@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -126,13 +126,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		aafRational_t	audioRate = { 44100, 1 };
 
 		// Create a  Composition Mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 								  IID_IAAFCompositionMob, 
 								  (IUnknown **)&pCompMob));
 
 		checkResult(pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(&newUID));
+		checkResult(pMob->SetMobID(newUID));
 		checkResult(pMob->SetName(L"AAFTaggedValuesTest"));
 
 		// append a comment to this mob !!
@@ -141,26 +141,26 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->AppendComment(TagNames, AltComment));
 
 		// Create a master mob to be referenced
-		checkResult(pDictionary->CreateInstance(&AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
 								 IID_IAAFMasterMob, 
 								 (IUnknown **)&pReferencedMob));
 
 		checkResult(pReferencedMob->QueryInterface(IID_IAAFMob, (void **)&pRMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
-		checkResult(pRMob->SetMobID(&referencedMobID));
+		checkResult(pRMob->SetMobID(referencedMobID));
 		checkResult(pRMob->SetName(L"AAFTaggedValueTest::ReferencedMob"));
 
 		// Add some slots
 		for(test = 0; test < 5; test++)
 		{
- 			checkResult(pDictionary->CreateInstance(&AUID_AAFSourceClip,
+ 			checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
 								     IID_IAAFSourceClip, 
 								     (IUnknown **)&sclp));		
 			// Set the properties for the SourceClip
 			sourceRef.sourceID = referencedMobID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
-			checkResult(sclp->Initialize((aafUID_t *)slotDDefs[test], &slotsLength[test], sourceRef));
+			checkResult(sclp->Initialize(*slotDDefs[test], slotsLength[test], sourceRef));
 			checkResult(sclp->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
 
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));

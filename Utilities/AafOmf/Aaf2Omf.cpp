@@ -986,7 +986,23 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			aafUID_t	ObjClass;
 			char		szTempUID[64];
 
-			pAAFObject->GetObjectClass(&ObjClass);
+			// pAAFObject->GetObjectClass(&ObjClass);
+			IAAFClassDef * classDef = 0;
+			pAAFObject->GetDefinition(&classDef);
+			IAAFDefObject * defObj = 0;
+			pEssenceDesc->QueryInterface(IID_IAAFDefObject, (void **)&defObj);
+			defObj->GetAUID (&ObjClass);
+			if (defObj)
+			  {
+				defObj->Release ();
+				defObj = 0;
+			  }
+			if (classDef)
+			  {
+				classDef->Release ();
+				classDef = 0;
+			  }
+
 			AUIDtoString(&ObjClass ,szTempUID);
 			if (gpGlobals->bVerboseMode)
 				printf("%sInvalid essence descripor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
@@ -2266,7 +2282,23 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 		aafUID_t	ObjClass;
 		char		szTempUID[64];
 
-		pAAFObject->GetObjectClass(&ObjClass);
+		// pAAFObject->GetObjectClass(&ObjClass);
+		IAAFClassDef * classDef = 0;
+		pAAFObject->GetDefinition(&classDef);
+		IAAFDefObject * defObj = 0;
+		pEssenceDesc->QueryInterface(IID_IAAFDefObject, (void **)&defObj);
+		defObj->GetAUID (&ObjClass);
+		if (defObj)
+		  {
+			defObj->Release ();
+			defObj = 0;
+		  }
+		if (classDef)
+		  {
+			classDef->Release ();
+			classDef = 0;
+		  }
+
 		AUIDtoString(&ObjClass ,szTempUID);
 		if (gpGlobals->bVerboseMode)
 			printf("%sInvalid essence data type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);

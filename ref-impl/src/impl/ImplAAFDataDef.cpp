@@ -58,8 +58,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsPictureKind (
       aafBool *bIsPictureKind)
 {
-	aafUID_t	uid = DDEF_Picture;
-	return(IsDataDefOf(&uid, bIsPictureKind));
+	return(IsDataDefOf(DDEF_Picture, bIsPictureKind));
 }
 
 
@@ -67,8 +66,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsMatteKind (
       aafBool *bIsMatteKind)
 {
-	aafUID_t	uid = DDEF_Matte;
-	return(IsDataDefOf(&uid, bIsMatteKind));
+	return(IsDataDefOf(DDEF_Matte, bIsMatteKind));
 }
 
 
@@ -76,8 +74,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsPictureWithMatteKind (
       aafBool *bIsPictureWithMatteKind)
 {
-	aafUID_t	uid = DDEF_PictureWithMatte;
-	return(IsDataDefOf(&uid, bIsPictureWithMatteKind));
+	return(IsDataDefOf(DDEF_PictureWithMatte, bIsPictureWithMatteKind));
 }
 
 
@@ -85,14 +82,13 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsSoundKind (
       aafBool *bIsSoundKind)
 {
-	aafUID_t	uid = DDEF_Sound;
-	return(IsDataDefOf(&uid, bIsSoundKind));
+	return(IsDataDefOf(DDEF_Sound, bIsSoundKind));
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::DoesDataDefConvertTo (
-      aafUID_t *pAuid,
+      const aafUID_t & id,
       aafBool *bDoesConvertTo)
 {
 	if(bDoesConvertTo == NULL)
@@ -102,13 +98,13 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		aafBool	result;
 		
-		CHECK(IsDataDefOf (pAuid, &result));
+		CHECK(IsDataDefOf (id, &result));
 		if(result == AAFFalse)
 		{
 			aafBool	isPWM;
 			aafUID_t	picture = DDEF_Picture;
 			CHECK(IsPictureWithMatteKind (&isPWM));
-			if((isPWM == AAFTrue) && EqualAUID(&picture, pAuid))
+			if((isPWM == AAFTrue) && EqualAUID(&picture, &id))
 				result = AAFTrue;
 		}
 		*bDoesConvertTo = result;
@@ -122,7 +118,7 @@ AAFRESULT STDMETHODCALLTYPE
 		   
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsDataDefOf (
-      aafUID_t *pAuid,
+      const aafUID_t & id,
       aafBool *bIsDataDefOf)
 {
 	aafUID_t	uid;
@@ -132,7 +128,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	
 	hr = GetAUID(&uid);
-	*bIsDataDefOf = EqualAUID(pAuid, &uid);
+	*bIsDataDefOf = EqualAUID(&id, &uid);
 
 	return hr;
 }
@@ -140,7 +136,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::DoesDataDefConvertFrom (
-      aafUID_t *pAuid,
+      const aafUID_t & id,
       aafBool * bDoesConvertFrom)
 {
 	if(bDoesConvertFrom == NULL)
@@ -150,13 +146,13 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		aafBool	result;
 		
-		CHECK(IsDataDefOf (pAuid, &result));
+		CHECK(IsDataDefOf (id, &result));
 		if(result == AAFFalse)
 		{
 			aafBool		isPict;
 			aafUID_t	pictureMatte = DDEF_PictureWithMatte;
 			CHECK(IsPictureKind (&isPict));
-			if((isPict == AAFTrue) && EqualAUID(&pictureMatte, pAuid))
+			if((isPict == AAFTrue) && EqualAUID(&pictureMatte, &id))
 				result = AAFTrue;
 		}
 		*bDoesConvertFrom = result;

@@ -146,10 +146,10 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
       CHECK(pComponent->GetDataDef(&componentDataDef));
  
 	  CHECK(GetDictionary(&pDict));
-	  CHECK(pDict->LookupDataDefinition(&componentDataDef, &pDef));
+	  CHECK(pDict->LookupDataDefinition(componentDataDef, &pDef));
 	  pDict->ReleaseReference();
 	  pDict = NULL;
-	  CHECK(pDef->DoesDataDefConvertTo(&sequDataDef, &willConvert));
+	  CHECK(pDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
 	  pDef->ReleaseReference();
 	  pDef = NULL;
 
@@ -182,10 +182,10 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
         // The component must have the same data definition [id] as the
         // sequence.
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDefinition(&componentDataDef, &pDef));
+		CHECK(pDict->LookupDataDefinition(componentDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
-		CHECK(pDef->DoesDataDefConvertTo(&sequDataDef, &willConvert));
+		CHECK(pDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
 		pDef->ReleaseReference();
 		pDef = NULL;
 

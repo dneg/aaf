@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -258,7 +258,7 @@ void EventTest::CreateEvent()
   {
     // Create an event (note: this will be replaced by a concrete event in a
     // later version after such an event is implemented.)
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFEvent,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFEvent,
                                              IID_IAAFEvent, 
                                              (IUnknown **)&pEvent));
     checkResult(pEvent->SetPosition(_position));
@@ -268,7 +268,7 @@ void EventTest::CreateEvent()
     checkResult(pEvent->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 
     // Create and initialize an EventMobSlot
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFEventMobSlot,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFEventMobSlot,
                                              IID_IAAFEventMobSlot, 
                                              (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
@@ -280,7 +280,7 @@ void EventTest::CreateEvent()
     checkResult(pMobSlot->SetSegment(pSegment));
 
     // Create the mob to hold the new event mob slot.
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFCompositionMob,
                                              IID_IAAFMob, 
                                              (IUnknown **)&pMob));
     checkResult(pMob->SetName(L"CompositionMob::Name:Test mob to hold an event mob slot"));
@@ -358,7 +358,7 @@ void EventTest::OpenEvent()
   try
   {
     // Get the composition mob that we created to hold the
-    checkResult(_pHeader->LookupMob(&_compositionMobID, &pMob));
+    checkResult(_pHeader->LookupMob(_compositionMobID, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
     checkResult(pMob->EnumAAFAllMobSlots(&pEnumSlots));

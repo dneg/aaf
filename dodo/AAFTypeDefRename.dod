@@ -37,10 +37,10 @@ AD_CLASS_UUID(307e9e69, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(307e9e6a, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD3(Initialize,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pID,
+			aafUID_constref,
+			id,
 			auid to be used to identify this type,
 
 			[in],
@@ -51,7 +51,7 @@ AD_XMETHOD3(Initialize,
 
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pTypeName,
 			friendly name of this type definition,
 
@@ -64,6 +64,7 @@ AD_XMETHOD3(Initialize,
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
   // - pBaseType is a valid pointer.
+  // - pTypeName is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -73,7 +74,7 @@ AD_XMETHOD3(Initialize,
   //   - succeeded.  \(This is the only code indicating success.\)
   // 
   // AAFRESULT_NULL_PARAM
-  //   - pBaseType is null.
+  //   - pBaseType or pTypeName is null.
   //
   // AAFRESULT_ALREADY_INITIALIZED
   //   - Initialize\(\) has already been called on this object.)

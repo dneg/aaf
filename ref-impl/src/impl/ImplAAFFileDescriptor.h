@@ -98,7 +98,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetSampleRate
 		// @parm [in] sample rate of the essence
-        (aafRational_t *  pRate);
+        (const aafRational_t & rate);
 
 
   //****************
@@ -116,7 +116,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetContainerFormat
 		// @parm [in] Identifies the file format
-        (aafUID_t *  pFormat);
+        (const aafUID_t & format);
 
 
   //****************

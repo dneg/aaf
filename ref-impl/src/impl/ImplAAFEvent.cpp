@@ -78,7 +78,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEvent::SetComment (
-      wchar_t *  pComment)
+      const aafCharacter * pComment)
 {
 	if (NULL == pComment)
 		return (AAFRESULT_NULL_PARAM);

@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -116,24 +116,24 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
      
      
     // Create a Composition mob - it should work !!
-    checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+    checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
                 IID_IAAFCompositionMob, 
                 (IUnknown **)&pCompMob));
     // get a IAAFMob interface
     checkResult(pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
     // Initialize the CompMob
     checkResult(CoCreateGuid((GUID *)&newMobID));
-    checkResult(pMob->SetMobID(&newMobID));
+    checkResult(pMob->SetMobID(newMobID));
     checkResult(pMob->SetName(L"AAFFillerTest"));
 
     // Create a AAFFiller - since it is the first time we will check the error code
-    checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
+    checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
                 IID_IAAFFiller, 
                 (IUnknown **)&pFiller));
     // Get a IAAFSegment interface for it
     checkResult(pFiller->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
     // Set filler properties
-    checkResult(pFiller->Initialize( &fillerUID, fillerLength));
+    checkResult(pFiller->Initialize( fillerUID, fillerLength));
     // append the filler to the MOB tree
     checkResult(pMob->AppendNewSlot(pSegment, 1, L"FillerSlot", &pSlot)); 
 

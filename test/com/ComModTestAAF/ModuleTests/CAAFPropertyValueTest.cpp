@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -108,13 +108,13 @@ static HRESULT TestPropertyValue ()
 
   // Let's try to do something interesting with a type definition
   IAAFTypeDefInt * pTypeDef = NULL;
-  hr = pDict->CreateInstance (&AUID_AAFTypeDefInt,
+  hr = pDict->CreateInstance (AUID_AAFTypeDefInt,
 							  IID_IAAFTypeDefInt,
 							  (IUnknown **) &pTypeDef);
   if (! SUCCEEDED (hr)) return hr;
   assert (pTypeDef);
 
-  hr = pTypeDef->Initialize (&TypeID_LocalInt32,
+  hr = pTypeDef->Initialize (TypeID_LocalInt32,
 							 4,        // 4-byte (32-bit) int
 							 AAFTrue,  // signed
 							 L"Local 32-bit int");

@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -74,12 +74,12 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
 	HRESULT			hr = S_OK;
 	aafUInt32		i;
 
- 	hr = pDictionary->CreateInstance(&AUID_AAFSequence,
+ 	hr = pDictionary->CreateInstance(AUID_AAFSequence,
 						   IID_IAAFSequence, 
 						   (IUnknown **)&pSequence);		
  	if (SUCCEEDED(hr))
 	{
-		pSequence->Initialize((aafUID_t*)&DDEF_Sound);
+		pSequence->Initialize(DDEF_Sound);
 
 		//
 		//	Add some segments.  Need to test failure conditions
@@ -91,14 +91,14 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
 	    IAAFComponent*	pComponent = NULL;
 			aafLength_t		len = 10;
 
-			hr = pDictionary->CreateInstance(&AUID_AAFFiller,
+			hr = pDictionary->CreateInstance(AUID_AAFFiller,
 									IID_IAAFComponent, 
 									(IUnknown **)&pComponent);
  			if (FAILED(hr))
 				break;
 
-			pComponent->SetDataDef((aafUID_t*)&DDEF_Sound);
-			pComponent->SetLength(&len);
+			pComponent->SetDataDef(DDEF_Sound);
+			pComponent->SetLength(len);
 			hr = pSequence->AppendComponent(pComponent);
 
 			pComponent->Release();

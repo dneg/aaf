@@ -69,7 +69,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetLength
-        (aafLength_t *  length);  //@parm [in] Length of this object
+        (const aafLength_t & length);  //@parm [in] Length of this object
 
 
   //****************
@@ -85,7 +85,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetDataDef
-        (aafUID_t *  datadef);  //@parm [in] DataDef of this object
+        (const aafUID_t & datadef);  //@parm [in] DataDef of this object
 
 
   //****************
@@ -99,7 +99,7 @@ public:
 public:
 	AAFRESULT SetNewProps(
 				aafLength_t length,		// IN - Length  property value
-				aafUID_t *dataDef);		// IN - DataDef property value
+				const aafUID_t & dataDef);		// IN - DataDef property value
 	virtual AAFRESULT AccumulateLength(aafLength_t *length);
 	virtual AAFRESULT GetMinimumBounds(aafPosition_t rootPos, aafLength_t rootLen,
 										ImplAAFMob *mob, ImplAAFMobSlot *track,
@@ -114,7 +114,8 @@ public:
 										ImplAAFComponent **found, aafBool *foundTransition);
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kComponent; return AAFRESULT_SUCCESS;}
-	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
+	virtual AAFRESULT ChangeContainedReferences(const aafUID_t & from,
+												const aafUID_t & to);
 
 
 private:

@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -142,7 +142,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
     
-	checkResult(pDictionary->CreateInstance(&AUID_AAFInterpolationDefinition,
+	checkResult(pDictionary->CreateInstance(AUID_AAFInterpolationDefinition,
 							  IID_IAAFInterpolationDef, 
 							  (IUnknown **)&pInterpolationDef));
     
@@ -156,7 +156,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pDef = NULL;
 	pInterpolationDef->Release();
 	pInterpolationDef = NULL;
-	checkResult(pDictionary->CreateInstance(&AUID_AAFInterpolationDefinition,
+	checkResult(pDictionary->CreateInstance(AUID_AAFInterpolationDefinition,
 							  IID_IAAFInterpolationDef, 
 							  (IUnknown **)&pInterpolationDef));
     

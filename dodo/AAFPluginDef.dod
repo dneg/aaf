@@ -25,34 +25,37 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-
 AD_FORWARD_DECLARATION(AAFNetworkLocator)
 AD_FORWARD_DECLARATION(AAFLocator)
 AD_FORWARD_DECLARATION(AAFPluggableCode)
 AD_FORWARD_DECLARATION(EnumAAFPluginLocators)
-
 AD_CLASS_UUID(AD1BB853, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(AD1BB854, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_XMETHOD3(Initialize,
 
-AD_XMETHOD3(Init,
-		   [in],
-		   objPass,
-		   aafUID_t *,
-		   pAuid,
-		   AUID for new DeObject,
-		   [in],
-		   objPass,
-		   aafCharacter *,
-		   pName,
-		   Name for new DefObject,
-		   [in],
-		   objPass,
-		   aafCharacter *,
-		   pDescription,
-		   Description for new DefObject,
-		   Init all fields of a definition object.)
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			id,
+			AUID for new DeObject,
+
+			[in],
+			objPass,
+			aafCharacter_constptr,
+			pName,
+			Name for new DefObject,
+
+			[in],
+			objPass,
+			aafCharacter_constptr,
+			pDescription,
+			Description for new DefObject,
+
+			Init all fields of a definition object.)
+
+
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
      the Name of this definition.)
 
@@ -62,12 +65,13 @@ AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
 
 
 AD_XMETHOD1(GetAUID,
-		   [retval\,out],
-		   objPass,
-		   aafUID_t *,
-		   pAuid,
-		   Pointer to an AUID reference,
-		   Gets the AUID for this object.)
+			[retval\, out],
+			objPass,
+			aafUID_t *,
+			pAuid,
+			Pointer to an AUID reference,
+			Gets the AUID for this object.)
+
 
 AD_XMETHOD1(GetCategoryClass,
 			[out],
@@ -100,19 +104,14 @@ AD_XMETHOD1(GetCategoryClass,
 
 
 AD_XMETHOD1(SetCategoryClass,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pCategoryClass,
+			aafUID_constref,
+			categoryClass,
 			The Category Class,
 			Sets the Category Class\, which is identifies the stored classID
   // of the subclass of AAFPluggableDefinition which references this plugin
   // descriptor.
-  // A copy is made of the data so the caller retains ownership of the
-  // *pCategoryClass aafUID_t and is responsible for de-allocating it.
-   //
-  // Succeeds if all of the following are true:
-  // - the pCategoryClass pointer is valid.
   // 
   // If this method fails the Category Class property will not be
   // changed.
@@ -125,10 +124,8 @@ AD_XMETHOD1(SetCategoryClass,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pCategoryClass arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
+
 
 AD_XMETHOD1(GetPluginVersion,
 			[out],
@@ -182,12 +179,14 @@ AD_XMETHOD1(SetPluginVersion,
   // AAFRESULT_NULL_PARAM
   //   - pVersion arg is NULL.)
 
+
 AD_XMETHOD2(GetPluginVersionString,
-			[in\,string],
+			[out\, string\, size_is\(bufSize\)],
 			objPass,
 			aafCharacter *,
 			pVersionString,
 			Plugin version string,
+
 			[in],
 			objPass,
 			aafInt32,
@@ -250,10 +249,11 @@ AD_XMETHOD1(GetProductVersionStringLen,
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.)
 
+
 AD_XMETHOD1(SetPluginVersionString,
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pVersionString,
 			Plugin version,
 
@@ -277,12 +277,14 @@ AD_XMETHOD1(SetPluginVersionString,
   // AAFRESULT_NULL_PARAM
   //   - pVersionString arg is NULL.)
 
+
 AD_XMETHOD2(GetPluginManufacturerName,
 			[in\,string],
 			objPass,
 			aafCharacter *,
 			pManufacturerName,
 			Plugin Manufacturer Name,
+
 			[in],
 			objPass,
 			aafInt32,
@@ -345,17 +347,18 @@ AD_XMETHOD1(GetProductManufacturerNameLen,
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.)
 
+
 AD_XMETHOD1(SetPluginManufacturerName,
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pManufacturerName,
 			Plugin Manufacturer,
 
-			This method sets the plugin Manufacturer Name property on a plugin descriptor to the value
-  // specified in pManufacturerName.  A copy is made of the data so the caller
-  // retains ownership of the *pManufacturerName buffer and is responsible for
-  // de-allocating it. 
+     This method sets the plugin Manufacturer Name property on a
+  // plugin descriptor to the value specified in pManufacturerName.  A
+  // copy is made of the data so the caller retains ownership of the
+  // *pManufacturerName buffer and is responsible for de-allocating it. 
   // 
   // Succeeds if all of the following are true:
   // - the pManufacturerName pointer is valid.
@@ -372,8 +375,9 @@ AD_XMETHOD1(SetPluginManufacturerName,
   // AAFRESULT_NULL_PARAM
   //   - pManufacturerName arg is NULL.)
 
+
 AD_XMETHOD1(GetManufacturerInfo,
-			[out\,retval],
+			[out\, retval],
 			objOut,
 			AAFNetworkLocator,
 			ppResult,
@@ -400,6 +404,7 @@ AD_XMETHOD1(GetManufacturerInfo,
   // AAFRESULT_NULL_PARAM
   //   - ppResult arg is NULL.)
 
+
 AD_XMETHOD1(SetManufacturerInfo,
 			[in],
 			objIn,
@@ -418,6 +423,7 @@ AD_XMETHOD1(SetManufacturerInfo,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\))
+
 
 AD_XMETHOD1(GetManufacturerID,
 			[out],
@@ -449,18 +455,13 @@ AD_XMETHOD1(GetManufacturerID,
 
 
 AD_XMETHOD1(SetManufacturerID,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pManufacturerID,
+			aafUID_constref,
+			manufacturerID,
 			The Category Class,
 			Sets the manufacturer ID\, which is identifies the
   // manufacturer of this plugin.
-  // A copy is made of the data so the caller retains ownership of the
-  // *pManufacturerID aafUID_t and is responsible for de-allocating it.
-   //
-  // Succeeds if all of the following are true:
-  // - the pManufacturerID pointer is valid.
   // 
   // If this method fails the ManufacturerID property will not be
   // changed.
@@ -473,10 +474,8 @@ AD_XMETHOD1(SetManufacturerID,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pManufacturerID arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
+
 
 AD_XMETHOD1(GetHardwarePlatform,
 			[out],
@@ -507,6 +506,7 @@ AD_XMETHOD1(GetHardwarePlatform,
   //
   // AAFRESULT_NULL_PARAM
   //   - pHardwarePlatform arg is NULL.)
+
 
 AD_XMETHOD1(SetHardwarePlatform,
 			[in],
@@ -539,19 +539,24 @@ AD_XMETHOD2(GetPlatformVersionRange,
 			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Platform Version,
+
 			[out],
 			objPass,
 			aafVersionType_t *,
 			pMaxVersion,
 			The Maximum Platform Version,
-			Gets the minimum and maximum platform Version properties associated with this
-  // plugin descriptor and places it into *pMinVersion\, and *pMaxVersion.  These are the
-  // minimum and maximum versions of the platform for which this plugin will function.
+
+	 Gets the minimum and maximum platform Version properties
+  // associated with this plugin descriptor and places it into
+  // *pMinVersion\, and *pMaxVersion.  These are the minimum and
+  // maximum versions of the platform for which this plugin will
+  // function.
   //
   // Succeeds if all of the following are true:
   // - both pMinVersion and pMaxVersion pointers are valid.
   // 
-  // If this method fails\, nothing will be written to *pMinVersion or *pMaxVersion.
+  // If this method fails\, nothing will be written to *pMinVersion or
+  // *pMaxVersion.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -566,19 +571,17 @@ AD_XMETHOD2(GetPlatformVersionRange,
   // AAFRESULT_NULL_PARAM
   //   - pMinVersion or pMaxVersion arg is NULL.)
 
+
 AD_XMETHOD1(SetPlatformMinimumVersion,
 			[in],
 			objPass,
-			aafVersionType_t *,
-			pMinVersion,
+			aafVersionType_constref,
+			minVersion,
 			The Minimum Platform Version,
 			Sets the maximum platform Version property of this
   // plugin descriptor.  This is the minimum version of the platform
   // for which this plugin will function.
   //
-  // Succeeds if all of the following are true:
-  // - pMinVersion pointer is valid.
-  // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
@@ -587,24 +590,19 @@ AD_XMETHOD1(SetPlatformMinimumVersion,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMinVersion arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
+
 
 AD_XMETHOD1(SetPlatformMaximumVersion,
 			[in],
 			objPass,
-			aafVersionType_t *,
-			pMaxVersion,
+			aafVersionType_constref,
+			maxVersion,
 			The Maximum Platform Version,
 			Sets the maximum platform Version properties associated with this
   // plugin descriptor.  This is the maximum version of the platform
   // for which this plugin will function.
   //
-  // Succeeds if all of the following are true:
-  // - both pMinVersion and pMaxVersion pointers are valid.
-  // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
@@ -613,10 +611,8 @@ AD_XMETHOD1(SetPlatformMaximumVersion,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMaxVersion arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
+
 
 AD_XMETHOD1(GetEngine,
 			[out],
@@ -680,20 +676,24 @@ AD_XMETHOD2(GetEngineVersionRange,
 			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Engine Version,
+
 			[out],
 			objPass,
 			aafVersionType_t *,
 			pMaxVersion,
 			The Maximum Engine Version,
-			Gets the minimum and maximum engine Version properties of the engine which
-  //		is associated with this plugin and places it into *pMinVersion\,
-  //		and *pMaxVersion.  These are the minimum and maximum
-  //		versions of the engine for which this plugin will function.
+
+	 Gets the minimum and maximum engine Version properties of the
+  // engine which is associated with this plugin and places it into
+  // *pMinVersion\, and *pMaxVersion.  These are the minimum and
+  // maximum versions of the engine for which this plugin will
+  // function.
   //
   // Succeeds if all of the following are true:
   // - both pMinVersion and pMaxVersion pointers are valid.
   // 
-  // If this method fails\, nothing will be written to *pMinVersion or *pMaxVersion.
+  // If this method fails\, nothing will be written to *pMinVersion or
+  // *pMaxVersion.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -712,16 +712,15 @@ AD_XMETHOD2(GetEngineVersionRange,
 AD_XMETHOD1(SetEngineMinimumVersion,
 			[in],
 			objPass,
-			aafVersionType_t *,
-			pMinVersion,
+			aafVersionType_constref,
+			minVersion,
 			The Minimum Engine Version,
-			Sets the minimum engine Version property to the minimum useful version
-  // of the engine which is associated with this plugin.  This is the minimum version
-  // of the engine for which this plugin will function.
+
+	 Sets the minimum engine Version property to the minimum useful
+  // version of the engine which is associated with this plugin.  This
+  // is the minimum version of the engine for which this plugin will
+  // function.
   //
-  // Succeeds if all of the following are true:
-  // - both pMinVersion and pMaxVersion pointers are valid.
-  // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
@@ -730,24 +729,20 @@ AD_XMETHOD1(SetEngineMinimumVersion,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMinVersion arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(SetEngineMaximumVersion,
 			[in],
 			objPass,
-			aafVersionType_t *,
+			aafVersionType_constref,
 			pMaxVersion,
 			The Minimum Engine Version,
-			Sets the minimum engine Version property to the maximum useful version
-  // of the engine which is associated with this plugin.  This is the maximum version
-  // of the engine for which this plugin will function.
-  //
-  // Succeeds if all of the following are true:
-  // - pMaxVersion pointer are valid.
+
+	 Sets the minimum engine Version property to the maximum useful
+  // version of the engine which is associated with this plugin.  This
+  // is the maximum version of the engine for which this plugin will
+  // function.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -757,10 +752,7 @@ AD_XMETHOD1(SetEngineMaximumVersion,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMaxVersion arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(GetPluginAPI,
@@ -801,9 +793,12 @@ AD_XMETHOD1(SetPluginAPI,
 			aafPluginAPI_t,
 			pluginAPI,
 			The Category Class,
-			Obtains the manufacturer ID\, which identifies the plugin interface supported by the plugin..
-  // The type aafPluginAPI_t is an extensible enumerated type\, and the value given must be
-  // either standard or in the type dictionary.
+
+	 Obtains the manufacturer ID\, which identifies the plugin
+  // interface supported by the plugin.
+  // 
+  // The type aafPluginAPI_t is an extensible enumerated type\, and
+  // the value given must be either standard or in the type dictionary.
   // 
   // If this method fails the PluginAPI property will not be
   // changed.
@@ -825,15 +820,18 @@ AD_XMETHOD2(GetPluginAPIVersionRange,
 			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Plugin API Version,
+
 			[out],
 			objPass,
 			aafVersionType_t *,
 			pMaxVersion,
 			The Maximum Plugin API Version,
-			Gets the minimum and maximum plugin API Version properties of the plugin API which
-  //		is associated with this plugin descriptor and places it into *pMinVersion\,
-  //		and *pMaxVersion.  These are the minimum and maximum versions of the PluginAPI
-  //		for which this plugin will function.
+
+	 Gets the minimum and maximum plugin API Version properties of the
+  // plugin API which is associated with this plugin descriptor and
+  // places it into *pMinVersion\, and *pMaxVersion.  These are the
+  // minimum and maximum versions of the PluginAPI for which this
+  // plugin will function.
   //
   // Succeeds if all of the following are true:
   // - both pMinVersion and pMaxVersion pointers are valid.
@@ -857,15 +855,14 @@ AD_XMETHOD2(GetPluginAPIVersionRange,
 AD_XMETHOD1(SetPluginAPIMinimumVersion,
 			[out],
 			objPass,
-			aafVersionType_t *,
-			pMinVersion,
+			aafVersionType_constref,
+			minVersion,
 			The Minimum Plugin API Version,
-			Sets the minimum plugin API Version property to the minimum useful version
-  // of the plugin API which is associated with this plugin.
+
+	 Sets the minimum plugin API Version property to the minimum
+  // useful version of the plugin API which is associated with this
+  // plugin.
   //
-  // Succeeds if all of the following are true:
-  // - both pMinVersion and pMaxVersion pointers are valid.
-  // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
@@ -874,22 +871,18 @@ AD_XMETHOD1(SetPluginAPIMinimumVersion,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMinVersion arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
+
 
 AD_XMETHOD1(SetPluginAPIMaximumVersion,
 			[in],
 			objPass,
-			aafVersionType_t *,
-			pMaxVersion,
+			aafVersionType_constref,
+			maxVersion,
 			The Maximum Plugin API Version,
-			Sets the maximum engine Version property to the maximum useful version
-  // of the plugin API which is associated with this plugin.
-  //
-  // Succeeds if all of the following are true:
-  // - both pMinVersion and pMaxVersion pointers are valid.
+
+	 Sets the maximum engine Version property to the maximum useful
+  // version of the plugin API which is associated with this plugin.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -899,10 +892,8 @@ AD_XMETHOD1(SetPluginAPIMaximumVersion,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMaxVersion arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
+
 
 AD_XMETHOD1(IsSoftwareOnly,
 			[out],
@@ -910,10 +901,12 @@ AD_XMETHOD1(IsSoftwareOnly,
 			aafBool *,
 			pIsSoftwareOnly,
 			The IsSoftwareOnly,
-			Tells whether the given plugin is capable of running in a software-only
-  // environment.  A value of AAFTrue indicates that no additional hardware is required.
-  // If the result is AAFTrue\, then this plugin may also support hardware acceleration\, as
-  // long as it also contains a software method of processing the data.
+
+	 Tells whether the given plugin is capable of running in a
+  // software-only environment.  A value of AAFTrue indicates that no
+  // additional hardware is required.  If the result is AAFTrue\, then
+  // this plugin may also support hardware acceleration\, as long as
+  // it also contains a software method of processing the data.
   // 
   // Succeeds if all of the following are true:
   // - the pIsSoftwareOnly pointer is valid.
@@ -934,19 +927,19 @@ AD_XMETHOD1(IsSoftwareOnly,
   //   - pIsSoftwareOnly arg is NULL.)
 
 
-
 AD_XMETHOD1(SetIsSoftwareOnly,
 			[in],
 			objPass,
 			aafBool,
 			isSoftwareOnly,
 			The isSoftwareOnly flag,
-			Sets whether the given plugin is capable of running in a software-only
-  // environment\, and returns AAFFalse if any hardware is required.
-  // If isSoftwareOnly is AAFTrue\, then this plugin may also support hardware acceleration\,
-  // as long as it also contains a software method of processing the data.
-  // If this method fails the isSoftwareOnly property will not be
-  // changed.
+
+	 Sets whether the given plugin is capable of running in a
+  // software-only environment\, and returns AAFFalse if any hardware
+  // is required.  If isSoftwareOnly is AAFTrue\, then this plugin may
+  // also support hardware acceleration\, as long as it also contains
+  // a software method of processing the data.  If this method fails
+  // the isSoftwareOnly property will not be changed.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -959,16 +952,16 @@ AD_XMETHOD1(SetIsSoftwareOnly,
   //   - This object has not yet had Initialize\(\) called on it.)
 
 
-
 AD_XMETHOD1(IsAccelerated,
 			[out],
 			objPass,
 			aafBool *,
 			pIsAccelerated,
 			The IsAccelerated,
-			Tells whether the given plugin is capable of running with a hardware
-  // accelerator.  If the result is AAFTrue\, then this plugin may also support
-  // software decompression.
+
+	 Tells whether the given plugin is capable of running with a
+  // hardware accelerator.  If the result is AAFTrue\, then this
+  // plugin may also support software decompression.
   // 
   // Succeeds if all of the following are true:
   // - the pIsAccelerated pointer is valid.
@@ -989,17 +982,17 @@ AD_XMETHOD1(IsAccelerated,
   //   - pIsAccelerated arg is NULL.)
 
 
-
-
 AD_XMETHOD1(SetIsAccelerated,
+
 			[in],
 			objPass,
 			aafBool,
 			isAccelerated,
 			The isAccelerated flag,
-			Tells whether the given plugin is capable of running with a hardware
-  // accelerator.  If the result is AAFTrue\, then this plugin may also support
-  // software decompression.
+
+	 Tells whether the given plugin is capable of running with a
+  // hardware accelerator.  If the result is AAFTrue\, then this
+  // plugin may also support software decompression.
   //
   // If this method fails the IsAccelerated property will not be
   // changed.
@@ -1014,14 +1007,17 @@ AD_XMETHOD1(SetIsAccelerated,
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\(\) called on it.)
 
+
 AD_XMETHOD1(SupportsAuthentication,
 			[out],
 			objPass,
 			aafBool *,
 			pSupportsAuthentication,
 			The SupportsAuthentication,
-			Tells whether the given plugin is capable of supporting authentication.
-  // The methods for authenticating a plugin are still <tbd>.
+
+	 Tells whether the given plugin is capable of supporting
+  // authentication.  The methods for authenticating a plugin are
+  // still <tbd>.
   // 
   // Succeeds if all of the following are true:
   // - the pSupportsAuthentication pointer is valid.
@@ -1048,8 +1044,10 @@ AD_XMETHOD1(SetSupportsAuthentication,
 			aafBool,
 			SupportsAuthentication,
 			The SupportsAuthentication flag,
-			Tells whether the given plugin is capable of supporting authentication.
-  // The methods for authenticating a plugin are still <tbd>.
+
+	 Tells whether the given plugin is capable of supporting
+  // authentication.  The methods for authenticating a plugin are
+  // still <tbd>.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -1061,13 +1059,16 @@ AD_XMETHOD1(SetSupportsAuthentication,
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\(\) called on it.)
 
+
 AD_XMETHOD1(GetPluggableCode,
 			[out],
 			objOut,
 			AAFPluggableCode,
 			pCode,
 			An interface pointer to the pluggable code object,
-			Returns the pluggableCode objects \(if any\) associated with this plugin descriptor.
+
+	 Returns the pluggableCode objects \(if any\) associated with this
+  // plugin descriptor. 
   //
   // Succeeds if all of the following are true:
   // - the pCode pointer is valid.
@@ -1087,7 +1088,9 @@ AD_XMETHOD1(GetPluggableCode,
   // AAFRESULT_NULL_PARAM
   //   - pCode arg is NULL.)
 
+
 AD_XMETHOD1(GetNumLocators,
+
 			[out],
 			objPass,
 			aafUInt32 *,
@@ -1192,6 +1195,7 @@ AD_XMETHOD1(IsPluginLocal,
   // AAFRESULT_NULL_PARAM
   //   - pIsLocal arg is NULL.)
 
+
 AD_XMETHOD1(EnumPluginLocators,
 			[out\, retval],
 			objOut,
@@ -1225,7 +1229,4 @@ AD_XMETHOD1(EnumPluginLocators,
   //
   // E_FAIL
   //   - Failed to create the enumerator.)
-
-
-
 AD_XCLASS_END(Concrete, StoredObject)

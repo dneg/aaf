@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -246,7 +246,7 @@ void HTMLClipTest::CreateHTMLClip()
   try
   {
     //Make the MOB to be referenced
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFMasterMob,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFMasterMob,
 					    IID_IAAFMasterMob, 
 					    (IUnknown **)&pMasterMob));
   
@@ -264,7 +264,7 @@ void HTMLClipTest::CreateHTMLClip()
 
 
     // Create a HTMLClip
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFHTMLClip,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFHTMLClip,
 					    IID_IAAFHTMLClip, 
 					    (IUnknown **)&pHTMLClip));
     checkResult(pHTMLClip->SetBeginAnchor(const_cast<wchar_t *>(_beginAnchor)));
@@ -277,7 +277,7 @@ void HTMLClipTest::CreateHTMLClip()
     checkResult(pSourceReference->SetSourceMobSlotID(0));
 
     // Create a composition mob to hold the html clip.
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFCompositionMob,
 					    IID_IAAFCompositionMob, 
 					    (IUnknown **)&pCompositionMob));
     checkResult(pCompositionMob->QueryInterface(IID_IAAFMob, (void **)&pReferencingMob));
@@ -424,7 +424,7 @@ void HTMLClipTest::OpenHTMLClip()
     checkResult(pHTMLClip->QueryInterface(IID_IAAFSourceReference, (void **)&pSourceReference));  
     checkResult(pSourceReference->GetSourceID(&masterMobID));
     checkExpression(0 == memcmp(&masterMobID, &_referencedMobID, sizeof(masterMobID)), AAFRESULT_TEST_FAILED);
-    checkResult(_pHeader->LookupMob(&masterMobID, &pReferencedMob));
+    checkResult(_pHeader->LookupMob(masterMobID, &pReferencedMob));
     checkResult(pReferencedMob->QueryInterface(IID_IAAFMasterMob, (void **)&pMasterMob));
 
     

@@ -57,7 +57,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] the size of this integer type in bytes
          aafUInt8  intSize,
@@ -66,7 +66,7 @@ public:
          aafBool  isSigned,
 
          // @parm [in, string] friendly name of this type definition
-         wchar_t *  pTypeName);
+         const aafCharacter * pTypeName);
 
 
   //****************

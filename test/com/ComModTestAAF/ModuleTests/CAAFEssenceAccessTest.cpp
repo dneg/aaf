@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -382,7 +382,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		// !!!Previous revisions of this file contained code here required to handle external essence
 		
 		// Get a Master MOB Interface
-		checkResult(pDictionary->CreateInstance( &AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
 			IID_IAAFMasterMob, 
 			(IUnknown **)&pMasterMob));
 		// Get a Mob interface and set its variables.
@@ -398,7 +398,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		if(dataFile != NULL)
 		{
 			// Make a locator, and attach it to the EssenceDescriptor
-			checkResult(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
+			checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
 				IID_IAAFLocator, 
 				(IUnknown **)&pLocator));		
 			checkResult(pLocator->SetPath (dataFile->dataFilename));
@@ -974,7 +974,7 @@ static HRESULT CreateJPEGAAFFile(
 		
 		
 		// Get a Master MOB Interface
-		checkResult(pDictionary->CreateInstance( &AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
 			IID_IAAFMasterMob, 
 			(IUnknown **)&pMasterMob));
 		// Get a Mob interface and set its variables.
@@ -990,7 +990,7 @@ static HRESULT CreateJPEGAAFFile(
 		if(dataFile != NULL)
 		{
 			// Make a locator, and attach it to the EssenceDescriptor
-			checkResult(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
+			checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
 				IID_IAAFLocator, 
 				(IUnknown **)&pLocator));		
 			checkResult(pLocator->SetPath (dataFile->dataFilename));

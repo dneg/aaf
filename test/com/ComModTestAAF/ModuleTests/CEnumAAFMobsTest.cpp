@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -108,17 +108,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     //Make the first mob
 
 	  // Create a FileMob
-	  checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+	  checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
 							IID_IAAFSourceMob, 
 							(IUnknown **)&pSourceMob));
 
 	  checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 
 	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-	  checkResult(pMob->SetMobID(&newUID));
+	  checkResult(pMob->SetMobID(newUID));
 	  checkResult(pMob->SetName(L"File Mob"));
 	
- 	  checkResult(pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
+ 	  checkResult(pDictionary->CreateInstance(AUID_AAFFileDescriptor,
 							IID_IAAFFileDescriptor, 
 							(IUnknown **)&edesc));		
 
@@ -131,12 +131,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     pMob = NULL;
 
 	  // Create a MasterMob
-	  checkResult(pDictionary->CreateInstance(&AUID_AAFMasterMob,
+	  checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
 							IID_IAAFMob, 
 							(IUnknown **)&pMob));
 
 	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-	  checkResult(pMob->SetMobID(&newUID));
+	  checkResult(pMob->SetMobID(newUID));
 	  checkResult(pMob->SetName(L"Master Mob"));
 
 	  checkResult(pHeader->AppendMob(pMob));
@@ -146,12 +146,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     pMob = NULL;
 
 	  // Create a CompositionMob
-	  checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+	  checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 							  IID_IAAFMob, 
 							  (IUnknown **)&pMob));
 
 	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-	  checkResult(pMob->SetMobID(&newUID));
+	  checkResult(pMob->SetMobID(newUID));
   	checkResult(pMob->SetName(L"Composition Mob"));
 
 	  checkResult(pHeader->AppendMob(pMob));

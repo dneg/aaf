@@ -60,9 +60,9 @@ public:
   // SetAUID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    Init
+    Initialize
         // @parm [in] Pointer to an AUID reference
-        (const aafUID_t *  pAuid,
+        (const aafUID_t & id,
 		 const wchar_t *name,
 		 const wchar_t *description);
   //****************
@@ -78,8 +78,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetAUID
-        // @parm [in] Pointer to an AUID reference
-        (const aafUID_t *  pAuid);
+        // @parm [in] AUID by which this object is to be identified
+        (const aafUID_t & id);
 
 
   //****************
@@ -87,7 +87,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetName
-        (const wchar_t *  name);  //@parm [in, ref] Definition Name
+        (const aafCharacter *  name);  //@parm [in, ref] Definition Name
 
 
   //****************
@@ -115,7 +115,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetDescription
-        (aafWChar *  description);  //@parm [in, ref] Definition description
+        (const aafCharacter * description);  //@parm [in, ref] Definition description
 
 
   //****************

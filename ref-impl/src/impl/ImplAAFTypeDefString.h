@@ -56,13 +56,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] type of each element to be contained in this array
          ImplAAFTypeDef * pTypeDef,
 
          // @parm [in] friendly name of this type definition
-         wchar_t *  pTypeName);
+         const aafCharacter * pTypeName);
 
 
   //****************
@@ -187,13 +187,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     pvtInitialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] type of each element to be contained in this array
-         const aafUID_t * pTypeID,
+         const aafUID_t & typeID,
 
          // @parm [in] friendly name of this type definition
-         wchar_t *  pTypeName);
+         const aafCharacter *  pTypeName);
 
 
   // overrides from ImplAAFTypeDef

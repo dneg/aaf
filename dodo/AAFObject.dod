@@ -29,18 +29,15 @@ AD_CLASS_UUID(B1A213AC, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_DEFAULT_UUID(B1A213AB, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_XCLASS_BEGIN(Abstract, StoredObjectBase)
 AD_XMETHOD1(SetGeneration,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pGeneration,
+			aafUID_constref,
+			generation,
 			Generation ID to which this object is to be set,
 			Sets the generation of this object to the given value.
   //
   AD_STD_COMMENT_METH_STUB
-  // Succeeds if all of the following are true:
-  // - the given pGeneration pointer is valid.
-  AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pGeneration\))
+  AD_STD_COMMENT_METH_ERR_HEADER)
 
 
 AD_XMETHOD1(GetGeneration,
@@ -59,28 +56,6 @@ AD_XMETHOD1(GetGeneration,
   // - the given pGeneration pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pGeneration\))
-
-
-AD_XMETHOD1(GetObjectClass,
-            [out],
-			objPass,
-			aafUID_t *,
-			pClass,
-			ID of object class of which this object is an instance.,
-            Gets the object class of which this object is an instance
-  // and places it into the caller-allocated aafUID_t pointed to by
-  // pClass.
-  //
-  // Succeeds if all of the following are true:
-  // - the given pClass pointer is valid.
-  //
-  // Note! Use care when dealing with the object class.  Among the
-  // pitfalls to be avoided is that tests for equality will not
-  // reflect inheritance.  This becomes important if an unknown
-  // non-builtin \(that is\, user defined\) object class ID is obtained.
-  //
-  AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClass\))
 
 
 AD_XMETHOD1(GetDefinition,

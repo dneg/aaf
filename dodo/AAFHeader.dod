@@ -44,10 +44,10 @@ AD_CLASS_UUID(B1A21383, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_DEFAULT_UUID(B1A21382, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_COM_EXT_CLASS_BEGIN(public IAAFEndian)
 AD_XMETHOD2(LookupMob,
-			[in\,ref],
+			[in\, ref],
 			  objPass,
-			  aafUID_t *,
-			  pMobID,
+			  aafUID_constref,
+			  mobID,
 			  The Mob ID,
 			[out\,retval],
 			  objOut,
@@ -59,7 +59,6 @@ AD_XMETHOD2(LookupMob,
   // before it is returned.
   // 
   // Succeeds if all of the following are true:
-  // - the pMobID pointer is valid.
   // - the ppMob pointer is valid.
   // 
   // If this method fails nothing will be written to *ppMob.
@@ -72,7 +71,7 @@ AD_XMETHOD2(LookupMob,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pMobID or ppMob is null
+  //   - ppMob is null
   //
   // AAFRESULT_MOB_NOT_FOUND
   //   - the requested mob wasn't found.)
@@ -196,10 +195,10 @@ AD_XMETHOD1(GetNumEssenceData,
   //   - pNumEssenceData is null.)
 
 AD_XMETHOD3(IsEssenceDataPresent,
-			[in],
+			[in\, ref],
 			  objPass,
-			  aafUID_t *,
-			  pFileMobID,
+			  aafUID_constref,
+			  fileMobID,
 			  A Unique File Mob ID,
 			[in],
 			  objPass,
@@ -213,7 +212,6 @@ AD_XMETHOD3(IsEssenceDataPresent,
 			  True if the essence is found,
   // 
   // Succeeds if all of the following are true:
-  // - the pFileMobID pointer is valid.
   // - the pResult pointer is valid.
   // 
   // If this method fails no state will be changed.
@@ -226,7 +224,7 @@ AD_XMETHOD3(IsEssenceDataPresent,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pFileMobID or pResult is null.)
+  //   - pResult is null.)
 
 
 AD_XMETHOD1(EnumEssenceData,
@@ -342,10 +340,10 @@ AD_XMETHOD1(GetLastIdentification,
 
 
 AD_XMETHOD2(GetIdentificationByGen,
-			[in\,ref],
+			[in\, ref],
 			  objPass,
-			  aafUID_t *,
-			  pGeneration,
+			  aafUID_constref,
+			  generation,
 			  Unique Generation ID,
 			[out\,retval],
 			  objOut,
@@ -359,7 +357,6 @@ AD_XMETHOD2(GetIdentificationByGen,
   // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
-  // - the pGeneration pointer is valid.
   // - the ppIdentification pointer is valid.
   // 
   // If this method fails no state will be changed.
@@ -372,7 +369,7 @@ AD_XMETHOD2(GetIdentificationByGen,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pGeneration or ppIdentification is null.)
+  //   - ppIdentification is null.)
 
 
 AD_XMETHOD1(GetNumIdents,

@@ -80,7 +80,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetDataDefinitionID
         // @parm [in] Pointer to the new data Definition Object
-        (aafUID_t  *pDataDefID);
+        (const aafUID_t & dataDefID);
 
   //****************
   // IsTimeWarp()

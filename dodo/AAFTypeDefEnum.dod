@@ -27,10 +27,10 @@ AD_CLASS_UUID(307e9e62, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(307e9e64, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD6(Initialize,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pID,
+			aafUID_constref,
+			id,
 			auid to be used to identify this type,
 
 			[in],
@@ -61,7 +61,7 @@ AD_XMETHOD6(Initialize,
 
 			[in],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pTypeName,
 			friendly name of this type definition,
 

@@ -81,18 +81,18 @@ ImplAAFDefObject::~ImplAAFDefObject ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDefObject::Init (
-      const aafUID_t *pAuid,
-	  const aafWChar *pName,
-	  const aafWChar *pDesc)
+    ImplAAFDefObject::Initialize (
+      const aafUID_t & id,
+	  const aafWChar * pName,
+	  const aafWChar * pDesc)
 {
-	if (pAuid == NULL || pName == NULL || pDesc == NULL)
+	if (pName == NULL || pDesc == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
 	else
 	{
-		_identification = *pAuid;
+		_identification = id;
 		_name = pName;
 		_description = pDesc;
 	}
@@ -100,7 +100,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::SetName (
-      const wchar_t *  pName)
+      const aafCharacter *  pName)
 {
   if (! pName)
 	{
@@ -148,7 +148,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::SetDescription (
-      wchar_t * pDescription)
+      const aafCharacter * pDescription)
 {
   if (! pDescription)
 	{
@@ -221,16 +221,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::SetAUID (
-      const aafUID_t *pAuid)
+      const aafUID_t & id)
 {
-  if (pAuid == NULL)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  else
-	{
-	  _identification = *pAuid;
-	}
+  _identification = id;
+
   return AAFRESULT_SUCCESS;
 }
 

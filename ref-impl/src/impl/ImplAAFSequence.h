@@ -67,7 +67,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
 		// @parm [in] Data Definition object
-        (aafUID_t * pDatadef);
+        (const aafUID_t & datadef);
 
 
   //****************
@@ -123,7 +123,8 @@ public:
 
   // Interfaces visible inside the toolkit, but not exposed through the API
   AAFRESULT GetNthComponent(aafUInt32 index, ImplAAFComponent **ppComponent);
-	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
+	virtual AAFRESULT ChangeContainedReferences(const aafUID_t & from,
+												const aafUID_t & to);
   AAFRESULT
     SetNthComponent (aafUInt32 index, ImplAAFComponent* pComponent);
 

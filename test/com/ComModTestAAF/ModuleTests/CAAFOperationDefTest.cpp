@@ -12,7 +12,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -164,28 +164,28 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
- 		checkResult(pDictionary->CreateInstance(&AUID_AAFParameterDef,
+ 		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
 						  IID_IAAFParameterDef, 
 						  (IUnknown **)&pParamDef));
 		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Init (&testParmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+		checkResult(pDefObject->Initialize (testParmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 		pDefObject->Release();
 		pDefObject = NULL;
 
 		for(index = 0; index < 3; index++)
 		{
-			checkResult(pDictionary->CreateInstance(&AUID_AAFOperationDef,
+			checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
 				IID_IAAFOperationDef, 
 				(IUnknown **)&pOperationDef));
 			checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
 			
 			checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-			checkResult(pDefObject->Init (effectID+index, effectNames[index], effectDesc[index]));
+			checkResult(pDefObject->Initialize (effectID[index], effectNames[index], effectDesc[index]));
 			pDefObject->Release();
 			pDefObject = NULL;
 			
-			checkResult(pOperationDef->SetDataDefinitionID (&testDataDef));
+			checkResult(pOperationDef->SetDataDefinitionID (testDataDef));
 			checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 			checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 			checkResult(pOperationDef->SetCategory (TEST_CATEGORY));

@@ -30,8 +30,8 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD3(Initialize,
 			[in],
 			objPass,
-			aafUID_t *,
-			pID,
+			aafUID_constref,
+			id,
 			auid to be used to identify this type,
 
 			[in],
@@ -42,7 +42,7 @@ AD_XMETHOD3(Initialize,
 
 			[in],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pTypeName,
 			friendly name of this type definition,
 
@@ -60,13 +60,12 @@ AD_XMETHOD3(Initialize,
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
-  // - pID is a valid pointer.
   // - pTypeDef is a valid pointer.
   // - pTypeName is a valid pointer.
   // - element type is permissible for use in a Stream.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pTypeDef\\\, or pTypeName\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef or pTypeName\)
   //
   // AAFRESULT_BAD_TYPE
   //   - an illegal element type was given.)

@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -113,18 +113,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		
 		//Make the first mob
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
 								IID_IAAFSourceMob, 
 								(IUnknown **)&pSourceMob));
 		
 		// Initialize mob properties:
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(&newUID));
+		checkResult(pMob->SetMobID(newUID));
 		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
 		
 		// Create the descriptor:
-		checkResult(pDictionary->CreateInstance(&AUID_AAFEssenceDescriptor,
+		checkResult(pDictionary->CreateInstance(AUID_AAFEssenceDescriptor,
 								IID_IAAFEssenceDescriptor, 
 								(IUnknown **)&edesc));		
  		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
@@ -135,7 +135,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   
 		// Make a locator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
+		checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
 								IID_IAAFLocator, 
 								(IUnknown **)&pLocator));		
 		checkResult(pLocator->SetPath (locator1));
@@ -148,7 +148,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
 
 		// Make a second ocator, and attach it to the EssenceDescriptor
-		checkResult(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
+		checkResult(pDictionary->CreateInstance(AUID_AAFNetworkLocator,
 								IID_IAAFLocator, 
 								(IUnknown **)&pLocator));		
 		checkResult(pLocator->SetPath (locator2));

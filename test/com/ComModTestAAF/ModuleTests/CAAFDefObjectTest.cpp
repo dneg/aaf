@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -185,7 +185,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
     
-	checkResult(pDictionary->CreateInstance(&AUID_AAFContainerDef,
+	checkResult(pDictionary->CreateInstance(AUID_AAFContainerDef,
 							  IID_IAAFContainerDef, 
 							  (IUnknown **)&pContainerDef));
     
@@ -201,10 +201,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// Test GetAUID() using a type def
 	//
 	IAAFTypeDefIntSP pTypeDef;
-	checkResult (pDictionary->CreateInstance (&AUID_AAFTypeDefInt,
+	checkResult (pDictionary->CreateInstance (AUID_AAFTypeDefInt,
 											  IID_IAAFTypeDefInt,
 											  (IUnknown **)&pTypeDef));
-	checkResult (pTypeDef->Initialize ((aafUID_t*) &kTestTypeId,
+	checkResult (pTypeDef->Initialize (kTestTypeId,
 									   1,
 									   AAFFalse,
 									   L"Test Unsigned Byte"));
@@ -213,28 +213,28 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// test Append, Prepend, and enum plugin descriptor using same type def
 	//
 	IAAFPluginDescriptorSP pd1;
-	checkResult (pDictionary->CreateInstance (&AUID_AAFPluginDescriptor,
+	checkResult (pDictionary->CreateInstance (AUID_AAFPluginDescriptor,
 											  IID_IAAFPluginDescriptor,
 											  (IUnknown **)&pd1));
-	checkResult (pd1->Init ((aafUID_t*) &kTestPluginDescID1,
+	checkResult (pd1->Initialize (kTestPluginDescID1,
 							L"PluginDesc1",
 							L"Plugin Descriptor 1 description"));
 	checkResult (pDictionary->RegisterPluginDescriptor (pd1));
 
 	IAAFPluginDescriptorSP pd2;
-	checkResult (pDictionary->CreateInstance (&AUID_AAFPluginDescriptor,
+	checkResult (pDictionary->CreateInstance (AUID_AAFPluginDescriptor,
 											  IID_IAAFPluginDescriptor,
 											  (IUnknown **)&pd2));
-	checkResult (pd2->Init ((aafUID_t*) &kTestPluginDescID2,
+	checkResult (pd2->Initialize (kTestPluginDescID2,
 							L"PluginDesc2",
 							L"Plugin Descriptor 2 description"));
 	checkResult (pDictionary->RegisterPluginDescriptor (pd2));
 
 	IAAFPluginDescriptorSP pd3;
-	checkResult (pDictionary->CreateInstance (&AUID_AAFPluginDescriptor,
+	checkResult (pDictionary->CreateInstance (AUID_AAFPluginDescriptor,
 											  IID_IAAFPluginDescriptor,
 											  (IUnknown **)&pd3));
-	checkResult (pd3->Init ((aafUID_t*) &kTestPluginDescID3,
+	checkResult (pd3->Initialize (kTestPluginDescID3,
 							L"PluginDesc3",
 							L"Plugin Descriptor 3 description"));
 	checkResult (pDictionary->RegisterPluginDescriptor (pd3));
@@ -329,7 +329,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 						 AAFRESULT_TEST_FAILED);
 
 		IAAFTypeDefSP pTypeDef;
-		checkResult (pDictionary->LookupType ((aafUID_t*) &kTestTypeId, &pTypeDef));
+		checkResult (pDictionary->LookupType (kTestTypeId, &pTypeDef));
 
 		IAAFDefObjectSP pDefObj;
 		checkResult(pTypeDef->QueryInterface (IID_IAAFDefObject,

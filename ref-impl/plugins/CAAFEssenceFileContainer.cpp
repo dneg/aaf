@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -193,13 +193,13 @@ HRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(&AUID_AAFContainerDef,
+		CHECK(dict->CreateInstance(AUID_AAFContainerDef,
 							IID_IAAFContainerDef, 
 							(IUnknown **)&container));
 		uid = ContainerFile;
 		CHECK(container->SetEssenceIsIdentified(AAFFalse));
 		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)&obj));
-		CHECK(obj->Init(&uid, L"Raw file Container", L"Essence is in a non-container file."));
+		CHECK(obj->Initialize(uid, L"Raw file Container", L"Essence is in a non-container file."));
 		obj->Release();
 		obj = NULL;
 		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)def));
@@ -233,20 +233,18 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
 	IAAFNetworkLocator		*pNetLoc = NULL;
-	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
-	aafUID_t				plugID = EXAMPLE_FILE_PLUGIN;
 	
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(&AUID_AAFPluginDescriptor,
+		CHECK(dict->CreateInstance(AUID_AAFPluginDescriptor,
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
 		*descPtr = desc;
-		CHECK(desc->Init(&plugID, L"Essence File Container", L"Handles non-container files."));
+		CHECK(desc->Initialize(EXAMPLE_FILE_PLUGIN, L"Essence File Container", L"Handles non-container files."));
 
-		CHECK(desc->SetCategoryClass(&category));
+		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
 		CHECK(desc->SetPluginVersionString(manufRev));
-		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (manufURL));
@@ -257,14 +255,14 @@ HRESULT STDMETHODCALLTYPE
 		pLoc->Release();
 		pLoc = NULL;
 
-		CHECK(desc->SetManufacturerID(&manufacturer));
+		CHECK(desc->SetManufacturerID(MANUF_JEFFS_PLUGINS));
 		CHECK(desc->SetPluginManufacturerName(manufName));
 		CHECK(desc->SetIsSoftwareOnly(AAFTrue));
 		CHECK(desc->SetIsAccelerated(AAFFalse));
 		CHECK(desc->SetSupportsAuthentication(AAFFalse));
 		
 		/**/
-		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (downloadURL));
@@ -289,8 +287,8 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::CreateEssenceStream (wchar_t *  pName,
-        aafUID_t *  pMobID,
+    CAAFEssenceFileContainer::CreateEssenceStream (const aafCharacter * pName,
+		const aafUID_t * pMobID,
         IAAFEssenceStream ** ppEssenceStream)
 {
   HRESULT hr = S_OK;
@@ -332,8 +330,8 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::CreateEssenceStreamWriteOnly (wchar_t *  pName,
-        aafUID_t *  pMobID,
+    CAAFEssenceFileContainer::CreateEssenceStreamWriteOnly (const aafCharacter * pName,
+        const aafUID_t * pMobID,
         IAAFEssenceStream ** ppEssenceStream)
 {
   return HRESULT_NOT_IMPLEMENTED;
@@ -341,8 +339,8 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::OpenEssenceStreamReadOnly (wchar_t *  pName,
-        aafUID_t *  pMobID,
+    CAAFEssenceFileContainer::OpenEssenceStreamReadOnly (const aafCharacter * pName,
+        const aafUID_t * pMobID,
         IAAFEssenceStream ** ppEssenceStream)
 {
   HRESULT hr = S_OK;
@@ -383,8 +381,8 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::OpenEssenceStreamAppend (wchar_t *  pName,
-        aafUID_t *  pMobID,
+    CAAFEssenceFileContainer::OpenEssenceStreamAppend (const aafCharacter * pName,
+        const aafUID_t * pMobID,
         IAAFEssenceStream ** ppEssenceStream)
 {
   HRESULT hr = S_OK;

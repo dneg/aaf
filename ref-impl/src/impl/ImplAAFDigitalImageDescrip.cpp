@@ -106,12 +106,9 @@ ImplAAFDigitalImageDescriptor::~ImplAAFDigitalImageDescriptor ()
 {}
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDigitalImageDescriptor::SetCompression (aafUID_t*  pCompression)
+    ImplAAFDigitalImageDescriptor::SetCompression (const aafUID_t & compression)
 {
-	if (pCompression == NULL)
-		return AAFRESULT_NULL_PARAM;
-
-	_compression = *pCompression;
+	_compression = compression;
 
 	return AAFRESULT_SUCCESS;
 }

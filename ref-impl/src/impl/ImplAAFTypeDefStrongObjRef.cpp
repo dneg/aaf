@@ -65,12 +65,10 @@ ImplAAFTypeDefStrongObjRef::~ImplAAFTypeDefStrongObjRef ()
 // Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStrongObjRef::pvtInitialize (
-      const aafUID_t *  pID,
-      const aafUID_t * pRefdObjID,
-      wchar_t *  pTypeName)
+      const aafUID_t & id,
+      const aafUID_t & refdObjID,
+      const aafCharacter * pTypeName)
 {
-  if (! pID)       return AAFRESULT_NULL_PARAM;
-  if (! pRefdObjID)  return AAFRESULT_NULL_PARAM;
   if (! pTypeName) return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
@@ -78,9 +76,9 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  _referencedType = *pRefdObjID;
+  _referencedType = refdObjID;
 
-  hr = SetAUID (pID);
+  hr = SetAUID (id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   return AAFRESULT_SUCCESS;
@@ -175,8 +173,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return hr;
 	  assert (pDict);
 
-	  aafUID_t id = _referencedType;
-	  hr = pDict->LookupClass (&id, &_cachedObjType);
+	  hr = pDict->LookupClass (_referencedType, &_cachedObjType);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (_cachedObjType);

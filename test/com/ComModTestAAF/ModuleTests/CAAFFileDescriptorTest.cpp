@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -115,33 +115,31 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		//Make the first mob
 		long			test;
-		aafUID_t		ddef = DDEF_Sound;
-		
 		aafRational_t	audioRate = { 44100, 1 };
 		
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
 			IID_IAAFSourceMob, 
 			(IUnknown **)&pSourceMob));
 		
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		
 		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(&newUID));
+		checkResult(pMob->SetMobID(newUID));
 		checkResult(pMob->SetName(L"FileDescriptorTest"));
 		
 		// Add some slots
 		for(test = 0; test < 2; test++)
 		{
-			checkResult(pSourceMob->AddNilReference (test+1, 0, &ddef, audioRate));
+			checkResult(pSourceMob->AddNilReference (test+1, 0, DDEF_Sound, audioRate));
 		}
 		
-		checkResult(pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
+		checkResult(pDictionary->CreateInstance(AUID_AAFFileDescriptor,
 			IID_IAAFEssenceDescriptor, 
 			(IUnknown **)&edesc));		
 		checkResult(edesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc));
-		checkResult(pFileDesc->SetSampleRate (&checkSampleRate));
-		checkResult(pFileDesc->SetContainerFormat (&checkContainer));
+		checkResult(pFileDesc->SetSampleRate (checkSampleRate));
+		checkResult(pFileDesc->SetContainerFormat (checkContainer));
 		checkResult(pFileDesc->SetLength (checkLength));
 		checkResult(pFileDesc->SetIsInContainer (AAFTrue));
 		

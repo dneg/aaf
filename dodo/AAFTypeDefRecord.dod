@@ -27,10 +27,10 @@ AD_CLASS_UUID(809c8ca5, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(809c8ca6, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_X2METHOD5(Initialize,
-			 [in],
+			 [in\, ref],
 			 objPass,
-			 aafUID_t *,
-			 pID,
+			 aafUID_constref,
+			 id,
 			 auid to be used to identify this type,
 			 ,
 
@@ -85,7 +85,7 @@ AD_X2METHOD5(Initialize,
   // - all member names are unique.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pMemberTypes\\\, pMemberNames\\\, or pTypeName\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pMemberTypes\\\, pMemberNames\\\, or pTypeName\)
   //
   // AAFRESULT_BAD_TYPE
   //   - an illegal member type was given.

@@ -65,11 +65,10 @@ AAFRESULT STDMETHODCALLTYPE
                             aafEdgecode_t	edgecode)
 {
 	HRESULT		rc = AAFRESULT_SUCCESS;
-	aafUID_t	ecddef = DDEF_Edgecode;
 	
 	XPROTECT()
 	{
-		CHECK(SetNewProps(length, &ecddef));
+		CHECK(SetNewProps(length, DDEF_Edgecode));
 		_start = edgecode.startFrame;
 		if (edgecode.filmKind < kFtNull || edgecode.filmKind > kFt65MM)
 			return AAFRESULT_INVALID_FILMTYPE;

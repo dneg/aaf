@@ -95,14 +95,14 @@ public:
     Create
         (ImplAAFMasterMob *masterMob,
 		// @parm [in] 
-         aafSlotID_t  masterSlotID,
+		 aafSlotID_t masterSlotID,
 
          // @parm [in] create essence of this type
-         aafUID_t	mediaKind,
+         const aafUID_t & mediaKind,
 
- 		 aafUID_t			codecID,
-		 aafRational_t	editRate,
-		 aafRational_t	sampleRate,
+ 		 const aafUID_t & codecID,
+		 const aafRational_t & editRate,
+		 const aafRational_t & sampleRate,
 
          // @parm [in] optionally compressing it
          aafCompressEnable_t  Enable);
@@ -660,12 +660,24 @@ public:
 	//Toolkit private functions
 	AAFRESULT MakeAAFContainerDef(ImplAAFHeader *head, ImplAAFContainerDef **result);
 	AAFRESULT CreateContainerDef (ImplAAFHeader *head);
-	AAFRESULT CreateCodecDef(ImplAAFHeader *head, aafUID_t codecDef, IAAFPluginDescriptor **newDesc);
-	AAFRESULT CreateEssenceFileFromLocator (ImplAAFHeader *srcHead, ImplAAFLocator *loc, ImplAAFFile **result);
-	AAFRESULT ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, ImplAAFLocator *loc, ImplAAFFile **result);
-	AAFRESULT CreateFileMob (ImplAAFHeader *newHead, aafBool addSlots, aafSlotID_t slotID, aafUID_t *newMobID,
-							aafUID_t mediaKind, aafRational_t editRate,aafRational_t sampleRate,
-							ImplAAFLocator *addLocator, ImplAAFSourceMob **result);
+	AAFRESULT CreateCodecDef(ImplAAFHeader *head,
+							 const aafUID_t & codecDef,
+							 IAAFPluginDescriptor **newDesc);
+	AAFRESULT CreateEssenceFileFromLocator (ImplAAFHeader *srcHead,
+											ImplAAFLocator *loc,
+											ImplAAFFile **result);
+	AAFRESULT ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead,
+											ImplAAFLocator *loc,
+											ImplAAFFile **result);
+	AAFRESULT CreateFileMob (ImplAAFHeader *newHead,
+							 aafBool addSlots,
+							 aafSlotID_t slotID,
+							 const aafUID_t * newMobID,
+							 const aafUID_t & mediaKind,
+							 const aafRational_t & editRate,
+							 const aafRational_t & sampleRate,
+							 ImplAAFLocator *addLocator,
+							 ImplAAFSourceMob **result);
 
 private:
 	aafUID_t				_codecID;

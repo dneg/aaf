@@ -74,7 +74,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEditRate
-        (aafRational_t *  value);  //@parm [in] Edit rate property value
+        (const aafRational_t &  value);  //@parm [in] Edit rate property value
 
 
   //****************

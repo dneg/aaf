@@ -109,7 +109,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetName
-        (aafWChar *  name);  //@parm [in] Mob Slot Name
+        (const aafCharacter *  name);  //@parm [in] Mob Slot Name
 
 
   //****************
@@ -165,7 +165,8 @@ public:
   virtual AAFRESULT ConvertToMyRate(aafPosition_t tmpPos,
 										  ImplAAFMobSlot *srcSlot,
 										aafPosition_t *convertPos);
-  virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
+  virtual AAFRESULT ChangeContainedReferences(const aafUID_t & from,
+											  const aafUID_t & to);
 
 
 protected:

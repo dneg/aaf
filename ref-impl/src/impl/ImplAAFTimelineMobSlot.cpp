@@ -81,12 +81,9 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTimelineMobSlot::SetEditRate (aafRational_t *editRate)
+    ImplAAFTimelineMobSlot::SetEditRate (const aafRational_t & editRate)
 {
-	if (editRate == NULL)
-		return AAFRESULT_NULL_PARAM;
-
-	_editRate = *editRate;
+	_editRate = editRate;
 	return AAFRESULT_SUCCESS;
 }
 

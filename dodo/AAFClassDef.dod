@@ -31,10 +31,10 @@ AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD3(Initialize,
 
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pID,
+			aafUID_constref,
+			classID,
 			auid to be used to identify this type,
 
 			[in],
@@ -90,10 +90,10 @@ AD_XMETHOD1(CountPropertyDefs,
 
 
 AD_XMETHOD5(AppendNewPropertyDef,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pID,
+			aafUID_constref,
+			id,
 			auid to be used to identify this property,
 
 			[in\, string],
@@ -141,7 +141,7 @@ AD_XMETHOD5(AppendNewPropertyDef,
   // - This class has not already been registered in the dictionary.
   // - The auid specified by pID has not already been registered.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pName\\\, or pTypeDef\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pName or pTypeDef\)
   //
   // AAFRESULT_OBJECT_ALREADY_ATTACHED
   //   - This class has already been registered.
@@ -151,10 +151,10 @@ AD_XMETHOD5(AppendNewPropertyDef,
 
 
 AD_XMETHOD4(AppendOptionalPropertyDef,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pID,
+			aafUID_constref,
+			id,
 			auid to be used to identify this property,
 
 			[in\, string],
@@ -193,17 +193,17 @@ AD_XMETHOD4(AppendOptionalPropertyDef,
   // - The pTypeDef pointer is valid.
   // - The auid specified by pID has not already been registered.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pName\\\, or pTypeDef\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pName or pTypeDef\)
   //
   // AAFRESULT_BAD_PARAM
   //   - The given ID has already been registered.)
 
 
 AD_XMETHOD2(LookupPropertyDef,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pPropID,
+			aafUID_constref,
+			propID,
 			auid reprepresenting property to look up,
 
 			[out],
@@ -221,7 +221,7 @@ AD_XMETHOD2(LookupPropertyDef,
   // - the auid specified by pID has been registered as a property
   //   definition for this class definition.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropID or ppPropDef\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppPropDef\)
   //
   // AAFRESULT_BAD_PARAM
   //   - The given ID has not been registered as a property

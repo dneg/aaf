@@ -170,20 +170,15 @@ AD_XMETHOD1(GetProductID,
 
 
 AD_XMETHOD1(SetProductID,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pProductID,
+			aafUID_constref,
+			productID,
 			The Product ID,
-			Set the Product ID property to the value specified in pProductID.
-  // A copy is made of the data so the caller retains ownership of the
-  // *pProductID aafUID_t and is responsible for de-allocating it.
+			Set the Product ID property to the value specified in productID.
   // 
   // NOTE! Stub only.   Implementation not yet added.
   //
-  // Succeeds if all of the following are true:
-  // - the pProductID pointer is valid.
-  // 
   // If this method fails the Product ID property will not be
   // changed.
   // 
@@ -195,10 +190,7 @@ AD_XMETHOD1(SetProductID,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pProductID arg is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
 AD_XMETHOD1(GetDate,

@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -145,32 +145,30 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
     
-	checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
+	checkResult(pDictionary->CreateInstance(AUID_AAFCodecDef,
 							  IID_IAAFCodecDef, 
 							  (IUnknown **)&pCodecDef));
     
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	uid = DDEF_Matte;
-	checkResult(pCodecDef->AppendEssenceKind (&uid));
+	checkResult(pCodecDef->AppendEssenceKind (DDEF_Matte));
 	uid = NoCodec;
-	checkResult(pDef->Init (&uid, sName1, sDescription1));
+	checkResult(pDef->Initialize (uid, sName1, sDescription1));
 	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
 	pDef->Release();
 	pDef = NULL;
 	pCodecDef->Release();
 	pCodecDef = NULL;
-	checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
+	checkResult(pDictionary->CreateInstance(AUID_AAFCodecDef,
 							  IID_IAAFCodecDef, 
 							  (IUnknown **)&pCodecDef));
     
 	checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
-	uid = DDEF_Matte;
-	checkResult(pCodecDef->AppendEssenceKind (&uid));
+	checkResult(pCodecDef->AppendEssenceKind (DDEF_Matte));
 	uid = NoCodec;
-	checkResult(pDef->Init (&uid, sName2, sDescription2));
+	checkResult(pDef->Initialize (uid, sName2, sDescription2));
 
 	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
   }

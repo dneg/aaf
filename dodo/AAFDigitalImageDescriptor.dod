@@ -108,8 +108,8 @@ AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_XMETHOD1(SetCompression,
 			[in],
 				objPass,
-				aafUID_t *,
-				pCodecID,
+				aafUID_constref,
+				codecID,
 			Identifies a Codec definition for the desired compression and
 	// format of compression information.,
 
@@ -117,19 +117,13 @@ AD_XMETHOD1(SetCompression,
   // information of the video essence data.  This property is
   // optional.  If there is no compression\, the property is omitted.
   // 
-  // Succeeds if all of the following are true:
-  // - the pCompression pointer is valid.
-  // 
   // If this method fails the Data Definition property will not be
   // changed.
   // 
   // This method will return the following codes:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFormat arg is NULL.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetCompression,

@@ -51,7 +51,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetCompression
 		// @parm [in] Identifies the compression and format of compression information
-        (aafUID_t *  pCompression);
+        (const aafUID_t & compression);
 
   //****************
   // SetStoredView()

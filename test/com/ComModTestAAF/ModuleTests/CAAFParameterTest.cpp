@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -177,11 +177,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
-		checkResult(pDictionary->CreateInstance(&AUID_AAFOperationDef,
+		checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
 							  IID_IAAFOperationDef, 
 							  (IUnknown **)&pOperationDef));
     
-		checkResult(pDictionary->CreateInstance(&AUID_AAFParameterDef,
+		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
@@ -189,11 +189,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Init (&effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
+		checkResult(pDefObject->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		pDefObject->Release();
 		pDefObject = NULL;
 
-		checkResult(pOperationDef->SetDataDefinitionID (&testDataDef));
+		checkResult(pOperationDef->SetDataDefinitionID (testDataDef));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -204,7 +204,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Init (&parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+		checkResult(pDefObject->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 		pDefObject->Release();
 		pDefObject = NULL;
 
@@ -214,36 +214,36 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		aafRational_t	videoRate = { 2997, 100 };
 
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 							  IID_IAAFMob, 
 							  (IUnknown **)&pMob));
 
 //		checkResult(CoCreateGuid((GUID *)&newUID));
-//		checkResult(pMob->SetMobID(&newUID));
+//		checkResult(pMob->SetMobID(newUID));
 		checkResult(pMob->SetName(L"AAFOperationGroupTest"));
 	  
 		// Add some slots
 		for(test = 0; test < 2; test++)
 		{
- 			checkResult(pDictionary->CreateInstance(&AUID_AAFOperationGroup,
+ 			checkResult(pDictionary->CreateInstance(AUID_AAFOperationGroup,
 							     IID_IAAFOperationGroup, 
 							     (IUnknown **)&pOperationGroup));
 			
-			checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
+			checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
 							     IID_IAAFSegment, 
 							     (IUnknown **)&pFiller));
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-			checkResult(pComponent->SetLength(&effectLen));
-			checkResult(pComponent->SetDataDef(&testDataDef));
- 			checkResult(pOperationGroup->Initialize(&testDataDef, TEST_EFFECT_LEN, pOperationDef));
+			checkResult(pComponent->SetLength(effectLen));
+			checkResult(pComponent->SetDataDef(testDataDef));
+ 			checkResult(pOperationGroup->Initialize(testDataDef, TEST_EFFECT_LEN, pOperationDef));
 
-			checkResult(pDictionary->CreateInstance(&AUID_AAFConstantValue,
+			checkResult(pDictionary->CreateInstance(AUID_AAFConstantValue,
 							  IID_IAAFConstantValue, 
 							  (IUnknown **)&pConstValue));
 			checkResult(pConstValue->SetValue(sizeof(testLevel), (aafDataBuffer_t)&testLevel));
 			checkResult(pConstValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
 			checkResult(pParm->SetParameterDefinition (pParamDef));
-			checkResult(pDictionary->LookupType (&testTypeID, &pTypeDef));
+			checkResult(pDictionary->LookupType (testTypeID, &pTypeDef));
 			checkResult(pParm->SetTypeDefinition (pTypeDef));
 			checkResult(pOperationGroup->AddNewParameter (pParm));
 			checkResult(pOperationGroup->AppendNewInputSegment (pFiller));
@@ -251,14 +251,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pFiller = NULL;
 
 			checkResult(pOperationGroup->SetBypassOverride (1));
-			checkResult(pDictionary->CreateInstance(&AUID_AAFSourceClip,
+			checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
 							  IID_IAAFSourceClip, 
 							  (IUnknown **)&pSourceClip));
 			aafSourceRef_t	sourceRef;
 			sourceRef.sourceID = zeroID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
-			checkResult(pSourceClip->Initialize (&testDataDef,&effectLen, sourceRef));
+			checkResult(pSourceClip->Initialize (testDataDef, effectLen, sourceRef));
 			checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
 			checkResult(pOperationGroup->SetRender (pSourceRef));
 			checkResult(pOperationGroup->QueryInterface (IID_IAAFSegment, (void **)&pSeg));

@@ -88,7 +88,8 @@ public:
 public:
 	//SDK-private
 
-	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
+	virtual AAFRESULT ChangeContainedReferences(const aafUID_t & from,
+												const aafUID_t & to);
 
 private:
 	OMFixedSizeProperty<aafUID_t>	_sourceID;

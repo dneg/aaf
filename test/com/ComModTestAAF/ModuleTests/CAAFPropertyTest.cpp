@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -114,7 +114,7 @@ static HRESULT ObjectTest ()
 	  checkResult (pHeader->GetDictionary (&pDict));
 	  assert (pDict);
 
-	  checkResult (pDict->CreateInstance (&AUID_IAAFTypeDefInt,
+	  checkResult (pDict->CreateInstance (AUID_IAAFTypeDefInt,
 										  IID_IAAFTypeDefInt,
 										  (IUnknown **) &pTypeDefInt));
 	  assert (pTypeDefInt);
@@ -123,14 +123,14 @@ static HRESULT ObjectTest ()
 											AAFTrue,
 											L"Fake local 1-byte signed int type");
 	  
-	  checkResult (pDict->CreateInstance (&AUID_AAFPropertyDef,
+	  checkResult (pDict->CreateInstance (AUID_AAFPropertyDef,
 										  IID_IAAFPropertyDef,
 										  (IUnknown **) &pPropDef));
 	  assert (pPropDef);
 	  checkResult (pPropDef->Initialize (&PropID_Local1,
 										 pTypeDefInt,
 										 L"Fake local property def");										 
-	  checkResult (pDict->CreateInstance (&AUID_AAFProperty,
+	  checkResult (pDict->CreateInstance (AUID_AAFProperty,
 										  IID_IAAFProperty,
 										  (IUnknown **) &pProp));
 	  assert (pProp);

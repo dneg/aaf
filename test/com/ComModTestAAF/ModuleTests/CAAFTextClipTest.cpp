@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -237,7 +237,7 @@ void TextClipTest::CreateTextClip()
   try
   {
   //Make the MOB to be referenced
-  checkResult(_pDictionary->CreateInstance(&AUID_AAFMasterMob,
+  checkResult(_pDictionary->CreateInstance(AUID_AAFMasterMob,
 					  IID_IAAFMasterMob, 
 					  (IUnknown **)&pMasterMob));
   
@@ -255,7 +255,7 @@ void TextClipTest::CreateTextClip()
 
 
   // Create a TextClip
-  checkResult(_pDictionary->CreateInstance(&AUID_AAFTextClip,
+  checkResult(_pDictionary->CreateInstance(AUID_AAFTextClip,
 					  IID_IAAFTextClip, 
 					  (IUnknown **)&pTextClip));
 
@@ -265,7 +265,7 @@ void TextClipTest::CreateTextClip()
   checkResult(pSourceReference->SetSourceMobSlotID(0));
 
   // Create a composition mob to hold the text clip.
-  checkResult(_pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+  checkResult(_pDictionary->CreateInstance(AUID_AAFCompositionMob,
 					  IID_IAAFCompositionMob, 
 					  (IUnknown **)&pCompositionMob));
   checkResult(pCompositionMob->QueryInterface(IID_IAAFMob, (void **)&pReferencingMob));
@@ -387,7 +387,7 @@ void TextClipTest::OpenTextClip()
     checkResult(pTextClip->QueryInterface(IID_IAAFSourceReference, (void **)&pSourceReference));  
     checkResult(pSourceReference->GetSourceID(&masterMobID));
     checkExpression(0 == memcmp(&masterMobID, &_referencedMobID, sizeof(masterMobID)), AAFRESULT_TEST_FAILED);
-    checkResult(_pHeader->LookupMob(&masterMobID, &pReferencedMob));
+    checkResult(_pHeader->LookupMob(masterMobID, &pReferencedMob));
     checkResult(pReferencedMob->QueryInterface(IID_IAAFMasterMob, (void **)&pMasterMob));
 
     

@@ -66,7 +66,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     IsEssenceKindSupported
         (// @parm [in,ref] The essence kind
-         aafUID_t *pEssenceKind,
+         const aafUID_t & essenceKind,
 
          // @parm [out,retval] Is this type supported
          aafBool*  pIsSupported);
@@ -77,7 +77,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendEssenceKind
         // @parm [in] The essence kind
-        (aafUID_t *  pEssenceKind);
+        (const aafUID_t & essenceKind);
 
 
 

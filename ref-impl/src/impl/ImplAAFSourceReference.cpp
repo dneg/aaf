@@ -109,12 +109,13 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(const aafUID_t & from,
+															const aafUID_t & to)
 {
 	aafUID_t			myID;
 
-	if(EqualAUID(&myID, from))
-		SetSourceID(*to);
+	if(EqualAUID(&myID, &from))
+		SetSourceID(to);
 
 	return AAFRESULT_SUCCESS;
 }

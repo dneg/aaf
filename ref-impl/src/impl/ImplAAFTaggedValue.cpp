@@ -62,14 +62,15 @@ ImplAAFTaggedValue::~ImplAAFTaggedValue ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTaggedValue::Initialize (wchar_t* pName, aafUID_t*  pDataDef)
+    ImplAAFTaggedValue::Initialize (const aafCharacter * pName,
+									const aafUID_t & dataDef)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
-	if (pName == NULL || pDataDef == NULL)
+	if (pName == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	_type = *pDataDef;
+	_type = dataDef;
 	_name = pName;
 
 	return rc;
@@ -130,7 +131,7 @@ AAFRESULT STDMETHODCALLTYPE
 		defUID = _type;
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupType(&defUID, ppTypeDef));
+		CHECK(dict->LookupType(defUID, ppTypeDef));
 	}
 	XEXCEPT
 	{

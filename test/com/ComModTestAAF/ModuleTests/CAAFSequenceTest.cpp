@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -153,19 +153,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pHeader->GetDictionary(&pDictionary));
  		
 	  // Create a Composition Mob
-	  checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+	  checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 							  IID_IAAFMob, 
 							  (IUnknown **)&pMob));
 
 	  checkResult(CoCreateGuid((GUID *)&NewMobID));
-	  checkResult(pMob->SetMobID(&NewMobID));
+	  checkResult(pMob->SetMobID(NewMobID));
 	  checkResult(pMob->SetName(L"AAFSequenceTest"));
 	  
 	  // Add mob slot w/ sequence
- 	  checkResult(pDictionary->CreateInstance(&AUID_AAFSequence,
+ 	  checkResult(pDictionary->CreateInstance(AUID_AAFSequence,
 						     IID_IAAFSequence, 
 						     (IUnknown **)&pSequence));		
-	  checkResult(pSequence->Initialize((aafUID_t*)&DDEF_Sound));
+	  checkResult(pSequence->Initialize(DDEF_Sound));
 
 	  //
 	  //	Add some segments.  Need to test failure conditions
@@ -176,12 +176,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  {
 		  aafLength_t		len = 10;
 
-		  checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
+		  checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
 								  IID_IAAFComponent, 
 								  (IUnknown **)&pComponent));
 
-		  checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_Sound));
-		  checkResult(pComponent->SetLength(&len));
+		  checkResult(pComponent->SetDataDef(DDEF_Sound));
+		  checkResult(pComponent->SetLength(len));
 		  checkResult(pSequence->AppendComponent(pComponent));
 
 		  pComponent->Release();

@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -166,7 +166,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTypeDef			*pTypeDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
-	aafUID_t			testDataDef = DDEF_Picture, testInterpDef = kAAFTypeID_Rational;
+	aafUID_t			testInterpDef = kAAFTypeID_Rational;
 	aafLength_t			effectLen = TEST_EFFECT_LEN;
 	aafUID_t			effectID = kTestEffectID;
 	aafUID_t			parmID = kTestParmID;
@@ -190,22 +190,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
-		checkResult(pDictionary->CreateInstance(&AUID_AAFOperationDef,
+		checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
 							  IID_IAAFOperationDef, 
 							  (IUnknown **)&pOperationDef));
     
-		checkResult(pDictionary->CreateInstance(&AUID_AAFParameterDef,
+		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Init (&parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+		checkResult(pDefObject->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 		pDefObject->Release();
 		pDefObject = NULL;
 
-		checkResult(pDictionary->CreateInstance(&AUID_AAFTypeDefInt,
+		checkResult(pDictionary->CreateInstance(AUID_AAFTypeDefInt,
 							  IID_IAAFTypeDefInt, 
 							  (IUnknown **)&pIntDef));
-		checkResult(pIntDef->Initialize (&testInterpDef, sizeof(aafRational_t), AAFTrue, L"Signed Rational Effect Parameter"));
+		checkResult(pIntDef->Initialize (testInterpDef, sizeof(aafRational_t), AAFTrue, L"Signed Rational Effect Parameter"));
 		checkResult(AAFGetPluginManager(&pMgr));
 		checkResult(pMgr->CreatePluginDefinition(LinearInterpolator, pDictionary, &pDefObject));
 		checkResult(pDefObject->QueryInterface(IID_IAAFInterpolationDef, (void **) &pInterpDef));
@@ -219,11 +219,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->RegisterType(pTypeDef));
 
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Init (&effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
+		checkResult(pDefObject->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		pDefObject->Release();
 		pDefObject = NULL;
 
-		checkResult(pOperationDef->SetDataDefinitionID (&testDataDef));
+		checkResult(pOperationDef->SetDataDefinitionID (DDEF_Picture));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -238,35 +238,35 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		long	test;
 		aafRational_t	videoRate = { 2997, 100 };
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 							  IID_IAAFMob, 
 							  (IUnknown **)&pMob));
 
 //		checkResult(CoCreateGuid((GUID *)&newUID));
-//		checkResult(pMob->SetMobID(&newUID));
+//		checkResult(pMob->SetMobID(newUID));
 		checkResult(pMob->SetName(L"AAFOperationGroupTest"));
 	  
 		// Add some slots
 		for(test = 0; test < 2; test++)
 		{
- 			checkResult(pDictionary->CreateInstance(&AUID_AAFOperationGroup,
+ 			checkResult(pDictionary->CreateInstance(AUID_AAFOperationGroup,
 							     IID_IAAFOperationGroup, 
 							     (IUnknown **)&pOperationGroup));
 			
-			checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
+			checkResult(pDictionary->CreateInstance(AUID_AAFFiller,
 							     IID_IAAFSegment, 
 							     (IUnknown **)&pFiller));
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-			checkResult(pComponent->SetLength(&effectLen));
-			checkResult(pComponent->SetDataDef(&testDataDef));
- 			checkResult(pOperationGroup->Initialize(&testDataDef, TEST_EFFECT_LEN, pOperationDef));
+			checkResult(pComponent->SetLength(effectLen));
+			checkResult(pComponent->SetDataDef(DDEF_Picture));
+ 			checkResult(pOperationGroup->Initialize(DDEF_Picture, TEST_EFFECT_LEN, pOperationDef));
 
-			checkResult(pDictionary->CreateInstance(&AUID_AAFVaryingValue,
+			checkResult(pDictionary->CreateInstance(AUID_AAFVaryingValue,
 							  IID_IAAFVaryingValue, 
 							  (IUnknown **)&pVaryingValue));
 			checkResult(pVaryingValue->SetInterpolationDefinition(pInterpDef));
 
-			checkResult(pDictionary->CreateInstance(&AUID_AAFControlPoint,
+			checkResult(pDictionary->CreateInstance(AUID_AAFControlPoint,
 							  IID_IAAFControlPoint, 
 							  (IUnknown **)&pControlPoint));
 			checkResult(pControlPoint->SetTime(testTime1));
@@ -276,7 +276,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pVaryingValue->AppendPoint(pControlPoint));
 			pControlPoint->Release();
 			pControlPoint = NULL;
-			checkResult(pDictionary->CreateInstance(&AUID_AAFControlPoint,
+			checkResult(pDictionary->CreateInstance(AUID_AAFControlPoint,
 							  IID_IAAFControlPoint, 
 							  (IUnknown **)&pControlPoint));
 			checkResult(pControlPoint->SetTypeDefinition (pTypeDef));
@@ -296,14 +296,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pFiller = NULL;
 
 			checkResult(pOperationGroup->SetBypassOverride (1));
-			checkResult(pDictionary->CreateInstance(&AUID_AAFSourceClip,
+			checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
 							  IID_IAAFSourceClip, 
 							  (IUnknown **)&pSourceClip));
 			aafSourceRef_t	sourceRef;
 			sourceRef.sourceID = zeroID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
-			checkResult(pSourceClip->Initialize (&testDataDef,&effectLen, sourceRef));
+			checkResult(pSourceClip->Initialize (DDEF_Picture, effectLen, sourceRef));
 			checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
 			checkResult(pOperationGroup->SetRender (pSourceRef));
 			checkResult(pOperationGroup->QueryInterface (IID_IAAFSegment, (void **)&pSeg));

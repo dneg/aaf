@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -105,23 +105,22 @@ static void RemoveTestFile(const wchar_t* pFileName)
 static HRESULT CreateOneTypeDef (IAAFDictionary *  pDict,
 								 aafUInt8          intSize,
 								 aafBool           isSigned,
-								 aafUID_t *        pID,
-								 wchar_t *         name,
+								 const aafUID_t &  id,
+								 const wchar_t *   name,
 								 IAAFTypeDefInt ** ppTD)
 {
   assert (pDict);
-  assert (pID);
   assert (name);
   assert (ppTD);
 
   HRESULT hr = E_FAIL;
   IAAFTypeDefInt * pTD = NULL;
 
-  checkResult (pDict->CreateInstance (&AUID_AAFTypeDefInt,
+  checkResult (pDict->CreateInstance (AUID_AAFTypeDefInt,
 									  IID_IAAFTypeDefInt,
 									  (IUnknown **) &pTD));
   assert (pTD);
-  checkResult (pTD->Initialize (pID, intSize, isSigned, name));
+  checkResult (pTD->Initialize (id, intSize, isSigned, name));
 
   *ppTD = pTD;
   return AAFRESULT_SUCCESS;
@@ -453,7 +452,7 @@ static HRESULT TestTypeDefInt ()
 	  checkResult (CreateOneTypeDef (pDict,
 									 1,                 // 1-byte (8-bit) int
 									 AAFTrue,           // signed
-									 &TypeID_LocalInt8,
+									 TypeID_LocalInt8,
 									 L"Local 8-bit signed int",
 									 &ptds8));
 	  assert (ptds8);
@@ -462,7 +461,7 @@ static HRESULT TestTypeDefInt ()
 	  checkResult (CreateOneTypeDef (pDict,
 									 2,                 // 2-byte (16-bit) int
 									 AAFTrue,           // signed
-									 &TypeID_LocalInt16,
+									 TypeID_LocalInt16,
 									 L"Local 8-bit signed int",
 									 &ptds16));
 	  assert (ptds16);
@@ -471,7 +470,7 @@ static HRESULT TestTypeDefInt ()
 	  checkResult (CreateOneTypeDef (pDict,
 									 4,                 // 4-byte (32-bit) int
 									 AAFTrue,           // signed
-									 &TypeID_LocalInt32,
+									 TypeID_LocalInt32,
 									 L"Local 32-bit signed int",
 									 &ptds32));
 	  assert (ptds32);
@@ -480,7 +479,7 @@ static HRESULT TestTypeDefInt ()
 	  checkResult (CreateOneTypeDef (pDict,
 									 8,                 // 8-byte (64-bit) int
 									 AAFTrue,           // signed
-									 &TypeID_LocalInt64,
+									 TypeID_LocalInt64,
 									 L"Local 64-bit signed int",
 									 &ptds64));
 	  assert (ptds64);
@@ -489,7 +488,7 @@ static HRESULT TestTypeDefInt ()
 	  checkResult (CreateOneTypeDef (pDict,
 									 1,                 // 1-byte (8-bit) int
 									 AAFFalse,          // unsigned
-									 &TypeID_LocalUInt8,
+									 TypeID_LocalUInt8,
 									 L"Local 8-bit unsigned int",
 									 &ptdu8));
 	  assert (ptdu8);
@@ -498,7 +497,7 @@ static HRESULT TestTypeDefInt ()
 	  checkResult (CreateOneTypeDef (pDict,
 									 2,                 // 2-byte (16-bit) int
 									 AAFFalse,          // unsigned
-									 &TypeID_LocalUInt16,
+									 TypeID_LocalUInt16,
 									 L"Local 8-bit unsigned int",
 									 &ptdu16));
 	  assert (ptdu16);
@@ -507,7 +506,7 @@ static HRESULT TestTypeDefInt ()
 	  checkResult (CreateOneTypeDef (pDict,
 									 4,                 // 4-byte (32-bit) int
 									 AAFFalse,          // unsigned
-									 &TypeID_LocalUInt32,
+									 TypeID_LocalUInt32,
 									 L"Local 32-bit unsigned int",
 									 &ptdu32));
 	  assert (ptdu32);
@@ -516,7 +515,7 @@ static HRESULT TestTypeDefInt ()
 	  checkResult (CreateOneTypeDef (pDict,
 									 8,                 // 8-byte (64-bit) int
 									 AAFFalse,          // unsigned
-									 &TypeID_LocalUInt64,
+									 TypeID_LocalUInt64,
 									 L"Local 64-bit unsigned int",
 									 &ptdu64));
 	  assert (ptdu64);

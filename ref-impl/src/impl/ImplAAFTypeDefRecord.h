@@ -59,7 +59,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in, size_is(numMembers)] array of member types to
 		 // be represented in this record type
@@ -278,7 +278,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     pvtInitialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in, size_is(numMembers)] array of member types to
 		 // be represented in this record type

@@ -123,7 +123,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  // CHECK(MyHeadObject(&head));
 	  // CHECK(head->GetDictionary(&dict));
 	  CHECK(GetDictionary(&dict));
-		CHECK(dict->LookupParameterDefinition(&_parmDef, ppParmDef));
+		CHECK(dict->LookupParameterDefinition(_parmDef, ppParmDef));
 //		(*ppParmDef)->AcquireReference();
 		// head->ReleaseReference();
 		// head = NULL;
@@ -204,7 +204,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  // CHECK(MyHeadObject(&head));
 	  // CHECK(head->GetDictionary(&dict));
 	  CHECK(GetDictionary(&dict));
-		CHECK(dict->LookupType(&_typeDef, ppTypeDef));
+		CHECK(dict->LookupType(_typeDef, ppTypeDef));
 //		(*ppTypeDef)->AcquireReference();
 		// head->ReleaseReference();
 		// head = NULL;

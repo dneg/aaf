@@ -161,7 +161,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetMobID
-        (aafUID_t *  mobID);  //@parm [in, ref] New Mob ID
+        (const aafUID_t &  mobID);  //@parm [in, ref] New Mob ID
 
 
   //****************
@@ -193,10 +193,10 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendNewTimelineSlot
-        (aafRational_t  editRate,   //@parm [in] Edit rate property value
+        (const aafRational_t &editRate,   //@parm [in] Edit rate property value
 		 ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
 		 aafSlotID_t  slotID,   //@parm [in] The Slot ID
-         aafWChar *  slotName,   //@parm [in] Slot Name (optional)
+         const aafWChar *  slotName,   //@parm [in] Slot Name (optional)
 		 aafPosition_t  origin,
 		 ImplAAFTimelineMobSlot ** newSlot);  //@parm [out] Newly created slot
 
@@ -302,8 +302,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     ChangeRef
-        (aafUID_t *  oldMobID,   //@parm [in,ref] Old Mob ID reference in source clip
-		 aafUID_t *  newMobID);  //@parm [in,ref] New Mob ID reference in source clip
+        (const aafUID_t & oldMobID,   //@parm [in,ref] Old Mob ID reference in source clip
+		 const aafUID_t & newMobID);  //@parm [in,ref] New Mob ID reference in source clip
 
 
 
@@ -332,9 +332,9 @@ AAFRESULT
         (aafAppendOption_t  addType,
 		 aafRational_t  editrate,
 		 aafSlotID_t  aMobSlot,
-         aafUID_t * pEssenceKind,
-		aafSourceRef_t  ref,
-        aafLength_t  srcRefLength);
+         const aafUID_t & essenceKind,
+		 aafSourceRef_t  ref,
+		 aafLength_t  srcRefLength);
 
 	virtual AAFRESULT InternalSearchSource(	
     aafSlotID_t trackID,             /* IN */

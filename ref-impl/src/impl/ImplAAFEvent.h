@@ -75,7 +75,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetComment
         // @parm [in, string] buffer from which Comment is to be read
-        (wchar_t *  pComment);
+        (const aafCharacter * pComment);
 
 
   //****************

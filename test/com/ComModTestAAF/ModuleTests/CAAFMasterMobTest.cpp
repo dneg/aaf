@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -172,22 +172,24 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		
 		// Create a Master Mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
 			IID_IAAFMob, 
 			(IUnknown **)&pMob));
 		
 		// Set the IAAFMob properties
 		checkResult(CoCreateGuid((GUID *)&NewMobID));
-		checkResult(pMob->SetMobID((aafUID_t *)&NewMobID));
+		aafUID_t NewMobAUID;
+		memcpy (&NewMobAUID, &NewMobID, sizeof (aafUID_t));
+		checkResult(pMob->SetMobID(NewMobAUID));
 		checkResult(pMob->SetName(MobName));
 		
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
 		
 		// Create source mob to associate with our MasterMob.
-		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
 			IID_IAAFSourceMob, 
 			(IUnknown **)&pTapeMob));		
-		hr = pDictionary->CreateInstance(&AUID_AAFTapeDescriptor,
+		hr = pDictionary->CreateInstance(AUID_AAFTapeDescriptor,
 												IID_IAAFTapeDescriptor, 
 												(IUnknown **)&pTapeDesc);		
 		if (AAFRESULT_SUCCESS == hr)
@@ -226,7 +228,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 		for (test = 0; test < NumMobSlots; test++)
 		{
-			checkResult(pTapeMob->AddNilReference (test, TAPE_MOB_LENGTH, (aafUID_t *)slotDDefs[test], slotRates[test]));
+			checkResult(pTapeMob->AddNilReference (test, TAPE_MOB_LENGTH, *slotDDefs[test], slotRates[test]));
 		}
 		checkResult(pTapeMob->QueryInterface(IID_IAAFMob, (void **) &pTempMob));
 		checkResult(pTempMob->SetName(TAPE_MOB_NAME));
@@ -239,7 +241,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		for (test = 0; test < NumMobSlots; test++)
 		{
 			// Create source mob to associate with our MasterMob.
-			checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+			checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
 				IID_IAAFSourceMob, 
 				(IUnknown **)&pSrcMob));		
 			
@@ -247,9 +249,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			ref.sourceSlotID = test;
 			ref.startTime = TAPE_MOB_OFFSET;
 			checkResult(pSrcMob->AppendPhysSourceRef (slotRates[test], test,
-				(aafUID_t *)slotDDefs[test], ref, TAPE_MOB_LENGTH));
+				*slotDDefs[test], ref, TAPE_MOB_LENGTH));
 			
-			checkResult(pDictionary->CreateInstance(&AUID_AAFEssenceDescriptor,
+			checkResult(pDictionary->CreateInstance(AUID_AAFEssenceDescriptor,
 				IID_IAAFEssenceDescriptor, 
 				(IUnknown **)&pDesc));		
 			checkResult(pSrcMob->SetEssenceDescriptor(pDesc));
@@ -260,14 +262,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			aafUID_t				TempUID;
 			checkResult(pSrcMob->QueryInterface(IID_IAAFMob, (void **) &pTempMob));
 			checkResult(CoCreateGuid((GUID *)&TempUID));
-			checkResult(pTempMob->SetMobID(&TempUID));
+			checkResult(pTempMob->SetMobID(TempUID));
 			checkResult(pTempMob->SetName(L"source mob"));
 			
 			checkResult(pHeader->AppendMob(pTempMob));
 			pTempMob->Release();
 			pTempMob = NULL;
 			
-			checkResult(pMasterMob->AddMasterSlot((aafUID_t *)slotDDefs[test], test, pSrcMob, test+1, slotNames[test]));
+			checkResult(pMasterMob->AddMasterSlot(*slotDDefs[test], test, pSrcMob, test+1, slotNames[test]));
 			
 			pSrcMob->Release();
 			pSrcMob = NULL;

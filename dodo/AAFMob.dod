@@ -72,18 +72,15 @@ AD_XMETHOD1(GetMobID,
 
 
 AD_XMETHOD1(SetMobID,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pMobID,
+			aafUID_constref,
+			mobID,
 			New Mob ID,
 
   // When a mob is initially created\, the Reference Implementation
   // internally creates a mobID for the new mob.  This method should
   // be used to change the mob's identity to an explicit mobID.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pMobID pointer is valid.
   // 
   // If this method fails no state will be changed.
   // 
@@ -92,10 +89,7 @@ AD_XMETHOD1(SetMobID,
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMobID arg is NULL.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD2(GetName,
@@ -684,16 +678,16 @@ AD_XMETHOD2(FindSlotBySlotID,
 
 
 AD_XMETHOD2(ChangeRef,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pOldMobID,
+			aafUID_constref,
+			oldMobID,
 			Old Mob ID reference in source clip,
 
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pNewMobID,
+			aafUID_constref,
+			newMobID,
 			New Mob ID reference in source clip,
 
 			Finds all Source Clips in the specified Mob that refer to the
@@ -706,10 +700,6 @@ AD_XMETHOD2(ChangeRef,
   //
   // NOTE! Stub only.   Implementation not yet added.
   //
-  // Succeeds if all of the following are true:
-  // - the pOldMobID pointer is valid.
-  // - the pNewMobID pointer is valid.
-  // 
   // If this method fails no state will be changed.
   // 
   // This method will return the following codes.  If more than one of
@@ -717,10 +707,7 @@ AD_XMETHOD2(ChangeRef,
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - either pOldMobID or pNewMobID args is NULL.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD4(CloneExternal,

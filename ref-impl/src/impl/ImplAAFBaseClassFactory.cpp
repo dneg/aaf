@@ -178,14 +178,14 @@ ImplAAFBaseClassFactory::~ImplAAFBaseClassFactory(void)
 
 // Global function that looksup the built-in code class id for the corresponding
 // auid.
-const aafClassID_t* ImplAAFBaseClassFactory::LookupClassID(const aafUID_t* pAUID)
+const aafClassID_t* ImplAAFBaseClassFactory::LookupClassID(const aafUID_t & auid)
 {
   // Return NULL if the given AUID cannot be found.
   const aafClassID_t *pClassID = NULL;
 
   // Lookup the class id in the predefined "base class" table.
   AAFObjectEntry_t **ppResult = NULL;
-  AAFObjectEntry_t key = {"KEY", pAUID, NULL};
+  AAFObjectEntry_t key = {"KEY", &auid, NULL};
   AAFObjectEntry_t *pKey = &key;
   
   // Use standard library's binary search routine.

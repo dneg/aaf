@@ -27,15 +27,15 @@ AD_CLASS_UUID(a5456f02, 0ef2, 11d3, 84, 2e, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(a5456f01, 0ef2, 11d3, 84, 2e, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD2(Initialize,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pID,
+			aafUID_constref,
+			id,
 			auid to be used to identify this type,
 
 			[in],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pTypeName,
 			friendly name of this type definition,
 
@@ -52,7 +52,7 @@ AD_XMETHOD2(Initialize,
   // - pTypeName is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pID or pTypeName\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeName\)
   //
   // AAFRESULT_DUPLICATE
   //   - duplicate name or value is found.)
@@ -184,10 +184,10 @@ AD_XMETHOD2(GetNameBufLenFromValue,
 
 
 AD_XMETHOD3(GetNameFromAUID,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pValue,
+			aafUID_constref,
+			value,
 			value of element to get,
 
 			[out\, size_is\(bufSize\)\, string],
@@ -211,7 +211,6 @@ AD_XMETHOD3(GetNameFromAUID,
   // required buffer size.
   // 
   // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
   // - the pName pointer is valid.
   // - bufSize indicates the buffer is large enough to hold the name.
   // - the integer value is associated with an element of this
@@ -220,7 +219,7 @@ AD_XMETHOD3(GetNameFromAUID,
   // If this method fails nothing will be written to
   // *pName.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pValue or pName\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName\)
   //
   // AAFRESULT_SMALLBUF
   //   - bufSize indicates the buffer is too small to hold the string.
@@ -231,10 +230,10 @@ AD_XMETHOD3(GetNameFromAUID,
 
 
 AD_XMETHOD2(GetNameBufLenFromAUID,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pValue,
+			aafUID_constref,
+			value,
 			value of element to get,
 
 			[out],
@@ -249,14 +248,13 @@ AD_XMETHOD2(GetNameBufLenFromAUID,
   // trailing null character.
   //
   // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
   // - the pLen pointer is valid.
   // - the value is associated with an element of this enumerated
   //   type.
   //
   // If this method fails nothing will be written to *pLen.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pValue or pLen\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pLen\)
   //
   // AAFRESULT_BAD_PARAM
   //   - the given value is not associated with an element of this
@@ -294,21 +292,20 @@ AD_XMETHOD2(SetAUIDValue,
 			pPropValToSet,
 			property value to set,
 
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pValueIn,
+			aafUID_constref,
+			valueIn,
 			new value of the enum represented by the given property value,
 
-     Sets the given property to the value given in pValueIn.
+     Sets the given property to the value given in valueIn.
   //
   // Succeeds if:
   // - The pPropValToSet pointer is valid.
-  // - The pValueIn pointer is valid.
   // - valueIn is a correct value for this enumerated type.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropValToSet or pValueIn\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPropValToSet\)
   //
   // AAFRESULT_BAD_PARAM
   //   - valueIn is not a correct value for this enumerated type.
@@ -316,15 +313,15 @@ AD_XMETHOD2(SetAUIDValue,
 
 
 AD_XMETHOD2(AppendElement,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pValue,
+			aafUID_constref,
+			value,
 			value of appended element,
 
 			[in],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pName,
 			name of appended element,
 
@@ -333,11 +330,10 @@ AD_XMETHOD2(AppendElement,
   // have elements with duplicate names or values.
   // 
   // Succeeds if:
-  // - The pValue pointer is valid.
   // - the pName pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pValue or pName\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName\)
   //
   // AAFRESULT_DUPLICATE
   //   - duplicate name or value is found.)

@@ -51,13 +51,10 @@ ImplAAFFiller::~ImplAAFFiller ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFFiller::Initialize (aafUID_t*	pDataDef,
+    ImplAAFFiller::Initialize (const aafUID_t & dataDef,
                            aafLength_t		length)
 {
-	if (pDataDef == NULL)
-		return AAFRESULT_NULL_PARAM;
-	else
-		return( SetNewProps( length, pDataDef ) );
+  return( SetNewProps( length, dataDef ) );
 }
 
 AAFRESULT ImplAAFFiller::TraverseToClip(aafLength_t length,

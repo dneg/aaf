@@ -1,4 +1,4 @@
-/***********************************************************************
+ /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
  *
@@ -197,17 +197,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // create
 	  IAAFTypeDefObjectRefSP tdor;
-	  checkResult (pDictionary->CreateInstance(&AUID_AAFTypeDefStrongObjRef,
+	  checkResult (pDictionary->CreateInstance(AUID_AAFTypeDefStrongObjRef,
 											   IID_IAAFTypeDefObjectRef,
 											   (IUnknown**)&tdor));
 
 	  // get class def for the referenced type.  In this case,
 	  // AAFComponent.
 	  IAAFClassDefSP cdComp;
-	  checkResult (pDictionary->LookupClass (&AUID_AAFComponent, &cdComp));
+	  checkResult (pDictionary->LookupClass (AUID_AAFComponent, &cdComp));
 
 	  // init our new type def strong obj ref
-	  checkResult (tdor->Initialize ((aafUID_t*) &kTestTypeID_ObjRef,
+	  checkResult (tdor->Initialize (kTestTypeID_ObjRef,
 									 cdComp,
 									 L"StrongRefToComponent"));
 
@@ -225,18 +225,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // get the existing class def describing comp mob
 	  IAAFClassDefSP cdCompMob;
-	  checkResult (pDictionary->LookupClass (&AUID_AAFCompositionMob, &cdCompMob));
+	  checkResult (pDictionary->LookupClass (AUID_AAFCompositionMob, &cdCompMob));
 
 	  // append the new prop defs to it
 	  IAAFPropertyDefSP pd1; // remember this for later use
 	  checkResult (cdCompMob->AppendOptionalPropertyDef
-				   ((aafUID_t*) &kTestPropID_CompMob_NewCompProp1,
+				   (kTestPropID_CompMob_NewCompProp1,
 					L"NewCompProp1",
 					td,
 					&pd1));
 	  IAAFPropertyDefSP pd2; // remember this for later use
 	  checkResult (cdCompMob->AppendOptionalPropertyDef
-				   ((aafUID_t*) &kTestPropID_CompMob_NewCompProp2,
+				   (kTestPropID_CompMob_NewCompProp2,
 					L"NewCompProp2",
 					td,
 					&pd2));
@@ -248,12 +248,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // Create a Composition Mob
 	  IAAFMobSP pMob;
-	  checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+	  checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 											  IID_IAAFMob, 
 											  (IUnknown **)&pMob));
 	  aafUID_t mobID;
 	  checkResult(CoCreateGuid((GUID *)&mobID));
-	  checkResult(pMob->SetMobID(&mobID));
+	  checkResult(pMob->SetMobID(mobID));
 	  checkResult(pMob->SetName(L"TestCompMob"));
 
 	  //
@@ -262,15 +262,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // different lengths (13 for #1, 26 for #2).
 	  //
 	  IAAFFillerSP fill1;
-	  checkResult (pDictionary->CreateInstance(&AUID_AAFFiller,
+	  checkResult (pDictionary->CreateInstance(AUID_AAFFiller,
 											   IID_IAAFFiller,
 											   (IUnknown **)&fill1));
-	  checkResult (fill1->Initialize ((aafUID_t*) &DDEF_PictureWithMatte, 13));
+	  checkResult (fill1->Initialize (DDEF_PictureWithMatte, 13));
 	  IAAFFillerSP fill2;
-	  checkResult (pDictionary->CreateInstance(&AUID_AAFFiller,
+	  checkResult (pDictionary->CreateInstance(AUID_AAFFiller,
 											   IID_IAAFFiller,
 											   (IUnknown **)&fill2));
-	  checkResult (fill2->Initialize ((aafUID_t*) &DDEF_PictureWithMatte, 26));
+	  checkResult (fill2->Initialize (DDEF_PictureWithMatte, 26));
 
 	  // get the AAFObject interfaces
 	  IAAFObjectSP fillObj1;
@@ -363,9 +363,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  // Get the prop defs for our two new props
 	  IAAFPropertyDefSP pd1;
 	  IAAFPropertyDefSP pd2;
-	  checkResult (cdMob->LookupPropertyDef ((aafUID_t*) &kTestPropID_CompMob_NewCompProp1,
+	  checkResult (cdMob->LookupPropertyDef (kTestPropID_CompMob_NewCompProp1,
 											 &pd1));
-	  checkResult (cdMob->LookupPropertyDef ((aafUID_t*) &kTestPropID_CompMob_NewCompProp2,
+	  checkResult (cdMob->LookupPropertyDef (kTestPropID_CompMob_NewCompProp2,
 											 &pd2));
 
 	  // Find the object type for one of them.
@@ -389,7 +389,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  
 	  // now get the expected class from the dictionary 
 	  IAAFClassDefSP dictClass;
-	  checkResult (dict->LookupClass (&AUID_AAFComponent,
+	  checkResult (dict->LookupClass (AUID_AAFComponent,
 									  &dictClass));
 	  IAAFDefObjectSP dictDef;
 	  checkResult (dictClass->QueryInterface (IID_IAAFDefObject,

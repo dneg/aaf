@@ -113,7 +113,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pHeader->GetDictionary(&pDictionary));
 
 		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 								IID_IAAFCompositionMob, 
 								(IUnknown **)&pCompMob));
 		// Get a MOB Interface 
@@ -121,7 +121,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
     // Assign the mob a new id.
     checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
     
     // Initialize the composition mob.
 		checkResult(pCompMob->Initialize( L"COMPMOB01" ));

@@ -71,7 +71,7 @@ ImplAAFMasterMob::Initialize ()
 // new slot in the Master Mob contains a Source Clip that specifies
 // the Source Mob in its source reference properties.
 //
-// The pDataDef parameter requires a data kind valid for a media
+// The dataDef parameter requires a data kind valid for a media
 // stream. Valid data kinds are:
 //
 // - DDEF_Picture
@@ -109,18 +109,18 @@ ImplAAFMasterMob::Initialize ()
 //
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::AddMasterSlot (aafUID_t*			pDataDef,
+    ImplAAFMasterMob::AddMasterSlot (const aafUID_t &	dataDef,
 									 aafSlotID_t		sourceSlotID,
 									 ImplAAFSourceMob*	pSourceMob,
 									 aafSlotID_t		masterSlotID,
-									 aafWChar*			pSlotName)
+									 const aafWChar*	pSlotName)
 {
 	aafLength_t	slotLength;
 	aafUID_t	sourceMobID;
 	HRESULT		hr = AAFRESULT_SUCCESS;
 	ImplAAFMobSlot*	pMobSlot;
 	ImplAAFTimelineMobSlot* pTimelineMobSlot = NULL;
-	aafUID_t	DataDef;
+	aafUID_t	segDataDef;
 	ImplAAFSegment*	pSegment = NULL;
 	ImplAAFSourceClip*	pSrcClip = NULL;
 	aafSourceRef_t		ref;
@@ -130,13 +130,13 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFDictionary *pDictionary = NULL;
 
 
-	if (!pDataDef || !pSourceMob || !pSlotName)
+	if (!pSourceMob || !pSlotName)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
 		// Get the slot length and mob id.  Verify that data kind
-		// of the slot is the same as pDataDef
+		// of the slot is the same as dataDef
 		CHECK(pSourceMob->GetMobID(&sourceMobID));
 
 		CHECK(pSourceMob->FindSlotBySlotID(sourceSlotID, &pMobSlot));
@@ -149,12 +149,12 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pMobSlot->GetSegment(&pSegment));
 
 		pSegment->GetLength(&slotLength);
-		pSegment->GetDataDef(&DataDef);
+		pSegment->GetDataDef(&segDataDef);
 		pSegment->ReleaseReference();
 		pSegment = NULL;
 
 		// Make sure the slot contains the expected media type.
-		if (!EqualAUID(&DataDef, pDataDef))
+		if (!EqualAUID(&segDataDef, &dataDef))
 			RAISE(AAFRESULT_INVALID_DATADEF);
 
 		pMobSlot->ReleaseReference();
@@ -173,7 +173,7 @@ AAFRESULT STDMETHODCALLTYPE
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
 
-		CHECK(pSrcClip->Initialize(pDataDef, &slotLength, ref));
+		CHECK(pSrcClip->Initialize(dataDef, slotLength, ref));
 		CHECK(AppendNewTimelineSlot(editRate,pSrcClip, masterSlotID, pSlotName, 
 									zeroPos,&pNewTimelineSlot));
 
@@ -609,28 +609,36 @@ AAFRESULT STDMETHODCALLTYPE
 // NewPhysSourceRef()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::NewPhysSourceRef (aafRational_t  editrate,
-                           aafSlotID_t  aMobSlot,
-                           aafUID_t *pEssenceKind,
-							aafSourceRef_t  ref,
-                           aafLength_t  srcRefLength)
+    ImplAAFMasterMob::NewPhysSourceRef (const aafRational_t & editrate,
+										aafSlotID_t  aMobSlot,
+										const aafUID_t & essenceKind,
+										aafSourceRef_t  ref,
+										aafLength_t  srcRefLength)
 {
-	return(ImplAAFMob::AddPhysSourceRef(kAAFForceOverwrite, editrate, aMobSlot,
-							pEssenceKind, ref, srcRefLength));
+	return(ImplAAFMob::AddPhysSourceRef(kAAFForceOverwrite,
+										editrate,
+										aMobSlot,
+										essenceKind,
+										ref,
+										srcRefLength));
 }
 
 //****************
 // AppendPhysSourceRef()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::AppendPhysSourceRef (aafRational_t  editrate,
-                           aafSlotID_t  aMobSlot,
-                           aafUID_t *pEssenceKind,
-							aafSourceRef_t  ref,
-                           aafLength_t  srcRefLength)
+    ImplAAFMasterMob::AppendPhysSourceRef (const aafRational_t & editrate,
+										   aafSlotID_t  aMobSlot,
+										   const aafUID_t & essenceKind,
+										   aafSourceRef_t  ref,
+										   aafLength_t  srcRefLength)
 {
-	return(ImplAAFMob::AddPhysSourceRef(kAAFAppend, editrate, aMobSlot,
-							pEssenceKind, ref, srcRefLength));
+	return(ImplAAFMob::AddPhysSourceRef(kAAFAppend,
+										editrate,
+										aMobSlot,
+										essenceKind,
+										ref,
+										srcRefLength));
 }
 
 
@@ -702,7 +710,7 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 			}
 			slot->ReleaseReference();
 			slot = NULL;
-			CHECK(seg->SetLength(&endPos));
+			CHECK(seg->SetLength(endPos));
 			seg->ReleaseReference();
 			seg = NULL;
 		}			

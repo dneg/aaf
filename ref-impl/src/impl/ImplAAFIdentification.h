@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -58,7 +58,7 @@ public:
     const wchar_t* productName,
     const aafProductVersion_t* productVersion,
     const wchar_t* productVersionString,
-    const aafUID_t* productId,
+    const aafUID_t & productId,
     const aafTimeStamp_t date,
     const aafProductVersion_t* toolKitVersion,
     const wchar_t* platform
@@ -97,7 +97,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetCompanyName
 		// @parm [in, string] The Company Name
-        (wchar_t *  pName);
+        (const aafCharacter * pName);
 
 
   //****************
@@ -127,7 +127,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetProductName
 		// @parm [in, string] The Product Name
-        (wchar_t *  pName);
+        (const aafCharacter * pName);
 
 
   //****************
@@ -157,7 +157,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetProductVersionString
 		// @parm [in, string] The Product Version String
-        (wchar_t *  pVersionString);
+        (const aafCharacter * pVersionString);
 
 
   //****************
@@ -193,7 +193,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetProductID
 		// @parm [in] The Product ID
-        (aafUID_t *  pProductID);
+        (const aafUID_t & productID);
 
 
   //****************

@@ -12,7 +12,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -156,11 +156,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
-		checkResult(pDictionary->CreateInstance(&AUID_AAFOperationDef,
+		checkResult(pDictionary->CreateInstance(AUID_AAFOperationDef,
 							  IID_IAAFOperationDef, 
 							  (IUnknown **)&pOperationDef));
   		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
-		checkResult(pOperationDef->SetDataDefinitionID (&testDataDef));
+		checkResult(pOperationDef->SetDataDefinitionID (testDataDef));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -175,13 +175,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
 
 		// Add two parameter defs, so that we can test all functions
-		checkResult(pDictionary->CreateInstance(&AUID_AAFParameterDef,
+		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Init (&TestParamUID1, TEST_PARAM_NAME1, TEST_PARAM_DESC1));
+		checkResult(pDefObject->Initialize (TestParamUID1, TEST_PARAM_NAME1, TEST_PARAM_DESC1));
 		pDefObject->Release();
 		pDefObject = NULL;
 		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
@@ -189,13 +189,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pParamDef->Release();
 		pParamDef = NULL;
 
-		checkResult(pDictionary->CreateInstance(&AUID_AAFParameterDef,
+		checkResult(pDictionary->CreateInstance(AUID_AAFParameterDef,
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Init (&TestParamUID2, TEST_PARAM_NAME2, TEST_PARAM_DESC2));
+		checkResult(pDefObject->Initialize (TestParamUID2, TEST_PARAM_NAME2, TEST_PARAM_DESC2));
 		pDefObject->Release();
 		pDefObject = NULL;
 		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));

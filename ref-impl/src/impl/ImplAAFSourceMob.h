@@ -97,13 +97,13 @@ public:
 		 aafSlotID_t  slotID,
 
 		 // @parm [in] Duration of the Source Clip to be added to the new slot
-		 aafLength_t  length,
+		 const aafLength_t & length,
 
 		 // @parm [in] Data kind of the new slot
-         aafUID_t * dataDef,
+         const aafUID_t & dataDef,
 
 		 // @parm [in] Edit rate of the new slot
-		 aafRational_t  editRate);
+		 const aafRational_t & editRate);
 
 
   //****************
@@ -179,15 +179,15 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     NewPhysSourceRef
         (// @parm [in] Edit rate of slot to contain reference
-		 aafRational_t  editrate,
+		 const aafRational_t & editrate,
 
 		 // @parm [in] SlotID of slot to contain reference
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         aafUID_t * pEssenceKind,
+         const aafUID_t & essenceKind,
 
-		aafSourceRef_t  ref,
+		 aafSourceRef_t  ref,
 
 		 // @parm [in] Length of the Source Clip
          aafLength_t  srcRefLength);
@@ -198,15 +198,15 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendPhysSourceRef
         (// @parm [in] Edit rate of slot to contain reference
-		 aafRational_t  editrate,
+		 const aafRational_t & editrate,
 
 		 // @parm [in] SlotID of slot to contain reference
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         aafUID_t * pEssenceKind,
+         const aafUID_t & essenceKind,
 
-		aafSourceRef_t  ref,
+		 aafSourceRef_t  ref,
 
 		 // @parm [in] Length of the Source Clip
          aafLength_t  srcRefLength);
@@ -219,15 +219,15 @@ public:
         (aafAppendOption_t  addType,
 		
 		// @parm [in] Edit rate of slot to contain reference
-		 aafRational_t  editrate,
+		 const aafRational_t & editrate,
 
 		 // @parm [in] SlotID of slot to contain reference
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         aafUID_t * pEssenceKind,
+         const aafUID_t & essenceKind,
 
-		aafSourceRef_t  ref,
+		 aafSourceRef_t  ref,
 
 		 // @parm [in] Length of the Source Clip in the Source Mob
          aafLength_t  srcRefLength,

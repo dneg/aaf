@@ -45,13 +45,12 @@ AD_DEFAULT_UUID(38e6f8a1, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Abstract, StoredObject)
 AD_METHOD1(SetLength,
 		   [in],
-		   aafLength_t *,
-		   pLength,
+		   aafLength_constref,
+		   length,
 		   The duration in edit units of this component,
 		   Sets the length property value on this component object.
   // 
   // Succeeds if all of the following are true:
-  // - the pLength pointer is valid.
   // - the optional length property is present for this object.
   //
   // This method deals with an optional property\\\, which will only be
@@ -66,9 +65,6 @@ AD_METHOD1(SetLength,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pVersion arg is NULL.
   //
   // AAFRESULT_BAD_PROP
   //   - the optional length property is not present for this object.)
@@ -105,15 +101,12 @@ AD_METHOD1(GetLength,
 	
 
 AD_XMETHOD1(SetDataDef,
-			[in],
+			[in\, ref],
 			objPass,
-			aafUID_t *,
-			pDatadef,
+			aafUID_constref,
+			datadef,
 			DataDef of this object,
 			sets the data definition property AUID on this component.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pDatadef pointer is valid.
   // 
   // If this method fails the Data Definition property will not be
   // changed.
@@ -123,10 +116,7 @@ AD_XMETHOD1(SetDataDef,
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDatadef arg is NULL.)
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetDataDef,

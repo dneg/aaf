@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -336,7 +336,7 @@ void EssenceDataTest::createFileMob()
   assert(NULL == _pSourceMob);
 
   // Create a Mob
-  check(_pDictionary->CreateInstance(&AUID_AAFSourceMob,
+  check(_pDictionary->CreateInstance(AUID_AAFSourceMob,
               IID_IAAFSourceMob, 
               (IUnknown **)&_pSourceMob));
 
@@ -344,10 +344,10 @@ void EssenceDataTest::createFileMob()
   
   aafUID_t newUID = {0};
   check(CoCreateGuid((GUID *)&newUID));
-  check(_pMob->SetMobID(&newUID));
+  check(_pMob->SetMobID(newUID));
   check(_pMob->SetName(L"EssenceDataTest File Mob"));
   
-  check(_pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
+  check(_pDictionary->CreateInstance(AUID_AAFFileDescriptor,
               IID_IAAFEssenceDescriptor, 
               (IUnknown **)&_pFileDescriptor));
 
@@ -383,7 +383,7 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
 
 
   // Attempt to create an AAFEssenceData.
-  check(_pDictionary->CreateInstance(&AUID_AAFEssenceData,
+  check(_pDictionary->CreateInstance(AUID_AAFEssenceData,
                          IID_IAAFEssenceData,
                          (IUnknown **)&_pEssenceData));
 

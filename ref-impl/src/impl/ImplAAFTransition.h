@@ -67,7 +67,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Create
         (// @parm [in] Data Definition Object
-         aafUID_t * pDatadef,
+         const aafUID_t & datadef,
 
 		 // @parm [in] Length property value
          aafLength_t  length,
