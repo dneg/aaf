@@ -245,6 +245,15 @@ void AxSourceClip::SetSourceReference( const aafSourceRef_t& ref )
   CHECK_HRESULT( _spIaafSourceClip->SetSourceReference( ref ) );
 }
 
+aafSourceRef_t AxSourceClip::GetSourceReference()
+{
+	aafSourceRef_t ref;
+
+	CHECK_HRESULT( _spIaafSourceClip->GetSourceReference( &ref ) );
+
+	return ref;
+}
+
 //=---------------------------------------------------------------------=
 
 AxOperationGroup::AxOperationGroup( IAAFOperationGroupSP spIaafOperationGroup )

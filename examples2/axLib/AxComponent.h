@@ -188,6 +188,7 @@ public:
 	void Initialize( IAAFDataDefSP, const aafLength_t&, const aafSourceRef_t& );
 
 	void SetSourceReference( const aafSourceRef_t& ref );
+	aafSourceRef_t GetSourceReference();
 	
 	operator IAAFSourceClipSP () 
 	{ return _spIaafSourceClip; }
