@@ -10,6 +10,8 @@ static char programName[FILENAME_MAX] = "Object Manager";
 
 void setProgramName(const char* name)
 {
+  TRACE("setProgramName");
+
   PRECONDITION("Valid program name", validString(name));
 
   size_t size = strlen(name) + 1;
@@ -27,6 +29,8 @@ const char* getProgramName(void)
 
 OMByteOrder hostByteOrder(void)
 {
+  TRACE("hostByteOrder");
+
   OMInt16 word = 0x1234;
   OMInt8  byte = *((OMInt8*)&word);
   OMByteOrder result;

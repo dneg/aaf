@@ -8,6 +8,8 @@
 OMObjectDirectory::OMObjectDirectory(int capacity)
 : _capacity(capacity), _current(0)
 {
+  TRACE("OMObjectDirectory::OMObjectDirectory");
+
   _table = new TableEntry[_capacity];
   ASSERT("Valid heap pointer", _table != 0);
   for (int i = 0; i < _capacity; i++) {
@@ -44,6 +46,8 @@ bool OMObjectDirectory::lookup(const char* name, const OMStorable*& p) const
 
 void OMObjectDirectory::insert(const char* name, const OMStorable* p)
 {
+  TRACE("OMObjectDirectory::insert");
+
   if (_current < _capacity) {
     char* n = new char[strlen(name) + 1];
     ASSERT("Valid heap pointer", n != 0);
