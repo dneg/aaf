@@ -60,7 +60,7 @@ public:
 	//
 	// EssenceDescriptor methods:
 	//
-	STDMETHOD (GetNumLocators) (aafInt32 *  pCount);
+	STDMETHOD (GetNumLocators) (aafUInt32 *  pCount);
 	STDMETHOD (AppendLocator) (IAAFLocator * pLocator);
 	STDMETHOD (PrependLocator) (IAAFLocator * pLocator);
 	STDMETHOD (EnumAAFAllLocators) (IEnumAAFLocators ** ppEnum);
