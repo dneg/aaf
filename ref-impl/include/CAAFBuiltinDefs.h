@@ -147,6 +147,7 @@ public:
   // Class Def 'get' methods
   //
   CLASS_DEF_METHOD(AIFCDescriptor);
+  CLASS_DEF_METHOD(AuxiliaryDescriptor);
   CLASS_DEF_METHOD(CDCIDescriptor);
   CLASS_DEF_METHOD(ClassDef);
   CLASS_DEF_METHOD(CodecDef);
@@ -158,6 +159,8 @@ public:
   CLASS_DEF_METHOD(ContentStorage);
   CLASS_DEF_METHOD(ControlPoint);
   CLASS_DEF_METHOD(DataDef);
+  CLASS_DEF_METHOD(DescriptiveFramework);
+  CLASS_DEF_METHOD(DescriptiveMarker);
   CLASS_DEF_METHOD(Dictionary);
   CLASS_DEF_METHOD(DigitalImageDescriptor);
   CLASS_DEF_METHOD(Edgecode);
@@ -176,6 +179,7 @@ public:
   CLASS_DEF_METHOD(ImportDescriptor);
   CLASS_DEF_METHOD(InterpolationDefinition);
   CLASS_DEF_METHOD(KLVData);
+  CLASS_DEF_METHOD(KLVDataDefinition);
   CLASS_DEF_METHOD(Locator);
   CLASS_DEF_METHOD(MasterMob);
   CLASS_DEF_METHOD(Mob);
@@ -191,6 +195,7 @@ public:
   CLASS_DEF_METHOD(PluginDef);
   CLASS_DEF_METHOD(PropertyDef);
   CLASS_DEF_METHOD(Pulldown);
+  CLASS_DEF_METHOD(RecordingDescriptor);
   CLASS_DEF_METHOD(RGBADescriptor);
   CLASS_DEF_METHOD(ScopeReference);
   CLASS_DEF_METHOD(Selector);
@@ -202,6 +207,7 @@ public:
   CLASS_DEF_METHOD(StaticMobSlot);
   CLASS_DEF_METHOD(TIFFDescriptor);
   CLASS_DEF_METHOD(TaggedValue);
+  CLASS_DEF_METHOD(TaggedValueDefinition);
   CLASS_DEF_METHOD(TapeDescriptor);
   CLASS_DEF_METHOD(TextClip);
   CLASS_DEF_METHOD(TextLocator);
@@ -238,6 +244,8 @@ public:
   DATA_DEF_METHOD(PictureWithMatte);
   DATA_DEF_METHOD(Sound);
   DATA_DEF_METHOD(Timecode);
+  DATA_DEF_METHOD(DescriptiveMetadata);
+  DATA_DEF_METHOD(Auxiliary);
 
 
   //
