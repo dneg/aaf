@@ -54,7 +54,10 @@
 #include <string.h>
 
 
+#ifndef __AAFPlugin_h__
 #include "AAFPlugin.h"
+#endif
+
 #include "AAFPluginManager.h"
 #include "aafUtils.h"
 #include "aafCvt.h"
@@ -303,6 +306,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 {
 	aafUID_t			fileMobUID, audioDDEF = DDEF_Audio;
 	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
+	aafRational_t		audioRate = { 44100, 1 };
 	AAFRESULT			aafError = OM_ERR_NONE;
 	ImplAAFSourceMob	*fileMob;
 	ImplAAFMobSlot		*tmpSlot;
@@ -335,14 +339,14 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 		XASSERT((_channels != NULL), OM_ERR_NOMEMORY);
 		_numChannels = 1;		 
 		CvtInt32toPosition(0, _dataStart);
-		CvtInt32toLength(0, _channels[0].numSamples);
+/*!!!!		CvtInt32toLength(0, _channels[0].numSamples);
 		_channels[0].dataOffset = _dataStart;
 		_channels[0].mediaKind = mediaKind;
 		_channels[0].trackID = masterSlotID;
 		_channels[0].physicalOutChan = 1;
 		_channels[0].sampleRate = sampleRate;
 		CvtInt32toLength(0, _channels[0].numSamples);
-		
+*/		
 		//!!! Handle tje other cases of destination and format (raw, no locator not allowed)
 		//	_destination = NULL;
 		//	_fileFormat = kAAFiMedia;
@@ -394,7 +398,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 			CHECK(mdes->SetIsInContainer (AAFTrue));
 			aafUID_t	fileType = NilMOBID;//!!!
 			CHECK(mdes->SetContainerFormat (&fileType));	//!!!
-
+			CHECK(mdes->SetSampleRate(&audioRate));
 			CHECK(fileMob->SetEssenceDescriptor(mdes));
 			CHECK(head->AppendMob(fileMob));
 			
@@ -897,6 +901,11 @@ AAFRESULT STDMETHODCALLTYPE
 		xfer.bytesXfered = 0;
 	
 		CHECK (_codec->codecWriteBlocks(this, deinterleave, 1, &xfer));
+
+		//!!!Move this into a loop when this routine is finished
+		// Do this here and not in the codec any more
+		CHECK(omfsAddInt32toInt64(xfer->numSamples, &_channels[0].numSamples));
+
 	}
 	XEXCEPT
 	XEND
@@ -940,7 +949,10 @@ AAFRESULT STDMETHODCALLTYPE
 		xfer.bytesXfered = 0;
 	
 		CHECK (_codec->codecWriteBlocks(this, deinterleave, 1, &xfer));
-	}
+
+		// Do this here and not in the codec any more
+		CHECK(omfsAddInt32toInt64(xfer->numSamples, &_channels[0].numSamples));
+}
 	XEXCEPT
 	XEND
 	
@@ -1534,24 +1546,6 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(plugins->GetCodecInstance(CLSID_AAFWaveCodec, _variety, &_codec));
 
 		IUnknown	*iFileMob;
-
-		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
-		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, &numCh));
-		if (numCh == 0)
-		  RAISE(AAFRESULT_INVALID_DATADEF);
-
-		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
-		if(_channels == NULL)
-			RAISE(OM_ERR_NOMEMORY);
-		_numChannels = numCh;
-		for(n = 0; n < numCh; n++)
-		{
-			CvtInt32toLength(0, _channels[n].numSamples);
-			_channels[n].dataOffset = _dataStart;
-			_channels[n].mediaKind = mediaKind;
-			_channels[n].physicalOutChan = n+1;
-			_channels[n].trackID = slotID+n;
-		}
 //!!!		_physicalOutChanOpen = physicalOutChan;
 		
 //!!!		CHECK(fileMob->LocateMediaFile(&_dataFile, &isAAF));
@@ -1606,7 +1600,27 @@ AAFRESULT STDMETHODCALLTYPE
 		edStream->Init(edUnknown);
 
 		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, _stream, &numCh));
+		if (numCh == 0)
+		  RAISE(AAFRESULT_INVALID_DATADEF);
+
+		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
+		if(_channels == NULL)
+			RAISE(OM_ERR_NOMEMORY);
+		_numChannels = numCh;
+		for(n = 0; n < numCh; n++)
+		{
+/* !!!			CvtInt32toLength(0, _channels[n].numSamples); 
+			_channels[n].dataOffset = _dataStart;*/
+			_channels[n].mediaKind = mediaKind;
+			_channels[n].physicalOutChan = n+1;
+			_channels[n].trackID = slotID+n;
+		}
+
+		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
 		CHECK(_codec->Open(iFileMob, openMode, _stream));
+
+
 //!!!		if(openMode == kMediaOpenAppend)
 //		{
 //			CHECK(GetSampleCount(&numSamples));										  
