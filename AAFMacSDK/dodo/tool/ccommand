@@ -16,20 +16,25 @@ end if
 set programName "{1}"
 shift
 
-# Create the argv file.
-echo "{parameters}" > "{programName}.arg"
+# Preserve the old obsolete arg file if present.
+if "`exists -f "{programName}.arg"`" ­ ""
+	Rename -y "{programName}.arg" "{programName}.arg1"
+end if
 
 # Preserve the old obsolete inp file if present.
 if "`exists -f "{programName}.inp"`" ­ ""
-	Rename "{programName}.inp" "{programName}.inp1"
+	Rename -y "{programName}.inp" "{programName}.inp1"
 end if
+
+# Create the argv file.
+echo "{parameters}" > "{programName}.arg"
 
 # Alias that behaves like the SystemTask toolbox routine releases time to the system
 # so that Finder and other applications get alittle time to complete processing
 # 
 alias SystemTask 'Evaluate index = 0;¶
 loop;¶
-	break if {index} >= 1000;¶
+	break if {index} >= 10;¶
 	Evaluate index = {index} + 1;¶
 end'
 
