@@ -44,29 +44,29 @@ public:
 	~Aaf2Omf();
 
 public:
-	HRESULT OpenInputFile( void );
+	void OpenInputFile( void );
 		
-	HRESULT ConvertFile( void );
+	void ConvertFile( void );
 
 protected:
 	void ConvertMobIDtoUID(aafMobID_constptr pMobID, OMF2::omfUID_t* pOMFMobID);
-	HRESULT OpenOutputFile( void );
+	void OpenOutputFile( void );
 	void CloseInputFile( void );
 	void CloseOutputFile(void );
-	HRESULT AAFFileRead( void );
-	virtual HRESULT ConvertCompositionMob(IAAFCompositionMob* pCompMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
-	HRESULT ConvertMasterMob(IAAFMasterMob* pMasterMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
-	HRESULT ConvertSourceMob(IAAFSourceMob* pSourceMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
-	HRESULT TraverseMob(IAAFMob* pMob, OMF2::omfMobObj_t* pOMFMob);
-	HRESULT ProcessComponent(IAAFComponent* pComponent, OMF2::omfObject_t* pOMFSegment);
-	HRESULT ConvertAAFDatadef(aafUID_t Datadef, OMF2::omfDDefObj_t* pDatakind);
-	virtual HRESULT ConvertAAFTypeIDDatakind(aafUID_t, OMF2::omfDDefObj_t* pDatakind);
-	HRESULT TraverseSequence(IAAFSequence* pSequence, OMF2::omfObject_t* pOMFSequence );
-	HRESULT ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
-	HRESULT ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
-	HRESULT ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
-	virtual HRESULT ConvertEffects(IAAFOperationGroup* pEffect, OMF2::omfEffObj_t nest, OMF2::omfEffObj_t*	pOMFEffect);
-	virtual HRESULT ConvertParameter(IAAFParameter* pParm,
+	void AAFFileRead( void );
+	virtual void ConvertCompositionMob(IAAFCompositionMob* pCompMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
+	void ConvertMasterMob(IAAFMasterMob* pMasterMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
+	void ConvertSourceMob(IAAFSourceMob* pSourceMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
+	void TraverseMob(IAAFMob* pMob, OMF2::omfMobObj_t* pOMFMob);
+	void ProcessComponent(IAAFComponent* pComponent, OMF2::omfObject_t* pOMFSegment);
+	void ConvertAAFDatadef(aafUID_t Datadef, OMF2::omfDDefObj_t* pDatakind);
+	virtual void ConvertAAFTypeIDDatakind(aafUID_t, OMF2::omfDDefObj_t* pDatakind);
+	void TraverseSequence(IAAFSequence* pSequence, OMF2::omfObject_t* pOMFSequence );
+	void ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
+	void ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
+	void ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
+	virtual void ConvertEffects(IAAFOperationGroup* pEffect, OMF2::omfEffObj_t nest, OMF2::omfEffObj_t*	pOMFEffect);
+	virtual void ConvertParameter(IAAFParameter* pParm,
 		aafUID_t			&effectDefID,
 		OMF2::omfSegObj_t pOMFEffect,
 		OMF2::omfInt32 slotNum, OMF2::omfLength_t effectLen);
@@ -76,8 +76,8 @@ protected:
 								aafDataBuffer_t srcValue, aafUInt32 srcValueLen,
 								aafDataBuffer_t *destValue, aafUInt32 *destValueLen,
 								bool *didAllocateNew);
-	virtual HRESULT ConvertObjectProps(IAAFObject* pObj, OMF2::omfObject_t pOMFObject);
-	virtual HRESULT ConvertNestedScope(IAAFNestedScope* pNest, OMF2::omfObject_t* pOMFNest );
+	virtual void ConvertObjectProps(IAAFObject* pObj, OMF2::omfObject_t pOMFObject);
+	virtual void ConvertNestedScope(IAAFNestedScope* pNest, OMF2::omfObject_t* pOMFNest );
 protected:
 
     OMF2::omfSessionHdl_t	OMFSession;
