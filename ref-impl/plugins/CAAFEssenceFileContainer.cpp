@@ -70,6 +70,19 @@ void CAAFEssenceFileContainer::SetLastFileStream(CAAFEssenceFileStream *pLastFil
   _pLastFileStream = pLastFileStream; 
 }
 
+static bool PathsAreEqual(const wchar_t *path1, const wchar_t *path2)
+{
+	assert(NULL != path1 && NULL != path2);
+	
+	if (NULL == path1 || NULL == path2)
+		return false;
+	
+	int i = 0;
+	while ((path1[i] && path2[i]) && (path1[i] == path2[i]))
+		++i;
+			
+	return (path1[i] == path2[i]);
+}
 
 HRESULT CAAFEssenceFileContainer::CheckExistingStreams(
   const wchar_t *pwcPath,
@@ -81,7 +94,7 @@ HRESULT CAAFEssenceFileContainer::CheckExistingStreams(
   {
     // Is the file stream already open?
     const wchar_t *existingFilePath = pCurrentFileStream->FilePath();
-    if (0 == wcscmp(existingFilePath, pwcPath))
+    if (PathsAreEqual(existingFilePath, pwcPath))
     {
       // Check for invalid mode combinations.
       FileStreamMode existingFileMode = pCurrentFileStream->StreamMode();
