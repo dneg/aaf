@@ -22,6 +22,8 @@
 #include "ImplAAFTimelineMobSlot.h"
 #endif
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 #include <AAFResult.h>
 #include "aafCvt.h" 
