@@ -257,6 +257,8 @@ const CLSID CLSID_AAFHeader =
 //           development.
 //  0.17   : changed format of aafTimeStamp_t struct to reflect
 //           reality.
+//  0.18   : Changed PluginDescriptor::Locators to be a
+//           StrongReferenceVector (was a StrongReferenceSet).
 //
 
 // The following may change at run time depending on the file format
@@ -268,7 +270,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 17;
+const OMUInt32 HIGHVERSION = 18;
 
 // Output format requested
 //
