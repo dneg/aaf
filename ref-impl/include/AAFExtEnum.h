@@ -35,7 +35,7 @@
 // Include the meta dictionary.
 //
 #define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(name, guid, container) \
-const aafUID_t name = id;
+const aafUID_t name = guid;
 
 #include "AAFMetaDictionary.h"
 
