@@ -31,12 +31,7 @@
 #define OMFEXCEPT_H_DEFINED (1)
 
 #include "ExceptionBase.h"
-namespace OMF2
-{
-	#include "omErr.h"
-}
-using	OMF2::omfErr_t;
-using	OMF2::OM_ERR_NONE;
+#include "omErr.h"
 
 /*******************************************************************
 Name: 

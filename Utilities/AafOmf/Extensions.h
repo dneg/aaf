@@ -46,7 +46,7 @@ public:
 	virtual ~ExtendedOmf2Aaf();
 
 public:
-	virtual void FinishUpMob(OMF2::omfMobObj_t pOMFMob, IAAFMob* pMob) { };
+	virtual void FinishUpMob(omfMobObj_t pOMFMob, IAAFMob* pMob) { };
 private:
 };
 
