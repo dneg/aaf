@@ -258,7 +258,8 @@ bool OMXMLStoredObjectFactory::compatibleNamedFile(
   // @mfunc Perform any necessary actions when the file
   //        contained in <p fileName> is closed.
   //   @parm The file name.
-void OMXMLStoredObjectFactory::close(const wchar_t* /* fileName */)
+void OMXMLStoredObjectFactory::close(const wchar_t* /* fileName */,
+                                     bool /* isWritable */)
 {
   TRACE("OMXMLStoredObjectFactory::close");
   // Nothing to do.
@@ -267,7 +268,8 @@ void OMXMLStoredObjectFactory::close(const wchar_t* /* fileName */)
   // @mfunc Perform any necessary actions when the file
   //        contained in <p rawStorage> is closed.
   //   @parm The <c OMRawStorage>
-void OMXMLStoredObjectFactory::close(OMRawStorage* /* rawStorage */)
+void OMXMLStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
+                                     bool /* isWritable */)
 {
   TRACE("OMXMLStoredObjectFactory::close");
   // Nothing to do.

@@ -227,7 +227,8 @@ bool OMKLVStoredObjectFactory::compatibleNamedFile(
   // @mfunc Perform any necessary actions when the file
   //        contained in <p fileName> is closed.
   //   @parm The file name.
-void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */)
+void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */,
+                                     bool /* isWritable */)
 {
   TRACE("OMKLVStoredObjectFactory::close");
   ASSERT("Unimplemented code not reached", false);
@@ -236,7 +237,8 @@ void OMKLVStoredObjectFactory::close(const wchar_t* /* fileName */)
   // @mfunc Perform any necessary actions when the file
   //        contained in <p rawStorage> is closed.
   //   @parm The <c OMRawStorage>
-void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */)
+void OMKLVStoredObjectFactory::close(OMRawStorage* /* rawStorage */,
+                                     bool /* isWritable */)
 {
   TRACE("OMKLVStoredObjectFactory::close");
   ASSERT("Unimplemented code not reached", false);

@@ -702,11 +702,11 @@ void OMFile::close(void)
       ASSERT("Recognized file encoding", factory != 0);
       OMRawStorage* store = rawStorage();
       if (store != 0) {
-        factory->close(store);
+        factory->close(store, isWritable());
         store->synchronize();
       } else {
         const wchar_t* name = fileName();
-        factory->close(name);
+        factory->close(name, isWritable());
       }
     }
   }

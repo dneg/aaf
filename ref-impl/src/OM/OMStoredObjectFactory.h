@@ -124,11 +124,11 @@ public:
 
     // @cmember Perform any necessary actions when the file
     //          contained in <p fileName> is closed.
-  virtual void close(const wchar_t* fileName) = 0;
+  virtual void close(const wchar_t* fileName, bool isWritable) = 0;
 
     // @cmember Perform any necessary actions when the file
     //          contained in <p rawStorage> is closed.
-  virtual void close(OMRawStorage* rawStorage) = 0;
+  virtual void close(OMRawStorage* rawStorage, bool isWritable) = 0;
 
 private:
   // @access Private members.

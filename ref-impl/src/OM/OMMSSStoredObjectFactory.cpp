@@ -303,7 +303,8 @@ bool OMMSSStoredObjectFactory::compatibleNamedFile(
   // @mfunc Perform any necessary actions when the file
   //        contained in <p fileName> is closed.
   //   @parm The file name.
-void OMMSSStoredObjectFactory::close(const wchar_t* fileName)
+void OMMSSStoredObjectFactory::close(const wchar_t* fileName,
+                                     bool /* isWritable */)
 {
   TRACE("OMMSSStoredObjectFactory::close");
 
@@ -314,7 +315,8 @@ void OMMSSStoredObjectFactory::close(const wchar_t* fileName)
   // @mfunc Perform any necessary actions when the file
   //        contained in <p rawStorage> is closed.
   //   @parm The <c OMRawStorage>
-void OMMSSStoredObjectFactory::close(OMRawStorage* rawStorage)
+void OMMSSStoredObjectFactory::close(OMRawStorage* rawStorage,
+                                     bool /* isWritable */)
 {
   TRACE("OMMSSStoredObjectFactory::close");
 
