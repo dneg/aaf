@@ -31,7 +31,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream.h>
-#include <memory>
 
 // OMF Includes
 namespace OMF2
@@ -216,8 +215,7 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 	aafBool					bAddExtraIdent = kAAFFalse;
 	aafProductIdentification_t	ProductInfo;
 
-	std::auto_ptr<wchar_t> pwFile( new wchar_t[strlen(pFileName)+1] );
-	aafWChar*	pwFileName = pwFile.get();
+	aafWChar*	pwFileName = new wchar_t[strlen(pFileName)+1];
 	mbstowcs(pwFileName, pFileName, strlen(pFileName)+1);
 
 	// Get Identification from OMF Header 
@@ -236,20 +234,17 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 										&OMFIdent, nOMFIdentifications);
 		if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTCompanyName, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 			strcpy(text, "<Not Specified>");
-		std::auto_ptr<wchar_t> pwcompany( new wchar_t[strlen(text)+1] );
-		pwCompanyName = pwcompany.get();
+		pwCompanyName = new wchar_t[strlen(text)+1];
 		mbstowcs(pwCompanyName, text, strlen(text)+1);
 		ProductInfo.companyName = pwCompanyName;
 		if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTProductName, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 			strcpy(text, "<Not Specified>");
-		std::auto_ptr<wchar_t> pwproduct( new wchar_t[strlen(text)+1] );
-		pwProductName = pwproduct.get();
+		pwProductName = new wchar_t[strlen(text)+1];
 		mbstowcs(pwProductName, text, strlen(text)+1);
 		ProductInfo.productName = pwProductName;
 		if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTProductVersionString, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 			strcpy(text, "<Not Specified>");
-		std::auto_ptr<wchar_t> pwversion( new wchar_t[strlen(text)+1] );
-		pwProductVersionString =  pwversion.get();
+		pwProductVersionString =  new wchar_t[strlen(text)+1];
 		mbstowcs(pwProductVersionString, text, strlen(text)+1);
 		ProductInfo.productVersionString = pwProductVersionString;
 		if (OMF2::omfsReadProductVersionType(OMFFileHdl, OMFIdent, OMF2::OMIDNTProductVersion, &OMFVersion) != OMF2::OM_ERR_NONE)
@@ -270,12 +265,16 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 
 		if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTPlatform, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 			strcpy(text, "<Not Specified>");
-		std::auto_ptr<wchar_t> pwplatform( new wchar_t[strlen(text)+1] );
-		pwPlatform = pwplatform.get();
+		pwPlatform =  new wchar_t[strlen(text)+1];
 		mbstowcs(pwPlatform, text, strlen(text)+1);
 		ProductInfo.platform = pwPlatform;
 		rc = AAFFileOpenNewModify(pwFileName, 0, &ProductInfo, &pFile);
 		bAddExtraIdent = kAAFTrue;
+
+		delete []  pwCompanyName;
+		delete []  pwProductName;
+		delete []  pwProductVersionString;
+		delete [] pwPlatform;
 	}
 	else
 	{
@@ -324,7 +323,8 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 	gpGlobals->pLogger->Log(kLogInfo, "AAF File: %s Created succesfully\n", pFileName);
 	pAAF->SetDictionary(pDictionary);
 
-	// auto_ptrs will clean up all allocated memory upon return;
+	delete [] pwFileName;
+
 	return;
 }
 
@@ -512,7 +512,10 @@ void Omf2Aaf::ConvertOMFHeader( void )
 	gpGlobals->pLogger->Log( kLogInfo, "Found: %ld Class Definitions\n", numEntries);
 	for (int j = 1;j <= numEntries; j++)
 	{
-		OMFError = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary, &OMFObject, j);
+		if (OMF2::kOmfRev2x == OMFFileRev)
+			OMFError = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary, &OMFObject, j);
+		else
+			OMFError = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMClassDictionary, &OMFObject, j);
 		// Process the given Class Dictionary object.
 		ConvertOMFClassDictionaryObject(OMFObject);
 	}
@@ -621,6 +624,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 	IAAFSourceMob*			pSourceMob;
 	AutoRelease<IAAFSourceMob> pSource;
 	aafBool					bConvertMedia = kAAFFalse;
+	aafBool					bForceUseDataValue = kAAFFalse;
 
 	CAAFBuiltinDefs defs (pDictionary);
 
@@ -739,19 +743,20 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 		pEssence = pEssenceData;
 		rc = pEssenceData->SetFileMob(pSourceMob);
 		rc = pHeader->AddEssenceData(pEssenceData);
-		if (OMF2::kOmfRev2x == OMFFileRev)
-		{
+//		if (OMF2::kOmfRev2x == OMFFileRev)
+//		{
 			OMF2::omfErr_t err;
 			idProperty = OMF2::OMIDATImageData;
 			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, &err );
 			OMFError = err;
-		}
-		else
-		{
-			strcat(propName, "IDAT");
-			strcat(propName, ":Data");
-		}
+//		}
+//		else
+//		{
+//			strcat(propName, "IDAT");
+//			strcat(propName, ":ImageData");
+//		}
 		bConvertMedia = kAAFTrue;
+		bForceUseDataValue = kAAFTrue;
 	}
 	else
 	{
@@ -797,7 +802,10 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			}
 			OMFError = OMF2::omfiIteratorDispose(OMFFileHdl, propIter);
 
-			numBytes = (aafUInt32)OMF2::omfsLengthVarLenBytes(OMFFileHdl, obj, idProperty);
+			if (OMF2::kOmfRev2x == OMFFileRev || bForceUseDataValue)
+				numBytes = (aafUInt32)OMF2::omfsLengthDataValue(OMFFileHdl, obj, idProperty);
+			else
+				numBytes = (aafUInt32)OMF2::omfsLengthVarLenBytes(OMFFileHdl, obj, idProperty);
 		}
 		if (numBytes > 0)
 		{
@@ -810,16 +818,17 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			{
 				nBlockSize = numBytes;
 			}
-			std::auto_ptr<char> buf( new char[nBlockSize] ); // For auto delete..
-			pBuffer = buf.get();
+			pBuffer = new char[nBlockSize];
 			OMFOffset = 0;
 			do 
 			{
 				if( (numBytes - OMFOffset) < nBlockSize )
 				{
-					nBlockSize = (numBytes - OMFOffset);
+					nBlockSize = (aafUInt32)(numBytes - OMFOffset);
 				}
 				if (OMF2::kOmfRev2x == OMFFileRev)
+				{
+					numBytes = (aafUInt32)OMF2::omfsLengthDataValue(OMFFileHdl, obj, idProperty);
 					OMFError = OMF2::omfsReadDataValue( OMFFileHdl, 
 									 					obj,
 														idProperty,
@@ -828,14 +837,24 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 														OMFOffset,
 														nBlockSize,
 														&numBytesRead);
+				}
 				else
-					OMFError = OMF2::omfsReadVarLenBytes(OMFFileHdl,
+				{
+					if(bForceUseDataValue)
+					{
+						OMFError = OMF2::OMReadProp(OMFFileHdl, obj, idProperty, 0, OMF2::kNeverSwab,
+											OMF2::OMDataValue, nBlockSize, pBuffer);
+						numBytesRead = nBlockSize;
+					}
+					else
+						OMFError = OMF2::omfsReadVarLenBytes(OMFFileHdl,
 														 obj,
 														 idProperty,
 														 OMFOffset,
 														 nBlockSize,
 														 pBuffer,
 														 &numBytesRead);
+				}
 
 				// write the data
 				rc = pEssenceData->SetPosition((aafPosition_t) OMFOffset);
@@ -847,8 +866,8 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			}while (numBytes > OMFOffset );
 
 			Assert( numBytes == OMFOffset );
-			// auto_ptr will Free the allocated buffer here when it goes
-			// out of scope.
+			if(pBuffer)
+				delete [] pBuffer;
 		}
 	}
 
@@ -938,8 +957,7 @@ void Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 	OMF2::omfErr_t	testErr;
 	testErr = OMF2::omfiMobGetInfo(OMFFileHdl, obj, &OMFMobID, sizeof(sMobName), sMobName, NULL, NULL);
 	char *src = (OMF2::OM_ERR_NONE == testErr) ? sMobName : "<not named>";
-	std::auto_ptr<wchar_t> pwmobname( new wchar_t[strlen(src)+1] );
-	aafWChar*	pwMobName = pwmobname.get();
+	aafWChar*	pwMobName = new wchar_t[strlen(src)+1];
 	mbstowcs(pwMobName, src, strlen(src)+1);
 	AAFCheck aafCheck = pMob->SetName(pwMobName);
 	gpGlobals->pLogger->Log( kLogInfo, "%sMob Name: %s\n", gpGlobals->indentLeader, src );
@@ -967,16 +985,17 @@ void Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 			int nameLen = strlen( sCommentName );
 			if( nameLen > 0 )
 			{
-				std::auto_ptr<wchar_t>pwcomment( new wchar_t[ nameLen + 1 ] );
-				aafWChar *pwCommentName = pwcomment.get();
+				aafWChar *pwCommentName = new wchar_t[ nameLen + 1 ];
 				mbstowcs(pwCommentName, sCommentName, nameLen + 1);
 				int textLen = strlen(sCommentValue);
-				std::auto_ptr<wchar_t>pwcommentval( new wchar_t[ textLen + 1 ] );
-				aafWChar* pwCommentValue = pwcommentval.get();
+				aafWChar* pwCommentValue = new wchar_t[ textLen + 1 ];
 				mbstowcs(pwCommentValue, sCommentValue, textLen + 1);
 				aafCheck = pMob->AppendComment(pwCommentName, pwCommentValue);
 				gpGlobals->pLogger->Log( kLogInfo, "Comment \"%s\" of length %ld was converted.\n", sCommentName, textLen );
 				gpGlobals->pLogger->Log( kLogInfo, "Comment value = \"%s\".\n", sCommentValue );
+
+				delete [] pwCommentName;
+				delete [] pwCommentValue;
 			}
 			else
 			{
@@ -991,9 +1010,8 @@ void Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 	FinishUpMob(obj, pMob);
 	DecIndentLevel();
 
-	// auto_ptrs will delete [] allocated pointers here...
-	// AutoRelease's will release resources here.
-	return;
+	if(pwMobName)
+		delete [] pwMobName;
 }
 
 // ============================================================================
@@ -1112,8 +1130,11 @@ void Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 			aafUInt32				physicalTrackNumber = 0;			
 			OMFError = OMF2::omfiTrackGetInfo(OMFFileHdl, obj, OMFSlot, &OMFeditRate, sizeof(sTrackName),
 				sTrackName, &OMFOrigin, &OMFTrackID, &OMFSegment);
-			OMFError = OMF2::omfiTrackGetPhysicalNum(OMFFileHdl, OMFSlot, (OMF2::omfUInt32 *)&physicalTrackNumber);
-			
+			if (OMF2::kOmfRev2x == OMFFileRev)
+				OMFError = OMF2::omfiTrackGetPhysicalNum(OMFFileHdl, OMFSlot, (OMF2::omfUInt32 *)&physicalTrackNumber);
+			else
+				physicalTrackNumber = OMFTrackID;
+
 			IAAFComponent*			pComponent = NULL;
 			ProcessOMFComponent(OMFSegment, &pComponent);
 			if( pComponent )
@@ -1124,8 +1145,7 @@ void Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 				AutoRelease<IAAFSegment> pseg( pSegment );
 				IncIndentLevel();
 				
-				std::auto_ptr <wchar_t> pwtrack( new wchar_t[strlen(sTrackName)+1] );
-				aafWChar* pwTrackName = pwtrack.get();
+				aafWChar* pwTrackName = new wchar_t[strlen(sTrackName)+1];
 				mbstowcs(pwTrackName, sTrackName, strlen(sTrackName)+1);
 				
 				// OMF ONLY created timeline mob slots 
@@ -1151,6 +1171,8 @@ void Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 				rc = pMob->AppendSlot( pMobSlot );
 				gpGlobals->pLogger->Log( kLogInfo, "%sConverted SlotID: %d, Name: %s\n",gpGlobals->indentLeader, (int)OMFTrackID, sTrackName);
 				DecIndentLevel();
+
+				delete [] pwTrackName;
 			}
 		}
 		// At this point we have a consistent MOB - Lets save it
@@ -1964,8 +1986,7 @@ void Omf2Aaf::ConvertOMFLocator(OMF2::omfObject_t obj,
 		char					locatorPath[128];
 		omfCheck = OMF2::omfmLocatorGetInfo(OMFFileHdl, OMFLocator, locType, 
 			sizeof( locatorPath ), locatorPath);
-		std::auto_ptr<wchar_t> plocpath(  new wchar_t[strlen(locatorPath)+1] );
-		aafWChar *pwLocatorPath = plocpath.get();
+		aafWChar *pwLocatorPath = new wchar_t[strlen(locatorPath)+1];
 		mbstowcs(pwLocatorPath, locatorPath, strlen(locatorPath)+1);
 
 		IAAFNetworkLocator*		pNetworkLocator;
@@ -1983,6 +2004,8 @@ void Omf2Aaf::ConvertOMFLocator(OMF2::omfObject_t obj,
 		gpGlobals->pLogger->Log( kLogInfo, 
 				"%sAdded a Network locator to the Essence Descriptor\n", gpGlobals->indentLeader);
 		testErr = OMF2::omfmMobGetNextLocator(locatorIter, obj, &OMFLocator);
+
+		delete [] pwLocatorPath;
 	}
 
 	OMFError = OMF2::omfiIteratorDispose(OMFFileHdl, locatorIter);
@@ -2438,7 +2461,10 @@ void Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 		// Retrieve and set generic File Descriptor properties.
 		rc = pEssenceDesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc);
 		
-		OMFError = OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLSampleRate, (OMF2::omfRational_t *)&sampleRate);
+		if (OMF2::kOmfRev2x == OMFFileRev)
+			OMFError = OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLSampleRate, (OMF2::omfRational_t *)&sampleRate);
+		else
+			OMFError = OMF2::omfsReadExactEditRate(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLSampleRate, (OMF2::omfRational_t *)&sampleRate);
 		rc = pFileDesc->SetSampleRate(sampleRate);
 		
 		OMFError = OMF2::omfsReadLength(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLLength, (OMF2::omfLength_t *)&length);
@@ -2506,7 +2532,7 @@ void Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 			pTapeDesc->SetTapeFormFactor((aafTapeCaseType_t)formFactor);
 			pTapeDesc->SetSignalType((aafVideoSignalType_t)videoSignal);
 			pTapeDesc->SetTapeFormat((aafTapeFormatType_t)tapeFormat);
-			pTapeDesc->SetTapeLength((aafLength_t)length);
+			pTapeDesc->SetTapeLength((aafUInt32)length);
 			rc = pTapeDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssenceDesc);
 			pSourceMob->SetEssenceDescriptor(pEssenceDesc);
 			gpGlobals->pLogger->Log(kLogInfo,
