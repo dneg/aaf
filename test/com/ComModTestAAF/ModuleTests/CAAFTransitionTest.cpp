@@ -176,7 +176,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 												IID_IAAFEffectDef,
 												(IUnknown **)&pEffectDef));
 		// Create an empty Effect object !!
-		checkResult(pDictionary->CreateInstance(&AUID_AAFEffect,
+		checkResult(pDictionary->CreateInstance(&AUID_AAFGroup,
 												IID_IAAFEffect,
 												(IUnknown **)&pEffect));
 
