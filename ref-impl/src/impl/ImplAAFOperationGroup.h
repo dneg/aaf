@@ -162,11 +162,8 @@ public:
   // AddNewInputSegment()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AddNewInputSegment
-        (// @parm [in] Index (1-based) of the input segment
-         aafInt32  index,
-
-         // @parm [in] Segment to place in effect
+    AppendNewInputSegment
+        (// @parm [in] Segment to place in effect
          ImplAAFSegment * value);
 	//@comm Replaces part of omfiEffectAddNewSlot
 
