@@ -96,6 +96,10 @@ SOURCE=.\FileGenOps\Alias.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileGenOps\AudioEssenceSource.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGenOps\CompositionMob.cpp
 # End Source File
 # Begin Source File
@@ -148,6 +152,10 @@ SOURCE=.\FileGenOps\ParamMaps.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileGenOps\Properties.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGenOps\Rate.cpp
 # End Source File
 # Begin Source File
@@ -174,6 +182,10 @@ SOURCE=.\FileGenOps\TapeDescriptor.cpp
 
 SOURCE=.\FileGenOps\VideoEssenceSource.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\FileGenOps\WaveHeader.cpp
+# End Source File
 # End Group
 # Begin Group "HeaderFiles"
 
@@ -189,6 +201,10 @@ SOURCE=.\FileGenOps\Rate.h
 # Begin Source File
 
 SOURCE=.\FileGenOps\SampleSource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\FileGenOps\WaveHeader.h
 # End Source File
 # End Group
 # End Group
