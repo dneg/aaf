@@ -50,6 +50,9 @@ public:
     // @cmember Destructor.
   virtual ~OMReferenceVectorProperty(void);
 
+    // @cmember Convert to <c OMReferenceContainer>.
+  virtual OMReferenceContainer* referenceContainer(void);
+
 };
 
 #endif

@@ -51,3 +51,10 @@ OMReferenceVectorProperty::~OMReferenceVectorProperty(void)
 {
   TRACE("OMReferenceVectorProperty::~OMReferenceVectorProperty");
 }
+
+  // @mfunc Convert to <c OMReferenceContainer>.
+  //   @rdesc TBS
+OMReferenceContainer* OMReferenceVectorProperty::referenceContainer(void)
+{
+  return this;
+}

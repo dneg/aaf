@@ -49,3 +49,10 @@ OMReferenceSetProperty::~OMReferenceSetProperty(void)
 {
   TRACE("OMReferenceSetProperty::~OMReferenceSetProperty");
 }
+
+  // @mfunc Convert to <c OMReferenceContainer>.
+  //   @rdesc TBS
+OMReferenceContainer* OMReferenceSetProperty::referenceContainer(void)
+{
+  return this;
+}
