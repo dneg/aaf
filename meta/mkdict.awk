@@ -125,20 +125,24 @@ BEGIN {
   #
   printf("//=---------------------------------------------------------------------=\n");
   printf("//\n");
+  printf("// This file was GENERATED for the AAF SDK\n");
+  printf("//\n");
+  printf("// $""Id$ $""Name$\n");
+  printf("//\n");
   printf("// The contents of this file are subject to the AAF SDK Public\n");
   printf("// Source License Agreement (the \"License\"); You may not use this file\n");
   printf("// except in compliance with the License.  The License is available in\n");
   printf("// AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF\n");
   printf("// Association or its successor.\n");
-  printf("// \n");
+  printf("//\n");
   printf("// Software distributed under the License is distributed on an \"AS IS\"\n");
   printf("// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See\n");
   printf("// the License for the specific language governing rights and limitations\n");
   printf("// under the License.\n");
-  printf("// \n");
+  printf("//\n");
   printf("// The Original Code of this file is Copyright 1998-2001, Licensor of the\n");
   printf("// AAF Association.\n");
-  printf("// \n");
+  printf("//\n");
   printf("// The Initial Developer of the Original Code of this file and the\n");
   printf("// Licensor of the AAF Association is Avid Technology.\n");
   printf("// All rights reserved.\n");
