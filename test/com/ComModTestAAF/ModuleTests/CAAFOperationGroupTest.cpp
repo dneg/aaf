@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFGroup
+// @com This file implements the module test for CAAFEffect
 
 /************************************************\
 *												*
@@ -10,14 +10,14 @@
 *												*
 \************************************************/
 
-#include "CAAFGroup.h"
-#include "CAAFGroup.h"
-#ifndef __CAAFGroup_h__
+#include "CAAFEffect.h"
+#include "CAAFEffect.h"
+#ifndef __CAAFEffect_h__
 #error - improperly defined include guard
 #endif
 
 // Temporarily necessary global declarations.
-extern "C" const CLSID CLSID_AAFGroup; // generated
+extern "C" const CLSID CLSID_AAFEffect; // generated
 
 
 #include <iostream.h>
@@ -122,7 +122,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFEffectDef*		pEffectDef = NULL;
 	IAAFParameterDef*	pParamDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
-	IAAFGroup			*pGroup = NULL;
+	IAAFEffect			*pEffect = NULL;
 	IAAFMob				*pMob = NULL;
 	IAAFSegment			*pSeg = NULL;
 	IAAFTimelineMobSlot	*pSlot = NULL;
@@ -200,9 +200,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add some slots
 		for(test = 0; test < 2; test++)
 		{
- 			checkResult(pDictionary->CreateInstance(&AUID_AAFGroup,
-							     IID_IAAFGroup, 
-							     (IUnknown **)&pGroup));
+ 			checkResult(pDictionary->CreateInstance(&AUID_AAFEffect,
+							     IID_IAAFEffect, 
+							     (IUnknown **)&pEffect));
 			
 			checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
 							     IID_IAAFSegment, 
@@ -210,19 +210,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 			checkResult(pComponent->SetLength(&effectLen));
 			checkResult(pComponent->SetDataDef(&testDataDef));
- 			checkResult(pGroup->Initialize(&testDataDef, TEST_EFFECT_LEN, pEffectDef));
+ 			checkResult(pEffect->Initialize(&testDataDef, TEST_EFFECT_LEN, pEffectDef));
 
 			checkResult(pDictionary->CreateInstance(&AUID_AAFParameter,
 							  IID_IAAFParameter, 
 							  (IUnknown **)&pParm));
 			checkResult(pParm->SetParameterDefinition (pParamDef));
  // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
-			checkResult(pGroup->AddNewParameter (pParm));
-			checkResult(pGroup->AppendNewInputSegment (pFiller));
+			checkResult(pEffect->AddNewParameter (pParm));
+			checkResult(pEffect->AppendNewInputSegment (pFiller));
 			pFiller->Release();
 			pFiller = NULL;
 
-			checkResult(pGroup->SetBypassOverride (1));
+			checkResult(pEffect->SetBypassOverride (1));
 			checkResult(pDictionary->CreateInstance(&AUID_AAFSourceClip,
 							  IID_IAAFSourceClip, 
 							  (IUnknown **)&pSourceClip));
@@ -232,8 +232,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			sourceRef.startTime = 0;
 			checkResult(pSourceClip->Initialize (&testDataDef,&effectLen, sourceRef));
 			checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
-			checkResult(pGroup->SetRender (pSourceRef));
-			checkResult(pGroup->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
+			checkResult(pEffect->SetRender (pSourceRef));
+			checkResult(pEffect->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
 
 			checkResult(pMob->AppendNewTimelineSlot (videoRate, pSeg, test+1, slotNames[test], 0, &pSlot));
 
@@ -243,8 +243,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pSeg->Release();
 			pSeg = NULL;
 
-			pGroup->Release();
-			pGroup = NULL;
+			pEffect->Release();
+			pEffect = NULL;
 			pParm->Release();
 			pParm = NULL;
 			pComponent->Release();
@@ -271,8 +271,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSourceClip->Release();
 	if (pDefObject)
 		pDefObject->Release();
-	if (pGroup)
-		pGroup->Release();
+	if (pEffect)
+		pEffect->Release();
 	if (pMob)
 		pMob->Release();
 	if (pSeg)
@@ -324,7 +324,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFParameter		*pParameter = NULL;
 	IAAFDefObject*		pDefObject = NULL;
 	IAAFSegment*		pSeg = NULL;
-	IAAFGroup*			pGroup = NULL;
+	IAAFEffect*			pEffect = NULL;
 	IEnumAAFMobs		*mobIter = NULL;
 	IAAFMob*			pMob = NULL;
 	IEnumAAFMobSlots	*slotIter = NULL;
@@ -361,28 +361,28 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		{
 			checkResult(slotIter->NextOne (&pSlot));
 			checkResult(pSlot->GetSegment (&pSeg));
-			checkResult(pSeg->QueryInterface (IID_IAAFGroup, (void **)&pGroup));
+			checkResult(pSeg->QueryInterface (IID_IAAFEffect, (void **)&pEffect));
 			pSeg->Release();
 			pSeg = NULL;
 
-			checkResult(pGroup->GetNumSourceSegments(&testNumSources));
+			checkResult(pEffect->GetNumSourceSegments(&testNumSources));
 			checkExpression(testNumSources == TEST_NUM_INPUTS, AAFRESULT_TEST_FAILED);
-			checkResult(pGroup->GetNumParameters(&testNumParam));
+			checkResult(pEffect->GetNumParameters(&testNumParam));
 			checkExpression(testNumSources == 1, AAFRESULT_TEST_FAILED);
 
-			checkResult(pGroup->IsATimeWarp (&readIsTimeWarp));
+			checkResult(pEffect->IsATimeWarp (&readIsTimeWarp));
 			checkExpression(readIsTimeWarp == AAFFalse, AAFRESULT_TEST_FAILED);
 
-			checkResult(pGroup->GetBypassOverride (&readOverride));
+			checkResult(pEffect->GetBypassOverride (&readOverride));
 			checkExpression(readOverride == 1, AAFRESULT_TEST_FAILED);
 
-			checkResult(pGroup->IsValidTranEffect (&readValidTransition));
+			checkResult(pEffect->IsValidTranEffect (&readValidTransition));
 			checkExpression(readValidTransition == AAFFalse, AAFRESULT_TEST_FAILED);
 			/**/
-			checkResult(pGroup->GetIndexedInputSegment (0, &pSeg));
+			checkResult(pEffect->GetIndexedInputSegment (0, &pSeg));
  			checkResult(pSeg->QueryInterface(IID_IAAFFiller, (void **) &pFill));
 			/**/
-			checkResult(pGroup->GetParameterByArgID (kTestParmID, &pParameter));
+			checkResult(pEffect->GetParameterByArgID (kTestParmID, &pParameter));
 			checkResult(pParameter->GetParameterDefinition(&pParmDef));
 			checkResult(pParmDef->GetDisplayUnits (checkName, sizeof(checkName)));
 			checkExpression(wcscmp(checkName, TEST_PARAM_UNITS) == 0, AAFRESULT_TEST_FAILED);
@@ -397,7 +397,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pParmDef = NULL;
 
 			/**/
-			checkResult(pGroup->GetEffectDefinition(&pEffectDef));
+			checkResult(pEffect->GetEffectDefinition(&pEffectDef));
 			checkResult(pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 			checkResult(pDefObject->GetName (checkName, sizeof(checkName)));
 			checkExpression(wcscmp(checkName, TEST_EFFECT_NAME) == 0, AAFRESULT_TEST_FAILED);
@@ -417,11 +417,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pEffectDef->Release();
 			pEffectDef = NULL;
 			/**/
-			checkResult(pGroup->GetRender (&pSourceRef));
+			checkResult(pEffect->GetRender (&pSourceRef));
 			checkResult(pSourceRef->GetSourceID (&readSourceID));
 			checkExpression(EqualAUID(&readSourceID, &zeroID) == AAFTrue, AAFRESULT_TEST_FAILED);
-			pGroup->Release();
-			pGroup = NULL;
+			pEffect->Release();
+			pEffect = NULL;
 			pSlot->Release();
 			pSlot = NULL;
 			pSeg->Release();
@@ -469,8 +469,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pSeg)
 		pSeg->Release();
       
-	if (pGroup)
-		pGroup->Release();
+	if (pEffect)
+		pEffect->Release();
       
 	if (pDictionary)
 		pDictionary->Release();
@@ -504,7 +504,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-HRESULT CAAFGroup::test()
+HRESULT CAAFEffect::test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"GroupTest.aaf";
@@ -517,7 +517,7 @@ HRESULT CAAFGroup::test()
 	}
 	catch (...)
 	{
-		cerr << "CAAFGroup::test...Caught general C++ exception!" << endl; 
+		cerr << "CAAFEffect::test...Caught general C++ exception!" << endl; 
 	}
 
 	return hr;
