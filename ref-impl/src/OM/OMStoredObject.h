@@ -74,11 +74,11 @@ public:
 
     // @cmember Create a new <c OMStoredObject>, named <p name>,
     //          contained by this <c OMStoredObject>.
-  OMStoredObject* create(const char* name);
+  OMStoredObject* create(const wchar_t* name);
 
     // @cmember Open an exsiting <c OMStoredObject>, named <p name>,
     //          contained by this <c OMStoredObject>.
-  OMStoredObject* open(const char* name);
+  OMStoredObject* open(const wchar_t* name);
 
     // @cmember Close this <c OMStoredObject>.
   void close(void);
@@ -105,11 +105,11 @@ public:
 
     // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
     //          <c OMStoredObject>, the vector is named <p vectorName>.
-  void save(const OMStoredVectorIndex* vector, const char* vectorName);
+  void save(const OMStoredVectorIndex* vector, const wchar_t* vectorName);
 
     // @cmember Save the <c OMStoredSetIndex> <p set> in this
     //          <c OMStoredObject>, the set is named <p setName>.
-  void save(const OMStoredSetIndex* set, const char* setName);
+  void save(const OMStoredSetIndex* set, const wchar_t* setName);
 
     // @cmember Save the <c OMPropertyTable> <p table> in this
     //          <c OMStoredObject>.
@@ -123,7 +123,7 @@ public:
             OMPropertyId keyPropertyId);
 
     // @cmember Save a collection (vector/set) of weak references.
-  void save(const char* collectionName,
+  void save(const wchar_t* collectionName,
             const OMUniqueObjectIdentification* index,
             size_t count,
             OMPropertyTag tag,
@@ -131,11 +131,11 @@ public:
 
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
-  void restore(OMStoredVectorIndex*& vector, const char* vectorName);
+  void restore(OMStoredVectorIndex*& vector, const wchar_t* vectorName);
 
     // @cmember Restore the set named <p setName> into this
     //          <c OMStoredObject>.
-  void restore(OMStoredSetIndex*& set, const char* setName);
+  void restore(OMStoredSetIndex*& set, const wchar_t* setName);
 
     // @cmember Restore the <c OMPropertyTable> in this <c OMStoredObject>.
   void restore(OMPropertyTable*& table);
@@ -148,7 +148,7 @@ public:
                OMPropertyId& keyPropertyId);
 
     // @cmember Restore a collection (vector/set) of weak references.
-  void restore(const char* collectionName,
+  void restore(const wchar_t* collectionName,
                const OMUniqueObjectIdentification*& index,
                size_t &count,
                OMPropertyTag& tag,
@@ -174,11 +174,11 @@ public:
 
     // @cmember Open a stream called <p streamName> contained within
     //          this <c OMStoredObject>.
-  IStream* openStream(const char* streamName);
+  IStream* openStream(const wchar_t* streamName);
 
     // @cmember Create a stream called <p streamName> contained within
     //          this <c OMStoredObject>.
-  IStream* createStream(const char* streamName);
+  IStream* createStream(const wchar_t* streamName);
 
     // @cmember Read <p size> bytes from <p stream> into the buffer at
     //          address <p data>.
@@ -320,14 +320,14 @@ private:
   
     // @cmember The stream name for the index of a collection
     //          named <p collectionName>.
-  char* collectionIndexStreamName(const char* collectionName);
+  wchar_t* collectionIndexStreamName(const wchar_t* collectionName);
 
-  IStream* createStream(IStorage* storage, const char* streamName);
-  IStream* openStream(IStorage* storage, const char* streamName);
+  IStream* createStream(IStorage* storage, const wchar_t* streamName);
+  IStream* openStream(IStorage* storage, const wchar_t* streamName);
 
-  IStorage* createStorage(IStorage* storage, const char* storageName);
+  IStorage* createStorage(IStorage* storage, const wchar_t* storageName);
   IStorage* openStorage(IStorage* storage,
-                        const char* storageName,
+                        const wchar_t* storageName,
                         const OMFile::OMAccessMode mode);
   void closeStorage(IStorage*& storage);
 
