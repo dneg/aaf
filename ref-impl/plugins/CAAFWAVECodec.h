@@ -214,14 +214,15 @@ public:
 
   // Write some number of bytes to the stream exactly and with no formatting or compression.
   STDMETHOD (WriteRawData)
-    (/*[in,size_is(buflen)]*/ aafDataBuffer_t  buffer, // to a buffer
+    (/*[in]*/ aafUInt32 nSamples,	//number of samples to read
+	/*[in,size_is(buflen)]*/ aafDataBuffer_t  buffer, // to a buffer
      /*[in]*/ aafInt32  buflen); // of this size 
 
 
 
   // Read some number of bytes from the stream exactly and with no formatting or compression.
   STDMETHOD (ReadRawData)
-    (aafUInt32 nSamples,
+    (/*[in]*/ aafUInt32 nSamples,	//number of samples to read
 	 /*[in]*/ aafUInt32  buflen, // to a buffer of this size
      /*[out, size_is(buflen), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer, // here is the buffer
      /*[out,ref]*/ aafUInt32 *  bytesRead,	// Return bytes actually read 
