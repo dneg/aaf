@@ -1028,7 +1028,6 @@ aafErr_t TimecodeToString(
 {
 	register int i, ten;
   aafInt16 hours, minutes, seconds, frames;
-  aafErr_t aafError = AAFRESULT_SUCCESS;
 
   XPROTECT()
 	{
@@ -1074,7 +1073,6 @@ aafErr_t TimecodeToString(
 
   XEXCEPT
 	{
-	  return(XCODE());
 	}
   XEND;
 
@@ -1189,7 +1187,6 @@ aafErr_t StringToTimecode(
 	
 	XEXCEPT
 	{
-		return(XCODE());
 	}
 	XEND;
 
