@@ -72,6 +72,12 @@
 #define kGammaNumTestVal				7
 #define kGammaDenTestVal				8
 
+// our test Mob id 
+static const aafMobID_t	TEST_MobID = 
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x3b38e782, 0x03fd, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
 static HRESULT SetDigitalImageDescProps(IAAFCDCIDescriptor* pDesc)
 {
 	IAAFDigitalImageDescriptor* pDIDesc;
@@ -187,7 +193,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*	pDictionary = NULL;
 	IAAFSourceMob*	pSourceMob = NULL;
-	aafMobID_t		newMobID;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
 
@@ -217,8 +222,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  {
 			  IAAFCDCIDescriptor*	pCDCIDesc = NULL;
 
-			  CoCreateGuid((GUID *)&newMobID);
-			  pMob->SetMobID(newMobID);
+			  pMob->SetMobID(TEST_MobID);
 			  pMob->SetName(L"CDCIDescriptorTest");
 			  hr = defs.cdCDCIDescriptor()->
 				CreateInstance(IID_IAAFCDCIDescriptor, 

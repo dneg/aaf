@@ -60,6 +60,35 @@ static aafMobID_t		NewMobID;
 #define TAPE_MOB_LENGTH	60
 #define TAPE_MOB_NAME	L"A Tape Mob"
 
+//--cf  This will require some work!!! 
+static const 	aafMobID_t	TEST_Master_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x07c01e92, 0x0403, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
+static const 	aafMobID_t	TEST_Source_MobIDs[NumMobSlots] =
+{	//start mobid block
+	
+	//first id
+	{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+		0x13, 0x00, 0x00, 0x00,
+	{0x11ee08d4, 0x0403, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}},
+	
+	//second id
+	{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+	0x13, 0x00, 0x00, 0x00,
+	{0x7f0b27bc, 0x0403, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}},
+	
+	//third id
+	{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+	0x13, 0x00, 0x00, 0x00,
+	{0x8d6c568c, 0x0403, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}
+	
+};	//end mobid block
+
+
+
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -185,10 +214,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pMob));
 		
 		// Set the IAAFMob properties
-		checkResult(CoCreateGuid((GUID *)&NewMobID));
-		aafMobID_t mobID;
-		memcpy (&mobID, &NewMobID, sizeof (mobID));
-		checkResult(pMob->SetMobID(mobID));
+		checkResult(pMob->SetMobID(TEST_Master_MobID));
 		checkResult(pMob->SetName(MobName));
 		
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
@@ -274,10 +300,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pDesc = NULL;
 			
 			// Append source MOB to header
-			aafMobID_t				TempUID;
 			checkResult(pSrcMob->QueryInterface(IID_IAAFMob, (void **) &pTempMob));
-			checkResult(CoCreateGuid((GUID *)&TempUID));
-			checkResult(pTempMob->SetMobID(TempUID));
+			checkResult(pTempMob->SetMobID(TEST_Source_MobIDs[test]));
 			checkResult(pTempMob->SetName(L"source mob"));
 			
 			checkResult(pHeader->AddMob(pTempMob));

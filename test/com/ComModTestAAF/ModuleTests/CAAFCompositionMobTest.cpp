@@ -46,6 +46,12 @@ static aafInt32 fadeInLen  = 1000;
 static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
 static aafRational_t fadeInEditUnit = { 25, 1};
 
+static const	aafMobID_t	TEST_MobID = 
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x9269dfa2, 0x0407, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
+
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -83,7 +89,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFCompositionMob*			pCompMob = NULL;
 	IAAFMob*					pMob = NULL;
 
-	aafMobID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
 
@@ -125,8 +130,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		
 	  // Assign the mob a new id.
-	  checkResult(CoCreateGuid((GUID *)&newMobID));
-	  checkResult(pMob->SetMobID(newMobID));
+	  checkResult(pMob->SetMobID(TEST_MobID));
     
 	  // Initialize the composition mob.
 	  checkResult(pCompMob->Initialize( L"COMPMOB01" ));

@@ -52,7 +52,11 @@
 //static aafTapeFormatType_t TapeFormat = kAAFVHSFormat;
 //static aafLength_t TapeLength = 3200 ;
 
-static aafMobID_t		NewMobID;
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xafc51ab6, 0x03fe, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
 //#define TAPE_MOB_OFFSET	10
 //#define TAPE_MOB_LENGTH	60
 //#define TAPE_MOB_NAME	L"A Tape Mob"
@@ -177,10 +181,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pMob));
 		
 		// Set the IAAFMob properties
-		checkResult(CoCreateGuid((GUID *)&NewMobID));
-		aafMobID_t NewMobAUID;
-		memcpy (&NewMobAUID, &NewMobID, sizeof (NewMobID));
-		checkResult(pMob->SetMobID(NewMobAUID));
+		checkResult(pMob->SetMobID(TEST_MobID));
 		checkResult(pMob->SetName(MobName));
 		
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));

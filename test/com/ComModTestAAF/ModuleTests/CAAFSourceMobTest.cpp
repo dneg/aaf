@@ -41,6 +41,10 @@
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xb6cb63f0, 0x0404, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
 
 // Cross-platform utility to delete a file.
@@ -81,7 +85,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFEssenceDescriptor *edesc = NULL;
 
 	aafProductIdentification_t	ProductInfo;
-	aafMobID_t					newMobID;
 	HRESULT						hr = S_OK;
 
 	aafProductVersion_t v;
@@ -126,8 +129,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 
-		checkResult(CoCreateGuid((GUID *)&newMobID));
-	  checkResult(pMob->SetMobID(newMobID));
+	  checkResult(pMob->SetMobID(TEST_MobID));
 	  checkResult(pMob->SetName(L"SourceMOBTest"));
 	  
 	  // Add some slots

@@ -40,6 +40,11 @@
 
 #include "CAAFBuiltinDefs.h"
 
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xc1f142c2, 0x0404, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -76,7 +81,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary*  pDictionary = NULL;
 	IAAFSourceReference	*pSourceReference = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafMobID_t					inSourceID, outSourceID;
+	aafMobID_t					outSourceID;
 	aafUInt32 inMobSlotID, outMobSlotID;
 	HRESULT						hr = S_OK;
 
@@ -117,8 +122,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// module-specific tests go here
 		//		Set Values.	
-		checkResult(CoCreateGuid((GUID *)&inSourceID));
-		checkResult(pSourceReference->SetSourceID( inSourceID));
+		checkResult(pSourceReference->SetSourceID( TEST_MobID));
 		
 		inMobSlotID = 100;   // Could have been any other value !
 		checkResult(pSourceReference->SetSourceMobSlotID( inMobSlotID));
@@ -127,7 +131,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSourceReference->GetSourceID( &outSourceID));
 
 		// Compare value with the one we set
-		checkExpression(memcmp(&inSourceID, &outSourceID, sizeof(inSourceID)) == 0, AAFRESULT_TEST_FAILED);
+		checkExpression(memcmp(&TEST_MobID, &outSourceID, sizeof(TEST_MobID)) == 0, AAFRESULT_TEST_FAILED);
 
 		
 		checkResult(pSourceReference->GetSourceMobSlotID( &outMobSlotID));

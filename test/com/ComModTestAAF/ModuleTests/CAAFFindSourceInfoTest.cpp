@@ -55,7 +55,34 @@ static aafVideoSignalType_t VideoSignalType = kAAFPALSignal;
 static aafTapeFormatType_t TapeFormat = kAAFVHSFormat;
 static aafLength_t TapeLength = 3200 ;
 
-static aafMobID_t		NewMobID;
+//static aafMobID_t		NewMobID;
+//--cf  This will require some work!!! 
+static const 	aafMobID_t	TEST_Master_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x8056f1f4, 0x03ff, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
+static const 	aafMobID_t	TEST_Source_MobIDs[NumMobSlots] =
+{	//start mobid block
+	
+	//first id
+	{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+		0x13, 0x00, 0x00, 0x00,
+	{0x9f66346a, 0x03ff, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}},
+	
+	//second id
+	{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+	0x13, 0x00, 0x00, 0x00,
+	{0xbc0e582c, 0x03ff, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}},
+	
+	//third id
+	{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+	0x13, 0x00, 0x00, 0x00,
+	{0xcaab21c6, 0x03ff, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}
+	
+};	//end mobid block
+
+
 static const aafPosition_t	TAPE_MOB_OFFSET_ARR[NumMobSlots] = { 15, 25, 35 };
 static const aafLength_t	TAPE_MOB_LENGTH_ARR[NumMobSlots] = { 90, 80, 70 };
 static aafMobID_t			TAPE_MOB_ID = {0};
@@ -188,10 +215,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			(IUnknown **)&pMob));
 		
 		// Set the IAAFMob properties
-		checkResult(CoCreateGuid((GUID *)&NewMobID));
-		aafMobID_t mobID;
-		memcpy (&mobID, &NewMobID, sizeof (mobID));
-		checkResult(pMob->SetMobID(mobID));
+		checkResult(pMob->SetMobID(TEST_Master_MobID));
 		checkResult(pMob->SetName(MobName));
 		
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
@@ -280,10 +304,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pDesc = NULL;
 			
 			// Append source MOB to header
-			aafMobID_t				TempUID;
 			checkResult(pSrcMob->QueryInterface(IID_IAAFMob, (void **) &pTempMob));
-			checkResult(CoCreateGuid((GUID *)&TempUID));
-			checkResult(pTempMob->SetMobID(TempUID));
+			checkResult(pTempMob->SetMobID(TEST_Source_MobIDs[test]));
 			checkResult(pTempMob->SetName(L"source mob"));
 			
 			checkResult(pHeader->AddMob(pTempMob));
@@ -400,7 +422,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			checkExpression(wcscmp(name, MobName) == 0, AAFRESULT_TEST_FAILED);
 			
 			checkResult(pMob->GetMobID(&mobID));
-			checkExpression(0 == memcmp(&mobID, &NewMobID, sizeof(mobID)), AAFRESULT_TEST_FAILED);
+			checkExpression(0 == memcmp(&mobID, &TEST_Master_MobID, sizeof(mobID)), AAFRESULT_TEST_FAILED);
 			
 			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(NumMobSlots == numSlots, AAFRESULT_TEST_FAILED);

@@ -45,6 +45,11 @@ static aafUInt32 FrameRate = 24;
 static aafUInt8 PerfPerFrame = 4;
 static aafRational_t	AspectRatio = { 1000, 1 };	// !!!Find a real aspect ratio
 
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x302e420e, 0x03ff, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -83,7 +88,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFilmDescriptor*			pFilmDesc = NULL;
 	
 	aafProductIdentification_t	ProductInfo;
-	aafMobID_t					newMobID;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	
 	
@@ -113,8 +117,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				CreateInstance(IID_IAAFSourceMob, 
 							   (IUnknown **)&pSourceMob));
 	checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
-	CoCreateGuid((GUID *)&newMobID);
-	pMob->SetMobID(newMobID);
+	pMob->SetMobID(TEST_MobID);
 	pMob->SetName(L"FilmDescriptorTest");
 	checkResult(defs.cdFilmDescriptor()->
 				CreateInstance(IID_IAAFFilmDescriptor, 

@@ -45,6 +45,11 @@ static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT
 static aafWChar* TagNames[3] = { L"TAG01", L"TAG02", L"TAG03" };
 static aafWChar* Comments[3] = { L"Comment 1", L"Comment 2", L"Comment 3"};	
 
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xa5691d12, 0x0406, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -83,7 +88,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceClip	*sclp = NULL;
 	IAAFComponent	*pComponent = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafMobID_t					newMobID;
 	HRESULT						hr = S_OK;
 
 	aafProductVersion_t v;
@@ -124,8 +128,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				  CreateInstance(IID_IAAFMob, 
 								 (IUnknown **)&pMob));
 
-	  checkResult(CoCreateGuid((GUID *)&newMobID));
-	  checkResult(pMob->SetMobID(newMobID));
+	  checkResult(pMob->SetMobID(TEST_MobID));
 	  checkResult(pMob->SetName(L"EnumAAFTaggedValuesTest"));
 		// append some comments to this mob !!
 	  for (test = 0; test < 3; test++)

@@ -75,6 +75,11 @@ static const aafUID_t kTestPropID_CompMob_NewCompProp2 =
 { 0x248f0cf, 0x7cb6, 0x11d3, { 0x84, 0x50, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
 
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xc68dee88, 0x0405, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -255,9 +260,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(defs.cdCompositionMob()->
 				  CreateInstance(IID_IAAFMob, 
 								 (IUnknown **)&pMob));
-	  aafMobID_t mobID;
-	  checkResult(CoCreateGuid((GUID *)&mobID));
-	  checkResult(pMob->SetMobID(mobID));
+	  checkResult(pMob->SetMobID(TEST_MobID));
 	  checkResult(pMob->SetName(L"TestCompMob"));
 
 	  //
