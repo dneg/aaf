@@ -71,6 +71,9 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	*ppEdes = _essenceDesc;
+	// !!!Handle case where essence descriptor may not
+	// exist, return  AAFRESULT_NO_ESSENCE_DESC.
+
   if (*ppEdes)
     (*ppEdes)->AcquireRef();
 
@@ -91,19 +94,6 @@ AAFRESULT STDMETHODCALLTYPE
 	_essenceDesc = pEdes;
 	return AAFRESULT_SUCCESS;
 }
-
-
-
-//****************
-// Setup()
-//
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::Setup (aafWChar *  /*pName*/,
-                           aafClassID_t *  /*pMdesClass*/)
-{
-	return AAFRESULT_NOT_IMPLEMENTED;
-}
-
 
 
 //****************
@@ -146,7 +136,7 @@ AAFRESULT STDMETHODCALLTYPE
 // AddTimecodeClip()
 //
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFSourceMob::AppendTimecodeClip (aafRational_t editrate,
+   ImplAAFSourceMob::AppendTimecodeSlot (aafRational_t editrate,
                            aafInt32 slotID,
 						   aafTimecode_t startTC,
                            aafFrameLength_t length32)
@@ -164,6 +154,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFTimelineMobSlot *	newSlot = NULL, *mobSlot = NULL;
 	aafBool			fullLength = AAFFalse;
 
+	//!!!Validate tape mobs only, return AAFRESULT_TAPE_DESC_ONLY
 	if(length32 == FULL_LENGTH)
 	  {
 		 fullLength = AAFTrue;
@@ -229,7 +220,7 @@ AAFRESULT STDMETHODCALLTYPE
 // AddEdgecodeClip()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::AppendEdgecodeClip (aafRational_t  /*editrate*/,
+    ImplAAFSourceMob::AppendEdgecodeSlot (aafRational_t  /*editrate*/,
                            aafInt32  /*slotID*/,
                           aafFrameOffset_t  /*startEC*/,
                            aafFrameLength_t  /*length32*/,
@@ -248,6 +239,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFDataKind *	edgecodeKind;
 	aafEdgecode_t	edge;
 	
+	// Validate film mobs only, return AAFRESULT_FILM_DESC_ONLY
 	CvtInt32toPosition(0, zeroPos);
 	CvtInt32toLength(0, zeroLen);
 	XPROTECT(_file)
@@ -298,7 +290,7 @@ AAFRESULT STDMETHODCALLTYPE
 // ValidateTimecodeRange()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::ValidateTimecodeRange (ImplAAFDataDef * /*pEssenceKind*/,
+    ImplAAFSourceMob::SpecifyValidCodeRange (ImplAAFDataDef * /*pEssenceKind*/,
                            aafSlotID_t  /*slotID*/,
                            aafRational_t  /*editrate*/,
                            aafFrameOffset_t  /*startOffset*/,
