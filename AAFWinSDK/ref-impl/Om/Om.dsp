@@ -94,6 +94,14 @@ SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMBufferedIStream.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMBufferedStream.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMCachedDiskRawStorage.cpp"
 # End Source File
 # Begin Source File
@@ -343,6 +351,14 @@ SOURCE="..\..\..\ref-impl\include\OM\OMArrayType.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMBufferedIStream.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMBufferedStream.h"
 # End Source File
 # Begin Source File
 
