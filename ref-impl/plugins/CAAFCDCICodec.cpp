@@ -58,13 +58,7 @@ typedef struct {
 	aafUID_t flavour;
 	aafCharacter *name;
 } FlavourInfo;
-const FlavourInfo kSupportedFlavours[] = {
-	kAAFNilCodecFlavour,				L"AAF CDCI Codec (no flavour)",
-	kAAFCodecFlavour_LegacyDV_625_50,	L"AAF CDCI Codec (LegacyDV 625 lines 50Hz)",
-	kAAFCodecFlavour_LegacyDV_525_60,	L"AAF CDCI Codec (LegacyDV 525 lines 60Hz)",
-	kAAFCodecFlavour_IEC_DV_625_50,		L"AAF CDCI Codec (IEC DV 625 lines 50Hz)",
-	kAAFCodecFlavour_IEC_DV_525_60,		L"AAF CDCI Codec (IEC DV 525 lines 60Hz)"
-	};
+static FlavourInfo kSupportedFlavours[5];
 const aafUInt32 kNumSupportedFlavours = sizeof(kSupportedFlavours);
 
 const wchar_t kDisplayName[] = L"AAF CDCI Codec";
@@ -209,6 +203,18 @@ CAAFCDCICodec::CAAFCDCICodec (IUnknown * pControllingUnknown)
 	_bitsPerSample = 0;
 	_numberOfSamples = 0;
 	_padBytesPerRow = 0;
+
+	// Ugly workaround for broken MSVC initialiser support
+	kSupportedFlavours[0].flavour = kAAFNilCodecFlavour;
+	kSupportedFlavours[1].flavour = kAAFCodecFlavour_LegacyDV_625_50;
+	kSupportedFlavours[2].flavour = kAAFCodecFlavour_LegacyDV_525_60;
+	kSupportedFlavours[3].flavour = kAAFCodecFlavour_IEC_DV_625_50;
+	kSupportedFlavours[4].flavour = kAAFCodecFlavour_IEC_DV_525_60;
+	kSupportedFlavours[0].name = L"AAF CDCI Codec (no flavour)";
+	kSupportedFlavours[1].name = L"AAF CDCI Codec (LegacyDV 625 lines 50Hz)";
+	kSupportedFlavours[2].name = L"AAF CDCI Codec (LegacyDV 525 lines 60Hz)";
+	kSupportedFlavours[3].name = L"AAF CDCI Codec (IEC DV 625 lines 50Hz)";
+	kSupportedFlavours[4].name = L"AAF CDCI Codec (IEC DV 525 lines 60Hz)";
 }
 
 
