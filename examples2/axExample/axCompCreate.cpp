@@ -68,8 +68,7 @@ CreateSourceClipToAppendToSequence( AxDictionary& axDictionary,
 		// query if it is not.
 
 		AxTimelineMobSlot axTimelineMobSlot(
-			AxQueryInterface<IAAFMobSlot,IAAFTimelineMobSlot>(
-				nextSlot, IID_IAAFTimelineMobSlot ) );
+			AxQueryInterface<IAAFMobSlot,IAAFTimelineMobSlot>( nextSlot ) );
 		
 		// Does it match the sequence's data def?
 
@@ -91,7 +90,8 @@ CreateSourceClipToAppendToSequence( AxDictionary& axDictionary,
 	// found, and append it to the sequence.
 	//
 
-	// FIXME - Is the sourceRef origin *always* just the slot's origin?
+	// Here we assume that we always want to refer to the start of
+	// the essence, hence the startTime is the sourceSlot origin.
 
 	aafSourceRef_t sourceRef;
 	sourceRef.sourceID = sourceMob.GetMobID();
@@ -101,8 +101,7 @@ CreateSourceClipToAppendToSequence( AxDictionary& axDictionary,
 	AxSegment axSegment( sourceSlot.GetSegment() );
 
 	AxSourceClip axSourceClip(
-		AxCreateInstance<IAAFSourceClip>(
-			axDictionary, AUID_AAFSourceClip, IID_IAAFSourceClip ) );
+		AxCreateInstance<IAAFSourceClip>( axDictionary ) );
 
 	axSourceClip.Initialize( sequenceDataDef, axSegment.GetLength(), sourceRef );
 	
@@ -115,7 +114,6 @@ void AxCreateCompositionExample( AxFile& axFile,
 							     AxCmdLineArgs& args )
 {
 	// FIXME - This function is too long.
-	
 	
 	// As usual, the header and dictionary are required.
 	AxHeader axHeader( axFile.getHeader() );
@@ -135,9 +133,7 @@ void AxCreateCompositionExample( AxFile& axFile,
 	     notAtEnd;
 	     notAtEnd = axMobIter.NextOne( nextMob ) ) { 
  	         AxAutoPtr<AxMasterMob> axMasterMob(
-			    new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>(
-				nextMob,
-				IID_IAAFMasterMob ) ) );
+			    new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>( nextMob ) ) );
 
 			 mobMap[ axMasterMob->GetName() ] = axMasterMob;
 	}
@@ -154,12 +150,10 @@ void AxCreateCompositionExample( AxFile& axFile,
 	}
 	
 	// Create the composition mob off which we with hang our
-	// audio, video source clips and transitions.
+	// audio source clips, video source clips and transitions.
 	
 	AxCompositionMob axCompMob(
-		AxCreateInstance<IAAFCompositionMob>( axDictionary,
-						      AUID_AAFCompositionMob,
-						      IID_IAAFCompositionMob ) );
+		AxCreateInstance<IAAFCompositionMob>( axDictionary ) );
 	axHeader.AddMob( axCompMob );
 
 	aafRational_t editRate = {25, 1};
@@ -175,15 +169,11 @@ void AxCreateCompositionExample( AxFile& axFile,
 	//
 
 	AxDataDef axAudioDataDef( axDictionary.LookupDataDef( DDEF_Sound ) );
-	AxSequence axAudioSequence(	AxCreateInstance<IAAFSequence>( axDictionary,
-									AUID_AAFSequence,
-									IID_IAAFSequence ) );
+	AxSequence axAudioSequence(	AxCreateInstance<IAAFSequence>( axDictionary ) );
 	axAudioSequence.Initialize( axAudioDataDef );
 
 	AxDataDef axVideoDataDef( axDictionary.LookupDataDef( DDEF_Picture ) );
-	AxSequence axVideoSequence(	AxCreateInstance<IAAFSequence>( axDictionary,
-									AUID_AAFSequence,
-									IID_IAAFSequence ) );
+	AxSequence axVideoSequence(	AxCreateInstance<IAAFSequence>( axDictionary ) );
 	axVideoSequence.Initialize( axVideoDataDef );
 
 	
@@ -218,16 +208,12 @@ void AxCreateCompositionExample( AxFile& axFile,
 	AxSourceClip axAudioClipB ( 
 		CreateSourceClipToAppendToSequence( axDictionary, *mobMap[ audioB ], axAudioSequence ) );
 	
-	if ( !axDictionary.isKnownTypeDef( kAAFEffectMonoAudioDissolve ) )
+	// If the operation definition is not in the dictionary already, then it is
+	// the programmers job to create the operation definition, initialize it,
+	// and register it.
+	if ( !axDictionary.isKnownOperationDef( kAAFEffectMonoAudioDissolve ) )
 	{
-		// FIXME - Once again, there is little documentation concerning
-		// this.  I'm not certain this is correct.  For the moment,
-		// I simply attempt to make it correct enough for the type
-		// lookup to succeed and the file get generated.
-
-		AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary,
-									     AUID_AAFOperationDef,
-									     IID_IAAFOperationDef ) );
+		AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary ) );
 
 		axOpDef.Initialize( kAAFEffectMonoAudioDissolve,
 				    L"Example Mono Dissolve",
@@ -246,23 +232,14 @@ void AxCreateCompositionExample( AxFile& axFile,
 	AxOperationDef axMonoAudioDslvOpDef( axDictionary.LookupOperationDef( kAAFEffectMonoAudioDissolve ) );
 
 
-	AxOperationGroup axMonoAudioDslvOpGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary,
-										       AUID_AAFOperationGroup,
-										       IID_IAAFOperationGroup ) );
+	AxOperationGroup axMonoAudioDslvOpGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary ) );
 
 	// FIXME - Duration... that's in samples - right?
 	// We will overlap the segment by 1 pal frame (at 44100 samples/sec).
 	// FIXME - Assumed rate and duration of source material.
 	axMonoAudioDslvOpGroup.Initialize( axAudioDataDef, 44100/25, axMonoAudioDslvOpDef );
 
-	// FIXME Documentation and examples are sketchy here - I'm
-	// not certain why this isn't necessary.
-	//axMonoAudioDslvOpGroup.AppendInputSegment( axAudioClipA );
-	//axMonoAudioDslvOpGroup.AppendInputSegment( axAudioClipB );
-
-	AxTransition axMonoAudioDslvTransition( AxCreateInstance<IAAFTransition>( axDictionary,
-										  AUID_AAFTransition,
-										  IID_IAAFTransition ) );
+	AxTransition axMonoAudioDslvTransition( AxCreateInstance<IAAFTransition>( axDictionary ) );
 
 	axMonoAudioDslvTransition.Initialize( axAudioDataDef, 44100/25, 0,
 					      axMonoAudioDslvOpGroup );
@@ -279,22 +256,16 @@ void AxCreateCompositionExample( AxFile& axFile,
 	// Setup a video dissolve
 	//
 
-	if ( !axDictionary.isKnownTypeDef( kAAFEffectVideoDissolve ) )
+	// If the operation definition is not in the dictionary already, then it is
+	// the programmers job to create the operation definition, initialize it,
+	// and register it.
+	if ( !axDictionary.isKnownOperationDef( kAAFEffectVideoDissolve ) )
 	{
-		// FIXME - Once again, there is little documentation concerning
-		// this.  I don't know if this is correct.  For the moment,
-		// I simply attempt to make it correct enought for the type
-		// lookup to succed and the file get generated.
-
-		AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary,
-									     AUID_AAFOperationDef,
-									     IID_IAAFOperationDef ) );
-
+		AxOperationDef axOpDef( AxCreateInstance<IAAFOperationDef> ( axDictionary ) );
 
 		axOpDef.Initialize( kAAFEffectVideoDissolve,
 				    L"Example Mono Dissolve",
 				    L"No timewarp, bypass track 0, 2 video inputs" );
-
 
 		axOpDef.SetIsTimeWarp( false );
 		axOpDef.SetCategory( kAAFEffectVideoDissolve );
@@ -307,24 +278,13 @@ void AxCreateCompositionExample( AxFile& axFile,
 
 	AxOperationDef axVideoDslvOpDef( axDictionary.LookupOperationDef( kAAFEffectVideoDissolve ) );
 	
-	AxOperationGroup axVideoDslvOpGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary,
-										   AUID_AAFOperationGroup,
-										   IID_IAAFOperationGroup ) );
+	AxOperationGroup axVideoDslvOpGroup( AxCreateInstance<IAAFOperationGroup>( axDictionary ) );
 	
 	// Overlap by one frame.
 	// FIXME - Hardcoded.
 	axVideoDslvOpGroup.Initialize( axVideoDataDef, 1, axVideoDslvOpDef );
 	
-	// FIXME - Based on the example in the Dev. Guide, I would have expected
-	// this to be necessary.  Nope.  If I do this I get: "Object not attached"
-	// violated in routine "OMStorable::~OMStorable" 
-	// axVideoDslvOpGroup.AppendInputSegment( axVideoClipA );
-	// axVideoDslvOpGroup.AppendInputSegment( axVideoClipB );
-
-
-	AxTransition axVideoDslvTransition( AxCreateInstance<IAAFTransition>( axDictionary,
-									      AUID_AAFTransition,
-									      IID_IAAFTransition ) );
+    AxTransition axVideoDslvTransition( AxCreateInstance<IAAFTransition>( axDictionary ) );
 
 	axVideoDslvTransition.Initialize( axVideoDataDef, 1, 0,
 					  axVideoDslvOpGroup );

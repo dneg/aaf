@@ -42,6 +42,7 @@
 
 namespace {
 
+
 void AddImageEssence( AxMasterMob& masterMob,
 		      AxHeader& axHeader,
 		      AxCmdLineArgs& args  )
@@ -57,6 +58,7 @@ void AddImageEssence( AxMasterMob& masterMob,
 	aafUID_t codec;
 
 #if 0
+	// Activate this code if you would like to test the BBC Mpeg codec.
 	if ( mpegCodecOpt.first ) {
 		codec = kAAFCodecMPEG2;
 	}
@@ -75,9 +77,9 @@ void AddImageEssence( AxMasterMob& masterMob,
 	// We will use ContainerAAF, hence no locator is required.
 	IAAFLocatorSP nullLocator; 
 
-	AxEssenceAccess axEssenceAccess ( 
+	 AxEssenceAccess axEssenceAccess ( 
 		masterMob.CreateEssence(
-			1,  /* FIXME - Can this be other than 1? */
+			1,
 			axPictureDef,
 			codec,
 			editRate,
@@ -86,44 +88,52 @@ void AddImageEssence( AxMasterMob& masterMob,
 			nullLocator,
 			ContainerAAF ) );
 
-	// CreateEssence caused a TimelineMobSlot, an EssenceData and a
-	// SourceMob to be created. We want to get an EssenceDescriptor interface
-	// so that we cat describe the data.  The EssenceDescriptor is accessed via
-	// the SourceMob.  So... let's get the source mob.  It is hanging off
-	// mob slot 1.
+	// CreateEssence caused a TimelineMobSlot, SourceClip, SourceMob, and
+	// EssenceData to be created.  This is the scaffolding upon which we add
+    // essence data.
+    //
+	// Before writing essence, we need set the codec's format specifiers.
+	// These format specifiers are not persistent, the are made persistent
+	// via an EssenceDescriptor object.
+    //
+	// The EssenceDescriptor is accessed via the SourceMob.  So... let's get
+	// the source mob.  The id of the SourceMob is found in the SourceClip that
+	// is hanging off of slot 1.
+
 	AxMobSlotIter axMobIter( masterMob.GetSlots() );
 	IAAFMobSlotSP nextSlot;
 	bool notAtEnd = axMobIter.NextOne( nextSlot );
 
 	if ( !notAtEnd ) {
-		throw AxEx( L"Where's the beef?" );
+		throw AxEx( L"Expected at least on MobSlot." );
 	}
 
 	IAAFMobSlotSP unused;
 	if ( axMobIter.NextOne( unused ) ) {
-		throw AxEx( L"More slots than expected." );
+		throw AxEx( L"More MobSlots are present than expected." );
 	};
 
 	AxMobSlot axMobSlot( nextSlot );
 
-	// The AxMobSlot::GetSegment() will return a segment interface.  We know that
-	// this is really a source clip, so "cast up" to source clip.
+	// The AxMobSlot::GetSegment() method will return a segment interface.
+	// We know tha this is really a source clip, so cast to source clip.
 	AxSourceClip axSourceClip( AxQueryInterface<IAAFSegment,IAAFSourceClip>(
-		axMobSlot.GetSegment(), IID_IAAFSourceClip ) );
+					   			axMobSlot.GetSegment() ) );
 
 	AxSourceMob sourceMob( AxQueryInterface<IAAFMob,IAAFSourceMob>(
-		axContentStorage.LookupMob( axSourceClip.GetSourceID() ), IID_IAAFSourceMob ) );
+		axContentStorage.LookupMob( axSourceClip.GetSourceID() ) ) );
 
-	// Get the essence descriptor, and "cast up" to CDCIDescriptor.  How do I
-	// know it should be a CDCIDescriptor... easy, I look at a dump of the file
-	// before writing the next fragment of code, and noticed that the
-	// EssenceDescription property of the SourceMob was an object of
-	// type CDCIDescriptor.  Of course, we also used the kAAFCodecCDCI codec
-	// but then, the JPEG coded uses a CDCI descriptor as well.
+	// Get the essence descriptor, and cast to CDCIDescriptor.  How does one
+	// know it should be a CDCIDescriptor?  The EssenceDescriptor type is 
+	// determined by the codec type that is passed to IAAFMasterMob::EssenceCreate().
+	// You must know, based on experience, what type of EssenceDescriptor(s) to expect.
+	// A good way to gain that experience is by studying aaf files using a dump program.
+
+	// In the case of the JPEG, and MPEG2 codec, we expect a CDCI descriptor.
 
 	AxCDCIDescriptor cdciDesc(
 		AxQueryInterface<IAAFEssenceDescriptor,IAAFCDCIDescriptor>(
-			sourceMob.GetEssenceDescriptor(), IID_IAAFCDCIDescriptor ) );
+			sourceMob.GetEssenceDescriptor() ) );
 
 	// loads of parameters to set...
 	aafRect_t rect = {0,0,720,576};
@@ -134,14 +144,15 @@ void AddImageEssence( AxMasterMob& masterMob,
 	aafUInt32 verticalSubsampling = 1;
 	aafUInt32 colorRange = 255;
 
-	// DigitalImageDescriptor
+	// CDCIDescriptor also implements DigitalImageDescriptor.  Here are some
+	// parameters that DigitalImageDescriptor inherits from CDCI descriptor.
 	cdciDesc.SetStoredView( rect.ySize, rect.xSize );
 	cdciDesc.SetSampledView( rect.ySize, rect.xSize, rect.xOffset, rect.yOffset );
 	cdciDesc.SetDisplayView( rect.ySize, rect.xSize, rect.xOffset, rect.yOffset );
 	cdciDesc.SetFrameLayout( layout );
 	cdciDesc.SetVideoLineMap( 2, startScanLine );
 
-	// CDCIDescriptor
+	// CDCIDescriptor parameters.
 	cdciDesc.SetComponentWidth( componentWidth );
 	cdciDesc.SetHorizontalSubsampling( horizontalSubsampling );
 	cdciDesc.SetVerticalSubsampling( verticalSubsampling );
@@ -150,62 +161,61 @@ void AddImageEssence( AxMasterMob& masterMob,
 	// EssenceDescriptor
 	// Nothing to do here.  We could add additional locators if necessary.
 
-	// Now, set the same set of EssenceFormatSpecifiers
+	// Now, set the same set of essence format specifiers.  We are "talking"
+	// to the codec at this point.
 
  	AxEssenceFormat axEssenceFormat( axEssenceAccess.GetEmptyFileFormat() );
 
-	// Well known format sepecifers - See AAFEssenceFormat.h
-	// Note, there are more format specifiers than this.
-	
 	axEssenceFormat.AddFormatSpecifier( kAAFStoredRect,   rect );
 	axEssenceFormat.AddFormatSpecifier( kAAFSampledRect,  rect );
 	axEssenceFormat.AddFormatSpecifier( kAAFDisplayRect,  rect );
 	axEssenceFormat.AddFormatSpecifier( kAAFFrameLayout,  layout );
 	axEssenceFormat.AddFormatSpecifier( kAAFVideoLineMap, startScanLine	);
 
-	// These are the format specifiers used exclusively by the CDCI codec.
+	// These are the format specifiers used by the CDCI, JPEG, and MPEG2 codecs.
 	// See AAFEssenceFormat.h.  Note, there is no VerticalSubsampling
-	// format specifier.. why not?!?!
+	// format specifier.. why not?
 
 	axEssenceFormat.AddFormatSpecifier( kAAFCDCICompWidth, componentWidth );
 	axEssenceFormat.AddFormatSpecifier( kAAFCDCIHorizSubsampling, horizontalSubsampling );
 	axEssenceFormat.AddFormatSpecifier( kAAFCDCIColorRange, colorRange );
 
-	// hmmm this is not part of the CDIC descriptor... do I really need it?
+	// This format specifier is not part of the CDIC descriptor, in a real application
+	// it would probably have to be deduced from the EssenceDescriptor parameters.
+
 	aafColorSpace_t colorSpace = kAAFColorSpaceYUV;
 	axEssenceFormat.AddFormatSpecifier( kAAFPixelFormat, colorSpace );
 
 	// That's it for the format specifiers...
 	axEssenceAccess.PutFileFormat( axEssenceFormat );
 
+	// With the essence descriptor, and format specifier, parameters set, we can
+	// now write some data.
+	
 	const int numSamples = 1;  // frames
 	const int numBytes = numSamples * rect.xSize * rect.ySize * 2;
 
 	auto_ptr<aafUInt8> pixels( new aafUInt8 [numBytes] );
 
-	// Write 2 frames.  Must write one sample at a time.
+	// Load pixels buffer with meaning full data here.
 
-	AxEssenceAccess::WriteResult written = 
+	int samplesStillToWrite = 2;
+
+	while ( samplesStillToWrite > 0 ) {
+
+		AxEssenceAccess::WriteResult written = 
 			axEssenceAccess.WriteSamples( numSamples,
-						      numBytes,
-						      reinterpret_cast<aafDataBuffer_t>(pixels.get()) );
-		
-    if ( written.samplesWritten != numSamples && written.bytesWritten == numBytes ) {
-			throw AxEx( L"Image WriteSamples size mismatch" );
+									      numBytes,
+									      reinterpret_cast<aafDataBuffer_t>(pixels.get()) );
+
+	    if ( written.samplesWritten != numSamples && written.bytesWritten == numBytes ) {
+				throw AxEx( L"Image WriteSamples size mismatch" );
+		}
+
+		samplesStillToWrite -= written.samplesWritten;
 	}
 
-	written = 
-		axEssenceAccess.WriteSamples( numSamples,
-					      numBytes,
-					      reinterpret_cast<aafDataBuffer_t>(pixels.get()) );
-	
-	if ( written.samplesWritten != numSamples && written.bytesWritten == numBytes ) {
-		throw AxEx( L"Image WriteSamples size mismatch" );
-	}
-
-	
-	axEssenceAccess.CompleteWrite();
-
+    axEssenceAccess.CompleteWrite();
 }
 
 
@@ -234,51 +244,51 @@ void AddAudioEssence( AxMasterMob& masterMob, AxHeader& axHeader )
 			null,
 			ContainerAAF ) );
 
-	// CreateEssence caused a TimelineMobSlot, an EssenceData and a
-	// SourceMob to be created
-	// Get The WAVDescriptor interface so that the WAV summary info
-	// can be set.
+	// CreateEssence caused a TimelineMobSlot, SourceClip, SourceMob, and
+	// EssenceData to be created.  Get The WAVEDescriptor interface so that
+	// the WAV summary info can be set.
 		
 	AxMobSlotIter axMobIter( masterMob.GetSlots() );
 	IAAFMobSlotSP nextSlot;
 	bool notAtEnd = axMobIter.NextOne( nextSlot );
 
 	if ( !notAtEnd ) {
-		throw AxEx( L"Where's the tofu?" );
+		throw AxEx( L"Expected at least one MobSlot." );
 	}
 
 	IAAFMobSlotSP unused;
 	if ( axMobIter.NextOne( unused ) ) {
-		throw AxEx( L"More slots than expected." );
+		throw AxEx( L"More mob slots are present than expected." );
 	};
 
 	AxMobSlot axMobSlot( nextSlot );
 
-	// The AxMobSlot::GetSegment() will return a segment interface.  We know that
-	// this is really a source clip, so "cast up" to source clip.
+	// The AxMobSlot::GetSegment() method will return a segment interface.  We know
+	// that this is really a source clip, so cast to source clip.
 	AxSourceClip axSourceClip( AxQueryInterface<IAAFSegment,IAAFSourceClip>(
-		axMobSlot.GetSegment(), IID_IAAFSourceClip ) );
+		axMobSlot.GetSegment() ) );
 
 	AxSourceMob sourceMob( AxQueryInterface<IAAFMob,IAAFSourceMob>(
-		axContentStorage.LookupMob( axSourceClip.GetSourceID() ), IID_IAAFSourceMob ) );
+		axContentStorage.LookupMob( axSourceClip.GetSourceID() ) ) );
 
-	// Get the essence descriptor, and "cast up" to the WAVDescriptor.
+	// Get the essence descriptor, and cast to the WAVEDescriptor.
 
 	AxWAVEDescriptor wavDesc(
 		AxQueryInterface<IAAFEssenceDescriptor,IAAFWAVEDescriptor>(
-			sourceMob.GetEssenceDescriptor(), IID_IAAFWAVEDescriptor ) );
+			sourceMob.GetEssenceDescriptor() ) );
 
-	// At this point, one must call wavDesc.SetSummary( size, pBuf ).  Only
-	// problem is... the buffer contents are not defined anywhere, you must
-	// use the header from a wave file, or build a fake one.  Yuck!
-	//
-	// So...revert to format specifiers.  The ExportAudioExample has a function
-	// called loadWAVEHeader() that will read a wave file header and return
-	// the sample rate, number of channels, and the bits per sample.  The
-	// the reate is set when you create the essence (above), the bit per sample
-	// is set via format specifier, but the number or channels is set no where.
-	// So... what is one to do?  For the moment, I will simply set the sample
-	// size using a format specifier.
+	// At this point, one must call wavDesc.SetSummary( size, pBuf ). A file
+	// dump indicates this is a UInt8[36].  This is the header information
+	// from the wave audio file.  It contains information such as sample
+	// rate, sample size, etc.
+	// FIXME - Futher documentation on this subject is required.
+
+
+	// Next, set the format specifiers.  The parameters that must be set
+	// are codec dependent.  The values are obtained from the WaveDescriptor
+	// summary information.  The following code only sets kAAFAudioSampleBits.
+	// Experience has shown that this is the only parameter that *must* be
+	// set.
 
 	AxEssenceFormat axEssenceFormat( axEssenceAccess.GetEmptyFileFormat() );
 
@@ -293,20 +303,44 @@ void AddAudioEssence( AxMasterMob& masterMob, AxHeader& axHeader )
 
 	const int numSamples = 2 * rateHz / 25;  // 2 pal frames in duration.
 	aafUInt16 samples[numSamples];
-	
-	AxEssenceAccess::WriteResult written = 
-		axEssenceAccess.WriteSamples( numSamples,
-					      sizeof(samples[0])*numSamples,
-					      reinterpret_cast<aafDataBuffer_t>(samples) );
 
-	if ( written.samplesWritten != numSamples ) {
-		throw AxEx( L"Audio WriteSamples size mismatch" );
+	// At this point one should write meaningful data into the
+	// sample buffer.
+	
+	int samplesStillToWrite = numSamples;
+
+	while ( samplesStillToWrite > 0 ) {
+	
+		int samplesToWriteThisTime = 100;
+
+		if ( samplesToWriteThisTime > samplesStillToWrite ) {
+			samplesToWriteThisTime = samplesStillToWrite;
+		}
+		
+		AxEssenceAccess::WriteResult written = 
+			axEssenceAccess.WriteSamples( samplesToWriteThisTime,
+						      sizeof(samples[0])*samplesToWriteThisTime,
+						      reinterpret_cast<aafDataBuffer_t>(&samples[numSamples-samplesStillToWrite]) );
+
+		if ( written.samplesWritten != samplesToWriteThisTime ) {
+			throw AxEx( L"Audio WriteSamples size mismatch" );
+		}
+
+		samplesStillToWrite -= written.samplesWritten;
 	}
 
 	axEssenceAccess.CompleteWrite();
 }
 
 } // end of namespace
+
+
+
+// AxCreateEssenceExample - Find the masters mobs we expect.  They are located using
+// their Mob names.  Note, there is no requirement that mobs have unique names, hence,
+// this approach would be not be adequate in a real application.  A better approach
+// would be use to use Mob ID's - which are unique.
+// Add essence to each of these mobs.
 
 void AxCreateEssenceExample( AxFile& axFile,
 							 AxCmdLineArgs& args )
@@ -331,8 +365,8 @@ void AxCreateEssenceExample( AxFile& axFile,
 	     notAtEnd;
 	     notAtEnd = axMobIter.NextOne( nextMob ) ) { 
 
-			 AxAutoPtr<AxMasterMob> axMasterMob( new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>(
-					nextMob, IID_IAAFMasterMob ) ) );
+			 AxAutoPtr<AxMasterMob> axMasterMob(
+					new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>( nextMob ) ) );
 
 			 mobMap[ axMasterMob->GetName() ] = axMasterMob;
 		 }

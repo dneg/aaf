@@ -32,16 +32,19 @@
 #include <vector>
 #include <iostream>
 
-// UUID generated with VC98's UUIDGEN.EXE tool:
+// Each of our KLV objects require a unique key.  Here they are:
+// UUIDs were generated with Microsoft VC's UUIDGEN.EXE tool:
+
 // 4353dc46-5a56-42f0-a4d8-9516dd98335f
 const aafUID_t KLVKey_AxExampleData_A =
 { 0x4353dc46, 0x5a56, 0x42f0, { 0xa4, 0xd8, 0x95, 0x16, 0xdd, 0x98, 0x33, 0x5f } };
-
-// UUID generated with VC98's UUIDGEN.EXE tool:
 // 6def0b26-d055-41f9-892b-c7528fdae103
 const aafUID_t KLVKey_AxExampleData_B =
 { 0x6def0b26, 0xd055, 0x41f9, {0x89, 0x2b, 0xc7, 0x52, 0x8f, 0xda, 0xe1, 0x03 } };
 
+
+
+// class KLV - a simple container for KLV values.
 
 namespace {
 
@@ -71,6 +74,9 @@ public:
 	{ return _V; } 
 };
 
+
+// class MobDescription - contains all information required to create on
+// sample mob, i.e., name, comments, and klv data.
 
 class MobDescription {
 public:
@@ -128,12 +134,13 @@ private:
 	const KLV& _klv_b;
 };
 
+// AddMasterMob - Creates, initializes, and adds one master mob.
+
 void AddMasterMob( AxHeader& axHeader,
 				   AxDictionary& axDictionary,
 				   const MobDescription& desc )
 {
-	AxMasterMob axMasterMob( AxCreateInstance<IAAFMasterMob>(
-		                      axDictionary, AUID_AAFMasterMob, IID_IAAFMasterMob ) );
+	AxMasterMob axMasterMob( AxCreateInstance<IAAFMasterMob>( axDictionary ) );
 
 	axMasterMob.Initialize();
 
@@ -146,16 +153,14 @@ void AddMasterMob( AxHeader& axHeader,
 
 
 	{
-		AxKLVData axKLVData( AxCreateInstance<IAAFKLVData>(
-						 axDictionary, AUID_AAFKLVData, IID_IAAFKLVData ) );
+		AxKLVData axKLVData( AxCreateInstance<IAAFKLVData>( axDictionary ) );
 		axKLVData.Initialize( desc.klv_a().K(), desc.klv_a().L(),
 							  const_cast<aafUInt8*>(desc.klv_a().V()) ); 
 		axMasterMob.AppendKLVData( axKLVData );
 	}
 
 	{
-		AxKLVData axKLVData( AxCreateInstance<IAAFKLVData>(
-						 axDictionary, AUID_AAFKLVData, IID_IAAFKLVData ) );
+		AxKLVData axKLVData( AxCreateInstance<IAAFKLVData>( axDictionary ) );
 
 		axKLVData.Initialize( desc.klv_b().K(), desc.klv_b().L(),
 							  const_cast<aafUInt8*>(desc.klv_b().V()) ); 
@@ -168,6 +173,9 @@ void AddMasterMob( AxHeader& axHeader,
 
 } // end of namespace
 
+
+// AxCreateMetaDataExample - Add four master mobs the file.  Two named Video A/B, two
+// named Audio A/B.  Another test module will find these mobs, and add essence data.
 
 void AxCreateMetaDataExample( AxFile& axFile,
 							  AxCmdLineArgs& args )
