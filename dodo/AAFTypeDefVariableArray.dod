@@ -14,6 +14,7 @@ AAFTypeDef\
 #endm
 #c
 #import ./AAFTypeDef.exp
+#import ./AAFTypeDefVariableArrayEx.exp
 AD_HEAD
 AD_IDL(//
 // This interface is used to define variably-sized Array types used in
@@ -24,7 +25,7 @@ AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
 AD_CLASS_UUID(307e9e65, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e66, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_COM_EXT_CLASS_BEGIN(public IAAFTypeDefVariableArrayEx)
 AD_XMETHOD3(Initialize,
 			[in\, ref],
 			objPass,
@@ -431,5 +432,8 @@ AD_XMETHOD2(GetElements,
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either PSetPropVal or ppEnum\))
 
+AD_COM_METH(.method-PrependElement)
+AD_COM_METH(.method-RemoveElement)
+AD_COM_METH(.method-InsertElement)
 
-AD_XCLASS_END(Concrete, StoredObject)
+AD_COM_EXT_CLASS_END(AAFTypeDefVariableArrayEx)
