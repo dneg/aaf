@@ -38,7 +38,7 @@
 
 
 ImplAAFTextLocator::ImplAAFTextLocator () :
-	_name(PID_TextLocator_Name,		"Text Locator")
+	_name(PID_TextLocator_Name,		"Name")
 {
 	_persistentProperties.put(_name.address());
 	_name = L"";
