@@ -29,14 +29,41 @@ create_unix_distribution ()
 	tar cvf - ${FileList} | gzip -c > ${filename}
 }
 
-create_mac_distribution ()
+create_macos9_distribution ()
 {
 	echo create_mac_distribution $1 $2 $3;
 
+	if [ ! -x `which stuff` ]; then
+	    echo Error StuffIt command line program not available.
+	    exit -1;
+	fi
+
 	cd $1;
-	filename=$2.tar.gz;
+	dirname=$2
+	sitformat=sitx
+	sitname=$2.${sitformat}
+
 	FileList=`grep -v \# $3`;
-	tar cvf - ${FileList} | gzip -c > ${filename}
+
+        mkdir -p $dirname;
+	for file in  ${FileList} ; do
+	    echo ${file}
+	    mkdir -p ${dirname}/`dirname "${file}"`
+
+	    # Wait.. this is Mac, simply cp'ing a file would be too simple.
+	    # It won't copy the resource fork.  
+	    # cp -r "${file}" ${dirname}/`dirname "${file}"`
+
+	    rm -f /tmp/tmp.sitx
+	    stuff -q --format=sitx --compression_method=0 --name=/tmp/tmp.sitx "${file}"
+	    unstuff -q --destination=${dirname}/`dirname "${file}"` /tmp/tmp.sitx
+	done
+
+	echo ============ Creating StuffIt Archive ==================
+	cd ${dirname}
+	cd ..
+	echo /usr/local/bin/stuff --format=${sitformat} --overwrite --name=`basename ${dirname}` `basename ${sitname}`
+	/usr/local/bin/stuff --format=${sitformat} --overwrite --name=`basename ${sitname}` `basename ${dirname}`
 }
 
 create_win_distribution ()
@@ -90,7 +117,7 @@ case ${AAFPLATFORM} in
 
 	Win       ) create_win_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
 
-	Mac       ) create_mac_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
+	Mac       ) create_macos9_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
 
 	*         ) usage;;
 esac
