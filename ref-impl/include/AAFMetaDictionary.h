@@ -48,7 +48,7 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Mon Aug  9 18:32:25 EDT 2004
+// This file was generated on Thu Aug 12 11:10:22 EDT 2004
 // by user akharkevakharkev on system akharkevichxp.
 //
 // Key to macros.
@@ -3689,6 +3689,36 @@ AAF_CLASS(Header,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x3b07,
     AAF_TYPE(UInt32),
+    false,
+    false,
+    Header)
+  AAF_PROPERTY(OperationalPattern,
+    // {01020203-0000-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x01020203,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3b09,
+    AAF_TYPE(AUID),
+    false,
+    false,
+    Header)
+  AAF_PROPERTY(EssenceContainers,
+    // {01020210-0201-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x01020210,
+      0x0201, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3b0a,
+    AAF_TYPE(AUIDSet),
+    false,
+    false,
+    Header)
+  AAF_PROPERTY(DescriptiveSchemes,
+    // {01020210-0202-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x01020210,
+      0x0202, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3b0b,
+    AAF_TYPE(AUIDSet),
     false,
     false,
     Header)
