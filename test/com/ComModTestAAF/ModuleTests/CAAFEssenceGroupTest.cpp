@@ -38,7 +38,6 @@
 #include "ModuleTest.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-#include "AAFUtils.h"
 
 #include "CAAFBuiltinDefs.h"
 
