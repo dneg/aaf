@@ -28,7 +28,7 @@ DODO_TARGETS = \
 	AAFAttribute.all \
 	AAFAttributeArray.all \
 	AAFClassDefinition.all \
-	AAFClassDictionary.all \
+	AAFDictionary.all \
 	AAFComponent.all \
 	AAFCompositionMob.all \
 	AAFConstValue.all \
@@ -211,7 +211,6 @@ AAFAttribute.all : AAFAttribute.cpp AAFAttribute.h
 AAFAttribute.all : AAFAttribute.comc AAFAttribute.comh
 AAFAttribute.all : AAFAttribute.exp AAFAttribute.idl
 AAFAttribute.all : AAFAttribute.implc AAFAttribute.implh
-AAFAttribute.all : AAFAttribute.idlh
 AAFAttribute.exp : AAFUnitTest.exp AAFObject.exp macros/exp.mac macros/base.mac
 AAFAttribute.h : AAFAttribute.exp macros/h.mac macros/base.mac
 AAFAttribute.cpp : AAFAttribute.exp macros/cpp.mac macros/base.mac
@@ -220,7 +219,8 @@ AAFAttribute.comc : AAFAttribute.exp macros/comc.mac macros/base.mac
 AAFAttribute.comh : AAFAttribute.exp macros/comh.mac macros/base.mac
 AAFAttribute.implc : AAFAttribute.exp macros/implc.mac macros/base.mac
 AAFAttribute.implh : AAFAttribute.exp macros/implh.mac macros/base.mac
-AAFAttribute.idlh : AAFTypes.idlh AAFAttribute.idl
+#AAFAttribute.all : AAFAttribute.idlh
+#AAFAttribute.idlh : AAFTypes.idlh AAFAttribute.idl
 
 AAFAttributeArray.all : AAFAttributeArray.cpp AAFAttributeArray.h
 AAFAttributeArray.all : AAFAttributeArray.comc AAFAttributeArray.comh
@@ -239,7 +239,6 @@ EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.cpp EnumAAFPropertyD
 EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.comc EnumAAFPropertyDefinitions.comh
 EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.exp EnumAAFPropertyDefinitions.idl
 EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.implc EnumAAFPropertyDefinitions.implh
-EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.idlh
 EnumAAFPropertyDefinitions.exp : AAFUnitTest.exp macros/exp.mac macros/base.mac
 EnumAAFPropertyDefinitions.h : EnumAAFPropertyDefinitions.exp macros/h.mac macros/base.mac
 EnumAAFPropertyDefinitions.cpp : EnumAAFPropertyDefinitions.exp macros/cpp.mac macros/base.mac
@@ -248,13 +247,13 @@ EnumAAFPropertyDefinitions.comc : EnumAAFPropertyDefinitions.exp macros/comc.mac
 EnumAAFPropertyDefinitions.comh : EnumAAFPropertyDefinitions.exp macros/comh.mac macros/base.mac
 EnumAAFPropertyDefinitions.implc : EnumAAFPropertyDefinitions.exp macros/implc.mac macros/base.mac
 EnumAAFPropertyDefinitions.implh : EnumAAFPropertyDefinitions.exp macros/implh.mac macros/base.mac
-EnumAAFPropertyDefinitions.idlh : AAFTypes.h EnumAAFPropertyDefinitions.idl
+#EnumAAFPropertyDefinitions.all : EnumAAFPropertyDefinitions.idlh
+#EnumAAFPropertyDefinitions.idlh : AAFTypes.h EnumAAFPropertyDefinitions.idl
 
 AAFClassDefinition.all : AAFClassDefinition.cpp AAFClassDefinition.h
 AAFClassDefinition.all : AAFClassDefinition.comc AAFClassDefinition.comh
 AAFClassDefinition.all : AAFClassDefinition.exp AAFClassDefinition.idl
 AAFClassDefinition.all : AAFClassDefinition.implc AAFClassDefinition.implh
-AAFClassDefinition.all : AAFClassDefinition.idlh
 AAFClassDefinition.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac macros/base.mac
 AAFClassDefinition.h : AAFClassDefinition.exp macros/h.mac macros/base.mac
 AAFClassDefinition.cpp : AAFClassDefinition.exp macros/cpp.mac macros/base.mac
@@ -263,20 +262,32 @@ AAFClassDefinition.comc : AAFClassDefinition.exp macros/comc.mac macros/base.mac
 AAFClassDefinition.comh : AAFClassDefinition.exp macros/comh.mac macros/base.mac
 AAFClassDefinition.implc : AAFClassDefinition.exp macros/implc.mac macros/base.mac
 AAFClassDefinition.implh : AAFClassDefinition.exp macros/implh.mac macros/base.mac
-AAFClassDefinition.idlh: AAFTypes.idlh AAFClassDefinition.idl
+#AAFClassDefinition.all : AAFClassDefinition.idlh
+#AAFClassDefinition.idlh: AAFTypes.idlh AAFClassDefinition.idl
 
-AAFClassDictionary.all : AAFClassDictionary.cpp AAFClassDictionary.h
-AAFClassDictionary.all : AAFClassDictionary.comc AAFClassDictionary.comh
-AAFClassDictionary.all : AAFClassDictionary.exp AAFClassDictionary.idl
-AAFClassDictionary.all : AAFClassDictionary.implc AAFClassDictionary.implh
-AAFClassDictionary.exp : AAFUnitTest.exp macros/exp.mac macros/base.mac
-AAFClassDictionary.h : AAFClassDictionary.exp macros/h.mac macros/base.mac
-AAFClassDictionary.cpp : AAFClassDictionary.exp macros/cpp.mac macros/base.mac
-AAFClassDictionary.idl : AAFClassDictionary.exp macros/idl.mac macros/base.mac
-AAFClassDictionary.comc : AAFClassDictionary.exp macros/comc.mac macros/base.mac
-AAFClassDictionary.comh : AAFClassDictionary.exp macros/comh.mac macros/base.mac
-AAFClassDictionary.implc : AAFClassDictionary.exp macros/implc.mac macros/base.mac
-AAFClassDictionary.implh : AAFClassDictionary.exp macros/implh.mac macros/base.mac
+# Build dependency
+AAFDictionary.all : \
+	AAFObject.all \
+	AAFClassDefinition.all EnumAAFClassDefinitions.all \
+	AAFTypeDefinition.all EnumAAFTypeDefinitions.all \
+	AAFDataDefinition.all EnumAAFDataDefinitions.all \
+	AAFEffectDefinition.all EnumAAFEffectDefinitions.all \
+	EnumAAFDefinitions.all
+AAFDictionary.all : AAFDictionary.cpp AAFDictionary.h
+AAFDictionary.all : AAFDictionary.comc AAFDictionary.comh
+AAFDictionary.all : AAFDictionary.exp AAFDictionary.idl
+AAFDictionary.all : AAFDictionary.implc AAFDictionary.implh
+AAFDictionary.exp : AAFObject.exp macros/exp.mac macros/base.mac
+AAFDictionary.h : AAFDictionary.exp macros/h.mac macros/base.mac
+AAFDictionary.cpp : AAFDictionary.exp macros/cpp.mac macros/base.mac
+AAFDictionary.idl : AAFDictionary.exp macros/idl.mac macros/base.mac
+AAFDictionary.comc : AAFDictionary.comh AAFDictionary.exp macros/comc.mac macros/base.mac
+AAFDictionary.comh : AAFDictionary.exp macros/comh.mac macros/base.mac
+AAFDictionary.implc : AAFDictionary.implh AAFDictionary.exp macros/implc.mac macros/base.mac
+AAFDictionary.implh : AAFDictionary.exp macros/implh.mac macros/base.mac 
+#AAFDictionary.all : AAFDictionary.idlh
+#AAFDictionary.idlh : AAFDictionary.idl
+#AAFDictionary.comh : AAFDictionary.idlh
 
 AAFComponent.all : AAFComponent.cpp AAFComponent.h
 AAFComponent.all : AAFComponent.comc AAFComponent.comh
@@ -680,9 +691,9 @@ AAFScopeReference.comh : AAFScopeReference.exp macros/comh.mac macros/base.mac
 AAFScopeReference.implc : AAFScopeReference.exp macros/implc.mac macros/base.mac
 AAFScopeReference.implh : AAFScopeReference.exp macros/implh.mac macros/base.mac
 
-AAFObject.idlh : AAFObject.idl AAFTypes.idlh
-AAFObject.comc : AAFObject.exp macros/comc.mac macros/base.mac AAFObject.comh
-AAFObject.comh : AAFObject.exp macros/comh.mac macros/base.mac AAFObject.idlh
+#AAFObject.idlh : AAFObject.idl AAFTypes.idlh
+#AAFObject.comc : AAFObject.exp macros/comc.mac macros/base.mac AAFObject.comh
+#AAFObject.comh : AAFObject.exp macros/comh.mac macros/base.mac AAFObject.idlh
 AAFObjectAttribute.all : AAFObjectAttribute.cpp AAFObjectAttribute.h
 AAFObjectAttribute.all : AAFObjectAttribute.comc AAFObjectAttribute.comh
 AAFObjectAttribute.all : AAFObjectAttribute.exp AAFObjectAttribute.idl
@@ -969,18 +980,25 @@ AAFWindowsLocator.comh : AAFWindowsLocator.exp macros/comh.mac macros/base.mac
 AAFWindowsLocator.implc : AAFWindowsLocator.exp macros/implc.mac macros/base.mac
 AAFWindowsLocator.implh : AAFWindowsLocator.exp macros/implh.mac macros/base.mac
 
+AAFHeader.all : \
+	AAFObject.all \
+	AAFIdentification.all EnumAAFIdentifications.all \
+	AAFDictionary.all EnumAAFMedia.all AAFMob.all EnumAAFMobs.all
 AAFHeader.all : AAFHeader.cpp AAFHeader.h
 AAFHeader.all : AAFHeader.comc AAFHeader.comh
 AAFHeader.all : AAFHeader.exp AAFHeader.idl
 AAFHeader.all : AAFHeader.implc AAFHeader.implh
 AAFHeader.exp : AAFUnitTest.exp AAFLocator.exp macros/exp.mac macros/base.mac
 AAFHeader.h : AAFHeader.exp macros/h.mac macros/base.mac
-AAFHeader.cpp : AAFHeader.exp macros/cpp.mac macros/base.mac
+AAFHeader.cpp : AAFHeader.h AAFHeader.exp macros/cpp.mac macros/base.mac
 AAFHeader.idl : AAFHeader.exp macros/idl.mac macros/base.mac
-AAFHeader.comc : AAFHeader.exp macros/comc.mac macros/base.mac
+AAFHeader.comc : AAFHeader.comh AAFHeader.exp macros/comc.mac macros/base.mac
 AAFHeader.comh : AAFHeader.exp macros/comh.mac macros/base.mac
-AAFHeader.implc : AAFHeader.exp macros/implc.mac macros/base.mac
+AAFHeader.implc : AAFHeader.implh AAFHeader.exp macros/implc.mac macros/base.mac
 AAFHeader.implh : AAFHeader.exp macros/implh.mac macros/base.mac
+#AAFHeader.all : AAFHeader.idlh
+#AAFHeader.idlh : AAFHeader.idl
+#AAFHeader.comh : AAFHeader.idlh
 
 AAFIdentification.all : AAFIdentification.cpp AAFIdentification.h
 AAFIdentification.all : AAFIdentification.comc AAFIdentification.comh
@@ -1020,6 +1038,7 @@ EnumAAFClassDefinitions.comc : EnumAAFClassDefinitions.exp macros/comc.mac macro
 EnumAAFClassDefinitions.comh : EnumAAFClassDefinitions.exp macros/comh.mac macros/base.mac
 EnumAAFClassDefinitions.implc : EnumAAFClassDefinitions.exp macros/implc.mac macros/base.mac
 EnumAAFClassDefinitions.implh : EnumAAFClassDefinitions.exp macros/implh.mac macros/base.mac
+
 EnumAAFComponents.all : EnumAAFComponents.cpp EnumAAFComponents.h
 EnumAAFComponents.all : EnumAAFComponents.comc EnumAAFComponents.comh
 EnumAAFComponents.all : EnumAAFComponents.exp EnumAAFComponents.idl
