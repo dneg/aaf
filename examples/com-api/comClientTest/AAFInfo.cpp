@@ -180,24 +180,6 @@ static void ReadAAFFile(aafWChar * pFileName)
   }
 }
 
-// simple helper class to initialize and cleanup AAF library.
-struct CAAFInitialize
-{
-  CAAFInitialize(const char *dllname = NULL)
-  {
-  	printf("Attempting to load the AAF dll...\n");
-    check(AAFLoad(dllname));
-    printf("DONE\n");
-  }
-
-  ~CAAFInitialize()
-  {
-    AAFUnload();
-  }
-};
-
-
-
 int main(int argumentCount, char* argumentVector[])
 {
   if (argumentCount != 2) {
@@ -210,11 +192,15 @@ int main(int argumentCount, char* argumentVector[])
   wchar_t wInputFileName[256];
   convert(wInputFileName, 256, inputFileName);
 
-  CAAFInitialize aafInit;
+  printf("Attempting to load the AAF dll...\n");
+  check(AAFLoad(0));
+  printf("DONE\n");
 
   ReadAAFFile(wInputFileName);
 
   fprintf(stdout, "Done\n");
+
+  AAFUnload();
 
   return(0);
 }
