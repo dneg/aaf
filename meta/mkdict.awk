@@ -123,6 +123,7 @@ BEGIN {
 }
 
 END {
+  printf("AAF_CLASS_END(%s)\n", class);
   printf("\n");
   printf("//\n");
   printf("// End of automatically generated file.\n");
