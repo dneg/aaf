@@ -138,6 +138,7 @@
 #define PORTKEY_APP_SINGLEPROC
 #if (__MWERKS__ >= 0x1100)
 #define PORTKEY_INT64_NATIVE	1
+#undef PORTKEY_INT64_TYPE
 #define PORTKEY_INT64_TYPE		long long
 #endif
 #endif
