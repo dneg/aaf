@@ -135,6 +135,14 @@ SOURCE="..\..\..\ref-impl\plugins\CAAFEssenceFileStream.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\plugins\CAAFEssenceRIFFWAVEContainer.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\plugins\CAAFEssenceRIFFWAVEStream.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp"
 # End Source File
 # Begin Source File
@@ -156,6 +164,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\plugins\CAAFWAVECodec.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\plugins\CAAFPCMCodec.cpp"
 # End Source File
 # Begin Source File
 
