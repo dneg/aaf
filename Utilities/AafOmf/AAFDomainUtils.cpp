@@ -1,0 +1,374 @@
+// @doc INTERNAL
+// @com This file handles bdirectional translation of effect metadata between OMF and AAF
+
+/***********************************************************************
+ *
+ *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *
+ * Permission to use, copy and modify this software and accompanying 
+ * documentation, and to distribute and sublicense application software
+ * incorporating this software for any purpose is hereby granted, 
+ * provided that (i) the above copyright notice and this permission
+ * notice appear in all copies of the software and related documentation,
+ * and (ii) the name Avid Technology, Inc. may not be used in any
+ * advertising or publicity relating to the software without the specific,
+ *  prior written permission of Avid Technology, Inc.
+ *
+ * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ * IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,
+ * SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR
+ * OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND
+ * ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES
+ * RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT
+ * ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF
+ * LIABILITY.
+ *
+ ************************************************************************/
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <iostream.h>
+
+namespace OMF2
+{
+#include "omPublic.h"
+#include "omMedia.h"
+}
+
+#include "AafOmf.h"
+#include "AAFDomainUtils.h"
+#include "AAFClassDefUIDs.h"
+#include "AAFException.h"
+#include "AutoRelease.h"
+
+#define CHECKAAF
+
+
+// ============================================================================
+// Constructor
+// ============================================================================
+AAFDomainUtils::AAFDomainUtils()
+{
+}
+// ============================================================================
+// Destructor
+// ============================================================================
+AAFDomainUtils::~AAFDomainUtils()
+{
+}
+
+IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictionary *dict, aafUID_t interpolationDefID)
+{
+	IAAFInterpolationDef	*interpDef;
+	IAAFDefObject			*defObject;
+	AAFRESULT				rc;
+
+	rc = dict->LookupInterpolationDefinition(interpolationDefID,&interpDef);
+	if(rc == AAFRESULT_SUCCESS && interpDef != NULL)
+		return interpDef;
+
+//	dprintf("AEffect::CreateInterpolationDefinition()\n");	//JeffB:
+
+	(void)(dict->CreateInstance(kAAFClassID_InterpolationDefinition,
+			IID_IAAFInterpolationDef,
+			(IUnknown **)&interpDef));
+	(void)(interpDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
+	if(memcmp(&interpolationDefID, &LinearInterpolator, sizeof(aafUID_t)) == 0)
+	{
+ 		(void)(defObject->Initialize(interpolationDefID, L"LinearInterp", L"Linear keyframe interpolation"));
+		dict->RegisterInterpolationDefinition(interpDef);
+	}
+	else
+	{
+		interpDef->Release();
+		interpDef = NULL;
+	}
+
+	defObject->Release();
+
+//cleanup:
+	return(interpDef);
+}
+
+IAAFTypeDef *AAFDomainUtils::CreateTypeDefinition(IAAFDictionary *pDict, aafUID_t typeDefID)
+{
+	IAAFTypeDef		*typeDef;
+	IAAFDefObject	*defObject;
+	AAFRESULT		rc;
+
+//	dprintf("AEffect::CreateTypeDefinition()\n");	//JeffB:
+	rc = pDict->LookupType(typeDefID,&typeDef);
+	if(rc == AAFRESULT_SUCCESS && typeDef != NULL)
+		return typeDef;
+
+	CHECKAAF(pDict->CreateInstance(kAAFClassID_TypeDefinition,
+			IID_IAAFTypeDef,
+			(IUnknown **)&typeDef));
+	CHECKAAF(typeDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
+	if(memcmp(&typeDefID, &kAAFTypeID_Rational, sizeof(aafUID_t)) == 0)
+	{
+ 		CHECKAAF(defObject->Initialize(typeDefID, L"Rational", L"Rational Number"));
+	}
+	else if(memcmp(&typeDefID, &kAAFTypeID_Int32, sizeof(aafUID_t)) == 0)
+	{
+ 		CHECKAAF(defObject->Initialize(typeDefID, L"Int32", L"32-bit signed integer"));
+	}
+	else
+	{
+		typeDef->Release();
+		typeDef = NULL;
+	}
+
+	if(typeDef != NULL)
+		pDict->RegisterType(typeDef);
+//cleanup:
+	if(defObject != NULL)
+		defObject->Release();
+
+	return(typeDef);
+}
+
+void AAFDomainUtils::AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentTime, long buflen, void *buf, IAAFTypeDef *typeDef, IAAFVaryingValue *pVVal)
+{
+	IAAFControlPoint	*pPoint = NULL;
+//	AAFRESULT			rc;
+
+	CHECKAAF(dict->CreateInstance(kAAFClassID_ControlPoint,
+		IID_IAAFControlPoint,
+		(IUnknown **)&pPoint));
+		
+	CHECKAAF(pPoint->SetTypeDefinition(typeDef));
+	CHECKAAF(pPoint->SetValue(buflen, (unsigned char *)buf));
+	CHECKAAF(pPoint->SetTime(percentTime));
+	CHECKAAF(pVVal->AppendPoint(pPoint));
+//cleanup:
+	if(pPoint != NULL)
+		pPoint->Release();
+}
+
+IAAFParameter *AAFDomainUtils::AAFAddConstantVal(IAAFDictionary *dict, long buflen, void *buf, IAAFOperationGroup *pGroup)
+{
+	IAAFConstantValue	*pCVal = NULL;
+	IAAFParameter		*pParm = NULL;
+//	AAFRESULT			rc;
+
+	CHECKAAF(dict->CreateInstance(kAAFClassID_ConstantValue,
+		IID_IAAFConstantValue,
+		(IUnknown **)&pCVal));
+	CHECKAAF(pCVal->SetValue(buflen, (unsigned char *)buf));
+	CHECKAAF(pCVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
+	CHECKAAF(pGroup->AddNewParameter(pParm));
+//cleanup:
+	if(pCVal)
+		pCVal->Release();
+
+	return(pParm);
+}
+
+IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IAAFOperationGroup *pOutputEffect)
+{
+	IAAFVaryingValue	*pVVal = NULL;
+	IAAFParameter		*pParm = NULL;
+//	AAFRESULT			rc;
+
+	CHECKAAF(dict->CreateInstance(kAAFClassID_VaryingValue,
+		IID_IAAFVaryingValue,
+		(IUnknown **)&pVVal));
+	CHECKAAF(pVVal->SetInterpolationDefinition(CreateInterpolationDefinition(
+												dict, LinearInterpolator)));
+	CHECKAAF(pVVal->QueryInterface(IID_IAAFParameter, (void **) &pParm));
+		
+	CHECKAAF(pOutputEffect->AddNewParameter(pParm));
+//cleanup:
+	if(pParm != NULL)
+		pParm->Release();
+
+	return(pVVal);
+}
+
+IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDict, aafUID_t parmDefID)
+{
+	IAAFParameterDef	*parmDef;
+	IAAFDefObject		*defObject;
+	IAAFTypeDef			*typeDef;
+	AAFRESULT			rc;
+	aafUID_t			typeUID;
+
+//	dprintf("AEffect::CreateParameterDefinition()\n");
+	rc = pDict->LookupParameterDefinition(parmDefID,&parmDef);
+	if(rc == AAFRESULT_SUCCESS && parmDef != NULL)
+		return parmDef;
+
+	CHECKAAF(pDict->CreateInstance(kAAFClassID_ParameterDefinition,
+			IID_IAAFParameterDef,
+			(IUnknown **)&parmDef));
+	CHECKAAF(parmDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
+
+	if(memcmp(&parmDefID, &kAAFParameterDefLevel, sizeof(aafUID_t)) == 0)
+	{
+    	CHECKAAF(defObject->Initialize(parmDefID, L"Level", L"fractional 0-1 inclusive"));
+		typeUID = kAAFTypeID_Rational;
+	}
+	else if(memcmp(&parmDefID, &kAAFParameterDefSMPTEWipeNumber, sizeof(aafUID_t)) == 0)
+	{
+    	CHECKAAF(defObject->Initialize(parmDefID, L"WipeCode", L"SMPTE Wipe Code"));
+		typeUID = kAAFTypeID_Int32;
+	}
+	else
+	{
+		parmDef->Release();
+		parmDef = NULL;
+	}
+
+	if(parmDef != NULL)
+	{
+		rc = pDict->LookupType(typeUID,&typeDef);
+		if(rc != AAFRESULT_SUCCESS || typeDef == NULL)
+		{
+			typeDef = CreateTypeDefinition(pDict, typeUID);
+		}
+		CHECKAAF(parmDef->SetTypeDef(typeDef));
+
+		CHECKAAF(pDict->RegisterParameterDefinition(parmDef));
+	}
+//cleanup:
+	if(defObject != NULL)
+		defObject->Release();
+
+	return(parmDef);
+}
+
+//***********************************************************
+//
+//	SetIntegerPropOnObject()
+//
+//	Set an integer property to the AAF object specified by pObj.
+//	The value of the property is specified in value.
+//
+//	Returns:
+//
+//		On Success: AAFRESULT_SUCCESS
+//		On Failure: An exception.
+//
+HRESULT AAFDomainUtils::SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID,
+							   aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
+{
+	AAFCheck			hr;
+
+	// Create a property value from the supplied value (pValue)
+	IAAFTypeDef*		pTD;
+	hr = dict->LookupType(*pIntTypeID, &pTD);
+	AutoRelease<IAAFTypeDef> r1( pTD );
+
+	IAAFTypeDefInt*	pTDInt;
+	hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
+	AutoRelease<IAAFTypeDefInt> r2( pTDInt );
+
+	// Now create a property value object with that value.
+	IAAFPropertyValue*	pPV;
+	hr = pTDInt->CreateValue(pValue, ValueSize, &pPV);
+	AutoRelease<IAAFPropertyValue> r3( pPV );
+
+	// Add the property to the target object.
+	// Get the class def for the object
+	IAAFClassDef*	pCD;
+	hr = dict->LookupClass(*pClassID, &pCD);
+	AutoRelease<IAAFClassDef> r4( pCD );
+
+	IAAFPropertyDef*	pPD;
+	hr = pCD->LookupPropertyDef(*pPropID, &pPD);
+	AutoRelease<IAAFPropertyDef> r5( pPD );
+
+	// Set the propeter value on the target object
+	hr = pObj->SetPropertyValue(pPD, pPV);
+
+	return AAFRESULT_SUCCESS;
+}
+
+//***********************************************************
+//
+//	GetIntegerPropFromObject()
+//
+//	Get an integer property from the AAF object specified by pObj.
+//	The value of the property is returned in pValue.
+//
+//	Returns:
+//
+//		On Success: AAFRESULT_SUCCESS
+//		On Failure: An exception.
+//
+HRESULT AAFDomainUtils::GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID, aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
+{
+	AAFCheck				hr;
+
+	// Get the property value for the target property
+	IAAFClassDef*		pCD;
+	hr = dict->LookupClass(*pClassID, &pCD);
+	AutoRelease<IAAFClassDef> r1(pCD);
+
+	IAAFPropertyDef*	pPD;
+	hr = pCD->LookupPropertyDef(*pPropID, &pPD);
+	AutoRelease<IAAFPropertyDef> r2( pPD );
+
+	aafBool	present = AAFFalse;
+	pObj->IsPropertyPresent(pPD, &present);
+	IAAFPropertyValue*	pPV = NULL;
+	AutoRelease<IAAFPropertyValue> r3;
+
+	if (present == AAFTrue)
+	{
+		hr = pObj->GetPropertyValue(pPD, &pPV);
+		r3 = pPV;
+	}
+	else
+	{
+		hr = AAFRESULT_PROP_NOT_PRESENT;
+	}
+
+	// Get the type def from the dict with which to interpret this
+	// property value.
+	IAAFTypeDef* pTD;
+	hr = dict->LookupType(*pIntTypeID, &pTD);
+	AutoRelease< IAAFTypeDef > r4 (pTD);
+
+	IAAFTypeDefInt* pTDInt;
+	hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
+	AutoRelease< IAAFTypeDefInt > r5( pTDInt );
+
+	pTDInt->GetInteger(pPV, pValue, ValueSize);
+
+	return AAFRESULT_SUCCESS;
+}
+
+//***********************************************************
+//
+//	AddPropertyToClass()
+//
+//	Add an integer property to the class specified by ClassID
+//	in the AAF Dictionary.
+//
+//	Returns:
+//
+//		On Success: AAFRESULT_SUCCESS
+//		On Failure: An exception.
+//
+HRESULT AAFDomainUtils::AddPropertyToClass(IAAFDictionary *dict, const aafUID_t* pClassID, const aafUID_t* pPropTypeID, const aafUID_t* pPropID, aafCharacter*  pName)
+{
+	AAFCheck			hr;
+
+	// Get the class definition.
+	IAAFClassDef*	pCD;
+	hr = dict->LookupClass(*pClassID, &pCD);
+	AutoRelease<IAAFClassDef> r1(pCD);
+	IAAFTypeDef*	pTypeDef;
+	hr = dict->LookupType(*pPropTypeID, &pTypeDef);
+	AutoRelease< IAAFTypeDef > r2( pTypeDef );
+	IAAFPropertyDef*	pPropDef;
+	hr = pCD->AppendOptionalPropertyDef(*pPropID, pName, pTypeDef, &pPropDef);
+	AutoRelease< IAAFPropertyDef > r3( pPropDef );	
+	return AAFRESULT_SUCCESS;
+}

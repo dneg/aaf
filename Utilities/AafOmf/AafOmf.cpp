@@ -50,6 +50,17 @@ namespace OMF2
 
 #include "AafOmf.h"
 
+#include "AAFDomainUtils.h"
+#include "OMFDomainUtils.h"
+#if AVID_SPECIAL
+#include "ConvertAvid.h"
+#include "AAFDomainAvidUtils.h"
+#include "OMFDomainAvidUtils.h"
+#else
+#include "AAFDomainExtensions.h"
+#include "OMFDomainExtensionUtils.h"
+#include "Extensions.h"
+#endif
 #include "Aaf2Omf.h"
 #include "Omf2Aaf.h"
 #include "aafclassdefuids.h"
@@ -450,8 +461,8 @@ int main(int argc, char *argv[])
 {
 	HRESULT			hr;
 	CComInitialize	comInit;
-	Aaf2Omf			AAFMain;
-	Omf2Aaf			OMFMain;
+	ExtendedAaf2Omf		AAFMain;
+	ExtendedOmf2Aaf		OMFMain;
 
 #ifdef macintosh
 	argc = ccommand(&argv);	// calls up a command line window
@@ -586,157 +597,3 @@ void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSe
 									   &(globals->omCDCIPaddingBits));
 }
 
-//***********************************************************
-//
-//	AddPropertyToClass()
-//
-//	Add an integer property to the class specified by ClassID
-//	in the AAF Dictionary.
-//
-//	Returns:
-//
-//		On Success: AAFRESULT_SUCCESS
-//		On Failure: An exception.
-//
-static HRESULT AddPropertyToClass(IAAFDictionary *dict, const aafUID_t* pClassID, const aafUID_t* pPropTypeID, const aafUID_t* pPropID, aafCharacter*  pName)
-{
-	AAFCheck			hr;
-
-	// Get the class definition.
-	IAAFClassDef*	pCD;
-	hr = dict->LookupClass(*pClassID, &pCD);
-	AutoRelease<IAAFClassDef> r1(pCD);
-	IAAFTypeDef*	pTypeDef;
-	hr = dict->LookupType(*pPropTypeID, &pTypeDef);
-	AutoRelease< IAAFTypeDef > r2( pTypeDef );
-	IAAFPropertyDef*	pPropDef;
-	hr = pCD->AppendOptionalPropertyDef(*pPropID, pName, pTypeDef, &pPropDef);
-	AutoRelease< IAAFPropertyDef > r3( pPropDef );	
-	return AAFRESULT_SUCCESS;
-}
-
-
-void RegisterOMFMCPrivate(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession)
-{
-	OMFCheck		OMFError;
-	
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither,
-		"AvidPrivateEffectID", OMClassEFFE, OMF2::OMString,
-		OMF2::kPropOptional, &(gpGlobals->pvtEffectIDProp));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "AppCode", OMClassMOBJ, 
-									   OMF2::OMInt32, OMF2::kPropOptional, 
-									   &(globals->pvtAppCode));
-}
-
-void RegisterAAFMCPrivate(IAAFDictionary * dict)
-{
-	AAFCheck	hr;
-	
-	hr = AddPropertyToClass(dict, &kAAFClassID_Mob,
-							&kAAFTypeID_Int32,
-							&AUID_PropertyMobAppCode,
-							L"AppCode");
-}
-
-//***********************************************************
-//
-//	SetIntegerPropOnObject()
-//
-//	Set an integer property to the AAF object specified by pObj.
-//	The value of the property is specified in value.
-//
-//	Returns:
-//
-//		On Success: AAFRESULT_SUCCESS
-//		On Failure: An exception.
-//
-HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID,
-							   aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
-{
-	AAFCheck			hr;
-
-	// Create a property value from the supplied value (pValue)
-	IAAFTypeDef*		pTD;
-	hr = dict->LookupType(*pIntTypeID, &pTD);
-	AutoRelease<IAAFTypeDef> r1( pTD );
-
-	IAAFTypeDefInt*	pTDInt;
-	hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
-	AutoRelease<IAAFTypeDefInt> r2( pTDInt );
-
-	// Now create a property value object with that value.
-	IAAFPropertyValue*	pPV;
-	hr = pTDInt->CreateValue(pValue, ValueSize, &pPV);
-	AutoRelease<IAAFPropertyValue> r3( pPV );
-
-	// Add the property to the target object.
-	// Get the class def for the object
-	IAAFClassDef*	pCD;
-	hr = dict->LookupClass(*pClassID, &pCD);
-	AutoRelease<IAAFClassDef> r4( pCD );
-
-	IAAFPropertyDef*	pPD;
-	hr = pCD->LookupPropertyDef(*pPropID, &pPD);
-	AutoRelease<IAAFPropertyDef> r5( pPD );
-
-	// Set the propeter value on the target object
-	hr = pObj->SetPropertyValue(pPD, pPV);
-
-	return AAFRESULT_SUCCESS;
-}
-
-//***********************************************************
-//
-//	GetIntegerPropFromObject()
-//
-//	Get an integer property from the AAF object specified by pObj.
-//	The value of the property is returned in pValue.
-//
-//	Returns:
-//
-//		On Success: AAFRESULT_SUCCESS
-//		On Failure: An exception.
-//
-HRESULT GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID, aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
-{
-	AAFCheck				hr;
-
-	// Get the property value for the target property
-	IAAFClassDef*		pCD;
-	hr = dict->LookupClass(*pClassID, &pCD);
-	AutoRelease<IAAFClassDef> r1(pCD);
-
-	IAAFPropertyDef*	pPD;
-	hr = pCD->LookupPropertyDef(*pPropID, &pPD);
-	AutoRelease<IAAFPropertyDef> r2( pPD );
-
-	aafBool	present = AAFFalse;
-	pObj->IsPropertyPresent(pPD, &present);
-	IAAFPropertyValue*	pPV = NULL;
-	AutoRelease<IAAFPropertyValue> r3;
-
-	if (present == AAFTrue)
-	{
-		hr = pObj->GetPropertyValue(pPD, &pPV);
-		r3 = pPV;
-	}
-	else
-	{
-		hr = AAFRESULT_PROP_NOT_PRESENT;
-	}
-
-	// Get the type def from the dict with which to interpret this
-	// property value.
-	IAAFTypeDef* pTD;
-	hr = dict->LookupType(*pIntTypeID, &pTD);
-	AutoRelease< IAAFTypeDef > r4 (pTD);
-
-	IAAFTypeDefInt* pTDInt;
-	hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
-	AutoRelease< IAAFTypeDefInt > r5( pTDInt );
-
-	pTDInt->GetInteger(pPV, pValue, ValueSize);
-
-	return AAFRESULT_SUCCESS;
-}

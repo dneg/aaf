@@ -1,5 +1,6 @@
-#ifndef _EFFECT_TRANSLATE_
-#define _EFFECT_TRANSLATE_
+// @doc INTERNAL
+// @com This file handles bdirectional translation of effect metadata between OMF and AAF
+
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -27,32 +28,29 @@
  *
  ************************************************************************/
 
-class EffectTranslate
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <iostream.h>
+
+namespace OMF2
 {
-public:
-	EffectTranslate();
-	virtual ~EffectTranslate();
+#include "omPublic.h"
+#include "omMedia.h"
+}
 
-public:
-	virtual bool isPrivateEffect(aafUID_t& uid);
+#include "OMFDomainUtils.h"
 
-
-	virtual HRESULT GetEffectIDs(IAAFOperationGroup *effect,
-									   OMF2::omfUniqueNamePtr_t effectID,
-									   OMF2::omfUniqueNamePtr_t MCEffectID);
-
-	virtual HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
-						OMF2::omfUniqueNamePtr_t MCEffectIDPtr,
-						aafUID_t	*aafUID);
-};
-
-typedef struct
+// ============================================================================
+// Constructor
+// ============================================================================
+OMFDomainUtils::OMFDomainUtils()
 {
-	const aafUID_t	*aafID;
-	const char		*omfEffectID;
-	const char		*ExtendedEffectID;
-} effectXlate_t;
+}
+// ============================================================================
+// Destructor
+// ============================================================================
+OMFDomainUtils::~OMFDomainUtils()
+{
+}
 
-extern effectXlate_t	stdXlateTable[];
-extern long				numStdEntries;
-#endif
