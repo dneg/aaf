@@ -169,6 +169,8 @@ STDAPI CoCreateGuid(GUID  *pguid)
   ++sTemplate.Data1;
   
   *pguid = sTemplate;
+  
+  return S_OK;
 }
 
 #endif
