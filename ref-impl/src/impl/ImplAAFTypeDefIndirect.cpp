@@ -1156,7 +1156,7 @@ AAFRESULT STDMETHODCALLTYPE
 	pActualType->internalize(actualExternalBytes,
                            actualExternalBytesSize,
                            (OMByte *)pData,
-                           dataSize,
+                           actualValueDataSize,
                            hostByteOrder());
 
 	// Restore the original byte order (we may be able to optimize here...)
