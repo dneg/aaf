@@ -87,7 +87,7 @@ class Impl.this-module;
 class .this-module
 {
 public:
-  .this-module ();
+  .this-module (AAFBool doInit=AAFTrue);
   ~.this-module ();
   //
   // Constructor/destructor
