@@ -44,8 +44,8 @@
 
 ImplAAFEdgecode::ImplAAFEdgecode ():
 _start( PID_EdgeCode_Start, "Start"),
-_filmType( PID_EdgeCode_FilmKind, "Film type"),
-_edgeType( PID_EdgeCode_CodeFormat, "Edge type"),
+_filmType( PID_EdgeCode_FilmKind, "FilmKind"),
+_edgeType( PID_EdgeCode_CodeFormat, "CodeFormat"),
 _header( PID_EdgeCode_Header, "Header")
 {
 	_persistentProperties.put(_start.address());
