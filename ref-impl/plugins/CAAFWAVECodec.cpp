@@ -56,6 +56,12 @@ const aafUID_t JEFFS_WAVE_PLUGIN = { 0x431D5CA1, 0xEDE2, 0x11d2, { 0x80, 0x9F, 0
 
 static void SplitBuffers(void *original, aafUInt32 srcSamples, aafUInt16 sampleSize, aafUInt16 numDest, interleaveBuf_t *destPtr);
 
+inline void checkResult(AAFRESULT r)
+{
+  if (AAFRESULT_SUCCESS != r)
+    throw HRESULT(r);
+}
+
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::CountDefinitions (aafUInt32 *pDefCount)
 {
@@ -516,6 +522,12 @@ HRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   if (0 == nSamples)
     return AAFRESULT_INVALID_PARAM;
+
+  aafPosition_t offset;
+  checkResult(_stream->GetPosition(&offset));
+  if ( offset + buflen > (aafPosition_t)2*1024*1024*1024-1 ) {
+    return AAFRESULT_EOF;
+  }
 
   // If there multiple channels in the WAVE file and the data is interleaved
   // then write all of the interleaved samples together.

@@ -894,6 +894,13 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
 	checkExpression( buffer != NULL && pTotalSamplesWritten != NULL && 
 		pTotalBytesWritten != NULL, AAFRESULT_NULL_PARAM );
 
+
+	aafPosition_t offset;
+	checkResult(_stream->GetPosition(&offset));
+	if ( offset + buflen > (aafPosition_t)2*1024*1024*1024-1 ) {
+	  return AAFRESULT_EOF;
+	}
+
 	// Init output
 	*pTotalBytesWritten = 0;
 	*pTotalSamplesWritten = 0;

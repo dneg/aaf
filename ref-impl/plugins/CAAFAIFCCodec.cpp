@@ -56,6 +56,13 @@ static void            ConvertToIeeeExtended(double num, char *bytes);
 
 static void SplitBuffers(void *original, aafUInt32 srcSamples, aafUInt16 sampleSize, aafUInt16 numDest, interleaveBufAIFF_t *destPtr);
 
+inline void checkResult(AAFRESULT r)
+{
+  if (AAFRESULT_SUCCESS != r)
+    throw HRESULT(r);
+}
+
+
 HRESULT STDMETHODCALLTYPE
 CAAFAIFCCodec::CountDefinitions (aafUInt32 *pDefCount)
 {
@@ -517,6 +524,12 @@ CAAFAIFCCodec::WriteSamples (aafUInt32  nSamples,
 		return AAFRESULT_NULL_PARAM;
 	if (0 == nSamples)
 		return AAFRESULT_INVALID_PARAM;
+
+	aafPosition_t offset;
+	checkResult(_stream->GetPosition(&offset));
+	if ( offset + buflen >  (aafPosition_t)2*1024*1024*1024-1 ) {
+	  return AAFRESULT_EOF;
+	}
 	
 	// If there multiple channels in the AIFC file and the data is interleaved
 	// then write all of the interleaved samples together.

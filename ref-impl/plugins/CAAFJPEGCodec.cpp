@@ -37,7 +37,6 @@
 
 #include "CAAFBuiltinDefs.h"
 
-
 // {0DB382D1-3BAC-11d3-BFD6-00104BC9156D}
 const CLSID CLSID_AAFJPEGCodec = 
 { 0xdb382d1, 0x3bac, 0x11d3, { 0xbf, 0xd6, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
@@ -1200,7 +1199,8 @@ HRESULT STDMETHODCALLTYPE
 {
 	HRESULT hr = S_OK;
 	aafUInt32 n;
-  aafUInt32 bytesXfered = 0, samplesXfered = 0; // TBD: Need to be return arguments.
+	aafUInt32 bytesXfered = 0, samplesXfered = 0; // TBD: Need to be return arguments.
+	aafPosition_t offset;
 
 	if (NULL == buffer || NULL == samplesWritten || NULL == bytesWritten)
 		return AAFRESULT_NULL_PARAM;
@@ -1212,7 +1212,7 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_ONESAMPLEWRITE;
 
 
-
+	
   /* This struct contains the JPEG compression parameters and pointers to
    * working space (which is allocated as needed by the JPEG library).
    * It is possible to have several such structures, representing multiple
@@ -1234,6 +1234,12 @@ HRESULT STDMETHODCALLTYPE
 
 	try
 	{
+		// check the file size over 2 GBytes 
+		// 20MB( at 30fps for 24 hrs ). this is maximum of the frame index.
+		checkResult(_stream->GetPosition(&offset));
+
+		checkExpression(offset + 1024 * 1000 * 20 <= 1024 * 1000 * 2000 , AAFRESULT_EOF);
+
 		// Preconditions:
 		checkAssertion(NULL != _stream);
 		checkExpression(NULL != _sampleIndex, AAFRESULT_NOFRAMEINDEX);
@@ -1246,108 +1252,120 @@ HRESULT STDMETHODCALLTYPE
 			// If we are being asked compress the given buffer then
 			// the we should have already calculated the size of a sample.
 			checkExpression(_fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE);
-
-
+			
+			
 			/* Step 1: allocate and initialize JPEG compression object */
-
+			
 			/* We have to set up the error handler first, in case the initialization
-			 * step fails.  (Unlikely, but it could happen if you are out of memory.)
-			 * This routine fills in the contents of struct jerr, and returns jerr's
-			 * address which we place into the link field in cinfo.
-			 */
+			* step fails.  (Unlikely, but it could happen if you are out of memory.)
+			* This routine fills in the contents of struct jerr, and returns jerr's
+			* address which we place into the link field in cinfo.
+			*/
 			cinfo.err = jpeg_std_error(&jerr);
 			jerr.error_exit = cplusplus_error_exit;
-
+			
 			/* Now we can initialize the JPEG compression object. */
 			jpeg_create_compress(&cinfo);
-
-
-			// Setup the compression parameters.
-			aafCompressionParams param;
-
-			// Get the dimensions of the image data to compress.
-			param.imageWidth = _imageWidth;
-			param.imageHeight = _imageHeight;
-			param.components = 3;
-//			param.imageHeight = (kAAFSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
-
-			param.colorSpace = _pixelFormat;
-			param.horizontalSubsampling = _horizontalSubsampling;
-			param.verticalSubsampling = _verticalSubsampling;
-			param.blackReferenceLevel = _blackReferenceLevel;
-			param.whiteReferenceLevel = _whiteReferenceLevel;
-			param.colorRange = _colorRange;
-
-			// Default quality (until we have support for custom tables.)
-			param.quality = _compression_IJG_Quality; 
-
-			// Compute the number of bytes in a single row of pixel data.
-			if (1 == _horizontalSubsampling)
-			{
-				param.rowBytes = (_imageWidth * param.components) + _padBytesPerRow;
-			}
-			else if (2 == _horizontalSubsampling)
-			{	// Add an extra byte if with is odd. NOTE: This will never
-				// happen with full 601 frame.
-				param.rowBytes = (_imageWidth * (param.components - 1)) + (_imageWidth % 2) + _padBytesPerRow;
-			}
-				
-
-			// Calculate the size of the sample data to be compressed.
-			param.bufferSize = param.rowBytes * param.imageHeight;
-
-			// Make sure the given buffer is really large enough for the complete
-			// uncompressed pixel data.
-			checkExpression(param.bufferSize <= buflen, AAFRESULT_SMALLBUF);
 			
-			// Adjust the parameters for separate fields...
-			if (kAAFSeparateFields == _frameLayout)
+			try
 			{
-				param.imageHeight /= 2;
+				// Setup the compression parameters.
+				aafCompressionParams param;
+				
+				// Get the dimensions of the image data to compress.
+				param.imageWidth = _imageWidth;
+				param.imageHeight = _imageHeight;
+				param.components = 3;
+				//			param.imageHeight = (kAAFSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
+				
+				param.colorSpace = _pixelFormat;
+				param.horizontalSubsampling = _horizontalSubsampling;
+				param.verticalSubsampling = _verticalSubsampling;
+				param.blackReferenceLevel = _blackReferenceLevel;
+				param.whiteReferenceLevel = _whiteReferenceLevel;
+				param.colorRange = _colorRange;
+				
+				// Default quality (until we have support for custom tables.)
+				param.quality = _compression_IJG_Quality; 
+				
+				// Compute the number of bytes in a single row of pixel data.
+				if (1 == _horizontalSubsampling)
+				{
+					param.rowBytes = (_imageWidth * param.components) + _padBytesPerRow;
+				}
+				else if (2 == _horizontalSubsampling)
+				{	// Add an extra byte if with is odd. NOTE: This will never
+					// happen with full 601 frame.
+					param.rowBytes = (_imageWidth * (param.components - 1)) + (_imageWidth % 2) + _padBytesPerRow;
+				}
+				
+				
+				// Calculate the size of the sample data to be compressed.
 				param.bufferSize = param.rowBytes * param.imageHeight;
-			}
-			
-
-
-			for (n = 0; n < nSamples; n++)
-			{
-				/* Step 2: specify data destination (eg, an IAAFEssenceStream) */
-				/* Note: steps 2 and 3 can be done in either order. */
-				jpeg_essencestream_dest(&cinfo, _stream);
-
 				
-				param.buffer = &buffer[bytesXfered];
-				checkResult(CompressImage(param, cinfo));
-				bytesXfered += param.bufferSize;
-
+				// Make sure the given buffer is really large enough for the complete
+				// uncompressed pixel data.
+				checkExpression(param.bufferSize <= buflen, AAFRESULT_SMALLBUF);
+				
+				// Adjust the parameters for separate fields...
 				if (kAAFSeparateFields == _frameLayout)
 				{
-					// Compress the second field right after the first field.
+					param.imageHeight /= 2;
+					param.bufferSize = param.rowBytes * param.imageHeight;
+				}
+				
+				
+				
+				for (n = 0; n < nSamples; n++)
+				{
+					/* Step 2: specify data destination (eg, an IAAFEssenceStream) */
+					/* Note: steps 2 and 3 can be done in either order. */
+					jpeg_essencestream_dest(&cinfo, _stream);
+					
+					
 					param.buffer = &buffer[bytesXfered];
 					checkResult(CompressImage(param, cinfo));
 					bytesXfered += param.bufferSize;
+					
+					if (kAAFSeparateFields == _frameLayout)
+					{
+						// Compress the second field right after the first field.
+						param.buffer = &buffer[bytesXfered];
+						checkResult(CompressImage(param, cinfo));
+						bytesXfered += param.bufferSize;
+					}
+					
+					// Add padding for _imageAlignmentFactor
+					if (0 < _imageAlignmentFactor)
+					{
+						aafUInt32 alignmentBytes = bytesXfered % _imageAlignmentFactor;
+						
+						// TODO: Allocate and use a "aligmentBuffer" so that all of the padding
+						// be written in a single write operation.
+						aafUInt32 i;
+						aafUInt8 ch = 0;
+						aafUInt32 bytesWritten;
+						for (i = 0; i < alignmentBytes; ++i)
+							checkResult(_stream->Write(1, &ch, &bytesWritten));
+					}
+					
+					// Update the return values.
+					samplesXfered++;
+					
+					// Add a new entry to the index and update the sample count...
+					AddNewCompressedSample();
 				}
-
-				// Add padding for _imageAlignmentFactor
-				if (0 < _imageAlignmentFactor)
-				{
-					aafUInt32 alignmentBytes = bytesXfered % _imageAlignmentFactor;
-
-					// TODO: Allocate and use a "aligmentBuffer" so that all of the padding
-					// be written in a single write operation.
-					aafUInt32 i;
-					aafUInt8 ch = 0;
-          aafUInt32 bytesWritten;
-					for (i = 0; i < alignmentBytes; ++i)
-						checkResult(_stream->Write(1, &ch, &bytesWritten));
-				}
-
-				// Update the return values.
-				samplesXfered++;
-
-				// Add a new entry to the index and update the sample count...
-				AddNewCompressedSample();
 			}
+			catch (...)
+			{
+				jpeg_destroy_compress(&cinfo);
+				throw;
+			}
+			
+			/* Step 7: release JPEG compression object */
+					
+			/* This is an important step since it will release a good deal of memory. */
+			jpeg_destroy_compress(&cinfo);
 		}
 		else
 		{
