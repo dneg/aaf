@@ -36,24 +36,36 @@
 // Terry Skotz 4-27-2000 Terry_Skotz@avid.com
 //             added support for DataInput.h so dump can get input from text
 //             file.
-
 //
 // Usage:
 //
-//  $ dump [-x -r -p -a -c -s -z <pid> -m <n> -l <n> -v -h] files...
+// $ dump OPTIONS <file...>
 //
-//    -x       = hex dump, works for any file.
-//    -r       = raw dump, works for any structured storage file.
-//    -p       = property dump, works for files using the AAF stored
-//                 object format.
-//    -a       = AAF file dump, works only for AAF files.
-//    -c       = print raw reference counts
-//    -s       = print statistics.
-//    -z <pid> = dump properties with pid <pid> (hex) as all zeroes.
-//    -m <n>   = dump only the first <n> bytes (dec) of media streams. 
-//    -l <n>   = dump only the first <n> bytes (dec) of the file.
-//    -v       = validate the structure of the file
-//    -h       = print help.
+//   --help            = help (-h) : print this message and exit.
+//
+//   --hex-dump        = hex dump (-x)      : any file.
+//   --raw-dump        = raw dump (-r)      : any structured storage file
+//                                            (default).
+//   --property-dump   = property dump (-p) : any file using the AAF stored
+//                                            format.
+//   --aaf-dump        = AAF file dump (-a) : any AAF file.
+//
+//   Use the following with --raw-dump, --property-dump and --aaf-dump.
+//
+//     --statistics      = print statistics (-s)
+//
+//   Use the following with --property-dump and --aaf-dump.
+//
+//     --raw-counts      = print raw reference counts (-c)
+//     --zero-out <pid>  = dump properties with pid <pid> (hex) as
+//                         all zeros (-z)
+//     --media-bytes <n> = dump only the first <n> bytes (dec) of
+//                         media streams (-m)
+//     --validate        = validate the structure of the file (-v)
+//
+//   Use the following with --hex-dump.
+//
+//     --file-bytes <n>  = dump only the first <n> bytes (dec) of the file (-l)
 //
 //  Notes:
 //
@@ -3851,26 +3863,26 @@ void usage(void)
   cerr << endl;
   cerr << "Use the following with --raw-dump, --property-dump and --aaf-dump."
        << endl;
-  cerr << "--statistics      = print statistics (-s) :"
+  cerr << "--statistics      = print statistics (-s)"
        << endl;
   cerr << endl;
   cerr << "Use the following with --property-dump and --aaf-dump."
        << endl;
-  cerr << "--raw-counts      = print raw reference counts (-c) :"
+  cerr << "--raw-counts      = print raw reference counts (-c)"
        << endl;
   cerr << "--zero-out <pid>  = "
-       << "dump properties with pid <pid> (hex) as all zeros (-z) :"
+       << "dump properties with pid <pid> (hex) as all zeros (-z)"
        << endl;
   cerr << "--media-bytes <n> = "
-       << "dump only the first <n> bytes (dec) of media streams (-m) :"
+       << "dump only the first <n> bytes (dec) of media streams (-m)"
        << endl;
-  cerr << "--validate        = validate the structure of the file (-v) :"
+  cerr << "--validate        = validate the structure of the file (-v)"
        << endl;
   cerr << endl;
   cerr << "Use the following with --hex-dump."
        << endl;
   cerr << "--file-bytes <n>  = "
-       << "dump only the first <n> bytes (dec) of the file (-l) :"
+       << "dump only the first <n> bytes (dec) of the file (-l)"
        << endl;
 }
 
