@@ -100,9 +100,9 @@ bool OMSet<Key, Element>::contains(const Element value) const
   //          identified by <p key>, false otherwise.
   //   @this const
 template <typename Key, typename Element>
-bool OMSet<Key, Element>::contains(const Key key) const
+bool OMSet<Key, Element>::containsKey(const Key key) const
 {
-  TRACE("OMSet<Key, Element>::contains");
+  TRACE("OMSet<Key, Element>::containsKey");
 
   bool result = _tree.contains(key);
 
