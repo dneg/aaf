@@ -197,9 +197,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
-//!!!	if (pPlug)
-//!!!		pPlug->Release();
-
 	if (pDataDef)
 		pDataDef->Release();
 	if (pCodec)
