@@ -72,6 +72,8 @@
 #include "ImplAAFContentStorage.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFTimelineMobSlot.h"
+#include "ImplAAFStaticMobSlot.h"
+#include "ImplAAFEventMobSlot.h"
 #include "ImplAAFSourceClip.h"
 #include "ImplAAFSequence.h"
 #include "ImplAAFPulldown.h"
@@ -667,6 +669,181 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFMob::AppendNewStaticSlot (ImplAAFSegment * pSegment,
+								 aafSlotID_t  slotID,
+								 aafCharacter_constptr  pSlotName,
+								 ImplAAFStaticMobSlot ** ppNewSlot)
+{
+	ImplAAFStaticMobSlot	*aSlot = NULL;
+	ImplAAFMobSlot			*tmpSlot = NULL;
+	ImplAAFDictionary *pDictionary = NULL;
+
+	// Validate input pointers...
+	if (NULL == pSegment || NULL == pSlotName || NULL == ppNewSlot)
+		return (AAFRESULT_NULL_PARAM);
+
+	*ppNewSlot = NULL;
+
+	XPROTECT()
+	{
+		CHECK(GetDictionary(&pDictionary));
+		CHECK(pDictionary->GetBuiltinDefs()->cdStaticMobSlot()->
+			CreateInstance ((ImplAAFObject**) &aSlot));
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
+		CHECK(aSlot->SetSegment(pSegment));
+		CHECK(aSlot->SetSlotID(slotID));
+		CHECK(aSlot->SetName(pSlotName));
+
+		/* Append new slot to mob */
+		tmpSlot = aSlot;
+		_slots.appendValue(tmpSlot);
+
+	} /* XPROTECT */
+
+	XEXCEPT
+	{
+		if (aSlot)
+			aSlot->ReleaseReference();
+		aSlot = 0;
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
+		pDictionary = 0;
+	}
+	XEND;
+
+	*ppNewSlot = aSlot;
+	if (aSlot)
+		aSlot->AcquireReference();
+
+	return(AAFRESULT_SUCCESS);
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFMob::AppendNewEventSlot (aafRational_t  editRate,
+                           ImplAAFSegment * pSegment,
+                           aafSlotID_t  slotID,
+                           aafCharacter_constptr  pSlotName,
+                           aafPosition_t  origin,
+                           ImplAAFEventMobSlot ** ppNewSlot)
+{
+	ImplAAFEventMobSlot	*aSlot = NULL;
+	ImplAAFMobSlot		*tmpSlot = NULL;
+  ImplAAFDictionary		*pDictionary = NULL;
+
+
+  // Validate input pointers...
+  if (NULL == pSegment || NULL == pSlotName || NULL == ppNewSlot)
+    return (AAFRESULT_NULL_PARAM);
+
+	*ppNewSlot = NULL;
+
+	XPROTECT()
+	  {
+		CHECK(GetDictionary(&pDictionary));
+		CHECK(pDictionary->GetBuiltinDefs()->cdEventMobSlot()->
+			  CreateInstance ((ImplAAFObject**) &aSlot));
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
+		CHECK(aSlot->SetSegment(pSegment));
+		CHECK(aSlot->SetSlotID(slotID));
+		CHECK(aSlot->SetName(pSlotName));
+		CHECK(aSlot->SetEditRate( &editRate));
+		
+
+		/* Append new slot to mob */
+		tmpSlot = aSlot;
+		_slots.appendValue(tmpSlot);
+
+	  } /* XPROTECT */
+
+	XEXCEPT
+	  {
+		if (aSlot)
+		  aSlot->ReleaseReference();
+		aSlot = 0;
+		if(pDictionary != NULL)
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
+	  }
+	XEND;
+
+	*ppNewSlot = aSlot;
+	if (aSlot)
+		aSlot->AcquireReference();
+
+	return(AAFRESULT_SUCCESS);
+}
+
+
+#if(0)
+//****************
+// AppendNewStaticSlot()
+//
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFMob::AppendNewStaticSlot
+        (        
+		ImplAAFSegment * pSegment,// @parm [in] AAFSegment | pSegment | Segment to append as slot component
+	    aafSlotID_t  slotID,   // @parm [in] aafSlotID_t | slotID | new slot ID
+		aafCharacter_constptr  pSlotName,   // @parm [in, string] aafCharacter_constptr | pSlotName | new slot name
+		ImplAAFStaticMobSlot ** ppNewSlot)  // @parm [out] AAFStaticMobSlot | ppNewSlot | Newly created slot
+{
+	ImplAAFStaticMobSlot	*aSlot = NULL;
+	ImplAAFMobSlot			*tmpSlot = NULL;
+  ImplAAFDictionary *pDictionary = NULL;
+///fLength_t length = CvtInt32toLength(0, length);
+///	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
+
+
+  // Validate input pointers...
+  if (NULL == pSegment || NULL == pSlotName || NULL == ppNewSlot)
+    return (AAFRESULT_NULL_PARAM);
+
+	*ppNewSlot = NULL;
+
+	XPROTECT()
+	  {
+		CHECK(GetDictionary(&pDictionary));
+		CHECK(pDictionary->GetBuiltinDefs()->cdStaticMobSlot()->
+			  CreateInstance ((ImplAAFObject**) &aSlot));
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
+		CHECK(aSlot->Initialize());
+		CHECK(aSlot->SetSegment(pSegment));
+		CHECK(aSlot->SetSlotID(slotID));
+		CHECK(aSlot->SetName(pSlotName));
+		CHECK(aSlot->SetEditRate(editRate));
+		CHECK(aSlot->SetOrigin(origin));
+
+		/* Append new slot to mob */
+		tmpSlot = aSlot;
+		_slots.appendValue(tmpSlot);
+
+	  } /* XPROTECT */
+
+	XEXCEPT
+	  {
+		if (aSlot)
+		  aSlot->ReleaseReference();
+		aSlot = 0;
+		if(pDictionary != NULL)
+		  pDictionary->ReleaseReference();
+		pDictionary = 0;
+	  }
+	XEND;
+
+	*ppNewSlot = aSlot;
+	if (aSlot)
+		aSlot->AcquireReference();
+
+	return(AAFRESULT_SUCCESS);
+}
+#endif
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetSlots (ImplEnumAAFMobSlots **ppEnum)
 {
@@ -1008,25 +1185,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 }
 
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMob::AppendNewStaticSlot (ImplAAFSegment * /*pSegment*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafCharacter_constptr  /*pSlotName*/,
-                           ImplAAFStaticMobSlot ** /*ppNewSlot*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMob::AppendNewEventSlot (aafRational_t  /*editRate*/,
-                           ImplAAFSegment * /*pSegment*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafCharacter_constptr  /*pSlotName*/,
-                           aafPosition_t  /*origin*/,
-                           ImplAAFEventMobSlot ** /*ppNewSlot*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::OffsetToMobTimecode (ImplAAFSegment *pTcSeg,
