@@ -116,9 +116,11 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 	if (FAILED(hr))
 	{
-		(*ppFile)->Release();
-		*ppFile = NULL;
-		return hr;
+	  if ( *ppFile ) {
+	    (*ppFile)->Release();
+	    *ppFile = NULL;
+	  }
+	  return hr;
 	}
   
   	hr = (*ppFile)->GetHeader(ppHeader);
