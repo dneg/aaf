@@ -99,6 +99,16 @@ public:
   static bool compatibleRawStorage(const OMAccessMode accessMode,
                                    const OMStoredObjectEncoding& encoding);
 
+    // @cmember Can a file of the encoding specified by <p encoding> be
+    //          created successfully as a named file and
+    //          accessed successfully in the mode specified by <p accessMode> ?
+  static bool compatibleNamedFile(const OMAccessMode accessMode,
+                                  const OMStoredObjectEncoding& encoding);
+
+    // @cmember Is <p rawStorage> compatible with <p accesMode> ? 
+  static bool compatible(const OMRawStorage* rawStorage,
+                         const OMAccessMode accessMode);
+
     // @cmember Open an existing <c OMFile> for read-only access.
     // @devnote Will superceed openExistingRead() above.
   static OMFile* openExistingRead(OMRawStorage* rawStorage,

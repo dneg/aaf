@@ -163,6 +163,7 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid client root", clientRoot != 0);
   PRECONDITION("Valid dictionary ", dictionary != 0);
+  PRECONDITION("Createable", compatibleNamedFile(modifyMode, encoding));
 
   OMStoredObjectFactory* f = findFactory(encoding);
   ASSERT("Recognized file encoding", f != 0);
@@ -202,6 +203,56 @@ bool OMFile::compatibleRawStorage(const OMAccessMode accessMode,
   return result;
 }
 
+  // @mfunc Can a file of the encoding specified by <p encoding> be
+  //        created successfully as a named file and
+  //        accessed successfully in the mode specified by <p accessMode> ?
+  //   @parm The <t OMAccessMode> 
+  //   @parm The <t OMStoredObjectEncoding>
+  //   @rdesc True if <p accessMode> and <p encoding> are compatible,
+  //          false otherwise.
+bool OMFile::compatibleNamedFile(const OMAccessMode accessMode,
+                                 const OMStoredObjectEncoding& encoding)
+{
+  TRACE("OMFile::compatibleNamedFile");
+
+  bool result = false;
+  OMStoredObjectFactory* factory = findFactory(encoding);
+  ASSERT("Recognized file encoding", factory != 0);
+  result = factory->compatibleNamedFile(accessMode);
+  return result;
+}
+
+  // @mfunc Is <p rawStorage> compatible with <p accesMode> ?
+  //   @parm The <c OMRawStorage>
+  //   @parm The <t OMAccessMode> 
+  //   @rdesc True if <p rawStorage> and <p accessMode> are compatible,
+  //          false otherwise.
+bool OMFile::compatible(const OMRawStorage* rawStorage,
+                        const OMAccessMode accessMode)
+{
+  TRACE("OMFile::compatible");
+
+  bool result = false;
+  switch (accessMode) {
+    case readOnlyMode:
+      if (rawStorage->isReadable()) {
+        result = true;
+      }
+      break;
+    case writeOnlyMode:
+      if (rawStorage->isWritable()) {
+        result = true;
+      }
+      break;
+    case modifyMode:
+      if (rawStorage->isReadable() && rawStorage->isWritable()) {
+        result = true;
+      }
+      break;
+  }
+  return result;
+}
+
 OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
                                  const OMClassFactory* factory,
                                  void* clientOnRestoreContext,
@@ -211,6 +262,7 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
   TRACE("OMFile::openExistingRead");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible access mode", compatible(rawStorage, readOnlyMode));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
@@ -233,6 +285,7 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
   TRACE("OMFile::openExistingModify");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible access mode", compatible(rawStorage, modifyMode));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
@@ -257,6 +310,8 @@ OMFile* OMFile::openNewWrite(OMRawStorage* rawStorage,
   TRACE("OMFile::openNewWrite");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible access mode",
+                                        compatible(rawStorage, writeOnlyMode));
   PRECONDITION("Creatable", compatibleRawStorage(writeOnlyMode, encoding));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
@@ -290,6 +345,7 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
   TRACE("OMFile::openNewModify");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible access mode", compatible(rawStorage, modifyMode));
   PRECONDITION("Creatable", compatibleRawStorage(modifyMode, encoding));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
