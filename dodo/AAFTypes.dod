@@ -43,7 +43,23 @@ typedef unsigned long	aafUInt32;
 typedef unsigned short	aafUInt16;
 typedef unsigned char	aafUInt8;
 
-typedef aafUInt16		aafWChar;
+AD_CPP_QUOTE(// All characters and strings are in AAF are unicode.)
+AD_CPP_QUOTE(#ifndef _MAC)
+AD_CPP_QUOTE(#ifndef _WCHAR_T_DEFINED)
+AD_CPP_QUOTE(typedef unsigned short wchar_t;)
+AD_CPP_QUOTE(#endif // _WCHAR_T_DEFINED)
+AD_CPP_QUOTE(#endif // ndef _MAC)
+
+AD_CPP_QUOTE(#ifdef __MWERKS__)
+AD_CPP_QUOTE(#if !__option\(wchar_type\))
+AD_CPP_QUOTE(typedef aafUInt16 	aafWChar;)
+AD_CPP_QUOTE(#else //!__option\(wchar_type\))
+AD_CPP_QUOTE(typedef wchar_t 	aafWChar;)
+AD_CPP_QUOTE(#endif //!__option\(wchar_type\))
+AD_CPP_QUOTE(#else // __MWERKS__)
+typedef wchar_t		aafWChar;
+AD_CPP_QUOTE(#endif // __MWERKS__)
+
 
 typedef aafUInt32		AAFRESULT;
 
