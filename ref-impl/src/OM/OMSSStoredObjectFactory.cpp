@@ -85,7 +85,7 @@ OMSSStoredObjectFactory::openModify(OMRawStorage* rawStorage)
                                          rawStorage->isExtendible());
 
   writeSignature(rawStorage, nullOMUniqueObjectIdentification);
-  return openFile(rawStorage, OMFile::readOnlyMode);
+  return openFile(rawStorage, OMFile::modifyMode);
 }
 
   // @mfunc Create a new root <c OMSSStoredObject> in the raw storage
