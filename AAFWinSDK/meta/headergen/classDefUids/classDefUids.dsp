@@ -95,7 +95,7 @@ SOURCE=..\..\..\..\meta\headergen\classDefUid.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
-SOURCE=..\..\..\..\meta\headergen\AAFMetaDictionary.h
+SOURCE=..\..\..\..\meta\AAFMetaDictionary.h
 # End Source File
 # Begin Source File
 
