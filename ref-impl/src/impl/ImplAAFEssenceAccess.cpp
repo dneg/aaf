@@ -105,8 +105,8 @@ extern "C" const CLSID CLSID_AAFFile;
 ImplAAFEssenceAccess::ImplAAFEssenceAccess ()
 {
 	_containerDefID = ContainerAAF;
-	_codecID = NoCodec;
-	_flavour = NilCodecFlavour;
+	_codecID = kAAFNoCodec;
+	_flavour = kAAFNilCodecFlavour;
 	_destination = NULL;
 	_compFileMob = NULL;
 	_numChannels = 0;
