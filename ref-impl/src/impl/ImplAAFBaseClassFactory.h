@@ -18,8 +18,13 @@ public:
 
 
 	// Factory method for making instances of the built-in base classes.
-	ImplAAFObject* createObject(const aafUID_t*	auid) const;
-
+  static ImplAAFObject*
+    CreateInstance(const aafUID_t*	pAUID);
+  
+  // Utility to find the code class id for the corresponding stored
+  // object id.
+  static const aafClassID_t* 
+    LookupClassID(const aafUID_t* pAUID);
 };
 
 
