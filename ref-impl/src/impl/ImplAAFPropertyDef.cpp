@@ -34,36 +34,55 @@
 
 
 ImplAAFPropertyDef::ImplAAFPropertyDef ()
+  : _pTypeDef (0)
 {}
 
 
 ImplAAFPropertyDef::~ImplAAFPropertyDef ()
-{}
+{
+  if (_pTypeDef)
+	_pTypeDef->ReleaseReference ();
+  _pTypeDef = 0;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPropertyDef::Initialize (
+      aafUID_t * pID,
+      ImplAAFTypeDef * pTypeDef,
+      wchar_t * pTypeName)
+{
+  AAFRESULT hr;
+
+  if (! pID)       return AAFRESULT_NULL_PARAM;
+  if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
+  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+
+  hr = SetIdentification (pID);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  hr = SetName (pTypeName);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+
+  _pTypeDef = pTypeDef;
+  _pTypeDef->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
+}
+
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyDef::GetTypeDef (
-      ImplAAFTypeDef ** /*ppTypeDef*/)
+      ImplAAFTypeDef ** ppTypeDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::GetName (
-      wchar_t *  /*pName*/,
-      aafInt32  /*bufSize*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::GetNameBufLen (
-      aafInt32 *  /*pLen*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
+  if (! _pTypeDef) return AAFRESULT_NOT_INITIALIZED;
+  assert (_pTypeDef);
+  assert (ppTypeDef);
+  *ppTypeDef = _pTypeDef;
+  (*ppTypeDef)->AcquireReference();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -123,34 +142,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::GetDescription (
-      wchar_t *  /*pStrDescription*/,
-      aafInt32  /*bufSize*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::GetDescriptionBufLen (
-      aafInt32 *  /*pLen*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::SetDescription (
-      wchar_t *  /*pStrDescription*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyDef::GetDefaultValue (
       ImplAAFPropertyValue ** /*ppDataValue*/)
 {
@@ -177,5 +168,3 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 OMDEFINE_STORABLE(ImplAAFPropertyDef, AUID_AAFPropertyDef);
-
-

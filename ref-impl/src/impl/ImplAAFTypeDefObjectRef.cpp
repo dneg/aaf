@@ -8,10 +8,16 @@
 \******************************************/
 
 
+#ifndef __ImplAAFPropertyValue_h__
+#include "ImplAAFPropertyValue.h"
+#endif
+
+#ifndef __ImplAAFClassDef_h__
+#include "ImplAAFClassDef.h"
+#endif
 
 
 
-#include "AAFStoredObjectIDs.h"
 
 #ifndef __ImplAAFTypeDefObjectRef_h__
 #include "ImplAAFTypeDefObjectRef.h"
@@ -28,11 +34,12 @@ ImplAAFTypeDefObjectRef::ImplAAFTypeDefObjectRef ()
 ImplAAFTypeDefObjectRef::~ImplAAFTypeDefObjectRef ()
 {}
 
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::Initialize (
-      aafUID_t *  /*pID*/,
-      ImplAAFClassDef * /*pObjType*/,
-      wchar_t *  /*pTypeName*/)
+      aafUID_t *  pID,
+      ImplAAFClassDef * pObjType,
+      wchar_t *  pTypeName)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -75,8 +82,3 @@ AAFRESULT STDMETHODCALLTYPE
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
-
-
-OMDEFINE_STORABLE(ImplAAFTypeDefObjectRef, AUID_AAFTypeDefObjectRef);
-
-

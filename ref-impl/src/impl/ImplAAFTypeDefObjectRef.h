@@ -14,6 +14,10 @@
 \******************************************/
 
 
+class ImplAAFPropertyValue;
+
+class ImplAAFClassDef;
+
 
 
 
@@ -97,11 +101,9 @@ public:
          ImplAAFObject * ppObject);
 
 
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefObjectRef)
 
+
+public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTypeDefObjectRefTest.cpp.
   static AAFRESULT test();
