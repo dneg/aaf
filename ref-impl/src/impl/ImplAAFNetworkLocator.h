@@ -22,10 +22,6 @@
 
 
 #include "OMProperty.h"
-#include "OMTypes.h"
-
-#include "OMProperty.h"
-#include "OMTypes.h"
 
 const int PID_NETWORKLOCATOR_URLSTRING          = 0;
 
