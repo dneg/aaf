@@ -101,11 +101,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-	else
-	{
-	  return pvtInitialize(id, pName, pDesc);
-	}
-	return AAFRESULT_SUCCESS;
+
+	return pvtInitialize(id, pName, pDesc);
 }
 
 
