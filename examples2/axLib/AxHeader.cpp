@@ -90,6 +90,16 @@ aafUInt32 AxHeader::CountMobs() const
 	return mobCount;
 }
 
+aafUInt32 AxHeader::CountMobs(aafMobKind_e mobKind) const
+{
+	aafUInt32 mobCount;
+
+	CHECK_HRESULT( _spIaafHeader->CountMobs( mobKind, &mobCount ) );
+
+	return mobCount;
+}
+
+
 aafUInt32 AxHeader::CountEssence() const
 {
 	aafUInt32 essenceCount;

@@ -37,6 +37,7 @@ public:
 	IAAFContentStorageSP GetContentStorage() const;
 
 	aafUInt32 CountMobs() const;
+	aafUInt32 CountMobs(aafMobKind_e mobKind) const;
 	aafUInt32 CountEssence() const;
 
 	void AddMob( IAAFMobSP spIaafMob );
