@@ -91,6 +91,19 @@ public:
     //          <p object> ?
   bool containsValue(const ReferencedObject* object) const;
 
+    // @cmember Does this <c OMStrongReferenceSetProperty> contain a
+    //          <p ReferencedObject> identified by <p identification>?
+  virtual bool contains(
+                     const OMUniqueObjectIdentification& identification) const;
+
+    // @cmember Find the <p ReferencedObject> in this
+    //          <c OMStrongReferenceSetProperty> identified by
+    //          <p identification>.  If the object is found it is returned
+    //          in <p object> and the result is true. If the element is
+    //          not found the result is false.
+  virtual bool find(const OMUniqueObjectIdentification& identification,
+                    ReferencedObject*& object) const;
+
   // Optional property interface
 
     // @cmember Remove this optional <c OMStrongReferenceSetProperty>.

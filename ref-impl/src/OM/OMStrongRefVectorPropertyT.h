@@ -320,6 +320,21 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::appendValue(
 
 }
 
+  // @mfunc Prepend the given <p ReferencedObject> <p value> to
+  //        this <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject>.
+template <typename ReferencedObject>
+void OMStrongReferenceVectorProperty<ReferencedObject>::prependValue(
+                                                const ReferencedObject* value)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::prependValue");
+
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc Insert <p object> into this
   //        <c OMStrongReferenceVectorProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
@@ -333,6 +348,23 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::insert(
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::insert");
 
   appendValue(object);
+}
+
+  // @mfunc Insert <p value> into this <c OMStrongReferenceVectorProperty>
+  //        at position <p index>. Existing values at <p index> and
+  //        higher are shifted up one index position.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject>.
+  //   @parm The position at which to insert the <p ReferencedObject>.
+template <typename ReferencedObject>
+void OMStrongReferenceVectorProperty<ReferencedObject>::insertAt(
+                             const ReferencedObject* value, const size_t index)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::insertAt");
+
+  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Does this <c OMStrongReferenceVectorProperty> contain

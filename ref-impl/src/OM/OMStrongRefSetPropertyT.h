@@ -303,6 +303,50 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::containsValue(
   return result;
 }
 
+  // @mfunc Does this <c OMStrongReferenceSetProperty> contain a
+  //        <p ReferencedObject> identified by <p identification>?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The unique identification of the desired object, the search key.
+  //   @rdesc True if the object is found, false otherwise.
+template <typename ReferencedObject>
+bool OMStrongReferenceSetProperty<ReferencedObject>::contains(
+                      const OMUniqueObjectIdentification& identification) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::contains");
+
+  ASSERT("Unimplemented code not reached", false);
+
+  bool result = false;
+  return result;
+}
+
+  // @mfunc Find the <p ReferencedObject> in this
+  //        <c OMStrongReferenceSetProperty> identified by
+  //        <p identification>.  If the object is found it is returned
+  //        in <p object> and the result is true. If the element is
+  //        not found the result is false.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject> by reference.
+  //   @parm The unique identification of the desired object, the search key.
+  //   @rdesc True if the object is found, false otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool OMStrongReferenceSetProperty<ReferencedObject>::find(
+                            const OMUniqueObjectIdentification& identification,
+                            ReferencedObject*& object) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::find");
+
+  ASSERT("Unimplemented code not reached", false);
+
+  bool result = false;
+  return result;
+}
+
   // @mfunc Remove this optional <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
