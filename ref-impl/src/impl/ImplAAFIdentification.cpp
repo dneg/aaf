@@ -78,7 +78,7 @@ _productVersionString(PID_IDENTIFICATION_PRODUCTVERSIONSTRING, "productVersionSt
 // _productId(        PID_IDENTIFICATION_PRODUCTID,            "productId"),
 _date(                PID_IDENTIFICATION_DATE,                 "date"),
 // _toolKitVersion(   PID_IDENTIFICATION_TOOLKITVERSION,       "toolkitVersion"),
-_platform(            PID_IDENTIFICATION_PLATFORM,             "platform"),
+_platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
 // _generation(       PID_IDENTIFICATION_GENERATION,           "generation")
 {
   // Insert the properties into the persistent property set.
