@@ -303,4 +303,16 @@ AD_XFUNCTION2(AAFFileOpenTransient,
   //
   // AAFRESULT_NULL_PARAM
   //   - the pIdent pointer argument is NULL.)
+
+  AD_XFUNCTION1(AAFGetPluginManager,
+			[out],
+			objOut,
+			AAFPluginManager,
+			ppPluginManager,
+			Pointer to the interface of the plugin manager.,
+
+
+			Returns an interface of the plugin manager\, which is used to select
+//			plugins for exporting.)
+
 AD_MODULE_END
