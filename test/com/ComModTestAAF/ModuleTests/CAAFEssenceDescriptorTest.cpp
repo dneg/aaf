@@ -149,6 +149,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
 
 		// Make another locator, and attach it to the EssenceDescriptor
+    pLocator->Release(); // Release reference before reusing variable.
+    pLocator = NULL;
 		checkResult(defs.cdLocator()->
 					CreateInstance(IID_IAAFLocator, 
 								   (IUnknown **)&pLocator));		
