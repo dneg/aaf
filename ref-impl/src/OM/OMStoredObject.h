@@ -92,7 +92,7 @@ public:
 
     // @cmember Save the <c OMPropertySet> <p properties> in this
     //          <c OMStoredObject>.
-  void save(const OMPropertySet& properties);
+  void save(const OMPropertySet& properties, void* clientContext);
 
     // @cmember Restore the <c OMPropertySet> <p properties> into
     //          this <c OMStoredObject>.
