@@ -39,6 +39,7 @@ class OMObjectDirectory;
 class OMPropertyTable;
 class OMStoredObject;
 class OMDictionary;
+class OMRootStorable;
 
 // @class Files supported by the Object Manager.
 //
@@ -85,12 +86,12 @@ public:
     //          <p factory> to create the objects. The file must not already
     //          exist. The byte ordering on the newly created file is given
     //          by <p byteOrder>. The client root <c OMStorable> in the newly
-    //          created file is given by <p root>.
+    //          created file is given by <p clientRoot>.
   static OMFile* openNewModify(const wchar_t* fileName,
                                const OMClassFactory* factory,
                                void* clientOnRestoreContext,
                                const OMByteOrder byteOrder,
-                               OMStorable* root,
+                               OMStorable* clientRoot,
                                const OMFileSignature& signature,
                                OMDictionary* dictionary = 0);
 
@@ -118,7 +119,7 @@ public:
          OMStoredObject* store,
          const OMClassFactory* factory,
          OMDictionary* dictionary,
-         OMStorable* root);
+         OMRootStorable* root);
 
     // @cmember Destructor.
   ~OMFile(void);
@@ -200,7 +201,7 @@ private:
     // @cmember Read the signature from the given file.
   void readSignature(const wchar_t* fileName);
 
-  OMStorable* _root;
+  OMRootStorable* _root;
   OMStoredObject* _rootStore;
 
   OMDictionary* _dictionary;
