@@ -129,6 +129,9 @@ struct AAFSmartPointerBase : public RefCountType
   // ctor to create 
   inline AAFSmartPointerBase ();
 
+  // ctor that takes ownership of ReferencedType pointer
+  inline AAFSmartPointerBase (ReferencedType* p);
+
   // copy ctor
   AAFSmartPointerBase (const AAFSmartPointerBase<ReferencedType, RefCountType> & src);
   
@@ -176,6 +179,14 @@ AAFSmartPointerBase ()
   : _rep (0)
 {}
 
+template <typename ReferencedType, typename RefCountType>
+inline AAFSmartPointerBase<ReferencedType, RefCountType>::
+AAFSmartPointerBase (ReferencedType* p)
+  : _rep (p)
+{
+  if (_rep)
+    acquire(_rep);
+};
 
 template <typename ReferencedType, typename RefCountType>
 AAFSmartPointerBase<ReferencedType, RefCountType>::
