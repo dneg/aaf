@@ -29,7 +29,7 @@ Sets the manufacturer name of the film stock [optional].)
 
 /****/
 AD_METHOD1(GetFilmManufacturer,
-[out],AAFString *,name,Pass in a string object,which will be erased and filled,
+[out],AAFString *,name,Pass in a string object which will be erased and filled,
 Gets the optional manufacturer name of the film stock.)
 	//@comm Returns a zero-length string if the property was not present
 	
@@ -40,7 +40,7 @@ Sets the model or brand of the film stock [optional].)
 
 /****/
 AD_METHOD1(GetFilmModel,
-[out],AAFString *,name,Pass in a string object,which will be erased and filled,
+[out],AAFString *,name,Pass in a string object which will be erased and filled,
 Gets the optional model or brand of the film stock.)
 
 /****/
