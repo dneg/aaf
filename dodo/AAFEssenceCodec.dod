@@ -278,7 +278,12 @@ AD_XMETHOD1(Seek,
 			// sample frame is one frame for picture\, and one sample
 			// times the number of interleaved channels for audio.)
 
-AD_METHOD0(CompleteWrite,
+AD_XMETHOD1(CompleteWrite,
+			[in],
+			objIn,
+			Unknown,
+			unk,
+			Optional second essence descriptor to also update,
 			Close the media stream\, ready to open another or Finish.)
 		
 AD_IDL(	// Old video write/read lines become fractional samples)
