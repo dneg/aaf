@@ -157,7 +157,7 @@ AD_XMETHOD2(SaveAs,
 
 			[in\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pFileName,
 			Null-terminated string containing name of filesystem file to
 	// which this file is to be saved.  Filename must be in a form

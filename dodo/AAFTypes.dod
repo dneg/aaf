@@ -53,11 +53,14 @@ AD_CPP_QUOTE(#endif // ndef _MAC)
 AD_CPP_QUOTE(#ifdef __MWERKS__)
 AD_CPP_QUOTE(#if !__option\(wchar_type\))
 AD_CPP_QUOTE(typedef aafUInt16 	aafWChar;)
+AD_CPP_QUOTE(typedef aafUInt16 	aafCharacter;)
 AD_CPP_QUOTE(#else //!__option\(wchar_type\))
 AD_CPP_QUOTE(typedef wchar_t 	aafWChar;)
+AD_CPP_QUOTE(typedef wchar_t 	aafCharacter;)
 AD_CPP_QUOTE(#endif //!__option\(wchar_type\))
 AD_CPP_QUOTE(#else // __MWERKS__)
 typedef wchar_t		aafWChar;
+typedef wchar_t		aafCharacter;
 AD_CPP_QUOTE(#endif // __MWERKS__)
 
 typedef aafInt32		AAFRESULT;
@@ -147,9 +150,9 @@ AD_CPP_QUOTE(#endif)
 
 
 AD_CPP_QUOTE(#if 0)
-typedef [string] aafWChar * aafString_t;
+typedef [string] aafCharacter * aafString_t;
 AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(typedef aafWChar * aafString_t;)
+AD_CPP_QUOTE(typedef aafCharacter * aafString_t;)
 
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
@@ -513,11 +516,11 @@ typedef struct _aafProductVersion_t
 
 typedef struct _aafProductIdentification_t
 {
-	aafWChar				*companyName;
-	aafWChar				*productName;
-	aafWChar				*productVersionString;
+	aafCharacter				*companyName;
+	aafCharacter				*productName;
+	aafCharacter				*productVersionString;
 	aafInt32			productID;
-	aafWChar				*platform;
+	aafCharacter				*platform;
 	aafProductVersion_t	productVersion;
 } aafProductIdentification_t;
 
