@@ -70,6 +70,7 @@ typedef struct _dumpFlags
   bool lazyLoad;
   aafUInt64 maxCount;
   char *showOnlyClasses;
+  bool useOMCache;
 } dumpFlags_t;
 
 // handy smart pointer typedefs
@@ -2578,8 +2579,42 @@ static bool dumpFile (aafCharacter * pwFileName,
 	// lazyLoad support
 	aafUInt32 mode = 0;
 	if (dumpFlags.lazyLoad)
-		mode |= AAF_FILE_MODE_LAZY_LOADING;
-	hr = AAFFileOpenExistingRead (pwFileName, mode, &pFile);
+	  mode |= AAF_FILE_MODE_LAZY_LOADING;
+
+	if ( dumpFlags.useOMCache )
+	{
+	  // Use a 16 MB cache
+	  const int pageCount = 4096;
+	  const int pageSize  = 4096;
+	  IAAFRawStorage* pRawStorage = 0;
+	  hr = AAFCreateRawStorageCachedDisk( pwFileName,
+					      kAAFFileExistence_existing,
+					      kAAFFileAccess_read,
+					      pageCount, pageSize,
+					      &pRawStorage);
+	  if ( AAFRESULT_SUCCESS == hr )
+	  {
+	    assert( pRawStorage );
+	    hr = AAFCreateAAFFileOnRawStorage( pRawStorage,
+					       kAAFFileExistence_existing,
+					       kAAFFileAccess_read,
+					       0,  /* pFileKind unused for existing file */
+					       mode,
+					       0,  /* product id unused for existing file */
+					       &pFile );
+
+		if ( AAFRESULT_SUCCESS == hr )
+		{
+			assert(pFile);
+			hr = pFile->Open();
+		}
+	    
+	  }
+	}
+	else
+	{
+		hr = AAFFileOpenExistingRead (pwFileName, mode, &pFile);
+	}
 
 	if (! SUCCEEDED (hr))
 	{
@@ -2753,7 +2788,7 @@ int main(int argc, char* argv[])
 	dumpFlags.showOnlyClasses=NULL; 
 	dumpFlags.identifybyname=true;
 	dumpFlags.lazyLoad=false;
-	
+	dumpFlags.useOMCache=false;
 
 	// Process command line args
 	for (comArg = 1; comArg < (argc-1); comArg++)
@@ -2844,6 +2879,12 @@ int main(int argc, char* argv[])
 		} else if (!strcmp("-nolazyLoad", argv[comArg]) && (comArg < (argc-1)))
 		{
 			dumpFlags.lazyLoad = false;
+		} else if (!strcmp("-useomcache", argv[comArg]) && (comArg < (argc-1)))
+		{
+			dumpFlags.useOMCache = true;
+		} else if (!strcmp("-nouseomcache", argv[comArg]) && (comArg < (argc-1)))
+		{
+			dumpFlags.useOMCache = false;
 		} else
 		{
 			cerr << "Unprocessed command argument: " << argv[comArg] << endl;
