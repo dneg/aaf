@@ -85,26 +85,6 @@ inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
 }
 
 
-static bool DR4TestSupported(aafProductVersion_constref toolkitVersion)
-{
-  bool result = true;
-   
-  if (kAAFVersionBeta == toolkitVersion.type)
-  {
-    if (1 == toolkitVersion.major && 
-        0 == toolkitVersion.minor && 
-        0 == toolkitVersion.tertiary && 
-        4 >= toolkitVersion.patchLevel)
-    {
-      result = false;
-    }
-  }
-  
-  return result;
-
-}
-
-
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
 						   // IAAFSession**		ppSession,

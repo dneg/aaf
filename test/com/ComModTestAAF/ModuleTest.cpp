@@ -44,12 +44,11 @@
 // DR3 -> {1, 0, 0, 3, kAAFVersionBeta};
 // DR4 -> {1, 0, 0, 4, kAAFVersionBeta};
 
-// Support for Sets (strong reference sets) added in DR4
-bool StrongReferenceSetsSupported(aafProductVersion_constref toolkitVersion)
+
+bool DR4TestSupported(aafProductVersion_constref toolkitVersion)
 {
   bool result = true;
-  
-  
+   
   if (kAAFVersionBeta == toolkitVersion.type)
   {
     if (1 == toolkitVersion.major && 
@@ -62,15 +61,14 @@ bool StrongReferenceSetsSupported(aafProductVersion_constref toolkitVersion)
   }
   
   return result;
-} 
+
+}
 
 
-// Support for weak references was added after DR4
-bool WeakReferencesSupported(aafProductVersion_constref toolkitVersion)
+bool RC1TestSupported(aafProductVersion_constref toolkitVersion)
 {
   bool result = true;
-  
-  
+   
   if (kAAFVersionBeta == toolkitVersion.type)
   {
     if (1 == toolkitVersion.major && 
@@ -83,6 +81,22 @@ bool WeakReferencesSupported(aafProductVersion_constref toolkitVersion)
   }
   
   return result;
+
+}
+
+
+
+// Support for Sets (strong reference sets) added in DR4
+bool StrongReferenceSetsSupported(aafProductVersion_constref toolkitVersion)
+{
+  return DR4TestSupported(toolkitVersion);
+} 
+
+
+// Support for weak references was added after DR4
+bool WeakReferencesSupported(aafProductVersion_constref toolkitVersion)
+{
+  return RC1TestSupported(toolkitVersion);
 } 
 
 
@@ -96,21 +110,7 @@ bool WeakReferenceSetsSupported(aafProductVersion_constref toolkitVersion)
 // Support for extending AAFObject was added after DR4
 bool ExtendingAAFObjectSupported(aafProductVersion_constref toolkitVersion)
 {
-  bool result = true;
-  
-  
-  if (kAAFVersionBeta == toolkitVersion.type)
-  {
-    if (1 == toolkitVersion.major && 
-        0 == toolkitVersion.minor && 
-        0 == toolkitVersion.tertiary && 
-        4 >= toolkitVersion.patchLevel)
-    {
-      result = false;
-    }
-  }
-  
-  return result;
+  return RC1TestSupported(toolkitVersion);
 } 
 
 
