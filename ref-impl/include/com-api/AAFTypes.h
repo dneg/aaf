@@ -1037,6 +1037,8 @@ enum _eAAFTypeCategory_e
 	kAAFTypeCatEncrypted	= 16
     }	eAAFTypeCategory_e;
 
+typedef aafAlphaTransparency_t aafAlphaTransparencyType_t;
+
 typedef aafBoolean_t aafBool;
 
 typedef aafColorSiting_t aafColorSitingType_t;
@@ -1045,15 +1047,17 @@ typedef aafEditHint_t aafEditHintType_t;
 
 typedef aafFrameLayout_t aafLayoutType_t;
 
-typedef aafTimecodeSourceType_t aafTCSource_t;
+typedef aafMobID_t aafMobIDType_t;
 
 typedef aafPulldownDir_t aafPulldownDirectionType_t;
 
 typedef aafPulldownKind_t aafPulldownKindType_t;
 
+typedef aafScanningDirection_t aafScanningDirectionType_t;
+
 typedef aafSignalStandard_t aafSignalStandardType_t;
 
-typedef aafScanningDirection_t aafScanningDirectionType_t;
+typedef aafTimecodeSourceType_t aafTCSource_t;
 
 /**************************/
 #ifndef STDMETHODCALLTYPE

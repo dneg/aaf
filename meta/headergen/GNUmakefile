@@ -133,25 +133,25 @@ $(GEN_H_DIR)/AAFTypeDefUIDs.h : typeDefUid$(EXE)
 
 # targets for generated Definition Object instance header files
 
-###NOTE specification of optional prefix ("kAAF_" or similar)
+###NOTE specification of optional prefix ("kAAF" or similar)
 
 $(GEN_H_DIR)/AAFOperationDefs.h : genDefInstances$(EXE)
-	./genDefInstances OperationDefinition kAAF_ > $(GEN_H_DIR)/AAFOperationDefs.h
+	./genDefInstances OperationDefinition kAAF > $(GEN_H_DIR)/AAFOperationDefs.h
 
 $(GEN_H_DIR)/AAFParameterDefs.h : genDefInstances$(EXE)
-	./genDefInstances ParameterDefinition kAAF_ > $(GEN_H_DIR)/AAFParameterDefs.h
+	./genDefInstances ParameterDefinition kAAF > $(GEN_H_DIR)/AAFParameterDefs.h
 
 $(GEN_H_DIR)/AAFDataDefs.h : genDefInstances$(EXE)
-	./genDefInstances DataDefinition > $(GEN_H_DIR)/AAFDataDefs.h
+	./genDefInstances DataDefinition kAAF > $(GEN_H_DIR)/AAFDataDefs.h
 
 $(GEN_H_DIR)/AAFContainerDefs.h : genDefInstances$(EXE)
-	./genDefInstances ContainerDefinition > $(GEN_H_DIR)/AAFContainerDefs.h
+	./genDefInstances ContainerDefinition kAAF > $(GEN_H_DIR)/AAFContainerDefs.h
 
 $(GEN_H_DIR)/AAFInterpolatorDefs.h : genDefInstances$(EXE)
-	./genDefInstances InterpolationDefinition > $(GEN_H_DIR)/AAFInterpolatorDefs.h
+	./genDefInstances InterpolationDefinition kAAF > $(GEN_H_DIR)/AAFInterpolatorDefs.h
 
 $(GEN_H_DIR)/AAFOPDefs.h : genDefInstances$(EXE)
-	./genDefInstances OPDefinition kAAF_ > $(GEN_H_DIR)/AAFOPDefs.h
+	./genDefInstances OPDefinition kAAF > $(GEN_H_DIR)/AAFOPDefs.h
 
 
 #install targets

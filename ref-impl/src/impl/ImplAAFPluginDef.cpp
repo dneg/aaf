@@ -52,7 +52,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFPluginLocators;
 
 
 ImplAAFPluginDef::ImplAAFPluginDef ()
-: _categoryClass(		PID_PluginDefinition_CategoryClass,		L"CategoryClass"),
+: _categoryClass(		PID_PluginDefinition_PluginCategory,		L"CategoryClass"),
  _pluginVersion(        PID_PluginDefinition_VersionNumber,     L"VersionNumber"),
  _pluginVersionString(	PID_PluginDefinition_VersionString,		L"VersionString"),
  _pluginManufacturerName(PID_PluginDefinition_Manufacturer,		L"Manufacturer"),

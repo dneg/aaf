@@ -69,7 +69,7 @@ using namespace std;
 #define kDisplayF2OffsetTestVal			1
 #define kStoredF2OffsetTestVal			-1
 #define kActiveFormatDescriptorTestVal	3
-#define kSignalStandardTestVal			kAAFSignalITU1358
+#define kSignalStandardTestVal			kAAFSignalStandard_ITU1358
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -350,7 +350,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  aafInt32				displayF2Offset = 0;
 	  aafInt32				storedF2Offset = 0;
 	  aafUInt8				activeFormatDescriptor = 0;
-	  aafSignalStandard_t signalStandard = kAAFSignalNone;
+	  aafSignalStandard_t signalStandard = kAAFSignalStandard_None;
 
 	  memset(&compTestVal, 0, sizeof(aafUID_t));
 

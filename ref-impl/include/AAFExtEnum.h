@@ -33,10 +33,10 @@
 // AAF extensible enumeration member UIDs.
 //
 
-// Members of OperationCategory
+// Members of OperationCategoryType
 //
 //{0d010102-0101-0100-060e-2b3404010101}
-const aafUID_t kAAFOperationEffect =
+const aafUID_t kAAFOperationCategory_Effect =
 {0x0d010102, 0x0101, 0x0100, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 // Members of TransferCharacteristicType
@@ -61,21 +61,21 @@ const aafUID_t kAAFTransferCharacteristic_ITU1361 =
 const aafUID_t kAAFTransferCharacteristic_linear =
 {0x04010101, 0x0106, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
-// Members of CategoryType
+// Members of PluginCategoryType
 //
 //{0d010102-0101-0200-060e-2b3404010101}
-const aafUID_t kAAFPluginCatagoryEffect =
+const aafUID_t kAAFPluginCategory_Effect =
 {0x0d010102, 0x0101, 0x0200, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 //{0d010102-0101-0300-060e-2b3404010101}
-const aafUID_t kAAFPluginCatagoryCodec =
+const aafUID_t kAAFPluginCategory_Codec =
 {0x0d010102, 0x0101, 0x0300, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 //{0d010102-0101-0400-060e-2b3404010101}
-const aafUID_t kAAFPluginCatagoryInterpolation =
+const aafUID_t kAAFPluginCategory_Interpolation =
 {0x0d010102, 0x0101, 0x0400, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
-// Members of UsageCodeType
+// Members of UsageType
 //
 //{0d010102-0101-0500-060e-2b3404010101}
 const aafUID_t kAAFUsage_SubClip =
@@ -100,29 +100,29 @@ const aafUID_t kAAFUsage_Template =
 // Members of ColorPrimariesType
 //
 //{04010101-0301-0000-060e-2b3404010106}
-const aafUID_t ColorPrimaries_SMPTE170M =
+const aafUID_t kAAFColorPrimaries_SMPTE170M =
 {0x04010101, 0x0301, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06}};
 
 //{04010101-0302-0000-060e-2b3404010106}
-const aafUID_t ColorPrimaries_ITU470_PAL =
+const aafUID_t kAAFColorPrimaries_ITU470_PAL =
 {0x04010101, 0x0302, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06}};
 
 //{04010101-0303-0000-060e-2b3404010106}
-const aafUID_t ColorPrimaries_ITU709 =
+const aafUID_t kAAFColorPrimaries_ITU709 =
 {0x04010101, 0x0303, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x06}};
 
 // Members of CodingEquationsType
 //
 //{04010101-0201-0000-060e-2b3404010101}
-const aafUID_t CodingEquations_ITU601 =
+const aafUID_t kAAFCodingEquations_ITU601 =
 {0x04010101, 0x0201, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 //{04010101-0202-0000-060e-2b3404010101}
-const aafUID_t CodingEquations_ITU709 =
+const aafUID_t kAAFCodingEquations_ITU709 =
 {0x04010101, 0x0202, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 //{04010101-0203-0000-060e-2b3404010101}
-const aafUID_t CodingEquations_SMPTE240M =
+const aafUID_t kAAFCodingEquations_SMPTE240M =
 {0x04010101, 0x0203, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 

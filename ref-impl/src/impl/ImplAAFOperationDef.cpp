@@ -66,7 +66,7 @@ ImplAAFOperationDef::ImplAAFOperationDef ()
 : _dataDef(	PID_OperationDefinition_DataDefinition,	L"DataDefinition", L"/Header/Dictionary/DataDefinitions", PID_DefinitionObject_Identification),
   _isTimeWarp(		PID_OperationDefinition_IsTimeWarp,			L"IsTimeWarp"),
   _degradeTo(		PID_OperationDefinition_DegradeTo,			L"DegradeTo", L"/Header/Dictionary/OperationDefinitions", PID_DefinitionObject_Identification),
-  _category(		PID_OperationDefinition_Category,			L"Category"),
+  _category(		PID_OperationDefinition_OperationCategory,			L"Category"),
   _numInputs(		PID_OperationDefinition_NumberInputs,		L"NumberInputs"),
   _bypass(			PID_OperationDefinition_Bypass,				L"Bypass"),
   _paramDefined(	PID_OperationDefinition_ParametersDefined,	L"ParametersDefined", L"/Header/Dictionary/ParameterDefinitions", PID_DefinitionObject_Identification)

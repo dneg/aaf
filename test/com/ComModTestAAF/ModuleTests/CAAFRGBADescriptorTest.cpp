@@ -67,7 +67,7 @@ using namespace std;
 #define kComponentMinRefTestVal		16
 #define kAlphaMaxRefTestVal		235
 #define kAlphaMinRefTestVal		16
-#define kScanningDirectionTestVal			kAAFScanningBottomToTopRightToLeft
+#define kScanningDirectionTestVal			kAAFScanningDirection_BottomToTopRightToLeft
 
 
 #define NUM_TEST_ELEMENTS	3
@@ -352,7 +352,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		aafUInt32				componentMinRef;
 		aafUInt32				alphaMaxRef;
 		aafUInt32				alphaMinRef;
-	  aafScanningDirection_t scanningDirection = kAAFScanningLeftToRightTopToBottom;
+	  aafScanningDirection_t scanningDirection = kAAFScanningDirection_LeftToRightTopToBottom;
 
 	  memset(&compTestVal, 0, sizeof(aafUID_t));
 

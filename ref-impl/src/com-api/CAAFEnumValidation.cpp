@@ -280,15 +280,15 @@ bool Is_aafEditHint_t_Valid(aafEditHint_t param)
 bool Is_aafElectroSpatialFormulation_t_Valid(aafElectroSpatialFormulation_t param)
 {
   switch (param) {
-    case kAAFEsDefault:
-    case kAAFEsTwoChannelMode:
-    case kAAFEsSingleChannelMode:
-    case kAAFEsPrimarySecondaryMode:
-    case kAAFEsStereophonicMode:
-    case kAAFEsSingleChannelDoubleSamplingFrequencyMode:
-    case kAAFEsStereoLeftChannelDoubleSamplingFrequencyMode:
-    case kAAFEsStereoRightChannelDoubleSamplingFrequencyMode:
-    case kAAFEsMultiChannelMode:
+    case kAAFElectroSpatialFormulation_Default:
+    case kAAFElectroSpatialFormulation_TwoChannelMode:
+    case kAAFElectroSpatialFormulation_SingleChannelMode:
+    case kAAFElectroSpatialFormulation_PrimarySecondaryMode:
+    case kAAFElectroSpatialFormulation_StereophonicMode:
+    case kAAFElectroSpatialFormulation_SingleChannelDoubleSamplingFrequencyMode:
+    case kAAFElectroSpatialFormulation_StereoLeftChannelDoubleSamplingFrequencyMode:
+    case kAAFElectroSpatialFormulation_StereoRightChannelDoubleSamplingFrequencyMode:
+    case kAAFElectroSpatialFormulation_MultiChannelMode:
       return true;
     default:
       return false;
@@ -623,14 +623,14 @@ bool Is_aafReferenceType_t_Valid(aafReferenceType_t param)
 bool Is_aafScanningDirection_t_Valid(aafScanningDirection_t param)
 {
   switch (param) {
-    case kAAFScanningLeftToRightTopToBottom:
-    case kAAFScanningRightToLeftTopToBottom:
-    case kAAFScanningLeftToRightBottomToTop:
-    case kAAFScanningRightToLeftBottomToTop:
-    case kAAFScanningTopToBottomLeftToRight:
-    case kAAFScanningTopToBottomRightToLeft:
-    case kAAFScanningBottomToTopLeftToRight:
-    case kAAFScanningBottomToTopRightToLeft:
+    case kAAFScanningDirection_LeftToRightTopToBottom:
+    case kAAFScanningDirection_RightToLeftTopToBottom:
+    case kAAFScanningDirection_LeftToRightBottomToTop:
+    case kAAFScanningDirection_RightToLeftBottomToTop:
+    case kAAFScanningDirection_TopToBottomLeftToRight:
+    case kAAFScanningDirection_TopToBottomRightToLeft:
+    case kAAFScanningDirection_BottomToTopLeftToRight:
+    case kAAFScanningDirection_BottomToTopRightToLeft:
       return true;
     default:
       return false;
@@ -675,13 +675,13 @@ bool Is_aafSearchTag_t_Valid(aafSearchTag_t param)
 bool Is_aafSignalStandard_t_Valid(aafSignalStandard_t param)
 {
   switch (param) {
-    case kAAFSignalNone:
-    case kAAFSignalITU601:
-    case kAAFSignalITU1358:
-    case kAAFSignalSMPTE347M:
-    case kAAFSignalSMPTE274M:
-    case kAAFSignalSMPTE296M:
-    case kAAFSignalSMPTE349M:
+    case kAAFSignalStandard_None:
+    case kAAFSignalStandard_ITU601:
+    case kAAFSignalStandard_ITU1358:
+    case kAAFSignalStandard_SMPTE347M:
+    case kAAFSignalStandard_SMPTE274M:
+    case kAAFSignalStandard_SMPTE296M:
+    case kAAFSignalStandard_SMPTE349M:
       return true;
     default:
       return false;

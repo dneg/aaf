@@ -282,40 +282,40 @@ typedef enum _aafFrameLayout_e
 typedef aafInt32 aafElectroSpatialFormulation_t;
 typedef enum _aafElectroSpatialFormulation_e
 {
-	kAAFEsDefault = 0, 
-	kAAFEsTwoChannelMode = 1, 
-	kAAFEsSingleChannelMode = 2, 
-	kAAFEsPrimarySecondaryMode = 3,
-	kAAFEsStereophonicMode = 4,
-	kAAFEsSingleChannelDoubleSamplingFrequencyMode = 7,
-	kAAFEsStereoLeftChannelDoubleSamplingFrequencyMode = 8,
-	kAAFEsStereoRightChannelDoubleSamplingFrequencyMode = 9,
-	kAAFEsMultiChannelMode = 15
+	kAAFElectroSpatialFormulation_Default = 0, 
+	kAAFElectroSpatialFormulation_TwoChannelMode = 1, 
+	kAAFElectroSpatialFormulation_SingleChannelMode = 2, 
+	kAAFElectroSpatialFormulation_PrimarySecondaryMode = 3,
+	kAAFElectroSpatialFormulation_StereophonicMode = 4,
+	kAAFElectroSpatialFormulation_SingleChannelDoubleSamplingFrequencyMode = 7,
+	kAAFElectroSpatialFormulation_StereoLeftChannelDoubleSamplingFrequencyMode = 8,
+	kAAFElectroSpatialFormulation_StereoRightChannelDoubleSamplingFrequencyMode = 9,
+	kAAFElectroSpatialFormulation_MultiChannelMode = 15
 } aafElectroSpatialFormulation_e;
 	
 typedef aafInt32 aafSignalStandard_t;
 typedef enum _aafSignalStandard_e
 {
-	kAAFSignalNone = 0,
-	kAAFSignalITU601 = 1,
-	kAAFSignalITU1358 = 2,
-	kAAFSignalSMPTE347M = 3,
-	kAAFSignalSMPTE274M = 4,
-	kAAFSignalSMPTE296M = 5,
-	kAAFSignalSMPTE349M = 6
+	kAAFSignalStandard_None = 0,
+	kAAFSignalStandard_ITU601 = 1,
+	kAAFSignalStandard_ITU1358 = 2,
+	kAAFSignalStandard_SMPTE347M = 3,
+	kAAFSignalStandard_SMPTE274M = 4,
+	kAAFSignalStandard_SMPTE296M = 5,
+	kAAFSignalStandard_SMPTE349M = 6
 } aafSignalStandard_e;
 	
 typedef aafInt32 aafScanningDirection_t;
 typedef enum _aafScanningDirection_e
 {
-	kAAFScanningLeftToRightTopToBottom = 0,
-	kAAFScanningRightToLeftTopToBottom = 1,
-	kAAFScanningLeftToRightBottomToTop = 2,
-	kAAFScanningRightToLeftBottomToTop = 3,
-	kAAFScanningTopToBottomLeftToRight = 4,
-	kAAFScanningTopToBottomRightToLeft = 5,
-	kAAFScanningBottomToTopLeftToRight = 6,
-	kAAFScanningBottomToTopRightToLeft = 7
+	kAAFScanningDirection_LeftToRightTopToBottom = 0,
+	kAAFScanningDirection_RightToLeftTopToBottom = 1,
+	kAAFScanningDirection_LeftToRightBottomToTop = 2,
+	kAAFScanningDirection_RightToLeftBottomToTop = 3,
+	kAAFScanningDirection_TopToBottomLeftToRight = 4,
+	kAAFScanningDirection_TopToBottomRightToLeft = 5,
+	kAAFScanningDirection_BottomToTopLeftToRight = 6,
+	kAAFScanningDirection_BottomToTopRightToLeft = 7
 } aafScanningDirection_e;
 	
 typedef aafInt32 aafColorSiting_t;
@@ -1016,15 +1016,17 @@ typedef enum _eAAFTypeCategory_e
 
 
 // typedefs to make things more consistent
+typedef aafAlphaTransparency_t  aafAlphaTransparencyType_t;
 typedef aafBoolean_t            aafBool;
 typedef aafColorSiting_t        aafColorSitingType_t;
 typedef aafEditHint_t           aafEditHintType_t;
 typedef aafFrameLayout_t        aafLayoutType_t;
-typedef aafTimecodeSourceType_t aafTCSource_t;
+typedef aafMobID_t              aafMobIDType_t;
 typedef aafPulldownDir_t        aafPulldownDirectionType_t;
 typedef aafPulldownKind_t       aafPulldownKindType_t;
-typedef aafSignalStandard_t     aafSignalStandardType_t;
 typedef aafScanningDirection_t  aafScanningDirectionType_t;
+typedef aafSignalStandard_t     aafSignalStandardType_t;
+typedef aafTimecodeSourceType_t aafTCSource_t;
 
 
 /**************************/

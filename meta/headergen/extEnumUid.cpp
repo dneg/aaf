@@ -31,7 +31,7 @@
 
 #include "headerGenUtils.h"
 
-const char* prefix = "";
+const char* prefix = "kAAF";
 
 #define AAF_TYPE_TABLE_BEGIN() {
 #define AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(name, id) \

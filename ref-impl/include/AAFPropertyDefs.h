@@ -110,7 +110,7 @@ const aafUID_t kAAFPropID_DescriptiveMarker_Description =
 {0x06010104, 0x020c, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x05}};
 
 //{05300506-0000-0000-060e-2b3401010102}
-const aafUID_t kAAFPropID_OperationGroup_OperationDefinition =
+const aafUID_t kAAFPropID_OperationGroup_Operation =
 {0x05300506, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{06010104-0602-0000-060e-2b3401010102}
@@ -306,7 +306,7 @@ const aafUID_t kAAFPropID_OperationDefinition_DegradeTo =
 {0x06010104, 0x0401, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{0530050a-0000-0000-060e-2b3401010102}
-const aafUID_t kAAFPropID_OperationDefinition_Category =
+const aafUID_t kAAFPropID_OperationDefinition_OperationCategory =
 {0x0530050a, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{05300504-0000-0000-060e-2b3401010101}
@@ -346,7 +346,7 @@ const aafUID_t kAAFPropID_PropertyDefinition_IsUniqueIdentifier =
 {0x06010107, 0x0600, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{05200901-0000-0000-060e-2b3401010102}
-const aafUID_t kAAFPropID_PluginDefinition_CategoryClass =
+const aafUID_t kAAFPropID_PluginDefinition_PluginCategory =
 {0x05200901, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0x02}};
 
 //{03030301-0300-0000-060e-2b3401010102}

@@ -65,7 +65,7 @@ static const CAAFSoundDescriptorTestFixture  gTestData =
     4,
     { 48000, 1 },
     kAAFTrue,
-    kAAFEsStereophonicMode,
+    kAAFElectroSpatialFormulation_StereophonicMode,
     40,
     -25,
     256,
@@ -722,7 +722,7 @@ static HRESULT Test_IAAFSoundDescriptor_ElectroSpatial(
     try
     {
         static const aafElectroSpatialFormulation_t bogusEsf =
-            kAAFEsStereoRightChannelDoubleSamplingFrequencyMode;
+            kAAFElectroSpatialFormulation_StereoRightChannelDoubleSamplingFrequencyMode;
 
 
         if( mode == kAAFUnitTestReadWrite )
