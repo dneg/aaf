@@ -22,6 +22,7 @@
 struct IAAFObject;
 class AAFObject;
 
+#include "AAFTypes.h"
 
 class ImplAAFObject
 {
@@ -77,7 +78,7 @@ public:
 
 private:
 
-  void * _pParent;
+  void * _pContainer;
 
 };
 
