@@ -84,12 +84,6 @@ public:
   virtual ~ImplAAFFile ();
 
 
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFFileTest.cpp.
-  static AAFRESULT test();
-
-
 private:
 
   // Private state for this file.
