@@ -88,6 +88,13 @@ BEGIN {
   #
   # SLO<n> SMPTE Label Octet n
   #
+  SLO00C=2
+  SLO01C=3
+  SLO02C=4
+  SLO03C=5
+  SLO04C=6
+  SLO05C=7
+  SLO06C=8
   SLO07C=9
   SLO08C=10
   SLO09C=11
@@ -660,8 +667,8 @@ BEGIN {
         errors++;
       }
       # AAF_CLASS(name, id, parent)
-      printf("AAF_CLASS(%s,\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s),\n  %s,\n  %s)\n",
-             $elementNameC, $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO07C, parent, concrete);
+      printf("AAF_CLASS(%s,\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s),\n  %s,\n  %s)\n",
+             $elementNameC, $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO00C, $SLO01C, $SLO02C, $SLO03C, $SLO04C, $SLO05C, $SLO06C, $SLO07C, parent, concrete);
     } else if ($typeNameC == "type" ) {
       # a type
       if (firstType) {
@@ -686,8 +693,8 @@ BEGIN {
         printf("AAF_TYPE_SEPARATOR()\n");
       }
 #
-      guid = sprintf("\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s)",
-             $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO07C);
+      guid = sprintf("\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
+             $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO00C, $SLO01C, $SLO02C, $SLO03C, $SLO04C, $SLO05C, $SLO06C, $SLO07C);
 #
       typeName = $elementNameC;
       parentTypeName = typeName;
@@ -768,8 +775,8 @@ BEGIN {
         printf("  AAF_TYPE_DEFINITION_RECORD_FIELD(%s, AAF_TYPE(%s),\n    %s)\n", memberName, $kindC, parentTypeName);
       } else if (kind == "extendible") {
 #
-      eguid = sprintf("AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s)",
-             $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO07C);
+      eguid = sprintf("AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
+             $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO00C, $SLO01C, $SLO02C, $SLO03C, $SLO04C, $SLO05C, $SLO06C, $SLO07C);
 #
         printf("  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(%s,\n    %s,\n    %s)\n", memberName, eguid, parentTypeName);
       } else {
@@ -846,7 +853,7 @@ BEGIN {
         uid = "false";
       }
       # AAF_PROPERTY(name, id, tag, type, mandatory, container)
-      printf("  AAF_PROPERTY(%s,\n    AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s),\n    0x%s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $elementNameC, $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO07C, $pidC, type, mandatory, uid, class);
+      printf("  AAF_PROPERTY(%s,\n    AAF_LITERAL_AUID(0x%s%s%s%s,\n      0x%s%s, 0x%s%s,\n      0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s),\n    0x%s,\n    %s,\n    %s,\n    %s,\n    %s)\n", $elementNameC, $SLO08C, $SLO09C, $SLO10C, $SLO11C, $SLO12C, $SLO13C, $SLO14C, $SLO15C, $SLO00C, $SLO01C, $SLO02C, $SLO03C, $SLO04C, $SLO05C, $SLO06C, $SLO07C, $pidC, type, mandatory, uid, class);
     }
   }
 }
