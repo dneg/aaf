@@ -65,7 +65,6 @@ endif
 
 # Update DBG_FLAGS depending on build target.
 ifeq ($(AAFTARGET), Debug)
-    ADD_CFLAGS = 
     ifneq ($(findstring -D_DEBUG, $(DBG_FLAGS)), -D_DEBUG)
         DBG_FLAGS += -D_DEBUG -DOM_DEBUG -DOM_STACK_TRACE_ON_ASSERT
     endif
