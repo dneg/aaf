@@ -208,9 +208,13 @@ public:
   CLASS_DEF_METHOD(TypeDefEnum);
   CLASS_DEF_METHOD(TypeDefExtEnum);
   CLASS_DEF_METHOD(TypeDefFixedArray);
+  CLASS_DEF_METHOD(TypeDefCharacter);
+  CLASS_DEF_METHOD(TypeDefIndirect);
+  CLASS_DEF_METHOD(TypeDefOpaque);
   CLASS_DEF_METHOD(TypeDefInt);
   CLASS_DEF_METHOD(TypeDefRecord);
   CLASS_DEF_METHOD(TypeDefRename);
+  CLASS_DEF_METHOD(TypeDefStream);
   CLASS_DEF_METHOD(TypeDefString);
   CLASS_DEF_METHOD(TypeDefStrongObjRef);
   CLASS_DEF_METHOD(TypeDefVariableArray);

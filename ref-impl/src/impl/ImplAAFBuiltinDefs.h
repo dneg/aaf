@@ -189,10 +189,12 @@ public:
   CLASS_DEF_METHOD(FileDescriptor);
   CLASS_DEF_METHOD(Filler);
   CLASS_DEF_METHOD(FilmDescriptor);
+  CLASS_DEF_METHOD(GPITrigger);
   CLASS_DEF_METHOD(HTMLClip);
   CLASS_DEF_METHOD(HTMLDescriptor);
   CLASS_DEF_METHOD(Identification);
   CLASS_DEF_METHOD(InterpolationDefinition);
+  CLASS_DEF_METHOD(KLVData);
   CLASS_DEF_METHOD(Locator);
   CLASS_DEF_METHOD(MasterMob);
   CLASS_DEF_METHOD(Mob);
@@ -206,6 +208,7 @@ public:
   CLASS_DEF_METHOD(PluginDef);
   CLASS_DEF_METHOD(PropertyDef);
   CLASS_DEF_METHOD(Pulldown);
+  CLASS_DEF_METHOD(RGBADescriptor);
   CLASS_DEF_METHOD(ScopeReference);
   CLASS_DEF_METHOD(Selector);
   CLASS_DEF_METHOD(Sequence);
@@ -256,10 +259,22 @@ public:
   //
   // Type Def 'get' methods
   //
-  TYPE_DEF_METHOD(Indirect);
-  TYPE_DEF_METHOD(Character);
+  TYPE_DEF_METHOD(Rational);
   TYPE_DEF_METHOD(String);
+  TYPE_DEF_METHOD(Character);
+  TYPE_DEF_METHOD(Indirect);
+  TYPE_DEF_METHOD(Opaque);
+  TYPE_DEF_METHOD(Stream);
 
+  // Built-in integer types
+  TYPE_DEF_METHOD(UInt8);
+  TYPE_DEF_METHOD(UInt16);
+  TYPE_DEF_METHOD(UInt32);
+  TYPE_DEF_METHOD(UInt64);
+  TYPE_DEF_METHOD(Int8);
+  TYPE_DEF_METHOD(Int16);
+  TYPE_DEF_METHOD(Int32);
+  TYPE_DEF_METHOD(Int64);
 
 private:
   ImplAAFDictionary * _pDict;
