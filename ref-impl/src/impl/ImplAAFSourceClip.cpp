@@ -52,11 +52,11 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
 typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 
 ImplAAFSourceClip::ImplAAFSourceClip ():
-	_fadeInLength(		PID_SourceClip_FadeInLength,		"FadeInLength"),
-	_fadeInType(	PID_SourceClip_FadeInType,		"FadeInType"),
-	_fadeOutLength(	PID_SourceClip_FadeOutLength,		"FadeOutLength"),
-	_fadeOutType(	PID_SourceClip_FadeOutType,		"FadeOutType"),
-	_startTime(		PID_SourceClip_StartTime,		"StartTime")
+	_fadeInLength(		PID_SourceClip_FadeInLength,		L"FadeInLength"),
+	_fadeInType(	PID_SourceClip_FadeInType,		L"FadeInType"),
+	_fadeOutLength(	PID_SourceClip_FadeOutLength,		L"FadeOutLength"),
+	_fadeOutType(	PID_SourceClip_FadeOutType,		L"FadeOutType"),
+	_startTime(		PID_SourceClip_StartTime,		L"StartTime")
 {
 	_persistentProperties.put(		_fadeInLength.address());
 	_persistentProperties.put(		_fadeInType.address());
