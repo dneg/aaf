@@ -251,7 +251,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		hr = E_FAIL;
+		hr = AAFRESULT_NO_MORE_OBJECTS;
 	}
 
 	return hr;
