@@ -57,6 +57,6 @@ AD_METHOD2(SetValue,
 //@com Internal
 //@com private:
 //@com		void			*_value;
-//@com		omfUInt32		_valueLen;
+//@com		aafUInt32		_valueLen;
 
 AD_CLASS_END
