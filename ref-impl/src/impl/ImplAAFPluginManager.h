@@ -151,8 +151,8 @@ AAFRESULT UnregisterAllPlugins(void);
 AAFRESULT Init(void);
 
 // Internal to the toolkit functions
-AAFRESULT GetFirstLoadedPlugin (aafTableIterate_t *iter, aafUID_t *pDesc);
-AAFRESULT GetNextLoadedPlugin (aafTableIterate_t *iter, aafUID_t *pDesc);
+AAFRESULT GetFirstLoadedPlugin (aafUID_t category, aafTableIterate_t *iter, aafUID_t *pDesc);
+AAFRESULT GetNextLoadedPlugin (aafUID_t category, aafTableIterate_t *iter, aafUID_t *pDesc);
 
 AAFRESULT CreatePluginDefinition (aafUID_t  pluginDefID,
         ImplAAFDictionary * pDictionary,
