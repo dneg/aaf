@@ -738,6 +738,65 @@ OMWeakReferenceSetProperty<ReferencedObject>::createIterator(void) const
   return result;
 }
 
+  // @mfunc Remove the <c OMObject> identified by <p identification>
+  //        from this <c OMWeakReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The unique identification of the object to remove.
+  //   @rdesc The object that was removed.
+template <typename ReferencedObject>
+OMObject*
+OMWeakReferenceSetProperty<ReferencedObject>::remove(void* identification)
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::remove");
+
+  // TBS
+  return 0;
+}
+
+  // @mfunc Does this <c OMWeakReferenceSetProperty> contain an
+  //        <c OMObject> identified by <p identification> ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The unique identification of the object for which to search.
+  //   @rdesc True if the object was found, false otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool
+OMWeakReferenceSetProperty<ReferencedObject>::contains(
+                                                    void* identification) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::containsObject");
+
+  // TBS
+  return false;
+}
+
+  // @mfunc Find the <c OMObject> in this <c OMWeakReferenceSetProperty>
+  //        identified by <p identification>.  If the object is found
+  //        it is returned in <p object> and the result is < e bool.true>.
+  //        If the object is not found the result is <e bool.false>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The unique identification of the object for which to search. 
+  //   @parm The object.
+  //   @rdesc True if the object was found, false otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool
+OMWeakReferenceSetProperty<ReferencedObject>::findObject(
+                                                      void* identification,
+                                                       OMObject*& object) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::findObject");
+
+  // TBS
+  return false;
+}
+
 template<typename ReferencedObject>
 OMPropertyTag
 OMWeakReferenceSetProperty<ReferencedObject>::targetTag(void) const
