@@ -38,9 +38,7 @@ public:
   //
   void save(void) const;
 
-  // Save this object to `s'.
-  //
-  void saveTo(OMStoredObject& s) const;
+  void close(void);
 
   // Restore an object, of unknown sub-class, from `s'.
   //
@@ -63,10 +61,6 @@ public:
   virtual bool attached(void);
 
 private:
-
-  // Save an object, given by a possibly null pointer `p', to `s'.
-  //
-  static void save(OMStoredObject& s, const OMStorable* p);
 
   // Restore the contents of an object, of known sub-class, from `s'.
   //

@@ -29,10 +29,11 @@ public:
     // @cmember Destructor.
   virtual ~OMProperty(void);
 
-    // @cmember Save this <c OMProperty> to the <c OMStoredObject>
-    //          <p s>.
+    // @cmember Save this <c OMProperty>.
     // @this const
-  virtual void saveTo(OMStoredObject& s) const = 0;
+  virtual void save(void) const = 0;
+
+  virtual void close(void);
 
     // @cmember Restore this <c OMProperty> from the
     //          <c OMStoredObject> <p s>, the size of the <c OMProperty>
@@ -140,10 +141,11 @@ public:
     //   @this const
   operator ReferencedObject*(void) const;
 
-    // @cmember Save this <c OMStrongReferenceProperty> to the
-    //          <c OMStoredObject> <p s>.
+    // @cmember Save this <c OMStrongReferenceProperty>.
     // @this const
-  virtual void saveTo(OMStoredObject& s) const;
+  virtual void save(void) const;
+
+  virtual void close(void);
 
     // @cmember Restore this <c OMStrongReferenceProperty> from the
     //          <c OMStoredObject> <p s>, the size of the
@@ -191,10 +193,9 @@ public:
     //   @this const
   operator ReferencedObject*(void) const;
 
-    // @cmember Save this <c OMWeakReferenceProperty> to the
-    //          <c OMStoredObject> <p s>.
+    // @cmember Save this <c OMWeakReferenceProperty>.
     // @this const
-  virtual void saveTo(OMStoredObject& s) const;
+  virtual void save(void) const;
 
     // @cmember Restore this <c OMWeakReferenceProperty> from the
     //          <c OMStoredObject> <p s>, the size of the
@@ -221,10 +222,9 @@ public:
     // @cmember Destructor.
   virtual ~OMSimpleProperty(void);
 
-    // @cmember Save this <c OMSimpleProperty> to the
-    //          <c OMStoredObject> <p s>.
+    // @cmember Save this <c OMSimpleProperty>.
     //   @this const
-  virtual void saveTo(OMStoredObject& s) const;
+  virtual void save(void) const;
 
     // @cmember The size of this <c OMSimpleProperty>.
     //   @this const
@@ -355,10 +355,11 @@ public:
     // @cmember Destructor.
   virtual ~OMStrongReferenceVectorProperty(void);
 
-    // @cmember Save this <c OMStrongReferenceVectorProperty> to the
-    //          <c OMStoredObject> <p s>.
+    // @cmember Save this <c OMStrongReferenceVectorProperty>.
     // @this const
-  virtual void saveTo(OMStoredObject& s) const;
+  virtual void save(void) const;
+
+  virtual void close(void);
 
     // @cmember Restore this <c OMStrongReferenceVectorProperty> from
     //          the <c OMStoredObject> <p s>, the size of the

@@ -19,10 +19,9 @@ public:
     // @cmember Destructor.
   virtual ~OMDataStreamProperty(void);
 
-    // @cmember Save this <c OMDataStreamProperty> to the
-    //          <c OMStoredObject> <p s>.
+    // @cmember Save this <c OMDataStreamProperty>.
     // @this const
-  virtual void saveTo(OMStoredObject& s) const;
+  virtual void save(void) const;
 
     // @cmember Restore this <c OMDataStreamProperty> from the
     //          <c OMStoredObject> <p s>, the size of the
