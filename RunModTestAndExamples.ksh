@@ -143,37 +143,58 @@ VerifyFiles ()
 		fi
 	}
 
+	print "\nRunning Files thru validation suite"
+
 	for File in $FileList; do
-	print -n "running ${File} thru dump.exe...  "
-		RemoveIfExists ${File}Dump.log
+		print "\n ${File}"
+
+		RemoveIfExists ${File}.Info.log
+		${ExamplesDir}/ComAAFInfo "$File" > tempdump.log
+		Stat=$?
+		print "  $Stat    ComAAFInfo.exe"
+		if [ $Stat -ne 0 ]; then
+			CheckExitCode $Stat   "     $File  <- ComAAFInfo.exe reported error.  See ${File}.Info.log"
+			mv tempdump.log ${File}.Info.log
+		fi
+
+		RemoveIfExists ${File}.dump.log
 		${DumpDir}/dump -s -p "$File" > tempdump.log
 		Stat=$?
-		print $Stat
+		print "  $Stat    dump.exe"
 		if [ $Stat -ne 0 ]; then
-			CheckExitCode $Stat   "     $File <- This File flunked the dump.exe validation test"
-			mv tempdump.log ${File}Dump.log
+			CheckExitCode $Stat   "     $File  <- dump.exe reported error.  See ${File}.dump.log"
+			mv tempdump.log ${File}.dump.log
 		fi
 #when running the debug version, an exception is thrown requiring user intervention so I an restrcting it to release
 if [ $Target = "Release" ]; then			
-		print -n "running ${File} thru AAFDump.exe...  "
-		RemoveIfExists ${File}AAFDump.log
+		RemoveIfExists ${File}.AAFDump.log
 		${UtilitiesDir}/AAFDump "$File" > tempdump.log
 		Stat=$?
-		print $Stat
+		print "  $Stat    AAFDump.exe"
 		if [ $Stat -ne 0 ]; then
-			CheckExitCode $Stat   "     $File <- This File flunked the AAFDump.exe validation test"
-			mv tempdump.log ${File}AAFDump.log
+			CheckExitCode $Stat   "     $File  <- AAFDump.exe reported error.  See ${File}.AAFDump.log"
+			mv tempdump.log ${File}.AAFDump.log
 		fi
 fi
-		print -n "running ${File} thru ComPropDirectDump.exe...  "
-		RemoveIfExists ${File}CPDDump.log
+
+		RemoveIfExists ${File}.CPDDump.log
 		${ExamplesDir}/ComPropDirectDump "$File" > tempdump.log
 		Stat=$?
-		print $Stat
+		print "  $Stat    ComPropDirectDump.exe"
 		if [ $Stat -ne 0 ]; then
-			CheckExitCode $Stat   "     $File <- This File flunked the ComPropDirectDump.exe validation test"
-			mv tempdump.log ${File}CPDDump.log
+			CheckExitCode $Stat   "     $File  <- ComPropDirectDump.exe reported error.  See ${File}.CPDDump.log"
+			mv tempdump.log ${File}.CPDDump.log
 		fi
+
+		RemoveIfExists ${File}.CPDAccess.log
+		${ExamplesDir}/ComPropDirectAccess "$File" > tempdump.log
+		Stat=$?
+		print "  $Stat    ComPropDirectAccess.exe"
+		if [ $Stat -ne 0 ]; then
+			CheckExitCode $Stat   "     $File  <- ComPropDirectAccess.exe reported error.  See ${File}.CPDAccess.log"
+			mv tempdump.log ${File}.CPDAccess.log
+		fi
+
 	done
 
 	
@@ -208,7 +229,7 @@ RunMainScript ()
 		cp ../../Test/Com/ComModTestAAF/Laser.wav .
 		ComModAAF
 		CheckExitCode $? "ComModAAF"
-
+		
 		VerifyFiles "`ls *.aaf`"
 
 		cd $TargetDir
@@ -266,33 +287,7 @@ RunMainScript ()
 		cd $TargetDir
 	fi
 
-	if [ AAFINFO -eq 1 ] || [ ALL -eq 1 ]; then
-		PrintSeparator "Running ComAAFInfo on EssenceTest.aaf"
-		cd Examples/com
-		ComAAFInfo EssenceTest.aaf
-		CheckExitCode $? "ComAAFInfo"
-
-		cd $TargetDir
-	fi
 	
-	if [ PROPDIRECTDUMP -eq 1 ] || [ ALL -eq 1 ]; then
-		PrintSeparator "Running ComPropDirectDump on EssenceTest.aaf"
-		cd Examples/com
-		ComPropDirectDump EssenceTest.aaf
-		CheckExitCode $? "ComPropDirectDump" 
-
-		cd $TargetDir
-	fi
-
-	if [ PROPDIRECTACCESS -eq 1 ] || [ ALL -eq 1 ]; then
-		PrintSeparator "Running ComPropDirectAccess on EssenceTest.aaf"
-		cd Examples/com
-		ComPropDirectAccess EssenceTest.aaf
-		CheckExitCode $? "ComPropDirectAccess" 
-
-		cd $TargetDir
-	fi
-
 	if [ CREATESEQUENCE -eq 1 ] || [ ALL -eq 1 ]; then
 		PrintSeparator "Running CreateSequence"
 		cd Test
