@@ -81,12 +81,12 @@ function createColorMap() {
 
   map["ref-impl/src/com-api/"]     = "#CCCCCC";
   map["ref-impl/include/com-api/"] = "#CCCCCC";
+  map["ref-impl/include/ref-api"]  = "#CCCCCC";
   map["AAF"]                       = "#CCCCCC";
   map["dodo/"]                     = "#CCCCCC";
 
   map["ref-impl/doc/"]             = "#CCFFFF";
   map["LEGAL/"]                    = "#CCFFFF";
-  map["ref-impl/include/ref-api"]  = "#CCFFFF";
   map["doc/"]                      = "#CCFFFF";
 
   map["test/"]                     = "#FFCCFF";
