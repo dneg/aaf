@@ -55,6 +55,8 @@ AD_IDL(//
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(AAFMobSlot)
 AD_FORWARD_DECLARATION(AAFTimelineMobSlot)
+AD_FORWARD_DECLARATION(AAFEventMobSlot)
+AD_FORWARD_DECLARATION(AAFStaticMobSlot)
 AD_FORWARD_DECLARATION(AAFFile)
 AD_FORWARD_DECLARATION(EnumAAFMobSlots)
 AD_FORWARD_DECLARATION(EnumAAFTaggedValues)
@@ -1102,5 +1104,115 @@ AD_XMETHOD1( GetUsageCode,
    //   AAFRESULT_SUCCESS
    //        - succeeded \(This is the only code indicating success.\)
    //
+
+
+AD_XMETHOD4(AppendNewStaticSlot,
+
+			[in],
+			objIn,
+			AAFSegment,
+			pSegment,
+			Segment to append as slot component,
+
+			[in],
+			objPass,
+			aafSlotID_t,
+			slotID,
+			new slot ID,
+
+			[in\, string],
+			objPass,
+			aafCharacter_constptr,
+			pSlotName,
+			new slot name,
+
+			[out],
+			objOut,
+			AAFStaticMobSlot,
+			ppNewSlot,
+			Newly created slot,
+
+			This method creates a new static mob slot with the given
+  // property values and appends it to the input mob.
+  // 
+  // The returned mob slot is AddRef\(\)ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the pSlotName pointer is valid.
+  // - the ppNewSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
+
+
+AD_XMETHOD6(AppendNewEventSlot,
+			[in],
+			objPass,
+			aafRational_t,
+			editRate,
+			Edit rate property value,
+
+			[in],
+			objIn,
+			AAFSegment,
+			pSegment,
+			Segment to append as slot component,
+
+			[in],
+			objPass,
+			aafSlotID_t,
+			slotID,
+			new slot ID,
+
+			[in\, string],
+			objPass,
+			aafCharacter_constptr,
+			pSlotName,
+			new slot name,
+
+			[in],
+			objPass,
+			aafPosition_t,
+			origin,
+			The slot origin,
+
+			[out],
+			objOut,
+			AAFEventMobSlot,
+			ppNewSlot,
+			Newly created slot,
+
+			This method creates a new event mob slot with the given
+  // property values and appends it to the input mob.
+  // 
+  // The returned mob slot is AddRef\(\)ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the pSlotName pointer is valid.
+  // - the ppNewSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
+	     
 
 AD_XCLASS_END(Abstract, StoredObject)
