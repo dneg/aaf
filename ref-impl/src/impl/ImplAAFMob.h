@@ -12,10 +12,6 @@
 *                                          *
 \******************************************/
 
-#ifndef __ImplAAFFile_h__
-#include "ImplAAFFile.h"
-#endif
-
 #ifndef __ImplAAFMobSlot_h__
 #include "ImplAAFMobSlot.h"
 #endif
@@ -82,15 +78,6 @@ public:
     GetName
         (aafString_t *  name);  //@parm [in,out] Mob Name
 
-
-  //****************
-  // GetEditRate()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetEditRate
-        (aafRational_t *  editRate);  //@parm [out,retval] Edit rate property value
-
-
   //****************
   // GetModTime()
   //
@@ -115,14 +102,6 @@ public:
         (aafString_t *  name,   //@parm [in,out] Mob Name
 		 aafTimeStamp_t *  lastModified,   //@parm [out] Modified Time
          aafTimeStamp_t *  creationTime);  //@parm [out] Creation Time
-
-
-  //****************
-  // GetNumTracks()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumTracks
-        (aafNumTracks_t *  numTracks);  //@parm [out] Number of tracks
 
 
   //****************
@@ -176,14 +155,6 @@ public:
         (aafString_t *  name);  //@parm [in, ref] Mob Name
 
 
-  //****************
-  // SetEditRate()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetEditRate
-        (aafRational_t  editRate);  //@parm [in] Edit rate property value
-
-
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
 // What doe's this do?
 
@@ -203,18 +174,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendNewSlot
         (aafRational_t  editRate,   //@parm [in] Edit rate property value
-		 ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
-         ImplAAFMobSlot ** newSlot);  //@parm [out] Newly created slot
-
-
-  //****************
-  // AppendNewTrack()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    AppendNewTrack
-        (aafRational_t  editRate,   //@parm [in] Edit rate property value
 		 ImplAAFSegment * segment,   //@parm [in] Segment to append as track component
-         aafPosition_t  origin,   //@parm [in] Track Origin
 		 aafTrackID_t  trackID,   //@parm [in] The Track ID
          aafString_t *  trackName,   //@parm [in] Track Name (optional)
 		 ImplAAFMobSlot ** newTrack);  //@parm [out] Newly created track
@@ -342,6 +302,10 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFMobTest.cpp.
   static AAFRESULT test();
+
+	// Interfaces visible inside the toolkit, but not exposed through the API
+AAFRESULT
+    GetNthMobSlot (aafInt32 index /* 0-based*/, ImplAAFMobSlot **ppMobSlot);
 
 	protected:
 	OMFixedSizeProperty<aafUID_t>		_mobID;
