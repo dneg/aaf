@@ -87,7 +87,7 @@ LINK32=link.exe
 # Name "ident - Win32 Debug"
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\com-api\AAFSession.idl"
+SOURCE="..\..\..\ref-impl\include\com-api\AAF.idl"
 
 !IF  "$(CFG)" == "ident - Win32 Release"
 
@@ -96,9 +96,9 @@ SOURCE="..\..\..\ref-impl\include\com-api\AAFSession.idl"
 # Begin Custom Build
 InputDir="\coresw\AAF-toolkit\ref-impl\include\com-api"
 ProjDir=.
-InputPath=..\..\..\ref-impl\include\com-api\AAFSession.idl
+InputPath=..\..\..\ref-impl\include\com-api\AAF.idl
 
-"$(ProjDir)/aafsession_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
+"$(ProjDir)/aaf_i.c" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	midl /I $(InputDir) /client stub $(InputPath)
 
 # End Custom Build
@@ -108,7 +108,7 @@ InputPath=..\..\..\ref-impl\include\com-api\AAFSession.idl
 # End Source File
 # Begin Source File
 
-SOURCE=.\AAFSession_i.c
+SOURCE=.\AAF_i.c
 # End Source File
 # Begin Source File
 
