@@ -590,6 +590,9 @@ extern "C" HRESULT CAAFTypeDefFixedArray_test()
 		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );		
 		
+		
+		if(hr == AAFRESULT_SUCCESS)
+			hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
 	}//try
 	catch (...)
 	{
