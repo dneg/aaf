@@ -19,13 +19,13 @@
 
 
 ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
-:	_componentWidth(PID_CDCIDescriptor_ComponentWidth,	"Component Width"),
-	_horizontalSubsampling(PID_CDCIDescriptor_HorizontalSubsampling,	"Horizontal Subsampling"),
-	_colorSiting(PID_CDCIDescriptor_ColorSiting,	"Color Siting"),
-	_blackReferenceLevel(PID_CDCIDescriptor_BlackReferenceLevel,	"Black Reference Level"),
-	_whiteReferenceLevel(PID_CDCIDescriptor_WhiteReferenceLevel,	"White Reference Level"),
-	_colorRange(PID_CDCIDescriptor_ColorRange,	"Color Range"),
-	_paddingBits(PID_CDCIDescriptor_PaddingBits,	"Padding Bits")
+:	_componentWidth(PID_CDCIDescriptor_ComponentWidth,	"ComponentWidth"),
+	_horizontalSubsampling(PID_CDCIDescriptor_HorizontalSubsampling,	"HorizontalSubsampling"),
+	_colorSiting(PID_CDCIDescriptor_ColorSiting,	"ColorSiting"),
+	_blackReferenceLevel(PID_CDCIDescriptor_BlackReferenceLevel,	"BlackReferenceLevel"),
+	_whiteReferenceLevel(PID_CDCIDescriptor_WhiteReferenceLevel,	"WhiteReferenceLevel"),
+	_colorRange(PID_CDCIDescriptor_ColorRange,	"ColorRange"),
+	_paddingBits(PID_CDCIDescriptor_PaddingBits,	"PaddingBits")
 {
 	_persistentProperties.put(_componentWidth.address());
 	_persistentProperties.put(_horizontalSubsampling.address());
