@@ -40,6 +40,7 @@
 #include "CAAFUnknown.h"
 #include "CAAFServer.h"
 #include <stddef.h>
+#include <string.h>
 
 #if defined(DONT_DELETE_LAST_REFERENCE)
 #include <iostream.h>
