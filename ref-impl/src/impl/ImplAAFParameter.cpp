@@ -74,9 +74,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(head)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND
 
@@ -109,9 +111,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(head)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND;
 
@@ -150,9 +154,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(head)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND;
 
@@ -184,9 +190,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(head)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND;
 
