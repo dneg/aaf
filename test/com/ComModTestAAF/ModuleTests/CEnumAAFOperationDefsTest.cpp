@@ -177,7 +177,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pOperationDef->Initialize (*(effectIDs[n]), TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
-		checkResult(pParamDef->Initialize (*(parmIDs[n]), TEST_PARAM_NAME, TEST_PARAM_DESC));
+		checkResult(pParamDef->Initialize (*(parmIDs[n]), TEST_PARAM_NAME, TEST_PARAM_DESC, defs.tdRational()));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		
 		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
