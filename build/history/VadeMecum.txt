@@ -6,14 +6,21 @@ What are they ?
 The change logs are a set of automatically generated pages, each page
 contains a single html table containing the changes between two tags.
 For example, the page
-http://aaf.sourceforge.net/build/Changes-V101-Build-0505.html
-contains a log of changes made between the tags V101 and Build-0505
+http://aaf.sourceforge.net/build/Changes-Build-xxxx-Build-yyyy.html
+contains a log of changes made between the tags Build-xxxx and
+Build-yyyy
+
+The page
+http://aaf.sourceforge.net/build/Changes-Build-yyyy-head.html
+contains a log of the most recent changes (between the last build tag
+and head)
+
+Note that most recent changes (between the last build tag and head)
+are only up to date as of the time that the AAFmkchangelogs script was
+last executed.
 
 An index, also automatically generated, is at -
 http://aaf.sourceforge.net/build/Changes-index.html
-
-Note that changes made since the most recent tag don't appear in any
-change log.
 
 How the generation process works
 
@@ -24,7 +31,9 @@ build/history/AAFtagdates.
 How to add a new change log
 
 The following instructions assume you are adding a new tag and want to
-create a new page and an updated index.
+create a new page and an updated index. If you only want to update the
+page for the most recent changes (between the last build tag and head)
+you can omit steps 1, 2, and 3.
 
 There are 6 steps
 
@@ -32,11 +41,11 @@ There are 6 steps
 
 2) add the new tag and the corresponding date and time to AAFtagdates
 
-3) generate new pages and a new index
+3) commit AAFtagdates
 
-4) upload the new/changed pages and updated index to the web site
+4) generate new pages and a new index
 
-5) commit AAFtagdates
+5) upload the new/changed pages and updated index to the web site
 
 6) browse to http://aaf.sourceforge.net/build/Changes-index.html and
    admire your handiwork
@@ -58,6 +67,12 @@ You can do this by noting UTC when you create the tag or by using
 method given below for finding the dates/times corresponding to cvs
 tags. Either way you must add the tag and its date/time to the
 AAFtagdates file.
+
+Commit AAFtagdates
+
+For example -
+
+$ cvs commit -m "Add the Build-zzzz tag." build/history/AAFtagdates
 
 Generate new pages and a new index
 
@@ -85,11 +100,14 @@ will create overlapping pages.
 
 Upload the new (or changed) pages and updated index to the web site
 
-[TBS]
+Use scp to copy the new page and index. See the SourceForge.net site
+documentation "Guide to the SourceForge.net Project Web Hosting
+Services") for more details.
 
-Commit AAFtagdates
-
-[TBS]
+$ scp Changes-TagA-TagB.html \
+      yourname@shell.sourceforge.net:/home/groups/a/aa/aaf/htdocs/build
+$ scp Changes-index.html \
+      yourname@shell.sourceforge.net:/home/groups/a/aa/aaf/htdocs/build
 
 Finding the dates/times corresponding to cvs tags
 
@@ -122,10 +140,5 @@ commands "cvs log -rT1:T2" and "cvs log -rD1:D2" don't (for reasons
 not fully understood by the author) produce the same (or even
 equivalent) output. The output of "cvs log -rD1:D2" is the output we
 need in this case.
-
-How do I get a log of all the changes that have been made since the
-most recent tag in AAFtagdates ?
-
-[TBS]
 
 Tim Bingham 30-October-2002
