@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
-#include <wchar.h>
 
 // Needed for the auid of the "Root" class.
 const static aafUID_t NULL3_AUID = { 0 };
@@ -721,6 +720,7 @@ const aafUInt32 kTypeDefinitionCharacterCount =
 
 
 //
+
 // Create an array of all strong reference types.
 //
 
