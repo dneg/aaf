@@ -713,176 +713,6 @@ STDAPI ImplAAFFileOpenTransient (
 #endif // USE_RAW_STORAGE
 }
 
-// Helpers for AAFFileIsAAFFile().
-//
-
-// AAF (and MXF) file signatures as byte streams.
-
-// AAF files encoded as structured storage (binary).
-//
-const aafUInt8 aafFileSignatureAafSSBinary[] = {
-  0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
-  0x41, 0x41, 0x46, 0x42, 0x0d, 0x00, 0x4f, 0x4d,
-  0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff
-};
-
-// MXF files encoded as structured storage (binary).
-//
-const aafUInt8 aafFileSignatureMxfSSBinary[] = {
-  0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
-  0x4d, 0x58, 0x46, 0x42, 0x0d, 0x00, 0x4f, 0x4d,
-  0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff
-};
-
-// AAF files encoded as XML (text).
-//
-const aafUInt8 aafFileSignatureAafXmlText[] = {
-  0x3c, 0x3f, 0x78, 0x6d, 0x6c, 0x20, 0x76, 0x65,
-  0x72, 0x73, 0x69, 0x6f, 0x6e, 0x3d, 0x22, 0x31,
-  0x2e, 0x30, 0x22, 0x3f, 0x3e, 0x3c, 0x3f, 0x41,
-  0x41, 0x46, 0x20, 0x73, 0x69, 0x67, 0x6e, 0x61,
-  0x74, 0x75, 0x72, 0x65, 0x3d, 0x22, 0x7b, 0x35,
-  0x38, 0x34, 0x36, 0x34, 0x31, 0x34, 0x31, 0x2d,
-  0x46, 0x46, 0x30, 0x44, 0x2d, 0x34, 0x44, 0x34,
-  0x46, 0x2d, 0x30, 0x36, 0x30, 0x45, 0x2d, 0x32,
-  0x42, 0x33, 0x34, 0x30, 0x31, 0x30, 0x31, 0x30,
-  0x31, 0x30, 0x30, 0x7d, 0x22, 0x3f, 0x3e
-};
-
-// MXF files encoded as XML (text).
-//
-const aafUInt8 aafFileSignatureMxfXmlText[] = {
-  0x3c, 0x3f, 0x78, 0x6d, 0x6c, 0x20, 0x76, 0x65,
-  0x72, 0x73, 0x69, 0x6f, 0x6e, 0x3d, 0x22, 0x31,
-  0x2e, 0x30, 0x22, 0x3f, 0x3e, 0x3c, 0x3f, 0x41,
-  0x41, 0x46, 0x20, 0x73, 0x69, 0x67, 0x6e, 0x61,
-  0x74, 0x75, 0x72, 0x65, 0x3d, 0x22, 0x7b, 0x35,
-  0x38, 0x34, 0x36, 0x35, 0x38, 0x34, 0x44, 0x2d,
-  0x46, 0x46, 0x30, 0x44, 0x2d, 0x34, 0x44, 0x34,
-  0x46, 0x2d, 0x30, 0x36, 0x30, 0x45, 0x2d, 0x32,
-  0x42, 0x33, 0x34, 0x30, 0x31, 0x30, 0x31, 0x30,
-  0x31, 0x30, 0x30, 0x7d, 0x22, 0x3f, 0x3e
-};
-
-// AAF files encoded as SMPTE KLV (binary).
-//
-const aafUInt8 aafFileSignatureAafKlvBinary[] = {
-  0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
-  0x41, 0x41, 0x46, 0x4b, 0x0d, 0x00, 0x4f, 0x4d,
-  0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff
-};
-
-// MXF files encoded as SMPTE KLV (binary).
-//
-const aafUInt8 aafFileSignatureMxfKlvBinary[] = {
-  0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
-  0x4d, 0x58, 0x46, 0x4b, 0x0d, 0x00, 0x4f, 0x4d,
-  0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff
-};
-
-// Table mapping valid signatures to file kinds.
-// Signatures are found at the beginning of the file and are variable in size.
-// There are multiple signatures since there are multiple file kinds
-// e.g. "AAF structured storage binary" and "AAF XML text".
-//
-struct mapSignatureToFileKind {
-  const aafUInt8* signature;
-  size_t signatureSize;
-  const aafUID_t* fileKind;
-} fileKindTable[] = {
-  {aafFileSignatureAafSSBinary,
-   sizeof(aafFileSignatureAafSSBinary),
-   &aafFileKindAafSSBinary},
-  {aafFileSignatureMxfSSBinary,
-   sizeof(aafFileSignatureMxfSSBinary),
-   &aafFileKindMxfSSBinary},
-  {aafFileSignatureAafXmlText,
-   sizeof(aafFileSignatureAafXmlText),
-   &aafFileKindAafXmlText},
-  {aafFileSignatureMxfXmlText,
-   sizeof(aafFileSignatureMxfXmlText),
-   &aafFileKindMxfXmlText}
-};
-
-static HRESULT readSignature(FILE* file,
-                             unsigned char* signature,
-                             size_t signatureSize);
-static size_t signatureSize(void);
-static aafBool isRecognizedSignature(unsigned char* signature,
-                                     size_t signatureSize,
-                                     aafUID_t* fileKind);
-
-static const size_t maxSignatureSize = 256; //signatureSize();
-
-// Read the file signature. Assumes that no valid file may be shorter
-// than the longest signature.
-//
-HRESULT readSignature(FILE* file,
-                      unsigned char* signature,
-                      size_t signatureSize)
-{
-  TRACE("readSignature");
-  ASSERT("Valid file", file != 0);
-  ASSERT("Valid signature buffer", signature != 0);
-  ASSERT("Valid signature buffer size", signatureSize != 0 
-                      && signatureSize <= maxSignatureSize);
-
-  HRESULT hr = S_OK;
-  unsigned char sig[maxSignatureSize];
-  if (sig == 0) {
-    hr = AAFRESULT_NOMEMORY;
-  } else {
-    size_t status = fread(sig, signatureSize, 1, file);
-    if (status == 1) {
-      memcpy(signature, sig, signatureSize);
-    } else {
-      hr = AAFRESULT_NOT_AAF_FILE;  // Can't read signature
-    }
-  }
-  return hr;
-}
-
-// The number of bytes to read to be sure of getting the signature.
-//
-size_t signatureSize(void)
-{
-  size_t result = 0;
-  for (size_t i = 0; i < sizeof(fileKindTable)/sizeof(fileKindTable[0]); i++) {
-    if (fileKindTable[i].signatureSize > result) {
-      result = fileKindTable[i].signatureSize;
-    }
-  }
-  return result;
-}
-
-// Try to recognize a file signature. Assumes that no signature is a
-// prefix of any other signature.
-//
-aafBool isRecognizedSignature(unsigned char* signature,
-                              size_t signatureSize,
-                              aafUID_t* fileKind)
-{
-  TRACE("isRecognizedSignature");
-  ASSERT("Valid signature buffer", signature != 0);
-  ASSERT("Valid signature buffer size", signatureSize != 0);
-  ASSERT("Valid file kind", fileKind != 0);
-
-  aafBool result = kAAFFalse;
-
-  for (size_t i = 0; i < sizeof(fileKindTable)/sizeof(fileKindTable[0]); i++) {
-    if (fileKindTable[i].signatureSize <= signatureSize) {
-      if (memcmp(fileKindTable[i].signature,
-                 signature,
-                 fileKindTable[i].signatureSize) == 0) {
-        result = kAAFTrue;
-        memcpy(fileKind, fileKindTable[i].fileKind, sizeof(CLSID));
-        break;
-      }
-    }
-  }
-  return result;
-}
-
 //***********************************************************
 //
 // AAFFileIsAAFFile()
@@ -902,30 +732,15 @@ STDAPI ImplAAFFileIsAAFFile (
   if (pFileIsAAFFile == 0)
     return AAFRESULT_NULL_PARAM;
 
-  ASSERT("Valid signature buffer size", signatureSize() <= maxSignatureSize);
-
-
   HRESULT hr = S_OK;
-  unsigned char signature[maxSignatureSize];
-  if (signature == 0) {
-    hr = AAFRESULT_NOMEMORY;
+
+  OMStoredObjectEncoding encoding;
+  bool recognized = OMFile::isRecognized(pFileName, encoding);
+  if (recognized) {
+    *pAAFFileKind = *reinterpret_cast<aafUID_t*>(&encoding);
+    *pFileIsAAFFile = kAAFTrue;
   } else {
-    FILE* f = wfopen(pFileName, L"rb");
-    if (f != 0) {
-      hr = readSignature(f, signature, signatureSize());
-      if (SUCCEEDED(hr)) {
-        *pFileIsAAFFile = isRecognizedSignature(signature,
-                                                signatureSize(),
-                                                pAAFFileKind);
-      } else {
-        // The file exists but we can't read the signature
-        *pFileIsAAFFile = kAAFFalse;
-        hr = S_OK;
-      }
-      fclose(f);
-    } else {
-      hr = AAFRESULT_FILE_NOT_FOUND; // Can't open file
-    }
+    *pFileIsAAFFile = kAAFFalse;
   }
   return hr;
 }
