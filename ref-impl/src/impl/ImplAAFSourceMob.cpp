@@ -64,6 +64,9 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	*ppEdes = _essenceDesc;
+  if (*ppEdes)
+    (*ppEdes)->AcquireRef();
+
 	return AAFRESULT_SUCCESS;
 }
 
