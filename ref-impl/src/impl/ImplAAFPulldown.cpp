@@ -188,7 +188,7 @@ AAFRESULT STDMETHODCALLTYPE
   // Override from AAFSegment
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPulldown::SegmentTCToOffset (aafTimecode_t *pTimecode,
-      aafRational_t */*pEditRate*/,
+      aafRational_t * /*pEditRate*/,
       aafFrameOffset_t *pOffset)
 {
 	ImplAAFTimecode	*pdwnInput;

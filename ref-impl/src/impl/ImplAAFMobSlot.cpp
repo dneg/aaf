@@ -271,7 +271,7 @@ AAFRESULT ImplAAFMobSlot::ConvertToEditRate(aafPosition_t tmpPos,
 }
 
 AAFRESULT ImplAAFMobSlot::ConvertToMyRate(aafPosition_t tmpPos,
-										  ImplAAFMobSlot */*srcSlot*/,
+										  ImplAAFMobSlot * /*srcSlot*/,
 										aafPosition_t *convertPos)
 {
 	if(convertPos == NULL )
