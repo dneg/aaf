@@ -13,6 +13,7 @@
 #include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFDataDefs.h"
+#include "AAFDefUIDs.h"
 
 #include <iostream.h>
 #include <stdio.h>
@@ -75,7 +76,7 @@ static HRESULT ObjectTest ()
 	  ProductInfo.productVersion.patchLevel = 0;
 	  ProductInfo.productVersion.type = kVersionUnknown;
 	  ProductInfo.productVersionString = NULL;
-	  ProductInfo.productID = -1;
+	  ProductInfo.productID = UnitTestProductID;
 	  ProductInfo.platform = NULL;
 
 	  RemoveTestFile (testFileName);

@@ -156,21 +156,51 @@ AAFRESULT STDMETHODCALLTYPE
 
 
   // Override from AAFSegment
-  AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPulldown::SegmentOffsetToTC (/*[in]*/ aafPosition_t *  /*pOffset*/,
-      /*[out]*/ aafTimecode_t *  /*pTimecode*/)
-  {
-    return AAFRESULT_NOT_IMPLEMENTED;
-  }
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPulldown::SegmentOffsetToTC (aafPosition_t *pOffset,
+      aafTimecode_t *pTimecode)
+{
+	aafBool	junk;
+	return(intSegmentOffsetToTC(*pOffset, pTimecode, &junk));
+}
 
   // Override from AAFSegment
-  AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPulldown::SegmentTCToOffset (/*[in]*/ aafTimecode_t *  /*pTimecode*/,
-      /*[in]*/ aafRational_t *  /*pEditRate*/,
-      /*[out]*/ aafFrameOffset_t *  /*pOffset*/)
-  {
-    return AAFRESULT_NOT_IMPLEMENTED;
-  }
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPulldown::SegmentTCToOffset (aafTimecode_t *pTimecode,
+      aafRational_t *pEditRate,
+      aafFrameOffset_t *pOffset)
+{
+	ImplAAFTimecode	*pdwnInput;
+	ImplAAFSegment	*seg;
+	aafTimecode_t	startTC;
+	aafLength_t		length;
+	aafPosition_t	offset;
+
+	XPROTECT()
+    {
+		seg = _inputSegment;
+		pdwnInput = dynamic_cast<ImplAAFTimecode*>(seg);
+		if(pdwnInput == NULL)
+			RAISE(AAFRESULT_TIMECODE_NOT_FOUND);
+
+		CHECK(pdwnInput->GetTimecode(&startTC));
+		CHECK(pdwnInput->GetLength(&length));
+		if((startTC.fps != pTimecode->fps) || (startTC.drop != pTimecode->drop))
+			RAISE(AAFRESULT_TIMECODE_NOT_FOUND);
+
+		offset = pTimecode->startFrame - startTC.startFrame;
+		if((offset < 0) || (offset >= length))
+			RAISE(AAFRESULT_TIMECODE_NOT_FOUND);
+
+		CHECK(MapOffset(offset, AAFTrue, pOffset, NULL));
+    }
+	XEXCEPT
+    {
+    }
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
+}
 
 AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 			   aafBool reverse,

@@ -19,6 +19,7 @@
 #include "aafCvt.h"
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
+#include "AAFDefUIDs.h"
 
 // This values are used for testing purposes
 static aafUID_t    fillerUID = DDEF_Picture;
@@ -106,7 +107,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.patchLevel = 0;
 	ProductInfo.productVersion.type = kVersionUnknown;
 	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
+	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 
 
@@ -364,7 +365,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.patchLevel = 0;
 	ProductInfo.productVersion.type = kVersionUnknown;
 	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
 

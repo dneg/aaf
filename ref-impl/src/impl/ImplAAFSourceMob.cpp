@@ -447,8 +447,9 @@ AAFRESULT STDMETHODCALLTYPE
 				if (Int64Less(pos, endPos) &&
 					Int64LessEqual(begPos, pos))
 				{
-//!!!					if(subSegment->IsTypeOf("FILL", &aafError) &&
-//		 				(sequLoop == (numSegs-1)))
+					ImplAAFFiller	*test;		// Used only in test of type
+					test = dynamic_cast<ImplAAFFiller*>(subSegment);
+					if(test != NULL && (sequLoop == (numSegs-1)))
 		 			{
 						firstFillLen = pos;
 						CHECK(SubInt64fromInt64(sequPos, &firstFillLen));
@@ -470,8 +471,8 @@ AAFRESULT STDMETHODCALLTYPE
 						CHECK(segSequ->AppendComponent(filler2));
 						break;
 					}
-//!!!					else
-//						RAISE(AAFRESULT_NOT_IMPLEMENTED);
+					else
+						RAISE(AAFRESULT_NOT_IN_CURRENT_VERSION);
 				}
 			} /* for */
 			sequIter->ReleaseReference();

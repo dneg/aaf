@@ -67,6 +67,7 @@
 
 extern "C" const aafClassID_t CLSID_EnumAAFIdentifications;
 
+const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 
 ImplAAFHeader::ImplAAFHeader ()
@@ -406,7 +407,7 @@ AAFRESULT STDMETHODCALLTYPE
 		}
   } else {
     *ppIdentification = 0;
-    result = AAFRESULT_NOT_IMPLEMENTED; // tjb - Should be AAFRESULT_FAILURE
+    result = AAFRESULT_INCONSISTANCY;
   }
   return result;
 }
@@ -493,7 +494,7 @@ AAFRESULT
 			fiction.companyName = L"Unknown";
 			fiction.productName = L"Unknown";
 			fiction.productVersionString = (aafWChar*)NULL;
-			fiction.productID = -1;
+			fiction.productID = NIL_UID;
 			fiction.platform = (aafWChar*)NULL;
 			fiction.productVersion.major = 0;
 			fiction.productVersion.minor = 0;
@@ -523,6 +524,7 @@ AAFRESULT
     CHECK(identObj->SetCompanyName(pIdent->companyName));
     CHECK(identObj->SetProductName(pIdent->productName));
     CHECK(identObj->SetProductVersionString(pIdent->productVersionString));
+	CHECK(identObj->SetProductID(&pIdent->productID));
 
     _identificationList.appendValue(identObj);
  

@@ -20,6 +20,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "aafCvt.h"
 #include "AAFResult.h"
+#include "AAFDefUIDs.h"
 
 
 
@@ -77,7 +78,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.patchLevel = 0;
 	ProductInfo.productVersion.type = kVersionUnknown;
 	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
+	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 	
 	try
@@ -197,7 +198,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.patchLevel = 0;
 	ProductInfo.productVersion.type = kVersionUnknown;
 	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 	
 	
