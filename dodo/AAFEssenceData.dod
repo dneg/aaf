@@ -29,7 +29,7 @@ AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_CLASS_UUID(6a33f4e1, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(6a33f4e2, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 /****/
 AD_METHOD3(Write,
@@ -117,4 +117,4 @@ AD_METHOD1(GetFileMobID,
 Return the mob id used to find the file mob associated with this essence.
   // The file mob must exist in the same file as this essence data.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
