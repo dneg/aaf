@@ -234,4 +234,4 @@ depend :
 	done $(SH_SUFFIX)
 	@echo "Done with depend.mk."
 
-include depend.mk
+sinclude depend.mk
