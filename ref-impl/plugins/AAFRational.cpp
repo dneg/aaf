@@ -27,13 +27,13 @@
 
 #include "AAFRational.h"
 
-AAFRational::AAFRational(AAFRational& s)
+AAFRational::AAFRational(const AAFRational& s)
 {
 	num = s.num;
 	denom = s.denom;
 }
 
-AAFRational& AAFRational::operator=(AAFRational& s)
+AAFRational& AAFRational::operator=(const AAFRational& s)
 {
 	if(this != &s)
 	{
@@ -43,7 +43,7 @@ AAFRational& AAFRational::operator=(AAFRational& s)
 	return(*this);
 }
 
-AAFRational AAFRational::operator+(AAFRational& s)
+AAFRational AAFRational::operator+(const AAFRational& s) const
 {
 	AAFRational	result;
 	result.num = (num * s.denom) + (s.num * denom);
@@ -51,7 +51,7 @@ AAFRational AAFRational::operator+(AAFRational& s)
 	return result;
 }
 
-AAFRational AAFRational::operator-(AAFRational& s)
+AAFRational AAFRational::operator-(const AAFRational& s) const
 {
 	AAFRational	result;
 	result.num = (num * s.denom) - (s.num * denom);
@@ -59,7 +59,7 @@ AAFRational AAFRational::operator-(AAFRational& s)
 	return result;
 }
 
-AAFRational AAFRational::operator*(AAFRational& s)
+AAFRational AAFRational::operator*(const AAFRational& s) const
 {
 	AAFRational	result;
 	result.num = num * s.num;
@@ -67,7 +67,7 @@ AAFRational AAFRational::operator*(AAFRational& s)
 	return(result);
 }
 
-AAFRational AAFRational::operator/(AAFRational& s)
+AAFRational AAFRational::operator/(const AAFRational& s) const
 {
 	AAFRational	result;
 	result.num = num * s.denom;
@@ -75,7 +75,7 @@ AAFRational AAFRational::operator/(AAFRational& s)
 	return(result);
 }
 
-AAFRational::operator aafRational_t()
+AAFRational::operator aafRational_t() const
 { 
 	aafRational_t result;
 	result.numerator = num;
