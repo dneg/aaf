@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFEffect\
+AAFOperationGroup\
 #endm
 #c
 #startm .parent-module 0
@@ -12,10 +12,10 @@ AD_HEAD
 AD_INCLUDE(AAFTypes)
 
 AD_FORWARD_DECLARATION(AAFDataDef)
-AD_FORWARD_DECLARATION(AAFEffectDef)
+AD_FORWARD_DECLARATION(AAFOperationDef)
 AD_FORWARD_DECLARATION(AAFParameter)
 AD_FORWARD_DECLARATION(AAFSourceReference)
-AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
+AD_FORWARD_DECLARATION(EnumAAFOperationDefs)
 AD_FORWARD_DECLARATION(EnumAAFParameterDefs)
 AD_FORWARD_DECLARATION(AAFSegment)
 
@@ -39,20 +39,20 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD3(Initialize,
 	[in], objPass, aafUID_t *, pDatadef, Data Definition Object,
 	[in], objPass, aafLength_t, length, Length property value,
-	[in], objIn, AAFEffectDef, effectDef, Effect Definition object,
-	Initializes an effect object with the given property values.)
-	//@comm  This function takes an already created effect definition object as an argument.
-	//@comm  To add slots to the effect, call AddNewSlot.
+	[in], objIn, AAFOperationDef, operationDef, Operation Definition object,
+	Initializes an operation group object with the given property values.)
+	//@comm  This function takes an already created operation definition object as an argument.
+	//@comm  To add slots to the operation group, call AddNewSlot.
 	//@comm  To add renderings, call SetRender.
 
-AD_XMETHOD1(GetEffectDefinition,
-			[out], objOut, AAFEffectDef, ppEffectDef, Effect definition object,
-		   Returns the effect definition for this invocation.)
+AD_XMETHOD1(GetOperationDefinition,
+			[out], objOut, AAFOperationDef, ppOperationDef, Operation definition object,
+		   Returns the operation definition for this invocation.)
   // 
   // Succeeds if all of the following are true:
-  // - the ppEffectDef pointer is valid.
+  // - the ppOperationDef pointer is valid.
   // 
-  // If this method fails nothing will be written to *ppEffectDef.
+  // If this method fails nothing will be written to *ppOperationDef.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -68,12 +68,12 @@ AD_XMETHOD1(GetEffectDefinition,
   //   - This property does not exist in the file.
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppEffectDef arg is NULL.)
+  //   - ppOperationDef arg is NULL.)
 
 
 AD_XMETHOD1(GetRender,
 			[out], objOut, AAFSourceReference, ppSourceRef, Final rendering segment,
-			Returns the segment that represents the optional rendering on an effect object.
+			Returns the segment that represents the optional rendering on an operation group object.
   // Working and final renderings are handled by using
   // an IAAFEssenceGroup as the segment.
   // 
@@ -100,7 +100,7 @@ AD_XMETHOD1(GetRender,
 
 AD_METHOD1(IsATimeWarp,
 		   [out\\\,retval], aafBool *, pIsTimeWarp, Returned boolean value,
-		   This boolean function returns whether or not an effect is a timewarp effect.
+		   This boolean function returns whether or not an operation group is a timewarp effect.
   // 
   // Succeeds if all of the following are true:
   // - the pIsTimeWarp pointer is valid.
@@ -122,7 +122,7 @@ AD_METHOD1(IsATimeWarp,
 
 AD_METHOD1(GetBypassOverride,
 	[out], aafUInt32 *, pBypassOverride, Bypass override property value,
-	Returns the optional bypass override propertyvalue from the input effect object.
+	Returns the optional bypass override propertyvalue from the input operation def object.
   // 
   // Succeeds if all of the following are true:
   // - the pBypassOverride pointer is valid.
@@ -146,8 +146,8 @@ AD_METHOD1(GetBypassOverride,
   //   - pBypassOverride arg is NULL.)
 
 AD_METHOD1(GetNumSourceSegments,
-	[out], aafInt32 *, pNumSources, Number of source media segments in the effect,
-	Returns the number of media sources to the effect.
+	[out], aafInt32 *, pNumSources, Number of source media segments in the operation group,
+	Returns the number of media sources to the operation group.
   //
   // Succeeds if all of the following are true:
   // - the pNumSources pointer is valid.
@@ -164,9 +164,9 @@ AD_METHOD1(GetNumSourceSegments,
   // AAFRESULT_NULL_PARAM
   //   - pNumSources arg is NULL.)
 
-AD_METHOD1(IsValidTranEffect,
-	[out], aafBool *, pValidTransition, TRUE if the effect is valid in a transition,
-	Verifies that the input effect object can be used in a transition.
+AD_METHOD1(IsValidTranOperation,
+	[out], aafBool *, pValidTransition, TRUE if the operation group is valid in a transition,
+	Verifies that the input operation group object can be used in a transition.
   // 
   // Succeeds if all of the following are true:
   // - the pValidTransition pointer is valid.
@@ -187,8 +187,8 @@ AD_METHOD1(IsValidTranEffect,
   //   - pValidTransition arg is NULL.)
 
 AD_METHOD1(GetNumParameters,
-	[out], aafInt32 *, pNumParameters, Number of parameter slots in the effect,
-	Returns the number of parameters in the effect.
+	[out], aafInt32 *, pNumParameters, Number of parameter slots in the operation group,
+	Returns the number of parameters in the operation group.
   //
   // Succeeds if all of the following are true:
   // - the pNumParameters pointer is valid.
@@ -207,7 +207,7 @@ AD_METHOD1(GetNumParameters,
 
 
 AD_XMETHOD1(AddNewParameter,
-	[in], objIn, AAFParameter, pValue, Parameter to place in effect slot,
+	[in], objIn, AAFParameter, pValue, Parameter to place in operation group slot,
 	Adds a new parameter object.
   // Succeeds if all of the following are true:
   // - the pValue pointer is valid.
@@ -226,8 +226,8 @@ AD_XMETHOD1(AddNewParameter,
   //   - pValue arg is NULL.)
 
 AD_XMETHOD1(AppendNewInputSegment,
-	[in], objIn, AAFSegment, pSegment, Segment to place in effect,
-	Appends another input segment to an effect.
+	[in], objIn, AAFSegment, pSegment, Segment to place in operation group,
+	Appends another input segment to an operation group.
   // 
   // Succeeds if all of the following are true:
   // - the pSegment pointer is valid.
@@ -247,7 +247,7 @@ AD_XMETHOD1(AppendNewInputSegment,
 
 AD_XMETHOD1(SetRender,
 	[in], objIn, AAFSourceReference, ppSourceRef, A segment containing a representation of the rendering,
-	This function sets the final rendering for the given effect
+	This function sets the final rendering for the given operation group
 	//    to the input source clip.  Multiple renderings may exist if the
 	//    source clip refers to a master mob that contains a Essence group.)
   // 
@@ -266,11 +266,10 @@ AD_XMETHOD1(SetRender,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppSourceRef arg is NULL.)
-	//@comm Replaces omfiEffectSetFinalRender and omfiEffectSetWorkingRender
 
 AD_METHOD1(SetBypassOverride,
 	[in], aafUInt32, bypassOverride, Bypass override,
-	This function sets the optional bypass override property on the given effect object.)
+	This function sets the optional bypass override property on the given operation group object.)
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
