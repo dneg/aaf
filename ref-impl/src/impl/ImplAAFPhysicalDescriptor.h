@@ -5,6 +5,8 @@
 
 //=---------------------------------------------------------------------=
 //
+// $Id$ $Name$
+//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
