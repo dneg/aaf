@@ -7,31 +7,34 @@ AAFMobSlot\
 #endm
 #c
 #import ./AAFMobSlot.exp
-
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-////////////////////////////////////////////////////////////////////////////////
+AD_IDL(//
+// The IAAFTimelineMobSlot interface is implemented by objects which
+// contain time-varying timeline essence.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//
 // Types required by this module:
 //
-// aafBool,
-// aafRational_t,
-// aafPosition_t,
-// aafTrackID_t,
-
+// aafBool
+// aafRational_t
+// aafPosition_t
+// aafTrackID_t
+//)
 AD_CLASS_UUID(B1A21379, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21378, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
-
 AD_METHOD1(GetEditRate,
 		   [out\\\,retval], 
 		   aafRational_t *, 
@@ -51,6 +54,7 @@ AD_METHOD1(GetEditRate,
   //
   // AAFRESULT_NULL_PARAM
   //   - pEditRate arg is NULL.)
+
 
 AD_METHOD1(SetEditRate,
 		   [in], 
@@ -72,6 +76,7 @@ AD_METHOD1(SetEditRate,
   // AAFRESULT_NULL_PARAM
   //   - pEditRate arg is NULL.)
 
+
 AD_METHOD1(GetOrigin,
 		   [out\\\,retval],
 		   aafPosition_t *,
@@ -92,6 +97,7 @@ AD_METHOD1(GetOrigin,
   // AAFRESULT_NULL_PARAM
   //   - pOrigin arg is NULL.)
 
+
 AD_METHOD1(SetOrigin,
 		   [in],
 		   aafPosition_t,
@@ -105,5 +111,4 @@ AD_METHOD1(SetOrigin,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \\\(This is the only code indicating success.\\\).)
-
 AD_CLASS_END
