@@ -42,9 +42,10 @@ class KindMap {
 public:
   KindMap()
   {
+#if AAF_MAJOR_VERSION == 1 && AAF_MINOR_VERSION == 0 && AAF_MAINT_RELEASE == 2
+
     #define ADD_KIND( X ) \
-    _kindMap[ string( #X ) ] = kAAFFileKind_Aaf##X;
-#if AAF_MAJOR_VERSION == 1 && AAF_MINOR_VERSION == 0 && AAF_MAINT_RELEASE < 2
+    _kindMap[ string( #X ) ] = aafFileKindAaf##X;
 
     ADD_KIND( MSSBinary );
     ADD_KIND( SSSBinary );
@@ -52,6 +53,9 @@ public:
     ADD_KIND( S4KBinary );
     
 #elif AAF_MAJOR_VERSION >= 1 && AAF_MINOR_VERSION >= 0
+
+    #define ADD_KIND( X ) \
+    _kindMap[ string( #X ) ] = kAAFFileKind_Aaf##X;
 
     ADD_KIND( M512Binary );
     ADD_KIND( S512Binary );
