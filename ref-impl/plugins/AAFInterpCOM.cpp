@@ -97,8 +97,6 @@ void pascal __terminate();
 void pascal DllTerminationRoutine();
 }
 
-#include "MetroNubUtils.h"
-
 
 #pragma export on
 #endif // #if defined( OS_MACOS )
@@ -256,11 +254,6 @@ DllGetVersion(UInt32* pVersion)
 OSErr pascal
 DllInitializationRoutine(CFragInitBlockPtr initBlkPtr)
 {
-#ifdef _DEBUG
-	if (AmIBeingMWDebugged())
-		Debugger();
-#endif // _DEBUG
-
 	DllData.InitBlock = *initBlkPtr;
 	DllData.Inited = false;
 	DllData.ResRefNum = -1;
