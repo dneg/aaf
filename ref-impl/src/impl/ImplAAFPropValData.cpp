@@ -106,7 +106,7 @@ AAFRESULT ImplAAFPropValData::AllocateBits (
 	  aafUInt32     bitsSize,
       aafMemPtr_t * ppBits)
 {
-  if (bitsSize != _bitsSize)
+  if ((bitsSize != _bitsSize) || (_pBits == 0)) // 2000-12-05 transdel: make sure _pBits are allocated!
 	{
 	  if (_ownerPropVal)
 		{
