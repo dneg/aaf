@@ -887,7 +887,7 @@ void OMStoredObject::save(const OMPropertyTable* table)
 void OMStoredObject::save(OMPropertyId propertyId,
                           int type,
                           const OMUniqueObjectIdentification& id,
-                          OMUInt32 tag)
+                          OMPropertyTag tag)
 {
   TRACE("OMStoredObject::save");
 
@@ -1099,7 +1099,7 @@ void OMStoredObject::restore(OMPropertyTable*& table)
 void OMStoredObject::restore(OMPropertyId propertyId,
                              int type,
                              OMUniqueObjectIdentification& id,
-                             OMUInt32& tag)
+                             OMPropertyTag& tag)
 {
   TRACE("OMStoredObject::restore");
 
