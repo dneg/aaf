@@ -29,7 +29,6 @@ ifeq ($(shell uname), IRIX)
 # 1107 - signed bit field has length of 1 bit in various stl files
 # 1682 - partial overide of AxPropertyValuePrtcl::process
 MODULE_PLATFORM_CFLAGS = -LANG:std -woff 1107,1682
-LIBCIO = -lCio
 endif
 
 # Common definitions
