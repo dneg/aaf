@@ -544,6 +544,13 @@ void ImplAAFHeader::SetByteOrder(const aafInt16 byteOrder)
 	_byteOrder = byteOrder;
 }
 
+void ImplAAFHeader::SetDictionary(ImplAAFDictionary *pDictionary)
+{
+	_dictionary = pDictionary;
+  if (pDictionary)
+    pDictionary->AcquireReference();
+}
+
 AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
 {
 	_toolkitRev = AAFReferenceImplementationVersion;
@@ -601,13 +608,7 @@ ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
 ImplAAFDictionary *ImplAAFHeader::GetDictionary()
 {
 	ImplAAFDictionary	*result = _dictionary;
-
-	// Create the dictionary object if it does not exist.
-	if (NULL == result) {
-		result = (ImplAAFDictionary *)CreateImpl(CLSID_AAFDictionary);
-		_dictionary = result;
-	}
-
+  assert(result);
 	return(result);
 }
 
