@@ -124,6 +124,18 @@ wchar_t* saveWideString(const wchar_t* string)
   return result;
 }
 
+char* saveString(const char* string)
+{
+  TRACE("saveString");
+
+  PRECONDITION("Valid string", validString(string));
+  size_t length = strlen(string) + 1;
+  char* result = new char[length];
+  ASSERT("Valid heap pointer", result != 0);
+  strcpy(result, string);
+  return result;
+}
+
 size_t lengthOfOMWideString(const OMWideCharacter* string)
 {
   const OMWideCharacter* p = string;

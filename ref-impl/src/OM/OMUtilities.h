@@ -71,11 +71,16 @@ wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
                         const size_t length);
 
-  // @func Save a wide character string. Same as strsave() but for wide
+  // @func Save a wide character string. Same as saveString() but for wide
   //       characters.
   //   @parm The wide character string to save.
   //   @rdesc The saved wide character string.
 wchar_t* saveWideString(const wchar_t* string);
+
+  // @func Save a character string.
+  //   @parm The character string to save.
+  //   @rdesc The saved character string.
+char* saveString(const char* string);
 
 size_t lengthOfOMWideString(const OMWideCharacter* string);
 
