@@ -20,6 +20,8 @@
 //
 //=---------------------------------------------------------------------=
 
+// Platform/compiler specific definitions
+//
 #define __dest_os __mac_os
 
 #define _MSL_USING_NAMESPACE
@@ -40,4 +42,6 @@
 #define _DEBUG
 #endif
 
+// Object Manager specific definitions
+//
 #define OM_ENABLE_DEBUG

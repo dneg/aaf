@@ -20,6 +20,8 @@
 //
 //=---------------------------------------------------------------------=
 
+// Platform/compiler specific definitions
+//
 #define __dest_os __mac_os
 
 #define _MSL_USING_NAMESPACE
@@ -39,3 +41,7 @@
 #ifndef NDEBUG
 #define NDEBUG
 #endif
+
+// Object Manager specific definitions
+//
+
