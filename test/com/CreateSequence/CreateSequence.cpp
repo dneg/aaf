@@ -443,7 +443,7 @@ void usage(void)
 {
 	printf("Usage:\n Createsequence.exe <Number of components in file> <file name>.aaf \n");
 	printf(" NB: Number is required to be integer greater than zero.\n");
-	printf(" Both arguments are required - no default is set.\n\n");
+	printf(" If only the number is given, the filename defaults to <number>.aaf\n\n");
 }
 
 //  Main adapted to use command-line arguments with argument checking
