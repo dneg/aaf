@@ -30,6 +30,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ComAAFInfo"=".\examples\com-api\ComAAFInfo\ComAAFInfo.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name comapi
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "ComTestAAF"=".\examples\com-api\ComTestAAF\ComTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -43,6 +61,21 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name COMIDL
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "CppAAFInfo"=".\examples\cpp-api\CppAAFInfo\CppAAFInfo.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cppapi
     End Project Dependency
 }}}
 
@@ -97,6 +130,12 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name COMIDL
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ComAAFInfo
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CppAAFInfo
     End Project Dependency
 }}}
 
