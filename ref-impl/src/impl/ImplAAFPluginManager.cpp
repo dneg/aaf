@@ -235,7 +235,7 @@ typedef struct _AAFTestLibraryProcData
 } AAFTestLibraryProcData;
 
 
-AAFRDLIRESULT testLibraryProc(const char* name, char isDirectory, void * userData)
+static AAFRDLIRESULT testLibraryProc(const char* name, char isDirectory, void * userData)
 {
   AAFRESULT rc = AAFRESULT_SUCCESS;
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
@@ -753,6 +753,7 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 	IAAFPlugin	*plugin			= NULL;
 	IAAFClassExtension *pClassExtension = NULL;
 	IAAFEssenceCodec	*codec	= NULL;
+	IAAFInterpolator *interpolator = NULL;
 	aafUID_t	uid, category = AUID_AAFDefObject;
 	aafUInt32 defIndex, defCount;
 	pluginData_t	pdata;
@@ -804,8 +805,13 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 			codec = NULL;
 		}
 		
-		if(plugin->QueryInterface(IID_IAAFInterpolator, (void **)&codec) == AAFRESULT_SUCCESS)
+		if(plugin->QueryInterface(IID_IAAFInterpolator, (void **)&interpolator) == AAFRESULT_SUCCESS)
+		{
 			category = AUID_AAFInterpolationDef;
+			
+			interpolator->Release();
+			interpolator = NULL;
+		}
 
 		//
 		// NOTE: This version supports a multiple plugins per definition (id).
@@ -1019,7 +1025,7 @@ AAFPluginFileEntry::~AAFPluginFileEntry()
 {
   if (_pPluginFile)
   {
-#ifdef NDEBUG // symbol for ansi assert
+#ifndef NDEBUG // symbol for ansi assert
     // If we are about to 
     if (1 == _pPluginFile->ReferenceCount() && S_OK != _pPluginFile->CanUnloadNow())
     {
