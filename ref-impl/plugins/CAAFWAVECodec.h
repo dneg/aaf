@@ -13,19 +13,12 @@
 \******************************************/
 
 
-
-#ifndef __AAFDefaultCodec_h__
-#include "CAAFDefaultCodec.h"
-#endif
-
 #include "AAFUtils.h"
+#include "AAF.h"
+#include "AAFPlugin.h"
+#include "CAAFUnknown.h"
 
 EXTERN_C const CLSID CLSID_AAFWaveCodec;
-
-#ifndef __AAFWAVEDescriptor_h__
-#include "CAAFWAVEDescriptor.h"
-#endif
-
 
 typedef struct
 {
@@ -127,7 +120,9 @@ public:
   STDMETHOD (Create)
     (/*[in]*/ IUnknown *fileMob, // Create the essence attached to this file mob
      /*[in]*/ aafUID_t  variant, // which variant of the codec to use
-     /*[in]*/ IAAFEssenceStream * stream); // Here is an essence stream with the raw data 
+        IAAFEssenceStream * stream,
+        aafInt32 numParms,
+        aafmMultiCreate_t *createParms);
 
   // Open a media data object.
   STDMETHOD (Open)
@@ -259,6 +254,8 @@ private:
 	aafInt64			_dataStartOffset;
 	aafInt64			_dataSizeOffset;
 	aafBool				_readOnly;
+	aafBool				_sampleDataHeaderWritten;
+	aafBool				_initialSeekPerformed;
 
 	AAFRESULT writeSwappedWAVEData(aafUInt8 **destBufHdl, aafInt32 maxsize, void *data);
 	AAFRESULT readSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
