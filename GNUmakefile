@@ -94,6 +94,11 @@ sdk-dist :
 	$(MAKE) CFG=Debug everything
 	cd dist && $(MAKE) sdk-dist
 
+# This target simply prints the compiler version.
+.PHONY : ccversion
+ccversion :
+	@$(CCVERSION)
+
 #
 # Clean up after 'make'
 #
