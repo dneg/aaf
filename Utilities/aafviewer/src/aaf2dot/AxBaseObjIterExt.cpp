@@ -122,14 +122,14 @@ namespace {
    void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
 				IAAFTypeDefVariableArraySP& spIaafTypeDefVariableArray )
    {
-      auto_ptr<AxArrayIterator<IAAFTypeDefVariableArray> > axArrayIter(
-	 new AxArrayIterator<IAAFTypeDefVariableArray>
-	 (spIaafTypeDefVariableArray, spIaafPropertyValue) );
+	AxTypeDefVariableArray axTypeDefVarArray( spIaafTypeDefVariableArray );
 
-      auto_ptr<AxBaseObjIterPrtcl> iter(
-	 new AxBaseArrayObjIter<IAAFTypeDefVariableArray>( axArrayIter ) );
+	AxPropertyValueIter axPropValIter( axTypeDefVarArray.GetElements( spIaafPropertyValue ) );
 
-      Post( iter );
+	auto_ptr< AxBaseObjIterPrtcl > iter( 
+		new AxBaseObjIter<AxPropertyValueIter, AxPropertyValue, IAAFPropertyValue>( axPropValIter ) );
+
+	Post( iter );
    }
 
    void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
@@ -153,15 +153,14 @@ namespace {
    void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
 				IAAFTypeDefFixedArraySP& spIaafTypeDefFixedArray )
    {
-      auto_ptr<AxArrayIterator<IAAFTypeDefFixedArray> > axArrayIter(
-	 new AxArrayIterator<IAAFTypeDefFixedArray>
-	 (spIaafTypeDefFixedArray, spIaafPropertyValue) );
+	AxTypeDefFixedArray axTypeDefFixedArray( spIaafTypeDefFixedArray );
 
-      auto_ptr<AxBaseObjIterPrtcl> iter(
-	 new AxBaseArrayObjIter<IAAFTypeDefFixedArray>( axArrayIter ) );
+	AxPropertyValueIter axPropValIter( axTypeDefFixedArray.GetElements( spIaafPropertyValue ) );
 
-      Post( iter );
+	auto_ptr< AxBaseObjIterPrtcl > iter( 
+		new AxBaseObjIter<AxPropertyValueIter, AxPropertyValue, IAAFPropertyValue>( axPropValIter ) );
 
+	Post( iter );
    }
 
    void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
