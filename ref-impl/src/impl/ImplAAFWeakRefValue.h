@@ -55,6 +55,11 @@ protected:
   
 public:
   // non-published method to initialize this object.
+  // Initialize an instance from a type definition. This is the "old-style"
+  // "non-direct" access initialization method. 
+  AAFRESULT Initialize (const ImplAAFTypeDefWeakObjRef *referenceType);
+
+  // non-published method to initialize this object.
   // NOTE: The given property's type must be a reference type.
   AAFRESULT Initialize (const ImplAAFTypeDefWeakObjRef *referenceType,
                         OMProperty *property);

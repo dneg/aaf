@@ -39,4 +39,18 @@ const aafUID_t kAAFPropID_##container##_##name = id;
 
 #include "AAFMetaDictionary.h"
 
+//
+// Special property ids used for specifying the starting strong reference in the
+// targe list for weak references.
+//
+
+// SMPTE Label: 06-0E-2B-34-01-01-01-02-0D-01-03-01-01-01-01-00
+const aafUID_t kAAFPropID_Root_MetaDictionary =
+{0x0D010301, 0x0101, 0x0100, {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02}};
+
+// SMPTE Label: 06-0E-2B-34-01-01-01-02-0D-01-03-01-01-02-01-00
+const aafUID_t kAAFPropID_Root_Header =
+{0x0D010301, 0x0102, 0x0100, {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02}};
+
+
 #endif // ! __AAFPropertyDefs_h__

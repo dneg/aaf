@@ -139,7 +139,7 @@ ImplAAFTypeDefObjectRef * ImplAAFWeakRefArrayValue::GetElementType(void) const /
       assert(AAFRESULT_SUCCEEDED(result));
       if (AAFRESULT_SUCCEEDED(result))
       {
-        pContainerElementType = dynamic_cast<ImplAAFTypeDefWeakObjRef *>((ImplAAFTypeDef *)pType); // extract obj from smartptr
+        pContainerElementType = dynamic_cast<ImplAAFTypeDefWeakObjRef *>((ImplAAFTypeDef *)pElementType); // extract obj from smartptr
       }
     }
   }
