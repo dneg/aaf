@@ -87,7 +87,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
 	v.patchLevel = 0;
 	v.type = kAAFVersionUnknown;
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFFile Test";
+	ProductInfo.productName = L"ComFileKindTest";
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
