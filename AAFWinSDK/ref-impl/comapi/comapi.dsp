@@ -218,10 +218,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFEventMobSlot.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEventTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFFile.cpp"
 # End Source File
 # Begin Source File
@@ -483,10 +479,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefString.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefStrongObjRef.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTypeDefTest.cpp"
 # End Source File
 # Begin Source File
 
