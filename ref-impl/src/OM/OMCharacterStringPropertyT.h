@@ -33,7 +33,7 @@
 
 // class OMCharacterStringProperty<CharacterType>
 
-template<typename CharacterType>
+template <typename CharacterType>
 OMCharacterStringProperty<CharacterType>::OMCharacterStringProperty(
                                                  const OMPropertyId propertyId,
                                                  const wchar_t* name)
@@ -42,7 +42,7 @@ OMCharacterStringProperty<CharacterType>::OMCharacterStringProperty(
   TRACE("OMCharacterStringProperty<CharacterType>::OMCharacterStringProperty");
 }
 
-template<typename CharacterType>
+template <typename CharacterType>
 OMCharacterStringProperty<CharacterType>::~OMCharacterStringProperty(void)
 {
   TRACE(
@@ -56,7 +56,7 @@ OMCharacterStringProperty<CharacterType>::~OMCharacterStringProperty(void)
   //                                  comprise the string.
   //   @rdesc The result of the conversion as a value of type
   //          pointer to <p CharacterType>.
-template<typename CharacterType>
+template <typename CharacterType>
 OMCharacterStringProperty<CharacterType>::operator const CharacterType* ()
 {
   return reinterpret_cast<const CharacterType*>(_bits);
@@ -67,7 +67,7 @@ OMCharacterStringProperty<CharacterType>::operator const CharacterType* ()
   //   @tcarg class | CharacterType | The type of the characters that
   //                                  comprise the string.
   //   @parm The string of <p CharacterType> characters to assign.
-template<typename CharacterType>
+template <typename CharacterType>
 void OMCharacterStringProperty<CharacterType>::assign(
                                           const CharacterType* characterString)
 {
@@ -88,7 +88,7 @@ void OMCharacterStringProperty<CharacterType>::assign(
   //                                  comprise the string.
   //   @rdesc The length of this <c OMCharacterStringProperty>.
   //   @this const
-template<typename CharacterType>
+template <typename CharacterType>
 size_t OMCharacterStringProperty<CharacterType>::length(void) const
 {
   return (size() - sizeof(CharacterType)) / sizeof(CharacterType);
@@ -102,7 +102,7 @@ size_t OMCharacterStringProperty<CharacterType>::length(void) const
   //   @parm  A  string of <p CharacterType> characters.
   //   @rdesc The length of the the string of <p CharacterType>
   //          characters <p characterString>.
-template<typename CharacterType>
+template <typename CharacterType>
 size_t OMCharacterStringProperty<CharacterType>::stringLength(
                                           const CharacterType* characterString)
 {
