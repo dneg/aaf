@@ -879,6 +879,26 @@ void OMStoredObject::save(const OMPropertyTable* table)
   closeStream(stream);
 }
 
+  // @mfunc Save a single weak reference.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The unique identification of the target.
+  //   @parm A tag identifying the collection in which the target resides.
+void OMStoredObject::save(OMPropertyId propertyId,
+                          int type,
+                          const OMUniqueObjectIdentification& id,
+                          OMUInt32 tag)
+{
+  TRACE("OMStoredObject::save");
+
+  const size_t size = sizeof(id) + sizeof(tag);
+  OMByte buffer[size];
+  memcpy(buffer, &id, sizeof(id));
+  memcpy(buffer + sizeof(id), &tag, sizeof(tag));
+
+  write(propertyId, type, (void *)buffer, size); 
+}
+
   // @mfunc Restore the vector named <p vectorName> into this
   //        <c OMStoredObject>.
   //   @parm The name of the vector.
@@ -1069,6 +1089,31 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   }
 
   closeStream(stream);
+}
+
+  // @mfunc Restore a single weak reference.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The unique identification of the target.
+  //   @parm A tag identifying the collection in which the target resides.
+void OMStoredObject::restore(OMPropertyId propertyId,
+                             int type,
+                             OMUniqueObjectIdentification& id,
+                             OMUInt32& tag)
+{
+  TRACE("OMStoredObject::restore");
+
+  const size_t size = sizeof(id) + sizeof(tag);
+  OMByte buffer[size];
+
+  read(propertyId, type, buffer, size);
+  memcpy(&id, buffer, sizeof(id));
+  memcpy(&tag, buffer + sizeof(id), sizeof(tag));
+
+  if (byteOrder() != hostByteOrder()) {
+	reorderUniqueObjectIdentification(id);
+	reorderUInt32(tag);
+  }
 }
 
 IStream* OMStoredObject::createStream(IStorage* storage,
