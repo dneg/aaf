@@ -64,13 +64,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	aafUID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
-	HRESULT						hr;
+	HRESULT						hr = S_OK;
 	aafLength_t					zero;
 	aafTimecode_t				startTC;
 
 	CvtInt32toLength(0, zero);
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"AAFTimecode Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -185,7 +185,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t				numMobs;
-	HRESULT						hr;
+	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
 	ProductInfo.productName = L"Make AVR Example. NOT!";
