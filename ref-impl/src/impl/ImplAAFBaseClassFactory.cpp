@@ -35,8 +35,6 @@
 #define CLSID_AAFDefinitionObject CLSID_AAFDefObject
 #define CLSID_AAFEdgeCode CLSID_AAFEdgecode
 #define CLSID_AAFOperationDefinition CLSID_AAFOperationDef
-#define CLSID_AAFEssenceGroup CLSID_AAFMediaGroup
-#define CLSID_AAFFilmDescriptor CLSID_AAFMediaFilmDescriptor
 #define CLSID_AAFInterchangeObject CLSID_AAFObject
 #define CLSID_AAFJPEGImageData CLSID_AAFJPEGData
 #define CLSID_AAFMIDIFileData CLSID_AAFMIDIData
@@ -58,8 +56,6 @@
 #define CLSID_AAFCodecDefinition CLSID_AAFCodecDef
 #define CLSID_AAFContainerDefinition CLSID_AAFContainerDef
 #define CLSID_AAFInterpolationDefinition CLSID_AAFInterpolationDef
-#define CLSID_AAFMediaFilmDescriptor CLSID_AAFFilmDescriptor
-#define CLSID_AAFMediaGroup CLSID_AAFEssenceGroup
 
 //
 // Include the AAF macro invocations.
