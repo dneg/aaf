@@ -28,7 +28,7 @@
 #include <wstring.h>	// include wcslen declaration.
 #endif
 
-//extern "C" const aafClassID_t CLSID_AAFFile;
+extern "C" const aafClassID_t CLSID_AAFPluginManager;
 
 // single instance of this class; initialized by first call to GetInstance().
 /*static*/ ImplAAFSession * ImplAAFSession::_singleton; // = 0;
@@ -54,13 +54,14 @@ void ImplAAFSession::InitPluginManager (void)
 {
 	if(_plugins == NULL)
 	{
-		_plugins = new ImplAAFPluginManager;
+		_plugins = (ImplAAFPluginManager *)CreateImpl(CLSID_AAFPluginManager);
 		_plugins->Init();
 	}
 }
 
 class ImplAAFPluginManager *ImplAAFSession::GetPluginManager (void)
 {
+	AcquireImplReference(_plugins);
 	return(_plugins);
 }
 
