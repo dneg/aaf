@@ -230,8 +230,11 @@ HRESULT Aaf2Omf::OpenOutputFile ()
 	
 	if (gpGlobals->bDeleteOutput)
 	{
-		UTLstdprintf("Previous file: %s will be overwritten\n", gpGlobals->sOutFileName);
-		deleteFile(gpGlobals->sOutFileName);
+		rc = deleteFile(gpGlobals->sOutFileName);
+		if (rc == AAFRESULT_SUCCESS)
+			UTLstdprintf("Output file: %s will be overwritten\n", gpGlobals->sOutFileName);
+		else
+			UTLstdprintf("Output file: %s will be created\n", gpGlobals->sOutFileName);
 	}
 	// Retrieve AAF file's last identification
 	rc = pHeader->GetLastIdentification(&pIdent);
@@ -1262,6 +1265,21 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		}
 		goto Cleanup;
 	}
+
+	rc = pComponent->QueryInterface(IID_IAAFOperationGroup, (void **)&pEffect);
+	if (SUCCEEDED(rc))
+	{
+		//Component is an effect
+		OMF2::omfEffObj_t	effect = NULL;
+
+		if (gpGlobals->bVerboseMode)
+		{
+			UTLstdprintf("%sProcessing Effect of length: %ld\n ", gpGlobals->indentLeader, (int)length);
+		}
+		rc = ConvertEffects(pEffect, &effect);
+
+		goto Cleanup;
+	}
 	rc = pComponent->QueryInterface(IID_IAAFTransition, (void **)&pTransition);
 	if (SUCCEEDED(rc))
 	{
@@ -1303,7 +1321,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		DecIndentLevel();
 		goto Cleanup;
 	}
-
+	
 	char szTempUID[64];
 	AUIDtoString(&datadef ,szTempUID);
 	if (gpGlobals->bVerboseMode)
@@ -1358,6 +1376,46 @@ HRESULT Aaf2Omf::GetUniqueNameFromAUID(aafUID_t Datadef,
 	if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(UniqueName, "omfi:effect:VideoDissolve");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoFadeToBlack, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:VideoFadeToBlack");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectSMPTEVideoWipe, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:SMPTEVideoWipe");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoSpeedControl, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:VideoSpeedControl");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoRepeat, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:VideoRepeat");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoFrameToMask, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:VideoFrameMask");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectMonoAudioDissolve, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:SimpleMonoAudioDissolve");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectMonoAudioPan, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:MonoAudioPan");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectMonoAudioGain, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:MonoAudioGain");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectStereoAudioDissolve, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:StereoAudioDissolve");
+	}
+	else if ( memcmp((char *)&Datadef, (char *)&kAAFEffectStereoAudioGain, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(UniqueName, "omfi:effect:StereoAudioGain");
 	}
 	else
 	{
@@ -1952,8 +2010,6 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 //		else
 //		{
 //		}
-		if (gpGlobals->bVerboseMode)
-			UTLstdprintf("%sConverting Effect of length = %ld\n", gpGlobals->indentLeader, length);
 		GetUniqueNameFromAUID(effectDefAUID, effectName);
 		bDefExists = OMF2::omfiEffectDefLookup(OMFFileHdl, effectName, &effectDef, &OMFError);
 		if (OMFError == OMF2::OM_ERR_NONE && !bDefExists)
