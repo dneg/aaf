@@ -206,7 +206,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pFile->GetHeader(&pHeader));
 
 	  // Get the AAF Dictionary so that we can create valid AAF objects.
-	  checkResult(pFile->GetDictionary(&pDictionary));
+	  checkResult(pHeader->GetDictionary(&pDictionary));
 
       // Make sure the header returns us the same dictionary as the file
 	  IAAFDictionarySP pDictionaryFromHeader;
