@@ -29,7 +29,6 @@
 
 #include "AAF.h"
 
-
 #include <iostream.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -68,6 +67,22 @@ inline void checkExpression(bool expression, HRESULT r)
 {
   if (!expression)
     throw r;
+}
+
+// Function to compare COM interface pointers, taken from 
+// CAAFTypeDefFixedArrayTest.cpp.
+template <class T1, class T2>
+aafBoolean_t  AreUnksSame(T1& cls1, T2& cls2)
+{
+	IAAFSmartPointer<IUnknown>    spUnk1, spUnk2;
+	
+	checkResult(cls1->QueryInterface(IID_IUnknown, (void **)&spUnk1));
+	checkResult(cls2->QueryInterface(IID_IUnknown, (void **)&spUnk2));
+	
+	if (spUnk1 == spUnk2)
+		return kAAFTrue;
+	else
+		return kAAFFalse;
 }
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
@@ -130,8 +145,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	bool bFileOpen = false;
 	HRESULT			hr = S_OK;
 	aafUID_t		uid;
-/*	long			test;
-*/
 
 	try
 	{
@@ -159,6 +172,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		uid = kAAFClassID_WAVEDescriptor;
 		checkResult(pDictionary->LookupClassDef(uid, &classDef));
 		checkResult(pPlugDef->SetFileDescriptorClass (classDef));
+
+		// Make sure GetFileDescriptorClass() returns correct value
+		IAAFClassDef *pWaveClassDef=0,*pReturnedClassDef=0;
+		aafUID_t uid = kAAFClassID_WAVEDescriptor;
+		checkResult(pDictionary->LookupClassDef(uid, &pWaveClassDef));
+		checkResult(pPlugDef->GetFileDescriptorClass(&pReturnedClassDef));
+		// COM interface pointers pReturnedClassDef and pWaveClassDef should be 
+		// equal
+		checkExpression(AreUnksSame(pReturnedClassDef,pWaveClassDef)==kAAFTrue,
+			AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
@@ -230,6 +253,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pCodec->AreThereFlavours (&testResult));
 		checkExpression (kAAFFalse == testResult,
 						 AAFRESULT_TEST_FAILED);
+		IAAFClassDef *pWaveClassDef=0,*pReturnedClassDef=0;
+		aafUID_t uid = kAAFClassID_WAVEDescriptor;
+		checkResult(pDictionary->LookupClassDef(uid, &pWaveClassDef));
+		checkResult(pCodec->GetFileDescriptorClass(&pReturnedClassDef));
+		// COM interface pointers pReturnedClassDef and pWaveClassDef should be 
+		// equal
+		checkExpression(AreUnksSame(pReturnedClassDef,pWaveClassDef)==kAAFTrue,
+			AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{
@@ -259,7 +290,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	return hr;
 }
  
-
 extern "C" HRESULT CAAFCodecDef_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
@@ -276,16 +306,6 @@ extern "C" HRESULT CAAFCodecDef_test()
 		cerr << "CAAFCodecDef_test..."
 			 << "Caught general C++ exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
-	}
-
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following IAAFCodecDef methods have not been tested:" << endl; 
-		cout << "     SetFileDescriptorClass" << endl; 
-		cout << "     GetFileDescriptorClass" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 
 	return hr;
