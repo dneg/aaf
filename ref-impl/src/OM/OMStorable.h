@@ -52,9 +52,11 @@ public:
 
   const char* pathName(void) const;
 
-  // The stored representation of this objects.
+  // The stored representation of this object.
   //
   OMStoredObject* store(void) const;
+
+  void setStore(OMStoredObject* store);
 
 private:
 
@@ -71,8 +73,6 @@ private:
   const char* name(void) const;
 
 protected:
-
-  void setStore(OMStoredObject* store);
 
   OMStorable* containingObject(void) const;
 
