@@ -56,6 +56,14 @@ public:
 
 /****/
   //****************
+  // Initialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+		// @parm [in] reference to a file mob
+        (ImplAAFSourceMob * pFileMob);
+
+  //****************
   // Write()
   //
   virtual AAFRESULT STDMETHODCALLTYPE

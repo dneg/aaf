@@ -40,6 +40,32 @@ AD_CLASS_UUID(6a33f4e1, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(6a33f4e2, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XMETHOD1(Initialize,
+[in],
+objIn,
+AAFSourceMob,
+pFileMob,
+reference to a file mob,
+     Associates a weak reference to the given file mob with the
+  // essence data.
+  //
+  // Succeeds if all of the following are true:
+  // - the pFileMob pointer is valid and points to 
+  // a file mob \(contains a file descriptor\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFileMob is null.)
+
 AD_METHOD3(Write,
 [in],aafUInt32, bytes, write this many bytes,
 [out\\\, size_is\\\(bytes\\\)],aafDataBuffer_t,buffer, here is the buffer,
