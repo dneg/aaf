@@ -147,10 +147,6 @@ SOURCE="..\..\..\ref-impl\plugins\CAAFWAVECodec.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\plugins\esdatadst.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\plugins\jpegesdatadst.cpp"
 # End Source File
 # Begin Source File
