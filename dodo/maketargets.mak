@@ -31,7 +31,7 @@ include aafobjects.mk
 
 INCLUDE_DIR = ../ref-impl/include
 
-targets: $(DODO_TARGETS) $(PLUGIN_TARGETS) $(INCLUDE_DIR)/com-api/AAF.idl $(INCLUDE_DIR)/ref-api/AAF.h $(PLUGIN_DIR)/Plugin.idl
+targets: $(DODO_TARGETS) $(INCLUDE_DIR)/com-api/AAF.idl $(INCLUDE_DIR)/ref-api/AAF.h $(PLUGIN_DIR)/AAFPlugin.idl
 
 $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	@ echo Generating AAF.idl...
@@ -72,7 +72,7 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	) > $(INCLUDE_DIR)/com-api/AAF.idl
 	chmod -w $(INCLUDE_DIR)/com-api/AAF.idl
 
-$(PLUGIN_DIR)/Plugin.idl : $(PLUGIN_FIDL_TARGETS)
+$(PLUGIN_DIR)/AAFPlugin.idl : $(PLUGIN_FIDL_TARGETS)
 	@ echo Generating Plugin.idl...
 	$(RM) -f $(PLUGIN_DIR)/AAFPlugin.idl
 	@ ( echo "cpp_quote(\"//=--------------------------------------------------------------------------=\")" ; \
