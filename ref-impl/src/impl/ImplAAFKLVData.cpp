@@ -39,7 +39,7 @@
 
 #include "ImplAAFDictionary.h"
 #include "ImplAAFDataDef.h"
-#include "ImplAAFTypeDefIndirect.h"
+#include "ImplAAFTypeDefOpaque.h"
 #include "ImplAAFTypeDefRename.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
@@ -120,20 +120,13 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVData::GetKey (aafUID_t* pKey)
 {
 	AAFRESULT		hr = AAFRESULT_SUCCESS;
-	ImplAAFTypeDef	*tmp = NULL;
 
 	if(pKey == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	// Validate the property and get the actual type definition from the
+	// Validate the property and get the actual type id from the
   // indirect value.
-	hr = ImplAAFTypeDefIndirect::GetActualPropertyType (_value, &tmp);
-	if(hr == AAFRESULT_SUCCESS)
-	{
-		tmp->GetAUID(pKey);
-		tmp->ReleaseReference();
-		tmp = 0;
-	}
+	hr = ImplAAFTypeDefIndirect::GetActualPropertyTypeID (_value, pKey);
 
 	return hr;
 }
