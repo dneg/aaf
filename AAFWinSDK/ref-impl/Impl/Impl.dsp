@@ -266,6 +266,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFIdentification.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFImportDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFInterpolationDef.cpp"
 # End Source File
 # Begin Source File
@@ -326,7 +330,11 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFOperationGroup.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFImportDescriptor.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameter.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
@@ -335,18 +343,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPCMDescriptor.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPhysicalDescriptor.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSoundDescriptor.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameter.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
@@ -438,6 +434,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSetFileBits.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSoundDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSourceClip.cpp"
 # End Source File
 # Begin Source File
@@ -475,6 +475,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFStrongRefValue.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValue.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueUtil.cpp"
 # End Source File
 # Begin Source File
 

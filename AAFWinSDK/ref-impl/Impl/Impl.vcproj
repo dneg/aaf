@@ -3,6 +3,7 @@
 	ProjectType="Visual C++"
 	Version="7.10"
 	Name="Impl"
+	ProjectGUID="{719FBA15-E7E2-479D-833A-8A8BA87FEC10}"
 	SccProjectName=""
 	SccLocalPath="">
 	<Platforms>
@@ -2116,6 +2117,9 @@
 					PreprocessorDefinitions=""
 					ForcedIncludeFiles=""/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTaggedValueUtil.cpp">
 		</File>
 		<File
 			RelativePath="..\..\..\ref-impl\src\impl\ImplAAFTapeDescriptor.cpp">
