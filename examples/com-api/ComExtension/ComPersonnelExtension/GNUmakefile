@@ -74,7 +74,7 @@ clean :
 	@$(RM) $(CXXOBJS)
 	@$(RM) $(CXXOBJS2)
 	@$(RM) $(DEPS)
-	@$(RM) $(AAFSDKBINDIR)/ComPersonnelExtension$(EXE)
+	@$(RM) $(AAFSDKBINDIR)/libAAFPersonnelExtension$(DLL)
 	@$(RM) $(AAFSDKBINDIR)/ComPersonnelPluginWrite$(EXE)
 	@$(RMDIR) $(OBJDIR)/ii_files
 
