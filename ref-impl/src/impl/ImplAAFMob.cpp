@@ -595,7 +595,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pDictionary != NULL)
 		  pDictionary->ReleaseReference();
 		pDictionary = 0;
-		return(XCODE());
 	}
 	XEND;
 
@@ -660,7 +659,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pDictionary != NULL)
 		  pDictionary->ReleaseReference();
 		pDictionary = 0;
-		return(XCODE());
 	  }
 	XEND;
 
@@ -699,7 +697,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if (theEnum)
 		  theEnum->ReleaseReference();
 		theEnum = 0;
-		return(XCODE());
 	}
 	XEND;
 	
@@ -779,7 +776,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pDictionary != NULL)
 		  pDictionary->ReleaseReference();
 		pDictionary = 0;
-		return(XCODE());
 	}
 	XEND;
 
@@ -866,7 +862,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if (theEnum)
 		  theEnum->ReleaseReference();
 		theEnum = 0;
-		return(XCODE());
 	}
 	XEND;
 	
@@ -962,7 +957,6 @@ AAFRESULT STDMETHODCALLTYPE
 		  theEnum->ReleaseReference();
 		  theEnum = 0;
 		}
-	  return(XCODE());
 	}
   XEND;
 	
@@ -1084,7 +1078,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pdwnInput != NULL)
 		  pdwnInput->ReleaseReference();
 		pdwnInput = 0;
-		return(XCODE());
 	}
 	XEND;
 	
@@ -1239,7 +1232,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if (dict)
 		  dict->ReleaseReference();
 		dict = 0;
-		return(XCODE());
 	}
 	XEND;
 	
@@ -1415,7 +1407,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	  {
 		/* NOTE: This function needs more cleanup (delete mob, out of index) */
-		return(XCODE());
 	  }
 	XEND;
 
@@ -1586,7 +1577,6 @@ AAFRESULT STDMETHODCALLTYPE
 		/* NOTE: This function needs more cleanup (delete mob, out of index) */
 		if (XCODE() == AAFRESULT_TABLE_DUP_KEY)
 		  return(AAFRESULT_DUPLICATE_MOBID);
-		return(XCODE());
 	  }
 	XEND;
 
@@ -1891,7 +1881,7 @@ AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 	XEXCEPT
 	{
 		/* At least try and return length if we can */
-		return(XCODE());
+		//return(XCODE());
 	}
 	XEND;
 	
