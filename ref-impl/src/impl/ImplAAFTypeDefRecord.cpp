@@ -61,7 +61,8 @@ ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
 	_registeredSize (0),
 	_internalSizes (0),
 	_cachedCount ((aafUInt32) -1),
-	_cachedMemberTypes (0)
+	_cachedMemberTypes (0),
+	_registrationAttempted (AAFFalse)
 {
   _persistentProperties.put(_memberTypes.address());
   _persistentProperties.put(_memberNames.address());
@@ -725,7 +726,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 		  // We know it's not the last member, so it's safe to index
 		  // to the next element in pOffsets array.
-		  _internalSizes[i] = pOffsets[i+1] = pOffsets[i];
+		  _internalSizes[i] = pOffsets[i+1] - pOffsets[i];
 		}
 	}
 
@@ -919,6 +920,17 @@ size_t ImplAAFTypeDefRecord::PropValSize (void) const
 
 aafBool ImplAAFTypeDefRecord::IsRegistered (void) const
 {
+  if (!_registeredOffsets)
+	{
+	  if (! _registrationAttempted)
+		{
+		  ImplAAFDictionarySP pDict;
+		  AAFRESULT hr = GetDictionary(&pDict);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  pDict->pvtAttemptBuiltinSizeRegistration ((ImplAAFTypeDefRecord*) this);
+		  ((ImplAAFTypeDefRecord*)this)->_registrationAttempted = AAFTrue;
+		}
+	}
   return (_registeredOffsets ? AAFTrue : AAFFalse);
 }
 
