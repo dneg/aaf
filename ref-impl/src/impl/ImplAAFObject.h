@@ -192,23 +192,12 @@ public:
     GetDictionary(ImplAAFDictionary **ppDictionary) const;
 
 
-  // iterate across the properties, calling initialialize on each.
-  //
-  void InitOMProperties (void);
-
   void pvtSetSoid (const aafUID_t & id);
 
-public:
-  virtual const OMClassId& classId(void) const;
+  // Initialize the OM Properties in this object.
+  void InitOMProperties ();
 
-protected:
-  void protInitProperty (OMProperty & rPropToInit,
-						 const OMPropertyId propertyId,
-						 const char* name,
-						 const aafUID_t & rTypeID,
-						 const bool isOptional = false) const;
-  //
-  // Initializes the given OM property.
+  virtual const OMClassId& classId(void) const;
 
 private:
 
@@ -219,8 +208,6 @@ private:
 
   ImplAAFClassDef *        _cachedDefinition;
 
-  aafBool                  _OMPropsInited;
-
   // stored object ID
   aafUID_t                 _soid;
 
@@ -229,6 +216,8 @@ private:
   enum { kMaxAddedPropCount = 100 };
   OMProperty* _addedProps[kMaxAddedPropCount];
   size_t _addedPropCount;
+
+  aafBool _OMPropInitStarted;
 };
 
 //
