@@ -136,10 +136,11 @@ HRESULT CAAFModuleTest::Test
 					cout << "NOT IMPLEMENTED!\n" << endl;
 				else
 					cout << "FAILED!\n" << endl;
+					
 			
 					
 
-				return S_OK;
+				return hr;
 			}
 		++index;	
 		}
@@ -212,8 +213,12 @@ HRESULT CAAFModuleTest::Test
 			cout<< "       More tests need to be implemented\n"<<endl;
 		}
 
-		
+		if ( 0 < failCount)
+		{
+			hr = AAFRESULT_TEST_FAILED;
+		}
 	}
+
 
 	return hr;
 }
