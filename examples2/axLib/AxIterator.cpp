@@ -18,6 +18,13 @@
 //
 //=---------------------------------------------------------------------=
 
+#if WIN32
+// Disable VC6 
+// warning C4660: template-class specialization 'AxArrayIterator<struct IAAFTypeDefFixedArray>' is already instantiated
+// etc
+#pragma warning( disable:4660 )
+#endif
+
 #include "AxIterator.h"
 
 // Required for record iterator... probably better
