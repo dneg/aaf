@@ -8,12 +8,11 @@ AAFDefinitionObject\
 #c
 AD_HEAD
 
-AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFControlCodeDefinition)
 AD_FORWARD_DECLARATION(AAFLocator)
-AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
 AD_FORWARD_DECLARATION(EnumAAFLocators)
 AD_FORWARD_DECLARATION(EnumAAFControlCodeDefinitions)
+//AxD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
 
 
 /******************************************\
@@ -79,29 +78,29 @@ AD_METHOD1(SetIsTimeWarp,
 		   is timewarp value, 
 		   Sets the IsTimeWarp boolean.)
 
-AD_XMETHOD1(AppendDegradeToEffects,
-			[in\,ref],
-			objIn,
-			AAFEffectDefinition,
-			pEffectDefinition, 
-			Degrade To Effect Definition Object,
-			Add the effect definition object to the DegradeTo list of definitions.)
-
-AD_XMETHOD1(RemoveDegradeToEffects,
-			[in\,ref], 
-			objIn,
-			AAFEffectDefinition,
-			pEffectDefinition, 
-			Degrade To Effect Definition Object,
-			Remove the effect definition object from the DegradeTo list of definitions.)
-
-AD_XMETHOD1(GetDegradeToEffects,
-			[out\,retval], 
-			objOut,
-			EnumAAFEffectDefinitions,
-			ppEnum, 
-			Effect Definition Enumeration,
-			Return an enumerator for aaf effect definitions.)
+//AxD_XMETHOD1(AppendDegradeToEffects,
+//			[in],
+//			objIn,
+//			AAFEffectDefinition,
+//			pEffectDefinition, 
+//			Degrade To Effect Definition Object,
+//			Add the effect definition object to the DegradeTo list of definitions.)
+//
+//AxD_XMETHOD1(RemoveDegradeToEffects,
+//			[in], 
+//			objIn,
+//			AAFEffectDefinition,
+//			pEffectDefinition, 
+//			Degrade To Effect Definition Object,
+//			Remove the effect definition object from the DegradeTo list of definitions.)
+//
+//AxD_XMETHOD1(GetDegradeToEffects,
+//			[out\,retval], 
+//			objOut,
+//			EnumAAFEffectDefinitions,
+//			ppEnum, 
+//			Effect Definition Enumeration,
+//			Return an enumerator for aaf effect definitions.)
 
 AD_METHOD1(GetManufacturerAUID,
 		   [out\\\,retval],
@@ -118,7 +117,7 @@ AD_METHOD1(SetManufacturerAUID,
 		   Sets the Manufacturer AUID for this effect definition.)
 
 AD_XMETHOD1(AppendPluginLocator,
-			[in\,ref],
+			[in],
 			objIn,
 			AAFLocator,
 			pAAFLocator, 
@@ -126,7 +125,7 @@ AD_XMETHOD1(AppendPluginLocator,
 			Add the effect definition object to the Plugin Locator list. )
 
 AD_XMETHOD1(RemovePluginLocator,
-			[in\,ref], 
+			[in], 
 			objIn,
 			AAFLocator,
 			pAAFLocator, 
@@ -184,7 +183,7 @@ AD_METHOD1(SetBypass,
 		   Sets the media segment index.)
 
 AD_XMETHOD1(AppendControlCodeDefs,
-			[in\,ref],
+			[in],
 			objIn,
 			AAFControlCodeDefinition,
 			pAAFControlCodeDef, 
@@ -192,14 +191,14 @@ AD_XMETHOD1(AppendControlCodeDefs,
 			Add the Control Code Definition object to the list. )
 
 AD_XMETHOD1(RemoveControlCodeDefs,
-			[in\,ref], 
+			[in], 
 			objIn,
 			AAFControlCodeDefinition,
 			pAAFControlCodeDef, 
 			Control Code definition Object,
 			Remove the Control Code Definition object from the list. )
 
-AD_XMETHOD1(GetPluginLocators,
+AD_XMETHOD1(GetControlCodeDefinitions,
 			[out\,retval], 
 			objOut,
 			EnumAAFControlCodeDefinitions,
