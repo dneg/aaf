@@ -32401,11 +32401,11 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
     // The multiXfer_t structure has the following fields, which
     // specify one channel of data:
     //
-    //     - essenceDef  [IN] -- The essence type definition
-    //     - physical    [IN] -- The physical input-output channel
-    //     - numSamples  [IN] -- The number of samples to transfer
-    //     - buflen      [IN] -- The size of the buffer
-    //     - buffer      [IN] -- The buffer for this
+    //   essenceDef  [IN] -- The essence type definition
+    //   physical    [IN] -- The physical input-output channel
+    //   numSamples  [IN] -- The number of samples to transfer
+    //   buflen      [IN] -- The size of the buffer
+    //   buffer      [IN] -- The buffer for this
     /*[in, size_is(elemCount)]*/ aafmMultiXfer_t *  xferArray,
 
     // Results go into this array.
@@ -32413,8 +32413,8 @@ DECLARE_INTERFACE_(IAAFEssenceMultiAccess, IUnknown)
     // The aafmMultiResult_t structure has the following fields,
     // which return result for one channel of data: 
     //
-    //     - bytesXfered   [OUT] -- The total number of bytes transferred
-    //     - samplesXfered [OUT] -- The total number of samples transferred
+    //   bytesXfered   [OUT] -- The total number of bytes transferred
+    //   samplesXfered [OUT] -- The total number of samples transferred
     /*[out, size_is(elemCount)]*/ aafmMultiResult_t *  resultArray) PURE;
 
   END_INTERFACE
