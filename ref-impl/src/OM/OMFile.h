@@ -157,6 +157,10 @@ public:
   static bool isRecognized(OMRawStorage* rawStorage,
                            OMStoredObjectEncoding& encoding);
 
+  typedef OMSet<OMStoredObjectEncoding, OMStoredObjectFactory*> FactorySet;
+  typedef OMSetIterator<OMStoredObjectEncoding,
+                        OMStoredObjectFactory*> FactorySetIterator;
+
   static void registerFactory(const OMStoredObjectEncoding& encoding,
                               OMStoredObjectFactory* factory);
 
@@ -354,7 +358,7 @@ private:
   bool _isNew;
   bool _isValid;
   OMByteOrder _byteOrder;
-  static OMSet<OMStoredObjectEncoding, OMStoredObjectFactory*> _factory;
+  static FactorySet _factory;
 
 };
 

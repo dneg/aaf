@@ -385,9 +385,7 @@ bool OMFile::isRecognized(const wchar_t* fileName,
   TRACE("OMFile::isRecognized");
   bool result = false;
 
-  OMSetIterator<OMStoredObjectEncoding,
-                OMStoredObjectFactory*> iterator(_factory, OMBefore);
-
+  FactorySetIterator iterator(_factory, OMBefore);
   while (++iterator) {
     if (iterator.value()->isRecognized(fileName)) {
       result = true;
@@ -411,9 +409,7 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
   TRACE("OMFile::isRecognized");
   bool result = false;
 
-  OMSetIterator<OMStoredObjectEncoding,
-                OMStoredObjectFactory*> iterator(_factory, OMBefore);
-
+  FactorySetIterator iterator(_factory, OMBefore);
   while (++iterator) {
     if (iterator.value()->isRecognized(rawStorage)) {
       result = true;
@@ -463,9 +459,7 @@ void OMFile::removeAllFactories(void)
 {
   TRACE("OMFile::removeAllFactories");
 
-  OMSetIterator<OMStoredObjectEncoding,
-                OMStoredObjectFactory*> iterator(_factory, OMBefore);
-
+  FactorySetIterator iterator(_factory, OMBefore);
   while (++iterator) {
     OMStoredObjectFactory* factory = iterator.value();
     delete factory;
@@ -1115,4 +1109,4 @@ OMRootStorable* OMFile::restoreRoot(void)
   return root;
 }
 
-OMSet<OMStoredObjectEncoding, OMStoredObjectFactory*> OMFile::_factory;
+OMFile::FactorySet OMFile::_factory;
