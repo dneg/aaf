@@ -559,6 +559,142 @@ STDAPI AAFFileIsAAFFile (
 }
 
 
+
+//***********************************************************
+//
+// AAFCreateRawStorageMemory()
+//
+STDAPI AAFCreateRawStorageMemory (
+  aafFileAccess_e  access,
+  IAAFRawStorage ** ppNewRawStorage)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->CreateRawStorageMemory(access,
+										 ppNewRawStorage);
+  }
+  catch (const char* exStr)
+  {
+    // Return a reasonable exception code.
+    //
+    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
+    hr = AAFRESULT_ASSERTION_VIOLATION;
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
+//***********************************************************
+//
+// AAFCreateRawStorageDisk()
+//
+STDAPI AAFCreateRawStorageDisk (
+  aafCharacter_constptr  filename,
+  aafFileExistence_e  existence,
+  aafFileAccess_e  access,
+  IAAFRawStorage ** ppNewRawStorage)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->CreateRawStorageDisk
+	  (filename,
+	   existence,
+	   access,
+	   ppNewRawStorage);
+  }
+  catch (const char* exStr)
+  {
+    // Return a reasonable exception code.
+    //
+    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
+    hr = AAFRESULT_ASSERTION_VIOLATION;
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
+//***********************************************************
+//
+// AAFCreateAAFFileOnRawStorage()
+//
+STDAPI AAFCreateAAFFileOnRawStorage (
+  IAAFRawStorage * pRawStorage,
+  aafUID_constptr  pFileKind,
+  aafUInt32  modeFlags,
+  aafProductIdentification_constptr  pIdent,
+  IAAFFile ** ppNewFile)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->CreateAAFFileOnRawStorage
+	  (pRawStorage,
+	   pFileKind,
+	   modeFlags,
+	   pIdent,
+	   ppNewFile);
+  }
+  catch (const char* exStr)
+  {
+    // Return a reasonable exception code.
+    //
+    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
+    hr = AAFRESULT_ASSERTION_VIOLATION;
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
 //***********************************************************
 //
 // AAFGetPluginManager()
@@ -696,6 +832,24 @@ HRESULT AAFDLL::Load(const char *dllname)
   if (AAFRESULT_FAILED(rc))
     return rc;
 
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFCreateRawStorageMemory",
+					   (AAFSymbolAddr *)&_pfnCreateRawStorageMemory);
+  if (AAFRESULT_FAILED(rc))
+    return rc;
+
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFCreateRawStorageDisk",
+					   (AAFSymbolAddr *)&_pfnCreateRawStorageDisk);
+  if (AAFRESULT_FAILED(rc))
+    return rc;
+
+  rc = ::AAFFindSymbol(_libHandle,
+					   "AAFCreateAAFFileOnRawStorage",
+					   (AAFSymbolAddr *)&_pfnCreateAAFFileOnRawStorage);
+  if (AAFRESULT_FAILED(rc))
+    return rc;
+
   return rc;
 }
 
@@ -734,6 +888,9 @@ void AAFDLL::ClearEntrypoints()
   _pfnOpenNewModify = NULL;
   _pfnOpenTransient = NULL;
   _pfnGetPluginManager = NULL;
+  _pfnCreateRawStorageMemory = 0;
+  _pfnCreateRawStorageDisk = 0;
+  _pfnCreateAAFFileOnRawStorage = 0;
 }
 
 
@@ -791,4 +948,41 @@ HRESULT AAFDLL::GetPluginManager (
   TRACE("AAFDLL::GetPluginManager");
   ASSERT("Valid dll callback function", _pfnGetPluginManager);
   return _pfnGetPluginManager(ppPluginManager);  
+}
+
+HRESULT AAFDLL::CreateRawStorageMemory (
+	aafFileAccess_e  access,
+	IAAFRawStorage ** ppNewRawStorage)
+{
+  TRACE("AAFDLL::CreateRawStorageMemory");
+  ASSERT("Valid dll callback function", _pfnCreateRawStorageMemory);
+  return _pfnCreateRawStorageMemory(access, ppNewRawStorage);
+}
+
+HRESULT AAFDLL::CreateRawStorageDisk (
+    aafCharacter_constptr  filename,
+    aafFileExistence_e  existence,
+	aafFileAccess_e  access,
+	IAAFRawStorage ** ppNewRawStorage)
+{
+  TRACE("AAFDLL::CreateRawStorageDisk");
+  ASSERT("Valid dll callback function", _pfnCreateRawStorageDisk);
+  return _pfnCreateRawStorageDisk(filename, existence, access, ppNewRawStorage);  
+}
+
+HRESULT AAFDLL::CreateAAFFileOnRawStorage (
+    IAAFRawStorage * pRawStorage,
+	aafUID_constptr  pFileKind,
+	aafUInt32  modeFlags,
+	aafProductIdentification_constptr  pIdent,
+	IAAFFile ** ppNewFile)
+{
+  TRACE("AAFDLL::CreateAAFFileOnRawStorage");
+  ASSERT("Valid dll callback function", _pfnCreateAAFFileOnRawStorage);
+  return _pfnCreateAAFFileOnRawStorage
+	(pRawStorage,
+	 pFileKind,
+	 modeFlags,
+	 pIdent,
+	 ppNewFile);
 }
