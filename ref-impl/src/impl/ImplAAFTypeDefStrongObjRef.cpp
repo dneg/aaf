@@ -51,7 +51,7 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefStrongObjRef::ImplAAFTypeDefStrongObjRef ()
-  : _referencedType (PID_TypeDefinitionStrongObjectReference_ReferencedType, "ReferencedType")
+  : _referencedType (PID_TypeDefinitionStrongObjectReference_ReferencedType, "ReferencedType", "/Dictionary/ClassDefinitions", PID_DefinitionObject_Identification)
 {
   _persistentProperties.put(_referencedType.address());
 }
@@ -64,7 +64,7 @@ ImplAAFTypeDefStrongObjRef::~ImplAAFTypeDefStrongObjRef ()
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStrongObjRef::pvtInitialize (
       const aafUID_t & id,
-      const aafUID_t & refdObjID,
+      const ImplAAFClassDef * pClassDef,
       const aafCharacter * pTypeName)
 {
   if (! pTypeName) return AAFRESULT_NULL_PARAM;
@@ -75,7 +75,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (AAFRESULT_FAILED (hr))
     return hr;
 
-  _referencedType = refdObjID;
+  _referencedType = pClassDef;
 
   return AAFRESULT_SUCCESS;
 }
@@ -152,28 +152,18 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStrongObjRef::GetObjectType (ImplAAFClassDef ** ppObjType)
 {
-  if (! ppObjType) return AAFRESULT_NULL_PARAM;
+  if (! ppObjType)
+	return AAFRESULT_NULL_PARAM;
 
-  if (! _cachedObjType)
-	{
-	  ImplAAFDictionarySP pDict;
+   if(_referencedType.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+  ImplAAFClassDef *pClassDef = _referencedType;
 
-	  AAFRESULT hr;
-	  hr = (GetDictionary(&pDict));
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (pDict);
-
-	  hr = pDict->LookupClassDef (_referencedType, &_cachedObjType);
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (_cachedObjType);
-	}
-  assert (ppObjType);
-  *ppObjType = _cachedObjType;
+  *ppObjType = pClassDef;
   assert (*ppObjType);
   (*ppObjType)->AcquireReference ();
   return AAFRESULT_SUCCESS;
+
 }
 
 // Override from AAFTypeDefObjectRef
