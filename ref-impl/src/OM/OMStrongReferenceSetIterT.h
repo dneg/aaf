@@ -68,7 +68,7 @@ OMStrongReferenceSetIterator<UniqueIdentification,
   //   @rdesc The new <c OMStrongReferenceSetIterator>.
   //   @this const
 template <typename UniqueIdentification, typename ReferencedObject>
-OMReferenceContainerIterator<ReferencedObject>*
+OMReferenceContainerIterator*
 OMStrongReferenceSetIterator<UniqueIdentification,
                              ReferencedObject>::copy(void) const
 {
@@ -280,6 +280,25 @@ OMStrongReferenceSetIterator<UniqueIdentification,
                                      "ReferencedObject>::identification");
 
   return _iterator.key();
+}
+
+  // @mfunc Return the <c OMObject> in the associated
+  //        <c OMStrongReferenceSetProperty> at the position currently
+  //        designated by this <c OMStrongReferenceSetIterator>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The <c OMObject> at the current position.
+  //   @this const
+template <typename UniqueIdentification, typename ReferencedObject>
+OMObject*
+OMStrongReferenceSetIterator<UniqueIdentification,
+                             ReferencedObject>::currentObject(void) const
+{
+  TRACE("OMStrongReferenceSetIterator<UniqueIdentification, "
+                                     "ReferencedObject>::currentObject");
+
+  OMObject* result = value();
+
+  return result;
 }
 
   // @mfunc Create an <c OMStrongReferenceSetIterator> given

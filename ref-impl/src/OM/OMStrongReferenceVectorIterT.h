@@ -67,7 +67,7 @@ OMStrongReferenceVectorIterator<ReferencedObject>::
   //   @rdesc The new <c OMStrongReferenceVectorIterator>.
   //   @this const
 template <typename ReferencedObject>
-OMReferenceContainerIterator<ReferencedObject>*
+OMReferenceContainerIterator*
             OMStrongReferenceVectorIterator<ReferencedObject>::copy(void) const
 {
   TRACE("OMStrongReferenceVectorIterator<ReferencedObject>::copy");
@@ -249,6 +249,23 @@ template <typename ReferencedObject>
 size_t OMStrongReferenceVectorIterator<ReferencedObject>::index(void) const
 {
   return _iterator.index();
+}
+
+  // @mfunc Return the <c OMObject> in the associated
+  //        <c OMStrongReferenceVectorProperty> at the position currently
+  //        designated by this <c OMStrongReferenceVectorIterator>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The <c OMObject> at the current position.
+  //   @this const
+template <typename ReferencedObject>
+OMObject*
+OMStrongReferenceVectorIterator<ReferencedObject>::currentObject(void) const
+{
+  TRACE("OMStrongReferenceVectorIterator<ReferencedObject>::currentObject");
+
+  OMObject* result = value();
+
+  return result;
 }
 
   // @mfunc Create an <c OMStrongReferenceVectorIterator> given

@@ -39,8 +39,7 @@ class OMStrongReferenceVectorProperty;
 // @class Iterators over <c OMStrongReferenceVectorProperty>s.
 //   @tcarg class | ReferencedObject | The type of the contained objects.
 template <typename ReferencedObject>
-class OMStrongReferenceVectorIterator :
-                        public OMReferenceContainerIterator<ReferencedObject> {
+class OMStrongReferenceVectorIterator : public OMReferenceContainerIterator {
 public:
   // @access Public members.
 
@@ -62,7 +61,7 @@ public:
                OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Create a copy of this <c OMStrongReferenceVectorIterator>.
-  virtual OMReferenceContainerIterator<ReferencedObject>* copy(void) const;
+  virtual OMReferenceContainerIterator* copy(void) const;
 
     // @cmember Destroy this <c OMStrongReferenceVectorIterator>.
   virtual ~OMStrongReferenceVectorIterator(void);
@@ -146,6 +145,11 @@ public:
     //          currently designated by this
     //          <c OMStrongReferenceVectorIterator>.
    virtual size_t index(void) const;
+
+    // @cmember Return the <p OMObject> in the associated
+    //          reference container property at the position currently
+    //          designated by this <c OMStrongReferenceVectorIterator>.
+   virtual OMObject* currentObject(void) const;
 
 protected:
 

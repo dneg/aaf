@@ -64,7 +64,7 @@ OMWeakReferenceSetIterator<ReferencedObject>::~OMWeakReferenceSetIterator(void)
   //   @rdesc The new <c OMWeakReferenceSetIterator>.
   //   @this const
 template <typename ReferencedObject>
-OMReferenceContainerIterator<ReferencedObject>*
+OMReferenceContainerIterator*
                  OMWeakReferenceSetIterator<ReferencedObject>::copy(void) const
 {
   TRACE("OMWeakReferenceSetIterator<ReferencedObject>::copy");
@@ -253,6 +253,23 @@ OMWeakReferenceSetIterator<ReferencedObject>::identification(void) const
   TRACE("OMWeakReferenceSetIterator<ReferencedObject>::identification");
 
   return _iterator.key();
+}
+
+  // @mfunc Return the <c OMObject> in the associated
+  //        <c OMWeakReferenceSetProperty> at the position currently
+  //        designated by this <c OMWeakReferenceSetIterator>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The <c OMObject> at the current position.
+  //   @this const
+template <typename ReferencedObject>
+OMObject*
+OMWeakReferenceSetIterator<ReferencedObject>::currentObject(void) const
+{
+  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::currentObject");
+
+  OMObject* result = value();
+
+  return result;
 }
 
   // @mfunc Create an <c OMWeakReferenceSetIterator> given

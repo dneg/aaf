@@ -39,8 +39,7 @@ class OMStrongReferenceSetProperty;
 // @class Iterators over <c OMStrongReferenceSetProperty>s.
 //   @tcarg class | ReferencedObject | The type of the contained objects.
 template <typename UniqueIdentification, typename ReferencedObject>
-class OMStrongReferenceSetIterator :
-                        public OMReferenceContainerIterator<ReferencedObject> {
+class OMStrongReferenceSetIterator : public OMReferenceContainerIterator {
 public:
   // @access Public members.
 
@@ -66,7 +65,7 @@ public:
   virtual ~OMStrongReferenceSetIterator(void);
 
     // @cmember Create a copy of this <c OMStrongReferenceSetIterator>.
-  virtual OMReferenceContainerIterator<ReferencedObject>* copy(void) const;
+  virtual OMReferenceContainerIterator* copy(void) const;
 
     // @cmember Reset this <c OMStrongReferenceSetIterator> to the given
     //          <p initialPosition>.
@@ -148,6 +147,11 @@ public:
     //          associated <c OMStrongReferenceSetProperty> at the position
     //          currently designated by this <c OMStrongReferenceSetIterator>.
    UniqueIdentification identification(void) const;
+
+    // @cmember Return the <p OMObject> in the associated
+    //          reference container property at the position currently
+    //          designated by this <c OMStrongReferenceSetIterator>.
+   virtual OMObject* currentObject(void) const;
 
 protected:
 
