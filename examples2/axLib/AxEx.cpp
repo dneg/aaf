@@ -38,8 +38,8 @@ AxString colon( L":" );
 //=---------------------------------------------------------------------=
 
 AxEx::AxEx()
-  : _widewhat(0),
-    _what(0)
+  : _widewhat(L""),
+    _what("")
 {}
 
 AxEx::AxEx( const wchar_t* what )
@@ -69,8 +69,8 @@ const char* AxEx::what() const
 
 AxExHResult::AxExHResult()
 : AxEx(),
-  _widewhat(0),
-  _what(0),
+  _widewhat(L""),
+  _what(""),
   _hresult( 0 )
 {}
 
@@ -84,7 +84,7 @@ AxExHResult::AxExHResult( HRESULT hr )
 AxExHResult::AxExHResult( HRESULT hr, const wchar_t* what )
 : AxEx(),
   _widewhat( what ),
-  _what( AxStringUtil::wctomb( what ) ),
+  _what( "" ),
   _hresult( hr )
 {
 	std::wostringstream os;
@@ -95,6 +95,7 @@ AxExHResult::AxExHResult( HRESULT hr, const wchar_t* what )
 	os << AxString( what );
 
 	_widewhat = os.str();
+	_what = AxStringUtil::wctomb( _widewhat );
 }
 
 AxExHResult::AxExHResult( HRESULT hr, const char* file, int line )
@@ -114,6 +115,7 @@ AxExHResult::AxExHResult( HRESULT hr, const char* file, int line )
 	os << spc << AxHrMap::getInstance().getStr( hr );
 
 	_widewhat = os.str();
+	_what = AxStringUtil::wctomb( _widewhat );
 }
 
 AxExHResult::~AxExHResult()
