@@ -69,4 +69,4 @@ AAFRESULT ImplAAFObject::MyHeadObject
 
 extern "C" const aafClassID_t CLSID_AAFObject;
 
-OMDEFINE_STORABLE(AAFObject, CLSID_AAFObject);
+OMDEFINE_STORABLE(ImplAAFObject, CLSID_AAFObject);
