@@ -216,7 +216,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 									  &pCDMasterMob));
 	check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator,
 									  &pCDNetworkLocator));
-	check(pDictionary->LookupDataDef(DDEF_Sound,
+	check(pDictionary->LookupDataDef(kAAFDataDef_Sound,
 									 &pDdefSound));
 
 	// !!!Previous revisions of this file contained code here required to handle external essence
@@ -553,7 +553,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					dataPtr = WAVDataBuf + dataOffset;
 					
 #else
-					check(pDictionary->LookupDataDef(DDEF_Sound, &pddSound));
+					check(pDictionary->LookupDataDef(kAAFDataDef_Sound, &pddSound));
 					check(pEssenceAccess->CountSamples(pddSound, &sampleCount));
 					samplesToRead = (aafInt32)sampleCount;		// !!! Possible loss of data if > 4gig
 #endif

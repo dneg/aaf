@@ -201,12 +201,12 @@ void EssenceCreate::RunTest( CmdState& state, int argc, char** argv )
   }
 
   if ( type == "picture" ) {
-    dataDefId = DDEF_Picture;
+    dataDefId = kAAFDataDef_Picture;
     sampleRate.numerator = MULTI_GEN_VIDEO_RATE_NUM;
     sampleRate.denominator = MULTI_GEN_VIDEO_RATE_DEN;
   }
   else if ( type == "sound" ) {
-    dataDefId = DDEF_Sound;
+    dataDefId = kAAFDataDef_Sound;
     sampleRate.numerator = MULTI_GEN_AUDIO_RATE_NUM;
     sampleRate.denominator = MULTI_GEN_AUDIO_RATE_DEN;
   }

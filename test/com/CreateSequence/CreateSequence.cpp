@@ -224,7 +224,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
                                     &pCDSourceClip));
   check(pDictionary->LookupClassDef(AUID_AAFFiller,
                                     &pCDFiller));
-  check(pDictionary->LookupDataDef(DDEF_Picture,
+  check(pDictionary->LookupDataDef(kAAFDataDef_Picture,
                                    &pDdefPicture));
 
 // IMPORTANT: major remodification is from this point onwards...
@@ -606,7 +606,7 @@ STDAPI MemoryFileOpenNewModify (
     rs,
     kAAFFileExistence_new,
     kAAFFileAccess_write,
-    &aafFileKindAaf4KBinary,
+    &kAAFFileKind_Aaf4KBinary,
     modeFlags,
     pIdent,
     ppFile);
