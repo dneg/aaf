@@ -68,7 +68,7 @@ wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
                         size_t length)
 {
-  TRACE("lengthOfWideString");
+  TRACE("copyWideString");
 
   PRECONDITION("Valid destination", destination != 0);
   PRECONDITION("Valid source string", validWideString(source));
