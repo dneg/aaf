@@ -12,13 +12,13 @@ BEGIN {
 
 /^[0-9]+-[0-9]+-[0-9]+/ {
   if (date != "") {
-#    printf("[%s]\n", entrytext);
+#    printf("<!--[%s]-->\n", entrytext);
     gsub("\t", " ", entrytext);
     entrytext = trim(entrytext, 3);
     f = split(entrytext, fields, ":");
-#    printf("[%d]\n", f);
+#    printf("<!--[%d]-->\n", f);
 #    for (i = 1; i <= f; i++) {
-#      printf("[%d : \"%s\"]\n", i, fields[i]);
+#      printf("<!--[%d : \"%s\"]-->\n", i, fields[i]);
 #    }
     /* We should have at least a file name and a comment */
     if (f < 2) {
@@ -42,9 +42,9 @@ BEGIN {
       comments = comments ":" fields[i]
     }
 
-    printf("[dir      = \"%s\"]\n", dir);
-    printf("[files    = \"%s\"]\n", files);
-    printf("[comments = \"%s\"]\n", comments);
+    printf("<!--[dir      = \"%s\"]-->\n", dir);
+    printf("<!--[files    = \"%s\"]-->\n", files);
+    printf("<!--[comments = \"%s\"]-->\n", comments);
     /* Print previous table row */
     printRow(date, name, files, comments, color);
   }
