@@ -34,6 +34,8 @@
 //
 // If your compiler is not listed please add code to detect it here
 // and add a section defining the OM[U]Int{8|16|32}64} types below.
+// This allows new platforms to be added without disturbing the code
+// for existing platforms.
 //
 #if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
 #define COMPILER_MSC_INTEL_WINDOWS
