@@ -188,11 +188,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		tccp = (ImplAAFTimecode *)CreateImpl(CLSID_AAFTimecode);
-		tccp->InitTimecode(length, &startTC);		 
+		tccp->Initialize(length, &startTC);		 
  		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot) == AAFRESULT_SUCCESS)
 		{
 			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
-			CHECK(aSequ->SetInitialValue(&timecodeKind));
+			CHECK(aSequ->Initialize(&timecodeKind));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(mobSlot->SetSegment(aSequ));
 
@@ -200,7 +200,7 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 		{
 			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
-			CHECK(aSequ->SetInitialValue(&timecodeKind));
+			CHECK(aSequ->Initialize(&timecodeKind));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
 										NULL, zeroPos, &newSlot));
