@@ -3395,6 +3395,6 @@ static void checkStatus(sresult status)
   TRACE("checkStatus");
 
   if (SSTG_OK!=status) {
-    throw OMException(status | 0x8000000L);
+    throw OMException(status | 0x80000000L);
   }
 }
