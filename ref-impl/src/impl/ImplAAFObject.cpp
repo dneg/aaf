@@ -264,9 +264,9 @@ AAFRESULT ImplPropertyCollection::SetPropertyValue
   assert (pOmProp);
   assert (pNewPropVal);
   ar = pNewPropVal->WriteTo(pOmProp);
-  assert (AAFRESULT_SUCCEEDED (ar));
+//  assert (AAFRESULT_SUCCEEDED (ar));
 
-  return(AAFRESULT_SUCCESS);
+  return(ar);
 }
 
 AAFRESULT ImplPropertyCollection::RemovePropertyValue(ImplAAFPropertyDef *pPropDef)
