@@ -15,7 +15,7 @@
 // aafRational_t,
 // AAFSegment,
 // aafPosition_t,
-// aafTrackID_t,
+// aafSlotID_t,
 // aafUInt32,
 // AAFDataDef
 
@@ -34,7 +34,7 @@
 
 ImplAAFMobSlot::ImplAAFMobSlot ()
 : _name(			PID_MOBSLOT_NAME,			"Name"),
-  _trackID(			PID_MOBSLOT_TRACKID,		"TrackID"),
+  _trackID(			PID_MOBSLOT_TRACKID,		"SlotID"),
   _physicalTrackNum(PID_MOBSLOT_PHYSICAL_TRACK,	"PhysicalTrack"),
   _segment(			PID_MOBSLOT_SEGMENT,		"Segment") 
 {
@@ -63,28 +63,31 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-static void stringPropertyToAAFString(aafString_t *aafString, OMStringProperty& stringProperty)
+static void stringPropertyToAAFString(aafWChar *aafString, OMStringProperty& stringProperty)
 {
   const char* string = stringProperty;
-  aafString->length = stringProperty.length();
-  aafString->value = new aafWChar[aafString->length + 1];
-  mbstowcs(aafString->value, string, aafString->length);
-  aafString->value[aafString->length] = L'\0';
-  //!!!Leaking string?
+  mbstowcs(aafString, string, stringProperty.length());
+  aafString[stringProperty.length()] = L'\0';
 }
 
 
-static void AAFStringToStringProperty(OMStringProperty& stringProperty, aafString_t *aafString)
+static void AAFStringToStringProperty(OMStringProperty& stringProperty, aafWChar *aafString)
 {
-	char* string;
-	string = new char[aafString->length + 1];	//!!!S/b more than we need
-	wcstombs(string, aafString->value, aafString->length);
+	char		*string;
+	aafWChar	*ptr;
+	aafInt32	len;
+	
+	for(len = 0, ptr = aafString; *ptr != 0; ptr++)
+		len++;
+	
+	string = new char[len + 1];	//!!!S/b more than we need
+	wcstombs(string, aafString, len);
+	string[len] = '\0';
 	stringProperty = string;
-  //!!!Leaking string?
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMobSlot::GetName (aafString_t *name)
+    ImplAAFMobSlot::GetName (aafWChar *name)
 {
 	aafAssert(name != NULL, NULL, AAFRESULT_NULL_PARAM);
 
@@ -94,7 +97,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMobSlot::SetName (aafString_t *name)
+    ImplAAFMobSlot::SetName (aafWChar *name)
 {
 	aafAssert(name != NULL, NULL, AAFRESULT_NULL_PARAM);
 
@@ -130,9 +133,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-  ImplAAFMobSlot::GetTrackID (
-    // @parm [out,retval] aafTrackID_t * | result | Track id of the Mob Slot
-    aafTrackID_t *  result
+  ImplAAFMobSlot::GetSlotID (
+    // @parm [out,retval] aafSlotID_t * | result | Slot id of the Mob Slot
+    aafSlotID_t *  result
   )
 {
 	*result = _trackID;
@@ -140,9 +143,9 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-  ImplAAFMobSlot::SetTrackID (
-    // @parm [in] aafTrackID_t | result | Track id of the Mob Slot
-    aafTrackID_t value
+  ImplAAFMobSlot::SetSlotID (
+    // @parm [in] aafSlotID_t | result | Slot id of the Mob Slot
+    aafSlotID_t value
   )
 {
 	_trackID = value;
