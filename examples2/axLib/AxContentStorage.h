@@ -35,6 +35,8 @@ public:
 	IAAFMobSP LookupMob( const aafMobID_t& );
 
 	IAAFEssenceDataSP LookupEssenceData( const aafMobID_t& id );
+	aafUInt32 CountEssenceData() const;
+	aafBoolean_t IsEssenceDataPresent( const aafMobID_t& id ) const;
 
 	IEnumAAFMobsSP GetMobs(  const aafSearchCrit_t* pCriteria = 0 ) const;
 

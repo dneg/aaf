@@ -48,6 +48,25 @@ IAAFEssenceDataSP AxContentStorage::LookupEssenceData( const aafMobID_t& id )
 	return spIaafEssenceData;
 }
 
+aafUInt32 AxContentStorage::CountEssenceData() const
+{
+        aafUInt32 result;
+
+        CHECK_HRESULT(_spIaafContentStorage->CountEssenceData(&result));
+
+        return result;
+}
+
+aafBoolean_t AxContentStorage::IsEssenceDataPresent( const aafMobID_t& id ) const
+{
+        aafBoolean_t result;
+
+        CHECK_HRESULT(_spIaafContentStorage->IsEssenceDataPresent(id,kAAFEssence,&result));
+
+        return result;
+}
+
+
 IEnumAAFMobsSP AxContentStorage::GetMobs(  const aafSearchCrit_t* pCriteria ) const
 {
     IEnumAAFMobsSP spIEnumAAFMobs;
