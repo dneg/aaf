@@ -106,7 +106,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	"{refh}AAFTypes.h" ¶' >> generated_refh.tmp
 	echo '"{refh}AAFTypes.h" Ä "{dod}AAFTypes.dod" "{macros}refh.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{refh}AAFTypes.h"' >> macdodo.tmp
-	echo '	''if `exists -f "{refh}AAFTypes.h"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{refh}AAFTypes.h"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{refh}AAFTypes.h"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{refh}AAFTypes.h"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -123,7 +123,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp
 	echo '"{dod}AAFRoot.exp" Ä "{dod}AAFRoot.dod" "{macros}exp.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 	echo '	''echo "{dod}AAFRoot.exp"' >> macdodo.tmp
-	echo '	''if `exists -f "{dod}AAFRoot.exp"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{dod}AAFRoot.exp"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{dod}AAFRoot.exp"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{dod}AAFRoot.exp"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -137,7 +137,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	"{refh}AAFRoot.h" ¶' >> generated_refh.tmp
 	echo '"{refh}AAFRoot.h" Ä "{dod}AAFRoot.dod" "{macros}refh.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{refh}AAFRoot.h"' >> macdodo.tmp
-	echo '	''if `exists -f "{refh}AAFRoot.h"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{refh}AAFRoot.h"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{refh}AAFRoot.h"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{refh}AAFRoot.h"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -151,7 +151,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp
 	echo '"{comh}CAAFRoot.h" Ä "{dod}AAFRoot.dod" "{macros}comh.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{comh}CAAFRoot.h"' >> macdodo.tmp
-	echo '	''if `exists -f "{comh}CAAFRoot.h"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{comh}CAAFRoot.h"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{comh}CAAFRoot.h"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{comh}CAAFRoot.h"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -165,7 +165,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp
 	echo '"{comc}CAAFRoot.cpp" Ä "{dod}AAFRoot.dod" "{macros}comc.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{comc}CAAFRoot.cpp"' >> macdodo.tmp
-	echo '	''if `exists -f "{comc}CAAFRoot.cpp"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{comc}CAAFRoot.cpp"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{comc}CAAFRoot.cpp"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{comc}CAAFRoot.cpp"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -179,7 +179,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp
 	echo '"{impl}ImplAAFRoot.h" Ä "{dod}AAFRoot.dod" "{macros}implh.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{impl}ImplAAFRoot.h"' >> macdodo.tmp
-	echo '	''if `exists -f "{impl}ImplAAFRoot.h"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{impl}ImplAAFRoot.h"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{impl}ImplAAFRoot.h"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{impl}ImplAAFRoot.h"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -193,7 +193,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp
 	echo '"{impl}ImplAAFRoot.cpp" Ä "{dod}AAFRoot.dod" "{macros}implc.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{impl}ImplAAFRoot.cpp"' >> macdodo.tmp
-	echo '	''if `exists -f "{impl}ImplAAFRoot.cpp"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{impl}ImplAAFRoot.cpp"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{impl}ImplAAFRoot.cpp"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{impl}ImplAAFRoot.cpp"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -227,7 +227,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo "" >> macdodo.tmp
 		echo '"{dod}'{base}'.exp" Ä "{dod}'{base}'.dod" "{macros}exp.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{dod}'{base}'.exp"' >> macdodo.tmp
-		echo '	''if `exists -f "{dod}'{base}'.exp"`'  >> macdodo.tmp
+		echo '	''if "`exists -f "{dod}'{base}'.exp"`"'  >> macdodo.tmp
 		echo '		''SetFile -a l "{dod}'{base}'.exp"'  >> macdodo.tmp
 		echo '		''Delete -i -ay "{dod}'{base}'.exp"'  >> macdodo.tmp
 		echo '	'end  >> macdodo.tmp
@@ -242,7 +242,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_frefh.tmp
 		echo '"{frefh}'{base}'.frefh" Ä "{dod}'{base}'.dod" "{macros}frefh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{frefh}'{base}'.frefh"' >> macdodo.tmp
-		echo '	''if `exists -f "{frefh}'{base}'.frefh"`'  >> macdodo.tmp
+		echo '	''if "`exists -f "{frefh}'{base}'.frefh"`"'  >> macdodo.tmp
 		echo '		''SetFile -a l "{frefh}'{base}'.frefh"'  >> macdodo.tmp
 		echo '		''Delete -i -ay "{frefh}'{base}'.frefh"'  >> macdodo.tmp
 		echo '	'end  >> macdodo.tmp
@@ -256,7 +256,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo "" >> macdodo.tmp
 		echo '"{comh}C'{base}'.h" Ä "{dod}'{base}'.dod" "{macros}comh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{comh}C'{base}'.h"' >> macdodo.tmp
-		echo '	''if `exists -f "{comh}C'{base}'.h"`'  >> macdodo.tmp
+		echo '	''if "`exists -f "{comh}C'{base}'.h"`"'  >> macdodo.tmp
 		echo '		''SetFile -a l "{comh}C'{base}'.h"'  >> macdodo.tmp
 		echo '		''Delete -i -ay "{comh}C'{base}'.h"'  >> macdodo.tmp
 		echo '	'end  >> macdodo.tmp
@@ -270,7 +270,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo "" >> macdodo.tmp
 		echo '"{comc}C'{base}'.cpp" Ä "{dod}'{base}'.dod" "{macros}comc.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{comc}C'{base}'.cpp"' >> macdodo.tmp
-		echo '	''if `exists -f "{comc}C'{base}'.cpp"`'  >> macdodo.tmp
+		echo '	''if "`exists -f "{comc}C'{base}'.cpp"`"'  >> macdodo.tmp
 		echo '		''SetFile -a l "{comc}C'{base}'.cpp"'  >> macdodo.tmp
 		echo '		''Delete -i -ay "{comc}C'{base}'.cpp"'  >> macdodo.tmp
 		echo '	'end  >> macdodo.tmp
@@ -285,7 +285,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 			echo "" >> macdodo.tmp
 			echo '"{comt}C'{base}'Test.cpp" Ä "{dod}'{base}'.dod" "{macros}comt.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 			echo '	''echo "{comt}C'{base}'Test.cpp"' >> macdodo.tmp
-			echo '	''if `exists -f "{comt}C'{base}'Test.cpp"`'  >> macdodo.tmp
+			echo '	''if "`exists -f "{comt}C'{base}'Test.cpp"`"'  >> macdodo.tmp
 			echo '		''SetFile -a l "{comt}C'{base}'Test.cpp"'  >> macdodo.tmp
 			echo '		''Delete -i -ay "{comt}C'{base}'Test.cpp"'  >> macdodo.tmp
 			echo '	'end  >> macdodo.tmp
@@ -299,7 +299,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 			echo "" >> macdodo.tmp
 			echo '"{impl}Impl'{base}'.h" Ä "{dod}'{base}'.dod" "{macros}implh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 			echo '	''echo "{impl}Impl'{base}'.h"' >> macdodo.tmp
-			echo '	''if `exists -f "{impl}Impl'{base}'.h"`'  >> macdodo.tmp
+			echo '	''if "`exists -f "{impl}Impl'{base}'.h"`"'  >> macdodo.tmp
 			echo '		''SetFile -a l "{impl}Impl'{base}'.h"'  >> macdodo.tmp
 			echo '		''Delete -i -ay "{impl}Impl'{base}'.h"'  >> macdodo.tmp
 			echo '	'end  >> macdodo.tmp
@@ -313,7 +313,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 			echo "" >> macdodo.tmp
 			echo '"{impl}Impl'{base}'.cpp" Ä "{dod}'{base}'.dod" "{macros}implc.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 			echo '	''echo "{impl}Impl'{base}'.cpp"' >> macdodo.tmp
-			echo '	''if `exists -f "{impl}Impl'{base}'.cpp"`'  >> macdodo.tmp
+			echo '	''if "`exists -f "{impl}Impl'{base}'.cpp"`"'  >> macdodo.tmp
 			echo '		''SetFile -a l "{impl}Impl'{base}'.cpp"'  >> macdodo.tmp
 			echo '		''Delete -i -ay "{impl}Impl'{base}'.cpp"'  >> macdodo.tmp
 			echo '	'end  >> macdodo.tmp
@@ -342,7 +342,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo "" >> macdodo.tmp
 		echo '"{dod}'{base}'.exp" Ä "{dod}'{base}'.dod" "{macros}exp.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{dod}'{base}'.exp"' >> macdodo.tmp
-		echo '	''if `exists -f "{dod}'{base}'.exp"`'  >> macdodo.tmp
+		echo '	''if "`exists -f "{dod}'{base}'.exp"`"'  >> macdodo.tmp
 		echo '		''SetFile -a l "{dod}'{base}'.exp"'  >> macdodo.tmp
 		echo '		''Delete -i -ay "{dod}'{base}'.exp"'  >> macdodo.tmp
 		echo '	'end  >> macdodo.tmp
@@ -356,7 +356,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo '	"{frefh}'{base}'.frefh" ¶' >> generated_frefh.tmp
 		echo '"{frefh}'{base}'.frefh" Ä "{dod}'{base}'.dod" "{macros}frefh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{frefh}'{base}'.frefh"' >> macdodo.tmp
-		echo '	''if `exists -f "{frefh}'{base}'.frefh"`'  >> macdodo.tmp
+		echo '	''if "`exists -f "{frefh}'{base}'.frefh"`"'  >> macdodo.tmp
 		echo '		''SetFile -a l "{frefh}'{base}'.frefh"'  >> macdodo.tmp
 		echo '		''Delete -i -ay "{frefh}'{base}'.frefh"'  >> macdodo.tmp
 		echo '	'end  >> macdodo.tmp
@@ -376,7 +376,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	"{refh}AAFPluginTypes.h" ¶' >> generated_refh.tmp
 	echo '"{refh}AAFPluginTypes.h" Ä "{dod}AAFPluginTypes.dod" "{macros}refh.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{refh}AAFPluginTypes.h"' >> macdodo.tmp
-	echo '	''if `exists -f "{refh}AAFPluginTypes.h"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{refh}AAFPluginTypes.h"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{refh}AAFPluginTypes.h"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{refh}AAFPluginTypes.h"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -401,7 +401,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo "" >> macdodo.tmp
 		echo '"{dod}'{base}'.exp" Ä "{dod}'{base}'.dod" "{macros}exp.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{dod}'{base}'.exp"' >> macdodo.tmp
-		echo '	''if `exists -f "{dod}'{base}'.exp"`'  >> macdodo.tmp
+		echo '	''if "`exists -f "{dod}'{base}'.exp"`"'  >> macdodo.tmp
 		echo '		''SetFile -a l "{dod}'{base}'.exp"'  >> macdodo.tmp
 		echo '		''Delete -i -ay "{dod}'{base}'.exp"'  >> macdodo.tmp
 		echo '	'end  >> macdodo.tmp
@@ -415,7 +415,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 		echo '	"{frefh}'{base}'.frefh" ¶' >> plugin_frefh_targets.tmp
 		echo '"{frefh}'{base}'.frefh" Ä "{dod}'{base}'.dod" "{macros}frefh.mac" "{macros}base.mac"' {imports} >> macdodo.tmp
 		echo '	''echo "{frefh}'{base}'.frefh"' >> macdodo.tmp
-		echo '	''if `exists -f "{frefh}'{base}'.frefh"`'  >> macdodo.tmp
+		echo '	''if "`exists -f "{frefh}'{base}'.frefh"`"'  >> macdodo.tmp
 		echo '		''SetFile -a l "{frefh}'{base}'.frefh"'  >> macdodo.tmp
 		echo '		''Delete -i -ay "{frefh}'{base}'.frefh"'  >> macdodo.tmp
 		echo '	'end  >> macdodo.tmp
@@ -435,7 +435,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '	"{frefh}AAFModule.frefh" ¶' >> generated_frefh.tmp
 	echo '"{frefh}AAFModule.frefh" Ä "{dod}AAFModule.dod" "{macros}frefh.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{frefh}AAFModule.frefh"' >> macdodo.tmp
-	echo '	''if `exists -f "{frefh}AAFModule.frefh"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{frefh}AAFModule.frefh"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{frefh}AAFModule.frefh"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{frefh}AAFModule.frefh"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -445,7 +445,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo "" >> macdodo.tmp	
 	echo '"{comc}CAAFModule.cpp" Ä "{dod}AAFModule.dod" "{macros}comc.mac" "{macros}base.mac"' >> macdodo.tmp
 	echo '	''echo "{comc}CAAFModule.cpp"' >> macdodo.tmp
-	echo '	''if `exists -f "{comc}CAAFModule.cpp"`'  >> macdodo.tmp
+	echo '	''if "`exists -f "{comc}CAAFModule.cpp"`"'  >> macdodo.tmp
 	echo '		''SetFile -a l "{comc}CAAFModule.cpp"'  >> macdodo.tmp
 	echo '		''Delete -i -ay "{comc}CAAFModule.cpp"'  >> macdodo.tmp
 	echo '	'end  >> macdodo.tmp
@@ -530,7 +530,7 @@ macaafobjects.mk Ä "{dod}aafobjects.mk"
 	echo '# Cleanup all of the dodo generated files...' >> macdodo.tmp
 	echo 'clean Ä' >> macdodo.tmp
 	echo '	''for file in {GENERATED_TARGETS}' >> macdodo.tmp
-	echo '	''	if `exists -f "{file}"`' >> macdodo.tmp
+	echo '	''	if "`exists -f "{file}"`"' >> macdodo.tmp
 	echo '	''		SetFile -a l "{file}"' >> macdodo.tmp
 	echo '	''		Delete -i -ay "{file}"' >> macdodo.tmp
 	echo '	''	end' >> macdodo.tmp
