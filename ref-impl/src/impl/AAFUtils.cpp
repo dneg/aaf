@@ -197,7 +197,7 @@ aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
 
 aafBool	EqualMobID(aafMobID_constref mobID1, aafMobID_constref mobID2)
 {
-	return(memcmp(&mobID1, &mobID1, sizeof(aafMobID_t)) == 0 ? kAAFTrue : kAAFFalse);
+	return(memcmp(&mobID1, &mobID2, sizeof(aafMobID_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
 
 static aafInt32 powi(
@@ -211,31 +211,6 @@ static aafInt32 powi(
 	 *
 	 *************************************************************/
 
-/*************************************************************************
- * Private Function: isObjFunc() and set1xEditrate()
- *
- *      These are callback functions used by omfiMobAppendNewSlot()
- *      to recursively attach the CPNT:Editrate property to 1.x
- *      components.  The callback functions are input to the
- *      omfiMobMatchAndExecute() function which traverses a
- *      tree of objects depth first and executes the callbacks.
- *      They will only be called on 1.x files.
- *
- * Argument Notes:
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- *************************************************************************/
-aafBool isObjFunc(ImplAAFFile * file,       /* IN - File Handle */
-				  ImplAAFObject * obj,     /* IN - Object to match */
-				  void *data)          /* IN/OUT - Match Data */
-{
-  /* Match all objects in the subtree */
-  return(kAAFTrue);
-}
 
 
 /************************
