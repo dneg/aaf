@@ -507,6 +507,7 @@ void OMDataStreamProperty::deepCopyTo(OMProperty* destination,
 
   // Restore current position of source
   setPosition(savedPosition);
+  dest->setPosition(0);
 }
 
 const wchar_t* OMDataStreamProperty::storedName(void) const
