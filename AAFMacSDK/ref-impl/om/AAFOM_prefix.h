@@ -37,11 +37,6 @@
 
 #include "MacHeaders.h"
 
-// Conditional debugging and ansi assertions disabled
-#ifndef NDEBUG
-#define NDEBUG
-#endif
-
 // Object Manager specific definitions
 //
 

@@ -37,11 +37,6 @@
 
 #include "MacHeaders.h"
 
-// Conditional debugging enabled...
-#ifndef _DEBUG
-#define _DEBUG
-#endif
-
 // Object Manager specific definitions
 //
 #define OM_ENABLE_DEBUG
