@@ -12,12 +12,12 @@
 #include "ImplAAFObject.h"
 #endif
 
-#ifndef __ImplCollection_h__
-#include "ImplCollection.h"
+#ifndef __ImplAAFCollection_h__
+#include "ImplAAFCollection.h"
 #endif
 
-#ifndef __ImplEnumerator_h__
-#include "ImplEnumerator.h"
+#ifndef __ImplAAFEnumerator_h__
+#include "ImplAAFEnumerator.h"
 #endif
 
 #include <assert.h>
@@ -41,13 +41,13 @@ extern "C" const aafClassID_t CLSID_EnumAAFProperties;
 
 
 // explicit template instantiation
-// template class ImplCollection<ImplAAFProperty *>;
+// template class ImplAAFCollection<ImplAAFProperty *>;
 
 
 //
 // Private class for implementing collections of properties.
 //
-class ImplPropertyCollection : public ImplCollection<ImplAAFProperty *>
+class ImplPropertyCollection : public ImplAAFCollection<ImplAAFProperty *>
 {
 public:
   ImplPropertyCollection ();
