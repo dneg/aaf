@@ -217,6 +217,9 @@ IAAFSmartPointer<IAAFMobSlot> GetSlotById( IAAFSmartPointer<IAAFMob>& pMob, aafS
 
   CheckResult( AAFRESULT_TEST_FAILED );
 
+  // Return something to keep MSVC6 happy.
+  IAAFSmartPointer<IAAFMobSlot> null;
+  return null;
 }
 
 //======================================================================
