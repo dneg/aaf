@@ -97,6 +97,8 @@ static HRESULT TestGetSetFileBits ()
   IAAFFileSP pWriteFile;
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pWriteStg,
+								   kAAFFileExistence_new,
+								   kAAFFileAccess_write,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -146,6 +148,8 @@ static HRESULT TestGetSetFileBits ()
   IAAFFileSP pReadFile;
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pReadStg,
+								   kAAFFileExistence_existing,
+								   kAAFFileAccess_read,
 								   0,
 								   0,
 								   0,

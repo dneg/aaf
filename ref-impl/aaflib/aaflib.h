@@ -81,6 +81,8 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATERAWSTORAGEDISK)(
 
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
     IAAFRawStorage * pRawStorage,
+	aafFileExistence_t  existence,
+	aafFileAccess_t  access,
 	aafUID_constptr  pFileKind,
 	aafUInt32  modeFlags,
 	aafProductIdentification_constptr  pIdent,
@@ -127,6 +129,8 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATERAWSTORAGEDISK)(
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
     IAAFRawStorage * pRawStorage,
+	aafFileExistence_t  existence,
+	aafFileAccess_t  access,
 	aafUID_constptr  pFileKind,
 	aafUInt32  modeFlags,
 	aafProductIdentification_constptr  pIdent,
@@ -214,6 +218,8 @@ public:
 
   HRESULT CreateAAFFileOnRawStorage (
     IAAFRawStorage * pRawStorage,
+	aafFileExistence_t  existence,
+	aafFileAccess_t  access,
 	aafUID_constptr  pFileKind,
 	aafUInt32  modeFlags,
 	aafProductIdentification_constptr  pIdent,

@@ -116,6 +116,8 @@ static HRESULT GetFileBitsTest ()
   IAAFFileSP pWriteFile;
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pWriteStg,
+								   kAAFFileExistence_new,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,

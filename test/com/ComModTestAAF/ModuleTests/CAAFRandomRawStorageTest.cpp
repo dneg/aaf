@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-2000 Avid Technology, Inc.
+*              Copyright (c) 1998-2001 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -244,6 +244,8 @@ static HRESULT localOpenFileDiskStgWrite
   // create the file and open it.
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
+								   kAAFFileExistence_new,
+								   kAAFFileAccess_write,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -272,6 +274,8 @@ static HRESULT localOpenFileDiskStgRead
   // create the file and open it.
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
+								   kAAFFileExistence_existing,
+								   kAAFFileAccess_read,
 								   0,
 								   0,
 								   0,
@@ -303,6 +307,8 @@ static HRESULT localOpenFileMemStgWrite
   // create the file and open it.
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
+								   kAAFFileExistence_new,
+								   kAAFFileAccess_write,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -329,6 +335,8 @@ static HRESULT localOpenFileMemStgRead
   // create the file and open it.
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
+								   kAAFFileExistence_existing,
+								   kAAFFileAccess_read,
 								   0,
 								   0,
 								   0,
@@ -586,6 +594,8 @@ static HRESULT localOpenFileCustomStgWrite
   // create the file and open it.
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
+								   kAAFFileExistence_new,
+								   kAAFFileAccess_write,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -613,6 +623,8 @@ static HRESULT localOpenFileCustomStgRead
   // create the file and open it.
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
+								   kAAFFileExistence_existing,
+								   kAAFFileAccess_read,
 								   0,
 								   0,
 								   0,

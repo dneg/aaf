@@ -2,7 +2,7 @@
 #define __ImplAAFFile_h__
 /***********************************************************************
  *
- *              Copyright (c) 1998-2000 Avid Technology, Inc.
+ *              Copyright (c) 1998-2001 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -79,6 +79,8 @@ public:
 
   virtual AAFRESULT STDMETHODCALLTYPE
     CreateAAFFileOnRawStorage (IAAFRawStorage * pRawStorage,
+							   aafFileExistence_t existence,
+							   aafFileAccess_t access,
 							   aafUID_constptr pFileKind,
 							   aafUInt32 modeFlags,
 							   aafProductIdentification_constptr pIdent);
@@ -118,19 +120,6 @@ public:
 
 protected:
 
-  typedef enum _openType_t
-  {
-    kOmCreate = 0,
-	kOmModify = 1,
-	kOmRead = 2,
-	kOmTransient = 3,
-	kOmUndefined = -1
-  } openType_t;
-	
-  // Returns the open mode for this file.  Requires IsOpen() or
-  // IsClosed().
-  openType_t openType (void) const;
-
   // Returns the OMFile associated with this AAFFile.  Requires
   // IsOpen().
   OMFile * omFile (void);
@@ -159,27 +148,16 @@ private:
   ImplAAFDictionary *_factory;
   ImplAAFMetaDictionary *_metafactory;
   aafInt16			_byteOrder;
-  openType_t		_openType;
   ImplAAFHeader *   _head;		// Needed by Head object
   aafBool   _semanticCheckEnable;	//!!!  /* Used to stop recursion in checks */
   aafFileRev_t   _setrev;
   aafBool _initialized;
-  aafBool _isOpen;
   aafUInt32 _modeFlags;
 
-  // Remember these between calls to CreateAAFFileOnRawStorage() and
-  // Open().  Note that this may not be necessary later, when OM
-  // support to get the OMRawStorage of a file which has not yet been
-  // opened is implemented.
-  aafBool                    _preOpenFileKindSet;
-  aafUID_t                   _preOpenFileKind;
-  aafBool                    _preOpenIdentSet;
-  aafProductIdentification_t _preOpenIdent;
+  aafFileExistence_t _existence;
+  aafFileAccess_t    _access;
 
-  OMRawStorage *             _pOMStg;
-  bool                       _isReadable;
-  bool                       _isWriteable;
-  bool                       _isClosed;
+  aafProductIdentification_t _preOpenIdent;
 };
 
 //
