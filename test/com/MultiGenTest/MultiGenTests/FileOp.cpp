@@ -23,6 +23,8 @@
 #include <AAFDefUIDs.h>
 #include <AAFFileKinds.h>
 
+#include <../../../../ref-impl/include/AAFSDKBuild.h>
+
 #include <map>
 #include <string>
 #include <memory>
@@ -41,10 +43,18 @@ public:
     #define ADD_KIND( X ) \
     _kindMap[ string( #X ) ] = aafFileKindAaf##X;
 
+#if AAF_BUILD_NUMBER >= 536
+    // SchemaSoft was branched at buld 536, so anything later
+    // (in the schemasoft branch, or the main branch post-merge)
+    // should have these symbols.
     ADD_KIND( MSSBinary );
     ADD_KIND( SSSBinary );
     ADD_KIND( M4KBinary );
     ADD_KIND( S4KBinary );
+#else
+    _kindMap[ "MSSBinary" ] = aafFileKindAafSSBinary;
+#endif
+
   }
 
   ~KindMap()
@@ -89,10 +99,10 @@ IAAFSmartPointer<IAAFFile> CreateFileOfKind( const std::string& fileName,
 					     const aafUID_t& fileKind,
 					     const aafProductIdentification_t& prodId )
 {
-  std::basic_string<wchar_t> wfileName( ToWideString( fileName.c_str() ) );
+  std::auto_ptr<wchar_t> wfileName( ToWideString( fileName.c_str() ) );
   
   IAAFSmartPointer<IAAFRawStorage> spRawStorage;
-  CHECK_HRESULT( AAFCreateRawStorageDisk( wfileName.c_str(),
+  CHECK_HRESULT( AAFCreateRawStorageDisk( wfileName.get(),
 					  existance,
 					  access,
 					  &spRawStorage) );
