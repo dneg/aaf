@@ -11,13 +11,10 @@ AAFPERSISTENTOBJECTS = \
 	AAFAIFCData \
 	AAFAIFCDescriptor \
 	AAFClassDef \
-	AAFCodecDef \
-	AAFContainerDef \
 	AAFCommentMarker \
 	AAFConstValue \
 	AAFControlPoint \
 	AAFDataDef \
-	AAFDefObject \
 	AAFDOSLocator \
 	AAFEffectDef \
 	AAFEvent \
@@ -104,9 +101,12 @@ AAFCOMINTERFACESONLY = \
 # its name here and remove it from either list above where it occurs.
 # Do not add the 'Impl'prefix here.
 HUMAN_TYPED_IMPL = \
+	AAFCodecDef \
 	AAFComponent \
 	AAFCompositionMob \
+	AAFContainerDef \
 	AAFContentStorage \
+	AAFDefObject \
 	AAFDictionary \
 	AAFEdgecode \
 	AAFEssenceAccess \
