@@ -374,7 +374,7 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::ensureAbsent(
   OMStrongReferenceSetElement<ReferencedObject>* element = 0;
   bool result = _set.find(identification, &element);
   if (result) {
-    ReferencedObject* result = element->setValue(0);
+    element->setValue(0);
     _set.remove(identification);
   }
 
