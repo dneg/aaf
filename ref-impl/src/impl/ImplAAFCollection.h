@@ -31,7 +31,7 @@ public:
   //********
   // ImplAAFCollection ();
 
-  virtual ~ImplAAFCollection<T> () {}
+  virtual ~ImplAAFCollection/*<T>*/  () {}
 
 public:
 
