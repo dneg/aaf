@@ -31,11 +31,7 @@
 
 
 class ImplAAFPluginDescriptor;
-
-
-
-
-
+class ImplAAFPluggableDef;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -108,6 +104,15 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplEnumAAFPluginDescriptorsTest.cpp.
   static AAFRESULT test();
+
+public:
+// Internal to the toolkit
+AAFRESULT
+    SetPluggableDef(ImplAAFPluggableDef *pEDesc);
+
+private:
+	aafInt32				_current;
+	ImplAAFPluggableDef		*_cPluggableDef;
 };
 
 #endif // ! __ImplEnumAAFPluginDescriptors_h__
