@@ -128,6 +128,7 @@ private:
 	const aafUID_t     * pParentId;
 	ClassTblEntry      * pParent;     // null for root
 	PropTblEntry       * pProperties; // null for none
+	bool                 isConcrete;
   };
 
 
