@@ -985,5 +985,168 @@ AD_XMETHOD1(CountTaggedValueDefs,
   // AAFRESULT_NULL_PARAM
   //   - pResult is null.)
 
+AD_XMETHOD1(LookupAuxiliaryDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the Auxiliary Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+AD_XMETHOD1(LookupDescriptiveDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the Descriptive Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupEdgecodeDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the Edgecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupLegacyPictureDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the legacy Picture Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupLegacySoundDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the legacy Sound Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupLegacyTimecodeDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the legacy Timecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupMatteDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the Matte Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupPictureDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the Picture Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupPictureWithMatteDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the PictureWithMatte Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupSoundDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the Sound Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
+
+AD_XMETHOD1(LookupTimecodeDataDef,
+
+			[out\,retval],
+			objOut,
+			AAFDataDef,
+			ppDataDef,
+			Data Definition Object,
+			Return the Timecode Data Definition Object.
+  // 
+  // Succeeds if:
+  // - The ppDataDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
+
 
 AD_XCLASS_END(Concrete, StoredObject)

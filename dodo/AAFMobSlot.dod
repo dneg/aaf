@@ -148,8 +148,8 @@ AD_XMETHOD1(GetDataDef,
 
 			This method will return the Data Definition object
   // associated with the segment in this Mob Slot.  Common
-  // DataDefinitions are DDEF_Picture\, DDEF_Sound\, DDEF_Timecode\,
-  // and DDEF_Edgecode.
+  // DataDefinitions are kAAFDataDef_Picture\, kAAFDataDef_Sound\, kAAFDataDef_Timecode\,
+  // and kAAFDataDef_Edgecode.
   //
   // Succeeds if all of the following are true:
   // - the ppResult pointer is valid.

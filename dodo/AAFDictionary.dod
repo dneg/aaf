@@ -865,4 +865,17 @@ AD_COM_METH(.method-LookupTaggedValueDef)
 AD_COM_METH(.method-GetTaggedValueDefs)
 AD_COM_METH(.method-CountTaggedValueDefs)
 
+AD_COM_METH(.method-LookupAuxiliaryDataDef)
+AD_COM_METH(.method-LookupDescriptiveDataDef)
+AD_COM_METH(.method-LookupEdgecodeDataDef)
+AD_COM_METH(.method-LookupLegacyPictureDataDef)
+AD_COM_METH(.method-LookupLegacySoundDataDef)
+AD_COM_METH(.method-LookupLegacyTimecodeDataDef)
+AD_COM_METH(.method-LookupMatteDataDef)
+AD_COM_METH(.method-LookupPictureDataDef)
+AD_COM_METH(.method-LookupPictureWithMatteDataDef)
+AD_COM_METH(.method-LookupSoundDataDef)
+AD_COM_METH(.method-LookupTimecodeDataDef)
+
+
 AD_COM_EXT_CLASS_END(AAFDictionary2)
