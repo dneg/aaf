@@ -192,13 +192,14 @@ static int dv_audio_unshuffle_50[6][9] = {
   { 15, 33, 51, 10, 28, 46,  5, 23, 41 },
 };
 
-// Unscramble the audio samples from a PAL DV frame.
-// See the SMPTE 314M-1999 specification, page 15.
-static int deshuffle_audio_block(const unsigned char *inbuf, int dif_seq, int channel,
-								int audio_dif, short *outbufs)
+
+// Deshuffle the audio samples from a PAL DV frame.
+// See the SMPTE 314M-1999 specification, section 4.6.2.2.
+static int deshuffle_audio_block(const unsigned char *inbuf, int dif_seq,
+									int audio_dif, short *outbufs)
 {
-	if (channel == 1)
-		dif_seq -= 6;			// hard-coded for 625/60
+	if (dif_seq >= 6)
+		dif_seq -= 6;			// hard-coded for 625/50
 
 	int i_base = dv_audio_unshuffle_50[dif_seq][audio_dif];
 
@@ -615,13 +616,13 @@ static bool addMasterMobForDVFile(
 			break;
 		}
 
-		// There are 12 DIF sequences, each storing audio data, in a PAL 625/60 system
+		// There are 12 DIF sequences, each storing audio data, in PAL 625/50
 		// Each DIF sequence is 12000 bytes long and has 9 DIF blocks containing
 		// audio data which are not arranged contiguously [SMPTE 314M-1999]
 		for (int dif_seq = 0; dif_seq < 12; dif_seq++)
 		{
-			// Audio data for one channel is scattered over 54 DIF blocks for the 625/50 system
-			// (6 DIF sequences * 9 DIF blocks)
+			// Audio data for one channel is scattered over 54 DIF blocks for
+			// the 625/50 system (6 DIF sequences * 9 DIF blocks)
 			for (int audio_dif = 0; audio_dif < 9; audio_dif++)
 			{
 				// channel 0 is in first 6 DIF sequences, channel 1 in 2nd 6
@@ -630,10 +631,9 @@ static bool addMasterMobForDVFile(
 				// skip first 6 DIF blocks (header, subcode, VAUX sections)
 				// audio blocks occur every 16 DIF blocks after this point
 				// each DIF block is 80 bytes in size
-				int offset = ((6 + dif_seq * 16) * 80);
-				deshuffle_audio_block(buf + offset, dif_seq, channel,
-										audio_dif, audio_buffers[channel]);
-
+				int offset = (dif_seq * 150 + 6 + audio_dif * 16) * 80;
+				deshuffle_audio_block(buf + offset, dif_seq, audio_dif,
+										audio_buffers[channel] );
 			}
 		}
 		aafDataValue_t dataA1 = (unsigned char *)audio_buffers[0];
