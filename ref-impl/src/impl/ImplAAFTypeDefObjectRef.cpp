@@ -164,3 +164,17 @@ bool ImplAAFTypeDefObjectRef::IsVariableArrayable () const
 
 bool ImplAAFTypeDefObjectRef::IsStringable () const
 { return false; }
+
+
+
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefObjectRef::onSave(void* clientContext) const
+{
+  ImplAAFTypeDef::onSave(clientContext);
+}
+
+void ImplAAFTypeDefObjectRef::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDef::onRestore(clientContext);
+}

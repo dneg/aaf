@@ -79,8 +79,7 @@ ImplAAFPropertyDef::~ImplAAFPropertyDef ()
 }
 
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPropertyDef::pvtInitialize (
+AAFRESULT ImplAAFPropertyDef::pvtInitialize (
       const aafUID_t & propertyAuid,
       OMPropertyId omPid,
       const aafCharacter * pPropName,
@@ -95,6 +94,47 @@ AAFRESULT STDMETHODCALLTYPE
   hr = ImplAAFMetaDefinition::Initialize(propertyAuid, pPropName, NULL);
 	if (AAFRESULT_FAILED (hr))
     return hr;
+
+  _Type = typeId;
+  _pid = omPid;
+  _IsOptional = isOptional;
+
+  if (isUniqueIdentifier)
+  {
+    // Only set this optional property if true.
+    _IsUniqueIdentifier = isUniqueIdentifier;
+  }
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT ImplAAFPropertyDef::pvtInitialize (
+      aafUID_constref propertyAuid,
+      OMPropertyId omPid,
+      aafCharacter_constptr pPropName,
+      ImplAAFTypeDef *pType,
+      aafBoolean_t isOptional,
+      aafBoolean_t isUniqueIdentifier)
+{
+  AAFRESULT hr;
+
+  if (! pPropName) return AAFRESULT_NULL_PARAM;
+  if (! pType)
+    return AAFRESULT_NULL_PARAM;
+
+  aafUID_t typeId;
+  hr = pType->GetAUID(&typeId);
+  if (AAFRESULT_FAILED (hr))
+    return hr;
+
+  hr = ImplAAFMetaDefinition::Initialize(propertyAuid, pPropName, NULL);
+  if (AAFRESULT_FAILED (hr))
+    return hr;
+
+  // Save the type. This is NOT reference counted!
+  _cachedType = pType;
+
 
   _Type = typeId;
   _pid = omPid;
@@ -292,4 +332,26 @@ void ImplAAFPropertyDef::SetOMPropCreateFunc
 {
   assert (pFunc);
   _OMPropCreateFunc = pFunc;
+}
+
+
+
+
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFPropertyDef::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFPropertyDef));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFPropertyDef::onSave(void* clientContext) const
+{
+  ImplAAFMetaDefinition::onSave(clientContext);
+}
+
+void ImplAAFPropertyDef::onRestore(void* clientContext) const
+{
+  ImplAAFMetaDefinition::onRestore(clientContext);
 }

@@ -865,8 +865,7 @@ static AAFRESULT CreateNewIndirectType (const aafUID_t & idToCreate,
 			return hr;
 		  assert (ptd);
 
-		  AAFRESULT hr = ptd->pvtInitialize (curIndirect->typeID,
-										  curIndirect->typeName);
+		  AAFRESULT hr = ptd->Initialize (curIndirect->typeID, curIndirect->typeName);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 
 		  assert (ppCreatedTypeDef);
@@ -906,7 +905,7 @@ static AAFRESULT CreateNewOpaqueType (const aafUID_t & idToCreate,
 			return hr;
 		  assert (ptd);
 
-		  AAFRESULT hr = ptd->pvtInitialize (curOpaque->typeID,
+		  AAFRESULT hr = ptd->Initialize (curOpaque->typeID,
 										  curOpaque->typeName);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 
