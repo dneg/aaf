@@ -6,7 +6,7 @@ AAFTIFFData\
 AAFImageData\
 #endm
 #c
-#import ./AAFImageData.exp
+#c #import ./AAFImageData.exp
 AD_HEAD
 
 

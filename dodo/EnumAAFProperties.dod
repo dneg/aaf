@@ -1,0 +1,14 @@
+#startm .this-module 0
+EnumAAFProperties\
+#endm
+#c
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+AD_HEAD
+AD_CLASS_UUID(BE316DB1, 7E73, 11D2, 84, 1D, 00, 60, 08, 32, AC, B8)
+
+AD_DEFAULT_UUID(BE316DB2, 7E73, 11D2, 84, 1D, 00, 60, 08, 32, AC, B8)
+AD_CLASS_BEGIN
+AD_CLASS_END

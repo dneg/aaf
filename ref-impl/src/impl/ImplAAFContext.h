@@ -30,14 +30,15 @@ class AAFSession;
 class ImplAAFSession : public ImplAAFRoot
 {
 public:
-  //
-  // Constructor/destructor
-  //
-  //********
-  ImplAAFSession ();
-  virtual ~ImplAAFSession ();
-
   OMDECLARE_STORABLE(ImplAAFSession)
+
+  //****************
+  // GetInstance()
+  //
+  // Allows clients to get the single instance of this class.
+  //
+  static ImplAAFSession * GetInstance ();
+
 
   //****************
   // EndSession()
@@ -114,8 +115,18 @@ public:
 
 private:
 
-	ImplAAFFile	*_topFile;
-	aafProductIdentification_t	*_defaultIdent;
+  //
+  // Constructor/destructor
+  //
+  //********
+  ImplAAFSession ();
+  virtual ~ImplAAFSession ();
+
+  // single instance of this class
+  static ImplAAFSession * _singleton;
+
+  ImplAAFFile	*_topFile;
+  aafProductIdentification_t	*_defaultIdent;
 };
 
 #endif // ! __ImplAAFSession_h__

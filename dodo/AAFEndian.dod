@@ -3,12 +3,34 @@ AAFEndian\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// This interface is used to allow the user to determine the byte
+// order of this object.  Note that the byte order of the object
+// stored in the AAF file may be different from the native byte order
+// of this machine.  Note also that both pieces of information are
+// available here.
+//
+// Byte order of newly created AAF files is set upon creation of that
+// file.  It is set to the byte order of the creating machine.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//)
 AD_DEFAULT_UUID(6BACC0C1, 6091, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
 AD_CLASS_BEGIN
 AD_XMETHOD1(GetStoredByteOrder,
 			[out],
 			objPass,
-			aafByteOrder_t *,
+			eAAFByteOrder_t *,
 			pOrder,
 			Pointer to place where byte order is to be put,
 			Returns the "Endian-ness" in which the current object was or will
@@ -35,7 +57,7 @@ AD_XMETHOD1(GetStoredByteOrder,
 AD_XMETHOD1(GetNativeByteOrder,
 			[out],
 			objPass,
-			aafByteOrder_t *,
+			eAAFByteOrder_t *,
 			pOrder,
 			Pointer to place where byte order is to be put,
 			Returns the native "Endian-ness" of the platform on which this is

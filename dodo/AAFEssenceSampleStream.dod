@@ -5,7 +5,7 @@ AAFEssenceSampleStream\
 AAFRoot\
 #endm
 #c
-#import ./AAFObject.exp
+#c #import ./AAFObject.exp
 AD_HEAD
 /************************************************\
 *												*

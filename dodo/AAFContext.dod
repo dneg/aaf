@@ -5,50 +5,189 @@ AAFSession\
 AAFRoot\
 #endm
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFFile)
-
 AD_CLASS_UUID(F0C10891, 3073, 11d2, 80, 4A, 00, 60, 08, 14, 3E, 6F)
+
 AD_DEFAULT_UUID(F0C10892, 3073, 11d2, 80, 4A, 00, 60, 08, 14, 3E, 6F)
-
 AD_CLASS_BEGIN
-
 AD_BEGIN_SESSION
-
 AD_METHOD0(EndSession,
 			End the session freeing up memory.)
 
+
 AD_XMETHOD3(CreateFile,
-			[in], objPass,aafDataBuffer_t,filePath, File path [replace with object later],
-			[in], objPass,aafFileRev_t, rev, File revision to create,
-			[out], objOut,AAFFile, file,Current AAF file,
-			Creates an AAF file of the given revision.)
+			[in],
+			  objPass,
+			  aafWChar *,
+			  pFilePath,
+			  File path,
+			[in],
+			  objPass,
+			  aafFileRev_t,
+			  rev,
+			  File revision to create,
+			[out],
+			  objOut,
+			  AAFFile,
+			  ppFile,
+			  Newly created file,
+			Creates a new AAF file in the filesystem with the given revision
+  // and filename which will be opened for writing.  Creates an
+  // AAFFile object to represent that file\, and returns it to the user
+  // through the ppFile argument.  Will fail if the named file already
+  // exists.  \(Use OpenExistingFileModify\(\) to update the contents of
+  // an existing file.\)  Succeeds if all of the following are true:
+  // - the given file path pointer is valid.
+  // - the given file path is valid\, and a writeable file can be
+  //   created.
+  // - a file of that name does not already exist.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pFilePath or ppFile arg is NULL.
+  //
+  // AAFRESULT_NOT_WRITEABLE
+  //   - the given location is write-protected.
+  //
+  // AAFRESULT_FILE_EXISTS
+  //   - the given file already exists.
+  //)
+
 
 AD_XMETHOD2(OpenReadFile,
-			[in], objPass,aafDataBuffer_t,filePath, File path [replace with object later],
-			[out], objOut,AAFFile, file,Current AAF file,
-			Opens an AAF file for reading.)
+			[in],
+			  objPass,
+			  aafWChar *,
+			  pFilePath,
+			  File path,
+			[out],
+			  objOut,
+			  AAFFile,
+			  ppFile,
+			  Current AAF file,
+			Opens an existing AAF file in the filesystem for reading.
+  // Creates an AAFFile object to represent that file\, and returns it
+  // to the user through the ppFile argument.  Succeeds if all of the
+  // following are true:
+  // - the given file path pointer is valid.
+  // - the given file exists.
+  // - the given file is readable.
+  // - the given file is a valid AAF file
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pFilePath or ppFile arg is NULL.
+  //
+  // AAFRESULT_FILE_NOT_FOUND
+  //   - the named file does not exist.
+  //
+  // AAFRESULT_NOT_READABLE
+  //   - the given file is not readable
+  //
+  // AAFRESULT_NOTAAFFILE
+  //   - the given file is not a valid AAF file.
+  //)
+
 
 AD_XMETHOD2(OpenModifyFile,
-			[in], objPass,aafDataBuffer_t,filePath, File path [replace with object later],
-			[out], objOut,AAFFile, file,Current AAF file,
-			Opens an AAF file for modification.)
+			[in],
+			  objPass,
+			  aafWChar *,
+			  pFilePath,
+			  File path,
+			[out],
+			  objOut,
+			  AAFFile,
+			  ppFile,
+			  Current AAF file,
+			Opens an existing AAF file in the filesystem for
+  // modification. Creates an AAFFile object to represent that file\,
+  // and returns it to the user through the ppFile argument.  Succeeds
+  // if all of the following are true:
+  // - the given file path pointer is valid.
+  // - the given file exists.
+  // - the given file is readable.
+  // - the given file is writeable.
+  // - the given file is a valid AAF file
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pFilePath or ppFile arg is NULL.
+  //
+  // AAFRESULT_FILE_NOT_FOUND
+  //   - the named file does not exist.
+  //
+  // AAFRESULT_NOT_READABLE
+  //   - the given file is not readable
+  //
+  // AAFRESULT_NOT_WRITEABLE
+  //   - the given file is not writeable
+  //
+  // AAFRESULT_NOTAAFFILE
+  //   - the given file is not a valid AAF file.
+  //)
 
-AD_METHOD1(SetDefaultIdentification,
-		   [in],aafProductIdentification_t *,ident, a struct from which it is initialized,
-		   Sets the object which identifies the creator of the file.)
 
-AD_METHOD1(GetIdentification,
-		   [out],aafProductIdentification_t *,ident, returned identification info,
-		   Gets information identifying the creator of the file.)
+AD_XMETHOD1(SetDefaultIdentification,
+			[in],
+			objPass,
+			aafProductIdentification_t *,
+			pIdent,
+			a struct from which it is initialized,
+     Sets the object which identifies the creator of the file.
+  // Succeeds if the following is true:
+  // - the pIdent pointer is not NULL.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - the pIdent arg is NULL.
+  //)
 
+
+AD_XMETHOD1(GetIdentification,
+			[out],
+			objPass,
+			aafProductIdentification_t *,
+			pIdent,
+			returned identification info,
+     Gets information identifying the creator of the file.  Copies
+  // that information into the caller-allocated structure which is
+  // pointed to by pIdent.  Succeeds if the following is true:
+  // - the pIdent pointer is not NULL.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - the pIdent arg is NULL.
+  //)
 AD_CLASS_END

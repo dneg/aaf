@@ -14,18 +14,6 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
-
 
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
@@ -46,10 +34,10 @@ public:
 
 
   //****************
-  // InitTimecode()
+  // Initialize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    InitTimecode
+    Initialize
 	    (// @parm [in] Length Property Value
          aafLength_t  length,
 

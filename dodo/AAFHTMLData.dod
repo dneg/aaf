@@ -6,7 +6,7 @@ AAFHTMLData\
 AAFEssenceData\
 #endm
 #c
-#import ./AAFEssenceData.exp
+#c #import ./AAFEssenceData.exp
 AD_HEAD
 
 
