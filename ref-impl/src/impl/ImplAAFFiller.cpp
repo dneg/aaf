@@ -72,7 +72,7 @@ ImplAAFFiller::GetObjectClass(aafUID_t * pClass)
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  memcpy (pClass, &CLSID_AAFFiller, sizeof aafClassID_t);
+  memcpy (pClass, &CLSID_AAFFiller, sizeof (aafClassID_t));
   return AAFRESULT_SUCCESS;
 }
 
