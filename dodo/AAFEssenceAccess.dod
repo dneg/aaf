@@ -17,6 +17,12 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFMasterMob)
 AD_FORWARD_DECLARATION(AAFSourceMob)
