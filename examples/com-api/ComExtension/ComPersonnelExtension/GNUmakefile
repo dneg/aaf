@@ -20,24 +20,24 @@ CXXFILES = AAFPersonnelExtension.cpp \
 	   CAAFAdminMob.cpp \
 	   CAAFPersonnelResource.cpp
 
-SUPOBJS = $(OBJDIR)/../../com-dll/obj/com-dll/CAAFClassFactory.o \
-	  $(OBJDIR)/../../com-dll/obj/com-dll/CAAFServer.o \
-	  $(OBJDIR)/../../com-dll/obj/com-dll/CAAFUnknown.o \
+SUPOBJS = $(OBJDIR)/../../com-dll/obj/CAAFClassFactory.o \
+	  $(OBJDIR)/../../com-dll/obj/CAAFServer.o \
+	  $(OBJDIR)/../../com-dll/obj/CAAFUnknown.o \
 	  $(OBJDIR)/extensionUtils.o
 
 $(LIBDIR)/libAAFPersonnelExtension$(LIB_SUFFIX) : $(LIBDIR) $(OBJDIR) $(CXXOBJS)
-	$(LD_DYN_LIB)  $(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(LIBDIR) \
-	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS) -o $@ -laaflib -laafiid
+	$(LD_DYN_LIB) $(SUPOBJS) $(CXXOBJS) \
+	$(CC2LDOPT) $(LD_DYN_LIB_PATH_FLAG) $(LIBDIR) \
+	-L$(LIBDIR) -o $@ -laaflib -laafiid
 
 CXXFILES2 = extensionReadPlugin.cpp \
 	    extensionWritePlugin.cpp \
 	    writePlugin.cpp
 
 $(BINDIR)/ComPersonnelPluginWrite$(EXE_SUFFIX) : $(BINDIR) $(OBJDIR) $(CXXOBJS2)
-	$(CC) -n32 -Wl,-wall $(CXXOBJS2) $(CC2LDOPT) \
+	$(CC) -n32 -Wl,-wall $(CXXOBJS2) $(OBJDIR)/extensionUtils.o $(CC2LDOPT)\
 	$(LD_DYN_LIB_PATH_FLAG) $(CC2LDOPT) $(LIBDIR) \
-	-L$(LIBDIR) $(CC2LDOPT) -laaflib -laafiid -o $@ -lC -laafutils \
-	-lAAFPersonnelExtension
+	-L$(LIBDIR) $(CC2LDOPT) -laaflib -laafiid -o $@ -lC -laafutils
 
 .PHONY : clean
 clean :
