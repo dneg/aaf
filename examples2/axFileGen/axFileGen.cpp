@@ -18,6 +18,13 @@
 //
 //=---------------------------------------------------------------------=
 
+
+#ifdef WIN32
+// warning C4660: template-class specialization 'AxFGRegistry<class AxFGOp>' is already instantiated
+// etc
+#pragma warning( disable:4660 )
+#endif 
+
 #include "axFileGen.h"
 
 #include <AxFile.h>
