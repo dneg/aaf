@@ -57,7 +57,9 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
   : _Type(PID_PropertyDefinition_Type, "Type"),
     _IsOptional(PID_PropertyDefinition_IsOptional, "IsOptional"),
     _pid(PID_PropertyDefinition_LocalIdentification, "LocalIdentification"),
-	_cachedType (0)  // BobT: don't reference count the cached type!
+	_cachedType (0),  // BobT: don't reference count the cached type!
+	_bname (0),
+	_OMPropCreateFunc (0)
 {
   _persistentProperties.put (_Type.address());
   _persistentProperties.put (_IsOptional.address());
@@ -68,6 +70,8 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
 ImplAAFPropertyDef::~ImplAAFPropertyDef ()
 {
   // BobT: don't reference count the cached type!
+
+  delete[] _bname;
 }
 
 
@@ -76,13 +80,13 @@ AAFRESULT STDMETHODCALLTYPE
       const aafUID_t * pPropertyAuid,
       OMPropertyId omPid,
       wchar_t * pPropName,
-      ImplAAFTypeDef * pTypeDef,
+	  const aafUID_t * pTypeId,
       aafBool isOptional)
 {
   AAFRESULT hr;
 
   if (! pPropertyAuid)       return AAFRESULT_NULL_PARAM;
-  if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
+  if (! pTypeId)  return AAFRESULT_NULL_PARAM;
   if (! pPropName) return AAFRESULT_NULL_PARAM;
 
   hr = SetAUID (pPropertyAuid);
@@ -91,11 +95,8 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetName (pPropName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  assert (pTypeDef);
-  aafUID_t typeId;
-  hr = pTypeDef->GetAUID (&typeId);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  _Type = typeId;
+  assert (pTypeId);
+  _Type = *pTypeId;
 
   _pid = omPid;
   _IsOptional = isOptional;
@@ -129,7 +130,10 @@ AAFRESULT STDMETHODCALLTYPE
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 	  assert (tmp);
-	  pNonConstThis->_cachedType = tmp;
+	  // If lookup caused this to already be put into the cache, just
+	  // throw away the current copy (in tmp)
+	  if (! pNonConstThis->_cachedType)
+		pNonConstThis->_cachedType = tmp;
 	  tmp->ReleaseReference ();
 	  tmp = 0;
 	}
@@ -196,3 +200,100 @@ OMPropertyId ImplAAFPropertyDef::OmPid (void) const
 }
 
 
+const OMType* ImplAAFPropertyDef::type(void) const
+{
+  AAFRESULT hr;
+  ImplAAFTypeDef * ptd = 0;
+
+  hr = GetTypeDef (&ptd);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (ptd);
+  // Don't reference count these!
+  aafUInt32 refCount;
+  refCount = ptd->ReleaseReference ();
+  // make sure our assumption (dict owns a ref) is correct
+  assert (refCount > 0);
+  return ptd;
+}
+
+
+const char* ImplAAFPropertyDef::name(void) const
+{
+  if (! _bname)
+	{
+	  // We'll have to convert the aafCharacter name to regular
+	  // byte-sized characters.
+	  AAFRESULT hr;
+	  aafCharacter * wname = 0;
+	  aafUInt32 nameLen;
+
+	  ImplAAFPropertyDef * pNonConstThis =
+		(ImplAAFPropertyDef *) this;
+	  hr = pNonConstThis->GetNameBufLen (&nameLen);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  wname = (aafCharacter*) new aafUInt8[nameLen];
+	  assert (wname);
+
+	  hr = pNonConstThis->GetName (wname, nameLen);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+
+	  // Convert the prop name
+	  pNonConstThis->_bname = new char [nameLen];
+	  assert (_bname);
+	  wcstombs (pNonConstThis->_bname, wname, nameLen);
+	  delete [] wname;
+	  // null terminate.  Don't forget nameLen is in bytes for a
+	  // string of aafCharacters, so we'll have to cut it in half in
+	  // order to get the proper index for the null terminator.
+	  _bname[nameLen/(sizeof (aafCharacter) / sizeof (aafUInt8))]
+		= '\0';
+	}
+  assert (_bname);
+  return _bname;
+}
+
+
+OMPropertyId ImplAAFPropertyDef::identification(void) const
+{
+  return _pid;
+}
+
+
+bool ImplAAFPropertyDef::isOptional(void) const
+{
+  return _IsOptional ? true : false;
+}
+
+
+OMProperty * ImplAAFPropertyDef::CreateOMProperty () const
+{
+  OMProperty * result = 0;
+
+  ImplAAFPropertyDef* pNonConstThis = (ImplAAFPropertyDef*) this;
+
+  if (_OMPropCreateFunc)
+	{
+	  result = _OMPropCreateFunc (_pid, name());
+	}
+
+  if (! result)
+	{
+	  // Either there was no create func, or an existing one deferred
+	  // to the type def.
+	  ImplAAFTypeDefSP ptd;
+	  AAFRESULT hr = GetTypeDef (&ptd);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (ptd);
+	  result = ptd->pvtCreateOMPropertyMBS (_pid, name());
+	}
+
+  return result;
+}
+
+
+void ImplAAFPropertyDef::SetOMPropCreateFunc
+(ImplAAFOMPropertyCreateFunc_t pFunc)
+{
+  assert (pFunc);
+  _OMPropCreateFunc = pFunc;
+}
