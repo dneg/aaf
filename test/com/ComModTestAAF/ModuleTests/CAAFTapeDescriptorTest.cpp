@@ -14,6 +14,9 @@
 #endif
 
 #include <iostream.h>
+#include <stdio.h>
+
+#include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
@@ -24,12 +27,40 @@ static aafVideoSignalType_t VideoSignalType = kPALSignal;
 static aafTapeFormatType_t TapeFormat = kVHSFormat;
 static aafLength_t TapeLength = 3200 ;
 
+
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
+inline void checkExpression(bool expression, HRESULT r)
+{
+  if (!expression)
+    throw r;
+}
+
+
+
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
-
+  IAAFDictionary*  pDictionary = NULL;
 	IAAFSourceMob*				pSourceMob = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFEssenceDescriptor*		pEssDesc = NULL;
@@ -41,7 +72,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"AAFTapeDescriptor Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -51,13 +82,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession);
-	*/
+  // Remove the previous test file if any.
+  RemoveTestFile(pFileName);
+
 	hr = CoCreateInstance(CLSID_AAFFile,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
@@ -69,76 +96,79 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		hr = pFile->Initialize();
 		if (AAFRESULT_SUCCESS == hr)
 		{
-			// hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
 			hr = pFile->OpenNewModify(pFileName, 0, &ProductInfo);
 			if (AAFRESULT_SUCCESS == hr)
 			{
 				hr = pFile->GetHeader(&pHeader);
 				if (AAFRESULT_SUCCESS == hr)
 				{
-					// Create a source mob
-					hr = CoCreateInstance(CLSID_AAFSourceMob,
-											NULL, 
-											CLSCTX_INPROC_SERVER, 
-											IID_IAAFSourceMob, 
-											(void **)&pSourceMob);
-					if (AAFRESULT_SUCCESS == hr)
-					{
-						hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-						if (AAFRESULT_SUCCESS == hr)
-						{
-							CoCreateGuid((GUID *)&newUID);
-							pMob->SetMobID(&newUID);
-							pMob->SetName(L"TapeDescriptorTest");
-							hr = CoCreateInstance(CLSID_AAFTapeDescriptor,
-													NULL, 
-													CLSCTX_INPROC_SERVER, 
-													IID_IAAFTapeDescriptor, 
-													(void **)&pTapeDesc);		
- 							if (AAFRESULT_SUCCESS == hr)
-							{
-								hr = pTapeDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
-								if (AAFRESULT_SUCCESS == hr)
-								{
-									hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
-									if (AAFRESULT_SUCCESS == hr)
-									{
-										hr = pTapeDesc->SetTapeManufacturer( Manufacturer );
-										if (AAFRESULT_SUCCESS == hr )
-										{
-											hr = pTapeDesc->SetTapeModel( Model );
-											if (AAFRESULT_SUCCESS == hr )
-											{
-												hr = pTapeDesc->SetTapeFormFactor( FormFactor );
-												if (AAFRESULT_SUCCESS == hr )
-												{
-													hr = pTapeDesc->SetSignalType( VideoSignalType );
-													if (AAFRESULT_SUCCESS == hr )
-													{
-														hr = pTapeDesc->SetTapeFormat( TapeFormat );
-														if (AAFRESULT_SUCCESS == hr )
-															hr = pTapeDesc->SetTapeLength( TapeLength );
-													}
-												}
-											}
-										}
-									}
-									pEssDesc->Release();
-									pEssDesc = NULL;
-								}
-								pTapeDesc->Release();
-								pTapeDesc = NULL;
-							}
+          hr = pHeader->GetDictionary(&pDictionary);
+				  if (AAFRESULT_SUCCESS == hr)
+				  {
+					  // Create a source mob
 
-							// Add the MOB to the file
-							if (AAFRESULT_SUCCESS == hr)
-								hr = pHeader->AppendMob(pMob);
+					  hr = pDictionary->CreateInstance(&AUID_AAFSourceMob,
+											  IID_IAAFSourceMob, 
+											  (IUnknown **)&pSourceMob);
+					  if (AAFRESULT_SUCCESS == hr)
+					  {
+						  hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+						  if (AAFRESULT_SUCCESS == hr)
+						  {
+							  CoCreateGuid((GUID *)&newUID);
+							  pMob->SetMobID(&newUID);
+							  pMob->SetName(L"TapeDescriptorTest");
+							  hr = pDictionary->CreateInstance(&AUID_AAFTapeDescriptor,
+													  IID_IAAFTapeDescriptor, 
+													  (IUnknown **)&pTapeDesc);		
+ 							  if (AAFRESULT_SUCCESS == hr)
+							  {
+								  hr = pTapeDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
+								  if (AAFRESULT_SUCCESS == hr)
+								  {
+									  hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
+									  if (AAFRESULT_SUCCESS == hr)
+									  {
+										  hr = pTapeDesc->SetTapeManufacturer( Manufacturer );
+										  if (AAFRESULT_SUCCESS == hr )
+										  {
+											  hr = pTapeDesc->SetTapeModel( Model );
+											  if (AAFRESULT_SUCCESS == hr )
+											  {
+												  hr = pTapeDesc->SetTapeFormFactor( FormFactor );
+												  if (AAFRESULT_SUCCESS == hr )
+												  {
+													  hr = pTapeDesc->SetSignalType( VideoSignalType );
+													  if (AAFRESULT_SUCCESS == hr )
+													  {
+														  hr = pTapeDesc->SetTapeFormat( TapeFormat );
+														  if (AAFRESULT_SUCCESS == hr )
+															  hr = pTapeDesc->SetTapeLength( TapeLength );
+													  }
+												  }
+											  }
+										  }
+									  }
+									  pEssDesc->Release();
+									  pEssDesc = NULL;
+								  }
+								  pTapeDesc->Release();
+								  pTapeDesc = NULL;
+							  }
 
-							pMob->Release();
-							pMob = NULL;
-						}
-						pSourceMob->Release();
-						pSourceMob = NULL;
+							  // Add the MOB to the file
+							  if (AAFRESULT_SUCCESS == hr)
+								  hr = pHeader->AppendMob(pMob);
+
+							  pMob->Release();
+							  pMob = NULL;
+						  }
+						  pSourceMob->Release();
+						  pSourceMob = NULL;
+            }
+
+					  pDictionary->Release();
+					  pDictionary = NULL;
 					}
 					pHeader->Release();
 					pHeader = NULL;
@@ -152,21 +182,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 
-	/*
-	if (pSession)
-	{
-		pSession->EndSession();
-		pSession->Release();
-	}
-	*/
-
-
 	return hr;
 }
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 
@@ -190,7 +210,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"AAFTapeDescriptor Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -200,14 +220,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession);
-	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
+
+  hr = CoCreateInstance(CLSID_AAFFile,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFFile, 
@@ -218,7 +232,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  hr = pFile->Initialize();
 		if (AAFRESULT_SUCCESS == hr)
 		{
-			// hr = pSession->OpenReadFile(pFileName, &pFile);
 			hr = pFile->OpenExistingRead(pFileName, 0);
 			if (AAFRESULT_SUCCESS == hr)
 			{
@@ -312,15 +325,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		pFile = NULL;
 	}
 
-
-	/*
-	if (pSession)
-	{
-		pSession->EndSession();
-		pSession->Release();
-	}
-	*/
-
 	return hr;
 }
 
@@ -343,26 +347,3 @@ HRESULT CAAFTapeDescriptor::test()
 
 	return hr;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -23,12 +23,43 @@
 #error - improperly defined include guard
 #endif
 
+#include <iostream.h>
+#include <stdio.h>
+
+#include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
-#include <iostream.h>
-
 #define kNumComponents	5
+
+
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
+inline void checkExpression(bool expression, HRESULT r)
+{
+  if (!expression)
+    throw r;
+}
+
+
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
@@ -40,7 +71,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"AAFSequence Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -113,218 +144,241 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	// IAAFSession*	pSession = NULL;
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
+  IAAFDictionary*  pDictionary = NULL;
 	IAAFMob*		pMob = NULL;
-	IAAFMobSlot*	pMobSlot;
-	IAAFSequence*	pSequence;
-	IAAFSegment*	pSegment;
+	IAAFMobSlot*	pMobSlot = NULL;
+	IAAFSequence*	pSequence = NULL;
+	IAAFSegment*	pSegment = NULL;
+	IAAFComponent*	pComponent = NULL;
 	aafUID_t		NewMobID;
 	int				i;
-	HRESULT			hr;
+	HRESULT			hr = S_OK;
 
-	// Create the AAF file
-	hr = OpenAAFFile(pFileName, kMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader);
-	if (FAILED(hr))
-		return hr;
 
-	// Create a Composition Mob
-	hr = CoCreateInstance(CLSID_AAFCompositionMob,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
-							IID_IAAFMob, 
-							(void **)&pMob);
-	if (FAILED(hr))
-		goto Cleanup;
+  try
+  {  
+    // Remove the previous test file if any.
+    RemoveTestFile(pFileName);
 
-	CoCreateGuid((GUID *)&NewMobID);
-	hr = pMob->SetMobID(&NewMobID);
-	hr = pMob->SetName(L"AAFSequenceTest");
-	
-	// Add mob slot w/ sequence
- 	hr = CoCreateInstance(CLSID_AAFSequence,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSequence, 
-						   (void **)&pSequence);		
- 	if (AAFRESULT_SUCCESS != hr)
-		goto Cleanup;
 
-	pSequence->Initialize((aafUID_t*)&DDEF_Audio);
+	  // Create the AAF file
+	  checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader));
 
-	//
-	//	Add some segments.  Need to test failure conditions
-	//	(i.e. starting/ending w/ transition, two trans back
-	//	to bacl).
-	//
-	for(i = 0; i < kNumComponents; i++)
-	{
-		IAAFComponent*	pComponent;
-		aafLength_t		len = 10;
+    // Get the AAF Dictionary so that we can create valid AAF objects.
+    checkResult(pHeader->GetDictionary(&pDictionary));
+ 		
+	  // Create a Composition Mob
+	  checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+							  IID_IAAFMob, 
+							  (IUnknown **)&pMob));
 
-		hr = CoCreateInstance(CLSID_AAFFiller,
-								NULL, 
-								CLSCTX_INPROC_SERVER, 
-								IID_IAAFComponent, 
-								(void **)&pComponent);
- 		if (FAILED(hr))
-			break;
+	  checkResult(CoCreateGuid((GUID *)&NewMobID));
+	  checkResult(pMob->SetMobID(&NewMobID));
+	  checkResult(pMob->SetName(L"AAFSequenceTest"));
+	  
+	  // Add mob slot w/ sequence
+ 	  checkResult(pDictionary->CreateInstance(&AUID_AAFSequence,
+						     IID_IAAFSequence, 
+						     (IUnknown **)&pSequence));		
+	  checkResult(pSequence->Initialize((aafUID_t*)&DDEF_Audio));
 
-		pComponent->SetDataDef((aafUID_t*)&DDEF_Audio);
-		pComponent->SetLength(&len);
-		hr = pSequence->AppendComponent(pComponent);
+	  //
+	  //	Add some segments.  Need to test failure conditions
+	  //	(i.e. starting/ending w/ transition, two trans back
+	  //	to bacl).
+	  //
+	  for(i = 0; i < kNumComponents; i++)
+	  {
+		  aafLength_t		len = 10;
 
-		pComponent->Release();
+		  checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
+								  IID_IAAFComponent, 
+								  (IUnknown **)&pComponent));
 
-		if (FAILED(hr))
-			break;
-	}
+		  checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_Audio));
+		  checkResult(pComponent->SetLength(&len));
+		  checkResult(pSequence->AppendComponent(pComponent));
 
-	if (SUCCEEDED(hr))
-	{
-		hr = pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment);
-		if (FAILED(hr))
-			goto Cleanup;
+		  pComponent->Release();
+      pComponent = NULL;
+	  }
 
-		pMob->AppendNewSlot(pSegment, 1, L"AAF Test Sequence", &pMobSlot);
-		if (pMobSlot) pMobSlot->Release();
+		checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
+
+		checkResult(pMob->AppendNewSlot(pSegment, 1, L"AAF Test Sequence", &pMobSlot));
+		
+    pMobSlot->Release();
+    pMobSlot = NULL;
 
 		pSegment->Release();
+    pSegment = NULL;
 
 		// Add the master mob to the file and cleanup
 		pHeader->AppendMob(pMob);
-	}
 
-Cleanup:
-	if (pSequence) pSequence->Release();
-	if (pMob) pMob->Release();
-	if (pHeader) pHeader->Release();
+  }
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+  }
+
+
+  // Cleanup and return
+  if (pMobSlot)
+    pMobSlot->Release();
+
+  if (pSegment)
+    pSegment->Release();
+
+  if (pComponent)
+    pComponent->Release();
+
+	if (pSequence)
+    pSequence->Release();
+
+	if (pMob)
+    pMob->Release();
+
+	if (pDictionary)
+    pDictionary->Release();
+
+	if (pHeader)
+    pHeader->Release();
 
 	if (pFile)
 	{
 		pFile->Close();
 		pFile->Release();
 	}
-
-	/*
-	if (pSession)
-	{
-		pSession->EndSession();
-		pSession->Release();
-	}
-	*/
 
 	return hr;
 }
 
 static HRESULT ReadAAFFile(aafWChar* pFileName)
 {
-	// IAAFSession*	pSession = NULL;
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IEnumAAFMobs*	pMobIter = NULL;
 	IAAFMob*		pMob;
+	IEnumAAFMobSlots*	pSlotIter = NULL;
+	IAAFMobSlot*		pSlot = NULL;
+	IAAFComponent*		pComp = NULL;
+	IAAFSegment*		pSegment = NULL;
+	IAAFSequence*		pSequence = NULL;
+	IEnumAAFComponents*	pCompIter = NULL;
 	aafNumSlots_t	numMobs;
 	aafSearchCrit_t	criteria;
 	HRESULT			hr;
 
-	// Open the AAF file
-	hr = OpenAAFFile(pFileName, kMediaOpenReadOnly, /*&pSession,*/ &pFile, &pHeader);
-	if (FAILED(hr))
-		return hr;
 
-	pHeader->GetNumMobs(kCompMob, &numMobs);
-	if (1 != numMobs )
-	{
-		hr = AAFRESULT_TEST_FAILED;
-		goto Cleanup;
-	}
+  try
+  {
+	  // Open the AAF file
+	  checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
 
-	// Enumerate over Composition MOBs
-	criteria.searchTag = kByMobKind;
-	criteria.tags.mobKind = kCompMob;
-    hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
-	while (pMobIter && pMobIter->NextOne(&pMob) != AAFRESULT_NO_MORE_MOBS)
-	{
-		IAAFMobSlot*		pSlot;
-		aafNumSlots_t		numSlots = 0;
-		IEnumAAFMobSlots*	pSlotIter = NULL;
+    // Validate that there is only one composition mob.
+	  checkResult(pHeader->GetNumMobs(kCompMob, &numMobs));
+	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-		pMob->GetNumSlots(&numSlots);
-		if (1 != numSlots)
-		{
-			hr = AAFRESULT_TEST_FAILED;
-		}
-		else
-		{
-			// Enumerate over all MOB slots for this MOB
-			hr = pMob->EnumAAFAllMobSlots(&pSlotIter);
-			while (pSlotIter && pSlotIter->NextOne(&pSlot) != AAFRESULT_NO_MORE_OBJECTS)
+	  // Enumerate over Composition MOBs
+	  criteria.searchTag = kByMobKind;
+	  criteria.tags.mobKind = kCompMob;
+    checkResult(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+	  while (pMobIter && pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS)
+	  {
+		  aafNumSlots_t		numSlots = 0;
+
+		  checkResult(pMob->GetNumSlots(&numSlots));
+		  checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
+
+      // Enumerate over all MOB slots for this MOB
+			checkResult(pMob->EnumAAFAllMobSlots(&pSlotIter));
+			while (pSlotIter && pSlotIter->NextOne(&pSlot) == AAFRESULT_SUCCESS)
 			{
-				IAAFComponent*		pComp;
-				IAAFSegment*		pSegment;
-				IAAFSequence*		pSequence;
-				IEnumAAFComponents*	pCompIter;
 				aafInt32			numCpnts;
 
-				pSlot->GetSegment(&pSegment);
-				pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence);
+				checkResult(pSlot->GetSegment(&pSegment));
+				checkResult(pSegment->QueryInterface(IID_IAAFSequence, (void **) &pSequence));
+
+				checkResult(pSequence->GetNumComponents(&numCpnts));
+				checkExpression(numCpnts == kNumComponents, AAFRESULT_TEST_FAILED);
+
+        checkResult(pSequence->EnumComponents(&pCompIter));
+			  numCpnts = 0;
+			  while (pCompIter && pCompIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
+			  {
+					aafLength_t	len;
+					aafUID_t	dataDef;
+
+					numCpnts++;
+
+					checkResult(pComp->GetDataDef(&dataDef));
+					checkExpression(memcmp(&DDEF_Audio, &dataDef, sizeof(aafUID_t)) == 0,
+					                AAFRESULT_TEST_FAILED);
+
+					checkResult(pComp->GetLength(&len));
+					checkExpression(len == 10, AAFRESULT_TEST_FAILED);
+
+					pComp->Release();
+          pComp = NULL;
+				}
+
+
+        checkExpression(numCpnts == kNumComponents, AAFRESULT_TEST_FAILED);
+
+				pCompIter->Release();
+        pCompIter = NULL;
+
+        pSequence->Release();
+        pSequence = NULL;
+
 				pSegment->Release();
+        pSegment = NULL;
 
-				pSequence->GetNumComponents(&numCpnts);
-				if (numCpnts != kNumComponents)
-				{
-					hr = AAFRESULT_TEST_FAILED;
-				}
-				else
-				{
-					pSequence->EnumComponents(&pCompIter);
-					numCpnts = 0;
-					while (pCompIter && pCompIter->NextOne(&pComp) != AAFRESULT_NO_MORE_OBJECTS)
-					{
-						aafLength_t	len;
-						aafUID_t	dataDef;
-
-						numCpnts++;
-
-						pComp->GetDataDef(&dataDef);
-						if (memcmp(&DDEF_Audio, &dataDef, sizeof(aafUID_t)) != 0)
-							hr = AAFRESULT_TEST_FAILED;
-
-						pComp->GetLength(&len);
-						if (len != 10)
-							hr = AAFRESULT_TEST_FAILED;
-
-						pComp->Release();
-					}
-
-					if (pCompIter) pCompIter->Release();
-
-					if (numCpnts != kNumComponents)
-						hr = AAFRESULT_TEST_FAILED;
-				}
-
-				pSequence->Release();
-				pSlot->Release();
-
-				if (FAILED(hr))
-					break;
+        pSlot->Release();
+        pSlot = NULL;
 			}
 
-			if (pSlotIter) pSlotIter->Release();
+			pSlotIter->Release();
+      pSlotIter = NULL;
+
+		  pMob->Release();
+      pMob = NULL;
 		}
 
-		pMob->Release();
 
-		if (FAILED(hr))
-			break;
 	}
+	catch (HRESULT& rResult)
+	{
+    hr = rResult;
+	}
+
+	// Cleanup object references
+  if (pComp)
+    pComp->Release();
+
+  if (pCompIter)
+    pCompIter->Release();
+
+  if (pSequence)
+    pSequence->Release();
+
+  if (pSegment)
+    pSegment->Release();
+
+  if (pSlot)
+    pSlot->Release();
+
+  if (pSlotIter)
+    pSlotIter->Release();
+
+  if (pMob)
+    pMob->Release();
 
 	if (pMobIter)
 		pMobIter->Release();
-
-Cleanup:
 
 	if (pHeader) pHeader->Release();
 
@@ -334,13 +388,6 @@ Cleanup:
 		pFile->Release();
 	}
 
-	/*
-	if (pSession)
-	{
-		pSession->EndSession();
-		pSession->Release();
-	}
-	*/
 
 	return 	hr;
 }

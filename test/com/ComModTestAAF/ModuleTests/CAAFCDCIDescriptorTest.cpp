@@ -25,6 +25,9 @@
 #endif
 
 #include <iostream.h>
+#include <stdio.h>
+
+#include "AAFStoredObjectIDs.h"
 
 // Default testing values for CDCI
 #define kCWTest		8
@@ -94,6 +97,19 @@ static HRESULT SetDigitalImageDescProps(IAAFCDCIDescriptor* pDesc)
 	return AAFRESULT_SUCCESS;
 }
 
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
 						   IAAFFile**			ppFile,
@@ -103,7 +119,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"AAFCDCIDescriptor Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -161,79 +177,90 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
+	IAAFDictionary*	pDictionary = NULL;
 	IAAFSourceMob*	pSourceMob = NULL;
 	aafUID_t		newUID;
 	HRESULT			hr = AAFRESULT_SUCCESS;
+
+
+  // Remove the previous test file if any.
+  RemoveTestFile(pFileName);
 
 	// Create the AAF file
 	hr = OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader);
 	if (FAILED(hr))
 		return hr;
 
-	// Create a source mob
-	hr = CoCreateInstance(CLSID_AAFSourceMob,
-						NULL, 
-						CLSCTX_INPROC_SERVER, 
-						IID_IAAFSourceMob, 
-						(void **)&pSourceMob);
+  // Get the AAF Dictionary so that we can create valid AAF objects.
+  hr = pHeader->GetDictionary(&pDictionary);
 	if (SUCCEEDED(hr))
-	{
-		IAAFMob*	pMob = NULL;
+  {
+	  // Create a source mob
+	  hr = pDictionary->CreateInstance(&AUID_AAFSourceMob,
+						  IID_IAAFSourceMob, 
+						  (IUnknown **)&pSourceMob);
+	  if (SUCCEEDED(hr))
+	  {
+		  IAAFMob*	pMob = NULL;
 
-		hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-		if (SUCCEEDED(hr))
-		{
-			IAAFCDCIDescriptor*	pCDCIDesc = NULL;
+		  hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+		  if (SUCCEEDED(hr))
+		  {
+			  IAAFCDCIDescriptor*	pCDCIDesc = NULL;
 
-			CoCreateGuid((GUID *)&newUID);
-			pMob->SetMobID(&newUID);
-			pMob->SetName(L"CDCIDescriptorTest");
-			hr = CoCreateInstance(CLSID_AAFCDCIDescriptor,
-									NULL, 
-									CLSCTX_INPROC_SERVER, 
-									IID_IAAFCDCIDescriptor, 
-									(void **)&pCDCIDesc);		
-			if (SUCCEEDED(hr))
-			{
-				// Add all CDCI properties
-				hr = pCDCIDesc->SetComponentWidth(kCWTest);
-				if (SUCCEEDED(hr)) hr = pCDCIDesc->SetHorizontalSubsampling(kHSTest);
-				if (SUCCEEDED(hr)) hr = pCDCIDesc->SetColorSiting(kCSTest);
-				if (SUCCEEDED(hr)) hr = pCDCIDesc->SetBlackReferenceLevel(kBRLTest);
-				if (SUCCEEDED(hr)) hr = pCDCIDesc->SetWhiteReferenceLevel(kWRLTest);
-				if (SUCCEEDED(hr)) hr = pCDCIDesc->SetColorRange(kCRTest);
-				if (SUCCEEDED(hr)) hr = pCDCIDesc->SetPaddingBits(kPBTest);
-				if (SUCCEEDED(hr)) hr = SetDigitalImageDescProps(pCDCIDesc);
+			  CoCreateGuid((GUID *)&newUID);
+			  pMob->SetMobID(&newUID);
+			  pMob->SetName(L"CDCIDescriptorTest");
+			  hr = CoCreateInstance(CLSID_AAFCDCIDescriptor,
+									  NULL, 
+									  CLSCTX_INPROC_SERVER, 
+									  IID_IAAFCDCIDescriptor, 
+									  (void **)&pCDCIDesc);		
+			  if (SUCCEEDED(hr))
+			  {
+				  // Add all CDCI properties
+				  hr = pCDCIDesc->SetComponentWidth(kCWTest);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetHorizontalSubsampling(kHSTest);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetColorSiting(kCSTest);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetBlackReferenceLevel(kBRLTest);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetWhiteReferenceLevel(kWRLTest);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetColorRange(kCRTest);
+				  if (SUCCEEDED(hr)) hr = pCDCIDesc->SetPaddingBits(kPBTest);
+				  if (SUCCEEDED(hr)) hr = SetDigitalImageDescProps(pCDCIDesc);
 
-				if (SUCCEEDED(hr))
-				{
-					IAAFEssenceDescriptor*	pEssDesc = NULL;
+				  if (SUCCEEDED(hr))
+				  {
+					  IAAFEssenceDescriptor*	pEssDesc = NULL;
 
-					hr = pCDCIDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
-					if (SUCCEEDED(hr))
-					{
-						hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
-						if (SUCCEEDED(hr))
-						{
-						}
-						pEssDesc->Release();
-						pEssDesc = NULL;
-					}
-				}
-				pCDCIDesc->Release();
-				pCDCIDesc = NULL;
-			}
+					  hr = pCDCIDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
+					  if (SUCCEEDED(hr))
+					  {
+						  hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
+						  if (SUCCEEDED(hr))
+						  {
+						  }
+						  pEssDesc->Release();
+						  pEssDesc = NULL;
+					  }
+				  }
+				  pCDCIDesc->Release();
+				  pCDCIDesc = NULL;
+			  }
 
-			// Add the MOB to the file
-			if (SUCCEEDED(hr))
-				hr = pHeader->AppendMob(pMob);
+			  // Add the MOB to the file
+			  if (SUCCEEDED(hr))
+				  hr = pHeader->AppendMob(pMob);
 
-			pMob->Release();
-			pMob = NULL;
-		}
-		pSourceMob->Release();
-		pSourceMob = NULL;
-	}
+			  pMob->Release();
+			  pMob = NULL;
+		  }
+		  pSourceMob->Release();
+		  pSourceMob = NULL;
+	  }
+
+    pDictionary->Release();
+    pDictionary = NULL;
+  }
 
 	if (pHeader) pHeader->Release();
 
