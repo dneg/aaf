@@ -181,7 +181,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT
-    ImplEnumAAFPluginLocators::SetPluginDescriptor(ImplAAFPluginDescriptor *pPDesc)
+    ImplEnumAAFPluginLocators::SetPluginDescriptor(ImplAAFPluginDef *pPDesc)
 {
 	if (_cPluginDesc)
 	  _cPluginDesc->ReleaseReference();

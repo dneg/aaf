@@ -32,7 +32,7 @@
  ************************************************************************/
 
 
-class ImplAAFPluginDescriptor;
+class ImplAAFPluginDef;
 class ImplAAFDefObject;
 
 #ifndef __ImplAAFObject_h__
@@ -41,19 +41,19 @@ class ImplAAFDefObject;
 
 #include "OMReferenceContainerIter.h"
 
-typedef OMVariableSizeProperty<aafUID_t> PluginDescWeakRefArrayProp_t;
+typedef OMVariableSizeProperty<aafUID_t> PluginDefWeakRefArrayProp_t;
 
-class ImplEnumAAFPluginDescriptors : public ImplAAFRoot
+class ImplEnumAAFPluginDefs : public ImplAAFRoot
 {
 public:
   //
   // Constructor/destructor
   //
   //********
-  ImplEnumAAFPluginDescriptors ();
+  ImplEnumAAFPluginDefs ();
 
 protected:
-  virtual ~ImplEnumAAFPluginDescriptors ();
+  virtual ~ImplEnumAAFPluginDefs ();
 
 public:
 
@@ -64,7 +64,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     NextOne
         // @parm [out,retval] The Next AAFPluginDescriptor
-        (ImplAAFPluginDescriptor ** ppAAFPluginDescriptor);
+        (ImplAAFPluginDef ** ppAAFPluginDef);
 
   //****************
   // Next()
@@ -75,7 +75,7 @@ public:
          aafUInt32  count,
 
          // @parm [out, size_is(count), length_is(*pFetched)] array to receive AAFPluginDescriptors
-         ImplAAFPluginDescriptor ** ppAAFPluginDescriptors,
+         ImplAAFPluginDef ** ppAAFPluginDefs,
 
          // @parm [out,ref] number of actual AAFPluginDescriptors fetched into ppAAFPluginDescriptors array
          aafUInt32 *  pFetched);
@@ -101,22 +101,18 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Clone
         // @parm [out,retval] new enumeration
-        (ImplEnumAAFPluginDescriptors ** ppEnum);
+        (ImplEnumAAFPluginDefs ** ppEnum);
 
 public:
 // Internal to the toolkit
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetEnumProperty( ImplAAFObject *pObj, PluginDescWeakRefArrayProp_t *pProp);// !!!TEmp until weak reference code
-  virtual AAFRESULT STDMETHODCALLTYPE
 	  SetIterator(ImplAAFObject *pObj,
-				OMReferenceContainerIterator<ImplAAFPluginDescriptor>* iterator);
+				OMReferenceContainerIterator<ImplAAFPluginDef>* iterator);
 
 private:
 	ImplAAFObject						*_enumObj;
-	OMReferenceContainerIterator<ImplAAFPluginDescriptor>*	_iterator;
-	aafUInt32						_current;
-	PluginDescWeakRefArrayProp_t	*_enumProp;
+	OMReferenceContainerIterator<ImplAAFPluginDef>*	_iterator;
 };
 
 #endif // ! __ImplEnumAAFPluginDescriptors_h__

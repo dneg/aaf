@@ -49,7 +49,7 @@ class ImplAAFLocator;
 #include "ImplAAFRoot.h"
 #endif
 
-#include "ImplAAFPluginDescriptor.h"
+#include "ImplAAFPluginDef.h"
 
 class ImplEnumAAFPluginLocators : public ImplAAFRoot
 {
@@ -116,11 +116,11 @@ public:
 public:
 // Internal to the toolkit
 AAFRESULT
-    SetPluginDescriptor(ImplAAFPluginDescriptor *pEDesc);
+    SetPluginDescriptor(ImplAAFPluginDef *pEDesc);
 
 private:
 	aafInt32					_current;
-	ImplAAFPluginDescriptor	*_cPluginDesc;
+	ImplAAFPluginDef			*_cPluginDesc;
 };
 
 #endif // ! __ImplEnumAAFPluginLocators_h__
