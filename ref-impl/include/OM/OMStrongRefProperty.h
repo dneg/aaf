@@ -119,6 +119,8 @@ public:
     //          as an <c OMStorable>.
   virtual OMStorable* storable(void) const;
 
+  virtual OMStrongObjectReference& reference(void) const;
+
 private:
 
   OMStrongObjectReference _reference;

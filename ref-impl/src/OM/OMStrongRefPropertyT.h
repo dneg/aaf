@@ -414,4 +414,13 @@ OMStorable* OMStrongReferenceProperty<ReferencedObject>::storable(void) const
   return result;
 }
 
+template <typename ReferencedObject>
+OMStrongObjectReference&
+OMStrongReferenceProperty<ReferencedObject>::reference(void) const
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::storable");
+
+  return const_cast<OMStrongObjectReference&>(_reference);
+}
+
 #endif
