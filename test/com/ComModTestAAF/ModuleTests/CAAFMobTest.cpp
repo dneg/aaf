@@ -273,8 +273,8 @@ HRESULT CAAFMob::test()
 	try
 	{
 		hr = CreateAAFFile(	pFileName );
-
-		hr = ReadAAFFile( pFileName );
+		if(hr == AAFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
 	}
 	catch (...)
 	{
@@ -286,6 +286,10 @@ HRESULT CAAFMob::test()
   // Cleanup our object if it exists.
   if (pObject)
 	pObject->Release();
+
+  	// When all of the functionality of this class is tested, we can return success
+	if(hr == AAFRESULT_SUCCESS)
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 
   return hr;
 }
