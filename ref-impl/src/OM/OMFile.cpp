@@ -399,23 +399,7 @@ OMStorable* OMFile::restore(void)
 {
   TRACE("OMFile::restore");
   PRECONDITION("File is open", isOpen());
-
-  _rootStore->restore(_referencedProperties);
-
-  OMClassId id;
-  _rootStore->restore(id);
-  ASSERT("Valid root stored object", id == OMRootStorable::_rootClassId);
-
-  _root = new OMRootStorable();
-  _root->attach(this, L"/");
-  _root->setStore(_rootStore);
-  _root->setClassFactory(_dictionary);
-
-  _root->restoreContents();
-
-  OMDictionary *metaDictionary = _root->dictionary();
-  ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
-  _root->setClassFactory(classFactory());
+  PRECONDITION("Valid root", _root != 0);
 
   return _root->clientRoot();
 }
@@ -448,6 +432,8 @@ void OMFile::open(void)
     } else { // _mode == modifyMode
       openModify();
 	}
+    ASSERT("No root object", _root == 0);
+    _root = restoreRoot();
     ASSERT("Object Manager file", isOMFile());
   }
 
@@ -515,8 +501,9 @@ OMStorable* OMFile::root(void)
 OMDictionary* OMFile::dictionary(void) const
 {
   TRACE("OMFile::dictionary");
+  PRECONDITION("Valid root", _root != 0);
 
-  return _dictionary;
+  return _root->dictionary();
 }
 
   // @mfunc Retrieve the <c OMPropertyTable> from this <c OMFile>.
@@ -853,6 +840,8 @@ OMFile::OMFile(const wchar_t* fileName,
   setClassFactory(factory);
   readSignature(_fileName, _signature);
   setName(L"/");
+  ASSERT("No root object", _root == 0);
+  _root = restoreRoot();
   _isOpen = true;
 }
 
@@ -1146,4 +1135,33 @@ void OMFile::createWrite(void)
   }
   ASSERT("Valid store", _rootStore != 0);
   _root->setStore(_rootStore);
+}
+
+OMRootStorable* OMFile::restoreRoot(void)
+{
+  TRACE("OMFile::restoreRoot");
+
+  enum OMLoadMode savedLoadMode = _loadMode;
+  _loadMode = lazyLoad;
+
+  _rootStore->restore(_referencedProperties);
+
+  OMClassId id;
+  _rootStore->restore(id);
+  ASSERT("Valid root stored object", id == OMRootStorable::_rootClassId);
+
+  OMRootStorable* root = new OMRootStorable();
+  ASSERT("Valid heap pointer", root != 0);
+  root->attach(this, L"/");
+  root->setStore(_rootStore);
+  root->setClassFactory(_dictionary);
+
+  root->restoreContents();
+
+  OMDictionary *metaDictionary = root->dictionary();
+  ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
+  root->setClassFactory(classFactory());
+
+  _loadMode = savedLoadMode;
+  return root;
 }

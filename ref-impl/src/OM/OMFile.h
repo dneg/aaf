@@ -325,6 +325,8 @@ private:
 
   void createWrite(void);
 
+  OMRootStorable* restoreRoot(void);
+
   OMRootStorable* _root;
   OMStoredObject* _rootStore;
 
