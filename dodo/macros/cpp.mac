@@ -262,22 +262,16 @@ AD_CLASS_BEGIN\
 
 .this-module::~.this-module ()
 {
-#if defined(DELETE_LAST_REFERENCE)
-  // The following code will be removed when the constructor and destructor
-  // have been protected and there is a factory method available for each
-  // api class.
-  if (0 != _refCount)
-  {
-    cerr << "Deleting " << this << " with refCount = " << _refCount << endl;
-    assert(0 == _refCount);
-  }
-#endif
-
 #ifdef BOB_TEST
-  ImplAAFRoot * rep;
-  rep = GetRepObject ();
-  assert (rep);
-  delete rep;
+  // The base class destructor of Impl.this-module must be declared as virtual.
+  // Eventhough the Impl.this-module is reference counted we call delete 
+  // directly since the Impl.this-module::ReleaseReference() delegates its
+  // release to .this-module::Release().
+  if (_rep)
+  {
+    delete _rep;
+    _rep = 0;
+  } 
 #endif
 }
 

@@ -185,8 +185,11 @@ public:
   //
   //********
   Impl.this-module ();
+
+protected:
   virtual ~Impl.this-module ();
 
+public:\
 #endm
 
 
@@ -233,7 +236,7 @@ public:
   Impl.this-module ();
   virtual ~Impl.this-module ();
 
-
+public:
   // Reference Counting interface
   virtual aafUInt32 AcquireReference() const;
   virtual aafUInt32 ReleaseReference();
@@ -806,7 +809,6 @@ public:
 private:
 
   void * _pContainer;
-
 };
 
 #endif // ! __Impl.this-module_h__

@@ -192,6 +192,8 @@ public:
   // Constructor/destructor
   //
   .this-module (aafBool doInit = AAFTrue);
+
+protected:
   virtual ~.this-module ();
 
 public:\
