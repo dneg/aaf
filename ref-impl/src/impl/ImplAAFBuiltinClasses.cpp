@@ -319,13 +319,9 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 	  if (EqualAUID (sBuiltinClassTable[i].pThisId, &rClassID))
 		{
 		  // We've found the desired class in our table.
-		  ImplAAFClassDef * pcd = (ImplAAFClassDef*)
-			_dictionary->pvtInstantiate(AUID_AAFClassDef);
+		  ImplAAFClassDef * pcd = (ImplAAFClassDef*)_dictionary->pvtInstantiate(AUID_AAFClassDef);
 		  assert (pcd);
-		  _dictionary
-			->GetBuiltinDefs()
-			->cdClassDef()
-			->InitOMProperties (pcd);
+      pcd->InitOMProperties(_dictionary->GetBuiltinDefs()->cdClassDef());
 
 		  status = InitBuiltinClassDef (rClassID, pcd);
 		  if (AAFRESULT_SUCCEEDED (status))

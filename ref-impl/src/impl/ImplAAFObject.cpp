@@ -940,8 +940,6 @@ void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
 }
 
 
-// Moved this code to ClassDef.
-#if 0
 //
 // Here is the mapping of DM type defs to OMProperty concrete
 // classes.
@@ -982,98 +980,88 @@ void ImplAAFObject::pvtSetSoid (const aafUID_t & id)
 //
 
 
-void ImplAAFObject::InitOMProperties ()
+// Associate the existing OMProperties with corresponding property definitions from
+// the given class definition. NOTE: This call is recursive, it calls itself again
+// for the parent class of the given class until current class is a "root" class.
+void ImplAAFObject::InitOMProperties (ImplAAFClassDef * pClassDef)
 {
-  assert (! _OMPropInitStarted);
-  _OMPropInitStarted = kAAFTrue;
-
+  assert (pClassDef);
   AAFRESULT hr;
+
+  //
+  // Init base class properties first
+  //
+  ImplAAFClassDefSP parentSP;
+	hr = pClassDef->GetParent (&parentSP);
+  // check that only a "root" will have no parent class definition.
+  assert (AAFRESULT_SUCCEEDED(hr) || (AAFRESULT_FAILED(hr) && AAFRESULT_IS_ROOT_CLASS == hr));
+  if(AAFRESULT_SUCCEEDED(hr))
+  {
+	  assert (parentSP);
+	  InitOMProperties (parentSP);
+  }
 
   // See if currently existing OM properties are defined in the class
   // def.
   //
-  ImplAAFClassDefSP spDef;
-  hr = GetDefinition (&spDef);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  assert (spDef);
-
   OMPropertySet * ps = propertySet();
   assert (ps);
   const size_t propCount = ps->count();
 
-  // Step 1: look through defined properties and see if there is an OM
-  // prop to match each.
-  while (1)
+  // Loop through properties of this class
+  ImplEnumAAFPropertyDefsSP pdEnumSP;
+  hr = pClassDef->GetPropertyDefs (&pdEnumSP);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  ImplAAFPropertyDefSP propDefSP;
+  while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&propDefSP)))
 	{
-	  // Loop through this class and all its parents
-	  ImplEnumAAFPropertyDefsSP pdEnumSP;
-	  hr = spDef->GetPropertyDefs (&pdEnumSP);
-	  assert (AAFRESULT_SUCCEEDED (hr));
-
-	  ImplAAFPropertyDefSP propDefSP;
-
-	  while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&propDefSP)))
+	  OMPropertyId defPid = propDefSP->OmPid ();
+	  // assert (ps->isAllowed (defPid));
+	  OMProperty * pProp = 0;
+	  if (ps->isPresent (defPid))
 		{
-		  // Loop through all properties of this class
-		  OMPropertyId defPid = propDefSP->OmPid ();
-
-//		  assert (ps->isAllowed (defPid));
-		  OMProperty * pProp = 0;
-		  if (ps->isPresent (defPid))
-			{
-			  pProp = ps->get (defPid);
-			}		  
-		  else
-			{
-			  // Defined property wasn't found in OM property set.
-			  // We'll have to install one.
-
-			  pProp = propDefSP->CreateOMProperty ();
-			  assert (pProp);
-
-			  // Remember this property so we can delete it later.
-			  _addedProps[_addedPropCount++] = pProp;
-			  assert (_addedPropCount <= kMaxAddedPropCount);
-
-			  // Bobt hack! this assertion was removed when optional
-			  // properties were put into service...
-			  //
-			  // assert (pProp->bitsSize ());
-
-			  // Add the property to the property set.
-			  ps->put (pProp);
-			}
-
+		  // Defined property was already in property set.  (Most
+		  // probably declared in the impl constructor.)  Get that
+		  // property.
+		  pProp = ps->get (defPid);
+		}		  
+		else if(defPid != PID_InterchangeObject_ObjClass
+			&& (defPid != PID_InterchangeObject_Generation)
+			&& (defPid != PID_PropertyDefinition_DefaultValue))
+		{
+		  // Defined property wasn't found in OM property set.
+		  // We'll have to install one.
+		  pProp = propDefSP->CreateOMProperty ();
+		  assert (pProp);
+		  
+		  // Remember this property so we can delete it later.
+		  RememberAddedProp (pProp);
+		  
+		  // Add the property to the property set.
+		  ps->put (pProp);
+	  }
+	  
+	if(defPid != PID_InterchangeObject_ObjClass
+			&& (defPid != PID_InterchangeObject_Generation)
+			&& (defPid != PID_PropertyDefinition_DefaultValue))
+	{
 		  ImplAAFPropertyDef * pPropDef =
-			(ImplAAFPropertyDef*) propDefSP;
+			  (ImplAAFPropertyDef*) propDefSP;
 		  OMPropertyDefinition * pOMPropDef =
-			dynamic_cast<OMPropertyDefinition*>(pPropDef);
+			  dynamic_cast<OMPropertyDefinition*>(pPropDef);
 		  assert (pOMPropDef);
-
+		  
 		  assert (pProp);
 		  pProp->initialize (pOMPropDef);
-
-		  propDefSP = 0;
-		  pProp = 0;
-		  pOMPropDef = 0;
+		  
 		  pPropDef = 0;
-		}
-
-	  // Look at the parent of this class
-	  ImplAAFClassDefSP parentSP;
-	  aafBool		isRoot;
-	  spDef->IsRoot (&isRoot);
-	  if(!isRoot)
-	  {
-		 hr = spDef->GetParent (&parentSP);
-		assert (AAFRESULT_SUCCEEDED (hr));
+		  pOMPropDef = 0;
 	  }
-	  else
-		break;
-	  spDef = parentSP;
-	}
+	  propDefSP = 0;
+	  pProp = 0;
+  }
 }
-#endif // 0
 
 
 //

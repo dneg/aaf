@@ -127,6 +127,12 @@ public:
     GetDescriptionBufLen
         (aafUInt32 *  descriptionLen);  //@parm [in,out] Definition description length
 
+public:
+  // Associate the existing OMProperties with corresponding property definitions from
+  // the given class definition. NOTE: This call is recursive, it calls itself again
+  // for the parent class of the given class until current class is a "root" class.
+  virtual void InitOMProperties (ImplAAFClassDef * pClassDef);
+
 
   virtual const OMUniqueObjectIdentification& identification(void) const;
 

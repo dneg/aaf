@@ -259,8 +259,6 @@ public:
   // has been loaded into memory.
   void AssurePropertyTypesLoaded ();
 
-  void InitOMProperties (ImplAAFObject * pObj);
-
   // Find the unique identifier property defintion for this class or any parent class
   // (RECURSIVE)
   ImplAAFPropertyDef * pvtGetUniqueIdentifier(void); // result is NOT reference counted.

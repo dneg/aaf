@@ -210,6 +210,20 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+
+
+
+
+// Associate the existing OMProperties with corresponding property definitions from
+// the given class definition. NOTE: This call is recursive, it calls itself again
+// for the parent class of the given class until current class is a "root" class.
+void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
+{
+  // Since ImplAAFMetaDefinition is still a subclass of ImplAAFObject we
+  // should just delegate property initialization:
+  ImplAAFObject::InitOMProperties(pClassDef);
+}
+
 const OMUniqueObjectIdentification&
   ImplAAFMetaDefinition::identification(void) const
 {
