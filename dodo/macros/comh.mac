@@ -168,6 +168,10 @@ public:
 #include "CAAFUnknown.h"
 #endif
 
+#ifndef __AAFResult_h_
+#include "AAFResult.h"
+#endif
+
 //
 // Forward declaration
 //
