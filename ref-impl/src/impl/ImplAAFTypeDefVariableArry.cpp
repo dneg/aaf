@@ -524,16 +524,21 @@ OMProperty * ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS
 	  //
 	  // Was: aafUInt32 elemSize = ptd->NativeSize ();
 	  //
-	  aafUInt32 elemSize;
-	  if (ptd->IsRegistered())
-		elemSize = ptd->NativeSize ();
-	  else
-		elemSize = ptd->PropValSize ();
+//	  aafUInt32 elemSize;
+//	  if (ptd->IsRegistered())
+//		elemSize = ptd->NativeSize ();
+//	  else
+//		elemSize = ptd->PropValSize ();
 
 	  // But even though elems are fixed size, the variable array is
 	  // of variable size.  Specify a size of one element.
-	  result = new OMSimpleProperty (pid, name, elemSize);
-	}
+//	  result = new OMSimpleProperty (pid, name, elemSize);
+
+    // Use a variable sized property so that we can allow a property value
+    // size of 0 (i.e. no elements in the array). (transdel 2000-MAR-14)
+	  result = new OMVariableSizeProperty<aafUInt8> (pid, name);
+
+  }
 
   assert (result);
   return result;
