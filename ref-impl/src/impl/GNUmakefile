@@ -27,7 +27,7 @@ impl : $(LIBDIR)/libimpl$(LIB)
 
 
 $(LIBDIR)/libimpl$(LIB) : $(OBJDIR) $(LIBDIR) $(CXXOBJS)
-	$(LD_STAT_LIB) $@ $(CXXOBJS) -lm
+	$(LD_STAT_LIB) $@ $(CXXOBJS)
 
 
 .PHONY : clean
