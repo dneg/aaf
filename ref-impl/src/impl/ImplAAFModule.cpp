@@ -710,7 +710,7 @@ STDAPI ImplAAFGetPluginManager (
 
 STDAPI
 ImplAAFCreateRawStorageMemory
-  (aafFileAccess_e access,
+  (aafFileAccess_t access,
    ImplAAFRawStorage ** ppNewRawStorage)
 {
   if (! ppNewRawStorage)
@@ -745,8 +745,8 @@ ImplAAFCreateRawStorageMemory
 STDAPI
 ImplAAFCreateRawStorageDisk
   (aafCharacter_constptr pFilename,
-   aafFileExistence_e existence,
-   aafFileAccess_e access,
+   aafFileExistence_t existence,
+   aafFileAccess_t access,
    ImplAAFRawStorage ** ppNewRawStorage)
 {
   if (! pFilename)
