@@ -102,9 +102,10 @@ HRESULT C.this-module::test()
 
 #ccccccccccccccccccccccccccc
 #c
-#c Starts a class definition
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
 #c
-#c Arguments: none
+#c Arguments: additional interface name
 #c
 #startm AD_COM_EXT_CLASS_BEGIN 01
 AD_CLASS_BEGIN\
@@ -245,6 +246,9 @@ HRESULT C.this-module::test()
 #endm
 
 #startm AD_CLASS_END 00
+#endm
+
+#startm AD_COM_EXT_CLASS_END 01
 #endm
 
 #startm AD_ROOT_CLASS_END 00
