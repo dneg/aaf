@@ -78,7 +78,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::save(void) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  OMPropertyTag tag = file()->referencedProperties()->insert(_targetName);
+  OMPropertyTag tag = targetTag();
 
   // create a set index
   //
@@ -262,8 +262,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::insert(
   OMUniqueObjectIdentification key = object->identification();
   SetElement newElement(this, key, _targetTag);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
-  _targetTag = file()->referencedProperties()->insert(_targetName);
-  newElement.reference().setTargetTag(_targetTag);
+  newElement.reference().setTargetTag(targetTag());
 #endif
   newElement.setValue(object);
   _set.insert(newElement);
