@@ -100,13 +100,13 @@ ImplAAFFindSourceInfo::Init(ImplAAFMob *mob, aafSlotID_t slotID, aafPosition_t p
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFindSourceInfo::AddPulldown(ImplAAFPulldown * /*pdwn*/)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 //AAFRESULT STDMETHODCALLTYPE
 //ImplAAFFindSourceInfo::Duplicate(ImplAAFFindSourceInfo * /*result*/)
 //{
-//	return AAFRESULT_NOT_IMPLEMENTED;
+//	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 //}
 
 

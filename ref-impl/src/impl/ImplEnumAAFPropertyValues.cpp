@@ -53,7 +53,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyValues::NextOne (
       ImplAAFPropertyValue ** /*ppPropertyValue*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
@@ -64,7 +64,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyValue ** /*ppPropertyValues*/,
       aafUInt32 *  /*pFetched*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
@@ -73,7 +73,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyValues::Skip (
       aafUInt32  /*count*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
@@ -81,7 +81,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyValues::Reset ()
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
@@ -90,7 +90,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyValues::Clone (
       ImplEnumAAFPropertyValues ** /*ppEnum*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 

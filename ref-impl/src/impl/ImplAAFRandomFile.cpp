@@ -88,7 +88,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFRandomFile::SaveAsFile (
       ImplAAFFile * /*pDestFile*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
