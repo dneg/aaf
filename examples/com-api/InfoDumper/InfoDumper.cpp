@@ -2031,21 +2031,8 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 	    checkResult(pTD->QueryInterface(IID_IAAFTypeDefSet, (void**)&pTDSet));
 	    // Get number of elements
 	    aafUInt32 numElems;
-#ifdef PRINT_SETS_OF_NON_OBJECTS
+
 	    checkResult(pTDSet->GetCount(pPVal, &numElems));
-#else
-	    // Property direct interface doesn't yet work for for sets of non-objects
-            const AAFRESULT hr = pTDSet->GetCount(pPVal, &numElems);
-	    if (hr == AAFRESULT_ELEMENT_NOT_OBJECT)
-	    {
-		os << "*** Unsupported type ***";
-		break;
-	    }
-	    else
-	    {
-		checkResult(hr);
-	    }
-#endif
 				
 	    os << "Set[" << numElems << "] of " ;
 	    IAAFTypeDefSP pElementTD;
