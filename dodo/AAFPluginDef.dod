@@ -107,7 +107,7 @@ AD_XMETHOD1(SetCategoryClass,
 AD_XMETHOD1(GetPluginVersion,
 			[out],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pVersion,
 			The Plugin Version,
 			Gets the Plugin Version property associated with this
@@ -117,6 +117,31 @@ AD_XMETHOD1(GetPluginVersion,
   // - the pVersion pointer is valid.
   // 
   // If this method fails\, nothing will be written to *pVersion.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersion arg is NULL.)
+
+AD_XMETHOD1(SetPluginVersion,
+			[in],
+			objPass,
+			aafVersionType_t *,
+			pVersion,
+			The plugin Version,
+			Sets the plugin version property of this
+  // plugin descriptor.
+  //
+  // Succeeds if all of the following are true:
+  // - pVersion pointer is valid.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -485,12 +510,12 @@ AD_XMETHOD1(SetHardwarePlatform,
 AD_XMETHOD2(GetPlatformVersionRange,
 			[out],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Platform Version,
 			[out],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMaxVersion,
 			The Maximum Platform Version,
 			Gets the minimum and maximum platform Version properties associated with this
@@ -518,7 +543,7 @@ AD_XMETHOD2(GetPlatformVersionRange,
 AD_XMETHOD1(SetPlatformMinimumVersion,
 			[in],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Platform Version,
 			Sets the maximum platform Version property of this
@@ -539,12 +564,12 @@ AD_XMETHOD1(SetPlatformMinimumVersion,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.)
+  //   - pMinVersion arg is NULL.)
 
 AD_XMETHOD1(SetPlatformMaximumVersion,
 			[in],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMaxVersion,
 			The Maximum Platform Version,
 			Sets the maximum platform Version properties associated with this
@@ -565,7 +590,7 @@ AD_XMETHOD1(SetPlatformMaximumVersion,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.)
+  //   - pMaxVersion arg is NULL.)
 
 AD_XMETHOD1(GetEngine,
 			[out],
@@ -626,12 +651,12 @@ AD_XMETHOD1(SetEngine,
 AD_XMETHOD2(GetEngineVersionRange,
 			[out],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Engine Version,
 			[out],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMaxVersion,
 			The Maximum Engine Version,
 			Gets the minimum and maximum engine Version properties of the engine which
@@ -661,7 +686,7 @@ AD_XMETHOD2(GetEngineVersionRange,
 AD_XMETHOD1(SetEngineMinimumVersion,
 			[in],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Engine Version,
 			Sets the minimum engine Version property to the minimum useful version
@@ -682,13 +707,13 @@ AD_XMETHOD1(SetEngineMinimumVersion,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.)
+  //   - pMinVersion arg is NULL.)
 
 
 AD_XMETHOD1(SetEngineMaximumVersion,
 			[in],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMaxVersion,
 			The Minimum Engine Version,
 			Sets the minimum engine Version property to the maximum useful version
@@ -709,7 +734,7 @@ AD_XMETHOD1(SetEngineMaximumVersion,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.)
+  //   - pMaxVersion arg is NULL.)
 
 
 AD_XMETHOD1(GetPluginAPI,
@@ -771,12 +796,12 @@ AD_XMETHOD1(SetPluginAPI,
 AD_XMETHOD2(GetPluginAPIVersionRange,
 			[out],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Plugin API Version,
 			[out],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMaxVersion,
 			The Maximum Plugin API Version,
 			Gets the minimum and maximum plugin API Version properties of the plugin API which
@@ -806,7 +831,7 @@ AD_XMETHOD2(GetPluginAPIVersionRange,
 AD_XMETHOD1(SetPluginAPIMinimumVersion,
 			[out],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMinVersion,
 			The Minimum Plugin API Version,
 			Sets the minimum plugin API Version property to the minimum useful version
@@ -826,12 +851,12 @@ AD_XMETHOD1(SetPluginAPIMinimumVersion,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.)
+  //   - pMinVersion arg is NULL.)
 
 AD_XMETHOD1(SetPluginAPIMaximumVersion,
 			[in],
 			objPass,
-			aafProductVersion_t *,
+			aafVersionType_t *,
 			pMaxVersion,
 			The Maximum Plugin API Version,
 			Sets the maximum engine Version property to the maximum useful version
@@ -851,7 +876,7 @@ AD_XMETHOD1(SetPluginAPIMaximumVersion,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.)
+  //   - pMaxVersion arg is NULL.)
 
 AD_XMETHOD1(IsSoftwareOnly,
 			[out],
@@ -1140,47 +1165,6 @@ AD_XMETHOD1(IsPluginLocal,
   //
   // AAFRESULT_NULL_PARAM
   //   - pIsLocal arg is NULL.)
-
-AD_XMETHOD1(GetPluginDescriptorID,
-			[out],
-			objPass,
-			aafUID_t *,
-			pDescriptorID,
-			The unique plugin descriptor id,
-			Returns the descriptor ID associated with this plugin descriptor.
-  //
-  // Succeeds if all of the following are true:
-  // - the pDescriptorID pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pDescriptorID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDescriptorID arg is NULL.)
-
-
-AD_XMETHOD1(SetPluginDescriptorID,
-			[in],
-			objPass,
-			aafUID_t,
-			descriptorID,
-			New Mob ID,
-			Returns the descriptor ID associated with this plugin descriptor.
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
-  
 
 AD_XMETHOD1(EnumPluginLocators,
 			[out\, retval],
