@@ -1,9 +1,9 @@
 #startm .this-module 0
-AAFTypeDefinition\
+AAFTypeDef\
 #endm
 #c
 #startm .parent-module 0
-AAFDefinitionObject\
+AAFDefObject\
 #endm
 #c
 AD_HEAD
@@ -22,9 +22,9 @@ AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 
 /*************************************************************************
  * 
- * @class AAFTypeDefinition | AAFTypeDefinition defines a property type.
+ * @class AAFTypeDef | AAFTypeDef defines a property type.
  *
- * @base public | AAFDefinitionObject
+ * @base public | AAFDefObject
  *
  *************************************************************************/
 AD_CLASS_UUID(dfbd6524, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)

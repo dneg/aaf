@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFDefinitionObject\
+AAFDefObject\
 #endm
 #c
 #startm .parent-module 0
@@ -21,9 +21,9 @@ AD_INCLUDE(AAFTypes)
 
 /*************************************************************************
  * 
- * @module AAFDefinitionObject | AAFDefinitionObject is an abstract class
+ * @module AAFDefObject | AAFDefObject is an abstract class
  *		  that defines an item to be referenced in the AAF file. 
- *		  AAFDefinitionObject specifies the AUID unique identifier.
+ *		  AAFDefObject specifies the AUID unique identifier.
  *
  * @base public | AAFObject
  *
