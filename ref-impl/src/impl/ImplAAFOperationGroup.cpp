@@ -418,12 +418,14 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFParameterDef	*parmDef = NULL;
 	aafInt32			numParm, n;
 	aafUID_t			testAUID;
+	aafBool				found;
 
 	XPROTECT()
 	{
 		if(ppParameter == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
 	
+		found = AAFFalse;
 		CHECK(GetNumParameters (&numParm))
 		for(n = 0; n < numParm; n++)
 		{
@@ -438,11 +440,14 @@ AAFRESULT STDMETHODCALLTYPE
 				{
 					parm->AcquireReference();
 					*ppParameter = parm;
+					found = AAFTrue;
 					break;
 				}
 
 			}
 		}
+		if(!found)
+			RAISE(AAFRESULT_PARAMETER_NOT_FOUND);
 	}
 	XEXCEPT
 	{
