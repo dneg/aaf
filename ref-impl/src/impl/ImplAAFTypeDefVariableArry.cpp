@@ -457,9 +457,10 @@ void ImplAAFTypeDefVariableArray::internalize(OMByte* externalBytes,
 	// aafUInt32 extElemSize = ptd->externalSize (0, 0);
 	if (intElemSize == extElemSize)
 	{
+		assert (externalBytesSize <= internalBytesSize);
 		copy (externalBytes,
 			internalBytes,
-			internalBytesSize);
+			externalBytesSize);
 	}
 	else
 	{
