@@ -250,6 +250,17 @@ OMStorable* OMStorable::find(const wchar_t* objectName) const
   return result;
 }
 
+OMStorable* OMStorable::find(OMPropertyId propertyId) const
+{
+  TRACE("OMStorable::find");
+
+  OMProperty* p = findProperty(propertyId);
+  ASSERT("Valid property", p != 0);
+  OMStorable* result = p->storable();
+  ASSERT("Valid object", result != 0);
+  return result;
+}
+
   // @mfunc Find the <c OMProperty> named <p propertyName> contained
   //        within this <c OMStorable>.
   //   @parm The name of the property.
@@ -260,6 +271,14 @@ OMProperty* OMStorable::findProperty(const wchar_t* propertyName) const
   TRACE("OMStorable::findProperty");
 
   OMProperty* result = _persistentProperties.get(propertyName);
+  return result;
+}
+
+OMProperty* OMStorable::findProperty(OMPropertyId propertyId) const
+{
+  TRACE("OMStorable::findProperty");
+
+  OMProperty* result = _persistentProperties.get(propertyId);
   return result;
 }
 
