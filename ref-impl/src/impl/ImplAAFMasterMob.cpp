@@ -39,7 +39,7 @@
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"

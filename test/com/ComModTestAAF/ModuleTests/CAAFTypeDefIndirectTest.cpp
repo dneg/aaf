@@ -61,10 +61,9 @@ typedef IAAFSmartPointer<IAAFComponent>             IAAFComponentSP;
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
-
-#if defined(_MAC) || defined(macintosh)
-#include <wstring.h>
-#endif
+#include <stdlib.h>
+#include <string.h>
+#include <wchar.h>
 
 // Required function prototypes
 extern "C"
@@ -473,7 +472,7 @@ static void ValidateTestPropertyValues(IAAFDictionary *pDictionary,
   ValidatePropertyValue(pDictionary,pSequence,
 	  ppComponentAnnotationPropertyDefs[0],kAAFTypeID_String,
 	  (aafDataBuffer_t)kSequenceAnnotation1,
-	  2*(wcslen(kSequenceAnnotation1)+1));
+	  sizeof(wchar_t)*(wcslen(kSequenceAnnotation1)+1));
 
   // Validate property value of type kAAFTypeID_UInt8Array created via
   // CreateValueFromActualData()
@@ -493,7 +492,7 @@ static void ValidateTestPropertyValues(IAAFDictionary *pDictionary,
   ValidatePropertyValue(pDictionary,pSequence,
 	  ppComponentAnnotationPropertyDefs[3],kAAFTypeID_String,
 	  (aafDataBuffer_t)kSequenceAnnotation1,
-	  2*(wcslen(kSequenceAnnotation1)+1));
+	  sizeof(wchar_t)*(wcslen(kSequenceAnnotation1)+1));
 
   // Validate property value of type kAAFTypeID_UInt8Array created via
   // CreateValueFromActualValue()
@@ -649,7 +648,7 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   // 
   // Set a string value into the component annotation property of the new sequence.
   //
-  aafUInt32 sequenceAnnotation1Size = 2 * (wcslen (kSequenceAnnotation1) + 1);
+  aafUInt32 sequenceAnnotation1Size = sizeof(wchar_t) * (wcslen (kSequenceAnnotation1) + 1);
   Test_CreateValueFromActualData (
           pSequence,
           ppComponentAnnotationPropertyDefs[0],

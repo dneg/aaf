@@ -63,7 +63,7 @@ namespace OMF2
 #endif
 #include "Aaf2Omf.h"
 #include "Omf2Aaf.h"
-#include "aafclassdefuids.h"
+#include "AAFClassDefUIDs.h"
 #include "EffectTranslate.h"
 
 //#include "AAFUtils.h"

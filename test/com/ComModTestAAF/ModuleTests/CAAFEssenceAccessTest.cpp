@@ -36,7 +36,7 @@
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
-#include "AAFDefUIDS.h"
+#include "AAFDefUIDs.h"
 #include "AAFDataDefs.h"
 #include "AAFOperationDefs.h"
 #include "AAFContainerDefs.h"
@@ -1552,7 +1552,7 @@ static HRESULT ReadVideoAAFFile(
 	return hr;
 }
 
-
+#ifndef __sgi
 struct CComInitialize
 {
 	CComInitialize()
@@ -1565,6 +1565,7 @@ struct CComInitialize
 		CoUninitialize();
 	}
 };
+#endif
 
 //**********************
 // Extra code required to scan the original WAVE headers and extract metadata parameters & data offset
@@ -1608,7 +1609,6 @@ void AAFByteSwap16(
 	cp[1] = cp[0];
 	cp[0] = t;
 }
-
 // app work on all WAVE files, not just laser.wav.
 void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
 {
@@ -1705,7 +1705,9 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 
 HRESULT CAAFEssenceAccess_test()
 {
+#ifndef __sgi
 	CComInitialize comInit;
+#endif
 	AAFRESULT	hr = S_OK;
 	
 	aafWChar *	rawData = L"EssenceAccessExtRaw.wav";

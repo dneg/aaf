@@ -42,10 +42,12 @@
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "AAFInterpolatorDefs.h"
 #include "AAFTypeDefUIDs.h"
 #include "AAFSmartPointer.h"
+
+#include "AAFWideString.h"
 
 #include "CAAFBuiltinDefs.h"
 

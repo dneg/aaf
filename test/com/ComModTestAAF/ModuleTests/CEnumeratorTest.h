@@ -34,6 +34,8 @@
 #include "AAFSmartPointer.h"
 #include "CAAFBuiltinDefs.h"
 
+#include <stdlib.h>
+
 typedef IAAFSmartPointer<IAAFFile> IAAFFileSP;
 typedef IAAFSmartPointer<IAAFHeader> IAAFHeaderSP;
 typedef IAAFSmartPointer<IAAFDefObject> IAAFDefObjectSP;

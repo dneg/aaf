@@ -34,6 +34,7 @@
 #include <assert.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -107,7 +108,7 @@ struct EssenceDataTest
 extern "C" HRESULT CAAFEssenceData_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
-  wchar_t fileName[] = L"AAFEssenceDataTest.aaf";
+  wchar_t *fileName = L"AAFEssenceDataTest.aaf";
   EssenceDataTest edt;
 
   try
