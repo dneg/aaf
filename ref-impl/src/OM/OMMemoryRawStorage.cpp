@@ -306,20 +306,18 @@ bool OMMemoryRawStorage::isExtendible(void) const
   return true;
 }
 
-  // @mfunc The current size of this <c OMMemoryRawStorage> in bytes.
-  //        precondition - isExtendible()
-  //   @rdesc The current size of this <c OMMemoryRawStorage> in bytes.
+  // @mfunc The current extent of this <c OMMemoryRawStorage> in bytes.
+  //        precondition - isPositionable()
+  //   @rdesc The current extent of this <c OMMemoryRawStorage> in bytes.
   //   @this const
-OMUInt64 OMMemoryRawStorage::size(void) const
+OMUInt64 OMMemoryRawStorage::extent(void) const
 {
-  TRACE("OMMemoryRawStorage::size");
+  TRACE("OMMemoryRawStorage::extent");
 
-  PRECONDITION("Extendible", isExtendible());
+  PRECONDITION("Positionable", isPositionable());
 
-  OMUInt64 result = _size;
-  POSTCONDITION("Consistent size and page count",
-                                   _size <= (_pageVector.count() * _pageSize));
-  return result;
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  return 0;
 }
 
   // @mfunc Set the size of this <c OMMemoryRawStorage> to <p newSize>
@@ -381,6 +379,22 @@ void OMMemoryRawStorage::extend(OMUInt64 newSize)
     POSTCONDITION("Consistent size and page count",
                                    _size <= (_pageVector.count() * _pageSize));
   }
+}
+
+  // @mfunc The current size of this <c OMMemoryRawStorage> in bytes.
+  //        precondition - isPositionable()
+  //   @rdesc The current size of this <c OMMemoryRawStorage> in bytes.
+  //   @this const
+OMUInt64 OMMemoryRawStorage::size(void) const
+{
+  TRACE("OMMemoryRawStorage::size");
+
+  PRECONDITION("Positionable", isPositionable());
+
+  OMUInt64 result = _size;
+  POSTCONDITION("Consistent size and page count",
+                                   _size <= (_pageVector.count() * _pageSize));
+  return result;
 }
 
   // @mfunc May the current position, for <f read()> and <f write()>,
