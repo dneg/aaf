@@ -19,6 +19,7 @@
 #include <iostream.h>
 #include <iomanip.h>
 #include <string.h>
+#include "AAFTypes.h"
 #include "AAFResult.h"
 
 //
