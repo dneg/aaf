@@ -73,6 +73,8 @@ inline void checkExpression(bool expression, HRESULT r)
 #define TEST_NUM_INPUTS		1
 #define TEST_CATEGORY		L"Test Parameters"
 #define TEST_BYPASS			1
+static const aafUID_t TEST_EFFECT_AUID = 
+{ 0x12684769, 0xcd02, 0x11d3, { 0xa3, 0xf4, 0x0, 0x4, 0xac, 0x96, 0xa9, 0x37 } };
 #define TEST_EFFECT_NAME	L"A TestEffect"
 #define TEST_EFFECT_DESC	L"A longer description of the TestEffect"
 #define TEST_PARAM_NAME1	L"A TestEffect parameter"
@@ -138,7 +140,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary*		pDictionary = NULL;
 	IAAFOperationDef*		pOperationDef = NULL;
 	IAAFParameterDef*	pParamDef = NULL;
-	IAAFDefObject*		pDefObject = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
 /*	long				test;
@@ -167,11 +168,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
 		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
-		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->SetName (TEST_EFFECT_NAME));
-		checkResult(pDefObject->SetDescription (TEST_EFFECT_DESC));
-		pDefObject->Release();
-		pDefObject = NULL;
+		checkResult(pOperationDef->Initialize(TEST_EFFECT_AUID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 
 		// !!!Added circular definitions because we don't have optional properties
 		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
@@ -182,10 +179,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pParamDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Initialize (TestParamUID1, TEST_PARAM_NAME1, TEST_PARAM_DESC1));
-		pDefObject->Release();
-		pDefObject = NULL;
+		checkResult(pParamDef->Initialize (TestParamUID1, TEST_PARAM_NAME1, TEST_PARAM_DESC1));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		pParamDef->Release();
@@ -196,10 +190,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pParamDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Initialize (TestParamUID2, TEST_PARAM_NAME2, TEST_PARAM_DESC2));
-		pDefObject->Release();
-		pDefObject = NULL;
+		checkResult(pParamDef->Initialize (TestParamUID2, TEST_PARAM_NAME2, TEST_PARAM_DESC2));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 		checkResult(pOperationDef->AddParameterDef (pParamDef));
 		pParamDef->Release();
@@ -212,9 +203,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	// Cleanup and return
-	if (pDefObject)
-		pDefObject->Release();
-
 	if (pOperationDef)
 		pOperationDef->Release();
 

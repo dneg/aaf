@@ -144,7 +144,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*		pDictionary = NULL;
 	IAAFParameterDef*	pParamDef = NULL;
-	IAAFDefObject*		pDefObject = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
 	aafUID_t			testParmID = kParmID;
@@ -170,11 +169,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		checkResult(defs.cdParameterDef()->
 					CreateInstance(IID_IAAFParameterDef, 
 								   (IUnknown **)&pParamDef));
+		checkResult(pParamDef->Initialize (testParmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
-		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Initialize (testParmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
-		pDefObject->Release();
-		pDefObject = NULL;
 
 		for(index = 0; index < 3; index++)
 		{
@@ -183,10 +179,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									   (IUnknown **)&pOperationDef));
 			checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 			
-			checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-			checkResult(pDefObject->Initialize (effectID[index], effectNames[index], effectDesc[index]));
-			pDefObject->Release();
-			pDefObject = NULL;
+			checkResult(pOperationDef->Initialize (effectID[index], effectNames[index], effectDesc[index]));
 			
 			checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 			checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
@@ -217,9 +210,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	// Cleanup and return
-	if (pDefObject)
-		pDefObject->Release();
-
 	if (pOperationDef)
 		pOperationDef->Release();
 
