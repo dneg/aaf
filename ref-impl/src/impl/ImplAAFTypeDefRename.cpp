@@ -151,7 +151,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefRename::GetValue (
+    ImplAAFTypeDefRename::CreateValue (
       ImplAAFPropertyValue * pInPropVal,
       ImplAAFPropertyValue ** ppOutPropVal)
 {
