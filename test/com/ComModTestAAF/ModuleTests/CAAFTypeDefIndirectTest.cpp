@@ -56,6 +56,9 @@ typedef IAAFSmartPointer<IAAFComponent>             IAAFComponentSP;
 #include <iostream.h>
 #include <stdio.h>
 
+#if defined(_MAC) || defined(macintosh)
+#include <wstring.h>
+#endif
 
 // Required function prototypes
 extern "C"
