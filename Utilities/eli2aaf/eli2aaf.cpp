@@ -84,7 +84,7 @@ const aafUID_t kAAFPropID_DIDImageSize				= { 0xce2aca4f, 0x51ab, 0x11d3, { 0xa0
 
 static bool writeNetworkLocator = false;
 static bool useRawStorage = false;
-static bool useLargeSectors = false;
+static bool useSmallSectors = false;
 
 // Add a property definition to the dictionary, after first checking if it
 // needs to be added (used in CreateLegacyPropDefs() only)
@@ -926,7 +926,7 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			if (!useRawStorage)
 			{
 				int modeFlags = 0;
-				if (useLargeSectors)
+				if (!useSmallSectors)
 					modeFlags |= AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
 
 				CHECK_HRESULT(AAFFileOpenNewModify(
@@ -934,12 +934,11 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 			}
 			else
 			{
-				// RawStorage with MS SS known to fail for 4k (works with 512)
 				const aafUID_t* pFileKind;
-				if (useLargeSectors)
-					pFileKind = &kAAFFileKind_Aaf4KBinary;
+				if (useSmallSectors)
+					pFileKind = &kAAFFileKind_Aaf512Binary;
 				else
-					pFileKind = &kAAFFileKind_Aaf512Binary; 
+					pFileKind = &kAAFFileKind_Aaf4KBinary; 
 
 				IAAFRawStorage* pRawStorage = 0;
 				CHECK_HRESULT (AAFCreateRawStorageDisk(
@@ -1261,7 +1260,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 3)
 	{
-		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-largeSectors] [-nocompmob] [-notapemob] [-noaudio] infile outfile [essencedir]" << endl;
+		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-smallSectors] [-nocompmob] [-notapemob] [-noaudio] infile outfile [essencedir]" << endl;
 		return 1;
 	}
 
@@ -1277,31 +1276,31 @@ int main(int argc, char* argv[])
 		}
 		else if (!strcmp(argv[i], "-useraw"))
 		{
-			// create AAF file on raw storage
+			// default is to use AAFFileOpenNewModify
 			useRawStorage = true;
 			i++;
 		}
-		else if (!strcmp(argv[i], "-largeSectors"))
+		else if (!strcmp(argv[i], "-smallSectors"))
 		{
-			// create AAF file using 4k sectors
-			useLargeSectors = true;
+			// default is to create 4K sectors
+			useSmallSectors = true;
 			i++;
 		}
 		else if (!strcmp(argv[i], "-nocompmob"))
 		{
-			// create composition mob
+			// default is to create composition mob
 			create_compmob = false;
 			i++;
 		}
 		else if (!strcmp(argv[i], "-notapemob"))
 		{
-			// create tape mob
+			// default is to create tape mob
 			create_tapemob = false;
 			i++;
 		}
 		else if (!strcmp(argv[i], "-noaudio"))
 		{
-			// create two audio tracks in Mobs and EssenceData
+			// default is to create two audio tracks in Mobs and EssenceData
 			add_audio = false;
 			i++;
 		}
@@ -1321,7 +1320,7 @@ int main(int argc, char* argv[])
 		if (useRawStorage)
 			idxOffset++;
 
-		if (useLargeSectors)
+		if (useSmallSectors)
 			idxOffset++;
 
 		if (!create_compmob)
