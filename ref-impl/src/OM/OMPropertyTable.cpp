@@ -51,17 +51,18 @@ OMPropertyTable::~OMPropertyTable(void)
 }
 
   // @mfunc If <p propertyName> is not already present then insert
-  //        it (by copying) into the table and return its index,
-  //        otherwise just return its index.
+  //        it (by copying) into the table and return its tag,
+  //        otherwise just return its tag. Tags are allocated
+  //        sequentially.
   //   @parm The property name to insert.
   //   @rdesc The assigned index.
-OMUInt32 OMPropertyTable::insert(const char* propertyName)
+OMPropertyTag OMPropertyTable::insert(const char* propertyName)
 {
   TRACE("OMPropertyTable::insert");
 
   PRECONDITION("Valid property name", validString(propertyName));
 
-  OMUInt32 result;
+  OMPropertyTag result;
   bool found = false;
   size_t elements = _vector.count();
   for (size_t i = 0; i < elements; i++) {
@@ -77,19 +78,21 @@ OMUInt32 OMPropertyTable::insert(const char* propertyName)
     result = elements;
   }
 
+  POSTCONDITION("Valid result", isValid(result));
   return result;
 }
 
-  // @mfunc The property name at position <p index> in the table.
+  // @mfunc The property name corresponding to <p tag> in the table.
   //   @parm The index.
   //   @rdesc The property name.
   //   @this const
-const char* OMPropertyTable::valueAt(OMUInt32 index) const
+const char* OMPropertyTable::valueAt(OMPropertyTag tag) const
 {
   TRACE("OMPropertyTable::valueAt");
 
-  PRECONDITION("Valid index", index < _vector.count());
-  return _vector.valueAt(index);
+  PRECONDITION("Valid tag", isValid(tag));
+
+  return _vector.valueAt(tag);
 }
 
   // @mfunc The count of entries in the table.
@@ -97,7 +100,26 @@ const char* OMPropertyTable::valueAt(OMUInt32 index) const
   //   @this const
 size_t OMPropertyTable::count(void) const
 {
-  TRACE("OMPropertyTable::valueAt");
+  TRACE("OMPropertyTable::count");
 
   return _vector.count();
+}
+
+  // @mfunc Is <p tag> valid ?
+  //   @parm The tag to check.
+  //   @rdesc True if the tag is valid, false otherwise.
+  //   @this const
+bool OMPropertyTable::isValid(OMPropertyTag tag) const
+{
+  TRACE("OMPropertyTable::isValid");
+
+  bool result;
+
+  if ((tag < count()) && (tag != nullOMPropertyTag)) {
+    result = true;
+  } else {
+    result = false;
+  }
+
+  return result;
 }

@@ -45,15 +45,19 @@ public:
   ~OMPropertyTable(void);
 
     // @cmember If <p propertyName> is not already present then insert
-    //          it (by copying) into the table and return its index,
-    //          otherwise just return its index.
-  OMUInt32 insert(const char* propertyName);
+    //          it (by copying) into the table and return its tag,
+    //          otherwise just return its tag. Tags are allocated
+    //          sequentially.
+  OMPropertyTag insert(const char* propertyName);
 
-    // @cmember The property name at position <p index> in the table.
-  const char* valueAt(OMUInt32 index) const;
+    // @cmember The property name corresponding to <p tag> in the table.
+  const char* valueAt(OMPropertyTag tag) const;
 
     // @cmember The count of entries in the table.
   size_t count(void) const;
+
+    // @cmember Is <p tag> valid ?
+  bool isValid(OMPropertyTag tag) const;
 
 private:
 
