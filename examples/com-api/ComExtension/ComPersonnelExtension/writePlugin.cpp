@@ -30,6 +30,8 @@
 #include "extensionUtils.h"
 #include "extensionReadPlugin.h"
 
+#include <stdlib.h>
+
 //
 // This example code is intended to show how AAF may be extended to
 // store personnel information relating to the staff which worked on a
