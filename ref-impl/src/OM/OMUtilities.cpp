@@ -66,7 +66,7 @@ size_t lengthOfWideString(const wchar_t* string)
 
 wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
-                        const size_t length)
+                        size_t length)
 {
   TRACE("lengthOfWideString");
 
@@ -89,7 +89,7 @@ wchar_t* copyWideString(wchar_t* destination,
 
 wchar_t* concatenateWideString(wchar_t* destination,
                                const wchar_t* source,
-                               const size_t length)
+                               size_t length)
 {
   TRACE("concatenateWideString");
 

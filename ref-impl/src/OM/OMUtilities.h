@@ -63,7 +63,7 @@ size_t lengthOfWideString(const wchar_t* string);
   //   @rdesc The resulting wide character string.
 wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
-                        const size_t length);
+                        size_t length);
 
   // @func Concatenate wide character strings. Same as strncat(), but for wide
   //       characters. Append up to <p length> characters from <p source>
@@ -80,7 +80,7 @@ wchar_t* copyWideString(wchar_t* destination,
   //   @rdesc The resulting wide character string.
 wchar_t* concatenateWideString(wchar_t* destination,
                                const wchar_t* source,
-                               const size_t length);
+                               size_t length);
 
   // @func Save a wide character string. Same as saveString() but for wide
   //       characters.
