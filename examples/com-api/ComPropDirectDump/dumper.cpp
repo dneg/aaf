@@ -1,7 +1,12 @@
 #include "AAF.h"
-#include "../AAFResult.h"
+#include "AAFResult.h"
 #include <assert.h>
 #include <stdio.h>
+
+
+#if defined(macintosh) || defined(_MAC)
+#include <console.h> /* Mac command line window */
+#endif
 
 
 // convenient error handlers.
@@ -16,7 +21,79 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
+static void convert(wchar_t* wcName, size_t length, const char* name)
+{
+  assert((name && *name));
+  assert(wcName != 0);
+  assert(length > 0);
+  
+  size_t status = mbstowcs(wcName, name, length);
+  if (status == (size_t)-1) {
+    fprintf(stderr, "Error : Failed to convert'%s' to a wide character string.\n\n", name);
+    exit(1);  
+  }
+}
 
+
+static void convert(char* cName, size_t length, const char* name)
+{
+  assert((name && *name));
+  assert(cName != 0);
+  assert(length > 0);
+
+  size_t sourceLength = strlen(name);
+  if (sourceLength < length - 1) {
+    strncpy(cName, name, length);
+  } else {
+    fprintf(stderr, "Error : Failed to copy '%s'.\n\n", name);
+    exit(1);  
+  }
+}
+
+static void convert(wchar_t* wName, size_t length, const wchar_t* name)
+{
+  assert((name && *name));
+  assert(wName != 0);
+  assert(length > 0);
+
+  size_t sourceLength = 0;
+  while (*name)
+    ++sourceLength;
+  if (sourceLength < length - 1) {
+    // Copy the string if there is enough room in the destinition buffer.
+    while (*wName++ = *name++)
+      ;
+  } else {
+    fprintf(stderr, "Error : Failed to copy '%s'.\n\n", name);
+    exit(1);  
+  }
+}
+
+static void convert(char* cName, size_t length, const wchar_t* name)
+{
+  assert((name && *name));
+  assert(cName != 0);
+  assert(length > 0);
+
+  size_t status = wcstombs(cName, name, length);
+  if (status == (size_t)-1) {
+    fprintf(stderr, ": Error : Conversion failed.\n\n");
+    exit(1); 
+  }
+}
+
+static char * make_mbstring(size_t length, const wchar_t* name)
+{
+  assert((name && *name));
+  assert(length > 0);
+
+  size_t mbLength = (length * MB_CUR_MAX) + 1;
+  char * mbStr = new char[mbLength];
+  assert(mbStr);
+  convert(mbStr, mbLength, name);
+
+  return mbStr;
+}
 
 static HRESULT dumpObject
 (
@@ -55,7 +132,10 @@ HRESULT dumpObject(IAAFObject *pContainer)
 		  wchar_t * nameBuf = new wchar_t[bufSize];
 		  assert (nameBuf);
 		  checkResult(pPDef->GetName(nameBuf, bufSize));
-		  wprintf (L"Property definition: %s; ", nameBuf);
+      char *mbBuf = make_mbstring(bufSize, nameBuf); // create an ansi/asci
+      checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+		  printf ("Property definition: %s; ", mbBuf);
+		  delete[] mbBuf;
 		  delete[] nameBuf;
 
 		  // Get the PropertyValue
@@ -98,20 +178,22 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 
 	  // Dump "damaged object" message.
 	  // Optionally, dump the property's bits using pPVal->GetBits().
-	  wprintf (L"Unknown type def.\n");
+	  printf ("Unknown type def.\n");
 	}
 
   else
 	{
 	  {
 		wchar_t bigBuf[100];
+    char mbBigBuf[100 * 3 /*MB_CUR_MAX */];
 		assert (pTD);
 		IAAFDefObject * pd = NULL;
 		checkResult(pTD->QueryInterface(IID_IAAFDefObject, (void**)&pd));
 		assert (pd);
 		checkResult(pd->GetName (bigBuf, sizeof (bigBuf)));
 		pd->Release ();
-		wprintf (L"type is %s; ", bigBuf);
+    convert(mbBigBuf, sizeof(mbBigBuf), bigBuf);
+		printf ("type is %s; ", mbBigBuf);
 	  }
 
 	  // get the type category of the data value
@@ -131,7 +213,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 			aafInt64 val;
 			checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &val, sizeof (val)));
 
-			wprintf (L"value is %d.\n", val);
+			printf ("value is %d.\n", val);
 
 			pTDI->Release();
 			pTDI = 0;
@@ -147,7 +229,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 
 			IAAFObject * pObj = 0;
 			checkResult(pTDO->GetObject(pPVal, &pObj));
-			wprintf (L"Value is an object:\n");
+			printf ("Value is an object:\n");
 			dumpObject (pObj);
 
 			pObj->Release();
@@ -256,12 +338,12 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 			aafUInt32 numElems = 0;
 			checkResult(pTDFA->GetCount(&numElems));
 
-			wprintf (L"Value is a fixed-sized of size %d:\n", numElems);
+			printf ("Value is a fixed-sized of size %d:\n", numElems);
 
 			aafUInt32 i;
 			for (i = 0; i < numElems; i++)
 			  {
-				wprintf (L"Element %d has value: ", i);
+				printf ("Element %d has value: ", i);
 				IAAFPropertyValue * pElemPropVal = 0;
 				checkResult(pTDFA->GetElementValue(pPVal, i, &pElemPropVal));
 				dumpPropertyValue (pElemPropVal);
@@ -284,12 +366,12 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 			aafUInt32 numElems;
 			checkResult(pTDVA->GetCount(pPVal, &numElems));
 
-			wprintf (L"Value is a variably-sized array of size %d:\n", numElems);
+			printf ("Value is a variably-sized array of size %d:\n", numElems);
 
 			aafUInt32 i;
 			for (i = 0; i < numElems; i++)
 			  {
-				wprintf (L"Element %d has value:\n", i);
+				printf ("Element %d has value:\n", i);
 				IAAFPropertyValue * pElemPropVal = 0;
 				checkResult(pTDVA->GetElementValue(pPVal, i, &pElemPropVal));
 				dumpPropertyValue (pElemPropVal);
@@ -364,7 +446,10 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal)
 					if (NULL == wterm)
 					  {
 						// We'll interpret it as a unicode string.
-						wprintf (L"string is %s\n", (wchar_t*) buf);
+            char *mbBuf = make_mbstring(bufSize, nameBuf); // create an ansi/asci
+            checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+						printf ("string is %s\n", mbBuf);
+            delete [] mbBuf;
 					  }
 					else
 					  {
@@ -490,12 +575,26 @@ struct CComInitialize
 
 
 
-main()
+int main(int argc, char* argv[])
 {
-  CComInitialize comInit;
-  wchar_t * pwFileName = L"d:/views/main/coresw/AAF-toolkit/AAFWinSDK/Debug/Examples/Com/EssenceTest.aaf";
+	/* console window for mac */
 
-  wprintf(L"***Dumping file %s using direct prop access)\n", pwFileName);
+	#if defined(macintosh) || defined(_MAC)
+	argc = ccommand(&argv);
+	#endif
+
+  CComInitialize comInit;
+
+  if (argc != 2) {
+    fprintf(stderr, "Error : wrong number of arguments\n");
+    return(1);
+  }
+
+  // The first argument should be an AAF file name.
+  wchar_t pwFileName[260];
+  convert(pwFileName, 260, argv[1]);
+  
+  printf("***Dumping file %s using direct prop access)\n", argv[1]);
   dumpFile (pwFileName);
 
   printf("Done\n");
