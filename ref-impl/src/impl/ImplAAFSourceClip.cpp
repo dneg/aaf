@@ -176,9 +176,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceClip::ResolveRef (ImplAAFMob ** mob)
 {
     aafSourceRef_t sourceRef;
-	ImplAAFMob * tmpMob = NULL;
-	ImplAAFHeader *head = NULL;
-	aafInt32 index = 0;
+    ImplAAFHeader *head = NULL;
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
 	*mob = NULL;
@@ -303,10 +301,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceClip::SetSourceReference (aafSourceRef_t  sourceRef)
 {
-    aafInt32	tmp1xSourcePosition = 0;
-	aafInt16	tmp1xTrackNum = 0;
 	AAFRESULT   aafError = AAFRESULT_SUCCESS;
-  static const aafMobID_t nullMobID = {0};
+	static const aafMobID_t nullMobID = {0};
 	
 	/* If MobID is NUL - make the rest of the fields 0 too. */
 	if(memcmp(&sourceRef.sourceID, &nullMobID, sizeof(sourceRef.sourceID)) == 0)
