@@ -664,9 +664,10 @@ OMStoredObject* OMFile::rootStore(void)
 OMDictionary* OMFile::dictionary(void) const
 {
   TRACE("OMFile::dictionary");
-  PRECONDITION("Valid root", _root != 0);
-
-  return _root->dictionary();
+  // tjb - temporary
+  // PRECONDITION("Valid root", _root != 0);
+  // return _root->dictionary();
+  return _dictionary;
 }
 
 const OMClassFactory* OMFile::classFactory(void) const
@@ -1109,10 +1110,12 @@ OMRootStorable* OMFile::restoreRoot(void)
 {
   TRACE("OMFile::restoreRoot");
 
-  enum OMLoadMode savedLoadMode = _loadMode;
-  _loadMode = lazyLoad;
+  enum OMLoadMode savedLoadMode = loadMode();
+  setLoadMode(lazyLoad);
 
-  _rootStore->restore(_referencedProperties);
+  OMPropertyTable* table = 0;
+  _rootStore->restore(table);
+  setReferencedProperties(table);
 
   OMClassId id;
   _rootStore->restore(id);
@@ -1121,16 +1124,16 @@ OMRootStorable* OMFile::restoreRoot(void)
   OMRootStorable* root = new OMRootStorable();
   ASSERT("Valid heap pointer", root != 0);
   root->attach(this);
-  root->setStore(_rootStore);
-  root->setClassFactory(_dictionary);
+  root->setStore(rootStore());
+  root->setClassFactory(dictionary());
 
   root->restoreContents();
 
   OMDictionary *metaDictionary = root->dictionary();
-  ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
+  ASSERT("Consistent dictionaries", metaDictionary == dictionary());
   root->setClassFactory(classFactory());
 
-  _loadMode = savedLoadMode;
+  setLoadMode(savedLoadMode);
   return root;
 }
 
