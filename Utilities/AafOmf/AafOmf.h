@@ -87,6 +87,7 @@ public:
 	void Usage( void );
 	void IncIndentLevel( void );
 	void DecIndentLevel( void );
+	void DisplaySummary( void );
 	HRESULT GetUserInput(int argc, char* argv[]);
 	HRESULT OpenInputFile( void );
 	HRESULT OpenOutputFile( void );
@@ -115,6 +116,8 @@ public:
 	HRESULT ConvertOMFComponentProperties(OMF2::omfObject_t sequence, IAAFComponent* pComponent);
 	HRESULT ConvertOMFTransition(OMF2::omfObject_t transition, IAAFTransition* pTransition);
 	HRESULT ConvertOMFSelector(OMF2::omfObject_t selector, IAAFSelector* pSelector);
+	HRESULT ConvertOMFLocator(OMF2::omfObject_t locator, IAAFEssenceDescriptor* pEssenceDesc);
+	HRESULT ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor, IAAFCDCIDescriptor* pAAFDescriptor);
 
 	char*					pProgramName;
 
@@ -133,6 +136,8 @@ private:
 	char					sLogFileName[256];
 
 	// For Statistical summary
+	aafInt32				nNumOMFMobs;
+	aafInt32				nNumAAFMobs;
 	aafInt32				nNumOMFObjects;
 	aafInt32				nNumAAFObjects;
 	aafInt32				nNumOMFProperties;
