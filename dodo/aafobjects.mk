@@ -26,7 +26,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFMacLocator \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup  \
-	AAFTapeDescriptor \
 	AAFNestedScope\
 	AAFObjectAttribute \
 	AAFParameter \
@@ -100,6 +99,7 @@ HUMAN_TYPED_IMPL = \
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFTimelineMobSlot \
+	AAFTapeDescriptor \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
 	EnumAAFMobs
