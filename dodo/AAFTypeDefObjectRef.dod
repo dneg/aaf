@@ -25,7 +25,7 @@ AD_IDL(//
 AD_CLASS_UUID(c3274643, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(c3274644, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty IAAFTypeDefObject-supporting
   // object.  This method must be called after allocation\, and before
@@ -121,4 +121,4 @@ AD_XMETHOD2(SetObject,
   //
   // AAFRESULT_BAD_TYPE_CATEGORY
   //   - The given Property Value is not a kAAFTypeCategoryObject.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
