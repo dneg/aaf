@@ -43,7 +43,7 @@ public:
   virtual void insert(const Element value) = 0;
 
     // @cmember Does this <c OMContainer> contain <p value> ?
-  virtual bool contains(const Element value) const = 0;
+  virtual bool containsValue(const Element value) const = 0;
 
     // @cmember The number of elements in this <c OMContainer>.
     //          <mf OMContainer::count> returns the actual number

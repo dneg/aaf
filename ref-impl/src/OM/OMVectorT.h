@@ -65,9 +65,9 @@ void OMVector<Element>::insert(const Element value)
   //   @parm The Element to search for. A value of type <p Element> by value.
   //   @this const 
 template <typename Element>
-bool OMVector<Element>::contains(const Element value) const
+bool OMVector<Element>::containsValue(const Element value) const
 {
-  TRACE("OMVector<Element>::contains");
+  TRACE("OMVector<Element>::containsValue");
 
   bool result = false;
 

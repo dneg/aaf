@@ -54,7 +54,7 @@ public:
   virtual void insert(const Element value);
 
     // @cmember Does this <c OMVector> contain <p value> ?
-  virtual bool contains(const Element value) const;
+  virtual bool containsValue(const Element value) const;
 
     // @cmember The number of elements in this <c OMVector>.
     //          <mf OMVector::count> returns the actual number

@@ -64,11 +64,11 @@ public:
   virtual void insert(const Element value);
 
     // @cmember Does this <c OMSet> contain <p value> ?
-  virtual bool contains(const Element value) const;
+  virtual bool containsValue(const Element value) const;
 
     // @cmember Does this <c OMSet> contain an <p Element>
     //          identified by <p key>?
-  virtual bool containsKey(const Key key) const;
+  virtual bool contains(const Key key) const;
 
     // @cmember Find the <p Element> in this <c OMSet> identified by
     //          <p key>.  If the element is found it is returned in
@@ -85,8 +85,12 @@ public:
     //          this <c OMSet>.
   void append(const Element value);
 
+    // @cmember Remove the <p Element> with <p Key> <p key>
+    //          from this <c OMSet>.
+  virtual void remove(const Key key);
+
     // @cmember Remove <p value> from this <c OMSet>.
-  virtual void remove(const Element value);
+  virtual void removeValue(const Element value);
 
 private:
   // @access Private members.

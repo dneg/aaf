@@ -75,9 +75,9 @@ void OMSet<Key, Element>::insert(const Element value)
   //   @rdesc True if this <c OMSet> contains <p value>, false otherwise.
   //   @this const
 template <typename Key, typename Element>
-bool OMSet<Key, Element>::contains(const Element value) const
+bool OMSet<Key, Element>::containsValue(const Element value) const
 {
-  TRACE("OMSet<Key, Element>::contains");
+  TRACE("OMSet<Key, Element>::containsValue");
 
   bool result = _tree.contains(value.identification());
 
@@ -100,9 +100,9 @@ bool OMSet<Key, Element>::contains(const Element value) const
   //          identified by <p key>, false otherwise.
   //   @this const
 template <typename Key, typename Element>
-bool OMSet<Key, Element>::containsKey(const Key key) const
+bool OMSet<Key, Element>::contains(const Key key) const
 {
-  TRACE("OMSet<Key, Element>::containsKey");
+  TRACE("OMSet<Key, Element>::contains");
 
   bool result = _tree.contains(key);
 
@@ -181,6 +181,25 @@ void OMSet<Key, Element>::append(const Element value)
   insert(value);
 }
 
+  // @mfunc Remove the <p Element> with <p Key> <p key> from this <c OMSet>.
+  //   @tcarg class | Element | The type of an <c OMSet> element.
+  //          This type must support operator = and operator==.
+  //          Instances of this type must be able to return a unique
+  //          value of type <p Key> to identify themselves through a
+  //          function with the signature
+  //          const Key Element::identification(void) const.
+  //   @tcarg class | Key  | The type of the unique key used to identify
+  //          elements. This type must support operator =, operator !=
+  //          and operator <lt>.
+  //   @parm The <p Key> of the <p Element> to remove.
+template <typename Key, typename Element>
+void OMSet<Key, Element>::remove(const Key key)
+{
+  TRACE("OMSet<Key, Element>::remove");
+
+  _tree.remove(key);
+}
+
   // @mfunc Remove <p value> from this <c OMSet>.
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
@@ -193,9 +212,9 @@ void OMSet<Key, Element>::append(const Element value)
   //          and operator <lt>.
   //   @parm The <p Element> to remove.
 template <typename Key, typename Element>
-void OMSet<Key, Element>::remove(const Element value)
+void OMSet<Key, Element>::removeValue(const Element value)
 {
-  TRACE("OMSet<Key, Element>::remove");
+  TRACE("OMSet<Key, Element>::removeValue");
 
   _tree.remove(value.identification());
 }
