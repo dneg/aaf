@@ -381,7 +381,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::AppendEssenceData (ImplAAFEssenceData * pEssenceData)
 {
 	aafUID_t	mobID;
-	ImplAAFMob	*test;
+	ImplAAFMob	*pMatchingMob = NULL;
 
 	if (NULL == pEssenceData)
 		return AAFRESULT_NULL_PARAM;
@@ -393,18 +393,23 @@ AAFRESULT STDMETHODCALLTYPE
 		// with the same AAF file.
 		CHECK(pEssenceData->GetFileMobID(&mobID));
 
-		// JeffB: Test is a throwaway, so don't bump the refcount
-		CHECK(LookupMob (&mobID, &test));
+		// Make sure the mob id matches an existing mob.
+		CHECK(LookupMob (&mobID, &pMatchingMob));
+
 
 		_essenceData.appendValue(pEssenceData);
 		// trr - We are saving a copy of pointer in _essenceData so we need
 		// to bump its reference count.
 		pEssenceData->AcquireReference();
+
 	} /* XPROTECT */
 	XEXCEPT
 	{
 	}
 	XEND;
+
+	if (pMatchingMob)
+		pMatchingMob->ReleaseReference();	
 	
 	return(AAFRESULT_SUCCESS);
 }
