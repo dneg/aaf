@@ -350,6 +350,7 @@ AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggabl
 
 	XPROTECT()
 	{
+		*result = NULL;
 		CHECK(GetPluggableDefinitions (&pluggableEnum));
 		status = pluggableEnum->NextOne (&pluggable);
 		defFound = AAFFalse;
@@ -357,7 +358,10 @@ AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggabl
 		{
 			CHECK(pluggable->GetAUID (&testAUID));
 			if(EqualAUID(defID, &testAUID))
+			{
 				defFound = AAFTrue;
+				*result = pluggable;
+			}
 			status = pluggableEnum->NextOne (&pluggable);
 		}
 		if(!defFound)
