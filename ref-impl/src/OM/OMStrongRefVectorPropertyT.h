@@ -217,11 +217,16 @@ ReferencedObject*
   // Set the vector to contain the new object
   //
   VectorElement& element = _vector.getAt(index);
-  ReferencedObject* oldObject = element.setValue(object);
+  OMStorable* p = element.setValue(object);
+  ReferencedObject* oldObject = 0;
+  if (p != 0) {
+    oldObject = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", oldObject != 0);
+  }
   setPresent();
 
   POSTCONDITION("Object properly inserted",
-                                    _vector.getAt(index).getValue() == object);
+     _vector.getAt(index).getValue() == const_cast<ReferencedObject*>(object));
   return oldObject;
 }
 
@@ -269,7 +274,12 @@ ReferencedObject* OMStrongReferenceVectorProperty<ReferencedObject>::valueAt(
 
   VectorElement& element = _vector.getAt(index);
 
-  ReferencedObject* result = element.getValue();
+  OMStorable* p = element.getValue();
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
@@ -294,8 +304,11 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getValueAt(
 
   VectorElement& element = _vector.getAt(index);
 
-  object = element.getValue();
-
+  OMStorable* p = element.getValue();
+  if (p != 0) {
+    object = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", object != 0);
+  }
 }
 
   // @mfunc If <p index> is valid, get the value of this
@@ -405,7 +418,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::insertAt(
   setPresent();
 
   POSTCONDITION("Object properly inserted",
-                                    _vector.getAt(index).getValue() == object);
+     _vector.getAt(index).getValue() == const_cast<ReferencedObject*>(object));
 }
 
   // @mfunc Does this <c OMStrongReferenceVectorProperty> contain
@@ -427,7 +440,7 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::containsValue(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    if (element.pointer() == object) {
+    if (element.pointer() == const_cast<ReferencedObject*>(object)) {
       result = true;
       break;
     }
@@ -535,7 +548,7 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    if (element.pointer() == object) {
+    if (element.pointer() == const_cast<ReferencedObject*>(object)) {
       result = iterator.index();
       break;
     }
@@ -564,7 +577,7 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::countOfValue(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    if (element.pointer() == object) {
+    if (element.pointer() == const_cast<ReferencedObject*>(object)) {
       result = result + 1;
     }
   }
@@ -617,7 +630,7 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::findIndex(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    if (element.pointer() == object) {
+    if (element.pointer() == const_cast<ReferencedObject*>(object)) {
       index = iterator.index();
       result = true;
       break;
@@ -627,7 +640,7 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::findIndex(
 }
 
   // @mfunc Increase the capacity of this
-  //        <c OMStrongReferemceVectorProperty> so that it
+  //        <c OMStrongReferenceVectorProperty> so that it
   //        can contain at least <p capacity> <p ReferencedObject>s
   //        without having to be resized.
   //   @parm The desired capacity.
@@ -666,7 +679,7 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::isVoid(void) const
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    ReferencedObject* object = element.getValue();
+    OMStorable* object = element.getValue();
     if (object != 0) {
       result = false;
       break;
@@ -729,7 +742,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getBits(
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
-  const ReferencedObject** p = (const ReferencedObject**)bits;
+  const OMStorable** p = (const OMStorable**)bits;
 
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {

@@ -531,7 +531,13 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 
   bool result = _set.find(identification, &element);
   if (result) {
-    object = element->getValue();
+    OMStorable* p = element->getValue();
+    if (p != 0) {
+      object = dynamic_cast<ReferencedObject*>(p);
+      ASSERT("Object is correct type", object != 0);
+    } else {
+      object = 0;
+    } 
   }
 
   POSTCONDITION("Consistent keys",
@@ -559,7 +565,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   SetIterator iterator(_set, OMBefore);
   while (++iterator) {
     SetElement& element = iterator.value();
-    ReferencedObject* object = element.getValue();
+    OMStorable* object = element.getValue();
     if (object != 0) {
       result = false;
       break;
@@ -631,7 +637,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
-  const ReferencedObject** p = (const ReferencedObject**)bits;
+  const OMStorable** p = (const OMStorable**)bits;
 
   SetIterator iterator(_set, OMBefore);
   while (++iterator) {
