@@ -349,6 +349,7 @@ bool OMFile::validSignature(const OMFileSignature& signature)
   }
   return result;
 }
+
   // @mfunc Is the file named <p fileName> a recognized file ?
   //        If so, the result is true, and the signature is returned
   //        in <p signature> and the encoding in <p encoding>.
