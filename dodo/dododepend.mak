@@ -22,10 +22,8 @@ depend.mk : aafobjects.mk
 	@ echo "#" This file automatically generated make. > depend.tmp
 	@ echo "#" Special case AAFTypes since no object is to be built only headers... >> depend.tmp
 	@ echo AAFTypes.all...
-	@ echo AAFTypes.all : AAFTypes.h >> depend.tmp
 	@ echo AAFTypes.all : AAFTypes.idl >> depend.tmp
 	@ echo AAFTypes.all : AAFTypes.refh >> depend.tmp
-	@ echo AAFTypes.h : macros/h.mac macros/base.mac >> depend.tmp
 	@ echo AAFTypes.idl : macros/idl.mac macros/base.mac >> depend.tmp
 	@ echo AAFTypes.refh : macros/refh.mac macros/base.mac >> depend.tmp
 	@ echo "" >> depend.tmp
@@ -41,15 +39,11 @@ depend.mk : aafobjects.mk
 	@ for base in $(DODO_TARGET_NAMES) ; do \
 		echo $$base.all... ; \
 		echo "" >> depend.tmp ; \
-		echo $$base.all : $$base.cpp $$base.h $$base.cppt >> depend.tmp ; \
 		echo $$base.all : $$base.comc $$base.comh >> depend.tmp ; \
 		echo $$base.all : $$base.comt >> depend.tmp ; \
 		echo $$base.all : $$base.implc $$base.implh >> depend.tmp ; \
 		echo $$base.all : $$base.fidl >> depend.tmp ; \
 		echo $$base.all : $$base.frefh >> depend.tmp ; \
-		echo $$base.cpp : macros/cpp.mac macros/base.mac >> depend.tmp ; \
-		echo $$base.h : macros/h.mac macros/base.mac >> depend.tmp ; \
-		echo $$base.cppt : macros/cppt.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.comc : macros/comc.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.comh : macros/comh.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.comt : macros/comt.mac macros/base.mac >> depend.tmp ; \
@@ -59,9 +53,6 @@ depend.mk : aafobjects.mk
 		echo $$base.frefh : macros/frefh.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
 		for import in `grep '^\#import' $$base.dod | sed -e 's,\#import,,' | sed -e 's,.*/,,'` ; do \
-			echo $$base.cpp : $$import >> depend.tmp ; \
-			echo $$base.h : $$import >> depend.tmp ; \
-			echo $$base.cppt : $$import >> depend.tmp ; \
 			echo $$base.comc : $$import >> depend.tmp ; \
 			echo $$base.comh : $$import >> depend.tmp ; \
 			echo $$base.comt : $$import >> depend.tmp ; \
@@ -82,10 +73,8 @@ depend.mk : aafobjects.mk
 	  done
 	@ echo AAFPluginTypes.all...
 	@ echo "" >> depend.tmp
-	@ echo AAFPluginTypes.all : AAFPluginTypes.h >> depend.tmp
 	@ echo AAFPluginTypes.all : AAFPluginTypes.idl >> depend.tmp
 	@ echo AAFPluginTypes.all : AAFPluginTypes.refh >> depend.tmp
-	@ echo AAFPluginTypes.h : macros/h.mac macros/base.mac >> depend.tmp
 	@ echo AAFPluginTypes.idl : macros/idl.mac macros/base.mac >> depend.tmp
 	@ echo AAFPluginTypes.refh : macros/refh.mac macros/base.mac >> depend.tmp
 	@ echo "" >> depend.tmp
@@ -110,5 +99,6 @@ depend.mk : aafobjects.mk
 clean :
 	$(RM) -rf depend.mk
 	touch depend.mk
+
 
 
