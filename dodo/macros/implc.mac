@@ -589,8 +589,6 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_ROOT_CLASS_END 00
 
-class IAAFObject;
-
 void * Impl.this-module::GetContainer ()
 {
   assert (_pContainer);
