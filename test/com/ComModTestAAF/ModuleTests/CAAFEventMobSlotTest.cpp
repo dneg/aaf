@@ -352,7 +352,7 @@ void EventMobSlotTest::CreateEventMobSlot()
     pMobSlot = NULL;
 
     // Attach the mob to the header...
-    checkResult(_pHeader->AppendMob(pMob));
+    checkResult(_pHeader->AddMob(pMob));
 
     // Save the id of the composition mob that contains our test
     // event mob slot.
@@ -419,7 +419,7 @@ void EventMobSlotTest::OpenEventMobSlot()
     checkResult(_pHeader->LookupMob(_eventMobID1, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
-    checkResult(pMob->EnumAAFAllMobSlots(&pEnumSlots));
+    checkResult(pMob->GetSlots(&pEnumSlots));
     checkResult(pEnumSlots->NextOne(&pMobSlot));
     checkResult(pMobSlot->QueryInterface(IID_IAAFEventMobSlot, (void **)&pEventMobSlot));
     checkResult(pEventMobSlot->GetEditRate(&editRate));
@@ -570,7 +570,7 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
     pMobSlot = NULL;
 
     // Attach the mob to the header...
-    checkResult(_pHeader->AppendMob(pMob));
+    checkResult(_pHeader->AddMob(pMob));
 
     // Save the id of the composition mob that contains our test
     // event mob slot.
@@ -649,7 +649,7 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
     checkResult(_pHeader->LookupMob(_eventMobID2, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
-    checkResult(pMob->EnumAAFAllMobSlots(&pEnumSlots));
+    checkResult(pMob->GetSlots(&pEnumSlots));
     checkResult(pEnumSlots->NextOne(&pMobSlot));
     checkResult(pMobSlot->QueryInterface(IID_IAAFEventMobSlot, (void **)&pEventMobSlot));
     checkResult(pEventMobSlot->GetEditRate(&editRate));
