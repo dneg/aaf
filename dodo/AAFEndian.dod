@@ -1,0 +1,32 @@
+#startm .this-module 0
+AAFEndian\
+#endm
+#c
+AD_HEAD
+AD_CLASS_UUID(6BACC0C0, 6091, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
+
+AD_DEFAULT_UUID(6BACC0C1, 6091, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
+AD_CLASS_BEGIN
+AD_XMETHOD1(GetStoredByteOrder,
+			[out],
+			objPass,
+			aafByteOrder_t *,
+			pOrder,
+			Pointer to place where byte order is to be put,
+			Returns the "Endian-ness" in which the current object was or will
+  // be stored.  If this is a transient object \(i.e.\, one which has
+  // not been persisted\) then it will return the native byte order of
+  // the platform on which this is running.
+  //)
+
+
+AD_XMETHOD1(GetNativeByteOrder,
+			[out],
+			objPass,
+			aafByteOrder_t *,
+			pOrder,
+			Pointer to place where byte order is to be put,
+			Returns the native "Endian-ness" of the platform on which this is
+  // running.
+  //)
+AD_CLASS_END
