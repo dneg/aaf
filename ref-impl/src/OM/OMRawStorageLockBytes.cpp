@@ -180,7 +180,7 @@ OMRawStorageLockBytes::Stat(STATSTG *pstatstg,
 {
   TRACE("OMRawStorageLockBytes::Stat");
 
-  // TBS
+  // TBS tjb
   memset(pstatstg, 0, sizeof(STATSTG));
   return NOERROR;
 }

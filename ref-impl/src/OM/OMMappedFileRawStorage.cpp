@@ -128,14 +128,15 @@ void OMMappedFileRawStorage::read(OMByte* /* bytes */,
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
-  //        from the current position in this <c OMMappedFileRawStorage>
+  //        from offset <p position> in this <c OMMappedFileRawStorage>
   //        into the buffer at address <p bytes>.
   //        The actual number of bytes read is returned in <p bytesRead>.
   //        Reading from positions greater than
   //        <mf OMMappedFileRawStorage::size> causes <p bytesRead> to be less
   //        than <p byteCount>. Reading bytes that have never been written
   //        returns undefined data in <p bytes>.
-  //   @parm OMUInt64 | position | TBS
+  //   @parm OMUInt64 | position | The position from which the bytes are
+  //         to be read.
   //   @parm OMByte* | bytes | The buffer into which the bytes are to be read.
   //   @parm OMUInt32 | byteCount | The number of bytes to read.
   //   @parm OMUInt32& | bytesRead | The number of bytes actually read.
@@ -197,7 +198,8 @@ void OMMappedFileRawStorage::write(const OMByte* /* bytes */,
   //        <c OMMappedFileRawStorage> to be extended, however such
   //        extension can fail, causing <p bytesWritten> to be less
   //        than <p byteCount>.
-  //   @parm OMUInt64 | position | TBS
+  //   @parm OMUInt64 | position | The position to which the bytes are
+  //         to be written.
   //   @parm OMByte* | bytes | The buffer from which the bytes are to be
   //         written.
   //   @parm OMUInt32 | byteCount | The number of bytes to write.

@@ -151,14 +151,14 @@ void OMDiskRawStorage::read(OMByte* bytes,
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
-  //        from the current position in this <c OMDiskRawStorage>
+  //        from offset <p position> in this <c OMDiskRawStorage>
   //        into the buffer at address <p bytes>.
   //        The actual number of bytes read is returned in <p bytesRead>.
   //        Reading from positions greater than
   //        <mf OMDiskRawStorage::size> causes <p bytesRead> to be less
   //        than <p byteCount>. Reading bytes that have never been written
   //        returns undefined data in <p bytes>.
-  //   @parm TBS
+  //   @parm The position from which the bytes are to be read.
   //   @parm The buffer into which the bytes are to be read.
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
@@ -224,7 +224,7 @@ void OMDiskRawStorage::write(const OMByte* bytes,
   //        <mf OMDiskRawStorage::size> causes this <c OMDiskRawStorage>
   //        to be extended, however such extension can fail, causing
   //        <p bytesWritten> to be less than <p byteCount>.
-  //   @parm TBS
+  //   @parm The position to which the bytes are to be written.
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
