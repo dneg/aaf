@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFTypeDefArray\
+AAFTypeDefVariableArray\
 #endm
 #c
 #startm .parent-module 0
@@ -8,113 +8,357 @@ AAFTypeDef\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used to define Array types used in AAF persistent
-// objects.
+// This interface is used to define variably-sized Array types used in
+// AAF persistent objects.
 //
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/)
-AD_FORWARD_DECLARATION(AAFPropertyValue)
-AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
+AD_CLASS_UUID(307e9e65, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
-AD_CLASS_UUID(c3274645, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
-
-AD_DEFAULT_UUID(c3274646, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
+AD_DEFAULT_UUID(307e9e66, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_METHOD0(Initialize,
-		   Initializes a newly allocated\, empty IAAFTypeDefArray-supporting
-  // object.  This method must be called after allocation\, and before
+AD_XMETHOD3(Initialize,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this type,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			type of each element to be contained in this array,
+
+			[in],
+			objPass,
+			wchar_t *,
+			pTypeName,
+			friendly name of this type definition,
+
+     Initializes this type def to contain elements of the given type.
+  //
+  // This method must be called after allocation\, and before
   // any other method can be called.
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
+  // - pTypeDef is a valid pointer.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_ALREADY_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pTypeDef or pTypeName\))
 
 
-AD_XMETHOD2(EnumPropertyValues,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
-
+AD_XMETHOD1(GetType,
 			[out],
 			objOut,
-			EnumAAFPropertyValues,
-			ppEnum,
-			The resulting enumerator,
+			AAFTypeDef,
+			ppTypeDef,
+			type of elements in this array,
 
-			Returns an enumerator across property values contained in the
-  // array assumed to be within the specified Property Value.
-  // Assumes that the given Property Value is of the
-  // kAAFTypeCategoryArray.
+     Returns the type of elements in this array.
   //
   // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - The ppEnum pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryArray.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or ppEnum pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryArray.)
+  // - Initialize\(\) has already been called on this object.
+  // - ppTypeDef is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
 
 
-AD_XMETHOD2(GetElementCount,
+AD_XMETHOD2(GetCount,
 			[in],
 			objIn,
 			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
+			pPropVal,
+			property value of array,
 
 			[out],
 			objPass,
 			aafUInt32 *,
 			pCount,
-			Count of contained elements,
-			Returns the count of contained elements in *pCount.
+			count of elements in the specified array property value,
+
+     Returns number of array elements in the referenced property
+  // value.
   //
   // Succeeds if:
-  // - The pCount pointer is valid.
+  // - Initialize\(\) has already been called on this object.
+  // - pPropVal is a valid pointer.
+  // - pCount is a valid pointer.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropVal or pCount\))
+
+
+AD_XMETHOD2(AppendElement,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value corresponding to array to which element is appended,
+
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pMemberPropVal,
+			value to be appended to this array,
+
+			Appends an element to the end of the array\, setting it to the
+  // value given in pMemberPropVal.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pInPropVal pointer is valid.
+  // - pMemberPropVal pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or pMemberPropVal\))
+
+
+AD_X2METHOD3(CreateValueFromValues,
+
+			 [in\, size_is\(numElements\)],
+			 objInArray,
+			 AAFPropertyValue,
+			 pElementValues,
+       array of property values for elements of array value which
+    // is to be created.,
+			 numElements,
+
+			 [in],
+			 objPass,
+			 aafUInt32,
+			 numElements,
+			 size of pElementValues array.,
+			 ,
+
+			 [out],
+			 objOut,
+			 AAFPropertyValue,
+			 ppPropVal,
+			 newly-created property value,
+			 ,
+
+     Creates a property value which contains a variable array type.
+  // The array elements in the property value are initialized to
+  // contain the given values\, passed in the pElementValues array.
+  // numElements\, which indicates the size of the pElementValues
+  // array\, determines the size of the array in the new array
+  // property value.
+  //
+  // Succeeds if all of the following are true:
+  // - the pElementValues pointer is valid.
+  // - the ppPropVal pointer is valid.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pElementValues or ppPropVal\))
+
+
+AD_XMETHOD3(CreateValueFromCArray,
+			[in\, size_is\(initDataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pInitData,
+			pointer to compile-time C array containing data to use,
+
+			[in],
+			objPass,
+			aafUInt32,
+			initDataSize,
+			size of data in pInitData\, in bytes,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppPropVal,
+			newly created property value,
+
+     Creates a property value which contains a fixed array type.  The
+  // array elements in the property value are initialized from data in
+  // a C array which is pointed to by pInitData.  Requires that any
+  // structures declared within this array typedef have had their
+  // offsets registered with that type.  Returns the newly-created
+  // property value in ppPropVal.  The size of the newly-created array
+  // property value will be determined by the number of elements in
+  // the initialization C array\, as communicated by initDataSize.
+  //
+  // Succeeds if all of the following are true:
+  // - the pInitData pointer is valid.
+  // - the ppPropVal pointer is valid.
+  // - compile-time struct has had its member offests registered.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInitData or ppPropVal\)
+  // AAFRESULT_NOT_REGISTERED
+  //  - any contained struct offsets have not yet been registered for
+  //    that typedef.)
+
+
+AD_XMETHOD3(GetElementValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value to read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into elements in this array type,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppOutPropVal,
+			value that is read,
+
+     Gets a single property value corresponding to the indexed array
+  // element.  Places a property value representing the array element
+  // identified by the index into ppOutPropval.  Index is zero-based\,
+  // and must be less than the value returned by GetCount\(\).
   // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - the index exists in this array type def.
+  // - The pInPropVal pointer is valid.
+  // - The ppOutPropVal pointer is valid.
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pInPropVal or ppOutPropVal\)
+  // AAFRESULT_BAD_PARAM
+  //   - The given index is out of range for this array type def.)
+
+
+AD_XMETHOD3(GetCArray,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value to read,
+			
+			[out\, size_is\(dataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which C array data should be written,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			size of pData buffer in bytes,
+
+     Copies all the array data contained in the given property value\,
+  // interpreted as a fixed array of this type\, into the C array
+  // pointed to by pData.  Requires that any structures declared
+  // within this array typedef have had their offsets registered with
+  // that type.
   //
-  // AAFRESULT_NULL_PARAM
-  //   - The pCount pointer is NULL.)
+  // Succeeds if all of the following are true:
+  // - the pPropVal pointer is valid.
+  // - the pData pointer is valid.
+  // - dataSize indicates pData is large enough to hold the data.
+  // - compile-time struct has had its member offests registered.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
+  // AAFRESULT_BAD_PARAM
+  //   - dataSize indicates pData is too small.
+  //
+  // AAFRESULT_NOT_REGISTERED
+  //  - struct offsets have not yet been registered for this typedef.)
+
+
+AD_XMETHOD3(SetElementValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value to write,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into members in this array type,
+
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pMemberPropVal,
+			value to be placed into this array,
+
+     Sets the value of the single\, indicated element of the fixed
+  // array contained in pPropVal\, to the value contained in
+  // pMemberPropVal.  Index is zero-based\, and must be less than the
+  // value returned by GetCount\(\).  Property value must be of the
+  // same type as returned by GetType\(\).
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - the index exists in this array type def.
+  // - The pInPropVal pointer is valid.
+  // - The ppOutPropVal pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or ppOutPropVal\)
+  // AAFRESULT_BAD_PARAM
+  //   - The given index is out of range for this array type def.)
+
+
+AD_XMETHOD3(SetCArray,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value to write,
+
+			[in\, size_is\(dataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer from which C array data should be read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			size of pData buffer in bytes,
+
+     Copies all the array data contained in the C array pointed to by
+  // pData into the given property value\, interpreting the data as a
+  // fixed array of this type.  Requires that any structures declared
+  // within this typedef have had their offsets registered with that
+  // type.  If dataSize indicates an array size different from the
+  // size currently in the indicated array property value\, that array
+  // property value will be resized.
+  //
+  // Succeeds if all of the following are true:
+  // - the pPropVal pointer is valid.
+  // - the pData pointer is valid.
+  // - any contained compile-time struct has had its member offests
+  //   registered.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
+  // AAFRESULT_NOT_REGISTERED
+  //  - offsets of any contained struct have not yet been registered.)
 AD_XCLASS_END(Concrete, StoredObject)
