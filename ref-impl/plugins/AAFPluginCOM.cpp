@@ -44,7 +44,6 @@
 
 
 #include "CAAFInProcServer.h"
-#include "CAAFInProcServer.cpp"
 
 static CAAFInProcServer g_AAFInProcServer;
 CAAFServer* g_pAAFServer = &g_AAFInProcServer;
