@@ -376,6 +376,18 @@ bool OMStorable::persistent(void) const
   return result;
 }
 
+  // @mfunc Is this <c OMStorable> dirty ?
+  //        A dirty object is one that has been modified since it
+  //        was last saved or that has never been saved at all. 
+bool OMStorable::isDirty(void) const
+{
+  TRACE("OMStorable::isDirty");
+
+  // Dirty bit not yet implemented, consider all objects dirty.
+  //
+  return true;
+}
+
   // @mfunc This object's property set.
   //   @rdesc A pointer to this object's <c OMPropertySet>.
 OMPropertySet* OMStorable::propertySet(void)
