@@ -285,7 +285,7 @@ public:
 		AxBuffer<aafUInt8> pixels( std::auto_ptr<aafUInt8>(new aafUInt8 [numBytes]), numBytes );
 
 		// Fill with random data.
-		int i;
+		unsigned i;
 		aafInt32* p = reinterpret_cast<aafInt32*>( pixels.GetPtr().get() );
 		for( i = 0; i < numBytes/sizeof(aafInt32); i++ ) {
 			p[i] = rand();
@@ -350,7 +350,7 @@ public:
 		int numSamples = GetNumSamplesPerChunk();
 
 		if ( numSamples > _numSamplesToWrite ) {
-			numSamples = _numSamplesToWrite;
+			numSamples = (int)_numSamplesToWrite;
 		}
 		
 		const int numBytes = numSamples * _bytesPerSample;
@@ -358,7 +358,7 @@ public:
 		AxBuffer<aafUInt8> samples( std::auto_ptr<aafUInt8>(new aafUInt8 [numBytes]), numBytes );
 
 		// Fill with random data.
-		int i;
+		unsigned i;
 		aafInt32* s = reinterpret_cast<aafInt32*>( samples.GetPtr().get() );
 		for( i = 0; i < numBytes/sizeof(aafInt32); i++ ) {
 			s[i] = rand();
@@ -430,7 +430,7 @@ public:
 		if ( _source == "video" ) {
 			std::auto_ptr< SampleSource > sampleSource(
 				new VideoSampleSource( _videoWidth, _videoHeight, _videoBytesPerPixel, _rate,
-									   _numSamples, kAAFCompressionDisable ) );
+									   (int)_numSamples, kAAFCompressionDisable ) );
 			return sampleSource;
 		}
 		else if ( _source == "audio" ) {
@@ -834,10 +834,10 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 	sampleSource->SetupFormatSpecifiers( axEssenceAccess );	
 
 	int numSamplesPerChunk = sampleSource->GetNumSamplesPerChunk();
-	int buflen = maxSize * numSamplesPerChunk;
+	int buflen = (int)maxSize * numSamplesPerChunk;
 	auto_ptr<char> buffer( new char [ buflen ] );
 
-	int numSamplesStillToRead = numSamples;
+	int numSamplesStillToRead = (int)numSamples;
 	
 	while( numSamplesStillToRead > 0 ) {
 
