@@ -36,16 +36,16 @@
 #include "ImplEnumAAFDataDefs.h"
 #endif
 
-#ifndef __ImplAAFEffectDef_h__
-#include "ImplAAFEffectDef.h"
+#ifndef __ImplAAFOperationDef_h__
+#include "ImplAAFOperationDef.h"
 #endif
 
 #ifndef __ImplAAFParameterDef_h__
 #include "ImplAAFParameterDef.h"
 #endif
 
-#ifndef __ImplEnumAAFEffectDefs_h__
-#include "ImplEnumAAFEffectDefs.h"
+#ifndef __ImplEnumAAFOperationDefs_h__
+#include "ImplEnumAAFOperationDefs.h"
 #endif
 
 #ifndef __ImplEnumAAFCodecDefs_h__
@@ -81,7 +81,7 @@
 #include "AAFUtils.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFDefObjects;
-extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFCodecDefs;
@@ -105,7 +105,7 @@ extern aafUID_t gClassID_Object;
 
 
 ImplAAFDictionary::ImplAAFDictionary ()
-: _effectDefinitions(PID_Dictionary_EffectDefinitions, "EffectDefinitions"), 
+: _operationDefinitions(PID_Dictionary_OperationDefinitions, "OperationDefinitions"), 
   _parameterDefinitions(PID_Dictionary_ParameterDefinitions, "ParameterDefinitions"),
   _codecDefinitions(PID_Dictionary_CodecDefinitions, "CodecDefinitions"),
   _containerDefinitions(PID_Dictionary_ContainerDefinitions, "ContainerDefinitions"),
@@ -113,7 +113,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions"),
   _pBuiltins (0)
 {
-  _persistentProperties.put (_effectDefinitions.address());
+  _persistentProperties.put (_operationDefinitions.address());
   _persistentProperties.put (_parameterDefinitions.address());
   _persistentProperties.put (_typeDefinitions.address());
   _persistentProperties.put (_classDefinitions.address());
@@ -468,35 +468,35 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterEffectDefinition (
-      ImplAAFEffectDef *pEffectDef)
+    ImplAAFDictionary::RegisterOperationDefinition (
+      ImplAAFOperationDef *pOperationDef)
 {
-	if (NULL == pEffectDef)
+	if (NULL == pOperationDef)
 		return AAFRESULT_NULL_PARAM;
 	
-	_effectDefinitions.appendValue(pEffectDef);
+	_operationDefinitions.appendValue(pOperationDef);
 	// trr - We are saving a copy of pointer in _pluginDefinitions
 	// so we need to bump its reference count.
-	pEffectDef->AcquireReference();
+	pOperationDef->AcquireReference();
 	
 	return(AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupEffectDefinition (
+    ImplAAFDictionary::LookupOperationDefinition (
       aafUID_t *effectID,
-      ImplAAFEffectDef **ppEffectDef)
+      ImplAAFOperationDef **ppOperationDef)
 {
-	ImplEnumAAFEffectDefs		*effectEnum = NULL;
-	ImplAAFEffectDef			*effectDef = NULL;
+	ImplEnumAAFOperationDefs	*effectEnum = NULL;
+	ImplAAFOperationDef			*effectDef = NULL;
 	aafBool						defFound;
 	AAFRESULT					status;
 	aafUID_t					testAUID;
 
 	XPROTECT()
 	{
-		CHECK(GetEffectDefinitions (&effectEnum));
+		CHECK(GetOperationDefinitions (&effectEnum));
 		status = effectEnum->NextOne (&effectDef);
 		defFound = AAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
@@ -505,7 +505,7 @@ AAFRESULT STDMETHODCALLTYPE
 			if(EqualAUID(effectID, &testAUID))
 			{
 				defFound = AAFTrue;
-				*ppEffectDef = effectDef;
+				*ppOperationDef = effectDef;
 				effectDef->AcquireReference();
 				break;
 			}
@@ -537,18 +537,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetEffectDefinitions (
-      ImplEnumAAFEffectDefs **ppEnum)
+    ImplAAFDictionary::GetOperationDefinitions (
+      ImplEnumAAFOperationDefs **ppEnum)
 {
 	if (NULL == ppEnum)
 		return AAFRESULT_NULL_PARAM;
 	*ppEnum = 0;
 	
-	ImplEnumAAFEffectDefs *theEnum = (ImplEnumAAFEffectDefs *)CreateImpl (CLSID_EnumAAFEffectDefs);
+	ImplEnumAAFOperationDefs *theEnum = (ImplEnumAAFOperationDefs *)CreateImpl (CLSID_EnumAAFOperationDefs);
 	
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEnumStrongProperty(this, &_effectDefinitions));
+		CHECK(theEnum->SetEnumStrongProperty(this, &_operationDefinitions));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
