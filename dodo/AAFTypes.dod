@@ -549,19 +549,28 @@ typedef struct _aafProductIdentification_t
 
 AD_CPP_QUOTE(extern const aafProductVersion_t AAFReferenceImplementationVersion;)
 
+
+
+typedef struct _aafDateStruct_t
+{
+  aafInt16 year;   /* range -32,767 to +32767 */
+  aafUInt8 month;  /* range: 1-12, inclusive */
+  aafUInt8 day;    /* range: 1-31, inclusive */
+} aafDateStruct_t;
+
+typedef struct _aafTimeStruct_t
+{
+  aafUInt8 hour;     /* range 0-23 inclusive */
+  aafUInt8 minute;   /* range 0-59 inclusive */
+  aafUInt8 second;   /* range 0-59 inclusive */
+  aafUInt8 fraction; /* range 0..99 inclusive; accuracy: .01 sec */
+} aafTimeStruct_t;
+
 typedef struct _aafTimeStamp_t
 {
-	// The TimeVal field format is the same as the Timestamp field in
-	// a GUID.  In short, it is represented by Universal Coordinated
-	// Time (UTC) in a 60-bit number as a count of 100-nanosecond
-	// intervals since 00:00:00.00, 15 October 1582 (the date of
-	// Gregorian reform to the Christian calendar).  See
-	// draft-leach-uuids-guids-01.txt for a further discussion.
-	aafInt64         	TimeVal;
-	aafInt8            	IsGMT;
+  aafDateStruct_t date;
+  aafTimeStruct_t time;
 } aafTimeStamp_t;
-
-
 
 
 
@@ -942,12 +951,14 @@ AD_CPP_QUOTE(#if 0)
     typedef aafRational_t * aafRational_constref;
     typedef aafLength_t * aafLength_constref;
     typedef aafVersionType_t * aafVersionType_constref;
+    typedef aafTimeStamp_t * aafTimeStamp_constref;
   #else
     /* MIDL 1.1 definitions */
     typedef aafUID_t aafUID_constref;
     typedef aafRational_t aafRational_constref;
     typedef aafLength_t aafLength_constref;
     typedef aafVersionType_t aafVersionType_constref;
+    typedef aafTimeStamp_t aafTimeStamp_constref;
   #endif
 
   typedef aafUID_t * aafUID_constptr;
@@ -959,11 +970,13 @@ AD_CPP_QUOTE(  #define aafUID_constref const aafUID_t &)
 AD_CPP_QUOTE(  #define aafRational_constref const aafRational_t &)
 AD_CPP_QUOTE(  #define aafLength_constref const aafLength_t &)
 AD_CPP_QUOTE(  #define aafVersionType_constref const aafVersionType_t &)
+AD_CPP_QUOTE(  #define aafTimeStamp_constref const aafTimeStamp_t &)
 AD_CPP_QUOTE(#else // !__cplusplus)
 AD_CPP_QUOTE(  #define aafUID_constref const aafUID_t * const)
 AD_CPP_QUOTE(  #define aafRational_constref const aafRational_t * const)
 AD_CPP_QUOTE(  #define aafLength_constref const aafLength_t * const)
 AD_CPP_QUOTE(  #define aafVersionType_constref const aafVersionType_t * const)
+AD_CPP_QUOTE(  #define aafTimeStamp_constref const aafTimeStamp_t * const)
 AD_CPP_QUOTE(#endif // !__cplusplus)
 
 AD_CPP_QUOTE(  #define aafUID_constptr const aafUID_t *)
