@@ -81,18 +81,4 @@ ifneq ($(GENDEPS), 0)
 -include $(DEPS)
 endif
 
-# Disable header dependencies for now, because they make the build process 
-# approximately 10^64 times slower.
-
-#ifneq (,$(CXXFILES))
-#include $(CXXFILES:%.$(CPP_EXTENSION)=$(OBJDIR)/%.d)
-#endif
-
-#ifneq (,$(CXXFILES2))
-#include $(CXXFILES2:%.$(CPP_EXTENSION)=$(OBJDIR)/%.d)
-#endif
-
-#ifneq (,$(CFILES))
-#include $(CFILES:%.c=$(OBJDIR)/%.d)
-#endif
 
