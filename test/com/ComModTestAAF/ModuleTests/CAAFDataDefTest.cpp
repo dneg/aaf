@@ -142,7 +142,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->CreateInstance(&AUID_AAFSequence,
 			IID_IAAFSequence, 
 			(IUnknown **)&pSequence));		
-		checkResult(pSequence->Initialize((aafUID_t*)&DDEF_Sound));
+		checkResult(pSequence->Initialize((aafUID_t*)&DDEF_Picture));
 		
 		//
 		//	Add some segments.  Need to test failure conditions
@@ -157,7 +157,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				IID_IAAFComponent, 
 				(IUnknown **)&pComponent));
 			
-			checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_Sound));
+			if(i == 0)
+			{
+				checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_PictureWithMatte));
+			}
+			else
+			{
+				checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_Picture));
+			}
+
 			checkResult(pComponent->SetLength(&len));
 			checkResult(pSequence->AppendComponent(pComponent));
 			
@@ -231,9 +239,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFSequence*		pSequence = NULL;
 	IAAFDictionary*		pDictionary = NULL;
 	IEnumAAFComponents*	pCompIter = NULL;
-	aafNumSlots_t	numMobs;
-	aafSearchCrit_t	criteria;
-	HRESULT			hr = S_OK;
+	aafNumSlots_t		numMobs;
+	aafInt32			index;
+	aafSearchCrit_t		criteria;
+	HRESULT				hr = S_OK;
 	
 	
 	try
@@ -273,29 +282,54 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				
 				checkResult(pSequence->EnumComponents(&pCompIter));
 				numCpnts = 0;
+				index = 0;
 				while (pCompIter && pCompIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
 				{
-					aafUID_t	dataDef;
+					aafUID_t	dataDef, pictureID = DDEF_Picture, pwmID = DDEF_PictureWithMatte;
+					aafUID_t	soundID = DDEF_Sound;
 					aafBool		testBool;
 
 					numCpnts++;
 					
 					checkResult(pComp->GetDataDef(&dataDef));
 					checkResult(pDictionary->LookupDataDefintion(&dataDef, &pDataDef));
-					checkResult(pDataDef->IsPictureKind(&testBool));
-					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 					checkResult(pDataDef->IsSoundKind(&testBool));
-					checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 					checkResult(pDataDef->IsMatteKind(&testBool));
 					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
-					checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
+
+					if(index == 0)	// First segment is Picture with Matte, converts to picture
+					{
+						checkResult(pDataDef->IsDataDefOf(&pwmID, &testBool));
+						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+						checkResult(pDataDef->IsPictureKind(&testBool));
+						checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
+						checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
+						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+						checkResult(pDataDef->DoesDataDefConvertTo (&pictureID, &testBool));
+						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+					}
+					else		// First segment is Picture, converts from picture with Matte
+					{
+						checkResult(pDataDef->IsDataDefOf(&pictureID, &testBool));
+						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+						checkResult(pDataDef->IsPictureKind(&testBool));
+						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+						checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
+						checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
+						checkResult(pDataDef->DoesDataDefConvertFrom (&pwmID, &testBool));
+						checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+					}
+					checkResult(pDataDef->DoesDataDefConvertTo (&soundID, &testBool));
+					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
+					checkResult(pDataDef->DoesDataDefConvertFrom (&soundID, &testBool));
 					checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 					
 					pComp->Release();
 					pComp = NULL;
 					pDataDef->Release();
-					pDataDef = NULL;//*!!!
-
+					pDataDef = NULL;
+					index++;
 				}
 				
 				pCompIter->Release();
@@ -386,14 +420,12 @@ extern "C" HRESULT CAAFDataDef_test()
 
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following AAFDataDef methods have not been implemented:" << endl; 
-	    cout << "     DoesDataDefConvertTo" << endl; 
-		cout << "     IsDataDefOf - needs unit test" << endl; 
-		cout << "     DoesDataDefConvertFrom - needs unit test" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
+//	if (SUCCEEDED(hr))
+//	{
+//		cout << "The following AAFDataDef methods have not been implemented:" << endl; 
+//		cout << "     IsDataDefOf - needs unit test" << endl; 
+//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//	}
 
 	return hr;
 }

@@ -59,7 +59,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFContext.h"
 #include "ImplAAFWAVEDescriptor.h"	//!!!
-#include "ImplEnumAAFLocators.h"	//!!!
+#include "ImplEnumAAFLocators.h"
 #include "ImplAAFFile.h"
 #include "AAFStoredObjectIDs.h"
 
@@ -1155,20 +1155,13 @@ AAFRESULT STDMETHODCALLTYPE
                            aafUInt32 *samplesRead,
                            aafUInt32 *bytesRead)
 {
-	IAAFEssenceStream		*pSamples = NULL;
-
 	aafAssert(buffer != NULL, _mainFile, AAFRESULT_BADDATAADDRESS);
 	XPROTECT()
 	{
-//!!!		CHECK(_codec->QueryInterface(IID_IAAFEssenceSampleStream, (void **)&pSamples));
 		CHECK(_codec->ReadRawData (nSamples, buflen, buffer, bytesRead, samplesRead));
-		if(pSamples != NULL)
-			pSamples->Release();
 	}
 	XEXCEPT
 	{
-		if(pSamples != NULL)
-			pSamples->Release();
 	}
 	XEND
 	
@@ -1722,10 +1715,7 @@ AAFRESULT STDMETHODCALLTYPE
 		iResultFormat = NULL;
 		assert (iObj);
 		CHECK(iObj->GetImplRep((void **)&arg));
-//		iObj->Release(); // we are through with this interface pointer.
 		*opsResult = static_cast<ImplAAFEssenceFormat*>(arg);
-//!!!		if(iResultFormat != NULL)
-//!!!			iResultFormat->Release();
 	}
 	XEXCEPT
 	{
