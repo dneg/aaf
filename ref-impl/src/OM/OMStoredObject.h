@@ -305,6 +305,17 @@ public:
                                 OMCharacter* externalString,
                                 size_t characterCount);
 
+  static void reorderUInt16Array(OMUInt16* array,
+                                 size_t elementCount);
+
+  static void internalizeUInt16Array(OMUInt16* externalArray,
+                                     OMUInt16* internalArray,
+                                     size_t elementCount);
+
+  static void externalizeUInt16Array(const OMUInt16* internalArray,
+                                     OMUInt16* externalArray,
+                                     size_t elementCount);
+
 private:
   // @access Private members.
 
