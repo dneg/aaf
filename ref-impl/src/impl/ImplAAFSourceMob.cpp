@@ -300,7 +300,7 @@ AAFRESULT STDMETHODCALLTYPE
 				  CreateInstance((ImplAAFObject**) &aSequ));
 			CHECK(aSequ->Initialize(pDictionary->
 									GetBuiltinDefs()->
-									ddkAAFTimecode()));
+									ddTimecode()));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(mobSlot->SetSegment(aSequ));
 
@@ -311,7 +311,7 @@ AAFRESULT STDMETHODCALLTYPE
 				  CreateInstance ((ImplAAFObject**) &aSequ));
 			CHECK(aSequ->Initialize(pDictionary->
 									GetBuiltinDefs()->
-									ddkAAFTimecode()));
+									ddTimecode()));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
 										L"Timecode", zeroPos, &newSlot));
@@ -394,18 +394,18 @@ AAFRESULT STDMETHODCALLTYPE
 			  CreateInstance((ImplAAFObject**) &filler1));
 		CHECK(filler1->Initialize(pDictionary->
 								  GetBuiltinDefs()->
-								  ddkAAFEdgecode(), zeroLen));	
+								  ddEdgecode(), zeroLen));	
 		CHECK(pDictionary->GetBuiltinDefs()->cdFiller()->
 			  CreateInstance ((ImplAAFObject**) &filler2));
 		CHECK(filler2->Initialize(pDictionary->
 								  GetBuiltinDefs()->
-								  ddkAAFEdgecode(), zeroLen));	
+								  ddEdgecode(), zeroLen));	
 
 		CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
 			  CreateInstance ((ImplAAFObject**) &ecSequence));
 		CHECK(ecSequence->Initialize(pDictionary->
 									 GetBuiltinDefs()->
-									 ddkAAFEdgecode()));	
+									 ddEdgecode()));	
 
 		CvtInt32toLength(length32, length);
 		CvtInt32toPosition(startEC, startPos);
