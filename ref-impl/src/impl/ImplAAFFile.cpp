@@ -584,9 +584,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 	if (! pIdent)
 		return AAFRESULT_NULL_PARAM;
 
-	OMRawStorage * pOMRawStg;
-	ImplAAFRawStorage* pRawStg;
-	bool pRawStg_owns_pOMRawStg = false;
+	OMRawStorage * pOMRawStg = 0;
 
 	try {
 		//
@@ -597,16 +595,6 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		if (!pOMRawStg) {
 			throw AAFRESULT_NOMEMORY;
 		}
-
-		pRawStg = static_cast<ImplAAFRawStorage *>(::CreateImpl(CLSID_AAFRandomRawStorage));
-		if(!pRawStg)
-		{
-			throw AAFRESULT_NOMEMORY;
-		}
-
-		pRawStg->Initialize(pOMRawStg, kAAFFileAccess_modify);
-		pRawStg_owns_pOMRawStg = true;
-
 
 		//
 		// Create a file on top of the memory backed storage. 
@@ -672,13 +660,8 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 
 	}
 	catch ( AAFRESULT& ex ) {
-		if ( pOMRawStg && !pRawStg_owns_pOMRawStg ) {
+		if ( pOMRawStg ) {
 			delete pOMRawStg;
-		}
-
-		if ( pRawStg ) {
-			pRawStg->ReleaseReference();
-			pRawStg = 0;
 		}
 
 		return ex;
