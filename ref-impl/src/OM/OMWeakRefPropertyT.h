@@ -33,6 +33,14 @@
 #include "OMPropertyTable.h"
 #include "OMUtilities.h"
 
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The name of this <c OMWeakReferenceProperty>.
+  //   @parm The name (as a string) of the the <c OMProperty> instance
+  //         (a set property) in which the object referenced by this
+  //         <c OMWeakReferenceProperty> resides.
+  //   @parm The id of the property by which the <p ReferencedObject>
+  //         is uniquely identified (the key).
 template<typename ReferencedObject>
 OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                               const OMPropertyId propertyId,
