@@ -62,7 +62,7 @@ public:
          ImplAAFPropertyValue * pPropVal,
 
          // @parm [out] count of elements in the specified array property value
-         aafUInt32 *  pCount);
+         aafUInt32 *  pCount) const;
 
 
   //****************
@@ -82,9 +82,36 @@ public:
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
 
 
+  //*************************************************************
+  //
+  // Overrides from OMType, via inheritace through ImplAAFTypeDef
+  //
+  //*************************************************************
+
+  /*
+  virtual void reorder(OMByte* bytes,
+                       size_t bytesSize) const;
+
+  virtual size_t externalSize(void) const;
+
+  virtual void externalize(OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual size_t internalSize(void) const;
+
+  virtual void internalize(OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByteOrder byteOrder) const;
+						   */
+
 protected:
   // override from ImplAAFTypeDefArray
-  virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal);
+  virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) const;
 
 
 public:
@@ -94,10 +121,10 @@ public:
 
   // overrides from ImplAAFTypeDef
   //
-  virtual aafBool IsFixedSize (void);
-  virtual size_t PropValSize (void);
-  virtual aafBool IsRegistered (void);
-  virtual size_t NativeSize (void);
+  virtual aafBool IsFixedSize (void) const;
+  virtual size_t PropValSize (void) const;
+  virtual aafBool IsRegistered (void) const;
+  virtual size_t NativeSize (void) const;
 
 private:
   // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;

@@ -60,7 +60,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetCount
         // @parm [out] count of elements in this array
-        (aafUInt32 *  pCount);
+        (aafUInt32 *  pCount) const;
 
 
   // Override from AAFTypeDef
@@ -68,8 +68,35 @@ public:
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
 
 
+  //*************************************************************
+  //
+  // Overrides from OMType, via inheritace through ImplAAFTypeDef
+  //
+  //*************************************************************
+
+  /*
+  virtual void reorder(OMByte* bytes,
+                       size_t bytesSize) const;
+
+  virtual size_t externalSize(void) const;
+
+  virtual void externalize(OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual size_t internalSize(void) const;
+
+  virtual void internalize(OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByteOrder byteOrder) const;
+						   */
+
 protected:
-  virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal);
+  virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) const;
   //
   // returns number of elements in this array
 
@@ -80,10 +107,10 @@ public:
 
   // overrides from ImplAAFTypeDef
   //
-  virtual aafBool IsFixedSize (void);
-  virtual size_t PropValSize (void);
-  aafBool IsRegistered (void);
-  size_t NativeSize (void);
+  virtual aafBool IsFixedSize (void) const;
+  virtual size_t PropValSize (void) const;
+  aafBool IsRegistered (void) const;
+  size_t NativeSize (void) const;
 
 private:
   // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
