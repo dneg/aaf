@@ -343,7 +343,7 @@ static void printMobID (const aafMobID_t &mobIDVal,
 
 static HRESULT dumpSummary
 (
- IAAFObjectSP pContainer, // object to be dumped
+ IAAFHeaderSP pHeader, // object to be dumped
  IAAFDictionary * pDict,  // dictionary for this file
  dumpFlags_t dumpFlags,
  int indent,
@@ -534,7 +534,7 @@ static HRESULT dumpPropertyDef(
 static HRESULT dumpMetaDefCommon
 (
  IAAFMetaDefinitionSP pMetaDef, // object to be dumped
- IAAFDictionary * pDict,  // dictionary for this file
+ IAAFDictionary * /*pDict*/,  // dictionary for this file
  dumpFlags_t dumpFlags,
  int indent,
  ostream & os
@@ -1195,7 +1195,7 @@ static HRESULT dumpTypeDef(
   return returnHr;
 }
 
-HRESULT dumpMetaDictionary(IAAFHeaderSP pHeader,
+HRESULT dumpMetaDictionary(IAAFHeaderSP /*pHeader*/,
 				   IAAFDictionary * pDict,
 				   dumpFlags_t dumpFlags,
 				   int indent,
@@ -1496,9 +1496,9 @@ HRESULT dumpEssence(IAAFHeaderSP pHeader,
 }
 
 HRESULT dumpSummary(IAAFHeaderSP pHeader,
-				   IAAFDictionary * pDict,
-				   dumpFlags_t dumpFlags,
-				   int indent,
+				   IAAFDictionary * /*pDict*/,
+				   dumpFlags_t /*dumpFlags*/,
+				   int /*indent*/,
 				   ostream & os)
 {
 	HRESULT returnHr = AAFRESULT_SUCCESS;
