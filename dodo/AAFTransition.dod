@@ -10,7 +10,7 @@ AAFComponent\
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
-AD_FORWARD_DECLARATION(AAFGroup)
+AD_FORWARD_DECLARATION(AAFEffect)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFParameter)
 AD_FORWARD_DECLARATION(AAFSourceReference)
@@ -35,7 +35,7 @@ AD_XMETHOD4(Create,
 				 [in], objPass, aafLength_t, length, Length property value,
 				 [in], objPass, aafPosition_t, cutPoint,
 				 The point at which a cut would be inserted if the transition were removed,
-				 [in], objIn, AAFGroup, effect, A reference to an effect invocation object,
+				 [in], objIn, AAFEffect, effect, A reference to an effect invocation object,
 				 Constructor which allows specification of starting values.)	 
 
 AD_METHOD1(GetCutPoint,
@@ -49,7 +49,7 @@ AD_METHOD1(GetCutPoint,
 AD_XMETHOD1(GetEffect,
 			[out],
 			objOut,
-			AAFGroup,
+			AAFEffect,
 			effObj,
 			Effect used by transition,
 			Gets the effect invocation associated with the transition.)
@@ -65,7 +65,7 @@ AD_METHOD1(SetCutPoint,
 AD_XMETHOD1(SetEffect,
 			[in],
 			objIn,
-			AAFGroup,
+			AAFEffect,
 			effObj,
 			Effect used by transition,
 			Sets the effect invocation associated with the transition.)
