@@ -1,4 +1,5 @@
-/*   FILE: PrintUtilities.java
+/*   $Id$ $Name$
+ *   FILE: PrintUtilities.java
  *   DATE OF CREATION:   Fri Jan 10 09:13:53 2003
  *   AUTHOR :            Emmanuel Pietriga (emmanuel@w3.org)
  *   MODIF:              Fri Jan 10 09:21:04 2003 by Emmanuel Pietriga

@@ -1,4 +1,5 @@
-/*   FILE: ConfigManager.java
+/*   $Id$ $Name$
+ *   FILE: ConfigManager.java
  *   DATE OF CREATION:   Thu Jan 09 14:14:35 2003
  *   AUTHOR :            Emmanuel Pietriga (emmanuel@w3.org)
  *   MODIF:              Mon Feb 03 09:44:51 2003 by Emmanuel Pietriga

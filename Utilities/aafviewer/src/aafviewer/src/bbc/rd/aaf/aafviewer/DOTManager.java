@@ -1,4 +1,5 @@
-/*   FILE: DOTManager.java
+/*   $Id$ $Name$
+ *   FILE: DOTManager.java
  *   DATE OF CREATION:   Thu Jan 09 14:14:35 2003
  *   AUTHOR :            Emmanuel Pietriga (emmanuel@w3.org)
  *   MODIF:              Fri Jan 17 10:41:41 2003 by Emmanuel Pietriga

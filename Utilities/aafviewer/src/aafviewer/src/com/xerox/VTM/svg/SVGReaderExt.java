@@ -1,3 +1,6 @@
+/*
+ * $Id$ $Name$
+*/
 package com.xerox.VTM.svg;
 
 

@@ -1,4 +1,5 @@
-/*   FILE: Messages.java
+/*   $Id$ $Name$
+ *   FILE: Messages.java
  *   DATE OF CREATION:   Fri Jan 10 09:37:09 2003
  *   AUTHOR :            Emmanuel Pietriga (emmanuel@w3.org)
  *   MODIF:              Fri Jan 17 16:33:15 2003 by Emmanuel Pietriga

@@ -1,4 +1,5 @@
-/*   FILE: Utils.java
+/*   $Id$ $Name$
+ *   FILE: Utils.java
  *   DATE OF CREATION:   Thu Jan 09 14:14:35 2003
  *   AUTHOR :            Emmanuel Pietriga (emmanuel@w3.org)
  *   MODIF:              Wed Jan 15 10:29:31 2003 by Emmanuel Pietriga

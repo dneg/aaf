@@ -1,6 +1,7 @@
 package bbc.rd.aaf.aafviewer;
 
 /**
+ * $Id$ $Name$
  * <p>Title: AAFManager </p>
  * <p>Description: AAF conversion to dot file. Dot file conversion to svg.
  * SVG import.</p>

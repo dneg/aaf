@@ -1,4 +1,5 @@
-/*   FILE: AAFViewer.java
+/*   $Id$ $Name$
+ *   FILE: AAFViewer.java
  *   DATE OF CREATION:   Thu Jan 09 14:13:31 2003
  *   AUTHOR :            Emmanuel Pietriga (emmanuel@w3.org)
  *   MODIF:              Mon Feb 03 10:57:41 2003 by Emmanuel Pietriga

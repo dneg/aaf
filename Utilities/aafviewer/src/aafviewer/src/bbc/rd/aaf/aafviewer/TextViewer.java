@@ -1,4 +1,5 @@
-/*   FILE: TextViewer.java
+/*   $Id$ $Name$
+ *   FILE: TextViewer.java
  *   DATE OF CREATION:   Fri Dec 13 10:29:49 2002
  *   AUTHOR :            Emmanuel Pietriga (emmanuel@w3.org)
  *   MODIF:              Fri Jan 17 16:26:07 2003 by Emmanuel Pietriga
