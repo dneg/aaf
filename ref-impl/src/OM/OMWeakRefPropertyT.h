@@ -43,7 +43,7 @@ OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty(
                                         SF_WEAK_OBJECT_REFERENCE,
                                         name), _reference(),
   _targetTag(nullOMPropertyTag),
-  _targetName(convertWideString(targetName)),
+  _targetName(targetName),
   _keyPropertyId(keyPropertyId)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::OMWeakReferenceProperty");
@@ -55,7 +55,6 @@ template<typename ReferencedObject>
 OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty(void)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::~OMWeakReferenceProperty");
-  delete [] _targetName;
 }
 
   // @mfunc Get the value of this <c OMWeakReferenceProperty>.

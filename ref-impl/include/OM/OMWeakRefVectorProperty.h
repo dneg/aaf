@@ -207,7 +207,7 @@ private:
     // The vector of references.
   OMVector<VectorElement> _vector;
   OMPropertyTag _targetTag;
-  char* _targetName;
+  const wchar_t* _targetName;
   OMPropertyId _keyPropertyId;
 
   friend class OMWeakReferenceVectorIterator<ReferencedObject>;

@@ -174,7 +174,7 @@ private:
   // The set of references.
   OMSet<OMUniqueObjectIdentification, SetElement> _set;
   OMPropertyTag _targetTag;
-  char* _targetName;
+  const wchar_t* _targetName;
   OMPropertyId _keyPropertyId;
 
   friend class OMWeakReferenceSetIterator<ReferencedObject>;

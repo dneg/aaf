@@ -50,7 +50,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::
                                         SF_WEAK_OBJECT_REFERENCE_SET,
                                         name),
   _targetTag(nullOMPropertyTag),
-  _targetName(convertWideString(targetName)),
+  _targetName(targetName),
   _keyPropertyId(keyPropertyId)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::"
@@ -63,7 +63,6 @@ OMWeakReferenceSetProperty<ReferencedObject>::~OMWeakReferenceSetProperty(void)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::"
                                                 "~OMWeakReferenceSetProperty");
-  delete [] _targetName;
 }
 
   // @mfunc Save this <c OMWeakReferenceSetProperty>.
