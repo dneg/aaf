@@ -202,7 +202,11 @@ void OMMemoryRawStorage::write(const OMByte* bytes,
   PRECONDITION("Valid buffer", bytes != 0);
   PRECONDITION("Valid byte count", byteCount > 0);
 
-  // TBS tjb - writes that extend
+  // Make sure there is space
+  OMUInt64 lastPosition = _position + byteCount;
+  if (lastPosition > _size) {
+    extend(lastPosition);
+  }
 
   OMUInt64 firstPage64 = (position() / _pageSize);
   ASSERT("Supported first page", firstPage64 < ~(size_t)0);
