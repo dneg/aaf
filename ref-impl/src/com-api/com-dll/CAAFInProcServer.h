@@ -8,8 +8,8 @@
 #include "CAAFServer.h"
 #endif
 
-#ifndef __unknwn_h__
-#include <unknwn.h>	
+#ifndef __AAFCOMPlatform_h__
+#include "AAFCOMPlatform.h"
 #endif
 
 #ifndef __CAAFClassFactory_h__
