@@ -41,11 +41,13 @@ typedef unsigned char	aafUInt8;
 typedef unsigned char * aafMemPtr_t;
 
 AD_CPP_QUOTE(// All characters and strings are in AAF are unicode.)
+AD_CPP_QUOTE(#ifndef __sgi)
 AD_CPP_QUOTE(#ifndef _MAC)
 AD_CPP_QUOTE(#ifndef _WCHAR_T_DEFINED)
 AD_CPP_QUOTE(typedef unsigned short wchar_t;)
 AD_CPP_QUOTE(#endif // _WCHAR_T_DEFINED)
 AD_CPP_QUOTE(#endif // ndef _MAC)
+AD_CPP_QUOTE(#endif // ndef __sgi)
 
 AD_CPP_QUOTE(#ifdef __MWERKS__)
 AD_CPP_QUOTE(#if !__option\(wchar_type\))
@@ -56,6 +58,12 @@ AD_CPP_QUOTE(typedef wchar_t 	aafWChar;)
 AD_CPP_QUOTE(typedef wchar_t 	aafCharacter;)
 AD_CPP_QUOTE(#endif //!__option\(wchar_type\))
 AD_CPP_QUOTE(#else // __MWERKS__)
+AD_CPP_QUOTE( #ifdef __sgi)
+AD_CPP_QUOTE(  // BobT: temporarily use wchar_t for our aafCharacter on sgi )
+AD_CPP_QUOTE(  // typedef aafUInt16 aafCharacter;)
+AD_CPP_QUOTE(  typedef wchar_t aafWChar;)
+AD_CPP_QUOTE(  typedef wchar_t aafCharacter;)
+AD_CPP_QUOTE( #endif // __sgi)
 typedef wchar_t		aafWChar;
 typedef wchar_t		aafCharacter;
 AD_CPP_QUOTE(#endif // __MWERKS__)
@@ -64,7 +72,7 @@ typedef aafInt32		AAFRESULT;
 
 
 AD_CPP_QUOTE(#ifndef NULL)
-AD_CPP_QUOTE(#define NULL \(\(void *\)0L\))
+AD_CPP_QUOTE(#define NULL \(0L\))
 AD_CPP_QUOTE(#endif)
 
 typedef aafInt32 aafBoolean_t;
@@ -107,7 +115,7 @@ AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#endif)
 
 AD_CPP_QUOTE(/* SGI Port definitions */)
-AD_CPP_QUOTE(#ifdef sgi)
+AD_CPP_QUOTE(#ifdef __sgi)
 AD_CPP_QUOTE(#if defined\(__LONGLONG\) || defined\(_LONGLONG\))
 AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
 AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
