@@ -415,7 +415,8 @@ void OMXMLStoredObject::save(const OMWeakReference& singleton)
 
   _stream << indent;
   _stream << beginl;
-  _stream << "<reference target=\"" << "x" << "\">" << endl;
+  const char* target = "Weak-References-NYI";
+  _stream << "<reference target=\"" << target << "\">" << endl;
 
   _stream << indent;
   _stream << beginl;
@@ -437,7 +438,8 @@ void OMXMLStoredObject::save(const OMWeakReferenceVector& vector)
 
   _stream << indent;
   _stream << beginl;
-  _stream << "<reference-vector target=\"" << "x" << "\">" << endl;
+  const char* target = "Weak-References-NYI";
+  _stream << "<reference-vector target=\"" << target << "\">" << endl;
 
   _stream << indent;
   _stream << beginl;
@@ -473,7 +475,8 @@ void OMXMLStoredObject::save(const OMWeakReferenceSet& set)
 
   _stream << indent;
   _stream << beginl;
-  _stream << "<reference-set target=\"" << "x" << "\">" << endl;
+  const char* target = "Weak-References-NYI";
+  _stream << "<reference-set target=\"" << target << "\">" << endl;
 
   _stream << indent;
   _stream << beginl;
