@@ -171,10 +171,11 @@ void OMXMLStoredObject::save(OMFile& file)
   _stream << beginl;
   _stream << "<!DOCTYPE object SYSTEM \"ObjectManager.dtd\">" << endl;
   _stream << beginl;
-  _stream << "<!-- This file was produced by a *PROTOTYPE* implementation, -->"
+  _stream << "<!-- This file was produced by a *PROTOTYPE*, both the -->"
           << endl;
   _stream << beginl;
-  _stream << "<!-- both the implementation and the dtd are subject to change. -->" << endl;
+  _stream << "<!-- implementation and the dtd are subject to change. -->"
+          << endl;
   file.root()->save();
   //save(file.referencedProperties());
   _stream << endl;
@@ -448,7 +449,8 @@ void OMXMLStoredObject::save(const OMWeakReferenceVector& vector)
           << " objects -->" << endl;
   _stream << outdent;
 
-  OMContainerIterator<OMWeakReferenceVectorElement>& iterator = *vector.iterator();
+  OMContainerIterator<OMWeakReferenceVectorElement>& iterator =
+                                                            *vector.iterator();
   while (++iterator) {
 
     OMWeakReferenceVectorElement& element = iterator.value();
