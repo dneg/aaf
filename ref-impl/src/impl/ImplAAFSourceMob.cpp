@@ -473,73 +473,31 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 //****************
-// AddPhysSourceRef()
+// NewPhysSourceRef()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::AddPhysSourceRef (aafRational_t  /*editrate*/,
-                           aafSlotID_t  /*aMobSlot*/,
-                           ImplAAFDataDef * /*pEssenceKind*/,
-                           ImplAAFSegment * /*pSourceRefObj*/,
-                           aafPosition_t  /*srcRefOffset*/,
-                           aafInt32  /*srcRefSlot*/,
-                           aafLength_t  /*srcRefLength*/)
+    ImplAAFSourceMob::NewPhysSourceRef (aafRational_t  editrate,
+                           aafSlotID_t  aMobSlot,
+                           aafUID_t *pEssenceKind,
+							aafSourceRef_t  ref,
+                           aafLength_t  srcRefLength)
 {
-#if FULL_TOOLKIT
-	ImplAAFSegment		*seg = NULL;
-	ImplAAFMobSlot		*slot = NULL;
-	AAFRESULT			status = AAFRESULT_SUCCESS;
-	aafSourceRef_t	ref;
-	aafPosition_t	zeroPos;
-	aafSlotID_t tmpSlotID;
-	ImplAAFSourceClip *		sclp = NULL;
-	ImplAAFMobSlot *trkd = NULL;
-	
-	aafAssertValidFHdl(_file);
-	
-	XPROTECT(_file)
-	{
-		if (sourceRefObj)
-		{
-			CvtInt32toPosition(0, zeroPos);
-			CHECK(sourceRefObj->ReadUID(OMMOBJMobID, &ref.sourceID));
-			ref.sourceSlotID = srcRefSlot;
-			ref.startTime = srcRefOffset;
-				
-			status = FindSlotBySlotID(aMobSlot, &slot);
-			if (status == AAFRESULT_SUCCESS)
-			{
-				CHECK(slot->GetSlotID(&tmpSlotID));
-				CHECK(slot->GetSegment(&seg));
-				if(seg->IsTypeOf("SEQU", &status))
-				{
-					
-//!!!					CHECK(MobFindCpntByPosition(aMobSlot, seg, zeroPos, zeroPos,
-//!!!														NULL, &foundPos, &seg, &foundLen));
-				}
-				XASSERT(seg->IsTypeOf("SCLP", &status), OM_ERR_NOT_SOURCE_CLIP);	/* OK Assertion */
-				CHECK(((ImplAAFSourceClip *)seg)->SetRef(ref));
-			}
-			else
-			{
-				sclp = CreateImpl(CLSID_AAFSourceClip(_file, mediaKind, srcRefLength, ref);
-				CHECK(AppendNewSlot(editrate, sclp,
-									zeroPos, aMobSlot, NULL, &trkd) );
-			}
+	return(ImplAAFMob::AddPhysSourceRef(kAAFForceOverwrite, editrate, aMobSlot,
+							pEssenceKind, ref, srcRefLength));
+}
 
-		}
-		else
-		{
-			CHECK(AddNilReference(aMobSlot, 
-										  srcRefLength, mediaKind,  editrate));
-		}
-	} /* XPROTECT */
-	XEXCEPT
-	XEND;
-
-	return (AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+//****************
+// AppendPhysSourceRef()
+//
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSourceMob::AppendPhysSourceRef (aafRational_t  editrate,
+                           aafSlotID_t  aMobSlot,
+                           aafUID_t *pEssenceKind,
+							aafSourceRef_t  ref,
+                           aafLength_t  srcRefLength)
+{
+	return(ImplAAFMob::AddPhysSourceRef(kAAFAppend, editrate, aMobSlot,
+							pEssenceKind, ref, srcRefLength));
 }
 
 
@@ -548,12 +506,11 @@ AAFRESULT STDMETHODCALLTYPE
 // AddPulldownRef()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::AddPulldownRef (aafRational_t  /*editrate*/,
+    ImplAAFSourceMob::AddPulldownRef (aafAppendOption_t  addType,
+							aafRational_t  /*editrate*/,
                            aafSlotID_t  /*aMobSlot*/,
-                           ImplAAFDataDef * /*pEssenceKind*/,
-                           ImplAAFSegment * /*pSourceRefObj*/,
-                           aafPosition_t  /*srcRefOffset*/,
-                           aafInt32  /*srcRefSlot*/,
+                           aafUID_t * /*pEssenceKind*/,
+							aafSourceRef_t  ref,
                            aafLength_t  /*srcRefLength*/,
                            aafPulldownKind_t  /*pulldownKind*/,
                            aafPhaseFrame_t  /*phaseFrame*/,
