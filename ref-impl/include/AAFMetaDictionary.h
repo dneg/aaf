@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Wed Mar 31 10:31:56 EST 1999
+// This file was generated on Tue Apr 20 16:27:47 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -2430,7 +2430,7 @@ AAF_CLASS(SourceMob,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   Mob)
-AAF_PROPERTY(MediaDescription,
+AAF_PROPERTY(EssenceDescription,
   AAF_LITERAL_AUID(0x064B4301,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
