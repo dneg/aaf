@@ -100,7 +100,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								hr = pTapeDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
 								if (AAFRESULT_SUCCESS == hr)
 								{
-									hr = pSourceMob->SetEssenceDescription(pEssDesc);
+									hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
 									if (AAFRESULT_SUCCESS == hr)
 									{
 										hr = pTapeDesc->SetTapeManufacturer( Manufacturer );
@@ -243,7 +243,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob);
 												 
 							// Back into testing mode
-							hr = pSourceMob->GetEssenceDescription(&pEssDesc);
+							hr = pSourceMob->GetEssenceDescriptor(&pEssDesc);
 							if (AAFRESULT_SUCCESS == hr)
 							{
 								// if there is an Essence Descriptor then it MUST be an (essence) TapeDescriptor

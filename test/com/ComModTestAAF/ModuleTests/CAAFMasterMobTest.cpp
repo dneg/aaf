@@ -174,7 +174,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 										CLSCTX_INPROC_SERVER, 
 										IID_IAAFEssenceDescriptor, 
 										(void **)&pDesc);		
- 				hr = pSrcMob->SetEssenceDescription(pDesc);
+ 				hr = pSrcMob->SetEssenceDescriptor(pDesc);
 				pDesc->Release();
 
 				// Append source MOB to header
