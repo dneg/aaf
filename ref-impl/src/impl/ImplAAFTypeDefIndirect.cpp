@@ -525,6 +525,32 @@ bool ImplAAFTypeDefIndirect::supportedActualType (ImplAAFTypeDef *pActualType, a
 }
 
 
+// Find the actual type definition from the dictionary.
+
+AAFRESULT ImplAAFTypeDefIndirect::LookupActualType (
+  aafUID_constref actualTypeID, 
+  ImplAAFTypeDef ** ppActualType) const
+{
+  assert (NULL != _dictionary);
+  assert (NULL != ppActualType);
+
+  AAFRESULT result = _dictionary->LookupTypeDef (actualTypeID, ppActualType);
+  if (AAFRESULT_FAILED(result))
+  { 
+    // For some reason this method returns AAFRESULT_NO_MORE_OBJECTS
+    // when it cannot find (or create) the requested type. This
+    // code is supposed to only be returned from IEnumAAFXXXX::NextOne,Next
+    // methods. If this is still the case then remap the result code
+    // to a more appropriate value.
+    if (AAFRESULT_NO_MORE_OBJECTS == result)
+      result = AAFRESULT_TYPE_NOT_FOUND;
+  }
+
+  return (result);
+}
+
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefIndirect::CreateValueFromActualValue (
       ImplAAFPropertyValue * pActualValue,
@@ -558,7 +584,7 @@ AAFRESULT STDMETHODCALLTYPE
   else
   {
     ImplAAFTypeDefSP testType;
-    result = _dictionary->LookupTypeDef (actualTypeID, &testType);
+    result = LookupActualType (actualTypeID, &testType);
     if (AAFRESULT_FAILED(result))
       return result;
   }
@@ -651,7 +677,7 @@ AAFRESULT STDMETHODCALLTYPE
   else
   {
     ImplAAFTypeDefSP testType;
-    result = _dictionary->LookupTypeDef (actualTypeID, &testType);
+    result = LookupActualType (actualTypeID, &testType);
     if (AAFRESULT_FAILED(result))
       return result;
   }
@@ -767,7 +793,7 @@ AAFRESULT ImplAAFTypeDefIndirect::GetIndirectValueInfo (
 
   // Lookup the actual type in the dictionary (use impl smartptrs to hide reference
   // counting...this code should be moved down into the OM anyway...)
-  result = _dictionary->LookupTypeDef (actualTypeID, ppActualType);
+  result = LookupActualType (actualTypeID, ppActualType);
   if (AAFRESULT_FAILED(result))
     return result;
 
@@ -838,6 +864,57 @@ AAFRESULT STDMETHODCALLTYPE
   *ppActualValue = pActualValueData;
   (*ppActualValue)->AcquireReference(); // refcount == 2, smartptr will reduce this to one.
 
+  return result;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefIndirect::GetActualSize (
+      ImplAAFPropertyValue * pIndirectValue,
+      aafUInt32 * pActualSize)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  if (NULL == pIndirectValue || NULL == pActualSize)
+    return AAFRESULT_NULL_PARAM;
+
+  //
+	// Validate the indirect value and extract common information...
+	//
+  ImplAAFTypeDefSP pActualType;
+	aafUInt32  indirectValueSize = 0;
+	aafMemPtr_t pIndirectValueDataBits = NULL;
+  result = GetIndirectValueInfo (pIndirectValue, indirectValueSize, pIndirectValueDataBits,
+                                 &pActualType);
+  if (AAFRESULT_FAILED(result))
+    return result;
+
+  // Compute the actual size of the data (minus the internal overhead of the
+  // indirect type)
+  *pActualSize = indirectValueSize - _internalIndirectSize;
+  
+  return result;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefIndirect::GetActualType (
+      ImplAAFPropertyValue * pIndirectValue,
+      ImplAAFTypeDef ** ppActualType)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  if (NULL == pIndirectValue || NULL == ppActualType)
+    return AAFRESULT_NULL_PARAM;
+
+  //
+	// Validate the indirect value and extract common information...
+	//
+	aafUInt32  indirectValueSize = 0;
+	aafMemPtr_t pIndirectValueDataBits = NULL;
+  result = GetIndirectValueInfo (pIndirectValue, indirectValueSize, pIndirectValueDataBits,
+                                 ppActualType);
+  
   return result;
 }
 
@@ -950,7 +1027,7 @@ void ImplAAFTypeDefIndirect::reorder(OMByte* externalBytes,
   // counting...this code should be moved down into the OM anyway...)
 	//
   ImplAAFTypeDefSP pActualType;
-  checkResult (_dictionary->LookupTypeDef (actualTypeID, &pActualType)); // ASSERT
+  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
 
   if (originalByteOrder != hostByteOrder())
   {
@@ -999,7 +1076,7 @@ size_t ImplAAFTypeDefIndirect::externalSize(OMByte* internalBytes,
   // Lookup the actual type in the dictionary (use impl smartptrs to hide reference
   // counting...this code should be moved down into the OM anyway...)
   ImplAAFTypeDefSP pActualType;
-  checkResult (_dictionary->LookupTypeDef (actualTypeID, &pActualType)); // ASSERT
+  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
 
   // Add the external size of the actual type.
   aafInt32 actualInternalBytesSize = internalBytesSize - _internalIndirectSize;
@@ -1051,7 +1128,7 @@ void ImplAAFTypeDefIndirect::externalize(
   // Lookup the actual type in the dictionary (use impl smartptrs to hide reference
   // counting...this code should be moved down into the OM anyway...)
   ImplAAFTypeDefSP pActualType;
-  checkResult (_dictionary->LookupTypeDef (actualTypeID, &pActualType)); // ASSERT
+  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
 
 
   // Externalize the rest of the data using the actual type.
@@ -1108,7 +1185,7 @@ size_t ImplAAFTypeDefIndirect::internalSize(
   // counting...this code should be moved down into the OM anyway...)
   //
   ImplAAFTypeDefSP pActualType;
-  checkResult (_dictionary->LookupTypeDef (actualTypeID, &pActualType)); // ASSERT
+  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
 
   // reorder the rest of the buffer with actual type.
   aafInt32 actualExternalBytesSize = externalSize - _externalIndirectSize;
@@ -1166,7 +1243,7 @@ void ImplAAFTypeDefIndirect::internalize(
   // counting...this code should be moved down into the OM anyway...)
   //
   ImplAAFTypeDefSP pActualType;
-  checkResult (_dictionary->LookupTypeDef (actualTypeID, &pActualType)); // ASSERT
+  checkResult (LookupActualType (actualTypeID, &pActualType)); // ASSERT
 
   // Externalize the rest of the data using the actual type.
   aafInt32 actualInternalBytesSize = internalBytesSize - _internalIndirectSize;
