@@ -62,6 +62,8 @@ size_t OMReferenceSet<UniqueIdentification,
 
   // @mfunc Insert <p object> into this
   //        <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The object to insert.
 template <typename UniqueIdentification, typename ReferencedObject>
@@ -84,6 +86,8 @@ void OMReferenceSet<UniqueIdentification, ReferencedObject>::insert(
   // @mfunc If it is not already present, insert <p object> into this
   //        <c OMReferenceSet> and return true,
   //        otherwise return false.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The object to insert.
   //   @rdesc True if the object was inserted, false if it was already present.
@@ -108,6 +112,8 @@ bool OMReferenceSet<UniqueIdentification,ReferencedObject>::ensurePresent(
 
   // @mfunc Append the given <p ReferencedObject> <p object> to
   //        this <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm A pointer to a <p ReferencedObject>.
 template <typename UniqueIdentification, typename ReferencedObject>
@@ -124,6 +130,8 @@ void OMReferenceSet<UniqueIdentification, ReferencedObject>::appendValue(
 
   // @mfunc Remove the <p ReferencedObject> identified by
   //        <p identification> from this <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The unique identification of the object to be removed, the
   //         search key.
@@ -153,6 +161,8 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::remove(
   // @mfunc If it is present, remove the <p ReferencedObject> identified by
   //        <p identification> from this <c OMReferenceSet>
   //        and return true, otherwise return false.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The object to remove.
   //   @rdesc True if the object was removed, false if it was already absent.
@@ -174,6 +184,8 @@ bool OMReferenceSet<UniqueIdentification, ReferencedObject>::ensureAbsent(
 }
 
   // @mfunc Remove <p object> from this <c OMReferenceSet>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm A pointer to a <p ReferencedObject>.
 template <typename UniqueIdentification, typename ReferencedObject>
@@ -193,6 +205,8 @@ void OMReferenceSet<UniqueIdentification, ReferencedObject>::removeValue(
 
   // @mfunc If it is present, remove <p object> from this
   //        <c OMReferenceSet> and return true, otherwise return false.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The object to remove.
   //   @rdesc True if the object was removed, false if it was already absent.
@@ -213,6 +227,8 @@ bool OMReferenceSet<UniqueIdentification, ReferencedObject>::ensureAbsent(
 }
 
   // @mfunc Does this <c OMReferenceSet> contain <p object> ?
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm A pointer to a <p ReferencedObject>.
 template <typename UniqueIdentification, typename ReferencedObject>
@@ -229,6 +245,8 @@ bool OMReferenceSet<UniqueIdentification, ReferencedObject>::containsValue(
 
   // @mfunc Does this <c OMReferenceSet> contain a
   //        <p ReferencedObject> identified by <p identification>?
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The unique identification of the desired object, the search key.
   //   @rdesc True if the object is found, false otherwise.
@@ -243,6 +261,8 @@ bool OMReferenceSet<UniqueIdentification, ReferencedObject>::contains(
 
   // @mfunc The <p ReferencedObject> in this <c OMReferenceSet> identified by
   //        <p identification>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The unique identification of the desired object, the search key.
   //   @rdesc A pointer to the <p ReferencedObject>.
@@ -270,6 +290,8 @@ OMReferenceSet<UniqueIdentification, ReferencedObject>::value(
   //        <p identification>.  If the object is found it is returned
   //        in <p object> and the result is true. If the element is
   //        not found the result is false.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @parm The unique identification of the desired object, the search key.
   //   @parm A pointer to a <p ReferencedObject> by reference.
