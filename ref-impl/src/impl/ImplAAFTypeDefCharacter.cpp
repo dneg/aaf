@@ -60,7 +60,7 @@ AAFRESULT ImplAAFTypeDefCharacter::pvtInitialize (
       aafCharacter_constptr  pTypeName)
 {
   // The description string needs to be initialized elsewhere...
-  return ImplAAFDefObject::pvtInitialize(id, pTypeName, L"Two-byte Unicode Character Type Definition");
+  return ImplAAFMetaDefinition::Initialize(id, pTypeName, L"Two-byte Unicode Character Type Definition");
 }
 
 
