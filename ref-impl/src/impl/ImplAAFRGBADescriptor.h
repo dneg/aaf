@@ -76,7 +76,10 @@ public:
          // @parm [in] Array of up to 8 aafRGBAComponent_t indicating component type and size.
          aafRGBAComponent_t*  PixelLayoutArray);
 
-  //****************
+   virtual AAFRESULT  STDMETHODCALLTYPE
+		CountPixelLayoutElements (aafUInt32 *  pResult);
+
+   //****************
   // GetPixelLayoutStructure()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -120,7 +123,7 @@ public:
         (aafUInt32 *  pNumberBytes);
 
   //****************
-  // SetPaletteLayoutStructure()
+  // SetPaletteLayoute()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetPaletteLayout
@@ -129,8 +132,11 @@ public:
          // @parm [in] Array of up to 8 aafRGBAComponent_t indicating component type and size.
          aafRGBAComponent_t*  PaletteLayoutArray);
 
-  //****************
-  // GetPaletteLayoutStructure()
+   virtual AAFRESULT  STDMETHODCALLTYPE
+		CountPaletteLayoutElements (aafUInt32 *  pResult);
+
+ //****************
+  // GetPaletteLayout()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPaletteLayout
