@@ -73,28 +73,17 @@ ImplAAFEssenceData::~ImplAAFEssenceData ()
                            aafDataBuffer_t buffer,
                            aafUInt32 *bytesWritten)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
-
   if (NULL == buffer || NULL == bytesWritten)
     return AAFRESULT_NULL_PARAM;
   // Cannot access the data property if it is NOT associated with a file.
   if (!persistent())
     return AAFRESULT_OBJECT_NOT_PERSISTENT;
   
-  try
-  {
-    _mediaData.write(buffer, bytes, *bytesWritten);
-    if (0 < bytes && 0 == *bytesWritten)
-      result = AAFRESULT_CONTAINERWRITE;
-  }
-  //catch (OMException& ome)
-  //{
-  //}
-  catch(...)
-  {
-    result = AAFRESULT_INTERNAL_ERROR;
-  }
-  return result;
+  _mediaData.write(buffer, bytes, *bytesWritten);
+  if (0 < bytes && 0 == *bytesWritten)
+    return AAFRESULT_CONTAINERWRITE;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -104,28 +93,17 @@ ImplAAFEssenceData::~ImplAAFEssenceData ()
                            aafDataBuffer_t  buffer,
                            aafUInt32 *bytesRead)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
-
   if (NULL == buffer || NULL == bytesRead)
     return AAFRESULT_NULL_PARAM;
   // Cannot access the data property if it is NOT associated with a file.
   if (!persistent())
     return AAFRESULT_OBJECT_NOT_PERSISTENT;
   
-  try
-  {
-    _mediaData.read(buffer, bytes, *bytesRead);
-    if (0 < bytes && 0 == *bytesRead)
-      result = AAFRESULT_END_OF_DATA;
-  }
-  //catch (OMException& ome)
-  //{
-  //}
-  catch(...)
-  {
-    result = AAFRESULT_INTERNAL_ERROR;
-  }
-  return result;
+  _mediaData.read(buffer, bytes, *bytesRead);
+  if (0 < bytes && 0 == *bytesRead)
+    return AAFRESULT_END_OF_DATA;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -138,20 +116,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (!persistent())
     return AAFRESULT_OBJECT_NOT_PERSISTENT;
 
-  try
-  {
-    OMUInt64 tmpOffset = offset;
-    _mediaData.setPosition(tmpOffset);
-  }
-  //catch (OMException& ome)
-  //{
-  //}
-  catch(...)
-  {
-    result = AAFRESULT_INTERNAL_ERROR;
-  }
+  OMUInt64 tmpOffset = offset;
+  _mediaData.setPosition(tmpOffset);
 
-  return result;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -159,29 +127,17 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceData::GetPosition (aafPosition_t  *pOffset)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
-
   if (NULL == pOffset)
     return AAFRESULT_NULL_PARAM;
   // Cannot access the data property if it is NOT associated with a file.
   if (!persistent())
     return AAFRESULT_OBJECT_NOT_PERSISTENT;
 
-  try
-  {
-    OMUInt64 tmpOffset;
-    tmpOffset = _mediaData.position();
-    *pOffset = tmpOffset;
-  }
-  //catch (OMException& ome)
-  //{
-  //}
-  catch(...)
-  {
-    result = AAFRESULT_INTERNAL_ERROR;
-  }
+  OMUInt64 tmpOffset;
+  tmpOffset = _mediaData.position();
+  *pOffset = tmpOffset;
 
-  return result;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -195,22 +151,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (!persistent())
     return AAFRESULT_OBJECT_NOT_PERSISTENT;
 
+  *pSize = _mediaData.size();
 
-  AAFRESULT result = AAFRESULT_SUCCESS;
-
-  try
-  {
-    *pSize = _mediaData.size();
-  }
-  //catch (OMException& ome)
-  //{
-  //}
-  catch(...)
-  {
-    result = AAFRESULT_INTERNAL_ERROR;
-  }
-
-  return result;
+  return AAFRESULT_SUCCESS;
 }
 
 

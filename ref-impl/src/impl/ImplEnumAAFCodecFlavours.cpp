@@ -57,11 +57,11 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFCodecFlavours::NextOne (
       aafUID_t *pAAFCodecFlavour)
 {
-	aafInt32			numElem;
+	aafUInt32			numElem;
 
 	XPROTECT()
 	{
-		CHECK(_codec->GetFlavourCount(&numElem))
+		CHECK(_codec->CountFlavours(&numElem))
 		if(pAAFCodecFlavour == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
 		if(_current >= numElem)
@@ -119,10 +119,10 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32  count)
 {
 	AAFRESULT	hr;
-	aafInt32	newCurrent;
-	aafInt32	numElem;
+	aafUInt32	newCurrent;
+	aafUInt32	numElem;
 
-	hr = _codec->GetFlavourCount(&numElem);
+	hr = _codec->CountFlavours(&numElem);
 	if(hr != AAFRESULT_SUCCESS)
 		return hr;
 
