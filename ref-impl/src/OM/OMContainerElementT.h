@@ -83,7 +83,7 @@ OMVectorElement<ReferencedObject>::operator= (
   TRACE("OMVectorElement<ReferencedObject>::operator=");
 
   if (*this == rhs) {
-	return *this; // early return !
+    return *this; // early return !
   }
 
   _pointer = rhs._pointer;
@@ -209,7 +209,7 @@ OMSetElement<UniqueIdentification, ReferencedObject>::operator= (
   TRACE("OMSetElement<UniqueIdentification, ReferencedObject>::operator=");
 
   if (*this == rhs) {
-	return *this; // early return !
+    return *this; // early return !
   }
 
   OMVectorElement<ReferencedObject>::operator=(rhs);
@@ -324,7 +324,7 @@ OMContainerElement<ObjectReference, ReferencedObject>::operator= (
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::operator=");
 
   if (*this == rhs) {
-	return *this; // early return !
+    return *this; // early return !
   }
 
   _reference = rhs._reference;
@@ -575,7 +575,7 @@ OMStrongReferenceVectorElement<ReferencedObject>::operator= (
   TRACE("OMStrongReferenceVectorElement<ReferencedObject>::operator=");
 
   if (*this == rhs) {
-	return *this; // early return !
+    return *this; // early return !
   }
 
   OMContainerElement<OMStrongObjectReference<ReferencedObject>,
@@ -712,7 +712,7 @@ OMStrongReferenceSetElement<UniqueIdentification, ReferencedObject>::
                                                                   "operator=");
 
   if (*this == rhs) {
-	return *this; // early return !
+    return *this; // early return !
   }
 
   OMStrongReferenceVectorElement<ReferencedObject>::operator=(rhs);
@@ -869,7 +869,7 @@ OMWeakReferenceVectorElement<ReferencedObject>::operator= (
   TRACE("OMWeakReferenceVectorElement<ReferencedObject>::operator=");
 
   if (*this == rhs) {
-	return *this; // early return !
+    return *this; // early return !
   }
 
   OMContainerElement<OMWeakObjectReference<ReferencedObject>,
@@ -986,7 +986,7 @@ OMWeakReferenceSetElement<ReferencedObject>::operator= (
   TRACE("OMWeakReferenceSetElement<ReferencedObject>::operator=");
 
   if (*this == rhs) {
-	return *this; // early return !
+    return *this; // early return !
   }
 
   OMContainerElement<OMWeakObjectReference<ReferencedObject>,
