@@ -101,20 +101,33 @@ ifndef LD_DYN_LIB
     LD_DYN_LIB = $(CC) -shared
 endif
 
-# UUID library to use
+# For GNU/Linux the UUID library is provided by e2fsprogs
 ifndef UUIDLIB
+    UUIDLIB_PATH := $(shell for f in /usr/local/lib /usr/lib /lib; do test -e $$f/libuuid.a && echo $$f && break; done)
+    ifeq "$(UUIDLIB_PATH)" ""
+        $(error Required library libuuid.a not found - install the e2fsprogs development libraries)
+    endif
+
     UUIDLIB = -luuid
 endif
 
+# Optional DV functionality requires libdv and can be turned on using e.g.
+# make LIBDV_PATH=/usr/lib
+#
 # libdv is used to provide DV functionality in the CDCICodec.
-# For GNU/Linux target assume libdv is available as a system library
-# so the only required link flag is -ldv when linking libaafpgapi.so
-ADD_CFLAGS += -DUSE_LIBDV
-OPT_CODEC_LIBS += -ldv
+ifdef LIBDV_PATH
+	ifneq "$(LIBDV_PATH)" "/usr/lib"
+        ADD_CFLAGS += -I$(LIBDV_PATH)/include
+    	OPT_CODEC_LIBS += -L$(LIBDV_PATH)
+	endif
+    ADD_CFLAGS += -DUSE_LIBDV
+    OPT_CODEC_LIBS += -ldv
+endif
 
 # Optional libgsf support is enabled by the LIBGSF_PATH variable which must
-# contain the path to the installed libgsf includes and library
-# e.g. make LIBGSF_PATH=/usr/local
+# contain the path to the installed libgsf includes and library e.g.
+# make LIBGSF_PATH=/usr/local
+#
 # libgsf itself requires glib (for gobject and glib calls) and zlib
 ifdef LIBGSF_PATH
 	PLATFORMLIBS += -L$(LIBGSF_PATH)/lib -lgsf-1 -lgobject-2.0 -lglib-2.0 -lz
