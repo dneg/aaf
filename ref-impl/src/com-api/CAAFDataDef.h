@@ -44,10 +44,16 @@
 #include "CAAFDefObject.h"
 #endif
 
+//
+// Forward declaration
+//
+class ImplAAFDataDef;
+
 
 class CAAFDataDef
   : public IAAFDataDef,
     public IAAFDataDef2,
+	public IAAFDataDef3,
     public CAAFDefObject
 {
 protected:
@@ -196,6 +202,36 @@ public:
     // @parm [retval,out] aafBoolean_t * | bIsTimecodeKind | pointer to the return value
     aafBoolean_t *  bIsTimecodeKind
   );
+
+
+  //***********************************************************
+  // METHOD NAME: IsDescriptiveKind()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDataDef3 | IsDescriptiveKind |
+  // Sets return value to TRUE if DataDef is descriptive.
+  // @end
+  // 
+  STDMETHOD (IsDescriptiveKind)
+   (
+    // @parm [retval,out] aafBoolean_t * | bIsDescriptiveKind | pointer to the return value
+    aafBoolean_t *  bIsDescriptiveKind
+  );
+
+  //***********************************************************
+  // METHOD NAME: IsAuxiliaryKind()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDataDef3 | IsAuxiliaryKind |
+  // Sets return value to TRUE if DataDef is auxiliary.
+  // @end
+  // 
+  STDMETHOD (IsAuxiliaryKind)
+   (
+    // @parm [retval,out] aafBoolean_t * | bIsAuxiliaryKind | pointer to the return value
+    aafBoolean_t *  bIsAuxiliaryKind
+  );
+
 
 
 protected:

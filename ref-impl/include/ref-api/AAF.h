@@ -175,6 +175,7 @@ interface IAAFCDCIDescriptor2;
 interface IAAFComponent2;
 interface IAAFCompositionMob2;
 interface IAAFDataDef2;
+interface IAAFDataDef3;
 interface IAAFDictionary2;
 interface IAAFDigitalImageDescriptor2;
 interface IAAFEndian;
@@ -325,6 +326,7 @@ typedef interface IAAFCDCIDescriptor2 IAAFCDCIDescriptor2;
 typedef interface IAAFComponent2 IAAFComponent2;
 typedef interface IAAFCompositionMob2 IAAFCompositionMob2;
 typedef interface IAAFDataDef2 IAAFDataDef2;
+typedef interface IAAFDataDef3 IAAFDataDef3;
 typedef interface IAAFDictionary2 IAAFDictionary2;
 typedef interface IAAFDigitalImageDescriptor2 IAAFDigitalImageDescriptor2;
 typedef interface IAAFEndian IAAFEndian;
@@ -2945,6 +2947,10 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
 
     // pointer to result
     /*[retval, out]*/ aafBoolean_t *  bDoesConvertFrom) PURE;
+
+
+
+
 
 
 
@@ -19301,9 +19307,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD(SetCompression) (THIS_
     // Identifies kind of compression and format of
 	// compression information.
@@ -19329,9 +19332,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pCompression arg is NULL.
@@ -19362,9 +19362,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD(SetChannelCount) (THIS_
     // The number of channels of sound represented
 	// by this descriptor.
@@ -19388,9 +19385,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pChannelCount arg is NULL.
@@ -19419,9 +19413,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD(SetAudioSamplingRate) (THIS_
     // Sample rate of audio essence.
     /*[in]*/ aafRational_t  rate) PURE;
@@ -19444,9 +19435,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pRate arg is NULL.
@@ -19475,9 +19463,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD(SetIsLocked) (THIS_
     // Is number of samples per frame locked to video?
     /*[in]*/ aafBoolean_t  locked) PURE;
@@ -19502,9 +19487,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pLocked arg is NULL.
@@ -19535,9 +19517,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD(SetElectroSpatialFormulation) (THIS_
     // Electro-spatial form of the signal.
     /*[in]*/ aafElectroSpatialFormulation_t  formulation) PURE;
@@ -19561,9 +19540,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pFormulation arg is NULL.
@@ -19593,9 +19569,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD(SetAudioRefLevel) (THIS_
     // Audio reference level.
     /*[in]*/ aafInt8  level) PURE;
@@ -19618,9 +19591,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pLevel arg is NULL.
@@ -19650,9 +19620,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD(SetDialNorm) (THIS_
     // Dial norm.
     /*[in]*/ aafInt8  dialNorm) PURE;
@@ -19675,9 +19642,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pDialNorm arg is NULL.
@@ -19707,9 +19671,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD(SetQuantizationBits) (THIS_
     // Number of quantization bits.
     /*[in]*/ aafUInt32  bitsCount) PURE;
@@ -19731,9 +19692,6 @@ DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pBitsCount arg is NULL.
@@ -36528,6 +36486,190 @@ DECLARE_INTERFACE_(IAAFDataDef2, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFDataDef2_INTERFACE_DEFINED__
+
+
+
+// IAAFDataDef3
+
+// ************************
+//
+// Interface IAAFDataDef3
+//
+// ************************
+
+#ifndef __IAAFDataDef3_INTERFACE_DEFINED__
+#define __IAAFDataDef3_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDataDef3;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDataDef3
+
+DECLARE_INTERFACE_(IAAFDataDef3, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDataDef3 methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // AUID for new DeObject
+    /*[in, ref]*/ aafUID_constref  id,
+
+    // Name for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pDescription) PURE;
+
+
+  //***********************************************************
+  //
+  // IsPictureKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture.
+  //
+  STDMETHOD(IsPictureKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsPictureKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a matte.
+  //
+  STDMETHOD(IsMatteKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsMatteKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsPictureWithMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture with matte.
+  //
+  STDMETHOD(IsPictureWithMatteKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsPictureWithMatteKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsSoundKind()
+  //
+  // Sets return value to TRUE if DataDef is a sound.
+  //
+  STDMETHOD(IsSoundKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsSoundKind) PURE;
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertTo()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.
+  //
+  STDMETHOD(DoesDataDefConvertTo) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * id,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bDoesConvertTo) PURE;
+		   
+
+  //***********************************************************
+  //
+  // IsDataDefOf()
+  //
+  // Sets the value to TRUE if the DataDef of the given object
+  // matches the DataDef specified in the IN parameter with the
+  // DataDefName string.
+  //
+  STDMETHOD(IsDataDefOf) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * pDataDef,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bIsDataDefOf) PURE;
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertFrom()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+  // can be converted from the DataDef specified in the IN 
+  // parameter specified with the DataDefName string.
+  //
+  STDMETHOD(DoesDataDefConvertFrom) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * pDataDef,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bDoesConvertFrom) PURE;
+
+
+  //***********************************************************
+  //
+  // IsEdgecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is an edgecode.
+  //
+  STDMETHOD(IsEdgecodeKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsEdgecodeKind) PURE;
+
+  //***********************************************************
+  //
+  // IsTimecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is a timecode.
+  //
+  STDMETHOD(IsTimecodeKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsTimecodeKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsAuxiliaryKind()
+  //
+  // Sets return value to TRUE if DataDef is auxiliary.
+  //
+  STDMETHOD(IsAuxiliaryKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsAuxiliaryKind) PURE;
+
+  //***********************************************************
+  //
+  // IsDescriptiveKind()
+  //
+  // Sets return value to TRUE if DataDef is descriptive.
+  //
+  STDMETHOD(IsDescriptiveKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsDescriptiveKind) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDataDef3_INTERFACE_DEFINED__
 
 
 

@@ -176,6 +176,7 @@ interface IAAFCDCIDescriptor2;
 interface IAAFComponent2;
 interface IAAFCompositionMob2;
 interface IAAFDataDef2;
+interface IAAFDataDef3;
 interface IAAFDictionary2;
 interface IAAFDigitalImageDescriptor2;
 interface IAAFEndian;
@@ -2669,7 +2670,6 @@ interface IAAFControlPoint : IUnknown
 
 //
 // Objects that implement IAAFDataDef also implement the following interfaces:
-//  - IAAFDataDef2
 //  - IAAFDefObject
 //  - IAAFObject
 
@@ -19212,15 +19212,6 @@ interface IAAFSequence : IUnknown
 //   - insufficient system memory is available to perform the
 //     operation.
 //
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize() called on it through
-//     this object's primary interface.  Note that
-//     IAAFSoundDescriptor is a primary interface for an
-//     abstract class, so it is not appropriate for the
-//     Initialize() method to exist in this interface.  The
-//     Initialize() method is available through the concrete
-//     object's primary interface.
-//
 
 
 //
@@ -19256,9 +19247,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   // 
   HRESULT SetCompression (
     // Identifies kind of compression and format of
@@ -19285,9 +19273,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pCompression arg is NULL.
@@ -19317,9 +19302,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   // 
   HRESULT SetChannelCount (
     // The number of channels of sound represented
@@ -19344,9 +19326,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pChannelCount arg is NULL.
@@ -19374,9 +19353,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   // 
   HRESULT SetAudioSamplingRate (
     // Sample rate of audio essence.
@@ -19400,9 +19376,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pRate arg is NULL.
@@ -19430,9 +19403,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   // 
   HRESULT SetIsLocked (
     // Is number of samples per frame locked to video?
@@ -19458,9 +19428,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pLocked arg is NULL.
@@ -19490,9 +19457,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   // 
   HRESULT SetElectroSpatialFormulation (
     // Electro-spatial form of the signal.
@@ -19517,9 +19481,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pFormulation arg is NULL.
@@ -19548,9 +19509,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   // 
   HRESULT SetAudioRefLevel (
     // Audio reference level.
@@ -19574,9 +19532,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pLevel arg is NULL.
@@ -19605,9 +19560,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   // 
   HRESULT SetDialNorm (
     // Dial norm.
@@ -19631,9 +19583,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pDialNorm arg is NULL.
@@ -19662,9 +19611,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   // 
   HRESULT SetQuantizationBits (
     // Number of quantization bits.
@@ -19687,9 +19633,6 @@ interface IAAFSoundDescriptor : IUnknown
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pBitsCount arg is NULL.
@@ -36277,6 +36220,180 @@ interface IAAFDataDef2 : IUnknown
   HRESULT IsTimecodeKind (
     // pointer to the return value
     [retval,out] aafBoolean_t *  bIsTimecodeKind);
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFDataDef3
+//
+// ************************
+
+//
+// Objects that implement IAAFDataDef3 also implement the following interfaces:
+//  - IAAFDefObject
+//  - IAAFObject
+
+[
+    object,
+    uuid(858109c4-cb51-48ad-9086-a3fcfe9739fa),
+    helpstring("IAAFDataDef3 Interface"),
+    pointer_default(unique)
+]
+interface IAAFDataDef3 : IUnknown
+{
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  // 
+  HRESULT Initialize (
+    // AUID for new DeObject
+    [in, ref] aafUID_constref  id,
+
+    // Name for new DefObject
+    [in, string] aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    [in, string] aafCharacter_constptr  pDescription);
+
+
+  //***********************************************************
+  //
+  // IsPictureKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture.
+  // 
+  HRESULT IsPictureKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsPictureKind);
+
+
+  //***********************************************************
+  //
+  // IsMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a matte.
+  // 
+  HRESULT IsMatteKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsMatteKind);
+
+
+  //***********************************************************
+  //
+  // IsPictureWithMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture with matte.
+  // 
+  HRESULT IsPictureWithMatteKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsPictureWithMatteKind);
+
+
+  //***********************************************************
+  //
+  // IsSoundKind()
+  //
+  // Sets return value to TRUE if DataDef is a sound.
+  // 
+  HRESULT IsSoundKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsSoundKind);
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertTo()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.
+  // 
+  HRESULT DoesDataDefConvertTo (
+    // data def to compare against
+    [in] IAAFDataDef * id,
+
+    // pointer to result
+    [retval, out] aafBoolean_t *  bDoesConvertTo);
+		   
+
+  //***********************************************************
+  //
+  // IsDataDefOf()
+  //
+  // Sets the value to TRUE if the DataDef of the given object
+  // matches the DataDef specified in the IN parameter with the
+  // DataDefName string.
+  // 
+  HRESULT IsDataDefOf (
+    // data def to compare against
+    [in] IAAFDataDef * pDataDef,
+
+    // pointer to result
+    [retval, out] aafBoolean_t *  bIsDataDefOf);
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertFrom()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+  // can be converted from the DataDef specified in the IN 
+  // parameter specified with the DataDefName string.
+  // 
+  HRESULT DoesDataDefConvertFrom (
+    // data def to compare against
+    [in] IAAFDataDef * pDataDef,
+
+    // pointer to result
+    [retval, out] aafBoolean_t *  bDoesConvertFrom);
+
+
+  //***********************************************************
+  //
+  // IsEdgecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is an edgecode.
+  // 
+  HRESULT IsEdgecodeKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsEdgecodeKind);
+
+  //***********************************************************
+  //
+  // IsTimecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is a timecode.
+  // 
+  HRESULT IsTimecodeKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsTimecodeKind);
+
+
+  //***********************************************************
+  //
+  // IsAuxiliaryKind()
+  //
+  // Sets return value to TRUE if DataDef is auxiliary.
+  // 
+  HRESULT IsAuxiliaryKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsAuxiliaryKind);
+
+  //***********************************************************
+  //
+  // IsDescriptiveKind()
+  //
+  // Sets return value to TRUE if DataDef is descriptive.
+  // 
+  HRESULT IsDescriptiveKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsDescriptiveKind);
 
 }
 

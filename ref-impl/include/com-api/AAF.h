@@ -847,6 +847,12 @@ typedef interface IAAFDataDef2 IAAFDataDef2;
 #endif 	/* __IAAFDataDef2_FWD_DEFINED__ */
 
 
+#ifndef __IAAFDataDef3_FWD_DEFINED__
+#define __IAAFDataDef3_FWD_DEFINED__
+typedef interface IAAFDataDef3 IAAFDataDef3;
+#endif 	/* __IAAFDataDef3_FWD_DEFINED__ */
+
+
 #ifndef __IAAFDictionary2_FWD_DEFINED__
 #define __IAAFDictionary2_FWD_DEFINED__
 typedef interface IAAFDictionary2 IAAFDictionary2;
@@ -971,6 +977,7 @@ void __RPC_USER MIDL_user_free( void __RPC_FAR * );
 // AAF Interfaces.
 //=--------------------------------------------------------------------------=
 //
+
 
 
 
@@ -34864,6 +34871,353 @@ void __RPC_STUB IAAFDataDef2_IsTimecodeKind_Stub(
 #endif 	/* __IAAFDataDef2_INTERFACE_DEFINED__ */
 
 
+#ifndef __IAAFDataDef3_INTERFACE_DEFINED__
+#define __IAAFDataDef3_INTERFACE_DEFINED__
+
+/* interface IAAFDataDef3 */
+/* [unique][helpstring][uuid][object] */ 
+
+
+EXTERN_C const IID IID_IAAFDataDef3;
+
+#if defined(__cplusplus) && !defined(CINTERFACE)
+    
+    MIDL_INTERFACE("858109c4-cb51-48ad-9086-a3fcfe9739fa")
+    IAAFDataDef3 : public IUnknown
+    {
+    public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsPictureKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsPictureKind) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsMatteKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsMatteKind) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsPictureWithMatteKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsPictureWithMatteKind) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsSoundKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsSoundKind) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE DoesDataDefConvertTo( 
+            /* [in] */ IAAFDataDef __RPC_FAR *id,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bDoesConvertTo) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsDataDefOf( 
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDataDefOf) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE DoesDataDefConvertFrom( 
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bDoesConvertFrom) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsEdgecodeKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsEdgecodeKind) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsTimecodeKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsTimecodeKind) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsAuxiliaryKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsAuxiliaryKind) = 0;
+        
+        virtual HRESULT STDMETHODCALLTYPE IsDescriptiveKind( 
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveKind) = 0;
+        
+    };
+    
+#else 	/* C style interface */
+
+    typedef struct IAAFDataDef3Vtbl
+    {
+        BEGIN_INTERFACE
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [in] */ REFIID riid,
+            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
+            IAAFDataDef3 __RPC_FAR * This);
+        
+        ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
+            IAAFDataDef3 __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsPictureKind )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsPictureKind);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsMatteKind )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsMatteKind);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsPictureWithMatteKind )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsPictureWithMatteKind);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsSoundKind )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsSoundKind);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoesDataDefConvertTo )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [in] */ IAAFDataDef __RPC_FAR *id,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bDoesConvertTo);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDataDefOf )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDataDefOf);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoesDataDefConvertFrom )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bDoesConvertFrom);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsEdgecodeKind )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsEdgecodeKind);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsTimecodeKind )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsTimecodeKind);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsAuxiliaryKind )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsAuxiliaryKind);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *IsDescriptiveKind )( 
+            IAAFDataDef3 __RPC_FAR * This,
+            /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveKind);
+        
+        END_INTERFACE
+    } IAAFDataDef3Vtbl;
+
+    interface IAAFDataDef3
+    {
+        CONST_VTBL struct IAAFDataDef3Vtbl __RPC_FAR *lpVtbl;
+    };
+
+    
+
+#ifdef COBJMACROS
+
+
+#define IAAFDataDef3_QueryInterface(This,riid,ppvObject)	\
+    (This)->lpVtbl -> QueryInterface(This,riid,ppvObject)
+
+#define IAAFDataDef3_AddRef(This)	\
+    (This)->lpVtbl -> AddRef(This)
+
+#define IAAFDataDef3_Release(This)	\
+    (This)->lpVtbl -> Release(This)
+
+
+#define IAAFDataDef3_Initialize(This,id,pName,pDescription)	\
+    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
+
+#define IAAFDataDef3_IsPictureKind(This,bIsPictureKind)	\
+    (This)->lpVtbl -> IsPictureKind(This,bIsPictureKind)
+
+#define IAAFDataDef3_IsMatteKind(This,bIsMatteKind)	\
+    (This)->lpVtbl -> IsMatteKind(This,bIsMatteKind)
+
+#define IAAFDataDef3_IsPictureWithMatteKind(This,bIsPictureWithMatteKind)	\
+    (This)->lpVtbl -> IsPictureWithMatteKind(This,bIsPictureWithMatteKind)
+
+#define IAAFDataDef3_IsSoundKind(This,bIsSoundKind)	\
+    (This)->lpVtbl -> IsSoundKind(This,bIsSoundKind)
+
+#define IAAFDataDef3_DoesDataDefConvertTo(This,id,bDoesConvertTo)	\
+    (This)->lpVtbl -> DoesDataDefConvertTo(This,id,bDoesConvertTo)
+
+#define IAAFDataDef3_IsDataDefOf(This,pDataDef,bIsDataDefOf)	\
+    (This)->lpVtbl -> IsDataDefOf(This,pDataDef,bIsDataDefOf)
+
+#define IAAFDataDef3_DoesDataDefConvertFrom(This,pDataDef,bDoesConvertFrom)	\
+    (This)->lpVtbl -> DoesDataDefConvertFrom(This,pDataDef,bDoesConvertFrom)
+
+#define IAAFDataDef3_IsEdgecodeKind(This,bIsEdgecodeKind)	\
+    (This)->lpVtbl -> IsEdgecodeKind(This,bIsEdgecodeKind)
+
+#define IAAFDataDef3_IsTimecodeKind(This,bIsTimecodeKind)	\
+    (This)->lpVtbl -> IsTimecodeKind(This,bIsTimecodeKind)
+
+#define IAAFDataDef3_IsAuxiliaryKind(This,bIsAuxiliaryKind)	\
+    (This)->lpVtbl -> IsAuxiliaryKind(This,bIsAuxiliaryKind)
+
+#define IAAFDataDef3_IsDescriptiveKind(This,bIsDescriptiveKind)	\
+    (This)->lpVtbl -> IsDescriptiveKind(This,bIsDescriptiveKind)
+
+#endif /* COBJMACROS */
+
+
+#endif 	/* C style interface */
+
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_Initialize_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [string][in] */ aafCharacter_constptr pName,
+    /* [string][in] */ aafCharacter_constptr pDescription);
+
+
+void __RPC_STUB IAAFDataDef3_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsPictureKind_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsPictureKind);
+
+
+void __RPC_STUB IAAFDataDef3_IsPictureKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsMatteKind_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsMatteKind);
+
+
+void __RPC_STUB IAAFDataDef3_IsMatteKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsPictureWithMatteKind_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsPictureWithMatteKind);
+
+
+void __RPC_STUB IAAFDataDef3_IsPictureWithMatteKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsSoundKind_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsSoundKind);
+
+
+void __RPC_STUB IAAFDataDef3_IsSoundKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_DoesDataDefConvertTo_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [in] */ IAAFDataDef __RPC_FAR *id,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bDoesConvertTo);
+
+
+void __RPC_STUB IAAFDataDef3_DoesDataDefConvertTo_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsDataDefOf_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDataDefOf);
+
+
+void __RPC_STUB IAAFDataDef3_IsDataDefOf_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_DoesDataDefConvertFrom_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [in] */ IAAFDataDef __RPC_FAR *pDataDef,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bDoesConvertFrom);
+
+
+void __RPC_STUB IAAFDataDef3_DoesDataDefConvertFrom_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsEdgecodeKind_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsEdgecodeKind);
+
+
+void __RPC_STUB IAAFDataDef3_IsEdgecodeKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsTimecodeKind_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsTimecodeKind);
+
+
+void __RPC_STUB IAAFDataDef3_IsTimecodeKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsAuxiliaryKind_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsAuxiliaryKind);
+
+
+void __RPC_STUB IAAFDataDef3_IsAuxiliaryKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+HRESULT STDMETHODCALLTYPE IAAFDataDef3_IsDescriptiveKind_Proxy( 
+    IAAFDataDef3 __RPC_FAR * This,
+    /* [out][retval] */ aafBoolean_t __RPC_FAR *bIsDescriptiveKind);
+
+
+void __RPC_STUB IAAFDataDef3_IsDescriptiveKind_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
+
+
+
+#endif 	/* __IAAFDataDef3_INTERFACE_DEFINED__ */
+
+
 #ifndef __IAAFDictionary2_INTERFACE_DEFINED__
 #define __IAAFDictionary2_INTERFACE_DEFINED__
 
@@ -42084,7 +42438,7 @@ void __RPC_STUB IAAFTypeDefVariableArrayEx_InsertElement_Stub(
 #endif 	/* __IAAFTypeDefVariableArrayEx_INTERFACE_DEFINED__ */
 
 
-/* interface __MIDL_itf_AAF_0226 */
+/* interface __MIDL_itf_AAF_0227 */
 /* [local] */ 
 
   //***********************************************************
@@ -42179,8 +42533,8 @@ STDAPI AAFGetLibraryPathName (
 
 
 
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0226_v0_0_c_ifspec;
-extern RPC_IF_HANDLE __MIDL_itf_AAF_0226_v0_0_s_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0227_v0_0_c_ifspec;
+extern RPC_IF_HANDLE __MIDL_itf_AAF_0227_v0_0_s_ifspec;
 
 /* Additional Prototypes for ALL interfaces */
 
