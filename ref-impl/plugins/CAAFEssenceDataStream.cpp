@@ -7,44 +7,48 @@
 *                                          *
 \******************************************/
 
-#include "CAAFObjectStream.h"
+#include "CAAFEssenceDataStream.h"
 
 #include <assert.h>
 #include "AAFResult.h"
 
-const CLSID CLSID_AAFObjectStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+const IID IID_IAAFEssenceData = { 0x6a33f4e2, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
 
-#if 1
-// Default Interface for AAFObjectStream 
-// {83402902-9146-11d2-8088-006008143e6f}
-const IID IID_IAAFObjectStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
-#else
-extern const CLSID CLSID_AAFObjectStream;
-extern const IID IID_IAAFObjectStream;
-#endif
+// Interface for AAFEssenceDataStream 
+// {CDDB6AB1-98DC-11d2-808A-006008143E6F}
+const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
 
-CAAFObjectStream::CAAFObjectStream (IUnknown * pControllingUnknown, aafBool doInit)
+CAAFEssenceDataStream::CAAFEssenceDataStream (IUnknown * pControllingUnknown, aafBool doInit)
   : CAAFDefaultStream (pControllingUnknown, AAFFalse)
 {
 }
 
 
-CAAFObjectStream::~CAAFObjectStream ()
+CAAFEssenceDataStream::~CAAFEssenceDataStream ()
 {
 }
 
+HRESULT STDMETHODCALLTYPE
+CAAFEssenceDataStream::Init(
+            /* [in] */ IUnknown  *essenceData)
+{
+	return(essenceData->QueryInterface (IID_IAAFEssenceData, (void **)&_data));
+}
 
 HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::Write (aafDataBuffer_t  buffer,
+    CAAFEssenceDataStream::Write (aafDataBuffer_t  buffer,
         aafInt32  buflen)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUInt32	written;
+
+	return(_data->Write (buflen, buffer, &written));
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::Read (aafUInt32  buflen,
+    CAAFEssenceDataStream::Read (aafUInt32  buflen,
         aafDataBuffer_t  buffer,
         aafUInt32 *  bytesRead)
 {
@@ -53,20 +57,20 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::Seek (aafUInt32  byteOffset)
+    CAAFEssenceDataStream::Seek (aafUInt32  byteOffset)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
-HRESULT STDMETHODCALLTYPE    CAAFObjectStream::SeekRelative (aafInt32  byteOffset)
+HRESULT STDMETHODCALLTYPE    CAAFEssenceDataStream::SeekRelative (aafInt32  byteOffset)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::IsPosValid (aafUInt32  byteOffset,
+    CAAFEssenceDataStream::IsPosValid (aafUInt32  byteOffset,
         aafBool *  isValid)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
@@ -74,28 +78,28 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::GetPosition (aafInt64 *  position)
+    CAAFEssenceDataStream::GetPosition (aafInt64 *  position)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::GetLength (aafInt64 *  position)
+    CAAFEssenceDataStream::GetLength (aafInt64 *  position)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::omcFlushCache ()
+    CAAFEssenceDataStream::omcFlushCache ()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFObjectStream::SetCacheSize (aafInt32  itsSize)
+    CAAFEssenceDataStream::SetCacheSize (aafInt32  itsSize)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -104,7 +108,7 @@ HRESULT STDMETHODCALLTYPE
 //
 // 
 // 
-HRESULT CAAFObjectStream::InternalQueryInterface
+HRESULT CAAFEssenceDataStream::InternalQueryInterface
 (
     REFIID riid,
     void **ppvObj)
@@ -115,15 +119,15 @@ HRESULT CAAFObjectStream::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (riid == IID_IAAFEssenceStream) 
+    if (riid == IID_IAAFEssenceDataStream) 
     { 
-        *ppvObj = (IAAFEssenceStream *)this; 
+        *ppvObj = (IAAFEssenceDataStream *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 
     // Always delegate back to base implementation.
-    return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
+    return CAAFDefaultStream::InternalQueryInterface(riid, ppvObj);
 }
 
 //
@@ -132,13 +136,13 @@ HRESULT CAAFObjectStream::InternalQueryInterface
 //
 // Define the contrete object support implementation.
 // 
-HRESULT CAAFObjectStream::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut)
+HRESULT CAAFEssenceDataStream::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut)
 {
 	*ppvObjOut = NULL;
- 	CAAFObjectStream *pAAFObjectStream = new CAAFObjectStream(pUnkOuter);
- 	if (NULL == pAAFObjectStream)
+ 	CAAFEssenceDataStream *pAAFEssenceDataStream = new CAAFEssenceDataStream(pUnkOuter);
+ 	if (NULL == pAAFEssenceDataStream)
  		return E_OUTOFMEMORY;
- 	*ppvObjOut = static_cast<IAAFEssenceStream *>(pAAFObjectStream);
+ 	*ppvObjOut = static_cast<IAAFEssenceStream *>(pAAFEssenceDataStream);
  	((IUnknown *)(*ppvObjOut))->AddRef();
  	return S_OK;
  }
