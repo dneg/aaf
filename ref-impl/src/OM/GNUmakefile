@@ -40,6 +40,8 @@ INCLUDES = -I. \
 	   -I../../include/OM \
 	   -I$(AAFBASE)/ss-impl/ref
 
+CFLAGS +=  -DOM_PERMIT_ZERO_LENGTH -DOM_STACK_TRACE_ON_ASSERT
+
 
 .PHONY : all
 all : om

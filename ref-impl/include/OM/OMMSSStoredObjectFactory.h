@@ -118,8 +118,6 @@ public:
   virtual void close(OMRawStorage* rawStorage, bool isWritable);
 
 private:
-  // @access Private members.
-
     // @cmember Write the signature to the given raw storage.
   static void writeSignature(OMRawStorage* rawStorage,
                              const OMUniqueObjectIdentification& signature);

@@ -21,14 +21,64 @@
 #include "MultiGenCommon.h"
 
 #include <AAFDefUIDs.h>
+#include <AAFFileKinds.h>
 
+#include "../../../../ref-impl/include/AAFSDKBuild.h"
+
+#include <map>
 #include <string>
 #include <memory>
 #include <iostream>
+#include <sstream>
 
 #include <stdlib.h>
+#include <assert.h>
 
 namespace {
+
+class KindMap {
+public:
+  KindMap()
+  {
+    #define ADD_KIND( X ) \
+    _kindMap[ string( #X ) ] = aafFileKindAaf##X;
+
+#if AAF_BUILD_NUMBER >= 536
+    // SchemaSoft was branched at buld 536, so anything later
+    // (in the schemasoft branch, or the main branch post-merge)
+    // should have these symbols.
+    ADD_KIND( MSSBinary );
+    ADD_KIND( SSSBinary );
+    ADD_KIND( M4KBinary );
+    ADD_KIND( S4KBinary );
+#else
+    _kindMap[ "MSSBinary" ] = aafFileKindAafSSBinary;
+#endif
+
+  }
+
+  ~KindMap()
+  {}
+
+
+  aafUID_t GetKind( const char* kindName )
+  {
+    std::map<std::string, aafUID_t >::const_iterator iter;
+    iter = _kindMap.find( kindName );
+
+    if ( iter == _kindMap.end() ) {
+      std::stringstream what;
+      what << "File kind unknown: " << kindName;
+      throw UsageEx( what.str().c_str() );
+    }
+
+    return iter->second;
+  }
+
+private:
+  std::map< std::string, aafUID_t > _kindMap;
+};
+
 
 class FileOp : public MultiGenTest
 { 
@@ -42,6 +92,32 @@ public:
 
   virtual void RunTest( CmdState& state, int argc, char** argv );
 };
+
+IAAFSmartPointer<IAAFFile> CreateFileOfKind( const std::string& fileName,
+					     aafFileExistence_e existance,
+					     aafFileAccess_e access,
+					     const aafUID_t& fileKind,
+					     const aafProductIdentification_t& prodId )
+{
+  std::auto_ptr<wchar_t> wfileName( ToWideString( fileName.c_str() ) );
+
+  IAAFSmartPointer<IAAFRawStorage> spRawStorage;
+  CHECK_HRESULT( AAFCreateRawStorageDisk( wfileName.get(),
+					  existance,
+					  access,
+					  &spRawStorage) );
+  
+  IAAFSmartPointer<IAAFFile> spFile;
+  CHECK_HRESULT( AAFCreateAAFFileOnRawStorage( spRawStorage,
+					       existance,
+					       access,
+					       &fileKind,
+					       0,
+					       &prodId,
+					       &spFile));
+
+  return spFile;
+}
 
 void FileOp::RunTest( CmdState& state, int argc, char** argv )
 {
@@ -57,7 +133,7 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
   v.patchLevel = 0;
   v.type = kAAFVersionUnknown;
   productInfo.companyName = L"AAF Developers Desk";
-  productInfo.productName = L"AAF Enumerator Test";
+  productInfo.productName = L"AAF MultiGenTest";
   productInfo.productVersion = &v;
   productInfo.productVersionString = NULL;
   productInfo.productID = UnitTestProductID;
@@ -69,48 +145,49 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
 
   string which(argv[1]);
 
-  auto_ptr<wchar_t> fileName(0);
+  if ( which == "write" || which == "read" || which == "modify" ) {
 
-  if ( argc >= 3 ) {
-    auto_ptr<wchar_t> tmp( ToWideString( argv[2] ) );
-    fileName = tmp;
-  }
-
-  if ( which == "write" ) {
-
-    if ( !fileName.get() ) {
-      throw UsageEx("FileOp write expected filename");
+    if ( argc != 4 ) {
+      throw UsageEx("FileOp write|read|modify expects 3 arguments.");
     }
 
-    IAAFSmartPointer<IAAFFile> pFile;
-    CHECK_HRESULT( AAFFileOpenNewModify( fileName.get(), 0, &productInfo,
-					 &iaafFile ) );
-
-    state.SetFile( iaafFile );
-  }
-  else if ( which == "read" ) {
-
-    if ( !fileName.get() ) {
-      throw UsageEx("FileOp read expected filename");
+    std::string fileName( argv[3] );
+    IAAFSmartPointer<IAAFFile> spFile;
+    
+    std::string kind( argv[2] );
+    
+    KindMap kmap;
+    aafUID_t fileKind = kmap.GetKind( argv[2] );
+    
+    aafFileExistence_e existance;
+    aafFileAccess_e access;
+    
+    if ( which == "write" ) {
+      existance = kAAFFileExistence_new;
+      access = kAAFFileAccess_modify;
     }
-
-    CHECK_HRESULT( AAFFileOpenExistingRead( fileName.get(),
-					    0,
-					    &iaafFile ) );
-    state.SetFile( iaafFile );
-  }
-  else if ( which == "modify" ) {
-
-    if ( !fileName.get() ) {
-      throw UsageEx("FileOp modify expected filename");
+    else if ( which == "read" ) {
+      existance = kAAFFileExistence_existing;
+      access = kAAFFileAccess_read;
     }
+    else if ( which == "modify" ) {
+      existance = kAAFFileExistence_existing;
+      access = kAAFFileAccess_modify;
+    }
+    else {
+      assert(0);
+    }
+    
+    spFile =
+      CreateFileOfKind( fileName,
+			existance,
+			access,
+			fileKind,
+			productInfo );
+    
+    CHECK_HRESULT( spFile->Open() );
 
-    CHECK_HRESULT( AAFFileOpenExistingModify( fileName.get(),
-					      0,
-					      &productInfo,
-					      &iaafFile ) );
-
-    state.SetFile( iaafFile );
+    state.SetFile( spFile );
   }
   else if ( which == "save" ) {
     CHECK_HRESULT( state.GetFile()->Save() );
@@ -131,9 +208,9 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
 StandardFactory<FileOp> factory(
   "FileOp",
   "File Operations",
-  "{ {write|read|modify filename} | save | close | save_and_close }",
+  "{ (write|read|modify MSSBinary|SSSBinary|M4KBinary|S4KBinary filename} | save | close | save_and_close }",
   "",
-  2, 3
+  2, 4
   );
 
 } // end of namespace

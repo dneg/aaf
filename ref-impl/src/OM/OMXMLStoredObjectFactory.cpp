@@ -290,7 +290,8 @@ void OMXMLStoredObjectFactory::readSignature(OMRawStorage* rawStorage,
     char ch;
     OMUInt32 x;
     rawStorage->read(reinterpret_cast<OMByte*>(&ch), 1, x);
-    int c = ch;
+    int c =  (unsigned char)ch;
+
     if (isprint(c)) {
       signature[index++] = toupper(ch);
     }

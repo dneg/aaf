@@ -49,8 +49,8 @@ sub usage {
 ######################################################################
 
 sub GenerateUniqueFilename {
-    my( $P, $V, $T ) = @_;
-    my($filename) = "$T-$P-$V.aaf";
+    my( $P, $V, $F, $T ) = @_;
+    my($filename) = "$T-$P-$V-$F.aaf";
     $filename;
 }
 
@@ -87,7 +87,7 @@ sub ExecuteCommand {
     # FIXME ... started out here wanting to call system() with a
     # list... had trouble with that... but got system() to work if I
     # passed a single string... had trouble getting the return status
-    # back from rcs... besides, system only returns 24 bits of exit
+    # back from rsh... besides, system only returns 24 bits of exit
     # status... that's no good... so use open() and parse the output
     # to extract the status values.  Great that works, but I think
     # open() can still take a command list rather than a string, so
@@ -98,7 +98,7 @@ sub ExecuteCommand {
 	$cmd .= "$item ";
     }    
 
-    open( PROCESS, "$cmd |" ) or die "Failed to open process: $cmd";
+    $pid = open( PROCESS, "$cmd |" ) or die "Failed to open process: $cmd";
 
     my($status) = 0xdeadbeef;
     while ( <PROCESS> ) {
@@ -109,7 +109,10 @@ sub ExecuteCommand {
 	    $status = $_;
 	}
     }
-    close(PROCESS);
+
+    my($sshstatus) = close(PROCESS)
+	or warn $! ? "system error closing proccess $pid: $sshstatus" :
+	             "process status error from process $pid: $sshstatus" ;
 
     $status;
 }
@@ -127,7 +130,7 @@ sub LoadLibrary {
     $status = 0;
 
     @args = ( $CFG{MultiGenTestPath}{$V}{$P},
-	      "-r LoadLib $CFG{$V}{$P}",
+	      "-r LoadLib $CFG{AAFComLibPath}{$V}{$P}",
 	      "-r RegPlugins $CFG{PlugInLibPath}{$V}{$P}",
 	      "-r UnloadLib",
             );
@@ -143,15 +146,13 @@ sub LoadLibrary {
 # new file, executes the test to modify that file, and saves it.
 
 sub CreateFile {
-    my( $P, $V, $T, $F ) = @_;
+    my( $P, $V, $F, $T, $filename ) = @_;
     my($status) = 0;
 
-
-
     my(@args) = ( $CFG{MultiGenTestPath}{$V}{$P},
-		  "-r LoadLib $CFG{$V}{$P}",
+		  "-r LoadLib $CFG{AAFComLibPath}{$V}{$P}",
 		  "-r RegPlugins $CFG{PlugInLibPath}{$V}{$P}",
-		  "-r FileOp write $CFG{SharedTestDirPath}{$P}/${F}",
+		  "-r FileOp write $CFG{FileOpArg}{$V}{$F} $CFG{SharedTestDirPath}{$P}/${filename}",
 		  TestListToCommandArgs( @{$CFG{$T}[1]} ),
 		  "-r FileOp save_and_close",
 		  "-r UnloadLib",
@@ -168,13 +169,13 @@ sub CreateFile {
 # existing and executes a test to modify it, and saves the file.
 
 sub ModifyFile {
-    my( $P, $V, $T, $F ) = @_;
+    my( $P, $V, $F, $T, $filename ) = @_;
     my($status) = 0;
 
     my(@args) = ( $CFG{MultiGenTestPath}{$V}{$P},
-		  "-r LoadLib $CFG{$V}{$P}",
+		  "-r LoadLib $CFG{AAFComLibPath}{$V}{$P}",
 		  "-r RegPlugins $CFG{PlugInLibPath}{$V}{$P}",
-		  "-r FileOp modify $CFG{SharedTestDirPath}{$P}/${F}",
+		  "-r FileOp modify $CFG{FileOpArg}{$V}{$F} $CFG{SharedTestDirPath}{$P}/${filename}",
 		  TestListToCommandArgs( @{$CFG{$T}[1]} ),
 		  "-r FileOp save_and_close",
 		  "-r UnloadLib",
@@ -192,13 +193,13 @@ sub ModifyFile {
 # contents, and closes it.
 
 sub VerifyFile {
-    my( $P, $V, $T, $F ) = @_;
+    my( $P, $V, $F, $T, $filename ) = @_;
     my($status) = 0;
 
     my(@args) = ( $CFG{MultiGenTestPath}{$V}{$P},
-		  "-r LoadLib $CFG{$V}{$P}",
+		  "-r LoadLib $CFG{AAFComLibPath}{$V}{$P}",
 		  "-r RegPlugins $CFG{PlugInLibPath}{$V}{$P}",
-		  "-r FileOp read $CFG{SharedTestDirPath}{$P}/${F}",
+		  "-r FileOp read $CFG{FileOpArg}{$V}{$F} $CFG{SharedTestDirPath}{$P}/${filename}",
 		  TestListToCommandArgs( @{$CFG{$T}[2]} ),
 		  "-r FileOp close",
 		  "-r UnloadLib",
@@ -258,6 +259,7 @@ sub CopyFile {
 		  $full_src,
 		  $full_dst );
 
+    # FIXME - no status check
     ExecuteCommand( $CFG{CopyHost}, @args );
 }
 
@@ -284,10 +286,11 @@ sub PrintConfigSummary {
     }
     print "\n\n";
 
+    print "AAFComLibPath:\n";
     foreach $version ( @{$CFG{Versions}} ) {
-	print "Version $version:\n";
+	print "\tVersion $version:\n";
 	foreach $machine ( @{$CFG{Platforms}} ) {
-	    print "\t$machine: $CFG{$version}{$machine}\n"
+	    print "\t\t$machine: $CFG{AAFComLibPath}{$version}{$machine}\n"
 	    }
 	print "\n";
     }
@@ -307,6 +310,29 @@ sub PrintConfigSummary {
 	foreach $platform ( @{$CFG{Platforms}} ) {
 	    print "\t\t$platform: $CFG{MultiGenTestPath}{$version}{$platform}\n";
         }
+    }
+    print "\n";
+
+    print "File Implementations: \n";
+    foreach $version ( @{$CFG{Versions}} ) {
+	print "\tVersion: ${version}\n";
+	foreach $platform ( @{$CFG{Platforms}} ) {
+	    print "\t\t${platform}:\t";
+	    foreach $fileimpl (  @{$CFG{FileImpl}{$version}{$platform}} ) {
+		print "${fileimpl}\t";
+	    }
+	    print "\n";
+	}
+    }
+    print "\n";
+
+    print "Compatible File Implementations:\n";
+    foreach $key ( keys %{$CFG{CompatFileImpl}} ) {
+	printf "\t${key}:\t";
+	for $fileimpl ( @{$CFG{CompatFileImpl}{$key}} ) {
+	    print "$fileimpl\t";
+	}
+	print "\n";
     }
     print "\n";
 
@@ -361,129 +387,200 @@ sub PrintConfigSummary {
 
 ######################################################################
 
+sub GetSupportedStorage {
+
+    my( $Cp, $Cv ) = @_;
+    
+    @_ = ( "A", "B", "C", "D" );
+}
+
+######################################################################
+
+sub LoadTest {
+
+    my( $P, $V, $F, $T ) = @_;
+
+    my( $what ) =  "load $V on $P";
+    print "${what}\n";
+    my( $status ) = LoadLibrary( $P, $V, $T );
+    TestStatus( $status, $what );
+    print "\n";
+}
+
+######################################################################
+
+sub CreateTest {
+
+    my( $Cp, $Cv, $Cf, $T ) = @_;
+
+    my( $filename ) = GenerateUniqueFilename( $Cp, $Cv, $Cf, $T );
+    my( $what ) = "create $filename by running $T on $Cp using $Cv with file impl $Cf";
+    print "${what}\n";
+
+    my( $status ) = CreateFile( $Cp, $Cv, $Cf, $T, $filename );
+    TestStatus( $status, $what );
+    print "\n";
+    
+    # for all platforms, versions and file impls: verify result of the create operation
+    foreach my $Vp ( @{$CFG{Platforms}} ) {
+	foreach my $Vv ( @{$CFG{Versions}} ) {
+	    foreach my $Vf ( GetCompatibleFileKinds( $Vp, $Vv, $Cf ) ) {
+
+		$what = "verify $filename by running $T on $Vp using $Vv with file impl $Vf";
+		print "${what}\n";
+		$status = VerifyFile( $Vp, $Vv, $Vf, $T, $filename );
+		TestStatus( $status, $what );
+		print "\n";
+	    } #Vf
+	} #Vv
+    } #Vp
+
+}
+
+######################################################################
+
+
+# Generate the set of file kinds that are compatible with kind F and
+# supported by platform/version P/V.
+
+sub GetCompatibleFileKinds {
+
+    my( $P, $V, $F ) = @_;
+
+    @CompatList = ();
+
+    foreach $CompatKind ( @{$CFG{CompatFileImpl}{$F}} ) {
+
+	foreach $SupportedKind ( @{$CFG{FileImpl}{$V}{$P}} ) {
+
+	    if ( $CompatKind eq $SupportedKind ) {
+		push( @CompatList, $SupportedKind );
+	    }
+	}
+    }
+
+    return @CompatList;
+}
+
+sub ModifyTest {
+
+    my( $Cp, $Cv, $Cf, $T ) = @_;
+
+    # for all platforms and versions: copy and modify
+    # the file created by the test referenced by the
+    # third argument in the modify test configuration
+    # list.
+    
+    my( $filename ) = GenerateUniqueFilename( $Cp, $Cv, $Cf, $CFG{$T}[3] );
+    
+    my( $Mp );
+    my( $Mv );
+    my( $Mf );
+    foreach $Mp ( @{$CFG{Platforms}} ) {
+	foreach $Mv ( @{$CFG{Versions}} ) {
+
+	    foreach $Mf ( GetCompatibleFileKinds( $Mp, $Mv, $Cf ) ) {
+
+		my( $exclude ) = 0;
+	    
+		my( $modify_filename ) = GenerateUniqueFilename( $Mp, $Mv, $Mf, $T );
+	    
+		my( $what ) = "copy $filename to $modify_filename and ...\n";
+		$what .= "modify $modify_filename by running $T on $Mp using $Mv with file impl $Mf";
+		print "${what}\n";
+	    
+		# Exclusion Processing:
+		# FIXME - Move this into a function
+		if ( $CFG{NoModifySupport}{Versions}{$Mv} eq "true" ) {
+		    print "Excluded: $Mv does not support modify operations.\n\n";
+		    $exclude = 1;
+		}  
+		elsif ( $CFG{NoModifySupport}{ByteOrder} eq "true" &&
+			$CFG{ByteOrder}{$Cp} ne $CFG{ByteOrder}{$Mp} ) {
+		    print "Excluded: $Cp and $Mp byte order mismatch;\n\n";
+		    $exclude = 1;
+		}
+		
+		if ( $exclude == 1 ) {
+		    $GlobalState{TestExcludedCount} += 1;
+		}
+		else {
+		    CopyFile( $filename, $modify_filename );
+		    
+		    my( $status ) = ModifyFile( $Mp, $Mv, $Mf, $T, $modify_filename );
+		    TestStatus( $status, $what );
+		    print "\n";
+		}
+		# end exclusion processing
+
+		
+		# for all platforms, versions, and file impls: verify result of the modify operation
+		#my( $Vp );
+		#my( $Vv );
+		foreach my $Vp ( @{$CFG{Platforms}} ) {
+		    foreach my $Vv ( @{$CFG{Versions}} ) {
+
+			foreach my $Vf ( GetCompatibleFileKinds( $Vp, $Vv, $Mf ) ) {
+			
+			    $what = "verify $modify_filename by running $T on $Vp using $Vv with file impl $Vf";
+			    
+			    if ( $exclude == 1 ) {
+				print "${what}\n";
+				print "Excluded: create or modify test was excluded.\n\n";
+				$GlobalState{TestExcludedCount} += 1;
+			    }
+			    else {
+				print "${what}\n";
+				my( $status ) = VerifyFile( $Vp, $Vv, $Vf, $T, $modify_filename );
+				TestStatus( $status, $what );
+				print "\n";
+			    }
+			} #Vf
+		    } #Vv
+		} #Vp
+		
+	    } #Mf
+	} #Mv
+    } #Mp
+}
+
+######################################################################
+
 sub ExecuteTests {
 
     print "Execution Log:\n\n";
 
-    # Cp = Create Platform
-    # Cv = Create Version
-    # Mp = Modify Platform
-    # Mv = Modify Version
-    # T  = Test
-    # Vp = Verify Platform
-    # Vv = Verify Version
-
     # FIXME - Move each test implementation (i.e. load, create, modify, verify),
     # into separate subroutines.
 
+    my( $T );
+    my( $Cp );
+    my( $Cv );
+    my( $Cf );
     foreach $T ( @{$CFG{Tests}} ) {
 	foreach $Cp ( @{$CFG{Platforms}} ) {
 	    foreach $Cv ( @{$CFG{Versions}} ) {
 
-		if ( $CFG{$T}[0] eq "load" ) {
-		    $what =  "load $Cv on $Cp";
-		    print "${what}\n";
-		    $status = LoadLibrary( $Cp, $Cv, $T );
-		    TestStatus( $status, $what );
-		    print "\n";
-		    next;
-		}
-		elsif ( $CFG{$T}[0] eq "create" ) {
-		    $filename = GenerateUniqueFilename( $Cp, $Cv, $T );
-		    $what = "create $filename by running $T on $Cp using $Cv";
-		    print "${what}\n";
-		    $status = CreateFile( $Cp, $Cv, $T, $filename );
-		    TestStatus( $status, $what );
-		    print "\n";
+		foreach $Cf ( @{$CFG{FileImpl}{$Cv}{$Cp}} ) {
 
-		    # for all platforms and versions: verify result of the create operation
-		    foreach $Vp ( @{$CFG{Platforms}} ) {
-			foreach $Vv ( @{$CFG{Versions}} ) {
-			    $what = "verify $filename by running $T on $Vp using $Vv";
-			    print "${what}\n";
-			    $status = VerifyFile( $Vp, $Vv, $T, $filename );
-			    TestStatus( $status, $what );
-			    print "\n";
-			} #Vv
-		    } #Vp
-
-		}
-		elsif ( $CFG{$T}[0] eq "modify" ) {
-
-		    # for all platforms and versions: copy and modify
-		    # the file created by the test referenced by the
-		    # third argument in the modify test configuration
-		    # list.
-
-		    $filename = GenerateUniqueFilename( $Cp, $Cv, $CFG{$T}[3] );
-
-		    foreach $Mp ( @{$CFG{Platforms}} ) {
-			foreach $Mv ( @{$CFG{Versions}} ) {
-
-			    $exclude = 0;
-
-			    $modify_filename = GenerateUniqueFilename( $Mp, $Mv, $T );
-
-			    $what = "copy $filename to $modify_filename and ...\n";
-			    $what .= "modify $modify_filename by running $T on $Mp using $Mv";
-			    print "${what}\n";
-
-			    # Exclusion Processing:
-
-			    if ( $CFG{NoModifySupport}{Versions}{$Mv} eq "true" ) {
-				print "Excluded: $Mv does not support modify operations.\n\n";
-				$exclude = 1;
-			    }  
-			    elsif ( $CFG{NoModifySupport}{ByteOrder} eq "true" &&
-				    $CFG{ByteOrder}{$Cp} ne $CFG{ByteOrder}{$Mp} ) {
-				print "Excluded: $Cp and $Mp byte order mismatch;\n\n";
-				$exclude = 1;
-			    }
-
-			    if ( $exclude == 1 ) {
-			      $GlobalState{TestExcludedCount} += 1;
-			    }
-			    else {
-			      CopyFile( $filename, $modify_filename );
-
-			      $status = ModifyFile( $Mp, $Mv, $T, $modify_filename );
-			      TestStatus( $status, $what );
-			      print "\n";
-			    }
-
-			    # for all platforms and versions: verify result of the modify operation
-			    foreach $Vp ( @{$CFG{Platforms}} ) {
-				foreach $Vv ( @{$CFG{Versions}} ) {
-
-				    $what = "verify $modify_filename by running $T on $Vp using $Vv";
-
-				    if ( $exclude == 1 ) {
-					print "${what}\n";
-					print "Excluded: create or modify test was excluded.\n\n";
-					$GlobalState{TestExcludedCount} += 1;
-				    }
-				    else {
-					print "${what}\n";
-					$status = VerifyFile( $Vp, $Vv, $T, $modify_filename );
-					TestStatus( $status, $what );
-					print "\n";
-				    }
-
-				} #Vv
-			    } #Vp
-
-			} #Mv
-		    } #Mp
-		}
-		else {
-		    # This is also tested in the summary code.  Repeat here just
-		    # in case that is ever removed.
-		    die "Test option must be \"create\", \"modify\" or \"load\" in test: $T\n";
-		}
-
-	    } #T
-	} #Cv
-    } #Cp
+		    if ( $CFG{$T}[0] eq "load" ) {
+			LoadTest( $Cp, $Cv, $Cf, $T );
+		    }
+		    elsif ( $CFG{$T}[0] eq "create" ) {
+			CreateTest( $Cp, $Cv, $Cf, $T );
+		    }
+		    elsif ( $CFG{$T}[0] eq "modify" ) {
+			ModifyTest( $Cp, $Cv, $Cf, $T )
+			}
+		    else {
+			# This is also tested in the summary code.  Repeat here just
+			# in case that is ever removed.
+			die "Test option must be \"create\", \"modify\" or \"load\" in test: $T\n";
+		    }
+		} #Cf
+	    } #Cv
+	} #Cp
+    } #T
 }
 
 ######################################################################

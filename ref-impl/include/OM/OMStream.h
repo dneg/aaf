@@ -62,7 +62,7 @@ public:
              OMUInt32 byteCount,
              OMUInt32& bytesWritten);
 
-  OMUInt64 size(void) const;
+  OMUInt64 size(void) ;
 
   void setSize(OMUInt64 newSize);
 

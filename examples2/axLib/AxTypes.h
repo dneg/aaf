@@ -27,6 +27,8 @@
 #include <memory>
 #include <string>
 
+#include <iostream>
+
 // Could have just used wstring, but the AAF SDK goes to the trouble of 
 // typedef'ing aafCharacter, so AxString follows that example.
 typedef ::std::basic_string<aafCharacter> AxString;

@@ -295,6 +295,239 @@ OMInt32 OMStgOpenStorageOnILockBytes(ILockBytes* plkbyt,
                                                              ppstgOpen);
 }
 
+
+
+#ifdef OM_USE_STORAGE_EX
+
+//Below are the definititions for MS Strucutred Storage Library
+
+typedef unsigned long ULONG;    // 4 bytes
+typedef unsigned short USHORT;  // 2 bytes
+typedef short OFFSET;           // 2 bytes
+typedef ULONG SECT;             // 4 bytes
+typedef ULONG FSINDEX;          // 4 bytes
+typedef USHORT FSOFFSET;        // 2 bytes
+typedef USHORT WCHAR;           // 2 bytes
+typedef ULONG DFSIGNATURE;      // 4 bytes
+typedef unsigned char BYTE;     // 1 byte
+typedef unsigned short WORD;    // 2 bytes
+typedef unsigned long DWORD;    // 4 bytes
+typedef ULONG StrID;              // 4 bytes
+
+//FAT Entries
+const SECT MAXREGSECT = 0xFFFFFFFA; // maximum SECT
+const SECT DIFSECT    = 0xFFFFFFFC; // denotes a DIFAT sector in a FAT
+const SECT FATSECT    = 0xFFFFFFFD; // denotes a FAT sector in a FAT
+const SECT ENDOFCHAIN = 0xFFFFFFFE; // end of a virtual stream chain
+const SECT FREESECT   = 0xFFFFFFFF; // unallocated sector
+
+const StrID MAXREGSID   = 0xFFFFFFFA; // maximum directory entry ID
+const StrID NOSTREAM    = 0xFFFFFFFF; // unallocated directory entry
+
+
+
+
+struct StructuredStorageHeader { // [offset from start (bytes), length (bytes)]
+  BYTE _abSig[8];            // [00H,08] {0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 
+                             //   0x1a, 0xe1} for current version
+  CLSID _clsid;              // [08H,16] reserved must be zero (WriteClassStg/
+                             //   GetClassFile uses root directory class id)
+  USHORT _uMinorVersion;     // [18H,02] minor version of the format: 33 is 
+                             //   written by reference implementation
+  USHORT _uDllVersion;       // [1AH,02] major version of the dll/format: 3 for
+                             //   512-byte sectors, 4 for 4 KB sectors
+  USHORT _uByteOrder;        // [1CH,02] 0xFFFE: indicates Intel byte-ordering
+  USHORT _uSectorShift;      // [1EH,02] size of sectors in power-of-two; 
+                             //   typically 9 indicating 512-byte sectors
+  USHORT _uMiniSectorShift;  // [20H,02] size of mini-sectors in power-of-two; 
+                             //   typically 6 indicating 64-byte mini-sectors
+  USHORT _usReserved;        // [22H,02] reserved, must be zero
+  ULONG _ulReserved1;        // [24H,04] reserved, must be zero
+  FSINDEX _csectDir;         // [28H,04] must be zero for 512-byte sectors,
+                             //   number of SECTs in directory chain for 4 KB
+                             //   sectors
+  FSINDEX _csectFat;         // [2CH,04] number of SECTs in the FAT chain
+  SECT _sectDirStart;        // [30H,04] first SECT in the directory chain
+  DFSIGNATURE _signature;    // [34H,04] signature used for transactions; must
+                             //   be zero. The reference implementation
+                             //   does not support transactions
+  ULONG _ulMiniSectorCutoff; // [38H,04] maximum size for a mini stream; 
+                             //   typically 4096 bytes
+  SECT _sectMiniFatStart;    // [3CH,04] first SECT in the MiniFAT chain
+  FSINDEX _csectMiniFat;     // [40H,04] number of SECTs in the MiniFAT chain
+  SECT _sectDifStart;        // [44H,04] first SECT in the DIFAT chain
+  FSINDEX _csectDif;         // [48H,04] number of SECTs in the DIFAT chain
+  SECT _sectFat[109];        // [4CH,436] the SECTs of first 109 FAT sectors
+} ;
+
+struct StructuredStorageDirectoryEntry { 
+  WCHAR _ab[32];      // [00H,64] 64 bytes. The element name in Unicode, padded
+                      //   with zeros to fill this byte array.  Terminating 
+                      //   Unicode NULL is required.
+  WORD _cb;           // [40H,02] Length of the Element name in bytes, 
+                      //   including the Unicode NULL
+  BYTE _mse;          // [42H,01] Type of object. Value taken from the 
+                      //   STGTY enumeration
+  BYTE _bflags;       // [43H,01] Value taken from DECOLOR enumeration
+  StrID _sidLeftSib;  // [44H,04] SID of the left-sibling of this entry 
+                      //   in the directory tree
+  StrID _sidRightSib; // [48H,04] SID of the right-sibling of this entry 
+                      //   in the directory tree
+  StrID _sidChild;    // [4CH,04] SID of the child acting as the root of all 
+                      //   the children of this element 
+                      //   (if _mse=STGTY_STORAGE or STGTY_ROOT)
+  CLSID _clsId;       // [50H,16] CLSID of this storage 
+                      //   (if _mse=STGTY_STORAGE or STGTY_ROOT)
+  DWORD _dwUserFlags; // [60H,04] User flags of this storage 
+                      //   (if _mse=STGTY_STORAGE or STGTY_ROOT)
+  FILETIME _time[2];  // [64H,16] Create/Modify time-stamps 
+                      //   (if _mse=STGTY_STORAGE)
+  SECT _sectStart;    // [74H,04] starting SECT of the stream 
+                      //   (if _mse=STGTY_STREAM)
+  ULONG _ulSizeLow;   // [78H,04] size of stream in bytes 
+                      //   (if _mse=STGTY_STREAM)
+  ULONG _ulSizeHigh;  // [7CH,02] must be zero for 512-byte sectors, 
+                      //   high part of 64-bit size for 4 KB sectors
+};
+
+
+#define SZ_4K  4*1024
+#define SZ_512 512
+#define NUMB_DIR_ENTRY	(SZ_4K/sizeof(	StructuredStorageDirectoryEntry))
+
+//this structure produces a minmal 4K secotr structured storage file.
+//It has 3 sectors Headere, FAT and Directory.
+//20040108 Ian Baker
+struct MinSS4KFile   {
+	union {
+		StructuredStorageHeader  HeaderInfo;
+		BYTE Header[ SZ_4K ];
+	}  ;
+
+	SECT FAT[SZ_4K/sizeof(SECT)];
+
+	union {
+		StructuredStorageDirectoryEntry Entry[NUMB_DIR_ENTRY];
+        BYTE Dir[SZ_4K];
+	};
+
+	MinSS4KFile()
+	{
+		int i;
+
+		memset(Header,0,sizeof(Header));
+		memset(FAT,0xff,sizeof(FAT));
+		memset(Dir,0,sizeof(Dir));
+		
+
+		BYTE sig[]={0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1,  0x1a, 0xe1};
+		memcpy(HeaderInfo._abSig,sig,sizeof(HeaderInfo._abSig));
+		memset(&HeaderInfo._clsid,0,sizeof(HeaderInfo._clsid));
+		HeaderInfo._uMinorVersion=0x3E;
+		HeaderInfo._uDllVersion=4;		   // 4K sectors
+		HeaderInfo._uByteOrder=0xFFFE;
+		HeaderInfo._uSectorShift=0x0C;	    // 4K sectors
+		HeaderInfo._uMiniSectorShift=0x06;
+		HeaderInfo._csectDir=0x01;
+		HeaderInfo._csectFat=0x01;
+		HeaderInfo._sectDirStart=0x01;
+		HeaderInfo._ulMiniSectorCutoff=0x1000;
+		HeaderInfo._sectMiniFatStart=ENDOFCHAIN;
+		HeaderInfo._sectDifStart=ENDOFCHAIN;
+		memset(HeaderInfo._sectFat,0xFF,sizeof(HeaderInfo._sectFat));
+		HeaderInfo._sectFat[0]=0;  // first block is in use.
+
+		FAT[0]=FATSECT;
+		FAT[1]=ENDOFCHAIN ;
+
+
+		for(i=0;i<NUMB_DIR_ENTRY;i++)
+		{
+			Entry[i]._sidLeftSib=NOSTREAM;
+			Entry[i]._sidRightSib=NOSTREAM;
+			Entry[i]._sidChild=NOSTREAM;
+		}
+
+		//Assume here that wide charater is 2 bytes.
+		// is 4 under solaris but MS lib does not work under Solaris
+		//now initialise root entry
+		wcscpy(Entry[0]._ab,(L"Root Entry"));
+		Entry[0]._cb=(wcslen(Entry[0]._ab)+1)*2;
+		Entry[0]._mse=5;
+		Entry[0]._sectStart=ENDOFCHAIN;
+	}
+};
+
+
+//this function does ot exist in the current MS Structured Storage Library
+// but is reqruied to create 4K files through the raw interface.
+//Therefore the function is simulated in OMMSStructuredStorage.cpp
+//040109 Ian Baker Metaglue Corp.
+
+OMInt32 StgCreateDocfileOnILockBytesEx (
+									ILockBytes* piLockBytes,
+									DWORD grfMode,
+									DWORD stgfmt,
+									DWORD grfAttrs,
+									OM_STGOPTIONS* pStgOptions,
+									void* reserved2,
+									REFIID riid,
+									void** ppstorage   )
+
+{
+	TRACE("StgCreateDocfileOnILockBytesEx");
+
+	if(	pStgOptions->ulSectorSize==512)
+	{
+		HRESULT status = StgCreateDocfileOnILockBytes(
+			piLockBytes,
+			grfMode,
+			0,
+			(IStorage **)ppstorage);
+			
+
+		return status;
+	}
+
+	//Will only handle 512 secotrs (above) or 4K sectors;
+	ASSERT ("Bad Sector Size",pStgOptions->ulSectorSize==SZ_4K);
+
+	HRESULT status;
+	MinSS4KFile *MinSSFile;
+
+	// Generate a minimal 4 K file. Code for this is in the Header
+	MinSSFile = new MinSS4KFile();
+
+
+	ULARGE_INTEGER startOfFile;
+	startOfFile.HighPart=0;
+	startOfFile.LowPart=0;
+
+	ULONG lbytesWritten;
+
+	status=piLockBytes->WriteAt(startOfFile,MinSSFile,sizeof(MinSS4KFile),&lbytesWritten);
+
+	// you might expect STGM_CREATE to the call to StgCreateDocfileOnILockBytesEx
+	// but not vaild to StgOpenStorageOnILockBytes
+	grfMode= grfMode & ~ STGM_CREATE;	//so remove it - to maintain consistent programming interface
+	
+	status=StgOpenStorageOnILockBytes (
+		piLockBytes,
+		NULL,
+		grfMode  ,
+		NULL,
+		0,
+		(IStorage **) ppstorage);
+	piLockBytes->Release();
+
+	return status;
+}
+
+
+#endif // OM_USE_STORAGE_EX
+
+
+
 OMInt32 OMStgIsStorageFile(const SSCHAR* pwcsName)
 {
   TRACE("OMStgIsStorageFile");

@@ -99,6 +99,18 @@
 #define OS_UNIX
 #define COMPILER_GCC
 #define PLATFORM_GCC_INTEL_LINUX
+
+/*
+ *  Compiler:   GNU C++
+ *  Processor:  SPARC
+ *  OS:         Solaris
+ */
+#elif defined(__GNUC__) && defined(__sun) 
+#define CPU_SPARC
+#define OS_SOLARIS
+#define OS_UNIX
+#define COMPILER_GCC
+#define PLATFORM_GCC_SPARC_SOLARIS
     
 /*
  *  Compiler:   GNU C++

@@ -166,11 +166,6 @@ AAFRESULT STDMETHODCALLTYPE
   if (! GetOMStorage()->isExtendible ())
 	return AAFRESULT_OPERATION_NOT_PERMITTED;
 
-  // BobT Hack!  Some implementations may not understand 64-bit
-  // integer sizes, so we'll only allow 32-bit sizes...
-  if (extent > ((unsigned long) ~0))
-	return AAFRESULT_DATA_SIZE;
-
   GetOMStorage()->extend (extent);
   // See if extend() succeded
   if (GetOMStorage()->extent() < extent)

@@ -385,27 +385,27 @@ int main( int argc, char **argv )
   }
 
   catch ( const UsageEx& ex_usage ) {
-    cout << "Usage Error: " << ex_usage.GetMsg() << endl;
+    cout << endl << "Usage Error: " << ex_usage.GetMsg() << endl;
     hr = -1;
   }
   catch ( const TestFailedEx& ex_failed ) {
-    cout << "Test Failed: " << ex_failed.GetMsg() << endl;
+    cout << endl << "Test Failed: " << ex_failed.GetMsg() << endl;
     hr = -1;
   }
   catch ( const HResultEx& ex_hr ) {
     hr = ex_hr.GetHResult(); 
-    cout << "Error: HRESULT value" << endl;
+    cout << endl << "Error: HRESULT value" << endl;
   }
   catch ( const string& ex_string ) {
-    cout << "Error: " << ex_string << endl;
+    cout << endl << "Error: " << ex_string << endl;
     hr = -1;
   }
   catch ( const char* ex_str ) {
-    cout << "Error: " << ex_str << endl;
+    cout << endl << "Error: " << ex_str << endl;
     hr = -1;
   }
   catch (...) {
-	cout << "Error: caught an unknown exception" << endl;
+    cout << endl << "Error: caught an unknown exception" << endl;
     hr = -1;
   }
 

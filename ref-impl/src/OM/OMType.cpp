@@ -23,6 +23,8 @@
 // @doc OMEXTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMType
 
+// define OM_PERMIT_ZERO_LENGTH to eliminate debug check for zero-length properties on read
+
 #include "OMType.h"
 
 #include "OMAssertions.h"
@@ -160,7 +162,10 @@ void OMType::copy(const OMByte* inputBytes,
   TRACE("OMType::copy");
   PRECONDITION("Valid input bytes", inputBytes != 0);
   PRECONDITION("Valid output bytes", outputBytes != 0);
+
+#ifndef OM_PERMIT_ZERO_LENGTH
   PRECONDITION("Valid buffer size", bytesSize > 0);
+#endif
 
   const OMByte* ip = inputBytes;
   OMByte* op = outputBytes;

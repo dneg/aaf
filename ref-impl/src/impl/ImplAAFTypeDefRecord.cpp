@@ -803,7 +803,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   hr = pActualRecordType->GetCount (&count);
   if (AAFRESULT_FAILED(hr)) return hr;
-  if (index <= count) return AAFRESULT_ILLEGAL_VALUE;
+  if (index >= count) return AAFRESULT_ILLEGAL_VALUE; // wol 031230 typo fix (was <=)
 
   ImplAAFPropValDataSP pvdIn;
   ImplAAFPropValDataSP pvdOut;
@@ -843,6 +843,25 @@ AAFRESULT STDMETHODCALLTYPE
 
   hr = pvdOut->GetBits (&pOutBits);
   if (AAFRESULT_FAILED(hr)) return hr;
+
+	/*	
+		this seems areasonable and worthwhile defensive addition
+
+		but whence comes the real problem?
+
+		pOutBits will be 0 if the PropValData has not been initialized
+		which will be the case if the ImplAAFProperty for the member believes it is Optional
+		which of course record members are not - they are mandatory
+
+		perhaps this is the real bug?
+	*/
+	if( !pOutBits )
+	{
+		aafUInt32 bitsSize; pvdOut->GetBitsSize( &bitsSize );
+
+		hr = pvdOut->AllocateBits ( bitsSize, &pOutBits);
+		if (AAFRESULT_FAILED(hr)) return hr;
+	}
 
   memcpy (pOutBits+offset, pInBits, ptd->PropValSize());
 

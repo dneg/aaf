@@ -85,6 +85,18 @@ inline void checkExpression(bool expression, HRESULT r)
 		throw r;
 }
 
+
+//next 3 functions all defined in CAAFEssenceAccessTest.cpp
+void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
+void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
+AAFRESULT loadWAVEHeader(aafUInt8 *buf,
+										aafUInt16 *bitsPerSample,
+										aafUInt16 *numCh,
+										aafRational_t *sampleRate,
+										aafUInt32 *dataOffset,
+										aafUInt32 *dataLen);
+
+
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
 						   IAAFFile**			ppFile,
@@ -160,6 +172,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafRational_t		writeRat, readRat;
 	aafUID_t			readCode;
 
+	FILE*						pWavFile = NULL;
+	unsigned char				dataBuff[4096], *dataPtr;
+	aafUInt32					dataOffset, dataLen;
+	aafUInt16					bitsPerSample, numCh;
+	aafUInt32					samplesWritten,bytesWritten;
+
+		aafRational_t				sampleRate = {44100, 1};
+
+
 	try
 	{
 		// Remove the previous test file if any.
@@ -186,6 +207,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
 		// Add the master mob to the file BEFORE creating the essence
 		checkResult(pHeader->AddMob(pMob));
+>>>>>>>>>>>>>>>>>>>> File 1
+>>>>>>>>>>>>>>>>>>>> File 2
 		checkResult(pMasterMob->CreateEssence (1,
 											   defs.ddSound(),
 											   kAAFCodecWAVE,
@@ -280,10 +303,141 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkExpression(pFormat->GetFormatSpecifier (kAAFSampleFormat,
   												sizeof(readValue), (aafDataBuffer_t)&readValue,
 												&bytesRead) == AAFRESULT_FORMAT_NOT_FOUND, AAFRESULT_TEST_FAILED);
+<<<<<<<<<<<<<<<<<<<<
 
-		pAccess->CompleteWrite();
-		pAccess->Release();
-		pAccess = NULL;
+		// data must be written to the codec as the codec assumes data has been written,
+		//otherwise will throw an exception when the file is closed.
+		//Ian Baker 040102
+		pWavFile = fopen("Laser.wav", "r");
+		if (pWavFile)
+		{
+			// read in the essence data
+			fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+			
+			// We have the data in memory so
+			// close essence data file
+			fclose(pWavFile);
+			pWavFile = NULL;
+
+			checkResult(loadWAVEHeader(dataBuff,
+				&bitsPerSample,
+				&numCh,
+				&sampleRate,
+				&dataOffset,
+				&dataLen));
+			dataPtr = dataBuff + dataOffset;
+
+			checkResult(pMasterMob->CreateEssence (1,
+				defs.ddSound(),
+				kAAFCodecWAVE,
+				rate,
+				rate,
+				kAAFCompressionDisable,
+				NULL,
+				ContainerAAF,
+				&pAccess));
+						
+			checkResult(pAccess->WriteSamples(	dataLen,	//!!! hardcoded bytes/sample ==1// Number of Samples
+				sizeof(dataBuff), // buffer size
+				dataPtr,	// THE data
+				&samplesWritten,
+				&bytesWritten));
+
+			// Fianlly! Get an essence format to test
+
+
+			checkResult(pAccess->GetEmptyFileFormat(&pFormat));
+			checkResult(pFormat->NumFormatSpecifiers(&numSpec));
+			checkExpression(0 == numSpec, AAFRESULT_TEST_FAILED);
+
+			/***/
+			writeValue = 16;
+			checkResult(pFormat->AddFormatSpecifier(kAAFAudioSampleBits,
+				sizeof(writeValue), (aafDataBuffer_t)&writeValue));
+			writeValue = 1;
+			checkResult(pFormat->AddFormatSpecifier(kAAFNumChannels,
+				sizeof(writeValue), (aafDataBuffer_t)&writeValue));
+			writeRat.numerator = 44100;
+			writeRat.denominator = 1;
+			checkResult(pFormat->AddFormatSpecifier(kAAFSampleRate,
+				sizeof(writeRat), (aafDataBuffer_t)&writeRat));
+			/***/
+			checkResult(pFormat->NumFormatSpecifiers(&numSpec));
+			checkExpression(3 == numSpec, AAFRESULT_TEST_FAILED);
+
+			/***/
+			checkResult(pFormat->GetFormatSpecifier (kAAFAudioSampleBits,
+				sizeof(readValue), (aafDataBuffer_t)&readValue,
+				&bytesRead));
+			checkExpression(sizeof(readValue) == bytesRead, AAFRESULT_TEST_FAILED);
+			checkExpression(16 == readValue, AAFRESULT_TEST_FAILED);
+			/***/
+			checkResult(pFormat->GetFormatSpecifier (kAAFNumChannels,
+				sizeof(readValue), (aafDataBuffer_t)&readValue,
+				&bytesRead));
+			checkExpression(sizeof(readValue) == bytesRead, AAFRESULT_TEST_FAILED);
+			checkExpression(1 == readValue, AAFRESULT_TEST_FAILED);
+			/***/
+			checkResult(pFormat->GetFormatSpecifier (kAAFSampleRate,
+				sizeof(readRat), (aafDataBuffer_t)&readRat,
+				&bytesRead));
+			checkExpression(sizeof(readRat) == bytesRead, AAFRESULT_TEST_FAILED);
+			checkExpression(44100 == readRat.numerator, AAFRESULT_TEST_FAILED);
+			checkExpression(1 == readRat.denominator, AAFRESULT_TEST_FAILED);
+			/***/
+
+			//******* Test indexed calls
+			/***/
+			checkResult(pFormat->GetIndexedFormatSpecifier (0, &readCode,
+				sizeof(readValue), (aafDataBuffer_t)&readValue,
+				&bytesRead));
+			checkExpression(memcmp(&readCode,&kAAFAudioSampleBits, sizeof(readCode)) == 0, AAFRESULT_TEST_FAILED);
+			checkExpression(sizeof(readValue) == bytesRead, AAFRESULT_TEST_FAILED);
+			checkExpression(16 == readValue, AAFRESULT_TEST_FAILED);
+			/***/
+			checkResult(pFormat->GetIndexedFormatSpecifier (1, &readCode,
+				sizeof(readValue), (aafDataBuffer_t)&readValue,
+				&bytesRead));
+			checkExpression(memcmp(&readCode,&kAAFNumChannels, sizeof(readCode)) == 0, AAFRESULT_TEST_FAILED);
+			checkExpression(sizeof(readValue) == bytesRead, AAFRESULT_TEST_FAILED);
+			checkExpression(1 == readValue, AAFRESULT_TEST_FAILED);
+			/***/
+			checkResult(pFormat->GetIndexedFormatSpecifier (2, &readCode,
+				sizeof(readRat), (aafDataBuffer_t)&readRat,
+				&bytesRead));
+			checkExpression(memcmp(&readCode,&kAAFSampleRate, sizeof(readCode)) == 0, AAFRESULT_TEST_FAILED);
+			checkExpression(sizeof(readRat) == bytesRead, AAFRESULT_TEST_FAILED);
+			checkExpression(44100 == readRat.numerator, AAFRESULT_TEST_FAILED);
+			checkExpression(1 == readRat.denominator, AAFRESULT_TEST_FAILED);
+			/***/
+			//******* Test indexed calls out of range
+			checkExpression(pFormat->GetIndexedFormatSpecifier (-1, &readCode,
+				sizeof(readRat), (aafDataBuffer_t)&readRat,
+				&bytesRead) == AAFRESULT_FORMAT_BOUNDS, AAFRESULT_TEST_FAILED);
+			checkExpression(pFormat->GetIndexedFormatSpecifier (3, &readCode,
+				sizeof(readRat), (aafDataBuffer_t)&readRat,
+				&bytesRead) == AAFRESULT_FORMAT_BOUNDS, AAFRESULT_TEST_FAILED);
+			//******* Test indexed calls small buffer size
+			checkExpression(pFormat->GetIndexedFormatSpecifier (2, &readCode,
+				sizeof(readValue), (aafDataBuffer_t)&readValue,
+				&bytesRead) == AAFRESULT_SMALLBUF, AAFRESULT_TEST_FAILED);
+			//******* Test ID calls small buffer size
+			checkExpression(pFormat->GetFormatSpecifier (kAAFSampleRate,
+				sizeof(readValue), (aafDataBuffer_t)&readValue,
+				&bytesRead) == AAFRESULT_SMALLBUF, AAFRESULT_TEST_FAILED);
+			//******* Test ID calls missing ID
+			checkExpression(pFormat->GetFormatSpecifier (kAAFSampleFormat,
+				sizeof(readValue), (aafDataBuffer_t)&readValue,
+				&bytesRead) == AAFRESULT_FORMAT_NOT_FOUND, AAFRESULT_TEST_FAILED);
+
+			pAccess->CompleteWrite();
+			pAccess->Release();
+			pAccess = NULL;
+		}
+		else
+		{
+			printf("***Failed to open Wave file Laser.wav\n");
+		}
 
 	}
 	catch (HRESULT& rResult)

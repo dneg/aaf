@@ -68,6 +68,17 @@
 #error "Don't know which structured storage implementation to use."
 #endif
 
+ //redefine STGOPTIONS so that it is available on all platforms
+typedef struct tagOM_STGOPTIONS
+{
+  USHORT      usVersion;
+  USHORT      reserved;
+  ULONG       ulSectorSize;
+  const WCHAR *pwcsTemplateFile;
+} OM_STGOPTIONS;
+
+
+
 // Determine whether or not UNICODE versions of the APIs are in use.
 //
 #if defined(OM_OS_WINDOWS) && defined(UNICODE)
@@ -174,5 +185,26 @@ OMInt32 OMStgIsStorageFile(const SSCHAR* pwcsName);
 OMInt32 OMCoInitialize(void* pvReserved);
 
 void OMCoUninitialize(void);
+
+
+
+#ifdef OM_USE_STORAGE_EX
+
+//this function does ot exist in the current MS Structured Storage Library
+// but is reqruied to create 4K files through the raw interface.
+//Therefore the function is simulated in OMMSStructuredStorage.cpp
+//040109 Ian Baker Metaglue Corp.
+OMInt32 StgCreateDocfileOnILockBytesEx (
+										ILockBytes* plkbyt,
+										DWORD grfMode,
+										DWORD stgfmt,
+										DWORD grfAttrs,
+										OM_STGOPTIONS* pStgOptions,
+										void* reserved2,
+										REFIID riid,
+										void** ppObjectOpen   );
+
+
+#endif // OM_USE_STORAGE_EX
 
 #endif

@@ -116,6 +116,7 @@ public:
                                   const OMClassFactory* factory,
                                   void* clientOnRestoreContext,
                                   const OMLoadMode loadMode,
+        			  const OMStoredObjectEncoding& encoding,
                                   OMDictionary* dictionary = 0);
 
     // @cmember Open an existing <c OMFile> for modify access.
@@ -124,6 +125,7 @@ public:
                                     const OMClassFactory* factory,
                                     void* clientOnRestoreContext,
                                     const OMLoadMode loadMode,
+				    const OMStoredObjectEncoding& encoding,
                                     OMDictionary* dictionary = 0);
 
     // @cmember Open a new <c OMFile> for write access.
@@ -321,6 +323,7 @@ private:
     // @devnote Will superceed OMFile::OMFile (for existing files) above.
   OMFile(OMRawStorage* rawStorage,
          void* clientOnRestoreContext,
+         OMStoredObjectEncoding encoding,
          const OMAccessMode mode,
          const OMClassFactory* factory,
          OMDictionary* dictionary,

@@ -27,10 +27,19 @@
 
 #include <limits.h>
 #include <errno.h>
+#include <stdio.h>
+#include <sys/stat.h>
 
 #include "OMUtilities.h"
 #include "OMExceptions.h"
 #include "OMRawStorage.h"
+
+#if defined( OM_COMPILER_GCC_SPARC_SUNOS )
+
+typedef off64_t __off64_t;
+
+#endif
+
 
   // @mfunc Create an <c OMStream> object by opening an existing
   //        file for read-only access, the file is named <p fileName>.
@@ -151,27 +160,54 @@ void OMStream::write(const OMByte* bytes,
   POSTCONDITION("All bytes written", actualByteCount == byteCount);
 }
 
-OMUInt64 OMStream::size(void) const
+OMUInt64 OMStream::size(void) 
 {
   TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
 
+#if (1)
+  struct stat fileStat;
+  fflush( _file );
+  OMInt64 status = fstat( fileno( _file ), &fileStat );
+  ASSERT( "Successful fstat", status == 0 );
+  OMUInt64 result = fileStat.st_size;
+
+#else  //change method of finding size
+
+
+	// where are we now?
+	OMUInt64 oldposition = position();
+
+	// seek to end
   errno = 0;
-  long int oldPosition = ftell(_file);
-  ASSERT("Successful tell", IMPLIES(oldPosition == -1L, errno == 0));
 
-  long int status = fseek(_file, 0, SEEK_END);
-  ASSERT("Successful seek", status == 0); // tjb - error
+#if defined( OM_OS_UNIX )
 
-  errno = 0;
-  long int position = ftell(_file);
-  ASSERT("Successful tell", IMPLIES(position == -1L, errno == 0));
+	// all POSIX-compliant
+	int status = fseeko64( _file, (__off64_t)0, SEEK_END);
+  ASSERT("Successful seek", status == 0);
+	
+#elif defined( OM_OS_WINDOWS )
 
-  status = fseek(_file, oldPosition, SEEK_SET);
-  ASSERT("Successful seek", status == 0); // tjb - error
+	// we have to rely upon fseek( _file, 0, SEEK_END ) to do the right thing
+  int status = fseek(_file, 0L, SEEK_END);
+  ASSERT("Successful seek", status == 0);
 
-  OMUInt64 result = position;
-  return result;
+#else
+
+	// have to be regular ISO
+  int status = fseek(_file, 0L, SEEK_END);
+  ASSERT("Successful seek", status == 0);
+
+#endif
+
+	// where is the end?
+	OMUInt64 result = position();
+
+	// back to where we started from
+	setPosition( oldposition );
+#endif  //change method of finding size
+	return result;
 }
 
 void OMStream::setSize(OMUInt64 newSize)
@@ -204,23 +240,79 @@ OMUInt64 OMStream::position(void) const
   PRECONDITION("No error on stream", ferror(_file) == 0);
 
   errno = 0;
+
+#if defined( OM_OS_UNIX )
+
+#if defined(OM_COMPILER_SGICC_MIPS_SGI)
+  OMInt64 position = ftell64( _file );
+  ASSERT("Successful tell", IMPLIES(position == static_cast<OMInt64>(-1), errno == 0));
+#else
+	// all POSIX-compliant
+  __off64_t position = ftello64( _file );
+  ASSERT("Successful tell", IMPLIES(position == (__off64_t)-1, errno == 0));
+#endif
+	
+#elif defined( OM_OS_WINDOWS )
+
+	// we have to rely upon Windows typedef __int64 fpos_t;
+	fpos_t position;
+	if( fgetpos( _file, &position ) ) {
+		ASSERT( "Successful tell", errno==0 );
+	}
+
+#else
+
+	// have to be regular ISO
   long int position = ftell(_file);
-  ASSERT("Successful tell", IMPLIES(position == -1L, errno == 0));
+
+#endif
 
   OMUInt64 result = position;
   return result;
+
 }
 
 void OMStream::setPosition(OMUInt64 newPosition)
 {
   TRACE("OMStream::setPosition");
 
-  ASSERT("Supported position", newPosition <= LONG_MAX); // tjb - limit
-
   ASSERT("No error on stream", ferror(_file) == 0);
+  errno = 0;
+
+#if defined( OM_OS_UNIX )
+
+
+#if defined(OM_COMPILER_SGICC_MIPS_SGI)
+	OMUInt64 position = newPosition;
+	int status = fseek64( _file, position, SEEK_SET );
+
+#else
+	// all POSIX-compliant
+	__off64_t position = newPosition;
+	int status = fseeko64( _file, position, SEEK_SET);
+#endif
+
+	ASSERT("Successful seek", status == 0);
+	
+#elif defined( OM_OS_WINDOWS )
+
+	// we have to rely upon Windows typedef __int64 fpos_t;
+	fpos_t position = newPosition;
+	if( fsetpos( _file, &position ) ) {
+		ASSERT( "Successful seek", errno==0 );
+	}
+
+#else
+
+	// have to be regular ISO
+  ASSERT("Supported position", newPosition <= LONG_MAX); // tjb - limit
   long int liNewPosition = static_cast<long int>(newPosition);
   int status = fseek(_file, liNewPosition, SEEK_SET);
-  ASSERT("Successful seek", status == 0); // tjb - error
+  ASSERT("Successful seek", status == 0);
+
+#endif
+
+
 }
 
 bool OMStream::isWritable(void) const
