@@ -158,7 +158,7 @@ private:
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMContainerElement>
-template <typename ReferencedObject>
+template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetElement : public
                              OMStrongReferenceVectorElement<ReferencedObject> {
 public:
@@ -172,11 +172,12 @@ public:
                               const char* name,
                               OMUInt32 localKey,
                               OMUInt32 referenceCount,
-                              OMUniqueObjectIdentification identification);
+                              UniqueIdentification identification);
 
     // @cmember Copy constructor.
   OMStrongReferenceSetElement(
-                     const OMStrongReferenceSetElement<ReferencedObject>& rhs);
+                 const OMStrongReferenceSetElement<UniqueIdentification,
+                                                   ReferencedObject>& rhs);
 
     // @cmember Destructor.
   ~OMStrongReferenceSetElement(void);
@@ -184,17 +185,20 @@ public:
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMSet>.
     //          This operator does not provide assignment of object references.
-  OMStrongReferenceSetElement<ReferencedObject>& operator=(
-                     const OMStrongReferenceSetElement<ReferencedObject>& rhs);
+  OMStrongReferenceSetElement<UniqueIdentification,
+                              ReferencedObject>& operator=(
+                 const OMStrongReferenceSetElement<UniqueIdentification,
+                                                   ReferencedObject>& rhs);
 
     // @cmember Equality.
     //          This operator provides value semantics for <c OMSet>.
     //          This operator does not provide equality of object references.
   bool operator== (
-               const OMStrongReferenceSetElement<ReferencedObject>& rhs) const;
+           const OMStrongReferenceSetElement<UniqueIdentification,
+                                             ReferencedObject>& rhs) const;
 
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
-  const OMUniqueObjectIdentification identification(void) const;
+  const UniqueIdentification identification(void) const;
 
     // @cmember The count of weak references to this
     //          <c OMStrongReferenceSetElement>.
@@ -207,7 +211,7 @@ private:
     //          The element's unique key is in memory even when the
     //          referenced object is not. That way we can tell if an
     //          object is present in a container without loading the object.
-  OMUniqueObjectIdentification _identification;
+  UniqueIdentification _identification;
 
     // @cmember The count of weak references to this
     //          <c OMStrongReferenceSetElement>.
