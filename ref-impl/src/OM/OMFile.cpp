@@ -52,6 +52,7 @@ OMFile* OMFile::openRead(const wchar_t* fileName,
 
   OMStoredObject* store = OMStoredObject::openRead(fileName);
   OMFile* newFile = new OMFile(readOnlyMode, store, factory);
+  ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
 
@@ -63,6 +64,7 @@ OMFile* OMFile::openModify(const wchar_t* fileName,
 
   OMStoredObject* store = OMStoredObject::openModify(fileName);
   OMFile* newFile = new OMFile(modifyMode, store, factory);
+  ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
 
@@ -90,6 +92,7 @@ OMFile* OMFile::createModify(const wchar_t* fileName,
 
   OMStoredObject* store = OMStoredObject::createModify(fileName);
   OMFile* newFile = new OMFile(modifyMode, store, factory, root);
+  ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
 
@@ -154,6 +157,7 @@ OMObjectDirectory* OMFile::objectDirectory(void)
 
   if (_objectDirectory == 0) {
     _objectDirectory = new OMObjectDirectory(OM_OBJECT_DIRECTORY_CAPACITY);
+    ASSERT("Valid heap pointer", _objectDirectory != 0);
   }
   return _objectDirectory;
 }
