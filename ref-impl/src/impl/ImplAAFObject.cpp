@@ -392,16 +392,17 @@ AAFRESULT ImplPropertyCollection::GetNthElement
 
 
 ImplAAFObject::ImplAAFObject ()
-  : _pProperties (0),
+  : _generation(PID_InterchangeObject_Generation, "Generation"),
+	_pProperties (0),
 	_cachedDefinition (0),
 	_apSavedProps (0),
 	_savedPropsSize (0),
-	_savedPropsCount (0),
-	_generation(			PID_InterchangeObject_Generation,		"Generation")
+	_savedPropsCount (0)
 {
+  _persistentProperties.put(_generation.address());
+
   const aafUID_t null_uid = { 0 };
   _soid = null_uid;
-	_persistentProperties.put(		_generation.address());
 }
 
 
@@ -512,17 +513,69 @@ void ImplAAFObject::RememberAddedProp (OMProperty * pProp)
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::SetGeneration (const aafUID_t & /*generation*/)
+    ImplAAFObject::GetGeneration (ImplAAFIdentification ** ppResult)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (!ppResult)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+
+  if (! pvtIsGenerationTracked ())
+	return AAFRESULT_INVALID_PARAM;
+
+  aafUID_t gen;
+  hr = GetGenerationAUID (&gen);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
+  ImplAAFHeaderSP pHead;
+  hr = MyHeadObject (&pHead);
+  if (AAFRESULT_FAILED (hr))
+	// This object is not attached to a file.
+	return AAFRESULT_OBJECT_NOT_ATTACHED;
+
+  assert (ppResult);
+  return pHead->LookupIdentification (gen, ppResult);
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::GetGeneration (aafUID_t *  /*pGeneration*/)
+    ImplAAFObject::GetGenerationAUID (aafUID_t * pResult)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  /*
+   * BobT note!  We may eventually implement
+   * InterchangeObject::Generation as a weak reference to an
+   * Identification object (instead of an AUID).  If so, then this
+   * method will simply call GetGeneration() for the Identification,
+   * and get the AUID from the returned Identification.  It will
+   * probably look something like this:
+   * 
+   * if (!pResult)
+   *   return AAFRESULT_NULL_PARAM;
+   * 
+   * ImplAAFIdentificationSP pId;
+   * AAFRESULT hr;
+   * hr = GetGeneration (&pId);
+   * if (AAFRESULT_FAILED (hr))
+   *   return hr;
+   * 
+   * return pId->GetGeneration (pResult);
+   * 
+   * Instead, the Generation property is implemented as an AUID so
+   * we'll simply return the AUID from the property without going
+   * through the Identification object.
+   */
+
+  if (!pResult)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! pvtIsGenerationTracked())
+	return AAFRESULT_INVALID_PARAM;
+
+  assert (_generation.isPresent());
+  *pResult = _generation;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -1099,4 +1152,62 @@ AAFRESULT ImplAAFObject::InitializeExtensions(void)
 
 
   return hr;
+}
+
+
+
+aafBoolean_t ImplAAFObject::pvtIsGenerationTracked() const
+{
+  return _generation.isPresent() ? kAAFTrue : kAAFFalse;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFObject::IsGenerationTracked (aafBoolean_t * pResult) const
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+
+  *pResult = pvtIsGenerationTracked();
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFObject::EnableGenerationTracking ()
+{
+  if (! _generation.isPresent())
+	{
+	  aafUID_t nullUid = { 0 };
+	  _generation = nullUid;
+	}
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFObject::DisableGenerationTracking ()
+{
+  if (_generation.isPresent())
+	{
+	  _generation.remove();
+	}
+  return AAFRESULT_SUCCESS;
+}
+
+
+void ImplAAFObject::onSave(void* clientContext) const
+{
+  if (clientContext)
+	{
+	  aafUID_t * pGen = (aafUID_t*) clientContext;
+	  if (pvtIsGenerationTracked())
+		{
+		  assert (pGen);
+		  ImplAAFObject * pNonConstThis = (ImplAAFObject*) this;
+		  pNonConstThis->_generation = *pGen;
+		}
+	}
 }

@@ -36,6 +36,7 @@
 //
 class ImplEnumAAFProperties;
 class ImplAAFClassDef;
+class ImplAAFIdentification;
 class ImplAAFProperty;
 class ImplAAFPropertyDef;
 class ImplAAFPropertyValue;
@@ -64,12 +65,26 @@ public:
 
 
   //****************
-  // SetGeneration()
+  // EnableGenerationTracking()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetGeneration
-		// @parm [in] Generation ID to which this object is to be set
-        (const aafUID_t & generation);
+    EnableGenerationTracking ();
+
+
+  //****************
+  // DisableGenerationTracking()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    DisableGenerationTracking ();
+
+
+  //****************
+  // IsGenerationTracked()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsGenerationTracked
+        // @parm [out] set to true if tracked, false otherwise.
+        (aafBoolean_t * pResult) const;
 
 
   //****************
@@ -77,6 +92,16 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetGeneration
+		// @parm [out] Identification corresponding to this object's
+		// generation
+        (ImplAAFIdentification **  ppResult);
+
+
+  //****************
+  // GetGenerationAUID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetGenerationAUID
 		// @parm [out] Generation ID into which this object's generation is to be written
         (aafUID_t *  pGeneration);
 
@@ -203,7 +228,14 @@ public:
   // object.
   void RememberAddedProp (OMProperty * pProp);
 
+  aafBoolean_t pvtIsGenerationTracked() const;
+
+  // Override callback from OMStorable
+  virtual void onSave(void* clientContext) const;
+
 private:
+
+  OMFixedSizeProperty<aafUID_t> _generation;
 
   // private method
   AAFRESULT InitProperties ();
@@ -214,7 +246,6 @@ private:
 
   // stored object ID
   aafUID_t                 _soid;
-	OMFixedSizeProperty<aafMobID_t>	_generation;
 
   // 
   // The following section is intended only to delete added properties
