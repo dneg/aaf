@@ -169,6 +169,7 @@ interface IAAFEssenceMultiAccess;
 interface IAAFTypeDefVariableArrayEx;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
+interface IAAFTimelineMobSlot2;
 interface IAAFComponent2;
 #else
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
@@ -300,6 +301,7 @@ typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 typedef interface IAAFMob2 IAAFMob2;
+typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
 typedef interface IAAFComponent2 IAAFComponent2;
 #endif
 
@@ -13472,6 +13474,8 @@ DECLARE_INTERFACE_(IAAFMetaDefinition, IUnknown)
 
 
 
+
+
 #ifndef __IAAFMob_INTERFACE_DEFINED__
 #define __IAAFMob_INTERFACE_DEFINED__
 
@@ -14459,6 +14463,8 @@ DECLARE_INTERFACE_(IAAFMob, IUnknown)
   STDMETHOD(RemoveKLVData) (THIS_
     // KLV data object to remove
     /*[in]*/ IAAFKLVData * pData) PURE;
+
+
 
 
 
@@ -21616,7 +21622,6 @@ DECLARE_INTERFACE_(IAAFTimelineMobSlot, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFTimelineMobSlot methods *** */
-
   //***********************************************************
   //
   // Initialize()
@@ -21736,10 +21741,16 @@ DECLARE_INTERFACE_(IAAFTimelineMobSlot, IUnknown)
     // Origin property value
     /*[in]*/ aafPosition_t  origin) PURE;
 
+
+
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFTimelineMobSlot_INTERFACE_DEFINED__
-
 
 
 // IAAFTransition
@@ -34227,6 +34238,8 @@ DECLARE_INTERFACE_(IAAFMasterMobEx, IUnknown)
 
 
 
+
+
 #ifndef __IAAFMob2_INTERFACE_DEFINED__
 #define __IAAFMob2_INTERFACE_DEFINED__
 
@@ -35364,9 +35377,422 @@ DECLARE_INTERFACE_(IAAFMob2, IUnknown)
    //
 
 
+  //***********************************************************
+  //
+  // AppendNewStaticSlot()
+  //
+  // This method creates a new static mob slot with the given
+  // property values and appends it to the input mob.
+  // 
+  // The returned mob slot is AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the pSlotName pointer is valid.
+  // - the ppNewSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSegment, pSlotName, or ppNewSlot arguments is null.
+  //
+  STDMETHOD(AppendNewStaticSlot) (THIS_
+    // Segment to append as slot component
+    /*[in]*/ IAAFSegment * pSegment,
+
+    // new slot ID
+    /*[in]*/ aafSlotID_t  slotID,
+
+    // new slot name
+    /*[in, string]*/ aafCharacter_constptr  pSlotName,
+
+    // Newly created slot
+    /*[out]*/ IAAFStaticMobSlot ** ppNewSlot) PURE;
+
+
+  //***********************************************************
+  //
+  // AppendNewEventSlot()
+  //
+  // This method creates a new event mob slot with the given
+  // property values and appends it to the input mob.
+  // 
+  // The returned mob slot is AddRef()ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSegment pointer is valid.
+  // - the pSlotName pointer is valid.
+  // - the ppNewSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any of pSegment, pSlotName, or ppNewSlot arguments is null.
+  //
+  STDMETHOD(AppendNewEventSlot) (THIS_
+    // Edit rate property value
+    /*[in]*/ aafRational_t  editRate,
+
+    // Segment to append as slot component
+    /*[in]*/ IAAFSegment * pSegment,
+
+    // new slot ID
+    /*[in]*/ aafSlotID_t  slotID,
+
+    // new slot name
+    /*[in, string]*/ aafCharacter_constptr  pSlotName,
+
+    // The slot origin
+    /*[in]*/ aafPosition_t  origin,
+
+    // Newly created slot
+    /*[out]*/ IAAFEventMobSlot ** ppNewSlot) PURE;
+	     
+
+
   END_INTERFACE
 };
 #endif // __IAAFMob2_INTERFACE_DEFINED__
+
+
+
+// IAAFTimelineMobSlot2
+
+// ************************
+//
+// Interface IAAFTimelineMobSlot2
+//
+// ************************
+
+
+
+#ifndef __IAAFTimelineMobSlot2_INTERFACE_DEFINED__
+#define __IAAFTimelineMobSlot2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFTimelineMobSlot2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFTimelineMobSlot2
+
+DECLARE_INTERFACE_(IAAFTimelineMobSlot2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFTimelineMobSlot2 methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Initializes a newly allocated, empty
+  // IAAFTimelineMobSlot2-supporting object.  This method must be
+  // called after allocation, and before any other method can be
+  // called.
+  //
+  // Succeeds if:
+  // - Initialize() has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // GetEditRate()
+  //
+  // This method will get the edit rate for this mob slot.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pEditRate pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEditRate arg is NULL.
+  //
+  STDMETHOD(GetEditRate) (THIS_
+    // Edit rate property value
+    /*[out,retval]*/ aafRational_t *  pEditRate) PURE;
+
+
+  //***********************************************************
+  //
+  // SetEditRate()
+  //
+  // This method will get set edit rate for this mob slot.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  STDMETHOD(SetEditRate) (THIS_
+    // Edit rate property value
+    /*[in]*/ aafRational_constref  editRate) PURE;
+
+
+  //***********************************************************
+  //
+  // GetOrigin()
+  //
+  // This method will return the origin of this mob slot.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pOrigin pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pOrigin arg is NULL.
+  //
+  STDMETHOD(GetOrigin) (THIS_
+    // Origin property value
+    /*[out,retval]*/ aafPosition_t *  pOrigin) PURE;
+
+
+  //***********************************************************
+  //
+  // SetOrigin()
+  //
+  // This method will set the origin of this mob slot.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.).
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize() called on it.
+  //
+  STDMETHOD(SetOrigin) (THIS_
+    // Origin property value
+    /*[in]*/ aafPosition_t  origin) PURE;
+
+  //***********************************************************
+  //
+  // GetMarkIn()
+  //
+  // Gets the MarkIn property of this TimelineMobSlot.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the result pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *result.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMarkIn arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetMarkIn) (THIS_
+    // MarkIn property value
+    /*[out,retval]*/ aafPosition_t *  result) PURE;
+
+  //***********************************************************
+  //
+  // SetMarkIn()
+  //
+  // Sets the MarkIn property of this TimelineMobSlot.
+  // This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  //
+  // If this method fails the MarkIn property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetMarkIn) (THIS_
+    // MarkIn property value
+    /*[in]*/ aafPosition_t  value) PURE;
+
+  //***********************************************************
+  //
+  // GetMarkOut()
+  //
+  // Gets the MarkOut property of this TimelineMobSlot.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the result pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *result.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMarkIn arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetMarkOut) (THIS_
+    // MarkOut property value
+    /*[out,retval]*/ aafPosition_t *  result) PURE;
+
+  //***********************************************************
+  //
+  // SetMarkOut()
+  //
+  // Sets the MarkOut property of this TimelineMobSlot.
+  // This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  //
+  // If this method fails the MarkOut property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetMarkOut) (THIS_
+    // MarkOut property value
+    /*[in]*/ aafPosition_t  value) PURE;
+
+  //***********************************************************
+  //
+  // GetUserPos()
+  //
+  // Gets the UserPos property of this TimelineMobSlot.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the result pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *result.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - result arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetUserPos) (THIS_
+    // UserPos property value
+    /*[out,retval]*/ aafPosition_t *  result) PURE;
+
+  //***********************************************************
+  //
+  // SetUserPos()
+  //
+  // Sets the UserPos property of this TimelineMobSlot.
+  // This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  //
+  // If this method fails the UserPos property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetUserPos) (THIS_
+    // UserPos property value
+    /*[in]*/ aafPosition_t  value) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFTimelineMobSlot2_INTERFACE_DEFINED__
 
 
 
