@@ -311,7 +311,7 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -449,8 +449,8 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -601,9 +601,9 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -772,10 +772,10 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/,
-      /*%17*/ %19 .%18-indirection /*%20*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/,
+      /*%17*/ .%18-adornment%19 .%18-indirection /*%20*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -964,11 +964,11 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/,
-      /*%17*/ %19 .%18-indirection /*%20*/,
-      /*%22*/ %24 .%23-indirection /*%25*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/,
+      /*%17*/ .%18-adornment%19 .%18-indirection /*%20*/,
+      /*%22*/ .%23-adornment%24 .%23-indirection /*%25*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1177,12 +1177,12 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/,
-      /*%17*/ %19 .%18-indirection /*%20*/,
-      /*%22*/ %24 .%23-indirection /*%25*/,
-      /*%27*/ %29 .%28-indirection /*%30*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/,
+      /*%17*/ .%18-adornment%19 .%18-indirection /*%20*/,
+      /*%22*/ .%23-adornment%24 .%23-indirection /*%25*/,
+      /*%27*/ .%28-adornment%29 .%28-indirection /*%30*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1409,13 +1409,13 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/,
-      /*%17*/ %19 .%18-indirection /*%20*/,
-      /*%22*/ %24 .%23-indirection /*%25*/,
-      /*%27*/ %29 .%28-indirection /*%30*/,
-      /*%32*/ %34 .%33-indirection /*%35*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/,
+      /*%17*/ .%18-adornment%19 .%18-indirection /*%20*/,
+      /*%22*/ .%23-adornment%24 .%23-indirection /*%25*/,
+      /*%27*/ .%28-adornment%29 .%28-indirection /*%30*/,
+      /*%32*/ .%33-adornment%34 .%33-indirection /*%35*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1660,14 +1660,14 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/,
-      /*%17*/ %19 .%18-indirection /*%20*/,
-      /*%22*/ %24 .%23-indirection /*%25*/,
-      /*%27*/ %29 .%28-indirection /*%30*/,
-      /*%32*/ %34 .%33-indirection /*%35*/,
-      /*%37*/ %39 .%38-indirection /*%40*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/,
+      /*%17*/ .%18-adornment%19 .%18-indirection /*%20*/,
+      /*%22*/ .%23-adornment%24 .%23-indirection /*%25*/,
+      /*%27*/ .%28-adornment%29 .%28-indirection /*%30*/,
+      /*%32*/ .%33-adornment%34 .%33-indirection /*%35*/,
+      /*%37*/ .%38-adornment%39 .%38-indirection /*%40*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1931,15 +1931,15 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/,
-      /*%17*/ %19 .%18-indirection /*%20*/,
-      /*%22*/ %24 .%23-indirection /*%25*/,
-      /*%27*/ %29 .%28-indirection /*%30*/,
-      /*%32*/ %34 .%33-indirection /*%35*/,
-      /*%37*/ %39 .%38-indirection /*%40*/,
-      /*%42*/ %44 .%43-indirection /*%45*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/,
+      /*%17*/ .%18-adornment%19 .%18-indirection /*%20*/,
+      /*%22*/ .%23-adornment%24 .%23-indirection /*%25*/,
+      /*%27*/ .%28-adornment%29 .%28-indirection /*%30*/,
+      /*%32*/ .%33-adornment%34 .%33-indirection /*%35*/,
+      /*%37*/ .%38-adornment%39 .%38-indirection /*%40*/,
+      /*%42*/ .%43-adornment%44 .%43-indirection /*%45*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2222,16 +2222,16 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/,
-      /*%17*/ %19 .%18-indirection /*%20*/,
-      /*%22*/ %24 .%23-indirection /*%25*/,
-      /*%27*/ %29 .%28-indirection /*%30*/,
-      /*%32*/ %34 .%33-indirection /*%35*/,
-      /*%37*/ %39 .%38-indirection /*%40*/,
-      /*%42*/ %44 .%43-indirection /*%45*/,
-      /*%47*/ %49 .%48-indirection /*%50*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/,
+      /*%17*/ .%18-adornment%19 .%18-indirection /*%20*/,
+      /*%22*/ .%23-adornment%24 .%23-indirection /*%25*/,
+      /*%27*/ .%28-adornment%29 .%28-indirection /*%30*/,
+      /*%32*/ .%33-adornment%34 .%33-indirection /*%35*/,
+      /*%37*/ .%38-adornment%39 .%38-indirection /*%40*/,
+      /*%42*/ .%43-adornment%44 .%43-indirection /*%45*/,
+      /*%47*/ .%48-adornment%49 .%48-indirection /*%50*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2534,17 +2534,17 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%07*/ %09 .%08-indirection /*%10*/,
-      /*%12*/ %14 .%13-indirection /*%15*/,
-      /*%17*/ %19 .%18-indirection /*%20*/,
-      /*%22*/ %24 .%23-indirection /*%25*/,
-      /*%27*/ %29 .%28-indirection /*%30*/,
-      /*%32*/ %34 .%33-indirection /*%35*/,
-      /*%37*/ %39 .%38-indirection /*%40*/,
-      /*%42*/ %44 .%43-indirection /*%45*/,
-      /*%47*/ %49 .%48-indirection /*%50*/,
-      /*%52*/ %54 .%53-indirection /*%55*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%07*/ .%08-adornment%09 .%08-indirection /*%10*/,
+      /*%12*/ .%13-adornment%14 .%13-indirection /*%15*/,
+      /*%17*/ .%18-adornment%19 .%18-indirection /*%20*/,
+      /*%22*/ .%23-adornment%24 .%23-indirection /*%25*/,
+      /*%27*/ .%28-adornment%29 .%28-indirection /*%30*/,
+      /*%32*/ .%33-adornment%34 .%33-indirection /*%35*/,
+      /*%37*/ .%38-adornment%39 .%38-indirection /*%40*/,
+      /*%42*/ .%43-adornment%44 .%43-indirection /*%45*/,
+      /*%47*/ .%48-adornment%49 .%48-indirection /*%50*/,
+      /*%52*/ .%53-adornment%54 .%53-indirection /*%55*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2840,9 +2840,9 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%08*/ %10 .%09-indirection /*%11*/,
-      /*%14*/ %16 .%15-indirection /*%17*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%08*/ .%09-adornment%10 .%09-indirection /*%11*/,
+      /*%14*/ .%15-adornment%16 .%15-indirection /*%17*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -3021,10 +3021,10 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-implc 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-      /*%08*/ %10 .%09-indirection /*%11*/,
-      /*%14*/ %16 .%15-indirection /*%17*/,
-      /*%20*/ %22 .%21-indirection /*%23*/)
+    Impl%%01::%01 (/*%02*/ .%03-adornment%04 .%03-indirection /*%05*/,
+      /*%08*/ .%09-adornment%10 .%09-indirection /*%11*/,
+      /*%14*/ .%15-adornment%16 .%15-indirection /*%17*/,
+      /*%20*/ .%21-adornment%22 .%21-indirection /*%23*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
