@@ -113,6 +113,7 @@ echo "<!-- If you edit this file your changes may be lost. -->" >> $index
 echo "<!-- -->" >> $index
 
 echo "<title>Index of cvs change logs</title>" >> $index
+echo "<h1 align=center>Index of cvs change logs</h1>" >> $index
 echo "<ul>" >> $index
 
 let i=$n-1

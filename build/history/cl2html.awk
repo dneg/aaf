@@ -46,6 +46,7 @@ END {
 }
 
 function printKey() {
+  printf("<h1>Key</h1>\n");
   printf("<TABLE>\n");
   printf("<TR><TH>Color</TH><TH>Component</TH></TR>\n");
   for (i in names) {
@@ -64,6 +65,7 @@ function printHeader() {
 <!-- -->\n");
   printf("<title>cvs change log</title>\n");
   printKey();
+  printf("<h1 align=center>Change log</h1>\n");
   printf("\
 <TABLE>\n\
 <TR>\n\
