@@ -39,6 +39,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 #include "CAAFBuiltinDefs.h"
 #include "AAFDefUIDs.h"
@@ -74,6 +75,17 @@ static const aafUID_t DDEF_TEST =
 { 0x81831639, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 
+//{060c2b340205110101001000-13-00-00-00-{f9d78788-8d6f-11d4-a380-009027dfca6a}}
+
+static const aafMobID_t gMobID = {
+
+{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
+
+0x13, 0x00, 0x00, 0x00, 
+
+{0xf9d78788, 0x8d6f, 0x11d4, 0xa3, 0x80, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a}};
+
+
 class GPITriggerTest
 {
 public:
@@ -92,7 +104,6 @@ private:
   bool _bWritableFile;
   IAAFHeader *_pHeader;
   IAAFDictionary *_pDictionary;
-  aafMobID_t _compositionMobID;
 
   // MobSlot static data
   static const wchar_t* _slotName;
@@ -107,7 +118,8 @@ private:
 
 const aafUID_t NIL_UID = { 0 };
 
-extern "C" HRESULT CAAFGPITrigger_test()
+extern "C" HRESULT CAAFGPITrigger_test(testMode_t mode);
+extern "C" HRESULT CAAFGPITrigger_test(testMode_t mode)
 {
   HRESULT hr = S_OK;
   aafProductIdentification_t	ProductInfo = {0};
@@ -134,7 +146,8 @@ extern "C" HRESULT CAAFGPITrigger_test()
   try
   {
     // Attempt to create a test file
-    test.Create(pFileName, &ProductInfo);
+	if(mode == kAAFUnitTestReadWrite)
+	    test.Create(pFileName, &ProductInfo);
 
     // Attempt to read the test file.
     test.Open(pFileName);
@@ -164,7 +177,6 @@ GPITriggerTest::GPITriggerTest() :
   _pHeader(NULL),
   _pDictionary(NULL)
 {
-  memset(&_compositionMobID, 0, sizeof(_compositionMobID));
 }
 
 GPITriggerTest::~GPITriggerTest()
@@ -307,12 +319,12 @@ void GPITriggerTest::CreateGPITrigger()
     // Append event slot to the composition mob.
     checkResult(pMob->AppendSlot(pMobSlot));
 
-    // Attach the mob to the header...
-    checkResult(_pHeader->AddMob(pMob));
-
     // Save the id of the composition mob that contains our test
     // event mob slot.
-    checkResult(pMob->GetMobID(&_compositionMobID));
+    checkResult(pMob->SetMobID(gMobID));
+
+    // Attach the mob to the header...
+    checkResult(_pHeader->AddMob(pMob));
   }
   catch (HRESULT& rHR)
   {
@@ -390,7 +402,7 @@ void GPITriggerTest::OpenGPITrigger()
   try
   {
     // Get the composition mob that we created to hold the
-    checkResult(_pHeader->LookupMob(_compositionMobID, &pMob));
+    checkResult(_pHeader->LookupMob(gMobID, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
     checkResult(pMob->GetSlots(&pEnumSlots));

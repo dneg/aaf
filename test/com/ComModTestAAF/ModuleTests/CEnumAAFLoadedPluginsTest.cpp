@@ -35,6 +35,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
@@ -122,7 +123,8 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	return hr;
 }
 
-extern "C" HRESULT CEnumAAFLoadedPlugins_test()
+extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t );
+extern "C" HRESULT CEnumAAFLoadedPlugins_test(testMode_t /*mode*/)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IEnumAAFLoadedPlugins	*pEnum = NULL, *pCloneEnum = NULL;

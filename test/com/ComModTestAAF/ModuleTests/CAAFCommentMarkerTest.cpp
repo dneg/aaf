@@ -38,6 +38,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "CAAFBuiltinDefs.h"
 #include "AAFDefUIDs.h"
 
@@ -105,7 +106,8 @@ private:
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-extern "C" HRESULT CAAFCommentMarker_test()
+extern "C" HRESULT CAAFCommentMarker_test(testMode_t mode);
+extern "C" HRESULT CAAFCommentMarker_test(testMode_t mode)
 {
 	HRESULT hr = S_OK;
 	aafProductIdentification_t	ProductInfo = {0};
@@ -132,7 +134,8 @@ extern "C" HRESULT CAAFCommentMarker_test()
 	try
 	{
 		// Attempt to create a test file
-		test.Create(pFileName, &ProductInfo);
+		if(mode == kAAFUnitTestReadWrite)
+			test.Create(pFileName, &ProductInfo);
 		
 		// Attempt to read the test file.
 		test.Open(pFileName);

@@ -35,6 +35,7 @@
 
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
@@ -127,7 +128,8 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	return hr;
 }
 
-extern "C" HRESULT CAAFPluginManager_test()
+extern "C" HRESULT CAAFPluginManager_test(testMode_t );
+extern "C" HRESULT CAAFPluginManager_test(testMode_t /*mode*/)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	IEnumAAFLoadedPlugins	*pEnum;

@@ -29,6 +29,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
@@ -120,8 +121,8 @@ aafBoolean_t  AreUnksSame(T1& cls1, T2& cls2)
 }
 
 
-static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const pDict,
-							   const aafBoolean_t bMinimalTesting)
+static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const /*pDict*/,
+							   const aafBoolean_t /*bMinimalTesting*/)
 							   
 {
 	//CAAFBuiltinDefs defs (pDict);
@@ -476,7 +477,8 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 	
 }
 
-extern "C" HRESULT CEnumAAFProperties_test()
+extern "C" HRESULT CEnumAAFProperties_test(testMode_t mode);
+extern "C" HRESULT CEnumAAFProperties_test(testMode_t mode)
 {
 	
 	HRESULT hr = AAFRESULT_SUCCESS;
@@ -484,7 +486,10 @@ extern "C" HRESULT CEnumAAFProperties_test()
 	
 	try
 	{
-		hr = CreateAAFFile(	pFileName );
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName);
+		else
+			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );		
 		

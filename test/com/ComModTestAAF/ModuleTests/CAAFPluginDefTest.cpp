@@ -44,6 +44,7 @@ static wchar_t *manuf3URL = L"www.softimage.com";
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFClassDefUIDs.h"
@@ -69,7 +70,7 @@ aafVersionType_t sampleMaxAPIVersion = { 40, 41 };//, 42, 43, kAAFVersionBeta };
 static wchar_t *manufName = L"Jeff's Plugin-O-Rama";
 static wchar_t *manufRev = L"Rev0.0.0a0";
 
-aafBool	EqualVersion(aafVersionType_t *vers1, aafVersionType_t *vers2)
+static aafBool	EqualVersion(aafVersionType_t *vers1, aafVersionType_t *vers2)
 {
 	return(memcmp((char *)vers1, (char *)vers2, sizeof(aafVersionType_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
@@ -499,14 +500,18 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
  
 
-extern "C" HRESULT CAAFPluginDef_test()
+extern "C" HRESULT CAAFPluginDef_test(testMode_t mode);
+extern "C" HRESULT CAAFPluginDef_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"AAFPluginDefTest.aaf";
 
 	try
 	{
-		hr = CreateAAFFile(pFileName);
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName);
+		else
+			hr = AAFRESULT_SUCCESS;
 		if (SUCCEEDED(hr))
 			hr = ReadAAFFile(pFileName);
 	}
