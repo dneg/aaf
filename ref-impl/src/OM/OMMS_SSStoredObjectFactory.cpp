@@ -89,7 +89,7 @@ OMStoredObject*
 OMMS_SSStoredObjectFactory::openFile (OMRawStorage* rawStorage,
                                      const OMFile::OMAccessMode mode)
 {
-  TRACE("OMSSStoredObject::openFile");
+  TRACE("OMMS_SSStoredObjectFactory::openFile");
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
                              (mode == OMFile::readOnlyMode));
