@@ -38,7 +38,6 @@
 
 #include "AAFPrivate.h"
 #include "AAFResult.h"
-#include "AAFFileKinds.h"
 
 #include "ImplAAFPluginManager.h"
 #include "ImplAAFFile.h"
@@ -570,13 +569,65 @@ STDAPI ImplAAFFileOpenNewModify (
 // AAFFileOpenNewModifyEx()
 //
 STDAPI ImplAAFFileOpenNewModifyEx (
-  const aafCharacter *  /* pFileName */,
-  aafUID_constptr  /* pFileKind */,
-  aafUInt32  /* modeFlags */,
-  aafProductIdentification_t *  /* pIdent */,
-  ImplAAFFile ** /* ppFile */)
+  // Null-terminated string containing name of filesystem file to be
+  // opened for modification.  Filename must be in a form that would
+  // be acceptable to StgOpenStorage() for this platform.
+  /*[in, string]*/ const aafCharacter *  pFileName,
+
+	// the FileKind to create. Must be one of the constants defined in
+	// include/AAFFileKinds.h, or 0
+	// a stored object factory must have been registered by ImplAAFFile.cpp
+  /*[in]*/ aafUID_constptr pFileKind,
+
+  // File open mode flags.  May be any of the following ORed together.
+  // All other bits must be set to zero.
+  //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
+  //    Default is buffered.
+  //  - kAAFFileModeRevertable - to indicate that Revert is possible
+  //    on this file (for all changes except those to essence).
+  /*[in]*/ aafUInt32  modeFlags,
+
+  // Identification of the application which is creating this file.
+  /*[in]*/ aafProductIdentification_t *  pIdent,
+
+  // Pointer to buffer to receive pointer to new file.
+  /*[out]*/ ImplAAFFile ** ppFile)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+  // this implementation requires the OM RAW_STORAGE apis
+  // an implementation using OM NAMED_FILE apis is possible, however it
+  // would require additional method on IAAFFile::OpenNewModifyEx()
+  // which is not felt to be worthwhile
+  // #if USE_RAW_STORAGE
+  IAAFRawStorage * pRawStg;
+  AAFRESULT hr = AAFCreateRawStorageDisk
+    (pFileName,
+     kAAFFileExistence_new,
+     kAAFFileAccess_modify,
+     &pRawStg);
+  if (AAFRESULT_SUCCEEDED (hr))
+    {
+      hr = ImplAAFCreateAAFFileOnRawStorage
+	(pRawStg,
+	 kAAFFileExistence_new,
+	 kAAFFileAccess_modify,
+	 pFileKind,
+	 modeFlags,
+	 pIdent,
+	 ppFile);
+      if (AAFRESULT_SUCCEEDED (hr))
+	{
+	  assert (ppFile);
+	  assert (*ppFile);
+	  hr = (*ppFile)->Open ();
+	}
+    }
+  if (pRawStg)
+    {
+      pRawStg->Release ();
+    }
+  
+  return hr;
 }
 
 //***********************************************************
