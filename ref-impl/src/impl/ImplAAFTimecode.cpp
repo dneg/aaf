@@ -63,6 +63,11 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	XPROTECT()
 	{
+		if (isInitialized ()) 
+		{
+			return AAFRESULT_ALREADY_INITIALIZED;
+		}
+
 		if (timecode == NULL)
 		{
 			return AAFRESULT_NULL_PARAM;
@@ -86,6 +91,8 @@ AAFRESULT STDMETHODCALLTYPE
 		  _drop = kAAFFalse;
 		}
 		_FPS = timecode->fps;
+		
+		setInitialized ();
 	}
 	XEXCEPT
 	XEND;
@@ -98,6 +105,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimecode::GetTimecode (aafTimecode_t *timecode)
 {
+	if ( !isInitialized ()) 
+	{
+		return AAFRESULT_NOT_INITIALIZED;
+	}
+
 	if (timecode == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
@@ -122,6 +134,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimecode::SetTimecode (aafTimecode_t  *timecode)
 {
+	if ( !isInitialized ()) 
+	{
+		return AAFRESULT_NOT_INITIALIZED;
+	}
 	if (timecode == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
