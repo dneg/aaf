@@ -33,10 +33,6 @@
 #include "ImplAAFLocator.h"
 #endif
 
-#ifndef __ImplAAFPluggableCode_h__
-#include "ImplAAFPluggableCode.h"
-#endif
-
 #ifndef __ImplEnumAAFPluginLocators_h__
 #include "ImplEnumAAFPluginLocators.h"
 #endif
@@ -832,13 +828,6 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPluginDescriptor::GetPluggableCode (
-      ImplAAFPluggableCode ** /*pCode*/)
-{
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-}
 
 
 AAFRESULT STDMETHODCALLTYPE
