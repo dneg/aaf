@@ -2549,7 +2549,7 @@ HRESULT dumpRawStreamPropertyValue
 		if (bytesLeft > kStreamReadSize)
 		  bytes = kStreamReadSize;
 		else
-		  bytes = bytesLeft;
+		  bytes = (aafUInt32)bytesLeft;
 		
 		streamResult = pStreamType->Read(pPVal, bytes, streamBuffer, &bytesRead);
 		if (AAFRESULT_FAILED(streamResult))
@@ -2563,7 +2563,7 @@ HRESULT dumpRawStreamPropertyValue
 		os << " /*" << dec << setw(kOffsetWidth) << ostream_int64(offset) << " */";  
 		offset += kStreamBytesPerLine;    
 		
-		aafUInt64 i;
+		aafUInt32 i;
 		char savedFill = os.fill();
 		for (i = 0; (i < kStreamBytesPerLine) && (i < bytesRead);)
 		  {

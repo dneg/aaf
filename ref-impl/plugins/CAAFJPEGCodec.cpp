@@ -2019,7 +2019,7 @@ void CAAFJPEGCodec::UpdateCalculatedData(void)
 	} /* end switch */
 
 	// The is true for RGB or YUV. (no alpha support)
-	_memBitsPerPixel = _componentWidth * 3;
+	_memBitsPerPixel = (aafInt16)(_componentWidth * 3);
 
 
 	// Computer the file bytes per sample.

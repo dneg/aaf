@@ -694,7 +694,7 @@ aafErr_t Int64ToString(
 			while(Int64Greater(workval, zero))
 			{
 				CHECK(DivideInt64byInt32(workval, base, &workval, &remainder));
-				tmpBuf[numDigits++] = remainder + '0';
+				tmpBuf[numDigits++] = (char)(remainder + '0');
 			}
 			if(negative)
 				tmpBuf[numDigits++] = '-';

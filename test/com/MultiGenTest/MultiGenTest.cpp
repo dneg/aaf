@@ -292,16 +292,17 @@ void ProcessCommandLineArgs( int argc, char** argv )
   vector<int> optionIndices;
   vector<CmdFunc*> optionCmdFuncs;
 
-  int i;
-  for( i = 1; i < argc; i++ ) {
-    string arg( argv[i] );
+  int j;
+  for( j = 1; j < argc; j++ ) {
+    string arg( argv[j] );
 
     if ( arg == "-r" || arg == "-run" ) {
-      optionIndices.push_back(i);
+      optionIndices.push_back(j);
       optionCmdFuncs.push_back( new RunCmd );
     }
   }
 
+  unsigned int i;
   optionIndices.push_back( argc );
   for(i = 0; i < optionIndices.size()-1; i++ ) {
 
