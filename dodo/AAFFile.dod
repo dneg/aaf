@@ -17,7 +17,7 @@ AD_HEAD
 
 AD_INCLUDE(AAFTypes)
 
-AD_FORWARD_DECLARATION(AAFSession)
+AD_FORWARD_DECLARATION(AAFHeader)
 
 AD_CLASS_UUID(9346ACD2, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
 AD_DEFAULT_UUID(9346ACD3, 2713, 11d2, 80, 35, 00, 60, 08, 14, 3E, 6F)
@@ -31,5 +31,13 @@ AD_METHOD0(Close,
 AD_METHOD1(GetRevision,
 			[out], aafFileRev_t *,rev, Revision of the current file,
 			Get the revision of the current AAF file.)
+
+AD_XMETHOD1(GetHeader,
+			[retval][out],
+			objOut,
+			AAFHeader,
+			header,
+			Header of the current file,
+			Get the header of the current AAF file.)
 
 AD_CLASS_END
