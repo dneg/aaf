@@ -19,6 +19,7 @@
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
+#include "AAFUtils.h"
 
 
 extern "C" const aafClassID_t CLSID_EnumAAFComponents;
@@ -318,43 +319,37 @@ AAFRESULT STDMETHODCALLTYPE
 // 
 // Override from AAFSegment
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFSequence::SegmentOffsetToTC (/*[in]*/ aafPosition_t *  /*pOffset*/,
-  /*[out]*/ aafTimecode_t *  /*pTimecode*/)
+ImplAAFSequence::SegmentOffsetToTC (aafPosition_t*  pOffset,
+									aafTimecode_t*  pTimecode)
 {
-#if FULL_TOOLKIT
-	AAFIterate		*sequIter = NULL;
-	aafPosition_t	sequPos;
-	AAFTimecode	*subSegment = NULL;
-	AAFObject* tmpSlot = NULL;
-	aafErr_t aafError = AAFRESULT_SUCCESS;
-	aafLength_t		zeroLen = CvtInt32toLength(0, zeroLen);
+	ImplAAFTimecode*	pTC;
+	aafPosition_t		sequPos;
 	aafUInt32			frameOffset;	
-	aafLength_t	junk;
+	HRESULT				hr = AAFRESULT_SUCCESS;
 
-	CvtInt32toInt64(0, &junk);
-	XPROTECT(_file)
+	if (pOffset == NULL || pTimecode == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	hr = OffsetToTimecodeClip(*pOffset, &pTC, &sequPos);
+	if(SUCCEEDED(hr))
 	{
-		CHECK(OffsetToTimecodeClip(offset, &subSegment, &sequPos));
-		if(subSegment != NULL)
+		aafTimecode_t timecode;
+
+ 		hr = pTC->GetTimecode(&timecode);
+		if (SUCCEEDED(hr))
 		{
- 			*found = TRUE;
- 			CHECK(subSegment->GetTimecode(tc));
-			SubInt64fromInt64(sequPos, &offset);
-			CHECK(TruncInt64toUInt32(offset, &frameOffset));
-			tc->startFrame += frameOffset;
-		}
-	} /* XPROTECT */
-	XEXCEPT
-	{
-	  if (sequIter)
-			delete sequIter;
-	}
-	XEND;
+			aafPosition_t	offset = *pOffset;
 
-	return AAFRESULT_SUCCESS;
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+			SubInt64fromInt64(sequPos, &offset);
+			TruncInt64toUInt32(offset, &frameOffset);
+			timecode.startFrame += frameOffset;
+
+			*pTimecode = timecode;
+		}
+		pTC->ReleaseRef();
+	}
+
+	return hr;
 }
 
 //***********************************************************
@@ -382,107 +377,108 @@ ImplAAFSequence::SegmentOffsetToTC (/*[in]*/ aafPosition_t *  /*pOffset*/,
 // 
 // Override from AAFSegment
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFSequence::SegmentTCToOffset (/*[in]*/ aafTimecode_t *  /*pTimecode*/,
-  /*[in]*/ aafRational_t *  /*pEditRate*/,
-  /*[out]*/ aafFrameOffset_t *  /*pOffset*/)
+ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
+									aafRational_t*		pEditRate,
+									aafFrameOffset_t*	pOffset)
 {
-#if FULL_TOOLKIT
-	aafTimecode_t	startTC;
-	AAFIterate *sequIter = NULL;
-	aafInt32		sequLoop, numSegs, segLen32, segStart, start32, frameOffset;
-	aafPosition_t	sequPos;
-	AAFComponent *subComponent;
-	AAFSegment *subSegment;
-	aafErr_t	aafError = OM_ERR_NONE;
-	AAFPulldown *pdwn = NULL;
-	aafLength_t	segLen, tcLen;
-	AAFTimecode	*tccp;
+	aafTimecode_t		startTC;
+	size_t				index, numCpnts;
+	aafInt32			segStart;
+	ImplAAFComponent*	pComponent;
+	ImplAAFSegment*		pSegment;
+	HRESULT				hr = AAFRESULT_SUCCESS;
+	aafLength_t			segLen, tcLen;
+	ImplAAFTimecode*	pTC;
 	aafFrameOffset_t	begPos, endPos;
-	aafPosition_t newStart, oldStart;
-	aafFindSourceInfo_t	sourceInfo;
-	aafLength_t	junk;
-	aafBool		isMask;
+	aafPosition_t		sequPos;
+	aafBool				found = AAFFalse;
+	aafLength_t			junk;
 
+	if (pOffset == NULL || pTimecode == NULL || pEditRate == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	segStart = 0;
 	CvtInt32toInt64(0, &junk);
-	XPROTECT(_file)
-	{
-		segStart = 0;
 
-		sequIter = new AAFIterate(_file);
-		CHECK(GetNumCpnts(&numSegs));
-		for (sequLoop=0; sequLoop < numSegs; sequLoop++)
+	_components.getSize(numCpnts);
+	for (index=0; index < numCpnts; index++)
+	{
+		ImplAAFSegment*	pSubSegment;
+		aafBool			isMask;
+		implCompType_t	type;
+
+		_components.getValueAt(pComponent, index);
+
+		pComponent->GetComponentType(&type);
+		if (type == kTransition)
+			continue;
+
+		pSegment = static_cast<ImplAAFSegment*> (pComponent);
+
+		/// !!!Jeff B - this needs some work for FILM
+		hr = pSegment->TraverseToClip(junk, &pSubSegment, NULL, NULL, &junk, &isMask);
+		if (SUCCEEDED(hr))
 		{
-			CHECK(sequIter->SequenceGetNextCpnt(this,
-											NULL, &sequPos, &subComponent));
-			subSegment = (AAFSegment *)subComponent;
-			CHECK(subSegment->TraverseToClip(junk, &subSegment, NULL,
-					 NULL, &junk, &isMask));
-			CHECK(subSegment->GetLength(&segLen));
-  			CHECK(TruncInt64toInt32(segLen, &segLen32));	/* OK FRAMEOFFSET */
-			/* Skip zero-length clips, sometimes found in MC files */
-			if (segLen32 == 0)
-				continue;
-	 		tccp = (AAFTimecode *)subSegment;
-	 		CHECK(tccp->GetTimecode(&startTC));
-			begPos = startTC.startFrame;
-			endPos = startTC.startFrame + segLen32;
-			if ((tc.startFrame < endPos) && (begPos <= tc.startFrame))
+			hr = pSubSegment->GetLength(&segLen);
+			if (SUCCEEDED(hr))
 			{
-  				CHECK(TruncInt64toInt32(sequPos, &segStart));	/* OK FRAMEOFFSET */
-				CHECK(tccp->GetLength(&tcLen));
-				*found = TRUE;
-				break;
-			}
-		} /* for */
-		delete sequIter;
-		sequIter = NULL;
-		
-		/* Release Bento reference, so the useCount is decremented */
-		if (subSegment)
-		  {
-			 subSegment->ReleaseObject();	
-			 subSegment = NULL;
-		  }
+				aafInt32	segLen32 = 0;
 
-		if(found)
-		{
-					  /* Assume found at this point, so finish generating result */
-			CvtInt32toInt64((tc.startFrame - startTC.startFrame) + segStart , &oldStart);
-			 CHECK(AAFConvertEditRate(editRate, oldStart,
-			  							sourceInfo.editrate , kRoundFloor, &newStart));
-			CHECK(TruncInt64toInt32(sourceInfo.position, &frameOffset));	/* OK FRAMEOFFSET */
-			CHECK(TruncInt64toInt32(newStart, &start32));		/* OK FRAMEOFFSET */
-			*offset = start32 - frameOffset;
+  				TruncInt64toInt32(segLen, &segLen32);	// OK FRAMEOFFSET
+				if (segLen32 == 0)
+					continue;		// Skip zero-length clips, sometimes found in MC files
 
-		   /* check for out of bound timecode */
-		   if (tc.startFrame < startTC.startFrame) 
-		   {
-				  /* out of left bound */
-				RAISE(AAFRESULT_BADSAMPLEOFFSET);
-		   }
-		   else
-		   {
-				aafUInt32 len;
-				CHECK(TruncInt64toUInt32(tcLen, &len));
-				if (tc.startFrame > (startTC.startFrame + len))
+	 			pTC = (ImplAAFTimecode *)pSubSegment;
+	 			pTC->GetTimecode(&startTC);
+				begPos = startTC.startFrame;
+				endPos = startTC.startFrame + segLen32;
+				if ((pTimecode->startFrame < endPos) && (begPos <= pTimecode->startFrame))
 				{
-						/* out of right bound */
-					 RAISE(AAFRESULT_BADSAMPLEOFFSET);
+					pComponent->AccumulateLength(&sequPos);
+  					TruncInt64toInt32(sequPos, &segStart);	// OK FRAMEOFFSET
+					pTC->GetLength(&tcLen);
+					found = AAFTrue;
+					break;
 				}
-		   }
+			}
+			pSubSegment->ReleaseRef();
 		}
-	 }
-	XEXCEPT
-	{
-	  if (sequIter)
-		delete sequIter;
 	}
-	XEND;
+	
+	if (found)
+	{
+		aafPosition_t	newStart, oldStart;
+		aafInt32		start32, frameOffset;
 
-	return AAFRESULT_SUCCESS;
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+		// Assume found at this point, so finish generating result
+		CvtInt32toInt64((pTimecode->startFrame - startTC.startFrame) + segStart , &oldStart);
+		hr = AAFConvertEditRate(*pEditRate, oldStart, *pEditRate, kRoundFloor, &newStart);
+		TruncInt64toInt32(sequPos, &frameOffset);	// OK FRAMEOFFSET
+		TruncInt64toInt32(newStart, &start32);		// OK FRAMEOFFSET
+		*pOffset = start32 - frameOffset;
+
+		// check for out of bound timecode
+		if (pTimecode->startFrame < startTC.startFrame) 
+		{
+			// out of left bound 
+			hr = AAFRESULT_BADSAMPLEOFFSET;
+		}
+		else
+		{
+			aafUInt32 len;
+
+			TruncInt64toUInt32(tcLen, &len);
+			if (pTimecode->startFrame > (startTC.startFrame + len))
+			{
+				// out of right bound
+				 hr = AAFRESULT_BADSAMPLEOFFSET;
+			}
+		}
+	}
+	else
+		hr = AAFRESULT_TIMECODE_NOT_FOUND;
+
+	return hr;
 }
 
 //***********************************************************
@@ -498,15 +494,24 @@ ImplAAFSequence::SegmentTCToOffset (/*[in]*/ aafTimecode_t *  /*pTimecode*/,
 //    - AddRef the object being returned.
 // 
 AAFRESULT
-    ImplAAFSequence::GetNthComponent (aafInt32 index, ImplAAFComponent** ppComponent)
+    ImplAAFSequence::GetNthComponent (aafUInt32 index, ImplAAFComponent** ppComponent)
 {
 	ImplAAFComponent*	obj;
+	size_t				numCpnts;
+	HRESULT				hr;
 
-	_components.getValueAt(obj, index);
-	obj->AcquireReference();
-	*ppComponent = obj;
+	_components.getSize(numCpnts);
+	if (index < numCpnts)
+	{
+		_components.getValueAt(obj, index);
+		obj->AcquireReference();
+		*ppComponent = obj;
+		hr =  AAFRESULT_SUCCESS;
+	}
+	else
+		hr = AAFRESULT_NO_MORE_OBJECTS;
 
-	return AAFRESULT_SUCCESS;
+	return hr;
 }
 
 extern "C" const aafClassID_t CLSID_AAFSequence;
