@@ -113,6 +113,8 @@ void* OMWindowsDynamicLibrary::findSymbol(const char* symbolName)
   return result;  
 }
 
+  // @mfunc Load the library described by this <c OMDynamicLibrary>.
+  //   @rdesc True if the library was successfully loaded, false otherwise.
 bool OMWindowsDynamicLibrary::load(void)
 {
   TRACE("OMWindowsDynamicLibrary::load");
@@ -150,6 +152,7 @@ bool OMWindowsDynamicLibrary::load(void)
   return result;
 }
 
+  // @mfunc Unload the library described by this <c OMDynamicLibrary>.
 void OMWindowsDynamicLibrary::unload(void)
 {
   TRACE("OMWindowsDynamicLibrary::unload");
@@ -255,6 +258,8 @@ void* OMMacOSDynamicLibrary::findSymbol(const char* symbolName)
   return result;
 }
 
+  // @mfunc Load the library described by this <c OMDynamicLibrary>.
+  //   @rdesc True if the library was successfully loaded, false otherwise.
 bool OMMacOSDynamicLibrary::load(void)
 {
   TRACE("OMMacOSDynamicLibrary::load");
@@ -293,6 +298,7 @@ bool OMMacOSDynamicLibrary::load(void)
   return result;
 }
 
+  // @mfunc Unload the library described by this <c OMDynamicLibrary>.
 void OMMacOSDynamicLibrary::unload(void)
 {
   TRACE("OMMacOSDynamicLibrary::unload");
@@ -387,6 +393,8 @@ void* OMUnixDynamicLibrary::findSymbol(const char* symbolName)
   return result;  
 }
 
+  // @mfunc Load the library described by this <c OMDynamicLibrary>.
+  //   @rdesc True if the library was successfully loaded, false otherwise.
 bool OMUnixDynamicLibrary::load(void)
 {
   TRACE("OMUnixDynamicLibrary::load");
@@ -408,6 +416,7 @@ bool OMUnixDynamicLibrary::load(void)
   return result;
 }
 
+  // @mfunc Unload the library described by this <c OMDynamicLibrary>.
 void OMUnixDynamicLibrary::unload(void)
 {
   TRACE("OMUnixDynamicLibrary::unload");
@@ -511,6 +520,8 @@ void* OMMacOSXDynamicLibrary::findSymbol(const char* symbolName)
   return result;
 }
 
+  // @mfunc Load the library described by this <c OMDynamicLibrary>.
+  //   @rdesc True if the library was successfully loaded, false otherwise.
 bool OMMacOSXDynamicLibrary::load(void)
 {
   TRACE("OMMacOSXDynamicLibrary::load");
@@ -570,6 +581,7 @@ bool OMMacOSXDynamicLibrary::load(void)
   return result;
 }
 
+  // @mfunc Unload the library described by this <c OMDynamicLibrary>.
 void OMMacOSXDynamicLibrary::unload(void)
 {
   TRACE("OMMacOSXDynamicLibrary::unload");
