@@ -71,15 +71,13 @@ bool ImplAAFBuiltinClasses::sBuiltinsInited = ImplAAFBuiltinClasses::sInitBuilti
 //
 
 #define AAF_TABLE_BEGIN() \
-/*static*/ ImplAAFBuiltinClasses::ClassTblEntry \
-ImplAAFBuiltinClasses::sBuiltinClassTable[] = \
-{
+ImplAAFBuiltinClasses::ClassTblEntry \
+ImplAAFBuiltinClasses::sBuiltinClassTable[] = {
 
 #define AAF_CLASS(name, id, parent, concrete) \
-  { &AUID_AAF##name, L"" L# name L"", &AUID_AAF##parent, 0, 0, concrete },
+  { &AUID_AAF##name,  L## #name  , &AUID_AAF##parent, 0, 0, concrete },
 
-#define AAF_TABLE_END() \
-};
+#define AAF_TABLE_END()  };
 
 const static aafUID_t NULL2_AUID = { 0 };
 
@@ -128,94 +126,21 @@ const /*static*/ aafUInt32 ImplAAFBuiltinClasses::ksNumClassDefs =
 //
 
 #define AAF_TABLE_BEGIN() \
-/*static*/ \
 ImplAAFBuiltinClasses::PropTblEntry \
 ImplAAFBuiltinClasses::sBuiltinPropTable[] = \
 {
 
-#define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
-  { L"" L# name L"", \
-	id, \
-    tag, \
-    &kAAFTypeID_##type, \
-    &kAAFClassID_##container, \
-    mandatory, \
-    uid, \
-	ImplAAFBuiltinClasses::CreateOMPropType##type, \
-    0 \
-  },
+#define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) { L## #name , id, tag, &kAAFTypeID_##type, &kAAFClassID_##container, mandatory, uid, ImplAAFBuiltinClasses::CreateOMPropType##type, 0 },
 
-#define AAF_TABLE_END() \
-};
+#define AAF_TABLE_END() };
 
-#define kAAFTypeID_AAF_REFERENCE_TYPE(type, target) \
-  kAAFTypeID_##target##type
+#define kAAFTypeID_AAF_REFERENCE_TYPE(type, target) kAAFTypeID_##target##type
 
-#define kAAFTypeID_AAF_TYPE(type) \
-  kAAFTypeID_##type
+#define kAAFTypeID_AAF_TYPE(type) kAAFTypeID_##type
 
-#define CreateOMPropTypeAAF_REFERENCE_TYPE(type, target) \
-  CreateOMPropType##type
+#define CreateOMPropTypeAAF_REFERENCE_TYPE(type, target) CreateOMPropType##type
 
-#define CreateOMPropTypeAAF_TYPE(target) \
-  CreateOMPropTypeSimple
-
-#if 0
-
-//
-// Compatibility 
-//
-#define kAAFTypeID_WeakReference         kAAFTypeID_RefAUID
-#define kAAFTypeID_WeakReferenceVector   kAAFTypeID_RefAUIDArray
-#define kAAFTypeID_WeakReferenceSet      kAAFTypeID_RefAUIDArray
-#define kAAFTypeID_StrongReference       kAAFTypeID_ObjRef
-#define kAAFTypeID_StrongReferenceVector kAAFTypeID_ObjRefArray
-#define kAAFTypeID_StrongReferenceSet    kAAFTypeID_ObjRefArray
-
-// names changed to be more clear
-#define kAAFTypeID_String kAAFTypeID_WCharString
-
-// hax here to "alias" different types
-#define kAAFTypeID_RefAUID kAAFTypeID_AUID
-#define kAAFTypeID_RefAUIDArray kAAFTypeID_AUIDArray
-#define kAAFTypeID_Length kAAFTypeID_Int64
-#define kAAFTypeID_Position kAAFTypeID_Int64
-#define kAAFTypeID_ColorSitingType kAAFTypeID_UInt32
-#define kAAFTypeID_EdgeType kAAFTypeID_UInt32
-#define kAAFTypeID_FilmType kAAFTypeID_UInt32
-//#define kAAFTypeID_Boolean kAAFTypeID_UInt8
-// on NT sizeof(aafBool) == 4 and that's
-// how it is currently persisted
-#define kAAFTypeID_Boolean kAAFTypeID_UInt32
-#define kAAFTypeID_CompCodeArray kAAFTypeID_UInt8
-#define kAAFTypeID_TCSource kAAFTypeID_UInt32
-#define kAAFTypeID_TapeCaseType kAAFTypeID_UInt32
-#define kAAFTypeID_TapeFormatType kAAFTypeID_UInt32
-#define kAAFTypeID_VideoSignalType kAAFTypeID_UInt32
-#define kAAFTypeID_LayoutType kAAFTypeID_Int32
-#define kAAFTypeID_EditHintType kAAFTypeID_UInt16
-#define kAAFTypeID_JPEGTableIDType kAAFTypeID_UInt32
-#define kAAFTypeID_PulldownKindType kAAFTypeID_UInt32
-#define kAAFTypeID_PulldownDirectionType kAAFTypeID_UInt32
-#define kAAFTypeID_PhaseFrameType kAAFTypeID_UInt16
-
-// bogus types 
-#define kAAFTypeID_DataStream kAAFTypeID_UInt8Array
-#define kAAFTypeID_DataValue kAAFTypeID_UInt8Array
-#define kAAFTypeID_ReferenceType kAAFTypeID_UInt8Array
-#define kAAFTypeID_StringArray kAAFTypeID_UInt8Array
-#define kAAFTypeID_TimeStamp kAAFTypeID_UInt8Array
-#define kAAFTypeID_Int64Array kAAFTypeID_UInt8Array
-#define kAAFTypeID_PositionArray kAAFTypeID_UInt8Array
-#define kAAFTypeID_ProductVersion kAAFTypeID_UInt8Array
-#define kAAFTypeID_Rational kAAFTypeID_UInt8Array
-#define kAAFTypeID_VersionType kAAFTypeID_UInt8Array
-#define kAAFTypeID_Rectangle kAAFTypeID_UInt8Array
-#define kAAFTypeID_Int32Array kAAFTypeID_UInt8Array
-#define kAAFTypeID_CompSizeArray kAAFTypeID_UInt8Array
-#define kAAFTypeID_RGBALayout kAAFTypeID_UInt8Array
-
-#else
+#define CreateOMPropTypeAAF_TYPE(target) CreateOMPropTypeSimple
 
 // Streams are not yet implemented.
 //#define kAAFTypeID_DataStream kAAFTypeID_UInt8Array
@@ -223,8 +148,6 @@ ImplAAFBuiltinClasses::sBuiltinPropTable[] = \
 // String arrays are currently implemented as a single
 // null-character-delimited string
 #define kAAFTypeID_StringArray kAAFTypeID_String
-
-#endif
 
 #include "AAFMetaDictionary.h"
 
