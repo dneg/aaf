@@ -21,13 +21,10 @@
 # All rights reserved.
 #
 ###############################################################################
-AAFPERSISTENTOBJECTS="\
-	 "
-
+AAFPERSISTENTOBJECTS=""
 
 # These are all of the other non-persistent objects:
-AAFNONPERSISTENTOBJECTS="\
-	 "
+AAFNONPERSISTENTOBJECTS=""
 
 
 # These are files which specify COM interfaces, but which are
@@ -40,7 +37,8 @@ AAFCOMINTERFACESONLY="\
 	AAFMasterMobEx \
 	AAFMob2 \
 	AAFTimelineMobSlot2 \
-	AAFComponent2 "
+	AAFComponent2 \
+	AAFDictionary2 "
 
 
 # These are the impl files that are typed by humans.  Be sure to
@@ -170,7 +168,12 @@ HUMAN_TYPED_IMPL="\
 	AAFRandomRawStorage \
 	AAFGetFileBits \
 	AAFSetFileBits \
-	AAFRandomFile "
+	AAFRandomFile \
+	AAFTaggedValueDefinition \
+	AAFKLVDataDefinition \
+	EnumAAFTaggedValueDefs \
+	EnumAAFKLVDataDefs "
+
 
 # Defered interfaces
 #	AAFIntraFrameMarker \
