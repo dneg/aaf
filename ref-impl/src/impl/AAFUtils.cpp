@@ -208,8 +208,8 @@ aafRational_t RationalFromFloat(
  * Possible Errors:
  *		Standard errors (see top of file).
  *************************************************************************/
-aafBool isObjFunc(AAFFile * file,       /* IN - File Handle */
-				  AAFObject * obj,     /* IN - Object to match */
+aafBool isObjFunc(ImplAAFFile * file,       /* IN - File Handle */
+				  ImplAAFObject * obj,     /* IN - Object to match */
 				  void *data)          /* IN/OUT - Match Data */
 {
   /* Match all objects in the subtree */
