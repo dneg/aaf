@@ -16,6 +16,9 @@
 #include <string.h>
 #include <stdlib.h>
 
+#if defined(macintosh) || defined(_MAC)
+#include <console.h> /* Mac command line window */
+#endif
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
@@ -844,12 +847,18 @@ void usage(void)
 //  The specified filename is the name of the file that is created by the program.
 main(int argumentCount, char* argumentVector[])
 {
+	/* console window for mac */
+	#if defined(macintosh) || defined(_MAC)
+	argumentCount = ccommand(&argumentVector);
+	#endif
+
+
 	CComInitialize comInit;
 	CAAFInitialize aafInit;
 
 	
-  // Make sure all of our required plugins have been registered.
-  checkFatal(RegisterRequiredPlugins());
+    // Make sure all of our required plugins have been registered.
+    checkFatal(RegisterRequiredPlugins());
   
 
 	if (argumentCount ==1)

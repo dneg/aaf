@@ -13,7 +13,9 @@
 #include <string.h>
 #include <stdlib.h>
 
-//#include "AAFPluginManager.h"
+#if defined(macintosh) || defined(_MAC)
+#include <console.h> /* Mac command line window */
+#endif
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
@@ -145,8 +147,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	IAAFTimelineMobSlot* pTimelineMobSlot = NULL;
 	IEnumAAFMobSlots* pMobSlotIter = NULL;
 	IAAFMobSlot* pMobSlot = NULL;
-  IAAFDataDef *pSoundDef = NULL;
-  IAAFDataDef *pDataDef = NULL;
+	IAAFDataDef *pSoundDef = NULL;
+	IAAFDataDef *pDataDef = NULL;
+	unsigned char *dataBuff = NULL;
 
 
 	/* Open an AAF file */
@@ -158,8 +161,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	// Get the AAF Dictionary so that we can create valid AAF objects.
 	check(pHeader->GetDictionary(&pDictionary));
 
-  /* Lookup any necessary data definitions. */
-  check(pDictionary->LookupDataDef(DDEF_Sound, &pSoundDef));
+	/* Lookup any necessary data definitions. */
+	check(pDictionary->LookupDataDef(DDEF_Sound, &pSoundDef));
 
 	// Here we check on the number of mobs in the file. 
 	// Get the number of master mobs in the file (must not be zero)
@@ -200,10 +203,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					check(pMobSlot->GetDataDef(&pDataDef));
 
 					// Check that we have a sound file by examining its data definition
-          aafBool bIsSoundKind = AAFFalse;
-          check(pDataDef->IsSoundKind(&bIsSoundKind));
+					aafBool bIsSoundKind = AAFFalse;
+					check(pDataDef->IsSoundKind(&bIsSoundKind));
 
-          if (AAFTrue == bIsSoundKind)
+					if (AAFTrue == bIsSoundKind)
 					{
 						// Prepare to get audio data: first get MobSlotID
 						check(pMobSlot->GetSlotID(&MobSlotID));
@@ -244,16 +247,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 						if (sampleBits == 8) 
 							dataLen = 1;
-						
-						// Set a suitable buffer size						
-						unsigned char dataBuff[524288];
-						
+												
 						// Get the sample count
 						aafLength_t sampleCount;
 						check(pEssenceAccess->GetSampleCount(pSoundDef, &sampleCount));
 						
 						// Read the samples of audio data
 						bytesLeft = (aafUInt32) sampleCount * dataLen;
+
+						// Set a suitable buffer size						
+						dataBuff = new unsigned char[bytesLeft];
+						if (NULL == dataBuff)
+							check(AAFRESULT_NOMEMORY);
+
 						
 						while (bytesLeft != 0)
 						{
@@ -269,30 +275,33 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 							bytesLeft = bytesLeft - actualBytesRead;
 						}
 						
-            pEssenceAccess->Release();
-            pEssenceAccess = NULL;
-            pMasterMob->Release();
-            pMasterMob = NULL;
+						delete [] dataBuff;
+						dataBuff = NULL;
+						
+						pEssenceAccess->Release();
+						pEssenceAccess = NULL;
+						pMasterMob->Release();
+						pMasterMob = NULL;
 
 						// Inform the user that the process has been successful
 						printf("Essence was read from file.\n");
 					}
 
-          pTimelineMobSlot->Release();
-          pTimelineMobSlot = NULL;
+					pTimelineMobSlot->Release();
+					pTimelineMobSlot = NULL;
 
-          pDataDef->Release();
-          pDataDef = NULL;
+					pDataDef->Release();
+					pDataDef = NULL;
 				}	
         
-        pMobSlot->Release();
-        pMobSlot = NULL;
+				pMobSlot->Release();
+				pMobSlot = NULL;
 			}
 
-      pMobSlotIter->Release();
-      pMobSlotIter = NULL;
+			pMobSlotIter->Release();
+			pMobSlotIter = NULL;
 
-      pMob->Release();
+			pMob->Release();
 			pMob = NULL;
 		}
 
@@ -305,7 +314,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	}
 
 cleanup:
-	// Cleanup and return
+  // Cleanup and return
+  if (dataBuff)
+    delete [] dataBuff;
+    
   if (pFormat)
     pFormat->Release();
 
@@ -559,6 +571,12 @@ void usage(void)
 //  Specifying that use file ImportAudioExample.aaf as default
 main(int argumentCount, char* argumentVector[])
 {
+	/* console window for mac */
+	#if defined(macintosh) || defined(_MAC)
+	argumentCount = ccommand(&argumentVector);
+	#endif
+
+
 	CComInitialize comInit;
 	CAAFInitialize aafInit;
 	
@@ -593,8 +611,8 @@ main(int argumentCount, char* argumentVector[])
 		return 0;
 	}
 
-  // Make sure all of our required plugins have been registered.
-  checkFatal(RegisterRequiredPlugins());
+	// Make sure all of our required plugins have been registered.
+	checkFatal(RegisterRequiredPlugins());
 
 	// Access the AAF file with name set from argument or lack thereof
 	printf("Opening file %s using ReadSamples\n", pFileName);
