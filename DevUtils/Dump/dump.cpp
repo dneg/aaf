@@ -82,6 +82,8 @@
 #define OM_OS_MACOS
 #elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
 #define OM_OS_UNIX
+#else
+#error "Can't determine host operating system"
 #endif
 
 #if defined(_MAC) || defined(macintosh)
