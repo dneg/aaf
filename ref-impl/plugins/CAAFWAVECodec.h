@@ -31,7 +31,6 @@ typedef struct
 
 class CAAFWaveCodec
   : public IAAFEssenceCodec,
-	public IAAFEssenceSampleStream,
 	public IAAFPlugin,
     public CAAFUnknown
 {
