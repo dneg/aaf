@@ -1,0 +1,44 @@
+1) Running dodo on Windows
+
+  a) Using Cygwin and GNUmake
+     TBS
+  b) Using the MKS Korn shell and GNUmake
+     TBS
+  c) Using the MKS Korn shell and clearmake
+     TBS
+
+2) Running dodo on Unix/Linux
+     TBS
+
+3) Running dodo from MPW on Macintosh
+
+ # Where you put "cvs checkout AAF"
+set -e aaf "MacintoshHD:TimsFolder:sf:AAF:"
+set -e MacDodo "{aaf}AAFMacSDK:dodo:"
+set Commands "{Commands},{MacDodo}Tool:"
+
+ # Where you installed MacPerl
+set -e MACPERL 'MacintoshHD:Applications (Mac OS 9):MPW 3.6d7:MacPerl:'
+
+directory "{aaf}:AAFMacSDK:dodo"
+make cleansdk > make.out
+make.out
+
+rundodo
+
+Notes
+
+Before running dodo on Macintosh consider temporarily commenting out
+the line that says
+  SetFile -m . "{DSTFILE}"
+in file
+  :AAFMacSDK:dodo:tool:copy_if_diff
+this will, depending on your CVS client (currently true for MAC CVS
+Pro) , make files whose contents have not changed, appear as localy
+modified.
+
+This is also true on Windows of WinCVS, in that case consider
+temporarily modifying the line that says
+  touch $2
+in file
+  update.ksh
