@@ -144,9 +144,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		}
 		
 		// Create a concrete subclass of FileDescriptor
-		checkResult(defs.cdHTMLDescriptor()->
+		checkResult(defs.cdAIFCDescriptor()->
 					CreateInstance(IID_IAAFEssenceDescriptor, 
 								   (IUnknown **)&edesc));		
+
+		IAAFAIFCDescriptor*			pAIFCDesc = NULL;
+		checkResult(edesc->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
+		checkResult(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+		pAIFCDesc->Release();
+		pAIFCDesc = NULL;
+
 		checkResult(edesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc));
 		checkResult(pFileDesc->SetSampleRate (checkSampleRate));
 		checkResult(pDictionary->LookupContainerDef(checkContainer, &pContainer));
