@@ -257,6 +257,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	if (pHeader)
 		pHeader->Release();
 
+	if (pMobIter)
+		pMobIter->Release();
+
 	if (pFile) 
 	{
 		if (bFileOpen)
