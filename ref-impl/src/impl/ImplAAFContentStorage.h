@@ -178,7 +178,6 @@ AAFRESULT
 AAFRESULT
     GetNthEssenceData (aafInt32 index, ImplAAFEssenceData **ppEnum);
 
-	AAFRESULT BuildMediaCache(void);
 AAFRESULT LoadMobTables(void);
 
 private:
