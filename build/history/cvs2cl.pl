@@ -8,10 +8,6 @@ exec perl -w -x $0 ${1+"$@"} # -*- mode: perl; perl-indent-level: 2; -*-
 ###                                                        ###
 ##############################################################
 
-## $Revision$
-## $Date$
-## $Author$
-##
 ##   (C) 1999 Karl Fogel <kfogel@red-bean.com>, under the GNU GPL.
 ## 
 ##   (Extensively hacked on by Melissa O'Neill <oneill@cs.sfu.ca>.)

@@ -1,19 +1,21 @@
 #c *********************************************************************
 #c
+#c $Id$ $Name$
+#c
 #c The contents of this file are subject to the AAF SDK Public
 #c Source License Agreement (the "License"); You may not use this file
 #c except in compliance with the License.  The License is available in
 #c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 #c Association or its successor.
-#c 
+#c
 #c Software distributed under the License is distributed on an "AS IS"
 #c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 #c the License for the specific language governing rights and limitations
 #c under the License.
-#c 
-#c The Original Code of this file is Copyright 1998-2001, Licensor of the
+#c
+#c The Original Code of this file is Copyright 1998-2004, Licensor of the
 #c AAF Association.
-#c 
+#c
 #c The Initial Developer of the Original Code of this file and the
 #c Licensor of the AAF Association is Avid Technology.
 #c All rights reserved.
@@ -34,7 +36,7 @@
 #ccccccccccccccccccccccccccc
 #c
 #c Pass through argument if for idl otherwise just comment the arg.
-#c 
+#c
 #c This macro is generally used to specify IDL options that would
 #c make since to emit to c++.
 #c To allow proper marshalling code generation of a struct: |
@@ -185,7 +187,7 @@ AD_CLASS_BEGIN\
 #ccccccccccccccccccccccccccc
 #c
 #c Types definitions should only be used by idl and c++ & impl headers
-#c 
+#c
 #c
 #c GUID
 #c Argument01: hex long  0-3[leading 0's w/o leading 0x]
@@ -242,7 +244,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -263,7 +265,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -286,7 +288,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -311,7 +313,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -338,7 +340,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -367,7 +369,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -398,7 +400,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -431,7 +433,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -466,7 +468,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -503,7 +505,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -542,7 +544,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -593,7 +595,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux1	aux2
 #c ----------   ----------   ---------   ----    ----    -------- ----  ----
 #c metharg 1    02           03          04      05      06       07	08
@@ -628,7 +630,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux1	aux2
 #c ----------   ----------   ---------   ----    ----    -------- --
 #c metharg 1    02           03          04      05      06       07	08
@@ -665,7 +667,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux1	aux2
 #c ----------   ----------   ---------   ----    ----    -------- --
 #c metharg 1    02           03          04      05      06       07	08
@@ -694,7 +696,7 @@ AD_CLASS_BEGIN\
 #c Macro Arg 01: method name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -877,7 +879,7 @@ AD_CLASS_END\
 #c Constructor name is assumed to be .this-module.
 #c
 #c Macro arguments 01+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    01           02          03      04      05
@@ -894,7 +896,7 @@ AD_CLASS_END\
 #c Constructor name is assumed to be .this-module.
 #c
 #c Macro arguments 01+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    01           02          03      04      05
@@ -912,7 +914,7 @@ AD_CLASS_END\
 #c Constructor name is assumed to be .this-module.
 #c
 #c Macro arguments 01+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    01           02          03      04      05
@@ -931,7 +933,7 @@ AD_CLASS_END\
 #c Constructor name is assumed to be .this-module.
 #c
 #c Macro arguments 01+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    01           02          03      04      05
@@ -990,7 +992,7 @@ AD_CLASS_END\
 #ccccccccccccccccccccccccccc
 #c
 #c Argument1: text to be quoted.
-#c 
+#c
 #c Just pass through the input quoted to cpp_quote and then
 #c let the midl compiler pass the quoted text to its ???.h 
 #c output.
@@ -1328,7 +1330,7 @@ AD_CLASS_END\
 #c Macro Arg 01: function name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -1349,7 +1351,7 @@ AD_CLASS_END\
 #c Macro Arg 01: function name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -1371,7 +1373,7 @@ AD_CLASS_END\
 #c Macro Arg 01: function name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
@@ -1394,7 +1396,7 @@ AD_CLASS_END\
 #c Macro Arg 01: function name
 #c
 #c Macro arguments 02+:
-#c 
+#c
 #c meth arg #   arg modfrs   obj style   type    name    arg cmnt
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
