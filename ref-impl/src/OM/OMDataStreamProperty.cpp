@@ -28,6 +28,8 @@
 // @doc OMEXTERNAL
 #include "OMDataStreamProperty.h"
 
+#include "OMAssertions.h"
+
 #include "OMPropertySet.h"
 #include "OMStorable.h"
 #include "OMStoredObject.h"
