@@ -46,68 +46,12 @@
 #include <stdlib.h>
 
 
-class MacAAFDLL : public AAFDLL
+
+
+
+AAFRDLIRESULT AAFLoadLibrary(const char* name, AAFLibraryHandle* pLibHandle)
 {
-public:
-  // Constructor and destructor.
-  MacAAFDLL();
-  ~MacAAFDLL();
-
-  // Implements Mac specific initialization of dll and entry points.
-  virtual HRESULT Load(const char *dllname);
-  
-  // Implements Mac specific cleanup of dll and entry points.
-  virtual HRESULT Unload();
-
-private:
-  // The handle to dll's module.
-	CFragConnectionID _connectionID;
-};
-
-
-
-//***********************************************************
-//
-// Factory function just returns an instance of the currect platform
-// dll wrapper object.
-AAFDLL * MakeAAFDLL()
-{
-  return new MacAAFDLL;
-}
-
-
-
-//***********************************************************
-//
-MacAAFDLL::MacAAFDLL()
-{
-  _connectionID = 0;
-}
-
-
-
-//***********************************************************
-//
-MacAAFDLL::~MacAAFDLL()
-{
-}
-
-
-
-//***********************************************************
-//
-HRESULT MacAAFDLL::Load(const char *dllname)
-{
-  TRACE("MacAAFDLL::Load");
-  
-  if (NULL == dllname)
-  { // use a realistic default name.
-    dllname = "AAFCOAPI.DLL (PPC)";
-  }
-  
-  
-  ASSERT("Valid dllname", NULL != dllname && strlen(dllname) <= 63);
-  
+  AAFRDLIRESULT result = AAFRESULT_SUCCESS;
   HRESULT hr = CO_E_DLLNOTFOUND; // the default error code
   OSErr             err = noErr;
   CFragArchitecture archType = kCompiledCFragArch;
@@ -116,83 +60,84 @@ HRESULT MacAAFDLL::Load(const char *dllname)
   char              errMessage[256];
   StringPtr         psymName = NULL;
   Ptr               symAddr = NULL;
-  CFragSymbolClass  symClass;
   Str63             libName;
+  CFragConnectionID connectionID = 0;
 
+ 
+  if (NULL == name || NULL == pLibHandle || (NULL != name && 63 > strlen(name)))
+    return AAFRESULT_NULL_PARAM;
+  
   
   // Copy and convert the c null terminated string to a Str63.
-  strncpy((char *)libName, dllname, sizeof(Str63));
+  strncpy((char *)libName, name, sizeof(Str63));
   libName[sizeof(Str63) - 1] = 0; // force null termination
   c2pstr((char *)libName);
   
   // Attempt to load the library.
-  err = GetSharedLibrary(libName, archType, loadFlags, &_connectionID, &mainAddr, (unsigned char *)errMessage);
+  err = GetSharedLibrary(libName, archType, loadFlags, &connectionID, &mainAddr, (unsigned char *)errMessage);
   if (noErr != err)
   {
-  	hr = err;
+  	result = err;
 #ifdef _DEBUG
     p2cstr((unsigned char *)errMessage);
-    fprintf(stderr, "\nGetSharedLibrary(\"%s\"...); \n\tfailed with an error code = %d and errMessage:\"%s\"\n", dllname, hr, errMessage);
+    fprintf(stderr, "\nGetSharedLibrary(\"%s\"...); \n\tfailed with an error code = %d and errMessage:\"%s\"\n", name, hr, errMessage);
     fflush(stderr);
 #endif
-  	return err;
   }
-
-
-
-  //
-  // Attempt to initialize the entry points...
-  //
-  err = FindSymbol(_connectionID, "\pAAFFileOpenExistingRead", (Ptr *)&_pfnOpenExistingRead, &symClass);
-  if (noErr != err)
-    return err;
-
-  err = FindSymbol(_connectionID, "\pAAFFileOpenExistingModify", (Ptr *)&_pfnOpenExistingModify, &symClass);
-  if (noErr != err)
-    return err;
-
-  err = FindSymbol(_connectionID, "\pAAFFileOpenNewModify", (Ptr *)&_pfnOpenNewModify, &symClass);
-  if (noErr != err)
-    return err;
-
-  err = FindSymbol(_connectionID, "\pAAFFileOpenTransient", (Ptr *)&_pfnOpenTransient, &symClass);
-  if (noErr != err)
-    return err;
-
-  err = FindSymbol(_connectionID, "\pAAFGetPluginManager", (Ptr *)&_pfnGetPluginManager, &symClass);
-  if (noErr != err)
-    return err;
-  
-
-  return S_OK;
+  else
+  { // Library successfully loaded:
+  	*pLibHandle = (AAFLibraryHandle *)connectionID;
+  }
+ 
+  return result;
 }
 
-
-
-//***********************************************************
-//
-HRESULT MacAAFDLL::Unload()
+AAFRDLIRESULT AAFUnloadLibrary(AAFLibraryHandle libHandle)
 {
-  TRACE("MacAAFDLL::Unload");
+  AAFRDLIRESULT result = AAFRESULT_SUCCESS;
+  CFragConnectionID connectionID = (CFragConnectionID)libHandle;
   
-  HRESULT hr = S_OK;
-  OSErr err = noErr;
-  
-  if (0 != _connectionID)
-  {
-    err = CloseConnection(&_connectionID);
-  	ASSERT("CloseConnection succeeded", noErr == err);
+  if (0 == connectionID)
+    return AAFRESULT_NULL_PARAM;
     
-    // Reset the entry point function pointers to NULL.
-    ClearEntrypoints();
+  result = CloseConnection(&connectionID);  
+
+  return result;
+}
+
+AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, AAFSymbolAddr* pSymbol)
+{
+  AAFRDLIRESULT result = AAFRESULT_SUCCESS;
+  Str63 PSymbolName;
+  Ptr theSymbol = NULL;
+  CFragSymbolClass  symClass;
+
   
-    // For now just return the Mac error code. This value will
-    // always be < 0 so the FAILED and SUCCEEDED macros from COM
-    // should still work.
-    hr = err;
-  }
+  if (NULL == libHandle || NULL == symbolName || NULL == pSymbol || (NULL != symbolName && 63 > strlen(symbolName)) )
+    return AAFRESULT_NULL_PARAM;
+
+  // Copy and convert the c null terminated string to a Str63.
+  strncpy((char *)PSymbolName, symbolName, sizeof(Str63));
+  PSymbolName[sizeof(Str63) - 1] = 0; // force null termination
+  c2pstr((char *)PSymbolName);
+
+  result = FindSymbol((CFragConnectionID)libHandle, PSymbolName, &theSymbol, &symClass);
+  if (AAFRESULT_SUCCEEDED(result))
+    *pSymbol = (AAFSymbolAddr)theSymbol;
+
   
-  return hr;
+  return result;
+}
+
+AAFRDLIRESULT AAFGetLibraryInfo(AAFLibraryHandle libHandle, AAFLibInfo* pLibInfo)
+{
+  AAFRDLIRESULT result = AAFRESULT_NOT_IMPLEMENTED;
+  
+  if (NULL == libHandle || NULL == pLibInfo || (NULL != pLibInfo || NULL == pLibInfo->nameBuffer))
+    return AAFRESULT_NULL_PARAM;
+  
+
+  return result;
 }
 
 
