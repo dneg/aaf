@@ -187,6 +187,20 @@ int MacroDef::GetNumArgs () const
 }
 
 
+char MacroDef::GetInitial () const
+{
+  const char * rep = _name.GetCString();
+  if (! rep)
+	{
+	  return '\0';
+	}
+  else
+	{
+	  return *rep;
+	}
+}
+
+
 void MacroDef::dump (FILE* fp) const
 {
   assert (fp);
