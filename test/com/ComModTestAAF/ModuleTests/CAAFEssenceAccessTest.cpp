@@ -42,6 +42,10 @@
 
 #include <iostream.h>
 
+// Temporarily necessary global declarations.
+extern "C" const CLSID CLSID_AAFEssenceAccess;
+
+
 HRESULT CAAFEssenceAccess::test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;

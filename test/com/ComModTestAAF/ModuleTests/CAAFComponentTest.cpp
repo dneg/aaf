@@ -17,6 +17,10 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+// Temporarily necessary global declarations.
+extern "C" const CLSID CLSID_AAFComponent;
+
+
 HRESULT CAAFComponent::test()
 {
 	HRESULT			hr = AAFRESULT_NOT_IMPLEMENTED;
