@@ -197,6 +197,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMob			*aMob = NULL;
 	IEnumAAFMobSlots	*slotIter = NULL;
 	IEnumAAFTaggedValues* pCommentIterator = NULL;
+	IEnumAAFTaggedValues* pCloneIterator = NULL;
 	IAAFTaggedValue*		pComment = NULL;
 
 	IAAFMobSlot		*slot = NULL;
@@ -260,6 +261,33 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			  checkExpression(wcscmp(Value, Comments[s])== 0, AAFRESULT_TEST_FAILED);
 			  pComment->Release();
 		  }
+		  // now check reset
+		  checkResult(pCommentIterator->Reset());
+		  checkResult(pCommentIterator->NextOne(&pComment));
+		  checkResult(pComment->GetName(tag, sizeof(tag)));
+		  checkResult(pComment->GetValue( sizeof(Value), (unsigned char *)Value, &bytesRead));
+		  checkExpression(wcscmp(tag, TagNames[0])== 0, AAFRESULT_TEST_FAILED);
+		  checkExpression(wcscmp(Value, Comments[0])== 0, AAFRESULT_TEST_FAILED);
+		  pComment->Release();
+		  // test skip
+		  checkResult(pCommentIterator->Skip(1));
+		  checkResult(pCommentIterator->NextOne(&pComment));
+		  checkResult(pComment->GetName(tag, sizeof(tag)));
+		  checkResult(pComment->GetValue( sizeof(Value), (unsigned char *)Value, &bytesRead));
+		  checkExpression(wcscmp(tag, TagNames[2])== 0, AAFRESULT_TEST_FAILED);
+		  checkExpression(wcscmp(Value, Comments[2])== 0, AAFRESULT_TEST_FAILED);
+		  pComment->Release();
+		  // test clone
+		  checkResult(pCommentIterator->Clone(&pCloneIterator));
+		  checkResult(pCloneIterator->Reset());
+		  checkResult(pCloneIterator->NextOne(&pComment));
+		  checkResult(pComment->GetName(tag, sizeof(tag)));
+		  checkResult(pComment->GetValue( sizeof(Value), (unsigned char *)Value, &bytesRead));
+		  checkExpression(wcscmp(tag, TagNames[0])== 0, AAFRESULT_TEST_FAILED);
+		  checkExpression(wcscmp(Value, Comments[0])== 0, AAFRESULT_TEST_FAILED);
+		  pComment->Release();
+
+		
 		  pCommentIterator->Release();
 			
 		  checkResult(aMob->GetNumSlots (&numSlots));
@@ -335,8 +363,6 @@ HRESULT CEnumAAFTaggedValues::test()
   // Cleanup our object if it exists.
 
   	// When all of the functionality of this class is tested, we can return success
-	if(hr == AAFRESULT_SUCCESS)
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 
   return hr;
 }
