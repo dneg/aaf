@@ -156,7 +156,10 @@ void OMStream::write(const OMByte* bytes,
   POSTCONDITION("All bytes written", actualByteCount == byteCount);
 }
 
-OMUInt64 OMStream::size(void) 
+
+
+
+OMUInt64 OMStream::size(void) const
 {
   TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
@@ -166,14 +169,58 @@ OMUInt64 OMStream::size(void)
 #if defined(OM_DEBUG)
   OMInt64 status =
 #endif
+
   fstat( fileno( _file ), &fileStat );
   ASSERT( "Successful fstat", status == 0 );
   OMUInt64 result = fileStat.st_size;
 
+
   return result;
 }
 
-void OMStream::setSize(OMUInt64 newSize)
+/*
+OMUInt64 OMStream::size(void) const
+{
+TRACE("OMStream::size");
+  PRECONDITION("No error on stream", ferror(_file) == 0);
+	// where are we now?
+	OMUInt64 oldposition = position();
+
+	// seek to end
+  errno = 0;
+
+#if defined( OM_OS_UNIX )
+
+	// all POSIX-compliant
+	int status = fseeko64( _file, (__off64_t)0, SEEK_END);
+  
+#elif defined( OM_OS_WINDOWS )
+
+	// we have to rely upon fseek( _file, 0, SEEK_END ) to do the right thing
+  int status = fseek(_file, 0L, SEEK_END);
+  //ASSERT("Successful seek", status == 0);
+
+#else
+
+	// have to be regular ISO
+  int status = fseek(_file, 0L, SEEK_END);
+  //ASSERT("Successful seek", status == 0);
+
+#endif
+  ASSERT("Successful seek", status == 0);
+
+	// where is the end?
+	OMUInt64 result = position();
+
+	// back to where we started from
+	OMStream* nonConstThis = const_cast<OMStream*>(this);
+	nonConstThis->setPosition( oldposition );
+
+	return result;
+}
+*/
+
+void OMStream::setSize(OMUInt64 newSize) 
 {
   TRACE("OMStream::setSize");
   PRECONDITION("Stream is writable", isWritable());
