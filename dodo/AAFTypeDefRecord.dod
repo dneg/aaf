@@ -30,7 +30,8 @@ AD_X2METHOD5(Initialize,
 			 aafUID_constref,
 			 id,
 			 auid to be used to identify this type,
-			 ,
+			 xxx1,
+			 xxx2,
 
 			 [in\, size_is\(numMembers\)],
 			 objInArray,
@@ -39,6 +40,7 @@ AD_X2METHOD5(Initialize,
        array of member types to be represented in this record
     // type,
 			 numMembers,
+			 xxx4,
 
 			 [in\, size_is\(numMembers\)],
 			 objPass,
@@ -46,21 +48,24 @@ AD_X2METHOD5(Initialize,
 			 pMemberNames,
        array of member names to be represented in this enumerated
     // type,
-			 ,
+			 xxx5,
+			 xxx6,
 
 			 [in],
 			 objPass,
 			 aafUInt32,
 			 numMembers,
 			 number of members in pMemberInfo array,
-			 ,
+			 xxx7,
+			 xxx8,
 
 			 [in],
 			 objPass,
 			 aafCharacter_constptr,
 			 pTypeName,
 			 friendly name of this type definition,
-			 ,
+			 xxx9,
+			 xxx10,
 
      Initializes this type def to be identified by the given guid\, and
   // to contain the given members \(types and names\).  It is considered
@@ -211,6 +216,7 @@ AD_X2METHOD3(CreateValueFromValues,
        array of property values for members of record value which
     // is to be created.,
 			 numMembers,
+			 ,
 
 			 [in],
 			 objPass,
@@ -218,12 +224,14 @@ AD_X2METHOD3(CreateValueFromValues,
 			 numMembers,
 			 size of pMemberValues array.,
 			 ,
+			 ,
 
 			 [out],
 			 objOut,
 			 AAFPropertyValue,
 			 ppPropVal,
 			 newly-created property value,
+			 ,
 			 ,
 
      Creates a property value which contains a record type.  The

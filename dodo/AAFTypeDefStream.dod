@@ -121,6 +121,7 @@ AD_X2METHOD3(AppendElements,
        property value corresponding to stream to which elements are to
     // be appended,
 			 ,
+			 ,
 
 			 [in\, size_is\(numElements\)],
 			 objInArray,
@@ -128,12 +129,14 @@ AD_X2METHOD3(AppendElements,
 			 ppMemberPropVals,
 			 values to be appended to this stream,
 			 numElements,
+			 ,
 
 			 [in],
 			 objPass,
 			 aafUInt32,
 			 numElements,
 			 number of values to be appended,
+			 ,
 			 ,
 
 			Appends elements to the end of the array\, setting them to the
@@ -175,12 +178,14 @@ AD_X2METHOD4(GetElementValues,
 			 pInPropVal,
 			 property value to read,
 			 ,
+			 ,
 
 			 [in],
 			 objPass,
 			 aafInt64,
 			 startElement,
 			 zero-based index into elements in this array type,
+			 ,
 			 ,
 
 			 [out\, size_is\(numElements\)],
@@ -189,12 +194,14 @@ AD_X2METHOD4(GetElementValues,
 			 pOutPropVals,
 			 array of values that are read,
 			 numElements,
+			 numElements,
 
 			 [in],
 			 objPass,
 			 aafUInt32,
 			 numElements,
 			 number of elements to get,
+			 ,
 			 ,
 
      Gets multiple property values\, corresponding to stream element
