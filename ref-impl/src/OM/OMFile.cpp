@@ -48,178 +48,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-  // @mfunc Constructor. Create an <c OMFile> object representing
-  //        an existing external file.
-  //   @parm The name of this <c OMFile>.
-  //   @parm The access mode of this <c OMFile>.
-  //   @parm The <c OMStoredObject> containing the root
-  //         <c OMStorable> object.
-  //   @parm The <c OMClassFactory> to use to restore objects from
-  //         this <c OMFile>.
-  //   @parm The <e OMFile::OMLoadMode> for this <c OMFile>.
-OMFile::OMFile(const wchar_t* fileName,
-               void* clientOnRestoreContext,
-               const OMAccessMode mode,
-               OMStoredObject* store,
-               const OMClassFactory* factory,
-               OMDictionary* dictionary,
-               const OMLoadMode loadMode)
-: _root(0),
-  _rootStore(store),
-  _dictionary(dictionary),
-  _objectDirectory(0),
-  _referencedProperties(0),
-  _mode(mode),
-  _loadMode(loadMode),
-  _fileName(0),
-  _signature(nullOMFileSignature),
-  _clientOnSaveContext(0),
-  _clientOnRestoreContext(clientOnRestoreContext),
-  _encoding(MSSBinaryEncoding),
-  _rawStorage(0),
-  _isOpen(false),
-  _isClosed(false),
-  _isNew(false),
-  _byteOrder(unspecified)
-{
-  TRACE("OMFile::OMFile");
-
-  PRECONDITION("Valid file name", validWideString(fileName));
-  PRECONDITION("Valid dictionary", _dictionary != 0);
-  _fileName = saveWideString(fileName);
-  setClassFactory(factory);
-  readSignature(_fileName, _signature);
-  setName(L"/");
-  _isOpen = true;
-}
-
-  // @mfunc Constructor. Create an <c OMFile> object representing
-  //        a new external file.
-  //   @parm The name of this <c OMFile>.
-  //   @parm The signature of this <c OMFile>.
-  //   @parm The access mode of this <c OMFile>.
-  //   @parm The <c OMStoredObject> in which to store the root
-  //         <c OMStorable> object.
-  //   @parm The <c OMClassFactory> to use to restore objects from
-  //         this <c OMFile>.
-  //   @parm The root <c OMStorable> object to save in this file.
-OMFile::OMFile(const wchar_t* fileName,
-               void* clientOnRestoreContext,
-               OMFileSignature signature,
-               const OMAccessMode mode,
-               OMStoredObject* store,
-               const OMClassFactory* factory,
-               OMDictionary* dictionary,
-               OMRootStorable* root)
-: _root(root),
-  _rootStore(store),
-  _dictionary(dictionary),
-  _objectDirectory(0),
-  _referencedProperties(0),
-  _mode(mode),
-  _loadMode(lazyLoad),
-  _fileName(0),
-  _signature(signature),
-  _clientOnSaveContext(0),
-  _clientOnRestoreContext(clientOnRestoreContext),
-  _encoding(MSSBinaryEncoding),
-  _rawStorage(0),
-  _isOpen(false),
-  _isClosed(false),
-  _isNew(true),
-  _byteOrder(unspecified)
-{
-  TRACE("OMFile::OMFile");
-
-  PRECONDITION("Valid file name", validWideString(fileName));
-  PRECONDITION("Valid dictionary", _dictionary != 0);
-  _fileName = saveWideString(fileName);
-  setClassFactory(factory);
-  setName(L"<file>");
-  _root->attach(this, L"/");
-  _root->setStore(_rootStore);
-  _isOpen = true;
-}
-
-  // @mfunc Constructor. Create an <c OMFile> object representing
-  //        an existing external file.
-OMFile::OMFile(OMRawStorage* rawStorage,
-               void* clientOnRestoreContext,
-               const OMAccessMode mode,
-               const OMClassFactory* factory,
-               OMDictionary* dictionary,
-               const OMLoadMode loadMode)
-: _root(0),
-  _rootStore(0),
-  _dictionary(dictionary),
-  _objectDirectory(0),
-  _referencedProperties(0),
-  _mode(mode),
-  _loadMode(loadMode),
-  _fileName(0),
-  _signature(nullOMFileSignature),
-  _clientOnSaveContext(0),
-  _clientOnRestoreContext(clientOnRestoreContext),
-  _encoding(MSSBinaryEncoding), // tjb
-  _rawStorage(rawStorage),
-  _isOpen(false),
-  _isClosed(false),
-  _isNew(false),
-  _byteOrder(unspecified)
-{
-  TRACE("OMFile::OMFile");
-
-  PRECONDITION("Valid raw storage", _rawStorage != 0);
-  PRECONDITION("Consistent access modes",
-                     IMPLIES(((mode == modifyMode) || (mode == writeOnlyMode)),
-                     rawStorage->isWritable()));
-  PRECONDITION("Valid dictionary", _dictionary != 0);
-
-  setClassFactory(factory);
-  setName(L"/");
-}
-
-  // @mfunc Constructor. Create an <c OMFile> object representing
-  //          a new external file.
-OMFile::OMFile(OMRawStorage* rawStorage,
-               void* clientOnRestoreContext,
-               OMFileSignature signature,
-               const OMAccessMode mode,
-               const OMClassFactory* factory,
-               OMDictionary* dictionary,
-               OMRootStorable* root,
-               const OMByteOrder byteOrder)
-: _root(root),
-  _rootStore(0),
-  _dictionary(dictionary),
-  _objectDirectory(0),
-  _referencedProperties(0),
-  _mode(mode),
-  _loadMode(lazyLoad),
-  _fileName(0),
-  _signature(signature),
-  _clientOnSaveContext(0),
-  _clientOnRestoreContext(clientOnRestoreContext),
-  _encoding(MSSBinaryEncoding), // tjb
-  _rawStorage(rawStorage),
-  _isOpen(false),
-  _isClosed(false),
-  _isNew(true),
-  _byteOrder(byteOrder)
-{
-  TRACE("OMFile::OMFile");
-
-  PRECONDITION("Valid dictionary", _dictionary != 0);
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Consistent access modes",
-                     IMPLIES(((mode == modifyMode) || (mode == writeOnlyMode)),
-                     rawStorage->isWritable()));
-
-  setClassFactory(factory);
-  setName(L"<file>");
-  _root->attach(this, L"/");
-}
-
   // @mfunc Destructor.
 OMFile::~OMFile(void)
 {
@@ -978,6 +806,178 @@ void* OMFile::clientOnSaveContext(void)
 void* OMFile::clientOnRestoreContext(void)
 {
   return _clientOnRestoreContext;
+}
+
+  // @mfunc Constructor. Create an <c OMFile> object representing
+  //        an existing external file.
+  //   @parm The name of this <c OMFile>.
+  //   @parm The access mode of this <c OMFile>.
+  //   @parm The <c OMStoredObject> containing the root
+  //         <c OMStorable> object.
+  //   @parm The <c OMClassFactory> to use to restore objects from
+  //         this <c OMFile>.
+  //   @parm The <e OMFile::OMLoadMode> for this <c OMFile>.
+OMFile::OMFile(const wchar_t* fileName,
+               void* clientOnRestoreContext,
+               const OMAccessMode mode,
+               OMStoredObject* store,
+               const OMClassFactory* factory,
+               OMDictionary* dictionary,
+               const OMLoadMode loadMode)
+: _root(0),
+  _rootStore(store),
+  _dictionary(dictionary),
+  _objectDirectory(0),
+  _referencedProperties(0),
+  _mode(mode),
+  _loadMode(loadMode),
+  _fileName(0),
+  _signature(nullOMFileSignature),
+  _clientOnSaveContext(0),
+  _clientOnRestoreContext(clientOnRestoreContext),
+  _encoding(MSSBinaryEncoding),
+  _rawStorage(0),
+  _isOpen(false),
+  _isClosed(false),
+  _isNew(false),
+  _byteOrder(unspecified)
+{
+  TRACE("OMFile::OMFile");
+
+  PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid dictionary", _dictionary != 0);
+  _fileName = saveWideString(fileName);
+  setClassFactory(factory);
+  readSignature(_fileName, _signature);
+  setName(L"/");
+  _isOpen = true;
+}
+
+  // @mfunc Constructor. Create an <c OMFile> object representing
+  //        a new external file.
+  //   @parm The name of this <c OMFile>.
+  //   @parm The signature of this <c OMFile>.
+  //   @parm The access mode of this <c OMFile>.
+  //   @parm The <c OMStoredObject> in which to store the root
+  //         <c OMStorable> object.
+  //   @parm The <c OMClassFactory> to use to restore objects from
+  //         this <c OMFile>.
+  //   @parm The root <c OMStorable> object to save in this file.
+OMFile::OMFile(const wchar_t* fileName,
+               void* clientOnRestoreContext,
+               OMFileSignature signature,
+               const OMAccessMode mode,
+               OMStoredObject* store,
+               const OMClassFactory* factory,
+               OMDictionary* dictionary,
+               OMRootStorable* root)
+: _root(root),
+  _rootStore(store),
+  _dictionary(dictionary),
+  _objectDirectory(0),
+  _referencedProperties(0),
+  _mode(mode),
+  _loadMode(lazyLoad),
+  _fileName(0),
+  _signature(signature),
+  _clientOnSaveContext(0),
+  _clientOnRestoreContext(clientOnRestoreContext),
+  _encoding(MSSBinaryEncoding),
+  _rawStorage(0),
+  _isOpen(false),
+  _isClosed(false),
+  _isNew(true),
+  _byteOrder(unspecified)
+{
+  TRACE("OMFile::OMFile");
+
+  PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid dictionary", _dictionary != 0);
+  _fileName = saveWideString(fileName);
+  setClassFactory(factory);
+  setName(L"<file>");
+  _root->attach(this, L"/");
+  _root->setStore(_rootStore);
+  _isOpen = true;
+}
+
+  // @mfunc Constructor. Create an <c OMFile> object representing
+  //        an existing external file.
+OMFile::OMFile(OMRawStorage* rawStorage,
+               void* clientOnRestoreContext,
+               const OMAccessMode mode,
+               const OMClassFactory* factory,
+               OMDictionary* dictionary,
+               const OMLoadMode loadMode)
+: _root(0),
+  _rootStore(0),
+  _dictionary(dictionary),
+  _objectDirectory(0),
+  _referencedProperties(0),
+  _mode(mode),
+  _loadMode(loadMode),
+  _fileName(0),
+  _signature(nullOMFileSignature),
+  _clientOnSaveContext(0),
+  _clientOnRestoreContext(clientOnRestoreContext),
+  _encoding(MSSBinaryEncoding), // tjb
+  _rawStorage(rawStorage),
+  _isOpen(false),
+  _isClosed(false),
+  _isNew(false),
+  _byteOrder(unspecified)
+{
+  TRACE("OMFile::OMFile");
+
+  PRECONDITION("Valid raw storage", _rawStorage != 0);
+  PRECONDITION("Consistent access modes",
+                     IMPLIES(((mode == modifyMode) || (mode == writeOnlyMode)),
+                     rawStorage->isWritable()));
+  PRECONDITION("Valid dictionary", _dictionary != 0);
+
+  setClassFactory(factory);
+  setName(L"/");
+}
+
+  // @mfunc Constructor. Create an <c OMFile> object representing
+  //          a new external file.
+OMFile::OMFile(OMRawStorage* rawStorage,
+               void* clientOnRestoreContext,
+               OMFileSignature signature,
+               const OMAccessMode mode,
+               const OMClassFactory* factory,
+               OMDictionary* dictionary,
+               OMRootStorable* root,
+               const OMByteOrder byteOrder)
+: _root(root),
+  _rootStore(0),
+  _dictionary(dictionary),
+  _objectDirectory(0),
+  _referencedProperties(0),
+  _mode(mode),
+  _loadMode(lazyLoad),
+  _fileName(0),
+  _signature(signature),
+  _clientOnSaveContext(0),
+  _clientOnRestoreContext(clientOnRestoreContext),
+  _encoding(MSSBinaryEncoding), // tjb
+  _rawStorage(rawStorage),
+  _isOpen(false),
+  _isClosed(false),
+  _isNew(true),
+  _byteOrder(byteOrder)
+{
+  TRACE("OMFile::OMFile");
+
+  PRECONDITION("Valid dictionary", _dictionary != 0);
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Consistent access modes",
+                     IMPLIES(((mode == modifyMode) || (mode == writeOnlyMode)),
+                     rawStorage->isWritable()));
+
+  setClassFactory(factory);
+  setName(L"<file>");
+  _root->attach(this, L"/");
 }
 
   // @mfunc Read the signature from the given file.
