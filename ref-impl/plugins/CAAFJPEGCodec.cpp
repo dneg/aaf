@@ -1949,7 +1949,7 @@ void CAAFJPEGCodec::UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper
 	checkResult(descriptorHelper.SetStoredView(_storedHeight, _storedWidth));
 	checkResult(descriptorHelper.SetSampledView(_sampledHeight, _sampledWidth, _sampledXOffset, _sampledYOffset));
 	checkResult(descriptorHelper.SetDisplayView(_displayHeight, _displayWidth, _displayXOffset, _displayYOffset));
-_frameLayout=kAAFSeparateFields;	checkResult(descriptorHelper.SetFrameLayout(_frameLayout));
+	checkResult(descriptorHelper.SetFrameLayout(_frameLayout));
 	checkResult(descriptorHelper.SetVideoLineMap(_videoLineMapSize, _videoLineMap));
 	checkResult(descriptorHelper.SetImageAspectRatio(_imageAspectRatio));
 	checkResult(descriptorHelper.SetAlphaTransparency(_alphaTransparency));
