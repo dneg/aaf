@@ -51,8 +51,8 @@
 
 
 ImplAAFScopeReference::ImplAAFScopeReference ():
-	_relativeScope(			PID_ScopeReference_RelativeScope,		"RelativeScope"),
-	_relativeSlot(			PID_ScopeReference_RelativeSlot,		"RelativeSlot")
+	_relativeScope(			PID_ScopeReference_RelativeScope,		L"RelativeScope"),
+	_relativeSlot(			PID_ScopeReference_RelativeSlot,		L"RelativeSlot")
 {
 	_persistentProperties.put(		_relativeScope.address());
 	_persistentProperties.put(		_relativeSlot.address());
