@@ -68,6 +68,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFComponent*				pComponent = NULL;
 	IAAFFiller*					pFiller = NULL;
 	IAAFSequence*				pSequence = NULL;
+	IAAFEffectDef*				pEffectDef = NULL;
 	
 	aafUID_t					newMobID;
 	aafUID_t					datadef = DDEF_Video;
@@ -170,13 +171,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	    checkResult(pDictionary->CreateInstance(&AUID_AAFTransition,
 												IID_IAAFTransition, 
 												(IUnknown **)&pTransition));
+
+		checkResult(pDictionary->CreateInstance(&AUID_AAFEffectDef,
+												IID_IAAFEffectDef,
+												(IUnknown **)&pEffectDef));
 		// Create an empty Effect object !!
 		checkResult(pDictionary->CreateInstance(&AUID_AAFGroup,
 												IID_IAAFGroup,
 												(IUnknown **)&pGroup));
 
 		checkResult(pTransition->Create (&datadef, transitionLength, cutPoint, pGroup));
-		checkResult(pGroup->Initialize(&datadef, transitionLength, NULL));
+		checkResult(pGroup->Initialize(&datadef, transitionLength, pEffectDef));
 		checkResult(pTransition->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 
 		// now append the transition
@@ -219,6 +224,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (pFiller)
 		pFiller->Release();
+	if (pEffectDef)
+		pEffectDef->Release();
 
 
 	if (pGroup)
