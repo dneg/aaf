@@ -29,6 +29,8 @@
 #ifndef OMREFERENCECONTAINERITER_H
 #define OMREFERENCECONTAINERITER_H
 
+#include <stddef.h> // for size_t
+
 #include "OMContainerIterator.h"
 
 class OMObject;
