@@ -72,10 +72,12 @@ private:
 	AutoRelease & operator= ( AutoRelease &ar ) { return *this; } // N/A
 	AutoRelease( AutoRelease &ar ){};// N/A
 public:
-	operator= ( resource * ptr )
+	AutoRelease<resource>& operator= ( resource * ptr )
 	{
 		Assert( iResource.ptr == 0 );
 		iResource.ptr = ptr;
+
+		return *this;
 	}
 
 	AutoRelease( resource *ptr )
