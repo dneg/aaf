@@ -85,6 +85,7 @@ inline void checkExpression(bool expression, HRESULT r)
 
 const aafUID_t kTestEffectID = { 0xD15E7611, 0xFE40, 0x11d2, { 0x80, 0xA5, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 const aafUID_t kTestParmID = { 0xC7265931, 0xFE57, 0x11d2, { 0x80, 0xA5, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafRational_t kTestLevel = { 1, 2 };
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
@@ -144,6 +145,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob				*pMob = NULL;
 	IAAFSegment			*pSeg = NULL;
 	IAAFTimelineMobSlot	*pSlot = NULL;
+  IAAFConstantValue *pConstValue = NULL;
 	IAAFParameter		*pParm = NULL;
 	IAAFSegment			*pFiller = NULL;
 	IAAFComponent		*pComponent = NULL;
@@ -155,8 +157,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafUID_t			effectID = kTestEffectID;
 	aafUID_t			parmID = kTestParmID;
 	aafInt32			numSegments;
-/*	long				test;
-*/
+	aafRational_t		testLevel = kTestLevel;
 
 	try
 	{
@@ -183,7 +184,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
-		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
+		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC, defs.tdRational()));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 
@@ -229,12 +230,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 													TEST_EFFECT_LEN,
 													pOperationDef));
 
-			checkResult(defs.cdParameter()->
-						CreateInstance(IID_IAAFParameter, 
-									   (IUnknown **)&pParm));
-			checkResult(pParm->SetParameterDefinition (pParamDef));
- // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
+			checkResult(defs.cdConstantValue()->
+						CreateInstance(IID_IAAFConstantValue, 
+									   (IUnknown **)&pConstValue));
+			checkResult(pConstValue->Initialize (pParamDef, sizeof(testLevel), (aafDataBuffer_t)&testLevel));
+			checkResult(pConstValue->SetValue(sizeof(testLevel), (aafDataBuffer_t)&testLevel));
+
+      checkResult(pConstValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
 			checkResult(pOperationGroup->AddParameter (pParm));
+      pConstValue->Release ();
+      pConstValue = NULL;
+
 			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();
 			pFiller = NULL;
@@ -315,6 +321,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSlot->Release();
 	if (pComponent)
 		pComponent->Release();
+  if (pConstValue)   
+    pConstValue->Release ();
 
 	if (pParm)
 		pParm->Release();
