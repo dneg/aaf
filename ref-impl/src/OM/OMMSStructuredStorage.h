@@ -69,7 +69,7 @@
 #error "Don't know which structured storage implementation to use."
 #endif
 
- //redefine OM_STGOPTIONS so that it is available on all platforms
+ //redefine STGOPTIONS so that it is available on all platforms
 typedef struct tagOM_STGOPTIONS
 {
   USHORT      usVersion;
@@ -77,6 +77,7 @@ typedef struct tagOM_STGOPTIONS
   ULONG       ulSectorSize;
   const WCHAR *pwcsTemplateFile;
 } OM_STGOPTIONS;
+
 
 
 // Determine whether or not UNICODE versions of the APIs are in use.
@@ -194,11 +195,6 @@ void OMCoUninitialize(void);
 
 
 
-
-#endif
-
-
-
 #ifdef OM_USE_STORAGE_EX
 
 //this function does ot exist in the current MS Structured Storage Library
@@ -217,3 +213,5 @@ OMInt32 StgCreateDocfileOnILockBytesEx (
 
 
 #endif // OM_USE_STORAGE_EX
+
+#endif
