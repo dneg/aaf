@@ -3,7 +3,6 @@
 #include "OMFile.h"
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
-#include "OMUtilities.h"
 
 #include "OMAssertions.h"
 
