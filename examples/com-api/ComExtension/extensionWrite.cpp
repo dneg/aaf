@@ -113,7 +113,7 @@ static void CreateAndRegisterRoleEnum (IAAFDictionary * pDict)
 
   // Instantiate a type definition object which will describe eRole
   // extensible enumerations.
-  IAAFTypeDefExtEnumSP ptde;
+  IAAFTypeDefExtEnum *ptde;
   check (pDict->CreateInstance (&AUID_AAFTypeDefExtEnum,
 								IID_IAAFTypeDefExtEnum,
 								(IUnknown**) &ptde));
@@ -133,9 +133,13 @@ static void CreateAndRegisterRoleEnum (IAAFDictionary * pDict)
   // Register this type definition in the dictionary.  The
   // dictionary::RegisterType() method expects an IAAFTypeDef pointer,
   // so we'll QI for that first.
-  IAAFTypeDefSP ptd;
+  IAAFTypeDef *ptd;
   check (ptde->QueryInterface (IID_IAAFTypeDef, (void **)&ptd));
   check (pDict->RegisterType (ptd));
+  ptde->Release();
+  ptde=NULL;
+  ptd->Release();
+  ptd=NULL;
 }
 
 
@@ -149,7 +153,7 @@ static void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 
   // Instantiate a class definition object which will describe
   // PersonnelResource objects.
-  IAAFClassDefSP pcd;
+  IAAFClassDef *pcd=NULL;
   check (pDict->CreateInstance (&AUID_AAFClassDef,
 								IID_IAAFClassDef,
 								(IUnknown**) &pcd));
@@ -158,7 +162,7 @@ static void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // parent class, so look it up here.  Since PersonnelResource
   // inherits directly from AAFObject, look up the AAFObject class
   // definition.
-  IAAFClassDefSP pcd_Object;
+  IAAFClassDef *pcd_Object=NULL;
   check (pDict->LookupClass (&AUID_AAFObject, &pcd_Object));
 
   // Now initialize our new PersonnelResource class definition.  We'll
@@ -183,13 +187,13 @@ static void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // definition; declare a variable where the Append method can put
   // the new prop def.  However we won't use the prop def in this
   // function.
-  IAAFPropertyDefSP pd_unused;
+  IAAFPropertyDef *pd_unused=NULL;
 
   // Add the Name property to the PersonnelRecord class defintion.
   // The type of the Name property is String, so we'll need to specify
   // the type definition describing String when we append the prop
   // def.  First, look up the type definition describing String.
-  IAAFTypeDefSP ptd_String;
+  IAAFTypeDef *ptd_String=NULL;
   check (pDict->LookupType ((aafUID_t*) &kAAFTypeID_String,
 							&ptd_String));
 
@@ -210,7 +214,7 @@ static void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
   // we've just registered), so we'll need to specify the type
   // definition describing eRole when we append the prop def.  First,
   // look up the type definition describing eRole.
-  IAAFTypeDefSP ptd_Role;
+  IAAFTypeDef *ptd_Role=NULL;
 
   // Now request that a new property def be appended to this class
   // def.  We're specifying an AUID by which this property will be
@@ -224,13 +228,15 @@ static void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 									ptd_Role,
 									AAFFalse,   // mandatory
 									&pd_unused));
+  pd_unused->Release();
+  pd_unused=NULL;
 
   // Add the Contract ID property to the PersonnelRecord class
   // defintion.  The type of the Contract ID property is UInt32, so
   // we'll need to specify the type definition describing UInt32 when
   // we append the prop def.  First, look up the type definition
   // describing UInt32.
-  IAAFTypeDefSP ptd_ui32;
+  IAAFTypeDef *ptd_ui32=NULL;
   check (pDict->LookupType ((aafUID_t*) &kAAFTypeID_UInt32, &ptd_ui32));
 
   // Now request that a new property def be appended to this class
@@ -244,11 +250,24 @@ static void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
 									ptd_ui32,
 									AAFTrue,    // optional
 									&pd_unused));
+  pd_unused->Release();
+  pd_unused=NULL;
 
   // Now that the class definition describing PersonnelResource is
   // initialized and its properties have been specified, we can
   // register that class definition.
   check (pDict->RegisterClass (pcd));
+  pcd->Release();
+  pcd=NULL;
+  pcd_Object->Release();
+  pcd_Object=NULL;
+  ptd_String->Release();
+  ptd_String=NULL;
+  ptd_Role->Release();
+  ptd_Role=NULL;
+  ptd_ui32->Release();
+  ptd_ui32=NULL;
+
 }
 
 
@@ -267,14 +286,14 @@ CreateAndRegisterPersonnelResourceReference
   // case, we want to specify that we're referencing objects of class
   // PersonnelResource.  Therefore we'll have to look up the class
   // describing PersonnelResource objects for use below.
-  IAAFClassDefSP pcd;
+  IAAFClassDef *pcd=NULL;
   check (pDict->LookupClass ((aafUID_t*) &kClassID_PersonnelResource,
 							 &pcd));
 
   // Instantiate a TypeDefinition for use as a Reference to a
   // PersonnelResource object.  We'll instantiate a
   // TypeDefinitionStrongObjectReference.
-  IAAFTypeDefObjectRefSP ptdr;
+  IAAFTypeDefObjectRef *ptdr=NULL;
   check (pDict->CreateInstance (&AUID_AAFTypeDefStrongObjRef,
 								IID_IAAFTypeDefObjectRef,
 								(IUnknown**) &ptdr));
@@ -292,9 +311,15 @@ CreateAndRegisterPersonnelResourceReference
   // Register this type definition in the dictionary.  The
   // dictionary::RegisterType() method expects an IAAFTypeDef pointer,
   // so we'll QI for that first.
-  IAAFTypeDefSP ptd;
+  IAAFTypeDef *ptd=NULL;
   check (ptdr->QueryInterface (IID_IAAFTypeDef, (void **)&ptd));
   check (pDict->RegisterType (ptd));
+  pcd->Release();
+  pcd=NULL;
+  ptdr->Release();
+  ptdr=NULL;
+  ptd->Release();
+  ptd=NULL;
 }
 
 
@@ -311,7 +336,7 @@ CreateAndRegisterPersonnelResourceReferenceVector
   // Instantiate a TypeDefinition for use as a Vector of References to
   // PersonnelResource objects.  We'll instantiate a
   // TypeDefinitionVariableArray.
-  IAAFTypeDefVariableArraySP ptdv;
+  IAAFTypeDefVariableArray *ptdv=NULL;
   check (pDict->CreateInstance (&AUID_AAFTypeDefVariableArray,
 								IID_IAAFTypeDefVariableArray,
 								(IUnknown**) &ptdv));
@@ -321,7 +346,7 @@ CreateAndRegisterPersonnelResourceReferenceVector
   // StrongReferenceToPersonnelRecord objects.  Therefore we'll have
   // to look up the type describing StrongReferenceToPersonnelRecord
   // for use below.
-  IAAFTypeDefSP ptdr;
+  IAAFTypeDef *ptdr=NULL;
   check (pDict->LookupType ((aafUID_t*) &kTypeID_PersonnelResourceStrongReference,
 							&ptdr));
 
@@ -339,9 +364,16 @@ CreateAndRegisterPersonnelResourceReferenceVector
   // Register this type definition in the dictionary.  The
   // dictionary::RegisterType() method expects an IAAFTypeDef pointer,
   // so we'll QI for that first.
-  IAAFTypeDefSP ptd;
+  IAAFTypeDef *ptd=NULL;
   check (ptdv->QueryInterface (IID_IAAFTypeDef, (void **)&ptd));
   check (pDict->RegisterType (ptd));
+  ptd->Release();
+  ptd=NULL;
+  ptdr->Release();
+  ptdr=NULL;
+  ptdv->Release();
+  ptdv=NULL;
+
 }
 
 
@@ -355,7 +387,7 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
 
   // Instantiate a class definition object which will describe
   // PersonnelMob objects.
-  IAAFClassDefSP pcd;
+  IAAFClassDef *pcd=NULL;
   check (pDict->CreateInstance (&AUID_AAFClassDef,
 								IID_IAAFClassDef,
 								(IUnknown**) &pcd));
@@ -363,7 +395,7 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
   // We'll have to specify the PersonnelMob class definition's parent
   // class, so look it up here.  Since PersonnelResource inherits from
   // AAFMob, look up the AAFMob class definition.
-  IAAFClassDefSP pcd_Mob;
+  IAAFClassDef *pcd_Mob=NULL;
   check (pDict->LookupClass (&AUID_AAFMob, &pcd_Mob));
 
   // Now initialize our new PersonnelMob class definition.  We'll
@@ -388,14 +420,14 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
   // definition; declare a variable where the Append method can put
   // the new prop def.  However we won't use the prop def in this
   // function.
-  IAAFPropertyDefSP pd_unused;
+  IAAFPropertyDef *pd_unused=NULL;
 
   // Add the Personnel property to the PersonnelMob class defintion.
   // The type of the Personnel property is
   // Vector-of-strong-reference-to-PesonnelRecord, so we'll need to
   // specify the type definition describing that kind of vector when
   // we append the prop def.  First, look up that type definition.
-  IAAFTypeDefSP ptd_PersonnelVector;
+  IAAFTypeDef *ptd_PersonnelVector=NULL;
   check (pDict->LookupType ((aafUID_t*) &kTypeID_PersonnelResourceStrongReferenceVector,
 							&ptd_PersonnelVector));
 
@@ -410,11 +442,20 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
 									ptd_PersonnelVector,
 									AAFFalse,
 									&pd_unused));
+  pd_unused->Release();
+  pd_unused=NULL;
 
   // Now that the class definition describing PersonnelMob is
   // initialized and its properties have been specified, we can
   // register that class definition.
   check (pDict->RegisterClass (pcd));
+  pcd->Release();
+  pcd=NULL;
+  pcd_Mob->Release();
+  pcd_Mob=NULL;
+  ptd_PersonnelVector->Release();
+  ptd_PersonnelVector=NULL;
+
 }
 
 
@@ -475,7 +516,7 @@ static void AppendResource (IAAFDictionary * pDict,
   assert (info.name);
 
   // Instantiate the PersonnelResource object.
-  IAAFObjectSP pObj;
+  IAAFObject *pObj=NULL;
   check (pDict->CreateInstance ((aafUID_t*) &kClassID_PersonnelResource,
 								IID_IAAFObject,
 								(IUnknown**) &pObj));
@@ -489,20 +530,20 @@ static void AppendResource (IAAFDictionary * pDict,
 
   // Look up the type def for StrongReference-to-PersonnelResource
   // objects.
-  IAAFTypeDefSP td;
+  IAAFTypeDef *td=NULL;
   check (pDict->LookupType ((aafUID_t*) &kTypeID_PersonnelResourceStrongReference,
 							&td));
   
   // Create the StrongReference-to-PersonnelResource property value
   // through the type def.  This must be done through the
   // IAAFTypeDefObjectRef interface, so QI for that first.
-  IAAFTypeDefObjectRefSP tdo;
+  IAAFTypeDefObjectRef *tdo=NULL;
   check (td->QueryInterface (IID_IAAFTypeDefObjectRef,
 							 (void **)&tdo));
 
   // Create the value.  The CreateValue() method takes as argument the
   // object to which this value will refer.
-  IAAFPropertyValueSP pv;
+  IAAFPropertyValue *pv=NULL;
   check (tdo->CreateValue (pObj, &pv));
 
   // Append the new property value (which refers to the new
@@ -520,31 +561,31 @@ static void AppendResource (IAAFDictionary * pDict,
   //   getting, and get the property.
 
   // QI for the PersonnelMob's IAAFObject interface
-  IAAFObjectSP pMobObj;
+  IAAFObject *pMobObj=NULL;
   check (pMob->QueryInterface (IID_IAAFObject,
 							   (void **)&pMobObj));
 
   // Use the IAAFObject interface to obtain the class definition
   // describing the PersonnelMob.
-  IAAFClassDefSP cd;
+  IAAFClassDef *cd=NULL;
   check (pMobObj->GetDefinition (&cd));
 
   // Use the ClassDefinition to look up the PropertyDefinition for the
   // Personnel property on the Personnel mob.
-  IAAFPropertyDefSP pd;
+  IAAFPropertyDef *pd=NULL;
   check (cd->LookupPropertyDef ((aafUID_t*) &kPropID_PersonnelMob_Personnel,
 								&pd));
 
   // Use the PropertyDefinition to specify the property whose value we
   // wish to obtain.
-  IAAFPropertyValueSP pva;
+  IAAFPropertyValue *pva=NULL;
   check (pMobObj->GetPropertyValue (pd, &pva));
 
   // Now get a type def for the array of personnel, and use that type
   // def to append the new personnel prop val to it.
-  IAAFTypeDefSP tdpv;
+  IAAFTypeDef *tdpv=NULL;
   check (pva->GetType (&tdpv));
-  IAAFTypeDefVariableArraySP tda;
+  IAAFTypeDefVariableArray *tda=NULL;
   check (tdpv->QueryInterface (IID_IAAFTypeDefVariableArray,
 							   (void **)&tda));
   check (tda->AppendElement (pva, pv));
@@ -552,6 +593,25 @@ static void AppendResource (IAAFDictionary * pDict,
   // Now that the property value has had the new element appended to
   // it, set the property in the PersonnelMob to its new value.
   check (pMobObj->SetPropertyValue (pd, pva));
+  pObj->Release();
+  pObj=NULL;
+  td->Release();
+  td=NULL;
+  tdo->Release();
+  tdo=NULL;
+  pv->Release();
+  pv=NULL;
+  pMobObj->Release();
+  pMobObj=NULL;
+  cd->Release();
+  cd=NULL;
+  pd->Release();
+  pd=NULL;
+  pva->Release();
+  pva=NULL;
+  tda->Release();
+  tda=NULL;
+
 }
 
 
@@ -587,16 +647,16 @@ void extensionWrite (const aafCharacter * filename)
   ProductInfo.productID = NULL_UID;
   ProductInfo.platform = 0;
   
-  IAAFFileSP pFile;
+  IAAFFile *pFile=NULL;
   check (AAFFileOpenNewModify ((aafCharacter*) filename,
 							   0,
 							   &ProductInfo,
 							   &pFile));
   
-  IAAFHeaderSP pHead;
+  IAAFHeader *pHead=NULL;
   check (pFile->GetHeader(&pHead));
 
-  IAAFDictionarySP pDict;
+  IAAFDictionary *pDict=NULL;
   check (pHead->GetDictionary(&pDict));
 
   // Register the extensible enumeration describing Role in the
@@ -620,7 +680,7 @@ void extensionWrite (const aafCharacter * filename)
   CreateAndRegisterPersonnelMob (pDict);
 
   // Instantiate a PersonnelMob object.
-  IAAFMobSP pMob;
+  IAAFMob *pMob=NULL;
   CreatePersonnelMob (pDict, &pMob);
 
   // Add the new PersonnelMOb object to the file's header.
@@ -637,4 +697,13 @@ void extensionWrite (const aafCharacter * filename)
   // Save the file and close it.
   check (pFile->Save());
   check (pFile->Close());
+  pFile->Release();
+  pFile=NULL;
+  pHead->Release();
+  pHead=NULL;
+  pDict->Release();
+  pDict=NULL;
+  pMob->Release();
+  pMob=NULL;
+
 }
