@@ -49,6 +49,9 @@ $SharedTestDirPath = "testfiles";
 	     ModifyEssence,
 	   ],
 
+  # Use this test vector run the tests mentioned in ../ReadMe.html.
+  #Tests => [ TestLoad, TestOne, TestTwo ],
+
   # A full path the COM library is required for each platform and
   # library version.  An CFG entry for each version in the Versions
   # list accomplishes this.  Each version entry maps the platform to a
@@ -196,6 +199,17 @@ $SharedTestDirPath = "testfiles";
   # in the file.
 
   TestLoad => [ "load" ],
+
+  TestOne => [ "create",
+	       [ "AddMasterMobs A B" ],
+	       [ "FindMasterMobsExclusive A B" ],
+	     ],
+
+  TestTwo => [ "modify",
+	       [ "AddMasterMobs C D" ],
+	       [ "FindMasterMobsExclusive A B C D" ],
+	       "TestOne"
+	     ],
 
   AddMobs =>
 
