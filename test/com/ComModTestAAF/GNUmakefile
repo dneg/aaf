@@ -42,16 +42,19 @@ CXXFILES2 = $(CXXFILES_TMP:ModuleTests/%=%)
 
 
 .PHONY : all
-all : $(OBJDIR) $(AAFSDKBINDIR)/ComModAAF$(EXE)
+#all : $(OBJDIR) $(AAFSDKBINDIR)/ComModAAF$(EXE)
+all : $(AAFSDKBINDIR)/ComModAAF$(EXE)
 
 
-$(AAFSDKBINDIR)/ComModAAF$(EXE) : $(CXXOBJS) ModuleTests
+# $(AAFSDKBINDIR)/ComModAAF$(EXE) : $(CXXOBJS) ModuleTests
+$(AAFSDKBINDIR)/ComModAAF$(EXE) : $(CXXOBJS) $(CXXOBJS2)
 	$(LD) $(CXXOBJS) $(CXXOBJS2) \
 	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
 
 
-.PHONY : ModuleTests
-ModuleTests :
+#.PHONY : ModuleTests
+#ModuleTests :
+$(CXXOBJS2):
 	@echo "\nBuilding ModuleTests\n"
 	cd ModuleTests && $(MAKE)
 
