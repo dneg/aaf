@@ -120,7 +120,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	hr = pMob->SetMobID(&newUID);
 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
-	hr = pMob->SetName(L"SourceMOBTest");
+	hr = pMob->SetName(L"EssenceDescriptorTest");
 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
 	
@@ -312,8 +312,8 @@ HRESULT CAAFEssenceDescriptor::test()
   try
 	{
 		hr = CreateAAFFile(	pFileName );
-
-		hr = ReadAAFFile( pFileName );
+		if(hr == AAFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
 	}
   catch (...)
 	{
@@ -325,5 +325,9 @@ HRESULT CAAFEssenceDescriptor::test()
   if (pObject)
 	pObject->Release();
 
-  return hr;
+  	// When all of the functionality of this class is tested, we can return success
+	if(hr == AAFRESULT_SUCCESS)
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+
+	return hr;
 }

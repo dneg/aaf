@@ -329,7 +329,7 @@ HRESULT CAAFSourceClip::test()
 	try
 	{
 		hr = CreateAAFFile(	pFileName );
-		if(hr == AFRESULT_SUCCESS)
+		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );
 	}
 	catch (...)

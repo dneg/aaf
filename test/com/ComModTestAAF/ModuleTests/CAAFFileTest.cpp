@@ -196,8 +196,8 @@ HRESULT CAAFFile::test()
 	try
 	{
 		hr = CreateAAFFile(	pFileName );
-
-		hr = ReadAAFFile( pFileName );
+		if(hr == AAFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
 	}
 	catch (...)
 	{
@@ -210,6 +210,9 @@ HRESULT CAAFFile::test()
   if (pObject)
 	pObject->Release();
 
+  	// When all of the functionality of this class is tested, we can return success
+	if(hr == AAFRESULT_SUCCESS)
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
   return hr;
 }
 
