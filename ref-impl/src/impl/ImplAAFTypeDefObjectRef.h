@@ -60,21 +60,6 @@ protected:
 public:
 
   //****************
-  // Initialize()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Initialize
-        (// @parm [in] auid to be used to identify this type
-         const aafUID_t & id,
-
-         // @parm [in] class def of objects permitted to be referenced
-         ImplAAFClassDef * pObjType,
-
-         // @parm [in, string] friendly name of this type definition
-         const aafCharacter * pTypeName);
-
-
-  //****************
   // CreateValue()
   //
   virtual AAFRESULT STDMETHODCALLTYPE

@@ -54,6 +54,27 @@ protected:
 
 public:
 
+  //****************
+  // Initialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+        (// @parm [in] auid to be used to identify this type
+         const aafUID_t & id,
+
+         // @parm [in] class def of objects permitted to be referenced
+         ImplAAFClassDef * pObjType,
+
+         // @parm [in, string] friendly name of this type definition
+         const aafCharacter * pTypeName,
+
+		 // List of property definition IDs indicating the property where
+		 // the target is to be found.
+		 aafUID_t * pTargetHint,
+
+		 // Number of property def IDs in pTargetHint
+		 aafUInt32 targetHintCount);
+
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
     SetObject (/*[in]*/ ImplAAFPropertyValue * pPropVal,
@@ -80,15 +101,6 @@ public:
 
 
 public:
-
-  /*
-  // Override from AAFTypeDefObjectRef
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Initialize
-        (const aafUID_t & id,
-         const aafUID_t & refdObjID,
-         const aafCharacter * pTypeName);
-  */
 
   // overrides from ImplAAFTypeDef
   //

@@ -54,19 +54,6 @@ ImplAAFTypeDefObjectRef::~ImplAAFTypeDefObjectRef ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefObjectRef::Initialize (
-      const aafUID_t & id,
-      ImplAAFClassDef * pObjType,
-      const aafCharacter * pTypeName)
-{
-  if (! pObjType)  return AAFRESULT_NULL_PARAM;
-
-  return pvtInitialize (id, pObjType, pTypeName);
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::pvtInitialize (
       const aafUID_t & /*pID*/,
       const ImplAAFClassDef * /*pRefdObjID*/,
