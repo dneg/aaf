@@ -53,7 +53,8 @@ CXXFILES = AAFPluginCOM.cpp \
 		CAAFWAVECodec.cpp \
 		CAAFAIFCCodec.cpp \
 		jpegesdatadst.cpp \
-		jpegesdatasrc.cpp
+		jpegesdatasrc.cpp \
+		utf8.cpp
 
 
 SUPOBJS = $(OBJDIR)/aafCvt$(OBJ) \
@@ -61,7 +62,8 @@ SUPOBJS = $(OBJDIR)/aafCvt$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFClassFactory$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFServer$(OBJ) \
 		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFUnknown$(OBJ) \
-		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFInProcServer$(OBJ)
+		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/CAAFInProcServer$(OBJ) \
+		$(AAFBUILDDIR)/com-api/$(AAFTARGETDIR)/utf8$(OBJ)
 
 
 .PHONY : all
