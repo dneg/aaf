@@ -8,6 +8,8 @@
 
 #include "AAFHeader.h"
 #include "OMFile.h"
+#include "OMClassFactory.h"
+#include "AAFIdentification.h"
 
 // Later: These two functions set a global alignment in the
 //file for writing properties.  Used only for media data
@@ -36,13 +38,27 @@ void OMContainer::SetDefaultByteOrder(aafInt16 byteOrder)
 // Close and save the file
 void OMContainer::OMLCloseContainer(void)
 {
-	*_file << *_head;
-  _file->close();
+  if (_mode == writeMode) {
+    *_file << *_head;
+    _file->close();
+  }
 }
 
 // Close without saving the file
 void OMContainer::OMLAbortContainer(void)
 {
+}
+
+OMStorable* makeHeader(void)
+{
+  AAFHeader* newAAFHeader = new AAFHeader;
+  return newAAFHeader->GetRepObject();
+}
+
+OMStorable* makeIdentification(void)
+{
+  AAFIdentification* newAAFIdentification = new AAFIdentification;
+  return newAAFIdentification->GetRepObject();
 }
 
 // Open a file
@@ -53,7 +69,16 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
 {
 	char *pathname;
 
+  _mode = readMode;
 	pathname = GetFileName(attributes);
+  _file = new OMFile(pathname);
+  _file->open();
+
+  OMFile::classFactory()->add(CLSID_AAFHEADER, makeHeader);
+  OMFile::classFactory()->add(CLSID_AAFIDENTIFICATION, makeIdentification);
+
+  OMStorable* head = OMStorable::restoreFrom(_file, "head", _file->root());
+
 }
 
 //Will remove this!
@@ -71,6 +96,7 @@ void OMContainer::OMLOpenNewContainer(OMLSession sessionData,
 {
 	char *pathname;
 
+  _mode = writeMode;
 	pathname = GetFileName(attributes);
 	_file = new OMFile(pathname);
   _file->create();
