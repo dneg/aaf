@@ -171,4 +171,7 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 	return(AAFRESULT_SUCCESS);
 }
 
+extern "C" const aafClassID_t CLSID_AAFComponent;
+
+OMDEFINE_STORABLE(AAFComponent, CLSID_AAFComponent);
 
