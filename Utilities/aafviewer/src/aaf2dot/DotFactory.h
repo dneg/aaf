@@ -56,7 +56,7 @@ class DotFactory
    DotEdge* GetEdge( std::string uid );
 
 
-   std::vector< DotEdge* > GetEdgesWithSourceNode( DotRecordNode *node );
+   std::vector< DotEdge* > GetSlotEdgesWithSourceNode( DotRecordNode *node );
 	
    void RemoveDotElement( DotElement *element );
    void RegisterRemoveDotElement( DotElement *element );
