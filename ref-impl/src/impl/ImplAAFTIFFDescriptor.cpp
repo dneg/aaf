@@ -38,10 +38,10 @@
 
 
 ImplAAFTIFFDescriptor::ImplAAFTIFFDescriptor ():
-_isUniform(PID_TIFFDescriptor_IsUniform,	"Is Uniform"),
-_isContiguous(PID_TIFFDescriptor_IsContiguous,	"Is Contiguous"),
-_leadingLines(PID_TIFFDescriptor_LeadingLines,	"Leading Lines"),
-_trailingLines(PID_TIFFDescriptor_TrailingLines,	"Trailing Lines"),
+_isUniform(PID_TIFFDescriptor_IsUniform,	"IsUniform"),
+_isContiguous(PID_TIFFDescriptor_IsContiguous,	"IsContiguous"),
+_leadingLines(PID_TIFFDescriptor_LeadingLines,	"LeadingLines"),
+_trailingLines(PID_TIFFDescriptor_TrailingLines,	"TrailingLines"),
 _jpegTableID(PID_TIFFDescriptor_JPEGTableID,	"JPEGTableID"),
 _summary(PID_TIFFDescriptor_Summary,	"Summary")
 {
