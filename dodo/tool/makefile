@@ -28,18 +28,17 @@ DEPEND_INCLUDES = $(INCLUDES) -I/usr/include/CC -I/usr/include/g++
 
 OURCFLAGS = -Dbool=int -Dtrue=1 -Dfalse=0
 
-DODO_COMMON_OBJS = SourceInfo.$(OBJ) TextLine.$(OBJ) TextStream.$(OBJ) ArgDef.$(OBJ) \
+DODO_COMMON_OBJS = SourceInfo.$(OBJ) TextStream.$(OBJ) ArgDef.$(OBJ) \
 	ArgSet.$(OBJ) MacroDef.$(OBJ) MacroSet.$(OBJ)
 
 DODO_APP_OBJS = $(DODO_COMMON_OBJS) DodoMain.$(OBJ)
 
 DODO_TEST_OBJS = $(DODO_COMMON_OBJS) TestMain.$(OBJ) \
-	SourceInfoTest.$(OBJ) TextLineTest.$(OBJ) TextStreamTest.$(OBJ) \
+	SourceInfoTest.$(OBJ) TextStreamTest.$(OBJ) \
 	ArgDefTest.$(OBJ) ArgSetTest.$(OBJ) MacroDefTest.$(OBJ) MacroSetTest.$(OBJ)
 
 DODO_SOURCES = DodoMain.cpp TestMain.cpp \
 	SourceInfo.cpp SourceInfoTest.cpp \
-	TextLine.cpp TextLineTest.cpp \
 	TextStream.cpp TextStreamTest.cpp \
 	ArgDef.cpp ArgDefTest.cpp \
 	ArgSet.cpp ArgSetTest.cpp \

@@ -15,6 +15,7 @@
 #define __TCHAR_DEFINED
 #include "ref.hxx"
 #include "wchar.h"
+#include "stdlib.h"
 
 #ifdef _UNICODE
 
@@ -80,7 +81,10 @@ typedef TCHAR OLECHAR, *LPOLECHAR, *LPOLESTR;
 #define _tcsnicmp _strnicmp
 #define _tcscat   strcat
 #define _itot     _itoa
-#define _T(str)   str
+
+#ifndef _T
+  #define _T(str)   str
+#endif /* _T */
 
 #ifdef _WIN32
 

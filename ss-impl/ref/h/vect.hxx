@@ -14,7 +14,9 @@
 #ifndef __VECT_HXX__
 #define __VECT_HXX__
 
-#include <malloc.h>
+// BobT: gcc sez malloc is obsolete; use stdlib instead.
+// #include <malloc.h>
+#include <stdlib.h>
 #include "page.hxx"
 
 //+-------------------------------------------------------------------------

@@ -50,6 +50,10 @@ AAF_BUILD_CONFIG_EXTERN_C_TRAILER
 	  for shared C and C++ header files.  Should be put at the
 	  bottom of such a header file.
 
+AAF_BUILD_CONFIG_EXPLICIT_TEMPLATES
+	- Evaluates to true if this platform requires explicit template
+	  instantiation.
+
  */
 
 
@@ -65,6 +69,10 @@ AAF_BUILD_CONFIG_EXTERN_C_TRAILER
   #define AAF_BUILD_CONFIG_EXTERN_C_TRAILER
 #endif /* ! AAF_BUILD_CONFIG_CPLUSPLUS */
 
+
+#if __GNUC__
+  #define AAF_BUILD_CONFIG_EXPLICIT_TEMPLATES 1
+#endif
 
 #endif /* ! _aaf_tk_bld_cfg_bld_cfg_h_ */
 
