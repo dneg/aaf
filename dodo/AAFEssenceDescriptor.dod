@@ -19,6 +19,7 @@ AD_HEAD
 \******************************************/
 
 #c AD_INCLUDE(myVector)
+AD_FORWARD_DECLARATION(AAFLocator)
 
 AD_CLASS_BEGIN
 
@@ -29,7 +30,7 @@ AD_METHOD1(GetNumLocators,
 
 AD_METHOD2(GetNthLocator,
 		   [in],aafInt32,index,A 1-based index,
-		   [out],AAFLocator,result,Returns a reference to the object,
+		   [out],AAFLocator*,result,Returns a reference to the object,
 		   Gets a particular locator from this media descriptor.)
   //@comm The number of locators may be zero if the media is in the current file.
 
