@@ -138,6 +138,11 @@ public:
     //          in the currently active call to <mf OMStorable::save>.
   virtual void onSave(void* clientContext) const;
 
+    // @cmember Inform this <c OMStorable> that it has just been restored.
+    //          The <p clientContext> passed is the one that was specified
+    //          in the currently active call to <mf OMStorable::restore>.
+  virtual void onRestore(void* clientContext) const;
+
 private:
   // @access Private members.
 
