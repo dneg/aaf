@@ -73,19 +73,60 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPluginDescriptors::Next (
-      aafUInt32  /*count*/,
-      ImplAAFPluginDescriptor ** /*ppAAFPluginDescriptors*/,
-      aafUInt32 *  /*pFetched*/)
+      aafUInt32  count,
+      ImplAAFPluginDescriptor ** ppAAFPluginDescriptors,
+      aafUInt32 * pFetched)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFPluginDescriptor**	ppDesc;
+	aafUInt32			numDesc;
+	HRESULT				hr;
+
+	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+		return E_INVALIDARG;
+
+	// Point at the first component in the array.
+	ppDesc = ppAAFPluginDescriptors;
+	for (numDesc = 0; numDesc < count; numDesc++)
+	{
+		hr = NextOne(ppDesc);
+		if (FAILED(hr))
+			break;
+
+		// Point at the next component in the array.  This
+		// will increment off the end of the array when
+		// numComps == count-1, but the for loop should
+		// prevent access to this location.
+		ppDesc++;
+	}
+	
+	if (pFetched)
+		*pFetched = numDesc;
+
+	return hr;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPluginDescriptors::Skip (
-      aafUInt32  /*count*/)
+      aafUInt32  count)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	AAFRESULT	hr;
+	aafInt32	newCurrent, siz;
+
+	newCurrent = _current + count;
+
+    _cPluggableDef->GetNumDescriptors(&siz);
+	if(newCurrent < siz)
+	{
+		_current = newCurrent;
+		hr = AAFRESULT_SUCCESS;
+	}
+	else
+	{
+		hr = E_FAIL;
+	}
+
+	return hr;
 }
 
 
