@@ -94,6 +94,33 @@ public:
          ImplAAFPropertyValue ** ppOutPropVal);
 
 
+  //*************************************************************
+  //
+  // Overrides from OMType, via inheritace through ImplAAFTypeDef
+  //
+  //*************************************************************
+
+  /*
+  virtual void reorder(OMByte* bytes,
+                       size_t bytesSize) const;
+
+  virtual size_t externalSize(void) const;
+
+  virtual void externalize(OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByteOrder byteOrder) const;
+
+  virtual size_t internalSize(void) const;
+
+  virtual void internalize(OMByte* externalBytes,
+                           size_t externalBytesSize,
+                           OMByte* internalBytes,
+                           size_t internalBytesSize,
+                           OMByteOrder byteOrder) const;
+						   */
+
 public:
   // Declare this class to be storable.
   //
