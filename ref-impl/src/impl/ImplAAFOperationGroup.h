@@ -1,7 +1,7 @@
 //@doc
-//@class    AAFGroup | Implementation class for AAFGroup
-#ifndef __ImplAAFGroup_h__
-#define __ImplAAFGroup_h__
+//@class    AAFEffect | Implementation class for AAFEffect
+#ifndef __ImplAAFEffect_h__
+#define __ImplAAFEffect_h__
 
 
 /******************************************\
@@ -46,17 +46,17 @@ class ImplAAFSourceReference;
 #endif
 
 
-class ImplAAFGroup : public ImplAAFSegment
+class ImplAAFEffect : public ImplAAFSegment
 {
 public:
   //
   // Constructor/destructor
   //
   //********
-  ImplAAFGroup ();
+  ImplAAFEffect ();
 
 protected:
-  virtual ~ImplAAFGroup ();
+  virtual ~ImplAAFEffect ();
 
 public:
 
@@ -212,10 +212,10 @@ public:
 public:
   // Declare this class to be storable.
   //
-  OMDECLARE_STORABLE(ImplAAFGroup)
+  OMDECLARE_STORABLE(ImplAAFEffect)
 
   // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFGroupTest.cpp.
+  // in /test/ImplAAFEffectTest.cpp.
   static AAFRESULT test();
 
 private:
@@ -226,6 +226,6 @@ private:
 	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
 };
 
-#endif // ! __ImplAAFGroup_h__
+#endif // ! __ImplAAFEffect_h__
 
 
