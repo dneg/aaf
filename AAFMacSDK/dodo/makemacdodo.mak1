@@ -11,7 +11,7 @@ frefh = "{aaf}dodo:"
 refh = "{aaf}ref-impl:include:ref-api:"
 comh = "{aaf}ref-impl:src:com-api:"
 comc = "{aaf}ref-impl:src:com-api:"
-comt = "{aaf}ref-impl:src:com-api:test:"
+comt = "{aaf}test:com:"
 impl = "{aaf}ref-impl:src:impl:"
 AAFMacSDK = "{aaf}AAFMacSDK:"
 DODO = "{AAFMacSDK}dodo:tool:dodo"
@@ -51,7 +51,7 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 	echo 'refh = {aaf}ref-impl:include:ref-api:' >> macdodo.tmp
 	echo 'comh = {aaf}ref-impl:src:com-api:' >> macdodo.tmp
 	echo 'comc = {aaf}ref-impl:src:com-api:' >> macdodo.tmp
-	echo 'comt = {aaf}ref-impl:src:com-api:test:' >> macdodo.tmp
+	echo 'comt = {aaf}test:com:' >> macdodo.tmp
 	echo 'impl = {aaf}ref-impl:src:impl:' >> macdodo.tmp
 	echo 'AAFMacSDK = {aaf}AAFMacSDK:' >> macdodo.tmp
 	echo 'DODO = {AAFMacSDK}dodo:tool:dodo' >> macdodo.tmp
