@@ -146,6 +146,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(edesc->CountLocators(&numLocators));
 		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
 
+		// Make another locator, and attach it to the EssenceDescriptor
+		checkResult(defs.cdLocator()->
+					CreateInstance(IID_IAAFLocator, 
+								   (IUnknown **)&pLocator));		
+		checkResult(edesc->AppendLocator(pLocator));
+		// Verify that there are now two locators
+		checkResult(edesc->CountLocators(&numLocators));
+		checkExpression(2 == numLocators, AAFRESULT_TEST_FAILED);
+		checkResult(edesc->RemoveLocatorAt (1));
+		// Verify that there is now one locator again
+		checkResult(edesc->CountLocators(&numLocators));
+		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
+
 		// Add the source mob into the tree
 		checkResult(pHeader->AddMob(pMob));
 	}
@@ -172,7 +185,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pDictionary)
     pDictionary->Release();
 
-  if (pHeader)
+	if (pHeader)
 		pHeader->Release();
 			
 	if (pFile)
