@@ -29,15 +29,38 @@ AD_XCLASS_BEGIN(Abstract, Transient)
 AD_METHOD0(Start, Set up a codec.)
 AD_METHOD0(Finish, Tear down a codec.)
 
-AD_XMETHOD1(GetPluginID,
+AD_XMETHOD1(GetPluggableID,
 			[out],
 			objPass,
 			aafUID_t *,
 			pPluginID,
 			The unique media object id,
 
-			This method returns the unique Plugin ID associated with this Plugin.  This
-  // is the same as the ID of the AAFPluggableDef in an AAF file.
+			This method returns the unique ID of the AAFPluggableDef associated with this Plugin.
+  //
+  // Succeeds if all of the following are true:
+  // - the pPluginID pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pPluginID.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPluginID arg is NULL.)
+
+AD_XMETHOD1(GetPluginDescriptorID,
+			[out],
+			objPass,
+			aafUID_t *,
+			pPluginID,
+			The unique media object id,
+
+			This method returns the unique ID of the AAFPluginDescriptor associated with this Plugin.
   //
   // Succeeds if all of the following are true:
   // - the pPluginID pointer is valid.

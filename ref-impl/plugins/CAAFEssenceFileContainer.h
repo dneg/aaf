@@ -66,7 +66,9 @@ public:
   // Tear down the plugin.
   STDMETHOD (Finish)(void);
  
-  STDMETHOD (GetPluginID)(aafUID_t *result);
+ 
+  STDMETHOD (GetPluggableID)(aafUID_t *result);
+  STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
 
   STDMETHOD (GetPluggableDefinition)(IAAFDictionary *dict, IAAFPluggableDef **def);
 
