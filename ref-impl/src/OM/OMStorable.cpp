@@ -25,7 +25,7 @@
 *
 ************************************************************************/
 
-// @doc OMINTERNAL
+// @doc OMEXTERNAL
 #include "OMStorable.h"
 #include "OMStoredObject.h"
 #include "OMFile.h"
