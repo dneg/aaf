@@ -210,12 +210,14 @@ AAFRESULT STDMETHODCALLTYPE
     aafMemPtr_t pBits = NULL;
     // Bobt hack! This should be removed once we have proper
     // integration with OM property def support.
+
+
     if (! property->isOptional() || property->isPresent ())
     {
       result = pvd->AllocateBits (bitsSize, &pBits);
       if (AAFRESULT_SUCCEEDED (result))
       {
-	if (bitsSize)
+				if (bitsSize)
         {
           assert (pBits);
           property->getBits (pBits, bitsSize);
