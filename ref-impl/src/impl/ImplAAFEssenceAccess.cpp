@@ -262,6 +262,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 		CHECK(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&_codec));
 		plugin->Release();
 		plugin = NULL;
+		CHECK(CreateCodecDef(compHead, codecID, &_codecDescriptor));
 
     // Initialize the multi-essence codec interface pointer (not required for this type of open).
     aafError = _codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec);
@@ -273,12 +274,16 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 		
     // When we enable the cloneExternal (below) then Don't do this call for creating the
 		// file mob twice
-		CHECK(CreateFileMob(compHead, kAAFTrue, DEFAULT_FILE_SLOT, NULL, mediaKind, editRate, sampleRate,
+		CHECK(CreateFileMob(compHead, kAAFTrue, DEFAULT_FILE_SLOT, NULL, mediaKind,
+			_codecID, editRate, sampleRate,
 			_destination, &_compFileMob));
 		CHECK(_compFileMob->GetMobID(&fileMobUID));
 		if(compHead != dataHead)
 		{
-			CHECK(CreateFileMob(dataHead, kAAFTrue, DEFAULT_FILE_SLOT, &fileMobUID, mediaKind, editRate, sampleRate,
+			CHECK(CreateContainerDef(dataHead))
+			CHECK(CreateCodecDef(dataHead, codecID, NULL));
+			CHECK(CreateFileMob(dataHead, kAAFTrue, DEFAULT_FILE_SLOT, &fileMobUID, mediaKind,
+				_codecID, editRate, sampleRate,
 				NULL, &_dataFileMob));
 			_dataFileMob->AcquireReference();	//!!!Leaking here?
 		}
@@ -298,16 +303,9 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 			}
 		}
 		
-		CHECK(CreateCodecDef(compHead, codecID, &_codecDescriptor));
 		CHECK(CreateContainerDef(compHead))
 		//!!! As an optimization, use clone to move a copy of the definition objects into the media file.
 		// This can be just a copy because there shouldn't be any definitions there yet...
-
-		if((dataHead != compHead) && (dataHead != NULL))
-		{
-			CHECK(CreateContainerDef(dataHead))
-			CHECK(CreateCodecDef(dataHead, codecID, NULL));
-		}
 		
 		// There isn't yet a container for AAF data, so this must be special-cased
 		if(EqualAUID(&_containerDefID, &aafFormat))
@@ -528,12 +526,12 @@ AAFRESULT STDMETHODCALLTYPE
 		// Don't add slots here, as they will be added in the loop below
 		sampleRate = mediaArray[0].sampleRate;		// !!! Assumes that edit rate == sample rate of channel 1
 		essenceKind = *(mediaArray[0].mediaKind);	// Assumes that mediaKind somes from track #1
-		CHECK(CreateFileMob(compHead, kAAFFalse, 0, NULL, essenceKind, sampleRate, sampleRate,
+		CHECK(CreateFileMob(compHead, kAAFFalse, 0, NULL, essenceKind, _codecID, sampleRate, sampleRate,
 			_destination, &_compFileMob));
 		CHECK(_compFileMob->GetMobID(&fileMobUID));
 		if(compHead != dataHead)
 		{
-			CHECK(CreateFileMob(dataHead, kAAFFalse, 0, &fileMobUID, essenceKind, sampleRate, sampleRate,
+			CHECK(CreateFileMob(dataHead, kAAFFalse, 0, &fileMobUID, essenceKind, _codecID, sampleRate, sampleRate,
 				NULL, &_dataFileMob));
 			_dataFileMob->AcquireReference();	//!!!Leaking here?
 		}
@@ -828,29 +826,37 @@ AAFRESULT STDMETHODCALLTYPE
 		sourceInfo = NULL;
 
 		CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&_mdes));
-		CHECK(_mdes->GetContainerFormat (&testFormat));
-		_containerDefID = testFormat;
+		if(_mdes->GetContainerFormat (&containerDef) == AAFRESULT_SUCCESS)
+		{
+			CHECK(containerDef->GetAUID(&testFormat));
+			_containerDefID = testFormat;
+		}
+		else
+		{
+			_containerDefID = ContainerAAF;
+			CHECK(compHead->GetDictionary (&dict));
+			CHECK(dict->LookupContainerDef (_containerDefID, &containerDef));
+			dict->ReleaseReference();
+			dict = NULL;
+		}
     
     
-    CHECK(fileMob->GetMobID(&fileMobID));
+		CHECK(fileMob->GetMobID(&fileMobID));
 		CHECK(_mdes->GetObjectClass(&essenceDescClass));
 
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
 	
-    // Initialize the multi-essence codec interface pointer (not required for this type of open).
-    aafError = _codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec);
+		// Initialize the multi-essence codec interface pointer (not required for this type of open).
+		aafError = _codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec);
 
 //!!!		_physicalOutChanOpen = physicalOutChan;
 		
 
-		CHECK(compHead->GetDictionary (&dict));
-		CHECK(dict->LookupContainerDef (testFormat, &containerDef));
-		dict->ReleaseReference();
-		dict = NULL;
 
 		found = kAAFFalse;
-		CHECK(containerDef->EssenceIsIdentified (&isIdentified));
+		if(containerDef->EssenceIsIdentified (&isIdentified) != AAFRESULT_SUCCESS)
+			isIdentified = kAAFTrue;
 		containerDef->ReleaseReference();
 		containerDef = NULL;
 
@@ -1173,7 +1179,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 		CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&_mdes));
 
-		CHECK(_mdes->GetContainerFormat (&testFormat));
+		CHECK(_mdes->GetContainerFormat (&containerDef));
+		CHECK(containerDef->GetAUID(&testFormat));
 		_containerDefID = testFormat;
         
     CHECK(fileMob->GetMobID(&fileMobID));
@@ -2593,12 +2600,15 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 									 aafSlotID_t		   slotID,
 									 aafMobID_constptr	   newMobID, /* optional */
 									 const aafUID_t &	   mediaKind,
+									 const aafUID_t &	   codecID,
 									 const aafRational_t & editRate,
 									 const aafRational_t & sampleRate,
 									 ImplAAFLocator	*      addLocator,
 									 ImplAAFSourceMob **   result)
 {
 	ImplAAFDictionary	*dict = NULL;
+	ImplAAFContainerDef	*container = NULL;
+	ImplAAFCodecDef		*codecDef = NULL;
 	ImplAAFSourceMob	*fileMob = NULL;
 	ImplAAFMobSlot		*tmpSlot = NULL;
 	aafUID_t			essenceDescriptorID;
@@ -2639,14 +2649,18 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		ImplAAFClassDefSP pClassDef;
 		CHECK(dict->LookupClassDef (essenceDescriptorID, &pClassDef));
 		CHECK(pClassDef->CreateInstance((ImplAAFObject **)&mdes));
-		CHECK(mdes->SetContainerFormat (_containerDefID));
 		CHECK(mdes->SetSampleRate(sampleRate));
 		CHECK(fileMob->SetEssenceDescriptor(mdes));
 		CHECK(newHead->AddMob(fileMob));
+		CHECK(dict->LookupContainerDef(_containerDefID, &container));
+		CHECK(mdes->SetContainerFormat (container));
+		CHECK(dict->LookupCodecDef(codecID, &codecDef));
+		CHECK(mdes->SetCodecDef(codecDef));
 		if(addLocator != NULL)
 		{
 			CHECK(mdes->AppendLocator(addLocator));
-			CHECK(mdes->SetContainerFormat (_containerDefID));
+			CHECK(mdes->SetContainerFormat (container));
+			CHECK(mdes->SetCodecDef(codecDef));
 		}
 		if(dict != NULL)
 		  dict->ReleaseReference();
@@ -2660,6 +2674,9 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		if(fileMob != NULL)
 		  fileMob->ReleaseReference();
 		fileMob = 0;
+		if(container != NULL)
+		  container->ReleaseReference();
+		container = 0;
 	}
 	XEXCEPT
 	{
@@ -2675,6 +2692,9 @@ ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 		if(fileMob != NULL)
 		  fileMob->ReleaseReference();
 		fileMob = 0;
+		if(container != NULL)
+		  container->ReleaseReference();
+		container = 0;
 	}
 	XEND
 		
