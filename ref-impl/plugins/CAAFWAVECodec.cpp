@@ -27,6 +27,9 @@
 #define STD_HDRSIZE_NODATA		36
 
 const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kVersionBeta};
+const aafRational_t		defaultRate = { 44100, 1 };
+const aafInt32			defaultSampleWidth = 8;
+const aafInt32			defaultNumCh = 1;
 
 // CLSID for AAFEssenceCodec 
 //{8D7B04B1-95E1-11d2-8089-006008143E6F}
@@ -202,11 +205,10 @@ CAAFWaveCodec::CAAFWaveCodec (IUnknown * pControllingUnknown, aafBool doInit)
 {
 	_headerLoaded = AAFFalse;
 	_nativeByteOrder = GetNativeByteOrder();
-	_sampleRate.numerator = 44100;
-	_sampleRate.denominator = 1;
-	_bitsPerSample = 8;
-	_numCh = 1;
-	_bytesPerFrame = 1;
+	_sampleRate = defaultRate;
+	_bitsPerSample = defaultSampleWidth;
+	_numCh = defaultNumCh;
+	_bytesPerFrame = (defaultSampleWidth+7)/8;;
 	_sampleFrames = 0;
 	_interleaveBuf = NULL;
 	_dataStartOffset = 0;
@@ -292,20 +294,30 @@ HRESULT STDMETHODCALLTYPE
 //!!!Change this to stored object IDs
 const aafUID_t LOCAL_AAFWAVEDescriptor = { 0x4c2e1691, 0x8ae6, 0x11d2, { 0x81, 0x3c, 0x00, 0x60, 0x97, 0x31, 0x01, 0x72 } };
 const aafUID_t LOCAL_AAFEssenceData = { 0x6a33f4e1, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+const wchar_t	name[] = L"WAVE Codec";
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetMaxCodecDisplayNameLength (
+        aafInt32  *bufSize)
+{
+	if(bufSize == NULL)
+		return AAFRESULT_NULL_PARAM;
+	
+	*bufSize = wcslen(name);
+	return AAFRESULT_SUCCESS;
+}	
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetCodecDisplayName (aafUID_t  variant,
         wchar_t *  pName,
         aafInt32  bufSize)
 {
-	wchar_t	name[] = L"WAVE Codec";
 	aafInt32	len = sizeof(name);
 	if(len > bufSize)
 		len = bufSize;
-	memcpy(pName, "WAVE Codec", len);
+	memcpy(pName, name, len);
 	return AAFRESULT_SUCCESS;
-}	
-
+}
 	
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetNumChannels (IAAFSourceMob *fileMob,
@@ -357,8 +369,9 @@ HRESULT STDMETHODCALLTYPE
         IAAFEssenceStream *stream,
 		aafCheckVerbose_t  verbose,
         aafCheckWarnings_t warning,
-        wchar_t *  pName,
-        aafInt32  bufSize)
+         aafInt32  bufSize,
+		wchar_t *  pName,
+        aafInt32  *bytesWritten)
 {
 	return HRESULT_NOT_IMPLEMENTED;
 }
@@ -1000,16 +1013,11 @@ HRESULT STDMETHODCALLTYPE
 
 			if(EqualAUID(&kAAFAudioSampleBits, &opcode))
 			{
-				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INTERNAL_CORRUPTVINFO);
-				memcpy(&valueUInt32, buf, bytesRead);
-				_bitsPerSample = (aafUInt16)valueUInt32;
-				_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
+				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INVALID_PARM_SIZE);
 			}
 			else if(EqualAUID(&kAAFSampleRate, &opcode))
 			{
-				XASSERT(bytesRead == sizeof(aafRational_t), AAFRESULT_INTERNAL_CORRUPTVINFO);
-				memcpy(&valueRat, buf, bytesRead);
-				_sampleRate = valueRat;
+				XASSERT(bytesRead == sizeof(aafRational_t), AAFRESULT_INVALID_PARM_SIZE);
 			}
 			else if(EqualAUID(&kAAFSampleFormat, &opcode))
 			{
@@ -1017,13 +1025,36 @@ HRESULT STDMETHODCALLTYPE
 			}
 			else if(EqualAUID(&kAAFNumChannels, &opcode))
 			{
-				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INTERNAL_CORRUPTVINFO);
+				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INVALID_PARM_SIZE);
+			}
+			else
+				RAISE(AAFRESULT_ILLEGAL_FILEFMT);
+		}
+
+		for(n = 0; n < numSpecifiers; n++)
+		{
+			CHECK(pFormat->GetIndexedFormatSpecifier (n, &opcode, sizeof(buf), buf, &bytesRead));
+
+			if(EqualAUID(&kAAFAudioSampleBits, &opcode))
+			{
+				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INVALID_PARM_SIZE);
+				memcpy(&valueUInt32, buf, bytesRead);
+				_bitsPerSample = (aafUInt16)valueUInt32;
+				_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
+			}
+			else if(EqualAUID(&kAAFSampleRate, &opcode))
+			{
+				XASSERT(bytesRead == sizeof(aafRational_t), AAFRESULT_INVALID_PARM_SIZE);
+				memcpy(&valueRat, buf, bytesRead);
+				_sampleRate = valueRat;
+			}
+			else if(EqualAUID(&kAAFNumChannels, &opcode))
+			{
+				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INVALID_PARM_SIZE);
 				memcpy(&valueUInt32, buf, bytesRead);
 				_numCh = (aafUInt16)valueUInt32;
 				_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
 			}
-			else
-				RAISE(AAFRESULT_INVALID_OP_CODEC);
 		}
 		
 		CHECK(CreateWAVEheader(header, STD_HDRSIZE_NODATA, _numCh));
@@ -1108,20 +1139,25 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetEssenceFormatList (IAAFEssenceFormat **pResult)
+    CAAFWaveCodec::GetDefaultEssenceFormat(IAAFEssenceFormat **pResult)
 {
-	IAAFEssenceFormat *fmt;
+	IAAFEssenceFormat	*fmt;
+	aafInt32			parm;
+	aafRational_t		ratParm;
 
 	XPROTECT()
 	{
 		CHECK(_access->GetEmptyFileFormat(&fmt));
 		*pResult = fmt;
 
-		CHECK(fmt->AddFormatSpecifier (kAAFAudioSampleBits, 0, NULL));
-		CHECK(fmt->AddFormatSpecifier (kAAFSampleRate, 0, NULL));
-		CHECK(fmt->AddFormatSpecifier (kAAFSampleFormat, 0, NULL));
-		CHECK(fmt->AddFormatSpecifier (kAAFNumChannels, 0, NULL));
-		CHECK(fmt->AddFormatSpecifier (kAAFMaxSampleBytes, 0, NULL));
+		parm = defaultSampleWidth;
+		CHECK(fmt->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(parm), (aafDataBuffer_t)&parm));
+		ratParm = defaultRate;
+		CHECK(fmt->AddFormatSpecifier (kAAFSampleRate, sizeof(ratParm), (aafDataBuffer_t)&ratParm));
+//		CHECK(fmt->AddFormatSpecifier (kAAFSampleFormat, 0, NULL));
+		parm = defaultNumCh;
+		CHECK(fmt->AddFormatSpecifier (kAAFNumChannels, sizeof(parm), (aafDataBuffer_t)&parm));
+//		CHECK(fmt->AddFormatSpecifier (kAAFMaxSampleBytes, 0, NULL));
 	}
 	XEXCEPT
 	XEND
