@@ -58,6 +58,8 @@
 #define DV_PAL_FRAME_SIZE 144000
 #define DV_NTSC_FRAME_SIZE 120000
 
+using namespace std;
+
 const aafMobID_t zerouid = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,{0,0,0,{0,0,0,0,0,0,0,0}}};
 
 const aafUID_t kAAFPropID_CDCIOffsetToFrameIndexes	= { 0x9d15fca3, 0x54c5, 0x11d3, { 0xa0, 0x29, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };

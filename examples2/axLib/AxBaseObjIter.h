@@ -39,7 +39,7 @@ public:
 
 	virtual ~AxBaseObjIterPrtcl() = 0;
 
-	virtual bool NextOne( auto_ptr<AxBaseObj>& ) = 0;
+	virtual bool NextOne( std::auto_ptr<AxBaseObj>& ) = 0;
 
 	virtual void Reset() = 0;
 
@@ -66,7 +66,7 @@ public:
 	virtual ~AxBaseObjIter()
 	{}
 
-	virtual bool NextOne( auto_ptr<AxBaseObj>& ret )
+	virtual bool NextOne( std::auto_ptr<AxBaseObj>& ret )
 	{
 #if 0
 	  // This is, hopefully, only temporarily disabled.  It works
@@ -80,7 +80,7 @@ public:
 		bool rc;
 		rc = _iter.NextOne( typeSP );
 		if ( rc ) {
-			auto_ptr<AxBaseObj> apObj( new ObjType ( typeSP ) );
+			std::auto_ptr<AxBaseObj> apObj( new ObjType ( typeSP ) );
 			ret = apObj;
 			return true;
 		}
@@ -96,8 +96,8 @@ public:
 
 	virtual std::auto_ptr<AxBaseObjIterPrtcl> Clone()
 	{
-		auto_ptr< IterType > iter( _iter.Clone() );
-		return auto_ptr<AxBaseObjIterPrtcl>(
+		std::auto_ptr< IterType > iter( _iter.Clone() );
+		return std::auto_ptr<AxBaseObjIterPrtcl>(
 			new AxBaseObjIter<IterType,ObjType,IAAFType>( *iter ) );
 	}
 
@@ -118,13 +118,13 @@ public:
 	~AxBaseSolitaryObjIter()
 	{}
 
-	virtual bool NextOne( auto_ptr<AxBaseObj>& ret )
+	virtual bool NextOne( std::auto_ptr<AxBaseObj>& ret )
 	{
 		if ( _done ) {
  		        return false;
 		}
 		else {
-			auto_ptr<AxBaseObj> apObj( new ObjType(_obj) );
+			std::auto_ptr<AxBaseObj> apObj( new ObjType(_obj) );
 			_done = true;
 			ret = apObj;
 			return true;
@@ -138,7 +138,7 @@ public:
 
 	virtual std::auto_ptr<AxBaseObjIterPrtcl> Clone()
 	{
-		auto_ptr<AxBaseObjIterPrtcl> iter (
+		std::auto_ptr<AxBaseObjIterPrtcl> iter (
 			new AxBaseSolitaryObjIter( _obj ) );
 		return iter;
 	}
@@ -153,21 +153,21 @@ private:
 
 class AxBaseRecordObjIter : public AxBaseObjIterPrtcl {
 public:
-	AxBaseRecordObjIter( auto_ptr< AxRecordIterator > );
+	AxBaseRecordObjIter( std::auto_ptr< AxRecordIterator > );
 	~AxBaseRecordObjIter();
 
-	virtual bool NextOne( auto_ptr<AxBaseObj>& ret );
+	virtual bool NextOne( std::auto_ptr<AxBaseObj>& ret );
 
 	virtual void Reset();
 
-	virtual auto_ptr<AxBaseObjIterPrtcl> Clone();
+	virtual std::auto_ptr<AxBaseObjIterPrtcl> Clone();
 
 private:
 	AxBaseRecordObjIter();
 	AxBaseRecordObjIter( const AxBaseRecordObjIter& );
 	AxBaseRecordObjIter& operator=( const AxBaseRecordObjIter& );
 
-	auto_ptr<AxRecordIterator> _axRecordIter;
+	std::auto_ptr<AxRecordIterator> _axRecordIter;
 };
 
 // AxBaseObjIterPrtcl for odd ball arrays
@@ -175,21 +175,21 @@ private:
 template <class TypeDef>
 class AxBaseArrayObjIter : public AxBaseObjIterPrtcl {
 public:
-	AxBaseArrayObjIter( auto_ptr< AxArrayIterator<TypeDef> > );
+	AxBaseArrayObjIter( std::auto_ptr< AxArrayIterator<TypeDef> > );
 	~AxBaseArrayObjIter();
 
-	virtual bool NextOne( auto_ptr<AxBaseObj>& ret );
+	virtual bool NextOne( std::auto_ptr<AxBaseObj>& ret );
 
 	virtual void Reset();
 
-	virtual auto_ptr<AxBaseObjIterPrtcl> Clone();
+	virtual std::auto_ptr<AxBaseObjIterPrtcl> Clone();
 
 private:
 	AxBaseArrayObjIter();
 	AxBaseArrayObjIter( const AxBaseArrayObjIter& );
 	AxBaseArrayObjIter& operator=( const AxBaseArrayObjIter& );
 
-	auto_ptr<AxArrayIterator<TypeDef> > _axArrayIter;
+	std::auto_ptr<AxArrayIterator<TypeDef> > _axArrayIter;
 };
 
 //=---------------------------------------------------------------------=
@@ -216,7 +216,7 @@ public:
 
 	virtual ~AxBaseObjRecIter();
 
-	bool NextOne( auto_ptr<AxBaseObj>& objRet, int& level );
+	bool NextOne( std::auto_ptr<AxBaseObj>& objRet, int& level );
 
 	void PopStack();
 

@@ -47,6 +47,7 @@ void TapeDescriptor::Execute( const std::vector<AxString>& argv )
 	AxString tapeOpName    = argv[2];
 	AxString lengthString  = argv[3];       
 
+	using namespace std;
 	pair<bool,AxString> manufacturer( false, L"" );
 	pair<bool,AxString> model( false, L"" );
 	pair<bool,AxString> caseType( false, L"" );

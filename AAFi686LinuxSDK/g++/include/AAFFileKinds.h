@@ -29,6 +29,9 @@
 // the enum to select DON'T CARE (whatever works)
 const aafUID_t aafFileKindDontCare = {0,0,0,{0,0,0,0,0,0,0,0}};
 
+// to cause error if used
+const aafUID_t aafFileKindPathalogical = {0xff,0xff,0xff,{0,0,0,0,0,0,0,0}};
+
 // the enum to select the Microsoft implementation
 const aafUID_t aafFileKindAafMSSBinary = 
 {0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
@@ -40,6 +43,10 @@ const aafUID_t aafFileKindAafSSSBinary =
 // the enum to select the SchemaSoft implementation with 4096 byte sectors
 const aafUID_t aafFileKindAafS4KBinary = 
 {0x42464141, 0x9640, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+
+// the enum to select the Microsoft implementation with 4096 byte sectors
+const aafUID_t aafFileKindAafM4KBinary = 
+{0x42464141, 0xa838, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 // AAF files encoded as XML (text).
 //
@@ -54,35 +61,81 @@ const aafUID_t aafFileKindMxfKlvBinary =
 {0x4b46584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 
+//note that aafFileKindAafSSAlternate and aafFileKindAaf4KAlternate 
+//will go away once we have AAFOpenFileModifyEx implmented
+
 // the enum to select the installation default
 // this MUST match what is selected in ImplAAFFile.cpp
 #if defined( OS_WINDOWS )
 // DEFAULT for this build is SchemaSoft 512.
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary;
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSSBinary;
+
+//NOTE: Add default 4k binary
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafM4KBinary;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary;
 
 #elif defined( OS_MACOS )
 // DEFAULT is Microsoft 512 (via MacOLE). SchemaSoft not yet ported
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical;
+
 
 #elif defined( OS_MACOS10 )
 // DEFAULT is Microsoft 512 (via Carbon lib(?). SchemaSoft not yet ported
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+
+//note that aafFileKindAafSSAlternate and aafFileKindAaf4KAlternate 
+//will go away once we have AAFOpenFileModifyEx implmented
+//designed to fail if used
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical;
+
 
 #elif defined( OS_IRIX )
 // DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+
+//note that aafFileKindAafSSAlternate and aafFileKindAaf4KAlternate 
+//will go away once we have AAFOpenFileModifyEx implmented
+//designed to fail if used
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical;
+
 
 #elif defined( OS_LINUX )
 // DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+//NOTE: change to Schemasoft for testing
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+//NOTE: Add default 4k binary
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary;
 
 #elif defined( OS_FREEBSD )
 // DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafMSSBinary;
+
+//note that aafFileKindAafSSAlternate and aafFileKindAaf4KAlternate 
+//will go away once we have AAFOpenFileModifyEx implmented
+//designed to fail if used
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical;
+
 
 #elif defined( OS_SOLARIS )
 // DEFAULT is SSS 512. MSS not available
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSBinary;
+// default 4k binary
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary;
 
 #else
 #error Unknown platform

@@ -93,6 +93,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "axHrMap"=.\axHrMap\axHrMap.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "axLib"=.\axLib\axLib.dsp - Package Owner=<4>
 
 Package=<5>

@@ -34,7 +34,7 @@
 
 namespace {
 
-AxString hrUnkownStr( L"unkown" );
+AxString hrUnknownStr( L"unknown" );
 
 };
 
@@ -395,13 +395,13 @@ const AxString& AxHrMap::getStr( HRESULT hr ) const
 {
 	// The only possible error is if hr is not found in the
 	// map. This method is called from AxExHresult.  Avoid a
-	// double exception by simply returning the hrUnkownStr to
+	// double exception by simply returning the hrUnknownStr to
 	// indicate the error.
 
 	std::map<HRESULT,AxString>::const_iterator iter = _map.find( hr );
 	
 	if ( iter == _map.end() ) {
-		return hrUnkownStr;
+		return hrUnknownStr;
 	}
 
 	return iter->second;

@@ -59,7 +59,7 @@ void WriteEssence::Execute( const std::vector<AxString>& argv )
 	std::auto_ptr<SampleSrcBuffer> buf;
 	src.Reset();
 	int count;
-	cout << " ";
+	std::cout << " ";
 	for ( buf = src.GetNext(), count = 0;
 		  buf->GetBufferPtr();
 		  buf = src.GetNext(), count++ ) {

@@ -49,9 +49,6 @@ _summary(PID_TIFFDescriptor_Summary,	L"Summary")
 
 	_isUniform = kAAFFalse;
 	_isContiguous = kAAFFalse;
-	_leadingLines = 0;
-	_trailingLines = 0;
-	_jpegTableID = 0;
 }
 
 ImplAAFTIFFDescriptor::~ImplAAFTIFFDescriptor ()

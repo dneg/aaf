@@ -57,6 +57,7 @@
 
 void _throwUsage()
 {
+        using namespace std;
 	wostringstream msg;
 	msg << L"Usage: " << L" -file aaf_filename" << endl;
 	msg << L"       " << L" -read | -write" << endl;
@@ -128,6 +129,7 @@ public:
 
 	IAAFLocatorSP GetNextLocator( AxDictionary& axDictionary )
 	{
+	  using namespace std;
 		wostringstream pathStream;
 
 		pathStream << _prefix << _counter++ << _suffix;
@@ -377,7 +379,6 @@ private:
 class CmdLineParser {
 
 public:
-
 	typedef enum {READ, WRITE, EXTEND} Op_t;
 
 	CmdLineParser( AxCmdLineArgs& args );
@@ -403,8 +404,9 @@ public:
 	int GetCountMultiplier()
 	{ return _multiplier; }
 
-	auto_ptr<EssenceLocator> CreateEssenceLocator()
+	std::auto_ptr<EssenceLocator> CreateEssenceLocator()
 	{
+	  using namespace std;
 		if ( _containerId == ContainerFile ) {
 			auto_ptr<EssenceLocator> networkLocatorPtr(
 				new NetworkEssenceLocator( _netlocPrefix, _netlocSuffix ) );
@@ -417,19 +419,20 @@ public:
 		}
 	}
 
-	auto_ptr<SampleSource> CreateSampleSource()
+	std::auto_ptr<SampleSource> CreateSampleSource()
 	{
+	  using namespace std;
 		// FIXME - Compression should be an option.  It is disabled here because
 		// it takes too long to compress images when running a test designed to
 		// write very large amounts of essense (i.e. many GB's)
 		if ( _source == "video" ) {
-			auto_ptr< SampleSource > sampleSource(
+			std::auto_ptr< SampleSource > sampleSource(
 				new VideoSampleSource( _videoWidth, _videoHeight, _videoBytesPerPixel, _rate,
 									   _numSamples, kAAFCompressionDisable ) );
 			return sampleSource;
 		}
 		else if ( _source == "audio" ) {
-			auto_ptr< SampleSource > audioSource(
+			std::auto_ptr< SampleSource > audioSource(
 				new AudioSampleSource( _audioBitsPerSample,
 									   (_audioBitsPerSample+7)/8,
 									   _rate,
@@ -465,7 +468,7 @@ private:
 
 	Op_t	_op;
 	
-	string _source;
+	std::string _source;
 
 	int _multiplier;
 	char* _symbol;
@@ -473,6 +476,8 @@ private:
 
 CmdLineParser::CmdLineParser( AxCmdLineArgs& args )
 {
+	  using namespace std;
+
 	// Video parameters hardcode for the moment.
 	_videoWidth         = 4096;
 	_videoHeight        = 4096;
@@ -533,7 +538,7 @@ CmdLineParser::CmdLineParser( AxCmdLineArgs& args )
 
 	// Operation option (read/write/extend) - required
 	{
-		pair<bool,int> opRead;
+	        pair<bool,int> opRead;
 		pair<bool,int> opWrite;
 		pair<bool,int> opExtend;
 
@@ -659,6 +664,7 @@ CmdLineParser::CmdLineParser( AxCmdLineArgs& args )
 void create_mastermob_and_write_essence( AxHeader axHeader,
 										 CmdLineParser& cmdLineParser )
 {
+        using namespace std;
 	auto_ptr<SampleSource> sampleSource = cmdLineParser.CreateSampleSource();
 	auto_ptr<EssenceLocator> essenceLocator = cmdLineParser.CreateEssenceLocator();
 
@@ -753,6 +759,8 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 void open_mastermob_and_read_essence( AxHeader& axHeader,
 									  CmdLineParser& cmdLineParser )
 {
+        using namespace std;
+
 	auto_ptr<SampleSource> sampleSource = cmdLineParser.CreateSampleSource();
 
 	AxContentStorage axContentStorage( axHeader.GetContentStorage() );
@@ -858,6 +866,8 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 
 int main( int argc, char* argv[] )
 {
+        using namespace std;
+
 	try {
 
 		AxCmdLineArgs args( argc, argv );

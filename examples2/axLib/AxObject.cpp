@@ -41,13 +41,6 @@ AxObject::AxObject( IAAFObjectSP spIaafObject )
 AxObject::~AxObject()
 {}
 
-#if 0
-AxString AxObject::GetClassName()
-{
-	return *AxDefNameToString< IAAFObject, IAAFClassDef >( _spIaafObject );
-}
-#endif
-
 IAAFDictionarySP AxObject::GetDictionary()
 {
 	IAAFDictionarySP spIaafDictionary;
@@ -57,27 +50,13 @@ IAAFDictionarySP AxObject::GetDictionary()
 	return spIaafDictionary;
 }
 
-#if 0
-IAAFPropertyDefSP AxObject::RegisterOptionalPropertyDef ( aafUID_constref  id,
-											 const AxString&  name,
-									         IAAFTypeDefSP spTypeDef )
+IEnumAAFPropertiesSP AxObject::GetProperties()
 {
-	IAAFPropertyDefSP spPropDef;
-	CHECK_HRESULT(
-		_spIaafObject->RegisterOptionalPropertyDef( id, name, spTypeDef, &spPropDef ) );
-	retur spPropDef;
-}
-#endif
+  IEnumAAFPropertiesSP spIEnumProperties;
 
-AxPropertyIter AxObject::CreatePropertyIter()
-{
-	IEnumAAFPropertiesSP spIEnumProperties;
+  CHECK_HRESULT( _spIaafObject->GetProperties( &spIEnumProperties ) );
 
-	CHECK_HRESULT( _spIaafObject->GetProperties( &spIEnumProperties ) );
-		
-	AxPropertyIter propertyIter( spIEnumProperties );
-
-	return propertyIter;
+  return spIEnumProperties;
 }
 
 //=---------------------------------------------------------------------=

@@ -53,14 +53,6 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	// Initialize Required properties
 	_componentWidth = 8;	// valid values are 8, 10, and 16 ?
 	_horizontalSubsampling = 1; // valid values are 1 and 2?
-	_verticalSubsampling = 1; // valid values are 1 and 2?
-
-	// Initialize Optional properties
-	_colorSiting = kAAFCoSiting;
-	_blackReferenceLevel = 0;
-	_whiteReferenceLevel = 255;
-	_colorRange = 255;
-	_paddingBits = 0;
 }
 
 
@@ -212,7 +204,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetVerticalSubsampling (aafUInt32* pVerticalSubsampling)
 {
 	if (pVerticalSubsampling == NULL)
-		return AAFRESULT_NULL_PARAM;
+	  return AAFRESULT_NULL_PARAM;
+
+	if (!_verticalSubsampling.isPresent())
+	  return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pVerticalSubsampling = _verticalSubsampling;
 

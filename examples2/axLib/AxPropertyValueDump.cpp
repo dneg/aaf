@@ -18,6 +18,7 @@
 
 #include "AxPropertyValueDump.h"
 
+#include "AxIterator.h"
 #include "AxProperty.h"
 #include "AxMetaDef.h"
 #include "AxUtil.h"
@@ -313,27 +314,38 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 
 		AxTypeDefWeakObjRef axWeakObjRef( spTypeDef );
 
-		AxObject axObj( AxQueryInterface<IUnknown,IAAFObject>(
-			axWeakObjRef.GetObject( spPropVal, IID_IAAFObject ) ) );
+		IUnknownSP spReferencedUnknown = axWeakObjRef.GetObject( spPropVal, IID_IUnknown );
 		
-		_os << L"to object of class " << axObj.GetClassName() << L" named \"";
+		IAAFClassDefSP spReferencedClassDef;
+		IAAFObjectSP spReferencedObject;
 
-		// Pluck out the value of the Name property.
-		AxPropertyIter axPropIter( axObj.CreatePropertyIter() );
-		IAAFPropertySP nextProp;
-		bool notAtEnd;
-		for ( notAtEnd = axPropIter.NextOne( nextProp );
-		      notAtEnd;
-		      notAtEnd = axPropIter.NextOne( nextProp ) ) {
-			AxProperty axProp ( nextProp );
-			if ( L"Name" == axProp.GetName() ) {
-				AxPropertyValue axPropVal( axProp.GetValue() );
-				AxPropertyValueDump dump( _os, false, true, _s );
-				axPropVal.Process( dump );
-			}
+		if ( AxIsA( spReferencedUnknown, spReferencedClassDef ) ) {
+			_os << L"to class definition of type ";
+			AxClassDef axClassDef( spReferencedClassDef );
+			_os << axClassDef.GetName();
 		}
+		else if ( AxIsA( spReferencedUnknown, spReferencedObject ) ) {
 
-		_os << L"\"";
+			AxObject axObj( spReferencedObject );
+		
+			_os << L"to object of class " << axObj.GetClassName() << L" named \"";
+
+			// Pluck out the value of the Name property.
+			AxPropertyIter axPropIter( axObj.GetProperties() );
+			IAAFPropertySP nextProp;
+			bool notAtEnd;
+			for ( notAtEnd = axPropIter.NextOne( nextProp );
+				notAtEnd;
+				notAtEnd = axPropIter.NextOne( nextProp ) ) {
+				AxProperty axProp ( nextProp );
+				if ( L"Name" == axProp.GetName() ) {
+					AxPropertyValue axPropVal( axProp.GetValue() );
+					AxPropertyValueDump dump( _os, false, true, _s );
+					axPropVal.Process( dump );
+				}
+			}
+			_os << L"\"";
+		}
 	}
 }
 

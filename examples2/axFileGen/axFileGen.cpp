@@ -33,6 +33,8 @@
 
 #include <ctype.h>
 
+using namespace std;
+
 #if defined(OS_MACOS)
 
 // Code Warrior 8 does not define isascii.
@@ -158,8 +160,8 @@ AxFGOpFactory::AxFGOpFactory( const AxString& name,
 	if ( _minArgc < 1 ) {
 		// Don't throw an error - the factories are instantiated from global objects.
 		// There is nothing to catch the exception!
-		std::wcout << L"*** Warning: Minimum arg count less than one used for: " << name;
-		std::wcout << L".  The value was adjusted." << std::endl << std::endl;
+		wcout << L"*** Warning: Minimum arg count less than one used for: " << name;
+		wcout << L".  The value was adjusted." << endl << endl;
 		_minArgc = 1;
 	}
 
@@ -257,7 +259,7 @@ T& AxFGRegistry<T>::Get( const AxString& name )
 }
 
 template <class T>
-std::pair<AxString, const T*> AxFGRegistry<T>::Next()
+pair<AxString, const T*> AxFGRegistry<T>::Next()
 {
 	pair<AxString, const T*> ret;
 	ret.first = L"";
@@ -338,16 +340,16 @@ IAAFDictionarySP DictionaryFromFileOp( const AxString& name )
 
 AxFGOpUsageEx::AxFGOpUsageEx( const AxFGOp& op )
 {
-	std::wostringstream os;
-	os << L"Usage: " << std::endl;
+	wostringstream os;
+	os << L"Usage: " << endl;
 	opUseMessage( os, op );
 	_what = os.str();
 }
 
 AxFGOpUsageEx::AxFGOpUsageEx( const AxFGOp& op, const AxString msg )
 {
-	std::wostringstream os;
-	os << L"Usage: " << msg << std::endl << std::endl;
+	wostringstream os;
+	os << L"Usage: " << msg << endl << endl;
 	opUseMessage( os, op );
 	_what = os.str();
 }
@@ -357,13 +359,13 @@ const AxString AxFGOpUsageEx::what() const
 	return _what;
 }
 
-void AxFGOpUsageEx::opUseMessage( std::wostringstream& os, const AxFGOp& op )
+void AxFGOpUsageEx::opUseMessage( wostringstream& os, const AxFGOp& op )
 {
-	os << L"Op Name:\t" << op.GetOpName() << std::endl; 
-	os << L"Usage:\t\t" << op.GetUsage() << std::endl;
-	os << L"Desc\t\t"  << op.GetDesc()  << std::endl;
-	os << L"Notes\t\t" << op.GetNotes() << std::endl;
-	os << std::endl;
+	os << L"Op Name:\t" << op.GetOpName() << endl; 
+	os << L"Usage:\t\t" << op.GetUsage() << endl;
+	os << L"Desc\t\t"  << op.GetDesc()  << endl;
+	os << L"Notes\t\t" << op.GetNotes() << endl;
+	os << endl;
 }
 
 //=---------------------------------------------------------------------=
@@ -371,7 +373,9 @@ void AxFGOpUsageEx::opUseMessage( std::wostringstream& os, const AxFGOp& op )
 
 void CheckCommand( AxString opName, int argC )
 {
-      AxFGOpFactoryRegistry& registry =
+	  using namespace std;
+	
+	  AxFGOpFactoryRegistry& registry =
 		  AxFGOpFactoryRegistry::GetInstance();
 
       if ( !registry.IsKnown( opName ) ) {
@@ -382,7 +386,7 @@ void CheckCommand( AxString opName, int argC )
       AxFGOpFactory& factory = registry.Get( opName );
 
       if ( argC < factory.GetMinArgC() ) {
-		wostringstream anError;
+		  wostringstream anError;
 		anError << L"Expected at least " << factory.GetMinArgC() <<
 		L" arguments for operation: " << opName;
 		throw anError.str();
@@ -438,7 +442,9 @@ public:
 
 void RunCmd::Execute()
 {
-    AxFGOpFactoryRegistry& registry = AxFGOpFactoryRegistry::GetInstance();
+    using namespace std;
+    
+	AxFGOpFactoryRegistry& registry = AxFGOpFactoryRegistry::GetInstance();
 
 	AxString opName = AxStringUtil::mbtowc( GetArgV()[0] );
 
@@ -446,7 +452,7 @@ void RunCmd::Execute()
 
     AxFGOp* op = factory.CreateInstance();
 
-	std::vector<AxString> argList;
+	vector<AxString> argList;
 	int i;
 	for( i = 0; i < GetArgC(); ++i ) {
 		cout << GetArgV()[i] << " ";
@@ -518,6 +524,8 @@ inline bool iseol( char c )
 
 void FileCmd::ReadFile( const char* fileName )
 {
+    using namespace std;
+	
 	// Forget about streams for this... easier char by char.
 	FILE *fp = fopen( fileName, "r" );
 
@@ -661,7 +669,7 @@ void FileCmd::ReadFile( const char* fileName )
 			// It is character... figure out what to do with it.
 
 			if ( start_new_line ) {
-				_cmdlines.push_back( std::vector<string>() );
+				_cmdlines.push_back( vector<string>() );
 				start_new_line = false;
 			}
 			
@@ -677,6 +685,8 @@ void FileCmd::ReadFile( const char* fileName )
 
 void FileCmd::CheckAllCommands()
 {
+	using namespace std;
+
 	vector< vector< string > >::iterator lines_iter;
 
 	// Probably have to reactivate the output code
@@ -702,7 +712,9 @@ void FileCmd::CheckAllCommands()
 
 void FileCmd::Execute()
 {
-    AxFGOpFactoryRegistry& registry = AxFGOpFactoryRegistry::GetInstance();
+	
+    
+	AxFGOpFactoryRegistry& registry = AxFGOpFactoryRegistry::GetInstance();
 
 	vector< vector< string > >::iterator lines_iter;
 	vector< string >::iterator iter;
@@ -717,7 +729,7 @@ void FileCmd::Execute()
 
 		AxFGOp* op = factory.CreateInstance();
 
-		std::vector<AxString> argList;
+		vector<AxString> argList;
 
 		for( iter = lines_iter->begin(); iter != lines_iter->end(); ++iter ) {
 			cout << *iter << " ";
@@ -757,7 +769,7 @@ void ProcessCommandLineArgs( int argc, char** argv )
 	using namespace std;
 
 	vector<int> optionIndices;
-	std::vector<CmdFunc*> optionCmdFuncs;
+	vector<CmdFunc*> optionCmdFuncs;
 
   // Pluck the -r, and -f options. Create a command object for each.
   int i;

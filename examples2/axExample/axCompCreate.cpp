@@ -26,6 +26,7 @@
 #include <AxMob.h>
 #include <AxMobSlot.h>
 #include <AxEssence.h>
+#include <AxIterator.h>
 #include <AxEx.h>
 #include <AxUtil.h>
 
@@ -126,7 +127,7 @@ void AxCreateCompositionExample( AxFile& axFile,
 	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
 	IAAFMobSP nextMob;
 	bool notAtEnd;
-	typedef map< AxString, IAAFMasterMobSP > MobMap;
+	typedef std::map< AxString, IAAFMasterMobSP > MobMap;
 	MobMap mobMap;
 
 	for( notAtEnd = axMobIter.NextOne( nextMob );

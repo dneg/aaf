@@ -26,10 +26,11 @@
 #include <AxMobSlot.h>
 #include <AxComponent.h>
 #include <AxEssence.h>
-#include <AAFEssenceFormats.h>
+#include <AxIterator.h>
 #include <AxEx.h>
 #include <AxUtil.h>
 
+#include <AAFEssenceFormats.h>
 #include <AAFStoredObjectIDs.h>
 #include <AAFTypeDefUIDs.h>
 #include <AAFDataDefs.h>
@@ -56,7 +57,7 @@ void AddImageEssence( AxMasterMob& masterMob,
 	
 	// FIXME - This should be moved to a centralized location rather than having
 	// options strings tested all over the place.
-	pair<bool,int> mpegCodecOpt = args.get( "-mpeg2" );
+	std::pair<bool,int> mpegCodecOpt = args.get( "-mpeg2" );
 	aafUID_t codec;
 
 #if 0
@@ -207,7 +208,11 @@ void AddImageEssence( AxMasterMob& masterMob,
 	const int numSamples = 1;  // frames
 	const int numBytes = numSamples * rect.xSize * rect.ySize * 2;
 
-	auto_ptr<aafUInt8> pixels( new aafUInt8 [numBytes] );
+	// Normally, one shouldn't place an array pointer inside an
+	// auto_ptr.  In this case we get a way with it because it is
+	// simply an array of ints (i.e. no per-element destructor to
+	// call).
+	std::auto_ptr<aafUInt8> pixels( new aafUInt8 [numBytes] );
 
 	// Load pixels buffer with meaning full data here.
 
@@ -368,7 +373,7 @@ void AxCreateEssenceExample( AxFile& axFile,
 	IAAFMobSP nextMob;
 	bool notAtEnd;
 
-	typedef map< AxString, IAAFMasterMobSP > MobMap;
+	typedef std::map< AxString, IAAFMasterMobSP > MobMap;
 	MobMap mobMap;
 
 	for( notAtEnd = axMobIter.NextOne( nextMob );

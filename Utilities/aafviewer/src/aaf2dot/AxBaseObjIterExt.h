@@ -57,13 +57,13 @@ class StackMember
 class AxBaseObjRecIterExt
 {
   public:
-   AxBaseObjRecIterExt( auto_ptr< AxBaseObjIterPrtcl > root );
-   AxBaseObjRecIterExt( auto_ptr< AxBaseObjIterPrtcl > root,
+   AxBaseObjRecIterExt( std::auto_ptr< AxBaseObjIterPrtcl > root );
+   AxBaseObjRecIterExt( std::auto_ptr< AxBaseObjIterPrtcl > root,
 			AxBaseObjRecIterListener *listener);
 
    virtual ~AxBaseObjRecIterExt();
 
-   bool NextOne( auto_ptr<AxBaseObj>& objRet, int& level );
+   bool NextOne( std::auto_ptr<AxBaseObj>& objRet, int& level );
 
    void PopStack();
 

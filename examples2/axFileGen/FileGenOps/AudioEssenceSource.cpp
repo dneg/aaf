@@ -212,7 +212,7 @@ std::auto_ptr< SampleSrcBuffer > ToneSource::GetNext()
 		return std::auto_ptr< SampleSrcBuffer >( new SimpleSampleSrcBuffer() );
 	}
 
-	auto_ptr<aafUInt8> buf( new aafUInt8[ _waveHeader.GetAudioDataSizeInBytes() ] );
+	std::auto_ptr<aafUInt8> buf( new aafUInt8[ _waveHeader.GetAudioDataSizeInBytes() ] );
 
 	// yikes... there's gotta be a better way...
 

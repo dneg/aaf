@@ -100,7 +100,7 @@ namespace {
       AxQueryInterface( spIUnknown, spIaafObject );
 
       AxObject axObj( spIaafObject );
-      auto_ptr< AxBaseObjIterPrtcl > iter(
+      std::auto_ptr< AxBaseObjIterPrtcl > iter(
 	 new AxBaseSolitaryObjIter<AxObject>( spIaafObject ) );
 
       Post( iter );
@@ -113,7 +113,7 @@ namespace {
 
       AxPropertyValueIter axPropValIter( axTypeDefSet.GetElements( spIaafPropertyValue ) );
 
-      auto_ptr< AxBaseObjIterPrtcl > iter( 
+      std::auto_ptr< AxBaseObjIterPrtcl > iter( 
 	 new AxBaseObjIter<AxPropertyValueIter, AxPropertyValue, IAAFPropertyValue>( axPropValIter ) );
 
       Post( iter );
@@ -126,7 +126,7 @@ namespace {
 
 	AxPropertyValueIter axPropValIter( axTypeDefVarArray.GetElements( spIaafPropertyValue ) );
 
-	auto_ptr< AxBaseObjIterPrtcl > iter( 
+	std::auto_ptr< AxBaseObjIterPrtcl > iter( 
 		new AxBaseObjIter<AxPropertyValueIter, AxPropertyValue, IAAFPropertyValue>( axPropValIter ) );
 
 	Post( iter );
@@ -141,10 +141,10 @@ namespace {
       // process the individual record fields using this framework,
       // a special iterator is required.
 
-      auto_ptr<AxRecordIterator> axRecordIter(
+      std::auto_ptr<AxRecordIterator> axRecordIter(
 	 new AxRecordIterator( spIaafPropertyValue, spIaafTypeDefRecord ) );
 
-      auto_ptr<AxBaseObjIterPrtcl> iter(
+      std::auto_ptr<AxBaseObjIterPrtcl> iter(
 	 new AxBaseRecordObjIter( axRecordIter ) );
 
       Post( iter );
@@ -157,7 +157,7 @@ namespace {
 
 	AxPropertyValueIter axPropValIter( axTypeDefFixedArray.GetElements( spIaafPropertyValue ) );
 
-	auto_ptr< AxBaseObjIterPrtcl > iter( 
+	std::auto_ptr< AxBaseObjIterPrtcl > iter( 
 		new AxBaseObjIter<AxPropertyValueIter, AxPropertyValue, IAAFPropertyValue>( axPropValIter ) );
 
 	Post( iter );
@@ -170,7 +170,7 @@ namespace {
 
       AxPropertyValue axActualPropVal( axIndirect.GetActualValue(spIaafPropertyValue) );
 
-      auto_ptr< AxBaseObjIterPrtcl > iter(
+      std::auto_ptr< AxBaseObjIterPrtcl > iter(
 	 new AxBaseSolitaryObjIter<AxPropertyValue>( axActualPropVal ) );
 
       Post( iter );
@@ -183,7 +183,7 @@ namespace {
 	
       AxPropertyValue axActualPropVal( axOpaque.GetActualValue( spIaafPropertyValue ) );
 
-      auto_ptr< AxBaseObjIterPrtcl > iter(
+      std::auto_ptr< AxBaseObjIterPrtcl > iter(
 	 new AxBaseSolitaryObjIter<AxPropertyValue>( axActualPropVal ) );
 
       Post( iter );
@@ -195,7 +195,7 @@ namespace {
       AxTypeDefRename axTypeDefRename( spIaafTypeDefRename );
       AxPropertyValue axBasePropVal( axTypeDefRename.GetBaseValue( spIaafPropertyValue ) );
 
-      auto_ptr< AxBaseObjIterPrtcl > iter(
+      std::auto_ptr< AxBaseObjIterPrtcl > iter(
 	 new AxBaseSolitaryObjIter<AxPropertyValue>( axBasePropVal ) );
 
       Post( iter );
@@ -208,7 +208,7 @@ namespace {
 
 
 //---------------------------------------------------------------------------
-AxBaseObjRecIterExt::AxBaseObjRecIterExt( auto_ptr< AxBaseObjIterPrtcl >  root )
+AxBaseObjRecIterExt::AxBaseObjRecIterExt( std::auto_ptr< AxBaseObjIterPrtcl >  root )
    :       _root( root ),
 	   _listener( 0 )
 {
@@ -217,7 +217,7 @@ AxBaseObjRecIterExt::AxBaseObjRecIterExt( auto_ptr< AxBaseObjIterPrtcl >  root )
 
 
 //---------------------------------------------------------------------------
-AxBaseObjRecIterExt::AxBaseObjRecIterExt( auto_ptr< AxBaseObjIterPrtcl >  root,
+AxBaseObjRecIterExt::AxBaseObjRecIterExt( std::auto_ptr< AxBaseObjIterPrtcl >  root,
 					  AxBaseObjRecIterListener *listener )
    :	_root( root ),
 	_listener( listener )
@@ -233,7 +233,7 @@ AxBaseObjRecIterExt::~AxBaseObjRecIterExt()
 
 
 //---------------------------------------------------------------------------
-inline void AxBaseObjRecIterExt::Push( auto_ptr< AxBaseObjIterPrtcl > iter,
+inline void AxBaseObjRecIterExt::Push( std::auto_ptr< AxBaseObjIterPrtcl > iter,
 				       int type )
 {
    StackMember member( iter.release(), type );
@@ -263,7 +263,7 @@ inline void AxBaseObjRecIterExt::Pop()
 
 
 //---------------------------------------------------------------------------
-bool AxBaseObjRecIterExt::NextOne( auto_ptr<AxBaseObj>& objRet, int& level )
+bool AxBaseObjRecIterExt::NextOne( std::auto_ptr<AxBaseObj>& objRet, int& level )
 {
    if ( Empty() ) {
       return false;
@@ -310,7 +310,7 @@ bool AxBaseObjRecIterExt::NextOne( auto_ptr<AxBaseObj>& objRet, int& level )
       }
    }
    catch ( const AxExHResult& ex ) {
-      auto_ptr< AxBaseObjIterPrtcl > iter(
+      std::auto_ptr< AxBaseObjIterPrtcl > iter(
 	 new AxBaseSolitaryObjIter<AxBaseObjAny<AxExHResult> >(
 	    AxBaseObjAny<AxExHResult>( ex ) ) );
       Push( iter, -1 );
@@ -357,8 +357,8 @@ inline int AxBaseObjRecIterExt::Size()
 //---------------------------------------------------------------------------
 void AxBaseObjRecIterExt::HandleObjectRecursion( AxObject& obj )
 {
-   auto_ptr< AxBaseObjIterPrtcl > iter(
-      new AxBaseObjIter<AxPropertyIter, AxProperty, IAAFProperty>( obj.CreatePropertyIter() ) );
+   std::auto_ptr< AxBaseObjIterPrtcl > iter(
+      new AxBaseObjIter<AxPropertyIter, AxProperty, IAAFProperty>( obj.GetProperties() ) );
 
    Push( iter,0 );
 }
@@ -369,7 +369,7 @@ void AxBaseObjRecIterExt::HandlePropertyRecursion( AxProperty& prop )
 {
    AxPropertyValue propVal( prop.GetValue() );
 
-   auto_ptr< AxBaseObjIterPrtcl > iter(
+   std::auto_ptr< AxBaseObjIterPrtcl > iter(
       new AxBaseSolitaryObjIter<AxPropertyValue>( propVal ) );
 
    Push( iter,1 );
@@ -392,7 +392,7 @@ void AxBaseObjRecIterExt::HandlePropertyValueRecursion( AxPropertyValue& propVal
 //---------------------------------------------------------------------------
 void AxBaseObjRecIterExt::HandleRecordPropertyValueRecursion( AxRecordIterator::Pair& recPair )
 {
-   auto_ptr< AxBaseObjIterPrtcl > iter(
+   std::auto_ptr< AxBaseObjIterPrtcl > iter(
       new AxBaseSolitaryObjIter<AxPropertyValue>( AxPropertyValue(recPair.second) ) );
 
    Push( iter,-1 );
