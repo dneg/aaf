@@ -47,6 +47,8 @@ void reportAssertionViolation(char* assertionKind,
   exit(EXIT_FAILURE);
 #elif defined(OM_ABORT_ON_ASSERT)
   abort();
+#elif defined(OM_CONTINUE_ON_ASSERT)
+  // Continue execution.
 #else
   throw OMAssertionViolation();
 #endif
