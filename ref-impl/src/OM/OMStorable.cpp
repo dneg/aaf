@@ -96,6 +96,7 @@ const OMClassDefinition* OMStorable::definition(void) const
 void OMStorable::save(void) const
 {
   TRACE("OMStorable::save");
+//PRECONDITION("Valid class definition", definition() != 0);
 
   bool opened = false;
   if (_store == 0 ) {
