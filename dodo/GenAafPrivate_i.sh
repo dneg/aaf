@@ -41,7 +41,7 @@ echo \#define __IID_DEFINED__
 echo ""
 echo "typedef struct _IID"
 echo "{"
-echo "    unsigned long x;"
+echo "    unsigned int x;"
 echo "    unsigned short s1;"
 echo "    unsigned short s2;"
 echo "    unsigned char  c[8];"
