@@ -22,6 +22,9 @@
 #include "AAFResult.h"
 #include "aafCvt.h"
 
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
+
 extern "C" const aafClassID_t CLSID_AAFSourceClip;
 
 ImplAAFMasterMob::ImplAAFMasterMob ()
@@ -504,21 +507,10 @@ AAFRESULT STDMETHODCALLTYPE
 	return(ImplAAFMob::AddPhysSourceRef(kAAFAppend, editrate, aMobSlot,
 							pEssenceKind, ref, srcRefLength));
 }
-extern "C" const aafClassID_t CLSID_AAFMasterMob;
 
-OMDEFINE_STORABLE(ImplAAFMasterMob, CLSID_AAFMasterMob);
 
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFMasterMob::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFMasterMob, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
+OMDEFINE_STORABLE(ImplAAFMasterMob, AUID_AAFMasterMob);
+
 
 /************************
  * Function: omfsReconcileMasterMobLength (INTERNAL)

@@ -30,6 +30,8 @@
 #include "ImplAAFTimecode.h"
 #include "ImplAAFSequence.h"
 
+#include "AAFStoredObjectIDs.h"
+
 
 ImplAAFSegment::ImplAAFSegment ()
 {}
@@ -174,7 +176,6 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 	return(AAFRESULT_SUCCESS);
 }
 
-extern "C" const aafClassID_t CLSID_AAFSegment;
 
-OMDEFINE_STORABLE(ImplAAFSegment, CLSID_AAFSegment);
+OMDEFINE_STORABLE(ImplAAFSegment, AUID_AAFSegment);
 

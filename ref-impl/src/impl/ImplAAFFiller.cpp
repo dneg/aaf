@@ -21,7 +21,8 @@
 #include "ImplAAFDataDef.h"
 #endif
 
-
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
 
 
 #ifndef __ImplAAFFiller_h__
@@ -60,19 +61,4 @@ AAFRESULT ImplAAFFiller::TraverseToClip(aafLength_t length,
 	return ( AAFRESULT_FILL_FOUND );
 }
 
-extern "C" const aafClassID_t CLSID_AAFFiller;
-
-OMDEFINE_STORABLE(ImplAAFFiller, CLSID_AAFFiller);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFFiller::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFFiller, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
+OMDEFINE_STORABLE(ImplAAFFiller, AUID_AAFFiller);
