@@ -268,11 +268,6 @@ int main(int argc, char *argv[])
 	HRESULT			hr;
 	CComInitialize	comInit;
 
-#ifdef macintosh
-	char dataFile[] = "AafOmf (PPC).inp";
-	getInputData(&argc, argv, dataFile);
-#endif 
-
 	hr = InitGlobalVars();
 	if (FAILED(hr))
 		return 1; //!!!UTLEcFromHr(hr);
@@ -367,10 +362,6 @@ int main(int argc, char *argv[])
 
 	// If we get here then the gpGlobals was created.
 	delete gpGlobals;
-
-#ifdef _MAC
-	cleanUpInputData(argc, argv);
-#endif
 
 	return( hr );
 }
