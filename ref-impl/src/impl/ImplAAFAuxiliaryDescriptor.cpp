@@ -30,7 +30,7 @@
 #include "ImplAAFAuxiliaryDescriptor.h"
 #endif
 
-#include <AAFPropertyIDs.h>
+#include "AAFPropertyIDs.h"
 
 #include <assert.h>
 #include <string.h>

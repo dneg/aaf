@@ -41,7 +41,7 @@
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
-#include <AAFResult.h>
+#include "AAFResult.h"
 #include "aafCvt.h" 
 #include "AAFUtils.h"
 

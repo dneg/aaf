@@ -29,7 +29,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
-#include <AAFResult.h>
+#include "AAFResult.h"
 
 
 #include <assert.h>

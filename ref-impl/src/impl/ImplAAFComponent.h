@@ -7,7 +7,7 @@
 #include "ImplAAFDataDef.h"
 #endif
 
-#include <ImplEnumAAFTaggedValues.h>
+#include "ImplEnumAAFTaggedValues.h"
 
 class ImplAAFMob;
 class ImplAAFMobSlot;

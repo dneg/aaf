@@ -28,7 +28,7 @@
 #endif
 
 #include <assert.h>
-#include <AAFResult.h>
+#include "AAFResult.h"
 
 #include "aafCvt.h" 
 #include "ImplAAFTimecode.h"
