@@ -27,6 +27,7 @@
 //
 #include <iostream.h>
 #include <fstream.h>
+#include <iomanip.h>
 #include <stdlib.h>
 #include <string.h>
 

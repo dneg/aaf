@@ -55,6 +55,7 @@ typedef IAAFSmartPointer<IAAFComponent>             IAAFComponentSP;
 
 
 #include <iostream.h>
+#include <iomanip.h>
 #include <stdio.h>
 #include <assert.h>
 #include <stdlib.h>
