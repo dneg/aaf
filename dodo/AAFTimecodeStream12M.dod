@@ -42,5 +42,7 @@ AD_OVERRIDE(.method-SetUserDataAtPosition)
 /****/
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
+/****/
+AD_OVERRIDE(.method-GetSampleSize)
 
 AD_XCLASS_END(Concrete, StoredObject)
