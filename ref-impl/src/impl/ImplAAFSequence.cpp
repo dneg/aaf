@@ -175,6 +175,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 		// If it all checks out, append the component to the sequence
 	    _components.appendValue(pComponent);
+
+		pComponent->AcquireReference();
 	}
 	XEXCEPT
 	{
@@ -286,7 +288,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		theEnum->ReleaseRef();
+		theEnum->ReleaseReference();
 		*ppEnum = NULL;
 	}
 
@@ -322,7 +324,7 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFSequence::SegmentOffsetToTC (aafPosition_t*  pOffset,
 									aafTimecode_t*  pTimecode)
 {
-	ImplAAFTimecode*	pTC;
+	ImplAAFTimecode*	pTC = NULL;;
 	aafPosition_t		sequPos;
 	aafUInt32			frameOffset;	
 	HRESULT				hr = AAFRESULT_SUCCESS;
@@ -346,7 +348,7 @@ ImplAAFSequence::SegmentOffsetToTC (aafPosition_t*  pOffset,
 
 			*pTimecode = timecode;
 		}
-		pTC->ReleaseRef();
+		pTC->ReleaseReference();
 	}
 
 	return hr;
@@ -441,7 +443,7 @@ ImplAAFSequence::SegmentTCToOffset (aafTimecode_t*		pTimecode,
 					break;
 				}
 			}
-			pSubSegment->ReleaseRef();
+			pSubSegment->ReleaseReference();
 		}
 	}
 	
