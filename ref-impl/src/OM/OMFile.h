@@ -187,6 +187,7 @@ public:
     // @cmember Save all changes made to the contents of this
     //          <c OMFile>. It is not possible to save
     //          read-only or transient files.
+    //   @precondition <f isOpen()>
   void saveFile(void* clientOnSaveContext = 0);
 
     // @cmember Save the entire contents of this <c OMFile> as well as
@@ -202,10 +203,29 @@ public:
 
     // @cmember Restore the client root <c OMStorable> object from
     //          this <c OMFile>.
+    //   @precondition <f isOpen()>
   OMStorable* restore(void);
 
+    // @cmember Open this <c OMFile>.
+    //   @precondition <f !isOpen()>
+    //   @precondition <f !isClosed()>
+    //   @postcondition <f isOpen()>
+  void open(void);
+
     // @cmember Close this <c OMFile>, any unsaved changes are discarded.
+    //   @precondition <f isOpen()>
+    //   @postcondition <f !isOpen()>
+    //   @postcondition <f isClosed()>
   void close(void);
+
+    // @cmember Is this <c OMFile> open ?
+  bool isOpen(void) const;
+
+    // @cmember Is this <c OMFile> closed ? Note that <f isClosed()> is not the
+    //          same as !<f isOpen()> since before open() is called,
+    //          <f isClosed()> is false. That is, <f isClosed()> means
+    //          "was once open and is now closed".
+  bool isClosed(void) const;
 
     // @cmember Retrieve the client root <c OMStorable> from this <c OMFile>.
   OMStorable* clientRoot(void);
@@ -304,6 +324,10 @@ private:
 
   enum OMFileEncoding _encoding;
   OMRawStorage* _rawStorage;
+
+  bool _isOpen;
+  bool _isClosed;
+
 };
 
 #endif
