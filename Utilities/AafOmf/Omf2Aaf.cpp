@@ -39,6 +39,7 @@ namespace OMF2
 #include "omPublic.h"
 #include "omMedia.h"
 #include "omEffect.h"
+#include "omDefs.h"
 #include "omUtils.h"
 }
 
@@ -1760,36 +1761,70 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 						rc = pDictionary->CreateInstance(AUID_AAFOperationGroup, IID_IAAFOperationGroup, (IUnknown **) &pEffect);
 						rc = GetAAFOperationDefinition("omfi:effect:SMPTEVideoWipe", NULL, "SMPTE Video Wipe", "Combines two video streams according to SMPTE ",
 										-1, AAFFalse, 2, DDEF_Picture, &pEffectDef);
+						pEffect->Initialize(datadef, (aafLength_t)OMFLength, pEffectDef);
+						pEffect->SetBypassOverride(-1);
+						// Port over Wipe number
 						rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEWipeNumber, NULL, 
 													L"Wipe Number", 
 													L"SMPTE Wipe Number. No Default",
 													L" ",
 													&pParameterDef);
 						pEffectDef->AddParameterDefs(pParameterDef);
-						pEffect->Initialize(datadef, (aafLength_t)OMFLength, pEffectDef);
-						pEffect->SetBypassOverride(-1);
 						rc = pDictionary->CreateInstance(AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
 						if (SUCCEEDED(rc))
 						{
 							pConstantValue->SetValue(sizeof(wipeNumber), (unsigned char *)&wipeNumber);
 						}
 						rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
+						pConstantValue->Release();
+						pConstantValue = NULL;
 						pEffect->AddNewParameter(pParameter);
 						pParameter->SetParameterDefinition(pParameterDef);
+						pParameterDef->Release();
+						pParameterDef = NULL;
 
 						pDictionary->LookupType(kAAFTypeID_Int32, &typeDef);
 						pParameter->SetTypeDefinition(typeDef);
 						typeDef->Release();
 						typeDef = NULL;
-	
+						pParameter->Release();
+						pParameter = NULL;
+
+						//Port over reverse flag
+						rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEReverse, NULL, 
+													L"Reverse", 
+													L"Reverse flag. Default FALSE.",
+													L" ",
+													&pParameterDef);
+						pEffectDef->AddParameterDefs(pParameterDef);
+						rc = pDictionary->CreateInstance(AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
+						if (SUCCEEDED(rc))
+						{
+							unsigned char	reverse = wipeControls.reverse;
+								
+							pConstantValue->SetValue(sizeof(reverse), &reverse);
+						}
+						rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
 						pConstantValue->Release();
 						pConstantValue = NULL;
+						pEffect->AddNewParameter(pParameter);
+						pParameter->SetParameterDefinition(pParameterDef);
+						pParameterDef->Release();
+						pParameterDef = NULL;
+
+						pDictionary->LookupType(kAAFTypeID_Boolean, &typeDef);
+						pParameter->SetTypeDefinition(typeDef);
+						typeDef->Release();
+						typeDef = NULL;
 						pParameter->Release();
+						pParameter = NULL;
+
+						// !!! Port over the rest of the wipeControls later
+							
 
 						pEffect->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
 						pEffect->Release();
 						pEffectDef->Release();
-						pParameterDef->Release();
 					}
 					else
 					{
@@ -2975,6 +3010,14 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 					pCPBuffer = new char[valueSize];
 					OMFError = OMF2::omfiControlPtGetInfo(OMFFileHdl, control, &time, &editHint, &cpDatakind, 
 						valueSize, (long *)&bytesRead, pCPBuffer);
+					
+					//!!! The above call is bad in the currently tested version of the OMF TK
+					//!!! Get the information another way (next two function calls
+					OMF2::omfsReadObjRef(OMFFileHdl, control, OMF2::OMCTLPDatakind, &cpDatakind);
+					OMFError = OMF2::omfsReadDataValue(OMFFileHdl, control,
+										OMF2::OMCTLPValue, cpDatakind, pCPBuffer,
+										0, valueSize, &bytesRead);
+
 					AAFCPTime.numerator = time.numerator;
 					AAFCPTime.denominator = time.denominator;
 					AAFCPEditHint = (aafEditHint_t)editHint;
@@ -3556,6 +3599,41 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				}
 				pParameterDef->Release();
 				pParameterDef = NULL;
+				
+				//
+				IAAFConstantValue* pConstantValue = NULL;
+				unsigned char	reverse = wipeArgs.reverse;
+				rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefSMPTEReverse, NULL, 
+										L"Reverse", 
+										L"SMPTE Reverse. Default FALSE",
+										L" ",
+										&pParameterDef);
+				pEffectDef->AddParameterDefs(pParameterDef);
+				rc = pDictionary->CreateInstance(AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
+				if (SUCCEEDED(rc))
+				{
+					pConstantValue->SetValue(sizeof(reverse), &reverse);
+				}
+				rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
+				pEffect->AddNewParameter(pParameter);
+				pParameter->SetParameterDefinition(pParameterDef);
+				pDictionary->LookupType(kAAFTypeID_Boolean, &typeDef);
+				pParameter->SetTypeDefinition(typeDef);
+				typeDef->Release();
+				typeDef = NULL;
+
+				pConstantValue->Release();
+				pConstantValue = NULL;
+
+				pParameter->Release();
+				pParameter = NULL;
+				pParameterDef->Release();
+				pParameterDef = NULL;
+
+				//
+				// port other wipeArgs over
+
+				//
 				if (inputSegmentA)
 				{
 					rc = ProcessOMFComponent(inputSegmentA, &pEffectSegment);
@@ -3821,45 +3899,6 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			if(slotID == keyFrameSlot)
 			{
 				(void)ConvertMCSpecialVaryingValue(segment, effectDefAUID, pEffect);
-#if 0
-										;---- Keep above this line
-				OMFIPvtKFInfo_t	**keyframes;
-				aafRational_t	*times;
-
-				//!!! Assume varying value
-				(void)omfiVaryValueGetNumPoints(OMFFileHdl, segment, &numPoints);
-
-				keyframes = new (OMFIPvtKFInfo_t *)[numPoints];
-				times = new aafRational_t[numPoints];
-				//!!!Allocate KF and POINTS arrays here
-				(void)omfiIteratorAlloc(OMFFileHdl, &pointIter);
-				writeIndex = 0;
-				while(omfiVaryValueGetNextPoint(pointIter, segment, NULL, &controlPoint) == OMF2::OM_ERR_NONE)
-				{
-					// Fill in one entry in KF and POINTS arrays
-					//!!!Assert write Index in bounds
-					keyframes[writeIndex] = new OMFIPvtKFInfo_t;
-					(void)omfiControlPtGetInfo(OMFFileHdl, controlPoint,
-												(times+writeIndex), NULL, NULL,
-												sizeof(OMFIPvtKFInfo_t), &bytesRead,
-												keyframes[writeIndex]);
-					writeIndex++;
-				}
-				(void)omfiIteratorDispose(OMFFileHdl, pointIter);
-
-				ExportSeparateKeyframeData(AAFEffectID,
-								numPoints,
-								OMFIPvtKFInfo_t **keyframes,
-								aafRational_t *times,
-								pDictionary, pEffect);
-				
-				//Delete KF and POINTS arrays here
-				for(n = 0; n < numPoints; n++)
-					delete keyframes[writeIndex];
-				delete keyframes;
-				delete times;
-;--- delete to marked line above
-#endif
 			}
 			else if(slotID == globalSlot)
 			{
@@ -3876,6 +3915,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 											&datakind,&length,
 											sizeof(OMFIPvtGlobalInfo_t),
 											&bytesRead, &omfGlobal);
+				// !!!Check OMF cookie and revision!
+				// !!! Byte swap cookie if OMF cookie was swapped
 				aafGlobal.cookie = AAF_GLB_COOKIE;
 				aafGlobal.rev = AAF_GLB_REVISION;
 				aafGlobal.kfCurrent = omfGlobal.kfCurrent;
@@ -3937,6 +3978,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		}
 	 
 	}
+#if 0
 	else if (OMF2::OM_ERR_PROP_NOT_PRESENT == OMFError)
 	{
 		// we need to add this code here until optional arguments are implemented !!!
@@ -3956,6 +3998,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		pNULLSourceClip->Release();
 		pNULLSourceClip = NULL;
 	}
+#endif
 
 	if (pEffectDef)
 		pEffectDef->Release();

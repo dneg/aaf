@@ -1773,6 +1773,11 @@ HRESULT Aaf2Omf::ConvertAAFTypeIDDatakind(aafUID_t typeID, OMF2::omfDDefObj_t* p
 		strcpy(datakindName, "omfi:data:Int32");
 		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
 	}
+	else if ( memcmp((char *)&typeID, (char *)&kAAFTypeID_Boolean, sizeof(aafUID_t)) == 0 )
+	{
+		strcpy(datakindName, "omfi:data:Boolean");
+		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
+	}
 	else if ( memcmp((char *)&typeID, (char *)&kAAFTypeID_AvidGlobalKF, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:EffectGlobals");
@@ -2435,6 +2440,16 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  1, kfSlot,
 										(OMF2::omfLength_t)length));
 		}
+		if(pEffect->GetParameterByArgID(kAAFParameterDefSMPTEReverse, &pParameter) == AAFRESULT_SUCCESS)
+		{
+			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  2, kfSlot,
+										(OMF2::omfLength_t)length));
+		}
+		if(pEffect->GetParameterByArgID(kAAFParamID_AvidSelected, &pParameter) == AAFRESULT_SUCCESS)
+		{
+			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  0, kfSlot,
+										(OMF2::omfLength_t)length));
+		}
 #if 0
 		if(pEffect->GetParameterByArgID(kAAFParameterDefAmplitude, &pParameter) == AAFRESULT_SUCCESS)
 		{
@@ -2615,7 +2630,9 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 	OMF2::omfObject_t	pOMFDatakind, pMCKeyframeKind = NULL;
 	OMFIPvtGlobalInfo_t	omfGlobal;
 	AAFPvtGlobalInfo_t	*aafGlobal;
-	
+	bool				hasStandardSlot = true;		// Assume true, prove false
+	bool				addedMCSlot = false;
+
 	moduleErrorTmp = AAFRESULT_SUCCESS;
     checkAAF(pParm->GetTypeDefinition(&pTypeDef));
 	checkAAF(pTypeDef->QueryInterface(IID_IAAFDefObject, (void **)&pDef));
@@ -2648,12 +2665,18 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 			destValue = srcValue;
 			destValueLen = srcValueLen;
 		}
+		else if(memcmp(&typeDefID, &kAAFTypeID_Boolean, sizeof(typeDefID)) == 0)
+		{
+			destValue = srcValue;
+			destValueLen = srcValueLen;
+		}
 		else if(memcmp(&typeDefID, &kAAFTypeID_AvidGlobalKF, sizeof(typeDefID)) == 0)
 		{
 			aafGlobal = (AAFPvtGlobalInfo_t *)srcValue;
 			destValue = (aafDataBuffer_t)&omfGlobal;
 			destValueLen = sizeof(omfGlobal);
 			// !!!Check cookie and revision!
+			// !!! Byte swap cookie if AAF cookie was swapped
 			omfGlobal.cookie = OMFI_GLB_COOKIE;
 			omfGlobal.rev = OMFI_GLB_REVISION;
 			omfGlobal.kfCurrent = aafGlobal->kfCurrent;
@@ -2741,13 +2764,36 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 				   memcmp(&typeDefID, &kAAFTypeID_AvidSpillSupress, sizeof(typeDefID)) == 0 ||
 				   memcmp(&typeDefID, &kAAFTypeID_AvidBounds, sizeof(typeDefID)) == 0 ||
 				   memcmp(&typeDefID, &kAAFTypeID_AvidEffColor, sizeof(typeDefID)) == 0 ||
-				   memcmp(&typeDefID, &kAAFTypeID_AvidEffUserParam, sizeof(typeDefID)) == 0)
+				   memcmp(&typeDefID, &kAAFTypeID_AvidEffUserParam, sizeof(typeDefID)) == 0 ||
+				   // Now compare parameter IDs
+				   memcmp(&paramDefID, &kAAFParamID_AvidSelected, sizeof(typeDefID)) == 0)
 				{
+					hasStandardSlot = false;
 					if(kfVVAL == NULL)
 					{
-						(void)GetMCKeyframeKind(OMFFileHdl, pMCKeyframeKind);
+						OMF2::omfNumSlots_t	numSlots, slotID;
+						OMF2::omfIterHdl_t	slotIter;
+						OMF2::omfESlotObj_t	effectSlot;
+						OMF2::omfObject_t	segment;
+
+						(void)OMF2::omfiEffectGetNumSlots(OMFFileHdl, pOMFEffect, &numSlots);
+						(void)OMF2::omfiIteratorAlloc(OMFFileHdl, &slotIter);
+						while(OMF2::omfiEffectGetNextSlot(slotIter, pOMFEffect, NULL, &effectSlot) == OMF2::OM_ERR_NONE)
+						{
+							(void)OMF2::omfiEffectSlotGetInfo(OMFFileHdl, effectSlot, &slotID, &segment);
+							if(slotID == kfSlotNum)
+							{
+								kfVVAL = segment;
+							}
+						}
+						(void)OMF2::omfiIteratorDispose(OMFFileHdl, slotIter);
+					}	
+					(void)GetMCKeyframeKind(OMFFileHdl, pMCKeyframeKind);
+					if(kfVVAL == NULL)
+					{
 						checkOMF(OMF2::omfiVaryValueNew(OMFFileHdl, pMCKeyframeKind, effectLen,
 											interpKind, &kfVVAL));
+						addedMCSlot = true;
 					}
 					checkAAF(UpdateKeyFrameVVAL(pPoint, paramDefID, kfVVAL, omfTime,
 									sizeof(OMFIPvtKFInfo_t),
@@ -2758,13 +2804,32 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 				{
 					if(memcmp(&typeDefID, &kAAFParameterDefLevel, sizeof(typeDefID)))
 					{
+						// This is duplicate code, make a common routine
 						if(kfVVAL == NULL)
 						{
-							(void)GetMCKeyframeKind(OMFFileHdl, pMCKeyframeKind);
+							OMF2::omfNumSlots_t	numSlots, slotID;
+							OMF2::omfIterHdl_t	slotIter;
+							OMF2::omfESlotObj_t	effectSlot;
+							OMF2::omfObject_t	segment;
+
+							(void)OMF2::omfiEffectGetNumSlots(OMFFileHdl, pOMFEffect, &numSlots);
+							(void)OMF2::omfiIteratorAlloc(OMFFileHdl, &slotIter);
+							while(OMF2::omfiEffectGetNextSlot(slotIter, pOMFEffect, NULL, &effectSlot) == OMF2::OM_ERR_NONE)
+							{
+								(void)OMF2::omfiEffectSlotGetInfo(OMFFileHdl, effectSlot, &slotID, &segment);
+								if(slotID == kfSlotNum)
+								{
+									kfVVAL = segment;
+								}
+							}
+							(void)OMF2::omfiIteratorDispose(OMFFileHdl, slotIter);
+						}	
+						(void)GetMCKeyframeKind(OMFFileHdl, pMCKeyframeKind);
+						if(kfVVAL == NULL)
+						{
 							checkOMF(OMF2::omfiVaryValueNew(OMFFileHdl, pMCKeyframeKind, effectLen,
 											interpKind, &kfVVAL));
-
-													
+							addedMCSlot = true;
 						}
 						checkAAF(UpdateKeyFrameVVAL(pPoint, paramDefID, kfVVAL, omfTime,
 									sizeof(OMFIPvtKFInfo_t),
@@ -2802,9 +2867,12 @@ HRESULT Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 					srcValue = NULL;
 				}
 			}
-			checkOMF(OMF2::omfiEffectAddNewSlot(OMFFileHdl,pOMFEffect,
+			if(hasStandardSlot)
+			{
+				checkOMF(OMF2::omfiEffectAddNewSlot(OMFFileHdl,pOMFEffect,
 									slotNum, omfSeg, &pOMFEffectSlot));
-			if(kfVVAL != NULL)
+			}
+			if((kfVVAL != NULL) && addedMCSlot)
 			{
 				omfSeg = kfVVAL;
 				checkOMF(OMF2::omfiEffectAddNewSlot(OMFFileHdl,pOMFEffect,
@@ -2922,6 +2990,8 @@ HRESULT Aaf2Omf::UpdateKeyFrameVVAL(IAAFControlPoint*		controlPoint,
 	checkOMF(OMF2::omfiIteratorDispose(OMFFileHdl, hdl));
 
 	// Use the AAF parameter definition kind to fill in any new fields
+	// !!!Check the old cookie for validity
+	// !! Byte-swap the new cookie if the old cookie was byte-swapped
 	omfKF = (OMFIPvtKFInfo_t *)value;
 	omfKF->cookie = OMFI_KF_COOKIE;
 	omfKF->revision = OMFI_KF_REVISION;
@@ -3025,6 +3095,12 @@ HRESULT Aaf2Omf::UpdateKeyFrameVVAL(IAAFControlPoint*		controlPoint,
 		omfKF->nColors = aafColors.nColors;
 		for(n = 0; n < MAX_EFFECT_COLORS; n++)	// min(aafColors, omfColors?)
 			omfKF->colors[n] = aafColors.colors[n];
+	}
+	else if(memcmp(&paramID, &kAAFParamID_AvidSelected, sizeof(paramID)) == 0)
+	{
+		unsigned char	selected;
+		checkAAF(controlPoint->GetValue( sizeof(selected), &selected, &bytesRead));
+		omfKF->selected = selected;
 	}
 	else if(memcmp(&paramID, &kAAFTypeID_AvidEffUserParam, sizeof(paramID)) == 0)
 	{
