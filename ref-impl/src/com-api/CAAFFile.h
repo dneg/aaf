@@ -181,6 +181,9 @@ public:
   // AAFRESULT_NULL_PARAM
   //   - the revision pointer arg is NULL.
   //
+  // AAFRESULT_NOT_OPEN
+  //   - This object is not open.
+  //
   STDMETHOD (GetRevision) (
     // Revision of the current file 
     /*[out, retval]*/ aafFileRev_t *  pRev);

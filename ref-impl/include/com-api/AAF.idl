@@ -7296,6 +7296,9 @@ interface IAAFFile : IUnknown
   //
   // AAFRESULT_NULL_PARAM
   //   - the revision pointer arg is NULL.
+  //
+  // AAFRESULT_NOT_OPEN
+  //   - This object is not open.
   // 
   HRESULT GetRevision (
     // Revision of the current file
