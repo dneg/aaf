@@ -1480,10 +1480,10 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
   //
   // set up for %02
   //
-  Impl%01 * internal%02 = NULL;
+  Impl%01 ** internal%02 = NULL;
   if (%02)
     {
-      int localIdx;
+      aafUInt32 localIdx;
 	  assert (%03 >= 0);
 	  internal%02 = new Impl%01*[%03];
 	  assert (internal%02);
@@ -1572,7 +1572,7 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
   //
   // set up for %02
   //
-  Impl%01 * internal%02 = NULL;
+  Impl%01 ** internal%02 = NULL;
   assert (%03 >= 0);
   internal%02 = new Impl%01*[%03];
   assert (internal%02);
@@ -1580,7 +1580,7 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
   Impl%01 ** pinternal%02 = NULL;
   if (%02)
     {
-      pinternal%02 = &internal%02;
+      pinternal%02 = internal%02;
     }
 #endm
 
@@ -1792,7 +1792,7 @@ pinternal%01\
     {
       IUnknown *pUnknown;
       HRESULT hStat;
-      int localIdx;
+      aafUInt32 localIdx;
 	  assert (%03 >= 0);
 	  for (localIdx = 0; localIdx < %03; localIdx++)
 		{
