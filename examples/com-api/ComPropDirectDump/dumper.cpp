@@ -177,6 +177,7 @@ HRESULT dumpObject(IAAFObject *pContainer, int indent)
 	}
   catch (HRESULT &caught)
 	{
+	  cout << endl << "***Caught hresult 0x" << hex << caught << "***" << endl;
 	  returnHr = caught;
 	}
 
@@ -500,6 +501,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			assert (pETD);    pETD->Release();    pETD = 0;
 			assert (pTDS);    pTDS->Release();    pTDS = 0;
 			assert (buf);     delete[] buf;       buf = 0;
+			break;
 		  }
 
 		case kAAFTypeCatRecord:
@@ -540,10 +542,11 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 
 			pTDR->Release();
 			pTDR = 0;
+			break;
 		  }
 
 		default:
-		  // Unknown type category.  Dump 'error' message.
+		  cout << "Unknown type category." << endl;
 		  break;
 		}
 	} // !pTD
