@@ -159,10 +159,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment*		pSegment = NULL;
 	IAAFNestedScope*		pNestedScope = NULL;
 	IAAFCompositionMob*	pCompMob = NULL;
-	aafInt32			fadeInLen  = 1000;
-	aafInt32			fadeOutLen = 2000;
-	aafFadeType_t		fadeInType = kAAFFadeLinearAmp;
-	aafFadeType_t		fadeOutType = kAAFFadeLinearPower;
 	aafSourceRef_t		sourceRef; 
 	aafLength_t			fillerLength = 3200;
 	aafUInt32			numSegments;
@@ -208,11 +204,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pSourceClip));		
 		 checkResult(pSourceClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		 checkResult(pComponent->SetLength(fillerLength));
 		pComponent->Release();
 		pComponent = NULL;
 
 		// Set the properties for the SourceClip
-		checkResult(pSourceClip->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
 		sourceRef.sourceID = TEST_referencedMobID;
 		sourceRef.sourceSlotID = 0;
 		sourceRef.startTime = 0;
@@ -223,7 +219,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFFiller, 
 								   (IUnknown **)&pFiller));
 		// Set its properties.
-	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength+2));
+	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
 
 		// Now create a nested scope 
 	    checkResult(defs.cdNestedScope()->
@@ -231,6 +227,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pNestedScope));
 		 checkResult(pNestedScope->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		 checkResult(pComponent->SetLength(fillerLength));
 		pComponent->Release();
 		pComponent = NULL;
 
@@ -263,7 +260,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	    checkResult(defs.cdFiller()->
 					CreateInstance(IID_IAAFFiller, 
 								   (IUnknown **)&pFiller));
-	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength+1));
+	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
 		checkResult(pFiller->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 		checkResult(pNestedScope->InsertSegmentAt(1,pSegment));
 		pFiller->Release();
@@ -403,7 +400,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					checkResult(pSegment->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 					aafLength_t fillerLength;
 					checkResult(pComponent->GetLength(&fillerLength));
-					checkExpression(fillerLength==3200+segmentIndex);
+					checkExpression(fillerLength==3200/*+segmentIndex*/);
 					pSegment->Release();
 					pSegment = NULL;
 					pFiller->Release();
