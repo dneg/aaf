@@ -322,7 +322,7 @@ clean:
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable.h
 	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.cpp
 	$(RM) -f $(COMAPI_DIR)/CAAFEnumValidation.h
-	$(RM) -f $(COMAPI_DIR)/CAAFEnumValidation_i.cpp
+	$(RM) -f $(COMAPI_DIR)/CAAFEnumValidation.cpp
 	$(CP)  aafobjects.mk tmp.sh
 	$(CHMOD) a+w tmp.sh
 	$(CAT) DelTargets.sh >> tmp.sh
