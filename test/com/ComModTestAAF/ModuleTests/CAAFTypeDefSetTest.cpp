@@ -439,6 +439,8 @@ void CAAFTypeDefSet_Register(IAAFHeader * pHeader, IAAFDictionary* pDictionary)
   aafProductVersion_t toolkitVersion;
   checkResult(GetAAFVersions(pHeader, &toolkitVersion, NULL));
 
+  checkExpression(StrongReferenceSetsSupported(toolkitVersion), AAFRESULT_NOT_IN_CURRENT_VERSION);
+
   //
   // Create and register a new subclass of AAFDefObject.
   //
@@ -465,19 +467,17 @@ void CAAFTypeDefSet_Register(IAAFHeader * pHeader, IAAFDictionary* pDictionary)
   checkResult(pDictionary->RegisterTypeDef(pTempType));
   
 
-#if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
-  
-  //
-  // Attempt to register a new set type as an optional property on the dictionary.
-  //
-  IAAFClassDefSP pDictionaryClass;
-  checkResult(pDictionary->LookupClassDef(AUID_AAFDictionary, &pDictionaryClass));
-  IAAFPropertyDefSP pMyDefsSetPropertyDef;
-  checkResult(pDictionaryClass->RegisterOptionalPropertyDef(kMyStrongRefSetPropData.id, kMyStrongRefSetPropData.name, pTempType, &pMyDefsSetPropertyDef));
-  //kMyStrongRefSetPropData
-
-#endif // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
-  
+  if (ExtendingAAFObjectSupported(toolkitVersion))
+  {  
+    //
+    // Attempt to register a new set type as an optional property on the dictionary.
+    //
+    IAAFClassDefSP pDictionaryClass;
+    checkResult(pDictionary->LookupClassDef(AUID_AAFDictionary, &pDictionaryClass));
+    IAAFPropertyDefSP pMyDefsSetPropertyDef;
+    checkResult(pDictionaryClass->RegisterOptionalPropertyDef(kMyStrongRefSetPropData.id, kMyStrongRefSetPropData.name, pTempType, &pMyDefsSetPropertyDef));
+    //kMyStrongRefSetPropData
+  }  
 } 
 
 
@@ -557,6 +557,9 @@ void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
 
   aafProductVersion_t toolkitVersion;
   checkResult(GetAAFVersions(pHeader, &toolkitVersion, NULL));
+
+  checkExpression(StrongReferenceSetsSupported(toolkitVersion), AAFRESULT_NOT_IN_CURRENT_VERSION);
+
   
   // Get the property value that represents the set of data definitions.
   IAAFTypeDefSetSP pDataDefinitionsSet;
@@ -601,11 +604,11 @@ void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
 
   
   // Now test removal of selected elements.
+  IAAFPropertyValueSP pKeyValue;
   aafUInt32 removeCount = 0;
   for (index = 0; index < kDataDefTestDataCount; ++index)
   {
-    IAAFPropertyValueSP pKeyValue;
-    checkResult(pDataDefinitionsSet->CreateKey((aafDataBuffer_t)&kDDTestData[index].id, sizeof(aafUID_t), &pKeyValue));
+     checkResult(pDataDefinitionsSet->CreateKey((aafDataBuffer_t)&kDDTestData[index].id, sizeof(aafUID_t), &pKeyValue));
   
     // Get the value with the same key from the set.
     checkResult(pDataDefinitionsSet->LookupElement(pDataDefinitionsValue, pKeyValue, &pDataDefValue));
@@ -624,35 +627,47 @@ void CAAFTypeDefSet_Write(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
 
 
   
-#if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+  if (ExtendingAAFObjectSupported(toolkitVersion))
+  {  
+    // Get the property value that represents the set of the new definitions.
+    IAAFTypeDefSetSP pMyDefinitionsSet;
+    IAAFPropertyValueSP pMyDefinitionsValue;
+    IAAFTypeDefObjectRefSP pMyElementType;
+    CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
+                                     kMyStrongRefSetPropData.id,
+                                     true, /*createOptional*/
+                                     &pMyDefinitionsSet,
+                                     &pMyElementType,
+                                     &pMyDefinitionsValue);
 
-  // Get the property value that represents the set of the new definitions.
-  IAAFTypeDefSetSP pMyDefinitionsSet;
-  IAAFPropertyValueSP pMyDefinitionsValue;
-  IAAFTypeDefObjectRefSP pMyElementType;
-  CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
-                                   kMyStrongRefSetPropData.id,
-                                   true, /*createOptional*/
-                                   &pMyDefinitionsSet,
-                                   &pMyElementType,
-                                   &pMyDefinitionsValue);
-
-  IAAFDefObjectSP pMyDefObject;
-  IAAFPropertyValueSP pMyDefValue;
-  for (index = 0; index < kMyDefTestDataCount; ++index)
-  {
-    checkResult(pDictionary->CreateInstance(kMyDefClassID, IID_IAAFDefObject, (IUnknown**)&pMyDefObject));
-    checkResult(pMyDefObject->Initialize(kMyDefTestData[index].id, kMyDefTestData[index].name));
-    checkResult(pMyDefObject->SetDescription(kMyDefTestData[index].description));
+    IAAFDefObjectSP pMyDefObject;
+    IAAFPropertyValueSP pMyDefValue;
+    for (index = 0; index < kMyDefTestDataCount; ++index)
+    {
+      checkResult(pDictionary->CreateInstance(kMyDefClassID, IID_IAAFDefObject, (IUnknown**)&pMyDefObject));
+      checkResult(pMyDefObject->Initialize(kMyDefTestData[index].id, kMyDefTestData[index].name));
+      checkResult(pMyDefObject->SetDescription(kMyDefTestData[index].description));
+      
+      // Create the new element and add it to the set.
+      checkResult(pMyElementType->CreateValue(pMyDefObject, &pMyDefValue));
+      checkResult(pMyDefinitionsSet->AddElement(pMyDefinitionsValue, pMyDefValue));
+    }
     
-    // Create the new element and add it to the set.
-    checkResult(pMyElementType->CreateValue(pMyDefObject, &pMyDefValue));
-    checkResult(pMyDefinitionsSet->AddElement(pMyDefinitionsValue, pMyDefValue));
-  }
+    for (index = 0; index < kMyDefTestDataCount; ++index)
+    {
+      checkResult(pMyDefinitionsSet->CreateKey((aafDataBuffer_t)&kMyDefTestData[index].id, sizeof(aafUID_t), &pKeyValue));
+    
+      // Get the value with the same key from the set.
+      checkResult(pMyDefinitionsSet->LookupElement(pMyDefinitionsValue, pKeyValue, &pMyDefValue));
+      
+      if (kMyDefTestData[index].remove)
+      {
+        ++removeCount;    
+        checkResult(pMyDefinitionsSet->RemoveElement(pMyDefinitionsValue, pMyDefValue));
+      }    
+    }  
+  }  
 
-#endif // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
-
-  
 } // CAAFTypeDefSet_Write
 
 
@@ -664,92 +679,156 @@ void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
   aafProductVersion_t toolkitVersion, fileToolkitVersion;
   checkResult(GetAAFVersions(pHeader, &toolkitVersion, &fileToolkitVersion));
 
-  // Get the property value that represents the set of data definitions.
-  IAAFTypeDefSetSP pDataDefinitionsSet;
-  IAAFPropertyValueSP pDataDefinitionsValue;
-  IAAFTypeDefObjectRefSP pElementType;
-  CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
-                                   kAAFPropID_Dictionary_DataDefinitions,
-                                   false, /*createOptional*/
-                                   &pDataDefinitionsSet,
-                                   &pElementType,
-                                   &pDataDefinitionsValue);
+  checkExpression(StrongReferenceSetsSupported(toolkitVersion), AAFRESULT_NOT_IN_CURRENT_VERSION);
 
-  // Validate the property value set with the public data defintiion access methods
-  //
-
-  // Check the count...
-  aafUInt32 actualDataDefinitionCount = 0;
-  aafUInt32 definitionCount = 0;
-  checkResult(pDictionary->CountDataDefs(&actualDataDefinitionCount));
-  checkResult(pDataDefinitionsSet->GetCount(pDataDefinitionsValue, &definitionCount));
-  checkExpression(definitionCount == actualDataDefinitionCount, AAFRESULT_TEST_FAILED);
-  
-  // Make sure all of the objects can be found in the set value.
-  IEnumAAFDataDefsSP pEnumDataDefs;
-  checkResult(pDictionary->GetDataDefs(&pEnumDataDefs));
-  IAAFDataDefSP pDataDef, pSetDataDef;
-  IAAFDefObjectSP pDefObject;
-  IAAFPropertyValueSP pKeyValue;
-  IAAFPropertyValueSP pDataDefValue;
-  IAAFTypeDefSP pDataDefValueType;
-  IAAFTypeDefObjectRefSP pDataDefValueObjectRef;
-  aafUID_t id;
-  aafBoolean_t containsKey = kAAFFalse;
-  while (SUCCEEDED(pEnumDataDefs->NextOne(&pDataDef)))
+  if (StrongReferenceSetsSupported(fileToolkitVersion))
   {
-    checkResult(pDataDef->QueryInterface(IID_IAAFDefObject, (void**)&pDefObject));
-    checkResult(pDefObject->GetAUID(&id));
-    checkResult(pDataDefinitionsSet->CreateKey((aafDataBuffer_t)&id, sizeof(id), &pKeyValue));
-    
-    // Is the key in the set?
-    checkResult(pDataDefinitionsSet->ContainsKey(pDataDefinitionsValue, pKeyValue, &containsKey));
-    checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
-    
-    // Get the value with the same key from the set.
-    checkResult(pDataDefinitionsSet->LookupElement(pDataDefinitionsValue, pKeyValue, &pDataDefValue));
-    
-    // The property value's type  must be the same as the elment type of the set!
-    checkResult(pDataDefValue->GetType(&pDataDefValueType));
-    checkExpression(EqualObject(pDataDefValueType, pElementType), AAFRESULT_TEST_FAILED);
+    // Get the property value that represents the set of data definitions.
+    IAAFTypeDefSetSP pDataDefinitionsSet;
+    IAAFPropertyValueSP pDataDefinitionsValue;
+    IAAFTypeDefObjectRefSP pElementType;
+    CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
+                                     kAAFPropID_Dictionary_DataDefinitions,
+                                     false, /*createOptional*/
+                                     &pDataDefinitionsSet,
+                                     &pElementType,
+                                     &pDataDefinitionsValue);
 
-    // Make sure that we actually found the "same" data definition.
-    checkResult(pElementType->GetObject(pDataDefValue, IID_IAAFDataDef, (IUnknown**)&pSetDataDef));
-    checkExpression(EqualObject(pSetDataDef, pDataDef), AAFRESULT_TEST_FAILED);
-  }
+    // Validate the property value set with the public data defintiion access methods
+    //
 
-  
-  // Turn the test around...
-  IEnumAAFPropertyValuesSP pEnumDataDefValues;
-  checkResult(pDataDefinitionsSet->GetElements(pDataDefinitionsValue, &pEnumDataDefValues));
-  while (SUCCEEDED(pEnumDataDefValues->NextOne(&pDataDefValue)))
-  {  
-    // The property value's type  must be the same as the elment type of the set!
-    checkResult(pDataDefValue->GetType(&pDataDefValueType));
-    checkExpression(EqualObject(pDataDefValueType, pElementType), AAFRESULT_TEST_FAILED);
+    // Check the count...
+    aafUInt32 actualDataDefinitionCount = 0;
+    aafUInt32 definitionCount = 0;
+    checkResult(pDictionary->CountDataDefs(&actualDataDefinitionCount));
+    checkResult(pDataDefinitionsSet->GetCount(pDataDefinitionsValue, &definitionCount));
+    checkExpression(definitionCount == actualDataDefinitionCount, AAFRESULT_TEST_FAILED);
     
-    // Make sure that we actually found the "same" data definition.
-    checkResult(pElementType->GetObject(pDataDefValue, IID_IAAFDataDef, (IUnknown**)&pSetDataDef));
-    checkResult(pSetDataDef->QueryInterface(IID_IAAFDefObject, (void**)&pDefObject));
-    checkResult(pDefObject->GetAUID(&id));
+    // Make sure all of the objects can be found in the set value.
+    IEnumAAFDataDefsSP pEnumDataDefs;
+    checkResult(pDictionary->GetDataDefs(&pEnumDataDefs));
+    IAAFDataDefSP pDataDef, pSetDataDef;
+    IAAFDefObjectSP pDefObject;
+    IAAFPropertyValueSP pKeyValue;
+    IAAFPropertyValueSP pDataDefValue;
+    IAAFTypeDefSP pDataDefValueType;
+    IAAFTypeDefObjectRefSP pDataDefValueObjectRef;
+    aafUID_t id;
+    aafBoolean_t containsKey = kAAFFalse;
+    while (SUCCEEDED(pEnumDataDefs->NextOne(&pDataDef)))
+    {
+      checkResult(pDataDef->QueryInterface(IID_IAAFDefObject, (void**)&pDefObject));
+      checkResult(pDefObject->GetAUID(&id));
+      checkResult(pDataDefinitionsSet->CreateKey((aafDataBuffer_t)&id, sizeof(id), &pKeyValue));
+      
+      // Is the key in the set?
+      checkResult(pDataDefinitionsSet->ContainsKey(pDataDefinitionsValue, pKeyValue, &containsKey));
+      checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
+      
+      // Get the value with the same key from the set.
+      checkResult(pDataDefinitionsSet->LookupElement(pDataDefinitionsValue, pKeyValue, &pDataDefValue));
+      
+      // The property value's type  must be the same as the elment type of the set!
+      checkResult(pDataDefValue->GetType(&pDataDefValueType));
+      checkExpression(EqualObject(pDataDefValueType, pElementType), AAFRESULT_TEST_FAILED);
+
+      // Make sure that we actually found the "same" data definition.
+      checkResult(pElementType->GetObject(pDataDefValue, IID_IAAFDataDef, (IUnknown**)&pSetDataDef));
+      checkExpression(EqualObject(pSetDataDef, pDataDef), AAFRESULT_TEST_FAILED);
+      
+      // Is the element in the set?
+      checkResult(pDataDefinitionsSet->ContainsElement(pDataDefinitionsValue, pDataDefValue, &containsKey));
+      checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
+    }
+
     
-    checkResult(pDictionary->LookupDataDef(id, &pDataDef));
-    checkExpression(EqualObject(pSetDataDef, pDataDef), AAFRESULT_TEST_FAILED);
-  }  
+    // Turn the test around...
+    IEnumAAFPropertyValuesSP pEnumDataDefValues;
+    checkResult(pDataDefinitionsSet->GetElements(pDataDefinitionsValue, &pEnumDataDefValues));
+    while (SUCCEEDED(pEnumDataDefValues->NextOne(&pDataDefValue)))
+    {  
+      // The property value's type  must be the same as the elment type of the set!
+      checkResult(pDataDefValue->GetType(&pDataDefValueType));
+      checkExpression(EqualObject(pDataDefValueType, pElementType), AAFRESULT_TEST_FAILED);
+      
+      // Make sure that we actually found the "same" data definition.
+      checkResult(pElementType->GetObject(pDataDefValue, IID_IAAFDataDef, (IUnknown**)&pSetDataDef));
+      checkResult(pSetDataDef->QueryInterface(IID_IAAFDefObject, (void**)&pDefObject));
+      checkResult(pDefObject->GetAUID(&id));
+      
+      checkResult(pDictionary->LookupDataDef(id, &pDataDef));
+      checkExpression(EqualObject(pSetDataDef, pDataDef), AAFRESULT_TEST_FAILED);
+    }  
 
-#if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
 
-  // Get the property value that represents the set of data definitions.
-  IAAFTypeDefSetSP pMyDefinitionsSet;
-  IAAFPropertyValueSP pMyDefinitionsValue;
-  IAAFTypeDefObjectRefSP pMyElementType;
-  CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
-                                   kMyStrongRefSetPropData.id,
-                                   false, /*createOptional*/
-                                   &pMyDefinitionsSet,
-                                   &pMyElementType,
-                                   &pMyDefinitionsValue);
 
-#endif // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+    if (ExtendingAAFObjectSupported(toolkitVersion) && ExtendingAAFObjectSupported(fileToolkitVersion))
+    {  
+      // Get the property value that represents the set of data definitions.
+      IAAFTypeDefSetSP pMyDefinitionsSet;
+      IAAFPropertyValueSP pMyDefinitionsValue;
+      IAAFTypeDefObjectRefSP pMyElementType;
+      CAAFTypeDefSet_GetDefinitionsSet(pDictionary,
+                                       kMyStrongRefSetPropData.id,
+                                       false, /*createOptional*/
+                                       &pMyDefinitionsSet,
+                                       &pMyElementType,
+                                       &pMyDefinitionsValue);
+
+      
+      // Attempt to read back all of the new definitions in the set.
+      // Turn the test around...
+      IEnumAAFPropertyValuesSP pEnumMyDefValues;
+      IAAFPropertyValueSP pMyDefValue;
+      IAAFTypeDefSP pMyDefValueType;
+      IAAFDefObjectSP pMyDefObject;
+      checkResult(pMyDefinitionsSet->GetElements(pMyDefinitionsValue, &pEnumMyDefValues));
+      while (SUCCEEDED(pEnumMyDefValues->NextOne(&pMyDefValue)))
+      {  
+        // The property value's type  must be the same as the elment type of the set!
+        checkResult(pMyDefValue->GetType(&pMyDefValueType));
+        checkExpression(EqualObject(pMyDefValueType, pMyElementType), AAFRESULT_TEST_FAILED);
+        
+        // Make sure that we actually found the "same" data definition.
+        checkResult(pElementType->GetObject(pMyDefValue, IID_IAAFDefObject, (IUnknown**)&pMyDefObject));
+        checkResult(pMyDefObject->GetAUID(&id));
+      } 
+      
+       
+      HRESULT result = S_OK;
+      aafUInt32 index;
+      for (index = 0; index < kMyDefTestDataCount; ++index)
+      {
+        //kMyDefTestData[index].id;
+        
+        if (!kMyDefTestData[index].remove)
+        {
+          checkResult(pMyDefinitionsSet->CreateKey((aafDataBuffer_t)&kMyDefTestData[index].id, sizeof(id), &pKeyValue));
+          
+          // Is the key in the set?
+          checkResult(pMyDefinitionsSet->ContainsKey(pMyDefinitionsValue, pKeyValue, &containsKey));
+          checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
+      
+          // Get the value with the same key from the set.
+          checkResult(pMyDefinitionsSet->LookupElement(pMyDefinitionsValue, pKeyValue, &pMyDefValue));
+          
+          // The property value's type  must be the same as the elment type of the set!
+          checkResult(pMyDefValue->GetType(&pMyDefValueType));
+          checkExpression(EqualObject(pMyDefValueType, pMyElementType), AAFRESULT_TEST_FAILED);
+
+          // Make sure that we actually found the "same" definition.
+          checkResult(pElementType->GetObject(pMyDefValue, IID_IAAFDefObject, (IUnknown**)&pMyDefObject));
+          checkResult(pMyDefObject->GetAUID(&id));
+          
+          // Is the element in the set?
+          checkResult(pMyDefinitionsSet->ContainsElement(pMyDefinitionsValue, pMyDefValue, &containsKey));
+          checkExpression(kAAFTrue == containsKey, AAFRESULT_TEST_FAILED);
+        }
+      }
+
+      
+    } // reading extended objects supported
+    
+  } // Reading sets supported.
   
 } // CAAFTypeDefSet_Read
