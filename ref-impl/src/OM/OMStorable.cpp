@@ -135,6 +135,12 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   return object;
 }
 
+void OMStorable::restoreContents(void)
+{
+  TRACE("OMStorable::restoreContents");
+  _store->restore(_persistentProperties);
+}
+
   // @mfunc Attach this <c OMStorable>.
   //   @parm The containining <c OMStorable>.
   //   @parm The name to be given to this <c OMStorable>.
