@@ -54,13 +54,13 @@
 
 
 ImplAAFPropertyDef::ImplAAFPropertyDef ()
-  : _Type(PID_PropertyDefinition_Type, "Type"),
-    _IsOptional(PID_PropertyDefinition_IsOptional, "IsOptional"),
-    _pid(PID_PropertyDefinition_LocalIdentification, "LocalIdentification"),
-    _DefaultValue(PID_PropertyDefinition_DefaultValue, "DefaultValue"),
-    _IsUniqueIdentifier(PID_PropertyDefinition_IsUniqueIdentifier, "IsUniqueIdentifier"),
+  : _Type(PID_PropertyDefinition_Type, L"Type"),
+    _IsOptional(PID_PropertyDefinition_IsOptional, L"IsOptional"),
+    _pid(PID_PropertyDefinition_LocalIdentification, L"LocalIdentification"),
+    _DefaultValue(PID_PropertyDefinition_DefaultValue, L"DefaultValue"),
+    _IsUniqueIdentifier(PID_PropertyDefinition_IsUniqueIdentifier, L"IsUniqueIdentifier"),
 	_cachedType (0),  // BobT: don't reference count the cached type!
-	_bname (0),
+	_wname (0),
 	_OMPropCreateFunc (0)
 {
   _persistentProperties.put (_Type.address());
@@ -75,7 +75,7 @@ ImplAAFPropertyDef::~ImplAAFPropertyDef ()
 {
   // BobT: don't reference count the cached type!
 
-  delete[] _bname;
+  delete[] _wname;
 }
 
 
@@ -227,39 +227,25 @@ const OMType* ImplAAFPropertyDef::type(void) const
 }
 
 
-const char* ImplAAFPropertyDef::name(void) const
+const wchar_t* ImplAAFPropertyDef::name(void) const
 {
-  if (! _bname)
+  if (! _wname)
 	{
-	  // We'll have to convert the aafCharacter name to regular
-	  // byte-sized characters.
 	  AAFRESULT hr;
-	  aafCharacter * wname = 0;
 	  aafUInt32 nameLen;
 
 	  ImplAAFPropertyDef * pNonConstThis =
 		(ImplAAFPropertyDef *) this;
 	  hr = pNonConstThis->GetNameBufLen (&nameLen);
 	  assert (AAFRESULT_SUCCEEDED (hr));
-	  wname = (aafCharacter*) new aafUInt8[nameLen];
-	  assert (wname);
+	  pNonConstThis->_wname = (aafCharacter*) new aafUInt8[nameLen];
+	  assert (_wname);
 
-	  hr = pNonConstThis->GetName (wname, nameLen);
+	  hr = pNonConstThis->GetName (_wname, nameLen);
 	  assert (AAFRESULT_SUCCEEDED (hr));
-
-	  // Convert the prop name
-	  pNonConstThis->_bname = new char [nameLen];
-	  assert (_bname);
-	  wcstombs (pNonConstThis->_bname, wname, nameLen);
-	  delete [] wname;
-	  // null terminate.  Don't forget nameLen is in bytes for a
-	  // string of aafCharacters, so we'll have to cut it in half in
-	  // order to get the proper index for the null terminator.
-	  _bname[nameLen/(sizeof (aafCharacter) / sizeof (aafUInt8))]
-		= '\0';
 	}
-  assert (_bname);
-  return _bname;
+  assert (_wname);
+  return _wname;
 }
 
 
@@ -294,7 +280,7 @@ OMProperty * ImplAAFPropertyDef::CreateOMProperty () const
 	  AAFRESULT hr = GetTypeDef (&ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (ptd);
-	  result = ptd->pvtCreateOMPropertyMBS (_pid, name());
+	  result = ptd->pvtCreateOMProperty (_pid, name());
 	}
 
   return result;
