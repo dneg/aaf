@@ -68,7 +68,6 @@ AAFPERSISTENTOBJECTS = \
 # These are all of the other non-persistent objects:
 AAFNONPERSISTENTOBJECTS = \
 	AAFRoot \
-	AAFEssenceFormat \
 	AAFProperty \
 	AAFPropertyValue \
 	EnumAAFClassDefs \
@@ -111,6 +110,7 @@ HUMAN_TYPED_IMPL = \
 	AAFFileDescriptor \
 	AAFDigitalImageDescriptor \
 	AAFCDCIDescriptor \
+	AAFEssenceFormat \
 	AAFFiller \
 	AAFFindSourceInfo \
 	AAFGroup \
