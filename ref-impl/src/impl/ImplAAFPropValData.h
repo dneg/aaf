@@ -73,7 +73,9 @@ public:
 
   // non-published method to initialize this object.
   AAFRESULT Initialize (ImplAAFTypeDef * pTypeDef);
-  
+
+  virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
+
 protected:
   virtual ~ImplAAFPropValData ();
 
