@@ -21,9 +21,23 @@
 #include <string.h>
 #include "AAFResult.h"
 
+//
+// Use the x-macros in AAFObjectTable.h to declare the function
+// prototypes for all of the module tests.
+//
+#undef AAF_BEGIN_OBJECT_MAP
+#undef AAF_OBJECT_ENTRY
+#undef AAF_END_OBJECT_MAP
+#define AAF_OBJECT_ENTRY(xclass) extern "C" HRESULT C##xclass##_test();
+
+#include "AAFObjectTable.h"
+#undef AAF_BEGIN_OBJECT_MAP
+#undef AAF_OBJECT_ENTRY
+#undef AAF_END_OBJECT_MAP
+
 
 //
-// Define the AAF_BEGIN_OBJECT_XXXX macros so that we can reuse the
+// Redefine the AAF_XXXX macros so that we can reuse the
 // AAFObjectMap and build a table for object test methods.
 //
 
@@ -35,35 +49,31 @@ typedef HRESULT (*AAFModuleTestProc)();
 
 typedef struct tagAAFObjectTestInfo
 {
-	const CLSID* pCLSID;
 	LPCSTR pClassName;
 	AAFModuleTestProc pfnTestProc;
 } AAFObjectTestInfo_t;
 
 
-#ifdef AAF_END_OBJECT_MAP
-#undef AAF_END_OBJECT_MAP
-#endif
 
 #define AAF_BEGIN_OBJECT_MAP(x) static AAFObjectTestInfo_t x[] = {
-#define AAF_OBJECT_ENTRY(xclass) { &CLSID_##xclass, #xclass, &C##xclass##_test },
-#define AAF_END_OBJECT_MAP() { NULL, NULL, NULL } };
+#define AAF_OBJECT_ENTRY(xclass) { #xclass, &C##xclass##_test },
+#define AAF_END_OBJECT_MAP() { NULL, NULL } };
 
 
 
 // Include the table the associates all of the CLSID's with class names and test methods.
-#include "AAFObjectTable_i.cpp"
+#include "AAFObjectTable.h"
 
 
 
 // CLSID for AAFObject 
 // {B1A213AE-1A7D-11D2-BF78-00104BC9156D}
-const CLSID CLSID_AAFModuleTest = { 0xB1A213AE, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+EXTERN_C const CLSID CLSID_AAFModuleTest = { 0xB1A213AE, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 
 
 // Default Interface for AAFObject 
 // {B1A213AD-1A7D-11D2-BF78-00104BC9156D}
-const IID IID_IAAFModuleTest = { 0xB1A213AD, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+EXTERN_C const IID IID_IAAFModuleTest = { 0xB1A213AD, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 
 
 // Implementation
@@ -125,7 +135,7 @@ STDMETHODIMP CAAFModuleTest::Test
 
 	if (NULL != pClassName)
 	{
-		while (NULL != AAFObjectMap[index].pCLSID)
+		while (NULL != AAFObjectMap[index].pClassName)
 		{
 			if (0 == strcmp(reinterpret_cast<char *>(pClassName), AAFObjectMap[index].pClassName))
 			{
@@ -157,7 +167,7 @@ STDMETHODIMP CAAFModuleTest::Test
 	{
 		cout<< "Running Module tests .... \n"<< endl;
 
-		while (NULL != AAFObjectMap[testCount].pCLSID && MAX_TEST_COUNT > testCount)
+		while (NULL != AAFObjectMap[testCount].pClassName && MAX_TEST_COUNT > testCount)
 		{
 			cout<< "  "<< AAFObjectMap[testCount].pClassName << endl;
 			testResults[testCount] = AAFObjectMap[testCount].pfnTestProc();
