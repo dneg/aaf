@@ -644,7 +644,7 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 	AxDictionary axDictionary( axHeader.GetDictionary() );
 
 	AxMasterMobEx axMasterMobEx(
-		AxCreateInstance<IAAFMasterMobEx>( axDictionary ) );
+		AxCreateInstance<IAAFMasterMob,IAAFMasterMobEx>( axDictionary ) );
 	axMasterMobEx.Initialize();
 
 	axHeader.AddMob( axMasterMobEx );
@@ -830,7 +830,7 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 
 //============================================================================
 
-int real_main( int argc, const char** argv )
+int main( int argc, const char** argv )
 {
 	try {
 
@@ -872,27 +872,6 @@ int real_main( int argc, const char** argv )
 	}
 
 	return 0;
-}
-
-int main( int argc , char* argv[] )
-{
-#if 0
-	char *fake_argv[] ={ argv[0],
-						"-file",
-						"c:/cygwin/tmp/mmex.aaf",
-					    "-source", "audio", "-netloc", "c:/cygwin/tmp/ess", ".wav",
-						"-numMSamples", "1700", "-write" };
-
-	return real_main( sizeof(fake_argv)/sizeof(char*),
-			          (const char**)fake_argv );
-#elif 0
-	char *fake_argv[] = { argv[0],
-						  "-file", "c:/cygwin/tmp/mmex.aaf",
-						  "-source", "video",
-						  "-read" };
-#else
-	return real_main( argc, (const char**)argv );
-#endif
 }
 
 
