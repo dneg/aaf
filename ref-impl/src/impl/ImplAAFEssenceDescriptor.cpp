@@ -51,16 +51,13 @@ ImplAAFEssenceDescriptor::ImplAAFEssenceDescriptor ()
 ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
 {
 	// Release all of the locator pointers.
-	ImplAAFLocator *pLocator = NULL;
 	size_t size = _locators.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		_locators.getValueAt(pLocator, i);
+		ImplAAFLocator *pLocator = _locators.setValueAt(0, i);
 		if (pLocator)
 		{
 			pLocator->ReleaseReference();
-			pLocator = NULL;
-			_locators.setValueAt(0, i);
 		}
 	}
 }

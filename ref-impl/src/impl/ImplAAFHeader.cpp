@@ -101,30 +101,25 @@ ImplAAFHeader::~ImplAAFHeader ()
 {
 	// Release all of the id pointers in the id list.
 	//
-	ImplAAFIdentification *pIdent = NULL;
-  size_t size;
-  _identificationList.getSize(size);
+	size_t size = _identificationList.getSize();
 	for (size_t i = 0; i < size; i++) {
-		_identificationList.getValueAt(pIdent, i);
+		ImplAAFIdentification *pIdent = _identificationList.setValueAt(0, i);
 
 		if (pIdent) {
 			pIdent->ReleaseReference();
-			// Set value to 0 so the OM can perform any necessary cleanup.
-			pIdent = 0;
-			_identificationList.setValueAt(pIdent, i);
 		}
 	}
 
 	// Release the content storage pointer.
-	if (_contentStorage) {
-		_contentStorage->ReleaseReference();
-		_contentStorage = 0;
+	ImplAAFContentStorage *contentStorage = _contentStorage.setValue(0);
+	if (contentStorage) {
+		contentStorage->ReleaseReference();
 	}
 
 	// Release the dictionary pointer.
-	if (_dictionary) {
-		_dictionary->ReleaseReference();
-		_dictionary = 0;
+	ImplAAFDictionary *dictionary = _dictionary.setValue(0);
+	if (dictionary) {
+		dictionary->ReleaseReference();
 	}
 }
 
