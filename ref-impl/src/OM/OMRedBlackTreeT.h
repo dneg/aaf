@@ -424,7 +424,7 @@ template <typename Key, typename Value>
 void OMRedBlackTree<Key, Value>::checkInvariant(void) const
 {
   TRACE("OMRedBlackTree<Key, Value>::checkInvariant");
-#if defined(PARANOID)
+#if defined(OM_INVARIANT)
   checkInvariant(_root);
 #endif
 }
