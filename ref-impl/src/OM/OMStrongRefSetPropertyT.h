@@ -266,6 +266,7 @@ void OMStrongReferenceSetProperty<ReferencedObject>::insert(
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::insert");
 
   PRECONDITION("Valid object", object != 0);
+  PRECONDITION("Object is not present", !containsValue(object));
 
   // Set the set to contain the new object
   //
@@ -280,7 +281,34 @@ void OMStrongReferenceSetProperty<ReferencedObject>::insert(
   setPresent();
   delete [] name;
 
+  POSTCONDITION("Object is present", containsValue(object));
   //POSTCONDITION("Optional property is present", isPresent());
+}
+
+  // @mfunc If it is not already present, insert <p object> into this
+  //        <c OMStrongReferenceSetProperty> and return true,
+  //        otherwise return false.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object to insert.
+  //   @rdesc True if the object was inserted, false if it was already present.
+template <typename ReferencedObject>
+bool OMStrongReferenceSetProperty<ReferencedObject>::ensurePresent(
+                                                const ReferencedObject* object)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::ensurePresent");
+
+  PRECONDITION("Valid object", object != 0);
+
+  // tjb - Current cost is 2 * O(lg N) this should be halved to
+  //       O(lg N) by implementing an ensurePresent() on OMSet.
+  bool present = containsValue(object);
+  if (!present) {
+    insert(object);
+  }
+  POSTCONDITION("Object is present", containsValue(object));
+  return !present;
 }
 
   // @mfunc Append the given <p ReferencedObject> <p object> to
@@ -298,6 +326,7 @@ void OMStrongReferenceSetProperty<ReferencedObject>::appendValue(
 
   OBSOLETE("OMStrongReferenceSetProperty<ReferencedObject>::insert");
   insert(object);
+  POSTCONDITION("Object is present", containsValue(object));
 }
 
   // @mfunc Remove the <p ReferencedObject> identified by
@@ -331,6 +360,32 @@ OMStrongReferenceSetProperty<ReferencedObject>::remove(
   return result;
 }
 
+  // @mfunc If it is present, remove the <p ReferencedObject> identified by
+  //        <p identification> from this <c OMStrongReferenceSetProperty>
+  //        and return true, otherwise return false.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object to remove.
+  //   @rdesc True if the object was removed, false if it was already absent.
+template <typename ReferencedObject>
+bool OMStrongReferenceSetProperty<ReferencedObject>::ensureAbsent(
+                            const OMUniqueObjectIdentification& identification)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::ensureAbsent");
+
+  OMSetElement<OMStrongObjectReference<ReferencedObject>,
+               ReferencedObject>* element = 0;
+  bool result = _set.find(identification, &element);
+  if (result) {
+    ReferencedObject* result = element->setValue(0);
+    _set.remove(identification);
+  }
+
+  POSTCONDITION("Object is not present", !contains(identification));
+  return result;
+}
+
   // @mfunc Remove <p object> from this
   //        <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
@@ -350,6 +405,29 @@ void OMStrongReferenceSetProperty<ReferencedObject>::removeValue(
   remove(identification);
 
   POSTCONDITION("Object is not present", !containsValue(object));
+}
+
+  // @mfunc If it is present, remove <p object> from this
+  //        <c OMStrongReferenceSetProperty> and return true,
+  //        otherwise return false.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object to remove.
+  //   @rdesc True if the object was removed, false if it was already absent.
+template <typename ReferencedObject>
+bool OMStrongReferenceSetProperty<ReferencedObject>::ensureAbsent(
+                                                const ReferencedObject* object)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::ensureAbsent");
+
+  PRECONDITION("Valid object", object != 0);
+
+  OMUniqueObjectIdentification identification = object->identification();
+  bool result = ensureAbsent(identification);
+
+  POSTCONDITION("Object is not present", !containsValue(object));
+  return result;
 }
 
   // @mfunc Does this <c OMStrongReferenceSetProperty> contain
@@ -383,6 +461,33 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::contains(
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::contains");
 
   return _set.contains(identification);
+}
+
+  // @mfunc The <p ReferencedObject> in this
+  //        <c OMStrongReferenceSetProperty> identified by
+  //        <p identification>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The unique identification of the desired object, the search key.
+  //   @rdesc A pointer to the <p ReferencedObject>.
+  //   @this const
+template <typename ReferencedObject>
+ReferencedObject* OMStrongReferenceSetProperty<ReferencedObject>::value(
+                     const OMUniqueObjectIdentification& identification) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::value");
+
+  PRECONDITION("Object is present", contains(identification));
+
+  OMSetElement<OMStrongObjectReference<ReferencedObject>,
+               ReferencedObject>* element = 0;
+
+  _set.find(identification, &element);
+  ReferencedObject* result = element->getValue();
+
+  POSTCONDITION("Valid result", result != 0);
+  return result;
 }
 
   // @mfunc Find the <p ReferencedObject> in this

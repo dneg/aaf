@@ -82,6 +82,11 @@ public:
     //          <c OMStrongReferenceSetProperty>.
   void insert(const ReferencedObject* object);
 
+    // @cmember If it is not already present, insert <p object> into this
+    //          <c OMStrongReferenceSetProperty> and return true,
+    //          otherwise return false.
+  bool ensurePresent(const ReferencedObject* object);
+
     // @cmember Append the given <p ReferencedObject> <p object> to
     //          this <c OMStrongReferenceSetProperty>.
   void appendValue(const ReferencedObject* object);
@@ -90,9 +95,19 @@ public:
     //          <p identification> from this <c OMStrongReferenceSetProperty>.
   ReferencedObject* remove(const OMUniqueObjectIdentification& identification);
 
+    // @cmember If it is present, remove the <p ReferencedObject> identified by
+    //          <p identification> from this <c OMStrongReferenceSetProperty>
+    //          and return true, otherwise return false.
+  bool ensureAbsent(const OMUniqueObjectIdentification& identification);
+
     // @cmember Remove <p object> from this
     //          <c OMStrongReferenceSetProperty>.
   void removeValue(const ReferencedObject* object);
+
+    // @cmember If it is present, remove <p object> from this
+    //          <c OMStrongReferenceSetProperty> and return true,
+    //          otherwise return false.
+  bool ensureAbsent(const ReferencedObject* object);
 
     // @cmember Does this <c OMStrongReferenceSetProperty> contain
     //          <p object> ?
@@ -103,6 +118,12 @@ public:
   virtual bool contains(
                      const OMUniqueObjectIdentification& identification) const;
 
+    // @cmember The <p ReferencedObject> in this
+    //          <c OMStrongReferenceSetProperty> identified by
+    //          <p identification>.
+  ReferencedObject* value(
+                     const OMUniqueObjectIdentification& identification) const;
+  
     // @cmember Find the <p ReferencedObject> in this
     //          <c OMStrongReferenceSetProperty> identified by
     //          <p identification>.  If the object is found it is returned
