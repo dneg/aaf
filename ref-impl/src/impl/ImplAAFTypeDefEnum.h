@@ -185,6 +185,15 @@ public:
          aafInt64  valueIn);
 
 
+  //****************
+  // RegisterSize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RegisterSize
+        (// @parm [in] size of this enum
+         aafUInt32  enumSize);
+
+
   // Override from AAFTypeDef
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
@@ -242,6 +251,10 @@ private:
   OMVariableSizeProperty<aafInt64> _ElementValues;
 
   ImplAAFTypeDefSP _cachedBaseType;
+
+  aafBool          _isRegistered;
+  aafBool          _registrationAttempted;
+  aafUInt32        _registeredSize;
 
   //
   // private methods
