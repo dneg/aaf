@@ -33,6 +33,20 @@ depend.mk : aafobjects.mk
 	@ echo AAFTypes.all : AAFTypes.refh >> depend.tmp
 	@ echo AAFTypes.idl : macros/idl.mac macros/base.mac >> depend.tmp
 	@ echo AAFTypes.refh : macros/refh.mac macros/base.mac >> depend.tmp
+	@ echo "" >> depend.tmp
+	@ echo "#" Special case AAFRoot since this is a private implementation object... >> depend.tmp
+	@ echo AAFRoot.all...
+	@ echo AAFRoot.all : AAFRoot.idl >> depend.tmp
+	@ echo AAFRoot.all : AAFRoot.refh >> depend.tmp
+	@ echo AAFRoot.all : AAFRoot.comc AAFRoot.comh >> depend.tmp
+	@ echo AAFRoot.all : AAFRoot.implc AAFRoot.implh >> depend.tmp
+	@ echo AAFRoot.idl : macros/idl.mac macros/base.mac >> depend.tmp
+	@ echo AAFRoot.refh : macros/refh.mac macros/base.mac >> depend.tmp
+	@ echo AAFRoot.comc : macros/comc.mac macros/base.mac >> depend.tmp
+	@ echo AAFRoot.comh : macros/comh.mac macros/base.mac >> depend.tmp
+	@ echo AAFRoot.implc : macros/implc.mac macros/base.mac >> depend.tmp
+	@ echo AAFRoot.implh : macros/implh.mac macros/base.mac >> depend.tmp
+	@ echo AAFRoot.exp : macros/exp.mac macros/base.mac >> depend.tmp
 	@ for base in $(DODO_TARGET_NAMES) ; do \
 		echo $$base.all... ; \
 		echo "" >> depend.tmp ; \

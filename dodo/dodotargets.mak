@@ -24,7 +24,7 @@ targets.mk : aafobjects.mk
 	@ echo "#" special case the utility classes since they will not be exposed by com >> targets.tmp 
 	@ echo DODO_TARGETS = '\' >> targets.tmp 
 	@ echo '	'AAFTypes.all \\\c>> targets.tmp 
-	@ for base in $(AAFOBJECTS) $(AAFCOMINTERFACESONLY) ;  do \
+	@ for base in AAFRoot $(AAFOBJECTS) $(AAFCOMINTERFACESONLY) ;  do \
 		echo '\' >> targets.tmp ; \
 		echo '	'$$base.all \\\c>> targets.tmp ; \
 	  done
