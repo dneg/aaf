@@ -181,6 +181,10 @@ public:
   virtual void onRestore(void* clientContext) const;
   virtual void onCopy(void* clientContext) const;
 
+  // Overrides from OMDefinition
+  virtual const OMUniqueObjectIdentification& identification(void) const;
+  virtual const wchar_t* name(void) const;
+
 protected:
   // Helper function to return the raw type of UInt8Array (if
   // applicable for the derived type)

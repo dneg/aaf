@@ -37,6 +37,7 @@
 
 #include <assert.h>
 #include <string.h>
+
 #include <wchar.h>
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
@@ -357,3 +358,14 @@ void ImplAAFTypeDef::onCopy(void* clientContext) const
   pNonConstThis->setInitialized();
 }
 
+const OMUniqueObjectIdentification& ImplAAFTypeDef::identification(void) const
+{
+  // tjb - to prevent ambiguity
+  return ImplAAFMetaDefinition::identification();
+}
+
+const wchar_t* ImplAAFTypeDef::name(void) const
+{
+  // tjb - to prevent ambiguity
+  return ImplAAFMetaDefinition::name();
+}

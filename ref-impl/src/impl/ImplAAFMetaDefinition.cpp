@@ -429,6 +429,11 @@ const OMUniqueObjectIdentification&
 
 
 
+const wchar_t* ImplAAFMetaDefinition::name(void) const
+{
+  return _name;
+}
+
 // Private method to install the AAFObjectModel definition associated with
 // this meta definition.
 AAFRESULT ImplAAFMetaDefinition::SetIdentification(aafUID_constref identification)
