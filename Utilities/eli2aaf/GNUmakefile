@@ -41,7 +41,7 @@ endif
 include $(AAFBASE)/build/common.mk
 
 # Include directories
-INCLUDES = -I../../ref-impl/include -I../../ref-impl/include/ref-api -I../../examples2/axLib
+INCLUDES = -I$(AAFSDKINCLUDEDIR) -I../../examples2/axLib
 
 # AxLib lib directory
 AXLIBPACKAGE = axExamples

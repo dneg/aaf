@@ -39,8 +39,7 @@ include $(AAFBASE)/build/common.mk
 
 INCLUDES = -I. \
 		-I../axLib \
-		-I../../ref-impl/include \
-		-I../../ref-impl/include/ref-api
+		-I$(AAFSDKINCLUDEDIR)
 
 .PHONY : all
 all : axPlugin

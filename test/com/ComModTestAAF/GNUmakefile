@@ -35,8 +35,10 @@ include $(AAFBASE)/build/common.mk
 # NOTE: Client code would never include implementation headers.
 # However, to ensure that all classes are tested, a macro from
 # ref-impl/src/com-api/AAFObjectTable.h is used by ComModAAF.
-INCLUDES = -I../../../ref-impl/include -I../../../ref-impl/include/ref-api \
-			-I../../../ref-impl/src/com-api
+# Also, utf8.h is temporarily included from ref-impl.
+INCLUDES = -I$(AAFSDKINCLUDEDIR) \
+			-I../../../ref-impl/src/com-api \
+			-I../../../ref-impl/include
 
 
 # CXXFILES2 is declared just to get the list of object files

@@ -39,7 +39,7 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I../../ref-impl/include -I../../ref-impl/include/ref-api
+INCLUDES = -I$(AAFSDKINCLUDEDIR)
 
 
 BINTARGET = $(AAFSDKBINDIR)/$(UTILITY)$(EXE)

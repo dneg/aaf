@@ -37,9 +37,7 @@ endif
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
-INCLUDES = -I. \
-		-I../../ref-impl/include \
-		-I../../ref-impl/include/ref-api
+INCLUDES = -I. -I$(AAFSDKINCLUDEDIR)
 
 .PHONY : all
 all : axLib

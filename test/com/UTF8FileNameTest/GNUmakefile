@@ -32,9 +32,10 @@ include $(AAFBASE)/build/common.mk
 
 
 # Include directories
-INCLUDES = -I../../../ref-impl/include \
-	   -I../../../ref-impl/include/ref-api \
-	   -I../../../ref-impl/include/com-api
+# utf8.h is temporarily included from ref-impl (once the code duplication
+# problem is solved this include will be removed).
+INCLUDES = -I$(AAFSDKINCLUDEDIR) \
+			-I../../../ref-impl/include
 
 
 .PHONY : all

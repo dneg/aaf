@@ -208,6 +208,7 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)/AAFCodecDefs.h \
 	$(AAFSDK_INCLUDE)/AAFCOMPlatform.h \
 	$(AAFSDK_INCLUDE)/AAFCOMPlatformTypes.h \
+	$(AAFSDK_INCLUDE)/AAFCompressionIDs.h \
 	$(AAFSDK_INCLUDE)/AAFContainerDefs.h \
 	$(AAFSDK_INCLUDE)/AAFDataDefs.h \
 	$(AAFSDK_INCLUDE)/AAFDefUIDs.h \
@@ -432,6 +433,9 @@ $(AAFSDK_INCLUDE)/AAFCOMPlatform.h : $(TOOLKIT_INCLUDE)/AAFCOMPlatform.h
 
 $(AAFSDK_INCLUDE)/AAFCOMPlatformTypes.h : $(TOOLKIT_INCLUDE)/AAFCOMPlatformTypes.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)/AAFCOMPlatformTypes.h $@
+
+$(AAFSDK_INCLUDE)/AAFCompressionIDs.h : $(TOOLKIT_INCLUDE)/AAFCompressionIDs.h
+	$(UPDATE) $(TOOLKIT_INCLUDE)/AAFCompressionIDs.h $@
 
 $(AAFSDK_INCLUDE)/AAFContainerDefs.h : $(TOOLKIT_INCLUDE)/AAFContainerDefs.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)/AAFContainerDefs.h $@
