@@ -67,13 +67,6 @@ public:
              const char* name);
 
     // @cmember Temporary pseudo-constructor for clients which provide
-    //          a type definition.
-  void initialize(const OMPropertyId propertyId,
-                  const char* name,
-                  OMType* type,
-                  const bool isOptional = false);
-
-    // @cmember Temporary pseudo-constructor for clients which provide
     //          a property definition.
   void initialize(const OMPropertyDefinition* definition);
 
