@@ -284,7 +284,7 @@ ReferencedObject*
 OMReferenceVector<ReferencedObject>::removeAt(const size_t index)
 {
   TRACE("OMReferenceVector<ReferencedObject>::removeAt");
-  PRECONDITION("Valid index", index <= count());
+  PRECONDITION("Valid index", index < count());
 
   ReferencedObject* result = clearValueAt(index);
   _vector.removeAt(index);
