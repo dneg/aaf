@@ -11,10 +11,16 @@
 #include "ArgSet.h"
 #endif
 
+#ifndef _bld_cfg_h_
+#include "bld_cfg.h"
+#endif
+
 #include <assert.h>
 
 
-// template class Vector<ArgDef>;
+#if AAF_BUILD_CONFIG_EXPLICIT_TEMPLATES
+template class Vector<ArgDef>;
+#endif
 
 void ArgSet::AppendArg (const ArgDef & src)
 {
