@@ -228,8 +228,12 @@ STDAPI AAFLoad(wchar_t * dllname)
 #endif
   }
 
-  // Attempt to load the dll and initialize the entry points
-  return pAAFDLL->Load(dllname);
+  // Attempt to load the dll and initialize the entry points.
+  // If the load fails the cleanup immediately.
+  HRESULT hr = pAAFDLL->Load(dllname);
+  if (FAILED(hr))
+    AAFUnload();
+  return hr;
 }
 
 
