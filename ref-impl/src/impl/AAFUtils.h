@@ -37,6 +37,11 @@
 #include "AAFTypes.h"
 #include "Container.h"
 
+typedef enum
+{
+	kRoundCeiling, kRoundFloor
+} aafRounding_t;
+
 #if PORT_LANG_CPLUSPLUS
 extern          "C"
 {
@@ -185,7 +190,6 @@ aafBool isObjFunc(AAFFile * file,
                          ImplAAFObject * obj,
                          void *data);
 
-#if FULL_TOOLKIT
 aafErr_t AAFConvertEditRate(
 	aafRational_t srcRate,        /* IN - Source Edit Rate */
 	aafPosition_t srcPosition,    /* IN - Source Position */
@@ -193,6 +197,7 @@ aafErr_t AAFConvertEditRate(
 	aafRounding_t howRound,	      /* IN - Rounding method (floor or ceiling) */
 	aafPosition_t *destPosition) ; /* OUT - Destination Position */
 	
+#if FULL_TOOLKIT
 AAFObject *AAFNewClassFromContainerObj(AAFFile *file, OMLObject obj);
 AAFObject *AAFNewClassFromClassID(AAFFile *file, char *classID, OMLObject obj);
 #endif
