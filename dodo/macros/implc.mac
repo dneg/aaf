@@ -220,15 +220,15 @@ Impl.this-module::~Impl.this-module ()
 
 
 // Increment the object reference count.
-aafUInt32 Impl.this-module::AcquireRef()
-{
+aafUInt32 Impl.this-module::AcquireReference() const
+{ // inforce conceptual 'constness'
   // Delegate to global function to increment the reference
   // count for this implementation object's COM or C++ API object.
-  return AcquireImplReference(this);
+  return AcquireImplReference(const_cast<Impl.this-module *>(this));
 }
 
 // Decrement the object reference count and delete the container.
-aafUInt32 Impl.this-module::ReleaseRef()
+aafUInt32 Impl.this-module::ReleaseReference()
 {
   // If there is only a single reference left it is the container's
   // reference to this implementation object. Tell the container to
@@ -238,11 +238,11 @@ aafUInt32 Impl.this-module::ReleaseRef()
 }
 
 // Just return the count. (this could be inline in the header...)
-aafUInt32 Impl.this-module::RefCount()
-{
+aafUInt32 Impl.this-module::ReferenceCount() const
+{ // inforce conceptual 'constness'
   // Delegate to global function to return the reference
   // count for this implementation object's COM or C++ API object.
-  return ReferenceImplCount(this);
+  return ReferenceImplCount(const_cast<Impl.this-module *>(this));
 }
 
 void Impl.this-module::InitContainer (void * pContainer)
