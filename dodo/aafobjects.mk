@@ -26,7 +26,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup \
 	AAFMIDIData \
-	AAFMIDIDescriptor \
+	AAFMIDIFileDescriptor \
 	AAFNestedScope\
 	AAFPluggableCode \
 	AAFPulldown \
