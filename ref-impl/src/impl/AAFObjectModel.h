@@ -109,6 +109,7 @@ private:
   void SortTypeDefinitions(void);
   void SortDefinitions(void);
   void InitializeClassDefinitions(void);
+  void InitializePrivateClassDefinitions(void);
   void InitializePropertyDefinitions(void);
   void InitializeTypeDefinitions(void);
   void InitializeAxiomaticDefinitions(void);
@@ -206,6 +207,7 @@ public:
                   aafUInt32 propertyCount,
                   PropertyDefinition ** propertyDefinitions) :
     Definition (name, id, concrete),
+    _privateClass(false),
     _parentId(parentId),
     _parentClass(NULL),
     _propertyCount(propertyCount),
@@ -215,7 +217,9 @@ public:
   virtual void Initialize (void); // only the member data of this object
   virtual const ClassDefinition *classDefinition(void) const;
   virtual void makeAxiomatic (void) const; // override
+  void makePrivateClass(void) const;
 
+  bool privateClass(void) const { return _privateClass; }
   aafUID_constptr parentId(void) const { return _parentId; }
   const ClassDefinition * parentClass (void) const { return _parentClass; }
 
@@ -252,8 +256,10 @@ public:
 
 private:
   void makePropertiesAxiomatic(void) const;
+  void setPrivateClass (bool privateClass) { _privateClass = privateClass; }
 
 private:
+  bool _privateClass; // true if this class if private to the reference implementation
   aafUID_constptr _parentId;
   const ClassDefinition *_parentClass;
 
