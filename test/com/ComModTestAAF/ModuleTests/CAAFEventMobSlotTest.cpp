@@ -146,7 +146,8 @@ extern "C" HRESULT CAAFEventMobSlot_test()
   }
   catch (...)
   {
-    cerr << "CAAFEventMobSlot_test...Caught general C++ exception!" << endl;
+    cerr << "CAAFEventMobSlot_test..."
+		 << "Caught general C++ exception!" << endl;
     hr = AAFRESULT_TEST_FAILED;
   }
 
