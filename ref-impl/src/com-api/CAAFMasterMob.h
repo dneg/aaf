@@ -175,8 +175,6 @@ public:
   // Caller may call GetTapeNameBufLen() to determine the required
   // buffer size.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pTapeName pointer is valid.
   // - the specified master slot was found.
@@ -226,8 +224,6 @@ public:
   // method.  The value is placed into the location specified by
   // pLen.  The value will include space required for the trailing
   // null character.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pLen pointer is valid.
@@ -320,8 +316,6 @@ public:
   //
   // The returned source clip is AddRef()ed before it is returned.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the ppSourceClip pointer is valid.
   //
@@ -367,8 +361,6 @@ public:
   // representations exist or not.
   //
   // The returned segment is AddRef()ed before it is returned.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the ppSegment pointer is valid.

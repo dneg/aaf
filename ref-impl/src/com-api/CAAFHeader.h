@@ -318,8 +318,6 @@ public:
   //
   // Appends the given essence data object to the header.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pEssenceData pointer is valid.
   // 
@@ -532,8 +530,6 @@ public:
   // *ppEnum argument.  The returned enumerator is AddRef()ed before
   // it is returned.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
   // 
@@ -648,8 +644,6 @@ public:
   //
   // Return the File Revision property.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pRevision pointer is valid.
   // 
@@ -676,8 +670,6 @@ public:
   //
   // Return the Last Modified property.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pTimeStamp pointer is valid.
   // 

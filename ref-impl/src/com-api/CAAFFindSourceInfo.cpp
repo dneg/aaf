@@ -36,12 +36,6 @@
 #include <string.h>
 
 
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 
 #include "CAAFMob.h"
 #include "ImplAAFMob.h"

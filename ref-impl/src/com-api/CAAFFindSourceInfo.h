@@ -34,12 +34,6 @@
 #endif
 
 
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 #ifndef __AAFTypes_h__
 #include "AAFTypes.h"
 #endif

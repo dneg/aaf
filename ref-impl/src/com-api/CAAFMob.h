@@ -252,8 +252,6 @@ public:
   //
   // Appends the given mob slot to the mob.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pSlot pointer is valid.
   // 
@@ -280,8 +278,6 @@ public:
   //
   // Prepends the given mob slot to the mob.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pSlot pointer is valid.
   // 
@@ -310,8 +306,6 @@ public:
   // existing slots at the given and higher index will be moved up one
   // index to accommodate.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pSlot pointer is valid.
   // - index is less than or equal to the result obtained by
@@ -348,8 +342,6 @@ public:
   // indices higher than the given index will be moved down one index
   // to accommodate.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - index is less than the result obtained by CountSlots().
   // 
@@ -377,8 +369,6 @@ public:
   //
   // Returns the indexed slot in *ppSlot.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - ppSlot is a valid pointer.
   // - index is less than the result obtained by CountSlots().
@@ -707,8 +697,6 @@ public:
   // Caller may call GetNameBufLen() to determine the required pName
   // buffer size.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pLastModified pointer is valid.
   // - the pCreationTime pointer is valid.
@@ -753,8 +741,6 @@ public:
   // pTcSeg is NULL, will search for the slot containing a timecode
   // segment and will use that instead.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pTcSeg pointer is valid.
   // - the pOffset pointer is valid.
@@ -767,6 +753,8 @@ public:
   // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
@@ -831,8 +819,6 @@ public:
   // Mob looking for Source Clips, and changes the sourceID property
   // on all Source Clips with oldMobID to newMobID.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // If this method fails no state will be changed.
   // 
   // This method will return the following codes.  If more than one of
@@ -872,8 +858,6 @@ public:
   // same AAF Version number.
   //
   // The returned mob is AddRef()ed before it is returned.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pDestFile pointer is valid.
@@ -917,8 +901,6 @@ public:
   // 
   // The returned mob is AddRef()ed before it is returned.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pDestMobName pointer is valid.
   // - the ppDestMob pointer is valid.
@@ -943,6 +925,7 @@ public:
 
     // Destination Mob
     /*[out]*/ IAAFMob ** ppDestMob);
+  //
 
   //***********************************************************
   //

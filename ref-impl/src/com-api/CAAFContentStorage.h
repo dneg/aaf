@@ -314,8 +314,6 @@ public:
   //
   // Appends the given essence data object to the header.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pEssenceData pointer is valid.
   // 
