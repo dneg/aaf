@@ -271,6 +271,8 @@ void OMStrongReferenceSetProperty<ReferencedObject>::insert(
   const size_t localKey = nextLocalKey();
   char* name = elementName(localKey);
   OMUniqueObjectIdentification key = object->identification();
+  ASSERT("Valid object identification",
+                                      key != nullOMUniqueObjectIdentification);
 
   OMStrongReferenceSetElement<ReferencedObject>
                                newElement(this, name, localKey, 1/*tjb*/, key);
