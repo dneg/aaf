@@ -633,3 +633,254 @@ void ImplAAFTypeDefVariableArray::onRestore(void* clientContext) const
 {
   ImplAAFTypeDefArray::onRestore(clientContext);
 }
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+
+AAFRESULT STDMETHODCALLTYPE
+ ImplAAFTypeDefVariableArray::PrependElement(
+    // property value corresponding to array to which element is prepended, [in]
+    ImplAAFPropertyValue * pInPropVal, 
+    // value to be prepended to this array,  [in]
+    ImplAAFPropertyValue * pMemberPropVal )
+{
+  if (!pInPropVal)
+	return AAFRESULT_NULL_PARAM;
+  if (!pMemberPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+
+  ImplAAFPropValData* inPvd =
+	dynamic_cast<ImplAAFPropValData*> (pInPropVal);
+  assert (inPvd);
+
+  ImplAAFPropValData* memPvd =
+	dynamic_cast<ImplAAFPropValData*> (pMemberPropVal);
+  assert (memPvd);
+
+  aafUInt32 oldSize = 0;
+  hr = inPvd->GetBitsSize (&oldSize);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  aafUInt32 newElemSize = 0;
+  hr = memPvd->GetBitsSize (&newElemSize);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  
+  aafUInt32 newSize = oldSize + newElemSize;
+  assert (newSize);
+  // sizeof (*buf) must be 1
+  aafUInt8* buf = new aafUInt8[newSize];
+  assert (buf);
+
+  aafMemPtr_t pBits = 0;
+
+  // Prepend new prop val onto end of our buffer
+  pBits = 0;
+  hr = memPvd->GetBits (&pBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBits);
+  // Following ptr addition depends on buf being a byte pointer
+  memcpy (buf, pBits, newElemSize);
+
+  // Copy old bits into our buffer
+  if (oldSize)
+	{
+	  pBits = 0;
+	  hr = inPvd->GetBits (&pBits);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  assert (pBits);
+	  memcpy (buf+newElemSize, pBits, oldSize);
+	}
+
+  
+  // Re-allocate prop val bits to hold newly expanded data
+  pBits = 0;
+  hr = inPvd->AllocateBits (newSize, &pBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBits);
+  memcpy (pBits, buf, newSize);
+
+  delete[] buf;
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ ImplAAFTypeDefVariableArray::RemoveElement(
+    // property value corresponding to array;  [in] 
+	ImplAAFPropertyValue * pInPropVal,
+    // zero-based index into elements in this array type; [in] 
+	aafUInt32  index)
+{
+  if (!pInPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  HRESULT hr = 0;
+  aafUInt32  count;
+  hr = GetCount (pInPropVal, &count);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  //CASE 1 -  invalid Index
+  if (index > (count-1) )
+	  return AAFRESULT_BADINDEX;
+
+  ImplAAFPropValData* inPvd =
+	dynamic_cast<ImplAAFPropValData*> (pInPropVal);
+  assert (inPvd);
+
+  aafUInt32 elemSize = BaseType()->NativeSize();
+
+  aafUInt32 oldSize = 0;
+  hr = inPvd->GetBitsSize (&oldSize);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  //Ensure the whole size is a multiple of elemSize
+  assert ( (oldSize % elemSize) == 0 );
+
+  aafUInt32 newSize = oldSize - elemSize; //The new size will be 1 less
+
+
+  //Ready for battle ..............
+
+  aafUInt8* buf = new aafUInt8[newSize];
+  assert (buf);
+
+  aafMemPtr_t pInBits = 0;
+
+  ///  OK ... Two parts: Pre-Index, Post-Index  (we skip the elem-to-delete)
+
+  // First part: copy upto Pre-Index into buffer
+  hr = inPvd->GetBits (&pInBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pInBits);
+  aafUInt32  preindex_size = (index) * elemSize;
+  memcpy (buf, pInBits, preindex_size);
+  //incr. pInBits to skip the elem-to-delete
+  pInBits+= (preindex_size + elemSize);
+  assert (pInBits);
+  
+  //Second part: copy Post-Index into buffer
+  //		don't forget to point incr. the buf ptr with the pre-index + the new Elem
+  aafUInt32 postindex_size = newSize - preindex_size; 
+  memcpy (buf + preindex_size,   pInBits,  postindex_size);
+  
+  
+  // Re-allocate prop val bits to hold newly expanded data
+  aafMemPtr_t  pBits = 0;
+  hr = inPvd->AllocateBits (newSize, &pBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBits);
+  memcpy (pBits, buf, newSize);
+
+  delete[] buf;
+  return AAFRESULT_SUCCESS;
+
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ ImplAAFTypeDefVariableArray::InsertElement(
+    // property value corresponding to array; [in] 
+	ImplAAFPropertyValue * pInPropVal,
+    // zero-based index into elements in this array type;  [in]
+	aafUInt32  index,
+    // value to be inserted into this array; [in]
+	ImplAAFPropertyValue * pMemberPropVal)
+{
+  if (!pInPropVal)
+	return AAFRESULT_NULL_PARAM;
+  if (!pMemberPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+
+  //CASE 1 -- if the Insert is at "0" postition - this implies a prepend, 
+  //			SO - delegate to PrependElement() routine
+  if (index == 0)
+	  PrependElement(pInPropVal, pMemberPropVal);
+
+
+  HRESULT hr = 0;
+
+  aafUInt32  count;
+  hr = GetCount (pInPropVal, &count);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  //CASE 2 -- if the Insert is at LAST position - this implies an Append,
+  //			SO - delegate to AppendElement() routine
+  if (index == count)
+	  AppendElement(pInPropVal, pMemberPropVal);
+
+  //CASE 3 -  invalid Index
+  if (index > count)
+	  return AAFRESULT_BADINDEX;
+
+  //All other VALID Cases follow ..............
+  //   (index lying within (1) and (count-1) ) ...
+
+
+
+  ImplAAFPropValData* inPvd =
+	dynamic_cast<ImplAAFPropValData*> (pInPropVal);
+  assert (inPvd);
+
+  ImplAAFPropValData* memPvd =
+	dynamic_cast<ImplAAFPropValData*> (pMemberPropVal);
+  assert (memPvd);
+
+  aafUInt32 oldSize = 0;
+  hr = inPvd->GetBitsSize (&oldSize);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  aafUInt32 newElemSize = 0;
+  hr = memPvd->GetBitsSize (&newElemSize);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  
+  aafUInt32 newSize = oldSize + newElemSize;
+  assert (newSize);
+  // sizeof (*buf) must be 1
+  aafUInt8* buf = new aafUInt8[newSize];
+  assert (buf);
+
+  aafMemPtr_t pBits = 0;
+  aafMemPtr_t pInBits = 0;
+
+
+  ///  OK ... three parts: Pre-Index, Index, Post-Index
+
+  // First part: copy upto Pre-Index into buffer
+  hr = inPvd->GetBits (&pInBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pInBits);
+  aafUInt32  preindex_size = (index-1) * newElemSize;
+  memcpy (buf, pInBits, preindex_size);
+  //incr. pInBits to remaining part
+  pInBits+=preindex_size;
+  assert (pInBits);
+  
+  //Second part: copy the Index (newElement)
+  pBits = 0;
+  hr = memPvd->GetBits (&pBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBits);
+  // Make sure to incr. the buf ptr by the pre-index  size
+  memcpy (buf + preindex_size, pBits, newElemSize);
+
+  //Third part: Finally, copy Post-Index into buffer
+  //		don't forget to point incr. the buf ptr with the pre-index + the new Elem
+  aafUInt32 postincr = (preindex_size + newElemSize);
+  aafUInt32 postindex_size = newSize - postincr; 
+  memcpy (buf + postincr,   pInBits,  postindex_size);
+  
+  
+  // Re-allocate prop val bits to hold newly expanded data
+  pBits = 0;
+  hr = inPvd->AllocateBits (newSize, &pBits);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pBits);
+  memcpy (pBits, buf, newSize);
+
+  delete[] buf;
+  return AAFRESULT_SUCCESS;
+}
