@@ -313,10 +313,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPulldownTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFReferenceValueTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFRGBADescriptorTest.cpp"
 # End Source File
 # Begin Source File
@@ -546,10 +542,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPropertyDefsTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPropertyValuesTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFReferenceValuesTest.cpp"
 # End Source File
 # Begin Source File
 
