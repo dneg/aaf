@@ -23,7 +23,6 @@ class ImplAAFSourceMob;
 #include "ImplAAFObject.h"
 #endif
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFEssenceData : public ImplAAFObject
 {
