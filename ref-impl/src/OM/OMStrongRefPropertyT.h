@@ -472,7 +472,11 @@ void OMStrongReferenceProperty<ReferencedObject>::deepCopyTo(
   ASSERT("Destination reference is void", dest->isVoid());
   OMStorable* source = _reference.getValue();
   ASSERT("Valid source", source != 0);
-  OMStorable* d = source->shallowCopy();
+  OMStorable* container = destination->container();
+  ASSERT("Valid container", container != 0);
+  OMClassFactory* factory = container->classFactory();
+  ASSERT("Valid class factory", factory != 0);
+  OMStorable* d = source->shallowCopy(factory);
   dest->setObject(d);
   d->onCopy(clientContext);
   source->deepCopyTo(d, clientContext);

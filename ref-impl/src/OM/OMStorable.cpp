@@ -516,8 +516,19 @@ void OMStorable::setClassFactory(const OMClassFactory* classFactory)
 OMStorable* OMStorable::shallowCopy(void) const
 {
   TRACE("OMStorable::shallowCopy");
+  OMStorable* result = shallowCopy(classFactory());
+
+  POSTCONDITION("Valid result", result != 0);
+  return result;
+}
+
+OMStorable* OMStorable::shallowCopy(const OMClassFactory* factory) const
+{
+  TRACE("OMStorable::shallowCopy");
+  PRECONDITION("Valid class factory", factory != 0);
+
   const OMStoredObjectIdentification& id = classId();
-  OMStorable* object = classFactory()->create(id);
+  OMStorable* object = factory->create(id);
   ASSERT("Registered class id", object != 0);
   ASSERT("Valid class factory", object->classFactory() != 0);
 #if !defined(OM_DISABLE_VALIDATE_DEFINITIONS)

@@ -147,7 +147,16 @@ public:
     // @cmember Create a shallow copy of this <c OMStorable>.
     //          In a shallow copy, contained objects (strong object
     //          references) and streams are not copied.
+    //          New objects are created using the same <c OMClassFactory>
+    //          used to create this <c OMStorable>.
   OMStorable* shallowCopy(void) const;
+
+    // @cmember Create a shallow copy of this <c OMStorable>.
+    //          In a shallow copy, contained objects (strong object
+    //          references) and streams are not copied.
+    //          New objects are created using the <c OMClassFactory>
+    //          <p factory>.
+  OMStorable* shallowCopy(const OMClassFactory* factory) const;
 
     // @cmember Create a deep copy of this <c OMStorable>, attach the
     //          copy to <p destination>.

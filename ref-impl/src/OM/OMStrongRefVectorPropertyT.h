@@ -1010,13 +1010,17 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::deepCopyTo(
   Property* dest = dynamic_cast<Property*>(destination);
   ASSERT("Destination is correct type", dest != 0);
   ASSERT("Valid destination", dest != this);
+  OMStorable* container = dest->container();
+  ASSERT("Valid container", container != 0);
+  OMClassFactory* factory = container->classFactory();
+  ASSERT("Valid class factory", factory != 0);
 
   ASSERT("Destination vector is void", dest->isVoid());
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
     OMStorable* source = element.getValue();
-    OMStorable* d = source->shallowCopy();
+    OMStorable* d = source->shallowCopy(factory);
     dest->insertObject(d);
     d->onCopy(clientContext);
     source->deepCopyTo(d, clientContext);
