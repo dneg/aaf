@@ -110,6 +110,11 @@ public:
 	 IAAFEssenceStream *stream,
      /*[out]*/ aafInt16 *  pNumChannels); // The number of channels present 
 
+  STDMETHOD (GetSelectInfo)
+   (IAAFSourceMob *fileMob,
+        IAAFEssenceStream *stream,
+        aafSelectInfo_t *  pSelectInfo);
+
   // Returns the number of samples which this codec can find on the
 			// given slot.
   STDMETHOD (GetNumSamples)
