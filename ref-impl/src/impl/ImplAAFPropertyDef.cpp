@@ -261,7 +261,7 @@ OMPropertyId ImplAAFPropertyDef::identification(void) const
 
 bool ImplAAFPropertyDef::isOptional(void) const
 {
-  return _IsOptional ? true : false;
+  return (AAFTrue == _IsOptional) ? true : false;
 }
 
 
