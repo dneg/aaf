@@ -68,9 +68,14 @@ void OMStrongReferenceProperty<ReferencedObject>::getValue(
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  ReferencedObject* result = _reference.getValue();
-
-  object = result;
+  OMStorable* p = _reference.getValue();
+  if (p != 0) {
+    ReferencedObject* result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+    object = result;
+  } else {
+    object = 0;
+  }
 }
 
   // @mfunc Set the value of this <c OMStrongReferenceProperty>.
@@ -89,7 +94,14 @@ ReferencedObject* OMStrongReferenceProperty<ReferencedObject>::setValue(
 
   // tjb - PRECONDITION("Valid object", object != 0);
 
-  ReferencedObject* result = _reference.setValue(object);
+  OMStorable* p = _reference.setValue(object);
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  } else {
+    result = 0;
+  }
   setPresent();
   return result;
 }
@@ -106,8 +118,14 @@ ReferencedObject* OMStrongReferenceProperty<ReferencedObject>::clearValue(void)
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::clearValue");
 
-  ReferencedObject* result = _reference.setValue(0);
-
+  OMStorable* p = _reference.setValue(0);
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  } else {
+    result = 0;
+  }
   return result;
 }
 
@@ -137,7 +155,17 @@ template <typename ReferencedObject>
 ReferencedObject*
 OMStrongReferenceProperty<ReferencedObject>::operator -> (void)
 {
-  return _reference.getValue();
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::operator ->");
+
+  OMStorable* p = _reference.getValue();
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  } else {
+    result = 0;
+  }
+  return result;
 }
 
   // @mfunc Dereference operator.
