@@ -22,8 +22,8 @@ AD_IDL(//
 /***********************************************\
 *	Stub only.   Implementation not yet added.	*
 \***********************************************/)
-AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
-AD_FORWARD_DECLARATION(AAFReferenceValue)
+AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
+AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(dfbd6522, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(dfbd6521, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
@@ -47,14 +47,14 @@ AD_METHOD0(Initialize,
   //   - Initialize\(\) has already been called on this object.)
 
 
-AD_XMETHOD1(GetAUID,
+AD_XMETHOD1(GetPropertyID,
 			[out\, retval],
 			objPass,
 			aafUID_t *,
 			pAuid,
 			Pointer to an AUID reference,
 
-			Gets the AUID for this object.
+			Gets the Property Definitions AUID associated with this	object.
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
@@ -72,6 +72,32 @@ AD_XMETHOD1(GetAUID,
   //
   // AAFRESULT_NULL_PARAM
   //   - The pAuid pointer is NULL.)
+
+
+AD_XMETHOD1(SetPropertyID,
+		    [in],
+			objPass,
+		    aafUID_t *,
+		    pPropertyID,
+		    Property Definition's AUID,
+			Sets the Property Definitions AUID associated with this	object.
+  //
+  // Succeeds if:
+  // - This object has already been Initialize\(\)d.
+  // - The pPropertyID pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - The pPropertyID pointer is NULL.)
 
 
 AD_XMETHOD2(GetPropertyName,
@@ -121,7 +147,7 @@ AD_XMETHOD2(GetPropertyName,
   //   - bufSize indicates the buffer is too small to hold the string.)
 
 
-AD_XMETHOD1(GetPropertyNameStringBufLen,
+AD_XMETHOD1(GetPropertyNameBufLen,
 			[out],
 			objPass,
 			aafInt32 *,
@@ -151,59 +177,6 @@ AD_XMETHOD1(GetPropertyNameStringBufLen,
   //
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.)
-
-
-AD_XMETHOD1(GetTypeAUID,
-			[out\, retval],
-			objPass,
-			aafUID_t *,
-			pTypeAuid,
-			Pointer to the Type Definitions AUID,
-
-			Gets the Type Definition's AUID associated with this object.
-  //
-  // Succeeds if:
-  // - This object has already been Initialize\(\)d.
-  // - The pTypeAuid pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pTypeAuid pointer is NULL.)
-
-
-AD_XMETHOD1(SetPropertyID,
-		    [in],
-			objPass,
-		    aafUID_t *,
-		    pPropertyID,
-		    Property Definition's AUID,
-			Sets the Property Definitions AUID associated with this	object.
-  //
-  // Succeeds if:
-  // - This object has already been Initialize\(\)d.
-  // - The pPropertyID pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pPropertyID pointer is NULL.)
 
 
 AD_XMETHOD1(SetPropertyName,
@@ -237,18 +210,18 @@ AD_XMETHOD1(SetPropertyName,
   //   - pPropertyName arg is NULL.)
 
 
-AD_XMETHOD1(SetTypeAUID,
-		    [in],
-		    objPass,
-		    aafUID_t *,
-		    pAuid,
-		    Pointer to Type Definition's AUID,
+AD_XMETHOD1(GetTypeAUID,
+			[out\, retval],
+			objPass,
+			aafUID_t *,
+			pTypeAuid,
+			Pointer to the Type Definitions AUID,
 
-			Sets the Type Definitions AUID associated with this object.
+			Gets the Type Definition's AUID associated with this object.
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
-  // - The pAuid pointer is valid.
+  // - The pTypeAuid pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -261,7 +234,34 @@ AD_XMETHOD1(SetTypeAUID,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - The pAuid pointer is NULL.)
+  //   - The pTypeAuid pointer is NULL.)
+
+
+AD_XMETHOD1(SetTypeAUID,
+		    [in],
+		    objPass,
+		    aafUID_t *,
+		    pTypeAuid,
+		    Pointer to Type Definition's AUID,
+
+			Sets the Type Definitions AUID associated with this object.
+  //
+  // Succeeds if:
+  // - This object has already been Initialize\(\)d.
+  // - The pTypeAuid pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - The pTypeAuid pointer is NULL.)
 
 
 AD_XMETHOD1(GetMinVersion,
@@ -324,6 +324,7 @@ AD_XMETHOD1(GetMaxVersion,
 			aafVersionType_t *,
 			pMaxVersion,
 			Pointer to the maximum version ,
+
 			Gets the Maximum AAF Version for this property definition.
   //
   // Succeeds if:
@@ -350,6 +351,7 @@ AD_XMETHOD1(SetMaxVersion,
 			aafVersionType_t *,
 			pMaxVersion,
 			Pointer to the maximum AAF Version,
+
 			Sets the Maximum AAF Version for property definition.
   //
   // Succeeds if:
@@ -370,7 +372,7 @@ AD_XMETHOD1(SetMaxVersion,
   //   - The pMaxVersion pointer is NULL.)
 
 
-AD_XMETHOD1(IsSearchable,
+AD_XMETHOD1(GetIsSearchable,
 			[out\, retval],
 			objPass,
 			aafBool *,
@@ -412,7 +414,6 @@ AD_XMETHOD1(SetIsSearchable,
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
-  // - The pIsSearchable pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -422,13 +423,10 @@ AD_XMETHOD1(SetIsSearchable,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pIsSearchable pointer is NULL.)
+  //   - This object has not yet had Initialize\(\) called on it.)
 
 
-AD_XMETHOD1(IsOptional,
+AD_XMETHOD1(GetIsOptional,
 			[out\, retval],
 			objPass,
 			aafBool *,
@@ -485,7 +483,7 @@ AD_XMETHOD2(GetDescription,
 			[out\, size_is\(bufSize\)\, string],
 			objPass,
 			wchar_t *,
-			pstrDescription,
+			pStrDescription,
 			Pointer to description,
 
 			[in],
@@ -495,7 +493,7 @@ AD_XMETHOD2(GetDescription,
 			The size of the pstrDescription buffer,
 
 			Writes the description of the property definition\, with a
-  // trailing null character\, into the pStrName buffer.  The buffer
+  // trailing null character\, into the pStrDescription buffer.  The buffer
   // is allocated by the caller.  The size of the buffer is given by
   // bufSize.  If the description has not yet been set\, a zero-length
   // string will be written \(that is\, only the trailing null
@@ -510,7 +508,7 @@ AD_XMETHOD2(GetDescription,
   // - bufSize indicates the buffer is large enough to hold the name.
   // 
   // If this method fails nothing will be written to
-  // *pstrDescription
+  // *pStrDescription .
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -523,13 +521,13 @@ AD_XMETHOD2(GetDescription,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pstrDescription arg is NULL.
+  //   - pStrDescription arg is NULL.
   //
   // AAFRESULT_SMALLBUF
   //   - bufSize indicates the buffer is too small to hold the string.)
 
 
-AD_XMETHOD1(GetDescriptionStringBufLen,
+AD_XMETHOD1(GetDescriptionBufLen,
 			[out],
 			objPass,
 			aafInt32 *,
@@ -565,16 +563,16 @@ AD_XMETHOD1(SetDescription,
 			[in\, string],
 			objPass,
 			wchar_t *,
-			pstrDescription,
+			pStrDescription,
 			description,
 
 			Sets the description of the property definition.  A copy is made
   // of the data so the caller retains ownership of the
-  // *pstrDescription buffer and is responsible for de-allocating it.
+  // *pStrDescription buffer and is responsible for de-allocating it.
   // 
   // Succeeds if all of the following are true:
   // - This object has already been Initialize\(\)d.
-  // - the pstrDescription pointer is valid.
+  // - the pStrDescription pointer is valid.
   // 
   // If this method fails the Description property will not be
   // changed.
@@ -590,49 +588,94 @@ AD_XMETHOD1(SetDescription,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pstrDescription arg is NULL.)
+  //   - pStrDescription arg is NULL.)
 
 
 AD_XMETHOD1(GetDefaultValue,
 			[out\, retval],
-			objPass,
-			aafDataValue_t *,
-			pDataValue,
+			objOut,
+            AAFPropertyValue,
+			ppDataValue,
 			Pointer to default data value,
-			Gets the default data value of this property definition.)
+
+			Gets the default data value of this property definition.
+  // 
+  // Succeeds if all of the following are true:
+  // - This object has already been Initialize\(\)d.
+  // - the ppDataValue pointer is valid.
+  // 
+  // If this method fails *ppDataValue will not be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataValue arg is NULL.)
 
 
-AD_METHOD1(SetDefaultValue,
-		   [in],
-		   aafDataValue_t,
-		   pDataValue,
-		   default data value,
-		   Sets the default data value of this property definition.)
-
-
-AD_XMETHOD1(AppendRefValue,
+AD_XMETHOD1(SetDefaultValue,
 			[in],
 			objIn,
-			AAFReferenceValue,
-			pRefValue, 
-			Ref value to be added,
-			Add the reference value  to the property definition.)
+			AAFPropertyValue,
+			pDataValue,
+			default data value,
 
-
-AD_XMETHOD1(RemoveRefValue,
-			[in],
-			objIn,
-			AAFReferenceValue,
-			pRefValue, 
-			Ref value to be removed,
-			Remove the reference value from the property definition.)
+		   Sets the default data value of this property definition.
+  // 
+  // Succeeds if all of the following are true:
+  // - This object has already been Initialize\(\)d.
+  // - the pDataValue pointer is valid.
+  // 
+  // If this method fails the Default Value property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataValue arg is NULL.)
 
 
 AD_XMETHOD1(GetRefValues,
 			[out\,retval],
 			objOut,
-			EnumAAFReferenceValues,
+			EnumAAFPropertyValues,
 			ppEnum, 
 			Reference value Enumeration,
-			Return an enumerator for the reference values.)
+
+			Places an enumerator for the reference values into the *ppEnum
+  // argument.
+  // 
+  // The returned enumerator is AddRef\(\)ed before it is returned.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
 AD_CLASS_END
