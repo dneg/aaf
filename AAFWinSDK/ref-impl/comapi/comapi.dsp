@@ -377,6 +377,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFNetworkLocator.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFNetworkLocatorTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFObject.cpp"
 # End Source File
 # Begin Source File
