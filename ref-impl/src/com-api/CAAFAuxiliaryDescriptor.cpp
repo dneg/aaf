@@ -68,6 +68,7 @@ CAAFAuxiliaryDescriptor::~CAAFAuxiliaryDescriptor ()
 }
 
 
+
 HRESULT STDMETHODCALLTYPE
     CAAFAuxiliaryDescriptor::Initialize ()
 {
