@@ -14,10 +14,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-
-// WIN32 Note: Proxy/Stub Information
-//		To build a separate proxy/stub DLL, 
-//		run nmake -f aafcomps.mk in the project directory.
+// Prototypes that must be implemented but NOT exported.
+extern "C" const char * AAFGetLibraryDirectory();
+extern "C" const char * AAFGetLibraryPath();
 
 
 #include "CAAFInProcServer.h"
@@ -140,25 +139,6 @@ STDAPI DllUnregisterServer(void)
 {
 	// Unregisters all objects.
 	return g_AAFInProcServer.UnregisterServer();
-}
-
-
-
-//
-// Calls that need to be available for platforms that do 
-// not support COM or Registry.
-//
-
-// Return the number of coclasses exported from this dll.
-STDAPI_(ULONG) AAFGetClassCount(void)
-{
-	return g_AAFInProcServer.GetClassCount();
-}
-
-// Get the nth implementation coclass id.
-STDAPI AAFGetClassObjectID(ULONG index, CLSID *pClassID)
-{
-	return g_AAFInProcServer.GetClassObjectID(index, pClassID);
 }
 
 
@@ -303,3 +283,17 @@ DllTerminationRoutine()
 #pragma export off
 #endif // #if defined(_MAC)
 
+
+//
+// Platform dependent file system information needed by the reference
+// implementation to load AAF plugins "relative" to this shared library/dll.
+//
+const char * AAFGetLibraryDirectory()
+{
+	return g_AAFInProcServer.GetServerDirectory();
+}
+
+const char * AAFGetLibraryPath()
+{
+	return g_AAFInProcServer.GetServerPath();
+}
