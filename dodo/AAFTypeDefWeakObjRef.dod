@@ -45,25 +45,25 @@ AD_XMETHOD5(Initialize,
 			pTypeName,
 			friendly name of this type definition,
 
-			[in\, size_is\(targetHintCount\)],
-			objPass,
-			aafUID_t *,
-			pTargetHint,
-       List of property definition IDs indicating the property where
-    // the target is to be found.,
-
 			[in],
 			objPass,
 			aafUInt32,
-			targetHintCount,
-       Number of property def IDs in pTargetHint,
+			ids,
+       Number of property def IDs in pTargetSet,
+
+			[in\, size_is\(ids\)],
+			objPass,
+			aafUID_constptr,
+			pTargetSet,
+       List of property definition IDs indicating the property where
+    // the target is to be found.,
 
      Initializes this type def to be a reference to objects of
   // the given type\, and assigns this object the given AUID.  pObjType
   // points to the class definition of the least-derived class which
   // is possible to be contained in property values of this type.
   // 
-  // pTargetHint points to an array of Property Def AUIDs which
+  // pTargetSet points to an array of Property Def AUIDs which
   // indicate the location of the property containing the target of
   // this weak reference.  The AUIDs indicate the containment path to
   // the target property\, starting at the root Header object.  For
@@ -77,7 +77,7 @@ AD_XMETHOD5(Initialize,
   // *all* objects in that vector or set are searched for the target.
   // Note that the final AUID *must* correspond to a Set property.
   // 
-  // The number of AUIDs in pTargetHint is noted by targeHintCount.
+  // The number of AUIDs in pTargetSet is noted by ids.
   // 
   // This method must be called after allocation\, and before
   // any other method can be called.
@@ -85,12 +85,8 @@ AD_XMETHOD5(Initialize,
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
   // - pObjType is a valid pointer.
-  // - pTargetHint is a valid pointer.
+  // - pTargetSet is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pObjType\\\, pTypeName\\\, or pTargetHint\))
-AD_OVERRIDE(.method-SetObject)
-AD_OVERRIDE(.method-GetObject)
-AD_OVERRIDE(.method-GetObjectType)
-AD_OVERRIDE(.method-CreateValue)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pObjType\\\, pTypeName\\\, or pTargetSet\))
 AD_XCLASS_END(Concrete, StoredObject)
