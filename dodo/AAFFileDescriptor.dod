@@ -17,7 +17,7 @@ AAFMediaDescriptor\
 *                                          *
 \******************************************/
 
-AD_CLASS_BEGIN()
+AD_CLASS_BEGIN
 
 //@access Public Members
 
