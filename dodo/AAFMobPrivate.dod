@@ -3,6 +3,23 @@ AAFMobPrivate\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// The IAAFMobPrivate interface contains methods which are secondary to
+// other methods of accessing the object.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//)
+
 AD_DEFAULT_UUID(CABC27B1, 57D5, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
 AD_CLASS_BEGIN
 AD_XMETHOD1(GetMobKind,
