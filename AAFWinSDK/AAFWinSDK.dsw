@@ -420,6 +420,36 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ExportDV"=".\examples\com-api\ExportDV\ExportDV.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ImportDV"=".\examples\com-api\ImportDV\ImportDV.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "MakeSDK"=.\MakeSDK.dsp - Package Owner=<4>
 
 Package=<5>
