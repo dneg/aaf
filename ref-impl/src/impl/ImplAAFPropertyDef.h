@@ -112,8 +112,7 @@ public:
   //****************
   // pvtInitialize()
   //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    pvtInitialize
+  AAFRESULT pvtInitialize
        (// @parm [in] auid to be used to identify this property definition
         const aafUID_t & propertyAuid,
 			
@@ -133,6 +132,29 @@ public:
         // @parm [in] Is this property a unique identifier
 		  aafBoolean_t isUniqueIdentifier);
 
+
+  //****************
+  // pvtInitialize()
+  //
+  AAFRESULT pvtInitialize
+       (// @parm [in] auid to be used to identify this property definition
+        aafUID_constref propertyAuid,
+			
+        // @parm [in] OM pid (small integer) to be used to identify
+		// this property definition
+        OMPropertyId omPid,
+			
+        // @parm [in, string] friendly name of this property
+	aafCharacter_constptr pPropName,
+	
+        // @parm [in] Type definition of this property definition,
+	ImplAAFTypeDef *pType,
+
+        // @parm [in] Is this property optional? (mandatory, if not)
+	aafBoolean_t isOptional,
+
+        // @parm [in] Is this property a unique identifier
+	aafBoolean_t isUniqueIdentifier);
 
 
   OMPropertyId OmPid (void) const;
@@ -154,6 +176,14 @@ public:
   // Sets the function which creates OMProperties useful for these
   // properties.
   void SetOMPropCreateFunc (ImplAAFOMPropertyCreateFunc_t pFunc);
+
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
 
 private:
 
