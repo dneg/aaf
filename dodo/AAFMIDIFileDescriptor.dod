@@ -1,30 +1,27 @@
+#c/******************************************\
+#c*                                          *
+#c* Advanced Authoring Format                *
+#c*                                          *
+#c* Copyright (c) 1998 Avid Technology, Inc. *
+#c* Copyright (c) 1998 Microsoft Corporation *
+#c*                                          *
+#c\******************************************/
 #startm .this-module 0
-AAFMIDIDescriptor\
+AAFMIDIFileDescriptor\
 #endm
 #c
 #startm .parent-module 0
 AAFFileDescriptor\
 #endm
 #c
-#import ./AAFFileDescriptor.exp
 AD_HEAD
-
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*  Stub only.   Implementation not yet added    *
-\***********************************************/
-
-
+AD_IDL(//
+// The IAAFMIDIFileDescriptor describes a MIDI object that contains multi-track
+// MIDI stream data stored in the Standard MIDI File 1.0 format. The MIDI file
+// data may be stored with either timecode-based times or metrical times. 
+// \(Metrical times are stored as subdivisions of a quarter note\, and related
+// to real time by a tempo map\).
+//)
 
 
 AD_CLASS_UUID(e684d76d, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
