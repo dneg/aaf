@@ -474,9 +474,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
-		if(parm != NULL)
-		  parm->ReleaseReference();
-		parm = 0;
+//		if(parm != NULL)
+//		  parm->ReleaseReference();
+//		parm = 0;
 		if(parmDef != NULL)
 		  parmDef->ReleaseReference();
 		parmDef = 0;
