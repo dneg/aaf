@@ -35,8 +35,11 @@ DODO_TARGETS = \
 	AAFMediaFileDescriptor.all \
 	AAFMediaFilmDescriptor.all \
 	AAFMediaGroup.all  \
-	AAFMob.all  \
 	AAFObject.all \
+	AAFMob.all  \
+	AAFMasterMob.all \
+	AAFMobSlot.all \
+	AAFTimelineMobSlot.all \
 	AAFObjectAttribute.all \
 	AAFSegment.all \
 	AAFSourceClip.all \
@@ -46,7 +49,7 @@ DODO_TARGETS = \
 	AAFUInt64.all \
 	AAFUnitTest.all \
 	AAFUnixLocator.all \
-	AAFWindowsLocator.all
+	AAFWindowsLocator.all 
 
 #	AAFMedia.all \
 # Jeff hasn't finished with these yet
@@ -271,7 +274,7 @@ AAFMob.all : AAFMob.cpp AAFMob.h
 AAFMob.all : AAFMob.comc AAFMob.comh
 AAFMob.all : AAFMob.exp AAFMob.idl
 AAFMob.all : AAFMob.implc AAFMob.implh
-AAFMob.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFMob.exp : AAFUnitTest.exp AAFObject.exp macros/exp.mac
 AAFMob.h : AAFMob.exp macros/h.mac
 AAFMob.cpp : AAFMob.exp macros/cpp.mac
 AAFMob.idl : AAFMob.exp macros/idl.mac
@@ -279,6 +282,45 @@ AAFMob.comc : AAFMob.exp macros/comc.mac
 AAFMob.comh : AAFMob.exp macros/comh.mac
 AAFMob.implc : AAFMob.exp macros/implc.mac
 AAFMob.implh : AAFMob.exp macros/implh.mac
+
+AAFMasterMob.all : AAFMasterMob.cpp AAFMasterMob.h
+AAFMasterMob.all : AAFMasterMob.comc AAFMasterMob.comh
+AAFMasterMob.all : AAFMasterMob.exp AAFMasterMob.idl
+AAFMasterMob.all : AAFMasterMob.implc AAFMasterMob.implh
+AAFMasterMob.exp : AAFUnitTest.exp AAFMob.exp macros/exp.mac
+AAFMasterMob.h : AAFMasterMob.exp macros/h.mac
+AAFMasterMob.cpp : AAFMasterMob.exp macros/cpp.mac
+AAFMasterMob.idl : AAFMasterMob.exp macros/idl.mac
+AAFMasterMob.comc : AAFMasterMob.exp macros/comc.mac
+AAFMasterMob.comh : AAFMasterMob.exp macros/comh.mac
+AAFMasterMob.implc : AAFMasterMob.exp macros/implc.mac
+AAFMasterMob.implh : AAFMasterMob.exp macros/implh.mac
+
+AAFMobSlot.all : AAFMobSlot.cpp AAFMobSlot.h
+AAFMobSlot.all : AAFMobSlot.comc AAFMobSlot.comh
+AAFMobSlot.all : AAFMobSlot.exp AAFMobSlot.idl
+AAFMobSlot.all : AAFMobSlot.implc AAFMobSlot.implh
+AAFMobSlot.exp : AAFUnitTest.exp AAFObject.exp macros/exp.mac
+AAFMobSlot.h : AAFMobSlot.exp macros/h.mac
+AAFMobSlot.cpp : AAFMobSlot.exp macros/cpp.mac
+AAFMobSlot.idl : AAFMobSlot.exp macros/idl.mac
+AAFMobSlot.comc : AAFMobSlot.exp macros/comc.mac
+AAFMobSlot.comh : AAFMobSlot.exp macros/comh.mac
+AAFMobSlot.implc : AAFMobSlot.exp macros/implc.mac
+AAFMobSlot.implh : AAFMobSlot.exp macros/implh.mac
+
+AAFTimelineMobSlot.all : AAFTimelineMobSlot.cpp AAFTimelineMobSlot.h
+AAFTimelineMobSlot.all : AAFTimelineMobSlot.comc AAFTimelineMobSlot.comh
+AAFTimelineMobSlot.all : AAFTimelineMobSlot.exp AAFTimelineMobSlot.idl
+AAFTimelineMobSlot.all : AAFTimelineMobSlot.implc AAFTimelineMobSlot.implh
+AAFTimelineMobSlot.exp : AAFUnitTest.exp AAFMobSlot.exp macros/exp.mac
+AAFTimelineMobSlot.h : AAFTimelineMobSlot.exp macros/h.mac
+AAFTimelineMobSlot.cpp : AAFTimelineMobSlot.exp macros/cpp.mac
+AAFTimelineMobSlot.idl : AAFTimelineMobSlot.exp macros/idl.mac
+AAFTimelineMobSlot.comc : AAFTimelineMobSlot.exp macros/comc.mac
+AAFTimelineMobSlot.comh : AAFTimelineMobSlot.exp macros/comh.mac
+AAFTimelineMobSlot.implc : AAFTimelineMobSlot.exp macros/implc.mac
+AAFTimelineMobSlot.implh : AAFTimelineMobSlot.exp macros/implh.mac
 
 AAFObject.all : AAFObject.cpp AAFObject.h
 AAFObject.all : AAFObject.comc AAFObject.comh
