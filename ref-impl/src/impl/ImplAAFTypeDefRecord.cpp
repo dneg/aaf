@@ -165,7 +165,7 @@ AAFRESULT STDMETHODCALLTYPE
   for (i = 0; i < numMembers; i++)
 	{
 	  assert (ppMemberTypes[i]);
-	  _memberTypes.setValueAt(ppMemberTypes[i], i);
+	  _memberTypes.insertAt(ppMemberTypes[i], i);
 //	  aafUID_t typeUID;
 //	  AAFRESULT hr = ppMemberTypes[i]->GetAUID(&typeUID);
 //	  assert (AAFRESULT_SUCCEEDED(hr));
@@ -242,7 +242,7 @@ AAFRESULT STDMETHODCALLTYPE
   for (i = 0; i < numMembers; i++)
 	{
 //	  buf[i] = *pMemberTypeIDs[i];
-	  _memberTypes.setValueAt(pMemberTypes[i], i);
+	  _memberTypes.insertAt(pMemberTypes[i], i);
 
 	  wcscpy(tmpNamePtr, pMemberNames[i]);
 	  // +1 to go past embedded null
