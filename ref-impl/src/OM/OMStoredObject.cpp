@@ -136,6 +136,7 @@ OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
   PRECONDITION("Path name is absolute", storagePathName[0] == '/');
 
   char* path = new char[strlen(storagePathName) + 1];
+  ASSERT("Valid heap pointer", path != 0);
   strcpy(path, storagePathName);
   
   char* element = path;
@@ -239,7 +240,8 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   OMUInt32 entries;
   readFromStream(_indexStream, &entries, sizeof(entries));
   OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
-  
+  ASSERT("Valid heap pointer", index != 0);
+
   // Read entries.
   //
   OMPropertyId propertyId;
@@ -326,6 +328,8 @@ OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
   }
 
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  ASSERT("Valid heap pointer", newStoredObject != 0);
+
   return newStoredObject;
 }
 
@@ -350,6 +354,8 @@ OMStoredObject* OMStoredObject::create(const wchar_t* fileName)
   }
 
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  ASSERT("Valid heap pointer", newStoredObject != 0);
+
   return newStoredObject;
 }
 
@@ -363,6 +369,7 @@ void OMStoredObject::create(void)
 
   _mode = modifyMode;
   _index = new OMStoredPropertySetIndex(50);
+  ASSERT("Valid heap pointer", _index != 0);
   _indexStream = createStream(_storage, propertyIndexStreamName);
   _propertiesStream = createStream(_storage, propertyValueStreamName);
   _open = true;
@@ -543,6 +550,7 @@ OMStoredObject* OMStoredObject::create(const char* name)
 
   IStorage* newStorage = createStorage(_storage, name);
   OMStoredObject* result = new OMStoredObject(newStorage);
+  ASSERT("Valid heap pointer", result != 0);
   result->create();
   return result;
 }
@@ -558,6 +566,7 @@ OMStoredObject* OMStoredObject::open(const char* name)
 
   IStorage* newStorage = openStorage(_storage, name, _mode);
   OMStoredObject* result = new OMStoredObject(newStorage);
+  ASSERT("Valid heap pointer", result != 0);
   result->open(_mode);
   return result;
 }
@@ -636,6 +645,7 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   // Create an index.
   //
   OMStoredVectorIndex* vectorIndex = new OMStoredVectorIndex(entries);
+  ASSERT("Valid heap pointer", vectorIndex != 0);
 
   // Read the element names, placing them in the index.
   //
@@ -658,6 +668,7 @@ char* OMStoredObject::vectorIndexStreamName(const char* vectorName)
 {
   char* suffix = " index";
   char* vectorIndexName = new char[strlen(vectorName) + strlen(suffix) + 1];
+  ASSERT("Valid heap pointer", vectorIndexName != 0);
   strcpy(vectorIndexName, vectorName);
   strcat(vectorIndexName, suffix);
 
@@ -832,9 +843,9 @@ void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
 
   // @mfunc Read <p size> bytes from <p stream> into the buffer at
   //        address <p data>.
-  //   @parm The stream on which to write.
+  //   @parm The stream from which to read.
   //   @parm The buffer to write.
-  //   @parm The number of bytes to write.   
+  //   @parm The number of bytes to read.   
 void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
 {
   TRACE("OMStoredObject::readFromStream");
