@@ -99,7 +99,8 @@ function printHeader() {
 
   printf("<html>\n");
   printf("<head>\n");
-  printf("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">\n");
+  printf("<meta http-equiv=\"Content-Type\"\n");
+  printf("      content=\"text/html; charset=ISO-8859-1\">\n");
   printf("<title>%s</title>\n", TITLE);
   printf("</head>\n");
   printf("<body>\n");
