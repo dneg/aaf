@@ -243,11 +243,21 @@ struct CComInitialize
   }
 };
 
-main()
+int main(int argumentCount, char* argumentVector[])
 {
+  if (argumentCount != 2) {
+    fprintf(stderr, "Error : wrong number of arguments\n");
+    return(1);
+  }
+
+  char* inputFileName = argumentVector[1];
+
+  wchar_t wInputFileName[256];
+  convert(wInputFileName, 256, inputFileName);
+
   CComInitialize comInit;
 
-  ReadAAFFile(L"Foo.aaf");
+  ReadAAFFile(wInputFileName);
 
   fprintf(stdout, "Done\n");
 
