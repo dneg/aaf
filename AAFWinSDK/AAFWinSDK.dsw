@@ -213,7 +213,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "dump"=".\Test\devutils\dump\dump.dsp" - Package Owner=<4>
+Project: "dump"=".\DevUtils\dump\dump.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
