@@ -9,11 +9,32 @@
 
 #include <iostream.h>
 
-#include <windows.h>
+#if defined(_MAC) || defined(macintosh)
+#include "wintypes.h"
+#include <storage.h>
+#else
+#include <objbase.h>
+#endif
+
+#if defined(__sgi)
+#define OMHIGHPART(x) x.u.HighPart
+#define OMLOWPART(x)  x.u.LowPart
+#else
+#define OMHIGHPART(x) x.HighPart
+#define OMLOWPART(x)  x.LowPart
+#endif
+
+#if defined(_WIN32) && defined(UNICODE)
+  typedef wchar_t OMCHAR;
+#else
+  typedef char OMCHAR;
+#endif
 
 static void convert(wchar_t* wcName, size_t length, const char* name);
 
-static void convert(char* cName, size_t length, wchar_t* name);
+static void convert(char* cName, size_t length, const wchar_t* name);
+
+static void convert(char* cName, size_t length, const char* name);
 
 static void formatError(DWORD errorCode);
 
@@ -38,17 +59,17 @@ OMStoredObject::OMStoredObject(struct IStorage* s)
 
 OMStoredObject* OMStoredObject::create(const char* fileName)
 {
-  TRACE("createFile");
+  TRACE("OMStoredObject::create");
   PRECONDITION("Valid file name", validString(fileName));
 
-  wchar_t wcFileName[256];
-  convert(wcFileName, 256, fileName);
+  OMCHAR omFileName[256];
+  convert(omFileName, 256, fileName);
 
   HRESULT result;
   IStorage* storage;
 
   result = StgCreateDocfile(
-    wcFileName,
+    omFileName,
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
     0,
     &storage);
@@ -64,17 +85,17 @@ OMStoredObject* OMStoredObject::create(const char* fileName)
 
 OMStoredObject* OMStoredObject::open(const char* fileName)
 {
-  TRACE("openFile");
+  TRACE("OMStoredObject::open");
   PRECONDITION("Valid file name", validString(fileName));
 
-  wchar_t wcFileName[256];
-  convert(wcFileName, 256, fileName);
+  OMCHAR omFileName[256];
+  convert(omFileName, 256, fileName);
 
   HRESULT result;
   IStorage* storage;
 
   result = StgOpenStorage(
-    wcFileName,
+    omFileName,
     0,
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
     0,
@@ -92,7 +113,7 @@ OMStoredObject* OMStoredObject::open(const char* fileName)
 
 OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
 {
-  TRACE("OMFile::openStoragePath");
+  TRACE("OMStoredObject::openStoragePath");
   PRECONDITION("Valid stream path name", validString(storagePathName));
   PRECONDITION("Path name is absolute", storagePathName[0] == '/');
 
@@ -414,11 +435,11 @@ IStream* OMStoredObject::createStream(IStorage* storage,
   PRECONDITION("Valid storage", storage != 0);
 
   IStream* stream;
-  wchar_t wcStreamName[256];
-  convert(wcStreamName, 256, streamName);
+  OMCHAR omStreamName[256];
+  convert(omStreamName, 256, streamName);
 
   HRESULT resultCode = storage->CreateStream(
-    wcStreamName,
+    omStreamName,
     STGM_DIRECT | STGM_WRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
     0,
     0,
@@ -437,11 +458,11 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
   PRECONDITION("Valid stream name", validString(streamName));
   
   IStream* stream;
-  wchar_t wcStreamName[256];
-  convert(wcStreamName, 256, streamName);
+  OMCHAR omStreamName[256];
+  convert(omStreamName, 256, streamName);
   
   HRESULT resultCode = storage->OpenStream(
-    wcStreamName,
+    omStreamName,
     0,
     STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE,
     0,
@@ -472,11 +493,11 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
   PRECONDITION("Valid storage name", validString(storageName));
 
   IStorage* newStorage;
-  wchar_t wcStorageName[256];
-  convert(wcStorageName, 256, storageName);
+  OMCHAR omStorageName[256];
+  convert(omStorageName, 256, storageName);
 
   HRESULT resultCode = storage->CreateStorage(
-    wcStorageName,
+    omStorageName,
     // STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
     0,
@@ -497,11 +518,11 @@ IStorage* OMStoredObject::openStorage(IStorage* storage,
   PRECONDITION("Valid storage name", validString(storageName));
 
   IStorage* newStorage;
-  wchar_t wcStorageName[256];
-  convert(wcStorageName, 256, storageName);
+  OMCHAR omStorageName[256];
+  convert(omStorageName, 256, storageName);
 
   HRESULT resultCode = storage->OpenStorage(
-    wcStorageName,
+    omStorageName,
     0,
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
     0,
@@ -554,8 +575,12 @@ void OMStoredObject::setClass(IStorage* storage, int cid)
   TRACE("OMStoredObject::setClass");
   PRECONDITION("Valid storage", storage != 0);
 
+#if 0
   struct _GUID g = {0,0,0, {0, 0, 0, 0, 0, 0, 0, 0}};
-  g.Data4[7] = cid;
+#else
+  GUID g = {0};
+#endif
+  g.Data4[7] = (unsigned char)cid;
   HRESULT resultCode = storage->SetClass(g);
   if (!check(resultCode)) {
     exit(FAILURE);
@@ -585,13 +610,8 @@ size_t OMStoredObject::streamOffset(IStream* stream)
   HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
   if (!check(status)) {
   }
-#if defined(__sgi)
-  ASSERT("Small stream", position.u.HighPart == 0);
-  result = position.u.LowPart;
-#else
-  ASSERT("Small stream", position.HighPart == 0);
-  result = position.LowPart;
-#endif
+  ASSERT("Small stream", OMHIGHPART(position) == 0);
+  result = OMLOWPART(position);
   return result;
 }
 
@@ -604,11 +624,7 @@ void OMStoredObject::streamSeek(IStream* stream, size_t offset)
   HRESULT status = stream->Seek(newPosition, STREAM_SEEK_SET, &oldPosition);
   if (!check(status)) {
   }
-#if defined(__sgi)
-  ASSERT("Small stream", oldPosition.u.HighPart == 0);
-#else
-  ASSERT("Small stream", oldPosition.HighPart == 0);
-#endif
+  ASSERT("Small stream", OMHIGHPART(oldPosition) == 0);
 }
 
 static void convert(wchar_t* wcName, size_t length, const char* name)
@@ -631,7 +647,7 @@ static void convert(wchar_t* wcName, size_t length, const char* name)
   }
 }
 
-static void convert(char* cName, size_t length, wchar_t* name)
+static void convert(char* cName, size_t length, const wchar_t* name)
 {
   ASSERT("Valid program name", validString(getProgramName()));
 
@@ -644,9 +660,28 @@ static void convert(char* cName, size_t length, wchar_t* name)
   }
 }
 
+static void convert(char* cName, size_t length, const char* name)
+{
+  TRACE("convert");
+  PRECONDITION("Valid input name", validString(name));
+  PRECONDITION("Valid output buffer", cName != 0);
+  PRECONDITION("Valid output buffer size", length > 0);
+
+  size_t sourceLength = strlen(name);
+  if (sourceLength < length - 1) {
+    strncpy(cName, name, length);
+  } else {
+    cerr << getProgramName()
+      << ": Error : Conversion failed."
+      << endl;
+    exit(FAILURE);  
+  }
+}
+
 static void formatError(DWORD errorCode)
 {
-  wchar_t buffer[256];
+#if defined(_WIN32) || defined(WIN32)
+  OMCHAR buffer[256];
 
   int status = FormatMessage(
     FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -670,7 +705,9 @@ static void formatError(DWORD errorCode)
   } else {
     cerr << "Error code = " << hex << errorCode << dec << endl;
   }
-
+#else
+  cerr << "Error code = " << hex << errorCode << dec << endl;
+#endif
 }
 
 static int check(HRESULT resultCode)
