@@ -519,7 +519,12 @@ private:
   wchar_t* collectionIndexStreamName(const wchar_t* collectionName);
 
   IStream* createStream(IStorage* storage, const wchar_t* streamName);
+
   IStream* openStream(IStorage* storage, const wchar_t* streamName);
+
+  IStream* createBufferedStream(IStorage* storage, const wchar_t* streamName);
+
+  IStream* openBufferedStream(IStorage* storage, const wchar_t* streamName);
 
   IStorage* createStorage(IStorage* storage, const wchar_t* storageName);
   IStorage* openStorage(IStorage* storage,
