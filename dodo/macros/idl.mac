@@ -53,6 +53,18 @@ interface I.this-module : IUnknown
 
 #ccccccccccccccccccccccccccc
 #c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_BEGIN 00
+interface I.this-module : IUnknown
+{
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Starts a class definition with no parent class
 #c
 #c Arguments: none
@@ -71,8 +83,7 @@ AD_CLASS_BEGIN
 #c
 #startm AD_METHOD0 02
   // %02
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 ();
+  AAFRESULT %01 ();
 #endm
 
 
@@ -89,8 +100,8 @@ AD_CLASS_BEGIN
 #c
 #startm AD_METHOD1 06
   // %06
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (%02 %03 %04);
+  AAFRESULT %01 (
+	%02 %03 %04);
 #endm
 
 
@@ -111,8 +122,9 @@ AD_CLASS_BEGIN
 #c
 #startm AD_METHOD2 10
   // %10
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (%02 %03 %04, %06 %07 %08);
+  AAFRESULT %01 (
+	%02 %03 %04, 
+	%06 %07 %08);
 #endm
 
 
@@ -137,8 +149,10 @@ AD_CLASS_BEGIN
 #c
 #startm AD_METHOD3 14
   // %14
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (%02 %03 %04, %06 %07 %08, %10 %11 %12);
+  AAFRESULT %01 (
+	%02 %03 %04, 
+	%06 %07 %08, 
+	%10 %11 %12);
 #endm
 
 
@@ -167,8 +181,11 @@ AD_CLASS_BEGIN
 #c
 #startm AD_METHOD4 18
   // %18
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (%02 %03 %04, %06 %07 %08, %10 %11 %12, %14 %15 %16);
+  AAFRESULT %01 (
+	%02 %03 %04, 
+	%06 %07 %08, 
+	%10 %11 %12, 
+	%14 %15 %16);
 #endm
 
 
@@ -201,8 +218,12 @@ AD_CLASS_BEGIN
 #c
 #startm AD_METHOD5 22
   // %22
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (%02 %03 %04, %06 %07 %08, %10 %11 %12, %14 %15 %16, %18 %19 %20);
+  AAFRESULT %01 (
+	%02 %03 %04, 
+	%06 %07 %08, 
+	%10 %11 %12, 
+	%14 %15 %16, 
+	%18 %19 %20);
 #endm
 
 
@@ -239,8 +260,192 @@ AD_CLASS_BEGIN
 #c
 #startm AD_METHOD6 26
   // %26
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (%02 %03 %04, %06 %07 %08, %10 %11 %12, %14 %15 %16, %18 %19 %20, %22 %23 %24);
+  AAFRESULT %01 (
+	%02 %03 %04, 
+	%06 %07 %08, 
+	%10 %11 %12, 
+	%14 %15 %16, 
+	%18 %19 %20, 
+	%22 %23 %24);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes seven arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: argument modifiers (e.g. [in])
+#c Argument27: argument type
+#c Argument28: argument name
+#c Argument29: argument comment
+#c Argument30: method description
+#c
+#c TomR:980713: Added
+#c
+#startm AD_METHOD7 30
+  // %30
+  AAFRESULT %01 (
+	%02 %03 %04, 
+	%06 %07 %08, 
+	%10 %11 %12, 
+	%14 %15 %16, 
+	%18 %19 %20, 
+	%22 %23 %24,
+	%26 %27 %28);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes eight arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: argument modifiers (e.g. [in])
+#c Argument27: argument type
+#c Argument28: argument name
+#c Argument29: argument comment
+#c Argument30: argument modifiers (e.g. [in])
+#c Argument31: argument type
+#c Argument32: argument name
+#c Argument33: argument comment
+#c Argument34: method description
+#c
+#c TomR:980713: Added
+#c
+#startm AD_METHOD7 34
+  // %34
+  AAFRESULT %01 (
+	%02 %03 %04, 
+	%06 %07 %08, 
+	%10 %11 %12, 
+	%14 %15 %16, 
+	%18 %19 %20, 
+	%22 %23 %24,
+	%26 %27 %28,
+	%30 %31 %32);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Forward declaration of another interface.
+#c
+#c Argument: Base name
+#c
+#c TomR:980713: Added
+#c
+#startm AD_FORWARD_DECLARATION 01
+interface "I%01";
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Defining the interface UUID.
+#c NOTE: Should be placed immediately before AD_CLASS_BEGIN
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c TomR:980713: Added
+#c
+#startm AD_DEFAULT_UUID 11
+[
+	object,
+	uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
+	helpstring("I.this-module Interface"),
+	pointer_default(unique)
+]
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Defining the Class "Factory" UUID.
+#c NOTE: should be placed before AD_DEFAULT_UUID or after
+#c AD_CLASS_END
+#c
+#c GUID
+#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
+#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
+#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
+#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
+#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
+#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
+#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
+#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
+#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
+#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
+#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
+#c
+#c Example:
+#c AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
+#c
+#c TomR:980713: Added
+#c
+#startm AD_CLASS_UUID 11
 #endm
 
 
@@ -376,8 +581,8 @@ AD_CLASS_BEGIN
 #c
 #startm AD_GETOBJ_METHOD1 06
   // %06
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (%02 %03 ** I%04);
+  AAFRESULT %01 (
+	%02 %03 ** I%04);
 #endm
 
 
@@ -397,6 +602,9 @@ AD_CLASS_BEGIN
 #c
 #startm AD_SETOBJ_METHOD1 06
   // %06
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01 (%02 %03 * I%04);
+  AAFRESULT %01 (
+	%02 %03 * I%04);
 #endm
+
+
+
