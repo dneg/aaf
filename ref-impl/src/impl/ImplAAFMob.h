@@ -406,6 +406,9 @@ virtual AAFRESULT MobFindSource(
 virtual AAFRESULT STDMETHODCALLTYPE
     GetMobKind (aafMobKind_t *pMobKind);
 
+  // SDK Internal
+  virtual AAFRESULT ReconcileMobLength(void);
+
 	protected:
 	OMFixedSizeProperty<aafUID_t>		_mobID;
 	OMWideStringProperty				_name;
