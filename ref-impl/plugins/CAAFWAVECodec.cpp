@@ -74,7 +74,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetPluggableDefinition (IAAFDictionary *dict, IAAFPluggableDef **def)
+    CAAFWaveCodec::GetDefinitionObject (IAAFDictionary *dict, IAAFDefObject **def)
 {
 	IAAFCodecDef	*codecDef = NULL;
 	IAAFDefObject	*obj = NULL;
@@ -89,9 +89,7 @@ HRESULT STDMETHODCALLTYPE
 		uid = CodecWave;
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(obj->Init(&uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
-		obj->Release();
-		obj = NULL;
-		CHECK(codecDef->QueryInterface(IID_IAAFPluggableDef, (void **)def));
+		*def = obj;
 		codecDef->Release();
 		codecDef = NULL;
 	}
@@ -123,7 +121,7 @@ HRESULT STDMETHODCALLTYPE
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
 	IAAFDefObject			*defObject = NULL;
-	aafUID_t				category = AUID_AAFPluggableDefinition, manufacturer = MANUF_JEFFS_PLUGINS;
+	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
 	aafUID_t				plugID = JEFFS_WAVE_PLUGIN;
 	
 	XPROTECT()
