@@ -1,12 +1,11 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
+/***********************************************\
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
+\***********************************************/
 
 
 #ifndef __ImplAAFReferenceValue_h__
@@ -18,19 +17,8 @@
 #endif
 
 
-/***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-* Copyright (c) 1998-1999 Microsoft Corporation *
-*												*
-\***********************************************/
-
- 
-
-
 #include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFParameterDef_h__
 #include "ImplAAFParameterDef.h"
@@ -41,7 +29,14 @@
 
 
 ImplAAFParameterDef::ImplAAFParameterDef ()
-{}
+: _dataDef(			PID_ParameterDefinition_Type,					"Type"),
+  _refVal(			PID_ParameterDefinition_ReferenceValues,		"ReferenceValues"),
+  _displayUnits(	PID_ParameterDefinition_DisplayUnits,			"DisplayUnits")
+{
+	_persistentProperties.put(_dataDef.address());
+	_persistentProperties.put(_refVal.address());
+	_persistentProperties.put(_displayUnits.address());
+}
 
 
 ImplAAFParameterDef::~ImplAAFParameterDef ()
@@ -50,34 +45,55 @@ ImplAAFParameterDef::~ImplAAFParameterDef ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::GetParameterDataDefID (
-      aafUID_t *  /*pParameterDataDefID*/)
+      aafUID_t *pParameterDataDefID)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(pParameterDataDefID == NULL)
+		return AAFRESULT_NULL_PARAM;
+	
+	*pParameterDataDefID = _dataDef;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::SetParameterDataDefID (
-      aafUID_t  /*ParameterDataDefID*/)
+      aafUID_t ParameterDataDefID)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_dataDef = ParameterDataDefID;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::GetDisplayUnits (
-      wchar_t *  /*pDisplayUnits*/,
-      aafInt32  /*bufSize*/)
+      wchar_t *pDisplayUnits,
+      aafInt32  bufSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	bool stat;
+
+	if(pDisplayUnits == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	stat = _displayUnits.copyToBuffer(pDisplayUnits, bufSize);
+	if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+	}
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::GetDisplayUnitsBufLen (
-      aafInt32 *  /*pLen*/)
+      aafInt32 * pLen)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(pLen == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	*pLen = _displayUnits.size();
+	return(AAFRESULT_SUCCESS); 
 }
 
 
@@ -85,9 +101,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::SetDisplayUnits (
-      wchar_t *  /*pDisplayUnits*/)
+      wchar_t *pDisplayUnits)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if(pDisplayUnits == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	_displayUnits = pDisplayUnits;
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
