@@ -689,6 +689,16 @@ OMPropertyTable* OMFile::referencedProperties(void)
   return _referencedProperties;
 }
 
+void OMFile::setReferencedProperties(OMPropertyTable* table)
+{
+  TRACE("OMFile::setReferencedProperties");
+
+  PRECONDITION("Valid table", table != 0);
+  PRECONDITION("No previous table", _referencedProperties == 0);
+
+  _referencedProperties = table;
+}
+
   // @mfunc The byte order of this <c OMFile>.
   //   @rdesc The byte order of this <c OMFile>.
   //   @this const

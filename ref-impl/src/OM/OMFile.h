@@ -235,6 +235,8 @@ public:
     // @cmember Retrieve the <c OMPropertyTable> from this <c OMFile>.
   OMPropertyTable* referencedProperties(void);
 
+  void setReferencedProperties(OMPropertyTable* table);
+
     // @cmember The byte order of this <c OMFile>.
   OMByteOrder byteOrder(void) const;
 
