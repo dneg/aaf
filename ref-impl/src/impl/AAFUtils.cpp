@@ -141,7 +141,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "AAFHeader.h"
 
 #if PORT_SYS_MAC
 #include <memory.h>		/* For AAFMalloc() and AAFFree() */
@@ -160,8 +159,6 @@
 #include "Container.h"
 #include "AAFTypes.h"
 #include "AAFUtils.h"
-#include "AAFFile.h"
-#include "AAFObject.h"
 #if FULL_TOOLKIT
 #include "AAFCompositionMob.h"
 #include "AAFControlPoint.h"
