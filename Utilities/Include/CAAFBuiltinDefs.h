@@ -173,6 +173,7 @@ public:
   CLASS_DEF_METHOD(HTMLClip);
   CLASS_DEF_METHOD(HTMLDescriptor);
   CLASS_DEF_METHOD(Identification);
+  CLASS_DEF_METHOD(ImportDescriptor);
   CLASS_DEF_METHOD(InterpolationDefinition);
   CLASS_DEF_METHOD(KLVData);
   CLASS_DEF_METHOD(Locator);
@@ -185,6 +186,8 @@ public:
   CLASS_DEF_METHOD(OperationGroup);
   CLASS_DEF_METHOD(Parameter);
   CLASS_DEF_METHOD(ParameterDef);
+  CLASS_DEF_METHOD(PCMDescriptor);
+  CLASS_DEF_METHOD(PhysicalDescriptor);
   CLASS_DEF_METHOD(PluginDef);
   CLASS_DEF_METHOD(PropertyDef);
   CLASS_DEF_METHOD(Pulldown);
@@ -192,6 +195,7 @@ public:
   CLASS_DEF_METHOD(ScopeReference);
   CLASS_DEF_METHOD(Selector);
   CLASS_DEF_METHOD(Sequence);
+  CLASS_DEF_METHOD(SoundDescriptor);
   CLASS_DEF_METHOD(SourceClip);
   CLASS_DEF_METHOD(SourceMob);
   CLASS_DEF_METHOD(SourceReference);
