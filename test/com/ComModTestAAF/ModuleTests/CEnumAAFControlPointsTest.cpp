@@ -25,6 +25,7 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
+#include "AAFInterpolatorDefs.h"
 
 static aafUID_t	zeroID = { 0 };
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
