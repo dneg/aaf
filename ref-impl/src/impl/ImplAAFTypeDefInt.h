@@ -137,8 +137,10 @@ public:
 
   // overrides from ImplAAFTypeDef
   //
-  virtual aafBool IsFixedSize (void);
-  virtual size_t PropValSize (void);
+  aafBool IsFixedSize (void);
+  size_t PropValSize (void);
+  aafBool IsRegistered (void);
+  size_t NativeSize (void);
 
 private:
   // the size of this integer type in bytes
