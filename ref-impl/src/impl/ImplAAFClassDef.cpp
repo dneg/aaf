@@ -44,6 +44,16 @@ ImplAAFClassDef::ImplAAFClassDef ()
 ImplAAFClassDef::~ImplAAFClassDef ()
 {}
 
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFClassDef::Initialize (
+      ImplAAFClassDef * /*pParentClass*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::GetPropertyDefs (
       ImplEnumAAFPropertyDefs ** /*ppEnum*/)
