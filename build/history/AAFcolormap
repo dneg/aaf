@@ -17,7 +17,7 @@
 # Colors
 
 color Pale-Green          CCFFCC
-color Pink                FFCCCC
+color Pale-Red            FFCCCC
 color Pale-Blue           CCFFFF
 color Pale-Magenta        FFCCFF
 color Yellow              FFFFCC
@@ -33,7 +33,7 @@ component Object-Manager Pale-Green
   ref-impl/dtd/
 end
 
-component Reference-Implementation Pink
+component Reference-Implementation Pale-Red
   ref-impl/src/impl/
   ref-impl/include/
   ref-impl/plugins/
