@@ -4,13 +4,23 @@
 # Copyright (c) 1998 Avid Technology, Inc. #
 #                                          #
 ############################################
+dod = "{aaf}dodo:"
+AAFMacSDK = "{aaf}AAFMacSDK:"
+DODO = "{AAFMacSDK}dodo:tool:dodo"
+convertmk = "{AAFMacSDK}dodo:tool:ConvertMake"
 
-all Ä macdodo.make
+
+all Ä macaafobjects.mk macdodo.make
 	make -f macdodo.make -d aaf={aaf} > macdodo.makeout
 	macdodo.makeout
 
 
-macdodo.make Ä 
+macaafobjects.mk Ä {dod}aafobjects.mk
+	echo 'Creating macaafobjects.mk...'
+	{convertmk} < {dod}aafobjects.mk > macaafobjects.mk
+
+
+macdodo.make Ä macaafobjects.mk makemacdodo.mak1 makemacdodo.mak2
 	make -f makemacdodo.make -d aaf={aaf} > makemacdodo.makeout
 	makemacdodo.makeout
 
@@ -29,3 +39,4 @@ cleanmacdodo Ä
 
 
 clean Ä cleandodo cleanmacdodo
+	delete -i -ay macdodo.make
