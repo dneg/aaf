@@ -297,6 +297,15 @@ aafSourceRef_t AxSourceClip::GetSourceReference()
 	return ref;
 }
 
+IAAFMobSP AxSourceClip::ResolveRef()
+{
+	IAAFMobSP mob;
+
+	CHECK_HRESULT(_spIaafSourceClip->ResolveRef(&mob));
+
+	return mob;
+}
+
 //=---------------------------------------------------------------------=
 
 AxOperationGroup::AxOperationGroup( IAAFOperationGroupSP spIaafOperationGroup )

@@ -127,6 +127,15 @@ IAAFMobSP AxHeader::LookupMob(aafMobID_constref mobid) const
 	return spmob;
 }
 
+IAAFEssenceDataSP AxHeader::LookupEssenceData(aafMobID_constref mobID)
+{
+	IAAFEssenceDataSP spessdata;
+
+	CHECK_HRESULT(_spIaafHeader->LookupEssenceData(mobID, &spessdata));
+
+	return spessdata;
+}
+
 aafUInt32 AxHeader::CountIdentifications()
 {
 	aafUInt32 idcount;

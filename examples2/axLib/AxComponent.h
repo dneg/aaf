@@ -212,6 +212,8 @@ public:
 
 	void SetSourceReference( const aafSourceRef_t& ref );
 	aafSourceRef_t GetSourceReference();
+
+	IAAFMobSP ResolveRef();
 	
 	operator IAAFSourceClipSP () 
 	{ return _spIaafSourceClip; }

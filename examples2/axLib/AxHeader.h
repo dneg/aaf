@@ -43,6 +43,7 @@ public:
 	IEnumAAFMobsSP GetMobs(aafSearchCrit_t & searchCrit) const;
 
 	IAAFMobSP LookupMob(aafMobID_constref mobid) const;
+	IAAFEssenceDataSP LookupEssenceData(aafMobID_constref mobID);
 
 	aafUInt32 CountIdentifications();
 	IAAFIdentificationSP GetIdentificationAt(aafUInt32 idno);
