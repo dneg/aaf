@@ -34,6 +34,39 @@
 #include "AAFTypeDefUIDs.h"
 #include "AAFResult.h"
 
+//
+// This class provides a facility to allow clients to access builtin
+// definition objects easily.  When set up, the client simply has to
+// call a method on this function, which returns a pointer to the
+// requested definition object.
+//
+// The returned object is *not* reference counted beyond that
+// maintained by the this class; furthermore, this class maintains no
+// reference count of any object beyond that of the associated
+// dictionary.  Therefore the client must promise that his use of the
+// returned definition object will last no longer than the scope of
+// the dictionary with which this ImplAAFBuiltinDefs object is
+// created, unless he explicitly maintains a reference count of the
+// use of that object beyond that scope.
+//
+// Usage example:
+//
+// void MyFunc (ImplAAFDictionary * pDict)
+// {
+//   // Use of CAAFBuiltinDefs to obtain a class definition
+//   CAAFBuiltinDefs defs (pDict);	// create builtin defs object.
+//   IAAFFiller * pFiller = 0;
+//   defs.cdFiller()->CreateInstance(IID_IAAFFiller, (IAAFObject**) &pFiller);
+//   // Note that ImplAAFClassDef returned by cdFiller() is only used
+//   // for the duration of the CreateInstance() function call.
+// 
+//   // Use of CAAFBuiltinDefs to obtain a data definition
+//   pFiller->Initialize(defs.ddPicture(), 10);
+//   // Note that ImplAAFDataDef returned by ddPicture() is only used
+//   // for the duration of the Initialize() function call.
+// }
+//
+
 // To avoid including assert.h in a header file (this one)
 #ifndef AAF_BUILTIN_DEFS_ASSERT
 #define AAF_BUILTIN_DEFS_ASSERT(condition) \
@@ -105,29 +138,27 @@ private: \
 
 
 
-  // Private dumb pointer template to make default pointer
-  // declarations be initialized to zero.  No reference counting done
-  // here.
-  //
-  template <typename T>
-  class ImplAAFDumbPointer
-  {
-  public:
-	ImplAAFDumbPointer (T * init = 0) : _rep (init) {}
-	operator T * () { return _rep; }
-	T ** operator & () { return &_rep; }
-	T * operator -> () { return _rep; }
-  private:
-	T * _rep;
-  };
+//
+// Private dumb pointer template to make default pointer
+// declarations be initialized to zero.  No reference counting done
+// here.
+//
+template <typename T>
+class ImplAAFDumbPointer
+{
+public:
+  ImplAAFDumbPointer (T * init = 0) : _rep (init) {}
+  operator T * () { return _rep; }
+  T ** operator & () { return &_rep; }
+  T * operator -> () { return _rep; }
+private:
+  T * _rep;
+};
 
 
 
 class ImplAAFBuiltinDefs
 {
-private:
-
-
 public:
   ImplAAFBuiltinDefs(ImplAAFDictionary * pDict)
   {
