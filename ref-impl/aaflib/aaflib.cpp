@@ -42,14 +42,14 @@
 //
 // Define the platform specific default dll name.
 //
-#if defined(WIN32) || defined(_WIN32)
+#if defined( OS_WINDOWS )
 #define DEFAULT_AAFDLL_NAME "AAFCOAPI.dll"
-#elif defined(macintosh) || defined(_MAC)
+#elif defined( OS_MACOS )
 #define DEFAULT_AAFDLL_NAME "AAFCOAPI.DLL (PPC)"
-#elif defined(__sgi)
+#elif defined( OS_UNIX )
 #define DEFAULT_AAFDLL_NAME "libcom-api.so"
 #else
-#define DEFAULT_AAFDLL_NAME "aafcoapi.so"
+#error Unknown operating system
 #endif
 
 
@@ -426,7 +426,7 @@ FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
   ASSERT("Valid mode", mode != 0);
 
   FILE* result = 0;
-#if defined(_WIN32) || defined(WIN32)
+#if defined( OS_WINDOWS )
   result = _wfopen(fileName, mode);
 #else
   char cFileName[FILENAME_MAX];

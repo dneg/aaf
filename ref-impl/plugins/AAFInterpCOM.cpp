@@ -43,6 +43,7 @@
 //		run nmake -f aafcomps.mk in the project directory.
 
 
+#include "AAFTypes.h"
 #include "CAAFInProcServer.h"
 
 static CAAFInProcServer g_AAFInProcServer;
@@ -55,7 +56,7 @@ CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 #include "AAFPlugin_i.c"
 
 
-#if defined(_MAC)
+#if defined( OS_MACOS )
 
 // Make sure we have defined IID_IUnknown and IID_IClassFactory.
 #include <initguid.h>
@@ -100,9 +101,9 @@ void pascal DllTerminationRoutine();
 
 
 #pragma export on
-#endif // #if defined(_MAC)
+#endif // #if defined( OS_MACOS )
 
-#if defined(__sgi)
+#if defined( OS_UNIX )
 
 class InterpCOMInitialize {
 public:
@@ -122,9 +123,9 @@ InterpCOMInitialize::~InterpCOMInitialize()
 
 InterpCOMInitialize init;
 
-#endif
+#endif  // OS_UNIX
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined( OS_WINDOWS )
 // Include the entry point for the windows dll.
 /////////////////////////////////////////////////////////////////////////////
 // DLL Entry Point
@@ -146,7 +147,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	return TRUE;    // ok
 }
 
-#endif
+#endif  // OS_WINDOWS
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -204,7 +205,7 @@ STDAPI AAFGetClassObjectID(ULONG index, CLSID *pClassID)
 
 
 
-#if defined(_MAC)
+#if defined( OS_MACOS )
 //
 //  DllGetVersion
 //
@@ -342,5 +343,5 @@ DllTerminationRoutine()
 
 
 #pragma export off
-#endif // #if defined(_MAC)
+#endif // #if defined( OS_MACOS )
 
