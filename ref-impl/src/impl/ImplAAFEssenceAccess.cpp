@@ -508,7 +508,36 @@ AAFRESULT STDMETHODCALLTYPE
 		_channels = (aafSubChannel_t *) new aafSubChannel_t[_numChannels];
 		XASSERT((_channels != NULL), AAFRESULT_NOMEMORY);
 
+		_codecID = codecID;
 		
+	
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
+		//!!!Handle case where multiple codecs exist for a codecID
+		CHECK(plugins->GetPluginInstance(_codecID, &plugin));
+		CHECK(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&_codec));
+		plugin->Release();
+		plugin = NULL;
+
+    // Initialize the multi-essence codec interface pointer (not required for this type of open).
+    CHECK(_codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec));
+    
+	// This line moved up method as dataDict is needed earlier - Joseph.Lord@rd.bbc.co.uk
+		CHECK(dataHead->GetDictionary(&dataDict));
+
+		if(_destination != NULL)
+		{
+			if(EqualAUID(&_containerDefID, &aafFormat))
+			{
+				//!!!				ImplAAFMob	*destmob;
+				
+				//!!!				CHECK(CloneExternal (kFollowDepend, kNoIncludeMedia, _destFile, &destMob));
+			}
+		}
+		
+		CHECK(CreateCodecDef(compHead, codecID, &_codecDescriptor));
+		CHECK(CreateContainerDef(compHead))
+		
+
 		// When we enable the cloneExternal (below) then Don't do this call for creating the
 		// file mob twice.
 		// Don't add slots here, as they will be added in the loop below
@@ -517,6 +546,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(CreateFileMob(compHead, kAAFFalse, 0, NULL, essenceKind, _codecID, sampleRate, sampleRate,
 			_destination, &_compFileMob));
 		CHECK(_compFileMob->GetMobID(&fileMobUID));
+
 		if(compHead != dataHead)
 		{
 			CHECK(CreateFileMob(dataHead, kAAFFalse, 0, &fileMobUID, essenceKind, _codecID, sampleRate, sampleRate,
@@ -524,9 +554,14 @@ AAFRESULT STDMETHODCALLTYPE
 			_dataFileMob->AcquireReference();	//!!!Leaking here?
 		}
 		else
+		{
 			_dataFileMob = NULL;
+		}
 
-		
+		// Added by Joseph Lord
+		// Just guessing that this setting of fileMob is appropriate.
+		fileMob = _compFileMob;
+
 		for (n = 0; n < arrayElemCount; n++)
 		{
 			initPtr = mediaArray + n;
@@ -545,8 +580,11 @@ AAFRESULT STDMETHODCALLTYPE
 												   oneLength,
 												   pInitMediaKind,
 												   initPtr->sampleRate));
-					tmpTrack->ReleaseReference();
-					tmpTrack = NULL;
+					if(tmpTrack != NULL)
+					{
+						tmpTrack->ReleaseReference();
+						tmpTrack = NULL;
+					}
 				}
 				CHECK(fileMob->FindSlotBySlotID(initPtr->slotID, &tmpTrack));
 				CHECK(tmpTrack->SetPhysicalNum(initPtr->subTrackNum));
@@ -557,35 +595,16 @@ AAFRESULT STDMETHODCALLTYPE
 			ImplAAFDataDefSP pEssenceKind;
 			CHECK(dataDict->LookupDataDef (essenceKind, &pEssenceKind));
 			CHECK(masterMob->AddMasterSlot (pEssenceKind, initPtr->slotID, _compFileMob, initPtr->slotID, L"A Slot"));	// Should be NULL or something useful!!!
+			if(tmpTrack != NULL)
+			{
+				tmpTrack->ReleaseReference();
+				tmpTrack = NULL;
+			}
 //!!!			CvtInt32toPosition(0, destPtr->dataOffset);
 //!!!			CvtInt32toLength(0, destPtr->numSamples);
 //!!!			destPtr->sampleRate = initPtr->sampleRate;
 		}
-		_codecID = codecID;
-		
-		
-		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
-		//!!!Handle case where multiple codecs exist for a codecID
-		CHECK(plugins->GetPluginInstance(_codecID, &plugin));
-		CHECK(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&_codec));
-		plugin->Release();
-		plugin = NULL;
 
-    // Initialize the multi-essence codec interface pointer (not required for this type of open).
-    CHECK(_codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec));
-    
-		if(_destination != NULL)
-		{
-			if(EqualAUID(&_containerDefID, &aafFormat))
-			{
-				//!!!				ImplAAFMob	*destmob;
-				
-				//!!!				CHECK(CloneExternal (kFollowDepend, kNoIncludeMedia, _destFile, &destMob));
-			}
-		}
-		
-		CHECK(CreateCodecDef(compHead, codecID, &_codecDescriptor));
-		CHECK(CreateContainerDef(compHead))
 			//!!! As an optimization, use clone to move a copy of the definition objects into the media file.
 			// This can be just a copy because there shouldn't be any definitions there yet...
 			
@@ -601,7 +620,7 @@ AAFRESULT STDMETHODCALLTYPE
 				aafUID_t	essenceDataID;
 				
 				CHECK(_codec->GetEssenceDataID(&essenceDataID));
-				CHECK(dataHead->GetDictionary(&dataDict));
+
 				ImplAAFClassDefSP pEssenceDataClass;
 				CHECK(dataDict->LookupClassDef(essenceDataID, &pEssenceDataClass));
 				CHECK(pEssenceDataClass->
