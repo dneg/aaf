@@ -56,14 +56,6 @@ void deleteFile(char* fileName)
 	//.. ignore error which typically happens if the file doesn;t exist
 
 }
-void Indent(int numSpaces)
-{
-	for (int i = 0; i < numSpaces;i++)
-	{
-		cout<<" ";
-	}
-}
-
 
 char* baseName(char* fullName)
 {
@@ -805,6 +797,38 @@ HRESULT AafOmf::ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj )
 }
 
 // ============================================================================
+// ConvertOMFDatakind
+//
+//			This function converts an OMF datakind into an AAF datadef. 
+//			
+// Returns: AAFRESULT_SUCCESS if datakind is converted succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind, 
+								   aafUID_t* pDatadef)
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	OMF2::omfUniqueName_t	datakindName;
+	aafUID_t				datadef ;
+	
+	rc = OMF2::omfiDatakindGetName(OMFFileHdl, datakind, 64, datakindName);
+	if (strncmp("omfi:data:Picture", datakindName, 17)== 0)
+		datadef = DDEF_Video;
+	else if (strncmp("omfi:data:Sound", datakindName, 15) == 0)
+		datadef = DDEF_Audio;
+	else if(strncmp("omfi:data:Timecode", datakindName, 18) == 0)
+		datadef = DDEF_Timecode;
+	else
+	{
+		UTLstdprintf("Invalid DataDef :%s Found in sequence\n", datakindName);
+		UTLerrprintf("Invalid DataDef :%s Found in sequence\n", datakindName);
+		rc = AAFRESULT_INVALID_DATADEF;
+	}
+
+	return rc;
+}
+// ============================================================================
 // ConvertOMFMOBObject
 //
 //			This function is converts all the mob basic data (name, MobId, etc.) 
@@ -985,9 +1009,9 @@ HRESULT AafOmf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 	char					sTrackName[32];
 	aafWChar*				pwTrackName = NULL;					
 
-	IAAFMobSlot*		pMobSlot = NULL;
-	IAAFSegment*		pSegment = NULL;
-	IAAFTimelineMobSlot* pTimelineMobSlot = NULL;
+	IAAFMobSlot*			pMobSlot = NULL;
+	IAAFSegment*			pSegment = NULL;
+	IAAFTimelineMobSlot*	pTimelineMobSlot = NULL;
 
 	rc = OMF2::omfiMobGetNumSlots(OMFFileHdl, obj, &numSlots);
 	if (AAFRESULT_SUCCESS != rc)
@@ -1013,8 +1037,6 @@ HRESULT AafOmf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 			{
 				rc = OMF2::omfiTrackGetInfo(OMFFileHdl, obj, OMFSlot, &OMFeditRate, sizeof(sTrackName),
 								sTrackName, &OMFOrigin, &OMFTrackID, &OMFSegment);
-				if (strlen(sTrackName) == 0)
-					strcpy(sTrackName, "unknown track name");
 				if (AAFRESULT_SUCCESS == rc)
 				{
 					ProcessOMFComponent(OMFSegment, &pSegment);
@@ -1073,15 +1095,22 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 	OMF2::omfLength_t		OMFLength;
 	OMF2::omfDDefObj_t		OMFDatakind;
 	OMF2::omfTimecode_t		OMFTimecode;
+	OMF2::omfEffObj_t		OMFEffect;
+	OMF2::omfPosition_t		OMFCutPoint;
 
 	IAAFSequence*			pSequence = NULL;
 	IAAFSourceClip*			pSourceClip = NULL;
 	IAAFTimecode*			pTimecode = NULL;
 	IAAFEdgecode*			pEdgecode = NULL;
+	IAAFFiller*				pFiller = NULL;
+	IAAFTransition*			pTransition = NULL;
 	aafEdgecode_t			edgecode;
 	aafTimecode_t			timecode;
+	aafUID_t				datadef ;
+
 
 	// First get sequence information
+	IncIndentLevel();
 	if (OMF2::omfiIsASequence(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		rc = pDictionary->CreateInstance(&AUID_AAFSequence,
@@ -1089,12 +1118,10 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 										 (IUnknown **)&pSequence);
 		pSequence->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
 		if (bVerboseMode)
-		{
-			Indent(4);
-			cout <<"Processing Sequence"<< endl;
-		}
+			UTLstdprintf("%sProcessing Sequence\n", indentLeader);
+
 		ConvertOMFSequence(OMFSegment, pSequence);
-		TraverseOMFComponent(OMFSegment);
+		TraverseOMFSequence(OMFSegment, pSequence);
 		pSequence->Release();
 	}
 
@@ -1105,10 +1132,7 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 										 (IUnknown **)&pSourceClip);
 		pSourceClip->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
 		if (bVerboseMode)
-		{
-			Indent(4);
-			cout <<"Processing SourceClip"<< endl;
-		}
+			UTLstdprintf("%sProcessing SourceClip\n", indentLeader);
 	}
 	else if (OMF2::omfiIsATimecodeClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
@@ -1119,20 +1143,16 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 		timecode.fps  = OMFTimecode.fps;
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Found Timecode"<< endl;
-			Indent(4);
-			cout <<"      length        : "<<(int)OMFLength<<endl;
-			Indent(4);
-			cout <<"      start Frame   : "<< timecode.startFrame<<endl;
-			Indent(4);
+			UTLstdprintf("%sProcessing Timecode\n", indentLeader);
+			IncIndentLevel();
+			UTLstdprintf("%slength\t\t: %ld\n", indentLeader, (int)OMFLength);
+			UTLstdprintf("%sstart Frame\t: %ld\n", indentLeader, timecode.startFrame);
 			if (timecode.drop == AAFTrue)
-				cout <<"      drop          : True"<<endl;
+				UTLstdprintf("%sdrop\t\t: True\n", indentLeader);
 			else
-				cout <<"      drop          : False"<<endl;
-			Indent(4);
-			cout <<"      Frames/second : "<< timecode.fps<<endl;     
-				
+				UTLstdprintf("%sdrop\t\t: False\n", indentLeader);
+			UTLstdprintf("%sFrames/second\t: %ld\n", indentLeader, timecode.fps);     
+			DecIndentLevel();				
 		}
 
 		rc = pDictionary->CreateInstance(&AUID_AAFTimecode,
@@ -1140,7 +1160,6 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 										 (IUnknown **)&pTimecode);
 
 		pTimecode->Initialize((aafLength_t)OMFLength, &timecode);
-
 		pTimecode->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
 	}
 	else if (OMF2::omfiIsAnEdgecodeClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
@@ -1155,12 +1174,11 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Found Edgecode "<< endl;
-			Indent(4);
-			cout <<"      length        : "<<(int)OMFLength<<endl;
-			Indent(4);
-			cout <<"      start Frame   : "<< edgecode.startFrame<<endl;
+			UTLstdprintf("%sProcessing Edgecode\n ", indentLeader);
+			IncIndentLevel();
+			UTLstdprintf("%slength\t\t: %ld\n", indentLeader, (int)OMFLength);
+			UTLstdprintf("%sstart Frame\t: %ld\n", indentLeader, edgecode.startFrame);
+			DecIndentLevel();				
 		}
 		rc = pDictionary->CreateInstance(&AUID_AAFEdgecode,
 										 IID_IAAFEdgecode,
@@ -1171,74 +1189,91 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 	}
 	else if (OMF2::omfiIsAFiller(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
-		if (bVerboseMode)
+		rc = OMF2::omfiFillerGetInfo(OMFFileHdl, OMFSegment, &OMFDatakind, &OMFLength);
+		rc = ConvertOMFDatakind( OMFDatakind, &datadef);
+		if (SUCCEEDED(rc))
 		{
-			Indent(4);
-			cout <<"Processing Filler"<< endl;
+			if (bVerboseMode)
+			{
+				UTLstdprintf("%sProcessing Filler of length: %ld\n ", indentLeader, (int)OMFLength);
+			}
+			rc = pDictionary->CreateInstance(&AUID_AAFFiller,
+											  IID_IAAFFiller,
+											  (IUnknown **) &pFiller);
+			rc = pFiller->Initialize( &datadef, (aafLength_t)OMFLength);
+			rc = pFiller->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
 		}
 	}
 	else if (OMF2::omfiIsAnEffect(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Processing Effect"<< endl;
+			UTLstdprintf("%sProcessing Effect\n ", indentLeader);
 		}
 	}
 	else if (OMF2::omfiIsATransition(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
-		if (bVerboseMode)
+		rc = OMF2::omfiTransitionGetInfo(OMFFileHdl, 
+										 OMFSegment,
+										 &OMFDatakind, 
+										 &OMFLength, 
+										 &OMFCutPoint,
+										 &OMFEffect);
+		rc = ConvertOMFDatakind( OMFDatakind, &datadef);
+		if (SUCCEEDED(rc))
 		{
-			Indent(4);
-			cout <<"Processing Transition"<< endl;
+			if (bVerboseMode)
+			{
+				UTLstdprintf("%sProcessing Transition of length: %ld\n ", indentLeader, (int)OMFLength);
+			}
+			rc = pDictionary->CreateInstance(&AUID_AAFTransition,
+											  IID_IAAFTransition,
+											  (IUnknown **) &pTransition);
+//			rc = pTransition->Create();
+			rc = pTransition->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
+
 		}
 	}
 	else if (OMF2::omfiIsAConstValue(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Processing Constant Value"<< endl;
+			UTLstdprintf("%sProcessing Constant Value\n ", indentLeader);
 		}
 	}
 	else if (OMF2::omfiIsAVaryValue(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Processing Varying Value"<< endl;
+			UTLstdprintf("%sProcessing Varying Value\n ", indentLeader);
 		}
 	}
 	else if (OMF2::omfiIsANestedScope(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Processing Nested Scope"<< endl;
+			UTLstdprintf("%sProcessing Nested Scope\n ", indentLeader);
 		}
 	}
 	else if (OMF2::omfiIsAScopeRef(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Processing Scope Reference"<< endl;
+			UTLstdprintf("%sProcessing Scope Reference\n ", indentLeader);
 		}
 	}
 	else if (OMF2::omfiIsASelector(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Processing Selector"<< endl;
+			UTLstdprintf("%sProcessing Selector\n ", indentLeader);
 		}
 	}
 	else if (OMF2::omfiIsAMediaGroup(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
 		if (bVerboseMode)
 		{
-			Indent(4);
-			cout <<"Processing Media Group"<< endl;
+			UTLstdprintf("%sProcessing Media Group\n ", indentLeader);
 		}
 	}
 	else
@@ -1249,11 +1284,11 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 		classID[4] = '\0';
 		if (bVerboseMode)
 		{
-			Indent(8);
-			cout <<"UNKNOWN OBJECT : "<<classID<<endl;
+			UTLerrprintf("%s*** UNKNOWN OBJECT : %s\n", indentLeader, classID);
 		}
 	}
 
+	DecIndentLevel();
 	return rc;
 }
 // ============================================================================
@@ -1271,7 +1306,6 @@ HRESULT AafOmf::ConvertOMFSequence(OMF2::omfObject_t sequence,
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
 	OMF2::omfDDefObj_t		datakind = NULL;
-	OMF2::omfUniqueName_t	datakindName;
 	OMF2::omfLength_t		sequLength = 0;
 
 	IAAFComponent*			pComponent = NULL;
@@ -1281,32 +1315,12 @@ HRESULT AafOmf::ConvertOMFSequence(OMF2::omfObject_t sequence,
 
 	// Get a pointer to a component interface
 	rc = pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
-	if (AAFRESULT_SUCCESS == rc)
+	if (SUCCEEDED(rc))
 	{
 		// Get Sequence data kind 
 		rc = OMF2::omfiSequenceGetInfo(OMFFileHdl, sequence, &datakind, &sequLength);
-		rc = OMF2::omfiDatakindGetName(OMFFileHdl, datakind, 64, datakindName);
-		if (strncmp("omfi:data:Picture", datakindName, 17)== 0)
-		{
-			bValid = AAFTrue;
-			datadef = DDEF_Video;
-		}
-		else if (strncmp("omfi:data:Sound", datakindName, 15) == 0)
-		{
-			bValid = AAFTrue;
-			datadef = DDEF_Audio;
-		}
-		else if(strncmp("omfi:data:Timecode", datakindName, 18) == 0)
-		{
-			bValid = AAFTrue;
-			datadef = DDEF_Timecode;
-		}
-		else
-		{
-			bValid = AAFFalse;
-			cout<<"Invalid DataDef : "<<datakindName<<" Found in sequence"<<endl;
-		}
-		if (bValid)
+		rc = ConvertOMFDatakind(datakind, &datadef);
+		if (SUCCEEDED(rc))
 			pComponent->SetDataDef(&datadef);
 		// Next - get all properties
 		rc = ConvertOMFComponentProperties(sequence, pComponent);
@@ -1341,20 +1355,17 @@ HRESULT AafOmf::ConvertOMFComponentProperties(OMF2::omfObject_t component,
 	{
 		switch (Property)
 		{
+			case OMF2::OMCPNTLength:
 			case OMF2::OMCPNTDatakind:
-				break;
 			case OMF2::OMCPNTTrackKind:
 			case OMF2::OMCPNTEditRate:
 			case OMF2::OMCPNTName:
-			case OMF2::OMCPNTLength:
 			case OMF2::OMCPNTEffectID:
 			case OMF2::OMCPNTAttributes:
 			case OMF2::OMOOBJObjClass:
-				break;
 			default:
-
 				OMF2::omfiGetPropertyName(OMFFileHdl, Property, 64, propertyName);
-				cout<<"Component Property NOT converted : "<<propertyName<<endl;
+				UTLstdprintf("%sComponent Property NOT converted : %s\n", indentLeader, propertyName);
 				break;
 		}
 		rc = OMF2::omfiGetNextProperty(propertyIterator, component, &Property, &propertyType);
@@ -1364,7 +1375,7 @@ HRESULT AafOmf::ConvertOMFComponentProperties(OMF2::omfObject_t component,
 	return rc;
 }
 // ============================================================================
-// TraverseOMFComponent
+// TraverseOMFSequence
 //
 //			This function reads all components the of an OMF Sequence,
 //			sets the equivalent AAF properties 
@@ -1372,26 +1383,52 @@ HRESULT AafOmf::ConvertOMFComponentProperties(OMF2::omfObject_t component,
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-HRESULT AafOmf::TraverseOMFComponent(OMF2::omfObject_t component )
+HRESULT AafOmf::TraverseOMFSequence(OMF2::omfObject_t sequence, IAAFSequence* pSequence )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
+
 	OMF2::omfIterHdl_t		componentIterator = NULL;
 	OMF2::omfPosition_t		sequPos;
 	OMF2::omfCpntObj_t		sequComponent;
+
+	IAAFSegment*			pSegment = NULL;
+	IAAFComponent*			pComponent = NULL;
 
 	aafInt32				numComponents = 0;
 	aafInt32				cpntCount;
 
 	OMF2::omfiIteratorAlloc(OMFFileHdl, &componentIterator);
-	rc = OMF2::omfiSequenceGetNumCpnts(OMFFileHdl, component, &numComponents);
-	if (OMF2::OM_ERR_NONE == rc)
+	rc = OMF2::omfiSequenceGetNumCpnts(OMFFileHdl, sequence, &numComponents);
+	if (SUCCEEDED(rc))
 	{
 		for (cpntCount = 0; cpntCount < numComponents; cpntCount++)
 		{   
-			rc = OMF2::omfiSequenceGetNextCpnt(componentIterator, component, NULL, 
+			rc = OMF2::omfiSequenceGetNextCpnt(componentIterator, sequence, NULL, 
 				                               &sequPos, &sequComponent); 
+			if (SUCCEEDED(rc))
+			{
+				rc = ProcessOMFComponent(sequComponent, &pSegment);
+				if (pSegment)
+				{
+					rc = pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+					if (SUCCEEDED(rc))
+					{
+						rc = pSequence->AppendComponent(pComponent);
+						pComponent->Release();
+						pComponent = NULL;
+						pSegment->Release();
+						pSegment = NULL;
+					}
+				}
+			}
 		}
 	}
+
+	if (pComponent)
+		pComponent->Release();
+	if (pSegment)
+		pSegment->Release();
+	DecIndentLevel();
 	OMF2::omfiIteratorDispose(OMFFileHdl, componentIterator);
 	return rc;
 }
@@ -1410,7 +1447,7 @@ HRESULT AafOmf::ConvertOMFMasterMob(OMF2::omfObject_t obj,
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	
 	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
-		cout << "Converted OMF Master MOB to AAF"<< endl;
+		UTLstdprintf("Converted OMF Master MOB to AAF\n");
 	return rc;
 }
 
@@ -1430,7 +1467,7 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 
 	
 	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
-		cout << "Converted OMF Source MOB to AAF"<< endl;
+		UTLstdprintf("Converted OMF Source MOB to AAF\n");
 	return rc;
 }
 
@@ -1482,7 +1519,7 @@ int main(int argc, char *argv[])
 	if (FAILED(rc))
 		return rc;
 
-	cout << theApp.pProgramName << ": Version 0.01.00" << endl;
+	UTLstdprintf("%s: Version 0.01.00\n", theApp.pProgramName);
 	if (AAFRESULT_SUCCESS == theApp.GetUserInput(argc, argv) )
 	{
 		if (AAFRESULT_SUCCESS == theApp.OpenInputFile() )
