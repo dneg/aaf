@@ -3,7 +3,6 @@
 #ifndef __ImplAAFTimecode_h__
 #define __ImplAAFTimecode_h__
 
-#include "OMStorable.h"
 
 /******************************************\
 *                                          *
@@ -84,10 +83,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTimecodeTest.cpp.
   static AAFRESULT test();
-
-  // Return this objects stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 public:
 	// Methods which are internal to the SDK

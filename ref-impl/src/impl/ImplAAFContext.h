@@ -16,7 +16,6 @@
 #include "ImplAAFRoot.h"
 
 class ImplAAFFile;
-class AAFFile;
 
 #include "Container.h"
 
@@ -30,7 +29,6 @@ class AAFSession;
 class ImplAAFSession : public ImplAAFRoot
 {
 public:
-  OMDECLARE_STORABLE(ImplAAFSession)
 
   //****************
   // GetInstance()
