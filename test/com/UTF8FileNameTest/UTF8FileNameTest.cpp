@@ -101,6 +101,7 @@ static const   aafMobID_t  TEST_MobID =
 
 static HRESULT CreateAAFFile(aafWChar * pFileName,
 			     bool UseRaw,
+			     bool UseEx,
                              const aafUID_t* pFileKind,
                              IAAFFile** ppFile)
 {
@@ -122,7 +123,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
   try {
 		RemoveTestFile(pFileName);
 
-		if( !UseRaw )
+		if( UseEx )
 		{
 			checkResult(AAFFileOpenNewModifyEx(
 				pFileName,
@@ -131,7 +132,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
 				&ProductInfo,
 				ppFile));
 		}
-		else
+		else if (UseRaw)
 		{
 			IAAFRawStorage* pRawStorage = 0;
 			checkResult(AAFCreateRawStorageDisk(
@@ -149,6 +150,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
 				ppFile));
 			pRawStorage->Release();
 			checkResult((*ppFile)->Open());
+		}
+		else
+		{
+			checkResult(AAFFileOpenNewModify(
+				pFileName,
+				0,
+				&ProductInfo,
+				ppFile));
 		}
   }
 	catch (HRESULT& rResult)
@@ -356,7 +365,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName,
 
 struct _fileinfo_t {
   wchar_t* name;
-	bool create;
+	bool createex;
 	bool createraw;
   const aafUID_t* kind;
   char* type;
@@ -365,28 +374,8 @@ struct _fileinfo_t {
   char* rtype;
 } fileinfo[] = {
   {
-    L"CFKT-Default-4K.aaf",
-		true,
-		true,
-    &kAAFFileKind_Aaf4KBinary,
-    "4K",
-    true,
-    &kAAFFileKind_Aaf4KBinary,
-    "4K"
-  },
-  {
-    L"CFKT-Default-512.aaf",
-		true,
-		true,
-    &kAAFFileKind_Aaf512Binary,
-    "512",
-    true,
-    &kAAFFileKind_Aaf512Binary,
-    "512"
-  },
-  {
     L"CFKT-S512.aaf",
-		true,
+		true, // use Ex
 		true,
     &kAAFFileKind_AafS512Binary,
     "S512",
@@ -396,7 +385,7 @@ struct _fileinfo_t {
   },
   {
     L"CFKT-S4K.aaf",
-		true,
+		true, // use Ex
 		true,
     &kAAFFileKind_AafS4KBinary,
     "S4K",
@@ -407,7 +396,7 @@ struct _fileinfo_t {
 #ifdef OS_WINDOWS
   , {
     L"CFKT-M512.aaf",
-		true,
+		true, // use Ex
 		true,
     &kAAFFileKind_AafM512Binary,
     "M512",
@@ -417,7 +406,7 @@ struct _fileinfo_t {
   },
   {
     L"CFKT-M4K.aaf",
-		true,
+		true, // use Ex
 		true,
     &kAAFFileKind_AafM4KBinary,
     "M4K",
@@ -426,6 +415,58 @@ struct _fileinfo_t {
     "M4K"
   }
 #endif
+  , {
+    L"CFKT-S512.aaf",
+		false,
+		true, // use raw
+    &kAAFFileKind_AafS512Binary,
+    "S512",
+    true,
+    &kAAFFileKind_AafS512Binary,
+    "S512"
+  },
+  {
+    L"CFKT-S4K.aaf",
+		false,
+		true, // use raw
+    &kAAFFileKind_AafS4KBinary,
+    "S4K",
+    true,
+    &kAAFFileKind_AafS4KBinary,
+    "S4K"
+  }
+#ifdef OS_WINDOWS
+  , {
+    L"CFKT-M512.aaf",
+		false,
+		true, // use raw
+    &kAAFFileKind_AafM512Binary,
+    "M512",
+    true,
+	&kAAFFileKind_AafM512Binary,
+	"M512"
+  },
+  {
+    L"CFKT-M4K.aaf",
+		false,
+		true, // use raw
+    &kAAFFileKind_AafM4KBinary,
+    "M4K",
+    true,
+    &kAAFFileKind_AafM4KBinary,
+    "M4K"
+  }
+#endif
+  , {
+    L"CFKT-Default-512.aaf",
+		false,
+		false, // use AAFFileOpenNewModify
+    &kAAFFileKind_Aaf512Binary,
+    "512",
+    true,
+    &kAAFFileKind_Aaf512Binary,
+    "512"
+  }
 };
 
 // Make sure all of our required plugins have been registered.
@@ -461,31 +502,32 @@ int main(int argc, char* argv[])
 	IAAFFile* pFile = 0;
 	wchar_t UnicodeFileName[30], UnicodeExtName[30];
 
-	wcscpy(UnicodeFileName, L"zz12345z.aaf");		// filename of AAF file
-	wcscpy(UnicodeExtName, L"zzexternal.extess");		// filename of external essence
-	UnicodeFileName[2]=0x2200;
-	UnicodeFileName[3]=0x2297;
-	UnicodeFileName[4]=0x222F;
-	UnicodeFileName[5]=0x2282;
-	UnicodeFileName[6]=0x221e;
-	UnicodeExtName[2]=0x2200;
-	UnicodeExtName[3]=0x2297;
-	UnicodeExtName[4]=0x222F;
-	UnicodeExtName[5]=0x2282;
-	UnicodeExtName[6]=0x221e;
+	wcscpy(UnicodeFileName, L"1x2x3xN.aaf");		// filename of AAF file
+	wcscpy(UnicodeExtName, L"1x2x3xN.ess");		// filename of external essence
+	UnicodeFileName[1]=0x61; // "a" symbol, UTF-8 encoding is 1 byte
+	UnicodeFileName[3]=0xa9; // copyright symbol, UTF-8 encoding is 2 byte
+	UnicodeFileName[5]=0x2260; // not equal symbol, UTF-8 encoding is 3 byte
+
+	UnicodeExtName[1]=0x61; // "a" symbol, UTF-8 encoding is 1 byte
+	UnicodeExtName[3]=0xa9; // copyright symbol, UTF-8 encoding is 2 byte
+	UnicodeExtName[5]=0x2260; // not equal symbol, UTF-8 encoding is 3 byte
 
     for (unsigned i = 0; i < sizeof(fileinfo)/sizeof(fileinfo[0]); i++)
 	{
-		// Increment second character of filename to give different names per iteration
-		UnicodeFileName[1]=i+'1';
-		UnicodeExtName[1]=i+'1';
+		// Increment seventh character of filename to give different names per iteration
+		UnicodeFileName[6] = UnicodeExtName[6] = '0'+i;
 		CoutTestFile( UnicodeFileName );
-		// Create the file
 
-		cout << "  Creating " ;
-		if( fileinfo[i].createraw ) cout << "Raw ";
-		cout << fileinfo[i].type << endl;
-		checkResult(CreateAAFFile(UnicodeFileName, fileinfo[i].createraw, fileinfo[i].kind, &pFile));
+		// Create the file
+		cout << "  Creating " << fileinfo[i].type << " with ";
+		if( fileinfo[i].createex )
+			cout << "AAFFileOpenNewModifyEx()" << endl;
+		else if( fileinfo[i].createraw )
+			cout << "AAFCreateRawStorageDisk(), AAFCreateAAFFileOnRawStorage()" << endl;
+		else
+			cout << "AAFFileOpenNewModify()" << endl;
+		checkResult(CreateAAFFile(UnicodeFileName, fileinfo[i].createraw, fileinfo[i].createex,
+			fileinfo[i].kind, &pFile));
 
 		// Write the AAF file and the external essence file
 		cout << "  Writing" << endl;
@@ -495,7 +537,7 @@ int main(int argc, char* argv[])
 			checkResult(WriteAAFFile(pFile, UnicodeExtName));
 
 		// Check that we made an AAF file with the correct encoding
-		cout << "  Checking " << fileinfo[i].type << endl;
+		cout << "  Checking with AAFFileIsAAFFile()" << endl;
 		aafUID_t k = {0};
 		aafBool b = kAAFFalse;
 
@@ -506,9 +548,10 @@ int main(int argc, char* argv[])
 		}
 
 		// Read the file
-		cout << "  Reading (default)" << endl;
+		cout << "  Reading with AAFFileOpenExistingRead()" << endl;
 		checkResult(ReadAAFFile(UnicodeFileName));
-		cout << "  Reading Raw " << fileinfo[i].rtype << endl;
+		cout << "  Reading " << fileinfo[i].rtype
+			<< " with AAFCreateRawStorageDisk(), AAFCreateAAFFileOnRawStorage()" << endl;
 		checkResult(ReadAAFFile(UnicodeFileName, true, fileinfo[i].rkind ));
 	}
   }
