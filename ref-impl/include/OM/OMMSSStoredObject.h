@@ -47,6 +47,12 @@ class OMMSSStoredObject : public OMStoredObject {
 public:
   // @access Static members.
 
+    // @cmember Perform Microsoft Structured Storage specific initialization.
+  static void initialize(void);
+
+    // @cmember Perform Microsoft Structured Storage specific finalization.
+  static void finalize(void);
+
     // @cmember Open the root <c OMMSSStoredObject> in the disk file
     //          <p fileName> for reading only.
     //   @devnote Soon to be obsolete.

@@ -116,6 +116,20 @@ size_t OMMSSStoredObject::_openStreams = 0;
 size_t OMMSSStoredObject::_maxOpenStreams = 0;
 #endif
 
+  // @mfunc Perform Microsoft Structured Storage specific initialization.
+void OMMSSStoredObject::initialize(void)
+{
+  TRACE("OMMSSStoredObject::initialize");
+  OMMSSInitialize();
+}
+
+  // @mfunc Perform Microsoft Structured Storage specific finalization.
+void OMMSSStoredObject::finalize(void)
+{
+  TRACE("OMMSSStoredObject::finalize");
+  OMMSSFinalize();
+}
+
   // @mfunc Open the root <c OMMSSStoredObject> in the disk file
   //        <p fileName> for reading only.
   //   @parm The name of the file to open. The file must already exist.
