@@ -6,7 +6,6 @@ AAFEffectDefinition\
 AAFDefinitionObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
@@ -207,7 +206,5 @@ AD_XMETHOD1(GetPluginLocators,
 			ppEnum, 
 			ControlCode definition enumeration,
 			Return an enumerator for aaf control code definition.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
