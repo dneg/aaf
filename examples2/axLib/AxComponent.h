@@ -241,6 +241,8 @@ public:
 	void AppendInputSegment( IAAFSegmentSP );
 
 	IAAFOperationDefSP GetOperationDef();
+	aafUInt32 CountSourceSegments();
+	IAAFSegmentSP GetInputSegmentAt(aafUInt32);
 
 	operator IAAFOperationGroupSP ()
 	{ return _spIaafOperationGroup; }

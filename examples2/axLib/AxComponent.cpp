@@ -348,6 +348,25 @@ IAAFOperationDefSP AxOperationGroup::GetOperationDef()
 	return operationDef;
 }
 
+aafUInt32 AxOperationGroup::CountSourceSegments()
+{
+	aafUInt32 numSegments;
+
+	CHECK_HRESULT( _spIaafOperationGroup->CountSourceSegments(&numSegments));
+
+	return numSegments;
+}
+
+IAAFSegmentSP AxOperationGroup::GetInputSegmentAt(aafUInt32 segIndex)
+{
+	IAAFSegmentSP inputSeg;
+
+	CHECK_HRESULT( _spIaafOperationGroup->GetInputSegmentAt(segIndex,
+								&inputSeg));
+
+	return inputSeg;
+}
+
 //=---------------------------------------------------------------------=
 
 AxEvent::AxEvent( IAAFEventSP spIaafEvent )
