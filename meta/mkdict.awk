@@ -38,47 +38,49 @@
 # This program uses the following spreadsheet columns for the
 # purposes indicated ...
 #
-# $1 - $9 = column(A - I) => AUID (with appropriate reordering).
-# $10     = column(J)     => class/property name.
-# $22     = column(V)     => if this field == "class" then the entity is a
+#      Column                          Purpose
+#
+# SLO00C .. SLO15C        => AUID (with appropriate reordering).
+# elementNameC            => class/property name.
+# typeNameC               => if this field == "class" then the entity is a
 #                            class, otherwise it is a property and this field
 #                            denotes the type of the property. When this
 #                            field == "class" this row is taken to be the
 #                            start of a class definition. All the following
 #                            rows (until the start of the next class) are
 #                            taken to be properties of this class.
-# $23     = column(W)     => For enumeration members the value of the member
+# kindC                   => For enumeration members the value of the member
 #                            For record members the name of the member
-# $24     = column(X)     => For enumerations the type of every member
+# qualifC                 => For enumerations the type of every member
 #                            For arrays indicates whether the array is fixed
 #                            or varying
 #                            For references indicates whether the reference
 #                            is strong or weak.
-# $25     = column(Y)     => For arrays the element type.
+# elementTypeC            => For arrays the element type.
 #                            For references (singleton, array and set) the
 #                            type of the target.
-# $26     = column(Z)     => if this field == "M" then this is a required
+# isMandatoryC            => if this field == "M" then this is a required
 #                            property. If this field is "O" then this is an
 #                            optional property.
-# $29     = column(AC)    => if this entity is a class then this field is
+# parentC                 => if this entity is a class then this field is
 #                            the immediate ancestor (otherwise the field
 #                            is checked to see that it is the same as the
 #                            current class).
-# $30     = column(AD)    => this field is not an input field to this program,
+# classNameC              => this field is not an input field to this program,
 #                            however it is checked. If this entity is a class
 #                            then this field should be the same as the class
-#                            name (J), otherwise the field should be the same
-#                            as the parent/owning class (AC).
-# $33     = column(AG)    => property id. This field is ignored if
-#                            field $29 == "class"
-# $34     = column(AH)    => if this is a property and the property type (V)
-#                            is a reference then this field is the type (class)
-#                            of the referenced object, otherwise this field
-#                            should be empty.
-# $35     = column(AI)    => if this entity is a class and the class is
+#                            name $elementNameC, otherwise the field should
+#                            be the same as the parent/owning class ($parentC).
+# pidC                    => property id. This field is ignored if
+#                            field $parentC == "class"
+# referenceTypeC          => if this is a property and the property type
+#                            ($typeNameC) is a reference then this field is
+#                            the type (class) of the referenced object,
+#                            otherwise this field should be empty.
+# isAbstractC             => if this entity is a class and the class is
 #                            abstract, this field contains "abstract" otherwise
 #                            this field should be empty.
-# $36     = column(AJ)    => if this entity is a property and the property is
+# isUidC                  => if this entity is a property and the property is
 #                            unique identifier, this field contains "uid"
 #                            otherwise this field should be empty.
 #
