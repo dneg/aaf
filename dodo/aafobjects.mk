@@ -39,9 +39,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFTypeDef \
 	AAFUnixLocator \
 	AAFVaryingValue \
-	AAFWindowsLocator \
-	AAFDigitalImageDescriptor \
-	AAFCDCIDescriptor
+	AAFWindowsLocator
 
 
 
@@ -86,6 +84,8 @@ HUMAN_TYPED_IMPL = \
 	AAFEssencePlugin \
 	AAFFile \
 	AAFFileDescriptor \
+	AAFDigitalImageDescriptor \
+	AAFCDCIDescriptor \
 	AAFFiller \
 	AAFFindSourceInfo \
 	AAFHeader \
