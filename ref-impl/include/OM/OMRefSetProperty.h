@@ -33,7 +33,7 @@
 
   // @class Abstract base class for persistent object reference set
   //        properties supported by the Object Manager.
-  //   @base public | <c OMProperty>
+  //   @base public | <c OMContainerProperty>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMReferenceSetProperty : public OMContainerProperty {
 public:
