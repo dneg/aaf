@@ -273,6 +273,9 @@ public:
 
   OMProperty* findProperty(const OMPropertyId* path) const;
 
+    // @cmember The number of objects in this <c OMFile>.
+  OMUInt64 objectCount(void) const;
+
   // OMStorable overrides.
   //
   virtual const OMClassId& classId(void) const;

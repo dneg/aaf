@@ -885,6 +885,18 @@ OMProperty* OMFile::findProperty(const OMPropertyId* path) const
   return result;
 }
 
+  // @mfunc The number of objects in this <c OMFile>.
+  //   @rdesc The number of objects.
+OMUInt64 OMFile::objectCount(void) const
+{
+  TRACE("OMFile::objectCount");
+  PRECONDITION("Open", isOpen());
+  PRECONDITION("Valid root", _root != 0);
+
+  ASSERT("Unimplemented code not reached.", false);
+  return 0;
+}
+
 const OMClassId& OMFile::classId(void) const
 {
   TRACE("OMFile::classId");
