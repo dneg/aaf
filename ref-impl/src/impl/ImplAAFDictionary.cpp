@@ -78,6 +78,10 @@
 #include "ImplEnumAAFPropertyDefs.h"
 #endif
 
+#ifndef __ImplAAFTypeDefRename_h__
+#include "ImplAAFTypeDefRename.h"
+#endif
+
 #ifndef __ImplEnumAAFContainerDefs_h__
 #include "ImplEnumAAFContainerDefs.h"
 #endif
@@ -175,11 +179,11 @@ ImplAAFDictionary::~ImplAAFDictionary ()
   while(++opaqueTypeDefinitions)
   {
     // NOTE: Temporary OpaqueTypeDefinitions are created to hold the type definition
-    // pointers.           |                               |
-    //                     V                               V
-    ImplAAFTypeDef *pType = opaqueTypeDefinitions.setValue(0);
-    if (pType)
-    {
+    // pointers.           |
+    //                     V
+	  ImplAAFTypeDef *pType = opaqueTypeDefinitions.value();
+   if (pType)
+   {
 		  pType->ReleaseReference();
 		  pType = 0;
     }
@@ -1296,7 +1300,7 @@ const OMUniqueObjectIdentification
 		assert (AAFRESULT_SUCCEEDED(result));
 	}
 
-  return (*reinterpret_cast<const OMUniqueObjectIdentification *>(&typeId));
+	return (*reinterpret_cast<const OMUniqueObjectIdentification *>(&typeId));
 }
 
 ImplAAFDictionary::OpaqueTypeDefinition& 
@@ -1433,7 +1437,26 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterKLVDataKey (
+      aafUID_t keyUID, 
+	  ImplAAFTypeDef *underlyingType)
+{
+	ImplAAFTypeDef			*pDef = NULL;
+	ImplAAFTypeDefRename	*pRenameDef = NULL;
+	
+	XPROTECT()
+	{
+		CHECK(GetBuiltinDefs()->cdTypeDefRename()->
+				CreateInstance((ImplAAFObject**)&pRenameDef));
+		CHECK(pRenameDef->Initialize (keyUID, underlyingType, L"KLV Data"));
+		CHECK(RegisterOpaqueTypeDef(pRenameDef));
+	}
+	XEXCEPT
+	XEND
+		
+	return AAFRESULT_SUCCESS;
+}
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterDataDef (
       ImplAAFDataDef *pDataDef)
