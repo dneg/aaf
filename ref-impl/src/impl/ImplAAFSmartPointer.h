@@ -88,33 +88,16 @@ template <typename ReferencedType>
 struct ImplAAFSmartPointer
   : public AAFSmartPointerBase <ReferencedType, AAFCountedImplReference>
 {
-  // Occasionally it might be necessary to set the value of this ptr;
-  // however we'd prefer that clients would find other means.  The
-  // only case I've seen its utility is when it is necessary to
-  // dynamically cast an Impl object to another Impl object, e.g.:
-  //
-  // (where DerivedClass inherits from BaseClass):
-  // ImplAAFSmartPointer<BaseClass> baseSP = [...something];
-  // ImplAAFSmartPointer<DerivedClass> derivedSP;
-  // derivedSP.SetPtr (dynamic_cast<DerivedClass>(baseSP));
-  //
-  // In other words, the dynamic_cast has to be done on the referenced
-  // type, not on the smart pointer type.
-  //
-  void SetPtr (ReferencedType * ptr);
-
   // operator =
   ImplAAFSmartPointer<ReferencedType> & operator =
-  (ReferencedType * src) { SetPtr (src); return *this; }
+  (ReferencedType * src) ;
 };
 
 
 template <class ReferencedType>
-void ImplAAFSmartPointer<ReferencedType>::SetPtr (ReferencedType * ptr)
+ImplAAFSmartPointer<ReferencedType> &
+ImplAAFSmartPointer<ReferencedType>::operator = (ReferencedType * ptr)
 {
-  // in case something changed since last time
-  updateRefCounts ();
-
   // Hack! get a pointer to the rep of this object
   ReferencedType ** ppRep = this->operator&();
   AAF_SMART_POINTER_ASSERT (ppRep);
@@ -122,14 +105,10 @@ void ImplAAFSmartPointer<ReferencedType>::SetPtr (ReferencedType * ptr)
   // set the pointer
   *ppRep = ptr;
 
-  // BobT 1999-07-07: Bug! See comment in
-  // AAFSmartPointerBase::updateRefCounts() to see why we need to
-  // addref this one explicitly.
   if (*ppRep)
 	acquire(*ppRep);
 
-  // put us back in sync
-  updateRefCounts ();
+  return *this;
 }
 
 
