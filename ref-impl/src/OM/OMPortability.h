@@ -38,7 +38,7 @@
 #elif defined(__MWERKS__) && defined(__POWERPC__) && defined(macintosh)
 #define OM_COMPILER_MWERKS_PPC_MACOS
 #define OM_OS_MACOS
-#elif defined(__MWERKS__) && defined(__ppc__) && defined(__APPLE__)
+#elif defined(__MWERKS__) && defined(__MACH__)
 #define OM_COMPILER_MWERKS_PPC_MACOSX
 #define OM_OS_MACOSX
 #elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__)
