@@ -349,8 +349,6 @@ void OMSimpleProperty::read(size_t externalBytesSize)
 {
   TRACE("OMSimpleProperty::read");
 
-  PRECONDITION("Valid internal bytes", _bits != 0);
-  PRECONDITION("Valid internal bytes size", _size > 0);
   PRECONDITION("Valid external bytes size", externalBytesSize > 0);
 
   OMStoredObject* store = _propertySet->container()->store();
@@ -384,6 +382,7 @@ void OMSimpleProperty::read(size_t externalBytesSize)
 
     // Internalize property value
     size_t requiredBytesSize = type->internalSize(buffer, externalBytesSize);
+    setSize(requiredBytesSize);
     ASSERT("Property value buffer large enough", _size >= requiredBytesSize);
 
     type->internalize(buffer,
@@ -395,6 +394,7 @@ void OMSimpleProperty::read(size_t externalBytesSize)
   } else {
     // tjb - temporary, no type information, do it the old way
     //
+    setSize(externalBytesSize);
     ASSERT("Property value buffer large enough", _size >= externalBytesSize);
     store->read(_propertyId, _storedForm, _bits, externalBytesSize);
   }
