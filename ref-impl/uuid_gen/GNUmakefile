@@ -36,7 +36,7 @@ INCLUDES = -I../include/ref-api \
 
 .PHONY : all
 
-ifeq ($(AAFPLATFORM),SunSunOS)
+ifeq ($(AAFPLATFORM),SparcSolaris)
 all : uuid_gen
 else
 all:
