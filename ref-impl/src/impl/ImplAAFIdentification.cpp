@@ -27,6 +27,18 @@
 ImplAAFIdentification::~ImplAAFIdentification ()
 {}
 
+// tjb - this is temporary and should be removed
+ImplAAFIdentification::ImplAAFIdentification():
+_companyName(         PID_IDENTIFICATION_COMPANYNAME,          "companyName"),
+_productName(         PID_IDENTIFICATION_PRODUCTNAME,          "productName"),
+// _productVersion(   PID_IDENTIFICATION_PRODUCTVERSION,       "productVersion")
+_productVersionString(PID_IDENTIFICATION_PRODUCTVERSIONSTRING, "productVersionString"),
+// _productId(        PID_IDENTIFICATION_PRODUCTID,            "productId"),
+_date(                PID_IDENTIFICATION_DATE,                 "date"),
+// _toolKitVersion(   PID_IDENTIFICATION_TOOLKITVERSION,       "toolkitVersion"),
+_platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
+// _generation(       PID_IDENTIFICATION_GENERATION,           "generation")
+{}
 
 ImplAAFIdentification::ImplAAFIdentification(
                                      const char* companyName,
