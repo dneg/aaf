@@ -31,6 +31,15 @@ AD_IDL(//
 	// NOT for each instance of a codec.
 	//)
 
+AD_XMETHOD1(SetEssenceAccess,
+		   [in],
+		   objIn,
+		   Unknown,
+		   access,
+		   Set the essence access associated with the codec as a factory creating AAFEssenceFormat,
+			 Set the essence access associated with the codec as
+	// a factory creating AAFEssenceFormat,)
+
 AD_XMETHOD2(GetIndexedVariantID,
 		   [in],
 		   objPass,
@@ -413,13 +422,26 @@ AD_XMETHOD1(PutEssenceFormat,
 			An essence format object,
 			Set the format of the data.)
 
-AD_XMETHOD1(GetEssenceFormat,
-			[in\,out],
+AD_XMETHOD2(GetEssenceFormat,
+			[in],
 			objIn,
 			AAFEssenceFormat,
-			pFormat,
-			An essence format object,
+			pFormatTemplate,
+			An essence format object to use as a template of which fields to read,
+			[out],
+			objOut,
+			AAFEssenceFormat,
+			pNewFormat,
+			A new essence format object with the data filled in,
 			Supply an essence format object specifying what data is
 			// required\, and it is filled in with the data values.)
+			
+AD_XMETHOD1(GetEssenceFormatList,
+			[out],
+			objOut,
+			AAFEssenceFormat,
+			pNewFormat,
+			An essence format with all valid parameter names filled in,
+			Returns an essence format object specifying which parameters may be set with the current codec.)
 
 AD_XCLASS_END(Abstract, Transient)

@@ -189,7 +189,11 @@ Given an AAFEssenceFormat\, read the essence parameters inside and set the value
 AD_XMETHOD1(GetFileFormatParameterList,
 [out],objOut,AAFEssenceFormat,ops,An ampty AAFEssenceFormat object,
 Returns an AAFEssenceFormat containing a list of all parameters supported by the current codec.)
-	//@comm Any pre-existing parameters inside of the AAFEssenceFormat will be deleted.
+
+/****/
+AD_XMETHOD1(GetEmptyFileFormat,
+[out],objOut,AAFEssenceFormat,ops,An ampty AAFEssenceFormat object,
+Returns an empty AAFEssenceFormat object.  This is the factory method for AAFEssenceFormat.)
 
 /****/
 AD_XMETHOD1(PutFileFormat,
