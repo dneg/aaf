@@ -18,65 +18,24 @@
 #include "CAAFDefaultCodec.h"
 #endif
 
+#include "AAFUtils.h"
+
 EXTERN_C const CLSID CLSID_AAFWaveCodec;
 
 #ifndef __AAFWAVEDescriptor_h__
 #include "CAAFWAVEDescriptor.h"
 #endif
 
-#if 0
-// A Codec has a generic "plugin" interface, and a more specific "codec"
-// interface.  Both of which are described in this .h file.
-class CAAFWaveCodec
-  : public CAAFDefaultCodec
+
+typedef struct
 {
-protected:
+	void			*buf;
+	aafInt32		buflen;
+	aafInt32		samplesLeft;
+	aafInt32		bytesXfered;
+	aafmMultiXfer_t	*xfer;
+} interleaveBuf_t;
 
-  //********
-  //
-  // Constructor/destructor
-  //
-  CAAFWaveCodec (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
-  virtual ~CAAFWaveCodec ();
-
-public:
-
-
-  // Set up a codec.
-  STDMETHOD (Start)
-     ();
-
-  // Tear down a codec.
-  STDMETHOD (Finish)
-     ();
-
-
-
-protected:
-  // 
-  // Declare the QI that implements for the interfaces
-  // for this module. This will be called by CAAFUnknown::QueryInterface().
-  // 
-  virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
-
-
-public:
-  //
-  // This class as concrete. All AAF objects can be constructed from
-  // a CLSID. This will allow subclassing all "base-classes" by
-  // aggreggation.
-  // 
-  AAF_DECLARE_CONCRETE();
-  //
-  //********
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/CAAFPluginTest.cpp.
-  static HRESULT test();
-};
-#endif
-
-#if 1 
 class CAAFWaveCodec
   : public CAAFDefaultCodec
 {
@@ -138,6 +97,7 @@ public:
   STDMETHOD (GetNumChannels)
     (/*[in]*/ IUnknown *fileMob, // Get the number of processable channels on this file mob
      /*[in]*/ aafUID_t  essenceKind, // This is the type of essence to open
+	 IAAFEssenceStream *stream,
      /*[out]*/ aafInt16 *  pNumChannels); // The number of channels present 
 
   // Returns a (possibly zero-length) string listing any problems
@@ -277,8 +237,27 @@ public:
 private:
 	IAAFEssenceStream	*_stream;
 	IAAFWAVEDescriptor	*_mdes;
+	AAFByteOrder		_nativeByteOrder;
+	aafRational_t		_sampleRate;
+	aafUInt16			_bitsPerSample;
+	aafUInt16			_numCh;
+	aafUInt16			_bytesPerFrame;
+	aafUInt32			_sampleFrames;
+	aafBool				_headerLoaded;
+	interleaveBuf_t		*_interleaveBuf;
+	aafInt64			_dataStartOffset;
+	aafInt64			_dataSizeOffset;
+	aafBool				_readOnly;
+
+	AAFRESULT writeSwappedWAVEData(aafUInt8 **destBufHdl, aafInt32 maxsize, void *data);
+	AAFRESULT readSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
+	AAFRESULT CreateWAVEheader(aafUInt8 *buffer, aafInt32 bufsize, aafInt16 numCh);
+	AAFRESULT loadWAVEHeader(void);
+	AAFRESULT GetWAVEData(aafUInt32 len, void *buf);
+
+	AAFRESULT CAAFWaveCodec::ComputeWriteChunkSize(aafInt64 sizeOff, aafInt64 end);
+	AAFRESULT CAAFWaveCodec::CreateAudioDataEnd(void);
 };
-#endif
 
 #endif // ! __CAAFEssenceCodec_h__
 
