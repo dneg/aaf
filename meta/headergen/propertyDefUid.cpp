@@ -5,51 +5,67 @@
 
 #include "headerGenUtils.h"
 
+const char* prefix = "kAAFPropID_";
+
+#define AAF_TABLE_BEGIN() {
 #define AAF_PROPERTY(name, id, tag, type, mandatory, uid, container) \
-cout << endl; \
-cout << "const aafUID_t kAAFPropID_" << #container \
-     << "_" << #name << " =" << endl; \
-id
+{#container "_" #name, id},
+#define AAF_TABLE_END()   };
 
-#include "literalAuidDef.h"
+typedef struct {
+  char* name;
+  aafUID_t identifier;
+} Property_t;
 
-static void doFile (const char * moduleName)
+Property_t properties[] =
+#include "AAFMetaDictionary.h"
+
+static void doFile(const char* moduleName)
 {
-  assert (moduleName);
-  cout << "#ifndef __" << moduleName << "_h__" << endl;
-  cout << "#define __" << moduleName << "_h__" << endl;
-  printCopyright (cout);
+  assert(moduleName);
+  printBeginGuard(moduleName, cout);
+  printCopyright(cout);
   cout << endl;
   cout << "#include \"AAFTypes.h\"" << endl;
   cout << endl;
-#include "AAFMetaDictionary.h"
-  cout << endl;
-  cout << endl;
+
+  size_t i = 0;
+  for (i = 0; i < sizeof(properties)/sizeof(properties[0]); i++){
+    printDefinition("const aafUID_t",
+                    prefix,
+                    properties[i].name,
+                    properties[i].identifier,
+                    cout);
+  }
+  Property_t special[] = {
+{"Root_MetaDictionary",
+{0x0D010301, 0x0101, 0x0100,{0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02}}},
+{"Root_Header",
+{0x0D010301, 0x0102, 0x0100, {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02}}}
+  };
+
+  cout << "// Special property definition ids used for specifying the" << endl;
+  cout << "// starting strong reference in the target list of a" << endl;
+  cout << "// weak reference." << endl;
   cout << "//" << endl;
-  cout << "// Special property ids used for specifying the starting strong reference in the" << endl;
-  cout << "// targe list for weak references." << endl;
-  cout << "//" << endl;
-  cout << endl;
-  cout << "// SMPTE Label: 06-0E-2B-34-01-01-01-02-0D-01-03-01-01-01-01-00" << endl;
-  cout << "const aafUID_t kAAFPropID_Root_MetaDictionary =" << endl;
-  cout << "{0x0D010301, 0x0101, 0x0100, {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02}};" << endl;
-  cout << endl;
-  cout << "// SMPTE Label: 06-0E-2B-34-01-01-01-02-0D-01-03-01-01-02-01-00" << endl;
-  cout << "const aafUID_t kAAFPropID_Root_Header =" << endl;
-  cout << "{0x0D010301, 0x0102, 0x0100, {0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02}};" << endl;
-  cout << endl;
-  cout << endl;
-  cout << "#endif // ! __" << moduleName << "_h__" << endl;
+
+  for (i = 0; i < sizeof(special)/sizeof(special[0]); i++){
+    printDefinition("const aafUID_t",
+                    prefix,
+                    special[i].name,
+                    special[i].identifier,
+                    cout);
+  }
+
+  printEndGuard(moduleName, cout);
 }
 
 
-void main (int argc, char ** argv)
+void main(int argc, char** argv)
 {
-  char * moduleName = 0;
-  validateArgs (argc, argv, moduleName);
-  // If validateArgs() returned (without exit()ing) then moduleName
-  // must be properly filled in.
-  assert (moduleName);
-  doFile (moduleName);
-  exit (0);
+  char* moduleName = 0;
+  validateArgs(argc, argv, moduleName);
+  assert(moduleName);
+  doFile(moduleName);
+  exit(0);
 }
