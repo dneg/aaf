@@ -125,6 +125,10 @@ AAFRESULT STDMETHODCALLTYPE
 // AAFRESULT_INSUFF_TRAN_MATERIAL
 //   - There is not enough source material to add this component.
 //
+// AAFRESULT_OBJECT_ALREADY_ATTACHED
+//   - Attempted to append a component that is already attached to
+//     (owned by) another object.
+//
 // 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::AppendComponent (ImplAAFComponent* pComponent)
@@ -139,6 +143,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (pComponent == NULL)
 		return AAFRESULT_NULL_PARAM;
+	
+	if (pComponent->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	// Verify that component's datakind converts to sequence's datakind
 	GetDataDef(&sequDataDef);
