@@ -1,7 +1,7 @@
 //@doc
 //@class    AAFPluginDescriptor | Implementation class for AAFPluginDescriptor
-#ifndef __ImplAAFPluginDescriptor_h__
-#define __ImplAAFPluginDescriptor_h__
+#ifndef __ImplAAFPluginDef_h__
+#define __ImplAAFPluginDef_h__
 
 
 /***********************************************************************
@@ -36,24 +36,24 @@ class ImplEnumAAFPluginLocators;
 
 
 
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
+#ifndef __ImplAAFDefObject_h__
+#include "ImplAAFDefObject.h"
 #endif
 
 #include "ImplAAFLocator.h"
 #include "ImplAAFNetworkLocator.h"
 
-class ImplAAFPluginDescriptor : public ImplAAFObject
+class ImplAAFPluginDef : public ImplAAFDefObject
 {
 public:
   //
   // Constructor/destructor
   //
   //********
-  ImplAAFPluginDescriptor ();
+  ImplAAFPluginDef ();
 
 protected:
-  virtual ~ImplAAFPluginDescriptor ();
+  virtual ~ImplAAFPluginDef ();
 
 public:
   // Initialize()
@@ -64,79 +64,6 @@ public:
         (const aafUID_t & pAuid,
 		 const aafCharacter * name,
 		 const aafCharacter * description);
-
-
-  //****************
-  // GetAUID()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetAUID
-        // @parm [retval,out] Pointer to an AUID reference
-        (aafUID_t *  pAuid) const;
-
-
-  //****************
-  // SetAUID()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetAUID
-        // @parm [in] Pointer to an AUID reference
-        (const aafUID_t & id);
-
-
-  //****************
-  // SetName()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetName
-        (const aafCharacter *  name);  //@parm [in, ref] Definition Name
-
-
-  //****************
-  // GetName()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetName
-        (// @parm [out, string, size_is(bufSize)] buffer into which Name is to be written
-         aafCharacter *  pName,
-
-         // @parm [in] size of *pName buffer in bytes
-         aafUInt32  bufSize);
-
-
-  //****************
-  // GetNameBufLen()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetNameBufLen
-        (aafUInt32 *  nameLen);  //@parm [in,out] Definition Name length
-
-
-  //****************
-  // SetDescription()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetDescription
-        (const aafCharacter *  description);  //@parm [in, ref] Definition description
-
-
-  //****************
-  // GetDescription()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetDescription
-        (aafCharacter *  description,  //@parm [in] Definition Description
-		 aafUInt32 bufSize);	  //@parm [in] size of the buffer required to hold Definition Description + terminator
-
-
-  //****************
-  // GetDescriptionBufLen()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetDescriptionBufLen
-        (aafUInt32 *  descriptionLen);  //@parm [in,out] Definition description length
-
-
 
   //****************
   // GetCategoryClass()
@@ -558,18 +485,29 @@ public:
         // @parm [out, retval] Plugin Locator Enumeration
         (ImplEnumAAFPluginLocators ** ppEnum);
 
+  //****************
+  // SetDefinitionObject()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetDefinitionObjectID
+        (aafUID_t def);  //@parm [in] Def of this object
+
+
+  //****************
+  // GetDataDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+   GetDefinitionObjectID
+        (aafUID_t *pDef);  //@parm [retval][out] Def of this object
+
 
 public:
 	virtual AAFRESULT
 		GetNthLocator (aafInt32 index, ImplAAFLocator **ppLocator);
   //	virtual AAFRESULT
   //		 GetNumLocators (aafInt32 *  pCount);
-  virtual const OMUniqueObjectIdentification& identification(void) const;
 
 private:
-	OMWideStringProperty          _name;
-	OMWideStringProperty          _description;
-	OMFixedSizeProperty<aafUID_t> _identification;
 	OMFixedSizeProperty<aafUID_t>					_categoryClass;
 	OMFixedSizeProperty<aafVersionType_t>			_pluginVersion;
 	OMWideStringProperty                            _pluginVersionString;
@@ -589,8 +527,9 @@ private:
 	OMFixedSizeProperty<aafBool>					_accelerator;
     OMStrongReferenceVectorProperty<ImplAAFLocator> _locators;
 	OMFixedSizeProperty<aafBool>					_authentication;
+	OMFixedSizeProperty<aafUID_t>					_defObj;
 };
 
-#endif // ! __ImplAAFPluginDescriptor_h__
+#endif // ! __ImplAAFPluginDef_h__
 
 
