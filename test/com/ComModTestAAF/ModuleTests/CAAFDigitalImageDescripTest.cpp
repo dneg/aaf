@@ -60,7 +60,7 @@ using namespace std;
 #define kDisplayYOffsetTestVal			8
 #define kAlphaTransparencyTestVal		kAAFMaxValueTransparent
 #define kImageAlignmentFactorTestVal	0
-#define kFieldDominanceTestVal	1
+#define kFieldDominanceTestVal	kAAFFieldOne
 #define kFieldStartOffsetTestVal	128
 #define kFieldEndOffsetTestVal	512
 
