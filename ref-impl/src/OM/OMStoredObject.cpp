@@ -767,10 +767,10 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
   OMUInt32 entries = vector->entries();
   writeToStream(vectorIndexStream, &entries, sizeof(entries));
 
-  // Write the high water mark.
+  // Write the first free key.
   //
-  OMUInt32 highWaterMark = vector->highWaterMark();
-  writeToStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
+  OMUInt32 firstFreeKey = vector->firstFreeKey();
+  writeToStream(vectorIndexStream, &firstFreeKey, sizeof(firstFreeKey));
 
   // For each element write the element name.
   //
@@ -812,10 +812,10 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
   OMUInt32 entries = set->entries();
   writeToStream(setIndexStream, &entries, sizeof(entries));
 
-  // Write the high water mark.
+  // Write the first free key.
   //
-  OMUInt32 highWaterMark = set->highWaterMark();
-  writeToStream(setIndexStream, &highWaterMark, sizeof(highWaterMark));
+  OMUInt32 firstFreeKey = set->firstFreeKey();
+  writeToStream(setIndexStream, &firstFreeKey, sizeof(firstFreeKey));
 
   // Write the key pid.
   //
@@ -1009,19 +1009,19 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   OMUInt32 entries;
   readUInt32FromStream(vectorIndexStream, entries, _reorderBytes);
 
-  // Read the high water mark.
+  // Read the first free key.
   //
-  OMUInt32 highWaterMark;
-  readUInt32FromStream(vectorIndexStream, highWaterMark, _reorderBytes);
+  OMUInt32 firstFreeKey;
+  readUInt32FromStream(vectorIndexStream, firstFreeKey, _reorderBytes);
 
   // Create an index.
   //
   OMStoredVectorIndex* vectorIndex = new OMStoredVectorIndex(entries);
   ASSERT("Valid heap pointer", vectorIndex != 0);
 
-  // Set the high water mark.
+  // Set the first free key.
   //
-  vectorIndex->setHighWaterMark(highWaterMark);
+  vectorIndex->setFirstFreeKey(firstFreeKey);
 
   // Read the element names, placing them in the index.
   //
@@ -1063,10 +1063,10 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   OMUInt32 entries;
   readUInt32FromStream(setIndexStream, entries, _reorderBytes);
 
-  // Read the high water mark.
+  // Read the first free key.
   //
-  OMUInt32 highWaterMark;
-  readUInt32FromStream(setIndexStream, highWaterMark, _reorderBytes);
+  OMUInt32 firstFreeKey;
+  readUInt32FromStream(setIndexStream, firstFreeKey, _reorderBytes);
 
   // Read the key pid.
   //
@@ -1083,9 +1083,9 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   OMStoredSetIndex* setIndex = new OMStoredSetIndex(entries, keyPid, keySize);
   ASSERT("Valid heap pointer", setIndex != 0);
 
-  // Set the high water mark.
+  // Set the first free key.
   //
-  setIndex->setHighWaterMark(highWaterMark);
+  setIndex->setFirstFreeKey(firstFreeKey);
 
   // Read the element names, counts and keys, placing them in the index.
   //
