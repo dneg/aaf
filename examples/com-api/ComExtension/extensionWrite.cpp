@@ -85,7 +85,7 @@
 
 
 //
-// Utility to convert wide character strings to single-byte-character
+// Utility to convert wide  strings to single-byte-character
 // strings.
 //
 static void convert(char* cName, size_t length, const wchar_t* name)
@@ -461,35 +461,6 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
 }
 
 
-//
-// Instantiates an object of type PersonnelMob, and passes it back to
-// the caller.  The caller passes in the dictionary used to create the
-// PersonnelMob.  The newly created PersonnelMob is passed back
-// through the ppMob argument.
-//
-static void CreatePersonnelMob (IAAFDictionary * pDict,
-								IAAFMob ** ppMob)
-{
-  assert (pDict);
-  assert (ppMob);
-
-  // Instantiate the PersonnelMob object.
-  IAAFMob * pMob = 0;
-  check (pDict->CreateInstance (kClassID_PersonnelMob,
-								IID_IAAFMob,
-								(IUnknown**) &pMob));
-  assert (pMob);
-
-  // Set the MobID and Name of this new Mob.  In general, you'd want
-  // to generate a MobID at runtime; however we've generated one here
-  // statically.
-  check (pMob->SetMobID (kMobID_Personnel));
-  check (pMob->SetName (L"Personnel"));
-  
-  assert (ppMob);
-  *ppMob = pMob;
-}
-
 
 //
 // Creates a PersonnelResource object through the given dictionary,
@@ -619,6 +590,47 @@ static void AppendResource (IAAFDictionary * pDict,
 }
 
 
+static void DefineResourceClassExtensions(IAAFDictionary *pDict)
+{
+	assert(pDict);
+  // Register the extensible enumeration describing Role in the
+  // dictionary.
+  CreateAndRegisterRoleEnum (pDict);
+
+  // Create a class definition describing PesonnelResource objects and
+  // register it in the dictionary.
+  CreateAndRegisterPersonnelResource (pDict);
+
+  // Create a type definition describing references to
+  // PersonnelResource objects, and register it.
+  CreateAndRegisterPersonnelResourceReference (pDict);
+
+  // Create a type definition describing vectors of references to
+  // PersonnelResource objects, and register it.
+  CreateAndRegisterPersonnelResourceReferenceVector (pDict);
+
+  // Create a class definition describing PersonnelMOb objects, and
+  // register it.
+  CreateAndRegisterPersonnelMob (pDict);
+
+
+}
+
+static void InitializePersonnelResource (IAAFObject *pPersResource,
+										 aafCharacter *familyName,
+										 aafCharacter *givenName,
+										 eJobFunction jobFunction)
+{
+	assert(pPersResource);
+
+}
+
+static void SetRole(IAAFObject *pPersResource,
+					aafCharacter role)
+{
+	assert(pPersResource);
+}
+
 //
 // - Creates an AAF file with the given name.
 // - Registers extensions that we'll use in the file's dictionary.
@@ -663,39 +675,32 @@ void extensionWrite (const aafCharacter * filename)
   IAAFDictionary *pDict=NULL;
   check (pHead->GetDictionary(&pDict));
 
-  // Register the extensible enumeration describing Role in the
-  // dictionary.
-  CreateAndRegisterRoleEnum (pDict);
+  DefineResourceClassExtensions(pDict);
 
-  // Create a class definition describing PesonnelResource objects and
-  // register it in the dictionary.
-  CreateAndRegisterPersonnelResource (pDict);
+  IAAFClassDef *persResourceCD=NULL;
+  check (pDict->LookupClass (kClassID_PersonnelResource, &persResourceCD));
+  persResourceCD->Release();
+  persResourceCD=NULL;
 
-  // Create a type definition describing references to
-  // PersonnelResource objects, and register it.
-  CreateAndRegisterPersonnelResourceReference (pDict);
 
-  // Create a type definition describing vectors of references to
-  // PersonnelResource objects, and register it.
-  CreateAndRegisterPersonnelResourceReferenceVector (pDict);
+ 
+  // Instantiate a AdministrativeMob object.
+  IAAFMob *pAdminMob=NULL;
+  check (pDict->CreateInstance (kClassID_PersonnelMob,
+								IID_IAAFMob,
+								(IUnknown**) &pAdminMob));
+  check (pAdminMob->SetName (L"Administrative Information"));
+ 
 
-  // Create a class definition describing PersonnelMOb objects, and
-  // register it.
-  CreateAndRegisterPersonnelMob (pDict);
-
-  // Instantiate a PersonnelMob object.
-  IAAFMob *pMob=NULL;
-  CreatePersonnelMob (pDict, &pMob);
-
-  // Add the new PersonnelMOb object to the file's header.
-  check (pHead->AppendMob (pMob));
+  // Add the new AdministrativeMob object to the file's header.
+  check (pHead->AppendMob (pAdminMob));
 
   // Add several PersonnelResource objects to the PersonnelMob.
-  AppendResource (pDict, pMob,
+  AppendResource (pDict, pAdminMob,
 				  FormatResource (L"Peter Vechtor", kRole_Producer,    42));
-  AppendResource (pDict, pMob,
+  AppendResource (pDict, pAdminMob,
 				  FormatResource (L"Oliver Morgan", kRole_FloorManager, 6 ));
-  AppendResource (pDict, pMob,
+  AppendResource (pDict, pAdminMob,
 				  FormatResource (L"Tom Ohanian",   kRole_Editor));
 
   // Save the file and close it.
@@ -707,7 +712,7 @@ void extensionWrite (const aafCharacter * filename)
   pHead=NULL;
   pDict->Release();
   pDict=NULL;
-  pMob->Release();
-  pMob=NULL;
+  pAdminMob->Release();
+  pAdminMob=NULL;
 
 }
