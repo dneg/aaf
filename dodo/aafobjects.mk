@@ -35,7 +35,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFParameter \
 	AAFParameterDef \
 	AAFPluggableCode \
-	AAFPluginManager \
 	AAFPulldown \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
@@ -119,6 +118,7 @@ HUMAN_TYPED_IMPL = \
 	AAFPropertyValue \
 	AAFPluggableDef \
 	AAFPluginDescriptor \
+	AAFPluginManager \
 	AAFSegment \
 	AAFSelector \
 	AAFSequence \
