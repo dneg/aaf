@@ -14,8 +14,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFHTMLData \
 	AAFImageData \
 	AAFLocator \
-	AAFFilmDescriptor \
-	AAFEssenceGroup \
 	AAFMIDIData \
 	AAFMIDIFileDescriptor \
 	AAFPluggableCode \
@@ -77,9 +75,11 @@ HUMAN_TYPED_IMPL = \
 	AAFEventMobSlot \
 	AAFFile \
 	AAFFileDescriptor \
+	AAFFilmDescriptor \
 	AAFDigitalImageDescriptor \
 	AAFCDCIDescriptor \
 	AAFEssenceFormat \
+	AAFEssenceGroup \
 	AAFFiller \
 	AAFFindSourceInfo \
 	AAFOperationGroup \
