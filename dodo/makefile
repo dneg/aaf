@@ -69,7 +69,7 @@ targets:
 
 
 targets.mk : aafobjects.mk
-	@echo \n"======== [ /coresw/AAF-toolkit/dodo ] \"Building targets.mk\"\n"
+	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets.mk\"\n"
 	$(MAKE) -f dodotargets.mak
 
 depend.mk : aafobjects.mk
