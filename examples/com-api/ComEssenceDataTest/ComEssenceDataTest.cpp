@@ -49,6 +49,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 //#include "AAFPluginManager.h"
 
 #include "AAFTypes.h"
@@ -99,6 +100,10 @@ const CLSID CLSID_AAFWAVECodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x0
 
 static aafSourceRef_t sourceRef; 
 
+#define assert(b, msg) \
+  if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
+
+
 static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 {
 	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
@@ -127,9 +132,22 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
      exit(1);\
 }
 
-static void AUIDtoString(aafUID_t *uid, aafWChar *buf)
+static void convert(char* cName, size_t length, const wchar_t* name)
 {
-	wsprintf(buf, L"%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
+  assert((name && *name), "Valid input name");
+  assert(cName != 0, "Valid output buffer");
+  assert(length > 0, "Valid output buffer size");
+
+  size_t status = wcstombs(cName, name, length);
+  if (status == (size_t)-1) {
+    fprintf(stderr, ": Error : Conversion failed.\n\n");
+    exit(1);  
+  }
+}
+
+static void AUIDtoString(aafUID_t *uid, char *buf)
+{
+	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
 			uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
 			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
 			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
@@ -332,13 +350,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		check(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			aafWChar	buf[256];
+			char mobIDstr[256];
+			char mobName[256];
+
 
 			check(pMob->GetMobID (&mobID));
 			check(pMob->GetName (namebuf, sizeof(namebuf)));
-			AUIDtoString(&mobID, buf);
-			wprintf(L"    MasterMob Name = '%s'\n", namebuf);
-			wprintf(L"        (mobID %s)\n", buf);
+			convert(mobName, sizeof(mobName), namebuf);
+			AUIDtoString(&mobID, mobIDstr);
+			printf("    MasterMob Name = '%s'\n", mobName);
+			printf("        (mobID %s)\n", mobIDstr);
 			// Make sure we have one slot 
 			check(pMob->GetNumSlots(&numSlots));
 			if (1 == numSlots)
@@ -424,7 +445,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			numMobs, 1L);
 	}
 
-	wprintf(L"--------\n");
+	printf("--------\n");
 
 cleanup:
 	// Cleanup and return
