@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -38,6 +38,7 @@ class OMClassFactory;
 class OMObjectDirectory;
 class OMPropertyTable;
 class OMStoredObject;
+class OMDictionary;
 
 // @class Files supported by the Object Manager.
 //
@@ -66,7 +67,8 @@ public:
   static OMFile* openExistingRead(const wchar_t* fileName,
                                   const OMClassFactory* factory,
                                   void* clientOnRestoreContext,
-                                  const OMLoadMode loadMode);
+                                  const OMLoadMode loadMode,
+                                  OMDictionary* dictionary = 0);
 
     // @cmember Open an existing <c OMFile> for modify access, the
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
@@ -75,7 +77,8 @@ public:
   static OMFile* openExistingModify(const wchar_t* fileName,
                                     const OMClassFactory* factory,
                                     void* clientOnRestoreContext,
-                                    const OMLoadMode loadMode);
+                                    const OMLoadMode loadMode,
+                                    OMDictionary* dictionary = 0);
 
     // @cmember Open a new <c OMFile> for modify access, the
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
@@ -88,7 +91,8 @@ public:
                                void* clientOnRestoreContext,
                                const OMByteOrder byteOrder,
                                OMStorable* root,
-                               const OMFileSignature& signature);
+                               const OMFileSignature& signature,
+                               OMDictionary* dictionary = 0);
 
      // @cmember Is <p signature> a valid signature for an <c OMFile> ?
   static bool validSignature(const OMFileSignature& signature);
@@ -102,6 +106,7 @@ public:
          const OMAccessMode mode,
          OMStoredObject* store,
          const OMClassFactory* factory,
+         OMDictionary* dictionary,
          const OMLoadMode loadMode);
 
     // @cmember Constructor. Create an <c OMFile> object representing
@@ -112,6 +117,7 @@ public:
          const OMAccessMode mode,
          OMStoredObject* store,
          const OMClassFactory* factory,
+         OMDictionary* dictionary,
          OMStorable* root);
 
     // @cmember Destructor.
@@ -144,6 +150,8 @@ public:
 
     // @cmember Retrieve the root <c OMStoredObject> from this <c OMFile>.
   OMStoredObject* rootStoredObject(void);
+
+  OMDictionary* dictionary(void) const;
 
     // @cmember Retrieve the <c OMPropertyTable> from this <c OMFile>.
   OMPropertyTable* referencedProperties(void);
@@ -192,7 +200,8 @@ private:
 
   OMStorable* _root;
   OMStoredObject* _rootStoredObject;
-  
+
+  OMDictionary* _dictionary;
   OMObjectDirectory* _objectDirectory;
   OMPropertyTable* _referencedProperties;
 
