@@ -1572,6 +1572,18 @@ void OMStoredObject::readFromStream(IStream* stream,
   check(result);
 }
 
+  // @mfunc Read an OMUInt8 from <p stream> into <p i>. If
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUInt8.
+void OMStoredObject::readUInt8FromStream(IStream* stream,
+                                         OMUInt8& i)
+{
+  TRACE("OMStoredObject::readUInt8FromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &i, sizeof(OMUInt8));
+}
+
   // @mfunc Read an OMUInt16 from <p stream> into <p i>. If
   //        <p reorderBytes> is true then the bytes are reordered.
   //   @parm The stream from which to read.
