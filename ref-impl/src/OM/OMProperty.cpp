@@ -501,6 +501,18 @@ void OMProperty::remove(void)
   POSTCONDITION("Optional property no longer present", !isPresent());
 }
 
+  // @mfunc The value of this <c OMProperty> as an <c OMStorable>.
+  //        If this <c OMProperty> does not represent an <c OMStorable>
+  //        then the value returned is 0.
+  //   @rdesc Always 0.
+  //   @this const
+OMStorable* OMProperty::storable(void) const
+{
+  TRACE("OMProperty::storable");
+
+  return 0;
+}
+
   // @mfunc The size of the raw bits of this
   //        <c OMSimpleProperty>. The size is given in bytes.
   //   @rdesc The size of the raw bits of this
