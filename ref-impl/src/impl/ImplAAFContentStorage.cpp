@@ -170,13 +170,13 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pNumMobs == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
-	if(mobKind == kAllMob)
+	if(mobKind == kAAFAllMob)
 	{
 		_mobs.getSize(siz);
 	}
 	else
 	{
-		criteria.searchTag = kByMobKind;
+		criteria.searchTag = kAAFByMobKind;
 		criteria.tags.mobKind = mobKind;
 		hr = GetMobs (&criteria,&mobEnum);
 		siz = 0;
@@ -375,7 +375,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		//!!!fmt is unused?
-		*pResult = AAFFalse;
+		*pResult = kAAFFalse;
 		CHECK(CountEssenceData(&numEssence));
 		for(n = 0; n < numEssence && !(*pResult); n ++)
 		{
@@ -383,7 +383,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(testData->GetFileMobID (&testMobID));
 			if(memcmp(&fileMobID, &testMobID, sizeof(testMobID)) == 0)
 			{
-				*pResult = AAFTrue;
+				*pResult = kAAFTrue;
 			}
 			testData->ReleaseReference();
 			testData = NULL;
@@ -414,7 +414,7 @@ AAFRESULT
 
 	XPROTECT()
 	{
-		found = AAFFalse;
+		found = kAAFFalse;
 		CHECK(CountEssenceData(&numEssence));
 		for(n = 0; n < numEssence && !found; n ++)
 		{
@@ -422,7 +422,7 @@ AAFRESULT
 			CHECK(testData->GetFileMobID (&testMobID));
 			if(memcmp(&fileMobID, &testMobID, sizeof(testMobID)) == 0)
 			{
-				found = AAFTrue;
+				found = kAAFTrue;
 				*ppEssence = testData;
 				(*ppEssence)->AcquireReference();
 			}

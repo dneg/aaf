@@ -122,7 +122,7 @@ AAFRESULT STDMETHODCALLTYPE
 		minutes = (((fmt.bits40_47 >> 5L) & 0x07) * 10) + ((fmt.bits32_39 >> 4L) & 0x0F);
 		seconds = (((fmt.bits24_31 >> 5L) & 0x07) * 10) + ((fmt.bits16_23 >> 4L) & 0x0F);
 		frames = (((fmt.bits8_15 >> 6L) & 0x03) * 10) + ((fmt.bits0_7 >> 4L) & 0x0F);
-		tc->drop = ((fmt.bits8_15 >> 5L) & 0x01 ? kTcDrop : kTcNonDrop);
+		tc->drop = ((fmt.bits8_15 >> 5L) & 0x01 ? kAAFTcDrop : kAAFTcNonDrop);
 		CHECK(PvtTimecodeToOffset((aafInt16)fps, hours, minutes, seconds, frames, tc->drop, &tc->startFrame));
 	}
 	XEXCEPT
@@ -156,7 +156,7 @@ AAFRESULT STDMETHODCALLTYPE
 		fmt.bits40_47 = (fmt.bits40_47 & ~0xE0) | (((minutes / 10) << 5L) & 0xE0);
 		fmt.bits48_55 = (fmt.bits48_55 & ~0xF0) | (((hours % 10) << 4L) & 0xF0);
 		fmt.bits56_63 = (fmt.bits56_63 & ~0xC0) | (((hours / 10) << 6L) & 0xC0);
-		fmt.bits8_15 = (fmt.bits8_15 & ~0x20)	| (tc->drop == kTcDrop ? 0x20 : 0x00);
+		fmt.bits8_15 = (fmt.bits8_15 & ~0x20)	| (tc->drop == kAAFTcDrop ? 0x20 : 0x00);
 		memcpy(buffer, (aafUInt8 *)&fmt, sizeof(smpte_12MFormat_t));
 	}
 	XEXCEPT

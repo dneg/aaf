@@ -521,7 +521,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pMobKind == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	*pMobKind = kAllMob;				// Abstract superclass, only match "all"
+	*pMobKind = kAAFAllMob;				// Abstract superclass, only match "all"
 	return AAFRESULT_SUCCESS;
 }
 
@@ -684,7 +684,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplEnumAAFTaggedValues*	pEnum = NULL;
 	
 	aafCharacter					oldTagName[64];
-	aafBool						commentFound = AAFFalse;
+	aafBool						commentFound = kAAFFalse;
 	aafUInt32					numComments = 0;
 	ImplAAFDictionary *pDictionary = NULL;
 	
@@ -704,7 +704,7 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(pTaggedValue->GetName(oldTagName, sizeof(oldTagName)));
 				if (wcscmp(oldTagName, pTagName) == 0)
 				{
-					commentFound = AAFTrue;
+					commentFound = kAAFTrue;
 					break;
 				}
 				pTaggedValue->ReleaseReference();
@@ -831,7 +831,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplEnumAAFMobSlots *iter = NULL;
 	ImplAAFSegment		*seg = NULL;
 	aafTimecode_t		timecode;
-	aafBool				reverse = AAFFalse;
+	aafBool				reverse = kAAFFalse;
 	aafUInt32			frameOffset;
 	aafUID_t			dataDefID;
 	aafPosition_t		newStart;
@@ -885,7 +885,7 @@ AAFRESULT STDMETHODCALLTYPE
 			*/
 			if (pdwn)
 			{
-				reverse = AAFFalse;
+				reverse = kAAFFalse;
 				CHECK(pdwn->MapOffset(*offset, reverse, &newStart, NULL));
 				CHECK(TruncInt64toInt32(newStart, &start32));
 				timecode.startFrame += start32;
@@ -949,7 +949,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafNumSlots_t	numSlots;
 	ImplAAFMobSlot	*tmpSlot = NULL;
 	aafSlotID_t	tmpSlotID;
-	aafBool			foundSlot = AAFFalse;
+	aafBool			foundSlot = kAAFFalse;
 	
 
   // Validate input pointers...
@@ -968,7 +968,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(tmpSlot->GetSlotID(&tmpSlotID));
 			if (tmpSlotID == slotID)
 			{
-				foundSlot = AAFTrue;
+				foundSlot = kAAFTrue;
 				break;
 			}
 		}
@@ -1025,7 +1025,7 @@ AAFRESULT STDMETHODCALLTYPE
 		ImplAAFDataDefSP pDDPicture;
 		CHECK(dict->LookupDataDef(DDEF_Picture, &pDDPicture));
 		mediaCrit.type = kAAFAnyRepresentation;
-		CHECK(InternalSearchSource(*slotID, *offset, kTapeMob,
+		CHECK(InternalSearchSource(*slotID, *offset, kAAFTapeMob,
 			&mediaCrit, NULL, &sourceInfo));
 		
 		CHECK(sourceInfo->GetMob(&tapeMob));
@@ -1111,7 +1111,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFSegment *pdwnInput = NULL;
 	aafPosition_t zero;
 	AAFRESULT	aafError = AAFRESULT_SUCCESS;
-	aafBool found = AAFFalse;
+	aafBool found = kAAFFalse;
 	aafRational_t	editRate;
 	aafLength_t	zeroLen;
 	ImplAAFFindSourceInfo	*sourceInfo = NULL;
@@ -1126,7 +1126,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(InternalSearchSource(slotID, zero, kTapeMob,
+		CHECK(InternalSearchSource(slotID, zero, kAAFTapeMob,
 			NULL /* mediaCrit */, NULL, &sourceInfo));
 		
 		CHECK(sourceInfo->GetMob(&tapeMob));
@@ -1140,7 +1140,7 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(timelineSlot->GetSegment(&seg));
 			
 				if(seg->SegmentTCToOffset(&timecode, &editRate, result) == AAFRESULT_SUCCESS)
-					found = AAFTrue;
+					found = kAAFTrue;
 				
 				timelineSlot->ReleaseReference();
 				timelineSlot = NULL;
@@ -1312,10 +1312,10 @@ AAFRESULT STDMETHODCALLTYPE
  *
  *      This function clones the given mob in the source file into
  *      a destination mob in the destination file with the same Mob ID.
- *      If resolveDependencies is AAFTrue, it will also clone all mobs 
+ *      If resolveDependencies is kAAFTrue, it will also clone all mobs 
  *      referenced by the given source mob. 
  *
- *      If includeMedia is AAFTrue, it will also copy the media data 
+ *      If includeMedia is kAAFTrue, it will also copy the media data 
  *      associated with the source mob.  The destination mob is
  *      returned. All private data is also cloned.
  *
@@ -1395,7 +1395,7 @@ AAFRESULT STDMETHODCALLTYPE
 		  {
 			if (aafError == AAFRESULT_SUCCESS)
 			  {
-				CHECK(tmpDestMob->SetPrimary(AAFTrue));
+				CHECK(tmpDestMob->SetPrimary(kAAFTrue));
 			  }
 			else
 			  {
@@ -1585,7 +1585,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	ImplAAFSegment			*rootObj = NULL;
 	aafRational_t			srcRate;
 	aafPosition_t			diffPos, nextPos;
-	aafBool					sourceFound = AAFFalse, foundTransition = AAFFalse;
+	aafBool					sourceFound = kAAFFalse, foundTransition = kAAFFalse;
 	ImplAAFMob				*nextMob = NULL;
 	aafInt32				nestDepth, pulldownPhase;
 	aafPosition_t			zeroPos = CvtInt32toPosition(0, zeroPos);
@@ -1762,7 +1762,7 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 {
 	ImplAAFSourceClip		*sclp = NULL;
 	aafLength_t				sclpLen;
-	aafBool					isMask = AAFFalse, reverse = AAFFalse;
+	aafBool					isMask = kAAFFalse, reverse = kAAFFalse;
 	aafSourceRef_t			sourceRef;
 	ImplAAFMob				*nextMob = NULL;
   aafMobID_t				nullMobID = { 0 };		// Need "isNIL" utility
@@ -1809,7 +1809,7 @@ AAFRESULT ImplAAFMob::FindNextMob(ImplAAFMobSlot *track,
 		*/
 		if (isMask)
 		{
-			reverse = AAFFalse;
+			reverse = kAAFFalse;
 			/* !!!Check out if we need phase returned from here */
 			CHECK((*pulldownObj)->MapOffset(diffPos, reverse, &tmpPos, NULL));
 		}
@@ -1867,7 +1867,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	ImplAAFOperationGroup	*effeObject = NULL;
 	ImplAAFMob				*nextMob = NULL;
 	aafSlotID_t				foundTrackID;
-	aafBool					nextFoundSource = AAFFalse, foundTransition = AAFFalse;
+	aafBool					nextFoundSource = kAAFFalse, foundTransition = kAAFFalse;
 	aafPosition_t			foundPos, diffPos, zeroPos;
 	aafRational_t			srcRate;
 	aafLength_t				tmpLength, foundLen, minLength, newLen;
@@ -1881,7 +1881,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	XPROTECT()
 	{
 		/* Initialize return values */
-		*foundSource = AAFFalse;
+		*foundSource = kAAFFalse;
 		CHECK(sourceInfo->Clear());
 		
 		/* Verify that track and position are valid */
@@ -1896,16 +1896,16 @@ AAFRESULT ImplAAFMob::MobFindSource(
 		
 		/* 1) Is this the mob that we're looking for? */
 		CHECK(GetMobKind (&tstKind));
-		if ((mobKind == kCompMob) ||
-			(mobKind == kMasterMob) || 
-			(mobKind == kFileMob) ||
-			(mobKind == kTapeMob) ||
-			(mobKind == kFilmMob))
+		if ((mobKind == kAAFCompMob) ||
+			(mobKind == kAAFMasterMob) || 
+			(mobKind == kAAFFileMob) ||
+			(mobKind == kAAFTapeMob) ||
+			(mobKind == kAAFFilmMob))
 		{
-			*foundSource = (mobKind == tstKind ? AAFTrue : AAFFalse);
+			*foundSource = (mobKind == tstKind ? kAAFTrue : kAAFFalse);
 		}
-		else if (mobKind == kAllMob)
-			*foundSource = AAFTrue;
+		else if (mobKind == kAAFAllMob)
+			*foundSource = kAAFTrue;
 		else
 		{
 			RAISE(AAFRESULT_INVALID_MOBTYPE);

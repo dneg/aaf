@@ -128,7 +128,7 @@ AAFRESULT STDMETHODCALLTYPE
 aafBool ImplAAFTypeDefSet::IsFixedSize (void) const
 {
   assert (0);
-  return AAFFalse; // Not reached!
+  return kAAFFalse; // Not reached!
 }
 
 
@@ -142,7 +142,7 @@ size_t ImplAAFTypeDefSet::PropValSize (void) const
 aafBool ImplAAFTypeDefSet::IsRegistered (void) const
 {
   assert (0);
-  return AAFFalse; // Not reached!
+  return kAAFFalse; // Not reached!
 }
 
 
