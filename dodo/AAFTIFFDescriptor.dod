@@ -17,14 +17,6 @@ AAFFileDescriptor\
 AD_HEAD
 AD_INCLUDE(AAFTypes)
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-*                                          *
-\******************************************/
-
 AD_IDL(//
 // The IAAFTIFFDescriptor interface is implemented by objects which
 // describe TIFF format media.  A TIFFDescriptor object
