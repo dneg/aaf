@@ -33,6 +33,8 @@ public:
 	virtual ~AxMetaDefinition();
 
 	aafUID_t GetAUID();
+        AxString GetName();
+	AxString GetDescription();
 
 private:
 	AxMetaDefinition();
@@ -68,7 +70,6 @@ public:
 		AxQueryInterface( CreateInstance( iid ), sp, iid );
 	}
 
-	AxString GetName();
 
 	IAAFClassDefSP GetParent();
 	aafBoolean_t IsConcrete();
@@ -91,7 +92,6 @@ public:
 	AxPropertyDef( IAAFPropertyDefSP spIaafPropertyDef );
 	~AxPropertyDef();
 
-//    AxString GetName();
 	aafBoolean_t GetIsOptional();
 	aafBoolean_t GetIsUniqueIdentifier();
 	IAAFTypeDefSP GetTypeDef();
@@ -243,11 +243,13 @@ public:
 
 	IEnumAAFPropertyValuesSP GetElements( IAAFPropertyValueSP& );
 
+	IAAFPropertyValueSP GetElementValue( IAAFPropertyValueSP& spFixedArrayPropVal, aafUInt32 index );
+
 private:
 	AxTypeDefFixedArray();
 	AxTypeDefFixedArray( const AxTypeDefFixedArray& );
 	AxTypeDefFixedArray& operator=( const AxTypeDefFixedArray& );
-		
+
 	IAAFTypeDefFixedArraySP _spIaafTypeDefFixedArray;
 };
 
@@ -343,7 +345,7 @@ private:
 	AxTypeDefObjRef();
 	AxTypeDefObjRef( const AxTypeDefObjRef& );
 	AxTypeDefObjRef& operator=( const AxTypeDefObjRef& );
-		
+
 	IAAFTypeDefObjectRefSP _spIaafTypeDefObjRef;
 };
 
@@ -411,8 +413,58 @@ private:
 	AxTypeDefVariableArray();
 	AxTypeDefVariableArray( const AxTypeDefVariableArray& );
 	AxTypeDefVariableArray& operator=( const AxTypeDefVariableArray& );
-		
+
 	IAAFTypeDefVariableArraySP _spIaafTypeDefVariableArray;
+};
+
+
+//=---------------------------------------------------------------------=
+
+class AxTypeDefEnum : public AxTypeDef {
+public:
+	AxTypeDefEnum( IAAFTypeDefEnumSP spIaafTypeDefEnum );
+	virtual ~AxTypeDefEnum();
+
+	IAAFTypeDefSP GetElementType();
+
+	aafUInt32 CountElements();
+	AxString GetElementName( aafUInt32 index );
+	aafInt64 GetElementValue( aafUInt32 index );
+
+
+	AxString GetNameFromValue( IAAFPropertyValueSP &spPropVal );
+
+	aafInt64 GetIntegerValue( IAAFPropertyValueSP &spPropVal );
+
+private:
+	AxTypeDefEnum();
+	AxTypeDefEnum( const AxTypeDefEnum& );
+	AxTypeDefEnum& operator=( const AxTypeDefEnum& );
+
+	IAAFTypeDefEnumSP _spIaafTypeDefEnum;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxTypeDefExtEnum : public AxTypeDef {
+public:
+	AxTypeDefExtEnum( IAAFTypeDefExtEnumSP spIaafTypeDefExtEnum );
+	virtual ~AxTypeDefExtEnum();
+
+	// this is not defined in the IDL, but is in the AAF spec?
+	//IAAFTypeDefSP GetElementType();
+
+	aafUInt32 CountElements();
+	AxString GetElementName( aafUInt32 index );
+	aafUID_t GetElementValue( aafUInt32 index );
+
+
+private:
+	AxTypeDefExtEnum();
+	AxTypeDefExtEnum( const AxTypeDefExtEnum& );
+	AxTypeDefExtEnum& operator=( const AxTypeDefExtEnum& );
+		
+	IAAFTypeDefExtEnumSP _spIaafTypeDefExtEnum;
 };
 
 #endif

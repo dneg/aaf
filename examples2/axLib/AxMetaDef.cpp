@@ -40,6 +40,18 @@ aafUID_t AxMetaDefinition::GetAUID()
 	return auid;
 }
 
+AxString AxMetaDefinition::GetName()
+{
+  return AxNameToString( _spIaafMetaDefinition );
+}
+
+
+AxString AxMetaDefinition::GetDescription()
+{
+  return AxDescriptionToString( _spIaafMetaDefinition );
+}
+
+
 //=---------------------------------------------------------------------=
 
 AxClassDef::AxClassDef( IAAFClassDefSP spIaafClassDef )
@@ -59,10 +71,6 @@ IUnknownSP AxClassDef::CreateInstance( const IID& auid )
 	return spIUnknown;
 }
 
-AxString AxClassDef::GetName()
-{
-	return AxNameToString( _spIaafClassDef );
-}
 
 IAAFClassDefSP AxClassDef::GetParent()
 {
@@ -339,6 +347,17 @@ IEnumAAFPropertyValuesSP AxTypeDefFixedArray::GetElements( IAAFPropertyValueSP& 
 }
 
 
+IAAFPropertyValueSP AxTypeDefFixedArray::GetElementValue( IAAFPropertyValueSP& spFixedArrayPropVal, aafUInt32 index )
+{
+	IAAFPropertyValueSP spElementPropVal;
+
+	CHECK_HRESULT( _spIaafTypeDefFixedArray->GetElementValue( spFixedArrayPropVal, index, &spElementPropVal ) );
+
+	return spElementPropVal;
+}
+
+
+
 //=---------------------------------------------------------------------=
 
 AxTypeDefRecord::AxTypeDefRecord( IAAFTypeDefRecordSP spIaafTypeDefRecord )
@@ -373,7 +392,7 @@ AxString AxTypeDefRecord::GetMemberName( aafUInt32 index )
 	
 	aafUInt32 sizeInChars;
 	aafUInt32 sizeInBytes;
-	
+
 	CHECK_HRESULT( _spIaafTypeDefRecord->GetMemberNameBufLen( index, &sizeInBytes ) );
 
 	sizeInChars = sizeInBytes / sizeof(aafCharacter) + 1;
@@ -433,7 +452,7 @@ AxString AxTypeDefString::GetElements( IAAFPropertyValueSP& propVal )
 	//	could also be of type int.
 	
 	using namespace std;
-	
+
 	aafUInt32 sizeInChars;
 	int sizeInBytes;
 	
@@ -580,3 +599,133 @@ IEnumAAFPropertyValuesSP AxTypeDefVariableArray::GetElements( IAAFPropertyValueS
 
 	return spEnum;
 }
+
+//=---------------------------------------------------------------------=
+
+AxTypeDefEnum::AxTypeDefEnum( IAAFTypeDefEnumSP spIaafTypeDefEnum )
+:	AxTypeDef( AxQueryInterface<IAAFTypeDefEnum, IAAFTypeDef>(spIaafTypeDefEnum) ),
+	_spIaafTypeDefEnum( spIaafTypeDefEnum )
+{}
+
+AxTypeDefEnum::~AxTypeDefEnum()
+{}
+
+IAAFTypeDefSP AxTypeDefEnum::GetElementType()
+{
+	IAAFTypeDefSP spIaafTypeDef;
+
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetElementType( &spIaafTypeDef ) );
+
+	return spIaafTypeDef;
+}
+
+aafUInt32 AxTypeDefEnum::CountElements()
+{
+	aafUInt32 count;
+
+	CHECK_HRESULT( _spIaafTypeDefEnum->CountElements( &count ) );
+
+	return count;
+}
+
+AxString AxTypeDefEnum::GetElementName( aafUInt32 index )
+{
+	aafUInt32 sizeInBytes = 0;
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetElementNameBufLen( index, &sizeInBytes ) );
+
+	int sizeInChars = (int)( (double)sizeInBytes / sizeof(aafCharacter) + 0.5 );
+	std::auto_ptr< aafCharacter >
+		buf( new aafCharacter[ sizeInChars ] );
+
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetElementName( index, buf.get(), 
+		sizeInChars*sizeof(aafCharacter) ) );
+	
+	AxString name( buf.get() );
+
+	return name;
+}
+
+aafInt64 AxTypeDefEnum::GetElementValue( aafUInt32 index )
+{
+	aafInt64 value;
+
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetElementValue( index, &value ) );
+
+	return value;
+}
+
+AxString AxTypeDefEnum::GetNameFromValue( IAAFPropertyValueSP &spPropVal )
+{
+	aafUInt32 sizeInBytes = 0;
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetNameBufLenFromValue( spPropVal, &sizeInBytes ) );
+
+	int sizeInChars = (int)( (double)sizeInBytes / sizeof(aafCharacter) + 0.5 );
+	std::auto_ptr< aafCharacter >
+		buf( new aafCharacter[ sizeInChars ] );
+
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetNameFromValue( spPropVal, buf.get(), 
+		sizeInChars*sizeof(aafCharacter) ) );
+	
+	AxString name( buf.get() );
+
+	return name;
+
+}
+
+
+aafInt64 AxTypeDefEnum::GetIntegerValue( IAAFPropertyValueSP& spPropVal )
+{
+	aafInt64 value;
+
+	CHECK_HRESULT( _spIaafTypeDefEnum->GetIntegerValue( spPropVal, &value ) );
+
+	return value;
+}
+
+
+//=---------------------------------------------------------------------=
+
+AxTypeDefExtEnum::AxTypeDefExtEnum( IAAFTypeDefExtEnumSP spIaafTypeDefExtEnum )
+:	AxTypeDef( AxQueryInterface<IAAFTypeDefExtEnum, IAAFTypeDef>(spIaafTypeDefExtEnum) ),
+	_spIaafTypeDefExtEnum( spIaafTypeDefExtEnum )
+{}
+
+AxTypeDefExtEnum::~AxTypeDefExtEnum()
+{}
+
+aafUInt32 AxTypeDefExtEnum::CountElements()
+{
+	aafUInt32 count;
+
+	CHECK_HRESULT( _spIaafTypeDefExtEnum->CountElements( &count ) );
+
+	return count;
+}
+
+AxString AxTypeDefExtEnum::GetElementName( aafUInt32 index )
+{
+	aafUInt32 sizeInBytes = 0;
+	CHECK_HRESULT( _spIaafTypeDefExtEnum->GetElementNameBufLen( index, &sizeInBytes ) );
+
+	int sizeInChars = (int)( (double)sizeInBytes / sizeof(aafCharacter) + 0.5 );
+	std::auto_ptr< aafCharacter >
+		buf( new aafCharacter[ sizeInChars ] );
+
+	CHECK_HRESULT( _spIaafTypeDefExtEnum->GetElementName( index, buf.get(), 
+		sizeInChars*sizeof(aafCharacter) ) );
+	
+	AxString name( buf.get() );
+
+	return name;
+}
+
+aafUID_t AxTypeDefExtEnum::GetElementValue( aafUInt32 index )
+{
+	aafUID_t auid;
+
+	CHECK_HRESULT( _spIaafTypeDefExtEnum->GetElementValue( index, &auid ) );
+
+	return auid;
+}
+
+
