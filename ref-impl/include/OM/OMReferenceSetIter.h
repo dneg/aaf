@@ -78,15 +78,15 @@ public:
     //          <c OMReferenceSetIterator> is made ready to traverse the
     //          associated <c OMReferenceSet> in the reverse
     //          direction (decreasing <p Key>s).
-   virtual void reset(OMIteratorPosition initialPosition = OMBefore);
+  virtual void reset(OMIteratorPosition initialPosition = OMBefore);
 
     // @cmember Is this <c OMReferenceSetIterator> positioned before
     //          the first <p ReferencedObject> ?
-   virtual bool before(void) const;
+  virtual bool before(void) const;
 
     // @cmember Is this <c OMReferenceSetIterator> positioned after
     //          the last <p ReferencedObject> ?
-   virtual bool after(void) const;
+  virtual bool after(void) const;
 
     // @cmember Is this <c OMReferenceSetIterator> validly
     //          positioned on a <p ReferencedObject> ?
@@ -110,7 +110,7 @@ public:
     //          becomes <e bool.false> and
     //          <mf OMReferenceSetIterator::after> becomes
     //          <e bool.true>. 
-   virtual bool operator++();
+  virtual bool operator++();
 
     // @cmember Retreat this <c OMReferenceSetIterator> to the previous
     //          <p ReferencedObject>, if any.
@@ -126,12 +126,12 @@ public:
     //          becomes <e bool.false> and
     //          <mf OMReferenceSetIterator::before> becomes
     //          <e bool.true>. 
-   virtual bool operator--();
+  virtual bool operator--();
 
     // @cmember Return the <p ReferencedObject> in the associated
     //          <c OMReferenceSet> at the position currently
     //          designated by this <c OMReferenceSetIterator>.
-   virtual ReferencedObject* value(void) const;
+  virtual ReferencedObject* value(void) const;
 
     // @cmember Set the <p ReferencedObject> in the associated
     //          <c OMReferenceSet> at the position currently
@@ -140,17 +140,17 @@ public:
     //          is returned. To preserve the ordering of <p Key>s, the
     //          <p Key> of <p newObject> must be the same as that of the
     //          existing <p ReferencedObject>.
-   virtual ReferencedObject* setValue(const ReferencedObject* newObject);
+  virtual ReferencedObject* setValue(const ReferencedObject* newObject);
 
     // @cmember Return the <p OMObject> in the associated
     //          reference container at the position currently
     //          designated by this <c OMReferenceSetIterator>.
-   virtual OMObject* currentObject(void) const;
+  virtual OMObject* currentObject(void) const;
 
     // @cmember Return the <p Key> of the <p ReferencedObject> in the
     //          associated <c OMReferenceSet> at the position
     //          currently designated by this <c OMReferenceSetIterator>.
-   UniqueIdentification identification(void) const;
+  UniqueIdentification identification(void) const;
 
 protected:
 

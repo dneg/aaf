@@ -73,15 +73,15 @@ public:
     //          <c OMVectorIterator> is made ready to traverse the
     //          associated <c OMVector> in the reverse direction
     //          (decreasing indexes).
-   virtual void reset(OMIteratorPosition initialPosition);
+  virtual void reset(OMIteratorPosition initialPosition);
 
     // @cmember Is this <c OMVectorIterator> positioned before the first
     //          <p Element> ?
-   virtual bool before(void) const;
+  virtual bool before(void) const;
 
     // @cmember Is this <c OMVectorIterator> positioned after the last
     //          <p Element> ?
-   virtual bool after(void) const;
+  virtual bool after(void) const;
 
     // @cmember The number of <p Elements>s in the associated
     //          <c OMVector>.
@@ -97,7 +97,7 @@ public:
     //          then the result is <e bool.false>,
     //          <mf OMVectorIterator::valid> becomes <e bool.false> and
     //          <mf OMVectorIterator::after> becomes <e bool.true>. 
-   virtual bool operator++();
+  virtual bool operator++();
 
     // @cmember Retreat this <c OMVectorIterator> to the previous
     //          <p Element>, if any.
@@ -109,23 +109,23 @@ public:
     //          reached then the result is <e bool.false>,
     //          <mf OMVectorIterator::valid> becomes <e bool.false> and
     //          <mf OMVectorIterator::before> becomes <e bool.true>. 
-   virtual bool operator--();
+  virtual bool operator--();
 
     // @cmember Return the <p Element> in the associated <c OMVector>
     //          at the position currently designated by this
     //          <c OMVectorIterator>.
-   virtual Element& value(void) const;
+  virtual Element& value(void) const;
 
     // @cmember Set the <p Element> in the associated <c OMVector> at the
     //          position currently designated by this
     //          <c OMVectorIterator> to <p newElement>. The previous
     //          <p Element> is returned.
-   virtual Element setValue(Element newElement);
+  virtual Element setValue(Element newElement);
 
     // @cmember Return the index of the <p Element> in the
     //          associated <c OMVector> at the position
     //          currently designated by this <c OMVectorIterator>.
-   virtual size_t index(void) const;
+  virtual size_t index(void) const;
 
 private:
 

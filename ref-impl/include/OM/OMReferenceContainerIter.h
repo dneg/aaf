@@ -61,15 +61,15 @@ public:
     //          <c OMReferenceContainerIterator> is made ready to traverse the
     //          associated reference container in the reverse
     //          direction (decreasing <p Key>s).
-   virtual void reset(OMIteratorPosition initialPosition = OMBefore) = 0;
+  virtual void reset(OMIteratorPosition initialPosition = OMBefore) = 0;
 
     // @cmember Is this <c OMReferenceContainerIterator> positioned before
     //          the first <p OMObject> ?
-   virtual bool before(void) const = 0;
+  virtual bool before(void) const = 0;
 
     // @cmember Is this <c OMReferenceContainerIterator> positioned after
     //          the last <p OMObject> ?
-   virtual bool after(void) const = 0;
+  virtual bool after(void) const = 0;
 
     // @cmember Is this <c OMReferenceContainerIterator> validly
     //          positioned on a <p OMObject> ?
@@ -93,7 +93,7 @@ public:
     //          becomes <e bool.false> and
     //          <mf OMReferenceContainerIterator::after> becomes
     //          <e bool.true>. 
-   virtual bool operator++() = 0;
+  virtual bool operator++() = 0;
 
     // @cmember Retreat this <c OMReferenceContainerIterator> to the previous
     //          <p OMObject>, if any.
@@ -109,12 +109,12 @@ public:
     //          becomes <e bool.false> and
     //          <mf OMReferenceContainerIterator::before> becomes
     //          <e bool.true>. 
-   virtual bool operator--() = 0;
+  virtual bool operator--() = 0;
 
     // @cmember Return the <p OMObject> in the associated
     //          reference container at the position currently
     //          designated by this <c OMReferenceContainerIterator>.
-   virtual OMObject* currentObject(void) const = 0;
+  virtual OMObject* currentObject(void) const = 0;
 
 };
 
