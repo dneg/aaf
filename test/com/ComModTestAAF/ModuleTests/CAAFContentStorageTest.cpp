@@ -430,10 +430,16 @@ void ContentStorageTest::createFileMob(aafMobID_constref newMobID)
 	check(_pMob->SetName(L"ContentStorageTest File Mob"));
 	
 	// instantiate a concrete subclass of FileDescriptor
-	check(defs.cdHTMLDescriptor()->
+	check(defs.cdAIFCDescriptor()->
 		  CreateInstance(IID_IAAFFileDescriptor, 
 						 (IUnknown **)&_pFileDescriptor));
 	
+	IAAFAIFCDescriptor*			pAIFCDesc = NULL;
+	check(_pFileDescriptor->QueryInterface (IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc));
+	check(pAIFCDesc->SetSummary (5, (unsigned char*)"TEST"));
+	pAIFCDesc->Release();
+	pAIFCDesc = NULL;
+
 	check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
 		(void **)&_pEssenceDescriptor));
 	check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
