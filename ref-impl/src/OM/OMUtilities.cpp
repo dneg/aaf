@@ -87,6 +87,23 @@ wchar_t* copyWideString(wchar_t* destination,
   return destination;
 }
 
+wchar_t* copyWideString(wchar_t* destination,
+                        const wchar_t* source)
+{
+  TRACE("copyWideString");
+
+  PRECONDITION("Valid destination", destination != 0);
+  PRECONDITION("Valid source string", validWideString(source));
+
+  wchar_t* d = destination;
+  const wchar_t* s = source;
+
+  while(*s != 0) {
+    *d++ = *s++;
+  }
+  return destination;
+}
+
 wchar_t* concatenateWideString(wchar_t* destination,
                                const wchar_t* source,
                                size_t length)
@@ -110,6 +127,27 @@ wchar_t* concatenateWideString(wchar_t* destination,
   return destination;
 }
 
+wchar_t* concatenateWideString(wchar_t* destination,
+                               const wchar_t* source)
+{
+  TRACE("concatenateWideString");
+
+  PRECONDITION("Valid destination", validWideString(destination));
+  PRECONDITION("Valid source", validWideString(source));
+
+  wchar_t* d = destination;
+  while (*d != 0) {
+    ++d;
+  }
+
+  const wchar_t* s = source;
+  while(*s != 0) {
+    *d++ = *s++;
+  }
+
+  return destination;
+}
+
 wchar_t* saveWideString(const wchar_t* string)
 {
   TRACE("saveWideString");
@@ -125,6 +163,35 @@ wchar_t* saveWideString(const wchar_t* string)
 // if string1 >  string2 then result =  1
 // if string1 == string2 then result =  0
 // if string1 <  string2 then result = -1
+int compareWideString(const wchar_t* string1,
+                      const wchar_t* string2,
+                      size_t length)
+{
+  TRACE("compareWideString");
+
+  PRECONDITION("Valid string", validWideString(string1));
+  PRECONDITION("Valid string", validWideString(string2));
+  int result = 0;
+  const wchar_t* s1 = string1;
+  const wchar_t* s2 = string2;
+  for (size_t i = 0; i < length; i++) {
+    if (*s1 != *s2) {
+      if (*s1 > *s2) {
+        result = 1;
+      } else {
+        result = -1;
+      } 
+      break;
+    } else if (*s1 == 0) {
+      result = 0;
+      break;
+    }
+    ++s1;
+    ++s2;
+  }
+  return result;
+}
+
 int compareWideString(const wchar_t* string1, const wchar_t* string2)
 {
   TRACE("compareWideString");

@@ -65,6 +65,9 @@ wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
                         size_t length);
 
+wchar_t* copyWideString(wchar_t* destination,
+                        const wchar_t* source);
+
   // @func Concatenate wide character strings. Same as strncat(), but for wide
   //       characters. Append up to <p length> characters from <p source>
   //       to the end of <p destination>. If the null character that terminates
@@ -82,11 +85,18 @@ wchar_t* concatenateWideString(wchar_t* destination,
                                const wchar_t* source,
                                size_t length);
 
+wchar_t* concatenateWideString(wchar_t* destination,
+                               const wchar_t* source);
+
   // @func Save a wide character string. Same as saveString() but for wide
   //       characters.
   //   @parm The wide character string to save.
   //   @rdesc The saved wide character string.
 wchar_t* saveWideString(const wchar_t* string);
+
+int compareWideString(const wchar_t* string1,
+                      const wchar_t* string2,
+                      size_t length);
 
 int compareWideString(const wchar_t* string1, const wchar_t* string2);
 
