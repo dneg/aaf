@@ -46,7 +46,7 @@ public:
   ImplAAFTimelineMobSlot ();
   ~ImplAAFTimelineMobSlot ();
 
-  OMDECLARE_STORABLE(ImplAAFMobSlot);
+  OMDECLARE_STORABLE(ImplAAFMobSlot)
 
   //****************
   // GetEditRate()
