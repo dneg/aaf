@@ -89,7 +89,7 @@ public:
 		 aafLength_t  length,
 
 		 // @parm [in] Data kind of the new slot
-         ImplAAFDataDef * dataDef,
+         aafUID_t * dataDef,
 
 		 // @parm [in] Edit rate of the new slot
 		 aafRational_t  editRate);
