@@ -46,6 +46,7 @@ $(AAFSDKBINDIR)/dump$(EXE) : $(CXXOBJS)
 .PHONY : clean
 clean :
 	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
 	@$(RM) $(AAFSDKBINDIR)/dump$(EXE)
 	@$(RMDIR) $(OBJDIR)/ii_files
 

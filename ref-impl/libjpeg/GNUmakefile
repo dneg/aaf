@@ -72,6 +72,7 @@ $(LIBDIR)/libjpeg$(LIB) :  $(CXXOBJS)
 .PHONY : clean
 clean :
 	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
 	@$(RM) $(LIBDIR)/libjpeg$(LIB)
 
 
