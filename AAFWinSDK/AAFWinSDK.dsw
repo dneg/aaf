@@ -339,9 +339,6 @@ Package=<4>
     Project_Dep_Name MakeSDKUtilities
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name ComFileKindTest
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name MakeSDKExamples2
     End Project Dependency
 }}}
@@ -495,6 +492,24 @@ Package=<4>
     Project_Dep_Name AAFStandardCodecs
     End Project Dependency
     Begin Project Dependency
+    Project_Dep_Name ComModTestAAF
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CreateSequence
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name EssenceAccess
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ComFileKindTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name UTF8FileNameTest
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MultiGenTest
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name ComAAFInfo
     End Project Dependency
     Begin Project Dependency
@@ -508,15 +523,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ComPropDirectDump
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name ComModTestAAF
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name CreateSequence
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name EssenceAccess
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ComPropDirectAccess
@@ -544,9 +550,6 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name InfoDumper
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name MultiGenTest
     End Project Dependency
 }}}
 
@@ -636,7 +639,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "UTF8FilenameTest"=.\Test\com\UTF8FileNameTest\UTF8FilenameTest.dsp - Package Owner=<4>
+Project: "UTF8FileNameTest"=.\Test\com\UTF8FileNameTest\UTF8FileNameTest.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

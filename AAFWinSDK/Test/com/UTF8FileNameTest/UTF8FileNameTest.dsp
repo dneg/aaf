@@ -1,24 +1,24 @@
-# Microsoft Developer Studio Project File - Name="UTF8FilenameTest" - Package Owner=<4>
+# Microsoft Developer Studio Project File - Name="UTF8FileNameTest" - Package Owner=<4>
 # Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
 
-CFG=UTF8FilenameTest - Win32 Debug
+CFG=UTF8FileNameTest - Win32 Debug
 !MESSAGE This is not a valid makefile. To build this project using NMAKE,
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
-!MESSAGE NMAKE /f "UTF8FilenameTest.mak".
+!MESSAGE NMAKE /f "UTF8FileNameTest.mak".
 !MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "UTF8FilenameTest.mak" CFG="UTF8FilenameTest - Win32 Debug"
+!MESSAGE NMAKE /f "UTF8FileNameTest.mak" CFG="UTF8FileNameTest - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "UTF8FilenameTest - Win32 Release" (based on "Win32 (x86) Console Application")
-!MESSAGE "UTF8FilenameTest - Win32 Debug" (based on "Win32 (x86) Console Application")
+!MESSAGE "UTF8FileNameTest - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "UTF8FileNameTest - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
@@ -28,7 +28,7 @@ CFG=UTF8FilenameTest - Win32 Debug
 CPP=cl.exe
 RSC=rc.exe
 
-!IF  "$(CFG)" == "UTF8FilenameTest - Win32 Release"
+!IF  "$(CFG)" == "UTF8FileNameTest - Win32 Release"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 0
@@ -53,7 +53,7 @@ LINK32=link.exe
 # ADD LINK32 ole32.lib uuid.lib winmm.lib user32.lib kernel32.lib aaf.lib aafiid.lib /nologo /subsystem:console /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /nodefaultlib:"msvcirtd.lib" /libpath:"..\..\..\lib"
 # SUBTRACT LINK32 /pdb:none
 
-!ELSEIF  "$(CFG)" == "UTF8FilenameTest - Win32 Debug"
+!ELSEIF  "$(CFG)" == "UTF8FileNameTest - Win32 Debug"
 
 # PROP BASE Use_MFC 0
 # PROP BASE Use_Debug_Libraries 1
@@ -82,8 +82,8 @@ LINK32=link.exe
 
 # Begin Target
 
-# Name "UTF8FilenameTest - Win32 Release"
-# Name "UTF8FilenameTest - Win32 Debug"
+# Name "UTF8FileNameTest - Win32 Release"
+# Name "UTF8FileNameTest - Win32 Debug"
 # Begin Group "Source Files"
 
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
