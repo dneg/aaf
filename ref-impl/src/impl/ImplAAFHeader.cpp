@@ -759,3 +759,43 @@ void ImplAAFHeader::SetObjectModelVersion (aafUInt32 version)
   _objectModelVersion = version;
   assert (IsObjectModelVersionPresent());
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::GetStoredByteOrder (eAAFByteOrder_t *  pOrder)
+{
+  if (!pOrder)
+    return AAFRESULT_NULL_PARAM;
+
+  if (_byteOrder == 0x4d4d) // 'MM'
+  {
+    *pOrder = kAAFByteOrderBig;
+  }
+  else  // 'II'
+  {
+    *pOrder = kAAFByteOrderLittle;
+  }
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::GetNativeByteOrder (eAAFByteOrder_t *  pOrder)
+{
+  if (!pOrder)
+    return AAFRESULT_NULL_PARAM;
+
+	OMByteOrder byteOrder = hostByteOrder();
+	if (byteOrder == littleEndian)
+  {
+		*pOrder = kAAFByteOrderLittle;
+	} 
+  else 
+  {
+		*pOrder = kAAFByteOrderBig;
+	}
+
+  return AAFRESULT_SUCCESS;
+}
