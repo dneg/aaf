@@ -19,54 +19,54 @@ include aafobjects.mk
 depend.mk : aafobjects.mk
 	@echo Creating depend.tmp ...
 	@rm -f depend.tmp
-	@echo # This file automatically generated make. > depend.tmp
-	@echo # Special case AAFTypes since no object is to be built only headers... > depend.tmp
+	@$(SH_PREFIX) echo # This file automatically generated make. > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo # Special case AAFTypes since no object is to be built only headers... > depend.tmp $(SH_SUFFIX)
 	@echo AAFTypes.all...
-	@echo AAFTypes.all : AAFTypes.cpp AAFTypes.h AAFTypes.cppt > depend.tmp
-	@echo AAFTypes.all : AAFTypes.comc AAFTypes.comh > depend.tmp
-	@echo AAFTypes.all : AAFTypes.implc AAFTypes.implh > depend.tmp
-	@echo AAFTypes.all : AAFTypes.idl AAFTypes.exp > depend.tmp
-	@echo AAFTypes.h : macros/h.mac macros/base.mac > depend.tmp
-	@echo AAFTypes.comh : macros/comh.mac macros/base.mac > depend.tmp
-	@echo AAFTypes.implh : macros/implh.mac macros/base.mac > depend.tmp
-	@echo AAFTypes.idl : macros/idl.mac macros/base.mac > depend.tmp
-	@echo AAFTypes.exp : macros/exp.mac macros/base.mac > depend.tmp
-	@echo # > depend.tmp
-	@echo # > depend.tmp
-	@echo #special case the utility classes since they will not be exposed by com > depend.tmp
+	@$(SH_PREFIX) echo AAFTypes.all : AAFTypes.cpp AAFTypes.h AAFTypes.cppt > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFTypes.all : AAFTypes.comc AAFTypes.comh > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFTypes.all : AAFTypes.implc AAFTypes.implh > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFTypes.all : AAFTypes.idl AAFTypes.exp > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFTypes.h : macros/h.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFTypes.comh : macros/comh.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFTypes.implh : macros/implh.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFTypes.idl : macros/idl.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFTypes.exp : macros/exp.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo # > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo # > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo #special case the utility classes since they will not be exposed by com > depend.tmp $(SH_SUFFIX)
 	@echo AAFUInt64.all...
-	@echo AAFUInt64.all : AAFUInt64.cpp AAFUInt64.h AAFUInt64.cppt > depend.tmp
-	@echo AAFUInt64.all : AAFUInt64.implc AAFUInt64.implh > depend.tmp
-	@echo AAFUInt64.all : AAFUInt64.exp > depend.tmp
-	@echo AAFUInt64.cpp : macros/cpp.mac macros/base.mac > depend.tmp
-	@echo AAFUInt64.h : macros/h.mac macros/base.mac > depend.tmp
-	@echo AAFUInt64.cppt : macros/cppt.mac macros/base.mac > depend.tmp
-	@echo AAFUInt64.implc : macros/implc.mac macros/base.mac > depend.tmp
-	@echo AAFUInt64.implh : macros/implh.mac macros/base.mac > depend.tmp
-	@echo AAFUInt64.exp : macros/exp.mac macros/base.mac > depend.tmp
-	@echo # > depend.tmp
+	@$(SH_PREFIX) echo AAFUInt64.all : AAFUInt64.cpp AAFUInt64.h AAFUInt64.cppt > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFUInt64.all : AAFUInt64.implc AAFUInt64.implh > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFUInt64.all : AAFUInt64.exp > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFUInt64.cpp : macros/cpp.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFUInt64.h : macros/h.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFUInt64.cppt : macros/cppt.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFUInt64.implc : macros/implc.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFUInt64.implh : macros/implh.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFUInt64.exp : macros/exp.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo # > depend.tmp $(SH_SUFFIX)
 	@echo AAFInt64.all...
-	@echo AAFInt64.all : AAFInt64.cpp AAFInt64.h AAFInt64.cppt > depend.tmp
-	@echo AAFInt64.all : AAFInt64.implc AAFInt64.implh > depend.tmp
-	@echo AAFInt64.all : AAFInt64.exp > depend.tmp
-	@echo AAFInt64.cpp : macros/cpp.mac macros/base.mac > depend.tmp
-	@echo AAFInt64.h : macros/h.mac macros/base.mac > depend.tmp
-	@echo AAFInt64.cppt : macros/cppt.mac macros/base.mac > depend.tmp
-	@echo AAFInt64.implc : macros/implc.mac macros/base.mac > depend.tmp
-	@echo AAFInt64.implh : macros/implh.mac macros/base.mac > depend.tmp
-	@echo AAFInt64.exp : macros/exp.mac macros/base.mac > depend.tmp
-	@echo # > depend.tmp
+	@$(SH_PREFIX) echo AAFInt64.all : AAFInt64.cpp AAFInt64.h AAFInt64.cppt > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFInt64.all : AAFInt64.implc AAFInt64.implh > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFInt64.all : AAFInt64.exp > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFInt64.cpp : macros/cpp.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFInt64.h : macros/h.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFInt64.cppt : macros/cppt.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFInt64.implc : macros/implc.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFInt64.implh : macros/implh.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFInt64.exp : macros/exp.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo # > depend.tmp $(SH_SUFFIX)
 	@echo AAFString.all...
-	@echo AAFString.all : AAFString.cpp AAFString.h AAFString.cppt > depend.tmp
-	@echo AAFString.all : AAFString.implc AAFString.implh > depend.tmp
-	@echo AAFString.all : AAFString.exp > depend.tmp
-	@echo AAFString.cpp : macros/cpp.mac macros/base.mac > depend.tmp
-	@echo AAFString.h : macros/h.mac macros/base.mac > depend.tmp
-	@echo AAFString.cppt : macros/cppt.mac macros/base.mac > depend.tmp
-	@echo AAFString.implc : macros/implc.mac macros/base.mac > depend.tmp
-	@echo AAFString.implh : macros/implh.mac macros/base.mac > depend.tmp
-	@echo AAFString.exp : macros/exp.mac macros/base.mac > depend.tmp
-	$(SH_PREFIX) for base in $(DODO_TARGET_NAMES) ; do \
+	@$(SH_PREFIX) echo AAFString.all : AAFString.cpp AAFString.h AAFString.cppt > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFString.all : AAFString.implc AAFString.implh > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFString.all : AAFString.exp > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFString.cpp : macros/cpp.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFString.h : macros/h.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFString.cppt : macros/cppt.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFString.implc : macros/implc.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFString.implh : macros/implh.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo AAFString.exp : macros/exp.mac macros/base.mac > depend.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) for base in $(DODO_TARGET_NAMES) ; do \
 		echo $$base.all... ; \
 		echo '' >> depend.tmp ; \
 		echo $$base.all : $$base.cpp $$base.h $$base.cppt >> depend.tmp ; \
