@@ -1,0 +1,94 @@
+#!docjet_editor
+
+Root = 'default.djt'
+FormatsToGenerate = 'AAFapi\\\\HTMLHelp'
+Hooks = 'ArgumentHook; GroupHook; SummaryHook; IDLCleanupHook'
+Version = 40007
+
+[Warnings]
+OnUndocumentedParams = true
+
+[]
+
+[Source]
+Wildcard = '.\\AAFNoSpace.idl'
+Wildcard = '.\\AAFTypes.idl'
+
+[Exclusion]
+
+[Variable]
+AAFapi.Output File Name = 'aafapi'
+AAFapi.Title = 'AAF COM API Reference'
+AAFapi.Trailer Banner = ''
+AAFapi.Trailer URL = ''
+All.Home URL = 'frontCover.html'
+All.Project Name = 'AAF SDK'
+All.Required Header = 'AAF.h'
+New Standard.Trailer Banner = ''
+New Standard.Trailer URL = ''
+
+[CommentSection]
+Example = 'Succeeds if'
+ImplementsInt = 'Implements'
+Results = \
+        'Return Value; Returns; Return Code; Result; Results; Possibl'\
+        'e Errors'
+SucceedsIf = 'Succeeds if'
+ValidValues = 'Valid values'
+
+[AddIns]
+ArgumentHook.AlwaysOverrideSFS = 'false'
+ArgumentHook.InputArgSectionNames = \
+        'input, inputs, input arguments, input parameters'
+ArgumentHook.OutputArgSectionNames = \
+        'output, outputs, output arguments, output parameters'
+BipUnboxer.boxchars = '*#-=+\''
+BulletParagraphScanner.bulletChars = '-'
+CharacterDirectiveScanner.Mapping = \
+        'External Hyperlink->1:hyperlink\n.Embedded Image->2:image\n.Ra'\
+        'w HTML->1:html'
+CurlyDirectiveScanner.Mapping = \
+        '$secretIfInCPP->0:secretIfInCPP\n$noArgWarnings->0:suppressUn'\
+        'documentedParameterWarnings\n$filename->1:filename\n$groups->1'\
+        ':groups\n$tag->1:tag\n$unsecret->0:unsecret\n$noResultsWarning-'\
+        '>0:noResultsWarning\n$glyph->2:glyph\n$secretByName->1:secretB'\
+        'yName\n$deprecated->0:deprecated\n$noArgWarnings->1:noArgWarni'\
+        'ngs\n$secretIfNotPublic->0:secretIfNotPublic\n$noUndocWarnings'\
+        '->0:suppressUndocumentedWarnings\n$noUndocWarnings->0:noUndoc'\
+        'Warning\n$noUndocWarnings->0:noUndocWarnings\n$internal->0:int'\
+        'ernal\n$partOf->1:partOf\n$alias->1:alias\n$group->1:group\n$noR'\
+        'esultsWarning->0:noResultsWarnings\n$noArgWarnings->0:noArgWa'\
+        'rning\n$secretByAccessSpecifier->1:secretByAccessSpecifier\n$d'\
+        'efaultGroup->1:defaultGroup\n$noAutoLink->0:noAutoLinks\n$secr'\
+        'et->1:secret\n$noAutoLink->0:noAutoLink\n$version->1:version'
+DelphiUnboxer.boxchars = '*#-=+{}'
+IDLCleanupHook.Action = 'RemoveAllAttributes'
+IDLCleanupHook.Transforms = \
+        'DWORD\nLong\nLONG\nLong\nlong\nLong\nint\nLong\nshort\nShort\nSHORT\nSh'\
+        'ort\ndouble\nDouble\nBSTR\nString\nconst char *\nString\nLPCSTR\nStr'\
+        'ing\nLPCTSTR\nString\nVARIANT\nVariant\nVARIANT_BOOL\nBoolean\nHRES'\
+        'ULT\nHRESULT\nVARTYPE\nVarType\nI+ *\nI+'
+IDLSource.NastyMacros = 'SAFEARRAY'
+IDLSource.TabWidth = '4'
+PreformattedParagraphScanner.meansPreformatted = '10'
+SlashStarUnboxer.boxchars = '*#-=+/'
+SummaryHook.Usage = 'Sentence'
+TableScanner.Tables = '@untitled table\n@table'
+TableScanner.bodyCellsStyle_0 = 'BodyCell'
+TableScanner.bodyCellsStyle_1 = 'BodyCell'
+TableScanner.bodyRowsStyle_0 = 'BodyRow'
+TableScanner.bodyRowsStyle_1 = 'BodyRow'
+TableScanner.hasTitleLine_0 = 'false'
+TableScanner.hasTitleLine_1 = 'true'
+TableScanner.rtfSpacingString_0 = ''
+TableScanner.rtfSpacingString_1 = ''
+TableScanner.spacesSeparatingColumns_0 = '2'
+TableScanner.spacesSeparatingColumns_1 = '2'
+TableScanner.spacingTolerance_0 = '3'
+TableScanner.spacingTolerance_1 = '3'
+TableScanner.tableStyle_0 = 'NoHeader'
+TableScanner.tableStyle_1 = 'WithHeader'
+TableScanner.titleCellsStyle_0 = 'TitleCell'
+TableScanner.titleCellsStyle_1 = 'TitleCell'
+TableScanner.titleRowStyle_0 = 'TitleRow'
+TableScanner.titleRowStyle_1 = 'TitleRow'
