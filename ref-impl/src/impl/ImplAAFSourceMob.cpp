@@ -68,6 +68,14 @@ ImplAAFSourceMob::~ImplAAFSourceMob ()
 	}
 }
 
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFSourceMob::Initialize ()
+{
+  return AAFRESULT_SUCCESS;
+}
+
+
 //****************
 // GetEssenceDescriptor()
 //
@@ -137,7 +145,7 @@ AAFRESULT STDMETHODCALLTYPE
 		sub = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
 		if(sub == NULL)
 			return(E_FAIL);
-		CHECK(sub->InitializeSourceClip (dataDef, &length, sourceRef));
+		CHECK(sub->Initialize (dataDef, &length, sourceRef));
 		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, L"Test", zeroPos, 
 												&newSlot));
 		newSlot->ReleaseReference();
