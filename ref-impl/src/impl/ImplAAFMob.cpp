@@ -1282,7 +1282,7 @@ ImplAAFMob::AddPhysSourceRef (aafAppendOption_t  addType,
 	{
 		CvtInt32toInt64(0, &zeroPos);
 		sclp = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
-		sclp->InitializeSourceClip(pEssenceKind, &srcRefLength, ref);
+		sclp->Initialize(pEssenceKind, &srcRefLength, ref);
 				
 		status = FindSlotBySlotID(aMobSlot, &slot);
 		if (status == AAFRESULT_SUCCESS)
