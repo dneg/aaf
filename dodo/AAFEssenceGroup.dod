@@ -7,6 +7,8 @@ AAFSegment\
 #endm
 #c
 #import ./AAFUnitTest.exp
+#import ./AAFSegment.exp
+AD_HEAD
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -15,7 +17,7 @@ AAFSegment\
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-#include "myVector.h"
+#c AD_INCLUDE(myVector)
 
 class AAFFile;
 
