@@ -53,6 +53,8 @@ public:
   virtual void insert(void* key,
                       const OMStrongReferenceSetElement& element) = 0;
 
+  virtual void find(void* key, OMStrongReferenceSetElement& element) const = 0;
+
   virtual void find(void* key, OMStorable*& object) const = 0;
 
   virtual OMKeySize keySize(void) const = 0;
