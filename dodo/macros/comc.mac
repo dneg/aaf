@@ -1495,7 +1495,7 @@ HRESULT C.this-module::InternalQueryInterface
     }
     if (EQUAL_UID(riid,IID_I%03)) 
     { 
-        *ppvObj = (I%02 *)this; 
+        *ppvObj = (I%03 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
