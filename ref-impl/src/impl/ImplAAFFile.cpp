@@ -511,4 +511,4 @@ AAFRESULT ImplAAFFile::OpenModify(
 
 extern "C" const aafClassID_t CLSID_AAFFile;
 
-OMDEFINE_STORABLE(AAFFile, CLSID_AAFFile);
+OMDEFINE_STORABLE(ImplAAFFile, CLSID_AAFFile);
