@@ -368,6 +368,59 @@ void OMStoredObject::save(const OMWeakReferenceSet& set)
   ASSERT("Unimplemented code not reached", false);
 }
 
+  // @mfunc Save the <c OMPropertyTable> <p table> in this
+  //        <c OMStoredObject>.
+  //   @parm The table to save.
+void OMStoredObject::save(const OMPropertyTable* table)
+{
+  TRACE("OMPropertyTable::save");
+
+  PRECONDITION("Valid property table", table != 0);
+
+  IStream* stream = createStream(L"referenced properties");
+
+  // byte order
+  ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
+  writeToStream(stream, &_byteOrder, sizeof(_byteOrder));
+
+  // count of paths
+  OMPropertyCount count = table->count();
+  writeToStream(stream, &count, sizeof(count));
+
+  // count of property ids
+  OMUInt32 pidCount = 0;
+  for (size_t i = 0; i < count; i++) {
+    OMUInt32 length = lengthOfPropertyPath(table->valueAt(i));
+    pidCount = pidCount + length + 1;
+  }
+  writeToStream(stream, &pidCount, sizeof(pidCount));
+
+  // sequence of null terminated pids
+  for (size_t j = 0; j < count; j++) {
+    const OMPropertyId* internalName = table->valueAt(j);
+    size_t pidCount = lengthOfPropertyPath(internalName);
+    size_t byteCount = pidCount * sizeof(OMPropertyId);
+    OMPropertyId* externalName = new OMPropertyId[pidCount];
+    ASSERT("Valid heap pointer", externalName != 0);
+    externalizeUInt16Array(internalName, externalName, pidCount);
+    writeToStream(stream, (void*)externalName, byteCount);
+    const OMPropertyId null = 0;
+    writeToStream(stream, (void*)&null, sizeof(null));
+    delete [] externalName;
+  }
+
+  closeStream(stream);
+}
+
+  // @mfunc Save the <c OMDataStream> <p stream> in this
+  //        <c OMStoredObject>.
+  //   @parm The <c OMDataStream> to save.
+void OMStoredObject::save(const OMDataStream& stream)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc  Save the <c OMStoredVectorIndex> <p vector> in this
   //         <c OMStoredObject>, the vector is named <p vectorName>.
   //   @parm The <c OMStoredVectorIndex> to save.
@@ -482,59 +535,6 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
 
   delete [] key;
   delete [] setIndexName;
-}
-
-  // @mfunc Save the <c OMPropertyTable> <p table> in this
-  //        <c OMStoredObject>.
-  //   @parm The table to save.
-void OMStoredObject::save(const OMPropertyTable* table)
-{
-  TRACE("OMPropertyTable::save");
-
-  PRECONDITION("Valid property table", table != 0);
-
-  IStream* stream = createStream(L"referenced properties");
-
-  // byte order
-  ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
-  writeToStream(stream, &_byteOrder, sizeof(_byteOrder));
-
-  // count of paths
-  OMPropertyCount count = table->count();
-  writeToStream(stream, &count, sizeof(count));
-
-  // count of property ids
-  OMUInt32 pidCount = 0;
-  for (size_t i = 0; i < count; i++) {
-    OMUInt32 length = lengthOfPropertyPath(table->valueAt(i));
-    pidCount = pidCount + length + 1;
-  }
-  writeToStream(stream, &pidCount, sizeof(pidCount));
-
-  // sequence of null terminated pids
-  for (size_t j = 0; j < count; j++) {
-    const OMPropertyId* internalName = table->valueAt(j);
-    size_t pidCount = lengthOfPropertyPath(internalName);
-    size_t byteCount = pidCount * sizeof(OMPropertyId);
-    OMPropertyId* externalName = new OMPropertyId[pidCount];
-    ASSERT("Valid heap pointer", externalName != 0);
-    externalizeUInt16Array(internalName, externalName, pidCount);
-    writeToStream(stream, (void*)externalName, byteCount);
-    const OMPropertyId null = 0;
-    writeToStream(stream, (void*)&null, sizeof(null));
-    delete [] externalName;
-  }
-
-  closeStream(stream);
-}
-
-  // @mfunc Save the <c OMDataStream> <p stream> in this
-  //        <c OMStoredObject>.
-  //   @parm The <c OMDataStream> to save.
-void OMStoredObject::save(const OMDataStream& stream)
-{
-  TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Save a single weak reference.
@@ -771,6 +771,70 @@ void OMStoredObject::restore(OMWeakReferenceSet& set, size_t externalSize)
   ASSERT("Unimplemented code not reached", false);
 }
 
+  // @mfunc Restore the <c OMPropertyTable> in this <c OMStoredObject>.
+  //   @parm A pointer to the newly restored <c OMPropertyTable> by reference.
+void OMStoredObject::restore(OMPropertyTable*& table)
+{
+  TRACE("OMPropertyTable::restore");
+
+  IStream* stream = openStream(L"referenced properties");
+
+  // byte order
+  OMByteOrder byteOrder;
+  readFromStream(stream, &byteOrder, sizeof(byteOrder));
+  bool reorderBytes;
+  if (byteOrder == hostByteOrder()) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+
+  // count of paths
+  OMPropertyCount count;
+  readUInt16FromStream(stream, count, reorderBytes);
+  table = new OMPropertyTable();
+  ASSERT("Valid heap pointer", table != 0);
+
+  if (count > 0) {
+    // count of property ids
+    OMUInt32 totalPids;
+    readUInt32FromStream(stream, totalPids, reorderBytes);
+
+    // sequence of null terminated pids
+    OMPropertyId* buffer = new OMPropertyId[totalPids];
+    ASSERT("Valid heap pointer", buffer != 0);
+    OMUInt32 totalBytes = totalPids * sizeof(OMPropertyId);
+    readFromStream(stream, buffer, totalBytes);
+    OMPropertyId* externalName = buffer;
+    for (size_t i = 0; i < count; i++) {
+      size_t pidCount = lengthOfPropertyPath(externalName);
+      OMPropertyId* internalName = new OMPropertyId[pidCount + 1];
+      ASSERT("Valid heap pointer", internalName != 0);
+      if (reorderBytes) {
+        reorderUInt16Array(externalName, pidCount + 1);
+      }
+      internalizeUInt16Array(externalName, internalName, pidCount + 1);
+      table->insert(internalName);
+      delete [] internalName;
+      internalName = 0; // for BoundsChecker
+      externalName = externalName + pidCount + 1;
+    }
+    delete [] buffer;
+  }
+
+  closeStream(stream);
+}
+
+  // @mfunc Restore the <c OMDataStream> <p stream> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMDataStream& stream, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc Restore the vector named <p vectorName> into this
   //        <c OMStoredObject>.
   //   @parm The name of the vector.
@@ -919,70 +983,6 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   delete [] setIndexName;
 
   set = setIndex;
-}
-
-  // @mfunc Restore the <c OMPropertyTable> in this <c OMStoredObject>.
-  //   @parm A pointer to the newly restored <c OMPropertyTable> by reference.
-void OMStoredObject::restore(OMPropertyTable*& table)
-{
-  TRACE("OMPropertyTable::restore");
-
-  IStream* stream = openStream(L"referenced properties");
-
-  // byte order
-  OMByteOrder byteOrder;
-  readFromStream(stream, &byteOrder, sizeof(byteOrder));
-  bool reorderBytes;
-  if (byteOrder == hostByteOrder()) {
-    reorderBytes = false;
-  } else {
-    reorderBytes = true;
-  }
-
-  // count of paths
-  OMPropertyCount count;
-  readUInt16FromStream(stream, count, reorderBytes);
-  table = new OMPropertyTable();
-  ASSERT("Valid heap pointer", table != 0);
-
-  if (count > 0) {
-    // count of property ids
-    OMUInt32 totalPids;
-    readUInt32FromStream(stream, totalPids, reorderBytes);
-
-    // sequence of null terminated pids
-    OMPropertyId* buffer = new OMPropertyId[totalPids];
-    ASSERT("Valid heap pointer", buffer != 0);
-    OMUInt32 totalBytes = totalPids * sizeof(OMPropertyId);
-    readFromStream(stream, buffer, totalBytes);
-    OMPropertyId* externalName = buffer;
-    for (size_t i = 0; i < count; i++) {
-      size_t pidCount = lengthOfPropertyPath(externalName);
-      OMPropertyId* internalName = new OMPropertyId[pidCount + 1];
-      ASSERT("Valid heap pointer", internalName != 0);
-      if (reorderBytes) {
-        reorderUInt16Array(externalName, pidCount + 1);
-      }
-      internalizeUInt16Array(externalName, internalName, pidCount + 1);
-      table->insert(internalName);
-      delete [] internalName;
-      internalName = 0; // for BoundsChecker
-      externalName = externalName + pidCount + 1;
-    }
-    delete [] buffer;
-  }
-
-  closeStream(stream);
-}
-
-  // @mfunc Restore the <c OMDataStream> <p stream> into this
-  //        <c OMStoredObject>.
-  //   @parm TBS
-  //   @parm TBS
-void OMStoredObject::restore(OMDataStream& stream, size_t externalSize)
-{
-  TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Restore a single weak reference.
