@@ -39,8 +39,9 @@ DBG_FLAGS = -g
 
 #------------------------------------------------------------------------------
 # Compiler flags
+# See the explanation of -G 0 in the gp_overflow(5) manpage.
 #------------------------------------------------------------------------------
-ADD_CFLAGS = -no_auto_include -prelink -xansi
+ADD_CFLAGS = -no_auto_include -prelink -xansi -G 0
 
 
 #------------------------------------------------------------------------------
