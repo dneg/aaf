@@ -42,7 +42,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /GX /O2 /I "../../../../ref-impl/src/impl" /I "../../../../ref-impl/src/OM" /I "../../../../ref-impl/include" /I "../../../../ref-impl/include/com-api" /I "../../../../ref-impl/include/OM" /I "../../../ref-impl/include/comidl" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /YX /FD /c
+# ADD CPP /nologo /MT /W3 /GX /O2 /I "../../../../ref-impl/src/impl" /I "../../../../ref-impl/src/OM" /I "../../../../ref-impl/include" /I "../../../../ref-impl/include/com-api" /I "../../../../ref-impl/include/OM" /I "../../../ref-impl/include/comidl" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
@@ -66,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../../ref-impl/include" /I "../../../../ref-impl/include/com-api" /I "../../../../ref-impl/include/OM" /I "../../../ref-impl/include/comidl" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "OM_ENABLE_DEBUG" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GX /ZI /Od /I "../../../../ref-impl/include" /I "../../../../ref-impl/include/com-api" /I "../../../../ref-impl/include/OM" /I "../../../ref-impl/include/comidl" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "OM_ENABLE_DEBUG" /YX /FD /c
 # SUBTRACT CPP /Fr
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
@@ -84,10 +84,6 @@ LINK32=link.exe
 
 # Name "ComEssenceDataTest - Win32 Release"
 # Name "ComEssenceDataTest - Win32 Debug"
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\include\comidl\AAF_i.c"
-# End Source File
 # Begin Source File
 
 SOURCE="..\..\..\..\examples\com-api\ComEssenceDataTest\ComEssenceDataTest.cpp"

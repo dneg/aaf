@@ -86,10 +86,6 @@ LINK32=link.exe
 # Name "ComCutsTestAAF - Win32 Debug"
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\comidl\AAF_i.c"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\..\examples\com-api\ComCutsOnlyTest\CutsOnlyExample.cpp"
 # End Source File
 # End Target
