@@ -34,35 +34,35 @@
 // to use. Here there are three different implementations to consider.
 //
 // 1) The standard implementation on Windows platforms
-//    for which USE_WINDOWS_SS is defined
+//    for which OM_WINDOWS_SS is defined
 // 2) The implementation on Macintosh (pre OSX)
-//    for which USE_MACINTOSH_SS is defined
+//    for which OM_MACINTOSH_SS is defined
 // 3) The reference implementation
-//    for which USE_REFERENCE_SS is defined
+//    for which OM_REFERENCE_SS is defined
 //
 #if defined(OM_OS_WINDOWS)
-#define USE_WINDOWS_SS
+#define OM_WINDOWS_SS
 #elif defined(OM_OS_MACOS)
-#define USE_MACINTOSH_SS
+#define OM_MACINTOSH_SS
 #elif defined(OM_OS_UNIX)
-#define USE_REFERENCE_SS
+#define OM_REFERENCE_SS
 #endif
 
 // Each Microsoft supplied Structured Storage implementation requires
 // us to include different header files.
 // 
-#if defined(USE_WINDOWS_SS)
+#if defined(OM_WINDOWS_SS)
 #include <objbase.h>
-#elif defined(USE_MACINTOSH_SS)
+#elif defined(OM_MACINTOSH_SS)
 #include "wintypes.h"
 #include <storage.h>
-#elif defined (USE_REFERENCE_SS)
+#elif defined (OM_REFERENCE_SS)
 #include "h/storage.h"
 #else
 #error "Don't know which structured storage implementation to use."
 #endif
 
-#if defined(USE_MACINTOSH_SS) || defined(USE_REFERENCE_SS)
+#if defined(OM_MACINTOSH_SS) || defined(OM_REFERENCE_SS)
 
 // The Macintosh and reference implementation declarations
 // for LARGE_INTEGER and ULARGE_INTEGER don't have a QuadPart.
