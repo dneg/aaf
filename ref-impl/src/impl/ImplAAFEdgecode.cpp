@@ -7,22 +7,14 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
-
-
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -39,7 +31,7 @@
 #include "aafErr.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 
 ImplAAFEdgecode::ImplAAFEdgecode ():
