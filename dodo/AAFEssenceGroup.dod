@@ -19,12 +19,9 @@ AD_HEAD
 \******************************************/
 #c AD_INCLUDE(myVector)
 
-AD_FORWARD_DECLARATION(AAFFile)
-
 AD_CLASS_BEGIN
 
-AD_XCONSTRUCTOR3(
-[in], objIn, AAFFile, file,File Handle ,
+AD_XCONSTRUCTOR2(
 [in], objIn, AAFDataDefinition, datadef,Data Definition object,
 [in], objPass, aafLength_t, length,Length property value,
 Creates a new empty media group object with the given property values.)
