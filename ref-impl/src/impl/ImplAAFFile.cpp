@@ -499,8 +499,8 @@ AAFRESULT ImplAAFFile::Create(
 			 */
 			ImplAAFFile *pSavedAddr = _prevFile;
 
-			if (session->GetTopFile())
-				AAFFree(session->GetTopFile());
+//!!!			if (session->GetTopFile())
+//				delete(session->GetTopFile());
 			     
 			/* Set to previous this or NULL */
 			session->SetTopFile(pSavedAddr);
