@@ -149,6 +149,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafFadeType_t		fadeOutType = kAAFFadeLinearPower;
 	aafSourceRef_t		sourceRef; 
 	aafLength_t			fillerLength = 3200;
+	aafInt32			numAlternates;
 
 	HRESULT				hr = AAFRESULT_SUCCESS;
 
@@ -222,6 +223,25 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSelector->AppendAlternateSegment(pSegment));
 		// Release the intreface so we can reuse the pointer
 		pSegment->Release();
+
+		// create another filler, add it as an alternate, count two alternates, 
+		// then delete and check for only one alternate
+	    checkResult(defs.cdFiller()->
+					CreateInstance(IID_IAAFFiller, 
+								   (IUnknown **)&pFiller));
+	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
+		checkResult(pFiller->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
+		checkResult(pSelector->AppendAlternateSegment(pSegment));
+		pSegment->Release();
+		checkResult(pSelector->GetNumAlternateSegments (&numAlternates));
+		checkExpression(2 == numAlternates, AAFRESULT_TEST_FAILED);
+		checkResult(pSelector->RemoveAlternateSegment (pSegment));
+		checkResult(pSelector->GetNumAlternateSegments (&numAlternates));
+		checkExpression(1 == numAlternates, AAFRESULT_TEST_FAILED);
+
+
+
+
 		checkResult(pSelector->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 	    // append the Selector to the MOB tree
 		aafRational_t editRate = { 0, 1};

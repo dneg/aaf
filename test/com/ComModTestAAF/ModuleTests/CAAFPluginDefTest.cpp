@@ -160,6 +160,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFLocator		*pLoc = NULL, *pLoc2 = NULL, *pLoc3 = NULL;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
   bool				bFileOpen = false;
+  aafUInt32			numLocators;
 	HRESULT			hr = S_OK;
 /*	long			test;
 */
@@ -242,7 +243,23 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
                                           (void **)&pLoc3));
 	checkResult(pLoc3->SetPath (manuf1URL));
     checkResult(pDesc->PrependLocator(pLoc3));
-
+	pLoc3->Release();
+	pLoc3 = NULL;
+	// Create a second locator, check for three locators, then delete it and recheck for two.
+	checkResult(defs.cdNetworkLocator()->
+				CreateInstance(IID_IAAFNetworkLocator, 
+							   (IUnknown **)&pNetLoc3));
+	checkResult(pNetLoc3->QueryInterface (IID_IAAFLocator,
+                                          (void **)&pLoc3));
+	checkResult(pLoc3->SetPath (manuf1URL));
+    checkResult(pDesc->AppendLocator(pLoc3));
+	pLoc3->Release();
+	pLoc3 = NULL;
+    checkResult(pDesc->CountLocators (&numLocators));
+	checkExpression(3 == numLocators, AAFRESULT_TEST_FAILED);
+    checkResult(pDesc->RemoveLocatorAt(2));
+    checkResult(pDesc->CountLocators (&numLocators));
+	checkExpression(2 == numLocators, AAFRESULT_TEST_FAILED);
   }
   catch (HRESULT& rResult)
   {

@@ -154,6 +154,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafLength_t			effectLen = TEST_EFFECT_LEN;
 	aafUID_t			effectID = kTestEffectID;
 	aafUID_t			parmID = kTestParmID;
+	aafInt32			numSegments;
 /*	long				test;
 */
 
@@ -237,6 +238,23 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();
 			pFiller = NULL;
+
+			// Create another input segment, count segments, then delete & recount
+			checkResult(defs.cdFiller()->
+						CreateInstance(IID_IAAFSegment, 
+									   (IUnknown **)&pFiller));
+			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
+			checkResult(pComponent->SetLength(effectLen));
+			checkResult(pComponent->SetDataDef(defs.ddPicture()));
+			checkResult(pOperationGroup->AppendInputSegment (pFiller));
+			pFiller->Release();
+			pFiller = NULL;
+			checkResult(pOperationGroup->CountSourceSegments (&numSegments));
+			checkExpression(2 == numSegments, AAFRESULT_TEST_FAILED);
+			checkResult(pOperationGroup->RemoveInputSegmentAt (1));
+			checkResult(pOperationGroup->CountSourceSegments (&numSegments));
+			checkExpression(1 == numSegments, AAFRESULT_TEST_FAILED);
+
 
 			checkResult(pOperationGroup->SetBypassOverride (1));
 			checkResult(defs.cdSourceClip()->
