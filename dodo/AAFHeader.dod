@@ -185,6 +185,30 @@ AD_XMETHOD1(RemoveMob,
   //   - pMob is null.)
 
 
+AD_XMETHOD1(GetNumEssenceData,
+			[out\, retval],
+			  objPass,
+			  aafUInt32 *,
+			  pNumEssenceData,
+			  Total number of essence data,
+			Writes the total number of essence data into the
+  // *pNumEssenceData argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pNumEssenceData pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumEssenceData.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumEssenceData is null.)
+
 AD_XMETHOD3(IsEssenceDataPresent,
 			[in],
 			  objPass,
@@ -219,12 +243,7 @@ AD_XMETHOD3(IsEssenceDataPresent,
   //   - either pFileMobID or pResult is null.)
 
 
-AD_XMETHOD2(EnumEssenceData,
-			[in\,ref],
-			  objPass,
-			  aafMediaCriteria_t *,
-			  pMediaCriteria,
-			  Essence Criteria for enumeration,
+AD_XMETHOD1(EnumEssenceData,
 			[out\,retval],
 			  objOut,
 			  EnumAAFEssenceData,
