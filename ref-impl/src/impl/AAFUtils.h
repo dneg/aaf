@@ -42,10 +42,9 @@ typedef enum
 	kRoundCeiling, kRoundFloor
 } aafRounding_t;
 
-#if PORT_LANG_CPLUSPLUS
-extern          "C"
-{
-#endif
+aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2);
+
+AAFRESULT aafMobIDNew(aafUID_t *mobID);
 
 /************************************************************************
  *
@@ -128,43 +127,11 @@ aafErr_t PvtTimecodeToOffset(
 /* omfsGetDateTime */
 void AAFGetDateTime(aafTimeStamp_t *time);
 
-
-/************************************************************************
- *
- * Container Functions
- *
- ************************************************************************/
-
-#if FULL_TOOLKIT
-aafBool omfsIsPropPresent(
-			AAFFile *			file,		/* IN -- For this aaf file */
-			AAFObject *		obj,		/* IN -- in this object */
-			aafProperty_t	prop,		/* IN -- read this property */
-			aafType_t		dataType);/* IN -- check the type */
-
-/************************************************************************
- *
- * Object Creation / Deletion Functions
- *
- ************************************************************************/
-
-aafErr_t AAFObjectNew(
-			AAFFile *				file,		/* IN - In this file */
-			aafClassID_t	*classID,	/* IN - create an object of this class */
-			AAFObject *			*result);	/* OUT - and return the result here. */
-#endif
-
 /************************************************************************
  *
  * Utility Functions
  *
  ************************************************************************/
-
-void *AAFMalloc(
-			size_t size);	/* Allocate this many bytes */
-
-void AAFFree(
-			void *ptr);	/* Free up this buffer */
 
 #if FULL_TOOLKIT
 aafErr_t AAFSetProgressCallback(
@@ -197,14 +164,6 @@ aafErr_t AAFConvertEditRate(
 	aafRounding_t howRound,	      /* IN - Rounding method (floor or ceiling) */
 	aafPosition_t *destPosition) ; /* OUT - Destination Position */
 	
-#if FULL_TOOLKIT
-AAFObject *AAFNewClassFromContainerObj(AAFFile *file, OMLObject obj);
-AAFObject *AAFNewClassFromClassID(AAFFile *file, char *classID, OMLObject obj);
-#endif
-
-#if PORT_LANG_CPLUSPLUS
-}
-#endif
 #endif				/* _AAF_UTIL_API_ */
 
 /* INDENT OFF */
