@@ -97,6 +97,12 @@ public:
     aafProductIdentification_t  *ident
   );
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  BeginSession (
+    aafProductIdentification_t  *ident
+  );
+
+
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFSessionTest.cpp.
