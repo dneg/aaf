@@ -77,7 +77,7 @@ PLATFORM_CFLAGS = -Dsgi $(MODULE_PLATFORM_CFLAGS)
 RPATH_OPT = $(XL)-rpath $(XL)$(RPATH)
 
 # Command to link executable.
-LD = $(CC) $(XL)-wall
+LD = $(CC) $(XL)-wall $(MODULE_PLATFORM_LDLAGS)
 
 # Command to link static library
 ifndef LD_STAT_LIB
