@@ -250,7 +250,7 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::GetTapeName (aafInt32		masterSlotID,
+    ImplAAFMasterMob::GetTapeName (aafUInt32		masterSlotID,
 								   aafWChar*	pTapeName,
 								   aafUInt32	bufSize)
 {
@@ -313,7 +313,7 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::GetTapeNameBufLen (aafInt32	masterSlotID,
+    ImplAAFMasterMob::GetTapeNameBufLen (aafUInt32	masterSlotID,
 										 aafUInt32*  pLen)
 {
 	ImplAAFFindSourceInfo	*info = NULL;
@@ -823,7 +823,7 @@ ImplAAFMasterMob::CreateEssence (aafSlotID_t		masterSlotID,
 /****/
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMasterMob::CreateMultiEssence (aafUID_t codecID,
-							aafInt16  arrayElemCount,
+							aafUInt16  arrayElemCount,
 							aafmMultiCreate_t *mediaArray,
 							aafCompressEnable_t Enable,
 							ImplAAFLocator		*destination,
@@ -871,11 +871,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::GetNumChannels (
+    ImplAAFMasterMob::CountChannels (
                            aafSlotID_t  slotID,
                            aafMediaCriteria_t *essenceCrit,
                            ImplAAFDataDef * pEssenceKind,
-                           aafInt16 *numCh)
+                           aafUInt16 *numCh)
 {
 	if (! pEssenceKind)
 	  return AAFRESULT_NULL_PARAM;
@@ -891,7 +891,7 @@ AAFRESULT STDMETHODCALLTYPE
     if (NULL == access)
       RAISE(AAFRESULT_NOMEMORY);
 
-	  CHECK(access->GetNumChannels(this, slotID, essenceCrit, essenceKind, numCh));
+	  CHECK(access->CountChannels(this, slotID, essenceCrit, essenceKind, numCh));
     access->ReleaseReference();
 	}
 	XEXCEPT
