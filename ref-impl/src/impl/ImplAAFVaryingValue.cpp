@@ -138,7 +138,6 @@ AAFRESULT STDMETHODCALLTYPE
 		  controlPointsType->ReleaseReference();
 		if (parameterType)
 		  parameterType->ReleaseReference();
-		return(XCODE());
 	}
 	XEND;
 
@@ -168,7 +167,6 @@ AAFRESULT STDMETHODCALLTYPE
 		if (theEnum)
 		  theEnum->ReleaseReference();
 		theEnum = 0;
-		return(XCODE());
 	}
 	XEND;
 	
