@@ -541,6 +541,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // Add the mob to the file.
 	  checkResult(pHeader->AddMob(pMob));
 
+	  // Test changing the mob id after the mob is attached to the
+	  // content store.  Change it, then reset to the original id.
+	  checkResult(pMob->SetMobID(MOBTestID2));
+	  checkResult(pMob->SetMobID(MOBTestID));
+	  
 	  // Create another Mob, check mob count, then delete and recheck count
 	  checkResult(defs.cdMasterMob()->
 				  CreateInstance(IID_IAAFMob, 
