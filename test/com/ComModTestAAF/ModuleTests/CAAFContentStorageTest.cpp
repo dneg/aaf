@@ -41,8 +41,12 @@
 
 #include "CAAFBuiltinDefs.h"
 
-const aafMobID_t kTestMobID1 = { 0x464AA9D8, 0x34AC, 0x11d3, { 0x80, 0xB4, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-const aafMobID_t kTestMobID2 = { 0x464AA9D9, 0x34AC, 0x11d3, { 0x80, 0xB4, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafMobID_t kTestMobID1 = { 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01,
+								 0x01, 0x01, 0x04, 0x02, 0x13, 0x00, 0x00, 0x00,
+								 0x464AA9D8, 0x34AC, 0x11d3, { 0x80, 0xB4, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+const aafMobID_t kTestMobID2 = { 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01,
+								 0x01, 0x01, 0x04, 0x02, 0x13, 0x00, 0x00, 0x00,
+								 0x464AA9D9, 0x34AC, 0x11d3, { 0x80, 0xB4, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
 
 // Utility class to implement the test.
@@ -359,9 +363,9 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	testMob->Release();
 	testMob = NULL;
 	/***/
-	uid.Data1 = 0;	// Invalidate the mobID
-	uid.Data2 = 0;
-	uid.Data3 = 0;
+	uid.material.Data1 = 0;	// Invalidate the mobID
+	uid.material.Data2 = 0;
+	uid.material.Data3 = 0;
 	checkExpression(_pHeader->LookupMob(uid, &testMob) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
 	/***/
 	check(_pHeader->CountMobs(kAAFFileMob, &readNumMobs));
@@ -382,9 +386,9 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	checkExpression(kAAFTrue == testBool, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID2;
- 	uid.Data1 = 0;	// Invalidate the mobID
-	uid.Data2 = 0;
-	uid.Data3 = 0;
+ 	uid.material.Data1 = 0;	// Invalidate the mobID
+	uid.material.Data2 = 0;
+	uid.material.Data3 = 0;
 	check(_pHeader->IsEssenceDataPresent (uid, kAAFEssence, &testBool));
 	checkExpression(kAAFFalse == testBool, AAFRESULT_TEST_FAILED);
 
