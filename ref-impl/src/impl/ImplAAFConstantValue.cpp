@@ -1,21 +1,10 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
 /***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
 * Copyright (c) 1998-1999 Avid Technology, Inc. *
 * Copyright (c) 1998-1999 Microsoft Corporation *
-*												*
+*                                               *
 \***********************************************/
 
 #ifndef __ImplAAFDataDef_h__
@@ -29,29 +18,29 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
-#ifndef __ImplAAFConstValue_h__
-#include "ImplAAFConstValue.h"
+#ifndef __ImplAAFConstantValue_h__
+#include "ImplAAFConstantValue.h"
 #endif
 
 #include <assert.h>
 #include <string.h>
 
 
-ImplAAFConstValue::ImplAAFConstValue ()
+ImplAAFConstantValue::ImplAAFConstantValue ()
 : _value(			PID_ConstantValue_Value,			"Value")
 {
 	_persistentProperties.put(_value.address());
 }
 
 
-ImplAAFConstValue::~ImplAAFConstValue ()
+ImplAAFConstantValue::~ImplAAFConstantValue ()
 {}
 
 
 	
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFConstValue::GetValue (
+    ImplAAFConstantValue::GetValue (
       aafUInt32  valueSize,
       aafDataBuffer_t  pValue,
       aafUInt32*  bytesRead)
@@ -71,7 +60,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFConstValue::GetValueBufLen (
+    ImplAAFConstantValue::GetValueBufLen (
       aafUInt32 *pLen)
 {
 	if(pLen == NULL)
@@ -85,7 +74,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFConstValue::SetValue (
+    ImplAAFConstantValue::SetValue (
       aafUInt32  valueSize,
       aafDataBuffer_t  pValue)
 {
@@ -98,6 +87,6 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-OMDEFINE_STORABLE(ImplAAFConstValue, AUID_AAFConstValue);
+OMDEFINE_STORABLE(ImplAAFConstantValue, AUID_AAFConstantValue);
 
 
