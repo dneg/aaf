@@ -3,18 +3,32 @@
 #define OMFILE_H
 
 #include "OMStorable.h"
-#include "OMStoredObject.h"
 #include "OMTypes.h"
 
 #include <stddef.h>
 
 class OMClassFactory;
 class OMObjectDirectory;
+class OMStoredObject;
 
 // @class Files supported by the Object Manager.
 //
 class OMFile : public OMStorable {
 public:
+
+    // @cmember,menum File access modes.
+  enum OMAccessMode {
+    readOnlyMode,  // @@emem The file may be read but may not be written.
+    writeOnlyMode, // @@emem The file may be written but may not be read.
+    modifyMode     // @@emem The file may be read and/or written.
+  };
+
+    // @cmember,menum Lazy loading modes (degrees of indolence).
+  enum OMLoadMode {
+    eagerLoad,   // @@emem Objects are loaded when the root object is loaded.
+    lazyLoad     // @@emem Objects are loaded on demand.
+  };
+
   // @access Static members.
 
     // @cmember Open an existing <c OMFile> for read-only access, the
@@ -22,14 +36,16 @@ public:
     //          <p factory> to create the objects. The file must already
     //          exist.
   static OMFile* openExistingRead(const wchar_t* fileName,
-                                  const OMClassFactory* factory);
+                                  const OMClassFactory* factory,
+                                  const OMLoadMode loadMode);
 
     // @cmember Open an existing <c OMFile> for modify access, the
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
     //          <p factory> to create the objects. The file must already
     //          exist.
   static OMFile* openExistingModify(const wchar_t* fileName,
-                                    const OMClassFactory* factory);
+                                    const OMClassFactory* factory,
+                                    const OMLoadMode loadMode);
 
     // @cmember Open a new <c OMFile> for write-only access, the
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
@@ -68,7 +84,8 @@ public:
     // @cmember Constructor.
   OMFile(const OMAccessMode mode,
          OMStoredObject* store,
-         const OMClassFactory* factory);
+         const OMClassFactory* factory,
+         const OMLoadMode loadMode);
 
     // @cmember Constructor.
   OMFile(const OMAccessMode mode,
@@ -118,6 +135,10 @@ public:
     //   @this const
   OMByteOrder byteOrder(void) const;
 
+    // @cmember The loading mode (eager or lazy) of this <c OMFile>.
+    //   @this const
+  OMLoadMode loadMode(void) const;
+
   // OMStorable overrides.
   //
   virtual const OMClassId& classId(void) const;
@@ -137,7 +158,7 @@ private:
   OMObjectDirectory* _objectDirectory;
 
   enum OMAccessMode _mode;
-
+  enum OMLoadMode _loadMode;
 };
 
 #endif
