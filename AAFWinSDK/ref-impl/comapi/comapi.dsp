@@ -102,6 +102,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFObjectCreation.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\AAFVersion.rc
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
