@@ -38,12 +38,6 @@
   #endif
 #endif
 
-// Include our Types here so that we do not have to reference it from every
-// CoClass header file.
-#ifndef __AAFTypes_h__
-#include "AAFTypes.h"
-#endif
-
 
 #endif // __AAFCOMPlatform_h__
 
