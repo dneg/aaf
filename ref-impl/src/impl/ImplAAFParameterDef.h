@@ -3,23 +3,6 @@
 #ifndef __ImplAAFParameterDef_h__
 #define __ImplAAFParameterDef_h__
 
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
-
-class ImplEnumAAFReferenceValues;
-#include "ImplAAFReferenceValue.h"
-
-
 /***********************************************\
 *												*
 * Advanced Authoring Format						*
@@ -99,24 +82,6 @@ public:
         // @parm [in, string] DisplayUnits
         (wchar_t *  pDisplayUnits);
 
-  //****************
-  // AddReferenceValue()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    AddReferenceValue
-        // @parm [in] Ref value to be added
-        (ImplAAFReferenceValue * pReferenceValue);
-
-  //****************
-  // GetRefValues()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetRefValues
-        // @parm [out,retval] Reference value Enumeration
-        (ImplEnumAAFReferenceValues ** ppEnum);
-
-
-
 public:
   // Declare this class to be storable.
   //
@@ -128,7 +93,6 @@ public:
 
 private:
 	OMFixedSizeProperty<aafUID_t>							_typeDef;
-    OMStrongReferenceVectorProperty<ImplAAFReferenceValue>	_refVal;
 	OMWideStringProperty									_displayUnits;
 };
 
