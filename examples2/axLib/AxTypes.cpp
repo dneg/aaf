@@ -196,3 +196,13 @@ bool operator==( const tagGUID& uidL, const tagGUID& uidR )
 }
 #endif
 
+
+bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs )
+{
+  return 0 == ::memcmp( &lhs, &rhs, sizeof( aafMobID_t ) );
+}
+
+bool operator<( const aafMobID_t& lhs, const aafMobID_t& rhs )
+{
+  return 0 > ::memcmp( &lhs, &rhs, sizeof( aafMobID_t ) );
+}
