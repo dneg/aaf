@@ -432,7 +432,7 @@ bool OMFile::isOMFile(void) const
 }
 
   // @mfunc The signature of this <c OMFile>.
-  //   @rdes The signature of this <c OMFile>.
+  //   @rdesc The signature of this <c OMFile>.
 OMFileSignature OMFile::signature(void) const
 {
   return _signature;
