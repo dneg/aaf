@@ -45,6 +45,8 @@ typedef ImplAAFEnumerator<ImplAAFPropertyDef> ImplEnumAAFPropertyDefs;
 #include "ImplAAFDefObject.h"
 #endif
 
+#include "OMWeakRefSetProperty.h"
+#include "OMWeakRefProperty.h"
 
 class ImplAAFKLVDataDefinition : public ImplAAFDefObject
 {
@@ -110,6 +112,10 @@ public:
         // @parm [in] Data definition object
         (ImplAAFTypeDef * pTypeDef);
 
+ private:
+  OMWeakReferenceSetProperty<ImplAAFPropertyDef> _parentProperties;
+  OMWeakReferenceProperty<ImplAAFTypeDef> _klvDataTypeDef;
+    
 };
 
 #endif // ! __ImplAAFKLVDataDefinition_h__

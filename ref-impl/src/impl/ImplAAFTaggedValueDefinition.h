@@ -43,6 +43,8 @@ typedef ImplAAFEnumerator<ImplAAFPropertyDef> ImplEnumAAFPropertyDefs;
 #include "ImplAAFDefObject.h"
 #endif
 
+#include "OMWeakRefSetProperty.h"
+
 
 class ImplAAFTaggedValueDefinition : public ImplAAFDefObject
 {
@@ -91,6 +93,10 @@ public:
     RemoveParentProperty
         // @parm [in] Property to remove.
         (ImplAAFPropertyDef * pParentProperty);
+
+ private:
+
+  OMWeakReferenceSetProperty<ImplAAFPropertyDef> _parentProperties;
 
 };
 

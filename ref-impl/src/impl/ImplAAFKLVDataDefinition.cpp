@@ -24,10 +24,6 @@
 //
 //=---------------------------------------------------------------------=
 
-
-
-
-
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
 #endif
@@ -40,21 +36,33 @@
 #include "ImplEnumAAFPropertyDefs.h"
 #endif
 
-
-
-
-
-#include "AAFStoredObjectIDs.h"
-
 #ifndef __ImplAAFKLVDataDefinition_h__
 #include "ImplAAFKLVDataDefinition.h"
 #endif
 
+#include "ImplAAFDictionary.h"
+#include "ImplAAFWeakRefSetUtil.h"
+
+#include "AAFResult.h"
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 #include <string.h>
 
+extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
 
 ImplAAFKLVDataDefinition::ImplAAFKLVDataDefinition ()
+
+  : _parentProperties( PID_KLVDataDefinition_KLVDataParentProperties,
+		       L"KLVDataParentProperties",
+		       L"/MetaDictionary/PropertyDefinitions",
+                       PID_MetaDefinition_Identification ),
+
+    _klvDataTypeDef(   PID_KLVDataDefinition_KLVDataType,
+	               L"KLVDataType",
+	               L"/MetaDictionary/TypeDefinitions",
+		       PID_MetaDefinition_Identification )
 {}
 
 
@@ -64,25 +72,25 @@ ImplAAFKLVDataDefinition::~ImplAAFKLVDataDefinition ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::AddParentProperty (
-      ImplAAFPropertyDef * /*pParentProperty*/)
+      ImplAAFPropertyDef * pParentProperty )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFWeakRefSetUtil::Add<ImplAAFPropertyDef>( pParentProperty, this, _parentProperties );
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFKLVDataDefinition::GetParentProperties (
-      ImplEnumAAFPropertyDefs ** /*ppEnum*/)
+ImplAAFKLVDataDefinition::GetParentProperties (
+      ImplEnumAAFPropertyDefs ** ppEnum )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFWeakRefSetUtil::Get( ppEnum, CLSID_EnumAAFPropertyDefs, this, _parentProperties );
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::CountParentProperties (
-      aafUInt32*  /*pNumProperties*/)
+      aafUInt32* pNumProperties )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFWeakRefSetUtil::Count( pNumProperties, _parentProperties );
 }
 
 
@@ -90,26 +98,54 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::RemoveParentProperty (
       ImplAAFPropertyDef * /*pParentProperty*/)
 {
+  // FIXME - Implement
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
+
+// FIXME - With the exception of the isPresent() test, these type
+// Set/Get methods are identical to
+// ImplAAFParameterDef::{Set,Get}TypeDefinition(), and no doubt
+// several others.  The code could be refactored to avoid the
+// duplication.
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::GetKLVDataType (
-      ImplAAFTypeDef ** /*ppTypeDef*/)
+      ImplAAFTypeDef ** ppTypeDef )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if ( !ppTypeDef ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if ( _klvDataTypeDef.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  if ( _klvDataTypeDef.isVoid() ) {
+    return AAFRESULT_OBJECT_NOT_FOUND;
+  }
+
+  *ppTypeDef = _klvDataTypeDef;
+  assert( *ppTypeDef );
+  
+  (*ppTypeDef)->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
 }
-
-
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::SetKLVDataType (
-      ImplAAFTypeDef * /*pTypeDef*/)
+      ImplAAFTypeDef* pTypeDef )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if ( pTypeDef == NULL ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if ( !aafLookupTypeDef( this, pTypeDef ) ) {
+    return AAFRESULT_INVALID_OBJ;
+  }
+
+  _klvDataTypeDef = pTypeDef;
+
+  return AAFRESULT_SUCCESS;
 }
-
-
-
-

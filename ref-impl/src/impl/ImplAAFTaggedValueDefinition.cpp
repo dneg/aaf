@@ -24,9 +24,9 @@
 //
 //=---------------------------------------------------------------------=
 
-
-
-
+#ifndef __ImplAAFTaggedValueDefinition_h__
+#include "ImplAAFTaggedValueDefinition.h"
+#endif
 
 #ifndef __ImplAAFPropertyDef_h__
 #include "ImplAAFPropertyDef.h"
@@ -36,24 +36,26 @@
 #include "ImplEnumAAFPropertyDefs.h"
 #endif
 
-
-
-
-
-
-#include "AAFStoredObjectIDs.h"
-
-#ifndef __ImplAAFTaggedValueDefinition_h__
-#include "ImplAAFTaggedValueDefinition.h"
+#ifndef __AAFPRopertyIDs_h__
+#include "AAFPropertyIDs.h"
 #endif
+
+#include "ImplAAFWeakRefSetUtil.h"
+#include "AAFStoredObjectIDs.h"
 
 #include <assert.h>
 #include <string.h>
 
+extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
 
 ImplAAFTaggedValueDefinition::ImplAAFTaggedValueDefinition ()
-{}
-
+  : _parentProperties( PID_TaggedValueDefinition_TaggedValueParentProperties,
+		       L"TaggedValueParentProperties",
+		       L"/MetaDictionary/PropertyDefinitions",
+                       PID_MetaDefinition_Identification )
+{
+  _persistentProperties.put( _parentProperties.address() );
+}
 
 ImplAAFTaggedValueDefinition::~ImplAAFTaggedValueDefinition ()
 {}
@@ -62,25 +64,25 @@ ImplAAFTaggedValueDefinition::~ImplAAFTaggedValueDefinition ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::AddParentProperty (
-      ImplAAFPropertyDef * /*pParentProperty*/)
+      ImplAAFPropertyDef* pParentProperty )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFWeakRefSetUtil::Add<ImplAAFPropertyDef>( pParentProperty, this, _parentProperties );
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::GetParentProperties (
-      ImplEnumAAFPropertyDefs ** /*ppEnum*/)
+      ImplEnumAAFPropertyDefs** ppEnum )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFWeakRefSetUtil::Get( ppEnum, CLSID_EnumAAFPropertyDefs, this, _parentProperties );
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::CountParentProperties (
-      aafUInt32*  /*pNumProperties*/)
+      aafUInt32*  pNumProperties )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFWeakRefSetUtil::Count( pNumProperties, _parentProperties );
 }
 
 
@@ -88,6 +90,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::RemoveParentProperty (
       ImplAAFPropertyDef * /*pParentProperty*/)
 {
+  // FIXME - Implement
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
