@@ -47,7 +47,7 @@ AD_XMETHOD1(GetDatakind,
 
 AD_METHOD3(GetValue,
 		   [in],aafInt32, valueSize, value size,
-		   [out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*pBytesRead\\\)], char *, pValue, Preallocated buffer to hold value,
+		   [out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*pBytesRead\\\)], aafDataBuffer_t, pValue, Preallocated buffer to hold value,
 		   [out\\\,ref], aafInt32 *,pBytesRead, Pointer to actual bytes read, 
 		   Returns the data value of the control point.)
 
@@ -65,7 +65,7 @@ AD_XMETHOD1(SetDataDefinition,
 
 AD_METHOD2(SetValue,
 		   [in],aafInt32, valueSize, value size,
-		   [in\\\, size_is\\\(valueSize\\\)], char *, pValue, Preallocated buffer to hold value,
+		   [in\\\, size_is\\\(valueSize\\\)], aafDataBuffer_t, pValue, Preallocated buffer to hold value,
 		   Sets the control point data value.)
 
 AD_CLASS_END
