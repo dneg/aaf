@@ -128,14 +128,14 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetName (
       wchar_t *  pName)
 {
-  if (! pName)
+	if (! pName)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-
-  _name = pName;
-
-  return AAFRESULT_SUCCESS;
+	
+	_name = pName;
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -144,18 +144,18 @@ AAFRESULT STDMETHODCALLTYPE
       wchar_t *  pName,
       aafUInt32  bufSize)
 {
-  bool stat;
-  if (! pName)
+	bool stat;
+	if (! pName)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-  stat = _name.copyToBuffer(pName, bufSize);
-  if (! stat)
+	stat = _name.copyToBuffer(pName, bufSize);
+	if (! stat)
 	{
-	  return AAFRESULT_SMALLBUF;
+		return AAFRESULT_SMALLBUF;
 	}
-
-  return AAFRESULT_SUCCESS;
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -176,14 +176,14 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetDescription (
       wchar_t * pDescription)
 {
-  if (! pDescription)
+	if (! pDescription)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-
-  _description = pDescription;
-
-  return AAFRESULT_SUCCESS;
+	
+	_description = pDescription;
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -192,18 +192,23 @@ AAFRESULT STDMETHODCALLTYPE
       wchar_t * pDescription,
       aafUInt32 bufSize)
 {
-  bool stat;
-  if (! pDescription)
+	if (! pDescription)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-  stat = _description.copyToBuffer(pDescription, bufSize);
-  if (! stat)
-	{
-	  return AAFRESULT_SMALLBUF;
-	}
+	
+	if (!_description.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
 
-  return AAFRESULT_SUCCESS;
+	bool stat;
+	
+	stat = _description.copyToBuffer(pDescription, bufSize);
+	if (! stat)
+	{
+		return AAFRESULT_SMALLBUF;
+	}
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -211,12 +216,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetDescriptionBufLen (
       aafUInt32 * pBufSize)  //@parm [in,out] Definition Name length
 {
-  if (! pBufSize)
+	if (! pBufSize)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-  *pBufSize = _description.size();
-  return AAFRESULT_SUCCESS;
+
+	if (!_description.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+		
+	*pBufSize = _description.size();
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -326,6 +335,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pVersionString == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if (!_pluginVersionString.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	stat = _pluginVersionString.copyToBuffer(pVersionString, bufSize);
 	if (! stat)
 	{
@@ -343,6 +355,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if (!_pluginVersionString.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	*pLen = _pluginVersionString.size();
 	return(AAFRESULT_SUCCESS); 
 }
@@ -366,18 +382,21 @@ AAFRESULT STDMETHODCALLTYPE
       wchar_t *  pManufacturerName,
       aafInt32  bufSize)
 {
-	bool stat;
-
 	if(pManufacturerName == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if (!_pluginManufacturerName.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	bool stat;
+		
 	stat = _pluginManufacturerName.copyToBuffer(pManufacturerName, bufSize);
 	if (! stat)
 	{
-	  return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+		return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
 	}
-
-	return(AAFRESULT_SUCCESS); 
+	
+	return AAFRESULT_SUCCESS; 
 }
 
 
@@ -387,9 +406,13 @@ AAFRESULT STDMETHODCALLTYPE
       aafInt32 * pLen)
 {
 	if(pLen == NULL)
-		return(AAFRESULT_NULL_PARAM);
+		return AAFRESULT_NULL_PARAM;
+
+	if(!_pluginManufacturerName.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	*pLen = _pluginManufacturerName.size();
-	return(AAFRESULT_SUCCESS); 
+	return AAFRESULT_SUCCESS; 
 }
 
 
@@ -457,6 +480,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+	else if (!_pluginManufacturerID.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		*pManufacturerID = _pluginManufacturerID;
@@ -491,6 +518,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+	else if (!_platform.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		*pHardwarePlatform = _platform;
@@ -518,6 +549,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pMinVersion == NULL || pMaxVersion == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
+	}
+	else if (!_minPlatformVersion.isPresent() || !_maxPlatformVersion.isPresent() )
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	else
 	{
@@ -569,6 +604,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+	else if (!_engine.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		*pEngine = _engine;
@@ -597,6 +636,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pMinVersion == NULL || pMaxVersion == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
+	}
+	else if (!_minEngineVersion.isPresent() || !_maxEngineVersion.isPresent() )
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	else
 	{
@@ -651,6 +694,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+	else if (!_pluginAPI.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		*pPluginAPI = _pluginAPI;
@@ -679,6 +726,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pMinVersion == NULL || pMaxVersion == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
+	}
+	else if (!_minPluginAPIVersion.isPresent() || !_maxPluginAPIVersion.isPresent() )
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	else
 	{
@@ -730,6 +781,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+	else if (!_softwareOnly.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		*pIsSoftwareOnly = _softwareOnly;
@@ -760,6 +815,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+	else if (!_accelerator.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
+	}
 	else
 	{
 		*pIsAccelerated = _accelerator;
@@ -767,7 +826,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return AAFRESULT_SUCCESS;
 }
-
 
 
 
@@ -788,6 +846,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pSupportsAuthentication == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
+	}
+	else if (!_authentication.isPresent())
+	{
+		return AAFRESULT_PROP_NOT_PRESENT;
 	}
 	else
 	{
