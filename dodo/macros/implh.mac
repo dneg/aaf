@@ -183,7 +183,7 @@ public:
   //
   //********
   Impl.this-module ();
-  virtual~Impl.this-module ();
+  virtual ~Impl.this-module ();
 #endm
 
 
@@ -606,19 +606,13 @@ public:
   // in /test/Impl.this-moduleTest.cpp.
   static AAFRESULT test();
 
-  void InitComParent (I.this-module * pComParent);
+  void InitContainer (void * pContainer);
 
-  void InitCppParent (.this-module * pCppParent);
-
-  I.this-module * GetCOMParent ();
-
-  .this-module * GetCppParent ();
+  void * GetContainer ();
 
 private:
 
-  I.this-module * _pComParent;
-
-  .this-module * _pCppParent;
+  void * _pParent;
 
 };
 
@@ -824,54 +818,6 @@ private:
         %06 %07,    //@parm %05 %08
         %10 %11,    //@parm %09 %12
         %14 %15);   //@parm %13 %16
-#endm
-
-
-#ccccccccccccccccccccccccccc
-#c
-#c Inserts declaration for a method which takes one argument, which is
-#c a pointer to an AAF object which is to be returned to the caller.
-#c This is different from the normal METHOD macro because the
-#c _rep will probably have the object in a different form.
-#c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
-#c
-#startm AD_GETOBJ_METHOD1 06
-  //****************
-  // %01()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-        (Impl%03 ** %04);   //@parm %02 %05
-#endm
-
-
-#ccccccccccccccccccccccccccc
-#c
-#c Inserts declaration for a method which takes one argument, which is
-#c a pointer to an AAF object which is to be passed in from the caller.
-#c This is different from the normal METHOD macro because the
-#c _rep will probably have the object in a different form.
-#c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
-#c
-#startm AD_SETOBJ_METHOD1 06
-  //****************
-  // %01()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-        (Impl%03 * %04);    //@parm %02 %05
 #endm
 
 

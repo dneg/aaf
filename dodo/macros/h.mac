@@ -160,14 +160,14 @@ class Impl.this-module;
 class .this-module : public .parent-module
 {
 protected:
-  //
+
+  //***********************************************************
   // Constructor/destructor
   //
-  //********
   .this-module (aafBool doInit = AAFTrue);
-  ~.this-module ();
+  virtual ~.this-module ();
 
-public:
+public:\
 #endm
 
 
@@ -191,14 +191,14 @@ class Impl.this-module;
 class .this-module
 {
 protected:
-  //
+
+  //***********************************************************
   // Constructor/destructor
   //
-  //********
-  .this-module (aafBool doInit=AAFTrue);
+  .this-module (aafBool doInit = AAFTrue);
   virtual ~.this-module ();
 
-public:
+public:\
 #endm
 
 
@@ -210,14 +210,15 @@ public:
 #c Argument2: method description
 #c
 #startm AD_METHOD0 02
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %02
+  // @end
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01 ();
-  //@rdesc Returns an AAFResult status code
+    %01 ();\
 #endm
 
 
@@ -236,15 +237,19 @@ public:
 #c Macro Arg 07: method description
 #c
 #startm AD_XMETHOD1 07
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %07
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-        (%04 .%03-indirection %05);  //@parm %02 %06
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05
+  );\
 #endm
 
 
@@ -264,16 +269,22 @@ public:
 #c Macro Arg 12: method description
 #c
 #startm AD_XMETHOD2 12
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %12
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10);   //@parm %07 %11
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10
+  );\
 #endm
 
 
@@ -294,17 +305,25 @@ public:
 #c Macro Arg 17: method description
 #c
 #startm AD_XMETHOD3 17
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %17
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15);   //@parm %12 %16
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15
+  );\
 #endm
 
 
@@ -326,18 +345,28 @@ public:
 #c Macro Arg 22: method description
 #c
 #startm AD_XMETHOD4 22
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %22
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15,    //@parm %12 %16
-        %19 .%18-indirection %20);   //@parm %17 %21
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15,
+
+    // @parm %19 | %20 | %17 %21
+    %19 .%18-indirection %20
+  );\
 #endm
 
 
@@ -360,19 +389,31 @@ public:
 #c Macro Arg 27: method description
 #c
 #startm AD_XMETHOD5 27
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %27
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15,    //@parm %12 %16
-        %19 .%18-indirection %20,    //@parm %17 %21
-        %24 .%23-indirection %25);   //@parm %22 %26
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15,
+
+    // @parm %19 | %20 | %17 %21
+    %19 .%18-indirection %20,
+
+    // @parm %24 | %25 | %22 %26
+    %24 .%23-indirection %25
+  );\
 #endm
 
 
@@ -396,20 +437,34 @@ public:
 #c Macro Arg 32: method description
 #c
 #startm AD_XMETHOD6 32
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %32
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15,    //@parm %12 %16
-        %19 .%18-indirection %20,    //@parm %17 %21
-        %24 .%23-indirection %25,    //@parm %22 %26
-        %29 .%28-indirection %30);   //@parm %27 %31
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15,
+
+    // @parm %19 | %20 | %17 %21
+    %19 .%18-indirection %20,
+
+    // @parm %24 | %25 | %22 %26
+    %24 .%23-indirection %25,
+
+    // @parm %29 | %30 | %27 %31
+    %29 .%28-indirection %30
+  );\
 #endm
 
 
@@ -434,21 +489,37 @@ public:
 #c Macro Arg 37: method description
 #c
 #startm AD_XMETHOD7 37
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %37
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15,    //@parm %12 %16
-        %19 .%18-indirection %20,    //@parm %17 %21
-        %24 .%23-indirection %25,    //@parm %22 %26
-        %29 .%28-indirection %30,    //@parm %27 %31
-        %34 .%33-indirection %35);   //@parm %32 %36
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15,
+
+    // @parm %19 | %20 | %17 %21
+    %19 .%18-indirection %20,
+
+    // @parm %24 | %25 | %22 %26
+    %24 .%23-indirection %25,
+
+    // @parm %29 | %30 | %27 %31
+    %29 .%28-indirection %30,
+
+    // @parm %34 | %35 | %32 %36
+    %34 .%33-indirection %35
+  );\
 #endm
 
 
@@ -474,22 +545,40 @@ public:
 #c Macro Arg 42: method description
 #c
 #startm AD_XMETHOD8 42
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %42
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15,    //@parm %12 %16
-        %19 .%18-indirection %20,    //@parm %17 %21
-        %24 .%23-indirection %25,    //@parm %22 %26
-        %29 .%28-indirection %30,    //@parm %27 %31
-        %34 .%33-indirection %35,    //@parm %32 %36
-        %39 .%38-indirection %40);   //@parm %37 %41
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15,
+
+    // @parm %19 | %20 | %17 %21
+    %19 .%18-indirection %20,
+
+    // @parm %24 | %25 | %22 %26
+    %24 .%23-indirection %25,
+
+    // @parm %29 | %30 | %27 %31
+    %29 .%28-indirection %30,
+
+    // @parm %34 | %35 | %32 %36
+    %34 .%33-indirection %35,
+
+    // @parm %39 | %40 | %37 %41
+    %39 .%38-indirection %40
+  );\
 #endm
 
 
@@ -516,23 +605,43 @@ public:
 #c Macro Arg 47: method description
 #c
 #startm AD_XMETHOD9 47
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %47
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15,    //@parm %12 %16
-        %19 .%18-indirection %20,    //@parm %17 %21
-        %24 .%23-indirection %25,    //@parm %22 %26
-        %29 .%28-indirection %30,    //@parm %27 %31
-        %34 .%33-indirection %35,    //@parm %32 %36
-        %39 .%38-indirection %40,    //@parm %37 %41
-        %44 .%43-indirection %45);   //@parm %42 %46
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15,
+
+    // @parm %19 | %20 | %17 %21
+    %19 .%18-indirection %20,
+
+    // @parm %24 | %25 | %22 %26
+    %24 .%23-indirection %25,
+
+    // @parm %29 | %30 | %27 %31
+    %29 .%28-indirection %30,
+
+    // @parm %34 | %35 | %32 %36
+    %34 .%33-indirection %35,
+
+    // @parm %39 | %40 | %37 %41
+    %39 .%38-indirection %40,
+
+    // @parm %44 | %45 | %42 %46
+    %44 .%43-indirection %45
+  );\
 #endm
 
 
@@ -560,24 +669,46 @@ public:
 #c Macro Arg 52: method description
 #c
 #startm AD_XMETHOD_10 52
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %52
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15,    //@parm %12 %16
-        %19 .%18-indirection %20,    //@parm %17 %21
-        %24 .%23-indirection %25,    //@parm %22 %26
-        %29 .%28-indirection %30,    //@parm %27 %31
-        %34 .%33-indirection %35,    //@parm %32 %36
-        %39 .%38-indirection %40,    //@parm %37 %41
-        %44 .%43-indirection %45,    //@parm %42 %46
-        %49 .%48-indirection %50);   //@parm %47 %51
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15,
+
+    // @parm %19 | %20 | %17 %21
+    %19 .%18-indirection %20,
+
+    // @parm %24 | %25 | %22 %26
+    %24 .%23-indirection %25,
+
+    // @parm %29 | %30 | %27 %31
+    %29 .%28-indirection %30,
+
+    // @parm %34 | %35 | %32 %36
+    %34 .%33-indirection %35,
+
+    // @parm %39 | %40 | %37 %41
+    %39 .%38-indirection %40,
+
+    // @parm %44 | %45 | %42 %46
+    %44 .%43-indirection %45,
+
+    // @parm %49 | %50 | %47 %51
+    %49 .%48-indirection %50
+  );\
 #endm
 
 
@@ -606,25 +737,49 @@ public:
 #c Macro Arg 57: method description
 #c
 #startm AD_XMETHOD_11 57
-  //****************
-  // %01()
+  //***********************************************************
+  // METHOD NAME: %01()
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
   // %57
+  // @end
+  // 
   virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-       (%04 .%03-indirection %05,    //@parm %02 %06
-        %09 .%08-indirection %10,    //@parm %07 %11
-        %14 .%13-indirection %15,    //@parm %12 %16
-        %19 .%18-indirection %20,    //@parm %17 %21
-        %24 .%23-indirection %25,    //@parm %22 %26
-        %29 .%28-indirection %30,    //@parm %27 %31
-        %34 .%33-indirection %35,    //@parm %32 %36
-        %39 .%38-indirection %40,    //@parm %37 %41
-        %44 .%43-indirection %45,    //@parm %42 %46
-        %49 .%48-indirection %50,    //@parm %47 %51
-        %54 .%53-indirection %55);   //@parm %52 %56
-  //@rdesc Returns an AAFResult status code
+  %01 (
+    // @parm %04 | %05 | %02 %06
+    %04 .%03-indirection %05,
+
+    // @parm %09 | %10 | %07 %11
+    %09 .%08-indirection %10,
+
+    // @parm %14 | %15 | %12 %16
+    %14 .%13-indirection %15,
+
+    // @parm %19 | %20 | %17 %21
+    %19 .%18-indirection %20,
+
+    // @parm %24 | %25 | %22 %26
+    %24 .%23-indirection %25,
+
+    // @parm %29 | %30 | %27 %31
+    %29 .%28-indirection %30,
+
+    // @parm %34 | %35 | %32 %36
+    %34 .%33-indirection %35,
+
+    // @parm %39 | %40 | %37 %41
+    %39 .%38-indirection %40,
+
+    // @parm %44 | %45 | %42 %46
+    %44 .%43-indirection %45,
+
+    // @parm %49 | %50 | %47 %51
+    %49 .%48-indirection %50,
+
+    // @parm %54 | %55 | %52 %56
+    %54 .%53-indirection %55
+  );\
 #endm
 
 
@@ -698,12 +853,14 @@ private:
 #c Macro Arg 06: method description
 #c
 #startm AD_XCONSTRUCTOR1 06
-  //****************
+  //***********************************************************
   // constructor
   //
   // %06
-  .this-module
-        (%03 .%02-indirection %04);  //@parm %02 %05
+  .this-module (
+    // @parm %03 | %04 %01 %05
+    %03 .%02-indirection %04
+  );\
 #endm
 
 
@@ -722,13 +879,17 @@ private:
 #c Macro Arg 11: method description
 #c
 #startm AD_XCONSTRUCTOR2 11
-  //****************
+  //***********************************************************
   // constructor
   //
   // %11
-    .this-module
-       (%03 .%02-indirection %04,    //@parm %02 %05
-        %08 .%07-indirection %09);   //@parm %07 %10
+  .this-module (
+    // @parm %03 | %04 %01 %05
+    %03 .%02-indirection %04,
+
+    // @parm %08 | %09 %06 %10
+    %08 .%07-indirection %09
+  );\
 #endm
 
 
@@ -748,14 +909,20 @@ private:
 #c Macro Arg 16: method description
 #c
 #startm AD_XCONSTRUCTOR3 16
-  //****************
+  //***********************************************************
   // constructor
   //
   // %16
-    .this-module
-       (%03 .%02-indirection %04,    //@parm %02 %05
-        %08 .%07-indirection %09,    //@parm %07 %10
-        %13 .%12-indirection %14);   //@parm %12 %15
+  .this-module (
+    // @parm %03 | %04 %01 %05
+    %03 .%02-indirection %04,
+
+    // @parm %08 | %09 %06 %10
+    %08 .%07-indirection %09,
+
+    // @parm %13 | %14 %11 %15
+    %13 .%12-indirection %14
+  );\
 #endm
 
 
@@ -776,67 +943,55 @@ private:
 #c Macro Arg 21: method description
 #c
 #startm AD_XCONSTRUCTOR4 21
-  //****************
+  //***********************************************************
   // constructor
   //
   // %21
-    .this-module
-       (%03 .%02-indirection %04,    //@parm %02 %05
-        %08 .%07-indirection %09,    //@parm %07 %10
-        %13 .%12-indirection %14,    //@parm %12 %15
-        %18 .%17-indirection %19);   //@parm %17 %20
+  .this-module (
+    // @parm %03 | %04 %01 %05
+    %03 .%02-indirection %04,
+
+    // @parm %08 | %09 %06 %10
+    %08 .%07-indirection %09,
+
+    // @parm %13 | %14 %11 %15
+    %13 .%12-indirection %14,
+
+    // @parm %18 | %19 %16 %20
+    %18 .%17-indirection %19
+  );\
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c Inserts declaration for a method which takes one argument, which is
-#c a pointer to an AAF object which is to be returned to the caller.
-#c This is different from the normal METHOD macro because the
-#c _rep will probably have the object in a different form.
+#c Formats a return code comment
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
-#c
-#startm AD_GETOBJ_METHOD1 06
-  //****************
-  // %01()
-  //
-  //@mfunc AAFRESULT | .this-module | %01 |
-  // %06
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-        (%03 ** %04);   //@parm %02 %05
-  //@rdesc Returns an AAFResult status code
+#c arg1 = return code
+#c arg2 = description
+#c 
+#startm AD_MRETVAL 02
+  // @rvalue %01 | %02\
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c Inserts declaration for a method which takes one argument, which is
-#c a pointer to an AAF object which is to be passed in from the caller.
-#c This is different from the normal METHOD macro because the
-#c _rep will probably have the object in a different form.
+#c Formats a method comment
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
-#c
-#startm AD_SETOBJ_METHOD1 06
-  //****************
-  // %01()
+#c arg1 = brief method description
+#c arg2 = return value strings
+#c arg3 = lengthy method comments
+#c 
+#startm AD_MCOMMENT 03
+%01
+  // @end
   //
-  //@mfunc AAFRESULT | .this-module | %01 |
-  // %06
-  virtual AAFRESULT STDMETHODCALLTYPE
-    %01
-        (%03 * %04);    //@parm %02 %05
-  //@rdesc Returns an AAFResult status code
+  // RETURNS:
+  // @rdesc Returns an AAFResult status code
+  // @rvalue S_OK | The operation succeeded
+%02  // @end
+  //
+  // COMMENTS:
+  // @comm %03\
 #endm

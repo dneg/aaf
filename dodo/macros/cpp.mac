@@ -98,6 +98,10 @@
 #ifndef __%01_h__
 #include "%01.h"
 #endif
+
+#ifndef __Impl%01_h__
+#include "Impl%01.h"
+#endif
 #endm
 
 
@@ -168,7 +172,7 @@
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
-      newRep->InitParent (this);
+      newRep->InitContainer (this);
 #endif
     }
 }
@@ -213,7 +217,7 @@
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
-      newRep->InitParent (this);
+      newRep->InitContainer (this);
 #endif
     }
 }
@@ -236,7 +240,7 @@ void .this-module::InitRep (Impl.this-module * newRep)
   assert (newRep);
   assert (_rep);
   _rep = newRep;
-  newRep->InitParent (this);
+  newRep->InitContainer (this);
 #endif
 }
 
@@ -266,7 +270,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 #ifdef BOB_TEST
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -301,7 +305,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -342,7 +346,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -388,7 +392,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -439,7 +443,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -495,7 +499,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -556,7 +560,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -622,7 +626,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -693,7 +697,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -769,7 +773,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -850,7 +854,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -936,7 +940,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  ImplAAFObject * pO;
+  void * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -1060,7 +1064,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XCONSTRUCTOR2 11
 .this-module::.this-module (%03 .%02-indirection %04,
-								%08 .%07-indirection %09)
+    %08 .%07-indirection %09)
 {
 #ifdef BOB_TEST
 .%02-setup(%03, %04)
@@ -1096,8 +1100,8 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XCONSTRUCTOR3 16
 .this-module::.this-module (%03 .%02-indirection %04,
-								%08 .%07-indirection %09,
-								%13 .%12-indirection %14)
+    %08 .%07-indirection %09,
+    %13 .%12-indirection %14)
 {
 #ifdef BOB_TEST
 .%02-setup(%03, %04)
@@ -1137,9 +1141,9 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XCONSTRUCTOR4 21
 .this-module::.this-module (%03 .%02-indirection %04,
-								%08 .%07-indirection %09,
-								%13 .%12-indirection %14,
-								%18 .%17-indirection %19)
+    %08 .%07-indirection %09,
+    %13 .%12-indirection %14,
+    %18 .%17-indirection %19)
 {
 #ifdef BOB_TEST
 .%02-setup(%03, %04)
