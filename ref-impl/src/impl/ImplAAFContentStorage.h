@@ -53,15 +53,13 @@ class ImplAAFFile;
 #include "ImplAAFObject.h"
 #endif
 
-#include "aafTable.h"
-
 #include "aafErr.h"
 #include "ImplAAFObject.h"
 #include "ImplAAFMob.h"
 #include "ImplAAFEssenceData.h"
 
 #include "OMProperty.h"
-
+#include "OMDataTypes.h"
 
 class AAFDataKind;
 class AAFOperationDef;
@@ -177,18 +175,9 @@ public:
 	AAFRESULT LookupEssence (aafMobID_constref fileMobID, ImplAAFEssenceData **ppEssence);
 	AAFRESULT ChangeIndexedMobID (ImplAAFMob *pMob, aafMobID_constref newID);
 
-AAFRESULT
-    GetNthMob (aafInt32 index, ImplAAFMob **ppEnum);
-
-AAFRESULT
-    GetNthEssenceData (aafInt32 index, ImplAAFEssenceData **ppEnum);
-
-AAFRESULT LoadMobTables(void);
-
 private:
-	aafTable_t		*_mobIndex;		// Non-persistant
-    OMStrongReferenceVectorProperty<ImplAAFMob> _mobs;
-    OMStrongReferenceVectorProperty<ImplAAFEssenceData> _essenceData;
+    OMStrongReferenceSetProperty<OMUniqueMaterialIdentification, ImplAAFMob> _mobs;
+    OMStrongReferenceSetProperty<OMUniqueMaterialIdentification, ImplAAFEssenceData> _essenceData;
 };
 
 #endif // ! __ImplAAFHeader_h__
