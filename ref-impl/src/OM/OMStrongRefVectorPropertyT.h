@@ -30,6 +30,8 @@
 #define OMSTRONGREFVECTORPROPERTYT_H
 
 #include "OMAssertions.h"
+#include "OMStoredVectorIndex.h"
+#include "OMStrongReferenceVectorIter.h"
 
 template <typename ReferencedObject>
 OMStrongReferenceVectorProperty<ReferencedObject>::
