@@ -58,7 +58,7 @@ public:
   ImplAAFContentStorage ();
   ~ImplAAFContentStorage ();
 
-	OMDECLARE_STORABLE(ImplAAFContentStorage);
+	OMDECLARE_STORABLE(ImplAAFContentStorage)
 
   //****************
   // LookupMob()
