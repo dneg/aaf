@@ -138,6 +138,7 @@ public:
 		// @parm [out] the file mob id associated with essence
         (aafMobID_t *  pFileMobID);
 
+  virtual const OMMaterialIdentification& identification(void) const;
 
 private:
   OMFixedSizeProperty<aafMobID_t> _fileMobID;
