@@ -424,6 +424,7 @@ ImplAAFFile::Close ()
 			}
 		}
 	  _cookie = 0;
+	  _open = AAFFalse;
 #if FULL_TOOLKIT
 	}
   XEXCEPT
