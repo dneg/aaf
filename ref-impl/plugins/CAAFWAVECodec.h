@@ -20,6 +20,10 @@
 
 EXTERN_C const CLSID CLSID_AAFWaveCodec;
 
+#ifndef __AAFWAVEDescriptor_h__
+#include "CAAFWAVEDescriptor.h"
+#endif
+
 #if 0
 // A Codec has a generic "plugin" interface, and a more specific "codec"
 // interface.  Both of which are described in this .h file.
@@ -124,7 +128,7 @@ public:
 
   // This function is called when opening a media stream on a file mob.
   STDMETHOD (GetSelectInfo)
-    (/*[in]*/ aafUID_t  fileMobID, // See if the current codec can process data from this file mob
+    (/*[in]*/ IUnknown *fileMob, // See if the current codec can process data from this file mob
      /*[out]*/ aafCodecSelectInfo_t *  pInfo); // The returned meta information about this codec 
 	
 
@@ -132,7 +136,7 @@ public:
   // Returns the number of channels which this codec can handle
 			// of the given essence kind
   STDMETHOD (GetNumChannels)
-    (/*[in]*/ aafUID_t  fileMobID, // Get the number of processable channels on this file mob
+    (/*[in]*/ IUnknown *fileMob, // Get the number of processable channels on this file mob
      /*[in]*/ aafUID_t  essenceKind, // This is the type of essence to open
      /*[out]*/ aafInt16 *  pNumChannels); // The number of channels present 
 
@@ -141,7 +145,7 @@ public:
 			// in the essence descriptor, and any such values contained within
 			// the essence data
   STDMETHOD (SemanticCheck)
-    (/*[in]*/ aafUID_t  fileMobID, // Run a check on this file mob
+    (/*[in]*/ IUnknown *fileMob, // Run a check on this file mob
      /*[in]*/ aafCheckVerbose_t  verbose, // This is the verbosity level of the output
      /*[out]*/ aafCheckWarnings_t *  warning, // This determines whether the output contains warnings
      /*[in,string]*/ wchar_t *  pName, // Human-readable text describing problems (or lack therof) with the media
@@ -150,13 +154,13 @@ public:
   // Create a media data object, and attach the correct type of
 			//EssenceDescriptor to the fileMob
   STDMETHOD (Create)
-    (/*[in]*/ aafUID_t  fileMobID, // Create the essence attached to this file mob
+    (/*[in]*/ IUnknown *fileMob, // Create the essence attached to this file mob
      /*[in]*/ aafUID_t  variant, // which variant of the codec to use
      /*[in]*/ IAAFEssenceStream * stream); // Here is an essence stream with the raw data 
 
   // Open a media data object.
   STDMETHOD (Open)
-    (/*[in]*/ aafUID_t  fileMobID, // Open the essence attached to this file mob
+    (/*[in]*/ IUnknown *fileMob, // Open the essence attached to this file mob
      /*[in]*/ aafMediaOpenMode_t  openMode, // In this mode
      /*[in]*/ IAAFEssenceStream * stream); // Here is an essence stream with the raw data 
 	
@@ -217,9 +221,11 @@ public:
 
   // Read some number of bytes from the stream exactly and with no formatting or compression.
   STDMETHOD (ReadRawData)
-    (/*[in]*/ aafUInt32  buflen, // to a buffer of this size
+    (aafUInt32 nSamples,
+	 /*[in]*/ aafUInt32  buflen, // to a buffer of this size
      /*[out, size_is(buflen), length_is(*bytesRead)]*/ aafDataBuffer_t  buffer, // here is the buffer
-     /*[out,ref]*/ aafUInt32 *  bytesRead); // Return bytes actually read 
+     /*[out,ref]*/ aafUInt32 *  bytesRead,	// Return bytes actually read 
+     /*[out,ref]*/ aafUInt32 *  samplesRead); // Return samples actually read 
 
 
 	
@@ -227,7 +233,7 @@ public:
 			// an AAFEssenceDescriptor to match, with all fields filled in.
   STDMETHOD (CreateDescriptorFromStream)
     (/*[in]*/ IAAFEssenceStream * pStream, // A raw file stream
-     /*[in]*/ aafUID_t  pSourceMobID); // Put the finished descriptor on this source mob 
+     /*[in]*/ IUnknown *fileMob); // Put the finished descriptor on this source mob 
 
 
 
@@ -269,6 +275,7 @@ public:
 
 private:
 	IAAFEssenceStream	*_stream;
+	IAAFWAVEDescriptor	*_mdes;
 };
 #endif
 
