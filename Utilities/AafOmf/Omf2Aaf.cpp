@@ -2567,7 +2567,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 //
 // ============================================================================
 HRESULT Omf2Aaf::ConvertOMFConstValue(OMF2::omfSegObj_t segment,
-									  IAAFConstValue* pConstValue)
+									  IAAFConstantValue* pConstValue)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
@@ -3074,9 +3074,9 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				{
 					if (OMF2::omfiIsAConstValue(OMFFileHdl, levelSegment, &OMFError))
 					{
-						IAAFConstValue* pConstantValue = NULL;
+						IAAFConstantValue* pConstantValue = NULL;
 			
-						rc = pDictionary->CreateInstance(&AUID_AAFConstValue, IID_IAAFConstValue, (IUnknown **)&pConstantValue);
+						rc = pDictionary->CreateInstance(&AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
 						if (SUCCEEDED(rc))
 						{
 							rc = ConvertOMFConstValue(levelSegment, pConstantValue);
@@ -3136,9 +3136,9 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				{
 					if (OMF2::omfiIsAConstValue(OMFFileHdl, levelSegment, &OMFError))
 					{
-						IAAFConstValue* pConstantValue = NULL;
+						IAAFConstantValue* pConstantValue = NULL;
 			
-						rc = pDictionary->CreateInstance(&AUID_AAFConstValue, IID_IAAFConstValue, (IUnknown **)&pConstantValue);
+						rc = pDictionary->CreateInstance(&AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
 						if (SUCCEEDED(rc))
 						{
 							rc = ConvertOMFConstValue(levelSegment, pConstantValue);
@@ -3198,9 +3198,9 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				{
 					if (OMF2::omfiIsAConstValue(OMFFileHdl, levelSegment, &OMFError))
 					{
-						IAAFConstValue* pConstantValue = NULL;
+						IAAFConstantValue* pConstantValue = NULL;
 			
-						rc = pDictionary->CreateInstance(&AUID_AAFConstValue, IID_IAAFConstValue, (IUnknown **)&pConstantValue);
+						rc = pDictionary->CreateInstance(&AUID_AAFConstantValue, IID_IAAFConstantValue, (IUnknown **)&pConstantValue);
 						if (SUCCEEDED(rc))
 						{
 							rc = ConvertOMFConstValue(levelSegment, pConstantValue);
