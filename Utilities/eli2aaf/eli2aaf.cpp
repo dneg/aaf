@@ -264,7 +264,7 @@ static int getFirstTimecodeFromDVFile(const char *file)
 	seconds_units = buf[2] & 0x0f;
 	minutes_tens = (buf[3] >> 4) & 0x07;
 	minutes_units = buf[3] & 0x0f;
-	hours_tens = (buf[3] >> 4) & 0x03;
+	hours_tens = (buf[4] >> 4) & 0x03;
 	hours_units = buf[4] & 0x0f;
 
 	printf("1st timecode for %s = %02d:%02d:%02d.%02d (df = %d)\n", file,
