@@ -141,10 +141,13 @@ AD_CPP_QUOTE(#define PORT_USE_NATIVE64 0)
 AD_CPP_QUOTE(#define PORTKEY_INT64_TYPE AAF_INT64_TYPE)
 AD_CPP_QUOTE(#endif)
 
-
 AD_CPP_QUOTE(#endif)
 
+
+AD_CPP_QUOTE(#if 0)
 typedef [string] wchar_t * aafString_t;
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(typedef wchar_t * aafString_t;)
 
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
