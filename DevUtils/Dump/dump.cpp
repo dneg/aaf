@@ -34,8 +34,8 @@
 //              Added new conditional macro IOS_FMT_FLAGS for CodeWarrior Pro5.
 //
 // Terry Skotz 4-27-2000 Terry_Skotz@avid.com
-//			   added support for DataInput.h so dump can get input from text
-//				file.
+//             added support for DataInput.h so dump can get input from text
+//             file.
 
 //
 // Usage:
@@ -80,7 +80,8 @@
 #define OM_OS_WINDOWS
 #elif defined(_MAC) || defined(macintosh)
 #define OM_OS_MACOS
-#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__) || \
+      defined (__APPLE__)
 #define OM_OS_UNIX
 #else
 #error "Can't determine host operating system"
@@ -707,7 +708,7 @@ static char* readName(IStream* stream,
                       OMUInt32 nameOffset,
                       OMUInt32 nameSize,
                       OMUInt32 version,
-					  bool	   swapNeeded)
+                      bool swapNeeded)
 {
   char* result;
   char* buffer;
@@ -2092,7 +2093,7 @@ void printSetIndex(SetIndexEntry* setIndex,
            << setw(8) << setIndex[i]._referenceCount
            << "     ";
       cout << endl;
-	  cout << "  ";
+      cout << "  ";
       if (keySize == 32) {
         if (!ignoring(keyPid)) {
           printUMID((const UMID&)keys[i * keySize]);
@@ -2235,7 +2236,7 @@ OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version)
     result = entry->_type;
   } else if (version > 7) {
     switch(entry->_type) {
-	  case TID_DATA:
+      case TID_DATA:
         result = SF_DATA;
         break;
       case TID_DATA_STREAM:
@@ -2309,7 +2310,7 @@ OMUInt32 objectCount(IStorage* storage,
                                   index->_offset,
                                   index->_length,
                                   version,
-								  swapNeeded);
+                                  swapNeeded);
 
   size_t size = strlen(collectionName) + strlen(suffix) + 1;
   char* collectionIndexName = new char[size];
@@ -2481,7 +2482,7 @@ void dumpContainedObjects(IStorage* storage,
                                      nameStart,
                                      nameLength,
                                      version,
-									 swapNeeded);
+                                     swapNeeded);
       
       // Compute the pathname for this stream
       //
@@ -2510,7 +2511,7 @@ void dumpContainedObjects(IStorage* storage,
                                       index[i]._offset,
                                       index[i]._length,
                                       version,
-									  swapNeeded);
+                                      swapNeeded);
       
       // Compute the pathname for this object
       //
@@ -2545,7 +2546,7 @@ void dumpContainedObjects(IStorage* storage,
                                   index[i]._offset,
                                   index[i]._length,
                                   version,
-								  swapNeeded);
+                                  swapNeeded);
 
       size_t size = strlen(vectorName) + strlen(suffix) + 1;
       char* vectorIndexName = new char[size];
@@ -2663,7 +2664,7 @@ void dumpContainedObjects(IStorage* storage,
                                index[i]._offset,
                                index[i]._length,
                                version,
-							   swapNeeded);
+                               swapNeeded);
 
       size_t size = strlen(setName) + strlen(suffix) + 1;
       char* setIndexName = new char[size];
@@ -2838,7 +2839,7 @@ void dumpContainedObjects(IStorage* storage,
                                index[i]._offset,
                                index[i]._length,
                                version,
-							   swapNeeded);
+                               swapNeeded);
 
       size_t size = strlen(setName) + strlen(suffix) + 1;
       char* setIndexName = new char[size];
@@ -2981,16 +2982,16 @@ void dumpDataStream(IStream* stream,
   if (version >= 28) {
     char* s;
     switch (byteOrder) {
-	case 'L':
+    case 'L':
       s = "little endian";
       break;
-	case 'B':
+    case 'B':
       s = "big endian";
       break;
-	case 'U':
+    case 'U':
       s = "unspecified";
       break;
-	default:
+    default:
       s = "unknown"; // error
       break;
     }
@@ -3481,8 +3482,8 @@ OMUInt16 determineVersion(IStorage* storage)
       ASSERT("Valid byte order",
                       (byteOrder == littleEndian) || (byteOrder == bigEndian));
       if (byteOrder != hostByteOrder()) {
-	    swapUInt16(&version);
-	  }
+        swapUInt16(&version);
+      }
       result = version;
     } else {
       result = version;
@@ -3552,7 +3553,7 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
     if (bo == hostByteOrder()) {
       swap = false;
       endianity = "native";
-	} else {
+    } else {
       swap = true;
       endianity = "foreign";
     }
@@ -3574,7 +3575,7 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
         names[index] = p;
         while (*p != 0) {
          ++p;
-		}
+        }
         ++p;
       }
 
@@ -3612,7 +3613,7 @@ static void dumpReferencedProperties(IStorage* root, OMUInt16 version)
         names[index] = p;
         while (*p != 0) {
          ++p;
-		}
+        }
         ++p;
       }
 
