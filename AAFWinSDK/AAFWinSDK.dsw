@@ -29,6 +29,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name COMIDL
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFIID
+    End Project Dependency
 }}}
 
 ###############################################################################
