@@ -17,10 +17,6 @@
 
 #include "Container.h"
 
-typedef enum
-{
-	kOmCreate, kOmModify, kOmOpenRead, kOmUndefined = -1
-}				openType_t;
 
 //
 // Forward declaration
@@ -110,13 +106,13 @@ private:
   
   void InternalReleaseObjects();
 
-		aafInt32       	_cookie;
-		aafFileFormat_t _fmt;
-		OMContainer     *_container;
-		aafInt16           _byteOrder;
-		openType_t		_openType;
-		ImplAAFFile			*_prevFile;
-		ImplAAFHeader *     _head;		// Needed by Head object
+	aafInt32			_cookie;
+	aafFileFormat_t		_fmt;
+	OMContainer			*_container;
+	aafInt16			_byteOrder;
+	openType_t			_openType;
+	ImplAAFFile			*_prevFile;
+	ImplAAFHeader *     _head;		// Needed by Head object
 #if FULL_TOOLKIT
 		aafCloseMediaPtr _closeMediaProc;
 		aafBool			_customStreamFuncsExist;	//!!!	
