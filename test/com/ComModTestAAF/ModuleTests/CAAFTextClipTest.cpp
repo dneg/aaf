@@ -129,7 +129,8 @@ extern "C" HRESULT CAAFTextClip_test()
   }
   catch (...)
   {
-    cerr << "CAAFTextClip_test...Caught general C++ exception!" << endl;
+    cerr << "CAAFTextClip_test..."
+		 << "Caught general C++ exception!" << endl;
     hr = AAFRESULT_TEST_FAILED;
   }
 
