@@ -245,10 +245,6 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMasterMobTest.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMIDIFileDescriptorTest.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMobSlotTest.cpp
 # End Source File
 # Begin Source File
@@ -282,10 +278,6 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFParameterDefTest.cpp
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFParameterTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluginDescriptorTest.cpp
 # End Source File
 # Begin Source File
 
@@ -639,6 +631,10 @@ SOURCE="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\CAAFModuleTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPluginDefTest.cpp
 # End Source File
 # Begin Source File
 

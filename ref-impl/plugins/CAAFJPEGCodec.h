@@ -90,7 +90,7 @@ public:
 
   STDMETHOD (CreateDescriptor)
 	  (/*[in] */ IAAFDictionary *dict,
-		 /*[out]*/ IAAFPluginDescriptor **desc);
+		 /*[out]*/ IAAFPluginDef **desc);
 
 
   //
