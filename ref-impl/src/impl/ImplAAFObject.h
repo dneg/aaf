@@ -199,6 +199,9 @@ public:
 
   virtual const OMClassId& classId(void) const;
 
+  // Create and intialize associated external extensions.
+  AAFRESULT InitializeExtensions(void);
+
 private:
 
   // private method

@@ -42,6 +42,10 @@
 #include "ImplEnumAAFPropertyDefs.h"
 #endif
 
+#ifndef __ImplAAFBaseClassFactory_h__
+#include "ImplAAFBaseClassFactory.h"
+#endif
+
 #include <assert.h>
 #include "aafErr.h"
 #include "AAFResult.h"
@@ -987,4 +991,75 @@ const OMClassId& ImplAAFObject::classId(void) const
   const aafUID_t null_uid = { 0 };
   assert (! EqualAUID (&_soid, &null_uid));
   return *reinterpret_cast<const OMClassId* const>(&_soid);
+}
+
+
+
+// Create and intialize associated external extensions.
+AAFRESULT ImplAAFObject::InitializeExtensions(void)
+{
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+  ImplAAFClassDef *pDef = NULL;
+  ImplAAFClassDef *pParentDef;
+  const aafClassID_t* id;
+
+
+  try
+  {
+    // We need to walk the class definitions:
+    // 1. If the class definition is an extension class, and
+    // 2. If the class definition has an associated plugin code (clsid), and
+    // 3. Attempt to intialize the associated extension for this object's container.
+    // 4. If step 3 fails then goto step 1 for the parent class definition.
+
+    hr = GetDefinition (&pDef);
+  
+    while (AAFRESULT_SUCCESS == hr)
+    {
+      aafUID_t auid;
+      hr = pDef->GetAUID(&auid);
+      if (AAFRESULT_SUCCESS != hr)
+        break;
+
+      // There should probably be a method on ImplAAFClassDef to 
+      // determine whether or not a particular class is an extended
+      // class. At the very least this method could cache the result
+      // of the following lookup so that lookup is only performed
+      // once per file. (TomR:991111)
+      //
+      // Lookup the code class id for the given stored object id.
+      id = ImplAAFBaseClassFactory::LookupClassID(auid);
+      if (NULL != id)
+        break; // we don't support extenting built-in classes!
+    
+      // If the intialize is successful then we are done. We currently
+      // only support a one class extension per object.
+      hr = InitializeImplExtension(this, auid);
+      if (AAFRESULT_SUCCESS == hr)
+        break;
+
+      // Try again with the parent class defintion.
+      hr = pDef->GetParent (&pParentDef);
+      if (AAFRESULT_SUCCESS == hr)
+      {
+        // NOTE:We only maintain one class definition reference in the loop.
+        pDef->ReleaseReference();
+        pDef = pParentDef;
+      }
+
+    } // while
+
+    if (NULL != pDef)
+      pDef->ReleaseReference();
+  }
+  catch (...)
+  {
+    if (NULL != pDef)
+      pDef->ReleaseReference();
+    
+    throw;
+  }
+
+
+  return hr;
 }
