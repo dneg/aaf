@@ -237,9 +237,19 @@ AD_CLASS_BEGIN\
 
 #include <assert.h>
 
+#ifdef _DEBUG
+#include <iostream.h>
+#endif
+
+#if defined(WIN32)
+// Include declarations for InterlockedIncrement() and InterlockcedDecrment().
+#include <windows.h>
+#endif
+
 
 .this-module::.this-module (aafBool doInit)
-  : _rep((Impl.this-module *)NULL)
+  : _rep((Impl.this-module *)NULL),
+    _refCount(0)
 {
   if (doInit)
     {
@@ -255,12 +265,63 @@ AD_CLASS_BEGIN\
 
 .this-module::~.this-module ()
 {
+#ifdef _DEBUG
+  // The following code will be removed when the constructor and destructor
+  // have been protected and there is a factory method available for each
+  // api class.
+  if (0 != _refCount)
+  {
+    cerr << "Deleting " << this << " with refCount = " << _refCount << endl;
+    assert(0 == _refCount);
+  }
+#endif
+
 #ifdef BOB_TEST
   ImplAAFRoot * rep;
   rep = GetRepObject ();
   assert (rep);
   delete rep;
 #endif
+}
+
+
+#if defined(macintosh) || defined(_MAC)
+inline long InterlockedIncrement(
+  long * pAddend   // pointer to the variable to increment
+)
+{
+  return ++(*pAddend);
+}
+
+inline long InterlockedDecrement(
+  long * pAddend   // pointer to the variable to decrement
+)
+{
+  return --(*pAddend);
+}
+#endif
+
+
+// Increment the object reference count.
+aafUInt32 .this-module::AcquireRef()
+{
+  return InterlockedIncrement(reinterpret_cast<long *>(&_refCount));
+}
+
+// Decrement the object reference count and delete the container.
+aafUInt32 .this-module::ReleaseRef()
+{
+  long count = InterlockedDecrement(reinterpret_cast<long *>(&_refCount));
+  if (0 == count)
+    delete this;
+  
+  return count;
+}
+
+// Just return the count. (this could be inline in the header...)
+aafUInt32 .this-module::RefCount()
+{
+  return _refCount;
 }
 
 
