@@ -233,7 +233,7 @@ AD_XMETHOD2(IsPropertyPresent,
   // methods\) is not done here.  Users must use this method at their
   // own risk.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\)
   //
   // AAFRESULT_ILLEGAL_PROPERTY
   //   - named property illegal for this object's class.)
