@@ -49,6 +49,8 @@
 #include <string.h>
 #include <stdlib.h>
 
+//#include "AAFPluginManager.h"
+
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
@@ -373,11 +375,24 @@ struct CComInitialize
   }
 };
 
+const aafUID_t CLSID_AAFDefaultCodec = { 0xDC089C31, 0x9527, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+const CLSID CLSID_AAFEssencePlugin = { 0xAF98DE41, 0x952D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+
 main()
 {
 	CComInitialize comInit;
 	aafWChar * pwFileName = L"EssenceTest.aaf";
 	const char * pFileName = "EssenceTest .aaf";
+	IAAFEssencePlugin *codecManager = NULL;
+	aafInt32		numCodecs;
+
+	CoCreateInstance(CLSID_AAFEssencePlugin,
+               NULL, 
+               CLSCTX_INPROC_SERVER, 
+               IID_IAAFEssencePlugin, 
+               (void **)&codecManager);
+	codecManager->NumCodecsMatching (DDEF_Audio, kAAFRev1, &numCodecs);
+
 
 	printf("***Creating file %s\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName));
