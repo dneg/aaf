@@ -36,8 +36,9 @@
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMReferenceSet;
 
-// @class Iterators over <c OMReferenceSet>s.
-//   @tcarg class | ReferencedObject | The type of the contained objects.
+  // @class Iterators over <c OMReferenceSet>s.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMReferenceSetIterator : public OMReferenceContainerIterator {
 public:

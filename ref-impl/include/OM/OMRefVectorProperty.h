@@ -34,6 +34,7 @@
   // @class Abstract base class for persistent object reference vector
   //        properties supported by the Object Manager.
   //   @base public | <c OMContainerProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMReferenceVectorProperty : public OMContainerProperty {
 public:
   // @access Public members.

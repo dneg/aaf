@@ -35,6 +35,7 @@
 
   // @class The in-memory representation of the on-disk index for a
   //        stored object set.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMStoredSetIndex {
 public:
   // @access Public members.

@@ -59,6 +59,7 @@
   //        <c OMMappedFileRawStorage> - an implementation of <c OMRawStorage>
   //                                     for files mapped into memory.
   //
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMRawStorage {
 public:
   // @access Public members.

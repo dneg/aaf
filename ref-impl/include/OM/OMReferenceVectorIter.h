@@ -36,8 +36,9 @@
 template <typename ReferencedObject>
 class OMReferenceVector;
 
-// @class Iterators over <c OMReferenceVector>s.
-//   @tcarg class | ReferencedObject | The type of the contained objects.
+  // @class Iterators over <c OMReferenceVector>s.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMReferenceVectorIterator : public OMReferenceContainerIterator {
 public:

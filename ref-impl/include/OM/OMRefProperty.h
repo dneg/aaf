@@ -36,6 +36,7 @@ class OMObject;
   // @class Abstract base class for persistent reference properties
   //        supported by the Object Manager.
   //   @base public | <c OMProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMReferenceProperty : public OMProperty {
 public:
   // @access Public members.

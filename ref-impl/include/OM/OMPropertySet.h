@@ -38,6 +38,7 @@ class OMProperty;
 class OMStorable;
 
   // @class Container class for <c OMProperty> objects.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMPropertySet {
 public:
   // @access Public members.

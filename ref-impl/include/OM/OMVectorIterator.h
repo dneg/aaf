@@ -34,9 +34,10 @@
 template <typename Element>
 class OMVector;
 
-// @class Iterators over <c OMVector>s.
-//   @tcarg class | Element | The type of the contained elements.
-//   @base public | <c OMContainerIterator>
+  // @class Iterators over <c OMVector>s.
+  //   @tcarg class | Element | The type of the contained elements.
+  //   @base public | <c OMContainerIterator>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename Element>
 class OMVectorIterator : public OMContainerIterator<Element> {
 public:

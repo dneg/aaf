@@ -34,6 +34,7 @@
 #include "OMVector.h"
 
   // @class Persistent tables of property instance names.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMPropertyTable {
 public:
   // @access Public members.

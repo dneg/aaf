@@ -35,6 +35,7 @@
 
   // @class The in-memory representation of the on-disk index for a
   //        stored property set.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMStoredPropertySetIndex {
 private:
   struct IndexEntry;

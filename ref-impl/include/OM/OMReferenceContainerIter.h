@@ -35,10 +35,11 @@
 
 class OMObject;
 
-// @class Abstract base class for iterators over Object Manager reference
-//        containers.
-//        The references may be Strong or Weak.
-//        The collections may be Vectors or Sets.
+  // @class Abstract base class for iterators over Object Manager reference
+  //        containers.
+  //        The references may be Strong or Weak.
+  //        The collections may be Vectors or Sets.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMReferenceContainerIterator {
 public:
   // @access Public members.

@@ -43,6 +43,7 @@ class OMVectorIterator;
   //        Objects are accessible by index. The order of objects is
   //        determined externally. Duplicate objects are allowed.
   //   @tcarg class | ReferencedObject | The type of the referenced object.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMReferenceVector {
 public:

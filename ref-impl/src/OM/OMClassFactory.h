@@ -33,9 +33,10 @@
 
 class OMStorable;
 
-// @class Abstract base class decribing the class factory used by
-//        the Object Manager and provided by Object Manager clients.
-//
+  // @class Abstract base class decribing the class factory used by
+  //        the Object Manager and provided by Object Manager clients.
+  //
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMClassFactory {
 public:
   // @access Public members.

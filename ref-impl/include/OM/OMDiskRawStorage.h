@@ -42,6 +42,7 @@
   //        ANSI file functions only.
   //
   //   @base public | <c OMRawStorage>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMDiskRawStorage : public OMRawStorage {
 public:
   // @access Static members.

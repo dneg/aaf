@@ -35,6 +35,7 @@
 
   // @class The in-memory representation of the on-disk index for a
   //        stored object vector.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMStoredVectorIndex {
 public:
   // @access Public members.

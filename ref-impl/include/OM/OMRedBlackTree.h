@@ -50,6 +50,7 @@ class OMRedBlackTreeIterator;
   //          and operator <lt>.
   //   @tcarg class | Value | The type of the value carried in an
   //          <c OMRedBlackTree> item. This type must support operator =.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename Key, typename Value>
 class OMRedBlackTree {
 public:

@@ -39,6 +39,7 @@
   //   @tcarg class | Element | The type of an <c OMVector> element.
   //          This type must support operator = and operator ==.
   //   @base public | <c OMContainer>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename Element>
 class OMVector : public OMContainer<Element> {
 public:

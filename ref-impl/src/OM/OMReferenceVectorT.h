@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMReferenceVector
 #ifndef OMREFERENCEVECTORT_H
 #define OMREFERENCEVECTORT_H
 

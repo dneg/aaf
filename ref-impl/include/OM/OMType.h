@@ -35,6 +35,7 @@
 
   // @class Abstract base class describing the data types that may be
   //        assumed by persistent properties supported by the Object Manager.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMType {
 public:
   // @access Public members.

@@ -33,6 +33,7 @@
 
   // @class Persistent wide character strings supported by the Object Manager.
   //   @base public | <c OMCharacterStringProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMWideStringProperty : public OMCharacterStringProperty<wchar_t> {
 public:
   // @access Public members.

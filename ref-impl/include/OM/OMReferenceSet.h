@@ -45,6 +45,7 @@ class OMSetElement;
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @tcarg class | UniqueIdentification | The type of the unique key
   //          used to identify the referenced objects.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMReferenceSet {
 public:

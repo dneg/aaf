@@ -35,6 +35,7 @@ class OMType;
 
   // @class Abstract base class used to define persistent properties
   //        supported by the Object Manager.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMPropertyDefinition {
 public:
   // @access Public members.
@@ -61,8 +62,11 @@ public:
 };
 
   // @class Definitions of persistent properties supported by
-  //        the Object Manager. This is a temporary class and
-  //        will be merged into <c OMPropertyDefinition>.
+  //        the Object Manager.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
+  //   @devnote This is a temporary class and will be merged into
+  //            <c OMPropertyDefinition>. This will require changes
+  //            to code in Object Manager clients.
 class OMBuiltinPropertyDefinition : public OMPropertyDefinition {
 public:
   // @access Public members.

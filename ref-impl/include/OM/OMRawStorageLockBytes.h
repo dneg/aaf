@@ -40,6 +40,7 @@ class OMRawStorage;
   //        may use the <c OMRawStorage> interface to access or to control
   //        the storage of the raw bytes of a file.
   //   @base public | ILockBytes
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMRawStorageLockBytes : public ILockBytes {
 public:
   // @access Public members.

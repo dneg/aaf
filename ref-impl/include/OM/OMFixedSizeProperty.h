@@ -37,6 +37,7 @@
   //          can be any type with well defined copy and assignment
   //          semantics.
   //   @base public | <c OMSimpleProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename PropertyType>
 class OMFixedSizeProperty : public OMSimpleProperty {
 public:

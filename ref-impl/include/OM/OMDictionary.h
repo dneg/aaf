@@ -34,6 +34,12 @@
 
 class OMPropertyDefinition;
 
+  // @class Dictionary containing definitions of classes, properties and types.
+  //        The dictionary is a factory for <c OMstorable> objects.
+  //        The dictionary is persistent.
+  //   @base public | <c OMClassFactory>
+  //   @base public | <c OMStorable>
+  //   @cauthor Tim Bingham | Avid Technology, Inc.
 class OMDictionary : public OMClassFactory, public OMStorable {
 public:
 

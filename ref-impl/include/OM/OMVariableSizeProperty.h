@@ -36,6 +36,7 @@
   //   @tcarg class | PropertyType | The type of the property. This
   //          can be any type.
   //   @base public | <c OMSimpleProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename PropertyType>
 class OMVariableSizeProperty : public OMSimpleProperty {
 public:

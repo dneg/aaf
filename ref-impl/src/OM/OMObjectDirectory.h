@@ -33,6 +33,8 @@
 
 class OMStorable;
 
+  // @class Debug only data structure for tracking objects by name.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMObjectDirectory {
 public:
 

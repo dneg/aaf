@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMRedBlackTree
 #ifndef OMREDBLACKTREET_H
 #define OMREDBLACKTREET_H
 

@@ -42,6 +42,7 @@
   //        <c OMRawStorage> interface.
   //
   //   @base public | <c OMRawStorage>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMMemoryRawStorage : public OMRawStorage {
 public:
   // @access Static members.

@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMVector
 #ifndef OMVECTORT_H
 #define OMVECTORT_H
 

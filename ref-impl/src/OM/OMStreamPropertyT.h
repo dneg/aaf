@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMStreamProperty
 #ifndef OMSTREAMPROPERTYT_H
 #define OMSTREAMPROPERTYT_H
 
