@@ -82,6 +82,7 @@ extern "C" const aafClassID_t CLSID_AAFEssenceDescriptor;
 extern "C" const aafClassID_t CLSID_AAFFileDescriptor;
 extern "C" const aafClassID_t CLSID_AAFSourceMob;
 extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
+extern "C" const aafClassID_t CLSID_AAFNetworkLocator;
 
 // Utility function for registering a given class id as legal in a
 // given file.This function hides the type "aafClassID_t" from the OM.
@@ -120,6 +121,7 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
   registerClass(_file, CLSID_AAFEssenceDescriptor);
   registerClass(_file, CLSID_AAFFileDescriptor);
   registerClass(_file, CLSID_AAFSourceMob);
+  registerClass(_file, CLSID_AAFNetworkLocator);
 
   OMStorable* head = OMStorable::restoreFrom(_file, "head", *(_file->root()));
   header = dynamic_cast<ImplAAFHeader *>(head);
