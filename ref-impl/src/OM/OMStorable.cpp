@@ -555,6 +555,17 @@ void OMStorable::deepCopyTo(OMStorable* destination,
   }
 }
 
+  // @mfunc The number of objects contained within this <c OStorable>.
+  //   @rdesc The number of objects.
+OMUInt64 OMStorable::objectCount(void) const
+{
+  TRACE("OMStorable::objectCount");
+
+  OMUInt64 result = 0;
+  ASSERT("Unimplemented code not reached", false);
+  return result;
+}
+
   // @mfunc Inform this <c OMStorable> that it is about to be saved.
   //        The <p clientContext> passed is the one that was specified
   //        in the currently active call to <mf OMStorable::save>.

@@ -166,6 +166,9 @@ public:
     //          <c OMStorable> are left unchanged.
   void deepCopyTo(OMStorable* destination, void* clientContext) const;
 
+    // @cmember The number of objects contained within this <c OStorable>.
+  virtual OMUInt64 objectCount(void) const;
+
   // Callbacks.
 
     // @cmember Inform this <c OMStorable> that it is about to be saved.
