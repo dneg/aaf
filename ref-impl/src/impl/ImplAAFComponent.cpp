@@ -314,6 +314,7 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 	{
 		*foundTransition = kAAFFalse;
 		*found = this;
+    AcquireReference(); // We are returning a reference so bump the reference count!
 		CHECK(GetLength(&tmpMinLen));
 		if (Int64Less(tmpMinLen, rootLen))
 		{
