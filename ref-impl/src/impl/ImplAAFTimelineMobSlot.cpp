@@ -55,13 +55,13 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimelineMobSlot::GetOrigin (aafPosition_t *origin)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-	ImplAAFSegment * tmpSegment = NULL;
+	ImplAAFSegment * tmpSegment = (ImplAAFSegment*) NULL;
 
 	assert(origin != NULL);
 
 	XPROTECT( )
 	  {
-		CHECK(GetTrackDesc(0, NULL, origin, NULL));
+		CHECK(GetTrackDesc(0, (aafString_t*) NULL, origin, (unsigned long*) NULL));
 	  }
 
 	XEXCEPT
