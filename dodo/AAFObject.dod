@@ -3,6 +3,7 @@ AAFObject\
 #endm
 #c
 #import ./AAFUnitTest.exp
+AD_HEAD
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -12,9 +13,7 @@ AAFObject\
 *                                          *
 \******************************************/
 
-#ifndef _AAFTypes_h_
-#include "AAFTypes.h"
-#endif
+AD_INCLUDE(AAFTypes)
 
 AD_ROOT_CLASS_BEGIN
 
