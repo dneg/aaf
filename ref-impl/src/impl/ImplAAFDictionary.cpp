@@ -376,42 +376,48 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 	  // First see if this is a built-in class.
 	  //
 	  result = pvtCreateBaseClassInstance(auid);
+
+//XX+ DAB 9-sep-2001 - code corrected to REALLY iterate up the inheritance hierarchy
+	  aafUID_t parentAUID = auid;
 	  while (result == 0)
-		{
-		  aafUID_t parentAUID = auid;
-		  aafBool	isRoot;
+	  {
+//	    aafUID_t parentAUID = auid;
+//XX- DAB 9-sep-2001 - code corrected to REALLY iterate up the inheritance hierarchy
+	    aafBool	isRoot;
 
-		  // Not a built-in class; find the nearest built-in parent.
-		  // That is, iterate up the inheritance hierarchy until we
-		  // find a class which we know how to instantiate.
-		  //
-		  ImplAAFClassDefSP pcd;
-		  AAFRESULT hr;
+	    // Not a built-in class; find the nearest built-in parent.
+	    // That is, iterate up the inheritance hierarchy until we
+	    // find a class which we know how to instantiate.
+	    //
+	    ImplAAFClassDefSP pcd;
+	    AAFRESULT hr;
 
-		  hr = ((ImplAAFDictionary*)this)->LookupClassDef (parentAUID, &pcd);
-		  if (AAFRESULT_FAILED (hr))
-			{
-			  // AUID does not correspond to any class in the
-			  // dictionary; bail out with NULL result
-			  assert (0 == result);
-			  break;
-			}
-			hr = pcd->IsRoot(&isRoot);
-		  if (isRoot || hr != AAFRESULT_SUCCESS)
-			{
-			  // Class was apparently registered, but no appropriate
-			  // parent class found!  This should not happen, as every
-			  // registered class must have a registered parent class.
-			  // The only exception is AAFObject, which would have
-			  // been found by the earlier
-			  // pvtCreateBaseClassInstance() call.
-			  assert (0);
-			}
-			hr = pcd->GetParent (&parent);
-			hr = parent->GetAUID(&parentAUID);
-			parent->ReleaseReference();
-		  result = pvtCreateBaseClassInstance(parentAUID);
-		}
+	    hr = ((ImplAAFDictionary*)this)->LookupClassDef (parentAUID, &pcd);
+	    if (AAFRESULT_FAILED (hr))
+	    {
+	      // AUID does not correspond to any class in the
+	      // dictionary; bail out with NULL result
+	      assert (0 == result);
+	      break;
+	    }
+
+	    hr = pcd->IsRoot(&isRoot);
+	    if (isRoot || hr != AAFRESULT_SUCCESS)
+	    {
+	      // Class was apparently registered, but no appropriate
+	      // parent class found!  This should not happen, as every
+	      // registered class must have a registered parent class.
+	      // The only exception is AAFObject, which would have
+	      // been found by the earlier
+	      // pvtCreateBaseClassInstance() call.
+	      assert (0);
+	    }
+
+	    hr = pcd->GetParent (&parent);
+	    hr = parent->GetAUID(&parentAUID);
+	    parent->ReleaseReference();
+	    result = pvtCreateBaseClassInstance(parentAUID);
+	  }
 	}
 
   if (result)
