@@ -420,9 +420,9 @@ UIDToString( aafUID_t &uid )
 string
 DateToString( _aafDateStruct_t &date )
 {
-   char buf[11];
+   char buf[13];
 
-   sprintf( buf, "%02d-%02d-%04d", date.day, date.month, date.year );
+   sprintf( buf, "%04d-%02d-%02d", date.year, date.month, date.day );
 
    return buf;
 }
