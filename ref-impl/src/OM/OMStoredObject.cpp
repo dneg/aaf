@@ -41,18 +41,6 @@ wchar_t* OMStoredObject::streamName(const wchar_t* propertyName,
   return referenceName(propertyName, pid);
 }
 
-wchar_t* OMStoredObject::temporaryFileName(const OMDataStream& /* stream */)
-{
-  TRACE("OMStoredObject::temporaryFileName");
-
-  char buffer[L_tmpnam];
-  char* name = tmpnam(buffer);
-  ASSERT("Valid name", name != 0);
-  wchar_t* result = convertString(name);
-  POSTCONDITION("Valid result", result != 0);
-  return result;
-}
-
 wchar_t* OMStoredObject::referenceName(const wchar_t* propertyName,
                                        OMPropertyId pid)
 {

@@ -194,8 +194,6 @@ public:
   static wchar_t* streamName(const wchar_t* propertyName,
                              OMPropertyId pid);
 
-  static wchar_t* temporaryFileName(const OMDataStream& stream);
-
     // @cmember Compute the name for an object reference.
     //   @devnote This member function doesn't make sense for all
     //            derived instances of <c OMStoredObject>.
