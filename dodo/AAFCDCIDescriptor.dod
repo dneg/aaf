@@ -30,8 +30,12 @@ AAFDigitalImageDescriptor\
 #endm
 #c
 #c #import ./AAFDigitalImageDescriptor.exp
+#import ./AAFCDCIDescriptor2.exp
 AD_HEAD
 AD_IDL(//
+// IAAFCDCIDescriptor is DEPRECATED.
+// Please use IAAFCDCIDescriptor2.
+//
 // The IAAFCDCIDescriptor interface is implemented by objects which
 // describe video essence formatted with one luminance component and 
 // two color-difference components.
@@ -47,7 +51,9 @@ AD_IDL(//
 AD_CLASS_UUID(44861702, 8AEA, 11d2, 81, 3C, 00, 60,97, 31, 01, 72)
 
 AD_DEFAULT_UUID(44861703, 8AEA, 11d2, 81, 3C, 00, 60, 97, 31, 01, 72)
-AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_COM_EXT_CLASS_BEGIN(public IAAFCDCIDescriptor2)
+
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty
   // IAAFCDCIDescriptor-supporting object.  This method must be called
@@ -569,4 +575,11 @@ AD_XMETHOD1(GetPaddingBits,
   //
   // AAFRESULT_NULL_PARAM
   //   - pPaddingBits arg is NULL.)
-AD_XCLASS_END(Concrete, StoredObject)
+#c
+#c AAFCDCIDescriptor2 methods
+#c
+
+AD_COM_METH(.method-SetAlphaSamplingWidth)
+AD_COM_METH(.method-GetAlphaSamplingWidth)
+
+AD_COM_EXT_CLASS_END(AAFCDCIDescriptor2)
