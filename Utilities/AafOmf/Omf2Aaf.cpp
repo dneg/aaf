@@ -1403,6 +1403,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 		UTLStrAToStrW(effectName, &pwName);
 		ConvertUniqueNameToAUID(effectID, &effectDefAUID);
 		rc = ConvertOMFDatakind( OMFDatakind, &datadef);
+		rc = ConvertOMFDatakind( effectDatakind, &effectAUID);
 		if (SUCCEEDED(rc))
 		{
 			if (gpGlobals->bVerboseMode)
@@ -1421,34 +1422,21 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 			// if it exists use it.
 			rc = pDictionary->LookupEffectDefinition(&effectDefAUID, &pEffectDef);
 			if (AAFRESULT_SUCCESS != rc)
-			{
 				// else create a new effect definition and fill the Object
 				// definition values.
-				rc = pDictionary->CreateInstance(&AUID_AAFEffectDef,
-												  IID_IAAFEffectDef,
-												  (IUnknown **) &pEffectDef);
-				rc = pDictionary->CreateInstance(&AUID_AAFParameterDef,
-												  IID_IAAFParameterDef,
-												  (IUnknown **) &pParameterDef);
+				CreateEffectDefinition( &pEffectDef, 
+										&pParameterDef, 
+										&effectDefAUID, 
+										&datadef, 
+										pwName, 
+										pwDesc, 
+										(aafBool)isTimeWarp, 
+										(aafUInt32)bypassOverride);
 
-				rc = pEffectDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
-				pDefObject->Init(&effectDefAUID, pwName, pwDesc);
-				pDefObject->Release();
-				rc = pDictionary->RegisterEffectDefinition(pEffectDef);
-			}
 			rc = pTransition->Create(&datadef, (aafLength_t)OMFLength, (aafPosition_t)OMFCutPoint, pEffect);
 			rc = pTransition->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
-			rc = ConvertOMFDatakind( effectDatakind, &effectAUID);
 			pEffect->Initialize(&effectAUID, (aafLength_t)OMFLength, pEffectDef);
-			pEffectDef->SetDataDefinitionID(&effectDefAUID); 
-			pEffectDef->SetIsTimeWarp((aafBool)isTimeWarp);
-			pEffectDef->SetCategory(pwCategory);
-			pEffectDef->SetBypass((aafUInt32 )bypassOverride);
-			if (memcmp((const void *)&effectDefAUID, (const void*)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0)
-				pEffectDef->SetNumberInputs((aafInt32)2);
-			else
-				pEffectDef->SetNumberInputs((aafInt32)0);
-			pEffectDef->AddParameterDefs(pParameterDef);
+			SetEffectOptionalProperties(pEffect, pParameterDef, (aafLength_t)OMFLength, datadef);
 			pParameterDef->Release();
 			pParameterDef = NULL;
 			pEffectDef->Release();
@@ -2431,12 +2419,28 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 	return rc;
 }
 
+// ============================================================================
+// OMFFileClose
+//
+//			This function closes the input OMF file
+//			
+// Returns: None
+//
+// ============================================================================
 void Omf2Aaf::OMFFileClose()
 {
 	OMF2::omfsCloseFile(OMFFileHdl);
 	OMF2::omfsEndSession(OMFSession);
 }
 
+// ============================================================================
+// AAFFileClose
+//
+//			This function closes the output AAF file
+//			
+// Returns: None
+//
+// ============================================================================
 void Omf2Aaf::AAFFileClose( )
 {
 	if (pDictionary)
@@ -2458,4 +2462,97 @@ void Omf2Aaf::AAFFileClose( )
 		pFile->Release();
 		pFile = NULL;
 	}
+}
+static aafUID_t	zeroID = { 0 };
+
+// ============================================================================
+// SetEffectOptionalProperties
+//
+//			This function sets the optional properties of an Effect to default 
+//			values. 
+//	NOTE:	This is a temporary hack to allow OM to succesfully write the AAF
+//			file. Once optional properties are supported this function should be
+//			removed or modified to handle the properties correctly and not just
+//			making them from thin air!!! 
+//			
+// Returns: None
+//
+// ============================================================================
+void Omf2Aaf::SetEffectOptionalProperties(IAAFEffect*		pEffect,
+										  IAAFParameterDef* pParameterDef,
+										  aafLength_t		effectLength,
+										  aafUID_t			effectDatadef)
+{
+	IAAFSourceReference*	pSourceRef= NULL;
+	IAAFSegment*			pFiller = NULL;
+	IAAFComponent*			pComponent = NULL;
+	IAAFSourceClip*			pSourceClip = NULL;
+	IAAFParameter*			pParameter = NULL;
+	aafSourceRef_t			sourceRef;
+
+	// First we make the objects we need !!
+	pDictionary->CreateInstance(&AUID_AAFSourceClip, IID_IAAFSourceClip, (IUnknown **)&pSourceClip);
+	sourceRef.sourceID = zeroID;
+	sourceRef.sourceSlotID = 0;
+	sourceRef.startTime = 0;
+	pSourceClip->Initialize (&effectDatadef, &effectLength, sourceRef);
+	pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef);
+
+	pDictionary->CreateInstance(&AUID_AAFFiller, IID_IAAFSegment, (IUnknown **)&pFiller);
+	pFiller->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+	pComponent->SetLength(&effectLength);
+	pComponent->SetDataDef(&effectDatadef);
+
+	pDictionary->CreateInstance(&AUID_AAFParameter, IID_IAAFParameter, (IUnknown **) &pParameter);
+	pParameter->SetParameterDefinition(pParameterDef);
+
+	pEffect->SetRender(pSourceRef);
+	pEffect->AppendNewInputSegment(pFiller);
+	pEffect->AddNewParameter(pParameter);
+	pEffect->SetBypassOverride(1);
+
+	pComponent->Release();
+	pFiller->Release();
+	pSourceRef->Release();
+	pSourceClip->Release();
+	pParameter->Release();
+}
+// ============================================================================
+// CreateEffectDefinition
+//
+//			This function Creates and sets the optional properties of an Effect
+//			definition.  It creates also a Parameter Definition object. 
+//			
+// Returns: None
+//
+// ============================================================================
+void Omf2Aaf::CreateEffectDefinition(IAAFEffectDef**	ppEffectDef,
+									 IAAFParameterDef** ppParameterDef,
+									 aafUID_t*			pEffectDefAUID,
+									 aafUID_t*			pEffectAUID,
+									 aafWChar*			pwName,
+									 aafWChar*			pwDesc,
+									 aafBool			isTimeWarp,
+									 aafUInt32			bypassOverride)
+{
+	IAAFDefObject*	pDefObject = NULL;
+
+	pDictionary->CreateInstance(&AUID_AAFEffectDef, IID_IAAFEffectDef, (IUnknown **) ppEffectDef);
+	pDictionary->CreateInstance(&AUID_AAFParameterDef, IID_IAAFParameterDef, (IUnknown **) ppParameterDef);
+
+	(*ppEffectDef)->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
+	pDefObject->Init(pEffectDefAUID, pwName, pwDesc);
+	pDictionary->RegisterEffectDefinition(*ppEffectDef);
+	pDictionary->RegisterParameterDefinition(*ppParameterDef);
+	(*ppEffectDef)->SetDataDefinitionID(pEffectAUID); 
+	(*ppEffectDef)->SetIsTimeWarp((aafBool)isTimeWarp);
+	(*ppEffectDef)->SetCategory(pwName);
+	(*ppEffectDef)->SetBypass((aafUInt32 )bypassOverride);
+	if (memcmp((const void *)pEffectDefAUID, (const void*)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0)
+		(*ppEffectDef)->SetNumberInputs((aafInt32)2);
+	else
+		(*ppEffectDef)->SetNumberInputs((aafInt32)0);
+	(*ppEffectDef)->AddParameterDefs(*ppParameterDef);
+
+	pDefObject->Release();
 }
