@@ -35,7 +35,7 @@
 #include "AAFDefUIDs.h"
 
 ImplAAFTimecode::ImplAAFTimecode ():
-_start(	PID_Timecode_Start,	"Position"),
+_start(	PID_Timecode_Start,	"Start"),
 _FPS(	PID_Timecode_FPS,	"FPS"),
 _drop(	PID_Timecode_Drop,	"Drop")
 {
