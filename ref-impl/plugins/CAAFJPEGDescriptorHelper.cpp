@@ -35,10 +35,13 @@
 #include "aafCvt.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
+#include "AAFTypeDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
 
+const aafUID_t kAAFPropID_CDCIOffsetToFrameIndexes = { 0x9d15fca3, 0x54c5, 0x11d3, { 0xa0, 0x29, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDFrameIndexByteOrder = { 0xb57e925d, 0x170d, 0x11d4, { 0xa0, 0x8f, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
@@ -597,4 +600,186 @@ HRESULT STDMETHODCALLTYPE
 {
 	checkAssertion(NULL != _cdcides);
 	return _cdcides->GetPaddingBits (pPaddingBits);
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFJPEGDescriptorHelper::GetOffsetFrameIndexes(aafUInt32 *pOffset)
+{
+	IAAFClassDef		*pClassDef;
+	IAAFObject			*pObj;
+	IAAFPropertyDef		*pPropertyDef;
+	IAAFPropertyValue	*pPropValue;
+	IAAFTypeDef			*pTypeDef;
+	IAAFTypeDefInt		*pTypeDefInt;
+	aafInt32			val;
+
+	HRESULT				hr = S_OK;
+
+	checkAssertion(NULL != _dides);
+	checkAssertion(NULL != pOffset);
+	try
+	{
+		checkResult(_dides->QueryInterface(IID_IAAFObject, (void **)&pObj));
+		checkResult(pObj->GetDefinition (&pClassDef));
+		checkResult(pClassDef->LookupPropertyDef(kAAFPropID_CDCIOffsetToFrameIndexes, &pPropertyDef));
+		checkResult(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
+		checkResult(pPropValue->GetType(&pTypeDef));
+		checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+		checkResult(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
+		*pOffset  = val;
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+	return hr;
+}
+				
+HRESULT STDMETHODCALLTYPE
+    CAAFJPEGDescriptorHelper::GetFrameIndexByteOrder(aafUInt16 *byteOrder)
+{
+	IAAFClassDef		*pClassDef;
+	IAAFObject			*pObj;
+	IAAFPropertyDef		*pPropertyDef;
+	IAAFPropertyValue	*pPropValue;
+	IAAFTypeDef			*pTypeDef;
+	IAAFTypeDefInt		*pTypeDefInt;
+	aafInt16			val;
+
+	HRESULT				hr = S_OK;
+
+	checkAssertion(NULL != _dides);
+	checkAssertion(NULL != byteOrder);
+	try
+	{
+		checkResult(_dides->QueryInterface(IID_IAAFObject, (void **)&pObj));
+		checkResult(pObj->GetDefinition (&pClassDef));
+		checkResult(pClassDef->LookupPropertyDef(kAAFPropID_DIDFrameIndexByteOrder, &pPropertyDef));
+		checkResult(pObj->GetPropertyValue (pPropertyDef, &pPropValue));
+		checkResult(pPropValue->GetType(&pTypeDef));
+		checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+		checkResult(pTypeDefInt->GetInteger(pPropValue, (aafMemPtr_t) &val, sizeof (val)));
+		*byteOrder  = val;
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+	return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFJPEGDescriptorHelper::PutFrameIndexProperties(aafUInt32 offset, aafUInt16 byteOrder)
+{
+	IAAFClassDef		*pClassDef = NULL;
+	IAAFObject			*pObj = NULL;
+	IAAFPropertyDef		*pPropertyDef = NULL;
+	IAAFPropertyValue	*pPropValue = NULL;
+	IAAFTypeDef			*pTypeDef = NULL;
+	IAAFTypeDefInt		*pTypeDefInt = NULL;
+	IAAFDictionary		*pDictionary = NULL;
+
+	HRESULT				hr = S_OK;
+
+	checkAssertion(NULL != _dides);
+
+	try
+	{
+		checkResult(_dides->QueryInterface(IID_IAAFObject, (void **)&pObj));
+		checkResult(pObj->GetDefinition (&pClassDef));
+		checkResult(pObj->GetDictionary(&pDictionary));
+		if(pClassDef->LookupPropertyDef(kAAFPropID_CDCIOffsetToFrameIndexes, &pPropertyDef) != AAFRESULT_SUCCESS)
+		{
+			checkResult(pDictionary->LookupTypeDef(kAAFTypeID_Int32, &pTypeDef));
+			checkResult(pClassDef->RegisterOptionalPropertyDef (kAAFPropID_CDCIOffsetToFrameIndexes,
+												L"OffsetToFrameIndexes",
+												pTypeDef, &pPropertyDef));
+		}
+		else
+		{
+			checkResult(pPropertyDef->GetTypeDef(&pTypeDef));
+		}
+		checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+		checkResult(pTypeDefInt->CreateValue ((aafMemPtr_t) &offset, sizeof (offset), &pPropValue));
+		checkResult(pObj->SetPropertyValue (pPropertyDef, pPropValue));
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+		pPropValue->Release();
+		pPropValue = NULL;
+		pTypeDefInt->Release();
+		pTypeDefInt = NULL;
+		pTypeDef->Release();
+		pTypeDef = NULL;
+
+		if(pClassDef->LookupPropertyDef(kAAFPropID_DIDFrameIndexByteOrder, &pPropertyDef) != AAFRESULT_SUCCESS)
+		{
+			checkResult(pDictionary->LookupTypeDef(kAAFTypeID_Int16, &pTypeDef));
+			checkResult(pClassDef->RegisterOptionalPropertyDef (kAAFPropID_DIDFrameIndexByteOrder,
+												L"FrameIndexByteOrder",
+												pTypeDef, &pPropertyDef));
+		}
+		else
+		{
+			checkResult(pPropertyDef->GetTypeDef(&pTypeDef));
+		}
+
+		checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTypeDefInt));
+		checkResult(pTypeDefInt->CreateValue ((aafMemPtr_t) &byteOrder, sizeof (byteOrder), &pPropValue));
+		checkResult(pObj->SetPropertyValue (pPropertyDef, pPropValue));
+		pPropertyDef->Release();
+		pPropertyDef = NULL;
+		pPropValue->Release();
+		pPropValue = NULL;
+		pTypeDefInt->Release();
+		pTypeDefInt = NULL;
+		pTypeDef->Release();
+		pTypeDef = NULL;
+		/**/
+		pClassDef->Release();
+		pClassDef = NULL;
+		pObj->Release();
+		pObj = NULL;
+		pDictionary->Release();
+		pDictionary = NULL;
+	}
+	catch (HRESULT& rhr)
+	{
+		if(pPropertyDef != NULL)
+			pPropertyDef->Release();
+		if(pPropValue != NULL)
+			pPropValue->Release();
+		if(pTypeDefInt != NULL)
+			pTypeDefInt->Release();
+		if(pTypeDef != NULL)
+			pTypeDef->Release();
+		if(pClassDef != NULL)
+			pClassDef->Release();
+		if(pObj != NULL)
+			pObj->Release();
+		if(pDictionary != NULL)
+			pDictionary->Release();
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+	return hr;
 }
