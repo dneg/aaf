@@ -53,21 +53,22 @@
 extern "C" const aafClassID_t CLSID_EnumAAFPluginDescriptors;
 
 ImplEnumAAFPluginDescriptors::ImplEnumAAFPluginDescriptors ()
+: _enumObj(0), _iterator(0)
 {
 	_current = 0;
-	_enumObj = NULL;
 	_enumProp = NULL;
-	_enumStrongProp = NULL;
 }
 
 
 ImplEnumAAFPluginDescriptors::~ImplEnumAAFPluginDescriptors ()
 {
 	if (_enumObj)
-	{
 		_enumObj->ReleaseReference();
-		_enumObj = NULL;
-	}
+	_enumObj = NULL;
+
+	if (_iterator)
+		delete _iterator;
+	_iterator = 0;
 }
 
 
@@ -79,55 +80,43 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			value;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
-  static const aafUID_t nullID = { 0 };
-
+	AAFRESULT ar = AAFRESULT_NO_MORE_OBJECTS;
 
 	if(_enumProp != NULL)
 		numElem = _enumProp->size() / sizeof(aafUID_t);
-	else if(_enumStrongProp != NULL)
-	{
-		size_t	siz;
-		
-		_enumStrongProp->getSize(siz);
-		numElem = siz;
-	}
-	else
+	else if(_iterator == NULL)
 		return(AAFRESULT_INCONSISTANCY);
 
 	if(ppAAFPluginDescriptor == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	if((aafUInt32)_current >= numElem)
-		return AAFRESULT_NO_MORE_OBJECTS;
 	XPROTECT()
 	{
 		if(_enumProp != NULL)
 		{
+			if(_current >= numElem)
+				return AAFRESULT_NO_MORE_OBJECTS;
 			_enumProp->getValueAt(&value, _current);
 			CHECK(_enumObj->MyHeadObject(&head));
 			CHECK(head->GetDictionary (&dict));
-			if(EqualAUID(&value, &nullID))		///!!! TEMP: to work without optional parms, handle NIL ID
-				RAISE(AAFRESULT_NO_MORE_OBJECTS)	//!!!
-			CHECK(dict->LookupPluginDef (value, ppAAFPluginDescriptor));
+			CHECK(dict->LookupPluginDef(value, ppAAFPluginDescriptor));
 			head->ReleaseReference();
 			head = NULL;
 			dict->ReleaseReference();
 			dict = NULL;
-		}
-		else if(_enumStrongProp != NULL)
-		{
-			_enumStrongProp->getValueAt(*ppAAFPluginDescriptor, _current);
-			(*ppAAFPluginDescriptor)->AcquireReference();
+			_current++;
+			ar = AAFRESULT_SUCCESS;
 		}
 		else
-			RAISE(AAFRESULT_INCONSISTANCY);
-		_current++;
-		if (head) {
-			head->ReleaseReference();
-			head = NULL;
-		}
-		if (dict) {
-			dict->ReleaseReference();
-			dict = NULL;
+		{
+			if (_iterator->before() || _iterator->valid())
+			{
+				if (++(*_iterator))
+				{
+					*ppAAFPluginDescriptor = _iterator->value();
+					(*ppAAFPluginDescriptor)->AcquireReference();
+					ar = AAFRESULT_SUCCESS;
+				}
+			}
 		}
 	}
 	XEXCEPT
@@ -142,7 +131,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return(AAFRESULT_SUCCESS); 
-}
+	
+	return ar;}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -162,15 +152,9 @@ AAFRESULT STDMETHODCALLTYPE
 	ppDesc = ppAAFPluginDescriptors;
 	for (numDesc = 0; numDesc < count; numDesc++)
 	{
-		hr = NextOne(ppDesc);
+		hr = NextOne(&ppDesc[numDesc]);
 		if (FAILED(hr))
 			break;
-
-		// Point at the next component in the array.  This
-		// will increment off the end of the array when
-		// numComps == count-1, but the for loop should
-		// prevent access to this location.
-		ppDesc++;
 	}
 	
 	if (pFetched)
@@ -184,43 +168,64 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPluginDescriptors::Skip (
       aafUInt32  count)
 {
-	AAFRESULT	hr;
+	AAFRESULT	ar = AAFRESULT_SUCCESS;
 	aafUInt32	newCurrent;
-	aafUInt32	numElem;
+	aafUInt32	numElem, n;
 
 	if(_enumProp != NULL)
+	{
 		numElem = _enumProp->size() / sizeof(aafUID_t);
-	else if(_enumStrongProp != NULL)
-	{
-		size_t	siz;
 		
-		_enumStrongProp->getSize(siz);
-		numElem = siz;
-	}
-	else
-		return(AAFRESULT_INCONSISTANCY);
-
-	newCurrent = _current + count;
-
-	if(newCurrent < numElem)
-	{
-		_current = newCurrent;
-		hr = AAFRESULT_SUCCESS;
+		newCurrent = _current + count;
+		
+		if(newCurrent < numElem)
+		{
+			_current = newCurrent;
+		}
+		else
+		{
+			ar = E_FAIL;
+		}
 	}
 	else
 	{
-		hr = E_FAIL;
+		
+		for(n = 1; n <= count; n++)
+		{
+			// Defined behavior of skip is to NOT advance at all if it would push us off of the end
+			if(!++(*_iterator))
+			{
+				// Off the end, increment 'n' to match the iterator, then
+				// decrement both back to the starting position
+				n++;
+				while(n >= 1)
+				{
+					--(*_iterator);
+					n--;
+				}
+				break;
+			}
+		}
 	}
 
-	return hr;
+	return ar;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPluginDescriptors::Reset ()
 {
-	_current = 0;
-	return AAFRESULT_SUCCESS;
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+	if(_enumProp != NULL)
+	{
+		_current = 0;
+	}
+	else
+	{
+		_iterator->reset();
+	}
+	return ar;
+
 }
 
 
@@ -229,33 +234,47 @@ AAFRESULT STDMETHODCALLTYPE
       ImplEnumAAFPluginDescriptors **ppEnum)
 {
 	ImplEnumAAFPluginDescriptors	*result;
-	AAFRESULT						hr;
-
+	AAFRESULT			ar = AAFRESULT_SUCCESS;
+	
 	result = (ImplEnumAAFPluginDescriptors *)CreateImpl(CLSID_EnumAAFPluginDescriptors);
 	if (result == NULL)
 		return E_FAIL;
-
+	
 	if(_enumProp != NULL)
-		hr = result->SetEnumProperty(_enumObj, _enumProp);
-	else if(_enumStrongProp != NULL)
-		hr = result->SetEnumStrongProperty(_enumObj, _enumStrongProp);
-	if (SUCCEEDED(hr))
 	{
-		result->_current = _current;
-		*ppEnum = result;
+		ar = result->SetEnumProperty(_enumObj, _enumProp);
+		if (SUCCEEDED(ar))
+		{
+			result->_current = _current;
+			*ppEnum = result;
+		}
+		else
+		{
+			result->ReleaseReference();
+			result = 0;
+			*ppEnum = NULL;
+		}
 	}
 	else
 	{
-	  result->ReleaseReference();
-	  result = 0;
-	  *ppEnum = NULL;
+		ar = result->SetIterator(_enumObj,_iterator->copy());
+		if (SUCCEEDED(ar))
+		{
+			*ppEnum = result;
+		}
+		else
+		{
+			result->ReleaseReference();
+			result = 0;
+			*ppEnum = NULL;
+		}
 	}
 	
-	return hr;
+	return ar;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFPluginDescriptors::SetEnumProperty( ImplAAFObject *pObj, pluginDescWeakRefArrayProp_t *pProp)
+    ImplEnumAAFPluginDescriptors::SetEnumProperty( ImplAAFObject *pObj, DataDefWeakRefArrayProp_t *pProp)
 {
 	if (_enumObj)
 	  _enumObj->ReleaseReference();
@@ -264,22 +283,26 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pObj)
 		pObj->AcquireReference();
 	_enumProp = pProp;				// Don't refcount, same lifetime as the object.
-	_enumStrongProp = NULL;
 
 	return AAFRESULT_SUCCESS;
 }
+
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFPluginDescriptors::SetEnumStrongProperty( ImplAAFObject *pObj, pluginDescStrongRefArrayProp_t *pProp)
+    ImplEnumAAFPluginDescriptors::SetIterator(
+                        ImplAAFObject *pObj,
+                        OMReferenceContainerIterator<ImplAAFPluginDescriptor>* iterator)
 {
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+	
 	if (_enumObj)
-	  _enumObj->ReleaseReference();
+		_enumObj->ReleaseReference();
 	_enumObj = 0;
+	
 	_enumObj = pObj;
 	if (pObj)
 		pObj->AcquireReference();
-	/**/
-	_enumStrongProp = pProp;		// Don't refcount, same lifetime as the object.
-	_enumProp = NULL;
-
-	return AAFRESULT_SUCCESS;
+	
+	delete _iterator;
+	_iterator = iterator;
+	return ar;
 }

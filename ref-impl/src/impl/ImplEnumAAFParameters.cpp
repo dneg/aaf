@@ -45,12 +45,19 @@
 extern "C" const aafClassID_t CLSID_EnumAAFParameters;
 
 ImplEnumAAFParameters::ImplEnumAAFParameters ()
+: _enumObj(0), _iterator(0)
 {
 }
 
 
 ImplEnumAAFParameters::~ImplEnumAAFParameters ()
 {
+	if (_enumObj)
+		_enumObj->ReleaseReference();
+	_enumObj = 0;
+
+	delete _iterator;
+	_iterator = 0;
 }
 
 
@@ -58,39 +65,84 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameters::NextOne (
       ImplAAFParameter **ppParameter)
 {
-  if (! ppParameter)
-	return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	AAFRESULT ar = AAFRESULT_NO_MORE_OBJECTS;
+	
+	if (_iterator->before() || _iterator->valid())
+	{
+		if (++(*_iterator))
+		{
+			*ppParameter = _iterator->value();
+			(*ppParameter)->AcquireReference();
+			ar = AAFRESULT_SUCCESS;
+		}
+	}
+	return ar;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameters::Next (
-      aafUInt32 /*count*/,
+      aafUInt32 count,
       ImplAAFParameter **ppParameters,
       aafUInt32 * pFetched)
 {
-  if (! ppParameters)
-	return AAFRESULT_NULL_PARAM;
-  if (! pFetched)
-	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUInt32 numDefs;
+	AAFRESULT  ar = AAFRESULT_SUCCESS;
+	
+	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+		return E_INVALIDARG;
+	
+	// Point at the first component in the array.
+	// Point at the first component in the array.
+	ImplAAFParameter** ppDef = ppParameters;
+	for (numDefs = 0; numDefs < count; numDefs++)
+	{
+		ar = NextOne(&ppDef[numDefs]);
+		if (FAILED(ar))
+			break;
+	}
+	
+	if (pFetched)
+		*pFetched = numDefs;
+	
+	return ar;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameters::Skip (
-      aafUInt32 /*count*/)
+      aafUInt32 count)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	AAFRESULT	ar = AAFRESULT_SUCCESS;
+	aafUInt32	n;
+	
+	for(n = 1; n <= count; n++)
+	{
+		// Defined behavior of skip is to NOT advance at all if it would push us off of the end
+		if(!++(*_iterator))
+		{
+			// Off the end, increment 'n' to match the iterator, then
+			// decrement both back to the starting position
+			n++;
+			while(n >= 1)
+			{
+				--(*_iterator);
+				n--;
+			}
+			break;
+		}
+	}
+
+	return ar;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameters::Reset ()
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+	_iterator->reset();
+	return ar;
 }
 
 
@@ -98,7 +150,46 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameters::Clone (
       ImplEnumAAFParameters **ppEnum)
 {
-  if (! ppEnum)
-	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+	AAFRESULT				ar = AAFRESULT_SUCCESS;
+	ImplEnumAAFParameters		*result;
+
+	result = (ImplEnumAAFParameters *)CreateImpl(CLSID_EnumAAFParameters);
+	if (result == NULL)
+		return E_FAIL;
+
+    ar = result->SetIterator(_enumObj,_iterator->copy());
+	if (SUCCEEDED(ar))
+	{
+		*ppEnum = result;
+	}
+	else
+	{
+	  result->ReleaseReference();
+	  result = 0;
+	  *ppEnum = NULL;
+	}
+	
+	return ar;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplEnumAAFParameters::SetIterator(
+                        ImplAAFObject *pObj,
+                        OMReferenceContainerIterator<ImplAAFParameter>* iterator)
+{
+	AAFRESULT ar = AAFRESULT_SUCCESS;
+	
+	if (_enumObj)
+		_enumObj->ReleaseReference();
+	_enumObj = 0;
+	
+	_enumObj = pObj;
+	if (pObj)
+		pObj->AcquireReference();
+	
+	delete _iterator;
+	_iterator = iterator;
+	return ar;
 }

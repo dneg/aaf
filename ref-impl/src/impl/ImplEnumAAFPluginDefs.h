@@ -39,8 +39,9 @@ class ImplAAFDefObject;
 #include "ImplAAFObject.h"
 #endif
 
-typedef OMVariableSizeProperty<aafUID_t> pluginDescWeakRefArrayProp_t;
-typedef OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> pluginDescStrongRefArrayProp_t;
+#include "OMReferenceContainerIter.h"
+
+typedef OMVariableSizeProperty<aafUID_t> PluginDescWeakRefArrayProp_t;
 
 class ImplEnumAAFPluginDescriptors : public ImplAAFRoot
 {
@@ -106,15 +107,16 @@ public:
 // Internal to the toolkit
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetEnumProperty( ImplAAFObject *pObj, pluginDescWeakRefArrayProp_t *pProp);
+    SetEnumProperty( ImplAAFObject *pObj, PluginDescWeakRefArrayProp_t *pProp);// !!!TEmp until weak reference code
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetEnumStrongProperty( ImplAAFObject *pObj, pluginDescStrongRefArrayProp_t *pProp);
+	  SetIterator(ImplAAFObject *pObj,
+				OMReferenceContainerIterator<ImplAAFPluginDescriptor>* iterator);
 
 private:
-	aafInt32							_current;
 	ImplAAFObject						*_enumObj;
-	pluginDescWeakRefArrayProp_t		*_enumProp;
-	pluginDescStrongRefArrayProp_t		*_enumStrongProp;
+	OMReferenceContainerIterator<ImplAAFPluginDescriptor>*	_iterator;
+	aafUInt32						_current;
+	PluginDescWeakRefArrayProp_t	*_enumProp;
 };
 
 #endif // ! __ImplEnumAAFPluginDescriptors_h__

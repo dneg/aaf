@@ -259,7 +259,7 @@ public:
 private:
 	OMFixedSizeProperty<aafUID_t>						_operationDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
-	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
+	OMStrongReferenceSetProperty<ImplAAFParameter>		_parameters;
 	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
 	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
 };
