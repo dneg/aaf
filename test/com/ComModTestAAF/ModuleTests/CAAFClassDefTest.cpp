@@ -105,7 +105,8 @@ template <class T>
 void CAAFModTestLog<T>::PrintSummary()
 {
 	// Print out names of all methods (if any) which were not tested
-	for(int n=0;n<_iMethods;n++)
+	int n;
+	for(n=0;n<_iMethods;n++)
 	{
 		if(_pLog[n]._bTested==kAAFFalse)
 		{
