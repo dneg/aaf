@@ -25,10 +25,7 @@
 
 #include "OMStorable.h"
 
-const int PID_COMPOSITIONMOB_DEFAULTFADELENGTH	= 6;
-const int PID_COMPOSITIONMOB_DEFAULTFADETYPE	= 7;
-const int PID_COMPOSITIONMOB_DEFAULTFADEEDITUNIT= 8;
-
+#include "AAFPropertyIDs.h"
 
 class ImplAAFCompositionMob : public ImplAAFMob
 {

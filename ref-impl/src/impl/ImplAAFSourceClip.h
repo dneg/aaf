@@ -26,15 +26,7 @@ class ImplAAFMob;
 #include "OMProperty.h"
 
 
-// Persistent Property IDs
-
-const int PID_SOURCECLIP_FADEINLEN	= 4;
-const int PID_SOURCECLIP_FADEINTYPE	= 5;
-const int PID_SOURCECLIP_FADEINPRESENT	= 6;
-const int PID_SOURCECLIP_FADEOUTLEN	= 7;
-const int PID_SOURCECLIP_FADEOUTTYPE	= 8;
-const int PID_SOURCECLIP_FADEOUTPRESENT	= 9;
-const int PID_SOURCECLIP_STARTTIME		= 10;
+#include "AAFPropertyIDs.h"
 
 
 class ImplAAFSourceClip : public ImplAAFSourceReference
