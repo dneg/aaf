@@ -55,12 +55,6 @@ OMStrongReferenceVectorProperty<ReferencedObject>::
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::"
                                            "~OMStrongReferenceVectorProperty");
-  size_t count = _vector.count();
-  for (size_t i = 0; i < count; i++) {
-    OMStrongReferenceVectorElement<ReferencedObject>&
-                                                    element = _vector.getAt(i);
-    element.setValue(0);
-  }
 }
 
   // @mfunc Save this <c OMStrongReferenceVectorProperty>.
