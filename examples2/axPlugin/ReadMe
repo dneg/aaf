@@ -1,0 +1,191 @@
+Title:	AxPlugin Readme - How to reuse the AxPlugin (null codec) code.
+
+Revision History:  18 Oct 2002, Jim Trainor, Initial Revision
+
+This is a simple example AAF plugin implementation.  Please refer to
+the AxPlug.pdf file for an overview (in UML format) of the code.  The
+AxPlugin code satisfies the basic requirements of all AFF plugins:
+
+Another reference is the "AAF Plugins and Codecs" presentation given
+at the AAF Engineering Commitee Meeting in Atlanta on Oct 7'th, 2002.
+
+i) A simple means to register all the components implemented by the
+plugin.
+
+ii) A common class factory to create these components.
+
+iii) A shared IUnknown implementation that support COM object
+aggregation (note, the factory is also involved in aggregation
+support).
+
+iv) Implementation of the four static entry points that must exist in
+all AAF plugins (see the AxPluginEntryPoints.cpp file).
+
+Support for COM aggregregation is provided using the techniques
+presented in the book: "Inside COM", Dale Rogerson, Microsoft Press.
+This book is the basis for the CAxUnknown implementation, and
+CAxClassFactory::CreateInstance() implementation.
+
+The four items noted above are implemented in a fairly transparent
+style that should be easy to understand and reuse.  In general, all
+that is required in order to reuse this code to copy all the files to
+a new location and add a new file(s) containing the implementation of
+your COM object.  Your COM object should be implemented using
+CAxNullEssenceCodec.{cpp,h} as a guide.
+
+If the idea of copying and modifying the code is offensive, the AxPlug
+build can be easily modified to create a static library than can be
+linked into a COM plugin implementation.
+
+Here is a recipe to get started with a new plugin:
+
+1) Copy the entire directory somewhere.  Search and replace the prefix
+"Ax" with a class prefix of you choosing.
+
+2) Create two new files: CMyPlugin.h and CMyPlugin.cpp
+
+3) CMyPlugin.h should include CAxUnknown.h and AAFPlugin.h.
+
+4) Define you new COM object in CMyPlugin.h.  The example below
+implements the IAAFEssenceCodec interface:
+
+ 	#include "CAxUnknown.h"
+	#include <AAFPlugin.h>
+
+	class CMyPlugin {
+	  : public IAAFEssenceCodec, <<= We choose to implement this plugin interface.
+	    public IAAFPlugin, 	     <<= All AAF plugins must implement this.
+	    public CAxUnknown        <<= Inherit the CAxUnknown IUknnown implementation
+	{
+	public:
+
+		// Required constructor and destructor.
+		CAxNullEssenceCodec( IUnknown * pUnkOuter );
+		~CAxNullEssenceCodec();
+
+		// Use this macro the implement the IUnknown methods.
+		// This macro inserts code that uses CAxUnknown to 
+		// implement QueryInterface(), AddRef(), and Release().
+		// The CAxUnknown implementation takes care of aggregation
+		// issues.		
+		CAXUNKNOWN_DECLARE_IUNKNOWN_METHODS
+	
+		// Override CAxUnknown::NondelegatingQueryInterface() in order to
+		// add support for the interfaces implemented by this class.
+		// Please refer to the "Inside COM" book to understand why this
+		// is called "NondelegatingQueryInterface" rather than simply
+		// "QueryInterface".
+
+		STDMETHOD( NondelegatingQueryInterface(const IID& iid, void** ppv) );
+
+		//
+		// IAAFPlugin Interface
+		//
+
+		.... declare the IAAFPlugin methods
+
+		//
+		// IAAFEssenceCodec interface methods
+		//
+
+		.... declare the IAAFEssenceCodecs methods
+
+	};
+
+5) Add the CMyPlugin method definitions to CMyPlugin.cpp:
+	
+	#include "CMyPlugin.h"
+
+	CMyPlugin::CMyPlugin( IUnknown* pUnkOuter )
+	:  CAxUnknown( pUnkOuter )
+	{}
+
+	CMyPlugin::~CMyPlugin()
+	{}
+
+	HRESULT STDMETHODCALLTYPE CMyPlugin::NondelegatingQueryInterface(const IID& iid, void** ppv)
+	{
+		// CMyPlugin implements IID_IAAFPlugin...
+		if ( IID_IAAFPlugin == iid ) {
+			// FinishQI is part of CAxUnkown... there is nothing special there.
+			// Tt just takes care of incrementing the ref count.
+			return FinishQI( static_cast<IAAFPlugin*>(this), ppv );
+		}
+
+		// CMyPlugin also implements IID_IAAFEssenceCodec...
+		else if ( IID_IAAFEssenceCodec == iid ) {
+			return FinishQI( static_cast<IAAFEssenceCodec*>(this), ppv );
+		}	
+
+		// Check for any additional interfaces this object implements
+
+		// Delegate unknown interface ids to CAxUnkown.
+
+		// IMPORTANT - Call NondelegateQueryInterface() NOT QueryInterface()!
+		// This is required because a call to QueryInterface is delegated
+		// back to the object in which we may be aggregated.... we don't
+		// want that to happen.
+
+		else {
+			return CAxUnknown::NondelegatingQueryInterface( iid, ppv );
+		}
+	}
+
+6) This new COM object implementation needs to be registered, and a
+class factory must exist.  Both are acheived by simply registering an
+instance AxPluginFctry<CMyPlugin>.  This is easily accomplished in the
+constructor of a static global object defined in your anonymous
+namespace.  At this point, a class id (CLSID) is required.  The
+uuidgen.exe program supplied with Microsoft Visual C++ is a conveniet
+way to generate a unique identifier.
+
+  Add the following to CMyPlugin.cpp:
+
+#include <memory>
+
+namespace{ 
+
+// Use Microsoft's uuidgen.exe program to generate a CLSID
+// aaaaaaaa-bbbb-cccc-ddee-ffgghhiijjkk
+const CLSID CLSID_CMyPlugin =
+{ 0xaaaaaaaa, 0xbbbb, 0xcccc, { 0xdd, 0xee, 0xff, 0xgg, 0xhh, 0xii, 0xjj, 0xkk } };
+
+class RegisterMyPlugin
+{
+public:
+
+	RegisterMyPlugin()
+	{
+		std::auto_ptr<AxPluginFctryPrtcl> myPluginCodecFctry(
+			new AxPluginFctry<CMyPlugin>( CLSID_CMyPlugin ) );
+
+		AxPluginRegistry::GetInstance().AddFactory( myPluginCodecFctry );
+	}
+
+	~RegisterMyPlugin()
+	{
+		AxPluginRegistry::GetInstance().RemoveFactory( CLSID_CMyPlugin );
+	}
+};
+
+RegisterMyPlugin nullEssenceCodecRegister;
+
+}
+7) Link my CMyCodec.o in with the rest of the AxPlugin code to create
+a new library.  That's it.  There is no need to modify the CAxPlugin
+code, just link in your new code.
+
+8) Implement the IAAFPlugin and IAAFEssenceCodec (or what ever
+inteface you are implementing).  This is the hard part.
+
+9) If, for some reason, you need to add some platform specific code
+(i.e. a DllMain implementation for a Windows dll), this can be done by
+adding code to the AxPluginWin.cpp file.  For Unix and MacOS platforms
+use the like named file.  Currently, there is no need for any platform
+specific code.
+
+10) The axPluginInfo program is a simple way to test loading your
+plugin.  It will load the plugin and log a bit of informatin about all
+plugins registered with the AAF SDK.
+
+END
