@@ -12,14 +12,38 @@
 
 #include <iostream.h>
 #include <stdio.h>
+#include <assert.h>
+
+#ifndef __AAFSmartPointer_h__
+#include "AAFSmartPointer.h"
+#endif
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
+#include "AAFTypeDefUIDs.h"
 
 #define kNumComponents	5
 
+
+typedef IAAFSmartPointer<IAAFClassDef>      IAAFClassDefSP;
+typedef IAAFSmartPointer<IAAFComponent>     IAAFComponentSP;
+typedef IAAFSmartPointer<IAAFFiller>        IAAFFillerSP;
+typedef IAAFSmartPointer<IAAFObject>        IAAFObjectSP;
+typedef IAAFSmartPointer<IAAFPropertyDef>   IAAFPropertyDefSP;
+typedef IAAFSmartPointer<IAAFPropertyValue> IAAFPropertyValueSP;
+typedef IAAFSmartPointer<IAAFTypeDef>       IAAFTypeDefSP;
+typedef IAAFSmartPointer<IAAFTypeDefInt>    IAAFTypeDefIntSP;
+typedef IAAFSmartPointer<IUnknown>          IUnknownSP;
+
+// {69E9DEB3-4130-11d3-843E-00600832ACB8}
+static aafUID_t kClassAUID_NewFill = 
+{ 0x69e9deb3, 0x4130, 0x11d3, { 0x84, 0x3e, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+
+// {69E9DEB4-4130-11d3-843E-00600832ACB8}
+static const aafUID_t kPropAUID_NewFill_Odor = 
+{ 0x69e9deb4, 0x4130, 0x11d3, { 0x84, 0x3e, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
 
 // Cross-platform utility to delete a file.
@@ -47,6 +71,46 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
+
+
+static void RegisterNewClass (IAAFDictionary * pDictionary)
+{
+  //
+  // Create a new kind of filler with no new properties.
+  //
+
+  // Look up parent class
+  IAAFClassDefSP pFillClass;
+  checkResult (pDictionary->LookupClass (&AUID_AAFFiller, &pFillClass));
+  assert (pFillClass);
+
+  // Create new object for our new filler class, and initialize it.
+  IAAFClassDefSP pNewFillClass;
+  checkResult (pDictionary->CreateInstance(&AUID_AAFClassDef,
+										   IID_IAAFClassDef,
+										   (IUnknown **)&pNewFillClass));
+  checkResult (pNewFillClass->Initialize ((aafUID_t*)&kClassAUID_NewFill,
+										  pFillClass,
+										  L"New Filler"));
+
+  // Get type def for uint32
+  IAAFTypeDefSP ptd;
+  checkResult (pDictionary->LookupType ((aafUID_t*)&kAAFTypeID_UInt32,
+										&ptd));
+  assert (ptd);
+
+  // Initialize new property
+  checkResult
+	(pNewFillClass->AppendNewPropertyDef ((aafUID_t*)&kPropAUID_NewFill_Odor,
+										  L"Odor",
+										  ptd,
+										  AAFFalse,  // mandatory
+										  0));
+
+  // Register it in the dictionary.
+  checkResult (pDictionary->RegisterClass (pNewFillClass));
+}
+										  
 
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
@@ -115,7 +179,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMobSlot*	pMobSlot = NULL;
 	IAAFSequence*	pSequence = NULL;
 	IAAFSegment*	pSegment = NULL;
-	IAAFComponent*	pComponent = NULL;
+	IAAFComponentSP	pComponent;
 	aafUID_t		NewMobID;
 	int				i;
 	HRESULT			hr = S_OK;
@@ -133,6 +197,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
 		
+		// Create a new class, and register it in the dictionary.
+		RegisterNewClass (pDictionary);
+
 		// Create a Composition Mob
 		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
 			IID_IAAFMob, 
@@ -151,32 +218,75 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		//
 		//	Add some segments.  Need to test failure conditions
 		//	(i.e. starting/ending w/ transition, two trans back
-		//	to bacl).
+		//	to back).
 		//
 		for(i = 0; i < kNumComponents; i++)
 		{
 			aafLength_t		len = 10;
 			
-			checkResult(pDictionary->CreateInstance(&AUID_AAFFiller,
-				IID_IAAFComponent, 
-				(IUnknown **)&pComponent));
-			
+			// For the first component, make it our extended filler.
 			if(i == 0)
 			{
-				checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_PictureWithMatte));
+			  checkResult
+				(pDictionary->CreateInstance((aafUID_t*)&kClassAUID_NewFill,
+											 IID_IAAFComponent, 
+											 (IUnknown**)&pComponent));
+			  checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_PictureWithMatte));
 			}
 			else
 			{
+			  checkResult
+				(pDictionary->CreateInstance(&AUID_AAFFiller,
+											 IID_IAAFComponent, 
+											 (IUnknown**)&pComponent));
+
 				checkResult(pComponent->SetDataDef((aafUID_t*)&DDEF_Picture));
 			}
 
 			checkResult(pComponent->SetLength(&len));
 			checkResult(pSequence->AppendComponent(pComponent));
 			
-			pComponent->Release();
-			pComponent = NULL;
+			// For our first component, set the 'odor' value.  Must be
+			// done after the component has been inserted in sequence.
+			if (i == 0)
+			  {
+				// Set the odor value.
+				//
+				// 1) Get type def for uint32
+				IAAFTypeDefSP ptd;
+				checkResult (pDictionary->LookupType ((aafUID_t*)&kAAFTypeID_UInt32,
+													  &ptd));
+				assert (ptd);
+				IAAFTypeDefIntSP pTDUint32;
+				checkResult(ptd->QueryInterface (IID_IAAFTypeDefInt,
+												 (void **)&pTDUint32));
+				assert (pTDUint32);
+
+				// 2) Create a property value for the odor property, and
+				//    set it to 42.
+				IAAFPropertyValueSP pVal;
+				const aafUInt32 odorValue = 42;
+				checkResult (pTDUint32->CreateValue ((aafMemPtr_t) &odorValue,
+													 sizeof (odorValue),
+													 &pVal));
+
+				// 3) Look up the property def for the odor property in
+				//    the new fill class.
+				IAAFClassDefSP pNewFillClass;
+				checkResult (pDictionary->LookupClass ((aafUID_t*)&kClassAUID_NewFill,
+													   &pNewFillClass));
+				IAAFPropertyDefSP pPropDef;
+				checkResult (pNewFillClass->LookupPropertyDef ((aafUID_t*)&kPropAUID_NewFill_Odor,
+															   &pPropDef));
+
+				// 4) Get IAAFObject interface for new fill object, and
+				//    set the odor property.
+				IAAFObjectSP pObj;
+				checkResult(pComponent->QueryInterface (IID_IAAFObject,
+														(void **)&pObj));
+				checkResult (pObj->SetPropertyValue (pPropDef, pVal));
+			  }
 		}
-		
 		checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 		
 		checkResult(pMob->AppendNewSlot(pSegment, 1, L"AAF Test Sequence", &pMobSlot));
@@ -203,9 +313,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	if (pSegment)
 		pSegment->Release();
-	
-	if (pComponent)
-		pComponent->Release();
 	
 	if (pSequence)
 		pSequence->Release();
@@ -286,6 +393,72 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pDataDef->IsDataDefOf(&pwmID, &testBool));
 		checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
 		
+		// Make sure first component is a filler, and is our extended
+		// class.  To do that, we'll compare the class def we looked
+		// up in the dict, with the one we got from the new object.
+		//
+		// First get the class from the object.
+		IAAFFillerSP pFill;
+		checkResult(pComp->QueryInterface(IID_IAAFFiller,
+										  (void **) &pFill));
+		assert (pFill);
+
+		IAAFObjectSP pObj;
+		checkResult(pFill->QueryInterface(IID_IAAFObject,
+										 (void **) &pObj));
+		assert (pObj);
+		IAAFClassDefSP pClassFromObj;
+		checkResult (pObj->GetDefinition (&pClassFromObj));
+		assert (pClassFromObj);
+		IUnknownSP pUnkFromObj;
+		checkResult(pClassFromObj->QueryInterface(IID_IUnknown,
+												  (void **) &pUnkFromObj));
+		
+		// Now get the class from the dict
+		IAAFClassDefSP pClassFromDict;
+		checkResult (pDictionary->LookupClass ((aafUID_t*)&kClassAUID_NewFill,
+											   &pClassFromDict));
+		assert (pClassFromDict);
+		IUnknownSP pUnkFromDict;
+		checkResult(pClassFromDict->QueryInterface(IID_IUnknown,
+												   (void **) &pUnkFromDict));
+
+		// Compare class from object with class from dict.  Compare
+		// using IUnknown pointers.
+		assert (((IUnknown*)pUnkFromObj) ==
+				((IUnknown*)pUnkFromDict));
+
+
+		// Get the 'odor' property from our new fill clip.  Make sure
+		// it is set to the value we think it should be ('42').
+		//
+		// First get the property def from the class.
+		IAAFPropertyDefSP pPropDef;
+		checkResult (pClassFromObj->LookupPropertyDef ((aafUID_t*)&kPropAUID_NewFill_Odor,
+													   &pPropDef));
+		//
+		// Get the property value from the object
+		IAAFPropertyValueSP pPropVal;
+		checkResult (pObj->GetPropertyValue (pPropDef, &pPropVal));
+		// 
+		// We know the property is int32; get the int32 type def
+		IAAFTypeDefSP ptd;
+		checkResult (pDictionary->LookupType ((aafUID_t*)&kAAFTypeID_UInt32,
+											  &ptd));
+		IAAFTypeDefIntSP pTDUint32;
+		checkResult(ptd->QueryInterface(IID_IAAFTypeDefInt,
+										(void **) &pTDUint32));
+		assert (pTDUint32);
+		//
+		// Ask the typedef to interpret this property value for us.
+		aafUInt32 odorValue = 0;
+		checkResult (pTDUint32->GetInteger (pPropVal,
+											(aafMemPtr_t) &odorValue,
+											sizeof (odorValue)));
+		//
+		// make sure it's what we expect.
+		assert (42 == odorValue);
+
 		pComp->Release();
 		pComp = NULL;
 		pDataDef->Release();
@@ -370,7 +543,7 @@ extern "C" HRESULT CAAFDictionary_test()
 	{
 		hr = CreateAAFFile(pFileName);
 		if (SUCCEEDED(hr))
-			hr = ReadAAFFile(pFileName);
+		  hr = ReadAAFFile(pFileName);
 	}
 	catch (...)
 	{
