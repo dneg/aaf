@@ -19,7 +19,11 @@ CLASSPATH	:= $(LIB_DIR)/xercesImpl.jar:$(LIB_DIR)/xmlParserAPIs.jar:$(LIB_DIR)/z
 
 # default rule
 .PHONY : all
-all : $(OBJECTS)
+all : $(OBJ_DIR) $(OBJECTS)
+
+# make obj directory if does not exist
+$(OBJ_DIR) :
+	mkdir -p $(OBJ_DIR)
 	
 # compile all .java files
 $(OBJ_DIR)/%.class : $(SRC_DIR)/%.java
