@@ -312,6 +312,22 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFOperationGroup.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFImportDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPCMDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFPhysicalDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFSoundDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameter.cpp"
 # End Source File
 # Begin Source File

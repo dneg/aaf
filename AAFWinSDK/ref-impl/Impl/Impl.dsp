@@ -326,6 +326,22 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFOperationGroup.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFImportDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPCMDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFPhysicalDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFSoundDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameter.cpp"
 # End Source File
 # Begin Source File
