@@ -343,7 +343,7 @@ bool OMVectorElement<ObjectReference, ReferencedObject>::operator== (
 template <typename ObjectReference, typename ReferencedObject>
 OMSetElement<ObjectReference, ReferencedObject>::OMSetElement(void)
   : OMContainerElement<ObjectReference, ReferencedObject>(),
-    _identification(),
+    _identification(nullOMUniqueObjectIdentification),
     _referenceCount(1/*tjb*/)
 {
   TRACE("OMSetElement<ObjectReference, ReferencedObject>::OMSetElement");
