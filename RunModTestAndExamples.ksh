@@ -223,7 +223,7 @@ PrintExitCodes ()
 	print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS"
 
 	if [ SANDBOX -eq 1 ]; then
-		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/Views/SandBox.log
+		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/Views/Sandbox.log
 	fi
 }
 
