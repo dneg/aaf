@@ -38,7 +38,7 @@ AD_IDL(//
 // AAFRESULT_NOMEMORY
 //   - insufficient system memory is available to perform the
 //     operation.
-//
+//)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(809c8ca9, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
