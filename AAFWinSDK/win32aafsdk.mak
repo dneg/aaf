@@ -13,13 +13,13 @@
 #                                                                              #
 #                                                                              #
 # Supported variables:                                                         #
-#   AAFSDK - variable that will contain the contents of the sdk.               #
+#   AAFSDK - variable that will contain the location of the aafsdk.            #
 #     WARNING: This directory will be removed during the clean.                #
 #                                                                              #
 #   AAFTOOLKIT - the directory that contains the AAF-toolkit                   #
 #                                                                              #
 #   CFG=FULL (default)                                                         #
-#      nmake /nologo AAFSDK=d:\\aafsdk -f win32aafsdk.mak                      #
+#      nmake /nologo AAFSDK=d:\aafsdk -f win32aafsdk.mak                       #
 #     Create a full aafsdk for a drop in the given AAFSDK directory            #
 #      The bin directory will contain the release dlls and the lib directory   #
 #      will contain the release libraries. The bin\debug will contain the      #
@@ -27,14 +27,14 @@
 #                                                                              #
 #   CFG=Release                                                                #
 #      nmake /nologo CFG="Release" win32aafsdk.mak                             #
-#     Create the sdk in the toolkit\AAFWinSDK directory for testing.           #
+#     Create the sdk in the toolkit\AAFWinSDK\aafsdk directory for testing.    #
 #      The bin directory will contain the release dlls and the lib directory   #
 #      will contain the release libraries. There will be not bin\debug         #
 #      directory if one exists it will be deleted.                             #
 #                                                                              #
 #   CFG=Debug                                                                  #
 #      nmake /nologo CFG="Debug" win32aafsdk.mak                               #
-#     Create the sdk in the toolkit\AAFWinSDK directory for testing.           #
+#     Create the sdk in the toolkit\AAFWinSDK\aafsdk directory for testing.    #
 #      The bin directory will contain the debug dlls and the lib directory     #
 #      will contain the debug libraries. There will be not bin\debug directory #
 #      if one exists it will be deleted.                                       #
@@ -46,6 +46,10 @@
 # History:                                                                     #
 # 08-APR-1999 : created by transdel avid                                       #
 # 13-APR-1999 : transdel Added support for different configurations.           #
+# 14-APR-1999 : transdel The AAFSDK now contains the location of the aafsdk    #
+#               directory. Added minimal rebuild for switching between Debug   #
+#               and Release. Added a plugins directory. No longer copy the     #
+#               AAFPGAPI.dll as part of the SDK.                               #
 ################################################################################
 
 
@@ -77,11 +81,17 @@ AAFTOOLKIT = ..
 
 
 #
-# The root directory for the AAF ADK
+# The location to put the AAF ADK
 #
-!if "$(AAFSDK)"==""
-AAFSDK  = .
+!if "$(SDKDIR)"==""
+SDKDIR  = .
 !endif
+
+
+#
+# The top level directory of the AAF SDK.
+#
+AAFSDK = $(SDKDIR)\aafsdk
 
 
 #
@@ -118,6 +128,7 @@ AAFSDK_DEBUG   = $(AAFSDK)\bin\debug
 AAFSDK_HELP    = $(AAFSDK)\help
 AAFSDK_INCLUDE = $(AAFSDK)\include
 AAFSDK_LIB     = $(AAFSDK)\lib
+AAFSDK_PLUGINS = $(AAFSDK)\plugins
 
 
 #
@@ -155,7 +166,8 @@ TARGET_DIRS = \
 !endif
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
-	$(AAFSDK_LIB)
+	$(AAFSDK_LIB) \
+	$(AAFSDK_PLUGINS)
 
 
 #
@@ -207,8 +219,7 @@ TARGET_LIB_FILES = \
 # Target Dynamic Link Libraries files that need to be registered and unregistered
 #
 TARGET_DLLS_TO_REGISTER = \
-	$(AAFSDK_BIN)\aafcoapi.dll \
-	$(AAFSDK_BIN)\aafpgapi.dll
+	$(AAFSDK_BIN)\aafcoapi.dll
 
 
 #
@@ -217,7 +228,6 @@ TARGET_DLLS_TO_REGISTER = \
 TARGET_DLL_FILES = \
 !if "$(CFG)"=="FULL"
 	$(AAFSDK_DEBUG)\aafcoapi.dll \
-	$(AAFSDK_DEBUG)\aafpgapi.dll \
 !endif
 	$(TARGET_DLLS_TO_REGISTER)
 
@@ -239,19 +249,13 @@ TARGET_FILES_TO_REMOVE = \
 # Note: Order is important: must have child before parent directory.
 #
 TARGET_DIRS_TO_REMOVE = \
-	$(AAFSDK_DEBUG) \
-!if "$(AAFSDK)" == "."
-	$(AAFSDK_HELP) \
-	$(AAFSDK_INCLUDE) \
-	$(AAFSDK_LIB)
-!else
 	$(AAFSDK_BIN) \
+	$(AAFSDK_DEBUG) \
 	$(AAFSDK_HELP) \
 	$(AAFSDK_INCLUDE) \
 	$(AAFSDK_LIB) \
+	$(AAFSDK_PLUGINS) \
 	$(AAFSDK)
-!endif
-
 
 
 #
@@ -266,9 +270,15 @@ sdk_targets : $(TARGET_DLL_FILES)
 
 
 #
-# Dependency that builds the sdk_targets and then the current configuration file.
+# Dependency that builds the sdk_targets and then the current configuration
+# file. Special case switching between Release and Debug builds so that
+# the entire SDK does not have to be rebuilt.
 #
-!if "$(LASTCFG)"!="$(CFG)"
+!if "$(LASTCFG)"=="Debug" && "$(CFG)"=="Release" 
+targets : cleanbinaries
+!elseif "$(LASTCFG)"=="Release" && "$(CFG)"=="Debug" 
+targets : cleanbinaries
+!elseif "$(LASTCFG)"!="$(CFG)"
 targets : clean
 !endif
 targets : sdk_targets
@@ -305,6 +315,9 @@ $(AAFSDK_INCLUDE) : $(AAFSDK)
 
 $(AAFSDK_LIB) : $(AAFSDK)
 	md $(AAFSDK_LIB)
+
+$(AAFSDK_PLUGINS) : $(AAFSDK)
+	md $(AAFSDK_PLUGINS)
 
 
 #
@@ -381,9 +394,9 @@ $(AAFSDK_BIN)\aafcoapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.dll "$(AAFSDK_BIN)\"
 	@regsvr32 /s /c $(AAFSDK_BIN)\aafcoapi.dll
 
-$(AAFSDK_BIN)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll
-	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll "$(AAFSDK_BIN)\"
-	@regsvr32 /s /c $(AAFSDK_BIN)\aafpgapi.dll
+$(AAFSDK_PLUGINS)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll
+	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll "$(AAFSDK_PLUGINS)\"
+	@regsvr32 /s /c $(AAFSDK_PLUGINS)\aafpgapi.dll
 
 #
 # Dependency and build rules for the debug library targets.
@@ -411,8 +424,21 @@ $(AAFSDK_DEBUG)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL)\aafpgapi.dll
 unregisterdlls:
 	@for %%f in ( $(TARGET_DLLS_TO_REGISTER) ) do \
 	    @if exist %%f \
-		    @echo regsvr32 /u /s/ /c %%f & \
+		@echo regsvr32 /u /s/ /c %%f & \
 	        regsvr32 /u /s/ /c %%f
+
+
+#
+# Unregister the dlls and remove all of the binaries
+# this target is used to streamline switching between Release and Debug
+# configurations.
+#
+cleanbinaries: unregisterdlls
+	@for %%f in ( $(TARGET_LIB_FILES) $(TARGET_DLLS_TO_REGISTER) ) do \
+	    @if exist %%f \
+		@echo $(RM) $(RM_OPTS) %%f & \
+	        $(RM) $(RM_OPTS) %%f
+	
 	
 
 #
@@ -421,7 +447,7 @@ unregisterdlls:
 cleanfiles : unregisterdlls
 	@for %%f in ( $(TARGET_FILES_TO_REMOVE) ) do \
 	    @if exist %%f \
-		    @echo $(RM) $(RM_OPTS) %%f & \
+		@echo $(RM) $(RM_OPTS) %%f & \
 	        $(RM) $(RM_OPTS) %%f
 
 
@@ -431,7 +457,7 @@ cleanfiles : unregisterdlls
 cleandirs :
 	@for %%d in ( $(TARGET_DIRS_TO_REMOVE) ) do \
 	    @if exist %%d \
-		    @echo rmdir %%d & \
+		@echo rmdir %%d & \
 	        rmdir %%d
 
 #
