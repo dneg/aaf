@@ -136,8 +136,6 @@ OMDiskRawStorage::~OMDiskRawStorage(void)
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMDiskRawStorage::readAt(OMUInt64 offset,
                               OMByte* bytes,
                               OMUInt32 byteCount,
@@ -148,11 +146,7 @@ void OMDiskRawStorage::readAt(OMUInt64 offset,
   PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
                              (_mode == OMFile::readOnlyMode));
 
-  ASSERT("Supported offset", offset <= LONG_MAX); // tjb - limit
-  long int liOffset = static_cast<long int>(offset);
-
-  int seekStatus = fseek(_file, liOffset, SEEK_SET);
-  ASSERT("Successful seek", seekStatus == 0); // tjb - error
+  setPosition(offset);
   size_t actualByteCount = fread(bytes, 1, byteCount, _file);
 
   bytesRead = actualByteCount;
@@ -169,8 +163,6 @@ void OMDiskRawStorage::readAt(OMUInt64 offset,
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-  //   @devnote fseek takes a long int for offset this may not be sufficient
-  //            for 64-bit offsets.
 void OMDiskRawStorage::writeAt(OMUInt64 offset,
                                const OMByte* bytes,
                                OMUInt32 byteCount,
@@ -181,11 +173,7 @@ void OMDiskRawStorage::writeAt(OMUInt64 offset,
   PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
                              (_mode == OMFile::writeOnlyMode));
 
-  ASSERT("Supported offset", offset <= LONG_MAX); // tjb - limit
-  long int liOffset = static_cast<long int>(offset);
-
-  int seekStatus = fseek(_file, liOffset, SEEK_SET);
-  ASSERT("Successful seek", seekStatus == 0); // tjb - error
+  setPosition(offset);
   size_t actualByteCount = fwrite(bytes, 1, byteCount, _file);
 
   bytesWritten = actualByteCount;
