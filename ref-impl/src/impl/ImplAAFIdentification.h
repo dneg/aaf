@@ -44,6 +44,8 @@ public:
   //
   //********
   ~ImplAAFIdentification ();
+  
+  ImplAAFIdentification(); // tjb -- this is temporary and should be removed.
 
   ImplAAFIdentification(
     const char* companyName,
