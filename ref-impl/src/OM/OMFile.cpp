@@ -80,7 +80,8 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
   PRECONDITION("Valid dictionary", dictionary != 0);
 
   OMFileSignature signature;
-  readSignature(fileName, signature);
+  bool result = OMMSSStoredObject::isRecognized(fileName, signature);
+  ASSERT("Recognized file", result);
   OMStoredObject* store = OMMSSStoredObject::openRead(fileName);
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
@@ -117,7 +118,8 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   PRECONDITION("Valid dictionary", dictionary != 0);
 
   OMFileSignature signature;
-  readSignature(fileName, signature);
+  bool result = OMMSSStoredObject::isRecognized(fileName, signature);
+  ASSERT("Recognized file", result);
   OMStoredObject* store = OMMSSStoredObject::openModify(fileName);
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
@@ -209,7 +211,9 @@ bool OMFile::compatibleRawStorage(const OMRawStorage* rawStorage,
   // Write only Microsoft Structured Storage files are allowed
   // only on a read/write OMRawStorage.
   //
-  OMFileEncoding encoding = encodingOf(signature);
+  OMFileEncoding encoding;
+  bool recognized = isRecognized(signature, encoding);
+  ASSERT("Recognized signature", recognized);
   if ((encoding == MSSBinaryEncoding) &&
       (accessMode == writeOnlyMode) &&
       (!rawStorage->isReadable())) {
@@ -1180,8 +1184,8 @@ void OMFile::openRead(void)
 {
   TRACE("OMFile::openRead");
 
-  readSignature(_rawStorage, _signature);
-  _encoding = encodingOf(_signature);
+  bool result = isRecognized(_rawStorage, _signature, _encoding);
+  ASSERT("Recognized file", result);
   ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
                            (_encoding == KLVBinaryEncoding) ||
                            (_encoding == XMLTextEncoding));
@@ -1203,8 +1207,8 @@ void OMFile::openModify(void)
 {
   TRACE("OMFile::openModify");
 
-  readSignature(_rawStorage, _signature);
-  _encoding = encodingOf(_signature);
+  bool result = isRecognized(_rawStorage, _signature, _encoding);
+  ASSERT("Recognized file", result);
   ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
                            (_encoding == KLVBinaryEncoding) ||
                            (_encoding == XMLTextEncoding));
@@ -1226,7 +1230,8 @@ void OMFile::createModify(void)
 {
   TRACE("OMFile::createModify");
 
-  _encoding = encodingOf(_signature);
+  bool result = isRecognized(_signature, _encoding);
+  ASSERT("Recognized file", result);
   ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
                            (_encoding == KLVBinaryEncoding) ||
                            (_encoding == XMLTextEncoding));
@@ -1250,7 +1255,8 @@ void OMFile::createWrite(void)
 {
   TRACE("OMFile::createWrite");
 
-  _encoding = encodingOf(_signature);
+  bool result = isRecognized(_signature, _encoding);
+  ASSERT("Recognized file", result);
   ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
                            (_encoding == KLVBinaryEncoding) ||
                            (_encoding == XMLTextEncoding));
