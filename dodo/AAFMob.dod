@@ -715,8 +715,10 @@ AD_XMETHOD3(OffsetToMobTimecode,
   // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
+  // - the pTcSeg pointer is valid.
   // - the pOffset pointer is valid.
   // - the pResult pointer is valid.
+  // - Timecode track exists.
   // 
   // If this method fails nothing will be written to *pResult.
   // 
@@ -731,7 +733,7 @@ AD_XMETHOD3(OffsetToMobTimecode,
   //   - either pOffset or pResult argument is NULL.
   //
   // AAFRESULT_TIMECODE_NOT_FOUND
-  //   - pTcSeg is NULL and timecode track wasn't found.)
+  //   - timecode track wasn't found.)
 
 
 AD_XMETHOD2(FindSlotBySlotID,

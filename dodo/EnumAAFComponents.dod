@@ -9,16 +9,20 @@ AD_HEAD
 AD_IDL(//
 // This interface is used to enumerate over the AAFComponents contained
 // in an AAFSequence.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
 //)
-
 AD_FORWARD_DECLARATION(AAFComponent)
-
-
 AD_CLASS_UUID(B1A21395, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21394, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
-
 AD_XMETHOD1(NextOne,
 			[out\,retval],
 			  objOut,
@@ -48,6 +52,7 @@ AD_XMETHOD1(NextOne,
   // AAFRESULT_NO_MORE_OBJECTS
   //   - no Components remaining to be returned.)
 
+
 AD_XMETHOD3(Next,
 			[in],
 			  objPass,
@@ -64,15 +69,16 @@ AD_XMETHOD3(Next,
 			  aafUInt32 *,
 			  pNumFetched,
 			  number of actual Components fetched into ppComponents array,
+
 			Enumerates the next count elements \(AAFComponent pointers\) in the
   // enumerator's list\, returning them in the given array along with
   // the actual number of enumerated elements in pNumFetched. The caller
   // is responsible for properly releasing the returned pointers.
   // 
   // Succeeds if all of the following are true:
-  // - The ppMobs pointer is valid.
+  // - The ppComponents pointer is valid.
   // - The pNumFetched pointer is valid. If count is 1\, pNumFetched can be NULL.
-  // - There are Mob objects remaining to be returned.
+  // - There are Component objects remaining to be returned.
   // 
   // If this method fails nothing is written to *ppComponents or
   // pNumFetched.
@@ -85,7 +91,8 @@ AD_XMETHOD3(Next,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - either ppCompoents or pNumFetched is null.)
+  //   - either ppComponents or pNumFetched is null.)
+
 
 AD_METHOD1(Skip,
 		   [in],
@@ -109,16 +116,18 @@ AD_METHOD1(Skip,
   // AAFRESULT_NO_MORE_OBJECTS
   //   - count exceeded number of remaining objects.)
 
+
 AD_METHOD0(Reset,
-		   Instructs the enumerator to position itself at the beginning of the list of elements.
-  //
-  // There is no guarantee that the same set of elements will be enumerated on 
-  // each pass through the list\, nor will the elements necessarily be enumerated in 
-  // the same order. The exact behavior depends on the collection being enumerated.
+		   Instructs the enumerator to position itself at the beginning of
+  // the list of elements.
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following code:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //)
+  //   - succeeded.  \(This is the only code indicating success.\))
+
 
 AD_XMETHOD1(Clone,
 			[out\,retval],
@@ -146,5 +155,4 @@ AD_XMETHOD1(Clone,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
-
 AD_CLASS_END

@@ -9,10 +9,18 @@ AD_HEAD
 AD_IDL(//
 // This interface is used to enumerate over the AAFPropertyValues
 // contained in a collection.
-//)
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
-\***********************************************/
+\***********************************************/)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(809c8ca9, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 

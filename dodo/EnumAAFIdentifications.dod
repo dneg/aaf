@@ -6,24 +6,17 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 AD_IDL(//
 // This interfaces allows access to individual
 // IAAFIdentification-supporting objects within a collection.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
 //)
 AD_FORWARD_DECLARATION(AAFIdentification)
 AD_CLASS_UUID(B1A21385, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -126,12 +119,15 @@ AD_XMETHOD1(Skip,
 
 
 AD_METHOD0(Reset,
-  // Instructs the enumerator to position itself at the beginning of
-  // the list of elements.  There is no guarantee that the same set of
-  // elements will be enumerated on each pass through the list\, nor
-  // will the elements necessarily be enumerated in the same
-  // order. The exact behavior depends on the collection being
-  // enumerated.)
+		   Instructs the enumerator to position itself at the beginning of
+  // the list of elements.
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following code:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(Clone,

@@ -21,6 +21,14 @@ AD_IDL(//
 //		kTapeMob -- Iterate over AAFSourceMob with attached AAFTapeDescriptor.
 //		kFilmMob -- Iterate over AAFSourceMob with attached AAFFilmDescriptor.
 //		kAllMob -- Iterate over all IAAMob.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
 //)
 AD_FORWARD_DECLARATION(AAFMob)
 AD_CLASS_UUID(B1A21387, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -75,7 +83,7 @@ AD_XMETHOD3(Next,
 			  number of actual Mobs fetched into ppMobs array,
 			  Enumerates the next count elements \(AAFMob pointers\) in the
   // enumerator's list\, returning them in the given array along with
-  // the actual number of enumerated elements in pcFetched. The caller
+  // the actual number of enumerated elements in pNumFetched. The caller
   // is responsible for properly releasing the returned pointers.
   // 
   // Succeeds if all of the following are true:
@@ -122,12 +130,16 @@ AD_XMETHOD1(Skip,
 
 
 AD_METHOD0(Reset,
-  // Instructs the enumerator to position itself at the beginning of
-  // the list of elements.  There is no guarantee that the same set of
-  // elements will be enumerated on each pass through the list\, nor
-  // will the elements necessarily be enumerated in the same
-  // order. The exact behavior depends on the collection being
-  // enumerated.)
+		   Instructs the enumerator to position itself at the beginning of
+  // the list of elements.
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following code:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
 
 AD_XMETHOD1(Clone,
 			[out\, retval],
@@ -135,7 +147,7 @@ AD_XMETHOD1(Clone,
 			EnumAAFMobs,
 			ppEnum,
 			new enumeration,
-  // Creates another mob enumerator with the same state as the current
+			Creates another mob enumerator with the same state as the current
   // enumerator to iterate over the same list. This method makes it
   // possible to record a point in the enumeration sequence in order
   // to return to that point at a later time.
