@@ -58,7 +58,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFMasterMob Test";
+	ProductInfo.productName = L"AAFCodecDef Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -227,7 +227,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 extern "C" HRESULT CAAFCodecDef_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"CodecDefTest.aaf";
+	aafWChar * pFileName = L"AAFCodecDefTest.aaf";
 
 	try
 	{

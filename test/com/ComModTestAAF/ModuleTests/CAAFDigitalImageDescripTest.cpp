@@ -361,7 +361,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 extern "C" HRESULT CAAFDigitalImageDescriptor_test()
 {
-	aafWChar*	pFileName = L"AAFDigitalImageDescTest.aaf";
+	aafWChar*	pFileName = L"AAFDigitalImageDescripTest.aaf";
 	HRESULT		hr = AAFRESULT_NOT_IMPLEMENTED;
 
 	try
