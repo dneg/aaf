@@ -78,7 +78,7 @@ AD_METHOD1(RemovePropertyDef,
 
 AD_METHOD1(GetPropertyDefinitions,
 		   [retval][out],
-		   AD_AAFTYPES\{EnumAAFPropertyDefinitions\} **,
+		   AD_AAFTYPES\(EnumAAFPropertyDefinitions\)**,
 		   ppEnum,
 		   Property Definition enumeration,
 		   Returns an enumerator for aaf property definitions.)
