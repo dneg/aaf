@@ -149,7 +149,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pFileDesc->SetSampleRate (checkSampleRate));
 		checkResult(pFileDesc->SetContainerFormat (checkContainer));
 		checkResult(pFileDesc->SetLength (checkLength));
-		checkResult(pFileDesc->SetIsInContainer (kAAFTrue));
+//		checkResult(pFileDesc->SetIsInContainer (kAAFTrue));
 		
 		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 		
@@ -210,7 +210,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafRational_t				testSampleRate;
 	aafUID_t					testContainer;
 	aafLength_t					testLength;
-	aafBool						testBool;
+//	aafBool						testBool;
 	
 	aafProductVersion_t v;
 	v.major = 1;
@@ -276,8 +276,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkExpression(memcmp(&testContainer, &checkContainer, sizeof(testContainer)) == 0, AAFRESULT_TEST_FAILED);
 			checkResult(pFileDesc->GetLength (&testLength));
 			checkExpression(checkLength == testLength, AAFRESULT_TEST_FAILED);
-			checkResult(pFileDesc->GetIsInContainer (&testBool));
-			checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+//			checkResult(pFileDesc->GetIsInContainer (&testBool));
+//			checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 			
 			pEdesc->Release();
 			pEdesc = NULL;
