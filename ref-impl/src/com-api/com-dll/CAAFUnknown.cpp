@@ -8,7 +8,6 @@
 //
 // @end
 //=--------------------------------------------------------------------------=
-// Copyright 1995 - 1998 Microsoft Corporation.  All Rights Reserved.
 //
 // THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF 
 // ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO 

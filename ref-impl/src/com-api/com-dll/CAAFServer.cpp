@@ -1,7 +1,7 @@
 
 
-#ifndef __aaftypes_h__
-#include "aaftypes.h"
+#ifndef __AAFTypes_h__
+#include "AAFTypes.h"
 #endif
 
 #ifndef __CAAFServer_h__
@@ -34,7 +34,7 @@ CAAFServer::~CAAFServer()
 
 void CAAFServer::Lock
 (
-	AAFBool fLock
+	aafBool fLock
 )
 {
 	if (fLock)
@@ -56,11 +56,11 @@ void CAAFServer::DecrementActiveObjects()
 }
 
 
-AAFUInt32 CAAFServer::GetLockCount()
+aafUInt32 CAAFServer::GetLockCount()
 {
 	return _lockCount;
 }
-AAFUInt32 CAAFServer::GetActiveObjectCount()
+aafUInt32 CAAFServer::GetActiveObjectCount()
 {
 	return _activeCount;
 }
