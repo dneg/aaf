@@ -44,6 +44,8 @@ class ImplAAFFile;
 
 #include "OMProperty.h"
 
+#include "AAFPropertyIDs.h"
+
 class AAFDataKind;
 class AAFEffectDef;
 class ImplAAFSession;
