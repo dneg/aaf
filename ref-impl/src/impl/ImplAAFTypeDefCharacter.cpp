@@ -56,6 +56,16 @@
 // We only support two byte unicode characters.
 const aafUInt32 kExternalCharacterSize = 2;
 
+
+//some macros
+#define check_hr(expr)\
+{\
+	HRESULT  the_hresult = (expr);\
+	if (FAILED(the_hresult))\
+	   return the_hresult;\
+}
+
+
 ImplAAFTypeDefCharacter::ImplAAFTypeDefCharacter ()
 {}
 
@@ -92,16 +102,14 @@ AAFRESULT STDMETHODCALLTYPE
 	tmp->ReleaseReference(); // we don't need this reference anymore.
 	tmp = 0;
 	
-	AAFRESULT hr;
-	hr = pv->Initialize(this);
-	if (! AAFRESULT_SUCCEEDED (hr))
-		return hr;
+	//Initialize
+	check_hr ( pv->Initialize(this) );
 	
+	//Allocate appropriate bits
 	aafMemPtr_t pBits = NULL;
-	hr = pv->AllocateBits (cbChar, &pBits);
-	if (! AAFRESULT_SUCCEEDED (hr))
-		return hr;
+	check_hr ( pv->AllocateBits (cbChar, &pBits) );
 	
+	//Set the bits to incoming character
 	assert (pBits);
 	memcpy (pBits, &character, cbChar);
 	
@@ -126,33 +134,26 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	// get the property value's embedded type
 	ImplAAFTypeDefSP pPropType;
-	AAFRESULT hr;
-	hr = pvd->GetType (&pPropType);
-	if (! AAFRESULT_SUCCEEDED (hr))
-	{
-		return hr;
-	}
+	check_hr ( pvd->GetType (&pPropType) );
 	assert (pPropType);
+	//Make sure the TD of the pv passed in, matches that of the ImplAAFTypeDefCharacter
+	if (pPropType != this)
+		return AAFRESULT_BAD_TYPE;
 	
 	//check to make sure that the size in the val data matches that of the native size
 	aafUInt32 cbChar = 0;
-	hr = pvd->GetBitsSize(&cbChar);
-	if (! AAFRESULT_SUCCEEDED (hr))
-	{
-		return hr;
-	}
+	check_hr ( pvd->GetBitsSize(&cbChar) );
 	
 	if (cbChar != NativeSize())
 	{
-		return AAFRESULT_BAD_TYPE;
+		return AAFRESULT_BAD_SIZE;
 	}
 	
 	//ok all set with initial conditions
 	//now set the value to the incoming character
 	
 	aafMemPtr_t pBits = NULL;
-	hr = pvd->GetBits (&pBits);
-	if (AAFRESULT_FAILED(hr)) return hr;
+	check_hr ( pvd->GetBits (&pBits)  );
 	assert (pBits);
 	
 	memcpy (pBits, &character, cbChar);
@@ -180,32 +181,25 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	// get the property value's embedded type
 	ImplAAFTypeDefSP pPropType;
-	AAFRESULT hr;
-	hr = pvd->GetType (&pPropType);
-	if (! AAFRESULT_SUCCEEDED (hr))
-	{
-		return hr;
-	}
+	check_hr ( pvd->GetType (&pPropType) );
 	assert (pPropType);
+	//Make sure the TD of the pv passed in, matches that of the ImplAAFTypeDefCharacter
+	if (pPropType != this)
+		return AAFRESULT_BAD_TYPE;
 	
 	//check to make sure that the size in the val data matches that of the native size
 	aafUInt32 cbChar = 0;
-	hr = pvd->GetBitsSize(&cbChar);
-	if (! AAFRESULT_SUCCEEDED (hr))
-	{
-		return hr;
-	}
-	
+	check_hr (  pvd->GetBitsSize(&cbChar) );
+
 	if (cbChar != NativeSize())
 	{
-		return AAFRESULT_BAD_TYPE;
+		return AAFRESULT_BAD_SIZE;
 	}
 
 	//Now set the character from that contained in the prop val data
 
 	aafMemPtr_t pBits = NULL;
-	hr = pvd->GetBits (&pBits);
-	if (AAFRESULT_FAILED(hr)) return hr;
+	check_hr ( pvd->GetBits (&pBits) );
 	assert (pBits);
 	
 	memcpy (pCharacter, pBits, cbChar);
