@@ -371,7 +371,7 @@ AAFRESULT ImplPropertyCollection::Initialize
 			  OMPropertyId opid = pPropDef->OmPid ();
 			  if (PID_InterchangeObject_ObjClass == opid)
 				// objclass isn't a real property yet...
-				break;
+  				continue; // break; don't abort the loop. transdel 2000-DEC-21
 			  pOmProp = pOMPropSet->get (opid);
 			  assert (pOmProp);
 			  propCount --;
