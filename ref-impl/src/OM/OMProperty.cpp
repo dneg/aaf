@@ -37,6 +37,10 @@
 
 // class OMProperty
 
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The stored form of this <c OMProperty>.
+  //   @parm The name of this <c OMProperty>.
 OMProperty::OMProperty(const OMPropertyId propertyId,
                        const int storedForm,
                        const char* name)
@@ -53,6 +57,12 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
   PRECONDITION("Valid name", validString(_name)); 
 }
 
+  // @mfunc Temporary pseudo-constructor for clients which provide
+  //         a type definition.
+  //   @parm The property id.
+  //   @parm The name of this <c OMProperty>.
+  //   @parm The type of this <c OMProperty>.
+  //   @parm True if this is an optional property, false otherwise.
 void OMProperty::initialize(const OMPropertyId propertyId,
                             const char* name,
                             OMType* type,
@@ -72,6 +82,9 @@ void OMProperty::initialize(const OMPropertyId propertyId,
   _isOptional = isOptional;
 }
 
+  // @mfunc Temporary pseudo-constructor for clients which provide
+  //        a property definition.
+  //   @parm The definition of this <c OMProperty>.
 void OMProperty::initialize(const OMPropertyDefinition* definition)
 {
   TRACE("OMProperty::initialize");
@@ -89,6 +102,7 @@ void OMProperty::initialize(const OMPropertyDefinition* definition)
   _isOptional = _definition->isOptional();
 }
 
+  // @mfunc Destructor.
 OMProperty::~OMProperty(void)
 {
   TRACE("OMProperty::~OMProperty");
@@ -103,7 +117,8 @@ void OMProperty::close(void)
 }
 
   // @mfunc The <c OMPropertyDefinition> defining this <c OMProperty>.
-  // @this const 
+  //   @rdesc The defining <c OMPropertyDefinition>.
+  //   @this const 
 const OMPropertyDefinition* OMProperty::definition(void) const
 {
   TRACE("OMProperty::definition");
@@ -328,6 +343,9 @@ void OMProperty::clearPresent(void)
 
 // class OMSimpleProperty
 
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The name of this <c OMSimpleProperty>.
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const char* name)
 : OMProperty(propertyId, SF_DATA, name), _size(0), _bits(0)
@@ -335,6 +353,10 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
   TRACE("OMSimpleProperty::OMSimpleProperty");
 }
 
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The name of this <c OMSimpleProperty>.
+  //   @parm The size of this <c OMSimpleProperty>.
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const char* name,
                                    size_t valueSize)
@@ -355,6 +377,7 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
   POSTCONDITION("Valid bits", _bits != 0 );
 }
 
+  // @mfunc Destructor.
 OMSimpleProperty::~OMSimpleProperty(void)
 {
   TRACE("OMSimpleProperty::~OMSimpleProperty");
@@ -362,6 +385,9 @@ OMSimpleProperty::~OMSimpleProperty(void)
   delete [] _bits;
 }
 
+  // @mfunc The size of this <c OMSimpleProperty>.
+  //   @rdesc The property size in bytes.
+  //   @this const
 size_t OMSimpleProperty::size(void) const
 {
   TRACE("OMSimpleProperty::size");
@@ -369,6 +395,10 @@ size_t OMSimpleProperty::size(void) const
   return _size;
 }
 
+  // @mfunc Get the value of this <c OMSimpleProperty>.
+  //   @parm The buffer to receive the property value.
+  //   @parm The size of the buffer.
+  //   @this const
 void OMSimpleProperty::get(void* value, size_t valueSize) const
 {
   TRACE("OMSimpleProperty::get");
@@ -380,6 +410,10 @@ void OMSimpleProperty::get(void* value, size_t valueSize) const
   memcpy(value, _bits, _size);
 }
 
+  // @mfunc Set the value of this <c OMSimpleProperty>.
+  //   @parm The address of the property value.
+  //   @parm The size of the value.
+  //   @this const
 void OMSimpleProperty::set(const void* value, size_t valueSize) 
 {
   TRACE("OMSimpleProperty::set");
@@ -555,6 +589,9 @@ OMUInt32 OMContainerProperty::nextKey(void)
 
 // class OMStringProperty
 
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The name of this <c OMStringProperty>.
 OMStringProperty::OMStringProperty(const OMPropertyId propertyId,
                                    const char* name)
 : OMCharacterStringProperty<char>(propertyId, name)
@@ -563,11 +600,15 @@ OMStringProperty::OMStringProperty(const OMPropertyId propertyId,
   PRECONDITION("Valid name", validString(name));
 }
 
+  // @mfunc Destructor.
 OMStringProperty::~OMStringProperty(void)
 {
   TRACE("OMStringProperty::~OMStringProperty");
 }
 
+  // @mfunc Assignment operator.
+  //   @parm The new value for this <c OMStringProperty>.
+  //   @rdesc The <c OMStringProperty> resulting from the assignment.
 OMStringProperty& OMStringProperty::operator = (const char* value)
 {
   TRACE("OMStringProperty::operator =");
@@ -579,6 +620,9 @@ OMStringProperty& OMStringProperty::operator = (const char* value)
 
 // class OMWideStringProperty
 
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The name of this <c OMWideStringProperty>.
 OMWideStringProperty::OMWideStringProperty(const OMPropertyId propertyId,
                                            const char* name)
 : OMCharacterStringProperty<wchar_t>(propertyId, name)
@@ -587,11 +631,15 @@ OMWideStringProperty::OMWideStringProperty(const OMPropertyId propertyId,
   PRECONDITION("Valid name", validString(name));
 }
 
+  // @mfunc Destructor.
 OMWideStringProperty::~OMWideStringProperty(void)
 {
   TRACE("OMWideStringProperty::~OMWideStringProperty");
 }
 
+  // @mfunc Assignment operator.
+  //   @parm The new value for this <c OMWideStringProperty>.
+  //   @rdesc The <c OMWideStringProperty> resulting from the assignment.
 OMWideStringProperty& OMWideStringProperty::operator = (const wchar_t* value)
 {
   TRACE("OMWideStringProperty::operator =");
