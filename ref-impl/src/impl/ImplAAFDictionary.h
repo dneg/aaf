@@ -38,9 +38,14 @@ class ImplEnumAAFPluggableDefs;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMClassFactory.h"
+
+
 #include "ImplAAFPluggableDef.h"
 
-class ImplAAFDictionary : public ImplAAFObject
+class ImplAAFDictionary :
+  public OMClassFactory, 
+  public ImplAAFObject
 {
 public:
   //
@@ -53,6 +58,10 @@ protected:
   virtual ~ImplAAFDictionary ();
 
 public:
+  // Create an instance of the appropriate derived class, given the class id.
+  //  This method implements the OMClassFactory interface.
+  //
+  OMStorable* create(const OMClassId& classId) const;
 
 
   //****************
