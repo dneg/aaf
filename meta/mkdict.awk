@@ -1011,10 +1011,22 @@ function formatAUID(O00, O01, O02, O03, O04, O05, O06, O07,
                     O08, O09, O10, O11, O12, O13, O14, O15,
                     indent)
 {
-  return sprintf("\n%sAAF_LITERAL_AUID(0x%s%s%s%s,\n%s  0x%s%s, 0x%s%s,\n%s  0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
-             indent,
+  s = formatAUIS(O00, O01, O02, O03, O04, O05, O06, O07,
+                 O08, O09, O10, O11, O12, O13, O14, O15);
+  return sprintf("\n%s// %s\n%sAAF_LITERAL_AUID(0x%s%s%s%s,\n%s  0x%s%s, 0x%s%s,\n%s  0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s, 0x%s)",
+             indent, s, indent,
              O08, O09, O10, O11, indent,
              O12, O13, O14, O15, indent,
+             O00, O01, O02, O03,
+             O04, O05, O06, O07);
+}
+
+function formatAUIS(O00, O01, O02, O03, O04, O05, O06, O07,
+                    O08, O09, O10, O11, O12, O13, O14, O15)
+{
+  return sprintf("{%s%s%s%s-%s%s-%s%s-%s%s-%s%s%s%s%s%s}",
+             O11, O10, O09, O08,
+             O13, O12, O15, O14,
              O00, O01, O02, O03,
              O04, O05, O06, O07);
 }
