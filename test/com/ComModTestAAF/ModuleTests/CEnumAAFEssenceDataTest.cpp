@@ -299,17 +299,15 @@ void EnumEssenceDataTest::createFileMob(int itemNumber)
 
 void EnumEssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
 {
-  assert(_pFile && _pHeader);
+  assert(_pFile && _pHeader && _pDictionary);
   assert(pSourceMob);
   assert(NULL == _pEssenceData);
 
 
   // Attempt to create an AAFEssenceData.
-  check(CoCreateInstance(CLSID_AAFEssenceData,
-                         NULL, 
-                         CLSCTX_INPROC_SERVER, 
+  check(_pDictionary->CreateInstance(&AUID_AAFEssenceData,
                          IID_IAAFEssenceData,
-                         (void **)&_pEssenceData));
+                         (IUnknown **)&_pEssenceData));
 
   check(_pEssenceData->SetFileMob(pSourceMob));
   check(_pHeader->AppendEssenceData(_pEssenceData));
