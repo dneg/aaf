@@ -110,10 +110,13 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMob::AppendSlot
         (ImplAAFMobSlot *  pSlot)  //@parm [in,out] Mob Name length
 {
+	AAFRESULT aafError = AAFRESULT_SUCCESS;
+
 	if (NULL == pSlot)
 		return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_slots.appendValue(pSlot);
+	return aafError;
 }
 
 //****************
