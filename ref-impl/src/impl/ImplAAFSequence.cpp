@@ -91,7 +91,7 @@ AAFRESULT STDMETHODCALLTYPE
 // that it is not the first object in a transition, and that it is
 // not neighboring another transition.  It also verifies that there
 // is enough source material on either side of the transition.  The
-// function also verifies that the datakinds are compatible.
+// function also verifies that the datadefs are compatible.
 //
 // If the component is successfully appended to the sequence, the
 // reference count of the component is incremented.
@@ -111,7 +111,7 @@ AAFRESULT STDMETHODCALLTYPE
 // AAFRESULT_NULL_PARAM
 //   - pComponent is null.
 //
-// AAFRESULT_INVALID_DATAKIND
+// AAFRESULT_INVALID_DATADEF
 //   - The data kind of the component is not compatible with the 
 //     data kind of the sequence.
 //
@@ -148,11 +148,11 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pComponent->attached())
 		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
-	// Verify that component's datakind converts to sequence's datakind
+	// Verify that component's datadef converts to sequence's datadef
 	GetDataDef(&sequDataDef);
 	pComponent->GetDataDef(&cpntDataDef);
 	if (memcmp(&sequDataDef, &cpntDataDef, sizeof(aafUID_t)) != 0)
-			return AAFRESULT_INVALID_DATAKIND;
+			return AAFRESULT_INVALID_DATADEF;
 
 	GetLength(&sequLen);
 	pComponent->GetLength(&cpntLen);
