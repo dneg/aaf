@@ -394,7 +394,7 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	IAAFDataDef					*pPictureDef = NULL, *pSoundDef;
 	IAAFDataDef					*media_kind = NULL;
 	aafUInt32					samplesWritten, bytesWritten;
-	aafInt32					frameSize;
+	aafInt32					frameSize = 0;
 
 	// Delete any previous test file before continuing...
 	char cFileName[FILENAME_MAX];
