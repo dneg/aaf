@@ -21,7 +21,7 @@
 #include "ImplEnumAAFPluginDescriptors.h"
 #endif
 
-#include "ImplAAFPluggableDef.h"
+#include "ImplAAFDefObject.h"
 #include "ImplAAFObjectCreation.h"
 
 #include <assert.h>
@@ -33,16 +33,16 @@ extern "C" const aafClassID_t CLSID_EnumAAFPluginDescriptors;
 ImplEnumAAFPluginDescriptors::ImplEnumAAFPluginDescriptors ()
 {
 	_current = 0;
-	_cPluggableDef = NULL;
+	_cDef = NULL;
 }
 
 
 ImplEnumAAFPluginDescriptors::~ImplEnumAAFPluginDescriptors ()
 {
-	if (_cPluggableDef)
+	if (_cDef)
 	{
-		_cPluggableDef->ReleaseReference();
-		_cPluggableDef = NULL;
+		_cDef->ReleaseReference();
+		_cDef = NULL;
 	}
 }
 
@@ -55,10 +55,10 @@ AAFRESULT STDMETHODCALLTYPE
 
     XPROTECT()
 	{
-		CHECK(_cPluggableDef->GetNumDescriptors (&siz));
+		CHECK(_cDef->GetNumDescriptors (&siz));
 		if(cur < siz)
 		{
-			CHECK(_cPluggableDef->GetNthDescriptor (cur, ppAAFPluginDescriptor));
+			CHECK(_cDef->GetNthDescriptor (cur, ppAAFPluginDescriptor));
 			_current = ++cur;
 		}
 		else
@@ -115,7 +115,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	newCurrent = _current + count;
 
-    _cPluggableDef->GetNumDescriptors(&siz);
+    _cDef->GetNumDescriptors(&siz);
 	if(newCurrent < siz)
 	{
 		_current = newCurrent;
@@ -149,7 +149,7 @@ AAFRESULT STDMETHODCALLTYPE
 	if (result == NULL)
 		return E_FAIL;
 
-	hr = result->SetPluggableDef(_cPluggableDef);
+	hr = result->SetDef(_cDef);
 	if (SUCCEEDED(hr))
 	{
 		result->_current = _current;
@@ -166,12 +166,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT
-    ImplEnumAAFPluginDescriptors::SetPluggableDef(ImplAAFPluggableDef *pEDesc)
+    ImplEnumAAFPluginDescriptors::SetDef(ImplAAFDefObject *pEDesc)
 {
-	if (_cPluggableDef)
-		_cPluggableDef->ReleaseReference();
+	if (_cDef)
+		_cDef->ReleaseReference();
 
-	_cPluggableDef = pEDesc;
+	_cDef = pEDesc;
 
 	if (pEDesc)
 		pEDesc->AcquireReference();

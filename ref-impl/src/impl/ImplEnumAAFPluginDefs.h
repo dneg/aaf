@@ -31,7 +31,7 @@
 
 
 class ImplAAFPluginDescriptor;
-class ImplAAFPluggableDef;
+class ImplAAFDefObject;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -108,11 +108,11 @@ public:
 public:
 // Internal to the toolkit
 AAFRESULT
-    SetPluggableDef(ImplAAFPluggableDef *pEDesc);
+    SetDef(ImplAAFDefObject *pEDesc);
 
 private:
 	aafInt32				_current;
-	ImplAAFPluggableDef		*_cPluggableDef;
+	ImplAAFDefObject		*_cDef;
 };
 
 #endif // ! __ImplEnumAAFPluginDescriptors_h__
