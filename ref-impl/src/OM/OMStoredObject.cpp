@@ -20,6 +20,9 @@
 #include <objbase.h>
 #endif
 
+// BobT hack: put open flags here for easy access
+#define bobt_openMode (STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE)
+
 const OMUInt32 currentVersion = 12;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
@@ -385,7 +388,9 @@ OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
   if (mode == OMFile::modifyMode) {
     openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
   } else if (mode == OMFile::readOnlyMode) {
-    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+    // BobT: hack out share excluse at Tim's suggestion (as an experiment)
+    // openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+    openMode = bobt_openMode;
   }
 
   OMCHAR omFileName[256];
@@ -838,7 +843,9 @@ IStream* OMStoredObject::createStream(IStorage* storage,
   if (_mode == OMFile::modifyMode) {
     mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
   } else if (_mode == OMFile::readOnlyMode) {
-    mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
+    // BobT: hack out share excluse at Tim's suggestion (as an experiment)
+    // mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
+	mode = bobt_openMode | STGM_CREATE;
   }
 
   IStream* stream = 0;
@@ -868,7 +875,9 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
   if (_mode == OMFile::modifyMode) {
     mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
   } else if (_mode == OMFile::readOnlyMode) {
-    mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+    // BobT: hack out share excluse at Tim's suggestion (as an experiment)
+    // mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+	mode = bobt_openMode;
   }
 
   IStream* stream = 0;
@@ -957,7 +966,9 @@ IStorage* OMStoredObject::openStorage(IStorage* storage,
   if (mode == OMFile::modifyMode) {
     openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
   } else if (mode == OMFile::readOnlyMode) {
-    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+    // BobT: hack out share excluse at Tim's suggestion (as an experiment)
+	// openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+    openMode = bobt_openMode;
   }
 
   IStorage* newStorage = 0;
