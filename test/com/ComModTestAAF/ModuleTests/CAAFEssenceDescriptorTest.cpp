@@ -311,9 +311,18 @@ extern "C" HRESULT CAAFEssenceDescriptor_test()
 	}
 
 
-  	// When all of the functionality of this class is tested, we can return success
-	if(hr == AAFRESULT_SUCCESS)
+	// When all of the functionality of this class is tested, we can return success.
+	// When a method and its unit test have been implemented, remove it from the list.
+	if (SUCCEEDED(hr))
+	{
+		cout << "The following AAFEssenceDescriptor methods have not been implemented:" << endl; 
+//		cout << "     GetNumLocators" << endl; 
+//		cout << "     AppendLocator - needs unit test" << endl; 
+		cout << "     PrependLocator - needs unit test" << endl; 
+//		cout << "     EnumAAFAllLocators - needs unit test" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+	}
 
 	return hr;
 }
+
