@@ -163,7 +163,7 @@ typedef aafUInt32 contractID_t;
 
 
 
-void SetStringProperty (IAAFObject * pObj,
+static void SetStringProperty (IAAFObject * pObj,
 						const aafUID_t propertyID,
 						const aafCharacter * strValue);
 
