@@ -84,7 +84,7 @@ static void RemoveTestFile(const wchar_t* pFileName)
 
 
 static HRESULT CreateOneTypeDef (IAAFDictionary *  pDict,
-								 aafUInt32         intSize,
+								 aafUInt8          intSize,
 								 aafBool           isSigned,
 								 aafUID_t *        pID,
 								 wchar_t *         name,
