@@ -205,6 +205,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFFindSourceInfoTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGetFileBitsTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGPITriggerTest.cpp
 # End Source File
 # Begin Source File
@@ -301,6 +305,18 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFPulldownTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRandomFileTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRandomRawStorageTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRawStorageTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRGBADescriptorTest.cpp
 # End Source File
 # Begin Source File
@@ -318,6 +334,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSelectorTest.cpp
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSequenceTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSetFileBitsTest.cpp
 # End Source File
 # Begin Source File
 
@@ -619,26 +639,6 @@ SOURCE="..\..\..\..\ref-impl\src\impl\aafCvt.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFGetFileBitsTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRandomFileTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRandomRawStorageTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFRawStorageTest.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFSetFileBitsTest.cpp
 # End Source File
 # Begin Source File
 
