@@ -35,7 +35,7 @@
 
 #include "ImplAAFFindSourceInfo.h"
 #include "ImplEnumAAFEssenceData.h"
-
+#include "ImplAAFContainerDef.h"
 
 #include <assert.h>
 #include <string.h>
@@ -65,6 +65,7 @@ extern "C" const aafClassID_t CLSID_AAFNetworkLocator;
 extern "C" const aafClassID_t CLSID_AAFSourceMob;
 extern "C" const aafClassID_t CLSID_AAFEssenceData;
 extern "C" const aafClassID_t CLSID_AAFEssenceFormat;
+extern "C" const aafClassID_t CLSID_AAFContainerDef;
 extern "C" const CLSID CLSID_AAFEssenceStream = { 0x66FE33B1, 0x946D, 0x11D2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceStream = { 0x83402902, 0x9146, 0x11d2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const IID IID_IAAFEssenceCodec = { 0x3631F7A2, 0x9121, 0x11D2, { 0x80, 0x88, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -106,7 +107,8 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 	ImplAAFHeader		*head;
 	AAFPluginManager	*plugins;
 	aafCodecMetaInfo_t	metaInfo;
-	ImplAAFWAVEDescriptor *mdes;
+	ImplAAFFileDescriptor *mdes;
+	ImplAAFDictionary	*dict;
 	IUnknown			*dataObj;
 	ImplAAFEssenceData	*implData;				
 	CLSID				dataClass;
@@ -121,7 +123,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		_openType = kAAFCreated;
 
 
-		CHECK(masterMob->MyHeadObject(&head));
+		CHECK(masterMob->MyHeadObject(&head));	//!!!Only makes essence in the current file?
 
 		// Can't put raw media inside of an AAF File
 		if(_destination == NULL && !EqualAUID(&_fileFormat, &aafFormat))
@@ -174,10 +176,28 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 			CHECK(tmpSlot->SetPhysicalNum(masterSlotID));
 			
 			CHECK(_codec->GetMetaInfo(&metaInfo));
-			mdes = (ImplAAFWAVEDescriptor *)CreateImpl(metaInfo.mdesClassID);
-			CHECK(mdes->SetIsInContainer (AAFTrue));
-			aafUID_t	fileType = NilMOBID;//!!!
-			CHECK(mdes->SetContainerFormat (&fileType));	//!!!
+			mdes = (ImplAAFFileDescriptor *)CreateImpl(metaInfo.mdesClassID);
+			CHECK(mdes->SetIsInContainer (_destination == NULL ? AAFTrue : AAFFalse));
+			
+			ImplAAFPluggableDef	*pluggable;
+			ImplAAFContainerDef	*containerDef;
+
+			CHECK(head->GetDictionary (&dict));	//!!!Only makes essence in the current file?
+			if(dict->LookupPluggableDef (&_fileFormat, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
+			{
+				if(EqualAUID(&_fileFormat, &ContainerAAF))
+				{
+					CHECK(MakeAAFContainerDef(&containerDef));
+					CHECK(dict->RegisterPluggableDefinition (containerDef));
+				}
+				else if(EqualAUID(&_fileFormat, &ContainerFile))
+				{
+					CHECK(MakeFileContainerDef(&containerDef));
+					CHECK(dict->RegisterPluggableDefinition (containerDef));
+				}
+				//!!!Else error
+			}
+			CHECK(mdes->SetContainerFormat (&_fileFormat));
 			CHECK(mdes->SetSampleRate(&sampleRate));
 			CHECK(fileMob->SetEssenceDescriptor(mdes));
 			CHECK(head->AppendMob(fileMob));
@@ -445,11 +465,11 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFHeader			*dataHead;
 	aafSourceRef_t	fileRef;
 	aafInt16		numCh;
-//	AAFRESULT		aafError;
 	ImplAAFEssenceData		*essenceData = NULL;
 	AAFPluginManager	*plugins;
 	wchar_t				*nameBuf = NULL;
 	aafInt32			buflen;
+	aafUID_t			essenceDescClass;
 
 	XPROTECT()
 	{
@@ -479,8 +499,10 @@ AAFRESULT STDMETHODCALLTYPE
 	
 		CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&_mdes));
 		CHECK(fileMob->GetMobID(&fileMobID));
+		CHECK(_mdes->GetObjectClass(&essenceDescClass));
 
 		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
 		CHECK(plugins->GetCodecInstance(CLSID_AAFWaveCodec, _variety, &_codec));
 
 		IUnknown	*iFileMob, *iAccess;
@@ -492,11 +514,18 @@ AAFRESULT STDMETHODCALLTYPE
 		
 		ImplEnumAAFEssenceData	*myEnum;
 		ImplAAFEssenceData		*testData;
+		ImplAAFDictionary		*dict;
+		ImplAAFPluggableDef		*pluggable;
 		aafBool					found = AAFFalse;
-		aafUID_t				testMobID;
+		aafUID_t				testMobID, testFormat;
+
+		//!!!!Currently, doesn't handle external AAF files
+		CHECK(_mdes->GetContainerFormat (&testFormat));
+		CHECK(fileMob->MyHeadObject(&dataHead));	// !!!Make this be in the data file
+		CHECK(dataHead->GetDictionary (&dict));
+		CHECK(dict->LookupPluggableDef (&testFormat, &pluggable));
 
 		CHECK(fileMob->GetMobID(&fileMobID));
-		CHECK(fileMob->MyHeadObject(&dataHead));
 		CHECK(dataHead->EnumEssenceData (&myEnum));
 		while(myEnum->NextOne (&testData) == AAFRESULT_SUCCESS  && !found)
 		{
@@ -1612,6 +1641,54 @@ AAFRESULT STDMETHODCALLTYPE
 #endif
 }
 
+AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFContainerDef **result)
+{
+	ImplAAFContainerDef	*obj;
+	aafUID_t			uid;
+
+	if(result == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	XPROTECT()
+	{
+		obj = (ImplAAFContainerDef *)CreateImpl (CLSID_AAFContainerDef);
+		if(obj == NULL)
+			RAISE(AAFRESULT_NOMEMORY);
+		uid = ContainerAAF;
+		CHECK(obj->SetAUID(&uid));
+		CHECK(obj->SetName(L"AAF Container"));
+		CHECK(obj->SetDescription(L"Essence is in an AAF file."));
+		*result = obj;
+	}
+	XEXCEPT
+	XEND
+	
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT ImplAAFEssenceAccess::MakeFileContainerDef(ImplAAFContainerDef **result)
+{
+	ImplAAFContainerDef	*obj;
+	aafUID_t			uid;
+	
+	if(result == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	XPROTECT()
+	{
+		obj = (ImplAAFContainerDef *)CreateImpl (CLSID_AAFContainerDef);
+		if(obj == NULL)
+			RAISE(AAFRESULT_NOMEMORY);
+		uid = ContainerFile;
+		CHECK(obj->SetAUID(&uid));
+		CHECK(obj->SetName(L"Raw file Container"));
+		CHECK(obj->SetDescription(L"Essence is in a non-container file."));
+		*result = obj;
+	}
+	XEXCEPT
+	XEND
+	
+	return AAFRESULT_SUCCESS;
+}
 
 
 
