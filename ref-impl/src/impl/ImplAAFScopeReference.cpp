@@ -62,6 +62,18 @@ ImplAAFScopeReference::ImplAAFScopeReference ():
 ImplAAFScopeReference::~ImplAAFScopeReference ()
 {}
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFScopeReference::Initialize(ImplAAFDataDef *pDataDef,
+	aafUInt32 RelativeScope,aafUInt32 RelativeSlot)
+{
+	if(!pDataDef)
+		return(AAFRESULT_NULL_PARAM);
+
+	_relativeScope = RelativeScope;
+	_relativeSlot = RelativeSlot;
+
+	return(ImplAAFComponent::SetDataDef(pDataDef));
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFScopeReference::Create (aafUInt32 RelativeScope, aafUInt32 RelativeSlot)

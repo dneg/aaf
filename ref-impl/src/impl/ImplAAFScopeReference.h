@@ -67,6 +67,21 @@ protected:
 
 public:
 
+  //****************
+  // Initialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+        (
+		 // @parm [in] Data definition for referenced slot
+		 ImplAAFDataDef *pDataDef,
+
+		 // @parm [in] Number of nested scopes to pass to find the Nested Scope slot
+         aafUInt32  RelativeScope,
+
+         // @parm [in] Number of slots that preced the slot containing the Scope Reference
+         aafUInt32  RelativeSlot);
+
 
   //****************
   // Create()
