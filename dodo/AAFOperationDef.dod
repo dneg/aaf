@@ -1,0 +1,213 @@
+#startm .this-module 0
+AAFEffectDefinition\
+#endm
+#c
+#startm .parent-module 0
+AAFDefinitionObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+
+AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(AAFControlCodeDefinition)
+AD_FORWARD_DECLARATION(AAFLocator)
+
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+/*************************************************************************
+ * 
+ * @Property AAFPropertyDefinition | AAFPropertyDefinition describes 
+ *				properties allowed for a class.
+ *
+ * @base public | AAFDefinitionObject
+ *
+ *************************************************************************/
+// {14035D91-1FF5-11d2-BF97-006097116212}
+DEFINE_GUID(<<name>>, 
+0x14035d91, 0x1ff5, 0x11d2, 0xbf, 0x97, 0x0, 0x60, 0x97, 0x11, 0x62, 0x12);
+
+AD_CLASS_UUID(14035d92, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12) 
+
+AD_DEFAULT_UUID(14035d91, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12)
+AD_CLASS_BEGIN
+
+AD_METHOD1(GetAUID,
+		   [retval][out],
+		   aafAuid_t *,
+		   pAuid,
+		   Pointer to an AUID reference,
+		   Gets the AUID for this object.)
+
+AD_METHOD1(GetEffectName,
+		   [retval][out],
+		   aafString_t *,
+		   pstrName,
+		   Pointer to effect's name,
+		   Gets the effect definition's name.)
+
+AD_METHOD1(SetEffectName,
+		   [in],
+		   aafString_t,
+		   strDescription,
+		   description,
+		   Sets the description of this effect definition.)
+
+AD_METHOD1(GetDescription,
+		   [retval][out],
+		   aafString_t *,
+		   pstrDescription,
+		   Pointer to description,
+		   Gets the description of the effect definition.)
+
+AD_METHOD1(SetDescription,
+		   [in],
+		   aafString_t,
+		   strDescription,
+		   description,
+		   Sets the description of the effect definition.)
+
+AD_METHOD1(IsTimeWarp,
+		   [retval][out],
+		   aafBool *,
+		   bIsTimeWarp,
+		   pointer to the return value, 
+		   Specifies that the duration of the input media can be different than the effect invocation)
+
+AD_METHOD1(SetIsTimeWarp,
+		   [in],
+		   aafBool,
+		   IsTimeWarp,
+		   is timewarp value, 
+		   Sets the IsTimeWarp boolean.)
+
+AD_METHOD1(AppendDegradeToEffects,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFEffectDefinition\) *,
+		   pEffectDefinition, 
+		   Degrade To Effect Definition Object,
+		   Add the effect definition object to the DegradeTo list of definitions.)
+
+AD_METHOD1(RemoveDegradeToEffects,
+		   [in\,ref], 
+		   AD_AAFTYPES\(AAFEffectDefinition\) *,
+		   pEffectDefinition, 
+		   Degrade To Effect Definition Object,
+		   Remove the effect definition object from the DegradeTo list of definitions.)
+
+AD_METHOD1(GetDegradeToEffects,
+		   [out\,retval], 
+		   AD_AAFTYPES\(EnumAAFEffectDefinitions\) **,
+		   ppEnum, 
+		   Effect Definition Enumeration,
+		   Return an enumerator for aaf effect definitions.)
+
+AD_METHOD1(GetManufacturerAUID,
+		   [retval][out],
+		   aafAuid_t *,
+		   pManufacturerAuid,
+		   Pointer to an AUID reference,
+		   Gets the Manufacturer AUID for this effect definition.)
+
+AD_METHOD1(SetManufacturerAUID,
+		   [in],
+		   aafAuid_t,
+		   ManufacturerAuid,
+		   an AUID reference,
+		   Sets the Manufacturer AUID for this effect definition.)
+
+AD_METHOD1(AppendPluginLocator,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFLocator\) *,
+		   pAAFLocator, 
+		   Plugin AAF Locator Object,
+		   Add the effect definition object to the Plugin Locator list. )
+
+AD_METHOD1(RemovePluginLocator,
+		   [in\,ref], 
+		   AD_AAFTYPES\(AAFLocator\) *,
+		   pAAFLocator, 
+		   Plugin AAF Locator Object,
+		   Add the effect definition object to the Plugin Locator list. )
+
+AD_METHOD1(GetPluginLocators,
+		   [out\,retval], 
+		   AD_AAFTYPES\(EnumAAFPluginLocator\) **,
+		   ppEnum, 
+		   Plugin Locator Enumeration,
+		   Return an enumerator for aaf plugin locator.)
+
+AD_METHOD1(GetCategory,
+		   [retval][out],
+		   aafString_t *,
+		   pstrCategory,
+		   Pointer to Category,
+		   Gets the category of the effect definition.)
+
+AD_METHOD1(SetCategory,
+		   [in],
+		   aafString_t,
+		   strCategory,
+		   category,
+		   Sets the category of the effect definition. Category is a name that describes  a group of effects.)
+
+AD_METHOD1(GetNumberInputs,
+		   [retval][out],
+		   aafInt32 *,
+		   pNumberInputs,
+		   Pointer to Number of Inputs,
+		   Gets the Number of input media segments.)
+
+AD_METHOD1(SetNumberInputs,
+		   [in],
+		   aafInt32,
+		   NumberInputs,
+		   Number of Inputs,
+		   Sets the Number of input media segments.)
+
+AD_METHOD1(GetBypass,
+		   [retval][out],
+		   aafUInt32 *,
+		   pBypass,
+		   Pointer to a Bypass media segment index ,
+		   Gets the Bypass media segment index.)
+
+AD_METHOD1(SetBypass,
+		   [in],
+		   aafUInt32
+		   baypass,
+		   Bypass media segment index,
+		   Sets the media segment index.)
+
+AD_METHOD1(AppendControlCodeDefs,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFControlCodeDefinition\) *,
+		   pAAFControlCodeDef, 
+		   Control Code definition Object,
+		   Add the Control Code Definition object to the list. )
+
+AD_METHOD1(RemoveControlCodeDefs,
+		   [in\,ref], 
+		   AD_AAFTYPES\(AAFControlCodeDefinition\) *,
+		   pAAFControlCodeDef, 
+		   Control Code definition Object,
+		   Remove the Control Code Definition object from the list. )
+
+AD_METHOD1(GetPluginLocators,
+		   [out\,retval], 
+		   AD_AAFTYPES\(EnumAAFControlCodeDefinition\) **,
+		   ppEnum, 
+		   ControlCode definition enumeration,
+		   Return an enumerator for aaf control code definition.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END

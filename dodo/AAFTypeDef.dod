@@ -1,0 +1,116 @@
+#startm .this-module 0
+AAFTypeDefinition\
+#endm
+#c
+#startm .parent-module 0
+AAFDefinitionObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+
+AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+/*************************************************************************
+ * 
+ * @class AAFTypeDefinition | AAFTypeDefinition defines a property type.
+ *
+ * @base public | AAFDefinitionObject
+ *
+ *************************************************************************/
+AD_CLASS_UUID(dfbd6524, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(dfbd6523, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
+AD_CLASS_BEGIN
+
+AD_CONSTRUCTOR5([in],aafAuid_t,Auid,auid for this definition object,
+				[in],aafString_t, Name, Unique name of this Data definition,
+				[in],aafVersionType_t, minRev, Minimum AAF Version for this type,
+				[in],aafVersionType_t, maxRev, Maximum AAF Version for this type,
+				[in],aafSwapNeeded_t, swapInfo, Specifies wheter the bytes in this type need to be swapped,
+				Constructs and sets the AUID ad Name of this TypeDefinition object.)
+
+AD_METHOD1(GetName,
+		   [retval][out],
+		   aafString_t *,
+		   pstrName,
+		   Pointer to name,
+		   Gets the unique name that identifies this datakind object.)
+
+AD_METHOD1(GetMinVersion,
+		   [retval][out],
+		   aafVersion_t *,
+		   pMinVersion,
+		   Pointer to the minimum version ,
+		   Gets the Minimum AAF Version for this type object.)
+
+AD_METHOD1(SetMinVersion,
+		   [in],
+		   aafVersion_t,
+		   MinVersion,
+		   Minimum AAF Version,
+		   Sets the Minimum AAF Version for type definition.)
+
+AD_METHOD1(GetMaxVersion,
+		   [retval][out],
+		   aafVersion_t *,
+		   pMaxVersion,
+		   Pointer to the maximum version ,
+		   Gets the Maximum AAF Version for this type object.)
+
+AD_METHOD1(SetMaxVersion,
+		   [in],
+		   aafVersion_t,
+		   MaxVersion,
+		   Maximum AAF Version,
+		   Sets the Maximum AAF Version for type definition.)
+
+AD_METHOD1(GetSwapNeeded,
+		   [retval][out],
+		   aafSwapNeeded_t,
+		   SwapNeeded,
+		   Specifies wheter the bytes in this type need to be swapped,
+		   Gets the swap information for this object.)
+
+AD_METHOD1(SetSwapNeeded,
+		   [in],
+		   aafSwapNeeded_t,
+		   SwapNeeded,
+		   Specifies wheter the bytes in this type need to be swapped,
+		   Sets the swap information for this object.)
+
+AD_METHOD1(AppendRefValue,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFReferenceValue\) *,
+		   pRefValue, 
+		   Ref value to be added,
+		   Add the reference value  to the property definition.)
+
+AD_METHOD1(RemoveRefValue,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFReferenceValue\) *,
+		   pRefValue, 
+		   Ref value to be removed,
+		   Remove the reference value from the property definition.)
+
+AD_METHOD1(GetRefValues,
+		   [out\,retval], AD_AAFTYPES\(EnumAAFReferenceValue\) **, 
+		   ppEnum, 
+		   Reference value Enumeration,
+		   Return an enumerator for the reference values.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
+
+

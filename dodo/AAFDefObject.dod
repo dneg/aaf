@@ -1,0 +1,47 @@
+#startm .this-module 0
+AAFDefinitionObject\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+/*************************************************************************
+ * 
+ * @class AAFDefinitionObject | AAFDefinitionObject is an abstract class
+ *		  that defines an item to be referenced in the AAF file. 
+ *		  AAFDefinitionObject specifies the AUID unique identifier.
+ *
+ * @base public | AAFObject
+ *
+ *************************************************************************/
+
+AD_CLASS_BEGIN
+
+AD_CONSTRUCTOR1([in],
+				aafAuid_t,
+				Auid,
+				auid for this definition object,
+				Constructs and sets the AUID for this object.)
+
+AD_METHOD1(GetAUID,
+		   [retval][out],
+		   aafAuid_t *,
+		   pAuid,
+		   Pointer to an AUID reference,
+		   Gets the AUID for this object.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
