@@ -230,7 +230,6 @@ AD_CLASS_BEGIN
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 ()
 {
-#ifdef BOB_TEST
   ImplAD_EXPORT_THIS_MODULE * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
@@ -238,9 +237,6 @@ AAFRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
   return ptr->%01();
-#else
-    return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -264,7 +260,6 @@ AAFRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 ()
 {
-#ifdef BOB_TEST
   ImplAD_EXPORT_THIS_MODULE * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
@@ -272,9 +267,6 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
   return ptr->%01();
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 #endm
@@ -361,7 +353,6 @@ HRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -375,9 +366,6 @@ AAFRESULT STDMETHODCALLTYPE
   stat = ptr->%01 (.%03-internalname(%05));
 .%03-cleanup(%04, %05)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -400,7 +388,6 @@ AAFRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -410,13 +397,10 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
+.%03-setup(%04, %05, foo)
   hr = ptr->%01 (.%03-internalname(%05));
-.%03-cleanup(%04, %05)
+.%03-cleanup(%04, %05, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 #endm
@@ -515,7 +499,6 @@ AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
         %09 .%08-indirection %10)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -532,9 +515,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -553,7 +533,6 @@ HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
         .%08-adornment%09 .%08-indirection %10)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -563,16 +542,13 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -682,7 +658,6 @@ AAFRESULT STDMETHODCALLTYPE
         %09 .%08-indirection %10,
         %14 .%13-indirection %15)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -702,9 +677,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -725,7 +697,6 @@ HRESULT STDMETHODCALLTYPE
         .%08-adornment%09 .%08-indirection %10,
         .%13-adornment%14 .%13-indirection %15)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -735,19 +706,16 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -869,7 +837,6 @@ AAFRESULT STDMETHODCALLTYPE
         %14 .%13-indirection %15,
         %19 .%18-indirection %20)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -892,9 +859,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%13-cleanup(%14, %15)
 .%18-cleanup(%19, %20)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -918,7 +882,6 @@ HRESULT STDMETHODCALLTYPE
         .%13-adornment%14 .%13-indirection %15,
         .%18-adornment%19 .%18-indirection %20)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -928,22 +891,19 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -1078,7 +1038,6 @@ AAFRESULT STDMETHODCALLTYPE
         %19 .%18-indirection %20,
         %24 .%23-indirection %25)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -1104,9 +1063,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%18-cleanup(%19, %20)
 .%23-cleanup(%24, %25)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -1132,7 +1088,6 @@ HRESULT STDMETHODCALLTYPE
         .%18-adornment%19 .%18-indirection %20,
         .%23-adornment%24 .%23-indirection %25)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -1142,25 +1097,22 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20),
     .%23-internalname(%25));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -1306,7 +1258,6 @@ AAFRESULT STDMETHODCALLTYPE
         %24 .%23-indirection %25,
         %29 .%28-indirection %30)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -1335,9 +1286,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%23-cleanup(%24, %25)
 .%28-cleanup(%29, %30)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -1365,7 +1313,6 @@ HRESULT STDMETHODCALLTYPE
         .%23-adornment%24 .%23-indirection %25,
         .%28-adornment%29 .%28-indirection %30)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -1375,28 +1322,25 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20),
     .%23-internalname(%25),
     .%28-internalname(%30));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -1554,7 +1498,6 @@ AAFRESULT STDMETHODCALLTYPE
         %29 .%28-indirection %30,
         %34 .%33-indirection %35)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -1586,9 +1529,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%28-cleanup(%29, %30)
 .%33-cleanup(%34, %35)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -1617,7 +1557,6 @@ HRESULT STDMETHODCALLTYPE
         .%28-adornment%29 .%28-indirection %30,
         .%33-adornment%34 .%33-indirection %35)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -1627,13 +1566,13 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -1641,17 +1580,14 @@ HRESULT STDMETHODCALLTYPE
     .%23-internalname(%25),
     .%28-internalname(%30),
     .%33-internalname(%35));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -1821,7 +1757,6 @@ AAFRESULT STDMETHODCALLTYPE
         %34 .%33-indirection %35,
         %39 .%38-indirection %40)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -1856,9 +1791,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%33-cleanup(%34, %35)
 .%38-cleanup(%39, %40)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -1889,7 +1821,6 @@ HRESULT STDMETHODCALLTYPE
         .%33-adornment%34 .%33-indirection %35,
         .%38-adornment%39 .%38-indirection %40)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -1899,14 +1830,14 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
-.%38-setup(%39, %40)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
+.%38-setup(%39, %40, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -1915,18 +1846,15 @@ HRESULT STDMETHODCALLTYPE
     .%28-internalname(%30),
     .%33-internalname(%35),
     .%38-internalname(%40));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
-.%38-cleanup(%39, %40)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
+.%38-cleanup(%39, %40, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -2108,7 +2036,6 @@ AAFRESULT STDMETHODCALLTYPE
         %39 .%38-indirection %40,
         %44 .%43-indirection %45)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -2146,9 +2073,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%38-cleanup(%39, %40)
 .%43-cleanup(%44, %45)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -2181,7 +2105,6 @@ HRESULT STDMETHODCALLTYPE
         .%38-adornment%39 .%38-indirection %40,
         .%43-adornment%44 .%43-indirection %45)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -2191,15 +2114,15 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
-.%38-setup(%39, %40)
-.%43-setup(%44, %45)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
+.%38-setup(%39, %40, foo)
+.%43-setup(%44, %45, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2209,19 +2132,16 @@ HRESULT STDMETHODCALLTYPE
     .%33-internalname(%35),
     .%38-internalname(%40),
     .%43-internalname(%45));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
-.%38-cleanup(%39, %40)
-.%43-cleanup(%44, %45)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
+.%38-cleanup(%39, %40, foo)
+.%43-cleanup(%44, %45, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -2416,7 +2336,6 @@ AAFRESULT STDMETHODCALLTYPE
         %44 .%43-indirection %45,
         %49 .%48-indirection %50)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -2457,9 +2376,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%43-cleanup(%44, %45)
 .%48-cleanup(%49, %50)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -2494,7 +2410,6 @@ HRESULT STDMETHODCALLTYPE
         .%43-adornment%44 .%43-indirection %45,
         .%48-adornment%49 .%48-indirection %50)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -2504,16 +2419,16 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
-.%38-setup(%39, %40)
-.%43-setup(%44, %45)
-.%48-setup(%49, %50)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
+.%38-setup(%39, %40, foo)
+.%43-setup(%44, %45, foo)
+.%48-setup(%49, %50, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2524,20 +2439,17 @@ HRESULT STDMETHODCALLTYPE
     .%38-internalname(%40),
     .%43-internalname(%45),
     .%48-internalname(%50));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
-.%38-cleanup(%39, %40)
-.%43-cleanup(%44, %45)
-.%48-cleanup(%49, %50)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
+.%38-cleanup(%39, %40, foo)
+.%43-cleanup(%44, %45, foo)
+.%48-cleanup(%49, %50, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 \\\#endm
 #endm
@@ -2744,7 +2656,6 @@ AAFRESULT STDMETHODCALLTYPE
         %49 .%48-indirection %50,
         %54 .%53-indirection %55)
 {
-#ifdef BOB_TEST
   AAFRESULT stat;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -2788,9 +2699,6 @@ AAFRESULT STDMETHODCALLTYPE
 .%48-cleanup(%49, %50)
 .%53-cleanup(%54, %55)
   return stat;
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }\\
 \\\#endm
 
@@ -2827,7 +2735,6 @@ HRESULT STDMETHODCALLTYPE
         .%48-adornment%49 .%48-indirection %50,
         .%53-adornment%54 .%53-indirection %55)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   ImplAD_EXPORT_THIS_MODULE * ptr;
@@ -2837,17 +2744,17 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
-.%38-setup(%39, %40)
-.%43-setup(%44, %45)
-.%48-setup(%49, %50)
-.%53-setup(%54, %55)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
+.%38-setup(%39, %40, foo)
+.%43-setup(%44, %45, foo)
+.%48-setup(%49, %50, foo)
+.%53-setup(%54, %55, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -2859,21 +2766,392 @@ HRESULT STDMETHODCALLTYPE
     .%43-internalname(%45),
     .%48-internalname(%50),
     .%53-internalname(%55));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
-.%38-cleanup(%39, %40)
-.%43-cleanup(%44, %45)
-.%48-cleanup(%49, %50)
-.%53-cleanup(%54, %55)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
+.%38-cleanup(%39, %40, foo)
+.%43-cleanup(%44, %45, foo)
+.%48-cleanup(%49, %50, foo)
+.%53-cleanup(%54, %55, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
+}
+\\\#endm
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes three arguments.
+#c Allows an additional macro argument per method argument to let
+#c macro caller pass more info.  For example:
+#c
+#c For type           Arg is
+#c     ----           ------
+#c     objInArray     array size
+#c     objOutArray    array size
+#c     objInCustom    custom input "marshal" code
+#c     objOutCustom   custom output "marshal" code
+#c     all else       ignored
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c ----------   ----------   ---------   ----    ----    -------- --
+#c metharg 1    02           03          04      05      06       07
+#c metharg 2    08           09          10      11      12       13
+#c metharg 3    14           15          16      17      18       19
+#c
+#c Macro Arg 20: method description
+#c
+#startm AD_X2METHOD3 20
+\\\#startm .method-%01-h 00
+  // Override from .this-module
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
+      /*%08*/ .%09-adornment%10 .%09-indirection %11,
+      /*%14*/ .%15-adornment%16 .%15-indirection %17);\\
+\\\#endm
+
+\\\#startm .method-%01-comh 00
+  // Override from .this-module
+  STDMETHOD (%01)
+     (/*%02*/ .%03-adornment%04 .%03-indirection %05,
+      /*%08*/ .%09-adornment%10 .%09-indirection %11,
+      /*%14*/ .%15-adornment%16 .%15-indirection %17);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+      /*%08*/ %10 .%09-indirection /*%11*/,
+      /*%14*/ %16 .%15-indirection /*%17*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
+\\\#endm
+
+\\\#startm .method-%01-implc 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+      /*%08*/ %10 .%09-indirection /*%11*/,
+      /*%14*/ %16 .%15-indirection /*%17*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
+\\\#endm
+\\\#startm .method-%01-com-meth-h 00
+  //***********************************************************
+  // METHOD NAME: %01()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
+  // %20
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  %01 (
+    // @parm %02 %04 | %05 | %06
+    .%03-adornment%04 .%03-indirection %05,
+
+    // @parm %08 %10 | %11 | %12
+    .%09-adornment%10 .%09-indirection %11,
+
+    // @parm %14 %16 | %17 | %18
+    .%15-adornment%16 .%15-indirection %17
+  );\\
+\\\#endm
+
+\\\#startm .method-%01-com-meth-comh 00
+  //***********************************************************
+  // METHOD NAME: %01()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
+  // %20
+  // @end
+  // 
+  STDMETHOD (%01)
+   (
+    // @parm %02 %04 | %05 | %06
+    .%03-adornment%04 .%03-indirection %05,
+
+    // @parm %08 %10 | %11 | %12
+    .%09-adornment%10 .%09-indirection %11,
+
+    // @parm %14 %16 | %17 | %18
+    .%15-adornment%16 .%15-indirection %17
+  );\\
+\\\#endm
+
+\\\#startm .method-%01-com-meth-cpp 01
+AAFRESULT STDMETHODCALLTYPE
+    AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
+        %10 .%09-indirection %11,
+        %16 .%15-indirection %17)
+{
+  AAFRESULT stat;
+
+  ImplAD_EXPORT_THIS_MODULE * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
+  assert (ptr);
+
+.%03-setup(%04, %05)
+.%09-setup(%10, %11)
+.%15-setup(%16, %17)
+  stat = ptr->%01 (.%03-internalname(%05),
+    .%09-internalname(%11),
+    .%15-internalname(%17));
+.%03-cleanup(%04, %05)
+.%09-cleanup(%10, %11)
+.%15-cleanup(%16, %17)
+  return stat;
+}\\
+\\\#endm
+
+\\\#startm .method-%01-com-meth-implc 01
+AAFRESULT STDMETHODCALLTYPE
+    ImplAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%09-adornment%10 .%09-indirection /*%11*/,
+                           .%15-adornment%16 .%15-indirection /*%17*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}\\
+\\\#endm
+
+\#c arg1 = this module's name
+\\\#startm .method-%01-com-meth-comc 01
+HRESULT STDMETHODCALLTYPE
+    CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
+        .%09-adornment%10 .%09-indirection %11,
+        .%15-adornment%16 .%15-indirection %17)
+{
+  HRESULT hr;
+
+  ImplAD_EXPORT_THIS_MODULE * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
+  assert (ptr);
+
+.%03-setup(%04, %05, %07)
+.%09-setup(%10, %11, %13)
+.%15-setup(%16, %17, %19)
+  hr = ptr->%01 (.%03-internalname(%05),
+    .%09-internalname(%11),
+    .%15-internalname(%17));
+.%03-cleanup(%04, %05, %07)
+.%09-cleanup(%10, %11, %13)
+.%15-cleanup(%16, %17, %17)
+  return hr;
+}
+\\\#endm
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes four arguments.
+#c Allows an additional macro argument per method argument to let
+#c macro caller pass more info.  For example:
+#c
+#c For type           Arg is
+#c     ----           ------
+#c     objInArray     array size
+#c     objOutArray    array size
+#c     objInCustom    custom input "marshal" code
+#c     objOutCustom   custom output "marshal" code
+#c     all else       ignored
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c ----------   ----------   ---------   ----    ----    -------- --
+#c metharg 1    02           03          04      05      06       07
+#c metharg 2    08           09          10      11      12       13
+#c metharg 3    14           15          16      17      18       19
+#c metharg 4    20           21          22      23      24       25
+#c
+#c Macro Arg 26: method description
+#c
+#startm AD_X2METHOD4 26
+\\\#startm .method-%01-h 00
+  // Override from .this-module
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
+      /*%08*/ .%09-adornment%10 .%09-indirection %11,
+      /*%14*/ .%15-adornment%16 .%15-indirection %17,
+      /*%20*/ .%21-adornment%22 .%21-indirection %23);\\
+\\\#endm
+
+\\\#startm .method-%01-comh 00
+  // Override from .this-module
+  STDMETHOD (%01)
+     (/*%02*/ .%03-adornment%04 .%03-indirection %05,
+      /*%08*/ .%09-adornment%10 .%09-indirection %11,
+      /*%14*/ .%15-adornment%16 .%15-indirection %17,
+      /*%20*/ .%21-adornment%22 .%21-indirection %23);\\
+\\\#endm
+
+\\\#startm .method-%01-cpp 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+      /*%08*/ %10 .%09-indirection /*%11*/,
+      /*%14*/ %16 .%15-indirection /*%17*/,
+      /*%20*/ %22 .%21-indirection /*%23*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
+\\\#endm
+
+\\\#startm .method-%01-implc 01
+  // Override from .this-module
+  AAFRESULT STDMETHODCALLTYPE
+    Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+      /*%08*/ %10 .%09-indirection /*%11*/,
+      /*%14*/ %16 .%15-indirection /*%17*/,
+      /*%20*/ %22 .%21-indirection /*%23*/)
+  {
+    return AAFRESULT_NOT_IMPLEMENTED;
+  }\\
+\\\#endm
+\\\#startm .method-%01-com-meth-h 00
+  //***********************************************************
+  // METHOD NAME: %01()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
+  // %20
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  %01 (
+    // @parm %02 %04 | %05 | %06
+    .%03-adornment%04 .%03-indirection %05,
+
+    // @parm %08 %10 | %11 | %12
+    .%09-adornment%10 .%09-indirection %11,
+
+    // @parm %14 %16 | %17 | %18
+    .%15-adornment%16 .%15-indirection %17,
+
+    // @parm %20 %22 | %23 | %24
+    .%21-adornment%22 .%21-indirection %23
+  );\\
+\\\#endm
+
+\\\#startm .method-%01-com-meth-comh 00
+  //***********************************************************
+  // METHOD NAME: %01()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
+  // %20
+  // @end
+  // 
+  STDMETHOD (%01)
+   (
+    // @parm %02 %04 | %05 | %06
+    .%03-adornment%04 .%03-indirection %05,
+
+    // @parm %08 %10 | %11 | %12
+    .%09-adornment%10 .%09-indirection %11,
+
+    // @parm %14 %16 | %17 | %18
+    .%15-adornment%16 .%15-indirection %17,
+
+    // @parm %20 %22 | %23 | %24
+    .%21-adornment%22 .%21-indirection %23
+  );\\
+\\\#endm
+
+\\\#startm .method-%01-com-meth-cpp 01
+AAFRESULT STDMETHODCALLTYPE
+    AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
+        %10 .%09-indirection %11,
+        %16 .%15-indirection %17,
+        %22 .%21-indirection %23)
+{
+  AAFRESULT stat;
+
+  ImplAD_EXPORT_THIS_MODULE * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
+  assert (ptr);
+
+.%03-setup(%04, %05)
+.%09-setup(%10, %11)
+.%15-setup(%16, %17)
+.%21-setup(%22, %23)
+  stat = ptr->%01 (.%03-internalname(%05),
+    .%09-internalname(%11),
+    .%15-internalname(%17),
+    .%21-internalname(%23));
+.%03-cleanup(%04, %05)
+.%09-cleanup(%10, %11)
+.%15-cleanup(%16, %17)
+.%21-cleanup(%22, %23)
+  return stat;
+}\\
+\\\#endm
+
+\\\#startm .method-%01-com-meth-implc 01
+AAFRESULT STDMETHODCALLTYPE
+    ImplAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+                           .%09-adornment%10 .%09-indirection /*%11*/,
+                           .%15-adornment%16 .%15-indirection /*%17*/,
+                           .%21-adornment%22 .%21-indirection /*%23*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}\\
+\\\#endm
+
+\#c arg1 = this module's name
+\\\#startm .method-%01-com-meth-comc 01
+HRESULT STDMETHODCALLTYPE
+    CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
+        .%09-adornment%10 .%09-indirection %11,
+        .%15-adornment%16 .%15-indirection %17,
+        .%21-adornment%22 .%21-indirection %23)
+{
+  HRESULT hr;
+
+  ImplAD_EXPORT_THIS_MODULE * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAD_EXPORT_THIS_MODULE*> (pO);
+  assert (ptr);
+
+.%03-setup(%04, %05, %07)
+.%09-setup(%10, %11, %13)
+.%15-setup(%16, %17, %19)
+.%21-setup(%22, %23, %25)
+  hr = ptr->%01 (.%03-internalname(%05),
+    .%09-internalname(%11),
+    .%15-internalname(%17),
+    .%21-internalname(%23));
+.%03-cleanup(%04, %05, %07)
+.%09-cleanup(%10, %11, %13)
+.%15-cleanup(%16, %17, %19)
+.%21-cleanup(%22, %23, %25)
+  return hr;
 }
 \\\#endm
 #endm
