@@ -242,6 +242,23 @@ AD_XMETHOD1(GetParent,
 			parent class definition,
 
      Gets the Parent class for this object.  If there is no parent\,
+  // returns the result AAFRESULT_NO_PARENT.  The only class which has no parent will
+  // be AAFObject.
+  // 
+  // Succeeds if:
+  // - The ppClassDef pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\))
+
+
+AD_XMETHOD1(IsRoot,
+			[out\, retval],
+			objPass,
+			aafBool*,
+			isRoot,
+			Is this a root \(base\) class,
+
+     Gets the Parent class for this object.  If there is no parent\,
   // returns the NULL AUID.  The only class which has no parent will
   // be AAFObject.
   // 

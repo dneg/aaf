@@ -243,6 +243,7 @@ void HTMLClipTest::CreateHTMLClip()
   IAAFMob *pReferencingMob = NULL;
   IAAFSegment *pSegment = NULL;
   IAAFTimelineMobSlot *pMobSlot = NULL;
+  IAAFComponent *pComponent = NULL;
 
   CAAFBuiltinDefs defs (_pDictionary);
 
@@ -272,7 +273,11 @@ void HTMLClipTest::CreateHTMLClip()
 							   (IUnknown **)&pHTMLClip));
     checkResult(pHTMLClip->SetBeginAnchor(const_cast<wchar_t *>(_beginAnchor)));
     checkResult(pHTMLClip->SetEndAnchor(const_cast<wchar_t *>(_endAnchor)));
+     checkResult(pHTMLClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 
+	 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+	 pComponent->Release();
+	 pComponent = NULL;
 
     // Initialize the source reference data.
     checkResult(pHTMLClip->QueryInterface(IID_IAAFSourceReference, (void **)&pSourceReference));
@@ -312,6 +317,11 @@ void HTMLClipTest::CreateHTMLClip()
   {
     pMobSlot->Release();
     pMobSlot = NULL;
+  }
+  if (pComponent)
+  {
+    pComponent->Release();
+    pComponent = NULL;
   }
 
   if (pSegment)

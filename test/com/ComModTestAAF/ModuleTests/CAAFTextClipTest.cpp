@@ -234,7 +234,7 @@ void TextClipTest::CreateTextClip()
   IAAFMob *pReferencingMob = NULL;
   IAAFSegment *pSegment = NULL;
   IAAFTimelineMobSlot *pMobSlot = NULL;
-
+	IAAFComponent*		pComponent = NULL;
 
   try
   {
@@ -262,6 +262,10 @@ void TextClipTest::CreateTextClip()
   checkResult(defs.cdTextClip()->
 			  CreateInstance(IID_IAAFTextClip, 
 							 (IUnknown **)&pTextClip));
+  checkResult(pTextClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+  checkResult(pComponent->SetDataDef(defs.ddPicture()));
+  pComponent->Release();
+  pComponent = NULL;
 
   // Initialize the source reference data.
   checkResult(pTextClip->QueryInterface(IID_IAAFSourceReference, (void **)&pSourceReference));
@@ -307,6 +311,12 @@ void TextClipTest::CreateTextClip()
   {
     pSegment->Release();
     pSegment = NULL;
+  }
+
+  if (pComponent)
+  {
+    pComponent->Release();
+    pComponent = NULL;
   }
 
   if (pReferencingMob)
