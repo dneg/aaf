@@ -114,7 +114,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(void) const
 
   // save the vector index
   //
-  store()->save(name(),
+  store()->save(storedName(),
                 index,
                 count,
                 tag,
@@ -180,7 +180,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   size_t entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
-  store()->restore(name(),
+  store()->restore(storedName(),
                    vectorIndex,
                    entries,
                    tag,

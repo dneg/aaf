@@ -164,7 +164,7 @@ void OMDataStreamProperty::open(void)
   TRACE("OMDataStreamProperty::open");
   PRECONDITION("Stream not already opened", _stream == 0);
 
-  _stream = store()->openStream(name());
+  _stream = store()->openStream(storedName());
 
   POSTCONDITION("Stream opened", _stream != 0);
 }
@@ -174,7 +174,7 @@ void OMDataStreamProperty::create(void)
   TRACE("OMDataStreamProperty::create");
   PRECONDITION("Stream not already created", _stream == 0);
 
-  _stream = store()->createStream(name());
+  _stream = store()->createStream(storedName());
 
   POSTCONDITION("Stream opened", _stream != 0);
 }

@@ -107,7 +107,7 @@ void OMStorable::close(void)
   //   @parm The <c OMStoredObject> from which to restore this
   //   <c OMStorable>.
 OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
-                                    const char* name,
+                                    const wchar_t* name,
                                     OMStoredObject& s)
 {
   TRACE("OMStorable::restoreFrom");
@@ -137,12 +137,12 @@ void OMStorable::restoreContents(void)
   // @mfunc Attach this <c OMStorable>.
   //   @parm The containining <c OMStorable>.
   //   @parm The name to be given to this <c OMStorable>.
-void OMStorable::attach(const OMStorable* container, const char* name)
+void OMStorable::attach(const OMStorable* container, const wchar_t* name)
 {
   TRACE("OMStorable::attach");
   // tjb PRECONDITION("Not attached", !attached());
   PRECONDITION("Valid container", container != 0);
-  PRECONDITION("Valid name", validString(name));
+  PRECONDITION("Valid name", validWideString(name));
 
   _container = container;
   setName(name);
@@ -187,7 +187,7 @@ void OMStorable::detach(void)
   // @mfunc The name of this <c OMStorable>.
   //   @rdesc The name of this <c OMStorable>.
   //   @this const
-const char* OMStorable::name(void) const
+const wchar_t* OMStorable::name(void) const
 {
   TRACE("OMStorable::name");
   return _name;
@@ -195,13 +195,13 @@ const char* OMStorable::name(void) const
 
   // @mfunc Give this <c OMStorable> a name.
   //   @parm The name to be given to this <c OMStorable>.
-void OMStorable::setName(const char* name)
+void OMStorable::setName(const wchar_t* name)
 {
   TRACE("OMStorable::setName");
-  PRECONDITION("Valid name", validString(name));
+  PRECONDITION("Valid name", validWideString(name));
   delete [] _name;
   _name = 0; // for BoundsChecker
-  _name = saveString(name);
+  _name = saveWideString(name);
   delete [] _pathName;
   _pathName = 0;
 }
@@ -222,7 +222,7 @@ OMFile* OMStorable::file(void) const
   //        the <c OMFile> in which this <c OMStorable> resides.
   //   @rdesc The path name of this <c OMStorable>.
   //   @this const
-const char* OMStorable::pathName(void) const
+const wchar_t* OMStorable::pathName(void) const
 {
   TRACE("OMStorable::pathName");
 
@@ -230,7 +230,7 @@ const char* OMStorable::pathName(void) const
     OMStorable* nonConstThis = const_cast<OMStorable*>(this);
     nonConstThis->_pathName = nonConstThis->makePathName();
   }
-  ASSERT("Valid path name", validString(_pathName));
+  ASSERT("Valid path name", validWideString(_pathName));
   return _pathName;
 }
 
@@ -239,7 +239,7 @@ const char* OMStorable::pathName(void) const
   //   @parm The name of the object.
   //   @rdesc The object.
   //   @this const
-OMStorable* OMStorable::find(const char* objectName) const
+OMStorable* OMStorable::find(const wchar_t* objectName) const
 {
   TRACE("OMStorable::find");
 
@@ -255,7 +255,7 @@ OMStorable* OMStorable::find(const char* objectName) const
   //   @parm The name of the property.
   //   @rdesc The property.
   //   @this const
-OMProperty* OMStorable::findProperty(const char* propertyName) const
+OMProperty* OMStorable::findProperty(const wchar_t* propertyName) const
 {
   TRACE("OMStorable::findProperty");
 
@@ -439,41 +439,45 @@ void OMStorable::onRestore(void*) const
   // nothing to do in this default implementation
 }
 
-char* OMStorable::makePathName(void)
+wchar_t* OMStorable::makePathName(void)
 {
   TRACE("OMStorable::makePathName");
 
-  ASSERT("Object has a name", validString(name()));
+  ASSERT("Object has a name", validWideString(name()));
   ASSERT("Root object properly named",
-                                  IMPLIES(isRoot(), strcmp(name(), "/") == 0));
+                      IMPLIES(isRoot(), compareWideString(name(), L"/") == 0));
   ASSERT("Non-root object properly named",
-                                  IMPLIES(strcmp(name(), "/") == 0, isRoot()));
+                      IMPLIES(compareWideString(name(), L"/") == 0, isRoot()));
   ASSERT("Non-root object has valid container",
                                           IMPLIES(!isRoot(), _container != 0));
 
-  char* result = 0;
+  wchar_t* result = 0;
   if (isRoot()) {
     // root
-    result = saveString(name());
+    result = saveWideString(name());
   } else {
     const OMStorable* cont = _container;
+    size_t pathNameLength = lengthOfWideString(cont->pathName());
+    size_t nameLength = lengthOfWideString(name());
+    size_t characterCount = pathNameLength + nameLength;
+
     if (cont->isRoot()) {
       // child of root
-      result = new char[strlen(cont->pathName()) + strlen(name()) + 1];
+      result = new wchar_t[characterCount + 1];
       ASSERT("Valid heap pointer", result != 0);
-      strcpy(result, cont->pathName());
-      strcat(result, name());
+      copyWideString(result, cont->pathName(), pathNameLength + 1);
+      concatenateWideString(result, name(), nameLength);
     } else {
       // general case
-      result = new char[strlen(cont->pathName()) + strlen(name()) + 1 + 1];
+      result = new wchar_t[characterCount + 1 + 1];
       ASSERT("Valid heap pointer", result != 0);
-      strcpy(result, cont->pathName());
-      strcat(result, "/");
-      strcat(result, name());
+      copyWideString(result, cont->pathName(), pathNameLength + 1);
+      concatenateWideString(result, L"/", 1);
+      concatenateWideString(result, name(), nameLength);
     }
   }
 
-  POSTCONDITION("Valid result", validString(result));
+  POSTCONDITION("Valid result", validWideString(result));
   return result;
 
 }

@@ -112,7 +112,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::save(void) const
 
   // save the set index
   //
-  store()->save(name(),
+  store()->save(storedName(),
                 index,
                 count,
                 tag,
@@ -181,7 +181,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
   size_t entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
-  store()->restore(name(),
+  store()->restore(storedName(),
                    setIndex,
                    entries,
                    tag,
