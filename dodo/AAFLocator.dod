@@ -24,6 +24,21 @@ AD_IDL(//
 //   - This object has not yet had Initialize\(\) called on it through
 //     this object's primary interface.
 //)
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+ 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
 AD_CLASS_UUID(e58a8565, 2a3e, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(d4f89061, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
