@@ -456,6 +456,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pParameter = NULL;
 			pSourceRef->Release();
 			pSourceRef = NULL;
+			pConstValue->Release();
+			pConstValue = NULL;
 		}
 		
 		slotIter->Release();

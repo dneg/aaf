@@ -233,6 +233,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pContainerDef)
 		pContainerDef->Release();
             
+	if (pDictionary)
+		pDictionary->Release();
+            
 	if (pFile)
 	{  // Close file
 		if (bFileOpen)
