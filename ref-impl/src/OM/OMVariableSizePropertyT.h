@@ -167,6 +167,7 @@ void OMVariableSizeProperty<PropertyType>::appendValue(
   }
   buffer[newCount - 1] = *value;
   setElementValues(buffer, newCount);
+  delete [] buffer;
 }
 
   // @mfunc Set the value of the item at the first position in this
@@ -193,6 +194,7 @@ void OMVariableSizeProperty<PropertyType>::prependValue(
   }
   buffer[0] = *value;
   setElementValues(buffer, newCount);
+  delete [] buffer;
 }
 
   // @mfunc Get the value of this <c OMVariableSizeProperty>.  The
