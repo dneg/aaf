@@ -75,6 +75,32 @@ BEGIN {
   #
   # Write a header to the generated file.
   #
+  printf("/***********************************************************************\n");
+  printf("*\n");
+  printf("*              Copyright (c) 1998-1999 Avid Technology, Inc.\n");
+  printf("*\n");
+  printf("* Permission to use, copy and modify this software and accompanying\n");
+  printf("* documentation, and to distribute and sublicense application software\n");
+  printf("* incorporating this software for any purpose is hereby granted,\n");
+  printf("* provided that (i) the above copyright notice and this permission\n");
+  printf("* notice appear in all copies of the software and related documentation,\n");
+  printf("* and (ii) the name Avid Technology, Inc. may not be used in any\n");
+  printf("* advertising or publicity relating to the software without the specific,\n");
+  printf("* prior written permission of Avid Technology, Inc.\n");
+  printf("*\n");
+  printf("* THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,\n");
+  printf("* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY\n");
+  printf("* WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.\n");
+  printf("* IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,\n");
+  printf("* SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR\n");
+  printf("* OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF\n");
+  printf("* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND\n");
+  printf("* ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES\n");
+  printf("* RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT\n");
+  printf("* ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF\n");
+  printf("* LIABILITY.\n");
+  printf("*\n");
+  printf("************************************************************************/\n");
   printf("//\n");
   printf("// Meta definition of the AAF object model.\n");
   printf("//\n");
