@@ -213,9 +213,9 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
 
   // Allocate a new typedef which will represent a 16-bit rational
   IAAFTypeDefRecordSP pTDRational16;
-  PROPAGATE_RESULT(defs.cdTypeDefRecord()->
-				   CreateInstance(IID_IAAFTypeDefRecord,
-								  (IUnknown **) &pTDRational16));
+  PROPAGATE_RESULT(pDict->CreateMetaInstance(AUID_AAFTypeDefRecord,
+                                             IID_IAAFTypeDefRecord,
+                                             (IUnknown **) &pTDRational16));
   PROPAGATE_RESULT(pTDRational16->Initialize(AUID_TypeRational16,
 											 memberTypes,
 											 memberNames,
@@ -243,9 +243,9 @@ HRESULT createRenamedRational16 (IAAFDictionary * pDict)
 										&pTDRational16));
 
   // create new (rename) type
-  PROPAGATE_RESULT(defs.cdTypeDefRename()->
-				   CreateInstance(IID_IAAFTypeDefRename,
-								  (IUnknown **) &pRenamedRational16));
+  PROPAGATE_RESULT(pDict->CreateMetaInstance(AUID_AAFTypeDefRename,
+                                             IID_IAAFTypeDefRename,
+                                             (IUnknown **) &pRenamedRational16));
 
   // connect 'em up
   PROPAGATE_RESULT(pRenamedRational16->Initialize(AUID_TypeRenamedRational16,

@@ -145,16 +145,13 @@ static void RemoveTestFile(const wchar_t* pFileName)
 
 static HRESULT  createVAType (IAAFDictionary* const pDict)
 {
-	CAAFBuiltinDefs defs(pDict);
-	
 	//Look up the Type def based on 16-bit signed integer
 	IAAFTypeDefSP spTD_elem;
 	checkResult(pDict->LookupTypeDef (TEST_ELEM_TYPE_ID, &spTD_elem));
 	
 	//Create a Variable Array
 	IAAFTypeDefVariableArraySP spVA;
-	checkResult(defs.cdTypeDefVariableArray()->
-		CreateInstance (IID_IAAFTypeDefVariableArray, (IUnknown **) &spVA));
+	checkResult(pDict->CreateMetaInstance (AUID_AAFTypeDefVariableArray, IID_IAAFTypeDefVariableArray, (IUnknown **) &spVA));
 	
 	//IAAFTypeDefVariableArray::Initialize
 	checkResult(spVA->Initialize(TEST_VA_TYPE_ID, spTD_elem,  TEST_VA_NAME));
