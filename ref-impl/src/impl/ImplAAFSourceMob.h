@@ -68,18 +68,6 @@ public:
 
 
   //****************
-  // Setup()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    Setup
-	    (// @parm [in] Name of new Source Mob
-         aafWChar *  pName,
-
-		 // @parm [in] ClassID of Essence Descriptor
-		 aafClassID_t *  pMdesClass);
-
-
-  //****************
   // AddNilReference()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -98,10 +86,10 @@ public:
 
 
   //****************
-  // AddTimecodeClip()
+  // AppendTimecodeSlot()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendTimecodeClip
+    AppendTimecodeSlot
         (// @parm [in] Edit rate of Timecode slot
 		 aafRational_t  editrate,
 
@@ -116,10 +104,10 @@ public:
 
 
   //****************
-  // AddEdgecodeClip()
+  // AppendEdgecodeSlot()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendEdgecodeClip
+    AppendEdgecodeSlot
         (// @parm [in] Edit rate of the Edgecode slot
 		 aafRational_t  editrate,
 
@@ -147,7 +135,7 @@ public:
   // ValidateTimecodeRange()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    ValidateTimecodeRange
+    SpecifyValidCodeRange
         (// @parm [in] Data kind for the slot to be added
 		 ImplAAFDataDef * pEssenceKind,
 
