@@ -90,10 +90,11 @@ DotRecordNodeAttribute::GetWidth( InstanceMapperProfile &profile )
 string
 DotRecordNodeAttribute::GetAttributeString()
 {
-   ostringstream attributeString;
-   attributeString << _name << " = " << _value;
+   string attributeString = ProcessRecordString(_name);
+   attributeString.append(" = ");
+   attributeString.append(ProcessRecordString(_value));
 
-   return ProcessStringForQuoting( attributeString.str() );
+   return attributeString;
 }
 
 
