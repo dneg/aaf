@@ -64,7 +64,7 @@ com-dll :
 	cd com-dll && $(MAKE)
 
 
-$(LIBTARGET) : $(CXXOBJS) $(CXXOBJS2)
+$(LIBTARGET) : $(CXXOBJS) $(CXXOBJS2) $(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) $(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
 	$(LD_DYN_LIB) $(CXXOBJS) $(CXXOBJS2) -o $@ \
 	$(AAFBUILDDIR)/ref-impl/$(AAFTARGETDIR)/libimpl$(LIB) \
 	$(AAFBUILDDIR)/OM/$(AAFTARGETDIR)/libom$(LIB) \
