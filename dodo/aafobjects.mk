@@ -21,7 +21,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFPluggableCode \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
-	AAFTaggedValue \
 	AAFTextLocator \
 	AAFTIFFData \
 	AAFTimecodeStream \
@@ -38,12 +37,10 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFDataDefs \
 	EnumAAFDefs \
 	EnumAAFIdentifications \
-	EnumAAFMobComments \
 	EnumAAFObjects \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
 	EnumAAFReferenceValues \
-	EnumAAFTaggedValues 
 
 
 # These are files which specify COM interfaces, but which are
@@ -116,6 +113,7 @@ HUMAN_TYPED_IMPL = \
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFStaticMobSlot \
+	AAFTaggedValue \
 	AAFTimecode \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
@@ -152,6 +150,7 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFPluginDescriptors \
 	EnumAAFPluginLocators \
 	EnumAAFSegments \
+	EnumAAFTaggedValues \
 	EnumAAFTypeDefs 
 
 # The list of standard dodo targets.
