@@ -206,10 +206,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceGroup.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssencePlugin.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEvent.cpp"
 # End Source File
 # Begin Source File

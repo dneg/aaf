@@ -206,10 +206,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceGroup.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssencePlugin.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEvent.cpp"
 # End Source File
 # Begin Source File
