@@ -47,7 +47,7 @@
 ; @author <name> | <initials> | <organization> | <class>
 ;
 .tag=author, html, 4, 20, $3::Author
-.pre=$(page)<H1>$3 members</H1>
+.pre=$(page)
 $(rmh)Defined in file$(rmhe)
 $(cb)$!f$(cbe)<P>
 $(rmh)Author$(rmhe)
