@@ -38,7 +38,7 @@
 
 class ImplAAFFile;
 class ImplAAFObject;
-#include "OMUtilities.h"
+
 
 typedef enum
 {
