@@ -270,7 +270,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFMob_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
- 	aafWChar * pFileName = L"MOBTest.aaf";
+ 	aafWChar * pFileName = L"AAFMobTest.aaf";
 
 	try
 	{
