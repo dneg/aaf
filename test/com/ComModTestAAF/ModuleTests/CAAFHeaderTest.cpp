@@ -233,6 +233,7 @@ void HeaderTest::createFile(wchar_t *pFileName)
   for (aafUInt32 item = 0; item < gMaxMobCount; ++item)
     createFileMob(item);
  
+  check(_pFile->Save());
   cleanupReferences();
 }
 
