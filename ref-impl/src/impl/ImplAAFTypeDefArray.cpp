@@ -233,6 +233,7 @@ AAFRESULT STDMETHODCALLTYPE
   hr = GetType (&pBaseType);
 
   assert (pBaseType->IsFixedSize ());
+  pBaseType->AttemptBuiltinRegistration ();
   assert (pBaseType->IsRegistered ());
   aafUInt32 elemSize = pBaseType->NativeSize ();
   aafUInt32 elemCount = pvtCount (pPropVal);
@@ -371,6 +372,7 @@ AAFRESULT STDMETHODCALLTYPE
   hr = GetType (&pBaseType);
 
   assert (pBaseType->IsFixedSize ());
+  pBaseType->AttemptBuiltinRegistration ();
   assert (pBaseType->IsRegistered ());
   // Size of individual elements
   aafUInt32 elemSize = pBaseType->NativeSize ();

@@ -1001,25 +1001,29 @@ size_t ImplAAFTypeDefRecord::PropValSize (void) const
 }
 
 
+void ImplAAFTypeDefRecord::AttemptBuiltinRegistration (void)
+{
+  if (! _registrationAttempted)
+	{
+	  ImplAAFDictionarySP pDict;
+	  AAFRESULT hr = GetDictionary(&pDict);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  pDict->pvtAttemptBuiltinSizeRegistration (this);
+	  _registrationAttempted = kAAFTrue;
+	}
+}
+
+
 aafBool ImplAAFTypeDefRecord::IsRegistered (void) const
 {
-  if (!_registeredOffsets)
-	{
-	  if (! _registrationAttempted)
-		{
-		  ImplAAFDictionarySP pDict;
-		  AAFRESULT hr = GetDictionary(&pDict);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-		  pDict->pvtAttemptBuiltinSizeRegistration ((ImplAAFTypeDefRecord*) this);
-		  ((ImplAAFTypeDefRecord*)this)->_registrationAttempted = kAAFTrue;
-		}
-	}
+  ((ImplAAFTypeDefRecord*)this)->AttemptBuiltinRegistration ();
   return (_registeredOffsets ? kAAFTrue : kAAFFalse);
 }
 
 
 size_t ImplAAFTypeDefRecord::NativeSize (void) const
 {
+  ((ImplAAFTypeDefRecord*)this)->AttemptBuiltinRegistration ();
   assert (IsRegistered());
   return _registeredSize;
 }

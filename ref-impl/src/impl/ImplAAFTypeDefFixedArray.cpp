@@ -332,6 +332,7 @@ aafBool ImplAAFTypeDefFixedArray::IsRegistered (void) const
 
 size_t ImplAAFTypeDefFixedArray::NativeSize (void) const
 {
+  ((ImplAAFTypeDefFixedArray*)this)->AttemptBuiltinRegistration ();
   assert (IsRegistered());
 
   size_t result;

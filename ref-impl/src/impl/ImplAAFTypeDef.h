@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -84,6 +84,10 @@ public:
 
   // Returns true if offsets have been registered for this type def.
   virtual aafBool IsRegistered (void) const;
+
+  // Will attempt to identify this as a built-in type; if it is, will
+  // register the offsets.
+  virtual void AttemptBuiltinRegistration (void);
 
   // If this->IsRegistered(), then will return the native in-memory
   // size of this type.  If not registered, will assert().
