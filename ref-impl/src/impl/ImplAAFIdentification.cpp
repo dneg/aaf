@@ -77,56 +77,6 @@ ImplAAFIdentification::ImplAAFIdentification():
 
 }
 
-/*
-ImplAAFIdentification::ImplAAFIdentification(
-                                     const wchar_t* companyName,
-                                     const wchar_t* productName,
-                                     const aafProductVersion_t* productVersion,
-                                     const wchar_t* productVersionString,
-                                     const aafUID_t & productId,
-                                     const aafTimeStamp_t date,
-                                     const aafProductVersion_t* toolKitVersion,
-                                     const wchar_t* platform
-                                     // const AUID* generation
-                                     ):
-  _companyName(         PID_Identification_CompanyName,          "CompanyName"),
-  _productName(         PID_Identification_ProductName,          "ProductName"),
-  _productVersion(      PID_Identification_ProductVersion,       "ProductVersion"),
-  _productVersionString(PID_Identification_ProductVersionString, "ProductVersionString"),
-  _productId(			  PID_Identification_ProductID,            "ProductID"),
-  _date(                PID_Identification_Date,                 "Date"),
-  _toolkitVersion(      PID_Identification_ToolkitVersion,       "ToolkitVersion"),
-  _platform(            PID_Identification_Platform,             "Platform"),
-  _generation(       PID_Identification_GenerationAUID,       "GenerationAUID")
-{
-  // Insert the properties into the persistent property set.
-  //
-  _persistentProperties.put(   _companyName.address());
-  _persistentProperties.put(   _productName.address());
-  _persistentProperties.put(_productVersion.address());
-  _persistentProperties.put(   _productVersionString.address());
-  _persistentProperties.put(_productId.address());
-  _persistentProperties.put(   _date.address());
-  _persistentProperties.put(_toolkitVersion.address());
-  _persistentProperties.put(   _platform.address());
-  _persistentProperties.put(_generation.address());
-
-  // Initialize members.
-  //
-  _companyName = companyName;
-  _productName = productName;
-	_productVersion = *productVersion;
-  _productVersionString = productVersionString;
-  _productId = productId;
-  _date = date;
-	_toolkitVersion = *toolKitVersion;
-  _platform = platform;
-  // _generation.???;
-
-};
-*/
-
-
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFIdentification::Initialize ()
