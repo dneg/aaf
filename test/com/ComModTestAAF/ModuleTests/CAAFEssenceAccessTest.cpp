@@ -421,6 +421,9 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 		
 		// open the Essence file to be included in this AAF file("Laser.wav")
 		pWavFile = fopen("Laser.wav", "r");
+                if (pWavFile == 0) {
+                  cerr << "Can't find \"Laser.wav\"." << endl;
+                }
 		checkExpression(pWavFile != NULL, AAFRESULT_TEST_FAILED);
 		// read in the essence data
 		fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
@@ -647,6 +650,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t c
       
       // Open and read the Wave file (for comparison)
 			pWavFile = fopen("Laser.wav", "r");
+                        if (pWavFile == 0) {
+                          cerr << "Can't find \"Laser.wav\"." << endl;
+                        }
 			checkExpression(pWavFile != NULL, AAFRESULT_TEST_FAILED);
 			
 			// read in the essence data
