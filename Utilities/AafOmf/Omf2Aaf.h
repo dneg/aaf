@@ -76,15 +76,11 @@ public:
 	HRESULT ConvertOMFSelector(OMF2::omfObject_t selector, IAAFSelector* pSelector);
 	HRESULT ConvertOMFLocator(OMF2::omfObject_t locator, IAAFEssenceDescriptor* pEssenceDesc);
 	HRESULT ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor, IAAFCDCIDescriptor* pAAFDescriptor);
-	void SetEffectOptionalProperties(IAAFEffect* pEffect, IAAFParameterDef* pParameterDef, aafLength_t effectLength, aafUID_t effectDatadef);
-	void CreateEffectDefinition(IAAFEffectDef**	ppEffectDef,
-								IAAFParameterDef** ppParameterDef,
-								aafUID_t* pEffectDefAUID, 
-								aafUID_t* pEffectAUID, 
-								aafWChar* pwName, 
-								aafWChar* pwDesc,
-								aafBool isTimeWarp,
-								aafUInt32 bypassOverride);
+	HRESULT SetEffectOptionalProperties(OMF2::omfEffObj_t effect, IAAFEffect* pEffect,
+										aafLength_t effectLength, aafUID_t effectDatadef);
+	HRESULT ConvertOMFEffects(OMF2::omfEffObj_t effect, IAAFEffect* pEffect);
+	HRESULT ConvertOMFEffectDefinition(OMF2::omfDDefObj_t effectDef, aafUID_t* pEffectAUID, IAAFEffectDef** ppEffectDef);
+	void CreateParameterDefinition(IAAFEffectDef*	pEffectDef);
 
 private:
 
