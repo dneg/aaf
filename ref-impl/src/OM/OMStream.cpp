@@ -105,6 +105,23 @@ OMStream::openNewModify(const wchar_t* fileName)
   return result;
 }
 
+  // @mfunc Create an <c OMStream> object by creating a new
+  //        temporary file for modify access.
+  //   @rdesc The newly created <c OMStream> object.
+OMStream*
+OMStream::openNewModify(void)
+{
+  TRACE("OMStream::openNewModify");
+
+  FILE* file = tmpfile();
+  ASSERT("File successfully opened", file != 0); // tjb - error
+
+  OMStream* result = new OMStream(file, true);
+  ASSERT("Valid heap pointer", result != 0);
+
+  return result;
+}
+
 void OMStream::read(OMByte* bytes,
                     OMUInt32 byteCount,
                     OMUInt32& bytesRead) const

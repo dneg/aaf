@@ -50,6 +50,10 @@ public:
     //          The file must not already exist.
   static OMStream* openNewModify(const wchar_t* fileName);
 
+    // @cmember Create an <c OMStream> object by creating a new
+    //          file temporary for modify access.
+  static OMStream* openNewModify(void);
+
   void read(OMByte* bytes,
             OMUInt32 byteCount,
             OMUInt32& bytesRead) const;
