@@ -609,12 +609,12 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGDescriptorHelper::GetOffsetFrameIndexes(aafUInt32 *pOffset)
 {
-	IAAFClassDef		*pClassDef;
-	IAAFObject			*pObj;
-	IAAFPropertyDef		*pPropertyDef;
-	IAAFPropertyValue	*pPropValue;
-	IAAFTypeDef			*pTypeDef;
-	IAAFTypeDefInt		*pTypeDefInt;
+	IAAFClassDef		*pClassDef = NULL;
+	IAAFObject			*pObj = NULL;
+	IAAFPropertyDef		*pPropertyDef = NULL;
+	IAAFPropertyValue	*pPropValue = NULL;
+	IAAFTypeDef			*pTypeDef = NULL;
+	IAAFTypeDefInt		*pTypeDefInt = NULL;
 	aafInt32			val;
 
 	HRESULT				hr = S_OK;
@@ -643,18 +643,31 @@ HRESULT STDMETHODCALLTYPE
 		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
 	}
 
+	if( pClassDef != NULL )
+	    pClassDef->Release();
+	if( pObj != NULL )
+	    pObj->Release();
+	if( pPropertyDef != NULL )
+	    pPropertyDef->Release();
+	if( pPropValue != NULL )
+	    pPropValue->Release();
+	if( pTypeDef != NULL )
+	    pTypeDef->Release();
+	if( pTypeDefInt != NULL )
+	    pTypeDefInt->Release();
+
 	return hr;
 }
 				
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGDescriptorHelper::GetFrameIndexByteOrder(aafUInt16 *byteOrder)
 {
-	IAAFClassDef		*pClassDef;
-	IAAFObject			*pObj;
-	IAAFPropertyDef		*pPropertyDef;
-	IAAFPropertyValue	*pPropValue;
-	IAAFTypeDef			*pTypeDef;
-	IAAFTypeDefInt		*pTypeDefInt;
+	IAAFClassDef		*pClassDef = NULL;
+	IAAFObject			*pObj = NULL;
+	IAAFPropertyDef		*pPropertyDef = NULL;
+	IAAFPropertyValue	*pPropValue = NULL;
+	IAAFTypeDef			*pTypeDef = NULL;
+	IAAFTypeDefInt		*pTypeDefInt = NULL;
 	aafInt16			val;
 
 	HRESULT				hr = S_OK;
@@ -682,6 +695,19 @@ HRESULT STDMETHODCALLTYPE
 		// Return a reasonable exception code.
 		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
 	}
+
+	if( pClassDef != NULL )
+	    pClassDef->Release();
+	if( pObj != NULL )
+	    pObj->Release();
+	if( pPropertyDef != NULL )
+	    pPropertyDef->Release();
+	if( pPropValue != NULL )
+	    pPropValue->Release();
+	if( pTypeDef != NULL )
+	    pTypeDef->Release();
+	if( pTypeDefInt != NULL )
+	    pTypeDefInt->Release();
 
 	return hr;
 }
@@ -791,12 +817,12 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGDescriptorHelper::GetResolutionID( aafInt32 *p_resid )
 {
-	IAAFClassDef		*pClassDef;
-	IAAFObject			*pObj;
-	IAAFPropertyDef		*pPropertyDef;
-	IAAFPropertyValue	*pPropValue;
-	IAAFTypeDef			*pTypeDef;
-	IAAFTypeDefInt		*pTypeDefInt;
+	IAAFClassDef		*pClassDef = NULL;
+	IAAFObject		*pObj = NULL;
+	IAAFPropertyDef		*pPropertyDef = NULL;
+	IAAFPropertyValue	*pPropValue = NULL;
+	IAAFTypeDef		*pTypeDef = NULL;
+	IAAFTypeDefInt		*pTypeDefInt = NULL;
 	aafInt32			val;
 
 	HRESULT				hr = S_OK;
@@ -825,8 +851,23 @@ HRESULT STDMETHODCALLTYPE
 		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
 	}
 
+	if( pClassDef != NULL )
+	    pClassDef->Release();
+	if( pObj != NULL )
+	    pObj->Release();
+	if( pPropertyDef != NULL )
+	    pPropertyDef->Release();
+	if( pPropValue != NULL )
+	    pPropValue->Release();
+	if( pTypeDef != NULL )
+	    pTypeDef->Release();
+	if( pTypeDefInt != NULL )
+	    pTypeDefInt->Release();
+
 	return hr;
 }
+
+
 
 HRESULT STDMETHODCALLTYPE
     CAAFJPEGDescriptorHelper::SetResolutionID( aafInt32  resolutionID )
