@@ -14,6 +14,9 @@ AD_IDL(//
 // indexes.  Each AAF file has one and only one instance of an object
 // which supports IAAFHeader.
 //
+// When an IAAFHeader-supporting object is created\, the contained
+// dictionary object is automatically created.
+//
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
 // values:
@@ -45,7 +48,8 @@ AD_XMETHOD2(LookupMob,
 			  ppMob,
 			  Matching Mob,
 			Looks up the Mob that matches the given mob id and puts it into
-  // the ppMob argument.
+  // the ppMob argument.  The returned mob interface is AddRef\(\)ed
+  // before it is returned.
   // 
   // Succeeds if all of the following are true:
   // - the pMobID pointer is valid.
@@ -111,7 +115,9 @@ AD_XMETHOD2(EnumAAFAllMobs,
 			Places an enumerator for mobs that apply to the criteria into the
   // *ppEnum argument.  If pSearchCriteria is null\, all mobs are returned.   The
   // searchTag field of pSearchCriteria\, and exactly ONE of the fields in the union
-  // \(tags.mobID\, tags.name\, etc. \) must be set.
+  // \(tags.mobID\, tags.name\, etc. \) must be set.  Only one search
+  // criterion may be specified.  The returned enumerator is
+  // AddRef\(\)ed before it is returned.
   // 
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
@@ -135,7 +141,8 @@ AD_XMETHOD1(AppendMob,
 			AAFMob,
 			pMob,
 			Mob to add header,
-			Appends the given mob to the header.
+			Appends the given mob to the header.  If the given mob is already
+  // contained this method will do nothing and will return success.
   // 
   // Succeeds if all of the following are true:
   // - the pMob pointer is valid.
@@ -224,7 +231,8 @@ AD_XMETHOD2(EnumAAFMediaObjects,
 			  ppEnum,
 			  Media Enumeration,
 			Places an enumerator for media that applies to the criteria into
-  // the *ppEnum argument.
+  // the *ppEnum argument.  The returned enumerator is AddRef\(\)ed
+  // before it is returned.
   // 
   // Succeeds if all of the following are true:
   // - the pMediaCriteria pointer is valid.
@@ -251,6 +259,8 @@ AD_XMETHOD1(AppendMedia,
 			Media object to append,
 			Appends the given media data object to the header.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pMedia pointer is valid.
   // 
@@ -271,34 +281,6 @@ AD_XMETHOD1(AppendMedia,
   //   - pMedia is null.)
 
 
-AD_XMETHOD1(RemoveMedia,
-			[in],
-			objIn,
-			AAFMedia,
-			pMedia,
-			Media object to remove,
-			Removes the given media from the header.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pMedia pointer is valid.
-  // - the given media is found.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_MOB_NOT_FOUND
-  //   - The mob is not in the current file.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMedia is null.)
-
-
 AD_XMETHOD1(GetDictionary,
 			[out\, retval],
 			objOut,
@@ -306,8 +288,12 @@ AD_XMETHOD1(GetDictionary,
 			ppDictionary,
 			The AAF Dictionary,
 			Places the dictionary that contains all types of aaf definition
-  // objects into the *ppDictionary argument.
+  // objects into the *ppDictionary argument.  The returned dictionary
+  // is AddRef\(\)ed before it is returned.  Note that the dictionary
+  // is automatically created when the header object is created.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the ppDictionary pointer is valid.
   // 
@@ -331,7 +317,8 @@ AD_XMETHOD1(GetLastIdentification,
 			ppIdentification,
 			Indentification Object,
   // Places the identification of the last entity that modified the
-  // file into the *ppIdentification argument. 
+  // file into the *ppIdentification argument.  The returned
+  // identification is AddRef\(\)ed before it is returned.
   // 
   // Succeeds if all of the following are true:
   // - the ppIdentification pointer is valid.
@@ -361,8 +348,11 @@ AD_XMETHOD2(GetIdentificationByGen,
 			  ppIdentification,
 			  Indentification Object,
 			Places the Identification that matches the given generation into
-  // the *ppIdentification argument.
+  // the *ppIdentification argument.  The returned identification is
+  // AddRef\(\)ed before it is returned.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pGeneration pointer is valid.
   // - the ppIdentification pointer is valid.
@@ -389,6 +379,8 @@ AD_XMETHOD1(GetNumIdents,
 			Writes the number of identification objects into the
   // *pNumIdents argument.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pNumIdents pointer is valid.
   // 
@@ -412,8 +404,11 @@ AD_XMETHOD1(EnumAAFIdents,
 			ppEnum,
 			Indentification Enumeration,
 			Places an enumerator for all Identifications criteria into	the
-  // *ppEnum argument.
+  // *ppEnum argument.  The returned enumerator is AddRef\(\)ed before
+  // it is returned.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
   // 
@@ -454,31 +449,6 @@ AD_XMETHOD1(AppendIdentification,
   //   - pIdent is null.)
 
 
-AD_XMETHOD1(RemoveIdentification,
-			[in],
-			objIn,
-			AAFIdentification,
-			pIdent,
-			Identification to remove,
-			Removes the given identification from the header.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pIdent pointer is valid.
-  // - the given identification is found.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pIdentification is null.)
-
-
 AD_XMETHOD1(GetRefImplVersion,
 			[out\, retval],
 			objPass,
@@ -512,6 +482,8 @@ AD_XMETHOD1(GetFileRevision,
 			The File Version,
 			Return the File Revision property.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pRevision pointer is valid.
   // 
@@ -536,6 +508,8 @@ AD_XMETHOD1(GetLastModified,
 			The modification date-time stamp,
 			Return the Last Modified property.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pTimeStamp pointer is valid.
   // 
