@@ -41,7 +41,7 @@
 extern "C" const aafClassID_t CLSID_EnumAAFLocators;
 
 ImplAAFEssenceDescriptor::ImplAAFEssenceDescriptor ()
-: _locators(         PID_ESSENCE_DESC_LOCATORS,          "locators")
+: _locators(         PID_EssenceDescriptor_Locator,          "Locator")
 {
   _persistentProperties.put(_locators.address());
 }
@@ -59,7 +59,6 @@ ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
 		{
 			pLocator->ReleaseReference();
 			pLocator = NULL;
-			// Set the current value to 0 so that the OM can perform necessary cleanup.
 			_locators.setValueAt(0, i);
 		}
 	}

@@ -81,10 +81,10 @@ extern "C" const aafClassID_t CLSID_AAFIdentification;
 extern "C" const aafClassID_t	CLSID_AAFContentStorage;
 
 ImplAAFHeader::ImplAAFHeader ()
-: _byteOrder(         PID_HEADER_BYTEORDER,          "byteOrder"),
-  _lastModified(      PID_HEADER_LASTMODIFIED,       "lastModified"),
-  _identificationList(PID_HEADER_IDENTIFICATIONLIST, "identificationList"),
-  _contentStorage(		PID_HEADER_CONTENTSTORAGE,	"contentStorage")
+: _byteOrder(         PID_Header_ByteOrder,          "Byte Order"),
+  _lastModified(      PID_Header_LastModified,       "Last Modified"),
+  _identificationList(PID_Header_IdentificationList, "Identification List"),
+  _contentStorage(		PID_Header_Content,	"Content")
 {
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
