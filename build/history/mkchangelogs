@@ -30,10 +30,13 @@ declare -a tagstuff
 let i=0;
 while read tag date time
 do
-  tagstuff[i]=$tag
-  tagstuff[i+1]=$date
-  tagstuff[i+2]=$time
-  let i=$i+3;
+  if [[ $tag != "#" ]]
+  then
+    tagstuff[i]=$tag
+    tagstuff[i+1]=$date
+    tagstuff[i+2]=$time
+    let i=$i+3;
+  fi
 done < $tagstufffile
 
 let n=${#tagstuff[@]}/3
