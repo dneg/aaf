@@ -185,7 +185,7 @@ AAFRESULT  ImplAAFTimelineMobSlot::
 		{
 			if (name)
 			{
-				GetName( name );
+//!!!				GetName( name );
 			}
 			if (origin)
 			{
