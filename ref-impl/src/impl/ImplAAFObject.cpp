@@ -73,6 +73,12 @@ typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
 extern "C" const aafClassID_t CLSID_AAFProperty;
 extern "C" const aafClassID_t CLSID_EnumAAFProperties;
 
+// Temporarily disable creation and removal of optional property values for v1.0
+// This feature will be enabled in v1.1.
+#ifndef ENABLE_NEW_OPTIONAL_PROPVALUE
+#define ENABLE_NEW_OPTIONAL_PROPVALUE 0
+#endif
+
 
 //
 // Private class for implementing collections of properties.
@@ -813,7 +819,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
 	ImplAAFObject::IsPropertyPresent (ImplAAFPropertyDef * pPropDef,
-									  aafBool * pResult)
+									  aafBoolean_t * pResult)
 {
   if (! pPropDef)
 	return AAFRESULT_NULL_PARAM;
@@ -837,6 +843,59 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_SUCCESS;
 	}
   return hr;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFObject::RemoveOptionalProperty (
+      ImplAAFPropertyDef * /*pPropDef*/)
+{
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFObject::CreateOptionalPropertyValue (
+      ImplAAFPropertyDef * pPropDef,
+      ImplAAFPropertyValue ** ppPropVal)
+{
+  if (!pPropDef || !ppPropVal)
+	  return AAFRESULT_NULL_PARAM;
+
+#if ENABLE_NEW_OPTIONAL_PROPVALUE
+  
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  ImplAAFTypeDefSP pPropertyType;
+  *ppPropVal = NULL;
+  
+  // 
+  aafBoolean_t alreadyPresent = kAAFFalse;
+  result = IsPropertyPresent(pPropDef, &alreadyPresent);
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    if (!alreadyPresent)
+    {
+      result = pPropDef->GetTypeDef(&pPropertyType);
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+        result = pPropertyType->CreatePropertyValue(ppPropVal);
+      }
+    }
+    else
+    {
+      // Cannot create a value if it is already present?
+      result = AAFRESULT_PROP_ALREADY_PRESENT;
+    }
+  }
+    
+  return result;
+
+#else	
+
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+    
+#endif
 }
 
 

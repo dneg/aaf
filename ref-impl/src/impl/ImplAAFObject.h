@@ -166,6 +166,27 @@ public:
 		 aafBool * pResult);
 
 
+  //****************
+  // RemoveOptionalProperty()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveOptionalProperty
+        // @parm [in] property definition indentifying desired property
+        (ImplAAFPropertyDef * pPropDef);
+        
+
+  //****************
+  // CreatePropertyValue()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateOptionalPropertyValue
+        (// @parm [in] property definition indentifying desired property
+         ImplAAFPropertyDef * pPropDef,
+
+         // @parm [out] returned AAFPropertyValue
+         ImplAAFPropertyValue ** ppPropVal);
+
+
 
 public:
   // Interfaces ivisible inside the toolkit, but not exposed through the API
