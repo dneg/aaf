@@ -187,7 +187,6 @@ HRESULT STDMETHODCALLTYPE
 {
 	aafUID_t			uid;
 	IAAFContainerDef	*container = NULL;
-	IAAFDefObject		*obj = NULL;
     IAAFClassDef        *pcd = 0;
 
 	if((dict == NULL) || (def == NULL))
@@ -202,10 +201,7 @@ HRESULT STDMETHODCALLTYPE
 		pcd = 0;
 		uid = ContainerFile;
 		CHECK(container->SetEssenceIsIdentified(AAFFalse));
-		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)&obj));
-		CHECK(obj->Initialize(uid, L"Raw file Container", L"Essence is in a non-container file."));
-		obj->Release();
-		obj = NULL;
+		CHECK(container->Initialize(uid, L"Raw file Container", L"Essence is in a non-container file."));
 		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)def));
 		container->Release();
 		container = NULL;
@@ -216,11 +212,6 @@ HRESULT STDMETHODCALLTYPE
 		  {
 			container->Release();
 			container = 0;
-		  }
-		if(obj != NULL)
-		  {
-			obj->Release();
-			obj = 0;
 		  }
 		if (pcd)
 		  {

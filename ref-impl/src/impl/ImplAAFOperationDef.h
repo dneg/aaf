@@ -56,6 +56,18 @@ public:
   //********
   ImplAAFOperationDef ();
 
+
+  //****************
+  // Initialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+        // @parm [in] Pointer to an AUID reference
+        (const aafUID_t & id,
+		 const aafCharacter *name,
+		 const aafCharacter *description);
+
+
 protected:
   virtual ~ImplAAFOperationDef ();
 
