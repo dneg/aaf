@@ -211,7 +211,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = mobIter->NextOne (&aMob);
 		if (AAFRESULT_SUCCESS != hr)
 			return hr;
-		hr = aMob->GetName (name);
+		hr = aMob->GetName (name, sizeof(name));
 		if (AAFRESULT_SUCCESS != hr)
 			return hr;
 		hr = aMob->GetMobID (&mobID);
@@ -234,7 +234,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				hr = slotIter->NextOne (&slot);
 				if (AAFRESULT_SUCCESS != hr)
 					return hr;
-				hr = slot->GetName (slotName);
+				hr = slot->GetName (slotName, sizeof(slotName));
 				if (AAFRESULT_SUCCESS != hr)
 					return hr;
 				hr = slot->GetSlotID(&trackID);

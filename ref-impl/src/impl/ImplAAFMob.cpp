@@ -124,39 +124,21 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-static void stringPropertyToAAFString(aafWChar *aafString, OMStringProperty& stringProperty)
-{
-  const char* string = stringProperty;
-  mbstowcs(aafString, string, stringProperty.length());
-  aafString[stringProperty.length()] = L'\0';
-}
-
-
-static void AAFStringToStringProperty(OMStringProperty& stringProperty, aafWChar *aafString)
-{
-	char		*string;
-	aafWChar	*ptr;
-	aafInt32	len;
-	
-	for(len = 0, ptr = aafString; *ptr != 0; ptr++)
-		len++;
-	
-	string = new char[len + 1];	//!!!S/b more than we need
-	wcstombs(string, aafString, len);
-	string[len] = '\0';
-	stringProperty = string;
-}
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetName (aafWChar *name)
+    ImplAAFMob::GetName (aafWChar *pName,
+	aafInt32 bufSize)
 {
-	aafAssert(name != NULL, NULL, AAFRESULT_NULL_PARAM);
-//!!!	if(_name != NULL)
-//	{
-		stringPropertyToAAFString(name, _name);
-//	}
-//	else if(strSize > 0)
-//		*name = '\0';
+	bool stat;
+
+	if(pName == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	stat = _name.copyToBuffer(pName, bufSize);
+	if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
+	}
 
 	return(AAFRESULT_SUCCESS); 
 }
@@ -166,9 +148,11 @@ AAFRESULT STDMETHODCALLTYPE
 //
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFMob::GetNameLen
-        (aafInt32 *  nameLen)  //@parm [in,out] Mob Name length
+        (aafInt32 *  pSize)  //@parm [in,out] Mob Name length
 {
-	*nameLen = _name.length();
+	if(pSize == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	*pSize = _name.length()+1;
 	return(AAFRESULT_SUCCESS); 
 }
 
@@ -306,11 +290,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetName (aafWChar *name)
+    ImplAAFMob::SetName (aafWChar *pName)
 {	
-	AAFStringToStringProperty(_name, name);
+	if(pName == NULL)
+		return(AAFRESULT_NULL_PARAM);
 
-	return(OM_ERR_NONE);
+	_name = pName;
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
