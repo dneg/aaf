@@ -1,12 +1,44 @@
+/***********************************************\
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*                                               *
+\***********************************************/
+
 #include "AAF.h"
 #include "AAFResult.h"
 #include <assert.h>
 #include <iostream.h>
 
+#ifndef __IAAFSmartPointer_h__
+#include "IAAFSmartPointer.h"
+#endif
 
 #if defined(macintosh) || defined(_MAC)
 #include <console.h> /* Mac command line window */
 #endif
+
+// handy smart pointer typedefs
+typedef IAAFSmartPointer<IAAFObject>               IAAFObjectSP;
+typedef IAAFSmartPointer<IAAFPropertyValue>        IAAFPropertyValueSP;
+typedef IAAFSmartPointer<IAAFProperty>             IAAFPropertySP;
+typedef IAAFSmartPointer<IAAFPropertyDef>          IAAFPropertyDefSP;
+typedef IAAFSmartPointer<IAAFTypeDef>              IAAFTypeDefSP;
+typedef IAAFSmartPointer<IAAFDefObject>            IAAFDefObjectSP;
+typedef IAAFSmartPointer<IAAFTypeDefInt>           IAAFTypeDefIntSP;
+typedef IAAFSmartPointer<IAAFTypeDefObjectRef>     IAAFTypeDefObjectRefSP;
+typedef IAAFSmartPointer<IAAFClassDef>             IAAFClassDefSP;
+typedef IAAFSmartPointer<IAAFTypeDefRename>        IAAFTypeDefRenameSP;
+typedef IAAFSmartPointer<IAAFTypeDefEnum>          IAAFTypeDefEnumSP;
+typedef IAAFSmartPointer<IAAFTypeDefFixedArray>    IAAFTypeDefFixedArraySP;
+typedef IAAFSmartPointer<IAAFTypeDefVariableArray> IAAFTypeDefVariableArraySP;
+typedef IAAFSmartPointer<IAAFTypeDefString>        IAAFTypeDefStringSP;
+typedef IAAFSmartPointer<IAAFTypeDefRecord>        IAAFTypeDefRecordSP;
+typedef IAAFSmartPointer<IAAFFile>                 IAAFFileSP;
+typedef IAAFSmartPointer<IAAFHeader>               IAAFHeaderSP;
+typedef IAAFSmartPointer<IEnumAAFProperties>       IEnumAAFPropertiesSP;
 
 
 // convenient error handlers.
@@ -113,25 +145,25 @@ static char * make_mbstring(size_t length, const wchar_t* name)
 
 static HRESULT dumpObject
 (
- IAAFObject *pContainer, // object to be dumped
+ IAAFObjectSP pContainer, // object to be dumped
  int indent
 );
 
 static HRESULT dumpPropertyValue
 (
- IAAFPropertyValue * pPVal,
+ IAAFPropertyValueSP pPVal,
  int indent
 );
 
 
-HRESULT dumpObject(IAAFObject *pContainer, int indent)
+HRESULT dumpObject(IAAFObjectSP pContainer, int indent)
 {
   HRESULT returnHr = AAFRESULT_SUCCESS;
 
-  IEnumAAFProperties * pPropEnum = 0;
-  IAAFProperty * pProp = 0;
-  IAAFPropertyDef *pPDef = 0;
-  IAAFPropertyValue *pPVal = 0;
+  IEnumAAFPropertiesSP pPropEnum;
+  IAAFPropertySP pProp;
+  IAAFPropertyDefSP pPDef;
+  IAAFPropertyValueSP pPVal;
   try
 	{
 	  // Get the contained properties.
@@ -146,7 +178,6 @@ HRESULT dumpObject(IAAFObject *pContainer, int indent)
 		{
 		  // Get property def
 		  checkResult(pProp->GetDefinition(&pPDef));
-		  assert (pPDef);
 
 		  // Here we print out property's name using pPDef->GetName()
 		  aafUInt32 bufSize;
@@ -167,12 +198,6 @@ HRESULT dumpObject(IAAFObject *pContainer, int indent)
 		  // dump property value
 		  dumpPropertyValue (pPVal, indent+1);
 
-		  pPVal->Release();
-		  pPVal = 0;
-
-		  pPDef->Release ();
-		  pPDef = 0;
-
 		} // while ()...
 	}
   catch (HRESULT &caught)
@@ -181,19 +206,14 @@ HRESULT dumpObject(IAAFObject *pContainer, int indent)
 	  returnHr = caught;
 	}
 
-  if (pPropEnum) pPropEnum->Release(); pPropEnum = 0;
-  if (pProp) pProp->Release(); pProp = 0;
-  if (pPDef) pPDef->Release(); pPDef = 0;
-  if (pPVal) pPVal->Release(); pPVal = 0;
-
   return returnHr;
 }
 
 
-HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
+HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal, int indent)
 {
   // get the type of the data value
-  IAAFTypeDef *pTD = 0;
+  IAAFTypeDefSP pTD;
   checkResult(pPVal->GetType(&pTD));
 
   if (! pTD)
@@ -211,12 +231,9 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 	  {
 		wchar_t bigBuf[100];
 		char mbBigBuf[100 * 3 /*MB_CUR_MAX */];
-		assert (pTD);
-		IAAFDefObject * pd = NULL;
+		IAAFDefObjectSP pd;
 		checkResult(pTD->QueryInterface(IID_IAAFDefObject, (void**)&pd));
-		assert (pd);
 		checkResult(pd->GetName (bigBuf, sizeof (bigBuf)));
-		pd->Release ();
 		convert(mbBigBuf, sizeof(mbBigBuf), bigBuf);
 		cout << "type: " << mbBigBuf << "; ";
 	  }
@@ -230,7 +247,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 		case kAAFTypeCatInt:
 		  {
 			// integral type; get the specific type def int interface
-			IAAFTypeDefInt * pTDI = 0;
+			IAAFTypeDefIntSP pTDI;
 			
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefInt,
 										   (void**)&pTDI));
@@ -258,29 +275,22 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			  }
 			cout << "." << endl;
 
-			pTDI->Release();
-			pTDI = 0;
 			break;
 		  }
 
 		case kAAFTypeCatStrongObjRef:
 		  {
 			// strong object reference; recursively dump contents.
-			IAAFTypeDefObjectRef * pTDO = 0;
+			IAAFTypeDefObjectRefSP pTDO;
 			AAFRESULT hr = pTD->QueryInterface(IID_IAAFTypeDefObjectRef,
-										   (void**)&pTDO);
+											   (void**)&pTDO);
 			checkResult(hr);
 
-			IAAFObject * pObj = 0;
+			IAAFObjectSP pObj;
 			checkResult(pTDO->GetObject(pPVal, &pObj));
 			cout << "Value: an object:" << endl;
 			dumpObject (pObj, indent+1);
 
-			pObj->Release();
-			pObj = 0;
-
-			pTDO->Release();
-			pTDO = 0;
 			break;	
 		  }
 
@@ -289,26 +299,18 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 		  {
 			// weak object reference; only dump summary info (not
 			// recursively)
-			IAAFTypeDefObjectRef * pTDO = 0;
+			IAAFTypeDefObjectRefSP pTDO;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefObjectRef,
 										   (void**)&pTDO));
 
-			IAAFObject * pObj = 0;
+			IAAFObjectSP pObj;
 			checkResult(pTDO->GetObject(pPVal, &pObj));
-			IAAFClassDef * pClassDef = 0;
+			IAAFClassDefSP pClassDef;
 			checkResult(pObj->GetDefinition(&pClassDef));
 
 			// Here is where you print the class def's name, etc. and any
 			// other summary info
 
-			pClassDef->Release;
-			pClassDef = 0;
-
-			pObj->Release;
-			pObj = 0;
-
-			pTDO->Release();
-			pTDO = 0;
 			break;	
 		  }
 #endif // 0
@@ -318,21 +320,16 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 		  {
 			// A renamed type; print this type's name, then dump contents
 			// as source type
-			IAAFTypeDefRename * pTDR = 0;
+			IAAFTypeDefRenameSP pTDR;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefRename,
 										   (void**)&pTDR));
 			// Here print rename's type using pTDR->GetName()
 
 			// Now get base property value and recursively print that
-			IAAFPropertyValue * pBasePropValue = 0;
+			IAAFPropertyValueSP pBasePropValue;
 			checkResult(pTDR->GetValue (pPVal, &pBasePropVal));
 			dumpPropertyValue (pBasePropVal, indent+1);
 
-			pBasePropVal->Release();
-			pBasePropVal = 0;
-
-			pTDR->Release();
-			pTDR = 0;
 			break;
 		  }
 #endif // 0
@@ -340,7 +337,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 		case kAAFTypeCatEnum:
 		  {
 			// Print enum element's text tag as well as int value
-			IAAFTypeDefEnum * pTDE = 0;
+			IAAFTypeDefEnumSP pTDE;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefEnum,
 										   (void**)&pTDE));
 
@@ -368,15 +365,13 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			delete[] nameBuf;
 			nameBuf = 0;
 
-			pTDE->Release();
-			pTDE = 0;
 			break;
 		  }
 
 		case kAAFTypeCatFixedArray:
 		  {
 			// Print out elements of array.
-			IAAFTypeDefFixedArray * pTDFA = 0;
+			IAAFTypeDefFixedArraySP pTDFA;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefFixedArray,
 										   (void**)&pTDFA));
 
@@ -391,21 +386,18 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			  {
 				printIndent (indent);
 				cout << "  [" << i << "]: ";
-				IAAFPropertyValue * pElemPropVal = 0;
+				IAAFPropertyValueSP pElemPropVal;
 				checkResult(pTDFA->GetElementValue(pPVal, i, &pElemPropVal));
 				dumpPropertyValue (pElemPropVal, indent+1);
-				pElemPropVal->Release();
 			  }
 
-			pTDFA->Release();
-			pTDFA = 0;
 			break;
 		  }
 
 		case kAAFTypeCatVariableArray:
 		  {
 			// Print out elements of array.
-			IAAFTypeDefVariableArray * pTDVA = 0;
+			IAAFTypeDefVariableArraySP pTDVA;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefVariableArray,
 										   (void**)&pTDVA));
 
@@ -420,31 +412,26 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			  {
 				printIndent (indent);
 				cout << "[" << i << "]: ";
-				IAAFPropertyValue * pElemPropVal = 0;
+				IAAFPropertyValueSP pElemPropVal;
 				checkResult(pTDVA->GetElementValue(pPVal, i, &pElemPropVal));
-				assert (pElemPropVal);
 				dumpPropertyValue (pElemPropVal, indent+1);
-				pElemPropVal->Release();
-				pElemPropVal = 0;
 			  }
 
-			pTDVA->Release();
-			pTDVA = 0;
 			break;
 		  }
 
 		case kAAFTypeCatString:
 		  {
-			IAAFTypeDefString * pTDS = 0;
+			IAAFTypeDefStringSP pTDS;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefString,
 										   (void**)&pTDS));
 
 			// Get typedef of an element
-			IAAFTypeDef * pETD = 0;
+			IAAFTypeDefSP pETD;
 			checkResult(pTDS->GetType(&pETD));
 
 			// Strings *must* be made up of integral types.
-			IAAFTypeDefInt * pETDInt = 0;
+			IAAFTypeDefIntSP pETDInt;
 			checkResult(pETD->QueryInterface(IID_IAAFTypeDefInt,
 											 (void**) &pETDInt));
 
@@ -499,16 +486,13 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 				assert (0);
 			  }
 
-			assert (pETDInt); pETDInt->Release(); pETDInt = 0;
-			assert (pETD);    pETD->Release();    pETD = 0;
-			assert (pTDS);    pTDS->Release();    pTDS = 0;
 			assert (buf);     delete[] buf;       buf = 0;
 			break;
 		  }
 
 		case kAAFTypeCatRecord:
 		  {
-			IAAFTypeDefRecord * pTDR = 0;
+			IAAFTypeDefRecordSP pTDR;
 			checkResult(pTD->QueryInterface(IID_IAAFTypeDefRecord,
 										   (void**)&pTDR));
 
@@ -534,16 +518,12 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 				delete[] nameBuf;
 				delete[] mbBuf;
 
-				IAAFPropertyValue * pMemberPropVal = 0;
+				IAAFPropertyValueSP pMemberPropVal;
 				checkResult(pTDR->GetValue(pPVal, i, &pMemberPropVal));
 				// recursively dump prop value
 				dumpPropertyValue (pMemberPropVal, indent+1);
-				pMemberPropVal->Release();
-				pMemberPropVal = 0;
 			  }
 
-			pTDR->Release();
-			pTDR = 0;
 			break;
 		  }
 
@@ -552,9 +532,6 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 		  break;
 		}
 	} // !pTD
-
-  pTD->Release ();
-  pTD = 0;
 
   return AAFRESULT_SUCCESS;
 }
@@ -565,25 +542,19 @@ static void dumpFile (wchar_t * pwFileName)
 {
   assert (pwFileName);
 
-  IAAFFile *   pFile = NULL;
-  IAAFHeader * pHeader = NULL;
-  IAAFObject * pHdrObj = NULL;
+  IAAFFileSP   pFile;
+  IAAFHeaderSP pHeader;
+  IAAFObjectSP pHdrObj;
 
   checkResult(AAFFileOpenExistingRead(pwFileName, 0, &pFile));
   checkResult(pFile->GetHeader(&pHeader));
-  assert (pHeader);
   checkResult(pHeader->QueryInterface(IID_IAAFObject,
 									  (void**)&pHdrObj));
-  assert (pHdrObj);
 
   dumpObject (pHdrObj, 0);
-  if (pHdrObj) pHdrObj->Release (); pHdrObj = 0;
-  if (pHeader) pHeader->Release (); pHeader = 0;
   if (pFile)
 	{
 	  pFile->Close ();
-	  pFile->Release ();
-	  pFile = 0;
 	}
 }
 
