@@ -99,6 +99,23 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDefObject::Initialize (
+      const aafUID_t & id,
+	  const aafCharacter * pName )
+{
+	//validate pName
+	if (pName == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+
+	_identification = id;
+	_name = pName;
+
+	return AAFRESULT_SUCCESS;
+}
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::SetName (
