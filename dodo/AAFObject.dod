@@ -189,7 +189,7 @@ AD_XMETHOD2(GetPropertyValue,
   // AAFRESULT_ILLEGAL_PROPERTY
   //   - named property illegal for this object's class.
   //
-  // AAFRESULT_PROPERTY_NOT_PRESENT
+  // AAFRESULT_PROP_NOT_PRESENT
   //   - named property is optional\, but not present in this class.)
 
 
@@ -221,7 +221,7 @@ AD_XMETHOD2(SetPropertyValue,
   // AAFRESULT_ILLEGAL_PROPERTY
   //   - named property illegal for this object's class.
   //
-  // AAFRESULT_PROPERTY_NOT_PRESENT
+  // AAFRESULT_PROP_NOT_PRESENT
   //   - named property is optional\, but not present in this class.)
 
 
@@ -251,6 +251,59 @@ AD_XMETHOD2(IsPropertyPresent,
   //
   // AAFRESULT_ILLEGAL_PROPERTY
   //   - named property illegal for this object's class.)
+
+
+AD_XMETHOD1(RemoveOptionalProperty,
+			[in],
+			objIn,
+			AAFPropertyDef,
+			pPropDef,
+			property definition indentifying desired property,
+
+     Removes the property if named property is legal and is
+  // optional and present.
+  // 
+  // Note! This is a low-level method which allows direct access to
+  // properties.  If such access is done\, any semantic checking \(such
+  // as that which is performed in all other named property Get/Set
+  // methods\) is not done here.  Users must use this method at their
+  // own risk.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\)
+  //
+  // AAFRESULT_ILLEGAL_PROPERTY
+  //   - named property illegal for this object's class.)
+
+
+AD_XMETHOD2(CreateOptionalPropertyValue,
+			[in],
+			objIn,
+			AAFPropertyDef,
+			pPropDef,
+			property definition indentifying desired property,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppPropVal,
+			returned AAFPropertyValue,
+
+     Returns the requested Property Value.  The desired property data
+  // is identified by the given optional property definition.
+  // 
+  // Note! This is a low-level method which allows direct access to
+  // properties.  If such access is done\, any semantic checking \(such
+  // as that which is performed in all other named property Get/Set
+  // methods\) is not done here.  Users must use this method at their
+  // own risk.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPropDef or ppPropVal\)
+  //
+  // AAFRESULT_ILLEGAL_PROPERTY
+  //   - named property illegal for this object's class.
+  //
+  // AAFRESULT_PROP_ALREADY_PRESENT
+  //   - named property is optional\, but already present in this class.)
 
 
 AD_XMETHOD1(GetDictionary,
