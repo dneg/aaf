@@ -525,7 +525,7 @@ static void convertName(char* cName,
                         char** tag);
 static char* makePathName(const char* pathName,
                           const char* componentName,
-                          bool isRoot);
+                          int isRoot);
 static void indent(int level);
 static void getClass(IStorage* storage, CLSID* clsid, const char* fileName);
 static void printClsid(const CLSID& clsid, ostream& stream);
@@ -1176,7 +1176,7 @@ void convertName(char* cName, size_t length, OMCHAR* wideName, char** tag)
 
 char* makePathName(const char* pathName,
                    const char* componentName,
-                   bool isRoot)
+                   int isRoot)
 {
   const char* separator = "/";
   size_t length = strlen(pathName) + strlen(componentName);
