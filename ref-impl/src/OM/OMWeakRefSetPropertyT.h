@@ -109,52 +109,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::save(void) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  OMPropertyTag tag = targetTag();
-
-  // create a set index
-  //
-  size_t count = _set.count();
-  OMUniqueObjectIdentification* index = 0;
-  if (count > 0) {
-    index = new OMUniqueObjectIdentification[count];
-    ASSERT("Valid heap pointer", index != 0);
-  }
-  size_t position = 0;
-
-  // Iterate over the set saving each element. The index entries
-  // are written in order of their unique keys.
-  //
-  SetIterator iterator(_set, OMBefore);
-  while (++iterator) {
-
-    SetElement& element = iterator.value();
-
-    // enter into the index
-    //
-    index[position] = element.identification();
-
-    // save the object
-    //
-    element.save();
-
-    position = position + 1;
-
-  }
-
-  // save the set index
-  //
-  store()->save(storedName(),
-                index,
-                count,
-                tag,
-                _keyPropertyId);
-  delete [] index;
-
-  // make an entry in the property index
-  //
-  saveName();
-
-  clearTargetTag();
+  store()->save(*this);
 }
 
   // @mfunc Close this <c OMWeakReferenceSetProperty>.
@@ -203,42 +158,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::restore");
 
-  // get the name of the set index stream
-  //
-  restoreName(externalSize);
-
-  // restore the index
-  //
-  OMUniqueObjectIdentification* setIndex = 0;
-  size_t entries;
-  OMPropertyTag tag;
-  OMPropertyId keyPropertyId;
-  store()->restore(storedName(),
-                   setIndex,
-                   entries,
-                   tag,
-                   keyPropertyId);
-
-  ASSERT("Valid set index", IMPLIES(entries != 0, setIndex != 0));
-  ASSERT("Valid set index", IMPLIES(entries == 0, setIndex == 0));
-  ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
-  _targetTag = tag;
-
-  // Iterate over the index restoring the elements of the set.
-  // Since the index entries are stored on disk in order of their
-  // unique keys this loop is the worst cast order of insertion. This
-  // code will eventually be replaced by code that inserts the keys in
-  // "binary search" order. That is the middle key is inserted first
-  // then (recursively) all the keys below the middle key followed by
-  // (recursively) all the keys above the middle key.
-  //
-  for (size_t i = 0; i < entries; i++) {
-    OMUniqueObjectIdentification key = setIndex[i];
-    SetElement newElement(this, key, _targetTag);
-    newElement.restore();
-    _set.insert(key, newElement);
-   }
-  delete [] setIndex;
+  store()->restore(*this, externalSize);
   setPresent();
 }
 
