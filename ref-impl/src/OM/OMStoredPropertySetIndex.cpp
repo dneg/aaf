@@ -36,12 +36,14 @@ OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
   _index = new IndexEntry[_capacity];
   ASSERT("Valid heap pointer", _index != 0);
 
+#if defined(OM_DEBUG)
   for (size_t i = 0; i < _capacity; i++) {
     _index[i]._propertyId = 0;
     _index[i]._storedForm = 0;
     _index[i]._length = 0;
     _index[i]._offset = 0;
   }
+#endif
 }
 
 OMStoredPropertySetIndex::~OMStoredPropertySetIndex(void)
