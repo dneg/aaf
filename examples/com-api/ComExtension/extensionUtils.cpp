@@ -135,9 +135,65 @@ void PrintPersonnelResource (IAAFDictionary * pDict,
 //
 // Prints all personnel resources in the given PersonnelMob.
 //
-void PrintPersonnelResources (const IAAFMob * pMob)
+void PrintPersonnelResources (IAAFDictionary * pDict,
+							  IAAFMob * pMob)
 {
-  assert (0);
+  // Get an IAAFObject for the mob
+  IAAFObjectSP pMobObj;
+  check (pMob->QueryInterface (IID_IAAFObject, (void **)&pMobObj));
+
+  IAAFClassDefSP cd;
+  check (pMobObj->GetDefinition (&cd));
+
+  IAAFPropertyDefSP pd;
+  check (cd->LookupPropertyDef ((aafUID_t*) &kPropID_PersonnelMob_Personnel,
+								&pd));
+
+  // Get the property value for the array of personnel objects
+  IAAFPropertyValueSP pva;
+  check (pMobObj->GetPropertyValue (pd, &pva));
+
+  // Get the type def for arrays
+  IAAFTypeDefSP td;
+  check (pva->GetType (&td));
+  IAAFTypeDefVariableArraySP tda;
+  check (td->QueryInterface (IID_IAAFTypeDefVariableArray, (void **)&tda));
+
+  // Get the number of personnel objects
+  aafUInt32 numPersonnel = 0;
+  check (tda->GetCount (pva, &numPersonnel));
+
+  IAAFTypeDefSP basetd;
+  check (tda->GetType (&basetd));
+  IAAFTypeDefObjectRefSP tdo;
+  check (basetd->QueryInterface (IID_IAAFTypeDefObjectRef, (void **)&tdo));
+
+  cout << "There are " << numPersonnel
+	   << " personnel record objects." << endl;
+
+  // Print each one.
+  aafUInt32 i;
+  for (i = 0; i < numPersonnel; i++)
+	{
+	  // put a newline between each
+	  if (i)
+		cout << endl;
+
+	  // Get the property value for the indexed record
+	  IAAFPropertyValueSP pvr;
+	  check (tda->GetElementValue (pva, i, &pvr));
+
+	  // Get the object contained in that property value
+	  IAAFObjectSP personObj;
+	  check (tdo->GetObject (pvr, &personObj));
+
+	  // Get the resource info from that object
+	  PersonnelResource r =
+		PersonnelRecordGetInfo (personObj);
+
+	  // print the resource info
+	  PrintPersonnelResource (pDict, r);
+	}
 }
 
 
@@ -231,7 +287,8 @@ void PersonnelRecordGetName (IAAFObject * pObj,
 {
   assert (pObj);
   assert (buf);
-  assert (buflen >= PersonnelRecordGetNameBufLen (pObj));
+  aafUInt32 nameLen = PersonnelRecordGetNameBufLen (pObj);
+  assert (buflen >= nameLen);
 
   IAAFClassDefSP cd;
   check (pObj->GetDefinition (&cd));
@@ -249,11 +306,10 @@ void PersonnelRecordGetName (IAAFObject * pObj,
   IAAFTypeDefStringSP tds;
   check (td->QueryInterface (IID_IAAFTypeDefString, (void **)&tds));
 
-  aafUInt32 numChars = 0;
   check (tds->GetElements (pv, (aafMemPtr_t) buf, buflen));
 
   // Make sure we're null-terminated.
-  buf[buflen-1] = '\0';
+  buf[nameLen-1] = '\0';
 }
 
 
@@ -279,6 +335,7 @@ void PersonnelRecordSetRole (IAAFObject * pObj,
   check (td->QueryInterface (IID_IAAFTypeDefExtEnum, (void **)&tde));
 
   check (tde->SetAUIDValue (pv, &role));
+  check (pObj->SetPropertyValue (pd, pv));
 }
 
 
@@ -312,7 +369,6 @@ void PersonnelRecordSetContractID (IAAFObject * pObj,
 								   contractID_t cid)
 {
   assert (pObj);
-  assert (PersonnelRecordContractIDIsPresent (pObj));
 
   IAAFClassDefSP cd;
   check (pObj->GetDefinition (&cd));
@@ -321,16 +377,16 @@ void PersonnelRecordSetContractID (IAAFObject * pObj,
   check (cd->LookupPropertyDef ((aafUID_t*) &kPropID_PersonnelResource_ContractID,
 								&pd));
 
-  IAAFPropertyValueSP pv;
-  check (pObj->GetPropertyValue (pd, &pv));
-  
   IAAFTypeDefSP td;
   check (pd->GetTypeDef (&td));
 
   IAAFTypeDefIntSP tdi;
   check (td->QueryInterface (IID_IAAFTypeDefInt, (void **)&tdi));
 
-  check (tdi->SetInteger (pv, (aafMemPtr_t) &cid, sizeof (cid)));
+  IAAFPropertyValueSP pv;
+  check (tdi->CreateValue ((aafMemPtr_t) &cid, sizeof (cid), &pv));
+
+  check (pObj->SetPropertyValue (pd, pv));
 }
 
 
@@ -406,97 +462,4 @@ PersonnelResource PersonnelRecordGetInfo (IAAFObject * pObj)
 	  r.cid_present = false;
 	}
   return r;
-}
-
-
-aafUInt32 PersonnelMobGetArraySize (IAAFMob * pMob)
-{
-  assert (pMob);
-
-  IAAFObjectSP pObj;
-  check (pMob->QueryInterface (IID_IAAFObject, (void **)&pObj));
-
-  IAAFClassDefSP cd;
-  check (pObj->GetDefinition (&cd));
-
-  IAAFPropertyDefSP pd;
-  check (cd->LookupPropertyDef ((aafUID_t*) &kPropID_PersonnelMob_Personnel,
-								&pd));
-  IAAFPropertyValueSP pv;
-  check (pObj->GetPropertyValue (pd, &pv));
-
-  IAAFTypeDefSP td;
-  check (pd->GetTypeDef (&td));
-
-  IAAFTypeDefVariableArraySP tda;
-  check (td->QueryInterface (IID_IAAFTypeDefVariableArray,
-							 (void **)&tda));
-
-  aafUInt32 numPersonnel = 0;
-  check (tda->GetCount (pv, &numPersonnel));
-
-  return numPersonnel;
-}
-
-
-void PersonnelMobGetArray (IAAFMob * pMob,
-						   IAAFObject ** pArray,
-						   aafUInt32 numElems)
-{
-  assert (pMob);
-  assert (pArray);
-  assert (numElems >= PersonnelMobGetArraySize (pMob));
-
-  IAAFObjectSP pObj;
-  check (pMob->QueryInterface (IID_IAAFObject, (void **)&pObj));
-
-  IAAFClassDefSP cd;
-  check (pObj->GetDefinition (&cd));
-
-  IAAFPropertyDefSP pd;
-  check (cd->LookupPropertyDef ((aafUID_t*) &kPropID_PersonnelMob_Personnel,
-								&pd));
-  IAAFPropertyValueSP pv;
-  check (pObj->GetPropertyValue (pd, &pv));
-
-  IAAFTypeDefSP td;
-  check (pd->GetTypeDef (&td));
-
-  IAAFTypeDefVariableArraySP tda;
-  check (td->QueryInterface (IID_IAAFTypeDefVariableArray,
-							  (void **)&tda));
-
-  check (tda->GetCArray (pv, (aafMemPtr_t) pArray, numElems * sizeof (IAAFObject)));
-}
-
-
-void PersonnelMobSetArray (IAAFMob * pMob,
-						   IAAFObject ** pArray,
-						   aafUInt32 numElems)
-{
-  assert (pMob);
-  assert (pArray);
-
-  IAAFObjectSP pObj;
-  check (pMob->QueryInterface (IID_IAAFObject, (void **)&pObj));
-
-  IAAFClassDefSP cd;
-  check (pObj->GetDefinition (&cd));
-
-  IAAFPropertyDefSP pd;
-  check (cd->LookupPropertyDef ((aafUID_t*) &kPropID_PersonnelMob_Personnel,
-								&pd));
-  IAAFPropertyValueSP pv;
-  check (pObj->GetPropertyValue (pd, &pv));
-
-  IAAFTypeDefSP td;
-  check (pd->GetTypeDef (&td));
-
-  IAAFTypeDefVariableArraySP tda;
-  check (td->QueryInterface (IID_IAAFTypeDefVariableArray,
-							  (void **)&tda));
-
-  check (tda->SetCArray (pv, (aafMemPtr_t) pArray, numElems * sizeof (IAAFObject)));
-
-  check (pObj->SetPropertyValue (pd, pv));
 }

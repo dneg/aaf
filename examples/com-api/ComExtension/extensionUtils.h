@@ -220,8 +220,8 @@ void PrintPersonnelResource (IAAFDictionary * pDict,
 //
 // Prints all personnel resources in the given PersonnelMob.
 //
-void PrintPersonnelResources (const IAAFDictionary * pDict,
-							  const IAAFMob * pMob);
+void PrintPersonnelResources (IAAFDictionary * pDict,
+							  IAAFMob * pMob);
 
 //
 // Set/Get name on a PersonnelResource object.  GetName requires that
@@ -260,18 +260,6 @@ contractID_t PersonnelRecordGetContractID (IAAFObject * pObj);
 void PersonnelRecordSetInfo (IAAFObject * pObj,
 							 const PersonnelResource & info);
 PersonnelResource  PersonnelRecordGetInfo (IAAFObject * pObj);
-
-
-//
-// Set/Get the array of personnel record objects from this mob.
-//
-aafUInt32 PersonnelMobGetArraySize (IAAFMob * pMob);
-void PersonnelMobGetArray (IAAFMob * pMob,
-						   IAAFObject ** pArray,
-						   aafUInt32 numElems);
-void PersonnelMobSetArray (IAAFMob * pMob,
-						   IAAFObject ** pArray,
-						   aafUInt32 numElems);
 
 
 //
