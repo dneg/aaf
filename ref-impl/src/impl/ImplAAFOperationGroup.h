@@ -47,8 +47,6 @@
 
 class ImplAAFDataDef;
 class ImplAAFParameter;
-class ImplEnumAAFOperationDefs;
-class ImplEnumAAFParameterDefs;
 class ImplAAFSegment;
 class ImplAAFSourceReference;
 class ImplEnumAAFParameters;
@@ -156,7 +154,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     CountSourceSegments
         // @parm [out] Number of source media segments in the effect
-        (aafInt32 *  numSources);
+        (aafUInt32 *  numSources);
 	//@comm Replaces omfiEffectGetNumSlots
 
 
@@ -166,7 +164,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     CountParameters
         // @parm [out] Number of parameter slots in the effect
-        (aafInt32 *  numParameters);
+        (aafUInt32 *  numParameters);
 	//@comm Replaces omfiEffectGetNumSlots
 
   //****************
