@@ -246,6 +246,12 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFStrongRefValue::WriteTo(
       // The local object reference must exist! NOTE: GetLocalObject() does NOT increment
       // the reference count of the returned object!
       result = SetNewObjectReference(refProperty, GetLocalObject());
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+        // Install the property direct access and cleanup the local reference.
+        SetProperty(pOmProp);
+        SetLocalObject(NULL);
+      }
     }
   }
   
