@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFObject\
@@ -20,10 +20,13 @@ AD_IDL(//
 // client programmer is aware of the liabilities.
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_INIT)
+
+AD_FORWARD_DECLARATION(AAFDictionary)
 AD_FORWARD_DECLARATION(AAFClassDef)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_FORWARD_DECLARATION(EnumAAFProperties)
+
 AD_CLASS_UUID(B1A213AC, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A213AB, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -212,4 +215,23 @@ AD_XMETHOD2(IsPropertyPresent,
   //
   // AAFRESULT_ILLEGAL_PROPERTY
   //   - named property illegal for this object's class.)
+
+
+AD_XMETHOD1(GetDictionary,
+            [out\, retval],
+		objOut,
+		AAFDictionary,
+		ppDictionary,
+		A pointer to an Dictionary pointer,
+            Returns the dictionary for this object instance.
+  //
+  // Succeeds if all of the following are true:
+  // - the given ppDictionary pointer is valid.
+  //
+  // Note! Use care when dealing with the object class.  Among the
+  // pitfalls to be avoided is that tests for equality will not
+  // reflect inheritance.  This becomes important if an unknown
+  // non-builtin \(that is\, user defined\) object class ID is obtained.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppClassDef\))
 AD_XCLASS_END(Abstract, StoredObjectBase)
