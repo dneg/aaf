@@ -1148,16 +1148,12 @@ void printClsid(REFCLSID clsid)
 {
   char cs[256];
 
-  if (!IsEqualCLSID(CLSID_NULL, clsid)) {
-    OMCHAR s[256];
-    int result = StringFromGUID2(clsid, s, 256);
-    if (result <= 0) {
-      strcpy(cs, "unknown");
-    } else {
-      convert(cs, 256, s);
-    }
+  OMCHAR s[256];
+  int result = StringFromGUID2(clsid, s, 256);
+  if (result <= 0) {
+    strcpy(cs, "unknown");
   } else {
-    strcpy(cs, "null");
+    convert(cs, 256, s);
   }
   cout << cs;
 }
