@@ -47,7 +47,7 @@
 #endif
 
 #if defined(macintosh) || defined(_MAC)
-#include <console.h> /* Mac command line window */
+#include "DataInput.h"
 #endif
 
 // handy smart pointer typedefs
@@ -896,7 +896,8 @@ int main(int argc, char* argv[])
   /* console window for mac */
 
 #if defined(macintosh) || defined(_MAC)
-  argc = ccommand(&argv);
+	char dataFile[] = "COMPROPDIRECTDUMP.inp";
+	getInputData(&argc, argv, dataFile);
 #endif
 
   CComInitialize comInit;
@@ -972,6 +973,11 @@ int main(int argc, char* argv[])
 		filestream.close ();
 	  exit (1);
 	}
+
+  #ifdef _MAC
+	cleanUpInputData(argc, argv);
+  #endif
+
   // Should have exited before now...
   assert (0); // not reached
   return 1;   // to keep compiler happy
