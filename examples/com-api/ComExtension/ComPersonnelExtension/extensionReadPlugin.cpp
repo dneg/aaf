@@ -85,35 +85,8 @@ HRESULT extensionReadPlugin (const aafCharacter * filename)
     check (pFile->GetHeader(&pHead));
     check (pHead->GetDictionary(&pDict));
 
+    VerifyResourceClassExtensions(pDict);
 
-    cout << "Verifying position enum type has been registered." << endl;
-    check (pDict->LookupTypeDef (kTypeID_ePosition, &ptd));
-    ptd->Release();
-    ptd=NULL;
-
-    cout << "Verifying PersonnelResource class has been registered." << endl;
-    check (pDict->LookupClassDef (kClassID_PersonnelResource, &pcd));
-    pcd->Release();
-    pcd=NULL;
-
-    cout << "Verifying AdminMob class has been registered." << endl;
-    check (pDict->LookupClassDef (kClassID_AdminMob, &pcd));
-    pcd->Release();
-    pcd=NULL;
-
-    cout << "Verifying PersonnelResourceReference type has been"
-	     << " registered." << endl;
-    check (pDict->LookupTypeDef (kTypeID_PersonnelResourceStrongReference,
-							  &ptd));
-    ptd->Release();
-    ptd=NULL;
-
-    cout << "Verifying PersonnelResourceReferenceVector type has been"
-	     << " registered." << endl; 
-    check (pDict->LookupTypeDef (kTypeID_PersonnelResourceStrongReferenceVector,
-							  &ptd));
-    ptd->Release();
-    ptd=NULL;
 
     cout << "Verifying AdminMob instance has been created and added" 
 	     << " to header." << endl;
