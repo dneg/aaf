@@ -74,6 +74,23 @@ bool AxDictionary::isKnownOperationDef( const aafUID_t& opId )
 	return result;
 }
 
+bool AxDictionary::isKnownParameterDef( const aafUID_t& paramId )
+{
+	IAAFParameterDefSP spIaafParameterDef;
+
+	HRESULT hr = _spIaafDictionary->LookupParameterDef( paramId, &spIaafParameterDef );
+
+	bool result = true;
+	if ( AAFRESULT_NO_MORE_OBJECTS == hr ) {
+		result = false;
+	}
+	else if ( AAFRESULT_SUCCESS != hr ) {
+		CHECK_HRESULT( hr );
+	}
+
+	return result;
+}
+
 void AxDictionary::RegisterClassDef( IAAFClassDefSP spIaafClassDef )
 {
 	CHECK_HRESULT( _spIaafDictionary->RegisterClassDef( spIaafClassDef ) );
@@ -210,6 +227,11 @@ void AxDictionary::RegisterKLVDataKey( const aafUID_t& uuid,
 void AxDictionary::RegisterOperationDef( IAAFOperationDefSP spIaafOperationDef )
 {
 	CHECK_HRESULT( _spIaafDictionary->RegisterOperationDef( spIaafOperationDef ) );
+}
+
+void AxDictionary::RegisterParameterDef( IAAFParameterDefSP spIaafParameterDef )
+{
+	CHECK_HRESULT( _spIaafDictionary->RegisterParameterDef( spIaafParameterDef ) );
 }
 
 void AxDictionary::RegisterCodecDef( IAAFCodecDefSP spIaafCodecDef)
