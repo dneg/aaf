@@ -180,7 +180,7 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 											 ImplAAFComponent *nextObject,
 											 ImplAAFScopeStack *scopeStack,
 											 aafPosition_t *diffPos, aafLength_t *minLength,
-											 ImplAAFGroup **effeObject, aafInt32	*nestDepth,
+											 ImplAAFEffect **effeObject, aafInt32	*nestDepth,
 											 ImplAAFComponent **found, aafBool *foundTransition)
 {
 	aafLength_t	tmpMinLen;
