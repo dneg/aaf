@@ -63,20 +63,27 @@
 #include "AAFUtils.h"
 #endif
 
+#include "ImplAAFObjectCreation.h"
+
 #define DEFAULT_NUM_MOBS				1000
 #define DEFAULT_NUM_DATAOBJ			200
 #define DEFAULT_NUM_DATAKIND_DEFS	100
 #define DEFAULT_NUM_EFFECT_DEFS		100
 
+extern "C" const aafClassID_t	CLSID_AAFContentStorage;
 
 ImplAAFHeader::ImplAAFHeader ()
 : _byteOrder(         PID_HEADER_BYTEORDER,          "byteOrder"),
   _lastModified(      PID_HEADER_LASTMODIFIED,       "lastModified"),
-  _identificationList(PID_HEADER_IDENTIFICATIONLIST, "identificationList")
+  _identificationList(PID_HEADER_IDENTIFICATIONLIST, "identificationList"),
+  _contentStorage(		PID_HEADER_CONTENTSTORAGE,	"contentStorage")
 {
+  ImplAAFContentStorage		*cstore;
+  
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
   _persistentProperties.put(_identificationList.address());
+  _persistentProperties.put(_contentStorage.address());
 
   //!!!	_head = this;
 //	file->InternalSetHead(this);
@@ -93,6 +100,8 @@ ImplAAFHeader::ImplAAFHeader ()
 	_toolkitRev.patchLevel = 0;
 //!!!	_byteOrder;
 //!!!	_lastModified;
+	cstore = (ImplAAFContentStorage *)CreateImpl(CLSID_AAFContentStorage);
+	_contentStorage = cstore;
 }
 
 
@@ -101,91 +110,73 @@ ImplAAFHeader::~ImplAAFHeader ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::LookupMob (aafUID_t *  /*mobID*/,
-                           ImplAAFMob ** /*ppMob*/)
+    ImplAAFHeader::LookupMob (aafUID_t *mobID,
+                           ImplAAFMob **ppMob)
 {
-#if FULL_TOOLKIT
-	mobTableEntry_t	*entry;
-	AAFMob			*tmpMob;
-	
-	XPROTECT(_file)
-	  {
-		/* Get the mob out of the mob hash table */
-		entry = (mobTableEntry_t *)TableUIDLookupPtr(_mobs, mobID);
-		if (entry != NULL)
-		  tmpMob = entry->mob; 
-
-		if (tmpMob)
-		  *mob = tmpMob;
-		else
-		  {
-			RAISE(OM_ERR_MOB_NOT_FOUND);
-		  }
-	  } /* XPROTECT */
-
-	XEXCEPT
-	  {
-		return(XCODE());
-	  }
-	XEND;
-#endif
-	
-	return(OM_ERR_NONE);
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->LookupMob(mobID, ppMob));
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetNumMobs (aafMobKind_t  /*mobKind*/,
-                           aafNumSlots_t *  /*pNumMobs*/)
+    ImplAAFHeader::GetNumMobs (aafMobKind_t mobKind,
+                           aafNumSlots_t *pNumMobs)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->GetNumMobs(mobKind, pNumMobs));
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumAAFPrimaryMobs (ImplEnumAAFMobs ** /*ppEnum*/)
+    ImplAAFHeader::EnumAAFPrimaryMobs (ImplEnumAAFMobs **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->GetPrimaryMobs(ppEnum));
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumAAFAllMobs (aafSearchCrit_t *  /*pSearchCriteria*/,
-                           ImplEnumAAFMobs ** /*ppEnum*/)
+    ImplAAFHeader::EnumAAFAllMobs (aafSearchCrit_t *pSearchCriteria,
+                           ImplEnumAAFMobs **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->GetMobs(pSearchCriteria, ppEnum));
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::AppendMob (ImplAAFMob * /*pMob*/)
+    ImplAAFHeader::AppendMob (ImplAAFMob *pMob)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->AppendMob(pMob));
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::RemoveMob (ImplAAFMob * /*pMob*/)
+    ImplAAFHeader::RemoveMob (ImplAAFMob *pMob)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->RemoveMob(pMob));
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::IsMediaDataPresent (aafUID_t *  /*pFileMobID*/,
-                           aafFileFormat_t  /*fmt*/,
-                           aafBool *  /*result*/)
+    ImplAAFHeader::IsMediaDataPresent (aafUID_t *pFileMobID,
+                           aafFileFormat_t fmt,
+                           aafBool *result)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->IsMediaDataPresent(pFileMobID, fmt, result));
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumAAFMediaObjects (aafMediaCriteria_t *  /*pMediaCriteria*/,
-                           ImplEnumAAFMedia ** /*ppEnum*/)
+    ImplAAFHeader::EnumAAFMediaObjects (aafMediaCriteria_t *pMediaCriteria,
+                           ImplEnumAAFMedia **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFContentStorage *cstore = _contentStorage;
+	return(cstore->GetMedia(pMediaCriteria, ppEnum));
 }
 
 
@@ -288,7 +279,7 @@ AAFRESULT
       pIdent->productVersionString = (unsigned char *)"Unknown version";
     }
     if (pIdent->platform == 0) {
-      pIdent->platform = (unsigned char *)"Windoze NT";
+      pIdent->platform = (unsigned char *)"Windows NT";
     }
     identObj = new ImplAAFIdentification(
       (const char *)pIdent->companyName,
@@ -465,34 +456,6 @@ AAFRESULT ImplAAFHeader::BuildMediaCache(void)
 	return(OM_ERR_NONE);
 }
 
-aafBool ImplAAFHeader::IsMediaDataPresent(
-									aafUID_t				fileMobUid,	/* IN -- */
-									aafFileFormat_t	fmt)
-{
-#if FULL_TOOLKIT
-	ImplAAFObject *	obj;
-	aafBool		result;
-	
-	aafAssertValidFHdl(_file);
-	result = AAFFalse;
-	
-	if (fmt == kAAFiMedia)
-	  {
-		 obj = (ImplAAFObject *)TableUIDLookupPtr(_dataObjs, fileMobUid);
-		 if(obj != NULL)
-			result = AAFTrue;
-		 }
-	  }
-	else
-	  result = AAFTrue;
-	
-	return (result);
-#else
-  return AAFFalse;
-#endif
-}
-
-
 AAFRESULT ImplAAFHeader::AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
 						  ImplAAFObject *dataObj)    /* IN - Input Mob */ 
 {
@@ -525,6 +488,12 @@ AAFRESULT ImplAAFHeader::IsValidHeadObject(void)
 #else
   return AAFRESULT_NOT_IMPLEMENTED;
 #endif
+}
+
+ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
+{
+	ImplAAFContentStorage	*result = _contentStorage;
+	return(result);
 }
 
 extern "C" const aafClassID_t CLSID_AAFHeader;
