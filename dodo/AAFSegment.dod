@@ -9,9 +9,12 @@ AAFComponent\
 #import ./AAFComponent.exp
 AD_HEAD
 AD_IDL(//
+// A segment is an abastract class\\\, its subclasses include all 
+// Components types with well-defined boundaries\\\, like AAFSequence
+// AAFNestedScope etc.  Segment is a subclass of AAFComponent 
+// See AAFComponent AAFTransition AAFSequence AAFNestedScope. 
 // The segment class represents a component that is independent of any
 // surrounding object
-// A segment is an abastract class 
 //)
 AD_CLASS_UUID(7a2f0571, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
@@ -77,13 +80,4 @@ AD_METHOD3(SegmentTCToOffset,
   // AAFRESULT_NULL_PARAM
   //   - any arg is NULL.)
 
-
-AD_METHOD1(NumRepresentations,
-		   [out],
-		   aafInt32 *,
-		   pCount,
-		   Pointer to Number of representations to be returned,
-		   This is a virtual method and should be overriden in the derived class.
-  // By default it always succeeds \\\(returning AAFRESULT_SUCCESS\\\) and
-  // sets the value of pCount to 1.) 
 AD_CLASS_END
