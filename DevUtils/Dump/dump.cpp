@@ -606,9 +606,6 @@ static SetIndexEntry* readSetIndex(IStream* stream,
 static WeakCollectionIndexEntry* readWeakCollectionIndex(IStream* stream,
                                                          OMUInt32 count,
                                                          bool swapNeeded);
-#if !defined (__GNUC__)
-static ByteOrder readByteOrder(IStream* stream);
-#endif
 static void dumpObject(IStorage* storage,
                        char* pathName,
                        int isRoot,
@@ -3126,70 +3123,6 @@ void dumpProperties(IStorage* storage,
 }
 
 ByteOrder fileByteOrder = unspecifiedEndian;
-
-#if !defined (__GNUC__)
-ByteOrder readByteOrder(IStream* stream)
-{
-  OMUInt8 byteOrder;
-  read(stream, &byteOrder, sizeof(byteOrder));
-
-  ByteOrder result;
-
-  if (byteOrder == 'L') {              // explicitly little endian
-    result = littleEndian;
-  } else if (byteOrder == 'B') {          // explicitly big endian
-    result = bigEndian;
-  } else if (byteOrder == 'M') {
-    result = littleEndian;
-  } else if (byteOrder == 'I') {
-    result = bigEndian;
-  } else if ((byteOrder == 0x0001) || (byteOrder == 0x0000)) {
-
-    // Handle old (version 1) prototype files with no byte order flag.
-    // Here we use the version number as the byte order flag.
-    //
-
-    // Read version number from start of stream.
-    //
-    OMUInt32 version;
-    read(stream, 0, &version, sizeof(OMUInt32)); 
-
-    ByteOrder hostOrder = hostByteOrder();
-    if (version == 0x00000001) {                // native version number 1 
-      result = hostOrder;
-    } else if (version == 0x01000000) {         // foreign version number 1
-      if (hostOrder == littleEndian) {
-        result = bigEndian;
-      } else {
-        result = littleEndian;
-      }
-    } else {
-      fatalError("readByteOrder", "Can't determine byte order.");
-    }
-
-    // Set format version dependent parameters.
-    //
-    _propertyValueStreamName = "properties";
-    _openArrayKeySymbol = "[";
-    _closeArrayKeySymbol = "]";
-
-    // Seek back to start of stream.
-    //
-    LARGE_INTEGER newPosition = {0, 0};
-    ULARGE_INTEGER oldPosition;
-    HRESULT status = stream->Seek(newPosition, STREAM_SEEK_SET, &oldPosition);
-    if (!checks(status)) {
-      fatalError("readByteOrder", "IStream::Seek() failed.");
-    }
-
-  } else {
-    fatalError("readByteOrder", "Can't determine byte order.");
-  }
-
-  ASSERT("Valid result", (result == littleEndian) || (result == bigEndian));
-  return result;
-}
-#endif
 
 void dumpObject(IStorage* storage,
                 char* pathName,
