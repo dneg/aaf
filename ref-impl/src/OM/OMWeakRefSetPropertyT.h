@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -462,7 +462,7 @@ bool OMWeakReferenceSetProperty<ReferencedObject>::find(
       ASSERT("Object is correct type", object != 0);
     } else {
       object = 0;
-    } 
+    }
   }
 
   return result;
@@ -473,7 +473,7 @@ bool OMWeakReferenceSetProperty<ReferencedObject>::find(
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable> and <c OMUnique>.
   //   @rdesc True if this <c OMWeakReferenceSetProperty> is void,
-  //          false otherwise. 
+  //          false otherwise.
   //   @this const
 template <typename ReferencedObject>
 bool OMWeakReferenceSetProperty<ReferencedObject>::isVoid(void) const
@@ -735,7 +735,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::contains(
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable> and <c OMUnique>.
-  //   @parm The unique identification of the object for which to search. 
+  //   @parm The unique identification of the object for which to search.
   //   @parm The object.
   //   @rdesc True if the object was found, false otherwise.
   //   @this const

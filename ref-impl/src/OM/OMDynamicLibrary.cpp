@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -124,7 +124,7 @@ void* OMWindowsDynamicLibrary::findSymbol(const char* symbolName)
   }
 #endif
   result = address;
-  return result;  
+  return result;
 }
 
   // @mfunc Load the library described by this <c OMDynamicLibrary>.
@@ -267,8 +267,8 @@ void* OMMacOSDynamicLibrary::findSymbol(const char* symbolName)
           << " \"" << err << "\"." << endl;
 #endif
     result = 0;
-  } 
-  
+  }
+
   return result;
 }
 
@@ -279,7 +279,7 @@ bool OMMacOSDynamicLibrary::load(void)
   TRACE("OMMacOSDynamicLibrary::load");
   PRECONDITION("Library not loaded", _library == 0);
 
-  bool result; 
+  bool result;
   CFragArchitecture architectureType = kCompiledCFragArch;
   CFragLoadOptions loadFlags = kPrivateCFragCopy;
   CFragConnectionID connectionID = 0;
@@ -404,7 +404,7 @@ void* OMUnixDynamicLibrary::findSymbol(const char* symbolName)
   }
 #endif
   result = address;
-  return result;  
+  return result;
 }
 
   // @mfunc Load the library described by this <c OMDynamicLibrary>.
@@ -548,7 +548,7 @@ bool OMMacOSXDynamicLibrary::load(void)
                                                CFStringGetSystemEncoding());
   ASSERT("Valid string", name != 0);
 
-  CFURLRef bundleURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault, 
+  CFURLRef bundleURL = CFURLCreateWithFileSystemPath(kCFAllocatorDefault,
                                                      name,
                                                      kCFURLPOSIXPathStyle,
                                                      true);
@@ -613,7 +613,7 @@ void OMMacOSXDynamicLibrary::unload(void)
   // @mfunc Find and load the given library.
   //   @parm The name of the library to load.
   //   @rdesc A pointer to a newly created <c OMDynamicLibrary>.
-  //          If the library cannot be found or loaded then 0 is returned. 
+  //          If the library cannot be found or loaded then 0 is returned.
 OMDynamicLibrary* OMDynamicLibrary::loadLibrary(const wchar_t* libraryName)
 {
   TRACE("OMDynamicLibrary::loadLibrary");

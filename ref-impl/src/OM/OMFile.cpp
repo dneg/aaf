@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -223,8 +223,8 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   //        access mode and encoding ? Can a file of the specified encoding
   //        be created on <p rawStorage> and then accessed in mode
   //        <p accessMode> ?
-  //   @parm The <c OMRawStorage> 
-  //   @parm The <t OMAccessMode> 
+  //   @parm The <c OMRawStorage>
+  //   @parm The <t OMAccessMode>
   //   @parm The <t OMStoredObjectEncoding>
   //   @rdesc True if <p accessMode> and <p encoding> are compatible,
   //          false otherwise.
@@ -244,7 +244,7 @@ bool OMFile::compatibleRawStorage(const OMRawStorage* rawStorage,
   // @mfunc Can a file of the encoding specified by <p encoding> be
   //        created successfully as a named file and
   //        accessed successfully in the mode specified by <p accessMode> ?
-  //   @parm The <t OMAccessMode> 
+  //   @parm The <t OMAccessMode>
   //   @parm The <t OMStoredObjectEncoding>
   //   @rdesc True if <p accessMode> and <p encoding> are compatible,
   //          false otherwise.
@@ -262,7 +262,7 @@ bool OMFile::compatibleNamedFile(const OMAccessMode accessMode,
 
   // @mfunc Is <p rawStorage> compatible with <p accesMode> ?
   //   @parm The <c OMRawStorage>
-  //   @parm The <t OMAccessMode> 
+  //   @parm The <t OMAccessMode>
   //   @rdesc True if <p rawStorage> and <p accessMode> are compatible,
   //          false otherwise.
 bool OMFile::compatible(const OMRawStorage* rawStorage,
@@ -844,7 +844,7 @@ void OMFile::setLoadMode(OMLoadMode mode)
 }
 
   // @mfunc The access mode of this <c OMFile>.
-  //   @rdesc The access mode of this <c OMFile>. 
+  //   @rdesc The access mode of this <c OMFile>.
   //   @this const
 OMFile::OMAccessMode OMFile::accessMode(void) const
 {

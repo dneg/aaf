@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -68,7 +68,7 @@ OMObjectReference::~OMObjectReference(void)
 
   // @mfunc Is this <c OMObjectReference> void ?
   //   @rdesc True if this <c OMObjectReference> is void,
-  //          false otherwise. 
+  //          false otherwise.
   //   @this const
 bool OMObjectReference::isVoid(void) const
 {
@@ -85,7 +85,7 @@ bool OMObjectReference::isVoid(void) const
   //        This operator provides value semantics for <c OMContainer>.
   //        This operator does not provide assignment of object references.
   //   @parm The <c OMObjectReference> to be assigned.
-  //   @rdesc The <c OMObjectReference> resulting from the assignment. 
+  //   @rdesc The <c OMObjectReference> resulting from the assignment.
 OMObjectReference& OMObjectReference::operator= (const OMObjectReference& rhs)
 {
   TRACE("OMObjectReference::operator=");
@@ -102,7 +102,7 @@ OMObjectReference& OMObjectReference::operator= (const OMObjectReference& rhs)
   //        This operator provides value semantics for <c OMContainer>.
   //        This operator does not provide equality of object references.
   //   @parm The <c OMObjectReference> to be compared.
-  //   @rdesc True if the values are the same, false otherwise. 
+  //   @rdesc True if the values are the same, false otherwise.
   //   @this const
 bool OMObjectReference::operator== (const OMObjectReference& rhs) const
 {
@@ -203,7 +203,7 @@ OMStrongObjectReference::~OMStrongObjectReference(void)
 
   // @mfunc Is this <c OMStrongObjectReference> void ?
   //   @rdesc True if this <c OMStrongObjectReference> is void,
-  //          false otherwise. 
+  //          false otherwise.
   //   @this const
 bool OMStrongObjectReference::isVoid(void) const
 {
@@ -220,7 +220,7 @@ bool OMStrongObjectReference::isVoid(void) const
   //        This operator provides value semantics for <c OMContainer>.
   //        This operator does not provide assignment of object references.
   //   @parm The <c OMStrongObjectReference> to be assigned.
-  //   @rdesc The <c OMStrongObjectReference> resulting from the assignment. 
+  //   @rdesc The <c OMStrongObjectReference> resulting from the assignment.
 OMStrongObjectReference&
 OMStrongObjectReference::operator= (const OMStrongObjectReference& rhs)
 {
@@ -240,7 +240,7 @@ OMStrongObjectReference::operator= (const OMStrongObjectReference& rhs)
   //        This operator provides value semantics for <c OMContainer>.
   //        This operator does not provide equality of object references.
   //   @parm The <c OMStrongObjectReference> to be compared.
-  //   @rdesc True if the values are the same, false otherwise. 
+  //   @rdesc True if the values are the same, false otherwise.
   //   @this const
 bool
 OMStrongObjectReference::operator== (const OMStrongObjectReference& rhs) const
@@ -529,7 +529,7 @@ OMWeakObjectReference::~OMWeakObjectReference(void)
 
   // @mfunc Is this <c OMWeakObjectReference> void ?
   //   @rdesc True if this <c OMWeakObjectReference> is void,
-  //          false otherwise. 
+  //          false otherwise.
   //   @this const
 bool OMWeakObjectReference::isVoid(void) const
 {
@@ -554,7 +554,7 @@ bool OMWeakObjectReference::isVoid(void) const
   //        This operator provides value semantics for <c OMContainer>.
   //        This operator does not provide assignment of object references.
   //   @parm The <c OMWeakObjectReference> to be assigned.
-  //   @rdesc The <c OMWeakObjectReference> resulting from the assignment. 
+  //   @rdesc The <c OMWeakObjectReference> resulting from the assignment.
 OMWeakObjectReference&
 OMWeakObjectReference::operator= (const OMWeakObjectReference& rhs)
 {
@@ -572,7 +572,7 @@ OMWeakObjectReference::operator= (const OMWeakObjectReference& rhs)
 
   // @mfunc Equality.
   //   @parm The <c OMWeakObjectReference> to be compared.
-  //   @rdesc True if the values are the same, false otherwise. 
+  //   @rdesc True if the values are the same, false otherwise.
   //   @this const
 bool OMWeakObjectReference::operator== (const OMWeakObjectReference& rhs) const
 {
@@ -635,7 +635,7 @@ OMStorable* OMWeakObjectReference::getValue(void) const
     OMStorable* object = 0;
     set()->find(&nonConstThis->_identification, object);
     nonConstThis->_pointer = object;
-  }  
+  }
   // If the following assertion is violated we have a dangling weak
   // reference.  The reference illegally designates an object that is
   // not present in the target set.  Code elsewhere prevents the

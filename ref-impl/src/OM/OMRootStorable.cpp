@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -49,7 +49,7 @@ OMRootStorable::~OMRootStorable(void)
 }
 
 // {B3B398A5-1C90-11d4-8053-080036210804}
-const OMClassId OMRootStorable::_rootClassId = 
+const OMClassId OMRootStorable::_rootClassId =
 { 0xb3b398a5, 0x1c90, 0x11d4, { 0x80, 0x53, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
 
 const OMClassId& OMRootStorable::classId(void) const

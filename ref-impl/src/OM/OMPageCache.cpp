@@ -21,7 +21,7 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
-// @author Tim Bingham | tjb | Avid Technology, Inc. | OMPageCache 
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMPageCache
 #include "OMPageCache.h"
 
 #include "OMDataTypes.h"

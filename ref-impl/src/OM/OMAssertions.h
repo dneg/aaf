@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -133,7 +133,7 @@ void obsolete(const char* routineName, const char* newRoutineName);
   //       is obsolete and that <p newRoutineName> should be used instead.
   //       OBSOLETE is provided to aid clients in migrating from one
   //       Object Manager version to the next. Routines are made obsolete
-  //       before they are removed. 
+  //       before they are removed.
   //   @parm The name of the routine that should be called instead.
 #define OBSOLETE(newRoutineName) \
   obsolete(currentRoutineName, newRoutineName);
@@ -236,7 +236,7 @@ void obsolete(const char* routineName, const char* newRoutineName);
   //   @parm The number of elements in the collection.
   //   @parm The expression to evaluate for each element.
 #define FORALL(index, elementCount, expression) \
-        FOREACH(index, 0, elementCount, expression) 
+        FOREACH(index, 0, elementCount, expression)
 
   // @func Define a name only when assertions are enabled. Use to
   //       avoid compiler warnings.

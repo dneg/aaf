@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -37,7 +37,7 @@ OMBuiltinPropertyDefinition::OMBuiltinPropertyDefinition(
 : _type(type),
   _name(name),
   _propertyId(propertyId),
-  _isOptional(isOptional)  
+  _isOptional(isOptional)
 {
   TRACE("OMBuiltinPropertyDefinition::OMBuiltinPropertyDefinition");
 }
@@ -83,7 +83,7 @@ OMPropertyId OMBuiltinPropertyDefinition::localIdentification(void) const
 }
 
   // @mfunc Is the <c OMProperty> defined by this
-  //        <c OMBuiltinPropertyDefinition> optional? 
+  //        <c OMBuiltinPropertyDefinition> optional?
 bool OMBuiltinPropertyDefinition::isOptional(void) const
 {
   TRACE("OMBuiltinPropertyDefinition::isOptional");

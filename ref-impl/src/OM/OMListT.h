@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -81,16 +81,18 @@ void OMList<Element>::insert(const Element value)
 }
 
 template <typename Element>
-void OMList<Element>::insertAfter(const Element /* value */,
-                                  const OMListIterator<Element>& /* position */)
+void OMList<Element>::insertAfter(
+                                 const Element /* value */,
+                                 const OMListIterator<Element>& /* position */)
 {
   TRACE("OMList<Element>::insertAfter");
   ASSERT("Unimplemented code not reached", false);
 }
 
 template <typename Element>
-void OMList<Element>::insertBefore(const Element /* value */,
-                                   const OMListIterator<Element>& /* position */)
+void OMList<Element>::insertBefore(
+                                 const Element /* value */,
+                                 const OMListIterator<Element>& /* position */)
 {
   TRACE("OMList<Element>::insertBefore");
   ASSERT("Unimplemented code not reached", false);
@@ -100,7 +102,7 @@ void OMList<Element>::insertBefore(const Element /* value */,
   //   @tcarg class | Element | The type of an <c OMList> element.
   //          This type must support operator = and operator ==.
   //   @parm The Element to search for. A value of type <p Element> by value.
-  //   @this const 
+  //   @this const
 template <typename Element>
 bool OMList<Element>::containsValue(const Element value) const
 {
@@ -171,7 +173,7 @@ OMListIterator<Element> OMList<Element>::findValue(const Element& value)
   //        the head of the list is removed.
   //   @tcarg class | Element | The type of an <c OMList> element.
   //          This type must support operator = and operator ==.
-  //  @parm The Element to remove. A value of type <p Element> by value. 
+  //  @parm The Element to remove. A value of type <p Element> by value.
 template <typename Element>
 void OMList<Element>::removeValue(const Element value)
 {

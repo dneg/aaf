@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -92,7 +92,7 @@ wchar_t* copyWideString(wchar_t* destination,
   //       character appears among the first <p length> characters of
   //       <p source>, then the first <p length> characters are copied and a
   //       null character is supplied to terminate <p destination>, that is,
-  //       <p length> + 1 characters in all are written.  
+  //       <p length> + 1 characters in all are written.
   //   @parm The destination buffer.
   //   @parm The wide character string to copy.
   //   @parm The number of characters to copy.
@@ -261,13 +261,13 @@ int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2);
   //       wchar_t* file names and modes.
   //   @parm The file name.
   //   @parm The mode.
-  //   @rdesc An ANSI FILE* 
+  //   @rdesc An ANSI FILE*
 FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
 
   // @func Remove the named file. Just like ANSI remove() except for
   //       wchar_t* file names.
   //   @parm The file name.
-  //   @rdesc 0 if the file is successfuly deleted -1 otherwise. 
+  //   @rdesc 0 if the file is successfuly deleted -1 otherwise.
 int wremove(const wchar_t* fileName);
 
 // Generating unique identifiers

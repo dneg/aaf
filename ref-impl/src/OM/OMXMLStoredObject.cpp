@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -734,15 +734,15 @@ void OMXMLStoredObject::output(void)
   _stream << dec << setw(8) << setfill(' ') << address;
   _stream << " -->  ";
   _line++;
-  
+
   for (i = 0; i < _count; i++) {
     _stream << hex << setw(2) << setfill('0') << uppercase << _buffer[i];
   }
-  
+
   for (i = _count; i < BYTESPERLINE; i++) {
     _stream << "  ";
   }
-  
+
   _stream << "  <!-- ";
   for (i = 0; i < _count; i++) {
     int c = (unsigned char)_buffer[i];
@@ -752,9 +752,9 @@ void OMXMLStoredObject::output(void)
 }
 
 void OMXMLStoredObject::print(unsigned char ch)
-{ 
+{
   _buffer[_count++] = ch;
-  
+
   if ( _count == BYTESPERLINE) {
     output();
     _count = 0;

@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -182,7 +182,7 @@ int compareWideString(const wchar_t* string1,
         result = 1;
       } else {
         result = -1;
-      } 
+      }
       break;
     } else if (*s1 == 0) {
       result = 0;
@@ -454,7 +454,7 @@ bool validWideString(const wchar_t* string)
   return (string != 0) /* && (lengthOfWideString(string) > 0) */;
 }
 
-static const char digits[] = "0123456789ABCDEF"; 
+static const char digits[] = "0123456789ABCDEF";
 
 void toString(const OMUInt8&i, char* is)
 {
@@ -498,7 +498,7 @@ void toString(const OMObjectIdentification& id, char* idString)
 
   char* op = idString;
 
-  *op++ = '{'; 
+  *op++ = '{';
 
   OMUInt32* lp = (OMUInt32 *)&id;
 
@@ -530,8 +530,8 @@ void toString(const OMObjectIdentification& id, char* idString)
   toString(*bp++, op); op = op + 2;
   toString(*bp++, op); op = op + 2;
 
-  *op++ = '}'; 
-  *op = '\0'; 
+  *op++ = '}';
+  *op = '\0';
 }
 
 void fromString(OMUInt8& i, const char* is)

@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -140,7 +140,7 @@ size_t OMSetIterator<Key, Element>::count(void) const
   //        If the end of the associated <c OMSet> is reached
   //        then the result is <e bool.false>,
   //        <mf OMSetIterator::valid> becomes <e bool.false> and
-  //        <mf OMSetIterator::after> becomes <e bool.true>. 
+  //        <mf OMSetIterator::after> becomes <e bool.true>.
   //   @tcarg class | Key | The type of the unique key that identifies
   //          the contained elements.
   //   @tcarg class | Element | The type of the contained elements.
@@ -165,7 +165,7 @@ bool OMSetIterator<Key, Element>::operator++()
   //        If the beginning of the associated <c OMSet> is
   //        reached then the result is <e bool.false>,
   //        <mf OMSetIterator::valid> becomes <e bool.false> and
-  //        <mf OMSetIterator::before> becomes <e bool.true>. 
+  //        <mf OMSetIterator::before> becomes <e bool.true>.
   //   @tcarg class | Key | The type of the unique key that identifies
   //          the contained elements.
   //   @tcarg class | Element | The type of the contained elements.

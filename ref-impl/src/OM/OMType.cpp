@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -90,10 +90,10 @@ void OMType::expand(const OMByte* inputBytes,
     memcpy(op, ip, inputBytesSize);
     op = op + inputBytesSize;
     // zero fill pad bytes (assumes sign extension not wanted)
-    memset(op, 0, padSize); 
+    memset(op, 0, padSize);
   } else { // byteOrder == bigEndian
     // zero fill pad bytes (assumes sign extension not wanted)
-    memset(op, 0, padSize); 
+    memset(op, 0, padSize);
     op = op + padSize;
     // copy valid bytes
     memcpy(op, ip, inputBytesSize);
