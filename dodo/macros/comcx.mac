@@ -574,6 +574,30 @@ AD_CLASS_END\
 
 #ccccccccccccccccccccccccccc
 #c
+#c Inserts declaration for a function which takes seven arguments.
+#c
+#c Macro Arg 01: function name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c
+#c Macro Arg 37: function description
+#c
+#startm AD_XFUNCTION7 37
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c macro for things which are not to be exported.
 #c
 #startm AD_NO_EXPORT 01
