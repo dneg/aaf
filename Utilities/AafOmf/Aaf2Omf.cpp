@@ -521,11 +521,13 @@ HRESULT Aaf2Omf::AAFFileRead()
 						pMobComment->GetNameBufLen(&textSize);
 						pwcName = new wchar_t [textSize/sizeof(wchar_t)];
 						pMobComment->GetName(pwcName, textSize);
+						pszCommName =  new char[textSize/sizeof(wchar_t)];
 						wcstombs(pszCommName, pwcName, textSize/sizeof(wchar_t));
 
 						pMobComment->GetValueBufLen((aafUInt32 *)&textSize);
 						pwcComment = new wchar_t (textSize/sizeof(wchar_t));
 						pMobComment->GetValue((aafUInt32)textSize, (aafDataBuffer_t)pwcComment, &bytesRead);
+						pszComment =  new char[textSize/sizeof(wchar_t)];
 						wcstombs(pszComment, pwcComment, textSize/sizeof(wchar_t));
 
 						OMFError = OMF2::omfiMobAppendComment(OMFFileHdl, OMFMob, pszCommName, pszComment);
