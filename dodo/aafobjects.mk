@@ -134,6 +134,7 @@ HUMAN_TYPED_COMTEST = \
 	AAFMasterMob \
 	AAFMob \
 	AAFSourceClip \
+	AAFFile \
 	AAFSourceMob \
 	EnumAAFMobs
 
@@ -199,7 +200,6 @@ AUTO_GEN_COMTEST = \
 	EnumAAFReferenceValues \
 	EnumAAFSegments \
 	EnumAAFTypeDefs \
-	AAFFile \
 	AAFHeader \
 	AAFIdentification \
 	AAFObject \
