@@ -39,6 +39,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "CAAFBuiltinDefs.h"
+#include "AAFDefUIDs.h"
 
 
 
@@ -121,7 +122,7 @@ extern "C" HRESULT CAAFCommentMarker_test()
 	ProductInfo.productName = L"AAFCommentMarker Test";
 	ProductInfo.productVersion = &v;
 	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = NIL_UID;
+	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 	
 	// Create an instance of our text clip test class and run the

@@ -41,6 +41,7 @@
 #include "AAFResult.h"
 
 #include "CAAFBuiltinDefs.h"
+#include "AAFDefUIDs.h"
 
 
 // Cross-platform utility to delete a file.
@@ -123,7 +124,7 @@ extern "C" HRESULT CAAFGPITrigger_test()
   ProductInfo.productName = L"AAFGPITrigger Test";
   ProductInfo.productVersion = &v;
   ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = NIL_UID;
+  ProductInfo.productID = UnitTestProductID;
   ProductInfo.platform = NULL;
 
   // Create an instance of our text clip test class and run the
