@@ -146,9 +146,9 @@
 #include <memory.h>		/* For AAFMalloc() and AAFFree() */
 #include <OSUtils.h>
 #endif
-#ifdef _WIN32
+//#ifdef _WIN32
 #include <time.h>
-#endif
+//#endif
 
 //#include "omPublic.h"
 //#include "omPvt.h" 
