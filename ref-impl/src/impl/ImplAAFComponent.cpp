@@ -59,11 +59,11 @@ AAFRESULT STDMETHODCALLTYPE
  *		Standard errors (see top of file).
  *************************************************************************/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFComponent::GetLength (aafLength_t * length)
+    ImplAAFComponent::GetLength (aafLength_t * pLength)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	*length = _length;
+	*pLength = _length;
 	return aafError;
 }
 
