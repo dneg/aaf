@@ -331,8 +331,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*		pFile = NULL;
 	bool bFileOpen = false;
 	IAAFHeader*		pHeader = NULL;
-	IAAFMob*		pMob = NULL;
-	IAAFMasterMob*		pMasterMob = NULL;
 	HRESULT			hr = S_OK;
 	
 	
