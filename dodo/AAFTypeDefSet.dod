@@ -13,6 +13,8 @@ AD_IDL(//
 //
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_STUB)
+AD_FORWARD_DECLARATION(AAFPropertyValue)
+AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
 AD_CLASS_UUID(381e1f21, e7bb, 11d2, 84, 2a, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(381e1f22, e7bb, 11d2, 84, 2a, 00, 60, 08, 32, ac, b8)
@@ -202,7 +204,7 @@ AD_XMETHOD3(CreateValueFromCArray,
   //    that typedef.)
 
 
-AD_XMETHOD3(GetElements,
+AD_XMETHOD2(GetElements,
 			[in],
 			objIn,
 			AAFPropertyValue,

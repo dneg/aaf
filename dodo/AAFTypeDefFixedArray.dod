@@ -13,6 +13,7 @@ AD_IDL(//
 //
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_STUB)
+AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(c3274645, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(c3274646, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
@@ -98,7 +99,7 @@ AD_X2METHOD3(CreateValueFromValues,
 			 [in\, size_is\(numElements\)],
 			 objInArray,
 			 AAFPropertyValue,
-			 pElementValues,
+			 ppElementValues,
        array of property values for elements of array value which
     // is to be created.,
 			 numElements,
