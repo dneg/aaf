@@ -171,9 +171,14 @@ TRACE("OMStream::size");
 
 #if defined( OM_OS_UNIX )
 
+#if defined(OM_COMPILER_SGICC_MIPS_SGI)
+	// all POSIX-compliant
+	int status = fseeko64( _file, (off64_t)0, SEEK_END);
+#else
 	// all POSIX-compliant
 	int status = fseeko64( _file, (__off64_t)0, SEEK_END);
-  
+#endif
+
 #elif defined( OM_OS_WINDOWS )
 
 	// we have to rely upon fseek( _file, 0, SEEK_END ) to do the right thing
