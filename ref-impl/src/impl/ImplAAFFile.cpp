@@ -737,7 +737,8 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 		  if (kAAFFileAccess_modify == access)
 			{
 			  // NewModify
-			  if (! OMFile::compatibleRawStorage (OMFile::modifyMode,
+			  if (! OMFile::compatibleRawStorage (pOMStg,
+												  OMFile::modifyMode,
 												  AAFMSSEncoding))
 				return AAFRESULT_INVALID_PARAM;
 												  
@@ -752,7 +753,8 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 		  else // write-only
 			{
 			  // NewWrite
-			  if (! OMFile::compatibleRawStorage (OMFile::writeOnlyMode,
+			  if (! OMFile::compatibleRawStorage (pOMStg,
+												  OMFile::writeOnlyMode,
 												  AAFMSSEncoding))
 				return AAFRESULT_INVALID_PARAM;
 												  

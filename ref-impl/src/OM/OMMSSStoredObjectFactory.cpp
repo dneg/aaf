@@ -253,21 +253,25 @@ OMMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   return result;
 }
 
-  // @mfunc Can a file be created successfully on an <c OMRawStorage> and
-  //        accessed successfully in the mode specified by <p accessMode> ?
+  // @mfunc Can a file be created successfully on the given
+  //        <c OMRawStorage> and accessed successfully in the mode
+  //        specified by <p accessMode> ?
+  //   @parm The <c OMRawStorage>.
   //   @parm The <t OMAccessMode>.
   //   @rdecs True if the file can be created, false otherwise.
 bool OMMSSStoredObjectFactory::compatibleRawStorage(
+                                         const OMRawStorage* rawStorage,
                                          const OMFile::OMAccessMode accessMode)
 {
   TRACE("OMMSSStoredObjectFactory::compatibleRawStorage");
 
-  bool result = false;
+  bool result = true;
 
   // Write only Microsoft Structured Storage files are not permitted.
-  if (accessMode != OMFile::writeOnlyMode) {
-    result = true;
+  if ((accessMode == OMFile::writeOnlyMode) && (!rawStorage->isReadable())) {
+    result = false;
   }
+
   return result;
 }
 

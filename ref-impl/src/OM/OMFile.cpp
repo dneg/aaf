@@ -184,14 +184,17 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   return newFile;
 }
 
-  // @mfunc Can a file of the encoding specified by <p encoding> be
-  //        created successfully on an <c OMRawStorage> and
-  //        accessed successfully in the mode specified by <p accessMode> ?
+  // @mfunc Is the given <c OMRawStorage> compatible with the given file
+  //        access mode and encoding ? Can a file of the specified encoding
+  //        be created on <p rawStorage> and then accessed in mode
+  //        <p accessMode> ?
+  //   @parm The <c OMRawStorage> 
   //   @parm The <t OMAccessMode> 
   //   @parm The <t OMStoredObjectEncoding>
   //   @rdesc True if <p accessMode> and <p encoding> are compatible,
   //          false otherwise.
-bool OMFile::compatibleRawStorage(const OMAccessMode accessMode,
+bool OMFile::compatibleRawStorage(const OMRawStorage* rawStorage,
+                                  const OMAccessMode accessMode,
                                   const OMStoredObjectEncoding& encoding)
 {
   TRACE("OMFile::compatibleRawStorage");
@@ -199,7 +202,7 @@ bool OMFile::compatibleRawStorage(const OMAccessMode accessMode,
   bool result = false;
   OMStoredObjectFactory* factory = findFactory(encoding);
   ASSERT("Recognized file encoding", factory != 0);
-  result = factory->compatibleRawStorage(accessMode);
+  result = factory->compatibleRawStorage(rawStorage, accessMode);
   return result;
 }
 
@@ -312,7 +315,8 @@ OMFile* OMFile::openNewWrite(OMRawStorage* rawStorage,
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Compatible access mode",
                                         compatible(rawStorage, writeOnlyMode));
-  PRECONDITION("Creatable", compatibleRawStorage(writeOnlyMode, encoding));
+  PRECONDITION("Creatable",
+                    compatibleRawStorage(rawStorage, writeOnlyMode, encoding));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
@@ -346,7 +350,8 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Compatible access mode", compatible(rawStorage, modifyMode));
-  PRECONDITION("Creatable", compatibleRawStorage(modifyMode, encoding));
+  PRECONDITION("Creatable",
+                       compatibleRawStorage(rawStorage, modifyMode, encoding));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));

@@ -93,10 +93,12 @@ public:
                                const OMStoredObjectEncoding& encoding,
                                OMDictionary* dictionary = 0);
 
-    // @cmember Can a file of the encoding specified by <p encoding> be
-    //          created successfully on an <c OMRawStorage> and
-    //          accessed successfully in the mode specified by <p accessMode> ?
-  static bool compatibleRawStorage(const OMAccessMode accessMode,
+  // @cmember Is the given <c OMRawStorage> compatible with the given file
+  //          access mode and encoding ? Can a file of the specified encoding
+  //          be created on <p rawStorage> and then accessed in mode
+  //          <p accessMode> ?
+  static bool compatibleRawStorage(const OMRawStorage* rawStorage,
+                                   const OMAccessMode accessMode,
                                    const OMStoredObjectEncoding& encoding);
 
     // @cmember Can a file of the encoding specified by <p encoding> be

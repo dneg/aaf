@@ -97,9 +97,11 @@ public:
     //          If so, the result is true.
   virtual bool isRecognized(OMRawStorage* rawStorage);
 
-    // @cmember Can a file be created successfully on an <c OMRawStorage> and
-    //          accessed successfully in the mode specified by <p accessMode> ?
-  virtual bool compatibleRawStorage(const OMFile::OMAccessMode accessMode);
+    // @cmember Can a file be created successfully on the given
+    //          <c OMRawStorage> and accessed successfully in the mode
+    //          specified by <p accessMode> ?
+  virtual bool compatibleRawStorage(const OMRawStorage* rawStorage,
+                                    const OMFile::OMAccessMode accessMode);
 
     // @cmember Can a file be created successfully as a named file and
     //          accessed successfully in the mode specified by <p accessMode> ?

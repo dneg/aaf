@@ -93,8 +93,7 @@ static HRESULT TestGetSetFileBits ()
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pWriteStg,
 								   kAAFFileExistence_new,
-//								   kAAFFileAccess_write, // tjb - mode
-								   kAAFFileAccess_modify,
+								   kAAFFileAccess_write,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
