@@ -370,6 +370,8 @@ static size_t maxSignatureSize = signatureSize();
 //           reality.
 //  0.18   : Changed PluginDescriptor::Locators to be a
 //           StrongReferenceVector (was a StrongReferenceSet).
+//  0.19   : Introduced singleton weak references, added
+//           "referenced properties".
 //
 
 // The following may change at run time depending on the file format
@@ -381,7 +383,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 18;
+const OMUInt32 HIGHVERSION = 19;
 
 // Output format requested
 //
