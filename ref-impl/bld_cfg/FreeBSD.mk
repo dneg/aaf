@@ -15,7 +15,7 @@
 
 PTFM_SUFX = 86
 OBJ = o${PTFM_SUFX}
-LIB = a${PTFM_SUFX}
+AAF_LIB = a${PTFM_SUFX}
 EXE = x${PTFM_SUFX}
 CC = gcc
 LD = gcc
