@@ -1,7 +1,7 @@
 #ifndef IMPLAAFOBJECTCREATION_H
 #define IMPLAAFOBJECTCREATION_H
 
-#include <wtypes.h>
+#include "AAFTypes.h"
 
 class ImplAAFRoot;
 
@@ -14,7 +14,7 @@ class ImplAAFRoot;
 // 2) Ask the newly created API class for its contained Impl class.
 // 3) Return that Impl class.
 //
-ImplAAFRoot * CreateImpl (const CLSID & rClassID);
+ImplAAFRoot * CreateImpl (const aafClassID_t & rClassID);
 
 // Deletes the given Impl object.  Will make sure the associated API
 // class is also deleted.
