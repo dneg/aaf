@@ -44,9 +44,9 @@
 #include "AAFDataDefs.h"
 
 ImplAAFTimecode::ImplAAFTimecode ():
-_start(	PID_Timecode_Start,	"Start"),
-_FPS(	PID_Timecode_FPS,	"FPS"),
-_drop(	PID_Timecode_Drop,	"Drop")
+_start(	PID_Timecode_Start,	L"Start"),
+_FPS(	PID_Timecode_FPS,	L"FPS"),
+_drop(	PID_Timecode_Drop,	L"Drop")
 {
 	_persistentProperties.put(_start.address());
 	_persistentProperties.put(_FPS.address());

@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -34,7 +34,7 @@
 template<typename PropertyType>
 OMFixedSizeProperty<PropertyType>::OMFixedSizeProperty(
                                                  const OMPropertyId propertyId,
-                                                 const char* name)
+                                                 const wchar_t* name)
 : OMSimpleProperty(propertyId, name, sizeof(PropertyType))
 {
   TRACE("OMFixedSizeProperty<PropertyType>::OMFixedSizeProperty");
