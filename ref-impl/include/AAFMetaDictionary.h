@@ -4,9 +4,15 @@
 // This file contains invocations of the macros described below.
 //
 // To use this file - 
-//   1) #define the macros to suit your usage
+//   1) #define those macros required to suit your usage
 //   2) #include this file
-//   3) #undef the macros
+//
+// This file will provide empty definitions for those macros you
+// choose not to define.
+//
+// After invoking the macros, this file will also undefine them.
+// All macros will be undefined - those you chose to define
+// and those defined by this file.
 //
 // This is an automatically generated file.
 //
@@ -17,7 +23,7 @@
 //
 // ../smpte/DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri Jun 25 14:07:35 EDT 1999
+// This file was generated on Mon Jun 28 12:12:51 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -2774,6 +2780,26 @@ AAF_PROPERTY(ElementValues,
 AAF_CLASS_END(TypeDefinitionExtendibleEnumeration)
 
 AAF_TABLE_END()
+
+// Undefine all macros
+//
+#undef AAF_TABLE_BEGIN
+
+#undef AAF_TABLE_END
+
+#undef AAF_CLASS
+
+#undef AAF_CLASS_END
+
+#undef AAF_CLASS_SEPARATOR
+
+#undef AAF_PROPERTY
+
+#undef AAF_TYPE
+
+#undef AAF_REFERENCE_TYPE
+
+#undef AAF_LITERAL_AUID
 
 //
 // End of automatically generated file.
