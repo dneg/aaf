@@ -20,34 +20,34 @@ AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 AD_CLASS_BEGIN
-AD_XMETHOD5(AddMasterTrack,
+AD_XMETHOD5(AddMasterSlot,
 			[in],
 			  objIn,
 			  AAFDataDef,
 			  pMediaKind,
-			  Data kind of new track,
+			  Data kind of new slot,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  trackID,
-			  TrackID of new Master Mob track,
+			  aafSlotID_t,
+			  slotID,
+			  SlotID of new Master Mob slot,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  fileTrackID,
-			  File Source Mob track ID,
+			  aafSlotID_t,
+			  fileSlotID,
+			  File Source Mob slot ID,
 			[in\, string],
 			  objPass,
 			  aafWChar *,
-			  pTrackName,
-			  Name to assign to new track in Master Mob,
+			  pSlotName,
+			  Name to assign to new slot in Master Mob,
 			[in],
 			  objIn,
 			  AAFSourceMob,
 			  pFileMob,
-			  File Source Mob associated with new track,
-			This function adds a track to the specified Master Mob that
-  // references the specified File Source Mob. The new track in the
+			  File Source Mob associated with new slot,
+			This function adds a slot to the specified Master Mob that
+  // references the specified File Source Mob. The new slot in the
   // Master Mob contains a Source Clip that specifies the File Source
   // Mob in its source reference properties. Typically this is done
   // automatically by passing the Master Mob handle to
@@ -58,9 +58,9 @@ AD_XMETHOD5(AddMasterTrack,
   // - Picture
   // - Sound
   //
-  // Note: If pTrackName is passed in with zero length\, then the
-  // track is not assigned a name.  Track names are not used by the
-  // Toolkit\, and exist only so the user can name tracks.
+  // Note: If pSlotName is passed in with zero length\, then the
+  // slot is not assigned a name.  Slot names are not used by the
+  // Toolkit\, and exist only so the user can name slots.
   // 
   // Succeeds if all of the following are true:
   // \(more conditions here\)
@@ -81,8 +81,8 @@ AD_XMETHOD3(GetTapeName,
 			[in],
 			  objPass,
 			  aafInt32,
-			  masterTrackID,
-			  TrackID of the Master Mob track,
+			  masterSlotID,
+			  SlotID of the Master Mob slot,
 			[out\, size_is\(bufSize\)\, string],
 			  objPass,
 			  aafWChar *,
@@ -93,7 +93,7 @@ AD_XMETHOD3(GetTapeName,
 			  aafInt32,
 			  bufSize,
 			  the size of the pTapeName buffer,
-			Finds the videotape Source Mob associated with a Master Mob track
+			Finds the videotape Source Mob associated with a Master Mob slot
   // and writes the name of the videotape\, which is stored in the
   // Mobs Name property\, into the pTapeName buffer.  The buffer is
   // allocated by the caller.  The size of the buffer is given by
@@ -154,16 +154,16 @@ AD_XMETHOD1(GetTapeNameBufLen,
 AD_XMETHOD2(GetNumRepresentations,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  trackID,
-			  TrackID,
+			  aafSlotID_t,
+			  slotID,
+			  SlotID,
 			[out\, retval],
 			  objPass,
 			  aafNumSlots_t *,
 			  pNumReps,
 			  number of representations,
   // This function returns the number of media representations
-  // available for the specified TrackID on a specified Master
+  // available for the specified SlotID on a specified Master
   // Mob. This function is meant to work with
   // omfmGetRepresentationSourceClip\, so that you can iterate through
   // all of the choices yourself.  In most cases\, you can use
@@ -190,9 +190,9 @@ AD_XMETHOD2(GetNumRepresentations,
 AD_XMETHOD3(GetRepresentationSourceClip,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  trackID,
-			  Track ID,
+			  aafSlotID_t,
+			  slotID,
+			  Slot ID,
 			[in],
 			  objPass,
 			  aafInt32,
@@ -204,7 +204,7 @@ AD_XMETHOD3(GetRepresentationSourceClip,
 			  ppSourceClip,
 			  Requested Source Clip,
 			This method returns the indexed media representation for the specified
-  // Master Mob\, TrackID\, and index.  This call is meant to work
+  // Master Mob\, SlotID\, and index.  This call is meant to work
   // with GetNumRepresentations\, so that you can iterate through all
   // of the choices yourself.  This method uses an integer index\, not
   // an iterator.  The function GetRepresentationSourceClip takes an
@@ -232,9 +232,9 @@ AD_XMETHOD3(GetRepresentationSourceClip,
 AD_XMETHOD3(GetCriteriaSourceClip,
 			[in],
 			  objPass,
-			  aafTrackID_t,
-			  trackID,
-			  Track ID,
+			  aafSlotID_t,
+			  slotID,
+			  Slot ID,
 			[in],
 			  objPass,
 			  aafMediaCriteria_t *,
@@ -245,7 +245,7 @@ AD_XMETHOD3(GetCriteriaSourceClip,
 			  AAFSourceClip,
 			  ppSourceClip,
 			  Requested Source Clip,
-  // Returns the Source Clip on the specified track of a Master Mob
+  // Returns the Source Clip on the specified slot of a Master Mob
   // that references the File Source Mob that best meets the specified
   // criteria.  This function will work whether multiple media
   // representations exist or not.
