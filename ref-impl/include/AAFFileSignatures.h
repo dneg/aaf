@@ -22,6 +22,6 @@
 //
 //=---------------------------------------------------------------------=
 
-// This file is obsolete.
+#error "This file is obsolete."
 
 #endif // !__AAFFileSignatures_h__
