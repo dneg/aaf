@@ -31,32 +31,32 @@
 #include "AAFTypes.h"
 #endif
 
-// The file kind for structured storage binary AAF files.
+// AAF files encoded as structured storage (binary).
 //
 const aafUID_t aafFileKindAafSSBinary = 
 {0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The file kind for structured storage binary MXF files.
+// MXF files encoded as structured storage (binary).
 //
 const aafUID_t aafFileKindMxfSSBinary = 
 {0x4246584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The file kind for XML text AAF files.
+// AAF files encoded as XML (text).
 //
 const aafUID_t aafFileKindAafXmlText = 
 {0x58464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The file kind for XML text MXF files.
+// MXF files encoded as XML (text).
 //
 const aafUID_t aafFileKindMxfXmlText = 
 {0x5846584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The file kind for SMPTE KLV binary AAF files.
+// AAF files encoded as SMPTE KLV (binary).
 //
 const aafUID_t aafFileKindAafKlvBinary = 
 {0x4b464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The file kind for SMPTE KLV binary MXF files.
+// MXF files encoded as SMPTE KLV (binary).
 //
 const aafUID_t aafFileKindMxfKlvBinary = 
 {0x4b46584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
