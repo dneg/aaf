@@ -597,8 +597,8 @@ main()
 
   printf("***Creating file %s\n", pFileName);
   CreateAAFFile(pwFileName);
-  // printf("***Re-opening file %s\n", pFileName);
-  // ReadAAFFile(pwFileName);
+  printf("***Re-opening file %s\n", pFileName);
+  ReadAAFFile(pwFileName);
   
   printf("Done\n");
   return(0);
