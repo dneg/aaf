@@ -281,6 +281,19 @@ STDAPI ImplAAFFileOpenNewModify (
   // Pointer to buffer to receive pointer to new file.
   /*[out]*/ ImplAAFFile ** ppFile);
 
+//***********************************************************
+//
+// AAFFileOpenNewModifyEx()
+//
+// Please see AAF.h for comments.
+//
+STDAPI ImplAAFFileOpenNewModifyEx (
+  const aafCharacter *  pFileName,
+  aafUID_constptr  pFileKind,
+  aafUInt32  modeFlags,
+  aafProductIdentification_t *  pIdent,
+  ImplAAFFile ** ppFile);
+
 
 
 //***********************************************************

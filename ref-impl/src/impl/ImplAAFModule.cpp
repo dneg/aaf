@@ -582,7 +582,19 @@ STDAPI ImplAAFFileOpenNewModify (
 #endif // USE_RAW_STORAGE
 }
 
-
+//***********************************************************
+//
+// AAFFileOpenNewModifyEx()
+//
+STDAPI ImplAAFFileOpenNewModifyEx (
+  const aafCharacter *  /* pFileName */,
+  aafUID_constptr  /* pFileKind */,
+  aafUInt32  /* modeFlags */,
+  aafProductIdentification_t *  /* pIdent */,
+  ImplAAFFile ** /* ppFile */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
 
 //***********************************************************
 //

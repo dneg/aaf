@@ -57,6 +57,13 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFFILEOPENNEWMODIFY)(
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
 
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFFILEOPENNEWMODIFYEX)(
+    const wchar_t *  pFileName,
+	aafUID_constptr  pFileKind,
+    aafUInt32  modeFlags,
+    aafProductIdentification_t *  pIdent,
+    IAAFFile ** ppFile);
+
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFFILEOPENTRANSIENT)(
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
@@ -119,6 +126,13 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFFILEOPENEXISTINGMODIFY)(
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFFILEOPENNEWMODIFY)(
     const wchar_t *  pFileName,
+    aafUInt32  modeFlags,
+    aafProductIdentification_t *  pIdent,
+    IAAFFile ** ppFile);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFFILEOPENNEWMODIFYEX)(
+    const wchar_t *  pFileName,
+	aafUID_constptr  pFileKind,
     aafUInt32  modeFlags,
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
@@ -230,6 +244,13 @@ public:
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
 
+  HRESULT OpenNewModifyEx (
+    const wchar_t *  pFileName,
+	aafUID_constptr  pFileKind,
+    aafUInt32  modeFlags,
+    aafProductIdentification_t *  pIdent,
+    IAAFFile ** ppFile);
+
   HRESULT OpenTransient (
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile);
@@ -292,6 +313,7 @@ protected:
   LPFNAAFFILEOPENEXISTINGREAD      _pfnOpenExistingRead;
   LPFNAAFFILEOPENEXISTINGMODIFY    _pfnOpenExistingModify;
   LPFNAAFFILEOPENNEWMODIFY         _pfnOpenNewModify;
+  LPFNAAFFILEOPENNEWMODIFYEX       _pfnOpenNewModifyEx;
   LPFNAAFFILEOPENTRANSIENT         _pfnOpenTransient;
   LPFNAAFFILEISAAFFILE             _pfnIsAAFFile;
   LPFNAAFRAWSTORAGEISAAFFILE       _pfnRawStorageIsAAFFile;

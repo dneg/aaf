@@ -313,6 +313,44 @@ STDAPI AAFFileOpenNewModify (
 
 //***********************************************************
 //
+// AAFFileOpenNewModifyEx()
+//
+// 
+STDAPI AAFFileOpenNewModifyEx (
+  const wchar_t *  pFileName,
+  aafUID_constptr  pFileKind,
+  aafUInt32  modeFlags,
+  aafProductIdentification_t *  pIdent,
+  IAAFFile ** ppFile)
+{
+  TRACE("AAFFileOpenNewModifyEx");
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->OpenNewModifyEx(pFileName, pFileKind, modeFlags, pIdent, ppFile);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
+//***********************************************************
+//
 // AAFFileOpenTransient()
 //
 STDAPI AAFFileOpenTransient (
@@ -696,6 +734,9 @@ HRESULT AAFDLL::Load(const char *dllname)
   if (AAFRESULT_FAILED(rc))
     return rc;
 
+  rc = ::AAFFindSymbol(_libHandle, "AAFFileOpenNewModifyEx", (AAFSymbolAddr *)&_pfnOpenNewModifyEx);
+  // Ignore failure
+
   rc = ::AAFFindSymbol(_libHandle, "AAFFileOpenTransient", (AAFSymbolAddr *)&_pfnOpenTransient);
   if (AAFRESULT_FAILED(rc))
     return rc;
@@ -774,6 +815,7 @@ void AAFDLL::ClearEntrypoints()
   _pfnOpenExistingRead = NULL;
   _pfnOpenExistingModify = NULL;
   _pfnOpenNewModify = NULL;
+  _pfnOpenNewModifyEx = 0;
   _pfnOpenTransient = NULL;
   _pfnIsAAFFile = 0;
   _pfnRawStorageIsAAFFile = 0;
@@ -822,6 +864,22 @@ HRESULT AAFDLL::OpenNewModify (
   TRACE("AAFDLL::OpenNewModify");
   ASSERT("Valid dll callback function", _pfnOpenNewModify);
   return _pfnOpenNewModify(pFileName, modeFlags, pIdent, ppFile);  
+}
+
+HRESULT AAFDLL::OpenNewModifyEx (
+    const wchar_t *  pFileName,
+	aafUID_constptr  pFileKind,
+    aafUInt32  modeFlags,
+    aafProductIdentification_t *  pIdent,
+    IAAFFile ** ppFile)
+{
+  TRACE("AAFDLL::OpenNewModifyEx");
+
+  // This entry point is not present in some versions of the DLL
+  if (NULL == _pfnOpenNewModifyEx)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+
+  return _pfnOpenNewModifyEx(pFileName, pFileKind, modeFlags, pIdent, ppFile);
 }
 
 HRESULT AAFDLL::OpenTransient (

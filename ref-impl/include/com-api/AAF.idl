@@ -32894,6 +32894,80 @@ cpp_quote("")
 
   //***********************************************************
   //
+  // AAFFileOpenNewModifyEx()
+  //
+  // Creates an object associated with with a new
+  // filesystem file that contains data which is to be read and
+  // written.  Associates the given identification with it.
+  // Does the following:
+  //
+  // - Creates a new file in the filesystem with the given name.
+  // - Opens the filesystem file for reading and writing.
+  // - Associates this object with that filesystem file.
+  // - Places this object into the Open state.
+  // - This AAFFile object then can be used as the root of the
+  //   containment tree representing all AAF objects contained within the file.
+  //
+  // Succeeds if:
+  // - The pFileName argument is valid.
+  // - The pFileKind argument is valid.
+  // - The pIdent argument is valid.
+  // - Only valid flags have been specified.
+  // - A valid combination of flags has been specified.
+  // - The named file does not exists in the filesystem.
+  // - There is sufficient space in the filesystem to create the file.
+  //
+  // This function will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pFileName or pIdent pointer argument is NULL.
+  //
+  // AAFRESULT_BAD_FLAGS
+  //   - one or more illegal flags were specified.
+  //
+  // AAFRESULT_BAD_FLAG_COMBINATION
+  //   - illegal combination of otherwise valid flags was specified.
+  //
+  // AAFRESULT_FILE_EXISTS
+  //   - The named file already exists in the filesystem.
+  //
+  // AAFRESULT_INSUFFICIENT_SPACE
+  //   - There is insufficient space in the filesystem to create this
+  //     file.
+  // 
+  // STDAPI AAFFileOpenNewModifyEx (
+    //  Null-terminated string containing name of filesystem file to be
+    // opened for modification.
+    //  [in, string] aafCharacter_constptr  pFileName,
+    //
+    //  kind of file to be created
+    //  [in] aafUID_constptr  pFileKind,
+    //
+    //  File open mode flags
+    //  [in] aafUInt32  modeFlags,
+    //
+    //  Identification of the application which is creating this file.
+    //  [in] aafProductIdentification_t *  pIdent,
+    //
+    //  Pointer to buffer to receive pointer to new file.
+    //  [out] IAAFFile ** ppFile);
+
+cpp_quote("STDAPI AAFFileOpenNewModifyEx (")
+cpp_quote("          aafCharacter_constptr  pFileName,")
+cpp_quote("          aafUID_constptr  pFileKind,")
+cpp_quote("          aafUInt32  modeFlags,")
+cpp_quote("          aafProductIdentification_t *  pIdent,")
+cpp_quote("          IAAFFile ** ppFile);")
+cpp_quote("")
+
+
+  //***********************************************************
+  //
   // AAFFileOpenTransient()
   //
   // Creates an object associated with with a transient file,
