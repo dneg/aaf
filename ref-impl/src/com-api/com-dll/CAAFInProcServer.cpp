@@ -35,11 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if defined( OS_MACOS )
-#include <olectl.h> // need ole control header for SELFREG_E_CLASS definition
-#include "aafrdli.h" // Temporary.
-
-#elif defined( OS_WINDOWS )
+#if defined( OS_WINDOWS )
 #include <olectl.h> // need ole control header for SELFREG_E_CLASS definition
 
 #endif
@@ -253,9 +249,6 @@ enum eAAFRegFlag
   AAF_REG_SUB_CLSID = 2,
   AAF_REG_SUB_CLASSNAME = 3,
   AAF_REG_SUB_MODULE = 4
-#if defined( OS_MACOS )
-  ,AAF_REG_SUB_ALIAS = 5
-#endif
 };
 
 
@@ -266,19 +259,11 @@ const AAFRegEntry g_AAFRegEntry[][3] =
     { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_CLASSNAME, OLESTR("%s Class") }
   },
-#if defined( OS_MACOS ) 
-  {  // [1]
-    { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\InprocServer") },
-    { AAF_REG_SUB_SKIP, 0 },
-    { AAF_REG_SUB_MODULE, OLESTR("ALS2:%s") }
-  },
-#else
   {  // [1]
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\InprocServer32") },
     { AAF_REG_SUB_SKIP, 0 }, 
     { AAF_REG_SUB_MODULE, OLESTR("%s") }
   },
-#endif 
   {  // [2] 
     { AAF_REG_SUB_CLSID, OLESTR("CLSID\\%s\\NotInsertable") }, 
     { AAF_REG_SUB_SKIP, 0 }, 
@@ -347,9 +332,6 @@ static int FormatRegBuffer
       pParam = pFileName;
       break;
     
-#if defined( OS_MACOS )
-    case AAF_REG_SUB_ALIAS:
-#endif
     case AAF_REG_SUB_SKIP:
       pBuffer[0] = 0; // set to empty string so that we set the 
       return 0;
@@ -495,66 +477,6 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 	return rc;
 }
 
-#elif defined( OS_MACOS )
-
-HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServerDirectory)
-{
-	HRESULT rc = S_OK;
-	char saveChar;
-	char *pDirSeparator = 0;
-	int pathLen = 0;
-	
-	if (!pServerPath || !pServerDirectory)
-	  return AAFRESULT_NULL_PARAM;
-	
-	*pServerPath = *pServerDirectory = 0;
-	
-	// In the MAC version we store the fragment block pointer in the HINSTANCE member.
-	CFragInitBlockPtr initBlkPtr = static_cast<CFragInitBlockPtr>(hInstance);
-	assert(initBlkPtr);
-	
-	
-	//
-	// Attempt to allocate and intialize the path to this code fragment.
-	int pathBufferSize = sizeof(StrFileName);
-	do
-	{
-		*pServerPath = new char[pathBufferSize];
-		if (!(*pServerPath))
-			return E_OUTOFMEMORY;
-		rc = AAFFSSpecToPath(initBlkPtr->fragLocator.u.onDisk.fileSpec, *pServerPath, pathBufferSize);
-		if (S_OK != rc)
-		{
-			delete [] *pServerPath;
-			*pServerPath = 0;
-		}
-		pathBufferSize += sizeof(StrFileName);
-	} while (AAFRESULT_SMALLBUF == rc);
-	
-	if (S_OK == rc)
-	{
-		pDirSeparator = strrchr(*pServerPath, ':');
-		assert(pDirSeparator);
-		
-		// Copy the directory path.
-		saveChar = pDirSeparator[1];
-		pDirSeparator[1] = 0;
-		pathLen = strlen(*pServerPath);
-		
-		*pServerDirectory = new char[pathLen + 1];
-		if (!(*pServerDirectory))
-		{
-			delete [] *pServerPath;
-			*pServerPath = 0;
-			return E_OUTOFMEMORY;
-		}
-		strcpy(*pServerDirectory, *pServerPath);
-		pDirSeparator[1] = saveChar; // restore saved character
-	}	
-	
-	return rc;
-}
-
 #elif defined( OS_UNIX )
 
 HRESULT AAFGetLibraryInfo(
@@ -594,4 +516,3 @@ HRESULT AAFGetLibraryInfo(HINSTANCE hInstance, char **pServerPath, char **pServe
 }
 
 #endif  // OS_WINDOWS
-

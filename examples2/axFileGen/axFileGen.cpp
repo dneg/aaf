@@ -44,27 +44,6 @@
 
 using namespace std;
 
-#if defined(OS_MACOS)
-
-// Code Warrior 8 does not define isascii.
-// Odd.. ?!?! Should investigate that further or stop using it.
-
-
-inline bool isascii( int c )
-{
-  if ( 0 <= c&0xff && c&0xff <= 0x7f ) {
-	return true;
-  }
-  else {
-	return false;
-  }
-}
-
-#endif
-
-
-//=---------------------------------------------------------------------=
-
 
 //=---------------------------------------------------------------------=
 

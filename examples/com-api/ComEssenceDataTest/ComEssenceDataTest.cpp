@@ -45,12 +45,6 @@
 
 
 
-#if defined( OS_MACOS )
-#include "DataInput.h"
-#endif
-
-
-
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 

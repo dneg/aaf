@@ -32,14 +32,7 @@
  ************************************************************************/
 
   
-#if defined(_MAC) || defined(macintosh)
-#include <initguid.h> // define all of the AAF guids.
 #include "AAF.h"
-#else
-#include "AAF.h"
-
-#endif
-
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "AAFDataDefs.h"

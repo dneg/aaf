@@ -85,32 +85,6 @@
 //   - Nondelegating version of IUnknown
 //
 
-#if defined( OS_MACOS )
-
-// MacOS just had to be different...
-// These DECLARE_INTERFACE macros come from AAFMacSDK/MacOLE/Include/compobj.h
-// The second version (i.e. with __comobject) is currently used, but
-// the entire set are included here for reference.
-// INondelegatingUnknown must be declared *identically* to IUnknown to ensure 
-// their vtable layouts match.  Hence this crud.
-
-#if defined(applec)
-// MPW declaration to force SI vtable construction.
-DECLARE_INTERFACE_(INondelegatingUnknown, SingleObject)
-#elif   defined(__MWERKS__)
-// jjo For testing with CW9 with __comobject compiler path from Andreas Hommel 
-DECLARE_INTERFACE_(INondelegatingUnknown, __comobject)
-#else
-DECLARE_INTERFACE(INondelegatingUnknown)
-#endif
-{
-	BEGIN_INTERFACE
-	STDMETHOD(NondelegatingQueryInterface)(const IID& iid, void** ppv) = 0 ;
-	STDMETHOD_(ULONG, NondelegatingAddRef)() = 0 ;
-	STDMETHOD_(ULONG, NondelegatingRelease)() = 0 ;
-} ;
-
-#else
 
 interface INondelegatingUnknown
 {
@@ -119,7 +93,6 @@ interface INondelegatingUnknown
 	STDMETHOD_(ULONG, NondelegatingRelease)() = 0 ;
 } ;
 
-#endif
 
 ///////////////////////////////////////////////////////////
 //

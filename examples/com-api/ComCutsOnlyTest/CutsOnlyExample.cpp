@@ -42,10 +42,6 @@
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
-#if defined( OS_MACOS )
-#include "DataInput.h"
-#endif
-
 
 // There are differences in the microsoft and other compilers in the "Length" specifier
 // used in printf for 64bit integers.

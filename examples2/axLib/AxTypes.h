@@ -96,7 +96,7 @@ inline bool operator!=( const aafUID_t& uidL, const aafUID_t& uidR )
 bool operator<( const aafUID_t& uidL, const aafUID_t& uidR );
 
 
-#if !(defined(OS_WINDOWS) || defined(OS_MACOS))
+#if !defined(OS_WINDOWS)
 bool operator==( const tagGUID& uidL, const tagGUID& uidR );
 inline bool operator!=( const tagGUID& uidL, const tagGUID& uidR )
 {

@@ -275,7 +275,7 @@ static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isD
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
 	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginPrefix && pData->pluginPrefixSize);
 
-#if defined( OS_MACOS ) || defined( OS_WINDOWS )
+#if defined( OS_WINDOWS )
   //
   // If the current name is not a directory and not equal to the 
   // path this dll (the reference implementation dll) and 
@@ -303,7 +303,7 @@ static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isD
 
 static AAFRDLIRESULT registerSharedPluginsProc(const char* path, const char* name, char isDirectory, void * userData)
 {
-#if defined( OS_MACOS ) || defined( OS_WINDOWS )
+#if defined( OS_WINDOWS )
   AAFRESULT rc = AAFRESULT_SUCCESS;
   AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
   assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginDirectory);

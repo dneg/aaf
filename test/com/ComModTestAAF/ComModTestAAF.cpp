@@ -53,30 +53,6 @@ using namespace std;
 #include <objbase.h>
 #endif
 
-#if defined( OS_MACOS )
-#define _MAC
-
-// Make sure we have defined IID_IUnknown and IID_IClassFactory.
-#include <initguid.h>
-#include <coguid.h>  
-#include "DataInput.h"
-
-#if !defined(CDECL) && defined(_MSC_VER)
-#define CDECL  _cdecl
-#endif // CDECL
-
-#if !defined(FAR)
-#define FAR
-#endif
-
-#include <ole2.h>
-#include "dispatch.h"
-#include "wintypes.h"
-#include <olectl.h>
-
-#endif  // OS_MACOS
-
-
 #include "CAAFModuleTest.h"
 #include "ModuleTest.h"
 

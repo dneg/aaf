@@ -30,10 +30,6 @@
 #include <iostream>
 using namespace std;
 
-#ifdef macintosh
-	#include <console.h>
-#endif 
-
 #include "omPublic.h"
 #include "omMedia.h"
 

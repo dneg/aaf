@@ -34,13 +34,8 @@
 #include <memory>
 
 #if 0
-#if defined( OS_MACOS )
-#include <stdio.h>
-#define TRACE printf( "%s:%d\n", __FILE__, __LINE__ );
-#else
 #include <iostream>
 #define TRACE std::cout << __FILE__ << ":" << __LINE__ << std::endl;
-#endif
 #else
 #define TRACE
 #endif

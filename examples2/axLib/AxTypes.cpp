@@ -197,7 +197,7 @@ bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs )
 }
 #endif
 
-#if !(defined(OS_WINDOWS) || defined(OS_MACOS))
+#if !defined(OS_WINDOWS)
 bool operator==( const tagGUID& uidL, const tagGUID& uidR )
 {
 	return 0 == ::memcmp( &uidL, &uidR, sizeof( tagGUID ) );

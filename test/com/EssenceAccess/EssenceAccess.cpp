@@ -51,10 +51,6 @@
 #include "UtlConsole.h"
 #endif
 
-#if defined( OS_MACOS )
-#include "DataInput.h"
-#endif
-
 // This static variables are here so they can be referenced 
 // throughout the whole program.
 

@@ -41,8 +41,6 @@ using std::ios;
 
 #if defined(OM_OS_WINDOWS)
 #define NEWLINE "\r\n"
-#elif defined(OM_OS_MACOS)
-#define NEWLINE "\r"
 #elif defined(OM_OS_UNIX)
 #define NEWLINE "\n"
 #elif defined(OM_OS_MACOSX)

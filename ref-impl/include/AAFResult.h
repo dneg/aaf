@@ -1,11 +1,6 @@
 #ifndef __AAFResult_h__
 #define __AAFResult_h__
 
-#if ((defined(_MAC) || defined(macintosh)) && ! defined(PPC_DARWIN))
-// Make sure SEVERITY_ERROR and FACILITY_ITF are defined.
-#include <scode.h>
-#endif
-
 //=---------------------------------------------------------------------=
 //
 // $Id$ $Name$

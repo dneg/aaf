@@ -327,23 +327,6 @@ AD_CLASS_BEGIN\
 }
 
 
-#if defined(macintosh) || defined(_MAC)
-inline long InterlockedIncrement(
-  long * pAddend   // pointer to the variable to increment
-)
-{
-  return ++(*pAddend);
-}
-
-inline long InterlockedDecrement(
-  long * pAddend   // pointer to the variable to decrement
-)
-{
-  return --(*pAddend);
-}
-#endif
-
-
 // Increment the object reference count.
 aafUInt32 .this-module::AcquireReference() const
 { // inforce conceptual 'constness'

@@ -22,14 +22,6 @@
 //
 //=---------------------------------------------------------------------=
 
-#if defined(macintosh)
-// Make sure we have defined IID_IUnknown and IID_IClassFactory.
-#include <initguid.h>
-#include <coguid.h>	
-#endif
-
-
-
 #include "AAF.h"
 #include "AAFTypes.h"
 #include "AAFResult.h"
@@ -46,10 +38,6 @@ using namespace std;
 
 #ifndef __AAFSmartPointer_h__
 #include "AAFSmartPointer.h"
-#endif
-
-#if defined( OS_MACOS )
-#include "DataInput.h"
 #endif
 
 #if defined( COMPILER_MWERKS )

@@ -33,12 +33,7 @@
 #include "AAFCOMPlatformTypes.h"
 #endif
 
-#if defined( OS_MACOS )
-  // Include files from ActiveX SDK for the Macintosh
-#  include <compobj.h>
-
-
-#elif defined( OS_WINDOWS )
+#if defined( OS_WINDOWS )
 #  include <unknwn.h>
 #  include <objbase.h>
 

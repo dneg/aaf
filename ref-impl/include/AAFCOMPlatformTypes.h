@@ -34,14 +34,7 @@
 #include "AAFPlatform.h"
 #endif
 
-#if defined( OS_MACOS )
-  // Include file form ActiveX SDK for the Macintosh. Otherwise the 
-  // OLE (2.08, 2.24) interfaces cannot be used since they use standard
-  // window's types and defines...
-  #include <wintypes.h>
-
-
-#elif defined( OS_WINDOWS )
+#if defined( OS_WINDOWS )
   #include <wtypes.h>
 
 

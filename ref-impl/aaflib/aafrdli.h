@@ -25,10 +25,6 @@
 #ifndef __AAFRDLI_H__
 #define __AAFRDLI_H__
 
-#if defined(macintosh) || defined(_MAC)
-#include <Files.h>
-#endif
-
 /* 
  * The AAF Runtime Dynamic (Library) Loader Interface 
  */
@@ -69,30 +65,9 @@ AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, 
 
 AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, void *userData);
 
-#if defined(macintosh) || defined(_MAC)
-// Given just a file name this routine will use GetSharedLibrary() to load the code fragment.
-AAFRDLIRESULT AAFLoadSharedLibrary(const char* name, AAFLibraryHandle* pLibHandle);
-
-// Given a full path to a file this routine will use the file's cfrg resource to load
-// the code fragment.
-AAFRDLIRESULT AAFLoadLibraryFile(const char* name, AAFLibraryHandle* pLibHandle);
-
-// Same as above except that it attempts to load the library from a mac file spec.
-AAFRDLIRESULT AAFFSpLoadLibraryFile(FSSpec *pSpec, AAFLibraryHandle* pLibHandle);
-
-// Given a pathname return the corresponding file spec.
-AAFRDLIRESULT AAFPathToFSSpec(const char* name, FSSpec *pSpec);
-
-// Given a pathname return the corresponding file spec.
-AAFRDLIRESULT AAFFSSpecToPath(const FSSpec *pSpec, char *pathBuffer, int pathBufferSize);
-#endif 
-
-
 
 #ifdef __cplusplus
 }
 #endif
 
 #endif /* __AAFRDLI_H__ */
-
-

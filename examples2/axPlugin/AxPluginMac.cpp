@@ -19,29 +19,3 @@
 //=---------------------------------------------------------------------=
 
 #include <AAFPlatform.h>
-
-#if defined(OS_MACOS)
-
-#include <MacTypes.h> 
-
-// The NullEssenceCodecRegister global constructor is not called
-// when the library loads on Mac (as it is on Irix, Linux, and Windows).
-// When that issue is resolved these init/fini routines can be removed.
-// Note, the project's "PPC Link" settings with also have to change when
-// these init/fini routines are removed.
-
-void CAxNullEssenceCodecInit();
-void CAxNullEssenceCodecFini();
-
-OSErr pascal AxMacLibInit()
-{
-	CAxNullEssenceCodecInit();
-	return noErr;
-}
-
-void pascal AxMacLibFini()
-{
-	CAxNullEssenceCodecFini();
-}
-
-#endif

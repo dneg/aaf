@@ -66,8 +66,6 @@ using namespace std;
 //
 #if defined(_WIN32)
 #define OM_OS_WINDOWS
-#elif defined(_MAC) || defined(macintosh)
-#define OM_OS_MACOS
 #elif defined(__MWERKS__) && defined(__MACH__)
 #define OM_OS_MACOSX
 #elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__) || \
@@ -83,15 +81,8 @@ using namespace std;
 //
 #if defined(OM_OS_WINDOWS)
 #define OM_USE_WINDOWS_SS
-#elif defined(OM_OS_MACOS)
-#define OM_USE_MACINTOSH_SS
-#elif defined(OM_OS_MACOSX)
-#define OM_USE_WRAPPED_MACINTOSH_SS
 #elif defined(OM_OS_UNIX)
 #define OM_USE_REFERENCE_SS
-#elif defined(OM_OS_SOLARIS)
-#warning  "Dump not supported on Solaris"
-
 #else
 #error "Don't know which implementation of structured storage to use."
 #endif
@@ -101,23 +92,6 @@ using namespace std;
 //
 #if defined(OM_USE_WINDOWS_SS)
 #include <objbase.h>
-#elif defined(OM_USE_MACINTOSH_SS)
-#include "macpub.h"
-#include "wintypes.h"
-#include "macdef.h"
-#include "compobj.h"
-#include "storage.h"
-#include "initguid.h"
-#include "coguid.h"
-#elif defined(OM_USE_WRAPPED_MACINTOSH_SS)
-#include "macpub.h"
-#include "wintypes.h"
-#include "macdef.h"
-#include "compobj.h"
-#include "storage.h"
-#include "initguid.h"
-#include "coguid.h"
-#include "SSWrapper.h"
 #elif defined(OM_USE_REFERENCE_SS)
 #include "h/storage.h"
 #endif
@@ -135,16 +109,6 @@ using namespace std;
 typedef wchar_t OMCHAR;
 #else
 typedef char OMCHAR;
-#endif
-
-// Console input for Macintosh (two different methods).
-//
-#if defined(OM_OS_MACOS)
-#if !defined(USE_DATAINPUT)
-#include <console.h>
-#else
-#include "DataInput.h"
-#endif
 #endif
 
 // TRR:2000-JAN-24: Added the following conditional code support
@@ -941,8 +905,6 @@ char* baseName(char* fullName)
   char* result;
 #if defined(OM_OS_WINDOWS)
   const int delimiter = '\\';
-#elif defined(OM_OS_MACOS)
-  const int delimiter = ':';
 #else
   const int delimiter = '/';
 #endif
@@ -4305,11 +4267,6 @@ void exitHandler(void)
 
 int main(int argumentCount, char* argumentVector[])
 {
-#if defined(OM_OS_MACOS)
-#if defined(USECONSOLE)
-  argumentCount = ccommand(&argumentVector); // console window for mac
-#endif
-#endif
   programName = baseName(argumentVector[0]);
   atexit(exitHandler);
   checkSizes();

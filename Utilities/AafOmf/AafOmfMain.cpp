@@ -33,9 +33,6 @@
 #include <iostream>
 using namespace std;
 
-#ifdef macintosh
-	#include "DataInput.h"
-#endif 
 #include "omPublic.h"
 #include "omMedia.h"
 
@@ -70,8 +67,6 @@ static char* baseName(char* fullName)
 	char* result;
 #if defined(WIN32)
 	const int delimiter = '\\';
-#elif defined(_MAC) || defined(macintosh)
-	const int delimiter = ':';
 #else
 	const int delimiter = '/';
 #endif

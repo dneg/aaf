@@ -41,10 +41,6 @@
 #include "AAFTypeDefUIDs.h"
 #include "AAFDataDefs.h"
 
-#if defined( OS_MACOS )
-#include "DataInput.h"
-#endif
-
 typedef IAAFSmartPointer<IAAFClassDef> IAAFClassDefSP;
 typedef IAAFSmartPointer<IAAFDefObject> IAAFDefObjectSP;
 typedef IAAFSmartPointer<IAAFDictionary> IAAFDictionarySP;

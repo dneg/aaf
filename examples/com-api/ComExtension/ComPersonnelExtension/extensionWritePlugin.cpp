@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#if defined( OS_WINDOWS ) || defined( OS_MACOS )
+#if defined( OS_WINDOWS )
 #define AAFPERSONNELEXTENSION_DLLNAME L"AAFPersonnelExtension.dll"
 #elif defined( OS_DARWIN )
 #define AAFPERSONNELEXTENSION_DLLNAME L"libAAFPersonnelExtension.dylib"

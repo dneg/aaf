@@ -80,11 +80,7 @@ class CAxClassFactory : public CAxClassFactoryCounters, public IClassFactory {
 public:
 
 // Schlock required to declare LockServer
-#if defined(OS_MACOS)
-	typedef OLEBOOL LockServerBool_t;
-#else
-	typedef BOOL    LockServerBool_t;
-#endif
+typedef BOOL    LockServerBool_t;
 
 public:
 

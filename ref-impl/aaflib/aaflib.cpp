@@ -39,8 +39,6 @@
 //
 #if defined( OS_WINDOWS )
 #define DEFAULT_AAFDLL_NAME "AAFCOAPI.dll"
-#elif defined( OS_MACOS )
-#define DEFAULT_AAFDLL_NAME "AAFCOAPI.DLL (PPC)"
 #elif defined( OS_DARWIN )
 #define DEFAULT_AAFDLL_NAME "libcom-api.dylib"
 #elif defined( OS_UNIX )

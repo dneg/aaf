@@ -41,8 +41,6 @@
 //
 #if defined(OM_OS_WINDOWS)
 #define OM_USE_WINDOWS_LOADER
-#elif defined(OM_OS_MACOS)
-#define OM_USE_CFM_LOADER
 #elif defined(OM_OS_UNIX) && !defined(__MACH__)
 #define OM_USE_UNIX_LOADER
 #elif defined(OM_OS_MACOSX)
@@ -180,151 +178,6 @@ void OMWindowsDynamicLibrary::unload(void)
       OMUInt32 error = GetLastError();
       omlog << "FreeLibrary() failed - GetLastError() returns"
             << " \"" << error << "\"." << endl;
-    }
-#endif
-    _library = 0;
-  }
-}
-
-#elif defined(OM_USE_CFM_LOADER)
-
-#include <CodeFragments.h>
-
-class OMMacOSDynamicLibrary : public OMDynamicLibrary {
-public:
-  // @access Public members.
-
-    // @cmember Constructor.
-  OMMacOSDynamicLibrary(const wchar_t* name);
-
-    // @cmember Destructor.
-  virtual ~OMMacOSDynamicLibrary(void);
-
-    // @cmember The address of the symbol named <p symbolName> in this
-    //          <c OMDynamicLibrary>.
-  virtual void* findSymbol(const char* symbolName);
-
-protected:
-  // @access Protected members.
-
-    // @cmember Load the library described by this <c OMDynamicLibrary>.
-  virtual bool load(void);
-
-    // @cmember Unload the library described by this <c OMDynamicLibrary>.
-  virtual void unload(void);
-
-private:
-  // @access Private members.
-
-  char* _name;
-  CFragConnectionID _library;
-
-};
-
-  // @mfunc Constructor.
-OMMacOSDynamicLibrary::OMMacOSDynamicLibrary(const wchar_t* name)
-  : _name(convertWideString(name)),
-  _library(0)
-{
-  TRACE("OMMacOSDynamicLibrary::OMMacOSDynamicLibrary");
-  PRECONDITION("Valid library name", validWideString(name));
-
-}
-
-  // @mfunc Destructor.
-OMMacOSDynamicLibrary::~OMMacOSDynamicLibrary(void)
-{
-  TRACE("OMMacOSDynamicLibrary::~OMMacOSDynamicLibrary");
-  PRECONDITION("Library not loaded", _library == 0);
-
-  delete [] _name;
-  _name = 0;
-}
-
-  // @mfunc The address of the symbol named <p symbolName> in this
-  //        <c OMDynamicLibrary>.
-  //   @parm The name of the symbol to find.
-  //   @rdesc The address of the symbol.
-  //          If symbol cannot be found then 0 is returned.
-void* OMMacOSDynamicLibrary::findSymbol(const char* symbolName)
-{
-  TRACE("OMMacOSDynamicLibrary::findSymbol");
-  PRECONDITION("Valid symbol name", validString(symbolName));
-
-  void* result = 0;
-  Str255 pSymbolName;
-  Ptr symbol = 0;
-  CFragSymbolClass symbolClass;
-  CFragConnectionID connectionID = _library;
-
-  copyCToPString(pSymbolName, sizeof(Str255), symbolName);
-  OSErr err = FindSymbol(connectionID, pSymbolName, &symbol, &symbolClass);
-  if (err == noErr) {
-    result = symbol;
-  } else {
-#if defined(OM_DYNAMIC_LIBRARY_DEBUG)
-    omlog << "FindSymbol() failed to find symbol"
-          << " \"" << symbolName << "\""
-          << " - error ="
-          << " \"" << err << "\"." << endl;
-#endif
-    result = 0;
-  }
-
-  return result;
-}
-
-  // @mfunc Load the library described by this <c OMDynamicLibrary>.
-  //   @rdesc True if the library was successfully loaded, false otherwise.
-bool OMMacOSDynamicLibrary::load(void)
-{
-  TRACE("OMMacOSDynamicLibrary::load");
-  PRECONDITION("Library not loaded", _library == 0);
-
-  bool result;
-  CFragArchitecture architectureType = kCompiledCFragArch;
-  CFragLoadOptions loadFlags = kPrivateCFragCopy;
-  CFragConnectionID connectionID = 0;
-  Ptr mainAddress = 0;
-  Str255 pErrorName;
-  Str63 pLibraryName;
-
-  copyCToPString(pLibraryName, sizeof(Str63), _name);
-  OSErr err = GetSharedLibrary(pLibraryName,
-                               architectureType,
-                               loadFlags,
-                               &connectionID,
-                               &mainAddress,
-                               pErrorName);
-  if (err == noErr) {
-    result = true;
-    _library = connectionID;
-  } else {
-#if defined(OM_DYNAMIC_LIBRARY_DEBUG)
-    omlog << "GetSharedLibrary() failed - error ="
-          << " \"" << err << "\"." << endl;
-    char errorName[256];
-    copyPToCString(errorName, sizeof(errorName), pErrorName);
-    omlog << "LoadLibrary() failed to load"
-          << " \"" << errorName << "\"." << endl;
-#endif
-    result = false;
-    _library = 0;
-  }
-  return result;
-}
-
-  // @mfunc Unload the library described by this <c OMDynamicLibrary>.
-void OMMacOSDynamicLibrary::unload(void)
-{
-  TRACE("OMMacOSDynamicLibrary::unload");
-
-  if (_library != 0) {
-    OSErr err = CloseConnection(&_library);
-#if defined(OM_DYNAMIC_LIBRARY_DEBUG)
-    if (err != noErr) {
-      omlog << "GetSharedLibrary() failed - error ="
-            << " \"" << err << "\"." << endl;
     }
 #endif
     _library = 0;
@@ -624,8 +477,6 @@ OMDynamicLibrary* OMDynamicLibrary::loadLibrary(const wchar_t* libraryName)
   OMDynamicLibrary* result = 0;
 #if defined(OM_USE_WINDOWS_LOADER)
   result = new OMWindowsDynamicLibrary(libraryName);
-#elif defined(OM_USE_CFM_LOADER)
-  result = new OMMacOSDynamicLibrary(libraryName);
 #elif defined(OM_USE_UNIX_LOADER)
   result = new OMUnixDynamicLibrary(libraryName);
 #elif defined(OM_USE_CFBUNDLE_LOADER)

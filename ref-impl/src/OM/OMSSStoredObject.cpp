@@ -3252,7 +3252,7 @@ static void checkStatus(HRESULT status)
   }
 }
 
-#if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
+#if defined(OM_WINDOWS_SS)
 
 // Simple class to ensure COM initialization/uninitialization.
 

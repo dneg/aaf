@@ -126,9 +126,7 @@ static void GetDateTime(aafTimeStamp_t *ts)
 #define PRODUCT_NAME		L"AAFDictionary Test"
 #define TEST_VERSION		L"TEST VERSION"
 
-#if defined( OS_MACOS )
-#define PLATFORM_NAME		L"MacOS"
-#elif defined( OS_WINDOWS )
+#if defined( OS_WINDOWS )
 #define PLATFORM_NAME		L"Win32"
 #elif defined( OS_UNIX )
 #define PLATFORM_NAME		L"Unix"

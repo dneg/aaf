@@ -49,11 +49,6 @@
 
 #include "AAFTypes.h"
 
-#if defined( OS_MACOS )
-#include <OSUtils.h>
-#include <events.h>
-#endif
-
 #if defined (OS_UNIX)
   #include <sys/time.h>
   #include <unistd.h>
@@ -378,11 +373,6 @@ aafUInt32 aafGetTickCount()
 #if defined( OS_WINDOWS )
 
     ticks = (aafUInt32)GetTickCount();
-
-
-#elif defined( OS_MACOS )
-
-    ticks = (aafUInt32)TickCount();
 
 #elif defined( OS_UNIX )
 

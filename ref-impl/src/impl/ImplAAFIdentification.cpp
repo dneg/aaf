@@ -68,8 +68,6 @@ ImplAAFIdentification::ImplAAFIdentification():
   
 #if defined( OS_WINDOWS )
   _platform = L"Win32";
-#elif defined( OS_MACOS )
-  _platform = L"MacOS";
 #elif defined( OS_UNIX )
   _platform = L"Unix";
 #else

@@ -37,10 +37,6 @@
 
 #include "CAAFBuiltinDefs.h"
 
-#if defined( OS_MACOS )
-#include "DataInput.h"
-#endif
-
 static const aafMobID_t TEST_MobID[5] = {
 
 //{060c2b340205110101001000-13-00-00-00-{fcd55620-9bca-11d4-9f7f-080036210804}}

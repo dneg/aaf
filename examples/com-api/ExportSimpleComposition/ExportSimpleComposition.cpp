@@ -32,10 +32,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#if defined(macintosh) || defined(_MAC)
-#include "DataInput.h"
-#endif
-
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"

@@ -21,21 +21,4 @@
 //
 //=---------------------------------------------------------------------=
 
-#if defined( OS_MACOS )
-
-// This will get the IID_IUnknown definition (amoung others).
-// FIXME - There is probably a better place for this than here.
-#include <initguid.h>
-#include <coguid.h>
-
-// Include this to avoid polluting code with the conditional include
-// below.  Application is still responsible for linking with
-// AAFMacSDK/DevUils/DataInput.cpp and add the include path for DataInput.h
-// 
-// **** DataInput.h redefines main() !!! ****
-
-#include <DataInput.h>
-
-#endif
-
 #endif

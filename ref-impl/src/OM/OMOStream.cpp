@@ -197,7 +197,7 @@ static void debugPrint(const char* string)
   OutputDebugString(s);
 }
 
-#elif defined(OM_OS_MACOS) || defined(OM_OS_MACOSX)
+#elif defined(OM_OS_MACOSX)
 
 #include <MacTypes.h>
 

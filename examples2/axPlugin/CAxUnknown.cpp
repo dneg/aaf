@@ -19,14 +19,6 @@
 //=---------------------------------------------------------------------=
 #include <AAFCOMPlatform.h>
 
-#if defined(OS_MACOS)
-// Must include these at least once where IID_IClassFactory and IID_IUnknown
-// are used  to ensure the linker sucks in the definitions
-// of those constants.
-#include <initguid.h>
-#include <coguid.h>
-#endif
-
 // Credits:
 //
 // The CAxUnknown implementation is a slightly modified version

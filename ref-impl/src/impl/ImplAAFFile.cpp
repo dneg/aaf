@@ -1543,11 +1543,6 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF-M",
                                                        L"AAF Microsoft SS"));
 
-#elif defined( OS_MACOS )
-// No SS implementation available since Microsoft 512 (via MacOLE) has been
-// deleted
-#error No SS implementation available on platform
-
 #elif defined( OS_DARWIN ) || defined( OS_IRIX ) || defined( OS_LINUX ) || defined( OS_SOLARIS )
 
 #ifdef USE_LIBGSF

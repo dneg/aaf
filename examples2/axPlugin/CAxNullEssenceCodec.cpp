@@ -94,26 +94,6 @@ const aafUID_t CAX_AAF_CODEC_MANUFACTURER_ID =
 
 } // End of anonymous name space.
 
-#if defined(OS_MACOS)
-
-// FIXME - See comments 
-
-NullEssenceCodecRegister *_instance = 0;
-void CAxNullEssenceCodecInit()
-{
-	if ( !_instance ) {
-		_instance = new NullEssenceCodecRegister;
-	}
-}
-
-void CAxNullEssenceCodecFini()
-{
-	if ( _instance ) {
-		delete _instance;
-	}
-}
-#endif
-
 
 //=---------------------------------------------------------------------=
 

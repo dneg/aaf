@@ -27,10 +27,6 @@
 #endif
 
 
-#if defined(macintosh)
-#include <CursorCtl.h>
-#endif
-
 #include <string.h>
 
 
@@ -208,18 +204,6 @@ void TextStream::Append
   _pData[_cachedLen] = c;
   _cachedLen++;
   _pData[_cachedLen] = '\0';
-  
-  
-#if defined(macintosh)
-  static long int counter = 0;
-  if (counter++ % 1024 == 0)
-  {
-    // Release time to the operating system (pre-MacOS X).
-    SpinCursor(-1);
-  }
-#endif
-  
-  
 }
 
 
@@ -359,15 +343,5 @@ void TextStream::dump (FILE* fp) const
   while (tmp.Consume (c))
 	{
 	  fputc (c, fp);
-	  
-#if defined(macintosh)
-      static long int counter = 0;
-      if (counter++ % 256 == 0)
-      {
-        // Release time to the operating system (pre-MacOS X).
-        SpinCursor(1);
-      }
-#endif
-
 	}
 }

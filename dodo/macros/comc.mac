@@ -3127,10 +3127,6 @@ HRESULT C.this-module::%01
 #include "OMExceptions.h"
 
 #include <assert.h>
-
-#if defined(_MAC)
-#pragma export on
-#endif // #if defined(_MAC)
 #endm
 
 
@@ -3138,9 +3134,6 @@ HRESULT C.this-module::%01
 #c End of the module definitions
 #c
 #startm AD_MODULE_END 00
-#if defined(_MAC)
-#pragma export off
-#endif // #if defined(_MAC)
 #endm
 
 
