@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Mon Mar 13 18:03:25 EST 2000
-// by user bedell on system JBEDELLPC.
+// This file was generated on Thu Mar 16 15:30:17 EST 2000
+// by user cfernand on system CFERNANDES2.
 //
 // Key to macros.
 //
@@ -2869,33 +2869,6 @@ AAF_CLASS(TaggedValue,
     true,
     TaggedValue)
 AAF_CLASS_END(TaggedValue)
-AAF_CLASS_SEPARATOR()
-
-// PluggableCode
-//
-AAF_CLASS(PluggableCode,
-  AAF_LITERAL_AUID(0x06500000,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  InterchangeObject,
-  true)
-  AAF_PROPERTY(PluginDefinitionID,
-    AAF_LITERAL_AUID(0x06500100,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x5101,
-    AAF_TYPE(AUID),
-    true,
-    PluggableCode)
-  AAF_PROPERTY(Code,
-    AAF_LITERAL_AUID(0x06500200,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x5102,
-    AAF_TYPE(DataValue),
-    false,
-    PluggableCode)
-AAF_CLASS_END(PluggableCode)
 AAF_CLASS_SEPARATOR()
 
 // TypeDefinitionInteger
