@@ -38,6 +38,8 @@ class ImplAAFDataDef;
 class ImplAAFInterpolationDef;
 class ImplAAFOperationDef;
 class ImplAAFPluginDef;
+class ImplAAFKLVDataDefinition;
+class ImplAAFTaggedValueDefinition;
 class ImplAAFTypeDef;
 class ImplAAFTypeDefEnum;
 class ImplAAFTypeDefRecord;
@@ -49,6 +51,8 @@ typedef ImplAAFEnumerator<ImplAAFContainerDef>		ImplEnumAAFContainerDefs;
 typedef ImplAAFEnumerator<ImplAAFDataDef>			ImplEnumAAFDataDefs;
 typedef ImplAAFEnumerator<ImplAAFInterpolationDef>	ImplEnumAAFInterpolationDefs;
 typedef ImplAAFEnumerator<ImplAAFPluginDef>			ImplEnumAAFPluginDefs;
+typedef ImplAAFEnumerator<ImplAAFKLVDataDefinition>			ImplEnumAAFKLVDataDefs;
+typedef ImplAAFEnumerator<ImplAAFTaggedValueDefinition>		ImplEnumAAFTaggedValueDefs;
 typedef ImplAAFEnumerator<ImplAAFTypeDef>			ImplEnumAAFTypeDefs;
 typedef ImplAAFEnumerator<ImplAAFOperationDef>		ImplEnumAAFOperationDefs;
 
@@ -517,6 +521,158 @@ public:
     CountPluginDefs
         // @parm [out, retval] Total number of plugin definition objects
         (aafUInt32 * pResult);
+
+
+  //***********************************************************
+  // METHOD NAME: RegisterKLVDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | RegisterKLVDataDef |
+  // Add the KLVData definition object to the header's list of definitions.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  RegisterKLVDataDef (
+    // @parm [in] AAFKLVDataDefinition | pDef | plugin definition object
+    ImplAAFKLVDataDefinition * pDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupKLVDataDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupKLVDataDef |
+  // Return the KLVData descriptor object with the given id.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  LookupKLVDataDef (
+    // @parm [in, ref] aafUID_constref | parameterId | Parameter Unique ID
+    aafUID_constref  parameterId,
+
+    // @parm [out,retval] AAFKLVDataDefinition | ppDef | KLVData descriptor object
+    ImplAAFKLVDataDefinition ** ppDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetKLVDataDefs()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | GetKLVDataDefs |
+  // Return an enumerator for all KLVData descriptors.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetKLVDataDefs (
+    // @parm [out,retval] EnumAAFKLVDataDefs | ppEnum | Definition Enumeration
+    ImplEnumAAFKLVDataDefs ** ppEnum
+  );
+
+  //***********************************************************
+  // METHOD NAME: CountKLVDataDefs()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | CountKLVDataDefs |
+  // Writes the number of KLVData definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  CountKLVDataDefs (
+    // @parm [out, retval] aafUInt32 * | pResult | Total number of KLVData definition objects
+    aafUInt32 *  pResult
+  );
+
+  //***********************************************************
+  // METHOD NAME: RegisterTaggedValueDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | RegisterTaggedValueDef |
+  // Add the tagged value definition object to the header's list of definitions.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  RegisterTaggedValueDef (
+    // @parm [in] AAFTaggedValueDefinition | pDef | tagged value definition Object
+    ImplAAFTaggedValueDefinition * pDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: LookupTaggedValueDef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | LookupTaggedValueDef |
+  // Return the tagged value descriptor object with the given id.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  LookupTaggedValueDef (
+    // @parm [in, ref] aafUID_constref | parameterId | Parameter Unique ID
+    aafUID_constref  parameterId,
+
+    // @parm [out,retval] AAFTaggedValueDefinition | ppDef | tagged value descriptor object
+    ImplAAFTaggedValueDefinition ** ppDef
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetTaggedValueDefs()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | GetTaggedValueDefs |
+  // Return an enumerator for all tagged value descriptors.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetTaggedValueDefs (
+    // @parm [out,retval] EnumAAFTaggedValueDefs | ppEnum | Definition Enumeration
+    ImplEnumAAFTaggedValueDefs ** ppEnum
+  );
+
+  //***********************************************************
+  // METHOD NAME: CountTaggedValueDefs()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDictionary2 | CountTaggedValueDefs |
+  // Writes the number of tagged value definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  CountTaggedValueDefs (
+    // @parm [out, retval] aafUInt32 * | pResult | Total number of tagged value definition objects
+    aafUInt32 *  pResult
+  );
+
 
 
 public:

@@ -40,6 +40,8 @@
 #include "ImplEnumAAFContainerDefs.h"
 #include "ImplEnumAAFInterpolationDefs.h"
 #include "ImplEnumAAFPluginDefs.h"
+#include "ImplEnumAAFKLVDataDefs.h"
+#include "ImplEnumAAFTaggedValueDefs.h"
 #include "AAFTypeDefUIDs.h"
 #include "ImplAAFBaseClassFactory.h"
 #include "ImplAAFBuiltinClasses.h"
@@ -1765,6 +1767,57 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_NULL_PARAM;
   *pResult = _pluginDefinitions.count();
   return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterKLVDataDef (ImplAAFKLVDataDefinition * /*pDef*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupKLVDataDef (aafUID_constref  /*parameterId*/,
+                           ImplAAFKLVDataDefinition ** /*ppDef*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::GetKLVDataDefs (ImplEnumAAFKLVDataDefs ** /*ppEnum*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::CountKLVDataDefs (aafUInt32 *  /*pResult*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterTaggedValueDef (ImplAAFTaggedValueDefinition * /*pDef*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupTaggedValueDef (aafUID_constref  /*parameterId*/,
+                           ImplAAFTaggedValueDefinition ** /*ppDef*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::GetTaggedValueDefs (ImplEnumAAFTaggedValueDefs ** /*ppEnum*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::CountTaggedValueDefs (aafUInt32 *  /*pResult*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
