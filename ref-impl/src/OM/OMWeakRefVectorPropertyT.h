@@ -190,6 +190,9 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
   ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
   _targetTag = tag;
+  ASSERT("Consistent target tag and name",
+  compareWideString(_targetName,
+                    file()->referencedProperties()->valueAt(_targetTag)) == 0);
 
   // Iterate over the index restoring the elements of the vector.
   //

@@ -191,6 +191,9 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
   ASSERT("Valid set index", IMPLIES(entries == 0, setIndex == 0));
   ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
   _targetTag = tag;
+  ASSERT("Consistent target tag and name",
+  compareWideString(_targetName,
+                    file()->referencedProperties()->valueAt(_targetTag)) == 0);
 
   // Iterate over the index restoring the elements of the set.
   // Since the index entries are stored on disk in order of their
