@@ -6,7 +6,6 @@ AAFMob\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
 /******************************************\
@@ -248,8 +247,6 @@ Clones the specified Source Mob\, and optionally all dependent Mobs\, to an
   // another file and clone it.
   // Both AAF files must be open before you call this function and both must have
   // the same AAF Version number.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_OVERRIDE(.method-Delete)
   // @commDeletes the entire Mob structure \(the MOBJ object and all its contained objects\)
