@@ -11,8 +11,6 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_INCLUDE(AAFTypes)
-
 
 AD_CLASS_UUID(B1A213AC, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
