@@ -39,39 +39,39 @@ extern          "C"
 
 typedef enum
 {
-	kOmTableDupError,
-	kOmTableDupReplace,
-	kOmTableDupAddDup
-} omTableDuplicate_t;
+	kAafTableDupError,
+	kAafTableDupReplace,
+	kAafTableDupAddDup
+} aafTableDuplicate_t;
 
 typedef enum
 {
 	kTableSrchAny,
 	kTableSrchMatch,
 	kTableSrchUnique
-} omTableSearch_t;
+} aafTableSearch_t;
 
-typedef aafInt32	(*omTblMapProc)( void *key);
-typedef aafBool	(*omTblCompareProc)( void *key1, void *key2);
-typedef void	(*omTblDisposeProc)(void *valuePtr);
+typedef aafInt32	(*aafTblMapProc)( void *key);
+typedef aafBool	(*aafTblCompareProc)( void *key1, void *key2);
+typedef void	(*aafTblDisposeProc)(void *valuePtr);
 
-typedef struct omTable omTable_t;
+typedef struct aafTable aafTable_t;
 typedef struct aafTableLink tableLink_t;
 
 typedef struct
 {
 	aafInt32				cookie;		/* Private */
-	omTable_t			*table;		/* Private */
+	aafTable_t			*table;		/* Private */
 	aafInt32				curHash;	/* Private */
 	tableLink_t			*nextEntry;	/* Private */
-	omTableSearch_t		srch;		/* Private */
+	aafTableSearch_t		srch;		/* Private */
 	void				*srchKey;	/* Private */
 	/* */
 	void				*key;		/* OUT */
 	aafInt32				keylen;		/* OUT */
 	void				*valuePtr;	/* OUT */
 	aafInt32				valueLen;	/* OUT */
-} omTableIterate_t;
+} aafTableIterate_t;
 
 /************************************************************************
  *
@@ -87,75 +87,75 @@ typedef struct
 aafErr_t NewTable(
 			AAFFile * file,
 			aafInt16 initKeySize,
-			omTblMapProc myMap,
-			omTblCompareProc myCompare,
+			aafTblMapProc myMap,
+			aafTblCompareProc myCompare,
 			aafInt32 numBuckets,
-			omTable_t **resultPtr);
+			aafTable_t **resultPtr);
 			
 aafErr_t SetTableDispose(
-			omTable_t *table,
-			omTblDisposeProc proc);
+			aafTable_t *table,
+			aafTblDisposeProc proc);
 			
 aafErr_t TableAddValuePtr(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key,
 			aafInt16 keyLen,
 			void *value,
-			omTableDuplicate_t dup);
+			aafTableDuplicate_t dup);
 			
 aafErr_t TableAddValueBlock(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key,
 			short keyLen,
 			void *value,
 			aafInt32 valueLen,
-			omTableDuplicate_t dup);
+			aafTableDuplicate_t dup);
 			
 aafErr_t TableRemove(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key);
 			
 aafBool TableIncludesKey(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key);
 
 void *TableLookupPtr(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key);
 			
 aafErr_t TableLookupBlock(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key,
 			aafInt32 valueLen,
 			void *valuePtr,
 			aafBool *found);
 			
 aafErr_t TableFirstEntry(
-			omTable_t *table,
-			omTableIterate_t *iter,
+			aafTable_t *table,
+			aafTableIterate_t *iter,
 			aafBool *found);
 			
 aafErr_t TableFirstEntryMatching(
-			omTable_t *table,
-			omTableIterate_t *iter,
+			aafTable_t *table,
+			aafTableIterate_t *iter,
 			void *key,
 			aafBool *found);
 			
 aafErr_t TableFirstEntryUnique(
-			omTable_t *table,
-			omTableIterate_t *iter,
+			aafTable_t *table,
+			aafTableIterate_t *iter,
 			aafBool *found);
 			
 aafErr_t TableNextEntry(
-			omTableIterate_t *iter,
+			aafTableIterate_t *iter,
 			aafBool *found);
 
 aafInt32 TableNumEntriesMatching(
-			omTable_t *table,
+			aafTable_t *table,
 			void *key);
 			
 aafErr_t TableSearchDataValue(
-			omTable_t *table,
+			aafTable_t *table,
 			aafInt32 valueLen,
 			void *value,
 			aafInt32 keyLen,
@@ -163,13 +163,13 @@ aafErr_t TableSearchDataValue(
 			aafBool *found);
 			
 aafErr_t TableDispose(
-			omTable_t *table);
+			aafTable_t *table);
 			
 aafErr_t TableDisposeAll(
-			omTable_t *table);
+			aafTable_t *table);
 			
 aafErr_t TableDisposeItems(
-			omTable_t *table);
+			aafTable_t *table);
 
 
 /************************************************************************
@@ -181,22 +181,22 @@ aafErr_t TableDisposeItems(
 aafErr_t NewStringTable(
 			AAFFile * file,
 			aafBool caseSensistive,
-			omTblCompareProc myCompare,
+			aafTblCompareProc myCompare,
 			aafInt32 numBuckets,
-			omTable_t **resultPtr);
+			aafTable_t **resultPtr);
 			
 aafErr_t TableAddString(
-			omTable_t *table,
+			aafTable_t *table,
 			char *key,
 			void *value,
-			omTableDuplicate_t dup);
+			aafTableDuplicate_t dup);
 			
 aafErr_t TableAddStringBlock(
-			omTable_t *table,
+			aafTable_t *table,
 			char *key,
 			void *value,
 			aafInt32 valueLen,
-			omTableDuplicate_t dup);
+			aafTableDuplicate_t dup);
 
 /************************************************************************
  *
@@ -207,24 +207,24 @@ aafErr_t TableAddStringBlock(
 aafErr_t NewUIDTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result);
+			aafTable_t **result);
 			
 aafErr_t TableAddUID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUID_t key,
 			void *value,
-			omTableDuplicate_t dup);
+			aafTableDuplicate_t dup);
 			
 aafErr_t TableRemoveUID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUID_t key);
 			
 aafBool TableIncludesUID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUID_t key);
 			
 void *TableUIDLookupPtr(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUID_t key);
 
 /************************************************************************
@@ -237,16 +237,16 @@ void *TableUIDLookupPtr(
 aafErr_t NewClassIDTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result);
+			aafTable_t **result);
 
 aafErr_t TableAddClassID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafClassIDPtr_t key,
 			void *value,
 			aafInt32 valueLen);
 			
 aafErr_t TableClassIDLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafClassIDPtr_t key,
 			aafInt32 valueLen,
 			void *valuePtr,
@@ -261,16 +261,16 @@ aafErr_t TableClassIDLookup(
 aafErr_t NewTrackIDTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result);
+			aafTable_t **result);
 			
 aafErr_t TableAddTrackID(
-			omTable_t *table,
+			aafTable_t *table,
 			aafTrackID_t key,
 			void *value,
 			aafInt32 valueLen);
 			
 aafErr_t TableTrackIDLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafTrackID_t key,
 			void *value,
 			aafInt32 valueLen,
@@ -286,17 +286,17 @@ aafErr_t TableTrackIDLookup(
 aafErr_t NewPropertyTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result);
+			aafTable_t **result);
 			
 aafErr_t TableAddProperty(
-			omTable_t *table,
+			aafTable_t *table,
 			aafProperty_t key,
 			void *value, 
 			aafInt32 valueLen,
-			omTableDuplicate_t dup);
+			aafTableDuplicate_t dup);
 			
 aafErr_t TablePropertyLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafProperty_t key,
 			aafInt32 valueLen,
 			void *valuePtr,
@@ -313,16 +313,16 @@ aafErr_t TablePropertyLookup(
 aafErr_t NewTypeTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result);
+			aafTable_t **result);
 			
 aafErr_t TableAddType(
-			omTable_t *table,
+			aafTable_t *table,
 			aafType_t key,
 			void *value,
 			aafInt32 valueLen);
 			
 aafErr_t TableTypeLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafType_t key,
 			aafInt32 valueLen,
 			void *valuePtr,
@@ -339,20 +339,20 @@ aafErr_t TableTypeLookup(
 aafErr_t NewDefTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
-			omTable_t **result);
+			aafTable_t **result);
 			
 aafErr_t TableAddDef(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUniqueName_t key,
 			void *value);
 			
 void *TableDefLookup(
-			omTable_t *table,
+			aafTable_t *table,
 			aafUniqueName_t key);
 #endif
 
 #ifdef AAF_SELF_TEST
-void testOmTable(void);
+void testaafTable(void);
 #endif
 
 #if PORT_LANG_CPLUSPLUS
