@@ -11,6 +11,7 @@
 #include "ImplAAFSourceMob.h"
 #endif
 
+#include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFEssenceData_h__
 #include "ImplAAFEssenceData.h"
