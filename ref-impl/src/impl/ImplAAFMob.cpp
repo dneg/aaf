@@ -217,7 +217,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if (index >= count)
 	  return AAFRESULT_BADINDEX;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+	_slots.removeAt(index);
+	return AAFRESULT_SUCCESS;
 }
 
 //****************
@@ -270,7 +271,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if (NULL == pSlot)
 		return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	_slots.removeValue(pSlot);
+	return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -758,10 +760,11 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMob::RemoveComment
         (ImplAAFTaggedValue * comment)
 {
-  if (! comment)
-	return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	if (! comment)
+		return AAFRESULT_NULL_PARAM;
+	
+	_userComments.removeValue(comment);
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT STDMETHODCALLTYPE

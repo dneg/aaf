@@ -53,7 +53,11 @@ static const aafMobID_t MOBTestID =
 { 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01,
 	 0x01, 0x01, 0x04, 0x02, 0x13, 0x00, 0x00, 0x00,
 	0x21f2083c, 0xb260, 0x11d3, { 0xbf, 0xfe, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
-
+// {81831638-EDF4-11d3-A353-009027DFCA6A}
+static const aafMobID_t MOBTestID2 = 
+{ 0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01,
+	 0x01, 0x01, 0x04, 0x02, 0x13, 0x00, 0x00, 0x00,
+	0x81831638, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 
 // Cross-platform utility to delete a file.
@@ -88,11 +92,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFHeader *        pHeader = NULL;
   IAAFDictionary*  pDictionary = NULL;
   IAAFMob						*pMob = NULL;
+  IAAFMob						*pMob2 = NULL;
   IAAFTimelineMobSlot *newSlot = NULL;
   IAAFSegment		*seg = NULL;
   IAAFSourceClip	*sclp = NULL;
   aafProductIdentification_t	ProductInfo;
   HRESULT						hr = S_OK;
+  aafNumSlots_t					numMobs;
 
   ProductInfo.companyName = L"AAF Developers Desk";
   ProductInfo.productName = L"AAFMob Test";
@@ -155,6 +161,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 												   0,
 												   &newSlot));
 
+		  if(test == 4)
+			  pMob->RemoveSlotAt(4);
+
 		  newSlot->Release();
 		  newSlot = NULL;
 
@@ -167,6 +176,24 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // Add the mob to the file.
 	  checkResult(pHeader->AddMob(pMob));
+
+	  // Create another Mob, check mob count, then delete and recheck count
+	  checkResult(defs.cdMob()->
+				  CreateInstance(IID_IAAFMob, 
+								 (IUnknown **)&pMob2));
+
+	  checkResult(pMob2->SetMobID(MOBTestID2));
+	  checkResult(pMob2->SetName(mobName));
+	  
+	  checkResult(pMob2->SetCreateTime(creationTimeStamp));
+	  checkResult(pMob2->SetModTime(modificationTimeStamp));
+	  // Add the mob to the file.
+	  checkResult(pHeader->AddMob(pMob2));
+	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
+	  checkExpression(numMobs == 2, AAFRESULT_TEST_FAILED);
+	  checkResult(pHeader->RemoveMob(pMob2));
+	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
+	  checkExpression(numMobs == 1, AAFRESULT_TEST_FAILED);
 	}
   catch (HRESULT& rResult)
 	{
@@ -296,7 +323,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkExpression (wcscmp(mobName, name) == 0, AAFRESULT_TEST_FAILED);
 
 		  checkResult(aMob->CountSlots (&numSlots));
-		  checkExpression(5 == numSlots, AAFRESULT_TEST_FAILED);
+		  checkExpression(4 == numSlots, AAFRESULT_TEST_FAILED);
 
 		  checkResult(aMob->GetSlots(&slotIter));
 
@@ -376,6 +403,7 @@ extern "C" HRESULT CAAFMob_test()
 		cout << "     EnumAAFAllMobSlots - needs unit test" << endl; 
 		cout << "     AppendComment - needs unit test" << endl; 
 		cout << "     GetNumComments" << endl; 
+		cout << "     RemoveComment" << endl; 
 		cout << "     EnumAAFAllMobComments - needs unit test" << endl; 
 		cout << "     AppendNewTimelineSlot" << endl; 
 		cout << "     OffsetToMobTimecode - needs unit test" << endl; 
