@@ -14,7 +14,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFControlPoint \
 	AAFDataDef \
 	AAFDOSLocator \
-	AAFEffectDef \
 	AAFEvent \
 	AAFEventMobSlot \
 	AAFGPITrigger \
@@ -31,8 +30,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFMIDIData \
 	AAFMIDIDescriptor \
 	AAFNestedScope\
-	AAFParameter \
-	AAFParameterDef \
 	AAFPluggableCode \
 	AAFPulldown \
 	AAFReferenceValue \
@@ -61,11 +58,9 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFControlPoints \
 	EnumAAFDataDefs \
 	EnumAAFDefs \
-	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
 	EnumAAFMobComments \
 	EnumAAFObjects \
-	EnumAAFParameterDefs \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
 	EnumAAFReferenceValues \
@@ -93,6 +88,7 @@ HUMAN_TYPED_IMPL = \
 	AAFDefObject \
 	AAFDictionary \
 	AAFEdgecode \
+	AAFEffectDef \
 	AAFEssenceAccess \
 	AAFEssenceData \
 	AAFEssenceDescriptor \
@@ -112,6 +108,8 @@ HUMAN_TYPED_IMPL = \
 	AAFMobSlot \
 	AAFNetworkLocator \
 	AAFObject \
+	AAFParameter \
+	AAFParameterDef \
 	AAFProperty \
 	AAFPropertyDef \
 	AAFPropertyValue \
@@ -143,11 +141,13 @@ HUMAN_TYPED_IMPL = \
 	AAFTypeDefVariableArray \
 	AAFWAVEDescriptor \
 	EnumAAFComponents \
+	EnumAAFEffectDefs \
 	EnumAAFEssenceData \
 	EnumAAFLoadedPlugins \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
 	EnumAAFMobs \
+	EnumAAFParameterDefs \
 	EnumAAFProperties \
 	EnumAAFPluggableDefs \
 	EnumAAFPluginDescriptors \
