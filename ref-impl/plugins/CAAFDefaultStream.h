@@ -1,7 +1,7 @@
 //@doc
 //@class    AAFEssenceStream | Implementation class for AAFEssenceStream
-#ifndef __CAAFEssenceStream_h__
-#define __CAAFEssenceStream_h__
+#ifndef __CAAFDefaultStream_h__
+#define __CAAFDefaultStream_h__
 
 /******************************************\
 *                                          *
@@ -25,13 +25,15 @@
 #include "CAAFRoot.h"
 #endif
 
-//
-// Forward declaration
-//
-class ImplAAFEssenceStream;
+#ifndef __CAAFUnknown_h__
+#include "CAAFUnknown.h"
+#endif
 
+#include "AAFPlugin.h"
 
-class CAAFEssenceStream
+EXTERN_C const CLSID CLSID_AAFDefaultStream;
+
+class CAAFDefaultStream
   : public IAAFEssenceStream,
     public CAAFRoot
 {
@@ -41,8 +43,8 @@ protected:
   //
   // Constructor/destructor
   //
-  CAAFEssenceStream (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
-  virtual ~CAAFEssenceStream ();
+  CAAFDefaultStream (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  virtual ~CAAFDefaultStream ();
 
 public:
 
