@@ -75,16 +75,16 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(SetNewProps(length,
 						  pDict->GetBuiltinDefs()->ddEdgecode()));
 		_start = edgecode.startFrame;
-		if (edgecode.filmKind < kFtNull || edgecode.filmKind > kFt65MM)
+		if (edgecode.filmKind < kAAFFtNull || edgecode.filmKind > kAAFFt65MM)
 			return AAFRESULT_INVALID_FILMTYPE;
 		else
 			_filmType = edgecode.filmKind;
 		
-		if (edgecode.codeFormat == kEtNull || 
-			edgecode.codeFormat == kEtKeycode ||
-			edgecode.codeFormat == kEtEdgenum4 ||
-			edgecode.codeFormat == kEtEdgenum5 ||
-			edgecode.codeFormat == kEtHeaderSize)
+		if (edgecode.codeFormat == kAAFEtNull || 
+			edgecode.codeFormat == kAAFEtKeycode ||
+			edgecode.codeFormat == kAAFEtEdgenum4 ||
+			edgecode.codeFormat == kAAFEtEdgenum5 ||
+			edgecode.codeFormat == kAAFEtHeaderSize)
 
 			_edgeType = edgecode.codeFormat;
 		else

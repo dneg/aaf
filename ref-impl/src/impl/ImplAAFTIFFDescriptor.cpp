@@ -52,8 +52,8 @@ _summary(PID_TIFFDescriptor_Summary,	"Summary")
 	_persistentProperties.put(_jpegTableID.address());
 	_persistentProperties.put(_summary.address());
 
-	_isUniform = AAFFalse;
-	_isContiguous = AAFFalse;
+	_isUniform = kAAFFalse;
+	_isContiguous = kAAFFalse;
 	_leadingLines = 0;
 	_trailingLines = 0;
 	_jpegTableID = 0;

@@ -93,14 +93,14 @@ AAFRESULT STDMETHODCALLTYPE
 			aafError = AAFRESULT_PROP_NOT_PRESENT;
 		else
 		{
-			if (_defaultFadeType == kFadeNone)
-				pResult->valid = AAFFalse;
+			if (_defaultFadeType == kAAFFadeNone)
+				pResult->valid = kAAFFalse;
 			else
 			{
 				pResult->fadeLength = _defaultFadeLen;
 				pResult->fadeType = _defaultFadeType;
 				pResult->fadeEditUnit = _defaultFadeEditUnit;
-				pResult->valid = AAFTrue;
+				pResult->valid = kAAFTrue;
 			}
 		}
 	}
@@ -118,8 +118,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (fadeLength >= 0) 
 	{
-		if (fadeType >= kFadeNone ||
-			fadeType <= kFadeLinearPower)
+		if (fadeType >= kAAFFadeNone ||
+			fadeType <= kAAFFadeLinearPower)
 		{
 			_defaultFadeLen = fadeLength;
 			_defaultFadeType = fadeType;
@@ -142,7 +142,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pMobKind == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	*pMobKind = kCompMob;
+	*pMobKind = kAAFCompMob;
 
 	return AAFRESULT_SUCCESS;
 }

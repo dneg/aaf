@@ -80,7 +80,7 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	// Initialize Required properties
 	_storedHeight = 0;
 	_storedWidth = 0;
-	_frameLayout = kFullFrame;
+	_frameLayout = kAAFFullFrame;
 	_imageAspectRatio = zero;
 	videoLineMap[0] = 0;
 	videoLineMap[1] = 1;
@@ -187,14 +187,14 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDigitalImageDescriptor::SetAlphaTransparency (aafAlphaTransparency_t AlphaTransparency)
 {
-	if ((AlphaTransparency != kMinValueTransparent) && (AlphaTransparency != kMaxValueTransparent))
+	if ((AlphaTransparency != kAAFMinValueTransparent) && (AlphaTransparency != kAAFMaxValueTransparent))
 	{
 		return AAFRESULT_INVALID_TRANSPARENCY;
 	}
 
 	aafRational_t transparency;
 
-	if (AlphaTransparency == kMinValueTransparent)
+	if (AlphaTransparency == kAAFMinValueTransparent)
 	{
 		transparency.numerator = 0;
 		transparency.denominator = 1;
@@ -364,11 +364,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (transparency.numerator == 0)
 	{
-		*pAlphaTransparency = kMinValueTransparent;
+		*pAlphaTransparency = kAAFMinValueTransparent;
 	}
 	else
 	{
-		*pAlphaTransparency = kMaxValueTransparent;
+		*pAlphaTransparency = kAAFMaxValueTransparent;
 	}
 
 	return AAFRESULT_SUCCESS;

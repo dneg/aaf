@@ -261,6 +261,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetOwningMobKind (aafMobKind_t *pMobKind)
 {
-	*pMobKind = kFilmMob;
+	*pMobKind = kAAFFilmMob;
 	return(AAFRESULT_SUCCESS);
 }
