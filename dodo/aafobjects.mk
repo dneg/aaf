@@ -11,7 +11,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFAttribute \
 	AAFClassDef \
 	AAFDictionary \
-	AAFComponent \
 	AAFCompositionMob \
 	AAFConstValue \
 	AAFControlCodeDef \
@@ -93,6 +92,7 @@ HUMAN_TYPED_IMPL = \
 	AAFHeader \
 	AAFIdentification \
 	AAFObject \
+	AAFComponent \
 	AAFMob  \
 	AAFSession
 
