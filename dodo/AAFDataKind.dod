@@ -14,14 +14,6 @@ AAFObject\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-*                                          *
-\******************************************/
-
 /*************************************************************************
  * 
  * @class AAFDataKind | This class encapsulates the definition and  
