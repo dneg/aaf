@@ -59,7 +59,6 @@
 #define AUID_AAFContainerDefinition AUID_AAFContainerDef
 #define AUID_AAFPluggableDefinition AUID_AAFPluggableDef
 
-
 // Include the inside-out macro files that invokes the AAF_CLASS macros.
 #include "AAFMetaDictionary.h"
 

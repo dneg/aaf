@@ -11,7 +11,6 @@ AD_IDL(//
 // addition to methods which all clients can use\, it provides methods
 // for direct property access which should not be used unless the
 // client programmer is aware of the liabilities.
-//
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_INIT)
 AD_FORWARD_DECLARATION(AAFClassDef)
@@ -33,7 +32,6 @@ AD_XMETHOD1(SetGeneration,
   AD_STD_COMMENT_METH_STUB
   // Succeeds if all of the following are true:
   // - the given pGeneration pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pGeneration\))
 
@@ -52,7 +50,6 @@ AD_XMETHOD1(GetGeneration,
   AD_STD_COMMENT_METH_STUB
   // Succeeds if all of the following are true:
   // - the given pGeneration pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pGeneration\))
 
@@ -95,7 +92,6 @@ AD_XMETHOD1(GetDefinition,
   // pitfalls to be avoided is that tests for equality will not
   // reflect inheritance.  This becomes important if an unknown
   // non-builtin \(that is\, user defined\) object class ID is obtained.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppClassDef\))
 
@@ -122,7 +118,6 @@ AD_XMETHOD1(GetProperties,
   // as that which is performed in all other named property Get/Set
   // methods\) is not done here.  Users must use this method at their
   // own risk.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
@@ -142,7 +137,6 @@ AD_XMETHOD1(CountProperties,
   // as that which is performed in all other named property Get/Set
   // methods\) is not done here.  Users must use this method at their
   // own risk.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
@@ -168,9 +162,9 @@ AD_XMETHOD2(GetPropertyValue,
   // as that which is performed in all other named property Get/Set
   // methods\) is not done here.  Users must use this method at their
   // own risk.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPropDef or ppPropVal\)
+  //
   // AAFRESULT_ILLEGAL_PROPERTY
   //   - named property illegal for this object's class.
   //
@@ -200,9 +194,9 @@ AD_XMETHOD2(SetPropertyValue,
   // as that which is performed in all other named property Get/Set
   // methods\) is not done here.  Users must use this method at their
   // own risk.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPropDef or ppPropVal\)
+  //
   // AAFRESULT_ILLEGAL_PROPERTY
   //   - named property illegal for this object's class.
   //
@@ -231,9 +225,9 @@ AD_XMETHOD2(IsPropertyPresent,
   // as that which is performed in all other named property Get/Set
   // methods\) is not done here.  Users must use this method at their
   // own risk.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\))
+  //
   // AAFRESULT_ILLEGAL_PROPERTY
   //   - named property illegal for this object's class.)
 AD_XCLASS_END(Abstract, StoredObjectBase)

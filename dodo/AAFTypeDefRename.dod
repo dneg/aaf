@@ -6,6 +6,7 @@ AAFTypeDefRename\
 AAFTypeDef\
 #endm
 #c
+#import ./AAFTypeDef.exp
 AD_HEAD
 AD_IDL(//
 // This interface is used to define Renamed types \(analogous to C
@@ -202,4 +203,7 @@ AD_XMETHOD2(GetValue,
   //
   // AAFRESULT_NULL_PARAM
   //   - pInPropVal or ppOutPropVal is NULL.)
+
+
+AD_OVERRIDE(.method-GetTypeCategory)
 AD_XCLASS_END(Concrete, StoredObject)

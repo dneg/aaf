@@ -6,11 +6,11 @@ AAFTypeDefObjectRef\
 AAFTypeDef\
 #endm
 #c
+#import ./AAFTypeDef.exp
 AD_HEAD
 AD_IDL(//
 // This interface is used to define Object references \(either strong
 // or weak\) used in AAF persistent objects.
-//
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_STUB)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
@@ -49,7 +49,6 @@ AD_XMETHOD3(Initialize,
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
   // - pObjType is a valid pointer.
-  // 
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pObjType\))
@@ -75,7 +74,6 @@ AD_XMETHOD2(CreateValue,
   // Succeeds if:
   // - The pObj pointer is valid.
   // - The ppPropVal pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pObj or ppPropVal\))
@@ -95,7 +93,6 @@ AD_XMETHOD1(GetObjectType,
   // Succeeds if:
   // - this object has been Initialize\(\)d.
   // - The ppObjType pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppObjType\))
@@ -121,7 +118,6 @@ AD_XMETHOD2(GetObject,
   // Succeeds if:
   // - The pPropVal pointer is valid.
   // - The ppObject pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or ppObject\))
@@ -147,8 +143,10 @@ AD_XMETHOD2(SetObject,
   // Succeeds if:
   // - The pPropVal pointer is valid.
   // - The ppObject pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or ppObject\))
+
+
+AD_OVERRIDE(.method-GetTypeCategory)
 AD_XCLASS_END(Abstract, Transient)

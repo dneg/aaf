@@ -6,12 +6,12 @@ AAFTypeDefEnum\
 AAFTypeDef\
 #endm
 #c
+#import ./AAFTypeDef.exp
 AD_HEAD
 AD_IDL(//
 // This interface is used to define enumerated types used in AAF
 // persistent objects.  Enumerated types are assumed to be based on
 // 32-bit integers.
-//
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_STUB)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
@@ -19,50 +19,59 @@ AD_CLASS_UUID(307e9e62, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(307e9e64, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD4(Initialize,
-			 [in],
-			 objPass,
-			 aafUID_t *,
-			 pID,
-			 auid to be used to identify this type,
+AD_XMETHOD5(Initialize,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this type,
 
-			 [in],
-			 objIn,
-			 AAFTypeDef,
-			 pType,
-			 Type of values in this enumeration,
+			[in],
+			objIn,
+			AAFTypeDef,
+			pType,
+			Type of values in this enumeration,
 
-			 [in\, size_is\(numElems\)],
-			 objPass,
-			 aafMemPtr_t,
-			 pElements,
-       array of element name/value pairs to be represented in this
-	// enumerated type,
+			[in\, size_is\(numElems\)],
+			objPass,
+			aafInt32*,
+			pElementValues,
+       array of element values to be represented in this enumerated
+    // type,
 
-			 [in],
-			 objPass,
-			 aafUInt32,
-			 numElems,
-			 number of elements in pElements array,
+			[in\, size_is\(numElems\)],
+			objPass,
+			aafString_t *,
+			pElementNames,
+       array of element names to be represented in this enumerated
+    // type,
+
+			[in],
+			objPass,
+			aafUInt32,
+			numElems,
+			number of members in pElementValues and pElementNames arrays,
 
      Initializes this type def to be identified by the given guid\, to
   // be implemented as the given data type\, and to contain the given
   // elements \(names and values\).  It is considered an error if
-  // multiple elements have the same name or the same value.
+  // multiple elements have the same name or the same value.  The
+  // values and names are given in parallel arrays\, each of which has
+  // numElements elements.
   //
   // This method must be called after allocation\, and before
   // any other method can be called.
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
-  // - pElemNames is a valid pointer.
-  // - pElemValues is a valid pointer.
+  // - pElementNames is a valid pointer.
+  // - pElementValues is a valid pointer.
   // - no duplicate names or values are found.
   // - types of all elements match pType
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pElemNames or pElemValues\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pElementNames or pElementValues\)
+  //
   // AAFRESULT_BAD_PARAM
   //   - one or more elements' type doesn't match pType.
   //
@@ -83,7 +92,6 @@ AD_XMETHOD1(GetElementType,
   // Succeeds if:
   // - Initialize\(\) has already been called on this object.
   // - The ppTypeDef pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
@@ -101,16 +109,129 @@ AD_XMETHOD1(CountElements,
   // Succeeds if:
   // - Initialize\(\) has already been called on this object.
   // - pCount is a valid pointer.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
 
-AD_XMETHOD3(GetElementName,
+AD_XMETHOD2(GetElementValues,
+			[out\, size_is\(numElems\)],
+			objPass,
+			aafUInt32 *,
+			pValues,
+			array to hold values,
+
+			[in],
+			objPass,
+			aafUInt32,
+			numElems,
+       number of elements in the pValues array,
+
+     Gets the values of all elements in this enumerated type.  The
+  // values are written into the client-allocated pValues array.  
+  //
+  // The number of elements in the pNames array is zero if it is NULL\,
+  // or is numElements otherwise.  If pNames is NULL\, no names will be
+  // written.  If pNames is not NULL\, it points to a user-allocated
+  // array of pointers to strings; each string pointer in that array
+  // points to memory allocated by the caller.  The required size of
+  // each string may be determined by calling
+  // GetElementNameLengths\(\).
+  //
+  // The number of elements in the pValues array is zero if it is
+  // NULL\, or is numElements otherwise. if pValues is NULL\, no values
+  // will be written.
+  //
+  // Succeeds if:
+  // - pNameLengths is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT)
+
+
+AD_XMETHOD3(GetNameFromValue,
 			[in],
 			objIn,
 			AAFPropertyValue,
+			pValue,
+			value of element to get,
+
+			[out\, size_is\(bufSize\)\, string],
+			objPass,
+			wchar_t *,
+			pName,
+			buffer into which the element name is written,
+
+			[in],
+			objPass,
+			aafUInt32,
+			bufSize,
+			The size of the pName buffer\, in bytes,
+
+     Writes the human-legible tag associated with the given value in
+  // this enumerated type.  The name is written\, with a trailing null
+  // character\, into the pName buffer.  The buffer is allocated by
+  // the caller.  The size of the buffer is given by bufSize.
+  // 
+  // Caller may call GetNameBufLenFromValue\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // - the pName pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // - the integer value is associated with an element of this
+  //   enumerated type.
+  // 
+  // If this method fails nothing will be written to
+  // *pName.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pValue or pName\)
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - the given value is not associated with an element of
+  //     this type.)
+
+
+AD_XMETHOD2(GetNameBufLenFromValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pValue,
+			value of element to get,
+
+			[out],
+			objPass,
+			aafUInt32 *,
+			pLen,
+			required buffer length\, in bytes,
+
+     Returns the length of buffer required for the GetNameFromValue\(\)
+  // method\, in bytes.  The value is placed into the location
+  // specified by pLen. The value will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // - the pLen pointer is valid.
+  // - the value is associated with an element of this enumerated
+  //   type.
+  //
+  // If this method fails nothing will be written to *pLen.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pValue or pLen\)
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - the given value is not associated with an element of this
+  //     type.)
+
+
+AD_XMETHOD3(GetNameFromInteger,
+			[in],
+			objPass,
+			aafInt32,
 			value,
 			value of element to get,
 
@@ -122,7 +243,7 @@ AD_XMETHOD3(GetElementName,
 
 			[in],
 			objPass,
-			aafInt32,
+			aafUInt32,
 			bufSize,
 			The size of the pName buffer\, in bytes,
 
@@ -131,7 +252,7 @@ AD_XMETHOD3(GetElementName,
   // character\, into the pName buffer.  The buffer is allocated by
   // the caller.  The size of the buffer is given by bufSize.
   // 
-  // Caller may call GetElementNameBufLen\(\) to determine the
+  // Caller may call GetNameBufLenFromInteger\(\) to determine the
   // required buffer size.
   // 
   // Succeeds if all of the following are true:
@@ -142,9 +263,8 @@ AD_XMETHOD3(GetElementName,
   // 
   // If this method fails nothing will be written to
   // *pName.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName\)
   //
   // AAFRESULT_SMALLBUF
   //   - bufSize indicates the buffer is too small to hold the string.
@@ -154,20 +274,20 @@ AD_XMETHOD3(GetElementName,
   //     this type.)
 
 
-AD_XMETHOD2(GetElementNameBufLen,
+AD_XMETHOD2(GetNameBufLenFromInteger,
 			[in],
-			objIn,
-			AAFPropertyValue,
-			pValue,
+			objPass,
+			aafInt32,
+			value,
 			value of element to get,
 
 			[out],
 			objPass,
-			aafInt32 *,
+			aafUInt32 *,
 			pLen,
 			required buffer length\, in bytes,
 
-     Returns the length of buffer required for the GetElementName\(\)
+     Returns the length of buffer required for the GetNameFromInteger\(\)
   // method\, in bytes.  The value is placed into the location
   // specified by pLen. The value will include space required for the
   // trailing null character.
@@ -178,16 +298,15 @@ AD_XMETHOD2(GetElementNameBufLen,
   //   type.
   //
   // If this method fails nothing will be written to *pLen.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pLen\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pLen\)
   //
   // AAFRESULT_BAD_PARAM
   //   - the given value is not associated with an element of this
   //     type.)
 
 
-AD_XMETHOD2(GetValueAsValue,
+AD_XMETHOD2(GetIntegerValue,
 			[in],
 			objIn,
 			AAFPropertyValue,
@@ -195,24 +314,23 @@ AD_XMETHOD2(GetValueAsValue,
 			property value to read,
 
 			[out],
-			objOut,
-			AAFPropertyValue,
-			ppPropValOut,
+			objPass,
+			aafInt32 *,
+			pValueOut,
 			value of the enum represented by the given input property value,
 
      Gets the value from the given property value and writes it as an
-  // property value ppPropValOut.
+  // integer into *pValueOut.
   //
   // Succeeds if:
   // - The pPropValIn pointer is valid.
-  // - The ppPropValOut pointer is valid.
-  //
+  // - The pValueOut pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropValIn or ppPropValOut\))
 
 
-AD_XMETHOD2(SetValueFromValue,
+AD_XMETHOD2(SetIntegerValue,
 			[in],
 			objIn,
 			AAFPropertyValue,
@@ -220,23 +338,24 @@ AD_XMETHOD2(SetValueFromValue,
 			property value to set,
 
 			[in],
-			objIn,
-			AAFPropertyValue,
-			pPropValIn,
+			objPass,
+			aafInt32,
+			valueIn,
 			new value of the enum represented by the given property value,
 
-     Sets the given property to the value given in pPropValIn.
-  // Requires that the pPropValIn property be of the same type as
-  // returned by GetElementType\(\).
+     Sets the given property to the value given in pValueIn.
   //
   // Succeeds if:
   // - The pPropValToSet pointer is valid.
-  // - The ppPropValIn pointer is valid.
-  // - pPropValIn's type matches GetElementType\(\).
-  //
+  // - valueIn is a correct value for this enumerated type.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropValToSet or pPropValIn\))
-  // AAFRESULT_BAD_TYPE
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPropValToSet\)
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - valueIn is not a correct value for this enumerated type.
   //   - pPropValIn's type doesn't match GetElementType\(\))
+
+
+AD_OVERRIDE(.method-GetTypeCategory)
 AD_XCLASS_END(Concrete, StoredObject)
