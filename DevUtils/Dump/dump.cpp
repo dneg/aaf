@@ -3641,7 +3641,7 @@ void printHeader(StructuredStorageHeader& header)
        << " bytes)"
        << endl;
 
-  cout << "  Mini-sector cutoff size  = "
+  cout << "  Mini-sector cutoff size   = "
        << dec
        << header._ulMiniSectorCutoff
        << endl;
