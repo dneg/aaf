@@ -26,6 +26,7 @@
 #include "AAFResult.h"
 
 #include <iostream.h>
+#include <iomanip.h>
 #include <assert.h>
 
 
