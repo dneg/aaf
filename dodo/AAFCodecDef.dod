@@ -20,6 +20,9 @@ AD_IDL(//
 //     operation.
 //)
 
+AD_FORWARD_DECLARATION(AAFClassDef)
+AD_FORWARD_DECLARATION(EnumAAFCodecFlavours)
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -127,6 +130,61 @@ AD_XMETHOD1(AreThereFlavours,
   // AAFRESULT_NULL_PARAM
   //   - if Result is null.)
 
+
+AD_XMETHOD1(GetFileDescriptorClass,
+			[out],
+			objOut,
+			AAFClassDef,
+			ppClass,
+			Returned file descriptor class object,
+			Places the file descriptor class object associated with this codec into the
+  // *ppClass argument.  If none exists yet\, NULL is placed into the
+  // *ppClass argument.
+  //
+  // The returned class object\, if it exists\, is
+  // AddRef\(\)ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppClass pointer is valid.
+  // - A valid file descriptor class exists.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppClass is null.)
+
+
+AD_XMETHOD1(SetFileDescriptorClass,
+			[in],
+			objIn,
+			AAFClassDef,
+			pClass,
+			File descriptor class object,
+			Sets the file descriptor class associated with this codec to be the given one.
+  //
+  // Succeeds if all of the following are true:
+  // - the pClass pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pClass is null.)
 
 
 AD_XMETHOD1(EnumCodecFlavours,
