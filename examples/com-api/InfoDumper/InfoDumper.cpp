@@ -34,6 +34,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
 #include "AAFPropertyDefs.h"
+#include "AAFFileMode.h"
 #include <assert.h>
 #include <iostream>
 #include <iomanip>
@@ -75,6 +76,7 @@ typedef struct _dumpFlags
   bool showSMPTE;
   bool showEssence;
   bool identifybyname;
+  bool eagerLoad;
   unsigned long maxCount;
   char *showOnlyClasses;
 } dumpFlags_t;
@@ -2633,7 +2635,13 @@ static bool dumpFile (aafCharacter * pwFileName,
 	IAAFDictionarySP pDict;
 	HRESULT          hr;
 	int indent=0;
-	hr = AAFFileOpenExistingRead (pwFileName, 0, &pFile);
+
+	// eagerLoad support
+	aafUInt32 mode = 0;
+	if (dumpFlags.eagerLoad)
+		mode |= AAF_FILE_MODE_EAGER_LOADING;
+	hr = AAFFileOpenExistingRead (pwFileName, mode, &pFile);
+
 	if (! SUCCEEDED (hr))
 	{
 	  if (hr==AAFRESULT_NOT_AAF_FILE)
@@ -2764,6 +2772,7 @@ static void usage (const char * progname)
 	cerr << endl;
 	cerr << "Where option is:" << endl;
 	cerr << "  [-o <output-filename>    ]      Specifies output filename (default stdout)" << endl;
+	cerr << "  [-[no]eagerLoad          ]      Use eager loading mode(default=no)" << endl;
 	cerr << "  [-[no]dict               ]      Displays the dictionary (default=no)" << endl;
 	cerr << "  [-[no]meta               ]      Displays the metadictionary (default=no)" << endl;
 	cerr << "  [-[no]allheader          ]      Displays all Header properties (default=no)"<< endl;
@@ -2804,6 +2813,7 @@ int main(int argc, char* argv[])
 	dumpFlags.maxCount=79;
 	dumpFlags.showOnlyClasses=NULL; 
 	dumpFlags.identifybyname=true;
+	dumpFlags.eagerLoad=false;
 	
 
 	// Process command line args
@@ -2885,6 +2895,12 @@ int main(int argc, char* argv[])
 		} else if (!strcmp("-h", argv[comArg]))
 		{
 		  usage (argv[0]);
+		} else if (!strcmp("-eagerLoad", argv[comArg]) && (comArg < (argc-1)))
+		{
+			dumpFlags.eagerLoad = true;
+		} else if (!strcmp("-noeagerLoad", argv[comArg]) && (comArg < (argc-1)))
+		{
+			dumpFlags.eagerLoad = false;
 		} else
 		{
 			cerr << "Unprocessed command argument: " << argv[comArg] << endl;
