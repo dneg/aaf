@@ -196,6 +196,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::GetLocators (ImplEnumAAFLocators **ppEnum)
 {
+	if (ppEnum == NULL) return AAFRESULT_NULL_PARAM;
+
 	ImplEnumAAFLocators		*theEnum = (ImplEnumAAFLocators *)CreateImpl (CLSID_EnumAAFLocators);
 		
 	XPROTECT()
