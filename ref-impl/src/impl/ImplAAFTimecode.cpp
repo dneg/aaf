@@ -35,9 +35,13 @@
 #include "AAFDefUIDs.h"
 
 ImplAAFTimecode::ImplAAFTimecode ():
-_timecode(	PID_TIMECODE_TC,	"timecode")
+_start(	PID_Timecode_Start,	"Position"),
+_FPS(	PID_Timecode_FPS,	"FPS"),
+_drop(	PID_Timecode_Drop,	"Drop")
 {
-	_persistentProperties.put(_timecode.address());
+	_persistentProperties.put(_start.address());
+	_persistentProperties.put(_FPS.address());
+	_persistentProperties.put(_drop.address());
 }
 
 ImplAAFTimecode::~ImplAAFTimecode ()
@@ -52,12 +56,26 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(SetNewProps(length, &tcddef));
 		if (timecode == NULL)
 		{
 			return AAFRESULT_NULL_PARAM;
 		}
-		_timecode = *timecode;
+		if ((timecode->drop != kTcDrop) && (timecode->drop != kTcNonDrop))
+		{
+			return AAFRESULT_INVALID_TIMECODE;
+		}
+
+		CHECK(SetNewProps(length, &tcddef));
+		_start = timecode->startFrame;
+		if (timecode->drop == kTcDrop)
+		{
+		  _drop = AAFTrue;
+		}
+		else
+		{
+		  _drop = AAFFalse;
+		}
+		_FPS = timecode->fps;
 	}
 	XEXCEPT
 	XEND;
@@ -75,7 +93,16 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	}
 
-	*timecode = _timecode;
+	timecode->startFrame = _start;
+	if (_drop)
+	{
+		timecode->drop = kTcDrop;
+	}
+	else
+	{
+		timecode->drop = kTcNonDrop;
+	}
+	timecode->fps = _FPS;
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -88,7 +115,21 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
-	_timecode = *timecode;
+	if ((timecode->drop != kTcDrop) && (timecode->drop != kTcNonDrop))
+	{
+		return AAFRESULT_INVALID_TIMECODE;
+	}
+	_start = timecode->startFrame;
+	if (timecode->drop == kTcDrop)
+	{
+		_drop = AAFTrue;
+	}
+	else
+	{
+		_drop = AAFFalse;
+	}
+	_FPS = timecode->fps;
+
 	return(AAFRESULT_SUCCESS);
 }
 
