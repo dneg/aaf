@@ -91,7 +91,6 @@
 #include "ImplAAFSmartPointer.h"
 typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 
-
 extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
 extern "C" const aafClassID_t CLSID_EnumAAFTaggedValues;
 extern "C" const aafClassID_t CLSID_AAFFindSourceInfo;
@@ -955,126 +954,69 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::OffsetToMobTimecode (ImplAAFSegment *tcSlotID,
-                           aafPosition_t *offset,
-                           aafTimecode_t *result)
+    ImplAAFMob::OffsetToMobTimecode (ImplAAFSegment *pTcSeg,
+				     aafPosition_t *offset,
+				     aafTimecode_t *result)
 {
-//	ImplAAFMobSlot		*slot = NULL;
-//	ImplAAFPulldown		*pdwn = NULL;
-//	ImplAAFSegment		*pdwnInput = NULL;
-//	ImplEnumAAFMobSlots *iter = NULL;
-//	ImplAAFSegment		*seg = NULL;
-//	aafTimecode_t		timecode;
-//	aafBool				reverse = kAAFFalse;
-//	aafUInt32			frameOffset;
-//	aafUID_t			dataDefID;
-//	aafPosition_t		newStart;
-//	aafInt32			start32;
-	
-
   // Validate input pointers...
-  if (NULL == tcSlotID || NULL == offset || NULL == result)
+  if (NULL == offset || NULL == result)
     return (AAFRESULT_NULL_PARAM);
-  
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-#if 0
-	memset(result, 0, sizeof(aafTimecode_t));
-	memset(&timecode, 0, sizeof(aafTimecode_t));
-	result->startFrame = 0;
-	
-	XPROTECT()
-	{
-		
-		/* Find timecode slot in mob */
-		//!!!			iterHdl = new AAFIterate(_file);
-		CHECK(GetSlots (&iter));
-		while(iter->NextOne(&slot) == AAFRESULT_SUCCESS)
-		{
-			CHECK(slot->GetSegment(&seg));
-			
-			/* Verify that it's a timecode slot by looking at the
-			* datakind of the slot segment. 
-			*/
-			ImplAAFDataDefSP pDataDef;
-			CHECK(seg->GetDataDef(&pDataDef));
-			CHECK(pDataDef->GetAUID(&dataDefID));
-			
-			if (!EqualAUID(&dataDefID, &DDEF_Timecode))
-			{
-				seg->ReleaseReference();
-				seg = NULL;
-			}
-		}
-		if (seg == NULL)
-		{
-			RAISE(AAFRESULT_TIMECODE_NOT_FOUND);
-		}
-		
-		CHECK(seg->SegmentOffsetToTC(offset, &timecode))
-			
-			
-			/* Assume found at this point, so finish generating result */
-			/* If this is a Film Composer file that has a mask or pulldown object
-			* in the timecode slot, pass the position through the mask/pulldown
-			* before adding it to the start timecode.
-			*/
-			if (pdwn)
-			{
-				reverse = kAAFFalse;
-				CHECK(pdwn->MapOffset(*offset, reverse, &newStart, NULL));
-				CHECK(TruncInt64toInt32(newStart, &start32));
-				timecode.startFrame += start32;
-			}
-			else
-			{
-				CHECK(TruncInt64toUInt32(*offset, &frameOffset));
-				timecode.startFrame += frameOffset;
-			}
-			
-			*result = timecode;
-			if(slot != NULL)
-			{
-				slot->ReleaseReference();
-				slot = NULL;
-			}
-			if(pdwn != NULL)
-			{
-				pdwn->ReleaseReference();
-				pdwn = NULL;
-			}
-			if(pdwnInput != NULL)
-			{
-				pdwnInput->ReleaseReference();
-				pdwnInput = NULL;
-			}
-			if(iter != NULL)
-			{
-				iter->ReleaseReference();
-				iter = NULL;
-			}
-	} /* XPROTECT */
-	
-	XEXCEPT
-	{
-		if(iter != NULL)
-		  iter->ReleaseReference();
-		iter = 0;
-		if(slot != NULL)
-		  slot->ReleaseReference();
-		slot = 0;
-		if(pdwn != NULL)
-		  pdwn->ReleaseReference();
-		pdwn = 0;
-		if(pdwnInput != NULL)
-		  pdwnInput->ReleaseReference();
-		pdwnInput = 0;
-	}
-	XEND;
-	
-	return(AAFRESULT_SUCCESS);
-#endif
-}
 
+  XPROTECT()
+  {
+    ImplAAFSmartPointer<ImplAAFSegment>      spSeg;
+    ImplAAFSmartPointer<ImplAAFDataDef>      spDataDef;
+
+    // If pTCSeg is null, then we must search for the first slot that
+    // has a segment with data definition of type DDEF_Timecode.
+    
+    if ( pTcSeg ) {
+      *(&spSeg) = pTcSeg;
+
+      aafUID_t dataDefID;
+      CHECK(spSeg->GetDataDef(&spDataDef));
+      CHECK(spDataDef->GetAUID(&dataDefID));
+      if (!EqualAUID(&dataDefID, &DDEF_Timecode)) {
+		RAISE(AAFRESULT_TIMECODE_NOT_FOUND);
+	  }
+    }
+    else {
+	  ImplAAFSmartPointer<ImplEnumAAFMobSlots> spSlotIter;
+	  ImplAAFSmartPointer<ImplAAFMobSlot>      spSlot;
+      bool found = false;
+
+      CHECK(GetSlots (&spSlotIter));
+      while(spSlotIter->NextOne(&spSlot) == AAFRESULT_SUCCESS) {
+		CHECK(spSlot->GetSegment(&spSeg));
+	
+		// Verify that it's a timecode slot by looking at the
+		// data definition of the slot segment. 
+		aafUID_t dataDefID;
+		CHECK(spSeg->GetDataDef(&spDataDef));
+		CHECK(spDataDef->GetAUID(&dataDefID));
+	
+		if (EqualAUID(&dataDefID, &DDEF_Timecode)) {
+			found = true;
+			break;
+		}
+      }
+      
+      if (!found) {
+		RAISE(AAFRESULT_TIMECODE_NOT_FOUND);
+      }
+    }
+
+	// The segment is responsible for computing the timecode result.
+    CHECK(spSeg->SegmentOffsetToTC(offset, result))
+
+  } /* XPROTECT */
+  XEXCEPT
+  {
+  }
+  XEND;
+  
+  return AAFRESULT_SUCCESS;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::FindSlotBySlotID (aafSlotID_t	slotID,
