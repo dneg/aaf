@@ -143,5 +143,5 @@ AAFRESULT STDMETHODCALLTYPE
 
 extern "C" const aafClassID_t CLSID_AAFSourceClip;
 
-OMDEFINE_STORABLE(AAFSourceClip, CLSID_AAFSourceClip);
+OMDEFINE_STORABLE(ImplAAFSourceClip, CLSID_AAFSourceClip);
 
