@@ -57,7 +57,6 @@ namespace OMF2
 #include "EffectTranslate.h"
 #endif
 #include "Aaf2Omf.h"
-#include "AAFDomainUtils.h"
 #include "aafCodecdefs.h"
 #include "aafclassdefuids.h"
 //#include "omcAvJPED.h"
@@ -137,6 +136,7 @@ HRESULT Aaf2Omf::ConvertFile ()
 //			rc = ConvertAAFHeader();
 //			if (SUCCEEDED(rc))
 			{
+				pAAF->SetDictionary(pDictionary);
 				rc = AAFFileRead();
 			}
 		}
@@ -2736,3 +2736,7 @@ void Aaf2Omf::ConvertValueBuf(aafUID_t &typeDefID,
 }
 // OTher idea: Upon hitting ANY of the Avid private params (or level) find a VVAL
 // and assume that all VVALs containing AvidPrivate have identical times
+HRESULT Aaf2Omf::ConvertObjectProps(IAAFObject* pObj, OMF2::omfObject_t	pOMFObject)
+{
+	return AAFRESULT_SUCCESS;
+}

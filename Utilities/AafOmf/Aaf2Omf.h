@@ -54,7 +54,7 @@ protected:
 	void CloseInputFile( void );
 	void CloseOutputFile(void );
 	HRESULT AAFFileRead( void );
-	HRESULT ConvertCompositionMob(IAAFCompositionMob* pCompMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
+	virtual HRESULT ConvertCompositionMob(IAAFCompositionMob* pCompMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
 	HRESULT ConvertMasterMob(IAAFMasterMob* pMasterMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
 	HRESULT ConvertSourceMob(IAAFSourceMob* pSourceMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
 	HRESULT TraverseMob(IAAFMob* pMob, OMF2::omfMobObj_t* pOMFMob);
@@ -76,6 +76,7 @@ protected:
 								aafDataBuffer_t srcValue, aafUInt32 srcValueLen,
 								aafDataBuffer_t *destValue, aafUInt32 *destValueLen,
 								bool *didAllocateNew);
+	virtual HRESULT ConvertObjectProps(IAAFObject* pObj, OMF2::omfObject_t pOMFObject);
 protected:
 
     OMF2::omfSessionHdl_t	OMFSession;
