@@ -468,6 +468,7 @@ template class ParamMap< aafUID_t, _OperationDefTag >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafIncMedia_t, aafIncMedia_e >::ParamMap()
 {
 	_map[ L"kAAFNoIncludeMedia" ] = kAAFNoIncludeMedia;
@@ -481,6 +482,7 @@ template class ParamMap< aafIncMedia_t, aafIncMedia_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafDepend_t, aafDepend_e >::ParamMap()
 {
 	_map[ L"kAAFNoFollowDepend" ] = kAAFNoFollowDepend;
@@ -494,6 +496,7 @@ template class ParamMap< aafDepend_t, aafDepend_e >;
 
 //=---------------------------------------------------------------------=
 
+template <>
 ParamMap< aafFileAccess_t, aafFileAccess_e >::ParamMap()
 {
   _map[ L"kAAFFileAccess_none" ]   = kAAFFileAccess_none;
@@ -529,6 +532,7 @@ template class ParamMap< aafFileAccess_t, aafFileAccess_e >;
 class _TemplateTag;
 typedef ParamMap< Type, _TemplateTag > TemplateParams;
 
+template <>
 ParamMap< Type, _TemplateTag >::ParamMap()
 {
 	_map[ L"NAME" ] = 0;
