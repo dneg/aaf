@@ -432,6 +432,31 @@ public:
   //
   // Internal to the SDK
   //
+#if USE_NEW_OBJECT_CREATION
+
+  //****************
+  // CreateImplClassDef() (not in the public API
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateImplClassDef (
+      aafUID_constref classID,
+      aafUID_constref pParentClassId,
+      aafCharacter_constptr pClassName,
+      ImplAAFClassDef ** ppClassDef);
+
+
+  //****************
+  // CreateClassDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateClassDef (
+      aafUID_constref classID,
+      ImplAAFClassDef * pParentClass,
+      aafCharacter_constptr pClassName,
+      ImplAAFClassDef ** ppClassDef);
+
+#endif // #if USE_NEW_OBJECT_CREATION
+
 
   //****************
   // GetNumEssenceData()
@@ -453,13 +478,6 @@ public:
 
   // Factory method for creating a Dictionary.
   static ImplAAFDictionary *CreateDictionary(void);
-
-  // internal utility factory method to create an ImplAAFObject given
-  // a classdef.  This method was created to make it simpler to
-  // replace calls to "Deprecated" call to CreateImpl which should
-  // only be used for instanciating transient non-ImplAAFObject
-  // classes such as an enumerator.
-  ImplAAFObject *CreateImplObject(aafUID_constref classID); 
 
   //
   // Instantiates an object of the given class and initializes its OM
