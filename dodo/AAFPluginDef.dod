@@ -3,7 +3,7 @@ AAFPluginDescriptor\
 #endm
 #c
 #startm .parent-module 0
-AAFDefObject\
+AAFObject\
 #endm
 #c
 AD_HEAD
@@ -37,6 +37,39 @@ AD_CLASS_UUID(AD1BB853, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(AD1BB854, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XMETHOD3(Init,
+		   [in],
+		   objPass,
+		   aafUID_t *,
+		   pAuid,
+		   AUID for new DeObject,
+		   [in],
+		   objPass,
+		   wchar_t *,
+		   pName,
+		   Name for new DefObject,
+		   [in],
+		   objPass,
+		   wchar_t *,
+		   pDescription,
+		   Description for new DefObject,
+		   Init all fields of a definition object.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
+     the Name of this definition.)
+
+
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
+     the Description of this definition.)
+
+
+AD_XMETHOD1(GetAUID,
+		   [retval\,out],
+		   objPass,
+		   aafUID_t *,
+		   pAuid,
+		   Pointer to an AUID reference,
+		   Gets the AUID for this object.)
 
 AD_XMETHOD1(GetCategoryClass,
 			[out],
