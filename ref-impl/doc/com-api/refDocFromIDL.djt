@@ -31,8 +31,9 @@ New Standard.Trailer URL = ''
 Example = 'Succeeds if'
 ImplementsInt = 'Implements'
 Results = \
-        'Return Value; Returns; Return Code; Result; Possible Errors;'\
-        ' Results'
+        'Return Value; Returns; Return Code; Result; Results; Possibl'\
+        'e Errors'
+StubMethod = 'Stub Only'
 SucceedsIf = 'Succeeds if'
 ValidValues = 'Valid values'
 
