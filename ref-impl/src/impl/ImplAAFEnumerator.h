@@ -36,7 +36,11 @@ class ImplAAFEnumerator: public ImplAAFRoot
 {
 public:
 	ImplAAFEnumerator();
-	~ImplAAFEnumerator();
+
+protected:
+	virtual ~ImplAAFEnumerator();
+	
+public:
 	AAFRESULT STDMETHODCALLTYPE Initialize(const aafClassID_t* pClassID,
 		ImplAAFRoot *pObj,OMReferenceContainerIterator* pIterator);
 

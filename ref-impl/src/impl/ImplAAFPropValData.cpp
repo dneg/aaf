@@ -163,7 +163,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPropValData::WriteTo(
   aafUInt32 bitsSize;
   HRESULT hr = GetBits (&bits);
   if (AAFRESULT_FAILED (hr)) return hr;
-  assert (bits);
+//  assert (bits);
 
   hr = GetBitsSize (&bitsSize);
   if (AAFRESULT_FAILED (hr)) return hr;
@@ -171,6 +171,8 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFPropValData::WriteTo(
   // OMSimpleProperty * pSimpleProp = dynamic_cast <OMSimpleProperty*>(pOmProp);
   // assert (pSimpleProp);
   // pSimpleProp->setBits (bits, bitsSize);
+  
+  if (bits) 
   pOmProp->setBits (bits, bitsSize);
   return AAFRESULT_SUCCESS;
 }
