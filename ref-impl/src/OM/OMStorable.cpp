@@ -97,6 +97,7 @@ void OMStorable::setName(const char* name)
 {
   PRECONDITION("Valid name", validString(name));
   delete [] _name;
+  _name = 0; // for BoundsChecker
   _name = new char[strlen(name) + 1];
   strcpy(_name, name);
   delete [] _pathName;
