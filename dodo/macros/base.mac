@@ -789,6 +789,7 @@ AD_XMETHOD1(Clone,
 #ccccccccccccccccccccccccccc
 #c
 #c Shared copyright message for all generated source files.
+#c (Id and Name will be corrected by cvs upon commit of generated file).
 #c
 #ccccccccccccccccccccccccccc
 #c
@@ -824,7 +825,7 @@ AD_XMETHOD1(Clone,
 #ccccccccccccccccccccccccccc
 #c
 #c Shared copyright message for all generated idl files.
-#c
+#c (Id and Name will be corrected by cvs upon commit of generated file).
 #ccccccccccccccccccccccccccc
 #c
 #startm .idl-copyright-message 00
