@@ -42,6 +42,11 @@
 //
 /*inline*/ bool AafPos2AnsiPos(fpos_t *ansiPos, const aafPosition_t *aafPos)
 {
+#if defined (__GNUC__) && ((__GNUC__ >= 2) && (__GNUC_MINOR__ >= 96))
+  // For gcc version 2.96 and above fpos_t is a struct
+  // NYI
+  return false;
+#else
   // For first version just assume that platform an perform conversion.
   if (sizeof(fpos_t) < sizeof(aafPosition_t))
   {
@@ -56,15 +61,22 @@
     *ansiPos = *aafPos;
 
   return true;
+#endif
 }
 
 
 /*inline*/ bool AnsiPos2AafPos(aafPosition_t *aafPos, const fpos_t *ansiPos)
 {
+#if defined (__GNUC__) && ((__GNUC__ >= 2) && (__GNUC_MINOR__ >= 96))
+  // For gcc version 2.96 and above fpos_t is a struct
+  // NYI
+  return false;
+#else
   // For first version just assume that platform an perform conversion.
   *aafPos = *ansiPos;
 
   return true;
+#endif
 }
 
 
@@ -332,7 +344,8 @@ HRESULT STDMETHODCALLTYPE
   }
 
   SetStreamMode(openNew);
-  _startingEOF = 0;
+  aafPosition_t zero = 0;
+  AafPos2AnsiPos(&_startingEOF, &zero);
 
   return AAFRESULT_SUCCESS;
 }
