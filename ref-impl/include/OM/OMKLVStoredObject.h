@@ -62,6 +62,12 @@ public:
     // @cmember Create a new root <c OMKLVStoredObject> in the raw storage
     //          <p rawStorage>. The byte order of the newly created root
     //          is given by <p byteOrder>.
+  static OMKLVStoredObject* createWrite(OMRawStorage* rawStorage,
+                                        const OMByteOrder byteOrder);
+
+    // @cmember Create a new root <c OMKLVStoredObject> in the raw storage
+    //          <p rawStorage>. The byte order of the newly created root
+    //          is given by <p byteOrder>.
   static OMKLVStoredObject* createModify(OMRawStorage* rawStorage,
                                          const OMByteOrder byteOrder);
 

@@ -61,6 +61,12 @@ public:
     // @cmember Create a new root <c OMXMLStoredObject> in the raw storage
     //          <p rawStorage>. The byte order of the newly created root
     //          is given by <p byteOrder>.
+  static OMXMLStoredObject* createWrite(OMRawStorage* rawStorage,
+                                        const OMByteOrder byteOrder);
+
+    // @cmember Create a new root <c OMXMLStoredObject> in the raw storage
+    //          <p rawStorage>. The byte order of the newly created root
+    //          is given by <p byteOrder>.
   static OMXMLStoredObject* createModify(OMRawStorage* rawStorage,
                                          const OMByteOrder byteOrder);
 

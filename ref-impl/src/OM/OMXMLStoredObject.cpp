@@ -62,6 +62,22 @@ OMXMLStoredObject* OMXMLStoredObject::openModify(
   //   @parm The raw storage in which to create the file.
   //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
+OMXMLStoredObject* OMXMLStoredObject::createWrite(OMRawStorage* rawStorage,
+                                                  const OMByteOrder byteOrder)
+{
+  TRACE("OMXMLStoredObject::createWrite");
+  PRECONDITION("Compatible raw storage", rawStorage->isWritable());
+  OMXMLStoredObject* result = new OMXMLStoredObject(rawStorage, byteOrder);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
+}
+
+  // @mfunc Create a new root <c OMXMLStoredObject> in the raw storage
+  //        <p rawStorage>. The byte order of the newly created root
+  //        is given by <p byteOrder>.
+  //   @parm The raw storage in which to create the file.
+  //   @parm The desired byte ordering for the new file.
+  //   @rdesc An <c OMXMLStoredObject> representing the root object.
 OMXMLStoredObject* OMXMLStoredObject::createModify(OMRawStorage* rawStorage,
                                                    const OMByteOrder byteOrder)
 {
