@@ -191,6 +191,12 @@ typedef struct {
   CLSID _key;
 } SetIndexEntry;
 
+// Structure of a weak collection index entry
+//
+typedef struct {
+  CLSID _key;
+} WeakCollectionIndexEntry;
+
 // Byte ordering
 //
 typedef OMUInt16 ByteOrder;
@@ -483,12 +489,19 @@ static void dumpSetIndexEntry(OMUInt32 i,
 static void printSetIndex(SetIndexEntry* setIndex,
                           OMUInt32 count,
                           OMUInt32 highWaterMark);
+static void printWeakCollectionIndex(OMUInt32 containerType,
+                                     WeakCollectionIndexEntry* collectionIndex,
+                                     OMUInt32 count,
+                                     OMUInt32 tage);
 static void readSetIndexEntry(IStream* stream,
                               SetIndexEntry* entry,
                               bool swapNeeded);
 static SetIndexEntry* readSetIndex(IStream* stream,
                                    OMUInt32 count,
                                    bool swapNeeded);
+static WeakCollectionIndexEntry* readWeakCollectionIndex(IStream* stream,
+                                                         OMUInt32 count,
+                                                         bool swapNeeded);
 static ByteOrder readByteOrder(IStream* stream);
 static void dumpObject(IStorage* storage, char* pathName, int isRoot);
 static OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version);
@@ -1625,6 +1638,41 @@ void printSetIndex(SetIndexEntry* setIndex,
   }
 }
 
+void printWeakCollectionIndex(OMUInt32 containerType,
+                              WeakCollectionIndexEntry* collectionIndex,
+                              OMUInt32 count,
+                              OMUInt32 tag)
+{
+  //TRACE("printWeakCollectionIndex");
+  ASSERT("Valid container type",
+                          (containerType == TID_WEAK_OBJECT_REFERENCE_SET) ||
+                          (containerType == TID_WEAK_OBJECT_REFERENCE_VECTOR));
+
+  if (containerType == TID_WEAK_OBJECT_REFERENCE_SET) {
+    cout << "Dump of set index" << endl;
+  } else if (containerType == TID_WEAK_OBJECT_REFERENCE_VECTOR) {
+    cout << "Dump of vector index" << endl;
+  }
+
+  cout << "( Tag = " << tag
+       << ", Number of entries = " << count << " )" << endl;
+
+  if (count > 0) {
+    cout << setw(8) << "ordinal"
+         << "   "
+         << setw(8) << "unique key"
+         << endl;
+
+    for (OMUInt32 i = 0; i < count; i++) {
+      cout << setw(8) << i;
+      cout << " : ";
+      printClsid(collectionIndex[i]._key);
+    }
+  } else {
+    cout << "empty" << endl;
+  }
+}
+
 void readSetIndexEntry(IStream* stream,
                           SetIndexEntry* entry,
                           bool swapNeeded)
@@ -1656,6 +1704,22 @@ SetIndexEntry* readSetIndex(IStream* stream,
   } else {
     for (OMUInt32 i = 0; i < count; i++) {
       readSetIndexEntry(stream, &result[i], swapNeeded);
+    }
+  }
+  return result;
+}
+
+WeakCollectionIndexEntry* readWeakCollectionIndex(IStream* stream,
+                                                  OMUInt32 count,
+                                                  bool swapNeeded)
+{
+  WeakCollectionIndexEntry* result = new WeakCollectionIndexEntry[count];
+  ASSERT("Successfully allocated collection index array", result != 0);
+  if (!swapNeeded) {
+    read(stream, result, sizeof(WeakCollectionIndexEntry) * count);
+  } else {
+    for (OMUInt32 i = 0; i < count; i++) {
+      readCLSID(stream, &result[i]._key, swapNeeded);
     }
   }
   return result;
@@ -1705,7 +1769,8 @@ void dumpContainedObjects(IStorage* storage,
 {
   for (OMUInt32 i = 0; i < entries; i++) {
 
-    switch (typeOf(&index[i], version)) {
+    OMUInt32 containerType = typeOf(&index[i], version);
+    switch (containerType) {
       
     case TID_DATA:
       // value is dumped when the property value stream is dumped
@@ -1983,8 +2048,65 @@ void dumpContainedObjects(IStorage* storage,
       break;
 
     case TID_WEAK_OBJECT_REFERENCE_VECTOR:
-    case TID_WEAK_OBJECT_REFERENCE_SET:
-      // value is dumped when the property value stream is dumped
+    case TID_WEAK_OBJECT_REFERENCE_SET: {
+      // get name of index
+      //
+      char* suffix = " index";
+      char* setName = new char[index[i]._length];
+      read(propertiesStream, index[i]._offset, setName, index[i]._length);
+
+      size_t size = strlen(setName) + strlen(suffix) + 1;
+      char* setIndexName = new char[size];
+      strcpy(setIndexName, setName);
+      strcat(setIndexName, suffix);
+
+      // Compute the pathname for this object
+      //
+      char thisPathName[256];
+      strcpy(thisPathName, pathName);
+      if (!isRoot) {
+        strcat(thisPathName, "/");
+      }
+      strcat(thisPathName, setName);
+
+      // open the index stream
+      //
+      IStream* subStream = 0;
+      openStream(storage, setIndexName, &subStream);
+      if (subStream == 0) {
+        fatalError("dumpContainedObjects", "openStream() failed.");
+      }
+      size_t setIndexStreamSize = sizeOfStream(subStream, setIndexName);
+      totalStreamBytes = totalStreamBytes + setIndexStreamSize;
+
+      OMUInt32 _count;
+      readUInt32(subStream, &_count, swapNeeded);
+
+      OMUInt32 _tag;
+      readUInt32(subStream, &_tag, swapNeeded);
+      
+      // Read the index.
+      //
+      WeakCollectionIndexEntry* collectionIndex =
+                                           readWeakCollectionIndex(subStream,
+                                                                   _count,
+                                                                   swapNeeded);
+
+      // dump the index
+      //
+      cout << endl;
+      cout << thisPathName << endl;
+      printWeakCollectionIndex(containerType, collectionIndex, _count, _tag);
+
+      delete [] setName;
+      setName = 0;
+
+      delete [] setIndexName;
+      setIndexName = 0;
+
+      delete [] collectionIndex;
+      collectionIndex = 0;
+      }
       break;
 
     case TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID:
