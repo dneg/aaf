@@ -15,12 +15,18 @@
 #include "SourceInfo.h"
 #endif
 
+#ifndef _bld_cfg_h_
+#include "bld_cfg.h"
+#endif
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
 
-// template class Vector<MacroDef>;
+#if AAF_BUILD_CONFIG_EXPLICIT_TEMPLATES
+template class Vector<MacroDef>;
+#endif
 
 void MacroSet::Append
 (const MacroDef & src)
