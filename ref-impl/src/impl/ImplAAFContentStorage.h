@@ -169,7 +169,7 @@ public:
 
 	aafBool IsEssenceDataPresent(aafUID_t fileMobUid, /* IN -- */ aafFileFormat_t fmt);
 	AAFRESULT AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
-						  AAFObject *dataObj) ;    /* IN - Input Mob */ 
+						  ImplAAFObject *dataObj) ;    /* IN - Input Mob */ 
 	AAFRESULT ChangeIndexedMobID (ImplAAFMob *pMob, aafUID_t *newID);
 
 AAFRESULT
