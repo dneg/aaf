@@ -16,6 +16,10 @@
 #include "AAFTypes.h"
 #endif
 
+#ifndef __ImplAAFRoot_h__
+#include "AAFRoot.h"
+#endif
+
 #include "Container.h"
 
 typedef enum
@@ -35,7 +39,7 @@ struct IAAFSession;
 class ImplAAFSession;
 class ImplAAFDataDefinition;
 
-class ImplAAFFile
+class ImplAAFFile : public ImplAAFRoot
 {
 public:
   //
