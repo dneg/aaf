@@ -738,4 +738,19 @@ void ImplAAFTypeDefArray::onRestore(void* clientContext) const
 
 
 
+// Method is called after associated class has been added to MetaDictionary.
+// If this method fails the class is removed from the MetaDictionary and the
+// registration method will fail.
+HRESULT ImplAAFTypeDefArray::CompleteClassRegistration(void)
+{
+  ImplAAFTypeDefSP pElementType;
+  AAFRESULT rc = GetType(&pElementType);
+  if (AAFRESULT_SUCCEEDED(rc))
+  {
+    rc = pElementType->CompleteClassRegistration();
+  }
+
+  return rc;
+}
+
 
