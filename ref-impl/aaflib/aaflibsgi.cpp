@@ -41,6 +41,38 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <errno.h>
+#include <limits.h>
+
+static bool AAFIsValidFile(const char *name)
+{
+#if defined( OS_DARWIN )
+   static const char pluginExt[] = "dylib";
+#else
+   static const char pluginExt[] = "so";
+#endif
+
+   if (name == NULL)
+      return false;
+
+   char *pExt = strrchr(name, '.');
+
+   return (pExt && strcmp(++pExt, pluginExt) == 0);
+}
+
+// This operates on a new directory component and checks
+// if it should be descended into during a library search (see AAFFindLibrary)
+// Assumes 'dir' is non-NULL
+static bool AAFIsValidDirectory(const char *dir)
+{
+   return (strcmp(dir, "..") != 0 && strcmp(dir, ".") != 0);
+}
+
+
 
 AAFRDLIRESULT AAFLoadLibrary(
    const char* name,
@@ -104,33 +136,80 @@ AAFRDLIRESULT AAFFindLibrary(
    LPFNAAFTESTFILEPROC testProc,
    void *userData)
 {
-   // Default implementation will just continue to use a hard-coded list
-	// of shared libaries.
-   
-#if defined( OS_DARWIN )
-   const char *pluginFileNames[] =  {
-		"libaafpgapi.dylib",
-		"libaafintp.dylib",
-      0
-   };
-#else
-   const char *pluginFileNames[] =  {
-		"libaafpgapi.so",
-		"libaafintp.so",
-      0
-   };
-#endif
    
    AAFRDLIRESULT rc = AAFRESULT_SUCCESS;
+   DIR *dir = NULL;
+   struct dirent *entry;
+   struct stat statbuf;
+
+   // Our buffer for building full paths.
+   char findPath[PATH_MAX];
+
    
 
-	if (NULL == name || NULL == testProc) {
-		return AAFRESULT_NULL_PARAM;
-	}
-		
-	for (int i = 0; AAFRESULT_SUCCESS == rc && pluginFileNames[i]; ++i) {
-		rc = testProc("",pluginFileNames[i], false , userData);
-	}
+   if (NULL == name || NULL == testProc)
+      return AAFRESULT_NULL_PARAM;
+
+   const size_t nameLen = strlen(name);
+
+   if ((dir = opendir(name)) == NULL)
+      rc = AAFRESULT_FILE_NOT_FOUND;
+
+   while (rc == AAFRESULT_SUCCESS && (entry = readdir(dir)) != NULL)
+   {
+      // We could assume readdir() would give us paths under PATH_MAX
+      // in length, but let's err on the side of safety.
+      if (strlen(entry->d_name) + nameLen > (PATH_MAX - 2))
+      {
+         rc = AAFRESULT_INVALID_PARAM;
+         break;
+      }
+
+      // Copies and appends PATH_MAX - 2 at most (see above check),
+      // which guarantees space for '/' and a null
+      strcpy(findPath, name);
+      strcat(findPath, "/");
+      strcat(findPath, entry->d_name);
+
+      if (lstat(findPath, &statbuf) != 0)
+      {
+         switch (errno)
+         {
+            case EACCES:
+               // No permission - just skip this one.
+               continue;
+            case EBADF:
+            case EFAULT:
+               rc = AAFRESULT_BAD_FHDL;
+               break;
+            case ENOMEM:
+               rc = AAFRESULT_NOMEMORY;
+               break;
+            case ENOENT:
+            case ENOTDIR:
+            case ELOOP:
+            case ENAMETOOLONG:
+            default:
+               rc = AAFRESULT_FILE_NOT_FOUND;
+               break;
+         }
+         // Fatal error - cut out
+         break;
+      }
+
+      if (S_ISDIR(statbuf.st_mode))
+      {
+         if (AAFIsValidDirectory(entry->d_name))
+            rc = testProc(findPath, entry->d_name, true, userData);
+      }
+      else if (S_ISREG(statbuf.st_mode)) // a file
+      {
+         if (AAFIsValidFile(findPath))
+            rc = testProc(findPath, entry->d_name, false, userData);
+      }
+   }
+
+   closedir(dir);
 
    return rc;
 }

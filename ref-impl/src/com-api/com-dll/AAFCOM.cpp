@@ -186,9 +186,15 @@ const char * AAFGetLibrarySharedDirectoryName()
 
 const char * AAFGetLibraryPluginPrefix()
 {
+#ifdef OS_WINDOWS
     static char g_PluginPrefix[4];
 
     strcpy(g_PluginPrefix, "aaf");
+#else
+    static char g_PluginPrefix[7];
+
+    strcpy(g_PluginPrefix, "libaaf");
+#endif
     
     return g_PluginPrefix;
 }

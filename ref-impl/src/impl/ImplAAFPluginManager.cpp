@@ -235,13 +235,12 @@ public:
   AAFTestLibraryProcData(ImplAAFPluginManager *pluginMgr, aafTable *files);
   
 	ImplAAFPluginManager *plugins;
-  aafTable_t	*pluginFiles;
+	aafTable_t *pluginFiles;
 	const char* currentLibraryPath;
 	const char* pluginDirectory;
 	size_t pluginDirectorySize;
 	const char* pluginPrefix;
 	size_t pluginPrefixSize;
-	char caseBuffer[kCaseBufferSize];
 } ;
 
 
@@ -260,14 +259,37 @@ AAFTestLibraryProcData::AAFTestLibraryProcData(ImplAAFPluginManager *pluginMgr, 
 	pluginDirectory = AAFGetLibrarySharedDirectoryName();
 	assert(NULL != pluginDirectory);
 	pluginDirectorySize = strlen(pluginDirectory);
-	assert(pluginDirectorySize <= kCaseBufferSize);
 	
 	pluginPrefix = AAFGetLibraryPluginPrefix();
 	assert(NULL != pluginPrefix);
 	pluginPrefixSize = strlen(pluginPrefix);
-	assert(pluginPrefixSize <= kCaseBufferSize);
-	
-	memset(caseBuffer, 0, kCaseBufferSize);
+}
+
+// Test that the given filename:
+//    1. Begins with the prefix stored in the given AAFTestLibraryProcData.
+//       The prefix is compared case-insensitively.
+//    2. Has something after the given prefix.
+static bool prefixtest(const char *filename, AAFTestLibraryProcData *pData)
+{
+  bool ret;
+
+  if (pData->pluginPrefixSize < strlen(filename))
+  {
+    size_t i;
+    for (i = 0; i < pData->pluginPrefixSize; ++i)
+    {
+      if (tolower(pData->pluginPrefix[i]) != tolower(filename[i]))
+        break;
+    }
+
+    ret = (i == pData->pluginPrefixSize);
+  }
+  else
+  {
+    ret = false;
+  }
+
+  return ret;
 }
 
 static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isDirectory, void * userData)
@@ -275,27 +297,21 @@ static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isD
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
 	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginPrefix && pData->pluginPrefixSize);
 
-#if defined( OS_WINDOWS )
   //
   // If the current name is not a directory and not equal to the 
   // path this dll (the reference implementation dll) and 
-  // the name begins with AAF or aaf then
+  // the name begins with the plugin prefix,
   // attempt to register the file and any contained plugins.
   //
   if (!isDirectory && (pData->pluginPrefixSize < strlen(name))) 
   {
-    if ( 0 == strncmp(pData->caseBuffer, pData->pluginPrefix, pData->pluginPrefixSize)) 
+    // Compare prefix
+    if (prefixtest(name, pData))
     { 
       if ( 0 != strcmp(path, pData->currentLibraryPath) )
         (pData->plugins)->RegisterPluginFile(path);
     }
   }
-#else
-  if(!isDirectory && 0 != strcmp(pData->currentLibraryPath, name))
-  {
-	(pData->plugins)->RegisterPluginFile(name);
-  }
-#endif
 
   // Ignore error results and continue processing plugins...
   return 0;
@@ -303,7 +319,6 @@ static AAFRDLIRESULT testPluginProc(const char *path, const char* name, char isD
 
 static AAFRDLIRESULT registerSharedPluginsProc(const char* path, const char* name, char isDirectory, void * userData)
 {
-#if defined( OS_WINDOWS )
   AAFRESULT rc = AAFRESULT_SUCCESS;
   AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
   assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath && pData->pluginDirectory);
@@ -314,17 +329,11 @@ static AAFRDLIRESULT registerSharedPluginsProc(const char* path, const char* nam
   //
   if (isDirectory && (0 == strcmp(pData->pluginDirectory, name))) // use case sensitive comparison for directory
   {
-    for (size_t i = 0; i < pData->pluginPrefixSize; i++)
-      pData->caseBuffer[i] = tolower(name[i]);
-
     rc = AAFFindLibrary(path, testPluginProc, userData);
   }
 
   // Ignore error results and continue processing plugins...
   return 0;
-#else
-  return(testPluginProc(path,name,isDirectory,userData));
-#endif
 }
 
 

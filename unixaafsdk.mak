@@ -131,10 +131,8 @@ AAFSDK_HELP           = $(AAFSDK)/help
 AAFSDK_INCLUDE        = $(AAFSDK)/include
 AAFSDK_LIB            = $(AAFSDK)/lib
 AAFSDK_LIB_DEBUG      = $(AAFSDK_LIB)/debug
-#AAFSDK_BIN_EXT        = $(AAFSDK_BIN)/aafext
-#AAFSDK_BIN_DEBUG_EXT  = $(AAFSDK_BIN_DEBUG)/aafext
-AAFSDK_BIN_EXT        = $(AAFSDK_BIN)
-AAFSDK_BIN_DEBUG_EXT  = $(AAFSDK_BIN_DEBUG)
+AAFSDK_BIN_EXT        = $(AAFSDK_BIN)/aafext
+AAFSDK_BIN_DEBUG_EXT  = $(AAFSDK_BIN_DEBUG)/aafext
 
 
 #
@@ -589,10 +587,10 @@ $(AAFSDK_LIB_DEBUG)/libaaflib$(LIB) : $(TOOLKIT_AAFLIB_DEBUG)/libaaflib$(LIB)
 $(AAFSDK_BIN)/libcom-api$(DLL) : $(TOOLKIT_COMAPI_RELEASE)/libcom-api$(DLL)
 	$(CP) $(CP_OPTS) $(TOOLKIT_COMAPI_RELEASE)/libcom-api$(DLL) $@
 
-$(AAFSDK_BIN)/libaafintp$(DLL) : $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafintp$(DLL)
+$(AAFSDK_BIN_EXT)/libaafintp$(DLL) : $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafintp$(DLL)
 	$(CP) $(CP_OPTS) $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafintp$(DLL) $@
 
-$(AAFSDK_BIN)/libaafpgapi$(DLL) : $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafpgapi$(DLL)
+$(AAFSDK_BIN_EXT)/libaafpgapi$(DLL) : $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafpgapi$(DLL)
 	$(CP) $(CP_OPTS) $(TOOLKIT_REFIMPL_RELEASE_EXT)/libaafpgapi$(DLL) $@
 
 #

@@ -49,6 +49,57 @@
 # endif
 #endif
 
+
+
+
+/////////////////////////////////////////////////////////////////////
+// Begin: Block of includes and other things to access dladdr and 
+// deal with its associated portability issues.
+
+#if defined( OS_LINUX ) && !defined( GNU_SOURCE )
+
+# define GNU_SOURCE
+# include <dlfcn.h>
+# undef GNU_SOURCE
+
+#elif defined( OS_IRIX )
+
+// IRIX requires that you implement dladdr() yourself(!) as follows.
+// The following is taken from the IRIX man page dladdr(3C)
+                                                                                
+# include <rld_interface.h>
+# ifndef _RLD_INTERFACE_DLFCN_H_DLADDR
+#  define _RLD_INTERFACE_DLFCN_H_DLADDR
+typedef struct Dl_info {
+    const char * dli_fname;
+    void       * dli_fbase;
+    const char * dli_sname;
+    void       * dli_saddr;
+    int          dli_version;
+    int          dli_reserved1;
+    long         dli_reserved[4];
+} Dl_info;
+# endif
+# define _RLD_DLADDR             14
+
+int dladdr(void *address, Dl_info *dl)
+{
+    void *v = _rld_new_interface(_RLD_DLADDR,address,dl);
+    return (int)v;
+}
+
+#elif defined( OS_UNIX )
+
+# include <dlfcn.h>
+
+#endif
+
+//
+// End block of includes and things for dladdr
+/////////////////////////////////////////////////////////////////////
+
+
+
 #include "AAFResult.h"
 
 static const char * g_EmptyString = "";
@@ -441,28 +492,69 @@ HRESULT AAFGetLibraryInfo(
    char **pServerPath,
    char **pServerDirectory)
 {
-   HRESULT rc = S_OK;
+    HRESULT rc = S_OK;
+    Dl_info info;
+    size_t len = 0;
+    char *pDirSeparator = 0;
 
-   // Library directory is not used under SGI
-   char pLibDirectory[] = "";
 
-   // Under SGI, we make the HINSTANCE pointer simply contain the name of
-   // the library.
-   if(!hInstance)
-   {
-	char pLibName[]="libcom-api.so";
-        *pServerPath = new char[strlen(pLibName)+1];
-   	strcpy( *pServerPath, pLibName );
-   }
-   else
-   {
-	*pServerPath = new char[strlen((char*)hInstance)+1];
-	strcpy( *pServerPath, (char*)hInstance);
-   }
+    if (!pServerPath || !pServerDirectory)
+        return E_INVALIDARG;
 
-   *pServerDirectory = new char[strlen(pLibDirectory) + 1];
-   strcpy( *pServerDirectory, pLibDirectory );
-   return rc;
+    // Inquire about this dynamic library's whereabouts.
+    // Don't use hInstance (it's NULL on UNIX anyway). Use
+    // this function's address as a way to inquire about
+    // the location of the enclosing library.
+    if (dladdr((void *)AAFGetLibraryInfo, &info) == 0)
+        return E_INVALIDARG;
+
+
+    // Allocate and copy into new buffer for library path
+    // We use this as a temporary string manipulation buffer
+    // when deducing the directory portion (below),
+    // but we restore the full value at the end.
+    len = strlen(info.dli_fname);
+    *pServerPath = new char[len + 1];
+    if (!(*pServerPath))
+        return E_OUTOFMEMORY;
+    strcpy(*pServerPath, info.dli_fname);
+
+
+    // This section cuts off the filename of the library
+    // we've found, leaving only the directory.
+    // This, like all code in this function,
+    // parallels the Windows equivalent. A major difference
+    // is that dladdr() doesn't always return a fully-qualified
+    // (absolute) path like Win32's GetModuleFileName() does.
+    // Practical tests have shown that even relative paths
+    // have some directory component (./libcom-api.so for example)
+    // based on how the library was found. So, the assert should be
+    // legitimate.
+    pDirSeparator = strrchr(*pServerPath, '/');
+    assert(pDirSeparator);
+
+	
+    // Terminate by overwriting the '/'	
+    *pDirSeparator = '\0';
+
+
+    // Allocate buffer for path directory information and copy into it.
+    len = strlen(*pServerPath);
+    *pServerDirectory = new char[len + 1];
+    if (!(*pServerDirectory))
+    {
+        delete [] *pServerPath;
+        *pServerPath = 0;
+        return E_OUTOFMEMORY;
+    }
+    strcpy(*pServerDirectory, *pServerPath);
+
+
+    // Restore the '/' we overwrote above to reconstruct full path for caller
+    *pDirSeparator = '/';
+
+
+    return rc;
 }
 
 #else // other platform?
