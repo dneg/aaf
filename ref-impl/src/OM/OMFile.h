@@ -104,6 +104,15 @@ public:
                                const OMFileSignature& signature,
                                OMDictionary* dictionary = 0);
 
+    // @cmember Is the given <c OMRawStorage> compatible with the given file
+    //          access mode and signature ? Can a file of the encoding
+    //          specified by <p signature> be created successfully on
+    //          <p rawStorage> and then accessed successfully in the mode
+    //          specified by <p accessMode> ?
+  static bool compatibleRawStorage(const OMRawStorage* rawStorage,
+                                   const OMAccessMode accessMode,
+                                   const OMFileSignature& signature);
+
     // @cmember Open an existing <c OMFile> for read-only access.
     // @devnote Will superceed openExistingRead() above.
   static OMFile* openExistingRead(OMRawStorage* rawStorage,
