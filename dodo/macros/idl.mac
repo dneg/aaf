@@ -74,6 +74,10 @@ cpp_quote("//")
 
 #ifndef DO_NO_IMPORTS
 import "unknwn.idl";
+#endif
+
+#ifndef DO_NO_IMPORTS
+import "AAFTypes.idl";
 #endif\
 #endm
 
@@ -101,7 +105,7 @@ cpp_quote("//")
 
 #ifndef DO_NO_IMPORTS
 import "wtypes.idl";
-#endif \
+#endif\
 #endm
 
 
@@ -538,7 +542,7 @@ interface I.this-module
 #startm AD_FORWARD_DECLARATION 01
 #ifndef DO_NO_IMPORTS
 import "%01.idl";
-#endif\
+#endif
 #endm
 
 
@@ -798,7 +802,7 @@ I%01 \
 #c TomR:added 980714
 #c
 #startm AD_DECLARE_FORWARD_AAFTYPES 01
-interface I%01; \
+interface I%01;\
 #endm
 
 
