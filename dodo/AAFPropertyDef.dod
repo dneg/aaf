@@ -37,7 +37,7 @@ AD_IDL(//
 // A property definition is used to indicate a particular property
 // within a class.  It defines the name and type of a property to be
 // contained in objects.  Clients cannot create these directly; they
-// must be created through IAAFClassDef::AppendNewPropertyDef\(\).
+// must be created through IAAFClassDef::RegisterNewPropertyDef\(\).
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
