@@ -50,6 +50,7 @@
 #               directory. Added minimal rebuild for switching between Debug  #
 #               and Release. Added a plugins directory. No longer copy the    #
 #               AAFPGAPI.dll as part of the SDK.                              #
+# 14-JUL-1999 : transdel Updated with new required SDK files.                 #
 ###############################################################################
 
 
@@ -172,14 +173,20 @@ TARGET_DIRS = \
 # Target Header files that need to be copied
 #
 TARGET_H_FILES = \
+	$(AAFSDK_INCLUDE)\AAFCodecDefs.h \
+	$(AAFSDK_INCLUDE)\AAFContainerDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDataDefs.h \
 	$(AAFSDK_INCLUDE)\AAFDefUIDs.h \
+	$(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h \
 	$(AAFSDK_INCLUDE)\AAFMetaDictionary.h \
+	$(AAFSDK_INCLUDE)\AAFOperationCategories.h \
 	$(AAFSDK_INCLUDE)\AAFOperationDefs.h \
 	$(AAFSDK_INCLUDE)\AAFParameterDefs.h \
+	$(AAFSDK_INCLUDE)\AAFPluginDefs.h \
 	$(AAFSDK_INCLUDE)\AAFPropertyIDs.h \
 	$(AAFSDK_INCLUDE)\AAFResult.h \
-	$(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h
+	$(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h \
+	$(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h
 
 
 #
@@ -397,20 +404,35 @@ $(AAFSDK_LIB) : $(AAFSDK)
 #
 # Dependency and build rules for the Header targets.
 #
+$(AAFSDK_INCLUDE)\AAFCodecDefs.h : $(TOOLKIT_INCLUDE)\AAFCodecDefs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFCodecDefs.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFContainerDefs.h : $(TOOLKIT_INCLUDE)\AAFContainerDefs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFContainerDefs.h "$(AAFSDK_INCLUDE)\"
+
 $(AAFSDK_INCLUDE)\AAFDataDefs.h : $(TOOLKIT_INCLUDE)\AAFDataDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDataDefs.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFDefUIDs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFDefUIDs.h "$(AAFSDK_INCLUDE)\"
 
+$(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h : $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h "$(AAFSDK_INCLUDE)\"
+
 $(AAFSDK_INCLUDE)\AAFMetaDictionary.h : $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFMetaDictionary.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFOperationCategories.h : $(TOOLKIT_INCLUDE)\AAFOperationCategories.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationCategories.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFOperationDefs.h : $(TOOLKIT_INCLUDE)\AAFOperationDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFOperationDefs.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFParameterDefs.h : $(TOOLKIT_INCLUDE)\AAFParameterDefs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFParameterDefs.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFPluginDefs.h : $(TOOLKIT_INCLUDE)\AAFPluginDefs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPluginDefs.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAFPropertyIDs.h : $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFPropertyIDs.h "$(AAFSDK_INCLUDE)\"
@@ -420,6 +442,9 @@ $(AAFSDK_INCLUDE)\AAFResult.h : $(TOOLKIT_INCLUDE)\AAFResult.h
 
 $(AAFSDK_INCLUDE)\AAFStoredObjectIDs.h : $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFStoredObjectIDs.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFTypeDefUIDs.h : $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE)\AAFTypeDefUIDs.h "$(AAFSDK_INCLUDE)\"
 
 
 #
