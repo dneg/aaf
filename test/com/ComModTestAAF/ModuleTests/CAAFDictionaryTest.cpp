@@ -370,7 +370,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* IID of def to pass to Init */ IID_IAAFParameterDef,
 				  /* SP of def to use with Init */ IAAFParameterDefSP,
 				  /* Init() invocation */
-				  Initialize (kTestParameterDefID, L"TestParameterDef", L"Desc"),
+				  Initialize (kTestParameterDefID, L"TestParameterDef", L"Desc", defs.tdRational()),
 				  /* IID of type to QI */          IID_IAAFDefObject,
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFParameterDef,
