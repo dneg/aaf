@@ -58,13 +58,11 @@ static void doFile (const char * moduleName)
   }
   size_t width = maxNameLength;
   for (i = 0; i < sizeof(aliases)/sizeof(aliases[0]); i++){
-    cout.flags(ios::left);
-    cout.fill(' ');
-    cout << "#define "
-         << prefix << setw(width) << aliases[i].alias
-         << " "
-         << prefix << setw(width) << aliases[i].name
-         << endl;
+    cout << "#define " << prefix;
+    printName(aliases[i].alias, width, cout);
+    cout << " " << prefix;
+    printName(aliases[i].name, width, cout);
+    cout << endl;
   }
   cout << endl;
 
