@@ -14,9 +14,12 @@
 
 // NOTE: This file may have to be modified to support other COM platforms.
 
+#ifndef __AAFCOMPlatformTypes_h__
+#include "AAFCOMPlatformTypes.h"
+#endif
+
 #if defined(_MAC) || defined(_MAC_) || defined(macintosh)
   // Include files form ActiveX SDK for the Macintosh
-  #include <wintypes.h>
   #include <compobj.h>
 #elif defined(WIN32) || defined(_WIN32)
   #include <unknwn.h>
