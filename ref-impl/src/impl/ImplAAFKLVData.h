@@ -68,9 +68,7 @@ public:
          aafUInt32  valueSize,
 
          // @parm [in, size_is(valueSize)] buffer containing value
-         aafDataBuffer_t  pValue,
-		
-		 ImplAAFTypeDef *underlyingType);
+         aafDataBuffer_t  pValue);
 
   //****************
   // GetKey()
