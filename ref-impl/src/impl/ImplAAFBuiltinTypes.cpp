@@ -210,7 +210,7 @@ static AAFRESULT CreateNewEnumerationType (const aafUID_t & idToCreate,
 	  
 		  ImplAAFTypeDefSP pElemType;
 		  // Look up the type of this enumeration
-		  hr = pDict->LookupType(*(*curEnumeration)->pElementTypeId, &pElemType);
+		  hr = pDict->LookupTypeDef(*(*curEnumeration)->pElementTypeId, &pElemType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pElemType);
 
@@ -349,7 +349,7 @@ static AAFRESULT CreateNewRecordType (const aafUID_t & idToCreate,
 		  for (i = 0; i < numMembers; i++)
 			{
 			  memberTypes[i] = 0;
-			  hr = pDict->LookupType(*(*curRecord)->members[i]->pMemberTypeId,
+			  hr = pDict->LookupTypeDef(*(*curRecord)->members[i]->pMemberTypeId,
 									 &memberTypes[i]);
 			  assert (AAFRESULT_SUCCEEDED (hr));
 			  assert (memberTypes[i]);
@@ -422,7 +422,7 @@ static AAFRESULT CreateNewVaryingArrayType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFTypeDefSP pElemType;
-		  hr = pDict->LookupType(*curElem->pBaseTypeId, &pElemType);
+		  hr = pDict->LookupTypeDef(*curElem->pBaseTypeId, &pElemType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pElemType);
 
@@ -470,7 +470,7 @@ static AAFRESULT CreateNewFixedArrayType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFTypeDefSP pElemType;
-		  hr = pDict->LookupType(*curElem->pBaseTypeId, &pElemType);
+		  hr = pDict->LookupTypeDef(*curElem->pBaseTypeId, &pElemType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pElemType);
 
@@ -519,7 +519,7 @@ static AAFRESULT CreateNewRenameType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFTypeDefSP pBaseType;
-		  hr = pDict->LookupType(*curElem->pBaseTypeId, &pBaseType);
+		  hr = pDict->LookupTypeDef(*curElem->pBaseTypeId, &pBaseType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pBaseType);
 
@@ -567,7 +567,7 @@ static AAFRESULT CreateNewStringType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFTypeDefSP pElemType;
-		  hr = pDict->LookupType(*curElem->pBaseTypeId, &pElemType);
+		  hr = pDict->LookupTypeDef(*curElem->pBaseTypeId, &pElemType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pElemType);
 
@@ -659,7 +659,7 @@ static AAFRESULT CreateNewStrongRefType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFClassDefSP pBaseClass;
-		  hr = pDict->LookupClass(*curElem->pRefdTypeId, &pBaseClass);
+		  hr = pDict->LookupClassDef(*curElem->pRefdTypeId, &pBaseClass);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pBaseClass);
 
@@ -707,7 +707,7 @@ static AAFRESULT CreateNewStrongRefSetType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFTypeDefSP pRefdType;
-		  hr = pDict->LookupType(*curElem->pRefdTypeId, &pRefdType);
+		  hr = pDict->LookupTypeDef(*curElem->pRefdTypeId, &pRefdType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pRefdType);
 
@@ -755,7 +755,7 @@ static AAFRESULT CreateNewStrongRefVectorType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFTypeDefSP pRefdType;
-		  hr = pDict->LookupType(*curElem->pRefdTypeId, &pRefdType);
+		  hr = pDict->LookupTypeDef(*curElem->pRefdTypeId, &pRefdType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pRefdType);
 
@@ -812,7 +812,7 @@ static AAFRESULT CreateNewWeakRefType (const aafUID_t & idToCreate,
 #else
 		  ImplAAFTypeDef * ptd = 0;
 		  // Instead, alias to an auid
-		  hr = pDict->LookupType (kAAFTypeID_AUID, &ptd);
+		  hr = pDict->LookupTypeDef (kAAFTypeID_AUID, &ptd);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 #endif
 
@@ -855,7 +855,7 @@ static AAFRESULT CreateNewWeakRefSetType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFTypeDefSP pRefdType;
-		  hr = pDict->LookupType(*curElem->pRefdTypeId, &pRefdType);
+		  hr = pDict->LookupTypeDef(*curElem->pRefdTypeId, &pRefdType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pRefdType);
 
@@ -902,7 +902,7 @@ static AAFRESULT CreateNewWeakRefVectorType (const aafUID_t & idToCreate,
 		  assert (ptd);
 
 		  ImplAAFTypeDefSP pRefdType;
-		  hr = pDict->LookupType(*curElem->pRefdTypeId, &pRefdType);
+		  hr = pDict->LookupTypeDef(*curElem->pRefdTypeId, &pRefdType);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  assert (pRefdType);
 
@@ -946,7 +946,7 @@ AAFRESULT ImplAAFBuiltinTypes::ImportBuiltinTypeDef
 	{
 	  assert (*ppResult);
 	  assert (_dictionary);
-	  AAFRESULT hr = _dictionary->RegisterType (*ppResult);
+	  AAFRESULT hr = _dictionary->RegisterTypeDef (*ppResult);
 	  if (AAFRESULT_FAILED (hr))
 		{
 		  assert (*ppResult);

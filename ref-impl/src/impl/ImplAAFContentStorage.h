@@ -88,10 +88,10 @@ public:
 
 
   //****************
-  // GetNumMobs()
+  // CountMobs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumMobs
+    CountMobs
         (aafMobKind_t  mobKind,   //@parm [in] The mob kind to count
 		 aafNumSlots_t *  pNumMobs);  //@parm [out,retval] Total number of mobs of kind mobKind
 
@@ -105,10 +105,10 @@ public:
 
 
   //****************
-  // AppendMob()
+  // AddMob()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendMob
+    AddMob
         (ImplAAFMob * pMob);  //@parm [in] Mob to add header
 
 
@@ -121,10 +121,10 @@ public:
 
 
   //****************
-  // GetNumEssenceData()
+  // CountEssenceData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumEssenceData
+    CountEssenceData
         (aafUInt32 *  pNumEssenceData);  //@parm [out,retval] Total number of essence data with type
 
 
@@ -153,10 +153,10 @@ public:
 
 
   //****************
-  // AppendEssenceData()
+  // AddEssenceData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendEssenceData
+    AddEssenceData
 		// @parm [in] Essence data object to append
         (ImplAAFEssenceData * pEssenceData);
 

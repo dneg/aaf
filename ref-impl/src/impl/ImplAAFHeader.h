@@ -94,18 +94,18 @@ public:
 
 
   //****************
-  // GetNumMobs()
+  // CountMobs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumMobs
+    CountMobs
         (aafMobKind_t  mobKind,   //@parm [in] The mob kind to count
 		 aafNumSlots_t *  pNumMobs);  //@parm [out,retval] Total number of mobs of kind mobKind
 
   //****************
-  // EnumAAFAllMobs()
+  // GetMobs()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    EnumAAFAllMobs
+    GetMobs
 	    (// @parm [in,ref] Search Criteria for enumeration
          aafSearchCrit_t *  pSearchCriteria,
 
@@ -114,10 +114,10 @@ public:
 
 
   //****************
-  // AppendMob()
+  // AddMob()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendMob
+    AddMob
         (ImplAAFMob * pMob);  //@parm [in] Mob to add header
 
 
@@ -130,10 +130,10 @@ public:
 
 
   //****************
-  // GetNumEssenceData()
+  // CountEssenceData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumEssenceData
+    CountEssenceData
         (aafUInt32 *  pNumEssenceData);  //@parm [out,retval] Total number of essence data with type
 
 
@@ -162,10 +162,10 @@ public:
 
 
   //****************
-  // AppendEssenceData()
+  // AddEssenceData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendEssenceData
+    AddEssenceData
 		// @parm [in] Essence data object to append
         (ImplAAFEssenceData * pEssenceData);
 
@@ -205,10 +205,10 @@ public:
 
 
   //****************
-  // GetIdentificationByGen()
+  // LookupIdentification()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetIdentificationByGen
+    LookupIdentification
 	    (// @parm [in,ref] Unique Generation ID
          const aafUID_t & generation,
 
@@ -217,20 +217,33 @@ public:
 
 
   //****************
-  // GetNumIdents()
+  // CountIdents()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumIdents
+    CountIdentifications
         (aafUInt32 *  pNumIdents);  //@parm [out,retval] Total number of identifications
 
 
   //****************
-  // EnumAAFIdents()
+  // GetIdentifications()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    EnumAAFIdents
+    GetIdentifications
 		// @parm [out,retval] Indentification Enumeration
         (ImplEnumAAFIdentifications ** ppEnum);
+
+
+
+  //****************
+  // GetIdentificationAt()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetIdentificationAt
+		// @parm [in] index of identification
+        (aafUInt32 index,
+
+		// @parm [out,retval] returned Indentification
+        ImplAAFIdentification ** ppIdentification);
 
 
 
@@ -280,7 +293,7 @@ public:
 	// Interfaces visible inside the toolkit, but not exposed through the API
 
 AAFRESULT SetToolkitRevisionCurrent(void);
-AAFRESULT GetNumIdentifications (aafInt32 * /*pCount*/);
+  // AAFRESULT CountIdentifications (aafInt32 * /*pCount*/);
 
 AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
 AAFRESULT LoadMobTables(void);
