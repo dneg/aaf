@@ -14,7 +14,7 @@ AD_IDL(//
 AD_CLASS_UUID(42A63FE1, 968A, 11d2, 80, 89, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(CDDB6AB1, 98DC, 11d2, 80, 8a, 00, 60, 08, 14, 3e, 6f)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 
 AD_XMETHOD1(Init,
 			[in],
@@ -24,5 +24,5 @@ AD_XMETHOD1(Init,
 			The EssenceData to stream over,
 			Init the stream over a particular EssenceData.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)
 
