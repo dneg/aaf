@@ -74,12 +74,43 @@ public:
          // @parm [in] friendly name of this type definition
          const aafCharacter *  pTypeName);
 
-
   //****************
-  // GetType()
+  // AddElement()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetType
+    AddElement
+        (// @parm [in] property value corresponding to set to which element is added
+         ImplAAFPropertyValue * pInPropVal,
+
+         // @parm [in] value to be added to this set
+         ImplAAFPropertyValue * pMemberPropVal);
+
+    //****************
+  // RemoveElement()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveElement
+        (// @parm [in] property value corresponding to set to which element is added
+         ImplAAFPropertyValue * pInPropVal,
+
+         ImplAAFPropertyValue * pMemberPropVal);
+
+      //****************
+  // ContainsElement()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    ContainsElement
+        (// @parm [in] property value corresponding to set to which element is added
+         ImplAAFPropertyValue * pInPropVal,
+
+         ImplAAFPropertyValue * pMemberPropVal,
+         aafBool * pContains);
+
+  //****************
+  // GetElementType()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetElementType
         // @parm [out] type of elements in this array
         (ImplAAFTypeDef ** ppTypeDef);
 
@@ -96,60 +127,58 @@ public:
          aafUInt32 *  pCount);
 
 
-  //****************
-  // AddElement()
+
+
+  //***********************************************************
+  // CreateKey()
   //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    AddElement
-        (// @parm [in] property value corresponding to set to which element is added
-         ImplAAFPropertyValue * pInPropVal,
+  AAFRESULT CreateKey (
+    // Pointer to the key value bytes
+    aafDataBuffer_t  pKeyPtr,
 
-         // @parm [in] value to be added to this set
-         ImplAAFPropertyValue * pMemberPropVal);
+    // The size of the key in bytes
+    aafUInt32 pLength,
+
+    // An interface which may be passed to LookupKey() or ContainsKey()
+    ImplAAFPropertyValue ** ppKey);
 
 
-  //****************
-  // CreateValueFromValues()
+  //***********************************************************
+  // LookupKey()
   //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    CreateValueFromValues
-        (// @parm [in, size_is(numElements)] array of property values for elements of set value which
-    // is to be created.
-         ImplAAFPropertyValue ** pElementValues,
+  AAFRESULT LookupKey (
+    // property value of set
+    ImplAAFPropertyValue * pInPropVal,
 
-         // @parm [in] size of pElementValues array.
-         aafUInt32  numElements,
+    // A key returned from CreateKey()
+    ImplAAFPropertyValue * pKey,
 
-         // @parm [out] newly-created property value
-         ImplAAFPropertyValue ** ppPropVal);
+    // The returned property value
+    ImplAAFPropertyValue ** pOutPropVal);
 
-
-  //****************
-  // CreateValueFromCArray()
+  //***********************************************************
+  // ContainsKey()
   //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    CreateValueFromCArray
-        (// @parm [in, size_is(initDataSize)] pointer to compile-time C array containing data to use
-         aafMemPtr_t  pInitData,
+  AAFRESULT ContainsKey (
+    // property value of set
+    ImplAAFPropertyValue * pInPropVal,
 
-         // @parm [in] size of data in pInitData, in bytes
-         aafUInt32  initDataSize,
+    // A key returned from CreateKey()
+    ImplAAFPropertyValue * pKey,
 
-         // @parm [out] newly created property value
-         ImplAAFPropertyValue ** ppPropVal);
+    // Value returned is AAFTrue if an entry with the correct key is present
+    ImplAAFPropertyValue ** pOutPropVal);
 
 
-  //****************
+  //***********************************************************
   // GetElements()
   //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetElements
-        (// @parm [in] property value to read
-         ImplAAFPropertyValue * pInPropVal,
+  AAFRESULT GetElements (
+    // property value to read
+    ImplAAFPropertyValue * pInPropVal,
 
-         // @parm [out] enumerator across property values
-         ImplEnumAAFPropertyValues ** ppEnum);
-
+    // enumerator across property values
+    ImplEnumAAFPropertyValues ** ppEnum);
 
 public:
   //****************
