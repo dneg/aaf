@@ -81,6 +81,9 @@ public:
     //          but has not yet been loaded then the value returned is 0.
   virtual OMStorable* pointer(void) const;
 
+    // @cmember The <c OMProperty> containing this <c OMObjectReference>.
+  OMProperty* property(void) const;
+
 protected:
   // @access Protected members.
 

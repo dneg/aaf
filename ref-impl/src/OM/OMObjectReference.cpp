@@ -130,6 +130,16 @@ OMStorable* OMObjectReference::pointer(void) const
   return _pointer;
 }
 
+  // @mfunc The <c OMProperty> containing this <c OMObjectReference>.
+  //   @rdesc A pointer to the containing <c OMProperty>.
+  //   @this const
+OMProperty* OMObjectReference::property(void) const
+{
+  TRACE("OMObjectReference::property");
+
+  return _property;
+}
+
 // class OMStrongObjectReference
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMStrongObjectReference
 
