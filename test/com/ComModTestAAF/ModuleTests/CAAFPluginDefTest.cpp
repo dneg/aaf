@@ -132,9 +132,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*	pDictionary = NULL;
   IAAFDefObject*	pPlugDef = NULL;
   IAAFCodecDef*		pCodecDef = NULL;
-  IAAFPluginDescriptor *pDesc;
-  IAAFNetworkLocator *pNetLoc, *pNetLoc2, *pNetLoc3;
-  IAAFLocator		*pLoc, *pLoc2, *pLoc3;
+  IAAFPluginDescriptor *pDesc = NULL;
+  IAAFNetworkLocator *pNetLoc = NULL, *pNetLoc2 = NULL, *pNetLoc3 = NULL;
+  IAAFLocator		*pLoc = NULL, *pLoc2 = NULL, *pLoc3 = NULL;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
   bool				bFileOpen = false;
   aafUID_t			uid;
@@ -229,8 +229,32 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
   // Cleanup and return
+  if (pDesc)
+    pDesc->Release();
+
   if (pPlugDef)
     pPlugDef->Release();
+
+  if (pNetLoc)
+    pNetLoc->Release();
+
+  if (pNetLoc2)
+    pNetLoc2->Release();
+
+  if (pNetLoc3)
+    pNetLoc3->Release();
+
+  if (pLoc)
+    pLoc->Release();
+
+  if (pLoc2)
+    pLoc2->Release();
+
+  if (pLoc3)
+    pLoc3->Release();
+
+  if (pCodecDef)
+    pCodecDef->Release();
 
   if (pDictionary)
     pDictionary->Release();
@@ -309,6 +333,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pNetLoc->QueryInterface (IID_IAAFLocator,
                                           (void **)&pLoc));
 		checkResult(pLoc->GetPath (testString, sizeof(testString)));
+		pNetLoc->Release();
+		pNetLoc = NULL;
+		pLoc->Release();
+		pLoc = NULL;
 		checkExpression (wcscmp(testString, manuf2URL) == 0, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->GetManufacturerID(&testUID));
 		checkExpression(EqualAUID(&testUID, &manufacturer) == AAFTrue, AAFRESULT_TEST_FAILED);
@@ -339,8 +367,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression (count == 2, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->EnumPluginLocators(&pEnumLoc));
 
-		pLoc->Release(); // this local variable was already has a reference that must be released!
-		pLoc = NULL;
 		checkResult(pEnumLoc->NextOne (&pLoc));
  		checkResult(pLoc->GetPath (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manuf1URL) == 0, AAFRESULT_TEST_FAILED);
@@ -366,6 +392,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	// Cleanup and return
 	if (pEnumLoc)
 		pEnumLoc->Release();
+
+	if (pEnumPluggable)
+		pEnumPluggable->Release();
 
 	if (pLoc)
 		pLoc->Release();
