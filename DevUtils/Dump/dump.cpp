@@ -202,6 +202,8 @@ const CLSID CLSID_AAFHeader =
 //           RefAUIDArray.
 //  0.12   : TIFFDescriptor now descended from FileDescriptor instead of
 //           DigitalImageDescriptor. Several other minor changes.
+//  0.13   : Change PropertDefinition::pid to
+//           PropertyDefinition::LocalIdentification.
 //
 
 // The following may change at run time depending on the file format
@@ -213,7 +215,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 12;
+const OMUInt32 HIGHVERSION = 13;
 
 // Output format requested
 //
