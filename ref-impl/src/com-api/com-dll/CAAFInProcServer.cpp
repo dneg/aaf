@@ -1,7 +1,7 @@
 
 
-#ifndef __aaftypes_h__
-#include "aaftypes.h"
+#ifndef __AAFTypes_h__
+#include "AAFTypes.h"
 #endif
 
 #ifndef __CAAFInProcServer_h__
