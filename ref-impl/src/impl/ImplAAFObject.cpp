@@ -325,20 +325,7 @@ AAFRESULT ImplPropertyCollection::Initialize
   // includes count of props both present and absent
   const aafUInt32 numPropsDefined = pOMPropSet->count();
   // only includes props that are present
-  aafUInt32 numPropsPresent = 0;
-
-  // count number of properties that are present
-  size_t omContext = 0;
-  OMProperty * pOmProp = NULL;
-  for (aafUInt32 i = 0; i < numPropsDefined; i++)
-	{
-	  pOmProp = 0;
-	  pOMPropSet->iterate (omContext, pOmProp);
-	  assert (pOmProp);
-	  // count it if it's mandatory, or (optional AND present)
-	  if (!pOmProp->isOptional() || pOmProp->isPresent())
-		numPropsPresent++;
-	}
+  aafUInt32 numPropsPresent = pOMPropSet->countPresent();
 
   _numUsed = numPropsPresent;
 
@@ -416,19 +403,14 @@ AAFRESULT ImplPropertyCollection::LookupOMProperty(const OMPropertyId& pid,
   if(!ppOMProperty)
 	  return(AAFRESULT_NULL_PARAM);
 
-  const aafUInt32 numPropsDefined = _pOMPropSet->count();
-  size_t omContext = 0;
-  aafUInt32 i;
-  for (i = 0; i < numPropsDefined; i++)
-  {
-    *ppOMProperty=0;
-    _pOMPropSet->iterate (omContext,*ppOMProperty);
-    assert(*ppOMProperty);
-    if ((*ppOMProperty)->propertyId() == pid)
-	  return(AAFRESULT_SUCCESS);
-  }
-  *ppOMProperty=0;
-  return(AAFRESULT_PROP_NOT_PRESENT);
+  if (!_pOMPropSet->isPresent(pid))
+	  return(AAFRESULT_PROP_NOT_PRESENT);
+  
+  *ppOMProperty = 0;
+  *ppOMProperty = _pOMPropSet->get(pid);
+  assert(*ppOMProperty);
+  
+  return(AAFRESULT_SUCCESS);
 }
 
 ImplAAFObject::ImplAAFObject ()
