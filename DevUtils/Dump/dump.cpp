@@ -1081,6 +1081,7 @@ void warning(char* routineName, char* message)
     cerr << " in routine \"" << routineName << "\"";
   }
   cerr << ": " << message << endl;
+  warningCount = warningCount + 1;
 }
 
 void printError(const char* prefix, const char* fileName, DWORD errorCode)
@@ -3161,7 +3162,6 @@ void dumpProperties(IStorage* storage,
     size_t correctSize = expectedStreamSize + 4 + (entries * 6);
     if (actualStreamSize != correctSize) {
       warning("dumpProperties", "Incorrect property stream size.");
-      warningCount = warningCount + 1;
       OMUInt16 bo = hostByteOrder();
       if (swapNeeded) {
         if (bo == littleEndian) {
