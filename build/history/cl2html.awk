@@ -129,8 +129,23 @@ function printRow(date, name, files, comments, color) {
     date, color, name, color, files, color, comments);
 }
 
+function printValidatesIcon() {
+  printf("<p>\n");
+  printf("  <a href=\"http://validator.w3.org/check?uri=referer\">\n");
+  printf("    <img border=\"0\"\n");
+  printf("         src=\"http://www.w3.org/Icons/valid-html401\"\n");
+  printf("         alt=\"Valid HTML 4.01!\"\n");
+  printf("         height=\"31\"\n");
+  printf("         width=\"88\">\n");
+  printf("  </a>\n");
+  printf("</p>\n");
+}
+
 function printTrailer() {
   printf("</table>\n");
+
+  printValidatesIcon();
+
   printf("</body>\n");
   printf("</html>\n");
 }

@@ -69,8 +69,23 @@ endList ()
   echo "</ul>"
 }
 
+writeValidatesIcon ()
+{
+  echo "<p>"
+  echo "  <a href=\"http://validator.w3.org/check?uri=referer\">"
+  echo "    <img border=\"0\""
+  echo "         src=\"http://www.w3.org/Icons/valid-html401\""
+  echo "         alt=\"Valid HTML 4.01!\""
+  echo "         height=\"31\""
+  echo "         width=\"88\">"
+  echo "  </a>"
+  echo "</p>"
+}
+
 writeFooter ()
 {
+  writeValidatesIcon
+
   echo "</body>"
   echo "</html>"
 }
