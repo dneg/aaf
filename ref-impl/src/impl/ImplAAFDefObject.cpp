@@ -403,3 +403,10 @@ AAFRESULT STDMETHODCALLTYPE
 
   return AAFRESULT_NOT_IMPLEMENTED;
 }
+
+const OMUniqueObjectIdentification&
+  ImplAAFDefObject::identification(void) const
+{
+  const aafUID_t& r =_identification.reference();
+  return reinterpret_cast<const OMUniqueObjectIdentification&>(r);
+}
