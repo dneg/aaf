@@ -95,6 +95,10 @@ SOURCE=.\AxPlugin.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AxPluginEntryPoints.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\AxPluginFctry.cpp
 # End Source File
 # Begin Source File
