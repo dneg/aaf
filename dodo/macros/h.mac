@@ -208,7 +208,7 @@ public:
   //***********************************************************
   // Constructor/destructor
   //
-  .this-module (aafBool doInit = AAFTrue);
+  .this-module (aafBool doInit = kAAFTrue);
 
 protected:
   virtual ~.this-module ();
@@ -269,7 +269,7 @@ public:
   //***********************************************************
   // Constructor/destructor
   //
-  .this-module (aafBool doInit = AAFTrue);
+  .this-module (aafBool doInit = kAAFTrue);
   virtual ~.this-module ();
 
 

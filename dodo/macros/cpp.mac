@@ -205,7 +205,7 @@
 #include <assert.h>
 
 .this-module::.this-module (aafBool doInit)
-: .parent-module (AAFFalse)
+: .parent-module (kAAFFalse)
 {
   if (doInit)
     {
