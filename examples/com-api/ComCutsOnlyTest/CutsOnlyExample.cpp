@@ -209,12 +209,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	//Make the Tape MOB
-	check(pDictionary->CreateInstance( pCDSourceMob,
-						   IID_IAAFSourceMob, 
-						   (IUnknown **)&pTapeMob));
-	check(pDictionary->CreateInstance( pCDTapeDescriptor,
-						   IID_IAAFTapeDescriptor, 
-						   (IUnknown **)&pTapeDesc));
+	check(pCDSourceMob->
+		  CreateInstance(IID_IAAFSourceMob, 
+						 (IUnknown **)&pTapeMob));
+	check(pCDTapeDescriptor->
+		  CreateInstance(IID_IAAFTapeDescriptor, 
+						 (IUnknown **)&pTapeDesc));
 	check(pTapeDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
 	check(pTapeMob->SetEssenceDescriptor(aDesc));
 	aDesc->Release();
@@ -232,18 +232,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	// Make a FileMob
-	check(pDictionary->CreateInstance( pCDSourceMob,
-						   IID_IAAFSourceMob, 
-						   (IUnknown **)&pFileMob));
-	check(pDictionary->CreateInstance( pCDFileDescriptor,
-						   IID_IAAFFileDescriptor, 
-						   (IUnknown **)&pFileDesc));
+	check(pCDSourceMob->
+		  CreateInstance(IID_IAAFSourceMob, 
+						 (IUnknown **)&pFileMob));
+	check(pCDFileDescriptor->
+		  CreateInstance(IID_IAAFFileDescriptor, 
+						 (IUnknown **)&pFileDesc));
 	check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
 
 	// Make a locator, and attach it to the EssenceDescriptor
-	check(pDictionary->CreateInstance( pCDNetworkLocator,
-							IID_IAAFNetworkLocator, 
-							(IUnknown **)&pNetLocator));		
+	check(pCDNetworkLocator->
+		  CreateInstance(IID_IAAFNetworkLocator, 
+						 (IUnknown **)&pNetLocator));		
 	check(pNetLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
 	check(pLocator->SetPath (TEST_PATH));	
 	check(aDesc->AppendLocator(pLocator));
@@ -267,9 +267,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pMob = NULL;
 
 	//Make the Master MOB
-	check(pDictionary->CreateInstance( pCDMasterMob,
-						   IID_IAAFMasterMob, 
-						   (IUnknown **)&pMasterMob));
+	check(pCDMasterMob->
+		  CreateInstance(IID_IAAFMasterMob, 
+						 (IUnknown **)&pMasterMob));
 
 	sourceRef.sourceID = fileMobID;
 	sourceRef.sourceSlotID = 1;
@@ -283,13 +283,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pMob = NULL;
 
 	// Create a Composition Mob
-	check(pDictionary->CreateInstance( pCDCompositionMob,
-						   IID_IAAFMob, 
-						   (IUnknown **)&pCompMob));
+	check(pCDCompositionMob->
+		  CreateInstance(IID_IAAFMob, 
+						 (IUnknown **)&pCompMob));
 	// Create a sequence
-	check(pDictionary->CreateInstance( pCDSequence,
-			   IID_IAAFSequence, 
-			   (IUnknown **)&pSequence));		
+	check(pCDSequence->
+		  CreateInstance(IID_IAAFSequence, 
+						 (IUnknown **)&pSequence));		
 	check(pSequence->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
 	check(pSequence->QueryInterface(IID_IAAFComponent, (void **)&aComponent));
@@ -308,9 +308,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	// Create a SourceClip
-	check(pDictionary->CreateInstance( pCDSourceClip,
-						   IID_IAAFSourceClip, 
-						   (IUnknown **)&compSclp));		
+	check(pCDSourceClip->
+		  CreateInstance(IID_IAAFSourceClip, 
+						 (IUnknown **)&compSclp));		
 
 	sourceRef.sourceID = masterMobID;
 	sourceRef.sourceSlotID = 1;
@@ -322,9 +322,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	check(pSequence->AppendComponent (aComponent));
 
 	// Create a filler - Get the component interface only (IID_IAAFComponent)
-	check(pDictionary->CreateInstance( pCDFiller,
-									   IID_IAAFComponent, 
-									   (IUnknown **)&compFill));		
+	check(pCDFiller->
+		  CreateInstance(IID_IAAFComponent, 
+						 (IUnknown **)&compFill));		
 
 	check(compFill->SetLength (fillLen));
 	check(compFill->SetDataDef(pDdefPicture));
