@@ -86,11 +86,8 @@
 #include "ImplEnumAAFMobSlots.h"
 #include "ImplEnumAAFComponents.h"
 
-#if defined(_MAC) || defined(macintosh)
-#include <wstring.h>
-#endif
-
 #include <assert.h>
+#include <wchar.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
@@ -759,7 +756,7 @@ AAFRESULT STDMETHODCALLTYPE
 		if (commentFound)
 		{
 			// Update existing comment
-			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafCharacter)+2), (aafDataValue_t)pComment));
+			CHECK(pTaggedValue->SetValue((wcslen(pComment)+1)*sizeof(aafCharacter), (aafDataValue_t)pComment));
 			pTaggedValue->ReleaseReference();
 			pTaggedValue = 0;
 		}
@@ -769,7 +766,7 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(pTaggedValueClass->CreateInstance ((ImplAAFObject**) &pTaggedValue));
 			CHECK(pTaggedValue->Initialize(pTagName,
 										   pTaggedValueType,
-                       (wcslen(pComment)*sizeof(aafCharacter)+2), 
+                       ((wcslen(pComment)+1)*sizeof(aafCharacter)), 
                        (aafDataValue_t)pComment));
 			_userComments.appendValue(pTaggedValue);
 		}

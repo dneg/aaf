@@ -83,7 +83,7 @@ typedef struct
 #include <assert.h>
 #include <string.h>
 #include "aafErr.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 ImplAAFTimecodeStream12M::ImplAAFTimecodeStream12M ()
 {}

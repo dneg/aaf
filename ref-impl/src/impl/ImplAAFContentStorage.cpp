@@ -30,7 +30,7 @@
 #include "AAFTypes.h"
 #include "aafErr.h"
 #include "AAFResult.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"

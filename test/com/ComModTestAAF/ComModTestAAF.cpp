@@ -82,18 +82,6 @@ typedef AAFRESULT (*AAFModuleTestProc)();
 #define SUCCESS (0)
 #define FAILURE (-1)
 
-#if defined(__sgi)
-// stubs
-void CoInitialize(void *)
-{
-}
-
-void CoUninitialize(void)
-{
-}
-
-#endif
-
 // routine copied from Tim Bingham's test program...
 static void formatError(DWORD errorCode)
 {

@@ -37,6 +37,7 @@
 
 #include <iostream.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -44,7 +45,7 @@
 
 #include "CAAFBuiltinDefs.h"
 
-#if defined(_MAC) || defined(macintosh)
+#if !defined(WIN32) && !defined(_WIN32)
 
 #define WAVE_FORMAT_PCM 0x0001
 

@@ -36,6 +36,8 @@
 
 #include <iostream.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
