@@ -1,0 +1,87 @@
+#startm .this-module 0
+AAFTypeDefObject\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDef\
+#endm
+#c
+AD_HEAD
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+AD_CLASS_UUID(c3274643, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(c3274644, 9467, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
+AD_CLASS_BEGIN
+AD_XMETHOD2(GetObject,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[out],
+			objOut,
+			AAFObject,
+			ppObject,
+			The contained object,
+
+			Returns the object contained in the specified Property Value.
+  // Assumes that the given Property Value is of the
+  // kAAFTypeCategoryObject.  If there is no contained object\,
+  // *ppObject will be set to NULL.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - The ppObject pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryObject.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or ppObject pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryObject.)
+
+
+AD_XMETHOD2(SetObject,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[in],
+			objIn,
+			AAFObject,
+			pObject,
+			The object to be contained,
+
+  // Places the given object to be contained in the specified Property
+  // Value.  Assumes that the given Property Value is of the
+  // kAAFTypeCategoryObject.  It is legal for pObject to be NULL.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryObject.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - The pPVal pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryObject.)
+AD_CLASS_END
