@@ -217,6 +217,8 @@ public:
     //          "was once open and is now closed".
   bool isClosed(void) const;
 
+  bool isValid(void) const;
+
     // @cmember Retrieve the client root <c OMStorable> from this <c OMFile>.
   OMStorable* clientRoot(void);
 
@@ -372,6 +374,7 @@ private:
   bool _isOpen;
   bool _isClosed;
   bool _isNew;
+  bool _isValid;
   OMByteOrder _byteOrder;
 
 };

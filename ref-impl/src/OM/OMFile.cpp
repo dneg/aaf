@@ -592,6 +592,12 @@ bool OMFile::isClosed(void) const
   return _isClosed;
 }
 
+bool OMFile::isValid(void) const
+{
+  TRACE("OMFile::isValid");
+  return _isValid;
+}
+
   // @mfunc Retrieve the client root <c OMStorable> from this <c OMFile>.
   //   @rdesc The root <c OMStorable>.
 OMStorable* OMFile::clientRoot(void)
@@ -943,6 +949,7 @@ OMFile::OMFile(const wchar_t* fileName,
   _isOpen(false),
   _isClosed(false),
   _isNew(false),
+  _isValid(true),
   _byteOrder(unspecified)
 {
   TRACE("OMFile::OMFile");
@@ -991,6 +998,7 @@ OMFile::OMFile(const wchar_t* fileName,
   _isOpen(false),
   _isClosed(false),
   _isNew(true),
+  _isValid(true),
   _byteOrder(unspecified)
 {
   TRACE("OMFile::OMFile");
@@ -1029,6 +1037,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   _isOpen(false),
   _isClosed(false),
   _isNew(false),
+  _isValid(true),
   _byteOrder(unspecified)
 {
   TRACE("OMFile::OMFile");
@@ -1069,6 +1078,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   _isOpen(false),
   _isClosed(false),
   _isNew(true),
+  _isValid(true),
   _byteOrder(byteOrder)
 {
   TRACE("OMFile::OMFile");
