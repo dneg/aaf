@@ -525,7 +525,7 @@ AD_XMETHOD9(CreateEssence,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
-[in],objPass, aafFileFormat_t,fileFormat,with this format,
+[in],objPass, aafUID_t,fileFormat,with this format,
 [out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
 Creates a single channel stream of essence.)
 	//@comm Creates a single channel stream of essence.  Convenience functions
@@ -549,7 +549,7 @@ AD_XMETHOD7(CreateMultiEssence,
 [in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
-[in],objPass, aafFileFormat_t,fileFormat,with this format,
+[in],objPass, aafUID_t,fileFormat,with this format,
 [out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
 Creates a multi-channel interleaved stream of essence.)
 	//@comm The essence handle from this call can be used with
