@@ -82,7 +82,6 @@
 #include "AAFDataDefs.h"
 #include "ImplEnumAAFMobSlots.h"
 #include "ImplEnumAAFComponents.h"
-#include "ImplAAFCloneResolver.h"
 #include "ImplAAFTaggedValueUtil.h"
 
 #include <assert.h>
@@ -93,6 +92,7 @@
 #include "aafCvt.h"
 #include "AAFUtils.h"
 
+#include "OMIdentitySet.h"
 #include "OMIdentitySetIter.h"
 
 #include "ImplAAFBuiltinDefs.h"
