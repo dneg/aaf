@@ -38,11 +38,11 @@
   //        stored property set.
 class OMStoredPropertySetIndex {
 private:
-  struct IndexEntry;  
+  struct IndexEntry;
 public:
   // @access Public members.
 
-    // @cmember Constructor.  
+    // @cmember Constructor.
   OMStoredPropertySetIndex(size_t capacity);
 
     // @cmember Destructor.
@@ -56,7 +56,7 @@ public:
               OMStoredForm storedForm,
               OMPropertyOffset offset,
               OMPropertySize length);
-  
+
     // @cmember The number of properties in this <c OMStoredPropertySetIndex>.
   size_t entries(void) const;
 
@@ -84,9 +84,9 @@ protected:
   OMStoredPropertySetIndex::IndexEntry* find(void) const;
 
   OMStoredPropertySetIndex::IndexEntry* find(OMPropertyId propertyId) const;
-    
+
 private:
-    
+
   struct IndexEntry {
     OMPropertyId _propertyId;
     OMStoredForm _storedForm;
@@ -94,7 +94,7 @@ private:
     OMPropertySize _length;
     bool _valid;
   };
-    
+
   size_t _capacity;
   IndexEntry* _table;
   size_t _entries;

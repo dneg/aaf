@@ -163,7 +163,7 @@ void OMStreamProperty<Element>::writeElements(OMUInt32 elementCount,
                                               const Element* elements)
 {
   TRACE("OMStreamProperty<Element>::writeElements");
-  
+
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Valid buffer", elements != 0);
 
@@ -288,7 +288,7 @@ void OMStreamProperty<Element>::setElementCount(OMUInt64 newElementCount)
   TRACE("OMStreamProperty<Element>::elementCount");
 
   OMUInt64 newSize = newElementCount * sizeof(Element);
-  
+
   setSize(newSize);
 }
 

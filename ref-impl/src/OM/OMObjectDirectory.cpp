@@ -61,7 +61,7 @@ bool OMObjectDirectory::lookup(const wchar_t* name, const OMStorable*& p) const
   TRACE("OMObjectDirectory::lookup");
   PRECONDITION("Valid name to look up", validWideString(name));
   bool result = false;
-  
+
   for (int i = 0; i < _current; i++) {
     int status = compareWideString(name, _table[i]._name);
     if (status == 0) {

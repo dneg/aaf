@@ -44,7 +44,7 @@ class OMSetElement;
   //        The objects are not ordered. Duplicates objects are not allowed.
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @tcarg class | UniqueIdentification | The type of the unique key
-  //          used to identify the referenced objects. 
+  //          used to identify the referenced objects.
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMReferenceSet {
 public:
@@ -100,7 +100,7 @@ public:
     //          <c OMReferenceSet> identified by
     //          <p identification>.
   ReferencedObject* value(const UniqueIdentification& identification) const;
-  
+
     // @cmember Find the <p ReferencedObject> in this
     //          <c OMReferenceSet> identified by
     //          <p identification>.  If the object is found it is returned

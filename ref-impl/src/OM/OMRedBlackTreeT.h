@@ -507,7 +507,7 @@ bool OMRedBlackTree<Key, Value>::insert(Node* n, Key k, Value v)
       n = n->_right;
     }
   }
-  
+
   if (n == _nil) {
     // There is no existing node with this key, create one
     result = true;

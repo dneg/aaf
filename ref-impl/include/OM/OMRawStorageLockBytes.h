@@ -51,13 +51,13 @@ public:
                                            void *pv,
                                            ULONG cb,
                                            ULONG *pcbRead);
-        
+
     // @cmember Write bytes (see Microsoft documentation for details).
   virtual HRESULT STDMETHODCALLTYPE WriteAt(ULARGE_INTEGER ulOffset,
                                             const void *pv,
                                             ULONG cb,
                                             ULONG *pcbWritten);
-        
+
     // @cmember Flush any buffered bytes (see Microsoft documentation
     //          for details).
   virtual HRESULT STDMETHODCALLTYPE Flush(void);
@@ -70,12 +70,12 @@ public:
   virtual HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER libOffset,
                                                ULARGE_INTEGER cb,
                                                DWORD dwLockType);
-        
+
     // @cmember See Microsoft documentation for details.
   virtual HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER libOffset,
                                                  ULARGE_INTEGER cb,
                                                  DWORD dwLockType);
-        
+
     // @cmember See Microsoft documentation for details.
   virtual HRESULT STDMETHODCALLTYPE Stat(STATSTG *pstatstg,
                                          DWORD grfStatFlag);

@@ -143,7 +143,7 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
   //   @parm The offset of the property value in bytes.
   //   @parm The size of the property value in bytes.
   //   @rdesc True if a property with the given id was found, false otherwise.
-  //   @this const  
+  //   @this const
 bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
                                     OMStoredForm& storedForm,
                                     OMPropertyOffset& offset,
@@ -204,7 +204,7 @@ bool OMStoredPropertySetIndex::isValid(OMPropertyOffset baseOffset) const
   if (entries != _entries) {
     result = false;
   }
-  
+
   return result;
 }
 

@@ -47,7 +47,7 @@ public:
 
     // @cmember Destructor.
   virtual ~OMStreamProperty(void);
- 
+
     // All reads/and writes advance the current element
 
   // Random access in chunks of Elements
