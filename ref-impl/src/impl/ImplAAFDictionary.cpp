@@ -288,6 +288,11 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
   return pDictionary;
 }
 
+void ImplAAFDictionary::cloneClassDef( const OMClassId& id, OMClassFactory* pDstFactory )
+{
+  metaDictionary()->cloneClassDef( id, pDstFactory );
+}
+
 bool ImplAAFDictionary::isRegistered(const OMClassId& classId ) const
 {
   return metaDictionary()->isRegistered( classId );

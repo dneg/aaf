@@ -51,6 +51,7 @@
 #include "OMPropertySetIterator.h"
 
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFCloneResolver.h"
 #include "aafErr.h"
 
 
@@ -202,6 +203,11 @@ bool ImplAAFMetaDictionary::isRegistered(const OMClassId& classId ) const
 {
 	assert( sizeof(OMClassId) == sizeof(aafUID_t) );
 	return containsClass( reinterpret_cast<const aafUID_t&>(classId) );
+}
+
+void ImplAAFMetaDictionary::cloneClassDef( const OMClassId& id, OMClassFactory* pDstFactory )
+{
+  ImplAAFCloneResolver::CloneClassDef(id, pDstFactory, this);
 }
 
 //
