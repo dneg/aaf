@@ -26,8 +26,6 @@
 #include <string.h>
 #include "AAFResult.h"
 
-const int PID_ESSENCEDATA_FILEMOBID     = 0;
-const int PID_ESSENCEDATA_MEDIADATA     = 1;
 
 const aafUID_t kNullID = {0};
 
