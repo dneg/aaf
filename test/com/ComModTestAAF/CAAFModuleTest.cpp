@@ -129,18 +129,22 @@ STDMETHODIMP CAAFModuleTest::Test
 		{
 			if (0 == strcmp(reinterpret_cast<char *>(pClassName), AAFObjectMap[index].pClassName))
 			{
-				cout << "Running module test for " << setiosflags(ios::left) << setw(30) << AAFObjectMap[index].pClassName;
-
+				cout << "Testing " << AAFObjectMap[index].pClassName << " ...." << endl;
 
 				hr = AAFObjectMap[index].pfnTestProc();
-				if (FAILED(hr))
-					cout << "FAILED!" << endl;
+
+				cout << "Module test for " << setiosflags(ios::left) << setw(38) << AAFObjectMap[index].pClassName;
+
+				if ( AAFRESULT_SUCCESS == hr )
+					cout << "SUCCEEDED.\n" << endl;
+				else if ( AAFRESULT_TEST_PARTIAL_SUCCESS == hr )
+					cout<< "PARTIAL SUCCESS\n" << endl;
 				else if (AAFRESULT_NOT_IMPLEMENTED == hr)
-					cout << "NOT IMPLEMENTED!" << endl;
-				else if ( AAFRESULT_TEST_PARTIAL_SUCCESS == testResults[testCount] )
-					cout<< "PARTIAL SUCCESS";
+					cout << "NOT IMPLEMENTED!\n" << endl;
 				else
-					cout << "SUCCEEDED." << endl;
+					cout << "FAILED!\n" << endl;
+			
+					
 
 				return S_OK;
 			}
@@ -245,6 +249,7 @@ HRESULT STDMETHODCALLTYPE
     return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
+
 
 
 
