@@ -166,7 +166,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pFile)
 	{	// Close file, clean-up and return
 		if (bFileOpen)
+		  {
+			pFile->Save();
 			pFile->Close();
+		  }
  		pFile->Release();
 	}
 

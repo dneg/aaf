@@ -113,6 +113,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add the source mob into the tree
 		checkResult(pHeader->AppendMob(pMob));
 
+		// Attempt to save the file.
+		checkResult(pFile->Save());
+
     // Attempt to close the file.
 	  checkResult(pFile->Close());
 	  bFileOpen = false;
@@ -136,7 +139,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pFile)
 	{	// Close file
 		if (bFileOpen)
+		  {
+			pFile->Save();
 			pFile->Close();
+		  }
  		pFile->Release();
 	}
 
