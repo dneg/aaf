@@ -46,7 +46,7 @@
 
 
 #define assert(b, msg) \
-  if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
+  if (!(b)) {fprintf(stderr, "ASSERT: %s: File %s on line %d\n\n", msg, __FILE__, __LINE__); exit(1);}
 
 
 
@@ -229,6 +229,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 										&dataOffset,
 										&dataLen));
 
+
+		assert (numCh == 1, "Input file must be mono audio data");
 		//  The testtype is for Internal Standard calls so set dataPtr
 		dataPtr = dataBuff + dataOffset;
 		
@@ -266,17 +268,29 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		
 		/* Write the samples */
 
-		aafInt32 totalNumberSamples = dataLen * 5;  //  arbitrarily set to write 5 copies of audio sequentially
-		aafInt32 samplesLeft = totalNumberSamples;
+		aafInt32 samplesLeft = dataLen;
+		aafUInt32 bytesPerSample = bitsPerSample/8;
+		aafUInt32 samplesToWrite = 0;
+		if (dataLen*bytesPerSample < (sizeof(dataBuff) - dataOffset))
+			samplesToWrite = dataLen;
+		else
+			samplesToWrite  = (sizeof(dataBuff) - dataOffset)/bytesPerSample;
 
-		while (samplesLeft >0)
+		//read input wav file in chunks and write them to Essence stream
+		while (true) 
 		{
-			check(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded bytes/sample ==1// Number of Samples
+			check(pEssenceAccess->WriteSamples(	samplesToWrite,	// Number of Samples
 												sizeof(dataBuff), // buffer size
 												dataPtr,	// THE data
 												&samplesWritten,
 												&bytesWritten));
-			samplesLeft=samplesLeft-dataLen;
+			samplesLeft = samplesLeft-samplesToWrite;
+			if (samplesLeft <= 0)
+				break;
+			
+			aafUInt32 bytesToWrite = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+			samplesToWrite = bytesToWrite/bytesPerSample;
+			dataPtr = dataBuff;
 		}
 
 		// Close the essence data file
@@ -519,8 +533,11 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 			break;
 		scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
 	}	
-	
-	return(AAFRESULT_SUCCESS);
+
+	if (fmtFound && dataFound)
+		return(AAFRESULT_SUCCESS);
+	else
+		return (AAFRESULT_TEST_FAILED);
 }
 
 // Make sure all of our required plugins have been registered.
