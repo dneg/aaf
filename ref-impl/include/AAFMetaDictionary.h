@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Thu Sep 16 14:19:35 EDT 1999
+// This file was generated on Thu Sep 16 15:33:16 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -454,10 +454,10 @@
 #define AAF_TYPE_SEPARATOR()
 #endif
 
-// Helper definitions
-//
+#ifndef AAF_LITERAL_AUID
 #define AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8) \
                         {l, w1, w2, {b1, b2, b3, b4, b5, b6, b7, b8}}
+#endif
 
 // AAF Object model
 //

@@ -538,10 +538,10 @@ BEGIN {
   printf("#define AAF_TYPE_SEPARATOR()\n");
   printf("#endif\n");
   printf("\n");
-  printf("// Helper definitions\n");
-  printf("//\n");
+  printf("#ifndef AAF_LITERAL_AUID\n");
   printf("#define AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8) \\\n");
   printf("                        {l, w1, w2, {b1, b2, b3, b4, b5, b6, b7, b8}}\n");
+  printf("#endif\n");
   printf("\n");
   printf("// AAF Object model\n");
   printf("//\n");
