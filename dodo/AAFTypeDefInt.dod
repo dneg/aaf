@@ -11,467 +11,199 @@ AD_IDL(//
 // This interface is used to define Integer types used in AAF persistent
 // objects.
 //
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/)
-AD_FORWARD_DECLARATION(AAFPropertyValue)
-
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
 AD_CLASS_UUID(809c8ca1, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(809c8ca2, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_METHOD0(Initialize,
-		   Initializes a newly allocated\, empty IAAFTypeDefInt-supporting
-  // object.  This method must be called after allocation\, and before
+AD_XMETHOD4(Initialize,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this type,
+
+			[in],
+			objPass,
+			aafUInt32,
+			intSize,
+			the size of this integer type in bytes,
+
+			[in],
+			objPass,
+			aafBool,
+			isSigned,
+			true if this integer type is signed; false for unsigned,
+
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pTypeName,
+			friendly name of this type definition,
+
+     Initializes this type def to be identified by the given guid\, to
+  // have the given size in bytes\, and to be signed or unsigned.
+  //
+  // This method must be called after allocation\, and before
   // any other method can be called.
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_ALREADY_INIT)
+
+
+AD_XMETHOD3(CreateValue,
+			[in\, size_is\(valSize\)],
+			objPass,
+			aafMemPtr_t,
+			pVal,
+			pointer to integer initialization value,
+
+			[in],
+			objPass,
+			aafUInt32,
+			valSize,
+			size of integer\, in bytes\, in pVal,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppPropVal,
+			newly created property value,
+
+     Creates a property value which contains an integer.  Initializes
+  // it to contain the given integer value.  The initialization value
+  // is passed through pVal; the size of the initialzation value is
+  // given in valSize.
   //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  // valSize may be smaller than GetSize\(\) for this typedef; if so\,
+  // the value is lsb-justified and sign-extended \(for signed\) or
+  // zero-filled \(for unsigned\).
+  //
+  // Succeeds if:
+  // - The pVal pointer is valid.
+  // - The ppPropVal pointer is valid.
+  // - valSize is no larger than GetSize\(\) for this typedef.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pVal or ppPropVal\)
+  //
+  // AAFRESULT_BAD_SIZE
+  //   - valSize is larger than GetSize\(\) for this typedef.)
 
 
-AD_XMETHOD2(GetSize,
+AD_XMETHOD3(GetInteger,
 			[in],
 			objIn,
 			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
+			pPropVal,
+			property value from which value is to be read,
 
+			[out\, size_is\(bufSize\)],
+			objPass,
+			aafMemPtr_t,
+			pBuf,
+			buffer into which value is written,
+
+			[in],
+			objPass,
+			aafUInt32,
+			bufSize,
+			size of pBuf buffer in bytes,
+
+     Returns the integer value of this property.  The value
+  // to set is passed through pVal.  The size of the pVal buffer is
+  // given in valSize.  valSize may be larger than GetSize\(\); if so\,
+  // the value is lsb-justified and sign-extended \(for signed\) or
+  // zero-filled \(for unsigned\).
+  //
+  // Succeeds if:
+  // - The pPropVal pointer is valid.
+  // - The pBuf pointer is valid.
+  // - bufSize indicates that pBuf is large enough to hold the value.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pBuf\)
+  //
+  // AAFRESULT_BAD_SIZE
+  //   - valSize is smaller than GetSize\(\) for this typedef.)
+
+
+AD_XMETHOD3(SetInteger,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value from which value is to be read,
+
+			[in\, size_is\(bufSize\)],
+			objPass,
+			aafUInt8 *,
+			pBuf,
+			buffer from which value is read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			bufSize,
+			size of pBuf buffer in bytes,
+
+     Sets this property value to the given integer value.  The value
+  // to set is passed in pVal\, and the size of the value in pVal is
+  // given in valSize.  valSize may be smaller than GetSize\(\); if so\,
+  // the value is lsb-justified and sign-extended \(for signed\) or
+  // zero-filled \(for unsigned\).
+  //
+  // Succeeds if:
+  // - The pPropVal pointer is valid.
+  // - The pBuf pointer is valid.
+  // - bufSize indicates that pBuf is large enough to hold the value.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pBuf\)
+  //
+  // AAFRESULT_BAD_SIZE
+  //   - valSize is larger than GetSize\(\) for this typedef.)
+
+
+AD_XMETHOD1(GetSize,
 			[out],
 			objPass,
 			aafUInt32 *,
 			pSize,
 			the returned size of this integral value\, in bytes,
 
-			Returns the size of the integral value assumed to be within the
-  // specified Property Value.  Assumes that the given Property Value
-  // is of the kAAFTypeCategoryInt.
+			Returns the size of the integral value defined by this type
+  // definition. 
   //
   // Succeeds if:
-  // - The pPVal pointer is valid.
   // - The pSize pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pSize pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pSize\))
 
 
-AD_XMETHOD4(GetValue,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
-
-			[in],
-			objPass,
-			aafUInt32,
-			valBufSize,
-			The size in bytes of buffer indicated by pValBuf,
-
-			[out\, size_is\(valBufSize\)\, length_is\(*pLenRead\)],
-			objPass,
-			aafInt8 *,
-			pValBuf,
-			Buffer into which value should be written,
-
+AD_XMETHOD1(IsSigned,
 			[out],
 			objPass,
-			aafUInt32 *,
-			pLenRead,
-			Number of bytes read,
-
-			Returns the integral value assumed to be within the specified
-  // Property Value\, and places it into the memory specified by
-  // pValBuf.  The size of the buffer indicated by pValBuf is passed
-  // in through the valBufSize argument.  The actual number of bytes
-  // read is returned in *pLenRead.  Assumes that the given Property
-  // Value is of the kAAFTypeCategoryInt.  If the buffer specified by
-  // valBufSize is actually larger than the contained value\, the
-  // value written to the buffer will be LSB-justified and
-  // sign-extended.
-  //
-  // Note: GetSize\(\) may be called to determine the size of buffer
-  // required for this method to succeed.
+			aafBool *,
+			pSigned,
+			set to true if this integer type is signed; set to false for
+    // unsigned,
+			Puts true in *pSigned if property values defined with this type
+  // def are signed; puts false there for unsigned property values.
   //
   // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - the pValBuf pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
-  // - valBufSize indicates that the pValBuf buffer is large enough to
-  //   hold the value
+  // - The pSigned pointer is valid.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pSize pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - valBufSize indicates the pValBuf is too small to hold the
-  //     value.)
-
-
-AD_XMETHOD3(SetValue,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
-
-			[in],
-			objPass,
-			aafUInt32,
-			valSize,
-			The size in bytes of buffer indicated by pValBuf,
-
-			[out],
-			objPass,
-			aafInt8 *,
-			pValBuf,
-			Buffer into which value should be written,
-
-			Sets the integral value assumed to be within the specified
-  // Property Value to the value given in the memory specified by
-  // pValBuf.  The size of the data in the buffer is passed in through
-  // the valSize argument.  Assumes that the given Property Value is
-  // of the kAAFTypeCategoryInt.  If the contained value is actually
-  // larger than specified by valSize\, the contained value will be
-  // LSB-justified and sign-extended.
-  //
-  // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - the pValBuf pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
-  // - valSize indicates that the data in the pValBuf buffer can fit
-  //   into the contained value.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pValBuf pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.
-  //
-  // AAFRESULT_DATA_SIZE
-  //   - valSize indicates the given data is too large to fit into the
-  //     contained value.)
-
-
-AD_XMETHOD2(GetInt8Value,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
-
-			[out],
-			objPass,
-			aafInt8 *,
-			pResult,
-			Place into which value should be written,
-
-			Convenience method to return the value assumed to be within the
-  // specified Property Value\, and place it into *pResult.  Assumes
-  // that the given Property Value is of the kAAFTypeCategoryInt\, and
-  // the value contained can fit into an aafInt8.
-  //
-  // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - the pResult pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
-  // - The value contained can fit into an aafInt8.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pResult pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - The value contained cannot fit into an aafInt8.)
-
-
-AD_XMETHOD2(SetInt8Value,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be set with the given data,
-
-			[in],
-			objPass,
-			aafInt8 *,
-			pNewValue,
-			New value to write,
-
-			Sets the value assumed to be within the specified Property Value
-  // to *pNewValue.  Assumes that the given Property Value is of the
-  // kAAFTypeCategoryInt.  If the contained value is actuall larger
-  // than an aafInt8\, the contained value will be LSB-justified and
-  // sign-extended.
-  //
-  // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - the pNewValue pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pNewValue pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.)
-
-
-AD_XMETHOD2(GetInt16Value,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
-
-			[out],
-			objPass,
-			aafInt16 *,
-			pResult,
-			Place into which value should be written,
-
-			Convenience method to return the value assumed to be within the
-  // specified Property Value\, and place it into *pResult.  Assumes
-  // that the given Property Value is of the kAAFTypeCategoryInt\, and
-  // the value contained can fit into an aafInt16.  If the value
-  // contained is actually smaller than an aafInt16 then the data
-  // written to pResult will be lsb-justified and sign-extended.
-  //
-  // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - the pResult pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
-  // - The value contained can fit into an aafInt16.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pResult pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - The value contained cannot fit into an aafInt16.)
-
-
-AD_XMETHOD2(SetInt16Value,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be set with the given data,
-
-			[in],
-			objPass,
-			aafInt16 *,
-			pNewValue,
-			New value to write,
-
-			Sets the value assumed to be within the specified Property Value
-  // to *pNewValue.  Assumes that the given Property Value is of the
-  // kAAFTypeCategoryInt\, and that an aafInt16 can fit into the
-  // contained value.  If the value contained is actually larger than
-  // an aafInt16\, the contained value will be LSB-justified and
-  // sign-extended.
-  //
-  // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - the pResult pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
-  // - An aafInt16 can fit into the contained value.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pNewValue pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - An aafInt16 cannot fit into the contained value.)
-
-
-AD_XMETHOD2(GetInt32Value,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
-
-			[out],
-			objPass,
-			aafInt32 *,
-			pResult,
-			Place into which value should be written,
-
-			Convenience method to return the value assumed to be within the
-  // specified Property Value\, and place it into *pResult.  Assumes
-  // that the given Property Value is of the kAAFTypeCategoryInt\, and
-  // the value contained can fit into an aafInt32.  If the value
-  // contained is actually smaller than an aafInt32 then the data
-  // written to pResult will be lsb-justified and sign-extended.
-  //
-  // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - the pResult pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
-  // - The value contained can fit into an aafInt32.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pResult pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - The value contained cannot fit into an aafInt32.)
-
-
-AD_XMETHOD2(SetInt32Value,
-			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be set with the given data,
-
-			[in],
-			objPass,
-			aafInt32 *,
-			pNewValue,
-			New value to write,
-
-			Sets the value assumed to be within the specified Property Value
-  // to *pNewValue.  Assumes that the given Property Value is of the
-  // kAAFTypeCategoryInt\, and that an aafInt32 can fit into the
-  // contained value.  If the value contained is actually larger than
-  // an aafInt32\, the contained value will be LSB-justified and
-  // sign-extended.
-  //
-  // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - the pResult pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryInt.
-  // - An aafInt32 can fit into the contained value.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or pNewValue pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryInt.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - An aafInt32 cannot fit into the contained value.)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pSigned\))
 AD_XCLASS_END(Concrete, StoredObject)
