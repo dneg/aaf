@@ -65,7 +65,10 @@ ImplAAFPropertyValue::~ImplAAFPropertyValue ()
 #endif // #if defined(REFERENCE_PROPERTY_CONTAINER)
 }
 
-
+void ImplAAFPropertyValue::SetProperty(OMProperty * pProperty)
+{
+  _property = pProperty;
+}
 
 AAFRESULT ImplAAFPropertyValue::Initialize (
 	  const ImplAAFTypeDef *propertyType)
@@ -116,7 +119,7 @@ AAFRESULT ImplAAFPropertyValue::Initialize (
   
   // Save our initialized member data.
   SetType(propertyType);
-  _property = property;
+  SetProperty(property);
   _propertyContainer = propertyContainer;
 #if defined(REFERENCE_PROPERTY_CONTAINER)
   _propertyContainer->AcquireReference();

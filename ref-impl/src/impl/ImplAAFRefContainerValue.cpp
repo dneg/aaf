@@ -78,6 +78,11 @@ ImplAAFRefContainerValue::~ImplAAFRefContainerValue ()
 
 
 
+AAFRESULT ImplAAFRefContainerValue::Initialize (
+	  const ImplAAFTypeDef *propertyType)
+{
+  return ImplAAFPropertyValue::Initialize(propertyType);
+}
 
 
 AAFRESULT ImplAAFRefContainerValue::Initialize (
@@ -183,6 +188,41 @@ void ImplAAFRefContainerValue::ReleaseOldObject(OMObject *object)
   if (NULL == pOldObject)
     throw AAFRESULT_INVALID_OBJ; // ???
   pOldObject->ReleaseReference();
+}
+
+  
+// Utility to release all old OMObjects from the given container.
+AAFRESULT ImplAAFRefContainerValue::ReleaseAllObjects(OMReferenceContainer *pContainerProperty)
+{
+  assert(pContainerProperty && usesReferenceCounting());
+
+  OMReferenceContainerIterator* containerIter = pContainerProperty->createIterator();
+  if (NULL == containerIter)
+    return AAFRESULT_NOMEMORY;
+    
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  while (AAFRESULT_SUCCEEDED(result) && (containerIter->before() || containerIter->valid()))
+  {
+    if (++(*containerIter))
+    {
+      OMObject *object = containerIter->currentObject();
+      ImplAAFStorable *obj = dynamic_cast<ImplAAFStorable*>(object);
+      assert(NULL != obj);
+      if (NULL == obj)
+      {
+        result = AAFRESULT_INVALID_OBJ;
+      }
+      else
+      {
+        obj->ReleaseReference();
+      }
+    }
+  }
+
+  delete containerIter;
+  containerIter = NULL;
+  
+  return AAFRESULT_SUCCESS;
 }
 
 

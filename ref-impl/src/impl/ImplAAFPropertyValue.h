@@ -77,8 +77,10 @@ protected:
   //
   //********
   virtual ~ImplAAFPropertyValue ();
-
-
+  
+  // Install the property.
+  void SetProperty(OMProperty * pProperty);
+  
   // non-published method to initialize this object.
   // Initialize an instance from a type definition. This is the "old-style"
   // "non-direct" access initialization method. 

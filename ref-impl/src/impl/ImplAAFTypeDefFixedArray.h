@@ -93,17 +93,14 @@ public:
   //****************
   // CreateValueFromValues() 
   //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    CreateValueFromValues
-        (// @parm [in, size_is(numElements)] array of property values for elements of array value which
-    // is to be created.
-         ImplAAFPropertyValue ** ppElementValues,
+  // Implementation inherited from ImplAAFTypeDefArray
 
-         // @parm [in] size of pElementValues array.
-         aafUInt32  numElements,
 
-         // @parm [out] newly-created property value
-         ImplAAFPropertyValue ** ppPropVal);
+  //****************
+  // CreateValueFromCArray() 
+  //
+  // Implementation inherited from ImplAAFTypeDefArray
+
 
   //****************
   // GetElements() 
@@ -112,6 +109,13 @@ public:
 		GetElements (
 								ImplAAFPropertyValue *pInPropVal,
 								ImplEnumAAFPropertyValues **ppEnum);
+
+
+  //****************
+  // SetCArray() 
+  //
+  // Implementation inherited from ImplAAFTypeDefArray
+
 
   //*************************************************************
   //
