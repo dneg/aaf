@@ -52,7 +52,7 @@ HRESULT STDMETHODCALLTYPE
         aafDataBuffer_t  buffer,
         aafUInt32 *  bytesRead)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return(_data->Read (buflen, buffer, bytesRead));
 }
 
 
