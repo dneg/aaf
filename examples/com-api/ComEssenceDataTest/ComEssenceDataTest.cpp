@@ -92,6 +92,8 @@ const CLSID CLSID_AAFEssenceAccess = { 0xaed97eb1, 0x2bc8, 0x11D2, { 0xbf, 0xaa,
 
 #endif
 
+const CLSID CLSID_AAFWAVECodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+
 // This static variables are here so they can be referenced 
 // thru out the whole program.
 
