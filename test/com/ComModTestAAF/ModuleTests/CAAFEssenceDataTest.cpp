@@ -84,6 +84,7 @@ struct EssenceDataTest
 
   // Shared member data:
   HRESULT _hr;
+  aafProductVersion_t _prodecutVersion;
   aafProductIdentification_t _productInfo;
   IAAFFile *_pFile;
   bool _bFileOpen;
@@ -184,15 +185,14 @@ EssenceDataTest::EssenceDataTest():
   _buffer(NULL),
   _bufferSize(0)
 {
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
+  _prodecutVersion.major = 1;
+  _prodecutVersion.minor = 0;
+  _prodecutVersion.tertiary = 0;
+  _prodecutVersion.patchLevel = 0;
+  _prodecutVersion.type = kAAFVersionUnknown;
   _productInfo.companyName = L"AAF Developers Desk";
   _productInfo.productName = L"AAFEssenceData Test";
-  _productInfo.productVersion = &v;
+  _productInfo.productVersion = &_prodecutVersion;
   _productInfo.productVersionString = NULL;
   _productInfo.productID = UnitTestProductID;
   _productInfo.platform = NULL;
