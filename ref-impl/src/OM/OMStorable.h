@@ -34,6 +34,10 @@ public:
   
   void setName(const char* name);
 
+  // Save this object.
+  //
+  void save(void) const;
+
   // Save this object to `s'.
   //
   void saveTo(OMStoredObject& s) const;
@@ -47,6 +51,10 @@ public:
   virtual OMFile* file(void) const;
 
   const char* pathName(void) const;
+
+  // The stored representation of this objects.
+  //
+  OMStoredObject* store(void) const;
 
 private:
 
@@ -64,7 +72,10 @@ private:
 
 protected:
 
+  void setStore(OMStoredObject* store);
+
   OMStorable* containingObject(void) const;
+
   OMPropertySet _persistentProperties;
 
 private:
@@ -74,6 +85,8 @@ private:
 
   OMProperty* _containingProperty;
   size_t _index;
+
+  OMStoredObject* _store;
 
 };
 
