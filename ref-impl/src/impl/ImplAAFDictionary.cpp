@@ -382,12 +382,12 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 	  //
 	  result = pvtCreateBaseClassInstance(auid);
 
-//XX+ DAB 9-sep-2001 - code corrected to REALLY iterate up the inheritance hierarchy
+//DAB+ 9-Sep-2001 Code corrected to REALLY iterate up the inheritance hierarchy
 	  aafUID_t parentAUID = auid;
 	  while (result == 0)
 	  {
 //	    aafUID_t parentAUID = auid;
-//XX- DAB 9-sep-2001 - code corrected to REALLY iterate up the inheritance hierarchy
+//DAB- 9-Sep-2001 Code corrected to REALLY iterate up the inheritance hierarchy
 	    aafBool	isRoot;
 
 	    // Not a built-in class; find the nearest built-in parent.
@@ -1783,7 +1783,7 @@ AAFRESULT ImplAAFDictionary::PvtIsPropertyDefDuplicate(
 		CHECK(GetClassDefs(&classEnum));
 		while((foundDup == false) && classEnum->NextOne(&pClassDef) == AAFRESULT_SUCCESS)
 		{
-			CHECK(pClassDef->GetAUID(&correctClassID));
+			CHECK(pClassDef->GetAUID(&testClassID));
 			if(memcmp(&testClassID, &correctClassID, sizeof(aafUID_t)) != 0)
 			{
 				foundDup = pClassDef->PvtIsPropertyDefRegistered(propertyDefID);
