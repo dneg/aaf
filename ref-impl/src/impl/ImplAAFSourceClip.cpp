@@ -329,5 +329,4 @@ AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 }
 
 
-OMDEFINE_STORABLE(ImplAAFSourceClip, AUID_AAFSourceClip);
 
