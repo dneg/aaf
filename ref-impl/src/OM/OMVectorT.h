@@ -273,7 +273,7 @@ template <typename Element>
 void OMVector<Element>::setAt(const Element value, const size_t index)
 {
   TRACE("OMVector<Element>::setAt");
-  PRECONDITION("Valid index", (index >= 0) && (index <  _count));
+  PRECONDITION("Valid index", index <  _count);
 
   _vector[index] = value;
 
@@ -291,7 +291,7 @@ template <typename Element>
 void OMVector<Element>::getAt(Element& value, const size_t index) const
 {
   TRACE("OMVector<Element>::getAt");
-  PRECONDITION("Valid index", ((index >= 0) && (index < _count)));
+  PRECONDITION("Valid index", index < _count);
 
   value = _vector[index];
 }
@@ -306,7 +306,7 @@ template <typename Element>
 Element& OMVector<Element>::getAt(const size_t index) const
 {
   TRACE("OMVector<Element>::getAt");
-  PRECONDITION("Valid index", ((index >= 0) && (index < _count)));
+  PRECONDITION("Valid index", index < _count);
 
   return _vector[index];
 }
@@ -321,7 +321,7 @@ template <typename Element>
 Element& OMVector<Element>::valueAt(const size_t index) const
 {
   TRACE("OMVector<Element>::valueAt");
-  PRECONDITION("Valid index", ((index >= 0) && (index < _count)));
+  PRECONDITION("Valid index", index < _count);
 
   return _vector[index];
 }
@@ -338,7 +338,7 @@ template <typename Element>
 void OMVector<Element>::insertAt(const Element value, const size_t index)
 {
   TRACE("OMVector<Element>::insertAt");
-  PRECONDITION("Valid index", (index >= 0) && (index <= _count));
+  PRECONDITION("Valid index", index <= _count);
   SAVE(_count, size_t);
 
   // Make space for at least one more element
@@ -399,7 +399,7 @@ template <typename Element>
 void OMVector<Element>::removeAt(const size_t index)
 {
   TRACE("OMVector<Element>::removeAt");
-  PRECONDITION("Valid index", (index >= 0) && (index <  _count));
+  PRECONDITION("Valid index", index < _count);
   SAVE(_count, size_t);
 
   // Shuffle down existing elements
