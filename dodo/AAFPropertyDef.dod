@@ -85,6 +85,30 @@ AD_XMETHOD1(GetIsOptional,
   // AAFRESULT_NULL_PARAM
   //   - The pIsOptional pointer is NULL.)
 
+AD_XMETHOD1(GetIsUniqueIdentifier,
+			[out\, retval],
+			objPass,
+			aafBoolean_t *,
+			pIsUniqueIdentifier,
+			pointer to the result, 
+
+     Sets *pIsUniqueIdentifier to AAFTrue for properties that are optional.
+  // Sets it to AAFFalse for properties that are mandatory.
+  //
+  // Succeeds if:
+  // - The pIsUniqueIdentifier pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  AD_STD_COMMENT_METH_STUB
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - The pIsUniqueIdentifier pointer is NULL.)
+
 
 
 
