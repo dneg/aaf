@@ -232,16 +232,14 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const char* name,
                                    size_t valueSize)
 : OMProperty(propertyId, SF_DATA, name),
-  _size(valueSize),
+  _size(0),
   _bits(0)
 {
   TRACE("OMSimpleProperty::OMSimpleProperty");
   PRECONDITION("Valid size", (valueSize > 0));
 
-  _bits = new unsigned char[valueSize];
-  ASSERT("Valid heap pointer", _bits != 0);
-
-  for (size_t i = 0; i < valueSize; i++) {
+  setSize(valueSize);
+  for (size_t i = 0; i < _size; i++) {
     _bits[i] = 0;
   }
 
@@ -428,13 +426,7 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
   PRECONDITION("Valid data buffer", value != 0);
   PRECONDITION("Valid size", valueSize > 0);
 
-  if (valueSize != _size) {
-    delete [] _bits;
-    _bits = 0; // for BoundsChecker
-    _bits = new unsigned char[valueSize];
-    ASSERT("Valid heap pointer", _bits != 0);
-    _size = valueSize;
-  }
+  setSize(valueSize);
   memcpy(_bits, value, _size);
   setPresent();
 }
