@@ -108,10 +108,6 @@ C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
 
 C.this-module::~C.this-module ()
 {
-//  Impl.this-module * rep;
-//  rep = GetRepObject ();
-//  assert (rep);
-//  delete rep;
 }
 #endm
 
@@ -145,8 +141,14 @@ C.this-module::~C.this-module ()
 {
 #ifdef BOB_TEST
   // The base class destructor of Impl.this-module must be declared as virtual.
+  // Eventhough the Impl.this-module is reference counted we call delete 
+  // directly since the Impl.this-module::ReleaseReference() delegates its
+  // release to C.this-module::Release().
   if (_rep)
-    delete _rep; 
+  {
+    delete _rep;
+    _rep = NULL;
+  } 
 #endif 
 }
 
