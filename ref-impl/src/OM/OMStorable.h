@@ -93,7 +93,15 @@ public:
     //          persistent representation.
   virtual OMFile* file(void) const;
 
+    // @cmember The path to this <c OMStorable> from the root of
+    //          the <c OMFile> in which this <c OMStorable> resides.
+    //   @this const
   const char* pathName(void) const;
+
+    // @cmember Is this <c OMStorable> the root of the object
+    //          containment hierarchy.
+    //   @this const
+  bool isRoot(void) const;
 
     // @cmember The stored representation of this <c OMStorable>.
     //   @this const
