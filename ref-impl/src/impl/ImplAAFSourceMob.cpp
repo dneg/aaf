@@ -47,6 +47,7 @@
 #include "ImplAAFSequence.h"
 #include "ImplEnumAAFComponents.h"
 #include "ImplAAFTimecode.h"
+#include "ImplAAFFileDescriptor.h"
 
 extern "C" const aafClassID_t	CLSID_AAFSourceClip;
 extern "C" const aafClassID_t	CLSID_AAFSequence;
@@ -756,6 +757,66 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 #else
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
+}
+
+/************************
+ * Function: omfsReconcileMobLength (INTERNAL)
+ *
+ * 	Given a master mob or file mob, make sure that all fields
+ *		which contain the length of the mob are in agreement.  Currently
+ *		only makes sure that mob length references are >= each of
+ *		the track lengths.
+ *
+ * Argument Notes:
+ *		<none>.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
+AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
+{
+	aafInt32					numSlots, loop;
+	aafLength_t					len;
+	ImplAAFTimelineMobSlot		*slot;	//!!! Assuming timeline
+	ImplAAFSegment				*seg;
+	ImplEnumAAFMobSlots			*slotIter = NULL;
+	aafRational_t				srcRate, destRate;
+	ImplAAFFileDescriptor		*physMedia;
+		
+	XPROTECT()
+	{
+		CHECK(GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&physMedia));	//!!!
+		{
+			CHECK(EnumAAFAllMobSlots (&slotIter));
+			CHECK(GetNumSlots(&numSlots));
+			for (loop = 1; loop <= numSlots; loop++)
+			{
+				CHECK(slotIter->NextOne((ImplAAFMobSlot **)&slot));	//!!! Assuming timeline
+				CHECK(slot->GetSegment(&seg));
+				CHECK(slot->GetEditRate(&destRate));
+				CHECK(physMedia->GetLength(&len));
+				CHECK(physMedia->GetSampleRate(&srcRate));
+//!!!				CHECK(slot->ConvertToEditRate(len,
+//										aafRational_t destRate,
+//										aafPosition_t *convertPos);
+				if((srcRate.numerator != destRate.numerator) ||
+				   (srcRate.denominator != destRate.denominator))
+				{
+					CHECK(AAFConvertEditRate(	srcRate, len, destRate, kRoundFloor, &len));
+				}
+				CHECK(seg->SetLength(&len));
+			}			
+//!!!			delete slotIter;
+			slotIter = NULL;
+		}
+	}
+	XEXCEPT
+	XEND
+		
+	return (AAFRESULT_SUCCESS);
 }
 
 //!!! Need a routine to get timecode slotID from physical timecode track
