@@ -6,7 +6,6 @@ AAFSourceClip\
 AAFSourceReference\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFSourceReference.exp
 AD_HEAD
 AD_FORWARD_DECLARATION(AAFMob)
@@ -20,6 +19,8 @@ AD_FORWARD_DECLARATION(AAFDataDefinition)
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+AD_CLASS_UUID(38e6f8a5, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
+AD_DEFAULT_UUID(38e6f8a7, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_CLASS_BEGIN
 
 AD_XCONSTRUCTOR3([in],objIn,AAFDataDefinition,datadef  ,Data Definition object,
@@ -75,8 +76,6 @@ AD_XMETHOD6(TraverseToClip,
 			[out],objPass,aafLength_t *,sclpLen,,
 			[out],objPass,aafBool *    ,isMask,,
 			)
-
-AD_OVERRIDE(.method-Test)
 
 AD_OVERRIDE(.method-GetSourceID)
 AD_OVERRIDE(.method-SetSourceID)
