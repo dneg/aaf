@@ -24,6 +24,12 @@ AD_FORWARD_DECLARATION(EnumAAFControlCodeDefs)
 *                                          *
 \******************************************/
 
+ 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 AD_CLASS_UUID(14035d92, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(14035d91, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12)

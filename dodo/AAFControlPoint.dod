@@ -14,7 +14,13 @@ AD_HEAD
 * Copyright (c) 1998 Avid Technology, Inc. *
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
-\******************************************/
+\******************************************/ 
+
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
 
 AD_FORWARD_DECLARATION(AAFDataDef)
 

@@ -16,6 +16,12 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 #c AD_INCLUDE(myVector)
 
 AD_FORWARD_DECLARATION(AAFSegment)
