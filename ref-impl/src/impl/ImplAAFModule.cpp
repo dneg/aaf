@@ -171,28 +171,22 @@ STDAPI ImplAAFFileOpenExistingRead (
 		hr = AAFRESULT_NOMEMORY;
   else
   {
-    try
+    // Make sure the file is initialized (not open yet...)
+    hr = pFile->Initialize();
+    if (SUCCEEDED(hr))
     {
-      // Make sure the file is initialized (not open yet...)
-      hr = pFile->Initialize();
+      // Attempt to open the file read only.
+      hr = pFile->OpenExistingRead(pFileName, modeFlags);
       if (SUCCEEDED(hr))
       {
-        // Attempt to open the file read only.
-        hr = pFile->OpenExistingRead(pFileName, modeFlags);
-        if (SUCCEEDED(hr))
-        {
-         *ppFile = pFile;
-         pFile = NULL;
-        }
+       *ppFile = pFile;
+       pFile = NULL;
       }
     }
-    catch (...)
-    {
-      // Cleanup the file if it could not be initialized and opened.
-      if (pFile)
-        pFile->ReleaseReference();
-      throw;
-    }
+
+    // Cleanup the file if it could not be initialized and opened.
+    if (FAILED(hr) && pFile)
+      pFile->ReleaseReference();
   }
 
   return hr;
@@ -298,28 +292,22 @@ STDAPI ImplAAFFileOpenExistingModify (
 		hr = AAFRESULT_NOMEMORY;
   else
   {
-    try
+    // Make sure the file is initialized (not open yet...)
+    hr = pFile->Initialize();
+    if (SUCCEEDED(hr))
     {
-      // Make sure the file is initialized (not open yet...)
-      hr = pFile->Initialize();
+      // Attempt to open the file for modification.
+      hr = pFile->OpenExistingModify(pFileName, modeFlags, pIdent);
       if (SUCCEEDED(hr))
       {
-        // Attempt to open the file for modification.
-        hr = pFile->OpenExistingModify(pFileName, modeFlags, pIdent);
-        if (SUCCEEDED(hr))
-        {
-          *ppFile = pFile;
-          pFile = NULL;
-        }
+        *ppFile = pFile;
+        pFile = NULL;
       }
     }
-    catch (...)
-    {
-      // Cleanup the file if it could not be initialized and opened.
-      if (pFile)
-        pFile->ReleaseReference();
-      throw;
-    }
+
+    // Cleanup the file if it could not be initialized and opened.
+    if (FAILED(hr) && pFile)
+      pFile->ReleaseReference();
   }
 
   return hr;
@@ -416,28 +404,22 @@ STDAPI ImplAAFFileOpenNewModify (
 		hr = AAFRESULT_NOMEMORY;
   else
   {
-    try
+    // Make sure the file is initialized (not open yet...)
+    hr = pFile->Initialize();
+    if (SUCCEEDED(hr))
     {
-      // Make sure the file is initialized (not open yet...)
-      hr = pFile->Initialize();
+      // Attempt to open a new file for modification.
+      hr = pFile->OpenNewModify(pFileName, modeFlags, pIdent);
       if (SUCCEEDED(hr))
       {
-        // Attempt to open a new file for modification.
-        hr = pFile->OpenNewModify(pFileName, modeFlags, pIdent);
-        if (SUCCEEDED(hr))
-        {
-          *ppFile = pFile;
-          pFile = NULL;
-        }
+        *ppFile = pFile;
+        pFile = NULL;
       }
     }
-    catch (...)
-    {
-      // Cleanup the file if it could not be initialized and opened.
-      if (pFile)
-        pFile->ReleaseReference();
-      throw;
-    }
+
+    // Cleanup the file if it could not be initialized and opened.
+    if (FAILED(hr) && pFile)
+      pFile->ReleaseReference();
   }
 
   return hr;
@@ -510,28 +492,22 @@ STDAPI ImplAAFFileOpenTransient (
 		hr = AAFRESULT_NOMEMORY;
   else
   {
-    try
+    // Make sure the file is initialized (not open yet...)
+    hr = pFile->Initialize();
+    if (SUCCEEDED(hr))
     {
-      // Make sure the file is initialized (not open yet...)
-      hr = pFile->Initialize();
+      // Attempt to open a new transient file.
+      hr = pFile->OpenTransient(pIdent);
       if (SUCCEEDED(hr))
       {
-        // Attempt to open a new transient file.
-        hr = pFile->OpenTransient(pIdent);
-        if (SUCCEEDED(hr))
-        {
-          *ppFile = pFile;
-          pFile = NULL;
-        }
+        *ppFile = pFile;
+        pFile = NULL;
       }
     }
-    catch (...)
-    {
-      // Cleanup the file if it could not be initialized and opened.
-      if (pFile)
-        pFile->ReleaseReference();
-      throw;
-    }
+
+    // Cleanup the file if it could not be initialized and opened.
+    if (FAILED(hr) && pFile)
+      pFile->ReleaseReference();
   }
 
   return hr;
