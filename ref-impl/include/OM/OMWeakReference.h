@@ -53,6 +53,8 @@ public:
 
   virtual void clearTargetTag(void) const = 0;
 
+  virtual const wchar_t* targetName(void) const = 0;
+
 };
 
 #endif

@@ -134,6 +134,8 @@ public:
 
   virtual void clearTargetTag(void) const;
 
+  virtual const wchar_t* targetName(void) const;
+
   virtual bool isResolved(void) const;
 
   virtual bool isResolvable(void) const;

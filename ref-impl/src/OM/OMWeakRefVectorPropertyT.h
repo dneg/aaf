@@ -1142,6 +1142,15 @@ OMWeakReferenceVectorProperty<ReferencedObject>::clearTargetTag(void) const
 }
 
 template <typename ReferencedObject>
+const wchar_t*
+OMWeakReferenceVectorProperty<ReferencedObject>::targetName(void) const
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::targetName");
+
+  return _targetName;
+}
+
+template <typename ReferencedObject>
 bool
 OMWeakReferenceVectorProperty<ReferencedObject>::isResolved(size_t index) const
 {

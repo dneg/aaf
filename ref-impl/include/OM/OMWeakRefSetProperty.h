@@ -218,6 +218,8 @@ public:
 
   virtual void clearTargetTag(void) const;
 
+  virtual const wchar_t* targetName(void) const;
+
   virtual bool isResolved(
                      const OMUniqueObjectIdentification& identification) const;
 
