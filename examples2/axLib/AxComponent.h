@@ -78,6 +78,9 @@ public:
 
 	void Initialize( IAAFDataDefSP, aafLength_t, aafPosition_t, IAAFOperationGroupSP);
 
+	aafPosition_t GetCutPoint();
+	void SetCutPoint( aafPosition_t cutPoint );
+	
 	operator IAAFTransitionSP ()
 	{ return _spIaafTransition; }
 
@@ -113,6 +116,44 @@ private:
 	IAAFSequenceSP _spIaafSequence;
 };
 
+//=---------------------------------------------------------------------=
+
+class AxTimecode : public AxSegment {
+
+public:
+	AxTimecode( IAAFTimecodeSP spIaafTimecode );
+	virtual ~AxTimecode();
+
+    void Initialize( aafLength_t length, const aafTimecode_t& timecode );
+
+	aafTimecode_t GetTimecode();
+	void SetTimecode( const aafTimecode_t& timecode );
+
+private:
+	AxTimecode();
+	AxTimecode( const AxTimecode& );
+	AxTimecode& operator=( const AxTimecode& );
+
+	IAAFTimecodeSP _spIaafTimecode;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxFiller : public AxSegment {
+
+public:
+	AxFiller( IAAFFillerSP spIaafFiller );
+	virtual ~AxFiller();
+
+    void Initialize( IAAFDataDefSP spDataDef, aafLength_t length );
+
+private:
+	AxFiller();
+	AxFiller( const AxFiller& );
+	AxFiller& operator=( const AxFiller& );
+
+	IAAFFillerSP _spIaafFiller;
+};
 
 //=---------------------------------------------------------------------=
 

@@ -202,6 +202,9 @@ private:
 
 //=---------------------------------------------------------------------=
 
+// FIXME a file to contain all definition object wrappers would be
+// a better place for this.
+
 class AxOperationDef: public AxDefObject {
 public:
 	AxOperationDef( IAAFOperationDefSP spIaafOperationDef );

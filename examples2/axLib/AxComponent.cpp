@@ -86,6 +86,18 @@ void AxTransition::Initialize( IAAFDataDefSP spDataDef,
 			spDataDef, length, cutPoint, spIaafOpGroup ) );
 }
 
+aafPosition_t AxTransition::GetCutPoint()
+{
+	aafPosition_t cutPoint;
+	CHECK_HRESULT( _spIaafTransition->GetCutPoint( &cutPoint ) );
+	return cutPoint;
+}
+
+void AxTransition::SetCutPoint( aafPosition_t cutPoint )
+{
+	CHECK_HRESULT( _spIaafTransition->SetCutPoint( cutPoint ) );
+}
+
 //=---------------------------------------------------------------------=
 
 AxSequence::AxSequence( IAAFSequenceSP spIaafSequence )
@@ -123,6 +135,53 @@ aafUInt32 AxSequence::CountComponents()
 	CHECK_HRESULT( _spIaafSequence->CountComponents( &numComponents ) );
 
 	return numComponents;
+}
+
+//=---------------------------------------------------------------------=
+
+AxTimecode::AxTimecode( IAAFTimecodeSP spIaafTimecode )
+:	AxSegment( AxQueryInterface<IAAFTimecode, IAAFSegment>( spIaafTimecode ) ),
+	_spIaafTimecode( spIaafTimecode )
+{}
+
+AxTimecode::~AxTimecode()
+{}
+
+void AxTimecode::Initialize( aafLength_t length, const aafTimecode_t& timecode )
+{
+	CHECK_HRESULT(
+		_spIaafTimecode->Initialize( length,
+									 const_cast<aafTimecode_t*>(&timecode) )
+	);
+}
+
+aafTimecode_t AxTimecode::GetTimecode()
+{
+	aafTimecode_t timecode;
+
+	CHECK_HRESULT( _spIaafTimecode->GetTimecode(&timecode) );
+
+	return timecode;
+}
+
+void AxTimecode::SetTimecode( const aafTimecode_t& timecode )
+{
+	CHECK_HRESULT( _spIaafTimecode->SetTimecode( const_cast<aafTimecode_t*>(&timecode) ) );
+}
+
+//=---------------------------------------------------------------------=
+
+AxFiller::AxFiller( IAAFFillerSP spIaafFiller )
+:	AxSegment( AxQueryInterface<IAAFFiller, IAAFSegment>( spIaafFiller ) ),
+	_spIaafFiller( spIaafFiller )
+{}
+
+AxFiller::~AxFiller()
+{}
+
+void AxFiller::Initialize( IAAFDataDefSP spDataDef, aafLength_t length )
+{
+	CHECK_HRESULT( _spIaafFiller->Initialize( spDataDef, length ) );
 }
 
 //=---------------------------------------------------------------------=
