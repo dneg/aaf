@@ -24,7 +24,7 @@ AD_CLASS_BEGIN
 
 AD_METHOD2(InitTimecode,
 [in],aafLength_t,length,Length Property Value,
-[in],aafTimecode_t,timecode,Timecode Value \\\(startFrame\\\, drop\\\, fps\\\),
+[in],aafTimecode_t*,timecode,Timecode Value \\\(startFrame\\\, drop\\\, fps\\\),
 Constructor taking initial values.)
 
 /****/
@@ -34,7 +34,7 @@ Get the timecode fields.)
 
 /****/
 AD_METHOD1(SetTimecode,
-[in],aafTimecode_t,timecode,Timecode \\\(startFrame\\\, drop\\\, fps\\\),
+[in],aafTimecode_t*,timecode,Timecode \\\(startFrame\\\, drop\\\, fps\\\),
 Set the timecode fields.)
 
 /****/
