@@ -138,7 +138,7 @@ HRESULT CAAFJPEGDescriptorHelper::Initialize(IAAFSourceMob *filemob)
 		// Get the interfaces needed for the rest of the descriptor methods.
 		checkResult(_edes->QueryInterface(IID_IAAFFileDescriptor, (void **)&_filedes));
 		checkResult(_edes->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **)&_dides));
-		checkResult(_edes->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&_dides));
+		checkResult(_edes->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&_cdcides));
 	}
 	catch (HRESULT& rhr)
 	{
