@@ -298,6 +298,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pHeader)
 		pHeader->Release();
       
+	if (pDictionary)
+		pDictionary->Release();
+      
 	if (pPlug)
 		pPlug->Release();
 

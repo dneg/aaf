@@ -163,6 +163,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDef->SetDescription (TEST_PARAM_DESC));
 		pDef->Release();
 		pDef = NULL;
+		pParamDef->Release();
+		pParamDef = NULL;
 		
 		pOperationDef->Release();
 		pOperationDef = NULL;
@@ -336,6 +338,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pArray[1])
 		pArray[1]->Release();
             
+	if (pDictionary)
+		pDictionary->Release();
+
 	if (pFile)
 	{  // Close file
 		if (bFileOpen)

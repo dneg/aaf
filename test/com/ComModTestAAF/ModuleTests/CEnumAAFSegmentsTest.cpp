@@ -146,7 +146,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
 		checkResult(pReferencedMob->SetMobID(&referencedMobID));
 		checkResult(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
-
+		pReferencedMob->Release();
+		pReferencedMob = NULL;
 		// Create a Composition Mob
 		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
 											  IID_IAAFCompositionMob, 
@@ -326,6 +327,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 				pSegment->Release();
 				pSegment = NULL;
+
+				pSelector->Release();
+				pSelector = NULL;
 
 				pSlot->Release();
 				pSlot = NULL;
