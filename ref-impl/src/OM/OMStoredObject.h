@@ -108,9 +108,25 @@ public:
     //          address <p data>.
   void readFromStream(IStream* stream, void* data, size_t size);
 
+    // @cmember Attempt to read <p bytes> bytes from <p stream> into
+    //          the buffer at address <p data>. The actual number of
+    //          bytes read is returned in <p bytesRead>.
+  void readFromStream(IStream* stream,
+                      OMByte* data,
+                      const OMUInt32 bytes,
+                      OMUInt32& bytesRead);
+
     // @cmember Write <p size> bytes from the buffer at address
     //          <p data> to <p stream>.
   void writeToStream(IStream* stream, void* data, size_t size);
+
+    // @cmember Attempt to write <p bytes> bytes from the buffer at
+    //          address <p data> to <p stream>. The actual number of
+    //          bytes written is returned in <p bytesWritten>.
+  void writeToStream(IStream* stream,
+                     const OMByte* data,
+                     const OMUInt32 bytes,
+                     OMUInt32& bytesWritten);
 
     // @cmember Read a UInt32 from <p stream> into <p i>. If
     //          <p reorderBytes> is true then the bytes are reordered.
