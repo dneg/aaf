@@ -124,6 +124,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(newSlot->SetName(slotNames[test]));
 			checkResult(pMob->AppendSlot (newSlot));
 			
+			timelineSlot->Release();
+			timelineSlot = NULL;
 			newSlot->Release();
 			newSlot = NULL;
 			
