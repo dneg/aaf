@@ -145,12 +145,8 @@
 #if PORT_SYS_MAC
 #include <memory.h>		/* For AAFMalloc() and AAFFree() */
 #include <OSUtils.h>
-#else
-#if PORT_INC_NEEDS_SYSTIME
-#include <sys/time.h>
 #endif
-#endif
-#if PORT_INC_NEEDS_TIMEH
+#ifdef _WIN32
 #include <time.h>
 #endif
 
@@ -159,45 +155,6 @@
 #include "Container.h"
 #include "AAFTypes.h"
 #include "AAFUtils.h"
-#if FULL_TOOLKIT
-#include "AAFCompositionMob.h"
-#include "AAFControlPoint.h"
-#include "AAFDataKind.h"
-#include "AAFPulldown.h"
-#include "AAFConstValue.h"
-#include "AAFEffect.h"
-#include "AAFEffectDef.h"
-#include "AAFSourceMob.h"
-#include "AAFFileMob.h"
-#include "AAFFilmMob.h"
-#include "AAFTapeMob.h"
-#include "AAFDOSLocator.h"
-#include "AAFMacLocator.h"
-#include "AAFWindowsLocator.h"
-#include "AAFTextLocator.h"
-#include "AAFNetworkLocator.h"
-#include "AAFUnixLocator.h"
-#include "AAFTapeMob.h"
-#include "AAFEdgecode.h"
-#include "AAFTimecode.h"
-#include "AAFSelector.h"
-#include "AAFSourceClip.h"
-#include "AAFMediaFileDescriptor.h"
-#include "AAFTapeDescriptor.h"
-#include "AAFMediaFilmDescriptor.h"
-#include "AAFEffectSlot.h"
-#include "AAFFiller.h"
-#include "AAFMasterMob.h"
-#include "AAFMediaGroup.h"
-#include "AAFMobSlot.h"
-#include "AAFNestedScope.h"
-#include "AAFScopeRef.h"
-#include "AAFSequence.h"
-#include "AAFTransition.h"
-#include "AAFVaryValue.h"
-#include "AAFPrivate.h"
-#include "AAFTrackDesc.h"
-#endif
 #include "aafCvt.h"
 
 /* Moved math.h down here to make NEXT's compiler happy */
@@ -215,6 +172,12 @@ static aafBool  InitCalled = AAFFalse;
 
 const aafProductVersion_t AAFToolkitVersion = {2, 1, 0, 1, kVersionBeta};
 
+
+aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
+{
+	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
+}
+
 static aafInt32 powi(
 			aafInt32	base,
 			aafInt32	exponent);
@@ -229,75 +192,6 @@ aafRational_t RationalFromFloat(
 	 * Public Functions (Part of the toolkit API)
 	 *
 	 *************************************************************/
-
-
-/************************
- * Function: AAFMalloc
- *
- * 		Allocates a block of memory of a given size.  Having this
- *		function separate from ANSI malloc works better on the
- *		Mac, and allows for memory leak tracking.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Returns a pointer to a block of memory on the heap, or
- *		NULL if there is no block of that size available.
- *
- * Possible Errors:
- *		NULL -- No memory available.
- */
-void *AAFMalloc(
-			size_t size)	/* Allocate this many bytes */
-{
-//	return(omOptMalloc(NULL, size)); !!! Need a solution here
-// This should eventually call the same place as the optimized routines
-// eventuall call
-
-#if PORT_SYS_MAC
-	return (NewPtr(size));
-#else
-#if XPDEBUG
-	if (size == 140)
-	  {
-		printf("Size == 140\n");
-	  }
-#endif
-	return ((void *) malloc((size_t) size));
-#endif
-}
-
-/************************
- * Function: AAFFree
- *
- * 	Frees a given block of memory allocated by AAFMalloc. Having this
- *		function separate from ANSI free() works better on the Mac, and
- *		allows for memory leak tracking.
- *
- * Argument Notes:
- *		Make sure that the pointer given was really allocated
- *		by AAFMalloc, just as for ANSI malloc.
- *
- * ReturnValue:
- *		<none>
- *
- * Possible Errors:
- *		<none known>
- */
-void AAFFree(
-			void *ptr)	/* Free up this buffer */
-{
-//	omOptFree(NULL, ptr);!!! Need a solution here
-// This should eventually call the same place as the optimized routines
-// eventuall call
-
-#if PORT_SYS_MAC
-	DisposPtr((Ptr) ptr);
-#else
-	free((void *) ptr);
-#endif
-}
 
 /*************************************************************************
  * Private Function: isObjFunc() and set1xEditrate()
@@ -343,13 +237,12 @@ aafBool isObjFunc(AAFFile * file,       /* IN - File Handle */
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-#if FULL_TOOLKIT
 void AAFGetDateTime(aafTimeStamp_t *time)
 {
-#if PORT_SYS_MAC
+#if defined(_MAC) || defined(macintosh)
 	GetDateTime(&(time->TimeVal));
 	time->IsGMT = FALSE;
-#elif  PORT_INC_NEEDS_TIMEH
+#elif  defined(_WIN32)
 	time->TimeVal = (long) clock();
 	time->IsGMT = FALSE;
 #else
@@ -363,7 +256,6 @@ void AAFGetDateTime(aafTimeStamp_t *time)
 	}
 #endif
 }
-#endif
 
 aafErr_t AAFConvertEditRate(
 	aafRational_t srcRate,        /* IN - Source Edit Rate */
@@ -531,6 +423,126 @@ static aafInt32 powi(
 		 */
 		return (0);
 	}
+}
+
+#if defined(_MAC) || defined(macintosh)
+#include <OSUtils.h>
+#include <events.h>
+#elif defined(_WIN32)
+#include <time.h>
+#define HZ CLK_TCK
+#endif
+
+/*
+ * Doug Cooper - 04-04-96
+ * Added proper includes for NeXTStep to define HZ:
+ */
+//#ifdef NEXT
+//#include <architecture/ARCH_INCLUDE.h>
+//#import ARCH_INCLUDE(bsd/, param.h)
+//#endif
+
+//#if defined(PORTKEY_OS_UNIX) || defined(PORTKEY_OS_ULTRIX)
+//#if PORT_INC_NEEDS_SYSTIME
+//#include <sys/time.h>
+//#include <sys/times.h>
+//#endif
+//#include <sys/param.h>
+//#endif
+//
+//#ifdef sun
+//#include <sys/resource.h>
+//#endif
+
+/*************************************************************************
+ * Function: omfiMobIDNew()
+ *
+ *      This function can be used to create a new mob ID.  The mob ID
+ *      consists of the company specific prefix specified when 
+ *      omfsBeginSession() is called.  The major number is the time of day,
+ *      and the minor number is the accumulated cpu cycles of the
+ *      application.
+ *
+ *      This function supports both 1.x and 2.x files.
+ *
+ * Argument Notes:
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ *************************************************************************/
+
+struct SMPTELabel
+{
+	aafUInt32	MobIDMajor;
+	aafUInt32	MobIDMinor;
+	aafUInt8	oid;
+	aafUInt8	size;
+	aafUInt8	ulcode;
+	aafUInt8	SMPTE;
+	aafUInt8	Registry;
+	aafUInt8	unused;
+	aafUInt16	MobIDPrefix;
+};
+
+union label
+{
+	aafUID_t			guid;
+	struct SMPTELabel	smpte;
+};
+
+AAFRESULT aafMobIDNew(
+        aafUID_t *mobID)     /* OUT - Newly created Mob ID */
+{
+	union label		aLabel;
+	static aafUInt32 last_part2 = 0;		// Get rid of this!!!
+//#ifdef sun
+//	struct rusage rusage_struct;
+//	int status;
+//#endif
+	aafTimeStamp_t	timestamp;
+	
+	aLabel.smpte.oid = 0x06;
+	aLabel.smpte.size = 0x0E;
+	aLabel.smpte.ulcode = 0x2B;
+	aLabel.smpte.SMPTE = 0x34;
+	aLabel.smpte.Registry = 0x02;
+	aLabel.smpte.MobIDPrefix = 42;		// Means its an OMF Uid
+
+	AAFGetDateTime(&timestamp);
+	aLabel.smpte.MobIDMajor = timestamp.TimeVal;
+#if defined(_MAC) || defined(macintosh)
+	aLabel.smpte.MobIDMinor = TickCount();
+#else
+#ifdef _WIN32
+	aLabel.smpte.MobIDMinor = ((unsigned long)(time(NULL)*60/CLK_TCK));
+#else 
+//#if defined(sun)
+//	status = getrusage(RUSAGE_SELF, &rusage_struct);
+//
+//	/* On the Sun, add system and user time */
+//	label.smpte.MobIDMminor = rusage_struct.ru_utime.tv_sec*60 + 
+//	      rusage_struct.ru_utime.tv_usec*60/1000000 +
+//		  rusage_struct.ru_stime.tv_sec*60 +
+//		  rusage_struct.ru_stime.tv_usec*60/1000000;
+//#else
+	{
+	  static struct tms timebuf;
+	  aLabel.smpte.MobIDMminor = ((unsigned long)(times(&timebuf)*60/HZ));
+	}	
+//#endif
+#endif
+#endif
+
+	if (last_part2 >= aLabel.smpte.MobIDMinor)
+	  aLabel.smpte.MobIDMinor = last_part2 + 1;
+		
+	last_part2 = aLabel.smpte.MobIDMinor;
+
+	*mobID = aLabel.guid;
+	return(OM_ERR_NONE);
 }
 
 #if 0	//!!! Add functions from the end of the file as needed 
