@@ -56,19 +56,12 @@
 // This static variables are here so they can be referenced 
 // thru out the whole program.
 
-static aafSourceRef_t sourceRef; 
-
 static const aafInt32 STD_SLOT_ID = 1;
 static const aafInt32 STD_WIDTH	= 128L;
 static const aafInt32 STD_HEIGHT = 96L;
 static const aafInt32 PIXELS_PER_FRAME = (STD_WIDTH * STD_HEIGHT);
 static const aafInt32 FRAME_BYTES = (PIXELS_PER_FRAME * 3L);
-static const aafInt32 LINE_BYTES = (FRAME_BYTES / STD_HEIGHT);
-
 static const aafInt32 SAMPLE_422_BYTES = (PIXELS_PER_FRAME * 2L); 
-
-/* Size of compressed data (below) when decompressed */
-static const aafInt32 COMPRESS_FRAME_BYTES = (128L * 96L * 3L);
 
 static const aafUInt32 MAX_SAMPLE_COUNT = 2;
 static const aafUInt32 STD_SAMPLE_COUNT = 1;
@@ -77,8 +70,6 @@ static const aafUInt8 green[] =		{ 0x00, 0xff, 0x00 };
 
 /* This is the value of the YCbCr returned by IJG when decompressing
    compressedJFIF */
-static const aafUInt8 yuv_decompressed_from_green_rgb[] = { 0x96, 0x2c, 0x15 };
-static const aafUInt8 hsv_from_green_rgb[] = { 0x50, 0xf0, 0x78 };
 static const aafUInt8 yuv_green[] = { 0x96, 0x2c, 0x15 };
 
 
@@ -283,18 +274,31 @@ static void HexDumpBuffer(const char* label, aafDataBuffer_t buffer, aafUInt32 b
 #endif // #ifdef _DEBUG
 
 
-static void MobIDtoString(aafMobID_t *uid, char *buf)
+static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
-	sprintf(buf, "%02x%02x%02x%02x%02x%02x%02x%02x--%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-		(int)uid->SMPTELabel[0], (int)uid->SMPTELabel[1], (int)uid->SMPTELabel[2], (int)uid->SMPTELabel[3], 
-		(int)uid->SMPTELabel[4], (int)uid->SMPTELabel[5], (int)uid->SMPTELabel[6], (int)uid->SMPTELabel[7], 
-		(int)uid->SMPTELabel[8], (int)uid->SMPTELabel[8], (int)uid->SMPTELabel[10], (int)uid->SMPTELabel[11], 
-		(int)uid->length, (int)uid->instanceHigh, (int)uid->instanceMid, (int)uid->instanceLow, 
-		uid->material.Data1, uid->material.Data2, uid->material.Data3, (int)uid->material.Data4[0],
-		(int)uid->material.Data4[1], (int)uid->material.Data4[2], (int)uid->material.Data4[3],
-		(int)uid->material.Data4[4],
-		(int)uid->material.Data4[5], (int)uid->material.Data4[6], (int)uid->material.Data4[7]);
+    sprintf( buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-" \
+		  "%02x-%02x-%02x-%02x-" \
+		  "%08x%04x%04x" \
+		  "%02x%02x%02x%02x%02x%02x%02x%02x",
+
+	(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], 
+	(int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3],
+	(int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], 
+	(int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7],
+	(int)uid.SMPTELabel[8], (int)uid.SMPTELabel[9], 
+	(int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11],
+
+	(int)uid.length, (int)uid.instanceHigh, 
+	(int)uid.instanceMid, (int)uid.instanceLow,
+
+	uid.material.Data1, uid.material.Data2, uid.material.Data3,
+
+	(int)uid.material.Data4[0], (int)uid.material.Data4[1], 
+	(int)uid.material.Data4[2], (int)uid.material.Data4[3],
+	(int)uid.material.Data4[4], (int)uid.material.Data4[5], 
+	(int)uid.material.Data4[6], (int)uid.material.Data4[7] );
 }
+
 
 typedef enum { testStandardCalls, testMultiCalls } testType_t;
 
@@ -351,8 +355,6 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 	aafRational_t				sampleRate = {44100, 1};
 	FILE*						pWavFile = NULL;
 	unsigned char				dataBuff[4096], *dataPtr;
-	size_t						bytesRead;
-//	aafUInt32					bytesWritten;
 	aafUInt32					dataOffset, dataLen;
 	aafUInt16					bitsPerSample, numCh;
 	aafInt32			n, numSpecifiers;
@@ -430,7 +432,7 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 		pWavFile = fopen("Laser.wav", "r");
 		checkExpression(pWavFile != NULL, AAFRESULT_TEST_FAILED);
 		// read in the essence data
-		bytesRead = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+		fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
 		checkResult(loadWAVEHeader(dataBuff,
 			&bitsPerSample,
 			&numCh,
@@ -629,7 +631,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType, aafUID_t c
 			checkResult(pMob->GetMobID (&mobID));
 			checkResult(pMob->GetName (namebuf, sizeof(namebuf)));
 			convert(mobName, sizeof(mobName), namebuf);
-			MobIDtoString(&mobID, mobIDstr);
+			MobIDtoString(mobID, mobIDstr);
 			// Make sure we have one slot 
 			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
@@ -1284,7 +1286,7 @@ static HRESULT ReadVideoAAFFile(
 			checkResult(pMob->GetMobID (&mobID));
 			checkResult(pMob->GetName (namebuf, sizeof(namebuf)));
 			convert(mobName, sizeof(mobName), namebuf);
-			MobIDtoString(&mobID, mobIDstr);
+			MobIDtoString(mobID, mobIDstr);
 			// Make sure we have one slot 
 			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
