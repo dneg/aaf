@@ -197,7 +197,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFControlPoint::GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef)
 {
-	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict =  NULL;
 	aafUID_t			typeID;
 
@@ -206,23 +205,15 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+		CHECK(GetDictionary(&dict));
 		typeID = _type;
 		CHECK(dict->LookupTypeDef(typeID, ppTypeDef));
 //		(*ppTypeDef)->AcquireReference();
-		head->ReleaseReference();
-		head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(head)
-		  {
-			head->ReleaseReference();
-			head = 0;
-		  }
 		if(dict)
 		  {
 			dict->ReleaseReference();
