@@ -11,14 +11,13 @@
 
 #include "MacHeaders.h"
 
-
-// Conditional debugging and ansi assertions disabled
-#ifndef NDEBUG
-#define NDEBUG
+// Conditional debugging enabled...
+#ifndef _DEBUG
+#define _DEBUG
 #endif
 
 // Enable PRECONDITION, POSTCONDITION, ASSERT, INVARIANT and IMPLIES macros.
-//#define OM_ENABLE_DEBUG
+#define OM_ENABLE_DEBUG
 
 // Uncomment the following line if you want to see an exhausted list
 // of the calling sequence within the Object Manager.
