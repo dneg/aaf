@@ -19,7 +19,6 @@
 #include "ImplAAFSegment.h"
 #endif
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFTimecode : public ImplAAFSegment
 {
