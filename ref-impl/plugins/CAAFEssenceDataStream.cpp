@@ -30,6 +30,7 @@
 #include "AAF.h" // need declaration for IAAFEssenceData.
 
 #include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 
 const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -215,6 +216,10 @@ HRESULT STDMETHODCALLTYPE
 //
 // 
 // 
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT CAAFEssenceDataStream::InternalQueryInterface
 (
     REFIID riid,
@@ -226,19 +231,19 @@ HRESULT CAAFEssenceDataStream::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IID_IAAFEssenceDataStream interface 
-    if (riid == IID_IAAFEssenceDataStream) 
+    if (EQUAL_UID(riid,IID_IAAFEssenceDataStream)) 
     { 
         *ppvObj = (IAAFEssenceDataStream *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-    else if (riid == IID_IAAFEssenceStream) 
+    else if (EQUAL_UID(riid,IID_IAAFEssenceStream)) 
     { 
         *ppvObj = (IAAFEssenceStream *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-    else if (riid == IID_IAAFPlugin) 
+    else if (EQUAL_UID(riid,IID_IAAFPlugin)) 
     { 
         *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();

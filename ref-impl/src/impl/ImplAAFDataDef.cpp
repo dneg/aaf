@@ -36,7 +36,7 @@
 #include <assert.h>
 #include <string.h>
 #include "AAFDataDefs.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 #include "ImplAAFBuiltinDefs.h"
 

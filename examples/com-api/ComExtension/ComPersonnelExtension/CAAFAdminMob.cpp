@@ -33,8 +33,8 @@
 
 #include "extensionUtils.h"
 
-#include "aafDataDefs.h"
-#include "aafDefUIDs.h"
+#include "AAFDataDefs.h"
+#include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 
 #include "CAAFBuiltinDefs.h"
@@ -511,6 +511,10 @@ HRESULT STDMETHODCALLTYPE
 
 // What interfaces does this plugin support
 // Override of CAAFUnknown method.
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT CAAFAdminMob::InternalQueryInterface
 (
     REFIID riid,
@@ -522,21 +526,21 @@ HRESULT CAAFAdminMob::InternalQueryInterface
         return E_INVALIDARG;
 
     // We support the IAAFAdminMob interface 
-    if (riid == IID_IAAFAdminMob) 
+    if (EQUAL_UID(riid,IID_IAAFAdminMob)) 
     { 
         *ppvObj = (IAAFAdminMob *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 		// and the IAAFPlugin interface.
-    else if (riid == IID_IAAFPlugin) 
+    else if (EQUAL_UID(riid,IID_IAAFPlugin)) 
     { 
         *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 		// and the IAAFClassExtension interface.
-    else if (riid == IID_IAAFClassExtension) 
+    else if (EQUAL_UID(riid,IID_IAAFClassExtension)) 
     { 
         *ppvObj = (IAAFClassExtension *)this; 
         ((IUnknown *)*ppvObj)->AddRef();

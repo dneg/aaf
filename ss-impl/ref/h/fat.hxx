@@ -19,6 +19,7 @@
 #define __FAT_HXX__
 
 #include "vect.hxx"
+#include "vectfunc.hxx"
 
 #define DEB_FAT (DEB_ITRACE|0x00010000)
 
@@ -43,6 +44,8 @@ public:
     SCODE Init(FSOFFSET uEntries);
     SCODE InitCopy(USHORT uSize, CFatSect& fsOld);
     
+    inline SECT* GetSectPtr(const FSOFFSET sect);
+    inline SECT* GetAssectEntryPtr(int index) const;
     inline SECT GetSect(const FSOFFSET sect) const;
     inline void SetSect(const FSOFFSET sect,const SECT sectNew);
     
@@ -63,32 +66,42 @@ private:
 #endif
 };
 
+inline SECT* CFatSect::GetAssectEntryPtr(int index) const
+{
+   return &((SECT*) ( (BYTE *) this ) )[index];
+}
+
+inline SECT* CFatSect::GetSectPtr(const FSOFFSET sect)
+{
+   return GetAssectEntryPtr(sect);
+}
+
 inline SECT CFatSect::GetSect(const FSOFFSET sect) const
 {
-    return _asectEntry[sect];
+    return *GetAssectEntryPtr(sect);
 }
 
 inline void CFatSect::SetSect(const FSOFFSET sect, 
-                                       const SECT sectNew)
+                              const SECT sectNew)
 {
-    _asectEntry[sect] = sectNew;
+    *GetAssectEntryPtr(sect) = sectNew;
 }
 
 inline SECT CFatSect::GetNextFat(USHORT uSize) const
 {
-    return _asectEntry[uSize];
+    return *GetAssectEntryPtr(uSize);
 }
 
 inline void CFatSect::SetNextFat(USHORT uSize, const SECT sect)
 {
-    _asectEntry[uSize] = sect;
+   *GetAssectEntryPtr(uSize) = sect;
 }
 
 inline void CFatSect::ByteSwap(FSOFFSET cbSector)
 {
     // swap all sectors in the sector
     for (FSOFFSET i=0; i < cbSector; i++)
-        ::ByteSwap(&(_asectEntry[i]));
+        ::ByteSwap(GetAssectEntryPtr(i));
 }
 
 //+-------------------------------------------------------------------------

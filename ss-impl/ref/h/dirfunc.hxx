@@ -66,7 +66,7 @@ inline void CDirEntry::SetSize(const ULONG ulSize)
 inline void CDirEntry::SetFlags(const MSENTRYFLAGS mse)
 {
     msfAssert(mse <= 0xff);
-    _mse = (const BYTE) mse;
+    _mse = (BYTE) mse;
 }
 
 inline void CDirEntry::SetBitFlags(BYTE bValue, BYTE bMask)
@@ -167,7 +167,7 @@ inline DWORD CDirEntry::GetUserFlags(VOID) const
 
 inline CDirEntry* CDirSect::GetEntry(DIROFFSET iEntry)
 {
-    return &(_adeEntry[iEntry]);
+    return &(GetAdeEntry(iEntry));
 }
 
 //+------------------------------------------------------------------
@@ -206,7 +206,7 @@ inline void CDirEntry::ByteSwap(void)
 inline void CDirSect::ByteSwap(USHORT cbSector)    
 {
     for (unsigned int i=0; i< (cbSector/sizeof(CDirEntry)); i++)
-        _adeEntry[i].ByteSwap();
+        GetAdeEntry(i).ByteSwap();
 }
 
 //+------------------------------------------------------------------

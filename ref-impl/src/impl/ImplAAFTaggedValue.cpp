@@ -31,7 +31,7 @@
 
 
 #include "AAFStoredObjectIDs.h"
-#include "AAFPropertyIds.h"
+#include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFTaggedValue_h__
 #include "ImplAAFTaggedValue.h"

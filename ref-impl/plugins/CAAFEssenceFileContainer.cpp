@@ -29,6 +29,7 @@
 #include "CAAFEssenceFileStream.h"
 
 #include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 #include "aafErr.h"
@@ -36,10 +37,7 @@
 #include "AAFContainerDefs.h"
 
 #include <errno.h>
-
-#if defined(_MAC) || defined(macintosh)
-#include <wstring.h>
-#endif
+#include <wchar.h>
 
 const aafUID_t  EXAMPLE_FILE_PLUGIN =	{ 0x914B3AD1, 0xEDE7, 0x11d2, { 0x80, 0x9F, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
@@ -436,6 +434,10 @@ HRESULT STDMETHODCALLTYPE
 //
 // 
 // 
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT CAAFEssenceFileContainer::InternalQueryInterface
 (
     REFIID riid,
@@ -447,14 +449,14 @@ HRESULT CAAFEssenceFileContainer::InternalQueryInterface
         return E_INVALIDARG;
 
     // We support the IAAFEssenceContainer interface 
-    if (riid == IID_IAAFEssenceContainer) 
+    if (EQUAL_UID(riid,IID_IAAFEssenceContainer)) 
     { 
         *ppvObj = (IAAFEssenceContainer *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
     // and the IAAFPlugin interface
-    else if (riid == IID_IAAFPlugin) 
+    else if (EQUAL_UID(riid,IID_IAAFPlugin)) 
     { 
         *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();

@@ -15,12 +15,12 @@
 #include "error.hxx"
 
 #define olErr(l, e) ErrJmp(ol, l, e, sc)
-#define olChkTo(l, e) if (FAILED(sc = (e))) olErr(l, sc) else 1
-#define olHChkTo(l, e) if (FAILED(sc = DfGetScode(e))) olErr(l, sc) else 1
+#define olChkTo(l, e) if (FAILED(sc = (e))) olErr(l, sc)
+#define olHChkTo(l, e) if (FAILED(sc = DfGetScode(e))) olErr(l, sc)
 #define olChk(e) olChkTo(EH_Err, e)
 #define olHChk(e) olHChkTo(EH_Err, e)
 #define olMemTo(l, e) \
-    if ((e) == NULL) olErr(l, STG_E_INSUFFICIENTMEMORY) else 1
+    if ((e) == NULL) olErr(l, STG_E_INSUFFICIENTMEMORY)
 #define olMem(e) olMemTo(EH_Err, e)
 
 #include "ref.hxx"

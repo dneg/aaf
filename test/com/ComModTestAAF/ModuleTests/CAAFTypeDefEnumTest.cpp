@@ -36,6 +36,8 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
+#include <wchar.h>
 
 #include "CAAFBuiltinDefs.h"
 
@@ -290,7 +292,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	checkResult(spSlotEnum->NextOne (&spMobSlot));
 	
 	aafCharacter buf[128] = {0};
-	checkResult(spMobSlot->GetName(buf, 128));
+	checkResult(spMobSlot->GetName(buf, 128*sizeof(aafCharacter)));
 	checkExpression( wcscmp(buf, TEST_SLOT_NAME) == 0,   AAFRESULT_TEST_FAILED );	
 	
 	aafSlotID_t slotid = {0};

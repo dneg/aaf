@@ -32,15 +32,14 @@
 #include "CAAFUnknown.h"
 #endif
 
-
-// We meed the following definition for a bool type since
+// We need the following definition for a bool type since
 // the Win32 used BOOL as an int and ActiveX SDK, MacOLE use
 // unsigned long for OLEBOOL.
 // NOTE: We may have to move this definition to AAFTypes.h.
-#if defined(_WIN32) || defined(WIN32)
-#define AAFBOOL BOOL
-#else
+#if defined(_MAC) || defined(_MAC_) || defined(macintosh)
 #define AAFBOOL OLEBOOL
+#else
+#define AAFBOOL BOOL
 #endif
 
 // Define the object creation callback function that should be

@@ -34,6 +34,7 @@
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "AAFSmartPointer.h"
 typedef IAAFSmartPointer<IAAFClassDef>         IAAFClassDefSP;

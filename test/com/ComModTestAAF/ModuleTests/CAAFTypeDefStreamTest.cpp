@@ -63,6 +63,7 @@ typedef IAAFSmartPointer<IEnumAAFEssenceData>       IEnumAAFEssenceDataSP;
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
+#include <stdlib.h>
 
 static const aafMobID_t sMobID[] = {
   //{060c2b340205110101001000-13-00-00-00-{78de46cd-4622-11d4-8029-00104bc9156d}}
@@ -162,9 +163,6 @@ HRESULT CAAFTypeDefStream_test()
 
   return result;
 }
-
-
-
 
 #ifndef _DEBUG
 // convenient error handlers.
@@ -402,8 +400,11 @@ static void Test_EssenceStreamWrite(
     reinterpret_cast<aafMemPtr_t>(const_cast<aafCharacter *>(sTestCharacter))));
   
 
-  expectedSize += sizeof(sTestCharacter);
-  expectedPosition += sizeof(sTestCharacter);
+  // The expected size and position must be incremented according to the
+  // *persisted* size of aafCharacter, which is always 2, whereas the 
+  // in-memory size may be 2 or 4, depending on the platform.
+  expectedSize += (sizeof(sTestCharacter)/sizeof(wchar_t))*2; // sizeof(sTestCharacter);
+  expectedPosition += (sizeof(sTestCharacter)/sizeof(wchar_t))*2; // sizeof(sTestCharacter);
   checkResult(pTypeDefStream->GetSize(pStreamPropertyValue, &streamSize));
   checkExpression(expectedSize == streamSize, AAFRESULT_TEST_FAILED);
   checkResult(pTypeDefStream->GetPosition(pStreamPropertyValue, &streamPosition));
@@ -491,7 +492,6 @@ static void Test_EssenceStreamRead(
   checkExpression(bytesRead == sizeof(sTestCharacter), AAFRESULT_TEST_FAILED);
   checkExpression(0 == memcmp(characterTest, sTestCharacter, bytesRead),
                   AAFRESULT_TEST_FAILED);
-
 }
 
 // Create the test file.

@@ -29,9 +29,8 @@
 
 #include <iostream.h>
 #include <stdio.h>
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#endif
+#include <stdlib.h>
+#include <wchar.h>
 #include "AAF.h"
 #include "AAFResult.h"
 #include "AAFSmartPointer.h"

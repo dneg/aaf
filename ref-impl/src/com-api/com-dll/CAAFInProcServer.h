@@ -41,6 +41,8 @@
 #include "CAAFClassFactory.h"
 #endif
 
+#include <stddef.h> // for size_t
+
 typedef struct tagAAFComObjectInfo
 {
 	const CLSID* pCLSID;
@@ -109,6 +111,10 @@ protected:
 	// implementation.
 	char * _serverPath;
 	char * _serverDirectory;
+
+	// Private key data for object info array
+	AAFComObjectInfo_t **_ppObjectInfoKey;
+	size_t _objectCount;
 };
 
 

@@ -34,7 +34,7 @@
 
 #include <assert.h>
 #include "AAFResult.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 ImplAAFSourceReference::ImplAAFSourceReference ():
 	_sourceID(			PID_SourceReference_SourceID,		L"SourceID"),

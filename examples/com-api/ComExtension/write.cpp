@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <stdlib.h>
+
 #include "AAF.h"
 
 #include "extensionUtils.h"

@@ -28,7 +28,6 @@
  ************************************************************************/
 
 
-
 #include "AAF.h"
 
 #include "AAFStoredObjectIDs.h"
@@ -40,6 +39,7 @@
 
 #include <iostream.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFPulldown; // generated

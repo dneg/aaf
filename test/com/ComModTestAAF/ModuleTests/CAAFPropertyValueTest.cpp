@@ -38,7 +38,7 @@
 #include <iostream.h>
 #include <assert.h>
 #include <stdio.h>
-
+#include <stdlib.h>
 
 
 // convenient error handlers.

@@ -91,18 +91,6 @@ private:
     SECT _sect;
     DWORD _dwFlags;
     LONG _cReferences;
-
-#ifdef _MSC_VER
-    // disable compiler warning C4200: nonstandard extension used : 
-    // zero-sized array in struct/union
-#pragma warning(disable: 4200)    
-    BYTE _ab[0];
-#pragma warning(default: 4200)
-#endif
-
-#ifdef __GNUC__
-    BYTE _ab[0];
-#endif
 };
 
 
@@ -232,7 +220,7 @@ inline DWORD CMSFPage::GetFlags(void) const
 
 inline void * CMSFPage::GetData(void) const
 {
-    return (void *) _ab;
+    return (void *) ( ((BYTE*) this ) + sizeof( *this ) );
 }
 
 //+---------------------------------------------------------------------------

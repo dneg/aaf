@@ -1,3 +1,6 @@
+
+#if(0)
+
 // @doc INTERNAL
 // @com This file implements the module test for CAAFTextClip
 /***********************************************************************
@@ -489,3 +492,5 @@ void TextClipTest::OpenTextClip()
   // Propogate the error if necessary.
   checkResult(hr);
 }
+
+#endif

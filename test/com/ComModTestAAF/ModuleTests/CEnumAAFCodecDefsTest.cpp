@@ -39,9 +39,11 @@
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-#include "AAFCLassDefUIDs.h"
+#include "AAFClassDefUIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFContainerDefs.h"
+
+#include "AAFWideString.h"
 
 #include "CAAFBuiltinDefs.h"
 

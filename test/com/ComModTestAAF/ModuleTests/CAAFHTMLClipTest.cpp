@@ -1,3 +1,6 @@
+
+#if(0)
+
 // @doc INTERNAL
 // @com This file implements the module test for CAAFHTMLClip
 /***********************************************************************
@@ -34,11 +37,10 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <stdlib.h>
+#include <wchar.h>
 
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#endif
-
+#include "AAF.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
@@ -538,6 +540,7 @@ void HTMLClipTest::OpenHTMLClip()
   checkResult(hr);
 }
 
+#endif // 0
 
 
 

@@ -39,7 +39,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFCodecFlavours;
 ImplEnumAAFCodecFlavours::ImplEnumAAFCodecFlavours ()
 {
 	_current = 0;
-	_codec = NULL;
+	_codec = 0;
 }
 
 
@@ -48,7 +48,7 @@ ImplEnumAAFCodecFlavours::~ImplEnumAAFCodecFlavours ()
 	if (_codec)
 	{
 		_codec->Release();
-		_codec = NULL;
+		_codec = 0;
 	}
 }
 
@@ -62,7 +62,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(_codec->CountFlavours(&numElem))
-		if(pAAFCodecFlavour == NULL)
+		if(pAAFCodecFlavour == 0)
 			RAISE(AAFRESULT_NULL_PARAM);
 		if(_current >= numElem)
 			RAISE(AAFRESULT_NO_MORE_FLAVOURS);
@@ -89,7 +89,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUInt32			numDefs;
 	HRESULT				hr;
 
-	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+	if ((!pFetched && count != 1) || (!pFetched && count == 1))
 		return E_INVALIDARG;
 
 	// Point at the first component in the array.
@@ -158,7 +158,7 @@ AAFRESULT STDMETHODCALLTYPE
 	AAFRESULT				hr;
 
 	result = (ImplEnumAAFCodecFlavours *)CreateImpl(CLSID_EnumAAFCodecFlavours);
-	if (result == NULL)
+	if (!result)
 		return E_FAIL;
 
 	hr = result->SetEnumCodec(_codec);
@@ -172,7 +172,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  result->ReleaseReference();
 	  result = 0;
-	  *ppEnum = NULL;
+	  *ppEnum = 0;
 	}
 	
 	return hr;

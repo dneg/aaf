@@ -27,22 +27,14 @@
  *
  ************************************************************************/
 
-
-
-
-
-
-
 #include "AAF.h"
-
 
 #include <iostream.h>
 #include <stdio.h>
 #include <assert.h>
 #include <memory.h>
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#endif
+#include <stdlib.h>
+#include <wchar.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -62,7 +54,6 @@ static void RemoveTestFile(const wchar_t* pFileName)
     remove(cFileName);
   }
 }
-
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -413,7 +404,7 @@ void EventTest::OpenEvent()
 
     // Validate the comment buffer size.
     aafUInt32 expectedLen = wcslen(_eventComment) + 1;
-    aafUInt32 expectedSize = expectedLen * 2;
+    aafUInt32 expectedSize = expectedLen * sizeof(wchar_t);
     aafUInt32 commentBufSize = 0;
     checkResult(pEvent->GetCommentBufLen(&commentBufSize));
     checkExpression(commentBufSize == expectedSize, AAFRESULT_TEST_FAILED);

@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*            Copyright (c) 1998-1999 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -43,13 +43,18 @@
 #include "CAAFServer.h"
 #endif
 
-
+#include <string.h>
 
 // Implementation
 CAAFClassFactory::CAAFClassFactory(AAFCreateComObjectProc pfnCreate)
-	: CAAFUnknown(NULL),
+	: CAAFUnknown(0),
 	  _pfnCreate(pfnCreate)
 {
+}
+
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
 }
 
 HRESULT CAAFClassFactory::InternalQueryInterface 
@@ -59,10 +64,10 @@ HRESULT CAAFClassFactory::InternalQueryInterface
 {
 	HRESULT hr = S_OK;
 
-	if (NULL == ppvObj)
+	if (!ppvObj)
 		return E_INVALIDARG;
 
-    if (riid == IID_IClassFactory) 
+    if (EQUAL_UID(riid,IID_IClassFactory)) 
     { 
         *ppvObj = (IClassFactory *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
@@ -84,10 +89,10 @@ STDMETHODIMP CAAFClassFactory::CreateInstance
 {
 	HRESULT hr = S_OK;
 
-	if (NULL == ppvObj)
+	if (!ppvObj)
 		return E_INVALIDARG;
 
-	*ppvObj = NULL;
+	*ppvObj = 0;
 	
 	// "Note that the nondelegating versions of QueryInteface, 
 	// AddRef, and Relase are used. If a stand-alone identity is
@@ -104,11 +109,11 @@ STDMETHODIMP CAAFClassFactory::CreateInstance
 	// object implementor needs to isolate only the one vptr to act
 	// as the nondelegating IUnknown." (p. 194, "Essensial COM", by
 	// Don Box, Addison Wesley, 2nd Printing Feb. 1998)
-	if (NULL != pUnkOuter && IID_IUnknown != riid)
+	if (pUnkOuter && !EQUAL_UID(IID_IUnknown,riid))
 		return E_INVALIDARG; //CLASS_E_NOAGGREGATION;
 
 	// Ask the callback function to create the object instance.
-	CAAFUnknown* pUnknown = NULL;
+	CAAFUnknown* pUnknown = 0;
 	hr = CallClassFactoryFunction(pUnkOuter, (void **)&pUnknown);
 	if (FAILED(hr))
 		return hr;

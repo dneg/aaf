@@ -25,6 +25,8 @@
  *
  ************************************************************************/
 
+#include <stdlib.h>
+
 #include "extensionRead.h"
 #include "extensionUtils.h"
 

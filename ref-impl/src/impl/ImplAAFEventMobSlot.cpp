@@ -45,7 +45,7 @@
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "aafCvt.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 #include <assert.h>
 #include <string.h>

@@ -20,11 +20,11 @@
 #define SECURE
 
 #define msfErr(l, e) ErrJmp(msf, l, e, sc)
-#define msfChkTo(l, e) if (FAILED(sc = (e))) msfErr(l, sc) else 1
-#define msfHChkTo(l, e) if (FAILED(sc = GetScode(e))) msfErr(l, sc) else 1
+#define msfChkTo(l, e) if (FAILED(sc = (e))) msfErr(l, sc) 
+#define msfHChkTo(l, e) if (FAILED(sc = GetScode(e))) msfErr(l, sc)
 #define msfChk(e) msfChkTo(Err, e)
 #define msfHChk(e) msfHChkTo(Err, e)
-#define msfMemTo(l, e) if (!(e)) msfErr(l, STG_E_INSUFFICIENTMEMORY) else 1
+#define msfMemTo(l, e) if (!(e)) msfErr(l, STG_E_INSUFFICIENTMEMORY)
 #define msfMem(e) msfMemTo(Err, e)
 
 #if DEVL == 1

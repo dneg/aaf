@@ -34,6 +34,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 //
 // This example code is intended to show how AAF may be extended to

@@ -41,7 +41,7 @@
 
 ImplAAFEssenceFormat::ImplAAFEssenceFormat ()
 {
-	_elements = NULL;
+	_elements = 0;
 	_elemUsed = 0;
 	_elemAllocated = 0;
 }
@@ -53,7 +53,7 @@ ImplAAFEssenceFormat::~ImplAAFEssenceFormat ()
 
 	for(n = 0; n < _elemUsed; n++)
 	{
-		if(_elements[n].parmValue != NULL)
+		if(_elements[n].parmValue != 0)
 			delete [] _elements[n].parmValue;
 	}
 	delete [] _elements;
@@ -69,7 +69,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUInt32		n;
 
 	parm = Lookup(essenceFormatCode);
-	if(parm == NULL)	// New format spec
+	if(parm == 0)	// New format spec
 	{
 		if(_elemUsed >= _elemAllocated)	// Allocate more memory
 		{
@@ -78,7 +78,7 @@ AAFRESULT STDMETHODCALLTYPE
 			_elemAllocated += CHUNK_SIZE;
 			for(n = 0; n < _elemUsed; n++)
 				_elements[n] = tempParm[n];
-			if(tempParm != NULL)
+			if(tempParm != 0)
 				delete [] tempParm;
 		}
 		
@@ -90,7 +90,7 @@ AAFRESULT STDMETHODCALLTYPE
 			memcpy(parm->parmValue, value, valueSize);
 		}
 		else
-			parm->parmValue = NULL;
+			parm->parmValue = 0;
 		parm->valueSize = valueSize;
 		parm->allocSize = valueSize;
 		parm->parmName = essenceFormatCode;
@@ -106,13 +106,13 @@ AAFRESULT STDMETHODCALLTYPE
 				memcpy(parm->parmValue, temp, valueSize);
 			}
 			else
-				parm->parmValue = NULL;
+				parm->parmValue = 0;
 			parm->allocSize = valueSize;
 			
-			if(temp != NULL)
+			if(temp != 0)
 				delete [] temp;
 		}
-		if(parm->parmValue != NULL && valueSize != 0)
+		if(parm->parmValue != 0 && valueSize != 0)
 			memcpy(parm->parmValue, value, valueSize);	//!!!
 		parm->valueSize = valueSize;
 	}
@@ -135,12 +135,12 @@ AAFRESULT STDMETHODCALLTYPE
 	oneParm_t	*parm;
 	
 	parm = Lookup(essenceFormatCode);
-	if(parm == NULL)
+	if(parm == 0)
 		return(AAFRESULT_FORMAT_NOT_FOUND);
 	if((aafUInt32)bufSize < parm->valueSize)
 		return(AAFRESULT_SMALLBUF);
 
-	if(parm->parmValue != NULL && parm->valueSize != 0)
+	if(parm->parmValue != 0 && parm->valueSize != 0)
 		memcpy(value, parm->parmValue, parm->valueSize);//!!!
 	*bytesRead = parm->valueSize;
 
@@ -195,7 +195,7 @@ oneParm_t	*ImplAAFEssenceFormat::Lookup(aafUID_t lookup)
 			return(_elements+n);
 	}
 
-	return(NULL);
+	return(0);
 }
 
 

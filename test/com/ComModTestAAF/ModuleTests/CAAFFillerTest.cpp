@@ -31,6 +31,7 @@
 
 #include <iostream.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -106,6 +107,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // Create the file.
 	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+
 	  bFileOpen = true;
   
 	  // We can't really do anthing in AAF without the header.
