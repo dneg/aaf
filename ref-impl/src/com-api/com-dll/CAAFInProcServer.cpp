@@ -19,7 +19,7 @@
 # endif
 #endif
 
-
+#include "AAFResult.h"
 
 
 // private key data for object info array. NOTE: This data is declared global to cause the
