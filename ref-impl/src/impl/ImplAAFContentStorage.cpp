@@ -317,7 +317,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		CHECK(pMob->GetMobID(&mobID));
 		CHECK(TableRemoveMobID(_mobIndex, mobID));
-//!!!	_mobs.removeValue(pMob);	// This call doesn't exist yet
+		_mobs.removeValue(pMob);
 	} /* XPROTECT */
 	XEXCEPT
 	{
