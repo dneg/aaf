@@ -22,6 +22,7 @@
 #include "AxEx.h"
 
 #include <AAFStoredObjectIDs.h>
+#include <AAFPlugin.h>
 
 #include <utility>
 
@@ -82,7 +83,7 @@ template<> inline const aafUID_t& AxAUID< TYPE >( TYPE * ) { return TYPEID; }
   AXIID_SPECIALIZE( IAAF##T, IID_IAAF##T ) \
 
 // Declare smart ponter and AxIID given full type name.
-// Used to declare IEnum types.
+// Used to declare IEnum types, and plugin interfaces.
 #define AXSP_TDEF_C(T) \
   typedef IAAFSmartPointer< T >	T##SP ; \
   AXIID_SPECIALIZE( T, IID_##T )
@@ -211,6 +212,16 @@ AXSP_TDEF_B( Endian )
 AXSP_TDEF_B( SearchSource )
 AXSP_TDEF_B( EssenceMultiAccess )
 AXSP_TDEF_B( TypeDefVariableArrayEx )
+
+// plugin interfaces
+AXSP_TDEF_C( IAAFPlugin )
+AXSP_TDEF_C( IAAFClassExtension )
+AXSP_TDEF_C( IAAFEssenceStream )
+AXSP_TDEF_C( IAAFEssenceDataStream )
+AXSP_TDEF_C( IAAFEssenceCodec )
+AXSP_TDEF_C( IAAFMultiEssenceCodec )
+AXSP_TDEF_C( IAAFEssenceContainer )
+AXSP_TDEF_C( IAAFInterpolator )
 
 AXSP_TDEF_C( IUnknown )
 
