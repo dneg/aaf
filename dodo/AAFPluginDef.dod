@@ -19,24 +19,19 @@ AD_IDL(//
 //     operation.
 //)
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/***********************************************\
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
+\***********************************************/
 
 AD_FORWARD_DECLARATION(AAFNetworkLocator)
 AD_FORWARD_DECLARATION(AAFLocator)
 AD_FORWARD_DECLARATION(AAFPluggableCode)
 AD_FORWARD_DECLARATION(EnumAAFPluginLocators)
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
 
 AD_CLASS_UUID(AD1BB853, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 

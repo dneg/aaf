@@ -20,20 +20,14 @@ AD_IDL(//
 //     operation.
 //)
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 AD_FORWARD_DECLARATION(AAFPluginDescriptor)
 
@@ -52,12 +46,12 @@ AD_XMETHOD1(NextOne,
   // for properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
-AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of AAFPluginDescriptors requested,
+AD_X2METHOD3(Next,
+			[in], objPass, aafUInt32, count, number of AAFPluginDescriptors requested,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFPluginDescriptor, ppAAFPluginDescriptors, array to receive AAFPluginDescriptors,
+			objOutArray, AAFPluginDescriptor, ppAAFPluginDescriptors, array to receive AAFPluginDescriptors,count,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual AAFPluginDescriptors fetched into ppAAFPluginDescriptors array,
+			number of actual AAFPluginDescriptors fetched into ppAAFPluginDescriptors array,xxx,
 			Enumerates the next count elements \(AAFPluginDescriptor pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
