@@ -62,6 +62,21 @@
 #error "Don't know which structured storage implementation to use."
 #endif
 
+// Determine whether or not UNICODE versions of the APIs are in use.
+//
+#if defined(OM_OS_WINDOWS) && defined(UNICODE)
+#define OM_UNICODE_APIS
+#endif
+
+// SSCHAR is used in client code for all character (string) arguments
+// to functions whose prototype changes when UNICODE is defined.
+//
+#if defined(OM_UNICODE_APIS)
+typedef wchar_t SSCHAR;
+#else
+typedef char SSCHAR;
+#endif
+
 #if defined(OM_MACINTOSH_SS) || defined(OM_REFERENCE_SS)
 
 // The Macintosh and reference implementation declarations

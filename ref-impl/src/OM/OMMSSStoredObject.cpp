@@ -66,22 +66,6 @@ const size_t indexEntrySize  = sizeof(OMPropertyId) +
                                sizeof(OMStoredForm) +
                                sizeof(OMPropertySize);
 
-// Determine whether or not UNICODE versions of the Structured Storage
-// APIs are in use.
-//
-#if defined(_WIN32) && defined(UNICODE)
-#define OM_UNICODE_APIS
-#endif
-
-// OMCHAR is used for all character arguments to Structured Storage
-// API functions whose prototype changes when UNICODE is defined.
-//
-#if defined(OM_UNICODE_APIS)
-  typedef wchar_t OMCHAR;
-#else
-  typedef char OMCHAR;
-#endif
-
 #if defined(OM_UNICODE_APIS)
 static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
 #else
@@ -2674,7 +2658,7 @@ OMMSSStoredObject* OMMSSStoredObject::openFile(const wchar_t* fileName,
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
   }
 
-  OMCHAR omFileName[256];
+  SSCHAR omFileName[256];
   convert(omFileName, 256, fileName);
 
   IStorage* storage = 0;
@@ -2703,7 +2687,7 @@ OMMSSStoredObject* OMMSSStoredObject::createFile(const wchar_t* fileName)
   TRACE("OMMSSStoredObject::createFile");
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  OMCHAR omFileName[256];
+  SSCHAR omFileName[256];
   convert(omFileName, 256, fileName);
 
   IStorage* storage = 0;
@@ -2951,7 +2935,7 @@ IStream* OMMSSStoredObject::createStream(IStorage* storage,
                STGM_SHARE_EXCLUSIVE  | STGM_CREATE;
 
   IStream* stream = 0;
-  OMCHAR omStreamName[256];
+  SSCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
 
   HRESULT status = storage->CreateStream(
@@ -2984,7 +2968,7 @@ IStream* OMMSSStoredObject::openStream(IStorage* storage,
   }
 
   IStream* stream = 0;
-  OMCHAR omStreamName[256];
+  SSCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
 
   HRESULT status = storage->OpenStream(
@@ -3015,7 +2999,7 @@ IStorage* OMMSSStoredObject::createStorage(IStorage* storage,
                STGM_SHARE_EXCLUSIVE  | STGM_CREATE;
 
   IStorage* newStorage = 0;
-  OMCHAR omStorageName[256];
+  SSCHAR omStorageName[256];
   convert(omStorageName, 256, storageName);
 
   HRESULT status = storage->CreateStorage(
@@ -3051,7 +3035,7 @@ IStorage* OMMSSStoredObject::openStorage(IStorage* storage,
   }
 
   IStorage* newStorage = 0;
-  OMCHAR omStorageName[256];
+  SSCHAR omStorageName[256];
   convert(omStorageName, 256, storageName);
 
   HRESULT status = storage->OpenStorage(
