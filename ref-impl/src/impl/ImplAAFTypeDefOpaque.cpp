@@ -193,7 +193,6 @@ AAFRESULT STDMETHODCALLTYPE
 	// Validate the indirect value and extract common information...
 	//
 	aafUInt32  indirectValueSize = 0;
-  aafUInt32 actualValueDataSize = 0;
 	aafMemPtr_t pIndirectValueDataBits = NULL;
   return (GetIndirectValueInfo (pOpaquePropertyValue, indirectValueSize, pIndirectValueDataBits,
                                 NULL, NULL, pActualTypeID));

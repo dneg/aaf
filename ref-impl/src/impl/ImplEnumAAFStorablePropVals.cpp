@@ -197,7 +197,6 @@ AAFRESULT STDMETHODCALLTYPE
   if (0 == count)
     return AAFRESULT_INVALID_PARAM;
 
-  AAFRESULT ar=AAFRESULT_SUCCESS;
   aafUInt32 n;
   
   for(n =1 ; n <= count; n++)
