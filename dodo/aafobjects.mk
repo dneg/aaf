@@ -30,7 +30,9 @@ AAFNONPERSISTENTOBJECTS = \
 AAFCOMINTERFACESONLY = \
 	AAFEndian \
 	AAFEssenceSampleStream \
-	AAFSearchSource
+	AAFSearchSource \
+	AAFEssenceMultiAccess \
+	AAFEssenceRawAccess
 
 # These are the impl files that are typed by humans.  Be sure to
 # remove them from the other list.  As you check each one in, just add
