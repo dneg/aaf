@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFDictionary\
@@ -202,6 +202,94 @@ AD_XMETHOD1(CountTypeDefs,
 			pResult,
 			Total number of type definition objects,
 			Writes the number of type definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(RegisterOpaqueTypeDef,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			Type Definition Object,
+
+     Add the opaquetype definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the definition is not already been registered with RegisterTypeDef.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef\)
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - The given type has already been registered.)
+
+
+AD_XMETHOD2(LookupOpaqueTypeDef,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			typeId,
+			Type Unique ID,
+
+			[out\,retval],
+			objOut,
+			AAFTypeDef,
+			ppTypeDef,
+			Type Definition Object,
+
+     Return the opaque type definition object with the given id.
+  // 
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  // - The ppTypeDef pointer is valid.
+  // - the ID is a recognized id for an opaque type definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either typeId or ppTypeDef\)
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - The given ID is not recognized as a type definition ID.)
+
+
+AD_XMETHOD1(GetOpaqueTypeDefs,
+
+			[out\,retval],
+			objOut,
+			EnumAAFTypeDefs,
+			ppEnum,
+			Type Def Enumeration,
+
+     Return an enumerator for all registered opaque type definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
+
+
+AD_XMETHOD1(CountOpaqueTypeDefs,
+			[out\, retval],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Total number of opaque type definition objects,
+			Writes the number of opaque type definition objects into the
   // *pResult argument.
   // 
   // Succeeds if all of the following are true:
