@@ -46,8 +46,8 @@
  
 // these next two lines are monitored/incremented by newbuild.pl
 
-#define AAF_BUILD_NUMBER 537
-#define AAF_CURRENT_YEAR "2003"
+#define AAF_BUILD_NUMBER 538
+#define AAF_CURRENT_YEAR "2004"
 
 //   The lines below shouldn't normally need to be modified
 //
