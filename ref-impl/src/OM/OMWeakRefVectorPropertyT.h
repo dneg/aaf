@@ -1221,6 +1221,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::shallowCopyTo(
   delete [] dest->_targetPropertyPath;
   dest->_targetPropertyPath = 0;
   dest->_keyPropertyId = _keyPropertyId;
+  dest->setPresent();
 }
 
 template <typename ReferencedObject>
