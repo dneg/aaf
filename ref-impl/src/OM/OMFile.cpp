@@ -164,3 +164,18 @@ OMFile* OMFile::file(void) const
 
   return const_cast<OMFile*>(this);
 }
+
+size_t OMFile::AcquireReference(void)
+{
+  return 1; // Stub
+}
+
+size_t OMFile::ReleaseReference(void)
+{
+  return 1; // Stub
+}
+
+size_t OMFile::ReferenceCount(void)
+{
+  return 1; // Stub
+}
