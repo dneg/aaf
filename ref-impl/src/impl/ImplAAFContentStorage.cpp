@@ -282,7 +282,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT
-    ImplAAFContentStorage::ChangeIndexedMobID (ImplAAFMob *pMob, aafMobID_constref newID)
+    ImplAAFContentStorage::ChangeIndexedMobID (ImplAAFMob *pMob, aafMobID_constref /*newID*/)
 {
 	aafMobID_t	mobID;
 	if (NULL == pMob)
@@ -313,7 +313,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::IsEssenceDataPresent (aafMobID_constref fileMobID,
-                           aafFileFormat_t fmt,
+                           aafFileFormat_t /*fmt*/,
                            aafBool *pResult)
 {
 	*pResult = _essenceData.contains((*reinterpret_cast<const OMMaterialIdentification *>(&fileMobID)));
@@ -446,7 +446,7 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-AAFRESULT ImplAAFContentStorage::UnlinkMobID(aafMobID_constref mobID)
+AAFRESULT ImplAAFContentStorage::UnlinkMobID(aafMobID_constref /*mobID*/)
 {
 	return(AAFRESULT_NOT_IMPLEMENTED);
 }
