@@ -1,0 +1,122 @@
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+/*************************************************************************
+ * 
+ * @class AAFNestedScope | an AAFNestedScope object defines a scope that 
+ *			contains an ordered set of AAFSegments and produces the value
+ *			specified by the last AAFSegement in the ordered set.
+ *
+ * @base public | AAFSegment
+ *
+ *************************************************************************/
+
+#ifndef __ImplAAFSegment_h__
+#include "ImplAAFSegment.h"
+#endif
+
+#ifndef __ImplEnumAAFSegments_h__
+#include "ImplEnumAAFSegments.h"
+#endif
+
+
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
+
+#include "ImplAAFObjectCreation.h"
+
+#ifndef __ImplAAFNestedScope_h__
+#include "ImplAAFNestedScope.h"
+#endif
+
+#include <assert.h>
+#include <string.h>
+#include "AAFResult.h"
+#include "aafCvt.h"
+#include "aafErr.h"
+
+extern "C" const aafClassID_t CLSID_AAFSegment;
+extern "C" const aafClassID_t CLSID_EnumAAFSegments;
+
+ImplAAFNestedScope::ImplAAFNestedScope ()
+:  _slots( PID_NestedScope_Slots, "Slots")
+{
+	_persistentProperties.put(_slots.address());
+}
+
+
+ImplAAFNestedScope::~ImplAAFNestedScope ()
+{
+	// Release all of the slot(segments) pointers in the slot list.
+	size_t size = _slots.getSize();
+	for (size_t i = 0; i < size; i++)
+	{
+		ImplAAFSegment* pSegment = _slots.setValueAt(0, i);
+
+		if (pSegment)
+		{
+			pSegment->ReleaseReference();
+		}
+	}
+
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFNestedScope::AppendSegment (ImplAAFSegment* pSegment)
+{
+	if(pSegment == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	_slots.appendValue(pSegment);
+	pSegment->AcquireReference();
+
+	return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFNestedScope::RemoveSegment (
+      ImplAAFSegment * /*pSegment*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFNestedScope::GetSlots (ImplEnumAAFSegments** ppEnum)
+{
+	if(ppEnum == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+//	*ppEnum = (ImplEnumAAFSegments *)CreateImpl(CLSID_EnumAAFSegments);
+//	if(*ppEnum == NULL)
+//		return(AAFRESULT_NOMEMORY);
+//	(*ppEnum)->SetEnumProperty(this, &_slots);
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+OMDEFINE_STORABLE(ImplAAFNestedScope, AUID_AAFNestedScope);
+
+
