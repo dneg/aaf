@@ -27,9 +27,7 @@ AAFPERSISTENTOBJECTS = \
 AAFNONPERSISTENTOBJECTS = \
 	AAFRoot \
 	EnumAAFClassDefs \
-	EnumAAFCodecFlavours \
 	EnumAAFDefs \
-	EnumAAFIdentifications \
 	EnumAAFObjects \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
@@ -135,10 +133,12 @@ HUMAN_TYPED_IMPL = \
 	AAFVaryingValue \
 	AAFWAVEDescriptor \
 	EnumAAFCodecDefs \
+	EnumAAFCodecFlavours \
 	EnumAAFComponents \
 	EnumAAFContainerDefs \
 	EnumAAFControlPoints \
 	EnumAAFDataDefs \
+	EnumAAFIdentifications \
 	EnumAAFInterpolationDefs \
 	EnumAAFOperationDefs \
 	EnumAAFEssenceData \

@@ -84,16 +84,6 @@ public:
         (aafMobKind_t  mobKind,   //@parm [in] The mob kind to count
 		 aafNumSlots_t *  pNumMobs);  //@parm [out,retval] Total number of mobs of kind mobKind
 
-
-  //****************
-  // EnumAAFPrimaryMobs()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    EnumAAFPrimaryMobs
-		// @parm [out,retval] Mob Enumeration
-        (ImplEnumAAFMobs ** ppEnum);
-
-
   //****************
   // EnumAAFAllMobs()
   //
