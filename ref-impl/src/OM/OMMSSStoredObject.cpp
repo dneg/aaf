@@ -830,7 +830,6 @@ void OMMSSStoredObject::save(const OMPropertyTable* table)
   IStream* stream = createStream(L"referenced properties");
 
   // byte order
-  ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
   writeUInt8ToStream(stream, _byteOrder);
 
   // count of paths
@@ -1637,7 +1636,6 @@ void OMMSSStoredObject::saveStream(OMPropertyId pid,
   OMCharacter* buffer = new OMCharacter[characterCount];
   ASSERT("Valid heap pointer", buffer != 0);
   externalizeString(name, buffer, characterCount);
-  ASSERT("Native byte order", _byteOrder == hostByteOrder());
   if (_reorderBytes) {
     reorderString(buffer, characterCount);
   }
@@ -2557,7 +2555,6 @@ void OMMSSStoredObject::writeName(OMPropertyId pid,
   OMCharacter* buffer = new OMCharacter[characterCount];
   ASSERT("Valid heap pointer", buffer != 0);
   externalizeString(name, buffer, characterCount);
-  ASSERT("Native byte order", _byteOrder == hostByteOrder());
   if (_reorderBytes) {
     reorderString(buffer, characterCount);
   }
@@ -2832,7 +2829,6 @@ void OMMSSStoredObject::save(OMStoredPropertySetIndex* index)
 
   // Write byte order flag.
   //
-  ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
   writeUInt8ToStream(_properties, _byteOrder);
 
   // Write version number.
