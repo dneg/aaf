@@ -128,7 +128,7 @@ void OMDataStreamProperty::setSize(const OMUInt64 newSize)
   TRACE("OMDataStreamProperty::setSize");
 
   stream()->setSize(newSize);
-
+  setPresent();
   POSTCONDITION("Size properly set", size() == newSize);
 }
 
