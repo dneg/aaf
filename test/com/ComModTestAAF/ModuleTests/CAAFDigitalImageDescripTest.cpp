@@ -26,6 +26,9 @@
 #endif
 
 #include <iostream.h>
+#include <stdio.h>
+
+#include "AAFStoredObjectIDs.h"
 
 // default test values
 #define kStoredHeightTestVal			248
@@ -49,6 +52,33 @@
 #define kGammaNumTestVal				7
 #define kGammaDenTestVal				8
 
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
+inline void checkExpression(bool expression, HRESULT r)
+{
+  if (!expression)
+    throw r;
+}
+
+
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
 						   IAAFFile**			ppFile,
@@ -58,7 +88,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"AAFDigitalImageDescriptor Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -116,98 +146,99 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
+	IAAFDictionary*	pDictionary = NULL;
 	IAAFSourceMob*	pSourceMob = NULL;
+	IAAFMob*	pMob = NULL;
+	IAAFDigitalImageDescriptor*	pDIDesc = NULL;
+	IAAFEssenceDescriptor*	pEssDesc = NULL;
 	aafUID_t		newUID;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
-	// Create the AAF file
-	hr = OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader);
-	if (FAILED(hr))
-		return hr;
 
-	// Create a source mob
-	hr = CoCreateInstance(CLSID_AAFSourceMob,
-						NULL, 
-						CLSCTX_INPROC_SERVER, 
-						IID_IAAFSourceMob, 
-						(void **)&pSourceMob);
-	if (SUCCEEDED(hr))
-	{
-		IAAFMob*	pMob = NULL;
+  try
+  {  
+    // Remove the previous test file if any.
+    RemoveTestFile(pFileName);
 
-		hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-		if (SUCCEEDED(hr))
-		{
-			IAAFDigitalImageDescriptor*	pDIDesc = NULL;
+    // Create the AAF file
+    checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader));
 
-			CoCreateGuid((GUID *)&newUID);
-			pMob->SetMobID(&newUID);
-			pMob->SetName(L"DigitalImageDescriptorTest");
-			hr = CoCreateInstance(CLSID_AAFDigitalImageDescriptor,
-									NULL, 
-									CLSCTX_INPROC_SERVER, 
-									IID_IAAFDigitalImageDescriptor, 
-									(void **)&pDIDesc);		
-			if (SUCCEEDED(hr))
-			{
-				aafRational_t	ratio;
-				aafInt32		VideoLineMap[kVideoLineMapMaxElement] = {kVideoLineMap1TestVal,kVideoLineMap2TestVal};
-				aafUID_t		compression;
+    // Get the AAF Dictionary so that we can create valid AAF objects.
+    checkResult(pHeader->GetDictionary(&pDictionary));
 
-				memset(&compression, 0, sizeof(aafUID_t));
 
-				// Add all DigitalImage properties
-				// Reguired Properties
-				pDIDesc->SetStoredView(kStoredHeightTestVal, kStoredWidthTestVal);
-				pDIDesc->SetFrameLayout(kFrameLayoutTestVal);
-				pDIDesc->SetVideoLineMap(kVideoLineMapMaxElement, VideoLineMap);
-				
-				ratio.numerator = kImageAspectRatioNumTestVal;
-				ratio.denominator = kImageAspectRatioDenTestVal;
-				pDIDesc->SetImageAspectRatio(ratio);
+    // Create a source mob
+    checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+                IID_IAAFSourceMob, 
+                (IUnknown **)&pSourceMob));
+    checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
-				// Optional Properties
-				pDIDesc->SetCompression(&compression);
-				pDIDesc->SetSampledView(kSampledHeightTestVal, kSampledWidthTestVal, kSampledXOffsetTestVal, kSampledYOffsetTestVal);
-				pDIDesc->SetDisplayView(kDisplayHeightTestVal, kDisplayWidthTestVal, kDisplayXOffsetTestVal, kDisplayYOffsetTestVal);
-				pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal);
-				pDIDesc->SetImageAlignmentFactor(kImageAlignmentFactorTestVal);
+    checkResult(CoCreateGuid((GUID *)&newUID));
+    checkResult(pMob->SetMobID(&newUID));
+    checkResult(pMob->SetName(L"DigitalImageDescriptorTest"));
 
-				ratio.numerator = kGammaNumTestVal;
-				ratio.denominator = kGammaDenTestVal;
-				pDIDesc->SetGamma(ratio);
 
-				if (SUCCEEDED(hr))
-				{
-					IAAFEssenceDescriptor*	pEssDesc = NULL;
+    // Create a digitial image descriptor.
+    checkResult(pDictionary->CreateInstance(&AUID_AAFDigitalImageDescriptor,
+                IID_IAAFDigitalImageDescriptor, 
+                (IUnknown **)&pDIDesc));		
 
-					hr = pDIDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
-					if (SUCCEEDED(hr))
-					{
-						hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
-						if (SUCCEEDED(hr))
-						{
-						}
-						pEssDesc->Release();
-						pEssDesc = NULL;
-					}
-				}
-				pDIDesc->Release();
-				pDIDesc = NULL;
-			}
+    aafRational_t	ratio;
+    aafInt32		VideoLineMap[kVideoLineMapMaxElement] = {kVideoLineMap1TestVal,kVideoLineMap2TestVal};
+    aafUID_t		compression;
+    memset(&compression, 0, sizeof(aafUID_t));
 
-			// Add the MOB to the file
-			if (SUCCEEDED(hr))
-				hr = pHeader->AppendMob(pMob);
+    // Add all DigitalImage properties
+    // Reguired Properties
+    checkResult(pDIDesc->SetStoredView(kStoredHeightTestVal, kStoredWidthTestVal));
+    checkResult(pDIDesc->SetFrameLayout(kFrameLayoutTestVal));
+    checkResult(pDIDesc->SetVideoLineMap(kVideoLineMapMaxElement, VideoLineMap));
 
-			pMob->Release();
-			pMob = NULL;
-		}
-		pSourceMob->Release();
-		pSourceMob = NULL;
-	}
+    ratio.numerator = kImageAspectRatioNumTestVal;
+    ratio.denominator = kImageAspectRatioDenTestVal;
+    checkResult(pDIDesc->SetImageAspectRatio(ratio));
 
-	if (pHeader) pHeader->Release();
+    // Optional Properties
+    checkResult(pDIDesc->SetCompression(&compression));
+    checkResult(pDIDesc->SetSampledView(kSampledHeightTestVal, kSampledWidthTestVal, kSampledXOffsetTestVal, kSampledYOffsetTestVal));
+    checkResult(pDIDesc->SetDisplayView(kDisplayHeightTestVal, kDisplayWidthTestVal, kDisplayXOffsetTestVal, kDisplayYOffsetTestVal));
+    checkResult(pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal));
+    checkResult(pDIDesc->SetImageAlignmentFactor(kImageAlignmentFactorTestVal));
+
+    ratio.numerator = kGammaNumTestVal;
+    ratio.denominator = kGammaDenTestVal;
+    checkResult(pDIDesc->SetGamma(ratio));
+
+    // Save the initialized descriptor with the source mob.
+    checkResult(pDIDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
+    checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));
+
+    // Add the MOB to the file
+    checkResult(pHeader->AppendMob(pMob));
+  }
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+  }
+
+  // Cleanup and return
+  if (pEssDesc)
+    pEssDesc->Release();
+
+  if (pDIDesc)
+    pDIDesc->Release();
+
+  if (pMob)
+    pMob->Release();
+
+  if (pSourceMob)
+    pSourceMob->Release();
+
+	if (pDictionary)
+    pDictionary->Release();
+
+	if (pHeader)
+    pHeader->Release();
 
 	if (pFile)
 	{
@@ -223,135 +254,116 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IEnumAAFMobs*	pMobIter = NULL;
+	IAAFMob*	pMob = NULL;
+	IAAFSourceMob*	pSourceMob = NULL;
+	IAAFEssenceDescriptor*	pEssDesc = NULL;
+	IAAFDigitalImageDescriptor*	pDIDesc = NULL;
 	aafNumSlots_t	numMobs = 0;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
-	// Open the AAF file
-	hr = OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader);
-	if (FAILED(hr))
-		return hr;
 
-	hr = pHeader->GetNumMobs(kAllMob, &numMobs);
-	if (1 != numMobs)
-	{
-		hr = AAFRESULT_TEST_FAILED;
-		goto Cleanup;
-	}
+  try
+  {
+	  // Open the AAF file
+	  checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
 
-	hr = pHeader->EnumAAFAllMobs(NULL, &pMobIter);
-	if (SUCCEEDED(hr))
-	{
-		IAAFMob*	pMob = NULL;
+    // Make sure there is one a single mob in the file.
+	  checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-		hr = pMobIter->NextOne(&pMob);
-		if (SUCCEEDED(hr))
-		{
-			IAAFSourceMob*	pSourceMob = NULL;
+    // Loop to the first mob.
+	  checkResult(pHeader->EnumAAFAllMobs(NULL, &pMobIter));
+	  checkResult(pMobIter->NextOne(&pMob));
 
-			hr = pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob);
-			if (SUCCEEDED(hr))
-			{					 
-				IAAFEssenceDescriptor*	pEssDesc = NULL;
+	  checkResult(pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob));
 
-				// Back into testing mode
-				hr = pSourceMob->GetEssenceDescriptor(&pEssDesc);
-				if (SUCCEEDED(hr))
-				{
-					IAAFDigitalImageDescriptor*	pDIDesc = NULL;
+    // Back into testing mode
+	  checkResult(pSourceMob->GetEssenceDescriptor(&pEssDesc));
 
-					// if there is an Essence Descriptor then it MUST be an (essence) DigitalImage Descriptor
-					hr = pEssDesc->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **) &pDIDesc);
-					if (SUCCEEDED(hr))
-					{
-						// TODO: test for expected DigitalImage properties
-						aafUInt32				val1, val2;
-						aafInt32				val3, val4;
-						aafFrameLayout_t		framelayout;
-						aafAlphaTransparency_t	alphaTrans;
-						aafRational_t			ratio;
-						aafInt32				VideoLineMap[kVideoLineMapMaxElement];
-						aafUID_t				compression, compTestVal;
+    // if there is an Essence Descriptor then it MUST be an (essence) DigitalImage Descriptor
+	  checkResult(pEssDesc->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **) &pDIDesc));
 
-						memset(&compTestVal, 0, sizeof(aafUID_t));
+    // TODO: test for expected DigitalImage properties
+	  aafUInt32				val1, val2;
+	  aafInt32				val3, val4;
+	  aafFrameLayout_t		framelayout;
+	  aafAlphaTransparency_t	alphaTrans;
+	  aafRational_t			ratio;
+	  aafInt32				VideoLineMap[kVideoLineMapMaxElement];
+	  aafUID_t				compression, compTestVal;
 
-						// Add all DigitalImage properties
-						// Reguired Properties
-						hr = pDIDesc->GetStoredView(&val1, &val2);
-						if (val1 != kStoredHeightTestVal || val2 != kStoredWidthTestVal)
-							hr = AAFRESULT_TEST_FAILED;
+	  memset(&compTestVal, 0, sizeof(aafUID_t));
 
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetFrameLayout(&framelayout);
-						if (framelayout != kFrameLayoutTestVal)
-							hr = AAFRESULT_TEST_FAILED;
+	  // Add all DigitalImage properties
+	  // Reguired Properties
+	  checkResult(pDIDesc->GetStoredView(&val1, &val2));
+	  checkExpression(val1 == kStoredHeightTestVal && val2 == kStoredWidthTestVal,
+						        AAFRESULT_TEST_FAILED);
 
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetVideoLineMapSize(&val1);
-						if (val1 != kVideoLineMapMaxElement)
-							hr = AAFRESULT_TEST_FAILED;
+	  checkResult(pDIDesc->GetFrameLayout(&framelayout));
+	  checkExpression(framelayout == kFrameLayoutTestVal, AAFRESULT_TEST_FAILED);
 
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetVideoLineMap(kVideoLineMapMaxElement, VideoLineMap);
-						if (VideoLineMap[0] != kVideoLineMap1TestVal || VideoLineMap[1] != kVideoLineMap2TestVal)
-							hr = AAFRESULT_TEST_FAILED;
-						
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetImageAspectRatio(&ratio);
-						if (ratio.numerator != kImageAspectRatioNumTestVal ||
-							ratio.denominator != kImageAspectRatioDenTestVal)
-							hr = AAFRESULT_TEST_FAILED;
+	  checkResult(pDIDesc->GetVideoLineMapSize(&val1));
+	  checkExpression(val1 == kVideoLineMapMaxElement, AAFRESULT_TEST_FAILED);
 
-						// Optional Properties
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetCompression(&compression);
-						if (memcmp(&compression, &compTestVal, sizeof(aafUID_t)) != 0)
-							hr = AAFRESULT_TEST_FAILED;
+	  checkResult(pDIDesc->GetVideoLineMap(kVideoLineMapMaxElement, VideoLineMap));
+	  checkExpression(VideoLineMap[0] == kVideoLineMap1TestVal && 
+                    VideoLineMap[1] == kVideoLineMap2TestVal,
+                    AAFRESULT_TEST_FAILED);
+						  
+	  checkResult(pDIDesc->GetImageAspectRatio(&ratio));
+    checkExpression(ratio.numerator == kImageAspectRatioNumTestVal &&
+                    ratio.denominator == kImageAspectRatioDenTestVal,
+                    AAFRESULT_TEST_FAILED);
 
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetSampledView(&val1, &val2, &val3, &val4);
-						if (val1 != kSampledHeightTestVal || val2 != kSampledWidthTestVal ||
-							val3 != kSampledXOffsetTestVal || val4 != kSampledYOffsetTestVal)
-							hr = AAFRESULT_TEST_FAILED;
+	  // Optional Properties
+	  checkResult(pDIDesc->GetCompression(&compression));
+	  checkExpression(memcmp(&compression, &compTestVal, sizeof(aafUID_t)) == 0,
+                    AAFRESULT_TEST_FAILED);
 
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetDisplayView(&val1, &val2, &val3, &val4);
-						if (val1 != kDisplayHeightTestVal || val2 != kDisplayWidthTestVal ||
-							val3 != kDisplayXOffsetTestVal || val4 != kDisplayYOffsetTestVal)
-							hr = AAFRESULT_TEST_FAILED;
+	  checkResult(pDIDesc->GetSampledView(&val1, &val2, &val3, &val4));
+	  checkExpression(val1 == kSampledHeightTestVal && val2 == kSampledWidthTestVal &&
+                    val3 == kSampledXOffsetTestVal && val4 == kSampledYOffsetTestVal,
+                    AAFRESULT_TEST_FAILED);
 
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetAlphaTransparency(&alphaTrans);
-						if (alphaTrans != kAlphaTransparencyTestVal)
-							hr = AAFRESULT_TEST_FAILED;
+		checkResult(pDIDesc->GetDisplayView(&val1, &val2, &val3, &val4));
+		checkExpression(val1 == kDisplayHeightTestVal && val2 == kDisplayWidthTestVal &&
+                    val3 == kDisplayXOffsetTestVal && val4 == kDisplayYOffsetTestVal,
+                    AAFRESULT_TEST_FAILED);
 
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetImageAlignmentFactor(&val3);
-						if (val3 != kImageAlignmentFactorTestVal)
-							hr = AAFRESULT_TEST_FAILED;
+		checkResult(pDIDesc->GetAlphaTransparency(&alphaTrans));
+		checkExpression(alphaTrans == kAlphaTransparencyTestVal,
+                    AAFRESULT_TEST_FAILED);
 
-						if (SUCCEEDED(hr)) hr = pDIDesc->GetGamma(&ratio);
-						if (ratio.numerator != kGammaNumTestVal ||
-							ratio.denominator != kGammaDenTestVal)
-							hr = AAFRESULT_TEST_FAILED;
+		checkResult(pDIDesc->GetImageAlignmentFactor(&val3));
+		checkExpression(val3 == kImageAlignmentFactorTestVal,
+                    AAFRESULT_TEST_FAILED);
 
-						pDIDesc->Release();
-						pDIDesc = NULL;
-					}
-					else
-					{
-						hr = AAFRESULT_TEST_FAILED;
-					}
-					pEssDesc->Release();
-					pEssDesc = NULL;
-				}
-				else
-				{
-					hr = AAFRESULT_TEST_FAILED;
-				}
-				pSourceMob->Release();
-				pSourceMob = NULL;
-			}
-			pMob->Release();
-			pMob = NULL;
-		}
-		pMobIter->Release();
-		pMobIter = NULL;
-	}
+		checkResult(pDIDesc->GetGamma(&ratio));
+		checkExpression(ratio.numerator == kGammaNumTestVal &&
+			              ratio.denominator == kGammaDenTestVal,
+                    AAFRESULT_TEST_FAILED);
+  }
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+  }
 
-Cleanup:
+  // Cleanup and return
+  if (pEssDesc)
+    pEssDesc->Release();
 
-	if (pHeader) pHeader->Release();
+  if (pDIDesc)
+    pDIDesc->Release();
+
+  if (pMob)
+    pMob->Release();
+
+  if (pSourceMob)
+    pSourceMob->Release();
+
+	if (pHeader)
+    pHeader->Release();
 
 	if (pFile)
 	{
