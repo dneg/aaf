@@ -12,7 +12,8 @@
 OMProperty::OMProperty(const OMPropertyId propertyId,
                        const int storedForm,
                        const char* name)
-: _propertyId(propertyId), _storedForm(storedForm), _name(name), _type(0)
+: _propertyId(propertyId), _storedForm(storedForm), _name(name), _type(0),
+  _isOptional(false), _isPresent(false)
 {
   TRACE("OMProperty::OMProperty");
 }
@@ -32,6 +33,7 @@ void OMProperty::initialize(const OMPropertyId propertyId,
   ASSERT("Consistent property name", strcmp(name, OMProperty::name()) == 0);
 
   _type = type;
+  _isOptional = isOptional;
 }
 
 OMProperty::~OMProperty(void)
@@ -225,6 +227,26 @@ void OMProperty::read(OMPropertyId propertyId,
                                        internalBytesSize >= externalBytesSize);
     store->read(propertyId, storedForm, internalBytes, externalBytesSize);
   }
+  setPresent();
+}
+
+  // @mfunc Set the bit that indicates that this optional <c OMProperty>
+  //        is present.
+void OMProperty::setPresent(void)
+{
+  TRACE("OMProperty::setPresent");
+
+  _isPresent = true;
+}
+
+  // @mfunc Clear the bit that indicates that this optional <c OMProperty>
+  //        is present.
+void OMProperty::clearPresent(void)
+{
+  TRACE("OMProperty::clearPresent");
+  PRECONDITION("Property is optional", isOptional());
+
+  _isPresent = false;
 }
 
 // @doc OMINTERNAL
@@ -277,6 +299,8 @@ void OMSimpleProperty::get(void* value, size_t valueSize) const
   TRACE("OMSimpleProperty::get");
   PRECONDITION("Valid data buffer", value != 0);
   PRECONDITION("Valid size", valueSize >= _size);
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
 
   memcpy(value, _bits, _size);
 }
@@ -295,6 +319,7 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
     _size = valueSize;
   }
   memcpy(_bits, value, _size);
+  setPresent();
 }
 
   // @mfunc Save this <c OMSimpleProperty>.
@@ -302,6 +327,8 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
 void OMSimpleProperty::save(void) const
 {
   TRACE("OMSimpleProperty::save");
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
 
   write(_propertyId, _storedForm, _bits, _size);
 }
@@ -318,6 +345,36 @@ void OMSimpleProperty::restore(size_t externalSize)
   ASSERT("Valid store", store != 0);
 
   read(_propertyId, _storedForm, _bits, _size, externalSize);
+}
+
+  // @mfunc Is this an optional property ? 
+  //   @rdesc True if this property is optional, false otherwise.
+  //   @this const
+bool OMProperty::isOptional(void) const
+{
+  TRACE("OMProperty::isOptional");
+  return _isOptional;
+}
+
+  // @mfunc Is this optional property present ?
+  //   @rdesc True if this property is present, false otherwise.
+  //   @this const
+bool OMProperty::isPresent(void) const
+{
+  TRACE("OMProperty::isPresent");
+
+  PRECONDITION("Property is optional", isOptional());
+  return _isPresent;
+}
+
+  // @mfunc Remove this optional property.
+void OMProperty::remove(void)
+{
+  TRACE("OMProperty::remove");
+  PRECONDITION("Property is optional", isOptional());
+  PRECONDITION("Optional property is present", isPresent());
+  clearPresent();
+  POSTCONDITION("Optional property no longer present", !isPresent());
 }
 
   // @mfunc The size of the raw bits of this
@@ -341,6 +398,8 @@ size_t OMSimpleProperty::bitsSize(void) const
 void OMSimpleProperty::getBits(OMByte* bits, size_t bitsSize) const
 {
   TRACE("OMSimpleProperty::getBits");
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", bitsSize >= _size);
 
