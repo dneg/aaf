@@ -115,7 +115,7 @@ static HRESULT ObjectWriteTest ()
   IEnumAAFProperties * pEnum = NULL;
 
   try
-	{
+  {
 	  aafProductVersion_t v;
 	  v.major = 1;
 	  v.minor = 0;
@@ -128,7 +128,7 @@ static HRESULT ObjectWriteTest ()
 	  ProductInfo.productVersionString = NULL;
 	  ProductInfo.productID = UnitTestProductID;
 	  ProductInfo.platform = NULL;
-
+	  
 	  RemoveTestFile (testFileName);
 	  checkResult (AAFFileOpenNewModify(testFileName,
 										0,
@@ -139,282 +139,296 @@ static HRESULT ObjectWriteTest ()
 	  assert (pHeader);
 	  checkResult (pHeader->GetDictionary (&pDict));
 	  assert (pDict);
-	  CAAFBuiltinDefs defs (pDict);
-
-	  // Add an optional property to the class definition for AAFCompositionMob
-	  // (pOptionalPropertyDef)
-	  IAAFClassDefSP pClassDef;
-	  checkResult(pDict->LookupClassDef(AUID_AAFCompositionMob,&pClassDef));
-      IAAFPropertyDefSP pOptionalPropertyDef;
-      checkResult(pClassDef->RegisterOptionalPropertyDef(AUID_OptionalProperty,
-			L"New property",
-			defs.tdUInt16(),
-			&pOptionalPropertyDef));
-      checkResult(pDict->RegisterClassDef(pClassDef));
-
-      // Add an optional property to the class definition for AAFSequence
-	  // (pOptionalPropertyDef2)
-	  checkResult(pDict->LookupClassDef(AUID_AAFSequence,&pClassDef));
-      IAAFPropertyDefSP pOptionalPropertyDef2;
-      checkResult(pClassDef->RegisterOptionalPropertyDef(AUID_OptionalProperty2,
-			L"New property",
-			defs.tdUInt16(),
-			&pOptionalPropertyDef2));
-      checkResult(pDict->RegisterClassDef(pClassDef));
-
-	  // Create an instance of AAFCompositionMob using the newly registered
-	  // class definition.
-	  checkResult(pDict->LookupClassDef(AUID_AAFCompositionMob,&pClassDef));
-	  checkResult (pClassDef->CreateInstance (IID_IAAFCompositionMob,
-		  (IUnknown **) &pCMob));
-	  assert (pCMob);
-
-	  checkResult (pCMob->QueryInterface (IID_IAAFMob,
-										  (void **) &pMob));
-	  assert (pMob);
-      
-	  checkResult(pMob->SetMobID(kTestMobID));
-	  checkResult (pCMob->Initialize (L"TestMob"));
-	  checkResult (pHeader->AddMob (pMob));
-
-	  checkResult (pCMob->QueryInterface (IID_IAAFObject,
-										  (void **) &pObj));
-	  assert (pObj);
-
-      // Before the optional property is set, calls to RemoveOptionalProperty()
-	  // should return AAFRESULT_PROP_NOT_PRESENT
-      checkExpression(pObj->RemoveOptionalProperty(pOptionalPropertyDef)
-		  ==AAFRESULT_PROP_NOT_PRESENT);
-
-      // Set the optional property we just created
-	  IAAFTypeDefIntSP pTypeDefInt;
-	  checkResult(defs.tdUInt16()->QueryInterface(IID_IAAFTypeDefInt,
-		  (void**)&pTypeDefInt));
-	  IAAFPropertyValueSP pOptionalPropertyValue;
-	  aafUInt16 five=5;
-	  checkResult(pTypeDefInt->CreateValue((aafMemPtr_t)&five,sizeof(aafUInt16),
-		  &pOptionalPropertyValue));
-      checkResult(pObj->SetPropertyValue(pOptionalPropertyDef,
-		  pOptionalPropertyValue));
-
-	  // Now try getting the optional property value from the object
-      IAAFPropertyValueSP pReturnedPropertyValue;
-	  checkResult(pObj->GetPropertyValue(pOptionalPropertyDef,
-		  &pReturnedPropertyValue));
-
-      // Perform some negative tests on RemoveOptionalProperty()
-
-	  // RemoveOptionalProperty() with NULL property definition should return
-	  // AAFRESULT_NULL_PARAM
-	  checkExpression(pObj->RemoveOptionalProperty(0)==AAFRESULT_NULL_PARAM);
-
-      // RemoveOptionalProperty() with property def. for a property that is not
-	  // in the class should return AAFRESULT_BAD_PROP
-      checkExpression(pObj->RemoveOptionalProperty(pOptionalPropertyDef2)
-		  ==AAFRESULT_BAD_PROP);
-
-      // Count number of properties before removing optional property value
-      aafUInt32 oldNumProperties=0;
-      checkResult(pObj->CountProperties(&oldNumProperties));
-	  checkExpression(oldNumProperties>=1);
-
-	  // Remove the optional property value
-	  checkResult(pObj->RemoveOptionalProperty(pOptionalPropertyDef));
-
-      // Verify that property count is reduced by 1.
-	  aafUInt32 newNumProperties=(aafUInt32)(-1);
-	  checkResult(pObj->CountProperties(&newNumProperties));
-	  checkExpression(newNumProperties==oldNumProperties-1);
-
-	  // Now we should not be able to get the optional property value from the
-	  // object
-	  checkExpression(pObj->GetPropertyValue(pOptionalPropertyDef,
-		  &pReturnedPropertyValue)==AAFRESULT_PROP_NOT_PRESENT);
-
-	  checkResult (pObj->GetProperties (&pEnum));
-	  checkExpression (pEnum != 0, AAFRESULT_TEST_FAILED);
-	  while (newNumProperties--)
+	  
+	  aafProductVersion_t			testRev;
+	  checkResult(pHeader->GetRefImplVersion(&testRev));
+	  if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
 	  {
-		  IAAFProperty * pProp = NULL;
-		  checkResult (pEnum->NextOne (&pProp));
-		  checkExpression (pProp != 0, AAFRESULT_TEST_FAILED);
-		  pProp->Release();
-	  }
-
-      // Now use CreateOptionalPropertyValue() to add an optional property to
-	  // an instance of AAFSequence
-
-	  // Create an instance of AAFSequence & initialize it
-	  checkResult(pDict->LookupClassDef(AUID_AAFSequence,&pClassDef));
-	  IAAFSequenceSP pSequence;
-	  checkResult (pClassDef->CreateInstance (IID_IAAFSequence,
-		  (IUnknown **)&pSequence));
-	  checkResult(pSequence->Initialize(defs.ddSound()));
-
-	  // Add sequence to composition Mob
-      IAAFSegmentSP pSegment;
-      checkResult(pSequence->QueryInterface(IID_IAAFSegment,(void **)&pSegment));
-      aafRational_t editRate = { 0, 1};
-      IAAFTimelineMobSlotSP pTimelineMobSlot;
-      checkResult(pMob->AppendNewTimelineSlot(editRate,pSegment,1,
-        L"AAF Test Sequence",0,&pTimelineMobSlot));
-
-  	  IAAFObjectSP pObj2;
-	  checkResult(pSequence->QueryInterface(IID_IAAFObject,(void**)&pObj2));
-
-      // Test CreateOptionalPropertyValue()
-
-      // First perform some negative tests on CreateOptionalPropertyValue()
-	  IAAFPropertyValueSP pCreatedPropVal;
-	  checkExpression(pObj2->CreateOptionalPropertyValue(0,&pCreatedPropVal)
-		  ==AAFRESULT_NULL_PARAM);
-	  checkExpression(pObj2->CreateOptionalPropertyValue(pOptionalPropertyDef2,0)
-		  ==AAFRESULT_NULL_PARAM);
-	  checkExpression(pObj2->CreateOptionalPropertyValue(pOptionalPropertyDef,
-		  &pCreatedPropVal)==AAFRESULT_BAD_PROP);
-	  checkExpression(pCreatedPropVal==0);
-      
-      // Now use CreateOptionalPropertyValue() to create a property value and
-	  // set it as an optional property of an instance of AAFSequence.
-	  checkResult(pObj2->CreateOptionalPropertyValue(pOptionalPropertyDef2,
-		  &pCreatedPropVal));
-
-	  IAAFTypeDefSP pTypeDef;
-	  checkResult(pCreatedPropVal->GetType(&pTypeDef));
-	  checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt,
-		  (void**)&pTypeDefInt));
-	  aafUInt16 ten=10;
-	  checkResult(pTypeDefInt->SetInteger(pCreatedPropVal,(aafMemPtr_t)&ten,
-		  sizeof(aafUInt16)));
-
-      checkResult(pObj2->SetPropertyValue(pOptionalPropertyDef2,
-		  pCreatedPropVal));
-
-	  //
-	  // Check Generation functionality.
-	  //
-
-	  // Test IsGenerationTracked(), DisableGenerationTracking()
-	  aafBoolean_t b;
-	  checkResult (pObj->IsGenerationTracked (&b));
-	  // Generation is not tracked by default.
-	  checkExpression (b == kAAFFalse, AAFRESULT_TEST_FAILED);
-
-	  // check for redundant disables
-	  checkResult (pObj->DisableGenerationTracking());
-	  checkResult (pObj->IsGenerationTracked (&b));
-	  checkExpression (b == kAAFFalse, AAFRESULT_TEST_FAILED);
-
-	  // Change the object (using the CompMob interface) so that
-	  // subsequent Save() will know it's a dirty object.
-	  aafRational_t eu = { 1, 1 };
-	  checkResult (pCMob->SetDefaultFade (0, kAAFFadeNone, eu));
-
-	  // Perform one save and verify that generation was not tracked.
-	  checkResult (pFile->Save());
-
-	  AAFRESULT testhr;
-	  IAAFIdentificationSP pIdent;
-	  aafUID_t identAuid;
-	  testhr = pObj->GetGeneration(&pIdent);
-	  checkExpression (AAFRESULT_INVALID_PARAM == testhr,
-					   AAFRESULT_TEST_FAILED);
-	  testhr = pObj->GetGenerationAUID(&identAuid);
-	  checkExpression (AAFRESULT_INVALID_PARAM == testhr,
-					   AAFRESULT_TEST_FAILED);
-	  // make sure gen still isn't tracked
-	  checkResult (pObj->IsGenerationTracked (&b));
-	  checkExpression (b == kAAFFalse, AAFRESULT_TEST_FAILED);
-
-	  // Test EnableGenerationTracking()
-	  checkResult (pObj->EnableGenerationTracking());
-	  checkResult (pObj->IsGenerationTracked (&b));
-	  checkExpression (b == kAAFTrue, AAFRESULT_TEST_FAILED);
-
-	  checkResult (pObj->DisableGenerationTracking());
-	  checkResult (pObj->IsGenerationTracked (&b));
-	  checkExpression (b == kAAFFalse, AAFRESULT_TEST_FAILED);
-
-	  // Check for redundant enables
-	  checkResult (pObj->EnableGenerationTracking());
-	  checkResult (pObj->EnableGenerationTracking());
-	  checkResult (pObj->IsGenerationTracked (&b));
-	  checkExpression (b == kAAFTrue, AAFRESULT_TEST_FAILED);
-
-	  // Now that generation tracking is enabled, try a couple of
-	  // save()s to see if the latest ident is saved.
-	  //
-	  // First, add a new identification.  We'll keep track of the
-	  // identifications we're putting in by using a bogus productID
-	  // AUID, and put small integers in the aafUID_t.Data1 field.
-	  //
-	  // Here's where we define two version AUIDs for our use.
-	  aafUID_t versionUid1 = { 0 };
-	  versionUid1.Data1 = 1;
-	  aafUID_t versionUid2 = { 0 };
-	  versionUid2.Data1 = 2;
-
-	  // Now make a new identification with the first version AUID,
-	  // and append it to the header.
-	  IAAFIdentificationSP pNewIdent;
-	  checkResult (defs.cdIdentification()->
-				   CreateInstance (IID_IAAFIdentification,
-								   (IUnknown **) &pNewIdent));
-	  assert (pNewIdent);
-	  checkResult (pNewIdent->Initialize (L"Avid",
-										  L"Test File",
-										  L"First Test Version",
-										  versionUid1));
-	  checkResult (pHeader->AppendIdentification (pNewIdent));
-
-	  // With Version1 identification in the header, do a save and see
-	  // if that generation made it to our file.
-	  //
-	  // First, change object to make sure Save() will save it
-	  checkResult (pCMob->SetDefaultFade (1, kAAFFadeNone, eu));
-
-	  checkResult (pFile->Save());
-	  IAAFIdentificationSP pReadIdent1;
-	  checkResult (pObj->GetGeneration(&pReadIdent1));
-	  aafUID_t readAuid1 = { 0 };
-	  checkResult (pReadIdent1->GetProductID(&readAuid1));
-	  checkExpression (1 == readAuid1.Data1, AAFRESULT_TEST_FAILED);
-
-	  // Now make a new identification with the second version AUID,
-	  // and append it to the header.
-	  checkResult (defs.cdIdentification()->
-				   CreateInstance (IID_IAAFIdentification,
-								   (IUnknown **) &pNewIdent));
-	  assert (pNewIdent);
-	  aafUID_t junkAuid;
-	  // make sure this isn't allowed before initialization
-	  HRESULT temphr = pNewIdent->GetProductID(&junkAuid);
-	  checkExpression (AAFRESULT_NOT_INITIALIZED == temphr,
-					   AAFRESULT_TEST_FAILED);
-
-	  checkResult (pNewIdent->Initialize (L"Avid",
-										  L"Test File",
-										  L"Second Test Version",
-										  versionUid2));
-
-	  // this should now work after initialization
-	  checkResult (pNewIdent->GetProductID(&junkAuid));
-
-	  checkResult (pHeader->AppendIdentification (pNewIdent));
-
-	  // With Version2 identification in the header, do a save and see
-	  // if that generation made it to our file.
-	  //
-	  // First, change object to make sure Save() will save it
-	  checkResult (pCMob->SetDefaultFade (2, kAAFFadeNone, eu));
-	  checkResult (pFile->Save());
-	  IAAFIdentificationSP pReadIdent2;
-	  checkResult (pObj->GetGeneration(&pReadIdent2));
-	  aafUID_t readAuid2 = { 0 };
-	  checkResult (pReadIdent2->GetProductID(&readAuid2));
-	  checkExpression (2 == readAuid2.Data1, AAFRESULT_TEST_FAILED);
-
-	  hr = AAFRESULT_SUCCESS;
+		  
+		  CAAFBuiltinDefs defs (pDict);
+		  
+		  // Add an optional property to the class definition for AAFCompositionMob
+		  // (pOptionalPropertyDef)
+		  IAAFClassDefSP pClassDef;
+		  checkResult(pDict->LookupClassDef(AUID_AAFCompositionMob,&pClassDef));
+		  IAAFPropertyDefSP pOptionalPropertyDef;
+		  checkResult(pClassDef->RegisterOptionalPropertyDef(AUID_OptionalProperty,
+			  L"New property",
+			  defs.tdUInt16(),
+			  &pOptionalPropertyDef));
+		  checkResult(pDict->RegisterClassDef(pClassDef));
+		  
+		  // Add an optional property to the class definition for AAFSequence
+		  // (pOptionalPropertyDef2)
+		  checkResult(pDict->LookupClassDef(AUID_AAFSequence,&pClassDef));
+		  IAAFPropertyDefSP pOptionalPropertyDef2;
+		  checkResult(pClassDef->RegisterOptionalPropertyDef(AUID_OptionalProperty2,
+			  L"New property",
+			  defs.tdUInt16(),
+			  &pOptionalPropertyDef2));
+		  checkResult(pDict->RegisterClassDef(pClassDef));
+		  
+		  // Create an instance of AAFCompositionMob using the newly registered
+		  // class definition.
+		  checkResult(pDict->LookupClassDef(AUID_AAFCompositionMob,&pClassDef));
+		  checkResult (pClassDef->CreateInstance (IID_IAAFCompositionMob,
+			  (IUnknown **) &pCMob));
+		  assert (pCMob);
+		  
+		  checkResult (pCMob->QueryInterface (IID_IAAFMob,
+			  (void **) &pMob));
+		  assert (pMob);
+		  
+		  checkResult(pMob->SetMobID(kTestMobID));
+		  checkResult (pCMob->Initialize (L"TestMob"));
+		  checkResult (pHeader->AddMob (pMob));
+		  
+		  checkResult (pCMob->QueryInterface (IID_IAAFObject,
+			  (void **) &pObj));
+		  assert (pObj);
+		  
+		  // Before the optional property is set, calls to RemoveOptionalProperty()
+		  // should return AAFRESULT_PROP_NOT_PRESENT
+		  hr = pObj->RemoveOptionalProperty(pOptionalPropertyDef);
+		  if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+		  {
+			  checkExpression(hr == AAFRESULT_PROP_NOT_PRESENT);
+		  }
+		  
+		  // Set the optional property we just created
+		  IAAFTypeDefIntSP pTypeDefInt;
+		  checkResult(defs.tdUInt16()->QueryInterface(IID_IAAFTypeDefInt,
+			  (void**)&pTypeDefInt));
+		  IAAFPropertyValueSP pOptionalPropertyValue;
+		  aafUInt16 five=5;
+		  checkResult(pTypeDefInt->CreateValue((aafMemPtr_t)&five,sizeof(aafUInt16),
+			  &pOptionalPropertyValue));
+		  checkResult(pObj->SetPropertyValue(pOptionalPropertyDef,
+			  pOptionalPropertyValue));
+		  
+		  // Now try getting the optional property value from the object
+		  IAAFPropertyValueSP pReturnedPropertyValue;
+		  checkResult(pObj->GetPropertyValue(pOptionalPropertyDef,
+			  &pReturnedPropertyValue));
+		  
+		  // Perform some negative tests on RemoveOptionalProperty()
+		  
+		  // RemoveOptionalProperty() with NULL property definition should return
+		  // AAFRESULT_NULL_PARAM
+		  checkExpression(pObj->RemoveOptionalProperty(0)==AAFRESULT_NULL_PARAM);
+		  
+		  // RemoveOptionalProperty() with property def. for a property that is not
+		  // in the class should return AAFRESULT_BAD_PROP
+		  checkExpression(pObj->RemoveOptionalProperty(pOptionalPropertyDef2)
+			  ==AAFRESULT_BAD_PROP);
+		  
+		  // Count number of properties before removing optional property value
+		  aafUInt32 oldNumProperties=0;
+		  checkResult(pObj->CountProperties(&oldNumProperties));
+		  checkExpression(oldNumProperties>=1);
+		  
+		  // Remove the optional property value
+		  checkResult(pObj->RemoveOptionalProperty(pOptionalPropertyDef));
+		  
+		  // Verify that property count is reduced by 1.
+		  aafUInt32 newNumProperties=(aafUInt32)(-1);
+		  checkResult(pObj->CountProperties(&newNumProperties));
+		  checkExpression(newNumProperties==oldNumProperties-1);
+		  
+		  // Now we should not be able to get the optional property value from the
+		  // object
+		  checkExpression(pObj->GetPropertyValue(pOptionalPropertyDef,
+			  &pReturnedPropertyValue)==AAFRESULT_PROP_NOT_PRESENT);
+		  
+		  
+		  checkResult (pObj->GetProperties (&pEnum));
+		  checkExpression (pEnum != 0, AAFRESULT_TEST_FAILED);
+		  while (newNumProperties--)
+		  {
+			  IAAFProperty * pProp = NULL;
+			  checkResult (pEnum->NextOne (&pProp));
+			  checkExpression (pProp != 0, AAFRESULT_TEST_FAILED);
+			  pProp->Release();
+		  }
+		  
+		  // Now use CreateOptionalPropertyValue() to add an optional property to
+		  // an instance of AAFSequence
+		  
+		  // Create an instance of AAFSequence & initialize it
+		  checkResult(pDict->LookupClassDef(AUID_AAFSequence,&pClassDef));
+		  IAAFSequenceSP pSequence;
+		  checkResult (pClassDef->CreateInstance (IID_IAAFSequence,
+			  (IUnknown **)&pSequence));
+		  checkResult(pSequence->Initialize(defs.ddSound()));
+		  
+		  // Add sequence to composition Mob
+		  IAAFSegmentSP pSegment;
+		  checkResult(pSequence->QueryInterface(IID_IAAFSegment,(void **)&pSegment));
+		  aafRational_t editRate = { 0, 1};
+		  IAAFTimelineMobSlotSP pTimelineMobSlot;
+		  checkResult(pMob->AppendNewTimelineSlot(editRate,pSegment,1,
+			  L"AAF Test Sequence",0,&pTimelineMobSlot));
+		  
+		  IAAFObjectSP pObj2;
+		  checkResult(pSequence->QueryInterface(IID_IAAFObject,(void**)&pObj2));
+		  
+		  // Test CreateOptionalPropertyValue()
+		  
+		  // First perform some negative tests on CreateOptionalPropertyValue()
+		  IAAFPropertyValueSP pCreatedPropVal;
+		  checkExpression(pObj2->CreateOptionalPropertyValue(0,&pCreatedPropVal)
+			  ==AAFRESULT_NULL_PARAM);
+		  checkExpression(pObj2->CreateOptionalPropertyValue(pOptionalPropertyDef2,0)
+			  ==AAFRESULT_NULL_PARAM);
+		  hr = pObj2->CreateOptionalPropertyValue(pOptionalPropertyDef,
+			  &pCreatedPropVal);
+		  if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+		  {
+			  checkExpression(hr == AAFRESULT_BAD_PROP);
+		  }
+		  checkExpression(pCreatedPropVal==0);
+		  
+		  // Now use CreateOptionalPropertyValue() to create a property value and
+		  // set it as an optional property of an instance of AAFSequence.
+		  checkResult(pObj2->CreateOptionalPropertyValue(pOptionalPropertyDef2,
+			  &pCreatedPropVal));
+		  
+		  IAAFTypeDefSP pTypeDef;
+		  checkResult(pCreatedPropVal->GetType(&pTypeDef));
+		  checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefInt,
+			  (void**)&pTypeDefInt));
+		  aafUInt16 ten=10;
+		  checkResult(pTypeDefInt->SetInteger(pCreatedPropVal,(aafMemPtr_t)&ten,
+			  sizeof(aafUInt16)));
+		  
+		  checkResult(pObj2->SetPropertyValue(pOptionalPropertyDef2,
+			  pCreatedPropVal));
+		  
+		  //
+		  // Check Generation functionality.
+		  //
+		  
+		  // Test IsGenerationTracked(), DisableGenerationTracking()
+		  aafBoolean_t b;
+		  checkResult (pObj->IsGenerationTracked (&b));
+		  // Generation is not tracked by default.
+		  checkExpression (b == kAAFFalse, AAFRESULT_TEST_FAILED);
+		  
+		  // check for redundant disables
+		  checkResult (pObj->DisableGenerationTracking());
+		  checkResult (pObj->IsGenerationTracked (&b));
+		  checkExpression (b == kAAFFalse, AAFRESULT_TEST_FAILED);
+		  
+		  // Change the object (using the CompMob interface) so that
+		  // subsequent Save() will know it's a dirty object.
+		  aafRational_t eu = { 1, 1 };
+		  checkResult (pCMob->SetDefaultFade (0, kAAFFadeNone, eu));
+		  
+		  // Perform one save and verify that generation was not tracked.
+		  checkResult (pFile->Save());
+		  
+		  AAFRESULT testhr;
+		  IAAFIdentificationSP pIdent;
+		  aafUID_t identAuid;
+		  testhr = pObj->GetGeneration(&pIdent);
+		  checkExpression (AAFRESULT_INVALID_PARAM == testhr,
+			  AAFRESULT_TEST_FAILED);
+		  testhr = pObj->GetGenerationAUID(&identAuid);
+		  checkExpression (AAFRESULT_INVALID_PARAM == testhr,
+			  AAFRESULT_TEST_FAILED);
+		  // make sure gen still isn't tracked
+		  checkResult (pObj->IsGenerationTracked (&b));
+		  checkExpression (b == kAAFFalse, AAFRESULT_TEST_FAILED);
+		  
+		  // Test EnableGenerationTracking()
+		  checkResult (pObj->EnableGenerationTracking());
+		  checkResult (pObj->IsGenerationTracked (&b));
+		  checkExpression (b == kAAFTrue, AAFRESULT_TEST_FAILED);
+		  
+		  checkResult (pObj->DisableGenerationTracking());
+		  checkResult (pObj->IsGenerationTracked (&b));
+		  checkExpression (b == kAAFFalse, AAFRESULT_TEST_FAILED);
+		  
+		  // Check for redundant enables
+		  checkResult (pObj->EnableGenerationTracking());
+		  checkResult (pObj->EnableGenerationTracking());
+		  checkResult (pObj->IsGenerationTracked (&b));
+		  checkExpression (b == kAAFTrue, AAFRESULT_TEST_FAILED);
+		  
+		  // Now that generation tracking is enabled, try a couple of
+		  // save()s to see if the latest ident is saved.
+		  //
+		  // First, add a new identification.  We'll keep track of the
+		  // identifications we're putting in by using a bogus productID
+		  // AUID, and put small integers in the aafUID_t.Data1 field.
+		  //
+		  // Here's where we define two version AUIDs for our use.
+		  aafUID_t versionUid1 = { 0 };
+		  versionUid1.Data1 = 1;
+		  aafUID_t versionUid2 = { 0 };
+		  versionUid2.Data1 = 2;
+		  
+		  // Now make a new identification with the first version AUID,
+		  // and append it to the header.
+		  IAAFIdentificationSP pNewIdent;
+		  checkResult (defs.cdIdentification()->
+			  CreateInstance (IID_IAAFIdentification,
+			  (IUnknown **) &pNewIdent));
+		  assert (pNewIdent);
+		  checkResult (pNewIdent->Initialize (L"Avid",
+			  L"Test File",
+			  L"First Test Version",
+			  versionUid1));
+		  checkResult (pHeader->AppendIdentification (pNewIdent));
+		  
+		  // With Version1 identification in the header, do a save and see
+		  // if that generation made it to our file.
+		  //
+		  // First, change object to make sure Save() will save it
+		  checkResult (pCMob->SetDefaultFade (1, kAAFFadeNone, eu));
+		  
+		  checkResult (pFile->Save());
+		  IAAFIdentificationSP pReadIdent1;
+		  checkResult (pObj->GetGeneration(&pReadIdent1));
+		  aafUID_t readAuid1 = { 0 };
+		  checkResult (pReadIdent1->GetProductID(&readAuid1));
+		  checkExpression (1 == readAuid1.Data1, AAFRESULT_TEST_FAILED);
+		  
+		  // Now make a new identification with the second version AUID,
+		  // and append it to the header.
+		  checkResult (defs.cdIdentification()->
+			  CreateInstance (IID_IAAFIdentification,
+			  (IUnknown **) &pNewIdent));
+		  assert (pNewIdent);
+		  aafUID_t junkAuid;
+		  // make sure this isn't allowed before initialization
+		  HRESULT temphr = pNewIdent->GetProductID(&junkAuid);
+		  checkExpression (AAFRESULT_NOT_INITIALIZED == temphr,
+			  AAFRESULT_TEST_FAILED);
+		  
+		  checkResult (pNewIdent->Initialize (L"Avid",
+			  L"Test File",
+			  L"Second Test Version",
+			  versionUid2));
+		  
+		  // this should now work after initialization
+		  checkResult (pNewIdent->GetProductID(&junkAuid));
+		  
+		  checkResult (pHeader->AppendIdentification (pNewIdent));
+		  
+		  // With Version2 identification in the header, do a save and see
+		  // if that generation made it to our file.
+		  //
+		  // First, change object to make sure Save() will save it
+		  checkResult (pCMob->SetDefaultFade (2, kAAFFadeNone, eu));
+		  checkResult (pFile->Save());
+		  IAAFIdentificationSP pReadIdent2;
+		  checkResult (pObj->GetGeneration(&pReadIdent2));
+		  aafUID_t readAuid2 = { 0 };
+		  checkResult (pReadIdent2->GetProductID(&readAuid2));
+		  checkExpression (2 == readAuid2.Data1, AAFRESULT_TEST_FAILED);
+}
+hr = AAFRESULT_SUCCESS;
 	}
   catch (HRESULT & rResult)
 	{
@@ -459,6 +473,10 @@ static HRESULT ObjectReadTest ()
       IAAFDictionarySP pDict;
 	  checkResult(pHeader->GetDictionary(&pDict));
 
+	  aafProductVersion_t			testRev;
+	  checkResult(pHeader->GetRefImplVersion(&testRev));
+	  if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+	  {
 	  IAAFIdentificationSP pReadIdent;
 	  checkResult (pHeader->GetLastIdentification(&pReadIdent));
 
@@ -522,6 +540,7 @@ static HRESULT ObjectReadTest ()
 	  checkResult(pTypeDefInt->GetInteger(pOptionalPropertyValue,
 		  (aafMemPtr_t)&storedValue,sizeof(aafUInt16)));
       checkExpression(storedValue==10);
+	  }
 
 	  hr = AAFRESULT_SUCCESS;
 	}
@@ -550,24 +569,24 @@ extern "C" HRESULT CAAFObject_test(testMode_t mode)
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
   try
-	{
-		if(mode == kAAFUnitTestReadWrite)
-		{
-		  hr = ObjectWriteTest ();
+  {
+		  if(mode == kAAFUnitTestReadWrite)
+		  {
+			  hr = ObjectWriteTest ();
+			  if (FAILED(hr))
+			  {
+				  cerr << "CAAFObject_test...FAILED!" << endl;
+				  return hr;
+			  }
+		  }
+		  
+		  hr = ObjectReadTest ();
 		  if (FAILED(hr))
-			{
+		  {
 			  cerr << "CAAFObject_test...FAILED!" << endl;
 			  return hr;
-			}
-		}
-
-	  hr = ObjectReadTest ();
-	  if (FAILED(hr))
-		{
-		  cerr << "CAAFObject_test...FAILED!" << endl;
-		  return hr;
-		}
-	}
+		  }
+  }
   catch (...)
 	{
 	  cerr << "CAAFObject_test...Caught general C++"

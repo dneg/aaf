@@ -3,7 +3,7 @@
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
  *
- * Permission to use, copy and modify this software and accompanying 
+ * Permission to use, copy and modify this software and accopanying 
  * documentation, and to distribute and sublicense application software
  * incorporating this software for any purpose is hereby granted, 
  * provided that (i) the above copyright notice and this permission
@@ -105,15 +105,7 @@ ImplAAFHeader::ImplAAFHeader ()
   _persistentProperties.put(_fileRev.address());
   _persistentProperties.put(_objectModelVersion.address());
 
-  //!!!	_head = this;
-//	file->InternalSetHead(this);
-	_toolkitRev.major = 0;
-	_toolkitRev.minor = 0;
-	_toolkitRev.tertiary = 0;
-	_toolkitRev.type = kAAFVersionUnknown;
-	_toolkitRev.patchLevel = 0;
-//!!!	_byteOrder;
-//!!!	_lastModified;
+	_toolkitRev = AAFReferenceImplementationVersion;
 	_file = NULL;
 }
 
