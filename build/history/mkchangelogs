@@ -49,7 +49,8 @@ writeHeader ()
 
   echo "<html>"
   echo "<head>"
-  echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">"
+  echo "<meta http-equiv=\"Content-Type\""
+  echo "      content=\"text/html; charset=ISO-8859-1\">"
   echo "<title>Index of cvs change logs</title>"
   echo "</head>"
   echo "<body>"
@@ -185,16 +186,16 @@ startList >> $index
 let i=$n-1
 while [[ i -gt 0 ]]
 do
- ptag=${tagnames[i - 1]}
- tag=${tagnames[i]}
- file=Changes-${ptag}-${tag}
- if [[ -s ${file}.clog ]]
- then
-   echo "<li><a href=\"${file}.html\">${ptag} -> ${tag}</a>"
- else
-   echo "<li>${ptag} -> ${tag} - no changes"
- fi
- let i=$i-1
+  ptag=${tagnames[i - 1]}
+  tag=${tagnames[i]}
+  file=Changes-${ptag}-${tag}
+  if [[ -s ${file}.clog ]]
+  then
+    echo "<li><a href=\"${file}.html\">${ptag} -> ${tag}</a>"
+  else
+    echo "<li>${ptag} -> ${tag} - no changes"
+  fi
+  let i=$i-1
 done >> $index
 
 endList >> $index
