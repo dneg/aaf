@@ -25,11 +25,11 @@ const char* getProgramName(void)
   return programName;
 }
 
-ByteOrder hostByteOrder(void)
+OMByteOrder hostByteOrder(void)
 {
   OMInt16 word = 0x1234;
   OMInt8  byte = *((OMInt8*)&word);
-  ByteOrder result;
+  OMByteOrder result;
 
   ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x34)));
 

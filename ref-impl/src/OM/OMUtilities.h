@@ -9,7 +9,7 @@ void setProgramName(const char* name);
 
 const char* getProgramName(void);
 
-ByteOrder hostByteOrder(void);
+OMByteOrder hostByteOrder(void);
 
 size_t wideStringLength(const wchar_t* string);
 

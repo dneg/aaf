@@ -2,20 +2,21 @@
 #define OMSTOREDVECTORINDEX_H
 
 #include "OMPortability.h"
+#include "OMTypes.h"
 
 class OMStoredVectorIndex {
 public:
   OMStoredVectorIndex(size_t size);
   ~OMStoredVectorIndex(void);
-  size_t highWaterMark(void) const;
-  void insert(size_t position, size_t name);
+  OMUInt32 highWaterMark(void) const;
+  void insert(size_t position, OMUInt32 name);
   size_t entries(void) const;
-  void iterate(size_t& context, size_t& name) const;
+  void iterate(size_t& context, OMUInt32& name) const;
 private:
-  size_t _highWaterMark;
+  OMUInt32 _highWaterMark;
   size_t _size;
   size_t _entries;
-  size_t* _names;
+  OMUInt32* _names;
 };
 
 #endif

@@ -20,9 +20,9 @@ OMStoredPropertySetIndex::~OMStoredPropertySetIndex(void)
 }
 
 void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
-                                      int type,
-                                      size_t offset,
-                                      size_t length)
+                                      OMUInt32 type,
+                                      OMUInt32 offset,
+                                      OMUInt32 length)
 {
   IndexEntry* entry = find(propertyId);
 
@@ -68,9 +68,9 @@ size_t OMStoredPropertySetIndex::entries(void) const
 
 void OMStoredPropertySetIndex::iterate(size_t& context,
                                        OMPropertyId& propertyId,
-                                       int& type,
-                                       size_t& offset,
-                                       size_t& length) const
+                                       OMUInt32& type,
+                                       OMUInt32& offset,
+                                       OMUInt32& length) const
 {
   OMStoredPropertySetIndex::IndexEntry* entry = 0;
   size_t start = context;

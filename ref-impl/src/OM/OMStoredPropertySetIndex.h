@@ -13,7 +13,10 @@ public:
 
   ~OMStoredPropertySetIndex(void);
 
-  void insert(OMPropertyId propertyId, int type, size_t offset, size_t length);
+  void insert(OMPropertyId propertyId,
+              OMUInt32 type,
+              OMUInt32 offset,
+              OMUInt32 length);
   
   IndexEntry* find(OMPropertyId propertyId) const;
 
@@ -21,9 +24,9 @@ public:
 
   void iterate(size_t& context,
                OMPropertyId& propertyId,
-               int& type,
-               size_t& offset,
-               size_t& length) const;
+               OMUInt32& type,
+               OMUInt32& offset,
+               OMUInt32& length) const;
 
   bool isSorted(void);
 
@@ -35,9 +38,9 @@ private:
     
   struct IndexEntry {
     OMPropertyId _propertyId;
-    int _type;
-    size_t _offset;
-    size_t _length;
+    OMUInt32 _type;
+    OMUInt32 _offset;
+    OMUInt32 _length;
     bool _valid;
   };
     
