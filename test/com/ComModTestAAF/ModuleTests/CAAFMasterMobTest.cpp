@@ -274,7 +274,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				if (slotID != s+1)
 					hr = AAFRESULT_TEST_FAILED;
 
-				pMasterMob->GetTapeNameBufLen(&bufSize);
+				pMasterMob->GetTapeNameBufLen(slotID, &bufSize);
 				if (bufSize)
 				{
 					pTapeName = new aafWChar [bufSize];
