@@ -16,6 +16,12 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+AD_IDL(//
+// The CompositionMob class specifies how to combine content data 
+// elements into a sequence\\\, how to modify content data elements\\\,
+//  and how to synchronize content data elements. 
+// A CompositionMob is a subclass of the Mob class. 
+//)
 AD_CLASS_UUID(91920d64, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(91920d63, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
@@ -23,28 +29,66 @@ AD_CLASS_BEGIN
 
   //@access Public Members
 AD_METHOD2(SetInitialValues,
-				[in\\\, string],aafWChar *,pName,Mob name [optional],
+				[in\\\, string],aafWChar *,pName,Mob name,
 				[in],aafBool,isPrimary,Whether or not the mob is a primary mob,
-				Constructor given name and primary mob status.)
-  //@rdesc Error code [see below].
+				Constructor given name and primary mob status.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName arg is NULL.)
 
 AD_METHOD1(GetDefaultFade,
-		   [out],aafDefaultFade_t *,result,a default fade struct,
-		   Get the default fade for this composition.)
-  //@rdesc Error code [see below].
-  //@comm If there is no default fade, this function returns with no error,
-  // but the VALID field of the structure is false.  This allows you to
-  // pass this struct to SourceClipGetFade() in all cases.
-  //@comm Maps to omfiMobGetDefaultFade
-	
+		   [out],aafDefaultFade_t *,pResult,a default fade struct,
+		   Get the default fade for this composition.
+  //
+  // If there is no default fade\\\, this function returns with no 
+  // error\\\, but the VALID field of the structure is false. 
+  // This allows you to pass this struct to SourceClip::GetFade\\\(\\\)
+  // in all cases.
+  // This method succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult Argument is NULL.)
+  	
 
 AD_METHOD3(SetDefaultFade,
 		   [in],aafLength_t  ,fadeLength  ,Default fade length,
 		   [in],aafFadeType_t,fadeType    ,default fade type,
 		   [in],aafRational_t,fadeEditUnit,default fade edit unit,
-		   Adds the default crossfade properties to the Mob.)
-  //@rdesc Error code [see below].
-  //@comm Maps to omfiMobSetDefaultFade
-
+		   Adds the default crossfade properties to the Mob.
+    // 
+  // This method succeeds if all of the following are true:
+  // - the fadeLength is a positive integer.
+  // - the fadeType is one the valid FadeTypes defined in AAFTypes.h
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - invalid fadeType.
+  //
+  // AAFRESULT_BAD_LENGTH
+  //   - invalid fadeLength.)
 
 AD_CLASS_END
