@@ -29,6 +29,16 @@ create_unix_distribution ()
 	tar cvf - ${FileList} | gzip -c > ${filename}
 }
 
+create_mac_distribution ()
+{
+	echo create_mac_distribution $1 $2 $3;
+
+	cd $1;
+	filename=$2.tar.gz;
+	FileList=`grep -v \# $3`;
+	tar cvf - ${FileList} | gzip -c > ${filename}
+}
+
 create_win_distribution ()
 {
 	echo create_zip_distribution $1 $2 $3;
@@ -79,6 +89,8 @@ case ${AAFPLATFORM} in
 	MipsIrix  ) create_unix_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
 
 	Win       ) create_win_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
+
+	Mac       ) create_mac_distribution $AAFSDK $DIST_FILE_NAME $DIST_LIST  ;;
 
 	*         ) usage;;
 esac
