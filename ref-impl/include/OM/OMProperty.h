@@ -110,12 +110,6 @@ public:
     // @cmember The address of this <c OMProperty> object.
   OMProperty* address(void);
 
-    // @cmember Detach the <c OMStorable> object with the given
-    //          <p key> from this <c OMProperty>. This <c OMProperty>
-    //          must no longer attempt to access the <c OMStorable> with
-    //          the given <p key>.
-  virtual void detach(const OMStorable* object, const size_t key);
-
   // Optional property interface
 
     // @cmember Is this an optional property ? 
@@ -310,12 +304,6 @@ public:
     //          is <p externalSize>.
   virtual void restore(size_t externalSize);
 
-    // @cmember Detach the <c OMStorable> object with the given
-    //          <p key> from this <c OMStrongReferenceProperty>. This
-    //          <c OMStrongReferenceProperty> must no longer attempt
-    //          to access the <c OMStorable> with the given <p key>.
-  virtual void detach(const OMStorable* object, const size_t key);
-
   // Optional property interface
 
     // @cmember Remove this optional <c OMStrongReferenceProperty>.
@@ -385,12 +373,6 @@ public:
     //          (persisted) size of the <c OMWeakReferenceProperty> is
     //          <p externalSize>.
   virtual void restore(size_t externalSize);
-
-    // @cmember Detach the <c OMStorable> object with the given
-    //          <p key> from this <c OMWeakReferenceProperty>. This
-    //          <c OMWeakReferenceProperty> must no longer attempt
-    //          to access the <c OMStorable> with the given <p key>.
-  virtual void detach(const OMStorable* object, const size_t key);
 
 protected:
   // @access Protected members.
@@ -636,12 +618,6 @@ public:
     // @cmember Append the given <p ReferencedObject> <p value> to
     //          this <c OMStrongReferenceVectorProperty>.
   void appendValue(const ReferencedObject*& value);
-
-    // @cmember Detach the <c OMStorable> object with the given
-    //          <p key> from this <c OMStrongReferenceVectorProperty>.
-    //          This <c OMStrongReferenceVectorProperty> must no longer
-    //          attempt to access the <c OMStorable> with the given <p key>.
-  virtual void detach(const OMStorable* object, const size_t key);
 
   // Optional property interface
 

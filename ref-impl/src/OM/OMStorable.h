@@ -65,8 +65,7 @@ public:
 
     // @cmember Inform this <c OMStorable> that it is contained
     //          within the <c OMProperty> <p containingProperty>.
-  void setContainingProperty(const OMProperty* containingProperty,
-                             const size_t key);
+  void setContainingProperty(const OMProperty* containingProperty);
 
     // @cmember Inform this <c OMStorable> that it is no longer
     //          contained within any <c OMProperty>.
@@ -155,7 +154,6 @@ private:
   char* _pathName;
 
   OMProperty* _containingProperty;
-  size_t _key;
 
   OMStoredObject* _store;
   const OMClassFactory* _classFactory;
