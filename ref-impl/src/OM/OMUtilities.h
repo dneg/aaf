@@ -124,6 +124,8 @@ size_t squeezeWideString(const wchar_t* clearName,
                          wchar_t* squeezedName,
                          size_t squeezedNameSize);
 
+void printWideString(const wchar_t* string);
+
   // @func Save a character string.
   //   @parm The character string to save.
   //   @rdesc The saved character string.

@@ -35,6 +35,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <iostream.h>
+
 static char programName[FILENAME_MAX] = "Object Manager";
 
 void setProgramName(const char* name)
@@ -207,6 +209,16 @@ wchar_t* findWideCharacter(const wchar_t* string, wchar_t character)
     result = const_cast<wchar_t*>(p);
   }
   return result;
+}
+
+void printWideString(const wchar_t* string)
+{
+  TRACE("printWideString");
+
+  PRECONDITION("Valid string", validWideString(string));
+  char* str = convertWideString(string);
+  cout << str;
+  delete [] str;
 }
 
 char* saveString(const char* string)
