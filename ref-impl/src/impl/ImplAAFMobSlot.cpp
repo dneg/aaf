@@ -46,7 +46,13 @@ ImplAAFMobSlot::ImplAAFMobSlot ()
 
 
 ImplAAFMobSlot::~ImplAAFMobSlot ()
-{}
+{
+	if (_segment)
+	{
+		_segment->ReleaseReference();
+		_segment = 0;
+	}
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMobSlot::GetSegment (ImplAAFSegment **result)
@@ -63,14 +69,14 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMobSlot::SetSegment (ImplAAFSegment *value)
 {
-	ImplAAFSegment *oldValue = _segment;
-	if (oldValue)
-		oldValue->ReleaseReference();
+	if (_segment)
+		_segment->ReleaseReference();
 
 	_segment = value;
 
 	if (value)
 		value->AcquireReference();
+
 	return AAFRESULT_SUCCESS;
 }
 
