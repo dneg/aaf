@@ -70,6 +70,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafUID_t					uid;
 	ProductInfo.companyName = L"";
 	ProductInfo.productName = L"";
+	ProductInfo.productVersionString = L"";
 
 	try 
 	{
