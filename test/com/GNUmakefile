@@ -25,7 +25,7 @@ AAFBASE ?= ../../..
 
 
 .PHONY : all
-all : ComModTestAAF CreateSequence EssenceAccess
+all : ComModTestAAF CreateSequence EssenceAccess MultiGenTest
 
 .PHONY : ComModTestAAF
 ComModTestAAF :
@@ -39,15 +39,21 @@ CreateSequence :
 EssenceAccess :
 	cd EssenceAccess && $(MAKE)
 
+.PHONY : MultiGenTest
+MultiGenTest :
+	cd MultiGenTest && $(MAKE)
+
 .PHONY : clean
 clean :
 	cd ComModTestAAF && $(MAKE) GENDEPS=0 $@
 	cd CreateSequence && $(MAKE) GENDEPS=0 $@
 	cd EssenceAccess && $(MAKE) GENDEPS=0 $@
+	cd MultiGenTest && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
 	cd ComModTestAAF && $(MAKE) GENDEPS=0 $@
 	cd CreateSequence && $(MAKE) GENDEPS=0 $@
 	cd EssenceAccess && $(MAKE) GENDEPS=0 $@
+	cd MultiGenTest && $(MAKE) GENDEPS=0 $@
 
