@@ -18,6 +18,8 @@
 
 #include "AxEssence.h"
 
+#include "AxUtil.h"
+
 #include <AAFResult.h>
 
 AxEssenceMultiAccess::AxEssenceMultiAccess( IAAFEssenceMultiAccessSP sp )
@@ -165,6 +167,71 @@ aafUID_t AxDefObject::GetAUID()
 	CHECK_HRESULT( _spIaafDefObject->GetAUID( &uid ) );
 
 	return uid;
+}
+
+AxString AxDefObject::GetName()
+{
+	return AxNameToString( _spIaafDefObject );
+}
+
+AxString AxDefObject::GetDescription()
+{
+	return AxDescriptionToString( _spIaafDefObject );
+}
+
+//=---------------------------------------------------------------------=
+
+AxCodecDef::AxCodecDef( IAAFCodecDefSP spIaafCodecDef )
+:	AxDefObject( AxQueryInterface<IAAFCodecDef, IAAFDefObject>(spIaafCodecDef) ),
+	_spIaafCodecDef( spIaafCodecDef )
+{}
+
+AxCodecDef::~AxCodecDef()
+{}
+
+aafBoolean_t AxCodecDef::IsEssenceKindSupported( IAAFDataDefSP spIaafDataDef )
+{
+	aafBoolean_t isSupported;
+
+	CHECK_HRESULT( _spIaafCodecDef->IsEssenceKindSupported( spIaafDataDef, &isSupported ) );
+
+	return isSupported;
+}
+
+aafUInt32 AxCodecDef::CountEssenceKinds()
+{
+	aafUInt32 count;
+
+	CHECK_HRESULT( _spIaafCodecDef->CountEssenceKinds( &count ) );
+
+	return count;
+}
+
+IEnumAAFDataDefsSP AxCodecDef::GetEssenceKinds()
+{
+	IEnumAAFDataDefsSP spIEnumDataDefs;
+
+	CHECK_HRESULT( _spIaafCodecDef->GetEssenceKinds( &spIEnumDataDefs ) );
+
+	return spIEnumDataDefs;
+}
+
+aafBoolean_t AxCodecDef::AreThereFlavours()
+{
+	aafBoolean_t areThereFlavours;
+
+	CHECK_HRESULT( _spIaafCodecDef->AreThereFlavours( &areThereFlavours ) );
+
+	return areThereFlavours;
+}
+
+IEnumAAFCodecFlavoursSP AxCodecDef::EnumCodecFlavours()
+{
+	IEnumAAFCodecFlavoursSP spIEnumCodecFlavours;
+
+	CHECK_HRESULT( _spIaafCodecDef->EnumCodecFlavours( &spIEnumCodecFlavours ) );
+
+	return spIEnumCodecFlavours;
 }
 
 //=---------------------------------------------------------------------=

@@ -138,12 +138,45 @@ public:
 
 	aafUID_t GetAUID();
 
+	AxString GetName();
+
+	AxString GetDescription();
+
+	inline operator IAAFDefObjectSP ()
+	{ return _spIaafDefObject; }
+
 private:
 	AxDefObject();
 	AxDefObject ( const AxDefObject& );
 	AxDefObject & operator=( const AxDefObject & );
 	
 	IAAFDefObjectSP _spIaafDefObject;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxCodecDef : public AxDefObject {
+public:
+	AxCodecDef( IAAFCodecDefSP spIaafCodecDef );
+	~AxCodecDef();
+
+	aafBoolean_t IsEssenceKindSupported( IAAFDataDefSP spIaafDataDef );
+
+	aafUInt32 CountEssenceKinds();
+
+	IEnumAAFDataDefsSP GetEssenceKinds();
+
+	aafBoolean_t AreThereFlavours();
+
+	IEnumAAFCodecFlavoursSP EnumCodecFlavours();
+
+
+private:
+	AxCodecDef();
+	AxCodecDef( const AxCodecDef& );
+	AxCodecDef& operator=( const AxCodecDef& );
+
+    IAAFCodecDefSP _spIaafCodecDef;
 };
 
 //=---------------------------------------------------------------------=

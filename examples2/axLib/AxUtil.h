@@ -71,6 +71,9 @@ class AxStringUtil {
 
 public:
 
+	static AxString bool2Str( bool value );
+	static AxString bool2Str( aafBoolean_t value );
+	
 	static AxString int2StrHex( aafUInt32 n );
 
 	static AxString int2Str( aafInt32 n );
@@ -99,6 +102,57 @@ AxString AxDefNameToString( IAAFSmartPointer< Type >& sp )
 		buf( new aafCharacter[ sizeInChars ] );
 
 	CHECK_HRESULT( spDef->GetName( buf.get(), sizeInChars*sizeof(aafCharacter) ) );
+	
+	AxString name( buf.get() );
+
+	return name;
+}
+
+
+// Function template that will return a name given a smart
+// pointer of type "Type".  Type must have a "GetNameBufLen",
+// and a "GetName" method.
+
+template <class Type>
+AxString AxNameToString( IAAFSmartPointer< Type >& sp )
+{
+	aafUInt32 sizeInBytes = 0;
+
+	CHECK_HRESULT( sp->GetNameBufLen( &sizeInBytes ) );
+
+	// size is in bytes!  Divide by sizeof(aafCharacter) to allocate correctly
+	// sized aafCharacter array.  Add one to account for possible rounding.
+
+	int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
+	std::auto_ptr< aafCharacter >
+		buf( new aafCharacter[ sizeInChars ] );
+
+	CHECK_HRESULT( sp->GetName( buf.get(), sizeInChars*sizeof(aafCharacter) ) );
+	
+	AxString name( buf.get() );
+
+	return name;
+}
+
+// Function template that will return a description given a smart
+// pointer of type "Type".  Type must have a "GetDescriptionBufLen",
+// and a "GetDescription" method.
+
+template <class Type>
+AxString AxDescriptionToString( IAAFSmartPointer< Type >& sp )
+{
+	aafUInt32 sizeInBytes = 0;
+
+	CHECK_HRESULT( sp->GetDescriptionBufLen( &sizeInBytes ) );
+
+	// size is in bytes!  Divide by sizeof(aafCharacter) to allocate correctly
+	// sized aafCharacter array.  Add one to account for possible rounding.
+
+	int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
+	std::auto_ptr< aafCharacter >
+		buf( new aafCharacter[ sizeInChars ] );
+
+	CHECK_HRESULT( sp->GetDescription( buf.get(), sizeInChars*sizeof(aafCharacter) ) );
 	
 	AxString name( buf.get() );
 

@@ -21,6 +21,7 @@
 #include "AxSmartPointer.h"
 #include "AxEx.h"
 #include "AxHrMap.h"
+#include "AxPluginMgr.h"
 
 #include <AAF.h>
 
@@ -42,17 +43,8 @@ AxInit::AxInit()
 
 	CHECK_HRESULT( AAFLoad( dllname ) );
 
-
-	IAAFPluginManagerSP	mgr;
-
-	// Load the plugin manager 
-	CHECK_HRESULT( AAFGetPluginManager(&mgr) );
-
-	// Attempt load and register all of the plugins
-	// in the shared plugin directory.
-	// FIXME - How does it know where the shared plugin directory
-	// is?
-	CHECK_HRESULT( (mgr->RegisterSharedPlugins() ) );
+	AxPluginMgr mgr;
+	mgr.RegisterSharedPlugins();
  
 	once = true;
 }

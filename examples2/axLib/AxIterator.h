@@ -33,43 +33,43 @@ using namespace std;
 
 // This template will work for all IAAFEnum* enumerators
 // that have the following methods:
-//	NextOne(), Next(int), Reset(), Skip(), Clone()
+// NextOne(), Next(int), Reset(), Skip(), Clone()
 
 template <class Type, class EnumeratorType>
 class AxIterator {
 public:
 
-        typedef IAAFSmartPointer<Type> TypeSP;
-
 	AxIterator();
 	AxIterator( const AxIterator<Type, EnumeratorType>& other );
-	AxIterator( const IAAFSmartPointer< EnumeratorType >& spEnumerator );
+	AxIterator( const IAAFSmartPointer<EnumeratorType >& spEnumerator );
 
 	~AxIterator();
 
 	AxIterator& operator=( const AxIterator<Type, EnumeratorType>& rhs );
 
-	bool NextOne( TypeSP& );
+	bool NextOne( Type& );
 
-	auto_ptr< vector< IAAFSmartPointer<Type> > > Next( aafUInt32 count );
+	auto_ptr< vector< Type > > Next( aafUInt32 count );
 
 	void Reset();
 
 	void Skip( aafUInt32 count );
 
-	auto_ptr< AxIterator<Type,EnumeratorType> > Clone();	
+	auto_ptr< AxIterator<Type, EnumeratorType> > Clone();	
 
 private:
 
 	IAAFSmartPointer< EnumeratorType > _spEnumerator;
 };
 
-typedef AxIterator< IAAFProperty, IEnumAAFProperties >		AxPropertyIter;
-typedef AxIterator< IAAFPropertyValue, IEnumAAFPropertyValues >	AxPropertyValueIter;
-typedef AxIterator< IAAFMob, IEnumAAFMobs >			AxMobIter;
-typedef AxIterator< IAAFEssenceData, IEnumAAFEssenceData >	AxEssenceIter;
-typedef AxIterator< IAAFMobSlot, IEnumAAFMobSlots >		AxMobSlotIter;
-
+typedef AxIterator< IAAFSmartPointer<IAAFProperty>,      IEnumAAFProperties >	  AxPropertyIter;
+typedef AxIterator< IAAFSmartPointer<IAAFPropertyValue>, IEnumAAFPropertyValues > AxPropertyValueIter;
+typedef AxIterator< IAAFSmartPointer<IAAFMob>,           IEnumAAFMobs >		  AxMobIter;
+typedef AxIterator< IAAFSmartPointer<IAAFEssenceData>,   IEnumAAFEssenceData >	  AxEssenceIter;
+typedef AxIterator< IAAFSmartPointer<IAAFMobSlot>,       IEnumAAFMobSlots >	  AxMobSlotIter;
+typedef AxIterator< IAAFSmartPointer<IAAFDataDef>,       IEnumAAFDataDefs >       AxDataDefsIter;
+typedef AxIterator< aafUID_t,                            IEnumAAFCodecFlavours >  AxCodecFlavoursIter;
+typedef AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >  AxLoadedPluginsIter;
 
 // Records contain a set of named values that must be iterated over as well,
 // but don't have any sort of native iterator.  This wrapper presents

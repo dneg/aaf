@@ -78,13 +78,13 @@ void AxIterator<Type, EnumeratorType>::Reset()
 
 
 template <class Type, class EnumeratorType>
-bool AxIterator<Type, EnumeratorType>::NextOne( TypeSP& ret )
+bool AxIterator<Type, EnumeratorType>::NextOne( Type& ret )
 {
 	HRESULT hr;
 
-	TypeSP typeSP;
+	Type type;
 
-	hr = _spEnumerator->NextOne( &typeSP );
+	hr = _spEnumerator->NextOne( &type );
 
 	if ( hr == AAFRESULT_NO_MORE_OBJECTS ) {
 	  return false;
@@ -92,41 +92,37 @@ bool AxIterator<Type, EnumeratorType>::NextOne( TypeSP& ret )
 
 	CHECK_HRESULT( hr );
 
-	ret = typeSP;
+	ret = type;
 	return true;
 }
 
 template <class Type, class EnumeratorType>
-auto_ptr< vector< IAAFSmartPointer<Type> > > 
+auto_ptr< vector< Type > > 
 AxIterator<Type, EnumeratorType>::Next( aafUInt32 count )
 {
-	Type* pType;
-
-	aafUInt32 numFetched = 0;
-	 
-	CHECK_HRESULT( _spEnumerator->Next( count, &pType, &numFetched ) );
-
-	auto_ptr< vector< IAAFSmartPointer<Type> > >
-		spTypeV( new vector< IAAFSmartPointer<Type> > );
 	int i;
-	Type* p = pType;
 
-	for( i = 0; i < numFetched; ++i ) {
-		IAAFSmartPointer<Type> spType;
-		*(&spType) = p++;
-		spTypeV->push_back( spType );
-	};
- 
-	delete pType;
+	auto_ptr< vector< Type > >
+		typeV( new vector< Type > );
 
-	return spTypeV;
+	for( i = 0; i < count; i++ ) {
+		Type tmp;
+		if ( NextOne( tmp ) ) {
+			typeV->push_back(tmp);
+		}
+		else {
+			break;
+		}
+	}
+
+	return typeV;
 }
 
 template <class Type, class EnumeratorType>
-auto_ptr< AxIterator<Type,EnumeratorType> > AxIterator<Type, EnumeratorType>::Clone()
+auto_ptr< AxIterator<Type, EnumeratorType> > AxIterator<Type, EnumeratorType>::Clone()
 {
-	auto_ptr< AxIterator<Type,EnumeratorType> >
-		pAxIterator( new AxIterator<Type,EnumeratorType>( _spEnumerator ) ) ;
+	auto_ptr< AxIterator<Type, EnumeratorType> >
+		pAxIterator( new AxIterator<Type, EnumeratorType>( _spEnumerator ) ) ;
 
 	return pAxIterator;
 }
@@ -236,11 +232,14 @@ auto_ptr<AxArrayIterator<TypeDef> > AxArrayIterator<TypeDef>::Clone()
 
 //=---------------------------------------------------------------------=
 
-template class AxIterator< IAAFProperty, IEnumAAFProperties >;
-template class AxIterator< IAAFPropertyValue, IEnumAAFPropertyValues >;
-template class AxIterator< IAAFMob, IEnumAAFMobs >;
-template class AxIterator< IAAFEssenceData, IEnumAAFEssenceData >;
-template class AxIterator< IAAFMobSlot, IEnumAAFMobSlots >;
+template class AxIterator< IAAFSmartPointer<IAAFProperty>,      IEnumAAFProperties >;
+template class AxIterator< IAAFSmartPointer<IAAFPropertyValue>, IEnumAAFPropertyValues >;
+template class AxIterator< IAAFSmartPointer<IAAFMob>,           IEnumAAFMobs >;
+template class AxIterator< IAAFSmartPointer<IAAFEssenceData>,   IEnumAAFEssenceData >;
+template class AxIterator< IAAFSmartPointer<IAAFMobSlot>,       IEnumAAFMobSlots >;
+template class AxIterator< IAAFSmartPointer<IAAFDataDef>,       IEnumAAFDataDefs >;
+template class AxIterator< aafUID_t,                            IEnumAAFCodecFlavours >;
+template class AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >;
 
 template class AxArrayIterator< IAAFTypeDefFixedArray >;
 template class AxArrayIterator< IAAFTypeDefVariableArray >;

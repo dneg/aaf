@@ -310,14 +310,18 @@ AxHrMap::AxHrMap()
 	MAP_ADD( AAFRESULT_ZERO_PIXELSIZE );
 	MAP_ADD( AAFRESULT_ZERO_SAMPLESIZE );
 
-
 	// Misc. Win32 errors.
 #if defined(OS_WINDOWS)
+
 	MAP_ADD( ERROR_MOD_NOT_FOUND );
 	MAP_ADD( E_NOINTERFACE );
 	MAP_ADD( STG_E_FILEALREADYEXISTS );
 	MAP_ADD( STG_E_PATHNOTFOUND );
 
+	// FIXME - Find out what proprocessor macro defines this.  It is not
+	// I would have expected ERROR_MOD_NOT_FOUND ????
+	_map[ 0x8007007E ] = L"The specified module could not be found. ";
+	
 	// Don't know the macro definition for 0x80030111. The MSVC++ Error Lookup tool 
 	// was used to translate it.  It is a structured storage error generated when
 	// the SS file exceeds 2GB when writting large amounts of essence data.

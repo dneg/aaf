@@ -130,9 +130,19 @@ std::pair<bool,const char*> AxCmdLineArgs::get( int n )
 
 //=---------------------------------------------------------------------=
 
+AxString AxStringUtil::bool2Str( bool value )
+{
+	return value ? L"true" : L"false";
+}
+
+AxString AxStringUtil::bool2Str( aafBoolean_t value )
+{
+	return AxStringUtil::bool2Str( value ? true : false );
+}
+
 AxString AxStringUtil::int2StrHex( aafUInt32 n )
 {
-        const unsigned int bufSize = 9;
+    const unsigned int bufSize = 9;
 	char buf[bufSize];
 
 	sprintf( buf, "%08x", n );

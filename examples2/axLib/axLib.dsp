@@ -288,6 +288,10 @@ SOURCE=.\AxObject.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AxPluginMgr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\AxProperty.cpp
 
 !IF  "$(CFG)" == "axLib - Win32 Release"
@@ -435,6 +439,10 @@ SOURCE=.\AxMobSlot.h
 # Begin Source File
 
 SOURCE=.\AxObject.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AxPluginMgr.h
 # End Source File
 # Begin Source File
 
