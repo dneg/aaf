@@ -42,7 +42,7 @@ all : $(OBJDIR) $(AAFSDKBINDIR)/CreateSequence$(EXE)
 
 
 $(AAFSDKBINDIR)/CreateSequence$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@ 
+	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) -o $@ 
 
 
 .PHONY : clean

@@ -43,7 +43,7 @@ all : $(OBJDIR) $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
 
 
 $(AAFSDKBINDIR)/ComFileKindTest$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@ 
+	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) $(LIBCIO) -o $@ 
 
 
 .PHONY : clean

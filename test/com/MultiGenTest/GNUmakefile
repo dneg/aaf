@@ -57,7 +57,7 @@ all : $(AAFSDKBINDIR)/MultiGenTest$(EXE)
 # $(AAFSDKBINDIR)/MultiGenTest$(EXE) : $(CXXOBJS) MultiGenTests
 $(AAFSDKBINDIR)/MultiGenTest$(EXE) : $(CXXOBJS) $(CXXOBJS2)
 	$(LD) $(CXXOBJS) $(CXXOBJS2) \
-	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
+	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) $(LIBCIO) -o $@
 
 
 #.PHONY : MultiGenTests

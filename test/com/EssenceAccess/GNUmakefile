@@ -42,7 +42,7 @@ all : $(OBJDIR) $(AAFSDKBINDIR)/EssenceAccess$(EXE)
 
 
 $(AAFSDKBINDIR)/EssenceAccess$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
+	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(PLATFORMLIBS) -o $@
 
 
 .PHONY : clean
