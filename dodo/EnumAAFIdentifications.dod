@@ -53,22 +53,25 @@ AD_XMETHOD1(NextOne,
   //   - no Identifications remaining to be returned.)
 
 
-AD_XMETHOD3(Next,
+AD_X2METHOD3(Next,
 			[in],
 			  objPass,
 			  aafInt32,
 			  count,
 			  number of identifications requested,
+			  xxx,
 			[out\, size_is\(count\)\, length_is\(*pNumFetched\)],
-			  objOut,
+			  objOutArray,
 			  AAFIdentification,
 			  ppIdentifications,
 			  array to receive identification objects,
+			  count,
 			[out],
 			  objPass,
 			  aafInt32 *,
 			  pNumFetched,
 			  number of actual Identifications fetched into ppIdentifications array,
+			  xxx,
   // Enumerates the next count elements \(AAFIdentification pointers\)
   // in the enumerator's list\, returning them in the given array
   // along with the actual number of enumerated elements in

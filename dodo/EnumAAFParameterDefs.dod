@@ -6,20 +6,14 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 AD_FORWARD_DECLARATION(AAFParameterDef)
 
@@ -39,13 +33,13 @@ AD_XMETHOD1(NextOne,
   // properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
-AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of control code definitions requested,
+AD_X2METHOD3(Next,
+			[in], objPass, aafUInt32, count, number of control code definitions requested,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFParameterDef, ppParameterDefs,
-			array to receive control code definitions,
+			objOutArray, AAFParameterDef, ppParameterDefs,
+			array to receive control code definitions,count,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual ParameterDefs fetched into ppParameterDefs array,
+			number of actual ParameterDefs fetched into ppParameterDefs array,xxx,
 			Enumerates the next count elements \(AAFParameterDef pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 

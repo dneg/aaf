@@ -56,18 +56,20 @@ AD_XMETHOD1(NextOne,
   //   - no Components remaining to be returned.)
 
 
-AD_XMETHOD3(Next,
+AD_X2METHOD3(Next,
 			[in],
 			objPass,
 			aafUInt32,
 			count,
 			number of objects requested,
+			xxx,
 
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut,
+			objOutArray,
 			AAFPropertyValue,
 			ppPropertyValues,
 			array to receive Property Values,
+			count,
 
 			[out\,ref],
 			objPass,
@@ -75,7 +77,7 @@ AD_XMETHOD3(Next,
 			pFetched,
 			number of actual Property Values fetched into ppPropertyValues
 	// array,
-
+			xxx,
 			Enumerates the next count elements \(AAFPropertyValue pointers\)
   // in the enumerator's list\, returning them in the given array
   // along with the actual number of enumerated elements in

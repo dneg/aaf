@@ -53,25 +53,28 @@ AD_XMETHOD1(NextOne,
   //   - Hit the end of the list of slots being enumerated over.)
 
 
-AD_XMETHOD3(Next,
+AD_X2METHOD3(Next,
 
 			[in],
 			objPass,
 			aafUInt32,
 			count,
 			number of mob slots requested,
+			xxx,
 
 			[out\, size_is\(count\)\, length_is\(*pNumFetched\)],
-			objOut,
+			objOutArray,
 			AAFMobSlot,
 			ppMobSlots,
 			array to receive mob slots,
+			count,
 
 			[out\,ref],
 			objPass,
 			aafUInt32 *,
 			pNumFetched,
 			number of actual MobSlots fetched into ppMobSlots array,
+			xxx,
 
 			Enumerates the next count elements \(AAFMobSlot pointers\) in 
   // the enumerator's list\, returning them in the given array along

@@ -30,12 +30,6 @@ AD_IDL(//
 *												*
 \***********************************************/
 
-
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFParameterDef)
 AD_FORWARD_DECLARATION(AAFTypeDef)

@@ -54,26 +54,26 @@ AD_XMETHOD1(NextOne,
   //   - no Locators remaining to be returned.)
 
 
-AD_XMETHOD3(Next,
+AD_X2METHOD3(Next,
 
 			[in],
 			objPass,
 			aafUInt32,
 			count,
 			number of locators requested,
-
+			xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut,
+			objOutArray,
 			AAFLocator,
 			ppLocators,
 			array to receive locators,
-
+			count,
 			[out\,ref],
 			objPass,
 			aafUInt32 *,
 			pFetched,
 			number of actual Locators fetched into ppLocators array,
-
+			xxx,
 			Enumerates the next count elements \(AAFLocator pointers\) in 
   // the enumerator's list\, returning them in the given array along
   // with the actual number of enumerated elements in pcFetched. The

@@ -53,22 +53,25 @@ AD_XMETHOD1(NextOne,
   //   - no Components remaining to be returned.)
 
 
-AD_XMETHOD3(Next,
+AD_X2METHOD3(Next,
 			[in],
 			  objPass,
 			  aafUInt32,
 			  count,
 			  number of components requested,
+			  xxx,
 			[out\, size_is\(count\)\, length_is\(*pNumFetched\)],
-			  objOut,
+			  objOutArray,
 			  AAFComponent,
 			  ppComponents,
 			  array to receive components,
+			  count,
 			[out\,ref],
 			  objPass,
 			  aafUInt32 *,
 			  pNumFetched,
 			  number of actual Components fetched into ppComponents array,
+			  xxx,
 
 			Enumerates the next count elements \(AAFComponent pointers\) in the
   // enumerator's list\, returning them in the given array along with

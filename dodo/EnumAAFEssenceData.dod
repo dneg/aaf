@@ -6,20 +6,14 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 AD_FORWARD_DECLARATION(AAFEssenceData)
 
@@ -39,12 +33,12 @@ AD_XMETHOD1(NextOne,
   // properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
-AD_XMETHOD3(Next,
-			[in], objPass, aafUInt32, count, number of essence data requested,
+AD_X2METHOD3(Next,
+			[in], objPass, aafUInt32, count, number of essence data requested,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOut, AAFEssenceData, ppEssenceData, array to receive EssenceData,
+			objOutArray, AAFEssenceData, ppEssenceData, array to receive EssenceData,count,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual EssenceData fetched into ppEssenceData array,
+			number of actual EssenceData fetched into ppEssenceData array,xxx,
 			Enumerates the next count elements \(AAFEssenceData pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 

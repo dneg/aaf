@@ -65,22 +65,25 @@ AD_XMETHOD1(NextOne,
   //   - no Mobs remaining to be returned.)
 
 
-AD_XMETHOD3(Next,
+AD_X2METHOD3(Next,
 			[in],
 			  objPass,
 			  aafUInt32,
 			  count,
 			  number of mobs requested,
+			  xxx,
 			[out\, size_is\(count\)\, length_is\(*pNumFetched\)],
-			  objOut,
+			  objOutArray,
 			  AAFMob,
 			  ppMobs,
 			  array to receive mobs,
+			  count,
 			[out],
 			  objPass,
 			  aafUInt32 *,
 			  pNumFetched,
 			  number of actual Mobs fetched into ppMobs array,
+			  xxx,
 			  Enumerates the next count elements \(AAFMob pointers\) in the
   // enumerator's list\, returning them in the given array along with
   // the actual number of enumerated elements in pNumFetched. The caller
