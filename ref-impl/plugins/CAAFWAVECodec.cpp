@@ -101,7 +101,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::SetCompression (aafCompressEnable_t  enable)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_SUCCESS;
 }
 
 
@@ -179,7 +179,8 @@ HRESULT STDMETHODCALLTYPE
         aafUID_t  variant,
         IAAFEssenceStream * stream)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	_stream = stream;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -222,7 +223,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::Close ()
 {
-  return HRESULT_NOT_IMPLEMENTED;
+  return HRESULT_SUCCESS;
 }
 
 		
@@ -253,7 +254,8 @@ HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::WriteRawData (aafDataBuffer_t  buffer,
         aafInt32  buflen)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	_stream->Write (buffer, buflen);
+	return HRESULT_SUCCESS;
 }
 
 
