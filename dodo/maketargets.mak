@@ -21,7 +21,7 @@ test_only:
 run:
 	 cd tool ; $(MAKE) run
 
-.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .fidl .implc .implh .comt .cppt .refh
+.SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .fidl .implc .implh .comt .cppt .refh .frefh
 
 # This file contains the list of all of the targets to be built...								   
 include targets.mk
@@ -30,7 +30,7 @@ include aafobjects.mk
 
 INCLUDE_DIR = ../ref-impl/include
 
-targets: $(DODO_TARGETS) $(INCLUDE_DIR)/com-api/AAF.idl
+targets: $(DODO_TARGETS) $(INCLUDE_DIR)/com-api/AAF.idl $(INCLUDE_DIR)/ref-api/AAF.h
 
 $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	@ echo Generating AAF.idl...
@@ -65,6 +65,41 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	    	cat $$class.fidl; \
 	    done ; \
 	) > $(INCLUDE_DIR)/com-api/AAF.idl
+
+$(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
+	@ echo Generating reference AAF.h...
+	@ ( echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998 Avid Technology." ; \
+	    echo "// (C) Copyright 1998 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// AAF Interfaces." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "//" ; \
+	    echo \#ifndef __AAF_h__ ; \
+	    echo \#define __AAF_h__ ; \
+	    echo "" ; \
+	    echo \#ifndef __AAFCOMPlatform_h__ ; \
+	    echo \#include \"AAFCOMPlatform.h\" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    for class in $(DODO_TARGET_NAMES) ; do \
+	    	echo interface I$$class\;; \
+	    done ; \
+	    for class in $(DODO_TARGET_NAMES); do \
+	    	echo ""; \
+	    	echo "// I$$class"; \
+	    	echo ""; \
+	    	cat $$class.frefh; \
+	    done ; \
+	    echo "" ; \
+	    echo \#endif __AAF_h__ ; \
+	) > $(INCLUDE_DIR)/ref-api/AAF.h
+
 
 SRC_DIR = ../ref-impl/src
 
@@ -138,12 +173,17 @@ SRC_DIR = ../ref-impl/src
 	mv $*.tmp $*.refh
 	cp $*.refh $(INCLUDE_DIR)/ref-api/$*.h
 
+.dod.frefh :
+	$(RM) -f $*.frefh
+	./tool/$(DODO) -f macros/frefh.mac < $*.dod > $*.tmp
+	mv $*.tmp $*.frefh
+
 
 
 clean:
 	cd tool ; $(MAKE) clean
 	$(RM) -f *.cpp *.cppt *.h *.idl *.fidl *.exp
-	$(RM) -f *.comc *.comh *.comt *.refh
+	$(RM) -f *.comc *.comh *.comt *.refh *.frefh
 	$(RM) -f *.implc *.implh
 	$(RM) -f core
 	$(RM) -f $(SRC_DIR)/cpp-api/AAF*.cpp
@@ -161,7 +201,6 @@ clean:
 	$(RM) -f $(INCLUDE_DIR)/cpp-api/AAF*.h
 	$(RM) -f $(INCLUDE_DIR)/cpp-api/EnumAAF*.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF*.h
-	$(RM) -f $(INCLUDE_DIR)/ref-api/EnumAAF*.h
 	@for file in $(AUTO_GEN_IMPL) ; do \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
