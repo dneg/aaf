@@ -1,6 +1,9 @@
 #startm .this-module 0
 AAFSession\
 #endm
+#startm .parent-module 0
+AAFRoot\
+#endm
 AD_HEAD
 /******************************************\
 *                                          *
@@ -17,7 +20,7 @@ AD_FORWARD_DECLARATION(AAFFile)
 AD_CLASS_UUID(F0C10891, 3073, 11d2, 80, 4A, 00, 60, 08, 14, 3E, 6F)
 AD_DEFAULT_UUID(F0C10892, 3073, 11d2, 80, 4A, 00, 60, 08, 14, 3E, 6F)
 
-AD_ROOT_CLASS_BEGIN
+AD_CLASS_BEGIN
 
 AD_BEGIN_SESSION
 
@@ -48,4 +51,4 @@ AD_METHOD1(GetIdentification,
 		   [out],aafProductIdentification_t *,ident, returned identification info,
 		   Gets information identifying the creator of the file.)
 
-AD_ROOT_CLASS_END
+AD_CLASS_END
