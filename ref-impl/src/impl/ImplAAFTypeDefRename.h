@@ -92,10 +92,10 @@ public:
 
 
   //****************
-  // GetValue()
+  // CreateValue()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetValue
+    CreateValue
         (// @parm [in] property value from which value is to be read
          ImplAAFPropertyValue * pInPropVal,
 

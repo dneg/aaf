@@ -137,7 +137,7 @@ AD_XMETHOD2(GetBaseValue,
   // AAFRESULT_NULL_PARAM
   //   - pInPropVal or ppOutPropVal is NULL.)
 
-AD_XMETHOD2(GetValue,
+AD_XMETHOD2(CreateValue,
 			[in],
 			objIn,
 			AAFPropertyValue,
