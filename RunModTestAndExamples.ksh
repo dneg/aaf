@@ -14,6 +14,8 @@ CREATESEQUENCE=0
 ESSENCEACCESS=0
 AAFINFO=0
 AAFOMFTEST=0
+PERSONNELEXTENSIONTEST=0
+PERSONNELEXTENSIONDIFF=0
 ALL=0
 PRINTPATH=0
 AAFWATCHDOG=0
@@ -36,6 +38,7 @@ PrintHelp ()
 	echo "-pa = ComPropDirectAccess" 
 	echo "-ea = EssenceAccess"
 	echo "-cs = CreateSequence"
+	echo "-pe = Personnel Extension tests"
 	echo "-t  = dump\n\n"
 	echo "-s  = update AAFWatchDog.log with exit code results"
 	echo "-pp = Print PATH variable\n\n"
@@ -71,7 +74,8 @@ do
 		-cs ) CREATESEQUENCE=1;;
 		-i ) AAFINFO=1;;
 		-ao ) AAFOMFTEST=1;;
-		-pp ) PRINTPATH=1;;
+		-pe ) PERSONNELEXTENSIONTEST=1;;
+		-p ) PRINTPATH=1;;
 		-s ) AAFWATCHDOG=1;;
 		-h ) PrintHelp
 			 exit 1 ;;
@@ -312,6 +316,45 @@ RunMainScript ()
 
 		cd $TargetDir
 	fi
+
+	if [ PERSONNELEXTENSIONTEST -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ComExtensionWrite"
+		cd Examples/com
+		
+		ComExtensionWrite > ComExtensionWrite.txt
+		CheckExitCode $? "ComExtensionWrite"
+		cat ComExtensionWrite.txt
+
+		VerifyFiles "extension.aaf"
+
+		PrintSeparator "Running ComPersonnelPluginWrite"
+
+		ComPersonnelPluginWrite > ComPersonnelPluginWrite.txt
+		CheckExitCode $? "ComPersonnelPluginWrite"
+		cat ComPersonnelPluginWrite.txt
+
+		VerifyFiles "extensionPlugin.aaf"
+
+		PrintSeparator "Comparing the output from ComExtensionWrite and ComPersonnelPluginWrite"
+
+		# Strip off the ONLY lines that should be different between the output
+		# of ComExtensionWrite and ComPersonnelPluginWrite.
+		cat ComExtensionWrite.txt | grep -v 'extension\.aaf' > ComExtensionWrite1.txt
+		cat ComPersonnelPluginWrite.txt | grep -v 'extensionPlugin\.aaf' > ComPersonnelPluginWrite1.txt
+		diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt
+		Stat=$?
+		CheckExitCode $Stat "diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt"
+		if [ Stat -ne 0 ]; then
+		    echo "Edit sources in ComExtensionWrite and ComPersonnelPluginWrite"
+		    echo "until diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt"
+		    echo "detects no differences."
+		else
+		    echo "Succeeded."
+		fi
+
+		cd $TargetDir
+	fi
+
 
 	cd $START_DIR
 
