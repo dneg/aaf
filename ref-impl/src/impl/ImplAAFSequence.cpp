@@ -172,7 +172,7 @@ AAFRESULT STDMETHODCALLTYPE
 		pComponent->GetDataDef(&cpntDataDef);
 		
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDefintion(&cpntDataDef, &pDef));
+		CHECK(pDict->LookupDataDefinition(&cpntDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
 		CHECK(pDef->DoesDataDefConvertTo(&sequDataDef, &willConvert));

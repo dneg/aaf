@@ -166,20 +166,20 @@ public:
 
 
   //****************
-  // RegisterDataDefintion()
+  // RegisterDataDefinition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    RegisterDataDefintion
+    RegisterDataDefinition
         // @parm [in] Data Definition Object
         (ImplAAFDataDef * pDataDef);
 
   //****************
-  // LookupDataDefintion()
+  // LookupDataDefinition()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    LookupDataDefintion
-        (// @parm [in,ref] Datak Defintion Unique ID
-         aafUID_t *  pDataDefintionID,
+    LookupDataDefinition
+        (// @parm [in,ref] Datak Definition Unique ID
+         aafUID_t *  pDataDefinitionID,
 
          // @parm [out,retval] Data Definition Object
          ImplAAFDataDef ** ppDataDef);
