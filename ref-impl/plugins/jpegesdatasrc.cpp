@@ -223,7 +223,7 @@ jpeg_essencestream_src (j_decompress_ptr cinfo, IAAFEssenceStream * infile, aafU
 
 	if (NULL == src->buffer) {
     src->buffer = (JOCTET *)
-      (*cinfo->mem->alloc_large) ((j_common_ptr) cinfo, JPOOL_IMAGE,
+      (*cinfo->mem->alloc_large) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
 				  samplesize * SIZEOF(JOCTET));
 		src->bufferSize = samplesize;
 		src->sampleSize = samplesize;
