@@ -43,6 +43,7 @@ class ImplEnumAAFPluggableDefs;
 
 #include "ImplAAFEffectDef.h"
 #include "ImplAAFPluggableDef.h"
+#include "ImplAAFTypeDef.h"
 
 class ImplAAFDictionary :
   public OMClassFactory, 
@@ -120,10 +121,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     RegisterType
-        (// @parm [in] ID by which type is to be known
-         aafUID_t * pTypeAUID,
-
-         // @parm [in] Type Definition Object
+        (// @parm [in] Type Definition Object
          ImplAAFTypeDef * pTypeDef);
 
   //****************
@@ -269,11 +267,16 @@ public:
   	AAFRESULT LookupPluggableDef(aafUID_t *containerID, ImplAAFPluggableDef **result);
 
 private:
+  // make sure built-in types are initialized.
+  void InitBuiltins();
+
+private:
+	aafBool _builtinsInited;
+
     OMStrongReferenceVectorProperty<ImplAAFPluggableDef>	_pluginDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFEffectDef>		_effectDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFParameterDef>	 _parameterDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFParameterDef>	_parameterDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFTypeDef>			_typeDefinitions;
 };
 
 #endif // ! __ImplAAFDictionary_h__
-
-
