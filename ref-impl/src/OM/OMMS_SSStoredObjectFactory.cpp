@@ -149,8 +149,8 @@ OMMS_SSStoredObjectFactory::createFile (OMRawStorage* rawStorage,
 
 	// choose sector size based on signature from factory
 	unsigned long sectorSize=0;
-	if( OMSignature_Aaf_SSBin_512 == signature ) sectorSize=512;
-	else if( OMSignature_Aaf_SSBin_4K == signature ) sectorSize=4096;
+	if( OMSignature_Aaf512Binary == signature ) sectorSize=512;
+	else if( OMSignature_Aaf4KBinary == signature ) sectorSize=4096;
 	PRECONDITION("Valid Signature", sectorSize!=0 );
 
 	IStorage* storage = 0;
@@ -273,8 +273,8 @@ OMMS_SSStoredObjectFactory::createFile (const wchar_t* fileName,
 
 // choose sector size based on signature from factory
 	unsigned long sectorSize=0;
-	if( OMSignature_Aaf_SSBin_512 == signature ) sectorSize=512;
-	else if( OMSignature_Aaf_SSBin_4K == signature ) sectorSize=4096;
+	if( OMSignature_Aaf512Binary == signature ) sectorSize=512;
+	else if( OMSignature_Aaf4KBinary == signature ) sectorSize=4096;
 	PRECONDITION("Valid Signature", sectorSize!=0 );
 
   SSCHAR omFileName[FILENAME_MAX];
