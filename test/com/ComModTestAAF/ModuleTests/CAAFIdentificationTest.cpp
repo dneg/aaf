@@ -37,6 +37,7 @@
 #include <stdlib.h>
 #include <wchar.h>
 #include <time.h>
+#include <string.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -126,6 +127,16 @@ static void GetDateTime(aafTimeStamp_t *ts)
 #define COMPANY_NAME		L"AAF Developers Desk"
 #define PRODUCT_NAME		L"AAFDictionary Test"
 #define TEST_VERSION		L"TEST VERSION"
+
+#if defined( OS_MACOS )
+#define PLATFORM_NAME		L"MacOS"
+#elif defined( OS_WINDOWS )
+#define PLATFORM_NAME		L"Win32"
+#elif defined( OS_UNIX )
+#define PLATFORM_NAME		L"Unix"
+#else
+#define PLATFORM_NAME		L"Unknown"
+#endif
 
 aafProductVersion_t			testVersion =  { 1, 0, 0, 0, kAAFVersionUnknown };
 
@@ -335,16 +346,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		TestMethod(pIdent->GetPlatformBufLen(NULL), AAFRESULT_NULL_PARAM);
 		TestMethod(pIdent->GetPlatformBufLen(&bufSize), AAFRESULT_SUCCESS);
 		
-#if defined(macintosh) || defined(_MAC)
-		if (bufSize != sizeof(L"MacOS"))
+		if (bufSize != sizeof(PLATFORM_NAME))
 			localhr = AAFRESULT_TEST_FAILED;
-#elif defined(_WIN32) || defined(WIN32)
-		if (bufSize != sizeof(L"Win32"))
-			localhr = AAFRESULT_TEST_FAILED;
-#else
-		if (bufSize != sizeof(L"Unknown"))
-			localhr = AAFRESULT_TEST_FAILED;
-#endif
 
 		PrintTestResult(testName);
 
@@ -356,16 +359,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		TestMethod(pIdent->GetPlatform(myBuffer, bufSize-1), AAFRESULT_SMALLBUF);
 		TestMethod(pIdent->GetPlatform(myBuffer, bufSize), AAFRESULT_SUCCESS);
 
-#if defined(macintosh) || defined(_MAC)
-		if (wcscmp(myBuffer, L"MacOS"))
+		if (wcscmp(myBuffer, PLATFORM_NAME))
 			localhr = AAFRESULT_TEST_FAILED;
-#elif defined(_WIN32) || defined(WIN32)
-		if (wcscmp(myBuffer, L"Win32"))
-			localhr = AAFRESULT_TEST_FAILED;
-#else
-		if (wcscmp(myBuffer, L"Unknown"))
-			localhr = AAFRESULT_TEST_FAILED;
-#endif
 							
 		delete [] myBuffer;
 

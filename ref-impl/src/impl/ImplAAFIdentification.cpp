@@ -68,10 +68,12 @@ ImplAAFIdentification::ImplAAFIdentification():
   _persistentProperties.put(_generation.address());
 
   
-#if defined(_WIN32)
+#if defined( OS_WINDOWS )
   _platform = L"Win32";
-#elif defined(macintosh) || defined(_MAC)
+#elif defined( OS_MACOS )
   _platform = L"MacOS";
+#elif defined( OS_UNIX )
+  _platform = L"Unix";
 #else
   _platform = L"Unknown";
 #endif
