@@ -127,6 +127,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFClassDef.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFClassFactory.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFCommentMarker.cpp"
 # End Source File
 # Begin Source File
