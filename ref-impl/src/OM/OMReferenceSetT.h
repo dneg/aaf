@@ -77,8 +77,9 @@ void OMReferenceSet<UniqueIdentification, ReferencedObject>::insert(
 
   // Set the set to contain the new object
   //
+  UniqueIdentification identification = object->identification();
   SetElement newElement(object);
-  _set.insert(newElement);
+  _set.insert(identification, newElement);
 
   POSTCONDITION("Object is present", containsValue(object));
 }

@@ -41,10 +41,6 @@ class OMSetIterator;
   //        are not allowed.
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
   //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
@@ -62,10 +58,7 @@ public:
   virtual ~OMSet(void);
 
     // @cmember Insert <p value> into this <c OMSet>.
-  virtual void insert(const Element value);
-
-    // @cmember Does this <c OMSet> contain <p value> ?
-  virtual bool containsValue(const Element value) const;
+  virtual void insert(const Key, const Element value);
 
     // @cmember Does this <c OMSet> contain an <p Element>
     //          identified by <p key>?
@@ -90,14 +83,11 @@ public:
 
     // @cmember Append the given <p Element> <p value> to
     //          this <c OMSet>.
-  void append(const Element value);
+  void append(const Key, const Element value);
 
     // @cmember Remove the <p Element> with <p Key> <p key>
     //          from this <c OMSet>.
   virtual void remove(const Key key);
-
-    // @cmember Remove <p value> from this <c OMSet>.
-  virtual void removeValue(const Element value);
 
     // @cmember Remove all elements from this <c OMSet>.
   virtual void clear(void);

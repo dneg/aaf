@@ -45,56 +45,26 @@ OMSet<Key, Element>::~OMSet()
   // @mfunc Insert <p value> into this <c OMSet>.
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
   //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
+  //   @parm The <p Key>.
   //   @parm The <p Element> to insert.
 template <typename Key, typename Element>
-void OMSet<Key, Element>::insert(const Element value)
+void OMSet<Key, Element>::insert(const Key key, const Element value)
 {
   TRACE("OMSet<Key, Element>::insert");
-  PRECONDITION("Element not present", !_tree.contains(value.identification()));
+  PRECONDITION("Element not present", !_tree.contains(key));
 
-  _tree.insert(value.identification(), value);
+  _tree.insert(key, value);
 
-  POSTCONDITION("Element present", _tree.contains(value.identification()));
-}
-
-  // @mfunc Does this <c OMSet> contain <p value> ?
-  //   @tcarg class | Element | The type of an <c OMSet> element.
-  //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
-  //   @tcarg class | Key | The type of the unique key used to identify
-  //          elements. This type must support operator =, operator !=
-  //          and operator <lt>.
-  //   @parm The <p Element> for which to search.
-  //   @rdesc True if this <c OMSet> contains <p value>, false otherwise.
-  //   @this const
-template <typename Key, typename Element>
-bool OMSet<Key, Element>::containsValue(const Element value) const
-{
-  TRACE("OMSet<Key, Element>::containsValue");
-
-  bool result = _tree.contains(value.identification());
-
-  return result;
+  POSTCONDITION("Element present", _tree.contains(key));
 }
 
   // @mfunc Does this <c OMSet> contain an <p Element>
   //        identified by <p key>?
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
   //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
@@ -118,10 +88,6 @@ bool OMSet<Key, Element>::contains(const Key key) const
   //        not found the result is false.
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
   //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
@@ -146,10 +112,6 @@ bool OMSet<Key, Element>::find(const Key key, Element& value) const
   //        not found the result is false.
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
   //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
@@ -173,10 +135,6 @@ bool OMSet<Key, Element>::find(const Key key, Element** value) const
   //        of elements in the <c OMSet>.
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
   //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
@@ -196,29 +154,22 @@ size_t OMSet<Key, Element>::count(void) const
   //        this <c OMSet>.
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
   //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
+  //   @parm The <p Key>.
   //   @parm The <p Element> to append.
 template <typename Key, typename Element>
-void OMSet<Key, Element>::append(const Element value)
+void OMSet<Key, Element>::append(const Key key, const Element value)
 {
   TRACE("OMSet<Key, Element>::append");
 
-  insert(value);
+  insert(key, value);
 }
 
   // @mfunc Remove the <p Element> with <p Key> <p key> from this <c OMSet>.
   //   @tcarg class | Element | The type of an <c OMSet> element.
   //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
   //   @tcarg class | Key | The type of the unique key used to identify
   //          elements. This type must support operator =, operator !=
   //          and operator <lt>.
@@ -229,25 +180,6 @@ void OMSet<Key, Element>::remove(const Key key)
   TRACE("OMSet<Key, Element>::remove");
 
   _tree.remove(key);
-}
-
-  // @mfunc Remove <p value> from this <c OMSet>.
-  //   @tcarg class | Element | The type of an <c OMSet> element.
-  //          This type must support operator = and operator==.
-  //          Instances of this type must be able to return a unique
-  //          value of type <p Key> to identify themselves through a
-  //          function with the signature
-  //          const Key Element::identification(void) const.
-  //   @tcarg class | Key | The type of the unique key used to identify
-  //          elements. This type must support operator =, operator !=
-  //          and operator <lt>.
-  //   @parm The <p Element> to remove.
-template <typename Key, typename Element>
-void OMSet<Key, Element>::removeValue(const Element value)
-{
-  TRACE("OMSet<Key, Element>::removeValue");
-
-  _tree.remove(value.identification());
 }
 
   // @mfunc Remove all elements from this <c OMSet>.
