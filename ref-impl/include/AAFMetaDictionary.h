@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Thu Feb  3 16:33:38 EST 2000
-// by user cfernand on system CFERNANDES2.
+// This file was generated on Wed Feb 16 16:03:33 EST 2000
+// by user bedell on system JBEDELL2.
 //
 // Key to macros.
 //
@@ -2081,6 +2081,14 @@ AAF_CLASS(CDCIDescriptor,
     AAF_TYPE(Int16),
     false,
     CDCIDescriptor)
+  AAF_PROPERTY(VerticalSubsampling,
+    AAF_LITERAL_AUID(0x06474142,
+      0x4108, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x3308,
+    AAF_TYPE(UInt32),
+    false,
+    CDCIDescriptor)
 AAF_CLASS_END(CDCIDescriptor)
 AAF_CLASS_SEPARATOR()
 
@@ -3591,7 +3599,7 @@ AAF_TYPE_DEFINITION_FIXED_ARRAY(RGBALayout,
   AAF_LITERAL_AUID(0x0C040300,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
-  AAF_TYPE(RGBAComponent), 6)
+  AAF_TYPE(RGBAComponent), 8)
 AAF_TYPE_SEPARATOR()
 
 // StringArray
