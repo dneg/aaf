@@ -10,8 +10,6 @@
 AAFPERSISTENTOBJECTS = \
 	AAFAIFCData \
 	AAFCommentMarker \
-	AAFConstValue \
-	AAFControlPoint \
 	AAFDataDef \
 	AAFDOSLocator \
 	AAFEvent \
@@ -45,7 +43,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFTypeDefSet \
 	AAFTypeDefRecord \
 	AAFUnixLocator \
-	AAFVaryingValue \
 	AAFWAVEData \
 	AAFWindowsLocator
 
@@ -83,8 +80,10 @@ HUMAN_TYPED_IMPL = \
 	AAFCodecDef \
 	AAFComponent \
 	AAFCompositionMob \
+	AAFConstValue \
 	AAFContainerDef \
 	AAFContentStorage \
+	AAFControlPoint \
 	AAFDefObject \
 	AAFDictionary \
 	AAFEdgecode \
@@ -139,6 +138,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTypeDefWeakObjRef \
 	AAFTypeDefObjectRef \
 	AAFTypeDefVariableArray \
+	AAFVaryingValue \
 	AAFWAVEDescriptor \
 	EnumAAFComponents \
 	EnumAAFEffectDefs \
