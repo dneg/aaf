@@ -29,7 +29,7 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(Initialize,
 			[in\, string],
 			objPass,
-			wchar_t *,
+			aafCharacter *,
 			pName,
 			Mob name [optional],
 
