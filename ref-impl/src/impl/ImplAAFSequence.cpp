@@ -671,8 +671,8 @@ AAFRESULT
 	return hr;
 }
 
-AAFRESULT ImplAAFSequence::ChangeContainedReferences(const aafUID_t & from,
-													 const aafUID_t & to)
+AAFRESULT ImplAAFSequence::ChangeContainedReferences(aafMobID_constref from,
+													 aafMobID_constref to)
 {
 	aafUInt32			n, count;
 	ImplAAFComponent	*comp = NULL;

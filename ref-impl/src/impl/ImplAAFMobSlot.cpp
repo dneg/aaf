@@ -281,8 +281,8 @@ AAFRESULT ImplAAFMobSlot::ConvertToMyRate(aafPosition_t tmpPos,
 	return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFMobSlot::ChangeContainedReferences(const aafUID_t & from,
-													const aafUID_t & to)
+AAFRESULT ImplAAFMobSlot::ChangeContainedReferences(aafMobID_constref from,
+													aafMobID_constref to)
 {
 	ImplAAFSegment	*seg;
 	

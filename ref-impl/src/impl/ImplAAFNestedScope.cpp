@@ -190,8 +190,8 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(const aafUID_t & from,
-														const aafUID_t & to)
+AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafMobID_constref from,
+														aafMobID_constref to)
 {
 	ImplAAFComponent	*comp = NULL;
 	

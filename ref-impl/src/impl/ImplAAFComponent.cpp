@@ -214,8 +214,8 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 }
 
 
-AAFRESULT ImplAAFComponent::ChangeContainedReferences(const aafUID_t & from,
-													  const aafUID_t & to)
+AAFRESULT ImplAAFComponent::ChangeContainedReferences(aafMobID_constref from,
+													  aafMobID_constref to)
 {
 	return AAFRESULT_SUCCESS;
 }

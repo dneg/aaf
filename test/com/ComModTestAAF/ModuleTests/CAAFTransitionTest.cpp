@@ -42,7 +42,7 @@
 // This values are used for testing purposes
 static aafUID_t    fillerUID = DDEF_Picture;
 static aafLength_t  fillerLength = 3200;
-static aafUID_t	zeroID = { 0 };
+static aafMobID_t	zeroMobID = { 0 };
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -105,7 +105,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFParameterDef*			pParamDef = NULL;
 	IAAFDefObject*				pDefObject = NULL;
 	
-	aafUID_t					newMobID;
+	aafMobID_t					newMobID;
 	aafUID_t					datadef = DDEF_Picture;
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
@@ -267,7 +267,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						  IID_IAAFSourceClip, 
 						  (IUnknown **)&pSourceClip));
 		aafSourceRef_t	sourceRef;
-		sourceRef.sourceID = zeroID;
+		sourceRef.sourceID = zeroMobID;
 		sourceRef.sourceSlotID = 0;
 		sourceRef.startTime = 0;
 		checkResult(pSourceClip->Initialize (testDataDef, effectLen, sourceRef));

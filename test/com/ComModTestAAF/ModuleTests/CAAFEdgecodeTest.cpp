@@ -76,7 +76,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFEdgecode				*pEdgecode = NULL;
 	IAAFSegment					*pSeg = NULL;
 
-	aafUID_t					newMobID;
+	aafMobID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
 	aafLength_t					zero;

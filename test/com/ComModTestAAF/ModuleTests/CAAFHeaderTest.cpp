@@ -78,7 +78,7 @@ struct HeaderTest
   IEnumAAFEssenceData *_pEnumEssenceData;
   IAAFEssenceData *_pEssenceData;
 
-  aafUID_t _mobID[gMaxMobCount];
+  aafMobID_t _mobID[gMaxMobCount];
 };
 
 extern "C" HRESULT CAAFHeader_test()
@@ -382,7 +382,7 @@ void HeaderTest::openMobs()
     check(_pEnumMobs->NextOne(&_pMob));
 
     // Validate the mob data.
-	aafUID_t mobID;
+	aafMobID_t mobID;
     check(_pMob->GetMobID(&mobID));
     if (0 != memcmp(&mobID, &_mobID[item], sizeof(mobID)))
       check(AAFRESULT_TEST_FAILED);

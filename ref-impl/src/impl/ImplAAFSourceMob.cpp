@@ -163,8 +163,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
- 		sourceRef.sourceID = NilMOBID;
-		sourceRef.sourceSlotID = 0;
+    memset(&sourceRef, 0, sizeof(sourceRef));
 		CvtInt32toPosition(0, sourceRef.startTime);
 		CHECK(GetDictionary(&pDictionary));
 		sub = (ImplAAFSourceClip *)pDictionary->CreateImplObject(AUID_AAFSourceClip);
@@ -444,8 +443,7 @@ AAFRESULT STDMETHODCALLTYPE
 		endFillLen = tcSlotLen;
 		CHECK(SubInt64fromInt64(pos, &endFillLen));
 		CHECK(SubInt64fromInt64(length, &endFillLen));
-		memset(&sourceRef, sizeof(aafUID_t), 0);
-		sourceRef.sourceSlotID = 0;
+		memset(&sourceRef, 0, sizeof(sourceRef));
 		CvtInt32toPosition(0, sourceRef.startTime);
 		CHECK(GetDictionary(&pDict));
 		CHECK(pDict->CreateInstance(AUID_AAFSourceClip, (ImplAAFObject **)&sclp));

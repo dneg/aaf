@@ -85,7 +85,7 @@
 
 extern "C" const aafClassID_t CLSID_EnumAAFIdentifications;
 
-const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+const aafUID_t NIL_UID = { 0 };
 
 
 ImplAAFHeader::ImplAAFHeader ()
@@ -146,7 +146,7 @@ ImplAAFHeader::~ImplAAFHeader ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::LookupMob (const aafUID_t & mobID,
+    ImplAAFHeader::LookupMob (aafMobID_constref mobID,
                            ImplAAFMob **ppMob)
 {
     ImplAAFContentStorage *cstore = NULL;
@@ -278,7 +278,7 @@ AAFRESULT STDMETHODCALLTYPE
 // based on omfmIsMediaDataPresent
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::IsEssenceDataPresent (const aafUID_t & fileMobID,
+    ImplAAFHeader::IsEssenceDataPresent (aafMobID_constref fileMobID,
                            aafFileFormat_t fmt,
                            aafBool *pResult)
 {

@@ -82,7 +82,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTimecodeStream			*pTimecodeStream = NULL;
 	IAAFSegment					*pSeg = NULL;
 	
-	aafUID_t					newMobID;
+	aafMobID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
 	aafLength_t					zero;
