@@ -93,7 +93,7 @@ const bool true = 1;
 // an association PID -> type in the dictionary.
 //
 
-// version 0.8 and above
+// version 0.08 and above
 const int TID_DATA                           = 0;
 const int TID_DATA_STREAM                    = 1;
 const int TID_STRONG_OBJECT_REFERENCE        = 2;
@@ -103,7 +103,7 @@ const int TID_WEAK_OBJECT_REFERENCE          = 5;
 const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 6;
 const int TID_WEAK_OBJECT_REFERENCE_SET      = 7;
 
-// version 0.7 and below
+// version 0.07 and below
 const int OLD_TID_DATA                           = 0;
 const int OLD_TID_STRONG_OBJECT_REFERENCE        = 1;
 const int OLD_TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
@@ -159,14 +159,14 @@ const char* const openArrayKeySymbol = "{";
 const char* const closeArrayKeySymbol = "}";
 
 // CLSID for AAFHeader 
-// Up to and including version 0.3
+// Up to and including version 0.03
 // {B1A21383-1A7D-11D2-BF78-00104BC9156D}
 const CLSID OldCLSID_AAFHeader =
   { 0xB1A21383,
     0x1A7D, 0x11D2,
   { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 
-// Version 0.4 and up - SMPTE style stored class id
+// Version 0.04 and up - SMPTE style stored class id
 //{06480000-0000-0000-060E-2B3401010104}
 const CLSID CLSID_AAFHeader =
   { 0x06480000,
@@ -198,6 +198,11 @@ const CLSID CLSID_AAFHeader =
 //  0.10   : remove OperationDefinition::PluginLocator and
 //           OperationDefinition::ManufacturerID,
 //           add TypeDefinitionExtendibleEnumeration.
+//  0.11   : remove classes AIFCData, HTMLData, ImageData, JPEGImageData,
+//           MIDIFileData, TIFFData and WAVEData. Move FrameIndex property
+//           to EssenceData and rename to SampleIndex. Change type of
+//           DefinitionObject::PluginDescriptors from ObjRefArray to
+//           RefAUIDArray
 //
 
 // The following may change at run time depending on the file format
@@ -209,7 +214,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 10;
+const OMUInt32 HIGHVERSION = 11;
 
 // Output format requested
 //
