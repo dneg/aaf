@@ -664,6 +664,13 @@ virtual AAFRESULT STDMETHODCALLTYPE
   HRESULT IsClassIDEqual( const aafClassID_t* id, bool& result ) const;
   bool IsUsageCodeEqual( const aafUID_t* usageCode ) const;
 
+
+protected:
+
+  AAFRESULT CloneDependencies(aafIncMedia_t  includeMedia,
+                              ImplAAFFile * destFile);
+
+
 	protected:
 	OMFixedSizeProperty<aafMobID_t>		_mobID;
 	OMWideStringProperty				_name;
