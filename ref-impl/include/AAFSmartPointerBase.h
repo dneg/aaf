@@ -193,7 +193,10 @@ operator=
   (const AAFSmartPointerBase<ReferencedType, RefCountType> & src)
 {
   if (_rep)
-	release (_rep);
+	{
+	  release (_rep);
+	  _rep = 0;
+	}
 
   _rep = src._rep;
   if (_rep)
