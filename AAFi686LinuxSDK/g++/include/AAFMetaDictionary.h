@@ -44,7 +44,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Tue May 28 11:00:43 EDT 2002
+// This file was generated on Tue May 28 11:29:23 EDT 2002
 // by user tjb on system tjb.avid.com.
 //
 // Key to macros.
@@ -344,6 +344,18 @@
 //
 //   Separate one AAF type definition from another.
 //
+// AAF_ALIAS_TABLE_BEGIN()
+//
+//   Begin a table of AAF alias definitions.
+//
+// AAF_ALIAS_TABLE_END()
+//
+//   End a table of AAF alias definitions.
+//
+// AAF_ALIAS_SEPARATOR()
+//
+//   Separate one AAF alias from another.
+//
 // AAF_CLASS_ALIAS(name, alias)
 //
 //     name      = class name
@@ -517,6 +529,18 @@
 
 #ifndef AAF_TYPE_SEPARATOR
 #define AAF_TYPE_SEPARATOR()
+#endif
+
+#ifndef AAF_ALIAS_TABLE_BEGIN
+#define AAF_ALIAS_TABLE_BEGIN()
+#endif
+
+#ifndef AAF_ALIAS_TABLE_END
+#define AAF_ALIAS_TABLE_END()
+#endif
+
+#ifndef AAF_ALIAS_SEPARATOR
+#define AAF_ALIAS_SEPARATOR()
 #endif
 
 #ifndef AAF_CLASS_ALIAS
@@ -6133,34 +6157,67 @@ AAF_TYPE_TABLE_END()
 
 // Aliases
 //
+
+AAF_ALIAS_TABLE_BEGIN()
+
 AAF_CLASS_ALIAS(ClassDefinition, ClassDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(CodecDefinition, CodecDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(DataDefinition, DataDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(DefinitionObject, DefObject)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(EdgeCode, Edgecode)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(OperationDefinition, OperationDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(InterchangeObject, Object)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(ParameterDefinition, ParameterDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(InterpolationDefinition, InterpolationDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(PropertyDefinition, PropertyDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinition, TypeDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionCharacter, TypeDefCharacter)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionEnumeration, TypeDefEnum)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionExtendibleEnumeration, TypeDefExtEnum)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionFixedArray, TypeDefFixedArray)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionInteger, TypeDefInt)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionRecord, TypeDefRecord)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionRename, TypeDefRename)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionSet, TypeDefSet)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionStream, TypeDefStream)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionString, TypeDefString)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionIndirect, TypeDefIndirect)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionOpaque, TypeDefOpaque)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionStrongObjectReference, TypeDefStrongObjRef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionVariableArray, TypeDefVariableArray)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(TypeDefinitionWeakObjectReference, TypeDefWeakObjRef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(ContainerDefinition, ContainerDef)
+AAF_ALIAS_SEPARATOR()
 AAF_CLASS_ALIAS(PluginDefinition, PluginDef)
+
+AAF_ALIAS_TABLE_END()
+
 // Undefine all macros
 //
 #undef AAF_TABLE_BEGIN
@@ -6242,6 +6299,12 @@ AAF_CLASS_ALIAS(PluginDefinition, PluginDef)
 #undef AAF_TYPE_DEFINITION_STREAM
 
 #undef AAF_TYPE_SEPARATOR
+
+#undef AAF_ALIAS_TABLE_BEGIN
+
+#undef AAF_ALIAS_TABLE_END
+
+#undef AAF_ALIAS_SEPARATOR
 
 #undef AAF_CLASS_ALIAS
 
