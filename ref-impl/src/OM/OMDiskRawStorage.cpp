@@ -90,6 +90,22 @@ OMDiskRawStorage::openNewModify(const wchar_t* fileName)
   return result;
 }
 
+  // @mfunc Create an <c OMDiskRawStorage> object by creating a new
+  //        temporary file for modify access.
+  //   @rdesc The newly created <c OMDiskRawStorage> object.
+OMDiskRawStorage*
+OMDiskRawStorage::openNewModify(void)
+{
+  TRACE("OMDiskRawStorage::openNewModify");
+
+  OMStream* file = OMStream::openNewModify();
+
+  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
+  ASSERT("Valid heap pointer", result != 0);
+
+  return result;
+}
+
   // @mfunc Destructor.
 OMDiskRawStorage::~OMDiskRawStorage(void)
 {

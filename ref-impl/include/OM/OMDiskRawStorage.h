@@ -56,6 +56,10 @@ public:
     //          The file must not already exist.
   static OMDiskRawStorage* openNewModify(const wchar_t* fileName);
 
+    // @cmember Create an <c OMDiskRawStorage> object by creating a new
+    //          temporary file for modify access.
+  static OMDiskRawStorage* openNewModify(void);
+
   // @access Public members.
 
     // @cmember Destructor.
