@@ -270,7 +270,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IEnumAAFComponents*	pCompIter = NULL;
 	aafNumSlots_t	numMobs;
 	aafSearchCrit_t	criteria;
-	HRESULT			hr;
+	HRESULT			hr = S_OK;
 
 
   try
