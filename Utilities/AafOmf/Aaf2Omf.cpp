@@ -679,6 +679,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		{
 			// It is a TIFF file descriptor
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_TIFF_VIDEO, pOMFSourceMob);
+			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
 			if (gpGlobals->bVerboseMode)
 				UTLstdprintf("%sAdded a Tiff Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			goto Cleanup;
@@ -688,6 +689,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		{
 			// It is a WAVE file descriptor
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_WAVE_AUDIO, pOMFSourceMob);
+			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
 			if (gpGlobals->bVerboseMode)
 				UTLstdprintf("%sAdded a Wave Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			goto Cleanup;
@@ -697,6 +699,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		{
 			// It is a AIFC file descriptor
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_AIFC_AUDIO, pOMFSourceMob);
+			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
 			if (gpGlobals->bVerboseMode)
 				UTLstdprintf("%sAdded an AIFC Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			goto Cleanup;
@@ -706,6 +709,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 		{
 			// It is a CDCI file descriptor
 			rc = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_CDCI_VIDEO, pOMFSourceMob);
+			rc = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
 			if (gpGlobals->bVerboseMode)
 				UTLstdprintf("%sAdded a CDCI Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			goto Cleanup;
@@ -720,8 +724,8 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			pAAFObject->GetObjectClass(&ObjClass);
 			AUIDtoString(&ObjClass ,szTempUID);
 			if (gpGlobals->bVerboseMode)
-				UTLstdprintf("%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
-			UTLerrprintf("%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+				UTLstdprintf("%sInvalid essence descripor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+			UTLerrprintf("%sInvalid essence descriptor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
 		}
 		goto Cleanup;
 	}
@@ -1329,56 +1333,205 @@ HRESULT Aaf2Omf::ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc,
 HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	OMF2::omfObject_t		OMFHeader = NULL;
 	OMF2::omfObject_t		OMFSourceMob = NULL;
+	OMF2::omfObject_t		OMFHeader = NULL;
+	OMF2::omfObject_t		mediaData = NULL;
 	OMF2::omfUID_t			mediaID;
 	OMF2::omfProperty_t		idProperty;
 	OMF2::omfDDefObj_t		datakind;
+	OMF2::omfRational_t		sampleRate;
 	char					id[5];
 
-	IAAFTIFFData*	pTIFFData = NULL;
-	IAAFAIFCData*	pAIFCData = NULL;
-	IAAFWAVEData*	pWAVEData = NULL;
-	IAAFJPEGData*	pJPEGData = NULL;
-	IAAFMob*		pMob = NULL;
-	IAAFSourceMob*	pSourceMob = NULL;
-	aafUID_t		mobID;
-	aafBool			bConvertMedia = AAFFalse;
+	IAAFTIFFData*			pTIFFData = NULL;
+	IAAFAIFCData*			pAIFCData = NULL;
+	IAAFWAVEData*			pWAVEData = NULL;
+	IAAFJPEGData*			pJPEGData = NULL;
+	IAAFMob*				pMob = NULL;
+	IAAFSourceMob*			pSourceMob = NULL;
+	IAAFEssenceDescriptor*	pEssenceDesc = NULL;
+	IAAFObject*				pAAFObject = NULL;
+	aafUID_t				mobID;
+	aafBool					bConvertMedia = AAFFalse;
+	aafRational_t			AAFsampleRate;
 
+	// get the file mob id
 	rc = pEssenceData->GetFileMobID(&mobID);
+	if (FAILED(rc))
+		return rc;
+	// make sure it is a Source mob
+	rc = pEssenceData->GetFileMob(&pSourceMob);
+	if (FAILED(rc))
+		return rc;
+
+	rc = pSourceMob->GetEssenceDescriptor(&pEssenceDesc);
+	if (FAILED(rc))
+	{
+		pSourceMob->Release();
+		return rc;
+	}
+
 	ConvertAUIDtoUID(&mobID, &mediaID);
 	rc = OMF2::omfsFindSourceMobByID(OMFFileHdl, mediaID, &OMFSourceMob);
-
+	if (rc != OMF2::OM_ERR_NONE)
+	{
+		rc = AAFRESULT_INVALID_OBJ;
+		pSourceMob->Release();
+		return rc;
+	}
 	rc = OMF2::omfsGetHeadObject( OMFFileHdl, &OMFHeader );
 
 	rc = pEssenceData->QueryInterface(IID_IAAFTIFFData, (void **)&pTIFFData);
 	if (SUCCEEDED(rc))
 	{
 		//Convert TIFF Essence data
-		goto Cleanup;
+		idProperty = OMF2::OMTIFFData;
+		OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&rc);
+		strcpy(id, "TIFF");
+		rc = OMF2::omfsObjectNew(OMFFileHdl, id, &mediaData);
+		if (rc != OMF2::OM_ERR_NONE)
+			goto Cleanup;
+		rc = OMF2::omfsWriteUID(OMFFileHdl, mediaData, OMF2::OMMDATMobID, mediaID);
+		if (rc)
+		{
+			char* pErrString = OMF2::omfsGetErrorString((OMF2::omfErr_t)rc);
+			goto Cleanup;
+		}
+		rc = OMF2::omfsAppendObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADMediaData, mediaData);
+		if (rc != OMF2::OM_ERR_NONE)
+			goto Cleanup;
+		else
+			goto CopyMedia;
 	}
 
 	rc = pEssenceData->QueryInterface(IID_IAAFAIFCData, (void **)&pAIFCData);
 	if (SUCCEEDED(rc))
 	{
 		//Convert AIFC Essence data
-		goto Cleanup;
+		idProperty = OMF2::OMAIFCData;
+		OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Sound", &datakind, (OMF2::omfErr_t *)&rc);
+		strcpy(id, "AIFC");
+		rc = OMF2::omfsObjectNew(OMFFileHdl, id, &mediaData);
+		if (rc != OMF2::OM_ERR_NONE)
+			goto Cleanup;
+		rc = OMF2::omfsWriteUID(OMFFileHdl, mediaData, OMF2::OMMDATMobID, mediaID);
+		if (rc)
+		{
+			char* pErrString = OMF2::omfsGetErrorString((OMF2::omfErr_t)rc);
+			goto Cleanup;
+		}
+		rc = OMF2::omfsAppendObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADMediaData, mediaData);
+		if (rc != OMF2::OM_ERR_NONE)
+			goto Cleanup;
+		else
+			goto CopyMedia;
 	}
 
 	rc = pEssenceData->QueryInterface(IID_IAAFWAVEData, (void **)&pWAVEData);
 	if (SUCCEEDED(rc))
 	{
 		//Convert WAVE Essence data
-		goto Cleanup;
+		idProperty = OMF2::OMWAVEData;
+		OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Sound", &datakind, (OMF2::omfErr_t *)&rc);
+		strcpy(id, "WAVE");
+		rc = OMF2::omfsObjectNew(OMFFileHdl, id, &mediaData);
+		if (rc != OMF2::OM_ERR_NONE)
+			goto Cleanup;
+		rc = OMF2::omfsWriteUID(OMFFileHdl, mediaData, OMF2::OMMDATMobID, mediaID);
+		if (rc)
+		{
+			char* pErrString = OMF2::omfsGetErrorString((OMF2::omfErr_t)rc);
+			goto Cleanup;
+		}
+		rc = OMF2::omfsAppendObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADMediaData, mediaData);
+		if (rc != OMF2::OM_ERR_NONE)
+			goto Cleanup;
+		else
+			goto CopyMedia;
 	}
 
 	rc = pEssenceData->QueryInterface(IID_IAAFJPEGData, (void **)&pJPEGData);
 	if (SUCCEEDED(rc))
 	{
 		//Convert JPEG Essence data
-		goto Cleanup;
+		idProperty = OMF2::OMIDATImageData;
+		OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&rc);
+		strcpy(id, "JPEG");
+		rc = OMF2::omfsObjectNew(OMFFileHdl, id, &mediaData);
+		if (rc != OMF2::OM_ERR_NONE)
+			goto Cleanup;
+		rc = OMF2::omfsWriteUID(OMFFileHdl, mediaData, OMF2::OMMDATMobID, mediaID);
+		if (rc)
+		{
+			char* pErrString = OMF2::omfsGetErrorString((OMF2::omfErr_t)rc);
+			goto Cleanup;
+		}
+		rc = OMF2::omfsAppendObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADMediaData, mediaData);
+		if (rc != OMF2::OM_ERR_NONE)
+			goto Cleanup;
+		else
+			goto CopyMedia;
 	}
+	// Media type not supported or invalid
+	rc = pEssenceData->QueryInterface(IID_IAAFObject, (void **)&pAAFObject);
+	if (SUCCEEDED(rc))
+	{
+		aafUID_t	ObjClass;
+		char		szTempUID[64];
 
+		pAAFObject->GetObjectClass(&ObjClass);
+		AUIDtoString(&ObjClass ,szTempUID);
+		if (gpGlobals->bVerboseMode)
+			UTLstdprintf("%sInvalid essence data type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+		UTLerrprintf("%sInvalid essence data type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+	}
+	goto Cleanup;
+
+CopyMedia:
+	if (mediaData)
+	{
+		void*			pBuffer = NULL;
+		aafPosition_t	AAFOffset;
+
+		aafLength_t		numBytes;
+		aafUInt32		nBlockSize;
+		aafUInt32		numBytesRead;
+		aafUInt32		numBytesWritten;
+		aafBool			bMore = AAFFalse;
+
+		rc = pEssenceData->GetSize(&numBytes);
+		if (numBytes > 0)
+		{
+			if (numBytes > (2 * 1048576))
+			{
+				nBlockSize = 2 * 1048576;	// only allocate 2 Meg
+				bMore = AAFTrue;			// you going to need more than one read/write
+			}
+			else
+			{
+				nBlockSize = numBytes;
+			}
+			rc = UTLMemoryAlloc(nBlockSize, &pBuffer);
+			AAFOffset = 0;
+			do 
+			{
+				rc = pEssenceData->SetPosition( AAFOffset );
+				rc = pEssenceData->Read( nBlockSize, (unsigned char *)pBuffer, &numBytesRead);
+
+				// write the media
+				rc = OMF2::omfsWriteDataValue(OMFFileHdl, 
+									 		  mediaData,
+											  idProperty,
+											  datakind, 
+											  (OMF2::omfDataValue_t)pBuffer,
+											  (OMF2::omfPosition_t)AAFOffset,
+											  numBytesRead);
+				// calculate next offset
+				AAFOffset += numBytesRead;
+			}while (numBytes > AAFOffset );
+			// Free the allocated buffer 
+			UTLMemoryFree(pBuffer);
+		}
+	}
 Cleanup:
 	if (pTIFFData)
 		pTIFFData->Release();
