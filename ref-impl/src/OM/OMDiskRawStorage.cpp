@@ -262,8 +262,8 @@ OMUInt64 OMDiskRawStorage::extent(void) const
 
   PRECONDITION("Positionable", isPositionable());
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  // TBS tjb - For now extent and size are the same
+  return size();
 }
 
   // @mfunc Set the size of this <c OMDiskRawStorage> to <p newSize> bytes.
