@@ -46,10 +46,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTextClip)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTextClipTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFTextClip_h__
