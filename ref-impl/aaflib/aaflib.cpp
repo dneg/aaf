@@ -221,17 +221,13 @@ STDAPI AAFLoad(wchar_t * dllname)
 
   if (NULL == dllname)
   { // use a realistic default name.
-#ifdef _DEBUG
-    dllname = L"AAFD.dll";
-#else
-    dllname = L"AAF.dll";
-#endif
+    dllname = L"AAFCOAPI.dll";
   }
 
   // Attempt to load the dll and initialize the entry points.
   // If the load fails the cleanup immediately.
   HRESULT hr = pAAFDLL->Load(dllname);
-  if (FAILED(hr))
+  if (S_OK != hr)
     AAFUnload();
   return hr;
 }
