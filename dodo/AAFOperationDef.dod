@@ -13,8 +13,8 @@ AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFControlCodeDefinition)
 AD_FORWARD_DECLARATION(AAFLocator)
 AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
-AD_FORWARD_DECLARATION(EnumAAFPluginLocator)
-AD_FORWARD_DECLARATION(EnumAAFControlCodeDefinition)
+AD_FORWARD_DECLARATION(EnumAAFLocators)
+AD_FORWARD_DECLARATION(EnumAAFControlCodeDefinitions)
 
 
 /******************************************\
@@ -137,7 +137,7 @@ AD_XMETHOD1(RemovePluginLocator,
 AD_XMETHOD1(GetPluginLocators,
 			[out\,retval], 
 			objOut,
-			EnumAAFPluginLocators,
+			EnumAAFLocators,
 			ppEnum, 
 			Plugin Locator Enumeration,
 			Return an enumerator for aaf plugin locator.)
