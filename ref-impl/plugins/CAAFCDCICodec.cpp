@@ -38,6 +38,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
+#include "AAFCompressionIDs.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -45,9 +46,6 @@
 // {C995E9A9-4156-11d4-A367-009027DFCA6A}
 const CLSID CLSID_AAFCDCICodec = 
 { 0xc995e9a9, 0x4156, 0x11d4, { 0xa3, 0x67, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
-
-// {EDB35391-6D30-11d3-A036-006094EB75CB}
-const aafUID_t AAF_CMPR_AUNC422 = { 0xedb35391, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 // This plugin currently only supports a single definition
 const aafUInt32 kSupportedDefinitions = 1;
@@ -57,11 +55,6 @@ const aafUInt32 kSupportedCodeFlavours = 1;
 
 const wchar_t kDisplayName[] = L"AAF CDCI Codec";
 const wchar_t kDescription[] = L"Handles uncompressed YUV & YCbCr and (compressed) IEC 61834 DV family";
-
-// DV Compression IDs supported (kLegacy_DV is found in AAF files output by some Avid products)
-aafUID_t kLegacy_DV = { 0xedb35390, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
-aafUID_t kIEC_DV_625_50 = { 0x04010202, 0x0201, 0x0200, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01 } };
-aafUID_t kIEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01 } };
 
 const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kAAFVersionBeta};
 const aafRational_t		kDefaultRate = { 30000, 1001 };
@@ -129,9 +122,9 @@ inline void checkAssertion(bool test)
 
 inline bool IsDV(const aafUID_t &compId)
 {
-	if (EqualAUID(&compId, &kLegacy_DV) ||
-		EqualAUID(&compId, &kIEC_DV_625_50) ||
-		EqualAUID(&compId, &kIEC_DV_525_60))
+	if (EqualAUID(&compId, &kAAFCompression_LegacyDV) ||
+		EqualAUID(&compId, &kAAFCompression_IEC_DV_625_50) ||
+		EqualAUID(&compId, &kAAFCompression_IEC_DV_525_60))
 	{
 		return true;
 	}
@@ -1651,7 +1644,7 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	    checkResult( descriptorHelper.SetFrameSampleSize( 
 		_fileBytesPerSample ) );
 	}
-	if( EqualAUID(&_compression,&kLegacy_DV))
+	if( EqualAUID(&_compression,&kAAFCompression_LegacyDV))
 	{
 	    checkResult( descriptorHelper.SetOffsetToFrameIndexes( 0 ) );
 	    checkResult( descriptorHelper.SetFrameIndexByteOrder( 0x4949) );
@@ -1922,8 +1915,8 @@ HRESULT STDMETHODCALLTYPE
 
 			// Only DV compressions supported for compressed CDCI
 			checkExpression (EqualAUID(&nullCompID, &param.operand.expUID) ||
-					EqualAUID(&kIEC_DV_625_50, &param.operand.expUID) ||
-					EqualAUID(&kIEC_DV_525_60, &param.operand.expUID),AAFRESULT_BADCOMPR);
+					EqualAUID(&kAAFCompression_IEC_DV_625_50, &param.operand.expUID) ||
+					EqualAUID(&kAAFCompression_IEC_DV_525_60, &param.operand.expUID),AAFRESULT_BADCOMPR);
 
 			memcpy( &_compression, &(param.operand.expUID), 
 			    sizeof(param.operand.expUID) );
@@ -2140,7 +2133,7 @@ HRESULT STDMETHODCALLTYPE
 		}
 		else if (EqualAUID( &kAAFLegacyDV, &param.opcode ) )
 		{
-			memcpy( &_compression, &kLegacy_DV, sizeof(_compression) );
+			memcpy( &_compression, &kAAFCompression_LegacyDV, sizeof(_compression) );
 		}
 
 		// Below are parameters which are accessible for client to read 
@@ -2188,7 +2181,7 @@ HRESULT STDMETHODCALLTYPE
 		// 4:2:2 is not supported by libdv (e.g DVCPRO 50)
 		checkExpression( !(_verticalSubsampling == 1 && _horizontalSubsampling == 2), AAFRESULT_BADPIXFORM );
 
-		if (EqualAUID(&_compression, &kLegacy_DV))
+		if (EqualAUID(&_compression, &kAAFCompression_LegacyDV))
 		{
 			// Experiment showed that legacy applications require display size set equal to stored size
 			// and that FrameLayout have the incorrect value of MixedFields, not SeparateFields

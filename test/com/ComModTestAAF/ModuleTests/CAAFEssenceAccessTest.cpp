@@ -41,6 +41,7 @@ using namespace std;
 #include "AAFContainerDefs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
+#include "AAFCompressionIDs.h"
 
 // Include the AAF interface declarations.
 #include "AAF.h"
@@ -1469,7 +1470,7 @@ static HRESULT CreateVideoAAFFile(
 				writeBufferSize = compressedBufferSize;
 			}
 		}
-		else if (compression == kAAFLegacyDV)
+		else if (compression == kAAFCompression_LegacyDV)
 		{
 			writeBuffer = readDVframe( &writeBufferSize );
 			rgbColorBuffer = writeBuffer;		// to ensure it is freed
@@ -1621,7 +1622,7 @@ static HRESULT CreateVideoAAFFile(
 			// Set format specifiers needed for uncompressed CDCI video
 			checkResult(pEssenceAccess->GetEmptyFileFormat (&pTransformFormat));
 			checkResult(pTransformFormat->AddFormatSpecifier (kAAFCDCIHorizSubsampling, sizeof(horizontalSubsample), (aafDataBuffer_t)&horizontalSubsample));
-			if (compression == kAAFLegacyDV)
+			if (compression == kAAFCompression_LegacyDV)
 			{
 				aafUInt32 useLegacyDV = 1;
 				aafInt32 YUV_pixel = kAAFColorSpaceYUV;
@@ -1837,7 +1838,7 @@ static HRESULT ReadVideoAAFFile(
 				}
 			}
 		}
-		else if (compression == kAAFLegacyDV)
+		else if (compression == kAAFCompression_LegacyDV)
 		{
 			compressedBuffer = readDVframe( &compressedBufferSize );
 			std_rc.xSize = 720;
@@ -2668,13 +2669,13 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	{
 		cout << "        WriteSamples (DV CompressionDisable)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessCDCI_DV.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
-			kAAFCodecCDCI, kAAFDataDef_Picture, testStandardCalls, kAAFLegacyDV);
+			kAAFCodecCDCI, kAAFDataDef_Picture, testStandardCalls, kAAFCompression_LegacyDV);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (DV CompressionDisable)" << endl;
 		hr = ReadVideoAAFFile(L"EssenceAccessCDCI_DV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, 
-			kAAFCodecCDCI, testStandardCalls, kAAFLegacyDV);
+			kAAFCodecCDCI, testStandardCalls, kAAFCompression_LegacyDV);
 	}
 
 	if(SUCCEEDED(hr))

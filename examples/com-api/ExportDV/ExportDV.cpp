@@ -39,6 +39,7 @@ using namespace std;
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
 #include "AAFFileKinds.h"
+#include "AAFCompressionIDs.h"
 
 // Include the AAF interface declarations.
 #include "AAF.h"
@@ -60,11 +61,6 @@ const aafInt32 DV_PAL_FRAME_SIZE = 144000;
 const aafInt32 DV_NTSC_FRAME_SIZE = 120000;
 
 bool useLegacyDV = false;
-
-// DV Compression IDs supported (kLegacy_DV is found in AAF files output by some Avid products)
-aafUID_t kLegacy_DV = { 0xedb35390, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
-aafUID_t kIEC_DV_625_50 = { 0x04010202, 0x0201, 0x0200, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01 } };
-aafUID_t kIEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01 } };
 
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
@@ -268,9 +264,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	{
 		// compression is passed to the kAAFCompression format specifier
 		if (formatPAL)
-			memcpy (&compression, &kIEC_DV_625_50, sizeof(compression));
+			memcpy (&compression, &kAAFCompression_IEC_DV_625_50, sizeof(compression));
 		else
-			memcpy (&compression, &kIEC_DV_525_60, sizeof(compression));
+			memcpy (&compression, &kAAFCompression_IEC_DV_525_60, sizeof(compression));
 	}
 
 	if (formatPAL)
