@@ -3,7 +3,7 @@ AAFTIFFDescriptor\
 #endm
 #c
 #startm .parent-module 0
-AAFDigitalImageDescriptor\
+AAFFileDescriptor\
 #endm
 #c
 #c #import ./AAFDigitalImageDescriptor.exp
