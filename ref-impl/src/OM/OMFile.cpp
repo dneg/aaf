@@ -350,6 +350,41 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   return newFile;
 }
 
+  // @mfunc Is the given <c OMRawStorage> compatible with the given file
+  //        access mode and signature ? Can a file of the encoding
+  //        specified by <p signature> be created successfully on
+  //        <p rawStorage> and then accessed successfully in the mode
+  //        specified by <p accessMode> ?
+  //   @parm TBS
+  //   @parm TBS
+  //   @parm TBS
+  //   @rdesc TBS
+bool OMFile::compatibleRawStorage(const OMRawStorage* rawStorage,
+                                  const OMAccessMode accessMode,
+                                  const OMFileSignature& signature)
+{
+  TRACE("OMFile::compatibleRawStorage");
+  PRECONDITION("Consistent raw storage access mode",
+                IMPLIES(accessMode == readOnlyMode, rawStorage->isReadable()));
+  PRECONDITION("Consistent raw storage access mode",
+               IMPLIES(accessMode == writeOnlyMode, rawStorage->isWritable()));
+  PRECONDITION("Consistent raw storage access mode",
+                  IMPLIES(accessMode == modifyMode, rawStorage->isReadable() &&
+                                                    rawStorage->isWritable()));
+
+  // Most combinations of raw storage access mode and file encoding
+  // (denoted by the signature) are valid.
+  //
+  bool result = true;
+
+  OMFileEncoding encoding = encodingOf(signature);
+  if ((encoding == MSSBinaryEncoding) && (accessMode == writeOnlyMode)) {
+    // Write only Microsoft Structured Storage files not allowed.
+    result = false;
+  }
+  return result;
+}
+
 OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
                                  const OMClassFactory* factory,
                                  void* clientOnRestoreContext,
@@ -409,6 +444,8 @@ OMFile* OMFile::openNewWrite(OMRawStorage* rawStorage,
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Compatible raw storage access mode", rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage",
+                   compatibleRawStorage(rawStorage, writeOnlyMode, signature));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
@@ -444,6 +481,8 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Compatible raw storage access mode",
                          rawStorage->isReadable() && rawStorage->isWritable());
+  PRECONDITION("Compatible raw storage",
+                   compatibleRawStorage(rawStorage, modifyMode, signature));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
