@@ -135,7 +135,7 @@ AxString AxStringUtil::int2StrHex( aafUInt32 n )
         const unsigned int bufSize = 9;
 	char buf[bufSize];
 
-	snprintf( buf, bufSize, "%08x", n );
+	sprintf( buf, "%08x", n );
 
 	return AxStringUtil::mbtowc( buf );
 }
@@ -144,10 +144,10 @@ AxString AxStringUtil::int2Str( aafInt32 n )
 {
 	// 32 bit int requires 1 character for sign, plus
 	// 10 digits, plus terminating null.
-        const unsigned int bufSize = 12;
-        char buf[bufSize];
+    const unsigned int bufSize = 12;
+    char buf[bufSize];
 
-	snprintf( buf, bufSize, "%d", n );
+	sprintf( buf, "%d", n );
 
 	return AxStringUtil::mbtowc( buf );
 }

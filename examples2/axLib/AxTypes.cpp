@@ -129,20 +129,20 @@ std::wostream& operator<<( std::wostream& os, const AxProductIdentification& id 
 
 std::wostream& operator<<( std::wostream& os, const aafUID_t& uid )
 {
-        const int bufSize = 37;
+    const int bufSize = 37;
 	char buf[bufSize];
 	int rc;
 	using namespace std;
 
 	// swprintf does not have uniform all platform support.
-	// Instead, use snprintf and convert to wide characters.
+	// Instead, use sprintf and convert to wide characters.
 
-	rc = snprintf( buf, bufSize, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+	rc = sprintf( buf, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
 				     uid.Data1, uid.Data2, uid.Data3,
 				     uid.Data4[0], uid.Data4[1],uid.Data4[2], uid.Data4[3],
 				     uid.Data4[4], uid.Data4[5],uid.Data4[6], uid.Data4[7] );
 	if ( -1 == rc ) {
-	  throw AxEx( L"swprintf failed" );
+	  throw AxEx( L"sprintf failed" );
 	}
 
 	AxString wBuf = AxStringUtil::mbtowc( buf );
