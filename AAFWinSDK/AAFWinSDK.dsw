@@ -51,6 +51,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "ComCutsTestAAF"=".\examples\com-api\ComCutsTestAAF\ComCutsTestAAF.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name comapi
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name COMIDL
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "ComModTestAAF"=".\Test\com\ComModTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -160,6 +178,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name CppClientTestAAF
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ComCutsTestAAF
     End Project Dependency
 }}}
 
