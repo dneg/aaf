@@ -46,13 +46,94 @@
 
 #include "OMProperty.h"
 #include "OMRefVectorProperty.h"
+#include "OMPropertyDefinition.h"
 
 #include <assert.h>
 #include <string.h>
 
 
+static const OMClassId sTempStorableClassId =
+{ 0xFFFFFFFF, 0xFFFF, 0xFFFF, { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF } };
+
+static const wchar_t * sTempVectorPropertyName = L"Temporary Vector Property";
+static const OMPropertyId sTempVectorPropertyId = 0xFFFF;
+
+
+class TempStorable : public OMStorable
+{
+public:
+  TempStorable(void);
+  virtual ~TempStorable(void);
+  
+  virtual const OMClassId& classId(void) const;
+};
+
+
+class TempPropertyDefinition : public OMPropertyDefinition
+{
+public:
+  TempPropertyDefinition(const ImplAAFTypeDef *type);
+  virtual ~TempPropertyDefinition(void);
+  virtual const OMType* type(void) const;
+  virtual const wchar_t* name(void) const;
+  virtual OMPropertyId localIdentification(void) const;
+  virtual bool isOptional(void) const;
+
+  const ImplAAFTypeDef *_type;
+};
+
+TempStorable::TempStorable(void)
+{}
+
+TempStorable::~TempStorable(void)
+{
+  // If there are any properties they have been allocated
+  // dynamically.
+  OMProperty * tempProperty = propertySet()->get(sTempVectorPropertyId);
+  assert(NULL != tempProperty);
+  delete tempProperty;
+}
+
+const OMClassId& TempStorable::classId(void) const
+{
+  return sTempStorableClassId;
+}
+
+
+TempPropertyDefinition::TempPropertyDefinition(const ImplAAFTypeDef *type) :
+  _type(type)
+{}
+
+TempPropertyDefinition::~TempPropertyDefinition()
+{}
+
+const OMType* TempPropertyDefinition::type(void) const
+{
+  return _type;
+}
+
+const wchar_t* TempPropertyDefinition::name(void) const
+{
+  return sTempVectorPropertyName;
+}
+
+OMPropertyId TempPropertyDefinition::localIdentification(void) const
+{
+  return sTempVectorPropertyId;
+}
+
+bool TempPropertyDefinition::isOptional(void) const
+{
+  return true;
+}
+
+
+
+
 ImplAAFRefArrayValue::ImplAAFRefArrayValue () :
-  _fixedSize(false)
+  _fixedSize(false),
+  _tempPropertyDefinition(NULL),
+  _tempStorable(NULL)
 {}
 
 
@@ -67,6 +148,70 @@ bool ImplAAFRefArrayValue::fixedSize(void) const
   return _fixedSize;
 }
 
+
+AAFRESULT ImplAAFRefArrayValue::Initialize (
+	  const ImplAAFTypeDefArray *containerType,
+	  bool fixed)
+{
+  _fixedSize = fixed; // TBD: Add validation
+  
+  if (NULL == _tempPropertyDefinition)
+  {
+    _tempPropertyDefinition = new TempPropertyDefinition(containerType);
+    if (NULL == _tempPropertyDefinition)
+      return AAFRESULT_NOMEMORY;
+  }
+
+  if (NULL == _tempStorable)
+  {
+    _tempStorable = new TempStorable();
+    if (NULL == _tempStorable)
+      return AAFRESULT_NOMEMORY;
+  }
+
+    
+  assert (NULL == property());
+  
+  // Create the temporary property...  
+  OMProperty *tempProperty = containerType->pvtCreateOMProperty(_tempPropertyDefinition->localIdentification(), _tempPropertyDefinition->name());
+  if (NULL == tempProperty)
+    return AAFRESULT_NOMEMORY;
+  
+  // Attach the temporary property to our temporary storable. The property now has a "valid" container.  
+  _tempStorable->propertySet()->put(tempProperty);
+  
+  // Make sure that the property has a "valid" definition.  
+  tempProperty->initialize(_tempPropertyDefinition);
+  
+  // Install the new property into this property value.
+  SetProperty(tempProperty);
+
+  return (ImplAAFRefContainerValue::Initialize(containerType));
+}
+
+void ImplAAFRefArrayValue::CleanupTemporaryProperty(void)
+{
+  if (NULL != property() && _tempPropertyDefinition == property()->definition())
+  {
+    // Cleanup the property if it was temporarily allocated but never
+    // attached to the real container's property set.
+    // NOTE: The temporary property will be deleted along with the 
+    // temporary storable container.
+    SetProperty(NULL);
+  }
+
+  if (NULL != _tempStorable)
+  {
+    delete _tempStorable; // This will cleanup the temporary property
+    _tempStorable = NULL;
+  }
+  
+  if (NULL != _tempPropertyDefinition)
+  {
+    delete _tempPropertyDefinition;
+    _tempPropertyDefinition = NULL;
+  }
+}
 
 
 AAFRESULT ImplAAFRefArrayValue::Initialize (
@@ -99,6 +244,85 @@ OMReferenceVectorProperty * ImplAAFRefArrayValue::referenceVectorProperty(void) 
 AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::WriteTo(
   OMProperty* pOmProp)
 {
+  // PATCH for DR4 CPR:
+  // If we have created an unattached temporary vector property to hold the 
+  // the new objects then we need to update the given property, pOmProp, to hold
+  // the contents of the the temporary property.
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  OMObject* object;
+  ImplAAFStorable* obj;
+  OMReferenceVectorProperty * pTempReferenceVectorProperty = referenceVectorProperty();
+  assert (NULL != pTempReferenceVectorProperty);
+  if (pTempReferenceVectorProperty->definition() == _tempPropertyDefinition)
+  {
+    // First empty the current property.
+    OMContainerProperty * pNewContainerProperty = dynamic_cast<OMContainerProperty *>(pOmProp);
+    if (NULL == pNewContainerProperty)
+      return AAFRESULT_INVALID_OBJ;
+    
+    if (usesReferenceCounting())
+    {
+      result = ReleaseAllObjects(pNewContainerProperty);
+      if (AAFRESULT_FAILED(result))
+        return result;
+    }
+      
+    // Make sure that there are no elements in the new property container.
+    pNewContainerProperty->removeAllObjects();
+    
+    // Install the new "empty" container property.
+    SetProperty(pOmProp);
+
+    OMReferenceContainerIterator* tempIterator = pTempReferenceVectorProperty->createIterator();
+    if (NULL == tempIterator)
+    {
+      result = AAFRESULT_NOMEMORY;
+    }
+    else
+    {
+      while (AAFRESULT_SUCCEEDED(result) && (tempIterator->before() || tempIterator->valid()))
+      {
+        if (++(*tempIterator))
+        {
+          object = tempIterator->currentObject();
+          obj = dynamic_cast<ImplAAFStorable*>(object);
+          assert(NULL != obj);
+          if (NULL == obj)
+          {
+            result = AAFRESULT_INVALID_OBJ;
+          }
+          else
+          {
+            if (usesReferenceCounting())
+            {
+              obj->detach();
+            }
+            
+            // Add the element from the temporary property container to the property.
+            result = InsertObject(obj); // reference counts if necessary...
+            
+            if (AAFRESULT_SUCCEEDED(result))
+            {
+              if (usesReferenceCounting())
+              {
+                obj->ReleaseReference();
+              }
+            }
+          }
+        }
+      }
+   
+      delete tempIterator;
+      tempIterator = NULL;
+    }
+    
+    // Cleanup the temporary property now the the the pOmProp has been created and initialized.
+    CleanupTemporaryProperty();
+    
+    if (AAFRESULT_FAILED(result))
+      return result;
+  }
+
   return (ImplAAFRefContainerValue::WriteTo(pOmProp));
 }
 
@@ -136,9 +360,6 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::RemoveObject(
 // Methods to access the elements from the OMReferenceVectorProperty
 // 
 
-// NOTE: THE SetObjectAt METHOD WILL NEED TO BE OVERRIDDEN FOR 
-// STRONG REFERENCE ARRAYS TO PERFORM PROPER REFERENCE COUNTING
-// FOR CONTAINED OBJECTS! transdel:2000-AUG-30
 
 // Set the value of the OMReferenceVectorProperty at position index to pObject.
 AAFRESULT STDMETHODCALLTYPE ImplAAFRefArrayValue::SetObjectAt(

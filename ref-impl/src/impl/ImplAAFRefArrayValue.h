@@ -39,6 +39,9 @@
 
 class ImplAAFTypeDefArray;
 class OMReferenceVectorProperty;
+class ImplAAFStorable;
+class TempStorable;
+class TempPropertyDefinition;
 
 class ImplAAFRefArrayValue : public ImplAAFRefContainerValue
 {
@@ -51,6 +54,12 @@ protected:
   ImplAAFRefArrayValue ();
   
   virtual ~ImplAAFRefArrayValue ();
+
+  // non-published method to initialize this object.
+  // Initialize an instance from a type definition. This is the "old-style"
+  // "non-direct" access initialization method. 
+  AAFRESULT Initialize (const ImplAAFTypeDefArray *containerType,
+                        bool fixedSize);
   
   // non-published method to initialize this object.
   // NOTE: The given property's type must be a reference type.
@@ -129,10 +138,13 @@ public:
   // Existing objects at index> and higher are shifted up one index position.
   virtual AAFRESULT STDMETHODCALLTYPE InsertElementAt(ImplAAFPropertyValue* pPropertyValue, aafUInt32 index);
   
-
+private:
+  void CleanupTemporaryProperty(void);
 
 private:
   bool _fixedSize; // true if the array property is fixed size
+  TempPropertyDefinition * _tempPropertyDefinition;
+  TempStorable *_tempStorable; // container for a temporary om property.
 };
 
 //

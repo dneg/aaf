@@ -57,6 +57,11 @@ protected:
   virtual ~ImplAAFRefContainerValue ();
 
   // non-published method to initialize this object.
+  // Initialize an instance from a type definition. This is the "old-style"
+  // "non-direct" access initialization method. 
+  AAFRESULT Initialize (const ImplAAFTypeDef *propertyType);
+
+  // non-published method to initialize this object.
   // NOTE: The given property's type must be a reference type.
   AAFRESULT Initialize (const ImplAAFTypeDef *containerType,
                         OMProperty *property);
@@ -69,6 +74,9 @@ protected:
   
   // Utility to release an old OMObject from the container.
   void ReleaseOldObject(OMObject *object);
+  
+  // Utility to release all old OMObjects from the given container.
+  AAFRESULT ReleaseAllObjects(OMReferenceContainer *pContainerProperty);
   
   //
   // Methods that must be overridden by subclasses of reference containers.
