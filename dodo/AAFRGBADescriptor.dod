@@ -149,7 +149,7 @@ AD_XMETHOD2(GetPixelLayout,
   //   - numberElements indicates that the array is too small to hold
   //     the data.)
 
-AD_XMETHOD2(SetPallete,
+AD_XMETHOD2(SetPalette,
 			[in],
 				objPass,
 				aafUInt32,
@@ -162,7 +162,7 @@ AD_XMETHOD2(SetPallete,
 				pPalette,
 				Array to hold the palette information,
 
-			Sets the palette property.  The pallete must be in the form specified
+			Sets the palette property.  The palette must be in the form specified
   // by the palette layout and palette structure parameters.
   // 
   // Succeeds if all of the following are true:
@@ -191,7 +191,7 @@ AD_XMETHOD2(GetPalette,
 				aafUInt8*,
 				pPalette,
 				Array to hold the palette information,
-			Sets the palette property.  The pallete must be in the form specified
+			Sets the palette property.  The palette must be in the form specified
   // by the palette layout and palette structure parameters.
   // The values are written to the array specified by pPalette\,
   // which is of size numberElements.  The required size may be found
