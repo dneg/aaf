@@ -7,9 +7,6 @@
 *                                          *
 \******************************************/
 
-
-
-
 #ifndef __ImplAAFDataDef_h__
 #include "ImplAAFDataDef.h"
 #endif
@@ -41,8 +38,6 @@
 #ifndef __ImplAAFSourceReference_h__
 #include "ImplAAFSourceReference.h"
 #endif
-
-
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIds.h"
@@ -263,6 +258,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pBypassOverride == NULL)
 		return AAFRESULT_NULL_PARAM;
+
+	if (!_bypassOverride.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	*pBypassOverride = _bypassOverride;
 
 	return AAFRESULT_SUCCESS;

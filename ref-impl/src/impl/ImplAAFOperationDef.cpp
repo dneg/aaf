@@ -108,6 +108,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(bIsTimeWarp == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(!_isTimeWarp.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	*bIsTimeWarp = _isTimeWarp;
 	
 	return AAFRESULT_SUCCESS;
@@ -224,6 +228,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pCategory == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(!_category.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	stat = _category.copyToBuffer(pCategory, bufSize);
 	if (! stat)
 	{
@@ -242,6 +249,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(!_category.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	*pLen = _category.size();
 	return(AAFRESULT_SUCCESS); 
 }
@@ -287,6 +298,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pBypass == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(!_bypass.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	*pBypass = _bypass;
 	
 	return AAFRESULT_SUCCESS;
@@ -339,7 +354,10 @@ AAFRESULT STDMETHODCALLTYPE
 		pEnum = NULL;
 		if (!parmDefFound)
 		{
-			oldBufSize = _paramDefined.size();
+			if (!_paramDefined.isPresent())
+				oldBufSize = 0;			
+			else oldBufSize = _paramDefined.size();
+
 			newBufSize = oldBufSize + sizeof(aafUID_t);
 			tmp = new aafUID_t[newBufSize];
 			if(tmp == NULL)

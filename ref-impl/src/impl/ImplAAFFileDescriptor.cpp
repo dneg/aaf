@@ -107,6 +107,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pFormat == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
 	_containerFmt = *pFormat;
 	return AAFRESULT_SUCCESS;
 }
@@ -115,11 +116,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFileDescriptor::GetContainerFormat (aafUID_t *pFormat)
 {
+	if(pFormat == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
 	if (!_containerFmt.isPresent())
 		return AAFRESULT_PROP_NOT_PRESENT;	
 	
-	if(pFormat == NULL)
-		return(AAFRESULT_NULL_PARAM);
 	*pFormat = _containerFmt;
 	return AAFRESULT_SUCCESS;
 }

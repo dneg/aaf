@@ -86,11 +86,14 @@ AAFRESULT STDMETHODCALLTYPE
       wchar_t *pDisplayUnits,
       aafInt32  bufSize)
 {
-	bool stat;
-
 	if(pDisplayUnits == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(!_displayUnits.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	bool stat;
+	
 	stat = _displayUnits.copyToBuffer(pDisplayUnits, bufSize);
 	if (! stat)
 	{
@@ -107,6 +110,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
+
+	if(!_displayUnits.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	*pLen = _displayUnits.size();
 	return(AAFRESULT_SUCCESS); 
 }

@@ -161,11 +161,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::CountPropertyDefs (
       aafUInt32 *  pCount)
 {
-  if (! pCount) return AAFRESULT_NULL_PARAM;
+	if (! pCount) return AAFRESULT_NULL_PARAM;
+	
+	assert (pCount);
+	
+	if (!_Properties.isPresent())
+		*pCount = 0;
 
-  assert (pCount);
-  *pCount = _Properties.getSize ();
-  return AAFRESULT_SUCCESS;
+	else  *pCount = _Properties.getSize ();
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
