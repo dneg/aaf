@@ -1449,7 +1449,7 @@ AAFRESULT ImplAAFMob::FindTrackAndSegment(aafSlotID_t trackID,
 	ImplAAFTimelineMobSlot	*tmpTrack = NULL;
 	aafPosition_t begPos = CvtInt32toPosition(0, begPos);
 	aafRational_t tmpSrcRate;
-	aafPosition_t origin;
+	aafPosition_t origin = 0;
 	aafSlotID_t tmpTrackID;
 	ImplAAFSegment	*tmpSegment = NULL;
 
@@ -1485,7 +1485,9 @@ AAFRESULT ImplAAFMob::FindTrackAndSegment(aafSlotID_t trackID,
 		AddInt64toInt64(origin, &offset);
 		
 		CHECK(tmpSegment->FindSubSegment(offset, &begPos, segment, &foundClip));
-		
+		if(!foundClip)
+			RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
+
 		/* Calculate diffPos - difference between requested offset and
 		* the beginning of clip that contains it. 
 		*/
