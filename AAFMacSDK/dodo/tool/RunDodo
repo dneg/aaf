@@ -1,0 +1,14 @@
+
+
+begin
+  ## Set the passed in parameters to variable names
+		
+  Echo "#--- Start generation of source tree (dodo)  ------------------ `Date -t` ----"
+  directory {MacDodo}
+  echo {MacDodo}
+  make > make.out
+  make.out
+	Echo "#--- Finish generation of source tree (dodo)  ------------------ `Date -t` ----"
+	
+end
+
