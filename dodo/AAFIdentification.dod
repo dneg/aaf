@@ -6,7 +6,7 @@ AAFIdentification\
 AAFObject\
 #endm
 #c
-#import ./AAFObject.exp
+#c #import ./AAFObject.exp
 AD_HEAD
 AD_IDL(//
 // The IAAFIdentification interface provides information about an
