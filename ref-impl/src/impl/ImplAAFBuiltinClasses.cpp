@@ -41,6 +41,9 @@
 #ifndef __AAFTypeDefUIDs_h__
 #include "AAFTypeDefUIDs.h"
 #endif
+#ifndef __AAFPropertyIDs_h__
+#include "AAFPropertyIDs.h"
+#endif
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -689,7 +692,10 @@ ImplAAFBuiltinClasses::CreateOMPropTypeWeakReference
    const char * name)
 {
   assert (name);
-  return new OMSimpleProperty (pid, name, sizeof (aafUID_t));
+  if(pid == PID_SourceReference_SourceID)
+	return new OMSimpleProperty (pid, name, sizeof (aafMobID_t));
+  else
+	return new OMSimpleProperty (pid, name, sizeof (aafUID_t));
 }
 
 /*static*/ OMProperty *

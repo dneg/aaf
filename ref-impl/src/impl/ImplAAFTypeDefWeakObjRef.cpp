@@ -42,6 +42,10 @@
 #include "AAFTypeDefUIDs.h"
 #endif
 
+#ifndef __AAFClassDefUIDs_h__
+#include "AAFClassDefUIDs.h"
+#endif
+
 #include "ImplAAFDictionary.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -186,7 +190,14 @@ size_t ImplAAFTypeDefWeakObjRef::PropValSize (void) const
 {
   // Temp change: currently weak refs are represented as auids.
   // return BaseType()->PropValSize();
-  return sizeof (aafUID_t);
+	if(memcmp(&_referencedType, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
+	{
+		return sizeof (aafMobID_t);
+	}
+	else
+	{
+		return sizeof (aafUID_t);
+	}
 }
 
 
@@ -200,7 +211,14 @@ size_t ImplAAFTypeDefWeakObjRef::NativeSize (void) const
 {
   // Temp change: currently weak refs are represented as auids.
   // return sizeof (ImplAAFObject*);
-  return sizeof (aafUID_t);
+	if(memcmp(&_referencedType, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
+	{
+		return sizeof (aafMobID_t);
+	}
+	else
+	{
+		return sizeof (aafUID_t);
+	}
 }
 
 

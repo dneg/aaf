@@ -880,6 +880,7 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_UInt8Array8,
   & kAAFTypeID_VersionType,
   & kAAFTypeID_RGBAComponent,
+  & kAAFTypeID_MobID,
  
   & kAAFTypeID_ClassDefinitionStrongReference,
   & kAAFTypeID_ClassDefinitionStrongReferenceSet,
