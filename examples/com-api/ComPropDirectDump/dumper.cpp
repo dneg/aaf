@@ -1,7 +1,7 @@
 #include "AAF.h"
 #include "AAFResult.h"
 #include <assert.h>
-#include <ostream.h>
+#include <iostream.h>
 
 
 #if defined(macintosh) || defined(_MAC)
