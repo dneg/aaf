@@ -23,6 +23,7 @@
 #include "ImplAAFTimecode.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -188,18 +189,5 @@ aafErr_t ImplAAFTimecode::OffsetToTimecodeClip(aafPosition_t offset, ImplAAFTime
 	return(OM_ERR_NONE);
 }
 
-extern "C" const aafClassID_t CLSID_AAFTimecode;
 
-OMDEFINE_STORABLE(ImplAAFTimecode, CLSID_AAFTimecode);
- 
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFTimecode::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFTimecode, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
+OMDEFINE_STORABLE(ImplAAFTimecode, AUID_AAFTimecode);
