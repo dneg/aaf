@@ -165,6 +165,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_SEGMENT_NOT_FOUND;
 
 	_alternates.removeValue(pSegment);
+	pSegment->ReleaseReference();
+
 	return AAFRESULT_SUCCESS;
 }
 

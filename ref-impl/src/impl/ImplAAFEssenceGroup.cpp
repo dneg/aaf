@@ -315,13 +315,18 @@ AAFRESULT STDMETHODCALLTYPE
 {
   aafUInt32 count;
   AAFRESULT hr;
+  ImplAAFSegment	*pSeg;
+  
   hr = CountChoices (&count);
   if (AAFRESULT_FAILED (hr)) return hr;
 
   if (index > count)
 	return AAFRESULT_BADINDEX;
 
-	_choices.removeAt(index);
+	pSeg = _choices.removeAt(index);
+	if(pSeg)
+		pSeg->ReleaseReference();
+
 	return AAFRESULT_SUCCESS;
 }
 

@@ -936,13 +936,18 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUInt32 count;
 	AAFRESULT hr;
+	ImplAAFLocator	*pLoc;
+	
 	hr = CountLocators (&count);
 	if (AAFRESULT_FAILED (hr)) return hr;
 
 	if (index >= count)
 	  return AAFRESULT_BADINDEX;
 
-	_locators.removeAt(index);
+	pLoc = _locators.removeAt(index);
+	if(pLoc)
+		pLoc->ReleaseReference();
+
 	return AAFRESULT_SUCCESS;
 }
 

@@ -173,13 +173,18 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUInt32 count;
 	AAFRESULT hr;
+	ImplAAFSegment	*pSeg;
+	
 	hr = CountSegments (&count);
 	if (AAFRESULT_FAILED (hr)) return hr;
 	
 	if (index >= count)
 		return AAFRESULT_BADINDEX;
 	
-	_slots.removeAt(index);
+	pSeg = _slots.removeAt(index);
+	if(pSeg)
+		pSeg->ReleaseReference();
+
 	return AAFRESULT_SUCCESS;
 }
 
