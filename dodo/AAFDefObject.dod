@@ -23,4 +23,13 @@ AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
 
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
      the Description of this definition.)
+
+
+AD_XMETHOD1(GetAUID,
+		   [retval\,out],
+		   objPass,
+		   aafUID_t *,
+		   pAuid,
+		   Pointer to an AUID reference,
+		   Gets the AUID for this object.)
 AD_XCLASS_END(Abstract, StoredObject)
