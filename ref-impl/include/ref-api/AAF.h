@@ -33738,6 +33738,21 @@ DECLARE_INTERFACE_(IAAFTaggedValueDefinition, IUnknown)
   /* *** IAAFTaggedValueDefinition methods *** */
 
 
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // AUID for new DeObject
+    /*[in, ref]*/ aafUID_constref  id,
+
+    // Name for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pDescription) PURE;
 
   //***********************************************************
   //
@@ -33856,6 +33871,22 @@ DECLARE_INTERFACE_(IAAFKLVDataDefinition, IUnknown)
 
   /* *** IAAFKLVDataDefinition methods *** */
 
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // AUID for new DeObject
+    /*[in, ref]*/ aafUID_constref  id,
+
+    // Name for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pDescription) PURE;
 
   //***********************************************************
   //
@@ -38449,8 +38480,8 @@ DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
   // Return the KLVData descriptor object with the given id.
   //
   STDMETHOD(LookupKLVDataDef) (THIS_
-    // Parameter Unique ID
-    /*[in, ref]*/ aafUID_constref  parameterId,
+    // KLV data definition Unique ID
+    /*[in, ref]*/ aafUID_constref  defId,
 
     // KLVData descriptor object
     /*[out,retval]*/ IAAFKLVDataDefinition ** ppDef) PURE;
@@ -38512,8 +38543,8 @@ DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
   // Return the tagged value descriptor object with the given id.
   //
   STDMETHOD(LookupTaggedValueDef) (THIS_
-    // Parameter Unique ID
-    /*[in, ref]*/ aafUID_constref  parameterId,
+    // tagged value definition ID
+    /*[in, ref]*/ aafUID_constref  defId,
 
     // tagged value descriptor object
     /*[out,retval]*/ IAAFTaggedValueDefinition ** ppDef) PURE;
@@ -39609,6 +39640,14 @@ DECLARE_INTERFACE_(IAAFMasterMob2, IUnknown)
 
     // Return an essence access on the essence.
     /*[out]*/ IAAFEssenceAccess ** access) PURE;
+  // This function is broadly similar to CreateEssence except that the essence is 
+  // Created in a static slot in the MasterMob
+  //
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
+
 
   //***********************************************************
   //
@@ -39643,6 +39682,14 @@ DECLARE_INTERFACE_(IAAFMasterMob2, IUnknown)
 
     // Return an essence access on the essence.
     /*[out]*/ IAAFEssenceAccess ** access) PURE;
+   // This function is broadly similar to CreateEssence except that the essence is 
+  // Created in a event slot in the MasterMob
+  //
+  // 
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
 
 
   END_INTERFACE

@@ -33574,6 +33574,22 @@ interface IAAFTaggedValueDefinition : IUnknown
 
   //***********************************************************
   //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  // 
+  HRESULT Initialize (
+    // AUID for new DeObject
+    [in, ref] aafUID_constref  id,
+
+    // Name for new DefObject
+    [in, string] aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    [in, string] aafCharacter_constptr  pDescription);
+
+  //***********************************************************
+  //
   // AddParentProperty()
   //
   // // Add a property definition to the tagged value definition.
@@ -33678,6 +33694,22 @@ interface IAAFTaggedValueDefinition : IUnknown
 interface IAAFKLVDataDefinition : IUnknown
 {
 
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  // 
+  HRESULT Initialize (
+    // AUID for new DeObject
+    [in, ref] aafUID_constref  id,
+
+    // Name for new DefObject
+    [in, string] aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    [in, string] aafCharacter_constptr  pDescription);
 
   //***********************************************************
   //
@@ -38256,8 +38288,8 @@ interface IAAFDictionary2 : IUnknown
   // Return the KLVData descriptor object with the given id.
   // 
   HRESULT LookupKLVDataDef (
-    // Parameter Unique ID
-    [in, ref] aafUID_constref  parameterId,
+    // KLV data definition Unique ID
+    [in, ref] aafUID_constref  defId,
 
     // KLVData descriptor object
     [out,retval] IAAFKLVDataDefinition ** ppDef);
@@ -38319,8 +38351,8 @@ interface IAAFDictionary2 : IUnknown
   // Return the tagged value descriptor object with the given id.
   // 
   HRESULT LookupTaggedValueDef (
-    // Parameter Unique ID
-    [in, ref] aafUID_constref  parameterId,
+    // tagged value definition ID
+    [in, ref] aafUID_constref  defId,
 
     // tagged value descriptor object
     [out,retval] IAAFTaggedValueDefinition ** ppDef);
@@ -39420,6 +39452,14 @@ interface IAAFMasterMob2 : IUnknown
 
     // Return an essence access on the essence.
     [out] IAAFEssenceAccess ** access);
+  // This function is broadly similar to CreateEssence except that the essence is 
+  // Created in a static slot in the MasterMob
+  //
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
+
 
   //***********************************************************
   //
@@ -39454,6 +39494,14 @@ interface IAAFMasterMob2 : IUnknown
 
     // Return an essence access on the essence.
     [out] IAAFEssenceAccess ** access);
+   // This function is broadly similar to CreateEssence except that the essence is 
+  // Created in a event slot in the MasterMob
+  //
+  // 
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
 
 }
 
