@@ -153,6 +153,12 @@ public:
     //          precondition - isExtendible()
   virtual void extend(OMUInt64 newSize);
 
+    // @cmember The current size of this <c OMCachedDiskRawStorage> in bytes.
+    //          The <f size()> is the valid size, while the <f extent()>
+    //          is the allocated size.
+    //          precondition - isPositionable()
+  virtual OMUInt64 size(void) const;
+
     // @cmember The current position for <f read()> and <f write()>, as an
     //          offset in bytes from the beginning of this
     //          <c OMCachedDiskRawStorage>.

@@ -233,7 +233,8 @@ OMUInt64 OMCachedDiskRawStorage::extent(void) const
 {
   TRACE("OMCachedDiskRawStorage::extent");
 
-  return _size;
+  // Size and Extent are equivalent
+  return size();
 }
 
   // @mfunc Set the size of this <c OMCachedDiskRawStorage> to <p newSize>
@@ -250,6 +251,18 @@ void OMCachedDiskRawStorage::extend(OMUInt64 newSize)
   TRACE("OMCachedDiskRawStorage::extend");
 
   _size = newSize;
+}
+
+  // @mfunc The current size of this <c OMCachedDiskRawStorage> in bytes.
+  //        precondition - isPositionable()
+  //   @rdesc The current size of this <c OMCachedDiskRawStorage> in bytes.
+  //   @this const
+OMUInt64 OMCachedDiskRawStorage::size(void) const
+{
+  TRACE("OMCachedDiskRawStorage::size");
+
+  PRECONDITION("Positionable", isPositionable());
+  return _size;
 }
 
   // @mfunc The current position for <f read()> and <f write()>, as an
