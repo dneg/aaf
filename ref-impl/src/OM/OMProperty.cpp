@@ -88,6 +88,11 @@ void OMProperty::detach(const OMStorable* object, const size_t key)
   // nothing to do for most descendants of OMProperty
 }
 
+int OMProperty::typeId(void) const
+{
+  return _type;
+}
+
 // @doc OMINTERNAL
 
 // class OMSimpleProperty
@@ -179,6 +184,33 @@ void OMSimpleProperty::restoreFrom(OMStoredObject& s, size_t size)
   ASSERT("Sizes match", size == _size);
 
   s.read(_propertyId, _type, _bits, _size);
+}
+
+  // @mfunc The size of the raw bits of this
+  //        <c OMSimpleProperty>. The size is given in bytes.
+  //   @rdesc The size of the raw bits of this
+  //          <c OMSimpleProperty> in bytes.
+  //   @this const
+size_t OMSimpleProperty::bitsSize(void) const
+{
+  TRACE("OMSimpleProperty::bitsSize");
+
+  return _size;
+}
+
+  // @mfunc Get the raw bits of this <c OMSimpleProperty>.
+  //        The raw bits are copied to the buffer at address <p bits> which
+  //        is <p size> bytes in size.
+  //   @parm The address of the buffer into which the raw bits are copied.
+  //   @parm The size of the buffer.
+  //   @this const
+void OMSimpleProperty::getBits(OMByte* bits, size_t bitsSize) const
+{
+  TRACE("OMSimpleProperty::getBits");
+  PRECONDITION("Valid bits", bits != 0);
+  PRECONDITION("Valid size", bitsSize >= _size);
+
+  memcpy(bits, _bits, _size);
 }
 
 // class OMCollectionProperty
