@@ -181,8 +181,10 @@ AAFRESULT ImplAAFSegment::GenerateSequence(ImplAAFSequence **seq)
 	{
     if (tmp)
       tmp->ReleaseReference();
+	tmp = 0;
     if(pDictionary != NULL)
       pDictionary->ReleaseReference();
+	pDictionary = 0;
 	}
 	XEND;
 
