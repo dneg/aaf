@@ -98,6 +98,10 @@ SOURCE="..\..\..\ref-impl\src\impl\AAFObjectModel.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\AAFObjectModelProcs.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\aafTable.cpp"
 # End Source File
 # Begin Source File
