@@ -129,7 +129,7 @@ public:
 
   // Callbacks.
 
-  virtual void onSave(void* clientContext) const {}
+  virtual void onSave(void* /* clientContext */) const {}
 
 private:
   // @access Private members.
