@@ -198,6 +198,8 @@ public:
   virtual void insert(void* key,
                       const OMStrongReferenceSetElement& element);
 
+  virtual ReferencedObject* replace(const ReferencedObject* object);
+
   virtual OMKeySize keySize(void) const;
 
   virtual OMPropertyId keyPropertyId(void) const;

@@ -846,6 +846,35 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 }
 
 template <typename UniqueIdentification, typename ReferencedObject>
+ReferencedObject*
+OMStrongReferenceSetProperty<UniqueIdentification,
+                             ReferencedObject>::replace(
+                                                const ReferencedObject* object)
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification,"
+                                     "ReferencedObject>::replace");
+
+  PRECONDITION("Valid object", object != 0);
+  UniqueIdentification identification = object->identification();
+  PRECONDITION("Object already present", contains(identification));
+
+  SetElement* element = 0;
+  bool found = _set.find(identification, &element);
+  ASSERT("Object found", found);
+  OMStrongObjectReference& reference = element->reference();
+
+  ReferencedObject* result =  0;
+  OMStorable* oldObject = reference.setValue(object);
+  if (oldObject != 0) {
+    result = dynamic_cast<ReferencedObject*>(oldObject);
+    ASSERT("Object is correct type", result != 0);
+  }
+  POSTCONDITION("Object inserted", contains(identification));
+  POSTCONDITION("Object inserted", containsValue(object));
+  return result;
+}
+
+template <typename UniqueIdentification, typename ReferencedObject>
 OMKeySize OMStrongReferenceSetProperty<UniqueIdentification,
                                        ReferencedObject>::keySize(void) const
 {
