@@ -20,10 +20,10 @@
 #error - improperly defined include guard
 #endif
 
-
+#include "AAFResult.h"
 
 
 HRESULT CAAFTypeDefExtEnum::test()
 {
-  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
