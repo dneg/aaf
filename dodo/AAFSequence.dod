@@ -8,6 +8,10 @@ AAFSegment\
 #c
 #import ./AAFSegment.exp
 AD_HEAD
+AD_IDL(//
+// This interface provides access to the list of Segment and
+// Transition objects maintained by a Sequence object.
+//)
 AD_FORWARD_DECLARATION(AAFTimecode)
 AD_FORWARD_DECLARATION(AAFComponent)
 AD_FORWARD_DECLARATION(AAFSegment)
