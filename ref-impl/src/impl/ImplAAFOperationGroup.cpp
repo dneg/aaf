@@ -104,8 +104,8 @@ ImplAAFOperationGroup::ImplAAFOperationGroup ()
 ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 {
 	// Release all of the mob slot pointers.
-	size_t size = _inputSegments.getSize();
-	for (size_t i = 0; i < size; i++)
+	size_t count = _inputSegments.count();
+	for (size_t i = 0; i < count; i++)
 	{
 		ImplAAFSegment *pSeg = _inputSegments.clearValueAt(i);
 		if (pSeg)
@@ -289,11 +289,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::CountSourceSegments (aafUInt32 *pNumSources)
 {
-   size_t numSlots;
-
 	if(pNumSources == NULL)
 		return AAFRESULT_NULL_PARAM;
-	_inputSegments.getSize(numSlots);
+
+	size_t numSlots = _inputSegments.count();
 	
 	*pNumSources = numSlots;
 

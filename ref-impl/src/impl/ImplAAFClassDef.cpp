@@ -218,7 +218,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (!_Properties.isPresent())
 	*pCount = 0;
 
-  else  *pCount = _Properties.getSize ();
+  else  *pCount = _Properties.count ();
 	
   return AAFRESULT_SUCCESS;
 }
