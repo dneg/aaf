@@ -433,6 +433,120 @@
 \\\#endm
 #endm
 
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes ten arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: argument modifiers (e.g. [in])
+#c Argument27: argument type
+#c Argument28: argument name
+#c Argument29: argument comment
+#c Argument30: argument modifiers (e.g. [in])
+#c Argument31: argument type
+#c Argument32: argument name
+#c Argument33: argument comment
+#c Argument34: argument modifiers (e.g. [in])
+#c Argument35: argument type
+#c Argument36: argument name
+#c Argument37: argument comment
+#c Argument38: argument modifiers (e.g. [in])
+#c Argument39: argument type
+#c Argument40: argument name
+#c Argument41: argument comment
+#c Argument42: method description
+#c
+#startm AD_METHOD_10 42
+\\\#startm .method-%01 00
+  // Override from .this-module
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24, /*%26*/ %27 %28, /*%30*/ %31 %32, /*%34*/ %35 %36, /*%38*/ %39 %40);\\
+\\\#endm
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes eleven arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: argument modifiers (e.g. [in])
+#c Argument27: argument type
+#c Argument28: argument name
+#c Argument29: argument comment
+#c Argument30: argument modifiers (e.g. [in])
+#c Argument31: argument type
+#c Argument32: argument name
+#c Argument33: argument comment
+#c Argument34: argument modifiers (e.g. [in])
+#c Argument35: argument type
+#c Argument36: argument name
+#c Argument37: argument comment
+#c Argument38: argument modifiers (e.g. [in])
+#c Argument39: argument type
+#c Argument40: argument name
+#c Argument41: argument comment
+#c Argument42: argument modifiers (e.g. [in])
+#c Argument43: argument type
+#c Argument44: argument name
+#c Argument45: argument comment
+#c Argument46: method description
+#c
+#startm AD_METHOD_11 46
+\\\#startm .method-%01 00
+  // Override from .this-module
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24, /*%26*/ %27 %28, /*%30*/ %31 %32, /*%34*/ %35 %36, /*%38*/ %39 %40, /*%42*/ %43 %44);\\
+\\\#endm
+#endm
+
 
 #ccccccccccccccccccccccccccc
 #c
