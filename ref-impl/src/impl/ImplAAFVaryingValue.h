@@ -4,16 +4,6 @@
 #define __ImplAAFVaryingValue_h__
 
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 /***********************************************\
 *												*
 * Advanced Authoring Format						*
@@ -26,7 +16,7 @@
 class ImplAAFDataDef;
 class ImplAAFControlPoint;
 class ImplEnumAAFControlPoints;
-
+class ImplAAFInterpolationDef;
 
 
 
@@ -35,6 +25,7 @@ class ImplEnumAAFControlPoints;
 #include "ImplAAFParameter.h"
 #endif
 
+#include "ImplEnumAAFControlPoints.h"
 
 class ImplAAFVaryingValue : public ImplAAFParameter
 {
@@ -52,10 +43,25 @@ public:
 
 
   //****************
-  // AddPoint()
+  // SetInterpolationDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AddPoint
+    SetInterpolationDefinition
+        (ImplAAFInterpolationDef * pPoint);
+
+
+  //****************
+  // GetInterpolationDef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetInterpolationDefinition
+        (ImplAAFInterpolationDef ** ppDef);
+
+    //****************
+  // AppendPoint()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendPoint
         // @parm [in] pointer to IAAFControlPoint object
         (ImplAAFControlPoint * pPoint);
 
@@ -93,7 +99,10 @@ public:
          // @parm [out] Number of actual bytes read
          aafInt32*  bytesRead);
 
-
+public:
+	// SDK-private methods
+	virtual AAFRESULT STDMETHODCALLTYPE
+		GetTypeDef(ImplAAFTypeDef **ppTypeDef);
 
 public:
   // Declare this class to be storable.
@@ -103,6 +112,9 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFVaryingValueTest.cpp.
   static AAFRESULT test();
+private:
+	OMFixedSizeProperty<aafUID_t>						 _interpolation;
+    OMStrongReferenceVectorProperty<ImplAAFControlPoint> _controlPoints;
 };
 
 #endif // ! __ImplAAFVaryingValue_h__
