@@ -31,6 +31,7 @@
 #include "OMProperty.h"
 #include "OMPropertySet.h"
 #include "OMStoredVectorIndex.h"
+#include "OMStoredSetIndex.h"
 #include "OMDataTypes.h"
 
 #include "OMAssertions.h"
@@ -58,9 +59,10 @@ const size_t indexEntrySize  = sizeof(OMPropertyId) + // Property id
                                sizeof(OMUInt32) +     // Offset
                                sizeof(OMUInt32);      // Length
 
-#if defined(_MAC) || defined(macintosh) || defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
+#if defined(_MAC) || defined(macintosh) || \
+    defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
 
-// The Macintosh and SGI (SS reference implementation) declarations
+// The Macintosh and Unix (SS reference implementation) declarations
 // for LARGE_INTEGER and ULARGE_INTEGER don't have a QuadPart.
 // On Macintosh this is probably because the HighPart and LowPart
 // components on that platform are not in the natural platform order.
@@ -132,6 +134,9 @@ static void printName(const char* name);
 
 static void printName(const wchar_t* name);
 
+  // @mfunc Constructor.
+  //   @parm The IStorage for the persistent representation of
+  //         this <c OMStoredObject>.
 OMStoredObject::OMStoredObject(IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
   _offset(0), _open(false), _mode(OMFile::readOnlyMode),
@@ -140,6 +145,7 @@ OMStoredObject::OMStoredObject(IStorage* s)
   TRACE("OMStoredObject::OMStoredObject");
 }
 
+  // @mfunc Destructor.
 OMStoredObject::~OMStoredObject(void)
 {
   TRACE("OMStoredObject::~OMStoredObject");
@@ -766,7 +772,7 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
   OMUInt32 entries = vector->entries();
   writeToStream(vectorIndexStream, &entries, sizeof(entries));
 
-  // Write the element names.
+  // For each element write the element name.
   //
   size_t context = 0;
   OMUInt32 name;
@@ -782,11 +788,59 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
   delete [] vectorIndexName;
 }
 
+  // @mfunc  Save the <c OMStoredSetIndex> <p set> in this
+  //         <c OMStoredObject>, the set is named <p setName>.
+  //   @parm The <c OMStoredSetIndex> to save.
+  //   @parm The name of the set.
+void OMStoredObject::save(const OMStoredSetIndex* set,
+                          const char* setName)
+{
+  TRACE("OMStoredObject::save");
+  PRECONDITION("Valid set", set != 0);
+  PRECONDITION("Valid set name", validString(setName));
+
+  // Calculate the stream name for the index.
+  //
+  char* setIndexName = setIndexStreamName(setName);
+
+  // Create the stream.
+  //
+  IStream* setIndexStream = createStream(_storage, setIndexName);
+
+  // Write the high water mark.
+  //
+  OMUInt32 highWaterMark = set->highWaterMark();
+  writeToStream(setIndexStream, &highWaterMark, sizeof(highWaterMark));
+
+  // Write the count of elements.
+  //
+  OMUInt32 entries = set->entries();
+  writeToStream(setIndexStream, &entries, sizeof(entries));
+
+  // For each element write the element name, reference count and key.
+  //
+  size_t context = 0;
+  OMUInt32 name;
+  OMUInt32 count;
+  OMUniqueObjectIdentification key;
+  for (size_t i = 0; i < entries; i++) {
+    set->iterate(context, name, count, key);
+    writeToStream(setIndexStream, &name, sizeof(name));
+    writeToStream(setIndexStream, &count, sizeof(count));
+    writeToStream(setIndexStream, &key, sizeof(key));
+  }
+
+  // Close the stream.
+  //
+  closeStream(setIndexStream);
+
+  delete [] setIndexName;
+}
+
   // @mfunc Restore the vector named <p vectorName> into this
   //        <c OMStoredObject>.
   //   @parm The name of the vector.
   //   @rdesc The newly restored <c OMStoredVectorIndex>.
-
 void OMStoredObject::restore(OMStoredVectorIndex*& vector,
                              const char* vectorName)
 {
@@ -833,6 +887,65 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   vector = vectorIndex;
 }
 
+  // @mfunc Restore the set named <p setName> into this
+  //        <c OMStoredObject>.
+  //   @parm The name of the set.
+  //   @rdesc The newly restored <c OMStoredSetIndex>.
+void OMStoredObject::restore(OMStoredSetIndex*& set,
+                             const char* setName)
+{
+  TRACE("OMStoredObject::restore");
+  PRECONDITION("Valid set name", validString(setName));
+
+  // Calculate the stream name for the index.
+  //
+  char* setIndexName = setIndexStreamName(setName);
+
+  // Open the stream.
+  //
+  IStream* setIndexStream = openStream(_storage, setIndexName);
+
+  // Read the high water mark.
+  //
+  OMUInt32 highWaterMark;
+  readUInt32FromStream(setIndexStream, highWaterMark, _reorderBytes);
+
+  // Read the count of elements.
+  //
+  OMUInt32 entries;
+  readUInt32FromStream(setIndexStream, entries, _reorderBytes);
+
+  // Create an index.
+  //
+  OMStoredSetIndex* setIndex = new OMStoredSetIndex(entries);
+  ASSERT("Valid heap pointer", setIndex != 0);
+
+  // Read the element names, counts amd keys, placing them in the index.
+  //
+  for (size_t i = 0; i < entries; i++) {
+    OMUInt32 name;
+    readUInt32FromStream(setIndexStream, name, _reorderBytes);
+    OMUInt32 count;
+    readUInt32FromStream(setIndexStream, count, _reorderBytes);
+    OMUniqueObjectIdentification key;
+    readUniqueObjectIdentificationFromStream(setIndexStream,
+                                             key,
+                                             _reorderBytes);
+    setIndex->insert(i, name, count, key);
+  }
+
+  // Close the stream.
+  //
+  closeStream(setIndexStream);
+
+  delete [] setIndexName;
+
+  set = setIndex;
+}
+
+  // @mfunc The stream name for the index of a vector named <p vectorName>.
+  //   @parm The vector name.
+  //   @rdesc The stream name for the vector index.
 char* OMStoredObject::vectorIndexStreamName(const char* vectorName)
 {
   TRACE("OMStoredObject::vectorIndexStreamName");
@@ -845,6 +958,23 @@ char* OMStoredObject::vectorIndexStreamName(const char* vectorName)
   strcat(vectorIndexName, suffix);
 
   return vectorIndexName;
+}
+
+  // @mfunc The stream name for the index of a set named <p setName>.
+  //   @parm The set name.
+  //   @rdesc The stream name for the set index.
+char* OMStoredObject::setIndexStreamName(const char* setName)
+{
+  TRACE("OMStoredObject::setIndexStreamName");
+  PRECONDITION("Valid set name", validString(setName));
+
+  char* suffix = " index";
+  char* setIndexName = new char[strlen(setName) + strlen(suffix) + 1];
+  ASSERT("Valid heap pointer", setIndexName != 0);
+  strcpy(setIndexName, setName);
+  strcat(setIndexName, suffix);
+
+  return setIndexName;
 }
 
 IStream* OMStoredObject::createStream(IStorage* storage,
@@ -1078,7 +1208,40 @@ void OMStoredObject::readFromStream(IStream* stream,
   check(result);
 }
 
-  // @mfunc Read a UInt32 from <p stream> into <p i>. If
+  // @mfunc Read an OMUInt16 from <p stream> into <p i>. If
+  //        <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUInt16.
+  //   @parm If true then reorder the bytes.
+void OMStoredObject::readUInt16FromStream(IStream* stream,
+                                          OMUInt16& i,
+                                          bool reorderBytes)
+{
+  TRACE("OMStoredObject::readUInt16FromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &i, sizeof(OMUInt16));
+  if (reorderBytes) {
+    reorderUInt16(i);
+  }
+}
+
+  // @mfunc Reorder the OMUInt16 <p i>.
+  //   @parm The OMUInt16 to reorder.
+void OMStoredObject::reorderUInt16(OMUInt16& i)
+{
+  TRACE("OMStoredObject::reorderUInt16");
+
+  OMUInt8* p = (OMUInt8*)&i;
+  OMUInt8 temp;
+
+  temp = p[0];
+  p[0] = p[1];
+  p[1] = temp;
+
+}
+
+  // @mfunc Read an OMUInt32 from <p stream> into <p i>. If
   //        <p reorderBytes> is true then the bytes are reordered.
   //   @parm The stream from which to read.
   //   @parm The resulting OMUInt32.
@@ -1092,15 +1255,15 @@ void OMStoredObject::readUInt32FromStream(IStream* stream,
 
   readFromStream(stream, &i, sizeof(OMUInt32));
   if (reorderBytes) {
-    reorderOMUInt32(i);
+    reorderUInt32(i);
   }
 }
 
-  // @mfunc Reorder the UInt32 from <p i>.
+  // @mfunc Reorder the OMUInt32 <p i>.
   //   @parm The OMUInt32 to reorder.
-void OMStoredObject::reorderOMUInt32(OMUInt32& i)
+void OMStoredObject::reorderUInt32(OMUInt32& i)
 {
-  TRACE("OMStoredObject::reorderOMUInt32");
+  TRACE("OMStoredObject::reorderUInt32");
 
   OMUInt8* p = (OMUInt8*)&i;
   OMUInt8 temp;
@@ -1113,6 +1276,38 @@ void OMStoredObject::reorderOMUInt32(OMUInt32& i)
   p[1] = p[2];
   p[2] = temp;
 
+}
+
+  // @mfunc Read a UniqueObjectIdentification from <p stream> into <p id>.
+  //        If <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUniqueObjectIdentification.
+  //   @parm If true then reorder the bytes.
+void OMStoredObject::readUniqueObjectIdentificationFromStream(
+                                              IStream* stream,
+                                              OMUniqueObjectIdentification& id,
+                                              bool reorderBytes)
+{
+  TRACE("OMStoredObject::UniqueObjectIdentificationFromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &id, sizeof(OMUniqueObjectIdentification));
+  if (reorderBytes) {
+    reorderUniqueObjectIdentification(id);
+  }
+}
+
+  // @mfunc Reorder the OMUniqueObjectIdentification <p id>.
+  //   @parm The OMUniqueObjectIdentification to reorder.
+void OMStoredObject::reorderUniqueObjectIdentification(
+                                              OMUniqueObjectIdentification& id)
+{
+  TRACE("OMStoredObject::reorderUniqueObjectIdentification");
+
+  reorderUInt32(id.Data1);
+  reorderUInt16(id.Data2);
+  reorderUInt16(id.Data3);
+  // no need to swap Data4
 }
 
 void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
