@@ -297,9 +297,22 @@ SRC_DIR = ../ref-impl/src
 
 .dod.fidl :
 	$(RM) -f $*.fidl
+	perl GenObjectInterfaces.pl $* > ObjInt.tmp
 	./tool/$(DODO) -f macros/fidl.mac < $*.dod > $*.tmp
-	$(MV) $*.tmp $*.fidl
+	perl -p -0 \
+            -e 's/(^\[\n\s*object,\n\s*uuid)/OBJ_INT\n\1/m;'\
+	    -e 's/^(\n\n)\n+/\1/mg;'\
+	    $*.tmp > $*X.tmp
+	sed -e '/OBJ_INT/r ObjInt.tmp' -e '/OBJ_INT/d' $*X.tmp > $*.fidl
 	$(CHMOD) -w $*.fidl
+	$(RM) -f ObjInt.tmp $*.tmp $*X.tmp
+
+
+# obsolete version
+#	$(RM) -f $*.fidl
+#	./tool/$(DODO) -f macros/fidl.mac < $*.dod > $*.tmp
+#	$(MV) $*.tmp $*.fidl
+#	$(CHMOD) -w $*.fidl
 
 .dod.refh :
 	$(RM) -f $*.refh
