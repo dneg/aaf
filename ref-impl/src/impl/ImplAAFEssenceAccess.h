@@ -180,25 +180,6 @@ public:
 	// 	Standard errors (see top of file).
 	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
 	//@comm Replaces omfmMediaMultiOpen*/
-
-	
-/****/
-  //****************
-  // SetBlockingSize()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetBlockingSize
-        // @parm [in] Preallocate this many bytes
-        (aafUInt32  numBytes);
-	//@comm Allocating the space in this fashion ensures that the data will be
-	// contiguous on disk (for at least numBytes bytes) even if other
-	// disk operations allocate space on the disk.  If the data written
-	// exceeds numBytes, then another disk block of numBytes size will be
-	// allocated.
-	//@comm Takes a essence handle, so the essence must have been opened or created.
-	// The space is allocated in terms of bytes.
-	//@comm Replaces omfmSetBlockingSize
-
 	
 /****/
   //****************
@@ -352,7 +333,7 @@ public:
          aafUID_t mediaKind,
 
          // @parm [out] the largest sample size
-         aafUInt32*  maxSize);
+         aafLength_t*  maxSize);
 	//@comm For uncompressed data, or the output of the software codec,
 	// the sample size will propably be a constant.
 	//@comm The essence type parameter exists to support codecs with multiple
@@ -584,16 +565,6 @@ public:
 	//	OM_ERR_INVALID_OP_CODEC -- This kind of essence doesn't have a frame index<nl>
 	//	OM_ERR_MEDIA_OPENMODE -- The essence is open for read-only.
 	//@comm Replaces omfmAddFrameIndexEntry */
-
-/****/
-  //****************
-  // SetStreamCacheSize()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetStreamCacheSize
-        // @parm [in] make the cache this many bytes long
-        (aafUInt32  cacheSize);
-	//@comm Replaces omfmSetStreamCacheSize */
 
 
   //***********************************************************
