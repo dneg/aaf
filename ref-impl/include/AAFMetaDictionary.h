@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Mon Jul 10 14:33:17 EDT 2000
-// by user tbingham on system TBINGHAMPC.
+// This file was generated on Mon Dec  4 12:18:00 EST 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -298,6 +298,21 @@
 //     id        = the auid used to identify the type [*]
 //     type      = the target type [*]
 //
+// AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container)
+//
+//   Define a member of an AAF extendible enumerated type.
+//
+//     name      = the name of the type
+//     parent    = the parent property for member [*]
+//     container = the name of the containing weak reference type
+//
+// AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name)
+//
+//   End an AAF extendible enumerated type definition.
+//
+//     name      = the name of the type
+//
+//
 // AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(name, id, type)
 //
 //   Define an AAF weak reference set type.
@@ -460,6 +475,14 @@
 
 #ifndef AAF_TYPE_DEFINITION_WEAK_REFERENCE
 #define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type)
+#endif
+
+#ifndef AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container)
+#endif
+
+#ifndef AAF_TYPE_DEFINITION_WEAK_REFERENCE_END
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name)
 #endif
 
 #ifndef AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET
@@ -1443,7 +1466,7 @@ AAF_CLASS(PropertyDefinition,
       0x0400, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x000B,
-    AAF_REFERENCE_TYPE(WeakReference, TypeDefinition),
+    AAF_TYPE(AUID),
     true,
     false,
     PropertyDefinition)
@@ -1701,7 +1724,7 @@ AAF_CLASS(CodecDefinition,
       0x0301, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x2302,
-    AAF_REFERENCE_TYPE(WeakReferenceSet, DataDefinition),
+    AAF_REFERENCE_TYPE(WeakReferenceVector, DataDefinition),
     true,
     false,
     CodecDefinition)
@@ -3001,7 +3024,7 @@ AAF_CLASS(Parameter,
       0x0104, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x4c01,
-    AAF_REFERENCE_TYPE(WeakReference, ParameterDefinition),
+    AAF_TYPE(AUID),
     true,
     false,
     Parameter)
@@ -4740,6 +4763,11 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(ClassDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(MetaDictionary, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, ClassDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(ClassDefinitions, MetaDictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, ClassDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, ClassDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<ContainerDefinition>
@@ -4750,6 +4778,13 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(ContainerDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Header, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, ContainerDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Dictionary, Header,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, ContainerDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(ContainerDefinitions, Dictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, ContainerDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, ContainerDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<DataDefinition>
@@ -4760,16 +4795,13 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(DataDefinition))
-AAF_TYPE_SEPARATOR()
-
-// WeakReference<DefinitionObject>
-//
-AAF_TYPE_DEFINITION_WEAK_REFERENCE(
-  AAF_REFERENCE_TYPE_NAME(WeakReference, DefinitionObject), 
-  AAF_LITERAL_AUID(0x05010400,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
-  AAF_TYPE(DefinitionObject))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Header, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, DataDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Dictionary, Header,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, DataDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(DataDefinitions, Dictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, DataDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, DataDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<InterpolationDefinition>
@@ -4780,6 +4812,13 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(InterpolationDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Header, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, InterpolationDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Dictionary, Header,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, InterpolationDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(InterpolationDefinitions, Dictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, InterpolationDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, InterpolationDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<Mob>
@@ -4790,6 +4829,13 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(Mob))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Header, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, Mob))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Content, Header,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, Mob))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Mobs, ContentStorage,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, Mob))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, Mob))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<OperationDefinition>
@@ -4800,6 +4846,13 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(OperationDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Header, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, OperationDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Dictionary, Header,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, OperationDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(OperationDefinitions, Dictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, OperationDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, OperationDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<ParameterDefinition>
@@ -4810,6 +4863,13 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(ParameterDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Header, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, ParameterDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Dictionary, Header,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, ParameterDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(ParameterDefinitions, Dictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, ParameterDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, ParameterDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<TypeDefinition>
@@ -4820,6 +4880,11 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(TypeDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(MetaDictionary, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, TypeDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(TypeDefinitions, MetaDictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, TypeDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, TypeDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<PluginDefinition>
@@ -4830,6 +4895,13 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(PluginDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Header, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, PluginDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Dictionary, Header,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, PluginDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(PluginDefinitions, Dictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, PluginDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, PluginDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<CodecDefinition>
@@ -4840,6 +4912,13 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(CodecDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Header, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, CodecDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Dictionary, Header,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, CodecDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(CodecDefinitions, Dictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, CodecDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(AAF_REFERENCE_TYPE_NAME(WeakReference, CodecDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReferenceSet<DataDefinition>
@@ -4890,6 +4969,16 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(TypeDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReferenceVector<DataDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(
+  AAF_REFERENCE_TYPE_NAME(WeakReferenceVector, DataDefinition), 
+  AAF_LITERAL_AUID(0x05040300,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(DataDefinition))
 
 AAF_TYPE_TABLE_END()
 
@@ -4962,6 +5051,10 @@ AAF_TYPE_TABLE_END()
 #undef AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR
 
 #undef AAF_TYPE_DEFINITION_WEAK_REFERENCE
+
+#undef AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER
+
+#undef AAF_TYPE_DEFINITION_WEAK_REFERENCE_END
 
 #undef AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET
 
