@@ -545,19 +545,6 @@ cleanup:
 	
 	return moduleErrorTmp;
 }
-// simple helper class to initialize and cleanup COM library.
-struct CComInitialize
-{
-  CComInitialize()
-  {
-    CoInitialize(NULL);
-  }
-
-  ~CComInitialize()
-  {
-    CoUninitialize();
-  }
-};
 
 // now need the reading functionality
 static HRESULT ReadAAFFile(aafWChar * pFileName)
@@ -640,7 +627,6 @@ int main(int argumentCount, char *argumentVector[])
 #if USE_TIMER_LIB
 	UTLInitTimers(1000);
 #endif
-	CComInitialize comInit;
 	
 	aafWChar FileNameBuffer[MAX];
 	mbstowcs(FileNameBuffer,niceFileName,MAX);
