@@ -178,5 +178,7 @@ EXTERN_C const CLSID CLSID_EnumAAFTaggedValueDefs;
 EXTERN_C const CLSID CLSID_EnumAAFKLVDataDefs;
 EXTERN_C const CLSID CLSID_AAFRecordingDescriptor;
 EXTERN_C const CLSID CLSID_AAFAuxiliaryDescriptor;
+EXTERN_C const CLSID CLSID_AAFDescriptiveFramework;
+EXTERN_C const CLSID CLSID_AAFDescriptiveMarker;
 
 #endif // __AAFCLSIDs_h__
