@@ -2043,32 +2043,6 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objOutCustom-setup(T, externArg, customCode, aux)
-#c
-#c arg1 = unadorned type
-#c arg2 = external arg name
-#c arg3 = custom arg translation code
-#c arg4 = aux argument
-#c
-#startm .objOutArray-setup 04
-  //
-  // set up for %02
-  //
-  Impl%01 * internal%02 = NULL;
-  assert (%03 >= 0);
-  internal%02 = new Impl%01*[%03];
-  assert (internal%02);
-
-  Impl%01 ** pinternal%02 = NULL;
-  if (%02)
-    {
-      pinternal%02 = &internal%02;
-    }
-#endm
-
-
-#ccccccccccccccccccccccccccc
-#c
 #c #define .objOutArrayCustom-setup(T, externArg, customCode, aux)
 #c
 #c arg1 = unadorned type
