@@ -46,28 +46,36 @@
 
 #include <map>
 
+// TODO - Verify data in the read test.
+//      - Implement a "-extend" option that opens a file for modification and extends the essence.
+
+
 void _throwUsage()
 {
 	wostringstream msg;
 	msg << L"Usage: " << L" -file aaf_filename" << endl;
-	msg << L"       " << L" -read | -write | -extend" << endl;
+	msg << L"       " << L" -read | -write" << endl;
 	msg << L"       " << L" -source audio | video" << endl;
 	msg << L"       " << L" -numSamples | -numKSamples | -numMSamples  number" << endl;
 	msg << L"       " << L" [-codec jpeg | cdci | wav | aifc]" << endl;
 	msg << L"       " << L" [-netloc filename_prefix filename_suffix]" << endl;
 	msg << endl;
 	msg << L"Examples: axMasterMobEx -file mmex.aaf -write -source video -netloc ess .jpg  -numSamples   200 -codec jpeg" << endl;
-	msg << L"Examples: axMasterMobEx -file mmex.aaf -write -source video -netloc ess .cdci -numSamples   200 -codec cdci" << endl;
+	msg << L"          axMasterMobEx -file mmex.aaf -write -source video -netloc ess .cdci -numSamples   200 -codec cdci" << endl;
 	msg << L"          axMasterMobEx -file mmex.aaf -write -source audio -netloc ess .wav  -numMSamples 2000 -codec wav" << endl;
 	msg << L"          axMasterMobEx -file mmex.aaf -write -source audio -netloc ess .aifc -numMSamples 2000 -codec aifc" << endl;
+	msg << L"          axMasterMobEx -file mmex.aaf -read -source video" << endl;
+	msg << L"          axMasterMobEx -file mmex.aaf -read -source audio" << endl;
 	msg << endl;
-	msg << L"Notes:  The default video codec is \"jpeg\" if the codec is not specified." << endl;
-	msg << L"        The default audio codec is \"wav\" if the codec is not specified." << endl;
-	msg << L"        Mismatched source and codec essence types will yield undefined results." << endl;
-	msg << L"        The default container is ContainerAAF.  -netloc specifies ContainerFile." << endl;
-	msg << L"        The -netloc option arguments are used to create a filename for the external essence." << endl;
-	msg << L"        If EssenceAccess::WriteEssence() returns AAFRESULT_EOF, the essence is extended and" << endl;
+	msg << L"Notes:  - The default video codec is \"jpeg\" if the codec is not specified." << endl;
+	msg << L"        - The default audio codec is \"wav\" if the codec is not specified." << endl;
+	msg << L"        - Mismatched source and codec essence types will yield undefined results." << endl;
+	msg << L"        - The default container is ContainerAAF.  -netloc specifies ContainerFile." << endl;
+	msg << L"        - The -netloc option arguments are used to create a filename for the external essence." << endl;
+	msg << L"        - If EssenceAccess::WriteEssence() returns AAFRESULT_EOF, the essence is extended and" << endl;
 	msg << L"        writing continues.  This is the means by which essence in excess of 2GB is supported." << endl;
+	msg << L"        - The \"-read\" option will sequentially read all essence data from the first slot of the" << endl;
+	msg << L"        first master mob in the file. The \"-source\" option must be used to specify the essence type." << endl;
 	throw AxEx( msg.str().c_str() );
 }
 
@@ -152,11 +160,13 @@ class SampleSource {
 public:
 
 	SampleSource( aafUID_t dataDef, aafRational_t rate,
-				  aafCompressEnable_t compression, int sampleByteSize )
+				  aafCompressEnable_t compression, int sampleByteSize,
+				  int numSamplesPerChunk )
 		: _dataDef( dataDef ),
 		  _rate( rate ),
 		  _compression( compression ),
-		  _sampleByteSize( sampleByteSize )
+		  _sampleByteSize( sampleByteSize ),
+		  _numSamplesPerChunk( numSamplesPerChunk )
 	{}
 
 	virtual ~SampleSource()
@@ -174,6 +184,9 @@ public:
 	int GetSampleByteSize()
 	{ return _sampleByteSize; }
 	
+	int GetNumSamplesPerChunk()
+	{ return _numSamplesPerChunk; }
+
 	virtual SetupFormatSpecifiers( AxEssenceAccess& ) = 0;
 
 	virtual bool AtEnd() = 0;
@@ -186,6 +199,7 @@ private:
 	aafRational_t _rate;
 	aafCompressEnable_t _compression;
 	int _sampleByteSize;
+	int _numSamplesPerChunk;
 };
 
 //============================================================================
@@ -198,7 +212,8 @@ public:
 		: SampleSource( DDEF_Picture,
 						rate,
 						compression,
-						bytesPerPixel * width * height ),
+						bytesPerPixel * width * height,
+						1 ),
 		  _numFramesToWrite( numFramesToWrite ),
 		  _width( width ),
 		  _height( height ),
@@ -237,7 +252,7 @@ public:
 
 	virtual pair<int, auto_ptr<aafUInt8> > GetSamples()
 	{
-		const int numSamples = 1;  // frames
+		const int numSamples = GetNumSamplesPerChunk();  // frames
 		const int numBytes = GetSampleByteSize();
 
 		auto_ptr<aafUInt8> pixels( new aafUInt8 [numBytes] );
@@ -274,7 +289,8 @@ public:
 		: SampleSource( DDEF_Sound,
 						rate,
 						compression,
-						bytesPerSample ),
+						bytesPerSample,
+						10*1024*1024/bytesPerSample ),
 		  _numSamplesToWrite( numSamplesToWrite ),
 		  _bitsPerSample( bitsPerSample ),
 		  _bytesPerSample( bytesPerSample )
@@ -304,7 +320,7 @@ public:
 	{
 		// FIXME - Hardcoded: write 10 MByte at a time.
 		
-		int numSamples = 10*1024*1024 / _bytesPerSample;
+		int numSamples = GetNumSamplesPerChunk();
 
 		if ( numSamples > _numSamplesToWrite ) {
 			numSamples = _numSamplesToWrite;
@@ -443,31 +459,6 @@ CmdLineParser::CmdLineParser( AxCmdLineArgs& args )
 	// Audio parameters hardcoded for the moment
 	_audioBitsPerSample = 24;
 	
-	// Operation option (read/write/extend)
-	{
-		pair<bool,int> opRead;
-		pair<bool,int> opWrite;
-		pair<bool,int> opExtend;
-
-		opRead = args.get( "-read" );
-		opWrite = args.get( "-write" );
-		opExtend = args.get( "-extend" );
-
-		if ( opRead.first ) {
-			_op = READ;
-		}
-		else if ( opWrite.first ) {
-			_op = WRITE;
-		}
-		else if ( opExtend.first ) {
-			_op = EXTEND;
-		}
-		else {
-			throwUsage();
-		}
-	}
-
-	
 	// AAF file name - required
 	{
 		pair<bool, int> fileOpArg = args.get( "-file" );
@@ -515,6 +506,31 @@ CmdLineParser::CmdLineParser( AxCmdLineArgs& args )
 		}
 
 		cout << "Sample source: " << _source<< endl;
+	}
+
+	// Operation option (read/write/extend) - required
+	{
+		pair<bool,int> opRead;
+		pair<bool,int> opWrite;
+		pair<bool,int> opExtend;
+
+		opRead = args.get( "-read" );
+		opWrite = args.get( "-write" );
+		//opExtend = args.get( "-extend" );
+
+		if ( opRead.first ) {
+			_op = READ;
+			return;
+		}
+		else if ( opWrite.first ) {
+			_op = WRITE;
+		}
+		else if ( opExtend.first ) {
+			_op = EXTEND;
+		}
+		else {
+			throwUsage();
+		}
 	}
 
 	// Rate - default is determined above.
@@ -708,10 +724,110 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 
 //============================================================================
 
-void open_mastermob_and_read_essence( AxFile& File, AxCmdLineArgs& args )
+void open_mastermob_and_read_essence( AxHeader& axHeader,
+									  CmdLineParser& cmdLineParser )
 {
-	cout << "report_master_()" << endl;
+	auto_ptr<SampleSource> sampleSource = cmdLineParser.CreateSampleSource();
+
+	AxContentStorage axContentStorage( axHeader.GetContentStorage() );
+
+	AxDictionary axDictionary( axHeader.GetDictionary() );
+
+	aafSearchCrit_t	criteria;
+	criteria.searchTag = kAAFByMobKind;
+	criteria.tags.mobKind = kAAFMasterMob;
+	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
+	AxMobIter::Pair next;
+
+	// Expect at least one master mob, and read the first mob found.
+	
+	next = axMobIter.NextOne();
+	assert( next.first );
+	
+	AxMasterMob axMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>(
+										next.second, IID_IAAFMasterMob ) );
+
+	wcout << L"MasterMob name: " << axMasterMob.GetName() << endl;
+	wcout << L"Number of Slots: " << axMasterMob.CountSlots() << endl;
+
+	AxDataDef axDataDef( axDictionary.LookupDataDef( sampleSource->GetDataDef() ) );
+
+	AxEssenceAccess axEssenceAccess(
+		axMasterMob.OpenEssence(1, 0, kAAFMediaOpenReadOnly, kAAFCompressionDisable ) );
+
+	wcout << L"Codec Name: " << axEssenceAccess.GetCodecName() << endl;	
+
+	aafLength_t maxSize = axEssenceAccess.GetLargestSampleSize( axDataDef );
+
+	unsigned int divisor;
+	char* symbol;
+	if ( maxSize > 1024*1024 ) {
+		symbol = "M";
+		divisor = 1024/1024;
+	}
+	else if ( maxSize > 1024 ) {
+		symbol = "K";
+		divisor = 1024;
+	}
+	else {
+		symbol = "";
+		divisor = 1;
+	}
+
+	cout << "Largest Sample Size: " << (unsigned int)(maxSize/divisor);
+	cout << " " << symbol << "bytes" << endl;
+
+	aafLength_t numSamples = axEssenceAccess.CountSamples( axDataDef );
+
+	if ( numSamples > 1024*1024 ) {
+		symbol = "M";
+		divisor = 1e6;
+	}
+	else if ( numSamples > 1024 ) {
+		symbol = "K";
+		divisor = 1e3;
+	}
+	else {
+		symbol = "";
+		divisor = 1;
+	}
+
+	cout << "Number of samples: " << (unsigned int) numSamples/divisor;
+	cout << " " << symbol << "samples" << endl;
+
+	sampleSource->SetupFormatSpecifiers( axEssenceAccess );	
+
+	int numSamplesPerChunk = sampleSource->GetNumSamplesPerChunk();
+	int buflen = maxSize * numSamplesPerChunk;
+	auto_ptr<char> buffer( new char [ buflen ] );
+
+	int numSamplesStillToRead = numSamples;
+	
+	while( numSamplesStillToRead > 0 ) {
+
+		AxEssenceAccess::ReadResult readResult;
+
+		int numSamplesToRead;
+		
+		if ( numSamplesPerChunk > numSamplesStillToRead ) {
+			numSamplesToRead = numSamplesStillToRead;
+		}
+		else {
+			numSamplesToRead = numSamplesPerChunk;
+		}
+		
+		
+		readResult = axEssenceAccess.ReadSamples( numSamplesToRead, buflen, (aafDataBuffer_t)buffer.get() );
+
+		numSamplesStillToRead -= readResult.samplesRead;
+
+		cout << "Read " << (unsigned int)(numSamples - numSamplesStillToRead)/divisor;
+		cout << " of " << (unsigned int)(numSamples/divisor) << " " << symbol << "samples" << endl;
+
+	}
+
 }
+
 //============================================================================
 
 int real_main( int argc, const char** argv )
@@ -732,16 +848,17 @@ int real_main( int argc, const char** argv )
 
 			axFile.OpenNewModify( cmdLineParser.GetAAFFileName() );
 			
-			auto_ptr<SampleSource> sampleSourcePtr = cmdLineParser.CreateSampleSource();
-			auto_ptr<EssenceLocator> essenceLocatorPtr = cmdLineParser.CreateEssenceLocator();
-			
 			AxHeader axHeader( axFile.getHeader() );
 			create_mastermob_and_write_essence( axHeader, cmdLineParser );
 
 			axFile.Save();
 		}
 		else if ( cmdLineParser.GetOp() == CmdLineParser::READ ) {
+
 			axFile.OpenExistingRead( cmdLineParser.GetAAFFileName() );
+
+			AxHeader axHeader( axFile.getHeader() );
+			open_mastermob_and_read_essence( axHeader, cmdLineParser );
 		}
 		else {
 			assert(0);
@@ -768,6 +885,11 @@ int main( int argc , char* argv[] )
 
 	return real_main( sizeof(fake_argv)/sizeof(char*),
 			          (const char**)fake_argv );
+#elif 0
+	char *fake_argv[] = { argv[0],
+						  "-file", "c:/cygwin/tmp/mmex.aaf",
+						  "-source", "video",
+						  "-read" };
 #else
 	return real_main( argc, (const char**)argv );
 #endif
