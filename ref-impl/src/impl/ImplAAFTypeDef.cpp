@@ -228,4 +228,19 @@ OMProperty * ImplAAFTypeDef::pvtCreateOMPropertyMBS
   return 0; // not reached!
 }
 
+// These all should be pure virtual, but if we allow client extension
+// of behavior, clients may have to instantiate these.
+bool ImplAAFTypeDef::IsAggregatable () const
+{ assert (0); return false; }
 
+bool ImplAAFTypeDef::IsStreamable () const
+{ assert (0); return false; }
+
+bool ImplAAFTypeDef::IsFixedArrayable () const
+{ assert (0); return false; }
+
+bool ImplAAFTypeDef::IsVariableArrayable () const
+{ assert (0); return false; }
+
+bool ImplAAFTypeDef::IsStringable () const
+{ assert (0); return false; }

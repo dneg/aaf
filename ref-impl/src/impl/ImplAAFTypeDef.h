@@ -185,6 +185,30 @@ public:
   virtual OMProperty *
     pvtCreateOMPropertyMBS (OMPropertyId pid,
 							const char * name) const;
+
+
+public:
+  // Pure virtual methods to assist in the composition of types.  Each
+  // type must implement these, to assist other types in determining
+  // if particular aggregations are legal.
+
+  // Returns true if aggregates (that is, Record types) may be made
+  // using this type as an element.
+  virtual bool IsAggregatable () const;
+
+  // Returns true if this type may be used as an element of a stream.
+  virtual bool IsStreamable () const;
+
+  // Returns true if this type may be used as an element of a
+  // fixed-size array.
+  virtual bool IsFixedArrayable () const;
+
+  // Returns true if this type may be used as an element of a
+  // variably-size array.
+  virtual bool IsVariableArrayable () const;
+
+  // Returns true if this type may be used as an element of a string.
+  virtual bool IsStringable () const;
 };
 
 //
