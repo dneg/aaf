@@ -81,6 +81,7 @@ bool Is_aafPulldownDir_t_Valid(aafPulldownDir_t param);
 bool Is_aafPulldownKind_t_Valid(aafPulldownKind_t param);
 bool Is_aafRGBAComponentKind_t_Valid(aafRGBAComponentKind_t param);
 bool Is_aafReferenceType_t_Valid(aafReferenceType_t param);
+bool Is_aafScanningDirection_t_Valid(aafScanningDirection_t param);
 bool Is_aafSearchDictionaryTag_t_Valid(aafSearchDictionaryTag_t param);
 bool Is_aafSearchTag_t_Valid(aafSearchTag_t param);
 bool Is_aafSignalStandard_t_Valid(aafSignalStandard_t param);

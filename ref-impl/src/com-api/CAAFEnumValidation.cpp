@@ -618,6 +618,23 @@ bool Is_aafReferenceType_t_Valid(aafReferenceType_t param)
   }
 }
 
+bool Is_aafScanningDirection_t_Valid(aafScanningDirection_t param)
+{
+  switch (param) {
+    case kAAFScanningLeftToRightTopToBottom:
+    case kAAFScanningRightToLeftTopToBottom:
+    case kAAFScanningLeftToRightBottomToTop:
+    case kAAFScanningRightToLeftBottomToTop:
+    case kAAFScanningTopToBottomLeftToRight:
+    case kAAFScanningTopToBottomRightToLeft:
+    case kAAFScanningBottomToTopLeftToRight:
+    case kAAFScanningBottomToTopRightToLeft:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool Is_aafSearchDictionaryTag_t_Valid(aafSearchDictionaryTag_t param)
 {
   switch (param) {

@@ -588,7 +588,7 @@ AD_XMETHOD1(SetAlphaSamplingWidth,
   //
   // Succeeds if all of the following are true:
   //
-  // If this method fails\, the FieldStartOffset property will not be
+  // If this method fails\, the AlphaSamplingWidth property will not be
   // changed.
   //
   // This method will return the following codes:
@@ -606,6 +606,7 @@ AD_XMETHOD1(GetAlphaSamplingWidth,
   //
   // Succeeds if all of the following are true:
   // - pAlphaSamplingWidth is a valid pointer
+  // - the property is present.
   //
   // If this method fails\, pAlphaSamplingWidth will not be changed.
   //
@@ -616,6 +617,49 @@ AD_XMETHOD1(GetAlphaSamplingWidth,
   //
   // AAFRESULT_NULL_PARAM
   //   - pAlphaSamplingWidth is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+AD_XMETHOD1(SetReversedByteOrder,
+                        [in],
+                                objPass,
+                                aafBoolean_t,
+                                reversedByteOrder,
+                                Optional.,
+                        Sets the ReversedByteOrder property.
+  //
+  // Succeeds if all of the following are true:
+  //
+  // If this method fails\, the ReversedByteOrder property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetReversedByteOrder,
+                        [out],
+                                objPass,
+                                aafBoolean_t *,
+                                pReversedByteOrder,
+                                Optional.,
+                        Gets the ReversedByteOrder property.
+  //
+  // Succeeds if all of the following are true:
+  // - pReversedByteOrder is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails\, pReversedByteOrder will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pReversedByteOrder is NULL.
   //
   // AAFRESULT_PROP_NOT_PRESENT
   //   - the property is not present.)

@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFRGBADescriptor\
+AAFRGBADescriptor2\
 #endm
 #c
 #startm .parent-module 0
@@ -30,15 +30,11 @@ AAFDigitalImageDescriptor\
 #endm
 #c
 #c #import ./AAFDigitalImageDescriptor.exp
-#import ./AAFRGBADescriptor2.exp
 AD_HEAD
 
 
 AD_IDL(//
-// IAAFRGBADescriptor is DEPRECATED.
-// Please use IAAFRGBADescriptor2.
-//
-// The IAAFRGBADescriptor interface is implemented by objects
+// The IAAFRGBADescriptor2 interface is implemented by objects
 // which describe video content data formatted using RGBA formatting.
 //
 // In addition to the parameters inherited from AAFDigitalImageDescriptor\,
@@ -65,11 +61,10 @@ AD_IDL(//
 //)
 
 
-AD_CLASS_UUID(e684d771, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
+AD_CLASS_UUID(a97b83d, c40b, 4ee2, ad, f7, 45, 23, 6f, c2, 53, 44)
 
-AD_DEFAULT_UUID(e684d772, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
-
-AD_COM_EXT_CLASS_BEGIN(public IAAFRGBADescriptor2)
+AD_DEFAULT_UUID(205c5aae, 727a, 46c3, 83, 68, cd, 8b, 1d, 14, fb, dd)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_XMETHOD2(SetPixelLayout,
 			[in],
@@ -358,19 +353,235 @@ AD_XMETHOD2(GetPaletteLayout,
   // AAFRESULT_SMALLBUF
   //   - numberElements indicates that the array is too small to hold
   //     the data.)
-#c
-#c AAFRGBADescriptor2 methods
-#c
 
-AD_COM_METH(.method-SetComponentMaxRef)
-AD_COM_METH(.method-GetComponentMaxRef)
-AD_COM_METH(.method-SetComponentMinRef)
-AD_COM_METH(.method-GetComponentMinRef)
-AD_COM_METH(.method-SetAlphaMaxRef)
-AD_COM_METH(.method-GetAlphaMaxRef)
-AD_COM_METH(.method-SetAlphaMinRef)
-AD_COM_METH(.method-GetAlphaMinRef)
-AD_COM_METH(.method-SetScanningDirection)
-AD_COM_METH(.method-GetScanningDirection)
 
-AD_COM_EXT_CLASS_END(AAFRGBADescriptor2)
+AD_XMETHOD1(SetComponentMaxRef,
+			[in],
+				objPass,
+				aafUInt32,
+				componentMaxRef,
+				Optional.,
+			Sets the ComponentMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the ComponentMaxRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+
+AD_XMETHOD1(GetComponentMaxRef,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pComponentMaxRef,
+                                Optional.,
+                        Gets the ComponentMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pComponentMaxRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails\, pComponentMaxRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponentMaxRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetComponentMinRef,
+			[in],
+				objPass,
+				aafUInt32,
+				componentMinRef,
+				Optional.,
+			Sets the ComponentMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the ComponentMinRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+
+AD_XMETHOD1(GetComponentMinRef,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pComponentMinRef,
+                                Optional.,
+                        Gets the ComponentMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pComponentMinRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails\, pComponentMinRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponentMinRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetAlphaMaxRef,
+			[in],
+				objPass,
+				aafUInt32,
+				alphaMaxRef,
+				Optional.,
+			Sets the AlphaMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the AlphaMaxRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+
+AD_XMETHOD1(GetAlphaMaxRef,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pAlphaMaxRef,
+                                Optional.,
+                        Gets the AlphaMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pAlphaMaxRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails\, pAlphaMaxRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAlphaMaxRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetAlphaMinRef,
+			[in],
+				objPass,
+				aafUInt32,
+				alphaMinRef,
+				Optional.,
+			Sets the AlphaMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the AlphaMinRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+
+AD_XMETHOD1(GetAlphaMinRef,
+                        [out],
+                                objPass,
+                                aafUInt32 *,
+                                pAlphaMinRef,
+                                Optional.,
+                        Gets the AlphaMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pAlphaMinRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails\, pAlphaMinRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAlphaMinRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XMETHOD1(SetScanningDirection,
+			[in],
+				enumIn,
+				aafScanningDirection_t,
+				scanningDirection,
+				Scanning direction value.,
+			Sets the ScanningDirection property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - scanningDirection is a value value.
+  // 
+  // If this method fails\, the ScanningDirection property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
+  //   - scanningDirection is not a valid value.)
+
+
+AD_XMETHOD1(GetScanningDirection,
+			[out],
+				objPass,
+				aafScanningDirection_t *,
+				pScanningDirection,
+				Scanning direction value.,
+			Gets the ScanningDirection property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - pScanningDirection is a valid pointer
+  // - the property is present.
+  // 
+  // If this method fails\, pScanningDirection not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pScanningDirection is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+
+AD_XCLASS_END(Concrete, StoredObject)

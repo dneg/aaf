@@ -632,7 +632,7 @@ public:
   //
   // Succeeds if all of the following are true:
   //
-  // If this method fails, the FieldStartOffset property will not be
+  // If this method fails, the AlphaSamplingWidth property will not be
   // changed.
   //
   // This method will return the following codes:
@@ -656,6 +656,7 @@ public:
   //
   // Succeeds if all of the following are true:
   // - pAlphaSamplingWidth is a valid pointer
+  // - the property is present.
   //
   // If this method fails, pAlphaSamplingWidth will not be changed.
   //
@@ -675,6 +676,61 @@ public:
    (
     // @parm [out] aafUInt32 * | pAlphaSamplingWidth | Optional.
     aafUInt32 *  pAlphaSamplingWidth
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetReversedByteOrder()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFCDCIDescriptor2 | SetReversedByteOrder |
+  // Sets the ReversedByteOrder property.
+  //
+  // Succeeds if all of the following are true:
+  //
+  // If this method fails, the ReversedByteOrder property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetReversedByteOrder)
+   (
+    // @parm [in] aafBoolean_t | reversedByteOrder | Optional.
+    aafBoolean_t  reversedByteOrder
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetReversedByteOrder()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFCDCIDescriptor2 | GetReversedByteOrder |
+  // Gets the ReversedByteOrder property.
+  //
+  // Succeeds if all of the following are true:
+  // - pReversedByteOrder is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pReversedByteOrder will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pReversedByteOrder is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetReversedByteOrder)
+   (
+    // @parm [out] aafBoolean_t * | pReversedByteOrder | Optional.
+    aafBoolean_t *  pReversedByteOrder
   );
 
 

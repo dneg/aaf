@@ -43,6 +43,7 @@
 
 
 
+
 #ifndef __CAAFDigitalImageDescriptor_h__
 #include "CAAFDigitalImageDescriptor.h"
 #endif
@@ -50,6 +51,7 @@
 
 class CAAFRGBADescriptor
   : public IAAFRGBADescriptor,
+    public IAAFRGBADescriptor2,
     public CAAFDigitalImageDescriptor
 {
 protected:
@@ -62,7 +64,6 @@ protected:
   virtual ~CAAFRGBADescriptor ();
 
 public:
-
 
 
   //***********************************************************
@@ -355,6 +356,286 @@ public:
     // Array to hold 8 aafRGBAComponent_t indicating component order and size.
     /*[out, size_is(numberElements)]*/ aafRGBAComponent_t*  PaletteLayoutArray);
 
+  //***********************************************************
+  // METHOD NAME: SetComponentMaxRef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetComponentMaxRef |
+  // Sets the ComponentMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the ComponentMaxRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetComponentMaxRef)
+   (
+    // @parm [in] aafUInt32 | componentMaxRef | Optional.
+    aafUInt32  componentMaxRef
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetComponentMaxRef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetComponentMaxRef |
+  // Gets the ComponentMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pComponentMaxRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pComponentMaxRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponentMaxRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetComponentMaxRef)
+   (
+    // @parm [out] aafUInt32 * | pComponentMaxRef | Optional.
+    aafUInt32 *  pComponentMaxRef
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetComponentMinRef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetComponentMinRef |
+  // Sets the ComponentMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the ComponentMinRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetComponentMinRef)
+   (
+    // @parm [in] aafUInt32 | componentMinRef | Optional.
+    aafUInt32  componentMinRef
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetComponentMinRef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetComponentMinRef |
+  // Gets the ComponentMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pComponentMinRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pComponentMinRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponentMinRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetComponentMinRef)
+   (
+    // @parm [out] aafUInt32 * | pComponentMinRef | Optional.
+    aafUInt32 *  pComponentMinRef
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetAlphaMaxRef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetAlphaMaxRef |
+  // Sets the AlphaMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the AlphaMaxRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetAlphaMaxRef)
+   (
+    // @parm [in] aafUInt32 | alphaMaxRef | Optional.
+    aafUInt32  alphaMaxRef
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetAlphaMaxRef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetAlphaMaxRef |
+  // Gets the AlphaMaxRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pAlphaMaxRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pAlphaMaxRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAlphaMaxRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetAlphaMaxRef)
+   (
+    // @parm [out] aafUInt32 * | pAlphaMaxRef | Optional.
+    aafUInt32 *  pAlphaMaxRef
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetAlphaMinRef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetAlphaMinRef |
+  // Sets the AlphaMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the AlphaMinRef property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetAlphaMinRef)
+   (
+    // @parm [in] aafUInt32 | alphaMinRef | Optional.
+    aafUInt32  alphaMinRef
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetAlphaMinRef()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetAlphaMinRef |
+  // Gets the AlphaMinRef property.
+  //
+  // Succeeds if all of the following are true:
+  // - pAlphaMinRef is a valid pointer
+  // - the property is present.
+  //
+  // If this method fails, pAlphaMinRef will not be changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAlphaMinRef is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetAlphaMinRef)
+   (
+    // @parm [out] aafUInt32 * | pAlphaMinRef | Optional.
+    aafUInt32 *  pAlphaMinRef
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetScanningDirection()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetScanningDirection |
+  // Sets the ScanningDirection property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - scanningDirection is a value value.
+  // 
+  // If this method fails, the ScanningDirection property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
+  //   - scanningDirection is not a valid value.
+  // @end
+  // 
+  STDMETHOD (SetScanningDirection)
+   (
+    // @parm [in] aafScanningDirection_t | scanningDirection | Scanning direction value.
+    aafScanningDirection_t  scanningDirection
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetScanningDirection()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetScanningDirection |
+  // Gets the ScanningDirection property.  This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - pScanningDirection is a valid pointer
+  // - the property is present.
+  // 
+  // If this method fails, pScanningDirection not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pScanningDirection is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetScanningDirection)
+   (
+    // @parm [out] aafScanningDirection_t * | pScanningDirection | Scanning direction value.
+    aafScanningDirection_t *  pScanningDirection
+  );
+
+
 
 protected:
   // 
@@ -376,5 +657,4 @@ public:
 };
 
 #endif // ! __CAAFRGBADescriptor_h__
-
 

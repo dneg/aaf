@@ -43,6 +43,7 @@ AAFCOMINTERFACESONLY="\
 	AAFMasterMob2 \
 	AAFMasterMobEx \
 	AAFMob2 \
+	AAFRGBADescriptor2 \
 	AAFSearchSource \
 	AAFSourceReference2 \
 	AAFTimelineMobSlot2 \

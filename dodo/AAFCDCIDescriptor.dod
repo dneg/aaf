@@ -581,5 +581,7 @@ AD_XMETHOD1(GetPaddingBits,
 
 AD_COM_METH(.method-SetAlphaSamplingWidth)
 AD_COM_METH(.method-GetAlphaSamplingWidth)
+AD_COM_METH(.method-SetReversedByteOrder)
+AD_COM_METH(.method-GetReversedByteOrder)
 
 AD_COM_EXT_CLASS_END(AAFCDCIDescriptor2)
