@@ -71,7 +71,18 @@ function trim(s, n) {
 }
 
 function rowcolor(files) {
-  return "#FFCCCC";
+  result = "#FFCCCC";
+  /* Get first file */
+  split(files, fns, ",");
+  ff = fns[1];
+  printf("<!--[%s]-->\n", ff);
+  /* Get directory of file */
+  if (match(ff, "ref-impl/src/OM")) {
+    result = "#CCFFCC";
+  } else if (match(ff, "ref-impl/include/OM")) {
+    result = "#CCFFCC";
+  }
+  return result;
 }
 
 function entry(entrytext) {
