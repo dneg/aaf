@@ -481,3 +481,30 @@
 	end
 	rename -y "{comh}AAFObjectTable.tmp" "{comh}AAFObjectTable_i.cpp"
 	SetFile -t TEXT -c CWIE -a L "{comh}AAFObjectTable_i.cpp"
+
+ 
+"{comh}CAAFEnumValidation.log" ÄÄ "{dod}AAFTypes.dod" "{dod}AAFTypes.dod" "{comh}CAAFEnumValidation.h" "{comh}CAAFEnumValidation.cpp"
+	echo "{comh}CAAFEnumValidation.h"
+	echo "{comh}CAAFEnumValidation.cpp"
+	perl GenEnumValidation.pl "{dod}AAFTypes.dod" "{dod}AAFTypes.dod" > "{macdodo}CAAFEnumValidation.log"
+	Set error {Status}
+	if {error} == 0
+		if "`exists -f "{comh}CAAFEnumValidation.h"`"
+			SetFile -a l "{comh}CAAFEnumValidation.h"
+			Delete -i -ay "{comh}CAAFEnumValidation.h"
+		end
+		move -y CAAFEnumValidation.h "{comh}"
+		SetFile -t TEXT -c CWIE -a L "{comh}CAAFEnumValidation.h"
+		if "`exists -f "{comc}CAAFEnumValidation.cpp"`"
+			SetFile -a l "{comc}CAAFEnumValidation.cpp"
+			Delete -i -ay "{comc}CAAFEnumValidation.cpp"
+		end
+		move -y CAAFEnumValidation.cpp "{comc}"
+		SetFile -t TEXT -c CWIE -a L "{comc}CAAFEnumValidation.cpp"
+		move -y "{macdodo}CAAFEnumValidation.log" "{comh}CAAFEnumValidation.log"
+	end
+	
+"{comh}CAAFEnumValidation.h" ÄÄ "{comh}CAAFEnumValidation.log"
+
+"{comc}CAAFEnumValidation.cpp" ÄÄ "{comh}CAAFEnumValidation.log"
+
