@@ -181,8 +181,6 @@ size_t squeezeWideString(const wchar_t* clearName,
   //   @rdesc The saved character string.
 char* saveString(const char* string);
 
-size_t lengthOfOMString(const OMCharacter* string);
-
   // Manipulation of property paths
 
 bool validPropertyPath(const OMPropertyId* path);

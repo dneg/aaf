@@ -407,17 +407,6 @@ size_t squeezeWideString(const wchar_t* clearName,
   return result;
 }
 
-size_t lengthOfOMString(const OMCharacter* string)
-{
-  const OMCharacter* p = string;
-  size_t length = 0;
-  while (*p != 0) {
-    ++length;
-    ++p;
-  }
-  return length;
-}
-
   // Manipulation of property paths (eventually these will be
   // intantiations of templates shared with the wide character
   // functions).
