@@ -2145,9 +2145,9 @@ bool ClassDefinition::visitPostOrder(VisitDefinitionProcType f, void *userData) 
   // Call the visit proc for each property definition.
   // NOTE: Should we acutally visit the properties in "reverse"
   // order for "real" post-order traversal?
-  for (aafUInt32 i = (propertyCount() - 1); (i >= 0) && bContinue; --i)
+  for (aafUInt32 i = propertyCount(); (i > 0) && bContinue; --i)
   {
-    bContinue = propertyDefinitionAt(i)->visitPostOrder(f, userData);
+    bContinue = propertyDefinitionAt(i-1)->visitPostOrder(f, userData);
   }
 
   if (bContinue)
@@ -2582,9 +2582,9 @@ bool TypeDefinitionRecord::visitPostOrder(VisitDefinitionProcType f, void *userD
   bool bContinue = false;
 
   // Call the visit proc for this record's field type definitions.
-  for (aafUInt32 i = (fieldCount() - 1); (i >= 0) && bContinue; ++i)
+  for (aafUInt32 i = fieldCount(); (i > 0) && bContinue; --i)
   {
-    bContinue = fieldAt(i)->typeDefinition()->visitPostOrder(f, userData);
+    bContinue = fieldAt(i-1)->typeDefinition()->visitPostOrder(f, userData);
   }
 
   if (bContinue)
