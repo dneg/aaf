@@ -31,12 +31,21 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
 
+#ifndef __ImplAAFPropValData_h__
+#include "ImplAAFPropValData.h"
+#endif
+
+#include "ImplAAFObjectCreation.h"
+
 #include <assert.h>
 #include <string.h>
 
 #if defined(macintosh) || defined(_MAC)
 #include <wstring.h>
 #endif
+
+extern "C" const aafClassID_t CLSID_AAFPropValData;
+
 
 ImplAAFTypeDef::ImplAAFTypeDef ()
 {}
@@ -159,6 +168,73 @@ OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
   return 0; // not reached!
 }
 
+
+
+
+// Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+// for the given OMProperty.
+AAFRESULT STDMETHODCALLTYPE
+  ImplAAFTypeDef::CreatePropertyValue(
+    OMProperty *property,
+    ImplAAFPropertyValue ** ppPropertyValue ) const
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  assert (property && ppPropertyValue);
+  if (NULL == property || NULL == ppPropertyValue)
+    return AAFRESULT_NULL_PARAM;
+  *ppPropertyValue = NULL; // initialize out parameter
+  assert (property->definition());
+  if (NULL == property->definition())
+    return AAFRESULT_INVALID_PARAM;
+  const OMType *type = property->definition()->type();
+  assert (type);
+  ImplAAFTypeDef *ptd = const_cast<ImplAAFTypeDef *>
+                          (dynamic_cast<const ImplAAFTypeDef *>(type));
+  assert (ptd);
+  if (NULL == ptd)
+    return AAFRESULT_INVALID_PARAM;
+ 
+  ImplAAFPropValData *pvd = NULL;
+  pvd = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
+  if (!pvd) 
+    return AAFRESULT_NOMEMORY;
+
+  result = pvd->Initialize (ptd);
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    // set the storage in the prop value
+    size_t bitsSize;
+    assert (property);
+    bitsSize = property->bitsSize ();
+    aafMemPtr_t pBits = NULL;
+    // Bobt hack! This should be removed once we have proper
+    // integration with OM property def support.
+    if (! property->isOptional() || property->isPresent ())
+    {
+      result = pvd->AllocateBits (bitsSize, &pBits);
+      if (AAFRESULT_SUCCEEDED (result))
+      {
+	if (bitsSize)
+        {
+          assert (pBits);
+          property->getBits (pBits, bitsSize);
+        }
+      }
+    }
+  }
+
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    *ppPropertyValue = pvd; // ref count is already 1.
+    pvd = NULL;
+  }
+  else
+  {
+    pvd->ReleaseReference(); // delete the new object.
+  }
+
+  return (result) ;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDef::pvtGetUInt8Array8Type (
