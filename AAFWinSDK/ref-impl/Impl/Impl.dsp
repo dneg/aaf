@@ -183,14 +183,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEdgecode.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEffect.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEffectDef.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceAccess.cpp"
 # End Source File
 # Begin Source File
@@ -316,6 +308,14 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFNetworkLocator.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFObject.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFOperationDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFOperationGroup.cpp"
 # End Source File
 # Begin Source File
 
@@ -555,10 +555,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFDefs.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFEffectDefs.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFEssenceData.cpp"
 # End Source File
 # Begin Source File
@@ -584,6 +580,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMobs.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMobSlots.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFOperationDefs.cpp"
 # End Source File
 # Begin Source File
 

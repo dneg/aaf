@@ -265,22 +265,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEdgecodeTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFEffect.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFEffectDef.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEffectDefTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEffectTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEssenceAccess.cpp"
 # ADD CPP /I "../../../ref-impl/plugins/"
 # End Source File
@@ -544,6 +528,22 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFObject.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFObjectTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFOperationDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFOperationDefTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFOperationGroup.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFOperationGroupTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -1019,14 +1019,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFDefsTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFEffectDefs.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFEffectDefsTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFEssenceData.cpp"
 # End Source File
 # Begin Source File
@@ -1080,6 +1072,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFMobSlotsTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFMobsTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFOperationDefs.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFOperationDefsTest.cpp"
 # End Source File
 # Begin Source File
 
