@@ -8,6 +8,18 @@ AAFObject\
 #c
 #import ./AAFObject.exp
 AD_HEAD
+AD_IDL(//
+// The IAAFIdentification interface provides information about the
+// application that created or modified the AAF file.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 AD_CLASS_UUID(B1A2137F, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A2137E, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -87,7 +99,9 @@ AD_XMETHOD1(SetCompanyName,
 			The Company Name,
 			Set the Company Name property to the value specified in pName.  A
   // copy is made of the data so the caller retains ownership of the
-  // *pName buffer and is responsible for de-allocating it.
+  // *pName buffer and is responsible for de-allocating it.  There is
+  // no pre-set limit to the length of the name\, other than available
+  // system memory or disk space.
   // 
   // Succeeds if all of the following are true:
   // - the pName pointer is valid.
@@ -275,7 +289,7 @@ AD_XMETHOD1(SetProductVersionString,
 			wchar_t *,
 			pVersionString,
 			The Product Version String,
-  // Set the Product Version String property to the value specified in
+			Set the Product Version String property to the value specified in
   // pVersionString.  A copy is made of the data so the caller retains
   // ownership of the *pVersionString buffer and is responsible for
   // de-allocating it. 
@@ -331,8 +345,11 @@ AD_XMETHOD1(GetProductID,
 			aafUID_t *,
 			pProductID,
 			The Product ID,
-			Writes the Product ID property into the caller-allocated aafUID_t
-  // specified by the pProductID argument.
+			Obtains the Product ID\, which is the identification number
+  // assigned to the application and vendor of the application which
+  // created or last modified this AAF file.  This ID is written into
+  // the caller-allocated aafUID_t specified by the pProductID
+  // argument.
   // 
   // Succeeds if all of the following are true:
   // - the pProductID pointer is valid.
@@ -410,8 +427,8 @@ AD_XMETHOD1(GetRefImplVersion,
 			aafProductVersion_t *,
 			pVersion,
 			The Reference Implementation Version,
-			Return the property. This is a
-  // Writes the Reference Implementation Version property into the
+			Obtains the version of the Reference Implementation which created
+  // or last modified this AAF file and writes it into the
   // caller-allocated aafProductVersion_t specified by the pVersion
   // argument.
   //
@@ -508,8 +525,10 @@ AD_XMETHOD1(GetGeneration,
 			aafUID_t *,
 			pGeneration,
 			The unique generation,
-			Writes the unique generation property into the caller-allocated
-  // aafUID_t specified by the pGeneration argument.
+			Obtains the generation of this AAF file\, which was generated at
+  // the time the application created or opened this file for
+  // modification.  This is written into the caller-allocated aafUID_t
+  // specified by the pGeneration argument.
   // 
   // Note: This is a read-only property.
   // 
