@@ -383,6 +383,7 @@ cleanup:
 
 	if (pFile) 
 	{
+		pFile->Save();
 		pFile->Close();
 		pFile->Release();
 	}
