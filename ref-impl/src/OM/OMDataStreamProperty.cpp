@@ -14,12 +14,9 @@ OMDataStreamProperty::~OMDataStreamProperty(void)
 {
 }
 
-  // @mfunc Save this <c OMDataStreamProperty> to the
-  //        <c OMStoredObject> <p s>.
-  //   @parm The <c OMStoredObject> on which to save this
-  //         <c OMDataStreamProperty>.
+  // @mfunc Save this <c OMDataStreamProperty>.
   //   @this const
-void OMDataStreamProperty::saveTo(OMStoredObject& s) const
+void OMDataStreamProperty::save(void) const
 {
   // stub
 }

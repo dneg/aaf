@@ -34,33 +34,40 @@ OMStorable::~OMStorable(void)
 
 void OMStorable::save(void) const
 {
-  saveTo(*store());
-}
-
-void OMStorable::saveTo(OMStoredObject& s) const
-{
-  TRACE("OMStorable::saveTo");
+  TRACE("OMStorable::save");
   
   size_t context = 0;
   //_file->objectDirectory()->insert(pathName(), this);
-  s.save(classId());
+  store()->save(classId());
   for (size_t i = 0; i < _persistentProperties.count(); i++)
   {
     OMProperty* p = 0;
     _persistentProperties.iterate(context, p);
     ASSERT("Valid property", p != 0);
-    s.save(p);
+    store()->save(p);
   }
+  store()->saveIndex();
 }
 
-void OMStorable::save(OMStoredObject& s, const OMStorable* p)
+void OMStorable::close(void)
 {
-  TRACE("OMStorable::save");
-  if (p != 0) {
-    p->saveTo(s);
-  } else {
-    // Treat null as a reference to non-existent object 0.
+  PRECONDITION("Object is attached", attached());
+  PRECONDITION("Not already closed", _store != 0);
+
+  size_t context = 0;
+  for (size_t i = 0; i < _persistentProperties.count(); i++)
+  {
+    OMProperty* p = 0;
+    _persistentProperties.iterate(context, p);
+    ASSERT("Valid property", p != 0);
+    p->close();
   }
+
+  _store->close();
+  delete _store;
+  _store = 0;
+
+  POSTCONDITION("Closed", _store == 0);
 }
 
 void OMStorable::restoreContentsFrom(OMStoredObject& s)
