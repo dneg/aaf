@@ -192,6 +192,11 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+const OMUniqueObjectIdentification&
+  ImplAAFParameter::identification(void) const
+{
+  return *reinterpret_cast<const OMUniqueObjectIdentification*>(&_parmDef.reference());
+}
 
 
 
