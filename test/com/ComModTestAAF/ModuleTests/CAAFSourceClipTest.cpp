@@ -329,8 +329,8 @@ HRESULT CAAFSourceClip::test()
 	try
 	{
 		hr = CreateAAFFile(	pFileName );
-
-		hr = ReadAAFFile( pFileName );
+		if(hr == AFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
 	}
 	catch (...)
 	{
@@ -343,7 +343,11 @@ HRESULT CAAFSourceClip::test()
   if (pObject)
 	pObject->Release();
 
-  return hr;
+  	// When all of the functionality of this class is tested, we can return success
+	if(hr == AAFRESULT_SUCCESS)
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+
+	return hr;
 }
 
 
