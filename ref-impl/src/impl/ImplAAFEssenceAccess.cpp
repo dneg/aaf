@@ -870,7 +870,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{						
 			CHECK(fileMob->GetMobID(&fileMobID));
 			CHECK(compHead->GetContentStorage (&cStore));
-			if(cStore->LookupEssence (fileMobID, &essenceData) == AAFRESULT_SUCCESS)
+			if(cStore->LookupEssenceData (fileMobID, &essenceData) == AAFRESULT_SUCCESS)
 			{
 				found = kAAFTrue;
 				CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
@@ -925,7 +925,7 @@ AAFRESULT STDMETHODCALLTYPE
 					{												
 						CHECK(_dataFile->GetHeader(&dataHead));
 						CHECK(dataHead->GetContentStorage (&cStore));
-						if(cStore->LookupEssence (fileMobID, &essenceData) == AAFRESULT_SUCCESS)
+						if(cStore->LookupEssenceData (fileMobID, &essenceData) == AAFRESULT_SUCCESS)
 							found = kAAFTrue;
 						cStore->ReleaseReference();
 						cStore = NULL;
@@ -1214,7 +1214,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{						
 			CHECK(fileMob->GetMobID(&fileMobID));
 			CHECK(compHead->GetContentStorage (&cStore));
-			if(cStore->LookupEssence (fileMobID, &essenceData) == AAFRESULT_SUCCESS)
+			if(cStore->LookupEssenceData (fileMobID, &essenceData) == AAFRESULT_SUCCESS)
 			{
 				found = kAAFTrue;
 				CHECK(plugins->CreateInstance(CLSID_AAFEssenceDataStream,
@@ -1270,7 +1270,7 @@ AAFRESULT STDMETHODCALLTYPE
 					{												
 						CHECK(_dataFile->GetHeader(&dataHead));
 						CHECK(dataHead->GetContentStorage (&cStore));
-						if(cStore->LookupEssence (fileMobID, &essenceData) == AAFRESULT_SUCCESS)
+						if(cStore->LookupEssenceData (fileMobID, &essenceData) == AAFRESULT_SUCCESS)
 							found = kAAFTrue;
 						cStore->ReleaseReference();
 						cStore = NULL;
