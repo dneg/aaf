@@ -23,7 +23,7 @@ AD_METHOD1(itsFile,
   // store\, or NULL for transient objects.)
 
 AD_METHOD1(isForeignByteOrder,
-		   [out],AAFBool *,isForeign,,
+		   [out],aafBool *,isForeign,,
 		   Returns TRUE if the given object has a non-native byte
   // order.)
   //@comm This routine is optimized in the common case (objects byte order == file byte order).	
@@ -34,8 +34,8 @@ AD_METHOD0(Delete,
   //@comm Replaces omfsObjectDelete
 
 AD_METHOD2(IsTypeOf,
-		   [in],AUID_t    ,aClass, AUID corresponding to a class,
-		   [out],AAFBool,Result, ,
+		   [in],aafUID_t    ,aClass, AUID corresponding to a class,
+		   [out],aafBool*,Result, ,
 		   Test if an object is a member of the given class\, or a
   // member of one of its subclasses.) 
 
