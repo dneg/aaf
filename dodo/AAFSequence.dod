@@ -37,18 +37,18 @@ AD_CLASS_UUID(66e855f1, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(66e855f0, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(Initialize,
-			[in\, ref],
-			objPass,
-			aafUID_constref,
-			datadef,
+			[in],
+			objIn,
+			AAFDataDef,
+			pDataDef,
 			DataDef of this object,
-			This function sets the properties on a newly created sequence
-  // object with the given property values. The length of the sequence is
-  // initially set to 0.  When components are appended to the sequence with
-  // the AppendComponent\(\) call\, the length of the appended component is
-  // added to the length of the sequence.  The given DataDef specifies
-  // the kind of data which all components to be contained in this
-  // sequence must share.
+     This function sets the properties on a newly created sequence
+  // object with the given property values. The length of the sequence
+  // is initially set to 0.  When components are appended to the
+  // sequence with the AppendComponent\(\) call\, the length of the
+  // appended component is added to the length of the sequence.  The
+  // given DataDef specifies the kind of data which all components to
+  // be contained in this sequence must share.
   // 
   // Succeeds if all of the following are true:
   // - this object has not yet been initialized.
@@ -62,6 +62,9 @@ AD_XMETHOD1(Initialize,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef is null.
+  //
   // AAFRESULT_ALREADY_INITIALIZED
   //   - Initialize\(\) has already been called on this object.)
 
@@ -72,14 +75,15 @@ AD_XMETHOD1(AppendComponent,
 			AAFComponent,
 			pComponent,
 			Component to append to the sequence,
-			This function appends the input component to the given sequence\,
+     This function appends the input component to the given sequence\,
   // enforcing bottom up creation of mobs.  The length of the sequence
-  // is incremented by the size of the component\, unless the component
-  // is a transition.  If the component is a transition\, it verifies
-  // that it is not the first object in a transition\, and that it is
-  // not neighboring another transition.  It also verifies that there
-  // is enough source material on either side of the transition.  The
-  // function also verifies that the datadefs are compatible.
+  // is incremented by the size of the component\, unless the
+  // component is a transition.  If the component is a transition\, it
+  // verifies that it is not the first object in a transition\, and
+  // that it is not neighboring another transition.  It also verifies
+  // that there is enough source material on either side of the
+  // transition.  The function also verifies that the datadefs are
+  // compatible.
   //
   // This method will AddRef\(\) the component if it succeeds.
   //
@@ -127,14 +131,15 @@ AD_XMETHOD1(PrependComponent,
 			AAFComponent,
 			pComponent,
 			Component to prepend to the sequence,
-			This function prepends the input component to the given sequence\,
-  // enforcing bottom up creation of mobs.  The length of the sequence
-  // is incremented by the size of the component\, unless the component
-  // is a transition.  If the component is a transition\, it verifies
-  // that it is not the first object in a transition\, and that it is
-  // not neighboring another transition.  It also verifies that there
-  // is enough source material on either side of the transition.  The
-  // function also verifies that the datadefs are compatible.
+     This function prepends the input component to the given
+  // sequence\, enforcing bottom up creation of mobs.  The length of
+  // the sequence is incremented by the size of the component\, unless
+  // the component is a transition.  If the component is a
+  // transition\, it verifies that it is not the first object in a
+  // transition\, and that it is not neighboring another transition.
+  // It also verifies that there is enough source material on either
+  // side of the transition.  The function also verifies that the
+  // datadefs are compatible.
   //
   // This method will AddRef\(\) the component if it succeeds.
   //

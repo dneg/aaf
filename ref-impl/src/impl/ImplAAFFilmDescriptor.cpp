@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -57,12 +57,10 @@ ImplAAFFilmDescriptor::~ImplAAFFilmDescriptor ()
 }
 
 
-//@access Public Members
 
-/****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFilmManufacturer (
-      wchar_t *name)
+      const aafCharacter *name)
 {
 	if(name == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -73,10 +71,10 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmManufacturer (
-      wchar_t *name, aafInt32 bufSize)
+      aafCharacter *name, aafUInt32 bufSize)
 {
 	if(name == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -95,12 +93,10 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS); 
 }
 
-	//@comm Returns a zero-length string if the property was not present
 
-/****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmManufacturerBufLen (
-      aafInt32 *bufSize)
+      aafUInt32 *bufSize)
 {
 	if(bufSize == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -112,10 +108,10 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS); 
 }
 	
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFilmModel (
-      wchar_t *name)
+      const aafCharacter *name)
 {
 	if(name == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -126,10 +122,10 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmModel (
-      wchar_t *name, aafInt32 bufSize)
+      aafCharacter *name, aafUInt32 bufSize)
 {
 	if(name == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -148,10 +144,10 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS); 
 }
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmModelBufLen (
-      aafInt32 *bufSize)
+      aafUInt32 *bufSize)
 {		
 	if(bufSize == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -163,7 +159,7 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS); 
 }
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmFormat (
       aafFilmType_t*filmFormat)
@@ -177,9 +173,7 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS); 
 }
 
-	//@comm Film format may be: kFt35MM, kFt16MM, kFt8MM, kFt65MM
 
-/****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFrameRate (
       aafUInt32*  rate)
@@ -194,7 +188,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetPerfPerFrame (
       aafUInt8* perfPerFrame)
@@ -209,7 +203,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::GetFilmAspectRatio (
       aafRational_t*aspectRatio)
@@ -224,7 +218,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFilmFormat (
       aafFilmType_t  filmFormat)
@@ -233,9 +227,7 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS); 
 }
 
-	//@comm kFt35MM, kFt16MM, kFt8MM, kFt65MM
 
-/****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFrameRate (
       aafUInt32 rate)
@@ -245,7 +237,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetPerfPerFrame (
       aafUInt8 perfPerFrame)
@@ -255,7 +247,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-/****/
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFFilmDescriptor::SetFilmAspectRatio (
       aafRational_t  aspectRatio)
@@ -272,7 +264,3 @@ AAFRESULT STDMETHODCALLTYPE
 	*pMobKind = kFilmMob;
 	return(AAFRESULT_SUCCESS);
 }
-
-
-
-

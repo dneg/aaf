@@ -42,7 +42,7 @@ AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD0(Initialize,
-		   Initializes a newly allocated\, empty IAAFMasterMob-supporting
+     Initializes a newly allocated\, empty IAAFMasterMob-supporting
   // object.  This method must be called after allocation\, and before
   // any other method can be called.
   //
@@ -61,11 +61,11 @@ AD_METHOD0(Initialize,
 
 
 AD_XMETHOD5(AddMasterSlot,
-			[in\, ref],
-			  objPass,
-			  aafUID_constref,
-			  dataDef,
-    // Data kind of new slot.  Requires a data kind valid for a media
+			[in],
+			  objIn,
+			  AAFDataDef,
+			  pDataDef,
+       Data kind of new slot.  Requires a data kind valid for a media
 	// stream. Valid data kinds are:
     // - DDEF_Picture
     // - DDEF_Sound,
@@ -86,10 +86,10 @@ AD_XMETHOD5(AddMasterSlot,
 			  SlotID assigned to the new Master Mob slot,
 			[in\, string],
 			  objPass,
-			  aafCharacter *,
+			  aafCharacter_constptr,
 			  pSlotName,
 			  Name to assign to new slot in Master Mob,
-			This function adds a slot to the specified Master Mob that
+     This function adds a slot to the specified Master Mob that
   // references the specified a slot in the specified Source Mob. The
   // new slot in the Master Mob contains a Source Clip that specifies
   // the Source Mob in its source reference properties.  Typically this
@@ -117,7 +117,7 @@ AD_XMETHOD5(AddMasterSlot,
   //
   // AAFRESULT_NULL_PARAM
   //   - One or more of the following parameters are NULL pSourceMob\,
-  //     and pSlotName.
+  //     pSlotName\, and pDataDef.
   //
   // AAFRESULT_INVALID_DATADEF
   //   - The data kind of the source MOB slot to be added to the Master
@@ -143,10 +143,10 @@ AD_XMETHOD3(GetTapeName,
 			  The returned name,
 			[in],
 			  objPass,
-			  aafInt32,
+			  aafUInt32,
 			  bufSize,
 			  the size of the pTapeName buffer,
-			Finds the tape Source Mob associated with a Master Mob slot
+     Finds the tape Source Mob associated with a Master Mob slot
   // and writes the name of the tape\, which is stored in the
   // Mobs Name property\, into the pTapeName buffer.  The buffer is
   // allocated by the caller.  The size of the buffer is given by
@@ -198,13 +198,13 @@ AD_XMETHOD2(GetTapeNameBufLen,
 			  SlotID of the Master Mob slot,
 			[out],
 			  objPass,
-			  aafInt32 *,
+			  aafUInt32 *,
 			  pLen,
 			  required buffer length,
-			Returns the length of buffer required for the GetTapeName\(\)
-  // method.  The value is placed into the location specified by pLen.
-  // The value will include space required for the trailing null
-  // character.
+     Returns the length of buffer required for the GetTapeName\(\)
+  // method.  The value is placed into the location specified by
+  // pLen.  The value will include space required for the trailing
+  // null character.
   //
   // NOTE! Stub only.   Implementation not yet added.
   //
@@ -244,7 +244,7 @@ AD_XMETHOD2(GetNumRepresentations,
 			  aafNumSlots_t *,
 			  pNumReps,
 			  number of representations,
-			This function returns the number of media representations
+     This function returns the number of media representations
   // available for the specified SlotID on a specified Master
   // Mob. This function is meant to work with
   // GetRepresentationSourceClip\, so that you can iterate through
@@ -291,15 +291,16 @@ AD_XMETHOD3(GetRepresentationSourceClip,
 			  AAFSourceClip,
 			  ppSourceClip,
 			  Requested Source Clip,
-			This method returns the indexed media representation for the specified
-  // Master Mob\, SlotID\, and index.  This call is meant to work
-  // with GetNumRepresentations\, so that you can iterate through all
-  // of the choices yourself.  This method uses an integer index\, not
-  // an iterator.  The function GetRepresentationSourceClip takes an
-  // index between 1 and the number of representations [inclusive]\,
-  // and returns the indexed Source Mob. You can make calls to functions
-  // such as AAFMedia::GetVideoInfo and AAFMedia::IsMediaContiguous to
-  // determine which media is the best fit.
+     This method returns the indexed media representation for the
+  // specified Master Mob\, SlotID\, and index.  This call is meant to
+  // work with GetNumRepresentations\, so that you can iterate through
+  // all of the choices yourself.  This method uses an integer index\,
+  // not an iterator.  The function GetRepresentationSourceClip takes
+  // an index between 1 and the number of representations
+  // [inclusive]\, and returns the indexed Source Mob. You can make
+  // calls to functions such as AAFMedia::GetVideoInfo and
+  // AAFMedia::IsMediaContiguous to determine which media is the best
+  // fit.
   //
   // The returned source clip is AddRef\(\)ed before it is returned.
   //
@@ -340,7 +341,7 @@ AD_XMETHOD3(GetCriteriaSourceClip,
 			  objPass,
 			  aafMediaCriteria_t *,
 			  pCriteria,
-			Index of requested representation.  Note: the
+       Index of requested representation.  Note: the
 	// aafMediaCriteria_t is defined as the following structure:
     // typedef struct
     // {
@@ -363,7 +364,7 @@ AD_XMETHOD3(GetCriteriaSourceClip,
 			  AAFSourceClip,
 			  ppSourceClip,
 			  Requested Source Clip,
-  // Returns the Source Clip on the specified slot of a Master Mob
+     Returns the Source Clip on the specified slot of a Master Mob
   // that references the Source Mob that best meets the specified
   // criteria.  This function will work whether multiple media
   // representations exist or not.
@@ -405,10 +406,10 @@ AD_XMETHOD5(AppendPhysSourceRef,
 			  aafSlotID_t,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
-			[in\, ref],
-			  objPass,
-			  aafUID_constref,
-			  essenceKind,
+			[in],
+			  objIn,
+			  AAFDataDef,
+			  pEssenceKind,
 			Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
     // - Picture
@@ -440,6 +441,7 @@ AD_XMETHOD5(AppendPhysSourceRef,
   //
   // Succeeds if all of the following are true:
   // - the pSourceRefObj pointer is valid.
+  // - the pEssenceKind pointer is valid.
   // \(other conditions here\)
   // 
   // This method will return the following codes.  If more than one of
@@ -453,7 +455,7 @@ AD_XMETHOD5(AppendPhysSourceRef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pSourceRefObj is null.
+  //   - pSourceRefObj or pEssenceKind is null.
   //
   // \(other codes here.\))
 
@@ -469,11 +471,11 @@ AD_XMETHOD5(NewPhysSourceRef,
 			  aafSlotID_t,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
-			[in\, ref],
-				objPass,
-				aafUID_constref,
+			[in],
+				objIn,
+				AAFDataDef,
 			  pEssenceKind,
-			Data kind of slot to contain reference.  Requires a data kind
+       Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
     // - Picture
     // - Sound,
@@ -487,7 +489,7 @@ AD_XMETHOD5(NewPhysSourceRef,
 			  aafLength_t,
 			  srcRefLength,
 			  Length of the Source Clip,
-			Connects this Source Mob with the physical Source Mob that
+     Connects this Source Mob with the physical Source Mob that
   // describes the previous generation of essence\, replacing any
   // existing Mob data.  If a physical Source Mob\, such as a File
   // Source Mob or tape Source Mob\, references another physical
@@ -504,6 +506,7 @@ AD_XMETHOD5(NewPhysSourceRef,
   //
   // Succeeds if all of the following are true:
   // - the pSourceRefObj pointer is valid.
+  // - the pEssenceKind pointer is valid.
   // \(other conditions here\)
   // 
   // This method will return the following codes.  If more than one of
@@ -517,104 +520,106 @@ AD_XMETHOD5(NewPhysSourceRef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pSourceRefObj is null.
+  //   - pSourceRefObj or pEssenceKind is null.
   //
   // \(other codes here.\))
 
-/****/
+
 AD_XMETHOD9(CreateEssence,
 [in],objPass, aafSlotID_t,masterSlotID,,
-[in],objPass, aafUID_t,mediaKind,create essence of this type,
-[in],objPass, aafUID_t,codecID,using this codec,
+[in],objIn, AAFDataDef,pMediaKind,create essence of this type,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
 [in],objPass, aafRational_t,editRate,with this edit rate,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
-[in],objPass, aafUID_t,fileFormat,with this format,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
 [out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
-Creates a single channel stream of essence.)
-	//@comm Creates a single channel stream of essence.  Convenience functions
-	// exist to create audio or video essence\, and a separate call
-	// \(MultiCreate\) exists to create interleaved audio and
-	// video data.
-	//@comm The essence handle from this call can be used with
-	// WriteDataSamples  and possibly WriteDataLines\, but NOT with
-	// WriteMultiSamples.
-	//@comm If you are creating the essence\, and then attaching it to a master
-	// mob, then the "masterMob" field may be left NULL.
-	// For video\, the sampleRate should be the edit rate of the file mob.
-	// For audio\, the sample rate should be the actual samples per second.
 
-	
-/****/
+     Creates a single channel stream of essence.  Convenience
+  // functions exist to create audio or video essence\, and a separate
+  // call \(MultiCreate\) exists to create interleaved audio and video
+  // data.
+  //
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
+  // If you are creating the essence\, and then attaching it to a
+  // master mob\, then the "masterMob" field may be left NULL.  For
+  // video\, the sampleRate should be the edit rate of the file mob.
+  // For audio\, the sample rate should be the actual samples per
+  // second.)
+
+
 AD_XMETHOD7(CreateMultiEssence,
-[in],objPass, aafUID_t,codecID,using this codec,
+[in\, ref],objPass, aafUID_constref,codecID,using this codec,
 [in],objPass, aafInt16,arrayElemCount,this many channels,
 [in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
-[in],objPass, aafUID_t,fileFormat,with this format,
+[in\, ref],objPass, aafUID_constref,fileFormat,with this format,
 [out],objPass, IAAFEssenceMultiAccess**,access,Return an essence access on the essence.,
-Creates a multi-channel interleaved stream of essence.)
-	//@comm The essence handle from this call can be used with
-	// WriteDataSamples or WriteMultiSamples but NOT with 
-	// or WriteDataLines.
-	//@comm If you are creating the essence, and then attaching it to a master
-	// mob, then the "masterMob" field may be left NULL.
+     Creates a multi-channel interleaved stream of essence.  The
+  // essence handle from this call can be used with WriteDataSamples
+  // or WriteMultiSamples but NOT with or WriteDataLines.
+  // 
+  // If you are creating the essence\, and then attaching it to a
+  // master mob\, then the "masterMob" field may be left NULL.)
 
-/****/
+
 AD_XMETHOD5(OpenEssence,
 [in],objPass, aafSlotID_t,slotID,On this slot,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
 [in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
 [in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
 [out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
-Opens a single channel of a file mob.)
-	//@comm If the essence is interleaved,
-	// then it will be di-interleaved when samples are read.  This routine
-	// follows the locator, and may call the locator failure callback if
-	// the essence can not be found.  If the failure callback finds the essence,
-	// then this routine will return normally.
-	//@comm The essence handle from this call can be used with
-	// ReadDataSamples  and possibly ReadDataLines, but NOT with
-	// ReadMultiSamples.
-	//@comm Possible Errors:
-	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
-	//@comm NOTE: If a locator is followed, then essencePtr may reference ANOTHER file
-	// object, which must be closed on file close.
+     Opens a single channel of a file mob.  If the essence is
+  // interleaved\, then it will be di-interleaved when samples are
+  // read.  This routine follows the locator\, and may call the locator
+  // failure callback if the essence can not be found.  If the failure
+  // callback finds the essence\, then this routine will return
+  // normally.
+  // 
+  // The essence handle from this call can be used with
+  // ReadDataSamples  and possibly ReadDataLines\, but NOT with
+  // ReadMultiSamples.
+  // 
+  // NOTE: If a locator is followed\, then essencePtr may reference
+  // ANOTHER file object\, which must be closed on file close.)
 	
-/****/
+
 AD_XMETHOD5(OpenMultiEssence,
 [in],objPass, aafSlotID_t,slotID,On this slot,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
 [in],objPass, aafMediaOpenMode_t,openMode,ReadOnly or Append,
 [in],objPass, aafCompressEnable_t,compEnable,optionally decompressing,
 [out],objPass, IAAFEssenceMultiAccess**,access,Return an essence access on the essence.,
-Opens a all channels associated with a file mob.)
-	//@comm This routine
-	// follows the locator, and may call the locator failure callback if
-	// the essence can not be found.  If the failure callback finds the essence,
-	// then this routine will return normally.
-	//@comm The essence handle from this call can be used with
-	//  WriteMultiSamples but NOT with 
-	//  WriteDataSamples.
-	//@comm Possible Errors:
-	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+     Opens a all channels associated with a file mob.  This routine
+  // follows the locator\, and may call the locator failure callback if
+  // the essence can not be found.  If the failure callback finds the
+  // essence\, then this routine will return normally.
+  //
+  // The essence handle from this call can be used with
+  // WriteMultiSamples but NOT with WriteDataSamples.)
 
-/****/
+
 AD_XMETHOD4(GetNumChannels,
 [in],objPass, aafSlotID_t,slotID,On this slot,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this essence criteria,
-[in],objPass, aafUID_t,mediaKind,for this essence type,
+[in],objIn, AAFDataDef,pMediaKind,for this essence type,
 [out],objPass, aafInt16*,numCh,How many channels?,
-Takes an opaque handle  a master mob reference  and a slot ID so that it may be called before the essence is opened.)
-	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
-	//@comm If the data format is not interleaved, then the answer will
-	// always be zero or one.  This function correctly returns zero
-	// for essence types not handled by a given codec, and handles codecs
-	// which work with multiple essence types.
+     Takes an opaque handle\, a master mob reference\, and a slot ID
+  // so that it may be called before the essence is opened.
+  //
+  // Returns the number of interleaved essence channels of a given
+  // type in the essence stream referenced by the given file mob.
+  //
+  // If the data format is not interleaved\, then the answer will
+  // always be zero or one.  This function correctly returns zero for
+  // essence types not handled by a given codec\, and handles codecs
+  // which work with multiple essence types.)
+
 
 AD_COM_METH(.method-SearchSource)
 AD_XCLASS_END(Concrete, StoredObject)

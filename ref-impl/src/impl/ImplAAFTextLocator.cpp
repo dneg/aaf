@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -56,7 +56,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTextLocator::GetName (wchar_t* pNameBuf, aafInt32  bufSize)
+    ImplAAFTextLocator::GetName (aafCharacter* pNameBuf, aafUInt32  bufSize)
 {
 	bool stat;
 	if (! pNameBuf)
@@ -75,7 +75,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTextLocator::GetNameBufLen (aafInt32* pLen)
+    ImplAAFTextLocator::GetNameBufLen (aafUInt32* pLen)
 {
 	if (! pLen)
 	{
@@ -89,7 +89,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTextLocator::SetName (wchar_t* pNameBuf)
+    ImplAAFTextLocator::SetName (const aafCharacter* pNameBuf)
 {
 	if (! pNameBuf)
 	{

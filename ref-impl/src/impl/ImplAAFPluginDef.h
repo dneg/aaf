@@ -15,7 +15,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -99,7 +99,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
         (// @parm [out, string, size_is(bufSize)] buffer into which Name is to be written
-         wchar_t *  pName,
+         aafCharacter *  pName,
 
          // @parm [in] size of *pName buffer in bytes
          aafUInt32  bufSize);
@@ -126,7 +126,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDescription
-        (aafWChar *  description,  //@parm [in] Definition Description
+        (aafCharacter *  description,  //@parm [in] Definition Description
 		 aafUInt32 bufSize);	  //@parm [in] size of the buffer required to hold Definition Description + terminator
 
 
@@ -180,19 +180,19 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPluginVersionString
         (// @parm [in,string] Plugin version string
-         wchar_t *  pVersionString,
+         aafCharacter *  pVersionString,
 
          // @parm [in] length of the buffer to hold plugin version string
-         aafInt32  bufSize);
+         aafUInt32  bufSize);
 
 
   //****************
   // GetProductVersionStringLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetProductVersionStringLen
+    GetPluginVersionStringBufLen
         // @parm [out] Mob Name
-        (aafInt32 *  pLen);
+        (aafUInt32 *  pLen);
 
 
   //****************
@@ -210,19 +210,19 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPluginManufacturerName
         (// @parm [in,string] Plugin Manufacturer Name
-         wchar_t *  pManufacturerName,
+         aafCharacter *  pManufacturerName,
 
          // @parm [in] length of the buffer to hold plugin Manufacturer Name
-         aafInt32  bufSize);
+         aafUInt32  bufSize);
 
 
   //****************
-  // GetProductManufacturerNameLen()
+  // GetPluginManufacturerNameBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetProductManufacturerNameLen
+    GetPluginManufacturerNameBufLen
         // @parm [out] Manufacturer Name
-        (aafInt32 *  pLen);
+        (aafUInt32 *  pLen);
 
 
   //****************
@@ -285,7 +285,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetHardwarePlatform
         // @parm [in] The Category Class
-        (aafHardwarePlatform_t  hardwarePlatform);
+        (aafHardwarePlatform_constref  hardwarePlatform);
 
 
   //****************
@@ -333,7 +333,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEngine
         // @parm [in] The software engine
-        (aafEngine_t  engine);
+        (aafEngine_constref engine);
 
 
   //****************
@@ -381,7 +381,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetPluginAPI
         // @parm [in] The Category Class
-        (aafPluginAPI_t  pluginAPI);
+        (aafPluginAPI_constref  pluginAPI);
 
 
   //****************

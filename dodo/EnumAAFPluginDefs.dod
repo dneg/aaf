@@ -26,58 +26,12 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-
 AD_FORWARD_DECLARATION(AAFPluginDescriptor)
-
 AD_CLASS_UUID(AD1BB85D, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(AD1BB85F, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, Transient)
-
-AD_XMETHOD1(NextOne,
-			[out\,retval],
-			objOut,
-			AAFPluginDescriptor,
-			ppAAFPluginDescriptor,
-			The Next AAFPluginDescriptor,
-			Enumerates to the next element in the enumerators list. The caller is responsible 
-  // for properly releasing the returned pointer when it is no longer needed.
-  // @comm This is a just simplified version of the Next method. )
-
-AD_X2METHOD3(Next,
-			[in], objPass, aafUInt32, count, number of AAFPluginDescriptors requested,xxx,
-			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOutArray, AAFPluginDescriptor, ppAAFPluginDescriptors, array to receive AAFPluginDescriptors,count,
-			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual AAFPluginDescriptors fetched into ppAAFPluginDescriptors array,xxx,
-			Enumerates the next count elements \(AAFPluginDescriptor pointers\) in 
-  // the enumerator's list\, returning them in the given array along with the actual 
-  // number of enumerated elements in pcFetched. The caller is responsible for 
-  // properly releasing the returned pointers.)
-
-AD_METHOD1(Skip,
-		   [in], aafUInt32, count, Number of elements to skip,
-		   Instructs the enumerator to skip the next count elements in the enumeration so that 
-  // the next call to EnumAAFPluginDescriptors::Next will not return 
-  // those elements.)
-
-AD_METHOD0(Reset,
-Instructs the enumerator to position itself at the beginning of the list of elements. 
-  // @comm There is no guarantee that the same set of elements will be enumerated on 
-  // each pass through the list\, nor will the elements necessarily be enumerated in 
-  // the same order. The exact behavior depends on the collection being enumerated.)
-
-AD_XMETHOD1(Clone,
-			[out\,retval],
-			objOut,
-			EnumAAFPluginDescriptors,
-			ppEnum,
-			new enumeration,
-			Creates another AAFPluginDescriptor enumerator with the same state as the current 
-  // enumerator to iterate over the same list. This method makes it possible to 
-  // record a point in the enumeration sequence in order to return to that point 
-  // at a later time.
-  // @comm The caller must release this new enumerator separately from the first
-  // enumerator.)
-
+AD_STD_METHOD_ENUMERATOR(PluginDescriptor,
+						 PluginDescriptors,
+						 Plugin Descriptor)
 AD_XCLASS_END(Concrete, Transient)

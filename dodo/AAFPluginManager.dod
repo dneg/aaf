@@ -15,10 +15,10 @@ AAFRoot\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used with an object representing an AAF class definition.
-// The operations on a class definition include managing the position of the
-// class within the class heirarchy\, and accessing property definitions associated
-// with the class.
+// This interface is used with an object representing an AAF class
+// definition.  The operations on a class definition include managing
+// the position of the class within the class heirarchy\, and
+// accessing property definitions associated with the class.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -28,19 +28,17 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-
 AD_FORWARD_DECLARATION(EnumAAFLoadedPlugins)
 AD_FORWARD_DECLARATION(AAFDictionary)
-
 AD_CLASS_UUID(AD1BB85B, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(AD1BB85C, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, Transient)
-
 AD_METHOD0(RegisterSharedPlugins,
 
-			Attempts to load and register all of the AAF plugin files found
+     Attempts to load and register all of the AAF plugin files found
   // in shared installation directory.)
+
 
 AD_XMETHOD1(RegisterPluginDirectory,
 			[in],
@@ -49,8 +47,9 @@ AD_XMETHOD1(RegisterPluginDirectory,
 			directoryName,
 			Pointer to the name of directory to look for plugins.,
 
-			Attempts to load and register all of the AAF plugin files found
+     Attempts to load and register all of the AAF plugin files found
   // in the given directory.)
+
 
 AD_XMETHOD1(RegisterPluginFile,
 			[in],
@@ -59,15 +58,14 @@ AD_XMETHOD1(RegisterPluginFile,
 			fileName,
 			Pointer to the name of plugin file to register.,
 
-			Attempts to load and register all of the AAF plugins found
+     Attempts to load and register all of the AAF plugins found
   // in the given file.)
 
 
-
 AD_XMETHOD2(EnumLoadedPlugins,
-			[in],
+			[in\, ref],
 			  objPass,
-			  aafUID_t,
+			  aafUID_constref,
 			  categoryID,
 			  Which category ID do we want to enumerate,
 			[out\,retval],
@@ -75,9 +73,9 @@ AD_XMETHOD2(EnumLoadedPlugins,
 			  EnumAAFLoadedPlugins,
 			  ppEnum,
 			  Loaded Plugin Enumeration,
-			Returns an enumerator which enumerates over all of the loaded
-  // pluigin choices through the *ppEnum argument.  The returned enumerator
-  // is AddRef\(\)ed before it is returned.
+     Returns an enumerator which enumerates over all of the loaded
+  // pluigin choices through the *ppEnum argument.  The returned
+  // enumerator is AddRef\(\)ed before it is returned.
   // 
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
@@ -94,10 +92,11 @@ AD_XMETHOD2(EnumLoadedPlugins,
   // AAFRESULT_NULL_PARAM
   //   - if ppEnum is null.)
 
+
 AD_XMETHOD3(CreatePluginDefinition,
-			[in],
+			[in\, ref],
 			  objPass,
-			  aafUID_t,
+			  aafUID_constref,
 			  pluginDefID,
 			  Which plugin definition do you want to create,
 			[in],
@@ -110,13 +109,15 @@ AD_XMETHOD3(CreatePluginDefinition,
 			IAAFDefObject**,
 			ppPluginDef,
 			The interface of the returned definition,
-			Given a plugin definition ID\, find a plugin and manufactures a plugin descriptor
-  // of the correct class for this plugin\, filling in the values\, and returning the definition
-  // through the *pPluginDesc argument.  The returned definition
-  // is AddRef\(\)ed before it is returned.  You must call QueryInterface
-  // on the result in order to find the correct interface\, and are responsible for adding the
-  // definition to the correct place in the dictionary\, as well as preventing duplicates.
-  // The resulting definiton has the plugin descriptor already attached.
+     Given a plugin definition ID\, find a plugin and manufactures a
+  // plugin descriptor of the correct class for this plugin\, filling
+  // in the values\, and returning the definition through the
+  // *pPluginDesc argument.  The returned definition is AddRef\(\)ed
+  // before it is returned.  You must call QueryInterface on the
+  // result in order to find the correct interface\, and are
+  // responsible for adding the definition to the correct place in the
+  // dictionary\, as well as preventing duplicates. The resulting
+  // definiton has the plugin descriptor already attached.
   // 
   // Succeeds if all of the following are true:
   // - the pPluginDesc pointer is valid.
@@ -133,6 +134,7 @@ AD_XMETHOD3(CreatePluginDefinition,
   // AAFRESULT_NULL_PARAM
   //   - if pPluginDesc is null.)
 
+
 AD_XMETHOD4(CreateInstance,
 	[in], objPass, REFCLSID, rclsid,
 		The class id of the plugin object do you want to create,
@@ -142,12 +144,14 @@ AD_XMETHOD4(CreateInstance,
 		The IID of the initialial interface for the new plugin instance,
 	[out\,iid_is\(riid\)], objPass, void **, ppPlugin,
 		The IID of the initialial interface for the new plugin instance,
-	Create an object contained within one of the loaded plugin files.
+     Create an object contained within one of the loaded plugin
+  // files.
+  // 
   // Succeeds if all of the following are true:
   // - the rclsid was found by the plugin manager
   // - the interface corresponding to riid is supported by the plugin
-  // - if pUnkOuter is not NULL and given plugin supports aggregation and riid must be
-  //      a reference to IID_IUnknown.
+  // - if pUnkOuter is not NULL and given plugin supports aggregation
+  //   and riid must be a reference to IID_IUnknown.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -164,6 +168,6 @@ AD_XMETHOD4(CreateInstance,
   //   - The given rclsid could not be found by the Plugin Manager.
   //
   // E_NOINTERFACE
-  //   - if initial interface given by riid is not supported by the plugin.)
-
+  //   - if initial interface given by riid is not supported by the
+  //     plugin.)
 AD_XCLASS_END(Concrete, Transient)

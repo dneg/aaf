@@ -19,7 +19,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -93,7 +93,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
-        (aafWChar *  name,  //@parm [in] buffer provided by client to hold the Mob Slot Name
+        (aafCharacter *  name,  //@parm [in] buffer provided by client to hold the Mob Slot Name
 		aafInt32	bufsize);	//@parm [in] length of the buffer provided to hold the slot name
 
   //****************
@@ -101,7 +101,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameBufLen
-		(aafInt32	*bufsize);	//@parm [in] length of the buffer provided to hold the slot name
+		(aafUInt32	*bufsize);	//@parm [in] length of the buffer provided to hold the slot name
 							// including the terminator
 
   //****************
@@ -133,7 +133,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDataDef
-        (aafUID_t *result);  //@parm [out,retval] Data Definition UUID
+        (ImplAAFDataDef ** result);  //@parm [out,retval] Data Definition
 
   //***********************************************************
   // METHOD NAME: GetSlotID()

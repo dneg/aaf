@@ -113,8 +113,8 @@ template <typename ReferencedObject>
 struct AAFCountedReference
 {
 protected:
-  virtual void acquire (ReferencedObject * pObj) = 0;
-  virtual void release (ReferencedObject * pObj) = 0;
+  virtual aafUInt32 acquire (ReferencedObject * pObj) = 0;
+  virtual aafUInt32 release (ReferencedObject * pObj) = 0;
 };
 
 
@@ -199,6 +199,7 @@ AAFSmartPointerBase<ReferencedType, RefCountType>::
 {
   if (_rep)
 	{
+	  aafUInt32 refCnt =
 	  release (_rep);
 	  _rep = 0;
 	}

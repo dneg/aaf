@@ -15,8 +15,9 @@ AAFDefObject\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used with an object representing a particular kind of essence
-// codec\, which may be implemented by one or more AAFPluginDescriptors.
+// This interface is used with an object representing a particular
+// kind of essence codec\, which may be implemented by one or more
+// AAFPluginDescriptors.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -34,10 +35,10 @@ AD_CLASS_UUID(AD1BB855, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_DEFAULT_UUID(AD1BB856, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD2(IsEssenceKindSupported,
-			[in\,ref],
-			  objPass,
-			  aafUID_constref,
-			  essenceKind,
+			[in],
+			  objIn,
+			  AAFDataDef,
+			  pEssenceKind,
 			  The essence kind,
 			[out\,retval],
 			  objPass,
@@ -48,6 +49,7 @@ AD_XMETHOD2(IsEssenceKindSupported,
   // of the given essence kind.
   // 
   // Succeeds if all of the following are true:
+  // - the pEssenceKind pointer is valid.
   // - the pIsSupported pointer is valid.
   // 
   // If this method fails nothing will be written to *pIsSupported.
@@ -60,14 +62,14 @@ AD_XMETHOD2(IsEssenceKindSupported,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pIsSupported is null.)
+  //   - pEssenceKind or pIsSupported is null.)
 
  
 AD_XMETHOD1(AddEssenceKind,
-			[in\, ref],
-		    objPass,
-			aafUID_constref,
-			essenceKind,
+			[in],
+		    objIn,
+			AAFDataDef,
+			pEssenceKind,
 			The essence kind,
 	   Appends the given essence kind to those supported by the codec.
   // This is dependant upon the format\, not an incomplete implementation.
@@ -81,15 +83,18 @@ AD_XMETHOD1(AddEssenceKind,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NULL_PARAM
+  //   - pEssenceKind is null.
+  //
   // AAFRESULT_DUPLICATE_ESSENCE_KIND
   //   - the given essenceKind is already contained.)
 
 
 AD_XMETHOD1(RemoveEssenceKind,
-			[in\, ref],
-		    objPass,
-			aafUID_constref,
-			essenceKind,
+			[in],
+		    objIn,
+			AAFDataDef,
+			pEssenceKind,
 			The essence kind to remove,
      Removes the given essence kind from the list of those supported
   // by the codec.
@@ -102,6 +107,9 @@ AD_XMETHOD1(RemoveEssenceKind,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEssenceKind is null.
   //
   // AAFRESULT_OBJECT_NOT_FOUND
   //   - the given essenceKind is not already contained.)

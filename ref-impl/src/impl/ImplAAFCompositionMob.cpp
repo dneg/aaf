@@ -54,7 +54,7 @@ ImplAAFCompositionMob::~ImplAAFCompositionMob ()
 
   //@access Public Members
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFCompositionMob::Initialize (aafWChar	*pName)
+    ImplAAFCompositionMob::Initialize (const aafCharacter * pName)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 	if (pName == NULL)

@@ -56,12 +56,12 @@ public:
 
 
   //****************
-  // Create()
+  // Initialize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    Create
+    Initialize
         (// @parm [in] Length Property Value
-         aafLength_t    length  ,
+         aafLength_t    length,
 
          // @parm [in] Edgecode Value
          aafEdgecode_t  edgecode);

@@ -16,9 +16,11 @@ AAFComponent\
 #c #import ./AAFComponent.exp
 AD_HEAD
 AD_IDL(//
-// The IAAFTransition interface is implemented by objects describe a change or transition
-// from one piece of essence to another.  Transitions must exist in the context of a sequence\,
-// and must be surrounded on both sides by segments \(an object which has an IAAFSegment interface\).
+// The IAAFTransition interface is implemented by objects describe a
+// change or transition from one piece of essence to another.
+// Transitions must exist in the context of a sequence\, and must be
+// surrounded on both sides by segments \(an object which has an
+// IAAFSegment interface\).
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -45,12 +47,12 @@ AD_CLASS_UUID(E3F38311, 2D3C, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(E3F38312, 2D3C, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD4(Create,
+AD_XMETHOD4(Initialize,
 
-			[in\, ref],
-			objPass,
-			aafUID_constref,
-			datadef,
+			[in],
+			objIn,
+			AAFDataDef,
+			pDataDef,
 			Data Definition Object,
 
 			[in],
@@ -98,7 +100,8 @@ AD_METHOD1(SetCutPoint,
 		   aafPosition_t,
 		   cutPoint,
 		   Cut Point,
-		   Sets the point at which a cut would be inserted if the transition were removed.)
+     Sets the point at which a cut would be inserted if the transition
+  // were removed.)
 
 
 AD_XMETHOD1(SetOperationGroup,

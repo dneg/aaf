@@ -55,11 +55,11 @@ AD_XMETHOD1(IsSoundKind,
 
 AD_XMETHOD2(DoesDataDefConvertTo,
 
-			[in\, ref],
-			objPass,
-			aafUID_constref,
+			[in],
+			objIn,
+			AAFDataDef,
 			id,
-			Auid to compare against,
+			data def to compare against,
 
 			[retval\, out],
 			objPass,
@@ -74,11 +74,11 @@ AD_XMETHOD2(DoesDataDefConvertTo,
 
 AD_XMETHOD2(IsDataDefOf,
 
-			[in\, ref],
-			objPass,
-			aafUID_constref,
-			id,
-			Auid to compare against,
+			[in],
+			objIn,
+			AAFDataDef,
+			pDataDef,
+			data def to compare against,
 
 			[retval\, out],
 			objPass,
@@ -93,10 +93,11 @@ AD_XMETHOD2(IsDataDefOf,
 
 AD_XMETHOD2(DoesDataDefConvertFrom,
 
-			[in\, ref],
-			objPass,
-			aafUID_constref,
-			id, Auid to compare against,
+			[in],
+			objIn,
+			AAFDataDef,
+			pDataDef,
+		    data def to compare against,
 
 			[retval\, out],
 			objPass,

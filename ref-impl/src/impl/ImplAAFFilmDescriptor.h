@@ -15,7 +15,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -32,18 +32,9 @@
  ************************************************************************/
 
 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
 #ifndef __AAFTypes_h__
 #include "AAFTypes.h"
 #endif
-
-
-
-
-
 
 #ifndef __ImplAAFEssenceDescriptor_h__
 #include "ImplAAFEssenceDescriptor.h"
@@ -64,54 +55,52 @@ protected:
 
 public:
 
-//@access Public Members
 
-/****/
   //****************
   // SetFilmManufacturer()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetFilmManufacturer
         // @parm [in] 
-        (wchar_t *  name);
+        (const aafCharacter *  name);
 
-/****/
+
   //****************
   // GetFilmManufacturer()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetFilmManufacturer
         // @parm [out] Pass in a string object which will be erased and filled
-        (wchar_t *  name, aafInt32 bufSize);
+        (aafCharacter *  name, aafUInt32 bufSize);
 	//@comm Returns a zero-length string if the property was not present
 
     virtual AAFRESULT STDMETHODCALLTYPE
     GetFilmManufacturerBufLen
-         (aafInt32 *bufSize);
+         (aafUInt32 *bufSize);
 
-/****/
+
   //****************
   // SetFilmModel()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetFilmModel
         // @parm [in] 
-        (wchar_t *  name);
+        (const aafCharacter *  name);
 
-/****/
+
   //****************
   // GetFilmModel()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetFilmModel
         // @parm [out] Pass in a string object which will be erased and filled
-        (wchar_t *  name, aafInt32 bufSize);
+        (aafCharacter *  name, aafUInt32 bufSize);
 
   virtual AAFRESULT STDMETHODCALLTYPE
     GetFilmModelBufLen
-         (aafInt32 *bufSize);
+         (aafUInt32 *bufSize);
 
-/****/
+
   //****************
   // GetFilmFormat()
   //
@@ -121,7 +110,7 @@ public:
         (aafFilmType_t*  filmFormat);
 	//@comm Film format may be: kFt35MM, kFt16MM, kFt8MM, kFt65MM
 
-/****/
+
   //****************
   // GetFrameRate()
   //
@@ -130,7 +119,7 @@ public:
         // @parm [out] Frame Rate
         (aafUInt32*  rate);
 
-/****/
+
   //****************
   // GetPerfPerFrame()
   //
@@ -139,7 +128,7 @@ public:
         // @parm [out] Perforations per frame
         (aafUInt8*  perfPerFrame);
 
-/****/
+
   //****************
   // GetFilmAspectRatio()
   //
@@ -148,7 +137,7 @@ public:
         // @parm [out] Film Aspect Ratio
         (aafRational_t*  aspectRatio);
 
-/****/
+
   //****************
   // SetFilmFormat()
   //
@@ -158,7 +147,7 @@ public:
         (aafFilmType_t  filmFormat);
 	//@comm kFt35MM, kFt16MM, kFt8MM, kFt65MM
 
-/****/
+
   //****************
   // SetFrameRate()
   //
@@ -167,7 +156,7 @@ public:
         // @parm [in] Frame Rate
         (aafUInt32  rate);
 
-/****/
+
   //****************
   // SetPerfPerFrame()
   //
@@ -176,7 +165,7 @@ public:
         // @parm [in] Perforations per frame
         (aafUInt8  perfPerFrame);
 
-/****/
+
   //****************
   // SetFilmAspectRatio()
   //
@@ -201,6 +190,3 @@ private:
 };
 
 #endif // ! __ImplAAFFilmDescriptor_h__
-
-
-   

@@ -54,7 +54,7 @@ AD_XMETHOD2(LookupMob,
 			  AAFMob,
 			  ppMob,
 			  Matching Mob,
-			Looks up the Mob that matches the given mob id and puts it into
+     Looks up the Mob that matches the given mob id and puts it into
   // the ppMob argument.  The returned mob interface is AddRef\(\)ed
   // before it is returned.
   // 
@@ -88,7 +88,7 @@ AD_XMETHOD2(CountMobs,
 			  aafNumSlots_t *,
 			  pResult,
 			  Total number of mobs of kind mobKind,
-			Writes the number of matches for the given mob kind into the
+     Writes the number of matches for the given mob kind into the
   // *pNumMobs argument.
   // 
   // Succeeds if all of the following are true:
@@ -118,12 +118,12 @@ AD_XMETHOD2(GetMobs,
 			  EnumAAFMobs,
 			  ppEnum,
 			  Mob Enumeration,
-			Places an enumerator for mobs that apply to the criteria into the
-  // *ppEnum argument.  If pSearchCriteria is null\, all mobs are returned.   The
-  // searchTag field of pSearchCriteria\, and exactly ONE of the fields in the union
-  // \(tags.mobID\, tags.name\, etc. \) must be set.  Only one search
-  // criterion may be specified.  The returned enumerator is
-  // AddRef\(\)ed before it is returned.
+     Places an enumerator for mobs that apply to the criteria into the
+  // *ppEnum argument.  If pSearchCriteria is null\, all mobs are
+  // returned.   The searchTag field of pSearchCriteria\, and exactly
+  // ONE of the fields in the union \(tags.mobID\, tags.name\, etc. \)
+  // must be set.  Only one search criterion may be specified.  The
+  // returned enumerator is AddRef\(\)ed before it is returned.
   // 
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
@@ -147,7 +147,7 @@ AD_XMETHOD1(AddMob,
 			AAFMob,
 			pMob,
 			Mob to add,
-			Appends the given mob to the header.  If the given mob is already
+     Appends the given mob to the header.  If the given mob is already
   // contained this method will do nothing and will return success.
   // 
   // Succeeds if all of the following are true:
@@ -205,13 +205,14 @@ AD_XMETHOD1(CountEssenceData,
 			  aafUInt32 *,
 			  pResult,
 			  Total number of essence data,
-			Writes the total number of essence data into the
-  // *pNumEssenceData argument.
+     Writes the total number of essence data into the *pNumEssenceData
+  // argument.
   // 
   // Succeeds if all of the following are true:
   // - the pNumEssenceData pointer is valid.
   // 
-  // If this method fails nothing will be written to *pNumEssenceData.
+  // If this method fails nothing will be written to
+  // *pNumEssenceData.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -222,6 +223,7 @@ AD_XMETHOD1(CountEssenceData,
   //
   // AAFRESULT_NULL_PARAM
   //   - pNumEssenceData is null.)
+
 
 AD_XMETHOD3(IsEssenceDataPresent,
 			[in\, ref],
@@ -262,9 +264,9 @@ AD_XMETHOD1(EnumEssenceData,
 			  EnumAAFEssenceData,
 			  ppEnum,
 			  Essence Enumeration,
-			Places an enumerator for essence that applies to the criteria into
-  // the *ppEnum argument.  The returned enumerator is AddRef\(\)ed
-  // before it is returned.
+     Places an enumerator for essence that applies to the criteria
+  // into the *ppEnum argument.  The returned enumerator is
+  // AddRef\(\)ed before it is returned.
   // 
   // Succeeds if all of the following are true:
   // - the pMediaCriteria pointer is valid.
@@ -319,13 +321,11 @@ AD_XMETHOD1(GetDictionary,
 			AAFDictionary,
 			ppDictionary,
 			The AAF Dictionary,
-			Places the dictionary that contains all types of aaf definition
+     Places the dictionary that contains all types of aaf definition
   // objects into the *ppDictionary argument.  The returned dictionary
   // is AddRef\(\)ed before it is returned.  Note that the dictionary
   // is automatically created when the header object is created.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the ppDictionary pointer is valid.
   // 
@@ -348,7 +348,7 @@ AD_XMETHOD1(GetLastIdentification,
 			AAFIdentification,
 			ppIdentification,
 			Indentification Object,
-  // Places the identification of the last entity that modified the
+     Places the identification of the last entity that modified the
   // file into the *ppIdentification argument.  The returned
   // identification is AddRef\(\)ed before it is returned.
   // 
@@ -379,7 +379,7 @@ AD_XMETHOD2(LookupIdentification,
 			  AAFIdentification,
 			  ppIdentification,
 			  Indentification Object,
-			Places the Identification that matches the given generation into
+     Places the Identification that matches the given generation into
   // the *ppIdentification argument.  The returned identification is
   // AddRef\(\)ed before it is returned.
   // 
@@ -407,8 +407,8 @@ AD_XMETHOD1(CountIdentifications,
 			aafUInt32 *,
 			pResult,
 			Total number of identification objects,
-			Writes the number of identification objects into the
-  // *pResult argument.
+     Writes the number of identification objects into the *pResult
+  // argument.
   // 
   // Succeeds if all of the following are true:
   // - the pResult pointer is valid.
@@ -432,7 +432,7 @@ AD_XMETHOD1(GetIdentifications,
 			EnumAAFIdentifications,
 			ppEnum,
 			Indentification Enumeration,
-			Places an enumerator for all Identifications criteria into	the
+     Places an enumerator for all Identifications criteria into	the
   // *ppEnum argument.  The returned enumerator is AddRef\(\)ed before
   // it is returned.
   // 
@@ -460,7 +460,7 @@ AD_XMETHOD1(AppendIdentification,
 			AAFIdentification,
 			pIdent,
 			Identification to append,
-			Appends the given Identification class to the header.  This
+     Appends the given Identification class to the header.  This
   // method does not attempt to identify duplicate identifications\, so
   // it will succeed even if an identical identification has already
   // been appended.
@@ -494,7 +494,7 @@ AD_XMETHOD2(GetIdentificationAt,
 			ppIdentification,
 			Retrieved identification,
 
-  // Retrieves the indexed identification from the header.  This
+     Retrieves the indexed identification from the header.
   // 
   // Succeeds if all of the following are true:
   // - the ppIdentification pointer is valid.
@@ -521,7 +521,7 @@ AD_XMETHOD1(GetRefImplVersion,
 			aafProductVersion_t *,
 			pVersion,
 			The Reference Implementation Version,
-			Return the version of the Reference Implementation currently
+     Return the version of the Reference Implementation currently
   // running on this machine\, which implements these interfaces.
   // 
   // Succeeds if all of the following are true:
@@ -593,5 +593,7 @@ AD_XMETHOD1(GetLastModified,
 
 
 AD_COM_METH(.method-GetStoredByteOrder)
+
+
 AD_COM_METH(.method-GetNativeByteOrder)
 AD_COM_EXT_CLASS_END(AAFEndian)

@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -95,13 +95,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
         (aafCharacter *  name,  //@parm [in] Mob Name
-		aafInt32 bufSize);	  //@parm [in] size of the buffer required to hold Mob Name + terminator
+		aafUInt32 bufSize);	  //@parm [in] size of the buffer required to hold Mob Name + terminator
   //****************
   // GetNameBufLen()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameBufLen
-        (aafInt32 *  nameLen);  //@parm [in,out] Mob Name length
+        (aafUInt32 *  nameLen);  //@parm [in,out] Mob Name length
 
   //****************
   // AppendSlot()
@@ -179,7 +179,7 @@ public:
         (aafTimeStamp_t *  lastModified,   //@parm [out] Modified Time
          aafTimeStamp_t *  creationTime,  //@parm [out] Creation Time
 		 aafCharacter *  name,   //@parm [in,out] Mob Name
-		 aafInt32  strSize);
+		 aafUInt32  strSize);
 
   //****************
   // CountSlots()
@@ -215,7 +215,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetName
-        (aafCharacter *  name);  //@parm [in, ref] Mob Name
+        (const aafCharacter *  name);  //@parm [in, ref] Mob Name
 
 
 // skip virtual aafErr_t Verify(char *buf, validateData_t *result);
@@ -230,7 +230,7 @@ public:
     AppendNewSlot
         (ImplAAFSegment * segment,   //@parm [in] Segment to append as slot component
 		 aafSlotID_t  slotID,   //@parm [in] The Slot ID
-         aafCharacter *  slotName,   //@parm [in] Slot Name (optional)
+         const aafCharacter *  slotName,   //@parm [in] Slot Name (optional)
 		 ImplAAFMobSlot ** newSlot);  //@parm [out] Newly created slot
 
 
@@ -260,8 +260,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendComment
-        (aafCharacter *  category,   //@parm [in,ref] Comment heading
-		 aafCharacter *  comment);  //@parm [in,ref] Comment value
+        (const aafCharacter *  category,   //@parm [in,ref] Comment heading
+		 const aafCharacter *  comment);  //@parm [in,ref] Comment value
 
   //****************
   // RemoveComment()
@@ -337,7 +337,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     Copy
-        (aafCharacter *  destMobName,   //@parm [in] Optional Input. The name to be assigned to the new copy of the Mob.
+        (const aafCharacter *  destMobName,   //@parm [in] Optional Input. The name to be assigned to the new copy of the Mob.
   // The destMobName argument is optional. Specify a NULL value if no desti-
   // nation Mob name is desired.
 		 ImplAAFMob ** destMob);  //@parm [out] Destination Mob

@@ -15,8 +15,9 @@ AAFDefObject\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used with an object representing a particular kind of essence stream factory
-// object\, which may be implemented by one or more AAFPluginDescriptors.
+// This interface is used with an object representing a particular
+// kind of essence stream factory object\, which may be implemented by
+// one or more AAFPluginDescriptors.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -26,25 +27,25 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-
 AD_CLASS_UUID(AD1BB857, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(AD1BB858, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-
 AD_XMETHOD1(EssenceIsIdentified,
 			[out],
 			objPass,
 			aafBool *,
 			pEssenceIsIdentified,
 			The EssenceIsIdentified,
-			Tells whether the given plugin is capable of supporting authentication.
-  // The methods for authenticating a plugin are still <tbd>.
+     Tells whether the given plugin is capable of supporting
+  // authentication.  The methods for authenticating a plugin are
+  // still <tbd>.
   // 
   // Succeeds if all of the following are true:
   // - the pEssenceIsIdentified pointer is valid.
   // 
-  // If this method fails nothing will be written to *pEssenceIsIdentified.
+  // If this method fails nothing will be written to
+  // *pEssenceIsIdentified.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -66,8 +67,9 @@ AD_XMETHOD1(SetEssenceIsIdentified,
 			aafBool,
 			EssenceIsIdentified,
 			The EssenceIsIdentified flag,
-			Tells whether the given plugin is capable of supporting authentication.
-  // The methods for authenticating a plugin are still <tbd>.
+     Tells whether the given plugin is capable of supporting
+  // authentication.  The methods for authenticating a plugin are
+  // still <tbd>.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one

@@ -17,8 +17,7 @@ AD_HEAD
 AD_IDL(//
 // This interface is used to access instances of properties contained
 // in AAF persistent objects.
-AD_STD_COMMENT_IFC_HEADER
-AD_STD_COMMENT_IFC_STUB)
+AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(83057d73, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)

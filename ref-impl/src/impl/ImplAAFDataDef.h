@@ -15,7 +15,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -35,7 +35,6 @@
 #ifndef __ImplAAFDefObject_h__
 #include "ImplAAFDefObject.h"
 #endif
-
 
 class ImplAAFDataDef : public ImplAAFDefObject
 {
@@ -87,8 +86,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     DoesDataDefConvertTo
-        (// @parm [in,ref] Auid to compare against
-         const aafUID_t & id,
+        (// @parm [in,ref] def to compare against
+         ImplAAFDataDef * pDataDef,
 
          // @parm [retval,out] pointer to result
          aafBool *  bDoesConvertTo);
@@ -98,8 +97,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     IsDataDefOf
-        (// @parm [in,ref] Auid to compare against
-         const aafUID_t & id,
+        (// @parm [in,ref] data def to compare against
+         ImplAAFDataDef * pDataDef,
 
          // @parm [retval,out] pointer to result
          aafBool *  bIsDataDefOf);
@@ -109,13 +108,29 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     DoesDataDefConvertFrom
-        (// @parm [in,ref] Auid to compare against
-         const aafUID_t & id,
+        (// @parm [in,ref] data def to compare against
+         ImplAAFDataDef * pDataDef,
 
          // @parm [retval,out] pointer to result
          aafBool *  bDoesConvertFrom);
+
+private:
+  // *NOT* reference counted!
+  ImplAAFDictionary * _pCachedDict;
+
+  ImplAAFDictionary * GetDict();
 };
 
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
+
+
 #endif // ! __ImplAAFDataDef_h__
-
-

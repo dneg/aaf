@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -51,7 +51,7 @@ ImplAAFHTMLClip::~ImplAAFHTMLClip ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFHTMLClip::GetBeginAnchor (wchar_t *  pName,
+ImplAAFHTMLClip::GetBeginAnchor (aafCharacter *  pName,
 								 aafInt32  bufSize)
 {
 	if (NULL == pName)
@@ -84,7 +84,7 @@ ImplAAFHTMLClip::GetBeginAnchorBufLen (aafUInt32 *  pLen)
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFHTMLClip::SetBeginAnchor (wchar_t *  pName)
+ImplAAFHTMLClip::SetBeginAnchor (const aafCharacter *  pName)
 {
 	if (NULL == pName)
 		return(AAFRESULT_NULL_PARAM);
@@ -96,7 +96,7 @@ ImplAAFHTMLClip::SetBeginAnchor (wchar_t *  pName)
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFHTMLClip::GetEndAnchor (wchar_t *  pName,
+ImplAAFHTMLClip::GetEndAnchor (aafCharacter *  pName,
 							   aafInt32  bufSize)
 {
 	if (NULL == pName)
@@ -131,7 +131,7 @@ ImplAAFHTMLClip::GetEndAnchorBufLen (aafUInt32 *  pLen)
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFHTMLClip::SetEndAnchor (wchar_t *  pName)
+ImplAAFHTMLClip::SetEndAnchor (const aafCharacter *  pName)
 {
 	if (NULL == pName)
 		return(AAFRESULT_NULL_PARAM);

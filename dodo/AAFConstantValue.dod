@@ -15,9 +15,10 @@ AAFParameter\
 #c
 AD_HEAD
 AD_IDL(//
-// The IAAFConstantValue interface is implemented by objects that specify a parameter
-// whose value is constant for an entire operation group.  Use IAAFVaryingValue and one or
-// more IAAFControlPoints for parameters which change in value during the operation group.
+// The IAAFConstantValue interface is implemented by objects that
+// specify a parameter whose value is constant for an entire operation
+// group.  Use IAAFVaryingValue and one or more IAAFControlPoints for
+// parameters which change in value during the operation group.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -27,32 +28,27 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-
-
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFParameter)
-
 AD_CLASS_UUID(b8ddc081, 2afa, 11D2, bf, A5, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(b8ddc080, 2afa, 11D2, bf, A5, 00, 60, 97, 11, 62, 12)
-
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-
-	
-/****/
 AD_METHOD3(GetValue,
 			[in],aafUInt32,valueSize,Size of preallocated buffer,
 			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
 			[out],aafUInt32*,bytesRead,Number of actual bytes read,
-			Writes the value into the pValue buffer.  The buffer is allocated by the caller\\\,
-  // and the size of the buffer is given by valueSize.
+     Writes the value into the pValue buffer.  The buffer is allocated
+  // by the caller\\\, and the size of the buffer is given by
+  // valueSize.
   // 
   // Caller may call GetValueBufLen\\\(\\\) to determine the
   // required buffer size.
   // 
   // Succeeds if all of the following are true:
   // - the pValue pointer is valid.
-  // - valueSize indicates the buffer is large enough to hold the name.
+  // - valueSize indicates the buffer is large enough to hold the
+  //   name.
   // 
   // If this method fails nothing will be written to *pValue.
   // 
@@ -67,7 +63,8 @@ AD_METHOD3(GetValue,
   //   - pValue arg is NULL.
   //
   // AAFRESULT_SMALLBUF
-  //   - valueSize indicates the buffer is too small to hold the value.)
+  //   - valueSize indicates the buffer is too small to hold the
+  //     value.)
 
 
 AD_XMETHOD1(GetValueBufLen,
@@ -77,8 +74,9 @@ AD_XMETHOD1(GetValueBufLen,
 			pLen,
 			Pointer to an variable used to return the length,
 
-			Returns the length of buffer required for the GetValue\(\) method.
-  // The value is placed into the location specified by pLen.
+     Returns the length of buffer required for the GetValue\(\)
+  // method.  The value is placed into the location specified by
+  // pLen.
   //
   // Succeeds if all of the following are true:
   // - the pLen pointer is valid.
@@ -95,7 +93,7 @@ AD_XMETHOD1(GetValueBufLen,
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.)
 
-/****/
+
 AD_METHOD2(SetValue,
 			[in],aafUInt32,valueSize, Size of preallocated buffer,
 			[in\\\, size_is\\\(valueSize\\\)],aafDataBuffer_t,pValue, buffer containing value,
@@ -116,5 +114,4 @@ AD_METHOD2(SetValue,
   //
   // AAFRESULT_NULL_PARAM
   //   - pValue is null.)
-
 AD_XCLASS_END(Concrete, StoredObject)

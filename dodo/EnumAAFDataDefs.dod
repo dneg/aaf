@@ -14,49 +14,11 @@ AAFRoot\
 #c
 AD_HEAD
 AD_FORWARD_DECLARATION(AAFDataDef)
-
-
 AD_CLASS_UUID(D8000381, 498E, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
 
 AD_DEFAULT_UUID(d8000382, 498e, 11d2, 84, 1B, 00, 60, 08, 32, AC, B8)
-
 AD_XCLASS_BEGIN(Concrete, Transient)
-
-AD_XMETHOD1(NextOne,
-			[out\,retval], objOut, AAFDataDef, ppDataDef, The Next DataDefinition,
-			Enumerates to the next element in the enumerators list. The caller is responsible for 
-  // properly releasing the returned pointer when it is no longer needed.
-  // @comm This is a just simplified version of the Next method. )
-
-AD_X2METHOD3(Next,
-			[in], objPass, aafUInt32, count, number of data definitions requested,xxx,
-			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOutArray, AAFDataDef, ppDataDef, array to receive data definitions,count,
-			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual DataDefinition fetched into ppDataDefinition array,xxx,
-			Enumerates the next count elements \(AAFDataDef pointers\) in 
-  // the enumerator's list\, returning them in the given array along with the actual 
-  // number of enumerated elements in pcFetched. The caller is responsible for 
-  // properly releasing the returned pointers.)
-
-AD_METHOD1(Skip,
-		   [in], aafUInt32, count, Number of elements to skip,
-		   Instructs the enumerator to skip the next count elements in the enumeration so that 
-  // the next call to EnumAAFDataDef::Next will not return 
-  // those elements.)
-
-AD_METHOD0(Reset,
-Instructs the enumerator to position itself at the beginning of the list of elements. 
-  // @comm There is no guarantee that the same set of elements will be enumerated on 
-  // each pass through the list\, nor will the elements necessarily be enumerated in 
-  // the same order. The exact behavior depends on the collection being enumerated.)
-
-AD_XMETHOD1(Clone,
-			[out\,retval], objOut, EnumAAFDataDefs, ppEnum, new enumeration,
-			Creates another data definition enumerator with the same state as the current 
-  // enumerator to iterate over the same list. This method makes it possible to 
-  // record a point in the enumeration sequence in order to return to that point 
-  // at a later time.
-  // @comm The caller must release this new enumerator separately from the first enumerator.)
-
+AD_STD_METHOD_ENUMERATOR(DataDef,
+						 DataDefs,
+						 Data Definition)
 AD_XCLASS_END(Concrete, Transient)

@@ -85,16 +85,16 @@ class ImplAAFRoot;
 struct AAFCountedImplReference : public AAFCountedReference<ImplAAFRoot>
 {
 protected:
-  void acquire (ImplAAFRoot * pObj)
+  aafUInt32 acquire (ImplAAFRoot * pObj)
   {
 	AAF_SMART_POINTER_ASSERT (pObj);
-	pObj->AcquireReference ();
+	return pObj->AcquireReference ();
   }
 
-  void release (ImplAAFRoot * pObj)
+  aafUInt32 release (ImplAAFRoot * pObj)
   {
 	AAF_SMART_POINTER_ASSERT (pObj);
-	pObj->ReleaseReference ();
+	return pObj->ReleaseReference ();
   }
 };
 

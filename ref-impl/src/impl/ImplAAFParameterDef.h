@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -29,9 +29,6 @@
  * LIABILITY.
  *
  ************************************************************************/
-
- 
-
 
 
 #ifndef __ImplAAFDefObject_h__
@@ -77,10 +74,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDisplayUnits
         (// @parm [in,string] DisplayUnits
-         wchar_t *  pDisplayUnits,
+         aafCharacter *  pDisplayUnits,
 
          // @parm [in] length of the buffer to hold DisplayUnits
-         aafInt32  bufSize);
+         aafUInt32  bufSize);
 
   //****************
   // GetDisplayUnitsBufLen()
@@ -88,7 +85,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDisplayUnitsBufLen
         // @parm [out] DisplayUnits
-        (aafInt32 *  pLen);
+        (aafUInt32 *  pLen);
 
 
 
@@ -98,7 +95,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetDisplayUnits
         // @parm [in, string] DisplayUnits
-        (wchar_t *  pDisplayUnits);
+        (const aafCharacter *  pDisplayUnits);
 
 private:
 	OMFixedSizeProperty<aafUID_t>							_typeDef;

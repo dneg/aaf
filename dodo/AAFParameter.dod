@@ -15,9 +15,9 @@ AAFObject\
 #c
 AD_HEAD
 AD_IDL(//
-// The IAAFParameter interface is implemented by objects that specify an
-// Instantiation of an operation parameter.  It is an abstract class\, so you should use
-// AAFConstantValue or AAFVaryingValue.
+// The IAAFParameter interface is implemented by objects that specify
+// an Instantiation of an operation parameter.  It is an abstract
+// class\, so you should use AAFConstantValue or AAFVaryingValue.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -27,25 +27,23 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFParameterDef)
 AD_FORWARD_DECLARATION(AAFTypeDef)
-
 AD_CLASS_UUID(9c568a82, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 1) 
 
 AD_DEFAULT_UUID(9c568a81, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Abstract, StoredObject)
-
 AD_XMETHOD1(SetParameterDefinition,
 		   [in],
 		   objIn,
 		   AAFParameterDef,
 		   pParmDef,
 		   New parameter definition,
-			Sets the parameter definition property value on the input component object.
-  // The length of an operation parameter is in the same edit units and has the
-  // same value as the IAAFOperationGroup enclosing this parameter.
+     Sets the parameter definition property value on the input
+  // component object.  The length of an operation parameter is in the
+  // same edit units and has the same value as the IAAFOperationGroup
+  // enclosing this parameter.
   // 
   // If this method fails no state will be changed.
   // 
@@ -63,9 +61,10 @@ AD_XMETHOD1(GetParameterDefinition,
 		   AAFParameterDef,
 		   ppParmDef,
 		   New parameter definition,
-			Places the parameter definition of the operation parameter into the
-  // *ppParmDef argument.  The length of an operation parameter is in the same
-  // edit units and has the same value as the IAAFOperationGroup enclosing this parameter.
+     Places the parameter definition of the operation parameter into
+  // the *ppParmDef argument.  The length of an operation parameter is
+  // in the same edit units and has the same value as the
+  // IAAFOperationGroup enclosing this parameter.
   //
   // Succeeds if all of the following are true:
   // - the ppParmDef pointer is valid.
@@ -90,12 +89,15 @@ AD_XMETHOD1(SetTypeDefinition,
 			AAFTypeDef,
 			pTypeDef,
 			Type Definition of the data value inside of this object,
-			Sets the IAAFTypeDefinition of the data value inside this parameter to be the given one.
-  // The data value is the value of the parameter.  It is often an integer
-  // or rational\, and may change over time.  An example of a value would be the \"level\" parameter
-  // of a video dissolve\, which has control points with a value of zero \(0 percent B material\) at the
-  // start\, to one \(100 percent B material\) at the end.  The data value will actually be stored
-  // in either AAFConstantValue or one of the AAFControlPoints inside of an AAFVaryingValue.
+     Sets the IAAFTypeDefinition of the data value inside this
+  // parameter to be the given one.  The data value is the value of
+  // the parameter.  It is often an integer or rational\, and may
+  // change over time.  An example of a value would be the \"level\"
+  // parameter of a video dissolve\, which has control points with a
+  // value of zero \(0 percent B material\) at the start\, to one
+  // \(100 percent B material\) at the end.  The data value will
+  // actually be stored in either AAFConstantValue or one of the
+  // AAFControlPoints inside of an AAFVaryingValue.
   //
   // Succeeds if all of the following are true:
   // - the pTypeDef pointer is valid.
@@ -113,21 +115,25 @@ AD_XMETHOD1(SetTypeDefinition,
   // AAFRESULT_NULL_PARAM
   //   - pTypeDef is null.)
 
+
 AD_XMETHOD1(GetTypeDefinition,
 			[out\,retval],
 			objOut,
 			AAFTypeDef,
 			ppTypeDef,
 			Type Definition of the data value inside of this object,
-			Places the IAAFTypeDefinition of the data value inside this parameter into the
-  // *ppTypeDef argument.  The data value is the value of the parameter.  It is often an integer
-  // or rational\, and may change over time.  An example of a value would be the \"level\" parameter
-  // of a video dissolve\, which has control points with a value of zero \(0 percent B material\) at the
-  // start\, to one \(100 percent B material\) at the end.  The data value will actually be stored
-  // in either AAFConstantValue or one of the AAFControlPoints inside of an AAFVaryingValue.
+     Places the IAAFTypeDefinition of the data value inside this
+  // parameter into the *ppTypeDef argument.  The data value is the
+  // value of the parameter.  It is often an integer or rational\, and
+  // may change over time.  An example of a value would be the
+  // \"level\" parameter of a video dissolve\, which has control
+  // points with a value of zero \(0 percent B material\) at the
+  // start\, to one \(100 percent B material\) at the end.  The data
+  // value will actually be stored in either AAFConstantValue or one
+  // of the AAFControlPoints inside of an AAFVaryingValue.
   //
-  // The definition is stored in the base class because it should be constant
-  // for all control points inside of a varying value.
+  // The definition is stored in the base class because it should be
+  // constant for all control points inside of a varying value.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -141,8 +147,4 @@ AD_XMETHOD1(GetTypeDefinition,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppTypeDef is null.)
-
-
 AD_XCLASS_END(Abstract, StoredObject)
-
-

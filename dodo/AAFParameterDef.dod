@@ -15,12 +15,12 @@ AAFDefObject\
 #c
 AD_HEAD
 AD_IDL(//
-// The IAAFParameterDef interface is implemented by objects that specify a
-// definition of an operation group parameter.  The parameterDef object is separate from the
-// operation definition to allow some parameters\, for example level\, to be specified
-// once for multiple operation definitions.
-// Parmeter definitions define the possible values and display units of a single operation
-// parameter.
+// The IAAFParameterDef interface is implemented by objects that
+// specify a definition of an operation group parameter.  The
+// parameterDef object is separate from the operation definition to
+// allow some parameters\, for example level\, to be specified once
+// for multiple operation definitions. Parmeter definitions define the
+// possible values and display units of a single operation parameter.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -30,26 +30,23 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-
 AD_FORWARD_DECLARATION(AAFTypeDef)
-
 AD_CLASS_UUID(20045fa2, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(20045fa1, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-
 AD_XMETHOD1(GetTypeDef,
 		   [retval\,out],
 		   objOut,
 		   AAFTypeDef,
 		   ppTypeDef,
 		   Pointer to a type definition,
-			Places the AAFTypeDef object attached to this IAAFParameterDef into the
-  // *ppTypeDef argument.  If none exists yet\, NULL is placed into the
-  // *ppTypeDef argument.
+     Places the AAFTypeDef object attached to this IAAFParameterDef
+  // into the *ppTypeDef argument.  If none exists yet\, NULL is
+  // placed into the *ppTypeDef argument.
   //
-  // The returned AAFTypeDef object\, if it exists\, is
-  // AddRef\(\)ed before it is returned.
+  // The returned AAFTypeDef object\, if it exists\, is AddRef\(\)ed
+  // before it is returned.
   //
   // Succeeds if all of the following are true:
   // - the ppTypeDef pointer is valid.
@@ -72,13 +69,15 @@ AD_XMETHOD1(GetTypeDef,
   //   - There is no AAFTypeDef.  There has to be one of some
   //     kind for this to be a valid operation definition.)
 
+
 AD_XMETHOD1(SetTypeDef,
 		   [in],
 		   objIn,
 		   AAFTypeDef,
 		   pTypeDef,
 		   Pointer to a type definition,
-			Sets the AAFTypeDef of this IAAFOperationDef to be the given one.
+     Sets the AAFTypeDef of this IAAFOperationDef to be the given
+  // one.
   //
   // Succeeds if all of the following are true:
   // - the pTypeDef pointer is valid.
@@ -96,106 +95,7 @@ AD_XMETHOD1(SetTypeDef,
   // AAFRESULT_NULL_PARAM
   //   - pTypeDef is null.)
 
-AD_XMETHOD2(GetDisplayUnits,
-			[in\,string],
-			objPass,
-			aafCharacter *,
-			pDisplayUnits,
-			DisplayUnits,
 
-			[in],
-			objPass,
-			aafInt32,
-			bufSize,
-			length of the buffer to hold DisplayUnits,
-
-			Writes the DisplayUnits\, with a trailing null character\, into the
-  // pDisplayUnits buffer.  The buffer is allocated by the caller.  The size
-  // of the buffer is given by bufSize.  If the property name has not
-  // yet been set\, a zero-length string will be written \(that is\,
-  // only the trailing null character\).  The display units string is intended
-  // for display to the user\, and so should be concise.  No other formatting for
-  // machine readability is implied.
-  // 
-  // Caller may call GetDisplayUnitsBufLen\(\) to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pDisplayUnits pointer is valid.
-  // - bufSize indicates the buffer is large enough to hold the name.
-  // 
-  // If this method fails nothing will be written to *pDisplayUnits.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDisplayUnits arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.)
-
-AD_XMETHOD1(GetDisplayUnitsBufLen,
-			[out],
-			objPass,
-			aafInt32 *,
-			pLen,
-			DisplayUnits,
-
-			Returns the length of buffer required for the GetDisplayUnits\(\) method.  
-  // The value is placed into the location
-  // specified by pLen. The value will include space required for the
-  // trailing null character.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.)
-
-
-
-AD_XMETHOD1(SetDisplayUnits,
-			[in\, string],
-			objPass,
-			aafCharacter *,
-			pDisplayUnits,
-			DisplayUnits,
-
-		   Sets the DisplayUnits of the operation definition. DisplayUnits is a
-  // name that describes  a group of operation groups.  A copy is made of the data so the caller
-  // retains ownership of the *pDisplayUnits buffer and is responsible for
-  // de-allocating it.  The display units string is intended
-  // for display to the user\, and so should be concise.  No other formatting for
-  // machine readability is implied.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pDisplayUnits pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDisplayUnits arg is NULL.)
-
-
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(DisplayUnits,
+     the Display Units string property.)
 AD_XCLASS_END(Concrete, StoredObject)

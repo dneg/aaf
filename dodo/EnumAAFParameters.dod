@@ -14,9 +14,9 @@ AAFRoot\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used to enumerate over the AAFParameters referenced
-// from in an AAFOperationDefinition or AAFParameter\, and contained within
-// the AAFDictionary.
+// This interface is used to enumerate over the AAFParameters
+// referenced from in an AAFOperationDefinition or AAFParameter\, and
+// contained within the AAFDictionary.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -67,14 +67,16 @@ AD_X2METHOD3(Next,
 			array to receive parameter objects,count,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
 			number of actual Parameters fetched into ppParameters array,xxx,
-			Enumerates the next count elements \(AAFParameter pointers\) in the
-  // enumerator's list\, returning them in the given array along with
-  // the actual number of enumerated elements in pNumFetched. The caller
-  // is responsible for properly releasing the returned pointers.
+     Enumerates the next count elements \(AAFParameter pointers\) in
+  // the enumerator's list\, returning them in the given array along
+  // with the actual number of enumerated elements in pNumFetched. The
+  // caller is responsible for properly releasing the returned
+  // pointers.
   // 
   // Succeeds if all of the following are true:
   // - The ppParameters pointer is valid.
-  // - The pNumFetched pointer is valid. If count is 1\, pNumFetched can be NULL.
+  // - The pNumFetched pointer is valid. If count is 1\, pNumFetched
+  //   can be NULL.
   // - There are AAFParameter objects remaining to be returned.
   // 
   // If this method fails nothing is written to *ppComponents or
@@ -120,17 +122,20 @@ AD_METHOD0(Reset,
   // This method will return the following code:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
-  // @comm There is no guarantee that the same set of elements will be enumerated on 
-  // each pass through the list\, nor will the elements necessarily be enumerated in 
-  // the same order. The exact behavior depends on the collection being enumerated.)
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // There is no guarantee that the same set of elements will be
+  // enumerated on each pass through the list\, nor will the elements
+  // necessarily be enumerated in the same order. The exact behavior
+  // depends on the collection being enumerated.)
+
 
 AD_XMETHOD1(Clone,
 			[out\,retval], objOut, EnumAAFParameters, ppEnum, new enumeration,
-			Creates another EnumAAFParameters enumerator with the same state as the current
-  // enumerator to iterate over the same list. This method makes it
-  // possible to record a point in the enumeration sequence in order
-  // to return to that point at a later time.
+     Creates another EnumAAFParameters enumerator with the same state
+  // as the current enumerator to iterate over the same list. This
+  // method makes it possible to record a point in the enumeration
+  // sequence in order to return to that point at a later time.
   //
   // Note: The caller must release this new enumerator separately from
   // the first enumerator.

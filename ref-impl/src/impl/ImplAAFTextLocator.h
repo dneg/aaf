@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -61,10 +61,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
         (// @parm [out, size_is(bufSize), string] buffer into which Name is written
-         wchar_t *  pNameBuf,
+         aafCharacter *  pNameBuf,
 
          // @parm [in] The size of the pNameBuf buffer
-         aafInt32  bufSize);
+         aafUInt32  bufSize);
 
 
   //****************
@@ -73,7 +73,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameBufLen
         // @parm [out] required buffer length
-        (aafInt32 *  pLen);
+        (aafUInt32 *  pLen);
 
 
   //****************
@@ -82,7 +82,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetName
         // @parm [in, string] the new Name
-        (wchar_t *  pNameBuf);
+        (const aafCharacter *  pNameBuf);
 
 
   // Persistent data

@@ -101,10 +101,10 @@ AD_METHOD1(GetLength,
 	
 
 AD_XMETHOD1(SetDataDef,
-			[in\, ref],
-			objPass,
-			aafUID_constref,
-			datadef,
+			[in],
+			objIn,
+			AAFDataDef,
+			pDataDef,
 			DataDef of this object,
 			sets the data definition property AUID on this component.
   // 
@@ -116,21 +116,22 @@ AD_XMETHOD1(SetDataDef,
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  //   - succeeded.  \(This is the only code indicating success.\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pDataDef\))
 
 
 AD_XMETHOD1(GetDataDef,
-			[retval][out],
-			objPass,
-			aafUID_t *,
-			pDatadef,
+			[out\, retval],
+			objOut,
+			AAFDataDef,
+			ppDatadef,
 			DataDef of this object,
 			returns data definition object.
   //
   // Succeeds if all of the following are true:
-  // - the pDatadef pointer is valid.
+  // - the ppDatadef pointer is valid.
   // 
-  // If this method fails nothing will be written to *pDatadef.
+  // If this method fails nothing will be written to *ppDatadef.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -140,5 +141,5 @@ AD_XMETHOD1(GetDataDef,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pDatadef arg is NULL.)
+  //   - ppDatadef arg is NULL.)
 AD_XCLASS_END(Abstract, StoredObject)

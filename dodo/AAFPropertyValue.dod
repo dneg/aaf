@@ -19,8 +19,7 @@ AD_IDL(//
 // in AAF persistent objects.  Values may be simple \(e.g. integer\)\,
 // structured \(e.g. aafTimecode_t\)\, other AAF persistent objects\,
 // media\, or arrays of other types.
-AD_STD_COMMENT_IFC_HEADER
-AD_STD_COMMENT_IFC_STUB)
+AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFTypeDef)
 AD_CLASS_UUID(83057d71, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
 

@@ -61,8 +61,8 @@ ImplAAFNetworkLocator::Initialize ()
 
 // Override from AAFLocator
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFNetworkLocator::GetPath (aafWChar *  pPathBuf,
-								aafInt32    bufSize)
+ImplAAFNetworkLocator::GetPath (aafCharacter *  pPathBuf,
+								aafUInt32    bufSize)
 {
   bool stat;
   if (! pPathBuf)
@@ -81,7 +81,7 @@ ImplAAFNetworkLocator::GetPath (aafWChar *  pPathBuf,
 
 // Override from AAFLocator
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFNetworkLocator::GetPathBufLen (aafInt32 *  pLen)
+ImplAAFNetworkLocator::GetPathBufLen (aafUInt32 *  pLen)
 {
   if (! pLen)
 	{
@@ -95,7 +95,7 @@ ImplAAFNetworkLocator::GetPathBufLen (aafInt32 *  pLen)
 
 // Override from AAFLocator
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFNetworkLocator::SetPath (aafWChar *  pPathBuf)
+ImplAAFNetworkLocator::SetPath (const aafCharacter *  pPathBuf)
 {
   if (! pPathBuf)
 	{

@@ -15,7 +15,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -31,19 +31,20 @@
  *
  ************************************************************************/
 
-class ImplAAFMasterMob;
-class ImplAAFSourceMob;
-class ImplAAFSourceClip;
-class ImplAAFEssenceFormat;
-class ImplAAFEssenceStream;
-class ImplAAFEssenceSampleStream;
-class ImplAAFFileDescriptor;
-class ImplAAFFile;
-class ImplAAFLocator;
 class ImplAAFContainerDef;
-class ImplAAFPluginDescriptor;
-class ImplAAFHeader;
+class ImplAAFDataDef;
 class ImplAAFDictionary;
+class ImplAAFEssenceFormat;
+class ImplAAFEssenceSampleStream;
+class ImplAAFEssenceStream;
+class ImplAAFFile;
+class ImplAAFFileDescriptor;
+class ImplAAFHeader;
+class ImplAAFLocator;
+class ImplAAFMasterMob;
+class ImplAAFPluginDescriptor;
+class ImplAAFSourceClip;
+class ImplAAFSourceMob;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -55,10 +56,10 @@ class ImplAAFDictionary;
 
 typedef struct
 {
-	aafUID_t		mediaKind;
-	aafInt32		trackID;
-	aafInt16		physicalOutChan;	/* 1->N */
-}               aafSubChannel_t;
+  aafUID_t mediaKind;
+  aafInt32 trackID;
+  aafInt16 physicalOutChan;	/* 1->N */
+} aafSubChannel_t;
 
 typedef enum { kAAFCreated, kAAFAppended, kAAFReadOnly } aafOpenType_t;
 
@@ -353,7 +354,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetLargestSampleSize
         (// @parm [in] and this essence type
-         aafUID_t mediaKind,
+         ImplAAFDataDef * pMediaKind,
 
          // @parm [out] the largest sample size
          aafLength_t*  maxSize);
@@ -370,7 +371,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSampleFrameSize
         (// @parm [in] and this essence type
-         aafUID_t  mediaKind,
+         ImplAAFDataDef *  pMediaKind,
 
          // @parm [in] for this [1-based] sample frame number
          aafPosition_t  frameNum,
@@ -405,7 +406,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSampleCount
         (// @parm [in] and this essence type
-         aafUID_t mediaKind,
+         ImplAAFDataDef * pMediaKind,
 
         // @parm [out] 
         aafLength_t *  result);

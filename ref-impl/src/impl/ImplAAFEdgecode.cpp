@@ -32,6 +32,9 @@
 #include "ImplAAFEdgecode.h"
 #endif
 
+#include "ImplAAFBuiltinDefs.h"
+#include "ImplAAFDictionary.h"
+
 #include <assert.h>
 #include <string.h>
 
@@ -41,7 +44,6 @@
 #include "aafCvt.h"
 #include "AAFUtils.h"
 #include "AAFDataDefs.h"
-
 
 ImplAAFEdgecode::ImplAAFEdgecode ():
 _start( PID_EdgeCode_Start, "Start"),
@@ -61,14 +63,17 @@ ImplAAFEdgecode::~ImplAAFEdgecode ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEdgecode::Create(aafLength_t		length,
-                            aafEdgecode_t	edgecode)
+    ImplAAFEdgecode::Initialize(aafLength_t		length,
+								aafEdgecode_t	edgecode)
 {
 	HRESULT		rc = AAFRESULT_SUCCESS;
 	
 	XPROTECT()
 	{
-		CHECK(SetNewProps(length, DDEF_Edgecode));
+		ImplAAFDictionarySP pDict;
+		CHECK(GetDictionary(&pDict));
+		CHECK(SetNewProps(length,
+						  pDict->GetBuiltinDefs()->ddEdgecode()));
 		_start = edgecode.startFrame;
 		if (edgecode.filmKind < kFtNull || edgecode.filmKind > kFt65MM)
 			return AAFRESULT_INVALID_FILMTYPE;

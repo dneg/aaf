@@ -80,76 +80,8 @@ AD_XMETHOD1(GetSegment,
   //   - pResult arg is NULL.)
 
 
-AD_XMETHOD2(GetName,
-			[in\,string],
-			objPass,
-			aafCharacter *,
-			pName,
-			buffer provided by client to hold the Mob Slot Name,
-
-			[in],
-			objPass,
-			aafInt32,
-			bufSize,
-			length of the buffer provided to hold the name,
-
-			Writes the mob slot name property\, with a trailing null
-  // character\, into the pName buffer.  The buffer is
-  // allocated by the caller.  The size of the buffer is given by
-  // bufSize.  If the property name has not yet been set\, a
-  // zero-length string will be written \(that is\, only the trailing
-  // null character\).
-  // 
-  // Caller may call GetNameBufLen\(\) to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pName pointer is valid.
-  // - bufSize indicates the buffer is large enough to hold the name.
-  // 
-  // If this method fails nothing will be written to
-  // *pName.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pName arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.)
-
-
-AD_XMETHOD1(GetNameBufLen,
-			[in],
-			objPass,
-			aafInt32 *,
-			pLen,
-			length of the buffer provided to hold the name,
-
-			Returns the length of buffer required for the
-  // GetName\(\) method.  The value is placed into the
-  // location specified by pLen. The value will include space required
-  // for the trailing null character.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.)
+AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
+     the Mob Slot Name string property.)
 
 
 AD_XMETHOD1(GetPhysicalNum,
@@ -193,20 +125,20 @@ AD_XMETHOD1(GetPhysicalNum,
 
 AD_XMETHOD1(GetDataDef,
 			[out\,retval],
-			objPass,
-			aafUID_t *,
-			pResult,
+			objOut,
+			AAFDataDef,
+			ppResult,
 			Data Definition AUID,
 
-			This method will return the AUID of the Data Definition object
+			This method will return the Data Definition object
   // associated with the segment in this Mob Slot.  Common
-  // DataDefinition UIDs are DDEF_Picture\, DDEF_Sound\, DDEF_Timecode\,
+  // DataDefinitions are DDEF_Picture\, DDEF_Sound\, DDEF_Timecode\,
   // and DDEF_Edgecode.
   //
   // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
+  // - the ppResult pointer is valid.
   // 
-  // If this method fails nothing will be written to *pResult.
+  // If this method fails nothing will be written to *ppResult.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -216,7 +148,7 @@ AD_XMETHOD1(GetDataDef,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pResult arg is NULL.)
+  //   - ppResult arg is NULL.)
 
 
 AD_XMETHOD1(GetSlotID,
@@ -264,34 +196,6 @@ AD_XMETHOD1(SetSegment,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\))
-
-
-AD_XMETHOD1(SetName,
-			[in\, string],
-			objPass,
-			aafCharacter_constptr,
-			pName,
-			Mob Slot Name,
-
-			Set the mob slot name property to the value specified in
-  // pName.  A copy is made of the data so the caller retains
-  // ownership of the *pName buffer and is responsible for
-  // de-allocating it. 
-  // 
-  // Succeeds if all of the following are true:
-  // - the pName pointer is valid.
-  // 
-  // If this method fails the name property will not be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pName arg is NULL.)
 
 
 AD_XMETHOD1(SetPhysicalNum,

@@ -22,7 +22,7 @@ AD_CLASS_UUID(38e6f8a2, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(38e6f8a4, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
-AD_METHOD2(Create,
+AD_METHOD2(Initialize,
 	[in],aafLength_t  ,length  ,Length Property Value,
 	[in],aafEdgecode_t,edgecode,Edgecode Value,
 	This function creates a new edgecode clip with the

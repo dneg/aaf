@@ -16,7 +16,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -100,7 +100,7 @@ public:
 		 const aafLength_t & length,
 
 		 // @parm [in] Data kind of the new slot
-         const aafUID_t & dataDef,
+         ImplAAFDataDef * pDataDef,
 
 		 // @parm [in] Edit rate of the new slot
 		 const aafRational_t & editRate);
@@ -185,7 +185,7 @@ public:
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         const aafUID_t & essenceKind,
+         ImplAAFDataDef * pEssenceKind,
 
 		 aafSourceRef_t  ref,
 
@@ -204,7 +204,7 @@ public:
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         const aafUID_t & essenceKind,
+         ImplAAFDataDef * pEssenceKind,
 
 		 aafSourceRef_t  ref,
 
@@ -225,7 +225,7 @@ public:
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         const aafUID_t & essenceKind,
+         ImplAAFDataDef * pEssenceKind,
 
 		 aafSourceRef_t  ref,
 

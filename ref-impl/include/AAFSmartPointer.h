@@ -82,16 +82,16 @@
 struct AAFRefCountedCOMReference : public AAFCountedReference<IUnknown>
 {
 protected:
-  void acquire (IUnknown * pObj)
+  aafUInt32 acquire (IUnknown * pObj)
   {
 	AAF_SMART_POINTER_ASSERT (pObj);
-	pObj->AddRef ();
+	return pObj->AddRef ();
   }
 
-  void release (IUnknown * pObj)
+  aafUInt32 release (IUnknown * pObj)
   {
 	AAF_SMART_POINTER_ASSERT (pObj);
-	pObj->Release ();
+	return pObj->Release ();
   }
 };
 

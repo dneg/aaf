@@ -36,7 +36,7 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(Initialize,
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pName,
 			Mob name [optional],
 

@@ -35,10 +35,10 @@ AD_CLASS_UUID(38e6f8a5, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(38e6f8a7, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD3(Initialize,
-			[in\, ref],
-				objPass,
-				aafUID_constref,
-				datadef,
+			[in],
+				objIn,
+				AAFDataDef,
+				pDataDef,
 				Data Definition object,
 			[in],
 				objPass,
@@ -65,7 +65,10 @@ AD_XMETHOD3(Initialize,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef argument is NULL.)
 
 
 AD_XMETHOD6(GetFade,
@@ -105,7 +108,7 @@ AD_XMETHOD6(GetFade,
 			pFadeOutPresent,
 			Fade In Type,
 
-			This function returns the optional fade information from a
+     This function returns the optional fade information from a
   // source clip.  This function only applies to audio source clips.
   // Length units are specified by the containing mob slot's edit
   // rate.
@@ -220,11 +223,11 @@ AD_XMETHOD4(SetFade,
 				fadeOutType,
 				Fade Out Type,
 
-  // This function sets the optional fade properties on this source
+     This function sets the optional fade properties on this source
   // clip object.  The fade properties only apply to a source clip of
-  // data definition \(or convertible to a data definition\) of type Sound. All
-  // arguments should be specified.  Length units are specified by the
-  // containing mob slot's edit rate.
+  // data definition \(or convertible to a data definition\) of type
+  // Sound.  All arguments should be specified.  Length units are
+  // specified by the containing mob slot's edit rate.
   // 
   // Succeeds if all of the following are true:
   // - This object has already been Initialize\(\)d.
@@ -246,7 +249,7 @@ AD_METHOD1(SetSourceReference,
 				sourceRef,
 				Source Reference,
 
-				This function sets the source reference of this source clip.
+     This function sets the source reference of this source clip.
   //
   // Note: the  3 properties of a source Clip that make up the "source
   // reference" are sourceID\\\, sourceTrackID\\\, and startTime.

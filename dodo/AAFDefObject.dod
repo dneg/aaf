@@ -24,21 +24,20 @@ AD_CLASS_UUID(dfbd6528, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6527, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Abstract, StoredObject)
-
 AD_XMETHOD3(Initialize,
 		   [in\, ref],
 		   objPass,
 		   aafUID_constref,
 		   id,
 		   AUID for new DeObject,
-		   [in],
+		   [in\, string],
 		   objPass,
-		   aafCharacter *,
+		   aafCharacter_constptr,
 		   pName,
 		   Name for new DefObject,
-		   [in],
+		   [in\, string],
 		   objPass,
-		   aafCharacter *,
+		   aafCharacter_constptr,
 		   pDescription,
 		   Description for new DefObject,
 		   Init all fields of a definition object.)
@@ -66,7 +65,7 @@ AD_XMETHOD1(AppendPluginDef,
 			pPluginDef,
 			PluginDef to append,
 
-			Append another PluginDef to this PluggableDefinition.  Use this
+     Append another PluginDef to this PluggableDefinition.  Use this
   // function to add a PluginDef to be scanned last when searching for
   // the plugin \(a secondary location for the plugin\).
   // 
@@ -93,9 +92,9 @@ AD_XMETHOD1(PrependPluginDef,
 			pPluginDef,
 			PluginDef to append,
 
-			Append another PluginDef to this PluggableDefinition.  Use this
-  // function to add a PluginDef to be scanned first when searching for
-  // the plugin \(a new primary location for the plugin\).
+     Append another PluginDef to this PluggableDefinition.  Use this
+  // function to add a PluginDef to be scanned first when searching
+  // for the plugin \(a new primary location for the plugin\).
   // 
   // Succeeds if all of the following are true:
   // - the pPluginDef pointer is valid.
@@ -112,14 +111,16 @@ AD_XMETHOD1(PrependPluginDef,
   // AAFRESULT_NULL_PARAM
   //   - pPluginDef is null.)
 
+
 AD_XMETHOD1(GetPluginDefs,
 			[out\, retval],
 			objOut,
 			EnumAAFPluginDescriptors,
 			ppEnum,
 			AAFPluginDef Enumeration,
-			Returns an IEnumAAFPluginDescriptors enumerator for the plugin descriptors
-  // contained in the AAFPluggableDef through the *ppEnum argument.
+     Returns an IEnumAAFPluginDescriptors enumerator for the plugin
+  // descriptors contained in the AAFPluggableDef through the *ppEnum
+  // argument.
   // 
   // The returned enumerator is AddRef\(\)ed before it is returned.
   //
@@ -152,8 +153,8 @@ AD_XMETHOD1(CountPluginDefs,
 			aafUInt32 *,
 			pResult,
 			Total number of plugin descriptor objects,
-			Writes the number of plugin descriptor objects into the
-  // *pResult argument.
+     Writes the number of plugin descriptor objects into the *pResult
+  // argument.
   // 
   // Succeeds if all of the following are true:
   // - the pResult pointer is valid.
@@ -184,7 +185,7 @@ AD_XMETHOD2(InsertPluginDefAt,
 			pPluginDef,
 			Plugin descriptor to insert,
 
-  // Inserts the given plugin descriptor at the given index.  The
+     Inserts the given plugin descriptor at the given index.  The
   // plugin descriptors already existing at the given and higher
   // indices are all moved to the next higher index.
   // 
@@ -221,7 +222,7 @@ AD_XMETHOD2(GetPluginDefAt,
 			ppPluginDef,
 			Retrieved plugin descriptor,
 
-  // Retrieves the indexed plugin descriptor from the header.  This
+     Retrieves the indexed plugin descriptor from the header.
   // 
   // Succeeds if all of the following are true:
   // - the ppPluginDef pointer is valid.
@@ -249,7 +250,7 @@ AD_XMETHOD1(RemovePluginDefAt,
 			index,
 			Index of plugin descriptor to be removed,
 
-  // Removes the given plugin descriptor at the given index.  The
+     Removes the given plugin descriptor at the given index.  The
   // plugin descriptors already existing at the given and higher
   // indices are all moved to the next lower index.
   // 

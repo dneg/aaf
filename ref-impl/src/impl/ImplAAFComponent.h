@@ -22,7 +22,7 @@ class ImplAAFScopeStack;
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -85,7 +85,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetDataDef
-        (const aafUID_t & datadef);  //@parm [in] DataDef of this object
+        (ImplAAFDataDef * pDataDef);  //@parm [in] DataDef of this object
 
 
   //****************
@@ -93,13 +93,13 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDataDef
-        (aafUID_t *  datadef);  //@parm [retval][out] DataDef of this object
+        (ImplAAFDataDef ** ppDataDef);  //@parm [retval][out] DataDef of this object
 
 
 public:
 	AAFRESULT SetNewProps(
 				aafLength_t length,		// IN - Length  property value
-				const aafUID_t & dataDef);		// IN - DataDef property value
+				ImplAAFDataDef * pDataDef);		// IN - DataDef property value
 	virtual AAFRESULT AccumulateLength(aafLength_t *length);
 	virtual AAFRESULT GetMinimumBounds(aafPosition_t rootPos, aafLength_t rootLen,
 										ImplAAFMob *mob, ImplAAFMobSlot *track,

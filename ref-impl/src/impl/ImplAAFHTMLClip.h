@@ -15,7 +15,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -59,7 +59,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetBeginAnchor
         (// @parm [in,string] Begin Anchor Name
-         wchar_t *  pName,
+         aafCharacter *  pName,
 
          // @parm [in] length of the buffer to hold Begin Anchor Name
          aafInt32  bufSize);
@@ -78,7 +78,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetBeginAnchor
         // @parm [in, string] Specifies the HTML tag that defines the start of the text
-        (wchar_t *  pName);
+        (const aafCharacter *  pName);
 
   //****************
   // GetEndAnchor()
@@ -86,7 +86,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetEndAnchor
         (// @parm [in,string] End Anchor Name
-         wchar_t *  pName,
+         aafCharacter *  pName,
 
          // @parm [in] length of the buffer to hold End Anchor Name
          aafInt32  bufSize);
@@ -105,7 +105,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEndAnchor
         // @parm [in, string] Specifies the HTML tag that defines the end of the text
-        (wchar_t *  pName);
+        (const aafCharacter *  pName);
 
 protected:
   // Persistent properties...

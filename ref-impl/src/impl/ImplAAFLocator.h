@@ -15,7 +15,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -30,11 +30,6 @@
  * LIABILITY.
  *
  ************************************************************************/
-
-
-
-
-
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -64,7 +59,7 @@ public:
          aafCharacter *  pPathBuf,
 
          // @parm [in] The size of the pPathBuf buffer
-         aafInt32  bufSize);
+         aafUInt32  bufSize);
 
 
   //****************
@@ -73,7 +68,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPathBufLen
         // @parm [out] required buffer length
-        (aafInt32 *  pLen);
+        (aafUInt32 *  pLen);
 
 
   //****************
@@ -82,7 +77,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetPath
         // @parm [in, string] the new path
-        (aafCharacter *  pPathBuf);
+        (const aafCharacter *  pPathBuf);
 };
 
 #endif // ! __ImplAAFLocator_h__

@@ -39,6 +39,7 @@
 #include "ImplAAFObject.h"
 #endif
 
+class ImplAAFTypeDef;
 
 class ImplAAFTaggedValue : public ImplAAFObject
 {
@@ -64,7 +65,7 @@ public:
          const aafCharacter * pName,
 
          // @parm [in] Type definition of this tagged value object
-         const aafUID_t & datadef);
+         ImplAAFTypeDef * pTypeDef);
 
   //****************
   // GetName()
@@ -83,7 +84,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameBufLen
         // @parm [out] Name buffer length
-        (aafInt32 *  pLen);
+        (aafUInt32 *  pLen);
 
   //****************
   // GetTypeDefinition()

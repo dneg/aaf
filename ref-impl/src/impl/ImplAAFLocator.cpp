@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -49,7 +49,7 @@ ImplAAFLocator::~ImplAAFLocator ()
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFLocator::GetPath (
       aafCharacter *  /*pPathBuf*/,
-      aafInt32  /*bufSize*/)
+      aafUInt32  /*bufSize*/)
 {
   return AAFRESULT_ABSTRACT_CLASS;
 }
@@ -58,7 +58,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFLocator::GetPathBufLen (
-      aafInt32 *  /*pLen*/)
+      aafUInt32 *  /*pLen*/)
 {
   return AAFRESULT_ABSTRACT_CLASS;
 }
@@ -67,7 +67,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFLocator::SetPath (
-      aafCharacter *  /*pPathBuf*/)
+      const aafCharacter *  /*pPathBuf*/)
 {
   return AAFRESULT_ABSTRACT_CLASS;
 }

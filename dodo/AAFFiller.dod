@@ -39,9 +39,9 @@ AD_DEFAULT_UUID(38e6f8a9, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD2(Initialize,
 			[in],
-			objPass,
-			aafUID_constref,
-			dataDef,
+			objIn,
+			AAFDataDef,
+			pDataDef,
 			Data Definition Object,
 
 			[in],
@@ -67,6 +67,9 @@ AD_XMETHOD2(Initialize,
   //
   // AAFRESULT_ALREADY_INITIALIZED
   //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef is null.
   //
   // AAFRESULT_BAD_LENGTH
   //   - length is negative.)

@@ -15,7 +15,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -73,7 +73,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AddMasterSlot
         (// @parm [in] Data kind of new Master Mob slot
-		 const aafUID_t & dataDef,
+		 ImplAAFDataDef * pDataDef,
 
 		 // @parm [in] Slot ID of the Source Mob slot to be added to the Master Mob
          aafSlotID_t  sourceSlotID,
@@ -101,7 +101,7 @@ public:
 		 aafWChar *  pTapeName,
 
 		 // @parm [in] the size of the pTapeName buffer
-         aafInt32  bufSize);
+         aafUInt32  bufSize);
 
 
   //****************
@@ -113,7 +113,7 @@ public:
 		 aafInt32  masterSlotID,
 
 		 // @parm [out] required buffer length
-         aafInt32 *  pLen);
+         aafUInt32 *  pLen);
 
 
   //****************
@@ -255,7 +255,7 @@ public:
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         const aafUID_t & essenceKind,
+         ImplAAFDataDef * pEssenceKind,
 
 		 aafSourceRef_t  ref,
 
@@ -274,7 +274,7 @@ public:
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         const aafUID_t & essenceKind,
+         ImplAAFDataDef * pEssenceKind,
 
 		 aafSourceRef_t  ref,
 
@@ -291,7 +291,7 @@ public:
          aafSlotID_t  masterSlotID,
 
          // @parm [in] create essence of this type
-         aafUID_t	mediaKind,
+         ImplAAFDataDef * pMediaKind,
 
  		 aafUID_t			codecID,
 		 aafRational_t	editRate,
@@ -411,7 +411,7 @@ public:
          aafMediaCriteria_t*  mediaCrit,
 
          // @parm [in] for this essence type
-         aafUID_t mediaKind,
+         ImplAAFDataDef * pMediaKind,
 
          // @parm [out] How many channels?
          aafInt16*  numCh);
