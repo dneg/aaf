@@ -28,6 +28,8 @@ class ImplAAFFileDescriptor;
 
 class ImplAAFLocator;
 class ImplAAFContainerDef;
+class ImplAAFPluginDescriptor;
+class ImplAAFHeader;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -674,6 +676,8 @@ public:
 public:
 	//Toolkit private functions
 	AAFRESULT MakeAAFContainerDef(ImplAAFContainerDef **result);
+	AAFRESULT CreateContainerDef (ImplAAFHeader *head);
+	AAFRESULT CreateCodecDef(ImplAAFHeader *head, aafUID_t codecDef);
 
 private:
 	aafUID_t			_codecID;
@@ -688,6 +692,7 @@ private:
 	IAAFEssenceCodec	*_codec;
 	IAAFEssenceStream	 *_stream;
 	aafOpenType_t		_openType;
+	IAAFPluginDescriptor *_codecDescriptor;
 };
 
 #endif // ! __ImplAAFEssenceAccess_h__
