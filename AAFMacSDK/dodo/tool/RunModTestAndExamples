@@ -84,10 +84,10 @@ unalias PrintHelp
 Set olddirectory `Directory`	# save the default directory
 if "{CHECK_RELEASE}" ­ ""
 	echo "Testing release build..."
-	Directory "{AAFMacSDK}bin:"
+	Directory "{aaf}AAFMacSDK:bin:"
 else
 	echo "Testing debug build..."
-	Directory "{AAFMacSDK}bin:debug:"
+	Directory "{aaf}AAFMacSDK:bin:debug:"
 end if
 
 
