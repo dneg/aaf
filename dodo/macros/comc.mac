@@ -101,6 +101,7 @@
 class OMAssertionViolation;
 
 #include <assert.h>
+#include <string.h>
 #endm
 
 
@@ -1274,6 +1275,10 @@ AD_CATCH_ASSERTION_END
 //
 // 
 // 
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT C.this-module::InternalQueryInterface
 (
     REFIID riid,
@@ -1285,7 +1290,7 @@ HRESULT C.this-module::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (riid == IID_I.this-module) 
+    if (EQUAL_UID(riid,IID_I.this-module)) 
     { 
         *ppvObj = (I.this-module *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
@@ -1314,6 +1319,10 @@ AAF_DEFINE_FACTORY(.this-module)\
 //
 // 
 // 
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT C.this-module::InternalQueryInterface
 (
     REFIID riid,
@@ -1325,14 +1334,14 @@ HRESULT C.this-module::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (riid == IID_I.this-module) 
+    if (EQUAL_UID(riid,IID_I.this-module)) 
     { 
         *ppvObj = (I.this-module *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 
-    if (riid == IID_I%01) 
+    if (EQUAL_UID(riid,IID_I%01)) 
     { 
         *ppvObj = (I%01 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
@@ -1359,7 +1368,11 @@ AAF_DEFINE_FACTORY(.this-module)\
 #startm AD_COM_EXT2_CLASS_END 02
 //
 // 
-// 
+//
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+} 
 HRESULT C.this-module::InternalQueryInterface
 (
     REFIID riid,
@@ -1371,20 +1384,20 @@ HRESULT C.this-module::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (riid == IID_I.this-module) 
+    if (EQUAL_UID(riid,IID_I.this-module)) 
     { 
         *ppvObj = (I.this-module *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
 
-    if (riid == IID_I%01) 
+    if (EQUAL_UID(riid,IID_I%01)) 
     { 
         *ppvObj = (I%01 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-    if (riid == IID_I%02) 
+    if (EQUAL_UID(riid,IID_I%02)) 
     { 
         *ppvObj = (I%02 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
@@ -1412,6 +1425,10 @@ AAF_DEFINE_FACTORY(.this-module)\
 //
 // 
 // 
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+}
 HRESULT C.this-module::InternalQueryInterface
 (
     REFIID riid,
@@ -1423,7 +1440,7 @@ HRESULT C.this-module::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (riid == IID_I.this-module) 
+    if (EQUAL_UID(riid,IID_I.this-module)) 
     { 
         *ppvObj = (I.this-module *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
@@ -2651,6 +2668,10 @@ C.this-module::~C.this-module ()
 // allows the aggregated extension object access to all of the
 // interfaces and property data of its controlling unknown.
 //
+inline int EQUAL_CLSID(const CLSID & a, const CLSID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (CLSID)));
+}
 HRESULT STDMETHODCALLTYPE
     C.this-module::InitializeExtension(REFCLSID rclsid)
 {
@@ -2673,7 +2694,7 @@ AD_CATCH_ASSERTION_BEGIN\
       pNextExtension = pExtension;
       while (NULL != pNextExtension)
       {
-        if (rclsid == pNextExtension->GetCLSID())
+        if (EQUAL_CLSID(rclsid,pNextExtension->GetCLSID()))
         {
           hr = AAFRESULT_EXTENSION_ALREADY_INITIALIZED;
           break;
@@ -2719,7 +2740,11 @@ AD_CATCH_ASSERTION_END\
 
 //
 // 
-// 
+//
+inline int EQUAL_UID(const GUID & a, const GUID & b)
+{
+  return (0 == memcmp((&a), (&b), sizeof (aafUID_t)));
+} 
 HRESULT C.this-module::InternalQueryInterface
 (
     REFIID riid,
@@ -2731,7 +2756,7 @@ HRESULT C.this-module::InternalQueryInterface
         return E_INVALIDARG;
 
     // We only support the IClassFactory interface 
-    if (riid == IID_I.this-module) 
+    if (EQUAL_UID(riid,IID_I.this-module)) 
     { 
         *ppvObj = (I.this-module *)this; 
         ((IUnknown *)*ppvObj)->AddRef();

@@ -55,7 +55,7 @@
 *
 ************************************************************************/
 
-#include <wtypes.h>
+#include "AAFCOMPlatformTypes.h"
 #endm
 
 #startm AD_TYPES_HEAD 00
