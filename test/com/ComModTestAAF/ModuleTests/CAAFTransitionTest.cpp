@@ -35,7 +35,7 @@
 #include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
-#include "aafCvt.h"
+//#include "aafCvt.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDataDefs.h"
@@ -149,7 +149,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafUID_t					effectID = kTestEffectID;
 	aafUID_t					parmID = kTestParmID;
 
-	CvtInt32toLength(100, transitionLength);
+	//CvtInt32toLength(100, transitionLength);
+	transitionLength = 100;
 	aafProductVersion_t v;
 	v.major = 1;
 	v.minor = 0;

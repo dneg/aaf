@@ -34,7 +34,7 @@
 #include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
-#include "aafCvt.h"
+//#include "aafCvt.h"
 #include "AAFResult.h"
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
@@ -92,7 +92,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   aafLength_t					zero;
   aafEdgecode_t				startEC;
 
-  CvtInt32toLength(0, zero);
+//  CvtInt32toLength(0, zero);
+  zero = 0;
   aafProductVersion_t v;
   v.major = 1;
   v.minor = 0;
