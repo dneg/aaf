@@ -31,7 +31,6 @@
 #include "OMXMLStoredObject.h"
 #include "OMKLVStoredObject.h"
 #include "OMClassFactory.h"
-#include "OMObjectDirectory.h"
 #include "OMPropertyTable.h"
 #include "OMUtilities.h"
 #include "OMDictionary.h"
@@ -48,8 +47,6 @@ OMFile::~OMFile(void)
 {
   TRACE("OMFile::~OMFile");
 
-  delete _objectDirectory;
-  _objectDirectory = 0;
   delete _referencedProperties;
   _referencedProperties = 0;
   delete _fileName;
@@ -645,22 +642,6 @@ OMPropertyTable* OMFile::referencedProperties(void)
   return _referencedProperties;
 }
 
-  // @mfunc Retrieve the <c OMObjectDirectory> from this <c OMFile>.
-  //   @rdesc The <c OMObjectDirectory> associated with this file.
-OMObjectDirectory* OMFile::objectDirectory(void)
-{
-  TRACE("OMFile::objectDirectory");
-
-#if defined(OM_TRACK_OBJECTS)
-  // Create the object directory on demand (debugging only) 
-  if (_objectDirectory == 0) {
-    _objectDirectory = new OMObjectDirectory();
-    ASSERT("Valid heap pointer", _objectDirectory != 0);
-  }
-#endif
-  return _objectDirectory;
-}
-
   // @mfunc The byte order of this <c OMFile>.
   //   @rdesc The byte order of this <c OMFile>.
   //   @this const
@@ -955,7 +936,6 @@ OMFile::OMFile(const wchar_t* fileName,
 : _root(0),
   _rootStore(store),
   _dictionary(dictionary),
-  _objectDirectory(0),
   _referencedProperties(0),
   _mode(mode),
   _loadMode(loadMode),
@@ -1005,7 +985,6 @@ OMFile::OMFile(const wchar_t* fileName,
 : _root(root),
   _rootStore(store),
   _dictionary(dictionary),
-  _objectDirectory(0),
   _referencedProperties(0),
   _mode(mode),
   _loadMode(lazyLoad),
@@ -1046,7 +1025,6 @@ OMFile::OMFile(OMRawStorage* rawStorage,
 : _root(0),
   _rootStore(0),
   _dictionary(dictionary),
-  _objectDirectory(0),
   _referencedProperties(0),
   _mode(mode),
   _loadMode(loadMode),
@@ -1088,7 +1066,6 @@ OMFile::OMFile(OMRawStorage* rawStorage,
 : _root(root),
   _rootStore(0),
   _dictionary(dictionary),
-  _objectDirectory(0),
   _referencedProperties(0),
   _mode(mode),
   _loadMode(lazyLoad),

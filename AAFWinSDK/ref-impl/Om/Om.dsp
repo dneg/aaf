@@ -182,10 +182,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredStream.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMObjectDirectory.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\OM\OMObjectManager.cpp"
 # End Source File
 # Begin Source File
@@ -507,10 +503,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMObject.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMObjectDirectory.h"
 # End Source File
 # Begin Source File
 

@@ -30,7 +30,6 @@
 #include <stddef.h>
 
 class OMClassFactory;
-class OMObjectDirectory;
 class OMPropertyTable;
 class OMStoredObject;
 class OMDictionary;
@@ -231,9 +230,6 @@ public:
     // @cmember Retrieve the <c OMPropertyTable> from this <c OMFile>.
   OMPropertyTable* referencedProperties(void);
 
-    // @cmember Retrieve the <c OMObjectDirectory> from this <c OMFile>.
-  OMObjectDirectory* objectDirectory(void);
-
     // @cmember The byte order of this <c OMFile>.
   OMByteOrder byteOrder(void) const;
 
@@ -351,7 +347,6 @@ private:
   OMStoredObject* _rootStore;
 
   OMDictionary* _dictionary;
-  OMObjectDirectory* _objectDirectory;
   OMPropertyTable* _referencedProperties;
 
   enum OMAccessMode _mode;

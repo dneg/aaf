@@ -27,7 +27,6 @@
 #include "OMStoredObject.h"
 #include "OMFile.h"
 #include "OMClassFactory.h"
-#include "OMObjectDirectory.h"
 #include "OMDataTypes.h"
 #include "OMProperty.h"
 #include "OMPropertySetIterator.h"
@@ -173,11 +172,6 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   // Attach the object.
   object->attach(containingObject, name);
   object->setStore(&s);
-#if defined(OM_TRACK_OBJECTS)
-  // Keep track of each object (debugging only)
-  OMFile* f = containingObject->file();
-  f->objectDirectory()->insert(object->pathName(), object);
-#endif
   object->restoreContents();
   return object;
 }
