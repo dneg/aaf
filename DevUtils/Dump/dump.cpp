@@ -3611,6 +3611,10 @@ void dumpFile(char* fileName)
 {
   resetStatistics();
 
+  if (hFlag) {
+    dumpHeader(fileName);
+  }
+
   initializeCOM();
   IStorage* storage = 0;
   openStorage(fileName, &storage);
@@ -4072,6 +4076,8 @@ void usage(void)
        << endl;
   cerr << "  --statistics      = print statistics (-s)"
        << endl;
+  cerr << "  --mss-header      = dump the structured storage header"
+       << endl;
   cerr << endl;
   cerr << "Use the following with --property-dump and --aaf-dump"
        << endl;
@@ -4084,8 +4090,6 @@ void usage(void)
        << "dump only the first <n> bytes (dec) of media streams (-m)"
        << endl;
   cerr << "  --validate        = validate the structure of the file (-v)"
-       << endl;
-  cerr << "  --mss-header      = dump the structured storage header"
        << endl;
   cerr << endl;
   cerr << "Use the following with --hex-dump"
