@@ -41,11 +41,11 @@
 #include "ImplAAFHeader.h"
 
 ImplAAFSourceClip::ImplAAFSourceClip ():
-	_fadeInLength(		PID_SourceClip_FadeInLength,		"fadeInLength"),
-	_fadeInType(	PID_SourceClip_FadeInType,		"fadeInType"),
-	_fadeOutLength(	PID_SourceClip_FadeOutLength,		"fadeOutLength"),
-	_fadeOutType(	PID_SourceClip_FadeOutType,		"fadeOutType"),
-	_startTime(		PID_SourceClip_StartTime,		"startTime")
+	_fadeInLength(		PID_SourceClip_FadeInLength,		"FadeInLength"),
+	_fadeInType(	PID_SourceClip_FadeInType,		"FadeInType"),
+	_fadeOutLength(	PID_SourceClip_FadeOutLength,		"FadeOutLength"),
+	_fadeOutType(	PID_SourceClip_FadeOutType,		"FadeOutType"),
+	_startTime(		PID_SourceClip_StartTime,		"StartTime")
 {
 	_persistentProperties.put(		_fadeInLength.address());
 	_persistentProperties.put(		_fadeInType.address());
