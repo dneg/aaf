@@ -1,3 +1,5 @@
+// @doc
+
 #include "OMPropertySet.h"
 #include "OMProperty.h"
 
@@ -24,6 +26,11 @@ OMPropertySet::~OMPropertySet(void)
   _propertySet = 0;
 }
 
+  // @mfunc Get the <c OMProperty> associated with the property
+  //        id <p pid>.
+  //   @parm Property id.
+  //   @rdesc The <c OMProperty> object with property id <p pid>.
+  //   @this const
 OMProperty* OMPropertySet::get(const int pid) const
 {
   TRACE("OMPropertySet::get");
@@ -39,6 +46,9 @@ OMProperty* OMPropertySet::get(const int pid) const
   return result;
 }
 
+  // @mfunc Insert the <c OMProperty> <p property> into
+  //        this <c OMPropertySet>.
+  //   @parm <c OMProperty> to insert.
 void OMPropertySet::put(OMProperty* property)
 {
   TRACE("OMPropertySet::put");
@@ -65,6 +75,14 @@ void OMPropertySet::put(OMProperty* property)
   POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
 }
 
+  // @mfunc Iterate over the <c OMProperty> objects in this
+  //        <c OMPropertySet>. Call this function <mf OMPropertySet::count>
+  //        times to iterate over all the <c OMProperty> objects in this
+  //        <c OMPropertySet>.
+  //   @parm Iteration context. Set this to 0 to start with the
+  //         "first" <c OMProperty>.
+  //   @parm The "current" <c OMProperty>.
+  //   @this const
 void OMPropertySet::iterate(size_t& context, OMProperty*& property) const
 {
   OMPropertySetElement* element = 0;
@@ -86,6 +104,12 @@ void OMPropertySet::iterate(size_t& context, OMProperty*& property) const
   }
 }
 
+  // @mfunc Does this <c OMPropertySet> contain an <c OMProperty>
+  //        with property id <p pid> ?
+  //  @rdesc <e bool.true> if an <c OMProperty> with property id
+  //         <p pid> is present <e bool.false> otherwise.
+  //  @parm Property id.
+  //  @this const
 bool OMPropertySet::contains(const int pid) const
 {
   OMPropertySetElement* element = find(pid);
@@ -96,12 +120,20 @@ bool OMPropertySet::contains(const int pid) const
   }
 }
 
+  // @mfunc The number of <c OMProperty> objects in this
+  //        <c OMPropertySet>.
+  //   @rdesc The number of <c OMProperty> objects in this
+  //          <c OMPropertySet>.
+  //   @this const
 size_t OMPropertySet::count(void) const
 {
   POSTCONDITION("Valid count", ((_count >= 0) && (_count <= _capacity)));
   return _count;
 }
 
+  // @mfunc Inform this <c OMPropertySet> that it contains the <c
+  // OMProperty> objects of the <c OMStorable> <p containingObject>.
+  //   @parm The <c OMStorable> object that owns this <c OMPropertySet>.
 void OMPropertySet::setContainingObject(const OMStorable* containingObject)
 {
   _containingObject = containingObject;
