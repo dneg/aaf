@@ -8,9 +8,9 @@
 // class OMProperty
 
 OMProperty::OMProperty(const OMPropertyId propertyId,
-                       const int type,
+                       const int storedForm,
                        const char* name)
-: _propertyId(propertyId), _type(type), _name(name)
+: _propertyId(propertyId), _storedForm(storedForm), _name(name)
 {
   TRACE("OMProperty::OMProperty");
 }
@@ -89,18 +89,13 @@ void OMProperty::detach(const OMStorable* object, const size_t key)
   // nothing to do for most descendants of OMProperty
 }
 
-int OMProperty::typeId(void) const
-{
-  return _type;
-}
-
 // @doc OMINTERNAL
 
 // class OMSimpleProperty
 
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const char* name)
-: OMProperty(propertyId, TID_DATA, name), _size(0), _bits(0)
+: OMProperty(propertyId, SF_DATA, name), _size(0), _bits(0)
 {
   TRACE("OMSimpleProperty::OMSimpleProperty");
 }
@@ -108,7 +103,7 @@ OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
 OMSimpleProperty::OMSimpleProperty(const OMPropertyId propertyId,
                                    const char* name,
                                    size_t valueSize)
-: OMProperty(propertyId, TID_DATA, name),
+: OMProperty(propertyId, SF_DATA, name),
   _size(valueSize),
   _bits(0)
 {
@@ -176,7 +171,7 @@ void OMSimpleProperty::save(void) const
   ASSERT("Container is persistent", container->persistent());
   OMStoredObject* s = container->store();
 
-  s->write(_propertyId, _type, _bits, _size);
+  s->write(_propertyId, _storedForm, _bits, _size);
 }
 
   // @mfunc Restore this <c OMSimpleProperty>, the size of the
@@ -190,7 +185,7 @@ void OMSimpleProperty::restore(size_t size)
   OMStoredObject* store = _propertySet->container()->store();
   ASSERT("Valid store", store != 0);
 
-  store->read(_propertyId, _type, _bits, _size);
+  store->read(_propertyId, _storedForm, _bits, _size);
 }
 
   // @mfunc The size of the raw bits of this
@@ -223,9 +218,9 @@ void OMSimpleProperty::getBits(OMByte* bits, size_t bitsSize) const
 // class OMCollectionProperty
 
 OMCollectionProperty::OMCollectionProperty(const OMPropertyId propertyId,
-                                           const int type,
+                                           const int storedForm,
                                            const char* name)
-: OMProperty(propertyId, type, name)
+: OMProperty(propertyId, storedForm, name)
 {
   TRACE("OMCollectionProperty::OMCollectionProperty");
   PRECONDITION("Valid name", validString(name));
