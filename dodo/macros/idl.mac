@@ -57,6 +57,15 @@ import "%01.idl";
 #c Arguments: none
 #c
 #startm AD_HEAD 00
+/******************************************\\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\\******************************************/
+
 cpp_quote("//=--------------------------------------------------------------------------=")
 cpp_quote("// .this-module.h")
 cpp_quote("//=--------------------------------------------------------------------------=")
@@ -124,6 +133,17 @@ import "wtypes.idl";
 #startm AD_CLASS_BEGIN 00
 interface I.this-module : IUnknown
 {\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_COM_EXT_CLASS_BEGIN 01
+AD_CLASS_BEGIN\
 #endm
 
 
@@ -661,6 +681,16 @@ cpp_quote("EXTERN_C const CLSID CLSID_.this-module;")
 
 #ccccccccccccccccccccccccccc
 #c
+#c Specifies a method in a separate COM interface.
+#c
+#c Argument: method declaration
+#c
+#startm AD_COM_METH 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Inserts declaration for a constructor which takes one argument.
 #c Constructor name is assumed to be .this-module.
 #c
@@ -863,4 +893,14 @@ I\
 
 #startm .objOut-adornment 00
 I\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Hack to quote the .this-module macro and keep it out of export
+#c files.  Do not define this macro in exp.mac!!!
+#c
+#startm AD_EXPORT_THIS_MODULE 00
+.this-module\
 #endm
