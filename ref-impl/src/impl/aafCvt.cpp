@@ -481,7 +481,7 @@ aafErr_t DivideInt64byInt32(
 	aafInt32	inSign;
 #endif
 	
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		XASSERT(in2 != 0, OM_ERR_ZERO_DIVIDE);
 #if PORT_USE_NATIVE64
@@ -674,7 +674,7 @@ aafErr_t Int64ToString(
 	if(buf == NULL)
 		return(OM_ERR_NULL_PARAM);
 
-	XPROTECT(NULL)
+	XPROTECT()
 	{
 		CvtInt32toInt64(0, &zero);
 		numDigits = 0;
@@ -1028,7 +1028,7 @@ aafErr_t TimecodeToString(
   aafInt16 hours, minutes, seconds, frames;
   aafErr_t aafError = OM_ERR_NONE;
 
-  XPROTECT(NULL)
+  XPROTECT()
 	{
 	  if ((tcString == NULL) || (strLen < 12))
 		{
@@ -1124,7 +1124,7 @@ aafErr_t StringToTimecode(
   aafInt32 intFRate;
   char tcString[36];
 
-  XPROTECT(NULL)
+  XPROTECT()
 	{
 	  len = strlen(timecodeString);
 
