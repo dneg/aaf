@@ -230,6 +230,7 @@ public:
   CLASS_DEF_METHOD(TypeDefEnum);
   CLASS_DEF_METHOD(TypeDefExtEnum);
   CLASS_DEF_METHOD(TypeDefFixedArray);
+  CLASS_DEF_METHOD(TypeDefIndirect);
   CLASS_DEF_METHOD(TypeDefInt);
   CLASS_DEF_METHOD(TypeDefRecord);
   CLASS_DEF_METHOD(TypeDefRename);
@@ -255,6 +256,7 @@ public:
   //
   // Type Def 'get' methods
   //
+  TYPE_DEF_METHOD(Indirect);
   TYPE_DEF_METHOD(String);
 
 
