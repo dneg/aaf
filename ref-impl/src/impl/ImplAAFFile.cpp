@@ -10,6 +10,7 @@
 
 
 
+#include "Container.h"
 
 
 #ifndef __ImplAAFFile_h__
@@ -30,7 +31,7 @@
 
 
 ImplAAFFile::ImplAAFFile ()
-: _pContainer (0)
+: _pContainer (0), _fmt(kAAFiMedia)
 {}
 
 
@@ -105,18 +106,13 @@ void * ImplAAFFile::GetContainer ()
 			{
 			case kOmCreate:
 			case kOmModify:
-#if FULL_TOOLKIT
-				_head->Save(this);
-#endif
+				_container->SetHead(_head);
 				break;
 			
 			default:
 			  break;
 			}
 		
-#if FULL_TOOLKIT
-		  delete _head;
-#endif
 	  }
 		else
 		{
@@ -404,6 +400,8 @@ AAFRESULT ImplAAFFile::Create(
 		_head = head;
 		if (head == NULL)
 		  RAISE(OM_ERR_BADHEAD);
+
+		_head->AddIdentificationObject(session->GetDefaultIdent());
 #if FULL_TOOLKIT
 		aafCheckBentoRaiseError(this, OM_ERR_BADHEAD);
 	
