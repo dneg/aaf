@@ -40,9 +40,9 @@ template <typename ReferencedObject>
 OMStrongReferenceVectorProperty<ReferencedObject>::
                  OMStrongReferenceVectorProperty(const OMPropertyId propertyId,
                                                  const wchar_t* name)
-: OMContainerProperty<ReferencedObject>(propertyId,
-                                        SF_STRONG_OBJECT_REFERENCE_VECTOR,
-                                        name)
+: OMReferenceVectorProperty(propertyId,
+                            SF_STRONG_OBJECT_REFERENCE_VECTOR,
+                            name)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::"
                                             "OMStrongReferenceVectorProperty");
@@ -766,6 +766,92 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::setBits(
     setValueAt(object, i);
   }
 
+}
+
+  // @mfunc Insert <p object> into this
+  //        <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The <c OMObject> to insert.
+template <typename ReferencedObject>
+void
+OMStrongReferenceVectorProperty<ReferencedObject>::insert(
+                                                        const OMObject* object)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::insert");
+
+  PRECONDITION("Valid object", object != 0);
+
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  insert(p);
+}
+
+  // @mfunc Does this <c OMStrongReferenceVectorProperty> contain
+  //        <p object> ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The <c OMObject> for which to search.
+  //   @rdesc True if <p object> is present, false otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool
+OMStrongReferenceVectorProperty<ReferencedObject>::containsValue(
+                                                  const OMObject* object) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::containsValue");
+
+  PRECONDITION("Valid object", object != 0);
+
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  return containsValue(p);
+}
+
+  // @mfunc Remove <p object> from this
+  //        <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The <c OMObject> to remove.
+template <typename ReferencedObject>
+void
+OMStrongReferenceVectorProperty<ReferencedObject>::removeValue(
+                                                        const OMObject* object)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeValue");
+
+  PRECONDITION("Valid object", object != 0);
+
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  removeValue(p);
+}
+
+  // @mfunc Create an <c OMReferenceContainerIterator> over this
+  //        <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc An <c OMReferenceContainerIterator> over this
+  //          <c OMStrongReferenceVectorProperty>.
+  //   @this const
+template <typename ReferencedObject>
+OMReferenceContainerIterator*
+OMStrongReferenceVectorProperty<ReferencedObject>::createIterator(void) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::createIterator");
+
+  OMStrongReferenceVectorIterator<ReferencedObject>* result =
+        new OMStrongReferenceVectorIterator<ReferencedObject>(*this, OMBefore);
+  ASSERT("Valid heap pointer", result != 0);
+
+  return result;
 }
 
 #endif

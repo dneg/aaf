@@ -31,6 +31,7 @@
 
 #include "OMDataTypes.h"
 #include "OMProperty.h"
+#include "OMRefProperty.h"
 #include "OMObjectReference.h"
 
   // @class Persistent strong reference (contained object)
@@ -40,8 +41,7 @@
   //          <c OMStorable>.
   //   @base public | <c OMReferenceProperty>
 template <typename ReferencedObject>
-class OMStrongReferenceProperty :
-                                 public OMReferenceProperty<ReferencedObject> {
+class OMStrongReferenceProperty : public OMReferenceProperty {
 public:
   // @access Public members.
 
@@ -104,6 +104,12 @@ public:
     //          bits are copied from the buffer at address <p bits> which
     //          is <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
+
+    // @cmember Get the value of this <c OMStrongReferenceProperty>.
+  virtual OMObject* getObject(void) const;
+
+    // @cmember set the value of this <c OMStrongReferenceProperty>.
+  virtual OMObject* setObject(const OMObject* object);
 
     // @cmember The value of this <c OMStrongReferenceProperty>
     //          as an <c OMStorable>.

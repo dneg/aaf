@@ -191,32 +191,6 @@ private:
 
 };
 
-  // @class Abstract base class for persistent reference properties
-  //        supported by the Object Manager.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          object. This type must be a descendant of <c OMStorable>.
-  //   @base public | <c OMProperty>
-template <typename ReferencedObject>
-class OMReferenceProperty : public OMProperty {
-public:
-  // @access Public members.
-
-    // @cmember Constructor.
-  OMReferenceProperty(const OMPropertyId propertyId,
-                      const OMStoredForm storedForm,
-                      const wchar_t* name);
-
-    // @cmember Destructor.
-  virtual ~OMReferenceProperty(void);
-
-  // Direct property access interface
-
-    // @cmember The size of the raw bits of this
-    //          <c OMReferenceProperty>. The size is given in bytes.
-  virtual size_t bitsSize(void) const;
-
-};
-
   // @class Abstract base class for simple (data) persistent
   //        properties supported by the Object Manager.
   //   @base public | <c OMProperty>
@@ -284,7 +258,5 @@ protected:
   size_t _size;
   unsigned char* _bits;
 };
-
-#include "OMPropertyT.h"
 
 #endif

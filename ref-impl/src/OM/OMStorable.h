@@ -29,6 +29,7 @@
 #ifndef OMSTORABLE_H
 #define OMSTORABLE_H
 
+#include "OMObject.h"
 #include "OMDataTypes.h"
 
 #include "OMPropertySet.h"
@@ -40,7 +41,7 @@ class OMClassFactory;
 // @class Abstract base class for all objects that may be stored by
 //        the Object Manager.
 //
-class OMStorable {
+class OMStorable : public OMObject {
 public:
   // @access Public members.
 

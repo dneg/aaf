@@ -35,9 +35,9 @@ template <typename ReferencedObject>
 OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty(
                                                  const OMPropertyId propertyId,
                                                  const wchar_t* name)
-: OMReferenceProperty<ReferencedObject>(propertyId,
-                                        SF_STRONG_OBJECT_REFERENCE,
-                                        name),
+: OMReferenceProperty(propertyId,
+                      SF_STRONG_OBJECT_REFERENCE,
+                      name),
   _reference()
 {
   TRACE(
@@ -301,6 +301,47 @@ void OMStrongReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
 
   const ReferencedObject* p = *(const ReferencedObject**)bits;
   setValue(p);
+}
+
+  // @mfunc Get the value of this <c OMStrongReferenceProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (pointed to) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc A pointer to an <c OMObject>.
+  //   @this const
+template<typename ReferencedObject>
+OMObject*
+OMStrongReferenceProperty<ReferencedObject>::getObject(void) const
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::getObject");
+
+  ReferencedObject* p = 0;  
+  getValue(p);
+  OMObject* result = p;
+
+  return result;
+}
+
+  // @mfunc Set the value of this <c OMStrongReferenceProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to the new <c OMObject>.
+  //   @rdesc A pointer to the old <c OMObject>. If lazy
+  //          loading is enabled and the referenced object was never
+  //          loaded the value returned is 0.
+template <typename ReferencedObject>
+OMObject* OMStrongReferenceProperty<ReferencedObject>::setObject(
+                                                        const OMObject* object)
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::setObject");
+
+  PRECONDITION("Valid object", object != 0);
+
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  return setValue(p);
 }
 
   // @mfunc The value of this <c OMStrongReferenceProperty>

@@ -31,7 +31,7 @@
 
 #include "OMVector.h"
 #include "OMContainerElement.h"
-#include "OMContainerProperty.h"
+#include "OMRefVectorProperty.h"
 
 template <typename ReferencedObject>
 class OMStrongReferenceVectorIterator;
@@ -46,10 +46,9 @@ class OMVectorIterator;
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @base public | <c OMContainerProperty>
+  //   @base public | <c OMReferenceVectorProperty>
 template <typename ReferencedObject>
-class OMStrongReferenceVectorProperty :
-                                 public OMContainerProperty<ReferencedObject> {
+class OMStrongReferenceVectorProperty : public OMReferenceVectorProperty {
 public:
   // @access Public members.
 
@@ -194,6 +193,22 @@ public:
     //          copied from the buffer at address <p bits> which is
     //          <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
+
+    // @cmember Insert <p object> into this
+    //          <c OMStrongReferenceVectorProperty>.
+  virtual void insert(const OMObject* object);
+
+    // @cmember Does this <c OMStrongReferenceVectorProperty> contain
+    //          <p object> ?
+  virtual bool containsValue(const OMObject* object) const;
+
+    // @cmember Remove <p object> from this
+    //          <c OMStrongReferenceVectorProperty>.
+  virtual void removeValue(const OMObject* object);
+
+    // @cmember Create an <c OMReferenceContainerIterator> over this
+    //          <c OMStrongReferenceVectorProperty>.
+  virtual OMReferenceContainerIterator* createIterator(void) const;
 
 private:
 

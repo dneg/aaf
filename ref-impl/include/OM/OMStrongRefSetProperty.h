@@ -31,7 +31,7 @@
 
 #include "OMSet.h"
 #include "OMContainerElement.h"
-#include "OMContainerProperty.h"
+#include "OMRefSetProperty.h"
 
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetIterator;
@@ -48,10 +48,9 @@ class OMStrongReferenceSetElement;
   //          <c OMStorable>.
   //   @tcarg class | UniqueIdentification | The type of the unique key
   //          used to identify the referenced objects. 
-  //   @base public | <c OMContainerProperty>
+  //   @base public | <c OMReferenceSetProperty>
 template <typename UniqueIdentification, typename ReferencedObject>
-class OMStrongReferenceSetProperty :
-                                 public OMContainerProperty<ReferencedObject> {
+class OMStrongReferenceSetProperty : public OMReferenceSetProperty {
 public:
   // @access Public members.
 
@@ -164,6 +163,22 @@ public:
     //          copied from the buffer at address <p bits> which is
     //          <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
+
+    // @cmember Insert <p object> into this
+    //          <c OMStrongReferenceSetProperty>.
+  virtual void insert(const OMObject* object);
+
+    // @cmember Does this <c OMStrongReferenceSetProperty> contain
+    //          <p object> ?
+  virtual bool containsValue(const OMObject* object) const;
+
+    // @cmember Remove <p object> from this
+    //          <c OMStrongReferenceSetProperty>.
+  virtual void removeValue(const OMObject* object);
+
+    // @cmember Create an <c OMReferenceContainerIterator> over this
+    //          <c OMStrongReferenceSetProperty>.
+  virtual OMReferenceContainerIterator* createIterator(void) const;
 
   bool isValidIdentification(UniqueIdentification& id) const;
 
