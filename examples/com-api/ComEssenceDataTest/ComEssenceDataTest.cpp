@@ -139,6 +139,7 @@ void AAFByteSwap32(
 			aafInt32 *lp);	/* IN/OUT -- Byte swap this value */
 void AAFByteSwap16(
 			aafInt16 * wp);	/* IN/OUT -- Byte swap this value */
+void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
 void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
 AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 										aafUInt16 *bitsPerSample,
@@ -333,7 +334,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		fclose(pWavFile);
 
 		// Finish writing the destination
-		pEssenceAccess->CompleteWrite();
+		check(pEssenceAccess->CompleteWrite());
 	}
 	else
 	{
@@ -341,8 +342,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	}
 
 	// Release all unnecesary interfaces
-	pEssenceAccess->Release();
-	pEssenceAccess= NULL;
+	if (pEssenceAccess)
+  {
+    pEssenceAccess->Release();
+	  pEssenceAccess= NULL;
+  }
 
 	pMasterMob->Release();
 	pMasterMob = NULL;
@@ -653,6 +657,12 @@ void AAFByteSwap16(
 }
 
 // app work on all WAVE files, not just laser.wav.
+void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
+{
+	memcpy(data, *srcBufHdl, maxsize);
+	(*srcBufHdl) += maxsize;
+}
+
 void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
 {
 	AAFByteOrder	nativeByteOrder = GetNativeByteOrder()
@@ -682,15 +692,15 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	aafUInt8			*ptr;
 
 	ptr = buf;
-	scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
 	if (memcmp(&chunkID, "RIFF", (size_t) 4) != 0)
 		return(AAFRESULT_BADWAVEDATA);
 	scanSwappedWAVEData(&ptr, sizeof(formSize), &formSize);	
-	scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
 	if (memcmp(&chunkID, "WAVE", (size_t) 4) != 0)
 		return(AAFRESULT_BADWAVEDATA);
 	
-	scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+	scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
 	while ((ptr-buf) < formSize)
 	{
 		scanSwappedWAVEData(&ptr, sizeof(chunkSize), &chunkSize);	
@@ -733,7 +743,7 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 			break;
 		if (fmtFound && dataFound)	// Do we have all information yet?
 			break;
-		scanSwappedWAVEData(&ptr, sizeof(chunkID), &chunkID);	
+		scanWAVEData(&ptr, sizeof(chunkID), &chunkID);	
 	}	
 	
 	return(AAFRESULT_SUCCESS);
