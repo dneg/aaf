@@ -93,6 +93,14 @@ SOURCE=..\..\..\Utilities\AafOmf\Aaf2Omf.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Utilities\AafOmf\AAFDomainExtensions.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\AAFDomainUtils.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Utilities\AafOmf\AAFException.cpp
 # End Source File
 # Begin Source File
@@ -113,11 +121,23 @@ SOURCE=..\..\..\Utilities\AafOmf\ExceptionBase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Utilities\AafOmf\Extensions.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Utilities\AafOmf\LoggerBase.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\..\Utilities\AafOmf\Omf2Aaf.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\OMFDomainExtensionUtils.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\OMFDomainUtils.cpp
 # End Source File
 # Begin Source File
 
@@ -137,6 +157,10 @@ SOURCE=..\..\..\Utilities\AafOmf\Aaf2Omf.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\AAFDomainExtensions.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Utilities\AafOmf\AafOmf.h
 # End Source File
 # Begin Source File
@@ -146,6 +170,10 @@ SOURCE=..\..\..\Utilities\AafOmf\EffectTranslate.h
 # Begin Source File
 
 SOURCE=..\..\..\Utilities\AafOmf\Omf2Aaf.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\OMFDomainUtils.h
 # End Source File
 # End Group
 # Begin Group "Resource Files"
