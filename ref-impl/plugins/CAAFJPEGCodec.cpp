@@ -1463,21 +1463,31 @@ void CAAFJPEGCodec::UpdateCalculatedData(void)
 	_bitsPerPixelAvg = 0;
 	_bitsPerSample = 0;
 
-	/* 4:4:4 = 1 sample for each of luma and two chroma channels */   
-	if (_horizontalSubsampling == 1)
+	if (kColorSpaceRGB == _pixelFormat)
 	{
+		// If the output color space is RGB then decompressed sample size
+		// ignores any subsampling in the compressed image since the 
+		// decompressor will upsample the pixels for us.
 		_bitsPerPixelAvg = (aafInt16)((_componentWidth * 3) + _paddingBits);
-		_bitsPerSample = (aafInt32) _imageWidth * (aafInt32) _imageHeight *
-	  							(_componentWidth * 3) * numFields;
+		_bitsPerSample = ((_bitsPerPixelAvg * _imageWidth) + _padBytesPerRow) * _imageHeight;
 	}							
-	/* 4:2:2 = two-pixels get 2 samples of luma, 1 of each chroma channel, avg == 2 */							
-	else if (_horizontalSubsampling == 2)						
+	else
 	{
-		_bitsPerPixelAvg = (aafInt16)((_componentWidth * 2) + _paddingBits);
-		_bitsPerSample = (aafInt32) _imageWidth * (aafInt32) _imageHeight *
-	  							(_componentWidth * 2) * numFields;
-	}							
-
+		/* 4:4:4 = 1 sample for each of luma and two chroma channels */   
+		if (_horizontalSubsampling == 1)
+		{
+			_bitsPerPixelAvg = (aafInt16)((_componentWidth * 3) + _paddingBits);
+			_bitsPerSample = (aafInt32) _imageWidth * (aafInt32) _imageHeight *
+	  								(_componentWidth * 3) * numFields; // trr: is this reall correct? Why do we care about numFields since we are using the full _imageHeight?
+		}							
+		/* 4:2:2 = two-pixels get 2 samples of luma, 1 of each chroma channel, avg == 2 */							
+		else if (_horizontalSubsampling == 2)						
+		{
+			_bitsPerPixelAvg = (aafInt16)((_componentWidth * 2) + _paddingBits);
+			_bitsPerSample = (aafInt32) _imageWidth * (aafInt32) _imageHeight *
+	  								(_componentWidth * 2) * numFields;
+		}
+	}
 
 	_fileBytesPerSample = (_bitsPerSample + 7) / 8;
 	_memBytesPerSample = _fileBytesPerSample;
@@ -2416,7 +2426,7 @@ JSAMPIMAGE CAAFJPEGCodec::GetRawSampleImage(const aafCompressionParams& param) /
 		// Compute the size of the Luminance component data array.
 		comp_offset[0] = 0;
 		mcu_sample_width[0]  = param.imageWidth + (param.imageWidth % DCTSIZE);
-		mcu_sample_height[0] = param.imageHeight + (param.imageHeight % DCTSIZE);
+		mcu_sample_height[0] = DCTSIZE * 2;
 		comp_size[0] = (mcu_sample_width[0] * mcu_sample_height[0]) * sizeof(JSAMPLE);
 
 		// Compute the size of the Cb component data array.
@@ -2489,6 +2499,28 @@ const int Y_OFFSET = 2;
 const int Cb_OFFSET = 4;
 const int Cr_OFFSET = 4;
 
+static void SetupFor422(aafUInt32 imageWidth, aafUInt32 comp_pos[], aafUInt32 comp_offset[], aafUInt32 comp_width[], aafUInt32 comp_height[])
+{
+	comp_pos[0] = Y_POS;
+	comp_pos[1] = Cb_POS;
+	comp_pos[2] = Cr_POS;
+
+	comp_offset[0] = Y_OFFSET;
+	comp_offset[1] = Cb_OFFSET;
+	comp_offset[2] = Cr_OFFSET;
+
+
+	comp_width[0] = imageWidth;
+	comp_width[2] = comp_width[1] = (imageWidth / 2);
+
+	comp_height[0] = DCTSIZE * 2;
+	comp_height[2] = comp_height[1] = comp_height[0];
+}
+
+
+
+
+
 void CAAFJPEGCodec::DumpSampleImage(
 	const aafCompressionParams& param, 
 	JSAMPIMAGE rawSampleImage)
@@ -2497,31 +2529,29 @@ void CAAFJPEGCodec::DumpSampleImage(
 	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&
 									kColorSpaceYUV == param.colorSpace,
 				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
-#ifdef _DEBUG //_AAF_DUMP
+#ifdef _AAF_DUMP
 	
 	printf("static const aafUInt8 %s[][][] =\n{\n", "SampleImage");
 
 
-	aafUInt32 ci, row, col, comp_width[3];
-//	JSAMPARRAY output_array;
-//	JSAMPROW output_row;
+	aafUInt32 ci, row, col, comp_pos[3], comp_offset[3], comp_width[3], comp_height[3];
 	int x;
 
-	comp_width[0] = param.imageWidth;
-	comp_width[2] = comp_width[1] = (param.imageWidth / 2);
+	SetupFor422(param.imageWidth, comp_pos, comp_offset, comp_width, comp_height);
+
 
 
 	for (ci = 0; ci < 3; ++ci)
 	{
 		printf("  { // Color component table %d\n    ", ci);
 
-		for (row = 0; row < param.imageHeight; ++row)
+		for (row = 0; row < comp_height[ci]; ++row)
 		{
 			for (col = 0; col < comp_width[ci]; ++col)
 			{
 				x = (int)rawSampleImage[ci][row][col];
 				printf("0x%02X", x);
-				if (col < (comp_width[ci] - 1))
+				if (!((col == (comp_width[ci] - 1)) && (row == (comp_height[ci] - 1))))
 					printf(",");
 			}
 
@@ -2542,24 +2572,10 @@ void CAAFJPEGCodec::DumpSampleImage(
 }
 
 
-static void SetupFor422(aafUInt32 imageWidth, aafUInt32 comp_pos[], aafUInt32 comp_offset[], aafUInt32 comp_width[])
-{
-	comp_pos[0] = Y_POS;
-	comp_pos[1] = Cb_POS;
-	comp_pos[2] = Cr_POS;
 
-	comp_offset[0] = Y_OFFSET;
-	comp_offset[1] = Cb_OFFSET;
-	comp_offset[2] = Cr_OFFSET;
-
-
-	comp_width[0] = imageWidth;
-	comp_width[2] = comp_width[1] = (imageWidth / 2);
-
-}
-
-void CAAFJPEGCodec::CopyDataToSampleImage(
+aafUInt32 CAAFJPEGCodec::CopyDataToSampleImage(
 	const aafCompressionParams& param, 
+	aafUInt32 startingOffset,
 	JSAMPIMAGE rawSampleImage) // throw HRESULT
 {
 	// We currently only support 601 and 4-2-2.
@@ -2573,34 +2589,44 @@ void CAAFJPEGCodec::CopyDataToSampleImage(
 	// function of IJG 6(b).
 
 	// The following code was modelled on the IJG null_convert in jccolor.c:
-	aafUInt32 ci, row, offset, col, comp_pos[3], comp_offset[3], comp_width[3];
-	JSAMPARRAY output_array;
-	JSAMPROW output_row;
+	aafUInt32 ci, row, offset, col, comp_pos[3], comp_offset[3], comp_width[3], comp_height[3];
+	JSAMPARRAY output_array = NULL;
+	JSAMPROW output_row = NULL;
 
-	SetupFor422(param.imageWidth, comp_pos, comp_offset, comp_width);
+	SetupFor422(param.imageWidth, comp_pos, comp_offset, comp_width, comp_height);
+
+try
+{
 
 	for (ci = 0; ci < 3; ++ci)
 	{
-		offset = comp_pos[ci];
+		offset = startingOffset + comp_pos[ci];
 		output_array = rawSampleImage[ci];
 
-		for (row = 0; row < param.imageHeight; ++row)
+		for (row = 0; row < comp_height[ci]; ++row)
 		{
 			output_row = output_array[row];
 			
-			for (col = 0; col < comp_width[ci]; ++col)
+			for (col = 0; col < comp_width[ci]; ++col, offset += comp_offset[ci])
 			{
 				output_row[col] = (JSAMPLE)param.buffer[offset];
-				offset += comp_offset[ci];
 			}
 		}
 	}
-
-//	DumpSampleImage(param, rawSampleImage);
+}
+catch (...)
+{
+	offset = offset;
 }
 
-void CAAFJPEGCodec::CopyDataFromSampleImage(
+	DumpSampleImage(param, rawSampleImage);
+
+	return (startingOffset + _rawSampleImageBufferSize);
+}
+
+aafUInt32 CAAFJPEGCodec::CopyDataFromSampleImage(
 	JSAMPIMAGE rawSampleImage, 
+	aafUInt32 startingOffset,
 	aafCompressionParams& param) // throw HRESULT
 {
 	// We currently only support 601 and 4-2-2.
@@ -2616,18 +2642,18 @@ void CAAFJPEGCodec::CopyDataFromSampleImage(
 	// function of IJG 6(b).
 
 	// The following code was modelled on the IJG null_convert in jccolor.c:
-	aafUInt32 ci, row, offset, col, comp_pos[3], comp_offset[3], comp_width[3];
-	JSAMPARRAY input_array;
-	JSAMPROW input_row;
+	aafUInt32 ci, row, offset, col, comp_pos[3], comp_offset[3], comp_width[3], comp_height[3];
+	JSAMPARRAY input_array = NULL;
+	JSAMPROW input_row = NULL;
 
-	SetupFor422(param.imageWidth, comp_pos, comp_offset, comp_width);
+	SetupFor422(param.imageWidth, comp_pos, comp_offset, comp_width, comp_height);
 
 	for (ci = 0; ci < 3; ++ci)
 	{
-		offset = comp_pos[ci];
+		offset = startingOffset + comp_pos[ci];
 		input_array = rawSampleImage[ci];
 
-		for (row = 0; row < param.imageHeight; ++row)
+		for (row = 0; row < comp_height[ci]; ++row)
 		{
 			input_row = input_array[row];
 			
@@ -2638,6 +2664,8 @@ void CAAFJPEGCodec::CopyDataFromSampleImage(
 			}
 		}
 	}
+
+	return (startingOffset + _rawSampleImageBufferSize);
 }
 
 
@@ -2695,6 +2723,8 @@ HRESULT CAAFJPEGCodec::CompressImage(
 				cinfo.in_color_space = JCS_RGB;
 		}
 
+
+
 		/* Now use the library's routine to set default compression parameters.
 		 * (You must set at least cinfo.in_color_space before calling this,
 		 * since the defaults depend on the source color space.)
@@ -2708,6 +2738,7 @@ HRESULT CAAFJPEGCodec::CompressImage(
 		jpeg_set_quality(&cinfo, param.quality, TRUE /* limit to baseline-JPEG values */);
 
 
+
 		if (JCS_YCbCr == cinfo.in_color_space && 
 			  (1 != param.horizontalSubsampling || 1 != param.verticalSubsampling) )
 		{
@@ -2715,19 +2746,18 @@ HRESULT CAAFJPEGCodec::CompressImage(
 			cinfo.raw_data_in = TRUE; // this was set to FALSE by jpeg_set_defaults.
 
 			// Ensure that the sampling factors are correct.
-			cinfo.comp_info[0].h_samp_factor = param.horizontalSubsampling;
-			cinfo.comp_info[0].v_samp_factor = param.verticalSubsampling;
+			cinfo.comp_info[0].h_samp_factor = 2;
+			cinfo.comp_info[0].v_samp_factor = 2;
+			cinfo.comp_info[1].h_samp_factor = 1;
+			cinfo.comp_info[1].v_samp_factor = 2;
+			cinfo.comp_info[2].h_samp_factor = 1;
+			cinfo.comp_info[2].v_samp_factor = 2;
 
 
 			// Get the raw image buffer (allocate one if necessary).
 			JSAMPIMAGE rawImage = GetRawSampleImage(param); // may be out of memory.
 
-			// Now map the input interleaved image data into the rawImage buffer.
-			// NOTE: The interleaved format is 601 4-2-2 (SMPTE 259).
-			CopyDataToSampleImage(param, rawImage);
-
-
-			/* Step 4: Start compressor */
+		  /* Step 4: Start compressor */
 
 			/* TRUE ensures that we will write a complete interchange-JPEG file.
 			 * Pass TRUE unless you are very sure of what you're doing.
@@ -2738,10 +2768,24 @@ HRESULT CAAFJPEGCodec::CompressImage(
 			/* Step 5: Write the image data into the compressor */
 
 			// Compress the raw subsampled data one MCU row at a time.
-			aafUInt32 total_rows_with_MCU = param.imageHeight + param.imageHeight % DCTSIZE;
+			aafUInt32 total_rows_with_MCU = param.imageHeight + (param.imageHeight % DCTSIZE);
+			aafUInt32 total_cols_with_MCU = param.imageWidth + (param.imageWidth % DCTSIZE);
 			aafUInt32 num_MCU_rows = 0;
+
+			/* Make sure that at least one iMCU row has been passed. */
+			aafUInt32 lines_per_iMCU_row = cinfo.max_v_samp_factor * DCTSIZE;
+
+			// 2 MCU rows of Y and 1 MCU row for each chromonance component.
+			aafUInt32 offset_to_next_iMCU_row = 0;
+
 			while (num_MCU_rows < total_rows_with_MCU)
-				num_MCU_rows += jpeg_write_raw_data(&cinfo, rawImage, DCTSIZE);
+			{
+				// Now map the input interleaved image data into the rawImage buffer.
+				// NOTE: The interleaved format is 601 4-2-2 (SMPTE 259).
+				offset_to_next_iMCU_row = CopyDataToSampleImage(param, offset_to_next_iMCU_row, rawImage);
+
+				num_MCU_rows += jpeg_write_raw_data(&cinfo, rawImage, lines_per_iMCU_row);
+			}
 		} 
 		else
 		{
@@ -2865,13 +2909,15 @@ HRESULT CAAFJPEGCodec::DecompressImage(
 			cinfo.raw_data_out = TRUE; // this was set to FALSE by jpeg_set_defaults.
 
 			// Ensure that the sampling factors are correct.
-			cinfo.comp_info[0].h_samp_factor = param.horizontalSubsampling;
-			cinfo.comp_info[0].v_samp_factor = param.verticalSubsampling;
+//			cinfo.comp_info[1].h_samp_factor = param.horizontalSubsampling;
+//			cinfo.comp_info[1].v_samp_factor = param.verticalSubsampling;
+//			cinfo.comp_info[2].h_samp_factor = param.horizontalSubsampling;
+//			cinfo.comp_info[2].v_samp_factor = param.verticalSubsampling;
 
 
 			/* Step 5: Start decompressor */
 
-			(void) jpeg_start_decompress(&cinfo);
+ 			(void) jpeg_start_decompress(&cinfo);
 			/* We can ignore the return value since suspension is not possible
 			 * with the essence stream data source.
 			 */
@@ -2881,15 +2927,27 @@ HRESULT CAAFJPEGCodec::DecompressImage(
 			JSAMPIMAGE rawImage = GetRawSampleImage(param); // may be out of memory.
 
 			// Compress the raw subsampled data one MCU row at a time.
-			aafUInt32 total_rows_with_MCU = param.imageHeight + param.imageHeight % DCTSIZE;
+			aafUInt32 total_rows_with_MCU = param.imageHeight + (param.imageHeight % DCTSIZE);
+			aafUInt32 total_cols_with_MCU = param.imageWidth + (param.imageWidth % DCTSIZE);
 			aafUInt32 num_MCU_rows = 0;
+
+			/* Make sure that at least one iMCU row has been passed. */
+			aafUInt32 lines_per_iMCU_row = cinfo.max_v_samp_factor * DCTSIZE;
+
+			// 2 MCU rows of Y and 1 MCU row for each chromonance component.
+			aafUInt32 offset_to_next_iMCU_row = 0;
+
+			
 			while (num_MCU_rows < total_rows_with_MCU)
-				num_MCU_rows += jpeg_read_raw_data(&cinfo, rawImage, DCTSIZE);
+			{
+				num_MCU_rows += jpeg_read_raw_data(&cinfo, rawImage, lines_per_iMCU_row);
+
+				// Now map the output interleaved image data from the rawImage buffer.
+				// NOTE: The interleaved format is 601 4-2-2 (SMPTE 259).
+				offset_to_next_iMCU_row = CopyDataFromSampleImage(rawImage, offset_to_next_iMCU_row, param);
+			}
 			
 
-			// Now map the output interleaved image data from the rawImage buffer.
-			// NOTE: The interleaved format is 601 4-2-2 (SMPTE 259).
-			CopyDataFromSampleImage(rawImage, param);
 		} 
 		else
 		{
