@@ -11,7 +11,7 @@
 
 #include "OMFile.h"
 #include "OMUtilities.h"
-#include "ImplAAFClassFactory.h"
+#include "ImplAAFDictionary.h"
 
 #include "ImplAAFSession.h"
 #include "ImplAAFHeader.h"
@@ -36,6 +36,7 @@ inline void checkExpression(bool test, AAFRESULT r)
 
 
 extern "C" const aafClassID_t CLSID_AAFHeader;
+extern "C" const aafClassID_t CLSID_AAFDictionary;
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::Initialize ()
@@ -46,8 +47,8 @@ ImplAAFFile::Initialize ()
 	}
 
 	// Create the class factory for base classes.
-	_classFactory = new ImplAAFClassFactory;
-	if (NULL == _classFactory)
+	_dictionary = static_cast<ImplAAFDictionary *>(CreateImpl(CLSID_AAFDictionary));
+	if (NULL == _dictionary)
 		return AAFRESULT_NOMEMORY;
 
 	_initialized = AAFTrue;
@@ -90,7 +91,7 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 	try
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openRead(pFileName, _classFactory);
+		_file = OMFile::openRead(pFileName, _dictionary);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -168,7 +169,7 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 	try 
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openModify(pFileName, _classFactory);
+		_file = OMFile::openModify(pFileName, _dictionary);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -229,7 +230,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 							aafProductIdentification_t * pIdent)
 {
 	ImplAAFSession * pS;
-	ImplAAFContentStorage	*pCStore;
+	ImplAAFContentStorage	*pCStore = NULL;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 	if (! _initialized)
@@ -257,6 +258,10 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
+    // Make sure the header is initialized with our previously created
+    // dictionary.
+    _head->SetDictionary(_dictionary);
+
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
 		  
@@ -265,10 +270,11 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		_head->SetByteOrder(_byteOrder);
 
 		 //JeffB!!! We must decide whether def-only files have a content storage
-		_head->GetContentStorage(&pCStore);
+		checkResult(_head->GetContentStorage(&pCStore));
+    pCStore->ReleaseReference(); // need to release this pointer!
 
 		// Attempt to create the file.
-		_file = OMFile::createModify(pFileName, _classFactory, _byteOrder, _head);
+		_file = OMFile::createModify(pFileName, _dictionary, _byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		_open = AAFTrue;
@@ -376,7 +382,7 @@ ImplAAFFile::Revert ()
 ImplAAFFile::ImplAAFFile () :
 		_cookie(0),
 		_file(0),
-		_classFactory(NULL),
+		_dictionary(NULL),
 		_byteOrder(0),
 		_openType(kOmUndefined),
 		_head(NULL),
@@ -397,10 +403,10 @@ ImplAAFFile::~ImplAAFFile ()
 	InternalReleaseObjects();
 
 	// cleanup the container.
-	if (_classFactory)
+	if (_dictionary)
 	{
-		delete _classFactory;
-		_classFactory = NULL;
+		_dictionary->ReleaseReference();
+		_dictionary = NULL;
 	}
 
 	// cleanup the OM File.
