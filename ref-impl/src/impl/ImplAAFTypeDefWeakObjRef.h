@@ -103,9 +103,6 @@ public:
 private:
   // Synchronize the array of OM pids with the current TargetSet property.
   AAFRESULT SyncTargetPidsFromTargetSet(void);
-  
-  // Synchronize the TargetSet property from the current targetPids OM pid array.
-  AAFRESULT SyncTargetSetFromTargetPids(void);
 
 public:
 
