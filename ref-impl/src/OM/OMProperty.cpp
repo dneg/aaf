@@ -40,8 +40,8 @@
 OMProperty::OMProperty(const OMPropertyId propertyId,
                        const int storedForm,
                        const char* name)
-: _propertyId(propertyId), _storedForm(storedForm), _name(name), _type(0),
-  _definition(0),
+: _propertyId(propertyId), _storedForm(storedForm), _name(name),
+  _propertySet(0), _definition(0), _type(0),
   // _isOptional(false),
   // BobT: make optional by default, to hack around problem where
   // props may be restored before they're initialized by DM.
@@ -100,6 +100,17 @@ void OMProperty::close(void)
   TRACE("OMProperty::close");
 
   // nothing to do for most descendants of OMProperty
+}
+
+  // @mfunc The <c OMPropertyDefinition> defining this <c OMProperty>.
+  // @this const 
+const OMPropertyDefinition* OMProperty::definition(void) const
+{
+  TRACE("OMProperty::definition");
+
+  const OMPropertyDefinition* result = _definition;
+  POSTCONDITION("Valid result", result != 0);
+  return result;
 }
 
   // @mfunc The name of this <c OMProperty>.
@@ -193,8 +204,8 @@ void OMProperty::write(OMPropertyId propertyId,
 
   const OMType* type = _type;
   if (_definition != 0) {
-	type = _definition->type();
-	PRECONDITION("Both _type and _definition not set", _type == 0);
+    type = _definition->type();
+    PRECONDITION("Both _type and _definition not set", _type == 0);
   }
   if (type != 0) { // tjb - temporary, should be ASSERTION below
 
@@ -261,8 +272,8 @@ void OMProperty::read(OMPropertyId propertyId,
 
   const OMType* type = _type;
   if (_definition != 0) {
-	type = _definition->type();
-	PRECONDITION("Both _type and _definition not set", _type == 0);
+    type = _definition->type();
+    PRECONDITION("Both _type and _definition not set", _type == 0);
   }
 
   if (type != 0) { // tjb - temporary, should be ASSERTION below
