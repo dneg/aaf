@@ -44,6 +44,7 @@
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
 #include "AAFInterpolatorDefs.h"
+#include "AAFTypeDefUIDs.h"
 
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFVaryingValue; // generated
@@ -163,7 +164,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTypeDef			*pTypeDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
-	aafUID_t			testDataDef = DDEF_Picture, testInterpDef = kAAFExpRational;
+	aafUID_t			testDataDef = DDEF_Picture, testInterpDef = kAAFTypeID_Rational;
 	aafLength_t			effectLen = TEST_EFFECT_LEN;
 	aafUID_t			effectID = kTestEffectID;
 	aafUID_t			parmID = kTestParmID;
