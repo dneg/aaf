@@ -1,0 +1,1216 @@
+#startm .this-module 0
+AAFPluginDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFDefObject\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// An object which describes a particular implementation of a plug-in interface
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+ 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+AD_CLASS_UUID(AD1BB853, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
+
+AD_DEFAULT_UUID(AD1BB854, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XMETHOD1(GetCategoryClass,
+			[out],
+			objPass,
+			aafUID_t *,
+			pCategoryClass,
+			The CategoryClass,
+			Obtains the Category Class\, which is identifies the stored classID
+  //		of the subclass of AAFPluggableDefinition which references this plugin
+  //		descriptor.  This ID is written into
+  // the caller-allocated aafUID_t specified by the pCategoryClass argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pCategoryClass pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pCategoryClass.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCategoryClass arg is NULL.)
+
+
+AD_XMETHOD1(SetCategoryClass,
+			[in],
+			objPass,
+			aafUID_t *,
+			pCategoryClass,
+			The Category Class,
+			Sets the Category Class\, which is identifies the stored classID
+  // of the subclass of AAFPluggableDefinition which references this plugin
+  // descriptor.
+  // A copy is made of the data so the caller retains ownership of the
+  // *pCategoryClass aafUID_t and is responsible for de-allocating it.
+   //
+  // Succeeds if all of the following are true:
+  // - the pCategoryClass pointer is valid.
+  // 
+  // If this method fails the Category Class property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCategoryClass arg is NULL.)
+
+AD_XMETHOD1(GetPluginVersion,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pVersion,
+			The Plugin Version,
+			Gets the Plugin Version property associated with this
+  // plugin descriptor and places it into *pVersion.
+  //
+  // Succeeds if all of the following are true:
+  // - the pVersion pointer is valid.
+  // 
+  // If this method fails\, nothing will be written to *pVersion.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersion arg is NULL.)
+
+AD_XMETHOD2(GetPluginVersionString,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pVersionString,
+			Plugin version string,
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold plugin version string,
+
+			Transfers the plugin version string\, with a trailing null character\, into the
+  // pVersionString buffer.  The buffer is allocated by the caller.  The size
+  // of the buffer is given by bufSize.  If the property name has not
+  // yet been set\, a zero-length string will be returned \(that is\,
+  // only the trailing null character\).
+  // 
+  // The caller may call GetProductVersionStringLen\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pVersionString pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pVersionString.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersionString arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
+
+
+AD_XMETHOD1(GetProductVersionStringLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			Mob Name,
+
+			Returns the length of buffer required for the GetPluginVersionString\(\)
+  // method.  The value is placed into the location
+  // specified by pLen. The value will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
+AD_XMETHOD1(SetPluginVersionString,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pVersionString,
+			Plugin version,
+
+			This method sets the plugin version string property on a plugin descriptor to
+  // the value specified in pVersionString.  A copy is made of the data so the caller
+  // retains ownership of the *pVersionString buffer and is responsible for
+  // de-allocating it. 
+  // 
+  // Succeeds if all of the following are true:
+  // - the pVersionString pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersionString arg is NULL.)
+
+AD_XMETHOD2(GetPluginManufacturerName,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pManufacturerName,
+			Plugin Manufacturer Name,
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold plugin Manufacturer Name,
+
+			Transfers the plugin Manufacturer Name\, with a trailing null character\, into the
+  // pManufacturerName buffer.  The buffer is allocated by the caller.  The size
+  // of the buffer is given by bufSize.  If the property name has not
+  // yet been set\, a zero-length Name will be returned \(that is\,
+  // only the trailing null character\).
+  // 
+  // The caller may call GetProductManufacturerNameLen\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pManufacturerName pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pManufacturerName.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pManufacturerName arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the Name.)
+
+
+AD_XMETHOD1(GetProductManufacturerNameLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			Manufacturer Name,
+
+			Returns the length of buffer required for the GetPluginManufacturerName\(\)
+  // method.  The value is placed into the location
+  // specified by pLen. The value will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
+AD_XMETHOD1(SetPluginManufacturerName,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pManufacturerName,
+			Plugin Manufacturer,
+
+			This method sets the plugin Manufacturer Name property on a plugin descriptor to the value
+  // specified in pManufacturerName.  A copy is made of the data so the caller
+  // retains ownership of the *pManufacturerName buffer and is responsible for
+  // de-allocating it. 
+  // 
+  // Succeeds if all of the following are true:
+  // - the pManufacturerName pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pManufacturerName arg is NULL.)
+
+AD_XMETHOD1(GetManufacturerInfo,
+			[out\,retval],
+			objOut,
+			AAFNetworkLocator,
+			ppResult,
+			ManufacturerInfo property value,
+
+			This method will get an AAFNetworkLocator pointing to ManufacturerInfo
+  // for this plugin and place an interface for the locator into the **ppResult
+  // argument.
+  // If a ManufacturerInfo locator exists\, the result will be AddRef\(\)ed.
+  // If not\, the result will be NULL.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppResult arg is NULL.)
+
+AD_XMETHOD1(SetManufacturerInfo,
+			[in],
+			objIn,
+			AAFNetworkLocator,
+			pManufacturerInfo,
+			ManufacturerInfo property value,
+			This method will set a locator pointing to the location of
+  // ManufacturerInfo for this plugin.  If a ManufacturerInfo
+  // already exists for this mob slot\, it will be discarded.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD1(GetManufacturerID,
+			[out],
+			objPass,
+			aafUID_t *,
+			pManufacturerID,
+			The ManufacturerID,
+			Obtains the manufacturer ID\, which is identifies the manfacturer
+  // of this plugin.  This ID is written into
+  // the caller-allocated aafUID_t specified by the pManufacturerID argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pManufacturerID pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pManufacturerID.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pManufacturerID arg is NULL.)
+
+
+AD_XMETHOD1(SetManufacturerID,
+			[in],
+			objPass,
+			aafUID_t *,
+			pManufacturerID,
+			The Category Class,
+			Sets the manufacturer ID\, which is identifies the
+  // manufacturer of this plugin.
+  // A copy is made of the data so the caller retains ownership of the
+  // *pManufacturerID aafUID_t and is responsible for de-allocating it.
+   //
+  // Succeeds if all of the following are true:
+  // - the pManufacturerID pointer is valid.
+  // 
+  // If this method fails the ManufacturerID property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pManufacturerID arg is NULL.)
+
+AD_XMETHOD1(GetHardwarePlatform,
+			[out],
+			objPass,
+			aafHardwarePlatform_t *,
+			pHardwarePlatform,
+			The HardwarePlatform,
+			Obtains the hardware platform ID\, which identifies the hardware platform
+  // which is required to use this plugin.  This ID is written into
+  // the caller-allocated variable specified by the pHardwarePlatform argument.
+  // The type aafHardwarePlatform_t is an extensible enumerated type\, and the value
+  // given must be either standard or in the type dictionary.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pHardwarePlatform pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pHardwarePlatform.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pHardwarePlatform arg is NULL.)
+
+AD_XMETHOD1(SetHardwarePlatform,
+			[in],
+			objPass,
+			aafHardwarePlatform_t,
+			hardwarePlatform,
+			The Category Class,
+			Sets the hardware platform ID\, which identifies the hardware platform
+  // which is required to use this plugin.  
+  // The type aafHardwarePlatform_t is an extensible enumerated type\, and the value
+  // given must be either standard or in the type dictionary.
+  // 
+  // If this method fails the HardwarePlatform property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+
+AD_XMETHOD2(GetPlatformVersionRange,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pMinVersion,
+			The Minimum Platform Version,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pMaxVersion,
+			The Maximum Platform Version,
+			Gets the minimum and maximum platform Version properties associated with this
+  // plugin descriptor and places it into *pMinVersion\, and *pMaxVersion.  These are the
+  // minimum and maximum versions of the platform for which this plugin will function.
+  //
+  // Succeeds if all of the following are true:
+  // - both pMinVersion and pMaxVersion pointers are valid.
+  // 
+  // If this method fails\, nothing will be written to *pMinVersion or *pMaxVersion.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+AD_XMETHOD1(SetPlatformMinimumVersion,
+			[in],
+			objPass,
+			aafProductVersion_t *,
+			pMinVersion,
+			The Minimum Platform Version,
+			Sets the maximum platform Version property of this
+  // plugin descriptor.  This is the minimum version of the platform
+  // for which this plugin will function.
+  //
+  // Succeeds if all of the following are true:
+  // - pMinVersion pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+AD_XMETHOD1(SetPlatformMaximumVersion,
+			[in],
+			objPass,
+			aafProductVersion_t *,
+			pMaxVersion,
+			The Maximum Platform Version,
+			Sets the maximum platform Version properties associated with this
+  // plugin descriptor.  This is the maximum version of the platform
+  // for which this plugin will function.
+  //
+  // Succeeds if all of the following are true:
+  // - both pMinVersion and pMaxVersion pointers are valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+AD_XMETHOD1(GetEngine,
+			[out],
+			objPass,
+			aafEngine_t *,
+			pEngine,
+			The software engine,
+			Obtains the software engine ID\, which identifies the software subsystem
+  // used for essence management and playback used by the plugin.  This ID is written into
+  // the caller-allocated variable specified by the pHardwarePlatform argument.
+  // The type aafEngine_t is an extensible\, enumerated type\, and the value given must be
+  // either standard or in the type dictionary.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pHardwarePlatform pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pHardwarePlatform.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pHardwarePlatform arg is NULL.)
+
+
+AD_XMETHOD1(SetEngine,
+			[in],
+			objPass,
+			aafEngine_t,
+			engine,
+			The software engine,
+			Sets the software engine ID\, which identifies the software subsystem
+  // used for essence management and playback used by the plugin.
+  // The type aafEngine_t is an extensible enumerated type\, and the value given must be
+  // either standard or in the type dictionary.
+  // 
+  // If this method fails the engine property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+
+AD_XMETHOD2(GetEngineVersionRange,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pMinVersion,
+			The Minimum Engine Version,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pMaxVersion,
+			The Maximum Engine Version,
+			Gets the minimum and maximum engine Version properties of the engine which
+  //		is associated with this plugin and places it into *pMinVersion\,
+  //		and *pMaxVersion.  These are the minimum and maximum
+  //		versions of the engine for which this plugin will function.
+  //
+  // Succeeds if all of the following are true:
+  // - both pMinVersion and pMaxVersion pointers are valid.
+  // 
+  // If this method fails\, nothing will be written to *pMinVersion or *pMaxVersion.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+
+AD_XMETHOD1(SetEngineMinimumVersion,
+			[in],
+			objPass,
+			aafProductVersion_t *,
+			pMinVersion,
+			The Minimum Engine Version,
+			Sets the minimum engine Version property to the minimum useful version
+  // of the engine which is associated with this plugin.  This is the minimum version
+  // of the engine for which this plugin will function.
+  //
+  // Succeeds if all of the following are true:
+  // - both pMinVersion and pMaxVersion pointers are valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+
+AD_XMETHOD1(SetEngineMaximumVersion,
+			[in],
+			objPass,
+			aafProductVersion_t *,
+			pMaxVersion,
+			The Minimum Engine Version,
+			Sets the minimum engine Version property to the maximum useful version
+  // of the engine which is associated with this plugin.  This is the maximum version
+  // of the engine for which this plugin will function.
+  //
+  // Succeeds if all of the following are true:
+  // - pMaxVersion pointer are valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+
+AD_XMETHOD1(GetPluginAPI,
+			[out],
+			objPass,
+			aafPluginAPI_t *,
+			pPluginAPI,
+			The PluginAPI,
+			Obtains the manufacturer ID Class\, which identifies the plugin interface
+  // supported by the plugin.
+  // This ID is written into
+  // the caller-allocated variable specified by the pPluginAPI argument.
+  // The type aafPluginAPI_t is an extensible enumerated type\, and the value given must be
+  // either standard or in the type dictionary.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pPluginAPI pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pPluginAPI.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPluginAPI arg is NULL.)
+
+
+AD_XMETHOD1(SetPluginAPI,
+			[in],
+			objPass,
+			aafPluginAPI_t,
+			pluginAPI,
+			The Category Class,
+			Obtains the manufacturer ID\, which identifies the plugin interface supported by the plugin..
+  // The type aafPluginAPI_t is an extensible enumerated type\, and the value given must be
+  // either standard or in the type dictionary.
+  // 
+  // If this method fails the PluginAPI property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+
+AD_XMETHOD2(GetPluginAPIVersionRange,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pMinVersion,
+			The Minimum Plugin API Version,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pMaxVersion,
+			The Maximum Plugin API Version,
+			Gets the minimum and maximum plugin API Version properties of the plugin API which
+  //		is associated with this plugin descriptor and places it into *pMinVersion\,
+  //		and *pMaxVersion.  These are the minimum and maximum versions of the PluginAPI
+  //		for which this plugin will function.
+  //
+  // Succeeds if all of the following are true:
+  // - both pMinVersion and pMaxVersion pointers are valid.
+  // 
+  // If this method fails\, nothing will be written to *pMinVersion or *pMaxVersion.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+
+AD_XMETHOD1(SetPluginAPIMinimumVersion,
+			[out],
+			objPass,
+			aafProductVersion_t *,
+			pMinVersion,
+			The Minimum Plugin API Version,
+			Sets the minimum plugin API Version property to the minimum useful version
+  // of the plugin API which is associated with this plugin.
+  //
+  // Succeeds if all of the following are true:
+  // - both pMinVersion and pMaxVersion pointers are valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+AD_XMETHOD1(SetPluginAPIMaximumVersion,
+			[in],
+			objPass,
+			aafProductVersion_t *,
+			pMaxVersion,
+			The Maximum Plugin API Version,
+			Sets the maximum engine Version property to the maximum useful version
+  // of the plugin API which is associated with this plugin.
+  //
+  // Succeeds if all of the following are true:
+  // - both pMinVersion and pMaxVersion pointers are valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMinVersion or pMaxVersion arg is NULL.)
+
+AD_XMETHOD1(IsSoftwareOnly,
+			[out],
+			objPass,
+			aafBool *,
+			pIsSoftwareOnly,
+			The IsSoftwareOnly,
+			Tells whether the given plugin is capable of running in a software-only
+  // environment.  A value of AAFTrue indicates that no additional hardware is required.
+  // If the result is AAFTrue\, then this plugin may also support hardware acceleration\, as
+  // long as it also contains a software method of processing the data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pIsSoftwareOnly pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pIsSoftwareOnly.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsSoftwareOnly arg is NULL.)
+
+
+
+AD_XMETHOD1(SetIsSoftwareOnly,
+			[in],
+			objPass,
+			aafBool,
+			isSoftwareOnly,
+			The isSoftwareOnly flag,
+			Sets whether the given plugin is capable of running in a software-only
+  // environment\, and returns AAFFalse if any hardware is required.
+  // If isSoftwareOnly is AAFTrue\, then this plugin may also support hardware acceleration\,
+  // as long as it also contains a software method of processing the data.
+  // If this method fails the isSoftwareOnly property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+
+
+AD_XMETHOD1(IsAccelerated,
+			[out],
+			objPass,
+			aafBool *,
+			pIsAccelerated,
+			The IsAccelerated,
+			Tells whether the given plugin is capable of running with a hardware
+  // accelerator.  If the result is AAFTrue\, then this plugin may also support
+  // software decompression.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pIsAccelerated pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pIsAccelerated.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsAccelerated arg is NULL.)
+
+
+
+
+AD_XMETHOD1(SetIsAccelerated,
+			[in],
+			objPass,
+			aafBool,
+			isAccelerated,
+			The isAccelerated flag,
+			Tells whether the given plugin is capable of running with a hardware
+  // accelerator.  If the result is AAFTrue\, then this plugin may also support
+  // software decompression.
+  //
+  // If this method fails the IsAccelerated property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+AD_XMETHOD1(SupportsAuthentication,
+			[out],
+			objPass,
+			aafBool *,
+			pSupportsAuthentication,
+			The SupportsAuthentication,
+			Tells whether the given plugin is capable of supporting authentication.
+  // The methods for authenticating a plugin are still <tbd>.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pSupportsAuthentication pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pSupportsAuthentication.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSupportsAuthentication arg is NULL.)
+
+
+AD_XMETHOD1(SetSupportsAuthentication,
+			[in],
+			objPass,
+			aafBool,
+			SupportsAuthentication,
+			The SupportsAuthentication flag,
+			Tells whether the given plugin is capable of supporting authentication.
+  // The methods for authenticating a plugin are still <tbd>.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.)
+
+AD_XMETHOD1(GetPluggableCode,
+			[out],
+			objOut,
+			AAFPluggableCode,
+			pCode,
+			An interface pointer to the pluggable code object,
+			Returns the pluggableCode objects \(if any\) associated with this plugin descriptor.
+  //
+  // Succeeds if all of the following are true:
+  // - the pCode pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pCode.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_CODE_NOT_PRESENT
+  //   - There is no pluggable code associated with this file.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCode arg is NULL.)
+
+AD_XMETHOD1(GetNumLocators,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pCount,
+			Returns the number of locators,
+
+			Return the number of locators attached to this plugin
+  // descriptor.  The number of locators may be zero if the plugin is
+  // in the current file.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pCount pointer is valid.
+  // 
+  // If this method fails nothing is written to *pCount.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCount is null.)
+
+
+AD_XMETHOD1(AppendLocator,
+			[in],
+			objIn,
+			AAFLocator,
+			pLocator,
+			Locator to append,
+
+			Append another locator to this plugin descriptor.  Use this
+  // function to add a locator to be scanned last when searching for
+  // the plugin \(a secondary location for the plugin\).
+  // 
+  // Succeeds if all of the following are true:
+  // - the pLocator pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLocator is null.)
+
+
+AD_XMETHOD1(PrependLocator,
+			[in],
+			objIn,
+			AAFLocator,
+			pLocator,
+			Locator to append,
+
+			Append another locator to this plugin descriptor.  Use this
+  // function to add a locator to be scanned first when searching for
+  // the plugin \(a new primary location for the plugin\).
+  // 
+  // Succeeds if all of the following are true:
+  // - the pLocator pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLocator is null.)
+
+
+AD_XMETHOD1(IsPluginLocal,
+			[out],
+			objPass,
+			aafBool *,
+			pIsLocal,
+			Returns AAFTrue if the plugin is local,
+
+		Tells if the plugin is local\, ie: inside of an AAFPluggableCode.
+  //
+  // Succeeds if all of the following are true:
+  // - the pIsLocal pointer is valid.
+  // 
+  // If this method fails\, nothing will be written to *pIsLocal.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsLocal arg is NULL.)
+
+AD_XMETHOD1(GetPluginDescriptorID,
+			[out],
+			objPass,
+			aafUID_t *,
+			pDescriptorID,
+			The unique plugin descriptor id,
+			Returns the descriptor ID associated with this plugin descriptor.
+  //
+  // Succeeds if all of the following are true:
+  // - the pDescriptorID pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pDescriptorID.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDescriptorID arg is NULL.)
+
+
+AD_XMETHOD1(SetPluginDescriptorID,
+			[in],
+			objPass,
+			aafUID_t,
+			descriptorID,
+			New Mob ID,
+			Returns the descriptor ID associated with this plugin descriptor.
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+  
+
+AD_XMETHOD1(EnumPluginLocators,
+			[out\, retval],
+			objOut,
+			EnumAAFPluginLocators,
+			ppEnum,
+			Plugin Locator Enumeration,
+			Places an IEnumAAFPluginLocators enumerator for the plugin locators
+
+  // contained in the AAFPluginDescriptor into the *ppEnum argument.
+  // 
+  // The returned enumerator is AddRef\(\)ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  // E_FAIL
+  //   - Failed to create the enumerator.)
+
+
+
+AD_XCLASS_END(Concrete, StoredObject)
