@@ -85,7 +85,7 @@ static const aafSlotID_t				TEST_SLOT_ID = 7;
 
 // i find this convenient to compare the IUNK's of two interfaces :
 template <class T1, class T2>
-aafBoolean_t  AreUnksSame(T1 cls1, T2 cls2)
+aafBoolean_t  AreUnksSame(T1& cls1, T2& cls2)
 {
 	IUnknownSP    spUnk1, spUnk2;
 	
@@ -107,12 +107,12 @@ aafBoolean_t  AreUnksSame(T1 cls1, T2 cls2)
 }
 
 // convenient error handlers.
-inline void checkResult(HRESULT r)
+inline void checkResult(const HRESULT r)
 {
 	if (FAILED(r))
 		throw r;
 }
-inline void checkExpression(aafBoolean_t expression, HRESULT r)
+inline void checkExpression(const aafBoolean_t expression, const HRESULT r)
 {
 	if (!expression)
 		throw r;
@@ -132,7 +132,7 @@ static void RemoveTestFile(const wchar_t* pFileName)
 }
 
 
-HRESULT  createFAType (IAAFDictionary *pDict)
+static HRESULT  createFAType (IAAFDictionary * const pDict)
 {
 	CAAFBuiltinDefs defs(pDict);
 	
@@ -158,7 +158,7 @@ HRESULT  createFAType (IAAFDictionary *pDict)
 }//createFAType()
 
 
-HRESULT addFATypeToComponent(IAAFDictionary *pDict)
+static HRESULT addFATypeToComponent(IAAFDictionary * const pDict)
 {
 	CAAFBuiltinDefs defs(pDict);
 	
@@ -186,7 +186,7 @@ HRESULT addFATypeToComponent(IAAFDictionary *pDict)
 }//addFATypeToComponent()
 
 
-HRESULT createFAFiller(IAAFDictionary *pDict, IAAFFillerSP spFill)
+static HRESULT createFAFiller(IAAFDictionary* const pDict, IAAFFillerSP& spFill)
 {
 	
 	//handy - QI filler for  Object intf.		
@@ -241,7 +241,9 @@ HRESULT createFAFiller(IAAFDictionary *pDict, IAAFFillerSP spFill)
 
 
 
-HRESULT verifyContents (IAAFHeader *pHeader, IAAFDictionary *pDict)
+static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const pDict,
+							   const aafBoolean_t bMinimalTesting)
+
 {
 	//CAAFBuiltinDefs defs (pDict);
 
@@ -330,11 +332,20 @@ HRESULT verifyContents (IAAFHeader *pHeader, IAAFDictionary *pDict)
 	checkExpression( AreUnksSame(spTestType, spTD_elem), AAFRESULT_TEST_FAILED );
 
 	//IAAFTypeDefFixedArray::GetCArray()
-	int i=0;
+	aafInt32 i=0;
 	checkResult(spFA->GetCArray(spPropVal, (aafMemPtr_t) check_fa, sizeof(check_fa)));
 	//VERIFY values:
 	for (i=0; i<TEST_FA_COUNT; i++)
 		checkExpression( check_fa[i] == TEST_FA_VALUES[i], AAFRESULT_TEST_FAILED );	
+
+
+	//At this point, the test is succesful for both the CREATE and READ (unscrambling of .aaf file) routines
+	if (bMinimalTesting)
+		// so,  bail if we're called from CREATE 
+		return S_OK;
+
+	/////  READ routine .... continue with more tests ....................
+
 
 	//IAAFTypeDefFixedArray::GetElementValue 
 	//Get 3rd index out of array
@@ -456,7 +467,7 @@ static HRESULT CreateAAFFile(aafWChar *  pFileName )
 		//////////////////// done /!!!!!!!!!!!!!!!!!!!!!!
 		
 		//Verify results right away (during this creation process) ....
-		checkResult(verifyContents (pHeader, pDict));
+		checkResult(verifyContents (pHeader, pDict, kAAFTrue));  //True => minimal testing 
 		
 	}
 	catch (HRESULT & rResult)
@@ -500,7 +511,7 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 		assert (pDict);
 		
 		// Read the mob, slots, etc  to verify the contents ...
-		checkResult(verifyContents (pHeader, pDict));
+		checkResult(verifyContents (pHeader, pDict, kAAFFalse));  //False => NOT minimal testing; i.e. test everything 
 		
 		
 	}//try
