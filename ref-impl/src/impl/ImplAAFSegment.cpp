@@ -120,12 +120,19 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 	{
 		CHECK(GetLength(&segLen));
 		CvtInt32toPosition(0, begPos);
+		endPos = begPos;
 		CHECK(AddInt64toInt64(segLen, &endPos));
 		if (Int64LessEqual(begPos, offset) &&
 			Int64Less(offset, endPos))
 		{
 			*found = AAFTrue;
 			*subseg = this;
+			*sequPosPtr = 0;
+		}
+		else
+		{
+			*found = AAFFalse;
+			*subseg = NULL;
 			*sequPosPtr = 0;
 		}
 	} /* XPROTECT */
