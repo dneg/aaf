@@ -32,7 +32,6 @@
 
 #include "OMAssertions.h"
 
-#include <iostream.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -222,16 +221,6 @@ size_t countWideCharacter(const wchar_t* string, wchar_t character)
     end = findWideCharacter(element, character);
   }
   return result;
-}
-
-void printWideString(const wchar_t* string)
-{
-  TRACE("printWideString");
-
-  PRECONDITION("Valid string", validWideString(string));
-  char* str = convertWideString(string);
-  cout << str;
-  delete [] str;
 }
 
 char* saveString(const char* string)
