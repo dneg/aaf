@@ -22,6 +22,15 @@
 #define OMHIGHPART(x) x.u.HighPart
 #define OMLOWPART (x) x.u.LowPart
 #define OMQUADPART(x) x.u.QuadPart
+#elif defined(_MAC) || defined(macintosh)
+// The mac declaration for LARGE_INTEGER and ULARGE_INTEGER
+// does NOT have a QuadPart. The following definition for
+// OMQUADPART only works if correctly if the input value
+// is of type ULARGE_INTEGER. This means that the IStream::Seek
+// used below only works if the LARGE_INTEGER input value is non-negative.
+#define OMHIGHPART(x) x.u.HighPart
+#define OMLOWPART (x) x.u.LowPart
+#define OMQUADPART(x) (*(reinterpret_cast<unsigned long long *>(&x)))
 #else
 #define OMHIGHPART(x) x.HighPart
 #define OMLOWPART (x) x.LowPart
