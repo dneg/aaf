@@ -110,6 +110,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   ProductInfo.companyName = L"AAF Developers Desk";
   ProductInfo.productName = L"AAFMob Test";
   ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.productID = UnitTestProductID;
+  ProductInfo.platform = NULL;
+
 
 
   try
@@ -269,19 +273,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   IAAFMob			*aMob = NULL;
   IEnumAAFMobSlots	*slotIter = NULL;
   IAAFMobSlot		*slot = NULL;
-  aafProductIdentification_t	ProductInfo;
   aafNumSlots_t	numMobs, n, s;
   HRESULT						hr = S_OK;
-
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFMob Test";
-  ProductInfo.productVersion = &v;
 
 
   try
