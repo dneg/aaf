@@ -3832,33 +3832,46 @@ static int isAnAAFFile(const wchar_t* fileName,
 void usage(void)
 {
   cerr << programName << ": Usage : " << programName
-       << " [-x -r -p -a -c -s -z <pid> -m <n> -l <n> -v -h] <file...>"
+       << " OPTIONS <file...>"
        << endl;
-  cerr << "-x       = hex dump"
-       << " : for any file." << endl;
-  cerr << "-r       = raw dump"
-       << " : for any structured storage file (default)." << endl;
-  cerr << "-p       = property dump"
-       << " : for any file using the AAF stored object format." << endl;
-  cerr << "-a       = AAF file dump"
-       << " : for any AAF file." << endl;
-  cerr << "-c       = print raw reference counts" << endl;
-  cerr << "-s       = print statistics"
-       << " : combine with -r, -p and -a." << endl;
-  cerr << "-z <pid> = dump properties with pid <pid> (hex) as all zeros :"
-       << endl
-       << "             combine with -p and -a." << endl;
-  cerr << "-m <n>   = dump only the first <n> bytes (dec) of media streams :"
-       << endl
-       << "             combine with -p and -a." << endl;
-  cerr << "-l <n>   = dump only the first <n> bytes (dec) of the file :"
-       << endl
-       << "             combine with -x." << endl;
-  cerr << "-v       = validate the structure of the file :"
-       << endl
-       << "             combine with -p and -a." << endl;
-  cerr << "-h       = help"
-       << " : print this message and exit." << endl;
+  cerr << "--help            = help (-h) : print this message and exit."
+       << endl;
+  cerr << endl;
+  cerr << "--hex-dump        = hex dump (-x)      : "
+       <<"any file."
+       << endl;
+  cerr << "--raw-dump        = raw dump (-r)      : "
+       << "any structured storage file (default)."
+       << endl;
+  cerr << "--property-dump   = property dump (-p) : "
+       << "any file using the AAF stored format."
+       << endl;
+  cerr << "--aaf-dump        = AAF file dump (-a) : any AAF file."
+       << endl;
+  cerr << endl;
+  cerr << "Use the following with --raw-dump, --property-dump and --aaf-dump."
+       << endl;
+  cerr << "--statistics      = print statistics (-s) :"
+       << endl;
+  cerr << endl;
+  cerr << "Use the following with --property-dump and --aaf-dump."
+       << endl;
+  cerr << "--raw-counts      = print raw reference counts (-c) :"
+       << endl;
+  cerr << "--zero-out <pid>  = "
+       << "dump properties with pid <pid> (hex) as all zeros (-z) :"
+       << endl;
+  cerr << "--media-bytes <n> = "
+       << "dump only the first <n> bytes (dec) of media streams (-m) :"
+       << endl;
+  cerr << "--validate        = validate the structure of the file (-v) :"
+       << endl;
+  cerr << endl;
+  cerr << "Use the following with --hex-dump."
+       << endl;
+  cerr << "--file-bytes <n>  = "
+       << "dump only the first <n> bytes (dec) of the file (-l) :"
+       << endl;
 }
 
 bool printStats = false; // default
@@ -4058,32 +4071,30 @@ int main(int argumentCount, char* argumentVector[])
 
   for (i = 1; i < argumentCount; i++) {
 
-    char* argument = argumentVector[i];
-    char c = argument[0];
+    char* opt = argumentVector[i];
 
-    if ((c == '-') && (strlen(argument) >= 2)) {
-      char flag = argument[1];
+    if ((strlen(opt) >= 2) && (opt[0] == '-')) {
 
-      switch (flag) {
-      case 'x':
+      if ((strcmp(opt, "-x") == 0) ||
+          (strcmp(opt, "--hex-dump") == 0)) {
         option = hexadecimal;
-        break;
-      case 'r':
+      } else if ((strcmp(opt, "-r") == 0) ||
+                 (strcmp(opt, "--raw-dump") == 0)) {
         option = raw;
-        break;
-      case 'p':
+      } else if ((strcmp(opt, "-p") == 0) ||
+                 (strcmp(opt, "--property-dump") == 0)) {
         option = property;
-        break;
-      case 'a':
+      } else if ((strcmp(opt, "-a") == 0) ||
+                 (strcmp(opt, "--aaf-dump") == 0)) {
         option = aaf;
-        break;
-      case 'c':
+      } else if ((strcmp(opt, "-c") == 0) ||
+                 (strcmp(opt, "--raw-counts") == 0)) {
         cFlag = true;
-        break;
-      case 's':
+      } else if ((strcmp(opt, "-s") == 0) ||
+                 (strcmp(opt, "--statistics") == 0)) {
         printStats = true;
-        break;
-      case 'z':
+      } else if ((strcmp(opt, "-z") == 0) ||
+                 (strcmp(opt, "--zero-out") == 0)) {
 
         // Does a value follow -z ?
         //
@@ -4123,13 +4134,13 @@ int main(int argumentCount, char* argumentVector[])
           }
         } else {
           cerr << programName
-               << ": Error : -z must be followed by a property id."
+               << ": Error : " << opt <<" must be followed by a property id."
                << endl;
           usage();
           exit(EXIT_FAILURE);
         }
-        break;
-      case 'm':
+      } else if ((strcmp(opt, "-m") == 0) ||
+                 (strcmp(opt, "--media-bytes") == 0)) {
 
         // Does a value follow -m ?
         //
@@ -4161,13 +4172,13 @@ int main(int argumentCount, char* argumentVector[])
           mLimit = bytes;
         } else {
           cerr << programName
-               << ": Error : -m must be followed by a byte count."
+               << ": Error : " << opt << " must be followed by a byte count."
                << endl;
           usage();
           exit(EXIT_FAILURE);
         }
-        break;
-      case 'l':
+      } else if ((strcmp(opt, "-l") == 0) ||
+                 (strcmp(opt, "--file-bytes") == 0)) {
 
         // Does a value follow -l ?
         //
@@ -4199,23 +4210,22 @@ int main(int argumentCount, char* argumentVector[])
           lLimit = bytes;
         } else {
           cerr << programName
-               << ": Error : -l must be followed by a byte count."
+               << ": Error : " << opt << " must be followed by a byte count."
                << endl;
           usage();
           exit(EXIT_FAILURE);
         }
-        break;
-      case 'v':
+      } else if ((strcmp(opt, "-v") == 0) ||
+                 (strcmp(opt, "--validate") == 0)) {
         vFlag = true;
-        break;
-      case 'h':
+      } else if ((strcmp(opt, "-h") == 0) ||
+                 (strcmp(opt, "--help") == 0)) {
         usage();
         exit(EXIT_SUCCESS);
-        break;
-      default:
+      } else {
         cerr << programName
-             << ": Error : -"
-             << flag
+             << ": Error : "
+             << opt
              << " is not a recognized option."
              << endl;
         usage();
