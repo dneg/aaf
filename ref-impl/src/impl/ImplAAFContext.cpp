@@ -29,6 +29,19 @@
 
 extern "C" const aafClassID_t CLSID_AAFFile;
 
+// single instance of this class; initialized by first call to GetInstance().
+/*static*/ ImplAAFSession * ImplAAFSession::_singleton; // = 0;
+
+/*static*/ ImplAAFSession * ImplAAFSession::GetInstance ()
+{
+  if (! _singleton)
+	{
+	  _singleton = new ImplAAFSession;
+	}
+  return _singleton;
+}
+
+
 ImplAAFSession::ImplAAFSession ()
 {}
 
@@ -211,6 +224,9 @@ ImplAAFSession::BeginSession (
   return SetDefaultIdentification(ident);
 }
 
-extern "C" const aafClassID_t CLSID_AAFSession;
+// extern "C" const aafClassID_t CLSID_AAFSession;
+// CLSID for AAFSession
+// {F0C10891-3073-11D2-804A-006008143E6F
+const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11D2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
 OMDEFINE_STORABLE(ImplAAFSession, CLSID_AAFSession);
