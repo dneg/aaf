@@ -64,7 +64,6 @@ protected:
   ~ImplAAFHeader ();
 
 public:
-  OMDECLARE_STORABLE(ImplAAFHeader)
 
   //****************
   // LookupMob()
