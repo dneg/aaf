@@ -332,6 +332,13 @@ BEGIN {
   printf("//     name      = the name of the type\n");
   printf("//     id        = the auid used to identify the type [*]\n");
   printf("//\n");
+  printf("// AAF_TYPE_DEFINITION_OPAQUE(name, id)\n");
+  printf("//\n");
+  printf("//   Define an AAF opque type.\n");
+  printf("//\n");
+  printf("//     name      = the name of the type\n");
+  printf("//     id        = the auid used to identify the type [*]\n");
+  printf("//\n");
   printf("// AAF_TYPE_DEFINITION_SET(name, id, type)\n");
   printf("//\n");
   printf("//   Define an AAF set type.\n");
@@ -512,6 +519,10 @@ BEGIN {
   printf("#define AAF_TYPE_DEFINITION_INDIRECT(name, id)\n");
   printf("#endif\n");
   printf("\n");
+  printf("#ifndef AAF_TYPE_DEFINITION_OPAQUE\n");
+  printf("#define AAF_TYPE_DEFINITION_OPAQUE(name, id)\n");
+  printf("#endif\n");
+  printf("\n");
   printf("#ifndef AAF_TYPE_DEFINITION_SET\n");
   printf("#define AAF_TYPE_DEFINITION_SET(name, id, type)\n");
   printf("#endif\n");
@@ -677,6 +688,8 @@ BEGIN {
         printf("AAF_TYPE_DEFINITION_CHARACTER(%s, %s)\n", typeName, guid);
       } else if (kind == "indirect") {
         printf("AAF_TYPE_DEFINITION_INDIRECT(%s, %s)\n", typeName, guid);
+      } else if (kind == "opaque") {
+        printf("AAF_TYPE_DEFINITION_OPAQUE(%s, %s)\n", typeName, guid);
       } else if (kind == "set") {
         elementType = $25;
         # Special cases for strong/weak reference sets.
@@ -853,6 +866,8 @@ END {
     printf("#undef AAF_TYPE_DEFINITION_CHARACTER\n");
     printf("\n");
     printf("#undef AAF_TYPE_DEFINITION_INDIRECT\n");
+    printf("\n");
+    printf("#undef AAF_TYPE_DEFINITION_OPAQUE\n");
     printf("\n");
     printf("#undef AAF_TYPE_DEFINITION_SET\n");
     printf("\n");

@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Mon Apr  3 13:59:31 EDT 2000
-// by user bedell on system JBEDELL2.
+// This file was generated on Wed Apr  5 13:30:34 EDT 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -248,6 +248,13 @@
 //     name      = the name of the type
 //     id        = the auid used to identify the type [*]
 //
+// AAF_TYPE_DEFINITION_OPAQUE(name, id)
+//
+//   Define an AAF opque type.
+//
+//     name      = the name of the type
+//     id        = the auid used to identify the type [*]
+//
 // AAF_TYPE_DEFINITION_SET(name, id, type)
 //
 //   Define an AAF set type.
@@ -426,6 +433,10 @@
 
 #ifndef AAF_TYPE_DEFINITION_INDIRECT
 #define AAF_TYPE_DEFINITION_INDIRECT(name, id)
+#endif
+
+#ifndef AAF_TYPE_DEFINITION_OPAQUE
+#define AAF_TYPE_DEFINITION_OPAQUE(name, id)
 #endif
 
 #ifndef AAF_TYPE_DEFINITION_SET
@@ -2883,7 +2894,7 @@ AAF_CLASS(KLVData,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x5101,
-    AAF_TYPE(Indirect),
+    AAF_TYPE(Opaque),
     true,
     KLVData)
 AAF_CLASS_END(KLVData)
@@ -3176,10 +3187,21 @@ AAF_CLASS(TypeDefinitionIndirect,
 AAF_CLASS_END(TypeDefinitionIndirect)
 AAF_CLASS_SEPARATOR()
 
+// TypeDefinitionOpaque
+//
+AAF_CLASS(TypeDefinitionOpaque,
+  AAF_LITERAL_AUID(0x065E0000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinitionIndirect,
+  true)
+AAF_CLASS_END(TypeDefinitionOpaque)
+AAF_CLASS_SEPARATOR()
+
 // TypeDefinitionCharacter
 //
 AAF_CLASS(TypeDefinitionCharacter,
-  AAF_LITERAL_AUID(0x065E0000,
+  AAF_LITERAL_AUID(0x065F0000,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   TypeDefinition,
@@ -3864,6 +3886,14 @@ AAF_TYPE_SEPARATOR()
 AAF_TYPE_DEFINITION_INDIRECT(Indirect, 
   AAF_LITERAL_AUID(0xFFFFFFFF,
     0xFFFF, 0xFFFD,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
+AAF_TYPE_SEPARATOR()
+
+// Opaque
+//
+AAF_TYPE_DEFINITION_OPAQUE(Opaque, 
+  AAF_LITERAL_AUID(0xFFFFFFFF,
+    0xFFFF, 0xFFFC,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0xFF))
 AAF_TYPE_SEPARATOR()
 
@@ -4615,6 +4645,8 @@ AAF_TYPE_TABLE_END()
 #undef AAF_TYPE_DEFINITION_CHARACTER
 
 #undef AAF_TYPE_DEFINITION_INDIRECT
+
+#undef AAF_TYPE_DEFINITION_OPAQUE
 
 #undef AAF_TYPE_DEFINITION_SET
 

@@ -414,6 +414,29 @@ static TypeIndirect s_AAFAllTypeIndirects [] = {
 
 
 
+//
+// Pass 13c:  Do stuff for opaque types. (there should be only one!)
+//
+#define AAF_TYPE_TABLE_BEGIN()  \
+struct TypeOpaque             \
+{                               \
+  const wchar_t * typeName;     \
+  aafUID_t        typeID;       \
+  int             isValid;      \
+};                              \
+                                \
+static TypeOpaque s_AAFAllTypeOpaques [] = {
+
+#define AAF_TYPE_DEFINITION_OPAQUE(name, id) \
+  {L##"aaf" L#name, id, 1},
+
+#define AAF_TYPE_TABLE_END()  \
+0 };
+
+#include "AAFMetaDictionary.h"
+
+
+
 
 //
 // Pass 14:  Do stuff for strong ref types.
