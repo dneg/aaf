@@ -533,7 +533,7 @@ HRESULT AAFDomainUtils::GetObjRefArrayPropFromObject(IAAFObject* pObj, aafUID_t*
 				{
 					IAAFObject*	pTempObj;
 
-					hr = pTDArrayElement->GetObject(pPVElement, &pTempObj);
+					hr = pTDArrayElement->GetObject(pPVElement, IID_IAAFObject, (IUnknown **)&pTempObj);
 					if (SUCCEEDED(hr))
 					{
 						pTempArray[numElements] = pTempObj;
@@ -679,7 +679,7 @@ HRESULT AAFDomainUtils::GetObjRefPropFromObject(IAAFObject* pObj, aafUID_t* pCla
 			{
 				IAAFObject*	pTempObj;
 
-				hr = pTDObjectRef->GetObject(pPV, &pTempObj);
+				hr = pTDObjectRef->GetObject(pPV, IID_IAAFObject, (IUnknown **)&pTempObj);
 				if (SUCCEEDED(hr))
 				{
 					*ppObject = pTempObj;
