@@ -105,6 +105,7 @@ void OMStorable::setName(const char* name)
 
 OMFile* OMStorable::file(void) const
 {
+  PRECONDITION("Valid containing object", _containingObject != 0);
   return _containingObject->file();
 }
 
