@@ -68,38 +68,32 @@ AD_XMETHOD1(CountElements,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
 
-AD_XMETHOD2(GetElementValues,
-			[out\, size_is\(numElems\)],
-			objPass,
-			aafUID_t *,
-			pValues,
-			array to hold values,
-
+AD_XMETHOD2(GetElementValue,
 			[in],
 			objPass,
 			aafUInt32,
-			numElems,
-       number of elements in the pValues array,
+			index,
+			index of element to retrieve,
 
-     Gets the values of all elements in this enumerated type.  The
-  // values are written into the client-allocated pValues array.  
-  //
-  // The number of elements in the pNames array is zero if it is NULL\,
-  // or is numElements otherwise.  If pNames is NULL\, no names will be
-  // written.  If pNames is not NULL\, it points to a user-allocated
-  // array of pointers to strings; each string pointer in that array
-  // points to memory allocated by the caller.  The required size of
-  // each string may be determined by calling
-  // GetElementNameLengths\(\).
-  //
-  // The number of elements in the pValues array is zero if it is
-  // NULL\, or is numElements otherwise. if pValues is NULL\, no values
-  // will be written.
+			[out],
+			objPass,
+			aafUID_t *,
+			pOutValue,
+			requested value,
+
+     Gets the indexed element in this enumerated type.  The
+  // value is written into the client-allocated *pOutValue.  Index
+  // must be less than the value returned by CountElements\(\).
   //
   // Succeeds if:
-  // - pNameLengths is a valid pointer.
+  // - pOutValue is a valid pointer.
+  // - index is less than CountElements\(\).
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NO_INIT)
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pOutValue\)
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is not less than CountElements\(\).)
 
 
 AD_XMETHOD3(GetNameFromValue,

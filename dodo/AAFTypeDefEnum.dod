@@ -146,6 +146,7 @@ AD_XMETHOD2(GetElementValue,
   // - index is less than CountElements\(\).
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pOutValue\)
   //
   // AAFRESULT_BADINDEX
   //   - index is not less than CountElements\(\).)
