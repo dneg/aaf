@@ -1093,10 +1093,12 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 {
   // Save all objects in this file to pDestFile.  Implemented by
   // cloning the source header's content store and
-  // _identificationList.  The destination header's _byteOrder,
-  // _lastModified, _dictionary, _fileRef, and _objectModelVersion are
-  // not cloned - they all take care of themselves.  The destination dictionary
-  // is updated as a side effect of cloning the content store and ident list.
+  // _identificationList.  The source identification objects are
+  // appended to pDstFile's existing identification list. The
+  // destination header's _byteOrder, _lastModified, _dictionary,
+  // _fileRef, and _objectModelVersion are not cloned - they all take
+  // care of themselves.  The destination dictionary is updated as a
+  // side effect of cloning the content store and ident list.
 
   if (! pDestFile)
 	return AAFRESULT_NULL_PARAM;
@@ -1146,8 +1148,6 @@ ImplAAFFile::SaveCopyAs (ImplAAFFile * pDestFile)
 
     // Clone the ident list.
     {
-      spDstHeader->ClearIdentificationList();
-
       aafUInt32 numSrcIdents = 0;
       checkResult( _head->CountIdentifications(&numSrcIdents) );
       
