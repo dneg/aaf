@@ -119,14 +119,14 @@ public:
 
     // @cmember Save a single weak reference.
   void save(OMPropertyId propertyId,
-            int type,
+            OMStoredForm storedForm,
             const OMUniqueObjectIdentification& id,
             OMPropertyTag tag,
             OMPropertyId keyPropertyId);
 
     // @cmember Save a collection (vector/set) of weak references.
   void save(OMPropertyId propertyId,
-            int type,
+            OMStoredForm storedForm,
             const char* collectionName,
             const OMUniqueObjectIdentification* index,
             size_t count,
@@ -146,14 +146,14 @@ public:
 
     // @cmember Restore a single weak reference.
   void restore(OMPropertyId propertyId,
-               int type,
+               OMStoredForm storedForm,
                OMUniqueObjectIdentification& id,
                OMPropertyTag& tag,
                OMPropertyId& keyPropertyId);
 
     // @cmember Restore a collection (vector/set) of weak references.
   void restore(OMPropertyId propertyId,
-               int type,
+               OMStoredForm storedForm,
                char*& collectionName,
                size_t nameSize,
                const OMUniqueObjectIdentification*& index,
@@ -165,13 +165,19 @@ public:
     //          property value to be written occupies <p size> bytes at
     //          the address <p start>. The property id is <p propertyId>.
     //          The property type is <p type>.
-  void write(OMPropertyId propertyId, int type, void* start, size_t size);
+  void write(OMPropertyId propertyId,
+             OMStoredForm storedForm,
+             void* start,
+             size_t size);
 
     // @cmember Read a property value from this <c OMStoredObject>.
     //          The property value is read into a buffer which occupies
     //          <p size> bytes at the address <p start>. The property id
     //          is <p propertyId>. The property type is <p type>.
-  void read(OMPropertyId propertyId, int type, void* start, size_t size);
+  void read(OMPropertyId propertyId,
+            OMStoredForm storedForm,
+            void* start,
+            size_t size);
 
     // @cmember Open a stream called <p streamName> contained within
     //          this <c OMStoredObject>.
