@@ -64,10 +64,6 @@
 
 
 static aafWChar *slotName = L"SLOT1";
-static aafInt32 fadeInLen  = 1000;
-static aafInt32 fadeOutLen = 2000;
-static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
-static aafFadeType_t fadeOutType = kAAFFadeLinearPower;
 static aafSourceRef_t sourceRef; 
 
 
@@ -103,15 +99,27 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 
 static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
-	sprintf(buf, "%02x%02x%02x%02x%02x%02x%02x%02x--%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-		(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], (int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3], 
-		(int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], (int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7], 
-		(int)uid.SMPTELabel[8], (int)uid.SMPTELabel[8], (int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11], 
-		(int)uid.length, (int)uid.instanceHigh, (int)uid.instanceMid, (int)uid.instanceLow, 
-		uid.material.Data1, uid.material.Data2, uid.material.Data3, (int)uid.material.Data4[0],
-		(int)uid.material.Data4[1], (int)uid.material.Data4[2], (int)uid.material.Data4[3],
-		(int)uid.material.Data4[4],
-		(int)uid.material.Data4[5], (int)uid.material.Data4[6], (int)uid.material.Data4[7]);
+    sprintf( buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-" \
+		  "%02x-%02x-%02x-%02x-" \
+		  "%08x%04x%04x" \
+		  "%02x%02x%02x%02x%02x%02x%02x%02x",
+
+	(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], 
+	(int)uid.SMPTELabel[2], (int)uid.SMPTELabel[3],
+	(int)uid.SMPTELabel[4], (int)uid.SMPTELabel[5], 
+	(int)uid.SMPTELabel[6], (int)uid.SMPTELabel[7],
+	(int)uid.SMPTELabel[8], (int)uid.SMPTELabel[9], 
+	(int)uid.SMPTELabel[10], (int)uid.SMPTELabel[11],
+
+	(int)uid.length, (int)uid.instanceHigh, 
+	(int)uid.instanceMid, (int)uid.instanceLow,
+
+	uid.material.Data1, uid.material.Data2, uid.material.Data3,
+
+	(int)uid.material.Data4[0], (int)uid.material.Data4[1], 
+	(int)uid.material.Data4[2], (int)uid.material.Data4[3],
+	(int)uid.material.Data4[4], (int)uid.material.Data4[5], 
+	(int)uid.material.Data4[6], (int)uid.material.Data4[7] );
 }
 
 
@@ -768,7 +776,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							check(pReferencedMob->GetMobID(&mobID));
 							check(pReferencedMob->GetName (bufW, sizeof(bufW)));
 							check(convert(bufA, sizeof(bufA), bufW));
-							printf("        References mob = '%s'\n", bufW);
+							printf("        References mob = '%s'\n", bufA);
 							MobIDtoString(mobID, bufA);
 							printf("            (mobID %s)\n", bufA);
 
