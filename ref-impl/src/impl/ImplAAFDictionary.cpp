@@ -493,35 +493,8 @@ AAFRESULT STDMETHODCALLTYPE
     // object pointer requested in auid
     ImplAAFMetaDefinition ** ppMetaObject)
 {
-#if 0  
-  if (!ppMetaObject)
-    return AAFRESULT_NULL_PARAM;
-
-  *ppMetaObject = NULL;
-
-  // Temporary: The first version just calls the old CreateInstance method.
-  // This will be replaced when the "two-roots", data and meta-data, are 
-  // implemented. transdel:2000-APR-21.
-  ImplAAFObject * pObject = NULL;
-  AAFRESULT result = CreateInstance(classId, &pObject);
-  if (AAFRESULT_SUCCEEDED(result))
-  {
-    // Make sure that this object is in fact a meta definition.
-    *ppMetaObject = dynamic_cast<ImplAAFMetaDefinition*>(pObject);
-    if (NULL == *ppMetaObject)
-    {
-      // Cleanup on failure.
-      pObject->ReleaseReference();
-      pObject = NULL;
-      result = AAFRESULT_INVALID_PARAM;
-    }
-  }
-
-  return (result);
-#else // #if 0
   // Ask the meta dictionary to create the meta definition
   return (metaDictionary()->CreateMetaInstance(classId, ppMetaObject));
-#endif
 }
 
 
