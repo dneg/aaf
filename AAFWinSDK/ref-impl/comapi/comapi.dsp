@@ -1059,6 +1059,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFMobsTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFObjects.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFObjectsTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFOperationDefs.cpp"
 # End Source File
 # Begin Source File
