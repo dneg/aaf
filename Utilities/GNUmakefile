@@ -22,17 +22,28 @@
 
 
 .PHONY : all
-all : aafomf
+all : aafomf eli2aaf aafviewer
 
 .PHONY : aafomf
 aafomf:
 	cd AafOmf && $(MAKE)
 
+.PHONY : eli2aaf
+eli2aaf:
+	cd eli2aaf && $(MAKE)
+
+.PHONY : aafviewer
+aafviewer:
+	cd aafviewer/src/aaf2dot && $(MAKE)
+
 .PHONY : clean
 clean :
 	cd AafOmf && $(MAKE) GENDEPS=0 $@
+	cd eli2aaf && $(MAKE) GENDEPS=0 $@
+	cd aafviewer/src/aaf2dot && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean :
 	cd AafOmf && $(MAKE) GENDEPS=0 $@
-
+	cd eli2aaf && $(MAKE) GENDEPS=0 $@
+	cd aafviewer/src/aaf2dot && $(MAKE) GENDEPS=0 $@
