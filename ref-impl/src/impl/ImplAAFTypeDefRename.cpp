@@ -76,6 +76,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (AAFRESULT_FAILED (hr))
     return hr;
 
+  // Check if specified type definition is in the dictionary.
+  if( !aafLookupTypeDef( this, pBaseType ) )
+	return AAFRESULT_TYPE_NOT_FOUND;
+
   _RenamedType = pBaseType;
 
   return AAFRESULT_SUCCESS;
