@@ -42,6 +42,7 @@ class OMStoredPropertySetIndex;
 class OMProperty;
 class OMPropertySet;
 class OMStoredVectorIndex;
+class OMStoredSetIndex;
 
   // @class In-memory representation of a persistent object.
 class OMStoredObject {
@@ -108,9 +109,17 @@ public:
     //          <c OMStoredObject>, the vector is named <p vectorName>.
   void save(const OMStoredVectorIndex* vector, const char* vectorName);
 
+    // @cmember Save the <c OMStoredSetIndex> <p set> in this
+    //          <c OMStoredObject>, the set is named <p setName>.
+  void save(const OMStoredSetIndex* set, const char* setName);
+
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
   void restore(OMStoredVectorIndex*& vector, const char* vectorName);
+
+    // @cmember Restore the set named <p setName> into this
+    //          <c OMStoredObject>.
+  void restore(OMStoredSetIndex*& set, const char* setName);
 
     // @cmember Write a property value to this <c OMStoredObject>. The
     //          property value to be written occupies <p size> bytes at
@@ -156,12 +165,29 @@ public:
                      const OMUInt32 bytes,
                      OMUInt32& bytesWritten);
 
-    // @cmember Read a UInt32 from <p stream> into <p i>. If
-    //          <p reorderBytes> is true then the bytes are reordered.
+    // @cmember Read an OMUInt16 from <p stream> into <p i>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void readUInt16FromStream(IStream* stream, OMUInt16& i, bool reorderBytes);
+
+    // @cmember Reorder the OMUInt16 <p i>.
+  void reorderUInt16(OMUInt16& i);
+
+    // @cmember Read an OMUInt32 from <p stream> into <p i>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
   void readUInt32FromStream(IStream* stream, OMUInt32& i, bool reorderBytes);
 
-    // @cmember Reorder the UInt32 <p i>.
-  void reorderOMUInt32(OMUInt32& i);
+    // @cmember Reorder the OMUInt32 <p i>.
+  void reorderUInt32(OMUInt32& i);
+
+    // @cmember Read a UniqueObjectIdentification from <p stream> into <p id>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void readUniqueObjectIdentificationFromStream(
+                                              IStream* stream,
+                                              OMUniqueObjectIdentification& id,
+                                              bool reorderBytes);
+
+    // @cmember Reorder the UniqueObjectIdentification <p id>.
+  void reorderUniqueObjectIdentification(OMUniqueObjectIdentification& id);
 
     // @cmember Size of <p stream> in bytes.
   OMUInt64 streamSize(IStream* stream) const;
@@ -186,6 +212,7 @@ public:
   OMByteOrder byteOrder(void) const;
 
 private:
+  // @access Private members.
 
   static OMStoredObject* open(const wchar_t* fileName,
                               const OMFile::OMAccessMode mode);
@@ -197,7 +224,11 @@ private:
   void save(OMStoredPropertySetIndex *index);
   OMStoredPropertySetIndex* restore(void);
   
+    // @cmember The stream name for the index of a vector named <p vectorName>.
   char* vectorIndexStreamName(const char* vectorName);
+
+    // @cmember The stream name for the index of a set named <p setName>.
+  char* setIndexStreamName(const char* setName);
 
   IStream* createStream(IStorage* storage, const char* streamName);
   IStream* openStream(IStorage* storage, const char* streamName);
