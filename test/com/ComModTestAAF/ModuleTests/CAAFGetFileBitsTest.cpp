@@ -111,7 +111,7 @@ static HRESULT GetFileBitsTest ()
   // writing.  We'll use this to get the GetFileBits to be tested.
   IAAFRawStorageSP pWriteStg;
   checkResult
-	(AAFCreateRawStorageMemory (kAAFFileAccess_write,
+	(AAFCreateRawStorageMemory (kAAFFileAccess_modify,
 								&pWriteStg));
   IAAFFileSP pWriteFile;
   checkResult

@@ -154,6 +154,7 @@ OMMSSStoredObject* OMMSSStoredObject::openRead(OMRawStorage* rawStorage)
 {
   TRACE("OMMSSStoredObject::openRead");
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible raw storage", rawStorage->isReadable());
 
   OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
                                                          rawStorage,
@@ -172,6 +173,8 @@ OMMSSStoredObject* OMMSSStoredObject::openModify(OMRawStorage* rawStorage)
   TRACE("OMMSSStoredObject::openModify");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Compatible raw storage",
+                         rawStorage->isReadable() && rawStorage->isWritable());
 
   OMMSSStoredObject* newStore = OMMSSStoredObject::openFile(
                                                            rawStorage,
@@ -195,6 +198,8 @@ OMMSSStoredObject* OMMSSStoredObject::createModify(OMRawStorage* rawStorage,
   PRECONDITION("Valid raw storage", rawStorage != 0);
   PRECONDITION("Valid byte order",
                       (byteOrder == littleEndian) || (byteOrder == bigEndian));
+  PRECONDITION("Compatible raw storage",
+                         rawStorage->isReadable() && rawStorage->isWritable());
 
   OMMSSStoredObject* newStore = OMMSSStoredObject::createFile(rawStorage);
   newStore->create(byteOrder);
