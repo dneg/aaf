@@ -1014,6 +1014,7 @@ const char* byteOrder(ByteOrder bo)
 void formatError(DWORD errorCode)
 {
 #if defined(OM_OS_WINDOWS)
+#if !defined(NO_W32_WFUNCS)
   OMCHAR buffer[256];
   int status = FormatMessage(
     FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
@@ -1023,9 +1024,20 @@ void formatError(DWORD errorCode)
     buffer,
     sizeof(buffer)/sizeof(buffer[0]),
     NULL);
-  char message[256];
-  convert(message, 256, buffer);
+#else
+  char buffer[256];
+  int status = FormatMessageA(
+    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+    NULL,
+    errorCode,
+    LANG_SYSTEM_DEFAULT,
+    buffer,
+    sizeof(buffer)/sizeof(buffer[0]),
+    NULL);
+#endif
   if (status != 0) {
+    char message[256];
+    convert(message, 256, buffer);
     int length = strlen(message);
     if (length >= 2) {
       message[length - 2] = '\0';
