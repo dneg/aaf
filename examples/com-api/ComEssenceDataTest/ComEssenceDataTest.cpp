@@ -137,7 +137,9 @@ static void AUIDtoString(aafUID_t *uid, char *buf)
 			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
 }
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+typedef enum { testRawCalls, testStandardCalls, testMultiCalls } testType_t;
+
+static HRESULT CreateAAFFile(aafWChar * pFileName, testType_t testType)
 {
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
@@ -160,8 +162,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
 	FILE*						pWavFile = NULL;
-	unsigned char				dataBuff[4096];
-	size_t						bytesRead;
+	unsigned char				dataBuff[4096], *dataPtr;
+	size_t						bytesRead, dataLen;
+	aafInt32					bytesLeft;
 
   
   // delete any previous test file before continuing...
@@ -251,10 +254,44 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	{
 		// read in the essence data
 		bytesRead = fread(dataBuff, sizeof(unsigned char), sizeof(dataBuff), pWavFile);
+		if(testType != testRawCalls)
+		{
+			dataPtr = dataBuff;
+			bytesLeft = bytesRead;
+			while(bytesLeft > 0)
+			{
+				while(bytesLeft > 0 && *dataPtr != 'd')
+				{
+					dataPtr++;
+					bytesLeft--;
+				}
+				if(memcmp(dataPtr, "data", 4) == 0)
+					break;
+			}
+						//!!! In development.  NOT industrial strength WAVE reader code.
+						// Assumes wave chunk is the last chunk & doesn't parse all chunks
+			dataPtr += 8;
+			dataLen = bytesLeft - 8;
+			// Assumes 8-bit WAVE data
+		}
+		else
+		{	
+			dataPtr = dataBuff;
+			dataLen = bytesRead;
+		}
 		// write out the data
-		check(pEssenceAccess->WriteRawData(	bytesRead,	// Number of Samples
-											dataBuff,	// THE Raw data
+		if(testType == testRawCalls)
+		{
+			check(pEssenceAccess->WriteRawData(	dataLen,	// Number of Samples
+											dataPtr,	// THE Raw data
 											sizeof(dataBuff)));// buffer size
+		}
+		else if(testType == testStandardCalls)
+		{
+			check(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded // Number of Samples
+											dataPtr,	// THE Raw data
+											sizeof(dataBuff)));// buffer size
+		}
 
 		// close essence data file
 		fclose(pWavFile);
@@ -307,7 +344,7 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-static HRESULT ReadAAFFile(aafWChar * pFileName)
+static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
@@ -324,8 +361,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	unsigned char				AAFDataBuf[4096];
 	aafUInt32					AAFBytesRead, samplesRead;
 	FILE*						pWavFile = NULL;
-	unsigned char				WAVDataBuf[4096];
-	size_t						WAVBytesRead;
+	unsigned char				WAVDataBuf[4096], *dataPtr;
+	size_t						WAVBytesRead, dataLen;
+	aafInt32					bytesLeft;
 
 	check(CoCreateInstance(CLSID_AAFFile,
                NULL, 
@@ -383,24 +421,58 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					// read in the essence data
 					WAVBytesRead = fread(WAVDataBuf, sizeof(unsigned char), sizeof(WAVDataBuf), pWavFile);
 					fclose(pWavFile);
+					if(testType != testRawCalls)
+					{
+						dataPtr = WAVDataBuf;
+						bytesLeft = WAVBytesRead;
+						while(bytesLeft > 0)
+						{
+							while(bytesLeft > 0 && *dataPtr != 'd')
+							{
+								dataPtr++;
+								bytesLeft--;
+							}
+							if(memcmp(dataPtr, "data", 4) == 0)
+								break;
+						}
+						dataPtr += 8;
+						bytesLeft -= 8;
+						dataLen = bytesLeft;
+					}
+					else
+					{	
+						dataPtr = WAVDataBuf;
+						dataLen = WAVBytesRead;
+					}
 
 //AAFRESULT STDMETHODCALLTYPE
 //    ImplAAFEssenceAccess::GetEssenceSampleStream
 //         (AAFEssenceSampleStream  **theStream)
 					// Read the Raw Data from the AAF file
-					check(pEssenceAccess->ReadRawData(	WAVBytesRead,		// Number of Samples 
+					if(testType == testRawCalls)
+					{
+						check(pEssenceAccess->ReadRawData(	dataLen,		// Number of Samples 
 														sizeof(AAFDataBuf),	// Maximum buffer size
 														AAFDataBuf,			// Buffer for the data
 														&AAFBytesRead,	// Actual number of bytes read
 														&samplesRead));		// Actual number of samples read
+					}
+					else if(testType == testStandardCalls)
+					{
+						check(pEssenceAccess->ReadSamples(	dataLen,	//!!! Hardcoded	// Number of Samples 
+														sizeof(AAFDataBuf),	// Maximum buffer size
+														AAFDataBuf,			// Buffer for the data
+														&samplesRead,		// Actual number of samples read
+														&AAFBytesRead));	// Actual number of bytes read
+					}
 
 					// Now compare the data read from the AAF file to the actual WAV file
-					if (WAVBytesRead != AAFBytesRead)
+					if (dataLen != AAFBytesRead)
 					{
 						printf("***Wrong number of bytes read ( was %ld , should be %ld)\n",
 							AAFBytesRead, WAVBytesRead);
 					}
-					if (memcmp( WAVDataBuf, AAFDataBuf, WAVBytesRead) != 0)
+					if (memcmp( dataPtr, AAFDataBuf, dataLen) != 0)
 					{
 						printf("*** Data Read is different than the data in the WAV file ***\n");
 					}
@@ -479,7 +551,7 @@ main()
 {
 	CComInitialize comInit;
 	aafWChar * pwFileName = L"EssenceTest.aaf";
-	const char * pFileName = "EssenceTest .aaf";
+	const char * pFileName = "EssenceTest.aaf";
 
 	IAAFEssencePlugin *codecManager = NULL;
 //	aafInt32		numCodecs;
@@ -494,10 +566,14 @@ main()
 //	codecManager->NumCodecsMatching (DDEF_Audio, kAAFRev1, &numCodecs);
 
 
-	printf("***Creating file %s\n", pFileName);
-	checkFatal(CreateAAFFile(pwFileName));
-	printf("***Re-opening file %s\n", pFileName);
-	ReadAAFFile(pwFileName);
+	printf("***Creating file %s using writeRawData\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, testRawCalls));
+	printf("***Re-opening file %s using readRawData\n", pFileName);
+	ReadAAFFile(pwFileName, testRawCalls);
+	printf("***Creating file %s using WriteSamples\n", pFileName);
+	checkFatal(CreateAAFFile(pwFileName, testStandardCalls));
+	printf("***Re-opening file %s using ReadSamples\n", pFileName);
+	ReadAAFFile(pwFileName, testStandardCalls);
 
 	printf("Done\n");
 
