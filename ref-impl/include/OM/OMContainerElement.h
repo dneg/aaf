@@ -48,9 +48,7 @@ public:
   OMContainerElement(void);
 
     // @cmember Constructor.
-  OMContainerElement(OMProperty* property,
-                     const char* name,
-                     OMUInt32 localKey);
+  OMContainerElement(const ObjectReference& reference);
 
     // @cmember Copy constructor.
   OMContainerElement(
@@ -91,18 +89,8 @@ public:
     // @cmember Set the value of this <c OMContainerElement>.
   ReferencedObject* setValue(const ReferencedObject* value);
 
-    // @cmember The local key of this <c OMContainerElement>.
-  OMUInt32 localKey(void) const;
-
-private:
-  // @access Private members.
-
-    // @cmember The local key of this <c OMContainerElement>.
-    //          The key is unique only within a given container instance
-    //          and is assigned to each element of the container in such
-    //          way as to be independent of the element's position within
-    //          the container.
-  OMUInt32 _localKey;
+protected:
+  // @access Protected members.
 
     // @cmember The actual object reference.
   ObjectReference _reference;
@@ -110,105 +98,117 @@ private:
 };
 
   // @class Elements of Object Manager reference vectors.
-  //   @tcarg class | ObjectReference  | The type of the contained object
-  //          reference 
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMContainerElement>
-template <typename ObjectReference, typename ReferencedObject>
-class OMVectorElement : public OMContainerElement<ObjectReference,
-                                                  ReferencedObject> {
+template <typename ReferencedObject>
+class OMStrongReferenceVectorElement : public
+                 OMContainerElement<OMStrongObjectReference<ReferencedObject>,
+                                                            ReferencedObject> {
 public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMVectorElement(void);
+  OMStrongReferenceVectorElement(void);
 
     // @cmember Constructor.
-  OMVectorElement(OMProperty* property,
-                  const char* name,
-                  OMUInt32 localKey);
+  OMStrongReferenceVectorElement(OMProperty* property,
+                                 const char* name,
+                                 OMUInt32 localKey);
 
     // @cmember Copy constructor.
-  OMVectorElement(
-                const OMVectorElement<ObjectReference, ReferencedObject>& rhs);
+  OMStrongReferenceVectorElement(
+                  const OMStrongReferenceVectorElement<ReferencedObject>& rhs);
 
     // @cmember Destructor.
-  ~OMVectorElement(void);
+  ~OMStrongReferenceVectorElement(void);
 
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMVector>.
     //          This operator does not provide assignment of object references.
-  OMVectorElement<ObjectReference, ReferencedObject>& operator=
-               (const OMVectorElement<ObjectReference, ReferencedObject>& rhs);
+  OMStrongReferenceVectorElement<ReferencedObject>& operator=(
+                  const OMStrongReferenceVectorElement<ReferencedObject>& rhs);
 
     // @cmember Equality.
     //          This operator provides value semantics for <c OMVector>.
     //          This operator does not provide equality of object references.
   bool operator== (
-          const OMVectorElement<ObjectReference, ReferencedObject>& rhs) const;
+            const OMStrongReferenceVectorElement<ReferencedObject>& rhs) const;
+
+    // @cmember The local key of this <c OMStrongReferenceVectorElement>.
+  OMUInt32 localKey(void) const;
+
+private:
+
+    // @cmember The local key of this <c OMStrongReferenceVectorElement>.
+    //          The key is unique only within a given container instance
+    //          and is assigned to each element of the container in such
+    //          way as to be independent of the element's position within
+    //          the container.
+  OMUInt32 _localKey;
 
 };
 
   // @class Elements of Object Manager reference sets.
-  //   @tcarg class | ObjectReference  | The type of the contained object
-  //          reference 
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMContainerElement>
-template <typename ObjectReference, typename ReferencedObject>
-class OMSetElement : public OMContainerElement<ObjectReference,
-                                               ReferencedObject> {
+template <typename ReferencedObject>
+class OMStrongReferenceSetElement : public
+                             OMStrongReferenceVectorElement<ReferencedObject> {
 public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMSetElement(void);
+  OMStrongReferenceSetElement(void);
 
     // @cmember Constructor.
-  OMSetElement(OMProperty* property,
-               const char* name,
-               OMUInt32 key,
-               OMUniqueObjectIdentification identification);
+  OMStrongReferenceSetElement(OMProperty* property,
+                              const char* name,
+                              OMUInt32 localKey,
+                              OMUInt32 referenceCount,
+                              OMUniqueObjectIdentification identification);
 
     // @cmember Copy constructor.
-  OMSetElement(const OMSetElement<ObjectReference, ReferencedObject>& rhs);
+  OMStrongReferenceSetElement(
+                     const OMStrongReferenceSetElement<ReferencedObject>& rhs);
 
     // @cmember Destructor.
-  ~OMSetElement(void);
+  ~OMStrongReferenceSetElement(void);
 
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMSet>.
     //          This operator does not provide assignment of object references.
-  OMSetElement<ObjectReference, ReferencedObject>& operator=
-                  (const OMSetElement<ObjectReference, ReferencedObject>& rhs);
+  OMStrongReferenceSetElement<ReferencedObject>& operator=(
+                     const OMStrongReferenceSetElement<ReferencedObject>& rhs);
 
     // @cmember Equality.
     //          This operator provides value semantics for <c OMSet>.
     //          This operator does not provide equality of object references.
   bool operator== (
-             const OMSetElement<ObjectReference, ReferencedObject>& rhs) const;
+               const OMStrongReferenceSetElement<ReferencedObject>& rhs) const;
 
-    // @cmember The unique key of this <c OMSetElement>.
+    // @cmember The unique key of this <c OMStrongReferenceSetElement>.
   const OMUniqueObjectIdentification identification(void) const;
 
-    // @cmember The count of weak references to this <c OMSetElement>.
+    // @cmember The count of weak references to this
+    //          <c OMStrongReferenceSetElement>.
   OMUInt32 referenceCount(void) const;
 
 private:
   // @access Private members.
 
-    // @cmember The unique key of this <c OMSetElement>.
+    // @cmember The unique key of this <c OMStrongReferenceSetElement>.
     //          The element's unique key is in memory even when the
     //          referenced object is not. That way we can tell if an
     //          object is present in a container without loading the object.
   OMUniqueObjectIdentification _identification;
 
-    // @cmember The count of weak references to this <c OMSetElement>.
+    // @cmember The count of weak references to this
+    //          <c OMStrongReferenceSetElement>.
   OMUInt32 _referenceCount;
 
 };
-
 
 #include "OMContainerElementT.h"
 

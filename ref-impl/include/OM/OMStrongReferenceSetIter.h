@@ -153,14 +153,12 @@ protected:
     //          an underlying <c OMSetIterator>.
   OMStrongReferenceSetIterator(
          const OMSetIterator<OMUniqueObjectIdentification,
-	            OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                             ReferencedObject> >& iter);
+	            OMStrongReferenceSetElement<ReferencedObject> >& iter);
 
 private:
 
   OMSetIterator<OMUniqueObjectIdentification,
-	            OMSetElement<OMStrongObjectReference<ReferencedObject>,
-                             ReferencedObject> > _iterator;
+	            OMStrongReferenceSetElement<ReferencedObject> > _iterator;
 
 };
 

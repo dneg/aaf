@@ -152,13 +152,12 @@ protected:
     //          an underlying <c OMVectorIterator>.
   OMStrongReferenceVectorIterator(
     const OMVectorIterator<
-                     OMVectorElement<OMStrongObjectReference<ReferencedObject>,
-                                     ReferencedObject> >& iter);
+                     OMStrongReferenceVectorElement<ReferencedObject> >& iter);
 
 private:
 
-  OMVectorIterator<OMVectorElement<OMStrongObjectReference<ReferencedObject>,
-                                   ReferencedObject> > _iterator;
+  OMVectorIterator<
+                  OMStrongReferenceVectorElement<ReferencedObject> > _iterator;
 
 };
 

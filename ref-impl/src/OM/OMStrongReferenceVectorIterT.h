@@ -208,7 +208,8 @@ OMStrongReferenceVectorIterator<ReferencedObject>::value(void) const
 {
   TRACE("OMStrongReferenceVectorIterator<ReferencedObject>::value");
 
-  const OMVectorElement<OMStrongObjectReference<ReferencedObject>, ReferencedObject>& element = _iterator.value();
+  const OMStrongReferenceVectorElement<ReferencedObject>&
+                                                   element = _iterator.value();
 
   ReferencedObject* result = element.getValue();
 
@@ -231,7 +232,8 @@ OMStrongReferenceVectorIterator<ReferencedObject>::setValue(
 {
   TRACE("OMStrongReferenceVectorIterator<ReferencedObject>::setValue");
 
-  OMVectorElement<OMStrongObjectReference<ReferencedObject>, ReferencedObject>& element = _iterator.value();
+  OMStrongReferenceVectorElement<ReferencedObject>&
+                                                   element = _iterator.value();
 
   ReferencedObject* result = element.setValue(newObject);
 
@@ -259,8 +261,7 @@ template <typename ReferencedObject>
 OMStrongReferenceVectorIterator<ReferencedObject>::
                                                OMStrongReferenceVectorIterator(
   const OMVectorIterator<
-                     OMVectorElement<OMStrongObjectReference<ReferencedObject>,
-                                     ReferencedObject> >& iter)
+                     OMStrongReferenceVectorElement<ReferencedObject> >& iter)
   : _iterator(iter) // probably bitwise
 {
 }
