@@ -378,7 +378,7 @@ AAFRESULT
 	aafUInt32		numEssence, n;
 	aafBool			found;
 	aafUID_t		testMobID;
-	ImplAAFEssenceData	*testData;
+	ImplAAFEssenceData	*testData = NULL;
 
 	XPROTECT()
 	{
@@ -392,16 +392,21 @@ AAFRESULT
 			{
 				found = AAFTrue;
 				*ppEssence = testData;
+				(*ppEssence)->AcquireReference();
 			}
+			testData->ReleaseReference();
+			testData = NULL;
 		}
 		// trr - We are returning a copy of pointer stored in _mobs so we need
 		// to bump its reference count.
-		if (found)
-			(*ppEssence)->AcquireReference();
-		else
+		if (!found)
 			RAISE(AAFRESULT_NO_MORE_OBJECTS);
 	}
 	XEXCEPT
+	{
+		if(testData != NULL)
+			testData->ReleaseReference();
+	}
 	XEND
 
 	return AAFRESULT_SUCCESS;
