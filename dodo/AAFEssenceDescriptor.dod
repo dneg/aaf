@@ -8,49 +8,160 @@ AAFObject\
 #c
 #import ./AAFObject.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
+AD_IDL(//
+// The IAAFEssenceDescriptor interface is implemented by objects which
+// describe the format of the content data associated with a File
+// Source mob or of the media associated with a Physical Source mob.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//)
 AD_FORWARD_DECLARATION(AAFLocator)
 AD_FORWARD_DECLARATION(EnumAAFLocators)
-
 AD_CLASS_UUID(94659784, 2a3c, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(94659783, 2a3c, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
-
 AD_CLASS_BEGIN
+AD_XMETHOD1(GetNumLocators,
+			[out],
+			objPass,
+			aafInt32 *,
+			pCount,
+			Returns the number of locators,
 
-AD_METHOD1(GetNumLocators,
-		   [out],aafInt32 *,pCount,Returns the number of locators,
-		   Return the number of locators attached to this essence descriptor.)
-  //@comm The number of locators may be zero if the essence is in the current file.
+			Return the number of locators attached to this essence
+  // descriptor.  The number of locators may be zero if the essence is
+  // in the current file.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pCount pointer is valid.
+  // 
+  // If this method fails nothing is written to *pCount.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCount is null.)
+
 
 AD_XMETHOD1(AppendLocator,
-		   [in],objIn,AAFLocator,pLocator,Locator to append,
-		   Append another locator to this essence descriptor. )
-  //@comm    Use this function to add a locator to be scanned first when searching for
-  // the essence (a new primary location).
+			[in],
+			objIn,
+			AAFLocator,
+			pLocator,
+			Locator to append,
+
+			Append another locator to this essence descriptor.  Use this
+  // function to add a locator to be scanned first when searching for
+  // the essence \(a new primary location\).
+  // 
+  // Succeeds if all of the following are true:
+  // - the pLocator pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLocator is null.)
+
 
 AD_XMETHOD1(PrependLocator,
-		   [in],objIn,AAFLocator,pLocator,Locator to append,
-		   Append another locator to this essence descriptor.)
-  //@comm    Use this function to add a locator to be scanned first when searching for
-  // the essence (a secondary location for the essence).
+			[in],
+			objIn,
+			AAFLocator,
+			pLocator,
+			Locator to append,
+
+  // Append another locator to this essence descriptor.  Use this
+  // function to add a locator to be scanned first when searching for
+  // the essence \(a secondary location for the essence\).
+  // 
+  // Succeeds if all of the following are true:
+  // - the pLocator pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLocator is null.)
+
 
 AD_XMETHOD1(RemoveLocator,
-		   [in],objIn,AAFLocator,pLocator,Locator to remove,
-		   Return the number of locators attached to this essence descriptor.)
+			[in],
+			objIn,
+			AAFLocator,
+			pLocator,
+			Locator to remove,
+			Removes the given locator from this essence descriptor.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pLocator pointer is valid.
+  // - the given locator is found.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLocator is null.
+  //
+  // AAFRESULT_NOT_FOUND
+  //   - the given locator was not found.)
+
 
 AD_XMETHOD1(EnumAAFAllLocators,
-			[out],objOut,EnumAAFLocators,ppEnum,An enumerator to the locators on this essence descriptor,
-			Returns an enumerator to the locators.)
-  //@comm The number of locators may be zero if the essence is in the current file.
+			[out],
+			objOut,
+			EnumAAFLocators,
+			ppEnum,
+			An enumerator to the locators on this essence descriptor,
 
-
+			Returns an enumerator to the locators.  The number of locators
+  // may be zero if the essence is in the current file.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
 AD_CLASS_END
