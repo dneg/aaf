@@ -26,7 +26,6 @@
 #include "ImplAAFSourceReference.h"
 #endif
 
-#include "ImplAAFCloneResolver.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -239,12 +238,5 @@ AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafMobID_constref fr
 	return AAFRESULT_SUCCESS;
 }
 
-void ImplAAFSourceReference::onCopy(void* clientContext) const
-{
-   ImplAAFSegment::onCopy(clientContext);
-  
-	if (clientContext) {
-		 ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-		 pResolver->AddSourceReference(_sourceID);
-	}
-}
+
+

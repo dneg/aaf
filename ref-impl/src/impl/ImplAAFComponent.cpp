@@ -39,7 +39,6 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
-#include "ImplAAFCloneResolver.h"
 #include "ImplAAFTaggedValueUtil.h"
 
 #include <assert.h>
@@ -406,16 +405,5 @@ AAFRESULT ImplAAFComponent::ChangeContainedReferences(aafMobID_constref /*from*/
 void ImplAAFComponent::Accept(AAFComponentVisitor&)
 {
 	// do nothing
-}
-
-
-void ImplAAFComponent::onCopy(void* clientContext) const
-{
-  ImplAAFObject::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_dataDef);
-  }
 }
 

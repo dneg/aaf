@@ -240,9 +240,6 @@ public:
         // @parm [out, retval] returned parameter def
 		 ImplAAFParameterDef ** ppParameterDef);
 
-  // OM deep copy notification
-  virtual void onCopy(void* clientContext) const;
-
 private:
 	OMWeakReferenceProperty<ImplAAFDataDef>			_dataDef;
 	OMFixedSizeProperty<aafBool>					_isTimeWarp;

@@ -51,7 +51,6 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
-#include "ImplAAFCloneResolver.h"
 
 
 #include <assert.h>
@@ -459,14 +458,3 @@ void ImplAAFTypeDefStrongObjRef::onRestore(void* clientContext) const
 {
   ImplAAFTypeDefObjectRef::onRestore(clientContext);
 }
-
-void ImplAAFTypeDefStrongObjRef::onCopy(void* clientContext) const
-{
-  ImplAAFTypeDefObjectRef::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_referencedType);
-  }
-}
-

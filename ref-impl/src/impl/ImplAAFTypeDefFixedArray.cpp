@@ -48,7 +48,6 @@
 
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
-#include "ImplAAFCloneResolver.h"
 #include "AAFClassIDs.h"
 
 #include <assert.h>
@@ -483,14 +482,4 @@ void ImplAAFTypeDefFixedArray::onSave(void* clientContext) const
 void ImplAAFTypeDefFixedArray::onRestore(void* clientContext) const
 {
   ImplAAFTypeDefArray::onRestore(clientContext);
-}
-
-void ImplAAFTypeDefFixedArray::onCopy(void* clientContext) const
-{
-  ImplAAFTypeDefArray::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_ElementType);
-  }
 }

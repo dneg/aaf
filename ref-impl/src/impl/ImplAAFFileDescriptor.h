@@ -132,9 +132,6 @@ public:
 	virtual AAFRESULT STDMETHODCALLTYPE
 		GetOwningMobKind (aafMobKind_t *pMobKind);
 
-  // OM deep copy notification
-  virtual void onCopy(void* clientContext) const;
-
 private:
 	OMFixedSizeProperty<aafRational_t>	_sampleRate;
 	OMFixedSizeProperty<aafLength_t>	_length;

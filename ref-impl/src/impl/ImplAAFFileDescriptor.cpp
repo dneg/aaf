@@ -29,7 +29,6 @@
 #include "ImplAAFFileDescriptor.h"
 #endif
 
-#include "ImplAAFCloneResolver.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -173,13 +172,3 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-void ImplAAFFileDescriptor::onCopy(void* clientContext) const
-{
-  ImplAAFEssenceDescriptor::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_codecDef);
-    pResolver->ResolveWeakReference(_containerFmt);
-  }
-}

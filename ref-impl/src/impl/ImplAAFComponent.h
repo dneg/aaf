@@ -285,9 +285,6 @@ public:
 	virtual void Accept(AAFComponentVisitor& visitor);
 
 
-  // OM deep copy notification
-  virtual void onCopy(void* clientContext) const;
-
 private:
 	OMWeakReferenceProperty<ImplAAFDataDef>		_dataDef;
 	OMFixedSizeProperty<aafLength_t>	_length;

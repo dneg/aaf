@@ -43,7 +43,6 @@
 #include "ImplAAFPropertyDef.h"
 #endif
 
-#include "ImplAAFCloneResolver.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "AAFTypeDefUIDs.h"
@@ -426,16 +425,6 @@ void ImplAAFPropertyDef::onRestore(void* clientContext) const
 #undef AAF_BEGIN_TYPE_PATCHES
 #undef AAF_PATCH_PROPETY_TYPE
 #undef AAF_END_TYPE_PATCHES
-
-void ImplAAFPropertyDef::onCopy(void *clientContext) const
-{
-  ImplAAFMetaDefinition::onCopy(clientContext);
-
-  if (clientContext) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->AddTypeReference( _Type );
-  }
-}
 
 // Method is called after class has been added to MetaDictionary.
 // If this method fails the class is removed from the MetaDictionary and the

@@ -96,7 +96,6 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFTypeDefObjectRef.h"
 #include "ImplAAFObjectCreation.h"
-#include "ImplAAFCloneResolver.h"
 
 
 #include <assert.h>
@@ -822,14 +821,4 @@ HRESULT ImplAAFTypeDefSet::CompleteClassRegistration(void)
   }
 
   return rc;
-}
-
-void ImplAAFTypeDefSet::onCopy(void* clientContext) const
-{
-  ImplAAFTypeDef::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_ElementType);
-  }
 }

@@ -31,7 +31,6 @@
 #endif
 
 #include "ImplAAFDictionary.h"
-#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -165,12 +164,3 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-void ImplAAFParameterDef::onCopy(void* clientContext) const
-{
-  ImplAAFDefObject::onCopy(clientContext);
-
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_typeDef);
-  }
-}

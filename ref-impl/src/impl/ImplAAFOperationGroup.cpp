@@ -64,7 +64,6 @@
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
 #include "ImplEnumAAFParameters.h"
-#include "ImplAAFCloneResolver.h"
 
 #include <assert.h>
 #include <string.h>
@@ -651,13 +650,3 @@ void ImplAAFOperationGroup::Accept(AAFComponentVisitor& visitor)
 	// visitor.VisitOperationGroup(this);
 }
 
-
-void ImplAAFOperationGroup::onCopy( void* clientContext ) const
-{
-  ImplAAFSegment::onCopy(clientContext);
-
-  if (clientContext) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_operationDefinition);
-  }
-}

@@ -62,7 +62,6 @@ typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
-#include "ImplAAFCloneResolver.h"
 #include "AAFUtils.h"
 
 #include <assert.h>
@@ -1003,16 +1002,6 @@ HRESULT ImplAAFClassDef::CompleteClassRegistration(void)
 	}
 
   return result;
-}
-
-void ImplAAFClassDef::onCopy(void* clientContext) const
-{
-  ImplAAFMetaDefinition::onCopy(clientContext);
-  
-  if ( clientContext ) {
-    ImplAAFCloneResolver* pResolver = reinterpret_cast<ImplAAFCloneResolver*>(clientContext);
-    pResolver->ResolveWeakReference(_ParentClass);
-  }
 }
 
 AAFRESULT ImplAAFClassDef::MergeTo(
