@@ -339,14 +339,19 @@ extern "C" HRESULT CAAFFile_test()
 	}
 	catch (...)
 	{
-	  cerr << "CAAFMob_test...Caught general C++"
+	  cerr << "CAAFFile_test...Caught general C++"
 		   << " exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 
-  	// When all of the functionality of this class is tested, we can
-	// return success
-	if(hr == AAFRESULT_SUCCESS)
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-  return hr;
+	// When all of the functionality of this class is tested, we can return success.
+	// When a method and its unit test have been implemented, remove it from the list.
+	if (SUCCEEDED(hr))
+	{
+//		cout << "The following IAAFFile tests have not been implemented:" << endl; 
+//		cout << "     GetRevision" << endl; 
+		hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
+	}
+
+	return hr;
 }
