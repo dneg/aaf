@@ -1,0 +1,31 @@
+#startm .this-module 0
+AAFPulldown\
+#endm
+#c
+#startm .parent-module 0
+AAFSegment\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#import ./AAFSegment.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN
+
+// Need get/set methods for pulldown properties
+
+AD_OVERRIDE(.method-FindSubSegment)
+AD_OVERRIDE(.method-SegmentOffsetToTC)
+AD_OVERRIDE(.method-SegmentTCToOffset)
+AD_OVERRIDE(.method-OffsetToTimecodeClip)
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
