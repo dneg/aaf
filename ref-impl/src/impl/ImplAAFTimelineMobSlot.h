@@ -27,7 +27,6 @@
 #include "ImplAAFMobSlot.h"
 #endif
 
-#include "OMProperty.h"
 
 
 class ImplAAFTimelineMobSlot : public ImplAAFMobSlot
@@ -94,10 +93,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFTimelineMobSlotTest.cpp.
 	static AAFRESULT test();
-
-  // Return this objects stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 protected:
 	OMFixedSizeProperty<aafRational_t>	_editRate;
