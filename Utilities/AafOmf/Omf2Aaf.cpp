@@ -281,9 +281,9 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 		ProductInfo.productVersion.minor = 0;
 		ProductInfo.productVersion.tertiary = 0;
 		ProductInfo.productVersion.patchLevel = 0;
-		ProductInfo.productVersion.type = kVersionUnknown;
+		ProductInfo.productVersion.type = kVersionDebug;
 		ProductInfo.productVersionString = NULL;
-		ProductInfo.productID = -1;
+		ProductInfo.productID = 42;
 		ProductInfo.platform = NULL;
 		rc = AAFFileOpenExistingModify(pwFileName, 0, &ProductInfo, &pFile);
 	}
@@ -295,7 +295,7 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 		rc = pHeader->GetDictionary(&pDictionary);
 		if (AAFRESULT_SUCCESS == rc && bAddExtraIdent)
 		{
-			// Create a new Composition Mob
+			// Create a new Identification
 			rc = pDictionary->CreateInstance(&AUID_AAFIdentification, 
 											 IID_IAAFIdentification,
 											 (IUnknown **)&pIdent);
@@ -307,9 +307,9 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 				ProductInfo.productVersion.minor = 0;
 				ProductInfo.productVersion.tertiary = 0;
 				ProductInfo.productVersion.patchLevel = 0;
-				ProductInfo.productVersion.type = kVersionUnknown;
+				ProductInfo.productVersion.type = kVersionDebug;
 				ProductInfo.productVersionString = NULL;
-				ProductInfo.productID = -1;
+				ProductInfo.productID = 42;
 				ProductInfo.platform = NULL;
 				pIdent->SetCompanyName(ProductInfo.companyName);
 				pIdent->SetProductName(ProductInfo.productName);
@@ -894,7 +894,7 @@ HRESULT Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 			{
 				UTLStrAToStrW(sCommentName, &pwCommentName);
 				UTLStrAToStrW(sCommentValue, &pwCommentValue);
-				pMob->AppendComment(pwCommentName, pwCommentValue);
+				rc = pMob->AppendComment(pwCommentName, pwCommentValue);
 				if (pwCommentName)
 					UTLMemoryFree(pwCommentName);
 				if (pwCommentValue)
