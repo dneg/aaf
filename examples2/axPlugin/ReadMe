@@ -3,7 +3,7 @@ Title:	AxPlugin Readme - How to reuse the AxPlugin (null codec) code.
 Revision History:
 
 18 Oct 2002, Jim Trainor, Initial Revision
- 4 Apr 2004, Jim Trainor, CAxPlugin, CAxEssenceCodec, AxImplPlugin,
+ 4 Apr 2003, Jim Trainor, CAxPlugin, CAxEssenceCodec, AxImplPlugin,
 and AxImplNullEssenceCodec details.  Some minor edits.
 
 
@@ -148,7 +148,7 @@ specifiers as the CDCIDescriptor.
 		// CMyPlugin implements IID_IAAFPlugin...
 		if ( IID_IAAFPlugin == iid ) {
 			// FinishQI is part of CAxUnkown... there is nothing special there.
-			// Tt just takes care of incrementing the ref count.
+			// It just takes care of incrementing the ref count.
 			return FinishQI( static_cast<IAAFPlugin*>(this), ppv );
 		}
 
@@ -209,11 +209,11 @@ public:
 };
 
 RegisterMyPlugin nullEssenceCodecRegister;
+}
 
 6.1) There are a number of other unique ID used by a codec implementation.
 Some additional notes may be found in: AxImplPlugin.h.
 
-}
 7) Link my CMyCodec.o in with the rest of the AxPlugin code to create
 a new library.  That's it.  There is no need to modify the AxPlugin
 code, just link in your new code.
@@ -222,7 +222,7 @@ code, just link in your new code.
 (i.e. a DllMain implementation for a Windows dll), this can be done by
 adding code to the AxPluginWin.cpp file.  For Unix and MacOS platforms
 use the like named file.  Currently, there is no need for any platform
-specific code.
+specific code, except on Mac. (See comments in AxPluginMac.cpp).
 
 10) The axPluginInfo program is a simple way to test loading your
 plugin.  It will load the plugin and log a bit of informatin about all
