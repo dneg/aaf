@@ -1173,14 +1173,6 @@ ImplAAFFile::Save ()
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 
-	  // Sync the file's dictionary with the built in dictionary
-	  // before proceeding with the save.
-	  OMDictionary* mf = _file->dictionary();
-	  assert(mf == _metafactory);
-  	  ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
-	  assert(d);
-	  checkResult( d->SyncMetaDictionaries() );
-
 	  dictSP->AssureClassPropertyTypes ();
 
 	  bool regWasEnabled = dictSP->SetEnableDefRegistration (false);

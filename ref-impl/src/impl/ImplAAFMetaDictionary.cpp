@@ -67,9 +67,26 @@
 #ifdef DEBUG_DICTIONARY_SYNC
 // TEMPORARY - for wcout debug code below.
 #include <iostream>
+
+void PrintClassName( ImplAAFClassDef* pClassDef )
+{
+  aafCharacter nameBuf[100];
+  AAFRESULT hr = pClassDef->GetName( nameBuf, sizeof(aafCharacter)*100 );
+  assert( AAFRESULT_SUCCESS == hr );
+  std::wcout << nameBuf;
+}
+
+void PrintPropertyName( ImplAAFPropertyDef* pPropDef )
+{
+  aafCharacter nameBuf[100];
+  AAFRESULT hr = pPropDef->GetName( nameBuf, sizeof(aafCharacter)*100 );
+  assert( AAFRESULT_SUCCESS == hr );
+  std::wcout << nameBuf;
+}
 #endif
 
 extern "C" const aafClassID_t CLSID_AAFMetaDictionary;
+extern "C" const aafClassID_t CLSID_AAFPropertyDef;
 extern "C" const aafClassID_t CLSID_EnumAAFClassDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 
@@ -77,13 +94,13 @@ ImplAAFMetaDictionary::ImplAAFMetaDictionary () :
   _typeDefinitions  (PID_MetaDictionary_TypeDefinitions,
                      L"TypeDefinitions", 
                      PID_MetaDefinition_Identification),
-  _fileClassDefinitions (PID_MetaDictionary_ClassDefinitions,
-			 L"ClassDefinitions", 
-			 PID_MetaDefinition_Identification),
+  _classDefinitions (PID_MetaDictionary_ClassDefinitions,
+                     L"ClassDefinitions", 
+                     PID_MetaDefinition_Identification),
   _dataDictionary(NULL)
 {
   _persistentProperties.put (_typeDefinitions.address());
-  _persistentProperties.put (_fileClassDefinitions.address());
+  _persistentProperties.put (_classDefinitions.address());
 }
 
 
@@ -153,22 +170,10 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
   }
 
   // Release _classDefinitions
-  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>classDefinitions(_classDefinitions);
+  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>classDefinitions(_classDefinitions);
   while(++classDefinitions)
   {
-    ImplAAFClassDef *pClass = classDefinitions.value();
-    if (pClass)
-    {
-      pClass->ReleaseReference();
-      pClass = 0;
-    }
-  }
-
-  // Release _fileClassDefinitions
-  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef> fileClassDefinitions(_fileClassDefinitions);
-  while(++fileClassDefinitions)
-  {
-    ImplAAFClassDef *pClass = fileClassDefinitions.clearValue();
+    ImplAAFClassDef *pClass = classDefinitions.clearValue();
     if (pClass)
     {
       pClass->ReleaseReference();
@@ -747,8 +752,8 @@ AAFRESULT STDMETHODCALLTYPE
   
   XPROTECT()
   {
-    OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>* iter = 
-      new OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>(_classDefinitions);
+    OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>* iter = 
+      new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>(_classDefinitions);
     if(iter == 0)
       RAISE(AAFRESULT_NOMEMORY);
 	CHECK(theEnum->Initialize(&CLSID_EnumAAFClassDefs,this,iter));
@@ -1347,22 +1352,9 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
       }
       else
       {
-#if 0
-	// FIXME - Is this necessary now that _classDefinitions is not
-	// persistent?
-        //
-	// ANSWER - It is not necessary because _classDefinition is always
-	// empty to begin with (now that it is non-persistent).  Hence, there
-	// is never an existing axiomatic defintion in the class.  We can
-	// assert this. If _fileClassDefitions was used (as used to be case)
-	// then it would be necessary because the axiomitic definition in the
-	// file may be out of date w.r.t. the builtin definition - hence the
-	// need to replace it.
-
-	ImplAAFClassDef* old = nonConstThis->_classDefinitions.replace(pAxiomaticClassDef);
-	if (old != 0)
-	    old->ReleaseReference();
-#endif
+	    ImplAAFClassDef* old = nonConstThis->_classDefinitions.replace(pAxiomaticClassDef);
+	    if (old != 0)
+	      old->ReleaseReference();
       }
       pAxiomaticClassDef->AcquireReference(); // saving another reference...
     }
@@ -1389,185 +1381,28 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
       pAxiomaticTypeDef->AcquireReference(); // saving another reference... 
     }
   }
-
   return result;
 }
 
-#ifdef DEBUG_DICTIONARY_SYNC
-void PrintClassName( ImplAAFClassDef* pClassDef )
-{
-  aafCharacter nameBuf[100];
-  AAFRESULT hr = pClassDef->GetName( nameBuf, sizeof(aafCharacter)*100 );
-  assert( AAFRESULT_SUCCESS == hr );
-  std::wcout << nameBuf;
-}
-
-void PrintPropertyName( ImplAAFPropertyDef* pPropDef )
-{
-  aafCharacter nameBuf[100];
-  AAFRESULT hr = pPropDef->GetName( nameBuf, sizeof(aafCharacter)*100 );
-  assert( AAFRESULT_SUCCESS == hr );
-  std::wcout << nameBuf;
-}
-#endif
-
-AAFRESULT ImplAAFMetaDictionary::PvtClearFileClassSet()
-{
-  // Clear the class defs in _fileClassDefinitions, then refill
-  // the set with class definitions from _classDefinitions.
-
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  
-  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>
-    iter( _fileClassDefinitions );
-
-  int idCount = iter.count();
-  OMUniqueObjectIdentification ids[ idCount ];
-
-  int i = 0;
-  while( ++iter ) {
-    assert ( i < idCount );
-    ids[i] = iter.identification();
-    ++i;
-  }
-
-  for( i = 0 ; i < idCount; ++i ) {
-    
-    ImplAAFClassDef* pDef = _fileClassDefinitions.remove( ids[i] );
-    assert(pDef);
-    if (pDef) {
-      pDef->ReleaseReference();
-      pDef = 0;
-    }
-  }
-
-  return result;
-}
-
-AAFRESULT ImplAAFMetaDictionary::PvtMergeBuiltinClassDefsToFile()
-{
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>
-    iter( _classDefinitions );
-
-#ifdef DEBUG_DICTIONARY_SYNC
-  std::wcout << L"MergeBuiltinClassDefsToFile :" << std::endl;
-  std::wcout << L"Initially " << iter.count() << L" class definitions in the builtin set." << std::endl;
-#endif
-  while(++iter) {
-    OMUniqueObjectIdentification id = iter.identification(); 
-
-    if ( !_fileClassDefinitions.contains( id ) ) {
-
-      ImplAAFClassDef* pBuiltinClassDef = iter.value(); 
-#ifdef DEBUG_DICTIONARY_SYNC
-      std::wcout << L"Merging builtin class "; 
-      PrintClassName( pBuiltinClassDef );
-      std::wcout << L" to file." << std::endl;
-#endif
-      _fileClassDefinitions.appendValue( pBuiltinClassDef );
-      pBuiltinClassDef->AcquireReference();
-    }
-  }
-
-  return result;
-}
-
-AAFRESULT ImplAAFMetaDictionary::PvtMergeFileClassDefsToBuiltin()
-{
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>
-    iter( _fileClassDefinitions );
-
-#ifdef DEBUG_DICTIONARY_SYNC
-  std::wcout << L"MergeFileClassDefsToBuiltin :" << std::endl;
-  std::wcout << L"Initially " << iter.count() << L" class definitions in the file set." << std::endl;
-#endif
-
-  while(++iter) {
-    OMUniqueObjectIdentification id = iter.identification(); 
-
-    if ( !_classDefinitions.contains( id ) ) {
-
-      ImplAAFClassDef* pFileClassDef = iter.value(); 
-#ifdef DEBUG_DICTIONARY_SYNC
-      std::wcout << L"Merging file class "; 
-      PrintClassName( pFileClassDef );
-      std::wcout << L" to builtin." << std::endl;
-#endif
-      _classDefinitions.appendValue( pFileClassDef );
-      pFileClassDef->AcquireReference();
-    }
-  }
-
-  return result;
-}
-
-//
-
-AAFRESULT ImplAAFMetaDictionary::PvtMergePropDefs( ImplAAFClassDef* pSrcClassDef,
-						   ImplAAFClassDef* pDstClassDef,
-						   const wchar_t* srcName, const wchar_t* dstName )
-{
-  assert( pSrcClassDef );
-  assert( pDstClassDef );
-
-  AAFRESULT hr = AAFRESULT_SUCCESS;
-
-  ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> pEnumSrcPropDefs; 
-  hr = pSrcClassDef->GetPropertyDefs(&pEnumSrcPropDefs); 
-
-  if (AAFRESULT_SUCCEEDED(hr)) { 
-    ImplAAFSmartPointer<ImplAAFPropertyDef> pSrcPropDef; 
-    while (AAFRESULT_SUCCEEDED(pEnumSrcPropDefs->NextOne(&pSrcPropDef))) { 
-      aafUID_t puid; 
-      pSrcPropDef->GetAUID(&puid); 
-      ImplAAFSmartPointer<ImplAAFPropertyDef> pDstPropDef; 
-      AAFRESULT tmpHr = pDstClassDef->LookupPropertyDef(puid, &pDstPropDef); 
-      if (AAFRESULT_FAILED(tmpHr)) { 
-
-#ifdef DEBUG_DICTIONARY_SYNC
-	std::wcout << "Found property definition "; 
-	PrintClassName(pSrcClassDef); 
-	std::wcout << "::"; 
-	PrintPropertyName(pSrcPropDef); 
-	std::wcout << " in " << srcName << " but not in " << dstName << std::endl; 
-#endif
-	hr = pSrcPropDef->MergeTo( pDstClassDef );
-	assert( AAFRESULT_SUCCESS == hr );
-	if ( AAFRESULT_SUCCESS != hr ) {
-	  break;
-	}
-      }
-    }
-  }
-  
-  return hr;
-}
-
-// Sync the property definitions in class defs that exist in both the
-// builtin and file dictionaries..
-//
 AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
 
   OMStrongReferenceSetIterator<OMUniqueObjectIdentification, 
                                ImplAAFClassDef>
-  iter(_fileClassDefinitions); 
+  iter(_classDefinitions); 
+
+  const AAFObjectModel* pObjectModel = AAFObjectModel::singleton();
+  assert( pObjectModel );
 
 #ifdef DEBUG_DICTIONARY_SYNC
   OMUInt32 classes = iter.count(); 
 
   std::wcout << L"SyncCommonClassDefs:" << std::endl;
-  std::wcout << L"Initially " << classes << L" class definitions in file." << 
-  std::endl;
 
-  OMReferenceSetIterator<OMUniqueObjectIdentification,
-						 ImplAAFClassDef> builtInIter(_classDefinitions);
-  std::wcout << L"Initially " << builtInIter.count() << L" class definitions built in." << 
-
-  std::endl; 
+  std::wcout << L"Initially " << classes << L" class definitions in file." <<  std::endl;
+  std::wcout << L"Initially " << pObjectModel->countClassDefinitions() <<
+    L" class definitions built in." <<   std::endl; 
 #endif
 
   // For each class def in file...
@@ -1577,21 +1412,52 @@ AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
     // the built in dictionary.
     OMUniqueObjectIdentification id = iter.identification(); 
     ImplAAFClassDef* pFileClassDef = iter.value(); 
-    aafUID_t* uid = reinterpret_cast<aafUID_t*>(&id); 
-    ImplAAFSmartPointer<ImplAAFClassDef> pBuiltinClassDef;
-    HRESULT hr = dataDictionary()->LookupClassDef(*uid, &pBuiltinClassDef); 
+    const aafUID_t* uid = reinterpret_cast<aafUID_t*>(&id); 
 
-    if (AAFRESULT_SUCCEEDED(hr)) {
+    const ClassDefinition* pBuiltInModelClassDef = pObjectModel->findClassDefinition( uid );
+
+    if ( pBuiltInModelClassDef && !pBuiltInModelClassDef->isNil() ) {
       
-     assert(pBuiltinClassDef);
-
       // The class def exists in both the builtin and file
-      // dictionaries.  Sync the property defs contained by these two
-      // class defs to ensure both contain an identical set of
-      // properties.
+      // dictionaries. Check that each property that exists in the
+      // builtin class def exists in the files's class def. If it
+      // doesn't, then add it.
 
-      PvtMergePropDefs( pBuiltinClassDef, pFileClassDef, L"Builtin", L"File" );
-      PvtMergePropDefs( pFileClassDef, pBuiltinClassDef, L"File", L"Builtin" );
+#ifdef DEBUG_DICTIONARY_SYNC
+      std::wcout << L"*** Found built in class: " << pBuiltInModelClassDef->name() << " [";
+      PrintClassName( pFileClassDef );
+      std::wcout << "]" << std::endl;
+#endif
+
+      unsigned int i;
+      for (i = 0; i < pBuiltInModelClassDef->propertyCount(); i++) {
+
+	const PropertyDefinition * pBuiltInModelPropDef = 0;
+	pBuiltInModelPropDef = pBuiltInModelClassDef->propertyDefinitionAt(i);
+
+	if ( ! pFileClassDef->PvtIsPropertyDefRegistered( *pBuiltInModelPropDef->id() ) ) {
+
+#ifdef DEBUG_DICTIONARY_SYNC
+	  std::wcout << "\tMerge property: " << pBuiltInModelPropDef->name() << std::endl;
+#endif
+
+	  ImplAAFSmartPointer<ImplAAFPropertyDef> spTmp;
+	  AAFRESULT hr;
+	  hr = pFileClassDef->pvtRegisterPropertyDef( *pBuiltInModelPropDef->id(),
+						      pBuiltInModelPropDef->name(),
+						      *pBuiltInModelPropDef->typeId(),
+						      pBuiltInModelPropDef->required() ? kAAFFalse : kAAFTrue,
+						      pBuiltInModelPropDef->uid() ? kAAFTrue : kAAFFalse,
+						      &spTmp );
+	  
+	  assert( AAFRESULT_SUCCESS == hr );
+	  if ( AAFRESULT_SUCCESS != hr ) {
+	    result = hr;
+	    break;
+	  }
+	}
+
+      }
     }
   }
 
@@ -1602,25 +1468,13 @@ AAFRESULT ImplAAFMetaDictionary::SyncMetaDictionaries()
 { 
   AAFRESULT hr = AAFRESULT_SUCCESS;
 
-  // First, sync the class defs that exist in both the builtin and
-  // file dictionaries to ensures that each set of class defs have
-  // identical property sets.
-  //
-  // Second, merge the classes in the built in dictionary into the
-  // file's dictionary.
-  //
-  // Third, merge the classes in the file's dictionary into the built
-  // in dictionary.
-
-  if ( AAFRESULT_SUCCESS == (hr = PvtSyncCommonClassDefs())  &&
-       AAFRESULT_SUCCESS == (hr = PvtMergeFileClassDefsToBuiltin()) &&
-       AAFRESULT_SUCCESS == (hr = PvtClearFileClassSet()) &&
-       AAFRESULT_SUCCESS == (hr = PvtMergeBuiltinClassDefsToFile()) ) {
+  if ( AAFRESULT_SUCCESS == (hr = PvtSyncCommonClassDefs()) ) {
     // intentional noop
   }
 
   return hr;
 }
+
 
 //
 // Methods that would be inherited or overriden from ImplAAFStrorable
