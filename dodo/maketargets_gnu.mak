@@ -573,7 +573,7 @@ $(IMPL_DIR)/AAFClassIDs.h : aafobjects_gnu.mk
 	    echo \#endif ; \
 	    echo "" ; \
 	    echo "" ; \
-	    for class in $(AAFOBJECTS) ; do \
+	    for class in $(PRIVATE_AAFOBJECTS) $(AAFOBJECTS) ; do \
 	    	echo "extern \"C\" const aafClassID_t CLSID_$$class;"; \
 	    done ; \
 	    echo "" ; \
@@ -623,7 +623,7 @@ $(COMAPI_DIR)/AAFCLSIDs.h : aafobjects_gnu.mk
 	    echo \#include \"AAFCOMPlatformTypes.h\" ; \
 	    echo \#endif ; \
 	    echo "" ; \
-	    for class in $(AAFOBJECTS) ; do \
+	    for class in $(PRIVATE_AAFOBJECTS) $(AAFOBJECTS) ; do \
 	    	echo "EXTERN_C const CLSID CLSID_$$class;"; \
 	    done ; \
 	    echo "" ; \
