@@ -1,4 +1,4 @@
-// >>> © 1998 Avid Technology, Inc.  All rights reserved. <<<
+// >>> (c) 1998 Avid Technology, Inc.  All rights reserved. <<<
 
 #if (__MWERKS__ >= 0x2400)
 // required for CW6 ShLib (DLL) targets
