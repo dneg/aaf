@@ -214,6 +214,13 @@ public:
 
   virtual void clearTargetTag(void) const;
 
+  // Copying.
+
+  virtual void shallowCopyTo(OMProperty* destination) const;
+
+  virtual void deepCopyTo(OMProperty* destination,
+                          void* clientContext) const;
+
 private:
 
   typedef OMWeakReferenceSetElement SetElement;

@@ -842,5 +842,22 @@ OMWeakReferenceSetProperty<ReferencedObject>::clearTargetTag(void) const
   nonConstThis->_targetPropertyPath = 0;
 }
 
+template <typename ReferencedObject>
+void OMWeakReferenceSetProperty<ReferencedObject>::shallowCopyTo(
+                                                 OMProperty* destination) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::shallowCopyTo");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
+template <typename ReferencedObject>
+void OMWeakReferenceSetProperty<ReferencedObject>::deepCopyTo(
+                                               OMProperty* /* destination */,
+                                               void* /* clientContext */) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::deepCopyTo");
+  // Nothing to do - this is a deep copy
+}
+
 #endif
 
