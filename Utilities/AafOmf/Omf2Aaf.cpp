@@ -260,11 +260,13 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 			OMFVersion.patchLevel = 0;
 			OMFVersion.type = OMF2::kVersionUnknown;
 		}
-		ProductInfo.productVersion.major = OMFVersion.major;
-		ProductInfo.productVersion.minor = OMFVersion.minor;
-		ProductInfo.productVersion.tertiary = OMFVersion.tertiary;
-		ProductInfo.productVersion.patchLevel = OMFVersion.type;
-		ProductInfo.productVersion.type = (aafProductReleaseType_t)OMFVersion.type;
+		aafProductVersion_t v;
+		v.major = OMFVersion.major;
+		v.minor = OMFVersion.minor;
+		v.tertiary = OMFVersion.tertiary;
+		v.patchLevel = OMFVersion.type;
+		v.type = (aafProductReleaseType_t)OMFVersion.type;
+		ProductInfo.productVersion = &v;
 
 		if(OMF2::omfsReadString(OMFFileHdl, OMFIdent, OMF2::OMIDNTPlatform, text, sizeof(text)) != OMF2::OM_ERR_NONE)
 			strcpy(text, "<Not Specified>");
@@ -277,13 +279,15 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 	}
 	else
 	{
+		aafProductVersion_t v;
+		v.major = 1;
+		v.minor = 0;
+		v.tertiary = 0;
+		v.patchLevel = 0;
+		v.type = kAAFVersionDebug;
 		ProductInfo.companyName = L"Company Name";
 		ProductInfo.productName = L"AAF/OMF File Conversion";
-		ProductInfo.productVersion.major = 1;
-		ProductInfo.productVersion.minor = 0;
-		ProductInfo.productVersion.tertiary = 0;
-		ProductInfo.productVersion.patchLevel = 0;
-		ProductInfo.productVersion.type = kAAFVersionDebug;
+		ProductInfo.productVersion = &v;
 		ProductInfo.productVersionString = NULL;
 		ProductInfo.productID = ProductID;
 		ProductInfo.platform = NULL;
@@ -303,19 +307,17 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 		  CreateInstance(IID_IAAFIdentification,
 						 (IUnknown **)&pIdent);
 		AutoRelease<IAAFIdentification> pident( pIdent );
-		ProductInfo.companyName = L"Company Name";
-		ProductInfo.productName = L"OMF to AAF File Conversion";
-		ProductInfo.productVersion.major = 1;
-		ProductInfo.productVersion.minor = 0;
-		ProductInfo.productVersion.tertiary = 0;
-		ProductInfo.productVersion.patchLevel = 0;
-		ProductInfo.productVersion.type = kAAFVersionDebug;
-		ProductInfo.productVersionString = NULL;
-		ProductInfo.productID = ProductID ;
-		ProductInfo.platform = NULL;
-		pIdent->SetCompanyName(ProductInfo.companyName);
-		pIdent->SetProductName(ProductInfo.productName);
-		pIdent->SetProductVersion(&ProductInfo.productVersion);
+		aafProductVersion_t v;
+		v.major = 1;
+		v.minor = 0;
+		v.tertiary = 0;
+		v.patchLevel = 0;
+		v.type = kAAFVersionDebug;
+		pIdent->Initialize(L"Company Name",
+						   L"OMF to AAF File Conversion",
+						   0,
+						   ProductID);
+		pIdent->SetProductVersion(v);
 		rc = pHeader->AppendIdentification(pIdent);
 	}
 	pAAF->RegisterAAFProperties(pDictionary);

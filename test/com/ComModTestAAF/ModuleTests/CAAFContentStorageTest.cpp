@@ -183,16 +183,18 @@ _pEssenceData(NULL),
 _buffer(NULL),
 _bufferSize(0)
 {
-	_productInfo.companyName = L"AAF Developers Desk";
-	_productInfo.productName = L"AAFContentStorage Test";
-	_productInfo.productVersion.major = 1;
-	_productInfo.productVersion.minor = 0;
-	_productInfo.productVersion.tertiary = 0;
-	_productInfo.productVersion.patchLevel = 0;
-	_productInfo.productVersion.type = kAAFVersionUnknown;
-	_productInfo.productVersionString = NULL;
-	_productInfo.productID = UnitTestProductID;
-	_productInfo.platform = NULL;
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  _productInfo.companyName = L"AAF Developers Desk";
+  _productInfo.productName = L"AAFContentStorage Test";
+  _productInfo.productVersion = &v;
+  _productInfo.productVersionString = NULL;
+  _productInfo.productID = UnitTestProductID;
+  _productInfo.platform = NULL;
 }
 
 ContentStorageTest::~ContentStorageTest()
