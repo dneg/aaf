@@ -141,7 +141,6 @@ class Impl%01;
 #ifndef __Impl.this-module_h__
 #define __Impl.this-module_h__
 
-#include "OMStorable.h"
 
 /******************************************\\
 *                                          *
@@ -1175,11 +1174,25 @@ AD_ROOT_CLASS_END\
 #c (first version defined backwords compatibility)
 
 #startm .begin-Abstract-StoredObjectBase 00
+#include "OMStorable.h"
+
 AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-StoredObjectBase 00
-AD_CLASS_END\
+
+
+public:
+  // Declare this class to be storable.
+  //
+  OMDECLARE_STORABLE(Impl.this-module)
+
+  // Declare the module test method. The implementation of the will be be
+  // in /test/Impl.this-moduleTest.cpp.
+  static AAFRESULT test();
+};
+
+#endif // ! __Impl.this-module_h__
 #endm
 
 
@@ -1192,7 +1205,15 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-Transient 00
-AD_CLASS_END\
+
+
+public:
+  // Declare the module test method. The implementation of the will be be
+  // in /test/Impl.this-moduleTest.cpp.
+  static AAFRESULT test();
+};
+
+#endif // ! __Impl.this-module_h__
 #endm
 
 
@@ -1205,7 +1226,19 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-StoredObject 00
-AD_CLASS_END\
+
+
+public:
+  // Declare this class to be storable.
+  //
+  OMDECLARE_STORABLE(Impl.this-module)
+
+  // Declare the module test method. The implementation of the will be be
+  // in /test/Impl.this-moduleTest.cpp.
+  static AAFRESULT test();
+};
+
+#endif // ! __Impl.this-module_h__
 #endm
 
 
@@ -1218,7 +1251,15 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Concrete-Transient 00
-AD_CLASS_END\
+
+
+public:
+  // Declare the module test method. The implementation of the will be be
+  // in /test/Impl.this-moduleTest.cpp.
+  static AAFRESULT test();
+};
+
+#endif // ! __Impl.this-module_h__
 #endm
 
 
@@ -1232,5 +1273,17 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Concrete-StoredObject 00
-AD_CLASS_END\
+
+
+public:
+  // Declare this class to be storable.
+  //
+  OMDECLARE_STORABLE(Impl.this-module)
+
+  // Declare the module test method. The implementation of the will be be
+  // in /test/Impl.this-moduleTest.cpp.
+  static AAFRESULT test();
+};
+
+#endif // ! __Impl.this-module_h__
 #endm

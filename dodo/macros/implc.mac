@@ -943,11 +943,14 @@ AD_ROOT_CLASS_END\
 #c (first version defined backwords compatibility)
 
 #startm .begin-Abstract-StoredObjectBase 00
+#include "AAFStoredObjectIDs.h"
+
 AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-StoredObjectBase 00
-AD_CLASS_END\
+
+OMDEFINE_STORABLE(Impl.this-module, AUID_.this-module);
 #endm
 
 
@@ -960,7 +963,6 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-Transient 00
-AD_CLASS_END\
 #endm
 
 
@@ -969,11 +971,13 @@ AD_CLASS_END\
 #c (first version defined backwords compatibility)
 
 #startm .begin-Abstract-StoredObject 00
+#include "AAFStoredObjectIDs.h"
+
 AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-StoredObject 00
-AD_CLASS_END\
+OMDEFINE_STORABLE(Impl.this-module, AUID_.this-module);
 #endm
 
 
@@ -986,7 +990,6 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Concrete-Transient 00
-AD_CLASS_END\
 #endm
 
 
@@ -996,9 +999,12 @@ AD_CLASS_END\
 #c (first version defined backwords compatibility)
 
 #startm .begin-Concrete-StoredObject 00
+#include "AAFStoredObjectIDs.h"
+
 AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Concrete-StoredObject 00
-AD_CLASS_END\
+
+OMDEFINE_STORABLE(Impl.this-module, AUID_.this-module);
 #endm
