@@ -2,24 +2,29 @@
 <HTML>
 <HEAD>
 <TITLE>AAF Project FAQ</TITLE>
-</HEAD>
+<style type="text/css">
+<!--
+p {  font-family: Verdana, Arial, Helvetica, sans-serif}
+-->
+</style></HEAD>
 <BODY bgcolor="#FFFFFF">
 <!-- #BeginLibraryItem "/Library/topBanner.lbi" -->  
 <table width="633" cellpadding="0" cellspacing="0">
   <tr> 
-    <td width="445"><img src="aafDSLogo.gif" width="445" height="88" alt="Developer Support"></td>
-    <td width="188"><a href="http://www.aafassociation.org/montreal.htm" target="devCon"><img src="banner_space_anim.gif" width="188" height="88" border="0" alt="advert space"></a></td>
+    <td width="445"><img src="http://aaf.sourceforge.net/aafDSLogo.gif" width="445" height="88"></td>
+    <td width="188"><a href="http://www.aafassociation.org/montreal.htm" target="devCon"><img src="http://aaf.sourceforge.net/banner_space_anim.gif" width="188" height="88" border="0"></a></td>
   </tr>
   <tr> 
     <td colspan="2">&nbsp;</td>
   </tr>
 </table>
-<!-- #EndLibraryItem -->Prepared by Tim Bingham, May 2001. Acknowledgement 
-due to Josh Goldman who prepared the description of the directories, to Alexey 
-Kharkevich who provided the description of the Unix makefile targets and to Tom 
-Ransdell and Jeff Bedell who helped with numerous questions. Although I prepared 
-the first version of this FAQ, I don't plan to be the maintainer, I believe that 
-honor goes to <a href="mailto:support@aafassociation.org">Simon Carter</a>.<!--
+<!-- #EndLibraryItem -->Prepared by Tim Bingham, May 2001. Acknowledgement due 
+to Josh Goldman who prepared the description of the directories, to Alexey Kharkevich 
+who provided the description of the Unix makefile targets Oliver Morgan who pointed 
+out the make -&gt; Anti-Virus workaround and to Tom Ransdell and Jeff Bedell who 
+helped with numerous questions. Although I prepared the first version of this 
+FAQ, I don't plan to be the maintainer, I believe that honor goes to <a href="mailto:support@aafassociation.org">Simon 
+Carter</a>.<!--
 
 [Note to FAQ maintainer - feel free to merge or otherwise edit this
 material.]
@@ -31,7 +36,9 @@ questions.]
 organized. I tried to put related questions together but with limited
 time I concentrated more on filling in the answers than in
 organizing.]
- --> 
+ 
+[Note to FAQ maintainer - Keep all HREF from here global e.g. starting with http:// so that this document will still work when detatched from the AAF support website]
+--> 
 <HR>
 <P> How do I get started with the AAF project at SourceForge ?</P>
 SourceForge is at<a href="%20http://sourceforge.net/"> http://sourceforge.net/</a> 
@@ -94,7 +101,7 @@ source files ?</a> regenerating the generated source files.
 </p>
 <P> <a name="howDev">How do I become an AAF developer ?</a></P>
 Please contact <a href="mailto:bgilmer@users.sourceforge.net">Brad Gilmer</a> 
-or <a href="mailto;terabrit@users.sourceforge.net">Oliver Morgan</a> 
+or <a href="mailto:terabrit@users.sourceforge.net">Oliver Morgan</a> 
 <P> OK, I'm a developer. How do I obtain and build the AAF SDK ?</P>
 <p>How do I make checkins ?</P>
 <p>What's ssh ?</p>
@@ -143,14 +150,18 @@ The AAF engineering committee is responsible for defining this process.<!--
  --> 
 <P> What are the rules for interface design. I notice that there are no parameters 
   of built-in type, such as "int" ?</P>
-- no parameters of built-in type such as "int" since the sizes of the builtin 
-type vary (across platforms, between compiler on the same platform and even for 
-the same compiler with different options). - no parameters of type enum (same 
-reasons as above) - no hidden pointers (e.g. as a struct member) <!--[reason - TBS]
+<ul>
+  <li>no parameters of built-in type such as "int" since the sizes of the builtin 
+    type vary (across platforms, between compiler on the same platform and even 
+    for the same compiler with different options).</li>
+  <li> no parameters of type enum (same reasons as above)</li>
+  <li>no hidden pointers (e.g. as a struct member) <!--[reason - TBS]
 
   - [others - TBS]
  --> 
-<HR>
+    <HR>
+  </li>
+</ul>
 <P> What platforms are supported ?</P>
 <p>As of RC1 (the initial sources made available on SourceForge April 17, 2001) 
   the supported platforms are (in no particular order) </p>
@@ -176,30 +187,21 @@ Storage</b> system extension. This is not yet available from Microsoft.
 No, some code changes are required. 
 <P> <a name="win9598MEsupport">What about Windows 95, Windows 98 and Windows ME 
   ?</a></P>
-<P>
-For brevity, let's refer collectively to Windows 95, Windows 98 and Windows ME
-as consumer versions of Windows.
-<br>
-We have not tested building and running AAF on consumer versions Windows as we
-have on the "supported" platforms. However AAF does build and run on consumer
-versions of Windows after some minor modifications to the Visual C++ projects.
-<br>
-To be able to build and run AAF on a consumer version of Windows you must change
-the C/C++ settings in the following projects ...
-</p>
-<p>
-./AAFWinSDK/ref-impl/aaflib/AAFLIB.dsp<br>
-./AAFWinSDK/ref-impl/Om/Om.dsp<br>
-./AAFWinSDK/DevUtils/Dump/Dump.dsp
-</P>
-Go to Settings -&gt; C/C++ -&gt; General -&gt; Preprocessor Definitions and add
--DNO_W32_WFOPEN (make sure "Settings for:" says "All Configurations")
-
-If you wish to create a single <b>aafdll</b> that runs on consumer versions of
-Windows and on Windows Nt/2000, then different changes would be required.
-
-
-<!--
+<P> For brevity, let's refer collectively to Windows 95, Windows 98 and Windows 
+  ME as consumer versions of Windows. <br>
+  We have not tested building and running AAF on consumer versions Windows as 
+  we have on the "supported" platforms. However AAF does build and run on consumer 
+  versions of Windows after some minor modifications to the Visual C++ projects. 
+  <br>
+  To be able to build and run AAF on a consumer version of Windows you must change 
+  the C/C++ settings in the following projects ... </p>
+<p> ./AAFWinSDK/ref-impl/aaflib/AAFLIB.dsp<br>
+  ./AAFWinSDK/ref-impl/Om/Om.dsp<br>
+  ./AAFWinSDK/DevUtils/Dump/Dump.dsp </P>
+Go to Settings -&gt; C/C++ -&gt; General -&gt; Preprocessor Definitions and add 
+-DNO_W32_WFOPEN (make sure "Settings for:" says "All Configurations") If you wish 
+to create a single <b>aafdll</b> that runs on consumer versions of Windows and 
+on Windows Nt/2000, then different changes would be required. <!--
 For brevity, let's refer collectively to Windows 95, Windows 98 and Windows ME 
 as consumer versions of Windows. We have not tested building and running AAF on 
 consumer versions Windows as we have the above platforms. However AAF does build 
@@ -229,34 +231,26 @@ Operating System CVS Client Available from Windows NT/Windows 2000 WinCvs http:/
 Macintosh Mac OS 8.6/9.0 MacCVS Pro http://www.maccvs.org/ Note that there are 
 several other Macintosh CVS clients with similar sounding names. On Linux we suggest 
 the the cvs(1) command. 
--->
-<P>When I open up AAFWinSDK.dsw I get a message "Unable to connect to source
-code control project AAFStandardCodecs". How can I get rid of this ?</P>
-
-<P>What's happening is that you have Visual Source Safe (Microsoft's source control
-product) installed as well as Visual Studio, Visual Source Safe is insisting on
-looking for a source control project even though none exists.<BR>
-
-You can get rid of the message temporarily (the setting is saved in
-AAFWinSDK.opt) by answering "no" to the question "Do you wish to attempt this
-connection in future sessions ?"
-
-To get rid of the message permanently, change the value of the registry key
-HKEY_CURRENT_USER\Software\Microsoft\DevStudio\6.0\Source Control\Disabled from
-0 to 1.
-
-This part of the registry contains all the settings from the Visual Studio -&gt;
-Tools -&gt; Options ... -&gt; Source Contol dialog. Unfortunately it seems that
-there's no UI checkbox to disable Visual Studio/Visual Source Safe integration.
-
-For more details see
-<a href="http://support.microsoft.com/support/kb/articles/Q236/3/99.ASP">http://support.microsoft.com/support/kb/articles/Q236/3/99.ASP</A>
+--> 
+<P>When I open up AAFWinSDK.dsw I get a message "Unable to connect to source code 
+  control project AAFStandardCodecs". How can I get rid of this ?</P>
+<P>What's happening is that you have Visual Source Safe (Microsoft's source control 
+  product) installed as well as Visual Studio, Visual Source Safe is insisting 
+  on looking for a source control project even though none exists.<BR>
+  You can get rid of the message temporarily (the setting is saved in AAFWinSDK.opt) 
+  by answering "no" to the question "Do you wish to attempt this connection in 
+  future sessions ?" To get rid of the message permanently, change the value of 
+  the registry key HKEY_CURRENT_USER\Software\Microsoft\DevStudio\6.0\Source Control\Disabled 
+  from 0 to 1. This part of the registry contains all the settings from the Visual 
+  Studio -&gt; Tools -&gt; Options ... -&gt; Source Contol dialog. Unfortunately 
+  it seems that there's no UI checkbox to disable Visual Studio/Visual Source 
+  Safe integration. For more details see <a href="http://support.microsoft.com/support/kb/articles/Q236/3/99.ASP">http://support.microsoft.com/support/kb/articles/Q236/3/99.ASP</A> 
 </P>
 <P> Where can I find out more about CVS ?</P>
 <p>There's information to help you get started on SourceForge<br>
-  <img src="fogelBook.gif" width="111" height="140" align="right" alt="Fogel CVS book">One book CVS 
-  I have found useful is Karl Franz Fogel, "OpenSource Development with CVS", 
-  November 1999, The Coriolis Group, ISBN: 1576104907. Most of this is available 
+  <img src="fogelBook.gif" width="111" height="140" align="right" alt="Fogel CVS book">One 
+  book CVS I have found useful is Karl Franz Fogel, "OpenSource Development with 
+  CVS", November 1999, The Coriolis Group, ISBN: 1576104907. Most of this is available 
   online at <a href="http://cvsbook.red-bean.com/">http://cvsbook.red-bean.com/</a></p>
 <p>There's a catalog of CVS documentation at <a href="http://www.cvshome.org/docs/index.html">http://www.cvshome.org/docs/</a> 
   I've found the PDF version of the "the Cederqvist" - the "official" CVS manual 
@@ -302,12 +296,22 @@ implementation can be licensed from Microsoft.) - Module tests, one per AAF clas
 - Test programs - Example programs - Utility programs 
 <P> What are the steps in the process of building an AAF SDK from the AAF project 
   ?</P>
-1) generate files a) build dodo tool b) run dodo tool to generate files 2) build 
-AAF reference implementation 3) create SDK 4) build tests using SDK 5) build examples 
-using SDK These are _all_ of the steps. Step 1 isn't necessary unless you've changed 
-the dodo inputs files. To avoid everyone having to do step 1 the generated files 
-are checked in to CVS. Note that regenerating the source files isn't done (by 
-default) by the projects or makefile. [TBS - more detail on each of the steps.] 
+<ol>
+  <li>generate files 
+    <ul>
+      <li>build dodo tool </li>
+      <li>run dodo tool to generate files</li>
+    </ul>
+  <li>build AAF reference implementation </li>
+  <li>create SDK</li>
+  <li>build tests using SDK</li>
+  <li>build examples using SDK</li>
+</ol>
+<p>These are <b>all</b> of the steps. Step 1 isn't necessary unless you've changed 
+  the dodo inputs files. To avoid everyone having to do step 1 the generated files 
+  are checked in to CVS. Note that regenerating the source files isn't done (by 
+  default) by the projects or makefile. <!--TBS - more detail on each of the steps.--> 
+</p>
 <P> <a name="regenSrc">How do I regenerate the generated source files ?</a></P>
 To regenerate the generated files you need to "cd dodo; make". There is one caveat 
 which only applies if you want to regenerate the generated source files, for example, 
@@ -348,12 +352,11 @@ dodo must be kept alive.<!--
 [TBS - more detail on dodo input and output files.] --> 
 <HR>
 <P> I get the following error from CodeWarrior when building from scratch. Error 
-  : ### Error: Out of memory ### Link Error : Link failed. I've seen this error 
-  too but could never track it down. It seems only to happen when compiling and 
-  linking from scratch and seems also to be related to the amount of memory allocated 
-  to CodeWarrior (oddly enough allocating more memory seemed to cause it more 
-  often). The error goes away if you try again. 
-</p>
+  : ### Error: Out of memory ### Link Error : Link failed. </p>
+I've seen this error too but could never track it down. It seems only to happen 
+when compiling and linking from scratch and seems also to be related to the amount 
+of memory allocated to CodeWarrior (oddly enough allocating more memory seemed 
+to cause it more often). The error goes away if you try again. 
 <HR>
 <P> When I build on Macintosh I get warnings. What's the house style guide say 
   on the acceptability of Warnings ?</P>
@@ -375,27 +378,38 @@ it doesn't recognize the "typename" keyword. Use "CC -n32" or gcc instead.
 <HR>
 <P> On Linux the default make at the top level doesn't descend all the branches, 
   it only seems to build in ref-impl. Is this correct ?</P>
-<p>Yes, this is correct for the default make file target. The default target (make 
-  with no arguments) is the reference implementation libraries. There are a number 
-  of other targets in the makefile. Here's an overview of the makefile targets. 
-  [Note to FAQ maintainer, I didn't have time to edit this for consistency.] To 
-  build AAF reference implementation libraries type: make Now you have to install 
-  libraries and header files to create AAF SDK to use with your applications: 
-  make install or make install AAFSDK=/home/user/New_AAF_SDK You can do 'make 
-  install' without doing 'make' first. If 'make install' cannot find libraries 
-  to install it will build them. With SDK created you now can build applications. 
-  To build applications distributed with the AAF SDK you can do: make test make 
-  examples make utilities make devutils or make everything If make cannot find 
-  installed AAF SDK it will build (if necessary) and install the SDK before building 
-  applications. Binaries are placed in the SDK's bin directory. Do not forget 
-  that if you use install directory other than default you have to specify it: 
-  make everything AAFSDK=/home/user/AAF_2001</p>
+Yes, this is correct for the default make file target. The default target (make 
+with no arguments) is the reference implementation libraries. There are a number 
+of other targets in the makefile. Here's an overview of the makefile targets. 
+<br>
+<!--[Note to FAQ maintainer, I didn't have time to edit this for consistency.] -->To 
+build AAF reference implementation libraries type: make<br>
+Now you have to install libraries and header files to create AAF SDK to use with 
+your applications:<br>
+<font face="Courier New, Courier, mono">make install</font> or <font face="Courier New, Courier, mono">make 
+install AAFSDK=/home/user/New_AAF_SDK</font><br>
+You can do 'make install' without doing 'make' first. If 'make install' cannot 
+find libraries to install it will build them.<br>
+With SDK created you now can build applications. To build applications distributed 
+with the AAF SDK you can do:<br>
+<font face="Courier New, Courier, mono">make test<br>
+make examples<br>
+make utilities<br>
+make devutils </font><br>
+or make everything<br>
+If make cannot find installed AAF SDK it will build (if necessary) and install 
+the SDK before building applications.<br>
+Binaries are placed in the SDK's bin directory. Do not forget that if you use 
+install directory other than default you have to specify it:<br>
+<font face="Courier New, Courier, mono">make everything AAFSDK=/home/user/AAF_2001 
+</font> 
 <p>How about cleaning up ?</p>
-<p>make clean will remove: all the intermediate files (like .o for), libraries 
-  (except installed SDK libraries), and applications (tests, examples, utilities). 
-  To remove SDK do make uninstall which removes all the installed libraries and 
-  header files. Again, don't forget that you may need to use: make clean AAFSDK=/usr/local/aaf 
-  make uninstall AAFSDK=/usr/local/aaf</p>
+<font face="Courier New, Courier, mono">make clean</font> will remove: all the 
+intermediate files (like .o for), libraries (except installed SDK libraries), 
+and applications (tests, examples, utilities).<br>
+To remove SDK do make uninstall which removes all the installed libraries and 
+header files. Again, don't forget that you may need to use: make clean AAFSDK=/usr/local/aaf 
+make uninstall AAFSDK=/usr/local/aaf 
 <p>What about running dodo ?</p>
 Dodo is utility to generate COM interfaces. By default all the generated files 
 are already there and do not get touched by commands mentioned above. If you want 
@@ -426,26 +440,77 @@ the IIDs (Interface identifiers) for the AAF interfaces.
 <P> What are the libraries called and where is their code ?</P>
 The actual library files have names that vary across platforms. The platform specific 
 names are given in the table below. To refer to a library in a platform independent 
-way I've used names such as <b>aaflib</b>, <b>aafiid</b> and <b>aafdll</b>.
+way I've used names such as <b>aaflib</b>, <b>aafiid</b> and <b>aafdll</b>. 
 <table cellspacing="6" cellpadding="6" border="0">
-  <tr><td>Library</td>
+  <tr> 
+    <td>Library</td>
     <td>Source</td>
     <td>Description</td>
-    <td>&nbsp;</td><td>Windows</td><td>Macintosh</td><td>Unix Library</td></tr>
-<tr><td rowspan="2">aaflib</td><td rowspan="2">ref-impl/aaflib</td><td rowspan="2">static stub library</td>
-<td>Debug</td><td>AAFD.LIB</td><td>AAFLIB (Debug)</td><td>libaaflib.a</td></tr>
-<tr><td>Release</td><td>AAF.LIB</td><td>AAFLIB</td><td>libaaflib.a</td></tr>
-<tr><td rowspan="2">aafiid</td><td rowspan="2">ref-impl/aafiid</td><td rowspan="2">interface identifiers</td>
-<td>Debug</td><td>AAFIIDD.LIB</td><td>AAFIIDD.LIB</td><td>libaafiid.a</td></tr>
-<tr><td>Release</td><td>AAFIID.LIB</td><td>AAFIID.LIB</td><td>libaafiid.a</td></tr>
-<tr><td rowspan="2">aafdll</td><td rowspan="2">ref-impl/src</td><td rowspan="2">the AAF reference implementation</td>
-<td>Debug</td><td>AAFCOAPI.DLL</td><td>AAFCOAPI.DLL (PPC)Dbg</td><td>libcom-api.so</td></tr>
-<tr><td>Release</td><td>AAFCOAPI.DLL</td><td>AAFCOAPI.DLL (PPC)</td><td>libcom-api.so</td></tr>
-<tr><td rowspan="2">omf</td><td rowspan="2">OMF/Include</td><td rowspan="2">the OMF toolkit used by the OMF-AAF converter</td>
-<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr>
     <td>&nbsp;</td>
-    <td>omfToolkit.dll</td><td>libOMFANSIC.a</td><td>libOMFI.a</td></tr>
+    <td>Windows</td>
+    <td>Macintosh</td>
+    <td>Unix Library</td>
+  </tr>
+  <tr> 
+    <td rowspan="2">aaflib</td>
+    <td rowspan="2">ref-impl/aaflib</td>
+    <td rowspan="2">static stub library</td>
+    <td>Debug</td>
+    <td>AAFD.LIB</td>
+    <td>AAFLIB (Debug)</td>
+    <td>libaaflib.a</td>
+  </tr>
+  <tr> 
+    <td>Release</td>
+    <td>AAF.LIB</td>
+    <td>AAFLIB</td>
+    <td>libaaflib.a</td>
+  </tr>
+  <tr> 
+    <td rowspan="2">aafiid</td>
+    <td rowspan="2">ref-impl/aafiid</td>
+    <td rowspan="2">interface identifiers</td>
+    <td>Debug</td>
+    <td>AAFIIDD.LIB</td>
+    <td>AAFIIDD.LIB</td>
+    <td>libaafiid.a</td>
+  </tr>
+  <tr> 
+    <td>Release</td>
+    <td>AAFIID.LIB</td>
+    <td>AAFIID.LIB</td>
+    <td>libaafiid.a</td>
+  </tr>
+  <tr> 
+    <td rowspan="2">aafdll</td>
+    <td rowspan="2">ref-impl/src</td>
+    <td rowspan="2">the AAF reference implementation</td>
+    <td>Debug</td>
+    <td>AAFCOAPI.DLL</td>
+    <td>AAFCOAPI.DLL (PPC)Dbg</td>
+    <td>libcom-api.so</td>
+  </tr>
+  <tr> 
+    <td>Release</td>
+    <td>AAFCOAPI.DLL</td>
+    <td>AAFCOAPI.DLL (PPC)</td>
+    <td>libcom-api.so</td>
+  </tr>
+  <tr> 
+    <td rowspan="2">omf</td>
+    <td rowspan="2">OMF/Include</td>
+    <td rowspan="2">the OMF toolkit used by the OMF-AAF converter</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+    <td>&nbsp;</td>
+  </tr>
+  <tr> 
+    <td>&nbsp;</td>
+    <td>omfToolkit.dll</td>
+    <td>libOMFANSIC.a</td>
+    <td>libOMFI.a</td>
+  </tr>
 </table>
 <P> What are AAFINTP.DLL and AAFPGAPI.DLL ?</P>
 AAFINTP.DLL is an example interpolator plugin and AAFPGAPI.DLL is an example essence 
@@ -460,6 +525,9 @@ These are special comments recognized by AutoDuck (AutoDuck is Freeware by Eric
 Artzt). AutoDuck extracts the comments and produces documentation in a variety 
 of formats. While AutoDuck is not particularly smart about C++ (e.g. it gets confused 
 about overloaded functions) the hyperlinked html output is very useful. 
+<p>Where can I get Autoduck from ?</p>
+try <a href="http://www.devstuff.com/utils.htm">http://www.devstuff.com/utils.htm</a> 
+note there are some older versions around that don't do HTML 
 <P> OK, where can I get the html ?</P>
 Run the script ref-impl/doc/OM/makedocs.ksh. Note that this script expects that 
 you already have Autoduck (AFAIK only available for Windows) and that documentation 
@@ -480,36 +548,37 @@ Yes, we're sure.
 <P> How is the Microsoft COM stuff distributed for Irix &amp; Linux - it seems 
   to miraculously work, is there a binary lib tucked away in the Distribution 
   ?</P>
-No it really is a miracle :-) Seriously,<!-- [TBS - more detail needed on how we don't really use COM] --> 
+No it really is a miracle :-) Seriously,<!-- <a href="../COMaaf.html"> see </a>[TBS - more detail needed on how we don't really use COM] --> 
 <P> OK. So what C++ features does the code use and which does it avoid ?</P>
 - Features we use - "bool" - class templates (including "typename") - static_cast&lt;&gt;, 
-dynamic_cast&lt;&gt;, const_cast&lt;&gt; and reinterpret_cast&lt;&gt; - Features we have avoided 
-- "mutable" - "namespace" - standard template library - class type_info, typeid 
-operator - function templates - class/function template specialization - class/function 
-template partial specialization - covariant virtual function return types - unbound 
-friend class/function template declarations - Other - note that we do use wchar_t 
-from &lt;stddef.h&gt; and the wcs functions (e.g. wcslen()) from &lt;wchar.h&gt;. Since this 
-is a relatively new addition to the ISO C libraries it may raise portability issues. 
+dynamic_cast&lt;&gt;, const_cast&lt;&gt; and reinterpret_cast&lt;&gt; - Features 
+we have avoided - "mutable" - "namespace" - standard template library - class 
+type_info, typeid operator - function templates - class/function template specialization 
+- class/function template partial specialization - covariant virtual function 
+return types - unbound friend class/function template declarations - Other - note 
+that we do use wchar_t from &lt;stddef.h&gt; and the wcs functions (e.g. wcslen()) 
+from &lt;wchar.h&gt;. Since this is a relatively new addition to the ISO C libraries 
+it may raise portability issues. 
 <HR>
-<P> I thought the AAF code was supposed to be portable why does the code contain 
-  references to IStorage and IStream ?</P>
-Aren't those Windows specific things. AAF is portable, however it does depend 
-on Microsoft Structured Storage. IStorage and IStream are interfaces with implementations 
-in Microsoft Structured Storage. Implementations of Microsoft Structured Storage 
-for Windows and Macintosh are available directly from Microsoft and are included 
-(headers and binaries) with AAF. On other platforms it is possible to licence 
-the source code for the Structured Storage reference implementation from Microsoft. 
-Header files and binaries for Linux and Irix are included. 
+<P> I thought the AAF code was supposed to be portable, why does the code contain 
+  references to IStorage and IStream ? Aren't those Windows specific things ?</P>
+AAF is portable, however it does depend on Microsoft Structured Storage. IStorage 
+and IStream are interfaces with implementations in Microsoft Structured Storage. 
+Implementations of Microsoft Structured Storage for Windows and Macintosh are 
+available directly from Microsoft and are included (headers and binaries) with 
+AAF. On other platforms it is possible to licence the source code for the Structured 
+Storage reference implementation from Microsoft. Header files and binaries for 
+Linux and Irix are included. 
 <P> Why does the Object Manager (ref-impl/src/OM and ref-impl/include/OM) depend 
   on &lt;iostream.h&gt; ?</P>
 The release build does not. The debug build does. The default configuration for 
 the debug build defines OM_ENABLE_DEBUG which enables run-time assertion checking. 
 If an assertion fails information about the failing assertion is written to "omlog" 
 an instance of class OMOStream. The distributed version of OMOStream is implemented 
-using &lt;iostream.h&gt; (only four functions in OMOStream.cpp). If you don't have (or 
-don't want to use) &lt;iostream.h&gt; you can either reimplement the four functions 
-in OMOStream.cpp or change the body of function reportAssertionViolation() in 
-OMAssertions.cpp to do something different. 
+using &lt;iostream.h&gt; (only four functions in OMOStream.cpp). If you don't 
+have (or don't want to use) &lt;iostream.h&gt; you can either reimplement the 
+four functions in OMOStream.cpp or change the body of function reportAssertionViolation() 
+in OMAssertions.cpp to do something different. 
 <HR>
 <P> Why does it say "This Project Has Not Released Any Files" on https://sourceforge.net/projects/aaf/, 
   I thought that all of the source for AAF had been released ?</P>
@@ -538,9 +607,10 @@ Hall, ISBN: 0136291554
 have time to check and edit this.] -->Here's a brief guide to the AAF Source Tree, 
 focusing on where to find useful bits of information. 
 <h4>AAFWinSDK</h4>
-<p>Windows project files and default location for compiles and 
-  links (Windows platform only)</p>
-<h4>bin</h4><p>Obsolete</p>
+<p>Windows project files and default location for compiles and links (Windows 
+  platform only)</p>
+<h4>bin</h4>
+<p>Obsolete</p>
 <h4>DevUtils</h4>
 <p>Utilities useful to AAF Developers.<br>
   There's only one of these, a low-level dumper that helps diagnose file format 
@@ -553,10 +623,10 @@ focusing on where to find useful bits of information.
   macros defined in *.mac files in the macros directory. The comments in the *.dod 
   files end up in the API reference document.</p>
 <h4>examples</h4>
-<p>Useful examples and some useful dump utilities meta Spreadsheet 
-  that defines the AAF object model, used to generate the AAFMetaDictionary.h 
-  file and the dictionary stored in the AAF file. (see ref-impl/src/impl for definitions 
-  used by the reference implementation for builtins)</p>
+<p>Useful examples and some useful dump utilities meta Spreadsheet that defines 
+  the AAF object model, used to generate the AAFMetaDictionary.h file and the 
+  dictionary stored in the AAF file. (see ref-impl/src/impl for definitions used 
+  by the reference implementation for builtins)</p>
 <h4>omf</h4>
 <p>OMF toolkit headers and libraries for the OMF converter</p>
 <h4>ref-impl</h4>
@@ -565,9 +635,9 @@ focusing on where to find useful bits of information.
 <h4>ref-impl/aaflib</h4>
 <h4>ref-impl/bld_cfg</h4>
 <h4>ref-impl/include</h4>
-<p>Contains the .idl and .h files used by the implementation 
-  (including those exported to AAF clients). The top-level include directory has 
-  the include files that are not generated from .idl files.<br>
+<p>Contains the .idl and .h files used by the implementation (including those 
+  exported to AAF clients). The top-level include directory has the include files 
+  that are not generated from .idl files.<br>
   AAFClassDefsUIDs.h defines the macros for defining the symbols and AUIDs for 
   the stored classes, but does not contain the list of symbols and the AUIDs. 
   The symbols for a class ID is in the format kAAFClassID_&lt;class-name&gt; However, 
@@ -575,35 +645,51 @@ focusing on where to find useful bits of information.
   defines symbols with the longer name. In general, the following abbreviations 
   are used </p>
 <table border="0" cellpadding="6" cellspacing="6">
-  <tr><td>Abbreviated form</td><td>Long form</td></tr>
-<tr><td>Def</td><td>Definition Object</td></tr>
-<tr><td>IntObj</td><td>InterchangeObject</td></tr>
-<tr><td>ObjRef</td><td>ObjectReference</td></tr>
-<tr><td>Int</td><td>Integer</td></tr></table>
+  <tr> 
+    <td>Abbreviated form</td>
+    <td>Long form</td>
+  </tr>
+  <tr> 
+    <td>Def</td>
+    <td>Definition Object</td>
+  </tr>
+  <tr> 
+    <td>IntObj</td>
+    <td>InterchangeObject</td>
+  </tr>
+  <tr> 
+    <td>ObjRef</td>
+    <td>ObjectReference</td>
+  </tr>
+  <tr> 
+    <td>Int</td>
+    <td>Integer</td>
+  </tr>
+</table>
 <p>In addition, there are a few symbols defined for multiple spellings (UNIX and 
   Unix, EdgeCode and Edgecode)<br>
-<b>AAFPropertyDefs.h</b> defines the macros for defining 
-  AUIDs for property ID and AAFPropertyIDs.h invokes the macros, but neither contains 
-  the symbol and the AUID defined for each property. The symbol for a property 
-  is in the format kAAFPropID_&lt;class-name&gt;_&lt;property-name&gt; with the 
-  added complication that the class-name used is the modified short name used 
-  in the code.
-</p>
+  <b>AAFPropertyDefs.h</b> defines the macros for defining AUIDs for property 
+  ID and AAFPropertyIDs.h invokes the macros, but neither contains the symbol 
+  and the AUID defined for each property. The symbol for a property is in the 
+  format kAAFPropID_&lt;class-name&gt;_&lt;property-name&gt; with the added complication 
+  that the class-name used is the modified short name used in the code. </p>
 <h4>ref-impl/include/com-api</h4>
 <p>Contains the .idl files for the Com interfaces.</p>
- <p><b>AAF.idl</b> defines the interfaces and methods and AAFTypes.idl defines the types 
-  ref-impl/include/om Contains the header files used internally by AAF data manager 
-  for the AAF object manager</p>
-<h4>ref-impl/include/ref-api</h4><p>Contains the .h files generated 
-  from the .idl files and private .h files used by the AAF data manager</p>
-<h4>ref-impl/libjpeg</h4><p>
-  Contains jpeg source code used by the JPEG codecs with the CDCI format.</p>
-<h4>ref-impl/plugins</h4><p>
-  Contains the source code used by the plugins provided with the reference implementation. 
+<p><b>AAF.idl</b> defines the interfaces and methods and AAFTypes.idl defines 
+  the types ref-impl/include/om Contains the header files used internally by AAF 
+  data manager for the AAF object manager</p>
+<h4>ref-impl/include/ref-api</h4>
+<p>Contains the .h files generated from the .idl files and private .h files used 
+  by the AAF data manager</p>
+<h4>ref-impl/libjpeg</h4>
+<p> Contains jpeg source code used by the JPEG codecs with the CDCI format.</p>
+<h4>ref-impl/plugins</h4>
+<p> Contains the source code used by the plugins provided with the reference implementation. 
   These plugins are AIFC codec, JPEG codec, WAVE codec, Interpolator plugin, Plugin 
-  manager code</p><!-- ??? anything else -->
-<h4>ref-impl/src</h4><p>
-Contains the source code for the reference implementation</p>
+  manager code</p>
+<!-- ??? anything else --> 
+<h4>ref-impl/src</h4>
+<p> Contains the source code for the reference implementation</p>
 <h4>ref-impl/src/com-api</h4>
 <p> Contains the source code for the Com interfaces. The top-level directory contains 
   the .cpp and .h file for each Com interface. <b>CAAFAIFCDescriptor.cpp</b> contains 
@@ -621,10 +707,11 @@ Contains the source code for the reference implementation</p>
   For example, the implementation class associated with the <b>AAFMasterMob</b> 
   class also supports the <b>IAAFSearchSource</b> interface.<br>
   This is shown by the following lines in the<b> CAAFMasterMob.h</b> file:</p>
-<p>class CAAFMasterMob : public IAAFMasterMob, public IAAFSearchSource, public CAAFMob</p>
+<p>class CAAFMasterMob : public IAAFMasterMob, public IAAFSearchSource, public 
+  CAAFMob</p>
 <h4>ref-impl/src/com-api/com-dll</h4>
-<p><!--?? -->Contains the code managing loading the 
-  AAF .dll and creating Com objects.</p>
+<p><!--?? -->Contains the code managing loading the AAF .dll and creating Com 
+  objects.</p>
 <h4>ref-impl/src/impl</h4>
 <p>Contains the .cpp and .h files that define the implementation objects.<br>
   The <b>Impl&lt;class-name&gt;.cpp</b> contains the body of the code.<br>
@@ -647,23 +734,24 @@ Contains the source code for the reference implementation</p>
   OMFixedSizeProperty&lt;aafUInt32&gt; _physicalTrackNum;<br>
   OMStrongReferenceProperty&lt;ImplAAFSegment&gt; _segment; </p>
 <h4>ref-impl/src/om</h4>
-<p>Contains the source for the AAF object manager ReleaseNotes 
-  Contains the release notes test Contains the test files</p>
+<p>Contains the source for the AAF object manager</p>
+<!-- ReleaseNotes Contains the release notes --> 
+<h4>test</h4>
+<p>Contains the test files</p>
 <h4>test/com/ComModTestAAF</h4>
 <p>Contains the module tests. This contains the module test test bed. To run individual 
   module tests, specify the class names as command line parameters.</p>
 <h4>test/com/ComMobTestAAF/ModuleTests</h4>
 <p>Contains the individual module tests. This contains usage code of the methods 
   in each Com interface.<br>
-In general, the examples directory contains more useful 
-  example usage, but if a method is not used in any example, the module test provides 
-  at least a minimal usage example.</p>
+  In general, the examples directory contains more useful example usage, but if 
+  a method is not used in any example, the module test provides at least a minimal 
+  usage example.</p>
 <h4>test/com/CreateSequence</h4>
-<p>Contains tests of 
-  the sequence and composition mob</p>
+<p>Contains tests of the sequence and composition mob</p>
 <h4>test/com/EssenceAccess</h4>
-<p>Contains test of the 
-  EssenceAccess interfaces Utilities aafOMF conversion utility. </p>
+<p>Contains test of the EssenceAccess interfaces Utilities aafOMF conversion utility. 
+</p>
 <HR>
 <P> I get the following error when I try to run one of the test programs. What's 
   wrong ?</P>
@@ -674,8 +762,8 @@ in your PATH (on Unix LD_LIBRARY_PATH).
   FAILED! The EssenceAccess test is looking for the file Laser.wav in the current 
   directory. Either run the module tests from the AAFWinSDK/Test/com/ComModTestAAF 
   directory or copy AAFWinSDK/Test/com/ComModTestAAF/Laser.wav to your current 
-  directory. 
-</p><P> I've copied Laser.wav to my current directory and the test still fails. What's 
+  directory. </p>
+<P> I've copied Laser.wav to my current directory and the test still fails. What's 
   going on ?</P>
 Make sure you're not using a Macintosh version of Laser.wav on another platform. 
 macintosh binary files are encoded for CVS. 
@@ -753,7 +841,7 @@ plugins. The example extension includes "personnel" meta-data, AAFPersonnelExten
 is the example extension plugin. 
 <HR>
 <P> Why doesn't the OMF to AAF converter build on Linux ? </p>
-<P>A version of the OMF library needs to be build for Linux. </p>
+A version of the OMF library needs to be build for Linux. 
 <HR>
 <P> Why does it say "This project has no CVS history." for AAF. I thought that 
   you checked in all of the RC1 files with their revision history ?</P>
@@ -777,17 +865,19 @@ site.
 <P> How did you import the binary files for the Mac files to CVS with resource 
   forks ?</P>
 <p>How are they encoded ?</p>
-<p>I created the entire AAF CVS tree for all platforms on Linux using files exported 
-  from our ClearCase configuration management system (the export process ran on 
-  SGI Irix). ClearCase (plus Xinet and some Avid extensions) stores, in addition 
-  to the data fork, the resource fork and finder information for Macintosh files. 
-  Macintosh CVS clients all recognize some form of encoding for binary files they 
-  check in or out of CVS. Since most Macintosh CVS clients seemed to support AppleSingle, 
-  that's the way I encodeed the files (on Unix using the karc utility from Xinet) 
-  before adding them to CVS. </p>
+I created the entire AAF CVS tree for all platforms on Linux using files exported 
+from our ClearCase configuration management system (the export process ran on 
+SGI Irix). ClearCase (plus Xinet and some Avid extensions) stores, in addition 
+to the data fork, the resource fork and finder information for Macintosh files. 
+Macintosh CVS clients all recognize some form of encoding for binary files they 
+check in or out of CVS. Since most Macintosh CVS clients seemed to support AppleSingle, 
+that's the way I encodeed the files (on Unix using the karc utility from Xinet) 
+before adding them to CVS. 
 <P> Did you get MacCVS to work for SSH ?</P>
-No. I've successfully used anonymous CVS access from Windows, Linux and Macintosh 
-but I've only used ssh access from Linux. 
+<!--No. I've successfully used anonymous CVS access from Windows, Linux and Macintosh 
+but I've only used ssh access from Linux.<br>
+ -->There is a workable solution using MacCVSpro and MacSSH set for port forwarding 
+see our <a href="http://aaf.sourceforge.net/sshMacOS.html">CV S/SSH Mac</a> page. 
 <P> I'm having problems with text file line endings using MacCVS on OSX, what's 
   going on ?</P>
 OSX is a Unix-like operating system and expects Unix style line endings. MacCVS 
@@ -797,77 +887,93 @@ line program.
 <P> AAF won't build on Red Hat Linux version 7.0 (gcc 2.1.92), I get errors in 
   /usr/include/_G_config.h, what's going on ?</P>
 <p>What versions of Linux and gcc does AAF build with ?</p>
-<p>We have previously (for RC1) tried Red Hat Linux 6.0 and 6.1. I recently (post 
-  RC1) tried version 7.1 (gcc 2.96) There's a bug in in _G_config.h which does 
-  #include(a standard header) to get a definition of __mbstate_t (an implementation 
-  specific typedef). Implementation specific typedefs should be obtained from 
-  implementation specific header files not from public header files like wchar.h. 
-  Because there is ss-impl/ref/h/wchar.h the definition of __mbstate_t is not 
-  found. I have worked around this problem by changing the makefiles and the #include 
-  directive for the structured storage reference implementation - these changes 
-  are checked in (post RC1) to CVS on SourceForge.</p>
-<P> Was dodo written specifically for AAF or is it in-house an Avid tool ?</P>
-Specifically for AAF. It was originally intended to be thrown away, hence the 
-name, the "dodo" is an extinct flightless bird. 
+<a name="#glib_problems"></a>We have previously (for RC1) tried Red Hat Linux 
+6.0 and 6.1. I recently (post RC1) tried version 7.1 (gcc 2.96) There's a bug 
+in in _G_config.h which does #include(a standard header) to get a definition of 
+__mbstate_t (an implementation specific typedef).<br>
+Implementation specific typedefs should be obtained from implementation specific 
+header files not from public header files like wchar.h.<br>
+Because there is ss-impl/ref/h/wchar.h the definition of __mbstate_t is not found.<br>
+I have worked around this problem by changing the makefiles and the #include directive 
+for the structured storage reference implementation - these changes are checked 
+in (post RC1) to CVS on SourceForge. 
+<p>Was dodo written specifically for AAF or is it in-house an Avid tool ?Specifically 
+  for AAF. It was originally intended to be thrown away, hence the name, the "dodo" 
+  is an extinct flightless bird. </p>
 <P> How would you describe "dodo" ?</P>
 It' a macro processor. 
+<p>I get the error message &quot;Connection refused&quot; from Sourceforge ?</p>
+<p>usw-pr-cvs.sourceforge.net: Connection refused cvs [history aborted]:end of 
+  file from server (consult above messages if any</p>
+Check you have a CVS_RSH environment variable correctly set to SSH 
+<p>&nbsp; </p>
 <HR>
 <P> What's the deal with Unicode and wchar_t ?</P>
 <p>What are the portability issues ?</p>
-<p>The ANSI/ISO C way to support Unicode is via wchar_t (from <b>&lt;stddef.h</b>&gt;), 
-  nearly all compilers support wchar_t. More problematic are the wcs functions 
-  (from <b>&lt;wchar.h&gt;</b>) since this was a late addition to ISO some compilers 
-  may not support all the wcs function or they may have them in different header 
-  files.<br>
-  The AAF policy is that all strings/characters in memory and across the API are 
-  wchar_t (the size of which varies across platforms) and all strings/characters 
-  in AAF files are 2-byte unicode. Any transformation to from the in memory wchar_t 
-  to the 2-byte external form is done transparently to the API client. </p>
-<P> What are the UNICODE and _UNICODE preprocessor symbols for ?</P>
+The ANSI/ISO C way to support Unicode is via wchar_t (from <b>&lt;stddef.h</b>&gt;), 
+nearly all compilers support wchar_t. More problematic are the wcs functions (from 
+<b>&lt;wchar.h&gt;</b>) since this was a late addition to ISO some compilers may 
+not support all the wcs function or they may have them in different header files.<br>
+The AAF policy is that all strings/characters in memory and across the API are 
+wchar_t (the size of which varies across platforms) and all strings/characters 
+in AAF files are 2-byte unicode. Any transformation to from the in memory wchar_t 
+to the 2-byte external form is done transparently to the API client. 
+<p>What are the UNICODE and _UNICODE preprocessor symbols for ? </p>
 <p>What's the difference ?</p>
-<p>These symbols are Microsoft specific (you'll encounter them on non-Microsoft 
-  platforms because AAF uses Microsoft Structured storage on all platforms). Defining 
-  them alters the prototypes (at compile time) of functions in a couple of APIs 
-  to point to the Unicode versions of various functions. The symbol UNICODE is 
-  for the Win32 API and the symbol _UNICODE is for the the C run time API. The 
-  symbols work something like this ... Given (say in the W32) API void Foo(TCHAR* 
-  bar); with UNICODE not defined this maps to void Foo(char* bar); with UNICODE 
-  defined this maps to void FooW(wchar_t* bar); Of course this is confusing and 
-  pollutes the name space. For example try debugging ImplAAFEssenceAccess and 
-  you see that the CreateFile member ends up as CreateFileW, bah ! </p>
+These symbols are Microsoft specific (you'll encounter them on non-Microsoft platforms 
+because AAF uses Microsoft Structured storage on all platforms). Defining them 
+alters the prototypes (at compile time) of functions in a couple of APIs to point 
+to the Unicode versions of various functions. The symbol UNICODE is for the Win32 
+API and the symbol _UNICODE is for the the C run time API. The symbols work something 
+like this ... Given (say in the W32) API void Foo(TCHAR* bar); with UNICODE not 
+defined this maps to void Foo(char* bar); with UNICODE defined this maps to void 
+FooW(wchar_t* bar); Of course this is confusing and pollutes the name space. For 
+example try debugging ImplAAFEssenceAccess and you see that the CreateFile member 
+ends up as CreateFileW, bah ! 
 <hr>
 <p> Is there a way to receive a more meaningful HRESULT when attempting to erroneously 
   create an aaf file that already exists ?</p>
-<p>If I try this, the HRESULT I get from <b>AAFFileOpenNewModify</b>() is AAFRESULT_ASSERTION_VIOLATION.<br>
-  However the call to <b>AAFFileOpenNewModify</b>() resulted in a call to StgCreateDocfile() 
-  which did return a meaningful HRESULT (0x80030050, already exists) indicating 
-  that the file already exists.</p>
-<p>Unfortunately there is currently no way to receive a more meaningful HRESULT 
-  when attempting to erroneously create an .AAF file that already exists.<br>
-  We planned to provide complete error handling in the Object Manager but that 
-  work has not yet been done. This work was deferred to concentrate on work items 
-  of higher priority.</p>
-<p>Currently the HRESULT returned by StgCreateDocfile() is lost. I suggest the 
-  following <i>workaround</i> - Use the host file system [ansi - <b>fopen</b>(), 
-  W32 - <b>CreateFile</b>() etc.] to check that the file does not already exist 
-  prior to calling <b>AAFFileOpenNewModify</b>()<br>
-  If you have a GUI you probably want to report the error that the file already 
-  exists when the user _chooses_ the name of the file to create i.e. before calling 
-  <b>AAFFileOpenNewModify</b>(). Alternatively you could try calling the W32 API 
-  function GetLastError()</p>
-<p> Other workarounds involving the use of <b>AAFCreateAAFFileOnRawStorage</b>() 
-  [available in RC1] may be possible. <br>
-  Note that the goal is for AAF to support multiple external representations. 
-  In addition to structured storage binary files, support for XML (text) and SMPTE 
-  KLV (binary) encodings is possible.<br>
-  This means that calls to <b>AFFileOpenNewModify</b>() don't always result in 
-  a call to <b>StgCreateDocfile</b>(). For each external representation the function 
-  called by the Object Manager to open/create the file is different and may not 
-  even return an HRESULT [e.g. fopen()]<br>
-  Any error handling scheme that is eventually implemented in the Object Manager 
-  needs to take the support for multiple external representations into account 
-  while still preserving any HRESULT that may be available.</p>
-<p>&nbsp;</p>
+If I try this, the HRESULT I get from <b>AAFFileOpenNewModify</b>() is AAFRESULT_ASSERTION_VIOLATION.<br>
+However the call to <b>AAFFileOpenNewModify</b>() resulted in a call to StgCreateDocfile() 
+which did return a meaningful HRESULT (0x80030050, already exists) indicating 
+that the file already exists.Unfortunately there is currently no way to receive 
+a more meaningful HRESULT when attempting to erroneously create an .AAF file that 
+already exists.<br>
+We planned to provide complete error handling in the Object Manager but that work 
+has not yet been done. This work was deferred to concentrate on work items of 
+higher priority.Currently the HRESULT returned by StgCreateDocfile() is lost. 
+I suggest the following <i>workaround</i> - Use the host file system [ansi - <b>fopen</b>(), 
+W32 - <b>CreateFile</b>() etc.] to check that the file does not already exist 
+prior to calling <b>AAFFileOpenNewModify</b>()<br>
+If you have a GUI you probably want to report the error that the file already 
+exists when the user _chooses_ the name of the file to create i.e. before calling 
+<b>AAFFileOpenNewModify</b>(). Alternatively you could try calling the W32 API 
+function GetLastError() Other workarounds involving the use of <b>AAFCreateAAFFileOnRawStorage</b>() 
+[available in RC1] may be possible. <br>
+Note that the goal is for AAF to support multiple external representations. In 
+addition to structured storage binary files, support for XML (text) and SMPTE 
+KLV (binary) encodings is possible.<br>
+This means that calls to <b>AFFileOpenNewModify</b>() don't always result in a 
+call to <b>StgCreateDocfile</b>(). For each external representation the function 
+called by the Object Manager to open/create the file is different and may not 
+even return an HRESULT [e.g. fopen()]<br>
+Any error handling scheme that is eventually implemented in the Object Manager 
+needs to take the support for multiple external representations into account while 
+still preserving any HRESULT that may be available.
+<hr>
+<p>When I try to build the AAF reference implementation on Windows 98 everything 
+  works fine until I reach the <b>win32aafsdk.mak</b> step. Exactly one command 
+  seems to be echoed, but doesn't get executed, then everything hangs. <br>
+  After a fresh checkout out that one command is "md" to make a directory. If 
+  I make the directories by hand the command that hangs is the first "copy". If 
+  I do the first copy by hand then it hangs on the next copy command and so on. 
+  When a hang occurs I can't stop the build with the button in the tool bar. I 
+  have to kill "vcspawn" with the task manager. After doing this a couple of times 
+  the system becomes unusable and I can't shut it down cleany. What's going wrong 
+  ?</p>
+Disable all anti-virus software. There are two different win api calls for spawning, 
+and one of them gets intercepted by Norton Anitvirus (and I've also seen the same 
+report for MacAfee). This problem was confirmed with Windows 98 and Norton Anti-Virus.
 </BODY>
 </HTML>
  
