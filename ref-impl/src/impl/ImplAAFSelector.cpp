@@ -158,6 +158,14 @@ AAFRESULT STDMETHODCALLTYPE
 	return hr;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFSelector::RemoveAlternateSegment (ImplAAFSegment* pSegment)
+{
+	HRESULT				hr = AAFRESULT_NOT_IMPLEMENTED;
+
+	return hr;
+}
+
 //***********************************************************
 //
 // GetNumComponents()
