@@ -30,6 +30,7 @@
 #define OMSTRONGREFERENCESETITER_H
 
 #include "OMSetIterator.h"
+#include "OMReferenceContainerIter.h"
 
 template <typename ReferencedObject>
 class OMStrongReferenceSetProperty;
@@ -37,7 +38,8 @@ class OMStrongReferenceSetProperty;
 // @class Iterators over <c OMStrongReferenceSetProperty>s.
 //   @tcarg class | ReferencedObject | The type of the contained objects.
 template <typename ReferencedObject>
-class OMStrongReferenceSetIterator {
+class OMStrongReferenceSetIterator :
+                        public OMReferenceContainerIterator<ReferencedObject> {
 public:
   // @access Public members.
 

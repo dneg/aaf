@@ -30,6 +30,7 @@
 #define OMSTRONGREFERENCEVECTORITER_H
 
 #include "OMVectorIterator.h"
+#include "OMReferenceContainerIter.h"
 
 template <typename ReferencedObject>
 class OMStrongReferenceVectorProperty;
@@ -37,7 +38,8 @@ class OMStrongReferenceVectorProperty;
 // @class Iterators over <c OMStrongReferenceVectorProperty>s.
 //   @tcarg class | ReferencedObject | The type of the contained objects.
 template <typename ReferencedObject>
-class OMStrongReferenceVectorIterator {
+class OMStrongReferenceVectorIterator :
+                        public OMReferenceContainerIterator<ReferencedObject> {
 public:
   // @access Public members.
 
