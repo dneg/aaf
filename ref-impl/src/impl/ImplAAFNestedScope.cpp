@@ -171,15 +171,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFNestedScope::RemoveSegmentAt (
       aafUInt32 index)
 {
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountSegments (&count);
-  if (AAFRESULT_FAILED (hr)) return hr;
-
-  if (index >= count)
-	return AAFRESULT_BADINDEX;
-
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountSegments (&count);
+	if (AAFRESULT_FAILED (hr)) return hr;
+	
+	if (index >= count)
+		return AAFRESULT_BADINDEX;
+	
+	_slots.removeAt(index);
+	return AAFRESULT_SUCCESS;
 }
 
 

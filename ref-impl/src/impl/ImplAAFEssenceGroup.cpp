@@ -321,7 +321,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (index > count)
 	return AAFRESULT_BADINDEX;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_choices.removeAt(index);
+	return AAFRESULT_SUCCESS;
 }
 
 
