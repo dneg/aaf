@@ -113,51 +113,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(void) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  OMPropertyTag tag = targetTag();
-
-  // create a vector index
-  //
-  size_t count = _vector.count();
-  OMUniqueObjectIdentification* index = 0;
-  if (count > 0) {
-    index = new OMUniqueObjectIdentification[count];
-    ASSERT("Valid heap pointer", index != 0);
-  }
-  size_t position = 0;
-
-  // Iterate over the vector saving each element. The index entries
-  // are written in order of their unique keys.
-  //
-  VectorIterator iterator(_vector, OMBefore);
-  while (++iterator) {
-
-    VectorElement& element = iterator.value();
-
-    // enter into the index
-    //
-    index[position] = element.identification();
-
-    // save the object
-    //
-    element.save();
-
-    position = position + 1;
-
-  }
-
-  // save the vector index
-  //
-  store()->save(storedName(),
-                index,
-                count,
-                tag,
-                _keyPropertyId);
-  delete [] index;
-
-  // make an entry in the property index
-  //
-  saveName();
-
+  store()->save(*this);
 }
 
   // @mfunc Close this <c OMWeakReferenceVectorProperty>.
@@ -203,39 +159,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::restore");
 
-  // get the name of the vector index stream
-  //
-  restoreName(externalSize);
-
-  // restore the index
-  //
-  OMUniqueObjectIdentification* vectorIndex = 0;
-  size_t entries;
-  OMPropertyTag tag;
-  OMPropertyId keyPropertyId;
-  store()->restore(storedName(),
-                   vectorIndex,
-                   entries,
-                   tag,
-                   keyPropertyId);
-
-  ASSERT("Valid vector index", IMPLIES(entries != 0, vectorIndex != 0));
-  ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
-  ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
-  _targetTag = tag;
-
-  // Iterate over the index restoring the elements of the vector.
-  //
-  if (entries > 0) {
-    grow(entries); // Set the vector size
-    for (size_t i = 0; i < entries; i++) {
-      OMUniqueObjectIdentification key = vectorIndex[i];
-      VectorElement newElement(this, key, _targetTag);
-      newElement.restore();
-      _vector.setAt(newElement, i);
-    }
-  }
-  delete [] vectorIndex;
+  store()->restore(*this, externalSize);
   setPresent();
 }
 
