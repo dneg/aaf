@@ -25,6 +25,7 @@
 #endif
 
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 
@@ -177,19 +178,4 @@ AAFRESULT
 	return AAFRESULT_SUCCESS;
 }
 
-extern "C" const aafClassID_t CLSID_AAFEssenceDescriptor;
-
-OMDEFINE_STORABLE(ImplAAFEssenceDescriptor, CLSID_AAFEssenceDescriptor);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFEssenceDescriptor::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFEssenceDescriptor, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
+OMDEFINE_STORABLE(ImplAAFEssenceDescriptor, AUID_AAFEssenceDescriptor);

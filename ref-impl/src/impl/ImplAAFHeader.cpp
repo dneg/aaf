@@ -45,6 +45,7 @@
 
 #include "ImplAAFFile.h"
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -666,19 +667,4 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary()
 #endif
 }
 
-extern "C" const aafClassID_t CLSID_AAFHeader;
-
-OMDEFINE_STORABLE(ImplAAFHeader, CLSID_AAFHeader);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFHeader::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFHeader, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
+OMDEFINE_STORABLE(ImplAAFHeader, AUID_AAFHeader);
