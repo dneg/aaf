@@ -31,8 +31,6 @@
 
 #include "OMRefProperty.h"
 
-class OMStrongObjectReference;
-
   // @class Persistent strong reference (contained object)
   //        properties supported by the Object Manager.
   //   @base public | <c OMReferenceProperty>
@@ -47,9 +45,6 @@ public:
 
     // @cmember Destructor.
   ~OMStrongReference(void);
-
-  virtual OMStrongObjectReference& reference(void) const = 0;
-
 
 };
 
