@@ -31,6 +31,7 @@
 
 #include "OMSet.h"
 #include "OMContainerElement.h"
+#include "OMContainerProperty.h"
 
 template <typename ReferencedObject>
 class OMStrongReferenceSetIterator;
@@ -44,7 +45,8 @@ class OMStrongReferenceSetIterator;
   //          <c OMStorable> and of <c OMUnique>.
   //   @base public | <c OMContainerProperty>
 template <typename ReferencedObject>
-class OMStrongReferenceSetProperty : public OMContainerProperty {
+class OMStrongReferenceSetProperty :
+                                 public OMContainerProperty<ReferencedObject> {
 public:
   // @access Public members.
 

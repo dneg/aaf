@@ -37,7 +37,9 @@ template <typename ReferencedObject>
 OMStrongReferenceSetProperty<ReferencedObject>::
                     OMStrongReferenceSetProperty(const OMPropertyId propertyId,
                                                  const char* name)
-: OMContainerProperty(propertyId, SF_STRONG_OBJECT_REFERENCE_SET, name)
+: OMContainerProperty<ReferencedObject>(propertyId,
+                                        SF_STRONG_OBJECT_REFERENCE_SET,
+                                        name)
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::"
                                                "OMStrongReferenceSetProperty");

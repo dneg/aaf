@@ -31,6 +31,7 @@
 
 #include "OMVector.h"
 #include "OMContainerElement.h"
+#include "OMContainerProperty.h"
 
 template <typename ReferencedObject>
 class OMStrongReferenceVectorIterator;
@@ -44,7 +45,8 @@ class OMStrongReferenceVectorIterator;
   //          <c OMStorable>.
   //   @base public | <c OMContainerProperty>
 template <typename ReferencedObject>
-class OMStrongReferenceVectorProperty : public OMContainerProperty {
+class OMStrongReferenceVectorProperty :
+                                 public OMContainerProperty<ReferencedObject> {
 public:
   // @access Public members.
 
