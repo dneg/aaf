@@ -1525,7 +1525,7 @@ void ImplAAFFile::registerFactories(void)
 
 	  OMFile::registerFactory(AAFSSSEncoding,
                           new OMSSSStoredObjectFactory(AAFSSSEncoding,
-													 Signature_SSBinary,
+ 						       Signature_SSBinary,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
 
@@ -1560,27 +1560,34 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF Microsoft SS"));
 
 #elif defined( OS_IRIX )
-// DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
 
-  OMFile::registerFactory(ENCODING(DEFAULTFileKind),
-                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
-                                                       Signature_SSBinary,
-                                                       L"AAF-M",
-                                                       L"AAF Microsoft SS"));
-
-#elif defined( OS_LINUX )
-
-// DEFAULT for this build is MSS 512.
-//NOTE: change default to schemasoft
   OMFile::registerFactory(ENCODING(DEFAULTFileKind),
                           new OMSSSStoredObjectFactory(AAFSSSEncoding,
-													 Signature_SSBinary,
+  						       Signature_SSBinary,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
 
   OMFile::registerFactory(AAFMSSEncoding,
                           new OMMSSStoredObjectFactory(AAFMSSEncoding,
-													 Signature_SSBinary,
+						       Signature_SSBinary,
+                                                       L"AAF-M",
+                                                       L"AAF Microsoft SS"));
+  OMFile::registerFactory(AAFS4KEncoding,
+                          new OMSSSStoredObjectFactory(AAFS4KEncoding,
+                                                       Signature_SSBin_4K,
+                                                       L"AAF-S4K",
+                                                       L"AAF Schemasoft 4K"));
+#elif defined( OS_LINUX )
+
+  OMFile::registerFactory(ENCODING(DEFAULTFileKind),
+                          new OMSSSStoredObjectFactory(AAFSSSEncoding,
+ 						       Signature_SSBinary,
+                                                       L"AAF-S",
+                                                       L"AAF Schemasoft SS"));
+
+  OMFile::registerFactory(AAFMSSEncoding,
+                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
+						       Signature_SSBinary,
                                                        L"AAF-M",
                                                        L"AAF Microsoft SS"));
 	OMFile::registerFactory(AAFS4KEncoding,
