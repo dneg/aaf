@@ -68,6 +68,9 @@ inline void checkExpression(bool expression, HRESULT r)
 	if (!expression)
 		throw r;
 }
+// {81831639-EDF4-11d3-A353-009027DFCA6A}
+static const aafUID_t DDEF_TEST = 
+{ 0x81831639, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 
 class CommentMarkerTest
@@ -256,20 +259,38 @@ void CommentMarkerTest::CreateEvent()
 	IAAFSegment *pSegment = NULL;
 	IAAFMobSlot *pMobSlot = NULL;
 	IAAFMob *pMob = NULL;
+	IAAFDataDef *pDataDef = NULL;
+	IAAFComponent *pComp = NULL;
 	
 	
 	CAAFBuiltinDefs defs (_pDictionary);
 
 	try
 	{
-		// Create an event (note: this will be replaced by a concrete event in a
+	  // not already in dictionary
+		checkResult(defs.cdDataDef()->
+					CreateInstance (IID_IAAFDataDef,
+									(IUnknown **)&pDataDef));
+	  hr = pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data");
+	  hr = _pDictionary->RegisterDataDef (pDataDef);
+
+	  // Create an event (note: this will be replaced by a concrete event in a
 		// later version after such an event is implemented.)
 		checkResult(defs.cdCommentMarker()->
 					CreateInstance(IID_IAAFCommentMarker, 
 								   (IUnknown **)&pMarker));
+		checkResult(pMarker->QueryInterface(IID_IAAFComponent, (void **)&pComp));
+		checkResult(pComp->SetDataDef(pDataDef));
+		pComp->Release();
+		pComp = NULL;
+
 		checkResult(defs.cdSourceClip()->
 					CreateInstance(IID_IAAFSourceReference, 
 								   (IUnknown **)&pClip));
+		checkResult(pClip->QueryInterface(IID_IAAFComponent, (void **)&pComp));
+		checkResult(pComp->SetDataDef(pDataDef));
+		pComp->Release();
+		pComp = NULL;
 
 		checkResult(pMarker->SetAnnotation(pClip));
 		pClip->Release();
