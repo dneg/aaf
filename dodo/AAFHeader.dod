@@ -192,7 +192,6 @@ AD_XMETHOD3(IsMediaDataPresent,
 			  aafBool *,
 			  pResult,
 			  True if the media is found,
-			  \(based on omfmIsMediaDataPresent\)
   // 
   // Succeeds if all of the following are true:
   // - the pFileMobID pointer is valid.
@@ -477,7 +476,8 @@ AD_XMETHOD1(GetRefImplVersion,
 			aafProductVersion_t *,
 			pVersion,
 			The Reference Implementation Version,
-			Return the version of this Reference Implementation.
+			Return the version of the Reference Implementation currently
+  // running on this machine\, which implements these interfaces.
   // 
   // Succeeds if all of the following are true:
   // - the pVersion pointer is valid.
