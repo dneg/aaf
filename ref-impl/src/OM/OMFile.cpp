@@ -360,35 +360,27 @@ bool OMFile::validSignature(const OMFileSignature& signature)
 }
 
   // @mfunc Is the file named <p fileName> a recognized file ?
-  //        If so, the result is true, and the signature is returned
-  //        in <p signature> and the encoding in <p encoding>.
+  //        If so, the result is true, the encoding is returned
+  //        in <p encoding>.
   //   @parm The name of the file to check.
-  //   @parm If recognized, the file signature.
   //   @parm If recognized, the file encoding.
   //   @rdesc True if the file is recognized, false otherwise.
 bool OMFile::isRecognized(const wchar_t* fileName,
-                          OMFileSignature& signature,
-                          OMFileEncoding& encoding)
+                          OMStoredObjectEncoding& encoding)
 {
   TRACE("OMFile::isRecognized");
   bool result = false;
 
-  if (OMMSSStoredObject::isRecognized(fileName, signature)) {
-    result = true;
-    encoding = MSSBinaryEncoding;
-  } else if (OMKLVStoredObject::isRecognized(fileName, signature)) {
-    result = true;
-    encoding = KLVBinaryEncoding;
-  } else if (OMXMLStoredObject::isRecognized(fileName, signature)) {
-    result = true;
-    encoding = XMLTextEncoding;
-  } else {
-    result = false;
+  OMSetIterator<OMStoredObjectEncoding,
+                OMStoredObjectFactory*> iterator(_factory, OMBefore);
+
+  while (++iterator) {
+    if (iterator.value()->isRecognized(fileName)) {
+      result = true;
+      encoding = iterator.key();
+      break;
+    }
   }
-  POSTCONDITION("Valid encoding", IMPLIES(result,
-                                          (encoding == MSSBinaryEncoding) ||
-                                          (encoding == KLVBinaryEncoding) ||
-                                          (encoding == XMLTextEncoding)));
   return result;
 }
 

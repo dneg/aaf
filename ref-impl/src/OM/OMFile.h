@@ -149,11 +149,10 @@ public:
 
 
      // @cmember Is the file named <p fileName> a recognized file ?
-     //          If so, the result is true, and the signature is returned
-     //          in <p signature> and the encoding in <p encoding>.
+     //          If so, the result is true, and the encoding is returned
+     //          in <p encoding>.
   static bool isRecognized(const wchar_t* fileName,
-                           OMFileSignature& signature,
-                           OMFileEncoding& encoding);
+                           OMStoredObjectEncoding& encoding);
 
      // @cmember Does <p rawStorage> contain a recognized file ?
      //          If so, the result is true, and the signature is returned
