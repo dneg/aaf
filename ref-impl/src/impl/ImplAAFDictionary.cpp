@@ -115,6 +115,7 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
+#include "AAFContainerDefs.h"
 #include "AAFClassDefUIDs.h"
 
 
@@ -1611,7 +1612,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 void ImplAAFDictionary::InitBuiltins()
 {
-  ImplAAFDataDef	*dataDef = NULL;
+  ImplAAFDataDef		*dataDef = NULL;
+  ImplAAFContainerDef	*containerDef = NULL;
   AAFRESULT		hr;
 
   hr = LookupDataDef (DDEF_Picture, &dataDef);
@@ -1685,6 +1687,45 @@ void ImplAAFDictionary::InitBuiltins()
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
+
+  //**********************
+  hr = LookupContainerDef (ContainerAAF, &containerDef);
+  if (AAFRESULT_FAILED (hr))
+	{
+	  // not already in dictionary
+	  hr = GetBuiltinDefs()->cdContainerDef()->
+		CreateInstance ((ImplAAFObject **)&containerDef);
+	  hr = containerDef->Initialize (ContainerAAF, L"AAF", L"AAF Container");
+	  hr = RegisterContainerDef (containerDef);
+	}
+  containerDef->ReleaseReference();
+  containerDef = NULL;
+
+  hr = LookupContainerDef (ContainerFile, &containerDef);
+  if (AAFRESULT_FAILED (hr))
+	{
+	  // not already in dictionary
+	  hr = GetBuiltinDefs()->cdContainerDef()->
+		CreateInstance ((ImplAAFObject **)&containerDef);
+	  hr = containerDef->Initialize (ContainerFile, L"External", L"External Container");
+	  hr = RegisterContainerDef (containerDef);
+	}
+  containerDef->ReleaseReference();
+  containerDef = NULL;
+
+  hr = LookupContainerDef (ContainerOMF, &containerDef);
+  if (AAFRESULT_FAILED (hr))
+	{
+	  // not already in dictionary
+
+	  hr = GetBuiltinDefs()->cdContainerDef()->
+		CreateInstance ((ImplAAFObject **)&containerDef);
+	  hr = containerDef->Initialize (ContainerOMF, L"OMF", L"OMF Container");
+	  hr = RegisterContainerDef (containerDef);
+	}
+  containerDef->ReleaseReference();
+  containerDef = NULL;
+
 
   _pBuiltinClasses;
 
