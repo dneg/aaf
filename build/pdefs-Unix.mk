@@ -38,6 +38,7 @@ CAT = cat
 MKDIR = mkdir -p
 TOUCH = touch
 CHMOD = chmod
-SH = sh
+SHELL = /bin/sh
+SH = $(SHELL)
 PERL = perl
 
