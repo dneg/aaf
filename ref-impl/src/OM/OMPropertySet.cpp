@@ -21,7 +21,7 @@ OMPropertySet::OMPropertySet(void)
 
 OMPropertySet::~OMPropertySet(void)
 {
-  delete _propertySet;
+  delete [] _propertySet;
   _propertySet = 0;
 }
 
