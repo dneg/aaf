@@ -375,6 +375,10 @@ aafErr_t TableRemove(
 				  if(entry->type == valueIsPtr)
 					{
 					  (*table->entryDispose)(entry->data);
+            // tomr 99-11-17 :  The following "delete" assumes that "pointer" was 
+            // allocated with new and not with new[] or malloc or some other allocator.
+            // Also, if the data is a C++ object the object's destrutor will not
+            // be called because entry->data is a void *.
 					  if(entry->data != NULL)
 						delete entry->data;
 					}
@@ -386,11 +390,11 @@ aafErr_t TableRemove(
 					  memcpy(tmpMem, entry->local+
 							 entry->keyLen, entry->valueLen);
 					  (*table->entryDispose)(tmpMem);
-					  delete tmpMem;
+					  delete[] tmpMem; // tomr 99-11-17 : use array delete to match new char[] allocator.
 					}
 				}
 
-			  delete entry;
+			  delete[] entry; // tomr 99-11-17 : use array delete to match new char[] allocator.
 
 			  table->numItems--;
 			  entry = NULL;
@@ -878,7 +882,7 @@ aafErr_t TableDispose(
 		DisposeList(table, AAFFalse);
 	
 		if(table->hashTable != NULL)
-			delete table->hashTable;
+			delete[] table->hashTable; // tomr 99-11-17 : use array delete to match new char[] allocator.
 
 		delete table;
 	}
@@ -988,6 +992,10 @@ static aafErr_t DisposeList(
 				  if(entry->type == valueIsPtr)
 				  {
 					(*table->entryDispose)(entry->data);
+            // tomr 99-11-17 :  The following "delete" assumes that "pointer" was 
+            // allocated with new and not with new[] or malloc or some other allocator.
+            // Also, if the data is a C++ object the object's destrutor will not
+            // be called because entry->data is a void *.
 					if(entry->data != NULL)
 					  delete entry->data;
 				  }
@@ -999,11 +1007,11 @@ static aafErr_t DisposeList(
 				      memcpy(tmpMem, entry->local+
 					     entry->keyLen, entry->valueLen);
 				      (*table->entryDispose)(tmpMem);
-				      delete tmpMem;
+				      delete[] tmpMem; // tomr 99-11-17 : use array delete to match new char[] allocator.
 				    }
 				}
 	
-				delete entry;
+				delete[] entry; // tomr 99-11-17 : use array delete to match new char[] allocator.
 				entry = entryNext;
 			}
 			
