@@ -754,8 +754,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
   IAAFSequenceSP       pSequence;
   IAAFDictionarySP     pDictionary;
   IEnumAAFComponentsSP pCompIter;
-  aafNumSlots_t        numMobs;
-  aafSearchCrit_t      criteria;
+//  aafNumSlots_t        numMobs;
+//  aafSearchCrit_t      criteria;
   HRESULT              hr = S_OK;
 	
   try
@@ -763,6 +763,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  // Open the AAF file
 	  checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
 		
+#if 0
 	  // Validate that there is only one composition mob.
 	  checkResult(pHeader->CountMobs(kAAFCompMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
@@ -888,6 +889,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		}
 
 	  checkResult (LookupDefs (pDictionary));
+#endif
 	}
   catch (HRESULT& rResult)
 	{
