@@ -679,7 +679,7 @@ AAFRESULT STDMETHODCALLTYPE
 	// ReadMultiSamples.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	// 	AAFRESULT_NOMEMORY -- couldn't allocate memory for the essence handle
 	//@comm NOTE: If a locator is followed, then essencePtr may reference ANOTHER file
 	// object, which must be closed on file close.
 	//@comm Replaces omfmMediaOpen*/
@@ -708,5 +708,5 @@ AAFRESULT STDMETHODCALLTYPE
 	//  WriteDataLines.
 	//@comm Possible Errors:
 	// 	Standard errors (see top of file).
-	// 	OM_ERR_NOMEMORY -- couldn't allocate memory for the essence handle
+	// 	AAFRESULT_NOMEMORY -- couldn't allocate memory for the essence handle
 	//@comm Replaces omfmMediaMultiOpen*/
