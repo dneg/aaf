@@ -205,7 +205,7 @@ depend :
 		echo $$targ... ; \
 		echo '' >> depend.mk ; \
 		base=`echo $$targ | sed -e 's,\.all,,'` ; \
-		echo $$targ : $$base.cpp $$base.h $base.cppt >> depend.mk ; \
+		echo $$targ : $$base.cpp $$base.h $$base.cppt >> depend.mk ; \
 		echo $$targ : $$base.comc $$base.comh $$base.comt >> depend.mk ; \
 		echo $$targ : $$base.implc $$base.implh >> depend.mk ; \
 		echo $$targ : $$base.idl $$base.exp >> depend.mk ; \
