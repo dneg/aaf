@@ -152,7 +152,7 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDictionary.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDigitalImageDescriptor.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDigitalImageDescrip.cpp"
 # End Source File
 # Begin Source File
 

@@ -209,11 +209,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFDictionaryTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFDigitalImageDescriptor.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFDigitalImageDescripTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFDigitalImageDescriptorTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFDigitalImageDescriptor.cpp"
 # End Source File
 # Begin Source File
 
