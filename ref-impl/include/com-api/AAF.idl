@@ -2,6 +2,8 @@ cpp_quote("//=------------------------------------------------------------------
 cpp_quote("//")
 cpp_quote("// This file was GENERATED for the AAF SDK")
 cpp_quote("//")
+cpp_quote("// $Id$ $Name$")
+cpp_quote("//")
 cpp_quote("// The contents of this file are subject to the AAF SDK Public")
 cpp_quote("// Source License Agreement (the \"License\"); You may not use this file")
 cpp_quote("// except in compliance with the License.  The License is available in")
@@ -158,6 +160,7 @@ interface IAAFRandomRawStorage;
 interface IAAFGetFileBits;
 interface IAAFSetFileBits;
 interface IAAFRandomFile;
+interface IAAFDataDef2;
 interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceDataEx;
@@ -2628,10 +2631,14 @@ interface IAAFControlPoint : IUnknown
 // Interface IAAFDataDef
 //
 // ************************
+//
+// IAAFDataDef is DEPRECATED,  Please use IAAFDataDef2.
+//
 
 
 //
 // Objects that implement IAAFDataDef also implement the following interfaces:
+//  - IAAFDataDef2
 //  - IAAFDefObject
 //  - IAAFObject
 
@@ -2643,7 +2650,6 @@ interface IAAFControlPoint : IUnknown
 ]
 interface IAAFDataDef : IUnknown
 {
-
   //***********************************************************
   //
   // Initialize()
@@ -2751,8 +2757,9 @@ interface IAAFDataDef : IUnknown
 
     // pointer to result
     [retval, out] aafBoolean_t *  bDoesConvertFrom);
-}
 
+
+}
 
 
 // ************************
@@ -31941,6 +31948,159 @@ interface IAAFRandomFile : IUnknown
   HRESULT SetFileBits (
     // The interface to the SetFileBits object
     [out] IAAFSetFileBits ** ppSetFileBits);
+}
+
+
+
+// ************************
+//
+// Interface IAAFDataDef2
+//
+// ************************
+
+//
+// Objects that implement IAAFDataDef2 also implement the following interfaces:
+//  - IAAFDefObject
+//  - IAAFObject
+
+[
+    object,
+    uuid(588951c1-2f10-46da-a20d-6e8e7ac6963c),
+    helpstring("IAAFDataDef2 Interface"),
+    pointer_default(unique)
+]
+interface IAAFDataDef2 : IUnknown
+{
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  // 
+  HRESULT Initialize (
+    // AUID for new DeObject
+    [in, ref] aafUID_constref  id,
+
+    // Name for new DefObject
+    [in, string] aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    [in, string] aafCharacter_constptr  pDescription);
+
+
+  //***********************************************************
+  //
+  // IsPictureKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture.
+  // 
+  HRESULT IsPictureKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsPictureKind);
+
+
+  //***********************************************************
+  //
+  // IsMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a matte.
+  // 
+  HRESULT IsMatteKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsMatteKind);
+
+
+  //***********************************************************
+  //
+  // IsPictureWithMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture with matte.
+  // 
+  HRESULT IsPictureWithMatteKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsPictureWithMatteKind);
+
+
+  //***********************************************************
+  //
+  // IsSoundKind()
+  //
+  // Sets return value to TRUE if DataDef is a sound.
+  // 
+  HRESULT IsSoundKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsSoundKind);
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertTo()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.
+  // 
+  HRESULT DoesDataDefConvertTo (
+    // data def to compare against
+    [in] IAAFDataDef * id,
+
+    // pointer to result
+    [retval, out] aafBoolean_t *  bDoesConvertTo);
+		   
+
+  //***********************************************************
+  //
+  // IsDataDefOf()
+  //
+  // Sets the value to TRUE if the DataDef of the given object
+  // matches the DataDef specified in the IN parameter with the
+  // DataDefName string.
+  // 
+  HRESULT IsDataDefOf (
+    // data def to compare against
+    [in] IAAFDataDef * pDataDef,
+
+    // pointer to result
+    [retval, out] aafBoolean_t *  bIsDataDefOf);
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertFrom()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+  // can be converted from the DataDef specified in the IN 
+  // parameter specified with the DataDefName string.
+  // 
+  HRESULT DoesDataDefConvertFrom (
+    // data def to compare against
+    [in] IAAFDataDef * pDataDef,
+
+    // pointer to result
+    [retval, out] aafBoolean_t *  bDoesConvertFrom);
+
+
+  //***********************************************************
+  //
+  // IsEdgecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is an edgecode.
+  // 
+  HRESULT IsEdgecodeKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsEdgecodeKind);
+
+  //***********************************************************
+  //
+  // IsTimecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is a timecode.
+  // 
+  HRESULT IsTimecodeKind (
+    // pointer to the return value
+    [retval,out] aafBoolean_t *  bIsTimecodeKind);
+
 }
 
 
