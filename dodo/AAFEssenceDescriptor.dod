@@ -112,34 +112,6 @@ AD_XMETHOD1(PrependLocator,
   //   - pLocator is null.)
 
 
-AD_XMETHOD1(RemoveLocator,
-			[in],
-			objIn,
-			AAFLocator,
-			pLocator,
-			Locator to remove,
-			Removes the given locator from this essence descriptor.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pLocator pointer is valid.
-  // - the given locator is found.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLocator is null.
-  //
-  // AAFRESULT_NOT_FOUND
-  //   - the given locator was not found.)
-
-
 AD_XMETHOD1(EnumAAFAllLocators,
 			[out],
 			objOut,
