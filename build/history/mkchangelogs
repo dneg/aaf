@@ -68,6 +68,10 @@ do
   fi
 done < $tagstufffile
 
+tagstuff[i]="head"
+tagstuff[i+1]=""
+tagstuff[i+2]=""
+
 let n=${#tagstuff[@]}/3
 
 let i=0
