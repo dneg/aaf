@@ -202,6 +202,30 @@ IAAFSegmentSP AxPulldown::GetInputSegment()
 
 	return spIaafSegment;
 }
+aafPulldownKind_t AxPulldown::GetPulldownKind()
+{
+	aafPulldownKind_t pdkind;
+
+	CHECK_HRESULT(_spIaafPulldown->GetPulldownKind(&pdkind));
+
+	return pdkind;
+}
+aafPulldownDir_t AxPulldown::GetPulldownDirection()
+{
+	aafPulldownDir_t pddir;
+
+	CHECK_HRESULT(_spIaafPulldown->GetPulldownDirection(&pddir));
+
+	return pddir;
+}
+aafPhaseFrame_t AxPulldown::GetPhaseFrame()
+{
+	aafPhaseFrame_t pdphase;
+
+	CHECK_HRESULT(_spIaafPulldown->GetPhaseFrame(&pdphase));
+
+	return pdphase;
+}
 
 //=---------------------------------------------------------------------=
 

@@ -164,6 +164,9 @@ public:
 	virtual ~AxPulldown();
 
 	IAAFSegmentSP GetInputSegment();
+	aafPulldownKind_t GetPulldownKind();
+	aafPulldownDir_t GetPulldownDirection();
+	aafPhaseFrame_t GetPhaseFrame();
 	
 	operator IAAFPulldownSP () 
 	{ return _spIaafPulldown; }
