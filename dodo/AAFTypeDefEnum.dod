@@ -368,5 +368,23 @@ AD_XMETHOD2(SetIntegerValue,
   //   - pPropValIn's type doesn't match GetElementType\(\))
 
 
+AD_XMETHOD1(RegisterSize,
+			[in],
+			objPass,
+			aafUInt32,
+			enumSize,
+			size of this enum,
+
+     Allows client to register to the reference implementation a
+  // runtime C enum to represent objects of this TypeDef.  The size of
+  // the enum to be represented should be passed as the enumSize
+  // argument.  This allows the reference implementation to write
+  // property values into compile-time-defined C enums intelligible
+  // by the local machine and compiler.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT)
 AD_OVERRIDE(.method-GetTypeCategory)
 AD_XCLASS_END(Concrete, StoredObject)
