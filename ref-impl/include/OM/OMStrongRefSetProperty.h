@@ -174,6 +174,10 @@ private:
 
   friend class OMStrongReferenceSetIterator<ReferencedObject>;
 
+    // @cmember The id of the property whose value is the unique
+    //          identifier of objects in this set.
+  OMPropertyId _keyPropertyId;
+
 };
 
 #include "OMStrongRefSetPropertyT.h"

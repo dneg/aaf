@@ -42,7 +42,8 @@ OMStrongReferenceSetProperty<ReferencedObject>::
                                                  const char* name)
 : OMContainerProperty<ReferencedObject>(propertyId,
                                         SF_STRONG_OBJECT_REFERENCE_SET,
-                                        name)
+                                        name),
+  _keyPropertyId(0 /* tjb */)
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::"
                                                "OMStrongReferenceSetProperty");
@@ -83,7 +84,10 @@ void OMStrongReferenceSetProperty<ReferencedObject>::save(
   // create a set index
   //
   size_t count = _set.count();
-  OMStoredSetIndex* index = new OMStoredSetIndex(count);
+  OMUInt32 keySize = sizeof(OMUniqueObjectIdentification);
+  OMStoredSetIndex* index = new OMStoredSetIndex(count,
+                                                 _keyPropertyId,
+                                                 keySize);
   ASSERT("Valid heap pointer", index != 0);
   index->setHighWaterMark(localKey());
   size_t position = 0;
@@ -98,10 +102,11 @@ void OMStrongReferenceSetProperty<ReferencedObject>::save(
 
     // enter into the index
     //
+    OMUniqueObjectIdentification key = element.identification();
     index->insert(position,
                   element.localKey(),
                   element.referenceCount(),
-                  element.identification());
+                  &key);
 
     // save the object
     //
@@ -190,6 +195,10 @@ void OMStrongReferenceSetProperty<ReferencedObject>::restore(
   OMStoredSetIndex* setIndex = 0;
   store->restore(setIndex, name());
   ASSERT("Valid set index", setIndex->isValid());
+  ASSERT("Consistent key sizes",
+                  setIndex->keySize() == sizeof(OMUniqueObjectIdentification));
+  ASSERT("Consistent key property ids",
+                                  setIndex->keyPropertyId() == _keyPropertyId);
   setLocalKey(setIndex->highWaterMark());
 
   // Iterate over the index restoring the elements of the set.
@@ -206,7 +215,7 @@ void OMStrongReferenceSetProperty<ReferencedObject>::restore(
   OMUInt32 count;
   OMUniqueObjectIdentification key;
   for (size_t i = 0; i < entries; i++) {
-    setIndex->iterate(context, localKey, count, key);
+    setIndex->iterate(context, localKey, count, &key);
     char* name = elementName(localKey);
     SetElement newElement(this, name, localKey, count, key);
     newElement.restore();
