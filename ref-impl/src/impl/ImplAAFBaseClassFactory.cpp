@@ -209,3 +209,13 @@ void ImplAAFBaseClassFactory::RegisterPredefinedClasses(OMFile* file)
     registerClass(file, *gAAFObjectTable[i].pAUID);
   }
 }
+
+
+
+ImplAAFObject* ImplAAFBaseClassFactory::createObject(const aafUID_t* auid) const
+{
+  // Call the current private static function to create the built-in
+  // base class.
+  const OMClassId& classId  = reinterpret_cast<const OMClassId&>(auid);
+  return (ImplAAFObject *)::createObject(classId);
+}
