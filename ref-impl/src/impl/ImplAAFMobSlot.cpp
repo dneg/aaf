@@ -39,8 +39,8 @@ ImplAAFMobSlot::ImplAAFMobSlot ()
 : _name(			PID_MOBSLOT_NAME,			"Name"),
   _origin(			PID_MOBSLOT_ORIGIN,			"Origin"),
   _trackID(			PID_MOBSLOT_TRACKID,		"TrackID"),
-  _physicalTrackNum(PID_MOBSLOT_PHYSICAL_TRACK,	"PhysicalTrack"),
-  _segment(			PID_MOBSLOT_SEGMENT,		"Segment")
+  _physicalTrackNum(PID_MOBSLOT_PHYSICAL_TRACK,	"PhysicalTrack") /*,
+  _segment(			PID_MOBSLOT_SEGMENT,		"Segment") */
 {}
 
 
