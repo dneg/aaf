@@ -32,7 +32,6 @@
 #define OMWEAKREFVECTORPROPERTYT_H
 
 #include "OMAssertions.h"
-#include "OMStoredVectorIndex.h"
 #include "OMWeakReferenceVectorIter.h"
 #include "OMPropertyTable.h"
 #include "OMUtilities.h"
