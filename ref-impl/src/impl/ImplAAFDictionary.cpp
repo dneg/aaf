@@ -338,8 +338,8 @@ AAFRESULT
 
 AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggableDef **result)
 {
-	ImplEnumAAFPluggableDefs	*pluggableEnum;
-	ImplAAFPluggableDef			*pluggable;
+	ImplEnumAAFPluggableDefs	*pluggableEnum = NULL;
+	ImplAAFPluggableDef			*pluggable = NULL;
 	aafBool						defFound;
 	AAFRESULT					status;
 	aafUID_t					testAUID;
@@ -357,13 +357,29 @@ AAFRESULT ImplAAFDictionary::LookupPluggableDef(aafUID_t *defID, ImplAAFPluggabl
 			{
 				defFound = AAFTrue;
 				*result = pluggable;
+				pluggable->AcquireReference();
 			}
+			pluggable->ReleaseReference();
+			pluggable = NULL;
 			status = pluggableEnum->NextOne (&pluggable);
 		}
+		if(pluggable != NULL)
+		{
+			pluggable->ReleaseReference();
+			pluggable = NULL;
+		}
+		pluggableEnum->ReleaseReference();
+		pluggableEnum = NULL;
 		if(!defFound)
 			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
 	}
 	XEXCEPT
+	{
+		if(pluggableEnum != NULL)
+			pluggableEnum->ReleaseReference();
+		if(pluggable != NULL)
+			pluggable->ReleaseReference();
+	}
 	XEND
 	
 	return(AAFRESULT_SUCCESS);
