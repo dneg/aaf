@@ -17,6 +17,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name axExample
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name axMasterMobEx
+    End Project Dependency
 }}}
 
 ###############################################################################
