@@ -48,6 +48,7 @@ class OMVectorIterator;
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
   //   @base public | <c OMReferenceVectorProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMWeakReferenceVectorProperty : public OMReferenceVectorProperty {
 public:

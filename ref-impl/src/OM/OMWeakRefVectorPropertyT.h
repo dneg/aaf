@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMWeakReferenceVectorProperty
 #ifndef OMWEAKREFVECTORPROPERTYT_H
 #define OMWEAKREFVECTORPROPERTYT_H
 

@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMStorable
+
 #include "OMStorable.h"
 #include "OMStoredObject.h"
 #include "OMFile.h"

@@ -36,6 +36,7 @@ class OMProperty;
   // @class Persistent references to persistent objects.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMObjectReference {
 public:
@@ -107,6 +108,7 @@ protected:
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMObjectReference>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMStrongObjectReference : public OMObjectReference<ReferencedObject> {
 public:
@@ -193,6 +195,7 @@ class OMStrongReferenceSetProperty;
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMObjectReference>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMWeakObjectReference : public OMObjectReference<ReferencedObject> {
 public:

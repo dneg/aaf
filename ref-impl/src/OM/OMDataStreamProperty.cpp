@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMDataStreamProperty
+
 #include "OMDataStreamProperty.h"
 
 #include "OMAssertions.h"

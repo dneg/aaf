@@ -48,6 +48,7 @@ class OMSetIterator;
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable> and of <c OMUnique>.
   //   @base public | <c OMReferenceSetProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMWeakReferenceSetProperty : public OMReferenceSetProperty {
 public:

@@ -42,8 +42,9 @@ class OMDictionary;
 class OMRootStorable;
 class OMRawStorage;
 
-// @class Files supported by the Object Manager.
-//
+  // @class Files supported by the Object Manager.
+  //   @base public | <c OMStorable>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMFile : public OMStorable {
 public:
 
