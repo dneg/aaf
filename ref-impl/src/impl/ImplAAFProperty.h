@@ -39,15 +39,16 @@ class ImplAAFPropertyValue;
 class OMProperty;
 
 
-
-
+#include "OMDataTypes.h"
+#include "OMObject.h"
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
 #endif
 
 
-class ImplAAFProperty : public ImplAAFRoot
+class ImplAAFProperty : public ImplAAFRoot,
+                        public OMObject
 {
 public:
   //
@@ -88,11 +89,15 @@ public:
 
 
   AAFRESULT pvtSetValue (ImplAAFPropertyValue * pValue);
+    
+  // non-public unique identification
+  const OMPropertyId& identification(void) const;
 
 
 private:
   ImplAAFPropertyDef *   _pPropDef;
   ImplAAFPropertyValue * _pPropVal;
+  OMPropertyId  _pid; // key returned by identification().
 };
 
 //

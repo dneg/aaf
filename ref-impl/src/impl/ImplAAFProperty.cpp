@@ -56,7 +56,8 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFProperty::ImplAAFProperty ()
   : _pPropDef (0),
-	_pPropVal (0)
+	_pPropVal (0),
+	_pid(0)
 {}
 
 
@@ -84,9 +85,13 @@ AAFRESULT ImplAAFProperty::Initialize
   if (!pOmProp)
 	return AAFRESULT_NULL_PARAM;
 
+  assert (!isInitialized());
+  if (isInitialized())
+    return AAFRESULT_ALREADY_INITIALIZED;
+
   try
 	{
-
+    _pid = pPropDef->OmPid(); // save local key.
 	  _pPropDef = pPropDef;
 	  // BobT: don't reference count the property def!
 	  // _pPropDef->AcquireReference ();
@@ -94,37 +99,14 @@ AAFRESULT ImplAAFProperty::Initialize
 	  hr = pPropDef->GetTypeDef (&ptd);
 	  if (AAFRESULT_FAILED(hr)) throw hr;
 	  assert (ptd);
-
-#if defined(ALWAYS_USE_PROPVALDATA)
-	  pvd = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
-	  if (! pvd) throw AAFRESULT_NOMEMORY;
-
-	  hr = pvd->Initialize (ptd);
-	  if (AAFRESULT_FAILED(hr)) throw hr;
-
-	  // set the storage in the prop value
-	  size_t bitsSize;
-	  assert (pOmProp);
-	  bitsSize = pOmProp->bitsSize ();
-	  aafMemPtr_t pBits = NULL;
-	  // Bobt hack! This should be removed once we have proper
-	  // integration with OM property def support.
-	  if (! pOmProp->isOptional() || pOmProp->isPresent ())
-		  {
-			hr = pvd->AllocateBits (bitsSize, &pBits);
-			if (! AAFRESULT_SUCCEEDED (hr)) throw hr;
-			if (bitsSize)
-			  {
-				assert (pBits);
-				pOmProp->getBits (pBits, bitsSize);
-			  }
-		  }
-
-	  _pPropVal = pvd;
-#else // #if defined(ALWAYS_USE_PROPVALDATA)
 	  // Let the type definition create the correct subclass of property value.
 	  hr = ptd->CreatePropertyValue(pOmProp, &_pPropVal);
-#endif // #else // #if defined(ALWAYS_USE_PROPVALDATA)
+
+    if (AAFRESULT_SUCCEEDED(hr))
+    {
+      // This instance is now fully initialized.
+      setInitialized();
+    }
 	}
   catch (HRESULT &rCaught)
 	{
@@ -185,4 +167,12 @@ AAFRESULT
   _pPropVal = pValue;
   _pPropVal->AcquireReference ();
   return AAFRESULT_SUCCESS;
+}
+
+
+    
+// non-public unique identification
+const OMPropertyId& ImplAAFProperty::identification(void) const
+{
+  return _pid;
 }
