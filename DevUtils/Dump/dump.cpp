@@ -77,7 +77,11 @@
 #include <string.h>
 
 #if defined(_MAC) || defined(macintosh)
+#if defined(USE_CONSOLE)
+#include <console.h>
+#else
 #include "DataInput.h"
+#endif
 
 #include "wintypes.h"
 #include "compobj.h"
@@ -3468,10 +3472,12 @@ int main(int argumentCount, char* argumentVector[])
 {
   checkSizes();
 
-  #if defined(_MAC) || defined(macintosh)
+#if defined(_MAC) || defined(macintosh)
+#if !defined(USE_CONSOLE)
   char dataFile[] = "dump.inp";
   getInputData(&argumentCount, argumentVector, dataFile);
-  #endif
+#endif
+#endif
 
   // Initialize com library for this process.
   CComInitialize comInit;
@@ -3711,9 +3717,11 @@ int main(int argumentCount, char* argumentVector[])
 
   }
 
-  #ifdef _MAC
+#if defined(_MAC) || defined(macintosh)
+#if !defined(USE_CONSOLE)
   cleanUpInputData(argumentCount, argumentVector);
-  #endif
+#endif
+#endif
 
   return (EXIT_SUCCESS);
 }
