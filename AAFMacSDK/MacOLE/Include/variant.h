@@ -316,7 +316,7 @@ struct FARSTRUCT tagVARIANT {
         int FAR *             pintVal;        /* VT_BYREF|VT_INT      */
         unsigned int FAR *    puintVal;       /* VT_BYREF|VT_UINT     */
 
-#if !__STDC__ && (_MSC_VER <= 1000)
+#if !__STDC__ && defined(_MSC_VER) && (_MSC_VER <= 1000)
         VARIANT_BOOL          bool;           /* (obsolete)           */
         VARIANT_BOOL FAR *    pbool;          /* (obsolete)           */
 #endif
