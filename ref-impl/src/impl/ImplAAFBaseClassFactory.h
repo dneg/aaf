@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include "AAFTypes.h"
 #include "OMFile.h"
-#include "ImplAAFHeader.h"
+#include "ImplAAFContentStorage.h"
 
 //#include "CMAPIErr.h"	/* !!! */
 //#include "CMAPIIDS.h"	/* !!! */
