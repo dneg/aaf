@@ -38,11 +38,12 @@ enum OMIteratorPosition {
   OMAfter   // @emem Position the iterator after the last element
 };
 
-// @class Abstract base class for iterators over Object Manager containers.
-//        The elements of an Object Manager container have a well defined
-//        order. An Object Manager container may be traversed in either the
-//        forward or reverse direction.
-//   @tcarg class | Element | The type of the contained elements.
+  // @class Abstract base class for iterators over Object Manager containers.
+  //        The elements of an Object Manager container have a well defined
+  //        order. An Object Manager container may be traversed in either the
+  //        forward or reverse direction.
+  //   @tcarg class | Element | The type of the contained elements.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename Element>
 class OMContainerIterator {
 public:

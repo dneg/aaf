@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMWideStringProperty
+
 #include "OMWideStringProperty.h"
 
 #include "OMAssertions.h"

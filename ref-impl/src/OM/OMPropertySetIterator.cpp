@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMPropertySetIterator
 
 #include "OMPropertySetIterator.h"
 #include "OMPropertySet.h"

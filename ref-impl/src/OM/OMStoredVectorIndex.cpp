@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMStoredVectorIndex
+
 #include "OMStoredVectorIndex.h"
 #include "OMAssertions.h"
 

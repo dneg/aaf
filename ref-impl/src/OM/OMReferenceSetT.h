@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMReferenceSet
 #ifndef OMREFERENCESETT_H
 #define OMREFERENCESETT_H
 

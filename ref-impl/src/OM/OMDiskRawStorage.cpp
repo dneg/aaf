@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMDiskRawStorage
+
 #include "OMRawStorage.h"
 #include "OMAssertions.h"
 #include "OMUtilities.h"

@@ -34,6 +34,7 @@
   // @class Abstract base class for collections of elements.
   //   @tcarg class | Element | The type of an <c OMContainer> element.
   //          This type must support = and ==.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename Element>
 class OMContainer {
 public:

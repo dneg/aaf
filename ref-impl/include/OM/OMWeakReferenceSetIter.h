@@ -36,8 +36,10 @@
 template <typename ReferencedObject>
 class OMWeakReferenceSetProperty;
 
-// @class Iterators over <c OMWeakReferenceSetProperty>s.
-//   @tcarg class | ReferencedObject | The type of the contained objects.
+  // @class Iterators over <c OMWeakReferenceSetProperty>s.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @base public | <c OMReferenceContainerIterator>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMWeakReferenceSetIterator : public OMReferenceContainerIterator {
 public:

@@ -38,11 +38,12 @@
 #include "OMContainerIterator.h"
 #include "OMRedBlackTree.h"
 
-// @class Iterators over <c OMRedBlackTree>s.
-//   @tcarg class | Key | The type of the unique key that identifies
-//          the contained values.
-//   @tcarg class | Value | The type of the contained values.
-//   @base public | <c OMContainerIterator>
+  // @class Iterators over <c OMRedBlackTree>s.
+  //   @tcarg class | Key | The type of the unique key that identifies
+  //          the contained values.
+  //   @tcarg class | Value | The type of the contained values.
+  //   @base public | <c OMContainerIterator>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename Key, typename Value>
 class OMRedBlackTreeIterator : public OMContainerIterator<Value> {
 public:

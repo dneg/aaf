@@ -37,6 +37,7 @@
   //        Object Manager.
   //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
   //   @base | public <c OMDataStreamProperty>.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename Element>
 class OMStreamProperty : public OMDataStreamProperty {
 public:

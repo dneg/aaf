@@ -37,6 +37,7 @@ class OMReferenceContainerIterator;
   // @class Abstract base class for persistent object reference container
   //        properties supported by the Object Manager.
   //   @base public | <c OMProperty>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMContainerProperty : public OMProperty {
 public:
   // @access Public members.

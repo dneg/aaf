@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMPropertyTable
+
 #include "OMPropertyTable.h"
 
 #include "OMAssertions.h"

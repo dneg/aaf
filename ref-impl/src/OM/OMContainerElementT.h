@@ -28,6 +28,7 @@
 // @doc OMINTERNAL
 
 // class OMVectorElement<ReferencedObject>
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMVectorElement
 
   // @mfunc Constructor.
   //   @tcarg class | ReferencedObject | The type of the referenced object.
@@ -150,6 +151,7 @@ ReferencedObject* OMVectorElement<ReferencedObject>::pointer(void) const
 }
 
 // class OMSetElement<UniqueIdentification, ReferencedObject>
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMSetElement
 
   // @mfunc Constructor.
   //   @tcarg class | ReferencedObject | The type of the referenced object.
@@ -247,6 +249,7 @@ OMSetElement<UniqueIdentification, ReferencedObject>::identification(
 }
 
 // class OMContainerElement<ObjectReference, ReferencedObject>
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMContainerElement
 
   // @mfunc Constructor.
   //   @tcarg class | ObjectReference | The type of the contained object

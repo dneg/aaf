@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMVariableSizeProperty
 #ifndef OMVARIABLESIZEPROPERTYT_H
 #define OMVARIABLESIZEPROPERTYT_H
 

@@ -35,11 +35,12 @@
 template <typename Key, typename Element>
 class OMSet;
 
-// @class Iterators over <c OMSet>s.
-//   @tcarg class | Key | The type of the unique key that identifies
-//          the contained elements.
-//   @tcarg class | Element | The type of the contained elements.
-//   @base public | <c OMContainerIterator>
+  // @class Iterators over <c OMSet>s.
+  //   @tcarg class | Key | The type of the unique key that identifies
+  //          the contained elements.
+  //   @tcarg class | Element | The type of the contained elements.
+  //   @base public | <c OMContainerIterator>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename Key, typename Element>
 class OMSetIterator : public OMContainerIterator<Element> {
 public:

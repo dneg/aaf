@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMWeakReferenceSetIterator
 #include "OMAssertions.h"
 
   // @mfunc Create an <c OMWeakReferenceSetIterator> over the given

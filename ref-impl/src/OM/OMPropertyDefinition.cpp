@@ -26,6 +26,9 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. |
+//         OMBuiltinPropertyDefinition
+
 #include "OMPropertyDefinition.h"
 #include "OMDictionary.h"
 

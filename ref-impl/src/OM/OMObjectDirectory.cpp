@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMObjectDirectory
+
 #include "OMObjectDirectory.h"
 #include "OMAssertions.h"
 #include "OMUtilities.h"

@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMRedBlackTreeIterator
 #include "OMAssertions.h"
 
   // @mfunc Create an <c OMRedBlackTreeIterator> over the given
