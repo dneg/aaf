@@ -119,6 +119,22 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceGroup::GetStillFrame (
+      ImplAAFSourceClip **stillFrame)
+{
+	if (stillFrame == NULL)
+		return AAFRESULT_NULL_PARAM;
+	
+	*stillFrame = _stillFrame;
+		
+	if (*stillFrame)
+		(*stillFrame)->AcquireReference();
+	
+	return AAFRESULT_SUCCESS;
+}
+
     //@comm Essence group choices should be added with the AddChoice() function.
     
 /****/
@@ -177,7 +193,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceGroup::GetNumRepresentations (
+    ImplAAFEssenceGroup::GetNumChoices (
       aafUInt32  *result)
 {
 	size_t	numClips;
@@ -190,7 +206,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceGroup::GetIndexedRepresentation (
+    ImplAAFEssenceGroup::GetIndexedChoice (
       aafUInt32  index,
       ImplAAFSourceClip  **result)
 {
