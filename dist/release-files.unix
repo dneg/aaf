@@ -1,0 +1,5 @@
+# The dynamically loaded shared libraries required by an application.
+
+./bin/libcom-api.so
+./bin/libaafintp.so
+./bin/libaafpgapi.so
