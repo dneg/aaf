@@ -62,7 +62,8 @@ class Impl.this-module;
 
 class .this-module : public .parent-module
 {
-  .this-module (AAFBool doInit = AAFTrue);
+  public:
+  .this-module (aafBool doInit = AAFTrue);
   ~.this-module ();
   //
   // Constructor/destructor
@@ -73,7 +74,7 @@ class .this-module : public .parent-module
 
 #ccccccccccccccccccccccccccc
 #c
-#c Starts a class definition
+#c Starts a root class definition
 #c
 #c Arguments: none
 #c
@@ -87,7 +88,7 @@ class Impl.this-module;
 class .this-module
 {
 public:
-  .this-module (AAFBool doInit=AAFTrue);
+  .this-module (aafBool doInit=AAFTrue);
   ~.this-module ();
   //
   // Constructor/destructor
