@@ -532,7 +532,7 @@ sub ModifyTest {
 		    $exclude = 1;
 		}
 		elsif ( IsReadableByVersion( $Cv, $Mv ) eq "false" ) {
-		    print "Excluded: ${Cv} cannot be read by ${Mv}.\n";
+		    print "Excluded: ${Cv} cannot be read by ${Mv}.\n\n";
 		    $exclude = 1;
 		}
 		
@@ -558,8 +558,12 @@ sub ModifyTest {
 			foreach my $Vf ( GetCompatibleFileKinds( $Vp, $Vv, $Mf ) ) {
 			
 			    $what = "verify $modify_filename by running $T on $Vp using $Vv with file impl $Vf";
-			    
-			    if ( $exclude == 1 ) {
+
+			    if ( IsReadableByVersion( $Mv, $Vv ) eq "false" ) {
+				print "Excluded: ${Mv} cannot be read by ${Vv}.\n\n";
+				$GlobalState{TestExcludedCount} += 1;
+			    }
+			    elsif ( $exclude == 1 ) {
 				print "${what}\n";
 				print "Excluded: create or modify test was excluded.\n\n";
 				$GlobalState{TestExcludedCount} += 1;
