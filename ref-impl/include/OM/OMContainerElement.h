@@ -52,6 +52,10 @@ public:
                      const char* name,
                      OMUInt32 localKey);
 
+    // @cmember Copy constructor.
+  OMContainerElement(
+             const OMContainerElement<ObjectReference, ReferencedObject>& rhs);
+
     // @cmember Destructor.
   ~OMContainerElement(void);
 
@@ -94,7 +98,7 @@ private:
     //          The key is unique only within a given container instance
     //          and is assigned to each element of the container in such
     //          way as to be independent of the element's position within
-   //           the container.
+    //          the container.
   OMUInt32 _localKey;
 
     // @cmember The actual object reference.
@@ -121,6 +125,10 @@ public:
   OMVectorElement(OMProperty* property,
                   const char* name,
                   OMUInt32 localKey);
+
+    // @cmember Copy constructor.
+  OMVectorElement(
+                const OMVectorElement<ObjectReference, ReferencedObject>& rhs);
 
     // @cmember Destructor.
   ~OMVectorElement(void);
@@ -159,6 +167,9 @@ public:
                const char* name,
                OMUInt32 key,
                OMUniqueObjectIdentification identification);
+
+    // @cmember Copy constructor.
+  OMSetElement(const OMSetElement<ObjectReference, ReferencedObject>& rhs);
 
     // @cmember Destructor.
   ~OMSetElement(void);

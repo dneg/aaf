@@ -63,6 +63,21 @@ OMContainerElement<ObjectReference, ReferencedObject>::OMContainerElement(
                            "ReferencedObject>::OMContainerElement");
 }
 
+  // @mfunc Copy constructor.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMContainerElement> to copy.
+template <typename ObjectReference, typename ReferencedObject>
+OMContainerElement<ObjectReference, ReferencedObject>::OMContainerElement(
+              const OMContainerElement<ObjectReference, ReferencedObject>& rhs)
+  : _localKey(rhs._localKey), _reference(rhs._reference)
+{
+  TRACE("OMContainerElement<ObjectReference,"
+                           "ReferencedObject>::OMContainerElement");
+}
+
   // @mfunc Destructor.
   //   @tcarg class | ObjectReference  | The type of the contained object
   //          reference 
@@ -226,7 +241,6 @@ OMVectorElement<ObjectReference, ReferencedObject>::OMVectorElement(void)
 {
   TRACE("OMVectorElement<ObjectReference, ReferencedObject>::OMVectorElement");
 }
-
   
   // @mfunc Constructor.
   //   @tcarg class | ObjectReference  | The type of the contained object
@@ -245,6 +259,20 @@ OMVectorElement<ObjectReference, ReferencedObject>::OMVectorElement(
                                                           OMUInt32 localKey)
   : OMContainerElement<ObjectReference,
                        ReferencedObject>(property, name, localKey)
+{
+  TRACE("OMVectorElement<ObjectReference, ReferencedObject>::OMVectorElement");
+}
+
+  // @mfunc Copy constructor.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMVectorElement> to copy.
+template <typename ObjectReference, typename ReferencedObject>
+OMVectorElement<ObjectReference, ReferencedObject>::OMVectorElement(
+                 const OMVectorElement<ObjectReference, ReferencedObject>& rhs)
+  : OMContainerElement<ObjectReference, ReferencedObject>(rhs)
 {
   TRACE("OMVectorElement<ObjectReference, ReferencedObject>::OMVectorElement");
 }
@@ -342,6 +370,22 @@ OMSetElement<ObjectReference, ReferencedObject>::OMSetElement(
                        ReferencedObject>(property, name, localKey),
     _identification(identification),
     _referenceCount(1/*tjb*/)
+{
+  TRACE("OMSetElement<ObjectReference, ReferencedObject>::OMSetElement");
+}
+
+  // @mfunc Copy constructor.
+  //   @tcarg class | ObjectReference  | The type of the contained object
+  //          reference 
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @parm The <c OMSetElement> to copy.
+template <typename ObjectReference, typename ReferencedObject>
+OMSetElement<ObjectReference, ReferencedObject>::OMSetElement(
+                    const OMSetElement<ObjectReference, ReferencedObject>& rhs)
+  : OMContainerElement<ObjectReference, ReferencedObject>(rhs),
+    _identification(rhs._identification),
+    _referenceCount(rhs._referenceCount)
 {
   TRACE("OMSetElement<ObjectReference, ReferencedObject>::OMSetElement");
 }
