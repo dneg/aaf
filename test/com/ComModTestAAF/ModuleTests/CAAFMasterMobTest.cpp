@@ -292,12 +292,17 @@ HRESULT CAAFMasterMob::test()
 	try
 	{
 		hr = CreateAAFFile(	pFileName );
-		hr = ReadAAFFile( pFileName );
+		if(hr == AAFRESULT_SUCCESS)
+			hr = ReadAAFFile( pFileName );
 	}
 	catch (...)
 	{
 		cerr << "CAAFMasterMob::test...Caught general C++ exception!" << endl; 
 	}
+
+	// When all of the functionality of this class is tested, we can return success
+	if(hr == AAFRESULT_SUCCESS)
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 
 	return hr;
 }
