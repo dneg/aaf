@@ -191,22 +191,31 @@ void ImplAAFTypeDefFixedArray::externalize(OMByte* internalBytes,
   ImplAAFTypeDefSP ptd = BaseType ();
   aafUInt32 internalSize = ptd->NativeSize ();
   aafUInt32 externalSize = ptd->PropValSize ();
-  aafInt32 internalBytesLeft = internalBytesSize;
-  aafInt32 externalBytesLeft = externalBytesSize;
-
-  for (elem = 0; elem < numElems; elem++)
+  if (internalSize == externalSize)
 	{
-	  ptd->externalize (internalBytes,
-						internalSize,
-						externalBytes,
-						externalSize,
-						byteOrder);
-	  internalBytes += internalSize;
-	  externalBytes += externalSize;
-	  internalBytesLeft -= internalSize;
-	  externalBytesLeft -= externalSize;
-	  assert (internalBytesLeft >= 0);
-	  assert (externalBytesLeft >= 0);
+	  copy (internalBytes,
+			externalBytes,
+			externalBytesSize);
+	}
+  else
+	{
+	  aafInt32 internalBytesLeft = internalBytesSize;
+	  aafInt32 externalBytesLeft = externalBytesSize;
+
+	  for (elem = 0; elem < numElems; elem++)
+		{
+		  ptd->externalize (internalBytes,
+							internalSize,
+							externalBytes,
+							externalSize,
+							byteOrder);
+		  internalBytes += internalSize;
+		  externalBytes += externalSize;
+		  internalBytesLeft -= internalSize;
+		  externalBytesLeft -= externalSize;
+		  assert (internalBytesLeft >= 0);
+		  assert (externalBytesLeft >= 0);
+		}
 	}
 }
 
@@ -232,22 +241,31 @@ void ImplAAFTypeDefFixedArray::internalize(OMByte* externalBytes,
   ImplAAFTypeDefSP ptd = BaseType ();
   aafUInt32 internalElemSize = ptd->internalSize (0, 0);
   aafUInt32 externalElemSize = ptd->externalSize (0, 0);
-  aafInt32 internalBytesLeft = internalBytesSize;
-  aafInt32 externalBytesLeft = externalBytesSize;
-
-  for (elem = 0; elem < numElems; elem++)
+  if (internalElemSize == externalElemSize)
 	{
-	  ptd->internalize (externalBytes,
-						externalElemSize,
-						internalBytes,
-						internalElemSize,
-						byteOrder);
-	  internalBytes += internalElemSize;
-	  externalBytes += externalElemSize;
-	  internalBytesLeft -= internalElemSize;
-	  externalBytesLeft -= externalElemSize;
-	  assert (internalBytesLeft >= 0);
-	  assert (externalBytesLeft >= 0);
+	  copy (externalBytes,
+			internalBytes,
+			internalBytesSize);
+	}
+  else
+	{
+	  aafInt32 internalBytesLeft = internalBytesSize;
+	  aafInt32 externalBytesLeft = externalBytesSize;
+
+	  for (elem = 0; elem < numElems; elem++)
+		{
+		  ptd->internalize (externalBytes,
+							externalElemSize,
+							internalBytes,
+							internalElemSize,
+							byteOrder);
+		  internalBytes += internalElemSize;
+		  externalBytes += externalElemSize;
+		  internalBytesLeft -= internalElemSize;
+		  externalBytesLeft -= externalElemSize;
+		  assert (internalBytesLeft >= 0);
+		  assert (externalBytesLeft >= 0);
+		}
 	}
 }
 
