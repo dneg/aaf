@@ -47,6 +47,8 @@
 #include "ImplAAFHeader.h"
 #endif
 
+#include "ImplEnumAAFPropertyValues.h"
+
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 
@@ -141,6 +143,13 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT
+ImplAAFTypeDefFixedArray::GetElements (
+								ImplAAFPropertyValue *pInPropVal,
+								ImplEnumAAFPropertyValues **ppEnum)
+{
+	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+}
 
 // Override from AAFTypeDef
 AAFRESULT STDMETHODCALLTYPE

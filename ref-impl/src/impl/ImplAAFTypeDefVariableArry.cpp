@@ -46,6 +46,7 @@
 #include "ImplAAFHeader.h"
 #endif
 
+#include "ImplEnumAAFPropertyValues.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
@@ -316,6 +317,13 @@ AAFRESULT STDMETHODCALLTYPE
 	return ImplAAFTypeDefArray::CreateValueFromValues(ppElementValues, numElements, ppPropVal);
 }
 
+AAFRESULT
+ImplAAFTypeDefVariableArray::GetElements (
+								ImplAAFPropertyValue *pInPropVal,
+								ImplEnumAAFPropertyValues **ppEnum)
+{
+	return AAFRESULT_NOT_IN_CURRENT_VERSION;
+}
 
 ImplAAFTypeDefSP ImplAAFTypeDefVariableArray::BaseType() const
 {
