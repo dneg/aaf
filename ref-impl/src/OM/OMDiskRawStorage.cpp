@@ -125,6 +125,22 @@ OMDiskRawStorage::~OMDiskRawStorage(void)
   _file = 0;
 }
 
+  // @mfunc Is it possible to read from this <c OMDiskRawStorage> ?
+  //  @rdesc True if this <c OMDiskRawStorage> is readable, false otherwise.
+  //  @this const
+bool OMDiskRawStorage::isReadable(void) const
+{
+  TRACE("OMDiskRawStorage::isReadable");
+
+  bool result;
+  if ((_mode == OMFile::modifyMode) || (_mode == OMFile::readOnlyMode)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
   // @mfunc Is it possible to write to this <c OMDiskRawStorage> ?
   //  @rdesc True if this <c OMDiskRawStorage> is writable, false otherwise.
   //  @this const

@@ -63,6 +63,9 @@ public:
     // @cmember Destructor.
   virtual ~OMRawStorage(void) {}
 
+    // @cmember Is it possible to read from this <c OMRawStorage> ?
+  virtual bool isReadable(void) const = 0;
+
     // @cmember Is it possible to write to this <c OMRawStorage> ?
   virtual bool isWritable(void) const = 0;
 

@@ -69,6 +69,9 @@ public:
     // @cmember Destructor.
   virtual ~OMDiskRawStorage(void);
 
+    // @cmember Is it possible to read from this <c OMDiskRawStorage> ?
+  virtual bool isReadable(void) const;
+
     // @cmember Is it possible to write to this <c OMDiskRawStorage> ?
   virtual bool isWritable(void) const;
 
