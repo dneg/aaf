@@ -403,9 +403,9 @@ void OMSimpleProperty::read(size_t externalBytesSize)
 
   // @mfunc Get the value of this <c OMSimpleProperty>.
   //   @parm The buffer to receive the property value.
-  //   @parm The size of the buffer.
+  //   @parm size_t | valueSize | The size of the buffer.
   //   @this const
-void OMSimpleProperty::get(void* value, size_t valueSize) const
+void OMSimpleProperty::get(void* value, size_t ANAME(valueSize)) const
 {
   TRACE("OMSimpleProperty::get");
   PRECONDITION("Valid data buffer", value != 0);
@@ -511,9 +511,9 @@ size_t OMSimpleProperty::bitsSize(void) const
   //        The raw bits are copied to the buffer at address <p bits> which
   //        is <p size> bytes in size.
   //   @parm The address of the buffer into which the raw bits are copied.
-  //   @parm The size of the buffer.
+  //   @parm size_t | bitsSize | The size of the buffer.
   //   @this const
-void OMSimpleProperty::getBits(OMByte* bits, size_t bitsSize) const
+void OMSimpleProperty::getBits(OMByte* bits, size_t ANAME(bitsSize)) const
 {
   TRACE("OMSimpleProperty::getBits");
   PRECONDITION("Optional property is present",
