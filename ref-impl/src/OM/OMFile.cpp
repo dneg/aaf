@@ -913,8 +913,10 @@ void OMFile::writeSignature(OMRawStorage* rawStorage,
   }
 
   OMUInt32 count;
-  rawStorage->setPosition(8);
-  rawStorage->write(reinterpret_cast<const OMByte*>(&sig), sizeof(sig), count);
+  rawStorage->writeAt(8,
+                      reinterpret_cast<const OMByte*>(&sig),
+                      sizeof(sig),
+                      count);
   ASSERT("All bytes written", count == sizeof(sig));
 }
 
@@ -929,10 +931,10 @@ void OMFile::readSignature(OMRawStorage* rawStorage,
   PRECONDITION("Valid raw storage", rawStorage != 0);
 
   OMUInt32 count;
-  rawStorage->setPosition(8);
-  rawStorage->read(reinterpret_cast<OMByte*>(&signature),
-                   sizeof(signature),
-                   count);
+  rawStorage->readAt(8,
+                     reinterpret_cast<OMByte*>(&signature),
+                     sizeof(signature),
+                     count);
   ASSERT("All bytes read", count == sizeof(signature));
 
   if (hostByteOrder() != littleEndian) {
