@@ -30,10 +30,9 @@
 // AAFDataDef
 
 const int PID_MOBSLOT_NAME				= 0;
-const int PID_MOBSLOT_ORIGIN			= 1;
-const int PID_MOBSLOT_TRACKID			= 2;
-const int PID_MOBSLOT_PHYSICAL_TRACK	= 3;
-const int PID_MOBSLOT_SEGMENT			= 4;
+const int PID_MOBSLOT_TRACKID			= 1;
+const int PID_MOBSLOT_PHYSICAL_TRACK	= 2;
+const int PID_MOBSLOT_SEGMENT			= 3;
 
 class ImplAAFSegment;
 
@@ -61,21 +60,19 @@ public:
   ~ImplAAFMobSlot ();
 
   OMDECLARE_STORABLE(AAFMobSlot);
-
-  //****************
-  // IsATrack()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    IsATrack
-        (aafBool *  retval);  //@parm [out,retval] True if slot is a track
-
-
   //****************
   // GetSegment()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSegment
         (ImplAAFSegment ** result);  //@parm [out,retval] Segment property value
+
+  //****************
+  // SetSegment()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetSegment
+        (ImplAAFSegment *value);  //@parm [in] Segment property value
 
 
   //****************
@@ -84,6 +81,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
         (aafString_t *  name);  //@parm [in,out] Mob Slot Name
+
+  //****************
+  // SetName()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetName
+        (aafString_t *  name);  //@parm [in] Mob Slot Name
 
 
   //****************
@@ -106,9 +110,26 @@ public:
   // GetDataKind()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetDataKind
-        (ImplAAFDataDef ** result);  //@parm [out,retval] Data Definition object
+    GetDataDef
+        (aafUID_t *result);  //@parm [out,retval] Data Definition UUID
 
+  //***********************************************************
+  // METHOD NAME: GetTrackID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetTrackID (
+    // @parm [out,retval] aafTrackID_t * | result | Track id of the Mob Slot
+    aafTrackID_t *  result
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetTrackID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+  SetTrackID (
+    // @parm [in] aafTrackID_t | value | Track id of the Mob Slot
+    aafTrackID_t value
+  );
 
 public:
   // Declare the module test method. The implementation of the will be be
@@ -117,7 +138,7 @@ public:
 
 protected:
 	OMStringProperty					_name;
-	OMFixedSizeProperty<aafPosition_t>	_origin;
+//!!!	OMFixedSizeProperty<aafPosition_t>	_origin; Move to TimelineMobSlot
 	OMFixedSizeProperty<aafUInt32>		_trackID;
 	OMFixedSizeProperty<aafUInt32>		_physicalTrackNum;
 	OMStrongReferenceProperty<ImplAAFSegment> _segment;
