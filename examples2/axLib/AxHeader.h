@@ -38,6 +38,10 @@ public:
 
 	aafUInt32 CountMobs() const;
 	aafUInt32 CountMobs(aafMobKind_e mobKind) const;
+
+	IEnumAAFMobsSP GetMobs() const;
+	IEnumAAFMobsSP GetMobs(aafSearchCrit_t & searchCrit) const;
+
 	aafUInt32 CountEssence() const;
 
 	void AddMob( IAAFMobSP spIaafMob );

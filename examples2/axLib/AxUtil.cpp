@@ -180,3 +180,15 @@ AxString AxStringUtil::mbtowc( const char* cstr )
 
 //=---------------------------------------------------------------------=
 
+AxString AxStringUtil::uid2Str(const aafUID_t & uid)
+{
+	std::wostringstream uidtextstr;
+	uidtextstr << std::hex;
+	uidtextstr << uid.Data1 << L"-" << uid.Data2 << L"-" << uid.Data3 << L"-";
+	for(int i = 0; i < 8; ++i)
+	{
+		uidtextstr << static_cast<int>(uid.Data4[i]);
+	}
+
+	return uidtextstr.str();
+}

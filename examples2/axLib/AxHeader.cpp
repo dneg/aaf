@@ -100,6 +100,24 @@ aafUInt32 AxHeader::CountMobs(aafMobKind_e mobKind) const
 }
 
 
+// Gets all Mobs
+IEnumAAFMobsSP AxHeader::GetMobs() const
+{
+	IEnumAAFMobsSP spMobs;
+	CHECK_HRESULT(_spIaafHeader->GetMobs(NULL, &spMobs));
+
+	return spMobs;
+}
+
+// Gets mobs according to the criteria set.
+IEnumAAFMobsSP AxHeader::GetMobs(aafSearchCrit_t & searchCrit) const
+{
+	IEnumAAFMobsSP spMobs;
+	CHECK_HRESULT(_spIaafHeader->GetMobs(&searchCrit, &spMobs));
+
+	return spMobs;
+}
+
 aafUInt32 AxHeader::CountEssence() const
 {
 	aafUInt32 essenceCount;

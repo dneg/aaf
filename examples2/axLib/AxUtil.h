@@ -78,6 +78,8 @@ public:
 
 	static AxString int2Str( aafInt32 n );
 
+	static AxString uid2Str(const aafUID_t & uid);
+
 	static AxString mbtowc( const char* cstr ); 
 };
 
