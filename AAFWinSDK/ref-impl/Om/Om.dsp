@@ -110,6 +110,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMMappedFileRawStorage.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # End Source File
 # Begin Source File
@@ -255,6 +259,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMFixedSizeProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMMappedFileRawStorage.h"
 # End Source File
 # Begin Source File
 
