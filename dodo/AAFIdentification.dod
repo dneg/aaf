@@ -1,0 +1,79 @@
+#startm .this-module 0
+AAFIdentification\
+#endm
+#c
+#startm .parent-module 0
+AAFObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#import ./AAFObject.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+
+AD_CLASS_UUID(B1A2137F, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+
+AD_DEFAULT_UUID(B1A2137E, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+AD_CLASS_BEGIN
+
+AD_METHOD1(GetCompanyName,
+[out\,retval], aafString_t *, companyName, The Company Name,
+Return the Company name property.)
+
+AD_METHOD1(GetCompanyName,
+[out\,retval], aafString_t *, productName, The Product Name,
+Return the Product name property.)
+
+AD_METHOD1(GetProductVersionString,
+[out\,retval], aafString_t *, productVersionString, The Product Version String,
+Return the Product Version String property.)
+
+AD_METHOD1(GetProductID,
+[out\,retval], aafInt32, productID, The Product ID,
+Return the Product ID property.)
+
+AD_METHOD1(GetProductVersionString,
+[out\,retval], aafString_t *, platform, The Platform,
+Return the Platform property.)
+
+AD_METHOD1(GetProductVersion,
+[out\,retval], aafProductVersion_t *, productVersion, The Product Version,
+Return the Product Version property.)
+
+AD_METHOD1(SetCompanyName,
+[in\,ref], aafString_t *, companyName, The Company Name,
+Set the Company name property.)
+
+AD_METHOD1(SetCompanyName,
+[in\,ref], aafString_t *, productName, The Product Name,
+Set the Product name property.)
+
+AD_METHOD1(SetProductVersionString,
+[in\,ref], aafString_t *, productVersionString, The Product Version String,
+Set the Product Version String property.)
+
+AD_METHOD1(SetProductID,
+[in], aafInt32, productID, The Product ID,
+Set the Product ID property.)
+
+AD_METHOD1(SetProductVersionString,
+[in\,ref], aafString_t *, platform, The Platform,
+Set the Platform property.)
+
+AD_METHOD1(GetProductVersion,
+[in\,ref], aafProductVersion_t *, productVersion, The Product Version,
+Set the Product Version property.)
+	
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
