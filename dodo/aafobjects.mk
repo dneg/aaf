@@ -83,6 +83,7 @@ HUMAN_TYPED_IMPL = \
 	AAFEssenceAccess \
 	AAFEssenceData \
 	AAFEssenceDescriptor \
+	AAFEssencePlugin \
 	AAFFile \
 	AAFFileDescriptor \
 	AAFFiller \
