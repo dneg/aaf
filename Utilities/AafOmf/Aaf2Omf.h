@@ -48,13 +48,25 @@ public:
 
 public:
 	HRESULT OpenInputFile( void );
-	HRESULT OpenOutputFile( void );
-
-	void CloseInputFile( void );
-	void CloseOutputFile(void );
 		
 	HRESULT ConvertFile( void );
+
+private:
+	void ConvertAUIDtoUID(aafUID_t* pMobID, OMF2::omfUID_t* pOMFMobID);
+	HRESULT OpenOutputFile( void );
+	void CloseInputFile( void );
+	void CloseOutputFile(void );
 	HRESULT AAFFileRead( void );
+	HRESULT ConvertCompositionMob(IAAFCompositionMob* pCompMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
+	HRESULT ConvertMasterMob(IAAFMasterMob* pMasterMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
+	HRESULT ConvertSourceMob(IAAFSourceMob* pSourceMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
+	HRESULT TraverseMob(IAAFMob* pMob, OMF2::omfMobObj_t* pOMFMob);
+	HRESULT ProcessComponent(IAAFComponent* pComponent, OMF2::omfObject_t* pOMFSegment);
+	HRESULT ConvertAAFDatadef(aafUID_t Datadef, OMF2::omfDDefObj_t* pDatakind);
+	HRESULT TraverseSequence(IAAFSequence* pSequence, OMF2::omfObject_t* pOMFSequence );
+	HRESULT ConvertSelector(IAAFSelector* pSelector, OMF2::omfObject_t* pOMFSelector );
+	HRESULT ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc, OMF2::omfMobObj_t*	pOMFSourceMob );
+	HRESULT ConvertEssenceDataObject(IAAFEssenceData* pEssenceData);
 
 private:
 
