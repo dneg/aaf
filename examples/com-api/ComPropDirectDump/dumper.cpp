@@ -174,6 +174,46 @@ static char * make_mbstring(size_t length, const aafCharacter* name)
   return mbStr;
 }
 
+static void printTimeStamp (const aafTimeStamp_t & ts,
+							ostream & os)
+{
+  static const char * const monthNames[] =
+  {
+	"Jan", "Feb", "Mar",
+	"Apr", "May", "Jun",
+	"Jul", "Aug", "Sep",
+	"Oct", "Nov", "Dec"
+  };
+
+  char monthNameBuf [10];
+  if ((ts.date.month < 1) ||
+	  (ts.date.month > 12))
+	{
+	  sprintf (monthNameBuf, "Month %d", ts.date.month);
+	}
+  else
+	{
+	  aafUInt8 month_index = ts.date.month-1;
+	  assert (month_index >= 0);
+	  assert (month_index < (sizeof (monthNames) / sizeof (monthNames[0])));
+	  strcpy (monthNameBuf, monthNames[month_index]);
+	}
+
+  os << dec
+	 << monthNameBuf << " "
+	 << (int) ts.date.day << ", "
+	 << (int) ts.date.year <<	" ";
+  char buf [12];
+  sprintf (buf, "%d:%02d:%02d.%02d",
+		   ts.time.hour,
+		   ts.time.minute,
+		   ts.time.second,
+		   ts.time.fraction);
+  os << buf;
+  os << " GMT";
+}
+
+
 static HRESULT dumpObject
 (
  IAAFObjectSP pContainer, // object to be dumped
@@ -587,16 +627,22 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 										   (void**)&pTDR));
 
 			// Special case!  See if this is an AUID
-			IAAFTypeDefSP ptd;
-			IUnknown * pUnkTest;
+			IUnknown * pUnkTest = 0;
 			checkResult(pTDR->QueryInterface(IID_IUnknown,
 											 (void**)&pUnkTest));
 
+			IAAFTypeDefSP ptd;
 			assert (pDict);
 			checkResult (pDict->LookupType (kAAFTypeID_AUID, &ptd));
-			IUnknown * pUnkAUID;
+			IUnknown * pUnkAUID = 0;
 			checkResult(ptd->QueryInterface(IID_IUnknown,
 											(void**)&pUnkAUID));
+			assert (pDict);
+			checkResult (pDict->LookupType (kAAFTypeID_TimeStamp, &ptd));
+			IUnknown * pUnkTimeStamp = 0;
+			checkResult(ptd->QueryInterface(IID_IUnknown,
+											(void**)&pUnkTimeStamp));
+
 			if (pUnkTest == pUnkAUID)
 			  {
 				// dump it as an auid
@@ -617,6 +663,19 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 					  os << ", ";
 				  }
 				os << " } }" << endl;
+			  }
+
+			if (pUnkTest == pUnkTimeStamp)
+			  {
+				// dump it as an aafTimeStamp_t
+				aafTimeStamp_t ts;
+				checkResult (pTDR->GetStruct (pPVal,
+											  (aafMemPtr_t) &ts,
+											  sizeof (ts)));
+
+				os << "Value: ";
+				printTimeStamp (ts, os);
+				os << endl;
 			  }
 
 			else
@@ -651,12 +710,21 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 					dumpPropertyValue (pMemberPropVal, pDict, indent+1, os);
 				  }
 			  }
-			assert (pUnkTest);
-			pUnkTest->Release ();
-			pUnkTest = 0;
-			assert (pUnkAUID);
-			pUnkAUID->Release ();
-			pUnkAUID = 0;
+			if (pUnkTest)
+			  {
+				pUnkTest->Release ();
+				pUnkTest = 0;
+			  }
+			if (pUnkAUID)
+			  {
+				pUnkAUID->Release ();
+				pUnkAUID = 0;
+			  }
+			if (pUnkTimeStamp)
+			  {
+				pUnkTimeStamp->Release ();
+				pUnkTimeStamp = 0;
+			  }
 			break;
 		  }
 
