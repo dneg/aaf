@@ -1482,180 +1482,26 @@ void ImplAAFDictionary::InitContainerDef(const aafUID_t & defID,
 
 void ImplAAFDictionary::InitBuiltins()
 {
-  ImplAAFDataDef		*dataDef = NULL;
-  ImplAAFContainerDef	*containerDef = NULL;
-  AAFRESULT		hr;
+  InitDataDef (kAAFDataDef_Auxiliary, L"Auxiliary", L"Auxiliary data");
+  InitDataDef (kAAFDataDef_Descriptive, L"Descriptive", L"Descriptive data");
+  InitDataDef (kAAFDataDef_Edgecode, L"Edgecode", L"Edgecode data");
+  InitDataDef (kAAFDataDef_Matte, L"Matte", L"Matte data");
+  InitDataDef (kAAFDataDef_Picture, L"Picture", L"Picture data");
+  InitDataDef (kAAFDataDef_PictureWithMatte, L"PictureWithMatte", L"PictureWithMatte data");
+  InitDataDef (kAAFDataDef_Sound, L"Sound", L"Sound data");
+  InitDataDef (kAAFDataDef_Timecode, L"Timecode", L"Timecode data");
+  InitDataDef (kAAFDataDef_Unknown, L"Unknown", L"Unknown data");
 
-  hr = LookupDataDef (kAAFDataDef_Picture, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (kAAFDataDef_Picture, L"Picture", L"Picture data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (DDEF_Picture, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Picture, L"LegacyPicture", L"Legacy Picture data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (kAAFDataDef_Sound, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (kAAFDataDef_Sound, L"Sound", L"Sound data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (DDEF_Sound, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Sound, L"LegacySound", L"Legacy Sound data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (kAAFDataDef_Timecode, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (kAAFDataDef_Timecode, L"Timecode", L"Timecode data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (DDEF_Timecode, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (DDEF_Timecode, L"LegacyTimecode", L"Legacy Timecode data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (kAAFDataDef_Edgecode, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (kAAFDataDef_Edgecode, L"Edgecode", L"Edgecode data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-  
-  hr = LookupDataDef (kAAFDataDef_Matte, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (kAAFDataDef_Matte, L"Matte", L"Matte data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (kAAFDataDef_PictureWithMatte, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (kAAFDataDef_PictureWithMatte, L"PictureWithMatte", L"PictureWithMatte data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (kAAFDataDef_Auxiliary, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (kAAFDataDef_Auxiliary, L"Auxiliary", L"Auxiliary data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
-
-  hr = LookupDataDef (kAAFDataDef_Descriptive, &dataDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdDataDef()->
-		CreateInstance ((ImplAAFObject **)&dataDef);
-	  hr = dataDef->Initialize (kAAFDataDef_Descriptive, L"Descriptive", L"Descriptive data");
-	  hr = RegisterDataDef (dataDef);
-	}
-  dataDef->ReleaseReference();
-  dataDef = NULL;
+  // Legacy definitions
+  InitDataDef (kAAFDataDef_LegacyPicture, L"Picture", L"Picture data (legacy)");
+  InitDataDef (kAAFDataDef_LegacySound, L"Sound", L"Sound data (legacy)");
+  InitDataDef (kAAFDataDef_LegacyTimecode, L"Timecode", L"Timecode data (legacy)");
 
   //**********************
-  hr = LookupContainerDef (ContainerAAF, &containerDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdContainerDef()->
-		CreateInstance ((ImplAAFObject **)&containerDef);
-	  hr = containerDef->Initialize (ContainerAAF, L"AAF", L"AAF Container");
-	  hr = RegisterContainerDef (containerDef);
-	}
-  containerDef->ReleaseReference();
-  containerDef = NULL;
 
-  hr = LookupContainerDef (ContainerFile, &containerDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-	  hr = GetBuiltinDefs()->cdContainerDef()->
-		CreateInstance ((ImplAAFObject **)&containerDef);
-	  hr = containerDef->Initialize (ContainerFile, L"External", L"External Container");
-	  hr = RegisterContainerDef (containerDef);
-	}
-  containerDef->ReleaseReference();
-  containerDef = NULL;
-
-  hr = LookupContainerDef (ContainerOMF, &containerDef);
-  if (AAFRESULT_FAILED (hr))
-	{
-	  // not already in dictionary
-
-	  hr = GetBuiltinDefs()->cdContainerDef()->
-		CreateInstance ((ImplAAFObject **)&containerDef);
-	  hr = containerDef->Initialize (ContainerOMF, L"OMF", L"OMF Container");
-	  hr = RegisterContainerDef (containerDef);
-	}
-  containerDef->ReleaseReference();
-  containerDef = NULL;
-
+  InitContainerDef (ContainerAAF, L"AAF", L"AAF Container");
+  InitContainerDef (ContainerFile, L"External", L"External Container");
+  InitContainerDef (ContainerOMF, L"OMF", L"OMF Container");
 
   AssureClassPropertyTypes ();
 }
@@ -2092,7 +1938,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT hr = LookupDataDef( DDEF_Picture, ppDataDef );
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_LegacyPicture, ppDataDef );
   assert(AAFRESULT_SUCCEEDED (hr));
   assert(NULL != *ppDataDef);
 
@@ -2107,7 +1953,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT hr = LookupDataDef( DDEF_Sound, ppDataDef );
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_LegacySound, ppDataDef );
   assert(AAFRESULT_SUCCEEDED (hr));
   assert(NULL != *ppDataDef);
 
@@ -2122,7 +1968,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (!ppDataDef) return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT hr = LookupDataDef( DDEF_Timecode, ppDataDef );
+  AAFRESULT hr = LookupDataDef( kAAFDataDef_LegacyTimecode, ppDataDef );
   assert(AAFRESULT_SUCCEEDED (hr));
   assert(NULL != *ppDataDef);
 
