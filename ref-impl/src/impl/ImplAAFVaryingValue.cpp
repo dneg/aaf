@@ -340,10 +340,10 @@ AAFRESULT STDMETHODCALLTYPE
 		intDef = NULL;
 		iParm->Release();
 		iParm = NULL;
-		plugin->Release();
-		plugin = NULL;
 		iInterp->Release();
 		iInterp = NULL;
+		plugin->Release();
+		plugin = NULL;
 		mgr->ReleaseReference();
 		mgr = NULL;
 		interpDef->ReleaseReference();
@@ -351,17 +351,21 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
-		if(plugin)
-			plugin->Release();
-		if(iUnk)
-			iUnk->Release();
-		if(iInterp)
-			iInterp->Release();
+		if (iTypeDef)
+			iTypeDef->Release();
+		if (intDef)
+			intDef->ReleaseReference();
 		if(iParm)
 			iParm->Release();
+		if(iInterp)
+			iInterp->Release();
+		if(plugin)
+			plugin->Release();
 		if(mgr)
 		  mgr->ReleaseReference();
 		mgr = 0;
+		if (interpDef)
+			interpDef->ReleaseReference();
 	}
 	XEND;
 	
