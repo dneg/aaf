@@ -76,7 +76,7 @@
 // - We will extend Mob to contain a collection of these
 //   PersonnelResource objects:
 //
-//   PersonnelMob : subclass of Mob 
+//   AdminMob : subclass of Mob 
 //   { 
 //     // mandatory property 
 //     StrongRefVector<Person> personnel;
@@ -129,6 +129,7 @@ static void CreateAndRegisterRoleEnum (IAAFDictionary * pDict)
   check (ptde->AppendElement (kRole_Producer,     L"Producer"));
   check (ptde->AppendElement (kRole_Editor,       L"Editor"));
   check (ptde->AppendElement (kRole_FloorManager, L"FloorManager"));
+  check (ptde->AppendElement (kRole_Actor, L"Actor"));
 
   // Register this type definition in the dictionary.  The
   // dictionary::RegisterType() method expects an IAAFTypeDef pointer,
@@ -380,34 +381,34 @@ CreateAndRegisterPersonnelResourceReferenceVector
 
 
 //
-// Creates a class definition to describe PersonnelMob objects, and
+// Creates a class definition to describe AdminMob objects, and
 // registers it in the dictionary.
 //
-static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
+static void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
 {
   assert (pDict);
 
   // Instantiate a class definition object which will describe
-  // PersonnelMob objects.
+  // AdminMob objects.
   IAAFClassDef *pcd=NULL;
   check (pDict->CreateInstance (AUID_AAFClassDef,
 								IID_IAAFClassDef,
 								(IUnknown**) &pcd));
 
-  // We'll have to specify the PersonnelMob class definition's parent
+  // We'll have to specify the AdminMob class definition's parent
   // class, so look it up here.  Since PersonnelResource inherits from
   // AAFMob, look up the AAFMob class definition.
   IAAFClassDef *pcd_Mob=NULL;
   check (pDict->LookupClass (AUID_AAFMob, &pcd_Mob));
 
-  // Now initialize our new PersonnelMob class definition.  We'll
+  // Now initialize our new AdminMob class definition.  We'll
   // specify an AUID with which it will be identified
-  // (kClassID_PersonnelMob, which we've already generated); the
+  // (kClassID_AdminMob, which we've already generated); the
   // parent class (specified by the class definition for AAFMob, which
   // we've just looked up), and a name for this class.
-  check (pcd->Initialize (kClassID_PersonnelMob,
+  check (pcd->Initialize (kClassID_AdminMob,
 						  pcd_Mob,
-						  L"PersonnelMob"));
+						  L"AdminMob"));
 
   //
   // Now we add a definition for the property that this class will
@@ -424,7 +425,7 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
   // function.
   IAAFPropertyDef *pd_unused=NULL;
 
-  // Add the Personnel property to the PersonnelMob class defintion.
+  // Add the Personnel property to the AdminMob class defintion.
   // The type of the Personnel property is
   // Vector-of-strong-reference-to-PesonnelRecord, so we'll need to
   // specify the type definition describing that kind of vector when
@@ -435,11 +436,11 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
 
   // Now request that a new property def be appended to this class
   // def.  We're specifying an AUID by which this property will be
-  // known (kPropID_PersonnelMob_Personnel, which we've already
+  // known (kPropID_AdminMob_Personnel, which we've already
   // generated), a name, the type of the property, and that the
   // property is mandatory.  The returned property def is ignored
   // since we won't use it in this function.
-  check (pcd->AppendNewPropertyDef (kPropID_PersonnelMob_Personnel,
+  check (pcd->AppendNewPropertyDef (kPropID_AdminMob_Personnel,
 									L"Personnel",
 									ptd_PersonnelVector,
 									AAFFalse,
@@ -447,7 +448,7 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
   pd_unused->Release();
   pd_unused=NULL;
 
-  // Now that the class definition describing PersonnelMob is
+  // Now that the class definition describing AdminMob is
   // initialized and its properties have been specified, we can
   // register that class definition.
   check (pDict->RegisterClass (pcd));
@@ -460,12 +461,24 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
 
 }
 
+static void ResourceInitialize(IAAFObject *pResource,
+							   aafCharacter *familyName,
+							   aafCharacter *givenName,
+							   eJobFunction jobFunction)
+{
+	assert (pResource);
+}
 
+static void ResourceSetActorRole (IAAFObject *pResource,
+								  aafCharacter *role)
+{
+	assert (pResource);
+}
 
 //
 // Creates a PersonnelResource object through the given dictionary,
 // and initializes it with the given info.  It is then appended to the
-// given PersonnelMob, in its Personnel property (which is an array of
+// given AdminMob, in its Personnel property (which is an array of
 // object references to PersonnelResource objects).
 //
 // These are the steps:
@@ -474,28 +487,21 @@ static void CreateAndRegisterPersonnelMob (IAAFDictionary * pDict)
 // - Create a object reference PropertyValue to refer to the new
 //   PersonnelResource object.
 // - Get the PropertyValue for the current value of the Personnel
-//   array from the PersonnelMob.
+//   array from the AdminMob.
 // - Append the new PropertyValue (which references the new
 //   PersonnelResource object) to the existing PropertyValue of the
-//   Personnel vector from the PersonnelMob.
-// - Set the value of the Personnel resource in the PersonnelMob to
+//   Personnel vector from the AdminMob.
+// - Set the value of the Personnel resource in the AdminMob to
 //   the newly-appended PropertyValue.
 //
-static void AppendResource (IAAFDictionary * pDict,
-							IAAFMob *pMob,
-							const PersonnelResource & info)
+static void AdminMobAppendResource (IAAFDictionary *pDict,
+									IAAFMob *pAdminMob,
+							        IAAFObject *pResource)
 {
-  assert (pMob);
-  assert (info.name);
+  assert (pAdminMob);
+  assert (pResource);
 
-  // Instantiate the PersonnelResource object.
-  IAAFObject *pObj=NULL;
-  check (pDict->CreateInstance (kClassID_PersonnelResource,
-								IID_IAAFObject,
-								(IUnknown**) &pObj));
 
-  // Set the properties in the newly-generated PersonnelRecord object.
-  PersonnelRecordSetInfo (pObj, info);
 
   // Create a property value corresponding to new object reference.
   // We'll have to do that through the type def for that kind of obj
@@ -517,36 +523,36 @@ static void AppendResource (IAAFDictionary * pDict,
   // Create the value.  The CreateValue() method takes as argument the
   // object to which this value will refer.
   IAAFPropertyValue *pv=NULL;
-  check (tdo->CreateValue (pObj, &pv));
+  check (tdo->CreateValue (pResource, &pv));
 
   // Append the new property value (which refers to the new
   // PersonnelRecord object) to the existing array of PersonnelRecord
   // object references.
 
   // First get the existing array-of-objects property value from the
-  // PersonnelMob object.  To do so, we'll need:
-  // - The IAAFObject interface from the PersonnelMob object.
+  // AdminMob object.  To do so, we'll need:
+  // - The IAAFObject interface from the AdminMob object.
   // - Using the IAAFObject interface, we obtain the ClassDefinition
-  //   describing this PersonnelMob object.
+  //   describing this AdminMob object.
   // - From that class definition, we look up the PropertyDef for the
-  //   Personnel property on PersonnelMob.
+  //   Personnel property on AdminMob.
   // - We use PropertyDef to specify which property value we're
   //   getting, and get the property.
 
-  // QI for the PersonnelMob's IAAFObject interface
+  // QI for the AdminMob's IAAFObject interface
   IAAFObject *pMobObj=NULL;
-  check (pMob->QueryInterface (IID_IAAFObject,
+  check (pAdminMob->QueryInterface (IID_IAAFObject,
 							   (void **)&pMobObj));
 
   // Use the IAAFObject interface to obtain the class definition
-  // describing the PersonnelMob.
+  // describing the AdminMob.
   IAAFClassDef *cd=NULL;
   check (pMobObj->GetDefinition (&cd));
 
   // Use the ClassDefinition to look up the PropertyDefinition for the
   // Personnel property on the Personnel mob.
   IAAFPropertyDef *pd=NULL;
-  check (cd->LookupPropertyDef (kPropID_PersonnelMob_Personnel,
+  check (cd->LookupPropertyDef (kPropID_AdminMob_Personnel,
 								&pd));
 
   // Use the PropertyDefinition to specify the property whose value we
@@ -564,10 +570,8 @@ static void AppendResource (IAAFDictionary * pDict,
   check (tda->AppendElement (pva, pv));
 
   // Now that the property value has had the new element appended to
-  // it, set the property in the PersonnelMob to its new value.
+  // it, set the property in the AdminMob to its new value.
   check (pMobObj->SetPropertyValue (pd, pva));
-  pObj->Release();
-  pObj=NULL;
   td->Release();
   td=NULL;
   tdo->Release();
@@ -589,10 +593,30 @@ static void AppendResource (IAAFDictionary * pDict,
 
 }
 
+//
+// Creates a PersonnelResource object through the given dictionary,
+// and initializes it with the given info.  It is then appended to the
+// given AdminMob, in its Personnel property (which is an array of
+// object references to PersonnelResource objects).
+//
+// These are the steps:
+// - Create the PersonnelResource object.
+// - Set the values in the newly-created PersonnelResource object.
+// - Create a object reference PropertyValue to refer to the new
+//   PersonnelResource object.
+// - Get the PropertyValue for the current value of the Personnel
+//   array from the AdminMob.
+// - Append the new PropertyValue (which references the new
+//   PersonnelResource object) to the existing PropertyValue of the
+//   Personnel vector from the AdminMob.
+// - Set the value of the Personnel resource in the AdminMob to
+//   the newly-appended PropertyValue.
+//
 
 static void DefineResourceClassExtensions(IAAFDictionary *pDict)
 {
-	assert(pDict);
+  // Need to check if already defined.
+  assert(pDict);
   // Register the extensible enumeration describing Role in the
   // dictionary.
   CreateAndRegisterRoleEnum (pDict);
@@ -609,9 +633,9 @@ static void DefineResourceClassExtensions(IAAFDictionary *pDict)
   // PersonnelResource objects, and register it.
   CreateAndRegisterPersonnelResourceReferenceVector (pDict);
 
-  // Create a class definition describing PersonnelMOb objects, and
+  // Create a class definition describing AdminMob objects, and
   // register it.
-  CreateAndRegisterPersonnelMob (pDict);
+  CreateAndRegisterAdminMob (pDict);
 
 
 }
@@ -622,11 +646,13 @@ static void InitializePersonnelResource (IAAFObject *pPersResource,
 										 eJobFunction jobFunction)
 {
 	assert(pPersResource);
+	PersonnelRecordSetName (pPersResource,familyName);
+	PersonnelRecordSetJobFunction(pPersResource,jobFunction);
 
 }
 
 static void SetRole(IAAFObject *pPersResource,
-					aafCharacter role)
+					aafCharacter *role)
 {
 	assert(pPersResource);
 }
@@ -634,9 +660,9 @@ static void SetRole(IAAFObject *pPersResource,
 //
 // - Creates an AAF file with the given name.
 // - Registers extensions that we'll use in the file's dictionary.
-// - Creates a PersonnelMob and adds it to the file's header.
+// - Creates a AdminMob and adds it to the file's header.
 // - Creates several PersonnelRecord objects and appends them to the
-//   PersonnelMob.
+//   AdminMob.
 // - Saves the file.
 //
 void extensionWrite (const aafCharacter * filename)
@@ -686,7 +712,7 @@ void extensionWrite (const aafCharacter * filename)
  
   // Instantiate a AdministrativeMob object.
   IAAFMob *pAdminMob=NULL;
-  check (pDict->CreateInstance (kClassID_PersonnelMob,
+  check (pDict->CreateInstance (kClassID_AdminMob,
 								IID_IAAFMob,
 								(IUnknown**) &pAdminMob));
   check (pAdminMob->SetName (L"Administrative Information"));
@@ -695,14 +721,52 @@ void extensionWrite (const aafCharacter * filename)
   // Add the new AdministrativeMob object to the file's header.
   check (pHead->AppendMob (pAdminMob));
 
-  // Add several PersonnelResource objects to the PersonnelMob.
-  AppendResource (pDict, pAdminMob,
-				  FormatResource (L"Peter Vechtor", kRole_Producer,    42));
-  AppendResource (pDict, pAdminMob,
-				  FormatResource (L"Oliver Morgan", kRole_FloorManager, 6 ));
-  AppendResource (pDict, pAdminMob,
-				  FormatResource (L"Tom Ohanian",   kRole_Editor));
+  // Add several PersonnelResource objects to the AdminMob.
+// Instantiate the PersonnelResource object.
+  IAAFObject *pPersResource=NULL;
+  check (pDict->CreateInstance (kClassID_PersonnelResource,
+								IID_IAAFObject,
+								(IUnknown**) &pPersResource));
 
+  InitializePersonnelResource (pPersResource,
+							   L"Morgan",
+							   L"Oliver",
+							   kRole_FloorManager);
+  AdminMobAppendResource (pDict,
+						  pAdminMob,
+						  pPersResource);
+  pPersResource->Release();
+  pPersResource=NULL;
+
+// Instantiate the PersonnelResource object.
+  check (pDict->CreateInstance (kClassID_PersonnelResource,
+								IID_IAAFObject,
+								(IUnknown**) &pPersResource));
+
+  InitializePersonnelResource (pPersResource,
+							   L"Ohanian",
+							   L"Tom",
+							   kRole_Editor);
+  AdminMobAppendResource (pDict,
+						  pAdminMob,
+						  pPersResource);
+  pPersResource->Release();
+  pPersResource=NULL;
+// Instantiate the PersonnelResource object.
+  check (pDict->CreateInstance (kClassID_PersonnelResource,
+								IID_IAAFObject,
+								(IUnknown**) &pPersResource));
+
+  InitializePersonnelResource (pPersResource,
+							   L"Oldman",
+							   L"Arianna",
+							   kRole_Actor);
+  SetRole(pPersResource, L"Lucy");
+  AdminMobAppendResource (pDict,
+						  pAdminMob,
+						  pPersResource);
+  pPersResource->Release();
+  pPersResource=NULL;
   // Save the file and close it.
   check (pFile->Save());
   check (pFile->Close());

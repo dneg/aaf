@@ -82,7 +82,6 @@ void main ()
   const aafWChar * filename = L"extension.aaf";
 
   extensionWrite (filename);
-
   bool status = extensionRead (filename);
   if (! status)
 	{
