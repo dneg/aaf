@@ -134,19 +134,38 @@ VerifyFiles ()
 {
 	FileList=$1
 
+	RemoveIfExists ()
+	{
+		FileToBeRemove=$1
+
+		if [ -a FileToBeRemove ]; then
+			rm FileToBeRemove
+		fi
+	}
+
 	for File in $FileList; do
-	print -n "running ${File} thru dump...  "
+	print -n "running ${File} thru dump.exe...  "
+		RemoveIfExists ${File}Dump.log
 		${DumpDir}/dump -s -p "$File" > tempdump.log
 		Stat=$?
 		print $Stat
 		if [ $Stat -ne 0 ]; then
 			CheckExitCode $Stat   "     $File <- This File flunked the dump.exe validation test"
-			mv tempdump.log ${File}.log
+			mv tempdump.log ${File}Dump.log
 		fi
 			
+		print -n "running ${File} thru ComPropDirectDump.exe...  "
+		RemoveIfExists ${File}CPDDump.log
+		${ExamplesDir}/ComPropDirectDump "$File" > tempdump.log
+		Stat=$?
+		print $Stat
+		if [ $Stat -ne 0 ]; then
+			CheckExitCode $Stat   "     $File <- This File flunked the ComPropDirectDump.exe validation test"
+			mv tempdump.log ${File}CPDDump.log
+		fi
 	done
-
-	rm tempdump.log
+	
+	RemoveIfExists tempdump.log
 }
 
 
@@ -168,6 +187,7 @@ RunMainScript ()
 	
 	TargetDir="`PWD`"
 	DumpDir="`PWD`/DevUtils"
+	ExamplesDir="`PWD`/Examples/Com"
 
 
 	if [ MODULETEST -eq 1 ] || [ ALL -eq 1 ]; then
@@ -204,7 +224,7 @@ RunMainScript ()
 		COMClientAAF
 		CheckExitCode $? "COMClientAAF"
 
-		VerifyFiles "Foo.aaf"
+		VerifyFiles "`ls *.aaf`"
 
 		cd $TargetDir
 	fi
