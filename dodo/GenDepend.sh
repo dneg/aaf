@@ -87,6 +87,7 @@ for base in ${AAFCOMINTERFACESONLY} ; do \
 	echo "" ; \
 	echo $base.all : $base.fidl $base.comcx $base.exp ; \
 	echo $base.fidl : macros/fidl.mac macros/base.mac ; \
+	echo $base.frefh : macros/frefh.mac macros/base.mac ; \
 	echo $base.comcx : macros/comcx.mac macros/base.mac ; \
 	echo $base.exp : macros/exp.mac macros/base.mac ; \
 done
