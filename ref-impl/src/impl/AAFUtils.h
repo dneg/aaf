@@ -35,7 +35,7 @@
 
 #include "aafErr.h"
 #include "AAFTypes.h"
-#include "Stubs.h"
+#include "Container.h"
 
 #if PORT_LANG_CPLUSPLUS
 extern          "C"
