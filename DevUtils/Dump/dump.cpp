@@ -1760,6 +1760,9 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
 
   cout << "Dump of properties" << endl;
   dumpProperties(storage, index, _entryCount, pathName, isRoot, swapNeeded);
+  if (_entryCount == 0) {
+    cout << "empty" << endl;
+  }
 
   delete [] index;
   index = 0;
