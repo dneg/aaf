@@ -771,7 +771,7 @@ AAFObject *AAFNewClassFromClassID(AAFFile *file, char *classID, OMLObject obj)
 	else if(strncmp(classID, "MGRP",4) == 0)
 		result = new AAFMediaGroup(file, obj);
 	else if(strncmp(classID, "MDTP",4) == 0)
-		result = new AAFMediaTapeDescriptor(file, obj);
+		result = new AAFTapeDescriptor(file, obj);
 	/* Skip MOBJ, as it's an abstract class */
 	else if(strncmp(classID, "MSLT",4) == 0)
 		result = new AAFMobSlot(file, obj);
