@@ -27,7 +27,7 @@ AD_HEAD
 // aafNumSlots_t,
 // aafInt32,
 // aafTimeStamp_t,
-// aafString, [probably need a corresponding aafString_t for idl]
+// aafString_t, [probably need a corresponding aafString_t for idl]
 // aafRational_t,
 // AAFSegment,
 // AAFMobSlot,
@@ -40,9 +40,9 @@ AD_HEAD
 // aafIncMedia_t		[enumeration]
 
 
-AD_FOWARD_DECLARATION(AAFSegment)
-AD_FOWARD_DECLARATION(AAFMobSlot)
-AD_FOWARD_DECLARATION(AAFFile)
+AD_FORWARD_DECLARATION(AAFSegment)
+AD_FORWARD_DECLARATION(AAFMobSlot)
+AD_FORWARD_DECLARATION(AAFFile)
 
 
 AD_CLASS_UUID(B1A21375, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -69,7 +69,7 @@ This method returns the number of slots contained by this mob.)
 
 // trr: does this method belong in the public AAF interfaces or is it part of an older omf api?
 AD_METHOD1(GetNumComments,
-[out], aafInt32	*, numComments, Number of comments,
+[out], aafString_t	*, numComments, Number of comments,
 Iterates through the specified Mob to retrieve the next user\-defined comment.)
 
 AD_METHOD1(SetModTime,
@@ -93,7 +93,7 @@ When a mob is initially created\, the Toolkit internally creates
   // the mob's identity to an explicit mobID.)
 
 AD_METHOD1(SetName,
-[in\, ref], aafString *, name, Mob Name,
+[in\, ref], aafString_t *, name, Mob Name,
 This method sets the name property on a mob.)
 
 AD_METHOD3(AppendNewSlot,
@@ -110,24 +110,24 @@ AD_METHOD6(AppendNewTrack,
 [in\, ref], AAFSegment *, segment, Segment to append as track component,
 [in], aafPosition_t, origin, Track Origin,
 [in], aafTrackID_t, trackID, The Track ID,
-[in], aafString *, trackName, Track Name \(optional\),
+[in], aafString_t *, trackName, Track Name \(optional\),
 [out], AAFMobSlot **, newTrack, Newly created track,
 This method creates a new mob slot with the given property values and appends it to the input mob.)
 
 AD_METHOD2(AppendComment,
-[in\,ref], aafString *, category, Comment heading,
-[in\,ref], aafString *, comment, Comment value,
+[in\,ref], aafString_t *, category, Comment heading,
+[in\,ref], aafString_t *, comment, Comment value,
 Creates a user-defined comment and appends it to the specified Mob.)
 
 AD_METHOD3(SetNewProps,
 [in], aafBool, isMasterMob, Whether or not this is a Master Mob,
-[in\,ref], aafString *, name, Mob Name \(optional\),
+[in\,ref], aafString_t *, name, Mob Name \(optional\),
 [in], aafBool, isPrimary, Whether or not this is a primary mob,
 This method is called to create the new properties on a mob.)
 
 AD_METHOD1(GetName,
-[in\,out], aafString *, name, Mob Name,
-This method will copy the mob name into the given aafString.)
+[in\,out], aafString_t *, name, Mob Name,
+This method will copy the mob name into the given aafString_t.)
 
 AD_METHOD1(GetModTime,
 [out], aafTimeStamp_t *, lastModified, Modified Time,
@@ -138,7 +138,7 @@ AD_METHOD1(GetCreateTime,
 This method will return the creation time for this mob.)
 
 AD_METHOD3(GetMobInfo,
-[in\,out], aafString *, name, Mob Name,
+[in\,out], aafString_t *, name, Mob Name,
 [out], aafTimeStamp_t *, lastModified, Modified Time,
 [out], aafTimeStamp_t *, creationTime, Creation Time,
 This method will all mob property information is a single call.)
@@ -216,7 +216,7 @@ This method returns false by default. This method must be overridden by
 // virtual aafErr_t Save(AAFFile *file);
 
 AD_METHOD2(Copy,
-[in], aafString *, destMobName, Optional Input. The name to be assigned to the new copy of the Mob.
+[in], aafString_t *, destMobName, Optional Input. The name to be assigned to the new copy of the Mob.
   // The destMobName argument is optional. Specify a NULL value if no desti\-
   // nation Mob name is desired.,
 [out], AAFMob **, destMob, Destination Mob,
@@ -237,7 +237,7 @@ Finds all Source Clips in the specified Mob that refer to the specified old Mob\
 AD_METHOD6(CopyExternal,
 [in], aafDepend_t, resolveDependencies, Whether to copy dependent mobs,
 [in], aafIncMedia_t, includeMedia, Whether to include media data,
-[in\,ref], aafString *, destMobName, Destination Mob Name,
+[in\,ref], aafString_t *, destMobName, Destination Mob Name,
 [in\,ref], AAFFile *, destFile, Destination File,
 [out], AAFObject **, destMedia, Destination Media Data,
 [out], AAFMob **, destMob, Destination Mob,
