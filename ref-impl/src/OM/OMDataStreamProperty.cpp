@@ -300,37 +300,37 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
   }
   if (readCount > 0) {
 
-  bool reorder = false;
-  if (byteOrder() != hostByteOrder()) {
-    reorder = true;
-  }
+    bool reorder = false;
+    if (byteOrder() != hostByteOrder()) {
+      reorder = true;
+    }
 
-  // Allocate buffer for one element
-  OMByte* buffer = new OMByte[externalElementSize];
+    // Allocate buffer for one element
+    OMByte* buffer = new OMByte[externalElementSize];
 
     for (size_t i = 0; i < readCount; i++) {
 
-    // Read an element of the property value
-    OMUInt32 actualByteCount;
-    read(buffer, externalElementSize, actualByteCount);
-    ASSERT("All bytes read", actualByteCount == externalElementSize);
+      // Read an element of the property value
+      OMUInt32 actualByteCount;
+      read(buffer, externalElementSize, actualByteCount);
+      ASSERT("All bytes read", actualByteCount == externalElementSize);
 
-    // Reorder an element of the property value
-    if (reorder) {
-      elementType->reorder(buffer, externalElementSize);
-    }
+      // Reorder an element of the property value
+      if (reorder) {
+        elementType->reorder(buffer, externalElementSize);
+      }
 
-    // Internalize an element of the property value
-    size_t requiredBytesSize = elementType->internalSize(buffer,
+      // Internalize an element of the property value
+      size_t requiredBytesSize = elementType->internalSize(buffer,
                                                          externalElementSize);
 
-    elementType->internalize(buffer,
+      elementType->internalize(buffer,
                              externalElementSize,
                              &elements[i * requiredBytesSize],
                              requiredBytesSize,
                              hostByteOrder());
-  }
-  delete [] buffer;
+    }
+    delete [] buffer;
   }
   elementsRead = readCount;
 }
