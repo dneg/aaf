@@ -1634,7 +1634,6 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFMobSlot			*slot = NULL;
 	ImplAAFSegment			*seg = NULL;
 	ImplAAFFindSourceInfo	*sourceInfo = NULL;
-	ImplAAFSourceMob		*fileMob = NULL;
 	ImplAAFHeader			*dataHead = NULL;
 	ImplAAFEssenceData		*essenceData = NULL;
 	ImplAAFPluginManager	*plugins = NULL;
