@@ -22,6 +22,7 @@
 #include <AxDictionary.h>
 #include <AxEssence.h>
 #include <AxMetaDef.h>
+#include <AxMob.h>
 
 #include <AAFCodecDefs.h>
 #include <AAFDataDefs.h>
@@ -45,7 +46,8 @@ AxImplNullEssenceCodec::AxImplNullEssenceCodec()
 	_codecDesc( L"AAF Example Codec" ),
 	_essenceDataAUID( AUID_AAFEssenceData ),
 	_essenceDataDefID( DDEF_Picture ),
-	_categoryClassAUID( AUID_AAFCodecDef )
+	_categoryClassAUID( AUID_AAFCodecDef ),
+	_pAccess( 0 )
 {
 	// Init the flavours vector
 	// kAAFNilCodecFlavour must be supported
@@ -54,7 +56,7 @@ AxImplNullEssenceCodec::AxImplNullEssenceCodec()
 	// Init the display name map.  This maps flavour ids to taste buds.
 	// Each entry in the _flavours vector should be represented in this map.
 	// kAAFNilCodecFlavour must alway be supported.
-	_displayNames[ kAAFNilCodecFlavour ] = L"AAF Example Codec";
+	_flavourNames[ kAAFNilCodecFlavour ] = L"AAF Example Codec";
 		
 	InitFormatSpecifiers();
 }
@@ -167,6 +169,76 @@ const AxString& AxImplNullEssenceCodec::GetDesc()
 	return _codecDesc;
 }
 
+IAAFCDCIDescriptorSP AxImplNullEssenceCodec::GetEssenceDescriptor( IAAFSourceMobSP spSourceMob )
+{
+	AxSourceMob axSourceMob( spSourceMob );
+
+	IAAFEssenceDescriptorSP spEssenceDesc = axSourceMob.GetEssenceDescriptor();
+	IAAFCDCIDescriptorSP spCDCIDescriptor;
+	AxQueryInterface( spEssenceDesc, spCDCIDescriptor );
+
+	return spCDCIDescriptor;
+}
+
+void AxImplNullEssenceCodec::UpdateEssenceDescriptor( IAAFSourceMobSP spSourceMob )
+{
+	AxCDCIDescriptor axDesc( GetEssenceDescriptor( spSourceMob ) );
+	
+	// Update FileDescriptor properties
+	axDesc.SetLength( _numSamples );
+	axDesc.SetSampleRate( _sampleRate );
+
+	// Update DigitalImageDescriptor properties
+	axDesc.SetCompression( _compression );
+	axDesc.SetStoredView(  _storedRect.GetVal().ySize,
+						   _storedRect.GetVal().xSize );
+	axDesc.SetSampledView( _sampledRect.GetVal().ySize,
+						   _sampledRect.GetVal().xSize,
+						   _sampledRect.GetVal().xOffset,
+						   _sampledRect.GetVal().yOffset );
+	axDesc.SetDisplayView( _displayRect.GetVal().ySize,
+						   _displayRect.GetVal().xSize,
+						   _displayRect.GetVal().xOffset,
+						   _displayRect.GetVal().yOffset );
+	axDesc.SetFrameLayout( _frameLayout );
+	axDesc.SetVideoLineMap( _videoLineMap.GetValBufSize()/sizeof(_videoLineMap.GetVal()[0]),
+							_videoLineMap );
+	axDesc.SetImageAspectRatio( _aspectRatio );
+	axDesc.SetAlphaTransparency( _alphaTransparency );
+	axDesc.SetGamma( _gamma );
+	axDesc.SetImageAlignmentFactor( _imageAlignmentFactor );
+
+	// FIXME - These are optional properties.  They would have to be added to
+	// the descriptor, as is done in plugin/CAAFCDescriptorHelper.cpp
+	// Seems like a bad idea, in general, should it be emulated here?
+	//axDesc.SetFieldDominance( _fieldDominance );
+	//axDesc.SetFieldStartOffset( _fieldStartOffset );
+	//axDesc.SetFieldEndOffset( _fieldEndOffset );
+
+	// CDCIDescriptor methods:
+	axDesc.SetComponentWidth( _componentWidth );
+	axDesc.SetHorizontalSubsampling( _horizSubsampling );
+	axDesc.SetColorSiting( _colorSiting );
+	axDesc.SetBlackReferenceLevel( _blackLevel );
+	axDesc.SetWhiteReferenceLevel( _whiteLevel );
+	axDesc.SetColorRange( _colorRange );
+	axDesc.SetPaddingBits( _padBits );
+}
+
+int AxImplNullEssenceCodec::GetFrameSize()
+{
+	// Verify minimal supported essence descriptor values.
+	// FIXME - Test this when the values are set.
+	if ( 2 != _horizSubsampling || kAAFColorSpaceYUV != _colorSpace ) {
+		// Of course, a full blown codec implemention would not enforce
+		// such restrictions.
+		CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
+	}
+
+	// Assumes 8 bit per component yuv.
+	return  _storedRect.GetVal().xSize * _storedRect.GetVal().ySize * 2;
+}
+
 //
 //  IAAFEssenceCodec methods
 //
@@ -174,7 +246,7 @@ const AxString& AxImplNullEssenceCodec::GetDesc()
 void AxImplNullEssenceCodec::SetEssenceAccess(
 		IAAFEssenceAccess * pEssenceAccess )
 {
-	_access = pEssenceAccess;
+	_pAccess = pEssenceAccess;
 }
 
 void AxImplNullEssenceCodec::CountFlavours(
@@ -248,18 +320,7 @@ void AxImplNullEssenceCodec::GetMaxCodecDisplayNameLength(
 		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
 	}
 
-	// FIXME - This could be done once at init time.  Also, could be in
-	// a little class that derives from std::map and adds a method to computes
-	// the max length is done with the specifier map.
-	int maxSize = 0;
-	DisplayNameIterType iter;
-	for( iter = _displayNames.begin();  iter != _displayNames.end(); ++iter ) {
-		if ( iter->second.size() > maxSize ) {
-			maxSize = iter->second.size();
-		}
-	}
-
-	*pBufSize = (maxSize+1) * sizeof(DisplayNameCharType);
+	*pBufSize = _flavourNames.GetMaxCBufferSize();
 }
 
 void AxImplNullEssenceCodec::GetCodecDisplayName(
@@ -274,8 +335,8 @@ void AxImplNullEssenceCodec::GetCodecDisplayName(
 	}
 
 	DisplayNameIterType iter;
-	iter = _displayNames.find( flavour );
-	if ( iter == _displayNames.end() ) {
+	iter = _flavourNames.find( flavour );
+	if ( iter == _flavourNames.end() ) {
 		// FIXME - This requires a more meaningful error code.
 		// e.g. "not found", "unknown", or "not supported".
 		CHECK_HRESULT( AAFRESULT_BADINDEX );
@@ -335,10 +396,35 @@ void AxImplNullEssenceCodec::Create(
 		aafUID_constref  essenceKind,
 		aafRational_constref  sampleRate,
 		IAAFEssenceStream * stream,
-		aafCompressEnable_t  compEnable)
+		aafCompressEnable_t  /*compEnable*/ )
 {
 	TRACE
-	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
+
+	if ( !fileMob || ! stream ) {
+		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
+	}
+
+	if ( !_flavourNames.IsFound( flavour ) ) {
+		// FIXME - The CDCI and JPEG codecs return AAFRESULT_NULL_PARAMS.
+		// This seems like a better alternative, but remains less than ideal.
+		CHECK_HRESULT( AAFRESULT_NO_MORE_FLAVOURS );
+	}
+
+	// If multiple flavours are supported, the data def would likely
+	// be a function of the flavour id.
+	if ( essenceKind != _dataDefID ) {
+		CHECK_HRESULT( AAFRESULT_INVALID_DATADEF );
+	}
+
+	// Reset specifier values as required.
+	_sampleRate = sampleRate;
+	
+	// Save the stream pointer.
+	IAAFEssenceStreamSP spStream(stream);
+	_spStream = spStream;
+
+	IAAFSourceMobSP spSrcMob( fileMob );
+	UpdateEssenceDescriptor( spSrcMob );
 }
 
 void AxImplNullEssenceCodec::Open(
@@ -355,8 +441,15 @@ void AxImplNullEssenceCodec::CountSamples(
 		aafUID_constref  essenceKind,
 		aafLength_t *  pNumSamples)
 {
-	TRACE
-	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
+	if ( !pNumSamples ) {
+		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
+	}
+
+	if ( essenceKind != _dataDefID ) {
+		CHECK_HRESULT( AAFRESULT_INVALID_DATADEF );
+	}
+
+	*pNumSamples = _numSamples;
 }
 
 void AxImplNullEssenceCodec::WriteSamples(
@@ -367,7 +460,21 @@ void AxImplNullEssenceCodec::WriteSamples(
 		aafUInt32 *  bytesWritten)
 {
 	TRACE
-	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
+
+	if ( !samplesWritten || !bytesWritten || !buffer ) {
+		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
+	}
+
+	if ( buflen < GetFrameSize() ) {
+		CHECK_HRESULT( AAFRESULT_SMALLBUF );
+	}
+	
+	// Write sample to _stream, aligning as necessary.
+
+	*samplesWritten = 1;
+	*bytesWritten = GetFrameSize();
+
+	_numSamples += 1;
 }
 
 void AxImplNullEssenceCodec::ReadSamples(
@@ -378,13 +485,25 @@ void AxImplNullEssenceCodec::ReadSamples(
 		aafUInt32 *  bytesRead)
 {
 	TRACE
-	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
+
+	if ( !samplesRead || !bytesRead ) {
+		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
+	}
+	
+	// Read samples from _stream, aligned as necessary.
+	
+	*samplesRead = 1;
+	*bytesRead = GetFrameSize();
 }
 
 void AxImplNullEssenceCodec::Seek(
 		aafPosition_t  sampleFrame)
 {
 	TRACE
+	
+	// Seek to the correct location in _stream to read frame number
+	// sampleFrame.
+
 	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
 }
 
@@ -392,6 +511,17 @@ void AxImplNullEssenceCodec::CompleteWrite(
 		IAAFSourceMob * pFileMob)
 {
 	TRACE
+
+	if ( !pFileMob ) {
+		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
+	}
+
+	// Perform final processing on _spStream.
+
+	// Update the essence descriptor.
+	IAAFSourceMobSP spSrcMob( pFileMob );
+	UpdateEssenceDescriptor( spSrcMob );
+		
 	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
 }
 
@@ -406,8 +536,15 @@ void AxImplNullEssenceCodec::CreateDescriptorFromStream(
 void AxImplNullEssenceCodec::GetCurrentEssenceStream(
 		IAAFEssenceStream ** ppStream)
 {
-	TRACE
-	CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
+	if ( !ppStream ) {
+		CHECK_HRESULT( AAFRESULT_NULL_PARAM );
+	}
+
+	// FIXME - Mixed use of smart/dump pointer.
+	// Is there a better way to deal with this?
+
+	*ppStream = _spStream;
+	(*ppStream)->AddRef();
 }
 
 void AxImplNullEssenceCodec::PutEssenceFormat(
@@ -472,7 +609,7 @@ void AxImplNullEssenceCodec::GetEssenceFormat(
 	CHECK_HRESULT( pFormatTemplate->NumFormatSpecifiers( &numSpecifiers ) );
 
 	IAAFSmartPointer<IAAFEssenceFormat> pFormat;
-	CHECK_HRESULT( _access->GetEmptyFileFormat( &pFormat ) );
+	CHECK_HRESULT( _pAccess->GetEmptyFileFormat( &pFormat ) );
 
 	for (i = 0; i < numSpecifiers; i++ ) {
 
@@ -507,7 +644,7 @@ void AxImplNullEssenceCodec::GetDefaultEssenceFormat(
 	}
 
 	IAAFSmartPointer<IAAFEssenceFormat> pFormat;
-	CHECK_HRESULT( _access->GetEmptyFileFormat( &pFormat ) );
+	CHECK_HRESULT( _pAccess->GetEmptyFileFormat( &pFormat ) );
 
 	AxPluginSpecifierMap::IterType iter;
 
@@ -578,14 +715,5 @@ void AxImplNullEssenceCodec::GetLargestSampleSize(
 		CHECK_HRESULT( AAFRESULT_CODEC_CHANNELS );
 	}
 
-	// Verify minimal supported essence descriptor values.
-	// FIXME - Test this when the values are set.
-	if ( 2 != _horizSubsampling || kAAFColorSpaceYUV != _colorSpace ) {
-		// Of course, a full blown codec implemention would not enforce
-		// such restrictions.
-		CHECK_HRESULT( AAFRESULT_NOT_IMPLEMENTED );
-	}
-
-	// Assumes 8 bit per component yuv.
-	*pLength = _storedRect.GetVal().xSize * _storedRect.GetVal().ySize * 2;
+	*pLength = GetFrameSize();
 }

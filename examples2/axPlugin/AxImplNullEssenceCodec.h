@@ -21,7 +21,10 @@
 
 #include "AxPluginFormatSpecifiers.h"
 
+#include "AxPluginUtil.h"
+
 #include <AxTypes.h>
+#include <AxSmartPointer.h>
 
 #include <AAFTypes.h>
 #include <AAFPlugin.h>
@@ -177,6 +180,21 @@ private:
 	void InitFormatSpecifiers();
 	void FiniFormatSpecifiers();
 
+	// Fetch a cdci descriptor from the source mob.
+	IAAFCDCIDescriptorSP GetEssenceDescriptor( IAAFSourceMobSP spMob );
+	void UpdateEssenceDescriptor( IAAFSourceMobSP spMob );
+
+	// Return size of one frame in bytes.
+	// All frames assumed the same size.
+	int GetFrameSize();
+
+	// The descriptor object associated with this essence.
+	// SetEssenceDescriptor sets this pointer.
+	//IAAFCDCIDescriptorSP _spCDCIDescriptor;
+	
+	// Sample count
+	int _numSamples;
+
 	// Format specifiers - the cdci specifiers are used in this example.
 	// These are initialized by InitFormatSpecifiers().  Each specifier
 	// is assigned a UID.  Some are considered read-only. This is enforced
@@ -256,14 +274,23 @@ private:
 	// each other?
 	std::vector< aafUID_t > _flavours;
 
-	// Map flavour id's to display names.
-	std::map< aafUID_t, AxString > _displayNames;
+	// Map flavour id's to display names.  This maps uids to strings.
+	// The map must contain the same set of uids as the _flavours vectr.
+	AxPluginNameMap _flavourNames;
 
 	// Some _displayNames related types to make life a bit easier.
 	typedef AxCharTraits::char_type DisplayNameCharType;
 	typedef std::map< aafUID_t, AxString >::iterator DisplayNameIterType;
 
-	IAAFEssenceAccess* _access;
+
+	// The pointer should *not* be referenced counted.  This pointer is set by
+	// SetEssenceAccess() and is the the container (owner) for this IAAFEssenceCodec.
+	// Referencing counting this interface would cause a circular reference count.
+	IAAFEssenceAccess* _pAccess;
+
+
+	// The essence stream is reference counted.
+	IAAFEssenceStreamSP _spStream;
 };
 
 
