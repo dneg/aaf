@@ -1293,8 +1293,9 @@ HRESULT Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 					}
 				}
 			}
-			
 		}
+		// At this point we have a consistent MOB - Lets save it
+		// pFile->Save();  Commented out until dirty bit is used by OM !!!
 	}
 
 	OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
