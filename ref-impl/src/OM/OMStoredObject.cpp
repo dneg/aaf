@@ -76,12 +76,6 @@ size_t OMStoredObject::_openStorages = 0;
 size_t OMStoredObject::_openStreams = 0;
 #endif
 
-  // @mfunc Destructor.
-OMStoredObject::~OMStoredObject(void)
-{
-  TRACE("OMStoredObject::~OMStoredObject");
-}
-
   // @mfunc Open the root <c OMStoredObject> in the disk file
   //        <p fileName> for reading only.
   //   @parm The name of the file to open. The file must already exist.
@@ -191,6 +185,81 @@ OMStoredObject* OMStoredObject::createModify(OMRawStorage* rawStorage,
   return newStore;
 }
 
+  // @mfunc Destructor.
+OMStoredObject::~OMStoredObject(void)
+{
+  TRACE("OMStoredObject::~OMStoredObject");
+}
+
+  // @mfunc Create a new <c OMStoredObject>, named <p name>,
+  //        contained by this <c OMStoredObject>.
+  //   @parm The name to be used for the new <c OMStoredObject>.
+  //   @rdesc A new <c OMStoredObject> contained by this
+  //          <c OMStoredObject>.
+OMStoredObject* OMStoredObject::create(const wchar_t* name)
+{
+  TRACE("OMStoredObject::create");
+  PRECONDITION("Valid name", validWideString(name));
+
+  IStorage* newStorage = createStorage(_storage, name);
+  OMStoredObject* result = new OMStoredObject(newStorage);
+  ASSERT("Valid heap pointer", result != 0);
+  result->create(_byteOrder);
+  return result;
+}
+
+  // @mfunc Open an exsiting <c OMStoredObject>, named <p name>,
+  //        contained by this <c OMStoredObject>.
+  //   @parm The name of the existing <c OMStoredObject>.
+  //   @rdesc The existing <c OMStoredObject> contained by this
+  //          <c OMStoredObject>.
+OMStoredObject* OMStoredObject::open(const wchar_t* name)
+{
+  TRACE("OMStoredObject::open");
+  PRECONDITION("Valid name", validWideString(name));
+
+  IStorage* newStorage = openStorage(_storage, name, _mode);
+  OMStoredObject* result = new OMStoredObject(newStorage);
+  ASSERT("Valid heap pointer", result != 0);
+  result->open(_mode);
+  return result;
+}
+
+  // @mfunc Close this <c OMStoredObject>.
+void OMStoredObject::close(void)
+{
+  TRACE("OMStoredObject::close");
+
+  if (_open) {
+
+    closeStream(_properties);
+
+    delete _index;
+    _index = 0;
+
+    closeStorage(_storage);
+
+    _open = false;
+  }
+}
+
+OMByteOrder OMStoredObject::byteOrder(void) const
+{
+  TRACE("OMStoredObject::byteOrder");
+
+  return _byteOrder;
+}
+
+  // @mfunc Save the <c OMStoredObjectIdentification> <p id>
+  //        in this <c OMStoredObject>.
+  //   @parm The <c OMStoredObjectIdentification> of this <c OMStoredObject>.
+void OMStoredObject::save(const OMStoredObjectIdentification& id)
+{
+  TRACE("OMStoredObject::save");
+
+  setClass(_storage, id);
+}
+
   // @mfunc Save the <c OMPropertySet> <p properties> in this
   //        <c OMStoredObject>.
   //   @parm The <c OMPropertySet> to save.
@@ -234,549 +303,6 @@ void OMStoredObject::save(const OMPropertySet& properties)
   POSTCONDITION("At start of properties stream",
                                              streamPosition(_properties) == 0);
   POSTCONDITION("At start of value stream", _offset == 0);
-}
-
-void OMStoredObject::save(OMStoredPropertySetIndex* index)
-{
-  TRACE("OMStoredObject::save(OMStoredPropertySetIndex*)");
-  PRECONDITION("Already open", _open);
-  PRECONDITION("Valid index", index != 0);
-  PRECONDITION("At start of index stream", streamPosition(_properties) == 0);
-
-  // The number of entries in the index.
-  //
-  OMPropertyCount entries = index->entries();
-  ASSERT("Valid index",
-                 index->isValid(indexHeaderSize + (entries * indexEntrySize)));
-
-  // Write byte order flag.
-  //
-  ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
-  writeToStream(_properties, &_byteOrder, sizeof(_byteOrder));
-
-  // Write version number.
-  //
-  OMVersion version = currentVersion;
-  writeToStream(_properties, &version, sizeof(version));
-
-  // Write count of entries.
-  //
-  writeToStream(_properties, &entries, sizeof(entries));
-
-  // Write entries.
-  //
-  OMPropertyId propertyId;
-  OMStoredForm type;
-  OMUInt32 offset;
-  OMPropertySize length;
-  size_t context = 0;
-  for (size_t i = 0; i < entries; i++) {
-    index->iterate(context, propertyId, type, offset, length);
-    writeToStream(_properties, &propertyId, sizeof(propertyId));
-    writeToStream(_properties, &type, sizeof(type));
-    writeToStream(_properties, &length, sizeof(length));
-  }
-
-  streamSetPosition(_properties, 0);
-  POSTCONDITION("At start of index stream", streamPosition(_properties) == 0);
-}
-
-OMStoredPropertySetIndex* OMStoredObject::restore(void)
-{
-  TRACE("OMStoredObject::restore");
-  PRECONDITION("Already open", _open);
-  PRECONDITION("At start of index stream", streamPosition(_properties) == 0);
-
-  // Read byte order flag.
-  //
-  readFromStream(_properties, &_byteOrder, sizeof(_byteOrder));
-  if (_byteOrder == hostByteOrder()) {
-    _reorderBytes = false;
-  } else {
-    _reorderBytes = true;
-  }
-
-  // Read version number.
-  //
-  OMVersion version;
-  readUInt8FromStream(_properties, version);
-  ASSERT("Recognized version number", version == currentVersion);
-
-  // Read count of entries.
-  //
-  OMPropertyCount entries;
-  readUInt16FromStream(_properties, entries, _reorderBytes);
-  OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
-  ASSERT("Valid heap pointer", index != 0);
-
-  // Read entries.
-  //
-  OMPropertyId propertyId;
-  OMStoredForm type;
-  OMUInt32 offset = indexHeaderSize + (entries * indexEntrySize);
-  OMPropertySize length;
-  for (size_t i = 0; i < entries; i++) {
-    readUInt16FromStream(_properties, propertyId, _reorderBytes);
-    readUInt16FromStream(_properties, type, _reorderBytes);
-    readUInt16FromStream(_properties, length, _reorderBytes);
-    index->insert(propertyId, type, offset, length);
-    offset = offset + length;
-  }
-
-  POSTCONDITION("Valid index",
-                 index->isValid(indexHeaderSize + (entries * indexEntrySize)));
-  return index;
-}
-
-  // @mfunc Restore the <c OMStoredObjectIdentification>
-  //        of this <c OMStoredObject> into <p id>.
-  //   @parm The <c OMStoredObjectIdentification> of this <c OMStoredObject>.
-void OMStoredObject::restore(OMStoredObjectIdentification& id)
-{
-  TRACE("OMStoredObject::restore");
-
-  getClass(_storage, id);
-}
-
-  // @mfunc Restore the <c OMPropertySet> <p properties> into
-  //        this <c OMStoredObject>.
-  //   @parm The <c OMPropertySet> to restore.
-void OMStoredObject::restore(OMPropertySet& properties)
-{
-  TRACE("OMStoredObject::restore");
-  PRECONDITION("Already open", _open);
-
-  size_t entries = _index->entries();
-
-  OMPropertyId propertyId;
-  OMStoredForm type;
-  OMUInt32 offset;
-  OMPropertySize length;
-  size_t context = 0;
-  for (size_t i = 0; i < entries; i++) {
-    _index->iterate(context, propertyId, type, offset, length);
-    OMProperty* p = properties.get(propertyId);
-    ASSERT("Valid property", p != 0);
-    p->restore(length);
-    ASSERT("Property is present", IMPLIES(p->isOptional(), p->isPresent()));
-  }
-#if !defined(OM_DISABLE_VALIDATE)
-  validate(&properties, _index);
-#endif
-  streamSetPosition(_properties, 0);
-  POSTCONDITION("At start of properties stream",
-                                       streamPosition(_properties) == 0);
-}
-
-  // @mfunc Constructor.
-  //   @parm The IStorage for the persistent representation of
-  //         this <c OMStoredObject>.
-OMStoredObject::OMStoredObject(IStorage* s)
-: _storage(s), _index(0), _properties(0),
-  _offset(0), _open(false), _mode(OMFile::readOnlyMode),
-  _byteOrder(hostByteOrder()), _reorderBytes(false)
-{
-  TRACE("OMStoredObject::OMStoredObject");
-}
-
-  // @mfunc Check that the <c OMPropertySet> <p propertySet> is
-  //        consistent with the <c OMStoredPropertySetIndex>
-  //        propertySetIndex.
-  //   @parm The <c OMPropertySet> to validate.
-  //   @parm The <c OMStoredPropertySetIndex> to validate.
-void OMStoredObject::validate(
-                        const OMPropertySet* propertySet,
-                        const OMStoredPropertySetIndex* propertySetIndex) const
-{
-  TRACE("OMStoredObject::validate");
-  PRECONDITION("Valid property set", propertySet != 0);
-  PRECONDITION("Valid property set index", propertySetIndex != 0);
-
-  OMPropertyId propertyId;
-  OMStoredForm type;
-  OMUInt32 offset;
-  OMPropertySize length;
-  size_t context;
-
-  // Check that all required properties are present.
-  //
-  OMPropertySetIterator iterator(*propertySet, OMBefore);
-  while (++iterator) {
-    OMProperty* p = iterator.property();
-    ASSERT("Valid property", p != 0);
-    propertyId = p->propertyId();
-    if (!p->isOptional()) {
-      bool found = propertySetIndex->find(propertyId, type, offset, length);
-      ASSERT("Required property present", found);
-      if (!found) {
-        // error required property missing
-      }
-    }
-  }
-
-  // Check that there are no spurious properties.
-  //
-  OMPropertyCount entries = propertySetIndex->entries();
-  context = 0;
-  for (size_t k = 0; k < entries; k++) {
-    propertySetIndex->iterate(context, propertyId, type, offset, length);
-    bool allowed = propertySet->isAllowed(propertyId);
-    ASSERT("Property allowed", allowed);
-    if (!allowed) {
-      // error illegal property for this object
-    }
-  }
-
-}
-
-OMStoredObject* OMStoredObject::openFile(const wchar_t* fileName,
-                                         const OMFile::OMAccessMode mode)
-{
-  TRACE("OMStoredObject::openFile");
-  PRECONDITION("Valid file name", validWideString(fileName));
-  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
-                             (mode == OMFile::readOnlyMode));
-
-  DWORD openMode;
-  if (mode == OMFile::modifyMode) {
-    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == OMFile::readOnlyMode) {
-    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
-  }
-
-  OMCHAR omFileName[256];
-  convert(omFileName, 256, fileName);
-
-  IStorage* storage = 0;
-
-  HRESULT status = StgOpenStorage(
-    omFileName,
-    0,
-    openMode,
-    0,
-    0,
-    &storage);
-  check(status);
-  ASSERT("StgOpenStorage() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
-#endif
-
-  OMStoredObject* newStoredObject = new OMStoredObject(storage);
-  ASSERT("Valid heap pointer", newStoredObject != 0);
-
-  return newStoredObject;
-}
-
-OMStoredObject* OMStoredObject::createFile(const wchar_t* fileName)
-{
-  TRACE("OMStoredObject::createFile");
-  PRECONDITION("Valid file name", validWideString(fileName));
-
-  OMCHAR omFileName[256];
-  convert(omFileName, 256, fileName);
-
-  IStorage* storage = 0;
-
-  HRESULT status = StgCreateDocfile(
-    omFileName,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_FAILIFTHERE,
-    0,
-    &storage);
-  check(status);
-  ASSERT("StgCreateDocfile() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
-#endif
-
-  OMStoredObject* newStoredObject = new OMStoredObject(storage);
-  ASSERT("Valid heap pointer", newStoredObject != 0);
-
-  return newStoredObject;
-}
-
-OMStoredObject* OMStoredObject::openFile(OMRawStorage* rawStorage,
-                                         const OMFile::OMAccessMode mode)
-{
-  TRACE("OMStoredObject::openFile");
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
-                             (mode == OMFile::readOnlyMode));
-
-  ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
-  ASSERT("Valid heap pointer", iLockBytes != 0);
-
-  DWORD openMode;
-  if (mode == OMFile::modifyMode) {
-    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == OMFile::readOnlyMode) {
-    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
-  }
-
-  IStorage* storage = 0;
-
-  HRESULT status = StgOpenStorageOnILockBytes(
-    iLockBytes,
-    0,
-    openMode,
-    0,
-    0,
-    &storage);
-  check(status);
-  ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
-#endif
-
-  iLockBytes->Release();
-  OMStoredObject* newStoredObject = new OMStoredObject(storage);
-  ASSERT("Valid heap pointer", newStoredObject != 0);
-
-  return newStoredObject;
-}
-
-OMStoredObject* OMStoredObject::createFile(OMRawStorage* rawStorage)
-{
-  TRACE("OMStoredObject::createFile");
-  PRECONDITION("Valid raw storage", rawStorage != 0);
-
-  ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
-  ASSERT("Valid heap pointer", iLockBytes != 0);
-
-  IStorage* storage = 0;
-
-  HRESULT status = StgCreateDocfileOnILockBytes(
-    iLockBytes,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
-    0,
-    &storage);
-  check(status);
-  ASSERT("StgCreateDocfileOnILockBytes() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
-  _openStorages = _openStorages + 1;
-#endif
-
-  iLockBytes->Release();
-  OMStoredObject* newStoredObject = new OMStoredObject(storage);
-  ASSERT("Valid heap pointer", newStoredObject != 0);
-
-  return newStoredObject;
-}
-
-static const wchar_t* const propertyStreamName = L"properties";
-
-void OMStoredObject::create(const OMByteOrder byteOrder)
-{
-  TRACE("OMStoredObject::create");
-  PRECONDITION("Valid byte order",
-                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
-  PRECONDITION("Not already open", !_open);
-
-  _byteOrder = byteOrder;
-  _mode = OMFile::modifyMode;
-  _properties = createStream(_storage, propertyStreamName);
-  _open = true;
-}
-
-void OMStoredObject::open(const OMFile::OMAccessMode mode)
-{
-  TRACE("OMStoredObject::open");
-  PRECONDITION("Not already open", !_open);
-  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
-                             (mode == OMFile::readOnlyMode));
-
-  _mode = mode;
-  _properties = openStream(_storage, propertyStreamName);
-  _open = true;
-  _index = restore();
-}
-
-  // @mfunc Close this <c OMStoredObject>.
-void OMStoredObject::close(void)
-{
-  TRACE("OMStoredObject::close");
-
-  if (_open) {
-
-    closeStream(_properties);
-
-    delete _index;
-    _index = 0;
-
-    closeStorage(_storage);
-
-    _open = false;
-  }
-}
-
-  // @mfunc Write a property value to this <c OMStoredObject>. The
-  //        property value to be written occupies <p size> bytes at
-  //        the address <p start>. The property id is <p propertyId>.
-  //        The property type is <p type>.
-  //   @parm The property id.
-  //   @parm The property type.
-  //   @parm The start address of the property value.
-  //   @parm The size of the property value in bytes.
-void OMStoredObject::write(OMPropertyId propertyId,
-                           OMStoredForm storedForm,
-                           void* start,
-                           size_t size)
-{
-  TRACE("OMStoredObject::write");
-  PRECONDITION("Valid data", start != 0);
-  PRECONDITION("Valid size", size > 0);
-
-  _index->insert(propertyId, storedForm, _offset, size);
-
-  // Write property value.
-  //
-  writeToStream(_properties, start, size);
-  _offset += size;
-}
-
-  // @mfunc Read a property value from this <c OMStoredObject>.
-  //        The property value is read into a buffer which occupies
-  //        <p size> bytes at the address <p start>. The property id
-  //        is <p propertyId>. The property type is <p type>.
-  //   @parm OMPropertyId | propertyId | The property id.
-  //   @parm int | type | The property type.
-  //   @parm void* | start | The start address of the buffer to hold the
-  //         property value.
-  //   @parm size_t | size | The size of the buffer in bytes.
-void OMStoredObject::read(OMPropertyId propertyId,
-                          OMStoredForm ANAME(storedForm),
-                          void* start,
-                          size_t size)
-{
-  TRACE("OMStoredObject::read");
-  PRECONDITION("Valid data", start != 0);
-  PRECONDITION("Valid size", size > 0);
-
-  // Consistency check - look up propertyId in _index and check that
-  // the property type is the expected (passed in) type, and that the
-  // property length is the expected (passed in as size) length.
-  //
-  OMStoredForm actualType;
-  OMUInt32 actualOffset;
-  OMPropertySize actualLength;
-  bool found = _index->find(propertyId,
-                            actualType,
-                            actualOffset,
-                            actualLength);
-
-  ASSERT("Recognized property", found);
-  if (!found) {
-    // error illegal property for this object
-  }
-  ASSERT("Matching property types", storedForm == actualType);
-  ASSERT("Matching property sizes", size == actualLength);
-
-  // Since random access is not yet supported, check that the stream
-  // is synchronized with the index.
-  //
-  ASSERT("Sequential access",
-         actualOffset == streamPosition(_properties));
-
-  // Read property value.
-  //
-  readFromStream(_properties, start, size);
-}
-
-  // @mfunc Size of <p stream> in bytes.
-  //   @parm An open stream.
-  //   @rdesc The size of <p stream> in bytes
-  //   @this const
-OMUInt64 OMStoredObject::streamSize(IStream* stream) const
-{
-  TRACE("OMStoredObject::streamSize");
-  PRECONDITION("Valid stream", stream != 0);
-
-  STATSTG statstg;
-  HRESULT status = stream->Stat(&statstg, STATFLAG_NONAME);
-  check(status);
-
-  OMUInt64 result = toOMUInt64(statstg.cbSize);
-  return result;
-}
-
-  // @mfunc Set the size, in bytes, of <p stream>
-  //   @parm An open stream.
-  //   @parm The new size for the stream.
-void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
-{
-  TRACE("OMStoredObject::streamSetSize");
-
-  ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
-  HRESULT status = stream->SetSize(newStreamSize);
-  check(status);
-}
-
-  // @mfunc Open a stream called <p streamName> contained within this
-  //        <c OMStoredObject>.
-  //   @parm The name of the stream to open.
-  //   @rdesc An open stream.
-IStream* OMStoredObject::openStream(const wchar_t* streamName)
-{
-  TRACE("OMStoredObject::openStream");
-  PRECONDITION("Valid stream name", validWideString(streamName));
-
-  return openStream(_storage, streamName);
-}
-
-  // @mfunc Create a stream called <p streamName> contained within
-  //        this <c OMStoredObject>.
-  //   @parm The name of the stream to create.
-  //   @rdesc An open stream.
-IStream* OMStoredObject::createStream(const wchar_t* streamName)
-{
-  TRACE("OMStoredObject::createStream");
-  PRECONDITION("Valid stream name", validWideString(streamName));
-
-  return createStream(_storage, streamName);
-}
-
-  // @mfunc Save the <c OMStoredObjectIdentification> <p id>
-  //        in this <c OMStoredObject>.
-  //   @parm The <c OMStoredObjectIdentification> of this <c OMStoredObject>.
-void OMStoredObject::save(const OMStoredObjectIdentification& id)
-{
-  TRACE("OMStoredObject::save");
-
-  setClass(_storage, id);
-}
-
-  // @mfunc Create a new <c OMStoredObject>, named <p name>,
-  //        contained by this <c OMStoredObject>.
-  //   @parm The name to be used for the new <c OMStoredObject>.
-  //   @rdesc A new <c OMStoredObject> contained by this
-  //          <c OMStoredObject>.
-OMStoredObject* OMStoredObject::create(const wchar_t* name)
-{
-  TRACE("OMStoredObject::create");
-  PRECONDITION("Valid name", validWideString(name));
-
-  IStorage* newStorage = createStorage(_storage, name);
-  OMStoredObject* result = new OMStoredObject(newStorage);
-  ASSERT("Valid heap pointer", result != 0);
-  result->create(_byteOrder);
-  return result;
-}
-
-  // @mfunc Open an exsiting <c OMStoredObject>, named <p name>,
-  //        contained by this <c OMStoredObject>.
-  //   @parm The name of the existing <c OMStoredObject>.
-  //   @rdesc The existing <c OMStoredObject> contained by this
-  //          <c OMStoredObject>.
-OMStoredObject* OMStoredObject::open(const wchar_t* name)
-{
-  TRACE("OMStoredObject::open");
-  PRECONDITION("Valid name", validWideString(name));
-
-  IStorage* newStorage = openStorage(_storage, name, _mode);
-  OMStoredObject* result = new OMStoredObject(newStorage);
-  ASSERT("Valid heap pointer", result != 0);
-  result->open(_mode);
-  return result;
 }
 
   // @mfunc  Save the <c OMStoredVectorIndex> <p vector> in this
@@ -1061,6 +587,46 @@ void OMStoredObject::saveStream(OMPropertyId pid,
   _offset += size;
 }
 
+  // @mfunc Restore the <c OMStoredObjectIdentification>
+  //        of this <c OMStoredObject> into <p id>.
+  //   @parm The <c OMStoredObjectIdentification> of this <c OMStoredObject>.
+void OMStoredObject::restore(OMStoredObjectIdentification& id)
+{
+  TRACE("OMStoredObject::restore");
+
+  getClass(_storage, id);
+}
+
+  // @mfunc Restore the <c OMPropertySet> <p properties> into
+  //        this <c OMStoredObject>.
+  //   @parm The <c OMPropertySet> to restore.
+void OMStoredObject::restore(OMPropertySet& properties)
+{
+  TRACE("OMStoredObject::restore");
+  PRECONDITION("Already open", _open);
+
+  size_t entries = _index->entries();
+
+  OMPropertyId propertyId;
+  OMStoredForm type;
+  OMUInt32 offset;
+  OMPropertySize length;
+  size_t context = 0;
+  for (size_t i = 0; i < entries; i++) {
+    _index->iterate(context, propertyId, type, offset, length);
+    OMProperty* p = properties.get(propertyId);
+    ASSERT("Valid property", p != 0);
+    p->restore(length);
+    ASSERT("Property is present", IMPLIES(p->isOptional(), p->isPresent()));
+  }
+#if !defined(OM_DISABLE_VALIDATE)
+  validate(&properties, _index);
+#endif
+  streamSetPosition(_properties, 0);
+  POSTCONDITION("At start of properties stream",
+                                       streamPosition(_properties) == 0);
+}
+
   // @mfunc Restore the vector named <p vectorName> into this
   //        <c OMStoredObject>.
   //   @parm The name of the vector.
@@ -1209,25 +775,6 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   delete [] setIndexName;
 
   set = setIndex;
-}
-
-  // @mfunc The stream name for the index of a collection
-  //        named <p collectionName>.
-  //   @parm The collection name.
-  //   @rdesc The stream name for the collection index.
-wchar_t* OMStoredObject::collectionIndexStreamName(
-                                                 const wchar_t* collectionName)
-{
-  TRACE("OMStoredObject::collectionIndexStreamName");
-  PRECONDITION("Valid collection name", validWideString(collectionName));
-
-  wchar_t* suffix = L" index";
-  wchar_t* indexName = new wchar_t[lengthOfWideString(collectionName) + lengthOfWideString(suffix) + 1];
-  ASSERT("Valid heap pointer", indexName != 0);
-  copyWideString(indexName, collectionName, lengthOfWideString(collectionName) + 1);
-  concatenateWideString(indexName, suffix, lengthOfWideString(suffix) + 1);
-
-  return indexName;
 }
 
   // @mfunc Restore the <c OMPropertyTable> in this <c OMStoredObject>.
@@ -1419,68 +966,398 @@ void OMStoredObject::restoreStream(OMPropertyId pid,
   delete [] buffer;
 }
 
-IStream* OMStoredObject::createStream(IStorage* storage,
-                                      const wchar_t* streamName)
+  // @mfunc Write a property value to this <c OMStoredObject>. The
+  //        property value to be written occupies <p size> bytes at
+  //        the address <p start>. The property id is <p propertyId>.
+  //        The property type is <p type>.
+  //   @parm The property id.
+  //   @parm The property type.
+  //   @parm The start address of the property value.
+  //   @parm The size of the property value in bytes.
+void OMStoredObject::write(OMPropertyId propertyId,
+                           OMStoredForm storedForm,
+                           void* start,
+                           size_t size)
 {
-  TRACE("OMStoredObject::createStream");
-  PRECONDITION("Valid storage", storage != 0);
-  PRECONDITION("Valid stream name", validWideString(streamName));
-  PRECONDITION("Valid mode", _mode == OMFile::modifyMode);
+  TRACE("OMStoredObject::write");
+  PRECONDITION("Valid data", start != 0);
+  PRECONDITION("Valid size", size > 0);
 
-  DWORD mode = STGM_DIRECT | STGM_READWRITE |
-               STGM_SHARE_EXCLUSIVE  | STGM_CREATE;
+  _index->insert(propertyId, storedForm, _offset, size);
 
-  IStream* stream = 0;
-  OMCHAR omStreamName[256];
-  convert(omStreamName, 256, streamName);
-
-  HRESULT status = storage->CreateStream(
-    omStreamName,
-    mode,
-    0,
-    0,
-    &stream);
-  check(status);
-  ASSERT("IStorage::CreateStream() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
-  _openStreams = _openStreams + 1;
-#endif
-
-  return stream;
+  // Write property value.
+  //
+  writeToStream(_properties, start, size);
+  _offset += size;
 }
 
-IStream* OMStoredObject::openStream(IStorage* storage,
-                                    const wchar_t* streamName)
+  // @mfunc Read a property value from this <c OMStoredObject>.
+  //        The property value is read into a buffer which occupies
+  //        <p size> bytes at the address <p start>. The property id
+  //        is <p propertyId>. The property type is <p type>.
+  //   @parm OMPropertyId | propertyId | The property id.
+  //   @parm int | type | The property type.
+  //   @parm void* | start | The start address of the buffer to hold the
+  //         property value.
+  //   @parm size_t | size | The size of the buffer in bytes.
+void OMStoredObject::read(OMPropertyId propertyId,
+                          OMStoredForm ANAME(storedForm),
+                          void* start,
+                          size_t size)
+{
+  TRACE("OMStoredObject::read");
+  PRECONDITION("Valid data", start != 0);
+  PRECONDITION("Valid size", size > 0);
+
+  // Consistency check - look up propertyId in _index and check that
+  // the property type is the expected (passed in) type, and that the
+  // property length is the expected (passed in as size) length.
+  //
+  OMStoredForm actualType;
+  OMUInt32 actualOffset;
+  OMPropertySize actualLength;
+  bool found = _index->find(propertyId,
+                            actualType,
+                            actualOffset,
+                            actualLength);
+
+  ASSERT("Recognized property", found);
+  if (!found) {
+    // error illegal property for this object
+  }
+  ASSERT("Matching property types", storedForm == actualType);
+  ASSERT("Matching property sizes", size == actualLength);
+
+  // Since random access is not yet supported, check that the stream
+  // is synchronized with the index.
+  //
+  ASSERT("Sequential access",
+         actualOffset == streamPosition(_properties));
+
+  // Read property value.
+  //
+  readFromStream(_properties, start, size);
+}
+
+  // @mfunc Open a stream called <p streamName> contained within this
+  //        <c OMStoredObject>.
+  //   @parm The name of the stream to open.
+  //   @rdesc An open stream.
+IStream* OMStoredObject::openStream(const wchar_t* streamName)
 {
   TRACE("OMStoredObject::openStream");
-  PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid stream name", validWideString(streamName));
 
-  DWORD mode;
-  if (_mode == OMFile::modifyMode) {
-    mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (_mode == OMFile::readOnlyMode) {
-    mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+  return openStream(_storage, streamName);
+}
+
+  // @mfunc Create a stream called <p streamName> contained within
+  //        this <c OMStoredObject>.
+  //   @parm The name of the stream to create.
+  //   @rdesc An open stream.
+IStream* OMStoredObject::createStream(const wchar_t* streamName)
+{
+  TRACE("OMStoredObject::createStream");
+  PRECONDITION("Valid stream name", validWideString(streamName));
+
+  return createStream(_storage, streamName);
+}
+
+  // @mfunc Read <p size> bytes from <p stream> into the buffer at
+  //        address <p data>.
+  //   @parm The stream from which to read.
+  //   @parm The buffer into which the bytes are read.
+  //   @parm The number of bytes to read.
+void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
+{
+  TRACE("OMStoredObject::readFromStream");
+  PRECONDITION("Valid stream", stream != 0);
+  PRECONDITION("Valid data buffer", data != 0);
+  PRECONDITION("Valid size", size > 0);
+
+  unsigned long bytesRead;
+  HRESULT result = stream->Read(data, size, &bytesRead);
+  check(result);
+
+  ASSERT("Successful read", bytesRead == size);
+}
+
+  // @mfunc Attempt to read <p bytes> bytes from <p stream> into
+  //        the buffer at address <p data>. The actual number of
+  //        bytes read is returned in <p bytesRead>.
+  //   @parm The stream from which to read.
+  //   @parm The buffer into which the bytes are read.
+  //   @parm The number of bytes to write
+  //   @parm The actual number of bytes read.
+void OMStoredObject::readFromStream(IStream* stream,
+                                    OMByte* data,
+                                    const OMUInt32 bytes,
+                                    OMUInt32& bytesRead)
+{
+  TRACE("OMStoredObject::readFromStream");
+  PRECONDITION("Valid stream", stream != 0);
+  PRECONDITION("Valid data buffer", data != 0);
+  PRECONDITION("Valid size", bytes > 0);
+
+  HRESULT result = stream->Read(data, bytes, &bytesRead);
+  check(result);
+}
+
+  // @mfunc Write <p size> bytes from the buffer at address <p data>
+  //        to <p stream>.
+  //   @parm The stream on which to write.
+  //   @parm The buffer to write.
+  //   @parm The number of bytes to write.
+void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
+{
+  TRACE("OMStoredObject::writeToStream");
+  PRECONDITION("Valid stream", stream != 0);
+  PRECONDITION("Valid data", data != 0);
+  PRECONDITION("Valid size", size > 0);
+
+  unsigned long bytesWritten;
+  HRESULT resultCode = stream->Write(data, size, &bytesWritten);
+  check(resultCode);
+
+  ASSERT("Successful write", bytesWritten == size);
+}
+
+  // @mfunc Attempt to write <p bytes> bytes from the buffer at
+  //        address <p data> to <p stream>. The actual number of
+  //        bytes written is returned in <p bytesWritten>.
+  //   @parm The stream on which to write.
+  //   @parm The buffer to write.
+  //   @parm The number of bytes to write
+  //   @parm The actual number of bytes written.
+void OMStoredObject::writeToStream(IStream* stream,
+                                   const OMByte* data,
+                                   const OMUInt32 bytes,
+                                   OMUInt32& bytesWritten)
+{
+  TRACE("OMStoredObject::writeToStream");
+  PRECONDITION("Valid stream", stream != 0);
+  PRECONDITION("Valid data", data != 0);
+  PRECONDITION("Valid size", bytes > 0);
+
+  HRESULT resultCode = stream->Write(data, bytes, &bytesWritten);
+  check(resultCode);
+}
+
+  // @mfunc Read an OMUInt8 from <p stream> into <p i>. If
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUInt8.
+void OMStoredObject::readUInt8FromStream(IStream* stream,
+                                         OMUInt8& i)
+{
+  TRACE("OMStoredObject::readUInt8FromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &i, sizeof(OMUInt8));
+}
+
+  // @mfunc Read an OMUInt16 from <p stream> into <p i>. If
+  //        <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUInt16.
+  //   @parm If true then reorder the bytes.
+void OMStoredObject::readUInt16FromStream(IStream* stream,
+                                          OMUInt16& i,
+                                          bool reorderBytes)
+{
+  TRACE("OMStoredObject::readUInt16FromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &i, sizeof(OMUInt16));
+  if (reorderBytes) {
+    reorderUInt16(i);
   }
+}
 
-  IStream* stream = 0;
-  OMCHAR omStreamName[256];
-  convert(omStreamName, 256, streamName);
+  // @mfunc Reorder the OMUInt16 <p i>.
+  //   @parm The OMUInt16 to reorder.
+void OMStoredObject::reorderUInt16(OMUInt16& i)
+{
+  TRACE("OMStoredObject::reorderUInt16");
 
-  HRESULT status = storage->OpenStream(
-    omStreamName,
-    0,
-    mode,
-    0,
-    &stream);
+  OMUInt8* p = (OMUInt8*)&i;
+  OMUInt8 temp;
+
+  temp = p[0];
+  p[0] = p[1];
+  p[1] = temp;
+
+}
+
+  // @mfunc Read an OMUInt32 from <p stream> into <p i>. If
+  //        <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUInt32.
+  //   @parm If true then reorder the bytes.
+void OMStoredObject::readUInt32FromStream(IStream* stream,
+                                          OMUInt32& i,
+                                          bool reorderBytes)
+{
+  TRACE("OMStoredObject::readUInt32FromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &i, sizeof(OMUInt32));
+  if (reorderBytes) {
+    reorderUInt32(i);
+  }
+}
+
+  // @mfunc Reorder the OMUInt32 <p i>.
+  //   @parm The OMUInt32 to reorder.
+void OMStoredObject::reorderUInt32(OMUInt32& i)
+{
+  TRACE("OMStoredObject::reorderUInt32");
+
+  OMUInt8* p = (OMUInt8*)&i;
+  OMUInt8 temp;
+
+  temp = p[0];
+  p[0] = p[3];
+  p[3] = temp;
+
+  temp = p[1];
+  p[1] = p[2];
+  p[2] = temp;
+
+}
+
+  // @mfunc Read a UniqueObjectIdentification from <p stream> into <p id>.
+  //        If <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUniqueObjectIdentification.
+  //   @parm If true then reorder the bytes.
+void OMStoredObject::readUniqueObjectIdentificationFromStream(
+                                              IStream* stream,
+                                              OMUniqueObjectIdentification& id,
+                                              bool reorderBytes)
+{
+  TRACE("OMStoredObject::UniqueObjectIdentificationFromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &id, sizeof(OMUniqueObjectIdentification));
+  if (reorderBytes) {
+    reorderUniqueObjectIdentification(id);
+  }
+}
+
+  // @mfunc Read a UniqueMaterialIdentification from <p stream> into <p id>.
+  //        If <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUniqueMaterialIdentification.
+  //   @parm If true then reorder the bytes.
+void OMStoredObject::readUniqueMaterialIdentificationFromStream(
+                                            IStream* stream,
+                                            OMUniqueMaterialIdentification& id,
+                                            bool reorderBytes)
+{
+  TRACE("OMStoredObject::UniqueMaterialIdentificationFromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &id, sizeof(OMUniqueMaterialIdentification));
+  if (reorderBytes) {
+    reorderUniqueMaterialIdentification(id);
+  }
+}
+
+  // @mfunc Reorder the OMUniqueObjectIdentification <p id>.
+  //   @parm The OMUniqueObjectIdentification to reorder.
+void OMStoredObject::reorderUniqueObjectIdentification(
+                                              OMUniqueObjectIdentification& id)
+{
+  TRACE("OMStoredObject::reorderUniqueObjectIdentification");
+
+  reorderUInt32(id.Data1);
+  reorderUInt16(id.Data2);
+  reorderUInt16(id.Data3);
+  // no need to swap Data4
+}
+
+  // @mfunc Reorder the OMUniqueMaterialIdentification <p id>.
+  //   @parm The OMUniqueMaterialIdentification to reorder.
+void OMStoredObject::reorderUniqueMaterialIdentification(
+                                            OMUniqueMaterialIdentification& id)
+{
+  TRACE("OMStoredMaterial::reorderUniqueMaterialIdentification");
+
+  // No need to swap
+  // SMPTELabel, length, instanceHigh, instanceMid or instanceLow.
+
+  reorderUniqueObjectIdentification(id.material);
+}
+
+  // @mfunc Size of <p stream> in bytes.
+  //   @parm An open stream.
+  //   @rdesc The size of <p stream> in bytes
+  //   @this const
+OMUInt64 OMStoredObject::streamSize(IStream* stream) const
+{
+  TRACE("OMStoredObject::streamSize");
+  PRECONDITION("Valid stream", stream != 0);
+
+  STATSTG statstg;
+  HRESULT status = stream->Stat(&statstg, STATFLAG_NONAME);
   check(status);
-  ASSERT("IStorage::OpenStream() succeeded", SUCCEEDED(status));
-#if defined(OM_ENABLE_DEBUG)
-  _openStreams = _openStreams + 1;
-#endif
 
-  return stream;
+  OMUInt64 result = toOMUInt64(statstg.cbSize);
+  return result;
+}
 
+  // @mfunc Set the size, in bytes, of <p stream>
+  //   @parm An open stream.
+  //   @parm The new size for the stream.
+void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
+{
+  TRACE("OMStoredObject::streamSetSize");
+
+  ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
+  HRESULT status = stream->SetSize(newStreamSize);
+  check(status);
+}
+
+  // @mfunc The current position for <f readFromStream()> and
+  //        <f writeToStream()>, as an offset in bytes from the begining
+  //        of the data stream.
+  //   @rdesc The current position for <f readFromStream()> and
+  //          <f writeToStream()>, as an offset in bytes from the begining
+  //          of the data stream.
+  //   @this const
+OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
+{
+  TRACE("OMStoredObject::streamPosition");
+  PRECONDITION("Valid stream", stream != 0);
+
+  OMUInt64 result;
+  LARGE_INTEGER zero = {0, 0};
+  ULARGE_INTEGER position;
+  HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
+  check(status);
+
+  result = toOMUInt64(position);
+  return result;
+}
+
+  // @mfunc Set the current position for <f readFromStream()> and
+  //        <f writeToStream()>, as an offset in bytes from the begining of
+  //        the data stream.
+  //   @parm The position to use for subsequent calls to readFromStream() and
+  //         writeToStream() on this stream. The position is specified as an
+  //         offset in bytes from the begining of the data stream.
+  //   @this const
+void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
+{
+  TRACE("OMStoredObject::streamSetPosition");
+  PRECONDITION("Valid stream", stream != 0);
+
+  ULARGE_INTEGER newPosition = fromOMUInt64(offset);
+  ULARGE_INTEGER oldPosition;
+  LARGE_INTEGER position;
+  memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
+  HRESULT status = stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
+  check(status);
 }
 
   // @mfunc Close <p stream>.
@@ -1500,13 +1377,6 @@ void OMStoredObject::closeStream(IStream*& stream)
 #if defined(OM_ENABLE_DEBUG)
   _openStreams = _openStreams - 1;
 #endif
-}
-
-OMByteOrder OMStoredObject::byteOrder(void) const
-{
-  TRACE("OMStoredObject::byteOrder");
-
-  return _byteOrder;
 }
 
 void OMStoredObject::mapCharacters(wchar_t* /* name */, size_t /* nameLength */)
@@ -1708,6 +1578,404 @@ void OMStoredObject::externalizeUInt16Array(const OMUInt16* internalArray,
   }
 }
 
+  // @mfunc Constructor.
+  //   @parm The IStorage for the persistent representation of
+  //         this <c OMStoredObject>.
+OMStoredObject::OMStoredObject(IStorage* s)
+: _storage(s), _index(0), _properties(0),
+  _offset(0), _open(false), _mode(OMFile::readOnlyMode),
+  _byteOrder(hostByteOrder()), _reorderBytes(false)
+{
+  TRACE("OMStoredObject::OMStoredObject");
+}
+
+  // @mfunc Check that the <c OMPropertySet> <p propertySet> is
+  //        consistent with the <c OMStoredPropertySetIndex>
+  //        propertySetIndex.
+  //   @parm The <c OMPropertySet> to validate.
+  //   @parm The <c OMStoredPropertySetIndex> to validate.
+void OMStoredObject::validate(
+                        const OMPropertySet* propertySet,
+                        const OMStoredPropertySetIndex* propertySetIndex) const
+{
+  TRACE("OMStoredObject::validate");
+  PRECONDITION("Valid property set", propertySet != 0);
+  PRECONDITION("Valid property set index", propertySetIndex != 0);
+
+  OMPropertyId propertyId;
+  OMStoredForm type;
+  OMUInt32 offset;
+  OMPropertySize length;
+  size_t context;
+
+  // Check that all required properties are present.
+  //
+  OMPropertySetIterator iterator(*propertySet, OMBefore);
+  while (++iterator) {
+    OMProperty* p = iterator.property();
+    ASSERT("Valid property", p != 0);
+    propertyId = p->propertyId();
+    if (!p->isOptional()) {
+      bool found = propertySetIndex->find(propertyId, type, offset, length);
+      ASSERT("Required property present", found);
+      if (!found) {
+        // error required property missing
+      }
+    }
+  }
+
+  // Check that there are no spurious properties.
+  //
+  OMPropertyCount entries = propertySetIndex->entries();
+  context = 0;
+  for (size_t k = 0; k < entries; k++) {
+    propertySetIndex->iterate(context, propertyId, type, offset, length);
+    bool allowed = propertySet->isAllowed(propertyId);
+    ASSERT("Property allowed", allowed);
+    if (!allowed) {
+      // error illegal property for this object
+    }
+  }
+
+}
+
+OMStoredObject* OMStoredObject::openFile(const wchar_t* fileName,
+                                         const OMFile::OMAccessMode mode)
+{
+  TRACE("OMStoredObject::openFile");
+  PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
+                             (mode == OMFile::readOnlyMode));
+
+  DWORD openMode;
+  if (mode == OMFile::modifyMode) {
+    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
+  } else if (mode == OMFile::readOnlyMode) {
+    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
+  }
+
+  OMCHAR omFileName[256];
+  convert(omFileName, 256, fileName);
+
+  IStorage* storage = 0;
+
+  HRESULT status = StgOpenStorage(
+    omFileName,
+    0,
+    openMode,
+    0,
+    0,
+    &storage);
+  check(status);
+  ASSERT("StgOpenStorage() succeeded", SUCCEEDED(status));
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
+
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  ASSERT("Valid heap pointer", newStoredObject != 0);
+
+  return newStoredObject;
+}
+
+OMStoredObject* OMStoredObject::createFile(const wchar_t* fileName)
+{
+  TRACE("OMStoredObject::createFile");
+  PRECONDITION("Valid file name", validWideString(fileName));
+
+  OMCHAR omFileName[256];
+  convert(omFileName, 256, fileName);
+
+  IStorage* storage = 0;
+
+  HRESULT status = StgCreateDocfile(
+    omFileName,
+    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_FAILIFTHERE,
+    0,
+    &storage);
+  check(status);
+  ASSERT("StgCreateDocfile() succeeded", SUCCEEDED(status));
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
+
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  ASSERT("Valid heap pointer", newStoredObject != 0);
+
+  return newStoredObject;
+}
+
+OMStoredObject* OMStoredObject::openFile(OMRawStorage* rawStorage,
+                                         const OMFile::OMAccessMode mode)
+{
+  TRACE("OMStoredObject::openFile");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
+                             (mode == OMFile::readOnlyMode));
+
+  ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
+  ASSERT("Valid heap pointer", iLockBytes != 0);
+
+  DWORD openMode;
+  if (mode == OMFile::modifyMode) {
+    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
+  } else if (mode == OMFile::readOnlyMode) {
+    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
+  }
+
+  IStorage* storage = 0;
+
+  HRESULT status = StgOpenStorageOnILockBytes(
+    iLockBytes,
+    0,
+    openMode,
+    0,
+    0,
+    &storage);
+  check(status);
+  ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
+
+  iLockBytes->Release();
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  ASSERT("Valid heap pointer", newStoredObject != 0);
+
+  return newStoredObject;
+}
+
+OMStoredObject* OMStoredObject::createFile(OMRawStorage* rawStorage)
+{
+  TRACE("OMStoredObject::createFile");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+
+  ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
+  ASSERT("Valid heap pointer", iLockBytes != 0);
+
+  IStorage* storage = 0;
+
+  HRESULT status = StgCreateDocfileOnILockBytes(
+    iLockBytes,
+    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
+    0,
+    &storage);
+  check(status);
+  ASSERT("StgCreateDocfileOnILockBytes() succeeded", SUCCEEDED(status));
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
+
+  iLockBytes->Release();
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  ASSERT("Valid heap pointer", newStoredObject != 0);
+
+  return newStoredObject;
+}
+
+static const wchar_t* const propertyStreamName = L"properties";
+
+void OMStoredObject::create(const OMByteOrder byteOrder)
+{
+  TRACE("OMStoredObject::create");
+  PRECONDITION("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
+  PRECONDITION("Not already open", !_open);
+
+  _byteOrder = byteOrder;
+  _mode = OMFile::modifyMode;
+  _properties = createStream(_storage, propertyStreamName);
+  _open = true;
+}
+
+void OMStoredObject::open(const OMFile::OMAccessMode mode)
+{
+  TRACE("OMStoredObject::open");
+  PRECONDITION("Not already open", !_open);
+  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
+                             (mode == OMFile::readOnlyMode));
+
+  _mode = mode;
+  _properties = openStream(_storage, propertyStreamName);
+  _open = true;
+  _index = restore();
+}
+
+void OMStoredObject::save(OMStoredPropertySetIndex* index)
+{
+  TRACE("OMStoredObject::save(OMStoredPropertySetIndex*)");
+  PRECONDITION("Already open", _open);
+  PRECONDITION("Valid index", index != 0);
+  PRECONDITION("At start of index stream", streamPosition(_properties) == 0);
+
+  // The number of entries in the index.
+  //
+  OMPropertyCount entries = index->entries();
+  ASSERT("Valid index",
+                 index->isValid(indexHeaderSize + (entries * indexEntrySize)));
+
+  // Write byte order flag.
+  //
+  ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
+  writeToStream(_properties, &_byteOrder, sizeof(_byteOrder));
+
+  // Write version number.
+  //
+  OMVersion version = currentVersion;
+  writeToStream(_properties, &version, sizeof(version));
+
+  // Write count of entries.
+  //
+  writeToStream(_properties, &entries, sizeof(entries));
+
+  // Write entries.
+  //
+  OMPropertyId propertyId;
+  OMStoredForm type;
+  OMUInt32 offset;
+  OMPropertySize length;
+  size_t context = 0;
+  for (size_t i = 0; i < entries; i++) {
+    index->iterate(context, propertyId, type, offset, length);
+    writeToStream(_properties, &propertyId, sizeof(propertyId));
+    writeToStream(_properties, &type, sizeof(type));
+    writeToStream(_properties, &length, sizeof(length));
+  }
+
+  streamSetPosition(_properties, 0);
+  POSTCONDITION("At start of index stream", streamPosition(_properties) == 0);
+}
+
+OMStoredPropertySetIndex* OMStoredObject::restore(void)
+{
+  TRACE("OMStoredObject::restore");
+  PRECONDITION("Already open", _open);
+  PRECONDITION("At start of index stream", streamPosition(_properties) == 0);
+
+  // Read byte order flag.
+  //
+  readFromStream(_properties, &_byteOrder, sizeof(_byteOrder));
+  if (_byteOrder == hostByteOrder()) {
+    _reorderBytes = false;
+  } else {
+    _reorderBytes = true;
+  }
+
+  // Read version number.
+  //
+  OMVersion version;
+  readUInt8FromStream(_properties, version);
+  ASSERT("Recognized version number", version == currentVersion);
+
+  // Read count of entries.
+  //
+  OMPropertyCount entries;
+  readUInt16FromStream(_properties, entries, _reorderBytes);
+  OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
+  ASSERT("Valid heap pointer", index != 0);
+
+  // Read entries.
+  //
+  OMPropertyId propertyId;
+  OMStoredForm type;
+  OMUInt32 offset = indexHeaderSize + (entries * indexEntrySize);
+  OMPropertySize length;
+  for (size_t i = 0; i < entries; i++) {
+    readUInt16FromStream(_properties, propertyId, _reorderBytes);
+    readUInt16FromStream(_properties, type, _reorderBytes);
+    readUInt16FromStream(_properties, length, _reorderBytes);
+    index->insert(propertyId, type, offset, length);
+    offset = offset + length;
+  }
+
+  POSTCONDITION("Valid index",
+                 index->isValid(indexHeaderSize + (entries * indexEntrySize)));
+  return index;
+}
+
+  // @mfunc The stream name for the index of a collection
+  //        named <p collectionName>.
+  //   @parm The collection name.
+  //   @rdesc The stream name for the collection index.
+wchar_t* OMStoredObject::collectionIndexStreamName(
+                                                 const wchar_t* collectionName)
+{
+  TRACE("OMStoredObject::collectionIndexStreamName");
+  PRECONDITION("Valid collection name", validWideString(collectionName));
+
+  wchar_t* suffix = L" index";
+  wchar_t* indexName = new wchar_t[lengthOfWideString(collectionName) + lengthOfWideString(suffix) + 1];
+  ASSERT("Valid heap pointer", indexName != 0);
+  copyWideString(indexName, collectionName, lengthOfWideString(collectionName) + 1);
+  concatenateWideString(indexName, suffix, lengthOfWideString(suffix) + 1);
+
+  return indexName;
+}
+
+IStream* OMStoredObject::createStream(IStorage* storage,
+                                      const wchar_t* streamName)
+{
+  TRACE("OMStoredObject::createStream");
+  PRECONDITION("Valid storage", storage != 0);
+  PRECONDITION("Valid stream name", validWideString(streamName));
+  PRECONDITION("Valid mode", _mode == OMFile::modifyMode);
+
+  DWORD mode = STGM_DIRECT | STGM_READWRITE |
+               STGM_SHARE_EXCLUSIVE  | STGM_CREATE;
+
+  IStream* stream = 0;
+  OMCHAR omStreamName[256];
+  convert(omStreamName, 256, streamName);
+
+  HRESULT status = storage->CreateStream(
+    omStreamName,
+    mode,
+    0,
+    0,
+    &stream);
+  check(status);
+  ASSERT("IStorage::CreateStream() succeeded", SUCCEEDED(status));
+#if defined(OM_ENABLE_DEBUG)
+  _openStreams = _openStreams + 1;
+#endif
+
+  return stream;
+}
+
+IStream* OMStoredObject::openStream(IStorage* storage,
+                                    const wchar_t* streamName)
+{
+  TRACE("OMStoredObject::openStream");
+  PRECONDITION("Valid storage", storage != 0);
+  PRECONDITION("Valid stream name", validWideString(streamName));
+
+  DWORD mode;
+  if (_mode == OMFile::modifyMode) {
+    mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
+  } else if (_mode == OMFile::readOnlyMode) {
+    mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+  }
+
+  IStream* stream = 0;
+  OMCHAR omStreamName[256];
+  convert(omStreamName, 256, streamName);
+
+  HRESULT status = storage->OpenStream(
+    omStreamName,
+    0,
+    mode,
+    0,
+    &stream);
+  check(status);
+  ASSERT("IStorage::OpenStream() succeeded", SUCCEEDED(status));
+#if defined(OM_ENABLE_DEBUG)
+  _openStreams = _openStreams + 1;
+#endif
+
+  return stream;
+
+}
+
 IStorage* OMStoredObject::createStorage(IStorage* storage,
                                         const wchar_t* storageName)
 {
@@ -1792,231 +2060,6 @@ void OMStoredObject::closeStorage(IStorage*& storage)
 #endif
 }
 
-  // @mfunc Write <p size> bytes from the buffer at address <p data>
-  //        to <p stream>.
-  //   @parm The stream on which to write.
-  //   @parm The buffer to write.
-  //   @parm The number of bytes to write.
-void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
-{
-  TRACE("OMStoredObject::writeToStream");
-  PRECONDITION("Valid stream", stream != 0);
-  PRECONDITION("Valid data", data != 0);
-  PRECONDITION("Valid size", size > 0);
-
-  unsigned long bytesWritten;
-  HRESULT resultCode = stream->Write(data, size, &bytesWritten);
-  check(resultCode);
-
-  ASSERT("Successful write", bytesWritten == size);
-}
-
-  // @mfunc Attempt to write <p bytes> bytes from the buffer at
-  //        address <p data> to <p stream>. The actual number of
-  //        bytes written is returned in <p bytesWritten>.
-  //   @parm The stream on which to write.
-  //   @parm The buffer to write.
-  //   @parm The number of bytes to write
-  //   @parm The actual number of bytes written.
-void OMStoredObject::writeToStream(IStream* stream,
-                                   const OMByte* data,
-                                   const OMUInt32 bytes,
-                                   OMUInt32& bytesWritten)
-{
-  TRACE("OMStoredObject::writeToStream");
-  PRECONDITION("Valid stream", stream != 0);
-  PRECONDITION("Valid data", data != 0);
-  PRECONDITION("Valid size", bytes > 0);
-
-  HRESULT resultCode = stream->Write(data, bytes, &bytesWritten);
-  check(resultCode);
-}
-
-  // @mfunc Read <p size> bytes from <p stream> into the buffer at
-  //        address <p data>.
-  //   @parm The stream from which to read.
-  //   @parm The buffer into which the bytes are read.
-  //   @parm The number of bytes to read.
-void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
-{
-  TRACE("OMStoredObject::readFromStream");
-  PRECONDITION("Valid stream", stream != 0);
-  PRECONDITION("Valid data buffer", data != 0);
-  PRECONDITION("Valid size", size > 0);
-
-  unsigned long bytesRead;
-  HRESULT result = stream->Read(data, size, &bytesRead);
-  check(result);
-
-  ASSERT("Successful read", bytesRead == size);
-}
-
-  // @mfunc Attempt to read <p bytes> bytes from <p stream> into
-  //        the buffer at address <p data>. The actual number of
-  //        bytes read is returned in <p bytesRead>.
-  //   @parm The stream from which to read.
-  //   @parm The buffer into which the bytes are read.
-  //   @parm The number of bytes to write
-  //   @parm The actual number of bytes read.
-void OMStoredObject::readFromStream(IStream* stream,
-                                    OMByte* data,
-                                    const OMUInt32 bytes,
-                                    OMUInt32& bytesRead)
-{
-  TRACE("OMStoredObject::readFromStream");
-  PRECONDITION("Valid stream", stream != 0);
-  PRECONDITION("Valid data buffer", data != 0);
-  PRECONDITION("Valid size", bytes > 0);
-
-  HRESULT result = stream->Read(data, bytes, &bytesRead);
-  check(result);
-}
-
-  // @mfunc Read an OMUInt8 from <p stream> into <p i>. If
-  //   @parm The stream from which to read.
-  //   @parm The resulting OMUInt8.
-void OMStoredObject::readUInt8FromStream(IStream* stream,
-                                         OMUInt8& i)
-{
-  TRACE("OMStoredObject::readUInt8FromStream");
-  PRECONDITION("Valid stream", stream != 0);
-
-  readFromStream(stream, &i, sizeof(OMUInt8));
-}
-
-  // @mfunc Read an OMUInt16 from <p stream> into <p i>. If
-  //        <p reorderBytes> is true then the bytes are reordered.
-  //   @parm The stream from which to read.
-  //   @parm The resulting OMUInt16.
-  //   @parm If true then reorder the bytes.
-void OMStoredObject::readUInt16FromStream(IStream* stream,
-                                          OMUInt16& i,
-                                          bool reorderBytes)
-{
-  TRACE("OMStoredObject::readUInt16FromStream");
-  PRECONDITION("Valid stream", stream != 0);
-
-  readFromStream(stream, &i, sizeof(OMUInt16));
-  if (reorderBytes) {
-    reorderUInt16(i);
-  }
-}
-
-  // @mfunc Reorder the OMUInt16 <p i>.
-  //   @parm The OMUInt16 to reorder.
-void OMStoredObject::reorderUInt16(OMUInt16& i)
-{
-  TRACE("OMStoredObject::reorderUInt16");
-
-  OMUInt8* p = (OMUInt8*)&i;
-  OMUInt8 temp;
-
-  temp = p[0];
-  p[0] = p[1];
-  p[1] = temp;
-
-}
-
-  // @mfunc Read an OMUInt32 from <p stream> into <p i>. If
-  //        <p reorderBytes> is true then the bytes are reordered.
-  //   @parm The stream from which to read.
-  //   @parm The resulting OMUInt32.
-  //   @parm If true then reorder the bytes.
-void OMStoredObject::readUInt32FromStream(IStream* stream,
-                                          OMUInt32& i,
-                                          bool reorderBytes)
-{
-  TRACE("OMStoredObject::readUInt32FromStream");
-  PRECONDITION("Valid stream", stream != 0);
-
-  readFromStream(stream, &i, sizeof(OMUInt32));
-  if (reorderBytes) {
-    reorderUInt32(i);
-  }
-}
-
-  // @mfunc Reorder the OMUInt32 <p i>.
-  //   @parm The OMUInt32 to reorder.
-void OMStoredObject::reorderUInt32(OMUInt32& i)
-{
-  TRACE("OMStoredObject::reorderUInt32");
-
-  OMUInt8* p = (OMUInt8*)&i;
-  OMUInt8 temp;
-
-  temp = p[0];
-  p[0] = p[3];
-  p[3] = temp;
-
-  temp = p[1];
-  p[1] = p[2];
-  p[2] = temp;
-
-}
-
-  // @mfunc Read a UniqueObjectIdentification from <p stream> into <p id>.
-  //        If <p reorderBytes> is true then the bytes are reordered.
-  //   @parm The stream from which to read.
-  //   @parm The resulting OMUniqueObjectIdentification.
-  //   @parm If true then reorder the bytes.
-void OMStoredObject::readUniqueObjectIdentificationFromStream(
-                                              IStream* stream,
-                                              OMUniqueObjectIdentification& id,
-                                              bool reorderBytes)
-{
-  TRACE("OMStoredObject::UniqueObjectIdentificationFromStream");
-  PRECONDITION("Valid stream", stream != 0);
-
-  readFromStream(stream, &id, sizeof(OMUniqueObjectIdentification));
-  if (reorderBytes) {
-    reorderUniqueObjectIdentification(id);
-  }
-}
-
-  // @mfunc Read a UniqueMaterialIdentification from <p stream> into <p id>.
-  //        If <p reorderBytes> is true then the bytes are reordered.
-  //   @parm The stream from which to read.
-  //   @parm The resulting OMUniqueMaterialIdentification.
-  //   @parm If true then reorder the bytes.
-void OMStoredObject::readUniqueMaterialIdentificationFromStream(
-                                            IStream* stream,
-                                            OMUniqueMaterialIdentification& id,
-                                            bool reorderBytes)
-{
-  TRACE("OMStoredObject::UniqueMaterialIdentificationFromStream");
-  PRECONDITION("Valid stream", stream != 0);
-
-  readFromStream(stream, &id, sizeof(OMUniqueMaterialIdentification));
-  if (reorderBytes) {
-    reorderUniqueMaterialIdentification(id);
-  }
-}
-
-  // @mfunc Reorder the OMUniqueObjectIdentification <p id>.
-  //   @parm The OMUniqueObjectIdentification to reorder.
-void OMStoredObject::reorderUniqueObjectIdentification(
-                                              OMUniqueObjectIdentification& id)
-{
-  TRACE("OMStoredObject::reorderUniqueObjectIdentification");
-
-  reorderUInt32(id.Data1);
-  reorderUInt16(id.Data2);
-  reorderUInt16(id.Data3);
-  // no need to swap Data4
-}
-
-  // @mfunc Reorder the OMUniqueMaterialIdentification <p id>.
-  //   @parm The OMUniqueMaterialIdentification to reorder.
-void OMStoredObject::reorderUniqueMaterialIdentification(
-                                            OMUniqueMaterialIdentification& id)
-{
-  TRACE("OMStoredMaterial::reorderUniqueMaterialIdentification");
-
-  // No need to swap
-  // SMPTELabel, length, instanceHigh, instanceMid or instanceLow.
-
-  reorderUniqueObjectIdentification(id.material);
-}
 
 void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
 {
@@ -2039,48 +2082,6 @@ void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
   check(result);
 
   memcpy(&cid, &statstg.clsid, sizeof(OMClassId));
-}
-
-  // @mfunc The current position for <f readFromStream()> and
-  //        <f writeToStream()>, as an offset in bytes from the begining
-  //        of the data stream.
-  //   @rdesc The current position for <f readFromStream()> and
-  //          <f writeToStream()>, as an offset in bytes from the begining
-  //          of the data stream.
-  //   @this const
-OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
-{
-  TRACE("OMStoredObject::streamPosition");
-  PRECONDITION("Valid stream", stream != 0);
-
-  OMUInt64 result;
-  LARGE_INTEGER zero = {0, 0};
-  ULARGE_INTEGER position;
-  HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
-  check(status);
-
-  result = toOMUInt64(position);
-  return result;
-}
-
-  // @mfunc Set the current position for <f readFromStream()> and
-  //        <f writeToStream()>, as an offset in bytes from the begining of
-  //        the data stream.
-  //   @parm The position to use for subsequent calls to readFromStream() and
-  //         writeToStream() on this stream. The position is specified as an
-  //         offset in bytes from the begining of the data stream.
-  //   @this const
-void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
-{
-  TRACE("OMStoredObject::streamSetPosition");
-  PRECONDITION("Valid stream", stream != 0);
-
-  ULARGE_INTEGER newPosition = fromOMUInt64(offset);
-  ULARGE_INTEGER oldPosition;
-  LARGE_INTEGER position;
-  memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
-  HRESULT status = stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
-  check(status);
 }
 
 static void convert(char* cName, size_t length, const wchar_t* name)
