@@ -76,7 +76,7 @@ C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
   if (doInit)
     {
 #ifdef BOB_TEST
-     Impl.this-module * newRep
+      Impl.this-module * newRep;
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
