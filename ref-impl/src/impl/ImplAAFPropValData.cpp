@@ -123,6 +123,7 @@ AAFRESULT ImplAAFPropValData::AllocateBits (
 		{
 		  return AAFRESULT_NOMEMORY;
 		}
+	  memset (_pBits, 0, bitsSize);
 	  _bitsSize = bitsSize;
 	}	  
   if (ppBits)
