@@ -190,7 +190,7 @@ AD_XMETHOD1(SetName,
   //   - pName arg is NULL.)
 
 
-AD_XMETHOD1(GetNumSlots,
+AD_XMETHOD1(CountSlots,
 			[out],
 			objPass,
 			aafNumSlots_t *,
@@ -220,7 +220,7 @@ AD_XMETHOD1(AppendSlot,
 			objIn,
 			AAFMobSlot,
 			pSlot,
-			Newly created slot,
+			slot to append,
 
 			Appends the given mob slot to the mob.
   // 
@@ -242,7 +242,145 @@ AD_XMETHOD1(AppendSlot,
   //   - pSlot is null.)
 
 
-AD_XMETHOD1(EnumAAFAllMobSlots,
+AD_XMETHOD1(PrependSlot,
+			[in],
+			objIn,
+			AAFMobSlot,
+			pSlot,
+			slot to prepend,
+
+			Prepends the given mob slot to the mob.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSlot pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSlot is null.)
+
+
+AD_XMETHOD2(InsertSlotAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index where slot is to be inserted,
+
+			[in],
+			objIn,
+			AAFMobSlot,
+			pSlot,
+			slot to insert,
+
+     Inserts the given slot into this mob at the given index.  All
+  // existing slots at the given and higher index will be moved up one
+  // index to accommodate.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - the pSlot pointer is valid.
+  // - index is less than or equal to the result obtained by
+  //   CountSlots\(\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSlot is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than the result obtained from CountSlots\(\).)
+
+
+AD_XMETHOD1(RemoveSlotAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of slot to be removed,
+
+     Removes the slot at the given index.  All existing slots at
+  // indices higher than the given index will be moved down one index
+  // to accommodate.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - index is less than the result obtained by CountSlots\(\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is not less than the result obtained from
+  //     CountSlots\(\).)
+
+
+AD_XMETHOD2(GetSlotAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of slot to be obtained,
+
+			[out\, retval],
+			objOut,
+			AAFMobSlot,
+			ppSlot,
+			the returned slot,
+
+     Returns the indexed slot in *ppSlot.
+  // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
+  // Succeeds if all of the following are true:
+  // - ppSlot is a valid pointer.
+  // - index is less than the result obtained by CountSlots\(\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppSlot is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is not less than the result obtained from
+  //     CountSlots\(\).)
+
+
+AD_XMETHOD1(GetSlots,
 			[out],
 			objOut,
 			EnumAAFMobSlots,
@@ -376,7 +514,7 @@ AD_XMETHOD2(AppendComment,
   //   - either pCategory or pComment args is NULL.)
 
 
-AD_XMETHOD1(GetNumComments,
+AD_XMETHOD1(CountComments,
 			[out],
 			objPass,
 			aafUInt32 *,
@@ -401,7 +539,7 @@ AD_XMETHOD1(GetNumComments,
   //   - pNumComments arg is NULL.)
 
 
-AD_XMETHOD1(EnumAAFAllMobComments,
+AD_XMETHOD1(GetComments,
 			[out],
 			objOut,
 			EnumAAFTaggedValues,
@@ -428,40 +566,19 @@ AD_XMETHOD1(EnumAAFAllMobComments,
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
 
-AD_XMETHOD4(AppendNewSlot,
+
+AD_XMETHOD1(RemoveComment,
 			[in],
 			objIn,
-			AAFSegment,
-			pSegment,
-			Segment to append as slot component,
+			AAFTaggedValue,
+			pComment,
+			Comment to remove,
 
-			[in],
-			objPass,
-			aafSlotID_t,
-			slotID,
-			new slot ID,
-
-			[in\, string],
-			objPass,
-			aafCharacter *,
-			pSlotName,
-			new slot name,
-
-			[out],
-			objOut,
-			AAFMobSlot,
-			ppNewSlot,
-			Newly created slot,
-
-			This method creates a new mob slot with the given property values
-  // and appends it to the input mob.
+  // Removes the given comment from this mob.
   // 
-  // The returned mob slot is AddRef\(\)ed before it is returned.
-  //
   // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
-  // - the pSlotName pointer is valid.
-  // - the ppNewSlot pointer is valid.
+  // - the pComment pointer is valid.
+  // - the given comment is present in the mob.
   // 
   // If this method fails no state will be changed.
   // 
@@ -473,7 +590,10 @@ AD_XMETHOD4(AppendNewSlot,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
+  //   - pComment is null.
+  //
+  // AAFRESULT_OBJECT_NOT_FOUND
+  //   - the given comment is not in this mob.)
 
 
 AD_XMETHOD6(AppendNewTimelineSlot,
@@ -637,11 +757,11 @@ AD_XMETHOD3(OffsetToMobTimecode,
   //   - timecode track wasn't found.)
 
 
-AD_XMETHOD2(FindSlotBySlotID,
+AD_XMETHOD2(LookupSlot,
 			[in],
 			objPass,
 			aafSlotID_t,
-			slotID,
+			slotId,
 			The requested slot id,
 
 			[out],
