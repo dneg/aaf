@@ -486,7 +486,7 @@ static void convertName(char* cName,
                         char** tag);
 static void indent(int level);
 static void getClass(IStorage* storage, CLSID* clsid, const char* fileName);
-static void printClsid(REFCLSID clsid);
+static void printClsid(const CLSID& clsid);
 static void printRawKey(OMByte* key, size_t keySize);
 static void printUMID(UMID* umid);
 static void openStream(IStorage* storage,
@@ -1144,7 +1144,7 @@ void getClass(IStorage* storage, CLSID* clsid, const char* fileName)
   *clsid = statstg.clsid;
 }
 
-void printClsid(REFCLSID clsid)
+void printClsid(const CLSID& clsid)
 {
   char cs[256];
 
