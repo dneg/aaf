@@ -161,10 +161,11 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   if( !_channelIDs.isPresent() ) {
-    return AAFRESULT_PROP_NOT_PRESENT;
+    *pNumberElements = 0;
   }
-
-  *pNumberElements = _channelIDs.size();
+  else {
+    *pNumberElements = _channelIDs.size();
+  }
 
   return AAFRESULT_SUCCESS;
 }
@@ -192,7 +193,7 @@ AAFRESULT STDMETHODCALLTYPE
   if( NULL == pMonoSourceSlotIDs ) {
     return AAFRESULT_NULL_PARAM;
   }
-  
+
   if( !_monoSourceSlotIDs.isPresent() ) {
     return AAFRESULT_PROP_NOT_PRESENT;
   }
@@ -202,7 +203,8 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   _monoSourceSlotIDs.copyToBuffer( pMonoSourceSlotIDs, numberElements );
-  
+
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -216,10 +218,11 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   if( !_monoSourceSlotIDs.isPresent() ) {
-    return AAFRESULT_PROP_NOT_PRESENT;
+    *pNumberElements = 0;
   }
-
-  *pNumberElements = _monoSourceSlotIDs.size();
+  else {
+    *pNumberElements = _monoSourceSlotIDs.size();
+  }
 
   return AAFRESULT_SUCCESS;
 }
