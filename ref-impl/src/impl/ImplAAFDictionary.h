@@ -650,7 +650,7 @@ private:
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPluginDef>				_pluginDefinitions;
 
 
-  aafInt32 _lastGeneratedPid;	// must be signed!
+  aafInt16 _lastGeneratedPid;	// must be signed!
 
   static const aafUID_t * sAxiomaticTypeGuids[];
   static const aafUID_t * sAxiomaticClassGuids[];
