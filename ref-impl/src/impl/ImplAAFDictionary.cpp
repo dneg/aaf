@@ -1087,7 +1087,6 @@ AAFRESULT STDMETHODCALLTYPE
       aafUID_t keyUID, 
 	  ImplAAFTypeDef *underlyingType)
 {
-	ImplAAFTypeDef			*pDef = NULL;
 	ImplAAFTypeDefRename	*pRenameDef = NULL;
 	
 	XPROTECT()
@@ -1096,12 +1095,20 @@ AAFRESULT STDMETHODCALLTYPE
 				CreateInstance((ImplAAFObject**)&pRenameDef));
 		CHECK(pRenameDef->Initialize (keyUID, underlyingType, L"KLV Data"));
 		CHECK(RegisterOpaqueTypeDef(pRenameDef));
+		pRenameDef->ReleaseReference();
+		pRenameDef = NULL;
 	}
 	XEXCEPT
+	{
+		if (pRenameDef)
+			pRenameDef->ReleaseReference();
+	}
 	XEND
 		
 	return AAFRESULT_SUCCESS;
 }
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterDataDef (
       ImplAAFDataDef *pDataDef)
