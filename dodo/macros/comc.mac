@@ -1237,7 +1237,7 @@ I%01\
 #c Argument: class name
 #c
 #startm AD_FORWARD_DECLARATION 01
-#ifndef _I%01_h_
+#ifndef __I%01_h__
 #include "I%01.h"
 #endif
 #endm

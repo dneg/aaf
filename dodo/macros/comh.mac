@@ -44,6 +44,10 @@
 //@class    .this-module | Implementation class for .this-module
 #ifndef _C.this-module_h_
 #define _C.this-module_h_
+
+// Forward declaration for output stream used by the static test method:
+// C.this-module::test.
+class ostream;
 #endm
 
 
@@ -68,8 +72,8 @@
 #include "C.parent-module.h"
 #endif
 
-#ifndef _I.this-module_h_
-#include "I.this-module.h"
+#ifndef _.this-module_h_
+#include ".this-module.h"
 #endif
 
 //
@@ -103,8 +107,8 @@ class C.this-module
 #include "CAAFUnknown.h"
 #endif
 
-#ifndef _I.this-module_h_
-#include "I.this-module.h"
+#ifndef _.this-module_h_
+#include ".this-module.h"
 #endif
 
 //
@@ -548,12 +552,15 @@ public:
   //
   //********
 
+  // Declare the module test method. The implementation of the will be be
+  // in /test/C.this-moduleTest.cpp.
+  static HRESULT test(ostream& stream);
+
   //
   // Return private implementation pointer for delegation.
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
-  //
-  STDMETHOD_(void *, GetImplRep)();
+  STDMETHOD(GetImplRep)(/*[retval, string, out]*/ char **);
 };
 
 #endif // ! _C.this-module_h_
@@ -586,12 +593,16 @@ public:
   //
   //********
 
+  // Declare the module test method. The implementation of the will be be
+  // in /test/C.this-moduleTest.cpp.
+  static HRESULT test(ostream& stream);
+
   //
   // Return private implementation pointer for delegation.
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  STDMETHOD_(void *, GetImplRep)();
+  STDMETHOD(GetImplRep)(/*[retval, string, out]*/ char **);
 
 protected:
 
@@ -795,10 +806,6 @@ I%01 \
 #c TomR:added 980714
 #c
 #startm AD_DECLARE_FORWARD_AAFTYPES 01
-#ifndef __I%01_FWD_DEFINED__
-#define __I%01_FWD_DEFINED__
-typedef interface I%01 I%01;
-#endif 	/* __I%01_FWD_DEFINED__ */
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -808,10 +815,6 @@ typedef interface I%01 I%01;
 #c This is ignored since forward declarations will be created
 #c by the midl generated header.
 #startm AD_FORWARD_DECLARATION 01
-#ifndef __I%01_FWD_DEFINED__
-#define __I%01_FWD_DEFINED__
-typedef interface I%01 I%01;
-#endif 	/* __I%01_FWD_DEFINED__ */
 #endm
 
 
