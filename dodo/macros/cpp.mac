@@ -1184,6 +1184,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (pObj);
   assert (ppSession);
   *ppSession = pObj;
+  pObj->SetDefaultIdentification(pIdent);
   return AAFRESULT_SUCCESS;
 
 #else
