@@ -554,7 +554,7 @@ OMStorable* OMFile::restore(void)
   ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
   _root->setClassFactory(classFactory());
 
-  return root();
+  return _root->clientRoot();
 }
 
   // @mfunc Close this <c OMFile>, any unsaved changes are discarded.
@@ -579,13 +579,20 @@ void OMFile::close(void)
 
   // @mfunc Retrieve the client root <c OMStorable> from this <c OMFile>.
   //   @rdesc The root <c OMStorable>.
-OMStorable* OMFile::root(void)
+OMStorable* OMFile::clientRoot(void)
 {
-  TRACE("OMFile::root");
+  TRACE("OMFile::clientRoot");
 
   OMStorable* result;
   result = _root->clientRoot();
   return result;
+}
+
+OMStorable* OMFile::root(void)
+{
+  TRACE("OMFile::root");
+
+  return _root;
 }
 
 OMDictionary* OMFile::dictionary(void) const
