@@ -77,6 +77,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTimelineMobSlot	*newSlot = NULL;
 	IAAFSegment		*seg = NULL;
 	IAAFSourceClip	*sclp = NULL;
+	IAAFComponent*		pComponent = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafMobID_t					newMobID;
 	HRESULT						hr = S_OK;
@@ -128,6 +129,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		  checkResult(defs.cdSourceClip()->
 					  CreateInstance(IID_IAAFSourceClip, 
 									 (IUnknown **)&sclp));		
+		 checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
 
 		  checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
@@ -161,6 +166,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   // Cleanup and return
   if (newSlot)
     newSlot->Release();
+
+	if (pComponent)
+		pComponent->Release();
 
   if (seg)
     seg->Release();
