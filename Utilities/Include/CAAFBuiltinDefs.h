@@ -241,6 +241,8 @@ public:
   TYPE_DEF_METHOD(String);
   TYPE_DEF_METHOD(Character);
   TYPE_DEF_METHOD(Indirect);
+  TYPE_DEF_METHOD(Opaque);
+  TYPE_DEF_METHOD(Stream);
 
   // Built-in integer types
   TYPE_DEF_METHOD(UInt8);
