@@ -70,8 +70,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUInt32			numElem;
 	aafUID_t			value;
-	ImplAAFHeader		*head;
-	ImplAAFDictionary	*dict;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
 
 	if(_enumProp != NULL)
 		numElem = _enumProp->size() / sizeof(aafUID_t);
@@ -102,8 +102,18 @@ AAFRESULT STDMETHODCALLTYPE
 		//!!!Else assert
 		(*ppEffectDef)->AcquireReference();
 		_current++;
+		head->ReleaseReference();
+		head = NULL;
+		dict->ReleaseReference();
+		dict = NULL;
 	}
 	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
 	XEND;
 
 	return(AAFRESULT_SUCCESS); 
