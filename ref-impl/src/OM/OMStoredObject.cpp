@@ -53,47 +53,6 @@ const size_t indexEntrySize  = sizeof(OMPropertyId) +
                                sizeof(OMStoredForm) +
                                sizeof(OMPropertySize);
 
-#if defined(_MAC) || defined(macintosh) || \
-    defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
-
-// The Macintosh and Unix (SS reference implementation) declarations
-// for LARGE_INTEGER and ULARGE_INTEGER don't have a QuadPart.
-// On Macintosh this is probably because the HighPart and LowPart
-// components on that platform are not in the natural platform order.
-
-static inline OMUInt64 toOMUInt64(const ULARGE_INTEGER &x)
-{
-  OMUInt64 result = (((OMUInt64)x.HighPart) << 32) + (x.LowPart);
-  return result;
-}
-
-static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
-{
-  ULARGE_INTEGER result;
-  result.HighPart = (unsigned long)(((OMUInt64)x) >> 32);
-  result.LowPart  = (unsigned long) (0x00000000FFFFFFFF & (OMUInt64)x);
-  return result;
-}
-
-#else
-
-static inline OMUInt64 toOMUInt64(const ULARGE_INTEGER &x)
-{
-  OMUInt64 result;
-  result = x.QuadPart;
-  return result;
-}
-
-
-static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
-{
-  ULARGE_INTEGER result;
-  result.QuadPart = x;
-  return result;
-}
-
-#endif
-
 #if defined(_WIN32) && defined(UNICODE)
   typedef wchar_t OMCHAR;
 #else
