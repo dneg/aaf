@@ -45,6 +45,7 @@
 #include "OMContainerElement.h"
 #include "OMObjectReference.h"
 #include "OMStrongReference.h"
+#include "OMStrongReferenceSet.h"
 #include "OMStrongReferenceVector.h"
 #include "OMWeakReference.h"
 #include "OMWeakReferenceVector.h"
@@ -425,10 +426,56 @@ void OMStoredObject::save(const OMStrongReferenceVector& vector)
   // @mfunc Save the <c OMStrongReferenceSet> <p set> in this
   //        <c OMStoredObject>.
   //   @parm The set of strong references to save.
-void OMStoredObject::save(const OMStrongReferenceSet& /* set */)
+void OMStoredObject::save(const OMStrongReferenceSet& set)
 {
   TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
+
+  // create a set index
+  //
+  size_t count = set.count();
+  OMKeySize keySize = set.keySize();
+  OMPropertyId keyPropertyId = set.keyPropertyId();
+  OMStoredSetIndex* index = new OMStoredSetIndex(count,
+                                                 keyPropertyId,
+                                                 keySize);
+  ASSERT("Valid heap pointer", index != 0);
+  index->setFirstFreeKey(set.localKey());
+  size_t position = 0;
+
+  // Iterate over the set saving each element. The index entries
+  // are written in order of their unique keys.
+  //
+  OMContainerIterator<OMStrongReferenceSetElement>& iterator = *set.iterator();
+  while (++iterator) {
+
+    OMStrongReferenceSetElement& element = iterator.value();
+
+    // enter into the index
+    //
+    void* key = element.identification();
+    index->insert(position,
+                  element.localKey(),
+                  element.referenceCount(),
+                  key);
+
+    // save the object
+    //
+    element.save();
+
+    position = position + 1;
+  }
+  delete &iterator;
+  // save the set index
+  //
+  ASSERT("Valid set index", index->isValid());
+  wchar_t* name = collectionName(set.name(), set.propertyId());
+  save(index, name);
+  delete index;
+
+  // make an entry in the property index
+  //
+  saveName(set, name);
+  delete [] name;
 }
 
   // @mfunc Save the <c OMWeakReference> <p singleton> in this
@@ -725,11 +772,59 @@ void OMStoredObject::restore(OMStrongReferenceVector& vector,
   //        <c OMStoredObject>.
   //   @parm TBS
   //   @parm TBS
-void OMStoredObject::restore(OMStrongReferenceSet& /* set */,
-                             size_t /* externalSize */)
+void OMStoredObject::restore(OMStrongReferenceSet& set,
+                             size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyId setId = set.propertyId();
+  const wchar_t* setName = set.name();
+
+  // restore the index
+  //
+  OMStoredSetIndex* setIndex = 0;
+  wchar_t* name = collectionName(setName, setId);
+  restoreName(set, name, externalSize);
+  restore(setIndex, name);
+  delete [] name;
+  ASSERT("Valid set index", setIndex->isValid());
+  ASSERT("Consistent key sizes", setIndex->keySize() == set.keySize());
+  ASSERT("Consistent key property ids",
+                             setIndex->keyPropertyId() == set.keyPropertyId());
+  set.setLocalKey(setIndex->firstFreeKey());
+
+  // Iterate over the index restoring the elements of the set.
+  // Since the index entries are stored on disk in order of their
+  // unique keys this loop is the worst cast order of insertion. This
+  // code will eventually be replaced by code that inserts the keys in
+  // "binary search" order. That is the middle key is inserted first
+  // then (recursively) all the keys below the middle key followed by
+  // (recursively) all the keys above the middle key.
+  //
+  size_t entries = setIndex->entries();
+  size_t context = 0;
+  OMUInt32 localKey;
+  OMUInt32 count;
+  OMKeySize keySize = setIndex->keySize();
+  OMByte* key = new OMByte[keySize];
+  ASSERT("Valid heap pointer", key != 0);
+
+  for (size_t i = 0; i < entries; i++) {
+    setIndex->iterate(context, localKey, count, key);
+    wchar_t* name = elementName(setName, setId, localKey);
+    OMStrongReferenceSetElement element(&set,
+                                        name,
+                                        localKey,
+                                        count,
+                                        key,
+                                        keySize);
+    element.restore();
+    set.insert(key, element);
+    delete [] name;
+    name = 0; // for BoundsChecker
+  }
+  delete [] key;
+  delete setIndex;
 }
 
   // @mfunc Restore the <c OMWeakReference> <p singleton> into this
