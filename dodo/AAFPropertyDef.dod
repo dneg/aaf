@@ -1,0 +1,177 @@
+#startm .this-module 0
+AAFPropertyDefinition\
+#endm
+#c
+#startm .parent-module 0
+AAFDefinitionObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+
+AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+/*************************************************************************
+ * 
+ * @Property AAFPropertyDefinition | AAFPropertyDefinition describes 
+ *				properties allowed for a class.
+ *
+ * @base public | AAFDefinitionObject
+ *
+ *************************************************************************/
+
+AD_CLASS_UUID(dfbd6522, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
+
+AD_DEFAULT_UUID(dfbd6521, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
+AD_CLASS_BEGIN
+
+AD_CONSTRUCTOR2([in],aafAuid_t,	Auid,auid for this definition object,
+				[in], aafString_t, PropertyName, Specifies the name of this property,
+				Constructs this object.)
+
+AD_METHOD1(GetAUID,
+		   [retval][out],
+		   aafAuid_t *,
+		   pAuid,
+		   Pointer to an AUID reference,
+		   Gets the AUID for this object.)
+
+AD_METHOD1(GetName,
+		   [retval][out],
+		   aafString_t *,
+		   pstrName,
+		   Pointer to name,
+		   Gets the unique name that identifies this property definition.)
+
+AD_METHOD1(GetTypeAUID,
+		   [retval][out],
+		   aafAuid_t *,
+		   pTypeAuid,
+		   Pointer to the Type Definition's AUID,
+		   Gets the Type Definition's AUID associated with this object.)
+
+AD_METHOD1(SetTypeAUID,
+		   [in],
+		   aafAuid_t,
+		   TypeAuid,
+		   Type Definition's AUID,
+		   Sets the Type Definition's AUID associated with this object.)
+
+AD_METHOD1(GetMinVersion,
+		   [retval][out],
+		   aafVersion_t *,
+		   pMinVersion,
+		   Pointer to the minimum version ,
+		   Gets the Minimum AAF Version for this property definition.)
+
+AD_METHOD1(SetMinVersion,
+		   [in],
+		   aafVersion_t,
+		   MinVersion,
+		   Minimum AAF Version,
+		   Sets the Minimum AAF Version for property definition.)
+
+AD_METHOD1(GetMaxVersion,
+		   [retval][out],
+		   aafVersion_t *,
+		   pMaxVersion,
+		   Pointer to the maximum version ,
+		   Gets the Maximum AAF Version for this property definition.)
+
+AD_METHOD1(SetMaxVersion,
+		   [in],
+		   aafVersion_t,
+		   MaxVersion,
+		   Maximum AAF Version,
+		   Sets the Maximum AAF Version for property definition.)
+
+AD_METHOD1(IsSearchable,
+		   [retval][out],
+		   aafBool *,
+		   bIsSearchable,
+		   pointer to the return value, 
+		   Identifies properties that can contain user-searchable data.)
+
+AD_METHOD1(SetIsSearchable,
+		   [in],
+		   aafBool,
+		   IsSearchable,
+		   is searchable value, 
+		   Sets the user-searchable boolean.)
+
+AD_METHOD1(IsOptional,
+		   [retval][out],
+		   aafBool *,
+		   bIsOptional,
+		   pointer to the return value, 
+		   Specifies whether object instances can omit a value for the property.)
+
+AD_METHOD1(SetIsOptional,
+		   [in],
+		   aafBool,
+		   IsOptional,
+		   is optional value, 
+		   Sets the IsOptional boolean.)
+
+AD_METHOD1(GetDescription,
+		   [retval][out],
+		   aafString_t *,
+		   pstrDescription,
+		   Pointer to description,
+		   Gets the description of the property definition.)
+
+AD_METHOD1(SetDescription,
+		   [in],
+		   aafString_t,
+		   strDescription,
+		   description,
+		   Sets the description of the property definition.)
+
+AD_METHOD1(GetDefaultValue,
+		   [retval][out],
+		   aafDataValue_t *,
+		   pDataValue,
+		   Pointer to default data value,,
+		   Gets the default data value of this property definition.)
+
+AD_METHOD1(SetDefaultValue,
+		   [in],
+		   aafDataValue_t,
+		   Default Datavalue,
+		   default data value,
+		   Sets the default data value of this property definition.)
+
+AD_METHOD1(AppendRefValue,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFReferenceValue\) *,
+		   pRefValue, 
+		   Ref value to be added,
+		   Add the reference value  to the property definition.)
+
+AD_METHOD1(RemoveRefValue,
+		   [in\,ref],
+		   AD_AAFTYPES\(AAFReferenceValue\) *,
+		   pRefValue, 
+		   Ref value to be removed,
+		   Remove the reference value from the property definition.)
+
+AD_METHOD1(GetRefValues,
+		   [out\,retval], AD_AAFTYPES\(EnumAAFReferenceValue\) **, 
+		   ppEnum, 
+		   Reference value Enumeration,
+		   Return an enumerator for the reference values.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
+
