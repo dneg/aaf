@@ -88,7 +88,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE="..\..\..\..\examples\com-api\CreateSequence\CreateSequence.cpp"
+SOURCE=..\..\..\..\test\com\CreateSequence\CreateSequence.cpp
 # End Source File
 # End Group
 # Begin Source File
