@@ -164,7 +164,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::AppendComponent (ImplAAFComponent* pComponent)
 {
 	ImplAAFDataDefSP sequDataDef, cpntDataDef;
-	aafBool			isPrevTran = kAAFFalse, willConvert;
+	aafBool			willConvert = kAAFFalse;
 
 	if (pComponent == NULL)
 		return AAFRESULT_NULL_PARAM;

@@ -446,16 +446,16 @@ protected:
 	OMFixedSizeProperty<aafRational_t>			_imageAspectRatio;
 	OMFixedSizeProperty<aafAlphaTransparency_t>	_alphaTransparency;
 	OMFixedSizeProperty<aafUID_t>				_transferCharacteristic;
-	OMFixedSizeProperty<aafUID_t>				_codingEquations;
 	OMFixedSizeProperty<aafUID_t>				_colorPrimaries;
+	OMFixedSizeProperty<aafUID_t>				_codingEquations;
 	OMFixedSizeProperty<aafUInt32>				_imageAlignmentFactor;
 	OMFixedSizeProperty<aafFieldNumber_t>				_fieldDominance;
 	OMFixedSizeProperty<aafUInt32>				_fieldStartOffset;
 	OMFixedSizeProperty<aafUInt32>				_fieldEndOffset;
-	OMFixedSizeProperty<aafInt32>				_displayF2Offset;
-	OMFixedSizeProperty<aafInt32>				_storedF2Offset;
-	OMFixedSizeProperty<aafUInt8>				_activeFormatDescriptor;
 	OMFixedSizeProperty<aafSignalStandard_t>		_signalStandard;
+	OMFixedSizeProperty<aafInt32>				_storedF2Offset;
+	OMFixedSizeProperty<aafInt32>				_displayF2Offset;
+	OMFixedSizeProperty<aafUInt8>				_activeFormatDescriptor;
 };
 
 #endif // ! __ImplAAFDigitalImageDescriptor_h__

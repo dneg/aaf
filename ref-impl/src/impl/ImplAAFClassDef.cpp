@@ -107,8 +107,8 @@ ImplAAFClassDef::ImplAAFClassDef ()
                     PID_MetaDefinition_Identification),
     _IsConcrete   ( PID_ClassDefinition_IsConcrete,   
                     L"IsConcrete"),
-	_propTypesLoaded (false),
-	_BootstrapParent(0)
+	_BootstrapParent(0),
+	_propTypesLoaded (false)
 {
   _persistentProperties.put(_ParentClass.address());
   _persistentProperties.put(_Properties.address());

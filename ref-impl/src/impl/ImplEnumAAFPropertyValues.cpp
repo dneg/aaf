@@ -97,12 +97,12 @@ AAFRESULT GetElementValueFromSet( ImplAAFPropertyValue* pVal,
 }
 
 ImplEnumAAFPropertyValues::ImplEnumAAFPropertyValues ()
-  : _count(0),
-    _current(0),
+  : _initialized(false),
+    _pDefSet(0),
     _pDef(0),
     _pVal(0),
-    _pDefSet(0),
-   _initialized(false)
+    _count(0),
+    _current(0)
 {}
 
 ImplEnumAAFPropertyValues::~ImplEnumAAFPropertyValues ()

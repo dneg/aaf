@@ -53,14 +53,14 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_transferCharacteristic(PID_DigitalImageDescriptor_TransferCharacteristic,		L"TransferCharacteristic"),
 	_colorPrimaries(PID_DigitalImageDescriptor_ColorPrimaries,				L"ColorPrimaries"),
 	_codingEquations(PID_DigitalImageDescriptor_CodingEquations,				L"CodingEquations"),
+	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,			L"ImageAlignmentFactor"),
 	_fieldDominance(PID_DigitalImageDescriptor_FieldDominance,				L"FieldDominance"),
 	_fieldStartOffset(PID_DigitalImageDescriptor_FieldStartOffset,				L"FieldStartOffset"),
 	_fieldEndOffset(PID_DigitalImageDescriptor_FieldEndOffset,				L"FieldEndOffset"),
-	_imageAlignmentFactor(PID_DigitalImageDescriptor_ImageAlignmentFactor,			L"ImageAlignmentFactor"),
-	_displayF2Offset(PID_DigitalImageDescriptor_DisplayF2Offset,				L"DisplayF2Offset"),
+	_signalStandard(PID_DigitalImageDescriptor_SignalStandard,			L"SignalStandard"),
 	_storedF2Offset(PID_DigitalImageDescriptor_StoredF2Offset,				L"StoredF2Offset"),
-	_activeFormatDescriptor(PID_DigitalImageDescriptor_ActiveFormatDescriptor,				L"ActiveFormatDescriptor"),
-	_signalStandard(PID_DigitalImageDescriptor_SignalStandard,			L"SignalStandard")
+	_displayF2Offset(PID_DigitalImageDescriptor_DisplayF2Offset,				L"DisplayF2Offset"),
+	_activeFormatDescriptor(PID_DigitalImageDescriptor_ActiveFormatDescriptor,				L"ActiveFormatDescriptor")
 {
 	aafInt32	videoLineMap[2];
 
@@ -82,14 +82,14 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_persistentProperties.put(_transferCharacteristic.address());
 	_persistentProperties.put(_colorPrimaries.address());
 	_persistentProperties.put(_codingEquations.address());
+	_persistentProperties.put(_imageAlignmentFactor.address());
 	_persistentProperties.put(_fieldDominance.address());
 	_persistentProperties.put(_fieldStartOffset.address());
 	_persistentProperties.put(_fieldEndOffset.address());
-	_persistentProperties.put(_imageAlignmentFactor.address());
-	_persistentProperties.put(_displayF2Offset.address());
-	_persistentProperties.put(_storedF2Offset.address());
-	_persistentProperties.put(_activeFormatDescriptor.address());
 	_persistentProperties.put(_signalStandard.address());
+	_persistentProperties.put(_storedF2Offset.address());
+	_persistentProperties.put(_displayF2Offset.address());
+	_persistentProperties.put(_activeFormatDescriptor.address());
 
 	aafRational_t	zero;
 	zero.numerator = 0;

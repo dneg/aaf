@@ -85,11 +85,11 @@ extern "C" const aafClassID_t CLSID_EnumAAFTaggedValueDefs;
 ImplAAFDictionary::ImplAAFDictionary ()
 : _operationDefinitions(PID_Dictionary_OperationDefinitions, L"OperationDefinitions", PID_DefinitionObject_Identification), 
   _parameterDefinitions(PID_Dictionary_ParameterDefinitions, L"ParameterDefinitions", PID_DefinitionObject_Identification),
+  _dataDefinitions      (PID_Dictionary_DataDefinitions,    L"DataDefinitions", PID_DefinitionObject_Identification),
+  _pluginDefinitions      (PID_Dictionary_PluginDefinitions,    L"PluginDefinitions", PID_DefinitionObject_Identification),
   _codecDefinitions(PID_Dictionary_CodecDefinitions, L"CodecDefinitions", PID_DefinitionObject_Identification),
   _containerDefinitions(PID_Dictionary_ContainerDefinitions, L"ContainerDefinitions", PID_DefinitionObject_Identification),
   _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    L"InterpolationDefinitions", PID_DefinitionObject_Identification),
-  _dataDefinitions      (PID_Dictionary_DataDefinitions,    L"DataDefinitions", PID_DefinitionObject_Identification),
-  _pluginDefinitions      (PID_Dictionary_PluginDefinitions,    L"PluginDefinitions", PID_DefinitionObject_Identification),
   _klvDataDefinitions( PID_Dictionary_KLVDataDefinitions, L"KLVDataDefinitions", PID_DefinitionObject_Identification),
   _taggedValueDefinitions( PID_Dictionary_TaggedValueDefinitions, L"TaggedValueDefinitions", PID_DefinitionObject_Identification),
   _pBuiltinClasses (0),
@@ -105,11 +105,11 @@ ImplAAFDictionary::ImplAAFDictionary ()
 {
   _persistentProperties.put (_operationDefinitions.address());
   _persistentProperties.put (_parameterDefinitions.address());
+  _persistentProperties.put(_dataDefinitions.address());
+  _persistentProperties.put(_pluginDefinitions.address());
   _persistentProperties.put(_codecDefinitions.address());
   _persistentProperties.put(_containerDefinitions.address());
   _persistentProperties.put(_interpolationDefinitions.address());
-  _persistentProperties.put(_dataDefinitions.address());
-  _persistentProperties.put(_pluginDefinitions.address());
   _persistentProperties.put(_klvDataDefinitions.address());
   _persistentProperties.put(_taggedValueDefinitions.address());
 

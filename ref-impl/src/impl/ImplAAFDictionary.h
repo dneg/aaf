@@ -915,19 +915,19 @@ private:
   bool pvtLookupAxiomaticClassDef (const aafUID_t & classID,
 								   ImplAAFClassDef ** ppClassDef);
 
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFOperationDef>			_operationDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFParameterDef>			_parameterDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFDataDef>				_dataDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPluginDef>				_pluginDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFCodecDef>				_codecDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFContainerDef>			_containerDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFInterpolationDef>		_interpolationDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFKLVDataDefinition>                  _klvDataDefinitions;
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTaggedValueDefinition>               _taggedValueDefinitions;
+
   ImplAAFBuiltinClasses * _pBuiltinClasses;
   ImplAAFBuiltinTypes   * _pBuiltinTypes;
   ImplAAFBuiltinDefs    * _pBuiltinDefs;
-
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFCodecDef>				_codecDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFContainerDef>			_containerDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFOperationDef>			_operationDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFParameterDef>			_parameterDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFInterpolationDef>		_interpolationDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFDataDef>				_dataDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFPluginDef>				_pluginDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFKLVDataDefinition>                  _klvDataDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTaggedValueDefinition>               _taggedValueDefinitions;
 
   aafInt16 _lastGeneratedPid;	// must be signed!
 

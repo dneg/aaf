@@ -62,8 +62,8 @@ ImplAAFTypeDefRecord::ImplAAFTypeDefRecord ()
 	_registeredOffsets (0),
 	_registeredSize (0),
 	_internalSizes (0),
-	_cachedCount ((aafUInt32) -1),
 	_cachedMemberTypes (0),
+	_cachedCount ((aafUInt32) -1),
 	_registrationAttempted (kAAFFalse),
 	_defaultRegistrationUsed (kAAFFalse)
 {

@@ -51,11 +51,11 @@
 extern "C" const aafClassID_t CLSID_EnumAAFControlPoints;
 
 ImplAAFVaryingValue::ImplAAFVaryingValue ()
-: _controlPoints(         PID_VaryingValue_PointList,          L"PointList"),
-  _interpolation(         PID_VaryingValue_Interpolation,      L"Interpolation", L"/Header/Dictionary/InterpolationDefinitions", PID_DefinitionObject_Identification)
+: _interpolation(         PID_VaryingValue_Interpolation,      L"Interpolation", L"/Header/Dictionary/InterpolationDefinitions", PID_DefinitionObject_Identification),
+ _controlPoints(         PID_VaryingValue_PointList,          L"PointList")
 {
-	  _persistentProperties.put(_controlPoints.address());
 	  _persistentProperties.put(_interpolation.address());
+	  _persistentProperties.put(_controlPoints.address());
 }
 
 
