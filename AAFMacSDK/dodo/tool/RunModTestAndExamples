@@ -1,0 +1,150 @@
+#
+# File: RunModTestAndExamples
+#
+
+set ALL_TESTS ""
+set CHECK_DEBUG ""
+set CHECK_RELEASE ""
+set CLIENTTEST ""
+set AAFINFO ""
+set CUTSTEST ""
+set PROPDIRECTDUMP ""
+set ESSENCETEST ""
+set MODULETEST ""
+
+alias PrintHelp 'echo "" ;¶
+	echo "To run module test and all examples for specified target, use either:" ;¶
+	echo " -r  = Release" ;¶
+	echo " -d  = Debug" ;¶
+	echo "" ;¶
+	echo "To specify which tests to run, add any of the following:" ;¶
+	echo " -a  = Run ALL Tests" ;¶
+	echo " -ao = AafOmf" ;¶
+	echo " -i  = ComAAFInfo" ;¶
+	echo " -cl = ComClientTest" ;¶
+	echo " -cu = ComCutsTest" ;¶
+	echo " -e  = ComEssenceDataTest" ;¶
+	echo " -m  = ComModAAF" ;¶
+	echo " -pd = ComPropDirectDump" ;¶
+	echo " -pa = ComPropDirectAccess" ;¶
+	echo " -ea = EssenceAccess" ;¶
+	echo " -cs = CreateSequence" ;¶
+	echo " -pe = Personnel Extension tests" ;¶
+	echo " -eae = ExportAudioExample" ;¶
+	echo " -esc = ExportSimpleComposition" ;¶
+	echo " -iae = ImportAudioExample" ;¶
+	echo " -t  = dump\n\n" ;¶
+	exit 1'
+
+# There are required parameters!
+if "{1}" == ""
+	PrintHelp	
+end if
+
+
+# Process all of the arguments
+loop
+	if "{1}" == "-r"
+		set CHECK_RELEASE "1"
+	else if "{1}" == "-d"
+		set CHECK_DEBUG "1"
+	else if "{1}" == "-a"
+		set ALL_TESTS "1"
+	else if "{1}" == "-i"
+		set AAFINFO "1"
+	else if "{1}" == "-cl"
+		set CLIENTTEST "1"
+	else if "{1}" == "-cu"
+		set CUTSTEST "1"
+	else if "{1}" == "-e"
+		set ESSENCETEST "1"
+	else if "{1}" == "-pd"
+		#set PROPDIRECTDUMP "1"
+		echo "# COMPROPDIRECTDUMP test not implemented."
+	else if "{1}" == "-m"
+		set MODULETEST "1"
+	else
+		PrintHelp
+	end if
+
+	# continue processing parameters
+	shift
+	break if "{1}" == ""
+end
+
+if "{CHECK_RELEASE}{CHECK_DEBUG}" == ""
+	PrintHelp	
+end if
+
+
+# cleanup local aliases
+unalias PrintHelp
+
+Set olddirectory `Directory`	# save the default directory
+if "{CHECK_RELEASE}" ­ ""
+	echo "Testing release build..."
+	Directory "{AAFMacSDK}bin:"
+else
+	echo "Testing debug build..."
+	Directory "{AAFMacSDK}bin:debug:"
+end if
+
+
+if "{AAFINFO}{ALL_TESTS}" ­ ""
+	if "" == "`exists -f Foo.aaf`"
+		set CLIENTTEST "1"
+	end if
+end if
+
+if "{CLIENTTEST}{ALL_TESTS}" ­ ""
+	echo "Running COMCLIENTAAF"
+	ccommand COMCLIENTAAF
+	echo ""
+end if
+
+
+if "{AAFINFO}{ALL_TESTS}" ­ ""
+	echo "Running COMAAFINFO"
+	ccommand COMAAFINFO Foo.aaf
+	echo ""
+end if
+
+
+
+if "{PROPDIRECTDUMP}{ALL_TESTS}" ­ ""
+	if "" == "`exists -f CutsOnly.aaf`"
+		set CUTSTEST "1"
+	end if
+end if
+
+if "{CUTSTEST}{ALL_TESTS}" ­ ""
+	echo "Running COMCUTSONLYTESTAAF"
+	ccommand COMCUTSONLYTESTAAF
+	echo ""
+	echo ""
+end if
+
+
+if "{PROPDIRECTDUMP}{ALL_TESTS}" ­ ""
+	echo "Running COMPROPDIRECTDUMP"
+	ccommand COMPROPDIRECTDUMP CutsOnly.aaf
+	echo ""
+	echo ""
+end if
+
+if "{ESSENCETEST}{ALL_TESTS}" ­ ""
+	echo "Running COMESSENCEDATATEST"
+	ccommand COMESSENCEDATATEST
+	echo ""
+	echo ""
+end if
+
+
+if "{MODULETEST}{ALL_TESTS}" ­ ""
+	echo "Running COMMODAAF (PPC)"
+	ccommand "COMMODAAF (PPC)"
+	echo ""
+	echo ""
+end if
+
+Directory "{olddirectory}"		# restore the original default directory
