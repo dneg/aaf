@@ -140,7 +140,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    "InterpolationDefinitions"),
   _dataDefinitions      (PID_Dictionary_DataDefinitions,    "DataDefinitions"),
   _pluginDefinitions      (PID_Dictionary_PluginDefinitions,    "PluginDefinitions"),
-
+	_opaqueTypeDefinitions (0),
   _pBuiltinClasses (0),
   _pBuiltinTypes (0),
   _pBuiltinDefs (0),
@@ -606,6 +606,7 @@ AAFRESULT STDMETHODCALLTYPE
 		  ImplAAFClassDef	*dictValue, *parent;
 		  // These classes fail with doubly-opened storages
 		  if(memcmp(&classID, &kAAFClassID_ClassDefinition, sizeof(aafUID_t)) != 0
+		   && memcmp(&classID, &kAAFClassID_TypeDefinitionCharacter, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionString, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionVariableArray, sizeof(aafUID_t)) != 0
 		   && memcmp(&classID, &kAAFClassID_TypeDefinitionRecord, sizeof(aafUID_t)) != 0
@@ -840,6 +841,19 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFTypeDef * pExistingTypeDef = NULL;
   hr = dictLookupTypeDef (newAUID, &pExistingTypeDef);
 
+//	if (AAFRESULT_FAILED(hr))
+//	{
+		// TBD:(transdel 2000-MAR-19) we also nee to check it the
+		// given type is an opaque type. if it is then we
+		// need to remove it from the opaqueTypeDefinitions set
+		// if the registration of successful. This make sence
+		// since type can no longer be opaque.
+		// hr = LookupOpaqueTypeDef (newAUID, &pExistingTypeDef);
+		// etc,,,
+		//
+//	}
+
+
   if (hr != AAFRESULT_SUCCESS) {
     // This type is not yet registered, add it to the dictionary.
     _typeDefinitions.appendValue(pTypeDef);
@@ -907,6 +921,7 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_Int64,
   & kAAFTypeID_Int64Array,
   & kAAFTypeID_Int8,
+  & kAAFTypeID_Character,
   & kAAFTypeID_String,
   & kAAFTypeID_TimeStamp,
   & kAAFTypeID_UInt16,
@@ -1118,6 +1133,97 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_NULL_PARAM;
 	*pResult = _typeDefinitions.count();
   return AAFRESULT_SUCCESS;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterOpaqueTypeDef (
+      ImplAAFTypeDef * pTypeDef)
+{
+  if (NULL == pTypeDef)
+		return AAFRESULT_NULL_PARAM;
+	
+  // Get the AUID of the new type to register.
+  aafUID_t newAUID;
+  HRESULT hr = pTypeDef->GetAUID(&newAUID);
+  if (hr != AAFRESULT_SUCCESS)
+    return hr;
+
+  // Is this type already registered ?
+  
+
+  // This type is not yet registered, add it to the dictionary.
+//  _opaqueTypeDefinitions.appendValue(pTypeDef);
+//  pTypeDef->AcquireReference();
+
+  return (AAFRESULT_NOT_IMPLEMENTED);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupOpaqueTypeDef (
+      const aafUID_t & typeID,
+      ImplAAFTypeDef ** ppTypeDef)
+{
+  ImplAAFTypeDefSP			typeDef;
+//  AAFRESULT					status;
+
+  if (! ppTypeDef) 
+		return AAFRESULT_NULL_PARAM;
+//  *ppTypeDef = typeDef;
+//  assert (*ppTypeDef);
+//  (*ppTypeDef)->AcquireReference ();
+	
+  return (AAFRESULT_NOT_IMPLEMENTED);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::GetOpaqueTypeDefs (
+      ImplEnumAAFTypeDefs ** ppEnum)
+{
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+
+#if 0
+	ImplEnumAAFTypeDefs *theEnum = (ImplEnumAAFTypeDefs *)CreateImpl (CLSID_EnumAAFTypeDefs);
+	
+	XPROTECT()
+	{
+		OMStrongReferenceSetIterator<ImplAAFTypeDef>* iter = 
+			new OMStrongReferenceSetIterator<ImplAAFTypeDef>(_typeDefinitions);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+		  {
+			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
+		return(XCODE());
+	}
+	XEND;
+	
+#endif
+  return (AAFRESULT_NOT_IMPLEMENTED);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::CountOpaqueTypeDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+		return AAFRESULT_NULL_PARAM;
+//	*pResult = _typeDefinitions.count();
+//  return AAFRESULT_SUCCESS;
+  return (AAFRESULT_NOT_IMPLEMENTED);
 }
 
 
