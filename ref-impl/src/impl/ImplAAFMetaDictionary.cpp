@@ -251,7 +251,7 @@ OMStorable* ImplAAFMetaDictionary::create(const OMClassId& classId) const
 //
 const OMClassId& ImplAAFMetaDictionary::classId(void) const
 {
-  return *reinterpret_cast<const OMClassId* const>(&AUID_AAFMetaDictionary);
+  return *reinterpret_cast<const OMClassId*>(&AUID_AAFMetaDictionary);
 }
 
 
