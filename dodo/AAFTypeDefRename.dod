@@ -103,7 +103,7 @@ AD_XMETHOD1(GetBaseType,
   //   - ppBaseType pointer is NULL.)
 
 
-AD_XMETHOD2(GetValue,
+AD_XMETHOD2(GetBaseValue,
 			[in],
 			objIn,
 			AAFPropertyValue,
@@ -137,6 +137,39 @@ AD_XMETHOD2(GetValue,
   // AAFRESULT_NULL_PARAM
   //   - pInPropVal or ppOutPropVal is NULL.)
 
+AD_XMETHOD2(GetValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value from which value is to be read,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppOutPropVal,
+			pointer to property value represented by rename type,
+
+  // Gets the property value of the typedef type from the given property
+  // value of the base type and places a pointer to the base type's
+  // property value into *ppOutPropVal.
+  //
+  // Succeeds if:
+  // - The pInPropVal pointer is valid.
+  // - The ppOutPropVal pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pInPropVal or ppOutPropVal is NULL.)
 
 AD_OVERRIDE(.method-GetTypeCategory)
 AD_XCLASS_END(Concrete, StoredObject)
