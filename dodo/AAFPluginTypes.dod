@@ -34,5 +34,14 @@ typedef enum _aafCheckWarnings_t
 	kAAFCheckNoWarnings
 } aafCheckWarnings_t;
 
+typedef struct _aafSelectInfo_t
+{
+	aafBool         	hwAssisted;
+	aafBool				isNative;
+	aafBool        		willHandleMDES;
+	aafInt16			relativeLoss;
+	aafUInt32			avgBitsPerSec;
+} aafSelectInfo_t;
+
 AD_TYPES_END
 
