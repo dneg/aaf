@@ -8,60 +8,208 @@ AAFEssenceDescriptor\
 #c
 #import ./AAFEssenceDescriptor.exp
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
+AD_IDL(//
+// The IAAFEssenceDescriptor interface is implemented by objects which
+// describe the format of the content data associated with a File
+// Source mob or the media associated with a Physical Source mob.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//)
 AD_CLASS_UUID(e58a8562, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(e58a8561, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
+AD_XMETHOD1(SetLength,
+			[in],
+			objPass,
+			aafLength_t,
+			length,
+			length of the essence in samples,
+  // 
+  // Sets the length of the essence in samples [not edit units].
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
 
-//@access Public Members
 
-/****/
-AD_METHOD1(SetLength,
-[in],aafLength_t,length,length of the essence in samples,
-Sets the length of the essence in samples [not edit units].)
+AD_XMETHOD1(GetLength,
+			[out],
+			objPass,
+			aafLength_t *,
+			pLength,
+			returns length of the essence in samples,
+  // Gets the length of the essence in samples [not edit units].
+  //
+  // Succeeds if all of the following are true:
+  // - the pLength pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pLength.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLength arg is NULL.)
 
-/****/
-AD_METHOD1(GetLength,
-[out],aafLength_t *,pLength,returns length of the essence in samples,
-Gets the length of the essence in samples [not edit units].)
 
-/****/
-AD_METHOD1(SetIsInContainer,
-[in],aafBool,isAAF,is this AAF or raw essence,
-Set to TRUE if this is AAF-wrapped essence FALSE if the essence is in an external non-AAF file.)
+AD_XMETHOD1(SetIsInContainer,
+			[in],
+			objPass,
+			aafBool,
+			isAAF,
+			is this AAF or raw essence,
+  // Set to TRUE if this is AAF-wrapped essence FALSE if the essence
+  // is in an external non-AAF file.
+  // 
+  // Always succeeds.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
 
-/****/
-AD_METHOD1(GetIsInContainer,
-[out],aafBool*,pIsAAF,is this AAF or raw medi,
-Returns TRUE if this is AAF-wrapped essence FALSE if the essence is in an external non-AAF file.)
 
-/****/
-AD_METHOD1(SetSampleRate,
-[in],aafRational_t *,pRate,sample rate of the essence,
-Sets sample rate of the essence as opposed to the edit rate.)
+AD_XMETHOD1(GetIsInContainer,
+			[out],
+			objPass,
+			aafBool *,
+			pIsAAF,
+			is this AAF or raw medi,
+  // Places TRUE into *pIsAAF if this is AAF-wrapped essence.  Places
+  // FALSE into *pIsAAF if the essence is in an external non-AAF file.
+  //
+  // Succeeds if all of the following are true:
+  // - the pIsAAF pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pIsAAF.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pIsAAF arg is NULL.)
 
-/****/
-AD_METHOD1(GetSampleRate,
-[out],aafRational_t*,pRate,sample rate of the essence,
-Sets sample rate of the essence as opposed to the edit rate.)
 
-/****/
-AD_METHOD1(SetContainerFormat,
-[in],aafUID_t *,pFormat,Identifies the file format,
-Optional. Identifies the file format.)
+AD_XMETHOD1(SetSampleRate,
+			[in],
+			objPass,
+			aafRational_t *,
+			pRate,
+			sample rate of the essence,
+  // Sets sample rate of the essence as opposed to the edit rate.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pRate pointer is valid.
+  // 
+  // If this method fails the Data Definition property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pRate arg is NULL.)
 
-/****/
-AD_METHOD1(GetContainerFormat,
-[out],aafUID_t *,pFormat,Identifies the file format,
-Optional. Identifies the file format.)
 
+AD_XMETHOD1(GetSampleRate,
+			[out],
+			objPass,
+			aafRational_t*,
+			pRate,
+			sample rate of the essence,
+  // Sets sample rate of the essence as opposed to the edit rate.
+  //
+  // Succeeds if all of the following are true:
+  // - the pRate pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pRate.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pRate arg is NULL.)
+
+
+AD_XMETHOD1(SetContainerFormat,
+			[in],
+			objPass,
+			aafUID_t *,
+			pFormat,
+			Identifies the file format,
+  // Optional. Identifies the file format.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pFormat pointer is valid.
+  // 
+  // If this method fails the Data Definition property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFormat arg is NULL.)
+
+
+AD_XMETHOD1(GetContainerFormat,
+			[out],
+			objPass,
+			aafUID_t *,
+			pFormat,
+			Identifies the file format,
+  // Optional. Identifies the file format.
+  //
+  // Succeeds if all of the following are true:
+  // - the pFormat pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pFormat.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFormat arg is NULL.)
 AD_CLASS_END
