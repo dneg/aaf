@@ -111,7 +111,7 @@ AD_XMETHOD5(AddMasterSlot,
   //   - One or more of the following parameters are NULL pSourceMob\,
   //     pDataDef\, and pSlotName.
   //
-  // AAFRESULT_INVALID_DATAKIND
+  // AAFRESULT_INVALID_DATADEF
   //   - The data kind of the source MOB slot to be added to the Master
   //     Mob does not match what is specfied in pDataDef.
   //
