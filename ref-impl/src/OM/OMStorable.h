@@ -58,6 +58,10 @@ public:
 
   void setStore(OMStoredObject* store);
 
+  // Is this object attached to a file ?
+
+  virtual bool attached(void);
+
 private:
 
   // Save an object, given by a possibly null pointer `p', to `s'.
