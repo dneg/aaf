@@ -11,6 +11,14 @@ AD_HEAD
 AD_IDL(//
 // This interface provides access to the list of Segment and
 // Transition objects maintained by a Sequence object.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
 //)
 AD_FORWARD_DECLARATION(AAFTimecode)
 AD_FORWARD_DECLARATION(AAFComponent)
