@@ -30,6 +30,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
@@ -66,7 +67,7 @@ typedef IAAFSmartPointer<IAAFTypeDefWeakObjRef>     IAAFTypeDefWeakObjRefSP;
 extern "C"
 {
   // Main test function.
-  HRESULT CAAFTypeDefWeakObjRef_test(void);
+  HRESULT CAAFTypeDefWeakObjRef_test(testMode_t mode);
 
   // Create the test file.
   void CAAFTypeDefWeakObjRef_create (aafCharacter_constptr pFileName); // throw HRESULT
@@ -76,7 +77,8 @@ extern "C"
 }
 
 
-HRESULT CAAFTypeDefWeakObjRef_test()
+extern "C" HRESULT CAAFTypeDefWeakObjRef_test(testMode_t);
+extern "C" HRESULT CAAFTypeDefWeakObjRef_test(testMode_t /*mode*/)
 {
 #if ENABLE_WEAK_REFERENCES
 
@@ -88,7 +90,8 @@ HRESULT CAAFTypeDefWeakObjRef_test()
   {
     // Run through a basic set of tests. Create the file, 
     // and then read and validate the new file.
-    CAAFTypeDefWeakObjRef_create (wFileName);
+     if(mode == kAAFUnitTestReadWrite)
+    		CAAFTypeDefWeakObjRef_create (wFileName);
     CAAFTypeDefWeakObjRef_read (wFileName);
   }
   catch (HRESULT &rhr)
