@@ -640,7 +640,7 @@ bool OMWeakReferenceVectorProperty<ReferencedObject>::findIndex(
 }
 
   // @mfunc Increase the capacity of this
-  //        <c OMWeakReferemceVectorProperty> so that it
+  //        <c OMWeakReferenceVectorProperty> so that it
   //        can contain at least <p capacity> <p ReferencedObject>s
   //        without having to be resized.
   //   @parm The desired capacity.
