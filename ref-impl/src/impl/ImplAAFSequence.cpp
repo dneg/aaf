@@ -287,9 +287,13 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::PrependComponent (ImplAAFComponent* pComponent)
 {
-  if (! pComponent) return AAFRESULT_NULL_PARAM;
+  if(!pComponent)
+		return(AAFRESULT_NULL_PARAM);
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  _components.prependValue(pComponent);
+  pComponent->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -297,16 +301,20 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::InsertComponentAt (aafUInt32 index,
 										ImplAAFComponent* pComponent)
 {
-  if (! pComponent) return AAFRESULT_NULL_PARAM;
+  if (!pComponent) 
+    return AAFRESULT_NULL_PARAM;
 
   aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountComponents (&count);
-  if (AAFRESULT_FAILED (hr)) return hr;
+  AAFRESULT ar;
+  ar = CountComponents (&count);
+  if (AAFRESULT_FAILED (ar)) return ar;
   if (index > count)
 	return AAFRESULT_BADINDEX;
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  _components.insertAt(pComponent,index);
+  pComponent->AcquireReference();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -314,16 +322,24 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::GetComponentAt (aafUInt32 index,
 									 ImplAAFComponent ** ppComponent)
 {
-  if (! ppComponent) return AAFRESULT_NULL_PARAM;
+  if (!ppComponent) 
+    return AAFRESULT_NULL_PARAM;
 
   aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountComponents (&count);
-  if (AAFRESULT_FAILED (hr)) return hr;
+  AAFRESULT ar;
+  ar = CountComponents (&count);
+  if (AAFRESULT_FAILED (ar)) return ar;
   if (index >= count)
 	return AAFRESULT_BADINDEX;
 
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+  ImplAAFComponent *pComponent;
+  _components.getValueAt(pComponent,index);
+
+  assert(pComponent);
+  pComponent->AcquireReference();
+  (*ppComponent)=pComponent;
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -448,8 +464,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::GetComponents (ImplEnumAAFComponents ** ppEnum)
 {
-	if(ppEnum == NULL)
-		return(AAFRESULT_NULL_PARAM);
 
 	*ppEnum = (ImplEnumAAFComponents *)CreateImpl(CLSID_EnumAAFComponents);
 	if(*ppEnum == NULL)
@@ -458,7 +472,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 	return(AAFRESULT_SUCCESS);
 }
-
 
 
 //***********************************************************
