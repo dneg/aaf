@@ -69,16 +69,20 @@ INCLUDE_DIR = ../ref-impl/include
 	$(SH_PREFIX) cp $*.comt $(SRC_DIR)/com-api/test/C$*Test.cpp $(SH_SUFFIX)
 
 .dod.implh :
-	$(SH_PREFIX) $(RM) -f $*.implh $(SH_SUFFIX)
-	$(SH_PREFIX) ./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp $(SH_SUFFIX)
-	$(SH_PREFIX) mv $*.tmp $*.implh $(SH_SUFFIX)
-	$(SH_PREFIX) cp $*.implh $(SRC_DIR)/impl/Impl$*.h $(SH_SUFFIX)
+	if test -z "`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.h`" ; then ; \
+		$(RM) -f $*.implh ; \
+		./tool/$(DODO) -f macros/implh.mac < $*.dod > $*.tmp ; \
+		mv $*.tmp $*.implh ; \
+		cp $*.implh $(SRC_DIR)/impl/Impl$*.h ; \
+	fi
 
 .dod.implc :
-	$(SH_PREFIX) $(RM) -f $*.implc $(SH_SUFFIX)
-	$(SH_PREFIX) ./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp $(SH_SUFFIX)
-	$(SH_PREFIX) mv $*.tmp $*.implc $(SH_SUFFIX)
-	$(SH_PREFIX) cp $*.implc $(SRC_DIR)/impl/Impl$*.cpp $(SH_SUFFIX)
+	if test -z "`cleartool ls -vob $(SRC_DIR)/impl/Impl$*.h`" ; then ; \
+		$(RM) -f $*.implc ; \
+		./tool/$(DODO) -f macros/implc.mac < $*.dod > $*.tmp ; \
+		mv $*.tmp $*.implc ; \
+		cp $*.implc $(SRC_DIR)/impl/Impl$*.cpp ; \
+	fi
 
 .dod.cpp :
 	$(SH_PREFIX) $(RM) -f $*.cpp $(SH_SUFFIX)
