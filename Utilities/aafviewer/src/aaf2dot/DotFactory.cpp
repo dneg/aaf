@@ -315,18 +315,20 @@ vector< DotEdge* >
 DotFactory::GetEdgesWithSourceNode( DotRecordNode *node )
 {
    vector< DotEdge* > retVector;
-
    vector< DotElement* >::iterator iter;
    for ( iter=_dotElements.begin(); iter!=_dotElements.end(); iter++ )
    {
       DotEdge *edge = dynamic_cast< DotEdge* > (*iter);
-      DotEdgeEnd *source = edge->GetSource();
-      if ( source != 0 )
+      if ( edge != 0 )
       {
-	 DotRecordNode *reference = source->GetReference();
-	 if ( reference->GetUID().compare( node->GetUID() ) == 0 )
+	 DotEdgeEnd *source = edge->GetSource();
+	 if ( source != 0 )
 	 {
-	    retVector.push_back( edge );
+	    DotRecordNode *reference = source->GetReference();
+	    if ( reference->GetUID().compare( node->GetUID() ) == 0 )
+	    {
+	       retVector.push_back( edge );
+	    }
 	 }
       }
    }
