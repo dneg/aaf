@@ -772,6 +772,10 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/Impl.this-moduleTest.cpp.
   static AAFRESULT test();
+
+  // Return this objects stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
 };
 
 #endif // ! __Impl.this-module_h__

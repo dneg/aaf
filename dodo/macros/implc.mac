@@ -644,6 +644,19 @@ AAFRESULT STDMETHODCALLTYPE
 extern "C" const aafClassID_t CLSID_.this-module;
 
 OMDEFINE_STORABLE(Impl.this-module, CLSID_.this-module);
+
+// Cheat!  We're using this object's CLSID instead of object class...
+AAFRESULT STDMETHODCALLTYPE
+Impl.this-module::GetObjectClass(aafUID_t * pClass)
+{
+  if (! pClass)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  memcpy (pClass, &CLSID_.this-module, sizeof aafClassID_t);
+  return AAFRESULT_SUCCESS;
+}
+
 #endm
 
 
