@@ -27,10 +27,6 @@ class ImplAAFScopeStack;
 #include "ImplAAFObject.h"
 #endif
 
-//#include "ImplAAFMob.h"
-
-#include "OMProperty.h"
-
 
 typedef 
 enum _implCompType_t
@@ -107,10 +103,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFComponentTest.cpp.
   static AAFRESULT test();
-
-  // Return this object's stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 private:
 	OMFixedSizeProperty<aafUID_t>		_dataDef;

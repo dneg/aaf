@@ -3,7 +3,6 @@
 #ifndef __ImplAAFFileDescriptor_h__
 #define __ImplAAFFileDescriptor_h__
 
-#include "OMStorable.h"
 
 /******************************************\
 *                                          *
@@ -19,7 +18,6 @@
 #include "ImplAAFEssenceDescriptor.h"
 #endif
 
-#include "OMProperty.h"
 
 
 class ImplAAFFileDescriptor : public ImplAAFEssenceDescriptor
@@ -121,10 +119,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFFileDescriptorTest.cpp.
   static AAFRESULT test();
-
-  // Return this object's stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 public:
 	// Functions internal to the toolkit

@@ -7,7 +7,6 @@
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
 #endif
-#include "OMProperty.h"
 
 /******************************************\
 *                                          *
@@ -153,10 +152,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFMobSlotTest.cpp.
   static AAFRESULT test();
-
-  // Return this objects stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 protected:
 	OMWideStringProperty				_name;

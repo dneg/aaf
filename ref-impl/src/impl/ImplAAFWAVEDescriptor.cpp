@@ -16,6 +16,7 @@
 #include "ImplAAFWAVEDescriptor.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -81,20 +82,5 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-extern "C" const aafClassID_t CLSID_AAFWAVEDescriptor;
 
-OMDEFINE_STORABLE(ImplAAFWAVEDescriptor, CLSID_AAFWAVEDescriptor);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFWAVEDescriptor::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFWAVEDescriptor, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
-
+OMDEFINE_STORABLE(ImplAAFWAVEDescriptor, AUID_AAFWAVEDescriptor);

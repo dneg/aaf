@@ -10,9 +10,9 @@
 *                                          *
 \******************************************/
 
-#include "OMStorable.h"
+#ifndef __ImplAAFFileDescriptor_h__
 #include "ImplAAFFileDescriptor.h"
-
+#endif
 
 class ImplAAFDigitalImageDescriptor : public ImplAAFFileDescriptor
 {
@@ -252,10 +252,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFDigitalImageDescriptorTest.cpp.
   static AAFRESULT test();
-
-  // Return this objects stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 protected:
 	OMFixedSizeProperty<aafUID_t>				_compression;

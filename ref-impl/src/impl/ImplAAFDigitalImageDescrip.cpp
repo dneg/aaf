@@ -8,6 +8,7 @@
 \******************************************/
 #include "ImplAAFDigitalImageDescriptor.h"
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -336,20 +337,5 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-extern "C" const aafClassID_t CLSID_AAFDigitalImageDescriptor;
 
-OMDEFINE_STORABLE(ImplAAFDigitalImageDescriptor, CLSID_AAFDigitalImageDescriptor);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFDigitalImageDescriptor::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFDigitalImageDescriptor, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
-
+OMDEFINE_STORABLE(ImplAAFDigitalImageDescriptor, AUID_AAFDigitalImageDescriptor);

@@ -12,7 +12,6 @@
 *                                          *
 \******************************************/
 
-#include "OMStorable.h"
 
 #ifndef __AAFTypes_h__
 #include "AAFTypes.h"
@@ -22,7 +21,6 @@
 #include "ImplAAFEssenceDescriptor.h"
 #endif
 
-#include "OMProperty.h"
 
 
 
@@ -164,10 +162,6 @@ public:
 
   virtual AAFRESULT	STDMETHODCALLTYPE
 		GetOwningMobKind (aafMobKind_t *pMobKind);
-
-  // Return this objects stored object class.
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetObjectClass(aafUID_t * pClass);
 
 	// Persistent properties
 private:
