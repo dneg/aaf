@@ -1875,7 +1875,7 @@ void Omf2Aaf::ConvertOMFSourceClip(omfObject_t sourceclip,
 //
 // ============================================================================
 void Omf2Aaf::ConvertOMFComponentProperties(omfObject_t component, 
-											 IAAFComponent* pComponent )
+											 IAAFComponent* /* pComponent */)
 {
 	AAFCheck				rc;
 	omfErr_t			OMFError;
@@ -1960,8 +1960,8 @@ void Omf2Aaf::TraverseOMFSequence(omfObject_t sequence, IAAFSequence* pSequence 
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-void Omf2Aaf::ConvertOMFMasterMob(omfObject_t obj,
-									IAAFMasterMob* pMasterMob )
+void Omf2Aaf::ConvertOMFMasterMob(omfObject_t /* obj */,
+									IAAFMasterMob* /* pMasterMob */)
 {
 	AAFCheck				rc;
 	
@@ -3763,6 +3763,6 @@ void Omf2Aaf::GetAAFOperationDefinition(omfUniqueName_t effectID,
 }
 
 
-void Omf2Aaf::ConvertObjectProps(omfObject_t pOMFObject, aafUID_t &classID, IAAFObject* pObj)
+void Omf2Aaf::ConvertObjectProps(omfObject_t /* pOMFObject */, aafUID_t &/* classID */, IAAFObject* /* pObj */)
 {
 }		

@@ -2751,7 +2751,7 @@ void Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 }
 
 void Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
-									aafUID_t			&effectDefID,
+									aafUID_t			&/* effectDefID */,
 								  omfSegObj_t		pOMFEffect,
 									omfInt32		slotNum,
 									omfLength_t	effectLen)
