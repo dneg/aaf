@@ -152,10 +152,7 @@ public:
 private:
   ImplAAFTypeDefSP BaseType () const;
 
-  // OMWeakReferenceProperty<ImplAAFTypeDef> _RenamedType;
-  OMFixedSizeProperty<aafUID_t>           _RenamedType;
-
-  ImplAAFTypeDefSP _cachedBaseType;
+   OMWeakReferenceProperty<ImplAAFTypeDef> _RenamedType;
 };
 
 //
