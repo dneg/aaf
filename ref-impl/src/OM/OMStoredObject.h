@@ -112,9 +112,9 @@ public:
     //          <p data> to <p stream>.
   void writeToStream(IStream* stream, void* data, size_t size);
 
-    // @cmember Read a UInt32 from <p stream> into <p i>. If <p
-    //          _reorderBytes> is true then the bytes are reordered.
-  void readUInt32FromStream(IStream* stream, OMUInt32& i, bool _reorderBytes);
+    // @cmember Read a UInt32 from <p stream> into <p i>. If
+    //          <p reorderBytes> is true then the bytes are reordered.
+  void readUInt32FromStream(IStream* stream, OMUInt32& i, bool reorderBytes);
 
     // @cmember Reorder the UInt32 <p i>.
   void reorderOMUInt32(OMUInt32& i);
