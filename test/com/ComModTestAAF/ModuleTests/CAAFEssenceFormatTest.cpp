@@ -189,7 +189,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pHeader->AddMob(pMob));
 		checkResult(pMasterMob->CreateEssence (1,
 											   defs.ddSound(),
-											   CodecWave,
+											   kAAFCodecWAVE,
 											   rate,
 											   rate,
 											   kAAFCompressionDisable,
