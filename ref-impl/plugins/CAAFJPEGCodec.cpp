@@ -3421,17 +3421,6 @@ HRESULT CAAFJPEGCodec::InternalQueryInterface
 }
 
 //
-// COM Factory function.
 // Define the contrete object support implementation.
 // 
-HRESULT CAAFJPEGCodec::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut)
-{
-	*ppvObjOut = NULL;
- 	CAAFJPEGCodec *pAAFJPEGCodec = new CAAFJPEGCodec(pUnkOuter);
- 	if (NULL == pAAFJPEGCodec)
- 		return E_OUTOFMEMORY;
- 	*ppvObjOut = static_cast<IAAFEssenceCodec *>(pAAFJPEGCodec);
- 	((IUnknown *)(*ppvObjOut))->AddRef();
- 	return S_OK;
- }
-
+AAF_DEFINE_FACTORY(AAFJPEGCodec)

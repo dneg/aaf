@@ -185,7 +185,7 @@ HRESULT STDMETHODCALLTYPE
 
 	return AAFRESULT_SUCCESS;
 }
-\
+
 
 CAAFBasicInterp::CAAFBasicInterp (IUnknown * pControllingUnknown, aafBool doInit)
   : CAAFUnknown (pControllingUnknown)
@@ -537,14 +537,4 @@ HRESULT CAAFBasicInterp::InternalQueryInterface
 //
 // Define the contrete object support implementation.
 // 
-HRESULT CAAFBasicInterp::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut)
-{
-	*ppvObjOut = NULL;
- 	CAAFBasicInterp *pAAFBasicInterp = new CAAFBasicInterp(pUnkOuter);
- 	if (NULL == pAAFBasicInterp)
- 		return E_OUTOFMEMORY;
- 	*ppvObjOut = static_cast<IAAFInterpolator *>(pAAFBasicInterp);
- 	((IUnknown *)(*ppvObjOut))->AddRef();
- 	return S_OK;
- }
-
+AAF_DEFINE_FACTORY(AAFBasicInterp)

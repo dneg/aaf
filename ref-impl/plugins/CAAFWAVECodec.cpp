@@ -1696,14 +1696,4 @@ HRESULT CAAFWaveCodec::InternalQueryInterface
 //
 // Define the contrete object support implementation.
 // 
-HRESULT CAAFWaveCodec::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut)
-{
-	*ppvObjOut = NULL;
- 	CAAFWaveCodec *pAAFWaveCodec = new CAAFWaveCodec(pUnkOuter);
- 	if (NULL == pAAFWaveCodec)
- 		return E_OUTOFMEMORY;
- 	*ppvObjOut = static_cast<IAAFEssenceCodec *>(pAAFWaveCodec);
- 	((IUnknown *)(*ppvObjOut))->AddRef();
- 	return S_OK;
- }
-
+AAF_DEFINE_FACTORY(AAFWaveCodec)
