@@ -27,7 +27,7 @@
 // Define the object creation callback function that should be
 // implemented as a static method for every concrete AAF object.
 // 
-typedef HRESULT (*AAFModuleTestProc)(ostream& stream); 
+typedef HRESULT (*AAFModuleTestProc)(); 
 
 
 typedef struct tagAAFObjectTestInfo
@@ -121,7 +121,7 @@ STDMETHODIMP CAAFModuleTest::Test
 			{
 				cout << "Found." << endl;
 				cout << "Running " << AAFObjectMap[index].pClassName << " module test...";
-				hr = AAFObjectMap[index].pfnTestProc(cerr);
+				hr = AAFObjectMap[index].pfnTestProc();
 				if (FAILED(hr))
 					cout << "FAILED!" << endl;
 				else if (AAFRESULT_NOT_IMPLEMENTED == hr)
@@ -141,7 +141,7 @@ STDMETHODIMP CAAFModuleTest::Test
 		while (NULL != AAFObjectMap[index].pCLSID)
 		{
 			cout << "Running " << AAFObjectMap[index].pClassName << " module test...";
-			hr = AAFObjectMap[index].pfnTestProc(cerr);
+			hr = AAFObjectMap[index].pfnTestProc();
 			if (FAILED(hr))
 				cout << "FAILED!" << endl;
 			else if (AAFRESULT_NOT_IMPLEMENTED == hr)
