@@ -1,4 +1,4 @@
-// @doc
+// @doc OMEXTERNAL
 #include "OMStoredObject.h"
 #include "OMStoredPropertySetIndex.h"
 #include "OMProperty.h"
@@ -107,11 +107,6 @@ OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName)
   return newStoredObject;
 }
 
-  // @mfunc Open the existing <c OMStoredObject> named by <p
-  //        storagePathName>.
-  //   @parm The path name of the <c StoredObject> to open.
-  //   @rdesc An <c OMStoredObject> representing the object currently
-  //          stored at <c storagePathName> in the disk file.
 OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
 {
   TRACE("OMStoredObject::openStoragePath");
@@ -131,14 +126,14 @@ OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
   
   while (end != 0) {
     *end = 0;
-    storage = storage->openSubStorage(element);
+    storage = storage->open(element);
     ASSERT("Valid storage pointer", storage != 0);
     element = ++end;
     end = strchr(element, '/');
   }
 
   if ((element != 0) && (strlen(element) > 0)) {
-    result = storage->openSubStorage(element);
+    result = storage->open(element);
   } else {
     result = storage;
   }
@@ -180,14 +175,14 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   
   // Write entries.
   //
-  int pid;
+  OMPropertyId propertyId;
   int type;
   size_t offset;
   size_t length;
   size_t context = 0;
   for (size_t i = 0; i < entries; i++) {
-    index->iterate(context, pid, type, offset, length);
-    writeToStream(_indexStream, &pid, sizeof(pid));
+    index->iterate(context, propertyId, type, offset, length);
+    writeToStream(_indexStream, &propertyId, sizeof(propertyId));
     writeToStream(_indexStream, &type, sizeof(type));
     writeToStream(_indexStream, &offset, sizeof(length));
     writeToStream(_indexStream, &length, sizeof(length));
@@ -221,16 +216,16 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   
   // Read entries.
   //
-  int pid;
+  OMPropertyId propertyId;
   int type;
   size_t offset;
   size_t length;
   for (size_t i = 0; i < entries; i++) {
-    readFromStream(_indexStream, &pid, sizeof(pid));
+    readFromStream(_indexStream, &propertyId, sizeof(propertyId));
     readFromStream(_indexStream, &type, sizeof(type));
     readFromStream(_indexStream, &offset, sizeof(offset));
     readFromStream(_indexStream, &length, sizeof(length));
-    index->insert(pid, type, offset, length);
+    index->insert(propertyId, type, offset, length);
   }
   
   POSTCONDITION("Sorted index", index->isSorted());
@@ -249,14 +244,14 @@ void OMStoredObject::restore(OMPropertySet& properties)
 
   size_t entries = _index->entries();
   
-  int pid;
+  OMPropertyId propertyId;
   int type;
   size_t offset;
   size_t length;
   size_t context = 0;
   for (size_t i = 0; i < entries; i++) {
-    _index->iterate(context, pid, type, offset, length);
-    OMProperty* p = properties.get(pid);
+    _index->iterate(context, propertyId, type, offset, length);
+    OMProperty* p = properties.get(propertyId);
     ASSERT("Valid property", p != 0);
     p->restoreFrom(*this, length);
   }
@@ -371,17 +366,20 @@ void OMStoredObject::close(void)
 
   // @mfunc Write a property value to this <c OMStoredObject>. The
   //        property value to be written occupies <p size> bytes at
-  //        the address <p start>. The property id is <p pid>. The
-  //        property type is <p type>.
+  //        the address <p start>. The property id is <p propertyId>.
+  //        The property type is <p type>.
   //   @parm The property id.
   //   @parm The property type.
   //   @parm The start address of the property value.
   //   @parm The size of the property value in bytes.
-void OMStoredObject::write(int pid, int type, void* start, size_t size)
+void OMStoredObject::write(OMPropertyId propertyId,
+                           int type,
+                           void* start,
+                           size_t size)
 {
   TRACE("OMStoredObject::write");
 
-  _index->insert(pid, type, _offset, size);
+  _index->insert(propertyId, type, _offset, size);
 
   // Write property value.
   //
@@ -392,14 +390,37 @@ void OMStoredObject::write(int pid, int type, void* start, size_t size)
   // @mfunc Read a property value from this <c OMStoredObject>.
   //        The property value is read into a buffer which occupies
   //        <p size> bytes at the address <p start>. The property id
-  //        is <p pid>. The property type is <p type>.
+  //        is <p propertyId>. The property type is <p type>.
   //   @parm The property id.
   //   @parm The property type.
   //   @parm The start address of the buffer to hold the property value.
   //   @parm The size of the buffer in bytes.
-void OMStoredObject::read(int pid, int type, void* start, size_t size)
+void OMStoredObject::read(OMPropertyId propertyId,
+                          int type,
+                          void* start,
+                          size_t size)
 {
   TRACE("OMStoredObject::read");
+
+  // Consistency check - look up propertyId in _index and check that
+  // the property type is the expected (passed in) type.  and that the
+  // property length is the expected (passed in as size) length.
+  // 
+  //
+  // NYI
+  // int actualType;
+  // size_t actualOffset;
+  // size_t actualLength;
+  // _index->find(propertyId, actualType, actualOffset, actualLength);
+  //
+  // ASSERT("Matching property types", type == actualType);
+  // ASSERT("Matching property sizes", size == actualLength);
+
+  // Since random access is not yet supported, check that the stream
+  // is synchronized with the index.
+  //
+  // ASSERT("Sequential access",
+  //        actualOffset == streamOffset(_propertiesStream));
 
   // Read property value.
   //
@@ -408,22 +429,20 @@ void OMStoredObject::read(int pid, int type, void* start, size_t size)
 
   // @mfunc Save the <c OMClassId> <p cid> in this <c OMStoredObject>.
   //   @parm The <c OMClassId> of this <c OMStoredObject>.
-void OMStoredObject::saveClassId(const OMClassId& cid)
+void OMStoredObject::save(const OMClassId& cid)
 {
-  TRACE("OMStoredObject::saveClassId");
+  TRACE("OMStoredObject::save");
 
   setClass(_storage, cid);
 }
 
   // @mfunc Restore the class id of this <c OMStoredObject>.
   //   @parm The <c OMClassId> of this <c OMStoredObject>.
-OMClassId OMStoredObject::restoreClassId(void)
+void OMStoredObject::restore(OMClassId& cid)
 {
-  TRACE("OMStoredObject::restoreClassId");
+  TRACE("OMStoredObject::restore");
 
-  OMClassId cid;
   getClass(_storage, cid);
-  return cid;
 }
 
   // @mfunc Create a new <c OMStoredObject>, named <p name>,
@@ -431,9 +450,9 @@ OMClassId OMStoredObject::restoreClassId(void)
   //   @parm The name to be used for the new <c OMStoredObject>.
   //   @rdesc A new <c OMStoredObject> contained by this
   //          <c OMStoredObject>.
-OMStoredObject* OMStoredObject::createSubStorage(const char* name)
+OMStoredObject* OMStoredObject::create(const char* name)
 {
-  TRACE("OMStoredObject::createSubStorage");
+  TRACE("OMStoredObject::create");
 
   IStorage* newStorage = createStorage(_storage, name);
   OMStoredObject* result = new OMStoredObject(newStorage);
@@ -446,9 +465,9 @@ OMStoredObject* OMStoredObject::createSubStorage(const char* name)
   //   @parm The name of the existing <c OMStoredObject>.
   //   @rdesc The existing <c OMStoredObject> contained by this
   //          <c OMStoredObject>.
-OMStoredObject* OMStoredObject::openSubStorage(const char* name)
+OMStoredObject* OMStoredObject::open(const char* name)
 {
-  TRACE("OMStoredObject::openSubStorage");
+  TRACE("OMStoredObject::open");
 
   IStorage* newStorage = openStorage(_storage, name, _mode);
   OMStoredObject* result = new OMStoredObject(newStorage);
@@ -456,11 +475,11 @@ OMStoredObject* OMStoredObject::openSubStorage(const char* name)
   return result;
 }
 
-  // @mfunc  Save the <c OMStoredVectorIndex> <p index> in this
+  // @mfunc  Save the <c OMStoredVectorIndex> <p vector> in this
   //         <c OMStoredObject>, the vector is named <p vectorName>.
   //   @parm The <c OMStoredVectorIndex> to save.
   //   @parm The name of the vector.
-void OMStoredObject::save(const OMStoredVectorIndex* index,
+void OMStoredObject::save(const OMStoredVectorIndex* vector,
                           const char* vectorName)
 {
   TRACE("OMStoredObject::save");
@@ -475,12 +494,12 @@ void OMStoredObject::save(const OMStoredVectorIndex* index,
 
   // Write the high water mark.
   //
-  size_t highWaterMark = index->highWaterMark();
+  size_t highWaterMark = vector->highWaterMark();
   writeToStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
 
   // Write the count of elements.
   //
-  size_t entries = index->entries();
+  size_t entries = vector->entries();
   writeToStream(vectorIndexStream, &entries, sizeof(entries));
 
   // Write the element names.
@@ -488,7 +507,7 @@ void OMStoredObject::save(const OMStoredVectorIndex* index,
   size_t context = 0;
   size_t name;
   for (size_t i = 0; i < entries; i++) {
-    index->iterate(context, name);
+    vector->iterate(context, name);
     writeToStream(vectorIndexStream, &name, sizeof(name));
   }
 
@@ -503,7 +522,9 @@ void OMStoredObject::save(const OMStoredVectorIndex* index,
   //        <c OMStoredObject>.
   //   @parm The name of the vector.
   //   @rdesc The newly restored <c OMStoredVectorIndex>.
-OMStoredVectorIndex* OMStoredObject::restore(const char* vectorName)
+
+void OMStoredObject::restore(OMStoredVectorIndex*& vector,
+                             const char* vectorName)
 {
   TRACE("OMStoredObject::restore");
   
@@ -543,7 +564,7 @@ OMStoredVectorIndex* OMStoredObject::restore(const char* vectorName)
 
   delete [] vectorIndexName;
 
-  return vectorIndex;
+  vector = vectorIndex;
 }
 
 char* OMStoredObject::vectorIndexStreamName(const char* vectorName)
