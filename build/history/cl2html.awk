@@ -12,17 +12,17 @@ BEGIN {
 
 /^[0-9]+-[0-9]+-[0-9]+/ {
   if (date != "") {
-#    printf("[%s]\n", filesandcomments);
-    gsub("\t", " ", filesandcomments);
-    filesandcomments = trim(filesandcomments, 3);
-    f = split(filesandcomments, fields, ":");
+#    printf("[%s]\n", entrytext);
+    gsub("\t", " ", entrytext);
+    entrytext = trim(entrytext, 3);
+    f = split(entrytext, fields, ":");
 #    printf("[%d]\n", f);
 #    for (i = 1; i <= f; i++) {
 #      printf("[%d : \"%s\"]\n", i, fields[i]);
 #    }
     /* We should have at least a file name and a comment */
     if (f < 2) {
-      printf("cl2html : Error near \"%s\"\n", filesandcomments) | "cat 1>&2";
+      printf("cl2html : Error near \"%s\"\n", entrytext) | "cat 1>&2";
       exit(1);
     }
     if (match(fields[1], "/$")) {
@@ -51,15 +51,15 @@ BEGIN {
   /* build new table row */
   date = $1;
   name = $3;
-  filesandcomments = "";
+  entrytext = "";
   files = "";
   comments = "";
   color = "#FFCCCC";
 }
 
 /^\t/ {
-  /* accumulate the file names and comments */
-  filesandcomments = filesandcomments $0;
+  /* accumulate the text of this entry */
+  entrytext = entrytext $0;
 }
 
 END {
