@@ -89,7 +89,7 @@ OMDiskRawStorage::openNewModify(const wchar_t* fileName)
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  FILE* file = wfopen(fileName, L"wb");
+  FILE* file = wfopen(fileName, L"w+b");
   ASSERT("File successfully opened", file != 0); // tjb - error
 
   OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
