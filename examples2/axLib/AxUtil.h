@@ -84,7 +84,7 @@ public:
 
 	static AxString mobid2Str(const aafMobID_t & mobid);
 
-	static AxString mbtowc( const char* cstr ); 
+	static AxString mbtowc( const char* cstr );
 
 	static std::string wctomb( const AxString& s );
 
@@ -180,6 +180,18 @@ AxString AxDescriptionToString( IAAFSmartPointer< Type >& sp )
 // Each has it's own GetNAMEBufLen/GetNAMEBuf pair.   That
 // can't be handled easily with a template.  Resort
 // to a macro.
+
+#define AX_ANY_TO_STRING_ONEARG( AXSTRING_RET, POINTER, GETBUFLEN, GETBUF, ARG1 ) \
+{ \
+	aafUInt32 _sizeInBytes = 0; \
+	CHECK_HRESULT( ((POINTER)->GETBUFLEN)( (ARG1), &_sizeInBytes ) ); \
+	int _sizeInChars = (_sizeInBytes /sizeof(aafCharacter)) + 1; \
+	std::vector< aafCharacter > _buf( _sizeInChars ); \
+	CHECK_HRESULT( ((POINTER)->GETBUF)( (ARG1), &_buf[0], _sizeInChars*sizeof(aafCharacter) ) ); \
+	AxString tmp( &_buf[0] ); \
+	AXSTRING_RET = tmp; \
+}
+
 #define AX_ANY_TO_STRING( AXSTRING_RET, POINTER, GETBUFLEN, GETBUF ) \
 { \
 	aafUInt32 _sizeInBytes = 0; \
@@ -190,6 +202,5 @@ AxString AxDescriptionToString( IAAFSmartPointer< Type >& sp )
 	AxString tmp( &_buf[0] ); \
 	AXSTRING_RET = tmp; \
 }
-
 
 #endif
