@@ -14,7 +14,7 @@ PLUGIN_DIR = $(AAFBASE)/ref-impl/plugins
 include $(BLD_CFG_DIR)/common.mk
 
 PACKAGE = dodoTool
-include $(AAFBASE)/build/defs.mk
+include $(AAFBASE)/build/common.mk
 
 DODO = $(BINDIR)/dodo
 
