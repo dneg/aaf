@@ -66,11 +66,37 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefArray::CreateValueFromCArray (
-      aafMemPtr_t  /*pInitData*/,
-      aafUInt32  /*initDataSize*/,
-      ImplAAFPropertyValue ** /*ppPropVal*/)
+      aafMemPtr_t pInitData,
+      aafUInt32 initDataSize,
+      ImplAAFPropertyValue ** ppPropVal)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pInitData)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! ppPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  ImplAAFPropValDataSP pvd;
+  ImplAAFPropValData * tmp;
+  tmp = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
+  if (!tmp) return AAFRESULT_NOMEMORY;
+  pvd = tmp;
+  // the pvd smart pointer will maintain a reference for us...
+  aafUInt32 refCount;
+  refCount = tmp->ReleaseReference ();
+  // ...make sure it really does
+  assert (1 == refCount);
+
+  AAFRESULT hr;
+  hr = SetCArray (pvd, pInitData, initDataSize);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
+  assert (ppPropVal);
+  *ppPropVal = pvd;
+  assert (*ppPropVal);
+  (*ppPropVal)->AcquireReference ();
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -131,11 +157,51 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefArray::GetCArray (
-      ImplAAFPropertyValue * /*pPropVal*/,
-      aafMemPtr_t  /*pData*/,
-      aafUInt32  /*dataSize*/)
+      ImplAAFPropertyValue * pPropVal,
+      aafMemPtr_t pData,
+      aafUInt32 dataSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! pData)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! IsRegistered ())
+	return AAFRESULT_NOT_REGISTERED;
+
+  AAFRESULT hr;
+  ImplAAFTypeDefSP pBaseType;
+  hr = GetType (&pBaseType);
+
+  assert (pBaseType->IsFixedSize ());
+  assert (pBaseType->IsRegistered ());
+  aafUInt32 elemSize = pBaseType->NativeSize ();
+  aafUInt32 elemCount = pvtCount (pPropVal);
+  aafUInt32 propSize = elemSize * elemCount;
+
+  if (dataSize < propSize)
+	return AAFRESULT_BAD_SIZE;
+
+  ImplAAFPropValData * pvd = 0;
+  assert (pPropVal);
+  pvd = dynamic_cast<ImplAAFPropValData*> (pPropVal);
+  assert (pvd);
+  
+  aafUInt32 bitsSize;
+  hr = pvd->GetBitsSize (&bitsSize);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+  assert (bitsSize >= propSize);
+
+  aafMemPtr_t pBits = 0;
+  hr = pvd->GetBits (&pBits);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+  assert (pBits);
+
+  memcpy (pData, pBits, propSize);
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -153,11 +219,59 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefArray::SetCArray (
-      ImplAAFPropertyValue * /*pPropVal*/,
-      aafMemPtr_t  /*pData*/,
-      aafUInt32  /*dataSize*/)
+      ImplAAFPropertyValue * pPropVal,
+      aafMemPtr_t pData,
+      aafUInt32 dataSize)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! pData)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! IsRegistered ())
+	return AAFRESULT_NOT_REGISTERED;
+
+  AAFRESULT hr;
+  ImplAAFTypeDefSP pBaseType;
+  hr = GetType (&pBaseType);
+
+  assert (pBaseType->IsFixedSize ());
+  assert (pBaseType->IsRegistered ());
+  // Size of individual elements
+  aafUInt32 elemSize = pBaseType->NativeSize ();
+  // number of elements in input data.  If this is not an integral
+  // number, this will round down and the test below will fail.
+  aafUInt32 elemCount = dataSize / elemSize;
+  // The size of the new property, calculated from number of elements
+  // and the size of each element.
+  aafUInt32 propSize = elemSize * elemCount;
+
+  // If the given dataSize was not an integral multiple of the size of
+  // each element, then we'll signal an error.
+  if (propSize != dataSize)
+	return AAFRESULT_BAD_SIZE;
+
+  // In case of fixed-size arrays, we'll also have to see if the data
+  // size matches what we're expecting.
+  if (IsFixedSize ())
+	{
+	  aafUInt32 nativeSize = NativeSize ();
+	  if (nativeSize != dataSize)
+		return AAFRESULT_BAD_SIZE;
+	}
+
+  ImplAAFPropValData * pvd = 0;
+  assert (pPropVal);
+  pvd = dynamic_cast<ImplAAFPropValData*> (pPropVal);
+  assert (pvd);
+
+  aafMemPtr_t pBits = 0;
+  hr = pvd->AllocateBits (propSize, &pBits);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+  assert (pBits);
+
+  memcpy (pBits, pData, propSize);
+  return AAFRESULT_SUCCESS;
 }
-
-
