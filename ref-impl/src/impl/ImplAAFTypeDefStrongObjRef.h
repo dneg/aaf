@@ -66,7 +66,7 @@ public:
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetObjectType (/*[out]*/ ImplAAFClassDef ** ppObjType) const;
+    GetObjectType (/*[out]*/ ImplAAFClassDef ** ppObjType);
 
   // Override from AAFTypeDefObjectRef
   virtual AAFRESULT STDMETHODCALLTYPE
