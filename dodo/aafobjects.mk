@@ -8,7 +8,7 @@
 # Place the object root name is this list if it is a "persistent"
 # aaf object:
 AAFPERSISTENTOBJECTS="\
-	AAFMIDIFileDescriptor "
+	 "
 
 
 # These are all of the other non-persistent objects:
@@ -65,7 +65,6 @@ HUMAN_TYPED_IMPL="\
 	AAFHTMLDescriptor \
 	AAFIdentification \
 	AAFInterpolationDef \
-	AAFIntraFrameMarker \
 	AAFKLVData \
 	AAFLocator \
 	AAFMasterMob \
