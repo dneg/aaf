@@ -39,6 +39,7 @@ targets: $(PLUGIN_TARGETS)
 targets: $(INCLUDE_DIR)/com-api/AAF.idl
 targets: $(PLUGIN_DIR)/AAFPlugin.idl
 targets: $(INCLUDE_DIR)/ref-api/AAF.h
+targets: $(UUID_DIR)/AAFRoot_i.c
 targets: $(UUID_DIR)/AAF_i.c
 targets: $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 targets: $(UUID_DIR)/AAFPlugin_i.c
@@ -359,6 +360,63 @@ $(UUID_DIR)/AAFPlugin_i.c : aafobjects.mk dod2iid.awk
 	chmod -w $(UUID_DIR)/AAFPlugin_i.c
 
 
+$(UUID_DIR)/AAFRoot_i.c : aafobjects.mk dod2iid.awk
+	@ echo Generating reference AAFRoot_i.c...
+	$(RM) -f $(UUID_DIR)/AAFRoot_i.c
+	@ ( echo "/* this file contains the actual definitions of */" ; \
+	    echo "/* the IIDs and CLSIDs */" ; \
+	    echo "" ; \
+	    echo "/* link this file in with the server and any clients */" ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
+	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// Definitions for all public IID's needed by an AAF SDK Plugin author" ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "//" ; \
+	    echo "" ; \
+	    echo \#ifdef __cplusplus ; \
+	    echo "extern \"C\"{" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo "" ; \
+	    echo \#ifndef __IID_DEFINED__ ; \
+	    echo \#define __IID_DEFINED__ ; \
+	    echo "" ; \
+	    echo "typedef struct _IID" ; \
+	    echo "{" ; \
+	    echo "    unsigned long x;" ; \
+	    echo "    unsigned short s1;" ; \
+	    echo "    unsigned short s2;" ; \
+	    echo "    unsigned char  c[8];" ; \
+	    echo "} IID;" ; \
+	    echo "" ; \
+	    echo \#endif "// __IID_DEFINED__" ; \
+	    echo "" ; \
+	    echo \#ifndef CLSID_DEFINED ; \
+	    echo \#define CLSID_DEFINED ; \
+	    echo "typedef IID CLSID;" ; \
+	    echo \#endif "// CLSID_DEFINED" ; \
+	    echo "" ; \
+	    for class in AAFRoot ; do \
+	    	awk -f dod2iid.awk C=$$class $$class.dod ; \
+	    done ; \
+	    echo \#ifdef __cplusplus ; \
+	    echo "}" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	) > $(UUID_DIR)/AAFRoot_i.c
+	chmod -w $(UUID_DIR)/AAFRoot_i.c
+
+
 $(IMPL_DIR)/AAFClassIDs.h : aafobjects.mk
 	@ echo Generating reference AAFClassIDs.h...
 	$(RM) -f $(IMPL_DIR)/AAFClassIDs.h
@@ -652,12 +710,15 @@ clean:
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.idl
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFRoot.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.idl
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFTypes.h
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFRoot.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPluginTypes.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	$(RM) -f $(IMPL_DIR)/AAFClassIDs.h
+	$(RM) -f $(UUID_DIR)/AAFRoot_i.c
 	$(RM) -f $(UUID_DIR)/AAF_i.c
 	$(RM) -f $(UUID_DIR)/AAFPlugin_i.c
 	$(RM) -f $(COMAPI_DIR)/AAFCLSIDs.h
