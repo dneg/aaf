@@ -23,7 +23,26 @@
 // @doc OMINTERNAL
 #include "OMXMLStoredObject.h"
 
-#include "OMRawStorage.h"
+#include "OMObjectReference.h"
+#include "OMContainerElement.h"
+
+#include "OMDataStream.h"
+#include "OMStrongReference.h"
+#include "OMStrongReferenceSet.h"
+#include "OMStrongReferenceVector.h"
+#include "OMWeakReference.h"
+#include "OMWeakReferenceSet.h"
+#include "OMWeakReferenceVector.h"
+
+#include "OMDiskRawStorage.h"
+#include "OMXMLStoredStream.h"
+#include "OMPropertySetIterator.h"
+
+#include "OMClassDefinition.h"
+
+#include "OMUtilities.h"
+
+#include "OMIOStream.h"
 
   // @mfunc Open the root <c OMXMLStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
@@ -78,9 +97,9 @@ OMXMLStoredObject* OMXMLStoredObject::createModify(OMRawStorage* rawStorage,
                                                    const OMByteOrder byteOrder)
 {
   TRACE("OMXMLStoredObject::createModify");
+
   PRECONDITION("Compatible raw storage access mode",
                          rawStorage->isReadable() && rawStorage->isWritable());
-  PRECONDITION("Compatible raw storage", rawStorage->isPositionable());
   OMXMLStoredObject* result = new OMXMLStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
@@ -90,7 +109,8 @@ OMXMLStoredObject* OMXMLStoredObject::createModify(OMRawStorage* rawStorage,
 OMXMLStoredObject::~OMXMLStoredObject(void)
 {
   TRACE("OMXMLStoredObject::~OMXMLStoredObject");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  // TBS tjb
 }
 
   // @mfunc Create a new <c OMXMLStoredObject>, named <p name>,
@@ -101,8 +121,9 @@ OMXMLStoredObject::~OMXMLStoredObject(void)
 OMStoredObject* OMXMLStoredObject::create(const wchar_t* /* name */)
 {
   TRACE("OMXMLStoredObject::create");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  OMStoredObject* result = new OMXMLStoredObject(&_store, _byteOrder);
+  ASSERT("Valid heap pointer", result != 0);
+  return result;
 }
 
   // @mfunc Open an exsiting <c OMXMLStoredObject>, named <p name>,
@@ -121,13 +142,13 @@ OMStoredObject* OMXMLStoredObject::open(const wchar_t* /* name */)
 void OMXMLStoredObject::close(void)
 {
   TRACE("OMXMLStoredObject::close");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _store.synchronize();
 }
 
 void OMXMLStoredObject::close(OMFile& /* file */)
 {
   TRACE("OMXMLStoredObject::close");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  close();
 }
 
   // @mfunc The byte order of this <c OMXMLStoredObject>.
@@ -140,97 +161,343 @@ OMByteOrder OMXMLStoredObject::byteOrder(void) const
   return unspecified;
 }
 
-void OMXMLStoredObject::save(OMFile& /* file */)
+void OMXMLStoredObject::save(OMFile& file)
 {
   TRACE("OMXMLStoredObject::save(OMFile)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _stream << beginl;
+  _stream << "<?xml version=\"1.0\"?>" << endl;
+  _stream << beginl;
+  _stream << "<?OM signature=\"" << file.signature() << "\"?>" << endl;
+  _stream << beginl;
+  _stream << "<!DOCTYPE object SYSTEM \"ObjectManager.dtd\">" << endl;
+  _stream << beginl;
+  _stream << "<!-- This file was produced by a *PROTOTYPE* implementation, -->"
+          << endl;
+  _stream << beginl;
+  _stream << "<!-- both the implementation and the dtd are subject to change. -->" << endl;
+  file.root()->save();
+  //save(file.referencedProperties());
+  _stream << endl;
 }
 
-void OMXMLStoredObject::save(OMStorable& /* object */)
+void OMXMLStoredObject::save(OMStorable& object)
 {
-  TRACE("OMXMLStoredObject::save(OMFile)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  TRACE("OMXMLStoredObject::save(OMStorable)");
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<object class=\"";
+  save(object.classId());
+  _stream << "\">" << endl;
+
+  _stream << indent;
+  _stream << beginl;
+  const wchar_t* name = 0;
+  const OMClassDefinition* definition = object.definition();
+#if 1
+  name = L"Unknown";
+#else
+  if (definition != 0) {
+    ASSERT("Valid definition", definition != 0);
+    name = definition->name();
+  } else {
+    name = L"Unknown";
+  }
+#endif
+  ASSERT("Valid name", name != 0);
+  _stream << "<!-- object of class " << name << " -->" << endl;
+  _stream << outdent;
+
+  save(*object.propertySet());
+
+  _stream << beginl;
+  _stream << "</object>" << endl;
+  _stream << outdent;
 }
 
   // @mfunc Save the <c OMStoredObjectIdentification> <p id>
   //        in this <c OMXMLStoredObject>.
   //   @parm The <t OMStoredObjectIdentification> to save.
-void OMXMLStoredObject::save(const OMStoredObjectIdentification& /* id */)
+void OMXMLStoredObject::save(const OMStoredObjectIdentification& id)
 {
   TRACE("OMXMLStoredObject::save(OMStoredObjectIdentification)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _stream << id;
 }
 
   // @mfunc Save the <c OMPropertySet> <p properties> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMPropertySet> to save.
-void OMXMLStoredObject::save(const OMPropertySet& /* properties */)
+void OMXMLStoredObject::save(const OMPropertySet& properties )
 {
   TRACE("OMXMLStoredObject::save(OMPropertySet)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  _stream << indent;
+  _stream << beginl;
+  OMUInt32 count = properties.countPresent();
+  _stream << "<!-- object contains " << dec << count << " properties  -->"
+          << endl;
+  _stream << outdent;
+
+  OMPropertySetIterator iterator(properties, OMBefore);
+  while (++iterator) {
+    const OMProperty* p = iterator.property();
+    if (!p->isOptional() || p->isPresent()) {
+      _stream << indent;
+      _stream << beginl;
+      OMUInt16 pid = p->propertyId();
+      _stream << "<property identification=\"" << showbase
+              << hex << setw(6) << setfill('0') << lowercase << pid
+              << "\">" << endl;
+
+      _stream << indent;
+      _stream << beginl;
+      _stream << "<!-- \"" << p->name() << "\" property -->" << endl;
+      _stream << outdent;
+
+      p->save();
+
+      _stream << beginl;
+      _stream << "</property>" << endl;
+      _stream << outdent;
+    } else {
+      // Since we are iterating over the properties in this property set
+      // instance rather than over the property definitions in the class
+      // definition we will omit this comment for optional properties that
+      // were added to the class definition after this object instance
+      // was created.
+      _stream << indent;
+      _stream << beginl;
+      _stream << "<!-- \"" << p->name() << "\" property not present -->"
+              << endl;
+      _stream << outdent;
+    }
+  }
 }
 
   // @mfunc Save the <c OMSimpleProperty> <p property> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMSimpleProperty> to save.
-void OMXMLStoredObject::save(const OMSimpleProperty& /* property */)
+void OMXMLStoredObject::save(const OMSimpleProperty& property)
 {
   TRACE("OMXMLStoredObject::save(OMSimpleProperty)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<data>" << endl;
+
+  OMUInt16 size = property.size();
+  _stream << "<!-- data size is " << dec << size << " bytes -->" << endl;
+
+  OMByte* start = property.bits();
+  for (size_t i = 0; i < size; i++) {
+    OMByte b = start[i];
+    print((char) b);
+  }
+  flush();
+
+  _stream << beginl;
+  _stream << "</data>" << endl;
+  _stream << outdent;
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMStrongReference> to save.
-void OMXMLStoredObject::save(const OMStrongReference& /* singleton */)
+void OMXMLStoredObject::save(const OMStrongReference& singleton)
 {
   TRACE("OMXMLStoredObject::save(OMStrongReference)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  singleton.reference().save();
 }
 
   // @mfunc Save the <c OMStrongReferenceVector> <p vector> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMStrongReferenceVector> to save.
-void OMXMLStoredObject::save(const OMStrongReferenceVector& /* vector */)
+void OMXMLStoredObject::save(const OMStrongReferenceVector& vector)
 {
   TRACE("OMXMLStoredObject::save(OMStrongReferenceVector)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<object-vector>" << endl;
+
+  _stream << indent;
+  _stream << beginl;
+  OMUInt32 count = vector.count();
+  _stream << "<!-- object-vector contains " << dec << count << " objects -->"
+          << endl;
+  _stream << outdent;
+
+  OMUInt32 ordinal = 0; // tjb - right size "
+  OMContainerIterator<OMStrongReferenceVectorElement>& iterator =
+                                                            *vector.iterator();
+  while (++iterator) {
+
+    _stream << indent;
+    _stream << beginl;
+    _stream << "<!-- element " << dec << ordinal << " of " << dec << count
+            << " in object-vector \"" << vector.name() << "\" -->" << endl;
+    OMStrongReferenceVectorElement& element = iterator.value();
+
+    element.save();
+
+    ordinal = ordinal + 1;
+    _stream << outdent;
+  }
+  delete &iterator;
+  _stream << beginl;
+  _stream << "</object-vector>" << endl;
+  _stream << outdent;
 }
 
   // @mfunc Save the <c OMStrongReferenceSet> <p set> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMStrongReference> to save.
-void OMXMLStoredObject::save(const OMStrongReferenceSet& /* set */)
+void OMXMLStoredObject::save(const OMStrongReferenceSet& set)
 {
   TRACE("OMXMLStoredObject::save(OMStrongReferenceSet)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<object-set>" << endl;
+
+  _stream << indent;
+  _stream << beginl;
+  OMUInt32 count = set.count();
+  _stream << "<!-- object-set contains " << dec << count << " objects -->"
+          << endl;
+  _stream << outdent;
+
+  OMKeySize keySize = set.keySize();
+  OMUInt32 ordinal = 0;
+  OMContainerIterator<OMStrongReferenceSetElement>& iterator = *set.iterator();
+  while (++iterator) {
+
+    OMStrongReferenceSetElement& element = iterator.value();
+
+    _stream << indent;
+    _stream << beginl;
+    _stream << "<!-- element " << dec << ordinal << " of " << dec << count
+            << " in object-set \"" << set.name() << "\" -->" << endl;
+    _stream << beginl;
+    _stream << "<element key=\"";
+    void* k = element.identification();
+    if (keySize == sizeof(OMUniqueObjectIdentification)) {
+      OMUniqueObjectIdentification* id =
+                            reinterpret_cast<OMUniqueObjectIdentification*>(k);
+      _stream << *id;
+    } else if (keySize == sizeof(OMMaterialIdentification)) {
+      OMMaterialIdentification* id =
+                                reinterpret_cast<OMMaterialIdentification*>(k);
+      _stream << *id;
+    } else {
+      _stream << nullOMUniqueObjectIdentification;
+    }
+    _stream << "\">" << endl;
+
+    element.save();
+
+    _stream << beginl;
+    _stream << "</element>" << endl;
+    _stream << outdent;
+
+    ordinal = ordinal + 1;
+  }
+  _stream << beginl;
+  _stream << "</object-set>" << endl;
+  _stream << outdent;
+  delete &iterator;
 }
 
   // @mfunc Save the <c OMWeakReference> <p singleton> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMWeakReference> to save.
-void OMXMLStoredObject::save(const OMWeakReference& /* singleton */)
+void OMXMLStoredObject::save(const OMWeakReference& singleton)
 {
   TRACE("OMXMLStoredObject::save(OMWeakReference)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<reference target=\"" << "x" << "\">" << endl;
+
+  _stream << indent;
+  _stream << beginl;
+  OMObjectIdentification k = singleton.reference().identification();
+  _stream << "<identification guid=\"" << k << "\"/>" << endl;
+  _stream << outdent;
+
+  _stream << beginl;
+  _stream << "</reference>" << endl;
+  _stream << outdent;
 }
 
   // @mfunc Save the <c OMWeakReferenceVector> <p vector> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMWeakReferenceVector> to save.
-void OMXMLStoredObject::save(const OMWeakReferenceVector& /* vector */)
+void OMXMLStoredObject::save(const OMWeakReferenceVector& vector)
 {
   TRACE("OMXMLStoredObject::save(OMWeakReferenceVector)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<reference-vector target=\"" << "x" << "\">" << endl;
+
+  _stream << indent;
+  _stream << beginl;
+  OMUInt32 count = vector.count();
+  _stream << "<!-- reference-vector references " << dec << count
+          << " objects -->" << endl;
+  _stream << outdent;
+
+  OMContainerIterator<OMWeakReferenceVectorElement>& iterator = *vector.iterator();
+  while (++iterator) {
+
+    OMWeakReferenceVectorElement& element = iterator.value();
+
+    OMObjectIdentification key = element.identification();
+
+    _stream << indent;
+    _stream << beginl;
+    _stream << "<identification guid=\"" << key << "\"/>" << endl;
+    _stream << outdent;
+  }
+  _stream << beginl;
+  _stream << "</reference-vector>" << endl;
+  _stream << outdent;
+  delete &iterator;
 }
 
   // @mfunc Save the <c OMWeakReferenceSet> <p set> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMWeakReferenceSet> to save.
-void OMXMLStoredObject::save(const OMWeakReferenceSet& /* set */)
+void OMXMLStoredObject::save(const OMWeakReferenceSet& set)
 {
   TRACE("OMXMLStoredObject::save(OMWeakReferenceSet)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<reference-set target=\"" << "x" << "\">" << endl;
+
+  _stream << indent;
+  _stream << beginl;
+  OMUInt32 count = set.count();
+  _stream << "<!-- reference-set references " << dec << count
+          << " objects -->" << endl;
+  _stream << outdent;
+
+  OMContainerIterator<OMWeakReferenceSetElement>& iterator = *set.iterator();
+  while (++iterator) {
+
+    OMWeakReferenceSetElement& element = iterator.value();
+
+    OMObjectIdentification key = element.identification();
+
+    _stream << indent;
+    _stream << beginl;
+    _stream << "<identification guid=\"" << key << "\"/>" << endl;
+    _stream << outdent;
+  }
+  _stream << beginl;
+  _stream << "</reference-set>" << endl;
+  _stream << outdent;
+  delete &iterator;
 }
 
   // @mfunc Save the <c OMPropertyTable> <p table> in this
@@ -245,10 +512,30 @@ void OMXMLStoredObject::save(const OMPropertyTable* /* table */)
   // @mfunc Save the <c OMDataStream> <p stream> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMDataStream> to save.
-void OMXMLStoredObject::save(const OMDataStream& /* stream */)
+void OMXMLStoredObject::save(const OMDataStream& stream)
 {
   TRACE("OMXMLStoredObject::save(OMDataStream)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<stream>" << endl;
+
+  OMUInt64 size = stream.size();
+  _stream << "<!-- stream size is " << dec << size << " bytes -->" << endl;
+
+  stream.setPosition(0);
+  for (size_t i = 0; i < size; i++) {
+    OMByte b;
+    OMUInt32 x;
+    stream.read(&b, 1, x);
+    print((char) b);
+  }
+  flush();
+
+  //  _stream << endl;
+
+  _stream << beginl;
+  _stream << "</stream>" << endl;
+  _stream << outdent;
 }
 
   // @mfunc Restore the <c OMStoredObjectIdentification>
@@ -370,7 +657,7 @@ void OMXMLStoredObject::restore(OMDataStream& /* stream */,
   //   @parm The <c OMDataStream> to be opened.
   //   @rdesc The newly created <c OMStoredStream>.
 OMStoredStream* OMXMLStoredObject::openStoredStream(
-											const OMDataStream& /* property */)
+                                            const OMDataStream& /* property */)
 {
   TRACE("OMXMLStoredObject::openStoredStream");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -382,19 +669,123 @@ OMStoredStream* OMXMLStoredObject::openStoredStream(
   //   @parm The <c OMDataStream> to be created.
   //   @rdesc The newly created <c OMStoredStream>.
 OMStoredStream* OMXMLStoredObject::createStoredStream(
-											const OMDataStream& /* property */)
+                                                  const OMDataStream& property)
 {
   TRACE("OMXMLStoredObject::createStoredStream");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+
+  // TBS - tjb
+  // The name currently computed here is not unique enough.
+  // The name should have an extension.
+  // It may not always be possible to buffer streams on disk like this.
+  wchar_t* sName = streamName(property.name(), property.propertyId());
+  size_t length = lengthOfWideString(sName);
+  wchar_t* buffer = new wchar_t[length + 5 + 4 + 1];
+  ASSERT("Valid heap pointer", buffer != 0);
+  wchar_t sSeed[4];
+  _seed = _seed + 1;
+  toWideString(_seed, sSeed, 4);
+  copyWideString(buffer, L"0000-", 6);
+  size_t seedLength = lengthOfWideString(sSeed);
+  copyWideString(buffer + (4 - seedLength), sSeed, seedLength);
+  concatenateWideString(buffer, sName, length + 1);
+  concatenateWideString(buffer, L".oms", 4);
+  OMDiskRawStorage* store = OMDiskRawStorage::openNewModify(buffer);
+  OMXMLStoredStream* result = new OMXMLStoredStream(store);
+  ASSERT("Valid heap pointer", result != 0);
+  delete [] sName;
+  delete [] buffer;
+  return result;
 }
+
+OMUInt16 OMXMLStoredObject::_seed = 0;
 
   // @mfunc Constructor.
   //   @parm The <c OMRawStorage> on which this <c OMXMLStoredObject> resides.
   //   @parm TBS
-OMXMLStoredObject::OMXMLStoredObject(OMRawStorage* s, OMByteOrder byteOrder)
-: _store(s),
-  _byteOrder(byteOrder)
+OMXMLStoredObject::OMXMLStoredObject(OMRawStorage* s,
+                                     const OMByteOrder byteOrder)
+: _store(*s),
+  _stream(s),
+  _byteOrder(byteOrder),
+  _count(0),
+  _line(0)
 {
   TRACE("OMXMLStoredObject::OMXMLStoredObject");
+}
+
+void OMXMLStoredObject::output(void)
+{
+  int i;
+
+  _stream << "<!-- ";
+  OMUInt32 address = _line * BYTESPERLINE;
+  _stream << dec << setw(8) << setfill(' ') << address;
+  _stream << " -->  ";
+  _line++;
+  
+  for (i = 0; i < _count; i++) {
+    _stream << hex << setw(2) << setfill('0') << uppercase << _buffer[i];
+  }
+  
+  for (i = _count; i < BYTESPERLINE; i++) {
+    _stream << "  ";
+  }
+  
+  _stream << "  <!-- ";
+  for (i = 0; i < _count; i++) {
+    int c = (unsigned char)_buffer[i];
+    _stream.put(map(c));
+  }
+  _stream << " -->" << endl;
+}
+
+void OMXMLStoredObject::print(unsigned char ch)
+{ 
+  _buffer[_count++] = ch;
+  
+  if ( _count == BYTESPERLINE) {
+    output();
+    _count = 0;
+  }
+}
+
+void OMXMLStoredObject::flush(void)
+{
+  if (_count > 0) {
+    output();
+  }
+  _count = 0;
+  _line = 0;
+
+}
+
+// Interpret values 0x00 - 0x7f as ASCII characters.
+//
+char OMXMLStoredObject::_table[128] = {
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+'.',  '.',  '.',  '.',  '.',  '.',  '.',  '.',
+' ',  '!',  '"',  '#',  '$',  '%',  '&', '\'',
+'(',  ')',  '*',  '+',  ',',  '-',  '.',  '/',
+'0',  '1',  '2',  '3',  '4',  '5',  '6',  '7',
+'8',  '9',  ':',  ';',  '<',  '=',  '>',  '?',
+'@',  'A',  'B',  'C',  'D',  'E',  'F',  'G',
+'H',  'I',  'J',  'K',  'L',  'M',  'N',  'O',
+'P',  'Q',  'R',  'S',  'T',  'U',  'V',  'W',
+'X',  'Y',  'Z',  '[', '\\',  ']',  '^',  '_',
+'`',  'a',  'b',  'c',  'd',  'e',  'f',  'g',
+'h',  'i',  'j',  'k',  'l',  'm',  'n',  'o',
+'p',  'q',  'r',  's',  't',  'u',  'v',  'w',
+'x',  'y',  'z',  '{',  '|',  '}',  '~',  '.'};
+
+char OMXMLStoredObject::map(int c)
+{
+  char result;
+  if (c < 0x80) {
+    result = _table[c & 0x7f];
+  } else {
+    result = '.';
+  }
+  return result;
 }

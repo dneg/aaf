@@ -41,48 +41,58 @@ OMXMLStoredStream::~OMXMLStoredStream(void)
   PRECONDITION("Stream not open", _store == 0);
 }
 
-void OMXMLStoredStream::read(void* ANAME(data), size_t ANAME(size)) const
+void OMXMLStoredStream::read(void* data, size_t size) const
 {
   TRACE("OMXMLStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  unsigned long bytesRead;
+  read(reinterpret_cast<OMByte*>(data), size, bytesRead);
+
+  ASSERT("Successful read", bytesRead == size);
 }
 
-void OMXMLStoredStream::read(OMByte* ANAME(data),
-                             const OMUInt32 ANAME(bytes),
-                             OMUInt32& /* bytesRead */) const
+void OMXMLStoredStream::read(OMByte* data,
+                             const OMUInt32 bytes,
+                             OMUInt32& bytesRead) const
 {
   TRACE("OMXMLStoredStream::read");
   PRECONDITION("Valid store", _store != 0);
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _store->readAt(_position, data, bytes, bytesRead);
+
+  OMXMLStoredStream* nonConstThis = const_cast<OMXMLStoredStream*>(this);
+  nonConstThis->_position = _position + bytesRead;
 }
 
-void OMXMLStoredStream::write(void* ANAME(data), size_t ANAME(size))
+void OMXMLStoredStream::write(void* data, size_t size)
 {
   TRACE("OMXMLStoredStream::write");
   PRECONDITION("Valid store", _store != 0);
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  unsigned long bytesWritten;
+  write(reinterpret_cast<OMByte*>(data), size, bytesWritten);
+
+  ASSERT("Successful write", bytesWritten == size);
 }
 
-void OMXMLStoredStream::write(const OMByte* ANAME(data),
-                              const OMUInt32 ANAME(bytes),
-                              OMUInt32& /* bytesWritten */)
+void OMXMLStoredStream::write(const OMByte* data,
+                              const OMUInt32 bytes,
+                              OMUInt32& bytesWritten)
 {
   TRACE("OMXMLStoredStream::write");
   PRECONDITION("Valid store", _store != 0);
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _store->writeAt(_position, data, bytes, bytesWritten);
+  _position = _position + bytesWritten;
 }
 
 OMUInt64 OMXMLStoredStream::size(void) const
@@ -90,17 +100,16 @@ OMUInt64 OMXMLStoredStream::size(void) const
   TRACE("OMXMLStoredStream::size");
   PRECONDITION("Valid store", _store != 0);
 
-  OMUInt64 result = 0;
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  OMUInt64 result = _store->extent();
   return result;
 }
 
-void OMXMLStoredStream::setSize(const OMUInt64 /* newSize */)
+void OMXMLStoredStream::setSize(const OMUInt64 newSize)
 {
   TRACE("OMXMLStoredStream::setSize");
   PRECONDITION("Valid store", _store != 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _store->extend(newSize);
 }
 
 OMUInt64 OMXMLStoredStream::position(void) const
@@ -108,16 +117,15 @@ OMUInt64 OMXMLStoredStream::position(void) const
   TRACE("OMXMLStoredStream::position");
   PRECONDITION("Valid store", _store != 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  return 0;
+  return _position;
 }
 
-void OMXMLStoredStream::setPosition(const OMUInt64 /* offset */)
+void OMXMLStoredStream::setPosition(const OMUInt64 offset)
 {
   TRACE("OMXMLStoredStream::setPosition");
   PRECONDITION("Valid store", _store != 0);
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  _position = offset;
 }
 
 void OMXMLStoredStream::close(void)

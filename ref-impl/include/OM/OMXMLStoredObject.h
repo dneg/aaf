@@ -27,6 +27,7 @@
 #include "OMStoredObject.h"
 #include "OMDataTypes.h"
 #include "OMFile.h"
+#include "OMIOStream.h"
 
 class OMSimpleProperty;
 class OMDataStream;
@@ -213,10 +214,34 @@ private:
   // @access Private members.
 
     // @cmember Constructor.
-  OMXMLStoredObject(OMRawStorage* s, OMByteOrder byteOrder);
+  OMXMLStoredObject(OMRawStorage* s, const OMByteOrder byteOrder);
 
-  OMRawStorage* _store;
+  OMRawStorage& _store;
+  OMIOStream _stream;
   OMByteOrder _byteOrder;
+
+  static OMUInt16 _seed; // For use during save()
+
+  // Binary data formatting
+
+  void output(void);
+
+    // Dump a single byte.
+    //
+  void print(unsigned char ch);
+
+    // Flush any pending dumped bytes.
+    //
+  void flush(void);
+
+  static char _table[128];
+
+  char map(int c);
+
+  enum {BYTESPERLINE  = 16}; // Number of dumped bytes to put on a line.
+  unsigned char _buffer[BYTESPERLINE];
+  int _count;
+  int _line;
 
 };
 
