@@ -53,34 +53,52 @@ ImplAAFSourceMob::ImplAAFSourceMob ()
 ImplAAFSourceMob::~ImplAAFSourceMob ()
 {}
 
+//****************
+// GetEssenceDescription()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::GetEssenceDescription (ImplAAFEssenceDescriptor **ppEdes)
 {
-  *ppEdes = _essenceDesc;
-  return AAFRESULT_SUCCESS;
+	if (ppEdes == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	*ppEdes = _essenceDesc;
+	return AAFRESULT_SUCCESS;
 }
 
 
 
+//****************
+// SetEssenceDescription()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::SetEssenceDescription (ImplAAFEssenceDescriptor *pEdes)
 {
-  _essenceDesc = pEdes;
-  return AAFRESULT_SUCCESS;
+	if (pEdes == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	_essenceDesc = pEdes;
+	return AAFRESULT_SUCCESS;
 }
 
 
 
+//****************
+// Setup()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::Setup (aafWChar *  /*pName*/,
                            aafClassID_t *  /*pMdesClass*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 
- AAFRESULT STDMETHODCALLTYPE
+//****************
+// AddNilReference()
+//
+AAFRESULT STDMETHODCALLTYPE
    ImplAAFSourceMob::AddNilReference (aafSlotID_t slotID,
                            aafLength_t  length,
                            aafUID_t *dataDef,
@@ -92,7 +110,8 @@ AAFRESULT STDMETHODCALLTYPE
 	aafSourceRef_t	sourceRef;
 	ImplAAFTimelineMobSlot *	newSlot = NULL;		// Need version for non-timeline slots!!!
 	
-	aafAssert(editRate.denominator != 0, _file, OM_ERR_BADRATE);
+	if (editRate.denominator == 0)
+		return AAFRESULT_BADRATE;
 	
 	XPROTECT()
 	{
@@ -122,14 +141,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
- AAFRESULT STDMETHODCALLTYPE
+//****************
+// AddTimecodeClip()
+//
+AAFRESULT STDMETHODCALLTYPE
    ImplAAFSourceMob::AddTimecodeClip (aafRational_t editrate,
                            aafInt32 slotID,
                            aafTimecode_t startTC,
                            aafFrameLength_t length32)
 {
 #if FULL_TOOLKIT
-	 ImplAAFSegment *slotComponent= NULL;
+	ImplAAFSegment *slotComponent= NULL;
 	ImplAAFTimecode *tccp = NULL;
 	ImplAAFFiller *fill = NULL;
 	ImplAAFSegment *     aSubComponent = NULL;
@@ -245,6 +267,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+//****************
+// AddEdgecodeClip()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::AddEdgecodeClip (aafRational_t  /*editrate*/,
                            aafInt32  /*slotID*/,
@@ -255,15 +280,6 @@ AAFRESULT STDMETHODCALLTYPE
                            aafEdgecodeHeader_t  /*header*/)
 {
 #if FULL_TOOLKIT
-AAFRESULT AAFSourceMob::AddEdgecodeClip(
-				aafRational_t		editrate,	/* IN -- */
-				aafInt32				slotID,	/* IN -- */
-				aafFrameOffset_t	startEC,		/* IN -- */
-				aafFrameLength_t	length32,	/* IN -- */
-				aafFilmType_t		filmKind,	/* IN -- */
-				aafEdgeType_t		codeFormat,
-				char 					*header)		/* IN -- */
-{
 	ImplAAFFiller *     filler1, *filler2;
 	ImplAAFSequence *ecSequence;
 	ImplAAFEdgecode *edgecodeClip;
@@ -320,6 +336,9 @@ AAFRESULT AAFSourceMob::AddEdgecodeClip(
 
 
 
+//****************
+// ValidateTimecodeRange()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::ValidateTimecodeRange (ImplAAFDataDef * /*pEssenceKind*/,
                            aafSlotID_t  /*slotID*/,
@@ -328,13 +347,6 @@ AAFRESULT STDMETHODCALLTYPE
                            aafFrameLength_t  /*length32*/)
 {
 #if FULL_TOOLKIT
-AAFRESULT AAFSourceMob::ValidateTimecodeRange(
-				AAFDataKind *  		mediaKind,	/* IN -- */
-				aafSlotID_t		slotID,		/* IN -- */
-				aafRational_t 		editrate,	/* IN -- */
-				aafFrameOffset_t	startOffset,/* IN -- */
-				aafFrameLength_t	length32)	/* IN -- */
-{
 	ImplAAFSourceClip	 *sclp;
 	ImplAAFTimecode *timecodeClip;
 	ImplAAFSequence *aSequ, *segSequ;
@@ -350,7 +362,7 @@ AAFRESULT AAFSourceMob::ValidateTimecodeRange(
   	aafTimecode_t	timecode;
   	aafProperty_t	prop;
   	aafInt32		sequLoop, numSegs;
-  ImplAAFIterate *		sequIter = NULL;
+    ImplAAFIterate *		sequIter = NULL;
   	AAFRESULT		aafError;
   	
 	XPROTECT(_file)
@@ -465,6 +477,9 @@ AAFRESULT AAFSourceMob::ValidateTimecodeRange(
 
 
 
+//****************
+// AddPhysSourceRef()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::AddPhysSourceRef (aafRational_t  /*editrate*/,
                            aafSlotID_t  /*aMobSlot*/,
@@ -475,15 +490,6 @@ AAFRESULT STDMETHODCALLTYPE
                            aafLength_t  /*srcRefLength*/)
 {
 #if FULL_TOOLKIT
-AAFRESULT AAFSourceMob::AddPhysSourceRef(
-				aafRational_t	editrate,	/* IN -- */
-				aafSlotID_t	aMobSlot,
-				ImplAAFDataKind *	mediaKind,
-				ImplAAFSegment *		sourceRefObj,
-				aafPosition_t	srcRefOffset,
-				aafInt32			srcRefSlot,
-				aafLength_t		srcRefLength)
-{
 	ImplAAFSegment	*seg = NULL;
 	ImplAAFMobSlot *slot = NULL;
 	AAFRESULT	status = AAFRESULT_SUCCESS;
@@ -543,6 +549,9 @@ AAFRESULT AAFSourceMob::AddPhysSourceRef(
 
 
 
+//****************
+// AddPulldownRef()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::AddPulldownRef (aafRational_t  /*editrate*/,
                            aafSlotID_t  /*aMobSlot*/,
@@ -556,19 +565,6 @@ AAFRESULT STDMETHODCALLTYPE
                            aafPulldownDir_t  /*direction*/)
 {
 #if FULL_TOOLKIT
-AAFRESULT AAFSourceMob::AddPulldownRef(
-				aafRational_t		editrate,			/* IN -- */
-				aafSlotID_t		aMobSlot,
-				ImplAAFDataKind *		mediaKind,
-				ImplAAFSegment *			sourceRefObj,
-				aafPosition_t		srcRefOffset,
-				aafInt32			srcRefSlot,
-				aafLength_t			srcRefLength,
-				aafPulldownKind_t	pulldownKind,
-				aafPhaseFrame_t		phaseFrame,
-				aafPulldownDir_t	direction
-				)
-{
 	ImplAAFSourceClip		*sclp = NULL;
 	ImplAAFMobSlot		*trkd = NULL;
 	aafSourceRef_t	ref;
@@ -706,6 +702,9 @@ AAFRESULT AAFSourceMob::AddPulldownRef(
 
 
 
+//****************
+// SearchSource()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::SearchSource (aafSlotID_t  /*slotID*/,
                            aafPosition_t  /*offset*/,
@@ -716,15 +715,6 @@ AAFRESULT STDMETHODCALLTYPE
                            ImplAAFFindSourceInfo ** /*ppSourceInfo*/)
 {
 #if FULL_TOOLKIT
-AAFRESULT AAFSourceMob::SearchSource(	
-    aafSlotID_t slotID,             /* IN */
-	aafPosition_t offset,             /* IN */
-	aafMobKind_t mobKind,             /* IN */
-	aafMediaCriteria_t *mediaCrit,    /* IN */
-	aafEffectChoice_t *effectChoice,  /* IN */  /* NOTE: take this arg out? */
-	ImplAAFComponent **thisCpnt,           /* OUT */
-	aafFindSourceInfo_t *sourceInfo)  /* OUT */
-{
 	return(InternalMobSearchSource(slotID, offset, mobKind, mediaCrit,
 								effectChoice, thisCpnt, sourceInfo));
 #else
@@ -734,15 +724,18 @@ AAFRESULT AAFSourceMob::SearchSource(
 
 
 
+//****************
+// GetMobKind()
+//
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::GetMobKind (aafMobKind_t *  /*pMobKind*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-/************************
- * Function:  FindTimecodeClip	(INTERNAL)
- */
+//************************
+// Function:  FindTimecodeClip	(INTERNAL)
+//
 AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 				aafFrameOffset_t	position,
 				ImplAAFTimecode 		**result,
@@ -781,23 +774,24 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 	return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
-/************************
- * Function:  FindTimecodeSlot	(INTERNAL)
- *
- *    Search a slot group for the timecode slot, and return a TCCP object.
- *    This routine will search for the first nonzero length subcomponent
- *    of a SEQU, because MC5.0 has zero length filler clips and
- *    transitions on the timecode slots.  NULL is returned if there is
- *    not a valid timecode object present.
- *
- * Argument Notes:
- *		StuffNeededBeyondNotesInDefinition.labelNumber
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- * Standard errors (see top of file).  */
+//************************
+// Function:  FindTimecodeSlot	(INTERNAL)
+//
+//    Search a slot group for the timecode slot, and return a TCCP object.
+//    This routine will search for the first nonzero length subcomponent
+//    of a SEQU, because MC5.0 has zero length filler clips and
+//    transitions on the timecode slots.  NULL is returned if there is
+//    not a valid timecode object present.
+//
+// Argument Notes:
+//		StuffNeededBeyondNotesInDefinition.labelNumber
+//
+// ReturnValue:
+//		Error code (see below).
+//
+// Possible Errors:
+// Standard errors (see top of file).
+//
 AAFRESULT ImplAAFSourceMob::FindTimecodeSlot(
 				ImplAAFSegment **result)
 {
