@@ -519,7 +519,7 @@ int main(void)
 		printf("         Ex - FileOpenNewModifyEx\n");
 
 		// Run all tests twice: once with small filenames, once with large filenames
-		bool testLongNames = true;
+		bool testLongNames = false;
 		bool allTested = false;
 		while (! allTested)
 		{
