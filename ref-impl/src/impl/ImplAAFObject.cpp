@@ -54,6 +54,18 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
+//************
+// Interfaces ivisible inside the toolkit, but not exposed through the API
+
+// Gets the head object of the file containing this object.
+// This function is used to maintain MOB and Definition tables in the
+// head object.
+AAFRESULT ImplAAFObject::MyHeadObject
+	(ImplAAFHeader **header)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
 
 extern "C" const aafClassID_t CLSID_AAFObject;
 
