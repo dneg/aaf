@@ -142,21 +142,12 @@ void AAFGetDateTime(aafTimeStamp_t *time);
  *
  ************************************************************************/
 
-#if FULL_TOOLKIT
-aafErr_t AAFSetProgressCallback(
-			AAFFile *				file,		/* IN - For this file */
-			aafProgressProc_t aProc);	/* IN - Set this progress callback */
-#endif
-
-/* omfsFixShort */
 void AAFByteSwap16(
 			aafInt16 * wp);	/* IN/OUT -- Byte swap this value */
 			
-/* omfsFixLong */
 void AAFByteSwap32(
 			aafInt32 *lp);	/* IN/OUT -- Byte swap this value */
 
-/* omfsFixLong64 */
 void AAFByteSwap64(
 			aafInt64 *lp);	/* IN/OUT -- Byte swap this value */
 
