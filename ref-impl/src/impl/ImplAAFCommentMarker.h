@@ -3,7 +3,6 @@
 #ifndef __ImplAAFCommentMarker_h__
 #define __ImplAAFCommentMarker_h__
 
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -13,19 +12,13 @@
 *                                          *
 \******************************************/
 
-
-
-
-class ImplAAFSourceReference;
-
-
-
-
-
-
 #ifndef __ImplAAFEvent_h__
 #include "ImplAAFEvent.h"
 #endif
+
+
+// Forward declaration
+class ImplAAFSourceReference;
 
 
 class ImplAAFCommentMarker : public ImplAAFEvent
@@ -66,9 +59,10 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFCommentMarker)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFCommentMarkerTest.cpp.
-  static AAFRESULT test();
+protected:
+  // The stored object model defines the annotation to be a 
+  // an optional strong reference.
+  OMStrongReferenceProperty<ImplAAFSourceReference> _annotation;
 };
 
 #endif // ! __ImplAAFCommentMarker_h__
