@@ -97,7 +97,7 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	    	cat $$class.frefh; \
 	    done ; \
 	    echo "" ; \
-	    echo \#endif __AAF_h__ ; \
+	    echo \#endif // __AAF_h__ ; \
 	) > $(INCLUDE_DIR)/ref-api/AAF.h
 
 
