@@ -1166,7 +1166,7 @@ aafErr_t TableAddStringBlock(
  *
  * 		WhatIt(Internal)Does
  */
-static aafInt32 MobMap(void *temp)
+static aafInt32 UidMap(void *temp)
 {
   aafUID_t *key = (aafUID_t *)temp;
 
@@ -1175,7 +1175,7 @@ static aafInt32 MobMap(void *temp)
   return(key->Data1+key->Data2+key->Data3);
 }
 
-static aafBool	Mobcompare(void *temp1, void *temp2)
+static aafBool	Uidcompare(void *temp1, void *temp2)
 {
   aafUID_t *key1 = (aafUID_t *)temp1;
   aafUID_t *key2 = (aafUID_t *)temp2;
@@ -1184,6 +1184,7 @@ static aafBool	Mobcompare(void *temp1, void *temp2)
 	 (key1->Data3 == key2->Data3) && (memcmp(key1->Data4, key2->Data4, 8) == 0)
 	 ? AAFTrue : AAFFalse);
 }
+
 
 /************************
  * name
@@ -1204,7 +1205,7 @@ aafErr_t NewUIDTable(
 			 aafInt32 numBuckets,
 			 aafTable_t **result)
 {
-  return(NewTable(file, sizeof(aafUID_t), MobMap, Mobcompare, numBuckets, 
+  return(NewTable(file, sizeof(aafUID_t), UidMap, Uidcompare, numBuckets, 
 		      result));
 }	
 
@@ -1327,6 +1328,186 @@ void TableUIDLookupBlock(
 {
 	TableLookupBlock(table, &key, valueLen, valuePtr, found);
 }
+
+
+
+	
+/************************************************************************
+ *
+ * MobID Table Functions
+ *
+ ************************************************************************/
+
+/************************
+ * name
+ *
+ * 		WhatIt(Internal)Does
+ */
+static aafInt32 MobidMap(void *temp)
+{
+  aafMobID_t *key = (aafMobID_t *)temp;
+
+//!!! Need to include in the hash
+//!!!  aafUInt8  Data4[8];
+  return(key->Data1+key->Data2+key->Data3);
+}
+
+static aafBool	Mobidcompare(void *temp1, void *temp2)
+{
+  aafMobID_t *key1 = (aafMobID_t *)temp1;
+  aafMobID_t *key2 = (aafMobID_t *)temp2;
+
+  return( (key1->Data1 == key2->Data1) && (key1->Data2 == key2->Data2) &&
+	 (key1->Data3 == key2->Data3) && (memcmp(key1->Data4, key2->Data4, 8) == 0)
+	 ? AAFTrue : AAFFalse);
+}
+
+
+/************************
+ * name
+ *
+ * 		WhatIt(Internal)Does
+ *
+ * Argument Notes:
+ *		StuffNeededBeyondNotesInDefinition.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
+aafErr_t NewMobIDTable(
+			 aafInt32 numBuckets,
+			 aafTable_t **result)
+{
+  return(NewTable(NULL, sizeof(aafMobID_t), MobidMap, Mobidcompare, numBuckets, 
+		      result));
+}	
+
+/************************
+ * name
+ *
+ * 		WhatIt(Internal)Does
+ *
+ * Argument Notes:
+ *		StuffNeededBeyondNotesInDefinition.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
+aafErr_t TableAddMobID(
+			aafTable_t *table,
+			aafMobID_constref key,
+			void *value,
+			aafTableDuplicate_t dup)
+{
+  return(TableAddValuePtr(table, (void *)&key, sizeof(aafMobID_t), value, dup));
+}
+		
+/************************
+ * name
+ *
+ * 		WhatIt(Internal)Does
+ *
+ * Argument Notes:
+ *		StuffNeededBeyondNotesInDefinition.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
+aafErr_t TableAddMobIDBlock(
+			aafTable_t *table,
+			aafMobID_constref key,
+			void *value,
+			aafInt32 valueLen,
+			aafTableDuplicate_t dup)
+{
+  return(TableAddValueBlock(table, (void *)&key, sizeof(aafMobID_t), value, valueLen, dup));
+}
+		
+/************************
+ * name
+ *
+ * 		WhatIt(Internal)Does
+ *
+ * Argument Notes:
+ *		StuffNeededBeyondNotesInDefinition.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
+aafErr_t TableRemoveMobID(
+			aafTable_t *table,
+			aafMobID_constref key)
+{
+  return(TableRemove(table, (void *)&key));
+}
+	
+/************************
+ * name
+ *
+ * 		WhatIt(Internal)Does
+ *
+ * Argument Notes:
+ *		StuffNeededBeyondNotesInDefinition.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
+aafBool TableIncludesMobID(
+			aafTable_t *table,
+			aafMobID_constref key)
+{
+  return(TableIncludesKey(table, (void *)&key));
+}
+	
+/************************
+ * name
+ *
+ * 		WhatIt(Internal)Does
+ *
+ * Argument Notes:
+ *		StuffNeededBeyondNotesInDefinition.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
+void *TableMobIDLookupPtr(
+			aafTable_t *table,
+			aafMobID_constref key)
+{
+  return(TableLookupPtr(table, (void *)&key));
+}
+
+void TableMobIDLookupBlock(
+			aafTable_t *table,
+			aafMobID_constref key,
+			aafInt32 valueLen,
+			void *valuePtr,
+			aafBool *found)
+{
+	TableLookupBlock(table, (void *)(&key), valueLen, valuePtr, found);
+}
+
+
+
+
 /************************************************************************
  *
  * SlotID Table Functions
