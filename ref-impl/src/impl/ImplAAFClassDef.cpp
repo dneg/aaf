@@ -652,8 +652,7 @@ AAFRESULT STDMETHODCALLTYPE
   check_result (pDict->GenerateOmPid (id, omPid));
 
   AAFRESULT hr;
-  hr = pDict->GetBuiltinDefs()->cdPropertyDef()->
-	CreateInstance((ImplAAFObject**)&pd);
+  hr = pDict->CreateMetaInstance(AUID_AAFPropertyDef, (ImplAAFMetaDefinition **)&pd);
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
