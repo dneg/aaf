@@ -36,7 +36,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMXMLStoredStream(OMRawStorage* store, wchar_t* name);
+  OMXMLStoredStream(OMRawStorage* store);
 
     // @cmember Destructor.
   ~OMXMLStoredStream(void);
@@ -87,7 +87,6 @@ private:
 
   OMRawStorage* _store;
   OMUInt64 _position;
-  wchar_t* _name;
 
 };
 

@@ -28,10 +28,9 @@
 #include "OMRawStorage.h"
 #include "OMUtilities.h"
 
-OMXMLStoredStream::OMXMLStoredStream(OMRawStorage* store, wchar_t* name)
+OMXMLStoredStream::OMXMLStoredStream(OMRawStorage* store)
 : _store(store),
-  _position(0),
-  _name(name)
+  _position(0)
 {
   TRACE("OMXMLStoredStream::OMXMLStoredStream");
   PRECONDITION("Valid store", _store != 0);
@@ -41,10 +40,6 @@ OMXMLStoredStream::~OMXMLStoredStream(void)
 {
   TRACE("OMXMLStoredStream::~OMXMLStoredStream");
   PRECONDITION("Stream not open", _store == 0);
-
-  wremove(_name);
-  delete [] _name;
-  _name = 0;
 }
 
 void OMXMLStoredStream::read(void* data, size_t size) const

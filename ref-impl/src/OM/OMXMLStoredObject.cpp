@@ -674,13 +674,12 @@ OMStoredStream* OMXMLStoredObject::openStoredStream(
   //   @parm The <c OMDataStream> to be created.
   //   @rdesc The newly created <c OMStoredStream>.
 OMStoredStream* OMXMLStoredObject::createStoredStream(
-                                                  const OMDataStream& property)
+                                            const OMDataStream& /* property */)
 {
   TRACE("OMXMLStoredObject::createStoredStream");
 
-  wchar_t* name = temporaryFileName(property);
-  OMRawStorage* store = OMCachedDiskRawStorage::openNewModify(name);
-  OMXMLStoredStream* result = new OMXMLStoredStream(store, name);
+  OMRawStorage* store = OMCachedDiskRawStorage::openNewModify();
+  OMXMLStoredStream* result = new OMXMLStoredStream(store);
   ASSERT("Valid heap pointer", result != 0);
   return result;
 }
