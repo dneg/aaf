@@ -585,7 +585,7 @@ void ImplAAFTypeDefExtEnum::internalize(OMByte* externalBytes,
 
 aafBool ImplAAFTypeDefExtEnum::IsFixedSize (void) const
 {
-  return AAFTrue;
+  return kAAFTrue;
 }
 
 

@@ -89,7 +89,7 @@ ImplAAFFile::Initialize ()
   _factory = ImplAAFDictionary::CreateDictionary();
 	if (NULL == _factory)
 		return AAFRESULT_NOMEMORY;
-	_initialized = AAFTrue;
+	_initialized = kAAFTrue;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -173,7 +173,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		// Initialize the mob lookup tables.
 		checkResult(_head->LoadMobTables());
 		
-		_open = AAFTrue;
+		_open = kAAFTrue;
 		_openType = kOmOpenRead;
 	}
 	catch (AAFRESULT &r)
@@ -292,7 +292,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		_head->AddIdentificationObject(&_ident);
 		
 
-		_open = AAFTrue;
+		_open = kAAFTrue;
 		_openType = kOmModify;
 	}
 	catch (AAFRESULT &rc)
@@ -407,7 +407,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		dictionary->ReleaseReference();
 		dictionary = 0;
 
-		_open = AAFTrue;
+		_open = kAAFTrue;
 		_openType = kOmCreate;
 		GetRevision(&_setrev);
 	}
@@ -493,7 +493,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		dictionary->ReleaseReference();
 		dictionary = 0;
 
-		_open = AAFTrue;
+		_open = kAAFTrue;
 		_openType = kOmTransient;
 		GetRevision(&_setrev);
 	}
@@ -611,9 +611,9 @@ ImplAAFFile::ImplAAFFile () :
 		_byteOrder(0),
 		_openType(kOmUndefined),
 		_head(NULL),
-		_semanticCheckEnable(AAFFalse),
-		_initialized(AAFFalse),
-		_open(AAFFalse),
+		_semanticCheckEnable(kAAFFalse),
+		_initialized(kAAFFalse),
+		_open(kAAFFalse),
 		_modeFlags(0)
 {
 	memset (&_ident, 0, sizeof (_ident));
@@ -691,7 +691,7 @@ ImplAAFFile::Close ()
 	}
 
 	_cookie = 0;
-	_open = AAFFalse;
+	_open = kAAFFalse;
 	_openType = kOmUndefined;
 
 
