@@ -1388,6 +1388,20 @@ HRESULT STDMETHODCALLTYPE
 }
 
 //
+// Intialize class extensions. This method is called after the
+// contained Impl object has been completely initialized. This
+// allows the aggregated extension object access to all of the
+// interfaces and property data of its controlling unknown.
+//
+HRESULT STDMETHODCALLTYPE
+    C.this-module::InitializeExtension(REFCLSID /*clsid*/)
+{
+  // Extensions are not supported for the shared
+  // C.this-module module.
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+//
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(.this-module)
@@ -2233,11 +2247,256 @@ AD_ROOT_CLASS_END\
 #c (first version defined backwords compatibility)
 
 #startm .begin-Abstract-StoredObjectBase 00
-AD_CLASS_BEGIN\
+
+// Private extension wrapper.
+C.this-module::Extension::Extension(REFCLSID rclsid) :
+  pNext(NULL),
+  clsid(rclsid),
+  pExtensionUnknown(NULL),
+  bExtensionQueryInterfaceInProgress(false)
+{
+}
+
+C.this-module::Extension::~Extension() 
+{
+  if (NULL != pExtensionUnknown)
+  {
+    pExtensionUnknown->Release();
+    pExtensionUnknown = NULL;
+  }
+}
+
+// Return the class id of this extension.
+REFCLSID C.this-module::Extension::GetCLSID(void) const
+{ 
+  return clsid;
+}
+
+// Set or get the next extension.
+void C.this-module::Extension::SetNext(C.this-module::Extension *next)
+{ 
+  pNext = next;
+}
+
+C.this-module::Extension * C.this-module::Extension::GetNext(void) const
+{ 
+  return pNext;
+}
+
+
+// Attempt to create the given plugin extension.
+HRESULT C.this-module::Extension::InitializeExtension(IUnknown *pControllingUnknown)
+{
+  assert(NULL == pExtensionUnknown); // precondition.
+  HRESULT hr = S_OK;
+  IAAFPluginManager *pPluginMgr = NULL;
+
+
+  try
+  {
+    // Get the plugin manager to create the plugin instance.
+    hr = ::AAFGetPluginManager(&pPluginMgr);
+    if (SUCCEEDED(hr))
+    {
+      hr = pPluginMgr->CreateInstance(clsid, 
+                                      pControllingUnknown, 
+                                      IID_IUnknown, 
+                                      (void **)&pExtensionUnknown);
+
+      if (pPluginMgr)
+        pPluginMgr->Release();
+    }
+  }
+  catch (...)
+  {
+    // cleanup
+    if (pPluginMgr)
+        pPluginMgr->Release();
+
+    throw;
+  }
+
+
+  return hr;
+}
+
+HRESULT C.this-module::Extension::QueryInterface(REFIID riid, void **ppvObjOut)
+{
+  assert(NULL != pExtensionUnknown); // precondition.
+  HRESULT hr = E_NOINTERFACE;
+
+  // We use state variable to prevent the endless cycle
+  // that would occur if the extension's QueryInterface
+  // called it's controlling IUnknown's QueryInterface
+  // (i.e. C.this-module::InternalQueryInterface)
+  // for an interface that is not supported for a built-in
+  // class.
+  // (QI cycle: Object::QI -> Extension::QI -> Object::QI)
+  if (NULL != pExtensionUnknown && !bExtensionQueryInterfaceInProgress)
+  {
+    bExtensionQueryInterfaceInProgress = true;
+    hr = pExtensionUnknown->QueryInterface(riid, ppvObjOut);
+    bExtensionQueryInterfaceInProgress = false;
+  }
+
+  return hr;
+}
+
+
+C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
+  : C.parent-module (pControllingUnknown, AAFFalse),
+  pExtension(NULL)
+{
+  if (doInit)
+    {
+      Impl.this-module * newRep;
+      newRep = new Impl.this-module;
+      assert (newRep);
+      InitRep (newRep);
+    }
+}
+
+
+C.this-module::~C.this-module ()
+{
+  // Cleanup any extensions
+  if (NULL != pExtension)
+  {
+    C.this-module::Extension *pCurrentExtension = pExtension;
+    C.this-module::Extension *pNextExtension;
+
+    // Set the refcount to 1 do avoid destruction when
+    // releasing the aggregated extension object.
+    InternalAddRef();
+
+    while (NULL != pCurrentExtension)
+    {
+      pNextExtension = pCurrentExtension->GetNext();
+      pCurrentExtension->SetNext(NULL);
+      delete pCurrentExtension;
+      pCurrentExtension = pNextExtension;
+    }
+
+    pExtension = NULL;
+  }
+}
 #endm
 
 #startm .end-Abstract-StoredObjectBase 00
-AD_CLASS_END\
+//
+// Intialize class extensions. This method is called after the
+// contained Impl object has been completely initialized. This
+// allows the aggregated extension object access to all of the
+// interfaces and property data of its controlling unknown.
+//
+HRESULT STDMETHODCALLTYPE
+    C.this-module::InitializeExtension(REFCLSID rclsid)
+{
+  HRESULT hr = S_OK;
+  C.this-module::Extension *pNextExtension = NULL;
+  C.this-module::Extension *pLastExtension = NULL;
+  C.this-module::Extension *pNewExtension = NULL;
+
+  // Increment the reference count to keep this object
+  // from being inadvertantly deleted by/with the aggregate
+  // extension object.
+  InternalAddRef();
+
+AD_CATCH_ASSERTION_BEGIN\
+      // Make sure that we do not already have an instantiation
+      // for the given clsid/plugin. Walk our linked list and 
+      // abort if we have already instantiated a plugin with
+      // the same code class id.
+      //
+      pNextExtension = pExtension;
+      while (NULL != pNextExtension)
+      {
+        if (rclsid == pNextExtension->GetCLSID())
+        {
+          hr = AAFRESULT_EXTENSION_ALREADY_INITIALIZED;
+          break;
+        }
+
+        // Remember the last extension so that we can add the
+        // new extension onto the end of the list.
+        pLastExtension = pNextExtension;
+        pNextExtension = pLastExtension->GetNext();
+      }
+
+      if (SUCCEEDED(hr)) // there were no duplicates...
+      {
+        pNewExtension = new C.this-module::Extension(rclsid);
+        if (NULL == pNewExtension)
+        {
+          hr = E_OUTOFMEMORY;
+        }
+        else
+        {
+          hr = pNewExtension->InitializeExtension(GetPrivateUnknown());
+          if (SUCCEEDED(hr))
+          {
+            // Save the extension in the list.
+            if (NULL != pLastExtension)
+              pLastExtension->SetNext(pNewExtension); // add to the end
+            else
+              pExtension = pNewExtension; // this is the first one.
+            pNewExtension = NULL; // This pointer is now owned by the list.
+          }
+        }
+      } 
+AD_CATCH_ASSERTION_END\
+
+  // Cleanup
+  InternalRelease();
+
+  if (pNewExtension)
+    delete pNewExtension;
+
+  return hr;
+}
+
+//
+// 
+// 
+HRESULT C.this-module::InternalQueryInterface
+(
+    REFIID riid,
+    void **ppvObj)
+{
+    HRESULT hr = S_OK;
+
+    if (NULL == ppvObj)
+        return E_INVALIDARG;
+
+    // We only support the IClassFactory interface 
+    if (riid == IID_I.this-module) 
+    { 
+        *ppvObj = (I.this-module *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    // Always delegate back to base implementation.
+    hr = C.parent-module::InternalQueryInterface(riid, ppvObj);
+
+    //
+    // If our built-in class did not handle the requested interface
+    // then delegate the request to extension objects if they exists.
+    //
+    C.this-module::Extension *pNextExtension = pExtension;
+    while (E_NOINTERFACE == hr && NULL != pNextExtension)
+    {
+        hr = pNextExtension->QueryInterface(riid, ppvObj);
+        pNextExtension = pNextExtension->GetNext();
+    }
+
+    return hr;
+}
+
+//
+// Define the contrete object support implementation.
+// 
+AAF_DEFINE_FACTORY(.this-module)\
 #endm
 
 

@@ -988,7 +988,7 @@ protected:
   // Declare the QI that implements for the interfaces
   // for this module. This will be called by CAAFUnknown::QueryInterface().
   // 
-  virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
+  STDMETHOD(InternalQueryInterface)(REFIID riid, void **ppvObjOut);
 
 
 public:
@@ -1043,7 +1043,7 @@ protected:
   // Declare the QI that implements for the interfaces
   // for this module. This will be called by CAAFUnknown::QueryInterface().
   // 
-  virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
+  STDMETHOD(InternalQueryInterface)(REFIID riid, void **ppvObjOut);
 
 
 public:
@@ -1062,6 +1062,14 @@ public:
   // object!
   //
   STDMETHOD(GetImplRep)(/*[retval, out]*/ void **);
+
+  //
+  // Intialize class extensions. This method is called after the
+  // contained Impl object has been completely initialized. This
+  // allows the aggregated extension object access to all of the
+  // interfaces and property data of its controlling unknown.
+  //
+  STDMETHOD(InitializeExtension)(REFCLSID clsid);
 
 protected:
 
@@ -1429,6 +1437,61 @@ AD_CLASS_BEGIN\
 #endm
 
 #startm .end-Abstract-StoredObjectBase 00
+
+private:
+  //
+  // Private class to encapsulate a list of extensions.
+  //
+  class Extension
+  {
+  public:
+    Extension(REFCLSID rclsid);
+    ~Extension();
+    
+    // Return the class id of this extension.
+    REFCLSID GetCLSID(void) const;
+
+    // Set or get the next extension.
+    void SetNext(Extension *next);
+    Extension * GetNext(void) const;
+
+    // Attempt to create the given plugin extension.
+    HRESULT InitializeExtension(IUnknown *pControllingUnknown);
+
+    // 
+    // Declare the QI that delegates to the QI of the pExtensionUnknown.
+    // 
+    HRESULT QueryInterface(REFIID riid, void **ppvObjOut);
+
+  private:
+    // The next extension in the list.
+    Extension *pNext;
+
+    // The code class id for this plugin extension. This
+    // value is used to make sure that we do not attempt to
+    // create duplicate extension objects.
+    CLSID clsid;
+
+    // Non-deleting unknown pointer for a plugin class extension.
+    IUnknown *pExtensionUnknown;
+
+    // State flag used by this class' associated extension's
+    // QueryInterface has been called. (Used to stop a possibly
+    // endless QI cycle: Oobject::QI -> Extension::QI -> Object::QI.)
+    bool bExtensionQueryInterfaceInProgress;
+  };
+
+  // The first extension.
+  C.this-module::Extension *pExtension;
+
+public:
+  //
+  // Intialize class extensions. This method is called after the
+  // contained Impl object has been completely initialized. This
+  // allows the aggregated extension object access to all of the
+  // interfaces and property data of its controlling unknown.
+  //
+  STDMETHOD(InitializeExtension)(REFCLSID clsid);
 AD_CLASS_END\
 #endm
 
