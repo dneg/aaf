@@ -89,11 +89,9 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (! pPropName) return AAFRESULT_NULL_PARAM;
 
-  hr = SetAUID (propertyAuid);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  hr = SetName (pPropName);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  hr = ImplAAFMetaDefinition::Initialize(propertyAuid, pPropName, NULL);
+	if (AAFRESULT_FAILED (hr))
+    return hr;
 
   _Type = typeId;
   _pid = omPid;

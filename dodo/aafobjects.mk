@@ -69,6 +69,8 @@ HUMAN_TYPED_IMPL="\
 	AAFKLVData \
 	AAFLocator \
 	AAFMasterMob \
+	AAFMetaDefinition \
+	AAFMetaDictionary \
 	AAFMob  \
 	AAFMobSlot \
 	AAFNestedScope\
