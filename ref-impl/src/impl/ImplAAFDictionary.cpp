@@ -1984,3 +1984,53 @@ void ImplAAFDictionary::InitializeMetaDefinitions(void)
 
   }
 }
+
+
+
+
+/*************************************************************************
+    aafLookupTypeDef()
+
+	This helper function searches for specified type definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_typedef	- type definition to look for.
+
+    Returns:
+	kAAFTrue - type definition found in given objects dictionary.
+	kAAFFalse - type def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupTypeDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFTypeDef		*p_typedef )
+{
+    assert( p_holder );
+    assert( p_typedef );
+
+    AAFRESULT		hr = AAFRESULT_TYPE_NOT_FOUND; // Important init.
+    aafUID_t		typedef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the type def we're looking for.
+    p_typedef->GetAUID( &typedef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFTypeDef		*p_tmp_typedef = NULL;
+
+	hr = p_dict->LookupTypeDef( typedef_id, &p_tmp_typedef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_typedef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+    // If failed this function will only return AAFRESULT_TYPE_NOT_FOUND.
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
