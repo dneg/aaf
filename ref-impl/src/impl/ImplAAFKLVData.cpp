@@ -76,7 +76,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFDictionary		*pDict = NULL;
 	ImplAAFTypeDef			*pDef = NULL;
-	ImplAAFTypeDefRename	*pRenameDef = NULL;
 	if (!pValue)
 		return AAFRESULT_NULL_PARAM;
 	if (_initialized)

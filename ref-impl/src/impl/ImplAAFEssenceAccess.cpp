@@ -208,13 +208,11 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 	IAAFPlugin				*plug = NULL;
 	aafMobID_t			fileMobUID;
 	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
-	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	ImplAAFDictionary	*dataDict = NULL;
 	ImplAAFHeader		*compHead = NULL;
 	ImplAAFHeader		*dataHead = NULL;
 	ImplAAFPluginManager *plugins = NULL;
 	ImplAAFEssenceData	*implData = NULL;
-	aafmMultiCreate_t	createBlock;
 	wchar_t				*nameBuf = NULL;
 	aafUInt32			buflen;
 	aafUID_t			aafFormat = ContainerAAF;
@@ -265,13 +263,8 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 		CHECK(CreateCodecDef(compHead, codecID, &_codecDescriptor));
 
     // Initialize the multi-essence codec interface pointer (not required for this type of open).
-    aafError = _codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec);
+    _codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec);
  		
-		createBlock.mediaKind = &mediaKind;
-		createBlock.subTrackNum = 0;		//!!!
-		createBlock.slotID = DEFAULT_FILE_SLOT;
-		createBlock.sampleRate = sampleRate;
-		
     // When we enable the cloneExternal (below) then Don't do this call for creating the
 		// file mob twice
 		CHECK(CreateFileMob(compHead, kAAFTrue, DEFAULT_FILE_SLOT, NULL, mediaKind,
@@ -369,11 +362,6 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 		//
 		//!!!Assert this		if(_codec != NULL)
 		
-		createBlock.mediaKind = &mediaKind;
-		createBlock.subTrackNum = 0;		//!!!
-		createBlock.slotID = DEFAULT_FILE_SLOT;
-		createBlock.sampleRate = sampleRate;
-
     CHECK(InstallEssenceAccessIntoCodec());
 
 		iUnk = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
@@ -481,7 +469,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafMobID_t				fileMobUID;
 	aafUID_t				essenceKind;
 	aafLength_t				oneLength = CvtInt32toLength(1, oneLength);
-	AAFRESULT				aafError = AAFRESULT_SUCCESS;
 	ImplAAFDictionary		*dataDict = NULL;
 	ImplAAFHeader			*compHead = NULL;
 	ImplAAFHeader			*dataHead = NULL;
@@ -796,7 +783,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUInt16		channelIndex;
 	aafUID_t		 mediaKind, myFileCLSID;
 	aafMobID_t		 fileMobID;
-	aafLength_t masterMobLength, one;
+	aafLength_t masterMobLength;
 	aafSourceRef_t	fileRef;
 	aafUInt16		numCh;
 	wchar_t				*nameBuf = NULL;
@@ -804,7 +791,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			essenceDescClass, codecID;
 	aafBool					found = kAAFFalse, isIdentified;
 	aafUID_t				testFormat;
-  AAFRESULT aafError = AAFRESULT_SUCCESS;
 
 	
 	XPROTECT()
@@ -813,7 +799,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 		_openType = kAAFReadOnly;
 		CvtInt32toPosition(0, zeroPos);	
-		CvtInt32toLength(1, one);
 		CHECK(masterMob->SearchSource(slotID, zeroPos,kAAFFileMob,
 									   mediaCrit,
 									   NULL,
@@ -867,7 +852,7 @@ AAFRESULT STDMETHODCALLTYPE
 								codecID, NULL, IID_IAAFEssenceCodec, (void**)&_codec));
 	
 		// Initialize the multi-essence codec interface pointer (not required for this type of open).
-		aafError = _codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec);
+		_codec->QueryInterface(IID_IAAFMultiEssenceCodec, (void **)&_multicodec);
 
 //!!!		_physicalOutChanOpen = physicalOutChan;
 		
@@ -1153,7 +1138,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUInt16		channelIndex;
 	aafUID_t		 mediaKind, myFileCLSID;
 	aafMobID_t		 fileMobID;
-	aafLength_t masterMobLength, one;
+	aafLength_t masterMobLength;
 	aafSourceRef_t	fileRef;
 	aafUInt16		numCh;
 	wchar_t				*nameBuf = NULL;
@@ -1169,7 +1154,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 		_openType = kAAFReadOnly;
 		CvtInt32toPosition(0, zeroPos);	
-		CvtInt32toLength(1, one);
 		CHECK(masterMob->SearchSource(slotID, zeroPos,kAAFFileMob,
 									   mediaCrit,
 									   NULL,
@@ -1892,10 +1876,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::Seek (aafPosition_t  frameNum)
 {
-	aafPosition_t		one;
+//	aafPosition_t		one;
 	AAFRESULT		status;
 	
-	CvtInt32toInt64(1, &one);
+//	CvtInt32toInt64(1, &one);
 //!!!	if(Int64Greater(_pvt->repeatCount, one))
 //		status = _codec->Seek(one);
 //	else

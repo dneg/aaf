@@ -117,7 +117,6 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceData::SetPosition (aafPosition_t  offset)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
   // Cannot access the data property if it is NOT associated with a file.
   if (!persistent())
     return AAFRESULT_OBJECT_NOT_PERSISTENT;
