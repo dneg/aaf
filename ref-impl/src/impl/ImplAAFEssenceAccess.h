@@ -516,6 +516,13 @@ public:
     GetFileFormatParameterList
         // @parm [out] 
         (ImplAAFEssenceFormat ** ops);
+  //****************
+  // GetParameterList()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetEmptyFileFormat
+        // @parm [out] 
+        (ImplAAFEssenceFormat ** ops);
 
 /****/
   //****************
