@@ -58,7 +58,7 @@
 
 // MAX is used for arrays when converting between types - set here for debugging. 
 const int MAX = 80;
-static char* niceFileName;
+static char niceFileName[FILENAME_MAX];
 static void usage(void);
 static aafWChar* slotName = L"SLOT1";
 //static aafInt32 fadeInLen  = 1000;
@@ -606,7 +606,7 @@ int main(int argumentCount, char *argumentVector[])
 	//  With no second argument, set output filename to CreateSequence<N>.aaf
 	if (argumentCount ==2)
 	{
-		niceFileName = Ns;
+		strncpy(niceFileName, Ns, FILENAME_MAX);
 		strcat (niceFileName,".aaf");
 	}
 	else 
@@ -614,7 +614,7 @@ int main(int argumentCount, char *argumentVector[])
 	//  Otherwise output to filename specified in the second argument
 	//  NB this case must have argC ==3 from earlier check
 
-	niceFileName = argumentVector[2];
+	strncpy(niceFileName, argumentVector[2], FILENAME_MAX);
 	strcat(niceFileName,".aaf");
 	}
 	//  and then carry on...
