@@ -16,13 +16,20 @@ public:
 
   static OMFile* openRead(const char* fileName);
   static OMFile* openModify(const char* fileName);
-  static OMFile* createModify(const char* fileName);
+  static OMFile* createWrite(const char* fileName, const OMStorable* root);
+  static OMFile* createModify(const char* fileName, const OMStorable* root);
+
+  void save(void);
+
+  void revert(void);
+
+  OMStorable* restore(void);
 
   void close(void);
 
-  OMStoredObject* root(void);
+  OMStorable* root(void);
 
-  OMFile& operator << (const OMStorable& o);
+  OMStoredObject* rootStoredObject(void);
 
   OMClassFactory* classFactory(void);
   OMObjectDirectory* objectDirectory(void);
@@ -35,10 +42,11 @@ private:
 
   void openRead(void);
   void openModify(void);
-  void createModify(void);
+  void createModify(const OMStorable* root);
 
   char* _name;
-  OMStoredObject* _root;
+  OMStorable* _root;
+  OMStoredObject* _rootStoredObject;
   
   OMClassFactory* _classFactory;
   OMObjectDirectory* _objectDirectory;
