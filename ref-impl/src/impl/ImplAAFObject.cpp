@@ -20,20 +20,11 @@
 
 
 ImplAAFObject::ImplAAFObject ()
-: _pContainer (0)
 {}
 
 
 ImplAAFObject::~ImplAAFObject ()
 {}
-
-
-void ImplAAFObject::InitContainer (void * pContainer)
-{
-  assert (! _pContainer);
-  _pContainer = pContainer;
-  assert (_pContainer);
-}
 
 
 // AxD_XMETHOD1(itsFile,
@@ -65,13 +56,4 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_NOT_IMPLEMENTED;
 }
  
-
-
-class IAAFObject;
-
-void * ImplAAFObject::GetContainer ()
-{
-  assert (_pContainer);
-  return _pContainer;
-}
 
