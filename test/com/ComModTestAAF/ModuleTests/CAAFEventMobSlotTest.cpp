@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -255,13 +255,12 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 
   IAAFEvent *pEvent = NULL;
   IAAFComponent *pComponent = NULL;
-  aafUID_t		uid;
 
   try
   {
     // Create an event (note: this will be replaced by a concrete event in a
     // later version after such an event is implemented.)
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFEvent,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFEvent,
                                              IID_IAAFEvent, 
                                              (IUnknown **)&pEvent));
     checkResult(pEvent->SetPosition(*position));
@@ -271,8 +270,7 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
     {
       // Get the segment inteface to add to the mob slot
       checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-      uid = DDEF_Picture;	// Give a valid but nonsense kind
-	  checkResult(pComponent->SetDataDef(&uid));
+	  checkResult(pComponent->SetDataDef(DDEF_Picture));	// Give a valid but nonsense kind
 
       // Add the event to the sequence.
       checkResult(pSequence->AppendComponent(pComponent));
@@ -327,7 +325,7 @@ void EventMobSlotTest::CreateEventMobSlot()
     pEvent = NULL;
 
     // Create and initialize an EventMobSlot
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFEventMobSlot,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFEventMobSlot,
                                              IID_IAAFEventMobSlot, 
                                              (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
@@ -343,7 +341,7 @@ void EventMobSlotTest::CreateEventMobSlot()
     pSegment = NULL;
 
     // Create the mob to hold the new event mob slot.
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFCompositionMob,
                                              IID_IAAFMob, 
                                              (IUnknown **)&pMob));
     checkResult(pMob->SetName(L"CompositionMob::Name:Test mob to hold an event mob slot"));
@@ -418,7 +416,7 @@ void EventMobSlotTest::OpenEventMobSlot()
   try
   {
     // Get the composition mob that we created to hold the
-    checkResult(_pHeader->LookupMob(&_eventMobID1, &pMob));
+    checkResult(_pHeader->LookupMob(_eventMobID1, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
     checkResult(pMob->EnumAAFAllMobSlots(&pEnumSlots));
@@ -502,17 +500,15 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
   IAAFEventMobSlot *pEventMobSlot = NULL;
   IAAFMobSlot *pMobSlot = NULL;
   IAAFMob *pMob = NULL;
-  aafUID_t	uid;
 
   try
   {
     // Create a sequence to hold our list of events.
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFSequence,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFSequence,
                                              IID_IAAFSequence, 
                                              (IUnknown **)&pSequence));
      checkResult(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-     uid = DDEF_Picture;	// Give a valid but nonsense kind
-	 checkResult(pComponent->SetDataDef(&uid));
+	 checkResult(pComponent->SetDataDef(DDEF_Picture));	// Give a valid but nonsense kind
 	 pComponent->Release();
 	 pComponent = NULL;
 
@@ -547,7 +543,7 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
     pSequence = NULL;
 
     // Create and initialize an EventMobSlot
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFEventMobSlot,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFEventMobSlot,
                                              IID_IAAFEventMobSlot, 
                                              (IUnknown **)&pEventMobSlot));
     checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
@@ -563,7 +559,7 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
     pSegment = NULL;
 
     // Create the mob to hold the new event mob slot.
-    checkResult(_pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+    checkResult(_pDictionary->CreateInstance(AUID_AAFCompositionMob,
                                              IID_IAAFMob, 
                                              (IUnknown **)&pMob));
     checkResult(pMob->SetName(L"CompositionMob::Name:Test mob to hold an event mob slot"));
@@ -650,7 +646,7 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
   try
   {
     // Get the composition mob that we created to hold the
-    checkResult(_pHeader->LookupMob(&_eventMobID2, &pMob));
+    checkResult(_pHeader->LookupMob(_eventMobID2, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
     checkResult(pMob->EnumAAFAllMobSlots(&pEnumSlots));
