@@ -811,12 +811,35 @@ void OMMSSStoredObject::save(const OMDataStream& stream)
   delete [] name;
 }
 
-OMRootStorable* OMMSSStoredObject::restore(OMFile& /* file */)
+OMRootStorable* OMMSSStoredObject::restore(OMFile& file)
 {
   TRACE("OMMSSStoredObject::restore(OMFile)");
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
-  OMRootStorable* result = 0;
-  return result;
+
+  enum OMFile::OMLoadMode savedLoadMode = file.loadMode();
+  file.setLoadMode(OMFile::lazyLoad);
+
+  OMPropertyTable* table = 0;
+  restore(table);
+  file.setReferencedProperties(table);
+
+  OMClassId id;
+  file.rootStore()->restore(id);
+  ASSERT("Valid root stored object", id == OMRootStorable::_rootClassId);
+
+  OMRootStorable* root = new OMRootStorable();
+  ASSERT("Valid heap pointer", root != 0);
+  root->attach(&file);
+  root->setStore(file.rootStore());
+  root->setClassFactory(file.dictionary());
+
+  root->restoreContents();
+
+  OMDictionary *metaDictionary = root->dictionary();
+  ASSERT("Consistent dictionaries", metaDictionary == file.dictionary());
+  root->setClassFactory(file.classFactory());
+
+  file.setLoadMode(savedLoadMode);
+  return root;
 }
 
   // @mfunc Restore the <c OMStoredObjectIdentification>
