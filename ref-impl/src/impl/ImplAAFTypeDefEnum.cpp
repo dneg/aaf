@@ -55,9 +55,9 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 
 ImplAAFTypeDefEnum::ImplAAFTypeDefEnum ()
-  : _ElementType   ( PID_TypeDefinitionEnumeration_ElementType,   "Element Type"),
-	_ElementNames  ( PID_TypeDefinitionEnumeration_ElementNames,  "Element Names"),
-	_ElementValues ( PID_TypeDefinitionEnumeration_ElementValues, "Element Values"),
+  : _ElementType   ( PID_TypeDefinitionEnumeration_ElementType,   "ElementType"),
+	_ElementNames  ( PID_TypeDefinitionEnumeration_ElementNames,  "ElementNames"),
+	_ElementValues ( PID_TypeDefinitionEnumeration_ElementValues, "ElementValues"),
 	_isRegistered (AAFFalse),
 	_registrationAttempted (AAFFalse)
 {
@@ -80,6 +80,41 @@ ImplAAFTypeDefEnum::Initialize (
       aafUInt32 numElements,
       wchar_t * pTypeName)
 {
+  if (!pType)
+	return AAFRESULT_NULL_PARAM;
+
+  eAAFTypeCategory_t baseTypeCat;  
+  assert (pType);
+  AAFRESULT hr = pType->GetTypeCategory(&baseTypeCat);
+  if (AAFRESULT_FAILED(hr))
+	return hr;
+  if (kAAFTypeCatInt != baseTypeCat)
+	return AAFRESULT_BAD_TYPE;
+
+  aafUID_t typeUID;
+  assert (pType);
+  hr = pType->GetAUID(&typeUID);
+  assert (AAFRESULT_SUCCEEDED(hr));
+  _ElementType = typeUID;
+
+  return pvtInitialize (pID,
+						&typeUID,
+						pElementValues,
+						pElementNames,
+						numElements,
+						pTypeName);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFTypeDefEnum::pvtInitialize (
+      const aafUID_t * pID,
+      const aafUID_t * pTypeId,
+      aafInt64 * pElementValues,
+      aafString_t * pElementNames,
+      aafUInt32 numElements,
+      wchar_t * pTypeName)
+{
   if (!pID)
 	return AAFRESULT_NULL_PARAM;
   if (!pTypeName)
@@ -90,14 +125,6 @@ ImplAAFTypeDefEnum::Initialize (
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-
-  eAAFTypeCategory_t baseTypeCat;  
-  assert (pType);
-  hr = pType->GetTypeCategory(&baseTypeCat);
-  if (AAFRESULT_FAILED(hr))
-	return hr;
-  if (kAAFTypeCatInt != baseTypeCat)
-	return AAFRESULT_BAD_TYPE;
 
   aafUInt32 i;
   aafUInt32 totalNameSize = 0;
@@ -125,11 +152,8 @@ ImplAAFTypeDefEnum::Initialize (
 	  tmpNamePtr += wcslen (pElementNames[i]) + 1;
 	}
 
-  aafUID_t typeUID;
-  assert (pType);
-  hr = pType->GetAUID(&typeUID);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  _ElementType = typeUID;
+  assert (pTypeId);
+  _ElementType = *pTypeId;
 
   _ElementNames.setValue (namesBuf, totalNameSize * sizeof(wchar_t));
   delete[] namesBuf;
@@ -810,13 +834,27 @@ size_t ImplAAFTypeDefEnum::NativeSize (void) const
 }
 
 
+static OMProperty * pvtMakeProperty (OMPropertyId pid,
+									 const char * name,
+									 size_t size)
+{
+  if (0 == size) { assert (0); return 0; }
+  else if (1 == size) { return new OMFixedSizeProperty<aafUInt8>(pid, name); }
+  else if (2 == size) { return new OMFixedSizeProperty<aafUInt16>(pid, name); }
+  else if (4 == size) { return new OMFixedSizeProperty<aafUInt32>(pid, name); }
+  else if (8 == size) { return new OMFixedSizeProperty<aafInt64>(pid, name); }
+  else if (sizeof(aafUID_t) == size) { return new OMFixedSizeProperty<aafUID_t>(pid, name); }
+  else { assert (0); return 0; }
+}
+
+
 OMProperty * ImplAAFTypeDefEnum::pvtCreateOMPropertyMBS
   (OMPropertyId pid,
    const char * name) const
 {
   assert (name);
-  size_t elemSize = PropValSize ();
-  OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
+  size_t elemSize = NativeSize ();
+  OMProperty * result = pvtMakeProperty (pid, name, elemSize);
   assert (result);
   return result;
 }
