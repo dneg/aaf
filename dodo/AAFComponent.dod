@@ -58,6 +58,4 @@ AD_XMETHOD1(GetDataDefinition,
 			DataDefinition of this object,
 			returns data definition object)
 
-AD_OVERRIDE(.method-Test)
-
 AD_CLASS_END
