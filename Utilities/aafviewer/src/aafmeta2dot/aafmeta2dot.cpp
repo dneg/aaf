@@ -187,7 +187,7 @@ int main(int argc, char** argv)
    }
    catch (const AxEx& ex) 
    {
-      wcout << ex.what() << endl;
+      cout << ex.what() << endl;
       Logging::DebugLogStream() << "Export failed." << endl;
    }
    catch (...)
