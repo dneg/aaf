@@ -73,17 +73,27 @@ static  const aafUID_t					TEST_EXTENUM_TYPE_ID =
 
 
 //Elements in the Enum ...
-#define 								TEST_EXTENUM_COUNT         5
+#define 								TEST_EXTENUM_COUNT         7
 
 //The Enum table
-static const aafString_t				TEST_EXTENUM_NAMES[5] = 
-						{L"Sunday", L"Monday", L"Tuesday", L"Wednesday", L"Thursday" };
-static const aafUID_t					TEST_EXTENUM_VALUES[5] = {
+
+// kAAFFriday is included to verify that CreateValueFromName()
+// operates correctly when given a name without the "kAAF" prefix.
+
+#define TEST_KAAF_SYMBOL L"Friday"
+#define TEST_NONKAAF_SYMBOL L"Saturday"
+
+static const aafString_t				TEST_EXTENUM_NAMES[TEST_EXTENUM_COUNT] = 
+						{L"Sunday", L"Monday", L"Tuesday", L"Wednesday", L"Thursday",
+						L"kAAF" TEST_KAAF_SYMBOL, TEST_NONKAAF_SYMBOL };
+static const aafUID_t					TEST_EXTENUM_VALUES[TEST_EXTENUM_COUNT] = {
 { 0x47b3df41, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } },
 { 0x47b3df42, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } },
 { 0x47b3df43, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } },
 { 0x47b3df44, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } },
-{ 0x47b3df45, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } } };
+{ 0x47b3df45, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } },
+{ 0x47b3df46, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } },
+{ 0x47b3df47, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } } };
 
 
 static const aafString_t				TEST_EXTENUM_SOME_SYMBOL = TEST_EXTENUM_NAMES[3];
@@ -261,6 +271,15 @@ static HRESULT createEXTENUMFiller(IAAFDictionary* const pDict, IAAFFillerSP& sp
 	checkResult(spObj->IsPropertyPresent(spPD_comp, &bIsPresent));
 	checkExpression(bIsPresent == kAAFTrue,  AAFRESULT_TEST_FAILED);
 	
+	// Test accessing the "kAAF" prefixed name without the "kAAF" prefix.
+	IAAFPropertyValueSP spPropValFriday;
+	checkResult( spEXTENUM->CreateValueFromName( TEST_KAAF_SYMBOL, &spPropValFriday ) );
+
+	// Test access to a non "kAAF" prefixed name, but, this time with the
+	// "kAAF" prefix.
+	IAAFPropertyValueSP spPropValSaturday;
+	checkResult( spEXTENUM->CreateValueFromName( L"kAAF" TEST_NONKAAF_SYMBOL, &spPropValSaturday ) );
+
 	return S_OK;
 }//createEXTENUMFiller()
 
@@ -375,6 +394,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	checkExpression( memcmp (&someval, &TEST_EXTENUM_SOME_VALUE, sizeof(aafUID_t)) == 0, 
 								AAFRESULT_TEST_FAILED );
 	
+
 	
 	aafUInt32 index = 0;
 	while (index < TEST_EXTENUM_COUNT )
@@ -404,7 +424,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	//SEt/Get Integer value
 
 	//try a -ve Set test
-	aafUID_t illegal = { 0x47b3df47, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } };  //illegal value!
+	aafUID_t illegal = { 0x47b3df48, 0x5370, 0x11d4, { 0x8e, 0x57, 0x0, 0x90, 0x27, 0xdf, 0xcc, 0x26 } };  //illegal value!
 	someval = illegal;
 	hr = spEXTENUM->SetAUIDValue(spPropVal, someval); //-ve test!
 	checkExpression( hr == AAFRESULT_ILLEGAL_VALUE, AAFRESULT_TEST_FAILED );	

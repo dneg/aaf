@@ -72,15 +72,23 @@ static  const aafUID_t					TEST_ENUM_TYPE_ID =
 
 
 //Elements in the Enum ...
-#define 								TEST_ENUM_COUNT         5
+#define 								TEST_ENUM_COUNT         7
 #define									TEST_ELEM_t				aafInt32
 static const aafUID_t					TEST_ELEM_TYPE_ID =	kAAFTypeID_Int32; 
 
 //The Enum table
-static aafString_t				TEST_ENUM_NAMES[5] = 
-						{L"Sunday", L"Monday", L"Tuesday", L"Wednesday", L"Thursday" };
-static aafInt64					TEST_ENUM_VALUES[5] = 
-											{-1, 15, -20, 33, -2 };
+
+// kAAFFriday is included to verify that CreateValueFromName()
+// operates correctly when given a name without the "kAAF" prefix.
+
+#define TEST_KAAF_SYMBOL L"Friday"
+#define TEST_NONKAAF_SYMBOL L"Saturday"
+
+static aafString_t				TEST_ENUM_NAMES[TEST_ENUM_COUNT] = 
+						{L"Sunday", L"Monday", L"Tuesday", L"Wednesday", L"Thursday",
+						 L"kAAF" TEST_KAAF_SYMBOL, TEST_NONKAAF_SYMBOL };
+static aafInt64					TEST_ENUM_VALUES[TEST_ENUM_COUNT] = 
+											{-1, 15, -20, 33, -2, 0xaaf };
 
 static const aafString_t				TEST_ENUM_SOME_SYMBOL = TEST_ENUM_NAMES[3];
 static const aafInt64					TEST_ENUM_SOME_VALUE = TEST_ENUM_VALUES[3];
@@ -258,6 +266,15 @@ static HRESULT createENUMFiller(IAAFDictionary* const pDict, IAAFFillerSP& spFil
 	//Verify that the optional property is now present in the object
 	checkResult(spObj->IsPropertyPresent(spPD_comp, &bIsPresent));
 	checkExpression(bIsPresent == kAAFTrue,  AAFRESULT_TEST_FAILED);
+
+	// Test accessing a "kAAF" prefixed name without the "kAAF" prefix.
+	IAAFPropertyValueSP spPropValFriday;
+	checkResult( spENUM->CreateValueFromName( TEST_KAAF_SYMBOL, &spPropValFriday ) );
+
+	// Test access to a non "kAAF" prefixed name, but, this time
+	// with the "kAAF" prefix.
+	IAAFPropertyValueSP spPropValSaturday;
+	checkResult( spENUM->CreateValueFromName( L"kAAF" TEST_NONKAAF_SYMBOL, &spPropValSaturday ) );
 	
 	return S_OK;
 }//createENUMFiller()
