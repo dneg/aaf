@@ -482,9 +482,8 @@ void OMFile::writeSignature(const wchar_t* fileName)
   size_t status = wcstombs(cFileName, fileName, 256);
   ASSERT("Convert succeeded", status != (size_t)-1);
 
-  ASSERT("Valid root stored object", _rootStoredObject != 0);
   if (hostByteOrder() != littleEndian) {
-    _rootStoredObject->reorderUniqueObjectIdentification(sig);
+    OMStoredObject::reorderUniqueObjectIdentification(sig);
   }
 
   FILE* f = fopen(cFileName, "rb+");
@@ -517,9 +516,8 @@ void OMFile::readSignature(const wchar_t* fileName)
 
   fclose(f);
 
-  ASSERT("Valid root stored object", _rootStoredObject != 0);
   if (hostByteOrder() != littleEndian) {
-    _rootStoredObject->reorderUniqueObjectIdentification(sig);
+    OMStoredObject::reorderUniqueObjectIdentification(sig);
   }
 
   _signature = sig;
