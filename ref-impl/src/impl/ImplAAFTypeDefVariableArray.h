@@ -96,6 +96,8 @@ public:
   //
   virtual aafBool IsFixedSize (void);
   virtual size_t PropValSize (void);
+  virtual aafBool IsRegistered (void);
+  virtual size_t NativeSize (void);
 
 private:
   OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;

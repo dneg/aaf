@@ -82,10 +82,12 @@ public:
   //
   virtual aafBool IsFixedSize (void);
   virtual size_t PropValSize (void);
+  aafBool IsRegistered (void);
+  size_t NativeSize (void);
 
 private:
-  OMStrongReferenceProperty<ImplAAFTypeDef> _ElementType;
-  OMFixedSizeProperty<aafUInt32>            _ElementCount;
+  OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  OMFixedSizeProperty<aafUInt32>          _ElementCount;
 };
 
 #endif // ! __ImplAAFTypeDefFixedArray_h__
