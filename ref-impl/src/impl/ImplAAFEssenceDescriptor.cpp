@@ -48,7 +48,22 @@ ImplAAFEssenceDescriptor::ImplAAFEssenceDescriptor ()
 
 
 ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
-{}
+{
+	// Release all of the locator pointers.
+	ImplAAFLocator *pLocator = NULL;
+	size_t size = _locators.getSize();
+	for (size_t i = 0; i < size; i++)
+	{
+		_locators.getValueAt(pLocator, i);
+		if (pLocator)
+		{
+			pLocator->ReleaseReference();
+			pLocator = NULL;
+			// Set the current value to 0 so that the OM can perform necessary cleanup.
+			_locators.setValueAt(0, i);
+		}
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -70,7 +85,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::AppendLocator (ImplAAFLocator *pLocator)
 {
+	if(pLocator == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
 	_locators.appendValue(pLocator);
+	pLocator->AcquireReference();
+
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -80,9 +100,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::PrependLocator (ImplAAFLocator *pLocator)
 {
+	if(pLocator == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
 	size_t			siz;
 	long			n;
-	ImplAAFLocator	*obj;
+	ImplAAFLocator	*obj = NULL;
 
 	_locators.getSize(siz);
 	for(siz-1; n >= 0; n--)
@@ -91,6 +114,7 @@ AAFRESULT STDMETHODCALLTYPE
 		_locators.setValueAt(obj, n+1);
 	}
 	_locators.setValueAt(pLocator, 0);
+	pLocator->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
 }
@@ -118,6 +142,8 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
+		if (theEnum)
+			theEnum->ReleaseReference();
 		return(XCODE());
 	}
 	XEND;
@@ -138,9 +164,16 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT
     ImplAAFEssenceDescriptor::GetNthLocator (aafInt32 index, ImplAAFLocator **ppLocator)
 {
-	ImplAAFLocator	*obj;
+	if(ppLocator == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	ImplAAFLocator	*obj = NULL;
 	_locators.getValueAt(obj, index);
 	*ppLocator = obj;
+	if (obj)
+		obj->AcquireReference();
+	else
+		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
 
 	return AAFRESULT_SUCCESS;
 }
