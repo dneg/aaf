@@ -47,6 +47,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFScopeReference \
 	AAFSegment \
 	AAFSequence \
+	AAFSession \
 	AAFSourceClip \
 	AAFSourceMob \
 	AAFSourceReference \
