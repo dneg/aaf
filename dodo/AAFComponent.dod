@@ -19,14 +19,14 @@ AD_HEAD
 \******************************************/
 AD_CLASS_BEGIN
 
-AD_SETOBJ_METHOD1(SetLength,
+AD_METHOD1(SetLength,
 				  [in],
 				  aafLength_t,
 				  length,
 				  Length of this object,
 				  sets the length property values on the input component object.)
 
-AD_GETOBJ_METHOD1(GetLength,
+AD_METHOD1(GetLength,
 				  [retval][out],
 				  aafLength_t,
 				  length,
@@ -37,19 +37,19 @@ AD_GETOBJ_METHOD1(GetLength,
   // stored as an implicit property on 1.x objects\, so this routine
   // recursively calculates the length.)
 	
-AD_SETOBJ_METHOD1(SetDataKind,
+AD_METHOD1(SetDataDefinition,
 				  [in],
-				  AAFDataDefinition,
-				  datakind,
-				  DataKind of this object,
-				  sets the datakind property values on the input component object.)
+				  AAFDataDefinition*,
+				  datadef,
+				  DataDefinition of this object,
+				  sets the data definition property value on the input component object.)
 
-AD_GETOBJ_METHOD1(GetDataKind,
+AD_METHOD1(GetDataDefinition,
 				  [retval][out],
-				  GetDataDefinition,
-				  datakind,
-				  DataKind of this object,
-				  returns datakind definition object)
+				  AAFDataDefinition*,
+				  datadef,
+				  DataDefinition of this object,
+				  returns data definition object)
 
 AD_OVERRIDE(.method-Test)
 
