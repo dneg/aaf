@@ -45,11 +45,11 @@ AD_XMETHOD1(NextOne,
   // @comm This is a just simplified version of the Next method. )
 
 AD_X2METHOD3(Next,
-			[in], objPass, aafUInt32, count, number of AAFPluginDescriptor requested,xxx,
+			[in], objPass, aafUInt32, count, number of AAFPluginDescriptor requested,xxx,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOutArray, AAFPluginDescriptor, ppAAFPluginDesc, array to receive AAFPluginDescriptors,count,
+			objOutArray, AAFPluginDescriptor, ppAAFPluginDesc, array to receive AAFPluginDescriptors,count,*pFetched,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual AAFPluginDescriptor fetched into ppAAFPluginDesc array,xxx,
+			number of actual AAFPluginDescriptor fetched into ppAAFPluginDesc array,xxx,xxx,
 			Enumerates the next count elements \(AAFPluginDesc pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pFetched. The caller is responsible for 
