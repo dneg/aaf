@@ -90,10 +90,11 @@ DotRecordNodeAttribute::GetWidth( DotProfile &profile )
 string
 DotRecordNodeAttribute::GetAttributeString()
 {
-   ostringstream attributeString;
-   attributeString << _name << " = " << _value;
+   string attributeString = ProcessRecordString(_name);
+   attributeString.append(" = ");
+   attributeString.append(ProcessRecordString(_value));
 
-   return ProcessStringForQuoting( attributeString.str() );
+   return attributeString;
 }
 
 
@@ -147,10 +148,11 @@ DotRecordNodeClassAttribute::GetWidth( DotProfile &profile )
 string
 DotRecordNodeClassAttribute::GetAttributeString()
 {
-   ostringstream attributeString;
-   attributeString << _name << ": " << _typeName;
-
-   return ProcessStringForQuoting( attributeString.str() );
+   string attributeString = ProcessRecordString(_name);
+   attributeString.append(": ");
+   attributeString.append(ProcessRecordString(_typeName));
+   
+   return attributeString;
 }
 
 
