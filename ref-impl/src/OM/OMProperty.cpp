@@ -548,6 +548,13 @@ OMStorable* OMProperty::storable(void) const
   return 0;
 }
 
+OMStoredForm OMProperty::storedForm(void) const
+{
+  TRACE("OMProperty::storedForm");
+
+  return _storedForm;
+}
+
   // @mfunc The size of the raw bits of this
   //        <c OMSimpleProperty>. The size is given in bytes.
   //   @rdesc The size of the raw bits of this
@@ -558,6 +565,13 @@ size_t OMSimpleProperty::bitsSize(void) const
   TRACE("OMSimpleProperty::bitsSize");
 
   return _size;
+}
+
+OMByte* OMSimpleProperty::bits(void) const
+{
+  TRACE("OMSimpleProperty::bits");
+
+  return _bits;
 }
 
   // @mfunc Get the raw bits of this <c OMSimpleProperty>.
