@@ -20,19 +20,23 @@ BEGIN {
 #    for (i = 1; i <= f; i++) {
 #      printf("[%d : \"%s\"]\n", i, fields[i]);
 #    }
+    /* We should have at least a file name and a comment */
     if (f < 2) {
       printf("cl2html : Error near \"%s\"\n", filesandcomments) | "cat 1>&2";
       exit(1);
     }
     if (match(fields[1], "/$")) {
+      /* The first field is a directory */
       dir = fields[1];
       files = trim(fields[2], 1);
-      cs = 3;
+      cs = 3; /* Start of comment */
     } else {
+      /* The first field is not a directory */
       dir = "";
       files = fields[1];
-      cs = 2;
+      cs = 2; /* Start of comment */
     }
+    /* put comment back together - undo split on ":" */
     comments = trim(fields[cs], 1);
     for (i = cs + 1; i <= f; i++) {
       comments = comments ":" fields[i]
