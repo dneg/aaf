@@ -675,7 +675,6 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::setBits(
   PRECONDITION("Valid bits", bits != 0);
   PRECONDITION("Valid size", size >= bitsSize());
 
-  size_t count = size / sizeof(ReferencedObject*);
   ReferencedObject** p = (ReferencedObject**)bits;
 
   OMVectorIterator<
