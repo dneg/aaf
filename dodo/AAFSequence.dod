@@ -26,7 +26,7 @@ AD_DEFAULT_UUID(66e855f0, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_XMETHOD1(SetInitialValue,
-			[in],objIn, AAFDataDefinition, datadef, Data Definition object,
+			[in],objIn, AAFDataDef, datadef, Data Definition object,
 // This function creates a new sequence object with the given
 // property values.  The length of the sequence is initially set to
 // 0.  When components are appended to the sequence with the

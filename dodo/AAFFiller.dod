@@ -18,14 +18,14 @@ AD_HEAD
 \******************************************/
 
 AD_INCLUDE(AAFTypes)
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(38e6f8a8, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(38e6f8a9, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 
 AD_CLASS_BEGIN
 
 AD_XMETHOD2(Create,
-	[in], objIn,AAFDataDefinition, datadef, Data Definition Object,
+	[in], objIn,AAFDataDef, datadef, Data Definition Object,
 	[in], objPass,aafLength_t, length, Length Property Value,
   // This function will create a new filler object with the given
   // property values.)
