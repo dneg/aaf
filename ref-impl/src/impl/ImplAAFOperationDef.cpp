@@ -307,29 +307,61 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::AddParameterDefs (
       ImplAAFParameterDef *pAAFParameterDef)
 {
-	aafUID_t	*tmp, newUID;
-	aafInt32	oldBufSize;
-	aafInt32	newBufSize;
+	aafUID_t					*tmp, newUID, oldUID;
+	aafInt32					oldBufSize;
+	aafInt32					newBufSize;
+	ImplAAFParameterDef*		pParmDef = NULL;
+	ImplEnumAAFParameterDefs*	pEnum = NULL;
+	aafBool						parmDefFound = AAFFalse;
 
 	if(pAAFParameterDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
 	XPROTECT()
 	{
-		oldBufSize = _paramDefined.size();
-		newBufSize = oldBufSize + sizeof(aafUID_t);
 		CHECK(pAAFParameterDef->GetAUID(&newUID));
-		tmp = new aafUID_t[newBufSize];
-		if(tmp == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-		if(oldBufSize != 0)
-			_paramDefined.copyToBuffer(tmp, oldBufSize);
-		tmp[oldBufSize/sizeof(aafUID_t)] = newUID;
-		_paramDefined.setValue(tmp, newBufSize);
-		delete [] tmp;
+		CHECK(GetParameterDefinitions(&pEnum));
+		pEnum->NextOne(&pParmDef);
+		while(pParmDef)
+		{
+			CHECK(pParmDef->GetAUID(&oldUID));
+			if ( memcmp(&newUID, &oldUID, sizeof(aafUID_t)) == 0)
+			{
+				parmDefFound = AAFTrue;
+				break;
+			}
+			pParmDef->ReleaseReference();
+			pParmDef = NULL;
+			pEnum->NextOne(&pParmDef);
+		}
+		pEnum->ReleaseReference();
+		pEnum = NULL;
+		if (!parmDefFound)
+		{
+			oldBufSize = _paramDefined.size();
+			newBufSize = oldBufSize + sizeof(aafUID_t);
+			tmp = new aafUID_t[newBufSize];
+			if(tmp == NULL)
+				RAISE(AAFRESULT_NOMEMORY);
+			if(oldBufSize != 0)
+				_paramDefined.copyToBuffer(tmp, oldBufSize);
+			tmp[oldBufSize/sizeof(aafUID_t)] = newUID;
+			_paramDefined.setValue(tmp, newBufSize);
+			delete [] tmp;
+		}
+		else
+		{
+			pParmDef->ReleaseReference();
+			pParmDef = NULL;
+			RAISE(AAFRESULT_OBJECT_ALREADY_ATTACHED);
+		}
 	}
 	XEXCEPT
 	{
+		if (pParmDef)
+			pParmDef->ReleaseReference();
+		if (pEnum)
+			pEnum->ReleaseReference();
 		if(tmp != NULL)
 			delete [] tmp;
 	}
