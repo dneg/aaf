@@ -25,19 +25,12 @@
 
 
 
-
-
-
-
-
-
-#include "CEnumAAFDataDefs.h"
-#include "CEnumAAFDataDefs.h"
-#ifndef __CEnumAAFDataDefs_h__
-#error - improperly defined include guard
+#ifndef __AAF_h__
+#include "AAF.h"
 #endif
-
+#ifndef __AAFResult_h__
 #include "AAFResult.h"
+#endif
 
 
 extern "C" HRESULT CEnumAAFDataDefs_test()
