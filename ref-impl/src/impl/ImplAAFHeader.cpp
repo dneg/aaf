@@ -83,8 +83,6 @@ ImplAAFHeader::ImplAAFHeader ()
   _identificationList(PID_HEADER_IDENTIFICATIONLIST, "identificationList"),
   _contentStorage(		PID_HEADER_CONTENTSTORAGE,	"contentStorage")
 {
-  ImplAAFContentStorage		*cstore;
-  
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
   _persistentProperties.put(_identificationList.address());
@@ -105,13 +103,37 @@ ImplAAFHeader::ImplAAFHeader ()
 	_toolkitRev.patchLevel = 0;
 //!!!	_byteOrder;
 //!!!	_lastModified;
-	cstore = (ImplAAFContentStorage *)CreateImpl(CLSID_AAFContentStorage);
-	_contentStorage = cstore;
+// trr - Moved conditional creation of content storage to GetContentStorage method
+// so that we do not leak an object when the file is restored. We may have to do
+// something similar for the dictionary.
+//	_contentStorage = (ImplAAFContentStorage *)CreateImpl(CLSID_AAFContentStorage);
 }
 
 
 ImplAAFHeader::~ImplAAFHeader ()
-{}
+{
+	// Release all of the id pointers in the id list.
+	//
+	ImplAAFIdentification *pIdent = NULL;
+  size_t size;
+  _identificationList.getSize(size);
+	for (size_t i; i < size; i++) {
+		_identificationList.getValueAt(pIdent, i);
+
+		if (pIdent) {
+			pIdent->ReleaseReference();
+			// Set value to 0 so the OM can perform any necessary cleanup.
+			pIdent = 0;
+			_identificationList.setValueAt(pIdent, i);
+		}
+	}
+
+	// Release the content storage pointer. Set the 
+	if (_contentStorage) {
+		_contentStorage->ReleaseReference();
+		_contentStorage = 0;
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -122,7 +144,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->LookupMob(pMobID, ppMob));
 }
 
@@ -135,7 +157,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->GetNumMobs(mobKind, pNumMobs));
 }
 
@@ -147,7 +169,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->GetPrimaryMobs(ppEnum));
 }
 
@@ -160,7 +182,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->GetMobs(pSearchCriteria, ppEnum));
 }
 
@@ -172,7 +194,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->AppendMob(pMob));
 }
 
@@ -184,7 +206,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->RemoveMob(pMob));
 }
 
@@ -199,7 +221,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->IsMediaDataPresent(pFileMobID, fmt, pResult));
 }
 
@@ -212,7 +234,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->GetMedia(pMediaCriteria, ppEnum));
 }
 
@@ -238,6 +260,25 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_NULL_PARAM;
 	}
   return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::GetContentStorage (ImplAAFContentStorage ** ppContentStorage)
+{
+  if (! ppContentStorage)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+
+	*ppContentStorage = GetContentStorage(); // does not increment reference!
+	if (*ppContentStorage) {
+		(*ppContentStorage)->AcquireReference();
+		return AAFRESULT_SUCCESS;
+	} else {
+		return AAFRESULT_NULLOBJECT; // trr - is there a better error code?
+	}
 }
 
 
@@ -270,7 +311,14 @@ AAFRESULT STDMETHODCALLTYPE
     // For size entries the valid positions are 0 .. size - 1
     // get the last one in the vector.
     _identificationList.getValueAt(*ppIdentification, size - 1);
-    result = AAFRESULT_SUCCESS;
+
+		// We are returning a non-null reference.
+		if (*ppIdentification) {
+			(*ppIdentification)->AcquireReference();
+			result = AAFRESULT_SUCCESS;
+		} else {
+			result = AAFRESULT_NO_MORE_OBJECTS; // trr - is there a better error code?
+		}
   } else {
     *ppIdentification = 0;
     result = AAFRESULT_NOT_IMPLEMENTED; // tjb - Should be AAFRESULT_FAILURE
@@ -302,9 +350,16 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT 
-    ImplAAFHeader::GetNumIdentifications (aafInt32 * /*pCount*/)
+    ImplAAFHeader::GetNumIdentifications (aafInt32 *pCount)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pCount)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+	size_t size;
+  _identificationList.getSize(size);
+	*pCount = size;
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT 
@@ -342,26 +397,12 @@ AAFRESULT
       pIdent->platform = L"Windows NT";
     }
 
-#if 0
-    identObj = new ImplAAFIdentification(
-      pIdent->companyName,
-      pIdent->productName,
-      &pIdent->productVersion,
-      pIdent->productVersionString,
-      // productID,
-      _lastModified,
-      &AAFToolkitVersion,
-      pIdent->platform
-      // generation
-      );
-#else
     identObj = static_cast<ImplAAFIdentification *>(CreateImpl(CLSID_AAFIdentification));
     if (NULL == identObj)
       CHECK(AAFRESULT_NOMEMORY);
     CHECK(identObj->SetCompanyName(pIdent->companyName));
     CHECK(identObj->SetProductName(pIdent->productName));
     CHECK(identObj->SetProductVersionString(pIdent->productVersionString));
-#endif
 
     _identificationList.appendValue(identObj);
  
@@ -383,6 +424,11 @@ AAFRESULT
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
+
+	_identificationList.appendValue(pIdent);
+	pIdent->AcquireReference();
+
+
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
@@ -460,7 +506,7 @@ AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
 
 AAFRESULT ImplAAFHeader::LoadMobTables(void)
 {
-	ImplAAFContentStorage *cstore = _contentStorage;
+	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->LoadMobTables());
 }
 
@@ -545,10 +591,42 @@ AAFRESULT ImplAAFHeader::IsValidHeadObject(void)
 #endif
 }
 
+
+// trr - NOTE: Eventhough this method returns a reference counted object it
+// does NOT bump the reference count. Currently only other file that calls
+// this method is ImplAAFMob.cpp. We should probably make this method protected
+// or private and create an new version the conforms to our other API guidlines:
+// AAFRESULT GetContentStorage(ImplAAFContentStorage **ppContentStorage);
+// 
 ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
 {
 	ImplAAFContentStorage	*result = _contentStorage;
+
+	// Create the content storage object if it does not exist.
+	if (NULL == result) {
+		result = (ImplAAFContentStorage *)CreateImpl(CLSID_AAFContentStorage);
+		_contentStorage = result;
+	}
+
 	return(result);
+}
+
+// Fill in when dictionary property is supported.
+ImplAAFDictionary *ImplAAFHeader::GetDictionary()
+{
+#if 0
+	ImplAAFDictionary	*result = _dictionary;
+
+	// Create the dictionary object if it does not exist.
+	if (NULL == result) {
+		result = (ImplAAFDictionary *)CreateImpl(CLSID_AAFDictionary);
+		_dictionary = result;
+	}
+
+	return(result);
+#else
+	return NULL;
+#endif
 }
 
 extern "C" const aafClassID_t CLSID_AAFHeader;
