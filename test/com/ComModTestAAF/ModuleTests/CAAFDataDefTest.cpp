@@ -40,6 +40,7 @@ using namespace std;
 #include "CAAFBuiltinDefs.h"
 
 #define kNumComponents	5
+#define kNumSlots	4 // adjust slot-specific behaviour in test if you change this
 
 static const	aafMobID_t	TEST_MobID = 
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -143,7 +144,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSequence*	pSequence = NULL;
 	IAAFSegment*	pSegment = NULL;
 	IAAFComponent*	pComponent = NULL;
-	int				i;
+	IAAFDataDef*	pSeqDataDef = NULL;
 	HRESULT			hr = S_OK;
 	
 	
@@ -171,56 +172,76 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Add the master mob to the file
 		pHeader->AddMob(pMob);
 		
-		// Add mob slot w/ Sequence
-		checkResult(defs.cdSequence()->
-					CreateInstance(IID_IAAFSequence, 
-								   (IUnknown **)&pSequence));		
-		checkResult(pSequence->Initialize(defs.ddPicture()));
-		checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
-		
-		aafRational_t editRate = { 0, 1};
-		checkResult(pMob->AppendNewTimelineSlot(editRate,
-												pSegment,
-												1,
-												L"AAF Test Sequence",
-												0,
-												&pMobSlot));
-		
-		//
-		//	Add some segments.  Need to test failure conditions
-		//	(i.e. starting/ending w/ transition, two trans back
-		//	to bacl).
-		//
-		for(i = 0; i < kNumComponents; i++)
+		// Different component kinds are put on different slots because
+		// they cannot be mixed within a slot
+		for(int slot = 0; slot < kNumSlots; slot++)
 		{
-			aafLength_t		len = 10;
+
+			// Add mob slot w/ Sequence
+			checkResult(defs.cdSequence()->
+						CreateInstance(IID_IAAFSequence, 
+									   (IUnknown **)&pSequence));		
+
+			if (slot==0)
+				pSeqDataDef = defs.ddPicture();
+			else if (slot==1)
+				pSeqDataDef = defs.ddSound();
+			else if (slot==2)
+				pSeqDataDef = defs.ddTimecode();
+			else if (slot==3)
+				pSeqDataDef = defs.ddEdgecode();
+
+			checkResult(pSequence->Initialize( pSeqDataDef ));
+			checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
+		
+			aafRational_t editRate = { 0, 1};
+			checkResult(pMob->AppendNewTimelineSlot(editRate,
+													pSegment,
+													slot+1, // SlotID is 1-based
+													L"AAF Test Sequence",
+													0,
+													&pMobSlot));
 			
-			checkResult(defs.cdFiller()->
-						CreateInstance(IID_IAAFComponent, 
-									   (IUnknown **)&pComponent));
-			
-			if(i == 0)
+			//
+			//	Add some segments.  Need to test failure conditions
+			//	(i.e. starting/ending w/ transition, two trans back
+			//	to bacl).
+			//
+			for(int comp = 0; comp < kNumComponents; comp++)
 			{
-				checkResult(pComponent->SetDataDef(defs.ddPictureWithMatte()));
-			}
-			else
-			{
-				checkResult(pComponent->SetDataDef(defs.ddPicture()));
-			}
-			checkResult(pComponent->SetLength(len));
-			checkResult(pSequence->AppendComponent(pComponent));
-			
-			pComponent->Release();
-			pComponent = NULL;
-		}
+				aafLength_t		len = 10;
 				
-		pMobSlot->Release();
-		pMobSlot = NULL;
-		
-		pSegment->Release();
-		pSegment = NULL;
-		
-		
+				checkResult(defs.cdFiller()->
+							CreateInstance(IID_IAAFComponent, 
+										   (IUnknown **)&pComponent));
+				
+				// First component of picture slot gets a picture with matte component
+				// so we can test that picture with matte converts to picture on read
+				if(slot==0 && comp == 0)
+				{
+					checkResult(pComponent->SetDataDef(defs.ddPictureWithMatte()));
+				}
+				else // otherwise component datadef matches sequence datadef
+				{
+					checkResult(pComponent->SetDataDef( pSeqDataDef ));
+				}
+				checkResult(pComponent->SetLength(len));
+				checkResult(pSequence->AppendComponent(pComponent));
+				
+				pComponent->Release();
+				pComponent = NULL;
+			}
+					
+			pMobSlot->Release();
+			pMobSlot = NULL;
+			
+			pSegment->Release();
+			pSegment = NULL;
+			
+			pSequence->Release();
+			pSequence = NULL;
+			
+		}		
 	}
 	catch (HRESULT& rResult)
 	{
@@ -271,11 +292,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFComponent*		pComp = NULL;
 	IAAFSegment*		pSegment = NULL;
 	IAAFDataDef*		pDataDef = NULL;
+	IAAFDataDef2*		pDataDef2 = NULL;
 	IAAFSequence*		pSequence = NULL;
 	IAAFDictionary*		pDictionary = NULL;
 	IEnumAAFComponents*	pCompIter = NULL;
 	aafNumSlots_t		numMobs;
-	aafInt32			index;
 	aafSearchCrit_t		criteria;
 	HRESULT				hr = S_OK;
 	
@@ -303,10 +324,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			aafNumSlots_t		numSlots = 0;
 			
 			checkResult(pMob->CountSlots(&numSlots));
-			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
+			checkExpression(kNumSlots == numSlots, AAFRESULT_TEST_FAILED);
 			
 			// Enumerate over all MOB slots for this MOB
 			checkResult(pMob->GetSlots(&pSlotIter));
+			int slot = 0;
 			while (pSlotIter && pSlotIter->NextOne(&pSlot) == AAFRESULT_SUCCESS)
 			{
 				aafUInt32			numCpnts;
@@ -319,7 +341,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				
 				checkResult(pSequence->GetComponents(&pCompIter));
 				numCpnts = 0;
-				index = 0;
+				int comp = 0;
 				while (pCompIter && pCompIter->NextOne(&pComp) == AAFRESULT_SUCCESS)
 				{
 					aafBool		testBool;
@@ -327,49 +349,83 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					numCpnts++;
 					
 					checkResult(pComp->GetDataDef(&pDataDef));
+					checkResult(pDataDef->QueryInterface(IID_IAAFDataDef2, (void **) &pDataDef2));
+
+					checkResult(pDataDef->IsPictureKind(&testBool));
+					if (slot==0 && comp!=0) // picture
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+					else
+						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+
 					checkResult(pDataDef->IsSoundKind(&testBool));
-					checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+					if (slot==1) // sound
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+					else
+						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+
+					checkResult(pDataDef2->IsTimecodeKind(&testBool));
+					if (slot==2) // timecode
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+					else
+						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+
+					checkResult(pDataDef2->IsEdgecodeKind(&testBool));
+					if (slot==3) // edgecode
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+					else
+						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+
+
 					checkResult(pDataDef->IsMatteKind(&testBool));
 					checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 
-					if(index == 0)	// First segment is Picture with Matte, converts to picture
+					if (slot==0)
 					{
-						checkResult(pDataDef->IsDataDefOf(defs.ddPictureWithMatte(), &testBool));
-						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->IsPictureKind(&testBool));
+						// First component of picture slot has a picture with matte component
+						// so we can test that picture with matte converts _to_ picture here
+						if(comp == 0)
+						{
+							checkResult(pDataDef->IsDataDefOf(defs.ddPictureWithMatte(), &testBool));
+							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+							checkResult(pDataDef->IsPictureKind(&testBool));
+							checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+							checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
+							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+							checkResult(pDataDef->DoesDataDefConvertTo (defs.ddPicture(),
+																		&testBool));
+							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+						}
+						else // Second component is Picture, converts _from_ picture with Matte
+						{
+							checkResult(pDataDef->IsDataDefOf(defs.ddPicture(), &testBool));
+							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+							checkResult(pDataDef->IsPictureKind(&testBool));
+							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+							checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
+							checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+							checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddPictureWithMatte(), &testBool));
+							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+						}
+
+						checkResult(pDataDef->DoesDataDefConvertTo (defs.ddSound(), &testBool));
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
-						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->DoesDataDefConvertTo (defs.ddPicture(),
-																	&testBool));
-						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-					}
-					else		// First segment is Picture, converts from picture with Matte
-					{
-						checkResult(pDataDef->IsDataDefOf(defs.ddPicture(), &testBool));
-						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->IsPictureKind(&testBool));
-						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
+						checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddSound(), &testBool));
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddPictureWithMatte(), &testBool));
-						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+
 					}
-					checkResult(pDataDef->DoesDataDefConvertTo (defs.ddSound(), &testBool));
-					checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
-					checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddSound(), &testBool));
-					checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
-					
+
 					pComp->Release();
 					pComp = NULL;
+					pDataDef2->Release();
+					pDataDef2 = NULL;
 					pDataDef->Release();
 					pDataDef = NULL;
-					index++;
+					comp++;
 				}
 				
 				pCompIter->Release();
 				pCompIter = NULL;
-				                                                                                                                                                                                                                                                                                                                                                                           				
+
 				pSequence->Release();
 				pSequence = NULL;
 				
@@ -378,6 +434,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				
 				pSlot->Release();
 				pSlot = NULL;
+				slot++;
 			}
 			
 			pSlotIter->Release();
