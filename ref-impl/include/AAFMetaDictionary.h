@@ -48,7 +48,7 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Tue Mar 30 14:40:13 BST 2004
+// This file was generated on Tue Mar 30 17:20:40 BST 2004
 // by user phil on system pilot16.
 //
 // Key to macros.
@@ -4008,6 +4008,36 @@ AAF_CLASS(TimelineMobSlot,
     0x4b02,
     AAF_TYPE(Position),
     true,
+    false,
+    TimelineMobSlot)
+  AAF_PROPERTY(MarkIn,
+    // {07020103-010C-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x07020103,
+      0x010C, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x4b03,
+    AAF_TYPE(Position),
+    false,
+    false,
+    TimelineMobSlot)
+  AAF_PROPERTY(MarkOut,
+    // {07020103-0103-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x07020103,
+      0x0103, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x4b04,
+    AAF_TYPE(Position),
+    false,
+    false,
+    TimelineMobSlot)
+  AAF_PROPERTY(UserPos,
+    // {07020103-010D-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x07020103,
+      0x010D, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x4b05,
+    AAF_TYPE(Position),
+    false,
     false,
     TimelineMobSlot)
 AAF_CLASS_END(TimelineMobSlot,
