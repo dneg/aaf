@@ -45,7 +45,13 @@ ImplEnumAAFMobSlots::ImplEnumAAFMobSlots ()
 
 
 ImplEnumAAFMobSlots::~ImplEnumAAFMobSlots ()
-{}
+{
+	if (_mob)
+	{
+		_mob->ReleaseReference();
+		_mob = NULL;
+	}
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -151,7 +157,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		theEnum->ReleaseRef();
+		theEnum->ReleaseReference();
 		*ppEnum = NULL;
 	}
 
@@ -163,7 +169,14 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT
     ImplEnumAAFMobSlots::SetEnumMob(ImplAAFMob *aMob)
 {
+	if (_mob)
+		_mob->ReleaseReference();
+
 	_mob = aMob;
+
+	if (aMob)
+		aMob->AcquireReference();
+
 	return AAFRESULT_SUCCESS;
 }
 
