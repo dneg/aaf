@@ -269,10 +269,24 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef *      pTypeDef,
       ImplAAFPropertyDef ** ppPropDef)
 {
+  AAFRESULT hr;
   if (! pTypeDef)
 	return AAFRESULT_NULL_PARAM;
+
+  ImplAAFDictionarySP pDict;
+  hr = GetDictionary (&pDict);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  aafUID_t myAuid;
+  hr = GetAUID (&myAuid);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  // Test to see if this class is axiomatic; if so, then we can't
+  // augment it.
+  if (pDict->IsAxiomaticClass (myAuid))
+	return AAFRESULT_NOT_EXTENDABLE;
+
   aafUID_t typeId;
-  AAFRESULT hr;
   hr = pTypeDef->GetAUID (&typeId);
   if (AAFRESULT_FAILED (hr))
 	return hr;
