@@ -76,6 +76,9 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
+static const aafUID_t DDEF_TEST = 
+{ 0x81831639, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
+
 
 class EventTest
 {
@@ -253,19 +256,32 @@ void EventTest::CreateEvent()
   IAAFEventMobSlot *pEventMobSlot = NULL;
   IAAFSegment *pSegment = NULL;
   IAAFMobSlot *pMobSlot = NULL;
+  IAAFDataDef *pDataDef = NULL;
+  IAAFComponent *pComp = NULL;
   IAAFMob *pMob = NULL;
 
   CAAFBuiltinDefs defs (_pDictionary);
 
   try
   {
-    // Create an event (note: this will be replaced by a concrete event in a
+	  // not already in dictionary
+		checkResult(defs.cdDataDef()->
+					CreateInstance (IID_IAAFDataDef,
+									(IUnknown **)&pDataDef));
+	  hr = pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data");
+	  hr = _pDictionary->RegisterDataDef (pDataDef);
+
+	  // Create an event (note: this will be replaced by a concrete event in a
     // later version after such an event is implemented.)
     checkResult(defs.cdEvent()->
 				CreateInstance(IID_IAAFEvent, 
 							   (IUnknown **)&pEvent));
     checkResult(pEvent->SetPosition(_position));
     checkResult(pEvent->SetComment(const_cast<wchar_t*>(_eventComment)));
+	checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComp));
+	checkResult(pComp->SetDataDef(pDataDef));
+	pComp->Release();
+	pComp = NULL;
 
     // Get the segment inteface to the event to install into the mob slot.
     checkResult(pEvent->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
@@ -309,6 +325,18 @@ void EventTest::CreateEvent()
   {
     pMob->Release();
     pMob = NULL;
+  }
+
+  if (pDataDef)
+  {
+    pDataDef->Release();
+    pDataDef = NULL;
+  }
+
+  if (pComp)
+  {
+    pComp->Release();
+    pComp = NULL;
   }
 
   if (pMobSlot)

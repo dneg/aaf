@@ -164,12 +164,23 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(CoCreateGuid((GUID *)&NewMobID));
 		checkResult(pMob->SetMobID(NewMobID));
 		checkResult(pMob->SetName(L"AAFDataDefTest"));
+		// Add the master mob to the file
+		pHeader->AddMob(pMob);
 		
 		// Add mob slot w/ Sequence
 		checkResult(defs.cdSequence()->
 					CreateInstance(IID_IAAFSequence, 
 								   (IUnknown **)&pSequence));		
 		checkResult(pSequence->Initialize(defs.ddPicture()));
+		checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
+		
+		aafRational_t editRate = { 0, 1};
+		checkResult(pMob->AppendNewTimelineSlot(editRate,
+												pSegment,
+												1,
+												L"AAF Test Sequence",
+												0,
+												&pMobSlot));
 		
 		//
 		//	Add some segments.  Need to test failure conditions
@@ -198,25 +209,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pComponent->Release();
 			pComponent = NULL;
 		}
-		
-		checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
-		
-		aafRational_t editRate = { 0, 1};
-		checkResult(pMob->AppendNewTimelineSlot(editRate,
-												pSegment,
-												1,
-												L"AAF Test Sequence",
-												0,
-												&pMobSlot));
-		
+				
 		pMobSlot->Release();
 		pMobSlot = NULL;
 		
 		pSegment->Release();
 		pSegment = NULL;
 		
-		// Add the master mob to the file and cleanup
-		pHeader->AddMob(pMob);
 		
 	}
 	catch (HRESULT& rResult)
