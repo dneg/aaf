@@ -384,7 +384,7 @@ static void Test_GetActualType (
 static void Test_GetActualData (
   IUnknown *pUknownObject,
   IAAFPropertyDef * pIndirectPropertyDef,
-  IAAFTypeDef */*pActualType*/,
+  IAAFTypeDef * /*pActualType*/,
   aafUInt32 actualDataSize,
   aafDataBuffer_t actualData)
 {
