@@ -130,7 +130,7 @@ public:
     // @cmember Return the <p Key> of the <p Element> in the associated
     //          <c OMSet> at the position currently designated by this
     //          <c OMSetIterator>.
-   const Key key(void) const;
+   Key key(void) const;
 
 private:
 

@@ -133,7 +133,7 @@ public:
     // @cmember Return the <p Key> of the <p Value> in the associated
     //          <c OMRedBlackTree> at the position currently designated by this
     //          <c OMRedBlackTreeIterator>.
-   const Key key(void) const;
+   Key key(void) const;
 
 private:
 
