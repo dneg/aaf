@@ -196,7 +196,8 @@ const CLSID CLSID_AAFHeader =
 //  0.09   : Effect -> OperationGroup, EffectDefinition -> OperationDefinition,
 //           PlugInDescriptors -> PluginDescriptors.
 //  0.10   : remove OperationDefinition::PluginLocator and
-//           OperationDefinition::ManufacturerID.
+//           OperationDefinition::ManufacturerID,
+//           add TypeDefinitionExtendibleEnumeration.
 //
 
 // The following may change at run time depending on the file format
