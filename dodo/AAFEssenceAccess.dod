@@ -617,8 +617,8 @@ Returns the codec ID being used to handle the specified media.)
 AD_METHOD1(AddFrameIndexEntry,
 [in],aafInt64,frameOffset,add a frame offset to it's frame index,
 Adds a frame index entry for media which was added precompressed.)
-	//@comm This function should NOT be called when media is passed to the toolkit
-	// in an uncompressed format.
+	//@comm This function should NOT be called when media is passed to
+	//the reference implementation in an uncompressed format.
 	//@comm Possible Errors:<nl>
 	//	Standard errors (see top of file).<nl>
 	//	OM_ERR_INVALID_OP_CODEC -- This kind of media doesn't have a frame index<nl>
