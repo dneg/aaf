@@ -8,10 +8,10 @@ AAFDefObject\
 #c
 AD_HEAD
 
-AD_FORWARD_DECLARATION(AAFControlCodeDef)
+AD_FORWARD_DECLARATION(AAFParameterDef)
 AD_FORWARD_DECLARATION(AAFLocator)
 AD_FORWARD_DECLARATION(EnumAAFLocators)
-AD_FORWARD_DECLARATION(EnumAAFControlCodeDefs)
+AD_FORWARD_DECLARATION(EnumAAFParameterDefs)
 //AxD_FORWARD_DECLARATION(EnumAAFEffectDefs)
 
 
@@ -188,28 +188,28 @@ AD_METHOD1(SetBypass,
 		   Bypass media segment index,
 		   Sets the media segment index.)
 
-AD_XMETHOD1(AppendControlCodeDefs,
+AD_XMETHOD1(AppendParameterDefs,
 			[in],
 			objIn,
-			AAFControlCodeDef,
-			pAAFControlCodeDef, 
-			Control Code definition Object,
-			Add the Control Code Definition object to the list. )
+			AAFParameterDef,
+			pAAFParameterDef, 
+			Parameter definition Object,
+			Add the Parameter Definition object to the list. )
 
-AD_XMETHOD1(RemoveControlCodeDefs,
+AD_XMETHOD1(RemoveParameterDefs,
 			[in], 
 			objIn,
-			AAFControlCodeDef,
-			pAAFControlCodeDef, 
-			Control Code definition Object,
-			Remove the Control Code Definition object from the list. )
+			AAFParameterDef,
+			pAAFParameterDef, 
+			Parameter definition Object,
+			Remove the Parameter Definition object from the list. )
 
-AD_XMETHOD1(GetControlCodeDefinitions,
+AD_XMETHOD1(GetParameterDefinitions,
 			[out\,retval], 
 			objOut,
-			EnumAAFControlCodeDefs,
+			EnumAAFParameterDefs,
 			ppEnum, 
-			ControlCode definition enumeration,
-			Return an enumerator for aaf control code definition.)
+			Parameter definition enumeration,
+			Return an enumerator for aaf Parameter definition.)
 
 AD_CLASS_END
