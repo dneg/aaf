@@ -19,10 +19,10 @@ AAFPERSISTENTOBJECTS = \
 	AAFDefObject \
 	AAFDOSLocator \
 	AAFEffectDef \
-	AAFEffectInvocation \
 	AAFEvent \
 	AAFEventMobSlot \
 	AAFGPITrigger \
+	AAFGroup \
 	AAFJPEGData \
 	AAFHTMLClip \
 	AAFHTMLData \
@@ -52,7 +52,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFTIFFDescriptor \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
-	AAFTransition \
 	AAFTypeDef \
 	AAFTypeDefArray \
 	AAFTypeDefInt \
@@ -130,6 +129,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTimecode \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
+	AAFTransition \
 	AAFWAVEDescriptor \
 	EnumAAFComponents \
 	EnumAAFEssenceData \
