@@ -147,18 +147,26 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pDataDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+  // Make sure objects are already attached (to the dictionary).
+  if (!pDataDef->attached() || !pOperationDef->attached())
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
+
 	XPROTECT()
 	{
 		CHECK(SetNewProps(length, pDataDef));
-		// find out if this OperationDef is already set
-		if(!_operationDefinition.isVoid())
-		{
-			pOldOperationDef = _operationDefinition;
-			if (pOldOperationDef != 0)
-				pOldOperationDef->ReleaseReference();
-		}
+
+    // The operation definition is a weak reference that is
+    // owned by the dictionary so we do NOT need to reference
+    // count it.
+//    // find out if this OperationDef is already set
+//		if(!_operationDefinition.isVoid())
+//		{
+//			pOldOperationDef = _operationDefinition;
+//			if (pOldOperationDef != 0)
+//				pOldOperationDef->ReleaseReference();
+//		}
 		_operationDefinition = pOperationDef;
-		pOperationDef->AcquireReference();
+//		pOperationDef->AcquireReference();
 	}
 	XEXCEPT
 	{
@@ -191,6 +199,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(OperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
+
+  // Make sure object is already attached (to the dictionary).
+  if (!OperationDef->attached())
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
 
 	assert(_operationDefinition.isVoid());
 	_operationDefinition = OperationDef;
@@ -342,6 +354,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pValue == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+  // Make sure object is not already attached.
+  if (pValue->attached())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	_parameters.appendValue(pValue);
 	pValue->AcquireReference();
 
@@ -353,6 +369,13 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::AppendInputSegment (ImplAAFSegment * value)
 {
+	if(value == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+  // Make sure object is not already attached.
+  if (value->attached())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	_inputSegments.appendValue(value);
 	value->AcquireReference();
 
@@ -389,6 +412,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(sourceRef == NULL)
 		return AAFRESULT_NULL_PARAM;
+
+  // Make sure object is not already attached.
+  if (sourceRef->attached())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	_rendering = sourceRef;
 	_rendering->AcquireReference();
