@@ -1,13 +1,18 @@
 #include "OMAssertions.h"
 
-#if defined(OM_ENABLE_STACK_TRACE)
-#include "OMStackTrace.h"
-#endif
+#if defined (OM_ENABLE_DEBUG)
 
 #include <string.h>
 
 #include <iostream.h>
 #include <stdlib.h>
+
+#include "OMUtilities.h"
+
+#if defined(OM_ENABLE_STACK_TRACE)
+#include "OMStackTrace.h"
+#endif
+
 
 void reportAssertionFailure(char* kind,
                             char* name,
@@ -33,11 +38,6 @@ void reportAssertionFailure(char* kind,
 #endif
 }
 
-void trace(const char* routine)
-{
-  cerr << "Enter \"" << routine << "\"." << endl;
-}
-
 bool validString(const char* string)
 {
   return ((string != 0) && (strlen(string) > 0));
@@ -45,5 +45,21 @@ bool validString(const char* string)
 
 bool validWideString(const wchar_t* string)
 {
-  return (string != 0);
+  return (string != 0) /* && (lengthOfWideString(string) > 0) */;
 }
+
+bool validOMWideString(const OMWideCharacter* string)
+{
+  return (string != 0) /* && (lengthOfOMWideString(string) > 0) */;
+}
+
+#if defined (OM_ENABLE_TRACE)
+
+void trace(const char* routine)
+{
+  cerr << "Enter \"" << routine << "\"." << endl;
+}
+
+#endif
+
+#endif

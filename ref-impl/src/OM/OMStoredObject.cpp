@@ -1252,9 +1252,9 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
   PRECONDITION("Valid output buffer", wcName != 0);
   PRECONDITION("Valid output buffer size", length > 0);
 
-  size_t sourceLength = wideStringLength(name);
+  size_t sourceLength = lengthOfWideString(name);
   if (sourceLength + 1 < length) {
-    wideStringCopy(wcName, name, sourceLength + 1);
+    copyWideString(wcName, name, sourceLength + 1);
   } else {
     cerr << getProgramName()
       << ": Error : Conversion failed."

@@ -10,12 +10,20 @@
 
 #if defined (OM_ENABLE_DEBUG)
 
+#include "OMDataTypes.h"
+
 void reportAssertionFailure(char* kind,
                             char* name,
                             char* expressionString,
                             char* routine,
                             char* fileName,
                             size_t lineNumber);
+
+bool validString(const char* string);
+
+bool validWideString(const wchar_t* string);
+
+bool validOMWideString(const OMWideCharacter* string);
 
 #if defined(OM_ENABLE_TRACE)
 
@@ -69,9 +77,5 @@ void trace(const char* routine);
 #define IMPLIES(a, b)
 
 #endif
-
-bool validString(const char* string);
-
-bool validWideString(const wchar_t* string);
 
 #endif
