@@ -35,7 +35,7 @@
 #define DEFAULT_NUM_DATAOBJ			200
 
 extern "C" const aafClassID_t	CLSID_AAFContentStorage;
-OMDEFINE_STORABLE(AAFContentStorage, CLSID_AAFContentStorage);
+OMDEFINE_STORABLE(ImplAAFContentStorage, CLSID_AAFContentStorage);
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
 

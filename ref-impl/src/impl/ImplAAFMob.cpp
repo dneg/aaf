@@ -214,8 +214,8 @@ AAFRESULT STDMETHODCALLTYPE
 	aafInt32 index = 0;
 	aafErr_t aafError = OM_ERR_NONE;
 	ImplAAFMob *mobPtr = NULL;
-	ImplAAFHeader *head;
-	ImplAAFContentStorage	*cstore;
+//	ImplAAFHeader *head;
+//	ImplAAFContentStorage	*cstore;
 	XPROTECT()
 	  {
 		/* Remember the old mob ID so it can be removed from the hash table */
@@ -1130,7 +1130,7 @@ AAFRESULT
 
 extern "C" const aafClassID_t CLSID_AAFMob;
 
-OMDEFINE_STORABLE(AAFMob, CLSID_AAFMob);
+OMDEFINE_STORABLE(ImplAAFMob, CLSID_AAFMob);
 
 
 
