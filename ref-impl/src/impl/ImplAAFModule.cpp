@@ -49,6 +49,7 @@
 #include "OMUtilities.h"
 #include "OMRawStorage.h"
 #include "OMDiskRawStorage.h"
+#include "OMCachedDiskRawStorage.h"
 #include "OMMemoryRawStorage.h"
 
 #include "ImplAAFSmartPointer.h"
@@ -1063,14 +1064,76 @@ ImplAAFCreateRawStorageDisk
 
 STDAPI
 ImplAAFCreateRawStorageCachedDisk
-  (aafCharacter_constptr /* pFilename */,
-   aafFileExistence_t /* existence */,
-   aafFileAccess_t /* access */,
-   aafUInt32  /* pageCount */,
-   aafUInt32  /* pageSize */,
-   ImplAAFRawStorage ** /* ppNewRawStorage */)
+  (aafCharacter_constptr pFilename,
+   aafFileExistence_t existence,
+   aafFileAccess_t access,
+   aafUInt32  pageCount,
+   aafUInt32  pageSize,
+   ImplAAFRawStorage ** ppNewRawStorage)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pFilename)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! ppNewRawStorage)
+	return AAFRESULT_NULL_PARAM;
+
+  OMRawStorage * stg = 0;
+
+  if (kAAFFileExistence_new == existence)
+	{
+	  switch (access)
+		{
+		case kAAFFileAccess_read:
+		  return AAFRESULT_WRONG_OPENMODE;		  
+		  break;
+		case kAAFFileAccess_write:
+		case kAAFFileAccess_modify:
+		  stg = OMCachedDiskRawStorage::openNewModify (pFilename, pageSize, pageCount);
+		  break;
+		default:
+		  return AAFRESULT_WRONG_OPENMODE;		  
+		}
+	}
+  else if (kAAFFileExistence_existing == existence)
+	{
+	  switch (access)
+		{
+		case kAAFFileAccess_read:
+		  stg = OMCachedDiskRawStorage::openExistingRead (pFilename, pageSize, pageCount);
+		  break;
+		case kAAFFileAccess_write:
+		case kAAFFileAccess_modify:
+		  stg = OMCachedDiskRawStorage::openExistingModify (pFilename, pageSize, pageCount);
+		  break;
+		default:
+		  return AAFRESULT_WRONG_OPENMODE;		  
+		}
+	}
+  else
+	{
+	  return AAFRESULT_WRONG_OPENMODE;
+	}
+
+  assert (stg);
+  ImplAAFRawStorage * prs = 0;
+  if (stg->isPositionable ())
+	prs = static_cast<ImplAAFRawStorage *>
+	  (::CreateImpl(CLSID_AAFRandomRawStorage));
+  else
+	prs = static_cast<ImplAAFRawStorage *>
+	  (::CreateImpl(CLSID_AAFRawStorage));
+
+  if(!prs)
+	{
+	  delete stg;
+	  return AAFRESULT_NOMEMORY;
+	}
+
+  prs->Initialize (stg, access);
+
+  assert (ppNewRawStorage);
+  *ppNewRawStorage = prs;
+  return AAFRESULT_SUCCESS;
 }
 
 STDAPI
