@@ -1000,7 +1000,15 @@ AD_CPP_QUOTE(} aafSearchDictionaryCrit_t;)
 
 AD_CPP_QUOTE(/**************************/)
 AD_CPP_QUOTE(#ifndef STDMETHODCALLTYPE)
-AD_CPP_QUOTE(#define STDMETHODCALLTYPE __stdcall)
+AD_CPP_QUOTE(\  #ifndef _MSC_VER)
+AD_CPP_QUOTE(\    #ifdef __SC__)
+AD_CPP_QUOTE(\      #define STDMETHODCALLTYPE _cdecl)
+AD_CPP_QUOTE(\    #else)
+AD_CPP_QUOTE(\      #define STDMETHODCALLTYPE)
+AD_CPP_QUOTE(\    #endif)
+AD_CPP_QUOTE(\  #else)
+AD_CPP_QUOTE(\    #define STDMETHODCALLTYPE __stdcall)
+AD_CPP_QUOTE(\  #endif)
 AD_CPP_QUOTE(#endif)
 
 
