@@ -56,9 +56,9 @@ template <typename Key, typename Element>
 void OMSet<Key, Element>::insert(const Element value)
 {
   TRACE("OMSet<Key, Element>::insert");
+  PRECONDITION("Element not present", !_tree.contains(value.identification()));
 
-  _tree.insert(value.identification() ,value);
-
+  _tree.insert(value.identification(), value);
 }
 
   // @mfunc Does this <c OMSet> contain <p value> ?
