@@ -160,15 +160,6 @@ HRESULT CAAFTypeDefStream_test()
     result = rhr;
   }
 
-  if (SUCCEEDED (result))
-  {
-    cout << "The following IAAFTypeStream methods have not been tested yet:" << endl;
-    cout << "     HasStoredByteOrder" << endl;
-    cout << "     GetStoredByteOrder" << endl;
-    cout << "     SetStoredByteOrder" << endl;
-    cout << "     ClearStoredByteOrder" << endl;
-    result = AAFRESULT_TEST_PARTIAL_SUCCESS;
- }
   return result;
 }
 
@@ -296,6 +287,29 @@ static void Test_EssenceStreamWrite(
 {
   IAAFTypeDefStreamSP pTypeDefStream;
   Test_GetTypeDefStream(pStreamPropertyValue, &pTypeDefStream);
+
+  // Check the byte order of the stream.
+  aafBoolean_t hasByteOrder;
+  eAAFByteOrder_t byteOrder;
+  checkResult(pTypeDefStream->HasStoredByteOrder(pStreamPropertyValue, &hasByteOrder));
+  // The byte order has never...
+  checkExpression(kAAFFalse == hasByteOrder, AAFRESULT_TEST_FAILED);
+  // Set the byte order of the stream to little endian...
+  checkResult(pTypeDefStream->SetStoredByteOrder(pStreamPropertyValue, kAAFByteOrderLittle));
+  checkResult(pTypeDefStream->HasStoredByteOrder(pStreamPropertyValue, &hasByteOrder));
+  checkExpression(kAAFTrue == hasByteOrder, AAFRESULT_TEST_FAILED);
+  checkResult(pTypeDefStream->GetStoredByteOrder(pStreamPropertyValue, &byteOrder));
+  checkExpression(kAAFByteOrderLittle == byteOrder, AAFRESULT_TEST_FAILED);
+  // Change the byte order.
+  checkResult(pTypeDefStream->ClearStoredByteOrder(pStreamPropertyValue));
+  checkResult(pTypeDefStream->HasStoredByteOrder(pStreamPropertyValue, &hasByteOrder));
+  checkExpression(kAAFFalse == hasByteOrder, AAFRESULT_TEST_FAILED);
+  // Set the byte order of the stream to big endian...
+  checkResult(pTypeDefStream->SetStoredByteOrder(pStreamPropertyValue, kAAFByteOrderBig));
+  checkResult(pTypeDefStream->HasStoredByteOrder(pStreamPropertyValue, &hasByteOrder));
+  checkExpression(kAAFTrue == hasByteOrder, AAFRESULT_TEST_FAILED);
+  checkResult(pTypeDefStream->GetStoredByteOrder(pStreamPropertyValue, &byteOrder));
+  checkExpression(kAAFByteOrderBig == byteOrder, AAFRESULT_TEST_FAILED);
 
   // Get the current position
   aafInt64 streamSize, expectedSize, streamPosition, expectedPosition;
