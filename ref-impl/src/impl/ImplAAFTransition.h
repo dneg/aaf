@@ -18,7 +18,6 @@
 #include "AAFTypes.h"
 #endif
 
-class ImplAAFEffectInvocation;
 
 class ImplAAFDataDef;
 
