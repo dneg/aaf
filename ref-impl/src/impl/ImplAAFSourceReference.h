@@ -34,6 +34,7 @@
 
 #include "ImplAAFObject.h"
 
+#include "OMArrayProperty.h"
 #include "OMStorable.h"
 
 class ImplAAFSourceReference : public ImplAAFSegment
@@ -154,8 +155,8 @@ public:
 private:
 	OMFixedSizeProperty<aafMobID_t>	_sourceID;
 	OMFixedSizeProperty<aafInt32>	_sourceMobSlotId;
-	OMVariableSizeProperty<aafUInt32> _channelIDs;
-	OMVariableSizeProperty<aafUInt32> _monoSourceSlotIDs;
+	OMArrayProperty<aafUInt32> _channelIDs;
+	OMArrayProperty<aafUInt32> _monoSourceSlotIDs;
 
 };
 
