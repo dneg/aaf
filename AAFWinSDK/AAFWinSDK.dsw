@@ -3,6 +3,21 @@ Microsoft Developer Studio Workspace File, Format Version 5.00
 
 ###############################################################################
 
+Project: "AAFCPPTST"=".\Test\cpp\AAFCPPTST.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name cppapi
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "ComTestAAF"=".\examples\com-api\ComTestAAF\ComTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -13,21 +28,6 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name comapi
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "CppAAFInfo"=".\examples\cpp-api\CppAAFInfo\CppAAFInfo.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name cppapi
     End Project Dependency
 }}}
 
@@ -69,13 +69,16 @@ Package=<4>
     Project_Dep_Name OM
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name CppAAFInfo
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name CppTestAAF
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name ComTestAAF
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name aafcomtst
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFCPPTST
     End Project Dependency
 }}}
 
@@ -104,6 +107,21 @@ Package=<5>
 
 Package=<4>
 {{{
+}}}
+
+###############################################################################
+
+Project: "aafcomtst"=".\Test\com\aafcomtst.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name comapi
+    End Project Dependency
 }}}
 
 ###############################################################################
