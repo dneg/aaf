@@ -159,7 +159,8 @@ HRESULT STDMETHODCALLTYPE
         aafUID_t  essenceKind,
         aafInt16 *  pNumChannels)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	*pNumChannels = 1;		//!!!
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -189,7 +190,8 @@ HRESULT STDMETHODCALLTYPE
         aafMediaOpenMode_t  openMode,
         IAAFEssenceStream * stream)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	_stream = stream;
+	return AAFRESULT_SUCCESS;
 }
 
 	
@@ -266,7 +268,8 @@ HRESULT STDMETHODCALLTYPE
         aafDataBuffer_t  buffer,
         aafUInt32 *  bytesRead)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	_stream->Read (buflen, buffer, bytesRead);
+	return HRESULT_SUCCESS;
 }
 
 
