@@ -55,7 +55,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDefaultStream::Seek (aafUInt32  byteOffset)
+    CAAFDefaultStream::Seek (aafInt64  byteOffset)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -69,7 +69,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFDefaultStream::IsPosValid (aafUInt32  byteOffset,
+    CAAFDefaultStream::IsPosValid (aafInt64  byteOffset,
         aafBool *  isValid)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
