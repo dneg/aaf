@@ -63,15 +63,19 @@
 typedef HRESULT (*AAFModuleTestProc)(); 
 
 
-typedef struct tagAAFObjectTestInfo
+struct AAFObjectTestInfo
 {
 	LPCSTR pClassName;
 	AAFModuleTestProc pfnTestProc;
-} AAFObjectTestInfo_t;
+
+  // Encapsulate the test proc so that we can trap exceptions
+  // in one place.
+  HRESULT CallTestProc(void) const;
+};
 
 
 
-#define AAF_BEGIN_OBJECT_MAP(x) static AAFObjectTestInfo_t x[] = {
+#define AAF_BEGIN_OBJECT_MAP(x) static AAFObjectTestInfo x[] = {
 #define AAF_OBJECT_ENTRY(xclass) { #xclass, &C##xclass##_test },
 #define AAF_END_OBJECT_MAP() { NULL, NULL } };
 
@@ -80,7 +84,23 @@ typedef struct tagAAFObjectTestInfo
 #include "AAFObjectTable.h"
 
 
-
+// Encapsulate the test proc so that we can trap exceptions
+// in one place.
+HRESULT AAFObjectTestInfo::CallTestProc(void) const
+{
+  HRESULT result = S_OK;
+  try
+  {
+    // Call the module test.
+    result = (*pfnTestProc)();
+  }
+  catch (...)
+  {
+    result = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+  
+  return (result);
+}
 
 
 // Implementation
@@ -124,7 +144,7 @@ HRESULT CAAFModuleTest::Test
 			{
 				cout << "Testing " << AAFObjectMap[index].pClassName << " ...." << endl;
 
-				hr = AAFObjectMap[index].pfnTestProc();
+				hr = AAFObjectMap[index].CallTestProc();
 
 				cout << "Module test for " << setiosflags(ios::left) << setw(38) << AAFObjectMap[index].pClassName;
 
@@ -134,6 +154,8 @@ HRESULT CAAFModuleTest::Test
 					cout<< "PARTIAL SUCCESS\n" << endl;
 				else if (AAFRESULT_NOT_IMPLEMENTED == hr)
 					cout << "NOT IMPLEMENTED!\n" << endl;
+				else if (AAFRESULT_UNEXPECTED_EXCEPTION == hr)
+					cout << "FAILED WITH UNEXPECTED EXCEPTION!\n" << endl;
 				else
 					cout << "FAILED!\n" << endl;
 					
@@ -154,7 +176,7 @@ HRESULT CAAFModuleTest::Test
 		while (NULL != AAFObjectMap[testCount].pClassName && MAX_TEST_COUNT > testCount)
 		{
 			cout<< "  "<< AAFObjectMap[testCount].pClassName << endl;
-			testResults[testCount] = AAFObjectMap[testCount].pfnTestProc();
+			testResults[testCount] = AAFObjectMap[testCount].CallTestProc();
 
 			++testCount;
 			if ( MAX_TEST_COUNT <= testCount ) 
