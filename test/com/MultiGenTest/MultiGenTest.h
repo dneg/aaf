@@ -18,6 +18,9 @@
 //
 //=---------------------------------------------------------------------=
 
+#ifndef MULTIGENTEST_H
+#define MULTIGENTEST_H
+
 #include <AAFTypes.h>
 #include <AAF.h>
 #include <AAFSmartPointer.h>
@@ -221,3 +224,4 @@ private:
 }
 
 //=---------------------------------------------------------------------=
+#endif		// MULTIGENTEST_H
