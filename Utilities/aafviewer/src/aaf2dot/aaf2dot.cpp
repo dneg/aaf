@@ -372,7 +372,7 @@ int main( int argc, char** argv )
    }
 
    catch ( const AxEx& ex ) {
-      wcout << ex.what() << endl;
+      cout << ex.what() << endl;
       return -1;
    }
 
