@@ -36,6 +36,7 @@ RM = rm
 # common targets
 #
 baseclean:
+	${RM} -f *.x86 *.xix *.xnt *.exe
 	${RM} -f *.o *.o86 *.oix *.ont *.obj
 	${RM} -f *.a *.a86 *.aix *.ant *.lib
 	${RM} -f *.dll *.ilk *.pdb *.exp
