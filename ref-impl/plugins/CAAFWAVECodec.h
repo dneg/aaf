@@ -56,6 +56,8 @@ public:
      (void);
 
 
+  STDMETHOD (SetEssenceAccess)
+    (/*[in]*/ IUnknown *access); // Set the AAFEssenceAccess used as a factory for AAFEssenceFormat
 
   // Some codecs have variants handled by a single codec.
 	// (For example, the Avid AVR codec handles multiple AVRs.)
@@ -223,7 +225,11 @@ public:
   // Supply an essence format object specifying what data is
 			// required, and it is filled in with the data values.
   STDMETHOD (GetEssenceFormat)
-    (/*[in,out]*/ IAAFEssenceFormat *pFormat); // An essence format object 
+    (/*[in]*/ IAAFEssenceFormat *pTemplate, // An essence format template object 
+    /*[out]*/ IAAFEssenceFormat **pResult); // An essence format result object 
+
+  STDMETHOD (GetEssenceFormatList)
+    (/*[out]*/ IAAFEssenceFormat **pFormat); // An essence format result object 
 
 
 protected:
@@ -251,6 +257,7 @@ public:
 private:
 	IAAFEssenceStream	*_stream;
 	IAAFWAVEDescriptor	*_mdes;
+	IAAFEssenceAccess	*_access;
 	AAFByteOrder		_nativeByteOrder;
 	aafRational_t		_sampleRate;
 	aafUInt16			_bitsPerSample;
