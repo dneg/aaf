@@ -41,4 +41,8 @@ void main ()
 
 	  exit (1);
 	}
+  else
+	{
+	  cout << "Succeeded." << endl;
+	}
 }
