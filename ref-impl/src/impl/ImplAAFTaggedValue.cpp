@@ -116,9 +116,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(dict != NULL)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 		if(head != NULL)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 	}
 	XEND;
 

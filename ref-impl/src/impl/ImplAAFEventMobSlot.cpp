@@ -214,10 +214,13 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
   {
     if (NULL != pComponent)
       pComponent->ReleaseReference();
+	pComponent = 0;
     if (NULL != pDict)
       pDict->ReleaseReference();
+	pDict = 0;
     if (NULL != pDef)
       pDef->ReleaseReference();
+	pDef = 0;
   }
   XEND;
 
