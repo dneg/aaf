@@ -19,7 +19,7 @@
 #include "ImplAAFSegment.h"
 #endif
 
-const int PID_TIMECODE_TC           = 5;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFTimecode : public ImplAAFSegment
 {
