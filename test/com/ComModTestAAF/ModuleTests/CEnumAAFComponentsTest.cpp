@@ -324,11 +324,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 
 
-    // TEMPORARY: make sure the content storage object is created and 
-    // persisted in the file...
-    aafInt32 numMobs = 0;
-    checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
-
     // Get the AAF Dictionary so that we can create valid AAF objects.
     checkResult(pHeader->GetDictionary(&pDictionary));
  
