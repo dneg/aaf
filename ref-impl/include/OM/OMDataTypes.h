@@ -146,6 +146,8 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
+#else
+#error "Unknown compiler"
 #endif
 
 typedef OMUInt8                OMByte;
