@@ -23,6 +23,7 @@ color Pale-Blue           CCFFFF
 color Pale-Magenta        FFCCFF
 color Yellow              FFFFCC
 color Blue                CCCCFF
+color Magenta             FF00FF
 color Green               00FF00
 
 # Components
@@ -40,7 +41,7 @@ component Reference-Implementation Pink
   ref-impl/aaflib/
 end
 
-component API Grey
+component API Magenta
   ref-impl/src/com-api/
   ref-impl/include/com-api/
   ref-impl/include/ref-api
