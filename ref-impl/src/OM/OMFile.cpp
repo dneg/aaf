@@ -925,6 +925,10 @@ void OMFile::readSignature(OMRawStorage* rawStorage,
                    sizeof(signature),
                    count);
   ASSERT("All bytes read", count == sizeof(signature));
+
+  if (hostByteOrder() != littleEndian) {
+    OMStoredObject::reorderUniqueObjectIdentification(signature);
+  }
 }
 
 OMFile::OMFileEncoding OMFile::encodingOf(const OMFileSignature& signature)
