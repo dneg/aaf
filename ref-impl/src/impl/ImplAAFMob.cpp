@@ -1365,7 +1365,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	aafSlotID_t				nextTrackID;
 	ImplAAFFindSourceInfo	*sourceInfo;
 	ImplAAFComponent		*leafObj = NULL;
-	ImplAAFEffectInvocation	*effeObject;
+	ImplAAFGroup	*effeObject;
 	
 	if(ppSourceInfo == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -1459,7 +1459,7 @@ AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 								  ImplAAFComponent **foundObj,
 								  aafLength_t *minLength,
 								  aafBool *foundTransition,
-								  ImplAAFEffectInvocation **effeObject,
+								  ImplAAFGroup **effeObject,
 								  aafInt32	*nestDepth,
 								  aafPosition_t *diffPos)
 {
@@ -1600,7 +1600,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	ImplAAFPulldown			*pulldownObj = NULL;
 	ImplAAFSegment			*rootObj = NULL;
 	ImplAAFComponent		*leafObj = NULL;
-	ImplAAFEffectInvocation	*effeObject = NULL;
+	ImplAAFGroup	*effeObject = NULL;
 	ImplAAFMob				*nextMob = NULL;
 	aafSlotID_t				foundTrackID;
 	aafBool					nextFoundSource = AAFFalse, foundTransition = AAFFalse;

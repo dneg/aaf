@@ -89,7 +89,7 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFFindSourceInfo::Clear(void)
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFindSourceInfo::SetEffect(
-										ImplAAFEffectInvocation *effect)
+										ImplAAFGroup *effect)
 {
 	_effect = effect;
 	return AAFRESULT_SUCCESS;
