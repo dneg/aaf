@@ -101,24 +101,24 @@ HRESULT CAAFModuleTest::InternalQueryInterface
 	return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
 }
 
+#define MAX_TEST_COUNT 1000
 
 STDMETHODIMP CAAFModuleTest::Test
 (
 	unsigned char *pClassName
 )
 {
-	HRESULT hr = S_OK;
+	HRESULT		hr = S_OK;
+	HRESULT		testResults[MAX_TEST_COUNT];	/* table of HR's for all test */
 
-	aafUInt32	index = 0; // index counter for AAFObjectMap table search - TS
+	aafInt16 	testCount = 0;	/* total number of Mod test objects attemped to find */
+	aafInt16	passCount = 0;	/* number of tests that succeeded */
+	aafInt16	failCount = 0;	/* number of tests that failed */
+	aafInt16	runCount = 0;	/* number of tests that were run */
+	aafInt16	nImplCount = 0;	/* number of tests not implemented */
+	aafInt32	index = 0;		/* General purpose index counter */ 
 
-	struct STAT_t	// Tests results stats struct - TS
-	{
-		aafInt16 	num_run;	/* total number of tests run */
-		aafInt16	num_failed;	/* number of tests that failed */
-		aafInt32	result[1000];	/* and the result of the test */
-	} stats = { 0, 0, NULL };
-
-
+	testResults[0] = NULL;
 
 	// Search the object table for the given class id.
 
@@ -148,55 +148,53 @@ STDMETHODIMP CAAFModuleTest::Test
 	}
 	else
 	{
-		while (NULL != AAFObjectMap[stats.num_run].pCLSID)
+		while (NULL != AAFObjectMap[testCount].pCLSID && MAX_TEST_COUNT > testCount)
 		{
-			cout << "Running module test for " << setiosflags(ios::left) << setw(30) << AAFObjectMap[stats.num_run].pClassName;
+			cout << "Running module test for " << setiosflags(ios::left) << setw(30) << AAFObjectMap[testCount].pClassName;
 
-			hr = AAFObjectMap[stats.num_run].pfnTestProc();
-			if (FAILED(hr))
-			{
-				cout << "FAILED!" << endl;
-				++stats.num_failed;
-			}
-			else if (AAFRESULT_NOT_IMPLEMENTED == hr)
-			{
-				cout << "NOT IMPLEMENTED!" << endl;
-				++stats.num_failed;
-			}
+			testResults[testCount] = AAFObjectMap[testCount].pfnTestProc();
+			if ( AAFRESULT_SUCCESS == testResults[testCount] )
+				cout<< "SUCCEEDED." << endl;		
+			else if ( FAILED(testResults[testCount]) )
+				cout<< "FAILED" << endl;
+			else if ( AAFRESULT_NOT_IMPLEMENTED == testResults[testCount] )
+				cout<< "NOT IMPLEMENTED!" << endl;
 			else
-				cout << "SUCCEEDED." << endl;
+				cout<< "UNKNOWN HRESULT!" << endl;
 
-			stats.result[stats.num_run] = hr;
-			++stats.num_run;
+			++testCount;
+			if ( MAX_TEST_COUNT <= testCount ) 
+				cout << "\n\nMAX_TEST_COUNT has been reached\n";
 		}
 
-		cout<< stats.num_run<< " Test(s) Run\n";
-		cout<< stats.num_failed<< " Failed\n"<< endl;
-
-		/*	This is being commented out because until implementation, all tests fail
-		/* list of all tests that failed */
-	/*	if ( stats.num_failed > 0 )
+		/* Tally the hresult stats */
+		for (index = 0; index < testCount; ++index)
 		{
-			cout << "\n" << "List of tests that failed" << endl;
-			for ( index = 0; index < stats.num_run; ++index )
-				switch (stats.result[index])
-			{
-				case 0:
-					break;
-				case -1:
-					cout<< AAFObjectMap[index].pClassName << "	"<< "FAILED!"<< endl;
-					break;
-				case 1:
-					cout<< AAFObjectMap[index].pClassName << "	"<< "NOT IMPLEMENTED"<< endl;
-					break;
-				case -2:
-					cout<< AAFObjectMap[index].pClassName << "	"<< "Not found in table"<< endl;
-					break;
-				default:
-					cout<< AAFObjectMap[index].pClassName << "	"<< "UNKOWN RESULT"<< endl;
-			}
+			if (AAFRESULT_SUCCESS == testResults[index])
+				++passCount;
+			if (AAFRESULT_NOT_IMPLEMENTED == testResults[index])
+				++nImplCount;
+			if (0 > testResults[index])
+				++failCount;
 		}
-	*/
+		runCount = passCount + nImplCount + failCount;
+
+		cout<< "\n\n";
+		cout<< setw(20)<< "  Tests Run:"<< runCount << endl;
+		cout<< setw(20)<< "  Passed:"<< passCount << endl;
+		cout<< setw(20)<< "  Failed:"<< failCount << endl; 
+		cout<< setw(20)<< "  Not Implemented:"<< nImplCount<< endl<< endl;
+
+		if (runCount != testCount)
+			cout<< setw(20)<< "  Unknown HRESULTS:"<< testCount - runCount<< endl << endl;	
+
+		if ( failCount > 0 )
+		{
+			cout<< "\nList of tests that failed" << endl;
+			for ( index = 0; index <= testCount; ++index )
+				if (0 > testResults[index])
+					cout<< AAFObjectMap[index].pClassName << "	"<< endl;
+		}
 	}
 
 	return hr;
