@@ -22,6 +22,7 @@
 #include "AAFResult.h"
 
 #include <assert.h>
+#include "AAFPluginManager.h"
 
 #if defined(__MWERKS__)
 #include <wstring.h>	// include wcslen declaration.
@@ -37,13 +38,31 @@ extern "C" const aafClassID_t CLSID_AAFFile;
   if (! _singleton)
 	{
 	  _singleton = new ImplAAFSession;
+	  _singleton->InitPluginManager(); 
 	}
   return _singleton;
 }
 
 
+
 ImplAAFSession::ImplAAFSession ()
-{}
+{
+	_plugins = NULL;
+}
+
+void ImplAAFSession::InitPluginManager (void)
+{
+	if(_plugins == NULL)
+	{
+		_plugins = new AAFPluginManager;
+		_plugins->Init();
+	}
+}
+
+class AAFPluginManager *ImplAAFSession::GetPluginManager (void)
+{
+	return(_plugins);
+}
 
 
 ImplAAFSession::~ImplAAFSession ()
