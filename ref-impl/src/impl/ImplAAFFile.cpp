@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -203,6 +203,9 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 	// Answer: because none of them are implemented yet.
 	_modeFlags = modeFlags;
 
+    if (!OMFile::hasFactory(ENCODING(aafFileKindAafSSBinary)))
+      return AAFRESULT_FILEKIND_NOT_REGISTERED;
+
 	try
 	{
 		// Ask the OM to open the file.
@@ -324,6 +327,9 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	//
 	// Answer: because none of them are implemented yet.
 	_modeFlags = modeFlags;
+
+    if (!OMFile::hasFactory(ENCODING(aafFileKindAafSSBinary)))
+      return AAFRESULT_FILEKIND_NOT_REGISTERED;
 
 	try 
 	{
@@ -452,6 +458,9 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 
 	if (modeFlags)
 	  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+
+    if (!OMFile::hasFactory(ENCODING(aafFileKindAafSSBinary)))
+      return AAFRESULT_FILEKIND_NOT_REGISTERED;
 
 	try
 	{
@@ -640,6 +649,9 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 	case kAAFFileExistence_new:
 	  if (! pFileKind)
 		return AAFRESULT_NULL_PARAM;
+
+      if (!OMFile::hasFactory(ENCODING(*pFileKind)))
+        return AAFRESULT_FILEKIND_NOT_REGISTERED;
 
 	  // Check to see if signature specifies Binary Structured
 	  // Storage; if so, raw storage must be at least readable, even
