@@ -1,0 +1,123 @@
+#startm .this-module 0
+AAFEffectInvocation\
+#endm
+#c
+#startm .parent-module 0
+AAFSegment\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#import ./AAFSegment.exp
+AD_HEAD
+
+AD_INCLUDE(AAFTypes)
+
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFEffectDefinition)
+AD_FORWARD_DECLARATION(AAFParameter)
+AD_FORWARD_DECLARATION(AAFParameterSlot)
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN
+
+AD_CONSTRUCTOR3(
+	[in], AAFDataDefinition *, datadef, Data definition object,
+	[in], aafLength_t, length, Length property value,
+	[in], AAFEffectDefinition *, effectDef, Effect Definition object,
+	Creates a new empty effect object with the given property values.)
+	//@comm  This function takes an already created effect definition object as an argument.
+	//@comm  To add slots to the effect, call omfiEffectAddNewSlot.
+	//@comm  To add renderings, call omfiEffectSetFinalRender or omfiEffectSetWorkingRender.
+
+AD_METHOD1(GetEffectDefinition,
+		   [out], AAFEffectDefinition **, effectDef, Effect definition object,
+		   Returns the effect definition for this invocation.)
+	//@comm Replaces part of omfiEffectGetInfo
+
+
+AD_METHOD1(GetRender,
+		   [out], AAFSegment **, segment, Final rendering segment,
+		   Returns the segment that represents the optional rendering on an effect object.)
+	//@comm If this property does not exist the error
+	// OM_ERR_PROP_NOT_PRESENT will be returned.
+	//@comm Working and final renderings are handled by using
+	// a media group as the segment.
+	//@comm Replaces omfiEffectGetFinalRender and omfiEffectGetWorkingRender
+
+AD_METHOD1(IsATimeWarp,
+		   [out], aafBool **, sourceClip, Working rendering source clip,
+		   This boolean function returns whether or not an effect is a timewarp effect.)
+	//@comm Replaces omfiEffectIsATimeWarp
+
+
+AD_METHOD1(GetBypassOverride,
+	[out], aafArgIDType_t *, bypassOverride, Bypass override property value,
+	Returns the optional bypass override propertyvalue from the input effect object.)
+	//@comm If the property does not exist, the error OM_ERR_PROP_NOT_PRESENT will be returned.)
+	//@comm Replaces omfiEffectGetBypassOverride
+
+AD_METHOD1(GetNumSourceSegments,
+	[out], aafInt32 *, numSources, Number of source media segments in the effect,
+	Returns the number of media sources to the effect. )
+	//@comm Replaces omfiEffectGetNumSlots
+
+
+AD_METHOD1(GetNumParameters,
+	[out], aafInt32 *, numParameters, Number of parameter slots in the effect,
+	Returns the number of parameters in the effect.)
+	//@comm Replaces omfiEffectGetNumSlots
+
+AD_METHOD1(IsValidTranEffect,
+	[out], aafBool *, validTransition, TRUE if the effect is valid in a transition,
+	Verifies that the input effect object can be used in a transition.)
+
+AD_METHOD3(AddNewParameterSlot,
+	[in], aafArgIDType_t, argID, Argument ID for the slot,
+	[in], AAFParameter *, value, Parameter to place in effect slot,
+	[out], AAFParameterSlot **, parmSlot, Parameter slot object,
+	creates a new parameter slot object\, inserts the
+	// segment passed as the "value" argument to the new slot\, and
+	//adds the slot to the effect object.)
+	//@comm Replaces part of omfiEffectAddNewSlot
+
+AD_METHOD2(AddNewInputSegment,
+	[in], aafInt32, index, Index \(1-based\) of the input segment,
+	[in], AAFSegment *, value, Segment to place in effect,
+	Adds another input segment to an effect at the given index.)
+	//@comm Replaces part of omfiEffectAddNewSlot
+
+AD_METHOD1(SetRender,
+	[in], AAFSegment *, segment, A segment containing a representation of the rendering,
+	This function sets the final rendering for the given effect
+	//    to the input source clip.  Multiple renderings may exist if the
+	//    source clip refers to a master mob that contains a media group.)
+	//@comm Replaces omfiEffectSetFinalRender and omfiEffectSetWorkingRender
+
+AD_METHOD1(SetBypassOverride,
+	[in], aafArgIDType_t, bypassOverride, Bypass override,
+	This function sets the optional bypass override property on the given effect object.)
+	//@comm Replaces omfiEffectSetBypassOverride
+
+AD_METHOD3(GetParameterSlotByArgID,
+		   [in], aafArgIDType_t, argID, Arg ID,
+		   [out], AAFParameterSlot **, parameterSlot, Parameter slot object,
+		   [out], AAFParameter **, parameter, Parameter object,
+		   Given an argID\, returns the corresponding parameter slot and parameter slot value.)
+
+AD_METHOD2(GetIndexedInputSegment,
+		   [in], aafInt32, index, 1-based index into the effet inputs,
+		   [out], AAFSegment **, inputSegment, Input segment,
+		   Given an index\, returns the corresponding input segment.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
+
