@@ -32,6 +32,8 @@
 #include "ImplAAFTypeDefArray.h"
 #endif
 
+#include "OMWeakRefVectorProperty.h"
+#include "OMWeakRefProperty.h"
 
 class ImplAAFTypeDefFixedArray : public ImplAAFTypeDefArray
 {

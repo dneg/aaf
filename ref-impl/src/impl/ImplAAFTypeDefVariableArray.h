@@ -34,6 +34,7 @@ class ImplAAFPropertyValue;
 #include "ImplAAFTypeDefArray.h"
 #endif
 
+#include "OMWeakRefProperty.h"
 
 class ImplAAFTypeDefVariableArray : public ImplAAFTypeDefArray
 {
