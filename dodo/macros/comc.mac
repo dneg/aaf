@@ -39,6 +39,15 @@
 #c Arguments: none
 #c
 #startm AD_HEAD 00
+#ifndef _C.this-module_h_
+#include "C.this-module.h"
+#endif
+
+#ifndef _Impl.this-module_h_
+#include "Impl.this-module.h"
+#endif
+
+#include <assert.h>
 #endm
 
 
@@ -59,27 +68,20 @@
 #c Arguments: none
 #c
 #startm AD_CLASS_BEGIN 00
-#ifndef _C.this-module_h_
-#include "C.this-module.h"
-#endif
-
-#ifndef _Impl.this-module_h_
-#include "Impl.this-module.h"
-#endif
-
-#include <assert.h>
 
 
-C.this-module::C.this-module (IUnknown * pControllingUnknown, AAFBool doInit)
+C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
   : C.parent-module (pControllingUnknown, AAFFalse)
 {
   if (doInit)
     {
-      Impl.this-module * newRep
+#ifdef BOB_TEST
+     Impl.this-module * newRep
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
       newRep->InitComParent (this);
+#endif
     }
 }
 
@@ -101,42 +103,40 @@ C.this-module::~C.this-module ()
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-#ifndef _C.this-module_h_
-#include "C.this-module.h"
-#endif
-
-#ifndef _Impl.this-module_h_
-#include "Impl.this-module.h"
-#endif
-
-#include <assert.h>
-
-
-C.this-module::C.this-module (IUnknown * pControllingUnknown, AAFBool doInit)
-  : CAAFUnknown(pControllingUnknown)
+C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
+  : CAAFUnknown(pControllingUnknown),
+    _rep(NULL)
 {}
 
 
 C.this-module::~C.this-module ()
 {
+#ifdef BOB_TEST
   // The base class destructor of Impl.this-module must be declared as virtual.
   if (_rep)
-    delete _rep;  
+    delete _rep; 
+#endif 
 }
 
 
 void C.this-module::InitRep (Impl.this-module * newRep)
 {
+#ifdef BOB_TEST
   assert (newRep);
   _rep = newRep;
   newRep->InitComParent (this);
+#endif
 }
 
 
 Impl.this-module * C.this-module::GetRepObject ()
 {
+#ifdef BOB_TEST
   assert (_rep);
   return _rep;
+#else
+  return NULL;
+#endif
 }
 #endm
 
@@ -187,16 +187,20 @@ Impl.this-module * C.this-module::GetRepObject ()
 #c Argument2: method description
 #c
 #startm AD_METHOD0 02
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 ()
 {
+#ifdef BOB_TEST
   C.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<C.this-module*> (pO);
-  assert (pO)
+  assert (pO);
   return pO->%01();
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -216,9 +220,10 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 07: method description
 #c
 #startm AD_XMETHOD1 07
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -232,6 +237,9 @@ AAFRESULT STDMETHODCALLTYPE
   stat = pO->%01 (.%03-internalname(%05));
 .%03-cleanup(%04, %05)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -252,10 +260,11 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 12: method description
 #c
 #startm AD_XMETHOD2 12
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -272,6 +281,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -293,11 +305,12 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 17: method description
 #c
 #startm AD_XMETHOD3 17
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -317,6 +330,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -339,12 +355,13 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 22: method description
 #c
 #startm AD_XMETHOD4 22
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15,
 		.%18-adornment%19 .%18-indirection %20)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -367,6 +384,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%13-cleanup(%14, %15)
 .%18-cleanup(%19, %20)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -390,13 +410,14 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 27: method description
 #c
 #startm AD_XMETHOD5 27
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15,
 		.%18-adornment%19 .%18-indirection %20,
 		.%23-adornment%24 .%23-indirection %25)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -422,6 +443,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%18-cleanup(%19, %20)
 .%23-cleanup(%24, %25)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -446,7 +470,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 32: method description
 #c
 #startm AD_XMETHOD6 32
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15,
@@ -454,6 +478,7 @@ AAFRESULT STDMETHODCALLTYPE
 		.%23-adornment%24 .%23-indirection %25,
 		.%28-adornment%29 .%28-indirection %30)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -482,6 +507,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%23-cleanup(%24, %25)
 .%28-cleanup(%29, %30)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -507,7 +535,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 37: method description
 #c
 #startm AD_XMETHOD7 37
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15,
@@ -516,6 +544,7 @@ AAFRESULT STDMETHODCALLTYPE
 		.%28-adornment%29 .%28-indirection %30,
 		.%33-adornment%34 .%33-indirection %35)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -547,6 +576,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%28-cleanup(%29, %30)
 .%33-cleanup(%34, %35)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -573,7 +605,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 42: method description
 #c
 #startm AD_XMETHOD8 42
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15,
@@ -583,6 +615,7 @@ AAFRESULT STDMETHODCALLTYPE
 		.%33-adornment%34 .%33-indirection %35,
 		.%38-adornment%39 .%38-indirection %40)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -617,6 +650,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%33-cleanup(%34, %35)
 .%38-cleanup(%39, %40)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -644,7 +680,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 47: method description
 #c
 #startm AD_XMETHOD9 47
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15,
@@ -655,6 +691,7 @@ AAFRESULT STDMETHODCALLTYPE
 		.%38-adornment%39 .%38-indirection %40,
 		.%43-adornment%44 .%43-indirection %45)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -692,6 +729,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%38-cleanup(%39, %40)
 .%43-cleanup(%44, %45)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -720,7 +760,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 52: method description
 #c
 #startm AD_XMETHOD_10 52
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15,
@@ -732,6 +772,7 @@ AAFRESULT STDMETHODCALLTYPE
 		.%43-adornment%44 .%43-indirection %45,
 		.%48-adornment%49 .%48-indirection %50)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -772,6 +813,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%43-cleanup(%44, %45)
 .%48-cleanup(%49, %50)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -801,7 +845,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 57: method description
 #c
 #startm AD_XMETHOD_11 57
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
 		.%08-adornment%09 .%08-indirection %10,
 		.%13-adornment%14 .%13-indirection %15,
@@ -814,6 +858,7 @@ AAFRESULT STDMETHODCALLTYPE
 		.%48-adornment%49 .%48-indirection %50,
 		.%53-adornment%54 .%53-indirection %55)
 {
+#ifdef BOB_TEST
   AAFRESULT stat;
 
   Impl.this-module * ptr;
@@ -857,6 +902,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%48-cleanup(%49, %50)
 .%53-cleanup(%54, %55)
   return stat;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 #endm
 
@@ -871,7 +919,7 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // 
 // 
-AAFRESULT C.this-module::InternalQueryInterface
+HRESULT C.this-module::InternalQueryInterface
 (
 	REFIID riid,
 	void **ppvObj)
@@ -898,17 +946,23 @@ AAFRESULT C.this-module::InternalQueryInterface
 // NOTE: This is NOT the pointer to the COM object's implementation
 // object!
 //
-void * AAFRESULT STDMETHODCALLTYPE
-    C.this-module::GetImplRep)()
+HRESULT STDMETHODCALLTYPE
+    C.this-module::GetImplRep(unsigned char **ppRep)
 {
-	return _rep; // GetRepObject();
+#ifdef BOB_TEST
+    if (!ppRep)
+        return E_INVALIDARG;
+	*ppRep = static_cast<unsigned char *>(_rep); // GetRepObject();
+	return S_OK;
+#else
+    return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 //
 // Define the contrete object support implementation.
 // 
-AAF_DEFINE_FACTORY(.this-module)
-
+AAF_DEFINE_FACTORY(.this-module)\
 #endm
 
 
@@ -922,7 +976,7 @@ AAF_DEFINE_FACTORY(.this-module)
 //
 // 
 // 
-AAFRESULT C.this-module::InternalQueryInterface
+HRESULT C.this-module::InternalQueryInterface
 (
 	REFIID riid,
 	void **ppvObj)
@@ -939,13 +993,6 @@ AAFRESULT C.this-module::InternalQueryInterface
         ((IUnknown *)*ppvObj)->AddRef();
 		return S_OK;
     }
-	// All base classes must support unit test.
-	else if (riid == IID_IAAFUnitTest) 
-    { 
-        *ppvObj = (IAAFUnitTest *)this; 
-        ((IUnknown *)*ppvObj)->AddRef();
-		return S_OK;
-    }
 
 	// Always delegate back to base implementation.
 	return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
@@ -956,10 +1003,17 @@ AAFRESULT C.this-module::InternalQueryInterface
 // NOTE: This is NOT the pointer to the COM object's implementation
 // object!
 //
-void * AAFRESULT STDMETHODCALLTYPE
-    C.this-module::GetImplRep ()
+HRESULT STDMETHODCALLTYPE
+    C.this-module::GetImplRep (unsigned char **)
 {
-	return _rep; // GetRepObject();
+#ifdef BOB_TEST
+	if (!ppRep)
+		return E_INVALIDARG;  
+	*ppRep = static_cast<unsigned char*>(_rep); // GetRepObject();
+	return S_OK;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 //
@@ -1133,7 +1187,7 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
 #c expansion.
 #c
 #startm AD_GETOBJ_METHOD1 06
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (I%03 ** %04)
 {
   ImplAAFObject * pThisO;
@@ -1177,7 +1231,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Argument6: method description
 #c
 #startm AD_SETOBJ_METHOD1 06
-AAFRESULT STDMETHODCALLTYPE
+HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (I%03 * %04)
 {
   ImplAAFObject* pArgO;
@@ -1268,7 +1322,7 @@ I%01\
 #startm AD_DEFAULT_UUID 11
 // Default Interface for .this-module 
 // {%01-%02-%03-%04%05-%06%07%08%09%10%11}
-IID IID_I.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11 } );
+const IID IID_I.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11 } };
 #endm
 
 
@@ -1299,7 +1353,7 @@ IID IID_I.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0x%07, 0x%
 #startm AD_CLASS_UUID 11
 // CLSID for .this-module 
 // {%01-%02-%03-%04%05-%06%07%08%09%10%11}
-CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11 } );
+const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0x%07, 0x%08, 0x%09, 0x%10, 0x%11 } };
 #endm
 
 

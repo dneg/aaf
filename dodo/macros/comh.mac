@@ -27,7 +27,7 @@
 #c Argument: Base filename
 #c
 #startm AD_INCLUDE 01
-#ifndef _%01_h_
+#ifndef __%01_h__
 #include "%01.h"
 #endif
 #endm
@@ -44,6 +44,10 @@
 //@class    .this-module | Implementation class for .this-module
 #ifndef _C.this-module_h_
 #define _C.this-module_h_
+
+#ifndef __.this-module_h__
+#include ".this-module.h"
+#endif
 
 // Forward declaration for output stream used by the static test method:
 // C.this-module::test.
@@ -72,10 +76,6 @@ class ostream;
 #include "C.parent-module.h"
 #endif
 
-#ifndef _.this-module_h_
-#include ".this-module.h"
-#endif
-
 //
 // Forward declaration
 //
@@ -89,7 +89,7 @@ class C.this-module
   //
   // Constructor/destructor
   //
-  C.this-module (IUnknown * pControllingUnknown, AAFBool doInit = AAFTrue);
+  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
   ~C.this-module ();
 
   //********
@@ -107,10 +107,6 @@ class C.this-module
 #include "CAAFUnknown.h"
 #endif
 
-#ifndef _.this-module_h_
-#include ".this-module.h"
-#endif
-
 //
 // Forward declaration
 //
@@ -125,7 +121,7 @@ public:
   //
   // Constructor/destructor
   //
-  C.this-module (IUnknown * pControllingUnknown, AAFBool doInit = AAFTrue);
+  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
   virtual ~C.this-module ();
 
   //********
@@ -182,7 +178,7 @@ public:
 #c
 #startm AD_METHOD0 02
   // %02
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
      ();
 #endm
 
@@ -203,7 +199,7 @@ public:
 #c
 #startm AD_XMETHOD1 07
   // %07
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05); // %06 \
 #endm
 
@@ -225,7 +221,7 @@ public:
 #c
 #startm AD_XMETHOD2 12
   // %12
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10); // %11 \
 #endm
@@ -249,7 +245,7 @@ public:
 #c
 #startm AD_XMETHOD3 17
   // %17
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15); // %16 \
@@ -275,7 +271,7 @@ public:
 #c
 #startm AD_XMETHOD4 22
   // %22
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
@@ -303,7 +299,7 @@ public:
 #c
 #startm AD_XMETHOD5 27
   // %27
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
@@ -333,7 +329,7 @@ public:
 #c
 #startm AD_XMETHOD6 32
   // %32
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
@@ -365,7 +361,7 @@ public:
 #c
 #startm AD_XMETHOD7 37
   // %37
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
@@ -399,7 +395,7 @@ public:
 #c
 #startm AD_XMETHOD8 42
   // %42
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
@@ -435,7 +431,7 @@ public:
 #c
 #startm AD_XMETHOD9 47
   // %47
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
@@ -473,7 +469,7 @@ public:
 #c
 #startm AD_XMETHOD_10 52
   // %52
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
@@ -513,7 +509,7 @@ public:
 #c
 #startm AD_XMETHOD_11 57
   // %57
-  STDMETHOD_(AAFRESULT, %01)
+  STDMETHOD (%01)
     (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
 	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
 	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
@@ -560,7 +556,7 @@ public:
   // Return private implementation pointer for delegation.
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
-  STDMETHOD(GetImplRep)(/*[retval, string, out]*/ char **);
+  STDMETHOD(GetImplRep)(/*[retval, string, out]*/ unsigned char **);
 };
 
 #endif // ! _C.this-module_h_
@@ -602,7 +598,7 @@ public:
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  STDMETHOD(GetImplRep)(/*[retval, string, out]*/ char **);
+  STDMETHOD(GetImplRep)(/*[retval, string, out]*/ unsigned char **);
 
 protected:
 
@@ -822,29 +818,9 @@ I%01 \
 #c
 #c Defining the interface UUID.
 #c NOTE: Should be placed immediately before AD_CLASS_BEGIN
-#c
-#c GUID
-#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
-#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
-#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
-#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
-#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
-#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
-#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
-#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
-#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
-#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
-#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
-#c
-#c Example:
-#c AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
-#c
-#c TomR:980713: Added
+#c This symbol is generated by the midl compiler.
 #c
 #startm AD_DEFAULT_UUID 11
-// Default Interface for .this-module 
-// {%01-%02-%03-%04%05-%06%07%08%09%10%11}
-extern "C" IID IID_I.this-module;
 #endm
 
 
@@ -853,29 +829,9 @@ extern "C" IID IID_I.this-module;
 #c Defining the Class "Factory" UUID.
 #c NOTE: should be placed before AD_DEFAULT_UUID or after
 #c AD_CLASS_END
-#c
-#c GUID
-#c Argument01: hex long  0-3[leading 0's w/o leading 0x]
-#c Argument02: hex short 4-5[leading 0's w/o leading 0x]
-#c Argument03: hex short 6-7[leading 0's w/o leading 0x]
-#c Argument04: hex byte   8 [leading 0's w/o leading 0x]
-#c Argument05: hex byte   9 [leading 0's w/o leading 0x]
-#c Argument06: hex byte  10 [leading 0's w/o leading 0x]
-#c Argument07: hex byte  11 [leading 0's w/o leading 0x]
-#c Argument08: hex byte  12 [leading 0's w/o leading 0x]
-#c Argument09: hex byte  13 [leading 0's w/o leading 0x]
-#c Argument10: hex byte  14 [leading 0's w/o leading 0x]
-#c Argument11: hex byte  15 [leading 0's w/o leading 0x]
-#c
-#c Example:
-#c AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
-#c
-#c TomR:980713: Added
+#c This symbol is generated by the midl compiler.
 #c
 #startm AD_CLASS_UUID 11
-// CLSID for .this-module 
-// {%01-%02-%03-%04%05-%06%07%08%09%10%11}
-extern "C" CLSID CLSID_.this-module;
 #endm
 
 
