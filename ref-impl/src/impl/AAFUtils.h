@@ -42,7 +42,7 @@ typedef enum
 	kRoundCeiling, kRoundFloor
 } aafRounding_t;
 
-aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2);
+aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2);
 
 AAFRESULT aafMobIDNew(aafUID_t *mobID);
 
