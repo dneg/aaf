@@ -521,8 +521,12 @@ bool OMWeakReferenceProperty<ReferencedObject>::isResolved(void) const
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::isResolved");
 
-  ASSERT("Unimplemented code not reached", false);
-  bool result = false;
+  bool result;
+  if (_reference.pointer() != 0) {
+    result = true;
+  } else {
+    result = false;
+  }
   return result;
 }
 
@@ -531,8 +535,20 @@ bool OMWeakReferenceProperty<ReferencedObject>::isResolvable(void) const
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::isResolvable");
 
-  ASSERT("Unimplemented code not reached", false);
-  bool result = false;
+  bool result;
+  OMFile* file = propertySet()->container()->file();
+  ASSERT("Valid file", file != 0);
+  if (file->propertyTableExists()) {
+    OMPropertyTable* table = file->referencedProperties();
+    ASSERT("Valid table", table != 0);
+    if (table->isValid(_targetTag)) {
+      result = true;
+    } else {
+      result = false;
+    }
+  } else {
+    result = false;
+  }
   return result;
 }
 
