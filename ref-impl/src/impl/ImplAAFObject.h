@@ -106,7 +106,7 @@ public:
   // in /test/ImplAAFObjectTest.cpp.
   static AAFRESULT test();
 
-  OMDECLARE_STORABLE(ImplAAFObject);
+  OMDECLARE_STORABLE(ImplAAFObject)
 };
 
 
