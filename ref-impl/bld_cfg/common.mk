@@ -38,6 +38,11 @@
 #
 UNAME := $(shell uname)
 
+# Newer cygwin environments return "CYGWIN_NT" instead of Windows_NT
+ifneq (,$(findstring CYGWIN_NT,$(UNAME)))
+	UNAME = Windows_NT
+endif 
+
 include $(BLD_CFG_DIR)/$(UNAME).mk
 
 

@@ -34,27 +34,38 @@ else
 fi
 
 case "${MACHINE}:${OS}" in
-    *:IRIX*)
+	*:IRIX*)
 	echo MipsIrix
 	exit 0;;
 
-    *:Linux)
+	*:Linux)
 	echo ${MACHINE}Linux
 	exit 0;;
 
-    sparc*:SunOS)
+	sparc*:SunOS)
 	echo SparcSolaris
 	exit 0;;
 
-    *86:Windows_NT)
+	# New cygwin environments return "CYGWIN_NT-5.x" so set to Windows_NT
+	*86:CYGWIN_NT*)
+	OS=Windows_NT
 	echo Win
 	exit 0;;
 
-    "Power Macintosh:Darwin")
+	# Cygwin builds
+	*86:Windows_NT)
+	echo Win
+	exit 0;;
+
+	# Mingw builds (E.g. using MSYS shell)
+	*86:MINGW32_NT*)
+	echo Win
+	exit 0;;
+
+	"Power Macintosh:Darwin")
 	echo PPCDarwin
 	exit 0;;
 esac
 
 echo Unknown
 exit 1
-
