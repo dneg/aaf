@@ -119,20 +119,16 @@ void OMMemoryRawStorage::read(OMByte* bytes,
   size_t firstCount = 0;
   // byte count of last partial page
   size_t lastCount = 0;
-  // count of whole pages
-  size_t pageCount = 0;
   if (lastPage > firstPage) {
     // One or more page boundaries
     firstCount = _pageSize - firstOffset;
     OMUInt64 lastCount64 = (position() + count) - (lastPage * _pageSize);
     ASSERT("Supported count", lastCount64 < ~(size_t)0);
     lastCount = static_cast<size_t>(lastCount64);
-    pageCount = lastPage - firstPage - 1;
   } else {
     // No page boundaries
     firstCount = count;
     lastCount = 0;
-    pageCount = 0;
   }
 
   OMByte* dest = bytes;
@@ -235,20 +231,16 @@ void OMMemoryRawStorage::write(const OMByte* bytes,
   size_t firstCount = 0;
   // byte count of last partial page
   size_t lastCount = 0;
-  // count of whole pages
-  size_t pageCount = 0;
   if (lastPage > firstPage) {
     // One or more page boundaries
     firstCount = _pageSize - firstOffset;
     OMUInt64 lastCount64 = (position() + byteCount) - (lastPage * _pageSize);
     ASSERT("Supported count", lastCount64 < ~(size_t)0);
     lastCount = static_cast<size_t>(lastCount64);
-    pageCount = lastPage - firstPage - 1;
   } else {
     // No page boundaries
     firstCount = byteCount;
     lastCount = 0;
-    pageCount = 0;
   }
 
   const OMByte* source = bytes;
