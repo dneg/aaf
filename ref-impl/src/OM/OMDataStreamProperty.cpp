@@ -426,7 +426,7 @@ void OMDataStreamProperty::setByteOrder(OMByteOrder byteOrder)
   TRACE("OMDataStreamProperty::setByteOrder");
 
   PRECONDITION("Valid byte order",
-                    (_byteOrder == littleEndian) || (_byteOrder == bigEndian));
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
   PRECONDITION("No existing byte order", !hasByteOrder());
   PRECONDITION("Stream is empty", size() == 0);
 
