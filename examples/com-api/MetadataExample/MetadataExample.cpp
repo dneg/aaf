@@ -30,7 +30,9 @@
 #include <stdlib.h>
 
 
-//#include "AAFPluginManager.h"
+#if defined(macintosh) || defined(_MAC)
+#include "DataInput.h"
+#endif
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
@@ -1012,7 +1014,7 @@ static HRESULT RegisterRequiredPlugins(void)
   return moduleErrorTmp;
 }
 
-int main()
+int main(int /*argc*/, char** /*argv*/)
 {
   CComInitialize comInit;
   CAAFInitialize aafInit;
