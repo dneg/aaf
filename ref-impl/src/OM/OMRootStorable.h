@@ -30,7 +30,7 @@
 #define OMROOTSTORABLE_H
 
 #include "OMStorable.h"
-#include "OMProperty.h"
+#include "OMStrongRefProperty.h"
 #include "OMDictionary.h"
 
 class OMRootStorable : public OMStorable {
