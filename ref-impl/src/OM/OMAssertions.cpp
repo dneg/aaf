@@ -32,7 +32,7 @@
 #include "OMOStream.h"
 #include "OMUtilities.h"
 
-#if defined(OM_ENABLE_STACK_TRACE)
+#if defined(OM_STACK_TRACE_ON_ASSERT)
 #include "OMStackTrace.h"
 #endif
 
@@ -51,7 +51,7 @@ void reportAssertionViolation(char* assertionKind,
         << " in file \"" << fileName << "\"." << endl;
   omlog << "The condition \"" << expressionString << "\" was false." << endl;
 
-#if defined(OM_ENABLE_STACK_TRACE)
+#if defined(OM_STACK_TRACE_ON_ASSERT)
   printStackTrace(omlog);
 #endif
 
