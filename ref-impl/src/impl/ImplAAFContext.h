@@ -51,7 +51,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     CreateFile
-        (aafDataBuffer_t  filePath,   //@parm [in] File path [replace with object later]
+        (aafWChar *  filePath,   //@parm [in] File path [replace with object later]
 		 aafFileRev_t  rev,   //@parm [in] File revision to create
          ImplAAFFile ** file);  //@parm [out] Current AAF file
 
@@ -61,7 +61,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     OpenReadFile
-        (aafDataBuffer_t  filePath,   //@parm [in] File path [replace with object later]
+        (aafWChar *  filePath,   //@parm [in] File path [replace with object later]
 		 ImplAAFFile ** file);  //@parm [out] Current AAF file
 
 
@@ -70,7 +70,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     OpenModifyFile
-        (aafDataBuffer_t  filePath,   //@parm [in] File path [replace with object later]
+        (aafWChar *  filePath,   //@parm [in] File path [replace with object later]
 		 ImplAAFFile ** file);  //@parm [out] Current AAF file
 
   //***********************************************************
