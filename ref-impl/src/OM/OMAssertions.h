@@ -102,6 +102,8 @@ bool validWideString(const wchar_t* string);
   //   @rdesc True if the OMCharacter string is valid, false otherwise.
 bool validOMString(const OMCharacter* string);
 
+void checkTypes(void);
+
 #if defined(OM_ENABLE_TRACE)
 
   // @func Output routine tracing information.

@@ -142,11 +142,7 @@ void obsolete(const char* routineName, const char* newRoutineName)
 
 #if defined(OM_ENABLE_DEBUG)
 
-bool checkTypes(void);
-
-static bool typesChecked = checkTypes();
-
-bool checkTypes(void)
+void checkTypes(void)
 {
   TRACE("checkTypes");
 
@@ -159,8 +155,6 @@ bool checkTypes(void)
   ASSERT("Correct size for OMUInt16", sizeof(OMUInt16) == 2);
   ASSERT("Correct size for OMUInt32", sizeof(OMUInt32) == 4);
   ASSERT("Correct size for OMUInt64", sizeof(OMUInt64) == 8);
-
-  return true;
 }
 
 #endif
