@@ -39,13 +39,8 @@
 #c Arguments: none
 #c
 #startm AD_HEAD 00
-#ifndef __C.this-module_h__
 #include "C.this-module.h"
-#endif
-
-#ifndef __Impl.this-module_h__
 #include "Impl.this-module.h"
-#endif
 
 #include <assert.h>
 #endm
@@ -80,7 +75,6 @@ C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
-      newRep->InitComParent (this);
 #endif
     }
 }
@@ -124,7 +118,7 @@ void C.this-module::InitRep (Impl.this-module * newRep)
 #ifdef BOB_TEST
   assert (newRep);
   _rep = newRep;
-  newRep->InitComParent (this);
+  newRep->InitContainer (this);
 #endif
 }
 
@@ -191,15 +185,15 @@ HRESULT STDMETHODCALLTYPE
     C.this-module::%01 ()
 {
 #ifdef BOB_TEST
-  C.this-module * ptr;
+  Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
-  ptr = static_cast<C.this-module*> (pO);
-  assert (pO);
-  return pO->%01();
+  ptr = static_cast<Impl.this-module*> (pO);
+  assert (ptr);
+  return ptr->%01();
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -224,21 +218,21 @@ HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
-  stat = pO->%01 (.%03-internalname(%05));
+  hr = ptr->%01 (.%03-internalname(%05));
 .%03-cleanup(%04, %05)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -265,24 +259,24 @@ HRESULT STDMETHODCALLTYPE
 		.%08-adornment%09 .%08-indirection %10)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -311,27 +305,27 @@ HRESULT STDMETHODCALLTYPE
 		.%13-adornment%14 .%13-indirection %15)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -362,20 +356,20 @@ HRESULT STDMETHODCALLTYPE
 		.%18-adornment%19 .%18-indirection %20)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
 .%18-setup(%19, %20)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15),
 	.%18-internalname(%20));
@@ -383,9 +377,9 @@ HRESULT STDMETHODCALLTYPE
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
 .%18-cleanup(%19, %20)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -418,21 +412,21 @@ HRESULT STDMETHODCALLTYPE
 		.%23-adornment%24 .%23-indirection %25)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
 .%18-setup(%19, %20)
 .%23-setup(%24, %25)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15),
 	.%18-internalname(%20),
@@ -442,9 +436,9 @@ HRESULT STDMETHODCALLTYPE
 .%13-cleanup(%14, %15)
 .%18-cleanup(%19, %20)
 .%23-cleanup(%24, %25)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -479,14 +473,14 @@ HRESULT STDMETHODCALLTYPE
 		.%28-adornment%29 .%28-indirection %30)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
@@ -494,7 +488,7 @@ HRESULT STDMETHODCALLTYPE
 .%18-setup(%19, %20)
 .%23-setup(%24, %25)
 .%28-setup(%29, %30)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15),
 	.%18-internalname(%20),
@@ -506,9 +500,9 @@ HRESULT STDMETHODCALLTYPE
 .%18-cleanup(%19, %20)
 .%23-cleanup(%24, %25)
 .%28-cleanup(%29, %30)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -545,14 +539,14 @@ HRESULT STDMETHODCALLTYPE
 		.%33-adornment%34 .%33-indirection %35)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
@@ -561,7 +555,7 @@ HRESULT STDMETHODCALLTYPE
 .%23-setup(%24, %25)
 .%28-setup(%29, %30)
 .%33-setup(%34, %35)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15),
 	.%18-internalname(%20),
@@ -575,9 +569,9 @@ HRESULT STDMETHODCALLTYPE
 .%23-cleanup(%24, %25)
 .%28-cleanup(%29, %30)
 .%33-cleanup(%34, %35)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -616,14 +610,14 @@ HRESULT STDMETHODCALLTYPE
 		.%38-adornment%39 .%38-indirection %40)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
@@ -633,7 +627,7 @@ HRESULT STDMETHODCALLTYPE
 .%28-setup(%29, %30)
 .%33-setup(%34, %35)
 .%38-setup(%39, %40)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15),
 	.%18-internalname(%20),
@@ -649,9 +643,9 @@ HRESULT STDMETHODCALLTYPE
 .%28-cleanup(%29, %30)
 .%33-cleanup(%34, %35)
 .%38-cleanup(%39, %40)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -692,14 +686,14 @@ HRESULT STDMETHODCALLTYPE
 		.%43-adornment%44 .%43-indirection %45)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
@@ -710,7 +704,7 @@ HRESULT STDMETHODCALLTYPE
 .%33-setup(%34, %35)
 .%38-setup(%39, %40)
 .%43-setup(%44, %45)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15),
 	.%18-internalname(%20),
@@ -728,9 +722,9 @@ HRESULT STDMETHODCALLTYPE
 .%33-cleanup(%34, %35)
 .%38-cleanup(%39, %40)
 .%43-cleanup(%44, %45)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -773,14 +767,14 @@ HRESULT STDMETHODCALLTYPE
 		.%48-adornment%49 .%48-indirection %50)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
@@ -792,7 +786,7 @@ HRESULT STDMETHODCALLTYPE
 .%38-setup(%39, %40)
 .%43-setup(%44, %45)
 .%48-setup(%49, %50)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15),
 	.%18-internalname(%20),
@@ -812,9 +806,9 @@ HRESULT STDMETHODCALLTYPE
 .%38-cleanup(%39, %40)
 .%43-cleanup(%44, %45)
 .%48-cleanup(%49, %50)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -859,14 +853,14 @@ HRESULT STDMETHODCALLTYPE
 		.%53-adornment%54 .%53-indirection %55)
 {
 #ifdef BOB_TEST
-  AAFRESULT stat;
+  HRESULT hr;
 
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
-  assert (pO);
+  assert (ptr);
 
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
@@ -879,7 +873,7 @@ HRESULT STDMETHODCALLTYPE
 .%43-setup(%44, %45)
 .%48-setup(%49, %50)
 .%53-setup(%54, %55)
-  stat = pO->%01 (.%03-internalname(%05),
+  hr = ptr->%01 (.%03-internalname(%05),
 	.%08-internalname(%10),
 	.%13-internalname(%15),
 	.%18-internalname(%20),
@@ -901,9 +895,9 @@ HRESULT STDMETHODCALLTYPE
 .%43-cleanup(%44, %45)
 .%48-cleanup(%49, %50)
 .%53-cleanup(%54, %55)
-  return stat;
+  return hr;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -947,15 +941,15 @@ HRESULT C.this-module::InternalQueryInterface
 // object!
 //
 HRESULT STDMETHODCALLTYPE
-    C.this-module::GetImplRep(unsigned char **ppRep)
+    C.this-module::GetImplRep(void **ppRep)
 {
 #ifdef BOB_TEST
     if (!ppRep)
         return E_INVALIDARG;
-	*ppRep = static_cast<unsigned char *>(_rep); // GetRepObject();
+	*ppRep = static_cast<void *>(GetRepObject());
 	return S_OK;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+    return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 
@@ -1004,15 +998,15 @@ HRESULT C.this-module::InternalQueryInterface
 // object!
 //
 HRESULT STDMETHODCALLTYPE
-    C.this-module::GetImplRep (unsigned char **)
+    C.this-module::GetImplRep (void **ppRep)
 {
 #ifdef BOB_TEST
 	if (!ppRep)
 		return E_INVALIDARG;  
-	*ppRep = static_cast<unsigned char*>(_rep); // GetRepObject();
+	*ppRep = static_cast<void*>(GetRepObject());
 	return S_OK;
 #else
-	return AAFRESULT_NOT_IMPLEMENTED;
+	return HRESULT_NOT_IMPLEMENTED;
 #endif
 }
 
@@ -1206,9 +1200,8 @@ I%01\
 #c Argument: class name
 #c
 #startm AD_FORWARD_DECLARATION 01
-#ifndef __%01_h__
-#include "%01.h"
-#endif
+#include "C%01.h"
+#include "Impl%01.h"
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -1317,17 +1310,18 @@ const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05, 0x%06, 0
 #c arg2 = external arg name
 #c
 #startm .objIn-setup 02
+  assert (0);
   Impl%01 * internal%02 = NULL;
-  if (%02)
-    {
-	  HRESULT hStat;
-	  IAAFRoot * iObj;
-	  hStat = %02->QueryInterface (IID_IAAFRoot, &iObj);
-	  assert (SUCCEEDED (hStat));
-	  assert (iObj);
-	  internal%02 = static_cast<Impl%01*>(iObj->GetImpl());
-	  assert (internal%02);
-    }
+//  if (%02)
+//    {
+//	  HRESULT hStat;
+//	  IAAFRoot * iObj;
+//	  hStat = %02->QueryInterface (IID_IAAFRoot, &iObj);
+//	  assert (SUCCEEDED (hStat));
+//	  assert (iObj);
+//	  internal%02 = static_cast<Impl%01*>(iObj->GetImpl());
+//	  assert (internal%02);
+//    }
 #endm
 
 
@@ -1422,21 +1416,19 @@ pinternal%01\
 #c arg2 = external arg name
 #c
 #startm .objOut-cleanup 02
-  if (internal%02)
-    {
-	  HRESULT hStat;
-	  IAAFRoot * iObj;
-	  hStat = internal%02->QueryInterface (IID_IAAFRoot, &iObj);
-	  assert (SUCCEEDED (hStat));
-	  assert (iObj);
+	if (SUCCEEDED(hr))
+	{
+		IUnknown *pUnknown;
+		HRESULT	hStat;
 
-	  assert (%02);
-	  *%02 = static_cast<%01*>(iObj->GetContainer());
-	  assert (*%02);
+		pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
+		hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
+		assert (SUCCEEDED (hStat));
+		pUnknown->Release();
 	}
-  else
-    {
-	  *%02 = NULL;
+	else
+	{
+		*%02 = NULL;
 	}
 #endm
 
