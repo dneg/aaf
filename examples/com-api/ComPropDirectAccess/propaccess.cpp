@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -26,6 +26,8 @@
  ************************************************************************/
 
 #include "AAF.h"
+
+#include "CAAFBuiltinDefs.h"
 
 //
 // This example code is intended to show the following:
@@ -191,6 +193,8 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
   IAAFTypeDefSP pTDInt16;
   const aafUInt32 kNumMembers = 2;
 
+  CAAFBuiltinDefs defs (pDict);
+
   // Get the pre-defined type for int16
   PROPAGATE_RESULT(pDict->LookupTypeDef(kAAFTypeID_Int16,
 										&pTDInt16));
@@ -209,7 +213,7 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
 
   // Allocate a new typedef which will represent a 16-bit rational
   IAAFTypeDefRecordSP pTDRational16;
-  PROPAGATE_RESULT(pDict->CreateInstance(AUID_AAFTypeDefRecord,
+  PROPAGATE_RESULT(pDict->CreateInstance(defs.cdTypeDefRecord(),
 										 IID_IAAFTypeDefRecord,
 										 (IUnknown **) &pTDRational16));
   PROPAGATE_RESULT(pTDRational16->Initialize(AUID_TypeRational16,
@@ -231,6 +235,7 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
 HRESULT createRenamedRational16 (IAAFDictionary * pDict)
 {
   IAAFTypeDefRenameSP pRenamedRational16;
+  CAAFBuiltinDefs defs (pDict);
 
   // look up existing type
   IAAFTypeDefSP pTDRational16;
@@ -238,7 +243,7 @@ HRESULT createRenamedRational16 (IAAFDictionary * pDict)
 										&pTDRational16));
 
   // create new (rename) type
-  PROPAGATE_RESULT(pDict->CreateInstance(AUID_AAFTypeDefRename,
+  PROPAGATE_RESULT(pDict->CreateInstance(defs.cdTypeDefRename(),
 										 IID_IAAFTypeDefRename,
 										 (IUnknown **) &pRenamedRational16));
 
@@ -296,6 +301,7 @@ HRESULT registerRational16StructOffsets (IAAFDictionary * pDict)
 HRESULT addRational16ToComponent (IAAFDictionary * pDict)
 {
   IAAFClassDefSP pCDComponent;
+  CAAFBuiltinDefs defs (pDict);
 
   // Get the class def for AAFComponent
   PROPAGATE_RESULT(pDict->LookupClassDef(AUID_AAFComponent,
@@ -327,16 +333,18 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
   assert (pDict);
   assert (ppCreatedFiller);
 
+  CAAFBuiltinDefs defs (pDict);
+
   //
   // Make a filler object.  Initialize it, then get the generic
   // IAAFObject interface.
   //
   IAAFFiller * pFill = 0;
-  PROPAGATE_RESULT(pDict->CreateInstance(AUID_AAFFiller,
+  PROPAGATE_RESULT(pDict->CreateInstance(defs.cdFiller(),
 										 IID_IAAFFiller,
 										 (IUnknown **) &pFill));
   assert (pFill);
-  PROPAGATE_RESULT (pFill->Initialize(DDEF_Sound, 10));
+  PROPAGATE_RESULT (pFill->Initialize(defs.ddSound(), 10));
 
   IAAFObjectSP pObj;
   PROPAGATE_RESULT (pFill->QueryInterface(IID_IAAFObject,
@@ -436,6 +444,7 @@ HRESULT checkStinkyFiller (IAAFDictionary * pDict,
 {
   assert (pFiller);
 
+  CAAFBuiltinDefs defs (pDict);
   IAAFObjectSP pObj;
   PROPAGATE_RESULT(pFiller->QueryInterface(IID_IAAFObject,
 										   (void**)&pObj));
@@ -713,6 +722,7 @@ static void CreateAAFFile(aafWChar * pFileName,
   // Get the AAF Dictionary so that we can create valid AAF objects.
   IAAFDictionarySP spDictionary;
   check (spHeader->GetDictionary(&spDictionary));
+  CAAFBuiltinDefs defs (spDictionary);
    
   // Create and register all new things that have to go into the
   // dictionary
@@ -722,7 +732,7 @@ static void CreateAAFFile(aafWChar * pFileName,
 
   // Create a source Mob
   IAAFSourceMobSP  smob;
-  check (spDictionary->CreateInstance(AUID_AAFSourceMob, 
+  check (spDictionary->CreateInstance(defs.cdSourceMob(),
 									 IID_IAAFSourceMob, 
 									 (IUnknown **)&smob));
 
@@ -736,7 +746,7 @@ static void CreateAAFFile(aafWChar * pFileName,
 
   IAAFFileDescriptorSP  spFileDesc;
   check (spDictionary->
-		 CreateInstance(AUID_AAFFileDescriptor,
+		 CreateInstance(defs.cdFileDescriptor(),
 						IID_IAAFFileDescriptor, 
 						(IUnknown **) &spFileDesc));
   aafRational_t  audioRate = { 44100, 1 };
