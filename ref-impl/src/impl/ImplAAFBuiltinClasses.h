@@ -116,7 +116,7 @@ private:
 	const aafUID_t * pTypeGuid;
 	const aafUID_t * pOwnerClassGuid;
 	bool             mandatory;
-  bool             uid; // this property is a unique identifier for the class
+  bool             isUniqueIdentifier; // this property is a unique identifier for the class
 	ImplAAFOMPropertyCreateFunc_t omPropCreateFunc;
 	PropTblEntry *   nextProp;  // null if this is the last one
   };

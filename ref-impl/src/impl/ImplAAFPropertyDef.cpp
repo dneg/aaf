@@ -58,6 +58,7 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
     _IsOptional(PID_PropertyDefinition_IsOptional, "IsOptional"),
     _pid(PID_PropertyDefinition_LocalIdentification, "LocalIdentification"),
     _DefaultValue(PID_PropertyDefinition_DefaultValue, "DefaultValue"),
+    _IsUniqueIdentifier(PID_PropertyDefinition_IsUniqueIdentifier, "IsUniqueIdentifier"),
 	_cachedType (0),  // BobT: don't reference count the cached type!
 	_bname (0),
 	_OMPropCreateFunc (0)
@@ -66,6 +67,7 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
   _persistentProperties.put (_IsOptional.address());
   _persistentProperties.put (_pid.address());
   _persistentProperties.put (_DefaultValue.address());
+  _persistentProperties.put (_IsUniqueIdentifier.address());
 }
 
 
@@ -83,7 +85,8 @@ AAFRESULT STDMETHODCALLTYPE
       OMPropertyId omPid,
       const aafCharacter * pPropName,
 	  const aafUID_t & typeId,
-      aafBool isOptional)
+      aafBoolean_t isOptional,
+      aafBoolean_t isUniqueIdentifier)
 {
   AAFRESULT hr;
 
@@ -96,6 +99,12 @@ AAFRESULT STDMETHODCALLTYPE
   _Type = typeId;
   _pid = omPid;
   _IsOptional = isOptional;
+
+  if (isUniqueIdentifier)
+  {
+    // Only set this optional property if true.
+    _IsUniqueIdentifier = isUniqueIdentifier;
+  }
 
   return AAFRESULT_SUCCESS;
 }
@@ -150,6 +159,29 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pIsOptional)
 	return AAFRESULT_NULL_PARAM;
   *pIsOptional = _IsOptional;
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPropertyDef::GetIsUniqueIdentifier (
+       aafBool * pIsUniqueIdentifier) const
+{
+  if (! pIsUniqueIdentifier)
+	  return AAFRESULT_NULL_PARAM;
+
+  if (! _IsUniqueIdentifier.isPresent())
+	{
+    // If the property is not present then this property
+    // definition cannot be for a unique identifier! Just
+    // return false.
+    *pIsUniqueIdentifier = kAAFFalse;
+//	  return AAFRESULT_PROP_NOT_PRESENT;
+	}
+  else
+  {
+    *pIsUniqueIdentifier = _IsUniqueIdentifier;
+  }
+
   return AAFRESULT_SUCCESS;
 }
 
