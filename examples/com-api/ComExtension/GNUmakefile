@@ -72,7 +72,7 @@ clean :
 	@$(RM) $(AAFSDKBINDIR)/ComExtensionRead$(EXE)
 	@$(RM) $(AAFSDKBINDIR)/ComExtensionWrite$(EXE)
 	@$(RMDIR) $(OBJDIR)/ii_files
-
+	cd ComPersonnelExtension && $(MAKE) GENDEPS=0 $@
 
 .PHONY : realclean
 realclean : clean
