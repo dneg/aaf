@@ -1241,6 +1241,30 @@ aafErr_t TableAddUID(
  * Possible Errors:
  *		Standard errors (see top of file).
  */
+aafErr_t TableAddUIDBlock(
+			aafTable_t *table,
+			aafUID_t key,
+			void *value,
+			aafInt32 valueLen,
+			aafTableDuplicate_t dup)
+{
+  return(TableAddValueBlock(table, &key, sizeof(aafUID_t), value, valueLen, dup));
+}
+		
+/************************
+ * name
+ *
+ * 		WhatIt(Internal)Does
+ *
+ * Argument Notes:
+ *		StuffNeededBeyondNotesInDefinition.
+ *
+ * ReturnValue:
+ *		Error code (see below).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ */
 aafErr_t TableRemoveUID(
 			aafTable_t *table,
 			aafUID_t key)
@@ -1290,6 +1314,15 @@ void *TableUIDLookupPtr(
   return(TableLookupPtr(table, &key));
 }
 
+void TableUIDLookupBlock(
+			aafTable_t *table,
+			aafUID_t key,
+			aafInt32 valueLen,
+			void *valuePtr,
+			aafBool *found)
+{
+	TableLookupBlock(table, &key, valueLen, valuePtr, found);
+}
 /************************************************************************
  *
  * SlotID Table Functions
