@@ -42,7 +42,7 @@
 
 class ImplAAFMob;
 class ImplAAFComponent;
-class ImplAAFEffectInvocation;
+class ImplAAFGroup;
 class ImplAAFPulldown;
 
 class ImplAAFFindSourceInfo : public ImplAAFRoot
@@ -63,7 +63,7 @@ protected:
 	aafRational_t	_editRate;
 	aafLength_t		_length;
 	ImplAAFComponent *_cpnt;
-	ImplAAFEffectInvocation *_effect;
+	ImplAAFGroup *_effect;
 
 public:
 
@@ -74,7 +74,7 @@ public:
 	virtual AAFRESULT STDMETHODCALLTYPE
 		AddPulldown(ImplAAFPulldown *pdwn);
 	virtual AAFRESULT STDMETHODCALLTYPE
-		SetEffect(ImplAAFEffectInvocation *effect);
+		SetEffect(ImplAAFGroup *effect);
 	virtual AAFRESULT STDMETHODCALLTYPE
 		SetComponent(ImplAAFComponent *cpnt);
 
