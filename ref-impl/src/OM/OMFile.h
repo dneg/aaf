@@ -28,11 +28,14 @@ public:
                             const OMClassFactory* factory);
   static OMFile* createWrite(const wchar_t* fileName,
                              const OMClassFactory* factory,
+                             const OMByteOrder byteOrder,
                              OMStorable* root);
   static OMFile* createModify(const wchar_t* fileName,
                               const OMClassFactory* factory,
+                              const OMByteOrder byteOrder,
                               OMStorable* root);
   static OMFile* createTransient(const OMClassFactory* factory,
+                                 const OMByteOrder byteOrder,
                                  OMStorable* root);
 
   void save(void);
@@ -49,7 +52,11 @@ public:
 
   const OMClassFactory* classFactory(void) const;
   OMObjectDirectory* objectDirectory(void);
-  
+
+  OMByteOrder byteOrder(void) const;
+
+  // OMStorable overrides.
+  //
   virtual const OMClassId& classId(void) const;
 
   virtual OMFile* file(void) const;
