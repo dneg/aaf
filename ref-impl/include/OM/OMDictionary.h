@@ -30,8 +30,25 @@
 
 #include "OMClassFactory.h"
 #include "OMStorable.h"
+#include "OMRedBlackTree.h"
+
+class OMPropertyDefinition;
 
 class OMDictionary : public OMClassFactory, public OMStorable {
+public:
+
+  static OMPropertyDefinition* find(const OMPropertyId propertyId);
+
+  static void insert(const OMPropertyId propertyId,
+                     const OMPropertyDefinition* definition);
+
+private:
+
+  typedef OMRedBlackTree<OMPropertyId,
+                         OMPropertyDefinition*> PropertyDefinitionSet;
+
+  static PropertyDefinitionSet _propertyDefinitions;
+
 };
 
 #endif
