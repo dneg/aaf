@@ -639,7 +639,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::omcFlushCache ()
+    CAAFEssenceFileStream::FlushCache ()
 {
   if (NULL != _pFile)
   {

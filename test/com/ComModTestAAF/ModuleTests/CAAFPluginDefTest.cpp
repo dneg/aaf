@@ -255,8 +255,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*		pFile = NULL;
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
-//!!!	IEnumAAFPluggableDefs *pEnumPluggable = NULL;
-	IAAFCodecDef *pPluggable = NULL;
+	IEnumAAFCodecDefs *pEnumPluggable = NULL;
+	IAAFCodecDef *pCodecDef = NULL;
+	IAAFDefObject *pDefObj = NULL;
 	IEnumAAFPluginDescriptors *pEnumDesc;
 	IAAFPluginDescriptor *pPlugin = NULL;
 	IAAFNetworkLocator	*pNetLoc = NULL;
@@ -284,10 +285,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-#if 0	//!!!
-		checkResult(pDictionary->GetPluggableDefinitions(&pEnumPluggable));
-		checkResult(pEnumPluggable->NextOne (&pPluggable));
-		checkResult(pPluggable->EnumPluginDescriptors (&pEnumDesc));
+#if 1	//!!!
+		checkResult(pDictionary->GetCodecDefinitions(&pEnumPluggable));
+		checkResult(pEnumPluggable->NextOne (&pCodecDef));
+		checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject, (void **)&pDefObj));
+		checkResult(pDefObj->EnumPluginDescriptors (&pEnumDesc));
 		checkResult(pEnumDesc->NextOne (&pPlugin));
 
 	  
@@ -378,8 +380,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pEnumDesc)
 		pEnumDesc->Release();
 
-	if (pPluggable)
-		pPluggable->Release();
+	if (pCodecDef)
+		pCodecDef->Release();
+	if (pDefObj)
+		pDefObj->Release();
 
 //!!!	if (pEnumPluggable)
 //!!!		pEnumPluggable->Release();
