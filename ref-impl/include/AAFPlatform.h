@@ -129,6 +129,18 @@
  
 /*
  *  Compiler:   GNU C++
+ *  Processor:  Intel x86
+ *  OS:         FreeBSD
+ */
+#elif defined(__GNUC__) && defined(__i386__) && defined(__OpenBSD__)
+#define CPU_INTEL
+#define OS_OPENBSD
+#define OS_UNIX
+#define COMPILER_GCC
+#define PLATFORM_GCC_INTEL_OPENBSD
+ 
+/*
+ *  Compiler:   GNU C++
  *  Processor:  PowerPC
  *  OS:         MacOS 10 (Darwin)
  */
@@ -204,7 +216,8 @@ typedef wchar_t			aafCharacter;
 #elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_X86_64_LINUX) \
 	|| defined(PLATFORM_MIPSPRO_MIPS_IRIX) || defined(PLATFORM_GCC_MIPS_IRIX) \
 	|| defined(PLATFORM_GCC_POWERPC_DARWIN) || defined(PLATFORM_MWERKS_POWERPC_DARWIN) \
-	|| defined(PLATFORM_GCC_SPARC_SOLARIS) || defined(PLATFORM_GCC_INTEL_FREEBSD)
+	|| defined(PLATFORM_GCC_SPARC_SOLARIS) || defined(PLATFORM_GCC_INTEL_FREEBSD) \
+	|| defined(PLATFORM_GCC_INTEL_OPENBSD)
 
 // Use ISO C99 (also ANSI and POSIX) fixed size integers
 #include <inttypes.h>

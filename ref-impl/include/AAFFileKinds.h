@@ -91,7 +91,7 @@ const aafUID_t kAAFFileKind_MxfKlvBinary = kAAFFileKind_MxfKlvBinary_Value;
 const aafUID_t kAAFFileKind_Aaf512Binary = kAAFFileKind_AafS512Binary_Value;
 const aafUID_t kAAFFileKind_Aaf4KBinary = kAAFFileKind_AafS4KBinary_Value;
 
-#elif defined( OS_DARWIN ) || defined( OS_IRIX ) || defined( OS_LINUX ) || defined( OS_SOLARIS ) || defined( OS_FREEBSD )
+#elif defined( OS_UNIX )
 
 #ifdef USE_LIBGSF
 // When LIBGSF is requested make it the default for 512 and 4k

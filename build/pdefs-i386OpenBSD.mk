@@ -22,55 +22,28 @@
 #
 ###############################################################################
 
+#------------------------------------------------------------------------------
+#
+# pdefs-i386OpenBSD.mk
+#
+#	This file contains makefile definitions for the OpenBSD platform.
+#
+#
+# Uses:
+#	COMPILER, XL, RPATH, CC
+#	
+# Requires:
+#	XL, RPATH, CC
+#
+# Sets:
+#	MIPS_ABI, COMPILER, PLATFORM_CFLAGS, RPATH_OPT, 
+#	LD, LD_STAT_LIB, LD_DYN_LIB, U_OPTS, OBJ, EXE, LIB, DLL, BYTE_ORDER,
+#	UUIDLIB
+#
+#------------------------------------------------------------------------------
 
-OS=`(uname -s) 2>/dev/null` || OS=Unknown
 
-if [ "$OS" = "SunOS" ] ; then
-	# Under Solaris "uname -p" returns "sparc" or "i386" for modern machines
-	MACHINE=`(uname -p) 2>/dev/null` || MACHINE=Unknown
-else
-	# Other OSes use the POSIX -m flag for machine hardware type
-	MACHINE=`(uname -m) 2>/dev/null` || MACHINE=Unknown
-fi
-
-case "${MACHINE}:${OS}" in
-	*:IRIX*)
-	echo MipsIrix
-	exit 0;;
-
-	*:Linux)
-	echo ${MACHINE}Linux
-	exit 0;;
-
-	sparc*:SunOS)
-	echo SparcSolaris
-	exit 0;;
-
-	# New cygwin environments return "CYGWIN_NT-5.x" so set to Windows_NT
-	*86:CYGWIN_NT*)
-	OS=Windows_NT
-	echo Win
-	exit 0;;
-
-	# Cygwin builds
-	*86:Windows_NT)
-	echo Win
-	exit 0;;
-
-	# Mingw builds (E.g. using MSYS shell)
-	*86:MINGW32_NT*)
-	echo Win
-	exit 0;;
-
-	"Power Macintosh:Darwin")
-	echo PPCDarwin
-	exit 0;;
-
-	# FreeBSD and OpenBSD
-	*86:FreeBSD|*86:OpenBSD)
-	echo ${MACHINE}${OS}
-	exit 0;;
-esac
-
-echo Unknown
-exit 1
+#------------------------------------------------------------------------------
+# OpenBSD is so close to FreeBSD we can use the FreeBSD configuration
+#------------------------------------------------------------------------------
+include $(AAFBASE)/build/pdefs-i386FreeBSD.mk
