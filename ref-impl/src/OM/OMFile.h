@@ -124,9 +124,9 @@ public:
   ~OMFile(void);
 
     // @cmember Save all changes made to the contents of this
-    //          <c OMFile>. It is not possible to <mf OMFile::save>
+    //          <c OMFile>. It is not possible to save
     //          read-only or transient files.
-  void save(void* clientOnSaveContext = 0);
+  void saveFile(void* clientOnSaveContext = 0);
 
     // @cmember Save the entire contents of this <c OMFile> as well as
     //          any unsaved changes in the new file <p fileName>. The file
