@@ -92,10 +92,12 @@ OMStoredObject::OMStoredObject(IStorage* s)
   _offset(0), _open(false), _mode(readOnlyMode),
   _byteOrder(hostByteOrder()), _reorderBytes(false)
 {
+  TRACE("OMStoredObject::OMStoredObject");
 }
 
 OMStoredObject::~OMStoredObject(void)
 {
+  TRACE("OMStoredObject::~OMStoredObject");
 }
 
   // @mfunc Open the root <c OMStoredObject> in the disk file
@@ -105,6 +107,9 @@ OMStoredObject::~OMStoredObject(void)
   //          the disk file.
 OMStoredObject* OMStoredObject::openRead(const wchar_t* fileName)
 {
+  TRACE("OMStoredObject::openRead");
+  PRECONDITION("Valid file name", validWideString(fileName));
+
   OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
                                                          readOnlyMode);
   newStoredObject->open(readOnlyMode);
@@ -119,6 +124,9 @@ OMStoredObject* OMStoredObject::openRead(const wchar_t* fileName)
   //          the disk file.
 OMStoredObject* OMStoredObject::openModify(const wchar_t* fileName)
 {
+  TRACE("OMStoredObject::openModify");
+  PRECONDITION("Valid file name", validWideString(fileName));
+
   OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
                                                          modifyMode);
   newStoredObject->open(modifyMode);
@@ -136,6 +144,11 @@ OMStoredObject* OMStoredObject::openModify(const wchar_t* fileName)
 OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName,
                                              const OMByteOrder byteOrder)
 {
+  TRACE("OMStoredObject::createModify");
+  PRECONDITION("Valid file name", validWideString(fileName));
+  PRECONDITION("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
+
   OMStoredObject* newStoredObject = OMStoredObject::create(fileName);
   newStoredObject->create(byteOrder);
 
@@ -204,6 +217,7 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
 {
   TRACE("OMStoredObject::save(OMStoredPropertySetIndex*)");
   PRECONDITION("Already open", _open);
+  PRECONDITION("Valid index", index != 0);
   PRECONDITION("Valid index", index->isValid());
   PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
 
@@ -404,6 +418,8 @@ static const char* const propertyValueStreamName = "property values";
 void OMStoredObject::create(const OMByteOrder byteOrder)
 {
   TRACE("OMStoredObject::create");
+  PRECONDITION("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
   PRECONDITION("Not already open", !_open);
 
   _byteOrder = byteOrder;
@@ -459,6 +475,8 @@ void OMStoredObject::write(OMPropertyId propertyId,
                            size_t size)
 {
   TRACE("OMStoredObject::write");
+  PRECONDITION("Valid data", start != 0);
+  PRECONDITION("Valid size", size > 0);
 
   _index->insert(propertyId, type, _offset, size);
 
@@ -482,6 +500,8 @@ void OMStoredObject::read(OMPropertyId propertyId,
                           size_t size)
 {
   TRACE("OMStoredObject::read");
+  PRECONDITION("Valid data", start != 0);
+  PRECONDITION("Valid size", size > 0);
 
   // Consistency check - look up propertyId in _index and check that
   // the property type is the expected (passed in) type.  and that the
@@ -548,6 +568,8 @@ void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
 IStream* OMStoredObject::openStream(const char* streamName)
 {
   TRACE("OMStoredObject::openStream");
+  PRECONDITION("Valid stream name", validString(streamName));
+
   return openStream(_storage, streamName);
 }
 
@@ -558,6 +580,8 @@ IStream* OMStoredObject::openStream(const char* streamName)
 IStream* OMStoredObject::createStream(const char* streamName)
 {
   TRACE("OMStoredObject::createStream");
+  PRECONDITION("Valid stream name", validString(streamName));
+
   return createStream(_storage, streamName);
 }
 
@@ -587,6 +611,7 @@ void OMStoredObject::restore(OMClassId& cid)
 OMStoredObject* OMStoredObject::create(const char* name)
 {
   TRACE("OMStoredObject::create");
+  PRECONDITION("Valid name", validString(name));
 
   IStorage* newStorage = createStorage(_storage, name);
   OMStoredObject* result = new OMStoredObject(newStorage);
@@ -603,6 +628,7 @@ OMStoredObject* OMStoredObject::create(const char* name)
 OMStoredObject* OMStoredObject::open(const char* name)
 {
   TRACE("OMStoredObject::open");
+  PRECONDITION("Valid name", validString(name));
 
   IStorage* newStorage = openStorage(_storage, name, _mode);
   OMStoredObject* result = new OMStoredObject(newStorage);
@@ -620,6 +646,10 @@ void OMStoredObject::validate(
                         const OMPropertySet* propertySet,
                         const OMStoredPropertySetIndex* propertySetIndex) const
 {
+  TRACE("OMStoredObject::validate");
+  PRECONDITION("Valid property set", propertySet != 0);
+  PRECONDITION("Valid property set index", propertySetIndex != 0);
+
   OMPropertyId propertyId;
   OMUInt32 type;
   OMUInt32 offset;
@@ -659,6 +689,8 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
                           const char* vectorName)
 {
   TRACE("OMStoredObject::save");
+  PRECONDITION("Valid vector", vector != 0);
+  PRECONDITION("Valid vector name", validString(vectorName));
 
   // Calculate the stream name for the index.
   //
@@ -703,7 +735,8 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
                              const char* vectorName)
 {
   TRACE("OMStoredObject::restore");
-  
+  PRECONDITION("Valid vector name", validString(vectorName));
+
   // Calculate the stream name for the index.
   //
   char* vectorIndexName = vectorIndexStreamName(vectorName);
@@ -746,6 +779,9 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
 
 char* OMStoredObject::vectorIndexStreamName(const char* vectorName)
 {
+  TRACE("OMStoredObject::vectorIndexStreamName");
+  PRECONDITION("Valid vector name", validString(vectorName));
+
   char* suffix = " index";
   char* vectorIndexName = new char[strlen(vectorName) + strlen(suffix) + 1];
   ASSERT("Valid heap pointer", vectorIndexName != 0);
@@ -760,6 +796,7 @@ IStream* OMStoredObject::createStream(IStorage* storage,
 {
   TRACE("OMStoredObject::createStream");
   PRECONDITION("Valid storage", storage != 0);
+  PRECONDITION("Valid stream name", validString(streamName));
 
   DWORD mode;
   if (_mode == modifyMode) {
@@ -830,6 +867,8 @@ void OMStoredObject::closeStream(IStream*& stream)
 
 OMByteOrder OMStoredObject::byteOrder(void) const
 {
+  TRACE("OMStoredObject::byteOrder");
+
   return _byteOrder;
 }
 
@@ -934,6 +973,9 @@ void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
 void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
 {
   TRACE("OMStoredObject::readFromStream");
+  PRECONDITION("Valid stream", stream != 0);
+  PRECONDITION("Valid data buffer", data != 0);
+  PRECONDITION("Valid size", size > 0);
 
   unsigned long bytesRead;
   HRESULT result = stream->Read(data, size, &bytesRead);
@@ -952,6 +994,9 @@ void OMStoredObject::readUInt32FromStream(IStream* stream,
                                           OMUInt32& i,
                                           bool reorderBytes)
 {
+  TRACE("OMStoredObject::readUInt32FromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
   readFromStream(stream, &i, sizeof(OMUInt32));
   if (reorderBytes) {
     reorderOMUInt32(i);
@@ -962,6 +1007,8 @@ void OMStoredObject::readUInt32FromStream(IStream* stream,
   //   @parm The OMUInt32 to reorder.
 void OMStoredObject::reorderOMUInt32(OMUInt32& i)
 {
+  TRACE("OMStoredObject::reorderOMUInt32");
+
   OMUInt8* p = (OMUInt8*)&i;
   OMUInt8 temp;
 
@@ -992,6 +1039,7 @@ void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
 void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
 {
   TRACE("OMStoredObject::getClass");
+  PRECONDITION("Valid storage", storage != 0);
 
   STATSTG statstg;
   HRESULT result = storage->Stat(&statstg, STATFLAG_NONAME);
@@ -1011,6 +1059,7 @@ void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
 OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
 {
   TRACE("OMStoredObject::streamPosition");
+  PRECONDITION("Valid stream", stream != 0);
 
   OMUInt64 result;
   LARGE_INTEGER zero = {0, 0};
@@ -1033,6 +1082,7 @@ OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
 void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
 {
   TRACE("OMStoredObject::streamSetPosition");
+  PRECONDITION("Valid stream", stream != 0);
 
   ULARGE_INTEGER newPosition;
   ULARGE_INTEGER oldPosition;
@@ -1068,6 +1118,9 @@ static void convert(wchar_t* wcName, size_t length, const char* name)
 static void convert(char* cName, size_t length, const wchar_t* name)
 {
   ASSERT("Valid program name", validString(getProgramName()));
+  PRECONDITION("Valid input name", validWideString(name));
+  PRECONDITION("Valid output buffer", cName != 0);
+  PRECONDITION("Valid output buffer size", length > 0);
 
   size_t status = wcstombs(cName, name, length);
   if (status == (size_t)-1) {
