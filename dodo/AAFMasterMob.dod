@@ -8,7 +8,6 @@ AAFMob\
 #c
 #import ./AAFObject.exp
 #import ./AAFMob.exp
-#import ./AAFMobPrivate.exp
 #import ./AAFSearchSource.exp
 AD_HEAD
 AD_IDL(//
@@ -132,6 +131,8 @@ AD_XMETHOD3(GetTapeName,
   // Caller may call GetTapeNameBufLen\(\) to determine the required
   // buffer size.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pTapeName pointer is valid.
   // - bufSize indicates the buffer is large enough to hold the name.
@@ -173,6 +174,8 @@ AD_XMETHOD2(GetTapeNameBufLen,
   // method.  The value is placed into the location specified by pLen.
   // The value will include space required for the trailing null
   // character.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pLen pointer is valid.
@@ -261,6 +264,10 @@ AD_XMETHOD3(GetRepresentationSourceClip,
   // such as AAFMedia::GetVideoInfo and AAFMedia::IsMediaContiguous to
   // determine which media is the best fit.
   //
+  // The returned source clip is AddRef\(\)ed before it is returned.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the ppSourceClip pointer is valid.
   //
@@ -320,6 +327,10 @@ AD_XMETHOD3(GetCriteriaSourceClip,
   // that references the Source Mob that best meets the specified
   // criteria.  This function will work whether multiple media
   // representations exist or not.
+  //
+  // The returned source clip is AddRef\(\)ed before it is returned.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the ppSourceClip pointer is valid.
@@ -462,7 +473,4 @@ AD_XMETHOD5(NewPhysSourceRef,
   // \(other codes here.\))
 
 AD_COM_METH(.method-SearchSource)
-
-
-AD_COM_METH(.method-GetMobKind)
 AD_CLASS_END
