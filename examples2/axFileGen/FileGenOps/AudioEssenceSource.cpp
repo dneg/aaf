@@ -223,7 +223,7 @@ std::auto_ptr< SampleSrcBuffer > ToneSource::GetNext()
 		aafUInt8* buf8 = buf.get();
 		int i;
 		for( i = 0; i < _waveHeader.GetNumSamples(); i++ ) {
-			buf8[i] = _toneGen->NextSample();
+			buf8[i] = static_cast<aafUInt8>(_toneGen->NextSample());
 		}
 	}
 	else if ( 2 == _waveHeader.GetBytesPerSample() ) {
@@ -234,7 +234,7 @@ std::auto_ptr< SampleSrcBuffer > ToneSource::GetNext()
 	
 		int i;
 		for( i = 0; i < _waveHeader.GetNumSamples(); i++ ) {
-			buf16[i] = _toneGen->NextSample();
+			buf16[i] = static_cast<aafUInt16>(_toneGen->NextSample());
 		}
 	}
 	else if ( 4 == _waveHeader.GetBytesPerSample() ) {
