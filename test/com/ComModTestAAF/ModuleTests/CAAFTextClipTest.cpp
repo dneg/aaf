@@ -85,7 +85,7 @@ private:
   bool _bWritableFile;
   IAAFHeader *_pHeader;
   IAAFDictionary *_pDictionary;
-  aafUID_t _referencedMobID; // save id for validation in the open test...
+  aafMobID_t _referencedMobID; // save id for validation in the open test...
 };
 
 
@@ -362,7 +362,7 @@ void TextClipTest::OpenTextClip()
   IAAFSegment *pSegment = NULL;
   IAAFTextClip *pTextClip = NULL;
   IAAFSourceReference *pSourceReference = NULL;
-  aafUID_t masterMobID = {0};
+  aafMobID_t masterMobID = {0};
   IAAFMasterMob *pMasterMob = NULL;
   IAAFMob *pReferencedMob = NULL;
 

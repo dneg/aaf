@@ -50,7 +50,7 @@ ImplAAFSourceReference::~ImplAAFSourceReference ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceReference::GetSourceID (aafUID_t*	pSourceID)
+    ImplAAFSourceReference::GetSourceID (aafMobID_t*	pSourceID)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 	if (pSourceID == NULL)
@@ -71,7 +71,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceReference::SetSourceID (aafUID_t	sourceID)
+    ImplAAFSourceReference::SetSourceID (aafMobID_constref	sourceID)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
@@ -109,12 +109,12 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(const aafUID_t & from,
-															const aafUID_t & to)
+AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafMobID_constref from,
+															aafMobID_constref to)
 {
-	aafUID_t			myID;
+	aafMobID_t			myID;
 
-	if(EqualAUID(&myID, &from))
+	if(memcmp(&myID, &from, sizeof(aafMobID_t)) == 0)
 		SetSourceID(to);
 
 	return AAFRESULT_SUCCESS;

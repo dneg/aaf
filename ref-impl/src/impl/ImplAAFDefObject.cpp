@@ -235,6 +235,8 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t	*tmp, newUID;
 	aafInt32	oldCount;
 	aafInt32	newCount;
+	static const aafUID_t nullID = { 0 };
+
 
 //!!!	if(pPluginDescriptor == NULL)
 //		return AAFRESULT_NULL_PARAM;
@@ -242,17 +244,17 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		oldCount = _descriptors.count();
-        if (oldCount == 1) {
-          aafUID_t first;
-          _descriptors.getValueAt(&first, 0);
-		  if(EqualAUID(&first, &NilMOBID))	//!!! Handle non-optional props
-		  {									//!!!
-			oldCount = 0;					//!!!
-		  }									//!!!
+		if (oldCount == 1) {
+			aafUID_t first;
+			_descriptors.getValueAt(&first, 0);
+		  	if(EqualAUID(&first, &nullID))	//!!! Handle non-optional props
+		  	{									//!!!
+				oldCount = 0;					//!!!
+			}									//!!!
 		}
 		newCount = oldCount + 1;
 		if(pPluginDescriptor == NULL)	//!!!
-			newUID = NilMOBID;			//!!!
+			newUID = nullID;			//!!!
 		else
 		{
 			CHECK(pPluginDescriptor->GetAUID(&newUID));

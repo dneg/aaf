@@ -288,7 +288,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::CreateEssenceStream (const aafCharacter * pName,
-		const aafUID_t * pMobID,
+		aafMobID_constptr pMobID,
         IAAFEssenceStream ** ppEssenceStream)
 {
   HRESULT hr = S_OK;
@@ -331,7 +331,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::CreateEssenceStreamWriteOnly (const aafCharacter * pName,
-        const aafUID_t * pMobID,
+        aafMobID_constptr pMobID,
         IAAFEssenceStream ** ppEssenceStream)
 {
   return HRESULT_NOT_IMPLEMENTED;
@@ -340,7 +340,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::OpenEssenceStreamReadOnly (const aafCharacter * pName,
-        const aafUID_t * pMobID,
+        aafMobID_constptr pMobID,
         IAAFEssenceStream ** ppEssenceStream)
 {
   HRESULT hr = S_OK;
@@ -382,7 +382,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::OpenEssenceStreamAppend (const aafCharacter * pName,
-        const aafUID_t * pMobID,
+        aafMobID_constptr pMobID,
         IAAFEssenceStream ** ppEssenceStream)
 {
   HRESULT hr = S_OK;

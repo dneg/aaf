@@ -89,7 +89,7 @@ private:
   bool _bWritableFile;
   IAAFHeader *_pHeader;
   IAAFDictionary *_pDictionary;
-  aafUID_t _referencedMobID; // save id for validation in the open test...
+  aafMobID_t _referencedMobID; // save id for validation in the open test...
   static const wchar_t *_beginAnchor; // sample anchor values for validation.
   static const wchar_t *_endAnchor;
 };
@@ -379,7 +379,7 @@ void HTMLClipTest::OpenHTMLClip()
   wchar_t *pBeginAnchor = NULL;
   wchar_t *pEndAnchor = NULL;
   IAAFSourceReference *pSourceReference = NULL;
-  aafUID_t masterMobID = {0};
+  aafMobID_t masterMobID = {0};
   IAAFMasterMob *pMasterMob = NULL;
   IAAFMob *pReferencedMob = NULL;
 
