@@ -24,6 +24,7 @@
 #ifndef OMMSSSTOREDSTREAM_H
 #define OMMSSSTOREDSTREAM_H
 
+#include "OMMSStructuredStorage.h"
 #include "OMStoredStream.h"
 
 struct IStream;

@@ -24,6 +24,7 @@
 #ifndef OMMSSSTOREDOBJECT_H
 #define OMMSSSTOREDOBJECT_H
 
+#include "OMMSStructuredStorage.h"
 #include "OMStoredObject.h"
 #include "OMDataTypes.h"
 #include "OMFile.h"
