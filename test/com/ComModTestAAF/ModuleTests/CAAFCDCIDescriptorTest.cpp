@@ -211,11 +211,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			  CoCreateGuid((GUID *)&newUID);
 			  pMob->SetMobID(&newUID);
 			  pMob->SetName(L"CDCIDescriptorTest");
-			  hr = CoCreateInstance(CLSID_AAFCDCIDescriptor,
-									  NULL, 
-									  CLSCTX_INPROC_SERVER, 
+			  hr = pDictionary->CreateInstance(&AUID_AAFCDCIDescriptor,
 									  IID_IAAFCDCIDescriptor, 
-									  (void **)&pCDCIDesc);		
+									  (IUnknown **)&pCDCIDesc);		
 			  if (SUCCEEDED(hr))
 			  {
 				  // Add all CDCI properties
