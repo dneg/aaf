@@ -121,7 +121,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFMobSlots::Skip (aafUInt32 count)
 {
 	AAFRESULT	hr;
-	aafInt32	newCurrent, siz;
+	aafNumSlots_t	newCurrent, siz;
 
 	newCurrent = _current + count;
 
