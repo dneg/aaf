@@ -124,6 +124,12 @@ typedef OMUInt8                OMCharacter;
 typedef OMUInt16               OMWideCharacter;
 
 typedef OMUInt32 OMPropertyId;
+typedef OMUInt32 OMPropertySize;
+typedef OMUInt32 OMPropertyCount;
+typedef OMUInt32 OMPropertyOffset;
+typedef OMUInt32 OMStoredForm;
+typedef OMUInt32 OMVersion;
+typedef OMUInt32 OMKeySize;
 
 typedef OMUInt16 OMByteOrder;
 
