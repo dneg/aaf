@@ -137,7 +137,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(sub->InitializeSourceClip (dataDef, &length, sourceRef));
 		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, L"Test", zeroPos, 
 												&newSlot));
-
+		newSlot->ReleaseReference();
 		sub->ReleaseReference();
 	}
 	XEXCEPT
@@ -217,6 +217,8 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(aSequ->SetLength(&length) );
 			}
 		}
+		if(newSlot != NULL)
+			newSlot->ReleaseReference();
 		if(aSequ != NULL)
 			aSequ->ReleaseReference();
 		if(tccp != NULL)
@@ -224,6 +226,8 @@ AAFRESULT STDMETHODCALLTYPE
 	} /* XPROTECT */
 	XEXCEPT
 	{
+		if(newSlot != NULL)
+			newSlot->ReleaseReference();
 		if(aSequ != NULL)
 			aSequ->ReleaseReference();
 		if(tccp != NULL)
