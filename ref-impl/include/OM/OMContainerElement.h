@@ -109,7 +109,7 @@ public:
                                       ReferencedObject>& rhs) const;
 
     // @cmember The unique key of this <c OMSetElement>.
-  const UniqueIdentification identification(void) const;
+  UniqueIdentification identification(void) const;
 
 };
 
@@ -283,7 +283,7 @@ public:
                                              ReferencedObject>& rhs) const;
 
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
-  const UniqueIdentification identification(void) const;
+  UniqueIdentification identification(void) const;
 
     // @cmember The count of weak references to this
     //          <c OMStrongReferenceSetElement>.
@@ -343,7 +343,7 @@ public:
               const OMWeakReferenceVectorElement<ReferencedObject>& rhs) const;
 
     // @cmember The unique key of this <c OMWeakReferenceVectorElement>.
-  const OMUniqueObjectIdentification identification(void) const;
+  OMUniqueObjectIdentification identification(void) const;
 
 };
 
@@ -386,7 +386,7 @@ public:
                  const OMWeakReferenceSetElement<ReferencedObject>& rhs) const;
 
     // @cmember The unique key of this <c OMWeakReferenceSetElement>.
-  const OMUniqueObjectIdentification identification(void) const;
+  OMUniqueObjectIdentification identification(void) const;
 
 };
 

@@ -235,7 +235,7 @@ bool OMSetElement<UniqueIdentification, ReferencedObject>::operator== (
   //   @tcarg class | ReferencedObject | The type of the referenced object.
   //   @rdesc  The unique key of this <c OMSetElement>.
 template <typename UniqueIdentification, typename ReferencedObject>
-const UniqueIdentification
+UniqueIdentification
 OMSetElement<UniqueIdentification, ReferencedObject>::identification(
                                                                     void) const
 {
@@ -761,7 +761,7 @@ OMStrongReferenceSetElement<UniqueIdentification, ReferencedObject>::
   //          object. This type must be a descendant of <c OMStorable>.
   //   @rdesc  The unique key of this <c OMStrongReferenceSetElement>.
 template <typename UniqueIdentification, typename ReferencedObject>
-const UniqueIdentification
+UniqueIdentification
 OMStrongReferenceSetElement<UniqueIdentification, ReferencedObject>::
                                                      identification(void) const
 {
@@ -898,7 +898,7 @@ bool OMWeakReferenceVectorElement<ReferencedObject>::operator== (
   //          object. This type must be a descendant of <c OMStorable>.
   //   @rdesc  The unique key of this <c OMWeakReferenceVectorElement>.
 template <typename ReferencedObject>
-const OMUniqueObjectIdentification
+OMUniqueObjectIdentification
 OMWeakReferenceVectorElement<ReferencedObject>::identification(void) const
 {
   TRACE("OMWeakReferenceVectorElement<ReferencedObject>::identification");
@@ -1015,7 +1015,7 @@ bool OMWeakReferenceSetElement<ReferencedObject>::operator== (
   //          object. This type must be a descendant of <c OMStorable>.
   //   @rdesc  The unique key of this <c OMWeakReferenceSetElement>.
 template <typename ReferencedObject>
-const OMUniqueObjectIdentification
+OMUniqueObjectIdentification
 OMWeakReferenceSetElement<ReferencedObject>::identification(void) const
 {
   TRACE("OMWeakReferenceSetElement<ReferencedObject>::identification");
