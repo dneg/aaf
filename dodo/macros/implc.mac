@@ -273,6 +273,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 17: method description
 #c
 #startm AD_XMETHOD3 17
+AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/)
@@ -300,7 +301,8 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 22: method description
 #c
 #startm AD_XMETHOD4 22
-    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+ AAFRESULT STDMETHODCALLTYPE
+   Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
                            .%18-adornment%19 .%18-indirection /*%20*/)
@@ -329,6 +331,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 27: method description
 #c
 #startm AD_XMETHOD5 27
+AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
@@ -360,7 +363,8 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 32: method description
 #c
 #startm AD_XMETHOD6 32
-    Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
+ AAFRESULT STDMETHODCALLTYPE
+   Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
                            .%18-adornment%19 .%18-indirection /*%20*/,
@@ -393,6 +397,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 37: method description
 #c
 #startm AD_XMETHOD7 37
+AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
@@ -428,6 +433,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 42: method description
 #c
 #startm AD_XMETHOD8 42
+AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
@@ -465,6 +471,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 47: method description
 #c
 #startm AD_XMETHOD9 47
+AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
@@ -504,6 +511,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 52: method description
 #c
 #startm AD_XMETHOD_10 52
+AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
@@ -545,6 +553,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Macro Arg 57: method description
 #c
 #startm AD_XMETHOD_11 57
+AAFRESULT STDMETHODCALLTYPE
     Impl.this-module::%01 (.%03-adornment%04 .%03-indirection /*%05*/,
                            .%08-adornment%09 .%08-indirection /*%10*/,
                            .%13-adornment%14 .%13-indirection /*%15*/,
@@ -686,6 +695,23 @@ Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
 	.%12-adornment%13 .%12-indirection /*%14*/,
 	.%17-adornment%18 .%17-indirection /*%19*/)
 {}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a static method used to bootstrap an AAF
+#c session by creating the first session object.
+#c
+#startm AD_BEGIN_SESSION 00
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a static method used for a container to create
+#c its contained objects in the cpp API.
+#c
+#startm AD_STATIC_CREATE 00
 #endm
 
 

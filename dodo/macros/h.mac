@@ -995,3 +995,25 @@ private:
   // COMMENTS:
   // @comm %03\
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a static method used to bootstrap an AAF
+#c session by creating the first session object.
+#c
+#startm AD_BEGIN_SESSION 00
+static AAFRESULT STDMETHODCALLTYPE
+    AAFSession::BeginSession (aafProductIdentification_t * pIdent,
+        AAFSession ** ppSession);
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a static method used for a container to create
+#c its contained objects in the cpp API.
+#c
+#startm AD_STATIC_CREATE 00
+static AAFRESULT STDMETHODCALLTYPE
+    .this-module::CreateObject (.this-module ** result);
+#endm

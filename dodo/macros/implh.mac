@@ -823,6 +823,23 @@ private:
 
 #ccccccccccccccccccccccccccc
 #c
+#c Inserts declaration for a static method used to bootstrap an AAF
+#c session by creating the first session object.
+#c
+#startm AD_BEGIN_SESSION 00
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a static method used for a container to create
+#c its contained objects in the cpp API.
+#c
+#startm AD_STATIC_CREATE 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c The following macros assist in passing arguments to methods of the
 #c contained implementation class:
 #c

@@ -1170,6 +1170,52 @@ AAFRESULT STDMETHODCALLTYPE
 
 #ccccccccccccccccccccccccccc
 #c
+#c Inserts declaration for a static method used to bootstrap an AAF
+#c session by creating the first session object.
+#c
+#startm AD_BEGIN_SESSION 00
+AAFRESULT STDMETHODCALLTYPE
+    AAFSession::BeginSession (aafProductIdentification_t * pIdent,
+        AAFSession ** ppSession)
+{
+#ifdef BOB_TEST
+  AAFSession * pObj;
+  pObj = new AAFSession;
+  assert (pObj);
+  assert (ppSession);
+  *ppSession = pObj;
+  return AAFRESULT_SUCCESS;
+
+#else
+  return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a static method used for a container to create
+#c its contained objects in the cpp API.
+#c
+#startm AD_STATIC_CREATE 00
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::CreateObject (.this-module ** result)
+{
+#ifdef BOB_TEST
+  .this-module * pObj;
+  pObj = new .this-module;
+  assert (pObj);
+  assert (result);
+  *result = pObj;
+  return AAFRESULT_SUCCESS;
+#else
+  return AAFRESULT_NOT_IMPLEMENTED;
+#endif
+}
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
 #c The following macros assist in passing arguments to methods of the
 #c contained implementation class:
 #c
@@ -1197,7 +1243,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c arg2 = external arg name
 #c
 #startm .objIn-setup 02
-  Impl%01 * internal%02 = NULL;
+  Impl%01 * internal%02 = (Impl%01*)NULL;
   if (%02)
     {
 	  internal%02 = static_cast<Impl%01*>(%02->GetRepObject());
@@ -1226,7 +1272,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm .objOut-setup 02
   Impl%01 * internal%02;
-  Impl%01 ** pinternal%02 = NULL;
+  Impl%01 ** pinternal%02 = (Impl%01**)NULL;
   if (%02)
     {
 	  pinternal%02 = &internal%02;
@@ -1305,6 +1351,6 @@ pinternal%01\
 	}
   else
     {
-	  *%02 = NULL;
+	  *%02 = (%01*)NULL;
 	}
 #endm
