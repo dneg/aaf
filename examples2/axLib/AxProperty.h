@@ -41,6 +41,8 @@ public:
 	
 	aafUID_t GetAUID() const;
 
+	IAAFPropertyDefSP GetDefinition();
+
 	bool isA( const aafUID_t& propertyTypeUID ) const;
 
 private:

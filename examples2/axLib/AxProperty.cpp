@@ -64,6 +64,15 @@ aafUID_t AxProperty::GetAUID() const
 	return uid;
 }
 
+IAAFPropertyDefSP AxProperty::GetDefinition()
+{
+	IAAFPropertyDefSP spDefinition;
+
+	CHECK_HRESULT( _spIaafProperty->GetDefinition( &spDefinition ) );
+
+	return spDefinition;
+}
+
 bool AxProperty::isA( const aafUID_t& propertyTypeUID ) const
 {
 	// FIXME - a class to encapsulate aafUID_t that provides an

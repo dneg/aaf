@@ -39,6 +39,9 @@ public:
 
 	AxPropertyIter CreatePropertyIter();
 
+	inline operator IAAFObjectSP ()
+	{ return _spIaafObject; }
+
 private:
 
 	AxObject& operator=( const AxObject& );

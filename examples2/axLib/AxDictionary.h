@@ -39,6 +39,9 @@ public:
 	IAAFDataDefSP LookupDataDef( const aafUID_t& dataDefId );
 	IAAFOperationDefSP LookupOperationDef( const aafUID_t& opDefId );
 
+	IEnumAAFClassDefsSP GetClassDefs();
+	IEnumAAFTypeDefsSP GetTypeDefs();
+
 	void RegisterOpaqueTypeDef( IAAFTypeDefSP );
 
 	void RegisterOperationDef( IAAFOperationDefSP );

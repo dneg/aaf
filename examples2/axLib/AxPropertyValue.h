@@ -84,6 +84,11 @@ public:
 	
 	void Process( AxPropertyValuePrtcl& prtcl );
 
+	IAAFPropertyValueSP GetValue()
+	{
+		return _spIaafPropertyValue;
+	}
+
 private:
 	AxPropertyValue& operator=( const AxPropertyValue& );
 	

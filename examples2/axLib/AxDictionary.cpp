@@ -108,6 +108,24 @@ IAAFOperationDefSP AxDictionary::LookupOperationDef( const aafUID_t& opDefId )
 	return spIaafOperationDef;
 }
 
+IEnumAAFClassDefsSP AxDictionary::GetClassDefs()
+{
+	IEnumAAFClassDefsSP spIEnumAAFClassDefs;
+
+	CHECK_HRESULT( _spIaafDictionary->GetClassDefs( &spIEnumAAFClassDefs ) );
+
+	return spIEnumAAFClassDefs;
+}
+
+IEnumAAFTypeDefsSP AxDictionary::GetTypeDefs()
+{
+	IEnumAAFTypeDefsSP spIEnumAAFTypeDefs;
+
+	CHECK_HRESULT( _spIaafDictionary->GetTypeDefs( &spIEnumAAFTypeDefs ) );
+
+	return spIEnumAAFTypeDefs;
+}
+
 void AxDictionary::RegisterOpaqueTypeDef( IAAFTypeDefSP spTypeDef )
 {
 	CHECK_HRESULT( _spIaafDictionary->RegisterOpaqueTypeDef( spTypeDef ) );
