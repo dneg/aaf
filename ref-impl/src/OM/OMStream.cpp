@@ -187,8 +187,7 @@ OMUInt64 OMStream::size(void)
 	OMUInt64 result = position();
 
 	// back to where we started from
-	OMStream* nonConstThis = const_cast<OMStream*>(this);
-	nonConstThis->setPosition( oldposition );
+	setPosition( oldposition );
 
 	return result;
 }
@@ -234,8 +233,9 @@ OMUInt64 OMStream::position(void) const
 
 	// we have to rely upon Windows typedef __int64 fpos_t;
 	fpos_t position;
-	if( fgetpos( _file, &position ) )
+	if( fgetpos( _file, &position ) ) {
 		ASSERT( "Successful tell", errno==0 );
+	}
 
 #else
 
@@ -267,8 +267,9 @@ void OMStream::setPosition(OMUInt64 newPosition)
 
 	// we have to rely upon Windows typedef __int64 fpos_t;
 	fpos_t position = newPosition;
-	if( fsetpos( _file, &position ) )
+	if( fsetpos( _file, &position ) ) {
 		ASSERT( "Successful seek", errno==0 );
+	}
 
 #else
 
