@@ -55,7 +55,7 @@
 // define standard guids
 #include <initguid.h>
 #include <coguid.h>
-#elif defined(__sgi)
+#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
 #include "storage.h"
 #else
 #include <objbase.h>
@@ -718,7 +718,7 @@ void indent(int level)
   }
 }
 
-#if defined(__sgi)
+#if defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
 
 static const unsigned char guidMap[] =
 { 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 }; 
@@ -2289,7 +2289,7 @@ void ignore(OMUInt32 pid)
   }
 }
 
-#if defined(__sgi)
+#if defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
 // stubs
 void CoInitialize(void *)
 {
