@@ -457,6 +457,7 @@ bool zFlag = false;
 bool mFlag = false;
 bool lFlag = false;
 bool vFlag = false;
+bool verboseFlag = false;
 bool hFlag = false;
 unsigned long int mLimit = 0;
 unsigned long int lLimit = 0;
@@ -1053,27 +1054,33 @@ char* programName;
 
 void fatalError(char* routineName, char* message)
 {
-  cerr << programName
-       << ": Fatal error in routine \"" << routineName << "\". "
-       << message << endl;
+  cerr << programName << ": Fatal error";
+  if (verboseFlag) {
+    cerr << " in routine \"" << routineName << "\"";
+  }
+  cerr << ". " << message << endl;
 
   exit(EXIT_FAILURE);
 }
 
 void error(char* routineName, char* message)
 {
-  cerr << programName
-       << ": Error in routine \"" << routineName << "\". "
-       << message << endl;
+  cerr << programName << ": Error";
+  if (verboseFlag) {
+    cerr << " in routine \"" << routineName << "\"";
+  }
+  cerr << ". " << message << endl;
 
   errorCount = errorCount + 1;
 }
 
 void warning(char* routineName, char* message)
 {
-  cerr << programName
-       << ": Warning in routine \"" << routineName << "\". "
-       << message << endl;
+  cerr << programName << ": Warning";
+  if (verboseFlag) {
+    cerr << " in routine \"" << routineName << "\"";
+  }
+  cerr << ". " << message << endl;
 }
 
 void printError(const char* prefix, const char* fileName, DWORD errorCode)
@@ -4355,6 +4362,8 @@ int main(int argumentCount, char* argumentVector[])
       } else if ((strcmp(opt, "-v") == 0) ||
                  (strcmp(opt, "--validate") == 0)) {
         vFlag = true;
+      } else if (strcmp(opt, "--verbose") == 0) {
+        verboseFlag = true;
       } else if (strcmp(opt, "--mss-header") == 0) {
         hFlag = true;
       } else if ((strcmp(opt, "-h") == 0) ||
