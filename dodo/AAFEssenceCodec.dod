@@ -1,0 +1,362 @@
+#startm .this-module 0
+AAFEssenceCodec\
+#endm
+#c
+#startm .parent-module 0
+AAFPlugin\
+#endm
+#c
+#import ./AAFObject.exp
+AD_HEAD
+
+AD_FORWARD_DECLARATION(AAFEssenceFormat)
+
+AD_IDL(//
+// The AAFEssenceCodec interface describes the calls of a plugin
+// which handles encoding media in a particular file format\, with
+// optional compression.
+//
+// The AAFPluginManager keeps a copy of each codec in a table\, along
+// with cached copies of pertinant metadata about the codec\, and
+// instantiates a copy of the codec for each media stream.
+//)
+AD_CLASS_UUID(3631F7A1, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
+
+AD_DEFAULT_UUID(3631F7A2, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
+AD_CLASS_BEGIN
+
+AD_IDL(//
+	//**************
+	// Meta codec functions.  Called to plug a codec into the SDK\, but
+	// NOT for each instance of a codec.
+	//)
+
+AD_XMETHOD2(GetIndexedVariantID,
+		   [in],
+		   objPass,
+		   aafInt32,
+		   index,
+		   Which variant to get the ID for,
+		   [out],
+		   objPass,
+		   aafUID_t *,
+		   pVariant,
+		   The returned variant ID,
+			 Some codecs have variants handled by a single codec.
+	// \(For example\, the Avid AVR codec handles multiple AVRs.\)
+	// The number of variants is returned by GetMetaInfo\, and cached
+	// by the AAFPluginManager.
+	//)
+
+	
+AD_XMETHOD2(GetIndexedDataDefinition,
+		   [in],
+		   objPass,
+		   aafInt32,
+		   index,
+		   Which data definition to get the ID for,
+		   [out],
+		   objPass,
+		   aafUID_t *,
+		   pVariant,
+		   The returned dataDefinition,
+	// All codecs handle at least one kind of media \(picture\, sound\, control\)
+	// but some handle more than one.  The kind of media is specified by an
+	// AAFDataDefinition.  The numnber of data definitions is returned by
+	// GetMetaInfo\, and cached by the AAFPluginManager.)
+
+AD_XMETHOD1(GetMetaInfo,
+		   [out],
+		   objPass,
+		   aafCodecMetaInfo_t *,
+		   pInfo,
+		   The returned meta information about this codec,
+		   This function is called at startup by the plugin manager)
+
+AD_XMETHOD3(GetCodecDisplayName,
+			[in],
+			objPass,
+			aafUID_t,
+			variant,
+			which variant of the codec to use,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pName,
+			Human-readable name of the variant,
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold variant Name,
+			Given a variant ID\, return the human readable name)
+
+AD_METHOD2(GetSelectInfo,
+		   [in],
+		   aafUID_t,
+		   fileMobID,
+		   See if the current codec can process data from this file mob,
+		   [out],
+		   aafCodecSelectInfo_t *,
+		   pInfo,
+		   The returned meta information about this codec,
+		   This function is called when opening a media stream on a file mob.)
+	
+AD_IDL(//
+	//**************
+	// General purpose codec functions\, always callable \(whether or not
+	// Open or Create have been called.\)  These are called by AAFEssenceAccess
+	// to before the stream is actually opened.
+	//)
+	
+AD_METHOD3(GetNumChannels,
+		   [in],
+		   aafUID_t,
+		   fileMobID,
+		   Get the number of processable channels on this file mob,
+		   [in],
+		   aafUID_t,
+		   essenceKind,
+		   This is the type of essence to open,
+		   [out],
+		   aafInt16 *,
+		   pNumChannels,
+		   The number of channels present,
+			Returns the number of channels which this codec can handle
+			// of the given essence kind)
+
+AD_XMETHOD5(SemanticCheck,
+		   [in],
+			objPass,
+		   aafUID_t,
+		   fileMobID,
+		   Run a check on this file mob,
+		   [in],
+			objPass,
+		   aafCheckVerbose_t,
+		   verbose,
+		   This is the verbosity level of the output,
+		   [out],
+			objPass,
+		   aafCheckWarnings_t *,
+		   warning,
+		   This determines whether the output contains warnings,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pName,
+			Human-readable text describing problems \(or lack therof\) with the media,
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold variant Name,
+			Returns a \(possibly zero-length\) string listing any problems
+			//found with the essence\, or the relationship between variables
+			// in the essence descriptor\, and any such values contained within
+			// the essence data)
+		
+AD_XMETHOD3(Create,
+			[in],
+			objPass,
+			aafUID_t,
+			fileMobID,
+			Create the essence attached to this file mob,
+			[in],
+			objPass,
+			aafUID_t,
+			variant,
+			which variant of the codec to use,
+			[in],
+			objIn,
+			AAFEssenceStream,
+			stream,
+			Here is an essence stream with the raw data,
+			Create a media data object\, and attach the correct type of
+			//EssenceDescriptor to the fileMob)
+
+AD_XMETHOD2(Open,
+			[in],
+			objPass,
+			aafUID_t,
+			fileMobID,
+			Open the essence attached to this file mob,
+			[in],
+			objIn,
+			AAFEssenceStream,
+			stream,
+			Here is an essence stream with the raw data,
+			Open a media data object.)
+	
+AD_IDL(//
+	//**************
+	// Essence access codec functions\, Open or Create must have been called.
+	//)
+
+AD_XMETHOD3(WriteBlocks,
+			[in],
+			objPass,
+			aafDeinterleave_t,
+			inter,
+			Whether the material will be de-interleaved on read,
+			[in],
+			objPass,
+			aafInt16,
+			xferBlockCount,
+			How many aafMultiXfer blocks follow,
+			[in],
+			objPass,
+			aafmMultiXfer_t *,
+			xferBlock,
+			One or more blocks containing buffer pointer and length,
+			Write blocks from one or more buffers\, interleaving if needed.)
+
+AD_XMETHOD3(ReadBlocks,
+			[in],
+			objPass,
+			aafDeinterleave_t,
+			inter,
+			Whether the material will be de-interleaved on read,
+			[in],
+			objPass,
+			aafInt16,
+			xferBlockCount,
+			How many aafmMultiXfer blocks follow,
+			[in],
+			objPass,
+			aafmMultiXfer_t *,
+			xferBlock,
+			One or more blocks containing buffer pointer and length,
+			Read blocks into one or more buffers\, de-interleaving if needed.)
+
+AD_XMETHOD1(Seek,
+			[in],
+			objPass,
+			aafPosition_t,
+			sampleFrame,
+			The sample frame to seek to.,
+			Seek to a particular sample frame on the media.  The
+			// sample frame is one frame for picture\, and one sample
+			// times the number of interleaved channels for audio.)
+
+AD_METHOD0(Close,
+			Close the media stream\, ready to open another or Finish.)
+		
+AD_IDL(	// Old video write/read lines become fractional samples)
+
+AD_XMETHOD2(WriteFractionalSample,
+			[in\,size_is\(buflen\)],
+			objPass,
+			aafDataBuffer_t,
+			buffer,
+			to a buffer,
+			[in],
+			objPass,
+			aafInt32,
+			buflen,
+			of this size,
+			Write some number of bytes to the stream\,
+			// formatting it as usual.  When the number of bytes passes
+			//the size of a sample frame\, then the number of sample frames is
+			// bumped by one.)
+
+
+
+AD_XMETHOD3(ReadFractionalSample,
+			[in],
+			objPass,
+			aafUInt32,
+			buflen,
+			to a buffer of this size,
+			[out\, size_is\(buflen\)\, length_is\(*bytesRead\)],
+			objPass,
+			aafDataBuffer_t,
+			buffer,
+			here is the buffer,
+			[out\,ref],
+			objPass,
+			aafUInt32 *,
+			bytesRead,
+			Return bytes actually read,
+			Read some number of bytes to the stream\, removing any
+			// formatting.  When the number of bytes passes
+			//the size of a sample frame\, then the number of sample frames read is
+			// bumped by one.)
+
+
+
+AD_METHOD2(WriteRawData,
+			[in\\\,size_is\\\(buflen\\\)],
+			aafDataBuffer_t,
+			buffer,
+			to a buffer,
+			[in],
+			aafInt32,
+			buflen,
+			of this size,
+			Write some number of bytes to the stream exactly and with no formatting or compression.)
+
+
+
+AD_METHOD3(ReadRawData,
+			[in],
+			aafUInt32,
+			buflen,
+			to a buffer of this size,
+			[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],
+			aafDataBuffer_t,
+			buffer,
+			here is the buffer,
+			[out\\\,ref],
+			aafUInt32 *,
+			bytesRead,
+			Return bytes actually read,
+			Read some number of bytes from the stream exactly and with no formatting or compression.)
+
+AD_IDL(//
+	//**************
+	// Misc. Functions
+	//)
+	
+AD_XMETHOD2(CreateDescriptorFromStream,
+			[in],
+			objIn,
+			AAFEssenceStream,
+			pStream,
+			A raw file stream,
+			[in],
+			objPass,
+			aafUID_t,
+			pSourceMobID,
+			Put the finished descriptor on this source mob,
+			Given some raw essence \(like a WAVE file\)\, create
+			// an AAFEssenceDescriptor to match\, with all fields filled in.)
+
+
+
+AD_XMETHOD1(GetCurrentEssenceStream,
+			[out],
+			objOut,
+			AAFEssenceStream,
+			ppStream,
+			The current essence stream,
+			Return the current essence stream.)
+		
+AD_XMETHOD1(PutEssenceFormat,
+			[in],
+			objIn,
+			AAFEssenceFormat,
+			pFormat,
+			An essence format object,
+			Set the format of the data.)
+
+AD_XMETHOD1(GetEssenceFormat,
+			[in\,out],
+			objOut,
+			AAFEssenceFormat,
+			ppFormat,
+			An essence format object,
+			Supply an essence format object specifying what data is
+			// required\, and it is filled in with the data values.)
+
+AD_CLASS_END

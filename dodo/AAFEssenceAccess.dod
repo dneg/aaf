@@ -27,6 +27,7 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFMasterMob)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFSourceClip)
+AD_FORWARD_DECLARATION(AAFEssenceFormat)
 
 AD_CLASS_UUID(aed97eb1, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
@@ -394,8 +395,8 @@ Opens a all channels associated with a file mob.)
 	//@comm Replaces omfmMediaMultiOpen*/
 
 /****/
-AD_METHOD1(SetVideoMemFormat,
-[in],aafVideoMemOp_t*,op,,
+AD_XMETHOD1(SetVideoMemFormat,
+[in],objIn,AAFEssenceFormat,op,,
 Sets the video memory format and layout expected in memory.)
 	//@comm This is the format expected on writes and produced on reads.
 	//@comm On writes, the data will be written in this format, except
@@ -407,8 +408,8 @@ Sets the video memory format and layout expected in memory.)
 	//@comm Replaces omfmSetVideoMemFormat*/
 
 /****/
-AD_METHOD1(SetAudioMemFormat,
-[in],aafAudioMemOp_t*,op,,
+AD_XMETHOD1(SetAudioMemFormat,
+[in],objIn,AAFEssenceFormat,op,,
 Sets the audio memory format expected in memory.)
 	//@comm This is the format expected on writes and produced on reads.
 	//@comm On writes, the data will be written in this format, except
@@ -523,14 +524,14 @@ Get video-related information about a given piece of essence data.)
 			
 			
 /****/
-AD_METHOD1(GetVideoInfoArray,
-[out],aafVideoMemOp_t*,ops,,
+AD_XMETHOD1(GetVideoInfoArray,
+[out],objOut,AAFEssenceFormat,ops,,
 Given an array of video format blocks  read the opcodes and fill in the operands from the file format.)
 	//@comm Replaces omfmGetVideoInfoArray */
 
 /****/
-AD_METHOD1(PutVideoInfoArray,
-[in],aafVideoMemOp_t*,ops,,
+AD_XMETHOD1(PutVideoInfoArray,
+[in],objIn,AAFEssenceFormat,ops,,
 Given an array of video format blocks  read the opcodes and operands and change the file format.)
 	//@comm Replaces omfmPutVideoInfoArray */
 
@@ -565,14 +566,14 @@ Get audio-related information about a given piece of essence data.)
 
 
 /****/
-AD_METHOD1(GetAudioInfoArray,
-[out],aafAudioMemOp_t *,ops,,
+AD_XMETHOD1(GetAudioInfoArray,
+[out],objOut,AAFEssenceFormat,ops,,
 Given an array of audio format blocks read the opcodes and fill in the operands from the file format.)
 	//@comm Replaces omfmGetAudioInfoArray */
 
 /****/
-AD_METHOD1(PutAudioInfoArray,
-[in],aafAudioMemOp_t*,ops,,
+AD_XMETHOD1(PutAudioInfoArray,
+[in],objIn,AAFEssenceFormat,ops,,
 Given an array of audio format blocks read the opcodes and operands and change the file format.)
 
 /****/
