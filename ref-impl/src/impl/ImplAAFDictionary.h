@@ -82,6 +82,12 @@ class ImplAAFTypeDefSet;
 #include "ImplAAFDataDef.h"
 #include "ImplAAFPluginDef.h"
 
+// FIXMEJPT Put this here for windows. 
+// Not required on Linux
+#include "ImplAAFKLVDataDefinition.h"
+#include "ImplAAFTaggedValueDefinition.h"
+
+
 class ImplAAFDictionary :
   public OMClassFactory,
   public ImplAAFObject
