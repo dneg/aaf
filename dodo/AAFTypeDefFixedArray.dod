@@ -51,17 +51,30 @@ AD_XMETHOD4(Initialize,
 			friendly name of this type definition,
 
      Initializes this type def to contain elements of the given type\,
-  // and have the given fixed size.
+  // and have the given fixed size.  Note that it is only possible to
+  // use certain types as the element type.  Those permissible types
+  // include:
+  // - AAFTypeDefInt
+  // - AAFTypeDefRecord
+  // - AAFTypeDefEnum
+  // - AAFTypeDefExtEnum
+  // - AAFTypeDefFixedArray
   //
   // This method must be called after allocation\, and before
   // any other method can be called.
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
+  // - pID is a valid pointer.
   // - pTypeDef is a valid pointer.
+  // - pTypeName is a valid pointer.
+  // - element type is permissible for use in a FixedArray.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pTypeDef or pTypeName\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pTypeDef\\\, or pTypeName\)
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - an illegal element type was given.)
 
 
 AD_XMETHOD1(GetType,
