@@ -1,0 +1,77 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "All"=.\ALL\All\All.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axDump
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name axExample
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axDump"=.\axDump\axDump.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axExample"=.\axExample\axExample.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axLib"=.\axLib\axLib.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+
