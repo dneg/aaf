@@ -445,7 +445,7 @@ void OMMSSStoredObject::save(OMFile& file)
 
 void OMMSSStoredObject::save(OMStorable& object)
 {
-  TRACE("OMMSSStoredObject::save(OMFile)");
+  TRACE("OMMSSStoredObject::save(OMStorable)");
   save(object.classId());
   save(*object.propertySet());
 }
@@ -2328,7 +2328,7 @@ void OMMSSStoredObject::readUniqueObjectIdentificationFromStream(
                                               OMUniqueObjectIdentification& id,
                                               bool reorderBytes)
 {
-  TRACE("OMMSSStoredObject::UniqueObjectIdentificationFromStream");
+  TRACE("OMMSSStoredObject::readUniqueObjectIdentificationFromStream");
   PRECONDITION("Valid stream", stream != 0);
 
   readFromStream(stream, &id, sizeof(OMUniqueObjectIdentification));
@@ -2367,7 +2367,7 @@ void OMMSSStoredObject::readUniqueMaterialIdentificationFromStream(
                                             OMUniqueMaterialIdentification& id,
                                             bool reorderBytes)
 {
-  TRACE("OMMSSStoredObject::UniqueMaterialIdentificationFromStream");
+  TRACE("OMMSSStoredObject::readUniqueMaterialIdentificationFromStream");
   PRECONDITION("Valid stream", stream != 0);
 
   readFromStream(stream, &id, sizeof(OMUniqueMaterialIdentification));
