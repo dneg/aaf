@@ -876,13 +876,18 @@ AAFRESULT STDMETHODCALLTYPE
 			// make a sequence
 			CHECK(pSrcClip->GetSourceReference(&ref));
 			CHECK(pSrcClip->GetLength(&len));
-			CHECK(pSrcClip->GetFade(&fadeIn, &fadeInType, &fadeInPresent, &fadeOut, &fadeOutType, &fadeOutPresent));
-			if (fadeInPresent == kAAFFalse) {
-				fadeIn = 0;
+			
+			HRESULT getFadeHR = pSrcClip->GetFade(&fadeIn, &fadeInType, &fadeInPresent, &fadeOut, &fadeOutType, &fadeOutPresent);
+			if ( getFadeHR != AAFRESULT_PROP_NOT_PRESENT ) {
+			  CHECK( getFadeHR );
+			  if (fadeInPresent == kAAFFalse) {
+			    fadeIn = 0;
+			  }
+			  if (fadeOutPresent == kAAFFalse) {
+			    fadeOut = 0;
+			  }
 			}
-			if (fadeOutPresent == kAAFFalse) {
-				fadeOut = 0;
-			}
+
 			CHECK(masterMob->GetDictionary(&pDictionary));
 			CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
 				CreateInstance((ImplAAFObject**) &pNewClip));
@@ -890,9 +895,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
 			aafBool isSound = false;
 			CHECK(pDataDef->IsSoundKind(&isSound));
-			if ( isSound ) {
-			CHECK(pNewClip->SetFade((aafUInt32)fadeIn, fadeInType, (aafUInt32)fadeOut, fadeOutType));
+
+			if ( isSound && getFadeHR != AAFRESULT_PROP_NOT_PRESENT ) {
+			  CHECK(pNewClip->SetFade((aafUInt32)fadeIn, fadeInType, (aafUInt32)fadeOut, fadeOutType));
 			}
+
 			CHECK(((ImplAAFSegment*)pNewClip)->GenerateSequence(&seq));
 			CHECK(seq->Initialize(pDataDef));
 			CHECK(slot->SetSegment((ImplAAFSegment*)seq));
@@ -1348,13 +1355,18 @@ ImplAAFEssenceAccess::MultiAppend (ImplAAFMasterMob *masterMob,
 					// make a sequence
 					CHECK(pSrcClip->GetSourceReference(&ref));
 					CHECK(pSrcClip->GetLength(&len));
-					CHECK(pSrcClip->GetFade(&fadeIn, &fadeInType, &fadeInPresent, &fadeOut, &fadeOutType, &fadeOutPresent));
-					if (fadeInPresent == kAAFFalse) {
-						fadeIn = 0;
+
+					HRESULT getFadeHR = pSrcClip->GetFade(&fadeIn, &fadeInType, &fadeInPresent, &fadeOut, &fadeOutType, &fadeOutPresent);
+					if ( getFadeHR != AAFRESULT_PROP_NOT_PRESENT ) {
+					  CHECK( getFadeHR );
+					  if (fadeInPresent == kAAFFalse) {
+					    fadeIn = 0;
+					  }
+					  if (fadeOutPresent == kAAFFalse) {
+					    fadeOut = 0;
+					  }
 					}
-					if (fadeOutPresent == kAAFFalse) {
-						fadeOut = 0;
-					}
+
 					CHECK(masterMob->GetDictionary(&pDictionary));
 					CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
 						CreateInstance((ImplAAFObject**) &pNewClip));
@@ -1362,8 +1374,8 @@ ImplAAFEssenceAccess::MultiAppend (ImplAAFMasterMob *masterMob,
 
 					aafBool isSound = false;
 					CHECK(pDataDef->IsSoundKind(&isSound));
-					if ( isSound ) {
-					CHECK(pNewClip->SetFade((aafUInt32)fadeIn, fadeInType, (aafUInt32)fadeOut, fadeOutType));
+					if ( isSound && getFadeHR != AAFRESULT_PROP_NOT_PRESENT ) {
+					  CHECK(pNewClip->SetFade((aafUInt32)fadeIn, fadeInType, (aafUInt32)fadeOut, fadeOutType));
 					}
 					CHECK(((ImplAAFSegment*)pNewClip)->GenerateSequence(&seq));
 					CHECK(seq->Initialize(pDataDef));
