@@ -47,19 +47,19 @@ bool extensionRead (const aafCharacter * filename)
 
   cout << "***Reading file " << filename << "***" << endl;
 
-  IAAFFileSP pFile;
+  IAAFFile *pFile=NULL;
   check (AAFFileOpenExistingRead ((aafCharacter*) filename,
 								  0,
 								  &pFile));
   
-  IAAFHeaderSP pHead;
+  IAAFHeader *pHead=NULL;
   check (pFile->GetHeader(&pHead));
 
-  IAAFDictionarySP pDict;
+  IAAFDictionary *pDict=NULL;
   check (pHead->GetDictionary(&pDict));
 
-  IAAFTypeDefSP ptd;
-  IAAFClassDefSP pcd;
+  IAAFTypeDef *ptd=NULL;
+  IAAFClassDef *pcd=NULL;
 
   cout << "Verifying role enum type has been registered." << endl;
   check (pDict->LookupType ((aafUID_t*) &kTypeID_eRole, &ptd));
@@ -82,7 +82,7 @@ bool extensionRead (const aafCharacter * filename)
 
   cout << "Verifying PersonnelMob instance has been created and added" 
 	   << " to header." << endl;
-  IAAFMobSP pMob;
+  IAAFMob *pMob=NULL;
   check (pHead->LookupMob ((aafUID_t*) &kMobID_Personnel,
 						   &pMob));
 
@@ -91,6 +91,15 @@ bool extensionRead (const aafCharacter * filename)
 
   // done.
   pFile->Close ();
-
+  pHead->Release();
+  pHead=NULL;
+  pDict->Release();
+  pDict=NULL;
+  ptd->Release();
+  ptd=NULL;
+  pcd->Release();
+  pcd=NULL;
+  pMob->Release();
+  pMob=NULL;
   return true;
 }
