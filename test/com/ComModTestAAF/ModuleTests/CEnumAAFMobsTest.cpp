@@ -16,19 +16,58 @@
 #endif
 
 #include <iostream.h>
+#include <stdio.h>
+
+#include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+
+
+
+
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
+inline void checkExpression(bool expression, HRESULT r)
+{
+  if (!expression)
+    throw r;
+}
+
+
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
+	bool bFileOpen = false;
 	IAAFHeader *				pHeader = NULL;
+  IAAFDictionary*  pDictionary = NULL;
+	IAAFSourceMob	*pSourceMob = NULL;
+	IAAFMob			*pMob = NULL;
+	IAAFEssenceDescriptor *edesc;
 	aafProductIdentification_t	ProductInfo;
 	aafUID_t					newUID;
-	HRESULT						hr;
+	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productName = L"EnumAAFMobs Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -38,157 +77,116 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession);
-	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFile, 
-						   (void **)&pFile);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-    hr = pFile->Initialize();
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
 
-	// hr = pSession->SetDefaultIdentification(&ProductInfo);
-	// if (AAFRESULT_SUCCESS != hr)
-	//	return hr;
+  try
+  {
+    // Remove the previous test file if any.
+    RemoveTestFile(pFileName);
 
-	// hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
-	hr = pFile->OpenNewModify(pFileName, 0, &ProductInfo);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-  
-  	hr = pFile->GetHeader(&pHeader);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
- 	
-//Make the first mob
-	IAAFSourceMob	*pSourceMob;
-	IAAFMob			*pMob;
-	IAAFEssenceDescriptor *edesc;
 
-	// Create a FileMob
-	hr = CoCreateInstance(CLSID_AAFSourceMob,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
+    // Create the file
+		checkResult(CoCreateInstance(CLSID_AAFFile,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFFile, 
+								 (void **)&pFile));
+		checkResult(pFile->Initialize());
+		checkResult(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+		bFileOpen = true;
+ 
+    // We can't really do anthing in AAF without the header.
+		checkResult(pFile->GetHeader(&pHeader));
+
+    // Get the AAF Dictionary so that we can create valid AAF objects.
+    checkResult(pHeader->GetDictionary(&pDictionary));
+ 		
+    //Make the first mob
+
+	  // Create a FileMob
+	  checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
 							IID_IAAFSourceMob, 
-							(void **)&pSourceMob);
+							(IUnknown **)&pSourceMob));
 
+	  checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	hr = pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-	hr = CoCreateGuid((GUID *)&newUID); // hack: we need a utility function.
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-	hr = pMob->SetMobID(&newUID);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
+	  checkResult(pMob->SetMobID(&newUID));
+	  checkResult(pMob->SetName(L"File Mob"));
 	
-	hr = pMob->SetName(L"File Mob");
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	
- 	hr = CoCreateInstance(CLSID_AAFFileDescriptor,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
+ 	  checkResult(pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
 							IID_IAAFFileDescriptor, 
-							(void **)&edesc);		
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
- 	hr = pSourceMob->SetEssenceDescriptor (edesc);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+							(IUnknown **)&edesc));		
 
-	hr = pHeader->AppendMob(pMob);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+    checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 
-	// Create a MasterMob
-	hr = CoCreateInstance(CLSID_AAFMasterMob,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
+	  checkResult(pHeader->AppendMob(pMob));
+
+    // Reusing local variable so we need to release the inteface.
+    pMob->Release();
+    pMob = NULL;
+
+	  // Create a MasterMob
+	  checkResult(pDictionary->CreateInstance(&AUID_AAFMasterMob,
 							IID_IAAFMob, 
-							(void **)&pMob);
+							(IUnknown **)&pMob));
 
+	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
+	  checkResult(pMob->SetMobID(&newUID));
+	  checkResult(pMob->SetName(L"Master Mob"));
 
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	  checkResult(pHeader->AppendMob(pMob));
 
-	hr = CoCreateGuid((GUID *)&newUID); // hack: we need a utility function.
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+    // Reusing local variable so we need to release the inteface.
+    pMob->Release();
+    pMob = NULL;
 
-	hr = pMob->SetMobID(&newUID);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	  // Create a CompositionMob
+	  checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+							  IID_IAAFMob, 
+							  (IUnknown **)&pMob));
+
+	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
+	  checkResult(pMob->SetMobID(&newUID));
+  	checkResult(pMob->SetName(L"Composition Mob"));
+
+	  checkResult(pHeader->AppendMob(pMob));
+	}
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+  }
 	
-	hr = pMob->SetName(L"Master Mob");
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
 
-	hr = pHeader->AppendMob(pMob);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+  // Cleanup and return
+  if (edesc)
+    edesc->Release();
 
-	// Create a CompositionMob
-	hr = CoCreateInstance(CLSID_AAFCompositionMob,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
-							IID_IAAFMob, 
-							(void **)&pMob);
+  if (pMob)
+    pMob->Release();
+  
+  if (pSourceMob)
+    pSourceMob->Release();
 
+	if (pDictionary)
+		pDictionary->Release();
 
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	if (pHeader)
+		pHeader->Release();
 
-	hr = CoCreateGuid((GUID *)&newUID); // hack: we need a utility function.
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	if (pFile) 
+	{
+		if (bFileOpen)
+			pFile->Close();
+		pFile->Release();
+	}
 
-	hr = pMob->SetMobID(&newUID);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	
-	hr = pMob->SetName(L"Composition Mob");
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-	hr = pHeader->AppendMob(pMob);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-	// Close the file and get out of here
-	hr = pFile->Close();
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-	// hr = pSession->EndSession();
- 	// if (AAFRESULT_SUCCESS != hr)
-	// 	return hr;
-
-	pMob->Release();
-	if (pFile) pFile->Release();
-	// if (pSession) pSession->Release();
-
-	return AAFRESULT_SUCCESS;
+	return hr;
 }
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
+	bool bFileOpen = false;
 	IAAFHeader *				pHeader = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs;
@@ -205,82 +203,59 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 	  
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession);
-	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFile, 
-						   (void **)&pFile);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-    hr = pFile->Initialize();
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
 
-	// hr = pSession->SetDefaultIdentification(&ProductInfo);
-	// if (AAFRESULT_SUCCESS != hr)
-	//	return hr;
+  try
+  {
+    // Open the file
+		checkResult(CoCreateInstance(CLSID_AAFFile,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFFile, 
+								 (void **)&pFile));
+		checkResult(pFile->Initialize());
+		checkResult(pFile->OpenExistingRead(pFileName, 0));
+		bFileOpen = true;
+ 
+    // We can't really do anthing in AAF without the header.
+		checkResult(pFile->GetHeader(&pHeader));
 
-	// hr = pSession->OpenReadFile(pFileName, &pFile);
-	hr = pFile->OpenExistingRead(pFileName, 0);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-  
-  	hr = pFile->GetHeader(&pHeader);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	  // Make sure that we have one master, one file, and one composition (three total)
+	  checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+	  checkExpression (3 == numMobs, AAFRESULT_TEST_FAILED);
 
-	// Make sure that we have one master, one file, and one composition (three total)
-	hr = pHeader->GetNumMobs(kAllMob, &numMobs);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	if (3 != numMobs )
-		return AAFRESULT_TEST_FAILED;
+	  checkResult(pHeader->GetNumMobs(kMasterMob, &numMobs));
+	  checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
 
-	hr = pHeader->GetNumMobs(kMasterMob, &numMobs);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	if (1 != numMobs )
-		return AAFRESULT_TEST_FAILED;
+	  checkResult(pHeader->GetNumMobs(kFileMob, &numMobs));
+	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
-	hr = pHeader->GetNumMobs(kFileMob, &numMobs);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	if (1 != numMobs )
-		return AAFRESULT_TEST_FAILED;
+	  checkResult(pHeader->GetNumMobs(kCompMob, &numMobs));
+	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
+	}
+  catch (HRESULT& rResult)
+  {
+    hr = rResult;
+  }
+	
 
-	hr = pHeader->GetNumMobs(kCompMob, &numMobs);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	if (1 != numMobs )
-		return AAFRESULT_TEST_FAILED;
+	// Cleanup and return
 
-	//!!! Problem deleting, let it leak -- 	delete mobIter;
-	hr = pFile->Close();
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	if (pHeader)
+		pHeader->Release();
 
-	// hr = pSession->EndSession();
-	// if (AAFRESULT_SUCCESS != hr)
-	//	return hr;
+	if (pFile) 
+	{
+		if (bFileOpen)
+			pFile->Close();
+		pFile->Release();
+	}
 
-	if (pHeader) pHeader->Release();
-	if (pFile) pFile->Release();
-	// if (pSession) pSession->Release();
-
-	return 	AAFRESULT_SUCCESS;
+	return hr;
 }
  
 HRESULT CEnumAAFMobs::test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	IAAFSourceMob *pObject = NULL;
  	aafWChar * pFileName = L"EnumMOBTest.aaf";
 
   try
@@ -295,9 +270,6 @@ HRESULT CEnumAAFMobs::test()
 		" exception!" << endl; 
 	}
 
-  // Cleanup our object if it exists.
-  if (pObject)
-	pObject->Release();
 
   	// When all of the functionality of this class is tested, we can return success
 	if(hr == AAFRESULT_SUCCESS)

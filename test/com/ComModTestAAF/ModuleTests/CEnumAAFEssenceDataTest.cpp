@@ -23,6 +23,8 @@
 #include <assert.h>
 #include <string.h>
 
+#include "AAFStoredObjectIDs.h"
+
 
 // Utility class to implement the test.
 struct EnumEssenceDataTest
@@ -40,6 +42,7 @@ struct EnumEssenceDataTest
 
   void cleanupReferences();
   void check(HRESULT hr);
+  void removeTestFile(const wchar_t* pFileName);
 
   // Shared member data:
   HRESULT _hr;
@@ -47,7 +50,7 @@ struct EnumEssenceDataTest
   IAAFFile *_pFile;
   bool _bFileOpen;
   IAAFHeader *_pHeader;
-
+  IAAFDictionary *_pDictionary;
   IAAFMob *_pMob;
   IAAFSourceMob *_pSourceMob;
   IAAFEssenceDescriptor *_pEssenceDescriptor;
@@ -94,6 +97,7 @@ EnumEssenceDataTest::EnumEssenceDataTest():
   _pFile(NULL),
   _bFileOpen(false),
   _pHeader(NULL),
+  _pDictionary(NULL),
   _pMob(NULL),
   _pSourceMob(NULL),
   _pEssenceDescriptor(NULL),
@@ -156,6 +160,13 @@ void EnumEssenceDataTest::cleanupReferences()
     _pMob = NULL;
   }
 
+  
+  if (NULL != _pDictionary)
+  {
+    _pDictionary->Release();
+    _pDictionary = NULL;
+  }
+
   if (NULL != _pHeader)
   {
     _pHeader->Release();
@@ -177,8 +188,25 @@ inline void EnumEssenceDataTest::check(HRESULT hr)
     throw hr;
 }
 
+// Cross-platform utility to delete a file.
+void EnumEssenceDataTest::removeTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
 void EnumEssenceDataTest::createFile(wchar_t *pFileName)
 {
+  // Remove the previous test file if any.
+  removeTestFile(pFileName);
+
+
   check(CoCreateInstance(CLSID_AAFFile,
                          NULL, 
                          CLSCTX_INPROC_SERVER, 
@@ -188,6 +216,7 @@ void EnumEssenceDataTest::createFile(wchar_t *pFileName)
   check(_pFile->OpenNewModify(pFileName, 0, &_productInfo));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
+  check(_pHeader->GetDictionary(&_pDictionary));
 
   for (aafUInt32 item = 0; item < _maxMobCount; ++item)
     createFileMob(item);
@@ -214,7 +243,7 @@ void EnumEssenceDataTest::openFile(wchar_t *pFileName)
 
 void EnumEssenceDataTest::createFileMob(int itemNumber)
 {
-  assert(_pFile && _pHeader);
+  assert(_pFile && _pHeader && _pDictionary);
   assert(NULL == _pSourceMob);
   assert(NULL == _pMob);
   assert(NULL == _pFileDescriptor);
@@ -231,11 +260,9 @@ void EnumEssenceDataTest::createFileMob(int itemNumber)
 
 
   // Create a Mob
-  check(CoCreateInstance(CLSID_AAFSourceMob,
-              NULL, 
-              CLSCTX_INPROC_SERVER, 
+  check(_pDictionary->CreateInstance(&AUID_AAFSourceMob,
               IID_IAAFSourceMob, 
-              (void **)&_pSourceMob));
+              (IUnknown **)&_pSourceMob));
 
   check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
   
@@ -244,11 +271,9 @@ void EnumEssenceDataTest::createFileMob(int itemNumber)
   check(_pMob->SetMobID(&newUID));
   check(_pMob->SetName(wcBuffer));
   
-  check(CoCreateInstance(CLSID_AAFFileDescriptor,
-              NULL, 
-              CLSCTX_INPROC_SERVER, 
+  check(_pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
               IID_IAAFEssenceDescriptor, 
-              (void **)&_pFileDescriptor));
+              (IUnknown **)&_pFileDescriptor));
 
   check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
                                           (void **)&_pEssenceDescriptor));
