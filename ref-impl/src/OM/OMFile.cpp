@@ -169,11 +169,11 @@ OMFile* OMFile::file(void) const
   return const_cast<OMFile*>(this);
 }
 
-bool OMFile::attached(void)
+bool OMFile::persistent(void)
 {
-  TRACE("OMFile::attached");
+  TRACE("OMFile::persistent");
 
-  // By definition a file is attached.
+  // By definition a file is persistent.
   //
   return true;
 }
