@@ -1,0 +1,383 @@
+// @doc INTERNAL
+// @com This file implements the module test for CAAFDefinitionObject
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
+
+
+
+#include "CAAFDigitalImageDescriptor.h"
+#include "CAAFDigitalImageDescriptor.h"
+#ifndef __CAAFDigitalImageDescriptor_h__
+#error - improperly defined include guard
+#endif
+
+#include <iostream.h>
+
+// default test values
+#define kStoredHeightTestVal			248
+#define kStoredWidthTestVal				720
+#define kFrameLayoutTestVal				kSeparateFields
+#define kVideoLineMapMaxElement			2
+#define kVideoLineMap1TestVal			10
+#define kVideoLineMap2TestVal			11
+#define kImageAspectRatioNumTestVal		4
+#define kImageAspectRatioDenTestVal		3
+#define kSampledHeightTestVal			247
+#define kSampledWidthTestVal			719
+#define kSampledXOffsetTestVal			5
+#define kSampledYOffsetTestVal			6
+#define kDisplayHeightTestVal			246
+#define kDisplayWidthTestVal			718
+#define kDisplayXOffsetTestVal			7
+#define kDisplayYOffsetTestVal			8
+#define kAlphaTransparencyTestVal		kMaxValueTransparent
+#define kImageAlignmentFactorTestVal	0
+#define kGammaNumTestVal				7
+#define kGammaDenTestVal				8
+
+static HRESULT OpenAAFFile(aafWChar*			pFileName,
+						   aafMediaOpenMode_t	mode,
+						   IAAFFile**			ppFile,
+						   IAAFHeader**			ppHeader)
+{
+	aafProductIdentification_t	ProductInfo;
+	HRESULT						hr = AAFRESULT_SUCCESS;
+
+	ProductInfo.companyName = L"AAF Developers Desk";
+	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.productVersion.major = 1;
+	ProductInfo.productVersion.minor = 0;
+	ProductInfo.productVersion.tertiary = 0;
+	ProductInfo.productVersion.patchLevel = 0;
+	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersionString = NULL;
+	ProductInfo.productID = -1;
+	ProductInfo.platform = NULL;
+
+	hr = CoCreateInstance(CLSID_AAFFile,
+						   NULL, 
+						   CLSCTX_INPROC_SERVER, 
+						   IID_IAAFFile, 
+						   (void **)ppFile);
+	if (AAFRESULT_SUCCESS != hr)
+		return hr;
+    hr = (*ppFile)->Initialize();
+	if (AAFRESULT_SUCCESS != hr)
+		return hr;
+
+	switch (mode)
+	{
+	case kMediaOpenReadOnly:
+		hr = (*ppFile)->OpenExistingRead(pFileName, 0);
+		break;
+
+	case kMediaOpenAppend:
+		hr = (*ppFile)->OpenNewModify(pFileName, 0, &ProductInfo);
+		break;
+
+	default:
+		hr = AAFRESULT_TEST_FAILED;
+		break;
+	}
+
+	if (FAILED(hr))
+	{
+		(*ppFile)->Release();
+		*ppFile = NULL;
+		return hr;
+	}
+  
+  	hr = (*ppFile)->GetHeader(ppHeader);
+	if (FAILED(hr))
+	{
+		(*ppFile)->Release();
+		*ppFile = NULL;
+		return hr;
+	}
+ 	
+	return hr;
+}
+
+static HRESULT CreateAAFFile(aafWChar * pFileName)
+{
+	IAAFFile*		pFile = NULL;
+	IAAFHeader*		pHeader = NULL;
+	IAAFSourceMob*	pSourceMob = NULL;
+	aafUID_t		newUID;
+	HRESULT			hr = AAFRESULT_SUCCESS;
+
+	// Create the AAF file
+	hr = OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader);
+	if (FAILED(hr))
+		return hr;
+
+	// Create a source mob
+	hr = CoCreateInstance(CLSID_AAFSourceMob,
+						NULL, 
+						CLSCTX_INPROC_SERVER, 
+						IID_IAAFSourceMob, 
+						(void **)&pSourceMob);
+	if (SUCCEEDED(hr))
+	{
+		IAAFMob*	pMob = NULL;
+
+		hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+		if (SUCCEEDED(hr))
+		{
+			IAAFDigitalImageDescriptor*	pDIDesc = NULL;
+
+			CoCreateGuid((GUID *)&newUID);
+			pMob->SetMobID(&newUID);
+			pMob->SetName(L"DigitalImageDescriptorTest");
+			hr = CoCreateInstance(CLSID_AAFDigitalImageDescriptor,
+									NULL, 
+									CLSCTX_INPROC_SERVER, 
+									IID_IAAFDigitalImageDescriptor, 
+									(void **)&pDIDesc);		
+			if (SUCCEEDED(hr))
+			{
+				aafRational_t	ratio;
+				aafInt32		VideoLineMap[kVideoLineMapMaxElement] = {kVideoLineMap1TestVal,kVideoLineMap2TestVal};
+				aafUID_t		compression;
+
+				memset(&compression, 0, sizeof(aafUID_t));
+
+				// Add all DigitalImage properties
+				// Reguired Properties
+				pDIDesc->SetStoredView(kStoredHeightTestVal, kStoredWidthTestVal);
+				pDIDesc->SetFrameLayout(kFrameLayoutTestVal);
+				pDIDesc->SetVideoLineMap(kVideoLineMapMaxElement, VideoLineMap);
+				
+				ratio.numerator = kImageAspectRatioNumTestVal;
+				ratio.denominator = kImageAspectRatioDenTestVal;
+				pDIDesc->SetImageAspectRatio(ratio);
+
+				// Optional Properties
+				pDIDesc->SetCompression(&compression);
+				pDIDesc->SetSampledView(kSampledHeightTestVal, kSampledWidthTestVal, kSampledXOffsetTestVal, kSampledYOffsetTestVal);
+				pDIDesc->SetDisplayView(kDisplayHeightTestVal, kDisplayWidthTestVal, kDisplayXOffsetTestVal, kDisplayYOffsetTestVal);
+				pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal);
+				pDIDesc->SetImageAlignmentFactor(kImageAlignmentFactorTestVal);
+
+				ratio.numerator = kGammaNumTestVal;
+				ratio.denominator = kGammaDenTestVal;
+				pDIDesc->SetGamma(ratio);
+
+				if (SUCCEEDED(hr))
+				{
+					IAAFEssenceDescriptor*	pEssDesc = NULL;
+
+					hr = pDIDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
+					if (SUCCEEDED(hr))
+					{
+						hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
+						if (SUCCEEDED(hr))
+						{
+						}
+						pEssDesc->Release();
+						pEssDesc = NULL;
+					}
+				}
+				pDIDesc->Release();
+				pDIDesc = NULL;
+			}
+
+			// Add the MOB to the file
+			if (SUCCEEDED(hr))
+				hr = pHeader->AppendMob(pMob);
+
+			pMob->Release();
+			pMob = NULL;
+		}
+		pSourceMob->Release();
+		pSourceMob = NULL;
+	}
+
+	if (pHeader) pHeader->Release();
+
+	if (pFile)
+	{
+		pFile->Close();
+		pFile->Release();
+	}
+
+	return hr;
+}
+
+static HRESULT ReadAAFFile(aafWChar * pFileName)
+{
+	IAAFFile*		pFile = NULL;
+	IAAFHeader*		pHeader = NULL;
+	IEnumAAFMobs*	pMobIter = NULL;
+	aafNumSlots_t	numMobs = 0;
+	HRESULT			hr = AAFRESULT_SUCCESS;
+
+	// Open the AAF file
+	hr = OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader);
+	if (FAILED(hr))
+		return hr;
+
+	hr = pHeader->GetNumMobs(kAllMob, &numMobs);
+	if (1 != numMobs)
+	{
+		hr = AAFRESULT_TEST_FAILED;
+		goto Cleanup;
+	}
+
+	hr = pHeader->EnumAAFAllMobs(NULL, &pMobIter);
+	if (SUCCEEDED(hr))
+	{
+		IAAFMob*	pMob = NULL;
+
+		hr = pMobIter->NextOne(&pMob);
+		if (SUCCEEDED(hr))
+		{
+			IAAFSourceMob*	pSourceMob = NULL;
+
+			hr = pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob);
+			if (SUCCEEDED(hr))
+			{					 
+				IAAFEssenceDescriptor*	pEssDesc = NULL;
+
+				// Back into testing mode
+				hr = pSourceMob->GetEssenceDescriptor(&pEssDesc);
+				if (SUCCEEDED(hr))
+				{
+					IAAFDigitalImageDescriptor*	pDIDesc = NULL;
+
+					// if there is an Essence Descriptor then it MUST be an (essence) DigitalImage Descriptor
+					hr = pEssDesc->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **) &pDIDesc);
+					if (SUCCEEDED(hr))
+					{
+						// TODO: test for expected DigitalImage properties
+						aafUInt32				val1, val2;
+						aafInt32				val3, val4;
+						aafFrameLayout_t		framelayout;
+						aafAlphaTransparency_t	alphaTrans;
+						aafRational_t			ratio;
+						aafInt32				VideoLineMap[kVideoLineMapMaxElement];
+						aafUID_t				compression, compTestVal;
+
+						memset(&compTestVal, 0, sizeof(aafUID_t));
+
+						// Add all DigitalImage properties
+						// Reguired Properties
+						hr = pDIDesc->GetStoredView(&val1, &val2);
+						if (val1 != kStoredHeightTestVal || val2 != kStoredWidthTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetFrameLayout(&framelayout);
+						if (framelayout != kFrameLayoutTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetVideoLineMapSize(&val1);
+						if (val1 != kVideoLineMapMaxElement)
+							hr = AAFRESULT_TEST_FAILED;
+
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetVideoLineMap(kVideoLineMapMaxElement, VideoLineMap);
+						if (VideoLineMap[0] != kVideoLineMap1TestVal || VideoLineMap[1] != kVideoLineMap2TestVal)
+							hr = AAFRESULT_TEST_FAILED;
+						
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetImageAspectRatio(&ratio);
+						if (ratio.numerator != kImageAspectRatioNumTestVal ||
+							ratio.denominator != kImageAspectRatioDenTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+						// Optional Properties
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetCompression(&compression);
+						if (memcmp(&compression, &compTestVal, sizeof(aafUID_t)) != 0)
+							hr = AAFRESULT_TEST_FAILED;
+
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetSampledView(&val1, &val2, &val3, &val4);
+						if (val1 != kSampledHeightTestVal || val2 != kSampledWidthTestVal ||
+							val3 != kSampledXOffsetTestVal || val4 != kSampledYOffsetTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetDisplayView(&val1, &val2, &val3, &val4);
+						if (val1 != kDisplayHeightTestVal || val2 != kDisplayWidthTestVal ||
+							val3 != kDisplayXOffsetTestVal || val4 != kDisplayYOffsetTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetAlphaTransparency(&alphaTrans);
+						if (alphaTrans != kAlphaTransparencyTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetImageAlignmentFactor(&val3);
+						if (val3 != kImageAlignmentFactorTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+						if (SUCCEEDED(hr)) hr = pDIDesc->GetGamma(&ratio);
+						if (ratio.numerator != kGammaNumTestVal ||
+							ratio.denominator != kGammaDenTestVal)
+							hr = AAFRESULT_TEST_FAILED;
+
+						pDIDesc->Release();
+						pDIDesc = NULL;
+					}
+					else
+					{
+						hr = AAFRESULT_TEST_FAILED;
+					}
+					pEssDesc->Release();
+					pEssDesc = NULL;
+				}
+				else
+				{
+					hr = AAFRESULT_TEST_FAILED;
+				}
+				pSourceMob->Release();
+				pSourceMob = NULL;
+			}
+			pMob->Release();
+			pMob = NULL;
+		}
+		pMobIter->Release();
+		pMobIter = NULL;
+	}
+
+Cleanup:
+
+	if (pHeader) pHeader->Release();
+
+	if (pFile)
+	{
+		pFile->Close();
+		pFile->Release();
+	}
+
+	return hr;
+}
+
+HRESULT CAAFDigitalImageDescriptor::test()
+{
+	aafWChar*	pFileName = L"AAFDigitalImageDescTest.aaf";
+	HRESULT		hr = AAFRESULT_NOT_IMPLEMENTED;
+
+	try
+	{
+		hr = CreateAAFFile(pFileName);
+		if (SUCCEEDED(hr))
+			hr = ReadAAFFile(pFileName);
+	}
+	catch (...)
+	{
+		cerr << "CAAFDigitalImageDescriptor::test...Caught general C++ exception!" << endl; 
+	}
+
+	return hr;
+}
+
