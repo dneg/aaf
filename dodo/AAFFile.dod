@@ -166,7 +166,10 @@ AD_XMETHOD1(GetRevision,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - the revision pointer arg is NULL.)
+  //   - the revision pointer arg is NULL.
+  //
+  // AAFRESULT_NOT_OPEN
+  //   - This object is not open.)
 
 
 AD_METHOD0(Save,
