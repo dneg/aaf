@@ -13,7 +13,10 @@ BEGIN {
     printf("Error : Usage : %s <colormap>\n", ARGV[0]) | "cat 1>&2";
     exit 1;
   }
-  
+
+  if (TITLE == "") {
+    TITLE = "cvs change log";
+  }
   entrytext = "";
   createColorMap(ARGV[1]);
   delete ARGV[1]; # Otherwise this would be the next input file
@@ -67,7 +70,7 @@ function printHeader() {
 
   printf("<html>\n");
   printf("<head>\n");
-  printf("<title>cvs change log</title>\n");
+  printf("<title>%s</title>\n", TITLE);
   printf("</head>\n");
   printf("<body>\n");
   printKey();
