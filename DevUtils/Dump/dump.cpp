@@ -66,35 +66,13 @@ using namespace std;
 //
 #if defined(_WIN32)
 #define OM_OS_WINDOWS
-#elif defined(__MWERKS__) && defined(__MACH__)
-#define OM_OS_MACOSX
-#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__) || \
-      defined (__APPLE__) || defined(__CYGWIN__)
-#define OM_OS_UNIX
-#elif defined (sun)
-#define OM_OS_SOLARIS
 #else
-#error "Can't determine host operating system"
+#error "Dump supported on MS Windows platform only"
 #endif
 
-// Determine which implementation of structured storage to use.
+// Include the structured storage headers.
 //
-#if defined(OM_OS_WINDOWS)
-#define OM_USE_WINDOWS_SS
-#elif defined(OM_OS_UNIX)
-#define OM_USE_REFERENCE_SS
-#else
-#error "Don't know which implementation of structured storage to use."
-#endif
-
-// Include the structured storage headers. These are different
-// depending on the implementation.
-//
-#if defined(OM_USE_WINDOWS_SS)
 #include <objbase.h>
-#elif defined(OM_USE_REFERENCE_SS)
-#include "h/storage.h"
-#endif
 
 // Determine whether or not UNICODE versions of the APIs are in use.
 //
@@ -1228,46 +1206,6 @@ void indent(int level)
     cout << " ";
   }
 }
-
-#if defined(OM_USE_REFERENCE_SS)
-
-static const unsigned char idMapLittle[] =
-{ 3, 2, 1, 0, '-', 5, 4, '-', 7, 6, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 };
-static const unsigned char idMapBig[] =
-{ 0, 1, 2, 3, '-', 4, 5, '-', 6, 7, '-', 8, 9, '-', 10, 11, 12, 13, 14, 15 };
-static const unsigned char* guidMap;
-static const wchar_t digits[] = L"0123456789ABCDEF";
-
-#define GUIDSTRMAX 38
-
-int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize)
-{
-  if (hostByteOrder() == littleEndian) {
-    guidMap = &idMapLittle[0];
-  } else {
-    guidMap = &idMapBig[0];
-  }
-  const unsigned char* ip = (const unsigned char*) &guid; // input pointer
-  OMCHAR* op = buffer;                                    // output pointer
-
-  *op++ = L'{';
-
-  for (size_t i = 0; i < sizeof(idMapLittle); i++) {
-
-    if (guidMap[i] == '-') {
-      *op++ = L'-';
-    } else {
-      *op++ = digits[ (ip[guidMap[i]] & 0xF0) >> 4 ];
-      *op++ = digits[ (ip[guidMap[i]] & 0x0F) ];
-    }
-  }
-  *op++ = L'}';
-  *op = L'\0';
-
-  return GUIDSTRMAX;
-}
-
-#endif
 
 void getClass(IStorage* storage, CLSID* clsid, const char* fileName)
 {
@@ -4243,16 +4181,12 @@ void ignore(OMUInt32 pid)
 
 void initializeCOM(void)
 {
-#if !defined(OM_USE_REFERENCE_SS)
   CoInitialize(0);
-#endif
 }
 
 void finalizeCOM(void)
 {
-#if !defined(OM_USE_REFERENCE_SS)
   CoUninitialize();
-#endif
 }
 
 bool completed = false;
