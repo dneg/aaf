@@ -116,6 +116,7 @@ HUMAN_TYPED_IMPL = \
 	AAFProperty \
 	AAFPropertyDef \
 	AAFPropertyValue \
+	AAFPropValData \
 	AAFPluggableDef \
 	AAFPluginDescriptor \
 	AAFPluginManager \
