@@ -131,6 +131,39 @@ static void printIdentification(IAAFIdentification* pIdent)
   convert(chName, sizeof(chName), wchName);
   printf("ProductVersionString = \"%s\"\n", chName);
 
+  aafProductVersion_t version;
+  check(pIdent->GetProductVersion(&version));
+  convert(chName, sizeof(chName), wchName);
+  printf("ProductVersion.major      = %d\n", version.major);
+  printf("ProductVersion.minor      = %d\n", version.minor);
+  printf("ProductVersion.tertiary   = %d\n", version.tertiary);
+  printf("ProductVersion.patchLevel = %d\n", version.patchLevel);
+  char* releaseType;
+  switch (version.type) {
+    case kAAFVersionUnknown:
+      releaseType = "Unknown";
+      break;
+    case kAAFVersionReleased:
+      releaseType = "Released";
+      break;
+    case kAAFVersionDebug:
+      releaseType = "Debug";
+      break;
+    case kAAFVersionPatched:
+      releaseType = "Patched";
+      break;
+    case kAAFVersionBeta:
+      releaseType = "Beta";
+      break;
+    case kAAFVersionPrivateBuild:
+      releaseType = "PrivateBuild";
+      break;
+    default:
+      releaseType = "Not Recognized";
+      break;
+  }
+  printf("ProductVersion.type       = \"%s\"\n", releaseType);
+
   check(pIdent->GetPlatform(wchName, sizeof (wchName)));
   convert(chName, sizeof(chName), wchName);
   printf("Platform             = \"%s\"\n", chName);
