@@ -80,6 +80,7 @@ HUMAN_TYPED_IMPL="\
 	AAFGPITrigger \
 	AAFHeader \
 	AAFIdentification \
+	AAFImportDescriptor \
 	AAFInterpolationDef \
 	AAFKLVData \
 	AAFLocator \
@@ -90,8 +91,10 @@ HUMAN_TYPED_IMPL="\
 	AAFNestedScope\
 	AAFNetworkLocator \
 	AAFObject \
+	AAFPCMDescriptor \
 	AAFParameter \
 	AAFParameterDef \
+	AAFPhysicalDescriptor \
 	AAFProperty \
 	AAFPropertyDef \
 	AAFPropertyValue \
@@ -102,6 +105,7 @@ HUMAN_TYPED_IMPL="\
 	AAFSegment \
 	AAFSelector \
 	AAFSequence \
+	AAFSoundDescriptor \
 	AAFSourceClip \
 	AAFSourceMob \
 	AAFSourceReference \

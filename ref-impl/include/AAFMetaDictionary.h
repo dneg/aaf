@@ -15,7 +15,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 //
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2004, Licensor of the
 // AAF Association.
 //
 // The Initial Developer of the Original Code of this file and the
@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Wed Mar 10 13:05:03 EST 2004
-// by user jpt on system warbler.localdomain.
+// This file was generated on Thu Mar 11 17:41:38 GMT 2004
+// by user stuartc on system pilot20.
 //
 // Key to macros.
 //
@@ -2783,6 +2783,252 @@ AAF_CLASS_END(RGBADescriptor,
   true)
 AAF_CLASS_SEPARATOR()
 
+// SoundDescriptor
+//
+AAF_CLASS(SoundDescriptor,
+  // {0D010101-0101-4200-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4200,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  FileDescriptor,
+  false)
+  AAF_PROPERTY(AudioSamplingRate,
+    // {04020301-0101-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0101, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3d03,
+    AAF_TYPE(Rational),
+    true,
+    false,
+    SoundDescriptor)
+  AAF_PROPERTY(Locked,
+    // {04020301-0400-0000-060E-2B3401010104}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0400, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x3d02,
+    AAF_TYPE(Boolean),
+    false,
+    false,
+    SoundDescriptor)
+  AAF_PROPERTY(AudioRefLevel,
+    // {04020101-0300-0000-060E-2B3401010101}
+    AAF_LITERAL_AUID(0x04020101,
+      0x0300, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01),
+    0x3d04,
+    AAF_TYPE(Int8),
+    false,
+    false,
+    SoundDescriptor)
+  AAF_PROPERTY(ElectroSpatial,
+    // {04020101-0100-0000-060E-2B3401010101}
+    AAF_LITERAL_AUID(0x04020101,
+      0x0100, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x01),
+    0x3d05,
+    AAF_TYPE(ElectroSpatialFormulation),
+    false,
+    false,
+    SoundDescriptor)
+  AAF_PROPERTY(Channels,
+    // {04020101-0400-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04020101,
+      0x0400, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3d07,
+    AAF_TYPE(UInt32),
+    true,
+    false,
+    SoundDescriptor)
+  AAF_PROPERTY(QuantizationBits,
+    // {04020303-0400-0000-060E-2B3401010104}
+    AAF_LITERAL_AUID(0x04020303,
+      0x0400, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x3d01,
+    AAF_TYPE(UInt32),
+    true,
+    false,
+    SoundDescriptor)
+  AAF_PROPERTY(DialNorm,
+    // {04020701-0000-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04020701,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3d0c,
+    AAF_TYPE(Int8),
+    false,
+    false,
+    SoundDescriptor)
+  AAF_PROPERTY(Compression,
+    // {04020402-0000-0000-060E-2B3401010102}
+    AAF_LITERAL_AUID(0x04020402,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
+    0x3d06,
+    AAF_TYPE(AUID),
+    false,
+    false,
+    SoundDescriptor)
+AAF_CLASS_END(SoundDescriptor,
+  // {0D010101-0101-4200-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4200,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  FileDescriptor,
+  false)
+AAF_CLASS_SEPARATOR()
+
+// PCMDescriptor
+//
+AAF_CLASS(PCMDescriptor,
+  // {0D010101-0101-4800-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4800,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  SoundDescriptor,
+  true)
+  AAF_PROPERTY(BlockAlign,
+    // {04020302-0100-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04020302,
+      0x0100, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3d0a,
+    AAF_TYPE(UInt16),
+    true,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(SequenceOffset,
+    // {04020302-0200-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04020302,
+      0x0200, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3d0b,
+    AAF_TYPE(UInt8),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(AverageBPS,
+    // {04020303-0500-0000-060E-2B3401010105}
+    AAF_LITERAL_AUID(0x04020303,
+      0x0500, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x05),
+    0x3d09,
+    AAF_TYPE(UInt32),
+    true,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(ChannelAssignment,
+    // {04020101-0500-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x04020101,
+      0x0500, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x3d32,
+    AAF_TYPE(AUID),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PeakEnvelopeVersion,
+    // {04020301-0600-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0600, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d29,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PeakEnvelopeFormat,
+    // {04020301-0700-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0700, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d2a,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PointsPerPeakValue,
+    // {04020301-0800-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0800, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d2b,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PeakEnvelopeBlockSize,
+    // {04020301-0900-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0900, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d2c,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PeakChannels,
+    // {04020301-0A00-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0A00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d2d,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PeakFrames,
+    // {04020301-0B00-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0B00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d2e,
+    AAF_TYPE(UInt32),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PeakOfPeaksPosition,
+    // {04020301-0C00-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0C00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d2f,
+    AAF_TYPE(Position),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PeakEnvelopeTimestamp,
+    // {04020301-0D00-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0D00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d30,
+    AAF_TYPE(TimeStamp),
+    false,
+    false,
+    PCMDescriptor)
+  AAF_PROPERTY(PeakEnvelopeData,
+    // {04020301-0E00-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04020301,
+      0x0E00, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3d31,
+    AAF_TYPE(Stream),
+    false,
+    false,
+    PCMDescriptor)
+AAF_CLASS_END(PCMDescriptor,
+  // {0D010101-0101-4800-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4800,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  SoundDescriptor,
+  true)
+AAF_CLASS_SEPARATOR()
+
 // HTMLDescriptor
 //
 AAF_CLASS(HTMLDescriptor,
@@ -3100,6 +3346,42 @@ AAF_CLASS_END(TapeDescriptor,
     0x0101, 0x2E00,
     0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
   EssenceDescriptor,
+  true)
+AAF_CLASS_SEPARATOR()
+
+// PhysicalDescriptor
+//
+AAF_CLASS(PhysicalDescriptor,
+  // {0D010101-0101-4900-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4900,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  EssenceDescriptor,
+  false)
+AAF_CLASS_END(PhysicalDescriptor,
+  // {0D010101-0101-4900-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4900,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  EssenceDescriptor,
+  false)
+AAF_CLASS_SEPARATOR()
+
+// ImportDescriptor
+//
+AAF_CLASS(ImportDescriptor,
+  // {0D010101-0101-4A00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4A00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  PhysicalDescriptor,
+  true)
+AAF_CLASS_END(ImportDescriptor,
+  // {0D010101-0101-4A00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4A00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  PhysicalDescriptor,
   true)
 AAF_CLASS_SEPARATOR()
 
@@ -4895,6 +5177,38 @@ AAF_TYPE_DEFINITION_ENUMERATION(FieldNumber,
 AAF_TYPE_DEFINITION_ENUMERATION_END(FieldNumber, 
   // {02010121-0000-0000-060E-2B3401040101}
   AAF_LITERAL_AUID(0x02010121,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+AAF_TYPE_SEPARATOR()
+
+// ElectroSpatialFormulation
+//
+AAF_TYPE_DEFINITION_ENUMERATION(ElectroSpatialFormulation, 
+  // {02010122-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010122,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsDefault,
+    0, ElectroSpatialFormulation)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsTwoChannelMode,
+    1, ElectroSpatialFormulation)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsSingleChannelMode,
+    2, ElectroSpatialFormulation)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsPrimarySecondaryMode,
+    3, ElectroSpatialFormulation)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsStereophonicMode,
+    4, ElectroSpatialFormulation)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsSingleChannelDoubleSamplingFrequencyMode,
+    7, ElectroSpatialFormulation)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsStereoLeftChannelDoubleSamplingFrequencyMode,
+    8, ElectroSpatialFormulation)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsStereoRightChannelDoubleSamplingFrequencyMode,
+    9, ElectroSpatialFormulation)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFEsMultiChannelMode,
+    15, ElectroSpatialFormulation)
+AAF_TYPE_DEFINITION_ENUMERATION_END(ElectroSpatialFormulation, 
+  // {02010122-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010122,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
 AAF_TYPE_SEPARATOR()

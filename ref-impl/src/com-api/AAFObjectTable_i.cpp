@@ -2,6 +2,8 @@
 //
 // This file was GENERATED for the AAF SDK
 //
+// $Id$ $Name$
+//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
@@ -78,6 +80,7 @@
 #include "CAAFGPITrigger.h"
 #include "CAAFHeader.h"
 #include "CAAFIdentification.h"
+#include "CAAFImportDescriptor.h"
 #include "CAAFInterpolationDef.h"
 #include "CAAFKLVData.h"
 #include "CAAFLocator.h"
@@ -88,8 +91,10 @@
 #include "CAAFNestedScope.h"
 #include "CAAFNetworkLocator.h"
 #include "CAAFObject.h"
+#include "CAAFPCMDescriptor.h"
 #include "CAAFParameter.h"
 #include "CAAFParameterDef.h"
+#include "CAAFPhysicalDescriptor.h"
 #include "CAAFProperty.h"
 #include "CAAFPropertyDef.h"
 #include "CAAFPropertyValue.h"
@@ -100,6 +105,7 @@
 #include "CAAFSegment.h"
 #include "CAAFSelector.h"
 #include "CAAFSequence.h"
+#include "CAAFSoundDescriptor.h"
 #include "CAAFSourceClip.h"
 #include "CAAFSourceMob.h"
 #include "CAAFSourceReference.h"

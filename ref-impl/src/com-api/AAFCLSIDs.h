@@ -2,6 +2,8 @@
 //
 // This file was GENERATED for the AAF SDK
 //
+// $Id$ $Name$
+//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
@@ -81,6 +83,7 @@ EXTERN_C const CLSID CLSID_AAFOperationGroup;
 EXTERN_C const CLSID CLSID_AAFGPITrigger;
 EXTERN_C const CLSID CLSID_AAFHeader;
 EXTERN_C const CLSID CLSID_AAFIdentification;
+EXTERN_C const CLSID CLSID_AAFImportDescriptor;
 EXTERN_C const CLSID CLSID_AAFInterpolationDef;
 EXTERN_C const CLSID CLSID_AAFKLVData;
 EXTERN_C const CLSID CLSID_AAFLocator;
@@ -91,8 +94,10 @@ EXTERN_C const CLSID CLSID_AAFMobSlot;
 EXTERN_C const CLSID CLSID_AAFNestedScope;
 EXTERN_C const CLSID CLSID_AAFNetworkLocator;
 EXTERN_C const CLSID CLSID_AAFObject;
+EXTERN_C const CLSID CLSID_AAFPCMDescriptor;
 EXTERN_C const CLSID CLSID_AAFParameter;
 EXTERN_C const CLSID CLSID_AAFParameterDef;
+EXTERN_C const CLSID CLSID_AAFPhysicalDescriptor;
 EXTERN_C const CLSID CLSID_AAFProperty;
 EXTERN_C const CLSID CLSID_AAFPropertyDef;
 EXTERN_C const CLSID CLSID_AAFPropertyValue;
@@ -103,6 +108,7 @@ EXTERN_C const CLSID CLSID_AAFScopeReference;
 EXTERN_C const CLSID CLSID_AAFSegment;
 EXTERN_C const CLSID CLSID_AAFSelector;
 EXTERN_C const CLSID CLSID_AAFSequence;
+EXTERN_C const CLSID CLSID_AAFSoundDescriptor;
 EXTERN_C const CLSID CLSID_AAFSourceClip;
 EXTERN_C const CLSID CLSID_AAFSourceMob;
 EXTERN_C const CLSID CLSID_AAFSourceReference;

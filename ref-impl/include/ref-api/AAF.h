@@ -2,6 +2,8 @@
 //
 // This file was GENERATED for the AAF SDK
 //
+// $Id$ $Name$
+//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
@@ -72,6 +74,7 @@ interface IAAFOperationGroup;
 interface IAAFGPITrigger;
 interface IAAFHeader;
 interface IAAFIdentification;
+interface IAAFImportDescriptor;
 interface IAAFInterpolationDef;
 interface IAAFKLVData;
 interface IAAFLocator;
@@ -82,8 +85,10 @@ interface IAAFMobSlot;
 interface IAAFNestedScope;
 interface IAAFNetworkLocator;
 interface IAAFObject;
+interface IAAFPCMDescriptor;
 interface IAAFParameter;
 interface IAAFParameterDef;
+interface IAAFPhysicalDescriptor;
 interface IAAFProperty;
 interface IAAFPropertyDef;
 interface IAAFPropertyValue;
@@ -94,6 +99,7 @@ interface IAAFScopeReference;
 interface IAAFSegment;
 interface IAAFSelector;
 interface IAAFSequence;
+interface IAAFSoundDescriptor;
 interface IAAFSourceClip;
 interface IAAFSourceMob;
 interface IAAFSourceReference;
@@ -198,6 +204,7 @@ typedef interface IAAFOperationGroup IAAFOperationGroup;
 typedef interface IAAFGPITrigger IAAFGPITrigger;
 typedef interface IAAFHeader IAAFHeader;
 typedef interface IAAFIdentification IAAFIdentification;
+typedef interface IAAFImportDescriptor IAAFImportDescriptor;
 typedef interface IAAFInterpolationDef IAAFInterpolationDef;
 typedef interface IAAFKLVData IAAFKLVData;
 typedef interface IAAFLocator IAAFLocator;
@@ -208,8 +215,10 @@ typedef interface IAAFMobSlot IAAFMobSlot;
 typedef interface IAAFNestedScope IAAFNestedScope;
 typedef interface IAAFNetworkLocator IAAFNetworkLocator;
 typedef interface IAAFObject IAAFObject;
+typedef interface IAAFPCMDescriptor IAAFPCMDescriptor;
 typedef interface IAAFParameter IAAFParameter;
 typedef interface IAAFParameterDef IAAFParameterDef;
+typedef interface IAAFPhysicalDescriptor IAAFPhysicalDescriptor;
 typedef interface IAAFProperty IAAFProperty;
 typedef interface IAAFPropertyDef IAAFPropertyDef;
 typedef interface IAAFPropertyValue IAAFPropertyValue;
@@ -220,6 +229,7 @@ typedef interface IAAFScopeReference IAAFScopeReference;
 typedef interface IAAFSegment IAAFSegment;
 typedef interface IAAFSelector IAAFSelector;
 typedef interface IAAFSequence IAAFSequence;
+typedef interface IAAFSoundDescriptor IAAFSoundDescriptor;
 typedef interface IAAFSourceClip IAAFSourceClip;
 typedef interface IAAFSourceMob IAAFSourceMob;
 typedef interface IAAFSourceReference IAAFSourceReference;
@@ -12022,6 +12032,65 @@ DECLARE_INTERFACE_(IAAFIdentification, IUnknown)
 
 
 
+// IAAFImportDescriptor
+
+// ************************
+//
+// Interface IAAFImportDescriptor
+//
+// ************************
+
+
+
+
+#ifndef __IAAFImportDescriptor_INTERFACE_DEFINED__
+#define __IAAFImportDescriptor_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFImportDescriptor;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFImportDescriptor
+
+DECLARE_INTERFACE_(IAAFImportDescriptor, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFImportDescriptor methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Initializes a newly allocated, empty
+  // IAAFImportDescriptor-supporting object.  This method must be called
+  // after allocation, and before any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize() has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFImportDescriptor_INTERFACE_DEFINED__
+
+
+
 // IAAFInterpolationDef
 
 // ************************
@@ -15554,6 +15623,939 @@ DECLARE_INTERFACE_(IAAFObject, IUnknown)
 
 
 
+// IAAFPCMDescriptor
+
+// ************************
+//
+// Interface IAAFPCMDescriptor
+//
+// ************************
+
+
+
+#ifndef __IAAFPCMDescriptor_INTERFACE_DEFINED__
+#define __IAAFPCMDescriptor_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFPCMDescriptor;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFPCMDescriptor
+
+DECLARE_INTERFACE_(IAAFPCMDescriptor, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFPCMDescriptor methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Initializes a newly allocated, IAAFPCMDescriptor-supporting
+  // object. This method must be called after allocation, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize() has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize() has already been called on this object.
+  STDMETHOD(Initialize) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // SetBlockAlign()
+  //
+  // // Sets the number of bytes used to store one sample of all channels.
+  // This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the BlockAlign property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetBlockAlign) (THIS_
+    // The number of bytes used to store one sample of all channels.
+    /*[in]*/ aafUInt16  blockAlign) PURE;
+
+
+  //***********************************************************
+  //
+  // GetBlockAlign()
+  //
+  // // Gets the number of bytes used to store one sample of all channels.
+  // This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pBlockAlign pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pBlockAlign.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBlockAlign arg is NULL.
+  //
+  STDMETHOD(GetBlockAlign) (THIS_
+    // The number of bytes used to store one sample of all channels.
+    /*[out]*/ aafUInt16 *  pBlockAlign) PURE;
+
+
+  //***********************************************************
+  //
+  // SetSequenceOffset()
+  //
+  // // Sets the frame number of the beginning of the essence data
+  // within a five-frame sequence. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the SequenceOffset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetSequenceOffset) (THIS_
+    // Zero-based ordinal frame number of the beginning of
+	// the essence data within a five-frame sequence.
+    /*[in]*/ aafUInt8  offset) PURE;
+
+
+  //***********************************************************
+  //
+  // GetSequenceOffset()
+  //
+  // // Gets the frame number of the beginning of the essence data
+  // within a five-frame sequence. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pOffset pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pOffset.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pOffset arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetSequenceOffset) (THIS_
+    // Zero-based ordinal frame number of the beginning of
+	// the essence data within a five-frame sequence.
+    /*[out]*/ aafUInt8 *  pOffset) PURE;
+
+
+  //***********************************************************
+  //
+  // SetAverageBPS()
+  //
+  // // Sets the average bytes per second of the essence stream.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the AverageBPS property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetAverageBPS) (THIS_
+    // Average bytes per second of the essence stream.
+    /*[in]*/ aafUInt32  bps) PURE;
+
+
+  //***********************************************************
+  //
+  // GetAverageBPS()
+  //
+  // // Gets the average bytes per second of the essence stream.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pBps pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pBps.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBps arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetAverageBPS) (THIS_
+    // Average bytes per second of the essence stream.
+    /*[out]*/ aafUInt32 *  pBps) PURE;
+
+
+  //***********************************************************
+  //
+  // AreAllPeakEnvelopePropertiesPresent()
+  //
+  // Places TRUE into *pArePresent if the following optional
+  // properties are set on the descriptor:
+  //   PeakEnvelopeVersion
+  //   PeakEnvelopeFormat
+  //   PointsPerPeakValue
+  //   PeakEnvelopeBlockSize
+  //   PeakChannels
+  //   PeakFrames
+  //   PeakOfPeaksPosition
+  //   PeakEnvelopeTimestamp
+  //   PeakEnvelopeData
+  //
+  // Succeeds if all of the following are true:
+  // - the pArePresent pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pIsPresent.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pArePresent arg is NULL.
+  //
+  STDMETHOD(AreAllPeakEnvelopePropertiesPresent) (THIS_
+    // The flag indicating presence of the optional properties
+	// that form peak envelope.
+    /*[out]*/ aafBoolean_t *  pArePresent) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPeakEnvelopeVersion()
+  //
+  // // Sets the version of the peak envelope data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the version will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetPeakEnvelopeVersion) (THIS_
+    // Version of the peak envelope data.
+    /*[in]*/ aafUInt32  version) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakEnvelopeVersion()
+  //
+  // // Gets the version of the peak envelope data.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pVersion pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pVersion.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pVersion arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetPeakEnvelopeVersion) (THIS_
+    // Version of the peak envelope data.
+    /*[out]*/ aafUInt32 *  pVersion) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPeakEnvelopeFormat()
+  //
+  // // Sets the format of the peak point.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the format will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetPeakEnvelopeFormat) (THIS_
+    // Format of the peak point.
+    /*[in]*/ aafUInt32  format) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakEnvelopeFormat()
+  //
+  // // Gets the format of the peak point.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pFormat pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pFormat.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFormat arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetPeakEnvelopeFormat) (THIS_
+    // Format of the peak point.
+    /*[out]*/ aafUInt32 *  pFormat) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPointsPerPeakValue()
+  //
+  // // Sets the number of peak points per peak value.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the PointsPerPeakValue property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetPointsPerPeakValue) (THIS_
+    // The number of peak points per peak value.
+    /*[in]*/ aafUInt32  pointCount) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPointsPerPeakValue()
+  //
+  // // Gets the number of peak points per peak value.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pPointCount pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pPointCount.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPointCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetPointsPerPeakValue) (THIS_
+    // The number of peak points per peak value.
+    /*[out]*/ aafUInt32 *  pPointCount) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPeakEnvelopeBlockSize()
+  //
+  // // Sets the number of audio samples used to generate each peak frame.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the PeakEnvelopeBlockSize property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetPeakEnvelopeBlockSize) (THIS_
+    // The number of audio samples used to generate each peak frame.
+    /*[in]*/ aafUInt32  blockSize) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakEnvelopeBlockSize()
+  //
+  // // Gets the number of audio samples used to generate each peak frame.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pBlockSize pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pBlockSize.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBlockSize arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetPeakEnvelopeBlockSize) (THIS_
+    // The number of audio samples used to generate each peak frame.
+    /*[out]*/ aafUInt32 *  pBlockSize) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPeakChannelCount()
+  //
+  // // Sets the number of peak channels.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the channel count will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetPeakChannelCount) (THIS_
+    // The number of peak channels.
+    /*[in]*/ aafUInt32  channelCount) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakChannelCount()
+  //
+  // // Gets the number of peak channels.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pChannelCount pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pChannelCount.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pChannelCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetPeakChannelCount) (THIS_
+    // The number of peak channels.
+    /*[out]*/ aafUInt32 *  pChannelCount) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPeakFrameCount()
+  //
+  // // Sets the number of peak frames.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the frame count will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetPeakFrameCount) (THIS_
+    // The number of peak frames.
+    /*[in]*/ aafUInt32  frameCount) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakFrameCount()
+  //
+  // // Gets the number of peak frames.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pFrameCount pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pFrameCount.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFrameCount arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetPeakFrameCount) (THIS_
+    // The number of peak frames.
+    /*[out]*/ aafUInt32 *  pFrameCount) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPeakOfPeaksPosition()
+  //
+  // // Sets the offset to the first audio sample whose absolute
+  // value is the maximum value of the entire audio file.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the PeakOfPeaksPosition property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetPeakOfPeaksPosition) (THIS_
+    // The offset to peak of peaks
+    /*[in]*/ aafPosition_t  position) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakOfPeaksPosition()
+  //
+  // // Gets the offset to the first audio sample whose absolute
+  // value is the maximum value of the entire audio file.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pPosition pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pPosition.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPosition arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetPeakOfPeaksPosition) (THIS_
+    // The offset to peak of peaks.
+    /*[out]*/ aafPosition_t *  pPosition) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPeakEnvelopeTimestamp()
+  //
+  // // Sets the time stamp of the creation of the peak data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the time stamp will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetPeakEnvelopeTimestamp) (THIS_
+    // The time stamp of the creation of the peak data.
+    /*[in]*/ aafTimeStamp_constref  timeStamp) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakEnvelopeTimestamp()
+  //
+  // // Gets the time stamp of the creation of the peak data.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pTimeStamp pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pTimeStamp.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTimeStamp arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetPeakEnvelopeTimestamp) (THIS_
+    // The time stamp of the creation of the peak data.
+    /*[out]*/ aafTimeStamp_t *  pTimeStamp) PURE;
+
+
+  //***********************************************************
+  //
+  // SetPeakEnvelopeDataPosition()
+  //
+  // // Sets the offset from the beginning of peak envelope data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the object is persistent (attached to a file).
+  // 
+  // If this method fails the position will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.
+  //
+  STDMETHOD(SetPeakEnvelopeDataPosition) (THIS_
+    // Offset from the beginning of peak envelope data.
+    /*[in]*/ aafPosition_t  position) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakEnvelopeDataPosition()
+  //
+  // // Gets the offset from the beginning of peak envelope data.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pPosition pointer is valid.
+  // - the object is persistent (attached to a file).
+  // 
+  // If this method fails nothing will be written to *pPosition.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPosition arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the PeakEnvelopeData property is not present.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.
+  //
+  STDMETHOD(GetPeakEnvelopeDataPosition) (THIS_
+    // Offset from the beginning of peak envelope data.
+    /*[out]*/ aafPosition_t *  pPosition) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPeakEnvelopeDataSize()
+  //
+  // // Gets the size of peak envelope data.
+  // PeakEnvelopeData is optional property.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pSize pointer is valid.
+  // - the PeakEnvelopeData property is present.
+  // - the object is persistent (attached to a file).
+  // 
+  // If this method fails nothing will be written to *pSize.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pSize arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the PeakEnvelopeData property is not present.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.
+  //
+  STDMETHOD(GetPeakEnvelopeDataSize) (THIS_
+    // The size of peak envelope data.
+    /*[out]*/ aafLength_t *  pSize) PURE;
+
+
+  //***********************************************************
+  //
+  // WritePeakEnvelopeData()
+  //
+  // // Write the specified bytes to the peak envelope data stream.
+  // 
+  // Succeeds if all of the following are true:
+  // - the number of bytes to write is non-zero.
+  // - the buffer pointer is valid.
+  // - the pBytesWritten pointer is valid.
+  // - the object is initialized.
+  // - the object is persistent (attached to a file).
+  // 
+  // If this method fails the PeakEnvelopeData property will
+  // not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - bytes arg is larger than zero.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - buffer arg is NULL.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBytesWritten arg is NULL.
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.
+  //
+  // AAFRESULT_CONTAINERWRITE
+  //   - writing failed.
+  //
+  STDMETHOD(WritePeakEnvelopeData) (THIS_
+    // Write this many bytes
+    /*[in]*/ aafUInt32  bytes,
+
+    // Data to write
+    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
+
+    // Number of bytes actually written.
+    /*[out,ref]*/ aafUInt32 *  pBytesWritten) PURE;
+
+
+  //***********************************************************
+  //
+  // ReadPeakEnvelopeData()
+  //
+  // // Read the specified number of bytes from the peak envelope data
+  // stream into buffer.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the number of bytes to read is non-zero.
+  // - the buffer pointer is valid.
+  // - the pBytesRead pointer is valid.
+  // - the PeakEnvelopeData property is present.
+  // - the object is persistent (attached to a file).
+  // - not yet reached the end of the data stream.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // 
+  // AAFRESULT_END_OF_DATA
+  //   - trying to read beyond the end of the data stream.
+  // 
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  // 
+  // AAFRESULT_INVALID_PARAM
+  //   - bytes arg is larger than zero.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - buffer arg is NULL.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBytesRead arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the PeakEnvelopeData property is not present.
+  //
+  // AAFRESULT_OBJECT_NOT_PERSISTENT
+  //   - the object is not persistent.
+  //
+  STDMETHOD(ReadPeakEnvelopeData) (THIS_
+    // Read this many bytes
+    /*[in]*/ aafUInt32  bytes,
+
+    // Buffer to read the data to
+    /*[out, size_is(bytes)]*/ aafDataBuffer_t  buffer,
+
+    // Number of bytes actually read.
+    /*[out,ref]*/ aafUInt32 *  pBytesRead) PURE;
+
+  END_INTERFACE
+};
+#endif // __IAAFPCMDescriptor_INTERFACE_DEFINED__
+
+
+
 // IAAFParameter
 
 // ************************
@@ -15850,6 +16852,44 @@ DECLARE_INTERFACE_(IAAFParameterDef, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFParameterDef_INTERFACE_DEFINED__
+
+
+
+// IAAFPhysicalDescriptor
+
+// ************************
+//
+// Interface IAAFPhysicalDescriptor
+//
+// ************************
+
+
+
+
+#ifndef __IAAFPhysicalDescriptor_INTERFACE_DEFINED__
+#define __IAAFPhysicalDescriptor_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFPhysicalDescriptor;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFPhysicalDescriptor
+
+DECLARE_INTERFACE_(IAAFPhysicalDescriptor, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFPhysicalDescriptor methods *** */
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFPhysicalDescriptor_INTERFACE_DEFINED__
 
 
 
@@ -18014,6 +19054,501 @@ DECLARE_INTERFACE_(IAAFSequence, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFSequence_INTERFACE_DEFINED__
+
+
+
+// IAAFSoundDescriptor
+
+// ************************
+//
+// Interface IAAFSoundDescriptor
+//
+// ************************
+
+
+
+#ifndef __IAAFSoundDescriptor_INTERFACE_DEFINED__
+#define __IAAFSoundDescriptor_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFSoundDescriptor;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFSoundDescriptor
+
+DECLARE_INTERFACE_(IAAFSoundDescriptor, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFSoundDescriptor methods *** */
+
+  //***********************************************************
+  //
+  // SetCompression()
+  //
+  // // Sets the kind of compression and format of compression
+  // information of the sound essence data. This property is
+  // optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the Compression property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetCompression) (THIS_
+    // Identifies kind of compression and format of
+	// compression information.
+    /*[in]*/ aafUID_constref  compression) PURE;
+
+
+  //***********************************************************
+  //
+  // GetCompression()
+  //
+  // // Gets the kind of compression and format of compression
+  // information of the sound essence data. This property is
+  // optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pCompression pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pCompression.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCompression arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetCompression) (THIS_
+    // Compression of the sound essence data.
+    /*[out]*/ aafUID_t *  pCompression) PURE;
+
+
+  //***********************************************************
+  //
+  // SetChannelCount()
+  //
+  // // Sets the number of channels of sound represented by
+  // this descriptor. This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the Channels property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetChannelCount) (THIS_
+    // The number of channels of sound represented
+	// by this descriptor.
+    /*[in]*/ aafUInt32  channelCount) PURE;
+
+
+  //***********************************************************
+  //
+  // GetChannelCount()
+  //
+  // // Gets the number of channels of sound represented by
+  // this descriptor. This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pChannelCount pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pChannelCount.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pChannelCount arg is NULL.
+  //
+  STDMETHOD(GetChannelCount) (THIS_
+    // The number of channels of sound represented
+	// by this descriptor.
+    /*[out]*/ aafUInt32 *  pChannelCount) PURE;
+
+
+  //***********************************************************
+  //
+  // SetAudioSamplingRate()
+  //
+  // // Sets the sample rate of audio represented by this descriptor.
+  // This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the AudioSamplingRate property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetAudioSamplingRate) (THIS_
+    // Sample rate of audio essence.
+    /*[in]*/ aafRational_t  rate) PURE;
+
+
+  //***********************************************************
+  //
+  // GetAudioSamplingRate()
+  //
+  // // Gets the sample rate of audio represented by this descriptor.
+  // This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pRate pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pRate.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pRate arg is NULL.
+  //
+  STDMETHOD(GetAudioSamplingRate) (THIS_
+    // Sample rate of audio essence.
+    /*[out]*/ aafRational_t *  pRate) PURE;
+
+
+  //***********************************************************
+  //
+  // SetIsLocked()
+  //
+  // // Sets the Locked flag which indicates whether the number of
+  // samples per frame is locked or unlocked. This property is
+  // optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the Locked property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetIsLocked) (THIS_
+    // Is number of samples per frame locked to video?
+    /*[in]*/ aafBoolean_t  locked) PURE;
+
+
+  //***********************************************************
+  //
+  // IsLocked()
+  //
+  // // Gets the Locked flag which indicates whether the number of
+  // samples per frame is locked or unlocked. This property is
+  // optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pLocked pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pLocked.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLocked arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(IsLocked) (THIS_
+    // Is number of samples per frame locked to video?
+    /*[out]*/ aafBoolean_t *  pLocked) PURE;
+
+
+  //***********************************************************
+  //
+  // SetElectroSpatialFormulation()
+  //
+  // // Sets the electro-spatial form of the signal. This property is
+  // optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the ElectroSpatial property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetElectroSpatialFormulation) (THIS_
+    // Electro-spatial form of the signal.
+    /*[in]*/ aafElectroSpatialFormulation_t  formulation) PURE;
+
+
+  //***********************************************************
+  //
+  // GetElectroSpatialFormulation()
+  //
+  // // Gets the electro-spatial form of the signal. This property is
+  // optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pFormulation pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pFormulation.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFormulation arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetElectroSpatialFormulation) (THIS_
+    // Electro-spatial form of the signal.
+    /*[out]*/ aafElectroSpatialFormulation_t *  pFormulation) PURE;
+
+
+  //***********************************************************
+  //
+  // SetAudioRefLevel()
+  //
+  // // Sets the audio reference level. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the AudioRefLevel property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetAudioRefLevel) (THIS_
+    // Audio reference level.
+    /*[in]*/ aafInt8  level) PURE;
+
+
+  //***********************************************************
+  //
+  // GetAudioRefLevel()
+  //
+  // // Gets the audio reference level. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pLevel pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pLevel.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLevel arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetAudioRefLevel) (THIS_
+    // Audio reference level.
+    /*[out]*/ aafInt8 *  pLevel) PURE;
+
+
+  //***********************************************************
+  //
+  // SetDialNorm()
+  //
+  // // Sets the dial norm. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the DialNorm property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetDialNorm) (THIS_
+    // Dial norm.
+    /*[in]*/ aafInt8  dialNorm) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDialNorm()
+  //
+  // // Gets the dial norm. This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pDialNorm pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *pDialNorm.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDialNorm arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  //
+  STDMETHOD(GetDialNorm) (THIS_
+    // Dial norm.
+    /*[out]*/ aafInt8 *  pDialNorm) PURE;
+
+
+  //***********************************************************
+  //
+  // SetQuantizationBits()
+  //
+  // // Sets the number of quantization bits. This property is required.
+  //  
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // 
+  // If this method fails the QuantizationBits property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  STDMETHOD(SetQuantizationBits) (THIS_
+    // Number of quantization bits.
+    /*[in]*/ aafUInt32  bitsCount) PURE;
+
+
+  //***********************************************************
+  //
+  // GetQuantizationBits()
+  //
+  // // Gets the number of quantization bits. This property is required.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the pBitsCount pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pBitsCount.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBitsCount arg is NULL.
+  //
+  STDMETHOD(GetQuantizationBits) (THIS_
+    // Number of quantization bits.
+    /*[out]*/ aafUInt32 *  pBitsCount) PURE;
+
+  END_INTERFACE
+};
+#endif // __IAAFSoundDescriptor_INTERFACE_DEFINED__
 
 
 

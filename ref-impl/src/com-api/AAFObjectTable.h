@@ -2,6 +2,8 @@
 //
 // This file was GENERATED for the AAF SDK
 //
+// $Id$ $Name$
+//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
@@ -100,6 +102,7 @@ AAF_BEGIN_OBJECT_MAP(AAFObjectMap)
 	AAF_OBJECT_ENTRY(AAFGPITrigger)
 	AAF_OBJECT_ENTRY(AAFHeader)
 	AAF_OBJECT_ENTRY(AAFIdentification)
+	AAF_OBJECT_ENTRY(AAFImportDescriptor)
 	AAF_OBJECT_ENTRY(AAFInterpolationDef)
 	AAF_OBJECT_ENTRY(AAFKLVData)
 	AAF_OBJECT_ENTRY(AAFLocator)
@@ -110,8 +113,10 @@ AAF_BEGIN_OBJECT_MAP(AAFObjectMap)
 	AAF_OBJECT_ENTRY(AAFNestedScope)
 	AAF_OBJECT_ENTRY(AAFNetworkLocator)
 	AAF_OBJECT_ENTRY(AAFObject)
+	AAF_OBJECT_ENTRY(AAFPCMDescriptor)
 	AAF_OBJECT_ENTRY(AAFParameter)
 	AAF_OBJECT_ENTRY(AAFParameterDef)
+	AAF_OBJECT_ENTRY(AAFPhysicalDescriptor)
 	AAF_OBJECT_ENTRY(AAFProperty)
 	AAF_OBJECT_ENTRY(AAFPropertyDef)
 	AAF_OBJECT_ENTRY(AAFPropertyValue)
@@ -122,6 +127,7 @@ AAF_BEGIN_OBJECT_MAP(AAFObjectMap)
 	AAF_OBJECT_ENTRY(AAFSegment)
 	AAF_OBJECT_ENTRY(AAFSelector)
 	AAF_OBJECT_ENTRY(AAFSequence)
+	AAF_OBJECT_ENTRY(AAFSoundDescriptor)
 	AAF_OBJECT_ENTRY(AAFSourceClip)
 	AAF_OBJECT_ENTRY(AAFSourceMob)
 	AAF_OBJECT_ENTRY(AAFSourceReference)

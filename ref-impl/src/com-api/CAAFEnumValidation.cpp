@@ -277,6 +277,24 @@ bool Is_aafEditHint_t_Valid(aafEditHint_t param)
   }
 }
 
+bool Is_aafElectroSpatialFormulation_t_Valid(aafElectroSpatialFormulation_t param)
+{
+  switch (param) {
+    case kAAFEsDefault:
+    case kAAFEsTwoChannelMode:
+    case kAAFEsSingleChannelMode:
+    case kAAFEsPrimarySecondaryMode:
+    case kAAFEsStereophonicMode:
+    case kAAFEsSingleChannelDoubleSamplingFrequencyMode:
+    case kAAFEsStereoLeftChannelDoubleSamplingFrequencyMode:
+    case kAAFEsStereoRightChannelDoubleSamplingFrequencyMode:
+    case kAAFEsMultiChannelMode:
+      return true;
+    default:
+      return false;
+  }
+}
+
 bool Is_aafFadeType_t_Valid(aafFadeType_t param)
 {
   switch (param) {
@@ -391,6 +409,7 @@ bool Is_aafFrameLayout_t_Valid(aafFrameLayout_t param)
     case kAAFSeparateFields:
     case kAAFOneField:
     case kAAFMixedFields:
+    case kAAFSegmentedFrame:
       return true;
     default:
       return false;
@@ -578,6 +597,7 @@ bool Is_aafRGBAComponentKind_t_Valid(aafRGBAComponentKind_t param)
     case kAAFCompGreen:
     case kAAFCompPalette:
     case kAAFCompRed:
+    case kAAFCompNull:
       return true;
     default:
       return false;
