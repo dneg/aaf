@@ -38,8 +38,8 @@ template <typename ObjectReference, typename ReferencedObject>
 OMContainerElement<ObjectReference, ReferencedObject>::OMContainerElement(void)
   : _reference()
 {
-  TRACE("OMContainerElement<ObjectReference,"
-                                      "ReferencedObject>::OMContainerElement");
+  TRACE("OMContainerElement<ObjectReference, ReferencedObject>::"
+                                                         "OMContainerElement");
 }
 
   // @mfunc Constructor.
@@ -53,8 +53,8 @@ OMContainerElement<ObjectReference, ReferencedObject>::OMContainerElement(
                                               const ObjectReference& reference)
   : _reference(reference)
 {
-  TRACE("OMContainerElement<ObjectReference,"
-                                      "ReferencedObject>::OMContainerElement");
+  TRACE("OMContainerElement<ObjectReference, ReferencedObject>::"
+                                                         "OMContainerElement");
 }
 
   // @mfunc Copy constructor.
@@ -68,8 +68,8 @@ OMContainerElement<ObjectReference, ReferencedObject>::OMContainerElement(
               const OMContainerElement<ObjectReference, ReferencedObject>& rhs)
   : _reference(rhs._reference)
 {
-  TRACE("OMContainerElement<ObjectReference,"
-                           "ReferencedObject>::OMContainerElement");
+  TRACE("OMContainerElement<ObjectReference, ReferencedObject>::"
+                                                         "OMContainerElement");
 }
 
   // @mfunc Destructor.
@@ -81,8 +81,8 @@ template <typename ObjectReference, typename ReferencedObject>
 OMContainerElement<ObjectReference, ReferencedObject>::~OMContainerElement(
                                                                           void)
 {
-  TRACE("OMContainerElement<ObjectReference,"
-                           "ReferencedObject>::~OMContainerElement");
+  TRACE("OMContainerElement<ObjectReference, ReferencedObject>::"
+                                                        "~OMContainerElement");
 }
 
   // @mfunc Assignment.
