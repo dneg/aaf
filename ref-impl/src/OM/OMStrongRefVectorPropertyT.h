@@ -100,7 +100,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::save(void) const
   // save the vector index
   //
   ASSERT("Valid vector index", index->isValid());
-  store()->save(index, name());
+  store()->save(index, storedName());
   delete index;
 
   // make an entry in the property index
@@ -159,7 +159,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
   // restore the index
   //
   OMStoredVectorIndex* vectorIndex = 0;
-  store()->restore(vectorIndex, name());
+  store()->restore(vectorIndex, storedName());
   ASSERT("Valid vector index", vectorIndex->isValid());
   setLocalKey(vectorIndex->firstFreeKey());
 
@@ -172,7 +172,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
     OMUInt32 localKey;
     for (size_t i = 0; i < entries; i++) {
       vectorIndex->iterate(context, localKey);
-      char* name = elementName(localKey);
+      wchar_t* name = elementName(localKey);
       VectorElement newElement(this, name, localKey);
       newElement.restore();
       _vector.setAt(newElement, i);
@@ -246,7 +246,7 @@ ReferencedObject*
   if (index == count()) {
     // This is an append, make sure the new element is defined.
     OMUInt32 localKey = nextLocalKey();
-    char* name = elementName(localKey);
+    wchar_t* name = elementName(localKey);
     VectorElement newElement(this, name, localKey);
     _vector.append(newElement);
     delete [] name;
@@ -403,7 +403,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::insertAt(
   PRECONDITION("Valid index", (index >= 0) && (index <= count()));
   
   OMUInt32 localKey = nextLocalKey();
-  char* name = elementName(localKey);
+  wchar_t* name = elementName(localKey);
   VectorElement newElement(this, name, localKey);
   newElement.setValue(object);
   _vector.insertAt(newElement, index);

@@ -57,13 +57,13 @@ public:
 // private:
 
     // @cmember Attach this <c OMStorable>.
-  void attach(const OMStorable* container, const char* name);
+  void attach(const OMStorable* container, const wchar_t* name);
 
     // @cmember Detach this <c OMStorable>.
   void detach(void);
 
     // @cmember Give this <c OMStorable> a name.
-  void setName(const char* name);
+  void setName(const wchar_t* name);
 
     // @cmember Save this <c OMStorable>.
   void save(void) const;
@@ -74,7 +74,7 @@ public:
     // @cmember Restore an <c OMStorable> (of unknown sub-class) from
     // the stored representation <p s>.
   static OMStorable* restoreFrom(const OMStorable* container,
-                                 const char* name,
+                                 const wchar_t* name,
                                  OMStoredObject& s);
 
     // @cmember Restore the contents of an <c OMStorable> (of unknown
@@ -87,15 +87,15 @@ public:
 
     // @cmember The path to this <c OMStorable> from the root of
     //          the <c OMFile> in which this <c OMStorable> resides.
-  const char* pathName(void) const;
+  const wchar_t* pathName(void) const;
 
     // @cmember Find the <c OMStorable> named <p objectName> contained
     //          within this <c OMStorable>.
-  OMStorable* find(const char* objectName) const;
+  OMStorable* find(const wchar_t* objectName) const;
 
     // @cmember Find the <c OMProperty> named <p propertyName> contained
     //          within this <c OMStorable>.
-  OMProperty* findProperty(const char* propertyName) const;
+  OMProperty* findProperty(const wchar_t* propertyName) const;
 
     // @cmember Is this <c OMStorable> the root of the object
     //          containment hierarchy.
@@ -150,20 +150,20 @@ public:
 private:
   // @access Private members.
 
-  char* makePathName(void);
+  wchar_t* makePathName(void);
 
 protected:
   // @access Protected members.
 
     // @cmember The name of this <c OMStorable>.
-  const char* name(void) const;
+  const wchar_t* name(void) const;
 
   OMPropertySet _persistentProperties;
 
 private:
   const OMStorable* _container;
-  char* _name;
-  char* _pathName;
+  wchar_t* _name;
+  wchar_t* _pathName;
 
   OMStoredObject* _store;
   const OMClassFactory* _classFactory;

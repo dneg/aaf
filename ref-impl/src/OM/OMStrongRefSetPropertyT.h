@@ -122,7 +122,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   // save the set index
   //
   ASSERT("Valid set index", index->isValid());
-  store()->save(index, name());
+  store()->save(index, storedName());
   delete index;
 
   // make an entry in the property index
@@ -192,7 +192,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   // restore the index
   //
   OMStoredSetIndex* setIndex = 0;
-  store()->restore(setIndex, name());
+  store()->restore(setIndex, storedName());
   ASSERT("Valid set index", setIndex->isValid());
   ASSERT("Consistent key sizes",
                           setIndex->keySize() == sizeof(UniqueIdentification));
@@ -215,7 +215,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   UniqueIdentification key;
   for (size_t i = 0; i < entries; i++) {
     setIndex->iterate(context, localKey, count, &key);
-    char* name = elementName(localKey);
+    wchar_t* name = elementName(localKey);
     SetElement newElement(this, name, localKey, count, key);
     newElement.restore();
     _set.insert(newElement);
@@ -280,7 +280,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   // Set the set to contain the new object
   //
   const size_t localKey = nextLocalKey();
-  char* name = elementName(localKey);
+  wchar_t* name = elementName(localKey);
   UniqueIdentification key = object->identification();
   ASSERT("Valid identification", isValidIdentification(key));
 

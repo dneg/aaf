@@ -91,7 +91,7 @@ public:
   const OMPropertyDefinition* definition(void) const;
 
     // @cmember The name of this <c OMProperty>.
-  const char* name(void) const;
+  const wchar_t* name(void) const;
 
     // @cmember The property id of this <c OMProperty>.
   OMPropertyId propertyId(void) const;
@@ -183,7 +183,6 @@ protected:
 
 private:
 
-  char* _cName;
   const OMPropertySet* _propertySet; // The PropertySet that contains
                                      // this property
   const OMPropertyDefinition* _definition;

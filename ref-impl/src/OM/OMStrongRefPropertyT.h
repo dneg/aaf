@@ -43,9 +43,7 @@ OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty(
   TRACE(
      "OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty");
 
-  char* cName = convertWideString(name);
-  _reference = OMStrongObjectReference<ReferencedObject>(this, cName);
-  delete [] cName;
+  _reference = OMStrongObjectReference<ReferencedObject>(this, storedName());
 }
 
 template <typename ReferencedObject>
