@@ -32,9 +32,14 @@ const int PID_ESSENCEDATA_MEDIADATA     = 1;
 const aafUID_t kNullID = {0};
 
 ImplAAFEssenceData::ImplAAFEssenceData () :
-  _fileMobID(PID_ESSENCEDATA_FILEMOBID, "fileMobID") /*
-  _mediaData(PID_ESSENCEDATA_MEDIADATA, "mediaData") */
+  _fileMobID(PID_ESSENCEDATA_FILEMOBID, "fileMobID"),
+  _mediaData(PID_ESSENCEDATA_MEDIADATA, "mediaData")
 {
+  // Add the properties into the property set.
+  _persistentProperties.put(_fileMobID.address());
+  _persistentProperties.put(_mediaData.address());
+
+  // Initial default property values.
   _fileMobID = kNullID;
 }
 
@@ -46,39 +51,133 @@ ImplAAFEssenceData::~ImplAAFEssenceData ()
 
 /****/
  AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceData::Write (aafUInt32  /*bytes*/,
-                           aafUInt32  /*buflen*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafUInt32 *  /*bytesRead*/)
+   ImplAAFEssenceData::Write (aafUInt32  bytes,
+                           aafDataBuffer_t buffer,
+                           aafUInt32 *bytesWritten)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  if (NULL == buffer || NULL == bytesWritten)
+    return AAFRESULT_NULL_PARAM;
+  
+  try
+  {
+    _mediaData.write(buffer, bytes, *bytesWritten);
+    if (0 < bytes && 0 == *bytesWritten)
+      result = AAFRESULT_NOT_IMPLEMENTED;
+  }
+  //catch (OMException& ome)
+  //{
+  //}
+  catch(...)
+  {
+    result = AAFRESULT_INTERNAL_ERROR;
+  }
+  return result;
 }
 
 
 /****/
  AAFRESULT STDMETHODCALLTYPE
-   ImplAAFEssenceData::Read (aafUInt32  /*bytes*/,
-                           aafUInt32  /*buflen*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafUInt32 *  /*bytesRead*/)
+   ImplAAFEssenceData::Read (aafUInt32  bytes,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32 *bytesRead)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  if (NULL == buffer || NULL == bytesRead)
+    return AAFRESULT_NULL_PARAM;
+  
+  try
+  {
+    _mediaData.read(buffer, bytes, *bytesRead);
+    if (0 < bytes && 0 == *bytesRead)
+      result = AAFRESULT_NOT_IMPLEMENTED;
+  }
+  //catch (OMException& ome)
+  //{
+  //}
+  catch(...)
+  {
+    result = AAFRESULT_INTERNAL_ERROR;
+  }
+  return result;
 }
 
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceData::Seek (aafPosition_t  /*offset*/)
+    ImplAAFEssenceData::SetPosition (aafPosition_t  offset)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  try
+  {
+    OMUInt64 tmpOffset = offset;
+    _mediaData.setPosition(tmpOffset);
+  }
+  //catch (OMException& ome)
+  //{
+  //}
+  catch(...)
+  {
+    result = AAFRESULT_INTERNAL_ERROR;
+  }
+
+  return result;
 }
 
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceData::GetSize (aafLength_t *  /*pSize */)
+    ImplAAFEssenceData::GetPosition (aafPosition_t  *pOffset)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  if (NULL == pOffset)
+    return AAFRESULT_NULL_PARAM;
+
+  try
+  {
+    OMUInt64 tmpOffset;
+    tmpOffset = _mediaData.position();
+    *pOffset = tmpOffset;
+  }
+  //catch (OMException& ome)
+  //{
+  //}
+  catch(...)
+  {
+    result = AAFRESULT_INTERNAL_ERROR;
+  }
+
+  return result;
+}
+
+
+/****/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFEssenceData::GetSize (aafLength_t *pSize)
+{
+  if (NULL == pSize)
+    return AAFRESULT_NULL_PARAM;
+
+
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  try
+  {
+    *pSize = _mediaData.size();
+  }
+  //catch (OMException& ome)
+  //{
+  //}
+  catch(...)
+  {
+    result = AAFRESULT_INTERNAL_ERROR;
+  }
+
+  return result;
 }
 
 
