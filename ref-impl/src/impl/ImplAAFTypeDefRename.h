@@ -128,6 +128,17 @@ public:
     pvtCreateOMProperty (OMPropertyId pid,
 						 const aafCharacter * name) const;
 
+  //****************
+  // GetTypeCategory()
+  //
+  // (override from ImplAAFTypeDef)
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetTypeCategory
+        // @parm [out] Returned type category
+        (eAAFTypeCategory_t *  pTid);
+
+
 private:
   ImplAAFTypeDefSP BaseType () const;
 
