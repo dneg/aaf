@@ -173,8 +173,6 @@ AD_XMETHOD3(GetTapeName,
   // Caller may call GetTapeNameBufLen\(\) to determine the required
   // buffer size.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pTapeName pointer is valid.
   // - the specified master slot was found.
@@ -221,8 +219,6 @@ AD_XMETHOD2(GetTapeNameBufLen,
   // method.  The value is placed into the location specified by
   // pLen.  The value will include space required for the trailing
   // null character.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pLen pointer is valid.
@@ -320,8 +316,6 @@ AD_XMETHOD3(GetRepresentation,
   //
   // The returned source clip is AddRef\(\)ed before it is returned.
   //
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the ppSourceClip pointer is valid.
   //
@@ -386,8 +380,6 @@ AD_XMETHOD3(GetCriteriaSegment,
   // representations exist or not.
   //
   // The returned segment is AddRef\(\)ed before it is returned.
-  //
-  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the ppSegment pointer is valid.

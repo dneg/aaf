@@ -31,7 +31,6 @@ AD_IDL(//
 // This interface is used to enumerate across Class Definition
 // objects.
 AD_STD_COMMENT_IFC_HEADER
-AD_STD_COMMENT_IFC_STUB
 //)
 AD_FORWARD_DECLARATION(AAFClassDef)
 AD_CLASS_UUID(B1A2138F, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)

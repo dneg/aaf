@@ -33,7 +33,6 @@ AD_IDL(//
 // This interface is used to implement Weak Object references.
 //
 AD_STD_COMMENT_IFC_HEADER
-AD_STD_COMMENT_IFC_STUB)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_FORWARD_DECLARATION(AAFClassDef)
 AD_CLASS_UUID(381e1f23, e7bb, 11d2, 84, 2a, 00, 60, 08, 32, ac, b8)

@@ -307,8 +307,6 @@ AD_XMETHOD1(AddEssenceData,
 			Essence data object to append,
 			Appends the given essence data object to the header.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pEssenceData pointer is valid.
   // 
@@ -512,8 +510,6 @@ AD_XMETHOD1(GetIdentifications,
   // *ppEnum argument.  The returned enumerator is AddRef\(\)ed before
   // it is returned.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
   // 
@@ -624,8 +620,6 @@ AD_XMETHOD1(GetFileRevision,
 			The File Version,
 			Return the File Revision property.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pRevision pointer is valid.
   // 
@@ -650,8 +644,6 @@ AD_XMETHOD1(GetLastModified,
 			The modification date-time stamp,
 			Return the Last Modified property.
   // 
-  // NOTE! Stub only.   Implementation not yet added.
-  //
   // Succeeds if all of the following are true:
   // - the pTimeStamp pointer is valid.
   // 

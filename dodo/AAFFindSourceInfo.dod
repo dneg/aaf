@@ -28,12 +28,6 @@ AAFRoot\
 #c
 AD_HEAD
 
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFMob)
 
