@@ -274,6 +274,7 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
   PRECONDITION("Valid element size", externalElementSize!= 0);
   PRECONDITION("Valid buffer", elements != 0);
   PRECONDITION("Valid element count", elementCount > 0);
+  PRECONDITION("Stream byte order is known", hasByteOrder());
 
   // Allocate buffer for one element
   OMByte* buffer = new OMByte[externalElementSize];
@@ -330,6 +331,7 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
   PRECONDITION("Valid element size", externalElementSize!= 0);
   PRECONDITION("Valid buffer", elements != 0);
   PRECONDITION("Valid element count", elementCount > 0);
+  PRECONDITION("Stream byte order is known", hasByteOrder());
 
   // Allocate buffer for one element
   size_t externalBytesSize = elementType->externalSize(
