@@ -205,7 +205,7 @@
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    %%01%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
 	  /*%07*/ %09 .%08-indirection /*%10*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
@@ -371,7 +371,7 @@
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
-    %%01%01 (/*%02*/ %04 .%03-indirection /*%05*/,
+    %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
 	  /*%07*/ %09 .%08-indirection /*%10*/,
 	  /*%12*/ %14 .%13-indirection /*%15*/,
 	  /*%17*/ %19 .%18-indirection /*%20*/,
