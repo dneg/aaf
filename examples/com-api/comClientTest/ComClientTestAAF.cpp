@@ -31,10 +31,19 @@
 #include "aafErr.h"		// TODO: this file needs to be moved to a public include directory...
 #include "AAFTypes.h"
 #include "AAFUtils.h"	// TODO: this file needs to be moved to a public include directory...
-#include "AAF.h"
 
+#if defined(_MAC) || defined(macintosh)
+#include <wprintf.h>
+#include <initguid.h> // define all of the AAF guids.
+#include "AAF.h"
+#else
+#include "AAF.h"
 // TODO: these should not be here, I added them for now to get a good link
+// Need to modify Win32 project to include  midl generated AAF_i.c IID definition file.
 const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+#endif
+
+
 const aafProductVersion_t AAFToolkitVersion = {2, 1, 0, 1, kVersionBeta};
 
 static void     FatalErrorCode(aafErr_t errcode, int line, char *file)
@@ -59,7 +68,7 @@ static aafErr_t moduleErrorTmp = OM_ERR_NONE;/* note usage in macro */
 #define assert(b, msg) \
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
-void printIdentification(IAAFIdentification* pIdent)
+static void printIdentification(IAAFIdentification* pIdent)
 {
 	aafString_t companyName;
 	check(pIdent->GetCompanyName(&companyName));
@@ -78,7 +87,7 @@ void printIdentification(IAAFIdentification* pIdent)
 	wprintf(L"Platform             = \"%s\"\n", platform.value);
 }
 
-void ReadAAFFile(unsigned char * pFileName)
+static void ReadAAFFile(unsigned char * pFileName)
 {
 	IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
@@ -119,7 +128,7 @@ void ReadAAFFile(unsigned char * pFileName)
 	if (pSession) pSession->Release();
 }
 
-void CreateAAFFile(unsigned char * pFileName)
+static void CreateAAFFile(unsigned char * pFileName)
 {
 	IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
@@ -150,16 +159,29 @@ void CreateAAFFile(unsigned char * pFileName)
 	if (pSession) pSession->Release();
 }
 
+// simple helper class to initialize and cleanup COM library.
+struct CComInitialize
+{
+	CComInitialize()
+	{
+		CoInitialize(NULL);
+	}
+
+	~CComInitialize()
+	{
+		CoUninitialize();
+	}
+};
+
 main()
 {
-	CoInitialize(NULL);
+	CComInitialize comInit;
 
 	CreateAAFFile((unsigned char *)"Foo.aaf");
 	ReadAAFFile((unsigned char *)"Foo.aaf");
 
 	fprintf(stdout, "Done\n");
 
-	CoUninitialize();
 
 	return(0);
 }
