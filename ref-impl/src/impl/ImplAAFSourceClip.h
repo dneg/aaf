@@ -60,7 +60,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetFade
         (// @parm [out] Fade In Length
-		 aafInt32 *       fadeInLen     ,
+		 aafLength_t *       fadeInLen     ,
 
 		 // @parm [out] Fade In Type
 		 aafFadeType_t *  fadeInType    ,
@@ -69,7 +69,7 @@ public:
          aafBool *        fadeInPresent ,
 
 		 // @parm [out] Fade Out Length
-		 aafInt32 *       fadeOutLen    ,
+		 aafLength_t *     fadeOutLen    ,
 
 		 // @parm [out] Fade Out Type
          aafFadeType_t *  fadeOutType   ,
