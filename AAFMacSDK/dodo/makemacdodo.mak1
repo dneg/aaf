@@ -145,7 +145,7 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 			end
 		end
 		set imports ""
-		set imports "`Search -s -ns '#import ./' {dod}{base}.dod -q | StreamEdit -e '1,$ replace /#import[ ]+.\//"\{dod\}"'`"
+		set imports "`Search -s -ns /¥#import ./¶/ {dod}{base}.dod -q | StreamEdit -e '1,$ replace /#import[ ]+.\//"\{dod\}"'`"
 		#if "{imports}" ­ ""
 		#	echo '	imports '{imports}
 		#end
@@ -258,7 +258,7 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 		echo '	'{base}'.all ¶' >> targets_all.tmp
 		echo {base}'.all...'
 		set imports ""
-		set imports "`Search -s -ns '#import ./' {dod}{base}.dod -q | StreamEdit -e '1,$ replace /#import[ ]+.\//"\{dod\}"'`"
+		set imports "`Search -s -ns /¥#import ./¶/ {dod}{base}.dod -q | StreamEdit -e '1,$ replace /#import[ ]+.\//"\{dod\}"'`"
 		#if "{imports}" ­ ""
 		#	echo '	imports '{imports}
 		#end
@@ -317,7 +317,7 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 		echo '	'{base}'.all ¶' >> targets_all.tmp
 		echo {base}'.all...'
 		set imports ""
-		set imports "`Search -s -ns '#import ./' {dod}{base}.dod -q | StreamEdit -e '1,$ replace /#import[ ]+.\//"\{dod\}"'`"
+		set imports "`Search -s -ns /¥#import ./¶/ {dod}{base}.dod -q | StreamEdit -e '1,$ replace /#import[ ]+.\//"\{dod\}"'`"
 		#if "{imports}" ­ ""
 		#	echo '	imports '{imports}
 		#end
