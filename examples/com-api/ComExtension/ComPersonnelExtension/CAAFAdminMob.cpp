@@ -302,7 +302,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFAdminMob::GetIndexedDefinitionID (aafUInt32 index, aafUID_t *uid)
+    CAAFAdminMob::GetIndexedDefinitionID (aafUInt32 /* index */, aafUID_t *uid)
 {
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;
