@@ -98,7 +98,7 @@
 #define OS_LINUX
 #define OS_UNIX
 #define COMPILER_GCC
-(#define PLATFORM_GCC_INTEL_LINUX
+#define PLATFORM_GCC_INTEL_LINUX
 
 /*
  *  Compiler:   GNU C++
