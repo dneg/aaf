@@ -186,7 +186,8 @@ bool operator==( const aafUID_t& uidL, const aafUID_t& uidR )
 	return 0 == ::memcmp( &uidL, &uidR, sizeof( aafUID_t ) );
 }
 
-#if !defined(OS_WINDOWS)
+
+#if !(defined(OS_WINDOWS) || defined(OS_MACOS))
 bool operator==( const tagGUID& uidL, const tagGUID& uidR )
 {
 	return 0 == ::memcmp( &uidL, &uidR, sizeof( tagGUID ) );

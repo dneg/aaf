@@ -91,14 +91,14 @@ inline bool operator!=( const aafUID_t& uidL, const aafUID_t& uidR )
 // as the key of a std::map<>
 bool operator<( const aafUID_t& uidL, const aafUID_t& uidR );
 
-#if !defined(OS_WINDOWS)
+
+#if !(defined(OS_WINDOWS) || defined(OS_MACOS))
 bool operator==( const tagGUID& uidL, const tagGUID& uidR );
 inline bool operator!=( const tagGUID& uidL, const tagGUID& uidR )
 {
 	return !(uidL == uidR);
 }
 #endif
-
 
 // Preserve auto_ptr ownership semantics but add a size
 // data member so that a buffer pointer and its size can travel

@@ -21,7 +21,7 @@
 
 #include "AxTypes.h"
 
-#include <AAFCOMPlatformTypes.h>
+#include <AAFCOMPlatform.h>
 
 #include <map>
 
