@@ -17,11 +17,12 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_INCLUDE(AAFTypes)
 AD_CLASS_BEGIN
 
 /****/
 AD_METHOD1(GetVolumeName,
-[out],AAFString*,volname,Pass in a string, which will be filled in,
+[out],aafString_t*,volname,Pass in a string which will be filled in,
 Get the volume name from a Mac locator.)
 
 /****/
@@ -37,19 +38,19 @@ Get the DirID from a Mac locator.)
 	//@comm Replaces part of omfmMacLocatorGetInfo
 	
 /****/
-AD_METHOD2(SetVolumeName,
-[out],AAFString*,volname,pass in a reference to a string object,
+AD_METHOD1(SetVolumeName,
+[out],aafString_t*,volname,pass in a reference to a string object,
 Set the volume name for a Mac locator.)
 
 /****/
-AD_METHOD2(SetDirID,
+AD_METHOD1(SetDirID,
 [out],aafInt32,DirID,,
 Set the DirID for a Mac locator.)
 
   //
   // IAAFUnitTest interface method overrides
   //
-.method-Test
+AD_OVERRIDE(.method-Test)
 
 
 AD_CLASS_END
