@@ -509,6 +509,7 @@ AAFRESULT aafMobIDNew(
 	aLabel.smpte.ulcode = 0x2B;
 	aLabel.smpte.SMPTE = 0x34;
 	aLabel.smpte.Registry = 0x02;
+	aLabel.smpte.unused = 0;
 	aLabel.smpte.MobIDPrefix = 42;		// Means its an OMF Uid
 
 	AAFGetDateTime(&timestamp);
