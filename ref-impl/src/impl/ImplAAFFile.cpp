@@ -1176,6 +1176,16 @@ OMFile * ImplAAFFile::omFile (void)
   return _file;
 }
 
+void ImplAAFFile::registerFactories(void)
+{
+  // Nothing yet
+}
+
+void ImplAAFFile::removeFactories(void)
+{
+  // Nothing yet
+}
+
 
 bool ImplAAFFile::IsReadable () const
 {

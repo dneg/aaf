@@ -30,6 +30,7 @@
 #include "ImplAAFContext.h"
 #endif
 
+#include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
 
 #include "AAFResult.h"
@@ -38,6 +39,7 @@
 #include "ImplAAFPluginManager.h"
 
 #include "OMObjectManager.h"
+
 
 extern "C" const aafClassID_t CLSID_AAFPluginManager;
 
@@ -103,6 +105,7 @@ ImplAAFContext::ImplAAFContext ()
 
   _plugins = NULL;
   OMObjectManager::initialize();
+  ImplAAFFile::registerFactories();
 }
 
 ImplAAFContext::~ImplAAFContext ()
@@ -115,6 +118,7 @@ ImplAAFContext::~ImplAAFContext ()
   
   // Thare Can Be Only One!
   _singleton = 0;
+  ImplAAFFile::removeFactories();
   OMObjectManager::finalize();
 }
 

@@ -102,6 +102,10 @@ public:
     GetDictionary
         (ImplAAFDictionary ** ppDictionary) const;  //@parm [out,retval] The AAF Dictionary
 
+  static void registerFactories(void);
+
+  static void removeFactories(void);
+
   //
   // Constructor/destructor
   //
