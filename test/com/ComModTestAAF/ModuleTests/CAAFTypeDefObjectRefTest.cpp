@@ -1,6 +1,6 @@
 // @doc INTERNAL
 // @com This file implements the module test for CAAFTypeDefObjectRef
- /***********************************************************************
+/***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
  *
@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- * prior written permission of Avid Technology, Inc.
+ *  prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -27,63 +27,120 @@
  *
  ************************************************************************/
 
-#include "AAF.h"
-#include "AAFResult.h"
-#include "AAFDataDefs.h"
-#include "AAFDefUIDs.h"
-#include "AAFStoredObjectIDs.h"
-
 #include <iostream.h>
 #include <stdio.h>
-#include <assert.h>
-
+#if defined(macintosh) || defined(_MAC)
+#include <wstring.h>
+#endif
+#include "AAF.h"
+#include "AAFResult.h"
 #include "AAFSmartPointer.h"
-typedef IAAFSmartPointer<IAAFClassDef>         IAAFClassDefSP;
-typedef IAAFSmartPointer<IAAFComponent>        IAAFComponentSP;
-typedef IAAFSmartPointer<IAAFMetaDefinition>   IAAFMetaDefinitionSP;
-typedef IAAFSmartPointer<IAAFDictionary>       IAAFDictionarySP;
-typedef IAAFSmartPointer<IAAFFile>             IAAFFileSP;
-typedef IAAFSmartPointer<IAAFFiller>           IAAFFillerSP;
-typedef IAAFSmartPointer<IAAFHeader>           IAAFHeaderSP;
-typedef IAAFSmartPointer<IAAFMob>              IAAFMobSP;
-typedef IAAFSmartPointer<IAAFObject>           IAAFObjectSP;
-typedef IAAFSmartPointer<IAAFPropertyDef>      IAAFPropertyDefSP;
-typedef IAAFSmartPointer<IAAFPropertyValue>    IAAFPropertyValueSP;
-typedef IAAFSmartPointer<IAAFTypeDef>          IAAFTypeDefSP;
-typedef IAAFSmartPointer<IAAFTypeDefObjectRef> IAAFTypeDefObjectRefSP;
-typedef IAAFSmartPointer<IAAFTypeDefStrongObjRef>
-    IAAFTypeDefStrongObjRefSP;
-typedef IAAFSmartPointer<IEnumAAFMobs>         IEnumAAFMobsSP;
-
+#include "AAFStoredObjectIDs.h"
 #include "CAAFBuiltinDefs.h"
 
-//
-// TypeID for our new component obj ref typedef
-//
+typedef IAAFSmartPointer<IAAFClassDef> IAAFClassDefSP;
+typedef IAAFSmartPointer<IAAFComponent> IAAFComponentSP;
+typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
+typedef IAAFSmartPointer<IAAFFile> IAAFFileSP;
+typedef IAAFSmartPointer<IAAFFiller> IAAFFillerSP;
+typedef IAAFSmartPointer<IAAFHeader> IAAFHeaderSP;
+typedef IAAFSmartPointer<IAAFMetaDefinition> IAAFMetaDefinitionSP;
+typedef IAAFSmartPointer<IAAFMob> IAAFMobSP;
+typedef IAAFSmartPointer<IAAFMobSlot> IAAFMobSlotSP;
+typedef IAAFSmartPointer<IAAFObject> IAAFObjectSP;
+typedef IAAFSmartPointer<IAAFPropertyDef> IAAFPropertyDefSP;
+typedef IAAFSmartPointer<IAAFPropertyValue> IAAFPropertyValueSP;
+typedef IAAFSmartPointer<IAAFSegment> IAAFSegmentSP;
+typedef IAAFSmartPointer<IAAFSequence> IAAFSequenceSP;
+typedef IAAFSmartPointer<IAAFTimelineMobSlot> IAAFTimelineMobSlotSP;
+typedef IAAFSmartPointer<IAAFTypeDef> IAAFTypeDefSP;
+typedef IAAFSmartPointer<IAAFTypeDefObjectRef> IAAFTypeDefObjectRefSP;
+typedef IAAFSmartPointer<IAAFTypeDefStrongObjRef> IAAFTypeDefStrongObjRefSP;
 
-// {0248F0CD-7CB6-11d3-8450-00600832ACB8}
-static const aafUID_t kTestTypeID_ObjRef = 
-{ 0x248f0cd, 0x7cb6, 0x11d3, { 0x84, 0x50, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+// convenient error handlers.
+inline void checkResult(HRESULT r)
+{
+  if (FAILED(r))
+    throw r;
+}
 
+inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
+{
+  if (!expression)
+    throw r;
+}
 
-//
-// Property IDs for new comp obj ref props on CompMob
-//
+// Function to compare COM interface pointers, taken from 
+// CAAFTypeDefFixedArrayTest.cpp.
+template <class T1, class T2>
+aafBoolean_t  AreUnksSame(T1& cls1, T2& cls2)
+{
+	IAAFSmartPointer<IUnknown>    spUnk1, spUnk2;
+	
+	checkResult(cls1->QueryInterface(IID_IUnknown, (void **)&spUnk1));
+	checkResult(cls2->QueryInterface(IID_IUnknown, (void **)&spUnk2));
+	
+	if (spUnk1 == spUnk2)
+		return kAAFTrue;
+	else
+		return kAAFFalse;
+}
 
-// {0248F0CE-7CB6-11d3-8450-00600832ACB8}
-static const aafUID_t kTestPropID_CompMob_NewCompProp1 = 
-{ 0x248f0ce, 0x7cb6, 0x11d3, { 0x84, 0x50, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+// Function to test if two AUIDs are equal
+static aafBoolean_t AreAUIDsEqual(aafUID_t& a1, aafUID_t& a2)
+{
+	// We cannot simply call memcmp() (or use the == operator), since there is 
+	// padding in between the structure fields due to byte alignment, and this 
+	// padding does not have to be equal in order for the AUIDs to be equal.
+	if(memcmp(&a1.Data1,&a2.Data1,sizeof(a1.Data1)))
+		return(kAAFFalse);
+	if(memcmp(&a1.Data2,&a2.Data2,sizeof(a1.Data2)))
+		return(kAAFFalse);
+	if(memcmp(&a1.Data3,&a2.Data3,sizeof(a1.Data3)))
+		return(kAAFFalse);
+	if(memcmp(&a1.Data4,&a2.Data4,sizeof(a1.Data4)))
+		return(kAAFFalse);
+	return(kAAFTrue);
+}
 
-// {0248F0CF-7CB6-11d3-8450-00600832ACB8}
-static const aafUID_t kTestPropID_CompMob_NewCompProp2 = 
-{ 0x248f0cf, 0x7cb6, 0x11d3, { 0x84, 0x50, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
+// Function to test if two class definitions are equivalent, i.e. if they have the
+// same AUID.
+static aafBoolean_t AreClassDefsEquivalent(IAAFClassDef *pClassDef1,
+										   IAAFClassDef *pClassDef2)
+{
+	IAAFMetaDefinitionSP pMetaDef1,pMetaDef2;
+	checkResult(pClassDef1->QueryInterface(IID_IAAFMetaDefinition,
+		(void**)&pMetaDef1));
+	checkResult(pClassDef2->QueryInterface(IID_IAAFMetaDefinition,
+		(void**)&pMetaDef2));
 
+	aafUID_t FirstAUID,SecondAUID;
+	checkResult(pMetaDef1->GetAUID(&FirstAUID));
+	checkResult(pMetaDef2->GetAUID(&SecondAUID));
 
-static const 	aafMobID_t	TEST_MobID =
-{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
-0x13, 0x00, 0x00, 0x00,
-{0xc68dee88, 0x0405, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+	return(AreAUIDsEqual(FirstAUID,SecondAUID));
+}
 
+// These two functions fill in the product version and product info structures,
+// respectively, for the AAF files we will create
+static void FillInProductVersion(aafProductVersion_t& v)
+{
+	v.major = 1;
+	v.minor = 0;
+	v.tertiary = 0;
+	v.patchLevel = 0;
+	v.type = kAAFVersionUnknown;
+}
+
+static void FillInProductInfo(aafProductIdentification_t& ProductInfo,
+	aafProductVersion_t& v)
+{
+	ProductInfo.companyName = L"AAF Developers Desk";
+	ProductInfo.productName = L"AAFTypeDefObjectRef Test";
+	ProductInfo.productVersion = &v;
+	ProductInfo.productVersionString = NULL;
+	ProductInfo.platform = NULL;
+}
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -93,390 +150,270 @@ static void RemoveTestFile(const wchar_t* pFileName)
 
   size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
   if (status != (size_t)-1)
-	{ // delete the file.
-	  remove(cFileName);
-	}
+  { // delete the file.
+    remove(cFileName);
+  }
 }
 
-// convenient error handlers.
-inline void checkResult(HRESULT r)
+// IDs of objects & types we will create
+
+// AUID of our "StrongReferenceToFiller" type def
+static const aafUID_t kTypeID_StrongRefToFiller = 
+{ 0x3c317b00, 0x4d33, 0x11d4, { 0x92, 0x25, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d } };
+
+// AUID of the optional property of type "StrongReferenceToFiller" we will add to
+// AAFSequence
+static const aafUID_t AUID_TestProperty = 
+{ 0x4af53da0, 0x4e91, 0x11d4, { 0x92, 0x26, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d } };
+
+// ID of Mob we will create
+static const aafMobID_t	Test_MobID =
+	{{0x07, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+	0x13, 0x00, 0x00, 0x00,
+	{0xffd21460, 0x4e92, 0x11d4, 0x92, 0x26, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d} };	
+
+static void CreateTypeDefObjectRefFile(aafWChar *pFilename)
 {
-  if (FAILED(r))
-    throw r;
-}
-inline void checkExpression(bool expression, HRESULT r)
-{
-  if (!expression)
-    throw r;
-}
+	aafProductVersion_t v;
+	aafProductIdentification_t	ProductInfo;
+	FillInProductVersion(v);
+	FillInProductInfo(ProductInfo,v);
 
+	// Remove the previous test file, if any.
+	RemoveTestFile(pFilename);
 
-inline bool EqualGUID (aafUID_t * a,
-					   aafUID_t * b)
-{
-  assert (a);
-  assert (b);
-  return memcmp (a, b, sizeof (aafUID_t)) ? false : true;
-}
+	// Create new AAF file.
+	IAAFFileSP pFile;
+	checkResult(AAFFileOpenNewModify(pFilename,0,&ProductInfo, &pFile));
 
+	// Get AAF header & dictionary
+	IAAFHeaderSP pHeader;
+	checkResult(pFile->GetHeader(&pHeader));
+	IAAFDictionarySP pDictionary;
+	checkResult(pHeader->GetDictionary(&pDictionary));
 
-static HRESULT OpenAAFFile(aafWChar*			pFileName,
-						   aafMediaOpenMode_t	mode,
-						   IAAFFile**			ppFile,
-						   IAAFHeader**			ppHeader)
-{
-  aafProductIdentification_t	ProductInfo;
-  HRESULT						hr = AAFRESULT_SUCCESS;
+	CAAFBuiltinDefs defs(pDictionary);
 
-  aafProductVersion_t v;
-  v.major = 1;
-  v.minor = 0;
-  v.tertiary = 0;
-  v.patchLevel = 0;
-  v.type = kAAFVersionUnknown;
-  ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"AAFDictionary Test";
-  ProductInfo.productVersion = &v;
-  ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = UnitTestProductID;
-  ProductInfo.platform = NULL;
+	// Create a strong object reference
+	IAAFTypeDefObjectRefSP pTypeDefObjectRef;
+	checkResult(pDictionary->CreateMetaInstance(AUID_AAFTypeDefStrongObjRef,
+		IID_IAAFTypeDefObjectRef,(IUnknown**)&pTypeDefObjectRef));
 
-  *ppFile = NULL;
+	// Initialize as strong reference to AAFFiller
+	IAAFTypeDefStrongObjRefSP pTypeDefStrongObjRef;
+	checkResult(pTypeDefObjectRef->QueryInterface(IID_IAAFTypeDefStrongObjRef,
+		(void **)&pTypeDefStrongObjRef));
+	checkResult(pTypeDefStrongObjRef->Initialize(kTypeID_StrongRefToFiller,
+		defs.cdFiller(),L"StrongReferenceToFiller"));
 
-  switch (mode)
-	{
-	case kAAFMediaOpenReadOnly:
-	  hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
-	  break;
+	// Add this type definition to the dictionary
+	IAAFTypeDefSP pTypeDef;
+	checkResult(pTypeDefObjectRef->QueryInterface(IID_IAAFTypeDef,
+		(void **)&pTypeDef));
+	checkResult(pDictionary->RegisterTypeDef(pTypeDef));
 
-	case kAAFMediaOpenAppend:
-	  hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
-	  break;
+	// Create a filler
+	IAAFFillerSP pFiller;
+	checkResult(defs.cdFiller()->CreateInstance(IID_IAAFFiller,
+		(IUnknown **)&pFiller));
+	checkResult(pFiller->Initialize(defs.ddPicture(),22));
+	IAAFObjectSP pObject;
+	checkResult(pFiller->QueryInterface(IID_IAAFObject,(void **)&pObject));
 
-	default:
-	  hr = AAFRESULT_TEST_FAILED;
-	  break;
-	}
+	// Now create a property value whose type is strong reference to AAFFiller
+	IAAFPropertyValueSP pPropVal;
+	pTypeDefObjectRef->CreateValue(pObject,&pPropVal);
 
-  if (FAILED(hr))
-	{
-	  if (*ppFile)
-		{
-		  (*ppFile)->Release();
-		  *ppFile = NULL;
-		}
-	  return hr;
-	}
+	// Make sure GetObject() returns correct object
+	IAAFObjectSP pReturnedObject;
+	checkResult(pTypeDefObjectRef->GetObject(pPropVal,IID_IAAFObject,
+		(IUnknown**)&pReturnedObject));
+	checkExpression(AreUnksSame(pObject,pReturnedObject)==kAAFTrue);
+
+	// Make sure GetObjectType() returns correct type
+	IAAFClassDefSP pReturnedClassDef;
+	checkResult(pTypeDefObjectRef->GetObjectType(&pReturnedClassDef));
+	checkExpression(AreClassDefsEquivalent(pReturnedClassDef,defs.cdFiller())
+		==kAAFTrue);
+
+	// Create a new filler object
+	IAAFFillerSP pNewFiller;
+	checkResult(defs.cdFiller()->CreateInstance(IID_IAAFFiller,
+		(IUnknown **)&pNewFiller));
+	checkResult(pNewFiller->Initialize(defs.ddPicture(),36));
+	IAAFObjectSP pNewObject;
+	checkResult(pNewFiller->QueryInterface(IID_IAAFObject,(void **)&pNewObject));
+
+	// Make sure SetObject() correctly sets new object
+	checkResult(pTypeDefObjectRef->SetObject(pPropVal,pNewObject));
+
+	checkResult(pTypeDefObjectRef->GetObject(pPropVal,IID_IAAFObject,
+		(IUnknown**)&pReturnedObject));
+	checkExpression(AreUnksSame(pNewObject,pReturnedObject)==kAAFTrue);
+
+	// Make sure GetObjectType() still returns correct type
+	checkResult(pTypeDefObjectRef->GetObjectType(&pReturnedClassDef));
+	checkExpression(AreClassDefsEquivalent(pReturnedClassDef,defs.cdFiller())
+		==kAAFTrue);
+
+	// Now create an optional property that takes our new type, set it, and save
+	// it in the file.
+
+	// Add an optional property of type "StrongReferenceToFiller" to AAFSequence.
+	IAAFClassDefSP pSequenceClassDef;
+	checkResult(pDictionary->LookupClassDef(AUID_AAFSequence,
+		&pSequenceClassDef));
+	IAAFPropertyDefSP pTestProperty;
+	checkResult(pSequenceClassDef->RegisterOptionalPropertyDef(AUID_TestProperty,
+			L"Test property",
+			pTypeDef,
+			&pTestProperty));
+	checkResult(pDictionary->RegisterClassDef(pSequenceClassDef));
+
+	// Create an instance of IAAFSequence & initialize it
+	IAAFSequenceSP pSequence;
+	checkResult(pDictionary->CreateInstance(AUID_AAFSequence,IID_IAAFSequence,
+		(IUnknown**)&pSequence));
+	checkResult(pSequence->Initialize(defs.ddSound()));
+
+	// Set value of our new property to property value created above
+	checkResult(pSequence->QueryInterface(IID_IAAFObject,(void**)&pObject));
+	checkResult(pObject->SetPropertyValue(pTestProperty,pPropVal));
+
+	// Now add this sequence to a composition Mob, and add the composition Mob
+	// to the file header.
+
+	// Create a Composition Mob
+	IAAFMobSP pMob;
+	checkResult(defs.cdCompositionMob()->CreateInstance(IID_IAAFMob, 
+		(IUnknown **)&pMob));
+	checkResult(pMob->SetMobID(Test_MobID));
+	checkResult(pMob->SetName(L"TypeDefObjectRefTest"));
   
-  hr = (*ppFile)->GetHeader(ppHeader);
-  if (FAILED(hr))
-	{
-	  (*ppFile)->Release();
-	  *ppFile = NULL;
-	  return hr;
-	}
- 	
-  return hr;
+	// Add timeline Mob slot
+	IAAFSegmentSP pSegment;
+	checkResult(pSequence->QueryInterface(IID_IAAFSegment,(void **)&pSegment));
+	aafRational_t editRate = { 0, 1};
+	IAAFTimelineMobSlotSP pTimelineMobSlot;
+	checkResult(pMob->AppendNewTimelineSlot(editRate,pSegment,1,
+		L"AAF Test Sequence",0,&pTimelineMobSlot));
+
+	// Add composition Mob to file
+	pHeader->AddMob(pMob);
+
+	// Save & close file
+	checkResult(pFile->Save());
+	checkResult(pFile->Close());
 }
 
-
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static void ReadTypeDefObjectRefFile(aafWChar *pFilename)
 {
-  IAAFFileSP       pFile;
-  HRESULT          hr = S_OK;
-	
-	
-  try
-	{  
-	  // Remove the previous test file if any.
-	  RemoveTestFile (pFileName);
-		
-	  // Create the AAF file
-	  IAAFHeaderSP pHeader;
-	  checkResult (OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader));
-		
-	  // Get the AAF Dictionary so that we can create valid AAF objects.
-	  IAAFDictionarySP pDictionary;
-	  checkResult (pHeader->GetDictionary(&pDictionary));
-	  CAAFBuiltinDefs defs (pDictionary);
+	IAAFFileSP pFile;
+	checkResult(AAFFileOpenExistingRead(pFilename,0,&pFile));
 
-	  //
-	  // Create a type def describing a strong object ref to
-	  // AAFComponent types.  Register it.
-	  //
-	  // We could have picked any top of object, but just for grins we
-	  // decided to go with components.
-	  //
+	// Get AAF header & dictionary
+	IAAFHeaderSP pHeader;
+	checkResult(pFile->GetHeader(&pHeader));
+	IAAFDictionarySP pDictionary;
+	checkResult(pHeader->GetDictionary(&pDictionary));
 
-	  // create
-	  IAAFTypeDefObjectRefSP tdor;
-	  checkResult (pDictionary->CreateMetaInstance(AUID_AAFTypeDefStrongObjRef,
-                                                       IID_IAAFTypeDefObjectRef,
-                                                       (IUnknown**)&tdor));
+	CAAFBuiltinDefs defs(pDictionary);
 
-	  // get class def for the referenced type.  In this case,
-	  // AAFComponent.
-	  IAAFClassDefSP cdComp;
-	  checkResult (pDictionary->LookupClassDef (AUID_AAFComponent, &cdComp));
+	// Look up "StrongReferenceToFiller" type definition
+	IAAFTypeDefSP pTypeDef;
+	checkResult(pDictionary->LookupTypeDef(kTypeID_StrongRefToFiller,&pTypeDef));
+	IAAFTypeDefObjectRefSP pTypeDefObjectRef;
+	checkResult(pTypeDef->QueryInterface(IID_IAAFTypeDefObjectRef,
+		(void**)&pTypeDefObjectRef));
 
-	  // init our new type def strong obj ref
-	  IAAFTypeDefStrongObjRefSP tdsor;
-	  checkResult (tdor->QueryInterface (IID_IAAFTypeDefStrongObjRef,
-										  (void **)&tdsor));
-	  checkResult (tdsor->Initialize (kTestTypeID_ObjRef,
-									  cdComp,
-									  L"StrongRefToComponent"));
+	// Retrieve the sequence we created
 
-	  // Blast it into the dictionary.  To do so, we'll need to use
-	  // the TypeDef interface.
-	  IAAFTypeDefSP td;
-	  checkResult (tdor->QueryInterface (IID_IAAFTypeDef,
-										 (void **)&td));
-	  checkResult (pDictionary->RegisterTypeDef (td));
+	// Look up Mob
+	IAAFMobSP pMob;
+	checkResult(pHeader->LookupMob(Test_MobID,&pMob));
+	IAAFMobSlotSP pSlot;
+	checkResult(pMob->GetSlotAt(0,&pSlot));
 
-	  //
-	  // It's now ready for use.  Let's try appending two properties
-	  // of this type to CompositionMob.
-	  //
+	IAAFSegmentSP pSegment;
+	checkResult(pSlot->GetSegment(&pSegment));
+	IAAFObjectSP pObject;
+	checkResult(pSegment->QueryInterface(IID_IAAFObject,(void**)&pObject));
 
-	  // get the existing class def describing comp mob
-	  IAAFClassDefSP cdCompMob;
-	  checkResult (pDictionary->
-				   LookupClassDef (AUID_AAFCompositionMob, &cdCompMob));
+	// Look up our "StrongReferenceToFiller" property definition
+	IAAFClassDefSP pClassDef;
+	checkResult(pDictionary->LookupClassDef(AUID_AAFSequence,&pClassDef));
+	IAAFPropertyDefSP pTestProperty;
+	checkResult(pClassDef->LookupPropertyDef(AUID_TestProperty,&pTestProperty));
 
-	  // append the new prop defs to it
-	  IAAFPropertyDefSP pd1; // remember this for later use
-	  checkResult (cdCompMob->RegisterOptionalPropertyDef
-				   (kTestPropID_CompMob_NewCompProp1,
-					L"NewCompProp1",
-					td,
-					&pd1));
-	  IAAFPropertyDefSP pd2; // remember this for later use
-	  checkResult (cdCompMob->RegisterOptionalPropertyDef
-				   (kTestPropID_CompMob_NewCompProp2,
-					L"NewCompProp2",
-					td,
-					&pd2));
+	// Get property value
+	IAAFPropertyValueSP pTestPropertyValue;
+	checkResult(pObject->GetPropertyValue(pTestProperty,&pTestPropertyValue));
 
-	  //
-	  // Class def describing comp mob is now ready to go with new
-	  // properties.  Let's create one and try to add props.
-	  //
+	// Get object referenced by our strong reference property value
+	IAAFObjectSP pReturnedObject;
+	checkResult(pTypeDefObjectRef->GetObject(pTestPropertyValue,IID_IAAFObject,
+		(IUnknown**)&pReturnedObject));
 
-	  // Create a Composition Mob
-	  IAAFMobSP pMob;
-	  checkResult(defs.cdCompositionMob()->
-				  CreateInstance(IID_IAAFMob, 
-								 (IUnknown **)&pMob));
-	  checkResult(pMob->SetMobID(TEST_MobID));
-	  checkResult(pMob->SetName(L"TestCompMob"));
+	// Make sure GetObjectType() returns correct class
+	IAAFClassDefSP pReturnedClassDef;
+	checkResult(pTypeDefObjectRef->GetObjectType(&pReturnedClassDef));
+	checkExpression(AreClassDefsEquivalent(pReturnedClassDef,defs.cdFiller())
+		==kAAFTrue);
 
-	  //
-	  // Create component objects (in this case, AAFFiller) to put
-	  // into our augmented comp mob.  Tell them apart by the
-	  // different lengths (13 for #1, 26 for #2).
-	  //
-	  IAAFFillerSP fill1;
-	  checkResult (defs.cdFiller()->
-				   CreateInstance(IID_IAAFFiller,
-								  (IUnknown **)&fill1));
-	  checkResult (fill1->Initialize (defs.ddPictureWithMatte(), 13));
-	  IAAFFillerSP fill2;
-	  checkResult (defs.cdFiller()->
-				   CreateInstance(IID_IAAFFiller,
-								  (IUnknown **)&fill2));
-	  checkResult (fill2->Initialize (defs.ddPictureWithMatte(), 26));
+	// Returned object should be an AAFFiller
+	IAAFFillerSP pFiller;
+	checkResult(pReturnedObject->QueryInterface(IID_IAAFFiller,(void**)&pFiller));
 
-	  // get the AAFObject interfaces
-	  IAAFObjectSP fillObj1;
-	  IAAFObjectSP fillObj2;
-	  checkResult (fill1->QueryInterface (IID_IAAFObject,
-										  (void **)&fillObj1));
-	  checkResult (fill2->QueryInterface (IID_IAAFObject,
-										  (void **)&fillObj2));
+	// Verify filler object
+	IAAFComponentSP pComponent;
+	checkResult(pFiller->QueryInterface(IID_IAAFComponent,(void**)&pComponent));
+	aafLength_t returnedLength;
+	checkResult(pComponent->GetLength(&returnedLength));
+	checkExpression(returnedLength==36);
+	IAAFDataDefSP pDataDef;
+	checkResult(pComponent->GetDataDef(&pDataDef));
+	// Can't use a smart pointer here, since defs.ddPicture() does not 
+	// AcquireReference()
+	IAAFDataDef *pExpectedDataDef=defs.ddPicture();
+	checkExpression(AreUnksSame(pDataDef,pExpectedDataDef)==kAAFTrue);
+	// No need to Release() pExpectedDataDef, since defs.ddPicture() does not
+	// AcquireReference()
 
-	  // create new property value whose val is the second component
-	  IAAFPropertyValueSP pv1;
-	  checkResult (tdor->CreateValue (fillObj2, &pv1));
-
-	  // Since we want to test SetObject(), let's now set the value of
-	  // pv1 to the first component.
-	  checkResult (tdor->SetObject (pv1, fillObj1));
-
-	  // Now, create another new property value whose val is the second component
-	  IAAFPropertyValueSP pv2;
-	  checkResult (tdor->CreateValue (fillObj2, &pv2));
-
-	  // Set the prop values
-	  // First, get the AAFObject ifc for the comp mob
-	  IAAFObjectSP compMobObject;
-	  checkResult (pMob->QueryInterface (IID_IAAFObject,
-										 (void **)&compMobObject));
-
-	  // now set the values
-	  checkResult (compMobObject->SetPropertyValue (pd1, pv1));
-	  checkResult (compMobObject->SetPropertyValue (pd2, pv2));
-
-	  // CompMob is ready to go.  Pop it into the file.
-	  checkResult (pHeader->AddMob(pMob));
-	}		
-  catch (HRESULT& rResult)
-	{
-	  hr = rResult;
-	}
-	
-  // Cleanup and return
-  if (pFile)
-	{
-	  pFile->Save();
-	  pFile->Close();
-	}
-  return hr;
+	pFile->Close();
 }
 
-
-static HRESULT ReadAAFFile(aafWChar* pFileName)
+extern "C" HRESULT CAAFTypeDefObjectRef_test()
 {
-  HRESULT              hr = S_OK;
-  IAAFFileSP   file;
-	
-  try
+	aafWChar *pTestFilename=L"TypeDefObjectRefTest.aaf";
+
+	try
 	{
-	  // Open the AAF file
-	  IAAFHeaderSP header;
-	  checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &file, &header));
-
-	  // Get the dictionary.
-	  IAAFDictionarySP dict;
-	  checkResult (header->GetDictionary (&dict));
-
-	  // Validate that there is only one composition mob.
-	  aafNumSlots_t numMobs = 0;
-	  checkResult(header->CountMobs(kAAFCompMob, &numMobs));
-	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
-
-	  // Get an enumerator for the composition mob.
-	  aafSearchCrit_t      criteria;
-	  criteria.searchTag = kAAFByMobKind;
-	  criteria.tags.mobKind = kAAFCompMob;
-
-	  IEnumAAFMobsSP mobEnum;
-	  checkResult(header->GetMobs(&criteria, &mobEnum));
-
-	  // Now get the mob.
-	  IAAFMobSP mob;
-	  checkResult (mobEnum->NextOne(&mob));
-
-	  // Get the class def for the mob.  Have to do it through the
-	  // IAAFObject interface.
-	  IAAFObjectSP mobObj;
-	  checkResult (mob->QueryInterface (IID_IAAFObject,
-										(void **)&mobObj));
-	  IAAFClassDefSP cdMob;
-	  checkResult (mobObj->GetDefinition (&cdMob));
-
-	  // Get the prop defs for our two new props
-	  IAAFPropertyDefSP pd1;
-	  IAAFPropertyDefSP pd2;
-	  checkResult (cdMob->LookupPropertyDef (kTestPropID_CompMob_NewCompProp1,
-											 &pd1));
-	  checkResult (cdMob->LookupPropertyDef (kTestPropID_CompMob_NewCompProp2,
-											 &pd2));
-
-	  // Find the object type for one of them.
-	  IAAFTypeDefSP propType;
-	  checkResult (pd1->GetTypeDef (&propType));
-	  // Verify that it's an obj ref, and that the ref'd object is a
-	  // Component.
-	  IAAFTypeDefObjectRefSP tdor;
-	  checkResult (propType->QueryInterface (IID_IAAFTypeDefObjectRef,
-											 (void **)&tdor));
-	  IAAFClassDefSP refdObjClass;
-	  checkResult (tdor->GetObjectType (&refdObjClass));
-
-	  // Compare this class def with one from the dict, using GUIDs
-	  // First, get the referenced object class def
-	  IAAFMetaDefinitionSP refdDef;
-	  checkResult (refdObjClass->QueryInterface (IID_IAAFMetaDefinition,
-												 (void **)&refdDef));
-	  aafUID_t refdObjID;
-	  checkResult (refdDef->GetAUID (&refdObjID));
-	  
-	  // now get the expected class from the dictionary 
-	  IAAFClassDefSP dictClass;
-	  checkResult (dict->LookupClassDef (AUID_AAFComponent,
-									  &dictClass));
-	  IAAFMetaDefinitionSP dictDef;
-	  checkResult (dictClass->QueryInterface (IID_IAAFMetaDefinition,
-											  (void **)&dictDef));
-	  aafUID_t dictObjID;
-	  checkResult (dictDef->GetAUID (&dictObjID));
-
-	  // compare ref'd with dict class ID guids
-	  checkExpression (EqualGUID (&refdObjID, &dictObjID), AAFRESULT_TEST_FAILED);
-	  
-	  //
-	  // Now get the objects.  We expect them to be Filler objects,
-	  // and to have lengths of 13 and 26.
-	  //
-
-	  // first object (len==13)
-	  IAAFPropertyValueSP pv1;
-	  checkResult (mobObj->GetPropertyValue (pd1, &pv1));
-	  IAAFObjectSP fillObj1;
-	  checkResult (tdor->GetObject (pv1, IID_IAAFObject, (IUnknown **)&fillObj1));
-	  IAAFComponentSP comp1;
-	  checkResult (fillObj1->QueryInterface (IID_IAAFComponent,
-											 (void **)&comp1));
-	  aafLength_t len1;
-	  checkResult (comp1->GetLength (&len1));
-	  checkExpression (13 == len1, AAFRESULT_TEST_FAILED);
-
-	  // second object (len==26)
-	  IAAFPropertyValueSP pv2;
-	  checkResult (mobObj->GetPropertyValue (pd2, &pv2));
-	  IAAFObjectSP fillObj2;
-	  checkResult (tdor->GetObject (pv2, IID_IAAFObject, (IUnknown **)&fillObj2));
-	  IAAFComponentSP comp2;
-	  checkResult (fillObj2->QueryInterface (IID_IAAFComponent,
-											 (void **)&comp2));
-	  aafLength_t len2;
-	  checkResult (comp2->GetLength (&len2));
-	  checkExpression (26 == len2, AAFRESULT_TEST_FAILED);
+		CreateTypeDefObjectRefFile(pTestFilename);
+		ReadTypeDefObjectRefFile(pTestFilename);
 	}
-  catch (HRESULT& rResult)
+	catch(HRESULT& rResult)
 	{
-	  hr = rResult;
+		return(rResult);
 	}
-	
-  // Cleanup and return.
-  if (file)
-	{
-	  file->Close();
-	}
-  return 	hr;
+
+	return AAFRESULT_SUCCESS;
 }
 
-extern "C" HRESULT CAAFTypeDefObjectRef_test();
 
-HRESULT CAAFTypeDefObjectRef_test()
-{
-  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
-  aafWChar * pFileName = L"AAFTypeDefObjectRefTest.aaf";
 
-  try
-	{
-	  hr = CreateAAFFile(pFileName);
-	  if (SUCCEEDED(hr))
-		hr = ReadAAFFile(pFileName);
-	}
-  catch (...)
-	{
-	  cerr << "CAAFTypeDefObjectRef_test..."
-		   << "Caught general C++ exception!" << endl; 
-	  hr = AAFRESULT_TEST_FAILED;
-	}
 
-  return hr;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
