@@ -10,12 +10,10 @@
 AAFPERSISTENTOBJECTS = \
 	AAFAIFCData \
 	AAFDataDef \
-	AAFDOSLocator \
 	AAFJPEGData \
 	AAFHTMLData \
 	AAFImageData \
 	AAFLocator \
-	AAFMacLocator \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup \
 	AAFMIDIData \
@@ -32,9 +30,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
 	AAFTypeDefSet \
-	AAFUnixLocator \
-	AAFWAVEData \
-	AAFWindowsLocator
+	AAFWAVEData
 
 
 # These are all of the other non-persistent objects:
