@@ -29,8 +29,10 @@ public:
   static OMStoredObject* openModify(const wchar_t* fileName);
 
     // @cmember Create a new root <c OMStoredObject> in the disk file
-    //          <p fileName>.
-  static OMStoredObject* createModify(const wchar_t* fileName);
+    //          <p fileName>. The byte order of the newly created root
+    //          is given by <p byteOrder>.
+  static OMStoredObject* createModify(const wchar_t* fileName,
+                                      const OMByteOrder byteOrder);
 
   // @access Public members.
 
@@ -137,13 +139,15 @@ public:
     // @cmember Close <p stream>.
   void closeStream(IStream*& stream);
 
+  OMByteOrder byteOrder(void) const;
+
 private:
 
   static OMStoredObject* open(const wchar_t* fileName,
                               const OMAccessMode mode);
   static OMStoredObject* create(const wchar_t* fileName);
 
-  void create(void);
+  void create(const OMByteOrder byteOrder);
   void open(const OMAccessMode mode);
 
   void save(OMStoredPropertySetIndex *index);
