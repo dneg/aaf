@@ -208,6 +208,7 @@ static void ReadAAFFile(aafWChar * pFileName)
 
 
   hr = AAFFileOpenExistingRead(pFileName, 0, &pFile);
+  check(hr);
   if (SUCCEEDED(hr))
   {
     IAAFHeader * pHeader = NULL;
