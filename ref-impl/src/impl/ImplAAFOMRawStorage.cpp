@@ -26,6 +26,8 @@
 ************************************************************************/
 
 #include "AAF.h"
+#include "AAFResult.h"
+
 #include <assert.h>
 
 #include "ImplAAFOMRawStorage.h"
