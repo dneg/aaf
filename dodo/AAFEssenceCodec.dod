@@ -823,5 +823,76 @@ AD_XMETHOD1(GetEssenceDataID,
 	// AAFRESULT_NULL_PARAM
 	//   - pEssenceDataID is null.)
 
+AD_XMETHOD3(GetIndexedSampleSize,
+			[in],
+			objPass,
+			aafUID_t,
+			essenceDefID,
+			The stored object AUID of the data definition class,
+			[in],
+			objPass,
+			aafPosition_t,
+			sampleOffset,
+			The zero-based offset to get the size of,
+			[out],
+			objPass,
+			aafLength_t *,
+			pLength,
+			The returned length of the given sample,
+			Returns the size of the sample at the given offset\, and of the given data definition.
+	//		For formats with fixed sample sizes \(without a sample offset table\)\, this method should
+	//		return the standard sample size.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pLength is null.)
+
+AD_XMETHOD2(GetLargestSampleSize,
+			[in],
+			objPass,
+			aafUID_t,
+			essenceDefID,
+			The stored object AUID of the data definition class,
+			[out],
+			objPass,
+			aafLength_t *,
+			pLength,
+			The returned length of the largest sample,
+			Returns the size of the largest sample\, and of the given data definition.
+	//		For formats with fixed sample sizes \(without a sample offset table\)\, this method should
+	//		return the standard sample size.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pLength is null.)
+
+AD_XMETHOD1(AddSampleIndexEntry,
+			[in],
+			objPass,
+			aafPosition_t,
+			offset,
+			The byte offset of the sample,
+			Adds the byte offset to the end of the sample index table \(if any\).
+	//		For formats with fixed sample sizes \(without a sample offset table\)\, this method should
+	//		return AAFRESULT_SUCCESS.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\) )
 
 AD_XCLASS_END(Abstract, Transient)
