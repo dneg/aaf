@@ -85,8 +85,8 @@ AD_XMETHOD1(GetLength,
 
 AD_XMETHOD1(SetCodecDef,
 			[in],
-			objPass,
-			aafUID_t,
+			objIn,
+			AAFCodecDef,
 			codecDef,
 			Which codec was used,
   // Set to the exact codec which was used as a hint.
@@ -103,8 +103,8 @@ AD_XMETHOD1(SetCodecDef,
 
 AD_XMETHOD1(GetCodecDef,
 			[out],
-			objPass,
-			aafUID_t*,
+			objOut,
+			AAFCodecDef,
 			pCodecDef,
 			Which codec was used,
   // Get to the exact codec which was used as a hint.
@@ -171,8 +171,8 @@ AD_XMETHOD1(GetSampleRate,
 
 AD_XMETHOD1(SetContainerFormat,
 			[in],
-			objPass,
-			aafUID_constref,
+			objIn,
+			AAFContainerDef,
 			format,
 			file format,
 			Identifies the file format.  The container format is an optional
@@ -191,8 +191,8 @@ AD_XMETHOD1(SetContainerFormat,
 
 AD_XMETHOD1(GetContainerFormat,
 			[out],
-			objPass,
-			aafUID_t *,
+			objOut,
+			AAFContainerDef,
 			pFormat,
 			Identifies the file format,
   // Optional. Identifies the file format.
