@@ -436,7 +436,7 @@ static HRESULT WriteRecord (const aafWChar * pFileName)
 		
 	  // Attempt to close the file.
 	  checkResult(pFile->Close());
-	  const IAAFFileSP nullFile;
+	  IAAFFileSP nullFile;
 	  pFile = nullFile;  // zeros the pFile, and releases it.
 
 	  hr = AAFRESULT_SUCCESS;
@@ -726,7 +726,7 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 
 	  // Attempt to close the file.
 	  checkResult(pFile->Close());
-	  const IAAFFileSP nullFile;
+	  IAAFFileSP nullFile;
 	  pFile = nullFile;  // zeros the pFile, and releases it.
 
 	  hr = AAFRESULT_SUCCESS;
