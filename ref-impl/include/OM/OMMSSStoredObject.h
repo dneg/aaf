@@ -66,7 +66,8 @@ public:
     //          is given by <p byteOrder>.
     //   @devnote Soon to be obsolete.
   static OMMSSStoredObject* createModify(const wchar_t* fileName,
-                                         const OMByteOrder byteOrder);
+                                         const OMByteOrder byteOrder,
+																				 const OMUniqueObjectIdentification& signature);
 
     // @cmember Open the root <c OMMSSStoredObject> in the raw storage
     //          <p rawStorage> for reading only.
@@ -80,13 +81,15 @@ public:
     //          <p rawStorage>. The byte order of the newly created root
     //          is given by <p byteOrder>.
   static OMMSSStoredObject* createWrite(OMRawStorage* rawStorage,
-                                        const OMByteOrder byteOrder);
+                                        const OMByteOrder byteOrder,
+																				const OMUniqueObjectIdentification& signature);
 
     // @cmember Create a new root <c OMMSSStoredObject> in the raw storage
     //          <p rawStorage>. The byte order of the newly created root
     //          is given by <p byteOrder>.
   static OMMSSStoredObject* createModify(OMRawStorage* rawStorage,
-                                         const OMByteOrder byteOrder);
+                                         const OMByteOrder byteOrder,
+																				 const OMUniqueObjectIdentification& signature);
 
   // @access Public members.
 
@@ -494,10 +497,12 @@ private:
 
   static OMMSSStoredObject* openFile(const wchar_t* fileName,
                                      const OMFile::OMAccessMode mode);
-  static OMMSSStoredObject* createFile(const wchar_t* fileName);
+  static OMMSSStoredObject* createFile(const wchar_t* fileName,
+																			 const OMUniqueObjectIdentification& signature);
   static OMMSSStoredObject* openFile(OMRawStorage* rawStorage,
                                      const OMFile::OMAccessMode mode);
-  static OMMSSStoredObject* createFile(OMRawStorage* rawStorage);
+  static OMMSSStoredObject* createFile(OMRawStorage* rawStorage,
+																			 const OMUniqueObjectIdentification& signature);
 
   void create(const OMByteOrder byteOrder);
   void open(const OMFile::OMAccessMode mode);
