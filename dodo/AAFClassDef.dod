@@ -1,0 +1,61 @@
+#startm .this-module 0
+AAFClassDefinition\
+#endm
+#c
+#startm .parent-module 0
+AAFDefinitionObject\
+#endm
+#c
+#import ./AAFUnitTest.exp
+AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+/*************************************************************************
+ * 
+ * @class AAFClassDefinition | AAFClassDefinition extends the AAF class 
+ *			hierarchy with a new class or with new properties for an 
+ *			existing class.
+ *
+ * @base public | AAFDefinitionObject
+ *
+ *************************************************************************/
+
+AD_CLASS_BEGIN
+
+AD_CONSTRUCTOR2([in],aafAuid_t,Auid,auid for this definition object,
+				[in],aafString_t, Name, Unique name of this Data definition,
+				Constructs and sets the AUID ad Name of this DataDefinition object.)
+
+AD_METHOD1(GetName,
+		   [retval][out],
+		   aafString_t *,
+		   pstrName,
+		   Pointer to name,
+		   Gets the unique name that identifies this datakind object.)
+
+AD_METHOD1(GetParentAUID,
+		   [retval][out],
+		   aafAuid_t *,
+		   pAuid,
+		   Pointer to an AUID reference,
+		   Gets the Parent class AUID for this object.)
+
+AD_METHOD1(SetParentAUID,
+		   [in],
+		   aafAuid_t,
+		   ParentAuid,
+		   Parent class AUID,
+		   Sets the Parent's AUID.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
+
+
