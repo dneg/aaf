@@ -315,6 +315,7 @@ private:
 	void SetNumberOfSamples(const aafLength_t& numberOfSamples);
 	void SetCurrentIndex(aafUInt32 currentIndex);
 	void SetWriteIndex(aafUInt32 writeIndex);
+	aafUInt32 GetSampleSizeFromIndex(const aafPosition_t& pos); // throw HRESULT
 
 	typedef struct _aafCompressionParams
 	{
@@ -339,12 +340,12 @@ private:
 
 	// Compress a single image data from the given buffer. Return the actual
 	// number of bytes written.
-	HRESULT CompressImage(const aafCompressionParams& param);
+	HRESULT CompressImage(const aafCompressionParams& param, struct jpeg_compress_struct& cinfo);
 
 	// Decompress a single image from the current position in the stream returning
 	// the image data in buffer and the actual number of bytes written. Note: bufLen must
 	// be large enough to hold all of the decompressed data
-	HRESULT DecompressImage(aafCompressionParams& param);
+	HRESULT DecompressImage(aafCompressionParams& param, struct jpeg_decompress_struct& cinfo);
 
 	// Utility to get the current offset in the stream and add
 	// it the the sample index
@@ -364,6 +365,9 @@ private:
 	// Helper utility to make sure the given descriptor information is synchronized
 	// with the current information in the codec. Called in CompleteWrite method.
 	void UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper);
+
+	// Routine to keep calculated member data up-to-date.
+	void UpdateCalculatedData(void);
 
 private:
 	AAFByteOrder		_nativeByteOrder;
@@ -446,9 +450,7 @@ private:
 	aafLength_t	_numberOfSamples; /* was _sampleFrames in WaveCodec) */
 
 	aafUInt16 _padBytesPerRow;
-
-
-	bool _headerLoaded; // has the jpeg header been loaded?
+	aafUInt32 _compression_IJG_Quality;
 
 };
 
