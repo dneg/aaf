@@ -31,9 +31,12 @@
  ************************************************************************/
 
 class ImplAAFObject;
-class ImplEnumAAFPropertyDefs;
 class ImplAAFDefObject;
 class ImplAAFPropertyDef;
+
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFPropertyDef> ImplEnumAAFPropertyDefs;
 
 #ifndef __ImplAAFMetaDefinition_h__
 #include "ImplAAFMetaDefinition.h"

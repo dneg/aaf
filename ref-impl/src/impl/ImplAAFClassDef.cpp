@@ -30,6 +30,9 @@
 #include "ImplEnumAAFPropertyDefs.h"
 #endif
 
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
+
 #ifndef __ImplAAFPropertyDef_h__
 #include "ImplAAFPropertyDef.h"
 #endif
@@ -191,7 +194,7 @@ AAFRESULT STDMETHODCALLTYPE
   if(iter == 0)
 	hr = AAFRESULT_NOMEMORY;
   else
-	hr = theEnum->SetIterator(this, iter);
+	hr = theEnum->Initialize(&CLSID_EnumAAFPropertyDefs,this,iter);
   if (AAFRESULT_FAILED (hr))
 	{
 		theEnum->ReleaseReference();

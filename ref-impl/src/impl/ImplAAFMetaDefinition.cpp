@@ -58,6 +58,9 @@
 #include "ImplEnumAAFPropertyDefs.h"
 #endif
 
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
+
 //#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 

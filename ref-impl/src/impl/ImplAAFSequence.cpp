@@ -464,11 +464,31 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::GetComponents (ImplEnumAAFComponents ** ppEnum)
 {
-
-	*ppEnum = (ImplEnumAAFComponents *)CreateImpl(CLSID_EnumAAFComponents);
-	if(*ppEnum == NULL)
-		return(AAFRESULT_NOMEMORY);
-	(*ppEnum)->SetEnumStrongProperty(this, &_components);
+  if (NULL == ppEnum)
+	return AAFRESULT_NULL_PARAM;
+  *ppEnum = 0;
+	
+  ImplEnumAAFComponents *theEnum = (ImplEnumAAFComponents *)CreateImpl (CLSID_EnumAAFComponents);
+	
+  XPROTECT()
+	{
+		OMStrongReferenceVectorIterator<ImplAAFComponent>* iter = 
+			new OMStrongReferenceVectorIterator<ImplAAFComponent>(_components);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFComponents, this, iter));
+	  *ppEnum = theEnum;
+	}
+  XEXCEPT
+	{
+	  if (theEnum)
+		{
+		  theEnum->ReleaseReference();
+		  theEnum = 0;
+		}
+	  return(XCODE());
+	}
+  XEND;
 
 	return(AAFRESULT_SUCCESS);
 }

@@ -55,8 +55,11 @@ class ImplAAFTypeDefStrongObjRef;
 class ImplAAFTypeDefWeakObjRef;
 class ImplAAFTypeDefSet;
 
-class ImplEnumAAFClassDefs;
-class ImplEnumAAFTypeDefs;
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFClassDef> ImplEnumAAFClassDefs;
+typedef ImplAAFEnumerator<ImplAAFTypeDef> ImplEnumAAFTypeDefs;
+
 class ImplAAFDictionary;
 
 #include "ImplAAFClassDef.h"

@@ -366,7 +366,7 @@ AAFRESULT STDMETHODCALLTYPE
 			new OMWeakReferenceVectorIterator</*OMUniqueObjectIdentification,*/ ImplAAFDataDef>(_dataDefs);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
-		CHECK(theEnum->SetIterator(this, iter));
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFDataDefs, this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT

@@ -42,6 +42,9 @@
 #include "ImplEnumAAFPropertyDefs.h"
 #endif
 
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
+
 #ifndef __ImplAAFBaseClassFactory_h__
 #include "ImplAAFBaseClassFactory.h"
 #endif
@@ -678,11 +681,11 @@ AAFRESULT STDMETHODCALLTYPE
   assert (_pProperties);
   
   ImplEnumAAFProperties * pEnum = NULL;
-  pEnum = (ImplEnumAAFProperties*) CreateImpl (CLSID_EnumAAFProperties);
-  if (! pEnum)
+  pEnum = dynamic_cast<ImplEnumAAFProperties*>(CreateImpl(
+	CLSID_EnumAAFProperties));
+  if (!pEnum)
 	return E_FAIL;
   assert (pEnum);
-  
   AAFRESULT hr = pEnum->Initialize (_pProperties);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
   

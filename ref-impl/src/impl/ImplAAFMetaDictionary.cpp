@@ -683,7 +683,8 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   *ppEnum = 0;
   
-  ImplEnumAAFClassDefs *theEnum = (ImplEnumAAFClassDefs *)CreateImpl (CLSID_EnumAAFClassDefs);
+  ImplEnumAAFClassDefs *theEnum = (ImplEnumAAFClassDefs *)CreateImpl (
+	  CLSID_EnumAAFClassDefs);
   
   XPROTECT()
   {
@@ -691,7 +692,7 @@ AAFRESULT STDMETHODCALLTYPE
       new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>(_classDefinitions);
     if(iter == 0)
       RAISE(AAFRESULT_NOMEMORY);
-    CHECK(theEnum->SetIterator(this, iter));
+	CHECK(theEnum->Initialize(&CLSID_EnumAAFClassDefs,this,iter));
     *ppEnum = theEnum;
   }
   XEXCEPT
@@ -811,7 +812,8 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   *ppEnum = 0;
   
-  ImplEnumAAFTypeDefs *theEnum = (ImplEnumAAFTypeDefs *)CreateImpl (CLSID_EnumAAFTypeDefs);
+  ImplEnumAAFTypeDefs *theEnum = (ImplEnumAAFTypeDefs *)CreateImpl (
+	  CLSID_EnumAAFTypeDefs);
   
   XPROTECT()
   {
@@ -819,7 +821,7 @@ AAFRESULT STDMETHODCALLTYPE
       new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>(_typeDefinitions);
     if(iter == 0)
       RAISE(AAFRESULT_NOMEMORY);
-    CHECK(theEnum->SetIterator(this, iter));
+	CHECK(theEnum->Initialize(&CLSID_EnumAAFTypeDefs,this,iter));
     *ppEnum = theEnum;
   }
   XEXCEPT
@@ -923,7 +925,7 @@ AAFRESULT STDMETHODCALLTYPE
       new OMSetIterator<OMUniqueObjectIdentification, ImplAAFMetaDictionary::OpaqueTypeDefinition>(_opaqueTypeDefinitions, OMBefore);
     if(iter == 0)
       RAISE(AAFRESULT_NOMEMORY);
-    CHECK(theEnum->SetIterator(this, iter));
+	CHECK(theEnum->Initialize(&CLSID_EnumAAFTypeDefs,this, iter));
     *ppEnum = theEnum;
   }
   XEXCEPT

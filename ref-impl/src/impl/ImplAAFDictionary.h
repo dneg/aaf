@@ -44,15 +44,17 @@ class ImplAAFPluginDef;
 class ImplAAFTypeDef;
 class ImplAAFTypeDefEnum;
 class ImplAAFTypeDefRecord;
-class ImplEnumAAFClassDefs;
-class ImplEnumAAFCodecDefs;
-class ImplEnumAAFContainerDefs;
-class ImplEnumAAFDataDefs;
-class ImplEnumAAFInterpolationDefs;
 class ImplEnumAAFOperationDefs;
-class ImplEnumAAFPluggableDefs;
-class ImplEnumAAFPluginDefs;
-class ImplEnumAAFTypeDefs;
+template <class T> 
+class ImplAAFEnumerator;
+typedef ImplAAFEnumerator<ImplAAFClassDef>			ImplEnumAAFClassDefs;
+typedef ImplAAFEnumerator<ImplAAFCodecDef>			ImplEnumAAFCodecDefs;
+typedef ImplAAFEnumerator<ImplAAFContainerDef>		ImplEnumAAFContainerDefs;
+typedef ImplAAFEnumerator<ImplAAFDataDef>			ImplEnumAAFDataDefs;
+typedef ImplAAFEnumerator<ImplAAFInterpolationDef>	ImplEnumAAFInterpolationDefs;
+typedef ImplAAFEnumerator<ImplAAFPluginDef>			ImplEnumAAFPluginDefs;
+typedef ImplAAFEnumerator<ImplAAFTypeDef>			ImplEnumAAFTypeDefs;
+
 class ImplAAFMetaDictionary;
 class ImplAAFMetaDefinition;
 class ImplAAFTypeDefVariableArray;
@@ -64,16 +66,10 @@ class ImplAAFTypeDefStrongObjRef;
 class ImplAAFTypeDefWeakObjRef;
 class ImplAAFTypeDefSet;
 
-
-
-#ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
-#endif
-
 
 #include "OMClassFactory.h"
 #include "OMStrongRefSetProperty.h"
-
 
 #include "ImplAAFClassDef.h"
 #include "ImplAAFOperationDef.h"
