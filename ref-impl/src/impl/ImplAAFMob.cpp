@@ -131,7 +131,7 @@ ImplAAFMob::~ImplAAFMob ()
 	size_t size = _slots.getSize();
 	for (size_t i = 0; i < size; i++)
 	{
-		ImplAAFMobSlot *pSlot = _slots.setValueAt(0, i);
+		ImplAAFMobSlot *pSlot = _slots.clearValueAt(i);
 		if (pSlot)
 		{
 		  pSlot->ReleaseReference();
@@ -144,7 +144,7 @@ ImplAAFMob::~ImplAAFMob ()
 		size = _userComments.getSize();
 		for (size_t j = 0; j < size; j++)
 		{
-			ImplAAFTaggedValue* pTaggedValue = _userComments.setValueAt(0, j);
+			ImplAAFTaggedValue* pTaggedValue = _userComments.clearValueAt(j);
 			if (pTaggedValue)
 			  pTaggedValue->ReleaseReference();
 			pTaggedValue = 0;
@@ -155,7 +155,7 @@ ImplAAFMob::~ImplAAFMob ()
 		size = _KLVData.getSize();
 		for (size_t j = 0; j < size; j++)
 		{
-			ImplAAFKLVData* pKLVData = _KLVData.setValueAt(0, j);
+			ImplAAFKLVData* pKLVData = _KLVData.clearValueAt(j);
 			if (pKLVData)
 			  pKLVData->ReleaseReference();
 			pKLVData = 0;
