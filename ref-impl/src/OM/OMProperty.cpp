@@ -10,9 +10,26 @@
 OMProperty::OMProperty(const OMPropertyId propertyId,
                        const int storedForm,
                        const char* name)
-: _propertyId(propertyId), _storedForm(storedForm), _name(name)
+: _propertyId(propertyId), _storedForm(storedForm), _name(name), _type(0)
 {
   TRACE("OMProperty::OMProperty");
+}
+
+void OMProperty::initialize(const OMPropertyId propertyId,
+                            const char* name,
+                            OMType* type,
+                            const bool isOptional)
+{
+  TRACE("OMProperty::initialize");
+
+  PRECONDITION("Valid property name", validString(name));
+  // PRECONDITION("Valid type", type != 0);
+
+  // Temporary consistency checks
+  ASSERT("Consistent property id", propertyId == OMProperty::propertyId());
+  ASSERT("Consistent property name", strcmp(name, OMProperty::name()) == 0);
+
+  _type = type;
 }
 
 OMProperty::~OMProperty(void)
