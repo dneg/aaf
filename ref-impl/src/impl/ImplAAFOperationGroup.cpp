@@ -47,8 +47,8 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIds.h"
 
-#ifndef __ImplAAFGroup_h__
-#include "ImplAAFGroup.h"
+#ifndef __ImplAAFEffect_h__
+#include "ImplAAFEffect.h"
 #endif
 
 #include "ImplAAFObjectCreation.h"
@@ -72,7 +72,7 @@ extern "C" const aafClassID_t CLSID_AAFSegment;
 
 const aafUID_t kNullID = {0};
 
-ImplAAFGroup::ImplAAFGroup ()
+ImplAAFEffect::ImplAAFEffect ()
 : _effectDefinition( PID_Group_EffectDefinition, "EffectDefinition"),
   _inputSegments( PID_Group_InputSegments, "InputSegments"),
   _parameters( PID_Group_Parameters, "Parameters"),
@@ -87,12 +87,12 @@ ImplAAFGroup::ImplAAFGroup ()
 }
 
 
-ImplAAFGroup::~ImplAAFGroup ()
+ImplAAFEffect::~ImplAAFEffect ()
 {}
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::Initialize(aafUID_t*		pDatadef,
+    ImplAAFEffect::Initialize(aafUID_t*		pDatadef,
 							 aafLength_t    length,
                              ImplAAFEffectDef* pEffectDef)
 {
@@ -144,7 +144,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm  To add renderings, call SetRender.
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::GetEffectDefinition (ImplAAFEffectDef **effectDef)
+    ImplAAFEffect::GetEffectDefinition (ImplAAFEffectDef **effectDef)
 {
 	aafUID_t			defUID;
 	ImplAAFDictionary	*dict = NULL;
@@ -176,7 +176,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::GetRender (ImplAAFSourceReference **sourceRef)
+    ImplAAFEffect::GetRender (ImplAAFSourceReference **sourceRef)
 {
 	if(sourceRef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -193,7 +193,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiEffectGetFinalRender and omfiEffectGetWorkingRender
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::IsATimeWarp (aafBool *isTimeWarp)
+    ImplAAFEffect::IsATimeWarp (aafBool *isTimeWarp)
 {
 	ImplAAFEffectDef	*def;
 	
@@ -214,7 +214,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::GetBypassOverride (aafUInt32* pBypassOverride)
+    ImplAAFEffect::GetBypassOverride (aafUInt32* pBypassOverride)
 {
 	if(pBypassOverride == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -227,7 +227,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiEffectGetBypassOverride
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::GetNumSourceSegments (aafInt32 *pNumSources)
+    ImplAAFEffect::GetNumSourceSegments (aafInt32 *pNumSources)
 {
    size_t numSlots;
 
@@ -244,7 +244,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::GetNumParameters (aafInt32 * pNumParameters)
+    ImplAAFEffect::GetNumParameters (aafInt32 * pNumParameters)
 {
    size_t numSlots;
 
@@ -260,7 +260,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiEffectGetNumSlots
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::IsValidTranEffect (aafBool * validTransition)
+    ImplAAFEffect::IsValidTranEffect (aafBool * validTransition)
 {
 	ImplAAFEffectDef	*def;
 	aafInt32			numInputs;
@@ -282,7 +282,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::AddNewParameter (ImplAAFParameter *pValue)
+    ImplAAFEffect::AddNewParameter (ImplAAFParameter *pValue)
 {
 	if(pValue == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -296,7 +296,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces part of omfiEffectAddNewSlot
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::AppendNewInputSegment (ImplAAFSegment * value)
+    ImplAAFEffect::AppendNewInputSegment (ImplAAFSegment * value)
 {
 	_inputSegments.appendValue(value);
 	value->AcquireReference();
@@ -307,7 +307,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces part of omfiEffectAddNewSlot
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::SetRender (ImplAAFSourceReference *sourceRef)
+    ImplAAFEffect::SetRender (ImplAAFSourceReference *sourceRef)
 {
 	if(sourceRef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -321,7 +321,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiEffectSetFinalRender and omfiEffectSetWorkingRender
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::SetBypassOverride (aafUInt32  bypassOverride)
+    ImplAAFEffect::SetBypassOverride (aafUInt32  bypassOverride)
 {
 	_bypassOverride = bypassOverride;
 
@@ -331,7 +331,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiEffectSetBypassOverride
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::GetParameterByArgID (aafArgIDType_t  argID,
+    ImplAAFEffect::GetParameterByArgID (aafArgIDType_t  argID,
                            ImplAAFParameter ** ppParameter)
 {
 	ImplAAFParameter	*parm = NULL;
@@ -375,7 +375,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFGroup::GetIndexedInputSegment (aafInt32  index,
+    ImplAAFEffect::GetIndexedInputSegment (aafInt32  index,
                            ImplAAFSegment ** ppInputSegment)
 {
 	ImplAAFSegment	*obj;
@@ -397,6 +397,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-OMDEFINE_STORABLE(ImplAAFGroup, AUID_AAFGroup);
+OMDEFINE_STORABLE(ImplAAFEffect, AUID_AAFEffect);
 
 
