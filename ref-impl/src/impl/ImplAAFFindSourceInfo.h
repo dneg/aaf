@@ -76,6 +76,8 @@ public:
 		AddPulldown(ImplAAFPulldown *pdwn);
 	virtual AAFRESULT STDMETHODCALLTYPE
 		SetEffect(ImplAAFEffectInvocation *effect);
+	virtual AAFRESULT STDMETHODCALLTYPE
+		SetComponent(ImplAAFComponent *cpnt);
 
 	virtual AAFRESULT STDMETHODCALLTYPE
 		Duplicate(ImplAAFFindSourceInfo *info);
@@ -83,6 +85,9 @@ public:
 		Clear(void);
 	virtual AAFRESULT STDMETHODCALLTYPE
 		GetMob(ImplAAFMob **ppMob);
+	virtual AAFRESULT STDMETHODCALLTYPE
+		GetReference(aafSourceRef_t *pSourceRef);
+
 
 public:
   // Declare this class to be storable.
