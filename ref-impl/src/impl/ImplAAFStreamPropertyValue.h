@@ -53,135 +53,12 @@ public:
 
 
   //  
-  // All reads/and writes advance the current element 
+  // All reads/and writes advance the current position 
   // 
-
-  // Stream element count and positioning. 
-
-  //****************
-  // GetElementCount()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetElementCount
-        (// @parm [out] count of elements in the specified stream property value
-         aafInt64 *  pElementCount);
-
-  //****************
-  // SetElementCount()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetElementCount
-        (// @parm [in] new count of elements in the specified stream property value
-         aafInt64  newElementCount);
-
-  //****************
-  // GetElementIndex()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetElementIndex
-        (// @parm [out] current index in the specified stream property value
-         aafInt64 *  pIndex);
-
-  //****************
-  // SetElementIndex()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetElementIndex
-        (// @parm [in] the current element index in the specified stream property value
-         aafInt64  newElementIndex);
-
-
-  // Sequential access in chunks of Elements 
-
-  //****************
-  // ReadElements()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    ReadElements
-        (// @parm [in] number of bytes to read (must be evenly divisible by the elemenet 
-         // type length)
-         aafUInt32  dataSize,
-
-         // @parm [out, size_is(dataSize), length_is(*bytesRead)] buffer into which elements from the stream should be written
-         aafMemPtr_t  pData,
-
-         // @parm [out,ref] number of bytes actually read (will be either dataSize or 0 if 
-         // there is in error)
-         aafUInt32 *  bytesRead);
-
-  //****************
-  // WriteElements()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    WriteElements
-        (// @parm [in] number of bytes to write (must be evenly divisible by the elemenet type 
-         // length)
-         aafUInt32  dataSize,
-
-         // @parm [in, ref, size_is(dataSize)] buffer into which elements from the stream should be written
-         aafMemPtr_t  pData);
-
-
-  // Sequential access one Element at a time. 
-
-  //****************
-  // ReadElement()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    ReadElement
-        (// @parm [in] number of bytes to read (must be equal to the elemenet type length)
-         aafUInt32  dataSize,
-
-         // @parm [out, size_is(dataSize), length_is(*bytesRead)] buffer into which one element from the stream should be written
-         aafMemPtr_t  pData,
-
-         // @parm [out,ref] number of bytes actually read (will be either dataSize or 0 if there 
-         // is in error)
-         aafUInt32 *  bytesRead);
-
-  //****************
-  // WriteElement()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    WriteElement
-        (// @parm [in] number of bytes to write (must be equal to the elemenet type length)
-         aafUInt32  dataSize,
-
-         // @parm [in, ref, size_is(dataSize)] buffer into which should contain one element to be written to the stream
-         aafMemPtr_t  pData);
-
-
-  // Extend in chunks of Elements 
-
-  //****************
-  // AppendElements()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    AppendElements
-        (// @parm [in] number of bytes to write (must be evenly divisible by the elemenet type 
-         // length)
-         aafUInt32  dataSize,
-
-         // @parm [in, ref, size_is(dataSize)] buffer into which elements from the stream should be written
-         aafMemPtr_t  pData);
-
-
-  // Extend one Element at a time 
-
-  //****************
-  // AppendElement()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    AppendElement
-        (// @parm [in] number of bytes to write (must be equal to the elemenet type length)
-         aafUInt32  dataSize,
-
-         // @parm [in, ref, size_is(dataSize)] buffer into which should contain one element to be written to the stream
-         aafMemPtr_t  pData);
 
 
   // 
-  // Raw un-typed stream access 
+  // Raw byte stream access 
   // 
 
 
@@ -234,7 +111,7 @@ public:
          aafMemPtr_t  pData,
 
          // @parm [out,ref] number of bytes actually read (will be either dataSize or 0 if there 
-    // is in error)
+         // is in error)
          aafUInt32 *  bytesRead);
 
   //****************
@@ -256,10 +133,105 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     Append
-        (// @parm [in] number of bytes to write (must be equal to the elemenet type length)
+        (// @parm [in] number of bytes to write (must be equal to the element type length)
          aafUInt32  dataSize,
 
          // @parm [in, ref, size_is(dataSize)] buffer into which should contain one element to be written to the stream
+         aafMemPtr_t  pData);
+
+
+
+  // 
+  // Access byte order of the stream 
+  // 
+
+
+  //****************
+  // HasStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    HasStoredByteOrder
+        (// @parm [out] kAAFTrue if this stream has a stored byte order
+         aafBoolean_t *  pHasByteOrder);
+
+  //****************
+  // GetStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetStoredByteOrder
+        (// @parm [out] Pointer to variable where byte order is to be copied
+         eAAFByteOrder_t *  pByteOrder);
+
+  //****************
+  // SetStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetStoredByteOrder
+        (// @parm [in] byte order is to be stored with the stream
+         eAAFByteOrder_t  byteOrder);
+
+  //****************
+  // ClearStoredByteOrder()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    ClearStoredByteOrder(void);
+
+
+
+  // 
+  // Access in typed chunks of Elements 
+  // 
+
+  //****************
+  // ReadElements()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    ReadElements
+        (// @parm [in] the type definition of the elements to read
+         ImplAAFTypeDef * pElementType,
+
+         // @parm [in] number of bytes to read (must be evenly divisible by the element 
+         // type length)
+         aafUInt32  dataSize,
+
+         // @parm [out, size_is(dataSize), length_is(*pBytesRead)] buffer into which elements from the stream should be written
+         aafMemPtr_t  pData,
+
+         // @parm [out,ref] number of bytes actually read (will be either dataSize or 0 if 
+         // there is in error)
+         aafUInt32 *  pBytesRead);
+
+  //****************
+  // WriteElements()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    WriteElements
+        (// @parm [in] the type definition of the elements to read
+         ImplAAFTypeDef * pElementType,
+
+         // @parm [in] number of bytes to write (must be evenly divisible by the element type 
+         // length)
+         aafUInt32  dataSize,
+
+         // @parm [in, ref, size_is(dataSize)] buffer into which elements from the stream should be written
+         aafMemPtr_t  pData);
+
+
+  // Extend in chunks of typed Elements 
+
+  //****************
+  // AppendElements()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendElements
+        (// @parm [in] the type definition of the elements to read
+         ImplAAFTypeDef * pElementType,
+
+         // @parm [in] number of bytes to write (must be evenly divisible by the element type 
+         // length)
+         aafUInt32  dataSize,
+
+         // @parm [in, ref, size_is(dataSize)] buffer into which elements from the stream should be written
          aafMemPtr_t  pData);
 
 
@@ -280,10 +252,7 @@ protected:
   
 private:
 	OMDataStreamProperty * _streamProperty;
-	ImplAAFTypeDef * _streamElementType;
 	ImplAAFRoot * _propertyContainer; // save reference to owning container.
-	aafUInt32 _externalElementSize;
-	aafUInt32 _internalElemeentSize;
 };
 
 //
