@@ -100,7 +100,7 @@ protected:
   // Declare the QI that implements for the interfaces
   // for this module. This will be called by CAAFUnknown::QueryInterface().
   // 
-  virtual HRESULT InternalQueryInterface(REFIID riid, void **ppvObjOut);
+  STDMETHOD(InternalQueryInterface)(REFIID riid, void **ppvObjOut);
 
   HRESULT FindBoundValues(aafRational_t point, aafUInt32 valueSize,
 						AAFRational *lowerBoundTime, aafMemPtr_t lowerBoundValue,
