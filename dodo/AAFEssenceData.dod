@@ -32,25 +32,28 @@ AD_DEFAULT_UUID(6a33f4e2, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 AD_CLASS_BEGIN
 
 /****/
-AD_METHOD4(Write,
+AD_METHOD3(Write,
 [in],aafUInt32, bytes, write this many bytes,
-[in],aafUInt32, buflen, from a buffer of this size,
-[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer, here is the buffer,
-[out\\\,ref],aafUInt32 *,bytesRead,,
+[out\\\, size_is\\\(bytes\\\)\\\, length_is\\\(*bytesWritten\\\)],aafDataBuffer_t,buffer, here is the buffer,
+[out\\\,ref],aafUInt32 *,bytesWritten,,
 Write pre-interleaved data to a essence stream.)
 
 /****/
-AD_METHOD4(Read,
+AD_METHOD3(Read,
 [in],aafUInt32, bytes, read this many bytes,
-[in],aafUInt32, buflen, to a buffer of this size,
-[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer, here is the buffer,
+[out\\\, size_is\\\(bytes\\\)\\\, length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer, here is the buffer,
 [out\\\,ref],aafUInt32 *,bytesRead,,
 Read pre-interleaved data from a essence stream.)
 
 /****/
-AD_METHOD1(Seek,
+AD_METHOD1(SetPosition,
 [in], aafPosition_t, offset, offset from beginning of essence,
 Seek to absolute position within the essence data.)
+
+/****/
+AD_METHOD1(GetPosition,
+[out], aafPosition_t*, pOffset, offset from beginning of essence,
+Get the absolute position within the essence data.)
 
 /****/
 AD_METHOD1(GetSize,
