@@ -128,6 +128,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  ts.time.minute = 31;
 	  ts.time.second = 12;
 	  ts.time.fraction = 1;
+	  checkResult(pMob->SetCreateTime(ts));
 	  checkResult(pMob->SetModTime(ts));
 
 	  // Add some slots
@@ -251,6 +252,15 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkResult(aMob->GetMobID (&mobID));
 
 		  // Check the modification time stamp: should be 7 December, 1941 at 05:13:12.01
+		  aafTimeStamp_t tsc = { 0 };
+		  checkResult(aMob->GetCreateTime(&tsc));
+		  checkExpression (1941 == tsc.date.year, AAFRESULT_TEST_FAILED);
+		  checkExpression (12 == tsc.date.month, AAFRESULT_TEST_FAILED);
+		  checkExpression (7 == tsc.date.day, AAFRESULT_TEST_FAILED);
+		  checkExpression (5 == tsc.time.hour, AAFRESULT_TEST_FAILED);
+		  checkExpression (31 == tsc.time.minute, AAFRESULT_TEST_FAILED);
+		  checkExpression (12 == tsc.time.second, AAFRESULT_TEST_FAILED);
+		  checkExpression (1 == tsc.time.fraction, AAFRESULT_TEST_FAILED);
 		  aafTimeStamp_t ts = { 0 };
 		  checkResult(aMob->GetModTime(&ts));
 		  checkExpression (1941 == ts.date.year, AAFRESULT_TEST_FAILED);
@@ -341,7 +351,6 @@ extern "C" HRESULT CAAFMob_test()
 		cout << "     GetNameBufLen" << endl; 
 		cout << "     AppendSlot" << endl; 
 		cout << "     EnumAAFAllMobSlots - needs unit test" << endl; 
-		cout << "     GetCreateTime - needs unit test" << endl; 
 		cout << "     AppendComment - needs unit test" << endl; 
 		cout << "     GetNumComments" << endl; 
 		cout << "     EnumAAFAllMobComments - needs unit test" << endl; 

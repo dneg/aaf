@@ -389,9 +389,17 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::SetModTime (const aafTimeStamp_t & modTime)
+    ImplAAFMob::SetModTime (aafTimeStamp_constref modTime)
 {
 	_lastModified = modTime;
+
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::SetCreateTime (aafTimeStamp_constref createTime)
+{
+	_creationTime = createTime;
 
 	return(AAFRESULT_SUCCESS);
 }
