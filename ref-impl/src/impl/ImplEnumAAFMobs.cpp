@@ -21,6 +21,7 @@
 //=---------------------------------------------------------------------=
 
 #include "ImplEnumAAFMobs.h"
+#include "AAFUtils.h"
 
 ImplEnumAAFMobs::ImplEnumAAFMobs()
 {
@@ -103,7 +104,59 @@ AAFRESULT STDMETHODCALLTYPE
 		  break;
 
 		case kAAFByDataDef:
+
+		  {
+		    // Check all slots for a matching data def.  Return first match.
+		    
+		    ImplAAFSmartPointer<ImplEnumAAFMobSlots> spSlotsIter;
+		    ar = pCandidate->GetSlots( &spSlotsIter );
+		    if ( AAFRESULT_SUCCESS != ar ) {
+		      pCandidate->ReleaseReference();
+		      return ar;
+		    }
+		    
+		    ImplAAFSmartPointer<ImplAAFMobSlot> spMobSlot;
+		    for( ar = spSlotsIter->NextOne( &spMobSlot );
+			 ar != AAFRESULT_NO_MORE_OBJECTS;
+			 ar = spSlotsIter->NextOne( &spMobSlot ) ) {
+		      
+		      AAFRESULT hr;
+		      ImplAAFSmartPointer<ImplAAFSegment> spSegment;
+		      
+		      hr = spMobSlot->GetSegment( &spSegment );
+		      if ( AAFRESULT_SUCCESS != hr ) {
+			pCandidate->ReleaseReference();
+			return hr;
+		      }
+		      
+		      ImplAAFSmartPointer<ImplAAFDataDef> spDataDef;
+		      hr = spSegment->GetDataDef( &spDataDef );
+		      if ( AAFRESULT_SUCCESS != hr ) {
+			pCandidate->ReleaseReference();
+			return hr;
+		      }
+
+		      aafUID_t defId;
+		      hr = spDataDef->GetAUID( &defId );
+		      if ( AAFRESULT_SUCCESS != hr ) {
+			pCandidate->ReleaseReference();
+			return hr;
+		      }
+		      
+		      if ( EqualAUID( &defId, &_criteria.tags.datadef ) ) {
+			*ppMob = pCandidate;
+			return AAFRESULT_SUCCESS;
+		      }
+
+		    }
+		  }
+
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+		  break;
+
 		case kAAFByMediaCrit:
+			// intentional fall through
 		default:
 			pCandidate->ReleaseReference();
 			return(AAFRESULT_NOT_IN_CURRENT_VERSION);
