@@ -24,7 +24,7 @@ AD_INCLUDE(AAFTypes)
 AD_CLASS_UUID(cee32173, 0c10, 11d4, 80, 14, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(cee32174, 0c10, 11d4, 80, 14, 00, 10, 4b, c9, 15, 6d)
-AD_XCLASS_BEGIN(Abstract, StoredObject)
+AD_XCLASS_BEGIN(Abstract, Transient)
 
 AD_XMETHOD3(Initialize,
 		   [in\, ref],
@@ -59,4 +59,4 @@ AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
      the Description of this definition.)
 
-AD_XCLASS_END(Abstract, StoredObject)
+AD_XCLASS_END(Abstract, Transient)
