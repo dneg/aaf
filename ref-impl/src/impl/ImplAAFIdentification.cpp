@@ -45,15 +45,15 @@ ImplAAFIdentification::~ImplAAFIdentification ()
 {}
 
 ImplAAFIdentification::ImplAAFIdentification():
-  _companyName(         PID_Identification_CompanyName,          "CompanyName"),
-  _productName(         PID_Identification_ProductName,          "ProductName"),
-  _productVersion(      PID_Identification_ProductVersion,       "ProductVersion"),
-  _productVersionString(PID_Identification_ProductVersionString, "ProductVersionString"),
-  _productId(			  PID_Identification_ProductID,            "ProductID"),
-  _date(                PID_Identification_Date,                 "Date"),
-  _toolkitVersion(      PID_Identification_ToolkitVersion,       "ToolkitVersion"),
-  _platform(            PID_Identification_Platform,             "Platform"),
-  _generation(       PID_Identification_GenerationAUID,       "GenerationAUID")
+  _companyName(         PID_Identification_CompanyName,          L"CompanyName"),
+  _productName(         PID_Identification_ProductName,          L"ProductName"),
+  _productVersion(      PID_Identification_ProductVersion,       L"ProductVersion"),
+  _productVersionString(PID_Identification_ProductVersionString, L"ProductVersionString"),
+  _productId(			  PID_Identification_ProductID,            L"ProductID"),
+  _date(                PID_Identification_Date,                 L"Date"),
+  _toolkitVersion(      PID_Identification_ToolkitVersion,       L"ToolkitVersion"),
+  _platform(            PID_Identification_Platform,             L"Platform"),
+  _generation(       PID_Identification_GenerationAUID,       L"GenerationAUID")
 {
   // Insert the properties into the persistent property set.
   //
