@@ -38,7 +38,7 @@ public:
 	ImplAAFEnumerator();
 	~ImplAAFEnumerator();
 	AAFRESULT STDMETHODCALLTYPE Initialize(const aafClassID_t* pClassID,
-		ImplAAFRoot *pObj,OMReferenceContainerIterator<T>* pIterator);
+		ImplAAFRoot *pObj,OMReferenceContainerIterator* pIterator);
 
 	virtual AAFRESULT STDMETHODCALLTYPE NextOne (T ** ppItem);
 	virtual AAFRESULT STDMETHODCALLTYPE Next(aafUInt32  count, T ** ppItems,
@@ -50,7 +50,7 @@ public:
 protected:
 	const aafClassID_t* _pClassID; // needed for Clone() 
 	ImplAAFRoot* _pObj;
-	OMReferenceContainerIterator<T>* _pIterator;
+	OMReferenceContainerIterator* _pIterator;
 };
 
 template <class T>
@@ -75,7 +75,7 @@ ImplAAFEnumerator<T>::~ImplAAFEnumerator ()
 template <class T>
 AAFRESULT STDMETHODCALLTYPE 
 	ImplAAFEnumerator<T>::Initialize(const aafClassID_t* pClassID,
-		ImplAAFRoot *pObj,OMReferenceContainerIterator<T>* pIterator)
+		ImplAAFRoot *pObj,OMReferenceContainerIterator* pIterator)
 {
 	AAFRESULT ar=AAFRESULT_SUCCESS;
 	
@@ -114,7 +114,10 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		if (++(*_pIterator))
 		{
-			*ppItem = _pIterator->value();
+			OMObject* object = _pIterator->currentObject();
+			T* obj = dynamic_cast<T*>(object);
+			// assert(obj != 0); // tjb - consistent way to handle this ?
+			*ppItem = obj;
 			(*ppItem)->AcquireReference();
 			ar = AAFRESULT_SUCCESS;
 		}
