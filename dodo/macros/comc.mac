@@ -96,12 +96,10 @@ C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
 {
   if (doInit)
     {
-#ifdef BOB_TEST
       Impl.this-module * newRep;
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
-#endif
     }
 }
 
@@ -139,7 +137,6 @@ C.this-module::C.this-module (IUnknown * pControllingUnknown, aafBool doInit)
 
 C.this-module::~C.this-module ()
 {
-#ifdef BOB_TEST
   // The base class destructor of Impl.this-module must be declared as virtual.
   // Eventhough the Impl.this-module is reference counted we call delete 
   // directly since the Impl.this-module::ReleaseReference() delegates its
@@ -149,29 +146,22 @@ C.this-module::~C.this-module ()
     delete _rep;
     _rep = NULL;
   } 
-#endif 
 }
 
 
 void C.this-module::InitRep (Impl.this-module * newRep)
 {
-#ifdef BOB_TEST
   assert (newRep);
   assert (!_rep);
   _rep = newRep;
   newRep->InitContainer (this);
-#endif
 }
 
 
 Impl.this-module * C.this-module::GetRepObject ()
 {
-#ifdef BOB_TEST
   assert (_rep);
   return _rep;
-#else
-  return NULL;
-#endif
 }
 #endm
 
@@ -225,7 +215,6 @@ Impl.this-module * C.this-module::GetRepObject ()
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 ()
 {
-#ifdef BOB_TEST
   Impl.this-module * ptr;
   ImplAAFRoot * pO;
   pO = GetRepObject ();
@@ -233,9 +222,6 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
   return ptr->%01();
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -248,7 +234,7 @@ HRESULT STDMETHODCALLTYPE
 #c
 #c Macro arguments 02+:
 #c 
-#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt	
 #c ----------   ----------   ---------   ----    ----    --------
 #c metharg 1    02           03          04      05      06
 #c
@@ -258,7 +244,6 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -268,13 +253,10 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
+.%03-setup(%04, %05, foo)
   hr = ptr->%01 (.%03-internalname(%05));
-.%03-cleanup(%04, %05)
+.%03-cleanup(%04, %05, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -299,7 +281,6 @@ HRESULT STDMETHODCALLTYPE
     C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
         .%08-adornment%09 .%08-indirection %10)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -309,16 +290,13 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -345,7 +323,6 @@ HRESULT STDMETHODCALLTYPE
         .%08-adornment%09 .%08-indirection %10,
         .%13-adornment%14 .%13-indirection %15)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -355,19 +332,16 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -396,7 +370,6 @@ HRESULT STDMETHODCALLTYPE
         .%13-adornment%14 .%13-indirection %15,
         .%18-adornment%19 .%18-indirection %20)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -406,22 +379,19 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -452,7 +422,6 @@ HRESULT STDMETHODCALLTYPE
         .%18-adornment%19 .%18-indirection %20,
         .%23-adornment%24 .%23-indirection %25)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -462,25 +431,22 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20),
     .%23-internalname(%25));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -513,7 +479,6 @@ HRESULT STDMETHODCALLTYPE
         .%23-adornment%24 .%23-indirection %25,
         .%28-adornment%29 .%28-indirection %30)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -523,28 +488,25 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
     .%18-internalname(%20),
     .%23-internalname(%25),
     .%28-internalname(%30));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -579,7 +541,6 @@ HRESULT STDMETHODCALLTYPE
         .%28-adornment%29 .%28-indirection %30,
         .%33-adornment%34 .%33-indirection %35)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -589,13 +550,13 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -603,17 +564,14 @@ HRESULT STDMETHODCALLTYPE
     .%23-internalname(%25),
     .%28-internalname(%30),
     .%33-internalname(%35));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -650,7 +608,6 @@ HRESULT STDMETHODCALLTYPE
         .%33-adornment%34 .%33-indirection %35,
         .%38-adornment%39 .%38-indirection %40)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -660,14 +617,14 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
-.%38-setup(%39, %40)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
+.%38-setup(%39, %40, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -676,18 +633,15 @@ HRESULT STDMETHODCALLTYPE
     .%28-internalname(%30),
     .%33-internalname(%35),
     .%38-internalname(%40));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
-.%38-cleanup(%39, %40)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
+.%38-cleanup(%39, %40, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -726,7 +680,6 @@ HRESULT STDMETHODCALLTYPE
         .%38-adornment%39 .%38-indirection %40,
         .%43-adornment%44 .%43-indirection %45)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -736,15 +689,15 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
-.%38-setup(%39, %40)
-.%43-setup(%44, %45)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
+.%38-setup(%39, %40, foo)
+.%43-setup(%44, %45, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -754,19 +707,16 @@ HRESULT STDMETHODCALLTYPE
     .%33-internalname(%35),
     .%38-internalname(%40),
     .%43-internalname(%45));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
-.%38-cleanup(%39, %40)
-.%43-cleanup(%44, %45)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
+.%38-cleanup(%39, %40, foo)
+.%43-cleanup(%44, %45, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -807,7 +757,6 @@ HRESULT STDMETHODCALLTYPE
         .%43-adornment%44 .%43-indirection %45,
         .%48-adornment%49 .%48-indirection %50)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -817,16 +766,16 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
-.%38-setup(%39, %40)
-.%43-setup(%44, %45)
-.%48-setup(%49, %50)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
+.%38-setup(%39, %40, foo)
+.%43-setup(%44, %45, foo)
+.%48-setup(%49, %50, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -837,20 +786,17 @@ HRESULT STDMETHODCALLTYPE
     .%38-internalname(%40),
     .%43-internalname(%45),
     .%48-internalname(%50));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
-.%38-cleanup(%39, %40)
-.%43-cleanup(%44, %45)
-.%48-cleanup(%49, %50)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
+.%38-cleanup(%39, %40, foo)
+.%43-cleanup(%44, %45, foo)
+.%48-cleanup(%49, %50, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 #endm
 
@@ -893,7 +839,6 @@ HRESULT STDMETHODCALLTYPE
         .%48-adornment%49 .%48-indirection %50,
         .%53-adornment%54 .%53-indirection %55)
 {
-#ifdef BOB_TEST
   HRESULT hr;
 
   Impl.this-module * ptr;
@@ -903,17 +848,17 @@ HRESULT STDMETHODCALLTYPE
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
 
-.%03-setup(%04, %05)
-.%08-setup(%09, %10)
-.%13-setup(%14, %15)
-.%18-setup(%19, %20)
-.%23-setup(%24, %25)
-.%28-setup(%29, %30)
-.%33-setup(%34, %35)
-.%38-setup(%39, %40)
-.%43-setup(%44, %45)
-.%48-setup(%49, %50)
-.%53-setup(%54, %55)
+.%03-setup(%04, %05, foo)
+.%08-setup(%09, %10, foo)
+.%13-setup(%14, %15, foo)
+.%18-setup(%19, %20, foo)
+.%23-setup(%24, %25, foo)
+.%28-setup(%29, %30, foo)
+.%33-setup(%34, %35, foo)
+.%38-setup(%39, %40, foo)
+.%43-setup(%44, %45, foo)
+.%48-setup(%49, %50, foo)
+.%53-setup(%54, %55, foo)
   hr = ptr->%01 (.%03-internalname(%05),
     .%08-internalname(%10),
     .%13-internalname(%15),
@@ -925,21 +870,133 @@ HRESULT STDMETHODCALLTYPE
     .%43-internalname(%45),
     .%48-internalname(%50),
     .%53-internalname(%55));
-.%03-cleanup(%04, %05)
-.%08-cleanup(%09, %10)
-.%13-cleanup(%14, %15)
-.%18-cleanup(%19, %20)
-.%23-cleanup(%24, %25)
-.%28-cleanup(%29, %30)
-.%33-cleanup(%34, %35)
-.%38-cleanup(%39, %40)
-.%43-cleanup(%44, %45)
-.%48-cleanup(%49, %50)
-.%53-cleanup(%54, %55)
+.%03-cleanup(%04, %05, foo)
+.%08-cleanup(%09, %10, foo)
+.%13-cleanup(%14, %15, foo)
+.%18-cleanup(%19, %20, foo)
+.%23-cleanup(%24, %25, foo)
+.%28-cleanup(%29, %30, foo)
+.%33-cleanup(%34, %35, foo)
+.%38-cleanup(%39, %40, foo)
+.%43-cleanup(%44, %45, foo)
+.%48-cleanup(%49, %50, foo)
+.%53-cleanup(%54, %55, foo)
   return hr;
-#else
-  return HRESULT_NOT_IMPLEMENTED;
-#endif
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes three arguments.
+#c Allows an additional macro argument per method argument to let
+#c macro caller pass more info.  For example:
+#c
+#c For type           Arg is
+#c     ----           ------
+#c     objInArray     array size
+#c     objOutArray    array size
+#c     objInCustom    custom input "marshal" code
+#c     objOutCustom   custom output "marshal" code
+#c     all else       ignored
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c ----------   ----------   ---------   ----    ----    -------- --
+#c metharg 1    02           03          04      05      06       07
+#c metharg 2    08           09          10      11      12       13
+#c metharg 3    14           15          16      17      18       19
+#c
+#c Macro Arg 20: method description
+#c
+#startm AD_X2METHOD3 20
+HRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+        .%09-adornment%10 .%09-indirection %11,
+        .%15-adornment%16 .%15-indirection %17)
+{
+  HRESULT hr;
+
+  Impl.this-module * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
+  assert (ptr);
+
+.%03-setup(%04, %05, %07)
+.%09-setup(%10, %11, %13)
+.%15-setup(%16, %17, %19)
+  hr = ptr->%01 (.%03-internalname(%05),
+    .%09-internalname(%11),
+    .%15-internalname(%17));
+.%03-cleanup(%04, %05, %07)
+.%09-cleanup(%10, %11, %13)
+.%15-cleanup(%16, %17, %19)
+  return hr;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes four arguments.
+#c Allows an additional macro argument per method argument to let
+#c macro caller pass more info.  For example:
+#c
+#c For type           Arg is
+#c     ----           ------
+#c     objInArray     array size
+#c     objOutArray    array size
+#c     objInCustom    custom input "marshal" code
+#c     objOutCustom   custom output "marshal" code
+#c     all else       ignored
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt aux
+#c ----------   ----------   ---------   ----    ----    -------- --
+#c metharg 1    02           03          04      05      06       07
+#c metharg 2    08           09          10      11      12       13
+#c metharg 3    14           15          16      17      18       19
+#c metharg 4    20           21          22      23      24       25
+#c
+#c Macro Arg 26: method description
+#c
+#startm AD_X2METHOD4 26
+HRESULT STDMETHODCALLTYPE
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+        .%09-adornment%10 .%09-indirection %11,
+        .%15-adornment%16 .%15-indirection %17,
+        .%21-adornment%22 .%21-indirection %23)
+{
+  HRESULT hr;
+
+  Impl.this-module * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<Impl.this-module*> (pO);
+  assert (ptr);
+
+.%03-setup(%04, %05, %07)
+.%09-setup(%10, %11, %13)
+.%15-setup(%16, %17, %19)
+.%21-setup(%22, %23, %24)
+  hr = ptr->%01 (.%03-internalname(%05),
+    .%09-internalname(%11),
+    .%15-internalname(%17),
+    .%21-internalname(%23));
+.%03-cleanup(%04, %05, %07)
+.%09-cleanup(%10, %11, %13)
+.%15-cleanup(%16, %17, %19)
+.%21-cleanup(%22, %23, %24)
+  return hr;
 }
 #endm
 
@@ -1070,14 +1127,10 @@ HRESULT C.this-module::InternalQueryInterface
 HRESULT STDMETHODCALLTYPE
     C.this-module::GetImplRep (void **ppRep)
 {
-#ifdef BOB_TEST
     if (!ppRep)
         return E_INVALIDARG;  
     *ppRep = static_cast<void*>(GetRepObject());
     return S_OK;
-#else
-    return HRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 //
@@ -1125,12 +1178,12 @@ AAF_DEFINE_FACTORY(.this-module)
 #startm AD_XCONSTRUCTOR1 06
 C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04)
 {
-.%02-setup(%03, %04)
+.%02-setup(%03, %04, foo)
   Impl.this-module * newRep;
   newRep = new Impl.this-module (.%02-internalname(%04));
   assert (newRep);
   InitRep (newRep);
-.%02-cleanup(%03, %04)
+.%02-cleanup(%03, %04, foo)
 }
 #endm
 
@@ -1153,15 +1206,15 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04)
 C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
     .%07-adornment%08 .%07-indirection %09)
 {
-.%02-setup(%03, %04)
-.%07-setup(%08, %09)
+.%02-setup(%03, %04, foo)
+.%07-setup(%08, %09, foo)
   Impl.this-module * newRep;
   newRep = new Impl.this-module (.%02-internalname(%04),
     .%07-internalname(%09));
   assert (newRep);
   InitRep (newRep);
-.%02-cleanup(%03, %04)
-.%07-cleanup(%08, %09)
+.%02-cleanup(%03, %04, foo)
+.%07-cleanup(%08, %09, foo)
 }
 #endm
 
@@ -1186,18 +1239,18 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
     .%07-adornment%08 .%07-indirection %09,
     .%12-adornment%13 .%12-indirection %14)
 {
-.%02-setup(%03, %04)
-.%07-setup(%08, %09)
-.%12-setup(%13, %14)
+.%02-setup(%03, %04, foo)
+.%07-setup(%08, %09, foo)
+.%12-setup(%13, %14, foo)
   Impl.this-module * newRep;
   newRep = new Impl.this-module (.%02-internalname(%04),
     .%07-internalname(%09),
     .%12-internalname(%14));
   assert (newRep);
   InitRep (newRep);
-.%02-cleanup(%03, %04)
-.%07-cleanup(%08, %09)
-.%12-cleanup(%13, %14)
+.%02-cleanup(%03, %04, foo)
+.%07-cleanup(%08, %09, foo)
+.%12-cleanup(%13, %14, foo)
 }
 #endm
 
@@ -1224,10 +1277,10 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
                               .%12-adornment%13 .%12-indirection %14,
                               .%17-adornment%18 .%17-indirection %19)
 {
-.%02-setup(%03, %04)
-.%07-setup(%08, %09)
-.%12-setup(%13, %14)
-.%17-setup(%18, %19)
+.%02-setup(%03, %04, foo)
+.%07-setup(%08, %09, foo)
+.%12-setup(%13, %14, foo)
+.%17-setup(%18, %19, foo)
   Impl.this-module * newRep;
   newRep = new Impl.this-module (.%02-internalname(%04),
     .%07-internalname(%09),
@@ -1235,10 +1288,10 @@ C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
     .%17-internalname(%19));
   assert (newRep);
   InitRep (newRep);
-.%02-cleanup(%03, %04)
-.%07-cleanup(%08, %09)
-.%12-cleanup(%13, %14)
-.%17-cleanup(%08, %19)
+.%02-cleanup(%03, %04, foo)
+.%07-cleanup(%08, %09, foo)
+.%12-cleanup(%13, %14, foo)
+.%17-cleanup(%08, %19, foo)
 }
 #endm
 
@@ -1387,12 +1440,16 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objIn-setup(T, externArg, internArg)
+#c #define .objIn-setup(T, externArg, aux)
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
+#c arg3 = aux argument
 #c
-#startm .objIn-setup 02
+#startm .objIn-setup 03
+  //
+  // set up for %02
+  //
   Impl%01 * internal%02 = NULL;
   if (%02)
     {
@@ -1404,7 +1461,7 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
       assert (iObj);
       hStat = iObj->GetImplRep((void **)&arg);
       assert (SUCCEEDED (hStat));
-    iObj->Release(); // we are through with this interface pointer.
+      iObj->Release(); // we are through with this interface pointer.
       internal%02 = static_cast<Impl%01*>(arg);
       assert (internal%02);
     }
@@ -1413,23 +1470,87 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-setup(T, externArg, internArg)      /* nothing */
+#c #define .objInArray-setup(T, externArg, aux)
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
+#c arg3 = aux argument
 #c
-#startm .objPass-setup 02
+#startm .objInArray-setup 03
+  //
+  // set up for %02
+  //
+  Impl%01 * internal%02 = NULL;
+  if (%02)
+    {
+      int localIdx;
+	  assert (%03 >= 0);
+	  internal%02 = new Impl%01*[%03];
+	  assert (internal%02);
+
+	  for (localIdx = 0; localIdx < %03; localIdx++)
+		{
+		  HRESULT hStat;
+		  IAAFRoot * iObj;
+		  ImplAAFRoot *arg;
+		  hStat = %02[localIdx]->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+		  assert (SUCCEEDED (hStat));
+		  assert (iObj);
+		  hStat = iObj->GetImplRep((void **)&arg);
+		  assert (SUCCEEDED (hStat));
+		  iObj->Release(); // we are through with this interface pointer.
+		  internal%02[localIdx] = static_cast<Impl%01*>(arg);
+		  assert (internal%02[localIdx]);
+		}
+    }
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objOut-setup(T, externArg, internArg)
+#c #define .objInArrayCustom-setup(T, externArg, customCode)
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
+#c arg3 = custom arg translation code
 #c
-#startm .objOut-setup 02
+#startm .objInArrayCustom-setup 03
+  //
+  // set up for %02
+  //
+  Impl%01 * internal%02 = NULL;
+  if (%02)
+    {
+	  %03
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objPass-setup(T, externArg, aux)      /* nothing */
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = aux argument
+#c
+#startm .objPass-setup 03
+\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOut-setup(T, externArg, aux)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = aux argument
+#c
+#startm .objOut-setup 03
+  //
+  // set up for %02
+  //
   Impl%01 * internal%02 = NULL;
   Impl%01 ** pinternal%02 = NULL;
   if (%02)
@@ -1441,7 +1562,82 @@ EXTERN_C const CLSID CLSID_.this-module = { 0x%01, 0x%02, 0x%03, { 0x%04, 0x%05,
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objIn-internalname(externArg, internArg)    (internArg)
+#c #define .objOutArray-setup(T, externArg, arraySize)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = size of array
+#c
+#startm .objOutArray-setup 03
+  //
+  // set up for %02
+  //
+  Impl%01 * internal%02 = NULL;
+  assert (%03 >= 0);
+  internal%02 = new Impl%01*[%03];
+  assert (internal%02);
+
+  Impl%01 ** pinternal%02 = NULL;
+  if (%02)
+    {
+      pinternal%02 = &internal%02;
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOutCustom-setup(T, externArg, customCode)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = custom arg translation code
+#c
+#startm .objOutArray-setup 03
+  //
+  // set up for %02
+  //
+  Impl%01 * internal%02 = NULL;
+  assert (%03 >= 0);
+  internal%02 = new Impl%01*[%03];
+  assert (internal%02);
+
+  Impl%01 ** pinternal%02 = NULL;
+  if (%02)
+    {
+      pinternal%02 = &internal%02;
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOutArrayCustom-setup(T, externArg, customCode)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = custom arg translation code
+#c
+#startm .objOutArrayCustom-setup 03
+  //
+  // set up for %02
+  //
+  Impl%01 * internal%02 = NULL;
+  assert (%03 >= 0);
+  internal%02 = new Impl%01*[%03];
+  assert (internal%02);
+
+  Impl%01 ** pinternal%02 = NULL;
+  if (%02)
+    {
+      pinternal%02 = &internal%02;
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objIn-internalname(externArg)    (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1452,7 +1648,18 @@ internal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-internalname(externArg, internArg)  (internArg)
+#c #define .objInArray-internalname(externArg)    (internArg)
+#c
+#c arg1 = external arg name
+#c
+#startm .objInArray-internalname 01
+internal%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objPass-internalname(externArg)  (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1463,7 +1670,7 @@ internal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objOut-internalname(externArg, internArg)   (internArg)
+#c #define .objOut-internalname(externArg)   (internArg)
 #c
 #c arg1 = external arg name
 #c
@@ -1474,52 +1681,161 @@ pinternal%01\
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objIn-cleanup(T, externArg, internArg)      /* nothing */
+#c #define .objOutArray-internalname(externArg)   (internArg)
 #c
-#c arg1 = unadorned type
-#c arg2 = external arg name
+#c arg1 = external arg name
 #c
-#startm .objIn-cleanup 02
+#startm .objOutArray-internalname 01
+pinternal%01\
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objPass-cleanup(T, externArg, internArg)    /* nothing */
+#c #define .objIn-cleanup(T, externArg, aux)      /* nothing */
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
 #c
-#startm .objPass-cleanup 02
+#startm .objIn-cleanup 03
+  //
+  // no cleanup necessary for %02
+  //
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c #define .objOut-cleanup(T, externArg, internArg)
+#c #define .objInArray-cleanup(T, externArg, aux)      /* nothing */
 #c
 #c arg1 = unadorned type
 #c arg2 = external arg name
 #c
-#startm .objOut-cleanup 02
-    if (SUCCEEDED(hr))
-    {
-        IUnknown *pUnknown;
-        HRESULT hStat;
-
-        pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
-        hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
-        assert (SUCCEEDED (hStat));
-        //pUnknown->Release();
-    internal%02->ReleaseReference(); // We are through with this pointer.
-    }
-    else
-    {
-        *%02 = NULL;
-    }
-
-
+#startm .objInArray-cleanup 03
+  //
+  // cleanup for %02
+  //
+  delete[] internal%02;
+  internal%02 = 0;
 #endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objInArrayCustom-cleanup(T, externArg, aux)      /* nothing */
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objInArrayCustom-cleanup 03
+  //
+  // cleanup for %02
+  //
+  delete[] internal%02;
+  internal%02 = 0;
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objPass-cleanup(T, externArg, aux)    /* nothing */
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objPass-cleanup 03
+\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOut-cleanup(T, externArg, aux)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objOut-cleanup 03
+  //
+  // cleanup for %02
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
+      hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
+      assert (SUCCEEDED (hStat));
+      //pUnknown->Release();
+      internal%02->ReleaseReference(); // We are through with this pointer.
+    }
+  else
+    {
+      *%02 = NULL;
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOutArray-cleanup(T, externArg, aux)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objOutArray-cleanup 03
+  //
+  // cleanup for %02
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+      int localIdx;
+	  assert (%03 >= 0);
+	  for (localIdx = 0; localIdx < %03; localIdx++)
+		{
+		  pUnknown = static_cast<IUnknown *> (internal%02[localIdx]->GetContainer());
+		  hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
+		  assert (SUCCEEDED (hStat));
+		  //pUnknown->Release();
+		  internal%02[localIdx]->ReleaseReference(); // We are through with this pointer.
+		}
+    }
+  else
+    {
+      *%02 = NULL;
+    }
+  delete[] internal%02;
+  internal%02 = 0;
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOutArrayCustom-cleanup(T, externArg, customCode)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c arg3 = custom arg translation code
+#c
+#startm .objOutArrayCustom-cleanup 03
+  //
+  // cleanup for %02
+  //
+  if (SUCCEEDED(hr))
+    {
+	  %03
+    }
+  else
+    {
+      *%02 = NULL;
+    }
+  delete[] internal%02;
+  internal%02 = 0;
+#endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -1547,12 +1863,30 @@ I\
 #endm
 
 
+#startm .objInArray-adornment 00
+I\
+#endm
+
+
+#startm .objInArrayCustom-adornment 00
+#endm
+
+
 #startm .objPass-adornment 00
 #endm
 
 
 #startm .objOut-adornment 00
 I\
+#endm
+
+
+#startm .objOutArray-adornment 00
+I\
+#endm
+
+
+#startm .objOutArrayCustom-adornment 00
 #endm
 
 
