@@ -990,13 +990,9 @@ void OMFile::readSignature(const wchar_t* fileName,
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  char cFileName[256];
-  size_t status = wcstombs(cFileName, fileName, 256);
-  ASSERT("Convert succeeded", status != (size_t)-1);
-
-  FILE* f = fopen(cFileName, "rb");
+  FILE* f = wfopen(fileName, L"rb");
   ASSERT("File exists", f != 0);
-  status = fseek(f, 8, SEEK_SET);
+  size_t status = fseek(f, 8, SEEK_SET);
   ASSERT("Seek succeeded", status == 0);
   status = fread(&signature, sizeof(signature), 1, f);
   ASSERT("Read succeeded", status == 1);
