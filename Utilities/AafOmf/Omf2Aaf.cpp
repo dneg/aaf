@@ -748,9 +748,9 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_
 		if (strncmp(id, "TIFF", 4) == 0)
 		{
 			// handle TIFF media data
-			IAAFTIFFData*	pTIFFData = NULL;
-			rc = pDictionary->CreateInstance(&AUID_AAFTIFFData,
-											 IID_IAAFTIFFData,
+			IAAFEssenceData*	pTIFFData = NULL;
+			rc = pDictionary->CreateInstance(&AUID_AAFEssenceData,
+											 IID_IAAFEssenceData,
 											 (IUnknown **)&pTIFFData);
 			rc = pTIFFData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
 			rc = pEssenceData->SetFileMob(pSourceMob);
@@ -773,9 +773,9 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_
 		else if (strncmp(id, "AIFC", 4) == 0)
 		{
 			// Handle Audio (Wave data)
-			IAAFAIFCData*	pAIFCData = NULL;
-			rc = pDictionary->CreateInstance(&AUID_AAFAIFCData,
-											 IID_IAAFAIFCData,
+			IAAFEssenceData*	pAIFCData = NULL;
+			rc = pDictionary->CreateInstance(&AUID_AAFEssenceData,
+											 IID_IAAFEssenceData,
 											 (IUnknown **)&pAIFCData);
 			rc = pAIFCData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
 			rc = pEssenceData->SetFileMob(pSourceMob);
@@ -796,9 +796,9 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_
 		else if (strncmp(id, "WAVE", 4) == 0 )
 		{
 			// Handle Audio (Wave data)
-			IAAFWAVEData*	pWAVEData = NULL;
-			rc = pDictionary->CreateInstance(&AUID_AAFWAVEData,
-											 IID_IAAFWAVEData,
+			IAAFEssenceData*	pWAVEData = NULL;
+			rc = pDictionary->CreateInstance(&AUID_AAFEssenceData,
+											 IID_IAAFEssenceData,
 											 (IUnknown **)&pWAVEData);
 			rc = pWAVEData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
 			rc = pEssenceData->SetFileMob(pSourceMob);
@@ -818,10 +818,10 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_
 		}
 		else if (strncmp(id, "JPEG", 4) == 0)
 		{
-			IAAFJPEGData*	pJPEGData = NULL;
+			IAAFEssenceData*	pJPEGData = NULL;
 
-			rc = pDictionary->CreateInstance(&AUID_AAFJPEGData,
-											 IID_IAAFJPEGData,
+			rc = pDictionary->CreateInstance(&AUID_AAFEssenceData,
+											 IID_IAAFEssenceData,
 											 (IUnknown **)&pJPEGData);
 			rc = pJPEGData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
 			rc = pEssenceData->SetFileMob(pSourceMob);
