@@ -10,18 +10,9 @@
 
 
 #if defined(WIN32)
-#include <windows.h>
-#else
-inline long InterlockedIncrement(long *value)
-{
-	return (++(*value));
-}
-inline long InterlockedDecrement(long *value)
-{
-	return (--(*value));
-}
+// Include declarations for InterlockedIncrement() and InterlockcedDecrment().
+#include <winbase.h>
 #endif
-
 
 CAAFServer::CAAFServer() :
 	_lockCount(0)
@@ -38,21 +29,21 @@ void CAAFServer::Lock
 )
 {
 	if (fLock)
-		InterlockedIncrement(reinterpret_cast<long *>(&_lockCount));
+		InterlockedIncrement(&_lockCount);
 	else
-		InterlockedDecrement(reinterpret_cast<long *>(&_lockCount));
+		InterlockedDecrement(&_lockCount);
 }
 
 // Called by all IUnknown::AddRef implementations in this module
 void CAAFServer::IncrementActiveObjects()
 {
-	InterlockedIncrement(reinterpret_cast<long *>(&_activeCount));
+	InterlockedIncrement(&_activeCount);
 }
 
 // Called by all IUnknown::Release implementations in this module
 void CAAFServer::DecrementActiveObjects()
 {
-	InterlockedDecrement(reinterpret_cast<long *>(&_activeCount));
+	InterlockedDecrement(&_activeCount);
 }
 
 
@@ -63,6 +54,24 @@ aafUInt32 CAAFServer::GetLockCount()
 aafUInt32 CAAFServer::GetActiveObjectCount()
 {
 	return _activeCount;
+}
+
+
+aafUInt32 CAAFServer::InterlockedIncrement(aafUInt32 *value)
+{
+#if defined(WIN32)
+	return ::InterlockedIncrement(reinterpret_cast<long *>(value));
+#else
+	return (++(*value));
+#endif
+}
+aafUInt32 CAAFServer::InterlockedDecrement(aafUInt32 *value)
+{
+#if defined(WIN32)
+	return ::InterlockedDecrement(reinterpret_cast<long *>(value));
+#else
+	return (--(*value));
+#endif
 }
 
 
