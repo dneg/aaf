@@ -864,7 +864,7 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-main()
+int main()
 {
 	CComInitialize comInit;
   CAAFInitialize aafInit;

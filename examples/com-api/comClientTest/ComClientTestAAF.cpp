@@ -587,7 +587,7 @@ struct CAAFInitialize
 };
 
 
-main()
+int main()
 {
   CComInitialize comInit;
   CAAFInitialize aafInit;
