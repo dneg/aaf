@@ -12,15 +12,14 @@
 *                                          *
 \******************************************/
 
-#ifndef __AAF_h__
-#include "AAF.h"
+#ifndef __AAFPlugin_h__
+#include "AAFPlugin.h"
 #endif
 
 #ifndef __CAAFUnknown_h__
 #include "CAAFUnknown.h"
 #endif
 
-#include "AAFPlugin.h"
 
 EXTERN_C const CLSID CLSID_AAFDefaultStream;
 
