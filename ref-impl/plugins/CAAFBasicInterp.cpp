@@ -39,6 +39,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFRational.h"
 #include "AAFInterpolatorDefs.h"
+#include "AAFTypeDefUIDs.h"
 
 const aafProductVersion_t AAFPluginImplementationVersion = {1, 0, 0, 1, kVersionBeta};
 
@@ -223,7 +224,7 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	if(index < 0 || index >= 1)
 		return AAFRESULT_BADINDEX;
-//!!!	*ppType = kAAFExpLong;					// temp!!! Use type definition mechanism
+//!!!	*ppType = kAAFTypeID_Int32;					// temp!!! Use type definition mechanism
 	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
@@ -308,7 +309,7 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(pDef->GetAUID (&defID));
 		pDef->Release();
 		pDef = NULL;
-		if(EqualAUID(&defID, &kAAFExpLong))
+		if(EqualAUID(&defID, &kAAFTypeID_Int32))
 		{
 			if(bufSize < sizeof(aafUInt32))
 				RAISE(AAFRESULT_SMALLBUF);
@@ -325,7 +326,7 @@ HRESULT STDMETHODCALLTYPE
 				
 			*bytesRead = sizeof(aafUInt32);
 		}
-		else if(EqualAUID(&defID, &kAAFExpRational))
+		else if(EqualAUID(&defID, &kAAFTypeID_Rational))
 		{
 			aafRational_t	*result = (aafRational_t *)pOutputValue;
 			AAFRational		lowerBound, upperBound, subResult, timeDelta, num, denom;
