@@ -3651,7 +3651,10 @@ void dumpHeader(char* fileName)
 {
   FILE* f = fopen(fileName, "rb");
   if (f == 0) {
-    fatalError("dumpHeader", "fopen() failed.");
+    cerr << programName <<": Error: "
+         << "File \"" << fileName << "\" not found."
+         << endl;
+    exit(EXIT_FAILURE);
   }
   StructuredStorageHeader header;
   readHeader(header, f);
