@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="../../../ref-impl/src/OM,../../../ref-impl/include/Om,../../../sss-impl/include"
+				AdditionalIncludeDirectories="../../../ref-impl/src/OM;../../../ref-impl/include/Om;../../../ref-impl/include;../../../sss-impl/include"
 				PreprocessorDefinitions="NDEBUG,_WIN32,WIN32,_WINDOWS,UNICODE,OM_USE_STORAGE_EX"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
@@ -73,7 +73,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../../../ref-impl/src/OM,../../../ref-impl/include/Om,../../../sss-impl/include"
+				AdditionalIncludeDirectories="../../../ref-impl/src/OM;../../../ref-impl/include/Om;../../../ref-impl/include;../../../sss-impl/include"
 				PreprocessorDefinitions="_DEBUG,OM_DEBUG,OM_STACK_TRACE_ON_ASSERT,_WIN32,WIN32,_WINDOWS,UNICODE,OM_USE_STORAGE_EX"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
@@ -790,9 +790,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\ref-impl\include\OM\OMXMLStoredStream.h">
-			</File>
-			<File
-				RelativePath="..\..\..\ref-impl\src\Om\utf8.h">
 			</File>
 		</Filter>
 	</Files>
