@@ -812,9 +812,9 @@ public:
   // in /test/.this-moduleTest.cpp.
   static AAFRESULT test();
 
-protected:
-
   Impl.this-module * GetRepObject ();
+
+protected:
 
   void InitRep (Impl.this-module * pObj);
 

@@ -181,7 +181,7 @@
 .this-module::~.this-module ()
 {
 #ifdef BOB_TEST
-  Impl.this-module * rep;
+  ImplAAFObject * rep;
   rep = GetRepObject ();
   assert (rep);
   delete rep;
@@ -1037,7 +1037,7 @@ AAFRESULT STDMETHODCALLTYPE
 #ifdef BOB_TEST
 .%02-setup(%03, %04)
   Impl.this-module * newRep;
-  newRep = new Impl.this-module (%04);
+  newRep = new Impl.this-module (.%02-internalname(%04));
   assert (newRep);
   InitRep (newRep);
 .%02-cleanup(%03, %04)
@@ -1070,8 +1070,8 @@ AAFRESULT STDMETHODCALLTYPE
 .%02-setup(%03, %04)
 .%07-setup(%08, %09)
   Impl.this-module * newRep;
-  newRep = new Impl.this-module (%04,
-								 %09);
+  newRep = new Impl.this-module (.%02-internalname(%04),
+    .%07-internalname(%09));
   assert (newRep);
   InitRep (newRep);
 .%02-cleanup(%03, %04)
@@ -1108,9 +1108,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%07-setup(%08, %09)
 .%12-setup(%13, %14)
   Impl.this-module * newRep;
-  newRep = new Impl.this-module (%04,
-								 %09,
-								 %14);
+  newRep = new Impl.this-module (.%02-internalname(%04),
+    .%07-internalname(%09),
+    .%12-internalname(%14));
   assert (newRep);
   InitRep (newRep);
 .%02-cleanup(%03, %04)
@@ -1151,10 +1151,10 @@ AAFRESULT STDMETHODCALLTYPE
 .%12-setup(%13, %14)
 .%17-setup(%18, %19)
   Impl.this-module * newRep;
-  newRep = new Impl.this-module (%04,
-								 %09,
-								 %14,
-								 %19);
+  newRep = new Impl.this-module (.%02-internalname(%04),
+    .%07-internalname(%09),
+    .%12-internalname(%14),
+    .%17-internalname(%19));
   assert (newRep);
   InitRep (newRep);
 .%02-cleanup(%03, %04)
@@ -1200,7 +1200,7 @@ AAFRESULT STDMETHODCALLTYPE
   Impl%01 * internal%02 = NULL;
   if (%02)
     {
-	  internal%02 = static_cast<Impl%01*>(%02->GetImpl());
+	  internal%02 = static_cast<Impl%01*>(%02->GetRepObject());
 	  assert (internal%02);
     }
 #endm
