@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Tue May  9 09:20:25 EDT 2000
-// by user transdel on system TRANSDEL.
+// This file was generated on Tue May  9 12:23:43 EDT 2000
+// by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
 //
