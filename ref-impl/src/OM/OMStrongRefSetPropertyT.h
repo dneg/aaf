@@ -317,9 +317,18 @@ OMStrongReferenceSetProperty<ReferencedObject>::remove(
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::remove");
 
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Object is present", contains(identification));
 
-  return 0;
+  OMSetElement<OMStrongObjectReference<ReferencedObject>,
+               ReferencedObject>* element = 0;
+  bool found = _set.find(identification, &element);
+  ASSERT("Object found", found);
+  ReferencedObject* result = element->setValue(0);
+  _set.remove(identification);
+
+  POSTCONDITION("Object is not present", !contains(identification));
+
+  return result;
 }
 
   // @mfunc Remove <p object> from this
@@ -334,7 +343,13 @@ void OMStrongReferenceSetProperty<ReferencedObject>::removeValue(
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::removeValue");
 
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid object", object != 0);
+  PRECONDITION("Object is present", containsValue(object));
+
+  OMUniqueObjectIdentification identification = object->identification();
+  remove(identification);
+
+  POSTCONDITION("Object is not present", !containsValue(object));
 }
 
   // @mfunc Does this <c OMStrongReferenceSetProperty> contain
@@ -367,10 +382,7 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::contains(
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::contains");
 
-  ASSERT("Unimplemented code not reached", false);
-
-  bool result = false;
-  return result;
+  return _set.contains(identification);
 }
 
   // @mfunc Find the <p ReferencedObject> in this
@@ -392,9 +404,14 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::find(
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::find");
 
-  ASSERT("Unimplemented code not reached", false);
+  OMSetElement<OMStrongObjectReference<ReferencedObject>,
+               ReferencedObject>* element = 0;
 
-  bool result = false;
+  bool result = _set.find(identification, &element);
+  if (result) {
+    object = element->getValue();
+  }
+
   return result;
 }
 
