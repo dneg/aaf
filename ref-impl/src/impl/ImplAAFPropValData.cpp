@@ -1,19 +1,16 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/***********************************************\
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*                                               *
+\***********************************************/
 
 
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
 #endif
-
-
-
 
 #ifndef __ImplAAFPropValData_h__
 #include "ImplAAFPropValData.h"
@@ -48,6 +45,7 @@ ImplAAFPropValData::~ImplAAFPropValData ()
 AAFRESULT ImplAAFPropValData::Initialize (
       ImplAAFTypeDef * pTD)
 {
+  assert (! pvtGetType ());
   return SetType (pTD);
 }
 
