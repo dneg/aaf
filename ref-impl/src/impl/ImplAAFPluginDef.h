@@ -64,7 +64,14 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPluginVersion
         // @parm [out] The Plugin Version
-        (aafProductVersion_t *  pVersion);
+        (aafVersionType_t *  pVersion);
+
+  //****************
+  // SetPluginVersion()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetPluginVersion
+        (aafVersionType_t *  pVersion);
 
   //****************
   // GetPluginVersionString()
@@ -178,10 +185,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPlatformVersionRange
         (// @parm [out] The Minimum Platform Version
-         aafProductVersion_t *  pMinVersion,
+         aafVersionType_t *  pMinVersion,
 
          // @parm [out] The Maximum Platform Version
-         aafProductVersion_t *  pMaxVersion);
+         aafVersionType_t *  pMaxVersion);
 
   //****************
   // SetPlatformMinimumVersion()
@@ -189,7 +196,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetPlatformMinimumVersion
         // @parm [in] The Minimum Platform Version
-        (aafProductVersion_t *  pMinVersion);
+        (aafVersionType_t *  pMinVersion);
 
   //****************
   // SetPlatformMaximumVersion()
@@ -197,7 +204,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetPlatformMaximumVersion
         // @parm [in] The Maximum Platform Version
-        (aafProductVersion_t *  pMaxVersion);
+        (aafVersionType_t *  pMaxVersion);
 
   //****************
   // GetEngine()
@@ -223,10 +230,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetEngineVersionRange
         (// @parm [out] The Minimum Engine Version
-         aafProductVersion_t *  pMinVersion,
+         aafVersionType_t *  pMinVersion,
 
          // @parm [out] The Maximum Engine Version
-         aafProductVersion_t *  pMaxVersion);
+         aafVersionType_t *  pMaxVersion);
 
 
   //****************
@@ -235,7 +242,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEngineMinimumVersion
         // @parm [in] The Minimum Engine Version
-        (aafProductVersion_t *  pMinVersion);
+        (aafVersionType_t *  pMinVersion);
 
 
   //****************
@@ -244,7 +251,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEngineMaximumVersion
         // @parm [in] The Minimum Engine Version
-        (aafProductVersion_t *  pMaxVersion);
+        (aafVersionType_t *  pMaxVersion);
 
 
   //****************
@@ -271,10 +278,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetPluginAPIVersionRange
         (// @parm [out] The Minimum Plugin API Version
-         aafProductVersion_t *  pMinVersion,
+         aafVersionType_t *  pMinVersion,
 
          // @parm [out] The Maximum Plugin API Version
-         aafProductVersion_t *  pMaxVersion);
+         aafVersionType_t *  pMaxVersion);
 
 
   //****************
@@ -283,7 +290,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetPluginAPIMinimumVersion
         // @parm [out] The Minimum Plugin API Version
-        (aafProductVersion_t *  pMinVersion);
+        (aafVersionType_t *  pMinVersion);
 
   //****************
   // SetPluginAPIMaximumVersion()
@@ -291,7 +298,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetPluginAPIMaximumVersion
         // @parm [in] The Maximum Plugin API Version
-        (aafProductVersion_t *  pMaxVersion);
+        (aafVersionType_t *  pMaxVersion);
 
   //****************
   // IsSoftwareOnly()
@@ -439,20 +446,20 @@ public:
 
 private:
 	OMFixedSizeProperty<aafUID_t>					_categoryClass;
-  // StructuredProperty<aafProductVersion_t>		_pluginVersion;
+	OMFixedSizeProperty<aafVersionType_t>			_pluginVersion;	//!!!StructuredProperty?
 	OMWideStringProperty                            _pluginVersionString;
 	OMWideStringProperty                            _pluginManufacturerName;
 	OMStrongReferenceProperty<ImplAAFNetworkLocator> _manufacturerURL;
 	OMFixedSizeProperty<aafUID_t>					_pluginManufacturerID;
 	OMFixedSizeProperty<aafUID_t>					_platform;
-  // StructuredProperty<aafProductVersion_t>		_minPlatformVersion;
-  // StructuredProperty<aafProductVersion_t>		_maxPlatformVersion;
+	OMFixedSizeProperty<aafVersionType_t>			_minPlatformVersion;	//!!!StructuredProperty?
+	OMFixedSizeProperty<aafVersionType_t>			_maxPlatformVersion;	//!!!StructuredProperty?
 	OMFixedSizeProperty<aafUID_t>					_engine;
-  // StructuredProperty<aafProductVersion_t>		_minEngineVersion;
-  // StructuredProperty<aafProductVersion_t>		_maxEngineVersion;
+	OMFixedSizeProperty<aafVersionType_t>			_minEngineVersion;	//!!!StructuredProperty?
+	OMFixedSizeProperty<aafVersionType_t>			_maxEngineVersion;	//!!!StructuredProperty?
 	OMFixedSizeProperty<aafUID_t>					_pluginAPI;
-  // StructuredProperty<aafProductVersion_t>		_minPluginAPIVersion;
-  // StructuredProperty<aafProductVersion_t>		_maxPluginAPIVersion;
+	OMFixedSizeProperty<aafVersionType_t>			_minPluginAPIVersion;	//!!!StructuredProperty?
+	OMFixedSizeProperty<aafVersionType_t>			_maxPluginAPIVersion;	//!!!StructuredProperty?
 	OMFixedSizeProperty<aafBool>					_softwareOnly;
 	OMFixedSizeProperty<aafBool>					_accelerator;
     OMStrongReferenceVectorProperty<ImplAAFLocator> _locators;
