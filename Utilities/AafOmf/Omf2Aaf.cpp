@@ -1031,7 +1031,10 @@ HRESULT Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 					if (pSegment)
 					{
 						IncIndentLevel();
-						UTLStrAToStrW(sTrackName, &pwTrackName);
+						if (strlen(sTrackName) > 0)
+							UTLStrAToStrW(sTrackName, &pwTrackName);
+						else
+							UTLStrAToStrW("", &pwTrackName);
 						// OMF ONLY created timeline mob slots 
 						// so that is what we going to do here
 						rc = pDictionary->CreateInstance(&AUID_AAFTimelineMobSlot,
@@ -1059,6 +1062,7 @@ HRESULT Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 							pMobSlot->Release();
 							pMobSlot = NULL;
 						}
+						UTLMemoryFree(pwTrackName);
 						DecIndentLevel();
 					}
 					if (pSegment)
@@ -2096,11 +2100,30 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 			else if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassAIFD, (OMF2::omfErr_t *)&rc) )
 			{
 				// AIFC Audio File Descriptor
+				void*					pSummary = NULL;
+				OMF2::omfDDefObj_t		datakind;
+				
+				aafUInt32				bytesRead;
+				aafUInt32				numBytes;
+
 				rc = pDictionary->CreateInstance(&AUID_AAFAIFCDescriptor,
 												 IID_IAAFAIFCDescriptor,
 												 (IUnknown **)&pAifcDesc);
 				if (SUCCEEDED( rc) )
 				{
+					OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Sound", &datakind, (OMF2::omfErr_t *)&rc);
+					numBytes = (aafUInt32)OMF2::omfsLengthDataValue(OMFFileHdl, mediaDescriptor, OMF2::OMAIFDSummary);
+					UTLMemoryAlloc(numBytes, &pSummary);
+					rc = OMF2::omfsReadDataValue(OMFFileHdl,
+												 mediaDescriptor,
+												 OMF2::OMAIFDSummary,
+												 datakind,
+												 (OMF2::omfDataValue_t)pSummary,
+												 0,
+												 numBytes,
+												 &bytesRead);
+					rc = pAifcDesc->SetSummary(bytesRead, (aafDataValue_t) pSummary);
+
 					rc = pAifcDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssenceDesc);
 					pSourceMob->SetEssenceDescriptor(pEssenceDesc);
 					if (gpGlobals->bVerboseMode)
