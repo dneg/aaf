@@ -3,10 +3,10 @@ AAFCompositionMob\
 #endm
 #c
 #startm .parent-module 0
-AAFObject\
+AAFMob\
 #endm
 #c
-#c#import ./AAFUnitTest.exp
+#import ./AAFUnitTest.exp
 
 /******************************************\
 *                                          *
@@ -20,7 +20,7 @@ AAFObject\
 AD_CLASS_BEGIN()
 
 //@access Public Members
-AD_METHOD1(AAFCompositionMob,[in],OMLObject,obj,hi jeff, Constructor from persistant store.)
+AD_METHOD1(AAFCompositionMob,[in],OMLObject,obj, , Constructor from persistant store.)
 
 AD_METHOD2(AAFCompositionMob,\
 [in],AAFString *,name,Mob name [optional],\
