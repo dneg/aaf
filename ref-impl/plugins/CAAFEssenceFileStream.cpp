@@ -162,8 +162,8 @@ void CAAFEssenceFileStream::RemoveFileStreamFromContainer()
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::Init (wchar_t *  pFilePath,
-        aafUID_t *  pMobID)
+    CAAFEssenceFileStream::Init (const aafCharacter * pFilePath,
+        const aafUID_t * pMobID)
 {
   if (NULL == pFilePath)
     return E_INVALIDARG;
@@ -314,8 +314,8 @@ CAAFEssenceFileStream::FileStreamOp CAAFEssenceFileStream::SetStreamOp(FileStrea
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::Create (wchar_t *  pFilePath,
-        aafUID_t *  pMobID)
+    CAAFEssenceFileStream::Create (const aafCharacter *  pFilePath,
+        const aafUID_t *  pMobID)
 {
   HRESULT hr = Init(pFilePath, pMobID);
   if (AAFRESULT_SUCCESS != hr)
@@ -343,8 +343,8 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::OpenRead (wchar_t *  pFilePath,
-        aafUID_t *  pMobID)
+    CAAFEssenceFileStream::OpenRead (const aafCharacter * pFilePath,
+        const aafUID_t * pMobID)
 {
   HRESULT hr = Init(pFilePath, pMobID);
   if (AAFRESULT_SUCCESS != hr)
@@ -367,8 +367,8 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileStream::OpenAppend (wchar_t *  pFilePath,
-        aafUID_t *  pMobID)
+    CAAFEssenceFileStream::OpenAppend (const aafCharacter * pFilePath,
+        const aafUID_t *  pMobID)
 {
   HRESULT hr = Init(pFilePath, pMobID);
   if (AAFRESULT_SUCCESS != hr)

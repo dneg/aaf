@@ -10,7 +10,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -25,10 +25,6 @@
  * LIABILITY.
  *
  ************************************************************************/
-
-
-
-
 
 
 #ifndef __ImplAAFIdentification_h__
@@ -86,7 +82,7 @@ ImplAAFIdentification::ImplAAFIdentification(
                                      const wchar_t* productName,
                                      const aafProductVersion_t* productVersion,
                                      const wchar_t* productVersionString,
-                                     const aafUID_t* productId,
+                                     const aafUID_t & productId,
                                      const aafTimeStamp_t date,
                                      const aafProductVersion_t* toolKitVersion,
                                      const wchar_t* platform
@@ -120,7 +116,7 @@ ImplAAFIdentification::ImplAAFIdentification(
   _productName = productName;
 	_productVersion = *productVersion;
   _productVersionString = productVersionString;
-  _productId = *productId;
+  _productId = productId;
   _date = date;
 	_toolkitVersion = *toolKitVersion;
   _platform = platform;
@@ -348,7 +344,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetCompanyName (aafWChar *  pName)
+    ImplAAFIdentification::SetCompanyName (const aafCharacter * pName)
 {
   if (! pName)
 	{
@@ -362,7 +358,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductName (aafWChar *  pName)
+    ImplAAFIdentification::SetProductName (const aafCharacter * pName)
 {
   if (! pName)
 	{
@@ -391,7 +387,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductVersionString (aafWChar * pVS)
+    ImplAAFIdentification::SetProductVersionString (const aafCharacter * pVS)
 {
 	if (! pVS)
 	{
@@ -405,12 +401,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductID (aafUID_t * pPID)
+    ImplAAFIdentification::SetProductID (const aafUID_t & PID)
 {
-  if (! pPID)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  _productId = *pPID;
+  _productId = PID;
   return AAFRESULT_SUCCESS;
 }

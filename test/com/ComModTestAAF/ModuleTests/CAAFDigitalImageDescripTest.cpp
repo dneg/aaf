@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -170,18 +170,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
     // Create a source mob
-    checkResult(pDictionary->CreateInstance(&AUID_AAFSourceMob,
+    checkResult(pDictionary->CreateInstance(AUID_AAFSourceMob,
                 IID_IAAFSourceMob, 
                 (IUnknown **)&pSourceMob));
     checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
     checkResult(CoCreateGuid((GUID *)&newUID));
-    checkResult(pMob->SetMobID(&newUID));
+    checkResult(pMob->SetMobID(newUID));
     checkResult(pMob->SetName(L"DigitalImageDescriptorTest"));
 
 
     // Create a digitial image descriptor.
-    checkResult(pDictionary->CreateInstance(&AUID_AAFDigitalImageDescriptor,
+    checkResult(pDictionary->CreateInstance(AUID_AAFDigitalImageDescriptor,
                 IID_IAAFDigitalImageDescriptor, 
                 (IUnknown **)&pDIDesc));		
 
@@ -201,7 +201,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDIDesc->SetImageAspectRatio(ratio));
 
     // Optional Properties
-    checkResult(pDIDesc->SetCompression(&compression));
+    checkResult(pDIDesc->SetCompression(compression));
     checkResult(pDIDesc->SetSampledView(kSampledHeightTestVal, kSampledWidthTestVal, kSampledXOffsetTestVal, kSampledYOffsetTestVal));
     checkResult(pDIDesc->SetDisplayView(kDisplayHeightTestVal, kDisplayWidthTestVal, kDisplayXOffsetTestVal, kDisplayYOffsetTestVal));
     checkResult(pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal));

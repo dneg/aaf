@@ -85,7 +85,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
 	aafUInt32					readNumIdents;
-	aafUID_t					uid;
 	ProductInfo.companyName = L"";
 	ProductInfo.productName = L"";
 	ProductInfo.productVersionString = L"";
@@ -110,8 +109,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pIdent->SetCompanyName(COMPANY_NAME));
 		checkResult(pIdent->SetProductName(PRODUCT_NAME));
 		checkResult(pIdent->SetProductVersionString(TEST_VERSION));
-		uid = UnitTestProductID;
-		checkResult(pIdent->SetProductID(&uid));
+		checkResult(pIdent->SetProductID(UnitTestProductID));
 		checkResult(pIdent->SetProductVersion(&testVersion));
 		
 		// Attempt to save the file.

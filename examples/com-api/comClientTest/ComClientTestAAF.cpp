@@ -469,31 +469,31 @@ static void CreateAAFFile(aafWChar * pFileName)
   {
      // Create a source Mob with a FileDescriptor attached
     check(pDictionary->CreateInstance(
-                &AUID_AAFSourceMob, 
+                AUID_AAFSourceMob, 
                 IID_IAAFSourceMob, 
                 (IUnknown **)&smob));
     check(smob->QueryInterface (IID_IAAFMob, (void **)&pMob));
     check(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
     //newUID.Data1 = test;
-    check(pMob->SetMobID(&newUID));
+    check(pMob->SetMobID(newUID));
     check(pMob->SetName(names[test]));
 
     check(pDictionary->CreateInstance(
-              &AUID_AAFFileDescriptor,
+              AUID_AAFFileDescriptor,
               IID_IAAFFileDescriptor, 
               (IUnknown **)&fileDesc));
-    check(fileDesc->SetSampleRate(&audioRate));
+    check(fileDesc->SetSampleRate(audioRate));
     check(fileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&essenceDesc));
 
     {
       HRESULT stat;
       stat = pDictionary->CreateInstance(
-                  &AUID_AAFNetworkLocator,
+                  AUID_AAFNetworkLocator,
                   IID_IAAFLocator, 
                   (IUnknown **)&pLocator);
       check (stat);
     }
-    check(fileDesc->SetSampleRate(&audioRate));
+    check(fileDesc->SetSampleRate(audioRate));
 
     check(essenceDesc->AppendLocator (pLocator));
     check(smob->SetEssenceDescriptor(essenceDesc));
@@ -501,7 +501,7 @@ static void CreateAAFFile(aafWChar * pFileName)
     // Add some slots
     for(testSlot = 0; testSlot < 3; testSlot++)
     {
-       check(pDictionary->CreateInstance(&AUID_AAFSourceClip,
+       check(pDictionary->CreateInstance(AUID_AAFSourceClip,
                IID_IAAFSourceClip, 
                (IUnknown **)&sclp));
       check(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));

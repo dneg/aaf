@@ -143,16 +143,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
-		checkResult(pDictionary->CreateInstance(&AUID_AAFCodecDef,
+		checkResult(pDictionary->CreateInstance(AUID_AAFCodecDef,
 							  IID_IAAFCodecDef, 
 							  (IUnknown **)&pPlugDef));
     
 		checkResult(pPlugDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
 		uid = CodecWave;
-		checkResult(pDef->Init (&uid, L"TestCodec", L"TestCodecDescription"));
+		checkResult(pDef->Initialize (uid, L"TestCodec", L"TestCodecDescription"));
 
-		uid = DDEF_Matte;
-		checkResult(pPlugDef->AppendEssenceKind (&uid));
+		checkResult(pPlugDef->AppendEssenceKind (DDEF_Matte));
 		checkResult(pDictionary->RegisterCodecDefinition(pPlugDef));
 		uid = kAAFClassID_WAVEDescriptor;
 //		checkResult(pDictionary->LookupClass(&uid, &classDef));
@@ -207,7 +206,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	bool					bFileOpen = false;
 	aafBool					testResult;
 	aafUID_t				codecID = CodecWave;
-	aafUID_t				testMatte = DDEF_Matte, testPicture = DDEF_Picture;
 	aafUID_t				readFlavour, checkFlavour = NilCodecFlavour;
 	HRESULT					hr = S_OK;
 
@@ -218,11 +216,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		checkResult(pDictionary->LookupCodecDefinition(&codecID, &pCodec));
+		checkResult(pDictionary->LookupCodecDefinition(codecID, &pCodec));
 
-		checkResult(pCodec->IsEssenceKindSupported (&testMatte, &testResult));
+		checkResult(pCodec->IsEssenceKindSupported (DDEF_Matte, &testResult));
 		checkExpression (testResult == AAFTrue, AAFRESULT_TEST_FAILED);
-		checkResult(pCodec->IsEssenceKindSupported (&testPicture, &testResult));
+		checkResult(pCodec->IsEssenceKindSupported (DDEF_Picture, &testResult));
 		checkExpression (testResult == AAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pCodec->EnumCodecFlavours (&pEnum));
 		checkResult(pEnum->NextOne (&readFlavour));

@@ -68,30 +68,22 @@ ImplAAFSourceClip::~ImplAAFSourceClip ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::Initialize(aafUID_t*		pDatadef,
-								  aafLength_t*	pLength,
-								  aafSourceRef_t	sourceRef)
+    ImplAAFSourceClip::Initialize(const aafUID_t &       datadef,
+								  const aafLength_t &    length,
+								  const aafSourceRef_t & sourceRef)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-	if (pDatadef == NULL ||
-		pLength == NULL)
-	{
-		aafError = AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		SetDataDef( pDatadef );
-		SetLength( pLength );
-		SetSourceID( sourceRef.sourceID );
-		SetSourceMobSlotID( sourceRef.sourceSlotID );
-		_startTime = sourceRef.startTime;
+	SetDataDef( datadef );
+	SetLength( length );
+	SetSourceID( sourceRef.sourceID );
+	SetSourceMobSlotID( sourceRef.sourceSlotID );
+	_startTime = sourceRef.startTime;
 
-		_fadeInLength		= 0;
-		_fadeInType		= kFadeNone;
+	_fadeInLength		= 0;
+	_fadeInType		= kFadeNone;
 	
-		_fadeOutLength		= 0;
-		_fadeOutType	= kFadeNone;
-}
+	_fadeOutLength		= 0;
+	_fadeOutType	= kFadeNone;
 
 	return aafError;
 }
@@ -197,7 +189,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 		CHECK(GetSourceReference(&sourceRef));
 		CHECK(MyHeadObject(&head));
-		CHECK(head->LookupMob(&sourceRef.sourceID, mob));
+		CHECK(head->LookupMob(sourceRef.sourceID, mob));
 
 		head->ReleaseReference();
 		head = NULL;

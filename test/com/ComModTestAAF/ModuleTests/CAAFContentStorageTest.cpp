@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -344,14 +344,14 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	checkExpression(2 == readNumEssenceData, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID1;
-	check(_pHeader->LookupMob(&uid, &testMob));
+	check(_pHeader->LookupMob(uid, &testMob));
 	check(testMob->GetMobID(&readID));
 	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
 	testMob->Release();
 	testMob = NULL;
 	/***/
 	uid = kTestMobID2;
-	check(_pHeader->LookupMob(&uid, &testMob));
+	check(_pHeader->LookupMob(uid, &testMob));
 	check(testMob->GetMobID(&readID));
 	checkExpression(memcmp(&uid, &readID, sizeof(readID)) == 0, AAFRESULT_TEST_FAILED);
 	testMob->Release();
@@ -360,7 +360,7 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	uid.Data1 = 0;	// Invalidate the mobID
 	uid.Data2 = 0;
 	uid.Data3 = 0;
-	checkExpression(_pHeader->LookupMob(&uid, &testMob) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
+	checkExpression(_pHeader->LookupMob(uid, &testMob) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
 	/***/
 	check(_pHeader->GetNumMobs(kFileMob, &readNumMobs));
 	checkExpression(2 == readNumMobs, AAFRESULT_TEST_FAILED);
@@ -376,14 +376,14 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	testMob = NULL;
 	/***/
 	uid = kTestMobID2;
-    check(_pHeader->IsEssenceDataPresent (&uid, kAAFiMedia, &testBool));
+    check(_pHeader->IsEssenceDataPresent (uid, kAAFiMedia, &testBool));
 	checkExpression(AAFTrue == testBool, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID2;
  	uid.Data1 = 0;	// Invalidate the mobID
 	uid.Data2 = 0;
 	uid.Data3 = 0;
-	check(_pHeader->IsEssenceDataPresent (&uid, kAAFiMedia, &testBool));
+	check(_pHeader->IsEssenceDataPresent (uid, kAAFiMedia, &testBool));
 	checkExpression(AAFFalse == testBool, AAFRESULT_TEST_FAILED);
 
 	/***/
@@ -402,16 +402,16 @@ void ContentStorageTest::createFileMob(aafUID_t newMobID)
 	assert(NULL == _pSourceMob);
 	
 	// Create a Mob
-	check(_pDictionary->CreateInstance(&AUID_AAFSourceMob,
+	check(_pDictionary->CreateInstance(AUID_AAFSourceMob,
 		IID_IAAFSourceMob, 
 		(IUnknown **)&_pSourceMob));
 	
 	check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
 	
-	check(_pMob->SetMobID(&newMobID));
+	check(_pMob->SetMobID(newMobID));
 	check(_pMob->SetName(L"ContentStorageTest File Mob"));
 	
-	check(_pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
+	check(_pDictionary->CreateInstance(AUID_AAFFileDescriptor,
 		IID_IAAFEssenceDescriptor, 
 		(IUnknown **)&_pFileDescriptor));
 	
@@ -447,7 +447,7 @@ void ContentStorageTest::createEssenceData(IAAFSourceMob *pSourceMob)
 	
 	
 	// Attempt to create an AAFEssenceData.
-	check(_pDictionary->CreateInstance(&AUID_AAFEssenceData,
+	check(_pDictionary->CreateInstance(AUID_AAFEssenceData,
 		IID_IAAFEssenceData,
 		(IUnknown **)&_pEssenceData));
 	

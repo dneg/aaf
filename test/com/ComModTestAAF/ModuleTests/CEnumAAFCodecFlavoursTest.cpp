@@ -126,7 +126,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFPluginManager *mgr = NULL;
 	bool bFileOpen = false;
 	HRESULT			hr = S_OK;
-	aafUID_t		uid;
 /*	long			test;
 */
 
@@ -146,9 +145,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(AAFGetPluginManager(&mgr));
 		checkResult(mgr->CreatePluginDefinition (CodecWave, pDictionary, &pDef));
 
-		uid = DDEF_Sound;
 		checkResult(pDef->QueryInterface(IID_IAAFCodecDef, (void **)&pCodecDef));
-		checkResult(pCodecDef->AppendEssenceKind (&uid));
+		checkResult(pCodecDef->AppendEssenceKind (DDEF_Sound));
 		checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
 	}
 	catch (HRESULT& rResult)
@@ -213,9 +211,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
-		checkResult(pDictionary->LookupCodecDefinition(&codecID, &pCodec));
+		checkResult(pDictionary->LookupCodecDefinition(codecID, &pCodec));
 
-		checkResult(pCodec->IsEssenceKindSupported (&testPicture, &testResult));
+		checkResult(pCodec->IsEssenceKindSupported (testPicture, &testResult));
 		checkExpression (testResult == AAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pCodec->EnumCodecFlavours (&pEnum));
 		checkResult(pEnum->NextOne (&testFlavour));
