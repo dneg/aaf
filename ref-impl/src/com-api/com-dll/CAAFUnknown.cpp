@@ -24,8 +24,10 @@
 #include "CAAFUnknown.h"
 #include "CAAFServer.h"
 #include <stddef.h>
-#include <iostream.h>
 
+#if !defined(DELETE_LAST_REFERENCE)
+#include <iostream.h>
+#endif
 
 //=--------------------------------------------------------------------------=
 // CAAFUnknown::CAAFUnknown
@@ -166,7 +168,7 @@ ULONG CAAFUnknown::CAAFPrivateUnknown::Release
 )
 {
     ULONG cRef = CAAFServer::InterlockedDecrement(&m_cRef);
-#if 0
+#if defined(DELETE_LAST_REFERENCE)
     if (0 == m_cRef)
         delete This();
 #else
