@@ -24,7 +24,7 @@ class WaveHeader {
 public:
 	WaveHeader();
 	
-	WaveHeader( 	std::pair<int, std::auto_ptr<aafUInt8> > buf );
+	WaveHeader( std::pair<int, std::auto_ptr<aafUInt8> > buf );
 	
 	WaveHeader( int sampleRate,
 				int numSamples,

@@ -140,7 +140,7 @@ aafUInt32 WaveHeader::GetAudioDataSizeInBytes()
 
 void WaveHeader::ChangeNumSamples( int numSamples )
 {
-	// Yes... it a cheap trick.
+	// Yes... it's a cheap trick.
 	
 	_numSamples = numSamples;
 
