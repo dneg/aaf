@@ -2,7 +2,7 @@
 // @com This file implements the module test for CAAFEventMobSlot
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -305,6 +305,8 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 	checkResult(pComp->SetDataDef(defs.ddPicture()));
 	pComp->Release();
 	pComp = NULL;
+	pDataDef->Release();
+	pDataDef = NULL;
 
     if (NULL != pSequence)
     {
@@ -331,6 +333,12 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
     {
       pEvent->Release();
       pEvent = NULL;
+    }
+
+    if (pDataDef)
+    {
+      pDataDef->Release();
+      pDataDef = NULL;
     }
     
     throw;
