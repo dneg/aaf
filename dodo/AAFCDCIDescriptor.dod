@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFCDCIDescriptor\
@@ -168,7 +168,7 @@ AD_XMETHOD1(GetHorizontalSubsampling,
 
 AD_XMETHOD1(SetColorSiting,
 			[in],
-				objPass,
+				enumIn,
 				aafColorSiting_t,
 				ColorSiting,
 				Color siting value.,

@@ -46,7 +46,7 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(GetActiveState,
 		[out\, retval],
 		objPass,
-		aafBool *,
+		aafBoolean_t *,
 		pActiveState,
 		pointer to the result, 
 
@@ -69,8 +69,8 @@ AD_XMETHOD1(GetActiveState,
 
 AD_XMETHOD1(SetActiveState,
 		[in],
-		objPass,
-		aafBool,
+		enumIn,
+		aafBoolean_t,
 		ActiveState,
 		the active state of the trigger, 
 

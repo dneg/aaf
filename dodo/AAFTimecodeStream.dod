@@ -149,7 +149,7 @@ AD_XMETHOD1(GetSampleRate,
 
 AD_XMETHOD1(SetSourceType,
 			[in],
-			objPass,
+			enumIn,
 			aafTimecodeSourceType_t,
 			sourceType,
 			The type \(LTC or VITC\) of the timecode data,

@@ -97,7 +97,7 @@ AD_XMETHOD3(SetDefaultFade,
 			Default fade length,
 
 			[in],
-			objPass,
+			enumIn,
 			aafFadeType_t,
 			fadeType,
 			default fade type,

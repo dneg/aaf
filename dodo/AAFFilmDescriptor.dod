@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFFilmDescriptor\
@@ -131,8 +131,8 @@ AD_METHOD1(GetFilmAspectRatio,
   //   - pAspectRatio arg is NULL.)
 
 
-AD_METHOD1(SetFilmFormat,
-[in],aafFilmType_t,filmFormat,Film Format,
+AD_XMETHOD1(SetFilmFormat,
+[in],enumIn,aafFilmType_t,filmFormat,Film Format,
      Sets the film format of the film.
   // Valid values include:
   //  - kFt35MM
@@ -144,14 +144,14 @@ AD_METHOD1(SetFilmFormat,
   // - formFactor represents a valid format.
   //
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
+  // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_BAD_TYPE
   //	- filmFormat is invalid.)

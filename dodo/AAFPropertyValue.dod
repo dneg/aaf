@@ -48,7 +48,7 @@ AD_XMETHOD1(GetType,
 AD_XMETHOD1(IsDefinedType,
 			[out],
 			objPass,
-			aafBool *,
+			aafBoolean_t *,
 			pIsDefined,
 			result,
 

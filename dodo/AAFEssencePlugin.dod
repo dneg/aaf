@@ -46,7 +46,7 @@ AD_XCLASS_BEGIN(Abstract, Transient)
 
 AD_XMETHOD3(NumCodecsMatching,
 [in],objPass,aafUID_t,dataDefinition,Looking for audio or video codecs,
-[in],objPass, aafFileRev_t,revision,for which variety of file,
+[in],enumIn, aafFileRev_t,revision,for which variety of file,
 [out],objPass,aafInt32 *,result,Returns the number of matches,
 Find all of the codecs available for a particular media type.)
 
@@ -57,7 +57,7 @@ AD_XMETHOD6(GetIndexedCodecInfo,
 			dataDefinition,
 			Looking for audio or video codecs,
 			[in],
-			objPass, 
+			enumIn, 
 			aafFileRev_t,
 			revision,
 			for which variety of file,

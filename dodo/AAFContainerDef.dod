@@ -34,7 +34,7 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(EssenceIsIdentified,
 			[out],
 			objPass,
-			aafBool *,
+			aafBoolean_t *,
 			pEssenceIsIdentified,
 			The EssenceIsIdentified,
      Tells whether the given plugin is capable of supporting
@@ -63,8 +63,8 @@ AD_XMETHOD1(EssenceIsIdentified,
 
 AD_XMETHOD1(SetEssenceIsIdentified,
 			[in],
-			objPass,
-			aafBool,
+			enumIn,
+			aafBoolean_t,
 			EssenceIsIdentified,
 			The EssenceIsIdentified flag,
      Tells whether the given plugin is capable of supporting
