@@ -42,13 +42,13 @@
 
 #define AAF_MAJOR_VERSION 1
 #define AAF_MINOR_VERSION 0
-#define AAF_MAINT_RELEASE 1
+#define AAF_MAINT_RELEASE 2
 
 #define AAF_RELEASE_STAGE kAAFVersionReleased
  
 // these next two lines are monitored/incremented by newbuild.pl
 
-#define AAF_BUILD_NUMBER 542
+#define AAF_BUILD_NUMBER 543
 #define AAF_CURRENT_YEAR "2004"
 
 //   The lines below shouldn't normally need to be modified
@@ -76,13 +76,5 @@
 #define AAF_FILE_VERSION AAF_FILE_VERSIONZZ( AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_BUILD_NUMBER)
 
 #define AAF_SDK_VERSION AAF_SDK_VERSIONZZ( AAF_MAJOR_VERSION, AAF_MINOR_VERSION, AAF_MAINT_RELEASE, AAF_BUILD_NUMBER)
-
-//  Mac rez stuff
-
-#define AAF_LONG_VERSION_STRING " " AAF_COPYRIGHT_STRING " Licensor of the AAF Association, www.AAFassociation.org"
-
-//  this next line will be updated to synchronise it with the numbers above by newbuild.pl
-
-#define AAF_SHORT_VERSION_STRING "1.0.1 build 504"
 
 #endif
