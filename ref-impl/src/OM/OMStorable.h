@@ -66,7 +66,7 @@ public:
   void setName(const wchar_t* name);
 
     // @cmember Save this <c OMStorable>.
-  void save(void) const;
+  virtual void save(void) const;
 
     // @cmember Close this <c OMStorable>.
   void close(void);
