@@ -6,7 +6,6 @@ AAFPulldown\
 AAFSegment\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFSegment.exp
 AD_HEAD
 /******************************************\
@@ -26,6 +25,5 @@ AD_OVERRIDE(.method-FindSubSegment)
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
 AD_OVERRIDE(.method-OffsetToTimecodeClip)
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END

@@ -7,7 +7,6 @@ AAFSegment\
 #endm
 #c
 #import ./AAFSegment.exp
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -54,7 +53,5 @@ Gets the user data [userbits] for a particular frame.)
 /****/
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
-AD_OVERRIDE(.method-Test)
-
 
 AD_CLASS_END
