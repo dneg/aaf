@@ -235,6 +235,45 @@ AAFDotInstanceMapper::MapAAFObject( AxObject axObject, bool &popStack )
       _dotGraph->AddEdge( edge ); // source references are always in the graph scope rather than subgraph
    }
 
+   // if it is a scope reference, then create an association for the reference
+   IAAFScopeReferenceSP spIaafScopeReference;
+   if ( AxIsA( spIUnknown, spIaafScopeReference ) )
+   {
+      aafUInt32 relativeScope;
+      aafUInt32 relativeSlot;
+      
+      CHECK_HRESULT( spIaafScopeReference->GetRelativeScope( &relativeScope ) );
+      CHECK_HRESULT( spIaafScopeReference->GetRelativeSlot( &relativeSlot ) );
+
+      DotRecordNode *refSlotNode = GetScopeReference( relativeScope, relativeSlot );
+      if ( refSlotNode == 0 )
+      {
+	 cerr << "Error: Could not resolve scope reference." << endl;
+	 throw exception();
+      }
+
+      DotEdge *edge = _dotFactory->CreateEdge( "scope reference", _dotFactory->CreateEdgeUID() );
+      edge->SetElementAttribute( "color", "magenta" );
+      // this causes the dot program to fail      edge->SetElementAttribute( "constraint", "false" );
+
+      DotEdgeEnd *sourceEdgeEnd = new DotEdgeEnd();
+      sourceEdgeEnd->SetReference( node );
+      edge->SetSource( sourceEdgeEnd );
+      DotEdgeEnd *targetEdgeEnd = new DotEdgeEnd();
+      targetEdgeEnd->SetReference( refSlotNode );
+      edge->SetTarget( targetEdgeEnd );
+
+      if ( subGraph == 0 )
+      {
+	 _dotGraph->AddEdge( edge );
+      }
+      else
+      {
+	 subGraph->AddEdge( edge );
+      }
+   }
+
+
    CompleteStrongReferences( node );
 
    ObjectStalker *stalker = new ObjectStalker( node, className );
@@ -1086,6 +1125,78 @@ AAFDotInstanceMapper::FilterAAFObject( AxObject axObject, bool &popStack )
    }
 
    return false;
+}
+
+
+//-----------------------------------------------------------------------------
+DotRecordNode*
+AAFDotInstanceMapper::GetScopeReference( aafUInt32 relativeScope, aafUInt32 relativeSlot )
+{
+   DotRecordNode *scopeReferenceNode = 0;
+
+   if ( relativeScope > 0 )
+   {
+      // no implemented yet.
+      cout << "Warning: Relative scope > 0 not implemented." << endl;
+      throw exception();
+   }
+
+   StalkerStack poppedStalkers;
+
+   // go up the strong reference chain and find the MOB
+   DotRecordNode *mobNode;
+   aafUInt32 numPops = 0;
+   bool foundMob = false;
+   for ( ; !foundMob; numPops++ )
+   {
+      PropertyValueStalker *pStalker = dynamic_cast< PropertyValueStalker* > ( PopStalker() );
+      if ( pStalker == 0 )
+      {
+	 cerr << "Error: Property value stalker expected." << endl;
+	 throw;
+      }
+      ObjectStalker *oStalker = dynamic_cast< ObjectStalker* > ( PopStalker() );
+      if ( oStalker == 0 )
+      {
+	 cerr << "Error: Object stalker expected." << endl;
+	 throw;
+      }
+		
+      if ( ( oStalker->GetNode()->GetID( "mobid" ) ).length() > 0 )
+      {
+	 foundMob = true;
+	 mobNode = oStalker->GetNode();
+      }
+
+      poppedStalkers.push_back( pStalker );
+      poppedStalkers.push_back( oStalker );
+   }
+
+   // count the number of slots in the MOB thus far
+   vector< DotEdge* > edges = _dotFactory->GetEdgesWithSourceNode( mobNode );
+
+   aafUInt32 slotCount = edges.size();
+   if ( slotCount < relativeSlot + 1 )
+   {
+      cerr << "Error: Relative slot exceeds current size of slots in mob." << endl;
+      throw exception();
+   }
+
+   // get the relative slot node
+   DotEdge *scopeEdge = edges[ slotCount - relativeSlot - 1 ];
+   DotEdgeEnd *scopeEdgeEnd = scopeEdge->GetTarget();
+   scopeReferenceNode = scopeEdgeEnd->GetReference();
+
+
+   // push back the popped stalkers
+   aafInt32 i;
+   for ( i=numPops-1; i>=0; i-- )
+   {
+      PushStalker( poppedStalkers[ 2 * i + 1 ] );
+      PushStalker( poppedStalkers[ 2 * i ] );
+   }
+
+   return scopeReferenceNode;
 }
 
 
