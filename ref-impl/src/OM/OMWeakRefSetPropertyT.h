@@ -113,8 +113,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::save(void) const
 
   // save the set index
   //
-  const char* propertyName = name();
-  store()->save(propertyName,
+  store()->save(name(),
                 index,
                 count,
                 tag,
@@ -123,10 +122,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::save(void) const
 
   // make an entry in the property index
   //
-  store()->write(_propertyId,
-                 _storedForm,
-                 (void *)propertyName,
-                 strlen(propertyName) + 1);
+  saveName();
 
 }
 
@@ -180,11 +176,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
 
   // get the name of the set index stream
   //
-  char* propertyName = new char[externalSize];
-  ASSERT("Valid heap pointer", propertyName != 0);
-
-  store()->read(_propertyId, _storedForm, propertyName, externalSize);
-  ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
+  restoreName(externalSize);
 
   // restore the index
   //
@@ -192,7 +184,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
   size_t entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
-  store()->restore(propertyName,
+  store()->restore(name(),
                    setIndex,
                    entries,
                    tag,
@@ -202,7 +194,6 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
   ASSERT("Valid set index", IMPLIES(entries == 0, setIndex == 0));
   ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
   _targetTag = tag;
-  delete [] propertyName;
 
   // Iterate over the index restoring the elements of the set.
   // Since the index entries are stored on disk in order of their

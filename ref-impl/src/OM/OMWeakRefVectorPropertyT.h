@@ -115,8 +115,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(void) const
 
   // save the vector index
   //
-  const char* propertyName = name();
-  store()->save(propertyName,
+  store()->save(name(),
                 index,
                 count,
                 tag,
@@ -125,10 +124,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(void) const
 
   // make an entry in the property index
   //
-  store()->write(_propertyId,
-                 _storedForm,
-                 (void *)propertyName,
-                 strlen(propertyName) + 1);
+  saveName();
 
 }
 
@@ -179,11 +175,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
 
   // get the name of the vector index stream
   //
-  char* propertyName = new char[externalSize];
-  ASSERT("Valid heap pointer", propertyName != 0);
-
-  store()->read(_propertyId, _storedForm, propertyName, externalSize);
-  ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
+  restoreName(externalSize);
 
   // restore the index
   //
@@ -191,7 +183,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   size_t entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
-  store()->restore(propertyName,
+  store()->restore(name(),
                    vectorIndex,
                    entries,
                    tag,
@@ -201,7 +193,6 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
   ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
   _targetTag = tag;
-  delete [] propertyName;
 
   // Iterate over the index restoring the elements of the vector.
   //
