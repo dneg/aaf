@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Thu Mar 30 11:01:26 EST 2000
-// by user transdel on system TRANSDEL.
+// This file was generated on Mon Apr  3 13:59:31 EDT 2000
+// by user bedell on system JBEDELL2.
 //
 // Key to macros.
 //
@@ -523,6 +523,14 @@ AAF_CLASS(Component,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x0202,
     AAF_TYPE(Length),
+    false,
+    Component)
+  AAF_PROPERTY(KLVData,
+    AAF_LITERAL_AUID(0x06410300,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x0203,
+    AAF_REFERENCE_TYPE(StrongReferenceVector, KLVData),
     false,
     Component)
 AAF_CLASS_END(Component)
@@ -2594,6 +2602,14 @@ AAF_CLASS(Mob,
     AAF_REFERENCE_TYPE(StrongReferenceSet, TaggedValue),
     false,
     Mob)
+  AAF_PROPERTY(KLVData,
+    AAF_LITERAL_AUID(0x064B0700,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x4407,
+    AAF_REFERENCE_TYPE(StrongReferenceVector, KLVData),
+    false,
+    Mob)
 AAF_CLASS_END(Mob)
 AAF_CLASS_SEPARATOR()
 
@@ -2843,14 +2859,6 @@ AAF_CLASS(TaggedValue,
     AAF_TYPE(String),
     true,
     TaggedValue)
-  AAF_PROPERTY(Type,
-    AAF_LITERAL_AUID(0x064F0200,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x5002,
-    AAF_REFERENCE_TYPE(WeakReference, TypeDefinition),
-    true,
-    TaggedValue)
   AAF_PROPERTY(Value,
     AAF_LITERAL_AUID(0x064F0300,
       0x0000, 0x0000,
@@ -2860,6 +2868,25 @@ AAF_CLASS(TaggedValue,
     true,
     TaggedValue)
 AAF_CLASS_END(TaggedValue)
+AAF_CLASS_SEPARATOR()
+
+// KLVData
+//
+AAF_CLASS(KLVData,
+  AAF_LITERAL_AUID(0x06500000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  InterchangeObject,
+  true)
+  AAF_PROPERTY(Value,
+    AAF_LITERAL_AUID(0x06500100,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x5101,
+    AAF_TYPE(Indirect),
+    true,
+    KLVData)
+AAF_CLASS_END(KLVData)
 AAF_CLASS_SEPARATOR()
 
 // TypeDefinitionInteger
@@ -4110,6 +4137,16 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE(
   AAF_TYPE(TypeDefinition))
 AAF_TYPE_SEPARATOR()
 
+// StrongReference<KLVData>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+  AAF_REFERENCE_TYPE_NAME(StrongReference, KLVData), 
+  AAF_LITERAL_AUID(0x0C0B001b,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
+  AAF_TYPE(KLVData))
+AAF_TYPE_SEPARATOR()
+
 // StrongReferenceSet<ClassDefinition>
 //
 AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
@@ -4348,6 +4385,16 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
   AAF_TYPE(TaggedValue))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<KLVData>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+  AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, KLVData), 
+  AAF_LITERAL_AUID(0x0C0B0208,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
+  AAF_TYPE(KLVData))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<ClassDefinition>
