@@ -105,7 +105,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFOperationDef*				pOperationDef = NULL;
 	IAAFParameter				*pParm = NULL;
 	IAAFParameterDef*			pParamDef = NULL;
-	IAAFDefObject*				pDefObject = NULL;
 	
 	aafMobID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
@@ -158,10 +157,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
-		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
-		pDefObject->Release();
-		pDefObject = NULL;
+		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 
 		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
@@ -173,10 +169,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->AppendDegradeToOperation (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
-		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
-		checkResult(pDefObject->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
-		pDefObject->Release();
-		pDefObject = NULL;
+		checkResult(pParamDef->Initialize (parmID, TEST_PARAM_NAME, TEST_PARAM_DESC));
 
 		// ------------------------------------------------------------
 		//	To test a Transition we need to create a Sequence which will 
