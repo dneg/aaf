@@ -409,21 +409,11 @@ AAFRESULT aafMobIDNew(
 {
     aafUInt32		major, minor;
     static aafUInt32	last_part2 = 0;		// Get rid of this!!!
-    aafTimeStamp_t	timestamp;
-
 
     //
-    // Get the time since the standard root date
+    // Get the time in seconds since the standard root date
     //
-    AAFGetDateTime(&timestamp);
-    assert (sizeof (aafTimeStruct_t) == sizeof (aafUInt32));
-    union
-    {
-	aafTimeStruct_t time;
-	aafUInt32       seconds;
-    } time_to_int;
-    time_to_int.time = timestamp.time;
-    major = time_to_int.seconds;
+    major = time(0);
 
 
     //
@@ -439,7 +429,7 @@ AAFRESULT aafMobIDNew(
     last_part2 = minor;
 
 
-    return(aafMobIDFromMajorMinor( 42, major, minor, 4, mobID ));
+    return(aafMobIDFromMajorMinor( 42, major, minor, 0x0F, mobID ));
 }
 
 
@@ -455,16 +445,16 @@ AAFRESULT aafMobIDFromMajorMinor(
 
 
     aLabel.OMFMobID.SMPTELabel[0]	= 0x06;
-    aLabel.OMFMobID.SMPTELabel[1]	= 0x0C;
+    aLabel.OMFMobID.SMPTELabel[1]	= 0x0A;
     aLabel.OMFMobID.SMPTELabel[2]	= 0x2B;
     aLabel.OMFMobID.SMPTELabel[3]	= 0x34;
-    aLabel.OMFMobID.SMPTELabel[4]	= 0x02;			// Still Open
-    aLabel.OMFMobID.SMPTELabel[5]	= 0x05;			// Still Open
-    aLabel.OMFMobID.SMPTELabel[6]	= 0x11;			// Still Open
-    aLabel.OMFMobID.SMPTELabel[7]	= 0x01;			// Still Open
-    aLabel.OMFMobID.SMPTELabel[8]	= 0x01;			// Still Open
-    aLabel.OMFMobID.SMPTELabel[9]	= UMIDType;
-    aLabel.OMFMobID.SMPTELabel[10]	= 0x10;			// Still Open
+    aLabel.OMFMobID.SMPTELabel[4]	= 0x01;			
+    aLabel.OMFMobID.SMPTELabel[5]	= 0x01;		
+    aLabel.OMFMobID.SMPTELabel[6]	= 0x01;	
+    aLabel.OMFMobID.SMPTELabel[7]	= 0x01;
+    aLabel.OMFMobID.SMPTELabel[8]	= 0x01;
+    aLabel.OMFMobID.SMPTELabel[9]	= 0x01;
+    aLabel.OMFMobID.SMPTELabel[10]	= UMIDType;	
     aLabel.OMFMobID.SMPTELabel[11]	= 0x00;
     aLabel.OMFMobID.length		= 0x13;
     aLabel.OMFMobID.instanceHigh	= 0x00;
