@@ -18,6 +18,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
@@ -57,8 +58,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMobSlot		*newSlot = NULL;
 	IAAFSegment		*seg = NULL;
 	IAAFSourceClip	*sclp = NULL;
+	IAAFComponent	*pComp = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
+	aafUID_t					newUID, typeUID = DDEF_Picture;
 	HRESULT						hr = S_OK;
 	
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -108,9 +110,21 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				IID_IAAFSourceClip, 
 				(IUnknown **)&sclp));		
 			
+			checkResult(sclp->QueryInterface (IID_IAAFComponent, (void **)&pComp));
+			checkResult(pComp->SetDataDef (&typeUID));
+			pComp->Release();
+			pComp = NULL;
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			
-			checkResult(pMob->AppendNewSlot (seg, test+1, slotNames[test], &newSlot));
+			checkResult(pDictionary->CreateInstance(&AUID_AAFMobSlot,
+				IID_IAAFMobSlot, 
+				(IUnknown **)&newSlot));		
+			
+			checkResult(newSlot->SetSegment(seg));
+			checkResult(newSlot->SetSlotID(test+1));
+			checkResult(newSlot->SetPhysicalNum(test+2));
+			checkResult(newSlot->SetName(slotNames[test]));
+			checkResult(pMob->AppendSlot (newSlot));
 			
 			newSlot->Release();
 			newSlot = NULL;
@@ -141,6 +155,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (sclp)
 		sclp->Release();
 	
+	if (pComp)
+		pComp->Release();
+	
 	if (pMob)
 		pMob->Release();
 	
@@ -165,16 +182,21 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-	IAAFFile *					pFile = NULL;
-	bool bFileOpen = false;
-	IAAFHeader *				pHeader = NULL;
-	IEnumAAFMobs *mobIter = NULL;
-	IAAFMob			*aMob = NULL;
-	IEnumAAFMobSlots	*slotIter = NULL;
-	IAAFMobSlot		*slot = NULL;
+	IAAFFile				*pFile = NULL;
+	bool					bFileOpen = false;
+	IAAFHeader				*pHeader = NULL;
+	IEnumAAFMobs			*mobIter = NULL;
+	IAAFMob					*aMob = NULL;
+	IEnumAAFMobSlots		*slotIter = NULL;
+	IAAFMobSlot				*slot = NULL;
+	IAAFSegment				*pSeg = NULL;
+	IAAFSourceClip			*pSourceClip = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafNumSlots_t	numMobs, n, s;
-	HRESULT						hr = S_OK;
+	aafNumSlots_t			numMobs, n;
+	aafSlotID_t				s;
+	aafInt32				length;
+	HRESULT					hr = S_OK;
+	aafUID_t				readUID, typeUID = DDEF_Picture;
 	
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"AAFMobSlot Test";
@@ -220,13 +242,25 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			
 			checkResult(aMob->EnumAAFAllMobSlots(&slotIter));
 			
-			for(s = 0; s < numSlots; s++)
+			for(s = 0; s < (aafSlotID_t)numSlots; s++)
 			{
 				checkResult(slotIter->NextOne (&slot));
-				checkResult(slot->GetName (slotName, sizeof(slotName)));
-				checkResult(slot->GetSlotID(&trackID));
+				checkResult(slot->GetNameBufLen(&length));
+				checkResult(slot->GetName (slotName, length));
 				checkExpression (wcscmp(slotName, slotNames[s]) == 0, AAFRESULT_TEST_FAILED);
-				
+				checkResult(slot->GetSlotID(&trackID));
+				checkExpression (trackID == s+1, AAFRESULT_TEST_FAILED);
+				checkResult(slot->GetPhysicalNum(&trackID));
+				checkExpression (trackID == s+2, AAFRESULT_TEST_FAILED);
+				checkResult(slot->GetPhysicalNum(&trackID));
+				checkResult(slot->GetDataDef(&readUID));
+				checkExpression (memcmp(&typeUID, &readUID, sizeof(typeUID)) == 0, AAFRESULT_TEST_FAILED);
+				checkResult(slot->GetSegment(&pSeg));
+				checkResult(pSeg->QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
+				pSourceClip->Release();
+				pSourceClip = NULL;
+				pSeg->Release();
+				pSeg = NULL;
 				slot->Release();
 				slot = NULL;
 			}
@@ -243,6 +277,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	// Cleanup object references
 	if (slot)
 		slot->Release();
+	
+	if (pSeg)
+		pSeg->Release();
+	
+	if (pSourceClip)
+		pSourceClip->Release();
 	
 	if (slotIter)
 		slotIter->Release();
@@ -287,9 +327,14 @@ extern "C" HRESULT CAAFMobSlot_test()
 	
 	// Cleanup our object if it exists.
 	
-	// When all of the functionality of this class is tested, we can return success
-	if(hr == AAFRESULT_SUCCESS)
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+	// When all of the functionality of this class is tested, we can return success.
+	// When a method and its unit test have been implemented, remove it from the list.
+//	if (SUCCEEDED(hr))
+//	{
+//		cout << "The following AAFMobSlot tests have not been implemented:" << endl; 
+//		cout << "     GetDataDef" << endl; 
+//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//	}
 	
 	return hr;
 }

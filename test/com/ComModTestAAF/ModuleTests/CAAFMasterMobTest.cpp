@@ -462,7 +462,7 @@ extern "C" HRESULT CAAFMasterMob_test()
 	// When a method and its unit test have been implemented, remove it from the list.
 	if (SUCCEEDED(hr))
 	{
-		cout << "The following IAAFMasterMob methods have not been implemented:" << endl; 
+		cout << "The following IAAFMasterMob tests have not been implemented:" << endl; 
 		cout << "     GetRepresentationSourceClip" << endl; 
 		cout << "     GetCriteriaSourceClip" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;

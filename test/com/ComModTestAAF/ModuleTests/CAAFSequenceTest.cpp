@@ -379,7 +379,7 @@ extern "C" HRESULT CAAFSequence_test()
 	if (SUCCEEDED(hr))
 	{
 		cout << "The following AAFSequence methods have not been implemented:" << endl; 
-		cout << "     RemoveComponent" << endl; 
+//		cout << "     RemoveComponent" << endl; 
 		cout << "     SegmentOffsetToTC - needs unit test" << endl; 
 		cout << "     SegmentTCToOffset - needs unit test" << endl; 
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
