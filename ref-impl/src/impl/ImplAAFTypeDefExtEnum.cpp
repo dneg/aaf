@@ -57,8 +57,8 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefExtEnum::ImplAAFTypeDefExtEnum ()
-  :	_ElementNames  ( PID_TypeDefinitionExtendibleEnumeration_ElementNames,  "Element Names"),
-	_ElementValues ( PID_TypeDefinitionExtendibleEnumeration_ElementValues, "Element Values")
+  :	_ElementNames  ( PID_TypeDefinitionExtendibleEnumeration_ElementNames,  "ElementNames"),
+	_ElementValues ( PID_TypeDefinitionExtendibleEnumeration_ElementValues, "ElementValues")
 {
   _persistentProperties.put(_ElementNames.address());
   _persistentProperties.put(_ElementValues.address());
@@ -288,6 +288,12 @@ AAFRESULT STDMETHODCALLTYPE
 
   AAFRESULT hr;
 
+  // Call this method to find out if this is a legal value
+  aafUInt32 tmp; // unused
+  hr = GetNameBufLenFromAUID (pValueIn, &tmp);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
   ptd = BaseType ();
   assert (ptd);
 
@@ -340,7 +346,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  // character for new name's trailing null
 	  newNameCharCount = origNameCharCount + wcslen (pName) + 1;
 	  namesBuf = new aafWChar[newNameCharCount];
-	  _ElementNames.getValue (namesBuf, origNameCharCount);
+	  if (origNameCharCount)
+		_ElementNames.getValue (namesBuf, origNameCharCount*sizeof(aafWChar));
 
 	  // Append new name to end of buffer.  Don't forget that original
 	  // buffer may have embedded nulls, so start copying at desired
@@ -353,7 +360,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	  // add one for new element to be appended
 	  valsBuf = new aafUID_t[origNumElems+1];
-	  _ElementValues.getValue (valsBuf, origNumElems);
+	  if (origNumElems)
+		_ElementValues.getValue (valsBuf, origNumElems*sizeof(aafUID_t));
 	  assert (pValue);
 	  valsBuf[origNumElems] = *pValue;
 
@@ -361,8 +369,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  // Copy newly-appended name and value buffers out.  Do these
 	  // together, last so that if any errors occurred during the
 	  // calculations we won't leave the property half-appended.
-	  _ElementNames.setValue (namesBuf, newNameCharCount);
-	  _ElementValues.setValue (valsBuf, origNumElems+1);
+	  _ElementNames.setValue (namesBuf, newNameCharCount*sizeof(aafWChar));
+	  _ElementValues.setValue (valsBuf, (origNumElems+1)*sizeof (aafUID_t));
 	}
   catch (AAFRESULT &rCaught)
 	{
