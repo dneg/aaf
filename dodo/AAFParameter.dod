@@ -6,7 +6,6 @@ AAFParameter\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -33,8 +32,8 @@ AD_METHOD1(SetLength,
 		   sets the length property values on the input component object.)
 
 AD_METHOD1(GetLength,
-		   [retval][out],
-		   aafLength_t,
+		   [out\\\,retval],
+		   aafLength_t *,
 		   length,
 		   Length of this component,
 		   Gets the starting time and places it into the pStartTime
@@ -52,14 +51,12 @@ AD_XMETHOD1(SetDataDefinition,
 			sets the datakind property values on the input component object.)
 
 AD_XMETHOD1(GetDataKind,
-			[retval][out],
+			[out\,retval],
 			objOut,
 			AAFDataDefinition *,
 			datadef,
 			Data Definition of this object,
 			returns datakind definition object)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
 
