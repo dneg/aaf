@@ -203,4 +203,31 @@ AD_METHOD0(Close,
   //
   // AAFRESULT_NOT_OPEN
   //   - This object is not already open.)
+
+AD_XMETHOD1(GetDictionary,
+			[out\, retval],
+			objOut,
+			AAFDictionary,
+			ppDictionary,
+			The AAF Dictionary,
+     Places the dictionary that contains all types of aaf definition
+  // objects into the *ppDictionary argument.  The returned dictionary
+  // is AddRef\(\)ed before it is returned.  Note that the dictionary
+  // is automatically created when the header object is created.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppDictionary pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDictionary is null.)
+
 AD_XCLASS_END(Concrete, Transient)
