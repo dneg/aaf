@@ -6,8 +6,10 @@
 
 all : targets
 
-BLD_CFG_DIR = ../ref-impl/bld_cfg
-PLUGIN_DIR = ../ref-impl/plugins
+AAFBASE ?= ..
+
+BLD_CFG_DIR = $(AAFBASE)/ref-impl/bld_cfg
+PLUGIN_DIR = $(AAFBASE)/ref-impl/plugins
 
 include $(BLD_CFG_DIR)/common.mk
 
