@@ -21,8 +21,9 @@ AD_IDL(//
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_INIT)
 
-AD_FORWARD_DECLARATION(AAFDictionary)
 AD_FORWARD_DECLARATION(AAFClassDef)
+AD_FORWARD_DECLARATION(AAFDictionary)
+AD_FORWARD_DECLARATION(AAFIdentification)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_FORWARD_DECLARATION(EnumAAFProperties)
@@ -31,34 +32,70 @@ AD_CLASS_UUID(B1A213AC, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A213AB, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_XCLASS_BEGIN(Abstract, StoredObjectBase)
-AD_XMETHOD1(SetGeneration,
-			[in\, ref],
-			objPass,
-			aafUID_constref,
-			generation,
-			Generation ID to which this object is to be set,
-			Sets the generation of this object to the given value.
-  //
-  AD_STD_COMMENT_METH_STUB
-  AD_STD_COMMENT_METH_ERR_HEADER)
-
-
 AD_XMETHOD1(GetGeneration,
+			[out],
+			objOut,
+			AAFIdentification,
+			ppGeneration,
+       AAFIdentification object corresponding to this object's
+    // Generation ID, 
+
+     Gets the generation of this object\, which is represented by an
+  // AAFIdentification object.  This is used to detect when an object
+  // has been modified.
+  //
+  // This method will succeed if generation tracking is enabled for
+  // this object.  Call EnableGenerationTrackint\(\) and
+  // DisableGenerationTrackint\(\) to control generation tracking for
+  // this object.  Call IsGenerationTracked\(\) to determine if
+  // generation tracking is currently enabled for this object.
+  //
+  // Succeeds if all of the following are true:
+  // - the given pGeneration pointer is valid.
+  // - generation tracking is enabled for this object.
+  // - this object is attached to a file.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppGeneration\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - Generation tracking is not enabled for this object.
+  //
+  // AAFRESULT_OBJECT_NOT_ATTACHED
+  //   - This object is not attached to a file from which generation
+  //     information can be obtained..)
+
+
+AD_XMETHOD1(GetGenerationAUID,
 			[out],
 			objPass,
 			aafUID_t *,
-			pGeneration,
-			Generation ID into which this object's generation is to be written,
-		    Gets the generation of this object\, which is a unique identifier
-  // that is used to detect when an object has been modified.  The
-  // generation is placed into the caller-allocated aafUID_t pointed
-  // to by pGeneration.
+			pResult,
+       AUID corresponding to this object's Generation ID, 
+
+     Shortcut to get the AUID representing the Identification
+  // representing this object's generation.  \(Can also be obtained by
+  // calling this->GetGeneration\(&pIdent\)\, and using its result to
+  // call pIdent->GetAuid\(\)\).
   //
-  AD_STD_COMMENT_METH_STUB
+  // This method will succeed if generation tracking is enabled for
+  // this object.  Call EnableGenerationTrackint\(\) and
+  // DisableGenerationTrackint\(\) to control generation tracking for
+  // this object.  Call IsGenerationTracked\(\) to determine if
+  // generation tracking is currently enabled for this object.
+  //
   // Succeeds if all of the following are true:
-  // - the given pGeneration pointer is valid.
+  // - the given pResult pointer is valid.
+  // - generation tracking is enabled for this object.
+  // - this object is attached to a file.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pGeneration\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - Generation tracking is not enabled for this object.
+  //
+  // AAFRESULT_OBJECT_NOT_ATTACHED
+  //   - This object is not attached to a file from which generation
+  //     information can be obtained..)
 
 
 AD_XMETHOD1(GetDefinition,
@@ -233,4 +270,62 @@ AD_XMETHOD1(GetDictionary,
   // non-builtin \(that is\, user defined\) object class ID is obtained.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppClassDef\))
+
+
+AD_METHOD0(EnableGenerationTracking,
+     Calling this method will cause generation tracking to be enabled
+  // for this object.  Generation information will then be available
+  // through the GetGeneration\(\) and GetGenerationAUID\(\) methods.
+  // 
+  // Calling the DisableGenerationTracking\(\) method will disable
+  // generation tracking for this object.
+  // 
+  // Generation tracking is disabled by default.
+  //
+  // This method always succeeds\, even if generation tracking is
+  // already enabled.
+  // 
+  // This method will return the following result:
+  //  - AAFRESULT_SUCCESS)
+
+
+AD_METHOD0(DisableGenerationTracking,
+     Calling this method will cause generation tracking to be disabled
+  // for this object.  Generation information will then not be
+  // available through the GetGeneration\(\) and GetGenerationAUID\(\)
+  // methods.
+  // 
+  // Calling the EnableGenerationTracking\(\) method will enable
+  // generation tracking for this object.
+  // 
+  // Generation tracking is disabled by default.
+  //
+  // This method always succeeds\, even if generation tracking is
+  // already disbled.
+  // 
+  // This method will return the following result:
+  //  - AAFRESULT_SUCCESS)
+
+
+AD_XMETHOD1(IsGenerationTracked,
+			[out],
+			objPass,
+			aafBoolean_t *,
+			pResult,
+			set to true if generations are tracked; false otherwise,
+
+     This method will set *pResult to AAFTrue if generations are
+  // being tracked for this object.  A result of AAFTrue indicates
+  // that generation information will be available through the
+  // GetGeneration\(\) and GetGenerationAUID\(\) methods.
+  // 
+  // Calling the EnableGenerationTracking\(\) method will enable
+  // generation tracking for this object; calling the
+  // DisableGenerationTracking\(\) method will disable generation
+  // tracking for this object.
+  // 
+  // Generation tracking is disabled by default.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\))
 AD_XCLASS_END(Abstract, StoredObjectBase)
