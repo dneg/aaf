@@ -257,7 +257,7 @@ OMPropertyId ImplAAFPropertyDef::localIdentification(void) const
 
 bool ImplAAFPropertyDef::isOptional(void) const
 {
-  return (AAFTrue == _IsOptional) ? true : false;
+  return (kAAFTrue == _IsOptional) ? true : false;
 }
 
 

@@ -170,9 +170,9 @@
 #undef max
 #endif
 
-static aafBool  InitCalled = AAFFalse;
+static aafBool  InitCalled = kAAFFalse;
 
-const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 1, kVersionBeta};
+const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 1, kAAFVersionBeta};
 
 AAFByteOrder GetNativeByteOrder(void)
 {
@@ -192,12 +192,12 @@ AAFByteOrder GetNativeByteOrder(void)
 
 aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
 {
-	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
+	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
 
 aafBool	EqualMobID(aafMobID_constref mobID1, aafMobID_constref mobID2)
 {
-	return(memcmp(&mobID1, &mobID1, sizeof(aafMobID_t)) == 0 ? AAFTrue : AAFFalse);
+	return(memcmp(&mobID1, &mobID1, sizeof(aafMobID_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
 
 static aafInt32 powi(
@@ -234,7 +234,7 @@ aafBool isObjFunc(ImplAAFFile * file,       /* IN - File Handle */
 				  void *data)          /* IN/OUT - Match Data */
 {
   /* Match all objects in the subtree */
-  return(AAFTrue);
+  return(kAAFTrue);
 }
 
 
@@ -669,12 +669,12 @@ aafErr_t PvtOffsetToTimecode(
 		offset = offset % info.dropFpMin10;
 		if (offset < info.fpMinute)
 		  {
-			 frame_dropped = AAFFalse;
+			 frame_dropped = kAAFFalse;
 			 min1 = 0;
 		  }
 		else
 		  {
-			 frame_dropped = AAFTrue;
+			 frame_dropped = kAAFTrue;
 			 offset -= info.fpMinute;
 			 min1 = (offset / info.dropFpMin) + 1;
 			 offset = offset % info.dropFpMin;

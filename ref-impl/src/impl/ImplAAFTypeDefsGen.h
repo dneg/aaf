@@ -52,7 +52,7 @@ struct TypeInteger              \
 static TypeInteger s_AAFAllTypeIntegers [] = {
 
 #define AAF_TYPE_DEFINITION_INTEGER(name, id, size, signed) \
-  {L##"aaf" L#name, id, size, AAF##signed, 1},
+  {L##"aaf" L#name, id, size, kAAF##signed, 1},
 
 #define AAF_TYPE_TABLE_END()  \
 0 };

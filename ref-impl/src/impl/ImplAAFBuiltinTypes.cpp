@@ -619,7 +619,7 @@ static AAFRESULT CreateNewCharacterType (const aafUID_t & idToCreate,
 
 		  AAFRESULT hr = ptd->Initialize (curCharacter->typeID,
 										  curCharacter->size,
-										  AAFFalse,
+										  kAAFFalse,
 										  curCharacter->typeName);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 
