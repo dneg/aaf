@@ -257,6 +257,8 @@ HRESULT CAAFModuleTest::Test
         {
           cout << AAFObjectMap[index].pClassName << endl;
           testResults[index] = AAFObjectMap[index].CallTestProc(mode);
+          if (testResults[index] != AAFRESULT_SUCCESS)
+			cout << "     ^^^ NOT SUCCESS ^^^" << endl;
           ++testCount;
         }
         else
@@ -275,6 +277,8 @@ HRESULT CAAFModuleTest::Test
           
         cout << "  " << AAFObjectMap[index].pClassName << endl;
         testResults[index] = AAFObjectMap[index].CallTestProc(mode);
+		if (testResults[index] != AAFRESULT_SUCCESS)
+			cout << "     ^^^ NOT SUCCESS ^^^" << endl;
         ++testCount;
       }
     }
