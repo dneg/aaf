@@ -129,6 +129,19 @@ const bool true = 1;
 // an association PID -> type in the dictionary.
 //
 
+// version 0.25 and above
+const int SF_DATA                                   = 0x82;
+const int SF_DATA_STREAM                            = 0x42;
+const int SF_STRONG_OBJECT_REFERENCE                = 0x22;
+const int SF_STRONG_OBJECT_REFERENCE_VECTOR         = 0x32;
+const int SF_STRONG_OBJECT_REFERENCE_SET            = 0x3A;
+const int SF_WEAK_OBJECT_REFERENCE                  = 0x02;
+const int SF_WEAK_OBJECT_REFERENCE_VECTOR           = 0x12;
+const int SF_WEAK_OBJECT_REFERENCE_SET              = 0x1A;
+const int SF_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID = 0x03;
+const int SF_UNIQUE_OBJECT_ID                       = 0x86;
+const int SF_OPAQUE_STREAM                          = 0x40;
+
 // version 0.08 and above
 const int TID_DATA                                   =  0;
 const int TID_DATA_STREAM                            =  1;
@@ -410,6 +423,7 @@ static size_t maxSignatureSize = signatureSize();
 //
 //           Remove the offset filed field from stored property set index
 //           entries.
+//  0.25   : Change stored froms to use bit values.
 //
 
 // The following may change at run time depending on the file format
@@ -422,7 +436,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 24;
+const OMUInt32 HIGHVERSION = 25;
 
 // Output format requested
 //
@@ -1610,47 +1624,47 @@ char* typeName(OMUInt32 type)
   
   switch (type) {
     
-  case TID_DATA:
+  case SF_DATA:
     result = "data";
     break;
     
-  case TID_DATA_STREAM:
+  case SF_DATA_STREAM:
     result = "data stream";
     break;
 
-  case TID_STRONG_OBJECT_REFERENCE:
+  case SF_STRONG_OBJECT_REFERENCE:
     result = "strong object reference";
     break;
     
-  case TID_STRONG_OBJECT_REFERENCE_VECTOR:
+  case SF_STRONG_OBJECT_REFERENCE_VECTOR:
     result = "strong object reference vector";
     break;
 
-  case TID_STRONG_OBJECT_REFERENCE_SET:
+  case SF_STRONG_OBJECT_REFERENCE_SET:
     result = "strong object reference set";
     break;
     
-  case TID_WEAK_OBJECT_REFERENCE:
+  case SF_WEAK_OBJECT_REFERENCE:
     result = "weak object reference";
     break;
 
-  case TID_WEAK_OBJECT_REFERENCE_VECTOR:
+  case SF_WEAK_OBJECT_REFERENCE_VECTOR:
     result = "weak object reference vector";
     break;
 
-  case TID_WEAK_OBJECT_REFERENCE_SET:
+  case SF_WEAK_OBJECT_REFERENCE_SET:
     result = "weak object reference set";
     break;
 
-  case TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID:
+  case SF_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID:
     result = "stored object identification";
     break;
 
-  case TID_UNIQUE_OBJECT_ID:
+  case SF_UNIQUE_OBJECT_ID:
     result = "unique object identification";
     break;
 
-  case TID_OPAQUE_STREAM:
+  case SF_OPAQUE_STREAM:
     result = "opaque stream";
     break;
 
@@ -1876,12 +1890,12 @@ void printWeakCollectionIndex(int containerType,
 {
   //TRACE("printWeakCollectionIndex");
   ASSERT("Valid container type",
-                          (containerType == TID_WEAK_OBJECT_REFERENCE_SET) ||
-                          (containerType == TID_WEAK_OBJECT_REFERENCE_VECTOR));
+                          (containerType == SF_WEAK_OBJECT_REFERENCE_SET) ||
+                          (containerType == SF_WEAK_OBJECT_REFERENCE_VECTOR));
 
-  if (containerType == TID_WEAK_OBJECT_REFERENCE_SET) {
+  if (containerType == SF_WEAK_OBJECT_REFERENCE_SET) {
     cout << "Dump of set index" << endl;
-  } else if (containerType == TID_WEAK_OBJECT_REFERENCE_VECTOR) {
+  } else if (containerType == SF_WEAK_OBJECT_REFERENCE_VECTOR) {
     cout << "Dump of vector index" << endl;
   }
 
@@ -1988,27 +2002,63 @@ OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version)
 {
   OMUInt32 result;
 
-  if (version > 7) {
+  if (version > 24) {
     result = entry->_type;
+  } else if (version > 7) {
+    switch(entry->_type) {
+	  case TID_DATA:
+        result = SF_DATA;
+        break;
+      case TID_DATA_STREAM:
+        result = SF_DATA_STREAM;
+        break;
+      case TID_STRONG_OBJECT_REFERENCE:
+        result = SF_STRONG_OBJECT_REFERENCE;
+        break;
+      case TID_STRONG_OBJECT_REFERENCE_VECTOR:
+        result = SF_STRONG_OBJECT_REFERENCE_VECTOR;
+        break;
+      case TID_STRONG_OBJECT_REFERENCE_SET:
+        result = SF_STRONG_OBJECT_REFERENCE_SET;
+        break;
+      case TID_WEAK_OBJECT_REFERENCE:
+        result = SF_WEAK_OBJECT_REFERENCE;
+        break;
+      case TID_WEAK_OBJECT_REFERENCE_VECTOR:
+        result = SF_WEAK_OBJECT_REFERENCE_VECTOR;
+        break;
+      case TID_WEAK_OBJECT_REFERENCE_SET:
+        result = SF_WEAK_OBJECT_REFERENCE_SET;
+        break;
+      case TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID:
+        result = SF_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID;
+        break;
+      case TID_UNIQUE_OBJECT_ID:
+        result = SF_UNIQUE_OBJECT_ID;
+        break;
+      case TID_OPAQUE_STREAM:
+        result = SF_OPAQUE_STREAM;
+        break;
+    }
   } else {
     switch (entry->_type) {
       case OLD_TID_DATA:
-        result = TID_DATA; 
+        result = SF_DATA; 
         break;
       case OLD_TID_STRONG_OBJECT_REFERENCE:
-        result = TID_STRONG_OBJECT_REFERENCE;
+        result = SF_STRONG_OBJECT_REFERENCE;
         break;
       case OLD_TID_STRONG_OBJECT_REFERENCE_VECTOR:
-        result = TID_STRONG_OBJECT_REFERENCE_VECTOR;
+        result = SF_STRONG_OBJECT_REFERENCE_VECTOR;
         break;
       case OLD_TID_WEAK_OBJECT_REFERENCE:
-        result = TID_WEAK_OBJECT_REFERENCE;
+        result = SF_WEAK_OBJECT_REFERENCE;
         break;
       case OLD_TID_WEAK_OBJECT_REFERENCE_VECTOR:
-        result = TID_WEAK_OBJECT_REFERENCE_VECTOR;
+        result = SF_WEAK_OBJECT_REFERENCE_VECTOR;
         break;
       case OLD_TID_DATA_STREAM:
-        result = TID_DATA_STREAM;
+        result = SF_DATA_STREAM;
         break;
       default:
         break;
@@ -2031,11 +2081,11 @@ void dumpContainedObjects(IStorage* storage,
     int containerType = typeOf(&index[i], version);
     switch (containerType) {
       
-    case TID_DATA:
+    case SF_DATA:
       // value is dumped when the property value stream is dumped
       break;
 
-    case TID_DATA_STREAM: {
+    case SF_DATA_STREAM: {
       char* subStreamName = new char[index[i]._length];
       read(propertiesStream,
            index[i]._offset,
@@ -2062,7 +2112,7 @@ void dumpContainedObjects(IStorage* storage,
     }
     break;
 
-    case TID_STRONG_OBJECT_REFERENCE: {
+    case SF_STRONG_OBJECT_REFERENCE: {
       // get name of sub-storage
       //
       char* subStorageName = new char[index[i]._length];
@@ -2096,7 +2146,7 @@ void dumpContainedObjects(IStorage* storage,
     }
     break;
 
-    case TID_STRONG_OBJECT_REFERENCE_VECTOR: {
+    case SF_STRONG_OBJECT_REFERENCE_VECTOR: {
       // get name of vector index
       //
       char* suffix = " index";
@@ -2211,7 +2261,7 @@ void dumpContainedObjects(IStorage* storage,
       vectorIndex = 0;
     }
     break;
-    case TID_STRONG_OBJECT_REFERENCE_SET : {
+    case SF_STRONG_OBJECT_REFERENCE_SET : {
       // get name of set index
       //
       char* suffix = " index";
@@ -2378,12 +2428,12 @@ void dumpContainedObjects(IStorage* storage,
       setIndex = 0;
     }
     break;
-    case TID_WEAK_OBJECT_REFERENCE:
+    case SF_WEAK_OBJECT_REFERENCE:
       // value is dumped when the property value stream is dumped
       break;
 
-    case TID_WEAK_OBJECT_REFERENCE_VECTOR:
-    case TID_WEAK_OBJECT_REFERENCE_SET: {
+    case SF_WEAK_OBJECT_REFERENCE_VECTOR:
+    case SF_WEAK_OBJECT_REFERENCE_SET: {
       // get name of index
       //
       char* suffix = " index";
@@ -2472,9 +2522,9 @@ void dumpContainedObjects(IStorage* storage,
       }
       break;
 
-    case TID_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID:
-    case TID_UNIQUE_OBJECT_ID:
-    case TID_OPAQUE_STREAM:
+    case SF_WEAK_OBJECT_REFERENCE_STORED_OBJECT_ID:
+    case SF_UNIQUE_OBJECT_ID:
+    case SF_OPAQUE_STREAM:
       // TBS
       break;
 
