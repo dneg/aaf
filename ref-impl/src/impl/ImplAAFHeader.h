@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -33,24 +33,13 @@
 
 
 class ImplAAFMob;
-
 class ImplAAFEssenceData;
-
 class ImplEnumAAFMobs;
-
 class ImplEnumAAFEssenceData;
-
 class ImplAAFDictionary;
-
 class ImplAAFIdentification;
-
 class ImplEnumAAFIdentifications;
-
 class ImplAAFFile;
-
-
-
-
 
 
 #ifndef __ImplAAFObject_h__
@@ -290,39 +279,55 @@ public:
         (aafTimeStamp_t *  pLastModified);  //@parm [out,retval] The modification date-time stamp
 
 public:
-	// Interfaces visible inside the toolkit, but not exposed through the API
+  // Interfaces visible inside the toolkit, but not exposed through the API
 
-AAFRESULT SetToolkitRevisionCurrent(void);
+  AAFRESULT SetToolkitRevisionCurrent(void);
   // AAFRESULT CountIdentifications (aafInt32 * /*pCount*/);
 
-AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
-AAFRESULT LoadMobTables(void);
-AAFRESULT SetModified(void);		// To NOW
+  AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
+  AAFRESULT LoadMobTables(void);
+  AAFRESULT SetModified(void);		// To NOW
 
   void SetByteOrder(const aafInt16 byteOrder);
   void SetDictionary(ImplAAFDictionary *pDictionary);
   void SetFileRevision(aafVersionType_t pRevision);
 
-private:
-	// These are private accessor methods.
-	ImplAAFContentStorage *GetContentStorage(void);
-	ImplAAFDictionary *GetDictionary(void) const;
+  // Returns true if ObjectModelVersion is present.  Calling
+  // SetObjectModelVersion() will make it present.
+  bool      IsObjectModelVersionPresent () const;
+
+  // Returns the file format version of this file.  Requires that the
+  // property be present.  Call IsObjectModelVersionPresent() to find
+  // out.
+  aafUInt32 GetObjectModelVersion () const;
+
+  // Makes the ObjectModelVersion present, if it wasn't already; in any
+  // case, sets it to the given value.
+  void      SetObjectModelVersion (aafUInt32 version);
 
 private:
+  // These are private accessor methods.
+  ImplAAFContentStorage *GetContentStorage(void);
+  ImplAAFDictionary *GetDictionary(void) const;
 
-		ImplAAFFile		*_file;
+private:
 
-		// Non-table instance variables
-		aafProductVersion_t	_toolkitRev;
+  ImplAAFFile		*_file;
 
-		// Persistent properties
-    //
-		OMFixedSizeProperty<aafInt16>						_byteOrder;
-		OMFixedSizeProperty<aafTimeStamp_t>					_lastModified;
-		OMStrongReferenceVectorProperty<ImplAAFIdentification> _identificationList;
-		OMStrongReferenceProperty<ImplAAFContentStorage>	_contentStorage;
-		OMStrongReferenceProperty<ImplAAFDictionary>		_dictionary;
-		OMFixedSizeProperty<aafVersionType_t>               _fileRev;
+  // Non-table instance variables
+  aafProductVersion_t	_toolkitRev;
+
+  // Persistent properties
+  //
+  OMFixedSizeProperty<aafInt16>                    _byteOrder;
+  OMFixedSizeProperty<aafTimeStamp_t>              _lastModified;
+  OMStrongReferenceVectorProperty<ImplAAFIdentification>
+    _identificationList;
+  OMStrongReferenceProperty<ImplAAFContentStorage> _contentStorage;
+  OMStrongReferenceProperty<ImplAAFDictionary>     _dictionary;
+  OMFixedSizeProperty<aafVersionType_t>            _fileRev;
+  OMFixedSizeProperty<aafUInt32>                   _objectModelVersion;
+
 };
 
 //
