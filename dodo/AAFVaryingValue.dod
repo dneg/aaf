@@ -19,23 +19,23 @@ AD_HEAD
 AD_CLASS_BEGIN
 
 AD_METHOD5(AddPoint,
-		   [in],AAFRational_t, time, time for Control Point,
-		   [in],AAFEditHint_t, editHint, Edit hint,
-		   [in],AAFDatakind *, datakind, pointer to datakind object,
-		   [in],AAFInt32, valueSize, Size of value data,
+		   [in],aafRational_t, time, time for Control Point,
+		   [in],aafEditHint_t, editHint, Edit hint,
+		   [in],AAFDataDefinition *, datadef, pointer to data definition object,
+		   [in],aafInt32, valueSize, Size of value data,
 		   [in],void *, pValue, Ponter to the value data,
 		   This function adds a control point in time order into a varying
 		   // value object.)
 
 AD_METHOD3(GetInfo,
-		   [retval][out],AAFDatakind *, pDatakind, Datakind definition object,
-		   [out], AAFLength *, pLength, Length of varying value object,
-		   [out], AAFInterpKind_t *, pInterpolation, Interpolation method,
+		   [retval][out],AAFDataDefinition *, pDatadef, Data Definition  object,
+		   [out], aafLength_t *, pLength, Length of varying value object,
+		   [out], aafInterpKind_t *, pInterpolation, Interpolation method,
 		   This function returns the required property values for the varying
 		   // value object.)
 
 AD_METHOD1(GetNumPoints,
-		   [retval][out],AAFInt32 *, pNumPoints, Number of control points,
+		   [retval][out],aafInt32 *, pNumPoints, Number of control points,
 		   This function gets the number of control points in the varying
 		   // value object.)
 
