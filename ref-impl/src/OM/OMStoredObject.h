@@ -339,7 +339,7 @@ private:
 
   void save(OMStoredPropertySetIndex *index);
   OMStoredPropertySetIndex* restore(void);
-  
+
     // @cmember The stream name for the index of a collection
     //          named <p collectionName>.
   wchar_t* collectionIndexStreamName(const wchar_t* collectionName);
