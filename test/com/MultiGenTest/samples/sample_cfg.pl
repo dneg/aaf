@@ -29,8 +29,7 @@ $SharedTestDirPath = "testfiles";
   # and Linux303 to independentally verify Linux builds that use
   # different versions of gcc.
 
-#  Platforms => [ Win2K, Linux, Irix ],
-  Platforms => [ Linux ],
+  Platforms => [ Win2K, Linux, Irix ],
 
   # A list of COM library versions.  Again these are just symbolic
   # names.  Every platform in the Platforms array must have a version
