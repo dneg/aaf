@@ -111,29 +111,6 @@ ifndef UUIDLIB
     UUIDLIB = -luuid
 endif
 
-# Optional DV functionality requires libdv and can be turned on using e.g.
-# make LIBDV_PATH=/usr/lib
-#
-# libdv is used to provide DV functionality in the CDCICodec.
-ifdef LIBDV_PATH
-	ifneq "$(LIBDV_PATH)" "/usr/lib"
-        ADD_CFLAGS += -I$(LIBDV_PATH)/include
-    	OPT_CODEC_LIBS += -L$(LIBDV_PATH)
-	endif
-    ADD_CFLAGS += -DUSE_LIBDV
-    OPT_CODEC_LIBS += -ldv
-endif
-
-# Optional libgsf support is enabled by the LIBGSF_PATH variable which must
-# contain the path to the installed libgsf includes and library e.g.
-# make LIBGSF_PATH=/usr/local
-#
-# libgsf itself requires glib (for gobject and glib calls) and zlib
-ifdef LIBGSF_PATH
-	PLATFORMLIBS += -L$(LIBGSF_PATH)/lib -lgsf-1 -lgobject-2.0 -lglib-2.0 -lz
-	ADD_CFLAGS += -I$(LIBGSF_PATH)/include -I$(LIBGSF_PATH)/include/glib-2.0 -I$(LIBGSF_PATH)/lib/glib-2.0/include -DUSE_LIBGSF
-endif
-
 
 #------------------------------------------------------------------------------
 # Select UNICODE or ansi API's:
