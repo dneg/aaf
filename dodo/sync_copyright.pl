@@ -143,6 +143,9 @@ sub read_copyright_message
     $copyright_message = "This file was GENERATED for the AAF SDK\n\n";
   }
 
+  # Added the Id and Name CVS keywords
+  $copyright_message .= "\$Id\$ \$Name\$\n\n";
+
   while (<COPYRIGHT_HANDLE>) {
 	s/[\n\r]//g; # rather than chomp in order to handle files downloaded on other platforms
     $line_length = length($_) - 1;
