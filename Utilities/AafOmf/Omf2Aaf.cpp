@@ -76,6 +76,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 #include "AAFException.h"
 #include "OMFException.h"
 #include "AutoRelease.h"
+#include "AAFClassDefUIDs.h" 
 
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
@@ -974,7 +975,9 @@ void Omf2Aaf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
 {
 	OMF2::omfDefaultFade_t	OMFDefaultFade;
 	aafDefaultFade_t		AAFDefaultFade;
-	
+	IAAFObject				*pElement = NULL;
+	AAFCheck				hr;
+
 	// get Composition mob information
 	OMF2::omfErr_t	OMFError = OMF2::omfiMobGetDefaultFade(OMFFileHdl, obj, &OMFDefaultFade);
 	if (OMF2::OM_ERR_NONE == OMFError && OMFDefaultFade.valid)
@@ -1013,6 +1016,11 @@ void Omf2Aaf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
 								 AAFDefaultFade.fadeEditUnit);
 		gpGlobals->nNumAAFProperties++;
 	}
+	aafUID_t	classID = kAAFClassID_CompositionMob;
+
+	hr = pCompMob->QueryInterface(IID_IAAFObject, (void **)&pElement);
+	ConvertObjectProps(obj, classID, pElement);
+
 	gpGlobals->pLogger->Log( kLogInfo, "Converted OMF Composition MOB to AAF\n");
 
 	return;
@@ -2167,6 +2175,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 									IAAFSourceMob* pSourceMob)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
+	AAFCheck				hr;
 	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
 
 	OMF2::omfObject_t		mediaDescriptor;
@@ -2179,6 +2188,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 	IAAFWAVEDescriptor*		pWAVEDesc = NULL;
 	IAAFAIFCDescriptor*		pAifcDesc = NULL;
 	IAAFCDCIDescriptor*		pCDCIDesc = NULL;
+	IAAFObject*				pElement = NULL;
 
 	aafLength_t				length = 0;
 	aafRational_t			sampleRate;
@@ -2188,6 +2198,11 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 
 
 	IncIndentLevel();
+	aafUID_t	classID = kAAFClassID_SourceMob;
+
+	hr = pSourceMob->QueryInterface(IID_IAAFObject, (void **)&pElement);
+	ConvertObjectProps(obj, classID, pElement);
+
 	OMFError = OMF2::omfmMobGetMediaDescription(OMFFileHdl, obj, &mediaDescriptor);
 	if (OMFError == OMF2::OM_ERR_NONE)
 	{
@@ -2434,6 +2449,8 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 				pFileDesc->Release();
 				pFileDesc = NULL;
 			}
+
+
 		}
 		else
 		{
@@ -3783,4 +3800,9 @@ HRESULT Omf2Aaf::GetAAFOperationDefinition(OMF2::omfUniqueName_t effectID,
 
 	return rc;
 }
-										
+
+
+HRESULT Omf2Aaf::ConvertObjectProps(OMF2::omfObject_t pOMFObject, aafUID_t &classID, IAAFObject* pObj)
+{
+	return AAFRESULT_SUCCESS;
+}		

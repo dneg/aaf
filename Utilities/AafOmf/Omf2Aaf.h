@@ -54,6 +54,8 @@ public:
 	void AAFFileClose(void );
 	void OMFFileRead( void );
 	void ConvertOMFHeader( void );
+	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj, IAAFSourceMob* pSourceMob );
+	void TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob );
 	void ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj);
 	void ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
 	void ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t inMediaID);
@@ -62,8 +64,6 @@ public:
 	void ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob );
 	void ConvertOMFCompositionObject( OMF2::omfObject_t obj,IAAFCompositionMob* pCompMob );
 	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj, IAAFMasterMob* pMasterMob );
-	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj, IAAFSourceMob* pSourceMob );
-	void TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob );
 	void ProcessOMFComponent( OMF2::omfObject_t obj, IAAFComponent** ppComponent );
 	void TraverseOMFSequence( OMF2::omfObject_t obj, IAAFSequence* pSequence );
 	void	ConvertOMFSequence( OMF2::omfObject_t sequence, IAAFSequence* pSequence);
@@ -83,6 +83,7 @@ public:
 	HRESULT	ConvertOMFVaryingValue(OMF2::omfSegObj_t segment, IAAFVaryingValue* pVaryingValue);
 	void	ConvertOMFNestedScope(OMF2::omfSegObj_t segment, IAAFNestedScope* pNestedScope);
 	HRESULT	ConvertOMFScopeRef(OMF2::omfSegObj_t segment, IAAFScopeReference* pScopeRef);
+	virtual HRESULT ConvertObjectProps(OMF2::omfObject_t pOMFObject, aafUID_t &classID, IAAFObject* pObj);
 
 protected:
 

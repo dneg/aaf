@@ -120,6 +120,8 @@ typedef struct _AafOmfGlobals
 	// MC Private Properties
 	OMF2::omfProperty_t		pvtEffectIDProp;
 	OMF2::omfProperty_t		pvtAppCode;
+	OMF2::omfProperty_t		pvtAttributes;
+	OMF2::omfProperty_t		pvtDataAttribute;
 
 	// Codec Properties
 	OMF2::omfProperty_t		omCDCIComponentWidth;
