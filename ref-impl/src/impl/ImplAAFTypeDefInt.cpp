@@ -60,7 +60,7 @@ static void pvtSignExtend (const aafMemPtr_t inVal,
 						   aafMemPtr_t outVal,
 						   aafUInt32   outValSize)
 {
-  aafInt32 localValue;	// only 4 bytes; see below for why it's OK.
+  aafInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
 
   assert (inVal);
   assert (outVal);
@@ -133,7 +133,7 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 						   aafMemPtr_t outVal,
 						   aafUInt32   outValSize)
 {
-  aafUInt32 localValue;	// only 4 bytes; see below for why it's OK.
+  aafUInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
 
   assert (inVal);
   assert (outVal);
@@ -268,7 +268,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_NULL_PARAM;
 	}
 
-  if (valSize > _size)
+  if (valSize > static_cast<aafUInt32>(_size))
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -284,7 +284,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
-  assert (_size <= sizeof (valBuf));
+  assert (static_cast<size_t>(_size) <= sizeof (valBuf));
   if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);
@@ -341,7 +341,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  if (valSize < _size)
+  if (valSize < static_cast<aafUInt32>(_size))
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -386,7 +386,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return hr;
 	}
-  if (_size < bitsSize)
+  if (static_cast<aafUInt32>(_size) < bitsSize)
 	{
 	  return AAFRESULT_BAD_TYPE;
 	}
@@ -431,7 +431,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  if (valSize > _size)
+  if (valSize > static_cast<aafUInt32>(_size))
 	{
 	  return AAFRESULT_BAD_SIZE;
 	}
@@ -470,7 +470,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // sign-extend or zero-fill the value.
   aafUInt8 valBuf[8];
-  assert (_size <= sizeof (valBuf));
+  assert (static_cast<size_t>(_size) <= sizeof (valBuf));
   if (_isSigned != 0)
 	{
 	  pvtSignExtend (pVal, valSize, valBuf, _size);

@@ -68,7 +68,7 @@ class ImplAAFPluginFile
 protected:
   ImplAAFPluginFile(const char *name);
 
-  ~ImplAAFPluginFile();
+  virtual ~ImplAAFPluginFile();
 
   
 public:

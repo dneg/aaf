@@ -375,7 +375,6 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
   //
   OMPropertySet * ps = propertySet();
   assert (ps);
-  const size_t propCount = ps->count();
 
   // Loop through properties of this class
   ImplEnumAAFPropertyDefsSP pdEnumSP;

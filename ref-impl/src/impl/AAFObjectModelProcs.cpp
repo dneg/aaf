@@ -286,13 +286,6 @@ static bool CreateTypeDefinition(
 }
 
 
-static bool InitializeTypeDefinition(
-  const TypeDefinition * /* typeDefinition */, 
-  ImplAAFMetaDictionary * /* metaDictionary */)
-{
-  return false;
-}
-
 
 //
 // TypeDefinitionInteger/ImplAAFTypeDef callbacks

@@ -203,7 +203,7 @@ static void pvtZeroFill (const aafMemPtr_t inVal,
 						   aafMemPtr_t outVal,
 						   aafUInt32   outValSize)
 {
-  aafUInt32 localValue;	// only 4 bytes; see below for why it's OK.
+  aafUInt32 localValue = 0;	// only 4 bytes; see below for why it's OK.
 
   assert (inVal);
   assert (outVal);
@@ -648,8 +648,6 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	// if (AAFRESULT_FAILED(hr)) return hr;
 	localIntSize = NativeSize();
 	
-	aafInt64 retval;
-	
 	ImplAAFDictionarySP pDict;
 	hr = GetDictionary(&pDict);
 	assert (AAFRESULT_SUCCEEDED (hr));
@@ -681,8 +679,9 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	ImplAAFTypeDefInt * pLocalTd =
 		dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef*) ptd);
 	assert (pLocalTd);
-	
+
 	assert (pPropValIn);
+	aafInt64 retval = 0;
 	switch (localIntSize)
 	{
 	case 1:

@@ -98,7 +98,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUID_t			*pDesc;
 	aafUInt32			numDesc;
-	HRESULT				hr;
+	HRESULT				hr = E_FAIL;
 
 	if (pFetched == NULL && count != 1)
 		return AAFRESULT_NULL_PARAM;

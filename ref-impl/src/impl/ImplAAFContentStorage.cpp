@@ -62,10 +62,6 @@
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
 extern "C" const aafClassID_t CLSID_EnumAAFEssenceData;
-static void ReleaseMobRefs(void *valuePtr)
-{
-	ReleaseImplReference((ImplAAFRoot *)valuePtr);
-}
 
 ImplAAFContentStorage::ImplAAFContentStorage ()
 : _mobs(PID_ContentStorage_Mobs, L"Mobs", PID_Mob_MobID),

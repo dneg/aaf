@@ -691,7 +691,7 @@ aafErr_t TableNextEntry(
 			aafBool *foundPtr) 
 {
 	aafTable_t		*table;
-	tableLink_t		*entry;
+	tableLink_t		*entry = NULL;
 	
 	XPROTECT()
 	{

@@ -80,7 +80,7 @@ const int bits48_55 = 6;
 const int bits56_63 = 7;
 const int bits64_71 = 8;
 const int bits72_79 = 9;
-const int TC_ARRAY_SIZE = 10;
+const unsigned int TC_ARRAY_SIZE = 10;
 
 #include "AAFStoredObjectIDs.h"
 

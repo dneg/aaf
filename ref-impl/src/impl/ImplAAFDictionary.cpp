@@ -358,7 +358,7 @@ ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
 	  // associated  plugin is created.
 	  // QUESTION: How should we "deal with" failure? We really need
 	  // an  error/warning log file for this kind of information.
-	  AAFRESULT result = pNewObject->InitializeExtensions();
+	  pNewObject->InitializeExtensions();
 	}
 
   return pNewObject;

@@ -29,7 +29,7 @@
 #include "aafErr.h"
 #include "AAFTypes.h"
 
-#if PORT_LANG_CPLUSPLUS
+#if defined(PORT_LANG_CPLUSPLUS)
 extern "C" 
   {
 #endif
@@ -160,7 +160,7 @@ aafErr_t StringToTimecode(
 	aafTimecode_t *timecode); /* OUT - Timecode Value */
 
 
-#if PORT_LANG_CPLUSPLUS
+#if defined(PORT_LANG_CPLUSPLUS)
 }
 #endif
 #endif				/* _AAF_CVT_API_ */

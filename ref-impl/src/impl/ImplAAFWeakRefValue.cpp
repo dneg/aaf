@@ -153,7 +153,7 @@ static AAFRESULT SetNewObjectReference(
   // The given storable must already be in the target strong reference set!
 
   // Save the reference in the OMReferenceProperty
-  OMObject *object = refProperty->setObject(pNewObject);
+  refProperty->setObject(pNewObject);
   
   return AAFRESULT_SUCCESS;
 }

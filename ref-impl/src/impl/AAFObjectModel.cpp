@@ -3031,7 +3031,6 @@ void TypeDefinitionWeakReference::Initialize(void)
 
 	// Make sure all of the other properties are in the dictionary.
 	const PropertyDefinition *propertyDefinition = NULL;
-	const TypeDefinition * typeDefinition = NULL;
 	for (aafUInt32 i = 1; i < targetSetCount(); i++)
 	{
     propertyDefinition = objectModel()->findPropertyDefinition(_targetSet[i]);

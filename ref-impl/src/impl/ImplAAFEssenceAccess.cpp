@@ -3666,7 +3666,7 @@ ImplAAFEssenceAccess::ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, Impl
 	aafProductIdentification_t		identSetup;
 	aafUInt32						length;
 	aafUInt32						buflen;
-	ImplAAFFile						*theFile;
+	ImplAAFFile						*theFile = NULL;
 	aafUID_t						myFileCLSID;
 
 	identSetup.companyName = NULL;
