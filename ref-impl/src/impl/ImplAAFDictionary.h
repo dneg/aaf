@@ -806,6 +806,9 @@ bool PvtIsTypePresent (
   // have been initialized. This should be called after the file has been opened.
   void InitializeMetaDefinitions(void);
 
+  // Merge class definitions, their property definitions and their
+  // dependencies to the destination dictionary.
+  virtual AAFRESULT MergeTo( ImplAAFDictionary* pDestDictionary );
 
 private:
   bool pvtLookupAxiomaticClassDef (const aafUID_t & classID,

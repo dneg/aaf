@@ -25,6 +25,7 @@
 
 #include "ImplAAFTypeDef.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFMetaDictionary.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
 
@@ -162,6 +163,44 @@ size_t ImplAAFTypeDef::ActualSize (void) const
 }
 
 
+AAFRESULT ImplAAFTypeDef::MergeTo( ImplAAFDictionary* pDstDictionary )
+{
+  assert( pDstDictionary );
+
+
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+
+  aafUID_t  typeID;
+  GetAUID( &typeID );
+
+  ImplAAFTypeDef* pDstTypeDef = 0;
+  if( AAFRESULT_FAILED( pDstDictionary->LookupTypeDef( typeID, &pDstTypeDef ) ) )
+  {
+    OMClassFactory* pDstFactory =
+        dynamic_cast<OMClassFactory*>( pDstDictionary->metaDictionary() );
+    OMStorable* pDstStorable = shallowCopy( pDstFactory );
+    ImplAAFTypeDef* pDstTypeDef =
+        dynamic_cast<ImplAAFTypeDef*>( pDstStorable );
+    assert( pDstTypeDef );
+
+    hr = pDstDictionary->RegisterTypeDef( pDstTypeDef );
+    if( AAFRESULT_SUCCEEDED(hr) )
+    {
+      pDstTypeDef->onCopy( 0 );
+      deepCopyTo( pDstTypeDef, 0 );
+    }
+  }
+  else
+  {
+      pDstTypeDef->ReleaseReference();
+      pDstTypeDef = 0;
+  }
+
+
+  return hr;
+}
+
+
 OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
   (OMPropertyId /*pid*/,
    const wchar_t * /*name*/) const
@@ -293,3 +332,12 @@ void ImplAAFTypeDef::onRestore(void* clientContext) const
 {
   ImplAAFMetaDefinition::onRestore(clientContext);
 }
+
+void ImplAAFTypeDef::onCopy(void* clientContext) const
+{
+  ImplAAFMetaDefinition::onCopy(clientContext);
+
+  ImplAAFTypeDef* pNonConstThis = const_cast<ImplAAFTypeDef*>(this);
+  pNonConstThis->setInitialized();
+}
+

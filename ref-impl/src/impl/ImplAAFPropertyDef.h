@@ -170,6 +170,8 @@ public:
   // registration method will fail.
   virtual HRESULT CompleteClassRegistration(void);
 
+  virtual AAFRESULT MergeTo( ImplAAFClassDef* pDestClassDef );
+
 private:
 
   // OMWeakReferenceProperty<ImplAAFTypeDef> _Type;

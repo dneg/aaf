@@ -2178,6 +2178,30 @@ void ImplAAFDictionary::InitializeMetaDefinitions(void)
 }
 
 
+AAFRESULT ImplAAFDictionary::MergeTo( ImplAAFDictionary* pDestDictionary )
+{
+    assert( pDestDictionary );
+
+
+    ImplEnumAAFClassDefs* pEnumSrcClassDefs = NULL;
+    AAFRESULT hr = GetClassDefs( &pEnumSrcClassDefs );
+    if( AAFRESULT_SUCCEEDED(hr) )
+    {
+        ImplAAFClassDef* pSrcClassDef = NULL;
+        while( AAFRESULT_SUCCEEDED(pEnumSrcClassDefs->NextOne(&pSrcClassDef)) )
+        {
+            pSrcClassDef->MergeTo( pDestDictionary );
+            pSrcClassDef->ReleaseReference();
+            pSrcClassDef = NULL;
+        }
+
+        pEnumSrcClassDefs->ReleaseReference();
+        pEnumSrcClassDefs = NULL;
+    }
+
+
+    return hr;
+}
 
 
 /*************************************************************************
