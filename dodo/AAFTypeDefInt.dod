@@ -1,0 +1,414 @@
+#startm .this-module 0
+AAFTypeDefInt\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDef\
+#endm
+#c
+AD_HEAD
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+AD_CLASS_UUID(809c8ca1, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(809c8ca2, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
+AD_CLASS_BEGIN
+AD_XMETHOD2(GetSize,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[out],
+			objPass,
+			aafUInt32 *,
+			pSize,
+			the returned size of this integral value\, in bytes,
+
+			Returns the size of the integral value assumed to be within the
+  // specified Property Value.  Assumes that the given Property Value
+  // is of the kAAFTypeCategoryInt.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - The pSize pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pSize pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.)
+
+
+AD_XMETHOD4(GetValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[in],
+			objPass,
+			aafUInt32,
+			valBufSize,
+			The size in bytes of buffer indicated by pValBuf,
+
+			[out\, size_is\(valBufSize\)\, length_is\(*pLenRead\)],
+			objPass,
+			aafInt8 *,
+			pValBuf,
+			Buffer into which value should be written,
+
+			[out],
+			objPass,
+			aafUInt32 *,
+			pLenRead,
+			Number of bytes read,
+
+			Returns the integral value assumed to be within the specified
+  // Property Value\, and places it into the memory specified by
+  // pValBuf.  The size of the buffer indicated by pValBuf is passed
+  // in through the valBufSize argument.  The actual number of bytes
+  // read is returned in *pLenRead.  Assumes that the given Property
+  // Value is of the kAAFTypeCategoryInt.
+  //
+  // Note: GetSize\(\) may be called to determine the size of buffer
+  // required for this method to succeed.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - the pValBuf pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  // - valBufSize indicates that the pValBuf buffer is large enough to
+  //   hold the value
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pSize pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - valBufSize indicates the pValBuf is too small to hold the
+  //     value.)
+
+
+AD_XMETHOD3(SetValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[in],
+			objPass,
+			aafUInt32,
+			valSize,
+			The size in bytes of buffer indicated by pValBuf,
+
+			[out],
+			objPass,
+			aafInt8 *,
+			pValBuf,
+			Buffer into which value should be written,
+
+			Sets the integral value assumed to be within the specified
+  // Property Value to the value given in the memory specified by
+  // pValBuf.  The size of the data in the buffer is passed in through
+  // the valSize argument.  Assumes that the given Property Value is
+  // of the kAAFTypeCategoryInt.  If the contained value is actuall
+  // larger than specified by valSize\, the contained value will be
+  // LSB-justified and sign-extended.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - the pValBuf pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  // - valSize indicates that the data in the pValBuf buffer can fit
+  //   into the contained value.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pValBuf pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.
+  //
+  // AAFRESULT_DATA_SIZE
+  //   - valSize indicates the given data is too large to fit into the
+  //     contained value.)
+
+
+AD_XMETHOD2(GetInt8Value,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[out],
+			objPass,
+			aafInt8 *,
+			pResult,
+			Place into which value should be written,
+
+			Convenience method to return the value assumed to be within the
+  // specified Property Value\, and place it into *pResult.  Assumes
+  // that the given Property Value is of the kAAFTypeCategoryInt\, and
+  // the value contained can fit into an aafInt8.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - the pResult pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  // - The value contained can fit into an aafInt8.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pResult pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - The value contained cannot fit into an aafInt8.)
+
+
+AD_XMETHOD2(SetInt8Value,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be set with the given data,
+
+			[in],
+			objPass,
+			aafInt8 *,
+			pNewValue,
+			New value to write,
+
+			Sets the value assumed to be within the specified Property Value
+  // to *pNewValue.  Assumes that the given Property Value is of the
+  // kAAFTypeCategoryInt.  If the contained value is actuall larger
+  // than an aafInt8\, the contained value will be LSB-justified and
+  // sign-extended.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - the pNewValue pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pNewValue pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.)
+
+
+AD_XMETHOD2(GetInt16Value,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[out],
+			objPass,
+			aafInt16 *,
+			pResult,
+			Place into which value should be written,
+
+			Convenience method to return the value assumed to be within the
+  // specified Property Value\, and place it into *pResult.  Assumes
+  // that the given Property Value is of the kAAFTypeCategoryInt\, and
+  // the value contained can fit into an aafInt16.  If the value
+  // contained is actually smaller than an aafInt16 then the data
+  // written to pResult will be lsb-justified and sign-extended.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - the pResult pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  // - The value contained can fit into an aafInt16.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pResult pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - The value contained cannot fit into an aafInt16.)
+
+
+AD_XMETHOD2(SetInt16Value,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be set with the given data,
+
+			[in],
+			objPass,
+			aafInt16 *,
+			pNewValue,
+			New value to write,
+
+			Sets the value assumed to be within the specified Property Value
+  // to *pNewValue.  Assumes that the given Property Value is of the
+  // kAAFTypeCategoryInt\, and that an aafInt16 can fit into the
+  // contained value.  If the value contained is actually larger than
+  // an aafInt16\, the contained value will be LSB-justified and
+  // sign-extended.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - the pResult pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  // - An aafInt16 can fit into the contained value.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pNewValue pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - An aafInt16 cannot fit into the contained value.)
+
+
+AD_XMETHOD2(GetInt32Value,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be read for this data,
+
+			[out],
+			objPass,
+			aafInt32 *,
+			pResult,
+			Place into which value should be written,
+
+			Convenience method to return the value assumed to be within the
+  // specified Property Value\, and place it into *pResult.  Assumes
+  // that the given Property Value is of the kAAFTypeCategoryInt\, and
+  // the value contained can fit into an aafInt32.  If the value
+  // contained is actually smaller than an aafInt32 then the data
+  // written to pResult will be lsb-justified and sign-extended.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - the pResult pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  // - The value contained can fit into an aafInt32.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pResult pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - The value contained cannot fit into an aafInt32.)
+
+
+AD_XMETHOD2(SetInt32Value,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPVal,
+			The Property Value which is to be set with the given data,
+
+			[in],
+			objPass,
+			aafInt32 *,
+			pNewValue,
+			New value to write,
+
+			Sets the value assumed to be within the specified Property Value
+  // to *pNewValue.  Assumes that the given Property Value is of the
+  // kAAFTypeCategoryInt\, and that an aafInt32 can fit into the
+  // contained value.  If the value contained is actually larger than
+  // an aafInt32\, the contained value will be LSB-justified and
+  // sign-extended.
+  //
+  // Succeeds if:
+  // - The pPVal pointer is valid.
+  // - the pResult pointer is valid.
+  // - The given Property Value is a kAAFTypeCategoryInt.
+  // - An aafInt32 can fit into the contained value.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pNewValue pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE_CATEGORY
+  //   - The given Property Value is not a kAAFTypeCategoryInt.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - An aafInt32 cannot fit into the contained value.)
+AD_CLASS_END
