@@ -64,11 +64,12 @@ all : $(OBJDIR) $(LIBTARGET) $(BINTARGET)
 $(LIBTARGET) : $(LIBCXXOBJS)
 	$(LD_STAT_LIB) $@ $(LIBCXXOBJS)
 
+OMFLIBDIR=$(AAFBASE)/OMF/IrixLibs
 
 # Build executable. Note that CXXOBJS2 is used instead of CXXOBJS.
 $(BINTARGET) : $(CXXOBJS2) $(LIBTARGET)
 	$(LD) $(CXXOBJS2) $(RPATH_OPT) -lAAFConverterLib \
-	-L$(AAFBASE)/OMF/IrixLibs -lAJPG -lOMFI -lbento -ljpeg \
+	-L$(OMFLIBDIR) -lAJPG -lOMFI -lbento -ljpeg \
 	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@ -lm
 
 
