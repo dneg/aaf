@@ -89,7 +89,12 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::GetLength (aafInt64 *  position)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafLength_t	result;
+	HRESULT		status;
+
+	status = _data->GetSize (&result);
+	*position = result;
+	return status;
 }
 
 
