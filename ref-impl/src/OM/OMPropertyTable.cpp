@@ -45,28 +45,28 @@ OMPropertyTable::~OMPropertyTable(void)
 
   size_t elements = _vector.count();
   for (size_t i = 0; i < elements; i++) {
-    wchar_t* p = _vector.valueAt(i);
+    OMPropertyId* p = _vector.valueAt(i);
     delete [] p;
   }
 }
 
-  // @mfunc If <p propertyName> is not already present then insert
+  // @mfunc If <p propertyPath> is not already present then insert
   //        it (by copying) into the table and return its tag,
   //        otherwise just return its tag. Tags are allocated
   //        sequentially.
-  //   @parm The property name to insert.
+  //   @parm The property path to insert.
   //   @rdesc The assigned index.
-OMPropertyTag OMPropertyTable::insert(const wchar_t* propertyName)
+OMPropertyTag OMPropertyTable::insert(const OMPropertyId* propertyPath)
 {
   TRACE("OMPropertyTable::insert");
 
-  PRECONDITION("Valid property name", validWideString(propertyName));
+  PRECONDITION("Valid property path", validPropertyPath(propertyPath));
 
   OMPropertyTag result;
   bool found = false;
   size_t elements = _vector.count();
   for (size_t i = 0; i < elements; i++) {
-    if (compareWideString(_vector.valueAt(i), propertyName) == 0) {
+    if (comparePropertyPath(_vector.valueAt(i), propertyPath) == 0) {
      result = i;
      found = true;
      break;
@@ -74,7 +74,7 @@ OMPropertyTag OMPropertyTable::insert(const wchar_t* propertyName)
   }
 
   if (!found) {
-    _vector.append(saveWideString(propertyName));
+    _vector.append(savePropertyPath(propertyPath));
     result = elements;
   }
 
@@ -82,11 +82,11 @@ OMPropertyTag OMPropertyTable::insert(const wchar_t* propertyName)
   return result;
 }
 
-  // @mfunc The property name corresponding to <p tag> in the table.
+  // @mfunc The property path corresponding to <p tag> in the table.
   //   @parm The index.
-  //   @rdesc The property name.
+  //   @rdesc The property path.
   //   @this const
-const wchar_t* OMPropertyTable::valueAt(OMPropertyTag tag) const
+const OMPropertyId* OMPropertyTable::valueAt(OMPropertyTag tag) const
 {
   TRACE("OMPropertyTable::valueAt");
 
