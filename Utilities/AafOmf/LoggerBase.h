@@ -100,7 +100,7 @@ protected:
 	virtual void Print( unsigned level, const char *fmt, va_list args  ) = 0;
 public:
 	virtual void Log( unsigned level, const char *fmt, ... );
-	virtual void Log( unsigned level, const char *fmt, VaList &valist  );
+	virtual void Log( unsigned level, const char *fmt, const VaList &valist  );
 	virtual bool LogThisMsg( unsigned level );
 	virtual unsigned SetLevel( unsigned level );
 	virtual unsigned GetLevel( void );

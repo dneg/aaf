@@ -35,7 +35,7 @@ Returns:
 	None
 	
 ****************************************************************/
-void LoggerBase::Log( unsigned level, const char *fmt, VaList &valist )
+void LoggerBase::Log( unsigned level, const char *fmt, const VaList &valist )
 {
 	if( LogThisMsg( level ) )
 	{
