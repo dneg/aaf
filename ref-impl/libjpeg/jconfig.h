@@ -15,16 +15,21 @@
 #undef NEED_SHORT_EXTERNAL_NAMES
 #undef INCOMPLETE_TYPES_BROKEN
 
+#if defined(WIN32) || defined(_WIN32)
 /* Define "boolean" as unsigned char, not int, per Windows custom */
 #ifndef __RPCNDR_H__		/* don't conflict if rpcndr.h already read */
 typedef unsigned char boolean;
 #endif
-#define HAVE_BOOLEAN		/* prevent jmorecfg.h from redefining it */
-
+#define HAVE_BOOLEAN		/* prevent jmorecfg.h from redefining it */'
+#endif
 
 #ifdef JPEG_INTERNALS
 
 #undef RIGHT_SHIFT_IS_UNSIGNED
+
+#if defined(macintosh) || defined(_MAC)
+#define ALIGN_TYPE long		/* Needed for 680x0 Macs */
+#endif
 
 #endif /* JPEG_INTERNALS */
 
@@ -36,8 +41,16 @@ typedef unsigned char boolean;
 #undef RLE_SUPPORTED		/* Utah RLE image file format */
 #define TARGA_SUPPORTED		/* Targa image file format */
 
+#if defined(macintosh) || defined(_MAC)
+#define USE_CCOMMAND		/* Command line reader for Macintosh */
+#endif
+
 #define TWO_FILE_COMMANDLINE	/* optional */
+
+#if defined(WIN32) || defined(_WIN32)
 #define USE_SETMODE		/* Microsoft has setmode() */
+#endif
+
 #undef NEED_SIGNAL_CATCHER
 #undef DONT_USE_B_MODE
 #undef PROGRESS_REPORT		/* optional */
