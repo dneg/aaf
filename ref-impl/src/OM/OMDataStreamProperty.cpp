@@ -268,7 +268,7 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
                                              OMUInt32 elementCount,
                                              OMUInt32& elementsRead) const
 {
-  TRACE("OMDataStreamProperty::readElements");
+  TRACE("OMDataStreamProperty::readTypedElements");
 
   PRECONDITION("Valid element type", elementType != 0);
   PRECONDITION("Valid element size", externalElementSize!= 0);
@@ -330,7 +330,7 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
                                               OMUInt32 elementCount,
                                               OMUInt32& elementsWritten)
 {
-  TRACE("OMDataStreamProperty::writeElements");
+  TRACE("OMDataStreamProperty::writeTypedElements");
 
   PRECONDITION("Valid element type", elementType != 0);
   PRECONDITION("Valid element size", externalElementSize!= 0);
