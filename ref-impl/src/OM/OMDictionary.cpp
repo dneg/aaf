@@ -67,4 +67,13 @@ void OMDictionary::insert(const OMPropertyId propertyId,
                                     _propertyDefinitions.contains(propertyId));
 }
 
+OMPropertyDefinition* OMDictionary::remove(const OMPropertyId /* propertyId */)
+{
+  TRACE("OMDictionary::remove");
+
+  ASSERT("Unimplemented code not reached", false);
+  OMPropertyDefinition* result = 0;
+  return result;
+}
+
 

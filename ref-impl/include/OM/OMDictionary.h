@@ -43,6 +43,8 @@ public:
   static void insert(const OMPropertyId propertyId,
                      const OMPropertyDefinition* definition);
 
+  static OMPropertyDefinition* remove(const OMPropertyId propertyId);
+
 private:
 
   typedef OMRedBlackTree<OMPropertyId,
