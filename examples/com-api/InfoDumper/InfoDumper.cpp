@@ -54,16 +54,17 @@ using namespace std;
 #include "DataInput.h"
 #endif
 
-#if defined( COMPILER_MWERKS )
-#if defined(__MSL_CPP__) && (__MSL_CPP__ >= 0x5300)
-#define IOS_FMT_FLAGS ios_base::fmtflags
+#if defined( _MSC_VER )
+// MS VC++ cannot cope with a 64bit int passed to the ostream << operator
+// so use this ugly workaround where it is converted to a string first.
+static char str_int64_workaround[30];	// big enough for 2**64-1 as decimal
+static const char *ostream_int64(aafInt64 value)
+{
+	sprintf(str_int64_workaround, "%I64d", value);
+	return str_int64_workaround;
+}
 #else
-#define IOS_FMT_FLAGS long int
-#endif
-#elif defined(__GNUC__) && (__GNUC__ >= 3)
-#define IOS_FMT_FLAGS std::ios_base::fmtflags
-#else
-#define IOS_FMT_FLAGS long int
+#define ostream_int64
 #endif
 
 // structure for dump flags
@@ -79,7 +80,7 @@ typedef struct _dumpFlags
   bool showEssence;
   bool identifybyname;
   bool eagerLoad;
-  unsigned long maxCount;
+  aafUInt64 maxCount;
   char *showOnlyClasses;
 } dumpFlags_t;
 
@@ -1512,9 +1513,9 @@ HRESULT dumpSummary(IAAFHeaderSP pHeader,
 	{
 	  os << endl << "Summary Information:" << endl;
 	  checkResult(pHeader->CountMobs(kAAFAllMob,&countMobs));
-	  os << "File has 0x" << countMobs << " mobs" << endl;
+	  os << "File has " << dec << countMobs << " mobs" << endl;
 	  checkResult(pHeader->CountEssenceData(&countEssence));
-	  os << "File has 0x" << countEssence << " EssenceData objects" << endl;
+	  os << "File has " << dec << countEssence << " EssenceData objects" << endl;
 
 	}
 	catch (HRESULT &caught)
@@ -2525,20 +2526,14 @@ HRESULT dumpRawStreamPropertyValue
 	    // Get number of bytes
 	    aafInt64 streamSize = 0;
 	    checkResult(pStreamType->GetSize(pPVal, &streamSize));
-	
-	    if (0x00000000FFFFFFFF < streamSize)
-	      {
-		os << "  Large (64-bit) stream not supported in ascii dump!" << endl;
-		os << "  WARNING: Stream will be truncated!" << endl;
-	      }
-	
-	    aafUInt32 bytesLeft = (aafUInt32)(streamSize);
-	    os << "{/* size: " << bytesLeft << " bytes */" << endl;
+	    os << "{/* size: " << dec << ostream_int64(streamSize) << " bytes */" << endl;
+
+	    aafUInt64 bytesLeft = streamSize;
 	
 	    if ((dumpFlags.maxCount > 0) && (dumpFlags.maxCount < bytesLeft))
 	      {
 		bytesLeft=dumpFlags.maxCount;
-		os << "Showing only first 0x" << bytesLeft << " bytes" << endl;
+		os << "Showing only first " << ostream_int64(bytesLeft) << " bytes" << endl;
 	      }
 	    const aafUInt32 kStreamBytesPerLine = 16;
 	    const aafUInt32 kStreamReadSize = kStreamBytesPerLine;
@@ -2546,7 +2541,7 @@ HRESULT dumpRawStreamPropertyValue
 	    aafUInt8 streamBuffer[kStreamReadSize];
 	    aafUInt32 bytes = 0;
 	    aafUInt32 bytesRead = 0;
-	    aafUInt32 offset = 0;
+	    aafUInt64 offset = 0;
 	
     
 	    while ((0 < bytesLeft) && AAFRESULT_SUCCEEDED(streamResult))
@@ -2559,20 +2554,17 @@ HRESULT dumpRawStreamPropertyValue
 		streamResult = pStreamType->Read(pPVal, bytes, streamBuffer, &bytesRead);
 		if (AAFRESULT_FAILED(streamResult))
 		  {
-		    os << "  // FAILED after reading " << (aafUInt32)streamSize - bytesLeft << " bytes." << endl;
+		    os << "  // FAILED after reading " << ostream_int64(streamSize - bytesLeft) << " bytes." << endl;
 		    break;
 		}
 		bytesLeft -= bytesRead;
 		
 		
-		os << " /*" << dec << setw(kOffsetWidth) << offset << " */";  
+		os << " /*" << dec << setw(kOffsetWidth) << ostream_int64(offset) << " */";  
 		offset += kStreamBytesPerLine;    
 		
-		aafUInt32 i;
-		
-		IOS_FMT_FLAGS savedFlags = os.setf(ios::basefield);
-		char savedFill = cout.fill();
-		
+		aafUInt64 i;
+		char savedFill = os.fill();
 		for (i = 0; (i < kStreamBytesPerLine) && (i < bytesRead);)
 		  {
 		    os << " 0x" << hex << setw(2) << setfill('0') << (int)streamBuffer[i++];
@@ -2584,8 +2576,6 @@ HRESULT dumpRawStreamPropertyValue
 		    
 		    os << ",";
 		  }
-		
-		os.setf(savedFlags, ios::basefield);
 		os.fill(savedFill);      
 		
 		
@@ -2893,7 +2883,11 @@ int main(int argc, char* argv[])
 			dumpFlags.showOnlyClasses = argv[++comArg];
 		} else if (!strcmp("-max", argv[comArg]) && (comArg < (argc-1)))
 		{
-			dumpFlags.maxCount = atoi(argv[++comArg]);
+#ifdef OS_WINDOWS
+			dumpFlags.maxCount = _atoi64(argv[++comArg]);
+#else
+			dumpFlags.maxCount = strtoll(argv[++comArg], NULL, 0);
+#endif
 		} else if (!strcmp("-h", argv[comArg]))
 		{
 		  usage (argv[0]);
