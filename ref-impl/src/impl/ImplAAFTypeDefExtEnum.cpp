@@ -126,6 +126,35 @@ ImplAAFTypeDefExtEnum::GetElementValue (
 	return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT ImplAAFTypeDefExtEnum::LookupValByName(aafUID_t *pVal, const aafCharacter *pName)
+{
+	aafUInt32 i=0;
+	aafUInt32 count=0;
+	aafBoolean_t  bFound = kAAFFalse;
+	aafCharacter Name_buf[256]; 
+	aafUInt32 bufSize = 256;
+	
+	check_hr ( CountElements(&count) );
+	while ( (i<count) && !bFound)
+	{
+		check_hr ( GetElementName (i, Name_buf, bufSize) );
+		if ( wcscmp (Name_buf, pName) == 0 ) //matched
+		{
+			bFound = kAAFTrue;
+			
+			check_hr (GetElementValue(i, pVal));
+			break;
+			
+		}//if
+		i++;
+	}//while
+
+	if (!bFound)
+		return AAFRESULT_INVALID_PARAM;
+
+	return AAFRESULT_SUCCESS;
+}
+
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefExtEnum::CreateValueFromName (
 											/*[in]*/ aafCharacter_constptr  Name,
@@ -142,31 +171,51 @@ ImplAAFTypeDefExtEnum::CreateValueFromName (
 	
 	
 	//Now try to do a Name lookup
-	aafUInt32 i=0;
-	aafUInt32 count=0;
-	aafBoolean_t  bFound = kAAFFalse;
-	aafCharacter Name_buf[256]; 
-	aafUInt32 bufSize = 256;
 	aafUID_t the_value = {0};
-	
-	check_hr ( CountElements(&count) );
-	while ( (i<count) && !bFound)
+	AAFRESULT rc;
+	rc = LookupValByName(&the_value, Name);
+
+
+	if (rc == AAFRESULT_INVALID_PARAM)
 	{
-		check_hr ( GetElementName (i, Name_buf, bufSize) );
-		if ( wcscmp (Name_buf, Name) == 0 ) //matched
-		{
-			bFound = kAAFTrue;
-			
-			check_hr (GetElementValue(i, &the_value));
-			break;
-			
-		}//if
-		i++;
-	}//while
-	
-	if (!bFound)
-		return AAFRESULT_INVALID_PARAM;
-	
+	    // Built-In names changed from v1.0 -> v1.1
+	    // to remove kAAF prefix. so we have to deal with both
+	    // old and new style names. 
+	    // The lookup on the originally provided name failed due to
+	    // the name not being found (not some other error).
+	    // So here we add kAAF if it isn't there or 
+	    // remove kAAF if it is there. Then look up again.
+	    aafCharacter *Name_mod;
+
+	    if ( wcsncmp (Name, L"kAAF", 4) == 0 )
+	    {
+		// Look past kAAF
+		Name_mod = new aafCharacter[wcslen(Name) - 3];
+		wcscpy(Name_mod, Name + 4);
+	    }
+	    else
+	    {
+		// Prepend kAAF
+		Name_mod = new aafCharacter[wcslen(Name) + 5];
+		if (!Name_mod)
+		    return AAFRESULT_NOMEMORY;
+		wcscpy(Name_mod, L"kAAF");
+		wcscat(Name_mod, Name);
+	    }
+
+	    // Look up again - Return checked later.
+	    rc = LookupValByName(&the_value, Name_mod);
+
+	    // Cleanup of allocated memory
+	    delete[] Name_mod;
+	}
+
+	// At this point, we have a successful lookup and the_val is
+	// set, the name was not found (even with variation), or
+	// some other error occurred. Check the result and return
+	// if we are not successful.
+	check_hr( rc );
+
 	//else FOUND
 	
 	

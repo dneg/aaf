@@ -249,6 +249,10 @@ private:
 	
 	ImplAAFTypeDefSP _cachedBaseType;
 	
+        // Lookup a value identifier by name. pName is assumed
+        // to be non-null. Returns AAFRESULT_SUCCESS if found.
+        // Returns AAFRESULT_INVALID_PARAM if not found.
+        AAFRESULT LookupValByName(aafUID_t *pVal, const aafCharacter *pName);
 
 public:
 	
