@@ -79,6 +79,17 @@ public:
         // @parm [out] type definition for which this is an alias
         (ImplAAFTypeDef ** ppBaseType) const;
 
+  //****************
+  // GetBaseValue()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetBaseValue
+        (// @parm [in] property value from which value is to be read
+         ImplAAFPropertyValue * pInPropVal,
+
+         // @parm [out] pointer to property value represented by base type
+         ImplAAFPropertyValue ** ppOutPropVal);
+
 
   //****************
   // GetValue()
@@ -88,7 +99,7 @@ public:
         (// @parm [in] property value from which value is to be read
          ImplAAFPropertyValue * pInPropVal,
 
-         // @parm [out] pointer to property value represented by base type
+         // @parm [out] pointer to property value represented by typedef type
          ImplAAFPropertyValue ** ppOutPropVal);
 
 
