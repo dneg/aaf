@@ -134,7 +134,7 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMMSSSStoredObject.cpp"
+SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObject.cpp"
 # End Source File
 # Begin Source File
 
@@ -354,7 +354,7 @@ SOURCE="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMMSSSStoredObject.h"
+SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredObject.h"
 # End Source File
 # Begin Source File
 
