@@ -45,6 +45,16 @@ AAFRESULT STDMETHODCALLTYPE
 			(*ppMob)=pCandidate;
 			return(AAFRESULT_SUCCESS);
 
+		case kAAFByMobID:
+		  
+		  if ( pCandidate->IsMobIDEqual( &_criteria.tags.mobID ) ) {
+		    *ppMob = pCandidate;
+		    return(AAFRESULT_SUCCESS);
+		  }
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+		  break;
+
 		case kAAFByMobKind:
 			aafMobKind_t	kind;
 				
@@ -64,6 +74,36 @@ AAFRESULT STDMETHODCALLTYPE
 			pCandidate = NULL;
 			break;
 
+		case kAAFByName:
+
+		  if ( pCandidate->IsNameEqual( _criteria.tags.name ) ) {
+		    *ppMob = pCandidate;
+		    return(AAFRESULT_SUCCESS);
+		  }
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+		  break;
+
+		case kAAFByClass:
+
+		  bool result;
+		  ar = pCandidate->IsClassIDEqual( &_criteria.tags.objClass, result ); 
+		  if ( AAFRESULT_SUCCESS != ar ) {
+		    pCandidate->ReleaseReference();
+		    return ar;
+		  }
+
+		  if ( result ) {
+		    *ppMob = pCandidate;
+		    return(AAFRESULT_SUCCESS);
+		  }
+
+		  pCandidate->ReleaseReference();
+		  pCandidate = NULL;
+		  break;
+
+		case kAAFByDataDef:
+		case kAAFByMediaCrit:
 		default:
 			pCandidate->ReleaseReference();
 			return(AAFRESULT_NOT_IN_CURRENT_VERSION);

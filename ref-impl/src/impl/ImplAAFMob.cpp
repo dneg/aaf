@@ -82,6 +82,7 @@
 #include "ImplEnumAAFComponents.h"
 
 #include <assert.h>
+#include <string.h>
 #include <wchar.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
@@ -2172,6 +2173,63 @@ const OMMaterialIdentification&
   return *reinterpret_cast<const OMMaterialIdentification*>(&_mobID.reference());
 }
 
+bool ImplAAFMob::IsMobIDEqual( const aafMobID_t* mobID ) const
+{
+	aafMobID_t thisMobID = _mobID;
 
+	if ( ::memcmp( mobID, &thisMobID, sizeof(aafMobID_t) ) == 0 ) {
+		return true;
+	}
+	else {
+		return false;
+	}
+
+}
+
+bool ImplAAFMob::IsNameEqual( const aafString_t name ) const
+{
+  if ( !_name.isPresent() ) {
+    return false;
+  }
+
+  const wchar_t* thisName = _name;
+
+  if ( ::wcscmp(name, thisName) == 0 ) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+HRESULT ImplAAFMob::IsClassIDEqual( const aafClassID_t* classId, bool& result ) const
+{
+  ImplAAFMob* ncThis = const_cast<ImplAAFMob*>(this);
+	
+  ImplAAFSmartPointer<ImplAAFClassDef> spClassDef;
+
+  AAFRESULT hr;
+  hr = ncThis->GetDefinition( &spClassDef );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return hr;
+  }
+
+  aafUID_t thisClassId;
+  hr = spClassDef->GetAUID( &thisClassId );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return hr;
+  }
+
+  assert( sizeof(aafUID_t) == sizeof(aafClassID_t) );
+
+  if ( ::memcmp( classId, &thisClassId, sizeof(aafUID_t) ) == 0 ) {
+    result = true;
+  }
+  else {
+    result = false;
+  }
+
+  return AAFRESULT_SUCCESS;
+}
 
 ////////////////////////////////////////////////////////////////////////////////

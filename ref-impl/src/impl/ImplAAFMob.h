@@ -468,6 +468,11 @@ virtual AAFRESULT STDMETHODCALLTYPE
   virtual AAFRESULT ReconcileMobLength(void);
   virtual const OMMaterialIdentification& identification(void) const;
 
+  // Internal methods used to support some Mob enumerator search criterion.
+  bool IsMobIDEqual( const aafMobID_t* mobID ) const;
+  bool IsNameEqual( const aafString_t name ) const;
+  HRESULT IsClassIDEqual( const aafClassID_t* id, bool& result ) const;
+
 	protected:
 	OMFixedSizeProperty<aafMobID_t>		_mobID;
 	OMWideStringProperty				_name;
