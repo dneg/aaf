@@ -79,6 +79,14 @@ typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATERAWSTORAGEDISK)(
 	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage);
 
+typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATERAWSTORAGECACHEDDISK)(
+    aafCharacter_constptr  pFilename,
+    aafFileExistence_t  existence,
+	aafFileAccess_t  access,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage);
+
 typedef STDAPICALLTYPE HRESULT (* LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
     IAAFRawStorage * pRawStorage,
 	aafFileExistence_t  existence,
@@ -130,6 +138,14 @@ typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATERAWSTORAGEDISK)(
     aafCharacter_constptr  pFilename,
     aafFileExistence_t  existence,
 	aafFileAccess_t  access,
+	IAAFRawStorage ** ppNewRawStorage);
+
+typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATERAWSTORAGECACHEDDISK)(
+    aafCharacter_constptr  pFilename,
+    aafFileExistence_t  existence,
+	aafFileAccess_t  access,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
 	IAAFRawStorage ** ppNewRawStorage);
 
 typedef HRESULT (STDAPICALLTYPE * LPFNAAFCREATEAAFFILEONRAWSTORAGE)(
@@ -226,6 +242,14 @@ public:
 	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage);
 
+  HRESULT CreateRawStorageCachedDisk (
+    aafCharacter_constptr  pFilename,
+    aafFileExistence_t  existence,
+	aafFileAccess_t  access,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage);
+
   HRESULT CreateAAFFileOnRawStorage (
     IAAFRawStorage * pRawStorage,
 	aafFileExistence_t  existence,
@@ -258,6 +282,7 @@ protected:
   LPFNAAFGETPLUGINMANAGER          _pfnGetPluginManager;
   LPFNAAFCREATERAWSTORAGEMEMORY    _pfnCreateRawStorageMemory;
   LPFNAAFCREATERAWSTORAGEDISK      _pfnCreateRawStorageDisk;
+  LPFNAAFCREATERAWSTORAGECACHEDDISK _pfnCreateRawStorageCachedDisk;
   LPFNAAFCREATEAAFFILEONRAWSTORAGE _pfnCreateAAFFileOnRawStorage;
 };
 

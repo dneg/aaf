@@ -454,6 +454,49 @@ STDAPI AAFCreateRawStorageDisk (
 
 //***********************************************************
 //
+// AAFCreateRawStorageCachedDisk()
+//
+STDAPI AAFCreateRawStorageCachedDisk (
+  aafCharacter_constptr  filename,
+  aafFileExistence_t  existence,
+  aafFileAccess_t  access,
+  aafUInt32  pageCount,
+  aafUInt32  pageSize,
+  IAAFRawStorage ** ppNewRawStorage)
+{
+  HRESULT hr = S_OK;
+  AAFDLL *pAAFDLL = NULL;
+
+  // Get the dll wrapper
+  hr = LoadIfNecessary(&pAAFDLL);
+  if (FAILED(hr))
+    return hr;
+  
+  try
+  {
+    // Attempt to call the dll's exported function...
+    hr = pAAFDLL->CreateRawStorageCachedDisk
+	  (filename,
+	   existence,
+	   access,
+	   pageCount,
+	   pageSize,
+	   ppNewRawStorage);
+  }
+  catch (...)
+  {
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
+//***********************************************************
+//
 // AAFCreateAAFFileOnRawStorage()
 //
 STDAPI AAFCreateAAFFileOnRawStorage (
@@ -653,6 +696,11 @@ HRESULT AAFDLL::Load(const char *dllname)
       return rc;
   }
 
+  rc = ::AAFFindSymbol(_libHandle,
+  					   "AAFCreateRawStorageCachedDisk",
+  					   (AAFSymbolAddr *)&_pfnCreateRawStorageCachedDisk);
+  // Ignore failure
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -694,6 +742,7 @@ void AAFDLL::ClearEntrypoints()
   _pfnGetPluginManager = NULL;
   _pfnCreateRawStorageMemory = 0;
   _pfnCreateRawStorageDisk = 0;
+  _pfnCreateRawStorageCachedDisk = 0;
   _pfnCreateAAFFileOnRawStorage = 0;
 }
 
@@ -807,6 +856,29 @@ HRESULT AAFDLL::CreateRawStorageDisk (
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
     
   return _pfnCreateRawStorageDisk(filename, existence, access, ppNewRawStorage);  
+}
+
+HRESULT AAFDLL::CreateRawStorageCachedDisk (
+    aafCharacter_constptr  filename,
+    aafFileExistence_t  existence,
+	aafFileAccess_t  access,
+    aafUInt32  pageCount,
+    aafUInt32  pageSize,
+	IAAFRawStorage ** ppNewRawStorage)
+{
+  TRACE("AAFDLL::CreateRawStorageCachedDisk");
+//  ASSERT("Valid dll callback function", _pfnCreateRawStorageCachedDisk);
+  // This callback did not exist in DR4 or earlier toolkits.
+  if (NULL == _pfnCreateRawStorageCachedDisk)
+    return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
+    
+  return _pfnCreateRawStorageCachedDisk
+	(filename,
+	 existence,
+	 access,
+	 pageCount,
+	 pageSize,
+	 ppNewRawStorage);  
 }
 
 HRESULT AAFDLL::CreateAAFFileOnRawStorage (
