@@ -296,6 +296,14 @@ private:
 
 
   ImplAAFTypeDefSP BaseType (void) const;
+
+public:
+  // Overrides from ImplAAFTypeDef
+  virtual bool IsAggregatable () const;
+  virtual bool IsStreamable () const;
+  virtual bool IsFixedArrayable () const;
+  virtual bool IsVariableArrayable () const;
+  virtual bool IsStringable () const;
 };
 
 //

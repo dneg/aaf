@@ -679,3 +679,17 @@ OMProperty * ImplAAFTypeDefInt::pvtCreateOMPropertyMBS
 }
 
 
+bool ImplAAFTypeDefInt::IsAggregatable () const
+{ return true; }
+
+bool ImplAAFTypeDefInt::IsStreamable () const
+{ return true; }
+
+bool ImplAAFTypeDefInt::IsFixedArrayable () const
+{ return true; }
+
+bool ImplAAFTypeDefInt::IsVariableArrayable () const
+{ return true; }
+
+bool ImplAAFTypeDefInt::IsStringable () const
+{ return true; }
