@@ -2233,7 +2233,7 @@ void dumpContainedObjects(IStorage* storage,
       OMUInt8 byteOrder = 0x55; // unspecified
       if (version >= 28) {
         // byte order
-        readUInt8(propertiesStream, &byteOrder);
+        read(propertiesStream, index[i]._offset, &byteOrder, 1);
         nameStart = nameStart + 1;
         nameLength = nameLength - 1;
       }
