@@ -98,7 +98,8 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  if( _segment == value )
 		return AAFRESULT_SUCCESS;
-	  _segment->ReleaseReference();
+		ImplAAFSegment *segment = _segment.clearValue();
+	  segment->ReleaseReference();
 	}
 
 	if( value->attached() )
