@@ -304,6 +304,7 @@ private:
 
   aafInt32           _cachedPropValSize;
   aafBool            _propValSizeIsCached;
+  aafBool            _registrationAttempted;
 
 public:
 
