@@ -214,6 +214,29 @@ void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
                          strcmp(_targetName, _reference.targetName(tag)) == 0);
 }
 
+  // @mfunc  Is this <c OMWeakReferenceProperty> void ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc True if this <c OMWeakReferenceProperty> is void, false
+  //          otherwise
+  //   @this const
+template<typename ReferencedObject>
+bool OMWeakReferenceProperty<ReferencedObject>::isVoid(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::isVoid");
+
+  bool result;
+  const OMUniqueObjectIdentification& key = _reference.identification();
+  if (key == nullOMUniqueObjectIdentification) {
+    result = true;
+  } else {
+    result = false;
+  }
+
+  return result;
+}
+
   // @mfunc Get the raw bits of this <c OMWeakReferenceProperty>. The raw bits
   //        are copied to the buffer at address <p bits> which is
   //        <p size> bytes in size.

@@ -86,6 +86,9 @@ public:
     //          <p externalSize>.
   virtual void restore(size_t externalSize);
 
+    // @cmember Is this <c OMWeakReferenceProperty> void ?
+  virtual bool isVoid(void) const;
+
     // @cmember Get the raw bits of this <c OMWeakReferenceProperty>. The
     //          raw bits are copied to the buffer at address <p bits>
     //          which is <p size> bytes in size.
