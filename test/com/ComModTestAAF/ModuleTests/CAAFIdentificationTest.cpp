@@ -423,15 +423,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdIdentification()->
 					CreateInstance(IID_IAAFIdentification, 
 								   (IUnknown **)&pTestIdent));	
-		TestMethod(pTestIdent->GetGeneration(&generation), AAFRESULT_NOT_INITIALIZED);
+		TestMethod(pTestIdent->GetGenerationID(&generation), AAFRESULT_NOT_INITIALIZED);
 
 		TestMethod(pTestIdent->Initialize(COMPANY_NAME,
 									   PRODUCT_NAME,
 									   TEST_VERSION,
 									   UnitTestProductID), AAFRESULT_SUCCESS);
 
-		TestMethod(pIdent->GetGeneration(NULL), AAFRESULT_NULL_PARAM);
-		TestMethod(pIdent->GetGeneration(&generation), AAFRESULT_SUCCESS);
+		TestMethod(pIdent->GetGenerationID(NULL), AAFRESULT_NULL_PARAM);
+		TestMethod(pIdent->GetGenerationID(&generation), AAFRESULT_SUCCESS);
 		
 		pTestIdent->Release();
 		PrintTestResult(testName);

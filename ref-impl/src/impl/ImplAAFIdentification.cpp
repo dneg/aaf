@@ -343,7 +343,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetGeneration (aafUID_t *  pGen)
+    ImplAAFIdentification::GetGenerationID (aafUID_t *  pGen)
 {
   if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
 
