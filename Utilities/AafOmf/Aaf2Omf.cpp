@@ -39,8 +39,6 @@ namespace OMF2
 #include "omMedia.h"
 }
 
-// AAF Utilities Infra-structure 
-#include "UtlConsole.h"
 // OMF Includes
 
 
@@ -154,37 +152,38 @@ HRESULT Aaf2Omf::OpenInputFile ()
 	IAAFIdentification*			pIdent = NULL;
 
 	// convert file name to Wide char
-	UTLStrAToStrW(gpGlobals->sInFileName, &pwFileName);
+	pwFileName = new wchar_t[strlen(gpGlobals->sInFileName)+1];
+	mbstowcs(pwFileName, gpGlobals->sInFileName, strlen(gpGlobals->sInFileName)+1);
 
 
 	rc = AAFFileOpenExistingRead(pwFileName, 0, &pFile);
 	if (FAILED(rc))
 	{
-		UTLMemoryFree(pwFileName);
+		delete [] pwFileName;
 		return rc;
 	}
 
 	rc = pFile->GetHeader(&pHeader);
 	if (FAILED(rc))
 	{
-		UTLMemoryFree(pwFileName);
+		delete [] pwFileName;
 		return rc;
 	}
 
 	rc = pHeader->GetDictionary(&pDictionary);
 	if (FAILED(rc))
 	{
-		UTLMemoryFree(pwFileName);
+		delete [] pwFileName;
 		return rc;
 	}
 	if (gpGlobals->bVerboseMode)
 	{
-		UTLstdprintf("AAF File: %s opened succesfully\n", gpGlobals->sInFileName);
-//		UTLstdprintf("          File Revision %s \n", szFileVersion);
+		printf("AAF File: %s opened succesfully\n", gpGlobals->sInFileName);
+//		printf("          File Revision %s \n", szFileVersion);
 	}
 
 	gpGlobals->bAAFFileOpen = AAFTrue;
-	UTLMemoryFree(pwFileName);
+	delete [] pwFileName;
 
 	return rc;
 }
@@ -204,6 +203,7 @@ HRESULT Aaf2Omf::OpenOutputFile ()
 	char*								pszProductName = NULL;
     char*								pszProductVersionString = NULL;
     char*								pszPlatform;
+	char*								src;
 	
 	IAAFIdentification*					pIdent = NULL;
 	aafWChar*							pwCompanyName = NULL;
@@ -225,51 +225,71 @@ HRESULT Aaf2Omf::OpenOutputFile ()
 	{
 		rc = deleteFile(gpGlobals->sOutFileName);
 		if (rc == AAFRESULT_SUCCESS)
-			UTLstdprintf("Output file: %s will be overwritten\n", gpGlobals->sOutFileName);
+			printf("Output file: %s will be overwritten\n", gpGlobals->sOutFileName);
 		else
-			UTLstdprintf("Output file: %s will be created\n", gpGlobals->sOutFileName);
+			printf("Output file: %s will be created\n", gpGlobals->sOutFileName);
 	}
 	// Retrieve AAF file's last identification
 	rc = pHeader->GetLastIdentification(&pIdent);
 	pIdent->GetCompanyNameBufLen(&textSize);
 	if (textSize > 0)
 	{
-		UTLMemoryAlloc(textSize, (void**)&pwCompanyName);
+		pwCompanyName = (wchar_t *)new wchar_t[textSize];
 		pIdent->GetCompanyName(pwCompanyName, textSize);
-		UTLStrWToStrA(pwCompanyName, &pszCompanyName);
+		pszCompanyName = (char *)new char[textSize/sizeof(wchar_t)];
+		wcstombs(pszCompanyName, pwCompanyName, textSize/sizeof(wchar_t));
 	}
 	else
-		UTLStrWToStrA(L"<Not Specified>", &pszCompanyName);
+	{
+		src = "<Not Specified>";
+		pszCompanyName = (char *)new char[strlen(src)+1];
+		strcpy(pszCompanyName, src);
+	}
 
 	pIdent->GetProductNameBufLen(&textSize);
 	if (textSize > 0)
 	{
-		UTLMemoryAlloc(textSize, (void**)&pwProductName);
+		pwProductName = (wchar_t *)new wchar_t[textSize];
 		pIdent->GetProductName(pwProductName, textSize);
-		UTLStrWToStrA(pwProductName, &pszProductName);
+		pszProductName = (char *)new char[textSize/sizeof(wchar_t)];
+		wcstombs(pszProductName, pwProductName, textSize/sizeof(wchar_t));
 	}
 	else
-		UTLStrWToStrA(L"<Not Specified>", &pszProductName);
+	{
+		src = "<Not Specified>";
+		pszProductName = (char *)new char[strlen(src)+1];
+		strcpy(pszProductName, src);
+	}
 
 	pIdent->GetProductVersionStringBufLen(&textSize);
 	if (textSize > 0)
 	{
-		UTLMemoryAlloc(textSize, (void**)&pwProductVersionString);
+		pwProductVersionString = (wchar_t *)new wchar_t[textSize];
 		pIdent->GetProductVersionString(pwProductVersionString, textSize);
-		UTLStrWToStrA(pwProductVersionString, &pszProductVersionString);
+		pszProductVersionString = (char *)new char[textSize/sizeof(wchar_t)];
+		wcstombs(pszProductVersionString, pwProductVersionString, textSize/sizeof(wchar_t));
 	}
 	else
-		UTLStrWToStrA(L"<Not Specified>", &pszProductVersionString);
+	{
+		src = "<Not Specified>";
+		pszProductVersionString = (char *)new char[strlen(src)+1];
+		strcpy(pszProductVersionString, src);
+	}
 
 	pIdent->GetPlatformBufLen(&textSize);
 	if (textSize > 0)
 	{
-		UTLMemoryAlloc(textSize, (void**)&pwPlatform);
+		pwPlatform = (wchar_t *)new wchar_t[textSize/sizeof(wchar_t)];
 		pIdent->GetPlatform(pwPlatform, textSize);
-		UTLStrWToStrA(pwPlatform, &pszPlatform);
+		pszPlatform = (char *)new char[textSize/sizeof(wchar_t)];
+		wcstombs(pszPlatform, pwPlatform, textSize/sizeof(wchar_t));
 	}
 	else
-		UTLStrWToStrA(L"<Not Specified>", &pszPlatform);
+	{
+		src = "<Not Specified>";
+		pszPlatform = (char *)new char[strlen(src)+1];
+		strcpy(pszPlatform, src);
+	}
 
 
 	OMFProductInfo.companyName = pszCompanyName;
@@ -316,36 +336,36 @@ Cleanup:
 		pIdent->Release();
 
 	if (pwCompanyName)
-		UTLMemoryFree(pwCompanyName);
+		delete [] pwCompanyName;
 
 	if (pszCompanyName)
-		UTLMemoryFree(pszCompanyName);
+		delete [] pszCompanyName;
 
 	if (pwProductName)
-		UTLMemoryFree(pwProductName);
+		delete [] pwProductName;
 
 	if (pszProductName)
-		UTLMemoryFree(pszProductName);
+		delete [] pszProductName;
 
 	if (pwPlatform)
-		UTLMemoryFree(pwPlatform);
+		delete [] pwPlatform;
 
 	if (pszPlatform)
-		UTLMemoryFree(pszPlatform);
+		delete [] pszPlatform;
 
 	if (pwProductVersionString)
-		UTLMemoryFree(pwProductVersionString);
+		delete [] pwProductVersionString;
 	
 	if (pszProductVersionString)
-		UTLMemoryFree(pszProductVersionString);
+		delete [] pszProductVersionString;
 
 	if (gpGlobals->bVerboseMode && SUCCEEDED(rc))
 	{
-		UTLstdprintf("OMF file: %s created succesfully\n", gpGlobals->sOutFileName);
+		printf("OMF file: %s created succesfully\n", gpGlobals->sOutFileName);
 	}
 	else
 	{
-		UTLstdprintf("File: %s could NOT be created\n", gpGlobals->sOutFileName);
+		printf("File: %s could NOT be created\n", gpGlobals->sOutFileName);
 	}
 
 
@@ -417,7 +437,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 	rc = pHeader->GetNumMobs(kAllMob, &nAAFNumMobs);
 	if (gpGlobals->bVerboseMode)
 	{
-		UTLstdprintf(" Found: %ld Mobs in the input file\n", nAAFNumMobs);
+		printf(" Found: %ld Mobs in the input file\n", nAAFNumMobs);
 	}
 	criteria.searchTag = kByMobKind;
 	criteria.tags.mobKind = kAllMob;
@@ -433,10 +453,11 @@ HRESULT Aaf2Omf::AAFFileRead()
 		gpGlobals->nNumAAFMobs++;
 		// Get Mob Info
 		pMob->GetNameBufLen(&nameLength);
-		UTLMemoryAlloc(nameLength, (void**)&pwMobName);
+		pwMobName = new wchar_t[nameLength/sizeof(wchar_t)];
 		rc = pMob->GetName(pwMobName, nameLength);
 		rc = pMob->GetMobID(&MobID);
-		UTLStrWToStrA(pwMobName, &pszMobName);
+		pszMobName = new char[nameLength/sizeof(wchar_t)];
+		wcstombs(pszMobName, pwMobName, nameLength/sizeof(wchar_t));
 		// Is this a composition Mob?
 		rc = pMob->QueryInterface(IID_IAAFCompositionMob, (void **)&pCompMob);
 		if (SUCCEEDED(rc))
@@ -469,8 +490,8 @@ HRESULT Aaf2Omf::AAFFileRead()
 				else
 				{
 					AUIDtoString(&MobID, szMobID);
-					UTLstdprintf("Unrecognized Mob kind encountered ID: %s\n", szMobID);
-					UTLerrprintf("Unrecognized Mob kind encountered ID: %s\n", szMobID);
+					printf("Unrecognized Mob kind encountered ID: %s\n", szMobID);
+//					fprintf(stderr,"Unrecognized Mob kind encountered ID: %s\n", szMobID);
 				}
 			}
 		}
@@ -498,23 +519,23 @@ HRESULT Aaf2Omf::AAFFileRead()
 						aafUInt32	bytesRead;
 
 						pMobComment->GetNameBufLen(&textSize);
-						UTLMemoryAlloc((aafUInt32)textSize, (void **)&pwcName);
+						pwcName = new wchar_t [textSize/sizeof(wchar_t)];
 						pMobComment->GetName(pwcName, textSize);
+						wcstombs(pszCommName, pwcName, textSize/sizeof(wchar_t));
 
 						pMobComment->GetValueBufLen((aafUInt32 *)&textSize);
-						UTLMemoryAlloc((aafUInt32)textSize, (void **)&pwcComment);
+						pwcComment = new wchar_t (textSize/sizeof(wchar_t));
 						pMobComment->GetValue((aafUInt32)textSize, (aafDataBuffer_t)pwcComment, &bytesRead);
+						wcstombs(pszComment, pwcComment, textSize/sizeof(wchar_t));
 
-						UTLStrWToStrA(pwcName, &pszCommName);
-						UTLStrWToStrA(pwcComment, &pszComment);
 						OMFError = OMF2::omfiMobAppendComment(OMFFileHdl, OMFMob, pszCommName, pszComment);
-						UTLMemoryFree(pszCommName);
+						delete [] pszCommName;
 						pszCommName = NULL;
-						UTLMemoryFree(pszComment);
+						delete [] pszComment;
 						pszComment = NULL;
-						UTLMemoryFree(pwcName);
+						delete [] pwcName;
 						pwcName = NULL;
-						UTLMemoryFree(pwcComment);
+						delete [] pwcComment;
 						pwcComment = NULL;
 						pMobComment->Release();
 						pMobComment = NULL;
@@ -523,8 +544,8 @@ HRESULT Aaf2Omf::AAFFileRead()
 				}
 			}
 		}
-		UTLMemoryFree(pwMobName);
-		UTLMemoryFree(pszMobName);
+		delete [] pwMobName;
+		delete [] pszMobName;
 		gpGlobals->nNumOMFMobs++;
 		pMob->Release();
 		pMob = NULL;
@@ -538,7 +559,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 	{
 		if (gpGlobals->bVerboseMode)
 		{
-			UTLstdprintf(" Found: %ld Essence data objects\n", numEssenceData);
+			printf(" Found: %ld Essence data objects\n", numEssenceData);
 		}
 		rc = pHeader->EnumEssenceData(&pEssenceDataIter);
 		while (SUCCEEDED(rc) && SUCCEEDED(pEssenceDataIter->NextOne(&pEssenceData)))
@@ -657,7 +678,7 @@ HRESULT Aaf2Omf::ConvertMasterMob(IAAFMasterMob* pMasterMob,
 		if (OMF2::OM_ERR_NONE == OMFError)
 		{
 			if (gpGlobals->bVerboseMode)
-				UTLstdprintf("Converted AAF Master MOB to OMF\n");
+				printf("Converted AAF Master MOB to OMF\n");
 		}
 	}
 
@@ -699,7 +720,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 	IAAFObject*				pAAFObject = NULL;
 
 	if (gpGlobals->bVerboseMode)
-		UTLstdprintf("Converting AAF Source MOB to OMF\n");
+		printf("Converting AAF Source MOB to OMF\n");
 
 	rc = pSourceMob->GetEssenceDescriptor(&pEssenceDesc);
 	if (FAILED(rc))
@@ -734,18 +755,20 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			pTapeDesc->GetTapeManBufLen(&textSize);
 			if (textSize > 0)
 			{
-				UTLMemoryAlloc(textSize, (void**)&pwManufacturer);
+				pwManufacturer = new wchar_t[textSize/sizeof(wchar_t)];
 				pTapeDesc->GetTapeManufacturer(pwManufacturer, textSize);
-				UTLStrWToStrA(pwManufacturer, &pszManufacturer);
+				pszManufacturer = new char[textSize/sizeof(wchar_t)];
+				wcstombs(pszManufacturer, pwManufacturer, textSize/sizeof(wchar_t));
 			}
 			else
 				pszManufacturer = NULL;
 			pTapeDesc->GetTapeModelBufLen(&textSize);
 			if (textSize > 0)
 			{
-				UTLMemoryAlloc(textSize, (void**)&pwModel);
+				pwModel = new wchar_t[textSize/sizeof(wchar_t)];
 				pTapeDesc->GetTapeModel(pwModel, textSize);
-				UTLStrWToStrA(pwModel, &pszModel);
+				pszModel = new char[textSize/sizeof(wchar_t)];
+				wcstombs(pszModel, pwModel, textSize/sizeof(wchar_t));
 			}
 			else
 				pszModel = NULL;
@@ -759,15 +782,15 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 												pszManufacturer,
 												pszModel);
 			if (gpGlobals->bVerboseMode)
-				UTLstdprintf("%sAdded a Tape Essence Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+				printf("%sAdded a Tape Essence Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			if (pwManufacturer)
-				UTLMemoryFree(pwManufacturer);
+				delete [] pwManufacturer;
 			if (pszManufacturer)
-				UTLMemoryFree(pszManufacturer);
+				delete [] pszManufacturer;
 			if (pwModel)
-				UTLMemoryFree(pwModel);
+				delete [] pwModel;
 			if (pszModel)
-				UTLMemoryFree(pszModel);
+				delete [] pszModel;
 		goto Cleanup;
 		}
 	}
@@ -799,7 +822,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 
 			// retrieve TIFF descriptor properties
 			rc = pTiffDesc->GetSummaryBufferSize(&summarySize);
-			UTLMemoryAlloc(summarySize, (void **)&pSummary);
+			pSummary = new aafUInt8[summarySize];
 			rc = pTiffDesc->GetSummary(summarySize, pSummary);
 			rc = pTiffDesc->GetTrailingLines(&trailingLines);
 			rc = pTiffDesc->GetLeadingLines(&leadingLines);
@@ -815,11 +838,11 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			if (OMFError)
 			{
 				char* pErrString = OMF2::omfsGetErrorString(OMFError);
-				UTLerrprintf("%sAn error occurred while adding TIFF Media descritptor, ERROR = %s\n",gpGlobals->indentLeader, pErrString);
+				fprintf(stderr,"%sAn error occurred while adding TIFF Media descritptor, ERROR = %s\n",gpGlobals->indentLeader, pErrString);
 				goto Cleanup;
 			}
 			if (gpGlobals->bVerboseMode)
-				UTLstdprintf("%sAdded a Tiff Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+				printf("%sAdded a Tiff Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 
 			// Set OMF TIFF File Descriptor properties
 			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&rc);
@@ -853,10 +876,10 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			if (OMFError)
 			{
 				char* pErrString = OMF2::omfsGetErrorString(OMFError);
-				UTLerrprintf("%sAn error occurred while adding TIFF Media descritptor, ERROR = %s\n",gpGlobals->indentLeader, pErrString);
+				fprintf(stderr,"%sAn error occurred while adding TIFF Media descritptor, ERROR = %s\n",gpGlobals->indentLeader, pErrString);
 				goto Cleanup;
 			}
-			UTLMemoryFree(pSummary);
+			delete [] pSummary;
 			goto Cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&pWAVEDesc);
@@ -865,13 +888,13 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			// It is a WAVE file descriptor
 			OMF2::omfDDefObj_t	datakind;
 			OMF2::omfObject_t	mediaDescriptor;
-			aafDataValue_t*		pSummary;
+			aafDataValue_t		pSummary;
 			aafUInt32			summarySize = 0;
 
 			// retrieve WAVE descriptor properties
 			rc = pWAVEDesc->GetSummaryBufferSize(&summarySize);
-			UTLMemoryAlloc(summarySize, (void **)&pSummary);
-			rc = pWAVEDesc->GetSummary(summarySize, *pSummary);
+			pSummary = new aafUInt8[summarySize];
+			rc = pWAVEDesc->GetSummary(summarySize, pSummary);
 
 			//Create a new WAVE File Descriptor
 			OMFError = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_WAVE_AUDIO, pOMFSourceMob);
@@ -886,7 +909,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 										 (OMF2::omfPosition_t)0,
 										 summarySize);
 			if (gpGlobals->bVerboseMode)
-				UTLstdprintf("%sAdded a Wave Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+				printf("%sAdded a Wave Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			goto Cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFAIFCDescriptor, (void **)&pAifcDesc);
@@ -899,7 +922,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 
 			// retrieve AIFC descriptor properties
 			rc = pAifcDesc->GetSummaryBufferSize(&summarySize);
-			UTLMemoryAlloc(summarySize, (void **)&pSummary);
+			pSummary = new aafUInt8[summarySize];
 			rc = pAifcDesc->GetSummary(summarySize, pSummary);
 			
 			OMFError = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_AIFC_AUDIO, pOMFSourceMob);
@@ -907,8 +930,8 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			OMFError = OMF2::omfmMobGetMediaDescription(OMFFileHdl, *pOMFSourceMob, &mediaDescriptor);
 			OMFError = OMF2::omfsWriteLength(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLLength, (OMF2::omfLength_t)length); 
 			if (gpGlobals->bVerboseMode)
-				UTLstdprintf("%sAdded an AIFC Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
-			UTLMemoryFree(pSummary);
+				printf("%sAdded an AIFC Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+			delete [] pSummary;
 			goto Cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pCDCIDesc);
@@ -918,7 +941,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			OMFError = OMF2::omfmFileMobNew(OMFFileHdl, pMobName, rate, CODEC_CDCI_VIDEO, pOMFSourceMob);
 			OMFError = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFSourceMob, OMFMobID);
 			if (gpGlobals->bVerboseMode)
-				UTLstdprintf("%sAdded a CDCI Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
+				printf("%sAdded a CDCI Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
 			goto Cleanup;
 		}
 		rc = pEssenceDesc->QueryInterface(IID_IAAFObject, (void **)&pAAFObject);
@@ -931,8 +954,8 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			pAAFObject->GetObjectClass(&ObjClass);
 			AUIDtoString(&ObjClass ,szTempUID);
 			if (gpGlobals->bVerboseMode)
-				UTLstdprintf("%sInvalid essence descripor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
-			UTLerrprintf("%sInvalid essence descriptor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+				printf("%sInvalid essence descripor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+			fprintf(stderr,"%sInvalid essence descriptor type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
 		}
 		goto Cleanup;
 	}
@@ -1009,7 +1032,7 @@ HRESULT Aaf2Omf::TraverseMob(IAAFMob* pMob,
 	IncIndentLevel();
 	if (gpGlobals->bVerboseMode)
 	{
-		UTLstdprintf("%sFound: %ld sub slots\n", gpGlobals->indentLeader, numSlots);
+		printf("%sFound: %ld sub slots\n", gpGlobals->indentLeader, numSlots);
 	}
 
 	for (aafInt32 times = 0; times< numSlots; times++)
@@ -1019,9 +1042,10 @@ HRESULT Aaf2Omf::TraverseMob(IAAFMob* pMob,
 		{
 			//	Process Segment data
 			pSlot->GetNameBufLen(&textSize);
-			UTLMemoryAlloc(textSize, (void**)&pwTrackName);
+			pwTrackName = new wchar_t[textSize/sizeof(wchar_t)];
 			pSlot->GetName(pwTrackName, textSize);
-			UTLStrWToStrA(pwTrackName, &pszTrackName);
+			pwTrackName = new wchar_t[textSize/sizeof(wchar_t)];
+			wcstombs(pszTrackName, pwTrackName, textSize/sizeof(wchar_t));
 			pSlot->GetSlotID( (aafSlotID_t *)&OMFTrackID);
 			rc = pSlot->QueryInterface(IID_IAAFTimelineMobSlot, (void **)&pTimelineMobSlot);
 			if (SUCCEEDED(rc))
@@ -1049,17 +1073,17 @@ HRESULT Aaf2Omf::TraverseMob(IAAFMob* pMob,
 			{
 				if (gpGlobals->bVerboseMode)
 				{
-					UTLstdprintf("%sConverted SlotID: %d, Name: %s\n",gpGlobals->indentLeader, (int)OMFTrackID, pszTrackName);
+					printf("%sConverted SlotID: %d, Name: %s\n",gpGlobals->indentLeader, (int)OMFTrackID, pszTrackName);
 				}
 			}
 			if (pszTrackName)
 			{
-				UTLMemoryFree(pszTrackName);
+				delete [] pszTrackName;
 				pszTrackName = NULL;
 			}
 			if (pwTrackName)
 			{
-				UTLMemoryFree(pwTrackName);
+				delete [] pwTrackName;
 				pwTrackName = NULL;
 			}
 			if (pSlot)
@@ -1144,7 +1168,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		// Component is a sequence
 		OMFError = OMF2::omfiSequenceNew(OMFFileHdl, OMFDatakind, pOMFSegment);
 		if (gpGlobals->bVerboseMode)
-			UTLstdprintf("%sProcessing Sequence\n", gpGlobals->indentLeader);
+			printf("%sProcessing Sequence\n", gpGlobals->indentLeader);
 		TraverseSequence(pSequence, pOMFSegment);
 		goto Cleanup;
 	}
@@ -1161,7 +1185,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 
 		if (gpGlobals->bVerboseMode)
 		{
-			UTLstdprintf("%sProcessing Source Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
+			printf("%sProcessing Source Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
 		// Get Source Clip properties
 		pSourceClip->GetSourceReference(&ref);
@@ -1235,14 +1259,14 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		timecode.fps = AAFTimecode.fps;
 		if (gpGlobals->bVerboseMode)
 		{
-			UTLstdprintf("%sProcessing Timecode Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
+			printf("%sProcessing Timecode Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 			IncIndentLevel();
-			UTLstdprintf("%sstart Frame\t: %ld\n", gpGlobals->indentLeader, timecode.startFrame);
+			printf("%sstart Frame\t: %ld\n", gpGlobals->indentLeader, timecode.startFrame);
 			if (timecode.drop == AAFTrue)
-				UTLstdprintf("%sdrop\t\t: True\n", gpGlobals->indentLeader);
+				printf("%sdrop\t\t: True\n", gpGlobals->indentLeader);
 			else
-				UTLstdprintf("%sdrop\t\t: False\n", gpGlobals->indentLeader);
-			UTLstdprintf("%sFrames/second\t: %ld\n", gpGlobals->indentLeader, timecode.fps);     
+				printf("%sdrop\t\t: False\n", gpGlobals->indentLeader);
+			printf("%sFrames/second\t: %ld\n", gpGlobals->indentLeader, timecode.fps);     
 			DecIndentLevel();				
 		}
 
@@ -1273,9 +1297,9 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		memcpy(OMFEdgecode.header, edgecode.header, sizeof(edgecode.header));
 		if (gpGlobals->bVerboseMode)
 		{
-			UTLstdprintf("%sProcessing Timecode Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
+			printf("%sProcessing Timecode Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 			IncIndentLevel();
-			UTLstdprintf("%sstart Frame\t: %ld\n", gpGlobals->indentLeader, edgecode.startFrame);
+			printf("%sstart Frame\t: %ld\n", gpGlobals->indentLeader, edgecode.startFrame);
 			DecIndentLevel();				
 		}
 		OMFError = OMF2::omfiEdgecodeNew(OMFFileHdl, (OMF2::omfLength_t)length, OMFEdgecode, pOMFSegment);		
@@ -1289,7 +1313,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		OMFError = OMF2::omfiFillerNew(OMFFileHdl, OMFDatakind, (OMF2::omfLength_t)length, pOMFSegment);
 		if (gpGlobals->bVerboseMode)
 		{
-			UTLstdprintf("%sProcessing Filler of length: %ld\n ", gpGlobals->indentLeader, (int)length);
+			printf("%sProcessing Filler of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
 		goto Cleanup;
 	}
@@ -1302,7 +1326,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 
 		if (gpGlobals->bVerboseMode)
 		{
-			UTLstdprintf("%sProcessing Effect of length: %ld\n ", gpGlobals->indentLeader, (int)length);
+			printf("%sProcessing Effect of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
 		rc = ConvertEffects(pEffect, &effect);
 
@@ -1318,7 +1342,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 
 		if (gpGlobals->bVerboseMode)
 		{
-			UTLstdprintf("%sProcessing Transition of length: %ld\n ", gpGlobals->indentLeader, (int)length);
+			printf("%sProcessing Transition of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
 		pTransition->GetCutPoint(&cutPoint);
 		rc = pTransition->GetOperationGroup(&pEffect);
@@ -1353,8 +1377,8 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	char szTempUID[64];
 	AUIDtoString(&datadef ,szTempUID);
 	if (gpGlobals->bVerboseMode)
-		UTLstdprintf("%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
-	UTLerrprintf("%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+		printf("%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+	fprintf(stderr,"%sInvalid component type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
 
 Cleanup:
 
@@ -1448,8 +1472,8 @@ HRESULT Aaf2Omf::GetUniqueNameFromAUID(aafUID_t Datadef,
 	else
 	{
 		AUIDtoString(&Datadef, szAUID);
-		UTLstdprintf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
-		UTLerrprintf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
+		printf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
+		fprintf(stderr,"%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
 		rc = AAFRESULT_INVALID_DATADEF;
 	}
 
@@ -1505,8 +1529,8 @@ HRESULT Aaf2Omf::ConvertAAFDatadef(aafUID_t Datadef,
 	else
 	{
 		AUIDtoString(&Datadef, szAUID);
-		UTLstdprintf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
-		UTLerrprintf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
+		printf("%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
+		fprintf(stderr,"%sInvalid DataDef Found in sequence AUID : %s\n", gpGlobals->indentLeader, szAUID);
 		rc = AAFRESULT_INVALID_DATADEF;
 	}
 
@@ -1591,7 +1615,7 @@ HRESULT Aaf2Omf::ConvertSelector(IAAFSelector* pSelector,
 	pComponent->GetLength(&length);
 
 	if (gpGlobals->bVerboseMode)
-		UTLstdprintf("%sProcessing Selector object of length = %ld\n", gpGlobals->indentLeader, length);
+		printf("%sProcessing Selector object of length = %ld\n", gpGlobals->indentLeader, length);
 
 	pComponent->Release();
 	pComponent = NULL;
@@ -1675,33 +1699,35 @@ HRESULT Aaf2Omf::ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc,
 			if (SUCCEEDED(rc))
 			{
 				rc = pTextLocator->GetNameBufLen((aafInt32 *)&textSize);
-				UTLMemoryAlloc(textSize, (void **)&pwName);
+				pwName = new wchar_t[textSize/sizeof(wchar_t)];
 				rc = pTextLocator->GetName(pwName, textSize);
 				if (SUCCEEDED(rc))
 				{
-					UTLStrWToStrA(pwName, &pszName);
+					pszName = new char[textSize/sizeof(wchar_t)];
+					wcstombs(pszName, pwName, textSize/sizeof(wchar_t));
 					OMFError = OMF2::omfmMobAddTextLocator(OMFFileHdl, *pOMFSourceMob, pszName);
 					if (pwName)
-						UTLMemoryFree(pwName);
+						delete [] pwName;
 					if (pszName)
-						UTLMemoryFree(pszName);
+						delete [] pszName;
 				}
 			}
 			else
 			{
 				pLocator->GetPathBufLen(&pathSize);
-				UTLMemoryAlloc(pathSize, (void **)&pwLocatorPath);
+				pwLocatorPath = new wchar_t[pathSize/sizeof(wchar_t)];
 				pLocator->GetPath(pwLocatorPath, pathSize);
-				UTLStrWToStrA(pwLocatorPath, &pszLocatorPath);
+				pszLocatorPath = new char[pathSize/sizeof(wchar_t)];
+				wcstombs(pszLocatorPath, pwLocatorPath, pathSize/sizeof(wchar_t));
 				OMFError = OMF2::omfmMobAddNetworkLocator(OMFFileHdl, *pOMFSourceMob, OMF2::kOmfiMedia, pszLocatorPath);
 				if (pwLocatorPath)
 				{
-					UTLMemoryFree(pwLocatorPath);
+					delete [] pwLocatorPath;
 					pwLocatorPath = NULL;
 				}
 				if (pszLocatorPath)
 				{
-					UTLMemoryFree(pszLocatorPath);
+					delete [] pszLocatorPath;
 					pszLocatorPath = NULL;
 				}
 			}
@@ -1714,9 +1740,9 @@ HRESULT Aaf2Omf::ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc,
 	if (pLocatorIter)
 		pLocatorIter->Release();
 	if (pwLocatorPath)
-		UTLMemoryFree(pwLocatorPath);
+		delete [] pwLocatorPath;
 	if (pszLocatorPath)
-		UTLMemoryFree(pszLocatorPath);
+		delete [] pszLocatorPath;
 
 	if (OMFError != OMF2::OM_ERR_NONE)
 		rc = AAFRESULT_INTERNAL_ERROR;
@@ -1898,8 +1924,8 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 		pAAFObject->GetObjectClass(&ObjClass);
 		AUIDtoString(&ObjClass ,szTempUID);
 		if (gpGlobals->bVerboseMode)
-			UTLstdprintf("%sInvalid essence data type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
-		UTLerrprintf("%sInvalid essence data type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+			printf("%sInvalid essence data type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
+		fprintf(stderr,"%sInvalid essence data type found, datadef : %s\n", gpGlobals->indentLeader, szTempUID);
 	}
 	goto Cleanup;
 
@@ -1933,7 +1959,7 @@ CopyMedia:
 				goto Cleanup;
 			  }
 			}
-			rc = UTLMemoryAlloc(nBlockSize, &pBuffer);
+			pBuffer = new char[nBlockSize];
 			AAFOffset = 0;
 			do 
 			{
@@ -1952,7 +1978,7 @@ CopyMedia:
 				AAFOffset += numBytesRead;
 			}while (numBytes > AAFOffset );
 			// Free the allocated buffer 
-			UTLMemoryFree(pBuffer);
+			delete [] pBuffer;
 		}
 	}
 Cleanup:
@@ -2047,13 +2073,15 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 		{
 			pDefObject->GetAUID(&effectDefAUID);
 			pDefObject->GetNameBufLen(&textSize);
-			UTLMemoryAlloc(textSize, (void **) &pwName);
+			pwName = new wchar_t[textSize/sizeof(wchar_t)];
 			pDefObject->GetName(pwName, textSize);
-			UTLStrWToStrA(pwName, &pszName);
+			pszName = new char[textSize/sizeof(wchar_t)];
+			wcstombs(pszName, pwName, textSize/sizeof(wchar_t));
 			pDefObject->GetDescriptionBufLen(&textSize);
-			UTLMemoryAlloc(textSize, (void **)&pwDesc);
+			pwDesc = new wchar_t[textSize/sizeof(wchar_t)];
 			pDefObject->GetDescription(pwDesc, textSize);
-			UTLStrWToStrA(pwDesc, &pszDesc);
+			pszDesc = new char[textSize/sizeof(wchar_t)];
+			wcstombs(pszDesc, pwDesc, textSize/sizeof(wchar_t));
 		}
 //		else
 //		{
@@ -2079,13 +2107,13 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	}
 	DecIndentLevel();
 	if (pwName)
-		UTLMemoryFree(pwName);
+		delete [] pwName;
 	if (pwDesc)
-		UTLMemoryFree(pwDesc);
+		delete [] pwDesc;
 	if (pszName)
-		UTLMemoryFree(pszName);
+		delete [] pszName;
 	if (pszDesc)
-		UTLMemoryFree(pszDesc);
+		delete [] pszDesc;
 
 	if (pEffectDef)
 		pEffectDef->Release();
