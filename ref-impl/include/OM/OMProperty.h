@@ -100,6 +100,9 @@ public:
     // @cmember The property id of this <c OMProperty>.
   OMPropertyId propertyId(void) const;
 
+    // @cmember The <c OMPropertySet> containing this <c OMProperty>.
+  const OMPropertySet* propertySet(void) const;
+
     // @cmember Inform this <c OMProperty> that it is a member of
     //          the <c OMPropertySet> <p propertySet>.
   void setPropertySet(const OMPropertySet* propertySet);
