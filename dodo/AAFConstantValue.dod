@@ -1,5 +1,13 @@
+#c/***********************************************\
+#c*                                               *
+#c* Advanced Authoring Format                     *
+#c*                                               *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc. *
+#c* Copyright (c) 1998-1999 Microsoft Corporation *
+#c*                                               *
+#c\***********************************************/
 #startm .this-module 0
-AAFConstValue\
+AAFConstantValue\
 #endm
 #c
 #startm .parent-module 0
@@ -8,7 +16,7 @@ AAFParameter\
 #c
 AD_HEAD
 AD_IDL(//
-// The IAAFConstValue interface is implemented by objects that specify a parameter
+// The IAAFConstantValue interface is implemented by objects that specify a parameter
 // whose value is constant for an entire operation group.  Use IAAFVaryingValue and one or
 // more IAAFControlPoints for parameters which change in value during the operation group.
 //
@@ -21,14 +29,6 @@ AD_IDL(//
 //     operation.
 //)
 
-/***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-* Copyright (c) 1998-1999 Microsoft Corporation *
-*												*
-\***********************************************/
 
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFParameter)

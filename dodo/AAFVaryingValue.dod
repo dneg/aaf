@@ -1,3 +1,11 @@
+#c/***********************************************\
+#c*                                               *
+#c* Advanced Authoring Format                     *
+#c*                                               *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc. *
+#c* Copyright (c) 1998-1999 Microsoft Corporation *
+#c*                                               *
+#c\***********************************************/
 #startm .this-module 0
 AAFVaryingValue\
 #endm
@@ -11,7 +19,7 @@ AD_IDL(//
 // The IAAFVaryingValue interface is implemented by objects that specify a parameter
 // whose value changes during the operation group.  The actual values are stored in one or
 // more IAAFControlPoints.  For parameters which are constant in value during the operation group\,
-// use IAAFConstValue.
+// use IAAFConstantValue.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -21,14 +29,7 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-/***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-* Copyright (c) 1998-1999 Microsoft Corporation *
-*												*
-\***********************************************/
+
 
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFControlPoint)
