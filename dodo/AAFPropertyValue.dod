@@ -1,0 +1,66 @@
+#startm .this-module 0
+AAFPropertyValue\
+#endm
+#c
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+AD_HEAD
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+AD_FORWARD_DECLARATION(AAFTypeDef)
+AD_CLASS_UUID(83057d71, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
+
+AD_DEFAULT_UUID(83057d72, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
+AD_CLASS_BEGIN
+AD_XMETHOD1(GetType,
+			[out],
+			objOut,
+			AAFTypeDef,
+			ppTypeDef,
+			The type definition associated with this property value,
+
+			Returns the type definition associated with this property value.
+  //
+  // Succeeds if:
+  // - The ppTypeDef pointer is valid.
+  // - The associated type definition can be found in the dictionary.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pSize pointer is NULL.
+  //
+  // AAFRESULT_BAD_TYPE
+  //   - This Property Value is not of a recognized type.)
+
+
+AD_XMETHOD1(GetTypeID,
+			[out],
+			objPass,
+			aafUID_t *,
+			pTypeID,
+			The type ID associated with this property value,
+
+			Returns the type ID associated with this property value.
+  //
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pSize pointer is NULL.)
+AD_CLASS_END
