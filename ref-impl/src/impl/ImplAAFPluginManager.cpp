@@ -47,7 +47,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <wchar.h>
-#include <iostream.h>
 
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
@@ -1094,15 +1093,17 @@ AAFPluginFileEntry::~AAFPluginFileEntry()
 {
   if (_pPluginFile)
   {
-#ifndef NDEBUG // symbol for ansi assert
-    // If we are about to 
+    // If we are about to release the last reference to the plugin file
+    // and the plugin file claims that it it not ready to be unloaded then ...
     if (1 == _pPluginFile->ReferenceCount() && S_OK != _pPluginFile->CanUnloadNow())
     {
-      cerr << "WARNING: Unloading a plugin dll when the CanUnloadNow()\n"
-              "callback has failed. This may not be an error if the dll\n"
-              "was loaded outside of the AAF Plugin Manager.\n";
+      // *** Need to output some sort of warning! ***
+      //
+      // "WARNING: Unloading a plugin dll when the CanUnloadNow()\n"
+      // "callback has failed. This may not be an error if the dll\n"
+      // "was loaded outside of the AAF Plugin Manager.\n"
     }
-#endif
+
     _pPluginFile->ReleaseReference();
     _pPluginFile = NULL;
   }
