@@ -156,6 +156,43 @@ protected:
 public:
 #endm
 
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT2_CLASS_BEGIN 02
+#ifndef __C.parent-module_h__
+#include "C.parent-module.h"
+#endif
+
+//
+// Forward declaration
+//
+class Impl.this-module;
+
+
+class C.this-module
+  : public I.this-module,
+    %01,
+	%02,
+    public C.parent-module
+{
+protected:
+
+  //********
+  //
+  // Constructor/destructor
+  //
+  C.this-module (IUnknown * pControllingUnknown, aafBool doInit = AAFTrue);
+  virtual ~C.this-module ();
+
+public:
+#endm
+
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -953,12 +990,24 @@ public:
 
 #ccccccccccccccccccccccccccc
 #c
-#c Ends a class definition for classes which support more than the
+#c Ends a class definition for classes which support 1 more than the
 #c primary COM interface.
 #c
 #c Arguments: additional interface name
 #c
 #startm AD_COM_EXT_CLASS_END 01
+AD_CLASS_END\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition for classes which support 2 more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT2_CLASS_END 02
 AD_CLASS_END\
 #endm
 
