@@ -515,7 +515,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
 {
-	_toolkitRev = AAFToolkitVersion;
+	_toolkitRev = AAFReferenceImplementationVersion;
 	return (OM_ERR_NONE);
 }
 
