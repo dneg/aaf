@@ -70,15 +70,15 @@ AAFRESULT STDMETHODCALLTYPE ImplEnumAAFPropertyValues::Initialize( ImplAAFTypeDe
   }
 
   // Must resolve the array type in order to get the array size.
-  ImplAAFTypeDefFixedArray *pFixedArray = 0;
-  ImplAAFTypeDefVariableArray *pVariableArray = 0;
+  ImplAAFTypeDefFixedArray *pFixedArray = dynamic_cast<ImplAAFTypeDefFixedArray*>(pDef);
+  ImplAAFTypeDefVariableArray *pVariableArray = dynamic_cast<ImplAAFTypeDefVariableArray*>(pDef);
 
   // Intentional assignment in predicate (both cases below).
   AAFRESULT hr = AAFRESULT_SUCCESS;
-  if ( pFixedArray = dynamic_cast<ImplAAFTypeDefFixedArray*>(pDef) ) {
+  if ( pFixedArray  ) {
     hr = pFixedArray->GetCount( &_count );
   }
-  else if ( pVariableArray = dynamic_cast<ImplAAFTypeDefVariableArray*>(pDef) ) {
+  else if ( pVariableArray  ) {
     hr = pVariableArray->GetCount( pVal, &_count );
   }
   else {

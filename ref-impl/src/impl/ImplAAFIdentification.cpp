@@ -414,7 +414,7 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
-void ImplAAFIdentification::onCopy(void* clientContext) const
+void ImplAAFIdentification::onCopy(void* /*clientContext*/) const
 {
   const_cast<ImplAAFIdentification*>(this)->setInitialized();
 }

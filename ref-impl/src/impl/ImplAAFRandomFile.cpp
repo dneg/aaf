@@ -81,7 +81,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFRandomFile::SaveAsFile (
-      ImplAAFFile * pDestFile )
+      ImplAAFFile * /*pDestFile*/ )
 {
 #if 0
   // Copy this file to the destination file.
