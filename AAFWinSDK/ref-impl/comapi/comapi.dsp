@@ -252,10 +252,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFInterpolationDef.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFIntraFrameMarker.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFKLVData.cpp"
 # End Source File
 # Begin Source File
@@ -265,10 +261,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFLocator.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFMasterMob.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFMIDIFileDescriptor.cpp"
 # End Source File
 # Begin Source File
 

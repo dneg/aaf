@@ -254,10 +254,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFInterpolationDef.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFIntraFrameMarker.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFKLVData.cpp"
 # End Source File
 # Begin Source File
@@ -267,10 +263,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFLocator.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMasterMob.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMIDIFileDescriptor.cpp"
 # End Source File
 # Begin Source File
 
