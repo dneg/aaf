@@ -287,7 +287,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  // Open the AAF file
 	  checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
 
-    // Make sure there is one a single mob in the file.
+	  // Make sure there is one a single mob in the file.
 	  checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
@@ -311,7 +311,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  aafAlphaTransparency_t	alphaTrans;
 	  aafRational_t			ratio;
 	  aafInt32				VideoLineMap[kVideoLineMapMaxElement];
-	  aafUID_t				compression, compTestVal;
+	  aafUID_t				compression;
+	  aafUID_t				compTestVal;
 
 	  memset(&compTestVal, 0, sizeof(aafUID_t));
 
@@ -429,7 +430,8 @@ extern "C" HRESULT CAAFRGBADescriptor_test()
 	aafWChar*	pFileName = L"AAFRGBADescripTest.aaf";
 	HRESULT		hr = AAFRESULT_NOT_IMPLEMENTED;
 
-	try
+
+   	try
 	{
 		hr = CreateAAFFile(pFileName);
 		if (SUCCEEDED(hr))
