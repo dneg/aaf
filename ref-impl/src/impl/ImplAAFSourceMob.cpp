@@ -719,9 +719,21 @@ AAFRESULT STDMETHODCALLTYPE
 // GetMobKind()
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceMob::GetMobKind (aafMobKind_t *  /*pMobKind*/)
+    ImplAAFSourceMob::GetMobKind (aafMobKind_t *pMobKind)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFEssenceDescriptor	*edesc;
+	
+	if(pMobKind == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	XPROTECT()
+	{
+		CHECK(GetEssenceDescription (&edesc));
+		CHECK(edesc->GetOwningMobKind(pMobKind));
+	}
+	XEXCEPT
+	XEND;
+
+	return AAFRESULT_SUCCESS;
 }
 
 //************************
