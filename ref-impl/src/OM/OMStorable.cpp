@@ -382,6 +382,16 @@ void OMStorable::setClassFactory(const OMClassFactory* classFactory)
   POSTCONDITION("Valid class factory", _classFactory != 0);
 }
 
+  // @mfunc Inform this <c OMStorable> that it is about to be saved.
+  //        The <p clientContext> passed is the one that was specified
+  //        in the currently active call to <mf OMStorable::save>.
+  //   @parm void *| clientContext | A context for the client.
+  //   @this const
+void OMStorable::onSave(void*) const
+{
+  // nothing to do in this default implementation
+}
+
 char* OMStorable::makePathName(void)
 {
   TRACE("OMStorable::makePathName");
