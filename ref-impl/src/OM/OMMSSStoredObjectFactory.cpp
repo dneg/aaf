@@ -226,6 +226,7 @@ OMMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
 {
   TRACE("OMMSSStoredObjectFactory::isRecognized");
   PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
 
   bool result = false;
 

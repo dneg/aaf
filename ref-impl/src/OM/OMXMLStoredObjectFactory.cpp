@@ -200,17 +200,13 @@ OMXMLStoredObjectFactory::isRecognized(OMRawStorage* /* rawStorage */)
   //   @parm The <t OMAccessMode>.
   //   @rdesc True if the file can be created, false otherwise.
 bool OMXMLStoredObjectFactory::compatibleRawStorage(
-                                         const OMRawStorage* NNAME(rawStorage),
-                                         const OMFile::OMAccessMode accessMode)
+                                  const OMRawStorage* NNAME(rawStorage),
+                                  const OMFile::OMAccessMode NNAME(accessMode))
 {
   TRACE("OMXMLStoredObjectFactory::compatibleRawStorage");
 
+  // tjb -- missing checks ?
   bool result = true;
-  // It is not possible to modify and XML encoded file in place.
-
-  if (accessMode == OMFile::modifyMode) {
-    result = false;
-  }
   return result;
 }
 
