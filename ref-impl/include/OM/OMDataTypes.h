@@ -25,6 +25,7 @@
 *
 ************************************************************************/
 
+// @doc OMEXTERNAL
 #ifndef OMDATATYPES_H
 #define OMDATATYPES_H
 
