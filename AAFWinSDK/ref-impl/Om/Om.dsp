@@ -98,6 +98,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDictionary.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMDiskRawStorage.cpp"
 # End Source File
 # Begin Source File
@@ -115,6 +119,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMObjectDirectory.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMProperty.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMPropertyDefinition.cpp"
 # End Source File
 # Begin Source File
 
