@@ -945,8 +945,7 @@ OMFile::OMFileEncoding OMFile::encodingOf(const OMFileSignature& signature)
   TRACE("OMFile::encodingOf");
   
   OMFileEncoding result;
-  const char* p = reinterpret_cast<const char *>(&signature);
-  char tag = p[3];
+  char tag = ((char)((signature.Data1 & 0xff000000) >> 24));
   switch (tag) {
   case 'B': // structured storage (binary)
     result = MSSBinaryEncoding;
