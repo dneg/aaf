@@ -185,9 +185,6 @@ public:
     // @parm [in] aafEffectChoice_t * | pEffectChoice | Effect Choice
     aafEffectChoice_t *  pEffectChoice,
 
-    // @parm [out] AAFComponent | ppThisCpnt | The found component
-    ImplAAFComponent ** ppThisCpnt,
-
     // @parm [out] AAFFindSourceInfo | ppSourceInfo | Source Information
     ImplAAFFindSourceInfo ** ppSourceInfo
   );
