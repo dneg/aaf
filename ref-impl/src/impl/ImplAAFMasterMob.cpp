@@ -668,12 +668,20 @@ AAFRESULT STDMETHODCALLTYPE
 							aafCompressEnable_t Enable,
 							ImplAAFLocator		*destination,
 							aafUID_t			fileFormat,
-							ImplAAFEssenceAccess **result)
+							IAAFEssenceMultiAccess **result)
 {
 	ImplAAFEssenceAccess	*access;
+	IUnknown				*iUnk = NULL;
+	AAFRESULT				hr;
 
 	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
-	*result = access;
+	iUnk = static_cast<IUnknown *> (access->GetContainer());
+	hr = iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)result);
+	if(hr != AAFRESULT_SUCCESS)
+		return hr;
+
+	iUnk->Release();
+	iUnk = NULL;
 	return access->MultiCreate(this, codecID, arrayElemCount, mediaArray, Enable);
 }
 
@@ -727,12 +735,19 @@ AAFRESULT STDMETHODCALLTYPE
                            aafMediaCriteria_t*  mediaCrit,
                            aafMediaOpenMode_t  openMode,
                            aafCompressEnable_t  compEnable,
-							ImplAAFEssenceAccess **result)
+							IAAFEssenceMultiAccess **result)
 {
 	ImplAAFEssenceAccess	*access;
+	IUnknown				*iUnk = NULL;
+	AAFRESULT				hr;
 
 	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
-	*result = access;
+	iUnk = static_cast<IUnknown *> (access->GetContainer());
+	hr = iUnk->QueryInterface(IID_IAAFEssenceMultiAccess, (void **)result);
+	if(hr != AAFRESULT_SUCCESS)
+		return hr;
+	iUnk->Release();
+	iUnk = NULL;
 	return access->MultiOpen(this, slotID, mediaCrit, openMode, compEnable);
 }
 
