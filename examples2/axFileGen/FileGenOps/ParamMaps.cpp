@@ -450,24 +450,31 @@ template class ParamMap< aafUID_t, _OperationDefTag >;
 
 //=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=
+
 #if 0
 // Recipe:
-// 1) Copy the template.
-// 2) Define _TemplateTag to something unique and appriate name.
-// 3) Change Type (the template uses int) to what ever you need.
+// 1) Copy this example.
+// 2) Define _TemplateTag to something unique and appropriate.  If the
+// type is an enum typedef, then the underlying enum type is a good
+// tag to use. (i.e. if X_t is the type, then X_e usually exists).
+// Else, invent a tag name.  A forward declaration of a non existant
+// class is useful for this.
+// 3) Change Type to what ever you need.
 // 4) In the constructor, initialize the _map;
-// 5) Move the _TemplateTag declaration and typedef to the header file.
+// 5) Move the _TemplateTag declaration and typedef to the header
+// file.
 
 class _TemplateTag;
-typedef ParamMap< int, _TemplateTag > TemplateParams;
+typedef ParamMap< Type, _TemplateTag > TemplateParams;
 
-ParamMap< int, _TemplateTag >::ParamMap()
+ParamMap< Type, _TemplateTag >::ParamMap()
 {
 	_map[ L"NAME" ] = 0;
 }
 
-template class ParamMap< int, _TemplateTag >;
+template class ParamMap< Type, _TemplateTag >;
 
 #endif
+
 //=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=
