@@ -4,7 +4,7 @@ Derived from the standard CONTENTS.D
 
 @doc OMEXTERNAL OMINTERNAL
 
-@contents1 AAF Object Manager Internal Documentation | 
+@contents1 AAF Object Manager Documentation | 
 
 @subindex Classes
 @subindex Class Members
