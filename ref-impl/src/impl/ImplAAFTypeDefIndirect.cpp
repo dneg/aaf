@@ -1192,7 +1192,7 @@ AAFRESULT STDMETHODCALLTYPE
 //
 
 void ImplAAFTypeDefIndirect::reorder(OMByte* externalBytes,
-                       size_t externalBytesSize) const
+                       size_t ANAME(externalBytesSize)) const
 {
   TRACE("ImplAAFTypeDefIndirect::reorder");
   PRECONDITION("Object has been initialized", _initialized);
@@ -1245,10 +1245,10 @@ size_t ImplAAFTypeDefIndirect::externalSize(OMByte* internalBytes,
 
 void ImplAAFTypeDefIndirect::externalize(
   OMByte* internalBytes,
-  size_t internalBytesSize,
+  size_t ANAME(internalBytesSize),
   OMByte* externalBytes,
   size_t externalBytesSize,
-  OMByteOrder /*byteOrder*/) const
+  OMByteOrder NNAME(byteOrder)) const
 {
   TRACE("ImplAAFTypeDefIndirect::externalize");
   PRECONDITION("Object has been initialized", _initialized);
@@ -1315,8 +1315,8 @@ void ImplAAFTypeDefIndirect::internalize(
   OMByte* externalBytes,
   size_t externalBytesSize,
   OMByte* internalBytes,
-  size_t internalBytesSize,
-  OMByteOrder byteOrder) const
+  size_t ANAME(internalBytesSize),
+  OMByteOrder ANAME(byteOrder)) const
 {
   TRACE("ImplAAFTypeDefIndirect::internalize");
   PRECONDITION("Object has been initialized", _initialized);
