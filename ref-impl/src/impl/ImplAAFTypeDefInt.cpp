@@ -278,10 +278,13 @@ AAFRESULT STDMETHODCALLTYPE
 	  pvtZeroFill (pVal, valSize, valBuf, _size);
 	}
 
+	// Create a temporary pointer to copy to the smartptr
+	ImplAAFPropValData * tmp = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
+  if (NULL == tmp)
+		return AAFRESULT_NOMEMORY;
   ImplAAFPropValDataSP pv;
-  pv = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
-  if (! pv)
-	return AAFRESULT_NOMEMORY;
+	pv = tmp;
+	tmp->ReleaseReference(); // we don't need this reference anymore.
 
   AAFRESULT hr;
   hr = pv->Initialize(this);
