@@ -64,6 +64,9 @@
 #startm AD_COM_EXT2_CLASS_BEGIN 02
 #endm
 
+#startm AD_COM_EXT3_CLASS_BEGIN 03
+#endm
+
 #startm AD_ROOT_CLASS_BEGIN 00
 #endm
 
@@ -128,6 +131,9 @@
 #endm
 
 #startm AD_COM_EXT2_CLASS_END 02
+#endm
+
+#startm AD_COM_EXT3_CLASS_END 03
 #endm
 
 #startm AD_ROOT_CLASS_END 00
