@@ -217,6 +217,14 @@ private:
   static void readSignature(const wchar_t* fileName,
                             OMFileSignature& signature);
 
+    // @cmember Write the signature to the given raw storage.
+  static void writeSignature(OMRawStorage* rawStorage,
+                             const OMFileSignature& signature);
+
+    // @cmember Read the signature from the given raw storage.
+  static void readSignature(OMRawStorage* rawStorage,
+                            OMFileSignature& signature);
+
   static OMFileEncoding encodingOf(const OMFileSignature& signature);
 
   OMRootStorable* _root;
