@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -29,12 +29,13 @@
 #include "OMUtilities.h"
 #include "OMAssertions.h"
 
-#include <iostream.h>
-#if defined(OM_OS_WINDOWS)
-#include <strstrea.h>
-#else
-#include <strstream.h>
-#endif
+#include <iostream>
+#include <sstream>
+#include <string>
+using std::ostringstream;
+using std::ends;
+using std::string;
+using std::ios;
 
 #if defined(OM_OS_WINDOWS)
 #define NEWLINE "\r\n"
@@ -46,11 +47,11 @@
 #define NEWLINE "\n"
 #endif
 
-static void print(strstream& s, const OMObjectIdentification& id);
+static void print(ostringstream& s, const OMObjectIdentification& id);
 
-static void print(strstream& s, const OMMaterialIdentification& id);
+static void print(ostringstream& s, const OMMaterialIdentification& id);
 
-static void format(strstream& s,
+static void format(ostringstream& s,
                    bool& showBase,
                    size_t base,
                    bool uppercase,
@@ -96,34 +97,31 @@ OMIOStream& OMIOStream::operator << (const wchar_t* string)
 
 OMIOStream& OMIOStream::operator << (const OMUInt8 i)
 {
-  strstream s;
+  ostringstream s;
   format(s, _showBase, _base, _uppercase, _fill, _width);
   s << (int)i << ends;
-  char* buffer = s.str();
-  write(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  write(buffer.c_str());
   return *this;
 }
 
 OMIOStream& OMIOStream::operator << (const OMUInt16 i)
 {
-  strstream s;
+  ostringstream s;
   format(s, _showBase, _base, _uppercase, _fill, _width);
   s << i << ends;
-  char* buffer = s.str();
-  write(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  write(buffer.c_str());
   return *this;
 }
 
 OMIOStream& OMIOStream::operator << (const OMUInt32 i)
 {
-  strstream s;
+  ostringstream s;
   format(s, _showBase, _base, _uppercase, _fill, _width);
   s << i << ends;
-  char* buffer = s.str();
-  write(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  write(buffer.c_str());
   return *this;
 }
 
@@ -139,7 +137,7 @@ OMIOStream& OMIOStream::operator << (const OMObjectIdentification& id)
 {
   TRACE("OMIOStream::operator << (const OMObjectIdentification& id)");
 
-  strstream s;
+  ostringstream s;
   format(s, _showBase, _base, _uppercase, _fill, _width);
 
   s.setf(ios::hex,ios::basefield);
@@ -148,9 +146,8 @@ OMIOStream& OMIOStream::operator << (const OMObjectIdentification& id)
   print(s, id);
 
   s << ends;
-  char* buffer = s.str();
-  write(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  write(buffer.c_str());
   return *this;
 }
 
@@ -158,7 +155,7 @@ OMIOStream& OMIOStream::operator << (const OMMaterialIdentification& id)
 {
   TRACE("OMIOStream::operator << (const OMMaterialIdentification& id)");
 
-  strstream s;
+  ostringstream s;
   format(s, _showBase, _base, _uppercase, _fill, _width);
 
   s.setf(ios::hex,ios::basefield);
@@ -167,9 +164,8 @@ OMIOStream& OMIOStream::operator << (const OMMaterialIdentification& id)
   print(s, id);
 
   s << ends;
-  char* buffer = s.str();
-  write(buffer);
-  delete [] buffer;
+  string buffer = s.str();
+  write(buffer.c_str());
   return *this;
 }
 
@@ -340,7 +336,7 @@ OMIOStream& set_w(OMIOStream& s, int n)
   return s.setw(n);
 }
 
-static void print(strstream& s, const OMObjectIdentification& id)
+static void print(ostringstream& s, const OMObjectIdentification& id)
 {
   OMByte* bp = (OMByte *)&id.Data4;
   OMByte pb1 = *bp++;
@@ -364,7 +360,7 @@ static void print(strstream& s, const OMObjectIdentification& id)
   s << "}";
 }
 
-static void print(strstream& s, const OMMaterialIdentification& id)
+static void print(ostringstream& s, const OMMaterialIdentification& id)
 {
   s << "{";
   for (size_t i = 0; i < sizeof(id.SMPTELabel); i++) {
@@ -384,7 +380,7 @@ static void print(strstream& s, const OMMaterialIdentification& id)
   s << "}";
 }
 
-static void format(strstream& s,
+static void format(ostringstream& s,
                    bool& showBase,
                    size_t base,
                    bool uppercase,
