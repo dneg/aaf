@@ -87,4 +87,5 @@ typedef ParamMap< aafPixelFormat_t,     aafPixelFormat_e     >  PixelFormatParam
 typedef ParamMap< aafDropType_t,        aafDropType_e        >  DropTypeParams;
 typedef ParamMap< aafBoolean_t,         aafBoolean_e         >  BooleanParams;
 typedef ParamMap< aafIncMedia_t,        aafIncMedia_e        >  IncMediaParams;
-typedef ParamMap< aafDepend_t,          aafDepend_e         >   DependParams;
+typedef ParamMap< aafDepend_t,          aafDepend_e          >  DependParams;
+typedef ParamMap< aafFileAccess_t,      aafFileAccess_e      >  FileAccessParams;

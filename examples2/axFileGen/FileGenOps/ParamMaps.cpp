@@ -494,6 +494,25 @@ template class ParamMap< aafDepend_t, aafDepend_e >;
 
 //=---------------------------------------------------------------------=
 
+ParamMap< aafFileAccess_t, aafFileAccess_e >::ParamMap()
+{
+  _map[ L"kAAFFileAccess_none" ]   = kAAFFileAccess_none;
+  _map[ L"none" ]                  = kAAFFileAccess_none;
+
+  _map[ L"kAAFFileAccess_read" ]   = kAAFFileAccess_read;
+  _map[ L"read" ]                  = kAAFFileAccess_read;
+
+  _map[ L"kAAFFileAccess_write" ]  = kAAFFileAccess_write;
+  _map[ L"write" ]                 = kAAFFileAccess_write;
+
+  _map[ L"kAAFFileAccess_modify" ] = kAAFFileAccess_modify;
+  _map[ L"modify" ]                = kAAFFileAccess_modify;
+}
+
+template class ParamMap< aafFileAccess_t, aafFileAccess_e >;
+
+//=---------------------------------------------------------------------=
+
 #if 0
 // Recipe:
 // 1) Copy this example.
