@@ -243,7 +243,7 @@ void ImplAAFTypeDefRename::internalize(OMByte* externalBytes,
 									   size_t internalBytesSize,
 									   OMByteOrder byteOrder) const
 {
-  BaseType()->externalize (externalBytes,
+  BaseType()->internalize (externalBytes,
 						   externalBytesSize,
 						   internalBytes,
 						   internalBytesSize,
