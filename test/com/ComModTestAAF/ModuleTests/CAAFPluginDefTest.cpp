@@ -485,14 +485,5 @@ extern "C" HRESULT CAAFPluginDescriptor_test()
 		cerr << "CAAFPluginDescriptor_test...Caught general C++ exception!" << endl; 
 	}
 
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-//	if (SUCCEEDED(hr))
-//	{
-//		cout << "The following IAAFPluginDescriptor methods have not been implemented:" << endl;       
-//		cout << "     IsPluginLocal" << endl; 
-//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-//	}
-
 	return hr;
 }
