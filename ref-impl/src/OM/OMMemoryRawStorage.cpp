@@ -59,73 +59,144 @@ OMMemoryRawStorage::~OMMemoryRawStorage(void)
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
-  //        from this <c OMMemoryRawStorage> at <p offset> into the buffer
-  //        at address <p bytes>. The actual number of bytes read is
-  //        returned in <p bytesRead>. Reading from offsets greater than
-  //        <mf OMRawStorage::size> causes <p bytesRead> to be less than
-  //        <p byteCount>. Reading bytes that have never been written
+  //        from the current position in this <c OMMemoryRawStorage>
+  //        into the buffer at address <p bytes>.
+  //        The actual number of bytes read is returned in <p bytesRead>.
+  //        Reading from positions greater than
+  //        <mf OMMemoryRawStorage::size> causes <p bytesRead> to be less
+  //        than <p byteCount>. Reading bytes that have never been written
   //        returns undefined data in <p bytes>.
-  //   @parm The offset from which to read.
   //   @parm The buffer into which the bytes are to be read.
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
   //   @devnote fseek takes a long int for offset this may not be sufficient
   //            for 64-bit offsets.
-void OMMemoryRawStorage::readAt(OMUInt64 offset,
-                                OMByte* bytes,
-                                OMUInt32 byteCount,
-                                OMUInt32& bytesRead) const
+void OMMemoryRawStorage::read(OMByte* bytes,
+                              OMUInt32 byteCount,
+                              OMUInt32& bytesRead) const
 {
-  TRACE("OMMemoryRawStorage::readAt");
+  TRACE("OMMemoryRawStorage::read");
 
   // TBS
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
-  //        to this <c OMMemoryRawStorage> at <p offset> from the buffer
-  //        at address <p bytes>. The actual number of bytes written is
-  //        returned in <p bytesWritten>. Writing to offsets greater than
-  //        <mf OMRawStorage::size> causes this <c OMMemoryRawStorage>
+  //        to the current position in this <c OMMemoryRawStorage>
+  //        from the buffer at address <p bytes>.
+  //        The actual number of bytes written is returned in
+  //        <p bytesWritten>.
+  //        Writing to positions greater than
+  //        <mf OMMemoryRawStorage::size> causes this
+  //        <c OMMemoryRawStorage>
   //        to be extended, however such extension can fail, causing
   //        <p bytesWritten> to be less than <p byteCount>.
-  //   @parm The offset at which to write.
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
   //   @devnote fseek takes a long int for offset this may not be sufficient
   //            for 64-bit offsets.
-void OMMemoryRawStorage::writeAt(OMUInt64 offset,
-                                 const OMByte* bytes,
-                                 OMUInt32 byteCount,
-                                 OMUInt32& bytesWritten)
+void OMMemoryRawStorage::write(const OMByte* bytes,
+                               OMUInt32 byteCount,
+                               OMUInt32& bytesWritten)
 {
-  TRACE("OMMemoryRawStorage::writeAt");
+  TRACE("OMMemoryRawStorage::write");
 
   // TBS
 }
 
+  // @mfunc May this <c OMMemoryRawStorage> be changed in size ?
+  //        An implementation of <c OMMemoryRawStorage> for disk files
+  //        would most probably return true. An implemetation
+  //        for network streams would return false. An implementation
+  //        for fixed size contiguous memory files (avoiding copying)
+  //        would return false.
+  //   @rdesc Always <e bool.true>.
+  //   @this const
+bool OMMemoryRawStorage::isSizeable(void) const
+{
+  TRACE("OMMemoryRawStorage::isSizeable");
+
+  return true;
+}
+
   // @mfunc The current size of this <c OMMemoryRawStorage> in bytes.
+  //        precondition - isSizeable()
   //   @rdesc The current size of this <c OMDiskRawSrorage> in bytes.
   //   @this const
 OMUInt64 OMMemoryRawStorage::size(void) const
 {
-  TRACE("OMMemoryRawStorage::setSize");
+  TRACE("OMMemoryRawStorage::size");
+
+  PRECONDITION("Sizeable", isSizeable());
 
   // TBS
   return 0;
 }
 
   // @mfunc Set the size of this <c OMMemoryRawStorage> to <p newSize>
-  //        bytes. If <p newSize> is greater than <mf OMRawStorage::size>
+  //        bytes.
+  //        If <p newSize> is greater than <mf OMMemoryRawStorage::size>
   //        then this <c OMMemoryRawStorage> is extended. If <p newSize>
-  //        is less than <mf OMRawStorage::size> then this
-  //        <c OMMemoryRawStorage> is truncated.
+  //        is less than <mf OMMemoryRawStorage::size> then this
+  //        <c OMMemoryRawStorage> is truncated. Truncation may also result
+  //        in the current position for <f read()> and <f write()>
+  //        being set to <mf OMMemoryRawStorage::size>.
+  //        precondition - isSizeable()
   //   @parm The new size of this <c OMDiskRawSrorage> in bytes.
   //   @devnote There is no ANSI way of truncating a file in place.
 void OMMemoryRawStorage::setSize(OMUInt64 newSize)
 {
   TRACE("OMMemoryRawStorage::setSize");
+
+  PRECONDITION("Sizeable", isSizeable());
+
+  // TBS
+}
+
+  // @mfunc May the current position, for <f read()> and <f write()>,
+  //        of this <c OMMemoryRawStorage> be changed ?
+  //        An implementation of <c OMMemoryRawStorage> for disk files
+  //        would most probably return true. An implemetation
+  //        for network streams would return false. An implementation
+  //        for memory files would return true.
+  //   @rdesc Always <e bool.true>.
+  //   @this const
+bool OMMemoryRawStorage::isPositionable(void) const
+{
+  TRACE("OMMemoryRawStorage::isPositionable");
+
+  return true;
+}
+
+  // @mfunc The current position for <f read()> and <f write()>, as an
+  //        offset in bytes from the begining of this
+  //        <c OMMemoryRawStorage>.
+  //        precondition - isPositionable()
+  //   @rdesc The current position for <f read()> and <f write()>.
+  //   @this const
+OMUInt64 OMMemoryRawStorage::position(void) const
+{
+  TRACE("OMMemoryRawStorage::position");
+
+  PRECONDITION("Positionable", isPositionable());
+
+  // TBS
+  return 0;
+}
+
+  // @mfunc Set the current position for <f read()> and <f write()>, as an
+  //        offset in bytes from the begining of this
+  //        <c OMMemoryRawStorage>.
+  //        precondition - isPositionable()
+  //   @parm The new position.
+  //   @devnote fseek takes a long int for offset this may not be sufficient
+  //            for 64-bit offsets.
+void OMMemoryRawStorage::setPosition(OMUInt64 newPosition)
+{
+  TRACE("OMMemoryRawStorage::setPosition");
+
+  PRECONDITION("Positionable", isPositionable());
 
   // TBS
 }
