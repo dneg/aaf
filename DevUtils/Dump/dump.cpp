@@ -539,6 +539,12 @@ static IndexEntry* readIndex(IStream* stream,
                              OMUInt32 count,
                              bool swapNeeded,
                              OMUInt32 version);
+void reportBadIndex(char* pathName,
+                    OMUInt16 order,
+                    OMUInt32 version,
+                    OMUInt32 entryCount,
+                    OMUInt32 expectedSize,
+                    OMUInt32 actualSize);
 static void reportBadIndexEntry(OMUInt32 i,
                                 const IndexEntry* entry);
 static bool isValid(const IndexEntry* index, const OMUInt32 entries);
@@ -1706,6 +1712,28 @@ IndexEntry* readIndex(IStream* stream,
     }
   }
   return result;
+}
+
+void reportBadIndex(char* pathName,
+                    OMUInt16 order,
+                    OMUInt32 version,
+                    OMUInt32 entryCount,
+                    OMUInt32 expectedSize,
+                    OMUInt32 actualSize)
+{
+  char* endianity;
+  if (order == hostByteOrder()) {
+    endianity = "native";
+  } else {
+    endianity = "foreign";
+  }
+  cerr << "Error in property index for \"" << pathName << ".\"" << endl;
+  cerr << "( Byte order = " << byteOrder(order)
+       << " (" << endianity << ")"
+       << ", Version = " << version
+       << ", Number of entries = " << entryCount << " )" << endl;
+  cerr << "Expected index stream size = " << expectedSize
+       << ", Actual index stream size = " << actualSize << "." << endl;
 }
 
 void reportBadIndexEntry(OMUInt32 i,
