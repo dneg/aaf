@@ -622,6 +622,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\CAAFModuleTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFParametersTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ComModTestAAF.cpp
 # End Source File
 # Begin Source File
