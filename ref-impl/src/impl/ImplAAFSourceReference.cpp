@@ -120,6 +120,9 @@ AAFRESULT STDMETHODCALLTYPE
   if( NULL == pChannelIDs ) {
     return AAFRESULT_NULL_PARAM;
   }
+  if( (numberElements * sizeof(aafUInt32)) > OMPROPERTYSIZE_MAX ) {
+    return AAFRESULT_BAD_SIZE;
+  }
 
   _channelIDs.setValue(pChannelIDs, numberElements);
   
@@ -177,6 +180,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if( NULL == pMonoSourceSlotIDs ) {
     return AAFRESULT_NULL_PARAM;
+  }
+  if( (numberElements * sizeof(aafUInt32)) > OMPROPERTYSIZE_MAX ) {
+    return AAFRESULT_BAD_SIZE;
   }
 
   _monoSourceSlotIDs.setValue(pMonoSourceSlotIDs, numberElements);
