@@ -1112,7 +1112,7 @@ static aafInt32 roundFrameRate(aafRational_t frameRate)
  * Function: StringToTimecode()
  *************************************************************************/
 aafErr_t StringToTimecode(
-	wchar_t *timecodeString, /* IN - Timecode String */
+	const wchar_t *timecodeString, /* IN - Timecode String */
 	aafRational_t frameRate,  /* IN - Frame Rate */
 	aafTimecode_t *timecode)  /* OUT - Timecode Value */
 {
