@@ -83,14 +83,13 @@ AD_XMETHOD1(GetLength,
   //   - pLength arg is NULL.)
 
 
-AD_XMETHOD1(SetIsInContainer,
+AD_XMETHOD1(SetCodecDef,
 			[in],
-			enumIn,
-			aafBoolean_t,
-			isAAF,
-			is this AAF or raw essence,
-  // Set to TRUE if this is AAF-wrapped essence FALSE if the essence
-  // is in an external non-AAF file.
+			objPass,
+			aafUID_t,
+			codecDef,
+			Which codec was used,
+  // Set to the exact codec which was used as a hint.
   // 
   // Always succeeds.
   // 
@@ -102,19 +101,18 @@ AD_XMETHOD1(SetIsInContainer,
   //   - succeeded.  \(This is the only code indicating success.\))
 
 
-AD_XMETHOD1(GetIsInContainer,
+AD_XMETHOD1(GetCodecDef,
 			[out],
 			objPass,
-			aafBoolean_t *,
-			pIsAAF,
-			is this AAF or raw media,
-  // Places TRUE into *pIsAAF if this is AAF-wrapped essence.  Places
-  // FALSE into *pIsAAF if the essence is in an external non-AAF file.
+			aafUID_t*,
+			pCodecDef,
+			Which codec was used,
+  // Get to the exact codec which was used as a hint.
   //
   // Succeeds if all of the following are true:
-  // - the pIsAAF pointer is valid.
+  // - the pCodecDef pointer is valid.
   // 
-  // If this method fails nothing will be written to *pIsAAF.
+  // If this method fails nothing will be written to *pCodecDef.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -124,7 +122,7 @@ AD_XMETHOD1(GetIsInContainer,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pIsAAF arg is NULL.)
+  //   - pCodecDef arg is NULL.)
 
 
 AD_XMETHOD1(SetSampleRate,
