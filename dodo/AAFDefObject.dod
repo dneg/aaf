@@ -36,14 +36,14 @@ AD_DEFAULT_UUID(dfbd6527, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_CONSTRUCTOR1([in],
-				aafAuid_t,
+				aafUID_t,
 				Auid,
 				auid for this definition object,
 				Constructs and sets the AUID for this object.)
 
 AD_METHOD1(GetAUID,
 		   [retval][out],
-		   aafAuid_t *,
+		   aafUID_t *,
 		   pAuid,
 		   Pointer to an AUID reference,
 		   Gets the AUID for this object.)

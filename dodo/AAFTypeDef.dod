@@ -10,6 +10,7 @@ AAFDefinitionObject\
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(AAFReferenceValue)
 AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 
 /******************************************\
@@ -33,13 +34,6 @@ AD_CLASS_UUID(dfbd6524, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(dfbd6523, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR5([in],aafAuid_t,Auid,auid for this definition object,
-				[in],aafString_t, Name, Unique name of this Data definition,
-				[in],aafVersionType_t, minRev, Minimum AAF Version for this type,
-				[in],aafVersionType_t, maxRev, Maximum AAF Version for this type,
-				[in],aafSwapNeeded_t, swapInfo, Specifies wheter the bytes in this type need to be swapped,
-				Constructs and sets the AUID ad Name of this TypeDefinition object.)
-
 AD_METHOD1(GetName,
 		   [retval][out],
 		   aafString_t *,
@@ -49,28 +43,28 @@ AD_METHOD1(GetName,
 
 AD_METHOD1(GetMinVersion,
 		   [retval][out],
-		   aafVersion_t *,
+		   aafVersionType_t *,
 		   pMinVersion,
 		   Pointer to the minimum version ,
 		   Gets the Minimum AAF Version for this type object.)
 
 AD_METHOD1(SetMinVersion,
 		   [in],
-		   aafVersion_t,
+		   aafVersionType_t,
 		   MinVersion,
 		   Minimum AAF Version,
 		   Sets the Minimum AAF Version for type definition.)
 
 AD_METHOD1(GetMaxVersion,
 		   [retval][out],
-		   aafVersion_t *,
+		   aafVersionType_t *,
 		   pMaxVersion,
 		   Pointer to the maximum version ,
 		   Gets the Maximum AAF Version for this type object.)
 
 AD_METHOD1(SetMaxVersion,
 		   [in],
-		   aafVersion_t,
+		   aafVersionType_t,
 		   MaxVersion,
 		   Maximum AAF Version,
 		   Sets the Maximum AAF Version for type definition.)
@@ -108,7 +102,7 @@ AD_XMETHOD1(RemoveRefValue,
 AD_XMETHOD1(GetRefValues,
 			[out\,retval],
 			objOut,
-			EnumAAFReferenceValue,
+			EnumAAFReferenceValues,
 			ppEnum, 
 			Reference value Enumeration,
 			Return an enumerator for the reference values.)

@@ -13,6 +13,7 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_INCLUDE(AAFTypes)
 
 AD_FORWARD_DECLARATION(AAFPropertyDefinition)
 
@@ -67,17 +68,6 @@ AD_XMETHOD1(Clone,
   // record a point in the enumeration sequence in order to return to that point 
   // at a later time.
   // @comm The caller must release this new enumerator separately from the first enumerator.)
-
-AD_XMETHOD1(NextOne,
-			[out\,retval],
-			objOut,
-			AAFPropertyDefinition,
-			ppPropertyDefinition,
-			The Next PropertyDefinition,
-			Enumerates to the next element in the enumerators list. The caller is responsible for 
-  // properly releasing the returned pointer when it is no longer needed.
-  // @comm This is a just simplified version of the Next method. )
-
 
 AD_OVERRIDE(.method-Test)
 
