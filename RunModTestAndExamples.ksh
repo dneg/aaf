@@ -166,7 +166,7 @@ VerifyFiles ()
 			mv tempdump.log ${File}.dump.log
 		fi
 #when running the debug version, an exception is thrown requiring user intervention so I an restrcting it to release
-if [ $Target = "Release" ] || [ $File = "AAFDictionaryTest.aaf" ]; then			
+if [ $Target = "Release" ] && [ ! $File = "AAFDictionaryTest.aaf" ]; then			
 		RemoveIfExists ${File}.AAFDump.log
 		${UtilitiesDir}/AAFDump "$File" > tempdump.log
 		Stat=$?
