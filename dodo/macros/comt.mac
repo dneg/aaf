@@ -71,11 +71,15 @@ HRESULT C.this-module::test()
 		}
 
 	  // module-specific tests go here
+
+      if (pObject)
+        pObject->Release();
 	  return AAFRESULT_NOT_IMPLEMENTED;
+
 	}
   catch (...)
 	{
-	  cerr << "CAAFDefinitionObject::test...Caught general C++"
+	  cerr << "C.this-module::test...Caught general C++"
 		" exception!" << endl; 
 	}
 
@@ -127,11 +131,15 @@ HRESULT C.this-module::test()
 		}
 
 	  // module-specific tests go here
+
+      if (pObject)
+        pObject->Release();
 	  return AAFRESULT_NOT_IMPLEMENTED;
+
 	}
   catch (...)
 	{
-	  cerr << "CAAFDefinitionObject::test...Caught general C++"
+	  cerr << "C.this-module::test...Caught general C++"
 		" exception!" << endl;
 	}
 
