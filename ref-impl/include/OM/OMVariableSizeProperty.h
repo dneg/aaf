@@ -55,6 +55,11 @@ public:
     //          address <p value> into the <c OMVariableSizeProperty>.
   void setValue(const PropertyType* value, size_t valueSize);
 
+    // @cmember Set the value of this <c OMVariableSizeProperty>. The
+    //          value is set by copying <p elementCount> elements from the
+    //          address <p value> into the <c OMVariableSizeProperty>.
+  void setElementValues(const PropertyType* value, size_t elementCount);
+
     // @cmember Get the value of the item at position <p index> in this
     //          <c OMVariableSizeProperty>. The value is obtained by copying
     //          a single item of type PropertyType from this
@@ -67,12 +72,34 @@ public:
     //          <c OMVariableSizeProperty> at position <p index>.
   void setValueAt(const PropertyType* value, const size_t index);
 
+    // @cmember Set the value of the item at the last position in this
+    //          <c OMVariableSizeProperty>. The <c OMVariableSizeProperty>
+    //          is first increased in size by one item. The value is then
+    //          set by copying a single item of type PropertyType into this
+    //          <c OMVariableSizeProperty> at the last position.
+  void appendValue(const PropertyType* value);
+
+    // @cmember Set the value of the item at the first position in this
+    //          <c OMVariableSizeProperty>. The <c OMVariableSizeProperty>
+    //          is first increased in size by one item and all existing items
+    //          are moved up by on position. The value is then
+    //          set by copying a single item of type PropertyType into this
+    //          <c OMVariableSizeProperty> at the first position.
+  void prependValue(const PropertyType* value);
+
     // @cmember Get the value of this <c OMVariableSizeProperty>.  The
     //          value is obtained by copying the value from the
     //          <c OMVariableSizeProperty>. The buffer is at address
     //          <p buffer> and is <p bufferSize> bytes in size.
     //          Copying only takes place if the buffer is large enough.
   bool copyToBuffer(PropertyType* buffer, size_t bufferSize) const;
+
+    // @cmember Get the value of this <c OMVariableSizeProperty>.  The
+    //          value is obtained by copying the value from the
+    //          <c OMVariableSizeProperty>. The buffer is at address
+    //          <p buffer> and is <p elementCount> elements in size.
+    //          Copying only takes place if the buffer is large enough.
+  bool copyElementsToBuffer(PropertyType* buffer, size_t elementCount) const;
 
     // @cmember Restore this <c OMVariableSizeProperty>, the external
     //          (persisted) size of the <c OMVariableSizeProperty> is
