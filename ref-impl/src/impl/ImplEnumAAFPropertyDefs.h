@@ -100,4 +100,15 @@ private:
 	propertyDefStrongRefArrayProp_t * _enumStrongProp;
 };
 
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplEnumAAFPropertyDefs> ImplEnumAAFPropertyDefsSP;
+
 #endif // ! __ImplEnumAAFPropertyDefs_h__
