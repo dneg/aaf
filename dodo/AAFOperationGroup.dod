@@ -6,7 +6,7 @@ AAFEffect\
 AAFSegment\
 #endm
 #c
-#import ./AAFSegment.exp
+#c #import ./AAFSegment.exp
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
