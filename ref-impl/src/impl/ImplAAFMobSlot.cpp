@@ -66,6 +66,8 @@ AAFRESULT STDMETHODCALLTYPE
 	*result = _segment;
 	if (*result)
 		(*result)->AcquireReference();
+	else
+		return (AAFRESULT_NULLOBJECT);
 
   return AAFRESULT_SUCCESS;
 }
@@ -215,10 +217,13 @@ AAFRESULT ImplAAFMobSlot::FindSegment(aafPosition_t offset,
 		* the beginning of clip that contains it. 
 		*/
 		*diffPos = offset;
+		tmpSegment->ReleaseReference();
 		
 	} /* XPROTECT */
 	XEXCEPT
 	{
+		if (tmpSegment)	
+			tmpSegment->ReleaseReference();
 	}
 	XEND;
 	return(AAFRESULT_SUCCESS);
