@@ -64,7 +64,7 @@ AD_STD_METHOD_STRING_GET_AND_SIZE(Name, the human-legible name.)
 AD_XMETHOD1(GetIsOptional,
 			[out\, retval],
 			objPass,
-			aafBool *,
+			aafBoolean_t *,
 			pIsOptional,
 			pointer to the result, 
 
@@ -89,7 +89,7 @@ AD_XMETHOD1(GetIsOptional,
 AD_XMETHOD1(GetIsSearchable,
 			[out\, retval],
 			objPass,
-			aafBool *,
+			aafBoolean_t *,
 			pIsSearchable,
 			pointer to the result, 
 
@@ -113,8 +113,8 @@ AD_XMETHOD1(GetIsSearchable,
 
 AD_XMETHOD1(SetIsSearchable,
 			[in],
-			objPass,
-			aafBool,
+			enumIn,
+			aafBoolean_t,
 			IsSearchable,
 			is searchable value, 
 
