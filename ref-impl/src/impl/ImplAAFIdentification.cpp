@@ -51,14 +51,14 @@ _platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
 }
 
 ImplAAFIdentification::ImplAAFIdentification(
-                                     const char* companyName,
-                                     const char* productName,
+                                     const wchar_t* companyName,
+                                     const wchar_t* productName,
                                      const aafProductVersion_t* productVersion,
-                                     const char* productVersionString,
+                                     const wchar_t* productVersionString,
                                      // const AUID* productId,
                                      const aafTimeStamp_t date,
                                      const aafProductVersion_t* toolKitVersion,
-                                     const char* platform
+                                     const wchar_t* platform
                                      // const AUID* generation
                                      ):
 _companyName(         PID_IDENTIFICATION_COMPANYNAME,          "companyName"),
@@ -71,12 +71,6 @@ _date(                PID_IDENTIFICATION_DATE,                 "date"),
 _platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
 // _generation(       PID_IDENTIFICATION_GENERATION,           "generation")
 {
-  TRACE("AAFIdentification::AAFIdentification");
-  PRECONDITION("Valid companyName",          validString(companyName));
-  PRECONDITION("Valid productName",          validString(productName));
-  PRECONDITION("Valid productVersionString", validString(productVersionString));
-  PRECONDITION("Valid platform",             validString(platform));
-
   // Insert the properties into the persistent property set.
   //
   _persistentProperties.put(   _companyName.address());
@@ -108,23 +102,6 @@ extern "C" const aafClassID_t CLSID_AAFIdentification;
 
 OMDEFINE_STORABLE(ImplAAFIdentification, CLSID_AAFIdentification);
 
-/* returns true if string fits into buffer and does the conversion.
-   Returns false otherwise. */
-static bool stringPropertyToWCharString(aafWChar *pWString,
-										aafInt32 buflen,
-										OMStringProperty& stringProperty)
-{
-  const char* string = stringProperty;
-  int slen = stringProperty.length();
-  if (buflen < slen)
-	{
-	  return false;
-	}
-  mbstowcs(pWString, string, slen);
-  pWString[slen] = L'\0';
-  return true;
-}
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetCompanyName (aafWChar *  pName,
 										   aafInt32 bufSize)
@@ -134,7 +111,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  stat = stringPropertyToWCharString(pName, bufSize, _companyName);
+  stat = _companyName.copyToBuffer(pName, bufSize);
   if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;
@@ -165,7 +142,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  stat = stringPropertyToWCharString(pProductName, bufSize, _productName);
+  stat = _productName.copyToBuffer(pProductName, bufSize);
   if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;
@@ -196,7 +173,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  stat = stringPropertyToWCharString(pVS, bufSize, _productVersionString);
+  stat = _productVersionString.copyToBuffer(pVS, bufSize);
   if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;
@@ -260,7 +237,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  stat = stringPropertyToWCharString(pPlatform, bufSize, _platform);
+  stat = _platform.copyToBuffer(pPlatform, bufSize);
   if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;

@@ -95,8 +95,8 @@ static void ReadAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n, s;
 
-	ProductInfo.companyName = (unsigned char *)"AAF Developers Desk. NOT!";
-	ProductInfo.productName = (unsigned char *)"Make AVR Example. NOT!";
+	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
+	ProductInfo.productName = L"Make AVR Example. NOT!";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -178,8 +178,8 @@ static void CreateAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 	aafUID_t					newUID;
 
-	ProductInfo.companyName = (unsigned char *)"AAF Developers Desk";
-	ProductInfo.productName = (unsigned char *)"Make AVR Example";
+	ProductInfo.companyName = L"AAF Developers Desk";
+	ProductInfo.productName = L"Make AVR Example";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
