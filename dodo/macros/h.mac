@@ -130,6 +130,16 @@ class %01; \
 
 #ccccccccccccccccccccccccccc
 #c
+#c AAFTypes support for IDL
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_HEAD 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Starts a class definition
 #c
 #c Arguments: none
@@ -651,7 +661,7 @@ private:
 #c Argument: method declaration
 #c
 #startm AD_OVERRIDE 01
-%01
+%01-h
 #endm
 
 
