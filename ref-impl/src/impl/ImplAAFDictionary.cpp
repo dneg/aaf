@@ -405,7 +405,7 @@ ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
   pNewObject = pvtInstantiate (auid);
   if (pNewObject)
 	{
-	  pClassDef->InitOMProperties (pNewObject);
+	  pNewObject->InitOMProperties (pClassDef);
 
 	  // Attempt to initialize the any class extensions associated
 	  // with this object. Only the most derived extension that has an
@@ -1957,9 +1957,16 @@ AAFRESULT ImplAAFDictionary::PvtIsPropertyDefDuplicate(
 			pClassDef->ReleaseReference();
 			pClassDef = NULL;
 		}
+		classEnum->ReleaseReference();
+		classEnum = 0;
 	}
 	XEXCEPT
 	{
+		if (pClassDef)
+		  {
+			pClassDef->ReleaseReference();
+			pClassDef = 0;
+		  }
 		if (classEnum)
 		  {
 			classEnum->ReleaseReference();
