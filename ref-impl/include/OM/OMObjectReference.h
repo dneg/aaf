@@ -81,6 +81,11 @@ public:
     //          The value is a pointer to the <c ReferencedObject>.
   virtual ReferencedObject* setValue(const ReferencedObject* value) = 0;
 
+    // @cmember The value of this <c OMObjectReference> as a pointer.
+    //          This function provides low-level access. If the object exits
+    //          but has not yet been loaded then the value returned is 0.
+  virtual ReferencedObject* pointer(void) const;
+
 protected:
   // @access Protected members.
 

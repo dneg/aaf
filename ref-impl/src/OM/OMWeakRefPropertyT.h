@@ -66,8 +66,10 @@ void OMWeakReferenceProperty<ReferencedObject>::getValue(
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  ReferencedObject* result = _reference.getValue(set());
-
+  ReferencedObject* result = _reference.pointer();
+  if (result == 0) {
+    result = _reference.getValue(set());
+  }
   object = result;
 
 }
@@ -117,14 +119,22 @@ template<typename ReferencedObject>
 ReferencedObject*
 OMWeakReferenceProperty<ReferencedObject>::operator -> (void)
 {
-  return _reference.getValue(set());
+  ReferencedObject* result = _reference.pointer();
+  if (result == 0) {
+    result = _reference.getValue(set());
+  }
+  return result;
 }
 
 template<typename ReferencedObject>
 const ReferencedObject*
 OMWeakReferenceProperty<ReferencedObject>::operator -> (void) const
 {
-  return _reference.getValue(set());
+  ReferencedObject* result = _reference.pointer();
+  if (result == 0) {
+    result = _reference.getValue(set());
+  }
+  return result;
 }
 
   // @mfunc Type conversion. Convert an
