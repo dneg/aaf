@@ -1873,7 +1873,9 @@ AAFRESULT STDMETHODCALLTYPE
 //!!!	aafInt64		one;
 	
 	aafAssert(buffer != NULL, _mainFile, AAFRESULT_NULL_PARAM);
+	aafAssert(samplesRead != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 	aafAssert(bytesRead != NULL, _mainFile, AAFRESULT_NULL_PARAM);
+
 
 //!!!	CvtInt32toInt64(1, &one);
 //!!!	if(Int64Greater(_pvt->repeatCount, one))
@@ -1885,16 +1887,19 @@ AAFRESULT STDMETHODCALLTYPE
 		xfer.numSamples = nSamples;
 		xfer.buflen = buflen;
 		xfer.buffer = buffer;
+		result.samplesXfered = 0;
 		result.bytesXfered = 0;
 	
 		CHECK(_codec->ReadBlocks(deinterleave, 1, &xfer, &result));
 	}
 	XEXCEPT
 	{
+		*samplesRead = result.samplesXfered;
 		*bytesRead = result.bytesXfered;
 	}
 	XEND
 	
+	*samplesRead = result.samplesXfered;
 	*bytesRead = result.bytesXfered;
 
 	return (AAFRESULT_SUCCESS);
