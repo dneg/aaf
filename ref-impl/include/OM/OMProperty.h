@@ -48,6 +48,8 @@
 
 #include "OMStrongRefVectorProperty.h"
 
+#include "OMStrongRefSetProperty.h"
+
 #include "OMWideStringProperty.h"
 
 #include "OMPropertyT.h"
