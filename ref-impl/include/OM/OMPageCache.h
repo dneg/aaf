@@ -129,6 +129,7 @@ private:
   OMUInt32 _pageSize;
   OMUInt32 _pageCount;
   OMUInt32 _validPageCount;
+  CacheEntry* _mruEntry;
   Cache _cache;
   CacheList _mruList;
 

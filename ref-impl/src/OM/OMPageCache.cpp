@@ -37,7 +37,8 @@ OMPageCache::OMPageCache(OMUInt32 pageSize,
                          OMUInt32 pageCount)
 : _pageSize(pageSize),
   _pageCount(pageCount),
-  _validPageCount(0)
+  _validPageCount(0),
+  _mruEntry(0)
 {
   TRACE("OMPageCache::OMPageCache");
 
@@ -224,10 +225,16 @@ OMPageCache::CacheEntry* OMPageCache::cacheEntry(OMUInt64 page)
 {
   TRACE("OMPageCache::cacheEntry");
 
-  CacheEntry* entry = findEntry(page);
-  if (entry == 0) {
-    // Page not in cache
-    entry = allocateEntry(page);
+  CacheEntry* entry = 0;
+  if ((_mruEntry != 0) && (_mruEntry->_pageNumber == page)) {
+    entry = _mruEntry;
+  } else {
+    entry = findEntry(page);
+    if (entry == 0) {
+      // Page not in cache
+      entry = allocateEntry(page);
+    }
+    _mruEntry = entry;
   }
   ASSERT("Page found", entry != 0);
   ASSERT("Consistent page numbers", page == entry->_pageNumber);
