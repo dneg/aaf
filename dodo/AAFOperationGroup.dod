@@ -14,6 +14,7 @@ AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFEffectDef)
 AD_FORWARD_DECLARATION(AAFParameter)
+AD_FORWARD_DECLARATION(AAFSourceReference)
 AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
 AD_FORWARD_DECLARATION(EnumAAFParameterDefs)
 AD_FORWARD_DECLARATION(AAFSegment)
@@ -41,7 +42,7 @@ AD_DEFAULT_UUID(3AE3BA82, 2C98, 11d2, 80, 42, 00, 60, 08, 14, 3E, 6F)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_XMETHOD3(Initialize,
-	[in], objIn, AAFDataDef, datadef, Data definition object,
+	[in], objPass, aafUID_t *, pDatadef, Data Definition Object,
 	[in], objPass, aafLength_t, length, Length property value,
 	[in], objIn, AAFEffectDef, effectDef, Effect Definition object,
 	Initializes an effect object with the given property values.)
