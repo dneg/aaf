@@ -72,7 +72,7 @@ bool MacroSet::SearchMacroName
  MacroDef & foundMacro) const
 {
   const char * pInitial = input.GetCString();
-  char * tmp;
+  const char * tmp;
   for (tmp = _nameInitials;
 	   *tmp;
 	   tmp++)
