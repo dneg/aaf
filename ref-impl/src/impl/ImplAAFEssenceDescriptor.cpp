@@ -134,7 +134,7 @@ AAFRESULT STDMETHODCALLTYPE
 		
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEssenceDesc(this));
+		CHECK(theEnum->SetEnumStrongProperty(this, &_locators));
 		CHECK(theEnum->Reset());
 		*ppEnum = theEnum;
 	}

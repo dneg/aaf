@@ -74,18 +74,18 @@ ImplAAFHeader::ImplAAFHeader ()
   _lastModified(      PID_Header_LastModified,       "LastModified"),
   _identificationList(PID_Header_IdentificationList, "IdentificationList"),
   _contentStorage(		PID_Header_Content,	"Content"),
-  _dictionary(PID_Header_Dictionary,	"Dictionary")
+  _dictionary(PID_Header_Dictionary,	"Dictionary"),
+  _fileRev(PID_Header_Version,		"Version")
 {
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
   _persistentProperties.put(_identificationList.address());
   _persistentProperties.put(_contentStorage.address());
   _persistentProperties.put(_dictionary.address());
+  _persistentProperties.put(_fileRev.address());
 
   //!!!	_head = this;
 //	file->InternalSetHead(this);
-	_fileRev.major = 0;
-	_fileRev.minor = 0;
 	_toolkitRev.major = 0;
 	_toolkitRev.minor = 0;
 	_toolkitRev.tertiary = 0;
@@ -582,30 +582,14 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-#if FULL_TOOLKIT
-	XPROTECT(_file)
-	{
-		if (IsPropertyPresent(OMVersion, OMVersionType))
-		  {
-			if ((_fileRev.major == 1) && (_fileRev.minor == 0))
-			  *pRevision = kAAFRev1;
-			else
-				RAISE(AAFRESULT_FILEREV_NOT_SUPP);
-		  }
-		else
-			RAISE(AAFRESULT_FILEREV_NOT_SUPP);
-	}
-	XEXCEPT
-	{
-	}
-	XEND;
-
-	return (AAFRESULT_SUCCESS);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+  *pRevision = _fileRev;
+  return (AAFRESULT_SUCCESS);
 }
 
+void ImplAAFHeader::SetFileRevision (aafVersionType_t revision)
+{
+  _fileRev = revision;
+}
 	
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::GetLastModified (aafTimeStamp_t * pTimeStamp)
