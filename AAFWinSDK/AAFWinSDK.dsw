@@ -285,17 +285,53 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
-    Project_Dep_Name dump
+    Project_Dep_Name MakeSDK
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name MakeSDKExamples
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name AafOmf
+    Project_Dep_Name MakeSDKUtilities
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name MakeSDK
+    Project_Dep_Name Dump
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "FileDumper"=".\Utilities\FileDumper\FileDumper.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "FileGenerator"=".\Utilities\FileGenerator\FileGenerator.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "FileValidator"=".\Utilities\FileValidator\FileValidator.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -348,6 +384,15 @@ Package=<5>
 Package=<4>
 {{{
     Begin Project Dependency
+    Project_Dep_Name MakeSDK
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFBasicInterpolators
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AAFStandardCodecs
+    End Project Dependency
+    Begin Project Dependency
     Project_Dep_Name ComAAFInfo
     End Project Dependency
     Begin Project Dependency
@@ -363,16 +408,37 @@ Package=<4>
     Project_Dep_Name ComPropDirectDump
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name AAFStandardCodecs
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name ComModTestAAF
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MakeSDKUtilities"=".\MakeSDKUtilities.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
     Begin Project Dependency
     Project_Dep_Name MakeSDK
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name AAFBasicInterpolators
+    Project_Dep_Name UtilLib
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AafOmf
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name FileDumper
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name FileGenerator
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name FileValidator
     End Project Dependency
 }}}
 
