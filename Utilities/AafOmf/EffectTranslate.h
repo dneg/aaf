@@ -42,6 +42,24 @@ HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
 
 IAAFInterpolationDef *CreateInterpolationDefinition(IAAFDictionary *dict, aafUID_t interpolationDefID);
 
+typedef struct OMFIPvtKFInfo OMFIPvtKFInfo_t;
+
+void ExportSeparateKeyframeData(aafUID_t &effectUID,
+								aafInt32 numKF,
+								OMFIPvtKFInfo_t **keyframes,
+								aafRational_t *times,
+								IAAFDictionary		*pDict,
+								IAAFOperationGroup* pOutputEffect);
+
+IAAFVaryingValue *AAFAddEmptyVaryingVal(IAAFDictionary *dict, IAAFOperationGroup *pOutputEffect);
+IAAFParameter *AAFAddConstantVal(IAAFDictionary *dict, long buflen, void *buf, IAAFOperationGroup *pGroup);
+void AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentTime, long buflen, void *buf, IAAFTypeDef *typeDef, IAAFVaryingValue *pVVal);
+IAAFParameterDef *CreateParameterDefinition(IAAFDictionary *dict, aafUID_t parmDefID);
+IAAFTypeDef *CreateTypeDefinition(IAAFDictionary *dict, aafUID_t typeDefID);
+bool EffectCapabilityPresent(aafUID_t &effectUID, aafUInt32 capabilityMask);
+aafInt32 GetMCKeyframeSlotID(aafUID_t& uid);
+bool isMCPrivateEffect(aafUID_t& uid);
+
 // Media composer effect IDs
 const aafUID_t kEffBlendPIPUUID =		{0xD94E75C2,0x6ADF,0x11d3,{0x80,0xCF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
 const aafUID_t kEffBlendSuperUUID =	{0xD94E75C4,0x6ADF,0x11d3,{0x80,0xCF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
@@ -151,6 +169,7 @@ const aafUID_t kAAFParamID_AvidColor =	{0x8BC4273D,0x6BAB,0x11d3,{0x80,0xCF,0x00
 const aafUID_t kAAFParamID_AvidUserParam =	{0x8BC4273E,0x6BAB,0x11d3,{0x80,0xCF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
 const aafUID_t kAAFParamID_AvidEffectName = {0x783B480F,0x7CF6,0x11d3,{0x80,0xD5,0x00,0x60,0x08,0x14,0x3E,0x6F}};
 const aafUID_t kAAFParamID_AvidDirection = {0xF1DB0F6A,0x8D64,0x11d3,{0x80,0xDF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
+const aafUID_t kAAFParamID_AvidGlobalKF = { 0x9997779, 0x960e, 0x11d3, { 0xa0, 0x4e, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 // Media Composer type ID's
 const aafUID_t kAAFTypeID_AvidPosition =	{0x8BC4272E,0x6BAB,0x11d3,{0x80,0xCF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
@@ -161,3 +180,168 @@ const aafUID_t kAAFTypeID_AvidBounds =	{0x8BC42732,0x6BAB,0x11d3,{0x80,0xCF,0x00
 const aafUID_t kAAFTypeID_AvidEffColor =	{0x8BC42733,0x6BAB,0x11d3,{0x80,0xCF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
 const aafUID_t kAAFTypeID_AvidEffUserParam =	{0x8BC42734,0x6BAB,0x11d3,{0x80,0xCF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
 const aafUID_t kAAFTypeID_AvidDirection = {0xF1DB0F6B,0x8D64,0x11d3,{0x80,0xDF,0x00,0x60,0x08,0x14,0x3E,0x6F}};
+const aafUID_t kAAFTypeID_AvidGlobalKF = { 0x9997778, 0x960e, 0x11d3, { 0xa0, 0x4e, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+
+// Avid MC Private effect blob
+#define MAX_EFFECT_COLORS		16
+
+typedef	unsigned long	AvFixed30;
+typedef	unsigned long	AvFixed16;
+
+typedef struct
+	{
+	unsigned char 		hue;
+	unsigned char 		sat;
+	unsigned char 		lum;
+	unsigned char		dep;
+	} hsl8Color_t, **hsl8ColorHdl;
+
+typedef	struct
+	{
+	AvFixed16	top;
+	AvFixed16	left;
+	AvFixed16	bottom;
+	AvFixed16	right;
+	unsigned char		Lvl2Xscale;
+	unsigned char		Lvl2Yscale;
+	unsigned char		Lvl2Xpos;
+	unsigned char		Lvl2Ypos;
+	} OMFIPvtFixedRect;
+
+#pragma pack(1)
+struct OMFIPvtKFInfo
+	{
+	long		cookie;
+	long		revision;
+	long	    selected;			// Boolean would have struct alignment problems x-platform
+	AvFixed30	percentTime;
+	AvFixed30	level;
+	AvFixed16	posX;
+	AvFixed16	XFloor;
+	AvFixed16	XCeiling;
+	AvFixed16	posY;
+	AvFixed16	YFloor;
+	AvFixed16	YCeiling;
+	AvFixed16	Xscale;
+	AvFixed16	Yscale;
+
+	AvFixed16	cropLeft;
+	AvFixed16	cropRight;
+	AvFixed16	cropTop;
+	AvFixed16	cropBottom;
+	
+	OMFIPvtFixedRect	Box;
+	long				borderWidth;
+	long				borderSoft;
+	long				nColors;
+	
+	short				secondGain;
+	short				spillGain;
+	
+	short				secondSoft;
+	short				spillSoft;
+
+	char				enableKeyFlags;
+	char				pad1;
+
+	hsl8Color_t 		colors[MAX_EFFECT_COLORS];
+
+// userParamSize must ALWAYS be the last field of this structure.  It doesn't have to
+// be the last one written to the domain, but it must be the last one here.  userParamSize
+// must always remain a long because people are using it to determine the position of the
+// userParams which is glommed on the end.  POC.
+
+	long				userParamSize;
+// the userParams are just glommed onto the end of this structure at this position.  POC.
+
+	};
+
+typedef struct
+	{
+	long				cookie;
+	long				rev;
+	long				kfCurrent;
+	long				kfSmooth;
+	short				colorItem;
+	short				quality;
+	unsigned char		isReversed;
+	unsigned char		ScalesDetached;
+	} OMFIPvtGlobalInfo_t;
+#pragma pack()
+
+typedef struct
+{
+	aafRational_t	pos;
+	aafRational_t	floor;
+	aafRational_t	ceiling;
+} AAFPvtPosExport;
+
+typedef struct
+{
+	aafRational_t	top;
+	aafRational_t	left;
+	aafRational_t	bottom;
+	aafRational_t	right;
+} AAFPvtCropExport;
+
+typedef struct
+{
+	aafRational_t	xScale;
+	aafRational_t	yScale;
+} AAFPvtScaleExport;
+
+typedef struct
+{
+	aafInt16	secondGain;
+	aafInt16	spillGain;	
+	aafInt16	secondSoft;
+	aafInt16	spillSoft;
+} AAFPvtSpillExport;
+
+typedef struct
+{
+	aafRational_t	top;
+	aafRational_t	left;
+	aafRational_t	bottom;
+	aafRational_t	right;
+	aafBool			Lvl2Xscale;
+	aafBool			Lvl2Yscale;
+	aafBool			Lvl2Xpos;
+	aafBool			Lvl2Ypos;		
+} AAFPvtBoundExport;
+
+typedef struct
+{
+	aafInt32		nColors;
+	hsl8Color_t 	colors[MAX_EFFECT_COLORS];	// JeffB: Not an AAF Type
+} AAFPvtColorExport;
+
+typedef struct
+	{
+	long				cookie;
+	long				rev;
+	long				kfCurrent;
+	long				kfSmooth;
+	short				colorItem;
+	short				quality;
+	unsigned char		isReversed;
+	unsigned char		ScalesDetached;
+	} AAFPvtGlobalInfo_t;
+
+#define OMF2_EFFE_ALLOTHERS_GLOBAL_SLOT 1
+#define OMF2_EFFE_ALLOTHERS_KEYFRAME_SLOT 2
+#define OMF2_EFFE_ALLOTHERS_LEVEL_SLOT 3
+#define OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_GLOBAL_SLOT		128
+#define OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_KEYFRAME_SLOT	129
+#define OMF2_EFFE_PUBLIC_WITH_AVID_PRIVATE_DATA_LEVEL_SLOT		130
+
+#define OMFI_KF_COOKIE		0x526F626E
+#define OMFI_KF_REVISION	1
+#define OMFI_GLB_COOKIE		0x476C6F62
+#define OMFI_GLB_REVISION	1
+
+#define AAF_GLB_COOKIE		0x476C6F62
+#define AAF_GLB_REVISION	1
+
+#define ONE_FIXED16			0x00010000
+#define ONE_FIXED30			0x40000000
