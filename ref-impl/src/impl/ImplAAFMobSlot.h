@@ -25,7 +25,7 @@
 // aafRational_t,
 // AAFSegment,
 // aafPosition_t,
-// aafTrackID_t,
+// aafSlotID_t,
 // aafUInt32,
 // AAFDataDef
 
@@ -80,14 +80,14 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetName
-        (aafString_t *  name);  //@parm [in,out] Mob Slot Name
+        (aafWChar *  name);  //@parm [in,out] Mob Slot Name
 
   //****************
   // SetName()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     SetName
-        (aafString_t *  name);  //@parm [in] Mob Slot Name
+        (aafWChar *  name);  //@parm [in] Mob Slot Name
 
 
   //****************
@@ -114,21 +114,21 @@ public:
         (aafUID_t *result);  //@parm [out,retval] Data Definition UUID
 
   //***********************************************************
-  // METHOD NAME: GetTrackID()
+  // METHOD NAME: GetSlotID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-  GetTrackID (
-    // @parm [out,retval] aafTrackID_t * | result | Track id of the Mob Slot
-    aafTrackID_t *  result
+  GetSlotID (
+    // @parm [out,retval] aafSlotID_t * | result | Slot id of the Mob Slot
+    aafSlotID_t *  result
   );
 
   //***********************************************************
-  // METHOD NAME: SetTrackID()
+  // METHOD NAME: SetSlotID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-  SetTrackID (
-    // @parm [in] aafTrackID_t | value | Track id of the Mob Slot
-    aafTrackID_t value
+  SetSlotID (
+    // @parm [in] aafSlotID_t | value | Slot id of the Mob Slot
+    aafSlotID_t value
   );
 
 public:

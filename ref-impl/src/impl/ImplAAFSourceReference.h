@@ -73,7 +73,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSourceMobSlotID
 		// @parm [retval][out] Place to put source mob slot ID
-        (aafTrackID_t *  pMobSlotID);
+        (aafSlotID_t *  pMobSlotID);
 
   //****************
   // SetSourceMobSlotID()
@@ -81,7 +81,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetSourceMobSlotID
 		// @parm [in] Source Mob ID to set
-        (aafTrackID_t   mobSlotID);
+        (aafSlotID_t   mobSlotID);
 
 
 
