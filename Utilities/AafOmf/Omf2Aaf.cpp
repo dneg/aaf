@@ -2249,7 +2249,8 @@ void Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 			if (OMF2::kOmfRev2x == OMFFileRev)
 			{
 				OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&testErr);
-				OMFError = OMF2::omfsReadDataValue(OMFFileHdl,
+				//Read only as much as there is...
+				(void)OMF2::omfsReadDataValue(OMFFileHdl,
 					mediaDescriptor,
 					OMF2::OMTIFDSummary,
 					datakind,
