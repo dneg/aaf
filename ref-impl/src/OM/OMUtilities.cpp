@@ -3,6 +3,8 @@
 #include "OMUtilities.h"
 #include "OMAssertions.h"
 
+#include <windows.h>
+
 const char* programName;
 
 void setProgramName(const char* name)
@@ -16,6 +18,8 @@ void convert(wchar_t* wcName, size_t length, const char* name)
   PRECONDITION("Valid input name", validString(name));
   PRECONDITION("Valid output buffer", wcName != 0);
   PRECONDITION("Valid output buffer size", length > 0);
+  
+  ASSERT("Valid program name", validString(programName));
 
   size_t status  = mbstowcs(wcName, name, length);
   if (status == -1) {
@@ -30,6 +34,8 @@ void convert(wchar_t* wcName, size_t length, const char* name)
 
 void convert(char* cName, size_t length, wchar_t* name)
 {
+  ASSERT("Valid program name", validString(programName));
+
   size_t status  = wcstombs(cName, name, length);
   if (status == -1) {
     cerr << programName
@@ -82,6 +88,8 @@ int check(HRESULT resultCode)
 {
   TRACE("check");
 
+  ASSERT("Valid program name", validString(programName));
+
   if (FAILED(resultCode)) {
     printError(programName, "Error");
     formatError(resultCode);
@@ -95,6 +103,8 @@ int checkFile(HRESULT resultCode, const char* fileName)
 {
   TRACE("checkFile");
   PRECONDITION("Valid file name", validString(fileName));
+
+  ASSERT("Valid program name", validString(programName));
 
   if (FAILED(resultCode)) {
     printError(programName, "File error");
@@ -111,6 +121,8 @@ int checkStream(HRESULT resultCode, const char* streamName)
   TRACE("checkStream");
   PRECONDITION("Valid stream name", validString(streamName));
 
+  ASSERT("Valid program name", validString(programName));
+
   if (FAILED(resultCode)) {
     printError(programName, "Stream error");
     printName(streamName);
@@ -126,6 +138,8 @@ int checkStorage(HRESULT resultCode, const char* storageName)
 {
   TRACE("checkStorage");
   PRECONDITION("Valid storage name", validString(storageName));
+
+  ASSERT("Valid program name", validString(programName));
 
   if (FAILED(resultCode)) {
     printError(programName, "Storage error");
