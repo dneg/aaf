@@ -439,8 +439,12 @@ void OMFile::open(void)
                              (_mode == modifyMode));
 
   if (_isNew) { // new file - create
-    ASSERT("Correct mode for new file", _mode == modifyMode);
-    createModify();
+    ASSERT("Correct mode for new file", _mode != readOnlyMode);
+    if (_mode == modifyMode) {
+      createModify();
+    } else { // _mode == writeOnly
+      createWrite();
+    }
   } else {      // existing file - open
     ASSERT("Correct mode for existing file", (_mode == readOnlyMode) ||
                                              (_mode == modifyMode));
@@ -1120,6 +1124,29 @@ void OMFile::createModify(void)
     break;
   case XMLTextEncoding:
     _rootStore = OMXMLStoredObject::createModify(_rawStorage, _byteOrder);
+    break;
+  }
+  ASSERT("Valid store", _rootStore != 0);
+  _root->setStore(_rootStore);
+}
+
+void OMFile::createWrite(void)
+{
+  TRACE("OMFile::createWrite");
+
+  _encoding = encodingOf(_signature);
+  ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
+                           (_encoding == KLVBinaryEncoding) ||
+                           (_encoding == XMLTextEncoding));
+  switch (_encoding) {
+  case MSSBinaryEncoding:
+    _rootStore = OMMSSStoredObject::createWrite(_rawStorage, _byteOrder);
+    break;
+  case KLVBinaryEncoding:
+    _rootStore = OMKLVStoredObject::createWrite(_rawStorage, _byteOrder);
+    break;
+  case XMLTextEncoding:
+    _rootStore = OMXMLStoredObject::createWrite(_rawStorage, _byteOrder);
     break;
   }
   ASSERT("Valid store", _rootStore != 0);

@@ -193,6 +193,30 @@ OMMSSStoredObject* OMMSSStoredObject::openModify(OMRawStorage* rawStorage)
   //   @parm The raw storage in which to create the file.
   //   @parm The desired byte ordering for the new file.
   //   @rdesc An <c OMMSSStoredObject> representing the root object.
+OMMSSStoredObject* OMMSSStoredObject::createWrite(OMRawStorage* rawStorage,
+                                                  const OMByteOrder byteOrder)
+{
+  TRACE("OMMSSStoredObject::createWrite");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
+  PRECONDITION("Compatible raw storage access mode",
+                         rawStorage->isWritable() && rawStorage->isReadable());
+  PRECONDITION("Compatible raw storage", rawStorage->isPositionable() &&
+                                         rawStorage->isExtendible());
+
+  OMMSSStoredObject* newStore = OMMSSStoredObject::createFile(rawStorage);
+  newStore->create(byteOrder); // mode == modify
+
+  return newStore;
+}
+
+  // @mfunc Create a new root <c OMMSSStoredObject> in the raw storage
+  //        <p rawStorage>. The byte order of the newly created root
+  //        is given by <p byteOrder>.
+  //   @parm The raw storage in which to create the file.
+  //   @parm The desired byte ordering for the new file.
+  //   @rdesc An <c OMMSSStoredObject> representing the root object.
 OMMSSStoredObject* OMMSSStoredObject::createModify(OMRawStorage* rawStorage,
                                                    const OMByteOrder byteOrder)
 {
