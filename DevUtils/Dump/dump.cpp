@@ -245,6 +245,8 @@ const CLSID CLSID_AAFHeader =
 //           PositionArray since these were not unique !
 //  0.16   : Version 0.15 used in DR1. Bump to 0.16 to continue
 //           development.
+//  0.17   : changed format of aafTimeStamp_t struct to reflect
+//           reality.
 //
 
 // The following may change at run time depending on the file format
@@ -256,7 +258,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 16;
+const OMUInt32 HIGHVERSION = 17;
 
 // Output format requested
 //
