@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -143,34 +143,6 @@ void OMStorable::close(void)
   _exists = false;
 
   POSTCONDITION("Closed", _store == 0);
-}
-
-  // @mfunc Restore an <c OMStorable> (of unknown sub-class) from
-  //        the stored representation <p s>.
-  //   @parm The <c OMStorable> that will contain (own) the newly
-  //   restored <c OMStorable>.
-  //   @parm The name to be given the newly restored <c OMStorable>.
-  //   @parm The <c OMStoredObject> from which to restore this
-  //   <c OMStorable>.
-OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
-                                    const wchar_t* name,
-                                    OMStoredObject& s)
-{
-  TRACE("OMStorable::restoreFrom");
-  OMClassId cid;
-  s.restore(cid);
-  const OMClassFactory* classFactory = containingObject->classFactory();
-  OMStorable* object = classFactory->create(cid);
-  ASSERT("Registered class id", object != 0);
-  ASSERT("Valid class factory", classFactory == object->classFactory());
-#if !defined(OM_NO_VALIDATE_DEFINITIONS)
-  ASSERT("Valid class definition", object->definition() != 0);
-#endif
-  // Attach the object.
-  object->attach(containingObject, name);
-  object->setStore(&s);
-  object->restoreContents();
-  return object;
 }
 
   // @mfunc Restore the contents of an <c OMStorable> (of unknown

@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -73,12 +73,6 @@ public:
 
     // @cmember Close this <c OMStorable>.
   virtual void close(void);
-
-    // @cmember Restore an <c OMStorable> (of unknown sub-class) from
-    // the stored representation <p s>.
-  static OMStorable* restoreFrom(const OMStorable* container,
-                                 const wchar_t* name,
-                                 OMStoredObject& s);
 
     // @cmember Restore the contents of an <c OMStorable> (of unknown
     //          sub-class).

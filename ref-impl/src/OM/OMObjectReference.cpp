@@ -448,11 +448,9 @@ void OMStrongObjectReference::load(void)
 
   OMStoredObject* subStorage = store->open(_name);
 
-  // restore contents from the sub-storage
+  // restore referenced object from the sub-storage
   //
-  OMStorable* object = OMStorable::restoreFrom(containingObject,
-                                               _name,
-                                               *subStorage);
+  OMStorable* object = subStorage->restoreObject(*this);
   ASSERT("Object properly restored", object != 0);
 
   // place a pointer to the newly restored object in this element
