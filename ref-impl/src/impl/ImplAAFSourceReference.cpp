@@ -24,7 +24,7 @@
 #endif
 
 #include <assert.h>
-#include <AAFResult.h>
+#include "AAFResult.h"
 
 
 ImplAAFSourceReference::ImplAAFSourceReference ():
@@ -41,30 +41,58 @@ ImplAAFSourceReference::~ImplAAFSourceReference ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceReference::GetSourceID (aafUID_t *  /*pSourceID*/)
+    ImplAAFSourceReference::GetSourceID (aafUID_t*	pSourceID)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+	if (pSourceID == NULL)
+	{
+		aafError = AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		*pSourceID = _sourceID;
+	}
+
+	return aafError;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceReference::SetSourceID (aafUID_t   /*sourceID*/)
+    ImplAAFSourceReference::SetSourceID (aafUID_t	sourceID)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	_sourceID = sourceID;
+
+	return aafError;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceReference::GetSourceMobSlotID (aafSlotID_t *  /*pMobSlotID*/)
+    ImplAAFSourceReference::GetSourceMobSlotID (aafSlotID_t*	pMobSlotID)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+	if (pMobSlotID == NULL)
+	{
+		aafError = AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		*pMobSlotID = _sourceMobSlotId;
+	}
+
+	return aafError;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceReference::SetSourceMobSlotID (aafSlotID_t   /*mobSlotID*/)
+    ImplAAFSourceReference::SetSourceMobSlotID (aafSlotID_t		mobSlotID)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	_sourceMobSlotId = mobSlotID;
+
+	return aafError;
 }
 
 
