@@ -29,7 +29,6 @@
 // aafUInt32,
 // AAFDataDef
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFSegment;
 

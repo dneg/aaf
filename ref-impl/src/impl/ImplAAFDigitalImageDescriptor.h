@@ -13,7 +13,6 @@
 #include "OMStorable.h"
 #include "ImplAAFFileDescriptor.h"
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFDigitalImageDescriptor : public ImplAAFFileDescriptor
 {

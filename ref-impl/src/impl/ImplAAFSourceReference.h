@@ -34,7 +34,6 @@
 #include "ImplAAFObject.h"
 #include "OMProperty.h"
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFSourceReference : public ImplAAFSegment
 {

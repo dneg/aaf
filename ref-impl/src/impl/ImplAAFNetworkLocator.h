@@ -23,7 +23,6 @@
 
 #include "OMProperty.h"
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFNetworkLocator : public ImplAAFLocator
 {

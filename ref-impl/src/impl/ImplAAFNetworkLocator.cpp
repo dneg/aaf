@@ -14,6 +14,8 @@
 #include "ImplAAFNetworkLocator.h"
 #endif
 
+#include "AAFPropertyIDs.h"
+
 #include "AAFResult.h"
 
 #include <assert.h>

@@ -31,7 +31,6 @@ class ImplAAFScopeStack;
 
 #include "OMProperty.h"
 
-#include "AAFPropertyIDs.h"
 
 typedef 
 enum _implCompType_t

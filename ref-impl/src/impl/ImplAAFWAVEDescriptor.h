@@ -14,7 +14,6 @@
 
 #include "ImplAAFFileDescriptor.h"
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFWAVEDescriptor : public ImplAAFFileDescriptor
 {

@@ -24,7 +24,6 @@
 
 #include "OMProperty.h"
 
-#include "AAFPropertyIDs.h"
 
 
 class ImplAAFTapeDescriptor : public ImplAAFEssenceDescriptor

@@ -34,7 +34,6 @@ class ImplAAFSegment;
 
 #include "OMProperty.h"
 
-#include "AAFPropertyIDs.h"
 
 const int FULL_LENGTH = -1;
 

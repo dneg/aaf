@@ -8,6 +8,8 @@
 \******************************************/
 #include "ImplAAFDigitalImageDescriptor.h"
 
+#include "AAFPropertyIDs.h"
+
 #include <assert.h>
 #include <string.h>
 
