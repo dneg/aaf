@@ -139,26 +139,6 @@ static const aafUID_t kMobID_Personnel =
 #define check(r) {if (FAILED (r)) assert(0); }
 
 
-//
-// Some smart pointer typedefs
-//
-#include "AAFSmartPointer.h"
-
-typedef IAAFSmartPointer<IAAFTypeDefObjectRef>     IAAFTypeDefObjectRefSP;
-typedef IAAFSmartPointer<IAAFTypeDefVariableArray> IAAFTypeDefVariableArraySP;
-typedef IAAFSmartPointer<IAAFClassDef>             IAAFClassDefSP;
-typedef IAAFSmartPointer<IAAFDictionary>           IAAFDictionarySP;
-typedef IAAFSmartPointer<IAAFFile>                 IAAFFileSP;
-typedef IAAFSmartPointer<IAAFHeader>               IAAFHeaderSP;
-typedef IAAFSmartPointer<IAAFMob>                  IAAFMobSP;
-typedef IAAFSmartPointer<IAAFObject>               IAAFObjectSP;
-typedef IAAFSmartPointer<IAAFPropertyDef>          IAAFPropertyDefSP;
-typedef IAAFSmartPointer<IAAFTypeDef>              IAAFTypeDefSP;
-typedef IAAFSmartPointer<IAAFTypeDefExtEnum>       IAAFTypeDefExtEnumSP;
-typedef IAAFSmartPointer<IAAFPropertyValue>        IAAFPropertyValueSP;
-typedef IAAFSmartPointer<IAAFTypeDefString>        IAAFTypeDefStringSP;
-typedef IAAFSmartPointer<IAAFTypeDefInt>           IAAFTypeDefIntSP;
-
 
 // For local in-memory use, we'll define the following typedef for
 // handy manipulation of eRole extensible enumerations.
