@@ -399,6 +399,16 @@ OMWeakReferenceProperty<ReferencedObject>::reference(void) const
   return const_cast<OMWeakObjectReference&>(_reference);
 }
 
+
+template <typename ReferencedObject>
+OMStrongReferenceSet*
+OMWeakReferenceProperty<ReferencedObject>::targetSet(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::targetSet");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  return 0;
+}
+
 template <typename ReferencedObject>
 OMPropertyId
 OMWeakReferenceProperty<ReferencedObject>::keyPropertyId(void) const

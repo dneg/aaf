@@ -206,6 +206,11 @@ public:
   virtual void insert(void* key,
                       const OMWeakReferenceSetElement& element);
 
+    // @cmember The <c OMStrongReferenceSet> in which the objects
+    //          referenced by this <c OMWeakReferenceSetProperty>
+    //          must reside.
+  virtual OMStrongReferenceSet* targetSet(void) const;
+
   virtual OMPropertyId keyPropertyId(void) const;
 
   virtual OMPropertyTag targetTag(void) const;

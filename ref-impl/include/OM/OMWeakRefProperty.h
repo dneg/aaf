@@ -117,6 +117,11 @@ public:
 
   virtual OMWeakObjectReference& reference(void) const;
 
+    // @cmember The <c OMStrongReferenceSet> in which the object
+    //          referenced by this <c OMWeakReferenceProperty>
+    //          must reside.
+  virtual OMStrongReferenceSet* targetSet(void) const;
+
   virtual OMPropertyId keyPropertyId(void) const;
 
   virtual OMPropertyTag targetTag(void) const;

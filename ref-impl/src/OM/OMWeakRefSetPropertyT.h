@@ -803,6 +803,15 @@ OMWeakReferenceSetProperty<ReferencedObject>::setTargetTag(
 }
 
 template <typename ReferencedObject>
+OMStrongReferenceSet*
+OMWeakReferenceSetProperty<ReferencedObject>::targetSet(void) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::targetSet");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  return 0;
+}
+
+template <typename ReferencedObject>
 OMPropertyId
 OMWeakReferenceSetProperty<ReferencedObject>::keyPropertyId(void) const
 {
