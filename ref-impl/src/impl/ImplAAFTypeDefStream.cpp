@@ -1,6 +1,6 @@
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2000 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -34,21 +34,32 @@
 #include "ImplAAFTypeDefStream.h"
 #endif
 
+#ifndef __ImplAAFStreamPropertyValue_h__
+#include "ImplAAFStreamPropertyValue.h"
+#endif
+
+#ifndef __ImplAAFDictionary_h__
+#include "ImplAAFDictionary.h"
+#endif
+
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
+#include "ImplAAFObjectCreation.h"
+
+#include "OMPropertyDefinition.h"
+#include "OMDataStreamProperty.h"
+#include "OMAssertions.h"
+#include "OMUtilities.h"
 
 
 #include <assert.h>
 #include <string.h>
 
 
+extern "C" const aafClassID_t CLSID_AAFStreamPropertyValue;
+
 ImplAAFTypeDefStream::ImplAAFTypeDefStream ()
-  : _elementType  (PID_TypeDefinitionStream_ElementType,
-                   L"ElementType",
-                   L"/MetaDictionary/TypeDefinitions",
-                   PID_MetaDefinition_Identification)
 {
-  _persistentProperties.put(_elementType.address());
 }
 
 
@@ -57,133 +68,356 @@ ImplAAFTypeDefStream::~ImplAAFTypeDefStream ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStream::Initialize (
-      const aafUID_t & id,
-      ImplAAFTypeDef * pTypeDef,
-      const aafCharacter * pTypeName)
-{
-  if (! pTypeDef)
-	return AAFRESULT_NULL_PARAM;
-  if (! pTypeName)
-	return AAFRESULT_NULL_PARAM;
-  if (!pTypeDef->attached())
-    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
-
-  return pvtInitialize(id, pTypeDef, pTypeName);
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStream::pvtInitialize (
       const aafUID_t & id,
-      ImplAAFTypeDef * pTypeDef,
       const aafCharacter * pTypeName)
 {
-  if (! pTypeDef)
-	return AAFRESULT_NULL_PARAM;
+  AAFRESULT result = AAFRESULT_SUCCESS;
   if (! pTypeName)
 	return AAFRESULT_NULL_PARAM;
 
-  assert (pTypeDef);
-  if (! pTypeDef->IsStreamable() || !pTypeDef->IsFixedSize())
-    return AAFRESULT_BAD_TYPE;
+  if (isInitialized())
+    return AAFRESULT_ALREADY_INITIALIZED;
+ 
+   // Initialize the type definition with its unique identifier and name.
+  result = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
+  if (AAFRESULT_FAILED (result))
+    return result; 
 
-  _elementType = pTypeDef;
-
-  return AAFRESULT_SUCCESS;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStream::GetType (
-      ImplAAFTypeDef ** ppTypeDef)
-{
-  if (! ppTypeDef)
-	return AAFRESULT_NULL_PARAM;
-
-  *ppTypeDef = _elementType;
-  if (*ppTypeDef)
-    (*ppTypeDef)->AcquireReference();
+  // This type definition stream instance has been initialized.
+  setInitialized();
 
   return AAFRESULT_SUCCESS;
 }
 
 
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStream::GetCount (
-      ImplAAFPropertyValue * pPropVal,
-      aafInt64 * pCount)
+// 
+// Make sure that this is a valid stream property value.
+//
+AAFRESULT ImplAAFTypeDefStream::GetStreamPropertyValue(
+  ImplAAFPropertyValue * pPropertyValue,
+  ImplAAFStreamPropertyValue *& pStreamPropertyValue)
 {
-  if (! pPropVal)
-	return AAFRESULT_NULL_PARAM;
-  if (! pCount)
-	return AAFRESULT_NULL_PARAM;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  
+  pStreamPropertyValue = NULL; // init out parameter
+  
+  if (NULL == pPropertyValue)
+    return AAFRESULT_NULL_PARAM;
+  
+  // The stream property value's type should be this instance of 
+  // ImplAAFTypeDefStream.
+  ImplAAFTypeDefSP pPropertyValueType;
+  result = pPropertyValue->GetType(&pPropertyValueType);
+  if ((ImplAAFTypeDef *)pPropertyValueType != (ImplAAFTypeDef *)this)
+    return AAFRESULT_INVALID_PARAM;
+  
+  pStreamPropertyValue = dynamic_cast<ImplAAFStreamPropertyValue *>(pPropertyValue);
+  if (NULL == pStreamPropertyValue)
+    return AAFRESULT_INVALID_PARAM;
+    
+  return AAFRESULT_SUCCESS;
+}
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+//
+// Macro to encapsulate the convertions and validation of a ImplAAFPropertyValue
+// into an ImplAAFStreamPropertyValue.
+//
+#define PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pv, spv)\
+  AAFRESULT result = AAFRESULT_SUCCESS;\
+  ImplAAFStreamPropertyValue * spv = NULL;\
+  result = GetStreamPropertyValue(pv, spv);\
+  if (AAFRESULT_FAILED(result))\
+    return result
+
+
+
+
+
+
+
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::GetSize (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafInt64 *  pSize)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->GetSize(pSize);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::SetSize (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafInt64  newSize)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->SetSize(newSize);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::GetPosition (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafInt64 *  pPosition)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->GetPosition(pPosition);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::SetPosition (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafInt64  newPosition)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->SetPosition(newPosition);
+}
+
+
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFTypeDefStream::Read (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData,
+      aafUInt32 *  bytesRead)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->Read(dataSize, pData, bytesRead);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::Write (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->Write(dataSize, pData);
+}
+
+
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::Append (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->Append(dataSize, pData);
+}
+
+
+
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::HasStoredByteOrder (
+      ImplAAFPropertyValue * pPropertyValue,
+      aafBoolean_t *  pHasByteOrder)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->HasStoredByteOrder(pHasByteOrder);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::GetStoredByteOrder (
+      ImplAAFPropertyValue * pPropertyValue,
+      eAAFByteOrder_t *  pByteOrder)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->GetStoredByteOrder(pByteOrder);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::SetStoredByteOrder (
+      ImplAAFPropertyValue * pPropertyValue,
+      eAAFByteOrder_t  byteOrder)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->SetStoredByteOrder(byteOrder);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::ClearStoredByteOrder (
+      ImplAAFPropertyValue * pPropertyValue)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->ClearStoredByteOrder();
+}
+
+
+
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFTypeDefStream::ReadElements (
+      ImplAAFPropertyValue * pPropertyValue,
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData,
+      aafUInt32 *  bytesRead)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->ReadElements(pElementType, dataSize, pData, bytesRead);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::WriteElements (
+      ImplAAFPropertyValue * pPropertyValue,
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
+{
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->WriteElements(pElementType, dataSize, pData);
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStream::AppendElements (
-      ImplAAFPropertyValue * pInPropVal,
-      ImplAAFPropertyValue ** ppMemberPropVals,
-      aafUInt32  /*numElements*/)
+      ImplAAFPropertyValue * pPropertyValue,
+      ImplAAFTypeDef * pElementType,
+      aafUInt32  dataSize,
+      aafMemPtr_t  pData)
 {
-  if (! pInPropVal)
-	return AAFRESULT_NULL_PARAM;
-  if (! ppMemberPropVals)
-	return AAFRESULT_NULL_PARAM;
+  PROPERTYVALUE_TO_STREAMPROPERTYVALUE(pPropertyValue, pStreamPropertyValue);
+  
+  return pStreamPropertyValue->AppendElements(pElementType, dataSize, pData);
+}
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefStream::GetTypeCategory (
+      eAAFTypeCategory_t *  pTid)
+{
+  if (NULL == pTid)
+    return AAFRESULT_NULL_PARAM;
+  
+  *pTid = kAAFTypeCatStream;
+  
+  return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStream::CreateEmpty (
-      ImplAAFPropertyValue ** ppPropVal)
+    ImplAAFTypeDefStream::RawAccessType (
+      ImplAAFTypeDef ** ppRawTypeDef)
 {
-  if (! ppPropVal)
-	return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == ppRawTypeDef)
+    return AAFRESULT_NULL_PARAM;
+  
+  // There is no "raw access type" for a stream. For now
+  // just return this stream type and let the caller handle
+  // reading the stream.
+  *ppRawTypeDef = this;
+  (*ppRawTypeDef)->AcquireReference();
+  
+  return AAFRESULT_SUCCESS;
 }
 
 
 
+// Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+// for the given OMProperty.
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStream::GetElementValues (
-      ImplAAFPropertyValue * pInPropVal,
-      aafInt64  /*startElement*/,
-      ImplAAFPropertyValue ** pOutPropVals,
-      aafUInt32  /*numElements*/)
+  ImplAAFTypeDefStream::CreatePropertyValue(
+    OMProperty *property,
+    ImplAAFPropertyValue ** ppPropertyValue ) const
 {
-  if (! pInPropVal)
-	return AAFRESULT_NULL_PARAM;
-  if (! pOutPropVals)
-	return AAFRESULT_NULL_PARAM;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  assert (property && ppPropertyValue);
+  if (NULL == property || NULL == ppPropertyValue)
+    return AAFRESULT_NULL_PARAM;
+  *ppPropertyValue = NULL; // initialize out parameter
+ 
+  ImplAAFStreamPropertyValue *pStreamValue = NULL;
+  pStreamValue = (ImplAAFStreamPropertyValue*) CreateImpl (CLSID_AAFStreamPropertyValue);
+  if (!pStreamValue) 
+    return AAFRESULT_NOMEMORY;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // Attempt to initialize the stream value. This will fail if given property is not a valid
+  // stream property.
+  result = pStreamValue->Initialize (this, property);
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+	*ppPropertyValue = pStreamValue; // The reference count is already 1.
+	pStreamValue = NULL;
+  }
+  else
+  {
+    pStreamValue->ReleaseReference();
+  }
+  return result;
 }
 
 
 
- AAFRESULT STDMETHODCALLTYPE
-   ImplAAFTypeDefStream::GetElements (
-      ImplAAFPropertyValue * pPropVal,
-      aafInt64  /*startElement*/,
-      aafMemPtr_t pData,
-      aafUInt32  /*numElements*/)
-{
-  if (! pPropVal)
-	return AAFRESULT_NULL_PARAM;
-  if (! pData)
-	return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+//
+// Overrides of ImplAAFTypeDef
+//
+
+aafBool ImplAAFTypeDefStream::IsFixedSize (void) const
+{
+  return kAAFFalse;
+}
+
+
+size_t ImplAAFTypeDefStream::PropValSize (void) const
+{
+  assert (0);
+  return 0; // not reached!
+}
+
+
+aafBool ImplAAFTypeDefStream::IsRegistered (void) const
+{
+  // This is an axiomatic type.
+  return kAAFTrue;
+}
+
+
+size_t ImplAAFTypeDefStream::NativeSize (void) const
+{
+  assert (0);
+  return 0; // not reached!
 }
 
 
@@ -204,6 +438,14 @@ bool ImplAAFTypeDefStream::IsStringable () const
 
 
 
+OMProperty * ImplAAFTypeDefStream::pvtCreateOMProperty
+  (OMPropertyId pid,
+   const wchar_t * name) const
+{
+  // TEMPORARY: Need to use non-template class: Use existing OMDataStreamProperty
+  // until new non-template typed-stream class is available.
+  return new OMDataStreamProperty(pid, name);
+}
 
 
 
