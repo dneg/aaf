@@ -38,25 +38,9 @@ using namespace std;
 string
 AxStringToString( AxString axString )
 {
-	string name;
-	
-	AxString::iterator iter;
-	for ( iter=axString.begin(); iter!=axString.end(); iter++ )
-	{
-		name += *iter;
-	}
-
-	return name;
+   return AxStringUtil::wctomb(axString);
 }
 
-
-//-----------------------------------------------------------------------------
-/*string 
-UIDToString( aafUID_t &uid )
-{
-	return AxStringUtil::wctomb( AxStringUtil::uid2Str( uid ) );
-}
-*/
 
 //-----------------------------------------------------------------------------
 string 
