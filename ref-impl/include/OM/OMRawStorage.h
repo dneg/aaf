@@ -63,6 +63,9 @@ public:
     // @cmember Destructor.
   virtual ~OMRawStorage(void) {}
 
+    // @cmember Is it possible to write to this <c OMRawStorage> ?
+  virtual bool isWritable(void) const = 0;
+
     // @cmember Attempt to read the number of bytes given by <p byteCount>
     //          from the current position in this <c OMRawStorage>
     //          into the buffer at address <p bytes>.

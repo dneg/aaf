@@ -69,6 +69,9 @@ public:
     // @cmember Destructor.
   virtual ~OMDiskRawStorage(void);
 
+    // @cmember Is it possible to write to this <c OMDiskRawStorage> ?
+  virtual bool isWritable(void) const;
+
     // @cmember Attempt to read the number of bytes given by <p byteCount>
     //          from the current position in this <c OMDiskRawStorage>
     //          into the buffer at address <p bytes>.

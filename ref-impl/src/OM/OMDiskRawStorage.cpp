@@ -125,6 +125,22 @@ OMDiskRawStorage::~OMDiskRawStorage(void)
   _file = 0;
 }
 
+  // @mfunc Is it possible to write to this <c OMDiskRawStorage> ?
+  //  @rdesc True if this <c OMDiskRawStorage> is writable, false otherwise.
+  //  @this const
+bool OMDiskRawStorage::isWritable(void) const
+{
+  TRACE("OMDiskRawStorage::isWritable");
+
+  bool result;
+  if ((_mode == OMFile::modifyMode) || (_mode == OMFile::writeOnlyMode)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
   //        from the current position in this <c OMDiskRawStorage>
   //        into the buffer at address <p bytes>.
