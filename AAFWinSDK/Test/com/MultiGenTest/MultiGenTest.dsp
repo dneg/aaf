@@ -94,6 +94,10 @@ SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\AddMasterMob.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\EssenceOp.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\FileOp.cpp
 # End Source File
 # Begin Source File
@@ -106,7 +110,19 @@ SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\LoadLib.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\MobOp.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\MultiGenCommon.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\noop.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\SlotOp.cpp
 # End Source File
 # End Group
 # Begin Source File
@@ -117,6 +133,14 @@ SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTest.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Group "MultiGenTests Header Files"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTests\MultiGenCommon.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\..\..\..\test\com\MultiGenTest\MultiGenTest.h
