@@ -67,10 +67,10 @@ AD_METHOD1(GetTapeFormat,
 		   Gets the recording method of the tape.)
 
 AD_METHOD1(SetTapeLength,
-		   [in],aafLength_t, tapeFormat,The length of the tape in minutes.,
+		   [in],aafLength_t, tapeLength,The length of the tape in minutes.,
 		   Sets the length of the tape.)
 AD_METHOD1(GetTapeLength,
-		   [out],aafLength_t*, tapeFormat,The length of the tape in minutes.,
+		   [out],aafLength_t*, pTapeLength,The length of the tape in minutes.,
 		   Gets the length of the tape.)
 
 AD_CLASS_END
