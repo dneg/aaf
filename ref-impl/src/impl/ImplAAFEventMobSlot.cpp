@@ -229,6 +229,5 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
 
 
 
-OMDEFINE_STORABLE(ImplAAFEventMobSlot, AUID_AAFEventMobSlot);
 
 

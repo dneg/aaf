@@ -101,5 +101,4 @@ AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafUID_t *from, aafU
 }
 
 
-OMDEFINE_STORABLE(ImplAAFSourceReference, AUID_AAFSourceReference);
 
