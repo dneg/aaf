@@ -207,7 +207,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const int HIGHVERSION = 9;
+const OMUInt32 HIGHVERSION = 9;
 
 // Output format requested
 //
@@ -247,8 +247,10 @@ static void printError(const char* prefix,
                        DWORD errorCode);
 static int check(const char* fileName, DWORD resultCode);
 static int checks(DWORD resultCode);
+#if defined(_WIN32) || defined(UNICODE)
 static void convert(wchar_t* wcName, size_t length, const char* name);
 static void convert(char* cName, size_t length, const wchar_t* name);
+#endif
 static void convert(char* cName, size_t length, const char* name);
 static void convertName(char* cName,
                         size_t length,
@@ -268,10 +270,14 @@ static void dumpStorage(IStorage* storage,
                         int isRoot);
 static void read(IStream* stream, void* address, size_t size);
 static void read(IStream* stream, size_t offset, void* address, size_t size);
+#if !defined (__GNUC__)
 static void readUInt8(IStream* stream, OMUInt8* value);
 static void readUInt16(IStream* stream, OMUInt16* value, bool swapNeeded);
+#endif
 static void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded);
+#if !defined (__GNUC__)
 static void swapUInt16(OMUInt16* value);
+#endif
 static void swapUInt32(OMUInt32* value);
 static void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry);
 static void printIndex(IndexEntry* index, OMUInt32 entries);
@@ -347,7 +353,7 @@ static size_t fileSize(const char* fileName)
   }
   errno = 0;
   size_t result = ftell(f);
-  if ((result == -1L) && (errno != 0)) {
+  if ((result == (size_t)-1) && (errno != 0)) {
     fatalError("fileSize", "ftell() failed");
   }
   return result;
@@ -626,10 +632,12 @@ int checks(DWORD resultCode)
   }
 }
 
+#if defined(_WIN32) || defined(UNICODE)
+
 void convert(wchar_t* wcName, size_t length, const char* name)
 {
   size_t status  = mbstowcs(wcName, name, length);
-  if (status == -1) {
+  if (status == (size_t)-1) {
     fatalError("convert", "Conversion failed.");
   }
 }
@@ -637,10 +645,12 @@ void convert(wchar_t* wcName, size_t length, const char* name)
 void convert(char* cName, size_t length, const wchar_t* name)
 {
   size_t status  = wcstombs(cName, name, length);
-  if (status == -1) {
+  if (status == (size_t)-1) {
     fatalError("convert", "Conversion failed.");
   }
 }
+
+#endif
 
 void convert(char* cName, size_t length, const char* name)
 {
@@ -701,7 +711,7 @@ int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize)
 
   *op++ = L'{'; 
  
-  for (int i = 0; i < sizeof(guidMap); i++) { 
+  for (size_t i = 0; i < sizeof(guidMap); i++) { 
 
     if (guidMap[i] == '-') { 
       *op++ = L'-'; 
@@ -1019,6 +1029,8 @@ void read(IStream* stream, size_t offset, void* address, size_t size)
   read(stream, address, size);
 }
 
+#if !defined(__GNUC__)
+
 void readUInt8(IStream* stream, OMUInt8* value)
 {
   read(stream, value, sizeof(OMUInt8));
@@ -1032,6 +1044,8 @@ void readUInt16(IStream* stream, OMUInt16* value, bool swapNeeded)
   }
 }
 
+#endif
+
 void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded)
 {
   read(stream, value, sizeof(OMUInt32));
@@ -1039,6 +1053,8 @@ void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded)
     swapUInt32(value);
   }
 }
+
+#if !defined(__GNUC__)
 
 void swapUInt16(OMUInt16* value)
 {
@@ -1050,6 +1066,8 @@ void swapUInt16(OMUInt16* value)
   p[1] = temp;
 
 }
+
+#endif
 
 void swapUInt32(OMUInt32* value)
 {
