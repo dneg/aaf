@@ -125,7 +125,10 @@ public:
 private:
 	OMFixedSizeProperty<aafUID_t>						 _interpolation;
     OMStrongReferenceVectorProperty<ImplAAFControlPoint> _controlPoints;
-};
+	OMVariableSizeProperty<aafUInt8>					_value;
+    OMWideStringProperty								 _displayValue;
+	OMFixedSizeProperty<aafReferenceType_t>				_significance;
+};	
 
 #endif // ! __ImplAAFVaryingValue_h__
 
