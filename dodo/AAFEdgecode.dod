@@ -32,11 +32,6 @@ AD_METHOD2(Create,
 AD_METHOD1(GetEdgecode,
 		   [out],aafEdgecode_t *,edgecode,Edgecode,
 		   This set of functions returns the required property values
-  // for the object identified by XXX.  If a value is not requested\\\, a
-  // NULL should be passed into the parameter corresponding to that
-  // property.  For example --
-  //            omfiMobSlotInfo\\\(file\\\, slotObj\\\, NULL\\\, &segment\\\);
-  // would not return the editRate property from a mob slot.
-  // Additional functions are provided to return optional properties.)
+  // for the object identified by XXX.)
 
 AD_CLASS_END
