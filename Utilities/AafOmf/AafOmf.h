@@ -103,6 +103,16 @@ typedef struct _AafOmfGlobals
 
 	// MC Private Properties
 	OMF2::omfProperty_t		pvtEffectIDProp;
+	OMF2::omfProperty_t		pvtAppCode;
+
+	// Codec Properties
+	OMF2::omfProperty_t		omCDCIComponentWidth;
+	OMF2::omfProperty_t		omCDCIHorizontalSubsampling;
+	OMF2::omfProperty_t		omCDCIColorSiting;
+	OMF2::omfProperty_t		omCDCIBlackReferenceLevel;
+	OMF2::omfProperty_t		omCDCIWhiteReferenceLevel;
+	OMF2::omfProperty_t		omCDCIColorRange;
+	OMF2::omfProperty_t		omCDCIPaddingBits;
 } AafOmfGlobals;
 
 int deleteFile( char* fileName );
@@ -113,6 +123,16 @@ AAFRESULT aafMobIDFromMajorMinor(
         aafUInt32	major,
 		aafUInt32	minor,
 		aafUID_t *mobID);     /* OUT - Newly created Mob ID */
+void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession);
+void RegisterOMFMCPrivate(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession);
+void RegisterAAFMCPrivate(IAAFDictionary * dict);
+HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID,
+							   aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict);
+
+HRESULT GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aafUID_t* pPropID,
+								 const aafUID_t* pIntTypeID, aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict);
+
+const aafUID_t AUID_PropertyMobAppCode = { 0x96c46992, 0x4f62, 0x11d3, { 0xa0, 0x22, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 
 #define MAX_EFFECT_COLORS		16
 

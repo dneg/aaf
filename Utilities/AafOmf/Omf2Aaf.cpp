@@ -188,9 +188,8 @@ HRESULT Omf2Aaf::OMFFileOpen(char * pFileName)
 		rc = AAFRESULT_BAD_SESSION;
 	}
 
-	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither,
-		"AvidPrivateEffectID", OMClassEFFE, OMF2::OMString,
-		OMF2::kPropOptional, &(gpGlobals->pvtEffectIDProp));
+	RegisterCodecProperties(gpGlobals, OMFSession);
+	RegisterOMFMCPrivate(gpGlobals, OMFSession);
 
 	OMF2::omfsFileGetRev(OMFFileHdl, &OMFFileRev);
 	if (OMF2::kOmfRev2x == OMFFileRev)
@@ -334,6 +333,7 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 				pIdent = NULL;
 			}
 		}
+		RegisterAAFMCPrivate(pDictionary);
 	}
 	else
 		rc = AAFRESULT_INTERNAL_ERROR;
@@ -1112,6 +1112,18 @@ HRESULT Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 		// Release the iterator
 		OMFError = OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 	}
+
+
+	aafInt32	appCode;
+	IAAFObject	*pObj = NULL;
+
+	(void)OMF2::OMReadProp(OMFFileHdl, obj, gpGlobals->pvtAppCode, 0,
+		OMF2::kSwabIfNeeded, OMF2::OMInt32, sizeof(aafInt32), &appCode);	
+	pMob->QueryInterface(IID_IAAFObject, (void **)&pObj);
+	SetIntegerPropOnObject(pObj, &AUID_AAFMob, (aafUID_t*)&AUID_PropertyMobAppCode,
+		&kAAFTypeID_Int32, (aafUInt8 *)&appCode, sizeof(appCode), pDictionary);
+	pObj->Release();
+	pObj = NULL;
 
 	if (pwMobName)
 		delete [] pwMobName;
@@ -2209,13 +2221,6 @@ HRESULT Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescript
 	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
 
 	OMF2::omfFrameLayout_t	frameLayout;
-	OMF2::omfProperty_t		omCDCIComponentWidth;
-	OMF2::omfProperty_t		omCDCIHorizontalSubsampling;
-	OMF2::omfProperty_t		omCDCIColorSiting;
-	OMF2::omfProperty_t		omCDCIBlackReferenceLevel;
-	OMF2::omfProperty_t		omCDCIWhiteReferenceLevel;
-	OMF2::omfProperty_t		omCDCIColorRange;
-	OMF2::omfProperty_t		omCDCIPaddingBits;
 	OMF2::omfPosition_t		zeroPos = 0;
 	OMF2::omfPosition_t		fourPos = 0;
 
@@ -2388,57 +2393,28 @@ HRESULT Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescript
 	pDigImageDesc->Release();
 	pDigImageDesc = NULL;
 
-	// To get the CDCI codec related properties we first reister them in OMF
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "ComponentWidth", OMClassCDCI, 
-									   OMF2::OMVersionType, OMF2::kPropRequired, 
-									   &omCDCIComponentWidth);
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "HorizontalSubsampling", OMClassCDCI, 
-									   OMF2::OMBoolean, OMF2::kPropRequired, 
-									   &omCDCIHorizontalSubsampling);
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "ColorSiting", OMClassCDCI, 
-									   OMF2::OMBoolean, OMF2::kPropRequired, 
-									   &omCDCIColorSiting);
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "BlackReferenceLevel", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
-									   &omCDCIBlackReferenceLevel);
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "WhiteReferenceLevel", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
-									   &omCDCIWhiteReferenceLevel);
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "ColorRange", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
-									   &omCDCIColorRange);
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
-									   "PaddingBits", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
-									   &omCDCIPaddingBits);
 	// Next we read the values
-	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, omCDCIComponentWidth, &componentWidth); 
+	OMFError = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIComponentWidth, &componentWidth); 
 	if (OMFError != OMF2::OM_ERR_NONE)
 		componentWidth = 0;
-	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIHorizontalSubsampling, &horizontalSubsampling); 
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIHorizontalSubsampling, &horizontalSubsampling); 
 	if (OMFError != OMF2::OM_ERR_NONE)
 		horizontalSubsampling = 0;
-	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, omCDCIHorizontalSubsampling, 
+	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIHorizontalSubsampling, 
 						  zeroPos, OMF2::kSwabIfNeeded, OMF2::OMColorSitingType,
 						  sizeof(colorSiting), (void *)&(colorSiting));
 	if (OMFError != OMF2::OM_ERR_NONE)
 		memset(&colorSiting, 0, sizeof(aafColorSiting_t));
-	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIBlackReferenceLevel, &blackReferenceLevel); 
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIBlackReferenceLevel, &blackReferenceLevel); 
 	if (OMFError != OMF2::OM_ERR_NONE)
 		blackReferenceLevel = 0;
-	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIWhiteReferenceLevel, &whiteReferenceLevel); 
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIWhiteReferenceLevel, &whiteReferenceLevel); 
 	if (OMFError != OMF2::OM_ERR_NONE)
 		whiteReferenceLevel = 0;
-	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIColorRange, &colorRange); 
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIColorRange, &colorRange); 
 	if (OMFError != OMF2::OM_ERR_NONE)
 		colorRange = 0;
-	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, omCDCIPaddingBits, 
+	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIPaddingBits, 
 						   zeroPos, OMF2::kSwabIfNeeded, OMF2::OMInt16,
 						   sizeof(paddingBits), &paddingBits); 
 	if (OMFError != OMF2::OM_ERR_NONE)

@@ -47,6 +47,7 @@ namespace OMF2
 #include "Aaf2Omf.h"
 #include "EffectTranslate.h"
 #include "aafCodecdefs.h"
+#include "aafclassdefuids.h"
 //#include "omcAvJPED.h"
 
 static void     LogError(HRESULT errcode, int line, char *file)
@@ -214,6 +215,8 @@ HRESULT Aaf2Omf::OpenInputFile ()
 //		printf("          File Revision %s \n", szFileVersion);
 	}
 
+	RegisterAAFMCPrivate(pDictionary);
+
 	gpGlobals->bAAFFileOpen = AAFTrue;
 	delete [] pwFileName;
 
@@ -344,9 +347,8 @@ HRESULT Aaf2Omf::OpenOutputFile ()
 		goto cleanup;
 	}
 
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither,
-		"AvidPrivateEffectID", OMClassEFFE, OMF2::OMString,
-		OMF2::kPropOptional, &(gpGlobals->pvtEffectIDProp));
+	RegisterCodecProperties(gpGlobals, OMFSession);
+	RegisterOMFMCPrivate(gpGlobals, OMFSession);
 	
 	bSessionStarted = AAFTrue;
 	OMFError = OMF2::omfmInit(OMFSession);
@@ -681,6 +683,22 @@ HRESULT Aaf2Omf::ConvertCompositionMob(IAAFCompositionMob* pCompMob,
 												 OMFFade.fadeLength, 
 												 OMFFade.fadeType ,
 												 OMFFade.fadeEditUnit);
+
+			}
+
+			aafInt32	appCode;
+			IAAFObject	*pObj = NULL;
+			AAFRESULT	hr;
+
+			pCompMob->QueryInterface(IID_IAAFObject, (void **)&pObj);
+			hr = GetIntegerPropFromObject(pObj, &kAAFClassID_Mob, (aafUID_t*)&AUID_PropertyMobAppCode,
+				&kAAFTypeID_Int32, (aafUInt8 *)&appCode, sizeof(appCode), pDictionary);
+			pObj->Release();
+			pObj = NULL;
+			if(hr == AAFRESULT_SUCCESS)
+			{
+				(void)OMF2::OMWriteProp(OMFFileHdl, *pOMFCompMob, gpGlobals->pvtAppCode, 0,
+					OMF2::OMInt32, sizeof(aafInt32), &appCode);
 			}
 		}
 	}
@@ -721,6 +739,21 @@ HRESULT Aaf2Omf::ConvertMasterMob(IAAFMasterMob* pMasterMob,
 			if (gpGlobals->bVerboseMode)
 				printf("Converted AAF Master MOB to OMF\n");
 		}
+	}
+			
+	aafInt32	appCode;
+	IAAFObject	*pObj = NULL;
+	AAFRESULT	hr;
+
+	pMasterMob->QueryInterface(IID_IAAFObject, (void **)&pObj);
+	hr = GetIntegerPropFromObject(pObj, &kAAFClassID_Mob, (aafUID_t*)&AUID_PropertyMobAppCode,
+		&kAAFTypeID_Int32, (aafUInt8 *)&appCode, sizeof(appCode), pDictionary);
+	pObj->Release();
+	pObj = NULL;
+	if(hr == AAFRESULT_SUCCESS)
+	{
+		(void)OMF2::OMWriteProp(OMFFileHdl, *pOMFMasterMob, gpGlobals->pvtAppCode, 0,
+			OMF2::OMInt32, sizeof(aafInt32), &appCode);
 	}
 
 	if (OMFError != OMF2::OM_ERR_NONE)
@@ -764,6 +797,21 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 
 	if (gpGlobals->bVerboseMode)
 		printf("Converting AAF Source MOB to OMF\n");
+
+	aafInt32	appCode;
+	IAAFObject	*pObj = NULL;
+	AAFRESULT	hr;
+
+	pSourceMob->QueryInterface(IID_IAAFObject, (void **)&pObj);
+	hr = GetIntegerPropFromObject(pObj, &kAAFClassID_Mob, (aafUID_t*)&AUID_PropertyMobAppCode,
+		&kAAFTypeID_Int32, (aafUInt8 *)&appCode, sizeof(appCode), pDictionary);
+	pObj->Release();
+	pObj = NULL;
+	if(hr == AAFRESULT_SUCCESS)
+	{
+		(void)OMF2::OMWriteProp(OMFFileHdl, *pOMFSourceMob, gpGlobals->pvtAppCode, 0,
+			OMF2::OMInt32, sizeof(aafInt32), &appCode);
+	}
 
 	rc = pSourceMob->GetEssenceDescriptor(&pEssenceDesc);
 	if (FAILED(rc))
@@ -1014,11 +1062,10 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			OMFError = OMF2::omfsWriteLength(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLLength, (OMF2::omfLength_t)length); 
 			
 			// Get Digital Image properties and set them
+			// Toolkit still expects signed
 			pDIDDDesc->GetStoredView(&storedWidth, &storedHeight);
-			OMFError = OMF2::omfsWriteUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredHeight, storedHeight);
-			OMFError = OMF2::omfsWriteUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredWidth, storedWidth);
-			OMFError = OMF2::omfsWriteUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredHeight, storedHeight);
-			OMFError = OMF2::omfsWriteUInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredWidth, storedWidth);
+			OMFError = OMF2::omfsWriteInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredHeight, storedHeight);
+			OMFError = OMF2::omfsWriteInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDStoredWidth, storedWidth);
 
 			if(pDIDDDesc->GetSampledView(&sampHeight, &sampWidth, &sampX, &sampY) == AAFRESULT_SUCCESS)
 			{
@@ -1080,14 +1127,25 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 			}
 			
 			// retrieve CDCI descriptor properties
+			aafInt32			componentWidth;
+			aafUInt32			horizSubsample;
+			aafColorSiting_t	cositing;
+
+			// Find out which are optional & which must fail!!!
+			(void)pCDCIDesc->GetComponentWidth(&componentWidth);
+			OMFError = OMF2::omfsWriteInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIComponentWidth, componentWidth); 
+
+			(void)pCDCIDesc->GetHorizontalSubsampling(&horizSubsample);
+			OMFError = OMF2::omfsWriteUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIHorizontalSubsampling, horizSubsample); 
+
+			(void)pCDCIDesc->GetColorSiting(&cositing);
+			OMFError = OMF2::OMWriteProp(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIColorSiting, 
+						  0, OMF2::OMColorSitingType,
+						  sizeof(cositing), (void *)&(cositing));
+
 #if 0
-			pCDCIDesc->GetComponentWidth( 
-				/* [out] */ aafInt32 __RPC_FAR *pComponentWidth) = 0;
 				
-				pCDCIDesc->GetHorizontalSubsampling( 
-				/* [out] */ aafUInt32 __RPC_FAR *pHorizontalSubsampling) = 0;
 				
-				pCDCIDesc->GetColorSiting( 
 				/* [out] */ aafColorSiting_t __RPC_FAR *pColorSiting) = 0;
                 
 				pCDCIDesc->GetBlackReferenceLevel( 
@@ -1101,6 +1159,23 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 				
 				pCDCIDesc->GetPaddingBits( 
 				/* [out] */ aafInt16 __RPC_FAR *pPaddingBits) = 0;
+
+	if (OMFError != OMF2::OM_ERR_NONE)
+		memset(&colorSiting, 0, sizeof(aafColorSiting_t));
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIBlackReferenceLevel, &blackReferenceLevel); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		blackReferenceLevel = 0;
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIWhiteReferenceLevel, &whiteReferenceLevel); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		whiteReferenceLevel = 0;
+	OMFError = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIColorRange, &colorRange); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		colorRange = 0;
+	OMFError = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, gpGlobals->omCDCIPaddingBits, 
+						   zeroPos, OMF2::kSwabIfNeeded, OMF2::OMInt16,
+						   sizeof(paddingBits), &paddingBits); 
+	if (OMFError != OMF2::OM_ERR_NONE)
+		paddingBits = 0;
 #endif        			
 				if (gpGlobals->bVerboseMode)
 					printf("%sAdded a CDCI Media Descriptor to a Source MOB\n", gpGlobals->indentLeader);
