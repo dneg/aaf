@@ -91,8 +91,6 @@ AAFRESULT ImplAAFPropertyValue::Initialize (
   const ImplAAFTypeDef *propertyType,    
   OMProperty *property)
 {
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  
   assert (!isInitialized());
   if (isInitialized())
     return AAFRESULT_ALREADY_INITIALIZED;
