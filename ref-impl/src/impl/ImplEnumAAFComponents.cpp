@@ -63,7 +63,7 @@ AAFRESULT STDMETHODCALLTYPE
 	AAFRESULT	result;
 	aafInt32	cur = _current, siz;
 
-    _pSequence->GetNumCpnts(&siz);
+    _pSequence->GetNumComponents(&siz);
 	if(cur < siz)
 	{
 		result = _pSequence->GetNthComponent(cur, ppComponent);
@@ -162,7 +162,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	newCurrent = _current + count;
 
-    _pSequence->GetNumCpnts(&siz);
+    _pSequence->GetNumComponents(&siz);
 	if(newCurrent < siz)
 	{
 		_current = newCurrent;

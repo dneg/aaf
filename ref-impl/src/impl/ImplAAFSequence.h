@@ -56,28 +56,28 @@ public:
 
 
   //****************
-  // AppendCpnt()
+  // AppendComponent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendCpnt
+    AppendComponent
 		// @parm [in] Component to append to the sequence
         (ImplAAFComponent * pComponent);
 
 
   //****************
-  // RemoveCpnt()
+  // RemoveComponent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    RemoveCpnt
+    RemoveComponent
 		// @parm [in] Component to append to the sequence
         (ImplAAFComponent * pComponent);
 
 
   //****************
-  // GetNumCpnts()
+  // GetNumComponents()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetNumCpnts
+    GetNumComponents
 		// @parm [out] Number of components
         (aafInt32 *  pNumCpnts);
 
