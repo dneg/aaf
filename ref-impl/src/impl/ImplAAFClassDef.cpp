@@ -286,8 +286,10 @@ AAFRESULT STDMETHODCALLTYPE
       return AAFRESULT_ALREADY_UNIQUELY_IDENTIFIED;
   }
 
+	//GMSB! 05-Dec-2001 Documentation says AAFRESULT_BAD_PARAM for this case (but AAFRESULT_BAD_PARAM doesn't really exist!)
+	//  and the code had AAFRESULT_SUCCESS before (which doesn't seem right, because ppPropDef won't have been filled in)
 	if(PvtIsPropertyDefRegistered(id))
-		return AAFRESULT_SUCCESS;
+		return AAFRESULT_INVALID_PARAM;
 	else
 	{
 		bool	isDuplicate;
@@ -340,8 +342,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
+	//GMSB! 05-Dec-2001 Documentation says AAFRESULT_BAD_PARAM for this case (but AAFRESULT_BAD_PARAM doesn't really exist!)
+	//  and the code had AAFRESULT_SUCCESS before (which doesn't seem right, because ppPropDef won't have been filled in)
 	if(PvtIsPropertyDefRegistered(id))
-		return AAFRESULT_SUCCESS;
+		return AAFRESULT_INVALID_PARAM;
 	else
 	{
 		bool	isDuplicate;
