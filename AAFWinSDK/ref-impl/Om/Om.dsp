@@ -246,6 +246,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMStackTrace.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMStorable.cpp"
 # End Source File
 # Begin Source File
@@ -659,6 +663,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMSingleton.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMSingletonT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMStackTrace.h"
 # End Source File
 # Begin Source File
 
