@@ -1137,8 +1137,8 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
 {
    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
 
-   aafUInt8 bytes[8];
-   axTypeDefInt.GetInteger(propValue, &bytes);
+   aafInt64 value;
+   axTypeDefInt.GetInteger(propValue, (aafMemPtr_t)&value, sizeof(value));
 
    char buffer[22];
    int strSize = 0;
@@ -1146,60 +1146,60 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
       case 1:
 	 if (axTypeDefInt.IsSigned()) {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%x", *((aafInt8*)bytes));
+	       strSize = sprintf(buffer, "0x%x", (aafInt8)value);
 	    } else {
-	       strSize = sprintf(buffer, "%d", *((aafInt8*)bytes));
+	       strSize = sprintf(buffer, "%d", (aafInt8)value);
 	    }
 	 } else {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%u", *((aafUInt8*)bytes));
+	       strSize = sprintf(buffer, "0x%u", (aafUInt8)value);
 	    } else {
-	       strSize = sprintf(buffer, "%u", *((aafUInt8*)bytes));
+	       strSize = sprintf(buffer, "%u", (aafUInt8)value);
 	    }
 	 }
 	 break;
       case 2:
 	 if (axTypeDefInt.IsSigned()) {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%x", *((aafInt16*)bytes));
+	       strSize = sprintf(buffer, "0x%x", (aafInt16)value);
 	    } else {
-	       strSize = sprintf(buffer, "%d", *((aafInt16*)bytes));
+	       strSize = sprintf(buffer, "%d", (aafInt16)value);
 	    }
 	 } else {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%x", *((aafUInt16*)bytes));
+	       strSize = sprintf(buffer, "0x%x", (aafUInt16)value);
 	    } else {
-	       strSize = sprintf(buffer, "%u", *((aafUInt16*)bytes));
+	       strSize = sprintf(buffer, "%u", (aafUInt16)value);
 	    }
 	 }
 	 break;
       case 4:
 	 if (axTypeDefInt.IsSigned()) {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%x", *((aafInt32*)bytes));
+	       strSize = sprintf(buffer, "0x%x", (aafInt32)value);
 	    } else {
-	       strSize = sprintf(buffer, "%d", *((aafInt32*)bytes));
+	       strSize = sprintf(buffer, "%d", (aafInt32)value);
 	    }
 	 } else {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%x", *((aafUInt32*)bytes));
+	       strSize = sprintf(buffer, "0x%x", (aafUInt32)value);
 	    } else {
-	       strSize = sprintf(buffer, "%u", *((aafUInt32*)bytes));
+	       strSize = sprintf(buffer, "%u", (aafUInt32)value);
 	    }
 	 }
 	 break;
       case 8:
 	 if (axTypeDefInt.IsSigned()) {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%"AAFFMT64"x", *((aafInt64*)bytes));
+	       strSize = sprintf(buffer, "0x%"AAFFMT64"x", value);
 	    } else {
-	       strSize = sprintf(buffer, "%"AAFFMT64"d", *((aafInt64*)bytes));
+	       strSize = sprintf(buffer, "%"AAFFMT64"d", value);
 	    }
 	 } else {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%"AAFFMT64"x", *((aafUInt64*)bytes));
+	       strSize = sprintf(buffer, "0x%"AAFFMT64"x", (aafUInt64)value);
 	    } else {
-	       strSize = sprintf(buffer, "%"AAFFMT64"u", *((aafUInt64*)bytes));
+	       strSize = sprintf(buffer, "%"AAFFMT64"u", (aafUInt64)value);
 	    }
 	 }
 	 break;
