@@ -27,7 +27,7 @@ AD_XMETHOD5(AddPoint,
 			[in],objPass,aafEditHint_t, editHint, Edit hint,
 			[in],objIn,AAFDataDefinition, datadef, pointer to data definition object,
 			[in],objPass,aafInt32, valueSize, Size of value data,
-			[in\, size_is\(valueSize\)],objPass, char *, pValue, Ponter to the value data,
+			[in\, size_is\(valueSize\)],objPass, aafDataBuffer_t, pValue, Ponter to the value data,
 			This function adds a control point in time order into a varying
 			// value object.)
 
