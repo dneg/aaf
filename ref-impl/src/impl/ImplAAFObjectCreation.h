@@ -1,6 +1,8 @@
 #ifndef IMPLAAFOBJECTCREATION_H
 #define IMPLAAFOBJECTCREATION_H
 
+class ImplAAFRoot;
+
 // Creates and returns an Impl object based on the given class ID.
 // Will create the appropriate kind of API class and attach it.
 //
@@ -10,7 +12,7 @@
 // 2) Ask the newly created API class for its contained Impl class.
 // 3) Return that Impl class.
 //
-AAFImplRoot * CreateImpl (const CLSID & rClassID);
+ImplAAFRoot * CreateImpl (const CLSID & rClassID);
 
 // Deletes the given Impl object.  Will make sure the associated API
 // class is also deleted.
@@ -20,6 +22,6 @@ AAFImplRoot * CreateImpl (const CLSID & rClassID);
 // 2) Delete that containing API object.  (The API class will
 //    automatically delete the impl class.)
 //
-void DeleteImpl (AAFImplRoot *& pObj);
+void DeleteImpl (ImplAAFRoot *& pObj);
 
 #endif
