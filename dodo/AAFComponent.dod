@@ -9,6 +9,9 @@ AAFObject\
 #import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
+
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
