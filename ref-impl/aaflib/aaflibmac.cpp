@@ -32,7 +32,9 @@
 #if defined(macintosh) || defined(_MAC)
 
 // Declare the public interface that must be implemented.
+
 #include "aafrdli.h"
+
 
 
 #include "AAFResult.h"
@@ -122,7 +124,7 @@ AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, 
   c2pstr((char *)PSymbolName);
 
   result = FindSymbol((CFragConnectionID)libHandle, PSymbolName, &theSymbol, &symClass);
-  if (AAFRESULT_SUCCEEDED(result))
+  if (noErr == result)
     *pSymbol = (AAFSymbolAddr)theSymbol;
 
   
@@ -131,12 +133,10 @@ AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, 
 
 
 
-
 /* Limited set of platform independent directory searching functions.*/
 AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, void *userData)
 {
 	// Default implementation will just continue to use a hard-coded list of shared libaries.
-
 	const char *pluginFileNames[] = 
 	{
 		"AAFPGAPI.DLL (PPC)",
