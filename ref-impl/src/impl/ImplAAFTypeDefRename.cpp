@@ -138,6 +138,12 @@ AAFRESULT STDMETHODCALLTYPE
 
   pOutPVData = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
   if (! pOutPVData) return AAFRESULT_NOMEMORY;
+
+  // Bobt: Hack bugfix! SmartPointer operator= will automatically
+  // AddRef; CreateImpl *also* will addref, so we've got one too
+  // many.  Put us back to normal.
+  pOutPVData->ReleaseReference ();
+
   assert (ptd);
   hr = pOutPVData->Initialize (ptd);
   if (AAFRESULT_FAILED(hr)) return hr;
