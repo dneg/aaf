@@ -1,7 +1,7 @@
 //@doc
-//@class    AAFEffectDef | Implementation class for AAFEffectDef
-#ifndef __ImplAAFEffectDef_h__
-#define __ImplAAFEffectDef_h__
+//@class    AAFOperationDef | Implementation class for AAFOperationDef
+#ifndef __ImplAAFOperationDef_h__
+#define __ImplAAFOperationDef_h__
 
 
 /***********************************************\
@@ -22,7 +22,7 @@ class ImplEnumAAFLocators;
 
 class ImplEnumAAFParameterDefs;
 
-class ImplEnumAAFEffectDefs;
+class ImplEnumAAFOperationDefs;
 
  
 #ifndef __ImplAAFDefObject_h__
@@ -30,21 +30,21 @@ class ImplEnumAAFEffectDefs;
 #endif
 
 #include "ImplAAFParameterDef.h"
-#include "ImplEnumAAFEffectDefs.h"
+#include "ImplEnumAAFOperationDefs.h"
 #include "ImplEnumAAFParameterDefs.h"
 
 
-class ImplAAFEffectDef : public ImplAAFDefObject
+class ImplAAFOperationDef : public ImplAAFDefObject
 {
 public:
   //
   // Constructor/destructor
   //
   //********
-  ImplAAFEffectDef ();
+  ImplAAFOperationDef ();
 
 protected:
-  virtual ~ImplAAFEffectDef ();
+  virtual ~ImplAAFOperationDef ();
 
 public:
 
@@ -84,25 +84,25 @@ public:
   // PrependDegradeToEffects()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    PrependDegradeToEffects (
+    PrependDegradeToOperations (
         // @parm [in] is timewarp value
-      ImplAAFEffectDef  *pEffectDef);
+      ImplAAFOperationDef  *pOperationDef);
 
   //****************
   // AppendDegradeToEffects()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendDegradeToEffects (
+    AppendDegradeToOperations (
         // @parm [in] is timewarp value
-      ImplAAFEffectDef  *pEffectDef);
+      ImplAAFOperationDef  *pOperationDef);
 
   //****************
   // GetDegradeToEffects()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetDegradeToEffects (
-        // @parm [out] Effect Definition Enumeration
-      ImplEnumAAFEffectDefs  **ppEnum);
+    GetDegradeToOperations (
+        // @parm [out] Operation Definition Enumeration
+      ImplEnumAAFOperationDefs  **ppEnum);
 
   //****************
   // GetCategory()
@@ -178,21 +178,21 @@ public:
 public:
   // Declare this class to be storable.
   //
-  OMDECLARE_STORABLE(ImplAAFEffectDef)
+  OMDECLARE_STORABLE(ImplAAFOperationDef)
 
   // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEffectDefTest.cpp.
+  // in /test/ImplAAFOperationDefTest.cpp.
   static AAFRESULT test();
 private:
 	OMFixedSizeProperty<aafUID_t>					_dataDef;
 	OMFixedSizeProperty<aafBool>					_isTimeWarp;
-//!!!	effectDefWeakRefArrayProp_t						_degradeTo;
+//!!!	OperationDefWeakRefArrayProp_t						_degradeTo;
 	OMWideStringProperty                            _category;
 	OMFixedSizeProperty<aafInt32>					_numInputs;
 	OMFixedSizeProperty<aafUInt32>					_bypass;
 	parmDefWeakRefArrayProp_t						_paramDefined;
 };
 
-#endif // ! __ImplAAFEffectDef_h__
+#endif // ! __ImplAAFOperationDef_h__
 
 

@@ -1,38 +1,18 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
 
-
-#ifndef __ImplAAFEffectDef_h__
-#include "ImplAAFEffectDef.h"
+#ifndef __ImplAAFOperationDef_h__
+#include "ImplAAFOperationDef.h"
 #endif
 
-
-
-
-
-
-#ifndef __ImplEnumAAFEffectDefs_h__
-#include "ImplEnumAAFEffectDefs.h"
+#ifndef __ImplEnumAAFOperationDefs_h__
+#include "ImplEnumAAFOperationDefs.h"
 #endif
 
 #include <assert.h>
@@ -43,9 +23,9 @@
 #include "ImplAAFHeader.h"
 #include "ImplAAFDictionary.h"
 
-extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 
-ImplEnumAAFEffectDefs::ImplEnumAAFEffectDefs ()
+ImplEnumAAFOperationDefs::ImplEnumAAFOperationDefs ()
 {
 	_current = 0;
 	_enumObj = NULL;
@@ -54,7 +34,7 @@ ImplEnumAAFEffectDefs::ImplEnumAAFEffectDefs ()
 }
 
 
-ImplEnumAAFEffectDefs::~ImplEnumAAFEffectDefs ()
+ImplEnumAAFOperationDefs::~ImplEnumAAFOperationDefs ()
 {
 	if (_enumObj)
 	{
@@ -65,8 +45,8 @@ ImplEnumAAFEffectDefs::~ImplEnumAAFEffectDefs ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFEffectDefs::NextOne (
-      ImplAAFEffectDef **ppEffectDef)
+    ImplEnumAAFOperationDefs::NextOne (
+      ImplAAFOperationDef **ppOperationDef)
 {
 	aafUInt32			numElem;
 	aafUID_t			value;
@@ -84,7 +64,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	//!!!Else assert
 
-	if(ppEffectDef == NULL)
+	if(ppOperationDef == NULL)
 		return(AAFRESULT_NULL_PARAM);
 	if(_current >= numElem)
 		return AAFRESULT_NO_MORE_OBJECTS;
@@ -95,16 +75,16 @@ AAFRESULT STDMETHODCALLTYPE
 			_enumProp->getValueAt(&value, _current);
 			CHECK(_enumObj->MyHeadObject(&head));
 			CHECK(head->GetDictionary (&dict));
-			CHECK(dict->LookupEffectDefinition(&value, ppEffectDef));
+			CHECK(dict->LookupOperationDefinition(&value, ppOperationDef));
 			head->ReleaseReference();
 			head = NULL;
 			dict->ReleaseReference();
 			dict = NULL;
 		}
 		else if(_enumStrongProp != NULL)
-			_enumStrongProp->getValueAt(*ppEffectDef, _current);
+			_enumStrongProp->getValueAt(*ppOperationDef, _current);
 		//!!!Else assert
-		(*ppEffectDef)->AcquireReference();
+		(*ppOperationDef)->AcquireReference();
 		_current++;
 		if (head) {
 			head->ReleaseReference();
@@ -129,12 +109,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFEffectDefs::Next (
+    ImplEnumAAFOperationDefs::Next (
       aafUInt32  count,
-      ImplAAFEffectDef **ppEffectDefs,
+      ImplAAFOperationDef **ppOperationDefs,
       aafUInt32 *pFetched)
 {
-	ImplAAFEffectDef**	ppDef;
+	ImplAAFOperationDef**	ppDef;
 	aafUInt32			numDefs;
 	HRESULT				hr;
 
@@ -142,7 +122,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return E_INVALIDARG;
 
 	// Point at the first component in the array.
-	ppDef = ppEffectDefs;
+	ppDef = ppOperationDefs;
 	for (numDefs = 0; numDefs < count; numDefs++)
 	{
 		hr = NextOne(ppDef);
@@ -164,7 +144,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFEffectDefs::Skip (
+    ImplEnumAAFOperationDefs::Skip (
       aafUInt32  count)
 {
 	AAFRESULT	hr;
@@ -198,7 +178,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFEffectDefs::Reset ()
+    ImplEnumAAFOperationDefs::Reset ()
 {
 	_current = 0;
 	return AAFRESULT_SUCCESS;
@@ -206,13 +186,13 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFEffectDefs::Clone (
-      ImplEnumAAFEffectDefs **ppEnum)
+    ImplEnumAAFOperationDefs::Clone (
+      ImplEnumAAFOperationDefs **ppEnum)
 {
-	ImplEnumAAFEffectDefs	*result;
+	ImplEnumAAFOperationDefs	*result;
 	AAFRESULT				hr;
 
-	result = (ImplEnumAAFEffectDefs *)CreateImpl(CLSID_EnumAAFEffectDefs);
+	result = (ImplEnumAAFOperationDefs *)CreateImpl(CLSID_EnumAAFOperationDefs);
 	if (result == NULL)
 		return E_FAIL;
 
@@ -238,7 +218,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFEffectDefs::SetEnumProperty( ImplAAFObject *pObj, effectDefWeakRefArrayProp_t *pProp)
+    ImplEnumAAFOperationDefs::SetEnumProperty( ImplAAFObject *pObj, OperationDefWeakRefArrayProp_t *pProp)
 {
 	if (_enumObj)
 		_enumObj->ReleaseReference();
@@ -255,7 +235,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFEffectDefs::SetEnumStrongProperty( ImplAAFObject *pObj, effectDefStrongRefArrayProp_t *pProp)
+    ImplEnumAAFOperationDefs::SetEnumStrongProperty( ImplAAFObject *pObj, OperationDefStrongRefArrayProp_t *pProp)
 {
 	if (_enumObj)
 		_enumObj->ReleaseReference();
