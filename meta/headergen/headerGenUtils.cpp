@@ -180,6 +180,38 @@ void printDefinition(const char* type,
   s << setw(4) << identifier << ";" << endl;
 }
 
+// print a macro invocation like this -
+// DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
+void printMacroInvocation(const char* prefix,
+                          const char* macro,
+                          const char* name,
+                          const aafUID_t& identifier,
+                          ostream& s)
+{
+  s << "//";
+  printReg(identifier, s);
+  s << endl;
+
+  s << macro << "(" << prefix << name << "," << endl;
+
+  s.setf(ios::uppercase);
+  s.flags(ios::right);
+  s << hex << setfill('0')
+    << "0x" << setw(8) << identifier.Data1 << ", "
+    << "0x" << setw(4) << identifier.Data2 << ", "
+    << "0x" << setw(4) << identifier.Data3 << ", "
+    << "0x" << setw(2) << (int)identifier.Data4[0] << ", "
+    << "0x" << setw(2) << (int)identifier.Data4[1] << ", "
+    << "0x" << setw(2) << (int)identifier.Data4[2] << ", "
+    << "0x" << setw(2) << (int)identifier.Data4[3] << ", "
+    << "0x" << setw(2) << (int)identifier.Data4[4] << ", "
+    << "0x" << setw(2) << (int)identifier.Data4[5] << ", "
+    << "0x" << setw(2) << (int)identifier.Data4[6] << ", "
+    << "0x" << setw(2) << (int)identifier.Data4[7];
+
+  s << ");" << endl;
+}
+
 void printName(const char* name,
                size_t width,
                ostream& s)

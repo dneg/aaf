@@ -62,6 +62,14 @@ void printDefinition(const char* type,
                      int identifier,
                      ostream& s);
 
+// print a macro invocation like this -
+// DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8);
+void printMacroInvocation(const char* prefix,
+                          const char* macro,
+                          const char* name,
+                          const aafUID_t& identifier,
+                          ostream& s);
+
 void printName(const char* name,
                size_t width,
                ostream& s);
