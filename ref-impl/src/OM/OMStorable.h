@@ -173,6 +173,12 @@ private:
   OMStoredObject* _store;
   const OMClassFactory* _classFactory;
 
+    // OMStorables can't be assigned  - declare but don't define
+  OMStorable& operator = (const OMStorable& rhs);
+
+    // OMStorables can't be copied - declare but don't define
+  OMStorable(const OMStorable& rhs);
+
 };
 
 #endif
