@@ -37,7 +37,6 @@ OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
   ASSERT("Valid heap pointer", _table != 0);
 
   for (size_t i = 0; i < _capacity; i++) {
-    _table[i]._valid = false;
     _table[i]._propertyId = 0;
     _table[i]._storedForm = 0;
     _table[i]._length = 0;
@@ -68,21 +67,14 @@ void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
 {
   TRACE("OMStoredPropertySetIndex::insert");
 
-  IndexEntry* entry = find(propertyId);
-
-  ASSERT("New index entry", entry == 0);
-  if (entry == 0 ) {
-    entry = find();
-    ASSERT("Found space for new entry", entry != 0);
-    _entries++;
-  }
-  ASSERT("Valid index entry", entry != 0);
+  ASSERT("Space for new entry", _entries < _capacity);
+  _entries++;
+  IndexEntry* entry = &_table[_entries - 1];
 
   entry->_propertyId = propertyId;
   entry->_storedForm = storedForm;
   entry->_offset = offset;
   entry->_length = length;
-  entry->_valid = true;
 }
 
   // @mfunc The number of properties in this <c OMStoredPropertySetIndex>.
@@ -111,26 +103,15 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
 {
   TRACE("OMStoredPropertySetIndex::iterate");
 
-  OMStoredPropertySetIndex::IndexEntry* entry = 0;
-  size_t start = context;
-  size_t found = 0;
+  PRECONDITION("Valid context", context < _entries);
+  OMStoredPropertySetIndex::IndexEntry* entry = &_table[context];
 
-  for (size_t i = start; i < _capacity; i++) {
-    if (_table[i]._valid) {
-      entry = &_table[i];
-      found = i;
-      break;
-    }
-  }
-  if (entry != 0) {
-    propertyId = entry->_propertyId;
-    storedForm = entry->_storedForm;
-    offset = entry->_offset;
-    length = entry->_length;
-    context = ++found;
-  } else {
-    context = 0;
-  }
+  propertyId = entry->_propertyId;
+  storedForm = entry->_storedForm;
+  offset = entry->_offset;
+  length = entry->_length;
+
+  context = context + 1;
 }
 
   // @mfunc Find the property with property id <p propertyId> in this
@@ -182,43 +163,25 @@ bool OMStoredPropertySetIndex::isValid(OMPropertyOffset baseOffset) const
   size_t position = baseOffset;
 
   for (size_t i = 0; i < _capacity; i++) {
-    if (_table[i]._valid) {
-      entries++; // count valid entries
-      currentOffset = _table[i]._offset;
-      currentLength = _table[i]._length;
-      if (currentLength == 0) {
-        result = false; // entry has invalid length
-        break;
-      }
-      if (currentOffset != position) {
-        result = false;  // gap or overlap
-        break;
-      }
-      // this entry is valid, calculate the expected next position
-      position = position + currentLength;
+    entries++; // count valid entries
+    currentOffset = _table[i]._offset;
+    currentLength = _table[i]._length;
+    if (currentLength == 0) {
+      result = false; // entry has invalid length
+      break;
     }
+    if (currentOffset != position) {
+      result = false;  // gap or overlap
+      break;
+    }
+    // calculate the expected next position
+    position = position + currentLength;
   }
 
   if (entries != _entries) {
     result = false;
   }
 
-  return result;
-}
-
-OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
-                                                                    void) const
-{
-  TRACE("OMStoredPropertySetIndex::find");
-
-  OMStoredPropertySetIndex::IndexEntry* result = 0;
-
-  for (size_t i = 0; i < _capacity; i++) {
-    if (!_table[i]._valid) {
-      result = &_table[i];
-      break;
-    }
-  }
   return result;
 }
 
@@ -230,13 +193,10 @@ OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
   OMStoredPropertySetIndex::IndexEntry* result = 0;
 
   for (size_t i = 0; i < _capacity; i++) {
-    if (_table[i]._valid) {
-      if (_table[i]._propertyId == propertyId) {
-        result = &_table[i];
-        break;
-      }
+    if (_table[i]._propertyId == propertyId) {
+      result = &_table[i];
+      break;
     }
   }
   return result;
-
 }

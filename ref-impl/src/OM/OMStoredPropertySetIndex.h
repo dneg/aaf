@@ -76,8 +76,6 @@ public:
 
 protected:
 
-  OMStoredPropertySetIndex::IndexEntry* find(void) const;
-
   OMStoredPropertySetIndex::IndexEntry* find(OMPropertyId propertyId) const;
 
 private:
@@ -87,7 +85,6 @@ private:
     OMStoredForm _storedForm;
     OMPropertyOffset _offset;
     OMPropertySize _length;
-    bool _valid;
   };
 
   size_t _capacity;
