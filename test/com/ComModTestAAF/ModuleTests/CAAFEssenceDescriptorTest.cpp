@@ -69,21 +69,25 @@ inline void checkExpression(bool expression, HRESULT r)
 }
 
 
-
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	// IAAFSession *				pSession = NULL;
-	IAAFFile *					pFile = NULL;
-	IAAFHeader *				pHeader = NULL;
-	IAAFDictionary*	pDictionary = NULL;
-	IAAFLocator	*				pLocator = NULL;
-	IAAFSourceMob	*pSourceMob = NULL;
-	IAAFMob			*pMob = NULL;
-	IAAFEssenceDescriptor *edesc = NULL;
+	// IAAFSession 				*pSession = NULL;
+	IAAFFile 					*pFile = NULL;
+	IAAFHeader 					*pHeader = NULL;
+	IAAFDictionary				*pDictionary = NULL;
+	IAAFLocator					*pLocator = NULL;
+	IAAFLocator					*pLocator2 = NULL;
+	IAAFSourceMob 				*pSourceMob = NULL;
+	IAAFMob						*pMob = NULL;
+	IAAFEssenceDescriptor 		*edesc = NULL;
+	IEnumAAFLocators			*pEnumLocators = NULL;
 	aafRational_t	audioRate = { 44100, 1 };
 	aafProductIdentification_t	ProductInfo;
-	aafUInt32					numLocators;
-	HRESULT						hr = AAFRESULT_SUCCESS;
+	aafMobID_t					newMobID;
+	aafUInt32					numLocators, numLocators2;
+	aafUInt32					i;
+	HRESULT						hr = AAFRESULT_SUCCESS,
+								localhr = AAFRESULT_SUCCESS;
 	bool bFileOpen = false;
 //	aafUID_t					ddef = DDEF_Sound;
 
@@ -125,7 +129,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Initialize mob properties:
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-		checkResult(pMob->SetMobID(TEST_MobID));
+		checkResult(CoCreateGuid((GUID *)&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
 		
 		// Create the descriptor:
@@ -134,39 +139,265 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&edesc));		
  		checkResult(pSourceMob->SetEssenceDescriptor (edesc));
 
-			// Verify that there are no locators
-		checkResult(edesc->CountLocators(&numLocators));
-		checkExpression(0 == numLocators, AAFRESULT_TEST_FAILED);
 
-  
-		// Make a locator, and attach it to the EssenceDescriptor
-		checkResult(defs.cdLocator()->
+/* CountLocators()	******************************************/
+		localhr = AAFRESULT_SUCCESS;
+		// Verify AAFRESULT_NULL_PARAM is returned
+		if (edesc->CountLocators(NULL) != AAFRESULT_NULL_PARAM)
+			localhr = AAFRESULT_TEST_FAILED;		
+		
+		// Verify that there are no locators
+		if (edesc->CountLocators(&numLocators) != AAFRESULT_SUCCESS)
+			localhr = AAFRESULT_TEST_FAILED;
+		if (0 != numLocators)
+			localhr = AAFRESULT_TEST_FAILED;
+			
+		if (localhr == AAFRESULT_SUCCESS)
+			cout<< "	CountLocators() ...		Passed"<< endl;
+		else
+		{
+			cout<< "	CountLocators() ...		FAILED"<< endl;
+			hr = AAFRESULT_TEST_FAILED;
+		}
+		
+/* AppendLocator()	******************************************/
+		localhr = AAFRESULT_SUCCESS;
+		// Verify AAFRESULT_NULL_PARAM is returned
+		if (edesc->AppendLocator(NULL) != AAFRESULT_NULL_PARAM)
+			localhr = AAFRESULT_TEST_FAILED;		
+
+		// Append and Count a bunch of Locators
+		for (i=1; i<=10; i++)
+		{
+			// Make a locator, and attach it to the EssenceDescriptor
+			checkResult(defs.cdLocator()->
 					CreateInstance(IID_IAAFLocator, 
-								   (IUnknown **)&pLocator));		
+								   (IUnknown **)&pLocator));	
+								   	
+			if (edesc->AppendLocator(pLocator) != AAFRESULT_SUCCESS)
+				localhr = AAFRESULT_TEST_FAILED;
 
-		checkResult(edesc->AppendLocator(pLocator));
+			// Verify the number of locators
+			numLocators = 0;
+			edesc->CountLocators(&numLocators);
+			if (i != numLocators)
+				localhr = AAFRESULT_TEST_FAILED;
 
-		// Verify that there is now one locator
-		checkResult(edesc->CountLocators(&numLocators));
-		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
+			// Verify that locator was appended
+			edesc->GetLocatorAt(i-1, &pLocator2);
+			if (pLocator2 != pLocator)
+				localhr = AAFRESULT_TEST_FAILED;
+		}
 
-		// Make another locator, and attach it to the EssenceDescriptor
-    pLocator->Release(); // Release reference before reusing variable.
-    pLocator = NULL;
-		checkResult(defs.cdLocator()->
+		if (localhr == AAFRESULT_SUCCESS)
+			cout<< "	AppendLocator() ...		Passed"<< endl;
+		else
+		{
+			cout<< "	AppendLocator() ...		FAILED"<< endl;
+			hr = AAFRESULT_TEST_FAILED;
+		}
+			
+
+/* PrependLocator()	******************************************/
+		localhr = AAFRESULT_SUCCESS;
+		// Verify AAFRESULT_NULL_PARAM is returned
+		if (edesc->PrependLocator(NULL) != AAFRESULT_NULL_PARAM)
+			localhr = AAFRESULT_TEST_FAILED;		
+
+		for (i; i<=20; i++)
+		{
+			// Make a locator, and attach it to the EssenceDescriptor
+			checkResult(defs.cdLocator()->
 					CreateInstance(IID_IAAFLocator, 
-								   (IUnknown **)&pLocator));		
-		checkResult(edesc->AppendLocator(pLocator));
-		// Verify that there are now two locators
-		checkResult(edesc->CountLocators(&numLocators));
-		checkExpression(2 == numLocators, AAFRESULT_TEST_FAILED);
-		checkResult(edesc->RemoveLocatorAt (1));
-		// Verify that there is now one locator again
-		checkResult(edesc->CountLocators(&numLocators));
-		checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
+								   (IUnknown **)&pLocator));	
+								   	
+			if (edesc->PrependLocator(pLocator) != AAFRESULT_SUCCESS)
+				localhr = AAFRESULT_TEST_FAILED;
 
-		// Add the source mob into the tree
-		checkResult(pHeader->AddMob(pMob));
+			// Verify the number of locators
+			numLocators = 0;
+			edesc->CountLocators(&numLocators);
+			if (i != numLocators)
+				localhr = AAFRESULT_TEST_FAILED;
+				
+			// Verify that locator was prepended
+			edesc->GetLocatorAt(0, &pLocator2);
+			if (pLocator2 != pLocator)
+				localhr = AAFRESULT_TEST_FAILED;
+		}
+
+		if (localhr == AAFRESULT_SUCCESS)
+			cout<< "	PrependLocator() ...	Passed"<< endl;
+		else
+		{
+			cout<< "	PrependLocator() ...	FAILED"<< endl;
+			hr = AAFRESULT_TEST_FAILED;
+		}
+
+
+/* InsertLocatorAt()	**************************************/
+		localhr = AAFRESULT_SUCCESS;
+		edesc->CountLocators(&numLocators);
+		// Verify that we can't remove an index value that is out of range
+		if (edesc->InsertLocatorAt(numLocators+1, pLocator) != AAFRESULT_BADINDEX)
+			localhr = AAFRESULT_TEST_FAILED;
+
+		// Verify behavior when NULL is passed in
+		if (edesc->InsertLocatorAt(1, NULL) != AAFRESULT_NULL_PARAM)
+			localhr = AAFRESULT_TEST_FAILED;
+					
+		cout<< "	InsertLocatorAt() ...	Needs to be Implemented!"<< endl;
+		if (hr != AAFRESULT_TEST_FAILED)
+			hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+			
+			
+/* GetLocatorAt()	******************************************/
+		localhr = AAFRESULT_SUCCESS;
+		edesc->CountLocators(&numLocators);
+		// Verify that we can't remove an index value that is out of range
+		// note: Locators index is 0 based so the index numLocators is out of range
+		if (edesc->GetLocatorAt(numLocators, &pLocator) != AAFRESULT_BADINDEX)
+			localhr = AAFRESULT_TEST_FAILED;
+
+		// Verify behavior when NULL is passed in
+		if (edesc->GetLocatorAt(1, NULL) != AAFRESULT_NULL_PARAM)
+			localhr = AAFRESULT_TEST_FAILED;
+			
+		for (i=0; i<numLocators; i++)
+		{
+			pLocator = NULL;
+			if (edesc->GetLocatorAt(i, &pLocator) != AAFRESULT_SUCCESS)
+				if (pLocator == NULL)
+					localhr = AAFRESULT_TEST_FAILED;
+				else
+					pLocator->Release();
+		}
+			
+		if (localhr == AAFRESULT_SUCCESS)
+			cout<< "	GetLocatorAt() ...		Passed"<< endl;
+		else
+		{
+			cout<< "	GetLocatorAt() ...		FAILED"<< endl;
+			hr = AAFRESULT_TEST_FAILED;
+		}
+
+
+/* GetLocators()	******************************************/
+		if (edesc->GetLocators(NULL) != AAFRESULT_NULL_PARAM)
+			localhr = AAFRESULT_TEST_FAILED;	
+
+		pEnumLocators = NULL;
+		if (edesc->GetLocators(&pEnumLocators) == AAFRESULT_SUCCESS)
+		{
+			if (pEnumLocators != NULL)
+			{	
+				// Try a simple test to confirm
+				if (pEnumLocators->NextOne(&pLocator) != AAFRESULT_SUCCESS)					
+					localhr = AAFRESULT_TEST_FAILED;
+				edesc->GetLocatorAt(0, &pLocator2);
+
+				if (pLocator != pLocator2)
+					localhr = AAFRESULT_TEST_FAILED;
+				else
+					pLocator2->Release();
+					
+				pEnumLocators->Release();
+			}
+			else
+				localhr = AAFRESULT_TEST_FAILED;			
+		}
+		else	
+			localhr = AAFRESULT_TEST_FAILED;
+
+		if (localhr == AAFRESULT_SUCCESS)
+			cout<< "	GetLocators() ...		Passed"<< endl;
+		else
+		{
+			cout<< "	GetLocators() ...		FAILED"<< endl;
+			hr = AAFRESULT_TEST_FAILED;
+		}
+
+
+		
+
+/* RemoveLocatorAt()	******************************************/
+		localhr = AAFRESULT_SUCCESS;
+
+		// Verify that we can't remove an index value that is out of range
+		// note: Locators index is 0 based so the index numLocators is out of range
+
+		if (edesc->RemoveLocatorAt (numLocators) != AAFRESULT_BADINDEX)
+			localhr = AAFRESULT_TEST_FAILED;
+				
+		// Remove locator at beginning, but Release it first
+		edesc->CountLocators(&numLocators);
+
+		edesc->GetLocatorAt(0, &pLocator);
+		pLocator->Release();
+
+		edesc->GetLocatorAt(1, &pLocator);
+		if (edesc->RemoveLocatorAt (0) != AAFRESULT_SUCCESS)
+			localhr = AAFRESULT_TEST_FAILED;
+
+		// Verify the count
+		edesc->CountLocators(&numLocators2);
+		if (numLocators2 != (numLocators - 1))
+			localhr = AAFRESULT_TEST_FAILED;
+
+		edesc->GetLocatorAt(0, &pLocator2);
+		// Verify that the locators shifted properly
+		if (pLocator != pLocator2)
+			localhr = AAFRESULT_TEST_FAILED;
+		
+		// Remove locator in middle, but Release it first
+		edesc->CountLocators(&numLocators);
+		edesc->GetLocatorAt((numLocators/2), &pLocator);
+		pLocator->Release();
+
+		edesc->GetLocatorAt((numLocators/2 +1), &pLocator);
+		if (edesc->RemoveLocatorAt (numLocators/2) != AAFRESULT_SUCCESS)
+			localhr = AAFRESULT_TEST_FAILED;
+		
+		edesc->CountLocators(&numLocators2);
+		if (numLocators2 != (numLocators - 1))
+			localhr = AAFRESULT_TEST_FAILED;
+		
+		edesc->GetLocatorAt(numLocators2/2, &pLocator2);
+		// Verify that the locators shifted properly
+		if (pLocator != pLocator2)
+			localhr = AAFRESULT_TEST_FAILED;
+
+		// Remove locator at end, but Release it first
+		edesc->CountLocators(&numLocators);
+		edesc->GetLocatorAt(numLocators-1, &pLocator);
+		pLocator->Release();
+
+		edesc->GetLocatorAt(numLocators-2, &pLocator);
+		if (edesc->RemoveLocatorAt (numLocators-1) != AAFRESULT_SUCCESS)
+			localhr = AAFRESULT_TEST_FAILED;
+		
+		edesc->CountLocators(&numLocators2);
+		if (numLocators2 != (numLocators - 1))
+			localhr = AAFRESULT_TEST_FAILED;
+
+		edesc->GetLocatorAt(numLocators2-1, &pLocator2);
+		// Verify that the locators shifted properly
+		if (pLocator != pLocator2)
+			localhr = AAFRESULT_TEST_FAILED;
+
+		if (localhr == AAFRESULT_SUCCESS)
+			cout<< "	RemoveLocatorAt() ...	Passed"<< endl;
+		else
+		{
+			cout<< "	RemoveLocatorAt() ...	FAILED"<< endl;
+			hr = AAFRESULT_TEST_FAILED;
+		}
+
+/*************************************************************/
+
+	// Add the source mob into the tree
+	checkResult(pHeader->AddMob(pMob));
+
 	}
 	catch (HRESULT& rResult)
 	{
@@ -174,10 +405,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	}
 
 
-
 	// Cleanup object references
-	if (pLocator)
+	edesc->CountLocators(&numLocators);
+
+	for (i=0; i<numLocators; ++i)
+	{
+		edesc->GetLocatorAt(i, &pLocator);
 		pLocator->Release();
+	}
 
 	if (edesc)
 		edesc->Release();
@@ -263,7 +498,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 			// Verify that there is now one locator
 			checkResult(pEdesc->CountLocators(&numLocators));
-		  checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
+		 	checkExpression(1 == numLocators, AAFRESULT_TEST_FAILED);
 		
 			checkResult(pEdesc->GetLocators(&pEnum));
 
@@ -350,19 +585,6 @@ extern "C" HRESULT CAAFEssenceDescriptor_test()
 	{
 	  cerr << "CAAFEssenceDescriptor_test...Caught general C++"
 		" exception!" << endl; 
-	}
-
-
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following AAFEssenceDescriptor methods have not been implemented:" << endl; 
-//		cout << "     GetNumLocators" << endl; 
-//		cout << "     AppendLocator - needs unit test" << endl; 
-		cout << "     PrependLocator - needs unit test" << endl; 
-//		cout << "     EnumAAFAllLocators - needs unit test" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 	}
 
 	return hr;
