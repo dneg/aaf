@@ -45,8 +45,8 @@ extern "C"
 #define IsInt64Positive(a) ((a) >= 0)
 #define CvtInt32toLength(in, out)		((out) = (in))
 #define CvtInt32toPosition(in, out)		((out) = (in))
-#define CvtInt32toInt64(in, out)		(*out = (in), OM_ERR_NONE)
-#define CvtUInt32toInt64(in, out)		(*out = (in), OM_ERR_NONE)
+#define CvtInt32toInt64(in, out)		(*out = (in), AAFRESULT_SUCCESS)
+#define CvtUInt32toInt64(in, out)		(*out = (in), AAFRESULT_SUCCESS)
 #else
 #define IsInt64Positive(a) (((aafInt16)(a).words[0]) >= 0)
 #define CvtInt32toLength(in, out)		\
