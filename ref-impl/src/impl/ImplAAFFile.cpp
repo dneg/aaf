@@ -225,7 +225,6 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	if (modeFlags)
 		return AAFRESULT_BAD_FLAGS;
 
-	memcpy (&_ident, pIdent, sizeof (_ident));
 
 	
 	// Save the mode flags for now. They are not currently (2/4/1999) used by the
@@ -291,7 +290,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 			_head->AddIdentificationObject((aafProductIdentification_t *)NULL);
 		}
 		// Now, always add the information from THIS application */
-		_head->AddIdentificationObject(&_ident);
+		_head->AddIdentificationObject(pIdent);
 		
 
 		_open = kAAFTrue;
@@ -345,7 +344,6 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		return AAFRESULT_BAD_FLAGS;
 
 
-	memcpy (&_ident, pIdent, sizeof (_ident));
 
 	try
 	{
@@ -376,7 +374,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		  }
 
 		// Add the ident to the header.
-		checkResult(_head->AddIdentificationObject(&_ident));
+		checkResult(_head->AddIdentificationObject(pIdent));
 		  
 		// Set the byte order
 		_byteOrder = hostByteOrder();
@@ -452,7 +450,6 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		return AAFRESULT_NULL_PARAM;
 
 
-	memcpy (&_ident, pIdent, sizeof (_ident));
 
 	try
 	{
@@ -469,7 +466,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		_head->SetDictionary(_factory);
 
 		// Add the ident to the header.
-		checkResult(_head->AddIdentificationObject(&_ident));
+		checkResult(_head->AddIdentificationObject(pIdent));
 		  
 		// Set the byte order
 		_byteOrder = hostByteOrder();
@@ -619,7 +616,6 @@ ImplAAFFile::ImplAAFFile () :
 		_open(kAAFFalse),
 		_modeFlags(0)
 {
-	memset (&_ident, 0, sizeof (_ident));
 }
 
 

@@ -124,7 +124,6 @@ private:
   aafBool _initialized;
   aafBool _open;
   aafUInt32 _modeFlags;
-  aafProductIdentification_t _ident;
 };
 
 //
