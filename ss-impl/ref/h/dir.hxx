@@ -183,7 +183,7 @@ private:
 
 inline CDirEntry& CDirSect::GetAdeEntry( ULONG index )
 {
-#if 0
+    /*
     Even though CDirSect doesn't contain any fields
     sizeof(CDirSect) returns 1, which causes problems.
     7-sep-00 Alexey
@@ -193,7 +193,7 @@ inline CDirEntry& CDirSect::GetAdeEntry( ULONG index )
       size += sizeof(int) - size;
    }
    return ( (CDirEntry*)( ((BYTE*)this ) + size ) )[index];
-#endif
+    */
 
    return ( (CDirEntry*)this )[index];
 }
