@@ -1106,10 +1106,10 @@ void OMMSSStoredObject::restore(OMStrongReferenceSet& set,
     // safely ignore the external one.
     //
     if (!set.contains(key)) {
+      wchar_t* name = elementName(setName, setId, localKey);
       // Sticky reference counts were previously incorrectly persisted
       // as 0x00000001 instead of 0xffffffff so we subract 2 below for
       // compatability.
-      wchar_t* name = elementName(setName, setId, localKey);
       OMStrongReferenceSetElement element(&set,
                                           name,
                                           localKey,
