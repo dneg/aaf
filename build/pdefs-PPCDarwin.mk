@@ -11,11 +11,11 @@
 # the License for the specific language governing rights and limitations
 # under the License.
 # 
-# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# The Original Code of this file is Copyright 2003-2004, Licensor of the
 # AAF Association.
 # 
 # The Initial Developer of the Original Code of this file and the
-# Licensor of the AAF Association is Avid Technology.
+# Licensor of the AAF Association is Apple Computer, Inc.
 # All rights reserved.
 #
 ###############################################################################
@@ -24,7 +24,8 @@
 #
 # pdefs-PPCDarwin.mk
 #
-#	This file contains makefile definitions for the MACOSX platform.
+#	This file contains makefile definitions for the Darwn (Mac OS X) 
+#	platform.
 #
 #
 # Uses:
@@ -65,7 +66,6 @@ PLATFORM_CFLAGS = -arch ppc
 #------------------------------------------------------------------------------
 # Linker command and options
 #------------------------------------------------------------------------------
-##RPATH_OPT = $(XL)-rpath $(XL)$(RPATH)
 RPATH_OPT = 
 
 # Command to link executable.
@@ -101,14 +101,24 @@ U_OPTS=no_unicode
 OBJ ?= .o
 EXE ?= 
 LIB ?= .a
-##DLL ?= .so
 DLL ?= .dylib
 
 
 #------------------------------------------------------------------------------
 # Intel machines are Little Endian (lower byte first)
-# Mac, HP, SUN, etc. are Big Endian (higher byte first)
+# Mac PPC, HP, SUN, etc. are Big Endian (higher byte first)
 # BYTE_ORDER = -DLITTLEENDIAN=1
 #------------------------------------------------------------------------------
 BYTE_ORDER = -DBIGENDIAN=1
+
+#------------------------------------------------------------------------------
+#  Get OS revision and add version specific libs as needed. 
+#------------------------------------------------------------------------------
+DARWIN_REV = $(shell uname -r  | cut -c 1 )
+ifeq ($(DARWIN_REV),6)
+    PLATFORMLIBS = -ldl -lwchar
+else 
+    ## assuming >6
+    PLATFORMLIBS = 
+endif
 
