@@ -23,12 +23,12 @@ dodo-app:
 
 test_only:
 	cd tool ; $(MAKE) $(RELENG_MAKEFLAGS) test_only
-	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
+	$(MAKE) -f dodotargets.mak$(MAKE_SUFFIX) $(RELENG_MAKEFLAGS)
 	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
 	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
 
 run:
-	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
+	$(MAKE) -f dodotargets.mak$(MAKE_SUFFIX) $(RELENG_MAKEFLAGS)
 	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
 	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
 	cd tool ; $(MAKE) $(RELENG_MAKEFLAGS) run
@@ -65,7 +65,7 @@ targets:
 
 targets.mk : aafobjects.mk
 	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets.mk\"\n"
-	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
+	$(MAKE) -f dodotargets.mak$(MAKE_SUFFIX) $(RELENG_MAKEFLAGS)
 
 depend.mk : aafobjects.mk
 	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building depend.mk\"\n"
@@ -75,7 +75,7 @@ depend : targets.mk depend.mk
 
 clean:
 	cd tool ; $(MAKE) clean
-	$(MAKE) -f dodotargets.mak clean
+	$(MAKE) -f dodotargets.mak$(MAKE_SUFFIX) clean
 	$(MAKE) -f dododepend.mak clean
 	touch targets.mk depend.mk
 	$(MAKE) -f maketargets.mak clean

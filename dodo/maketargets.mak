@@ -65,7 +65,6 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	    done ; \
 	    for class in $(DODO_TARGET_NAMES) $(AAFCOMINTERFACESONLY) ; do \
 	    	echo ""; \
-	    	echo "// I$$class"; \
 	    	echo ""; \
 	    	cat $$class.fidl; \
 	    done ; \
