@@ -115,6 +115,32 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_NOT_IMPLEMENTED;
 }
 
+AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+{
+	ImplAAFComponent	*comp = NULL;
+	
+	XPROTECT()
+	{
+		size_t count = _slots.getSize();
+		for (size_t n = 0; n < count; n++)
+		{
+			ImplAAFSegment	*pSegment;
+			_slots.getValueAt(pSegment, n);
+			CHECK(pSegment->ChangeContainedReferences(from, to));
+			pSegment->ReleaseReference();
+			pSegment = NULL;
+		}
+	}
+	XEXCEPT
+	{
+		if(comp != NULL)
+			comp->ReleaseReference();
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
+}
+
 
 
 OMDEFINE_STORABLE(ImplAAFNestedScope, AUID_AAFNestedScope);

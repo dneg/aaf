@@ -55,7 +55,6 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplEnumAAFDataDefs	*dataEnum = NULL;
 	ImplAAFDataDef		*aVal = NULL;
 	aafBool				result = AAFFalse;
-	aafUID_t			essenceUID;
 
 	XPROTECT()
 	{

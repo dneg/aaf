@@ -215,5 +215,9 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 }
 
 
+AAFRESULT ImplAAFComponent::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+{
+	return AAFRESULT_SUCCESS;
+}
 
 OMDEFINE_STORABLE(ImplAAFComponent, AUID_AAFComponent);

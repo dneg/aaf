@@ -235,7 +235,7 @@ AAFRESULT ImplAAFMobSlot::ConvertToEditRate(aafPosition_t tmpPos,
 {
 	if(convertPos == NULL )
 		return(AAFRESULT_NULL_PARAM);
-	*convertPos = tmpPos;		// if static (not time-based) slot, assume 1-1 mapping!!!
+	*convertPos = tmpPos;		// if static (not time-based) slot, assume 1-1 mapping
 	return AAFRESULT_SUCCESS;
 }
 
@@ -245,6 +245,18 @@ AAFRESULT ImplAAFMobSlot::ConvertToMyRate(aafPosition_t tmpPos,
 {
 	if(convertPos == NULL )
 		return(AAFRESULT_NULL_PARAM);
-	*convertPos = tmpPos;		// if static (not time-based) slot, assume 1-1 mapping!!!
+	*convertPos = tmpPos;		// if static (not time-based) slot, assume 1-1 mapping
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT ImplAAFMobSlot::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+{
+	ImplAAFSegment	*seg;
+	
+	seg = _segment;
+
+	if(seg != NULL)
+		seg->ChangeContainedReferences(from, to);
+
 	return AAFRESULT_SUCCESS;
 }

@@ -571,5 +571,50 @@ AAFRESULT
 	return hr;
 }
 
+AAFRESULT ImplAAFSequence::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+{
+	aafInt32			n, count;
+	ImplAAFComponent	*comp = NULL;
+	
+	XPROTECT()
+	{
+		CHECK(GetNumComponents (&count));
+		for(n = 0; n < count; n++)
+		{
+			CHECK(GetNthComponent (n, &comp));
+			CHECK(comp->ChangeContainedReferences(from, to));
+			comp->ReleaseReference();
+			comp = NULL;
+		}
+	}
+	XEXCEPT
+	{
+		if(comp != NULL)
+			comp->ReleaseReference();
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
+}
+
+//SDK Internal
+AAFRESULT
+    ImplAAFSequence::SetNthComponent (aafUInt32 index, ImplAAFComponent* pComponent)
+{
+	size_t				numCpnts;
+	HRESULT				hr;
+
+	_components.getSize(numCpnts);
+	if (index < numCpnts)
+	{
+		_components.setValueAt(pComponent, index);
+		pComponent->AcquireReference();
+		hr =  AAFRESULT_SUCCESS;
+	}
+	else
+		hr = AAFRESULT_NO_MORE_OBJECTS;
+
+	return hr;
+}
 
 OMDEFINE_STORABLE(ImplAAFSequence, AUID_AAFSequence);
