@@ -632,6 +632,13 @@ public:
   // meta data: classes, properties and types). This method
   // can only be called once.
   void setMetaDictionary(ImplAAFMetaDictionary *metaDictionary);
+
+  // Private class registration. This version does not perform any
+  // initialization that requires other classes, types or properties or
+  // types to be in the dictionary...it only adds the given class
+  // to the set in the dictionary.
+  AAFRESULT PvtRegisterClassDef(ImplAAFClassDef * pClassDef);
+
 AAFRESULT PvtIsPropertyDefDuplicate(
 							aafUID_t propertyDefID,
 							ImplAAFClassDef *correctClass,
