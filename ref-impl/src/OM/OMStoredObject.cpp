@@ -49,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMUInt32 currentVersion = 21;
+const OMUInt32 currentVersion = 22;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
                                sizeof(OMUInt32) +     // Version number
@@ -762,15 +762,15 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
   //
   IStream* vectorIndexStream = createStream(_storage, vectorIndexName);
 
-  // Write the high water mark.
-  //
-  OMUInt32 highWaterMark = vector->highWaterMark();
-  writeToStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
-
   // Write the count of elements.
   //
   OMUInt32 entries = vector->entries();
   writeToStream(vectorIndexStream, &entries, sizeof(entries));
+
+  // Write the high water mark.
+  //
+  OMUInt32 highWaterMark = vector->highWaterMark();
+  writeToStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
 
   // For each element write the element name.
   //
@@ -807,15 +807,15 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
   //
   IStream* setIndexStream = createStream(_storage, setIndexName);
 
-  // Write the high water mark.
-  //
-  OMUInt32 highWaterMark = set->highWaterMark();
-  writeToStream(setIndexStream, &highWaterMark, sizeof(highWaterMark));
-
   // Write the count of elements.
   //
   OMUInt32 entries = set->entries();
   writeToStream(setIndexStream, &entries, sizeof(entries));
+
+  // Write the high water mark.
+  //
+  OMUInt32 highWaterMark = set->highWaterMark();
+  writeToStream(setIndexStream, &highWaterMark, sizeof(highWaterMark));
 
   // Write the key pid.
   //
@@ -1004,15 +1004,15 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   //
   IStream* vectorIndexStream = openStream(_storage, vectorIndexName);
 
-  // Read the high water mark.
-  //
-  OMUInt32 highWaterMark;
-  readUInt32FromStream(vectorIndexStream, highWaterMark, _reorderBytes);
-
   // Read the count of elements.
   //
   OMUInt32 entries;
   readUInt32FromStream(vectorIndexStream, entries, _reorderBytes);
+
+  // Read the high water mark.
+  //
+  OMUInt32 highWaterMark;
+  readUInt32FromStream(vectorIndexStream, highWaterMark, _reorderBytes);
 
   // Create an index.
   //
@@ -1058,15 +1058,15 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   //
   IStream* setIndexStream = openStream(_storage, setIndexName);
 
-  // Read the high water mark.
-  //
-  OMUInt32 highWaterMark;
-  readUInt32FromStream(setIndexStream, highWaterMark, _reorderBytes);
-
   // Read the count of elements.
   //
   OMUInt32 entries;
   readUInt32FromStream(setIndexStream, entries, _reorderBytes);
+
+  // Read the high water mark.
+  //
+  OMUInt32 highWaterMark;
+  readUInt32FromStream(setIndexStream, highWaterMark, _reorderBytes);
 
   // Read the key pid.
   //
