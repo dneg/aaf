@@ -1555,21 +1555,6 @@ static HRESULT ReadVideoAAFFile(
 	return hr;
 }
 
-#ifndef __sgi
-struct CComInitialize
-{
-	CComInitialize()
-	{
-		CoInitialize(NULL);
-	}
-	
-	~CComInitialize()
-	{
-		CoUninitialize();
-	}
-};
-#endif
-
 //**********************
 // Extra code required to scan the original WAVE headers and extract metadata parameters & data offset
 AAFByteOrder GetNativeByteOrder(void)
@@ -1709,9 +1694,6 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 HRESULT CAAFEssenceAccess_test(testMode_t mode);
 HRESULT CAAFEssenceAccess_test(testMode_t mode)
 {
-#ifndef __sgi
-	CComInitialize comInit;
-#endif
 	AAFRESULT	hr = S_OK;
 	
 	aafWChar *	rawDataWave = L"EssenceAccessExtRaw.wav";

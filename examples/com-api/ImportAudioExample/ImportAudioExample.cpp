@@ -377,19 +377,6 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-struct CComInitialize
-{
-  CComInitialize()
-  {
-    CoInitialize(NULL);
-  }
-
-  ~CComInitialize()
-  {
-    CoUninitialize();
-  }
-};
-
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
@@ -583,7 +570,6 @@ void usage(void)
 //  Specifying that use file ImportAudioExample.aaf as default
 int main(int argumentCount, char* argumentVector[])
 {
-	CComInitialize comInit;
 	CAAFInitialize aafInit;
 	
 	

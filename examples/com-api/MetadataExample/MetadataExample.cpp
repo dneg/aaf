@@ -823,19 +823,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 }
 
 
-struct CComInitialize
-{
-  CComInitialize()
-  {
-    CoInitialize(NULL);
-  }
-
-  ~CComInitialize()
-  {
-    CoUninitialize();
-  }
-};
-
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
@@ -1023,7 +1010,6 @@ static HRESULT RegisterRequiredPlugins(void)
 
 int main(int /*argc*/, char** /*argv*/)
 {
-  CComInitialize comInit;
   CAAFInitialize aafInit;
 
   aafWChar* pwFileName = L"MetadataTest.aaf";

@@ -656,19 +656,6 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-struct CComInitialize
-{
-  CComInitialize()
-  {
-    CoInitialize(NULL);
-  }
-
-  ~CComInitialize()
-  {
-    CoUninitialize();
-  }
-};
-
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
@@ -862,7 +849,6 @@ void usage(void)
 //  The specified filename is the name of the file that is created by the program.
 int main(int argumentCount, char* argumentVector[])
 {
-	CComInitialize comInit;
 	CAAFInitialize aafInit;
 
 	

@@ -352,19 +352,6 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-struct CComInitialize
-{
-  CComInitialize()
-  {
-    CoInitialize(NULL);
-  }
-
-  ~CComInitialize()
-  {
-    CoUninitialize();
-  }
-};
-
 // simple helper class to initialize and cleanup AAF library.
 struct CAAFInitialize
 {
@@ -551,7 +538,6 @@ cleanup:
 
 int main()
 {
-	CComInitialize comInit;
 	CAAFInitialize aafInit;
 	
 	aafWChar *		pwFileName	= L"ExportAudioExample.aaf";
