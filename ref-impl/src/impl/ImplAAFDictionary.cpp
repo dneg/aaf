@@ -93,6 +93,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFCodecDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFContainerDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFInterpolationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFDataDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFPluginDescriptors;
 
 extern aafUID_t gTypeID_AUID;
 extern aafUID_t gTypeID_UInt8;
@@ -120,6 +121,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions"),
   _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    "InterpolationDefinitions"),
   _dataDefinitions      (PID_Dictionary_DataDefinitions,    "DataDefinitions"),
+  _pluginDefinitions      (PID_Dictionary_PluginDefinitions,    "PluginDefinitions"),
   _pBuiltins (0)
 {
   _persistentProperties.put (_operationDefinitions.address());
@@ -130,6 +132,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _persistentProperties.put(_containerDefinitions.address());
   _persistentProperties.put(_interpolationDefinitions.address());
   _persistentProperties.put(_dataDefinitions.address());
+  _persistentProperties.put(_pluginDefinitions.address());
 }
 
 
@@ -201,6 +204,16 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	  if (pInterp)
 		{
 		  pInterp->ReleaseReference();
+		}
+	}
+
+  size_t pluginDescSize = _pluginDefinitions.getSize();
+  for (i = 0; i < pluginDescSize; i++)
+	{
+	  ImplAAFPluginDescriptor *pDesc = _pluginDefinitions.setValueAt(0, i);
+	  if (pDesc)
+		{
+		  pDesc->ReleaseReference();
 		}
 	}
 
@@ -1265,6 +1278,101 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(theEnum->SetEnumStrongProperty(this, &_interpolationDefinitions));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterPluginDescriptor (		//!!! Bring this out through the IDL
+      ImplAAFPluginDescriptor *pDesc)
+{
+	if (NULL == pDesc)
+		return AAFRESULT_NULL_PARAM;
+	
+	_pluginDefinitions.appendValue(pDesc);
+	// trr - We are saving a copy of pointer in _pluginDefinitions
+	// so we need to bump its reference count.
+	pDesc->AcquireReference();
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupPluginDescriptor (		//!!! Bring this out through the IDL
+      aafUID_t *pInterpolationID,
+      ImplAAFPluginDescriptor **ppPluginDesc)
+{
+	ImplEnumAAFPluginDescriptors		*pEnum = NULL;
+	ImplAAFPluginDescriptor			*pDesc = NULL;
+	aafBool						defFound;
+	AAFRESULT					status;
+	aafUID_t					testAUID;
+
+	XPROTECT()
+	{
+		CHECK(GetPluginDescriptors (&pEnum));
+		status = pEnum->NextOne (&pDesc);
+		defFound = AAFFalse;
+		while(status == AAFRESULT_SUCCESS && !defFound)
+		{
+			CHECK(pDesc->GetAUID (&testAUID));
+			if(EqualAUID(pInterpolationID, &testAUID))
+			{
+				defFound = AAFTrue;
+				*ppPluginDesc = pDesc;
+				pDesc->AcquireReference();
+				break;
+			}
+			pDesc->ReleaseReference();
+			pDesc = NULL;
+			status = pEnum->NextOne (&pDesc);
+		}
+		if(pDesc != NULL)
+		{
+			pDesc->ReleaseReference();
+			pDesc = NULL;
+		}
+		pEnum->ReleaseReference();
+		pEnum = NULL;
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	{
+		if(pEnum != NULL)
+			pEnum->ReleaseReference();
+		if(pDesc != NULL)
+			pDesc->ReleaseReference();
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::GetPluginDescriptors (		//!!! Bring this out through the IDL
+      ImplEnumAAFPluginDescriptors **ppEnum)
+{
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFPluginDescriptors *theEnum = (ImplEnumAAFPluginDescriptors *)CreateImpl (CLSID_EnumAAFPluginDescriptors);
+	
+	XPROTECT()
+	{
+		CHECK(theEnum->SetEnumStrongProperty(this, &_pluginDefinitions));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
