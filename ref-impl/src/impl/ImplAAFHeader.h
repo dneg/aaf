@@ -49,7 +49,7 @@ class ImplAAFFile;
 
 
 class AAFDataKind;
-class AAFEffectDef;
+class AAFOperationDef;
 
 
 class ImplAAFHeader : public ImplAAFObject

@@ -179,7 +179,7 @@ typedef aafUInt8    	*aafDataValue_t;
 typedef aafUInt8    	*aafDataBuffer_t;
 
 
-AD_CPP_QUOTE(\/*** Types for effects ***/)
+AD_CPP_QUOTE(\/*** Types for operation groups ***/)
 typedef struct _aafUID_t   aafArgIDType_t;
 	
 AD_CPP_QUOTE(\/*** Types for plugins ***/)
@@ -341,21 +341,21 @@ typedef enum _aafMobKind_t
 	kAllMob = 6
 } aafMobKind_t;
 
-typedef enum _aafEffectChoice_t
+typedef enum _aafOperationChoice_t
 {
   kFindNull = 0,
   kFindIncoming = 1,
   kFindOutgoing = 2,
   kFindRender = 3,
-  kFindEffectSrc1 = 4,
-  kFindEffectSrc2 = 5,
-  kFindEffectSrc3 = 6,
-  kFindEffectSrc4 = 7, 
-  kFindEffectSrc5 = 8,
-  kFindEffectSrc6 = 9,
-  kFindEffectSrc7 = 10,
-  kFindEffectSrc8 = 11
-} aafEffectChoice_t;
+  kFindOperationSrc1 = 4,
+  kFindOperationSrc2 = 5,
+  kFindOperationSrc3 = 6,
+  kFindOperationSrc4 = 7, 
+  kFindOperationSrc5 = 8,
+  kFindOperationSrc6 = 9,
+  kFindOperationSrc7 = 10,
+  kFindOperationSrc8 = 11
+} aafOperationChoice_t;
 
 typedef enum _aafDepend_t
 {
@@ -457,7 +457,7 @@ typedef struct _aafMobComment_t
 
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
-AD_CPP_QUOTE(\ * Effect Types)
+AD_CPP_QUOTE(\ * Operation Group Types)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ *************************************************************/)	  
 typedef enum _aafInterpKind_t
@@ -558,12 +558,16 @@ typedef struct _aafmMultiXfer_t
 {
 	aafUID_t *			mediaKind;		/* IN -- */
 	aafInt16			subTrackNum;	/* IN - The physical output channel */
-	aafUInt32           numSamples;	/* IN -- */
-	aafUInt32          	buflen;	/* IN -- */
-	aafDataBuffer_t		buffer;	/* IN/OUT -- */
+	aafUInt32           numSamples;		/* IN -- */
+	aafUInt32          	buflen;			/* IN -- */
+	aafDataBuffer_t		buffer;			/* IN/OUT -- */
+} aafmMultiXfer_t;
+
+typedef struct _aafmMultiResult_t
+{
 	aafUInt32          	bytesXfered;	/* OUT -- */
 	aafUInt32			samplesXfered;	/* OUT */
-} aafmMultiXfer_t;
+} aafmMultiResult_t;
 
 typedef struct _aafmMultiCreate_t
 {
@@ -739,7 +743,7 @@ typedef enum _aafDefinitionKind_t
 	kAAFPropertyDefinition  = 2,
 	kAAFTypeDefinition      = 4,
 	kAAFDataDefinition      = 8,
-	kAAFEffectDefinition    = 16,
+	kAAFOperationDefinition    = 16,
 	kAAFAllDefinitions      = -1
 } aafDefinitionKind_t;
 
