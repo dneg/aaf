@@ -591,6 +591,7 @@ public:
 							 aafSlotID_t slotID,
 							 aafMobID_constptr newMobID, /* optional */
 							 const aafUID_t & mediaKind,
+							 const aafUID_t &	   codecID,
 							 const aafRational_t & editRate,
 							 const aafRational_t & sampleRate,
 							 ImplAAFLocator *addLocator,
