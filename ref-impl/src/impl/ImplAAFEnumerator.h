@@ -44,12 +44,12 @@ public:
 	AAFRESULT STDMETHODCALLTYPE Initialize(const aafClassID_t* pClassID,
 		ImplAAFRoot *pObj,OMReferenceContainerIterator* pIterator);
 
-	virtual AAFRESULT STDMETHODCALLTYPE NextOne (T ** ppItem);
-	virtual AAFRESULT STDMETHODCALLTYPE Next(aafUInt32  count, T ** ppItems,
+	AAFRESULT STDMETHODCALLTYPE NextOne (T ** ppItem);
+	AAFRESULT STDMETHODCALLTYPE Next(aafUInt32  count, T ** ppItems,
 		aafUInt32 *  pFetched);
-	virtual AAFRESULT STDMETHODCALLTYPE Skip(aafUInt32  count);
-	virtual AAFRESULT STDMETHODCALLTYPE Reset ();
-	virtual AAFRESULT STDMETHODCALLTYPE Clone(ImplAAFEnumerator<T> ** ppEnum);
+	AAFRESULT STDMETHODCALLTYPE Skip(aafUInt32  count);
+	AAFRESULT STDMETHODCALLTYPE Reset ();
+	AAFRESULT STDMETHODCALLTYPE Clone(ImplAAFEnumerator<T> ** ppEnum);
 
 protected:
 	const aafClassID_t* _pClassID; // needed for Clone() 
