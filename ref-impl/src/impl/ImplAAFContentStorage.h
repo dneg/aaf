@@ -40,6 +40,7 @@ class ImplAAFFile;
 #include "aafErr.h"
 #include "ImplAAFObject.h"
 #include "ImplAAFMob.h"
+#include "ImplAAFEssenceData.h"
 
 #include "OMProperty.h"
 
@@ -47,8 +48,6 @@ class AAFDataKind;
 class AAFEffectDef;
 class ImplAAFSession;
 
-const int PID_CONTENT_STORAGE_MOBS	   = 0;
-//!!!const int PID_CONTENT_STORAGE_MEDIA    = 1;
 
 class ImplAAFContentStorage : public ImplAAFObject
 {
@@ -114,6 +113,14 @@ public:
 
 
   //****************
+  // GetNumEssenceData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetNumEssenceData
+        (aafUInt32 *  pNumEssenceData);  //@parm [out,retval] Total number of essence data with type
+
+
+  //****************
   // IsEssenceDataPresent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -129,14 +136,11 @@ public:
 
 
   //****************
-  // EnumAAFEssenceData()
+  // EnumEssenceData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     EnumEssenceData
-	    (// @parm [in,ref] Essence Criteria for enumeration
-         aafMediaCriteria_t *  pMediaCriteria,
-
-		 // @parm [out,retval] Essence Enumeration
+	    (	 // @parm [out,retval] Essence Enumeration
 		 ImplEnumAAFEssenceData ** ppEnum);
 
 
@@ -170,13 +174,16 @@ public:
 AAFRESULT
     GetNthMob (aafInt32 index, ImplAAFMob **ppEnum);
 
+AAFRESULT
+    GetNthEssenceData (aafInt32 index, ImplAAFEssenceData **ppEnum);
+
 	AAFRESULT BuildMediaCache(void);
 AAFRESULT LoadMobTables(void);
 
 private:
 	aafTable_t		*_mobIndex;		// Non-persistant
     OMStrongReferenceVectorProperty<ImplAAFMob> _mobs;
-//!!!    OMStrongReferenceVectorProperty<ImplAAFMediaData> _mediaData;
+    OMStrongReferenceVectorProperty<ImplAAFEssenceData> _essenceData;
 };
 
 #endif // ! __ImplAAFHeader_h__
