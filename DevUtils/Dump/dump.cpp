@@ -535,6 +535,8 @@ static IndexEntry* readIndex(IStream* stream,
                              OMUInt32 count,
                              bool swapNeeded,
                              OMUInt32 version);
+static void reportBadIndexEntry(OMUInt32 i,
+                                const IndexEntry* entry);
 static bool isValid(const IndexEntry* index, const OMUInt32 entries);
 static size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries);
 static char* typeName(OMUInt32 type);
@@ -1705,6 +1707,28 @@ IndexEntry* readIndex(IStream* stream,
   return result;
 }
 
+void reportBadIndexEntry(OMUInt32 i,
+                         const IndexEntry* entry)
+{
+  cerr << "Property set index entry is invalid." << endl;
+  cerr << setw(12) << "property";
+  cerr << setw(12) << "pid (hex)";
+  cerr << setw(12) << "form (hex)";
+  cerr << setw(12) << "offset";
+  cerr << setw(12) << "length";
+  cerr << endl;
+  cerr << setw(12) << i;
+  cerr << setw(12) << hex
+                   << entry->_pid
+                   << dec;
+  cerr << setw(12) << hex
+                   << entry->_type
+                   << dec;
+  cerr << setw(12) << entry->_offset;
+  cerr << setw(12) << entry->_length;
+  cerr << endl;
+}
+
 bool isValid(const IndexEntry* index, const OMUInt32 entries)
 {
   bool result = true;
@@ -1719,6 +1743,7 @@ bool isValid(const IndexEntry* index, const OMUInt32 entries)
     currentLength = index[i]._length;
     // Check length
     if (currentLength == 0) {
+      reportBadIndexEntry(i, &index[i]);
       fatalError("isValid", "Property set index entry has zero length.");
       result = false;
       break;
@@ -1730,10 +1755,12 @@ bool isValid(const IndexEntry* index, const OMUInt32 entries)
     } else {
       // Subsequent entries
       if (currentOffset < previousOffset) {
+        reportBadIndexEntry(i, &index[i]);
         warning("isValid", "Property set index entries out of order.");
         result = false;
         break;
       } else if (position > currentOffset) {
+        reportBadIndexEntry(i, &index[i]);
         warning("isValid", "Property set index entries overlap.");
         result = false;
         break; 
