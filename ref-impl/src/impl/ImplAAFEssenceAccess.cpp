@@ -62,8 +62,8 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
 #include <assert.h>
 #include <string.h>
 
-#ifndef __AAFRoot_h__
-#include "AAFRoot.h"
+#ifndef __AAFPrivate_h__
+#include "AAFPrivate.h"
 #endif
 
 #ifndef __AAFPlugin_h__
