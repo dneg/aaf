@@ -485,24 +485,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::RemoveEssenceData (ImplAAFEssenceData * pEssenceData)
 {
-//	aafUID_t	mobID;
 	if (NULL == pEssenceData)
 		return AAFRESULT_NULL_PARAM;
 
-#if FULL_TOOLKIT
-	XPROTECT()
-	{
 		//!!!_essenceData.removeValue(pEssenceData);	// This call doesn't exist yet
-	} /* XPROTECT */
-	XEXCEPT
-	{
-	}
-	XEND;
 	
 	return(AAFRESULT_SUCCESS);
-#else
-	return(AAFRESULT_NOT_IMPLEMENTED);
-#endif
 }
 
 AAFRESULT ImplAAFContentStorage::LoadMobTables(void)
