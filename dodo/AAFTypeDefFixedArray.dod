@@ -119,20 +119,23 @@ AD_X2METHOD3(CreateValueFromValues,
        array of property values for elements of array value which
     // is to be created.,
 			 numElements,
+			 xxx,
 
 			 [in],
 			 objPass,
 			 aafUInt32,
 			 numElements,
 			 size of pElementValues array.,
-			 ,
+			 xxx,
+			 xxx,
 
 			 [out],
 			 objOut,
 			 AAFPropertyValue,
 			 ppPropVal,
 			 newly-created property value,
-			 ,
+			 xxx,
+			 xxx,
 
      Creates a property value which contains a fixed array type.  The
   // array elements in the property value are initialized to contain
