@@ -31,7 +31,7 @@
 #include "OMPropertyDefinition.h"
 #include "OMStoredObject.h"
 
-#include <memory.h>
+#include <string.h>
 
 // class OMProperty
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMProperty
