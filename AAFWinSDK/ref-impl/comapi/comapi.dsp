@@ -249,14 +249,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFDigitalImageDescriptor.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFDOSLocator.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFDOSLocatorTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEdgecode.cpp"
 # End Source File
 # Begin Source File
@@ -436,14 +428,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFLocator.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFLocatorTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFMacLocator.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMacLocatorTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -911,14 +895,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTypeDefWeakObjRefTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFUnixLocator.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFUnixLocatorTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp"
 # End Source File
 # Begin Source File
@@ -944,14 +920,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFWAVEDescriptor.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFWAVEDescriptorTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFWindowsLocator.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFWindowsLocatorTest.cpp"
 # End Source File
 # Begin Source File
 

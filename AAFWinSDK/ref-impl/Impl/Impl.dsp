@@ -175,10 +175,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDigitalImageDescrip.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFDOSLocator.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEdgecode.cpp"
 # End Source File
 # Begin Source File
@@ -264,10 +260,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFJPEGData.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFLocator.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMacLocator.cpp"
 # End Source File
 # Begin Source File
 
@@ -503,10 +495,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefWeakObjRef.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFUnixLocator.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFVaryingValue.cpp"
 # End Source File
 # Begin Source File
@@ -516,10 +504,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFWAVEData.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFWAVEDescriptor.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFWindowsLocator.cpp"
 # End Source File
 # Begin Source File
 
