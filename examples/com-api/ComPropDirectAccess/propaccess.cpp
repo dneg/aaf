@@ -191,7 +191,7 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
   const aafUInt32 kNumMembers = 2;
 
   // Get the pre-defined type for int16
-  PROPAGATE_RESULT(pDict->LookupType((aafUID_t*) &kAAFTypeID_Int16,
+  PROPAGATE_RESULT(pDict->LookupType(kAAFTypeID_Int16,
 									 &pTDInt16));
 
   // load up arrays to initialize our new typedef
@@ -208,10 +208,10 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
 
   // Allocate a new typedef which will represent a 16-bit rational
   IAAFTypeDefRecordSP pTDRational16;
-  PROPAGATE_RESULT(pDict->CreateInstance(&AUID_AAFTypeDefRecord,
+  PROPAGATE_RESULT(pDict->CreateInstance(AUID_AAFTypeDefRecord,
 										 IID_IAAFTypeDefRecord,
 										 (IUnknown **) &pTDRational16));
-  PROPAGATE_RESULT(pTDRational16->Initialize((aafUID_t*) &AUID_TypeRational16,
+  PROPAGATE_RESULT(pTDRational16->Initialize(AUID_TypeRational16,
 											 memberTypes,
 											 memberNames,
 											 kNumMembers,
@@ -233,16 +233,16 @@ HRESULT createRenamedRational16 (IAAFDictionary * pDict)
 
   // look up existing type
   IAAFTypeDefSP pTDRational16;
-  PROPAGATE_RESULT(pDict->LookupType((aafUID_t*) &AUID_TypeRational16,
+  PROPAGATE_RESULT(pDict->LookupType(AUID_TypeRational16,
 									 &pTDRational16));
 
   // create new (rename) type
-  PROPAGATE_RESULT(pDict->CreateInstance(&AUID_AAFTypeDefRename,
+  PROPAGATE_RESULT(pDict->CreateInstance(AUID_AAFTypeDefRename,
 										 IID_IAAFTypeDefRename,
 										 (IUnknown **) &pRenamedRational16));
 
   // connect 'em up
-  PROPAGATE_RESULT(pRenamedRational16->Initialize((aafUID_t*) &AUID_TypeRenamedRational16,
+  PROPAGATE_RESULT(pRenamedRational16->Initialize(AUID_TypeRenamedRational16,
 												  pTDRational16,
 												  L"RenamedRational16"));
 
@@ -264,7 +264,7 @@ HRESULT registerRational16StructOffsets (IAAFDictionary * pDict)
 {
   // Get the Rational16 type out of the dictionary
   IAAFTypeDefSP spTypeDef;
-  PROPAGATE_RESULT(pDict->LookupType((aafUID_t*) &AUID_TypeRational16,
+  PROPAGATE_RESULT(pDict->LookupType(AUID_TypeRational16,
 									 &spTypeDef));
 
   IAAFTypeDefRecordSP spTypeDefRecord;
@@ -297,17 +297,17 @@ HRESULT addRational16ToComponent (IAAFDictionary * pDict)
   IAAFClassDefSP pCDComponent;
 
   // Get the class def for AAFComponent
-  PROPAGATE_RESULT(pDict->LookupClass((aafUID_t*) &AUID_AAFComponent,
+  PROPAGATE_RESULT(pDict->LookupClass(AUID_AAFComponent,
 									  &pCDComponent));
 
   // Get the Rational16 type out of the dictionary
   IAAFTypeDefSP pTDRational16;
-  PROPAGATE_RESULT(pDict->LookupType((aafUID_t*) &AUID_TypeRational16,
+  PROPAGATE_RESULT(pDict->LookupType(AUID_TypeRational16,
 									 &pTDRational16));
 
   IAAFPropertyDefSP pJunk;
   PROPAGATE_RESULT(pCDComponent->
-				   AppendOptionalPropertyDef((aafUID_t*) &AUID_PropertyComponentOdor,
+				   AppendOptionalPropertyDef(AUID_PropertyComponentOdor,
 											 L"Odor",       // prop name
 											 pTDRational16, // prop ID
 											 &pJunk));
@@ -331,11 +331,11 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
   // IAAFObject interface.
   //
   IAAFFiller * pFill = 0;
-  PROPAGATE_RESULT(pDict->CreateInstance((aafUID_t*) &AUID_AAFFiller,
+  PROPAGATE_RESULT(pDict->CreateInstance(AUID_AAFFiller,
 										 IID_IAAFFiller,
 										 (IUnknown **) &pFill));
   assert (pFill);
-  PROPAGATE_RESULT (pFill->Initialize((aafUID_t*)&DDEF_Sound, 10));
+  PROPAGATE_RESULT (pFill->Initialize(DDEF_Sound, 10));
 
   IAAFObjectSP pObj;
   PROPAGATE_RESULT (pFill->QueryInterface(IID_IAAFObject,
@@ -346,11 +346,11 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
   // Get the property definition for Component::Odor
   //
   IAAFClassDefSP pCDComponent;
-  PROPAGATE_RESULT(pDict->LookupClass((aafUID_t*) &AUID_AAFComponent,
+  PROPAGATE_RESULT(pDict->LookupClass(AUID_AAFComponent,
 									  &pCDComponent));
   IAAFPropertyDefSP pPDComponentOdor;
   PROPAGATE_RESULT(pCDComponent->
-				   LookupPropertyDef((aafUID_t*) &AUID_PropertyComponentOdor,
+				   LookupPropertyDef(AUID_PropertyComponentOdor,
 									 &pPDComponentOdor));
 
 
@@ -383,7 +383,7 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
   //
   IAAFTypeDefSP spTypeDef;
   PROPAGATE_RESULT (pDict->
-					LookupType ((aafUID_t*) &AUID_TypeRational16,
+					LookupType (AUID_TypeRational16,
 								&spTypeDef));
   IAAFTypeDefRecordSP spTypeDefRat16;
   PROPAGATE_RESULT(spTypeDef->
@@ -443,11 +443,11 @@ HRESULT checkStinkyFiller (IAAFDictionary * pDict,
   // Get the property def for Component::Odor
   //
   IAAFClassDefSP pCDComponent;
-  PROPAGATE_RESULT(pDict->LookupClass((aafUID_t*) &AUID_AAFComponent,
+  PROPAGATE_RESULT(pDict->LookupClass(AUID_AAFComponent,
 									  &pCDComponent));
   IAAFPropertyDefSP pPDComponentOdor;
   PROPAGATE_RESULT(pCDComponent->
-				   LookupPropertyDef((aafUID_t*) &AUID_PropertyComponentOdor,
+				   LookupPropertyDef(AUID_PropertyComponentOdor,
 									 &pPDComponentOdor));
 
   //
@@ -472,7 +472,7 @@ HRESULT checkStinkyFiller (IAAFDictionary * pDict,
   //
   IAAFTypeDefSP spTypeDef;
   PROPAGATE_RESULT (pDict->
-					LookupType ((aafUID_t*) &AUID_TypeRational16,
+					LookupType (AUID_TypeRational16,
 								&spTypeDef));
   IAAFTypeDefRecordSP spTypeDefRat16;
   PROPAGATE_RESULT(spTypeDef->
@@ -639,7 +639,7 @@ static void ReadAAFFile(aafWChar * pFileName,
   check (spFile->GetHeader(&spHeader));
 
   IAAFMobSP spMob;
-  check (spHeader->LookupMob ((aafUID_t*) &createdMobID, &spMob));
+  check (spHeader->LookupMob (createdMobID, &spMob));
 
   aafNumSlots_t numSlots = 0;
   check (spMob->GetNumSlots (&numSlots));
@@ -721,7 +721,7 @@ static void CreateAAFFile(aafWChar * pFileName,
 
   // Create a source Mob
   IAAFSourceMobSP  smob;
-  check (spDictionary->CreateInstance(&AUID_AAFSourceMob, 
+  check (spDictionary->CreateInstance(AUID_AAFSourceMob, 
 									 IID_IAAFSourceMob, 
 									 (IUnknown **)&smob));
 
@@ -730,16 +730,16 @@ static void CreateAAFFile(aafWChar * pFileName,
 
   aafUID_t newUID;
   check (CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-  check (spMob->SetMobID(&newUID));
+  check (spMob->SetMobID(newUID));
   check (spMob->SetName(L"a Source Mob"));
 
   IAAFFileDescriptorSP  spFileDesc;
   check (spDictionary->
-		 CreateInstance(&AUID_AAFFileDescriptor,
+		 CreateInstance(AUID_AAFFileDescriptor,
 						IID_IAAFFileDescriptor, 
 						(IUnknown **) &spFileDesc));
   aafRational_t  audioRate = { 44100, 1 };
-  check (spFileDesc->SetSampleRate(&audioRate));
+  check (spFileDesc->SetSampleRate(audioRate));
 
   IAAFEssenceDescriptorSP spEssenceDesc;
   check (spFileDesc->QueryInterface (IID_IAAFEssenceDescriptor,

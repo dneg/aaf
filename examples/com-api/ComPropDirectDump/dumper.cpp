@@ -436,12 +436,12 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			// buf len, and allocating a buffer to hold the name
 			aafCharacter * nameBuf;
 			aafUInt32 nameBufLen;
-			checkResult(pTDE->GetNameBufLenFromAUID(&enumValue, &nameBufLen));
+			checkResult(pTDE->GetNameBufLenFromAUID(enumValue, &nameBufLen));
 			// don't forget NameBufLen is in bytes, not aafCharacters
 			nameBuf = (aafCharacter*) new aafUInt8[nameBufLen];
 
 			// and now get the name itself
-			checkResult(pTDE->GetNameFromAUID(&enumValue, nameBuf, nameBufLen));
+			checkResult(pTDE->GetNameFromAUID(enumValue, nameBuf, nameBufLen));
 
 			// Print the contents
 			char *mbBuf = make_mbstring(nameBufLen, nameBuf); // create an ansi/asci
@@ -593,7 +593,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 											 (void**)&pUnkTest));
 
 			assert (pDict);
-			checkResult (pDict->LookupType ((aafUID_t*) &kAAFTypeID_AUID, &ptd));
+			checkResult (pDict->LookupType (kAAFTypeID_AUID, &ptd));
 			IUnknown * pUnkAUID;
 			checkResult(ptd->QueryInterface(IID_IUnknown,
 											(void**)&pUnkAUID));
