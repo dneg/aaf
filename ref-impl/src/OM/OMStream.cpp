@@ -165,13 +165,16 @@ OMUInt64 OMStream::size(void)
   TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
 
+#if (1)
   struct stat fileStat;
   fflush( _file );
   OMInt64 status = fstat( fileno( _file ), &fileStat );
   ASSERT( "Successful fstat", status == 0 );
   OMUInt64 result = fileStat.st_size;
 
-  /*
+#else  //change method of finding size
+
+
 	// where are we now?
 	OMUInt64 oldposition = position();
 
@@ -203,7 +206,7 @@ OMUInt64 OMStream::size(void)
 
 	// back to where we started from
 	setPosition( oldposition );
-  */
+#endif  //change method of finding size
 	return result;
 }
 
