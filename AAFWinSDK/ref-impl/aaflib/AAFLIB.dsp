@@ -41,7 +41,7 @@ RSC=rc.exe
 # PROP Intermediate_Dir "Release"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_MBCS" /D "_LIB" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/plugins" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /I "../../../ref-impl/include" /D "NDEBUG" /D "WIN32" /D "_UNICODE" /D "UNICODE" /D "_LIB" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /WX /GX /O2 /I "../../../ref-impl/src/com-api" /I "../../../ref-impl/plugins" /I "../../../ref-impl/include/com-api/" /I "../../../ref-impl/src/impl" /I "../../../ref-impl/src/Om" /I "../../../ref-impl/include/OM" /I "../../../ref-impl/src/com-api/com-dll" /I "../include/comidl" /I "../../../ref-impl/include/ref-api" /I "../../../ref-impl/include" /D "NDEBUG" /D "WIN32" /D "_UNICODE" /D "UNICODE" /D "_LIB" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
 BSC32=bscmake.exe
