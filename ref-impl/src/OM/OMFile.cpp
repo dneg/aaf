@@ -32,38 +32,70 @@
 #include "OMStoredObject.h"
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
+#include "OMUtilities.h"
 
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define OM_OBJECT_DIRECTORY_CAPACITY  (5000)
 
-OMFile::OMFile(const OMAccessMode mode,
+  // @mfunc Constructor. Create an <c OMFile> object representing
+  //        an existing external file.
+  //   @parm The name of this <c OMFile>.
+  //   @parm The access mode of this <c OMFile>.
+  //   @parm The <c OMStoredObject> containing the root
+  //         <c OMStorable> object.
+  //   @parm The <c OMClassFactory> to use to restore objects from
+  //         this <c OMFile>.
+  //   @parm The <e OMFile::OMLoadMode> for this <c OMFile>.
+OMFile::OMFile(const wchar_t* fileName,
+               const OMAccessMode mode,
                OMStoredObject* store,
                const OMClassFactory* factory,
                const OMLoadMode loadMode)
 : _root(0), _rootStoredObject(store), _classFactory(factory),
-  _objectDirectory(0), _mode(mode), _loadMode(loadMode)
+  _objectDirectory(0), _mode(mode), _loadMode(loadMode), _fileName(0)
 {
   TRACE("OMFile::OMFile");
 
+  PRECONDITION("Valid file name", validWideString(fileName));
+  _fileName = saveWideString(fileName);
+  readSignature(_fileName);
   setName("/");
 }
 
-OMFile::OMFile(const OMAccessMode mode,
+  // @mfunc Constructor. Create an <c OMFile> object representing
+  //        a new external file.
+  //   @parm The name of this <c OMFile>.
+  //   @parm The signature of this <c OMFile>.
+  //   @parm The access mode of this <c OMFile>.
+  //   @parm The <c OMStoredObject> in which to store the root
+  //         <c OMStorable> object.
+  //   @parm The <c OMClassFactory> to use to restore objects from
+  //         this <c OMFile>.
+  //   @parm The root <c OMStorable> object to save in this file.
+OMFile::OMFile(const wchar_t* fileName,
+               OMFileSignature signature,
+               const OMAccessMode mode,
                OMStoredObject* store,
                const OMClassFactory* factory,
                OMStorable* root)
 : _root(root), _rootStoredObject(store), _classFactory(factory),
-  _objectDirectory(0), _mode(mode), _loadMode(lazyLoad)
+  _objectDirectory(0), _mode(mode), _loadMode(lazyLoad), _fileName(0),
+  _signature(signature)
 {
   TRACE("OMFile::OMFile");
 
+  PRECONDITION("Valid file name", validWideString(fileName));
+  _fileName = saveWideString(fileName);
   setName("<file>");
   _root->setContainingObject(this);
   _root->setName("/");
   _root->setStore(rootStoredObject());
 }
 
+  // @mfunc Destructor.
 OMFile::~OMFile(void)
 {
   TRACE("OMFile::~OMFile");
@@ -71,6 +103,8 @@ OMFile::~OMFile(void)
   _classFactory = 0;
   delete _objectDirectory;
   _objectDirectory = 0;
+  delete _fileName;
+  _fileName = 0;
 }
 
   // @mfunc Open an existing <c OMFile> for read-only access, the
@@ -90,8 +124,13 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
 
   OMStoredObject* store = OMStoredObject::openRead(fileName);
-  OMFile* newFile = new OMFile(readOnlyMode, store, factory, loadMode);
+  OMFile* newFile = new OMFile(fileName,
+                               readOnlyMode,
+                               store,
+                               factory,
+                               loadMode);
   ASSERT("Valid heap pointer", newFile != 0);
+  POSTCONDITION("Object Manager file", newFile->isOMFile());
   return newFile;
 }
 
@@ -112,8 +151,13 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
 
   OMStoredObject* store = OMStoredObject::openModify(fileName);
-  OMFile* newFile = new OMFile(modifyMode, store, factory, loadMode);
+  OMFile* newFile = new OMFile(fileName,
+                               modifyMode,
+                               store,
+                               factory,
+                               loadMode);
   ASSERT("Valid heap pointer", newFile != 0);
+  POSTCONDITION("Object Manager file", newFile->isOMFile());
   return newFile;
 }
 
@@ -129,9 +173,10 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   //   @parm The root <c OMStorable> in the newly created file.
   //   @rdesc The newly created <c OMFile>.
 OMFile* OMFile::openNewWrite(const wchar_t* fileName,
-                            const OMClassFactory* factory,
-                            const OMByteOrder byteOrder,
-                            OMStorable* root)
+                             const OMClassFactory* factory,
+                             const OMByteOrder byteOrder,
+                             OMStorable* root,
+                             const OMFileSignature& signature)
 {
   TRACE("OMFile::openNewWrite");
   PRECONDITION("Valid file name", validWideString(fileName));
@@ -139,6 +184,7 @@ OMFile* OMFile::openNewWrite(const wchar_t* fileName,
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid root", root != 0);
+  PRECONDITION("Valid signature", validSignature(signature));
 
   // Not yet implemented.
   //
@@ -159,7 +205,8 @@ OMFile* OMFile::openNewWrite(const wchar_t* fileName,
 OMFile* OMFile::openNewModify(const wchar_t* fileName,
                               const OMClassFactory* factory,
                               const OMByteOrder byteOrder,
-                              OMStorable* root)
+                              OMStorable* root,
+                              const OMFileSignature& signature)
 {
   TRACE("OMFile::openNewModify");
   PRECONDITION("Valid file name", validWideString(fileName));
@@ -167,9 +214,15 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid root", root != 0);
+  PRECONDITION("Valid signature", validSignature(signature));
 
   OMStoredObject* store = OMStoredObject::createModify(fileName, byteOrder);
-  OMFile* newFile = new OMFile(modifyMode, store, factory, root);
+  OMFile* newFile = new OMFile(fileName,
+                               signature,
+                               modifyMode,
+                               store,
+                               factory,
+                               root);
   ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
@@ -198,6 +251,42 @@ OMFile* OMFile::openNewTransient(const OMClassFactory* factory,
   //
   ASSERT("Not yet implemented", false);
   return 0;
+}
+
+   // @mfunc Is <p signature> a valid signature for an <c OMFile> ?
+   //   @parm The signature to check.
+   //   @rdesc True if <p signature> is a valid signature for an
+   //          <c OMFile>, false otherwise.
+bool OMFile::validSignature(const OMFileSignature& signature)
+{
+  TRACE("OMFile::validSignature");
+  bool result;
+
+  if ((signature.Data2 == 0x4F4F) && (signature.Data3 == 0x4D4D)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+  // @mfunc Initialize the Object Manager specific parts
+  //        (Data2 and Data3) of the OMFileSignature <p prototype>.
+  //   @parm A prototype (partially complete) OMFileSignature.
+  //   @rdesc The fully initialized OMFileSignature.
+OMFileSignature OMFile::initializeSignature(const OMFileSignature& prototype)
+{
+  TRACE("OMFile::initializeSignature");
+
+  PRECONDITION("Reserved fields zero",
+                           ((prototype.Data2 == 0) && (prototype.Data3 == 0)));
+
+  OMFileSignature result = prototype;
+  result.Data2 = 0x4F4F; // "OO"
+  result.Data3 = 0x4D4D; // "MM" 
+
+  POSTCONDITION("Valid signature", validSignature(result));
+  return result;
 }
 
   // @mfunc Save all changes made to the contents of this
@@ -253,6 +342,9 @@ void OMFile::close(void)
   TRACE("OMFile::close");
 
   _root->close();
+  if (_mode == modifyMode) {
+    writeSignature(_fileName);
+  }
 #if 0
   _rootStoredObject->close();
   delete _rootStoredObject;
@@ -321,6 +413,31 @@ OMFile::OMLoadMode OMFile::loadMode(void) const
   return _loadMode;
 }
 
+  // @mfunc Is this file recognized by the Object Manager ?
+  //   @rdesc True if this file is recognized by the Object Manager,
+  //          false otherwise.
+  //   @this const
+bool OMFile::isOMFile(void) const
+{
+  TRACE("OMFile::isOMFile");
+
+  bool result;
+
+  if (validSignature(_signature)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+  // @mfunc The signature of this <c OMFile>.
+  //   @rdes The signature of this <c OMFile>.
+OMFileSignature OMFile::signature(void) const
+{
+  return _signature;
+}
+
 const OMClassId& OMFile::classId(void) const
 {
   TRACE("OMFile::classId");
@@ -348,4 +465,63 @@ bool OMFile::persistent(void) const
   // Transient files NYI so by definition a file is persistent.
   //
   return true;
+}
+
+  // @mfunc Write the signature to the given file.
+  //   @parm The file name.
+void OMFile::writeSignature(const wchar_t* fileName)
+{
+  TRACE("OMFile::writeSignature");
+  OMFileSignature sig = _signature;
+
+  // There's no ANSI function to open a file with a wchar_t* name.
+  // for now convert the name. In future add 
+  // FILE* fopen(const wchar_t* fileName, const wchar_t* mode);
+  //
+  char cFileName[256];
+  size_t status = wcstombs(cFileName, fileName, 256);
+  ASSERT("Convert succeeded", status != (size_t)-1);
+
+  ASSERT("Valid root stored object", _rootStoredObject != 0);
+  if (hostByteOrder() != littleEndian) {
+    _rootStoredObject->reorderUniqueObjectIdentification(sig);
+  }
+
+  FILE* f = fopen(cFileName, "rb+");
+  ASSERT("File exists", f != 0);
+  status = fseek(f, 8, SEEK_SET);
+  ASSERT("Seek succeeded", status == 0);
+  status = fwrite(&sig, sizeof(sig), 1, f);
+  ASSERT("Write succeeded", status == 1);
+
+  fclose(f);
+}
+
+  // @mfunc Read the signature from the given file.
+  //   @parm The file name.
+void OMFile::readSignature(const wchar_t* fileName)
+{
+  TRACE("OMFile::readSignature");
+  OMFileSignature sig;
+
+  char cFileName[256];
+  size_t status = wcstombs(cFileName, fileName, 256);
+  ASSERT("Convert succeeded", status != (size_t)-1);
+
+  FILE* f = fopen(cFileName, "rb");
+  ASSERT("File exists", f != 0);
+  status = fseek(f, 8, SEEK_SET);
+  ASSERT("Seek succeeded", status == 0);
+  status = fread(&sig, sizeof(sig), 1, f);
+  ASSERT("Read succeeded", status == 1);
+
+  fclose(f);
+
+  ASSERT("Valid root stored object", _rootStoredObject != 0);
+  if (hostByteOrder() != littleEndian) {
+    _rootStoredObject->reorderUniqueObjectIdentification(sig);
+  }
+
+  _signature = sig;
+
 }
