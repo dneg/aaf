@@ -462,6 +462,7 @@ void OMFile::removeAllFactories(void)
   FactorySetIterator iterator(_factory, OMBefore);
   while (++iterator) {
     OMStoredObjectFactory* factory = iterator.value();
+    factory->finalize();
     delete factory;
   }
   _factory.clear();
