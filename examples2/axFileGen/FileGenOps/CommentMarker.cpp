@@ -29,8 +29,8 @@ AXFG_OP(
   CommentMarker,           
   L"CommentMarker",
   L"Create a comment marker.",
-  L"GF CommentName SourceRefName comment_string",
-  L"The comment marker will have the same data def as the soruce reference.",
+  L"GF CommentName DataDefName comment_string",
+  L"",
   5,
   5 ) 
 
@@ -41,20 +41,17 @@ void CommentMarker::Execute( const std::vector<AxString>& argv )
 {
 	AxString fileName          = argv[1];
 	AxString commentMarkerName = argv[2];
-	AxString srcRefName        = argv[3];
+	AxString dataDefName       = argv[3];
 	AxString comment           = argv[4];
 
 	IAAFCommentMarkerSP spCommentMarker;
 	AxCreateInstance(  DictionaryFromFileOp( fileName ), spCommentMarker );
 	AxCommentMarker axCommentMarker( spCommentMarker );
 
-	IAAFSourceReferenceSP spSrcRef;
-	GetInstance( srcRefName ).GetCOM( spSrcRef );
-	AxSourceReference axSrcRef( spSrcRef );
+	IAAFDataDefSP spDataDef;
+	GetInstance( dataDefName ).GetCOM( spDataDef );
 
-	axCommentMarker.SetDataDef( axSrcRef.GetDataDef() );
-
-	axCommentMarker.SetAnnotation( spSrcRef );
+	axCommentMarker.SetDataDef( spDataDef );
 	axCommentMarker.SetComment( comment );
 
 	SetCOM( spCommentMarker );
