@@ -347,102 +347,6 @@ void OMSimpleProperty::setSize(size_t newSize)
   }
 }
 
-  // @mfunc Write this property to persistent store, performing
-  //        any necessary externalization and byte reordering.
-  //   @this const
-void OMSimpleProperty::write(void) const
-{
-  TRACE("OMSimpleProperty::write");
-
-  PRECONDITION("Valid internal bytes", _bits != 0);
-  PRECONDITION("Valid internal bytes size", _size > 0);
-
-  const OMType* propertyType = type();
-
-  if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
-
-    ASSERT("Valid property type", propertyType != 0);
-
-    // Allocate buffer for property value
-    size_t externalBytesSize = propertyType->externalSize(_bits,
-                                                          _size);
-    OMByte* buffer = new OMByte[externalBytesSize];
-    ASSERT("Valid heap pointer", buffer != 0);
-
-    // Externalize property value
-    propertyType->externalize(_bits,
-                              _size,
-                              buffer,
-                              externalBytesSize,
-                              store()->byteOrder());
-
-    // Reorder property value
-    if (store()->byteOrder() != hostByteOrder()) {
-      propertyType->reorder(buffer, externalBytesSize);
-    }
-
-    // Write property value
-    store()->write(_propertyId, _storedForm, buffer, externalBytesSize);
-    delete [] buffer;
-
-  } else {
-    // tjb - temporary, no type information, do it the old way
-    //
-    store()->write(_propertyId, _storedForm, _bits, _size);
-  }
-}
-
-  // @mfunc Read this property from persistent store, performing
-  //        any necessary byte reordering and internalization.
-  //   @parm The size of the external (on disk) form of the bytes of
-  //         this propery.
-  //   @this const
-void OMSimpleProperty::read(size_t externalBytesSize)
-{
-  TRACE("OMSimpleProperty::read");
-
-  PRECONDITION("Valid external bytes size", externalBytesSize > 0);
-
-  const OMType* propertyType = type();
-
-  if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
-
-    ASSERT("Valid property type", propertyType != 0);
-
-    // Allocate buffer for property value
-    OMByte* buffer = new OMByte[externalBytesSize];
-    ASSERT("Valid heap pointer", buffer != 0);
-
-    // Read property value
-    store()->read(_propertyId, _storedForm, buffer, externalBytesSize);
-
-    // Reorder property value
-    if (store()->byteOrder() != hostByteOrder()) {
-      propertyType->reorder(buffer, externalBytesSize);
-    }
-
-    // Internalize property value
-    size_t requiredBytesSize = propertyType->internalSize(buffer,
-                                                          externalBytesSize);
-    setSize(requiredBytesSize);
-    ASSERT("Property value buffer large enough", _size >= requiredBytesSize);
-
-    propertyType->internalize(buffer,
-                              externalBytesSize,
-                              _bits,
-                              requiredBytesSize,
-                              hostByteOrder());
-    delete [] buffer;
-  } else {
-    // tjb - temporary, no type information, do it the old way
-    //
-    setSize(externalBytesSize);
-    ASSERT("Property value buffer large enough", _size >= externalBytesSize);
-    store()->read(_propertyId, _storedForm, _bits, externalBytesSize);
-  }
-  setPresent();
-}
-
   // @mfunc Get the value of this <c OMSimpleProperty>.
   //   @parm The buffer to receive the property value.
   //   @parm size_t | valueSize | The size of the buffer.
@@ -481,7 +385,7 @@ void OMSimpleProperty::save(void) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  write();
+  store()->save(*this);
 }
 
   // @mfunc Restore this <c OMSimpleProperty>, the external (persisted)
@@ -492,7 +396,8 @@ void OMSimpleProperty::restore(size_t externalSize)
   TRACE("OMSimpleProperty::restore");
   ASSERT("Sizes match", externalSize == _size);
 
-  read(externalSize);
+  store()->restore(*this, externalSize);
+  setPresent();
 }
 
   // @mfunc Is this an optional property ?
