@@ -63,6 +63,20 @@ AD_CPP_QUOTE(#endif // __MWERKS__)
 
 typedef aafUInt32		AAFRESULT;
 
+AD_CPP_QUOTE(#ifndef AAFRESULT_NOT_IMPLEMENTED)
+AD_CPP_QUOTE(#define AAFRESULT_NOT_IMPLEMENTED	 0x80004001L	//!!!Move this somewhere else)
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(#ifndef AAFRESULT_SUCCESS)
+AD_CPP_QUOTE(#define AAFRESULT_SUCCESS	 0	//!!!Move this somewhere else)
+AD_CPP_QUOTE(#endif)
+
+AD_CPP_QUOTE(#ifndef HRESULT_NOT_IMPLEMENTED)
+AD_CPP_QUOTE(#define HRESULT_NOT_IMPLEMENTED	 0x80004001L	//!!!Move this somewhere else)
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(#ifndef HRESULT_SUCCESS)
+AD_CPP_QUOTE(#define HRESULT_SUCCESS	 0	//!!!Move this somewhere else)
+AD_CPP_QUOTE(#endif)
+
 
 AD_CPP_QUOTE(#ifndef NULL)
 AD_CPP_QUOTE(#define NULL \(\(void *\)0L\))
@@ -1032,5 +1046,6 @@ AD_CPP_QUOTE(#endif)
 
 
 AD_TYPES_END
+
 
 
