@@ -698,7 +698,7 @@ void FileCmd::Execute()
 	vector< vector< string > >::iterator lines_iter;
 	vector< string >::iterator iter;
 
-	cout << "Executing: " << GetArgV()[0] << endl;
+	cout << endl << "Executing: " << GetArgV()[0] << endl;
 	
 	for ( lines_iter = _cmdlines.begin(); lines_iter != _cmdlines.end(); ++lines_iter ) {
 	
@@ -724,7 +724,7 @@ void FileCmd::Execute()
 		cout << "done" << endl;
 	}
 
-	cout << "Finished executing: " << GetArgV()[0]  << endl;
+	cout << "Finished executing: " << GetArgV()[0]  << endl << endl;
 }
 
 //=---------------------------------------------------------------------=
