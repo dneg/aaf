@@ -162,6 +162,7 @@ HRESULT Omf2Aaf::OMFFileOpen(char * pFileName)
 {
 	HRESULT				rc = AAFRESULT_SUCCESS;
 	aafBool				bSessionStarted = AAFFalse;
+	char				szFileVersion[5];
 
 	if (OMF2::OM_ERR_NONE == OMF2::omfsBeginSession(0, &OMFSession))
 	{
@@ -183,18 +184,19 @@ HRESULT Omf2Aaf::OMFFileOpen(char * pFileName)
 	}
 
 	OMF2::omfsFileGetRev(OMFFileHdl, &OMFFileRev);
-	if (OMF2::kOmfRev2x != OMFFileRev)
+	if (OMF2::kOmfRev2x == OMFFileRev)
 	{
-		rc = AAFRESULT_FILEREV_NOT_SUPP ;
-		UTLerrprintf("ERROR:OMFI File Revision 1.0 is NOT supported\n\n");
-		OMF2::omfsCloseFile(OMFFileHdl);
-		OMF2::omfsEndSession(OMFSession);
+		strcpy(szFileVersion, "2.0");
 	}
 	else
 	{
-		gpGlobals->bOMFFileOpen = AAFTrue;
-		if (gpGlobals->bVerboseMode)
-			UTLstdprintf("OMF File: %s opened succesfully\n", pFileName);
+		strcpy(szFileVersion, "1.0");
+	}
+	gpGlobals->bOMFFileOpen = AAFTrue;
+	if (gpGlobals->bVerboseMode)
+	{
+		UTLstdprintf("OMF File: %s opened succesfully\n", pFileName);
+		UTLstdprintf("          File Revision %s \n", szFileVersion);
 	}
 	return rc;
 }
@@ -801,15 +803,15 @@ HRESULT Omf2Aaf::ConvertUniqueNameToAUID(OMF2::omfUniqueName_t datakindName,
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
-	if (strncmp("omfi:effect:VideoDissolve", datakindName, strlen("omfi:effect:VideoDissolve"))== 0)
+	if (strncmp("omfi:effect:VideoDissolve", datakindName, strlen(datakindName))== 0)
 		*pDatadef = kAAFEffectVideoDissolve;
-	else if (strncmp("omfi:effect:MonoAudioDissolve", datakindName, strlen("omfi:effect:MonoAudioDissolve")) == 0)
+	else if (strncmp("omfi:effect:MonoAudioDissolve", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = kAAFEffectMonoAudioDissolve;
-	else if(strncmp("omfi:effect:StereoAudioDissolve", datakindName, strlen("omfi:effect:StereoAudioDissolve")) == 0)
+	else if(strncmp("omfi:effect:StereoAudioDissolve", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = kAAFEffectStereoAudioDissolve;
-	else if(strncmp("omfi:effect:VideoFadeToBlack", datakindName, strlen("omfi:effect:VideoFadeToBlack")) == 0)
+	else if(strncmp("omfi:effect:VideoFadeToBlack", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = kAAFEffectVideoFadeToBlack;
-	else if(strncmp("omfi:effect:SMPTEVideoWipe", datakindName, strlen("omfi:effect:SMPTEVideoWipe")) == 0)
+	else if(strncmp("omfi:effect:SMPTEVideoWipe", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = kAAFEffectSMPTEVideoWipe;
 	else
 	{
@@ -835,15 +837,15 @@ HRESULT Omf2Aaf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind,
 	OMF2::omfUniqueName_t	datakindName;
 	
 	rc = OMF2::omfiDatakindGetName(OMFFileHdl, datakind, 64, datakindName);
-	if (strncmp("omfi:data:Picture", datakindName, strlen("omfi:data:Picture"))== 0)
+	if (strncmp("omfi:data:Picture", datakindName, strlen(datakindName))== 0)
 		*pDatadef = DDEF_Video;
-	else if (strncmp("omfi:data:Sound", datakindName, strlen("omfi:data:Sound")) == 0)
+	else if (strncmp("omfi:data:Sound", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = DDEF_Audio;
-	else if(strncmp("omfi:data:Timecode", datakindName, strlen("omfi:data:Timecode")) == 0)
+	else if(strncmp("omfi:data:Timecode", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = DDEF_Timecode;
-	else if(strncmp("omfi:data:Edgecode", datakindName, strlen("omfi:data:Edgecode")) == 0)
+	else if(strncmp("omfi:data:Edgecode", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = DDEF_Edgecode;
-	else if(strncmp("omfi:data:PictureWithMatte", datakindName, strlen("omfi:data:PictureWithMatte")) == 0)
+	else if(strncmp("omfi:data:PictureWithMatte", datakindName, strlen(datakindName)) == 0)
 		*pDatadef = kAAFEffectPictureWithMate;
 
 	else
