@@ -1220,6 +1220,9 @@ AAFRESULT STDMETHODCALLTYPE
   // @commDeletes the entire Mob structure \(the MOBJ object and all its contained objects\)
   // and deletes the entry from the Header.
 
+extern "C" const aafClassID_t CLSID_AAFMob;
+
+OMDEFINE_STORABLE(AAFMob, CLSID_AAFMob);
 
 
 

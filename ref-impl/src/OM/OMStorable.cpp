@@ -3,6 +3,7 @@
 #include "OMFile.h"
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
+#include "OMTypes.h"
 
 #include "OMAssertions.h"
 
@@ -48,7 +49,7 @@ void OMStorable::restoreContentsFrom(OMStoredObject& s)
 OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject, const char* name, OMStoredObject& s)
 {
   TRACE("OMStorable::restoreFrom");
-  int cid = s.restoreClassId();
+  OMClassId cid = s.restoreClassId();
   OMFile* f = containingObject->file();
   OMStorable* object = f->classFactory()->create(cid);
   ASSERT("Registered class id", object != 0);
