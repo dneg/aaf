@@ -117,6 +117,12 @@ public:
     //          <c OMStoredObject>.
   void save(const OMPropertyTable* table);
 
+    // @cmember Save a single weak reference.
+  void save(OMPropertyId propertyId,
+            int type,
+            const OMUniqueObjectIdentification& id,
+            OMUInt32 tag);
+
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
   void restore(OMStoredVectorIndex*& vector, const char* vectorName);
@@ -127,6 +133,12 @@ public:
 
     // @cmember Restore the <c OMPropertyTable> in this <c OMStoredObject>.
   void restore(OMPropertyTable*& table);
+
+    // @cmember Restore a single weak reference.
+  void restore(OMPropertyId propertyId,
+               int type,
+               OMUniqueObjectIdentification& id,
+               OMUInt32& tag);
 
     // @cmember Write a property value to this <c OMStoredObject>. The
     //          property value to be written occupies <p size> bytes at
