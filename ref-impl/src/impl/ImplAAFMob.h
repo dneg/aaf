@@ -65,14 +65,6 @@ public:
   OMDECLARE_STORABLE(ImplAAFMob)
 
   //****************
-  // IsAPrimaryMob()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    IsAPrimaryMob
-        (aafBool *  retval);  //@parm [retval][out] Set to true if this is a primary mob
-
-
-  //****************
   // GetMobID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -148,9 +140,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetNewProps
         (aafBool  isMasterMob,   //@parm [in] Whether or not this is a Master Mob
-		 aafWChar *  name,   //@parm [in,ref] Mob Name (optional)
-         aafBool  isPrimary);  //@parm [in] Whether or not this is a primary mob
-
+		 aafWChar *  name);   //@parm [in,ref] Mob Name (optional)
 
   //****************
   // SetModTime()
@@ -158,15 +148,6 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetModTime
         (aafTimeStamp_t *  modTime);  //@parm [in, ref] New Modification Time
-
-
-  //****************
-  // SetPrimary()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetPrimary
-        (aafBool  isPrimary);  //@parm [in] Whether or not the mob is a primary mob
-
 
   //****************
   // SetIdentity()

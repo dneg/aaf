@@ -22,6 +22,8 @@
 #include "ImplAAFSequence.h"
 #include "AAFResult.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFHeader.h"
+#include "ImplAAFDictionary.h"
 
 #include <assert.h>
 
@@ -31,14 +33,18 @@ extern "C" const aafClassID_t CLSID_EnumAAFComponents;
 ImplEnumAAFComponents::ImplEnumAAFComponents ()
 {
 	_current = 0;
-	_pSequence = NULL;
+	_enumObj = NULL;
+	_enumStrongProp = NULL;
 }
 
 
 ImplEnumAAFComponents::~ImplEnumAAFComponents ()
 {
-	if (_pSequence)
-		_pSequence->ReleaseReference();
+	if (_enumObj)
+	{
+		_enumObj->ReleaseReference();
+		_enumObj = NULL;
+	}
 }
 
 //***********************************************************
@@ -71,22 +77,54 @@ ImplEnumAAFComponents::~ImplEnumAAFComponents ()
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFComponents::NextOne (ImplAAFComponent** ppComponent)
 {
-	AAFRESULT	result;
-	aafInt32	cur = _current, siz;
+	aafUInt32			numElem;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
 
-	if (ppComponent == NULL)
-		return AAFRESULT_NULL_PARAM;
-
-    _pSequence->GetNumComponents(&siz);
-	if(cur < siz)
+	if(_enumStrongProp != NULL)
 	{
-		result = _pSequence->GetNthComponent(cur, ppComponent);
-		_current = ++cur;
+		size_t	siz;
+		
+		_enumStrongProp->getSize(siz);
+		numElem = siz;
 	}
 	else
-		result = AAFRESULT_NO_MORE_OBJECTS;
+		return(AAFRESULT_INCONSISTANCY);
 
-	return result;
+	if(ppComponent == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	if(_current >= numElem)
+		return AAFRESULT_NO_MORE_OBJECTS;
+	XPROTECT()
+	{
+		if(_enumStrongProp != NULL)
+		{
+			_enumStrongProp->getValueAt(*ppComponent, _current);
+			(*ppComponent)->AcquireReference();
+		}
+		else
+			RAISE(AAFRESULT_INCONSISTANCY);
+
+		_current++;
+		if (head) {
+			head->ReleaseReference();
+			head = NULL;
+		}
+		if (dict) {
+			dict->ReleaseReference();
+			dict = NULL;
+		}
+	}
+	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
+	XEND;
+
+	return(AAFRESULT_SUCCESS); 
 }
 
   //***********************************************************
@@ -121,18 +159,18 @@ AAFRESULT STDMETHODCALLTYPE
 								 ImplAAFComponent**	ppComponents,
 								 aafUInt32*			pFetched)
 {
-	ImplAAFComponent**	ppComponent;
-	aafUInt32			numComps;
+	ImplAAFComponent**	ppDef;
+	aafUInt32			numDefs;
 	HRESULT				hr;
 
-	if (pFetched == NULL && count != 1)
-		return AAFRESULT_NULL_PARAM;
+	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+		return E_INVALIDARG;
 
 	// Point at the first component in the array.
-	ppComponent = ppComponents;
-	for (numComps = 0; numComps < count; numComps++)
+	ppDef = ppComponents;
+	for (numDefs = 0; numDefs < count; numDefs++)
 	{
-		hr = NextOne(ppComponent);
+		hr = NextOne(ppDef);
 		if (FAILED(hr))
 			break;
 
@@ -140,11 +178,11 @@ AAFRESULT STDMETHODCALLTYPE
 		// will increment off the end of the array when
 		// numComps == count-1, but the for loop should
 		// prevent access to this location.
-		ppComponent++;
+		ppDef++;
 	}
 	
 	if (pFetched)
-		*pFetched = numComps;
+		*pFetched = numDefs;
 
 	return hr;
 }
@@ -174,19 +212,28 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFComponents::Skip (aafUInt32  count)
 {
 	AAFRESULT	hr;
-	aafInt32	newCurrent, siz;
+	aafUInt32	newCurrent;
+	aafUInt32	numElem;
+	if(_enumStrongProp != NULL)
+	{
+		size_t	siz;
+		
+		_enumStrongProp->getSize(siz);
+		numElem = siz;
+	}
+	else
+		return(AAFRESULT_INCONSISTANCY);
 
 	newCurrent = _current + count;
 
-    _pSequence->GetNumComponents(&siz);
-	if(newCurrent < siz)
+	if(newCurrent < numElem)
 	{
 		_current = newCurrent;
 		hr = AAFRESULT_SUCCESS;
 	}
 	else
 	{
-		hr = AAFRESULT_NO_MORE_OBJECTS;
+		hr = E_FAIL;
 	}
 
 	return hr;
@@ -241,51 +288,47 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFComponents::Clone (ImplEnumAAFComponents ** ppEnum)
 {
-	ImplEnumAAFComponents*	theEnum;
-	HRESULT					hr;
+	ImplEnumAAFComponents	*result;
+	AAFRESULT				hr;
 
-	if (ppEnum == NULL)
-		return AAFRESULT_NULL_PARAM;
-	
-	theEnum = (ImplEnumAAFComponents *)CreateImpl(CLSID_EnumAAFComponents);
-	if (theEnum == NULL)
+	result = (ImplEnumAAFComponents *)CreateImpl(CLSID_EnumAAFComponents);
+	if (result == NULL)
 		return E_FAIL;
-		
-	hr = theEnum->SetEnumSequence(_pSequence);
+
+	if(_enumStrongProp != NULL)
+		hr = result->SetEnumStrongProperty(_enumObj, _enumStrongProp);
+	else
+		return(AAFRESULT_INCONSISTANCY);
+
 	if (SUCCEEDED(hr))
 	{
-		theEnum->Reset();
-		theEnum->Skip(_current);
-		*ppEnum = theEnum;
+		result->_current = _current;
+		*ppEnum = result;
 	}
 	else
 	{
-		theEnum->ReleaseReference();
+		result->ReleaseReference();
 		*ppEnum = NULL;
 	}
-
+	
 	return hr;
 }
 
 
-//***********************************************************
-//
-// SetEnumSequence()
-//
-// Internal method for use by the SDK.  Set the sequence which
-// will be enumerated over.
-// 
-// AAFRESULT_SUCCESS
-//   - Successfuly set the sequence.
-// 
-AAFRESULT
-    ImplEnumAAFComponents::SetEnumSequence(ImplAAFSequence * pSequence)
+AAFRESULT STDMETHODCALLTYPE
+    ImplEnumAAFComponents::SetEnumStrongProperty( ImplAAFObject *pObj, ComponentStrongRefArrayProp_t *pProp)
 {
-	if (_pSequence)
-		_pSequence->ReleaseReference();
-
-	_pSequence = pSequence;
-	_pSequence->AcquireReference();
+	if (_enumObj)
+		_enumObj->ReleaseReference();
+	_enumObj = pObj;
+	if (pObj)
+		pObj->AcquireReference();
+	/**/
+	_enumStrongProp = pProp;				// Don't refcount, same lifetime as the object.
 
 	return AAFRESULT_SUCCESS;
 }
+
+
+
+

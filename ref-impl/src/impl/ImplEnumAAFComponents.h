@@ -32,10 +32,11 @@ class ImplAAFSequence;
 
 
 
-#ifndef __ImplAAFRoot_h__
-#include "ImplAAFRoot.h"
+#ifndef __ImplAAFObject_h__
+#include "ImplAAFObject.h"
 #endif
 
+typedef OMStrongReferenceVectorProperty<ImplAAFComponent> ComponentStrongRefArrayProp_t;
 
 class ImplEnumAAFComponents : public ImplAAFRoot
 {
@@ -95,19 +96,20 @@ public:
         (ImplEnumAAFComponents ** ppEnum);
 
 
+public:
+  // SDK Internal 
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEnumStrongProperty( ImplAAFObject *pObj, ComponentStrongRefArrayProp_t *pProp);
 
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplEnumAAFComponentsTest.cpp.
   static AAFRESULT test();
 
-  //Internal
-  AAFRESULT SetEnumSequence(ImplAAFSequence * pSequence);
-
 private:
-	aafInt32			_current;
-	ImplAAFSequence*	_pSequence;
-
+	aafUInt32							_current;
+	ImplAAFObject						*_enumObj;
+	ComponentStrongRefArrayProp_t	*_enumStrongProp;
 };
 
 #endif // ! __ImplEnumAAFComponents_h__
