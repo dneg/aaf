@@ -288,14 +288,14 @@ AxString AxTypeDefRecord::GetMemberName( aafUInt32 index )
 
 	sizeInChars = sizeInBytes / sizeof(aafCharacter) + 1;
 
-	std::auto_ptr< array_ptr<aafCharacter> >
-		buf( new array_ptr<aafCharacter>(new aafCharacter[ sizeInChars ]) );
+	std::auto_ptr<aafCharacter>
+		buf( new aafCharacter[ sizeInChars ] );
 	
 	CHECK_HRESULT( _spIaafTypeDefRecord->GetMemberName( index,
-							    buf.get()->get(),
+							    buf.get(),
 							    sizeInBytes ) );
 													  
-	return AxString( buf.get()->get() );
+	return AxString( buf.get() );
 }
 
 IAAFPropertyValueSP AxTypeDefRecord::GetValue( IAAFPropertyValueSP& spRecordPropVal,
@@ -353,14 +353,14 @@ AxString AxTypeDefString::GetElements( IAAFPropertyValueSP& propVal )
 
 	sizeInBytes = sizeof(aafCharacter)*sizeInChars;
 
-	std::auto_ptr< array_ptr<aafCharacter> >
-		buf( new array_ptr<aafCharacter>(new aafCharacter[ sizeInChars ]) );
+	std::auto_ptr< aafCharacter >
+		buf( new aafCharacter[ sizeInChars ] );
 	
 	CHECK_HRESULT( _spIaafTypeDefString->GetElements( propVal,
-							  reinterpret_cast<aafMemPtr_t>(buf.get()->get()),
+							  reinterpret_cast<aafMemPtr_t>(buf.get()),
 							  sizeInBytes ) );
 													  
-	return AxString( buf.get()->get() );
+	return AxString( buf.get() );
 }
 
 //=---------------------------------------------------------------------=

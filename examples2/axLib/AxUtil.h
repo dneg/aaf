@@ -78,27 +78,11 @@ public:
 	static AxString mbtowc( const char* cstr ); 
 };
 
-// Small class to ensure delete[] is used to destroy an array
-// contained by an auto_ptr.
-
-// FIXME - Is this really unneccessary?  Check if it can be removed.
-// In the cases where is used by this code, I think it redundant.
-
-template <class T>
-class array_ptr {
-public:
-	explicit array_ptr( T* ptr ) : _ptr(ptr) {}
-	~array_ptr() { delete [] _ptr; }
-	T* get() const { return _ptr; };
-private:
-	T* _ptr;
-};
-
 // Function template that will return a type name given a smart
 // pointer of type "Type".
 
 template <class Type, class DefType>
-std::auto_ptr< AxString > AxDefNameToString( IAAFSmartPointer< Type >& sp )
+AxString AxDefNameToString( IAAFSmartPointer< Type >& sp )
 {
 	IAAFSmartPointer< DefType > spDef;
 
@@ -111,12 +95,12 @@ std::auto_ptr< AxString > AxDefNameToString( IAAFSmartPointer< Type >& sp )
 	// sized aafCharacter array.  Add one to account for possible rounding.
 
 	int sizeInChars = (sizeInBytes /sizeof(aafCharacter)) + 1;
-	std::auto_ptr< array_ptr<aafCharacter> >
-		buf( new array_ptr<aafCharacter>(new aafCharacter[ sizeInChars ]) );
+	std::auto_ptr< aafCharacter >
+		buf( new aafCharacter[ sizeInChars ] );
 
-	CHECK_HRESULT( spDef->GetName( buf.get()->get(), sizeInChars*sizeof(aafCharacter) ) );
+	CHECK_HRESULT( spDef->GetName( buf.get(), sizeInChars*sizeof(aafCharacter) ) );
 	
-	std::auto_ptr< AxString > name( new AxString( buf.get()->get() ) );
+	AxString name( buf.get() );
 
 	return name;
 }

@@ -60,7 +60,7 @@ AxString AxMob::GetName()
 
 	int sizeInChars = sizeInBytes/sizeof( aafCharacter ) + 1;
 
-	array_ptr<aafCharacter> buf( new aafCharacter[ sizeInChars ] );
+	std::auto_ptr<aafCharacter> buf( new aafCharacter[ sizeInChars ] );
 
 	CHECK_HRESULT( _spIaafMob->GetName( buf.get(), sizeInBytes ) );
 
