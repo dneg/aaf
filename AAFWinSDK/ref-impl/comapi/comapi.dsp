@@ -265,11 +265,19 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEdgecodeTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFEffect.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFEffectDef.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEffectDefTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFEffectTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -368,14 +376,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFGPITrigger.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFGPITriggerTest.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFGroup.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFGroupTest.cpp"
 # End Source File
 # Begin Source File
 
