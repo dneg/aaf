@@ -294,3 +294,15 @@ extern "C" const aafClassID_t CLSID_AAFSourceClip;
 
 OMDEFINE_STORABLE(ImplAAFSourceClip, CLSID_AAFSourceClip);
 
+// Cheat!  We're using this object's CLSID instead of object class...
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFSourceClip::GetObjectClass(aafUID_t * pClass)
+{
+  if (! pClass)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  memcpy (pClass, &CLSID_AAFSourceClip, sizeof aafClassID_t);
+  return AAFRESULT_SUCCESS;
+}
+
