@@ -112,6 +112,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  assert (tmp);
 	  pNonConstThis->_cachedType = tmp;
 	  tmp->ReleaseReference ();
+	  tmp = 0;
 	}
   assert (ppTypeDef);
   *ppTypeDef = _cachedType;

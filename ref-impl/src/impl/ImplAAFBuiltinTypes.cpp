@@ -153,20 +153,20 @@ ImplAAFBuiltinTypes::ImplAAFBuiltinTypes (ImplAAFDictionary* dictionary) :
 
 ImplAAFBuiltinTypes::~ImplAAFBuiltinTypes ()
 {
-  if (_TD_AUID)        _TD_AUID->ReleaseReference ();
-  if (_TD_AUIDArray)   _TD_AUIDArray->ReleaseReference ();
-  if (_TD_UInt8Array)  _TD_UInt8Array->ReleaseReference ();
-  if (_TD_UInt8Array8) _TD_UInt8Array8->ReleaseReference ();
-  if (_TD_UInt8)       _TD_UInt8->ReleaseReference ();
-  if (_TD_UInt16)      _TD_UInt16->ReleaseReference ();
-  if (_TD_Int16)       _TD_Int16->ReleaseReference ();
-  if (_TD_UInt32)      _TD_UInt32->ReleaseReference ();
-  if (_TD_Int32)       _TD_Int32->ReleaseReference ();
-  if (_TD_Int64)       _TD_Int64->ReleaseReference ();
-  if (_TD_ObjRef)      _TD_ObjRef->ReleaseReference ();
-  if (_TD_ObjRefArray) _TD_ObjRefArray->ReleaseReference ();
-  if (_TD_WCharString) _TD_WCharString->ReleaseReference ();
-  if (_TD_FadeType)    _TD_FadeType->ReleaseReference ();
+  if (_TD_AUID)        _TD_AUID->ReleaseReference (); _TD_AUID = 0;
+  if (_TD_AUIDArray)   _TD_AUIDArray->ReleaseReference (); _TD_AUIDArray = 0;
+  if (_TD_UInt8Array)  _TD_UInt8Array->ReleaseReference (); _TD_UInt8Array = 0;
+  if (_TD_UInt8Array8) _TD_UInt8Array8->ReleaseReference (); _TD_UInt8Array8 = 0;
+  if (_TD_UInt8)       _TD_UInt8->ReleaseReference (); _TD_UInt8 = 0;
+  if (_TD_UInt16)      _TD_UInt16->ReleaseReference (); _TD_UInt16 = 0;
+  if (_TD_Int16)       _TD_Int16->ReleaseReference (); _TD_Int16 = 0;
+  if (_TD_UInt32)      _TD_UInt32->ReleaseReference (); _TD_UInt32 = 0;
+  if (_TD_Int32)       _TD_Int32->ReleaseReference (); _TD_Int32 = 0;
+  if (_TD_Int64)       _TD_Int64->ReleaseReference (); _TD_Int64 = 0;
+  if (_TD_ObjRef)      _TD_ObjRef->ReleaseReference (); _TD_ObjRef = 0;
+  if (_TD_ObjRefArray) _TD_ObjRefArray->ReleaseReference (); _TD_ObjRefArray = 0;
+  if (_TD_WCharString) _TD_WCharString->ReleaseReference (); _TD_WCharString = 0;
+  if (_TD_FadeType)    _TD_FadeType->ReleaseReference (); _TD_FadeType = 0;
 }
 
 
@@ -229,8 +229,11 @@ ImplAAFBuiltinTypes::TypeDefAUID (ImplAAFTypeDef ** ptd)
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	  }
 	  pTDUInt8Array8->ReleaseReference ();
+	  pTDUInt8Array8 = 0;
 	  pTDUInt16->ReleaseReference ();
+	  pTDUInt16 = 0;
 	  pTDUInt32->ReleaseReference ();
+	  pTDUInt32 = 0;
 	}
   assert (_TD_AUID);
   if (! ptd) return AAFRESULT_NULL_PARAM;
@@ -511,6 +514,7 @@ ImplAAFBuiltinTypes::TypeDefObjRefArray (ImplAAFTypeDef ** ptd)
 	  hr = _TD_ObjRefArray->Initialize (&kAAFTypeID_ObjRefArray, ptdo, L"Strong Object Reference Array");
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	  ptdo->ReleaseReference ();
+	  ptdo = 0;
 	}
   assert (_TD_ObjRefArray);
   if (! ptd) return AAFRESULT_NULL_PARAM;
@@ -551,6 +555,7 @@ ImplAAFBuiltinTypes::TypeDefAUIDArray (ImplAAFTypeDef ** ptd)
 	  hr = _TD_AUIDArray->Initialize (&kAAFTypeID_AUIDArray, ptda, L"AUID Array");
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	  ptda->ReleaseReference ();
+	  ptda = 0;
 	}
   assert (_TD_AUIDArray);
   if (! ptd) return AAFRESULT_NULL_PARAM;
@@ -590,6 +595,7 @@ ImplAAFBuiltinTypes::TypeDefUInt8Array (ImplAAFTypeDef ** ptd)
 	  hr = _TD_UInt8Array->Initialize (&kAAFTypeID_UInt8Array, ptd8, L"UInt8 Array");
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	  ptd8->ReleaseReference ();
+	  ptd8 = 0;
 	}
   assert (_TD_UInt8Array);
   if (! ptd) return AAFRESULT_NULL_PARAM;
@@ -630,6 +636,7 @@ ImplAAFBuiltinTypes::TypeDefUInt8Array8 (ImplAAFTypeDef ** ptd)
 	  hr = _TD_UInt8Array8->Initialize (&kAAFTypeID_UInt8Array8, ptd8, 8, L"UInt8[8]");
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	  ptd8->ReleaseReference ();
+	  ptd8 = 0;
 	}
   assert (_TD_UInt8Array8);
   if (! ptd) return AAFRESULT_NULL_PARAM;
@@ -669,6 +676,7 @@ ImplAAFBuiltinTypes::TypeDefWCharString (ImplAAFTypeDef ** ptd)
 	  hr = _TD_WCharString->Initialize (&kAAFTypeID_WCharString, ptd16, L"Wide Char String");
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	  ptd16->ReleaseReference ();
+	  ptd16 = 0;
 	}
   assert (_TD_WCharString);
   if (! ptd) return AAFRESULT_NULL_PARAM;
@@ -728,6 +736,7 @@ ImplAAFBuiltinTypes::TypeDefFadeType (ImplAAFTypeDef ** ptd)
 									 L"FadeType");
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	  ptd32->ReleaseReference ();
+	  ptd32 = 0;
 	}
   assert (_TD_FadeType);
   if (! ptd) return AAFRESULT_NULL_PARAM;
@@ -798,6 +807,7 @@ AAFRESULT ImplAAFBuiltinTypes::ImportBuiltinTypeDef (const aafUID_t & rTypeID,
 			{
 			  assert (ptd);
 			  ptd->ReleaseReference ();
+			  ptd = 0;
 			  return hr;
 			}
 
