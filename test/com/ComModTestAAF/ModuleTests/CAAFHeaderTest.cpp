@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFHeader.
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -14,216 +14,392 @@
 #endif
 
 #include <iostream.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
-static aafWChar *slotName = L"SLOT1";
 
-// Handle macro for error handling...
-#ifdef CHECK
-#undef CHECK
-#endif
-#define CHECK(result)\
-do\
-{\
-	hr = result;\
-	if (AAFRESULT_SUCCESS != hr)\
-		throw hr;\
-} while (false)
+const aafUInt32 gMaxMobCount = 5;
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+
+// Utility class to implement the test.
+struct HeaderTest
 {
-	// IAAFSession *				pSession = NULL;
-	IAAFFile *					pFile = NULL;
-	IAAFHeader *				pHeader = NULL;
-	IAAFMob			*pMob = NULL;
-	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
-	HRESULT						hr = AAFRESULT_SUCCESS;
-	bool bFileOpen = false;
+  HeaderTest();
+  ~HeaderTest();
 
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
-	ProductInfo.platform = NULL;
+  void createFile(wchar_t *pFileName);
+  void openFile(wchar_t *pFileName);
 
+  void createFileMob(int itemNumber);
+  void createEssenceData(IAAFSourceMob *pSourceMob);
+  void openMobs();
+  void openEssenceData();
 
-	try 
-	{
-		/*
-		hr = CoCreateInstance(CLSID_AAFSession,
-								 NULL, 
-								 CLSCTX_INPROC_SERVER, 
-								 IID_IAAFSession, 
-								 (void **)&pSession);
-		*/
+  int formatMobName(int itemNumber, wchar_t* mobName);
+  void cleanupReferences();
+  void check(HRESULT hr);
 
-		// hr = pSession->SetDefaultIdentification(&ProductInfo);
-		// if (AAFRESULT_SUCCESS != hr)
-		// 	return hr;
+  // Shared member data:
+  HRESULT _hr;
+  aafProductIdentification_t _productInfo;
+  IAAFFile *_pFile;
+  bool _bFileOpen;
+  IAAFHeader *_pHeader;
 
-		CHECK(CoCreateInstance(CLSID_AAFFile,
-								 NULL, 
-								 CLSCTX_INPROC_SERVER, 
-								 IID_IAAFFile, 
-								 (void **)&pFile));
-		CHECK(pFile->Initialize());
+  IAAFMob *_pMob;
+  IAAFSourceMob *_pSourceMob;
+  IEnumAAFMobs *_pEnumMobs;
+  IAAFEssenceDescriptor *_pEssenceDescriptor;
+  IAAFFileDescriptor *_pFileDescriptor;
+  IEnumAAFEssenceData *_pEnumEssenceData;
+  IAAFEssenceData *_pEssenceData;
 
-		// hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
-		CHECK(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
-		bFileOpen = true;
-  
-		CHECK(pFile->GetHeader(&pHeader));
-
-		//Make the MOB
-		CHECK(CoCreateInstance(CLSID_AAFMob,
-								NULL, 
-								CLSCTX_INPROC_SERVER, 
-								IID_IAAFMob, 
-								(void **)&pMob));
-
-		newUID = DDEF_Video;   // Could have been any other value !
-		CHECK(pMob->SetMobID(&newUID));
-		CHECK(pHeader->AppendMob(pMob));
-	}
-	catch (...)
-	{
-	}
-
-	// Cleanup object references
-	if (pMob)
-		pMob->Release();
-	
-	if (pHeader)
-		pHeader->Release();
-			
-	if (pFile)
-	{	// Close file, clean-up and return
-		if (bFileOpen)
-			pFile->Close();
- 		pFile->Release();
-	}
-
-	// hr = pSession->EndSession();
- 	// if (AAFRESULT_SUCCESS != hr)
-	// 	return hr;
-	// if (pSession) pSession->Release();
-
-
-	return hr;
-}
-
-
-static HRESULT ReadAAFFile(aafWChar * pFileName)
-{
-	// IAAFSession *				pSession = NULL;
-	IAAFFile *					pFile = NULL;
-	IAAFHeader *				pHeader = NULL;
-	aafProductIdentification_t	ProductInfo;
-	aafNumSlots_t				numMobs;
-	IAAFMob						*pMob = NULL;
-	aafUID_t					checkUID;
-	bool bFileOpen = false;
-	HRESULT						hr = AAFRESULT_SUCCESS;
-
-	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"Make AVR Example. NOT!";
-	ProductInfo.productVersion.major = 1;
-	ProductInfo.productVersion.minor = 0;
-	ProductInfo.productVersion.tertiary = 0;
-	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
-	ProductInfo.platform = NULL;
-	
-	try
-	{  
-		/*
-		hr = CoCreateInstance(CLSID_AAFSession,
-								 NULL, 
-								 CLSCTX_INPROC_SERVER, 
-								 IID_IAAFSession, 
-								 (void **)&pSession);
-		*/
-		// hr = pSession->SetDefaultIdentification(&ProductInfo);
-		// if (AAFRESULT_SUCCESS != hr)
-		// 	return hr;
-
-		CHECK(CoCreateInstance(CLSID_AAFFile,
-								 NULL, 
-								 CLSCTX_INPROC_SERVER, 
-								 IID_IAAFFile, 
-								 (void **)&pFile));
-		CHECK(pFile->Initialize());
-
-		// hr = pSession->OpenReadFile(pFileName, &pFile);
-		CHECK(pFile->OpenExistingRead(pFileName, 0));
-		bFileOpen = true;
-  
-  	CHECK(pFile->GetHeader(&pHeader));
-
-		CHECK(pHeader->GetNumMobs(kAllMob, &numMobs));
-		if (numMobs != 1)
-			CHECK(AAFRESULT_TEST_FAILED);
-
-		checkUID = DDEF_Video;   // Could have been any other value !
-		CHECK(pHeader->LookupMob(&checkUID, &pMob));
-	}
-	catch (...)
-	{
-	}
-
-	// Cleanup object references
-	if (pMob)
-		pMob->Release();
-	
-	if (pHeader)
-		pHeader->Release();
-			
-	if (pFile)
-	{	// Close file, clean-up and return
-		if (bFileOpen)
-			pFile->Close();
- 		pFile->Release();
-	}
-
-	//hr = pSession->EndSession();
-	//if (AAFRESULT_SUCCESS != hr)
-	//	return hr;
-	//if (pSession) pSession->Release();
-
-	return 	AAFRESULT_SUCCESS;
-}
- 
-
+  aafUID_t _mobID[gMaxMobCount];
+};
 
 HRESULT CAAFHeader::test()
 {
-	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
- 	aafWChar * pFileName = L"HeaderTest.aaf";
+  HRESULT hr = AAFRESULT_SUCCESS;
+  wchar_t fileName[] = L"HeaderTest.aaf";
+  HeaderTest ht;
 
-	try
-	{
-		hr = CreateAAFFile(	pFileName );
-		if (AAFRESULT_SUCCESS == hr)
-			hr = ReadAAFFile( pFileName );
-	}
-	catch (...)
-	{
-		cerr << "CAAFHeader::test...Caught general C++"
-		" exception!" << endl; 
-		hr = AAFRESULT_TEST_FAILED;
-	}
+  try
+  {
+    ht.createFile(fileName);
+    ht.openFile(fileName);
+  }
+  catch (HRESULT& ehr)
+  {
+    // thrown by HeaderTest::check() method.
+    hr = ehr;
+  }
+  catch (...)
+  {
+    cerr << "CAAFHeader::test...Caught general C++"
+    " exception!" << endl; 
+  }
 
   // Cleanup our object if it exists.
+
   return hr;
+}
+
+
+
+HeaderTest::HeaderTest():
+  _hr(AAFRESULT_SUCCESS),
+  _pFile(NULL),
+  _bFileOpen(false),
+  _pHeader(NULL),
+  _pMob(NULL),
+  _pSourceMob(NULL),
+  _pEnumMobs(NULL),
+  _pEssenceDescriptor(NULL),
+  _pFileDescriptor(NULL),
+  _pEnumEssenceData(NULL),
+  _pEssenceData(NULL)
+{
+  _productInfo.companyName = L"AAF Developers Desk";
+  _productInfo.productName = L"Header Module Test";
+  _productInfo.productVersion.major = 1;
+  _productInfo.productVersion.minor = 0;
+  _productInfo.productVersion.tertiary = 0;
+  _productInfo.productVersion.patchLevel = 0;
+  _productInfo.productVersion.type = kVersionUnknown;
+  _productInfo.productVersionString = NULL;
+  _productInfo.productID = -1;
+  _productInfo.platform = NULL;
+
+  // Generate the ids for each created mob.
+  for (int i = 0; i < gMaxMobCount; ++i)
+	  CoCreateGuid((GUID *)&_mobID[i]);
+}
+
+HeaderTest::~HeaderTest()
+{
+  cleanupReferences();
+}
+
+void HeaderTest::cleanupReferences()
+{
+  if (NULL != _pEssenceData)
+  {
+    _pEssenceData->Release();
+    _pEssenceData = NULL;
+  }
+
+  if (NULL != _pEnumEssenceData)
+  {
+    _pEnumEssenceData->Release();
+    _pEnumEssenceData = NULL;
+  }
+
+  if (NULL != _pFileDescriptor)
+  {
+    _pFileDescriptor->Release();
+    _pFileDescriptor = NULL;
+  }
+
+  if (NULL != _pEssenceDescriptor)
+  {
+    _pEssenceDescriptor->Release();
+    _pEssenceDescriptor = NULL;
+  }
+
+  if (NULL != _pSourceMob)
+  {
+    _pSourceMob->Release();
+    _pSourceMob = NULL;
+  }
+
+  if (NULL != _pMob)
+  {
+    _pMob->Release();
+    _pMob = NULL;
+  }
+
+  if (NULL != _pEnumMobs)
+  {
+    _pEnumMobs->Release();
+    _pEnumMobs = NULL;
+  }
+
+
+  if (NULL != _pHeader)
+  {
+    _pHeader->Release();
+    _pHeader = NULL;
+  }
+
+  if (NULL != _pFile)
+  {
+    if (_bFileOpen)
+      _pFile->Close();
+    _pFile->Release();
+    _pFile = NULL;
+  }
+}
+
+inline void HeaderTest::check(HRESULT hr)
+{
+  if (AAFRESULT_SUCCESS != (_hr = hr))
+    throw hr;
+}
+
+
+void HeaderTest::createFile(wchar_t *pFileName)
+{
+  check(CoCreateInstance(CLSID_AAFFile,
+                         NULL, 
+                         CLSCTX_INPROC_SERVER, 
+                         IID_IAAFFile, 
+                         (void **)&_pFile));
+  check(_pFile->Initialize());
+  check(_pFile->OpenNewModify(pFileName, 0, &_productInfo));
+  _bFileOpen = true;
+  check(_pFile->GetHeader(&_pHeader));
+
+  for (aafUInt32 item = 0; item < gMaxMobCount; ++item)
+    createFileMob(item);
+ 
+  cleanupReferences();
+}
+
+void HeaderTest::openFile(wchar_t *pFileName)
+{
+  check(CoCreateInstance(CLSID_AAFFile,
+                         NULL, 
+                         CLSCTX_INPROC_SERVER, 
+                         IID_IAAFFile, 
+                         (void **)&_pFile));
+  check(_pFile->Initialize());
+  check(_pFile->OpenExistingRead(pFileName, 0));
+  _bFileOpen = true;
+  check(_pFile->GetHeader(&_pHeader));
+
+  openEssenceData();
+
+  openMobs();
+
+  cleanupReferences();
+}
+
+
+int HeaderTest::formatMobName(int itemNumber, wchar_t* mobName)
+{
+  assert(0 <= itemNumber && gMaxMobCount > itemNumber);
+  assert(NULL != mobName);
+
+  char cBuffer[64];
+
+  sprintf(cBuffer, "HeaderTest File Mob %d", itemNumber);
+  size_t count = mbstowcs(mobName, cBuffer, strlen(cBuffer) + 1);
+  if (-1 == count)
+    check(AAFRESULT_INTERNAL_ERROR);
+  return count;
+}
+
+
+void HeaderTest::createFileMob(int itemNumber)
+{
+  assert(_pFile && _pHeader);
+  assert(NULL == _pSourceMob);
+  assert(NULL == _pMob);
+  assert(NULL == _pFileDescriptor);
+  assert(NULL == _pEssenceDescriptor);
+  assert(NULL == _pSourceMob);
+  assert(0 <= itemNumber && gMaxMobCount > itemNumber);
+
+  // Format the mob name.
+  wchar_t wcBuffer[128];
+  formatMobName(itemNumber, wcBuffer);
+
+  // Create a Mob
+  check(CoCreateInstance(CLSID_AAFSourceMob,
+              NULL, 
+              CLSCTX_INPROC_SERVER, 
+              IID_IAAFSourceMob, 
+              (void **)&_pSourceMob));
+
+  check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
+  
+  check(_pMob->SetMobID(&_mobID[itemNumber]));
+
+  check(_pMob->SetName(wcBuffer));
+  
+  check(CoCreateInstance(CLSID_AAFFileDescriptor,
+              NULL, 
+              CLSCTX_INPROC_SERVER, 
+              IID_IAAFEssenceDescriptor, 
+              (void **)&_pFileDescriptor));
+
+  check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
+                                          (void **)&_pEssenceDescriptor));
+  check(_pSourceMob->SetEssenceDescriptor (_pEssenceDescriptor));
+
+  check(_pHeader->AppendMob(_pMob));
+
+  createEssenceData(_pSourceMob);
+
+  // Cleanup instance data for reuse...
+  _pEssenceDescriptor->Release();
+  _pEssenceDescriptor = NULL;
+
+  _pFileDescriptor->Release();
+  _pFileDescriptor = NULL;
+
+  _pMob->Release();
+  _pMob = NULL;
+
+  _pSourceMob->Release();
+  _pSourceMob = NULL;
+}
+
+void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
+{
+  assert(_pFile && _pHeader);
+  assert(pSourceMob);
+  assert(NULL == _pEssenceData);
+
+
+  // Attempt to create an AAFEssenceData.
+  check(CoCreateInstance(CLSID_AAFEssenceData,
+                         NULL, 
+                         CLSCTX_INPROC_SERVER, 
+                         IID_IAAFEssenceData,
+                         (void **)&_pEssenceData));
+
+  check(_pEssenceData->SetFileMob(pSourceMob));
+  check(_pHeader->AppendEssenceData(_pEssenceData));
+  
+  _pEssenceData->Release();
+  _pEssenceData = NULL;
+}
+
+void HeaderTest::openMobs()
+{
+  assert(_pFile && _pHeader);
+  assert(NULL == _pEnumMobs);
+  assert(NULL == _pMob);
+  assert(NULL == _pSourceMob);
+
+
+  aafInt32 mobCount = 0;
+  check(_pHeader->GetNumMobs(kAllMob, &mobCount));
+  if (gMaxMobCount != mobCount)
+    check(AAFRESULT_TEST_FAILED);
+ 
+  check(_pHeader->EnumAAFAllMobs(NULL, &_pEnumMobs));
+  for (aafInt32 item = 0; item < mobCount; ++item)
+  {
+    check(_pEnumMobs->NextOne(&_pMob));
+
+    // Validate the mob data.
+	aafUID_t mobID;
+    check(_pMob->GetMobID(&mobID));
+    if (0 != memcmp(&mobID, &_mobID[item], sizeof(mobID)))
+      check(AAFRESULT_TEST_FAILED);
+
+	wchar_t mobName[128], expectedMobName[128];
+    int expectedMobNameLen = (formatMobName(item, expectedMobName) + 1) * 2;
+	aafInt32 mobNameLen;
+	check(_pMob->GetNameBufLen(&mobNameLen));
+	if (mobNameLen != expectedMobNameLen)
+      check(AAFRESULT_TEST_FAILED);
+    check(_pMob->GetName(mobName, 128));
+    if (0 != memcmp(mobName, expectedMobName, expectedMobNameLen))
+      check(AAFRESULT_TEST_FAILED);
+	
+	// Make sure that we actually created a source mob.
+	check(_pMob->QueryInterface(IID_IAAFSourceMob, (void **)&_pSourceMob));
+	
+    _pSourceMob->Release();
+    _pSourceMob = NULL;
+
+    _pMob->Release();
+    _pMob = NULL;
+  }
+
+
+  _pEnumMobs->Release();
+  _pEnumMobs = NULL;
+}
+
+void HeaderTest::openEssenceData()
+{
+  assert(_pFile && _pHeader);
+  assert(NULL == _pEnumEssenceData);
+  assert(NULL == _pEssenceData);
+  assert(NULL == _pSourceMob);
+
+  aafUInt32 essenceDataCount = 0;
+  check(_pHeader->GetNumEssenceData(&essenceDataCount));
+  if (gMaxMobCount != essenceDataCount)
+    check(AAFRESULT_TEST_FAILED);
+ 
+  check(_pHeader->EnumEssenceData(&_pEnumEssenceData));
+  for (aafUInt32 item = 0; item < essenceDataCount; ++item)
+  {
+    check(_pEnumEssenceData->NextOne(&_pEssenceData));
+
+    // Make sure that the essence data still references
+    // a valid mob.
+    check(_pEssenceData->GetFileMob(&_pSourceMob));
+
+    _pSourceMob->Release();
+    _pSourceMob = NULL;
+
+    _pEssenceData->Release();
+    _pEssenceData = NULL;
+  }
+
+
+  _pEnumEssenceData->Release();
+  _pEnumEssenceData = NULL;
 }
 
 
