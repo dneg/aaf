@@ -121,17 +121,29 @@ AD_XMETHOD1(AppendComponent,
   //   - There is not enough source material to add this component.)
 
 
-AD_XMETHOD1(GetNumComponents,
-			[out],
-			objPass,
-			aafInt32 *,
-			pNumCpnts,
-			Number of components,
-			This function returns the number of components in the sequence.
+AD_XMETHOD1(PrependComponent,
+			[in],
+			objIn,
+			AAFComponent,
+			pComponent,
+			Component to prepend to the sequence,
+			This function prepends the input component to the given sequence\,
+  // enforcing bottom up creation of mobs.  The length of the sequence
+  // is incremented by the size of the component\, unless the component
+  // is a transition.  If the component is a transition\, it verifies
+  // that it is not the first object in a transition\, and that it is
+  // not neighboring another transition.  It also verifies that there
+  // is enough source material on either side of the transition.  The
+  // function also verifies that the datadefs are compatible.
+  //
+  // This method will AddRef\(\) the component if it succeeds.
+  //
+  // If the component is successfully appended to the sequence\, the
+  // reference count of the component is incremented.
   // 
   // Succeeds if all of the following are true:
   // - this object has already been initialized.
-  // - the pNumCpnts pointer is valid.
+  // - the pComponent pointer is valid.
   // 
   // If this method fails no state is changed.
   // 
@@ -146,10 +158,195 @@ AD_XMETHOD1(GetNumComponents,
   //   - Initialize\(\) has already been called on this object.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pNumCpnts is null.)
+  //   - pComponent is null.
+  //
+  // AAFRESULT_INVALID_DATADEF
+  //   - The data kind of the component is not compatible with the 
+  //     data def of the sequence.
+  //
+  // AAFRESULT_LEADING_TRAN
+  //   - Attempted to append a transition as the first component of
+  //     a sequence.  A sequence can not start with a transition. 
+  //
+  // AAFRESULT_ADJACENT_TRAN
+  //   - Attempted to append a transition next to a transition.  A
+  //     sequence can not contain back to back transitions.
+  //
+  // AAFRESULT_INSUFF_TRAN_MATERIAL
+  //   - There is not enough source material to add this component.)
 
 
-AD_XMETHOD1(EnumComponents,
+AD_XMETHOD2(InsertComponentAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index to insert component,
+
+			[in],
+			objIn,
+			AAFComponent,
+			pComponent,
+			Component to insert into the sequence,
+     This function inserts the input component into the given sequence
+  // at the given index\, enforcing bottom up creation of mobs.  The
+  // length of the sequence is incremented by the size of the
+  // component\, unless the component is a transition.  If the
+  // component is a transition\, it verifies that it is not the first
+  // object in a transition\, and that it is not neighboring another
+  // transition.  It also verifies that there is enough source
+  // material on either side of the transition.  The function also
+  // verifies that the datadefs are compatible.
+  //
+  // This method will AddRef\(\) the component if it succeeds.
+  //
+  // If the component is successfully appended to the sequence\, the
+  // reference count of the component is incremented.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pComponent pointer is valid.
+  // - index is less than or equal to the value returned by
+  //   CountComponents\(\).
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponent is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than the value returned by
+  //     CountComponents\(\).
+  //
+  // AAFRESULT_INVALID_DATADEF
+  //   - The data kind of the component is not compatible with the 
+  //     data def of the sequence.
+  //
+  // AAFRESULT_LEADING_TRAN
+  //   - Attempted to append a transition as the first component of
+  //     a sequence.  A sequence can not start with a transition. 
+  //
+  // AAFRESULT_ADJACENT_TRAN
+  //   - Attempted to append a transition next to a transition.  A
+  //     sequence can not contain back to back transitions.
+  //
+  // AAFRESULT_INSUFF_TRAN_MATERIAL
+  //   - There is not enough source material to add this component.)
+
+
+AD_XMETHOD2(GetComponentAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of component to retrieve,
+
+			[out\, retval],
+			objOut,
+			AAFComponent,
+			ppComponent,
+			Retrieved component,
+     This function retrieves the input component at the given index in
+  // the given sequence.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the ppComponent pointer is valid.
+  // - index is less than the value returned by
+  //   CountComponents\(\).
+  // 
+  // If this method fails nothing will be written to *ppComponent.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pComponent is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than or equal to the value returned by
+  //     CountComponents\(\).)
+
+
+AD_XMETHOD1(RemoveComponentAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of component to remove,
+     This function removes the input component at the given index in
+  // the given sequence.  Components already existing at indices
+  // higher than the given index will be moved to the next lower index
+  // to accommodate.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - index is less than the value returned by
+  //   CountComponents\(\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than or equal to the value returned by
+  //     CountComponents\(\).)
+
+
+AD_XMETHOD1(CountComponents,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Number of components,
+			This function returns the number of components in the sequence.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD1(GetComponents,
 			[out\, retval],
 			objOut,
 			EnumAAFComponents,
@@ -184,5 +381,7 @@ AD_XMETHOD1(EnumComponents,
 
 
 AD_OVERRIDE(.method-SegmentOffsetToTC)
+
+
 AD_OVERRIDE(.method-SegmentTCToOffset)
 AD_XCLASS_END(Concrete, StoredObject)
