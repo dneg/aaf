@@ -18,7 +18,7 @@ include $(BLD_CFG_DIR)/common.mk
 DODO = dodo.$(EXE)
 
 dodo-app:
-	@echo "	[ dodo/tool ] \"Building dodo tool\""
+	@echo "	[ /coresw/AAF-toolkit/dodo/tool ] \"Building dodo tool\""
 	cd tool ;  $(MAKE)
 
 test_only:
@@ -44,17 +44,17 @@ aafobjects.all : \
 	$(SRC_DIR)/cpp-api/aafobjects.mk
 
 $(INCLUDE_DIR)/com-api/aafobjects.mk : aafobjects.mk
-	@echo "	[ dodo ] \"Building $(INCLUDE_DIR)/com-api/aafobjects.mk\""
+	@echo "	[ /coresw/AAF-toolkit/dodo ] \"Building $(INCLUDE_DIR)/com-api/aafobjects.mk\""
 	$(RM) -f $(INCLUDE_DIR)/com-api/aafobjects.mk
 	cp aafobjects.mk $(INCLUDE_DIR)/com-api
 
 $(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
-	@echo "	[ dodo ] \"Building $(SRC_DIR)/com-api/aafobjects.mk\""
+	@echo "	[ /coresw/AAF-toolkit/dodo ] \"Building $(SRC_DIR)/com-api/aafobjects.mk\""
 	$(RM) -f $(SRC_DIR)/com-api/aafobjects.mk
 	cp aafobjects.mk $(SRC_DIR)/com-api
 
 $(SRC_DIR)/cpp-api/aafobjects.mk : aafobjects.mk
-	@echo "	[ dodo ] \"Building $(SRC_DIR)/cpp-api/aafobjects.mk\""
+	@echo "	[ /coresw/AAF-toolkit/dodo ] \"Building $(SRC_DIR)/cpp-api/aafobjects.mk\""
 	$(RM) -f $(SRC_DIR)/cpp-api/aafobjects.mk
 	cp aafobjects.mk $(SRC_DIR)/cpp-api
 
@@ -64,16 +64,16 @@ $(SRC_DIR)/cpp-api/aafobjects.mk : aafobjects.mk
 #targets: aafobjects.mk targets.mk depend.mk
 
 targets: 
-	@echo "	[ dodo ] \"Building targets\""
+	@echo "	[ /coresw/AAF-toolkit/dodo ] \"Building targets\""
 	$(MAKE) -f maketargets.mak
 
 
 targets.mk : aafobjects.mk
-	@echo "	[ dodo ] \"Building targets.mk\""
+	@echo "	[ /coresw/AAF-toolkit/dodo ] \"Building targets.mk\""
 	$(MAKE) -f dodotargets.mak
 
 depend.mk : aafobjects.mk
-	@echo "	[ dodo ] \"Building depend.mk\""
+	@echo "	[ /coresw/AAF-toolkit/dodo ] \"Building depend.mk\""
 	$(MAKE) -f dododepend.mak
 
 depend : targets.mk depend.mk
