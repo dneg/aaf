@@ -31,11 +31,6 @@ CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 // Include the definitions for all of the interface IID's.
 #include "AAFPlugin_i.c"
 
-//
-// Initialize the AUID's.
-#define INIT_AUID
-#include "AAFStoredObjectIDs.h"
-#undef INIT_AUID
 
 #if defined(_MAC)
 
