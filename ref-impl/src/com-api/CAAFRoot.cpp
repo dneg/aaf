@@ -49,15 +49,23 @@ CAAFRoot::CAAFRoot (IUnknown * pControllingUnknown, aafBool /*doInit*/)
 
 CAAFRoot::~CAAFRoot ()
 {
-  // The base class destructor of ImplAAFRoot must be declared as virtual.
-  // Eventhough the ImplAAFRoot is reference counted we call delete 
-  // directly since the ImplAAFRoot::ReleaseReference() delegates its
-  // release to CAAFRoot::Release().
-  if (_rep)
-  {
-    delete _rep;
-    _rep = NULL;
-  } 
+  try {
+    // The base class destructor of ImplAAFRoot must be declared as virtual.
+    // Eventhough the ImplAAFRoot is reference counted we call delete 
+    // directly since the ImplAAFRoot::ReleaseReference() delegates its
+    // release to CAAFRoot::Release().
+    if (_rep)
+    {
+      delete _rep;
+      _rep = NULL;
+    } 
+  } catch (...) {
+    // Exceptions should be handled by the impl code. However, if an
+    // unhandled exception occurs, control reaches here. We must not
+    // allow the unhandled exception to leave this destructor and
+    // reach the client code. Since we cannot return an exception code
+    // the exception is swallowed.
+  }
 }
 
 
