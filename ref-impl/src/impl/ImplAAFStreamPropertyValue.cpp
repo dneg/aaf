@@ -374,16 +374,10 @@ AAFRESULT STDMETHODCALLTYPE
   if (dataSize != (elementCount * internalElementSize))
     return AAFRESULT_INVALID_PARAM;
   
-  // Get the external size of an element from the type.  
-  OMUInt32 externalElementSize = pElementType->PropValSize();
-  assert (0 < externalElementSize);
-  if (0 == externalElementSize)
-     return AAFRESULT_INVALID_PARAM; 
-  
   // Write the elements to the data stream.
   OMUInt32 elementsWritten;
   _streamProperty->writeTypedElements(pElementType,
-                                     externalElementSize,
+                                     internalElementSize,
                                      pData,
                                      elementCount,
                                      elementsWritten);
