@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFMediaDescriptor\
+AAFEssenceDescriptor\
 #endm
 #c
 #startm .parent-module 0
@@ -17,8 +17,8 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-#c AD_INCLUDE(myVector)
 AD_FORWARD_DECLARATION(AAFLocator)
+AD_FORWARD_DECLARATION(EnumAAFLocators)
 
 AD_CLASS_UUID(94659784, 2a3c, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
 
@@ -27,15 +27,30 @@ AD_DEFAULT_UUID(94659783, 2a3c, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_METHOD1(GetNumLocators,
-		   [out],aafInt32 *,count,,
-		   Return the number of locators attached to this media descriptor.)
-  //@comm The number of locators may be zero if the media is in the current file.
+		   [out],aafInt32 *,pCount,Returns the number of locators,
+		   Return the number of locators attached to this essence descriptor.)
+  //@comm The number of locators may be zero if the essence is in the current file.
 
-AD_XMETHOD2(GetNthLocator,
-			[in],objPass,aafInt32,index,A 1-based index,
-			[out],objOut,AAFLocator,result,Returns a reference to the object,
-			Gets a particular locator from this media descriptor.)
-  //@comm The number of locators may be zero if the media is in the current file.
+AD_XMETHOD1(AppendLocator,
+		   [in],objIn,AAFLocator,pLocator,Locator to append,
+		   Append another locator to this essence descriptor. )
+  //@comm    Use this function to add a locator to be scanned first when searching for
+  // the essence (a new primary location).
+
+AD_XMETHOD1(PrependLocator,
+		   [in],objIn,AAFLocator,pLocator,Locator to append,
+		   Append another locator to this essence descriptor.)
+  //@comm    Use this function to add a locator to be scanned first when searching for
+  // the essence (a secondary location for the essence).
+
+AD_XMETHOD1(RemoveLocator,
+		   [in],objIn,AAFLocator,pLocator,Locator to remove,
+		   Return the number of locators attached to this essence descriptor.)
+
+AD_XMETHOD1(EnumAAFAllLocators,
+			[out],objOut,EnumAAFLocators,ppEnum,An enumerator to the locators on this essence descriptor,
+			Returns an enumerator to the locators.)
+  //@comm The number of locators may be zero if the essence is in the current file.
 
 
 AD_CLASS_END
