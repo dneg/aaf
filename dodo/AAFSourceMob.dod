@@ -163,7 +163,7 @@ AD_XMETHOD4(AddNilReference,
   // \(other codes here.\))
 
 
-AD_XMETHOD4(AddTimecodeClip,
+AD_XMETHOD4(AppendTimecodeClip,
 			[in],
 			  objPass,
 			  aafRational_t,
@@ -210,7 +210,7 @@ AD_XMETHOD4(AddTimecodeClip,
   // \(other codes here.\))
 
 
-AD_XMETHOD7(AddEdgecodeClip,
+AD_XMETHOD7(AppendEdgecodeClip,
 			[in],
 			  objPass,
 			  aafRational_t,
