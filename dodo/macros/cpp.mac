@@ -50,6 +50,17 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Includes another file in implementation (not header).
+#c
+#c Argument: Base filename
+#c
+#startm AD_CPPINCLUDE 01
+#include "%01.h"
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Types definitions should only be used by idl and c++ & impl headers
 #c 
 #c Argument: Pieces of UUID

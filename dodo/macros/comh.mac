@@ -51,6 +51,18 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Includes another file in implementation (not header).
+#c
+#c Argument: Base filename
+#c
+#c Note: it is not necessary to expand it here, since it was already
+#c included in this module's source implementation file.
+#c
+#startm AD_CPPINCLUDE 01
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
 #c Goes at the head of the file.
 #c
 #c Arguments: none

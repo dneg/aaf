@@ -49,6 +49,17 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Includes another file in implementation (not header).
+#c
+#c Argument: Base filename
+#c
+#startm AD_CPPINCLUDE 01
+#include "%01.h"
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Goes at the head of the file.
 #c
 #c Arguments: none
@@ -2807,6 +2818,28 @@ AD_CLASS_END\
 
 #ccccccccccccccccccccccccccc
 #c
+#c Inserts code to validate that the given class id (%01) is not for a 
+#c private toolkit class.
+#c
+#c Argument1: class id to validate
+#c
+#startm AD_CHECK_FOR_PRIVATE_CLASS 01
+
+  // Make sure that the client fails when they attempt to create a "private"
+  // toolkit object instance.
+  const AAFObjectModel * pObjectModel = AAFObjectModel::singleton();
+  assert(pObjectModel); // this is statically contructed so it should not fail.
+  const ClassDefinition * classDefinition = pObjectModel->findClassDefinition(&%01);
+  if (NULL != classDefinition)
+  {
+    if (classDefinition->privateClass())
+      return AAFRESULT_INVALID_CLASS_ID;
+  }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Declaration for the dictionary's factory method.
 #c
 #startm AD_DICTIONARY_FACTORY 02
@@ -2841,6 +2874,8 @@ HRESULT C.this-module::%01
   { // This should never happen.
     return AAFRESULT_INTERNAL_ERROR;
   }
+
+  AD_CHECK_FOR_PRIVATE_CLASS(id)
 
   // Create the corresponding impl object.
   ImplAAFObject *pObject = NULL;
@@ -2901,6 +2936,8 @@ HRESULT C.this-module::%01
     return AAFRESULT_INTERNAL_ERROR;
   }
 
+  AD_CHECK_FOR_PRIVATE_CLASS(id)
+
   // Create the corresponding impl object.
   ImplAAFMetaDefinition *pObject = NULL;
   result = pImpl.this-module->CreateMetaInstance(id, &pObject);
@@ -2952,6 +2989,14 @@ HRESULT C.this-module::%01
   { // This should never happen.
     return AAFRESULT_INTERNAL_ERROR;
   }
+
+  // Get the class id and make sure then this is not a private class...
+  aafUID_t id;
+  result = pImpl.this-module->GetAUID(&id);
+  if (AAFRESULT_SUCCESS != result)
+    return result;
+      
+  AD_CHECK_FOR_PRIVATE_CLASS(id)
 
   // Create the corresponding impl object.
   ImplAAFObject *pObject = NULL;
