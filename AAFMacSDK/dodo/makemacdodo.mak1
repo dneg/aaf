@@ -113,27 +113,6 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 	echo '	''SetFile -t TEXT -c CWIE -a L {refh}AAFTypes.h'  >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
-	echo "#" >> macdodo.tmp
-	echo "#" >> macdodo.tmp
-	echo "#" special case the utility classes since they will not be exposed by com >> macdodo.tmp
-	echo '	''AAFModuleTest.all ¶' >> targets_all.tmp
-	echo 'AAFModuleTest.all...'
-	echo "" >> macdodo.tmp
-	echo '# AAFModuleTest.all composite target' >> macdodo.tmp
-	echo 'AAFModuleTest.all Ä {refh}AAFModuleTest.h' >> macdodo.tmp
-	echo "" >> macdodo.tmp
-	echo '	{refh}AAFModuleTest.h ¶' >> generated_targets.tmp
-	echo '	{refh}AAFModuleTest.h ¶' >> generated_refh.tmp
-	echo '{refh}AAFModuleTest.h Ä {dod}AAFModuleTest.dod {macros}refh.mac {macros}base.mac' >> macdodo.tmp
-	echo '	''echo {refh}AAFModuleTest.h' >> macdodo.tmp
-	echo '	''if "`exists -f {refh}AAFModuleTest.h`"'  >> macdodo.tmp
-	echo '		''SetFile -a l {refh}AAFModuleTest.h'  >> macdodo.tmp
-	echo '		''Delete -i -ay {refh}AAFModuleTest.h'  >> macdodo.tmp
-	echo '	'end  >> macdodo.tmp
-	echo '	''{DODO} -f {macros}refh.mac < {dod}AAFModuleTest.dod > {refh}AAFModuleTest.h'  >> macdodo.tmp
-	echo '	''SetFile -t TEXT -c CWIE -a L {refh}AAFModuleTest.h'  >> macdodo.tmp
-	echo "" >> macdodo.tmp
-	echo "" >> macdodo.tmp
 	for base in {DODO_TARGET_NAMES}
 		echo '	'{base}'.all ¶' >> targets_all.tmp
 		echo {base}'.all...'
@@ -385,9 +364,11 @@ macaafobjects.mk Ä {dod}aafobjects.mk
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '	AAFClassIDs.all ¶' >> targets_all.tmp
-	echo 'AAFClassIDs.all Ä {impl}AAFClassIDs.h {comh}AAFCLSIDs.h' >> macdodo.tmp
+	echo 'AAFClassIDs.all Ä {impl}AAFClassIDs.h {comh}AAFCLSIDs.h {comh}AAFObjectTable.h {comh}AAFObjectTable_i.cpp' >> macdodo.tmp
 	echo '	{impl}AAFClassIDs.h ¶' >> generated_targets.tmp
 	echo '	{comh}AAFCLSIDs.h ¶' >> generated_targets.tmp
+	echo '	{comh}AAFObjectTable.h ¶' >> generated_targets.tmp
+	echo '	{comh}AAFObjectTable_i.cpp ¶' >> generated_targets.tmp
 	echo "" >> macdodo.tmp
 	echo "" >> macdodo.tmp
 	echo '#' >> macdodo.tmp
