@@ -959,7 +959,32 @@ void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  HRESULT resultCode = stream->Write(data, size, NULL);
+  unsigned long bytesWritten;
+  HRESULT resultCode = stream->Write(data, size, &bytesWritten);
+  if (!check(resultCode)) {
+    exit(FAILURE);
+  }
+  ASSERT("Successful write", bytesWritten == size);
+}
+
+  // @mfunc Attempt to write <p bytes> bytes from the buffer at
+  //        address <p data> to <p stream>. The actual number of
+  //        bytes written is returned in <p bytesWritten>.
+  //   @parm The stream on which to write.
+  //   @parm The buffer to write.
+  //   @parm The number of bytes to write
+  //   @parm The actual number of bytes written.
+void OMStoredObject::writeToStream(IStream* stream,
+                                   const OMByte* data,
+                                   const OMUInt32 bytes,
+                                   OMUInt32& bytesWritten)
+{
+  TRACE("OMStoredObject::writeToStream");
+  PRECONDITION("Valid stream", stream != 0);
+  PRECONDITION("Valid data", data != 0);
+  PRECONDITION("Valid size", bytes > 0);
+
+  HRESULT resultCode = stream->Write(data, bytes, &bytesWritten);
   if (!check(resultCode)) {
     exit(FAILURE);
   }
@@ -968,7 +993,7 @@ void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
   // @mfunc Read <p size> bytes from <p stream> into the buffer at
   //        address <p data>.
   //   @parm The stream from which to read.
-  //   @parm The buffer to write.
+  //   @parm The buffer into which the bytes are read.
   //   @parm The number of bytes to read.   
 void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
 {
@@ -983,6 +1008,29 @@ void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
     exit(FAILURE);
   }
   ASSERT("Successful read", bytesRead == size);
+}
+
+  // @mfunc Attempt to read <p bytes> bytes from <p stream> into
+  //        the buffer at address <p data>. The actual number of
+  //        bytes read is returned in <p bytesRead>.
+  //   @parm The stream from which to read.
+  //   @parm The buffer into which the bytes are read.
+  //   @parm The number of bytes to write
+  //   @parm The actual number of bytes read.
+void OMStoredObject::readFromStream(IStream* stream,
+                                    OMByte* data,
+                                    const OMUInt32 bytes,
+                                    OMUInt32& bytesRead)
+{
+  TRACE("OMStoredObject::readFromStream");
+  PRECONDITION("Valid stream", stream != 0);
+  PRECONDITION("Valid data buffer", data != 0);
+  PRECONDITION("Valid size", bytes > 0);
+
+  HRESULT result = stream->Read(data, bytes, &bytesRead);
+  if (!check(result)) {
+    exit(FAILURE);
+  }
 }
 
   // @mfunc Read a UInt32 from <p stream> into <p i>. If
