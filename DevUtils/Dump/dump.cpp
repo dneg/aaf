@@ -1058,7 +1058,7 @@ void fatalError(char* routineName, char* message)
   if (verboseFlag) {
     cerr << " in routine \"" << routineName << "\"";
   }
-  cerr << ". " << message << endl;
+  cerr << ": " << message << endl;
 
   exit(EXIT_FAILURE);
 }
@@ -1069,7 +1069,7 @@ void error(char* routineName, char* message)
   if (verboseFlag) {
     cerr << " in routine \"" << routineName << "\"";
   }
-  cerr << ". " << message << endl;
+  cerr << ": " << message << endl;
 
   errorCount = errorCount + 1;
 }
@@ -1080,7 +1080,7 @@ void warning(char* routineName, char* message)
   if (verboseFlag) {
     cerr << " in routine \"" << routineName << "\"";
   }
-  cerr << ". " << message << endl;
+  cerr << ": " << message << endl;
 }
 
 void printError(const char* prefix, const char* fileName, DWORD errorCode)
