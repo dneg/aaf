@@ -33,7 +33,7 @@
 
 #include "OMDataStream.h"
 
-struct IStream;
+class OMStoredStream;
 
   // @class Persistent data stream properties supported by the Object
   //        Manager.
@@ -159,7 +159,7 @@ private:
   void open(void);
   void create(void);
 
-  IStream* _stream;
+  OMStoredStream* _stream;
   OMByteOrder _byteOrder;
 
 };
