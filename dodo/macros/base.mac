@@ -552,9 +552,9 @@ AD_XMETHOD2(Get%01,
   // - The p%01 pointer is valid.
   // - bufSize indicates that the buffer is large enough to hold
   //   %01.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\(p%01\\)
+  //
   // AAFRESULT_SMALL_BUF
   //   - bufSize indicates that the allocated buffer is not large
   //     enough to hold %01.)
@@ -571,7 +571,6 @@ AD_XMETHOD1(Get%01BufLen,
   // 
   // Succeeds if:
   // - The pBufSize pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\(pBufSize\\))\
 #endm
@@ -630,7 +629,7 @@ AD_STD_METHOD_STRING_GET_AND_SIZE(%01, %02)\
 #c
 #c Standard macro to declare methods for use in an Enumeration class.
 #c
-#c arg1: Singular version fo type of object which is to be enumerated,
+#c arg1: Singular version of type of object which is to be enumerated,
 #c       minus leading "AAF"
 #c arg2: Plural version of type of object which is to be enumerated,
 #c       minus leading "AAF" 
@@ -663,25 +662,28 @@ AD_XMETHOD1(NextOne,
   //   - no %03 objects remaining to be returned.)
 
 
-AD_XMETHOD3(Next,
+AD_X2METHOD3(Next,
 
-			[in],
-			objPass,
-			aafUInt32,
-			count,
-			number of %02 requested,
+			 [in],
+			 objPass,
+			 aafUInt32,
+			 count,
+			 number of %02 requested,
+			 xxx,
 
-			[out\\, size_is\\(count\\)\\, length_is\\(*pNumFetched\\)],
-			objOut,
-			AAF%01,
-			pp%02,
-			array to receive elements,
+			 [out\\, size_is\\(count\\)\\, length_is\\(*pNumFetched\\)],
+			 objOutArray,
+			 AAF%01,
+			 pp%02,
+			 array to receive elements,
+			 count,
 
-			[out\\,ref],
-			objPass,
-			aafUInt32 *,
-			pNumFetched,
-			number of actual %03 objects fetched into pp%02 array,
+			 [out\\,ref],
+			 objPass,
+			 aafUInt32 *,
+			 pNumFetched,
+			 number of actual %03 objects fetched into pp%02 array,
+			 xxx,
 
      Enumerates the next count elements \\(AAF%01 pointers\\) in the
   // enumerator's list\\, returning them in the given array along with

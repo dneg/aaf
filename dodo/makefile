@@ -1,8 +1,8 @@
-############################################
-#                                          #
-# Copyright (c) 1998 Avid Technology, Inc. #
-#                                          #
-############################################
+#################################################
+#                                               #
+# Copyright (c) 1998-1999 Avid Technology, Inc. #
+#                                               #
+#################################################
 
 all : dodo-app aafobjects.all targets.mk depend.mk targets
 
@@ -18,17 +18,17 @@ include $(BLD_CFG_DIR)/common.mk
 DODO = dodo.$(EXE)
 
 dodo-app:
-	@echo "\n======== [ /coresw/AAF-toolkit/dodo/tool ] \n"
+	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo/tool ] \n"
 	cd tool ;  $(MAKE) $(RELENG_MAKEFLAGS)
 
 test_only:
 	cd tool ; $(MAKE) $(RELENG_MAKEFLAGS) test_only
-	$(MAKE) -f dodotargets.mak$(MAKE_SUFFIX) $(RELENG_MAKEFLAGS)
+	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
 	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
 	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
 
 run:
-	$(MAKE) -f dodotargets.mak$(MAKE_SUFFIX) $(RELENG_MAKEFLAGS)
+	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
 	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
 	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
 	cd tool ; $(MAKE) $(RELENG_MAKEFLAGS) run
@@ -43,14 +43,14 @@ aafobjects.all : \
 	$(SRC_DIR)/com-api/aafobjects.mk 
 
 $(INCLUDE_DIR)/com-api/aafobjects.mk : aafobjects.mk
-	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building $(INCLUDE_DIR)/com-api/aafobjects.mk\"\n"
+	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building $(INCLUDE_DIR)/com-api/aafobjects.mk\"\n"
 	$(RM) -f $(INCLUDE_DIR)/com-api/aafobjects.mk
-	cp aafobjects.mk $(INCLUDE_DIR)/com-api
+	$(CP) aafobjects.mk $(INCLUDE_DIR)/com-api
 
 $(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
-	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building $(SRC_DIR)/com-api/aafobjects.mk\"\n"
+	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building $(SRC_DIR)/com-api/aafobjects.mk\"\n"
 	$(RM) -f $(SRC_DIR)/com-api/aafobjects.mk
-	cp aafobjects.mk $(SRC_DIR)/com-api
+	$(CP) aafobjects.mk $(SRC_DIR)/com-api
 
 
 
@@ -59,24 +59,24 @@ $(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
 #targets: aafobjects.mk targets.mk depend.mk
 
 targets: 
-	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets\"\n"
+	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets\"\n"
 	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
 
 
 targets.mk : aafobjects.mk
-	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets.mk\"\n"
-	$(MAKE) -f dodotargets.mak$(MAKE_SUFFIX) $(RELENG_MAKEFLAGS)
+	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets.mk\"\n"
+	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
 
 depend.mk : aafobjects.mk
-	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building depend.mk\"\n"
+	@$(ECHO) "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building depend.mk\"\n"
 	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
 
 depend : targets.mk depend.mk
 
 clean:
 	cd tool ; $(MAKE) clean
-	$(MAKE) -f dodotargets.mak$(MAKE_SUFFIX) clean
+	$(MAKE) -f dodotargets.mak clean
 	$(MAKE) -f dododepend.mak clean
-	touch targets.mk depend.mk
+	$(TOUCH) targets.mk depend.mk
 	$(MAKE) -f maketargets.mak clean
 	$(RM) -f targets.mk depend.mk
