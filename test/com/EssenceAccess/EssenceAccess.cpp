@@ -945,7 +945,7 @@ cleanup:
 
 
 //  A new usage function to make program more friendly
-void usage(void)
+static void usage(void)
 {
 	printf ("Usage:\n EssenceAccess.exe <Number of copies of Laser.wav in AAF file>\n");
 	printf (" Number is required to be integer greater than zero.\n\n");
@@ -955,15 +955,6 @@ void usage(void)
 //  NOTE:  defining [0] program name; [1] Number N of wave files
 int main(int argumentCount, char *argumentVector[])
 {
-
-	/* console window for mac */
-
-	#if defined(macintosh) || defined(_MAC)
-	char inputFile[] = "EssenceAcess.inp";
-	getInputData(&argumentCount, argumentVector, inputFile);
-	#endif
-
-
 	//  First checking for correct number of arguments 
 
 	if (argumentCount != 2)
@@ -1048,10 +1039,6 @@ int main(int argumentCount, char *argumentVector[])
 	
 	//  and now, we're all done...
 	printf("Done\n");
-
-	#ifdef _MAC
-		cleanUpInputData(argumentCount, argumentVector);
-	#endif
 
 	return(0);
 	

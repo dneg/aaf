@@ -595,14 +595,7 @@ void usage(void)
 //  Main adapted to use command-line arguments with argument checking
 //  NOTE:  defining [0] program name; [1] Number N of components; [2] filename.aaf; 
 int main(int argumentCount, char *argumentVector[])
-{
-	/* console window for mac */
-
-	#if defined(macintosh) || defined(_MAC)
-		char dataFile[] = "CreateSequence (PPC).inp";
-		getInputData(&argumentCount, argumentVector, dataFile);
-	#endif
-	
+{	
 	//  First check for correct number of arguments
 	//  printf("%ld\n",argumentCount);
 	if ((argumentCount < 2) || (argumentCount > 3))
@@ -657,10 +650,6 @@ int main(int argumentCount, char *argumentVector[])
 	
 	// Open the file and gather statistics
 	ReadAAFFile(pwFileName);
-
-	#ifdef _MAC
-		cleanUpInputData(argumentCount, argumentVector);
-	#endif
 
 	return(0);
 }
