@@ -479,10 +479,31 @@ AD_XCONSTRUCTOR4(%01, objPass, %02, %03, %04,
 #endm
 
 
+#startm .objInArray-indirection 00
+*\
+#endm
+
+
+#startm .objInArrayCustom-indirection 00
+*\
+#endm
+
+
 #startm .objPass-indirection 00
+\
 #endm
 
 
 #startm .objOut-indirection 00
+**\
+#endm
+
+
+#startm .objOutArray-indirection 00
+**\
+#endm
+
+
+#startm .objOutArrayCustom-indirection 00
 **\
 #endm
