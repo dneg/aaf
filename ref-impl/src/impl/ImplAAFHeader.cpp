@@ -76,21 +76,22 @@
 #define DEFAULT_NUM_EFFECT_DEFS		100
 
 
-// This is temporary and will be replaced when sequence
-// factory method is available.
-extern "C" const aafClassID_t CLSID_AAFIdentification;
-extern "C" const aafClassID_t	CLSID_AAFContentStorage;
+// We need the class id of the dictionary so that we can then use the factory
+// method on dictionary 
+extern "C" const aafClassID_t	CLSID_AAFDictionary;
 
 ImplAAFHeader::ImplAAFHeader ()
 : _byteOrder(         PID_Header_ByteOrder,          "Byte Order"),
   _lastModified(      PID_Header_LastModified,       "Last Modified"),
   _identificationList(PID_Header_IdentificationList, "Identification List"),
-  _contentStorage(		PID_Header_Content,	"Content")
+  _contentStorage(		PID_Header_Content,	"Content"),
+  _dictionary(PID_Header_Dictionary,	"Dictionary")
 {
   _persistentProperties.put(_byteOrder.address());
   _persistentProperties.put(_lastModified.address());
   _persistentProperties.put(_identificationList.address());
   _persistentProperties.put(_contentStorage.address());
+  _persistentProperties.put(_dictionary.address());
 
   //!!!	_head = this;
 //	file->InternalSetHead(this);
@@ -107,10 +108,6 @@ ImplAAFHeader::ImplAAFHeader ()
 	_toolkitRev.patchLevel = 0;
 //!!!	_byteOrder;
 //!!!	_lastModified;
-// trr - Moved conditional creation of content storage to GetContentStorage method
-// so that we do not leak an object when the file is restored. We may have to do
-// something similar for the dictionary.
-//	_contentStorage = (ImplAAFContentStorage *)CreateImpl(CLSID_AAFContentStorage);
 }
 
 
@@ -132,10 +129,16 @@ ImplAAFHeader::~ImplAAFHeader ()
 		}
 	}
 
-	// Release the content storage pointer. Set the 
+	// Release the content storage pointer.
 	if (_contentStorage) {
 		_contentStorage->ReleaseReference();
 		_contentStorage = 0;
+	}
+
+	// Release the dictionary pointer.
+	if (_dictionary) {
+		_dictionary->ReleaseReference();
+		_dictionary = 0;
 	}
 }
 
@@ -308,7 +311,15 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+  *ppDictionary = GetDictionary();
+  if (*ppDictionary)
+  {
+    (*ppDictionary)->AcquireReference();
+    return AAFRESULT_SUCCESS;
+  }
+  else
+    return AAFRESULT_NULLOBJECT;
 }
 
 
@@ -426,8 +437,14 @@ AAFRESULT
     if (pIdent->platform == 0) {
       pIdent->platform = L"Windows NT";
     }
-
-    identObj = static_cast<ImplAAFIdentification *>(CreateImpl(CLSID_AAFIdentification));
+    
+    // Get the dictionary so that we can use the factory
+    // method to create the identification.
+    ImplAAFDictionary *pDictionary = GetDictionary();
+    if (NULL == pDictionary)
+      CHECK(AAFRESULT_NOMEMORY);
+    CHECK(pDictionary->CreateInstance(&AUID_AAFIdentification, (ImplAAFObject **)&identObj));
+//    identObj = static_cast<ImplAAFIdentification *>(CreateImpl(CLSID_AAFIdentification));
     if (NULL == identObj)
       CHECK(AAFRESULT_NOMEMORY);
     CHECK(identObj->SetCompanyName(pIdent->companyName));
@@ -641,9 +658,15 @@ ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
 	ImplAAFContentStorage	*result = _contentStorage;
 
 	// Create the content storage object if it does not exist.
-	if (NULL == result) {
-		result = (ImplAAFContentStorage *)CreateImpl(CLSID_AAFContentStorage);
-		_contentStorage = result;
+	if (NULL == result)
+  { // Get the dictionary so that we can use the factory
+    // method to create the identification.
+    ImplAAFDictionary *pDictionary = GetDictionary();
+    if (NULL != pDictionary)
+    {
+      pDictionary->CreateInstance(&AUID_AAFContentStorage, (ImplAAFObject **)&result);
+		  _contentStorage = result;
+    }
 	}
 
 	return(result);
@@ -652,7 +675,6 @@ ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
 // Fill in when dictionary property is supported.
 ImplAAFDictionary *ImplAAFHeader::GetDictionary()
 {
-#if 0
 	ImplAAFDictionary	*result = _dictionary;
 
 	// Create the dictionary object if it does not exist.
@@ -662,9 +684,6 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary()
 	}
 
 	return(result);
-#else
-	return NULL;
-#endif
 }
 
 OMDEFINE_STORABLE(ImplAAFHeader, AUID_AAFHeader);
