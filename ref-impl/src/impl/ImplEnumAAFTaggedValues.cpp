@@ -166,8 +166,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		result->ReleaseReference();
-		*ppEnum = NULL;
+	  result->ReleaseReference();
+	  result = 0;
+	  *ppEnum = NULL;
 	}
 	
 	return hr;
@@ -177,7 +178,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFTaggedValues::SetEnumStrongProperty( ImplAAFObject *pObj, taggedValueStrongRefArrayProp_t *pProp)
 {
 	if (_enumObj)
-		_enumObj->ReleaseReference();
+	  _enumObj->ReleaseReference();
+	_enumObj = 0;
 	_enumObj = pObj;
 	if (pObj)
 		pObj->AcquireReference();

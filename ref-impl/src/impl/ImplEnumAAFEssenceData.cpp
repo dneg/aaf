@@ -141,7 +141,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
-			theEnum->ReleaseReference();
+		  theEnum->ReleaseReference();
+		theEnum = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -157,6 +158,7 @@ AAFRESULT
 {
   if (_contentStorage)
     _contentStorage->ReleaseReference();
+  _contentStorage = 0;
 
   _contentStorage = pContentStorage;
 

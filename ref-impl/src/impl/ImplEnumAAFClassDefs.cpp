@@ -96,9 +96,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(head)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND;
 
@@ -209,8 +211,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		result->ReleaseReference();
-		*ppEnum = NULL;
+	  result->ReleaseReference();
+	  result = 0;
+	  *ppEnum = NULL;
 	}
 	
 	return hr;
@@ -223,7 +226,8 @@ AAFRESULT STDMETHODCALLTYPE
 										   classDefWeakRefArrayProp_t *pProp)
 {
 	if (_enumObj)
-		_enumObj->ReleaseReference();
+	  _enumObj->ReleaseReference();
+	_enumObj = 0;
 	_enumObj = pObj;
 
 	if (pObj)
@@ -240,7 +244,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFClassDefs::SetEnumStrongProperty( ImplAAFObject *pObj, classDefStrongRefArrayProp_t *pProp)
 {
 	if (_enumObj)
-		_enumObj->ReleaseReference();
+	  _enumObj->ReleaseReference();
+	_enumObj = 0;
 	_enumObj = pObj;
 	if (pObj)
 		pObj->AcquireReference();

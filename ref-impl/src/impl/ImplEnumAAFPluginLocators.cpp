@@ -151,8 +151,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		result->ReleaseReference();
-		*ppEnum = NULL;
+	  result->ReleaseReference();
+	  result = 0;
+	  *ppEnum = NULL;
 	}
 	
 	return hr;
@@ -164,7 +165,8 @@ AAFRESULT
     ImplEnumAAFPluginLocators::SetPluginDescriptor(ImplAAFPluginDescriptor *pPDesc)
 {
 	if (_cPluginDesc)
-		_cPluginDesc->ReleaseReference();
+	  _cPluginDesc->ReleaseReference();
+	_cPluginDesc = 0;
 
 	_cPluginDesc = pPDesc;
 

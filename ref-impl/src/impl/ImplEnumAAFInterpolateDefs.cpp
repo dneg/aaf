@@ -101,9 +101,11 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(head)
-			head->ReleaseReference();
+		  head->ReleaseReference();
+		head = 0;
 		if(dict)
-			dict->ReleaseReference();
+		  dict->ReleaseReference();
+		dict = 0;
 	}
 	XEND;
 
@@ -212,8 +214,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		result->ReleaseReference();
-		*ppEnum = NULL;
+	  result->ReleaseReference();
+	  result = 0;
+	  *ppEnum = NULL;
 	}
 	
 	return hr;
@@ -223,7 +226,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFInterpolationDefs::SetEnumProperty( ImplAAFObject *pObj, parmDefWeakRefArrayProp_t *pProp)
 {
 	if (_enumObj)
-		_enumObj->ReleaseReference();
+	  _enumObj->ReleaseReference();
+	_enumObj = 0;
 	_enumObj = pObj;
 	if (pObj)
 		pObj->AcquireReference();
@@ -237,7 +241,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFInterpolationDefs::SetEnumStrongProperty( ImplAAFObject *pObj, interpDefStrongRefArrayProp_t *pProp)
 {
 	if (_enumObj)
-		_enumObj->ReleaseReference();
+	  _enumObj->ReleaseReference();
+	_enumObj = 0;
 	_enumObj = pObj;
 	if (pObj)
 		pObj->AcquireReference();

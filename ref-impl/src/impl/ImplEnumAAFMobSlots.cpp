@@ -155,8 +155,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		theEnum->ReleaseReference();
-		*ppEnum = NULL;
+	  theEnum->ReleaseReference();
+	  theEnum = 0;
+	  *ppEnum = NULL;
 	}
 
 	return hr;
@@ -168,7 +169,8 @@ AAFRESULT
     ImplEnumAAFMobSlots::SetEnumMob(ImplAAFMob *aMob)
 {
 	if (_mob)
-		_mob->ReleaseReference();
+	  _mob->ReleaseReference();
+	_mob = 0;
 
 	_mob = aMob;
 
