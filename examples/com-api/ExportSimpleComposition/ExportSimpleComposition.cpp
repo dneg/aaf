@@ -855,13 +855,6 @@ void usage(void)
 //  The specified filename is the name of the file that is created by the program.
 int main(int argumentCount, char* argumentVector[])
 {
-	/* console window for mac */
-	#if defined(macintosh) || defined(_MAC)
-	char dataFile[] = "ExportSimpleComposition.inp";
-	getInputData(&argumentCount, argumentVector, dataFile);
-	#endif
-
-
 	CComInitialize comInit;
 	CAAFInitialize aafInit;
 
@@ -901,10 +894,6 @@ int main(int argumentCount, char* argumentVector[])
 	// Access the AAF file with name set from argument or lack thereof
 	printf("Working on file %s using ReadSamples\n", pFileName);
 	ProcessAAFFile(pwFileName, testStandardCalls);
-	
-	#ifdef _MAC
- 	cleanUpInputData(argumentCount, argumentVector);
-	#endif
 
 	printf("DONE\n\n");
 

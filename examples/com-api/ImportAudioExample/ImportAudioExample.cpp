@@ -575,13 +575,6 @@ void usage(void)
 //  Specifying that use file ImportAudioExample.aaf as default
 int main(int argumentCount, char* argumentVector[])
 {
-	/* console window for mac */
-	#if defined(macintosh) || defined(_MAC)
-	char dataFile[] = "ImportAudioExample.inp";
-	getInputData(&argumentCount, argumentVector, dataFile);
-	#endif
-
-
 	CComInitialize comInit;
 	CAAFInitialize aafInit;
 	
@@ -622,10 +615,6 @@ int main(int argumentCount, char* argumentVector[])
 	// Access the AAF file with name set from argument or lack thereof
 	printf("Opening file %s using ReadSamples\n", pFileName);
 	ReadAAFFile(pwFileName, testStandardCalls);
-
- 	#ifdef _MAC
- 	cleanUpInputData(argumentCount, argumentVector);
- 	#endif
 
 	printf("DONE\n\n");
 
