@@ -42,6 +42,10 @@ using namespace std;
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
+static aafPosition_t markInTestData[5] = { 0, 1, -3, 0x7ffffffffffffffdLL, 0x8000000000000000LL };
+static aafPosition_t userPosTestData[5] = { 0, 2, -2, 0x7ffffffffffffffeLL, 0x8000000000000001LL };
+static aafPosition_t markOutTestData[5] = { 0, 3, -1, 0x7fffffffffffffffLL, 0x8000000000000002LL };
+
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
 0x13, 0x00, 0x00, 0x00,
@@ -84,6 +88,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob					*pMob = NULL;
 	IAAFMobSlot				*newSlot = NULL;
 	IAAFTimelineMobSlot		*timelineSlot = NULL;
+	IAAFTimelineMobSlot2		*timelineSlot2 = NULL;
 	IAAFSegment				*seg = NULL;
 	IAAFSourceClip			*sclp = NULL;
 	IAAFComponent*		pComponent = NULL;
@@ -145,19 +150,56 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 			
-			checkResult(defs.cdTimelineMobSlot()->
-						CreateInstance(IID_IAAFTimelineMobSlot, 
-									   (IUnknown **)&timelineSlot));		
-			checkResult(timelineSlot->SetEditRate (checkEditRate));
-			checkResult(timelineSlot->SetOrigin (0));
-			checkResult(timelineSlot->QueryInterface (IID_IAAFMobSlot, (void **)&newSlot));
+			// test  Interface
+			// ----  ---------
+			// 0     Use IAAFTimelineMobSlot for v1.0 props, don't add v1.1 props
+			// 1     Use IAAFTimelineMobSlot for v1.0 props, IAAFTimelineMobSlot2 for v1.1 props
+			// 2     Use IAAFTimelineMobSlot2 for all props
+			// 3     Use IAAFTimelineMobSlot2 for all props
+			// 4     Use IAAFTimelineMobSlot2 for all props
+
+			if (test < 2)
+			{
+				checkResult(defs.cdTimelineMobSlot()->
+							CreateInstance(IID_IAAFTimelineMobSlot, 
+											 (IUnknown **)&timelineSlot));		
+				checkResult(timelineSlot->SetEditRate (checkEditRate));
+				checkResult(timelineSlot->SetOrigin (0));
+				checkResult(timelineSlot->QueryInterface (IID_IAAFMobSlot, (void **)&newSlot));
+				checkResult(timelineSlot->QueryInterface (IID_IAAFTimelineMobSlot2, (void **)&timelineSlot2));
+			}
+			else
+			{
+				checkResult(defs.cdTimelineMobSlot()->
+							CreateInstance(IID_IAAFTimelineMobSlot2, 
+											 (IUnknown **)&timelineSlot2));		
+				checkResult(timelineSlot2->SetEditRate (checkEditRate));
+				checkResult(timelineSlot2->SetOrigin (0));
+
+				checkResult(timelineSlot2->QueryInterface (IID_IAAFMobSlot, (void **)&newSlot));
+			}
+
+			// use IAAFTimelineMobSlot2 to set MarkIn, MarkOut and UserPos
+			// for test == 0, don't set these props, to check they are omitted correctly
+			if (test != 0)
+			{
+				checkResult(timelineSlot2->SetMarkIn( markInTestData[test] ));
+				checkResult(timelineSlot2->SetMarkOut( markOutTestData[test] ));
+				checkResult(timelineSlot2->SetUserPos( userPosTestData[test] ));
+			}
+
 			checkResult(newSlot->SetSegment(seg));
 			checkResult(newSlot->SetSlotID(test+1));
 			checkResult(newSlot->SetName(slotNames[test]));
+
 			checkResult(pMob->AppendSlot (newSlot));
 			
-			timelineSlot->Release();
-			timelineSlot = NULL;
+			timelineSlot2->Release();
+			timelineSlot2 = NULL;
+			if (timelineSlot) {
+				timelineSlot->Release();
+				timelineSlot = NULL;
+			}
 			newSlot->Release();
 			newSlot = NULL;
 			
@@ -178,6 +220,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	
 	// Cleanup and return
+	if (timelineSlot)
+		timelineSlot->Release();
+
+	if (timelineSlot2)
+		timelineSlot2->Release();
+
 	if (newSlot)
 		newSlot->Release();
 	
@@ -222,9 +270,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IEnumAAFMobSlots		*slotIter = NULL;
 	IAAFMobSlot				*slot = NULL;
 	IAAFTimelineMobSlot		*timelineSlot = NULL;
+	IAAFTimelineMobSlot2		*timelineSlot2 = NULL;
 	aafNumSlots_t			numMobs, n, s;
 	aafPosition_t			testOrigin;
 	aafRational_t			testRate;
+	aafPosition_t			testMarkIn = 0;
+	aafPosition_t			testMarkOut = 0;
+	aafPosition_t			testUserPos = 0;
 	HRESULT					hr = S_OK;
 	
 	try
@@ -264,21 +316,65 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 			for(s = 0; s < numSlots; s++)
 			{
+				// test  Interface
+				// ----  ---------
+				// 0     Use IAAFTimelineMobSlot for v1.0 props, don't add v1.1 props
+				// 1     Use IAAFTimelineMobSlot for v1.0 props, IAAFTimelineMobSlot2 for v1.1 props
+				// 2     Use IAAFTimelineMobSlot2 for all props
+				// 3     Use IAAFTimelineMobSlot2 for all props
+				// 4     Use IAAFTimelineMobSlot2 for all props
+
 				checkResult(slotIter->NextOne (&slot));
 				checkResult(slot->GetName (slotName, sizeof(slotName)));
 				checkResult(slot->GetSlotID(&trackID));
 				checkExpression (wcscmp(slotName, slotNames[s]) == 0, AAFRESULT_TEST_FAILED);
-				checkResult(slot->QueryInterface(IID_IAAFTimelineMobSlot, (void **) &timelineSlot));
-				checkResult(timelineSlot->GetEditRate (&testRate));
-				checkExpression (testRate.numerator == checkEditRate.numerator, AAFRESULT_TEST_FAILED);
-				checkExpression (testRate.denominator == checkEditRate.denominator, AAFRESULT_TEST_FAILED);
-				checkResult(timelineSlot->GetOrigin (&testOrigin));
- 				checkExpression (testOrigin == 0, AAFRESULT_TEST_FAILED);
+
+				if (s < 2)
+				{
+					checkResult(slot->QueryInterface(IID_IAAFTimelineMobSlot, (void **) &timelineSlot));
+					checkResult(timelineSlot->GetEditRate (&testRate));
+					checkExpression (testRate.numerator == checkEditRate.numerator, AAFRESULT_TEST_FAILED);
+					checkExpression (testRate.denominator == checkEditRate.denominator, AAFRESULT_TEST_FAILED);
+					checkResult(timelineSlot->GetOrigin (&testOrigin));
+					checkExpression (testOrigin == 0, AAFRESULT_TEST_FAILED);
 				
+					checkResult(timelineSlot->QueryInterface (IID_IAAFTimelineMobSlot2, (void **)&timelineSlot2));
+				}
+				else
+				{
+					checkResult(slot->QueryInterface(IID_IAAFTimelineMobSlot2, (void **) &timelineSlot2));
+					checkResult(timelineSlot2->GetEditRate (&testRate));
+					checkExpression (testRate.numerator == checkEditRate.numerator, AAFRESULT_TEST_FAILED);
+					checkExpression (testRate.denominator == checkEditRate.denominator, AAFRESULT_TEST_FAILED);
+					checkResult(timelineSlot2->GetOrigin (&testOrigin));
+					checkExpression (testOrigin == 0, AAFRESULT_TEST_FAILED);
+				}
+
+				if (s != 0)
+				{
+					checkResult( timelineSlot2->GetMarkIn( &testMarkIn ) );
+					checkExpression( testMarkIn == markInTestData[s], AAFRESULT_TEST_FAILED);
+					checkResult( timelineSlot2->GetMarkOut( &testMarkOut ) );
+					checkExpression( testMarkOut == markOutTestData[s], AAFRESULT_TEST_FAILED);
+					checkResult( timelineSlot2->GetUserPos( &testUserPos ) );
+					checkExpression( testUserPos == userPosTestData[s], AAFRESULT_TEST_FAILED);
+				}
+				else
+				{
+					// check v1.1 props are not present for test == 0
+					checkExpression( timelineSlot2->GetMarkIn( &testMarkIn ) == AAFRESULT_PROP_NOT_PRESENT, AAFRESULT_TEST_FAILED);
+					checkExpression( timelineSlot2->GetMarkOut( &testMarkOut ) == AAFRESULT_PROP_NOT_PRESENT, AAFRESULT_TEST_FAILED);
+					checkExpression( timelineSlot2->GetUserPos( &testUserPos ) == AAFRESULT_PROP_NOT_PRESENT, AAFRESULT_TEST_FAILED);
+				}
+
 				slot->Release();
 				slot = NULL;
-				timelineSlot->Release();
-				timelineSlot = NULL;
+				if (timelineSlot) {
+					timelineSlot->Release();
+					timelineSlot = NULL;
+				}
+				timelineSlot2->Release();
+				timelineSlot2 = NULL;
 			}
 			
 			aMob->Release();
@@ -293,6 +389,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	// Cleanup object references
 	if (slot)
 		slot->Release();
+	
+	if (timelineSlot2)
+		timelineSlot2->Release();
 	
 	if (timelineSlot)
 		timelineSlot->Release();

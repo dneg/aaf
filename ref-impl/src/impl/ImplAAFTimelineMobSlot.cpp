@@ -47,12 +47,22 @@
 
 ImplAAFTimelineMobSlot::ImplAAFTimelineMobSlot ():
 	_editRate(	PID_TimelineMobSlot_EditRate,	L"EditRate"),
-	_origin(	PID_TimelineMobSlot_Origin,		L"Origin")
+	_origin(	PID_TimelineMobSlot_Origin,		L"Origin"),
+	_markIn(	PID_TimelineMobSlot_MarkIn,		L"MarkIn"),
+	_markOut(	PID_TimelineMobSlot_MarkOut,		L"MarkOut"),
+	_userPos(	PID_TimelineMobSlot_UserPos,		L"UserPos")
 
 {
 	_persistentProperties.put( _editRate.address());
 	_persistentProperties.put( _origin.address());
+	_persistentProperties.put( _markIn.address());
+	_persistentProperties.put( _markOut.address());
+	_persistentProperties.put( _userPos.address());
 
+	// Initialize the required properties with bogus values.
+	const aafRational_t  null_rational = { 0, 0 };
+	_editRate = null_rational;
+	_origin = 0;
 }
 
 
@@ -63,7 +73,7 @@ ImplAAFTimelineMobSlot::~ImplAAFTimelineMobSlot ()
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTimelineMobSlot::Initialize ()
 {
-  return AAFRESULT_SUCCESS;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -101,6 +111,69 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	_origin = origin;
 
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::SetMarkIn (aafPosition_t  markIn)
+{
+	_markIn = markIn;
+
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::GetMarkIn (aafPosition_t *markIn)
+{
+	if ( markIn == NULL )
+		return AAFRESULT_NULL_PARAM;
+
+	if ( !_markIn.isPresent() )
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*markIn = _markIn;
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::SetMarkOut (aafPosition_t  markOut)
+{
+	_markOut = markOut;
+
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::GetMarkOut (aafPosition_t *markOut)
+{
+	if ( markOut == NULL )
+		return AAFRESULT_NULL_PARAM;
+
+	if ( !_markOut.isPresent() )
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*markOut = _markOut;
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::SetUserPos (aafPosition_t  userPos)
+{
+	_userPos = userPos;
+
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::GetUserPos (aafPosition_t *userPos)
+{
+	if ( userPos == NULL )
+		return AAFRESULT_NULL_PARAM;
+
+	if ( !_userPos.isPresent() )
+		return AAFRESULT_PROP_NOT_PRESENT;
+
+	*userPos = _userPos;
 	return AAFRESULT_SUCCESS;
 }
 
