@@ -166,7 +166,7 @@ if [ $CVS_RUN_CO_COMMAND -eq 1 ]; then
 		echo cvs update -d
 		echo cvs log file is: $CVS_UPDATE_LOG_FILENAME
 		cd AAF
-		RepeatUntil 0 25 cvs update > $CVS_UPDATE_LOG_FILENAME 2>&1
+		RepeatUntil 0 100 cvs update > $CVS_UPDATE_LOG_FILENAME 2>&1
 		CVS_STATUS=$?
 		cd ..
 	else
@@ -174,7 +174,7 @@ if [ $CVS_RUN_CO_COMMAND -eq 1 ]; then
 		echo cvs -z3 co AAF
 	        echo CVSROOT = $CVSROOT
 		echo cvs log file is: $CVS_CO_LOG_FILENAME
-		RepeatUntil 0 25 cvs -z3 co AAF > $CVS_CO_LOG_FILENAME 2>&1
+		RepeatUntil 0 100 cvs -z3 co AAF > $CVS_CO_LOG_FILENAME 2>&1
 		CVS_STATUS=$?
 
 	fi
@@ -219,7 +219,7 @@ if [ $CVS_RUN_LOG_COMMAND -eq 1 ]; then
 
     echo cvs log -r${BUILD_TAG} ${AAFSDKBUILD_H}
     echo cvs log files are: ${CVS_LOG_OUTPUT_FILENAME} and ${CVS_LOG_OUTPUT_FILENAME}.error
-    RepeatUntil 0 25 cvs log -r${BUILD_TAG} ${AAFSDKBUILD_H} > ${CVS_LOG_OUTPUT_FILENAME} 2>&1
+    RepeatUntil 0 100 cvs log -r${BUILD_TAG} ${AAFSDKBUILD_H} > ${CVS_LOG_OUTPUT_FILENAME} 2>&1
     CVS_STATUS=$?
     if [ $CVS_STATUS -ne 0 ]; then
         mv ${CVS_LOG_OUTPUT_FILENAME} ${CVS_LOG_OUTPUT_FILENAME}.error
@@ -283,7 +283,7 @@ if [ $BUILD_RUN_COMMAND -eq 1 ]; then
     printf "Unknown local files are not shown.\n\n" >> $MAKE_LOG_FILENAME
 
     echo Running: cvs -nq update -d -r ${BUILD_TAG} 
-    RepeatUntil 0 25 cvs -nq update -d -r ${BUILD_TAG} > ~/tmp/cvs.changed_files.log
+    RepeatUntil 0 100 cvs -nq update -d -r ${BUILD_TAG} > ~/tmp/cvs.changed_files.log
     CVS_STATUS=$?
     if [ $CVS_STATUS -ne 0 ]; then
 	echo cvs failed with exit status $CVS_STATUS
