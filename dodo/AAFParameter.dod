@@ -53,7 +53,7 @@ AD_XMETHOD1(SetDataDefinition,
 AD_XMETHOD1(GetDataKind,
 			[out\,retval],
 			objOut,
-			AAFDataDef *,
+			AAFDataDef,
 			datadef,
 			Data Definition of this object,
 			returns datakind definition object)
