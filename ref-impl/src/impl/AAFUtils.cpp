@@ -499,7 +499,7 @@ void aafCreateGUID( GUID *p_guid )
 	 assert(p_guid);
 	 aafUUIDCreate((aafUUID_t*) p_guid);
  
-#elif
+#else
 
     // {1994bd00-69de-11d2-b6bc-fcab70ff7331}
     static GUID	sTemplate = { 0x1994bd00,  0x69de,  0x11d2,
