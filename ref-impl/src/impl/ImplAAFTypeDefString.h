@@ -87,6 +87,39 @@ public:
 
 
   //****************
+  // CreateValueFromCString()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateValueFromCString
+        (// @parm [in] pointer to compile-time C string containing data to use
+		 aafMemPtr_t pInitData,
+
+		 // @parm [in] size of data in pInitData, in bytes
+		 aafUInt32  initDataSize,
+
+		 // @parm [out] newly created property value
+		 ImplAAFPropertyValue ** ppPropVal);
+
+
+  //****************
+  // SetCString()
+  //
+  //****************
+  // SetCArray()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetCString
+        (// @parm [in] property value to write
+         ImplAAFPropertyValue * pPropVal,
+
+         // @parm [in, size_is(dataSize)] buffer from which C string data should be read
+         aafMemPtr_t  pData,
+
+         // @parm [in] size of pData buffer in bytes
+         aafUInt32  dataSize);
+
+
+  //****************
   // AppendElements()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
