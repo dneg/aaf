@@ -3,13 +3,13 @@
 
 #include <stdarg.h>
 #include "AAFTypes.h"
-#include "OMFile.h"
 #include "ImplAAFContentStorage.h"
 
 //#include "CMAPIErr.h"	/* !!! */
 //#include "CMAPIIDS.h"	/* !!! */
 
 class ImplAAFFile;
+class OMFile;
 
 /* Flags */
 #define kOMLWriting        0x0002U                 /* container was opened for writing   */
@@ -85,13 +85,15 @@ class OMContainer
 		void SetDefaultByteOrder(aafInt16 byteOrder);
 		void OMLCloseContainer(void);
 		void OMLAbortContainer(void);
-		void OMLOpenContainer(OMLSession sessionData,
+		void OMLOpenContainer(aafWChar* stream,
+                                         OMLSession sessionData,
                                          OMLRefCon attributes,
                                          OMLconst_OMLGlobalName typeName, 
                                          OMLContainerUseMode useFlags,
                                          ImplAAFHeader*& header);
 		void OMLSetContainerVersion1(void);
-		void OMLOpenNewContainer(ImplAAFHeader* head,
+		void OMLOpenNewContainer(aafWChar* stream,
+                                          ImplAAFHeader* head,
                                           OMLSession sessionData,
                                           OMLRefCon attributes,
                                           OMLconst_OMLGlobalName typeName, 
