@@ -105,11 +105,11 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 
     // enter into the index
     //
-    UniqueIdentification key = element.identification();
+    void* key = element.identification();
     index->insert(position,
                   element.localKey(),
                   element.referenceCount(),
-                  &key);
+                  key);
 
     // save the object
     //
@@ -212,11 +212,12 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   size_t context = 0;
   OMUInt32 localKey;
   OMUInt32 count;
+  OMKeySize keySize = setIndex->keySize();
   UniqueIdentification key;
   for (size_t i = 0; i < entries; i++) {
     setIndex->iterate(context, localKey, count, &key);
     wchar_t* name = elementName(localKey);
-    SetElement newElement(this, name, localKey, count, key);
+    SetElement newElement(this, name, localKey, count, &key, keySize);
     newElement.restore();
     _set.insert(key, newElement);
     delete [] name;
@@ -265,8 +266,8 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   UniqueIdentification key = object->identification();
   ASSERT("Valid identification", isValidIdentification(key));
 
-  SetElement newElement(this, name, localKey, 1/*tjb*/, key);
-  newElement.setValue(key, object);
+  SetElement newElement(this, name, localKey, 1/*tjb*/, &key, sizeof(key));
+  newElement.setValue(&key, object);
   _set.insert(key, newElement);
   setPresent();
   delete [] name;
@@ -353,7 +354,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   UniqueIdentification nullUniqueIdentification;
   memset(&nullUniqueIdentification, 0, sizeof(UniqueIdentification));
   ReferencedObject* result = 0;
-  OMStorable* p = element->setValue(nullUniqueIdentification, 0);
+  OMStorable* p = element->setValue(&nullUniqueIdentification, 0);
   if (p != 0) {
     result = dynamic_cast<ReferencedObject*>(p);
     ASSERT("Object is correct type", result != 0);
