@@ -32,11 +32,14 @@ public:
 	virtual ~AxMob();
 
 	aafMobID_t GetMobID();
+	void SetMobID( const aafMobID_t& mobID );
 	
 	AxString GetName();
 	void SetName( const AxString& name );
 	
 	aafNumSlots_t CountSlots();
+
+	IAAFMobSlotSP LookupSlot( aafSlotID_t slotId );
 
 	void AppendComment( const AxString& category,
 						const AxString& comment );

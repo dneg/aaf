@@ -49,6 +49,11 @@ aafMobID_t AxMob::GetMobID()
 	return id;
 }
 
+void AxMob::SetMobID( const aafMobID_t& mobID )
+{
+	CHECK_HRESULT( _spIaafMob->SetMobID( mobID ) );
+}
+	
 AxString AxMob::GetName()
 {
 	// FIXME - This pattern appears in several places, it should be factored out.
@@ -111,6 +116,15 @@ IEnumAAFMobSlotsSP AxMob::GetSlots()
 	CHECK_HRESULT( _spIaafMob->GetSlots( &spIEnumAAFMobSlots ) );
 
 	return spIEnumAAFMobSlots;
+}
+
+IAAFMobSlotSP AxMob::LookupSlot( aafSlotID_t slotId )
+{
+	IAAFMobSlotSP spIAAFMobSlot;
+
+	CHECK_HRESULT( _spIaafMob->LookupSlot( slotId, &spIAAFMobSlot ) );
+
+	return spIAAFMobSlot;
 }
 
 //=---------------------------------------------------------------------=
