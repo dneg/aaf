@@ -56,6 +56,8 @@
 #include <AAFFileKinds.h>
 #include <AAFFileMode.h>
 
+#include <assert.h>
+
 #define DV_PAL_FRAME_SIZE 144000
 #define DV_NTSC_FRAME_SIZE 120000
 
@@ -85,6 +87,7 @@ const aafUID_t kAAFPropID_DIDImageSize				= { 0xce2aca4f, 0x51ab, 0x11d3, { 0xa0
 static bool writeNetworkLocator = false;
 static bool useRawStorage = false;
 static bool useSmallSectors = false;
+static bool useOMCache = false;
 
 // Add a property definition to the dictionary, after first checking if it
 // needs to be added (used in CreateLegacyPropDefs() only)
@@ -416,13 +419,19 @@ static bool addMasterMobForDVFile(
 	// For Large File Support (>2GB) we must use the awkward stat() and
 	// _stati64() calls below.  C++ standard library ifstream seekg and tellg
 	// aren't 64bit capable using GCC 3.3 and MSVC 7 (GCC 3.4 fixes this).
+        int rc;
 #ifdef _MSC_VER
 	struct _stati64 statbuf;
-	_stati64(filename.c_str(), &statbuf);
+	rc = _stati64(filename.c_str(), &statbuf);
 #else
 	struct stat statbuf;
-	stat(filename.c_str(), &statbuf);
+	rc = stat(filename.c_str(), &statbuf);
 #endif
+	if ( 0 != rc ) {
+	  perror( string( string("stat failed on ") + filename ).c_str() );
+	  return false;
+	}
+
 	aafLength_t eslength = statbuf.st_size;
 
 	// Truncate frame count to ignore any partial frame at the end
@@ -941,11 +950,26 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 					pFileKind = &kAAFFileKind_Aaf4KBinary; 
 
 				IAAFRawStorage* pRawStorage = 0;
-				CHECK_HRESULT (AAFCreateRawStorageDisk(
+
+				if ( useOMCache ) {
+				  // Use a 16 MB cache
+				  const int pageCount = 4096;
+				  const int pageSize  = 4096;
+				  CHECK_HRESULT (AAFCreateRawStorageCachedDisk(
+					AxStringUtil::mbtowc( output_aaf_file ).c_str(),
+					kAAFFileExistence_new,
+					kAAFFileAccess_modify,
+					pageCount, pageSize,
+					&pRawStorage));
+				}
+				else {
+				  CHECK_HRESULT (AAFCreateRawStorageDisk(
 					AxStringUtil::mbtowc( output_aaf_file ).c_str(),
 					kAAFFileExistence_new,
 					kAAFFileAccess_modify,
 					&pRawStorage));
+				}
+
 				CHECK_HRESULT (AAFCreateAAFFileOnRawStorage (
 					pRawStorage,
 					kAAFFileExistence_new,
@@ -1260,7 +1284,7 @@ int main(int argc, char* argv[])
 {
 	if (argc < 3)
 	{
-		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-smallSectors] [-nocompmob] [-notapemob] [-noaudio] infile outfile [essencedir]" << endl;
+		cout << "Usage: " << argv[0] << " [-netloc] [-useraw] [-omcache] [-smallSectors] [-nocompmob] [-notapemob] [-noaudio] infile outfile [essencedir]" << endl;
 		return 1;
 	}
 
@@ -1284,6 +1308,12 @@ int main(int argc, char* argv[])
 		{
 			// default is to create 4K sectors
 			useSmallSectors = true;
+			i++;
+		}
+		else if (!strcmp(argv[i], "-omcache"))
+		{
+			// default is to not use the OM buffer cache
+		        useOMCache = true;
 			i++;
 		}
 		else if (!strcmp(argv[i], "-nocompmob"))
@@ -1318,6 +1348,9 @@ int main(int argc, char* argv[])
 			idxOffset++;
 
 		if (useRawStorage)
+			idxOffset++;
+
+		if (useOMCache)
 			idxOffset++;
 
 		if (useSmallSectors)
