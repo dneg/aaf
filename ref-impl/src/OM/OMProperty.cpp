@@ -133,6 +133,16 @@ OMPropertyId OMProperty::propertyId(void) const
   return _propertyId;
 }
 
+  // @mfunc The <c OMPropertySet> containing this <c OMProperty>.
+  //   @rdesc The containing <c OMPropertySet>.
+  //   @this const
+const OMPropertySet* OMProperty::propertySet(void) const
+{
+  TRACE("OMProperty::propertySet");
+
+  return _propertySet;
+}
+
   // @mfunc Inform this <c OMProperty> that it is a member of
   //        the <c OMPropertySet> <p propertySet>.
   //   @parm The <c OMPropertySet> of which this <c OMProperty> is
