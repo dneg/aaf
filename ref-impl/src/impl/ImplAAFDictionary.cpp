@@ -569,7 +569,7 @@ AAFRESULT STDMETHODCALLTYPE
   // implemented. transdel:2000-APR-21.
   ImplAAFObject * pObject = NULL;
   AAFRESULT result = CreateInstance(classId, &pObject);
-  if (AAFRESULT_SUCCESS(result))
+  if (AAFRESULT_SUCCEEDED(result))
   {
     // Make sure that this object is in fact a meta definition.
     *ppMetaObject = dynamic_cast<ImplAAFMetaDefinition*>(pObject);
