@@ -77,6 +77,7 @@ protected:
 								aafDataBuffer_t *destValue, aafUInt32 *destValueLen,
 								bool *didAllocateNew);
 	virtual HRESULT ConvertObjectProps(IAAFObject* pObj, OMF2::omfObject_t pOMFObject);
+	virtual HRESULT ConvertNestedScope(IAAFNestedScope* pNest, OMF2::omfObject_t* pOMFNest );
 protected:
 
     OMF2::omfSessionHdl_t	OMFSession;

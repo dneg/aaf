@@ -1371,7 +1371,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	IAAFScopeReference*		pScopeRef = NULL;
 	IAAFDataDef*            pDataDef = 0;
 	IAAFDefObject*          pDefObj = 0;
-
+	IAAFNestedScope*		pNest = 0;
 	aafUID_t				datadef;
 	aafLength_t				length;
 
@@ -1558,16 +1558,39 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 //		//Component is an effect
 		OMF2::omfObject_t	nest = NULL;
 		OMF2::omfObject_t	effect = NULL;
+		IAAFOperationDef	*pEffectDef = NULL;
+		IAAFDefObject		*pDefObject = NULL;
+		aafUID_t			effectDefAUID;
 
 		if (gpGlobals->bVerboseMode)
 		{
 			printf("%sProcessing Effect of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 		}
-		OMFError = OMF2::omfiNestedScopeNew(OMFFileHdl, OMFDatakind,
+		
+		// Public effects don't get a surrounding NEST
+		rc = pEffect->GetOperationDefinition(&pEffectDef);
+		checkAAF(pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
+		pDefObject->GetAUID(&effectDefAUID);
+		pEffectDef->Release();
+		pDefObject->Release();
+
+		if(pEffectTranslate->isPrivateEffect(effectDefAUID)
+#if AVID_SPECIAL
+			&& memcmp(&effectDefAUID, &kEffAudioEQ, sizeof(aafUID_t)) != 0)
+#else
+			)
+#endif
+		{
+			OMFError = OMF2::omfiNestedScopeNew(OMFFileHdl, OMFDatakind,
 								(OMF2::omfLength_t)length, &nest);
-		rc = ConvertEffects(pEffect, nest, &effect);
-		OMFError = OMF2::omfiNestedScopeAppendSlot(OMFFileHdl,nest,effect);
-		*pOMFSegment = nest;
+			rc = ConvertEffects(pEffect, nest, &effect);
+			OMFError = OMF2::omfiNestedScopeAppendSlot(OMFFileHdl,nest,effect);
+			*pOMFSegment = nest;
+		}
+		else
+		{
+			rc = ConvertEffects(pEffect, NULL, pOMFSegment);
+		}
 
 		goto cleanup;
 	}
@@ -1613,6 +1636,21 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		goto cleanup;
 	}
 	
+	rc = pComponent->QueryInterface(IID_IAAFNestedScope, (void **)&pNest);
+	if (SUCCEEDED(rc))
+	{
+		// component is a selector
+		IncIndentLevel();
+		
+		OMFError = OMF2::omfiNestedScopeNew(OMFFileHdl,
+								   OMFDatakind,
+								   (OMF2::omfLength_t)length,
+								   pOMFSegment);
+		rc = ConvertNestedScope(pNest, pOMFSegment);
+		DecIndentLevel();
+		goto cleanup;
+	}
+
 	rc = pComponent->QueryInterface(IID_IAAFScopeReference, (void **)&pScopeRef);
 	if (SUCCEEDED(rc))
 	{
@@ -1648,6 +1686,12 @@ cleanup:
 	  {
 		pScopeRef->Release();
 		pScopeRef = 0;
+	  }
+	
+	if (pNest)
+	  {
+		pNest->Release();
+		pNest = 0;
 	  }
 	
 	if (pSequence)
@@ -1920,6 +1964,57 @@ HRESULT Aaf2Omf::ConvertSelector(IAAFSelector* pSelector,
 		}
 	}
 
+	DecIndentLevel();
+	if (pSegment)
+		pSegment->Release();
+	if (pComponent)
+		pComponent->Release();
+
+	if (OMF2::OM_ERR_NONE != OMFError)
+		rc = AAFRESULT_INTERNAL_ERROR;
+	return rc;
+}
+
+// ============================================================================
+// ConvertSelector
+//
+//			This function converts an AAF Selector object and all the objects it
+// contains or references.
+//			
+// Returns: AAFRESULT_SUCCESS if succesfully
+//
+// ============================================================================
+HRESULT Aaf2Omf::ConvertNestedScope(IAAFNestedScope* pNest,
+								 OMF2::omfObject_t* pOMFNest )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
+	OMF2::omfSegObj_t		OMFSegment = NULL;
+
+	IAAFComponent*			pComponent = NULL;
+	IAAFSegment*			pSegment = NULL;
+	IEnumAAFSegments*		pEnumSegments;
+	aafLength_t				length;
+
+	IncIndentLevel();
+
+	pNest->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+	pComponent->GetLength(&length);
+
+	if (gpGlobals->bVerboseMode)
+		printf("%sProcessing Nest object of length = %ld\n", gpGlobals->indentLeader, length);
+
+	rc = pNest->GetSegments (&pEnumSegments);
+	while(pEnumSegments->NextOne (&pSegment) == AAFRESULT_SUCCESS)
+	{
+		pSegment->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+		rc = ProcessComponent(pComponent, &OMFSegment);
+		OMFError = OMF2::omfiNestedScopeAppendSlot(OMFFileHdl, *pOMFNest, OMFSegment);
+		pSegment->Release();
+		pSegment = NULL;
+		pComponent->Release();
+		pComponent = NULL;
+	}
 	DecIndentLevel();
 	if (pSegment)
 		pSegment->Release();
@@ -2351,7 +2446,7 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	{
 		pComponent->GetLength(&length);
 		checkAAF(pComponent->GetDataDef(&pDataDef));
-		checkAAF(pDataDef->QueryInterface(IID_IAAFDataDef, (void **)&pDefObj));
+		checkAAF(pDataDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObj));
 		pDataDef->Release ();
 		pDataDef = 0;
 		checkAAF(pDefObj->GetAUID(&effectAUID));
