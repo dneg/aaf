@@ -73,7 +73,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AddMasterSlot
         (// @parm [in] Data kind of new Master Mob slot
-		 aafUID_t * pDataDef,
+		 const aafUID_t & dataDef,
 
 		 // @parm [in] Slot ID of the Source Mob slot to be added to the Master Mob
          aafSlotID_t  sourceSlotID,
@@ -85,7 +85,7 @@ public:
 		 aafSlotID_t  masterSlotID,
 
 		 // @parm [in, string] Name to assign to new slot in Master Mob
-		 aafWChar *  pSlotName);
+		 const aafWChar *  pSlotName);
 
 
 
@@ -249,15 +249,15 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     NewPhysSourceRef
         (// @parm [in] Edit rate of slot to contain reference
-		 aafRational_t  editrate,
+		 const aafRational_t & editrate,
 
 		 // @parm [in] SlotID of slot to contain reference
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         aafUID_t * pEssenceKind,
+         const aafUID_t & essenceKind,
 
-		aafSourceRef_t  ref,
+		 aafSourceRef_t  ref,
 
 		 // @parm [in] Length of the Source Clip
          aafLength_t  srcRefLength);
@@ -268,15 +268,15 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendPhysSourceRef
         (// @parm [in] Edit rate of slot to contain reference
-		 aafRational_t  editrate,
+		 const aafRational_t & editrate,
 
 		 // @parm [in] SlotID of slot to contain reference
 		 aafSlotID_t  aMobSlot,
 
 		 // @parm [in] Data kind of slot to contain reference
-         aafUID_t * pEssenceKind,
+         const aafUID_t & essenceKind,
 
-		aafSourceRef_t  ref,
+		 aafSourceRef_t  ref,
 
 		 // @parm [in] Length of the Source Clip
          aafLength_t  srcRefLength);

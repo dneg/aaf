@@ -61,10 +61,10 @@ AD_METHOD0(Initialize,
 
 
 AD_XMETHOD5(AddMasterSlot,
-			[in],
+			[in\, ref],
 			  objPass,
-			  aafUID_t *,
-			  pDataDef,
+			  aafUID_constref,
+			  dataDef,
     // Data kind of new slot.  Requires a data kind valid for a media
 	// stream. Valid data kinds are:
     // - DDEF_Picture
@@ -117,7 +117,7 @@ AD_XMETHOD5(AddMasterSlot,
   //
   // AAFRESULT_NULL_PARAM
   //   - One or more of the following parameters are NULL pSourceMob\,
-  //     pDataDef\, and pSlotName.
+  //     and pSlotName.
   //
   // AAFRESULT_INVALID_DATADEF
   //   - The data kind of the source MOB slot to be added to the Master
@@ -405,10 +405,10 @@ AD_XMETHOD5(AppendPhysSourceRef,
 			  aafSlotID_t,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
-			[in],
+			[in\, ref],
 			  objPass,
-			  aafUID_t *,
-			  pEssenceKind,
+			  aafUID_constref,
+			  essenceKind,
 			Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
     // - Picture
@@ -439,7 +439,6 @@ AD_XMETHOD5(AppendPhysSourceRef,
   // AAFTapeDescriptor or NIL.
   //
   // Succeeds if all of the following are true:
-  // - the pEssenceKind pointer is valid.
   // - the pSourceRefObj pointer is valid.
   // \(other conditions here\)
   // 
@@ -454,7 +453,7 @@ AD_XMETHOD5(AppendPhysSourceRef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pEssenceKind or pSourceRefObj is null.
+  //   - pSourceRefObj is null.
   //
   // \(other codes here.\))
 
@@ -470,9 +469,9 @@ AD_XMETHOD5(NewPhysSourceRef,
 			  aafSlotID_t,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
-			[in],
+			[in\, ref],
 				objPass,
-				aafUID_t *,
+				aafUID_constref,
 			  pEssenceKind,
 			Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
@@ -504,7 +503,6 @@ AD_XMETHOD5(NewPhysSourceRef,
   // AAFTapeDescriptor or NIL.
   //
   // Succeeds if all of the following are true:
-  // - the pEssenceKind pointer is valid.
   // - the pSourceRefObj pointer is valid.
   // \(other conditions here\)
   // 
@@ -519,7 +517,7 @@ AD_XMETHOD5(NewPhysSourceRef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pEssenceKind or pSourceRefObj is null.
+  //   - pSourceRefObj is null.
   //
   // \(other codes here.\))
 

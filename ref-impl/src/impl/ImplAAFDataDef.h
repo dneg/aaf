@@ -88,7 +88,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     DoesDataDefConvertTo
         (// @parm [in,ref] Auid to compare against
-         aafUID_t *  pAuid,
+         const aafUID_t & id,
 
          // @parm [retval,out] pointer to result
          aafBool *  bDoesConvertTo);
@@ -99,7 +99,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     IsDataDefOf
         (// @parm [in,ref] Auid to compare against
-         aafUID_t *  pAuid,
+         const aafUID_t & id,
 
          // @parm [retval,out] pointer to result
          aafBool *  bIsDataDefOf);
@@ -110,7 +110,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     DoesDataDefConvertFrom
         (// @parm [in,ref] Auid to compare against
-         aafUID_t *  pAuid,
+         const aafUID_t & id,
 
          // @parm [retval,out] pointer to result
          aafBool *  bDoesConvertFrom);

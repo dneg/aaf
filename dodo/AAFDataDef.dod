@@ -13,13 +13,10 @@ AAFDataDef\
 AAFDefObject\
 #endm
 AD_HEAD
-
 AD_CLASS_UUID(dfbd652A, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6529, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-
-
 AD_XMETHOD1(IsPictureKind,
 		   [retval\,out],
 		   objPass,
@@ -27,6 +24,7 @@ AD_XMETHOD1(IsPictureKind,
 		   bIsPictureKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataDef is a picture.)
+
 
 AD_XMETHOD1(IsMatteKind,
 		   [retval\,out],
@@ -36,6 +34,7 @@ AD_XMETHOD1(IsMatteKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataDef is a matte.)
 
+
 AD_XMETHOD1(IsPictureWithMatteKind,
 		   [retval\,out],
 		   objPass,
@@ -43,6 +42,7 @@ AD_XMETHOD1(IsPictureWithMatteKind,
 		   bIsPictureWithMatteKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataDef is a picture with matte.)
+
 
 AD_XMETHOD1(IsSoundKind,
 		   [retval\,out],
@@ -52,25 +52,59 @@ AD_XMETHOD1(IsSoundKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataDef is a sound.)
 
+
 AD_XMETHOD2(DoesDataDefConvertTo,
-		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
-		   [retval\,out], objPass, aafBool *, bDoesConvertTo, pointer to result,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			id,
+			Auid to compare against,
+
+			[retval\, out],
+			objPass,
+			aafBool *,
+			bDoesConvertTo,
+			pointer to result,
+
 		   Sets return value to TRUE if the DataDef of the given object
 		   // can be converted to the DataDef specified in the IN 
 		   // parameter with the DataDefName string.)
 		   
+
 AD_XMETHOD2(IsDataDefOf,
-		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
-		   [retval\,out], objPass, aafBool *, bIsDataDefOf, pointer to result,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			id,
+			Auid to compare against,
+
+			[retval\, out],
+			objPass,
+			aafBool *,
+			bIsDataDefOf,
+			pointer to result,
+
 		   Sets the value to TRUE if the DataDef of the given object
-		   // matches the DataDef specified in the IN parameter with
-		   // the DataDefName string.)
+  // matches the DataDef specified in the IN parameter with the
+  // DataDefName string.)
+
 
 AD_XMETHOD2(DoesDataDefConvertFrom,
-		   [in\,ref], objPass, aafUID_t *, pAuid, Auid to compare against,
-		   [retval\,out], objPass, aafBool *, bDoesConvertFrom, pointer to result,
-		   Sets return value to TRUE if the DataDef of the given object
-		   // can be converted from the DataDef specified in the IN 
-		   // parameter specified with the DataDefName string.)
 
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			id, Auid to compare against,
+
+			[retval\, out],
+			objPass,
+			aafBool *,
+			bDoesConvertFrom,
+			pointer to result,
+
+		   Sets return value to TRUE if the DataDef of the given object
+  // can be converted from the DataDef specified in the IN 
+  // parameter specified with the DataDefName string.)
 AD_XCLASS_END(Concrete, StoredObject)

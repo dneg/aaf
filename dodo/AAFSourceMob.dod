@@ -150,9 +150,9 @@ AD_XMETHOD4(AddNilReference,
 			  aafLength_t,
 			  length,
 			  Duration of the Source Clip to be added to the new slot,
-			[in],
+			[in\, ref],
 			  objPass,
-			  aafUID_t *,
+			  aafUID_constref,
 			  dataDef,
 			  Data definition of the new slot,
 			[in],
@@ -174,7 +174,6 @@ AD_XMETHOD4(AddNilReference,
   // videotape.
   //
   // Succeeds if all of the following are true:
-  // - dataDef is a valid pointer.
   // - editRate is valid.
   // 
   // This method will return the following codes.  If more than one of
@@ -186,9 +185,6 @@ AD_XMETHOD4(AddNilReference,
   //
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - dataDef is NULL
   //
   // AAFRESULT_BADRATE
   //   - the editRate is not valid.)
@@ -392,10 +388,10 @@ AD_XMETHOD5(AppendPhysSourceRef,
 			  aafSlotID_t,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
-			[in],
+			[in\, ref],
 			  objPass,
-			  aafUID_t *,
-			  pEssenceKind,
+			  aafUID_constref,
+			  essenceKind,
 			Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
     // - Picture
@@ -426,7 +422,6 @@ AD_XMETHOD5(AppendPhysSourceRef,
   // AAFTapeDescriptor or NIL.
   //
   // Succeeds if all of the following are true:
-  // - the pEssenceKind pointer is valid.
   // - the pSourceRefObj pointer is valid.
   // 
   // This method will return the following codes.  If more than one of
@@ -440,7 +435,7 @@ AD_XMETHOD5(AppendPhysSourceRef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pEssenceKind or pSourceRefObj is null.)
+  //   - pSourceRefObj is null.)
 
 
 AD_XMETHOD5(NewPhysSourceRef,
@@ -454,11 +449,11 @@ AD_XMETHOD5(NewPhysSourceRef,
 			  aafSlotID_t,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
-			[in],
-				objPass,
-				aafUID_t *,
-			  pEssenceKind,
-			Data kind of slot to contain reference.  Requires a data kind
+			[in\, ref],
+			  objPass,
+			  aafUID_constref,
+			  essenceKind,
+			  Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
     // - Picture
     // - Sound,
@@ -488,7 +483,6 @@ AD_XMETHOD5(NewPhysSourceRef,
   // AAFTapeDescriptor or NIL.
   //
   // Succeeds if all of the following are true:
-  // - the pEssenceKind pointer is valid.
   // - the pSourceRefObj pointer is valid.
   // 
   // This method will return the following codes.  If more than one of
@@ -502,7 +496,7 @@ AD_XMETHOD5(NewPhysSourceRef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pEssenceKind or pSourceRefObj is null.)
+  //   - pSourceRefObj is null.)
 
 
 AD_XMETHOD9(AddPulldownRef,
@@ -522,10 +516,10 @@ AD_XMETHOD9(AddPulldownRef,
 			  aafSlotID_t,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
-			[in],
+			[in\, ref],
 			  objPass,
-			  aafUID_t *,
-			  pEssenceKind,
+			  aafUID_constref,
+			  essenceKind,
 			  Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
     // - Picture
@@ -579,7 +573,6 @@ AD_XMETHOD9(AddPulldownRef,
   // often an AAFFilmDescriptor or NIL.
   //
   // Succeeds if all of the following are true:
-  // - the pEssenceKind pointer is valid.
   // - the pSourceRefObj pointer is valid.
   // - a valid pulldown direction was specified.
   // 
@@ -594,7 +587,7 @@ AD_XMETHOD9(AddPulldownRef,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pEssenceKind or pSourceRefObj is null.
+  //   - pSourceRefObj is null.
   //
   // AAFRESULT_PULLDOWN_DIRECTION
   //   - an invalid pulldown direction was specified.)

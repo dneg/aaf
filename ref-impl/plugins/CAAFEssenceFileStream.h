@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -135,8 +135,8 @@ public:
   // AAFRESULT_FILE_EXISTS
   //   - the given path already points to a file-system file.
   STDMETHOD (Create)
-    (/*[in,string]*/ wchar_t *  pFilePath, // The local file-system path to a file
-     /*[in]*/ aafUID_t *  pMobID); // Optional mobID identifying the external media 
+    (/*[in,string]*/ const aafCharacter * pFilePath, // The local file-system path to a file
+     /*[in]*/ const aafUID_t * pMobID); // Optional mobID identifying the external media 
 
   // Attempt to open an essence file stream for reading.
   // Returns one of the following:
@@ -148,8 +148,8 @@ public:
   // AAFRESULT_NOT_READABLE
   //   - file is write-only, cannot be opened for reading.
   STDMETHOD (OpenRead)
-    (/*[in,string]*/ wchar_t *  pFilePath, // The local file-system path to a file
-     /*[in]*/ aafUID_t *  pMobID); // Optional mobID identifying the external media 
+    (/*[in,string]*/ const aafCharacter * pFilePath, // The local file-system path to a file
+     /*[in]*/ const aafUID_t * pMobID); // Optional mobID identifying the external media 
 
   // Attempt to open an essence file stream for appending.
   // Returns one of the following:
@@ -161,8 +161,8 @@ public:
   // AAFRESULT_NOT_WRITEABLE
   //   - file is read-only, cannot be opened for writing.
   STDMETHOD (OpenAppend)
-    (/*[in,string]*/ wchar_t *  pFilePath, // The local file-system path to a file
-     /*[in]*/ aafUID_t *  pMobID); // Optional mobID identifying the external media 
+    (/*[in,string]*/ const aafCharacter * pFilePath, // The local file-system path to a file
+     /*[in]*/ const aafUID_t * pMobID); // Optional mobID identifying the external media 
 
 
 
@@ -204,8 +204,8 @@ public :
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   STDMETHOD (Init)
-    (/*[in,string]*/ wchar_t *  pFilePath, // The local file-system path to a file
-     /*[in]*/ aafUID_t *  pMobID); // Optional mobID identifying the external media 
+    (/*[in,string]*/ const aafCharacter * pFilePath, // The local file-system path to a file
+     /*[in]*/ const aafUID_t * pMobID); // Optional mobID identifying the external media 
 
   // Cleanup any internally allocated buffers.
   void CleanupBuffers(void);

@@ -39,8 +39,8 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD2(IsEssenceKindSupported,
 			[in\,ref],
 			  objPass,
-			  aafUID_t*,
-			  pEssenceKind,
+			  aafUID_constref,
+			  essenceKind,
 			  The essence kind,
 			[out\,retval],
 			  objPass,
@@ -51,7 +51,6 @@ AD_XMETHOD2(IsEssenceKindSupported,
   // of the given essence kind.
   // 
   // Succeeds if all of the following are true:
-  // - the pEssenceKind pointer is valid.
   // - the pIsSupported pointer is valid.
   // 
   // If this method fails nothing will be written to *pIsSupported.
@@ -64,20 +63,16 @@ AD_XMETHOD2(IsEssenceKindSupported,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pEssenceKind or pIsSupported is null.)
+  //   - pIsSupported is null.)
  
  AD_XMETHOD1(AppendEssenceKind,
-			[in],
+			[in\, ref],
 		    objPass,
-			aafUID_t*,
-			pEssenceKind,
+			aafUID_constref,
+			essenceKind,
 			The essence kind,
-			Appends the given essence kind to those supported by the codec.  This is dependant upon
-  // the format\, not an incomplete implementation.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pMob pointer is valid.
-  // - the given mob is not already part of this collection.
+	   Appends the given essence kind to those supported by the codec.
+  // This is dependant upon the format\, not an incomplete implementation.
   // 
   // If this method fails no state will be changed.
   // 
@@ -87,9 +82,6 @@ AD_XMETHOD2(IsEssenceKindSupported,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pEssenceKind is null.
   //
   // AAFRESULT_DUPLICATE_ESSENCE_KIND
   //   - the given essenceKind is already contained.)
