@@ -31,7 +31,12 @@ include aafobjects.mk
 
 INCLUDE_DIR = ../ref-impl/include
 
-targets: $(DODO_TARGETS) $(INCLUDE_DIR)/com-api/AAF.idl $(INCLUDE_DIR)/ref-api/AAF.h $(PLUGIN_DIR)/AAFPlugin.idl
+targets: $(DODO_TARGETS)
+targets: $(INCLUDE_DIR)/com-api/AAF.idl
+targets: $(PLUGIN_DIR)/AAFPlugin.idl
+targets: $(INCLUDE_DIR)/ref-api/AAF.h
+targets: $(INCLUDE_DIR)/ref-api/AAFPlugin.h
+
 
 $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	@ echo Generating AAF.idl...
@@ -156,6 +161,54 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	    echo \#endif // __AAF_h__ ; \
 	) > $(INCLUDE_DIR)/ref-api/AAF.h
 	chmod -w $(INCLUDE_DIR)/ref-api/AAF.h
+
+
+$(INCLUDE_DIR)/ref-api/AAFPlugin.h : $(PLUGIN_FREFH_TARGETS)
+	@ echo Generating reference AAFPlugin.h...
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
+	@ ( echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998 Avid Technology." ; \
+	    echo "// (C) Copyright 1998 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// AAF Plugin Interfaces." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "//" ; \
+	    echo \#ifndef __AAFPlugin_h__ ; \
+	    echo \#define __AAFPlugin_h__ ; \
+	    echo "" ; \
+	    echo \#ifndef __AAFCOMPlatform_h__ ; \
+	    echo \#include \"AAFCOMPlatform.h\" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef __AAFTypes_h__ ; \
+	    echo \#include \"AAFTypes.h\" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifdef __cplusplus ; \
+	    for class in $(PLUGIN_OBJECTS) ; do \
+	    	echo interface I$$class\;; \
+	    done ; \
+	    echo \#else ; \
+	    for class in $(PLUGIN_OBJECTS) ; do \
+	    	echo typedef interface I$$class I$$class\;;  \
+	    done ; \
+	    echo \#endif ; \
+	    for class in $(PLUGIN_OBJECTS) ; do \
+	    	echo ""; \
+	    	echo "// I$$class"; \
+	    	echo ""; \
+	    	cat $$class.frefh; \
+	    done ; \
+	    echo "" ; \
+	    echo \#endif // __AAFPlugin_h__ ; \
+	) > $(INCLUDE_DIR)/ref-api/AAFPlugin.h
+	chmod -w $(INCLUDE_DIR)/ref-api/AAFPlugin.h
+
 
 SRC_DIR = ../ref-impl/src
 
@@ -298,6 +351,7 @@ clean:
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFTypes.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFModuleTest.h
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	@for file in $(AUTO_GEN_IMPL) ; do \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
