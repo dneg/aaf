@@ -50,8 +50,17 @@ OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
 OMDataStreamProperty::~OMDataStreamProperty(void)
 {
   TRACE("OMDataStreamProperty::~OMDataStreamProperty");
-  if (_stream != 0) {
-    close();
+
+  try 
+  {
+	if (_stream != 0) {
+		close();
+	}
+  }
+  catch(...)
+  {
+	  //close can throw exceptions under limited circustances with schemasoft library.
+	  //This is to ensure that excpetions do not get thrown outside the destructor.
   }
   POSTCONDITION("Stream closed", _stream == 0);
 }
