@@ -36,6 +36,10 @@
 #include "OMDataTypes.h"
 #include "OMPropertyTable.h"
 
+#include "OMDiskRawStorage.h"
+#include "OMMemoryRawStorage.h"
+#include "OMRawStorageLockBytes.h"
+
 #include "OMAssertions.h"
 #include "OMUtilities.h"
 
@@ -151,6 +155,60 @@ OMStoredObject* OMStoredObject::createModify(const wchar_t* fileName,
                       (byteOrder == littleEndian) || (byteOrder == bigEndian));
 
   OMStoredObject* newStore = OMStoredObject::createFile(fileName);
+  newStore->create(byteOrder);
+
+  return newStore;
+}
+
+  // @mfunc Open the root <c OMStoredObject> in the raw storage
+  //        <p rawStorage> for reading only.
+  //   @parm The raw storage in which to open the file.
+  //   @rdesc An <c OMStoredObject> representing the root object.
+OMStoredObject* OMStoredObject::openRead(OMRawStorage* rawStorage)
+{
+  TRACE("OMStoredObject::openRead");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+
+  OMStoredObject* newStore = OMStoredObject::openFile(rawStorage,
+                                                      OMFile::readOnlyMode);
+  newStore->open(OMFile::readOnlyMode);
+
+  return newStore;
+}
+
+  // @mfunc Open the root <c OMStoredObject> in the raw storage
+  //        <p rawStorage> for modification.
+  //   @parm The raw storage in which to open the file.
+  //   @rdesc An <c OMStoredObject> representing the root object.
+OMStoredObject* OMStoredObject::openModify(OMRawStorage* rawStorage)
+{
+  TRACE("OMStoredObject::openModify");
+
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+
+  OMStoredObject* newStore = OMStoredObject::openFile(rawStorage,
+                                                      OMFile::modifyMode);
+  newStore->open(OMFile::modifyMode);
+
+  return newStore;
+}
+
+  // @mfunc Create a new root <c OMStoredObject> in the raw storage
+  //        <p rawStorage>. The byte order of the newly created root
+  //        is given by <p byteOrder>.
+  //   @parm The raw storage in which to create the file.
+  //   @parm The desired byte ordering for the new file.
+  //   @rdesc An <c OMStoredObject> representing the root object.
+OMStoredObject* OMStoredObject::createModify(OMRawStorage* rawStorage,
+                                             const OMByteOrder byteOrder)
+{
+  TRACE("OMStoredObject::createModify");
+
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid byte order",
+                      (byteOrder == littleEndian) || (byteOrder == bigEndian));
+
+  OMStoredObject* newStore = OMStoredObject::createFile(rawStorage);
   newStore->create(byteOrder);
 
   return newStore;
@@ -382,6 +440,74 @@ OMStoredObject* OMStoredObject::createFile(const wchar_t* fileName)
   _openStorages = _openStorages + 1;
 #endif
 
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  ASSERT("Valid heap pointer", newStoredObject != 0);
+
+  return newStoredObject;
+}
+
+OMStoredObject* OMStoredObject::openFile(OMRawStorage* rawStorage,
+                                         const OMFile::OMAccessMode mode)
+{
+  TRACE("OMStoredObject::openFile");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
+                             (mode == OMFile::readOnlyMode));
+
+  ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
+  ASSERT("Valid heap pointer", iLockBytes != 0);
+
+  DWORD openMode;
+  if (mode == OMFile::modifyMode) {
+    openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
+  } else if (mode == OMFile::readOnlyMode) {
+    openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
+  }
+
+  HRESULT result;
+  IStorage* storage = 0;
+
+  result = StgOpenStorageOnILockBytes(
+    iLockBytes,
+    0,
+    openMode,
+    0,
+    0,
+    &storage);
+  check(result);
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
+
+  iLockBytes->Release();
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  ASSERT("Valid heap pointer", newStoredObject != 0);
+
+  return newStoredObject;
+}
+
+OMStoredObject* OMStoredObject::createFile(OMRawStorage* rawStorage)
+{
+  TRACE("OMStoredObject::createFile");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+
+  ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
+  ASSERT("Valid heap pointer", iLockBytes != 0);
+
+  HRESULT result;
+  IStorage* storage = 0;
+
+  result = StgCreateDocfileOnILockBytes(
+    iLockBytes,
+    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
+    0,
+    &storage);
+  check(result);
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
+
+  iLockBytes->Release();
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
   ASSERT("Valid heap pointer", newStoredObject != 0);
 
