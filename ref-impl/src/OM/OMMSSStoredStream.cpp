@@ -36,80 +36,124 @@ OMMSSStoredStream::OMMSSStoredStream(IStream* stream)
 : _stream(stream)
 {
   TRACE("OMMSSStoredStream::OMMSSStoredStream");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid stream", _stream != 0);
 }
 
 OMMSSStoredStream::~OMMSSStoredStream(void)
 {
   TRACE("OMMSSStoredStream::~OMMSSStoredStream");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Stream not open", _stream == 0);
 }
 
-void OMMSSStoredStream::read(void* /* data */, size_t /* size */) const
+void OMMSSStoredStream::read(void* data, size_t size) const
 {
   TRACE("OMMSSStoredStream::read");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid stream", _stream != 0);
+  PRECONDITION("Valid data buffer", data != 0);
+  PRECONDITION("Valid size", size > 0);
+
+  unsigned long bytesRead;
+  HRESULT result = _stream->Read(data, size, &bytesRead);
+  ASSERT("Succeeded", SUCCEEDED(result)); // tjb - error
+
+  ASSERT("Successful read", bytesRead == size);
 }
 
-void OMMSSStoredStream::read(OMByte* /* data */,
-                             const OMUInt32 /* bytes */,
-                             OMUInt32& /* bytesRead */) const
+void OMMSSStoredStream::read(OMByte* data,
+                             const OMUInt32 bytes,
+                             OMUInt32& bytesRead) const
 {
   TRACE("OMMSSStoredStream::read");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid stream", _stream != 0);
+  PRECONDITION("Valid data buffer", data != 0);
+  PRECONDITION("Valid size", bytes > 0);
+
+  HRESULT result = _stream->Read(data, bytes, &bytesRead);
+  ASSERT("Succeeded", SUCCEEDED(result)); // tjb - error
 }
 
-void OMMSSStoredStream::write(void* /* data */, size_t /* size */)
+void OMMSSStoredStream::write(void* data, size_t size)
 {
   TRACE("OMMSSStoredStream::write");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid stream", _stream != 0);
+  PRECONDITION("Valid data", data != 0);
+  PRECONDITION("Valid size", size > 0);
+
+  unsigned long bytesWritten;
+  HRESULT resultCode = _stream->Write(data, size, &bytesWritten);
+  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
+
+  ASSERT("Successful write", bytesWritten == size);
 }
 
-void OMMSSStoredStream::write(const OMByte* /* data */,
-                              const OMUInt32 /* bytes */,
-                              OMUInt32& /* bytesWritten */)
+void OMMSSStoredStream::write(const OMByte* data,
+                              const OMUInt32 bytes,
+                              OMUInt32& bytesWritten)
 {
   TRACE("OMMSSStoredStream::write");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid stream", _stream != 0);
+  PRECONDITION("Valid data", data != 0);
+  PRECONDITION("Valid size", bytes > 0);
+
+  HRESULT resultCode = _stream->Write(data, bytes, &bytesWritten);
+  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
 }
 
 OMUInt64 OMMSSStoredStream::size(void) const
 {
   TRACE("OMMSSStoredStream::size");
-  ASSERT("Unimplemented code not reached", false);
-  return 0; // tjb TBS
+  PRECONDITION("Valid stream", _stream != 0);
+
+  STATSTG statstg;
+  HRESULT status = _stream->Stat(&statstg, STATFLAG_NONAME);
+  ASSERT("Succeeded", SUCCEEDED(status)); // tjb - error
+
+  OMUInt64 result = toOMUInt64(statstg.cbSize);
+  return result;
 }
 
-void OMMSSStoredStream::setSize(const OMUInt64 /* newSize */)
+void OMMSSStoredStream::setSize(const OMUInt64 newSize)
 {
   TRACE("OMMSSStoredStream::setSize");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+
+  ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
+  HRESULT status = _stream->SetSize(newStreamSize);
+  ASSERT("Succeeded", SUCCEEDED(status)); // tjb - error
 }
 
 OMUInt64 OMMSSStoredStream::position(void) const
 {
   TRACE("OMMSSStoredStream::position");
-  ASSERT("Unimplemented code not reached", false);
-  return 0; // tjb TBS
+  PRECONDITION("Valid stream", _stream != 0);
+
+  OMUInt64 result;
+  LARGE_INTEGER zero = {0, 0};
+  ULARGE_INTEGER position;
+  HRESULT status = _stream->Seek(zero, STREAM_SEEK_CUR, &position);
+  ASSERT("Succeeded", SUCCEEDED(status)); // tjb - error
+
+  result = toOMUInt64(position);
+  return result;
 }
 
-void OMMSSStoredStream::setPosition(const OMUInt64 /* offset */)
+void OMMSSStoredStream::setPosition(const OMUInt64 offset)
 {
   TRACE("OMMSSStoredStream::setPosition");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid stream", _stream != 0);
+
+  ULARGE_INTEGER newPosition = fromOMUInt64(offset);
+  ULARGE_INTEGER oldPosition;
+  LARGE_INTEGER position;
+  memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
+  HRESULT status = _stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
+  ASSERT("Succeeded", SUCCEEDED(status)); // tjb - error
 }
 
 void OMMSSStoredStream::close(void)
 {
   TRACE("OMMSSStoredStream::close");
-  // tjb TBS
-  ASSERT("Unimplemented code not reached", false);
+  PRECONDITION("Valid stream", _stream != 0);
+
+  _stream->Release();
+  _stream = 0;
 }
