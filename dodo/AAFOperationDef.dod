@@ -359,8 +359,48 @@ AD_XMETHOD1(CountDegradeToOperations,
   //   - pResult is null.)
 
 
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Category,
-     the Category string property.)
+AD_XMETHOD1(GetCategory,
+			[out],
+			objPass,
+			aafUID_t*,
+			pValue,
+			The enumeration describing the current category,
+
+			This method returns an AUID indicating the category of the given operation.
+  //
+  // Succeeds if all of the following are true:
+  // - the pValue pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pValue.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pValue arg is NULL.)
+
+
+AD_XMETHOD1(SetCategory,
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			value,
+			The enumeration describing the current categor,
+
+			This method sets an AUID indicating the category of the given operation.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_METHOD1(GetNumberInputs,

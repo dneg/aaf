@@ -223,10 +223,10 @@ AD_XMETHOD1(GetTapeFormat,
 AD_XMETHOD1(SetTapeLength,
 			[in],
 			objPass,
-			aafLength_t,
+			aafUInt32,
 			tapeLength,
 			The length of the tape in minutes.,
-			Sets the length of the tape.
+			Sets the length of the tape in minutes.
   // 
   // This method succeeds if all of the following are true:
   // - tapeLength is a positive number.
@@ -248,11 +248,11 @@ AD_XMETHOD1(SetTapeLength,
 AD_XMETHOD1(GetTapeLength,
 			[out],
 			objPass,
-			aafLength_t *,
+			aafUInt32 *,
 			pTapeLength,
 			The length of the tape in minutes.,
 
-			Gets the length of the tape.
+			Gets the length of the tape in minutes.
   //
   // This method succeeds if all of the following are true:
   // - the pTapeLength pointer is valid.
