@@ -15,11 +15,14 @@
 #include "SourceInfo.h"
 #endif
 
+#if !defined(macintosh)
 #ifndef _bld_cfg_h_
 #include "bld_cfg.h"
 #endif
 
 #include <assert.h>
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -104,9 +107,13 @@ void MacroSet::import
  bool ignoreText)
 {
   char filename[100];
-  unsigned int i;
+  unsigned int i = 0;
 
-  for (i = 0; i < sizeof (filename); i++)
+#if defined(macintosh)
+  filename[0] = ':';
+#endif
+
+  for (i = 1; i < sizeof (filename); )
 	{
 	  char c;
 	  bool stat;
@@ -121,7 +128,20 @@ void MacroSet::import
 		  filename[i] = '\0';
 		  break;
 		}
+#if defined(macintosh)
+  	  else if ('\/' == c)
+  	    {
+  	      if (2 == i && '.' == filename[1])
+  	      {
+  	        i = 0; // reset and skip over the first "./"
+  	        continue;
+  	      }
+          // On the mac we need to begin with a partial path.
+          c = ':';
+        }
+#endif
 	  filename[i] = c;
+	  i++;
 	}
   if (sizeof (filename) == i)
 	{
@@ -439,7 +459,7 @@ void MacroSet::err_exit1
  const char * msg2,
  const TextStream & lineInfo)
 {
-  int size = strlen(msg1) + strlen(msg2) + 1;
+  size_t size = strlen(msg1) + strlen(msg2) + 1;
   char * buf = new char[size];
   assert (buf);
   sprintf (buf, msg1, msg2);
