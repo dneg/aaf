@@ -55,7 +55,7 @@ AAFRESULT STDMETHODCALLTYPE
 		aafInt32		/*index*/,			// Which codec. 1 to number of codecs,
 		wchar_t			*pName,			// Codec Name,
 		aafInt32		/*bufSize*/,		//length of the buffer to hold Codec Name,
-		aafUID_t		*/*codecID*/)		//ID used to access the codec,
+		aafUID_t		* /*codecID*/)		//ID used to access the codec,
 {
 	memcpy(pName, L"Test Codec", 28);
 	return AAFRESULT_SUCCESS;
