@@ -504,10 +504,22 @@ struct SMPTELabel
 	aafUInt8	MobIDPrefixHigh;
 };
 
-union label
+
+
+struct OMFMobID
+{
+    aafUInt8			SMPTELabel[12];		// 12-bytes of label prefix
+	aafUInt8			length;
+    aafUInt8			instanceHigh;
+    aafUInt8			instanceMid;
+    aafUInt8			instanceLow;
+	struct SMPTELabel	material;
+};
+
+union MobIDOverlay
 {
 	aafMobID_t			mobID;
-	struct SMPTELabel	smpte;
+	struct OMFMobID		OMFMobID;
 };
 
 AAFRESULT aafMobIDNew(
@@ -560,30 +572,48 @@ AAFRESULT aafMobIDNew(
 		
 	last_part2 = minor;
 
-	return(aafMobIDFromMajorMinor(major, minor, mobID));
+	return(aafMobIDFromMajorMinor(42, major, minor, 4, mobID));		// !!!All toolkit generated, all data
 }
 
 AAFRESULT aafMobIDFromMajorMinor(
+        aafUInt32	prefix,
         aafUInt32	major,
 		aafUInt32	minor,
+		aafUInt8	UMIDType,
 		aafMobID_t *mobID)     /* OUT - Newly created Mob ID */
 {
-	union label		aLabel;
+	union MobIDOverlay		aLabel;
 	
-	aLabel.smpte.oid = 0x06;
-	aLabel.smpte.size = 0x0E;
-	aLabel.smpte.ulcode = 0x2B;
-	aLabel.smpte.SMPTE = 0x34;
-	aLabel.smpte.Registry = 0x02;
-	aLabel.smpte.unused = 0;
-	aLabel.smpte.MobIDPrefixLow = 42;		// Means its an OMF Uid
-	aLabel.smpte.MobIDPrefixHigh = 0;		// Means its an OMF Uid
+    aLabel.OMFMobID.SMPTELabel[0]	= 0x06;
+    aLabel.OMFMobID.SMPTELabel[1]	= 0x0C;
+    aLabel.OMFMobID.SMPTELabel[2]	= 0x2B;
+    aLabel.OMFMobID.SMPTELabel[3]	= 0x34;
+    aLabel.OMFMobID.SMPTELabel[4]	= 0x02;			// Still Open
+    aLabel.OMFMobID.SMPTELabel[5]	= 0x05;			// Still Open
+    aLabel.OMFMobID.SMPTELabel[6]	= 0x11;			// Still Open
+    aLabel.OMFMobID.SMPTELabel[7]	= 0x01;			// Still Open
+    aLabel.OMFMobID.SMPTELabel[8]	= 0x01;			// Still Open
+    aLabel.OMFMobID.SMPTELabel[9]	= UMIDType;
+    aLabel.OMFMobID.SMPTELabel[10]	= 0x10;			// Still Open
+    aLabel.OMFMobID.SMPTELabel[11]	= 0x00;
+	aLabel.OMFMobID.length			= 0x13;
+    aLabel.OMFMobID.instanceHigh		= 0x00;
+    aLabel.OMFMobID.instanceMid		= 0x00;
+	aLabel.OMFMobID.instanceLow		= 0x00;
+	aLabel.OMFMobID.material.oid				= 0x06;
+	aLabel.OMFMobID.material.size				= 0x0E;
+	aLabel.OMFMobID.material.ulcode			= 0x2B;
+	aLabel.OMFMobID.material.SMPTE				= 0x34;
+	aLabel.OMFMobID.material.Registry			= 0x7F;
+	aLabel.OMFMobID.material.unused			= 0x7F;
+	aLabel.OMFMobID.material.MobIDPrefixHigh	= (aafUInt8)((prefix >> 7L) | 0x80);
+	aLabel.OMFMobID.material.MobIDPrefixLow	= (aafUInt8)(prefix & 0x7F);
 
-	aLabel.smpte.MobIDMajor = major;
-	aLabel.smpte.MobIDMinorLow = (aafUInt16)(minor & 0xFFFF);
-	aLabel.smpte.MobIDMinorHigh =  (aafUInt16)((minor >> 16L) & 0xFFFF);
+	aLabel.OMFMobID.material.MobIDMajor		= major;
+	aLabel.OMFMobID.material.MobIDMinorLow		= (aafUInt16)(minor & 0xFFFF);
+	aLabel.OMFMobID.material.MobIDMinorHigh	=  (aafUInt16)((minor >> 16L) & 0xFFFF);
 
-	*mobID = aLabel.mobID;
+	*mobID = (aafMobID_t)aLabel.mobID;
 	return(AAFRESULT_SUCCESS);
 }
 
