@@ -571,7 +571,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::removeProperty(void)
   //   @rdesc The size of the raw bits of this
   //          <c OMWeakReferenceSetProperty> in bytes.
   //   @this const
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 size_t OMWeakReferenceSetProperty<ReferencedObject>::bitsSize(void) const
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::bitsSize");
@@ -589,7 +589,7 @@ size_t OMWeakReferenceSetProperty<ReferencedObject>::bitsSize(void) const
   //   @parm The address of the buffer into which the raw bits are copied.
   //   @parm The size of the buffer.
   //   @this const
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 void OMWeakReferenceSetProperty<ReferencedObject>::getBits(
                                                       OMByte* bits,
                                                       size_t ANAME(size)) const
@@ -620,7 +620,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::getBits(
   //          <c OMStorable> and <c OMUnique>.
   //   @parm The address of the buffer from which the raw bits are copied.
   //   @parm The size of the buffer.
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 void OMWeakReferenceSetProperty<ReferencedObject>::setBits(const OMByte* bits,
                                                            size_t size)
 {
@@ -801,7 +801,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::findObject(
   return result;
 }
 
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 OMPropertyTag
 OMWeakReferenceSetProperty<ReferencedObject>::targetTag(void) const
 {
@@ -819,7 +819,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::targetTag(void) const
   return _targetTag;
 }
 
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 OMPropertyId*
 OMWeakReferenceSetProperty<ReferencedObject>::targetPropertyPath(void) const
 {
@@ -836,7 +836,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::targetPropertyPath(void) const
   return _targetPropertyPath;
 }
 
-template<typename ReferencedObject>
+template <typename ReferencedObject>
 void
 OMWeakReferenceSetProperty<ReferencedObject>::clearTargetTag(void) const
 {
