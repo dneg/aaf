@@ -197,7 +197,7 @@ AD_XMETHOD2(IsPropertyPresent,
 			
 			[out],
 			objPass,
-			aafBool*,
+			aafBoolean_t*,
 			pResult,
 			true if present; false if not present,
 
