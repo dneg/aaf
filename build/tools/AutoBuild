@@ -20,9 +20,14 @@
 #
 ###############################################################################
 
+# This is used in the help message, hence it is defined here.
+SF_SHELL_HOST=shell.sourceforge.net
+SF_LOG_DIR=/home/groups/a/aa/aaf/htdocs/build/AutoMake.logs
+SF_LOG_SCP_DST=${SF_SHELL_HOST}:${SF_LOG_DIR}
+
 short_usage()
 {
-    echo "Usage `basename $0` [-basedir] [-bump] [-update| [-nocvsco] [-nocvslog] [-nobuild] [-h|-help]"
+    echo "Usage `basename $0` [-basedir] [-bump] [-copylogs] [-update| [-nocvsco] [-nocvslog] [-nobuild] [-h|-help]"
 }
 
 usage()
@@ -39,6 +44,15 @@ usage()
     echo "-bump"
     echo "	Bump the build number (i.e. increment it). This is implemented using"
     echo "	the BuildNumber script."
+    echo ""
+    echo "-copylogs"
+    echo "      Copy the make logs to aaf.sourceforge.net.  Both the full and filtered"
+    echo "      logs are copied.  The logs are copied to aaf.sourceforge.net using"
+    echo "      scp.  A directory named identically to the build tag is created (if"
+    echo "      nonexistant) to store the logs.  The user of this script must ensure"
+    echo "      ssh is configured properly to access ${SF_SHELL_HOST}."
+    echo "      The scp destination is:"
+    echo "      ${SF_LOG_SCP_DST}"
     echo ""
     echo "-update"
     echo "	Update an existing cvs sandbox rather than performing a checkout."
@@ -69,7 +83,7 @@ usage()
     echo "4. Run \"make everything\" and log the results."
     echo "5. Filter the make log to identify unexpected build log messages"
     echo "   (i.e. errors)."
-    echo "6. Generate a build report and copy this to aaf.sourceforge.net."
+    echo "6. Copy the build logs to aaf.sourceforge.net."
     echo ""
     echo "If CVSROOT is not set, then it is assigned the default value:"
     echo ""
@@ -84,6 +98,7 @@ CVS_RUN_LOG_COMMAND=1
 CVS_UPDATE_ONLY=0
 BUILD_RUN_COMMAND=1
 BUMP_BUILD_TAG=0
+COPY_LOGS=0
 BASE_DIR=.
 
 until [ $# == 0 ]
@@ -92,6 +107,7 @@ do
 	case $1 in
 		-basedir  ) BASE_DIR=$2 ; shift ;;
 		-bump     ) BUMP_BUILD_TAG=1 ;;
+		-copylogs ) COPY_LOGS=1 ;;
 		-update   ) CVS_UPDATE_ONLY=1 ;;
 		-nocvsco  ) CVS_RUN_CO_COMMAND=0 ;;
 		-nocvslog ) CVS_RUN_LOG_COMMAND=0 ;;
@@ -157,14 +173,19 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Optionally bump the build number.
+# Optionally bump the build number, or simply call BuildNumber to
+# verify the consistency of the AAFSDKBuild.h file, and the build tag.
 #
 if [ $BUMP_BUILD_TAG -eq 1 ]; then
+    echo Bump the build number.
     BuildNumber -basedir $BASE_DIR -bump
     if [ $? -ne 0 ] ; then
 	echo Failed to bump the build number.
 	exit 1
     fi
+else
+    echo Verify build number consistency.
+    BuildNumber -basedir $BASE_DIR
 fi
 
 #
@@ -200,13 +221,15 @@ fi
 BUILD_TAG_DATE=`grep date: $CVS_LOG_OUTPUT_FILENAME | awk '{print $2, $3}' | sed s/\;//`
 CURRENT_DATE=`date -u "+%Y/%m/%d %H:%M:%S %Z"`
 
+# This version of the date is compatible with cp and scp (i.e. no / or : characters.)
+CURRENT_DATE_FOR_FILENAME=`echo $CURRENT_DATE | sed s/\ /_/g | sed sx/x-xg | sed s/:/-/g`
 #
 # Make everything
 #
 if [ $BUILD_RUN_COMMAND -eq 1 ]; then
 
-    MAKE_LOG_LINK=make.everything.log
-    MAKE_LOG_FILENAME=make.everything.`echo $CURRENT_DATE | sed s/\ /_/g | sed sx/x-xg`.log
+    MAKE_LOG_LINK=make.log
+    MAKE_LOG_FILENAME=make.log.${BUILD_TAG}.`sh build/aafplatform.sh`.${CURRENT_DATE_FOR_FILENAME}
 
     MAKE_INFO_HEADER=~/tmp/make.header.log
 
@@ -219,10 +242,13 @@ if [ $BUILD_RUN_COMMAND -eq 1 ]; then
     ln -s $MAKE_LOG_FILENAME $MAKE_LOG_LINK
 
     cat /dev/null > $MAKE_INFO_HEADER
-    printf "Build tag:\t\t\t${BUILD_TAG}\n"                      >> $MAKE_INFO_HEADER
-    printf "Date ${BUILD_TAG} was applied:\t${BUILD_TAG_DATE}\n" >> $MAKE_INFO_HEADER
-    printf "Current date on host:\t\t${CURRENT_DATE}\n"                >> $MAKE_INFO_HEADER
-    printf "\n "                                                 >> $MAKE_INFO_HEADER
+    printf "Build tag:\t\t${BUILD_TAG}\n"                      >> $MAKE_INFO_HEADER
+    printf "${BUILD_TAG} date:\t${BUILD_TAG_DATE}\n" >> $MAKE_INFO_HEADER
+    printf "Host date:\t\t${CURRENT_DATE}\n"               >> $MAKE_INFO_HEADER
+    printf "\n"                                                  >> $MAKE_INFO_HEADER
+    printf "Host type: `uname -sr`\n"                        >> $MAKE_INFO_HEADER
+    printf "Compiler version: `make ccversion`\n"                >> $MAKE_INFO_HEADER
+    printf "\n"                                                  >> $MAKE_INFO_HEADER
 
     cat $MAKE_INFO_HEADER
     cat $MAKE_INFO_HEADER >> $MAKE_LOG_FILENAME
@@ -247,3 +273,26 @@ echo Filtering make log using: $FILTER_COMMAND
 $FILTER_COMMAND  < $MAKE_LOG_FILENAME > ${MAKE_LOG_FILENAME}.filtered
 rm -f $MAKE_LOG_LINK.filtered
 ln -s $MAKE_LOG_FILENAME.filtered $MAKE_LOG_LINK.filtered
+
+#
+# Copy the make logs to aaf.sourceforge.net
+#
+
+if [ $COPY_LOGS -eq 1 ]; then
+    echo Copying the log files.
+    DST_DIR=${SF_LOG_DIR}/${BUILD_TAG}
+    echo ssh ${SF_SHELL_HOST} mkdir -p ${DST_DIR}
+    ssh ${SF_SHELL_HOST} mkdir -p ${DST_DIR}
+    echo scp ${MAKE_LOG_FILENAME} ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}
+    scp -q ${MAKE_LOG_FILENAME} ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}
+    echo scp ${MAKE_LOG_FILENAME}.filtered ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}.filtered
+    scp -q ${MAKE_LOG_FILENAME}.filtered ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}.filtered
+
+    # Add a user friendly link. It will always point to most recent log.
+    ssh ${SF_SHELL_HOST} rm -f  ${DST_DIR}/`sh build/aafplatform.sh`
+    ssh ${SF_SHELL_HOST} ln -s ${DST_DIR}/${MAKE_LOG_FILENAME} ${DST_DIR}/`sh build/aafplatform.sh`
+
+    ssh ${SF_SHELL_HOST} rm -f ${DST_DIR}/`sh build/aafplatform.sh`.filtered
+    ssh ${SF_SHELL_HOST} ln -s ${DST_DIR}/${MAKE_LOG_FILENAME}.filtered ${DST_DIR}/`sh build/aafplatform.sh`.filtered
+
+fi
