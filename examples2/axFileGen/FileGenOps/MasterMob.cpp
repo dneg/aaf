@@ -60,7 +60,8 @@ void MasterMob::Execute( const std::vector<AxString>& argv )
 
 	axMasMob.SetName( name );
 	
-	AxHeader( HeaderFromFileOp(fileName) ).AddMob( axMasMob );
+	AxHeader axHeader( HeaderFromFileOp(fileName) );
+	axHeader.AddMob( axMasMob );
 
 	SetCOM( spMasMob );
 	RegisterInstance( mobName );

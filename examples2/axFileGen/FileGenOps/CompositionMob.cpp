@@ -52,7 +52,18 @@ void CompositionMob::Execute( const std::vector<AxString>& argv )
 
 	axCompMob.Initialize( name );
  
-	AxHeader( HeaderFromFileOp( fileName ) ).AddMob( axCompMob );
+	// gcc 3.2.2 doesn't like this:
+	//
+	// AxHeader( HeaderFromFileOp( fileName ) ).AddMob( axCompMob );
+	//
+	// It generates: "CompositionMob.cpp:57: no matching function
+	// for call to `AxHeader::AxHeader(AxString&)'".  Why does it
+	// think HeaderFromFileOp() returns an AxString& !!!!  Is that
+	// a bug in gcc 3.2.2?  Avoiding temporary object creation
+	// works around the problem.  A similar change was made to
+	// MasterMob.cpp
+	AxHeader axHeader( HeaderFromFileOp( fileName ) );
+	axHeader.AddMob( axCompMob );
 
 	SetCOM( spCompMob );
 	RegisterInstance( mobName );
