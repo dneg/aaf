@@ -1,3 +1,4 @@
+// @doc OMINTERNAL
 #include "OMStorable.h"
 #include "OMStoredObject.h"
 #include "OMFile.h"
@@ -32,6 +33,8 @@ OMStorable::~OMStorable(void)
   _pathName = 0;
 }
 
+  // @mfunc Save this <c OMStorable>.
+  //   @this const
 void OMStorable::save(void) const
 {
   TRACE("OMStorable::save");
@@ -49,6 +52,7 @@ void OMStorable::save(void) const
   store()->saveIndex();
 }
 
+  // @mfunc Close this <c OMStorable>.
 void OMStorable::close(void)
 {
   PRECONDITION("Object is attached", attached());
@@ -70,12 +74,23 @@ void OMStorable::close(void)
   POSTCONDITION("Closed", _store == 0);
 }
 
+  // @mfunc Restore the contents of an <c OMStorable> (of unknown
+  //        sub-class) from the stored representation <p s>.
+  //   @parm The <c OMStoredObject> from which to restore this
+  //   <c OMStorable>.
 void OMStorable::restoreContentsFrom(OMStoredObject& s)
 {
   TRACE("OMStorable::restoreContentsFrom");
   s.restore(_persistentProperties);
 }
 
+  // @mfunc Restore an <c OMStorable> (of unknown sub-class) from
+  //        the stored representation <p s>.
+  //   @parm The <c OMStorable> that will contain (own) the newly
+  //   restored <c OMStorable>.
+  //   @parm The name to be given the newly restored <c OMStorable>.
+  //   @parm The <c OMStoredObject> from which to restore this
+  //   <c OMStorable>.
 OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
                                     const char* name,
                                     OMStoredObject& s)
@@ -97,6 +112,10 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   return object;
 }
 
+  // @mfunc  The <c OMStorable> that contains (owns) this
+  //          <c OMStorable>.
+  //   @rdesc The containing <c OMStorable>.
+  //   @this const
 OMStorable* OMStorable::containingObject(void) const
 {
   TRACE("OMStorable::containingObject");
@@ -104,6 +123,9 @@ OMStorable* OMStorable::containingObject(void) const
   return const_cast<OMStorable*>(_containingObject);
 }
 
+  // @mfunc Inform this <c OMStorable> that it is contained
+  //        (owned) by the <c OMStorable> <p containingObject>.
+  //   @parm The containing <c OMStorable>.
 void OMStorable::setContainingObject(const OMStorable* containingObject)
 {
   TRACE("OMStorable::setContainingObject");
@@ -114,12 +136,18 @@ void OMStorable::setContainingObject(const OMStorable* containingObject)
   _pathName = 0;
 }
 
+  // @mfunc Inform this <c OMStorable> that it is no longer contained.
 void OMStorable::clearContainingObject(void)
 {
   TRACE("OMStorable::clearContainingObject");
   _containingObject = 0;
 }
 
+  // @mfunc Inform this <c OMStorable> that it is contained
+  //        within the <c OMProperty> <p containingProperty>.
+  //   @parm The containing <c OMProperty>.
+  //   @parm A key used to be used by this <c OMStorable> to identify
+  //         itself in future transactions with the given <c OMProperty>.
 void OMStorable::setContainingProperty(const OMProperty* containingProperty,
                                        const size_t key)
 {
@@ -133,16 +161,23 @@ void OMStorable::setContainingProperty(const OMProperty* containingProperty,
   POSTCONDITION("Object properly attached", _containingProperty != 0);
 }
 
+  // @mfunc Inform this <c OMStorable> that it is no longer
+  //        contained within any <c OMProperty>.
 void OMStorable::clearContainingProperty(void)
 {
   _containingProperty = 0;
 }
 
+  // @mfunc The name of this <c OMStorable>.
+  //   @rdesc The name of this <c OMStorable>.
+  //   @this const
 const char* OMStorable::name(void) const
 {
   return _name;
 }
 
+  // @mfunc Give this <c OMStorable> a name.
+  //   @parm The name to be given to this <c OMStorable>.
 void OMStorable::setName(const char* name)
 {
   TRACE("OMStorable::setName");
@@ -155,6 +190,11 @@ void OMStorable::setName(const char* name)
   _pathName = 0;
 }
 
+  // @mfunc The <c OMFile> in which this <c OMStorable> has a
+  //        persistent representation.
+  //   @rdesc The <c OMFile> in which this <c OMStorable> has a
+  //          persistent representation.
+  //   @this const
 OMFile* OMStorable::file(void) const
 {
   TRACE("OMStorable::file");
@@ -174,6 +214,9 @@ const char* OMStorable::pathName(void) const
   return _pathName;
 }
 
+  // @mfunc The stored representation of this <c OMStorable>.
+  //   @rdesc The <c OMStoredObject> representing this <c OMStorable>.
+  //   @this const
 OMStoredObject* OMStorable::store(void) const
 {
   if (_store == 0) {
@@ -186,6 +229,10 @@ OMStoredObject* OMStorable::store(void) const
   return _store;
 }
 
+  // @mfunc Inform this <c OMStorable> where it should store its
+  //        persistent representation.
+  //   @parm The <c OMStoredObject> on which this <c OMStorable>
+  //         should be persisted.
 void OMStorable::setStore(OMStoredObject* store)
 {
   PRECONDITION("Valid store", store != 0);
@@ -193,6 +240,9 @@ void OMStorable::setStore(OMStoredObject* store)
   _store = store;
 }
 
+  // @mfunc Is this <c OMStorable> attached to a file ?
+  //   @rdesc True if this <c OMStorable> is attached to a file, false
+  //          otherwise.
 bool OMStorable::attached(void)
 {
   TRACE("OMStorable::attached");
