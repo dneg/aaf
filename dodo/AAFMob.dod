@@ -219,6 +219,8 @@ AD_XMETHOD1(AppendSlot,
 
 			Appends the given mob slot to the mob.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pSlot pointer is valid.
   // 
@@ -235,36 +237,6 @@ AD_XMETHOD1(AppendSlot,
   //   - pSlot is null.)
 
 
-AD_XMETHOD1(RemoveSlot,
-			[in],
-			objIn,
-			AAFMobSlot,
-			pSlot,
-			Existing slot in the mob,
-
-			Removes the given mob slot from this header.  If the given mob
-  // slot is not found no action is taken and an error is returned.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSlot pointer is valid.
-  // - the given locator is found.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSlot is null.
-  //
-  // AAFRESULT_SLOT_NOT_FOUND
-  //   - the given mob slot was not found.)
-
-
 AD_XMETHOD1(EnumAAFAllMobSlots,
 			[out],
 			objOut,
@@ -272,7 +244,8 @@ AD_XMETHOD1(EnumAAFAllMobSlots,
 			ppEnum,
 			Mob Slot Enumeration,
 
-			return an enumeration for all mob slots.
+			return an enumeration for all mob slots.  The returned
+  // enumerator is AddRef\(\)ed before it is returned.
   // 
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
@@ -386,6 +359,8 @@ AD_XMETHOD2(AppendComment,
 			Creates a user-defined comment and appends it to the specified
   // Mob.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pCategory pointer is valid.
   // - the pComment pointer is valid.
@@ -412,6 +387,8 @@ AD_XMETHOD1(GetNumComments,
 
 			return total number of comments attached to this mob.
   //
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pNumComments pointer is valid.
   // 
@@ -435,8 +412,11 @@ AD_XMETHOD1(EnumAAFAllMobComments,
 			ppEnum,
 			Mob Comments,
 
-			return the enumeration for all mob comments.
+			return the enumeration for all mob comments.  The returned
+  // enumerator is AddRef\(\)ed before it is returned.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
   // 
@@ -453,35 +433,6 @@ AD_XMETHOD1(EnumAAFAllMobComments,
   //   - ppEnum is null.)
 
 
-AD_XMETHOD1(RemoveComment,
-			[in],
-			objPass,
-			aafMobComment_t *,
-			pComment,
-			Mob Comment to remove,
-
-			Remove a given comment from the mob.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pComment pointer is valid.
-  // - the given locator is found.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pComment is null.
-  //
-  // AAFRESULT_NOT_FOUND
-  //   - the given comment was not found.)
-
-
 AD_XMETHOD1(IsAPrimaryMob,
 			[out],
 			objPass,
@@ -491,6 +442,8 @@ AD_XMETHOD1(IsAPrimaryMob,
 
 			This method will return true if this mob is a primary mob. If an
   // error occurs the retval will be false.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pRetval pointer is valid.
@@ -536,6 +489,8 @@ AD_XMETHOD4(AppendNewSlot,
 			This method creates a new mob slot with the given property values
   // and appends it to the input mob.
   // 
+  // The returned mob slot is AddRef\(\)ed before it is returned.
+  //
   // Succeeds if all of the following are true:
   // - the pSegment pointer is valid.
   // - the pSlotName pointer is valid.
@@ -594,6 +549,8 @@ AD_XMETHOD6(AppendNewTimelineSlot,
 			This method creates a new timeline mob slot with the given
   // property values and appends it to the input mob.
   // 
+  // The returned mob slot is AddRef\(\)ed before it is returned.
+  //
   // Succeeds if all of the following are true:
   // - the pSegment pointer is valid.
   // - the pSlotName pointer is valid.
@@ -642,6 +599,8 @@ AD_XMETHOD4(GetMobInfo,
   // Caller may call GetNameBufLen\(\) to determine the required pName
   // buffer size.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pLastModified pointer is valid.
   // - the pCreationTime pointer is valid.
@@ -685,6 +644,8 @@ AD_XMETHOD3(SetNewProps,
 
 			This method is called to create the new properties on a mob.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pName pointer is valid.
   // 
@@ -711,6 +672,8 @@ AD_XMETHOD1(SetPrimary,
 			This method is used to either add a mob to the HEAD Primary Mob
   // index or to take it out of the index.
   // 
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Always succeeds.
   // 
   // This method will return the following codes.  If more than one of
@@ -725,14 +688,14 @@ AD_XMETHOD3(OffsetToMobTimecode,
 			[in],
 			objIn,
 			AAFSegment,
-			pTcSlotID,
-			Current slot,
+			pTcSeg,
+			Timecode Segment,
 
 			[in],
 			objPass,
 			aafPosition_t *,
 			pOffset,
-			Offset into segment,
+			Offset into segment in edit units for that segment's mob slot,
 
 			[out],
 			objPass,
@@ -741,12 +704,16 @@ AD_XMETHOD3(OffsetToMobTimecode,
 			The resulting timecode,
 
 			This method will determine the timecode at the given offset into
-  // the given slot\, and will return it in *pResult.
+  // the given timecode segment\, and will return it in *pResult.  If
+  // pTcSeg is NULL\, will search for the slot containing a timecode
+  // segment and will use that instead.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
-  // - the pTCSlotID pointer is valid.
   // - the pOffset pointer is valid.
   // - the pResult pointer is valid.
+  // - 
   // 
   // If this method fails nothing will be written to *pDatadef.
   // 
@@ -758,7 +725,10 @@ AD_XMETHOD3(OffsetToMobTimecode,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - any of pTCSlotID\, pOffset\, or pResult arguments is NULL.)
+  //   - either pOffset or pResult argument is NULL.
+  //
+  // AAFRESULT_TIMECODE_NOT_FOUND
+  //   - pTcSeg is NULL and timecode track wasn't found.)
 
 
 AD_XMETHOD2(FindSlotBySlotID,
@@ -775,6 +745,8 @@ AD_XMETHOD2(FindSlotBySlotID,
 			The requested slot,
 
 			The method will find the mob slot for the given slot id.
+  //
+  // The returned mob slot is AddRef\(\)ed before it is returned.
   //
   // Succeeds if all of the following are true:
   // - the ppDestSlot pointer is valid.
@@ -813,6 +785,8 @@ AD_XMETHOD2(ChangeRef,
   // This function traverses through the entire structure of the input
   // Mob looking for Source Clips\, and changes the sourceID property
   // on all Source Clips with oldMobID to newMobID.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pOldMobID pointer is valid.
@@ -857,7 +831,8 @@ AD_XMETHOD4(CloneExternal,
 			Destination Mob,
 
 			Clones the specified Source Mob\, and optionally all dependent
-  // Mobs\, to an external file\, keeping the same MobID.
+  // Mobs\, to an external file\, keeping the same MobID.  A pointer
+  // to the newly created destination mob is returned in *ppDestMob.
   // 
   // This function clones the specified Source Mob in the source file
   // into a destination Mob\, with the same MobID\, in the destination
@@ -871,6 +846,10 @@ AD_XMETHOD4(CloneExternal,
   // attempt to find it in another file and clone it.  Both AAF files
   // must be open before you call this function and both must have the
   // same AAF Version number.
+  //
+  // The returned mob is AddRef\(\)ed before it is returned.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
   // - the pDestFile pointer is valid.
@@ -910,6 +889,10 @@ AD_XMETHOD2(Copy,
   // the name specified in the destMobName parameter. The function
   // also copies all private data.
   // 
+  // The returned mob is AddRef\(\)ed before it is returned.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if all of the following are true:
   // - the pDestMobName pointer is valid.
   // - the ppDestMob pointer is valid.
