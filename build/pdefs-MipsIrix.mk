@@ -76,8 +76,9 @@ include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 # 1681 - virtual function override intended?
 # 1460 - function decalred inline after being called
 # 1047 - macro has an incompatible redefinition
+# 1183 - unsigned integer compared to zero
 
-PLATFORM_CFLAGS = -Dsgi -woff 1552,1174,1107,1681,1460,1047 $(MODULE_PLATFORM_CFLAGS) 
+PLATFORM_CFLAGS = -Dsgi -woff 1552,1174,1107,1681,1460,1047,1183 $(MODULE_PLATFORM_CFLAGS) 
 
 # iostream support on Irix is provided by libCio
 # Include this as part of the link command.
