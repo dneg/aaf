@@ -50,6 +50,9 @@ public:
     //          of elements in the <c OMContainer>.
   virtual size_t count(void) const = 0;
 
+    // @cmember Remove <p value> from this <c OMContainer>.
+  virtual void removeValue(const Element value) = 0;
+
 };
 
 #endif

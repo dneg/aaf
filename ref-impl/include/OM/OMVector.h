@@ -61,6 +61,11 @@ public:
     //          of elements in the <c OMVector>.
   size_t count(void) const;
 
+    // @cmember Remove <p value> from this <c OMVector>.
+    //          In the case of duplicate values, the one with the lowest
+    //          index is removed.
+  virtual void removeValue(const Element value);
+
     // @cmember The capacity of this <c OMVector>.
     //          <mf OMVector::capacity> returns the potential
     //          number of elements in the <c OMVector>.
@@ -127,6 +132,13 @@ public:
     //          from this <c OMVector>. Existing values in this
     //          <c OMVector> are shifted down one index position.
   void removeFirst(void);
+
+    // @cmember The index of the element with value <p value>.
+    //          In the case of duplicate values, lowest index is returned.
+  size_t indexOfValue(const Element value) const;
+
+    // @cmember The number of elements with value <p value>.
+  size_t countValue(const Element value) const;
 
 private:
   // @access Private members.
