@@ -80,7 +80,7 @@ ImplAAFEssenceGroup::~ImplAAFEssenceGroup ()
 		  pClip = 0;
 		}
 	}
-	ImplAAFSourceClip *pClip = _stillFrame.setValue(0);
+	ImplAAFSourceClip *pClip = _stillFrame.clearValue();
 	if (pClip)
 	{
 	  pClip->ReleaseReference();

@@ -62,7 +62,7 @@ ImplAAFSelector::ImplAAFSelector () :
 
 ImplAAFSelector::~ImplAAFSelector ()
 {
-	ImplAAFSegment *selected = _selected.setValue(0);
+	ImplAAFSegment *selected = _selected.clearValue();
 	if (selected != NULL)
 	{
 	  selected->ReleaseReference();

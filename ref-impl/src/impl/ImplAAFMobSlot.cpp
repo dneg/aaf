@@ -69,7 +69,7 @@ ImplAAFMobSlot::ImplAAFMobSlot ()
 
 ImplAAFMobSlot::~ImplAAFMobSlot ()
 {
-	ImplAAFSegment *segment = _segment.setValue(0);
+	ImplAAFSegment *segment = _segment.clearValue();
 	if (segment)
 	{
 	  segment->ReleaseReference();

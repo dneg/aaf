@@ -87,7 +87,7 @@ ImplAAFSourceMob::ImplAAFSourceMob ()
 
 ImplAAFSourceMob::~ImplAAFSourceMob ()
 {
-	ImplAAFEssenceDescriptor *essenceDesc = _essenceDesc.setValue(0);
+	ImplAAFEssenceDescriptor *essenceDesc = _essenceDesc.clearValue();
 	if (essenceDesc)
 	{
 	  essenceDesc->ReleaseReference();

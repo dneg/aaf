@@ -101,7 +101,7 @@ ImplAAFPluginDef::ImplAAFPluginDef ()
 ImplAAFPluginDef::~ImplAAFPluginDef ()
 {
 	// Release the manufacturer locator
-	ImplAAFNetworkLocator *pNetLocator = _manufacturerURL.setValue(0);
+	ImplAAFNetworkLocator *pNetLocator = _manufacturerURL.clearValue();
 	if (pNetLocator)
 	{
 	  pNetLocator->ReleaseReference();

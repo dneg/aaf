@@ -55,7 +55,7 @@ ImplAAFPulldown::ImplAAFPulldown ()
 
 ImplAAFPulldown::~ImplAAFPulldown ()
 {
-	ImplAAFSegment *seg = _inputSegment.setValue(0);
+	ImplAAFSegment *seg = _inputSegment.clearValue();
 	if (seg)
 	{
 	  seg->ReleaseReference();

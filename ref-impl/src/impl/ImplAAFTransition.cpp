@@ -78,7 +78,7 @@ _cutPoint( PID_Transition_CutPoint, L"CutPoint")
 
 ImplAAFTransition::~ImplAAFTransition ()
 {
-	ImplAAFOperationGroup *group = _operationGroup.setValue(0);
+	ImplAAFOperationGroup *group = _operationGroup.clearValue();
 	if (group)
 	{
 	  group->ReleaseReference();
