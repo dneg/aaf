@@ -193,7 +193,7 @@ AD_XMETHOD1(GetDataDef,
 
 			This method will return the AUID of the Data Definition object
   // associated with the segment in this Mob Slot.  Common
-  // DataDefinition UIDs are DDEF_Video\, DDEF_Audio\, DDEF_Timecode\,
+  // DataDefinition UIDs are DDEF_Picture\, DDEF_Sound\, DDEF_Timecode\,
   // and DDEF_Edgecode.
   //
   // Succeeds if all of the following are true:
