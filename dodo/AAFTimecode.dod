@@ -38,7 +38,8 @@ AD_XMETHOD2(Initialize,
 			Timecode Value \(startFrame\, drop\, fps\),
 
 			Initializes this object with the given length and timecode
-  // values.
+  // values.  Length is specified in units of the edit rate of the
+  // containing timeline mob slot.
   // 
   // Succeeds if all of the following are true:
   // - this object has not yet been initialized.
