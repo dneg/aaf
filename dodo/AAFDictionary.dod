@@ -25,23 +25,23 @@ AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_ROOT_CLASS_BEGIN
 
-AD_METHOD2(LookupClass,
-[in\,ref], aafUID_t *, pClassID, Class Unique ID,
-[out\,retval], AD_AAFTYPES\(AAFClassDefinition\) **, ppClassDefinition, Class Definition,
+AD_XMETHOD2(LookupClass,
+[in\,ref], objPass, aafUID_t *, pClassID, Class Unique ID,
+[out\,retval], objOut, AAFClassDefinition, ppClassDefinition, Class Definition,
 Return the class definition with the given id.)
 
-AD_METHOD1(RegisterClass,
-[in\,ref], AD_AAFTYPES\(AAFClassDefinition\) *, pClassDefinition, Class Definition,
+AD_XMETHOD1(RegisterClass,
+[in\,ref], objIn, AAFClassDefinition, pClassDefinition, Class Definition,
 Add the class definition object to the dictionary.)
 
 
-AD_METHOD1(GetAllClassDefinitions,
-[out\,retval], AD_AAFTYPES\(EnumAAFClassDefinitions\) **, ppEnum, Class Definition Enumeration,
+AD_XMETHOD1(GetAllClassDefinitions,
+[out\,retval], objOut, EnumAAFClassDefinitions, ppEnum, Class Definition Enumeration,
 Return an enumerator for all class definitions.)
 
-AD_METHOD2(GetClassDefinitions,
-[in\,ref], aafSearchDictionaryCrit_t *, pCriteria, criteria to limit definitions in enumeration,
-[out\,retval], AD_AAFTYPES\(EnumAAFClassDefinitions\) **, ppEnum, Class Definition Enumeration,
+AD_XMETHOD2(GetClassDefinitions,
+[in\,ref], objPass, aafSearchDictionaryCrit_t *, pCriteria, criteria to limit definitions in enumeration,
+[out\,retval], objOut, EnumAAFClassDefinitions, ppEnum, Class Definition Enumeration,
 Return an enumerator for all class definitions that match the given criteria.)
 
 

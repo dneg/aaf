@@ -62,30 +62,31 @@ AD_METHOD1(SetParentAUID,
 		   Parent class AUID,
 		   Sets the Parent's AUID.)
 
-AD_METHOD1(AppendPropertyDef,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFPropertyDefintion\) *,
-		   pPropertyDef, 
-		   Property Definition to be added,
-		   Add the Property Definition to the class definition.)
+AD_XMETHOD1(AppendPropertyDef,
+		    [in\,ref],
+		    objIn,
+		    AAFPropertyDefintion,
+		    pPropertyDef, 
+		    Property Definition to be added,
+		    Add the Property Definition to the class definition.)
 
-AD_METHOD1(RemovePropertyDef,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFPropertyDefinition\) *,
-		   pPropertyDef, 
-		   Property Definition to be removed,
-		   Remove Property Definition from the class definition.)
+AD_XMETHOD1(RemovePropertyDef,
+		    [in\,ref],
+		    objIn,
+		    AAFPropertyDefinition,
+		    pPropertyDef, 
+		    Property Definition to be removed,
+		    Remove Property Definition from the class definition.)
 
-AD_METHOD1(GetPropertyDefinitions,
-		   [retval][out],
-		   AD_AAFTYPES\(EnumAAFPropertyDefinitions\)**,
-		   ppEnum,
-		   Property Definition enumeration,
-		   Returns an enumerator for aaf property definitions.)
+AD_XMETHOD1(GetPropertyDefinitions,
+		    [retval][out],
+		    objOut,
+		    EnumAAFPropertyDefinitions,
+		    ppEnum,
+		    Property Definition enumeration,
+		    Returns an enumerator for aaf property definitions.)
 		    		
 
 AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
-
-
