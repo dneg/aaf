@@ -233,77 +233,12 @@ typedef enum _aafAlphaTransparency_t
 	kMaxValueTransparent = 1
 } aafAlphaTransparency_t;
 
-// TomR: The following enumeration, aafVideoFmtOpcode_t and aafAudioFmtOpcode_t, will 
-// be replaced by a more general "plugin option" object mechanism [TBD] that does not 
-// require the public AAF api to have any declared public knowledge of any particular
-// code. We do NOT want to change the public api to support any plugin.
-// 
-typedef enum _aafVideoFmtOpcode_t
-{
-	kAAFVFmtEnd = 0,
-		 
-	kAAFPixelFormat = 1, 		/* operand.expPixelFormat */
-	kAAFFrameLayout = 2, 		/* operand.expFrameLayout */
-	kAAFFieldDominance = 3,		/* operand.expFieldDom */
-	kAAFStoredRect = 4, 		/* operand.expRect */
-	kAAFDisplayRect = 5,  		/* operand.expRect */
-	kAAFSampledRect = 6,  		/* operand.expRect */
-	kAAFPixelSize = 7, 			/* operand.expInt16 */
-	kAAFAspectRatio = 8,		/* operand.expRational */
-	kAAFAlphaTransparency = 9,  /* operand.expInt32 */
-	kAAFGamma = 10,				/* operand.expRational */
-	kAAFImageAlignmentFactor = 11, /* operand.expInt32 */
-	kAAFVideoLineMap = 12,		/* operand.expLineMap */
-	kAAFWillTransferLines = 13,	/* operand.expBoolean */
-	kAAFIsCompressed = 14,		/* operand.expBoolean */
-	kAAFLineLength = 15,			/* operand.expInt32 */
-	
-	/* the following group is exclusive to RGBA codec */
-	kAAFRGBCompLayout = 16,		/* operand.expCompArray */
-	kAAFRGBCompSizes = 17,		/* operand.expCompSizeArray */
-	kAAFRGBPalette = 18,			/* operand.expPointer */
-	kAAFRGBPaletteLayout = 19,	/* operand.expCompArray */
-	kAAFRGBPaletteSizes = 20,	/* operand.expCompSizeArray */	
-		
-	/* the following group is exclusive to CDCI codec */
-	kAAFCDCICompWidth = 21,	    /* operand.expInt32 */
-	kAAFCDCIHorizSubsampling = 22,/* operand.expUInt32 */
-	kAAFCDCIColorSiting = 23,    /* operand.expColorSiting */
-	kAAFCDCIBlackLevel = 24,     /* operand.expUInt32 */
-	kAAFCDCIWhiteLevel = 25,     /* operand.expUInt32 */
-	kAAFCDCIColorRange = 26,     /* operand.expUInt32 */
-	kAAFCDCIPadBits = 27,	    /* operand.expInt16 */
-		
-	kAAFVideoOpcodeReserved1 = 28,
-	kAAFVideoOpcodeReserved2 = 29,
-	kAAFVideoOpcodeReserved3 = 30,
-	kAAFVideoOpcodeReserved4 = 31,
-	kAAFVideoOpcodeReserved5 = 32,
-	kAAFVideoOpcodeReserved6 = 33,
-	kAAFVideoOpcodeReserved7 = 34,
-	kAAFVideoOpcodeReserved8 = 35,
-		
-		
-	kAAFLastVideoOpcode = 36
-} aafVideoFmtOpcode_t;
-
 typedef enum _aafPixelFormat_t
 {
 	kAAFPixNone = 0, 
 	kAAFPixRGBA = 1, 
 	kAAFPixYUV = 2
 } aafPixelFormat_t;
-
-typedef enum _aafAudioFmtOpcode_t
-{
-	kAAFAFmtEnd = 0, 
-	kAAFSampleSize = 1, 
-	kAAFSampleRate = 2, 
-	kAAFSampleFormat = 3, 
-	kAAFNumChannels = 4,
-	kAAFExpLong = 5,		// TomR:Added to support all options in the union
-	kAAFExpRational = 6 	// TomR:Added to support all options in the union
-} aafAudioFmtOpcode_t;
 
 AD_CPP_QUOTE(#if 0)
 typedef enum _aafJPEGcomponent_t
@@ -634,111 +569,6 @@ typedef struct _aafmMultiCreate_t
 	aafInt32           	slotID;		/* IN -- */
 	aafRational_t		sampleRate;
 } aafmMultiCreate_t;
-
-AD_CPP_QUOTE(#if 0)
-typedef struct _aafVideoMemOp_t
-{
-
-    aafVideoFmtOpcode_t     opcode;
-    [switch_is(opcode)] union
-    {
-        [case(kAAFPixelFormat)]
-			aafPixelFormat_t	expPixelFormat;
-        [case(kAAFFrameLayout)]
-			aafFrameLayout_t	expFrameLayout;
-        [case(kAAFFieldDominance)]
-			aafFieldDom_t		expFieldDom	;		
-        [case(kAAFStoredRect, kAAFDisplayRect, kAAFSampledRect)]
-			aafRect_t			expRect;			
-        [case(kAAFPixelSize, kAAFCDCIPadBits)]
-			aafInt16			expInt16;			
-        [case(kAAFAspectRatio, kAAFGamma)]
-			aafRational_t   	expRational;			
-        [case(kAAFAlphaTransparency, kAAFImageAlignmentFactor, 
-              kAAFLineLength, kAAFCDCICompWidth, kAAFCDCIHorizSubsampling)]
-			aafInt32			expInt32;			
-        [case(kAAFVideoLineMap)]
-			aafVideoLineMap_t	expLineMap;			
-        [case(kAAFWillTransferLines, kAAFIsCompressed)]
-			aafBool				expBoolean;			
-        [case(kAAFRGBCompLayout, kAAFRGBPaletteLayout)]
-			aafCompArray_t		expCompArray;			
-        [case(kAAFRGBCompSizes, kAAFRGBPaletteSizes)]
-			aafCompSizeArray_t	expCompSizeArray;			
-        [case(kAAFRGBPalette)]
-			aafDataBuffer_t		expPointer;			
-        [case(kAAFCDCIColorSiting)]
-			aafColorSiting_t	expColorSiting;			
-        [case(kAAFCDCIBlackLevel, kAAFCDCIWhiteLevel, kAAFCDCIColorRange)]
-			aafUInt32			expUInt32;			
-						
-        [default] ;
-    } ;
-
-} aafVideoMemOp_t;
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(//)
-AD_CPP_QUOTE(typedef struct _aafVideoMemOp_t)
-AD_CPP_QUOTE({)
-AD_CPP_QUOTE(\	aafVideoFmtOpcode_t opcode;)
-AD_CPP_QUOTE(\	union)
-AD_CPP_QUOTE(\	{)
-AD_CPP_QUOTE(\		aafPixelFormat_t	expPixelFormat;)
-AD_CPP_QUOTE(\		aafFrameLayout_t	expFrameLayout;)
-AD_CPP_QUOTE(\		aafFieldDom_t		expFieldDom;)
-AD_CPP_QUOTE(\		aafRect_t			expRect;)
-AD_CPP_QUOTE(\		aafInt32			expInt32;)
-AD_CPP_QUOTE(\		aafInt16			expInt16;)
-AD_CPP_QUOTE(\		aafUInt32			expUInt32;)
-AD_CPP_QUOTE(\		aafRational_t   	expRational;)
-AD_CPP_QUOTE(\		aafDataBuffer_t		expPointer;)
-AD_CPP_QUOTE(\		aafCompArray_t		expCompArray;)
-AD_CPP_QUOTE(\		aafCompSizeArray_t	expCompSizeArray;)
-AD_CPP_QUOTE(\		aafColorSiting_t	expColorSiting;)
-AD_CPP_QUOTE(\		aafVideoLineMap_t	expLineMap;)
-AD_CPP_QUOTE(\		aafBool				expBoolean;)
-AD_CPP_QUOTE(\	} operand;)
-AD_CPP_QUOTE(} aafVideoMemOp_t;)
-
-
-AD_CPP_QUOTE(#if 0)
-typedef struct _aafAudioMemOp_t
-{
-
-    aafAudioFmtOpcode_t     opcode;
-    [switch_is(opcode)] union
-    {
-        [case(kAAFSampleFormat)]
-			aafAudioSampleType_t	format;	/* OffsetBinary or SignedMagnitude */
-        [case(kAAFSampleSize)]
-			aafInt16           		sampleSize;
-        [case(kAAFSampleRate)]
-			aafRational_t   		sampleRate;
-        [case(kAAFNumChannels)]
-			aafInt16				numChannels;
-        [case(kAAFExpLong)]
-			aafInt32				expLong;
-        [case(kAAFExpRational)]
-			aafRational_t   		expRational;
-        [default] ;
-    } ;
-
-} aafAudioMemOp_t;
-AD_CPP_QUOTE(#endif)
-AD_CPP_QUOTE(//)
-AD_CPP_QUOTE(typedef struct _aafAudioMemOp_t)
-AD_CPP_QUOTE({)
-AD_CPP_QUOTE(\	aafAudioFmtOpcode_t opcode;)
-AD_CPP_QUOTE(\	union)
-AD_CPP_QUOTE(\	{)
-AD_CPP_QUOTE(\	    aafAudioSampleType_t	format;	/* OffsetBinary or SignedMagnitude */)
-AD_CPP_QUOTE(\		aafInt16           		sampleSize;)
-AD_CPP_QUOTE(\		aafRational_t   		sampleRate;)
-AD_CPP_QUOTE(\		aafInt16				numChannels;)
-AD_CPP_QUOTE(\		aafInt32				expLong;)
-AD_CPP_QUOTE(\		aafRational_t   		expRational;)
-AD_CPP_QUOTE(\	} operand;)
-AD_CPP_QUOTE(\} aafAudioMemOp_t;)
 
 AD_CPP_QUOTE(/* Typedefs specific to edgecode and timecode */)
 typedef enum _aafEdgeType_t
