@@ -247,16 +247,4 @@ HRESULT CAAFEssenceDataStream::InternalQueryInterface
 //
 // Define the contrete object support implementation.
 // 
-//
-// Define the contrete object support implementation.
-// 
-HRESULT CAAFEssenceDataStream::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut)
-{
-	*ppvObjOut = NULL;
- 	CAAFEssenceDataStream *pAAFEssenceDataStream = new CAAFEssenceDataStream(pUnkOuter);
- 	if (NULL == pAAFEssenceDataStream)
- 		return E_OUTOFMEMORY;
- 	*ppvObjOut = static_cast<IAAFEssenceStream *>(pAAFEssenceDataStream);
- 	((IUnknown *)(*ppvObjOut))->AddRef();
- 	return S_OK;
- }
+AAF_DEFINE_FACTORY(AAFEssenceDataStream)

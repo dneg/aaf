@@ -454,17 +454,7 @@ HRESULT CAAFEssenceFileContainer::InternalQueryInterface
     return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
 }
 
-
 //
 // Define the contrete object support implementation.
 // 
-HRESULT CAAFEssenceFileContainer::COMCreate(IUnknown *pUnkOuter, void **ppvObjOut)
-{
-	*ppvObjOut = NULL;
- 	CAAFEssenceFileContainer *pAAFEssenceFileContainer = new CAAFEssenceFileContainer(pUnkOuter);
- 	if (NULL == pAAFEssenceFileContainer)
- 		return E_OUTOFMEMORY;
- 	*ppvObjOut = static_cast<IAAFEssenceContainer *>(pAAFEssenceFileContainer);
- 	((IUnknown *)(*ppvObjOut))->AddRef();
- 	return S_OK;
-}
+AAF_DEFINE_FACTORY(AAFEssenceFileContainer)
