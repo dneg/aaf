@@ -20,6 +20,15 @@
 
 const int currentVersion = 4;
 
+const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
+                               sizeof(OMUInt32) +     // Version number
+                               sizeof(OMUInt32);      // Count of entries
+
+const size_t indexEntrySize  = sizeof(OMPropertyId) + // Property id
+                               sizeof(OMUInt32) +     // Type
+                               sizeof(OMUInt32) +     // Offset
+                               sizeof(OMUInt32);      // Length
+
 #if defined(__sgi)
 #define OMQUADPART(x) x.u.QuadPart
 #define OMSETQUADPART(x,y) (OMQUADPART(x) = (y))
@@ -198,6 +207,20 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   PRECONDITION("Valid index", index->isValid());
   PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
 
+  // The number of entries in the index.
+  //
+  OMUInt32 entries = index->entries();
+
+  // Compute the size of the index stream.
+  //
+  size_t indexStreamSize = indexHeaderSize + (entries * indexEntrySize);
+
+  // Set the index stream size. This avoids paying the cost of growing
+  // the stream during writes, it also avoids leaving garbage at the
+  // end of the stream if the index has shrunk.
+  //
+  streamSetSize(_indexStream, indexStreamSize);
+
   // Write byte order flag.
   //
   ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
@@ -210,7 +233,6 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   
   // Write count of entries.
   //
-  OMUInt32 entries = index->entries();
   writeToStream(_indexStream, &entries, sizeof(entries));
   
   // Write entries.
@@ -230,6 +252,8 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
 
   streamSetPosition(_indexStream, 0);
   POSTCONDITION("At start of index stream", streamPosition(_indexStream) == 0);
+  POSTCONDITION("Consistent index stream size",
+                                  indexStreamSize == streamSize(_indexStream));
 }
 
 OMStoredPropertySetIndex* OMStoredObject::restore(void)
