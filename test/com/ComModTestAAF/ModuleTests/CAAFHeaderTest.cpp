@@ -2,7 +2,7 @@
 // @com This file implements the module test for CAAFHeader.
 /***********************************************************************
  *
- *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *              Copyright (c) 1998-2001 Avid Technology, Inc.
  *
  * Permission to use, copy and modify this software and accompanying 
  * documentation, and to distribute and sublicense application software
@@ -74,6 +74,15 @@ static const aafMobID_t  _mobID[gMaxMobCount] =
 	
 }; //end mobid block
 
+
+// {B8CF441F-F2F5-11d4-8040-00104BC9156D}
+static const aafUID_t Header_OptionalPropID =
+{ 0xb8cf441f, 0xf2f5, 0x11d4, { 0x80, 0x40, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+
+static aafCharacter_constptr Header_OptionalPropName = L"Header optional property";
+
+static const aafUInt32 Header_OptionalPropertyValue = 42;
+
 inline void checkhr(HRESULT expression, HRESULT r)
 {
   if (expression != r)
@@ -88,6 +97,9 @@ struct HeaderTest
 
   void createFile(wchar_t *pFileName);
   void openFile(wchar_t *pFileName);
+
+  void writeOptionalProperties();
+  void readOptionalProperties();
 
   void createFileMob(int itemNumber);
   void createEssenceData(IAAFSourceMob *pSourceMob);
@@ -117,7 +129,12 @@ struct HeaderTest
   IAAFEssenceData *_pEssenceData;
   IAAFIdentification *_pIdent;
   IEnumAAFIdentifications *_pEnumIdent;
-  
+  IAAFObject *_pHeaderObject;
+  IAAFClassDef *_pClassDef;
+  IAAFTypeDef *_pOptionalPropTypeDef;
+  IAAFTypeDefInt *_pTypeDefInt;
+  IAAFPropertyDef *_pOptionalPropDef;
+  IAAFPropertyValue *_pOptionalPropValue;
 };
 
 extern "C" HRESULT CAAFHeader_test(testMode_t mode);
@@ -150,8 +167,6 @@ extern "C" HRESULT CAAFHeader_test(testMode_t mode)
   return hr;
 }
 
-
-
 HeaderTest::HeaderTest():
   _hr(AAFRESULT_SUCCESS),
   _pFile(NULL),
@@ -164,7 +179,13 @@ HeaderTest::HeaderTest():
   _pEssenceDescriptor(NULL),
   _pFileDescriptor(NULL),
   _pEnumEssenceData(NULL),
-  _pEssenceData(NULL)
+  _pEssenceData(NULL),
+  _pHeaderObject(NULL),
+  _pClassDef(NULL),
+  _pOptionalPropTypeDef(NULL),
+  _pTypeDefInt(NULL),
+  _pOptionalPropDef(NULL),
+  _pOptionalPropValue(NULL)
 {
   _productVersion.major = 1;
   _productVersion.minor = 0;
@@ -187,6 +208,42 @@ HeaderTest::~HeaderTest()
 
 void HeaderTest::cleanupReferences()
 {
+  if (NULL != _pOptionalPropValue)
+  {
+    _pOptionalPropValue->Release();
+    _pOptionalPropValue = NULL;
+  }
+
+  if (NULL != _pOptionalPropDef)
+  {
+    _pOptionalPropDef->Release();
+    _pOptionalPropDef = NULL;
+  }
+
+  if (NULL != _pTypeDefInt)
+  {
+    _pTypeDefInt->Release();
+    _pTypeDefInt = NULL;
+  }
+
+  if (NULL != _pOptionalPropTypeDef)
+  {
+    _pOptionalPropTypeDef->Release();
+    _pOptionalPropTypeDef = NULL;
+  }
+
+  if (NULL != _pClassDef)
+  {
+    _pClassDef->Release();
+    _pClassDef = NULL;
+  }
+
+  if (NULL != _pHeaderObject)
+  {
+    _pHeaderObject->Release();
+    _pHeaderObject = NULL;
+  }
+
   if (NULL != _pEssenceData)
   {
     _pEssenceData->Release();
@@ -279,7 +336,6 @@ void HeaderTest::createFile(wchar_t *pFileName)
 
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
-  
 
   // GetDictionary
   checkhr(_pHeader->GetDictionary(NULL), AAFRESULT_NULL_PARAM);
@@ -381,6 +437,9 @@ void HeaderTest::createFile(wchar_t *pFileName)
   for (aafUInt32 item = 0; item < gMaxMobCount; ++item)
     createFileMob(item);
  
+  writeOptionalProperties();
+  readOptionalProperties();
+ 
   check(_pFile->Save());
   cleanupReferences();
 }
@@ -390,12 +449,100 @@ void HeaderTest::openFile(wchar_t *pFileName)
   check(AAFFileOpenExistingRead(pFileName, 0, &_pFile));
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
+  check(_pHeader->GetDictionary(&_pDictionary));
 
   openEssenceData();
 
   openMobs();
 
+  readOptionalProperties();
+
   cleanupReferences();
+}
+
+
+void HeaderTest::writeOptionalProperties()
+{
+  assert(_pHeader && _pDictionary);
+
+  aafProductVersion_t toolkitVersion;
+  check(GetAAFVersions(_pHeader, &toolkitVersion, NULL));
+
+  if (ExtendingAAFObjectSupported(toolkitVersion))
+  {
+    // First register the new optional property with the class
+    // definition for the Header.
+    check(_pDictionary->LookupTypeDef(kAAFTypeID_UInt32, &_pOptionalPropTypeDef));
+    check(_pOptionalPropTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void **)&_pTypeDefInt));
+    check(_pDictionary->LookupClassDef(AUID_AAFHeader, &_pClassDef));
+    check(_pClassDef->RegisterOptionalPropertyDef(Header_OptionalPropID, 
+                                                  Header_OptionalPropName,
+                                                  _pOptionalPropTypeDef,
+                                                  &_pOptionalPropDef));
+    
+    // Now write a value into the new optional property.
+    check(_pHeader->QueryInterface(IID_IAAFObject, (void **)&_pHeaderObject));
+    check(_pTypeDefInt->CreateValue((aafMemPtr_t)&Header_OptionalPropertyValue,
+                                    sizeof(Header_OptionalPropertyValue),
+                                    &_pOptionalPropValue));
+    check(_pHeaderObject->SetPropertyValue(_pOptionalPropDef, _pOptionalPropValue));
+    
+    // Release references
+    _pOptionalPropValue->Release();
+    _pOptionalPropValue = NULL;
+    _pHeaderObject->Release();
+    _pHeaderObject = NULL;
+    _pOptionalPropDef->Release();
+    _pOptionalPropDef = NULL;
+    _pClassDef->Release();
+    _pClassDef = NULL;
+    _pTypeDefInt->Release();
+    _pTypeDefInt = NULL;
+    _pOptionalPropTypeDef->Release();
+    _pOptionalPropTypeDef = NULL;
+  }
+}
+
+
+void HeaderTest::readOptionalProperties()
+{
+  assert(_pHeader && _pDictionary);
+
+  aafProductVersion_t toolkitVersion, fileToolkitVersion;
+  check(GetAAFVersions(_pHeader, &toolkitVersion, &fileToolkitVersion));
+
+  if (ExtendingAAFObjectSupported(toolkitVersion) && 
+      ExtendingAAFObjectSupported(fileToolkitVersion))
+  {
+    // First find the new optional property definition in the class
+    // definition for the Header.
+    check(_pDictionary->LookupTypeDef(kAAFTypeID_UInt32, &_pOptionalPropTypeDef));
+    check(_pOptionalPropTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void **)&_pTypeDefInt));
+    check(_pDictionary->LookupClassDef(AUID_AAFHeader, &_pClassDef));
+    check(_pClassDef->LookupPropertyDef(Header_OptionalPropID, &_pOptionalPropDef));
+    
+    // Now read a value into the new optional property.
+    check(_pHeader->QueryInterface(IID_IAAFObject, (void **)&_pHeaderObject));
+    check(_pHeaderObject->GetPropertyValue(_pOptionalPropDef, &_pOptionalPropValue));
+    aafUInt32 value = 0;
+    check(_pTypeDefInt->GetInteger(_pOptionalPropValue, (aafMemPtr_t)&value, sizeof(value)));
+    if (Header_OptionalPropertyValue != value) check(AAFRESULT_TEST_FAILED);
+
+   
+    // Release references
+    _pOptionalPropValue->Release();
+    _pOptionalPropValue = NULL;
+    _pHeaderObject->Release();
+    _pHeaderObject = NULL;
+    _pOptionalPropDef->Release();
+    _pOptionalPropDef = NULL;
+    _pClassDef->Release();
+    _pClassDef = NULL;
+    _pTypeDefInt->Release();
+    _pTypeDefInt = NULL;
+    _pOptionalPropTypeDef->Release();
+    _pOptionalPropTypeDef = NULL;
+  }
 }
 
 
