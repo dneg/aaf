@@ -299,7 +299,7 @@ public:
 
   AAFRESULT LookupPropDef (OMPropertyId opid,
 						   ImplAAFPropertyDef ** ppd);
-private:
+
   // make sure built-in types are initialized.
   void InitBuiltins();
 
