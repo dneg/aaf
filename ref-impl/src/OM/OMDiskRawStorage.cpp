@@ -203,7 +203,7 @@ OMUInt64 OMDiskRawStorage::size(void) const
   //        is less than <mf OMRawStorage::size> then this
   //        <c OMDiskRawStorage> is truncated.
   //   @parm The new size of this <c OMDiskRawSrorage> in bytes.
-  //   @devnote There is no ANSI way of truncating a file in place.
+  //   @devnote There is no ISO/ANSI way of truncating a file in place.
 void OMDiskRawStorage::setSize(OMUInt64 newSize)
 {
   TRACE("OMDiskRawStorage::setSize");
@@ -224,7 +224,7 @@ void OMDiskRawStorage::setSize(OMUInt64 newSize)
     ASSERT("Successful write", bytesWritten == 1);
     ASSERT("Size properly changed", size() == newSize);
   }
-  // else no ANSI way to truncate the file in place
+  // else no ISO/ANSI way to truncate the file in place
 }
 
   // @mfunc Set the position for subsequent reads and writes
