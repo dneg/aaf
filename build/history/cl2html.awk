@@ -77,20 +77,42 @@ function rowcolor(files) {
   ff = fns[1];
 #  printf("<!--[%s]-->\n", ff);
   /* Match directory of file to a color */
-  if (match(ff, "ref-impl/src/OM/")) {
+  if (match(ff, "^ref-impl/src/OM/")) {
     result = "#CCFFCC";
-  } else if (match(ff, "ref-impl/include/OM/")) {
+  } else if (match(ff, "^ref-impl/include/OM/")) {
     result = "#CCFFCC";
-  } else if (match(ff, "ref-impl/src/impl/")) {
+  } else if (match(ff, "^ref-impl/src/impl/")) {
     result = "#FFCCCC";
-  } else if (match(ff, "ref-impl/doc/")) {
+  } else if (match(ff, "^ref-impl/plugins/")) {
+    result = "#FFCCCC";
+  } else if (match(ff, "^ref-impl/src/com-api/")) {
+    result = "#CCCCCC";
+  } else if (match(ff, "^ref-impl/include/com-api/")) {
+    result = "#CCCCCC";
+  } else if (match(ff, "^AAF")) {
+    result = "#CCCCCC";
+  } else if (match(ff, "^dodo/")) {
+    result = "#CCCCCC";
+  } else if (match(ff, "^ref-impl/doc/")) {
     result = "#CCFFFF";
-  } else if (match(ff, "doc/")) {
+  } else if (match(ff, "^LEGAL/")) {
     result = "#CCFFFF";
-  } else if (match(ff, "examples/")) {
+  } else if (match(ff, "^ref-impl/include/ref-api")) {
+    result = "#CCFFFF";
+  } else if (match(ff, "^doc/")) {
+    result = "#CCFFFF";
+  } else if (match(ff, "^test/")) {
     result = "#FFCCFF";
-  } else if (match(ff, "examples2/")) {
+  } else if (match(ff, "^examples/")) {
     result = "#FFCCFF";
+  } else if (match(ff, "^examples2/")) {
+    result = "#FFCCFF";
+  } else if (match(ff, "^DevUtils/")) {
+    result = "#FFFFCC";
+  } else if (match(ff, "^Utilities/")) {
+    result = "#FFFFCC";
+  } else if (match(ff, "^OMF/")) {
+    result = "#FFFFCC";
   }
   return result;
 }
