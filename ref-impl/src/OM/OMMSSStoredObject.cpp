@@ -2044,6 +2044,7 @@ void OMMSSStoredObject::read(OMPropertyId propertyId,
   PRECONDITION("Valid data", start != 0);
   PRECONDITION("Valid size", size > 0);
 
+#if defined(OM_DEBUG)
   // Consistency check - look up propertyId in _index and check that
   // the property type is the expected (passed in) type, and that the
   // property length is the expected (passed in as size) length.
@@ -2062,6 +2063,7 @@ void OMMSSStoredObject::read(OMPropertyId propertyId,
   }
   ASSERT("Matching property types", storedForm == actualType);
   ASSERT("Matching property sizes", size == actualLength);
+#endif
 
   // Since random access is not yet supported, check that the stream
   // is synchronized with the index.
