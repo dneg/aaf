@@ -1013,18 +1013,12 @@ AAFRESULT ImplAAFSequence::CheckLengthSemantics( ImplAAFEvent* pEvent )
 
 AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFEvent* pEvent )
 {
-	// If the sequence has no length property, and pEvent has no
-	// lenght property... then don't create one.
+	// If the sequence has no length property, then one is always
+	// created.
+	// If pEvent has not length property, then a default length of zero
+	// is used.
 
 	AAFRESULT status;
-
-	aafLength_t unused;
-
-	if( AAFRESULT_PROP_NOT_PRESENT == pEvent->GetLength( &unused )   &&
-		AAFRESULT_PROP_NOT_PRESENT == GetLength( &unused ) ) {
-
-		return AAFRESULT_SUCCESS;
-	}
 
     // One of them has a length property, so update the length of
 	// the sequence.
