@@ -41,6 +41,8 @@ public:
 
   virtual OMFile* file(void) const;
 
+  virtual bool attached(void);
+
 private:
 
   OMStorable* _root;
