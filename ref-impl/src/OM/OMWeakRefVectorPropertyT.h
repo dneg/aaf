@@ -80,16 +80,8 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(void) const
 
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
-  ASSERT("Valid property set", _propertySet != 0);
-  OMStorable* container = _propertySet->container();
-  ASSERT("Valid container", container != 0);
-  ASSERT("Container is persistent", container->persistent());
-  OMStoredObject* s = container->store();
 
-  OMFile* file = container->file();
-  OMPropertyTag tag = file->referencedProperties()->insert(_targetName);
-
-  const char* propertyName = name();
+  OMPropertyTag tag = file()->referencedProperties()->insert(_targetName);
 
   // create a vector index
   //
@@ -123,13 +115,14 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(void) const
 
   // save the vector index
   //
-  s->save(_propertyId,
-          _storedForm,
-          propertyName,
-          index,
-          count,
-          tag,
-          _keyPropertyId);
+  const char* propertyName = name();
+  store()->save(_propertyId,
+                _storedForm,
+                propertyName,
+                index,
+                count,
+                tag,
+                _keyPropertyId);
   delete [] index;
 }
 
@@ -182,8 +175,6 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   //
   char* propertyName = new char[externalSize];
   ASSERT("Valid heap pointer", propertyName != 0);
-  OMStoredObject* store = _propertySet->container()->store();
-  ASSERT("Valid store", store != 0);
 
   // restore the index
   //
@@ -191,14 +182,14 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   size_t entries;
   OMPropertyTag tag;
   OMPropertyId keyPropertyId;
-  store->restore(_propertyId,
-                 _storedForm,
-                 propertyName,
-                 externalSize,
-                 vectorIndex,
-                 entries,
-                 tag,
-                 keyPropertyId);
+  store()->restore(_propertyId,
+                   _storedForm,
+                   propertyName,
+                   externalSize,
+                   vectorIndex,
+                   entries,
+                   tag,
+                   keyPropertyId);
 
   ASSERT("Valid vector index", IMPLIES(entries != 0, vectorIndex != 0));
   ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
