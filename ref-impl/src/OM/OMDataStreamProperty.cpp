@@ -49,6 +49,11 @@ OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
 
 OMDataStreamProperty::~OMDataStreamProperty(void)
 {
+  TRACE("OMDataStreamProperty::~OMDataStreamProperty");
+  if (_stream != 0) {
+    close();
+  }
+  POSTCONDITION("Stream closed", _stream == 0);
 }
 
   // @mfunc Save this <c OMDataStreamProperty>.
