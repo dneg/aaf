@@ -932,12 +932,12 @@ HRESULT STDMETHODCALLTYPE
 {
 	plugin_trace("CAAFPCMCodec::ReadBlocks()\n");
 
-	aafUInt32       nbytes, fileBytes;
-	aafUInt32        n, startBuflen, xferSamples, sub;
+	aafUInt32		nbytes, fileBytes;
+	aafUInt32		n, xferSamples, sub;
 	aafUInt32		maxSamplesLeft;
 	aafUInt8		*start;
 	aafmMultiXfer_t *xfer;
-	aafmMultiResult_t *result;
+	aafmMultiResult_t *result = NULL;
 	aafUInt16		ch, xf;
 	aafUInt8		tmpBuf[256];
 
@@ -1002,7 +1002,7 @@ HRESULT STDMETHODCALLTYPE
 		}
 		else
 		{
-			aafUInt32	bytesPerSample;
+			aafUInt32	bytesPerSample, startBuflen = 0;
 
 			if(_interleaveBuf == NULL)
 				_interleaveBuf = new pcm_interleaveBuf_t[_numCh];

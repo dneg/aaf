@@ -766,12 +766,12 @@ CAAFAIFCCodec::ReadBlocks (aafDeinterleave_t  inter,
 						   aafmMultiXfer_t *  xferBlock,
 						   aafmMultiResult_t *  resultBlock)
 {
-	aafUInt32       nbytes, fileBytes;
-	aafUInt32        n, startBuflen, xferSamples, sub;
+	aafUInt32		nbytes, fileBytes;
+	aafUInt32		n, xferSamples, sub;
 	aafUInt32		maxSamplesLeft;
 	aafUInt8		*start;
 	aafmMultiXfer_t *xfer;
-	aafmMultiResult_t *result;
+	aafmMultiResult_t *result = NULL;
 	aafUInt16		ch, xf;
 	aafUInt8		tmpBuf[256];
 	
@@ -842,7 +842,7 @@ CAAFAIFCCodec::ReadBlocks (aafDeinterleave_t  inter,
 		}
 		else
 		{
-			aafUInt32	bytesPerSample;
+			aafUInt32	bytesPerSample, startBuflen = 0;
 			
 			if(_interleaveBuf == NULL)
 				_interleaveBuf = new interleaveBufAIFF_t[_numCh];

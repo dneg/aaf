@@ -697,7 +697,7 @@ HRESULT STDMETHODCALLTYPE
 	HRESULT hr = S_OK;
 	aafUInt32		storedWidth, storedHeight;
 	aafInt16		padBits;
-	aafUInt32		compWidth, bitsPerPixel;
+	aafUInt32		compWidth, bitsPerPixel = 0;
 	aafUInt32		subSampling;
 	aafRational_t		sampleRate = NULL_RATIONAL;
 	aafFrameLayout_t	frameLayout;
