@@ -32,6 +32,7 @@ DODO_TARGETS = \
 	AAFControlPoint.all \
 	AAFDataDefinition.all \
 	AAFEdgecode.all \
+	AAFEffectInvocation.all \
 	AAFFiller.all \
 	AAFInt64.all \
 	AAFIntegerAttribute.all \
@@ -233,6 +234,19 @@ AAFEdgecode.comc : AAFEdgecode.exp macros/comc.mac
 AAFEdgecode.comh : AAFEdgecode.exp macros/comh.mac
 AAFEdgecode.implc : AAFEdgecode.exp macros/implc.mac
 AAFEdgecode.implh : AAFEdgecode.exp macros/implh.mac
+
+AAFEffectInvocation.all : AAFEffectInvocation.cpp AAFEffectInvocation.h
+AAFEffectInvocation.all : AAFEffectInvocation.comc AAFEffectInvocation.comh
+AAFEffectInvocation.all : AAFEffectInvocation.exp AAFEffectInvocation.idl
+AAFEffectInvocation.all : AAFEffectInvocation.implc AAFEffectInvocation.implh
+AAFEffectInvocation.exp : AAFEffectInvocation.dod AAFUnitTest.exp macros/exp.mac
+AAFEffectInvocation.h : AAFEffectInvocation.exp AAFSegment.exp macros/h.mac
+AAFEffectInvocation.cpp : AAFEffectInvocation.exp macros/cpp.mac
+AAFEffectInvocation.idl : AAFEffectInvocation.exp macros/idl.mac
+AAFEffectInvocation.comc : AAFEffectInvocation.exp macros/comc.mac
+AAFEffectInvocation.comh : AAFEffectInvocation.exp macros/comh.mac
+AAFEffectInvocation.implc : AAFEffectInvocation.exp macros/implc.mac
+AAFEffectInvocation.implh : AAFEffectInvocation.exp macros/implh.mac
 
 AAFFiller.all : AAFFiller.cpp AAFFiller.h
 AAFFiller.all : AAFFiller.comc AAFFiller.comh
