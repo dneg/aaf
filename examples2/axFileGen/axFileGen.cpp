@@ -514,10 +514,10 @@ void FileCmd::ReadFile( const char* fileName )
 	// described as ... ahhh... organic.
 	// ... oh let's be honest.. IT'S A POS.. nearly!  I plan to replace it with a real
 	// state machine driven parser... also it looks like it not possible to avoid
-	// defining a small grammer for the file.  Complications arise when supporting
+	// defining a small grammar for the file.  Complications arise when supporting
 	// end of line comments in a mid command position, or mid quote.  The parser
 	// uses the awkward "\#" to identify end of line comments..  A clear start of
-	// command grammer would resolve this..  It is also required to support white
+	// command grammar would resolve this..  It is also required to support white
 	// space independent parsing... that would do away with all the escaped end
 	// of lines.
 
@@ -737,7 +737,7 @@ void FileCmd::Execute()
   // For each option determine the start/end argument indices that the
   // command object will pass through.
   //
-  // For each command objects, verify that the test exists and the the
+  // For each command objects, verify that the test exists and the
   // number of command line options match the number expected by the
   // command.
   //
