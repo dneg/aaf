@@ -93,8 +93,20 @@ public:
     //          this <c OMStrongReferenceVectorProperty>.
   void appendValue(const ReferencedObject*& value);
 
+    // @cmember Insert <p object> into this
+    //          <c OMStrongReferenceVectorProperty>.
+  void insert(const ReferencedObject* object);
+
+    // @cmember Does this <c OMStrongReferenceVectorProperty> contain
+    //          <p object> ?
+  bool containsValue(const ReferencedObject* object) const;
+
+    // @cmember Remove <p object> from this
+    //          <c OMStrongReferenceVectorProperty>.
+  void removeValue(const ReferencedObject* object);
+
     // @cmember Increase the capacity of this
-    //          <c OMStrongReferemceVectorProperty> so that it
+    //          <c OMStrongReferenceVectorProperty> so that it
     //          can contain at least <p capacity> <p ReferencedObject>s
     //          without having to be resized.
   void grow(const size_t capacity);

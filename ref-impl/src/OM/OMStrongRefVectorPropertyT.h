@@ -320,6 +320,55 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::appendValue(
 
 }
 
+  // @mfunc Insert <p object> into this
+  //        <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject> by reference.
+template <typename ReferencedObject>
+void OMStrongReferenceVectorProperty<ReferencedObject>::insert(
+                                                const ReferencedObject* object)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::insert");
+
+  appendValue(object);
+}
+
+  // @mfunc Does this <c OMStrongReferenceVectorProperty> contain
+  //        <p object> ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject> by reference.
+  //   @this const
+template <typename ReferencedObject>
+bool OMStrongReferenceVectorProperty<ReferencedObject>::containsValue(
+                                          const ReferencedObject* object) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::containsValue");
+
+  ASSERT("Unimplemented code not reached", false);
+
+  bool result = false;
+  return result;
+}
+
+  // @mfunc Remove <p object> from this
+  //        <c OMStrongReferenceVectorProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject> by reference.
+template <typename ReferencedObject>
+void OMStrongReferenceVectorProperty<ReferencedObject>::removeValue(
+                                                const ReferencedObject* object)
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeValue");
+
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc Increase the capacity of this
   //        <c OMStrongReferemceVectorProperty> so that it
   //        can contain at least <p capacity> <p ReferencedObject>s

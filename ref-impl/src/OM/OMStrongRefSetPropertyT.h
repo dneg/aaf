@@ -271,6 +271,38 @@ void OMStrongReferenceSetProperty<ReferencedObject>::appendValue(
   insert(value);
 }
 
+  // @mfunc Remove <p object> from this
+  //        <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject>.
+template <typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::removeValue(
+                                                const ReferencedObject* object)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::removeValue");
+
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Does this <c OMStrongReferenceSetProperty> contain
+  //        <p object> ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to a <p ReferencedObject>.
+template <typename ReferencedObject>
+bool OMStrongReferenceSetProperty<ReferencedObject>::containsValue(
+                                          const ReferencedObject* object) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::containsValue");
+  PRECONDITION("Valid object", object != 0);
+
+  bool result = _set.contains(object->identification());
+  return result;
+}
+
   // @mfunc Remove this optional <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of

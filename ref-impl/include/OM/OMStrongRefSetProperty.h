@@ -83,6 +83,14 @@ public:
     //          this <c OMStrongReferenceSetProperty>.
   void appendValue(const ReferencedObject*& value);
 
+    // @cmember Remove <p object> from this
+    //          <c OMStrongReferenceSetProperty>.
+  void removeValue(const ReferencedObject* object);
+
+    // @cmember Does this <c OMStrongReferenceSetProperty> contain
+    //          <p object> ?
+  bool containsValue(const ReferencedObject* object) const;
+
   // Optional property interface
 
     // @cmember Remove this optional <c OMStrongReferenceSetProperty>.
