@@ -282,7 +282,7 @@ AAFRESULT
     ImplEnumAAFComponents::SetEnumSequence(ImplAAFSequence * pSequence)
 {
 	if (_pSequence)
-		return E_UNEXPECTED;
+		_pSequence->ReleaseReference();
 
 	_pSequence = pSequence;
 	_pSequence->AcquireReference();
