@@ -51,6 +51,8 @@
 #define COMPILER_SGICC_MIPS_SGI
 #elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__)
 #define COMPILER_GCC_PPC_MACOSX
+#elif defined(__GNUC__) && defined(__sparc__) && defined(__sun__)
+#define COMPILER_GCC_SPARC_SUNOS
 #else
 #error "Unknown compiler"
 #endif
@@ -122,6 +124,17 @@ typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
 #elif defined(COMPILER_GCC_PPC_MACOSX)
+typedef signed char            OMInt8;
+typedef short int              OMInt16;
+typedef long int               OMInt32;
+typedef long long int          OMInt64;
+
+typedef unsigned char          OMUInt8;
+typedef unsigned short int     OMUInt16;
+typedef unsigned long int      OMUInt32;
+typedef unsigned long long int OMUInt64;
+
+#elif defined(COMPILER_GCC_SPARC_SUNOS)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
