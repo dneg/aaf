@@ -28,6 +28,7 @@
 // Include the AAF interface declarations.
 #include "AAF.h"
 #include "AAFTypes.h"
+#include "AAFResult.h"
 
 #if defined( OS_MACOS )
 #include "DataInput.h"
@@ -193,7 +194,13 @@ int main(int argumentCount, char* argumentVector[])
   convert(wInputFileName, 256, inputFileName);
 
   printf("Attempting to load the AAF dll...\n");
-  check(AAFLoad(0));
+  HRESULT hr = AAFLoad(0);
+  if (!AAFRESULT_SUCCEEDED(hr))
+  {
+    fprintf(stderr, "Failed to load the AAF DLL.\n");
+    fprintf(stderr, "Is the $PATH environment variable set correctly ?\n");
+    exit(1);
+  }
   printf("DONE\n");
 
   ReadAAFFile(wInputFileName);
