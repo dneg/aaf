@@ -4,7 +4,8 @@
 #                                          #
 ############################################
 
-all : dodo-app depend targets
+all : dodo-app depend
+	$(MAKE) targets
 
 BLD_CFG_DIR = ../ref-impl/bld_cfg
 
@@ -19,7 +20,7 @@ test_only:
 	$(SH_PREFIX) cd tool ; $(MAKE) test_only $(SH_SUFFIX)
 
 run:
-	 $(SH_PREIX) cd tool ; $(MAKE) run $(SH_SUFFIX)
+	 $(SH_PREFIX) cd tool ; $(MAKE) run $(SH_SUFFIX)
 
 .SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh .comt .cppt
 								   
