@@ -93,7 +93,7 @@ SOURCE="..\..\..\ref-impl\plugins\CAAFWAVECodec.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE=.\CAAFWAVECodecTest.cpp
+SOURCE="..\..\..\ref-impl\plugins\CAAFWAVECodecTest.cpp"
 # ADD CPP /I "../../../ref-impl/src/com-api/com-dll/" /I "../../../ref-impl/src/com-api/"
 # End Source File
 # End Target
