@@ -285,10 +285,20 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupClass (
-      aafUID_t *  /*pClassID*/,
-      ImplAAFClassDef ** /*ppClassDef*/)
+      aafUID_t * pClassID,
+      ImplAAFClassDef ** ppClassDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (!pClassID) return AAFRESULT_NULL_PARAM;
+  if (!ppClassDef) return AAFRESULT_NULL_PARAM;
+
+  // BobT hack! we don't have class defs fully impl'd yet, so return
+  // the only class def we know (for AAFObject)
+  ImplAAFClassDef *pcd = NULL;
+  AAFRESULT hr =_pBuiltins->ClassDefObject(&pcd);
+  if (AAFRESULT_FAILED(hr)) return hr;
+  assert (ppClassDef);
+  *ppClassDef = pcd;
+  return AAFRESULT_SUCCESS;
 }
 
 

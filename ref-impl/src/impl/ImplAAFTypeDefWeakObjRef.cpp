@@ -20,11 +20,19 @@
 #include "ImplAAFTypeDefWeakObjRef.h"
 #endif
 
+#ifndef __ImplAAFHeader_h_
+#include "ImplAAFHeader.h"
+#endif
+
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
 #include <string.h>
+
+
+#define RELEASE_IF_SET(obj) \
+    if (obj) { obj->ReleaseReference(); obj = NULL; }
 
 
 ImplAAFTypeDefWeakObjRef::ImplAAFTypeDefWeakObjRef ()
@@ -55,8 +63,11 @@ AAFRESULT STDMETHODCALLTYPE
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   if (! pObjType) return AAFRESULT_NULL_PARAM;
-  _referencedType = pObjType;
-  pObjType->AcquireReference ();
+  aafUID_t id;
+  assert (pObjType);
+  hr = pObjType->GetAUID(&id);
+  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+  _referencedType = id;
 
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
@@ -93,11 +104,38 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! ppObjType) return AAFRESULT_NULL_PARAM;
 
-  *ppObjType = _referencedType;
-  assert (*ppObjType);
-  (*ppObjType)->AcquireReference ();
+  ImplAAFHeader * pHead = NULL;
+  ImplAAFDictionary * pDict = NULL;
+  AAFRESULT rReturned = AAFRESULT_SUCCESS;
+  try
+	{
+	  AAFRESULT hr;
+	  hr = MyHeadObject(&pHead);
+	  if (AAFRESULT_FAILED(hr))
+		throw hr;
+	  assert (pHead);
+	  hr = (pHead->GetDictionary(&pDict));
+	  if (AAFRESULT_FAILED(hr))
+		throw hr;
+	  assert (pDict);
 
-  return AAFRESULT_SUCCESS;
+	  ImplAAFClassDef * pcd = NULL;
+	  aafUID_t id = _referencedType;
+	  hr = pDict->LookupClass (&id, &pcd);
+	  if (AAFRESULT_FAILED(hr))
+		throw hr;
+
+	  *ppObjType = pcd;
+	  (*ppObjType)->AcquireReference ();
+	}
+  catch (AAFRESULT &rCaught)
+	{
+	  rReturned = rCaught;
+	}
+  RELEASE_IF_SET (pHead);
+  RELEASE_IF_SET (pDict);
+
+  return rReturned;
 }
 
   // Override from AAFTypeDefObjectRef
