@@ -72,14 +72,6 @@ public:
 		 // @parm [out] Frame Offset to be returned if found
          aafFrameOffset_t *  pOffset);
 
-  //****************
-  // NumRepresentations()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    NumRepresentations
-		// @parm [out] Pointer to Number of representations to be returned
-        (aafInt32 *  pCount);
-
 
 
 public:
@@ -87,6 +79,8 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFSegment)
 
+
+	virtual AAFRESULT NumRepresentations(aafInt32 *  pCount);
 
 	virtual AAFRESULT AccumulateLength(aafLength_t *length);
 
