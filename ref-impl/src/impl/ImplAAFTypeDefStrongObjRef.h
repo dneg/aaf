@@ -39,6 +39,8 @@ class ImplAAFClassDef;
 #include "ImplAAFTypeDefObjectRef.h"
 #endif
 
+#include "OMWeakRefVectorProperty.h"
+#include "OMWeakRefProperty.h"
 
 class ImplAAFTypeDefStrongObjRef : public ImplAAFTypeDefObjectRef
 {
