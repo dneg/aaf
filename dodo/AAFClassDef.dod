@@ -12,6 +12,7 @@ AD_HEAD
 AD_INCLUDE(AAFTypes)
 
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefinitions)
+AD_FORWARD_DECLARATION(AAFDefinitionObject)
 
 /******************************************\
 *                                          *
@@ -22,15 +23,6 @@ AD_FORWARD_DECLARATION(EnumAAFPropertyDefinitions)
 *                                          *
 \******************************************/
 
-/*************************************************************************
- * 
- * @class AAFClassDefinition | AAFClassDefinition extends the AAF class 
- *			hierarchy with a new class or with new properties for an 
- *			existing class.
- *
- * @base public | AAFDefinitionObject
- *
- *************************************************************************/
 
 AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
@@ -42,14 +34,14 @@ AD_CONSTRUCTOR2([in],aafAuid_t,Auid,auid for this definition object,
 				Constructs and sets the AUID ad Name of this ClassDefinition object.)
 
 AD_METHOD1(GetName,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafString_t *,
 		   pstrName,
 		   Pointer to name,
 		   Gets the unique name that identifies this datakind object.)
 
 AD_METHOD1(GetParentAUID,
-		   [retval][out],
+		   [out\\\,retval],
 		   aafAuid_t *,
 		   pAuid,
 		   Pointer to an AUID reference,
@@ -79,7 +71,7 @@ AD_XMETHOD1(RemovePropertyDef,
 		    Remove Property Definition from the class definition.)
 
 AD_XMETHOD1(GetPropertyDefinitions,
-		    [retval][out],
+		   [out\,retval],
 		    objOut,
 		    EnumAAFPropertyDefinitions,
 		    ppEnum,
