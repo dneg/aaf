@@ -122,6 +122,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMPropertySet.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMPropertySetIterator.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMPropertyTable.cpp"
 # End Source File
 # Begin Source File
@@ -283,6 +287,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMPropertyDefinition.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMPropertySet.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMPropertySetIterator.h"
 # End Source File
 # Begin Source File
 
