@@ -26,6 +26,9 @@
 #include <AAFStoredObjectIDs.h>
 #include <AAFDataDefs.h>
 #include <AAFContainerDefs.h>
+#include <AAFDataDefs.h>
+
+#include "../../../../ref-impl/include/AAFSDKBuild.h"
 
 #include <assert.h>
 
@@ -214,12 +217,27 @@ void EssenceCreate::RunTest( CmdState& state, int argc, char** argv )
   }
 
   if ( type == "picture" ) {
+
+#if AAF_MAJOR_VERSION == 1 && AAF_MINOR_VERSION == 0 && AAF_MAINT_RELEASE < 2
     dataDefId = kAAFDataDef_Picture;
+#elif AAF_MAJOR_VERSION >= 1 && AAF_MINOR_VERSION >= 0
+    dataDefId = DDEF_Picture;
+#else
+#uerror unsupported version
+#endif
+
     sampleRate.numerator = MULTI_GEN_VIDEO_RATE_NUM;
     sampleRate.denominator = MULTI_GEN_VIDEO_RATE_DEN;
   }
   else if ( type == "sound" ) {
+#if AAF_MAJOR_VERSION == 1 && AAF_MINOR_VERSION == 0 && AAF_MAINT_RELEASE < 2
     dataDefId = kAAFDataDef_Sound;
+#elif AAF_MAJOR_VERSION >= 1 && AAF_MINOR_VERSION >= 0
+    dataDefId = DDEF_Sound;
+#else
+#error unsupported version
+#endif
+
     sampleRate.numerator = MULTI_GEN_AUDIO_RATE_NUM;
     sampleRate.denominator = MULTI_GEN_AUDIO_RATE_DEN;
   }
