@@ -86,6 +86,39 @@ void AxEssenceAccess::CompleteWrite()
 	CHECK_HRESULT( _spIaafEssenceAccess->CompleteWrite() );
 }
 
+AxString AxEssenceAccess::GetCodecName()
+{
+	// There is no "GetCodecNameLength()" method, hence, assume the name will be
+	// less than 80 characters.
+	const bufLength = 80;
+	aafCharacter* buf = new aafCharacter[bufLength];
+
+	CHECK_HRESULT( _spIaafEssenceAccess->GetCodecName( bufLength, buf ) );
+
+	return AxString( buf );
+}
+
+aafLength_t AxEssenceAccess::GetLargestSampleSize( IAAFDataDefSP spIaafDataDef )
+{
+	aafLength_t length;
+
+	CHECK_HRESULT( _spIaafEssenceAccess->GetLargestSampleSize( spIaafDataDef, &length ) );
+
+	return length;
+}
+
+AxEssenceAccess::ReadResult AxEssenceAccess::ReadSamples( aafUInt32 nSamples,
+			 					 					      aafUInt32 buflen,
+												 	      aafDataBuffer_t buffer )
+{
+	ReadResult result;
+
+	CHECK_HRESULT( _spIaafEssenceAccess->ReadSamples( nSamples, buflen, buffer,
+					&result.samplesRead, &result.bytesRead ) );
+
+	return result;
+}
+
 //=---------------------------------------------------------------------=
 
 AxLocator::AxLocator( IAAFLocatorSP& spIaafLocator )

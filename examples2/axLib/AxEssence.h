@@ -53,6 +53,11 @@ public:
 		aafUInt32 bytesWritten;
 	};
 
+	struct ReadResult {
+		aafUInt32 samplesRead;
+		aafUInt32 bytesRead;
+	};
+
 	AxEssenceAccess( IAAFEssenceAccessSP& spIaafEssenceAccess );
 	~AxEssenceAccess();
 
@@ -68,6 +73,14 @@ public:
 							  aafDataBuffer_t buffer );
 
 	void CompleteWrite();
+
+	AxString GetCodecName();
+
+	aafLength_t GetLargestSampleSize( IAAFDataDefSP spIaafDataDef );
+
+	ReadResult ReadSamples( aafUInt32 nSamples,
+					  	    aafUInt32 buflen,
+						    aafDataBuffer_t buffer );
 
 private:
 	AxEssenceAccess();
