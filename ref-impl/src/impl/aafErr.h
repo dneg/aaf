@@ -139,7 +139,6 @@ enum
 /* INTERNAL Error Codes */
 	OM_ERR_TABLE_DUP_KEY, OM_ERR_TABLE_MISSING_COMPARE,
 	OM_ERR_TABLE_BAD_HDL, OM_ERR_TABLE_BAD_ITER,
-	OM_ERR_BENTO_PROBLEM, OM_ERR_BENTO_HANDLER,
 	OM_ERR_PROPID_MATCH, OM_ERR_INTERNAL_DIVIDE,
 
 /* Testing Error Codes */
@@ -235,11 +234,6 @@ AAF_EXPORT void aafPrintStackTrace(AAFFile * file);
 #define aafRegErrorReturn(file, ec) { \
    aafRegErrDebug(file, ec, __FILE__, __LINE__); return(ec); }
 
-#define aafCheckBentoRaiseError(file, ec) { if (file->ContainerErrorRaised()) { \
-    printf("<Bento %1ld>%s @ %d in '%s'\n", file->ContainerErrorCode(), \
-		   file->GetContainerErrString(), __LINE__, __FILE__);  \
-			RAISE(ec); \
-    } }
 #define aafRegErrReturnBool(ec, errparam, retval) { \
         aafRegErr(ec); *errparam = ec; return(retval); }
 
@@ -248,8 +242,6 @@ AAF_EXPORT void aafPrintStackTrace(AAFFile * file);
 #define aafRegErrorReturn(ec) { aafRegErr(ec); return(ec); }
 #define aafRegErrReturnBool(ec, errparam, retval) { \
         aafRegErr(ec); *errparam = ec; return(retval); }
-#define aafCheckBentoRaiseError(file, ec) { if(file->ContainerErrorRaised()) \
-											  RAISE(ec); }
 
 #endif /* AAF_ERROR_TRACE */
 
