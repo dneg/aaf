@@ -166,15 +166,15 @@ public:
 
     // @cmember Insert <p object> into this
     //          <c OMStrongReferenceSetProperty>.
-  virtual void insert(const OMObject* object);
+  virtual void insertObject(const OMObject* object);
 
     // @cmember Does this <c OMStrongReferenceSetProperty> contain
     //          <p object> ?
-  virtual bool containsValue(const OMObject* object) const;
+  virtual bool containsObject(const OMObject* object) const;
 
     // @cmember Remove <p object> from this
     //          <c OMStrongReferenceSetProperty>.
-  virtual void removeValue(const OMObject* object);
+  virtual void removeObject(const OMObject* object);
 
     // @cmember Create an <c OMReferenceContainerIterator> over this
     //          <c OMStrongReferenceSetProperty>.

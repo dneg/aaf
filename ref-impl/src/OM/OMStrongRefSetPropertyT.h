@@ -697,10 +697,11 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 template <typename UniqueIdentification, typename ReferencedObject>
 void
 OMStrongReferenceSetProperty<UniqueIdentification,
-                             ReferencedObject>::insert(const OMObject* object)
+                             ReferencedObject>::insertObject(
+                                                        const OMObject* object)
 {
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
-                                     "ReferencedObject>::insert");
+                                     "ReferencedObject>::insertObject");
 
   PRECONDITION("Valid object", object != 0);
 
@@ -721,11 +722,11 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 template <typename UniqueIdentification, typename ReferencedObject>
 bool
 OMStrongReferenceSetProperty<UniqueIdentification,
-                             ReferencedObject>::containsValue(
+                             ReferencedObject>::containsObject(
                                                   const OMObject* object) const
 {
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
-                                     "ReferencedObject>::containsValue");
+                                     "ReferencedObject>::containsObject");
 
   PRECONDITION("Valid object", object != 0);
 
@@ -744,11 +745,11 @@ OMStrongReferenceSetProperty<UniqueIdentification,
 template <typename UniqueIdentification, typename ReferencedObject>
 void
 OMStrongReferenceSetProperty<UniqueIdentification,
-                             ReferencedObject>::removeValue(
+                             ReferencedObject>::removeObject(
                                                         const OMObject* object)
 {
   TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
-                                     "ReferencedObject>::removeValue");
+                                     "ReferencedObject>::removeObject");
 
   PRECONDITION("Valid object", object != 0);
 
