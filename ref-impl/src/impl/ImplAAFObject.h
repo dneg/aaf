@@ -29,6 +29,11 @@ class ImplAAFDictionary;
 #include "OMProperty.h"
 #include "ImplAAFRoot.h"
 
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
 
 
 class ImplAAFObject : public OMStorable, public ImplAAFRoot
@@ -194,8 +199,23 @@ private:
 
   ImplPropertyCollection * _pProperties;
 
+  // Didn't use shorthand here in an attempt to avoid including ClassDef header.
+  ImplAAFSmartPointer<ImplAAFClassDef> _cachedDefinition;
+
   aafBool                  _OMPropsInited;
+
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFObject> ImplAAFObjectSP;
 
 
 #endif // ! __ImplAAFObject_h__

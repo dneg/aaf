@@ -278,32 +278,26 @@ AAFRESULT STDMETHODCALLTYPE
 	  pvtZeroFill (pVal, valSize, valBuf, _size);
 	}
 
-  ImplAAFPropValData * pv = NULL;
+  ImplAAFPropValDataSP pv;
   pv = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
   if (! pv)
-	{
-	  return AAFRESULT_NOMEMORY;
-	}
+	return AAFRESULT_NOMEMORY;
 
   AAFRESULT hr;
   hr = pv->Initialize(this);
   if (! AAFRESULT_SUCCEEDED (hr))
-	{
-	  pv->ReleaseReference ();
-	  return hr;
-	}
+	return hr;
 
   aafMemPtr_t pBits = NULL;
   hr = pv->AllocateBits (valSize, &pBits);
   if (! AAFRESULT_SUCCEEDED (hr))
-	{
-	  pv->ReleaseReference ();
-	  return hr;
-	}
+	return hr;
+
   assert (pBits);
   memcpy (pBits, valBuf, valSize);
 
   *ppPropVal = pv;
+  (*ppPropVal)->AcquireReference ();
   return AAFRESULT_SUCCESS;
 }
 
@@ -328,12 +322,12 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_BAD_SIZE;
 	}
 
-  ImplAAFPropValData * pvd = NULL;
+  ImplAAFPropValDataSP pvd;
   pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
   if (!pvd) return AAFRESULT_BAD_TYPE;
 
   // get the property value's embedded type
-  ImplAAFTypeDef * pPropType = 0;
+  ImplAAFTypeDefSP pPropType;
   AAFRESULT hr;
   hr = pvd->GetType (&pPropType);
   if (! AAFRESULT_SUCCEEDED (hr))
@@ -354,8 +348,6 @@ AAFRESULT STDMETHODCALLTYPE
   //	  return AAFRESULT_BAD_TYPE;
   //	}
   assert (pPropType);
-  pPropType->ReleaseReference ();
-  pPropType = 0;
 
   // current impl only allows 1, 2, 4, and 8-bit ints.
   if ((1 != valSize) &&
@@ -424,12 +416,12 @@ AAFRESULT STDMETHODCALLTYPE
 	  return AAFRESULT_BAD_SIZE;
 	}
 
-  ImplAAFPropValData * pvd = NULL;
+  ImplAAFPropValDataSP pvd;
   pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
   if (!pvd) return AAFRESULT_BAD_TYPE;
 
   // get the property value's embedded type
-  ImplAAFTypeDef * pPropType = 0;
+  ImplAAFTypeDefSP pPropType;
   AAFRESULT hr;
   hr = pvd->GetType (&pPropType);
   if (! AAFRESULT_SUCCEEDED (hr))
@@ -441,13 +433,10 @@ AAFRESULT STDMETHODCALLTYPE
   // with this one for reading.  For now, we'll only allow integral
   // type properties to be read by this integral type def.
   assert (pPropType);
-  if (! dynamic_cast<ImplAAFTypeDefInt *>(pPropType))
+  if (! dynamic_cast<ImplAAFTypeDefInt *>((ImplAAFTypeDef*) pPropType))
 	{
 	  return AAFRESULT_BAD_TYPE;
 	}
-  assert (pPropType);
-  pPropType->ReleaseReference ();
-  pPropType = 0;
 
   // current impl only allows 1, 2, 4, and 8-bit ints.
   if ((1 != valSize) &&
@@ -648,6 +637,18 @@ size_t ImplAAFTypeDefInt::NativeSize (void) const
 {
   // same as property value size
   return PropValSize();
+}
+
+
+OMProperty * ImplAAFTypeDefInt::pvtCreateOMPropertyMBS
+  (OMPropertyId pid,
+   const char * name) const
+{
+  assert (name);
+  size_t elemSize = PropValSize ();
+  OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
+  assert (result);
+  return result;
 }
 
 

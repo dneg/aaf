@@ -64,7 +64,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetElementType
         // @parm [out] type definition of values of this enumeration
-        (ImplAAFTypeDef ** ppTypeDef);
+        (ImplAAFTypeDef ** ppTypeDef) const;
 
 
   //****************
@@ -179,6 +179,10 @@ public:
   aafBool IsRegistered (void) const;
   size_t NativeSize (void) const;
 
+  virtual OMProperty * 
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
+
 
   //*************************************************************
   //
@@ -219,6 +223,7 @@ private:
   // array of values for elements.
   OMVariableSizeProperty<aafInt64> _ElementValues;
 
+  ImplAAFTypeDefSP _cachedBaseType;
 
   //
   // private methods
@@ -232,12 +237,25 @@ private:
 					wchar_t * pName,
 					aafUInt32  bufSize);
 
-  ImplAAFTypeDef * GetBaseType (void);
+
+  ImplAAFTypeDefSP BaseType (void) const;
+
 
 public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefEnum)
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefEnum> ImplAAFTypeDefEnumSP;
 
 #endif // ! __ImplAAFTypeDefEnum_h__

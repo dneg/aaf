@@ -1,11 +1,11 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
+/***********************************************\
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*                                               *
+\***********************************************/
 
 
 #ifndef __ImplAAFObject_h__
@@ -18,6 +18,10 @@
 
 #ifndef __ImplAAFEnumerator_h__
 #include "ImplAAFEnumerator.h"
+#endif
+
+#ifndef __ImplEnumAAFPropertyDefs_h__
+#include "ImplEnumAAFPropertyDefs.h"
 #endif
 
 #include <assert.h>
@@ -37,16 +41,9 @@
 #include "AAFPropertyIDs.h"
 #include "OMProperty.h"
 
+
 extern "C" const aafClassID_t CLSID_AAFProperty;
 extern "C" const aafClassID_t CLSID_EnumAAFProperties;
-
-
-#define RELEASE_IF_SET(obj) \
-    if (obj) { obj->ReleaseReference(); obj = NULL; }
-
-
-// explicit template instantiation
-// template class ImplAAFCollection<ImplAAFProperty *>;
 
 
 //
@@ -73,12 +70,8 @@ public:
 				OMPropertySet * pOMPropSet);
 
 private:
-  //AAFRESULT initProperty(aafUInt32 index,
-  //                       ImplAAFPropertyDef * pPropDef);
-
-  // OMPropertySet *    _pOMPropSet;
-  ImplAAFProperty ** _pProperties;
-  aafUInt32          _count;
+  ImplAAFPropertySP * _pProperties;
+  aafUInt32           _count;
 };
 
 
@@ -95,7 +88,7 @@ AAFRESULT ImplPropertyCollection::Initialize
  OMPropertySet * pOMPropSet
 )
 {
-  ImplAAFPropertyDef * pPropDef = NULL;
+  ImplAAFPropertyDefSP pPropDef;
   AAFRESULT rReturned = AAFRESULT_SUCCESS;
 
   // make sure we haven't called this before
@@ -104,21 +97,32 @@ AAFRESULT ImplPropertyCollection::Initialize
   if (! pOMPropSet)
 	return AAFRESULT_NULL_PARAM;
 
-  _count = pOMPropSet->count();
+  // includes count of props both present and absent
+  const aafUInt32 numPropsDefined = pOMPropSet->count();
+  // only includes props that are present
+  aafUInt32 numPropsPresent = 0;
 
-  _pProperties = new ImplAAFProperty * [_count];
+  // count number of properties that are present
+  size_t omContext = 0;
+  OMProperty * pOmProp = NULL;
+  for (aafUInt32 i = 0; i < numPropsDefined; i++)
+	{
+	  pOmProp = 0;
+	  pOMPropSet->iterate (omContext, pOmProp);
+	  assert (pOmProp);
+	  // count it if it's mandatory, or (optional AND present)
+	  if (!pOmProp->isOptional() || pOmProp->isPresent())
+		numPropsPresent++;
+	}
+
+  _count = numPropsPresent;
+
+  _pProperties = new ImplAAFPropertySP [numPropsPresent];
   if (! _pProperties)
 	return AAFRESULT_NOMEMORY;
 
-  for (aafUInt32 i = 0;
-	   i < _count;
-	   i++)
-	{
-	  _pProperties[i] = NULL;
-	}
-
-  ImplAAFHeader * pHead = NULL;
-  ImplAAFDictionary * pDict = NULL;
+  ImplAAFHeaderSP pHead;
+  ImplAAFDictionarySP pDict;
   try
 	{
 	  AAFRESULT hr;
@@ -143,54 +147,45 @@ AAFRESULT ImplPropertyCollection::Initialize
 
 	  size_t omContext = 0;
 	  OMProperty * pOmProp = NULL;
-	  for (aafUInt32 i = 0;
-		   i < _count;
-		   i++)
+	  aafUInt32 presentPropIdx = 0;
+	  for (aafUInt32 definedPropIdx = 0;
+		   definedPropIdx < numPropsDefined;
+		   definedPropIdx++)
 		{
-		  _pProperties[i] = (ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
-		  if (!_pProperties[i])
-			throw AAFRESULT_NOMEMORY;
-
 		  pOMPropSet->iterate (omContext, pOmProp);
 		  assert (pOmProp);
+		  if (pOmProp->isOptional() && !pOmProp->isPresent())
+			// optional property not present
+			continue;
+
 		  OMPropertyId opid = pOmProp->propertyId ();
 		  assert (pDict);
 		  AAFRESULT hr = pDict->LookupPropDefByOMPid (opid, &pPropDef);
 		  if (AAFRESULT_FAILED (hr)) throw hr;
 		  assert (pPropDef);
-		  hr = _pProperties[i]->Initialize (pPropDef, pOmProp);
+
+		  _pProperties[presentPropIdx] =
+			(ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
+		  if (!_pProperties[presentPropIdx])
+			throw AAFRESULT_NOMEMORY;
+
+		  hr = _pProperties[presentPropIdx]->Initialize (pPropDef, pOmProp);
 		  if (AAFRESULT_FAILED (hr)) throw hr;
-		  pPropDef->ReleaseReference ();
-		  pPropDef = 0;
+
+		  presentPropIdx++;
+		  assert (presentPropIdx <= numPropsPresent);
 		}
+	  assert (presentPropIdx == numPropsPresent);
 	}
   catch (AAFRESULT &rCaught)
 	{
 	  rReturned = rCaught;
-	  if (pPropDef)
-		{
-		  pPropDef->ReleaseReference ();
-		  pPropDef = NULL;
-		}
 	  if (_pProperties)
 		{
-		  assert (_count);
-		  for (aafUInt32 i = 0;
-			   i < _count;
-			   i++)
-			{
-			  if (_pProperties[i])
-				{
-				  _pProperties[i]->ReleaseReference ();;
-				  _pProperties[i] = NULL;
-				}
-			}
 		  delete[] _pProperties;
 		  _pProperties = NULL;
 		}
 	}
-  RELEASE_IF_SET (pHead)
-  RELEASE_IF_SET (pDict);
 
   return rReturned;
 }
@@ -200,16 +195,6 @@ ImplPropertyCollection::~ImplPropertyCollection ()
 {
   if (_pProperties)
 	{
-	  for (aafUInt32 numProps = 0;
-		   numProps < _count;
-		   numProps++)
-		{
-		  if (_pProperties[numProps])
-			{
-			  _pProperties[numProps]->ReleaseReference();
-			  _pProperties[numProps] = NULL;
-			}
-		}
 	  delete[] _pProperties;
 	  _pProperties = NULL;
 	}
@@ -276,9 +261,35 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::GetDefinition (ImplAAFClassDef ** /*ppClassDef*/)
+    ImplAAFObject::GetDefinition (ImplAAFClassDef ** ppClassDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! ppClassDef)
+	return AAFRESULT_NULL_PARAM;
+
+  if (! _cachedDefinition)
+	{
+	  AAFRESULT hr;
+	  ImplAAFDictionarySP pDict;
+	  hr = GetDictionary(&pDict);
+	  if (AAFRESULT_FAILED (hr))
+		return hr;
+	  assert (pDict);
+
+	  aafUID_t classID;
+	  hr = GetObjectClass (&classID);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+
+	  hr = pDict->LookupClass(&classID, &_cachedDefinition);
+	  if (AAFRESULT_FAILED (hr))
+		return hr;
+	  assert (_cachedDefinition);
+	}
+  assert (ppClassDef);
+  *ppClassDef = _cachedDefinition;
+  assert (*ppClassDef);
+  (*ppClassDef)->AcquireReference ();
+
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -483,6 +494,48 @@ ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary) const
 }
 
 
+//
+// Here is the mapping of DM type defs to OMProperty concrete
+// classes.
+//
+// DM TypeDef				Treatment
+// ----------				-------------------------
+// AAFTypeDefEnum			FixedData(sizeof rep'd type)
+//
+// AAFTypeDefExtEnum		FixedData(sizeof auid)
+//
+// AAFTypeDefFixedArray     FixedData(sizeof elem * num elems)
+//
+// AAFTypeDefInt			FixedData(sizeof int)
+//
+// AAFTypeDefRecord         FixedData(sum of sizes of elements)
+//
+// AAFTypeDefRename         <refer to referenced type>
+//
+// AAFTypeDefSet:
+//   if elem type is StrRef	OMStrongReferenceVectorProperty<AAFObject>
+//   if elem type is WkRef  VariableData(sizeof auid)
+//   if elem is fixed data  VariableData(sizeof elem)
+//   else                   <not yet supported; maybe never!>
+//
+// AAFTypeDefStream			<not yet supported>
+//
+// AAFTypeDefString			VariableData(sizeof elem)
+//
+// AAFTypeDefStrongObjRef	OMStrongReferenceProperty<AAFObject>
+//
+// AAFTypeDefVariableArray
+//   if elem type is StrRef	OMStrongReferenceVectorProperty<AAFObject>
+// 	 if elem type is WkRef  VariableData(sizeof auid)
+// 	 if elem is fixed data  VariableData(sizeof elem)
+//   else                   <not yet supported; maybe never!>
+//
+// AAFTypeDefWeakObjRef     FixedData(sizeof auid)
+//
+
+
+#include <iostream.h>
+
 void ImplAAFObject::InitOMProperties (void)
 {
   if (_OMPropsInited)
@@ -490,69 +543,170 @@ void ImplAAFObject::InitOMProperties (void)
 
   // Set this first to prevent calls below from re-attempting this
   // method.
+  //
   _OMPropsInited = AAFTrue;
 
   //
-  // iterate across the properties, calling initialialize on each.
+  // We want to do two things.
   //
-  AAFRESULT hr;
-  ImplAAFDictionary * pDict = 0;
+  // 1. Iterate across the properties in the classdef; for each one,
+  //    see if there currently is an OMProperty to match it.  If not,
+  //    allocate one.
+  //
+  // 2. Iterate across all existing OM properties.  For each one:
+  //
+  // 2a. See if this currently existing OM property is defined in the
+  //     ClassDef, and the definition matches that of the property to
+  //     the best of our ability to test.
+  //
+  // 2b. If the property is there (and it's an error caught in the
+  //     previous stepif it isn't), then initialize it with whatever
+  //     info we have at hand from the class definition.
+  //
 
-  hr = GetDictionary(&pDict);
+  AAFRESULT hr;
+
+  // See if currently existing OM properties are defined in the class
+  // def.
+  //
+  ImplAAFClassDefSP spDef;
+  hr = GetDefinition (&spDef);
   assert (AAFRESULT_SUCCEEDED (hr));
-  assert (pDict);
+  assert (spDef);
 
   OMPropertySet * ps = propertySet();
   assert (ps);
-
   const size_t propCount = ps->count();
+
+  ImplAAFDictionarySP pDict;
+  hr = GetDictionary(&pDict);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  // Step 1: look through defined properties and see if there is an OM
+  // prop to match each.
+  ImplEnumAAFPropertyDefsSP pdEnumSP;
+
+  ImplAAFPropertyDefSP pdSP;
+#if 0 // BobT hack! comment this out to avoid some time-consuming
+	  // stuff until we can profile and determine the culprit.
+  hr = spDef->GetPropertyDefs (&pdEnumSP);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  assert (pdEnumSP);
+  while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&pdSP)))
+	{
+	  assert (pdSP);
+	  OMPropertyId defPid = pdSP->OmPid ();
+	  OMPropertyId propPid = defPid + 1; // make sure it's set to
+										 // something different
+	  size_t context = 0;
+	  for (size_t i = 0; i < propCount; i++)
+		{
+		  OMProperty * pProp = 0;
+		  ps->iterate (context, pProp);
+		  assert (pProp);
+		  propPid = pProp->propertyId ();
+		  if (defPid == propPid)
+			break;
+		}
+	  if (defPid != propPid)
+		{
+		  // Defined property wasn't found in OM property set.  We'll
+		  // have to install one.
+
+		  // Get type info for the prop to be installed
+		  ImplAAFTypeDefSP ptd;
+		  hr = pdSP->GetTypeDef (&ptd);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert (ptd);
+
+		  // Get the property name from the property def.
+		  aafUInt32 wNameLen = 0;
+		  hr = pdSP->GetNameBufLen (&wNameLen);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert (wNameLen > 0);
+		  aafCharacter * wNameBuf =
+			(aafCharacter *) new aafUInt8[wNameLen];
+		  assert (wNameBuf);
+		  hr = pdSP->GetName (wNameBuf, wNameLen);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+
+		  // Create the property with the given name.
+		  OMProperty * pNewProp =
+			ptd->pvtCreateOMProperty (defPid, wNameBuf);
+		  // Bobt hack! this assertion was removed when optional
+		  // properties were put into service...
+		  //
+		  // assert (pNewProp->bitsSize ());
+		  delete[] wNameBuf;
+
+		  // Add the property to the property set.
+		  ps->put (pNewProp);
+		}
+	}
+#endif // 0
+  // Step 2: look through OM properties.  2a. See if each is defined
+  // in the class def.  It's an error if it isn't. 2b. Initialize it
+  // with any info we can.
   size_t context = 0;
   for (size_t i = 0; i < propCount; i++)
 	{
-	  OMProperty * pProp;
-	  pProp = 0;
+	  OMProperty * pProp = 0;
 	  ps->iterate (context, pProp);
 	  assert (pProp);
 	  OMPropertyId opid = pProp->propertyId ();
 
-	  /*
-	  ImplAAFPropertyDef * pPropDef = 0;
-	  hr = pDict->LookupPropDefByOMPid (opid, &pPropDef);
+	  ImplAAFTypeDefSP ptd;
+	  assert (spDef);
+	  pdSP = 0;
+	  hr = spDef->LookupPropertyDefbyOMPid (opid, &pdSP);
+
+	  // The following assertion will fail if the property is not
+	  // defined in the class definition for this object.
 	  assert (AAFRESULT_SUCCEEDED (hr));
-	  assert (pPropDef);
-	  */
+	  assert (pdSP);
 
-	  ImplAAFTypeDef * ptd = 0;
-	  hr = pDict->LookupComplexPropTypeByOMPid (opid, &ptd);
-
-	  /*
-	  assert (! ptd);
-	  hr = pPropDef->GetTypeDef (&ptd);
-	  */
+	  hr = pdSP->GetTypeDef (&ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
-	  // Not necessarily non-null; will be null if this is a
-	  // non-complex type (that is, a strong object reference).
-	  // assert (ptd);
+	  assert (ptd);
 
+	  // The only info we can compare is sizes of properties.  Let's
+	  // make sure they match.
+	  size_t omPropSize  = pProp->bitsSize ();
+	  // Hack!  We don't think internalsize() actually needs the
+	  // pointer to bits, so we'll pass zero since bits ptr is
+	  // difficult to get.
+	  size_t definedSize = ptd->internalSize (0, omPropSize);
+
+	  // If the assertion below fails, try un-commenting the lines
+	  // which follow it to find out which property is defined with
+	  // the wrong size.  You'll also have to add an include to
+	  // iostream.h .  Be sure to reinstate the comments, and remove
+	  // the include<iostream.h> before you check in any changes!
+	  assert (definedSize == omPropSize);
 	  /*
-	  pPropDef->ReleaseReference ();
-	  pPropDef = 0;
+	  if (definedSize != omPropSize)
+		{
+		  cerr << "Property size error: "
+			   <<   "pid=0x"         << hex << opid
+			   << ", definedSize=0x" << hex << definedSize
+			   << ", omPropSize=0x"  << hex << omPropSize
+			   << endl;
+		}
 	  */
 
+	  // Fill in other OMProp info that the property def can offer.
+	  // Specifically, the property type, and 'optionality'.
 	  assert (pProp);
 	  const char * propName = pProp->name ();
 	  assert (propName);
-	  pProp->initialize (opid, propName, ptd);
-
-	  if (ptd)
-	  {
-		ptd->ReleaseReference ();
-		ptd = 0;
-	  }
+	  aafBool isOptional;
+	  hr = pdSP->GetIsOptional (&isOptional);
+	  assert (AAFRESULT_SUCCEEDED (hr));
+	  pProp->initialize (opid,
+						 propName,
+						 ptd,
+						 isOptional ? true : false);
 	}
-  assert (pDict);
-  pDict->ReleaseReference ();
-  pDict = 0;
 }
 
 

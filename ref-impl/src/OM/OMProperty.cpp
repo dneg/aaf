@@ -13,7 +13,11 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
                        const int storedForm,
                        const char* name)
 : _propertyId(propertyId), _storedForm(storedForm), _name(name), _type(0),
-  _isOptional(false), _isPresent(false)
+  // _isOptional(false),
+  // BobT: make optional by default, to hack around problem where
+  // props may be restored before they're initialized by DM.
+  _isOptional(true),
+  _isPresent(false)
 {
   TRACE("OMProperty::OMProperty");
 }
