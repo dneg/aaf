@@ -39,7 +39,7 @@
 
 extern "C" HRESULT CAAFTypeDefSet_test()
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
 
 
