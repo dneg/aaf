@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "Container.h"
-#include "AAFObject.h"
 #include "AAFUtils.h"
 #include "aafansic.h"
 #include "aafCvt.h"
