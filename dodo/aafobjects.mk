@@ -86,6 +86,7 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
 	EnumAAFLoadedPlugins \
+	EnumAAFMobComments \
 	EnumAAFObjects \
 	EnumAAFParameterDefs \
 	EnumAAFPluginDescriptors \
