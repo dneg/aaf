@@ -217,6 +217,8 @@ private:
   static void readSignature(const wchar_t* fileName,
                             OMFileSignature& signature);
 
+  static OMFileEncoding encodingOf(const OMFileSignature& signature);
+
   OMRootStorable* _root;
   OMStoredObject* _rootStore;
 
