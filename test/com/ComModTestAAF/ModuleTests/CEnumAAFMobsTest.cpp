@@ -190,7 +190,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFHeader *				pHeader = NULL;
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs;
-	HRESULT						hr;
+	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
 	ProductInfo.productName = L"Make AVR Example. NOT!";
