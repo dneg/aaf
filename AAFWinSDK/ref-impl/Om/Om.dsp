@@ -141,5 +141,9 @@ SOURCE="..\..\..\ref-impl\src\OM\OMType.cpp"
 
 SOURCE="..\..\..\ref-impl\src\OM\OMUtilities.cpp"
 # End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMWideStringProperty.cpp"
+# End Source File
 # End Target
 # End Project
