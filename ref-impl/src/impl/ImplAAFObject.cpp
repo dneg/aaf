@@ -445,8 +445,8 @@ ImplAAFObject::SavedProp::~SavedProp ()
 	dynamic_cast<OMStrongReferenceVectorProperty <ImplAAFObject>*>(_p);
   if (srv)
 	{
-	  size_t size = srv->getSize();
-	  for (size_t i = 0; i < size; i++)
+	  size_t count = srv->count();
+	  for (size_t i = 0; i < count; i++)
 		{
 		  ImplAAFObject* oldObj = srv->clearValueAt(i);
 		  if (oldObj)
