@@ -383,6 +383,13 @@ OMStorable* OMStrongObjectReference::setValue(const OMStorable* value)
   return oldObject;
 }
 
+const wchar_t* OMStrongObjectReference::name(void) const
+{
+  TRACE("OMStrongObjectReference::name");
+
+  return _name;
+}
+
   // @mfunc Is this <c OMStrongObjectReference> in the loaded state. If false
   //        there is a persisted representation of this
   //        <c OMStrongObjectReference> that can be loaded.

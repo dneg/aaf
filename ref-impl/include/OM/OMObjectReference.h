@@ -149,6 +149,8 @@ public:
     //          The value is a pointer to the referenced <c OMStorable>.
   virtual OMStorable* setValue(const OMStorable* value);
 
+  virtual const wchar_t* name(void) const;
+
 protected:
   // @access Protected members.
 
