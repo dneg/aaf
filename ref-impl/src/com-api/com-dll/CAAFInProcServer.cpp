@@ -187,7 +187,7 @@ const AAFRegEntry g_AAFRegEntry[][3] =
 
 static int FormatRegBuffer 
 (
-	LPTSTR pBuffer,
+	LPOLESTR pBuffer,
 	const AAFRegEntry& entry,
 	LPOLESTR pCLSIDString,
 	LPCOLESTR pClassName,
