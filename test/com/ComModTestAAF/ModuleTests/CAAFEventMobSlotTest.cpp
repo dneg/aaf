@@ -300,7 +300,7 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 				CreateInstance(IID_IAAFEvent, 
 							   (IUnknown **)&pEvent));
     checkResult(pEvent->SetPosition(*position));
-    checkResult(pEvent->SetComment(L"Event::Comment:This is a test event"));
+    checkResult(pEvent->SetComment(comment));
 	checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComp));
 	checkResult(pComp->SetDataDef(defs.ddPicture()));
 	pComp->Release();
