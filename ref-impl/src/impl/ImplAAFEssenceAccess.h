@@ -56,12 +56,9 @@ class ImplAAFLocator;
 
 typedef struct
 {
-//	aafPosition_t	dataOffset;
 	aafUID_t		mediaKind;
 	aafInt32		trackID;
 	aafInt16		physicalOutChan;	/* 1->N */
-//	aafRational_t	sampleRate;
-//	aafLength_t		numSamples;
 }               aafSubChannel_t;
 
 typedef enum { kAAFCreated, kAAFAppended, kAAFReadOnly } aafOpenType_t;
@@ -300,10 +297,10 @@ public:
          aafDataBuffer_t  buffer,
 
          // @parm [out,ref] 
-         aafUInt32 *  bytesRead,
+         aafUInt32 *  samplesRead,
 
          // @parm [out,ref] 
-         aafUInt32 *  samplesRead);
+         aafUInt32 *  bytesRead);
 	//@comm A single video frame is ONE sample.
 	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
 	//@comm Possible Errors:
@@ -508,8 +505,8 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetFileFormat
-        // @parm [out] 
-        (ImplAAFEssenceFormat ** ops);
+        (ImplAAFEssenceFormat * opsTemplate,
+         ImplAAFEssenceFormat ** opsResult);
 	//@comm Replaces omfmGetVideoInfoArray */
 
   //****************
@@ -612,9 +609,6 @@ public:
         (aafUInt32  cacheSize);
 	//@comm Replaces omfmSetStreamCacheSize */
 
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetEssenceSampleStream
-         (ImplAAFEssenceSampleStream  **theStream);
 
   //***********************************************************
   // METHOD NAME: GetStoredByteOrder()
@@ -695,7 +689,6 @@ private:
 	ImplAAFSourceMob	*_fileMob;
 	aafInt32			_numChannels;
 	aafSubChannel_t		*_channels;
-	aafPosition_t		_dataStart;
 	ImplAAFMasterMob	*_masterMob;
 	ImplAAFFileDescriptor *_mdes;
 	IAAFEssenceCodec	*_codec;
