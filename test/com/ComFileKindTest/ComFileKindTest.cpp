@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFFile
+// @com This file implements tests for variour file kinds
 //=---------------------------------------------------------------------=
 //
 // The contents of this file are subject to the AAF SDK Public
@@ -40,21 +40,17 @@
 
 #include "CAAFBuiltinDefs.h"
 
-
-// Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
   const size_t kMaxFileName = 512;
   char cFileName[kMaxFileName];
 
   size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
-  if (status != (size_t)-1)
-  { // delete the file.
+  if (status != (size_t)-1) {
     remove(cFileName);
   }
 }
 
-// convenient error handlers.
 inline void checkResult(HRESULT r)
 {
   if (FAILED(r))
@@ -69,7 +65,7 @@ inline void checkExpression(bool expression, HRESULT r=AAFRESULT_TEST_FAILED)
 #define MOB_NAME_TEST L"MOBTest"
 #define MOB_NAME_SIZE 16
 
-static const 	aafMobID_t	TEST_MobID =
+static const   aafMobID_t  TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
 0x13, 0x00, 0x00, 0x00,
 {0xfd3cc302, 0x03fe, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
@@ -79,199 +75,190 @@ static HRESULT CreateAAFFile(aafWChar * pFileName,
                              const aafUID_t* pFileKind,
                              IAAFFile** ppFile)
 {
-	aafProductIdentification_t	ProductInfo;
-	aafProductVersion_t v;
-	v.major = 1;
-	v.minor = 0;
-	v.tertiary = 0;
-	v.patchLevel = 0;
-	v.type = kAAFVersionUnknown;
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"ComFileKindTest";
-	ProductInfo.productVersion = &v;
-	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = UnitTestProductID;
-	ProductInfo.platform = NULL;
-	HRESULT						hr = S_OK;
+  aafProductIdentification_t  ProductInfo;
+  aafProductVersion_t v;
+  v.major = 1;
+  v.minor = 0;
+  v.tertiary = 0;
+  v.patchLevel = 0;
+  v.type = kAAFVersionUnknown;
+  ProductInfo.companyName = L"AAF Developers Desk";
+  ProductInfo.productName = L"ComFileKindTest";
+  ProductInfo.productVersion = &v;
+  ProductInfo.productVersionString = NULL;
+  ProductInfo.productID = UnitTestProductID;
+  ProductInfo.platform = NULL;
+  HRESULT hr = S_OK;
  
-    try {
-     // Remove the previous test file if any.
-      RemoveTestFile(pFileName);
+  try {
+    RemoveTestFile(pFileName);
 
 #if 0
-      checkResult(AAFFileOpenNewModify(
-        pFileName,
-        0,
-        &ProductInfo,
-        ppFile));
+    checkResult(AAFFileOpenNewModify(
+      pFileName,
+      0,
+      &ProductInfo,
+      ppFile));
 #else
-      IAAFRawStorage* pRawStorage = 0;
-      checkResult(AAFCreateRawStorageDisk(
-		pFileName,
-        kAAFFileExistence_new,
-        kAAFFileAccess_modify,
-        &pRawStorage));
-      checkResult(AAFCreateAAFFileOnRawStorage (
-        pRawStorage,
-        kAAFFileExistence_new,
-        kAAFFileAccess_modify,
-        pFileKind,
-        0,
-        &ProductInfo,
-        ppFile));
-      pRawStorage->Release();
-      checkResult((*ppFile)->Open());
+    IAAFRawStorage* pRawStorage = 0;
+    checkResult(AAFCreateRawStorageDisk(
+      pFileName,
+      kAAFFileExistence_new,
+      kAAFFileAccess_modify,
+      &pRawStorage));
+    checkResult(AAFCreateAAFFileOnRawStorage (
+      pRawStorage,
+      kAAFFileExistence_new,
+      kAAFFileAccess_modify,
+      pFileKind,
+      0,
+      &ProductInfo,
+      ppFile));
+    pRawStorage->Release();
+    checkResult((*ppFile)->Open());
 #endif
-	} catch (HRESULT& rResult) {
-	  hr = rResult;
-    }
-	return hr;
+  } catch (HRESULT& rResult) {
+    hr = rResult;
+  }
+  return hr;
 }
 
 static HRESULT WriteAAFFile(IAAFFile* pFile)
 {
-	bool bFileOpen = true;
-	IAAFHeader *				pHeader = NULL;
-	IAAFDictionary*	pDictionary = NULL;
-	IAAFMob			*pMob = NULL;
-	HRESULT						hr = S_OK;
+  bool bFileOpen = true;
+  IAAFHeader* pHeader = NULL;
+  IAAFDictionary* pDictionary = NULL;
+  IAAFMob *pMob = NULL;
+  HRESULT hr = S_OK;
 
   try 
   {
 
-	  // We can't really do anthing in AAF without the header.
-	  checkResult(pFile->GetHeader(&pHeader));
+    // Get the header
+    checkResult(pFile->GetHeader(&pHeader));
 
-	  // Get the AAF Dictionary so that we can create valid AAF objects.
-	  checkResult(pHeader->GetDictionary(&pDictionary));
-
-      // Make sure the header returns us the same dictionary as the file
-	  IAAFDictionarySP pDictionaryFromHeader;
-	  checkResult(pHeader->GetDictionary(&pDictionaryFromHeader));
-
-	  CAAFBuiltinDefs defs (pDictionary);
- 	  
-	  // Create a concrete subclass of Mob
-	  checkResult(defs.cdMasterMob()->
-				  CreateInstance(IID_IAAFMob, 
-								 (IUnknown **)&pMob));
+    // Get the AAF Dictionary
+    checkResult(pHeader->GetDictionary(&pDictionary));
+    CAAFBuiltinDefs defs (pDictionary);
+     
+    // Create a Mob
+    checkResult(defs.cdMasterMob()->CreateInstance(IID_IAAFMob, 
+                                                   (IUnknown **)&pMob));
     
-	  // Initialize the Mob properties
-	  checkResult(pMob->SetMobID(TEST_MobID));
-	  checkResult(pMob->SetName(MOB_NAME_TEST));
+    // Initialize the Mob
+    checkResult(pMob->SetMobID(TEST_MobID));
+    checkResult(pMob->SetName(MOB_NAME_TEST));
 
-	  // Add the source mob into the tree
-	  checkResult(pHeader->AddMob(pMob));
+    // Add the mob to the file
+    checkResult(pHeader->AddMob(pMob));
 
-	  // Attempt to save the file.
-	  checkResult(pFile->Save());
+    // Save the file
+    checkResult(pFile->Save());
 
-	  // Attempt to close the file.
-	  checkResult(pFile->Close());
-	  bFileOpen = false;
-    }
-  catch (HRESULT& rResult)
-	{
-	  hr = rResult;
-	}
+    // Close the file
+    checkResult(pFile->Close());
+    bFileOpen = false;
 
+  } catch (HRESULT& rResult) {
+    hr = rResult;
+  }
 
-	// Cleanup and return
-	if (pMob)
-		pMob->Release();
+  // Clean up
+  if (pMob)
+    pMob->Release();
 
   if (pDictionary)
     pDictionary->Release();
 
   if (pHeader)
-		pHeader->Release();
-			
-	if (pFile)
-	{	// Close file
-		if (bFileOpen)
-		  {
-			pFile->Save();
-			pFile->Close();
-		  }
- 		pFile->Release();
-	}
+    pHeader->Release();
+      
+  if (pFile) {
+    if (bFileOpen) {
+      // Save and close the file if an error left it open
+      pFile->Save();
+      pFile->Close();
+    }
+    pFile->Release();
+  }
 
-	return hr;
+  return hr;
 }
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-  IAAFFile *					pFile = NULL;
+  IAAFFile* pFile = NULL;
   bool bFileOpen = false;
-  IAAFHeader *				pHeader = NULL;
-  IEnumAAFMobs *mobIter = NULL;
-  IAAFMob			*pMob = NULL;
-  aafNumSlots_t				numMobs, n;
-  HRESULT						hr = S_OK;
-  aafWChar					name[500];
-  aafMobID_t					mobID;
-  aafFileRev_t					testRev;
+  IAAFHeader* pHeader = NULL;
+  IEnumAAFMobs* mobIter = NULL;
+  IAAFMob* pMob = NULL;
+  aafNumSlots_t numMobs, n;
+  HRESULT hr = S_OK;
+  aafWChar name[500];
+  aafMobID_t mobID;
+  aafFileRev_t testRev;
 
-	  
   try
   {
+
     // Open the file
     checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
-	  bFileOpen = true;
+    bFileOpen = true;
 
-    // We can't really do anthing in AAF without the header.
-  	checkResult(pFile->GetHeader(&pHeader));
+    // Get the header
+    checkResult(pFile->GetHeader(&pHeader));
 
-		checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
-		checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
+    // Expect to find a single Mob
+    checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
+    checkExpression (1 == numMobs, AAFRESULT_TEST_FAILED);
 
     checkResult(pHeader->GetMobs (NULL, &mobIter));
-    for(n = 0; n < numMobs; n++)
-	  {
-		  checkResult(mobIter->NextOne (&pMob));
-		  checkResult(pMob->GetName (name, sizeof(name)));
-		  checkResult(pMob->GetMobID (&mobID));
-		  checkExpression(wcscmp( name, MOB_NAME_TEST) == 0, AAFRESULT_TEST_FAILED);
-		  checkExpression(memcmp(&mobID, &TEST_MobID, sizeof(mobID)) == 0, AAFRESULT_TEST_FAILED);
+    for(n = 0; n < numMobs; n++) {
+      checkResult(mobIter->NextOne (&pMob));
+      checkResult(pMob->GetName (name, sizeof(name)));
+      checkResult(pMob->GetMobID (&mobID));
+      // Check that the properties are as we wrote them
+      checkExpression(wcscmp( name, MOB_NAME_TEST) == 0,
+                      AAFRESULT_TEST_FAILED);
+      checkExpression(memcmp(&mobID, &TEST_MobID, sizeof(mobID)) == 0,
+                      AAFRESULT_TEST_FAILED);
 
-		  pMob->Release();
-		  pMob = NULL;
-	  }
+      pMob->Release();
+      pMob = NULL;
+    }
 
-	  mobIter->Release();
-	  mobIter = NULL;
+    mobIter->Release();
+    mobIter = NULL;
 
-	checkResult(pFile->GetRevision(&testRev));
+    checkResult(pFile->GetRevision(&testRev));
     checkExpression(kAAFRev1 == testRev, AAFRESULT_TEST_FAILED);
 
-	checkResult(pFile->Close());
+    checkResult(pFile->Close());
     bFileOpen = false;
 
-  }
-  catch (HRESULT& rResult)
-  {
+  } catch (HRESULT& rResult) {
     hr = rResult;
   }
 
-
-	// Cleanup and return
+  // Clean up
   if (mobIter)
     mobIter->Release();
 
-	if (pMob)
-		pMob->Release();
+  if (pMob)
+    pMob->Release();
 
   if (pHeader)
-		pHeader->Release();
-			
-	if (pFile)
-	{	// Close file
-		if (bFileOpen)
-			pFile->Close();
- 		pFile->Release();
-	}
+    pHeader->Release();
+      
+  if (pFile) {
+    if (bFileOpen) {
+      // Close the file if an error left it open
+      pFile->Close();
+    }
+    pFile->Release();
+  }
 
-	return hr;
+  return hr;
 }
 
 struct {
@@ -296,8 +283,11 @@ int main(void)
   try {
   IAAFFile* pFile = 0;
     for (int i = 0; i < sizeof(fileinfo)/sizeof(fileinfo[0]); i++) {
+      // Create the file
       checkResult(CreateAAFFile(fileinfo[i].name, fileinfo[i].kind, &pFile));
+      // Write the file contents
       checkResult(WriteAAFFile(pFile));
+      // Check that we made an AAF file with the correct encoding
       aafUID_t k = {0};
       aafBool b = kAAFFalse;
       checkResult(AAFFileIsAAFFile(fileinfo[i].name, &k, &b));
@@ -309,6 +299,7 @@ int main(void)
         cerr << "Incorrect file kind." << endl;
         throw AAFRESULT_TEST_FAILED;
       }
+      // Read the file
       if (fileinfo[i].read) {
         checkResult(ReadAAFFile(fileinfo[i].name));
       }
