@@ -94,6 +94,7 @@ inline void PrintTestResult(char *testName, HRESULT localhr, HRESULT *phr)
 #define PRODUCT_NAME3		L"AAFIdentification Test3"
 #define PRODUCT_NAME4		L"AAFIdentification Test4"
 #define TEST_VERSION		L"TEST VERSION"
+#define TEST_PLATFORM		L"TEST PLATFORM"
 
 static aafProductVersion_t			testVersion =  { 1, 0, 0, 0, kAAFVersionUnknown };
 
@@ -112,6 +113,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productName = PRODUCT_NAME;
 	ProductInfo.productVersionString = TEST_VERSION;
 	ProductInfo.productID = UnitTestProductID;
+	ProductInfo.platform = TEST_PLATFORM;
 	ProductInfo.productVersion = &testVersion;
 	aafWChar					*pProductName[5] = { PRODUCT_NAME,
 													PRODUCT_NAME1,
