@@ -28,6 +28,11 @@ AD_IDL(//
 *                                          *
 \******************************************/
 
+AD_FORWARD_DECLARATION(AAFNetworkLocator)
+AD_FORWARD_DECLARATION(AAFLocator)
+AD_FORWARD_DECLARATION(AAFPluggableCode)
+AD_FORWARD_DECLARATION(EnumAAFPluginLocators)
+
  
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
