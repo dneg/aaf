@@ -253,7 +253,7 @@ public:
     //          <c OMStrongReferenceProperty> into a pointer to the
     //          referenced (contained) <p ReferencedObject>.
     //   @this const
-  operator ReferencedObject*(void) const;
+  operator ReferencedObject*() const;
 
     // @cmember Save this <c OMStrongReferenceProperty>.
     // @this const
@@ -332,7 +332,7 @@ public:
     //          <c OMWeakReferenceProperty> into a pointer to the
     //          referenced (pointed to) <p ReferencedObject>.
     //   @this const
-  operator ReferencedObject*(void) const;
+  operator ReferencedObject*() const;
 
     // @cmember Save this <c OMWeakReferenceProperty>.
     // @this const
@@ -447,7 +447,7 @@ public:
     // @cmember Type conversion. Convert an <c OMFixedSizeProperty>
     //          into a <p PropertyType>.
     //   @this const
-  operator PropertyType(void) const;
+  operator PropertyType() const;
 
     // @cmember "Address of" operator.
   PropertyType* operator &(void);
@@ -694,13 +694,13 @@ public:
     // @cmember Type conversion. Convert an
     //          <c OMCharacterStringProperty> into a
     //          string of <p CharacterType> characters.
-  operator const CharacterType* (void);
+  operator const CharacterType* ();
 
     // @cmember Type conversion. Convert an
     //          <c OMCharacterStringProperty> into a
     //          string of <p CharacterType> characters.
     //   @this const
-  operator const CharacterType* (void) const;
+  operator const CharacterType* () const;
 
     // @cmember Assign the string <p characterString> to this
     //          <c OMCharacterStringProperty>.
@@ -751,7 +751,7 @@ public:
   virtual ~OMWideStringProperty(void);
 
     // @cmember Assignment operator.
-  OMWideStringProperty& operator = (const wchar_t* value);
+  OMWideStringProperty& operator = (const wchar_t * value);
 
 };
 
