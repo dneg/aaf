@@ -51,7 +51,8 @@
 #include <AxPropertyValue.h>
 #include <AAFResult.h>
 
-#define DVFRAMESIZE 144000		// true for PAL, not NTSC
+#define DV_PAL_FRAME_SIZE 144000
+#define DV_NTSC_FRAME_SIZE 120000
 
 const aafMobID_t zerouid = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,{0,0,0,{0,0,0,0,0,0,0,0}}};
 
@@ -214,8 +215,8 @@ static int deshuffle_audio_block(const unsigned char *inbuf, int dif_seq,
 
 
 // Return timecode as an integer number of frames from 0:00:00.00
-// using the first DV frame from the specified DV file
-// This code was based on the specification in SMPTE 314M-1999
+// using the first DV frame from the specified DV file.
+// This is based on the specification in SMPTE 314M-1999.
 static int getFirstTimecodeFromDVFile(const char *file)
 {
 	int frames = 0;
@@ -227,7 +228,7 @@ static int getFirstTimecodeFromDVFile(const char *file)
 	}
 
 	// Seek to the first frame, Subcode section, past the subcode ID (3 bytes),
-	// skip the first 3 SSYBs (3*8), and skip the SSYB ID (3 bytes),
+	// skip the first 3 SSYBs (3*8), then skip the SSYB ID (3 bytes),
 	// leaving the file pointer at the start of the TC payload of 5 bytes
 	fseek(fp, 0 + 80 + 3 + 3*8 + 3, SEEK_SET);
 
@@ -236,17 +237,22 @@ static int getFirstTimecodeFromDVFile(const char *file)
 	if (fread(buf, 1, sizeof(buf), fp) != sizeof(buf))
 	{
 		perror(file);
+		fclose(fp);
 		return -1;
 	}
 
 	// Treat all 0xff values as a special case and return 0
 	// (the first byte buf[0] always contains 0x13 and does not store timecode)
 	if (buf[1] == 0xff && buf[2] == 0xff && buf[3] == 0xff && buf[4] == 0xff)
+	{
+		fclose(fp);
 		return 0;
+	}
 
-	int drop_frame_flag;
+	int color_frame, drop_frame_flag;
 	int frame_tens, frame_units, seconds_tens, seconds_units;
 	int minutes_tens, minutes_units, hours_tens, hours_units;
+	color_frame = (buf[1] >> 7) & 0x01;
 	drop_frame_flag = (buf[1] >> 6) & 0x01;
 	frame_tens = (buf[1] >> 4) & 0x03;
 	frame_units = buf[1] & 0x0f;
@@ -257,12 +263,51 @@ static int getFirstTimecodeFromDVFile(const char *file)
 	hours_tens = (buf[3] >> 4) & 0x03;
 	hours_units = buf[4] & 0x0f;
 
-	frames =	frame_tens * 10 + frame_units +
-				(seconds_tens * 10 + seconds_units) * 25 +
-				(minutes_tens * 10 + minutes_units) * 25*60 +
-				(hours_tens * 10 + hours_units) * 25*60*60;
+	printf("1st timecode for %s = %02d:%02d:%02d.%02d (df = %d)\n", file,
+					(hours_tens * 10 + hours_units),
+					(minutes_tens * 10 + minutes_units),
+					(seconds_tens * 10 + seconds_units),
+					frame_tens * 10 + frame_units,
+					drop_frame_flag);
+
+	if (drop_frame_flag)
+	{
+		// FIXME: We round here instead of following SMPTE 12M-1999 sect 4.2.2
+		// "To minimize the NTSC time error, the first two frame numbers
+		// (00 and 01) shall be omitted from the count at the start of each
+		// minute except minutes 00, 10, 20, 30, 40, and 50."
+		double rate = 30000/1001;
+		double tmp =
+					frame_tens * 10 + frame_units +
+					(seconds_tens * 10 + seconds_units) * rate +
+					(minutes_tens * 10 + minutes_units) * rate*60 +
+					(hours_tens * 10 + hours_units) * rate*60*60;
+		frames = (int)(tmp + 0.5);		// round it
+	}
+	else
+	{
+		frames =	frame_tens * 10 + frame_units +
+					(seconds_tens * 10 + seconds_units) * 25 +
+					(minutes_tens * 10 + minutes_units) * 25*60 +
+					(hours_tens * 10 + hours_units) * 25*60*60;
+	}
+	fclose(fp);
 	return frames;
 }
+
+
+// TODO: These should be command-line arguments
+static bool create_tapemob = true;
+static bool create_compmob = true;
+static bool add_audio = true;
+
+// Records format detected when parsing eli file
+static bool formatPAL = false;
+
+static aafRational_t PALrate = {25,1};
+static aafRational_t NTSCrate = {30000,1001};
+//static aafRational_t NTSCrate = {2997,100};
+
 
 // Macro to make AxLib declaration look clearer.
 // Relies on an AxDictionary dict being declared in the same scope.
@@ -298,7 +343,9 @@ static bool addMasterMobForDVFile(
 	int eslength = essenceinput.tellg();
 	essenceinput.seekg (0, ios::beg);
 
-	int cliplength = eslength / DVFRAMESIZE;	// hard-coded for PAL, 25Mbps
+	// Truncate frame count to ignore any partial frame at the end
+	int cliplength = eslength /
+					( formatPAL ? DV_PAL_FRAME_SIZE : DV_NTSC_FRAME_SIZE );
 
 	aafSourceRef_t srcref;		// tmp SourceRef used for multiple SetSourceReference()'s
 	srcref.sourceID = zerouid;
@@ -309,13 +356,21 @@ static bool addMasterMobForDVFile(
 	mmob.SetName( AxStringUtil::mbtowc(name.c_str()) );
 
 	IUnknownSP unk;
-	aafRational_t editrate = {25,1};
-	aafRational_t samplerate = {25,1};
+
+	// Establish PAL / NTSC versions of editrate
+	aafRational_t editrate;
+	if (formatPAL)
+		editrate = PALrate;
+	else
+		editrate = NTSCrate;
+	aafRational_t samplerate = editrate;
 
 	// TimelineMobSlot for the Master Mob
 	DECLARE_AX( TimelineMobSlot, tlslot );
 	tlslot.SetEditRate(editrate);
 	tlslot.SetSlotID(1);
+	tlslot.SetPhysicalNum(1);
+	tlslot.SetName(L"V1");
 
 	// TimelineMobSlot for the source Mob
 	DECLARE_AX( TimelineMobSlot, srctlslot );
@@ -325,7 +380,7 @@ static bool addMasterMobForDVFile(
 	// SourceMob
 	DECLARE_AX( SourceMob, smob );
 
-	// Create the source clip for the Source Mob
+	// Create the source clip for the Video File Source Mob
 	DECLARE_AX( SourceClip, srcclip );
 	srcclip.SetDataDef(dict.LookupDataDef(DDEF_Picture));
 	srcclip.SetLength(cliplength);
@@ -351,15 +406,28 @@ static bool addMasterMobForDVFile(
 
 	// Create CDCIDescriptor
 	DECLARE_AX( CDCIDescriptor, cdci );
-	cdci.SetDisplayView(0x120,0x2d0,0,0);
-	cdci.SetSampledView(0x120,0x2d0,0,0);
-	cdci.SetStoredView(0x120,0x2d0);
 	cdci.SetFrameLayout(kAAFMixedFields);
 	cdci.SetComponentWidth(8);
-	cdci.SetVerticalSubsampling(2);
-	cdci.SetHorizontalSubsampling(2);
-	aafInt32 lines[2] = {0x17, 0x14f};
-	cdci.SetVideoLineMap(2,lines);
+	if (formatPAL)
+	{
+		cdci.SetDisplayView(0x120,0x2d0,0,0);
+		cdci.SetSampledView(0x120,0x2d0,0,0);
+		cdci.SetStoredView(0x120,0x2d0);
+		cdci.SetHorizontalSubsampling(2);	// 4:2:0 chroma format
+		cdci.SetVerticalSubsampling(2);
+		aafInt32 lines[2] = {0x17, 0x14f};
+		cdci.SetVideoLineMap(2,lines);
+	}
+	else
+	{
+		cdci.SetDisplayView(0xf0,0x2d0,0,0);
+		cdci.SetSampledView(0xf0,0x2d0,0,0);
+		cdci.SetStoredView(0xf0,0x2d0);
+		cdci.SetHorizontalSubsampling(4);	// 4:1:1 chroma format
+		cdci.SetVerticalSubsampling(1);
+		aafInt32 lines[2] = {0x17, 0x11d};
+		cdci.SetVideoLineMap(2,lines);
+	}
 	cdci.SetBlackReferenceLevel(0x10);
 	cdci.SetWhiteReferenceLevel(0xeb);
 	cdci.SetColorRange(0xe1);
@@ -390,10 +458,18 @@ static bool addMasterMobForDVFile(
 
 	SET_PROPERTY_VALUE( CDCIOffsetToFrameIndexes, aafInt32, 0 );
 	SET_PROPERTY_VALUE( DIDFrameIndexByteOrder, aafUInt16, 0x4949 );
-	SET_PROPERTY_VALUE( DIDResolutionID, aafUInt32, 0x8d );
 	SET_PROPERTY_VALUE( DIDFirstFrameOffset, aafInt32, 0x0 );
-	SET_PROPERTY_VALUE( DIDFrameSampleSize, aafInt32, DVFRAMESIZE );
-	SET_PROPERTY_VALUE( DIDImageSize, aafInt32, cliplength * DVFRAMESIZE );
+	SET_PROPERTY_VALUE( DIDImageSize, aafInt32, eslength );
+	if (formatPAL)
+	{
+		SET_PROPERTY_VALUE( DIDResolutionID, aafUInt32, 0x8d );
+		SET_PROPERTY_VALUE( DIDFrameSampleSize, aafInt32, DV_PAL_FRAME_SIZE );
+	}
+	else
+	{
+		SET_PROPERTY_VALUE( DIDResolutionID, aafUInt32, 0x8c );
+		SET_PROPERTY_VALUE( DIDFrameSampleSize, aafInt32, DV_NTSC_FRAME_SIZE );
+	}
 
 	// Order may be important from here.
 	// Mobs must have slots before they are added to the header.
@@ -450,10 +526,15 @@ static bool addMasterMobForDVFile(
 	cout << filename << ": " << total_written << " bytes written for CDCI Essence" << endl;
 
 
+	/////////////////////////////////////////////////////////////////
+	// Audio channel 1
+
 	// TimelineMobSlot for channel 1 audio
 	DECLARE_AX( TimelineMobSlot, tlslotA1 );
 	tlslotA1.SetEditRate(editrate);
 	tlslotA1.SetSlotID(2);
+	tlslotA1.SetPhysicalNum(1);
+	tlslotA1.SetName(L"A1");
 
 	// TimelineMobSlot for the source Mob
 	DECLARE_AX( TimelineMobSlot, srctlslotA1 );
@@ -495,26 +576,36 @@ static bool addMasterMobForDVFile(
 	smobA1.SetEssenceDescriptor(waveA1);
 	tlslotA1.SetSegment(msrcclipA1);
 	srctlslotA1.SetSegment(srcclipA1);
-	mmob.AppendSlot(tlslotA1);
 	smobA1.AppendSlot(srctlslotA1);
-	head.AddMob(smobA1);
+	if (add_audio)
+	{
+		mmob.AppendSlot(tlslotA1);
+		head.AddMob(smobA1);
+	}
 
 	IAAFEssenceDataSP wavA1data;
-	unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
-	if(!AxIsA(unk, wavA1data))
+	if (add_audio)
 	{
-		throw AxEx(L"Bad wavA1data data object.");
+		unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
+		if(!AxIsA(unk, wavA1data))
+		{
+			throw AxEx(L"Bad wavA1data data object.");
+		}
+		CHECK_HRESULT(wavA1data->SetFileMob(static_cast<IAAFSourceMobSP>(smobA1)));
+	
+		// You must add the essence data to the file before you write to the essence data.
+		CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(wavA1data));
 	}
-	CHECK_HRESULT(wavA1data->SetFileMob(static_cast<IAAFSourceMobSP>(smobA1)));
 
-	// You must add the essence data to the file before you write to the essence data.
-	CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(wavA1data));
-
+	/////////////////////////////////////////////////////////////////
+	// Audio channel 2
 
 	// TimelineMobSlot for channel 2 audio
 	DECLARE_AX( TimelineMobSlot, tlslotA2 );
 	tlslotA2.SetEditRate(editrate);
 	tlslotA2.SetSlotID(3);
+	tlslotA2.SetPhysicalNum(2);
+	tlslotA2.SetName(L"A2");
 
 	// TimelineMobSlot for the source Mob
 	DECLARE_AX( TimelineMobSlot, srctlslotA2 );
@@ -553,101 +644,111 @@ static bool addMasterMobForDVFile(
 	smobA2.SetEssenceDescriptor(waveA2);
 	tlslotA2.SetSegment(msrcclipA2);
 	srctlslotA2.SetSegment(srcclipA2);
-	mmob.AppendSlot(tlslotA2);
 	smobA2.AppendSlot(srctlslotA2);
-	head.AddMob(smobA2);
+	if (add_audio)
+	{
+		mmob.AppendSlot(tlslotA2);
+		head.AddMob(smobA2);
+	}
 
 	IAAFEssenceDataSP wavA2data;
-	unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
-	if(!AxIsA(unk, wavA2data))
+	if (add_audio)
 	{
-		throw AxEx(L"Bad wavA2data data object.");
-	}
-	CHECK_HRESULT(wavA2data->SetFileMob(static_cast<IAAFSourceMobSP>(smobA2)));
-
-	// You must add the essence data to the file before you write to the essence data.
-	CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(wavA2data));
-
-
-
-	short audio_buffers[2][DV_AUDIO_SAMPLES * sizeof(short)];
-
-	struct stat statbuf;
-	stat(filename.c_str(), &statbuf);
-
-	// 48000 samples per second at 2 bytes per sample
-	// so 1920 samples per frame
-	// so 3840 bytes per frame.
-	int num_samples = (statbuf.st_size / DVFRAMESIZE) * 1920;
-	int length_in_er = num_samples / 1920;
-	waveA1.SetLength(length_in_er);		// length is in terms of editrate
-	srcclipA1.SetLength(length_in_er);
-	msrcclipA1.SetLength(length_in_er);
-	waveA2.SetLength(length_in_er);		// length is in terms of editrate
-	srcclipA2.SetLength(length_in_er);
-	msrcclipA2.SetLength(length_in_er);
-
-	CreateWaveHeader(WAVEHeader);
-	WAVEDataLen = num_samples * 2;
-	WAVEFileLen = WAVEDataLen + 36;
-
-	waveA1.SetSummary(sizeof(WAVEHeader), WAVEHeader);
-	waveA2.SetSummary(sizeof(WAVEHeader), WAVEHeader);
-	aafUInt32 byteswritten = 0;
-	CHECK_HRESULT(wavA1data->Write(sizeof(WAVEHeader), WAVEHeader, &byteswritten));
-	CHECK_HRESULT(wavA2data->Write(sizeof(WAVEHeader), WAVEHeader, &byteswritten));
-
-	// Create the essence wav data and write to it for both A1 and A2
-	fp = fopen(filename.c_str(), "rb");
-	if (!fp)
-	{
-		cerr << "Error Opening File " << filename << endl;
-		return false;
-	}
-	int total_A1 = 0;
-	int total_A2 = 0;
-	for (int i = 0; i < statbuf.st_size; i += DVFRAMESIZE)
-	{
-		unsigned char buf[DVFRAMESIZE];
-		int r;
-		if ((r = fread(buf, 1, sizeof(buf), fp)) != sizeof(buf))
+		unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
+		if(!AxIsA(unk, wavA2data))
 		{
-			cout << filename << " short read of DV frame (expected " << sizeof(buf) << ") read " << r << endl;
-			break;
+			throw AxEx(L"Bad wavA2data data object.");
 		}
+		CHECK_HRESULT(wavA2data->SetFileMob(static_cast<IAAFSourceMobSP>(smobA2)));
 
-		// There are 12 DIF sequences, each storing audio data, in PAL 625/50
-		// Each DIF sequence is 12000 bytes long and has 9 DIF blocks containing
-		// audio data which are not arranged contiguously [SMPTE 314M-1999]
-		for (int dif_seq = 0; dif_seq < 12; dif_seq++)
+		// You must add the essence data to the file before you write to the essence data.
+		CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(wavA2data));
+	}
+
+
+	// Audio sample extraction from DV stream
+	// FIXME: Audio sample extraction only works for PAL at the moment.
+	if (add_audio)
+	{
+		short audio_buffers[2][DV_AUDIO_SAMPLES * sizeof(short)];
+
+		struct stat statbuf;
+		stat(filename.c_str(), &statbuf);
+
+		// 48000 samples per second at 2 bytes per sample
+		// so 1920 samples per frame
+		// so 3840 bytes per frame.
+		int num_samples = (statbuf.st_size / DV_PAL_FRAME_SIZE) * 1920;
+		int length_in_er = num_samples / 1920;
+		waveA1.SetLength(length_in_er);		// length is in terms of editrate
+		srcclipA1.SetLength(length_in_er);
+		msrcclipA1.SetLength(length_in_er);
+		waveA2.SetLength(length_in_er);		// length is in terms of editrate
+		srcclipA2.SetLength(length_in_er);
+		msrcclipA2.SetLength(length_in_er);
+
+		CreateWaveHeader(WAVEHeader);
+		WAVEDataLen = num_samples * 2;
+		WAVEFileLen = WAVEDataLen + 36;
+
+		waveA1.SetSummary(sizeof(WAVEHeader), WAVEHeader);
+		waveA2.SetSummary(sizeof(WAVEHeader), WAVEHeader);
+		aafUInt32 byteswritten = 0;
+		CHECK_HRESULT(wavA1data->Write(sizeof(WAVEHeader), WAVEHeader, &byteswritten));
+		CHECK_HRESULT(wavA2data->Write(sizeof(WAVEHeader), WAVEHeader, &byteswritten));
+
+		// Create the essence wav data and write to it for both A1 and A2
+		fp = fopen(filename.c_str(), "rb");
+		if (!fp)
 		{
-			// Audio data for one channel is scattered over 54 DIF blocks for
-			// the 625/50 system (6 DIF sequences * 9 DIF blocks)
-			for (int audio_dif = 0; audio_dif < 9; audio_dif++)
+			cerr << "Error Opening File " << filename << endl;
+			return false;
+		}
+		int total_A1 = 0;
+		int total_A2 = 0;
+		for (int i = 0; i < statbuf.st_size; i += DV_PAL_FRAME_SIZE)
+		{
+			unsigned char buf[DV_PAL_FRAME_SIZE];
+			int r;
+			if ((r = fread(buf, 1, sizeof(buf), fp)) != sizeof(buf))
 			{
-				// channel 0 is in first 6 DIF sequences, channel 1 in 2nd 6
-				int channel = (dif_seq < 6) ? 0 : 1;
-
-				// skip first 6 DIF blocks (header, subcode, VAUX sections)
-				// audio blocks occur every 16 DIF blocks after this point
-				// each DIF block is 80 bytes in size
-				int offset = (dif_seq * 150 + 6 + audio_dif * 16) * 80;
-				deshuffle_audio_block(buf + offset, dif_seq, audio_dif,
-										audio_buffers[channel] );
+				cout << filename << " short read of DV frame (expected " << sizeof(buf) << ") read " << r << endl;
+				break;
 			}
-		}
-		aafDataValue_t dataA1 = (unsigned char *)audio_buffers[0];
-		aafDataValue_t dataA2 = (unsigned char *)audio_buffers[1];
 
-		CHECK_HRESULT(wavA1data->Write(DV_AUDIO_SAMPLES*sizeof(short),
-								dataA1, &byteswritten));
-		total_A1 += byteswritten;
-		CHECK_HRESULT(wavA2data->Write(DV_AUDIO_SAMPLES*sizeof(short),
-								dataA2, &byteswritten));
-		total_A2 += byteswritten;
+			// There are 12 DIF sequences, each storing audio data, in PAL 625/50
+			// Each DIF sequence is 12000 bytes long and has 9 DIF blocks containing
+			// audio data which are not arranged contiguously [SMPTE 314M-1999]
+			for (int dif_seq = 0; dif_seq < 12; dif_seq++)
+			{
+				// Audio data for one channel is scattered over 54 DIF blocks for
+				// the 625/50 system (6 DIF sequences * 9 DIF blocks)
+				for (int audio_dif = 0; audio_dif < 9; audio_dif++)
+				{
+					// channel 0 is in first 6 DIF sequences, channel 1 in 2nd 6
+					int channel = (dif_seq < 6) ? 0 : 1;
+
+					// skip first 6 DIF blocks (header, subcode, VAUX sections)
+					// audio blocks occur every 16 DIF blocks after this point
+					// each DIF block is 80 bytes in size
+					int offset = (dif_seq * 150 + 6 + audio_dif * 16) * 80;
+					deshuffle_audio_block(buf + offset, dif_seq, audio_dif,
+											audio_buffers[channel] );
+				}
+			}
+			aafDataValue_t dataA1 = (unsigned char *)audio_buffers[0];
+			aafDataValue_t dataA2 = (unsigned char *)audio_buffers[1];
+
+			CHECK_HRESULT(wavA1data->Write(DV_AUDIO_SAMPLES*sizeof(short),
+									dataA1, &byteswritten));
+			total_A1 += byteswritten;
+			CHECK_HRESULT(wavA2data->Write(DV_AUDIO_SAMPLES*sizeof(short),
+									dataA2, &byteswritten));
+			total_A2 += byteswritten;
+		}
+		cout << filename << ": " << total_A1 << " bytes written for A1 WAVE Essence" << endl;
+		cout << filename << ": " << total_A2 << " bytes written for A2 WAVE Essence" << endl;
 	}
-	cout << filename << ": " << total_A1 << " bytes written for A1 WAVE Essence" << endl;
-	cout << filename << ": " << total_A2 << " bytes written for A2 WAVE Essence" << endl;
 
 	return true;
 }
@@ -659,8 +760,6 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 {
 	bool result = true;
 	IAAFFile *pFile;
-	bool create_tapemob = true;
-	bool create_compmob = true;
 
 	try
 	{
@@ -705,7 +804,20 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 
 		CreateLegacyPropDefs(static_cast<IAAFDictionarySP>(dict));
 
-		aafRational_t editrate = {25,1};
+		// Establish PAL / NTSC versions of editrate
+		int length_24hours;
+		aafRational_t editrate;
+
+		if (formatPAL)
+		{
+			editrate = PALrate;
+			length_24hours = 24*60*60*25;
+		}
+		else
+		{
+			editrate = NTSCrate;
+			length_24hours = (int)(24*60*60*(30000.0/1001));
+		}
 
 		aafSourceRef_t srcref;
 		srcref.sourceID = zerouid;
@@ -718,50 +830,72 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		// Variable scope to keep Tape variables tidy.
 		{
 			DECLARE_AX( TapeDescriptor, tapedes );
-			// TODO: replace hard-coded tape SourceMob name
-			tapemob.SetName(L"Partie1");
+			// TODO: replace hard-coded tape SourceMob name with command arg.
+			tapemob.SetName(L"DCAE");
 			tapemob.SetEssenceDescriptor(tapedes);
-			tapedes.SetSignalType(kAAFPALSignal);
+			if (formatPAL)
+				tapedes.SetSignalType(kAAFPALSignal);
+			else
+				tapedes.SetSignalType(kAAFNTSCSignal);
 
 			DECLARE_AX( TimelineMobSlot, tapeslotvid );
 			tapeslotvid.SetSlotID(1);
 			tapeslotvid.SetEditRate(editrate);
+			tapeslotvid.SetPhysicalNum(1);
+			tapeslotvid.SetName(L"V1");
 			DECLARE_AX( Filler, tapefiller );
-			// Video track of Filler for 24 hours at 25 fps
-			tapefiller.Initialize(dict.LookupDataDef(DDEF_Picture), 25*60*60*24);
+			// Video track of Filler for 24 hours
+			tapefiller.Initialize(dict.LookupDataDef(DDEF_Picture), length_24hours);
 
 			DECLARE_AX( TimelineMobSlot, tapeslotaud1 );
 			tapeslotaud1.SetSlotID(2);
 			tapeslotaud1.SetEditRate(editrate);
+			tapeslotaud1.SetPhysicalNum(1);
+			tapeslotaud1.SetName(L"A1");
 			DECLARE_AX( Filler, tapefiller_aud1 );
-			// Audio track 1 of Filler for 24 hours at 25 fps
-			tapefiller_aud1.Initialize(dict.LookupDataDef(DDEF_Sound), 25*60*60*24);
+			// Audio track 1 of Filler for 24 hours
+			tapefiller_aud1.Initialize(dict.LookupDataDef(DDEF_Sound), length_24hours);
 
 			DECLARE_AX( TimelineMobSlot, tapeslotaud2 );
 			tapeslotaud2.SetSlotID(3);
 			tapeslotaud2.SetEditRate(editrate);
+			tapeslotaud2.SetPhysicalNum(2);
+			tapeslotaud2.SetName(L"A2");
 			DECLARE_AX( Filler, tapefiller_aud2 );
-			// Audio track 2 of Filler for 24 hours at 25 fps
-			tapefiller_aud2.Initialize(dict.LookupDataDef(DDEF_Sound), 25*60*60*24);
+			// Audio track 2 of Filler for 24 hours
+			tapefiller_aud2.Initialize(dict.LookupDataDef(DDEF_Sound), length_24hours);
 
 			DECLARE_AX( TimelineMobSlot, tapeslottc );
 			tapeslottc.SetSlotID(4);
 			tapeslottc.SetEditRate(editrate);
+			tapeslottc.SetPhysicalNum(1);
+			tapeslottc.SetName(L"TC1");
 
 			DECLARE_AX( Timecode, tcseg );
 			aafTimecode_t tc;
-			tc.drop = kAAFFalse;
-			tc.fps = editrate.numerator/editrate.denominator;
+			if (formatPAL)
+			{
+				tc.drop = kAAFFalse;
+				tc.fps = editrate.numerator/editrate.denominator;
+			}
+			else
+			{
+				tc.drop = kAAFTrue;
+				tc.fps = 30;
+			}
 			tc.startFrame = 0;						// Start time of 0:00:00.00
-			tcseg.Initialize(25*60*60*24, tc);		// 24 hours at 25 fps
+			tcseg.Initialize(length_24hours, tc);		// 24 hours
 			tcseg.SetDataDef(dict.LookupDataDef(DDEF_Timecode));
 
 			tapeslotvid.SetSegment(tapefiller);
 			tapemob.AppendSlot(tapeslotvid);
-			tapeslotaud1.SetSegment(tapefiller_aud1);
-			tapemob.AppendSlot(tapeslotaud1);
-			tapeslotaud2.SetSegment(tapefiller_aud2);
-			tapemob.AppendSlot(tapeslotaud2);
+			if (add_audio)
+			{
+				tapeslotaud1.SetSegment(tapefiller_aud1);
+				tapemob.AppendSlot(tapeslotaud1);
+				tapeslotaud2.SetSegment(tapefiller_aud2);
+				tapemob.AppendSlot(tapeslotaud2);
+			}
 			tapeslottc.SetSegment(tcseg);
 			tapemob.AppendSlot(tapeslottc);
 			if (create_tapemob)
@@ -830,23 +964,36 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		string compositionName = stripDirAndExt(output_aaf_file);
 		cmob.SetName( AxStringUtil::mbtowc(compositionName.c_str()) );
 
-		// TimelineMobSlots for V1 A1 A2
+		// TimelineMobSlots for TC1 V1 A1 A2
+		DECLARE_AX( TimelineMobSlot, comp_tcslot );
+		comp_tcslot.SetEditRate(editrate);
+		comp_tcslot.SetSlotID(1);
+		comp_tcslot.SetPhysicalNum(1);
+		comp_tcslot.SetName(L"TC1");
+
 		DECLARE_AX( TimelineMobSlot, comp_tlslot_V1 );
 		comp_tlslot_V1.SetEditRate(editrate);
-		comp_tlslot_V1.SetSlotID(1);
+		comp_tlslot_V1.SetSlotID(2);
+		comp_tlslot_V1.SetPhysicalNum(1);
+		comp_tlslot_V1.SetName(L"V1");
 
 		DECLARE_AX( TimelineMobSlot, ctlslotA1 );
 		ctlslotA1.SetEditRate(editrate);
-		ctlslotA1.SetSlotID(2);
+		ctlslotA1.SetSlotID(3);
+		ctlslotA1.SetPhysicalNum(1);
+		ctlslotA1.SetName(L"A1");
 
 		DECLARE_AX( TimelineMobSlot, ctlslotA2 );
 		ctlslotA2.SetEditRate(editrate);
-		ctlslotA2.SetSlotID(3);
+		ctlslotA2.SetSlotID(4);
+		ctlslotA2.SetPhysicalNum(2);
+		ctlslotA2.SetName(L"A2");
 
-		// Sequence segment for Composition
-		DECLARE_AX( Sequence, sequence );
-		sequence.SetDataDef(dict.LookupDataDef(DDEF_Picture));
-		comp_tlslot_V1.SetSegment(sequence);
+		// Sequence segments for Composition
+
+		DECLARE_AX( Sequence, sequenceV1 );
+		sequenceV1.SetDataDef(dict.LookupDataDef(DDEF_Picture));
+		comp_tlslot_V1.SetSegment(sequenceV1);
 
 		DECLARE_AX( Sequence, sequenceA1 );
 		sequenceA1.SetDataDef(dict.LookupDataDef(DDEF_Sound));
@@ -857,44 +1004,70 @@ static bool createAAFFileForEditDecisions(const char *output_aaf_file,
 		ctlslotA2.SetSegment(sequenceA2);
 
 		// Loop over the clips, appending SourceClips to the sequence
+		int comp_length = 0;
 		for (i = 0; i < start_by_idx.size(); i++)
 		{
 			// In ELI format, the end index is last included frame,
 			// so add 1 when calculating the length
 			int length = end_by_idx[i] + 1 - start_by_idx[i];
+			comp_length += length;
 
 			// Create the source clip for the Composition Mob
-			DECLARE_AX( SourceClip, comsrcclip1 );
-			comsrcclip1.SetDataDef(dict.LookupDataDef(DDEF_Picture));
-			comsrcclip1.SetLength(length);
+			DECLARE_AX( SourceClip, comsrcclipV1 );
+			comsrcclipV1.SetDataDef(dict.LookupDataDef(DDEF_Picture));
+			comsrcclipV1.SetLength(length);
 			srcref.sourceID = mobID_by_dvfile[ dvfile_by_idx[ i ] ];
 			srcref.sourceSlotID = 1;
 			srcref.startTime = start_by_idx[i];
-			comsrcclip1.SetSourceReference(srcref);
+			comsrcclipV1.SetSourceReference(srcref);
 
-			sequence.AppendComponent(comsrcclip1);
+			sequenceV1.AppendComponent(comsrcclipV1);
 
 			// A1
-			DECLARE_AX( SourceClip, comsrcclip1A1 );
-			comsrcclip1A1.SetDataDef(dict.LookupDataDef(DDEF_Sound));
-			comsrcclip1A1.SetLength(length);
+			DECLARE_AX( SourceClip, comsrcclipA1 );
+			comsrcclipA1.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+			comsrcclipA1.SetLength(length);
 			srcref.sourceSlotID = 2;
-			comsrcclip1A1.SetSourceReference(srcref);
+			comsrcclipA1.SetSourceReference(srcref);
 
-			sequenceA1.AppendComponent(comsrcclip1A1);
+			sequenceA1.AppendComponent(comsrcclipA1);
 
 			// A2
-			DECLARE_AX( SourceClip, comsrcclip1A2 );
-			comsrcclip1A2.SetDataDef(dict.LookupDataDef(DDEF_Sound));
-			comsrcclip1A2.SetLength(length);
+			DECLARE_AX( SourceClip, comsrcclipA2 );
+			comsrcclipA2.SetDataDef(dict.LookupDataDef(DDEF_Sound));
+			comsrcclipA2.SetLength(length);
 			srcref.sourceSlotID = 3;
-			comsrcclip1A2.SetSourceReference(srcref);
+			comsrcclipA2.SetSourceReference(srcref);
 
-			sequenceA2.AppendComponent(comsrcclip1A2);
+			sequenceA2.AppendComponent(comsrcclipA2);
 		}
+
+		// Setup timecode segment
+		DECLARE_AX( Timecode, tcseg );
+		aafTimecode_t tc;
+		if (formatPAL)
+		{
+			tc.drop = kAAFFalse;
+			tc.fps = editrate.numerator/editrate.denominator;
+		}
+		else
+		{
+			tc.drop = kAAFTrue;
+			tc.fps = 30;
+		}
+		// TODO: make the composition start timecode a command arg.
+		tc.startFrame = 0;							// Start time of 0:00:00.00
+		tcseg.Initialize(comp_length, tc);
+		tcseg.SetDataDef(dict.LookupDataDef(DDEF_Timecode));
+		comp_tcslot.SetSegment(tcseg);
+
+		cmob.AppendSlot(comp_tcslot);
 		cmob.AppendSlot(comp_tlslot_V1);
-		cmob.AppendSlot(ctlslotA1);
-		cmob.AppendSlot(ctlslotA2);
+		if (add_audio)
+		{
+			cmob.AppendSlot(ctlslotA1);
+			cmob.AppendSlot(ctlslotA2);
+		}
 		if (create_compmob)
 		{
 			cout << "Adding Composition Mob for " << start_by_idx.size() << " Clips" << endl;
@@ -948,7 +1121,17 @@ int main(int argc, char* argv[])
 	char str[1024];
 
 	fscanf(edlfp, "%[^\n]\n", str);		// skip first line
-	fscanf(edlfp, "%[^\n]\n", str);		// skip second line
+	fscanf(edlfp, "%[^\n]\n", str);		// PAL / NTSC specifier
+	if (strcmp(str, "PAL") == 0)
+	{
+		formatPAL = true;
+		add_audio = true;
+	}
+	else
+	{
+		formatPAL = false;
+		add_audio = false;
+	}
 	int num_clips = 0;
 	fscanf(edlfp, "%d\n", &num_clips);	// read total number of clips (not DV files)
 
