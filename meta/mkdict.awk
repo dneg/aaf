@@ -763,7 +763,7 @@ BEGIN {
   #
   firstType = 1;
   firstAlias = 1;
-  firstInstance = -1; // set to 1 by Aliases
+  firstInstance = -1; # set to 1 by Aliases
 }
 
 /^#fields/ {
@@ -843,27 +843,30 @@ BEGIN {
       type = $C["s_type_sym"];
 
       # match reference types and separate out the target type
-	  if        ( 1==match(type,"(WeakReferenceVector)(.*)", typebits) ) {
+      target_type = type;
+      if        ( 1 == sub("^WeakReferenceVector", "", target_type) ) {
         reftype = "WEAK_REFERENCE_VECTOR";
-      } else if ( 1==match(type,"(WeakReferenceSet)(.*)", typebits) ) {
+      } else if ( 1 == sub("^WeakReferenceSet", "", target_type) ) {
         reftype = "WEAK_REFERENCE_SET";
-      } else if ( 1==match(type,"(WeakReference)(.*)", typebits) ) {
+      } else if ( 1 == sub("^WeakReference", "", target_type) ) {
         reftype = "WEAK_REFERENCE";
-      } else if ( 1==match(type,"(StrongReferenceVector)(.*)", typebits) ) {
+      } else if ( 1 == sub("^StrongReferenceVector", "", target_type) ) {
         reftype = "STRONG_REFERENCE_VECTOR";
-      } else if ( 1==match(type,"(StrongReferenceSet)(.*)", typebits) ) {
+      } else if ( 1 == sub("^StrongReferenceSet", "", target_type) ) {
         reftype = "STRONG_REFERENCE_SET";
-      } else if ( 1==match(type,"(StrongReference)(.*)", typebits) ) {
+      } else if ( 1 == sub("^StrongReference", "", target_type) ) {
         reftype = "STRONG_REFERENCE";
       } else {
         reftype="";
       }
 
       if (reftype != "") {
-        if ($C["s_target_sym"] == "" || $C["s_target_sym"] == typebits[2]) {
-          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", typebits[1], typebits[2]);
-	    } else if (typebits[2]=="" && $C["s_target_sym"] != "") {
-          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", typebits[1], $C["s_target_sym"]);
+        reference_type=type;
+        sub(target_type, "", reference_type);
+        if ($C["s_target_sym"] == "" || $C["s_target_sym"] == target_type) {
+          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", reference_type, target_type);
+        } else if (target_type == "" && $C["s_target_sym"] != "") {
+          type = sprintf("AAF_REFERENCE_TYPE(%s, %s)", reference_type, $C["s_target_sym"]);
         } else {
           propertyError($C["r_sym"], class, C["s_target_sym"])
           errors++;
@@ -953,7 +956,7 @@ BEGIN {
 
       typeName = $C["r_sym"];
 
-	  // diagnostic comments
+      # diagnostic comments
       printf("\n");
       if ((qualif == "weak") || (qualif == "strong"))
         printf("// %s<%s>\n", referenceTypeName( kind, qualif ), $C["s_target_sym"]);
