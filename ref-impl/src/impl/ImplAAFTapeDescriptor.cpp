@@ -87,7 +87,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTapeDescriptor::GetManufacturerNameLen (aafInt32 *pLen)
+    ImplAAFTapeDescriptor::GetTapeManBufLen (aafInt32 *pLen)
 {
     AAFRESULT	aafError = AAFRESULT_SUCCESS;
 
@@ -141,7 +141,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTapeDescriptor::GetTapeModelLen (aafInt32*	pLen)
+    ImplAAFTapeDescriptor::GetTapeModelBufLen (aafInt32*	pLen)
 {
     AAFRESULT	aafError = AAFRESULT_SUCCESS;
 

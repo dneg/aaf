@@ -87,7 +87,7 @@
 //#include "omPvt.h" 
 //#include "AAFPrivate.h"
 #include "AAFUtils.h"
-#include "aafresult.h"
+#include "AAFResult.h"
 
 /* Moved math.h down here to make NEXT's compiler happy */
 #include <math.h>

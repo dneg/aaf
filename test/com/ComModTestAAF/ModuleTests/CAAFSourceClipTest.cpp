@@ -9,17 +9,6 @@
 *                                          *
 \******************************************/
 
-
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
 #ifndef __CAAFSourceClip_h__
 #include "CAAFSourceClip.h"
 #endif
@@ -38,7 +27,7 @@ static aafSourceRef_t sourceRef;
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-	IAAFSession*				pSession = NULL;
+	// IAAFSession*				pSession = NULL;
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
 	IAAFMob*					pMob = NULL;
@@ -63,17 +52,26 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
+	/*
 	hr = CoCreateInstance(CLSID_AAFSession,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSession, 
 						   (void **)&pSession);
+	*/
+	hr = CoCreateInstance(CLSID_AAFFile,
+						   NULL, 
+						   CLSCTX_INPROC_SERVER, 
+						   IID_IAAFFile, 
+						   (void **)&pFile);
 	if (AAFRESULT_SUCCESS == hr)
 	{
 		// We assume the following functions have been tested and they do work
 		// The next 3 function calls create the AAF file
-		hr = pSession->SetDefaultIdentification(&ProductInfo);
-		hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
+		// hr = pSession->SetDefaultIdentification(&ProductInfo);
+		// hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
+		hr = pFile->Initialize();
+		hr = pFile->OpenNewModify(pFileName, 0, &ProductInfo);
 	  	hr = pFile->GetHeader(&pHeader);
 
 		//Make the MOB to be referenced
@@ -140,11 +138,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pFile->Release();
 	}
 
+	/*
 	if (pSession)
 	{
 		pSession->EndSession();
 		pSession->Release();
 	}
+	*/
 
 	if (pHeader)
 		pHeader->Release();
@@ -166,7 +166,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
-	IAAFSession *				pSession = NULL;
+	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
@@ -201,17 +201,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 	  
+	/*
 	hr = CoCreateInstance(CLSID_AAFSession,
 						   NULL, 
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSession, 
 						   (void **)&pSession);
+	*/
+	hr = CoCreateInstance(CLSID_AAFFile,
+						   NULL, 
+						   CLSCTX_INPROC_SERVER, 
+						   IID_IAAFFile, 
+						   (void **)&pFile);
 	if (AAFRESULT_SUCCESS == hr)
 	{
 		// We assume the following functions have been tested and they do work
 		// The next 3 function calls open the AAF file
-		hr = pSession->SetDefaultIdentification(&ProductInfo);
-		hr = pSession->OpenReadFile(pFileName, &pFile);
+		// hr = pSession->SetDefaultIdentification(&ProductInfo);
+		// hr = pSession->OpenReadFile(pFileName, &pFile);
+		hr = pFile->Initialize();
+		hr = pFile->OpenExistingRead(pFileName, 0);
 	  	hr = pFile->GetHeader(&pHeader);
 
 		// Get the number of mobs in the file (should be one)
@@ -299,11 +308,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		pFile->Release();
 	}
 
+	/*
 	if (pSession)
 	{
 		pSession->EndSession();
 		pSession->Release();
 	}
+	*/
 
 	if (pHeader)
 		pHeader->Release();
