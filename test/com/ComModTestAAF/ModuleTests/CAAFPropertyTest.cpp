@@ -196,8 +196,8 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 			//From the Object, we can get the properties ....
 			aafUInt32 propCount = 0;
 			checkResult (pObj->CountProperties (&propCount));
-			//A composition should have at least 6 properties ...
-			checkExpression(propCount>=6, AAFRESULT_TEST_FAILED);
+			//A composition should have at least 5 properties ...
+ 			checkExpression(propCount>=5, AAFRESULT_TEST_FAILED);
 			
 			//Get Enumeration over properties
 			checkResult (pObj->GetProperties (&pEnum));

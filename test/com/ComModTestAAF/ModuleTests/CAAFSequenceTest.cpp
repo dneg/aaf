@@ -179,17 +179,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  for(i = 0; i < kNumComponents + 1; i++)	// Add one more for delete below
 	  {
 		  aafLength_t		len = 10;
-
+		  
 		  checkResult(defs.cdFiller()->
-					  CreateInstance(IID_IAAFComponent, 
-									 (IUnknown **)&pComponent));
-
+			  CreateInstance(IID_IAAFComponent, 
+			  (IUnknown **)&pComponent));
+		  
 		  checkResult(pComponent->SetDataDef(defs.ddSound()));
 		  checkResult(pComponent->SetLength(len));
 		  checkResult(pSequence->AppendComponent(pComponent));
-
+		  
 		  pComponent->Release();
-      pComponent = NULL;
+		  pComponent = NULL;
 	  }
 		checkResult(pSequence->CountComponents (&numComponents));
 		checkExpression(kNumComponents + 1 == numComponents, AAFRESULT_TEST_FAILED);
