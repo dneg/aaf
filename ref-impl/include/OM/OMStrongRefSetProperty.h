@@ -162,6 +162,8 @@ public:
     //          <p size> bytes in size.
   virtual void setBits(const OMByte* bits, size_t size);
 
+  bool isValidIdentification(UniqueIdentification& id) const;
+
 private:
 
   typedef OMStrongReferenceSetElement<UniqueIdentification,
