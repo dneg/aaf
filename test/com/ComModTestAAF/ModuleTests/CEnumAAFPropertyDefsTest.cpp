@@ -33,6 +33,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 #include "CEnumeratorTest.h"
 
@@ -80,12 +81,14 @@ private:
 	IAAFClassDef *_pKnownClassDef;
 };
 
-extern "C" HRESULT CEnumAAFPropertyDefs_test()
+extern "C" HRESULT CEnumAAFPropertyDefs_test(testMode_t mode);
+extern "C" HRESULT CEnumAAFPropertyDefs_test(testMode_t mode)
 {
 	try
 	{
 		CEnumAAFPropertyDefsTest Test;
-		Test.Run();
+  		if(mode == kAAFUnitTestReadWrite)
+			Test.Run(mode);		// !!! This test requires create & verify intermixed
 	}
 	catch(HRESULT& rResult)
 	{

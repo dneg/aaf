@@ -29,6 +29,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
@@ -574,14 +575,18 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 	
 }//ReadAAFFile()
 
-extern "C" HRESULT CAAFTypeDefExtEnum_test()
+extern "C" HRESULT CAAFTypeDefExtEnum_test(testMode_t mode);
+extern "C" HRESULT CAAFTypeDefExtEnum_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	aafWChar * pFileName = L"AAFTypeDefExtEnumTest.aaf";
 	
 	try
 	{
-		hr = CreateAAFFile(	pFileName );
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName);
+		else
+			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );	
 		

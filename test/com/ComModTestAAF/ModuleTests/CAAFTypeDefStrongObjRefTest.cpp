@@ -27,6 +27,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
@@ -456,9 +457,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
   return 	hr;
 }
 
-extern "C" HRESULT CAAFTypeDefStrongObjRef_test();
+extern "C" HRESULT CAAFTypeDefStrongObjRef_test(testMode_t mode);
 
-HRESULT CAAFTypeDefStrongObjRef_test()
+HRESULT CAAFTypeDefStrongObjRef_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
@@ -466,7 +467,10 @@ HRESULT CAAFTypeDefStrongObjRef_test()
 
   try
 	{
-	  hr = CreateAAFFile(pFileName);
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName);
+		else
+			hr = AAFRESULT_SUCCESS;
 	  if (SUCCEEDED(hr))
 		hr = ReadAAFFile(pFileName);
 	}

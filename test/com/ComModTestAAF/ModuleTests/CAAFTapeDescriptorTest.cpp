@@ -36,6 +36,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 
 #include "CAAFBuiltinDefs.h"
@@ -318,14 +319,18 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-extern "C" HRESULT CAAFTapeDescriptor_test()
+extern "C" HRESULT CAAFTapeDescriptor_test(testMode_t mode);
+extern "C" HRESULT CAAFTapeDescriptor_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"AAFTapeDescriptorTest.aaf";
 
 	try
 	{
-		hr = CreateAAFFile( pFileName );
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName);
+		else
+			hr = AAFRESULT_SUCCESS;
 		if (hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );
 	}

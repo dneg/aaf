@@ -35,9 +35,11 @@
 
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 
-extern "C" HRESULT CAAFEssencePlugin_test()
+extern "C" HRESULT CAAFEssencePlugin_test(testMode_t);
+extern "C" HRESULT CAAFEssencePlugin_test(testMode_t /*mode*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

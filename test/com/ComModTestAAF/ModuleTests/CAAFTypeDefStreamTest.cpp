@@ -34,6 +34,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
@@ -133,7 +134,7 @@ static const aafCharacter sTruncatedCharacters[] = L"Truncated Characters";
 extern "C"
 {
   // Main test function.
-  HRESULT CAAFTypeDefStream_test(void);
+  HRESULT CAAFTypeDefStream_test(testMode_t mode);
 
   // Create the test file.
   void CAAFTypeDefStream_create (aafCharacter_constptr pFileName); // throw HRESULT
@@ -143,7 +144,7 @@ extern "C"
 }
 
 
-HRESULT CAAFTypeDefStream_test()
+HRESULT CAAFTypeDefStream_test(testMode_t mode)
 {
   HRESULT result = AAFRESULT_SUCCESS;
   aafCharacter_constptr wFileName = L"AAFTypeDefStreamTest.aaf";
@@ -153,7 +154,8 @@ HRESULT CAAFTypeDefStream_test()
   {
     // Run through a basic set of tests. Create the file, 
     // and then read and validate the new file.
-    CAAFTypeDefStream_create (wFileName);
+     if(mode == kAAFUnitTestReadWrite)
+    	CAAFTypeDefStream_create (wFileName);
     CAAFTypeDefStream_read (wFileName);
   }
   catch (HRESULT &rhr)

@@ -36,6 +36,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 #include "AAFClassDefUIDs.h"
 
@@ -746,15 +747,17 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 }
 
 
-extern "C" HRESULT CAAFTypeDefRecord_test()
+extern "C" HRESULT CAAFTypeDefRecord_test(testMode_t mode);
+extern "C" HRESULT CAAFTypeDefRecord_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_TEST_FAILED;
   const aafWChar * pFileName = L"AAFTypeDefRecordTest.aaf";
 
   try
     {
-      hr =  WriteRecord(pFileName);
-	  if (SUCCEEDED (hr))
+      if(mode == kAAFUnitTestReadWrite)
+		hr =  WriteRecord(pFileName);
+	  if (SUCCEEDED (hr) || mode != mode == kAAFUnitTestReadWrite)
 		{
 		  hr = AAFRESULT_TEST_FAILED;
 		  hr = ReadRecord(pFileName);

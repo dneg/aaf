@@ -29,6 +29,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
@@ -69,7 +70,7 @@ typedef IAAFSmartPointer<IAAFComponent>             IAAFComponentSP;
 extern "C"
 {
   // Main test function.
-  HRESULT CAAFTypeDefIndirect_test(void);
+  HRESULT CAAFTypeDefIndirect_test(testMode_t mode);
 
   // Create the test file.
   void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName); // throw HRESULT
@@ -78,7 +79,8 @@ extern "C"
   void CAAFTypeDefIndirect_read (aafCharacter_constptr pFileName); // throw HRESULT
 }
 
-HRESULT CAAFTypeDefIndirect_test()
+extern "C" HRESULT CAAFTypeDefIndirect_test(testMode_t mode);
+extern "C" HRESULT CAAFTypeDefIndirect_test(testMode_t mode)
 {
   HRESULT result = AAFRESULT_SUCCESS;
   aafCharacter_constptr wFileName = L"AAFTypeDefIndirectTest.aaf";
@@ -88,7 +90,8 @@ HRESULT CAAFTypeDefIndirect_test()
     // Run through a basic set of tests. Create the file, then read it
     // back and validate it.
 
-    CAAFTypeDefIndirect_create (wFileName);
+	if(mode == kAAFUnitTestReadWrite)
+   		 CAAFTypeDefIndirect_create (wFileName);
     CAAFTypeDefIndirect_read (wFileName);
   }
   catch (HRESULT &rhr)
@@ -132,7 +135,10 @@ static const char kSequenceAnnotation2[] =
 static aafUInt16 kSequenceAnnotation3=5;
 
 // The test mob id that we added...
-static aafMobID_t sTestMob = {0};
+static const 	aafMobID_t	sTestMob =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x37c13606, 0x0405, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
 #ifndef _DEBUG
 // convenient error handlers.
@@ -316,7 +322,7 @@ static void Test_CreateValueFromActualValue(IAAFDictionary *pDictionary,
 static aafUInt32 Test_GetActualSize (
   IUnknown *pUknownObject,
   IAAFPropertyDef * pIndirectPropertyDef,
-  aafUInt32 expectedDataSize)
+  aafUInt32 /*expectedDataSize*/)
 {
   IAAFObjectSP pObject;
   IAAFTypeDefIndirectSP pTypeDefIndirect;
@@ -378,7 +384,7 @@ static void Test_GetActualType (
 static void Test_GetActualData (
   IUnknown *pUknownObject,
   IAAFPropertyDef * pIndirectPropertyDef,
-  IAAFTypeDef *pActualType,
+  IAAFTypeDef */*pActualType*/,
   aafUInt32 actualDataSize,
   aafDataBuffer_t actualData)
 {
@@ -626,7 +632,7 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   checkResult (defs.cdCompositionMob()->CreateInstance(IID_IAAFMob, (IUnknown **)&pMob));
   checkResult (pMob->SetName(L"AAFIndirectTypeTest-Mob"));
   // Save the new mob id so that we can just look it up...
-  checkResult (pMob->GetMobID (&sTestMob));
+  checkResult (pMob->SetMobID (sTestMob));
   
 
   checkResult (defs.cdTimelineMobSlot()->CreateInstance(IID_IAAFTimelineMobSlot, (IUnknown**)&pTimelineMobSlot));

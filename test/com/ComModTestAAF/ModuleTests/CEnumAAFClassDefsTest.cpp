@@ -32,6 +32,7 @@
 #include <wchar.h>
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 #include "CEnumeratorTest.h"
 
@@ -54,12 +55,13 @@ public:
 	}
 };
 
-extern "C" HRESULT CEnumAAFClassDefs_test()
+extern "C" HRESULT CEnumAAFClassDefs_test(testMode_t mode);
+extern "C" HRESULT CEnumAAFClassDefs_test(testMode_t mode)
 {
 	try
 	{
 		CEnumAAFClassDefsTest Test;
-		Test.Run();
+		Test.Run(mode);
 	}
 	catch(HRESULT& rResult)
 	{

@@ -33,6 +33,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 #include "CEnumeratorTest.h"
 
@@ -55,12 +56,13 @@ public:
 	}
 };
 
-extern "C" HRESULT CEnumAAFTypeDefs_test()
+extern "C" HRESULT CEnumAAFTypeDefs_test(testMode_t mode);
+extern "C" HRESULT CEnumAAFTypeDefs_test(testMode_t mode)
 {
 	try
 	{
 		CEnumAAFTypeDefsTest Test;
-		Test.Run();
+		Test.Run(mode);
 	}
 	catch(HRESULT& rResult)
 	{

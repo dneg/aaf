@@ -35,6 +35,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFSmartPointer.h"
 #include "AAFStoredObjectIDs.h"
 #include "CAAFBuiltinDefs.h"
@@ -251,13 +252,15 @@ static void ReadScopeReferenceFile(aafWChar *pFilename)
 	pFile->Close();
 }
 
-extern "C" HRESULT CAAFScopeReference_test()
+extern "C" HRESULT CAAFScopeReference_test(testMode_t mode);
+extern "C" HRESULT CAAFScopeReference_test(testMode_t mode)
 {
 	aafWChar *pTestFilename=L"ScopeReferenceTest.aaf";
 
 	try
 	{
-		CreateScopeReferenceFile(pTestFilename);
+		if(mode == kAAFUnitTestReadWrite)
+			CreateScopeReferenceFile(pTestFilename);
 		ReadScopeReferenceFile(pTestFilename);
 	}
 	catch(HRESULT& rResult)

@@ -30,6 +30,7 @@
 #include "AAF.h"
 
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 
 #include <iostream.h>
@@ -41,7 +42,7 @@
 #include "CAAFBuiltinDefs.h"
 
 // Foward declaration.
-extern "C" HRESULT CAAFTypeDefInt_test();
+extern "C" HRESULT CAAFTypeDefInt_test(testMode_t mode);
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -370,7 +371,7 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 
 
 
-static HRESULT TestTypeDefInt ()
+static HRESULT TestTypeDefInt (testMode_t mode)
 {
   HRESULT hr = E_FAIL;
   HRESULT caughtHr = AAFRESULT_SUCCESS;
@@ -404,8 +405,16 @@ static HRESULT TestTypeDefInt ()
 	  ProductInfo.productID = UnitTestProductID;
 	  ProductInfo.platform = NULL;
 
-	  RemoveTestFile (testFileName);
-	  checkResult (AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile));
+	  if(mode == kAAFUnitTestReadWrite)
+	  {
+		  RemoveTestFile (testFileName);
+	  	 checkResult (AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile));
+	  }
+	  else
+	  {
+	  	 checkResult (AAFFileOpenExistingRead(testFileName, 0, &pFile));
+	  }
+	  
       assert (pFile);
 	  checkResult (pFile->GetHeader (&pHeader));
 	  assert (pHeader);
@@ -555,11 +564,14 @@ static HRESULT TestTypeDefInt ()
   	pHeader->Release();
   if (pFile)
   {
-	hr = pFile->Save();
-	if (! SUCCEEDED (hr))
-	{  
-	  pFile->Release();
-	  return hr;
+  	if(mode == kAAFUnitTestReadWrite)
+	{
+		hr = pFile->Save();
+		if (! SUCCEEDED (hr))
+		{  
+	  	pFile->Release();
+	  	return hr;
+	  	}
 	}
 	hr = pFile->Close();
 	pFile->Release();
@@ -570,13 +582,14 @@ static HRESULT TestTypeDefInt ()
 }
 
 
-HRESULT CAAFTypeDefInt_test()
+HRESULT CAAFTypeDefInt_test(testMode_t mode);
+HRESULT CAAFTypeDefInt_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
   try
     {
-      hr =  TestTypeDefInt();
+      hr =  TestTypeDefInt(mode);
 	}
   catch (...)
     {

@@ -39,8 +39,18 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 #include "CAAFBuiltinDefs.h"
+//{060c2b340205110101001000-13-00-00-00-{f5fedc56-8d6f-11d4-a380-009027dfca6a}}
+
+static const aafMobID_t gMobID = {
+
+{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
+
+0x13, 0x00, 0x00, 0x00, 
+
+{0xf5fedc56, 0x8d6f, 0x11d4, 0xa3, 0x80, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a}};
 
 
 // Cross-platform utility to delete a file.
@@ -90,7 +100,6 @@ private:
   bool _bWritableFile;
   IAAFHeader *_pHeader;
   IAAFDictionary *_pDictionary;
-  aafMobID_t _compositionMobID;
 
   // MobSlot static data
   static const wchar_t* _slotName;
@@ -104,7 +113,8 @@ private:
 
 const aafUID_t NIL_UID = { 0 };
 
-extern "C" HRESULT CAAFEvent_test()
+extern "C" HRESULT CAAFEvent_test(testMode_t mode);
+extern "C" HRESULT CAAFEvent_test(testMode_t mode)
 {
   HRESULT hr = S_OK;
   aafProductIdentification_t	ProductInfo = {0};
@@ -131,7 +141,8 @@ extern "C" HRESULT CAAFEvent_test()
   try
   {
     // Attempt to create a test file
-    test.Create(pFileName, &ProductInfo);
+	if(mode == kAAFUnitTestReadWrite)
+	    test.Create(pFileName, &ProductInfo);
 
     // Attempt to read the test file.
     test.Open(pFileName);
@@ -161,7 +172,6 @@ EventTest::EventTest() :
   _pHeader(NULL),
   _pDictionary(NULL)
 {
-  memset(&_compositionMobID, 0, sizeof(_compositionMobID));
 }
 
 EventTest::~EventTest()
@@ -301,12 +311,13 @@ void EventTest::CreateEvent()
     // Append event slot to the composition mob.
     checkResult(pMob->AppendSlot(pMobSlot));
 
+    // Save the id of the composition mob that contains our test
+    // event mob slot.
+    checkResult(pMob->SetMobID(gMobID));
+    
     // Attach the mob to the header...
     checkResult(_pHeader->AddMob(pMob));
 
-    // Save the id of the composition mob that contains our test
-    // event mob slot.
-    checkResult(pMob->GetMobID(&_compositionMobID));
   }
   catch (HRESULT& rHR)
   {
@@ -383,7 +394,7 @@ void EventTest::OpenEvent()
   try
   {
     // Get the composition mob that we created to hold the
-    checkResult(_pHeader->LookupMob(_compositionMobID, &pMob));
+    checkResult(_pHeader->LookupMob(gMobID, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
     checkResult(pMob->GetSlots(&pEnumSlots));

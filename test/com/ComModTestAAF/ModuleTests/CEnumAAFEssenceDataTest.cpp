@@ -39,6 +39,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 
 #include "CAAFBuiltinDefs.h"
@@ -80,7 +81,8 @@ struct EnumEssenceDataTest
   static const aafUInt32 _maxMobCount;
 };
 
-extern "C" HRESULT CEnumAAFEssenceData_test()
+extern "C" HRESULT CEnumAAFEssenceData_test(testMode_t mode);
+extern "C" HRESULT CEnumAAFEssenceData_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_SUCCESS;
   wchar_t const *fileName = L"EnumAAFEssenceDataTest.aaf";
@@ -88,7 +90,8 @@ extern "C" HRESULT CEnumAAFEssenceData_test()
 
   try
   {
-    edt.createFile(fileName);
+     if(mode == kAAFUnitTestReadWrite)
+   		 edt.createFile(fileName);
     edt.openFile(fileName);
   }
   catch (HRESULT& ehr)

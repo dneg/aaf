@@ -33,6 +33,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFSmartPointer.h"
 
 #include "CEnumeratorTest.h"
@@ -199,12 +200,14 @@ void CEnumAAFParametersTest::GetAUID(IAAFParameter *pParameter,aafUID_t *pAUID)
 	checkResult(pDefObject->GetAUID(pAUID));
 }
 
-extern "C" HRESULT CEnumAAFParameters_test()
+extern "C" HRESULT CEnumAAFParameters_test(testMode_t mode);
+extern "C" HRESULT CEnumAAFParameters_test(testMode_t mode)
 {
 	try
 	{
 		CEnumAAFParametersTest Test;
-		Test.Run();
+  		if(mode == kAAFUnitTestReadWrite)
+			Test.Run(mode);		// !!! This test requires create & verify intermixed
 	}
 	catch(HRESULT& rResult)
 	{

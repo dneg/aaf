@@ -33,6 +33,7 @@
 #include <wchar.h>
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFSmartPointer.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFDataDefs.h"
@@ -422,13 +423,15 @@ static void ReadTypeDefOpaqueFile(aafWChar *pFilename)
 	pFile->Close();
 }
 
-extern "C" HRESULT CAAFTypeDefOpaque_test()
+extern "C" HRESULT CAAFTypeDefOpaque_test(testMode_t mode);
+extern "C" HRESULT CAAFTypeDefOpaque_test(testMode_t mode)
 {
 	aafWChar *pTestFilename=L"TypeDefOpaqueTest.aaf";
 
 	try
 	{
-		CreateTypeDefOpaqueFile(pTestFilename);
+		if(mode == kAAFUnitTestReadWrite)
+			CreateTypeDefOpaqueFile(pTestFilename);
 		ReadTypeDefOpaqueFile(pTestFilename);
 	}
 	catch(HRESULT& rResult)

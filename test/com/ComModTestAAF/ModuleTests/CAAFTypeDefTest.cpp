@@ -30,6 +30,7 @@
 #include "AAF.h"
 
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFTypeDefUIDs.h"
 
@@ -66,7 +67,7 @@ static void RemoveTestFile(const wchar_t* pFileName)
 
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
-static HRESULT TestTypeDef ()
+static HRESULT TestTypeDef (testMode_t mode)
 {
   HRESULT hr = E_FAIL;
   aafProductIdentification_t ProductInfo;
@@ -85,8 +86,16 @@ static HRESULT TestTypeDef ()
   ProductInfo.platform = NULL;
 
   IAAFFileSP pFile;
-  RemoveTestFile (testFileName);
-  hr = AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile);
+  if(mode == kAAFUnitTestReadWrite)
+  {
+ 	 RemoveTestFile (testFileName);
+  	hr = AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile);
+  }
+  else
+  {
+  	hr = AAFFileOpenExistingRead(testFileName, 0, &pFile);
+  }
+  
   if (! SUCCEEDED (hr)) return hr;
 
   IAAFHeaderSP pHeader;
@@ -150,8 +159,11 @@ static HRESULT TestTypeDef ()
 
 
   // that's all we can test for.  Clean up.
-  hr = pFile->Save();
-  if (! SUCCEEDED (hr)) return hr;
+  if(mode == kAAFUnitTestReadWrite)
+  {
+  	hr = pFile->Save();
+ 	 if (! SUCCEEDED (hr)) return hr;
+ }
   hr = pFile->Close();
   if (! SUCCEEDED (hr)) return hr;
 
@@ -159,14 +171,15 @@ static HRESULT TestTypeDef ()
 }
 
 
-extern "C" HRESULT CAAFTypeDef_test()
+extern "C" HRESULT CAAFTypeDef_test(testMode_t mode);
+extern "C" HRESULT CAAFTypeDef_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
   try
     {
       // Attempt to create an AAFTypeDef.
-      hr =  TestTypeDef();
+      hr =  TestTypeDef(mode);
 	}
   catch (...)
     {

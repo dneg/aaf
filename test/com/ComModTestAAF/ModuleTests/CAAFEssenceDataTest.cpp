@@ -38,6 +38,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 
 #include "CAAFBuiltinDefs.h"
@@ -105,7 +106,8 @@ struct EssenceDataTest
   static const char _frowney[];
 };
 
-extern "C" HRESULT CAAFEssenceData_test()
+extern "C" HRESULT CAAFEssenceData_test(testMode_t mode);
+extern "C" HRESULT CAAFEssenceData_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_SUCCESS;
   wchar_t *fileName = L"AAFEssenceDataTest.aaf";
@@ -113,7 +115,8 @@ extern "C" HRESULT CAAFEssenceData_test()
 
   try
   {
-    edt.createFile(fileName);
+	if(mode == kAAFUnitTestReadWrite)
+    	edt.createFile(fileName);
     edt.openFile(fileName);
   }
   catch (HRESULT& ehr)

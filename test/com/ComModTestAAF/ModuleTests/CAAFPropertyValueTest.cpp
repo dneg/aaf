@@ -30,6 +30,7 @@
 #include "AAF.h"
 
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFDefUIDs.h"
 
@@ -70,7 +71,7 @@ static void RemoveTestFile(const wchar_t* pFileName)
 }
 
 
-static HRESULT TestPropertyValue ()
+static HRESULT TestPropertyValue (testMode_t mode)
 {
   // HRESULT hr = E_FAIL;
   long hr = E_FAIL;
@@ -90,9 +91,17 @@ static HRESULT TestPropertyValue ()
   ProductInfo.platform = NULL;
 
   IAAFFile* pFile = NULL;
-  RemoveTestFile (testFileName);
-  checkResult (AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile));
-  assert (pFile);
+  if(mode == kAAFUnitTestReadWrite)
+  {
+  	RemoveTestFile (testFileName);
+  	checkResult (AAFFileOpenNewModify(testFileName, 0, &ProductInfo, &pFile));
+ 	 assert (pFile);
+ }
+  else
+  {
+  	checkResult (AAFFileOpenExistingRead(testFileName, 0, &pFile));
+ 	 assert (pFile);
+ }
 
   IAAFHeader * pHeader = NULL;
   hr = pFile->GetHeader (&pHeader);
@@ -112,88 +121,90 @@ static HRESULT TestPropertyValue ()
   if (! SUCCEEDED (hr)) return hr;
   assert (pTypeDef);
 
-  // Now attempt to create invalid property values; check for errors.
-  const aafInt32 forty_two = 42;
-  IAAFPropertyValue * pv = NULL;
-  // This is what a correct one would look like; we're not ready for that yet:
-  // hr = pTypeDef->CreateValue (&forty_two, 4, &pv);
+  if(mode == kAAFUnitTestReadWrite)
+	{
+		  // Now attempt to create invalid property values; check for errors.
+	  const aafInt32 forty_two = 42;
+	  IAAFPropertyValue * pv = NULL;
+	  // This is what a correct one would look like; we're not ready for that yet:
+	  // hr = pTypeDef->CreateValue (&forty_two, 4, &pv);
 
-  // set this to -1 to see if it gets modified
-  pv = (IAAFPropertyValue *) (-1);
+	  // set this to -1 to see if it gets modified
+	  pv = (IAAFPropertyValue *) (-1);
 
-  // Try null pVal
-  hr = pTypeDef->CreateValue (NULL, 4, &pv);
-  if (AAFRESULT_NULL_PARAM != hr)
-	return AAFRESULT_TEST_FAILED;
-  if ((IAAFPropertyValue *)(-1) != pv)
-	return AAFRESULT_TEST_FAILED;
+	  // Try null pVal
+	  hr = pTypeDef->CreateValue (NULL, 4, &pv);
+	  if (AAFRESULT_NULL_PARAM != hr)
+		return AAFRESULT_TEST_FAILED;
+	  if ((IAAFPropertyValue *)(-1) != pv)
+		return AAFRESULT_TEST_FAILED;
 
-  // Try valSize too large
-  hr = pTypeDef->CreateValue ((aafMemPtr_t) &forty_two, 8, &pv);
-  if (AAFRESULT_BAD_SIZE != hr)
-	return AAFRESULT_TEST_FAILED;
-  if ((IAAFPropertyValue *)(-1) != pv)
-	return AAFRESULT_TEST_FAILED;
+	  // Try valSize too large
+	  hr = pTypeDef->CreateValue ((aafMemPtr_t) &forty_two, 8, &pv);
+	  if (AAFRESULT_BAD_SIZE != hr)
+		return AAFRESULT_TEST_FAILED;
+	  if ((IAAFPropertyValue *)(-1) != pv)
+		return AAFRESULT_TEST_FAILED;
 
-  // Now try correct one
-  pv = NULL;
-  hr = pTypeDef->CreateValue ((aafMemPtr_t) &forty_two, 4, &pv);
-  if (! SUCCEEDED (hr)) return hr;
-  if (! pv)
-	return AAFRESULT_TEST_FAILED;
+	  // Now try correct one
+	  pv = NULL;
+	  hr = pTypeDef->CreateValue ((aafMemPtr_t) &forty_two, 4, &pv);
+	  if (! SUCCEEDED (hr)) return hr;
+	  if (! pv)
+		return AAFRESULT_TEST_FAILED;
 
-  // That one worked; let's try one with a smaller init size (should
-  // also work)
-  pv->Release();
-  pv = NULL;
-  const aafInt16 fifty_seven = 57;
-  hr = pTypeDef->CreateValue ((aafMemPtr_t) &fifty_seven, 2, &pv);
-  if (! SUCCEEDED (hr)) return hr;
-  if (! pv)
-	return AAFRESULT_TEST_FAILED;
+	  // That one worked; let's try one with a smaller init size (should
+	  // also work)
+	  pv->Release();
+	  pv = NULL;
+	  const aafInt16 fifty_seven = 57;
+	  hr = pTypeDef->CreateValue ((aafMemPtr_t) &fifty_seven, 2, &pv);
+	  if (! SUCCEEDED (hr)) return hr;
+	  if (! pv)
+		return AAFRESULT_TEST_FAILED;
 
-  // cool.  Now we should have a good property value whose value is 57.
-  // check GetType() for error condition
-  hr = pv->GetType (NULL);
-  if (AAFRESULT_NULL_PARAM != hr)
-	return AAFRESULT_TEST_FAILED;
+	  // cool.  Now we should have a good property value whose value is 57.
+	  // check GetType() for error condition
+	  hr = pv->GetType (NULL);
+	  if (AAFRESULT_NULL_PARAM != hr)
+		return AAFRESULT_TEST_FAILED;
 
-  // this GetType() call should work, and return the original type def.
-  IAAFTypeDef * propType = NULL;
-  hr = pv->GetType (&propType);
-  if (! SUCCEEDED (hr)) return hr;
-  if (! propType)
-	return AAFRESULT_TEST_FAILED;
+	  // this GetType() call should work, and return the original type def.
+	  IAAFTypeDef * propType = NULL;
+	  hr = pv->GetType (&propType);
+	  if (! SUCCEEDED (hr)) return hr;
+	  if (! propType)
+		return AAFRESULT_TEST_FAILED;
 
-  // Convert both to IUnknown for comparison
-  IUnknown * pPropUnknown = NULL;
-  IUnknown * pTypeDefUnknown = NULL;
-  hr = propType->QueryInterface(IID_IUnknown, (void **)&pPropUnknown);
-  if (! SUCCEEDED (hr)) return hr;
-  assert (pPropUnknown);
-  hr = pTypeDef->QueryInterface(IID_IUnknown, (void **)&pTypeDefUnknown);
-  if (! SUCCEEDED (hr)) return hr;
-  assert (pTypeDefUnknown);
+	  // Convert both to IUnknown for comparison
+	  IUnknown * pPropUnknown = NULL;
+	  IUnknown * pTypeDefUnknown = NULL;
+	  hr = propType->QueryInterface(IID_IUnknown, (void **)&pPropUnknown);
+	  if (! SUCCEEDED (hr)) return hr;
+	  assert (pPropUnknown);
+	  hr = pTypeDef->QueryInterface(IID_IUnknown, (void **)&pTypeDefUnknown);
+	  if (! SUCCEEDED (hr)) return hr;
+	  assert (pTypeDefUnknown);
 
-  if (pPropUnknown != pTypeDefUnknown)
-	return AAFRESULT_TEST_FAILED;
+	  if (pPropUnknown != pTypeDefUnknown)
+		return AAFRESULT_TEST_FAILED;
+	  // Test IsDefinedType ()
+	  // (Currently only returns true.)
+	  aafBool b = kAAFFalse;
+	  hr = pv->IsDefinedType (&b);
+		if (! SUCCEEDED (hr)) return hr;
+	  if (kAAFTrue != b)
+		return AAFRESULT_TEST_FAILED;
 
-  // Test IsDefinedType ()
-  // (Currently only returns true.)
-  aafBool b = kAAFFalse;
-  hr = pv->IsDefinedType (&b);
-	if (! SUCCEEDED (hr)) return hr;
-  if (kAAFTrue != b)
-	return AAFRESULT_TEST_FAILED;
-
-  pTypeDefUnknown->Release();
-  pPropUnknown->Release();
-  pTypeDef->Release();
-  propType->Release();
-  pv->Release();
-  pDict->Release();
-  pHeader->Release();
-  hr = pFile->Save();
+	  pTypeDefUnknown->Release();
+	  pPropUnknown->Release();
+	  pTypeDef->Release();
+	  propType->Release();
+	  pv->Release();
+	  pDict->Release();
+	  pHeader->Release();
+	  hr = pFile->Save();
+	}
   if (! SUCCEEDED (hr)) return hr;
   hr = pFile->Close();
   if (! SUCCEEDED (hr)) return hr;
@@ -204,13 +215,14 @@ static HRESULT TestPropertyValue ()
 
 
 
-extern "C" HRESULT CAAFPropertyValue_test()
+extern "C" HRESULT CAAFPropertyValue_test(testMode_t mode);
+extern "C" HRESULT CAAFPropertyValue_test(testMode_t mode)
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 
   try
 	{
-	  hr = TestPropertyValue();
+	  	hr = TestPropertyValue(mode);
 	}
   catch (...)
 	{

@@ -35,6 +35,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDataDefs.h"
 #include "AAFCodecDefs.h"
 #include "AAFContainerDefs.h"
@@ -362,14 +363,19 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 }
 
 
-extern "C" HRESULT CAAFEssenceFormat_test()
+extern "C" HRESULT CAAFEssenceFormat_test(testMode_t mode);
+extern "C" HRESULT CAAFEssenceFormat_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"AAFEssenceFormatTest.aaf";
 	
 	try
 	{
-		hr = CreateAAFFile(pFileName);
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName);
+		else
+			hr = AAFRESULT_SUCCESS;
+			
 		if (SUCCEEDED(hr))
 			hr = ReadAAFFile(pFileName);
 	}

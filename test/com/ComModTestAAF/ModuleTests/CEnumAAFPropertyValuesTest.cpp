@@ -35,11 +35,12 @@
 
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
+#include "ModuleTest.h"
 
 // Required function prototype.
-extern "C" HRESULT CEnumAAFPropertyValues_test(void);
+extern "C" HRESULT CEnumAAFPropertyValues_test(testMode_t);
 
-HRESULT CEnumAAFPropertyValues_test()
+HRESULT CEnumAAFPropertyValues_test(testMode_t /*mode*/)
 {
   return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }

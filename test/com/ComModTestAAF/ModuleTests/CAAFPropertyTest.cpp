@@ -29,6 +29,7 @@
 
 #include "AAF.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
@@ -297,14 +298,18 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 	
 }
 
-extern "C" HRESULT CAAFProperty_test()
+extern "C" HRESULT CAAFProperty_test(testMode_t mode);
+extern "C" HRESULT CAAFProperty_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_SUCCESS;
 	aafWChar * pFileName = L"AAFPropertyTest.aaf";
 	
 	try
 	{
-		hr = CreateAAFFile(	pFileName );
+		if(mode == kAAFUnitTestReadWrite)
+			hr = CreateAAFFile(pFileName);
+		else
+			hr = AAFRESULT_SUCCESS;
 		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );
 
