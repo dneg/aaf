@@ -533,7 +533,7 @@ sub ModifyTest {
 		}
 		elsif ( IsReadableByVersion( $Cv, $Mv ) eq "false" ) {
 		    print "Excluded: ${Cv} cannot be read by ${Mv}.\n";
-		    $excluded = 1;
+		    $exclude = 1;
 		}
 		
 		if ( $exclude == 1 ) {
