@@ -491,6 +491,7 @@ static void convertName(char* cName,
                         OMCHAR* wideName,
                         char** tag);
 static void indent(int level);
+static void getClass(IStorage* storage, CLSID* clsid, const char* fileName);
 static void printClsid(REFCLSID clsid);
 static void printRawKey(OMByte* key, size_t keySize);
 static void printUMID(UMID* umid);
@@ -1114,6 +1115,16 @@ int StringFromGUID2(const GUID& guid, OMCHAR* buffer, int bufferSize)
 } 
 
 #endif
+
+void getClass(IStorage* storage, CLSID* clsid, const char* fileName)
+{
+  STATSTG statstg;
+  HRESULT result = storage->Stat(&statstg, STATFLAG_DEFAULT);
+  if (!check(fileName, result)) {
+    fatalError("getClass", "IStorage::Stat() failed.");
+  }
+  *clsid = statstg.clsid;
+}
 
 void printClsid(REFCLSID clsid)
 {
@@ -3053,6 +3064,11 @@ void dumpObject(IStorage* storage,
 
   cout << endl;
   cout << pathName << endl;
+
+  CLSID clsid;
+  getClass(storage, &clsid, pathName);
+  printClsid(clsid);
+  cout << endl;
 
   char* endianity;
   if (_byteOrder == hostByteOrder()) {
