@@ -38,15 +38,16 @@
 #include "AAFStoredObjectIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
+#include "ImplAAFFileSignatures.h"
 
 
 #include <assert.h>
 
 // AAF file signature.
-static const OMFileSignature aafFileSignature  =
-{0x42464141,
- 0xff0d, 0x4d4f,
-{0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+//static const OMFileSignature aafFileSignature  =
+//{0x42464141,
+//0xff0d, 0x4d4f,
+//{0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
 
 //
@@ -130,6 +131,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 
         // Check the file's signature.
         OMFileSignature sig = _file->signature();
+		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureGUID);
         checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
 
 		// Get the byte order
@@ -387,6 +389,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		pCStore = 0;
 
 		// Attempt to create the file.
+		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureGUID);
 		_file = OMFile::openNewModify(pFileName, _factory, _byteOrder, _head, aafFileSignature);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
