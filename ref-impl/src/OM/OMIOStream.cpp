@@ -41,6 +41,8 @@
 #define NEWLINE "\r"
 #elif defined(OM_OS_UNIX)
 #define NEWLINE "\n"
+#elif defined(OM_OS_MACOSX)
+#define NEWLINE "\n"
 #endif
 
 static void print(strstream& s, const OMObjectIdentification& id);
