@@ -251,7 +251,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// close essence data file
 		fclose(pWavFile);
 	}
-
+	else
+	{
+		printf("***Failed to open Wave file Laser.wav\n");
+	}
 
 	// Close the EssenceData
 	check(pEssenceAccess->Close());
@@ -383,7 +386,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 						printf("*** Data Read is different than the data in the WAV file ***\n");
 					}
 				}
-					// Close the EssenceData
+				else
+				{
+					printf("***Failed to open Wave file Laser.wav for comparison\n");
+				}
+
+				// Close the EssenceData
 				check(pEssenceAccess->Close());
 
 			}
