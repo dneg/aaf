@@ -227,10 +227,7 @@ AD_XMETHOD1(GetChannelIDsSize,
 //   - succeeded
 //
 // AAFRESULT_NULL_PARAM
-//   - pChannelIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present)
+//   - pChannelIDs is null)
 
 AD_XMETHOD2(SetMonoSourceSlotIDs,
 		[in],
@@ -299,10 +296,6 @@ AD_XMETHOD1(GetMonoSourceSlotIDsSize,
 //   - succeeded
 //
 // AAFRESULT_NULL_PARAM
-//   - pMonoSourceSlotIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present)
-
+//   - pMonoSourceSlotIDs is null)
 
 AD_XCLASS_END(Abstract, StoredObject)
