@@ -44,6 +44,7 @@ class ImplAAFParameterDef;
 #endif
 #include "OMReferenceContainerIter.h"
 
+#include "OMVariableSizeProperty.h"
 typedef OMVariableSizeProperty<aafUID_t> parmDefWeakRefArrayProp_t;
 
 class ImplEnumAAFParameterDefs : public ImplAAFRoot

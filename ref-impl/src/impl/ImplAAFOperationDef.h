@@ -41,6 +41,8 @@ class ImplEnumAAFParameterDefs;
 #include "ImplAAFDefObject.h"
 #endif
 
+#include "OMWeakRefProperty.h"
+
 #include "ImplAAFDataDef.h"
 #include "ImplAAFParameterDef.h"
 #include "ImplEnumAAFOperationDefs.h"

@@ -48,6 +48,8 @@ class ImplAAFSourceClip;
 #include "ImplAAFSegment.h"
 #endif
 
+#include "OMStrongRefProperty.h"
+#include "OMStrongRefVectorProperty.h"
 
 class ImplAAFEssenceGroup : public ImplAAFSegment
 {

@@ -43,6 +43,7 @@ class ImplAAFOperationDef;
 #include "ImplAAFObject.h"
 #endif
 #include "OMReferenceContainerIter.h"
+#include "OMVariableSizeProperty.h"
 
 typedef OMVariableSizeProperty<aafUID_t> OperationDefWeakRefArrayProp_t;
 
