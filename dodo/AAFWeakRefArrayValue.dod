@@ -10,7 +10,7 @@ AAFWeakRefArrayValue\
 #endm
 #c
 #startm .parent-module 0
-AAFRefArrayValue\
+AAFPropertyValue\
 #endm
 #c
 AD_HEAD

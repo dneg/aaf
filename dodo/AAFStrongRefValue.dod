@@ -10,7 +10,7 @@ AAFStrongRefValue\
 #endm
 #c
 #startm .parent-module 0
-AAFRefValue\
+AAFPropertyValue\
 #endm
 #c
 AD_HEAD
