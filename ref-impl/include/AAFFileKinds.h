@@ -63,8 +63,11 @@ const aafUID_t aafFileKindMxfKlvBinary =
 #if defined( OS_WINDOWS )
 // DEFAULT for this build is SchemaSoft 512.
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSSBinary;
+
 //NOTE: Add default 4k binary
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary;
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafM4KBinary;
+const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary;
 
 #elif defined( OS_MACOS )
 // DEFAULT is Microsoft 512 (via MacOLE). SchemaSoft not yet ported
