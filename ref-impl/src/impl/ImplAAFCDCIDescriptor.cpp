@@ -66,16 +66,13 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	AAFRESULT	hr;
 
-	switch (ComponentWidth)
+	if (ComponentWidth >= 0)
 	{
-	case 8:
-	case 10:
-	case 16:
 		_componentWidth = ComponentWidth;
 		hr = AAFRESULT_SUCCESS;
-		break;
-
-	default:
+	}
+	else
+	{
 		hr = AAFRESULT_BAD_PROP;
 	}
 
@@ -206,10 +203,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetVerticalSubsampling (aafUInt32* pVerticalSubsampling)
 {
 	if (pVerticalSubsampling == NULL)
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 
-	if (!_verticalSubsampling.isPresent())
-	  return AAFRESULT_PROP_NOT_PRESENT;
+	if(!_verticalSubsampling.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pVerticalSubsampling = _verticalSubsampling;
 
