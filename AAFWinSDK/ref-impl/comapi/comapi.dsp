@@ -264,6 +264,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFMasterMob.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFMetaDefinition.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFMetaDictionary.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFMob.cpp"
 # End Source File
 # Begin Source File

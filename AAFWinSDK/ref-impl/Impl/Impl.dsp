@@ -266,6 +266,14 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMasterMob.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMetaDefinition.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMetaDictionary.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMob.cpp"
 # End Source File
 # Begin Source File
