@@ -1,0 +1,62 @@
+#startm .this-module 0
+AAFConstantValue\
+#endm
+#c
+#startm .parent-module 0
+AAFSegment\
+#endm
+#c
+#import ./AAFUnitTest.exp
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+AD_CLASS_BEGIN
+
+/****/
+AD_METHOD5(AAFConstValue,
+[in],AAFFile*,file,File Handle,
+[in],AAFDataKind *,datakind,Datakind object,
+[in],AAFLength,length,Length property value,
+[in],aafInt32,valueSize,Size of the value data,
+[in],void *,value,Value data,
+Constructor given starting parameters)
+	//%comm The value data is passed in as a void * through the "value"
+	// argument.  The size of the value must be passed through the
+	// valueSize argument.
+	//@comm Replaces omfiConstValueNew
+	
+/****/
+AD_METHOD3(GetValue,
+[in],omfInt64,valueSize,Size of preallocated buffer,
+[out],omfInt64*,bytesRead,Number of actual bytes read,
+[out],void *,value,Preallocated buffer to hold value,
+The data value is returned in a preallocated buffer of size valueSize.)
+	//@comm The actual number of bytes read is returned in
+	// bytesRead.  If the buffer is not big enough to return the entire
+	// value, an error is returned.  GetDataValueSize() can be
+	// called to calculate the size of the buffer to allocate.
+	//@comm Replaces omfiConstValueGetInfo
+
+/****/
+AD_METHOD2(SetValue,
+[in],aafInt32,valueSize, Size of preallocated buffer,
+[in],void *,value, buffer containing value
+The data value is set from a buffer of size valueSize.)
+
+// Internal
+//private:
+//	void			*_value;
+//	omfUInt32		_valueLen;
+
+  //
+  // IAAFUnitTest interface method overrides
+  //
+.method-Test
+
+
+AD_CLASS_END
