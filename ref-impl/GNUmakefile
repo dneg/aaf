@@ -1,6 +1,5 @@
 .PHONY : all
 all :
-	cd ../dodo && $(MAKE)
 	cd src && $(MAKE)
 	cd aafutils && $(MAKE)
 	cd aafiid && $(MAKE)
@@ -20,7 +19,6 @@ clean :
 	cd aafiid && $(MAKE) clean
 	cd aafutils && $(MAKE) clean
 	cd src && $(MAKE) clean
-	cd ../dodo && $(MAKE) clean
 
 
 
