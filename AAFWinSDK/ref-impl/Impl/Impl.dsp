@@ -107,15 +107,15 @@ SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\Container.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAIFCData.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAIFCDescriptor.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFBaseClassFactory.cpp"
 # End Source File
 # Begin Source File
 
