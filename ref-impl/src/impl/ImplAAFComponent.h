@@ -8,7 +8,8 @@ class ImplAAFDataDef;
 class ImplAAFMob;
 class ImplAAFMobSlot;
 class ImplAAFEffectDef;
-
+class ImplAAFEffectInvocation;
+class ImplAAFScopeStack;
 
 /******************************************\
 *                                          *
@@ -97,11 +98,9 @@ public:
 										aafEffectChoice_t *effectChoice,
 										ImplAAFComponent	*prevObject,
 										ImplAAFComponent *nextObject,
-#ifdef FULL_TOOLKIT
-										AAFScopeStack *scopeStack,
-#endif
+										ImplAAFScopeStack *scopeStack,
 										aafPosition_t *diffPos, aafLength_t *minLength,
-										ImplAAFEffectDef **effeObject, aafInt32	*nestDepth,
+										ImplAAFEffectInvocation **effeObject, aafInt32	*nestDepth,
 										ImplAAFComponent **found, aafBool *foundTransition);
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kComponent; return AAFRESULT_SUCCESS;}
