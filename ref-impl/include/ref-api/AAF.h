@@ -2,6 +2,8 @@
 //
 // This file was GENERATED for the AAF SDK
 //
+// $Id$ $Name$
+//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
@@ -157,6 +159,7 @@ interface IAAFRandomRawStorage;
 interface IAAFGetFileBits;
 interface IAAFSetFileBits;
 interface IAAFRandomFile;
+interface IAAFDataDef2;
 interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceDataEx;
@@ -283,6 +286,7 @@ typedef interface IAAFRandomRawStorage IAAFRandomRawStorage;
 typedef interface IAAFGetFileBits IAAFGetFileBits;
 typedef interface IAAFSetFileBits IAAFSetFileBits;
 typedef interface IAAFRandomFile IAAFRandomFile;
+typedef interface IAAFDataDef2 IAAFDataDef2;
 typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFEssenceDataEx IAAFEssenceDataEx;
@@ -2756,6 +2760,7 @@ DECLARE_INTERFACE_(IAAFControlPoint, IUnknown)
 // ************************
 
 
+
 #ifndef __IAAFDataDef_INTERFACE_DEFINED__
 #define __IAAFDataDef_INTERFACE_DEFINED__
 
@@ -2774,7 +2779,6 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFDataDef methods *** */
-
   //***********************************************************
   //
   // Initialize()
@@ -2883,10 +2887,11 @@ DECLARE_INTERFACE_(IAAFDataDef, IUnknown)
     // pointer to result
     /*[retval, out]*/ aafBoolean_t *  bDoesConvertFrom) PURE;
 
+
+
   END_INTERFACE
 };
 #endif // __IAAFDataDef_INTERFACE_DEFINED__
-
 
 
 // IAAFDefObject
@@ -32087,6 +32092,169 @@ DECLARE_INTERFACE_(IAAFRandomFile, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFRandomFile_INTERFACE_DEFINED__
+
+
+
+// IAAFDataDef2
+
+// ************************
+//
+// Interface IAAFDataDef2
+//
+// ************************
+
+#ifndef __IAAFDataDef2_INTERFACE_DEFINED__
+#define __IAAFDataDef2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDataDef2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDataDef2
+
+DECLARE_INTERFACE_(IAAFDataDef2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDataDef2 methods *** */
+
+  //***********************************************************
+  //
+  // Initialize()
+  //
+  // Init all fields of a definition object.
+  //
+  STDMETHOD(Initialize) (THIS_
+    // AUID for new DeObject
+    /*[in, ref]*/ aafUID_constref  id,
+
+    // Name for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pName,
+
+    // Description for new DefObject
+    /*[in, string]*/ aafCharacter_constptr  pDescription) PURE;
+
+
+  //***********************************************************
+  //
+  // IsPictureKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture.
+  //
+  STDMETHOD(IsPictureKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsPictureKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a matte.
+  //
+  STDMETHOD(IsMatteKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsMatteKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsPictureWithMatteKind()
+  //
+  // Sets return value to TRUE if DataDef is a picture with matte.
+  //
+  STDMETHOD(IsPictureWithMatteKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsPictureWithMatteKind) PURE;
+
+
+  //***********************************************************
+  //
+  // IsSoundKind()
+  //
+  // Sets return value to TRUE if DataDef is a sound.
+  //
+  STDMETHOD(IsSoundKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsSoundKind) PURE;
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertTo()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.
+  //
+  STDMETHOD(DoesDataDefConvertTo) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * id,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bDoesConvertTo) PURE;
+		   
+
+  //***********************************************************
+  //
+  // IsDataDefOf()
+  //
+  // Sets the value to TRUE if the DataDef of the given object
+  // matches the DataDef specified in the IN parameter with the
+  // DataDefName string.
+  //
+  STDMETHOD(IsDataDefOf) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * pDataDef,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bIsDataDefOf) PURE;
+
+
+  //***********************************************************
+  //
+  // DoesDataDefConvertFrom()
+  //
+  // Sets return value to TRUE if the DataDef of the given object
+  // can be converted from the DataDef specified in the IN 
+  // parameter specified with the DataDefName string.
+  //
+  STDMETHOD(DoesDataDefConvertFrom) (THIS_
+    // data def to compare against
+    /*[in]*/ IAAFDataDef * pDataDef,
+
+    // pointer to result
+    /*[retval, out]*/ aafBoolean_t *  bDoesConvertFrom) PURE;
+
+
+  //***********************************************************
+  //
+  // IsEdgecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is an edgecode.
+  //
+  STDMETHOD(IsEdgecodeKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsEdgecodeKind) PURE;
+
+  //***********************************************************
+  //
+  // IsTimecodeKind()
+  //
+  // Sets return value to TRUE if DataDef is a timecode.
+  //
+  STDMETHOD(IsTimecodeKind) (THIS_
+    // pointer to the return value
+    /*[retval,out]*/ aafBoolean_t *  bIsTimecodeKind) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDataDef2_INTERFACE_DEFINED__
 
 
 
