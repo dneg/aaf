@@ -231,5 +231,32 @@ void OMDataStreamProperty::write(const OMByte* buffer,
   s->writeToStream(_stream, buffer, bytes, bytesWritten);
 }
 
+  // @mfunc The size of the raw bits of this
+  //        <c OMDataStreamProperty>. The size is given in bytes.
+  //   @rdesc The size of the raw bits of this
+  //          <c OMDataStreamProperty> in bytes.
+  //   @this const
+size_t OMDataStreamProperty::bitsSize(void) const
+{
+  TRACE("OMDataStreamProperty::bitsSize");
+
+  return sizeof(IStream*);
+}
+
+  // @mfunc Get the raw bits of this <c OMDataStreamProperty>.
+  //        The raw bits are copied to the buffer at address <p bits> which
+  //        is <p size> bytes in size.
+  //   @parm The address of the buffer into which the raw bits are copied.
+  //   @parm The size of the buffer.
+  //   @this const
+void OMDataStreamProperty::getBits(OMByte* bits, size_t size) const
+{
+  TRACE("OMDataStreamProperty::getBits");
+  PRECONDITION("Valid bits", bits != 0);
+  PRECONDITION("Valid size", size >= bitsSize());
+
+  memcpy(bits, &_stream, bitsSize());
+}
+
 
 
