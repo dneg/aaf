@@ -25,6 +25,7 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
+#include "AAFInterpolatorDefs.h"
 
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFVaryingValue; // generated
