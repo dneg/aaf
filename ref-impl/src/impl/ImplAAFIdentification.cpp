@@ -29,15 +29,15 @@ ImplAAFIdentification::~ImplAAFIdentification ()
 {}
 
 ImplAAFIdentification::ImplAAFIdentification():
-_companyName(         PID_IDENTIFICATION_COMPANYNAME,          "companyName"),
-_productName(         PID_IDENTIFICATION_PRODUCTNAME,          "productName"),
-// _productVersion(   PID_IDENTIFICATION_PRODUCTVERSION,       "productVersion")
-_productVersionString(PID_IDENTIFICATION_PRODUCTVERSIONSTRING, "productVersionString"),
-// _productId(        PID_IDENTIFICATION_PRODUCTID,            "productId"),
-_date(                PID_IDENTIFICATION_DATE,                 "date"),
-// _toolKitVersion(   PID_IDENTIFICATION_TOOLKITVERSION,       "toolkitVersion"),
-_platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
-// _generation(       PID_IDENTIFICATION_GENERATION,           "generation")
+_companyName(         PID_Identification_CompanyName,          "Company Name"),
+_productName(         PID_Identification_ProductName,          "Product Name"),
+// _productVersion(   PID_Identification_ProductVersion,       "Product Version")
+_productVersionString(PID_Identification_ProductVersionString, "Product Version String"),
+// _productId(        PID_Identification_ProductID,            "Product ID"),
+_date(                PID_Identification_Date,                 "Date"),
+// _toolKitVersion(   PID_Identification_ToolkitVersion,       "Toolkit Version"),
+_platform(            PID_Identification_Platform,             "Platform")
+// _generation(       PID_Identification_GenerationAUID,       "Generation AUID")
 {
   // Insert the properties into the persistent property set.
   //
@@ -73,15 +73,15 @@ ImplAAFIdentification::ImplAAFIdentification(
                                      const wchar_t* platform
                                      // const AUID* generation
                                      ):
-_companyName(         PID_IDENTIFICATION_COMPANYNAME,          "companyName"),
-_productName(         PID_IDENTIFICATION_PRODUCTNAME,          "productName"),
-// _productVersion(   PID_IDENTIFICATION_PRODUCTVERSION,       "productVersion")
-_productVersionString(PID_IDENTIFICATION_PRODUCTVERSIONSTRING, "productVersionString"),
-// _productId(        PID_IDENTIFICATION_PRODUCTID,            "productId"),
-_date(                PID_IDENTIFICATION_DATE,                 "date"),
-// _toolKitVersion(   PID_IDENTIFICATION_TOOLKITVERSION,       "toolkitVersion"),
-_platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
-// _generation(       PID_IDENTIFICATION_GENERATION,           "generation")
+_companyName(         PID_Identification_CompanyName,          "Company Name"),
+_productName(         PID_Identification_ProductName,          "Product Name"),
+// _productVersion(   PID_Identification_ProductVersion,       "Product Version")
+_productVersionString(PID_Identification_ProductVersionString, "Product Version String"),
+// _productId(        PID_Identification_ProductID,            "Product ID"),
+_date(                PID_Identification_Date,                 "Date"),
+// _toolKitVersion(   PID_Identification_ToolkitVersion,       "Toolkit Version"),
+_platform(            PID_Identification_Platform,             "Platform")
+// _generation(       PID_Identification_GenerationAUID,       "Generation AUID")
 {
   // Insert the properties into the persistent property set.
   //
