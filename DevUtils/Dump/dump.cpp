@@ -671,7 +671,8 @@ static void ignore(OMUInt32 pid);
 static char* readName(IStream* stream,
                       OMUInt32 nameOffset,
                       OMUInt32 nameSize,
-                      OMUInt32 version)
+                      OMUInt32 version,
+					  bool	   swapNeeded)
 {
   char* result;
   char* buffer;
@@ -684,8 +685,12 @@ static char* readName(IStream* stream,
     result = buffer;
   } else {
     // name consists of 2-byte characters
-    char* name = new char[nameSize/2];
-    convert(name, nameSize/2, (OMCharacter*)buffer);
+    size_t characterCount = nameSize / 2;
+    if (swapNeeded) {
+      swapOMString((OMCharacter*)buffer, characterCount);
+    }
+    char* name = new char[characterCount];
+    convert(name, characterCount, (OMCharacter*)buffer);
     delete [] buffer;
     result = name;
   }
@@ -2230,7 +2235,8 @@ OMUInt32 objectCount(IStorage* storage,
   char* collectionName = readName(propertiesStream,
                                   index->_offset,
                                   index->_length,
-                                  version);
+                                  version,
+								  swapNeeded);
 
   size_t size = strlen(collectionName) + strlen(suffix) + 1;
   char* collectionIndexName = new char[size];
@@ -2401,7 +2407,8 @@ void dumpContainedObjects(IStorage* storage,
       char* subStreamName = readName(propertiesStream,
                                      nameStart,
                                      nameLength,
-                                     version);
+                                     version,
+									 swapNeeded);
       
       // Compute the pathname for this stream
       //
@@ -2429,7 +2436,8 @@ void dumpContainedObjects(IStorage* storage,
       char* subStorageName = readName(propertiesStream,
                                       index[i]._offset,
                                       index[i]._length,
-                                      version);
+                                      version,
+									  swapNeeded);
       
       // Compute the pathname for this object
       //
@@ -2463,7 +2471,8 @@ void dumpContainedObjects(IStorage* storage,
       char* vectorName = readName(propertiesStream,
                                   index[i]._offset,
                                   index[i]._length,
-                                  version);
+                                  version,
+								  swapNeeded);
 
       size_t size = strlen(vectorName) + strlen(suffix) + 1;
       char* vectorIndexName = new char[size];
@@ -2580,7 +2589,8 @@ void dumpContainedObjects(IStorage* storage,
       char* setName = readName(propertiesStream,
                                index[i]._offset,
                                index[i]._length,
-                               version);
+                               version,
+							   swapNeeded);
 
       size_t size = strlen(setName) + strlen(suffix) + 1;
       char* setIndexName = new char[size];
@@ -2754,7 +2764,8 @@ void dumpContainedObjects(IStorage* storage,
       char* setName = readName(propertiesStream,
                                index[i]._offset,
                                index[i]._length,
-                               version);
+                               version,
+							   swapNeeded);
 
       size_t size = strlen(setName) + strlen(suffix) + 1;
       char* setIndexName = new char[size];
