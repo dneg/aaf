@@ -206,9 +206,9 @@ void OMStoredObject::save(const OMPropertySet& properties)
     ASSERT("Valid property", p != 0);
     p->save();
   }
-
+#if !defined(OM_DISABLE_VALIDATE)
   validate(&properties, _index);
-
+#endif
   save(_index);
 
 }
@@ -341,9 +341,9 @@ void OMStoredObject::restore(OMPropertySet& properties)
     ASSERT("Valid property", p != 0);
     p->restore(length);
   }
-
+#if !defined(OM_DISABLE_VALIDATE)
   validate(&properties, _index);
-
+#endif
   streamSetPosition(_propertiesStream, 0);
   POSTCONDITION("At start of properties stream",
                 streamPosition(_propertiesStream) == 0);
