@@ -47,13 +47,13 @@ AD_XCLASS_BEGIN(Concrete, Transient)
 
 AD_XMETHOD2(EnumLoadedPlugins,
 			[in],
-			  abjPass,
+			  objPass,
 			  aafUID_t,
 			  categoryID,
 			  Which category ID do we want to enumerate,
 			[out\,retval],
 			  objOut,
-			  EnumAAFPluginDef,
+			  EnumAAFLoadedPlugins,
 			  ppEnum,
 			  Loaded Plugin Enumeration,
 			Returns an enumerator which enumerates over all of the loaded
