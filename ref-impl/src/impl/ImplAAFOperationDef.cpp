@@ -308,50 +308,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::GetCategory (
-       aafCharacter		*pCategory,
-		aafUInt32	bufSize)
+       aafUID_t		*pCategory)
 {
-	bool stat;
-
 	if(pCategory == NULL)
 		return(AAFRESULT_NULL_PARAM);
-
-	if(!_category.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-
-	stat = _category.copyToBuffer(pCategory, bufSize);
-	if (! stat)
-	{
-	  return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
-	}
-
-	return(AAFRESULT_SUCCESS); 
-}
- 
-  //****************
-  // GetCategoryBufLen()
-  //
-AAFRESULT STDMETHODCALLTYPE
-	ImplAAFOperationDef::GetCategoryBufLen (
-			aafUInt32 *		pLen)
-{
-	if(pLen == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
-	if(!_category.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-
-	*pLen = _category.size();
-	return(AAFRESULT_SUCCESS); 
+	*pCategory = _category;
+	
+	return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::SetCategory (
-      const aafCharacter *pCategory)
+      const aafUID_t pCategory)
 {
-	if(pCategory == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
 	_category = pCategory;
 
 	return(AAFRESULT_SUCCESS); 
