@@ -186,7 +186,7 @@ AAFSmartPointerBase (ReferencedType* p)
 {
   if (_rep)
     acquire(_rep);
-};
+}
 
 template <typename ReferencedType, typename RefCountType>
 AAFSmartPointerBase<ReferencedType, RefCountType>::
