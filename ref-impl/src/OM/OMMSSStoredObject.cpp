@@ -854,6 +854,31 @@ OMRootStorable* OMMSSStoredObject::restore(OMFile& file)
   return root;
 }
 
+OMStorable*
+OMMSSStoredObject::restoreObject(const OMStrongObjectReference& reference)
+{
+  TRACE("OMMSSStoredObject::restoreObject");
+
+  const wchar_t* name = reference.name();
+  OMProperty* property = reference.property();
+  OMStorable* containingObject = property->propertySet()->container();
+
+  OMClassId cid;
+  restore(cid);
+  const OMClassFactory* classFactory = containingObject->classFactory();
+  OMStorable* object = classFactory->create(cid);
+  ASSERT("Registered class id", object != 0);
+  ASSERT("Valid class factory", classFactory == object->classFactory());
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
+  ASSERT("Valid class definition", object->definition() != 0);
+#endif
+  // Attach the object.
+  object->attach(containingObject, name);
+  object->setStore(this);
+  object->restoreContents();
+  return object;
+}
+
   // @mfunc Restore the <c OMStoredObjectIdentification>
   //        of this <c OMMSSStoredObject> into <p id>.
   //   @parm The <c OMStoredObjectIdentification> of this

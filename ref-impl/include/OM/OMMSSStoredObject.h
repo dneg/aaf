@@ -167,7 +167,9 @@ public:
 
   virtual OMRootStorable* restore(OMFile& file);
 
-    // @cmember Restore the <c OMStoredObjectIdentification>
+  virtual OMStorable* restoreObject(const OMStrongObjectReference& reference);
+
+   // @cmember Restore the <c OMStoredObjectIdentification>
     //          of this <c OMMSSStoredObject> into <p id>.
   virtual void restore(OMStoredObjectIdentification& id);
 

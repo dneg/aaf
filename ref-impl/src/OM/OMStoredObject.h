@@ -36,6 +36,7 @@ class OMWeakReference;
 class OMWeakReferenceSet;
 class OMWeakReferenceVector;
 class OMStoredStream;
+class OMStrongObjectReference;
 
   // @class Abstract base class fo the in-memory representation
   //        of a persistent object.
@@ -120,6 +121,9 @@ public:
   virtual void save(const OMDataStream& stream) = 0;
 
   virtual OMRootStorable* restore(OMFile& file) = 0;
+
+  virtual OMStorable* restoreObject(
+                                 const OMStrongObjectReference& reference) = 0;
 
     // @cmember Restore the <c OMStoredObjectIdentification>
     //          of this <c OMStoredObject> into <p id>.

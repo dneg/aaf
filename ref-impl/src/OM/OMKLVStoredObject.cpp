@@ -254,6 +254,15 @@ OMRootStorable* OMKLVStoredObject::restore(OMFile& /* file */)
   return result;
 }
 
+OMStorable* OMKLVStoredObject::restoreObject(
+                                const OMStrongObjectReference& /* reference */)
+{
+  TRACE("OMKLVStoredObject::restoreObject");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  OMStorable* result = 0;
+  return result;
+}
+
   // @mfunc Restore the <c OMStoredObjectIdentification>
   //        of this <c OMKLVStoredObject> into <p id>.
   //   @parm The newly restored <t OMStoredObjectIdentification>.

@@ -39,6 +39,7 @@
 #include "OMXMLStoredStream.h"
 #include "OMPropertySetIterator.h"
 
+#include "OMClassFactory.h"
 #include "OMClassDefinition.h"
 
 #include "OMUtilities.h"
@@ -543,6 +544,32 @@ OMRootStorable* OMXMLStoredObject::restore(OMFile& /* file */)
   OMRootStorable* result = 0;
   return result;
 }
+
+OMStorable*
+OMXMLStoredObject::restoreObject(const OMStrongObjectReference& reference)
+{
+  TRACE("OMXMLStoredObject::restoreObject");
+
+  const wchar_t* name = reference.name();
+  OMProperty* property = reference.property();
+  OMStorable* containingObject = property->propertySet()->container();
+
+  OMClassId cid;
+  restore(cid);
+  const OMClassFactory* classFactory = containingObject->classFactory();
+  OMStorable* object = classFactory->create(cid);
+  ASSERT("Registered class id", object != 0);
+  ASSERT("Valid class factory", classFactory == object->classFactory());
+#if !defined(OM_NO_VALIDATE_DEFINITIONS)
+  ASSERT("Valid class definition", object->definition() != 0);
+#endif
+  // Attach the object.
+  object->attach(containingObject, name);
+  object->setStore(this);
+  object->restoreContents();
+  return object;
+}
+
   // @mfunc Restore the <c OMStoredObjectIdentification>
   //        of this <c OMXMLStoredObject> into <p id>.
   //   @parm The newly restored <t OMStoredObjectIdentification>.
