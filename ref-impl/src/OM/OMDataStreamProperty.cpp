@@ -286,6 +286,20 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Stream byte order is known", hasByteOrder());
 
+  OMUInt64 currentPosition = position();
+  OMUInt64 streamSize = size();
+
+  OMUInt32 readCount = 0;
+  if (currentPosition < streamSize) {
+    OMUInt64 remaining = (streamSize - currentPosition) / externalElementSize;
+    if (remaining < elementCount) {
+      readCount = static_cast<OMUInt32>(remaining);
+    } else {
+      readCount = elementCount;
+    }
+  }
+  if (readCount > 0) {
+
   bool reorder = false;
   if (byteOrder() != hostByteOrder()) {
     reorder = true;
@@ -294,7 +308,7 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
   // Allocate buffer for one element
   OMByte* buffer = new OMByte[externalElementSize];
 
-  for (size_t i = 0; i < elementCount; i++) {
+    for (size_t i = 0; i < readCount; i++) {
 
     // Read an element of the property value
     OMUInt32 actualByteCount;
@@ -317,7 +331,8 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
                              hostByteOrder());
   }
   delete [] buffer;
-  elementsRead = elementCount;
+  }
+  elementsRead = readCount;
 }
 
 
