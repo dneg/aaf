@@ -32,8 +32,8 @@
   // @mfunc Constructor.
   //   @parm The capacity of this <c OMStoredSetIndex>.
 OMStoredSetIndex::OMStoredSetIndex(size_t capacity,
-                                   OMUInt32 keyPid,
-                                   OMUInt32 keySize)
+                                   OMPropertyId keyPid,
+                                   OMKeySize keySize)
 : _firstFreeKey(0), _lastFreeKey(~(OMUInt32)0),
   _capacity(capacity), _entries(0),
   _keyPropertyId(keyPid), _keySize(keySize),

@@ -64,9 +64,9 @@ OMStoredPropertySetIndex::~OMStoredPropertySetIndex(void)
   //   @parm The offset of the property value in bytes.
   //   @parm The size of the property value in bytes.
 void OMStoredPropertySetIndex::insert(OMPropertyId propertyId,
-                                      OMUInt32 storedForm,
-                                      OMUInt32 offset,
-                                      OMUInt32 length)
+                                      OMStoredForm storedForm,
+                                      OMPropertyOffset offset,
+                                      OMPropertySize length)
 {
   TRACE("OMStoredPropertySetIndex::insert");
 
@@ -107,9 +107,9 @@ size_t OMStoredPropertySetIndex::entries(void) const
   //   @this const
 void OMStoredPropertySetIndex::iterate(size_t& context,
                                        OMPropertyId& propertyId,
-                                       OMUInt32& storedForm,
-                                       OMUInt32& offset,
-                                       OMUInt32& length) const
+                                       OMStoredForm& storedForm,
+                                       OMPropertyOffset& offset,
+                                       OMPropertySize& length) const
 {
   TRACE("OMStoredPropertySetIndex::iterate");
 
@@ -145,9 +145,9 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
   //   @rdesc True if a property with the given id was found, false otherwise.
   //   @this const  
 bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
-                                    OMUInt32& storedForm,
-                                    OMUInt32& offset,
-                                    OMUInt32& length) const
+                                    OMStoredForm& storedForm,
+                                    OMPropertyOffset& offset,
+                                    OMPropertySize& length) const
 {
   bool result;
 
@@ -167,7 +167,7 @@ bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
   //   @rdesc True if this <c OMStoredPropertySetIndex> is valid,
   //          false otherwise.
   //   @this const
-bool OMStoredPropertySetIndex::isValid(OMUInt32 baseOffset) const
+bool OMStoredPropertySetIndex::isValid(OMPropertyOffset baseOffset) const
 {
   TRACE("OMStoredPropertySetIndex::isValid");
 

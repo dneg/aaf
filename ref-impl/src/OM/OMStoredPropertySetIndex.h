@@ -53,9 +53,9 @@ public:
     //          representation is <p storedForm>. The property value
     //          occupies <p length> bytes starting at offset <p offset>.
   void insert(OMPropertyId propertyId,
-              OMUInt32 storedForm,
-              OMUInt32 offset,
-              OMUInt32 length);
+              OMStoredForm storedForm,
+              OMPropertyOffset offset,
+              OMPropertySize length);
   
     // @cmember The number of properties in this <c OMStoredPropertySetIndex>.
   size_t entries(void) const;
@@ -64,20 +64,20 @@ public:
     //          <c OMStoredPropertySetIndex>.
   void iterate(size_t& context,
                OMPropertyId& propertyId,
-               OMUInt32& storedForm,
-               OMUInt32& offset,
-               OMUInt32& length) const;
+               OMStoredForm& storedForm,
+               OMPropertyOffset& offset,
+               OMPropertySize& length) const;
 
     // @cmember Find the property with property id <p propertyId> in this
     //          <c OMStoredPropertySetIndex>. If found the <p storedForm>,
     //          <p offset> and <p length> of the property are returned.
   bool find(const OMPropertyId& propertyId,
-            OMUInt32& storedForm,
-            OMUInt32& offset,
-            OMUInt32& length) const;
+            OMStoredForm& storedForm,
+            OMPropertyOffset& offset,
+            OMPropertySize& length) const;
 
     // @cmember Is this <c OMStoredPropertySetIndex> valid ?
-  bool isValid(OMUInt32 baseOffset) const;
+  bool isValid(OMPropertyOffset baseOffset) const;
 
 protected:
 
@@ -89,9 +89,9 @@ private:
     
   struct IndexEntry {
     OMPropertyId _propertyId;
-    OMUInt32 _storedForm;
-    OMUInt32 _offset;
-    OMUInt32 _length;
+    OMStoredForm _storedForm;
+    OMPropertyOffset _offset;
+    OMPropertySize _length;
     bool _valid;
   };
     

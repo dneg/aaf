@@ -41,7 +41,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStoredSetIndex(size_t capacity, OMUInt32 keyPid, OMUInt32 keySize);
+  OMStoredSetIndex(size_t capacity, OMPropertyId keyPid, OMKeySize keySize);
 
     // @cmember Destructor.
   ~OMStoredSetIndex(void);
@@ -100,7 +100,7 @@ private:
   size_t _capacity;
   size_t _entries;
   OMPropertyId _keyPropertyId; // Id of property that is the key
-  OMUInt32 _keySize; // The size of a key
+  OMKeySize _keySize; // The size of a key
   OMUInt32* _localKeys;
   OMUInt32* _referenceCounts;
   OMByte* _keys;
