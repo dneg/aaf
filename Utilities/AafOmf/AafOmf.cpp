@@ -592,12 +592,15 @@ HRESULT AafOmf::OMFFileRead()
 	// OMF Variables
 	OMF2::omfIterHdl_t		OMFMobIter = NULL;
 	OMF2::omfMobObj_t		OMFMob;
+	OMF2::omfObject_t		OMFHeader, OMFObject;
 
 	// AAF Variables
 	IAAFMob*				pMob = NULL;
 	IAAFCompositionMob*		pCompMob = NULL;
 	IAAFMasterMob*			pMasterMob = NULL;
 	IAAFSourceMob*			pSourceMob = NULL;
+
+	aafInt32				numMedia;
 	
 	rc = OMF2::omfiIteratorAlloc( OMFFileHdl, &OMFMobIter);
 	if (AAFRESULT_SUCCESS == rc)
@@ -693,9 +696,26 @@ HRESULT AafOmf::OMFFileRead()
 			}
 		}
 	}
-
 	OMF2::omfiIteratorDispose(OMFFileHdl, OMFMobIter);
-			
+	// Now that we have read all the metadata we can get on with
+	// the actual essence (media) data
+
+	rc = OMF2::omfsGetHeadObject( OMFFileHdl, &OMFHeader );
+	numMedia = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADMediaData); 
+	if (bVerboseMode)
+	{
+		UTLstdprintf("Found: %ld Media data objects\n", numMedia);
+	}
+	for (int k = 0;k < numMedia; k++)
+	{
+		rc = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADMediaData, &OMFObject, k+1);
+		if (OMF2::OM_ERR_NONE == rc)
+		{
+			// Process the given Class Dictionary object.
+			rc = ConvertOMFMediaDataObject(OMFObject);
+		}
+	}
+
 	return rc;
 }
 // ============================================================================
@@ -820,6 +840,137 @@ HRESULT AafOmf::ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj )
 	return rc;
 }
 
+// ============================================================================
+// ConvertOMFMediaDataObject
+//
+//			This function is called by the ConvertOMFHeader module for each 
+//			media data object found in the header
+//			
+// Returns: AAFRESULT_SUCCESS if Header object is converted succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfUID_t			mediaID;
+	OMF2::omfProperty_t		idProperty;
+	OMF2::omfDDefObj_t		datakind;
+	char					id[5];
+
+	IAAFEssenceData*		pEssenceData = NULL;
+	IAAFMob*				pMob = NULL;
+	IAAFSourceMob*			pSourceMob = NULL;
+	aafUID_t				mobID;
+	aafBool					bConvertMedia = AAFFalse;
+
+	IncIndentLevel();
+	memset(id, 0, sizeof(id));
+	rc = OMF2::omfsReadUID(OMFFileHdl, obj, OMF2::OMMDATMobID, &mediaID);
+	rc = aafMobIDFromMajorMinor(mediaID.major, mediaID.minor, &mobID);
+	rc = pHeader->LookupMob(&mobID, &pMob);
+	if (FAILED(rc))
+		return rc;
+
+	rc = pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob);
+	rc = OMF2::omfsReadClassID(OMFFileHdl, obj, OMF2::OMOOBJObjClass, id);
+	if (SUCCEEDED(rc))
+	{
+		if (bVerboseMode)
+			UTLstdprintf("%sProcessing: %s Media Data\n", indentLeader, id);
+		if (strncmp(id, "TIFF", 4) == 0)
+		{
+			// handle TIFF media data
+			IAAFTIFFData*	pTIFFData = NULL;
+			rc = pDictionary->CreateInstance(&AUID_AAFTIFFData,
+											 IID_IAAFTIFFData,
+											 (IUnknown **)&pTIFFData);
+			rc = pTIFFData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
+			rc = pEssenceData->SetFileMob(pSourceMob);
+			rc = pHeader->AppendEssenceData(pEssenceData);
+			idProperty = OMF2::OMTIFFData;
+			bConvertMedia = AAFTrue;
+			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&rc);
+
+		}
+		else if (strncmp(id, "AIFC", 4) == 0)
+		{
+			// Handle Audio (Wave data)
+			IAAFWAVEData*	pWAVEData = NULL;
+			rc = pDictionary->CreateInstance(&AUID_AAFWAVEData,
+											 IID_IAAFWAVEData,
+											 (IUnknown **)&pWAVEData);
+			rc = pWAVEData->QueryInterface(IID_IAAFEssenceData, (void **)&pEssenceData);
+			rc = pEssenceData->SetFileMob(pSourceMob);
+			rc = pHeader->AppendEssenceData(pEssenceData);
+			idProperty = OMF2::OMAIFCData;
+			OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Sound", &datakind, (OMF2::omfErr_t *)&rc);
+			bConvertMedia = AAFTrue;
+		}
+		else
+		{
+			// rest of media (essence) NOT implemented)
+			IncIndentLevel();
+			UTLstdprintf("%sThis conversion is not implemented yet !!\n", indentLeader);
+			DecIndentLevel();
+		}
+		if (bConvertMedia)
+		{
+			void*				pBuffer = NULL;
+			OMF2::omfPosition_t	OMFOffset;
+
+			aafUInt32			numBytes;
+			aafUInt32			nBlockSize;
+			aafUInt32			numBytesRead;
+			aafUInt32			numBytesWritten;
+			aafBool				bMore = AAFFalse;
+			
+
+			// find out how big the data is 
+			numBytes = (aafUInt32)OMF2::omfsLengthDataValue(OMFFileHdl, obj, idProperty);
+			if (numBytes > (2 * 1048576))
+			{
+				nBlockSize = 2 * 1048576;		// only allocate 2 Meg
+				bMore = AAFTrue;			// you going to need more than one read/write
+			}
+			else
+			{
+				nBlockSize = numBytes;
+			}
+			rc = UTLMemoryAlloc(nBlockSize, &pBuffer);
+			OMFOffset = 0;
+			do 
+			{
+				rc = OMF2::omfsReadDataValue(OMFFileHdl, 
+											 obj,
+											 idProperty,
+											 datakind,
+											 (OMF2::omfDataValue_t)pBuffer,
+											 OMFOffset,
+											 nBlockSize,
+											 &numBytesRead);
+
+				// write the data
+				rc = pEssenceData->SetPosition((aafPosition_t) OMFOffset);
+				rc = pEssenceData->Write(numBytesRead, (aafDataBuffer_t)pBuffer, &numBytesWritten);
+
+				// calculate next offset
+				OMFOffset += numBytesRead;
+
+			}while (numBytes > OMFOffset );
+			// Free the allocated buffer 
+			UTLMemoryFree(pBuffer);
+		}
+	}
+	if (pEssenceData)
+	{
+		pEssenceData->Release();
+		pEssenceData = NULL;
+	}
+	DecIndentLevel();
+	pMob->Release();
+	pSourceMob->Release();
+	return rc;
+}
 // ============================================================================
 // ConvertOMFDatakind
 //
