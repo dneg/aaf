@@ -28,6 +28,8 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 
+#include <assert.h>
+
 //=---------------------------------------------------------------------=
 
 ImplAAFCloneResolver::ImplAAFCloneResolver( ImplAAFFile* pDstFile )
