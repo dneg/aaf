@@ -330,7 +330,7 @@ public:
   AAFRESULT InstantiateAxiomaticDefinitions(void);
 
   // Sync the builtin dictionary and the file dictionary definitions.
-  AAFRESULT SyncMetaDictionaries();
+  AAFRESULT MergeBuiltinClassDefs();
 
   // Create all of the axiomatic classes as uninitialized objects.
   void CreateAxiomaticClasses(void); // throw AAFRESULT
@@ -384,11 +384,6 @@ protected:
   // the given class definition. NOTE: This call is recursive, it calls itself again
   // for the parent class of the given class until current class is a "root" class.
   virtual void InitOMProperties (ImplAAFClassDef * pClassDef);
-
-private:
-
-  // Sync class defs found in both the _fileClassDefinitions and _classDefinitions.
-  AAFRESULT PvtSyncCommonClassDefs();
 
 private:
 

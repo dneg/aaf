@@ -63,28 +63,6 @@
 #include "AAFObjectModel.h"
 #include "AAFObjectModelProcs.h"
 
-// #define DEBUG_DICTIONARY_SYNC
-#ifdef DEBUG_DICTIONARY_SYNC
-// TEMPORARY - for wcout debug code below.
-#include <iostream>
-
-void PrintClassName( ImplAAFClassDef* pClassDef )
-{
-  aafCharacter nameBuf[100];
-  AAFRESULT hr = pClassDef->GetName( nameBuf, sizeof(aafCharacter)*100 );
-  assert( AAFRESULT_SUCCESS == hr );
-  std::wcout << nameBuf;
-}
-
-void PrintPropertyName( ImplAAFPropertyDef* pPropDef )
-{
-  aafCharacter nameBuf[100];
-  AAFRESULT hr = pPropDef->GetName( nameBuf, sizeof(aafCharacter)*100 );
-  assert( AAFRESULT_SUCCESS == hr );
-  std::wcout << nameBuf;
-}
-#endif
-
 extern "C" const aafClassID_t CLSID_AAFMetaDictionary;
 extern "C" const aafClassID_t CLSID_AAFPropertyDef;
 extern "C" const aafClassID_t CLSID_EnumAAFClassDefs;
@@ -1384,7 +1362,7 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
   return result;
 }
 
-AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
+AAFRESULT ImplAAFMetaDictionary::MergeBuiltinClassDefs()
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
 
@@ -1394,16 +1372,6 @@ AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
 
   const AAFObjectModel* pObjectModel = AAFObjectModel::singleton();
   assert( pObjectModel );
-
-#ifdef DEBUG_DICTIONARY_SYNC
-  OMUInt32 classes = iter.count(); 
-
-  std::wcout << L"SyncCommonClassDefs:" << std::endl;
-
-  std::wcout << L"Initially " << classes << L" class definitions in file." <<  std::endl;
-  std::wcout << L"Initially " << pObjectModel->countClassDefinitions() <<
-    L" class definitions built in." <<   std::endl; 
-#endif
 
   // For each class def in file...
   while (++iter) {   
@@ -1420,14 +1388,9 @@ AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
       
       // The class def exists in both the builtin and file
       // dictionaries. Check that each property that exists in the
-      // builtin class def exists in the files's class def. If it
-      // doesn't, then add it.
-
-#ifdef DEBUG_DICTIONARY_SYNC
-      std::wcout << L"*** Found built in class: " << pBuiltInModelClassDef->name() << " [";
-      PrintClassName( pFileClassDef );
-      std::wcout << "]" << std::endl;
-#endif
+      // builtin class def also exists in the files's version of that
+      // class def. If it doesn't, then add it to the file's class
+      // def.
 
       unsigned int i;
       for (i = 0; i < pBuiltInModelClassDef->propertyCount(); i++) {
@@ -1436,10 +1399,6 @@ AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
 	pBuiltInModelPropDef = pBuiltInModelClassDef->propertyDefinitionAt(i);
 
 	if ( ! pFileClassDef->PvtIsPropertyDefRegistered( *pBuiltInModelPropDef->id() ) ) {
-
-#ifdef DEBUG_DICTIONARY_SYNC
-	  std::wcout << "\tMerge property: " << pBuiltInModelPropDef->name() << std::endl;
-#endif
 
 	  ImplAAFSmartPointer<ImplAAFPropertyDef> spTmp;
 	  AAFRESULT hr;
@@ -1463,12 +1422,6 @@ AAFRESULT ImplAAFMetaDictionary::PvtSyncCommonClassDefs()
 
   return result;
 }
-
-AAFRESULT ImplAAFMetaDictionary::SyncMetaDictionaries()
-{ 
-  return PvtSyncCommonClassDefs();
-}
-
 
 //
 // Methods that would be inherited or overriden from ImplAAFStrorable
