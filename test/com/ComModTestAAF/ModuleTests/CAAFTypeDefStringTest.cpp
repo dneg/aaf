@@ -39,6 +39,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <wchar.h>
+#include <string.h>
 
 #include "CAAFBuiltinDefs.h"
 
