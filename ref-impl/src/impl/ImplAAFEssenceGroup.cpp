@@ -370,6 +370,10 @@ AAFRESULT ImplAAFEssenceGroup::GetMinimumBounds(aafPosition_t rootPos, aafLength
 	  }
 	XEND;
 
+	//sdaigle: release objects not used anymore.
+	if( critClip != NULL )
+		critClip->ReleaseReference();
+	
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -415,6 +419,10 @@ AAFRESULT ImplAAFEssenceGroup::GetCriteriaSegment(
 			access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
 			CHECK(access->GetSelectInfo (fileMob, &selectInfo))
 				
+			//sdaigle: Don't forget to release objects not used anymore.
+			if( access )
+				access->ReleaseReference();
+
 			/* Check for locator file existance & continue if not present
 			 * A file which is supposed to be an OMFI file must be opened
 			 * to check for the existance of the data object, so we must
@@ -425,6 +433,10 @@ AAFRESULT ImplAAFEssenceGroup::GetCriteriaSegment(
 //				continue;
 //			if(dataFile != file)
 //				omfsCloseFile(dataFile);
+
+			//sdaigle: Don't forget to release objects not used anymore.
+			if( fileMob )
+				fileMob->ReleaseReference();
 
 			score = 0;
 			switch(criteria->type)
@@ -448,10 +460,19 @@ AAFRESULT ImplAAFEssenceGroup::GetCriteriaSegment(
 				break;
 			}
 	
+			//sdaigle: Don't forget to release objects not used anymore.
 			if((score > highestScore) || (highestScoreSourceClip == NULL))
 			{
 				highestScore = score;
+				//sdaigle: Don't forget to release objects not used anymore.
+				if( highestScoreSourceClip != NULL )
+					highestScoreSourceClip->ReleaseReference();
 				highestScoreSourceClip = sourceClip;
+			}
+			else
+			{
+				//sdaigle: Don't forget to release objects not used anymore.
+				sourceClip->ReleaseReference();
 			}
 		}
 	}
