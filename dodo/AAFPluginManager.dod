@@ -1,0 +1,78 @@
+#startm .this-module 0
+AAFPluginManager\
+#endm
+#c
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// This interface is used with an object representing an AAF class definition.
+// The operations on a class definition include managing the position of the
+// class within the class heirarchy\, and accessing property definitions associated
+// with the class.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
+
+AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
+AD_FORWARD_DECLARATION(AAFPropertyDef)
+AD_FORWARD_DECLARATION(AAFDefObject)
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+ 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+AD_CLASS_UUID(AD1BB85B, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
+
+AD_DEFAULT_UUID(AD1BB85C, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
+AD_XCLASS_BEGIN(Concrete, Transient)
+
+AD_XMETHOD2(EnumLoadedPlugins,
+			[in],
+			  abjPass,
+			  aafUID_t,
+			  categoryID,
+			  Which category ID do we want to enumerate,
+			[out\,retval],
+			  objOut,
+			  EnumAAFPluginDef,
+			  ppEnum,
+			  Loaded Plugin Enumeration,
+			Returns an enumerator which enumerates over all of the loaded
+  // pluigin choices through the *ppEnum argument.  The returned enumerator
+  // is AddRef\(\)ed before it is returned.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - if ppEnum is null.)
+
+AD_XCLASS_END(Concrete, Transient)
