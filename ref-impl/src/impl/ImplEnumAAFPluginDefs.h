@@ -15,28 +15,25 @@
 
 
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
 
 
 class ImplAAFPluginDescriptor;
 class ImplAAFDefObject;
 
-#ifndef __ImplAAFRoot_h__
-#include "ImplAAFRoot.h"
+#ifndef __ImplAAFObject_h__
+#include "ImplAAFObject.h"
 #endif
 
+typedef OMVariableSizeProperty<aafUID_t> pluginDescWeakRefArrayProp_t;
+typedef OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> pluginDescStrongRefArrayProp_t;
 
 class ImplEnumAAFPluginDescriptors : public ImplAAFRoot
 {
@@ -107,12 +104,17 @@ public:
 
 public:
 // Internal to the toolkit
-AAFRESULT
-    SetDef(ImplAAFDefObject *pEDesc);
+  // SDK Internal 
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEnumProperty( ImplAAFObject *pObj, pluginDescWeakRefArrayProp_t *pProp);
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEnumStrongProperty( ImplAAFObject *pObj, pluginDescStrongRefArrayProp_t *pProp);
 
 private:
-	aafInt32				_current;
-	ImplAAFDefObject		*_cDef;
+	aafInt32							_current;
+	ImplAAFObject						*_enumObj;
+	pluginDescWeakRefArrayProp_t		*_enumProp;
+	pluginDescStrongRefArrayProp_t		*_enumStrongProp;
 };
 
 #endif // ! __ImplEnumAAFPluginDescriptors_h__
