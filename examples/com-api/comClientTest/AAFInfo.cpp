@@ -202,10 +202,10 @@ static void ReadAAFFile(aafWChar * pFileName)
         
         hr = pFile->Close();
         check(hr);
-      }
 
-      pFile->Release();
-      pFile = NULL;
+        pFile->Release();
+        pFile = NULL;
+      }
     }
 
     pSession->EndSession(); // obsolete!
