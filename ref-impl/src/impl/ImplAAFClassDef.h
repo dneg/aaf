@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -99,7 +99,7 @@ public:
          const aafUID_t & id,
 
          // @parm [in, string] name of the new property
-         wchar_t *  pName,
+         const aafCharacter *  pName,
 
          // @parm [in] type of the new property
          ImplAAFTypeDef * pTypeDef,
@@ -120,7 +120,7 @@ public:
          const aafUID_t & id,
 
          // @parm [in, string] name of the new property
-         wchar_t *  pName,
+         const aafCharacter *  pName,
 
          // @parm [in] type of the new property
          ImplAAFTypeDef * pTypeDef,
@@ -180,7 +180,7 @@ public:
   AAFRESULT STDMETHODCALLTYPE
     pvtRegisterPropertyDef
         (const aafUID_t & id,
-         wchar_t *  pName,
+         const aafCharacter *  pName,
          const aafUID_t & typeId,
          aafBool  isOptional,
          ImplAAFPropertyDef ** ppPropDef);

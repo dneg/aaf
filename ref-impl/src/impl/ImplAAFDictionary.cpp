@@ -104,6 +104,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFBuiltinDefs.h"
 
 
 #include <assert.h>
@@ -138,6 +139,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
 
   _pBuiltinClasses (0),
   _pBuiltinTypes (0),
+  _pBuiltinDefs (0),
 
   _lastGeneratedPid (0),
   _axiomaticTypes (0),
@@ -261,9 +263,17 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 
   assert (_pBuiltinClasses);
   delete _pBuiltinClasses;
+  _pBuiltinClasses = 0;
 
   assert (_pBuiltinTypes);
   delete _pBuiltinTypes;
+  _pBuiltinTypes = 0;
+
+  if (_pBuiltinDefs)
+	{
+	  delete _pBuiltinDefs;
+	  _pBuiltinDefs = 0;
+	}
 
   delete [] _axiomaticTypes;
 }
@@ -437,10 +447,8 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
   // with a specified stored object id.
 AAFRESULT STDMETHODCALLTYPE 
   ImplAAFDictionary::CreateInstance (
-    // Class identifier (AUID) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    const aafUID_t & auid,
+    // Class definition of the stored object to be created.
+    ImplAAFClassDef * pClassDef,
 
     // Address of output variable that receives the 
     // object pointer requested in auid
@@ -452,6 +460,10 @@ AAFRESULT STDMETHODCALLTYPE
   // Initialize the out parameter.
   *ppvObject = NULL;
 
+  aafUID_t auid;
+  AAFRESULT hr = pClassDef->GetAUID (&auid);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
   const OMClassId* classId  = reinterpret_cast<const OMClassId*>(&auid);
   *ppvObject = static_cast<ImplAAFObject *>(create(*classId));
 
@@ -462,16 +474,16 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-// internal utility factory method to create an ImplAAFObject given an auid.
+// internal utility factory method to create an ImplAAFObject given a classdef.
 // This method was created to make it simpler to replace calls to "Deprecated"
 // call to CreateImpl which should only be used for instanciating transient
 // non-ImplAAFObject classes such as an enumerator.
-ImplAAFObject *ImplAAFDictionary::CreateImplObject(const aafUID_t& auid)
+ImplAAFObject *ImplAAFDictionary::CreateImplObject(ImplAAFClassDef * pClassDef)
 {
   ImplAAFObject *pObject = NULL;
   AAFRESULT result = AAFRESULT_SUCCESS;
   
-  result = CreateInstance(auid, &pObject);
+  result = CreateInstance(pClassDef, &pObject);
   assert(AAFRESULT_SUCCEEDED(result));
   return pObject;
 }
@@ -1720,7 +1732,7 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (AUID_AAFDataDef,
+	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Picture, L"Picture", L"Picture data");
 	  hr = RegisterDataDef (dataDef);
@@ -1732,7 +1744,7 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (AUID_AAFDataDef,
+	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Sound, L"Sound", L"Sound data");
 	  hr = RegisterDataDef (dataDef);
@@ -1744,7 +1756,7 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (AUID_AAFDataDef,
+	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Timecode, L"Timecode", L"Timecode data");
 	  hr = RegisterDataDef (dataDef);
@@ -1756,7 +1768,7 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (AUID_AAFDataDef,
+	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Edgecode, L"Edgecode", L"Edgecode data");
 	  hr = RegisterDataDef (dataDef);
@@ -1768,7 +1780,7 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (AUID_AAFDataDef,
+	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Matte, L"Matte", L"Matte data");
 	  hr = RegisterDataDef (dataDef);
@@ -1780,7 +1792,7 @@ void ImplAAFDictionary::InitBuiltins()
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (AUID_AAFDataDef,
+	  hr = CreateInstance (GetBuiltinDefs()->cdDataDef(),
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_PictureWithMatte, L"PictureWithMatte", L"PictureWithMatte data");
 	  hr = RegisterDataDef (dataDef);
@@ -2190,4 +2202,15 @@ bool ImplAAFDictionary::SetEnableDefRegistration (bool isEnabled)
   bool retval = _defRegistrationAllowed;
   _defRegistrationAllowed = isEnabled;
   return retval;
+}
+
+
+ImplAAFBuiltinDefs * ImplAAFDictionary::GetBuiltinDefs ()
+{
+  if (! _pBuiltinDefs)
+	{
+	  _pBuiltinDefs = new ImplAAFBuiltinDefs (this);
+	}
+  assert (_pBuiltinDefs);
+  return _pBuiltinDefs;
 }
