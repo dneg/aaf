@@ -427,6 +427,45 @@ void OMStoredObject::read(OMPropertyId propertyId,
   readFromStream(_propertiesStream, start, size);
 }
 
+  // @mfunc Size of <p stream> in bytes.
+  //   @parm An open stream.
+  //   @rdesc The size of <p stream> in bytes
+  //   @this const
+size_t OMStoredObject::sizeOfStream(IStream* stream) const
+{
+  TRACE("OMStoredObject::sizeOfStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  STATSTG statstg;
+  HRESULT status = stream->Stat(&statstg, STATFLAG_NONAME);
+  if (!check(status)) {
+    exit(FAILURE);
+  }
+  ASSERT("Small stream", OMHIGHPART(statstg.cbSize) == 0);
+  size_t result = OMLOWPART(statstg.cbSize);
+  return result;
+}
+
+  // @mfunc Open a stream called <p streamName> contained within this
+  //        <c OMStoredObject>.
+  //   @parm The name of the stream to open.
+  //   @rdesc An open stream.
+IStream* OMStoredObject::openStream(const char* streamName)
+{
+  TRACE("OMStoredObject::openStream");
+  return openStream(_storage, streamName);
+}
+
+  // @mfunc Create a stream called <p streamName> contained within
+  //        this <c OMStoredObject>.
+  //   @parm The name of the stream to create.
+  //   @rdesc An open stream.
+IStream* OMStoredObject::createStream(const char* streamName)
+{
+  TRACE("OMStoredObject::createStream");
+  return createStream(_storage, streamName);
+}
+
   // @mfunc Save the <c OMClassId> <p cid> in this <c OMStoredObject>.
   //   @parm The <c OMClassId> of this <c OMStoredObject>.
 void OMStoredObject::save(const OMClassId& cid)
@@ -624,6 +663,8 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
   
 }
 
+  // @mfunc Close <p stream>.
+  //   @parm The stream to close.
 void OMStoredObject::closeStream(IStream*& stream)
 {
   TRACE("OMStoredObject::closeStream");
@@ -653,7 +694,7 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
     0,
     &newStorage);
   if (!checkStorage(resultCode, storageName)) {
-    newStorage = 0;
+    exit(FAILURE);
   }
 
   return newStorage;
@@ -703,6 +744,11 @@ void OMStoredObject::closeStorage(IStorage*& storage)
   ASSERT("Reference count is 0.", resultCode == 0);
 }
 
+  // @mfunc Write <p size> bytes from the buffer at address <p data>
+  //        to <p stream>.
+  //   @parm The stream on which to write.
+  //   @parm The buffer to write.
+  //   @parm The number of bytes to write.   
 void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
 {
   TRACE("OMStoredObject::writeToStream");
@@ -716,6 +762,11 @@ void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
   }
 }
 
+  // @mfunc Read <p size> bytes from <p stream> into the buffer at
+  //        address <p data>.
+  //   @parm The stream on which to write.
+  //   @parm The buffer to write.
+  //   @parm The number of bytes to write.   
 void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
 {
   TRACE("OMStoredObject::readFromStream");
@@ -763,6 +814,7 @@ size_t OMStoredObject::streamOffset(IStream* stream)
   ULARGE_INTEGER position;
   HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
   if (!check(status)) {
+    exit(FAILURE);
   }
   ASSERT("Small stream", OMHIGHPART(position) == 0);
   result = OMLOWPART(position);
@@ -777,6 +829,7 @@ void OMStoredObject::streamSeek(IStream* stream, size_t offset)
   ULARGE_INTEGER oldPosition;
   HRESULT status = stream->Seek(newPosition, STREAM_SEEK_SET, &oldPosition);
   if (!check(status)) {
+    exit(FAILURE);
   }
   ASSERT("Small stream", OMHIGHPART(oldPosition) == 0);
 }
@@ -956,7 +1009,7 @@ static void printError(const char* prefix, const char* type)
 
 static void printName(const char* name)
 {
-  cerr << "\"" << name << "\": ";
+  cerr << "\"" << name << "\" : ";
 }
 
 static void printName(const wchar_t* name)
