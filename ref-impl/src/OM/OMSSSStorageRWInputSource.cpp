@@ -40,6 +40,7 @@ extern void AssertProc(char* cond, char* file, SINT4 line);
 //we must use Schemasofts debug malloc routines under schemasoft debug builds or
 // the heap corruption tests will fail
 //This will only be needed for devleopers who have access to the  schemasoft code
+//SS_DEBUG should be defined when you get run time errors that guard bytes were corrupted.
 #define ss_malloc dbgMalloc
 
 void * dbgMalloc(size_t cb);
