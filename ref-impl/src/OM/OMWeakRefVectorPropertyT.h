@@ -281,12 +281,17 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt(
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
   element.reference().setTargetTag(targetTag());
 #endif
-  ReferencedObject* oldObject = element.setValue(object);
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(object->identification(), object);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   setPresent();
 
   POSTCONDITION("Object properly inserted",
      _vector.getAt(index).getValue() == const_cast<ReferencedObject*>(object));
-  return oldObject;
+  return result;
 }
 
   // @mfunc Set the value of this <c OMWeakReferenceVectorProperty>
@@ -307,11 +312,15 @@ OMWeakReferenceVectorProperty<ReferencedObject>::clearValueAt(
   PRECONDITION("Valid index", index < count());
 
   VectorElement& element = _vector.getAt(index);
-  ReferencedObject* oldObject = element.setValue(0);
-
+  OMStorable* p = element.setValue(nullOMUniqueObjectIdentification, 0);
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   POSTCONDITION("Object properly cleared",
                                          _vector.getAt(index).getValue() == 0);
-  return oldObject;
+  return result;
 }
 
   // @mfunc The value of this <c OMWeakReferenceVectorProperty>
@@ -481,7 +490,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::insertAt(
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
   newElement.reference().setTargetTag(targetTag());
 #endif
-  newElement.setValue(object);
+  newElement.setValue(key, object);
   _vector.insertAt(newElement, index);
   setPresent();
 
