@@ -55,6 +55,9 @@ AAFByteOrder GetNativeByteOrder(void);
 
 aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2);
 aafBool	EqualMobID(aafMobID_constref mobID1, aafMobID_constref mobID2);
+aafBool aafIsEqualGUID( const GUID& guid1, const GUID& guid2 );
+#define aafIsEqualIID(x, y) aafIsEqualGUID(x, y)
+#define aafIsEqualCLSID(x, y) aafIsEqualGUID(x, y)
 
 AAFRESULT aafMobIDNew(aafMobID_t *mobID);
 AAFRESULT aafMobIDFromMajorMinor(
