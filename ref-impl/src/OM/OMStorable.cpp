@@ -4,13 +4,15 @@
 #include "OMClassFactory.h"
 #include "OMObjectDirectory.h"
 #include "OMTypes.h"
+#include "OMProperty.h"
 
 #include "OMAssertions.h"
 
 #include <string.h>
 
 OMStorable::OMStorable(void)
-: _persistentProperties(), _containingObject(0), _name(0), _pathName(0)
+: _persistentProperties(), _containingObject(0), _name(0),
+  _pathName(0), _containingProperty(0), _index(0)
 {
   TRACE("OMStorable::OMStorable");
   _persistentProperties.setContainer(this);
@@ -18,6 +20,12 @@ OMStorable::OMStorable(void)
 
 OMStorable::~OMStorable(void)
 {
+  TRACE("OMStorable::~OMStorable");
+  if (_containingProperty != 0) {
+    _containingProperty->detach(this, _index);
+    _containingProperty = 0;
+  }
+
   delete [] _name;
   _name = 0;
   delete [] _pathName;
@@ -78,14 +86,43 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
 
 OMStorable* OMStorable::containingObject(void) const
 {
+  TRACE("OMStorable::containingObject");
+
   return const_cast<OMStorable*>(_containingObject);
 }
 
 void OMStorable::setContainingObject(const OMStorable* containingObject)
 {
+  TRACE("OMStorable::setContainingObject");
+  //PRECONDITION("No valid old containing object", _containingObject == 0);
+  PRECONDITION("Valid new containing object", containingObject != 0);
   _containingObject = containingObject;
   delete [] _pathName;
   _pathName = 0;
+}
+
+void OMStorable::clearContainingObject(void)
+{
+  TRACE("OMStorable::clearContainingObject");
+  _containingObject = 0;
+}
+
+void OMStorable::setContainingProperty(const OMProperty* containingProperty,
+                                       const size_t index)
+{
+  TRACE("OMStorable::setContainingProperty");
+  PRECONDITION("Object not already attached", _containingProperty == 0);
+  PRECONDITION("Valid property", containingProperty != 0);
+
+  _containingProperty = const_cast<OMProperty*>(containingProperty);
+  _index = index;
+
+  POSTCONDITION("Object properly attached", _containingProperty != 0);
+}
+
+void OMStorable::clearContainingProperty(void)
+{
+  _containingProperty = 0;
 }
 
 const char* OMStorable::name(void) const
@@ -95,6 +132,7 @@ const char* OMStorable::name(void) const
 
 void OMStorable::setName(const char* name)
 {
+  TRACE("OMStorable::setName");
   PRECONDITION("Valid name", validString(name));
   delete [] _name;
   _name = 0; // for BoundsChecker
@@ -106,6 +144,7 @@ void OMStorable::setName(const char* name)
 
 OMFile* OMStorable::file(void) const
 {
+  TRACE("OMStorable::file");
   PRECONDITION("Valid containing object", _containingObject != 0);
   return _containingObject->file();
 }
