@@ -1330,12 +1330,14 @@ void OMStoredObject::restoreStream(OMPropertyId pid,
 {
   TRACE("OMStoredObject::restoreStream");
 
-  OMByte* buffer = new OMByte[size];
-  ASSERT("Valid heap pointer", buffer != 0);
-  read(pid, storedForm, buffer, size);
-  *byteOrder = buffer[0];
   size_t characterCount = (size - 1) / sizeof(OMCharacter);
-  OMCharacter* externalName = (OMCharacter*)(buffer + 1);
+  OMCharacter* buffer = new OMCharacter[characterCount + 1];
+  ASSERT("Valid heap pointer", buffer != 0);
+  OMByte* property = ((OMByte*)buffer + 1);
+  read(pid, storedForm, property, size);
+  *byteOrder = *property;
+  OMCharacter* externalName = buffer;
+  externalName = externalName + 1;
   if (_reorderBytes) {
     reorderString(externalName, characterCount);
   }
