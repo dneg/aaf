@@ -135,6 +135,11 @@ public:
   // in /test/ImplAAFFileDescriptorTest.cpp.
   static AAFRESULT test();
 
+public:
+	// Functions internal to the toolkit
+	virtual AAFRESULT STDMETHODCALLTYPE
+		GetOwningMobKind (aafMobKind_t *pMobKind);
+
 private:
 	OMFixedSizeProperty<aafRational_t>	_sampleRate;
 	OMFixedSizeProperty<aafLength_t>	_length;
