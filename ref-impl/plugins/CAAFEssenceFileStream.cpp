@@ -26,16 +26,17 @@
 // if fpos_t is defined to be a structure or aafInt64 is a 
 // structure.
 //
-inline bool AafPos2AnsiPos(fpos_t *ansiPos, const aafInt64 *aafPos)
+/*inline*/ bool AafPos2AnsiPos(fpos_t *ansiPos, const aafInt64 *aafPos)
 {
   // For first version just assume that platform an perform conversion.
   if (sizeof(fpos_t) < sizeof(aafInt64))
   {
-    *ansiPos = *aafPos;
-
     // The following test assumes 64 bit arithematic!
-    if (0x00000000FFFFFFFF >= *aafPos)
+    aafInt64 trunPos = (0x00000000FFFFFFFF & *aafPos);
+    if (trunPos != *aafPos && 0xFFFFFFFFFFFFFFFF != *aafPos)
       return false;
+
+    *ansiPos = *aafPos;
   }
   else
     *ansiPos = *aafPos;
@@ -44,7 +45,7 @@ inline bool AafPos2AnsiPos(fpos_t *ansiPos, const aafInt64 *aafPos)
 }
 
 
-inline bool AnsiPos2AafPos(aafInt64 *aafPos, const fpos_t *ansiPos)
+/*inline*/ bool AnsiPos2AafPos(aafInt64 *aafPos, const fpos_t *ansiPos)
 {
   // For first version just assume that platform an perform conversion.
   *aafPos = *ansiPos;
