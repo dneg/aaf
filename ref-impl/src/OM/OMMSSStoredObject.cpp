@@ -25,19 +25,6 @@
 // @doc OMEXTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMMSSStoredObject
 
-// Template instances are assigned to this compilation using on Irix
-// (MipsPro).  This is problem now that librefstg.a has been removed
-// for V1.0.2.  The assignment requires that all symbols in this file
-// be resolved. However, without librefstg.a they cannot be resolved.
-// MipsPro does have a "do_not_instantiate" pragma.  That was tested,
-// but eliminating one instance (e.g. OMRedBlackIterator<>) simple
-// moves the problem to another template instance that is assigned to
-// this compilatino unit.  The best solution is to simply not build
-// this file.  That cannot be done using he current build rules.  In
-// lieu of that, simply ifdef out all the code!
-#include "OMPortability.h"
-#if !defined( OM_COMPILER_SGICC_MIPS_SGI )
-
 // define OM_PERMIT_ZERO_LENGTH to eliminate debug check for zero-length properties on read
 
 #include "OMMSSStoredObject.h"
@@ -3483,8 +3470,4 @@ public:
 //
 static MSSInitializer _MSSInitializer;
 
-#endif
-
-
-//if defined( OM_COMPILER_SGICC_MIPS_SGI )
 #endif
