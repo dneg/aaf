@@ -148,11 +148,11 @@ void AxPropertyValue::Process( AxPropertyValuePrtcl& prtcl )
 			// distinquished from encrypted using only the process() argument type?
 			break;
 		case kAAFTypeCatEncrypted:
-			// FIXME - see kAAFTypeCatUnkown above.
+			// FIXME - see kAAFTypeCatUnknown above.
 			break;
 
 		default:
-			throw AxExBadImp( L"unkown type category" );
+			throw AxExBadImp( L"unknown type category" );
 	}
 }
 

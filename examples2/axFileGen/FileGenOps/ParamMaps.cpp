@@ -266,26 +266,26 @@ template class ParamMap< aafTapeFormatType_t, aafTapeFormatType_e >;
 template <>
 ParamMap< aafUID_t, _DDefTag >::ParamMap()
 {
-	_map[ L"DDEF_Picture" ]          = DDEF_Picture;
-	_map[ L"Picture" ]               = DDEF_Picture;
+	_map[ L"kAAFDataDef_Picture" ]          = kAAFDataDef_Picture;
+	_map[ L"Picture" ]               = kAAFDataDef_Picture;
 
-	_map[ L"DDEF_Matte" ]            = DDEF_Matte;
-	_map[ L"Matte" ]                 = DDEF_Matte;
+	_map[ L"kAAFDataDef_Matte" ]            = kAAFDataDef_Matte;
+	_map[ L"Matte" ]                 = kAAFDataDef_Matte;
 
-	_map[ L"DDEF_PictureWithMatte" ] = DDEF_PictureWithMatte;
-	_map[ L"PictureWithMatte" ]      = DDEF_PictureWithMatte;
+	_map[ L"kAAFDataDef_PictureWithMatte" ] = kAAFDataDef_PictureWithMatte;
+	_map[ L"PictureWithMatte" ]      = kAAFDataDef_PictureWithMatte;
 
-	_map[ L"DDEF_Sound" ]            = DDEF_Sound;
-	_map[ L"Sound" ]                 = DDEF_Sound;
+	_map[ L"kAAFDataDef_Sound" ]            = kAAFDataDef_Sound;
+	_map[ L"Sound" ]                 = kAAFDataDef_Sound;
 
-	_map[ L"DDEF_Timecode" ]         = DDEF_Timecode;
-	_map[ L"Timecode" ]              = DDEF_Timecode;
+	_map[ L"kAAFDataDef_Timecode" ]         = kAAFDataDef_Timecode;
+	_map[ L"Timecode" ]              = kAAFDataDef_Timecode;
 
-	_map[ L"DDEF_Edgecode" ]         = DDEF_Edgecode;
-	_map[ L"Edgecode" ]              = DDEF_Edgecode;
+	_map[ L"kAAFDataDef_Edgecode" ]         = kAAFDataDef_Edgecode;
+	_map[ L"Edgecode" ]              = kAAFDataDef_Edgecode;
 		
-	_map[ L"DDEF_Unknown" ]          = DDEF_Unknown;
-	_map[ L"Unknown" ]               = DDEF_Unknown;
+	_map[ L"kAAFDataDef_Unknown" ]          = kAAFDataDef_Unknown;
+	_map[ L"Unknown" ]               = kAAFDataDef_Unknown;
 }
 
 template class ParamMap< aafUID_t, _DDefTag >;

@@ -55,7 +55,7 @@ void AddImageEssence( AxMasterMob& masterMob,
 	AxContentStorage axContentStorage( axHeader.GetContentStorage() );
 	AxDictionary axDictionary( axHeader.GetDictionary() );
 
-	AxDataDef axPictureDef( axDictionary.LookupDataDef( DDEF_Picture ) );
+	AxDataDef axPictureDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
 	
 	// FIXME - This should be moved to a centralized location rather than having
 	// options strings tested all over the place.
@@ -243,7 +243,7 @@ void AddAudioEssence( AxMasterMob& masterMob, AxHeader& axHeader )
 	AxContentStorage axContentStorage( axHeader.GetContentStorage() );
 	AxDictionary axDictionary( axHeader.GetDictionary() );
 
-	AxDataDef axSoundDef( axDictionary.LookupDataDef( DDEF_Sound ) );
+	AxDataDef axSoundDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) );
 	
 	const int rateHz = 44100;
 	aafRational_t editRate = {rateHz, 1};

@@ -139,7 +139,7 @@ public:
 		aafCompressEnable_t	compEnable );	// optionally decompressing
 	
 	void AddMasterSlot(
-		IAAFDataDefSP		spDataDef,		// Data kind of new slot. (Probably DDEF_Picture or DDEF_Sound)
+		IAAFDataDefSP		spDataDef,		// Data kind of new slot. (Probably kAAFDataDef_Picture or kAAFDataDef_Sound)
 		aafSlotID_t			sourceSlotID,	// Slot ID of the Source Mob slot to be added to the Master Mob
 		IAAFSourceMobSP		spSourceMob,	// Source Mob containing the slot to be added to the Master Mob
 		aafSlotID_t			masterSlotID,	// SlotID assigned to the new Master Mob slot

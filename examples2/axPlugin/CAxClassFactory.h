@@ -65,7 +65,7 @@ private:
 
 
 // CAxClassFactory implements IClassFactory for the template class
-// ComObjectType.  ComObjectType should be derived from CAxUnkown.
+// ComObjectType.  ComObjectType should be derived from CAxUnknown.
 //
 // The CAxClassFactoryCounters is used to implement a CAxClassFactory<>
 // instance count, and to implement the LockServer() method.

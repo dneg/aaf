@@ -236,7 +236,7 @@ public:
 	VideoSampleSource(	int width, int height, int bytesPerPixel, aafRational_t rate,
 						int numFramesToWrite,
 					    aafCompressEnable_t compression )
-		: SampleSource( DDEF_Picture,
+		: SampleSource( kAAFDataDef_Picture,
 						rate,
 						compression,
 						bytesPerPixel * width * height,
@@ -313,7 +313,7 @@ public:
 	AudioSampleSource(	int bitsPerSample, int bytesPerSample, aafRational_t rate,
 						aafInt64 numSamplesToWrite,
 					    aafCompressEnable_t compression )
-		: SampleSource( DDEF_Sound,
+		: SampleSource( kAAFDataDef_Sound,
 						rate,
 						compression,
 						bytesPerSample,

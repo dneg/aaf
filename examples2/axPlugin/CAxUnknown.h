@@ -25,7 +25,7 @@
 
 #include "AxPluginUtil.h"
 
-// CAxUnkown is a standard implementation of IUnkown.
+// CAxUnknown is a standard implementation of IUnknown.
 //
 // Credits:
 //
@@ -42,31 +42,31 @@
 // thread safe to begin with, hence, this is a non-issue.
 //
 // "Inside COM" should be referenced for a full explanation of the
-// "INondelegatingUnkown" interface.  Suffice to say, the
+// "INondelegatingUnknown" interface.  Suffice to say, the
 //  INondelegatingUnknown interface exists to satisfy the requirements
-//  of COM object aggregation.  Classes that derive from CAxUnkown
+//  of COM object aggregation.  Classes that derive from CAxUnknown
 //  must provide an implementation of IUnknown that delagates calls
 //  to the aggregating (i.e. "outer") object if it exists.  At the
-//  same time, CAxUnkown must provide the outer object with an independent
+//  same time, CAxUnknown must provide the outer object with an independent
 //  implementation of IUnknown that does not delegate to the outer object.
 //  This is the purpose of INondelegatingUnknown.  Insofar as the vtable
 //  (and the COM binary interface specification) is concerned,
-//  INondelgatingUnkonw is identical to IUnkown.  Hence,
-//  a pointer to INondelegatingUnkown can be used in place of a pointer
-//  to IUnkown.  CAxUnknown::QueryInterface() uses this fact to provide
-//  its own independent implementation of IUnkown (the non delegating implementation).
-//  At the same time, classes that derive from CAxUnkown can implement IUnknown
+//  INondelgatingUnkonw is identical to IUnknown.  Hence,
+//  a pointer to INondelegatingUnknown can be used in place of a pointer
+//  to IUnknown.  CAxUnknown::QueryInterface() uses this fact to provide
+//  its own independent implementation of IUnknown (the non delegating implementation).
+//  At the same time, classes that derive from CAxUnknown can implement IUnknown
 //  by delegating the IUknown interface calls to the outer object.
 //
-//  HOW TO USE CAxUnkown:
+//  HOW TO USE CAxUnknown:
 // 
-//  Classes that derive from CAxUnkown *must* use the
+//  Classes that derive from CAxUnknown *must* use the
 //  CAXUNKNOWN_DECLARE_IUNKNOWN_METHODS to declare (and define)
-//  their IUnkown implementation.  For example:
+//  their IUnknown implementation.  For example:
 //
-//     class CMyComponent : public IAnInterface : CAxUnkown {
+//     class CMyComponent : public IAnInterface : CAxUnknown {
 //        public:
-//          // IUnkown methods provided by the following macro
+//          // IUnknown methods provided by the following macro
 //          CAXUNKNOWN_DECLARE_IUNKNOWN_METHODS
 //		
 //          // IAnInterface method declarations follow...

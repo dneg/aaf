@@ -147,7 +147,7 @@ specifiers as the CDCIDescriptor.
 	{
 		// CMyPlugin implements IID_IAAFPlugin...
 		if ( IID_IAAFPlugin == iid ) {
-			// FinishQI is part of CAxUnkown... there is nothing special there.
+			// FinishQI is part of CAxUnknown... there is nothing special there.
 			// It just takes care of incrementing the ref count.
 			return FinishQI( static_cast<IAAFPlugin*>(this), ppv );
 		}
@@ -159,7 +159,7 @@ specifiers as the CDCIDescriptor.
 
 		// Check for any additional interfaces this object implements
 
-		// Delegate unknown interface ids to CAxUnkown.
+		// Delegate unknown interface ids to CAxUnknown.
 
 		// IMPORTANT - Call NondelegateQueryInterface() NOT QueryInterface()!
 		// This is required because a call to QueryInterface is delegated

@@ -172,11 +172,11 @@ void AxCreateCompositionExample( AxFile& axFile,
 	// Create one sequence for each time line (i.e. track).
 	//
 
-	AxDataDef axAudioDataDef( axDictionary.LookupDataDef( DDEF_Sound ) );
+	AxDataDef axAudioDataDef( axDictionary.LookupDataDef( kAAFDataDef_Sound ) );
 	AxSequence axAudioSequence(	AxCreateInstance<IAAFSequence>( axDictionary ) );
 	axAudioSequence.Initialize( axAudioDataDef );
 
-	AxDataDef axVideoDataDef( axDictionary.LookupDataDef( DDEF_Picture ) );
+	AxDataDef axVideoDataDef( axDictionary.LookupDataDef( kAAFDataDef_Picture ) );
 	AxSequence axVideoSequence(	AxCreateInstance<IAAFSequence>( axDictionary ) );
 	axVideoSequence.Initialize( axVideoDataDef );
 

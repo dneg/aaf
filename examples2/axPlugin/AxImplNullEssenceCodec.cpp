@@ -49,11 +49,11 @@
 
 AxImplNullEssenceCodec::AxImplNullEssenceCodec()
 :	_descriptorAUID( AUID_AAFCDCIDescriptor ),
-	_dataDefID( DDEF_Picture ),
+	_dataDefID( kAAFDataDef_Picture ),
 	_codecName( L"AxNullEssenceCodec" ),
 	_codecDesc( L"AAF Example Codec" ),
 	_essenceDataAUID( AUID_AAFEssenceData ),
-	_essenceDataDefID( DDEF_Picture ),
+	_essenceDataDefID( kAAFDataDef_Picture ),
 	_categoryClassAUID( AUID_AAFCodecDef ),
 	_pAccess( 0 ),
 	_numSamples( 0 )

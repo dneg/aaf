@@ -33,7 +33,7 @@
 
 namespace {
 
-AxString catUnkownStr( L"unkown" );
+AxString catUnknownStr( L"unknown" );
 
 };
 
@@ -85,7 +85,7 @@ const AxString& AxTypeCatMap::getStr( eAAFTypeCategory_t cat ) const
 	std::map<eAAFTypeCategory_t,AxString>::const_iterator iter = _map.find( cat );
 	
 	if ( iter == _map.end() ) {
-		return catUnkownStr;
+		return catUnknownStr;
 	}
 
 	return iter->second;

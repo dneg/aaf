@@ -259,7 +259,7 @@ void CreateAAFFileOnRawStorage::Execute( const std::vector<AxString>& argv )
 	CHECK_HRESULT( AAFCreateAAFFileOnRawStorage( spRawStorage,
 												 kAAFFileExistence_new,
 												 kAAFFileAccess_write,
-												 &aafFileKindAaf4KBinary,
+												 &kAAFFileKind_Aaf4KBinary,
 												 0,
 												 ident.getProductId(),
 												 &spFile ) );

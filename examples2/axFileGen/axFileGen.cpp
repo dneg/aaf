@@ -388,7 +388,7 @@ void CheckCommand( AxString opName, int argC )
 		  AxFGOpFactoryRegistry::GetInstance();
 
       if ( !registry.IsKnown( opName ) ) {
-  	    AxString anError( L"Unkown operation: " + opName );
+  	    AxString anError( L"Unknown operation: " + opName );
 		throw anError;
       }
 
