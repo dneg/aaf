@@ -160,13 +160,11 @@ char		*aafGetExpandedErrorString(AAFFile * file,
 											aafInt16 buflen,
 											char *buffer);
 void     aafErrorInit(void);
-void     aafRegErr(AAFFile * file, aafErr_t msgcode);
-void     aafReregErrDebug(AAFFile * file, 
-								 aafErr_t ec, 
+void     aafRegErr(aafErr_t msgcode);
+void     aafReregErrDebug(aafErr_t ec, 
 								 char *filename, 
 								 aafInt16 line);
-void     aafRegErrDebug(AAFFile * file, 
-							   aafErr_t msgcode, 
+void     aafRegErrDebug(aafErr_t msgcode, 
 							   char *filename, 
 							   aafInt16 line);
 
@@ -180,25 +178,20 @@ void     aafRegErrDebug(AAFFile * file,
  *************************************************************/
 
 #ifdef AAF_NO_ASSERTS
-#define aafAssertValidFHdl(file)
-#define aafAssertValidFHdlBool(file, errparam, ret)
-#define aafAssert(b, file, msgcode)
-#define aafAssertBool(b, file, msgcode, msgparam, retval)
+#define aafAssertValidFHdl()
+#define aafAssertValidFHdlBool(errparam, ret)
+#define aafAssert(b, msgcode)
+#define aafAssertBool(b, msgcode, msgparam, retval)
 
 #define aafAssertIterMore(ihdl)
 #define aafAssertSTrackHdl(thdl)
 #define aafAssertIterHdl(ihdl)
 #define aafAssertMediaHdl(mhdl)
 
-#define aafAssertIsAAF(file)
-#define aafAssertMediaInitComplete(file)
+#define aafAssertIsAAF()
+#define aafAssertMediaInitComplete()
 
-#else /* AAF_NO_ASSERTS */
-#define aafAssertValidFHdlBool(file, errparam, ret) \
-	if (!file->isValid()) \
-           {aafRegErrReturnBool(file, OM_ERR_BAD_FHDL, errparam, ret);}
-           
-    				
+#else /* AAF_NO_ASSERTS */    				
 #define aafAssertIterMore(ihdl) \
 	if((ihdl == NULL) || (ihdl->_iterType == kIterDone)) \
           return(OM_ERR_NO_MORE_OBJECTS)
@@ -213,16 +206,14 @@ void     aafRegErrDebug(AAFFile * file,
            return(OM_ERR_BAD_ITHDL)
           
 #define aafAssert(b, file, msgcode) \
-	if (!(b)) { aafRegErrorReturn(file, msgcode); }
+	if (!(b)) { aafRegErrorReturn(msgcode); }
 
 #define aafAssertBool(b, file, msgcode, msgparam, retval) \
-    if (!(b)) { aafRegErrReturnBool(file, msgcode, msgparam, retval); }
+    if (!(b)) { aafRegErrReturnBool(msgcode, msgparam, retval); }
 
 #define aafAssertMediaHdl(mhdl) \
 	aafAssert((mhdl != NULL) && (mhdl->_cookie == MEDIA_COOKIE), \
-			  mhdl->itsMainFile(), OM_ERR_BAD_MDHDL)
-#define aafAssertValidFHdl(file) \
-	aafAssert((file != NULL) && file->isValid(), file, OM_ERR_BAD_FHDL);
+			  OM_ERR_BAD_MDHDL)
 #define aafAssertIsAAF(file) \
 	aafAssert((file->_fmt == kAAFMedia), file, OM_ERR_WRONG_FILETYPE)
 #define aafAssertMediaInitComplete(file) \
@@ -249,14 +240,14 @@ AAF_EXPORT void aafPrintStackTrace(AAFFile * file);
 		   file->GetContainerErrString(), __LINE__, __FILE__);  \
 			RAISE(ec); \
     } }
-#define aafRegErrReturnBool(file, ec, errparam, retval) { \
-        aafRegErr(file, ec); *errparam = ec; return(retval); }
+#define aafRegErrReturnBool(ec, errparam, retval) { \
+        aafRegErr(ec); *errparam = ec; return(retval); }
 
 #else /* AAF_ERROR_TRACE */
 
-#define aafRegErrorReturn(file, ec) { aafRegErr(file, ec); return(ec); }
-#define aafRegErrReturnBool(file, ec, errparam, retval) { \
-        aafRegErr(file, ec); *errparam = ec; return(retval); }
+#define aafRegErrorReturn(ec) { aafRegErr(ec); return(ec); }
+#define aafRegErrReturnBool(ec, errparam, retval) { \
+        aafRegErr(ec); *errparam = ec; return(retval); }
 #define aafCheckBentoRaiseError(file, ec) { if(file->ContainerErrorRaised()) \
 											  RAISE(ec); }
 
@@ -267,18 +258,17 @@ AAF_EXPORT void aafPrintStackTrace(AAFFile * file);
 	 * New exception-style error handling
 	 *
 	 *************************************************************/
-#define XPROTECT(a)	{ aafErr_t zzOmfEcode = OM_ERR_NONE; \
-						ImplAAFFile * zzOmfFile = a; \
+#define XPROTECT()	{ aafErr_t zzOmfEcode = OM_ERR_NONE; \
 						aafBool zzOmfPropagate = AAFTrue;
 
 #define CHECK(a) { if((zzOmfEcode = (a)) != OM_ERR_NONE) goto zzOmfCleanup; }
 
 #if defined(AAF_ERROR_TRACE)
-#define REG_ERR(file,ecode)	   aafRegErrDebug(file,ecode, __FILE__, __LINE__)
-#define REREG_ERR(file,ecode)  aafReregErrDebug(file,ecode, __FILE__, __LINE__)
+#define REG_ERR(ecode)	   aafRegErrDebug(ecode, __FILE__, __LINE__)
+#define REREG_ERR(ecode)  aafReregErrDebug(ecode, __FILE__, __LINE__)
 #else 
-#define REG_ERR(file,ecode)
-#define REREG_ERR(file,ecode)
+#define REG_ERR(ecode)
+#define REREG_ERR(ecode)
 #endif
 
 #ifdef AAF_NO_ASSERTS
@@ -289,7 +279,7 @@ AAF_EXPORT void aafPrintStackTrace(AAFFile * file);
 #endif
 
 #define RAISE(a)		{ zzOmfEcode = (a); \
-							REG_ERR(zzOmfFile, zzOmfEcode); goto zzOmfCleanup;\
+							REG_ERR(zzOmfEcode); goto zzOmfCleanup;\
 						}
 						
 #define RERAISE(a)		zzOmfEcode = (a)
@@ -297,11 +287,11 @@ AAF_EXPORT void aafPrintStackTrace(AAFFile * file);
 #define XCODE()			zzOmfEcode
 #define XEXCEPT			goto zzOmfExit; \
 						zzOmfCleanup:
-#define XEND			if(zzOmfPropagate) { REREG_ERR(zzOmfFile, zzOmfEcode);\
+#define XEND			if(zzOmfPropagate) { REREG_ERR(zzOmfEcode);\
 										   return(zzOmfEcode); } } zzOmfExit:
-#define XEND_VOID		if(zzOmfPropagate) { REREG_ERR(zzOmfFile, zzOmfEcode);\
+#define XEND_VOID		if(zzOmfPropagate) { REREG_ERR(zzOmfEcode);\
 											   return; } } zzOmfExit:
-#define XEND_SPECIAL(a)	if(zzOmfPropagate) { REREG_ERR(zzOmfFile, zzOmfEcode);\
+#define XEND_SPECIAL(a)	if(zzOmfPropagate) { REREG_ERR(zzOmfEcode);\
 											   return(a); } } zzOmfExit:
 // Prevent warnings of the form ...
 //
