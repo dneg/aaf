@@ -305,6 +305,69 @@ void OMStoredObject::save(const OMPropertySet& properties)
   POSTCONDITION("At start of value stream", _offset == 0);
 }
 
+  // @mfunc Save the <c OMSimpleProperty> <p property> in this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+void OMStoredObject::save(const OMSimpleProperty& property)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Save the <c OMStrongReference> <p singleton> in this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+void OMStoredObject::save(const OMStrongReference& singleton)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Save the <c OMStrongReferenceVector> <p vector> in this
+  //        <c OMStoredObject>.
+  //   @parm The vector of strong references to save.
+void OMStoredObject::save(const OMStrongReferenceVector& vector)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Save the <c OMStrongReferenceSet> <p set> in this
+  //        <c OMStoredObject>.
+  //   @parm The set of strong references to save.
+void OMStoredObject::save(const OMStrongReferenceSet& set)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Save the <c OMWeakReference> <p singleton> in this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+void OMStoredObject::save(const OMWeakReference& singleton)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Save the <c OMWeakReferenceVector> <p vector> in this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+void OMStoredObject::save(const OMWeakReferenceVector& vector)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Save the <c OMWeakReferenceSet> <p set> in this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+void OMStoredObject::save(const OMWeakReferenceSet& set)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
+}
+
   // @mfunc  Save the <c OMStoredVectorIndex> <p vector> in this
   //         <c OMStoredObject>, the vector is named <p vectorName>.
   //   @parm The <c OMStoredVectorIndex> to save.
@@ -463,6 +526,15 @@ void OMStoredObject::save(const OMPropertyTable* table)
   }
 
   closeStream(stream);
+}
+
+  // @mfunc Save the <c OMDataStream> <p stream> in this
+  //        <c OMStoredObject>.
+  //   @parm The <c OMDataStream> to save.
+void OMStoredObject::save(const OMDataStream& stream)
+{
+  TRACE("OMStoredObject::save");
+  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Save a single weak reference.
@@ -625,6 +697,78 @@ void OMStoredObject::restore(OMPropertySet& properties)
   streamSetPosition(_properties, 0);
   POSTCONDITION("At start of properties stream",
                                        streamPosition(_properties) == 0);
+}
+
+  // @mfunc Restore the <c OMSimpleProperty> <p property> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMSimpleProperty& property, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMStrongReference> <p singleton> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMStrongReference& singleton, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMStrongReferenceVector> <p vector> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMStrongReferenceVector& vector,
+                             size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMStrongReferenceSet> <p set> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMStrongReferenceSet& set, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMWeakReference> <p singleton> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMWeakReference& singleton, size_t externalSize)
+{
+  TRACE("OMPropertyTable::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMWeakReferenceVector> <p vector> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMWeakReferenceVector& vector,
+                             size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Restore the <c OMWeakReferenceSet> <p set> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMWeakReferenceSet& set, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Restore the vector named <p vectorName> into this
@@ -829,6 +973,16 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   }
 
   closeStream(stream);
+}
+
+  // @mfunc Restore the <c OMDataStream> <p stream> into this
+  //        <c OMStoredObject>.
+  //   @parm TBS
+  //   @parm TBS
+void OMStoredObject::restore(OMDataStream& stream, size_t externalSize)
+{
+  TRACE("OMStoredObject::restore");
+  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Restore a single weak reference.
