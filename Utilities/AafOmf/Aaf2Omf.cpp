@@ -1718,13 +1718,17 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	OMF2::omfDDefObj_t		datakind;
 	char					id[5];
 
-	IAAFTIFFData*			pTIFFData = NULL;
-	IAAFAIFCData*			pAIFCData = NULL;
-	IAAFWAVEData*			pWAVEData = NULL;
-	IAAFJPEGData*			pJPEGData = NULL;
+	IAAFEssenceData*			pTIFFData = NULL;
+	IAAFEssenceData*			pAIFCData = NULL;
+	IAAFEssenceData*			pWAVEData = NULL;
+	IAAFEssenceData*			pJPEGData = NULL;
+	IAAFTIFFDescriptor*			pTIFFDesc = NULL;
+	IAAFAIFCDescriptor*			pAIFCDesc = NULL;
+	IAAFWAVEDescriptor*			pWAVEDesc = NULL;
+	IAAFCDCIDescriptor*			pJPEGDesc = NULL;
+	IAAFEssenceDescriptor		*pEssenceDesc = NULL;
 	IAAFMob*				pMob = NULL;
 	IAAFSourceMob*			pSourceMob = NULL;
-	IAAFEssenceDescriptor*	pEssenceDesc = NULL;
 	IAAFObject*				pAAFObject = NULL;
 	aafUID_t				mobID;
 	aafBool					bConvertMedia = AAFFalse;
@@ -1755,7 +1759,12 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	}
 	OMFError = OMF2::omfsGetHeadObject( OMFFileHdl, &OMFHeader );
 
-	rc = pEssenceData->QueryInterface(IID_IAAFTIFFData, (void **)&pTIFFData);
+	// !!! Tomas, there is only one kind of essence data now, so this code will
+	// need to find the EssenceDescriptor of the associated file mob (lookup he
+	// dataID in the MOB index on the dictionary) and do a QI on the result
+	// The code is something like:
+	//
+	rc = pEssenceDesc->QueryInterface(IID_IAAFTIFFDescriptor, (void **)&pTIFFDesc);
 	if (SUCCEEDED(rc))
 	{
 		//Convert TIFF Essence data
@@ -1781,7 +1790,7 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 			goto CopyMedia;
 	}
 
-	rc = pEssenceData->QueryInterface(IID_IAAFAIFCData, (void **)&pAIFCData);
+	rc = pEssenceDesc->QueryInterface(IID_IAAFAIFCDescriptor, (void **)&pAIFCDesc);
 	if (SUCCEEDED(rc))
 	{
 		//Convert AIFC Essence data
@@ -1804,7 +1813,7 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 			goto CopyMedia;
 	}
 
-	rc = pEssenceData->QueryInterface(IID_IAAFWAVEData, (void **)&pWAVEData);
+	rc = pEssenceData->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&pWAVEDesc);
 	if (SUCCEEDED(rc))
 	{
 		//Convert WAVE Essence data
@@ -1827,7 +1836,8 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 			goto CopyMedia;
 	}
 
-	rc = pEssenceData->QueryInterface(IID_IAAFJPEGData, (void **)&pJPEGData);
+	//!!!Need to check "compression" flag to determine if really JPEG
+	rc = pEssenceData->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pJPEGDesc);
 	if (SUCCEEDED(rc))
 	{
 		//Convert JPEG Essence data
@@ -1849,6 +1859,7 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 		else
 			goto CopyMedia;
 	}
+	
 	// Media type not supported or invalid
 	rc = pEssenceData->QueryInterface(IID_IAAFObject, (void **)&pAAFObject);
 	if (SUCCEEDED(rc))
@@ -1912,6 +1923,8 @@ CopyMedia:
 Cleanup:
 	if (pSourceMob)
 		pSourceMob->Release();
+	if (pEssenceDesc)
+		pEssenceDesc->Release();
 
 	if (pTIFFData)
 		pTIFFData->Release();
