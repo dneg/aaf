@@ -36,6 +36,8 @@
 #include "ImplAAFFindSourceInfo.h"
 #include "ImplEnumAAFEssenceData.h"
 #include "ImplAAFContainerDef.h"
+#include "ImplEnumAAFPluginDescriptors.h"
+#include "ImplAAFDictionary.h"
 
 #include <assert.h>
 #include <string.h>
@@ -100,37 +102,41 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 							  aafRational_t	sampleRate,
 							  aafCompressEnable_t  enable)
 {
+	IUnknown				*dataObj = NULL;
+	IUnknown				*iFileMob = NULL;
+	IUnknown				*iAccess = NULL;
+	IAAFEssenceDataStream	*edStream = NULL;
+	IAAFPlugin				*plugin = NULL;
+	IAAFEssenceContainer	*container = NULL;
+	IAAFPlugin				*plug;
 	aafUID_t			fileMobUID, audioDDEF = DDEF_Audio;
 	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
 	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	ImplAAFSourceMob	*fileMob;
 	ImplAAFMobSlot		*tmpSlot;
-	ImplAAFHeader		*head;
+	ImplAAFHeader		*compHead;
+	ImplAAFHeader		*dataHead;
 	ImplAAFPluginManager *plugins;
-	aafCodecMetaInfo_t	metaInfo;
 	ImplAAFFileDescriptor *mdes;
-	ImplAAFDictionary	*dict;
-	IUnknown			*dataObj;
-	ImplAAFEssenceData	*implData;				
-	CLSID				dataClass;
+	ImplAAFEssenceData	*implData;
+	ImplAAFDictionary	*dict;			
 	aafmMultiCreate_t	createBlock;
 	wchar_t				*nameBuf = NULL;
 	aafInt32			buflen;
-	aafUID_t			aafFormat = ContainerAAF;
-
+	aafUID_t			aafFormat = ContainerAAF, essenceDescriptorID;
+	
 	XPROTECT()
 	{
-
 		_openType = kAAFCreated;
-
-
-		CHECK(masterMob->MyHeadObject(&head));	//!!!Only makes essence in the current file?
-
+		
+		CHECK(masterMob->MyHeadObject(&compHead));
+		CHECK(masterMob->MyHeadObject(&dataHead));	//!!!Only makes essence in the current file?
+		
 		// Can't put raw media inside of an AAF File
 		if(_destination == NULL && !EqualAUID(&_fileFormat, &aafFormat))
 			RAISE(AAFRESULT_WRONG_MEDIATYPE);
 		
-		/* Initialize the basic fields of the media handle
+			/* Initialize the basic fields of the media handle
 		*/
 		fileMob = (ImplAAFSourceMob *)CreateImpl(CLSID_AAFSourceMob);
 		CHECK(fileMob->GetMobID(&fileMobUID));
@@ -145,189 +151,149 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		_channels[0].physicalOutChan = 1;
 		
 		_codecID = codecID;
-		if(!EqualAUID(&codecID, &NoCodec))
-		{
-			IUnknown	*iAccess;
-			IAAFPlugin	*plugin;
-
-			plugins = ImplAAFSession::GetInstance()->GetPluginManager();
-			CHECK(plugins->GetPluginInstance(_codecID, /*_variety*/ &plugin));
-			CHECK(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&_codec));
-
-			createBlock.mediaKind = &mediaKind;
-			createBlock.subTrackNum = 0;		//!!!
-			createBlock.slotID = DEFAULT_FILE_SLOT;
-			createBlock.sampleRate = sampleRate;
-
-			iAccess = static_cast<IUnknown *> (this->GetContainer());
-			CHECK(_codec->SetEssenceAccess(iAccess));
-			
-			/* JEFF!! Changed masterSlotID to be 1 when creating mono 
-			* audio media, so file mob track will be labeled correctly */
-			if (EqualAUID(&mediaKind, &audioDDEF))
-				masterSlotID = 1;
-			
+		
+		
+		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		//!!!Handle case where multiple codecs exist for a codecID
+		CHECK(plugins->GetPluginInstance(_codecID, &plugin));
+		CHECK(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&_codec));
+		plugin->Release();
+		plugin = NULL;
+		
+		createBlock.mediaKind = &mediaKind;
+		createBlock.subTrackNum = 0;		//!!!
+		createBlock.slotID = DEFAULT_FILE_SLOT;
+		createBlock.sampleRate = sampleRate;
+		
+		iAccess = static_cast<IUnknown *> (this->GetContainer());
+		CHECK(_codec->SetEssenceAccess(iAccess));
+		iAccess->Release();
+		iAccess = NULL;
+		
+		/* JEFF!! Changed masterSlotID to be 1 when creating mono 
+		* audio media, so file mob track will be labeled correctly */
+		if (EqualAUID(&mediaKind, &audioDDEF))
+			masterSlotID = 1;
+		
 			/* JeffB: Handle the case where an existing file=>tape mob connection exists
-			*/
-			if(fileMob->FindSlotBySlotID(DEFAULT_FILE_SLOT, &tmpSlot) == AAFRESULT_SLOT_NOT_FOUND)
-			{
-				CHECK(fileMob->AddNilReference(DEFAULT_FILE_SLOT, 
-						0, &mediaKind, editRate));
-			}
-			CHECK(masterMob->AddMasterSlot (&mediaKind, DEFAULT_FILE_SLOT, fileMob, masterSlotID, L"A Slot"));	// Should be NULL or something useful!!!
-			CHECK(fileMob->FindSlotBySlotID(masterSlotID, &tmpSlot));
-			CHECK(tmpSlot->SetPhysicalNum(masterSlotID));
-			
-			CHECK(_codec->GetMetaInfo(&metaInfo));
-			mdes = (ImplAAFFileDescriptor *)CreateImpl(metaInfo.mdesClassID);
-			CHECK(mdes->SetIsInContainer (_destination == NULL ? AAFTrue : AAFFalse));
-			
-			ImplAAFPluggableDef	*pluggable;
-			ImplAAFContainerDef	*containerDef;
-			IAAFPlugin			*plug;
-			IAAFPluggableDef	*pluggableDef;
-			IAAFDictionary		*dictInterface;
-			IUnknown			*pUnknown;
-
-			CHECK(head->GetDictionary (&dict));	//!!!Only makes essence in the current file?
-			if(dict->LookupPluggableDef (&_fileFormat, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
-			{
-				
-				//!!!This should call into the pluginmanager instead of using if?
-				if(EqualAUID(&_fileFormat, &ContainerAAF))
-				{
-					CHECK(MakeAAFContainerDef(&containerDef));
-					CHECK(dict->RegisterPluggableDefinition (containerDef));
-				}
-				else
-				{
-					
-					pUnknown = static_cast<IUnknown *> (dict->GetContainer());
-					CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
-					CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
-					CHECK(plug->GetPluggableDefinition (dictInterface, &pluggableDef));
-					//					CHECK(pluggableDef->QueryInterface(IID_IAAFContainerDef, (void **)&containerInterface));
-					//					containerDef = static_cast<ImplAAFContainerDef*> (rootInterface->GetRepObject ());
-					CHECK(dictInterface->RegisterPluggableDefinition (pluggableDef));
-					//!!!Remember to do all releases here!
-				}
-			}
-
-			if(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
-			{
-				
-				
-				pUnknown = static_cast<IUnknown *> (dict->GetContainer());
-				CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
-				CHECK(plugins->GetPluginInstance(codecID, &plug));
-				CHECK(plug->GetPluggableDefinition (dictInterface, &pluggableDef));
-				//					CHECK(pluggableDef->QueryInterface(IID_IAAFContainerDef, (void **)&containerInterface));
-				//					containerDef = static_cast<ImplAAFContainerDef*> (rootInterface->GetRepObject ());
-				CHECK(dictInterface->RegisterPluggableDefinition (pluggableDef));
-				//!!!Remember to do all releases here!
-				CHECK(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable));
-			}
-
-			aafInt32	numExisting;
-			CHECK(pluggable->GetNumDescriptors(&numExisting));
-			if(numExisting == 0)	// If pluginDescriptor is not in place
-			{
-				IAAFPluginDescriptor	*pluginDesc;
-				IAAFPluggableDef		*pluggableInterface;
-
-				pUnknown = static_cast<IUnknown *> (dict->GetContainer());
-				CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
-				CHECK(plugins->GetPluginInstance(codecID, &plug));
-				CHECK(plug->GetDescriptor (dictInterface, &pluginDesc));
-				pUnknown = static_cast<IUnknown *> (pluggable->GetContainer());
-				CHECK(pUnknown->QueryInterface(IID_IAAFPluggableDef, (void **)&pluggableInterface));
-				CHECK(pluggableInterface->AppendPluginDescriptor (pluginDesc));
-				//!!!Remember to do all releases here!
-			}
-
+		*/
+		if(fileMob->FindSlotBySlotID(DEFAULT_FILE_SLOT, &tmpSlot) == AAFRESULT_SLOT_NOT_FOUND)
+		{
+			CHECK(fileMob->AddNilReference(DEFAULT_FILE_SLOT, 
+				0, &mediaKind, editRate));
+		}
+		CHECK(masterMob->AddMasterSlot (&mediaKind, DEFAULT_FILE_SLOT, fileMob, masterSlotID, L"A Slot"));	// Should be NULL or something useful!!!
+		CHECK(fileMob->FindSlotBySlotID(masterSlotID, &tmpSlot));
+		CHECK(tmpSlot->SetPhysicalNum(masterSlotID));
+		
+		CHECK(CreateContainerDef(compHead))
+		CHECK(CreateCodecDef(compHead, codecID));
+		//!!! Use clone to move a copy of the mobs into the media file.  This can be just a copy
+		// because there shouldn't be any definitions there yet...
+		
+		CHECK(compHead->GetDictionary (&dict));
+		CHECK(_codec->GetEssenceDescriptorID(&essenceDescriptorID));
+		CHECK(dict->CreateInstance(&essenceDescriptorID, (ImplAAFObject **)&mdes));
+		CHECK(mdes->SetIsInContainer (_destination == NULL ? AAFTrue : AAFFalse));
+		CHECK(mdes->SetContainerFormat (&_fileFormat));
+		CHECK(mdes->SetSampleRate(&sampleRate));
+		CHECK(fileMob->SetEssenceDescriptor(mdes));
+		CHECK(compHead->AppendMob(fileMob));
+		if(_destination != NULL)
+		{
+			CHECK(mdes->AppendLocator(_destination));
+			CHECK(mdes->SetIsInContainer(AAFFalse));
 			CHECK(mdes->SetContainerFormat (&_fileFormat));
-			CHECK(mdes->SetSampleRate(&sampleRate));
-			CHECK(fileMob->SetEssenceDescriptor(mdes));
-			CHECK(head->AppendMob(fileMob));
-			if(_destination != NULL)
+			if(EqualAUID(&_fileFormat, &aafFormat))
 			{
-				CHECK(mdes->AppendLocator(_destination));
-				CHECK(mdes->SetIsInContainer(AAFFalse));
-				CHECK(mdes->SetContainerFormat (&_fileFormat));
+				//!!! Use cloneExternal to move a copy of the mobs into the media file
 			}
-			else
-			{
-				memcpy(&dataClass, &metaInfo.dataClassID, sizeof(dataClass));
-				implData = (ImplAAFEssenceData *)CreateImpl (metaInfo.dataClassID);
-				dataObj = static_cast<IUnknown *> (implData->GetContainer());
+		}
 
-				CHECK(implData->SetFileMob(fileMob));
-				CHECK(head->AppendEssenceData (implData));
-			}
-		}
-		else
+		// There isn't yet a container for AAF data, so this must be special-cased
+		if(EqualAUID(&_fileFormat, &aafFormat))
 		{
-			_codec = NULL;
-		}
-		
-		
-		if(_destination == NULL)
-		{
-			IAAFEssenceDataStream	*edStream;
+			aafUID_t	essenceDataID;
+			
+			CHECK(_codec->GetEssenceDataID(&essenceDataID));
+			CHECK(dict->CreateInstance(&essenceDataID, (ImplAAFObject **)&implData));
+			dataObj = static_cast<IUnknown *> (implData->GetContainer());
+			
+			CHECK(implData->SetFileMob(fileMob));
+			CHECK(dataHead->AppendEssenceData (implData));
+
 			CHECK(CoCreateInstance(CLSID_AAFEssenceDataStream,
 				NULL, 
 				CLSCTX_INPROC_SERVER, 
 				IID_IAAFEssenceStream, 
 				(void **)&_stream));
-		
+			
 			CHECK(_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
 			edStream->Init(dataObj);
+			edStream->Release();
+			edStream = NULL;
 		}
 		else
 		{
-			IAAFEssenceContainer	*container;
-			IAAFPlugin				*plug;
-
 			_destination->GetPathBufLen(&buflen);
 			nameBuf = new wchar_t[buflen];
 			if(nameBuf == NULL)
 				RAISE(AAFRESULT_NOMEMORY);
 			CHECK(_destination->GetPath(nameBuf, buflen));
+
 			CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
 			CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
+			plug->Release();
+			plug = NULL;
+
 			CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
 			delete nameBuf;
-			nameBuf = NULL;
+			nameBuf = NULL;			
+			container->Release();
+			container = NULL;
 		}
-
-		fileMob->MyHeadObject(&head);
-		CHECK(head->SetModified());		// To NOW
 		
+		CHECK(compHead->SetModified());		// To NOW
+		if(dataHead != compHead)
+		{
+			CHECK(dataHead->SetModified());	// To NOW
+		}
 		
 		// Call the codec to create the actual media.
 		//
-		if(_codec != NULL)
-		{
-			IUnknown	*iFileMob;
-
-			createBlock.mediaKind = &mediaKind;
-			createBlock.subTrackNum = 0;		//!!!
-			createBlock.slotID = DEFAULT_FILE_SLOT;
-			createBlock.sampleRate = sampleRate;
-
-			iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
-			CHECK(_codec->Create(iFileMob, _variety, _stream, 1, &createBlock));
-			(void)(_codec->SetCompression(enable));
-		}
+		//!!!Assert this		if(_codec != NULL)
+		
+		createBlock.mediaKind = &mediaKind;
+		createBlock.subTrackNum = 0;		//!!!
+		createBlock.slotID = DEFAULT_FILE_SLOT;
+		createBlock.sampleRate = sampleRate;
+		
+		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		CHECK(_codec->Create(iFileMob, _variety, _stream, 1, &createBlock));
+		(void)(_codec->SetCompression(enable));
+		if(dataObj != NULL)
+			dataObj->Release();
 	}
 	XEXCEPT
 	{
 		if(nameBuf != NULL)
 			delete nameBuf;
+		if(edStream != NULL)
+			edStream->Release();
+		if(iAccess != NULL)
+			iAccess->Release();
+		if(dataObj != NULL)
+			dataObj->Release();
+		if(plugin != NULL)
+			plugin->Release();
+		if(container != NULL)
+			container->Release();
+		if(plug != NULL)
+			plug->Release();
 	}
 	XEND
 		
-	return (AAFRESULT_SUCCESS);
+		return (AAFRESULT_SUCCESS);
 }
 
 	//@comm Creates a single channel stream of essence.  Convenience functions
@@ -1570,43 +1536,27 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetCodecName (aafUInt32  /*namelen*/,
-                           wchar_t *  /*name*/)
+    ImplAAFEssenceAccess::GetCodecName (aafUInt32 namelen,
+                           wchar_t *  name)
 {
-#if FULL_TOOLKIT
-	aafCodecMetaInfo_t	meta;
-	codecTable_t		codec_data;
-	aafBool				found;
-	AAFSession *	session;
+	IAAFDefObject	*def = NULL;
 	
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	aafAssert(name != NULL, _mainFile, AAFRESULT_NULL_PARAM);
-	session = _mainFile->_session;
-	
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
-		TableLookupBlock(session->_codecID, codecID, sizeof(codec_data),
-									&codec_data, &found);
-		if(!found)
-			RAISE(AAFRESULT_CODEC_INVALID);
-		
-		CHECK(_codec->codecGetMetaInfo(session, &codec_data, NULL, name, namelen, &meta));
+		//!!!Assert that _pluginDescriptor is NON-NULL
+		CHECK(_codecDescriptor->QueryInterface(IID_IAAFDefObject, (void **)&def));
+		CHECK(def->GetName (name, namelen));
+		def->Release();
+		def = NULL;
 	}
 	XEXCEPT
 	{
-		if(XCODE() == AAFRESULT_INVALID_OP_CODEC)
-		{
-			strncpy(name, "<none supplied>", namelen);
-			NO_PROPAGATE();
-		}
+		if(def != NULL)
+			def->Release();
 	}
 	XEND
 	
 	return (AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 	//@comm No other call uses this name, so it may be fully descriptive, esp. of limitations.
@@ -1620,29 +1570,25 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetCodecID (aafCodecID_t*  /*codecID*/)
+    ImplAAFEssenceAccess::GetCodecID (aafCodecID_t *codecID)
 {
-#if FULL_TOOLKIT
-	aafCodecMetaInfo_t	meta;
-	AAFSession *	session;
-	
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-	session = _mainFile->_session;
-	
-	XPROTECT(_mainFile)
+	IAAFPlugin	*plug = NULL;
+
+	XPROTECT()
 	{
-		CHECK(_codec->codecGetMetaInfo(session, &_pvt->codecInfo, NULL, NULL, 0, &meta));
-		*codecID = meta.codecID;
+		CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
+		CHECK(plug->GetPluggableID(codecID));
+		plug->Release();
+		plug = NULL;
 	}
 	XEXCEPT
+	{
+		if(plug != NULL)
+			plug->Release();
+	}
 	XEND
 	
 	return (AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 	//@comm This will be required in order to send private data to the codec.
@@ -1727,34 +1673,172 @@ AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFContainerDef **result
 	return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT
+ImplAAFEssenceAccess::CreateContainerDef (ImplAAFHeader *head)
+{
+	IAAFPlugin					*plug = NULL;
+	IAAFPluggableDef			*pluggableDef = NULL;
+	IAAFDictionary				*dictInterface = NULL;
+	IUnknown					*pUnknown = NULL;
+	ImplAAFPluggableDef			*pluggable;
+	ImplAAFContainerDef			*containerDef;
+	ImplAAFDictionary			*dict;
+	ImplAAFPluginManager		*plugins;
 
-//AAFRESULT ImplAAFEssenceAccess::MakeFileContainerDef(ImplAAFContainerDef **result)
-//{	//!!! Get rid of this function
-//	ImplAAFContainerDef	*obj;
-//	aafUID_t			uid;
-//	
-//	if(result == NULL)
-//		return(AAFRESULT_NULL_PARAM);
-//	XPROTECT()
-//	{
-//		obj = (ImplAAFContainerDef *)CreateImpl (CLSID_AAFContainerDef);
-//		if(obj == NULL)
-//			RAISE(AAFRESULT_NOMEMORY);
-//		uid = ContainerFile;
-//		CHECK(obj->SetAUID(&uid));
-//		CHECK(obj->SetName(L"Raw file Container"));
-//		CHECK(obj->SetDescription(L"Essence is in a non-container file."));
-//		CHECK(obj->SetEssenceIsIdentified(AAFFalse));
-//		*result = obj;
-//	}
-//	XEXCEPT
-//	XEND
-//	
-//	return AAFRESULT_SUCCESS;
-//}
+	XPROTECT()
+	{
+		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		CHECK(head->GetDictionary (&dict));
+		if(dict->LookupPluggableDef (&_fileFormat, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
+		{
+			
+			//!!!This should call into the pluginmanager instead of using if?
+			if(EqualAUID(&_fileFormat, &ContainerAAF))
+			{
+				CHECK(MakeAAFContainerDef(&containerDef));
+				CHECK(dict->RegisterPluggableDefinition (containerDef));
+			}
+			else
+			{
+				
+				pUnknown = static_cast<IUnknown *> (dict->GetContainer());
+				CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+				pUnknown->Release();
+				pUnknown = NULL;
 
+				CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
+				CHECK(plug->GetPluggableDefinition (dictInterface, &pluggableDef));
+				plug->Release();
+				plug = NULL;
+				CHECK(dictInterface->RegisterPluggableDefinition (pluggableDef));
+				pluggableDef->Release();
+				pluggableDef = NULL;
+				dictInterface->Release();
+				dictInterface = NULL;
+			}
+		}
+	}
+	XEXCEPT
+	{
+		if(plug != NULL)
+			plug->Release();
+		if(pluggableDef != NULL)
+			pluggableDef->Release();
+		if(dictInterface != NULL)
+			dictInterface->Release();
+		if(pUnknown != NULL)
+			pUnknown->Release();
+	}
+	XEND
+		
+	return(AAFRESULT_SUCCESS);
+}
 
+AAFRESULT
+ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, aafUID_t codecID)
+{
+	IAAFPlugin					*plug = NULL;
+	IAAFPluggableDef			*pluggableDef = NULL;
+	IAAFDictionary				*dictInterface = NULL;
+	IUnknown					*pUnknown = NULL;
+	IAAFPluginDescriptor		*pluginDesc = NULL;
+	IEnumAAFPluginDescriptors	*descEnum = NULL;
+	IAAFPluggableDef			*pluggableInterface = NULL;
+	IAAFDefObject				*defInterface = NULL;
+	ImplAAFPluggableDef			*pluggable;
+	ImplAAFDictionary			*dict;
+	ImplAAFPluginManager		*plugins;
+	aafBool						found = AAFFalse;
+	aafUID_t					currentPlugDesc, testAUID;
 
+	XPROTECT()
+	{
+		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		CHECK(head->GetDictionary (&dict));	//!!!Only makes essence in the current file?
+		if(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
+		{
+			pUnknown = static_cast<IUnknown *> (dict->GetContainer());
+			CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+			CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
+			CHECK(plug->GetPluggableDefinition (dictInterface, &pluggableDef));
+			CHECK(dictInterface->RegisterPluggableDefinition (pluggableDef));
+			CHECK(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable));
+
+			pUnknown->Release();
+			pUnknown = NULL;
+			plug->Release();
+			plug = NULL;
+			dictInterface->Release();
+			dictInterface = NULL;
+			pluggableDef->Release();
+			pluggableDef = NULL;
+		}
+		
+			pUnknown = static_cast<IUnknown *> (dict->GetContainer());
+			CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+			CHECK(_codec->QueryInterface(IID_IAAFPlugin, (void **)&plug));
+			CHECK(plug->GetPluginDescriptorID(&currentPlugDesc));
+			pUnknown = static_cast<IUnknown *> (pluggable->GetContainer());
+			CHECK(pUnknown->QueryInterface(IID_IAAFPluggableDef, (void **)&pluggableInterface));
+			pUnknown->Release();
+			pUnknown = NULL;
+
+			CHECK(pluggableInterface->EnumPluginDescriptors (&descEnum));
+			while(descEnum->NextOne(&pluginDesc) == AAFRESULT_SUCCESS)
+			{
+				CHECK(pluginDesc->QueryInterface(IID_IAAFDefObject, (void **)&defInterface));
+				CHECK(defInterface->GetAUID(&testAUID));
+				if(EqualAUID(&testAUID, &currentPlugDesc))
+				{
+					_codecDescriptor = pluginDesc;
+					found = AAFTrue;
+				}
+				defInterface->Release();
+				defInterface = NULL;
+				pluginDesc->Release();
+				pluginDesc = NULL;
+			}
+			
+			if(found == AAFFalse)	// If pluginDescriptor is not in place
+			{
+				
+				CHECK(plug->GetDescriptor (dictInterface, &pluginDesc));
+				CHECK(pluggableInterface->AppendPluginDescriptor (pluginDesc));
+				_codecDescriptor = pluginDesc;
+			}
+			
+			dictInterface->Release();
+			dictInterface = NULL;
+			plug->Release();
+			plug = NULL;
+			descEnum->Release();
+			descEnum = NULL;
+			pluggableInterface->Release();
+			pluggableInterface = NULL;
+	}
+	XEXCEPT
+	{
+		if(plug != NULL)
+			plug->Release();
+		if(pluggableDef != NULL)
+			pluggableDef->Release();
+		if(dictInterface != NULL)
+			dictInterface->Release();
+		if(pUnknown != NULL)
+			pUnknown->Release();
+		if(pluginDesc != NULL)
+			pluginDesc->Release();
+		if(descEnum != NULL)
+			descEnum->Release();
+		if(pluggableInterface != NULL)
+			pluggableInterface->Release();
+		if(defInterface != NULL)
+			defInterface->Release();
+	}
+	XEND
+		
+		return(AAFRESULT_SUCCESS);
+}
 
  #if FULL_TOOLKIT
  /************************************************************************
@@ -1763,63 +1847,6 @@ AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFContainerDef **result
  *
  ************************************************************************/
 
-/************************
- * Function: InitMediaHandle (INTERNAL)
- *
- * 		Initialize an entire media handle structure so that fields are
- *			not left with random values.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-aafErr_t AAFMedia::InitMediaHandle(
-			AAFFileMob *		fileMob)
-{
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
-	XPROTECT(_mainFile)
-	{
-		_masterMob = NULL;
-		_fileMob = NULL;
-		_mdes = NULL;
-		_dataObj = NULL;
-		_userData = NULL;
-		_numChannels = 0;
-		_codecVariety = NULL;
-		_compEnable = kToolkitCompressionEnable;
-		_dataFile = NULL;
-		_cookie = MEDIA_COOKIE;
-		_openType = kAAFNone;
-		_channels = NULL;
-		_fileMob = fileMob;
-		_nilKind = _mainFile->_nilKind;
-		_pictureKind = _mainFile->_pictureKind;
-		_soundKind = _mainFile->_soundKind;
-		_rawFile = NULL;			/* If non-omfi file */
-		_physicalOutChanOpen = 0;
-		_pvt = (AAFMediaPvt_t *)
-				_mainFile->omOptMalloc(sizeof(AAFMediaPvt_t));
-		_pvt->codecInfo.rev = 0;
-		CvtInt32toInt64(1, &_pvt->repeatCount);
-		_stream = new CodecStream;
-		
-		_pvt->nextMedia = _mainFile->_topMedia;
-		_mainFile->_topMedia = this;
-	
-//!!!		_mainFile->_closeMediaProc = Close;
-	}
-	XEXCEPT
-	XEND
-	
-	return (AAFRESULT_SUCCESS);
-}
 
 
 /************************
