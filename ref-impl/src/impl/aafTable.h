@@ -254,24 +254,24 @@ aafErr_t TableClassIDLookup(
 #endif
 /************************************************************************
  *
- * TrackID Table Functions
+ * SlotID Table Functions
  *
  ************************************************************************/
 
-aafErr_t NewTrackIDTable(
+aafErr_t NewSlotIDTable(
 			AAFFile * file,
 			aafInt32 numBuckets,
 			aafTable_t **result);
 			
-aafErr_t TableAddTrackID(
+aafErr_t TableAddSlotID(
 			aafTable_t *table,
-			aafTrackID_t key,
+			aafSlotID_t key,
 			void *value,
 			aafInt32 valueLen);
 			
-aafErr_t TableTrackIDLookup(
+aafErr_t TableSlotIDLookup(
 			aafTable_t *table,
-			aafTrackID_t key,
+			aafSlotID_t key,
 			void *value,
 			aafInt32 valueLen,
 			aafBool *found);
