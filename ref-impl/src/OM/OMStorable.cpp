@@ -151,7 +151,19 @@ void OMStorable::restoreContents(void)
 {
   TRACE("OMStorable::restoreContents");
 
-  store()->restore(_persistentProperties);
+  try {
+    store()->restore(_persistentProperties);
+  }
+  catch (...)
+  {
+	// See comment below: "Temporary brute force...".
+	// It applies here as well.
+	ASSERT("Valid store", _store != 0);
+    _store->close();
+	delete _store;
+	_store = 0;
+	throw;
+  }
 
   // Temporary brute force solution to the Microsoft Structured
   // Storage built in limit on the number of open storage elements
