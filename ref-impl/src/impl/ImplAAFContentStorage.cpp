@@ -68,8 +68,11 @@ ImplAAFContentStorage::ImplAAFContentStorage ()
 ImplAAFContentStorage::~ImplAAFContentStorage ()
 {
 	// Cleanup the non-persistent data...
-	TableDispose(_mobIndex);
-	_mobIndex = 0;
+  if (_mobIndex)
+  {
+	  TableDispose(_mobIndex);
+  	_mobIndex = 0;
+  }
 
 	// Cleanup the persistent data...
 
