@@ -8,9 +8,9 @@ include/*.c
 
 # The release versions of the com-api, plugins, and static
 # libraries.
-./bin/AAFCOAPI.dll
-./bin/aafext/AAFINTP.dll
-./bin/aafext/AAFPGAPI.dll
+./Release/Refimpl/AAFCOAPI.dll
+./Release/Refimpl/aafext/AAFINTP.dll
+./Release/Refimpl/aafext/AAFPGAPI.dll
 ./lib/AAF.lib
 ./lib/AAFIID.lib
 
