@@ -597,8 +597,8 @@ static char * NewStringFromAAFString(aafCharacter_constptr wName)
 {
   char * name = NULL;
   int wNameLength = wcslen(wName);
-  int nameLegth = wcsu8slen(wName);
-  name = new char[nameLegth];
+  int nameLength = wcsu8slen(wName);
+  name = new char[nameLength+1];
   if (NULL != name)
   {
     size_t status = wcstombs(name, wName, wNameLength + 1);
