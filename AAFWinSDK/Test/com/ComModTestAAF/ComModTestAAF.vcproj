@@ -21,7 +21,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\include;&quot;../../../../ref-impl/include&quot;;&quot;../../../../ref-impl/src/impl&quot;;&quot;..\..\..\..\ref-impl\src\com-api&quot;;..\..\..\..\test\com\commodtestaaf"
+				AdditionalIncludeDirectories="..\..\..\include;&quot;..\..\..\..\ref-impl\include&quot;;&quot;..\..\..\..\ref-impl\src\impl&quot;;&quot;..\..\..\..\ref-impl\src\com-api&quot;;..\..\..\..\test\com\commodtestaaf"
 				PreprocessorDefinitions="WIN32,_DEBUG,_CONSOLE,UNICODE"
 				RuntimeLibrary="3"
 				RuntimeTypeInfo="TRUE"
@@ -86,7 +86,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\..\include,../../../../ref-impl/src/impl,..\..\..\..\ref-impl\src\com-api,..\..\..\..\test\com\commodtestaaf"
+				AdditionalIncludeDirectories="..\..\..\include;&quot;..\..\..\..\ref-impl\include&quot;;&quot;..\..\..\..\ref-impl\src\impl&quot;;&quot;..\..\..\..\ref-impl\src\com-api&quot;;..\..\..\..\test\com\commodtestaaf"
 				PreprocessorDefinitions="WIN32,NDEBUG,_CONSOLE,UNICODE"
 				StringPooling="TRUE"
 				RuntimeLibrary="2"
