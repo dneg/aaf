@@ -61,8 +61,27 @@
 #define L64 "ll"
 #endif
 
+// 060c2b340205110101041000-13-00-00-00-041a3300932f0004060e2b347f7f2a80
+static const aafMobID_t kATapeMobID = 
+{ { 0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x04, 0x10, 0x00}, 0x13, 0x00, 0x00, 0x00,
+  { 0x041a3300, 0x932e, 0x0004, { 0x06, 0x0e, 0x2b, 0x34, 0x7f, 0x7f, 0x2a, 0x80}}};
 
+// 060c2b340205110101041000-13-00-00-00-041a3300932e0004060e2b347f7f2a80
+static const aafMobID_t kAFileMobID = 
+{ { 0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x04, 0x10, 0x00}, 0x13, 0x00, 0x00, 0x00,
+  { 0x041a3300, 0x932f, 0x0004, { 0x06, 0x0e, 0x2b, 0x34, 0x7f, 0x7f, 0x2a, 0x80}}};
 
+// 060c2b340205110101041000-13-00-00-00-041a330093300004060e2b347f7f2a80
+static const aafMobID_t kAMasterMobID = 
+{ { 0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x04, 0x10, 0x00}, 0x13, 0x00, 0x00, 0x00,
+  { 0x041a3300, 0x9330, 0x0004, { 0x06, 0x0e, 0x2b, 0x34, 0x7f, 0x7f, 0x2a, 0x80}}};
+
+// 060c2b340205110101041000-13-00-00-00-041a330093310004060e2b347f7f2a80
+static const aafMobID_t kACompositionMobID = 
+{ { 0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x04, 0x10, 0x00}, 0x13, 0x00, 0x00, 0x00,
+  { 0x041a3300, 0x9331, 0x0004, { 0x06, 0x0e, 0x2b, 0x34, 0x7f, 0x7f, 0x2a, 0x80}}};
+ 
+ 
 static aafWChar *slotName = L"SLOT1";
 static aafSourceRef_t sourceRef; 
 
@@ -175,7 +194,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFClassDef *              pCDSourceClip = 0;
 	IAAFClassDef *              pCDFiller = 0;
 	aafRational_t				videoRate = { 30000, 1001 };
-	aafMobID_t					tapeMobID, fileMobID, masterMobID;
 	aafTimecode_t				tapeTC = { 108000, kAAFTcNonDrop, 30};
 	aafLength_t					fileLen = FILE1_LENGTH;
 	aafLength_t					fillLen = FILL_LENGTH;
@@ -246,8 +264,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	check(pTapeMob->AddNilReference (1,TAPE_LENGTH, pDdefPicture, videoRate));
 	check(pTapeMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->SetName (L"A Tape Mob"));
+  check(pMob->SetMobID(kATapeMobID));
 	check(pHeader->AddMob(pMob));
-	check(pMob->GetMobID (&tapeMobID));
 	pMob->Release();
 	pMob = NULL;
 
@@ -280,14 +298,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pFileDesc->Release();
 	pFileDesc = NULL;
 
-	sourceRef.sourceID = tapeMobID;
+	sourceRef.sourceID = kATapeMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
 	check(pFileMob->NewPhysSourceRef (videoRate,
                            1, pDdefPicture, sourceRef, fileLen));
 
 	check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-	check(pMob->GetMobID (&fileMobID));
+	check(pMob->SetMobID (kAFileMobID));
 	check(pHeader->AddMob(pMob));
 	pMob->Release();
 	pMob = NULL;
@@ -297,12 +315,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  CreateInstance(IID_IAAFMasterMob, 
 						 (IUnknown **)&pMasterMob));
 
-	sourceRef.sourceID = fileMobID;
+	sourceRef.sourceID = kAFileMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
 	check(pMasterMob->NewPhysSourceRef (videoRate, 1, pDdefPicture, sourceRef, fileLen));
 	check(pMasterMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-	check(pMob->GetMobID (&masterMobID));
+	check(pMob->SetMobID (kAMasterMobID));
 	check(pMob->SetName (L"A Master Mob"));
 	check(pHeader->AddMob(pMob));
 	pMob->Release();
@@ -322,6 +340,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	check(aComponent->SetDataDef(pDdefPicture));
 	check(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	check(pMob->SetName (L"A Composition Mob"));
+	check(pMob->SetMobID(kACompositionMobID));
 	check(pMob->AppendNewTimelineSlot (videoRate, seg, 1, slotName, 0, &newSlot));
 
 	// This variable is about to be overwritten so we need to 
@@ -338,7 +358,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  CreateInstance(IID_IAAFSourceClip, 
 						 (IUnknown **)&compSclp));		
 
-	sourceRef.sourceID = masterMobID;
+	sourceRef.sourceID = kAMasterMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
 	check(compSclp->SetSourceReference (sourceRef));
