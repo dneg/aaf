@@ -59,7 +59,7 @@ public:
   STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
   STDMETHOD (GetEssenceDescriptorID)(aafUID_t *result);
   STDMETHOD (GetEssenceDataID)(aafUID_t *result);
-  STDMETHOD (GetPluggableDefinition)(IAAFDictionary *dict, IAAFPluggableDef **def);
+  STDMETHOD (GetDefinitionObject)(IAAFDictionary *dict, IAAFDefObject **def);
   STDMETHOD (GetDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
 
   STDMETHOD (SetEssenceAccess)
