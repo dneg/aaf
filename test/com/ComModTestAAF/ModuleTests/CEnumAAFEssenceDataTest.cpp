@@ -221,6 +221,8 @@ void EnumEssenceDataTest::createFile(wchar_t *pFileName)
   for (aafUInt32 item = 0; item < _maxMobCount; ++item)
     createFileMob(item);
  
+  check(_pFile->Save());
+
   cleanupReferences();
 }
 
