@@ -35,6 +35,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
+#include "OMProperty.h"
 
 extern "C" const aafClassID_t CLSID_AAFProperty;
 extern "C" const aafClassID_t CLSID_EnumAAFProperties;
@@ -64,12 +65,13 @@ public:
          ImplAAFProperty* * pElem);
 
   AAFRESULT
-    /*ImplPropertyCollection::*/Init (OMPropertySet * pPropSet);
+    Initialize (OMPropertySet * pPropSet);
 
 private:
-  AAFRESULT initProperty(aafUInt32 index);
+  //AAFRESULT initProperty(aafUInt32 index,
+  //                       ImplAAFPropertyDef * pPropDef);
 
-  OMPropertySet *    _pPropSet;
+  // OMPropertySet *    _pOMPropSet;
   ImplAAFProperty ** _pProperties;
   aafUInt32          _count;
 };
@@ -77,56 +79,114 @@ private:
 
 
 ImplPropertyCollection::ImplPropertyCollection ()
-  : _pPropSet (0),
-	_pProperties (0),
+  : _pProperties (0),
 	_count (0)
 {}
 
 
-AAFRESULT ImplPropertyCollection::Init (OMPropertySet * pPropSet)
+AAFRESULT ImplPropertyCollection::Initialize
+(OMPropertySet * pOMPropSet)
 {
+  ImplAAFPropertyDef * pPropDef = NULL;
+  AAFRESULT rReturned = AAFRESULT_SUCCESS;
+
   // make sure we haven't called this before
-  assert (! _pPropSet);
   assert (! _pProperties);
 
-  if (! pPropSet)
+  if (! pOMPropSet)
 	return AAFRESULT_NULL_PARAM;
 
-  _pPropSet = pPropSet;
-
-  assert (_pPropSet);
-  _count = _pPropSet->count();
+  _count = pOMPropSet->count();
 
   _pProperties = new ImplAAFProperty * [_count];
   if (! _pProperties)
 	return AAFRESULT_NOMEMORY;
+
   for (aafUInt32 i = 0;
 	   i < _count;
 	   i++)
 	{
+	  assert (_pProperties[i]);
 	  _pProperties[i] = NULL;
 	}
-  return AAFRESULT_SUCCESS;
+
+  try
+	{
+
+	  size_t omContext = 0;
+	  OMProperty * pOmProp = NULL;
+	  for (aafUInt32 i = 0;
+		   i < _count;
+		   i++)
+		{
+		  _pProperties[i] = (ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
+		  if (!_pProperties[i])
+			throw AAFRESULT_NOMEMORY;
+
+		  pOMPropSet->iterate (omContext, pOmProp);
+		  assert (pOmProp);
+		  OMPropertyId opid = pOmProp->propertyId ();
+		  AAFRESULT hr = ImplAAFBuiltins::LookupPropDef (opid, &pPropDef);
+		  if (AAFRESULT_FAILED (hr)) throw hr;
+		  assert (pPropDef);
+		  hr = _pProperties[i]->Initialize (pPropDef, pOmProp);
+		  if (AAFRESULT_FAILED (hr)) throw hr;
+		  pPropDef->ReleaseReference ();
+		  pPropDef = 0;
+		}
+	}
+  catch (AAFRESULT &rCaught)
+	{
+	  rReturned = rCaught;
+	  if (pPropDef)
+		{
+		  pPropDef->ReleaseReference ();
+		  pPropDef = NULL;
+		}
+	  if (_pProperties)
+		{
+		  assert (_count);
+		  for (aafUInt32 i = 0;
+			   i < _count;
+			   i++)
+			{
+			  if (_pProperties[i])
+				{
+				  _pProperties[i]->ReleaseReference ();;
+				  _pProperties[i] = NULL;
+				}
+			}
+		  delete[] _pProperties;
+		  _pProperties = NULL;
+		}
+	}
+  return rReturned;
 }
 
 
 ImplPropertyCollection::~ImplPropertyCollection ()
 {
   if (_pProperties)
-	for (aafUInt32 numProps = 0;
-		 numProps < _count;
-		 numProps++)
-	  {
-		if (_pProperties[numProps])
-		  _pProperties[numProps]->ReleaseReference();
-	  }
+	{
+	  for (aafUInt32 numProps = 0;
+		   numProps < _count;
+		   numProps++)
+		{
+		  if (_pProperties[numProps])
+			{
+			  _pProperties[numProps]->ReleaseReference();
+			  _pProperties[numProps] = NULL;
+			}
+		}
+	  delete[] _pProperties;
+	  _pProperties = NULL;
+	}
 }
 
 
 AAFRESULT ImplPropertyCollection::GetNumElements
 (aafUInt32 * pCount)
 {
-  assert (_pPropSet);
   if (! pCount)
 	return AAFRESULT_NULL_PARAM;
   *pCount = _count;
@@ -145,77 +205,13 @@ AAFRESULT ImplPropertyCollection::GetNthElement
   if (index >= _count)
 	return AAFRESULT_NO_MORE_OBJECTS;
 
-  if (! _pProperties[index])
-	{
-	  AAFRESULT hr = initProperty(index);
-	  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-	}
+  assert (_pProperties);
   assert (_pProperties[index]);
   assert (pElem);
   *pElem = _pProperties[index];
   (*pElem)->AcquireReference();
   return AAFRESULT_SUCCESS;
 }
-
-
-AAFRESULT ImplPropertyCollection::initProperty(aafUInt32 index)
-{
-  ImplAAFProperty * pProp = NULL;
-
-  assert (index <= _count);
-  assert (! _pProperties[index]);
-
-  assert (_pPropSet);
-  size_t ctx = 0;
-  OMProperty * pOmProp = NULL;
-  for (aafUInt32 i = 0;
-       i <= index;
-	   i++)
-	{
-	  // wasteful get of all properties until we get to the one we
-	  // want
-	  _pPropSet->iterate (ctx, pOmProp);
-	  assert (pOmProp);
-	}
-
-  // pOmProp now points to the OM property we want.
-
-  // Allocate a property object
-  pProp = (ImplAAFProperty*) CreateImpl (CLSID_AAFProperty);
-  if (! pProp)
-	return E_FAIL;
-  assert (pProp);
-
-  // Get the OM's property ID
-  OMPropertyId opid = pOmProp->propertyId();
-
-  ImplAAFPropertyDef * pd = NULL;
-  AAFRESULT hr = ImplAAFBuiltins::LookupPropDef (opid, &pd);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  assert (pd);
-  pProp->Initialize (pd);
-  pd->ReleaseReference();
-
-  // get the prop value from the prop
-  ImplAAFPropertyValue *pVal = NULL;
-  hr = pProp->GetValue (&pVal);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  assert (pVal);
-
-  // set the storage in the prop value
-  size_t bitsSize;
-  assert (pOmProp);
-  bitsSize = pOmProp->bitsSize ();
-  OMByte * pBits = NULL;
-  hr = pVal->AllocateBits (bitsSize, &pBits);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  assert (pBits);
-  pOmProp->getBits (pBits, bitsSize);
-
-  _pProperties[index] = pProp;  
-  return AAFRESULT_SUCCESS;
-}
-
 
 
 ImplAAFObject::ImplAAFObject ()
@@ -297,7 +293,8 @@ AAFRESULT ImplAAFObject::InitProperties ()
 		return AAFRESULT_NOMEMORY;
 	  OMPropertySet * ps = propertySet();
 	  assert (ps);
-	  _pProperties->Init(ps);
+	  AAFRESULT hr = _pProperties->Initialize (ps);
+	  if (AAFRESULT_FAILED (hr)) return hr;
 	}
   assert (_pProperties);
   return AAFRESULT_SUCCESS;
