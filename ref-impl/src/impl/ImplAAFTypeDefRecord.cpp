@@ -119,7 +119,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32 numMembers,
       const aafCharacter * pTypeName)
 {
-  if (!pTypeName)
+  if (!ppMemberTypes && !pMemberNames && !pTypeName)
     return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
@@ -152,13 +152,24 @@ AAFRESULT STDMETHODCALLTYPE
   aafCharacter * tmpNamePtr = namesBuf;
 
   assert (0 == _memberTypes.count());
-  aafUID_t * buf = new aafUID_t[numMembers*sizeof(aafUID_t)];
+  aafUID_t * buf = new aafUID_t[numMembers];
+  if (!buf)
+  {
+    delete[] namesBuf;
+    return AAFRESULT_NOMEMORY;
+  }
   for (i = 0; i < numMembers; i++)
 	{
 	  assert (ppMemberTypes[i]);
 	  aafUID_t typeUID;
 	  AAFRESULT hr = ppMemberTypes[i]->GetAUID(&typeUID);
 	  assert (AAFRESULT_SUCCEEDED(hr));
+    if (AAFRESULT_FAILED(hr))
+    {
+      delete[] buf;
+      delete[] namesBuf;
+      return hr;
+    }
 	  buf[i] = typeUID;
 
 	  assert (pMemberNames[i]);
@@ -184,7 +195,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafUInt32 numMembers,
       const aafCharacter * pTypeName)
 {
-  if (!pTypeName)
+  if (!pMemberTypeIDs && !pMemberNames && !pTypeName)
     return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
@@ -215,13 +226,16 @@ AAFRESULT STDMETHODCALLTYPE
   aafCharacter * tmpNamePtr = namesBuf;
 
   assert (0 == _memberTypes.count());
-  aafUID_t * buf = new aafUID_t[numMembers*sizeof(aafUID_t)];
+  aafUID_t * buf = new aafUID_t[numMembers];
+  if (!buf)
+  {
+    delete[] namesBuf;
+    return AAFRESULT_NOMEMORY;
+  }
   for (i = 0; i < numMembers; i++)
 	{
-	  assert (pMemberTypeIDs[i]);
 	  buf[i] = *pMemberTypeIDs[i];
 
-	  assert (pMemberNames[i]);
 	  wcscpy(tmpNamePtr, pMemberNames[i]);
 	  // +1 to go past embedded null
 	  tmpNamePtr += wcslen (pMemberNames[i]) + 1;
