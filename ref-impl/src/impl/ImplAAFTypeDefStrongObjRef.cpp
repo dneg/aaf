@@ -222,6 +222,3 @@ OMProperty * ImplAAFTypeDefStrongObjRef::pvtCreateOMPropertyMBS
   assert (result);
   return result;
 }
-
-
-OMDEFINE_STORABLE(ImplAAFTypeDefStrongObjRef, AUID_AAFTypeDefStrongObjRef);

@@ -188,5 +188,4 @@ AAFRESULT ImplAAFTimelineMobSlot::ConvertToMyRate(aafPosition_t srcPos,
 }
 
 
-OMDEFINE_STORABLE(ImplAAFTimelineMobSlot, AUID_AAFTimelineMobSlot);
 
