@@ -270,5 +270,16 @@ OMProperty * ImplAAFTypeDefRename::pvtCreateOMProperty
   return BaseType()->pvtCreateOMProperty (pid, name);
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefRename::GetTypeCategory (
+      eAAFTypeCategory_t * pTid)
+{
+  if (! pTid)
+	return AAFRESULT_NULL_PARAM;
+
+  *pTid = kAAFTypeCatRename;
+  return AAFRESULT_SUCCESS;
+}
+
 
 
