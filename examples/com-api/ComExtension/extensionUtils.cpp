@@ -862,7 +862,7 @@ void AdminMobAppendResource (IAAFDictionary *pDict,
 }
 
 
-void AdminMobGetNumPersonnel (IAAFDictionary * pDict,
+void AdminMobGetNumPersonnel (IAAFDictionary * /* pDict */,
 							  IAAFMob * pMob,
 							  aafUInt32 *numPersonnel)
 {
@@ -930,7 +930,7 @@ void AdminMobGetNumPersonnel (IAAFDictionary * pDict,
   }
 }
 
-void AdminMobGetNthPersonnel (IAAFDictionary * pDict,
+void AdminMobGetNthPersonnel (IAAFDictionary * /* pDict */,
 							  IAAFMob * pMob,
 							  aafUInt32 index,
 							  IAAFObject **personnelResource)

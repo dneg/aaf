@@ -208,7 +208,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::GetIndexedDefinitionID (aafUInt32 index, aafUID_t *uid)
+    CAAFCDCICodec::GetIndexedDefinitionID (aafUInt32 /* index */, aafUID_t *uid)
 {
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;
@@ -511,7 +511,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::GetIndexedFlavourID (aafUInt32  index,
+    CAAFCDCICodec::GetIndexedFlavourID (aafUInt32  /* index */,
         aafUID_t *  pFlavour)
 {
 	if(pFlavour == NULL)
@@ -534,7 +534,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::GetIndexedDataDefinition (aafUInt32  index,
+    CAAFCDCICodec::GetIndexedDataDefinition (aafUInt32  /* index */,
         aafUID_t * pFlavour)
 {
 	if (NULL == pFlavour)
@@ -556,7 +556,7 @@ HRESULT STDMETHODCALLTYPE
 }	
 
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::GetCodecDisplayName (aafUID_constref flavour,
+    CAAFCDCICodec::GetCodecDisplayName (aafUID_constref /* flavour */,
         aafCharacter *  pName,
         aafUInt32  bufSize)
 {
@@ -733,9 +733,9 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::ValidateEssence (IAAFSourceMob *fileMob,
         IAAFEssenceStream *stream,
-		aafCheckVerbose_t  verbose,
-        aafCheckWarnings_t warning,
-         aafUInt32  bufSize,
+		aafCheckVerbose_t  /* verbose */,
+        aafCheckWarnings_t /* warning */,
+         aafUInt32  /* bufSize */,
 		wchar_t *  pName,
         aafUInt32  *bytesWritten)
 {
@@ -764,7 +764,7 @@ CAAFCDCICodec::Create (IAAFSourceMob *p_srcmob,
   aafUID_constref essenceKind,
   aafRational_constref sampleRate,
   IAAFEssenceStream * stream,
-  aafCompressEnable_t compEnable)
+  aafCompressEnable_t /* compEnable */)
 {
     HRESULT	    hr = S_OK;
 
@@ -833,7 +833,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::Open (IAAFSourceMob *p_srcmob,
 		aafMediaOpenMode_t  openMode,
     IAAFEssenceStream * stream,
-    aafCompressEnable_t compEnable)
+    aafCompressEnable_t /* compEnable */)
 {
     HRESULT hr = S_OK;
 

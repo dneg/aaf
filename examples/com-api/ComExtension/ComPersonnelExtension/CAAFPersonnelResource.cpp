@@ -599,7 +599,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFPersonnelResource::GetIndexedDefinitionID (aafUInt32 index, aafUID_t *uid)
+    CAAFPersonnelResource::GetIndexedDefinitionID (aafUInt32 /* index */, aafUID_t *uid)
 {
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;

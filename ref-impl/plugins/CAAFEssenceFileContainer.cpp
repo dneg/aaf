@@ -144,7 +144,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::GetIndexedDefinitionID (aafUInt32 index, aafUID_t *uid)
+    CAAFEssenceFileContainer::GetIndexedDefinitionID (aafUInt32 /* index */, aafUID_t *uid)
 {
 	if(uid == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -162,7 +162,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::GetIndexedDefinitionObject (aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def)
+    CAAFEssenceFileContainer::GetIndexedDefinitionObject (aafUInt32 /* index */, IAAFDictionary *dict, IAAFDefObject **def)
 {
 	aafUID_t			uid;
 	IAAFContainerDef	*container = NULL;
@@ -334,9 +334,9 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::CreateEssenceStreamWriteOnly (const aafCharacter * pName,
-        aafMobID_constptr pMobID,
-        IAAFEssenceStream ** ppEssenceStream)
+    CAAFEssenceFileContainer::CreateEssenceStreamWriteOnly (const aafCharacter * /* pName */,
+        aafMobID_constptr /* pMobID */,
+        IAAFEssenceStream ** /* ppEssenceStream */)
 {
   return HRESULT_NOT_IMPLEMENTED;
 }

@@ -3245,7 +3245,7 @@ static void SetupFor422(aafUInt32 imageWidth, aafUInt32 comp_pos[], aafUInt32 co
 
 void CAAFJPEGCodec::DumpSampleImage(
 	const aafCompressionParams& param, 
-	JSAMPIMAGE rawSampleImage)
+	JSAMPIMAGE /* rawSampleImage */)
 {
 	// We currently only support 601 and 4-2-2.
 	checkExpression(1 == param.verticalSubsampling && 2 == param.horizontalSubsampling &&

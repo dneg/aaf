@@ -202,7 +202,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceDataStream::SetCacheSize (aafUInt32  itsSize)
+    CAAFEssenceDataStream::SetCacheSize (aafUInt32  /* itsSize */)
 {
   return S_OK; //AAFRESULT_NOT_IMPLEMENTED;
 }
