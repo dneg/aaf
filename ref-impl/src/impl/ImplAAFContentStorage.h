@@ -46,7 +46,7 @@ class ImplAAFFile;
 
 
 class AAFDataKind;
-class AAFEffectDef;
+class AAFOperationDef;
 
 
 class ImplAAFContentStorage : public ImplAAFObject
