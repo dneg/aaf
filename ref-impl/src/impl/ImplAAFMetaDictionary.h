@@ -329,6 +329,9 @@ public:
   // Create and initialize all of the axiomatic definitions.
   AAFRESULT InstantiateAxiomaticDefinitions(void);
 
+  // Merge the builtin dictionary into the file dictionary.
+  AAFRESULT MergeWithFile();
+
   // Create all of the axiomatic classes as uninitialized objects.
   void CreateAxiomaticClasses(void); // throw AAFRESULT
 
@@ -388,12 +391,12 @@ private:
   // Persistent data members.
   //
   OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFTypeDef> _typeDefinitions;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef> _classDefinitions;
-
+  OMStrongReferenceSetProperty<OMUniqueObjectIdentification, ImplAAFClassDef> _fileClassDefinitions;
 
   //
   // Non-persistent data members.
   //
+  OMReferenceSet<OMUniqueObjectIdentification, ImplAAFClassDef> _classDefinitions;
   OMReferenceSet<OMUniqueObjectIdentification, ImplAAFTypeDef> _opaqueTypeDefinitions;
   OMReferenceSet<OMUniqueObjectIdentification, ImplAAFClassDef> _axiomaticClassDefinitions;
   OMReferenceSet<OMUniqueObjectIdentification, ImplAAFPropertyDef> _axiomaticPropertyDefinitions;

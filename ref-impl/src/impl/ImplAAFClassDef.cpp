@@ -153,9 +153,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
 //	ImplAAFClassDef	*oldParent;
   if (!pClassName) return AAFRESULT_NULL_PARAM;	
+
+ 
+#if 0
+  // Disable overzealous attached check...
   if (pParentClass && pParentClass != this && !pParentClass->attached())  // a root class has itself as a parent
     return AAFRESULT_OBJECT_NOT_ATTACHED;	
-	
+#endif
+
   HRESULT hr;
   hr = ImplAAFMetaDefinition::Initialize(classID, pClassName, NULL);
   if (AAFRESULT_FAILED (hr))

@@ -413,7 +413,10 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
 		assert(d);
-		d->InstantiateAxiomaticDefinitions();
+		checkResult( d->InstantiateAxiomaticDefinitions() );
+
+		// Merge the builtin dictionary into the file dictionary.
+		checkResult( d->MergeWithFile() );
 
 		// Get the byte order
 		OMByteOrder byteOrder = _file->byteOrder();

@@ -68,18 +68,17 @@ extern "C" const aafClassID_t CLSID_AAFMetaDictionary;
 extern "C" const aafClassID_t CLSID_EnumAAFClassDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 
-
 ImplAAFMetaDictionary::ImplAAFMetaDictionary () :
   _typeDefinitions  (PID_MetaDictionary_TypeDefinitions,
                      L"TypeDefinitions", 
                      PID_MetaDefinition_Identification),
-  _classDefinitions (PID_MetaDictionary_ClassDefinitions,
-                     L"ClassDefinitions", 
-                     PID_MetaDefinition_Identification),
+  _fileClassDefinitions (PID_MetaDictionary_ClassDefinitions,
+			 L"ClassDefinitions", 
+			 PID_MetaDefinition_Identification),
   _dataDictionary(NULL)
 {
   _persistentProperties.put (_typeDefinitions.address());
-  _persistentProperties.put (_classDefinitions.address());
+  _persistentProperties.put (_fileClassDefinitions.address());
 }
 
 
@@ -149,7 +148,7 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
   }
 
   // Release _classDefinitions
-  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>classDefinitions(_classDefinitions);
+  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>classDefinitions(_fileClassDefinitions);
   while(++classDefinitions)
   {
     ImplAAFClassDef *pClass = classDefinitions.clearValue();
@@ -732,7 +731,7 @@ AAFRESULT STDMETHODCALLTYPE
   XPROTECT()
   {
     OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>* iter = 
-      new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>(_classDefinitions);
+      new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFClassDef>(_fileClassDefinitions);
     if(iter == 0)
       RAISE(AAFRESULT_NOMEMORY);
 	CHECK(theEnum->Initialize(&CLSID_EnumAAFClassDefs,this,iter));
@@ -1331,7 +1330,7 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
       }
       else
       {
-	    ImplAAFClassDef* old = nonConstThis->_classDefinitions.replace(pAxiomaticClassDef);
+	    ImplAAFClassDef* old = nonConstThis->_fileClassDefinitions.replace(pAxiomaticClassDef);
 	    if (old != 0)
 	      old->ReleaseReference();
       }
@@ -1363,7 +1362,99 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
   return result;
 }
 
+// TEMPORARY - for wcout debug code below.
+#include <iostream>
 
+
+void PrintClassName( ImplAAFClassDef* pClassDef )
+{
+  aafCharacter nameBuf[100];
+  AAFRESULT hr = pClassDef->GetName( nameBuf, sizeof(aafCharacter)*100 );
+  assert( AAFRESULT_SUCCESS == hr );
+  std::wcout << nameBuf;
+}
+
+void PrintPropertyName( ImplAAFPropertyDef* pPropDef )
+{
+  aafCharacter nameBuf[100];
+  AAFRESULT hr = pPropDef->GetName( nameBuf, sizeof(aafCharacter)*100 );
+  assert( AAFRESULT_SUCCESS == hr );
+  std::wcout << nameBuf;
+}
+
+//
+// Merge the builtin dictionary into the file dictionary.
+//
+AAFRESULT ImplAAFMetaDictionary::MergeWithFile()
+{ 
+  AAFRESULT result = AAFRESULT_SUCCESS;
+
+  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, 
+                               ImplAAFClassDef>
+    iter(_fileClassDefinitions); 
+
+  OMUInt32 classes = iter.count(); 
+
+  std::wcout << "Initially " << classes << " class definitions in file." << 
+    std::endl; 
+
+  while (++iter) { 
+
+    OMUniqueObjectIdentification id = iter.identification(); 
+    ImplAAFClassDef* pFileClassDef = iter.value(); 
+
+    aafUID_t* uid = reinterpret_cast<aafUID_t*>(&id); 
+    ImplAAFClassDef* pClassDef = 0; 
+    HRESULT hr = dataDictionary()->LookupClassDef(*uid, &pClassDef); 
+
+    if (AAFRESULT_SUCCEEDED(hr)) { 
+      ImplEnumAAFPropertyDefs* pEnumPropDefs = 0; 
+      hr = pClassDef->GetPropertyDefs(&pEnumPropDefs); 
+      if (AAFRESULT_SUCCEEDED(hr)) { 
+        ImplAAFPropertyDef* pPropDef; 
+        while (AAFRESULT_SUCCEEDED(pEnumPropDefs->NextOne(&pPropDef))) { 
+          aafUID_t puid; 
+          pPropDef->GetAUID(&puid); 
+          ImplAAFPropertyDef* pFilePropDef = 0; 
+          hr = pFileClassDef->LookupPropertyDef(puid, &pFilePropDef); 
+          if (AAFRESULT_FAILED(hr)) { 
+            std::wcout << "Found property definition "; 
+            PrintClassName(pClassDef); 
+            std::wcout << "::"; 
+            PrintPropertyName(pPropDef); 
+            std::wcout << " compiled-in but not in file." << std::endl; 
+
+#if 1
+	    hr = pPropDef->MergeTo( pFileClassDef );
+	    assert( AAFRESULT_SUCCESS == hr );
+	    if ( AAFRESULT_SUCCESS != hr ) {
+	      result = hr;
+	      break;
+	    }
+#else
+	    // This might (redundantly) be called multiple times.
+	    ImplAAFDictionary* pFileDictionary = 0;
+	    hr = pFileClassDef->GetDictionary( &pFileDictionary );
+	    assert( AAFRESULT_SUCCESS == hr );
+	    if ( AAFRESULT_SUCCESS == hr ) {
+	      pClassDef->MergeTo( pFileDictionary );
+	      pFileDictionary->ReleaseReference();
+	    }
+#endif
+          }
+        } 
+      } 
+    } else if (hr == AAFRESULT_NO_MORE_OBJECTS) { 
+      std::wcout << "class "; 
+      PrintClassName(pFileClassDef); 
+      std::wcout << " in file but not compiled in." << std::endl; 
+    } else { 
+      std::wcout << "erk!" << std::endl; 
+    } 
+  }
+
+  return result;
+}
 
 
 //
