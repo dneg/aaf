@@ -309,6 +309,15 @@ typedef enum
 	kAAFForceOverwrite
 } aafAppendOption_t;
 
+typedef enum
+{
+	kRefLimitMinimum = 0,
+	kRefLimitMaximum,
+	kRefMinimum,
+	kRefMaximum,
+	kRefEnumvalue
+} aafReferenceType_t;
+
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ * Mob specific data types)
