@@ -248,6 +248,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 										sizeof(smiley))); // buffer size
 
 
+	// Close the EssenceData
+	check(pEssenceAccess->Close());
 	// Release all unnecesary interfaces
 	pEssenceAccess->Release();
 	pEssenceAccess= NULL;
@@ -296,12 +298,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFHeader *				pHeader = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 	IAAFMob*					pMob = NULL;
+	IAAFMasterMob*				pMasterMob = NULL;
+	IAAFEssenceAccess*			pEssenceAccess = NULL;
 
-	aafNumSlots_t				numMobs;
+	aafNumSlots_t				numMobs, numSlots;
 	aafSearchCrit_t				criteria;
 	aafUID_t					mobID;
 	aafWChar					namebuf[1204];
-
+	unsigned char				DataBuf[512];
+	aafUInt32					bytesRead, samplesRead;
+	
 	check(CoCreateInstance(CLSID_AAFFile,
                NULL, 
                CLSCTX_INPROC_SERVER, 
@@ -329,7 +335,68 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			AUIDtoString(&mobID, buf);
 			wprintf(L"    MasterMob Name = '%s'\n", namebuf);
 			wprintf(L"        (mobID %s)\n", buf);
-			
+			// Make sure we have one slot 
+			check(pMob->GetNumSlots(&numSlots));
+			if (1 == numSlots)
+			{
+				// The essence data is in SlotID 1
+				// Get a Master Mob interface
+				check(pMob->QueryInterface(IID_IAAFMasterMob, (void **)&pMasterMob));
+
+				// Get an EssenceAccess Interface
+				check(CoCreateInstance(CLSID_AAFEssenceAccess,
+										NULL, 
+										CLSCTX_INPROC_SERVER, 
+										IID_IAAFEssenceAccess, 
+										(void **)&pEssenceAccess));		
+				// Open the Essence Data
+				check(pEssenceAccess->Open(	pMasterMob,				//Master Mob pointer
+											1,						// SlotID 1
+											NULL,				// mediaCriteria (Don't care)
+											kMediaOpenReadOnly,	// Open mode
+											kSDKCompressionDisable));// Compress disabled
+
+				// Read the Raw Data
+				check(pEssenceAccess->ReadRawData(	1,					// Number of Salmples 
+													sizeof(DataBuf),	// Maximum buffer size
+													DataBuf,			// Buffer for the data
+													&bytesRead,			// Actual number of bytes read
+													&samplesRead));		// Actual number of samples read
+
+				// Now compare the data read with the data we wrote when we created the file
+				if (1 != samplesRead)
+				{
+					printf("***Wrong number of samples read ( was %ld , should be %ld)\n",
+						samplesRead, 1L);
+				}
+				if (bytesRead != sizeof(smiley))
+				{
+					printf("***Wrong number of bytes read ( was %ld , should be %ld)\n",
+						bytesRead, sizeof(smiley));
+				}
+				if (memcmp( smiley, DataBuf, bytesRead) != 0)
+				{
+					printf("*** Data Read is different than the data Written ***\n");
+				}
+				// Close the EssenceData
+				check(pEssenceAccess->Close());
+
+			}
+			else
+			{
+				printf("***Wrong number of slots in the Master Mob (was %ld should be %ld)\n",
+					numSlots, 1L);
+			}
+			if (pEssenceAccess)
+			{
+				pEssenceAccess->Release();
+				pEssenceAccess = NULL;
+			}
+			if (pMasterMob)
+			{
+				pMasterMob->Release();
+				pMasterMob = NULL;
+			}
 
 			pMob->Release();
 			pMob = NULL;
