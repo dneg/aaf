@@ -18,15 +18,20 @@ AD_HEAD
 \******************************************/
 AD_FORWARD_DECLARATION(AAFTimecode)
 AD_FORWARD_DECLARATION(AAFComponent)
+AD_FORWARD_DECLARATION(AAFSegment)
 
+AD_CLASS_UUID(66e855f1, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(66e855f0, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_XCONSTRUCTOR1([in],objIn, AAFDataDefinition, datadef, Data Definition object,
-  // This function creates a new sequence object with the given
-  // property values.  The length of the sequence is initially set to
-  // 0.  When components are appended to the sequence with the
-  // omfiSequenceAppendCpnt\(\) call\, the length of the appended
-  // component is added to the length of the sequence.)
+AD_XMETHOD1(SetInitialValue,
+			[in],objIn, AAFDataDefinition, datadef, Data Definition object,
+// This function creates a new sequence object with the given
+// property values.  The length of the sequence is initially set to
+// 0.  When components are appended to the sequence with the
+// omfiSequenceAppendCpnt\(\) call\, the length of the appended
+// component is added to the length of the sequence.)
 
 AD_XMETHOD1(AppendCpnt,
 			[in],objIn,AAFComponent,component,
