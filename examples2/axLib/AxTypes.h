@@ -21,6 +21,7 @@
 //=---------------------------------------------------------------------=
 
 #include <AAFTypes.h>
+#include <AAFCOMPlatformTypes.h>
 
 #include <iosfwd>
 #include <memory>
@@ -80,10 +81,71 @@ std::wostream& operator<<( std::wostream& os, const aafProductVersion_t& ver );
 std::wostream& operator<<( std::wostream& os, const aafUID_t& uid );
 
 bool operator==( const aafUID_t& uidL, const aafUID_t& uidR );
-
 inline bool operator!=( const aafUID_t& uidL, const aafUID_t& uidR )
 {
 	return !(uidL == uidR);
 }
+
+#if !defined(OS_WINDOWS)
+bool operator==( const tagGUID& uidL, const tagGUID& uidR );
+inline bool operator!=( const tagGUID& uidL, const tagGUID& uidR )
+{
+	return !(uidL == uidR);
+}
+#endif
+
+// AxAutoPtr - Just like auto_ptr, does not have const related
+// problems (using gcc 3.0.3) when using in maps, pairs, etc.
+template <class T>
+class AxAutoPtr
+{
+public:
+  AxAutoPtr()
+  : _p( 0 )
+  {}
+
+  explicit AxAutoPtr( T* p )
+    : _p(p)
+  {}
+
+  ~AxAutoPtr()
+  { delete _p; }
+
+  AxAutoPtr( const AxAutoPtr& other )
+  {
+    AxAutoPtr& ncother = const_cast<AxAutoPtr&>(other);
+    _p = ncother.release();
+  }
+
+  AxAutoPtr& operator=( const AxAutoPtr& other )
+  {
+    AxAutoPtr& ncother = const_cast<AxAutoPtr&>(other);
+    if ( this != &other ) {
+      _p = ncother.release();
+    }
+	return *this;
+  }
+
+  T* operator->() const
+  {
+	return _p;
+  }
+
+  T& operator*() const
+  {
+	return *_p;
+  }
+
+  T* get() const
+  { return _p; }
+
+  T* release()
+  { T* p = _p; _p = 0; return p; }
+
+private:
+  T* _p;
+};
+
+
 
 #endif

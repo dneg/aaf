@@ -29,7 +29,7 @@ class AxHeader : public AxObject {
 
 public:
 
-	AxHeader( IAAFHeaderSP& spIaafHeader );
+	AxHeader( IAAFHeaderSP spIaafHeader );
 	AxHeader( const AxHeader& );
 	virtual ~AxHeader();
 
@@ -59,3 +59,4 @@ private:
 std::wostream& operator<<( std::wostream& os, const AxHeader& obj );
 
 #endif
+

@@ -36,7 +36,7 @@ public:
 private:
 
 	AxHrMap();
-	AxHMap( const AxHrMap& );
+	AxHrMap( const AxHrMap& );
 	virtual ~AxHrMap();
 	AxHrMap& operator=( const AxHrMap& );
 
@@ -44,3 +44,6 @@ private:
 };
 
 #endif
+
+
+

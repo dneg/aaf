@@ -29,7 +29,7 @@
 class AxMetaDefinition : public AxBaseObj {
 
 public:
-	AxMetaDefinition( IAAFMetaDefinitionSP& spIaafMetaDefinition );
+	AxMetaDefinition( IAAFMetaDefinitionSP spIaafMetaDefinition );
 	virtual ~AxMetaDefinition();
 
 private:
@@ -44,7 +44,7 @@ private:
 
 class AxClassDef : public AxMetaDefinition {
 public:
-	AxClassDef( IAAFClassDefSP& spIaafClassDef );
+	AxClassDef( IAAFClassDefSP spIaafClassDef );
 	~AxClassDef();
 
 	// vanilla wrapper
@@ -53,7 +53,7 @@ public:
 	// Type safe wrapper.  First calls vanilla wrapper to get an IUnknown given
 	// iid, then casts that to Type using iid.
 	template< class Type >
-	CreateInstance( const IID& iid, IAAFSmartPointer<Type>& sp )
+	void CreateInstance( const IID& iid, IAAFSmartPointer<Type>& sp )
 	{
 		AxQueryInterface( CreateInstance( iid ), sp, iid );
 	}
@@ -75,7 +75,7 @@ private:
 class AxTypeDef : public AxMetaDefinition {
 
 public:
-	AxTypeDef( IAAFTypeDefSP& spIaafTypeDef );
+	AxTypeDef( IAAFTypeDefSP spIaafTypeDef );
 	virtual ~AxTypeDef();
 
 	virtual eAAFTypeCategory_t GetTypeCategory();
@@ -97,7 +97,7 @@ private:
 
 class AxTypeDefIndirect : public AxTypeDef {
 public:
-	AxTypeDefIndirect( IAAFTypeDefIndirectSP& spIaafTypeDefIndirect );
+	AxTypeDefIndirect( IAAFTypeDefIndirectSP spIaafTypeDefIndirect );
 	virtual ~AxTypeDefIndirect();
 
 	IAAFTypeDefSP GetActualType( IAAFPropertyValueSP& );
@@ -115,7 +115,7 @@ private:
 
 class AxTypeDefOpaque : public AxTypeDefIndirect {
 public:
-	AxTypeDefOpaque( IAAFTypeDefOpaqueSP& spIaafTypeDefOpaque  );
+	AxTypeDefOpaque( IAAFTypeDefOpaqueSP spIaafTypeDefOpaque  );
 	virtual ~AxTypeDefOpaque();
 
 	aafUID_t GetActualTypeID( IAAFPropertyValueSP& );
@@ -160,7 +160,7 @@ private:
 
 class AxTypeDefInt : public AxTypeDef {
 public:
-	AxTypeDefInt( IAAFTypeDefIntSP& spIaafTypeDefInt );
+	AxTypeDefInt( IAAFTypeDefIntSP spIaafTypeDefInt );
 	virtual ~AxTypeDefInt();
 
 	aafUInt32 GetSize();
@@ -198,7 +198,7 @@ private:
 
 class AxTypeDefFixedArray : public AxTypeDef {
 public:
-	AxTypeDefFixedArray( IAAFTypeDefFixedArraySP& spIaafTypeDefFixedArray );
+	AxTypeDefFixedArray( IAAFTypeDefFixedArraySP spIaafTypeDefFixedArray );
 	virtual ~AxTypeDefFixedArray();
 
 	IAAFTypeDefSP GetType();
@@ -219,7 +219,7 @@ private:
 
 class AxTypeDefRecord : public AxTypeDef {
 public:
-	AxTypeDefRecord( IAAFTypeDefRecordSP& spIaafTypeDefRecord );
+	AxTypeDefRecord( IAAFTypeDefRecordSP spIaafTypeDefRecord );
 	virtual ~AxTypeDefRecord();
 
 	aafUInt32 GetCount();
@@ -242,7 +242,7 @@ private:
 
 class AxTypeDefStream : public AxTypeDef {
 public:
-	AxTypeDefStream( IAAFTypeDefStreamSP& spIaafTypeDefStream );
+	AxTypeDefStream( IAAFTypeDefStreamSP spIaafTypeDefStream );
 	virtual ~AxTypeDefStream();
 
 	aafInt64 GetSize( IAAFPropertyValueSP& );
@@ -259,7 +259,7 @@ private:
 
 class AxTypeDefString : public AxTypeDef {
 public:
-	AxTypeDefString( IAAFTypeDefStringSP& spIaafTypeDefString );
+	AxTypeDefString( IAAFTypeDefStringSP spIaafTypeDefString );
 	virtual ~AxTypeDefString();
 
 	AxString GetElements( IAAFPropertyValueSP& );
@@ -276,7 +276,7 @@ private:
 
 class AxTypeDefSet : public AxTypeDef {
 public:
-	AxTypeDefSet( IAAFTypeDefSetSP& spIaafTypeDefSet );
+	AxTypeDefSet( IAAFTypeDefSetSP spIaafTypeDefSet );
 	virtual ~AxTypeDefSet();
 
 	IEnumAAFPropertyValuesSP GetElements( IAAFPropertyValueSP& );
@@ -293,7 +293,7 @@ private:
 
 class AxTypeDefObjRef : public AxTypeDef {
 public:
-	AxTypeDefObjRef( IAAFTypeDefObjectRefSP& spIaafTypeDefObjRef );
+	AxTypeDefObjRef( IAAFTypeDefObjectRefSP spIaafTypeDefObjRef );
 	virtual ~AxTypeDefObjRef();
 
 	virtual IUnknownSP GetObject( IAAFPropertyValueSP& spPropVal,
@@ -312,7 +312,7 @@ private:
 class AxTypeDefWeakObjRef : public AxTypeDefObjRef {
 
 public:
-	AxTypeDefWeakObjRef( IAAFTypeDefWeakObjRefSP& spIaafTypeDefWeakObjRef );
+	AxTypeDefWeakObjRef( IAAFTypeDefWeakObjRefSP spIaafTypeDefWeakObjRef );
 	virtual ~AxTypeDefWeakObjRef();
 
 private:
@@ -328,7 +328,7 @@ private:
 class AxTypeDefStrongObjRef : public AxTypeDefObjRef {
 
 public:
-	AxTypeDefStrongObjRef( IAAFTypeDefStrongObjRefSP& spIaafTypeDefStrongObjRef );
+	AxTypeDefStrongObjRef( IAAFTypeDefStrongObjRefSP spIaafTypeDefStrongObjRef );
 	virtual ~AxTypeDefStrongObjRef();
 
 private:
@@ -343,7 +343,7 @@ private:
 
 class AxTypeDefVariableArrayEx : public AxTypeDef {
 public:
-	AxTypeDefVariableArrayEx( IAAFTypeDefVariableArrayExSP& spIaafTypeDefVariableArrayEx );
+	AxTypeDefVariableArrayEx( IAAFTypeDefVariableArrayExSP spIaafTypeDefVariableArrayEx );
 	virtual ~AxTypeDefVariableArrayEx();
 
 private:
@@ -358,7 +358,7 @@ private:
 
 class AxTypeDefVariableArray : public AxTypeDefVariableArrayEx {
 public:
-	AxTypeDefVariableArray( IAAFTypeDefVariableArraySP& spIaafTypeDefVariableArray );
+	AxTypeDefVariableArray( IAAFTypeDefVariableArraySP spIaafTypeDefVariableArray );
 	virtual ~AxTypeDefVariableArray();
 
 	IAAFTypeDefSP GetType();

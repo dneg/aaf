@@ -30,6 +30,7 @@
 #define AAF_SMART_POINTER_ASSERT(condition) \
 	{ if (!(condition)) throw AxExSmartPointer(); }
 
+
 #include <AAFSmartPointer.h>
 
 

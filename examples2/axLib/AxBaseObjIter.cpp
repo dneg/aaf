@@ -24,9 +24,6 @@
 #include "AxMetaDef.h"
 #include "AxIterator.h"
 
-// Get rid of this when recursin object code factored out.
-#include "AxPropertyValue.h"
-
 //=---------------------------------------------------------------------=
 
 namespace {
@@ -42,11 +39,11 @@ public:
 
 	virtual void process( IAAFPropertyValueSP&, IAAFTypeDefStrongObjRefSP& );
 
-	virtual void process( IAAFPropertyValueSP&,	IAAFTypeDefSetSP& );
+	virtual void process( IAAFPropertyValueSP&, IAAFTypeDefSetSP& );
 
-	virtual void process( IAAFPropertyValueSP&,	IAAFTypeDefVariableArraySP& );
+	virtual void process( IAAFPropertyValueSP&, IAAFTypeDefVariableArraySP& );
 
-	virtual void process( IAAFPropertyValueSP&,	IAAFTypeDefRecordSP& );
+	virtual void process( IAAFPropertyValueSP&, IAAFTypeDefRecordSP& );
 
 	virtual void process( IAAFPropertyValueSP&, IAAFTypeDefFixedArraySP& );
 
@@ -58,7 +55,7 @@ public:
 
 private:
 
-	inline Post( auto_ptr< AxBaseObjIterPrtcl > iter ) {
+	inline void Post( auto_ptr< AxBaseObjIterPrtcl > iter ) {
 		_result.first = true;
 		_result.second = iter;
 	}
@@ -79,8 +76,7 @@ void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
 	AxTypeDefStrongObjRef axStrongObjRef( spIaafTypeDefStrongObjRef );
 
 	IUnknownSP spIUnknown;
-	spIUnknown = axStrongObjRef.GetObject( spIaafPropertyValue,
-				  						   IID_IAAFObject );
+	spIUnknown = axStrongObjRef.GetObject( spIaafPropertyValue, 				  						      IID_IAAFObject );
 
 	IAAFObjectSP spIaafObject;
 	AxQueryInterface( spIUnknown, spIaafObject, IID_IAAFObject );
@@ -97,9 +93,10 @@ void PropValToIter::process( IAAFPropertyValueSP& spIaafPropertyValue,
 {
 	AxTypeDefSet axTypeDefSet( spIaafTypeDefSet );
 
+	AxPropertyValueIter axPropValIter( axTypeDefSet.GetElements( spIaafPropertyValue ) );
+
 	auto_ptr< AxBaseObjIterPrtcl > iter( 
-		new AxBaseObjIter<AxPropertyValueIter, AxPropertyValue>(
-			axTypeDefSet.GetElements( spIaafPropertyValue ) ) );
+		new AxBaseObjIter<AxPropertyValueIter, AxPropertyValue, IAAFPropertyValue>( axPropValIter ) );
 
 	Post( iter );
 }
@@ -199,23 +196,19 @@ AxBaseRecordObjIter::AxBaseRecordObjIter( auto_ptr<AxRecordIterator> axRecordIte
 AxBaseRecordObjIter::~AxBaseRecordObjIter()
 {}
 
-AxBaseObjIterPrtcl::Pair AxBaseRecordObjIter::NextOne()
+bool AxBaseRecordObjIter::NextOne( auto_ptr<AxBaseObj>& ret )
 {
-	AxBaseObjIterPrtcl::Pair retPair;
-
-	retPair.first = false;
-
 	AxRecordIterator::Pair nextRecordPair;
 
 	if ( _axRecordIter->NextOne( nextRecordPair ) ) {
 		auto_ptr<AxBaseObj>
-			intrChgObj( new AxBaseObjAny<AxRecordIterator::Pair>( nextRecordPair ) );
+			obj( new AxBaseObjAny<AxRecordIterator::Pair>( nextRecordPair ) );
 
-		retPair.first  = true;
-		retPair.second = intrChgObj;
+		ret = obj;
+		return true;
 	}
 
-	return retPair;
+	return false;
 }
 
 void AxBaseRecordObjIter::Reset()
@@ -244,24 +237,20 @@ AxBaseArrayObjIter<TypeDef>::~AxBaseArrayObjIter()
 {}
 
 template <class TypeDef>
-AxBaseObjIterPrtcl::Pair AxBaseArrayObjIter<TypeDef>::NextOne()
+bool AxBaseArrayObjIter<TypeDef>::NextOne( auto_ptr<AxBaseObj>& ret )
 {
-	AxBaseObjIterPrtcl::Pair retPair;
-
-	retPair.first = false;
-
-	AxArrayIterator<TypeDef>::Pair next;
-
-	next = _axArrayIter->NextOne();
-	if ( next.first ) {
+        IAAFPropertyValueSP next;
+        bool rc;
+	rc = _axArrayIter->NextOne( next );
+	if ( rc ) {
 		auto_ptr<AxBaseObj>
-			intrChgObj( new AxPropertyValue( next.second ) );
+			obj( new AxPropertyValue( next ) );
 
-		retPair.first  = true;
-		retPair.second = intrChgObj;
+		ret = obj;
+		return true;
 	}
 
-	return retPair;
+	return false;
 }
 
 template <class TypeDef>
@@ -286,17 +275,18 @@ AxBaseObjIterPrtcl::~AxBaseObjIterPrtcl()
 
 inline void AxBaseObjRecIter::Push( auto_ptr< AxBaseObjIterPrtcl > iter )
 {
-	_deque.push_back( iter );
+	_deque.push_back( iter.release() );
 }
 
 inline void AxBaseObjRecIter::Pop()
 {
-	_deque.pop_back();
+        delete _deque.back();
+        _deque.pop_back();
 }
 
-inline const auto_ptr< AxBaseObjIterPrtcl >& AxBaseObjRecIter::Top()
+inline AxBaseObjIterPrtcl& AxBaseObjRecIter::Top()
 {
-	return _deque.back();
+	return *_deque.back();
 }
 
 inline bool AxBaseObjRecIter::Empty()
@@ -319,46 +309,47 @@ AxBaseObjRecIter::AxBaseObjRecIter( auto_ptr< AxBaseObjIterPrtcl >  root )
 AxBaseObjRecIter::~AxBaseObjRecIter()
 {}
 
-AxBaseObjRecIter::Pair AxBaseObjRecIter::NextOne( int& level )
+bool AxBaseObjRecIter::NextOne( auto_ptr<AxBaseObj>& objRet, int& level )
 {
 	if ( Empty() ) {
-		return Pair(false,auto_ptr<AxBaseObj>());
+	  return false;
 	}
 
-	const auto_ptr< AxBaseObjIterPrtcl >&iter = Top();
-	Pair result = iter->NextOne();
+	AxBaseObjIterPrtcl& iter = Top();
 
-	if ( !result.first ) {
+	bool rc = iter.NextOne( objRet );
+
+	if ( !rc ) {
 		Pop();
-		return NextOne( level );
+		return NextOne( objRet, level );
 	}
 
 	level = GetLevel();
 
 	// Peek at the pointer, use it, but don't take ownership!
 	try {
-		if ( dynamic_cast< AxObject* >( result.second.get() ) ) {
+		if ( dynamic_cast< AxObject* >( objRet.get() ) ) {
 
-			AxObject& obj = dynamic_cast< AxObject& >( *result.second.get() );
+			AxObject& obj = dynamic_cast< AxObject& >( *objRet.get() );
 
 			HandleObjectRecursion( obj );
 		}
-		else if ( dynamic_cast< AxProperty* >( result.second.get() ) ) {
+		else if ( dynamic_cast< AxProperty* >( objRet.get() ) ) {
 
-			AxProperty& prop = dynamic_cast< AxProperty& >( *result.second.get() );
+			AxProperty& prop = dynamic_cast< AxProperty& >( *objRet.get() );
 
 			HandlePropertyRecursion( prop );
 		}	
-		else if ( dynamic_cast< AxPropertyValue* >( result.second.get() ) ) {
+		else if ( dynamic_cast< AxPropertyValue* >( objRet.get() ) ) {
 
-			AxPropertyValue& propVal = dynamic_cast< AxPropertyValue& >( *result.second.get() );
+			AxPropertyValue& propVal = dynamic_cast< AxPropertyValue& >( *objRet.get() );
 
 			HandlePropertyValueRecursion( propVal );
 		}                      
-		else if ( dynamic_cast< AxBaseObjAny<AxRecordIterator::Pair>* >( result.second.get() ) ) {
+		else if ( dynamic_cast< AxBaseObjAny<AxRecordIterator::Pair>* >( objRet.get() ) ) {
 
 			AxBaseObjAny<AxRecordIterator::Pair>& recPair =
-				dynamic_cast< AxBaseObjAny<AxRecordIterator::Pair>& >( *result.second.get() );
+				dynamic_cast< AxBaseObjAny<AxRecordIterator::Pair>& >( *objRet.get() );
 
 			HandleRecordPropertyValueRecursion(	recPair.get() );
 		
@@ -371,7 +362,7 @@ AxBaseObjRecIter::Pair AxBaseObjRecIter::NextOne( int& level )
 		Push( iter );
 	}
 	
-	return result;
+	return true;
 }
 
 void AxBaseObjRecIter::PopStack()
@@ -386,8 +377,8 @@ int AxBaseObjRecIter::GetLevel()
 
 void AxBaseObjRecIter::HandleObjectRecursion( AxObject& obj )
 {
-	auto_ptr< AxBaseObjIterPrtcl > iter( 
-		new AxBaseObjIter<AxPropertyIter, AxProperty>( obj.CreatePropertyIter() ) );
+      	auto_ptr< AxBaseObjIterPrtcl > iter( 
+		new AxBaseObjIter<AxPropertyIter, AxProperty, IAAFProperty>( obj.CreatePropertyIter() ) );
 
 	Push( iter );
 }

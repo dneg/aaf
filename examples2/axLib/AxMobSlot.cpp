@@ -20,7 +20,7 @@
 
 //=---------------------------------------------------------------------=
 
-AxMobSlot::AxMobSlot( IAAFMobSlotSP& spIaafMobSlot )
+AxMobSlot::AxMobSlot( IAAFMobSlotSP spIaafMobSlot )
 :	AxObject( AxQueryInterface<IAAFMobSlot, IAAFObject>(
 				spIaafMobSlot, IID_IAAFObject ) ),
 	_spIaafMobSlot( spIaafMobSlot )
@@ -58,7 +58,7 @@ IAAFDataDefSP AxMobSlot::GetDataDef()
 
 //=---------------------------------------------------------------------=
 
-AxTimelineMobSlot::AxTimelineMobSlot( IAAFTimelineMobSlotSP& spIaafTimelineMobSlot )
+AxTimelineMobSlot::AxTimelineMobSlot( IAAFTimelineMobSlotSP spIaafTimelineMobSlot )
 :	AxMobSlot( AxQueryInterface<IAAFTimelineMobSlot, IAAFMobSlot>(
 			  spIaafTimelineMobSlot, IID_IAAFMobSlot ) ),
 	_spIaafTimelineMobSlot( spIaafTimelineMobSlot )

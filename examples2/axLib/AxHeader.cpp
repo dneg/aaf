@@ -22,7 +22,7 @@
 
 #include <iostream>
 
-AxHeader::AxHeader( IAAFHeaderSP& spIaafHeader )
+AxHeader::AxHeader( IAAFHeaderSP spIaafHeader )
 :	AxObject( AxQueryInterface<IAAFHeader,IAAFObject>(
 				spIaafHeader, IID_IAAFObject ) ),
 	_spIaafHeader( spIaafHeader )

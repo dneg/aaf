@@ -27,7 +27,7 @@
 
 class AxMobSlot : public AxObject {
 public:
-	AxMobSlot( IAAFMobSlotSP& spIaafMobSlot );
+	AxMobSlot( IAAFMobSlotSP spIaafMobSlot );
 	~AxMobSlot();
 
 	aafSlotID_t GetSlotID();
@@ -48,7 +48,7 @@ private:
 
 class AxTimelineMobSlot : public AxMobSlot {
 public:
-	AxTimelineMobSlot( IAAFTimelineMobSlotSP& spIaafTimelineMobSlot );
+	AxTimelineMobSlot( IAAFTimelineMobSlotSP spIaafTimelineMobSlot );
 	~AxTimelineMobSlot();
 
 	aafPosition_t GetOrigin();

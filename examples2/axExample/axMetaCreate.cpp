@@ -189,35 +189,40 @@ void AxCreateMetaDataExample( AxFile& axFile,
 	aafUInt32 v_b = 0x87654321;
 	KLV klv_b( KLVKey_AxExampleData_A, sizeof(v_b), reinterpret_cast<aafUInt8*>(&v_b) );
 
-	vector< auto_ptr<MobDescription> > descV;
+	vector< MobDescription* > descV;
 
-	descV.push_back( auto_ptr<MobDescription>(
+	descV.push_back( 
 		new MobDescription( L"Audio Mob A",
 				    L"Meta Comment", L"Metadata added.",
 				    L"Essence Comment", L"No essence data yet.",
-				    klv_a, klv_b  ) ) );
+				    klv_a, klv_b  ) );
 
-	descV.push_back( auto_ptr<MobDescription>(
+	descV.push_back( 
 		new MobDescription( L"Audio Mob B",
 				    L"Meta Comment", L"Metadata added.",
 				    L"Essence Comment", L"No essence data yet.",
-				    klv_a, klv_b  ) ) );
+				    klv_a, klv_b  ) );
 
-	descV.push_back( auto_ptr<MobDescription>(
+	descV.push_back( 
 		new MobDescription( L"Video Mob A",
 				    L"Meta Comment", L"Metadata added.",
 				    L"Essence Comment", L"No essence data yet.",
-				    klv_a, klv_b  ) ) );
+				    klv_a, klv_b  ) );
 
-	descV.push_back( auto_ptr<MobDescription>(
+	descV.push_back( 
 		new MobDescription( L"Video Mob B",
 				    L"Meta Comment", L"Metadata added.",
 				    L"Essence Comment", L"No essence data yet.",
-				    klv_a, klv_b  ) ) );
+				    klv_a, klv_b  ) );
 
-	vector< auto_ptr<MobDescription> >::const_iterator iter;
+	vector< MobDescription* >::const_iterator iter;
 	for( iter = descV.begin(); iter != descV.end(); ++iter ) {
 		AddMasterMob( axHeader, axDictionary, **iter );
 	}
-	
+
+	/* Must delete "manually".  It would be nice not use a bare 
+	   pointer so that this could be avoided. */
+	for( iter = descV.begin(); iter != descV.end(); ++iter ) {
+	  delete *iter;
+	}
 }

@@ -20,7 +20,7 @@
 
 #include <AAFResult.h>
 
-AxDictionary::AxDictionary( IAAFDictionarySP& spIaafDictionary )
+AxDictionary::AxDictionary( IAAFDictionarySP spIaafDictionary )
 :	AxObject( AxQueryInterface<IAAFDictionary, IAAFObject>(
 			   spIaafDictionary, IID_IAAFObject ) ),
 	_spIaafDictionary( spIaafDictionary )
@@ -93,7 +93,7 @@ void AxDictionary::RegisterOpaqueTypeDef( IAAFTypeDefSP spTypeDef )
 }
 
 void AxDictionary::RegisterKLVDataKey( const aafUID_t& uuid,
-				       IAAFTypeDefSP& spTypeDef )
+				       IAAFTypeDefSP spTypeDef )
 {
 	CHECK_HRESULT( _spIaafDictionary->RegisterKLVDataKey( uuid, spTypeDef ) );
 }

@@ -22,7 +22,7 @@
 
 #include <sstream>
 
-AxMetaDefinition::AxMetaDefinition( IAAFMetaDefinitionSP& spIaafMetaDefinition )
+AxMetaDefinition::AxMetaDefinition( IAAFMetaDefinitionSP spIaafMetaDefinition )
 :	_spIaafMetaDefinition( spIaafMetaDefinition )
 {}
 
@@ -31,7 +31,7 @@ AxMetaDefinition::~AxMetaDefinition()
 
 //=---------------------------------------------------------------------=
 
-AxClassDef::AxClassDef( IAAFClassDefSP& spIaafClassDef )
+AxClassDef::AxClassDef( IAAFClassDefSP spIaafClassDef )
 :	AxMetaDefinition( AxQueryInterface<IAAFClassDef,IAAFMetaDefinition>(
 				spIaafClassDef, IID_IAAFMetaDefinition ) ),
 	_spIaafClassDef( spIaafClassDef )
@@ -51,7 +51,7 @@ IUnknownSP AxClassDef::CreateInstance( const IID& auid )
 
 //=---------------------------------------------------------------------=
 
-AxTypeDef::AxTypeDef( IAAFTypeDefSP& spIaafTypeDef )
+AxTypeDef::AxTypeDef( IAAFTypeDefSP spIaafTypeDef )
 :	AxMetaDefinition( AxQueryInterface<IAAFTypeDef,IAAFMetaDefinition>(
 			      spIaafTypeDef, IID_IAAFMetaDefinition ) ),
 	_spIaafTypeDef( spIaafTypeDef )
@@ -76,7 +76,7 @@ IAAFTypeDefSP AxTypeDef::GetTypeDefSP()
 	
 //=---------------------------------------------------------------------=
 
-AxTypeDefIndirect::AxTypeDefIndirect( IAAFTypeDefIndirectSP& spIaafTypeDefIndirect )
+AxTypeDefIndirect::AxTypeDefIndirect( IAAFTypeDefIndirectSP spIaafTypeDefIndirect )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefIndirect, IAAFTypeDef>(
  				spIaafTypeDefIndirect, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefIndirect( spIaafTypeDefIndirect )
@@ -106,7 +106,7 @@ IAAFPropertyValueSP AxTypeDefIndirect::GetActualValue( IAAFPropertyValueSP& spPr
 //=---------------------------------------------------------------------=
 
 
-AxTypeDefOpaque::AxTypeDefOpaque( IAAFTypeDefOpaqueSP& spIaafTypeDefOpaque  )
+AxTypeDefOpaque::AxTypeDefOpaque( IAAFTypeDefOpaqueSP spIaafTypeDefOpaque  )
 :	AxTypeDefIndirect( AxQueryInterface<IAAFTypeDefOpaque, IAAFTypeDefIndirect>(
  						spIaafTypeDefOpaque, IID_IAAFTypeDefIndirect ) ),
 	_spIaafTypeDefOpaque ( spIaafTypeDefOpaque  )
@@ -173,7 +173,7 @@ IAAFPropertyValueSP AxTypeDefRename::GetBaseValue( IAAFPropertyValueSP& spPropVa
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefInt::AxTypeDefInt( IAAFTypeDefIntSP& spIaafTypeDefInt )
+AxTypeDefInt::AxTypeDefInt( IAAFTypeDefIntSP spIaafTypeDefInt )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefInt, IAAFTypeDef>(
  				spIaafTypeDefInt, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefInt( spIaafTypeDefInt )
@@ -210,7 +210,7 @@ void AxTypeDefInt::GetInteger( IAAFPropertyValueSP& spPropVal,
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefFixedArray::AxTypeDefFixedArray( IAAFTypeDefFixedArraySP& spIaafTypeDefFixedArray )
+AxTypeDefFixedArray::AxTypeDefFixedArray( IAAFTypeDefFixedArraySP spIaafTypeDefFixedArray )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefFixedArray,IAAFTypeDef>(
 				spIaafTypeDefFixedArray, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefFixedArray( spIaafTypeDefFixedArray )
@@ -250,7 +250,7 @@ IEnumAAFPropertyValuesSP AxTypeDefFixedArray::GetElements( IAAFPropertyValueSP& 
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefRecord::AxTypeDefRecord( IAAFTypeDefRecordSP& spIaafTypeDefRecord )
+AxTypeDefRecord::AxTypeDefRecord( IAAFTypeDefRecordSP spIaafTypeDefRecord )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefRecord, IAAFTypeDef>(
  				spIaafTypeDefRecord, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefRecord( spIaafTypeDefRecord )
@@ -310,7 +310,7 @@ IAAFPropertyValueSP AxTypeDefRecord::GetValue( IAAFPropertyValueSP& spRecordProp
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefStream::AxTypeDefStream( IAAFTypeDefStreamSP& spIaafTypeDefStream )
+AxTypeDefStream::AxTypeDefStream( IAAFTypeDefStreamSP spIaafTypeDefStream )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefStream, IAAFTypeDef>(
  				spIaafTypeDefStream, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefStream( spIaafTypeDefStream )
@@ -330,7 +330,7 @@ aafInt64 AxTypeDefStream::GetSize( IAAFPropertyValueSP& spPropVal )
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefString::AxTypeDefString( IAAFTypeDefStringSP& spIaafTypeDefString )
+AxTypeDefString::AxTypeDefString( IAAFTypeDefStringSP spIaafTypeDefString )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefString, IAAFTypeDef>(
  				spIaafTypeDefString, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefString( spIaafTypeDefString )
@@ -365,7 +365,7 @@ AxString AxTypeDefString::GetElements( IAAFPropertyValueSP& propVal )
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefSet::AxTypeDefSet( IAAFTypeDefSetSP& spIaafTypeDefSet )
+AxTypeDefSet::AxTypeDefSet( IAAFTypeDefSetSP spIaafTypeDefSet )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefSet, IAAFTypeDef>(
  				spIaafTypeDefSet, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefSet( spIaafTypeDefSet )
@@ -385,7 +385,7 @@ IEnumAAFPropertyValuesSP AxTypeDefSet::GetElements( IAAFPropertyValueSP& spPropV
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefObjRef::AxTypeDefObjRef( IAAFTypeDefObjectRefSP& spIaafTypeDefObjRef )
+AxTypeDefObjRef::AxTypeDefObjRef( IAAFTypeDefObjectRefSP spIaafTypeDefObjRef )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefObjectRef,IAAFTypeDef>(
 				spIaafTypeDefObjRef, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefObjRef( spIaafTypeDefObjRef )
@@ -409,7 +409,7 @@ IUnknownSP AxTypeDefObjRef::GetObject( IAAFPropertyValueSP& spPropVal,
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefWeakObjRef::AxTypeDefWeakObjRef( IAAFTypeDefWeakObjRefSP& spIaafTypeDefWeakObjRef )
+AxTypeDefWeakObjRef::AxTypeDefWeakObjRef( IAAFTypeDefWeakObjRefSP spIaafTypeDefWeakObjRef )
 :	AxTypeDefObjRef( AxQueryInterface<IAAFTypeDefWeakObjRef,IAAFTypeDefObjectRef>(
 				spIaafTypeDefWeakObjRef, IID_IAAFTypeDefObjectRef ) ),
 	_spIaafTypeDefWeakObjRef( spIaafTypeDefWeakObjRef )
@@ -420,7 +420,7 @@ AxTypeDefWeakObjRef::~AxTypeDefWeakObjRef()
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefStrongObjRef::AxTypeDefStrongObjRef( IAAFTypeDefStrongObjRefSP& spIaafTypeDefStrongObjRef )
+AxTypeDefStrongObjRef::AxTypeDefStrongObjRef( IAAFTypeDefStrongObjRefSP spIaafTypeDefStrongObjRef )
 :	AxTypeDefObjRef( AxQueryInterface<IAAFTypeDefStrongObjRef,IAAFTypeDefObjectRef>(
 				spIaafTypeDefStrongObjRef, IID_IAAFTypeDefObjectRef ) ),
 	_spIaafTypeDefStrongObjRef( spIaafTypeDefStrongObjRef )
@@ -432,7 +432,7 @@ AxTypeDefStrongObjRef::~AxTypeDefStrongObjRef()
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefVariableArrayEx::AxTypeDefVariableArrayEx( IAAFTypeDefVariableArrayExSP& spIaafTypeDefVariableArrayEx )
+AxTypeDefVariableArrayEx::AxTypeDefVariableArrayEx( IAAFTypeDefVariableArrayExSP spIaafTypeDefVariableArrayEx )
 :	AxTypeDef( AxQueryInterface<IAAFTypeDefVariableArrayEx,IAAFTypeDef>(
 				spIaafTypeDefVariableArrayEx, IID_IAAFTypeDef ) ),
 	_spIaafTypeDefVariableArrayEx( spIaafTypeDefVariableArrayEx )
@@ -443,7 +443,7 @@ AxTypeDefVariableArrayEx::~AxTypeDefVariableArrayEx()
 
 //=---------------------------------------------------------------------=
 
-AxTypeDefVariableArray::AxTypeDefVariableArray( IAAFTypeDefVariableArraySP& spIaafTypeDefVariableArray )
+AxTypeDefVariableArray::AxTypeDefVariableArray( IAAFTypeDefVariableArraySP spIaafTypeDefVariableArray )
 :	AxTypeDefVariableArrayEx( AxQueryInterface<IAAFTypeDefVariableArray,IAAFTypeDefVariableArrayEx>(
 				spIaafTypeDefVariableArray, IID_IAAFTypeDefVariableArrayEx ) ),
 	_spIaafTypeDefVariableArray( spIaafTypeDefVariableArray )

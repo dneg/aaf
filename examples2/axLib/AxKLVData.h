@@ -29,7 +29,7 @@
 class AxKLVData : public AxObject {
 
 public:
-	AxKLVData( IAAFKLVDataSP& spIaafKLVData );
+	AxKLVData( IAAFKLVDataSP spIaafKLVData );
 	virtual ~AxKLVData();
 
 	void Initialize( aafUID_t  key,

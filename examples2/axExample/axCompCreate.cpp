@@ -26,7 +26,6 @@
 #include <AxMob.h>
 #include <AxMobSlot.h>
 #include <AxEssence.h>
-
 #include <AxEx.h>
 #include <AxUtil.h>
 
@@ -52,15 +51,17 @@ CreateSourceClipToAppendToSequence( AxDictionary& axDictionary,
 	aafUID_t sequenceDataDefAUID = sequenceDataDef.GetAUID();
 
 	AxMobSlotIter axSourceMobIter( sourceMob.GetSlots() );
-	AxMobSlotIter::Pair nextSourceSlot;
+
+	IAAFMobSlotSP nextSlot;
+	bool notAtEnd;
 
 	// If AxTimelineMobSlot had a default ctor and assigment operator
 	// we could use an AxTimelineMobSlot here, instead of an IAAF...
 	IAAFTimelineMobSlotSP spSourceSlot;
 
-	for( nextSourceSlot = axSourceMobIter.NextOne();
-		 nextSourceSlot.first;
-		 nextSourceSlot = axSourceMobIter.NextOne() ) {
+	for( notAtEnd = axSourceMobIter.NextOne( nextSlot );
+	     notAtEnd;
+	     notAtEnd = axSourceMobIter.NextOne( nextSlot ) ) {
 		
 		// First of all, the slot should be a timeline slot.
 		// This will throw an exception due to a bad interface
@@ -68,7 +69,7 @@ CreateSourceClipToAppendToSequence( AxDictionary& axDictionary,
 
 		AxTimelineMobSlot axTimelineMobSlot(
 			AxQueryInterface<IAAFMobSlot,IAAFTimelineMobSlot>(
-				nextSourceSlot.second, IID_IAAFTimelineMobSlot ) );
+				nextSlot, IID_IAAFTimelineMobSlot ) );
 		
 		// Does it match the sequence's data def?
 
@@ -79,7 +80,7 @@ CreateSourceClipToAppendToSequence( AxDictionary& axDictionary,
 		}
 	}
 
-	if ( !nextSourceSlot.first ) {
+	if ( !notAtEnd ) {
 		throw AxEx( L"Failed to find matching data definition." );
 	}
 
@@ -125,21 +126,21 @@ void AxCreateCompositionExample( AxFile& axFile,
 	criteria.searchTag = kAAFByMobKind;
 	criteria.tags.mobKind = kAAFMasterMob;
 	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
-	AxMobIter::Pair nextMob;
-	typedef map< AxString, auto_ptr<AxMasterMob> > MobMap;
+	IAAFMobSP nextMob;
+	bool notAtEnd;
+	typedef map< AxString, AxAutoPtr<AxMasterMob> > MobMap;
 	MobMap mobMap;
 
-	for( nextMob = axMobIter.NextOne();
-		 nextMob.first;
-		 nextMob = axMobIter.NextOne() ) { 
-
-			 auto_ptr<AxMasterMob> axMasterMob( new AxMasterMob( 
-					AxQueryInterface<IAAFMob,IAAFMasterMob>( nextMob.second,
-															 IID_IAAFMasterMob ) ) );
+	for( notAtEnd = axMobIter.NextOne( nextMob );
+	     notAtEnd;
+	     notAtEnd = axMobIter.NextOne( nextMob ) ) { 
+ 	         AxAutoPtr<AxMasterMob> axMasterMob(
+			    new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>(
+				nextMob,
+				IID_IAAFMasterMob ) ) );
 
 			 mobMap[ axMasterMob->GetName() ] = axMasterMob;
-	 }
-
+	}
 
 	AxString audioA( L"Audio Mob A" );
 	AxString audioB( L"Audio Mob B" );
@@ -160,7 +161,6 @@ void AxCreateCompositionExample( AxFile& axFile,
 						      AUID_AAFCompositionMob,
 						      IID_IAAFCompositionMob ) );
 	axHeader.AddMob( axCompMob );
-
 
 	aafRational_t editRate = {25, 1};
 	

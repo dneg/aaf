@@ -320,11 +320,12 @@ void AxPropertyValueDump::process( IAAFPropertyValueSP& spPropVal,
 
 		// Pluck out the value of the Name property.
 		AxPropertyIter axPropIter( axObj.CreatePropertyIter() );
-		AxPropertyIter::Pair nextProp;
-		for (nextProp = axPropIter.NextOne();
-			 nextProp.first;
-			 nextProp = axPropIter.NextOne()) {
-			AxProperty axProp ( nextProp.second );
+		IAAFPropertySP nextProp;
+		bool notAtEnd;
+		for ( notAtEnd = axPropIter.NextOne( nextProp );
+		      notAtEnd;
+		      notAtEnd = axPropIter.NextOne( nextProp ) ) {
+			AxProperty axProp ( nextProp );
 			if ( L"Name" == *axProp.GetName() ) {
 				AxPropertyValue axPropVal( axProp.GetValue() );
 				AxPropertyValueDump dump( _os, false, true, _s );

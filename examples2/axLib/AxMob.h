@@ -28,7 +28,7 @@
 class AxMob : public AxObject {
 
 public:
-	AxMob( IAAFMobSP& spIaafMob );
+	AxMob( IAAFMobSP spIaafMob );
 	virtual ~AxMob();
 
 	aafMobID_t GetMobID();
@@ -55,8 +55,10 @@ public:
 	inline operator IAAFMobSP ()
 	{ return _spIaafMob; }
 
+	AxMob()
+	  {}
+
 private:
-	AxMob();
 	AxMob( const AxMob& );
 	AxMob& operator=( const AxMob& );
 
@@ -69,11 +71,13 @@ private:
 class AxSearchSource {
 
 public:
-	AxSearchSource( IAAFSearchSourceSP& spIaafSearchSource );
+	AxSearchSource( IAAFSearchSourceSP spIaafSearchSource );
 	virtual ~AxSearchSource();
 
+	AxSearchSource()
+	  {}
+
 private:
-	AxSearchSource();
 	AxSearchSource( const AxSearchSource& );
 	AxSearchSource& operator=( const AxSearchSource& );
 
@@ -86,7 +90,7 @@ private:
 class AxMasterMob : public AxMob, public AxSearchSource {
 
 public:
-	AxMasterMob( IAAFMasterMobSP& spIaafMasterMob );
+	AxMasterMob( IAAFMasterMobSP spIaafMasterMob );
 	
 	virtual ~AxMasterMob();
 
@@ -112,10 +116,30 @@ public:
 	inline operator IAAFMasterMobSP ()
 	{ return _spIaafMasterMob; }
 
+	AxMasterMob()
+	  {}
+
+#if 0
+	AxMasterMob( const AxMasterMob& other )
+	{
+		
+	}
+	  : _spIaafMasterMob( other._spIaafMasterMob )
+	  
+
+	AxMasterMob& operator=( const AxMasterMob& rhs )
+	{
+	  if ( &rhs != this ) {
+	    _spIaafMasterMob = rhs._spIaafMasterMob;
+	  }
+	  return *this;
+	}
+#endif
+
 private:
-	AxMasterMob();
-	AxMasterMob( const AxMasterMob& );
-	AxMasterMob& operator=( const AxMasterMob& );
+
+	AxMasterMob( const AxMasterMob& other );
+	AxMasterMob& operator=( const AxMasterMob& rhs );
 
 	// As soon as you attempt to implement a copy constructor,
 	// and/or operator=,  you have to deal with a const AxMasterMob&.
@@ -128,7 +152,7 @@ private:
 class AxMasterMobEx : public AxMasterMob {
 
 public:
-	AxMasterMobEx( IAAFMasterMobExSP& spIaafMasterMobEx );
+	AxMasterMobEx( IAAFMasterMobExSP spIaafMasterMobEx );
 
 	virtual ~AxMasterMobEx();
 
@@ -161,7 +185,7 @@ private:
 class AxCompositionMob : public AxMob {
 
 public:
-	AxCompositionMob( IAAFCompositionMobSP& spIaafCompositionMob );
+	AxCompositionMob( IAAFCompositionMobSP spIaafCompositionMob );
 	virtual ~AxCompositionMob();
 
 private:
@@ -177,7 +201,7 @@ private:
 class AxSourceMob : public AxMob, public AxSearchSource {
 
 public:
-	AxSourceMob( IAAFSourceMobSP& spIaafSourceMob );
+	AxSourceMob( IAAFSourceMobSP spIaafSourceMob );
 	virtual ~AxSourceMob();
 
 	IAAFEssenceDescriptorSP GetEssenceDescriptor();

@@ -18,7 +18,7 @@
 
 #include "AxKLVData.h"
 
-AxKLVData::AxKLVData( IAAFKLVDataSP& spIaafKLVData )
+AxKLVData::AxKLVData( IAAFKLVDataSP spIaafKLVData )
 : AxObject( AxQueryInterface<IAAFKLVData, IAAFObject>(
 		   spIaafKLVData, IID_IAAFObject ) ),
 	_spIaafKLVData( spIaafKLVData )

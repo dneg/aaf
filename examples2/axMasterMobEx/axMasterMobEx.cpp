@@ -45,6 +45,10 @@
 #include <stdlib.h>
 
 #include <map>
+#include <new>
+
+
+
 
 // TODO - Verify data in the read test.
 //      - Implement a "-extend" option that opens a file for modification and extends the essence.
@@ -187,11 +191,11 @@ public:
 	int GetNumSamplesPerChunk()
 	{ return _numSamplesPerChunk; }
 
-	virtual SetupFormatSpecifiers( AxEssenceAccess& ) = 0;
+	virtual void SetupFormatSpecifiers( AxEssenceAccess& ) = 0;
 
 	virtual bool AtEnd() = 0;
 
-	virtual pair<int, auto_ptr<aafUInt8> > GetSamples() = 0;
+	virtual pair<int, AutoPtr<aafUInt8> > GetSamples() = 0;
 
 private:
 
@@ -224,7 +228,7 @@ public:
 	virtual ~VideoSampleSource()
 	{}
 
-	virtual SetupFormatSpecifiers( AxEssenceAccess& axEssenceAccess )
+	virtual void SetupFormatSpecifiers( AxEssenceAccess& axEssenceAccess )
 	{
 		AxEssenceFormat axEssenceFormat( axEssenceAccess.GetEmptyFileFormat() );
 
@@ -250,12 +254,12 @@ public:
 		return _numFramesToWrite > 0 ? false : true;
 	}
 
-	virtual pair<int, auto_ptr<aafUInt8> > GetSamples()
+	virtual pair<int, AutoPtr<aafUInt8> > GetSamples()
 	{
 		const int numSamples = GetNumSamplesPerChunk();  // frames
 		const int numBytes = GetSampleByteSize();
 
-		auto_ptr<aafUInt8> pixels( new aafUInt8 [numBytes] );
+		AutoPtr<aafUInt8> pixels( new aafUInt8 [numBytes] );
 
 		// Fill with random data.
 		int i;
@@ -265,7 +269,7 @@ public:
 		}
 
 		_numFramesToWrite -= numSamples;
-		pair<int, auto_ptr<aafUInt8> > ret(numSamples, pixels);
+		pair<int, AutoPtr<aafUInt8> > ret(numSamples, pixels);
 		return ret;
 	}
 	
@@ -299,7 +303,7 @@ public:
 	virtual ~AudioSampleSource()
 	{}
 
-	virtual SetupFormatSpecifiers( AxEssenceAccess& axEssenceAccess )
+	virtual void SetupFormatSpecifiers( AxEssenceAccess& axEssenceAccess )
 	{
 		AxEssenceFormat axEssenceFormat( axEssenceAccess.GetEmptyFileFormat() );
 
@@ -316,7 +320,7 @@ public:
 		return _numSamplesToWrite > 0 ? false : true;
 	}
 
-	virtual pair<int, auto_ptr<aafUInt8> > GetSamples()
+	virtual pair<int, AutoPtr<aafUInt8> > GetSamples()
 	{
 		// FIXME - Hardcoded: write 10 MByte at a time.
 		
@@ -328,7 +332,7 @@ public:
 		
 		const int numBytes = numSamples * _bytesPerSample;
 
-		auto_ptr<aafUInt8> samples( new aafUInt8 [numBytes] );
+		AutoPtr<aafUInt8> samples( new aafUInt8 [numBytes] );
 
 		// Fill with random data.
 		int i;
@@ -338,7 +342,7 @@ public:
 		}
 
 		_numSamplesToWrite -= numSamples;
-		pair<int, auto_ptr<aafUInt8> > ret(numSamples, samples);
+		pair<int, AutoPtr<aafUInt8> > ret(numSamples, samples );
 		return ret;
 	}
 	
@@ -672,7 +676,7 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 
 	while ( !sampleSource->AtEnd() ) {
 	
-		pair<int, auto_ptr<aafUInt8> > samples = sampleSource->GetSamples();
+		pair<int, AutoPtr<aafUInt8> > samples = sampleSource->GetSamples();
 
 		int numSamplesToWriteThisTime = samples.first;
 		int numSamplesWrittenThisTime = 0;
@@ -687,7 +691,7 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 			numSamplesWrittenThisTime += writeResult.samplesWritten;
 			numSamplesWrittenTotal += writeResult.samplesWritten;
 
-			cout << ((double)numSamplesWrittenTotal/(double)cmdLineParser.GetCountMultiplier());
+			cout << (unsigned int)(numSamplesWrittenTotal/cmdLineParser.GetCountMultiplier());
 			cout << " " <<   cmdLineParser.GetCountSymbol() << "samples written" << endl;
 
 			if ( writeResult.hr == AAFRESULT_EOF ) {
@@ -737,15 +741,16 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 	criteria.searchTag = kAAFByMobKind;
 	criteria.tags.mobKind = kAAFMasterMob;
 	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
-	AxMobIter::Pair next;
+	IAAFMobSP nextMob;
+	bool notAtEnd;
 
 	// Expect at least one master mob, and read the first mob found.
 	
-	next = axMobIter.NextOne();
-	assert( next.first );
+	notAtEnd = axMobIter.NextOne( nextMob );
+	assert( notAtEnd );
 	
-	AxMasterMob axMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>(
-										next.second, IID_IAAFMasterMob ) );
+	AxMasterMob axMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>( 
+			     nextMob, IID_IAAFMasterMob ) );
 
 	wcout << L"MasterMob name: " << axMasterMob.GetName() << endl;
 	wcout << L"Number of Slots: " << axMasterMob.CountSlots() << endl;
@@ -781,11 +786,11 @@ void open_mastermob_and_read_essence( AxHeader& axHeader,
 
 	if ( numSamples > 1024*1024 ) {
 		symbol = "M";
-		divisor = 1e6;
+		divisor = 1000000;
 	}
 	else if ( numSamples > 1024 ) {
 		symbol = "K";
-		divisor = 1e3;
+		divisor = 1000;
 	}
 	else {
 		symbol = "";

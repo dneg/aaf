@@ -125,15 +125,22 @@ std::wostream& operator<<( std::wostream& os, const AxProductIdentification& id 
 
 std::wostream& operator<<( std::wostream& os, const aafUID_t& uid )
 {
-	wchar_t buf[37];
+        const int bufSize = 37;
+	wchar_t buf[bufSize];
 	int rc;
 	using namespace std;
 
+#if defined(OS_WINDOWS)
 	rc = swprintf( buf, L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
 					uid.Data1, uid.Data2, uid.Data3,
 					uid.Data4[0], uid.Data4[1],uid.Data4[2], uid.Data4[3],
 					uid.Data4[4], uid.Data4[5],uid.Data4[6], uid.Data4[7] );
-
+#else
+	rc = swprintf( buf, bufSize, L"%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
+					uid.Data1, uid.Data2, uid.Data3,
+					uid.Data4[0], uid.Data4[1],uid.Data4[2], uid.Data4[3],
+					uid.Data4[4], uid.Data4[5],uid.Data4[6], uid.Data4[7] );
+#endif
 	if ( -1 == rc ) {
 	  // FIXME throw excetption.
 	}
@@ -173,4 +180,11 @@ bool operator==( const aafUID_t& uidL, const aafUID_t& uidR )
 {
 	return 0 == ::memcmp( &uidL, &uidR, sizeof( aafUID_t ) );
 }
+
+#if !defined(OS_WINDOWS)
+bool operator==( const tagGUID& uidL, const tagGUID& uidR )
+{
+	return 0 == ::memcmp( &uidL, &uidR, sizeof( tagGUID ) );
+}
+#endif
 

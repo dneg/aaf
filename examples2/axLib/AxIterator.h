@@ -39,8 +39,7 @@ template <class Type, class EnumeratorType>
 class AxIterator {
 public:
 
-	typedef pair<bool, IAAFSmartPointer<Type> > Pair;
-	typedef IAAFSmartPointer<Type> TypeSP;
+        typedef IAAFSmartPointer<Type> TypeSP;
 
 	AxIterator();
 	AxIterator( const AxIterator<Type, EnumeratorType>& other );
@@ -50,7 +49,7 @@ public:
 
 	AxIterator& operator=( const AxIterator<Type, EnumeratorType>& rhs );
 
-	Pair NextOne();
+	bool NextOne( TypeSP& );
 
 	auto_ptr< vector< IAAFSmartPointer<Type> > > Next( aafUInt32 count );
 
@@ -65,11 +64,11 @@ private:
 	IAAFSmartPointer< EnumeratorType > _spEnumerator;
 };
 
-typedef AxIterator< IAAFProperty, IEnumAAFProperties >				AxPropertyIter;
-typedef AxIterator< IAAFPropertyValue, IEnumAAFPropertyValues >		AxPropertyValueIter;
-typedef AxIterator< IAAFMob, IEnumAAFMobs >							AxMobIter;
-typedef AxIterator< IAAFEssenceData, IEnumAAFEssenceData >			AxEssenceIter;
-typedef AxIterator< IAAFMobSlot, IEnumAAFMobSlots >					AxMobSlotIter;
+typedef AxIterator< IAAFProperty, IEnumAAFProperties >		AxPropertyIter;
+typedef AxIterator< IAAFPropertyValue, IEnumAAFPropertyValues >	AxPropertyValueIter;
+typedef AxIterator< IAAFMob, IEnumAAFMobs >			AxMobIter;
+typedef AxIterator< IAAFEssenceData, IEnumAAFEssenceData >	AxEssenceIter;
+typedef AxIterator< IAAFMobSlot, IEnumAAFMobSlots >		AxMobSlotIter;
 
 
 // Records contain a set of named values that must be iterated over as well,
@@ -116,14 +115,11 @@ class AxArrayIterator {
 public:
 	typedef IAAFSmartPointer<TypeDef> TypeDefSP;
 
-	typedef pair<bool, IAAFPropertyValueSP> Pair;
-
 	AxArrayIterator( TypeDefSP spTypeDef, IAAFPropertyValueSP spPropVal );
 
 	~AxArrayIterator();
 
-	// A pair<bool,IAAFPropertyValue> would be better.
-	Pair NextOne();
+	bool NextOne( IAAFPropertyValueSP&  );
 
 	void Reset();
 

@@ -36,7 +36,9 @@ AxString hrUnkownStr( L"unkown" );
 AxHrMap::AxHrMap()
 {
 
-#define MAP_ADD( HR ) _map[ HR ] = L#HR ;
+#define HRSTRING( PREFIX, STRING ) PREFIX##STRING
+#define MAP_ADD( HR ) _map[ HR ] = HRSTRING( L, #HR ) ;
+
 	
 	// Error code list generated automatically using the command:
 	// grep AAFRESULT ref-impl/include/AAFResult.h | cut -d\  -f2 | sort | uniq
@@ -308,6 +310,7 @@ AxHrMap::AxHrMap()
 
 
 	// Misc. Win32 errors.
+#if defined(OS_WINDOWS)
 	MAP_ADD( ERROR_MOD_NOT_FOUND );
 	MAP_ADD( E_NOINTERFACE );
 	MAP_ADD( STG_E_FILEALREADYEXISTS );
@@ -317,6 +320,7 @@ AxHrMap::AxHrMap()
 	// was used to translate it.  It is a structured storage error generated when
 	// the SS file exceeds 2GB when writting large amounts of essence data.
 	_map[ 0x80030111 ] = L"The compound file is too large for the current implementation.";
+#endif
 
 #undef MAP_ADD
 }

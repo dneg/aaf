@@ -91,7 +91,7 @@ void dumpBaseObjects( AxDictionary& axDict,
 {
 	using namespace std;
 
-	AxBaseObjIterPrtcl::Pair next;
+	pair<bool,auto_ptr<AxBaseObj> > next;
 	Level level(0);
 
 	// FIXME - options require refinement.
@@ -127,9 +127,9 @@ void dumpBaseObjects( AxDictionary& axDict,
 	//		  and its subtree not descended.
 	
 	
-	for( next = recIter.NextOne( level.getRef() );
+	for( next.first  = recIter.NextOne( next.second, level.getRef() );
 		 next.first;
-		 next = recIter.NextOne( level.getRef() ) ) {
+		 next.first = recIter.NextOne( next.second, level.getRef() ) ) {
 
 		 if ( objectDump.first &&
 			  dynamic_cast<AxObject*>( next.second.get() ) ) {
@@ -256,14 +256,14 @@ int renamePeskyOpaques( AxDictionary& axDict,
 {
 	using namespace std;
 
-	AxBaseObjIterPrtcl::Pair next;
+	pair<bool, auto_ptr< AxBaseObj > > next;
 	Level level(0);
 
 	int count = 0;
 
-	for( next = recIter.NextOne( level.getRef() );
+	for( next.first = recIter.NextOne( next.second, level.getRef() );
 		 next.first;
-		 next = recIter.NextOne( level.getRef() ) ) {
+		 next.first = recIter.NextOne( next.second, level.getRef() ) ) {
 
 		if ( dynamic_cast<AxPropertyValue*>( next.second.get() ) ) {
 

@@ -22,7 +22,7 @@
 
 #include <ostream>
 
-AxContentStorage::AxContentStorage( IAAFContentStorageSP& spIaafContentStorage )
+AxContentStorage::AxContentStorage( IAAFContentStorageSP spIaafContentStorage )
 :	AxObject( AxQueryInterface<IAAFContentStorage,IAAFObject>(
 		spIaafContentStorage, IID_IAAFObject ) ),
 	_spIaafContentStorage( spIaafContentStorage )
@@ -81,3 +81,4 @@ std::wostream& operator<<( std::wostream& os, const AxContentStorage& obj )
 {
 	return obj.dump( os );
 }
+

@@ -78,23 +78,22 @@ void AxIterator<Type, EnumeratorType>::Reset()
 
 
 template <class Type, class EnumeratorType>
-AxIterator<Type, EnumeratorType>::Pair
-AxIterator<Type, EnumeratorType>::NextOne()
+bool AxIterator<Type, EnumeratorType>::NextOne( TypeSP& ret )
 {
 	HRESULT hr;
-	Pair ret;
 
-	hr = _spEnumerator->NextOne( &ret.second );
+	TypeSP typeSP;
+
+	hr = _spEnumerator->NextOne( &typeSP );
 
 	if ( hr == AAFRESULT_NO_MORE_OBJECTS ) {
-		ret.first = false;
-		return ret;
+	  return false;
 	}
 
 	CHECK_HRESULT( hr );
 
-	ret.first = true;
-	return ret;
+	ret = typeSP;
+	return true;
 }
 
 template <class Type, class EnumeratorType>
@@ -201,21 +200,17 @@ AxArrayIterator<TypeDef>::~AxArrayIterator()
 {}
 
 template <class TypeDef>
-AxArrayIterator<TypeDef>::Pair AxArrayIterator<TypeDef>::NextOne()
+bool AxArrayIterator<TypeDef>::NextOne( IAAFPropertyValueSP& ret )
 {
-	Pair pairRet;
-	 
 	if ( _current == _count ) {
-		pairRet.first = false;
-		return pairRet;
+		return false;
 	}
 	
-	CHECK_HRESULT( _spTypeDef->GetElementValue( _spPropVal, _current, &pairRet.second ) );	
-	pairRet.first = true;
+	CHECK_HRESULT( _spTypeDef->GetElementValue( _spPropVal, _current, &ret ) );	
 
 	_current++;
 
-	return pairRet;
+	return true;
 }
 
 template <class TypeDef>

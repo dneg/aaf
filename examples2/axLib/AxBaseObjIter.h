@@ -32,14 +32,14 @@ class AxObject;
 class AxProperty;
 class AxPropertyValue;
 
+
 // AxBaseObjIterPrtcl defines the interface of AxBaseObj interators.
 class AxBaseObjIterPrtcl {
 public:
-	typedef std::pair<bool,std::auto_ptr<AxBaseObj> > Pair;
-	
+
 	virtual ~AxBaseObjIterPrtcl() = 0;
 
-	virtual Pair NextOne() = 0;
+	virtual bool NextOne( auto_ptr<AxBaseObj>& ) = 0;
 
 	virtual void Reset() = 0;
 
@@ -56,7 +56,7 @@ public:
 // to an ObjType constructor.
 // - A method NextOne( IterType::TypeSP& );
 
-template <class IterType, class ObjType>
+template <class IterType, class ObjType, class IAAFType>
 class AxBaseObjIter : public AxBaseObjIterPrtcl {
 public:
 	AxBaseObjIter( const IterType& iter )
@@ -66,15 +66,26 @@ public:
 	virtual ~AxBaseObjIter()
 	{}
 
-	virtual Pair NextOne()
+	virtual bool NextOne( auto_ptr<AxBaseObj>& ret )
 	{
-		IterType::Pair pairRet = _iter.NextOne();
-		if ( pairRet.first ) {
-			auto_ptr<AxBaseObj> apObj( new ObjType ( pairRet.second ) );
-			return Pair(true, apObj);
+#if 0
+	  // This is, hopefully, only temporarily disabled.  It works
+	  // fine with MSVC, but won't compile with gcc 3.0.3.  I
+	  // would like to get to the bottom of the gcc before giving
+	  // up on it.  It should be fine.
+	        IterType::TypeSP typeSP;
+#else
+		IAAFSmartPointer<IAAFType> typeSP;
+#endif
+		bool rc;
+		rc = _iter.NextOne( typeSP );
+		if ( rc ) {
+			auto_ptr<AxBaseObj> apObj( new ObjType ( typeSP ) );
+			ret = apObj;
+			return true;
 		}
 		else {
-			return Pair(false, auto_ptr<AxBaseObj>(0) );
+		        return false;
 		}
 	}
 
@@ -87,7 +98,7 @@ public:
 	{
 		auto_ptr< IterType > iter( _iter.Clone() );
 		return auto_ptr<AxBaseObjIterPrtcl>(
-			new AxBaseObjIter<IterType,ObjType>( *iter ) );
+			new AxBaseObjIter<IterType,ObjType,IAAFType>( *iter ) );
 	}
 
 private:
@@ -107,16 +118,16 @@ public:
 	~AxBaseSolitaryObjIter()
 	{}
 
-	virtual Pair NextOne()
+	virtual bool NextOne( auto_ptr<AxBaseObj>& ret )
 	{
 		if ( _done ) {
-			auto_ptr<AxBaseObj> apObj(0);
-			return Pair( false, apObj );
+ 		        return false;
 		}
 		else {
 			auto_ptr<AxBaseObj> apObj( new ObjType(_obj) );
 			_done = true;
-			return Pair( true, apObj );
+			ret = apObj;
+			return true;
 		}
 	}
 
@@ -145,7 +156,7 @@ public:
 	AxBaseRecordObjIter( auto_ptr< AxRecordIterator > );
 	~AxBaseRecordObjIter();
 
-	virtual Pair NextOne();
+	virtual bool NextOne( auto_ptr<AxBaseObj>& ret );
 
 	virtual void Reset();
 
@@ -167,7 +178,7 @@ public:
 	AxBaseArrayObjIter( auto_ptr< AxArrayIterator<TypeDef> > );
 	~AxBaseArrayObjIter();
 
-	virtual Pair NextOne();
+	virtual bool NextOne( auto_ptr<AxBaseObj>& ret );
 
 	virtual void Reset();
 
@@ -204,13 +215,11 @@ private:
 class AxBaseObjRecIter {
 public:
 	
-	typedef AxBaseObjIterPrtcl::Pair Pair;
-
 	AxBaseObjRecIter( std::auto_ptr< AxBaseObjIterPrtcl > root );
 
 	virtual ~AxBaseObjRecIter();
 
-	Pair NextOne( int& level );
+	bool NextOne( auto_ptr<AxBaseObj>& objRet, int& level );
 
 	void PopStack();
 
@@ -224,7 +233,7 @@ private:
 
 	void Push( std::auto_ptr< AxBaseObjIterPrtcl > );
 	void Pop();
-	const std::auto_ptr< AxBaseObjIterPrtcl >& Top();
+	AxBaseObjIterPrtcl& Top();
 	bool Empty();
 	int  Size();
 
@@ -234,7 +243,7 @@ private:
 	void HandleRecordPropertyValueRecursion( AxRecordIterator::Pair& recPair );
 
 	std::auto_ptr< AxBaseObjIterPrtcl > _root;
-	std::deque< std::auto_ptr< AxBaseObjIterPrtcl > > _deque;
+	std::deque< AxBaseObjIterPrtcl* > _deque;
 };
 
 #endif

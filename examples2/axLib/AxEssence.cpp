@@ -20,7 +20,7 @@
 
 #include <AAFResult.h>
 
-AxEssenceMultiAccess::AxEssenceMultiAccess( IAAFEssenceMultiAccessSP& sp )
+AxEssenceMultiAccess::AxEssenceMultiAccess( IAAFEssenceMultiAccessSP sp )
 :	_spIaafEssenceMultiAccess( sp )
 {}
 
@@ -29,7 +29,7 @@ AxEssenceMultiAccess::~AxEssenceMultiAccess()
 
 //=---------------------------------------------------------------------=
 
-AxEssenceAccess::AxEssenceAccess( IAAFEssenceAccessSP& sp )
+AxEssenceAccess::AxEssenceAccess( IAAFEssenceAccessSP sp )
 :	AxEssenceMultiAccess( AxQueryInterface<IAAFEssenceAccess, IAAFEssenceMultiAccess>(
 							sp, IID_IAAFEssenceMultiAccess ) ),
 	_spIaafEssenceAccess( sp )
@@ -90,7 +90,7 @@ AxString AxEssenceAccess::GetCodecName()
 {
 	// There is no "GetCodecNameLength()" method, hence, assume the name will be
 	// less than 80 characters.
-	const bufLength = 80;
+	const aafUInt32 bufLength = 80;
 	aafCharacter* buf = new aafCharacter[bufLength];
 
 	CHECK_HRESULT( _spIaafEssenceAccess->GetCodecName( bufLength, buf ) );
@@ -121,7 +121,7 @@ AxEssenceAccess::ReadResult AxEssenceAccess::ReadSamples( aafUInt32 nSamples,
 
 //=---------------------------------------------------------------------=
 
-AxLocator::AxLocator( IAAFLocatorSP& spIaafLocator )
+AxLocator::AxLocator( IAAFLocatorSP spIaafLocator )
 :	AxObject( AxQueryInterface<IAAFLocator, IAAFObject>(
 				spIaafLocator, IID_IAAFObject ) ),
 	_spIaafLocator( spIaafLocator )
@@ -137,7 +137,7 @@ void AxLocator::SetPath( const AxString& path )
 
 //=---------------------------------------------------------------------=
 
-AxNetworkLocator::AxNetworkLocator( IAAFNetworkLocatorSP& spIaafNetworkLocator )
+AxNetworkLocator::AxNetworkLocator( IAAFNetworkLocatorSP spIaafNetworkLocator )
 :	AxLocator( AxQueryInterface<IAAFNetworkLocator, IAAFLocator>(
 			   spIaafNetworkLocator, IID_IAAFLocator ) ),
 	_spIaafNetworkLocator( spIaafNetworkLocator )
@@ -153,7 +153,7 @@ void AxNetworkLocator::Initialize()
 
 //=---------------------------------------------------------------------=
 
-AxDefObject::AxDefObject( IAAFDefObjectSP& spIaafDefObject )
+AxDefObject::AxDefObject( IAAFDefObjectSP spIaafDefObject )
 :	AxObject( AxQueryInterface<IAAFDefObject, IAAFObject>(
 				spIaafDefObject, IID_IAAFObject) ),
 	_spIaafDefObject( spIaafDefObject )
@@ -173,7 +173,7 @@ aafUID_t AxDefObject::GetAUID()
 
 //=---------------------------------------------------------------------=
 
-AxDataDef::AxDataDef( IAAFDataDefSP& spIaafDataDef )
+AxDataDef::AxDataDef( IAAFDataDefSP spIaafDataDef )
 :	AxDefObject( AxQueryInterface<IAAFDataDef, IAAFDefObject>(
 					spIaafDataDef, IID_IAAFDefObject ) ),
 	_spIaafDataDef( spIaafDataDef )
@@ -203,7 +203,7 @@ bool AxDataDef::IsPictureKind()
 
 //=---------------------------------------------------------------------=
 
-AxOperationDef::AxOperationDef( IAAFOperationDefSP& spIaafOperationDef )
+AxOperationDef::AxOperationDef( IAAFOperationDefSP spIaafOperationDef )
 :	AxDefObject( AxQueryInterface<IAAFOperationDef, IAAFDefObject>(
 					spIaafOperationDef, IID_IAAFDefObject ) ),
 	_spIaafOperationDef( spIaafOperationDef )
@@ -212,9 +212,9 @@ AxOperationDef::AxOperationDef( IAAFOperationDefSP& spIaafOperationDef )
 AxOperationDef::~AxOperationDef()
 {}
 
-AxOperationDef::Initialize( const aafUID_t& uid,
-			    const AxString& name,
-			    const AxString& desc )
+void AxOperationDef::Initialize( const aafUID_t& uid,
+				 const AxString& name,
+				 const AxString& desc )
 {
 	CHECK_HRESULT( _spIaafOperationDef->Initialize( uid, name.c_str(), desc.c_str() ) );
 }
@@ -246,7 +246,7 @@ void AxOperationDef::SetBypass( aafUInt32 bypassTrack )
 
 //=---------------------------------------------------------------------=
 
-AxEssenceDescriptor::AxEssenceDescriptor( IAAFEssenceDescriptorSP& sp )
+AxEssenceDescriptor::AxEssenceDescriptor( IAAFEssenceDescriptorSP sp )
 :	AxObject( AxQueryInterface<IAAFEssenceDescriptor, IAAFObject>(
 				sp, IID_IAAFObject ) ),
 	_spIaafEssenceDescriptor( sp )
@@ -257,7 +257,7 @@ AxEssenceDescriptor::~AxEssenceDescriptor()
 
 //=---------------------------------------------------------------------=
 
-AxFileDescriptor::AxFileDescriptor( IAAFFileDescriptorSP& sp )
+AxFileDescriptor::AxFileDescriptor( IAAFFileDescriptorSP sp )
 :	AxEssenceDescriptor( AxQueryInterface<IAAFFileDescriptor, IAAFEssenceDescriptor>(
 						sp, IID_IAAFEssenceDescriptor ) ),
 	_spIaafFileDescriptor( sp )
@@ -268,7 +268,7 @@ AxFileDescriptor::~AxFileDescriptor()
 
 //=---------------------------------------------------------------------=
 
-AxWAVEDescriptor::AxWAVEDescriptor( IAAFWAVEDescriptorSP& sp )
+AxWAVEDescriptor::AxWAVEDescriptor( IAAFWAVEDescriptorSP sp )
 :	AxFileDescriptor( AxQueryInterface<IAAFWAVEDescriptor, IAAFFileDescriptor>(
 					sp, IID_IAAFFileDescriptor ) ),
 	_spIaafWAVEDescriptor( sp )
@@ -284,7 +284,7 @@ void AxWAVEDescriptor::SetSummary( aafUInt32 size, aafDataValue_t  pSummary )
 
 //=---------------------------------------------------------------------=
 
-AxDigitalImageDescriptor::AxDigitalImageDescriptor( IAAFDigitalImageDescriptorSP& sp )
+AxDigitalImageDescriptor::AxDigitalImageDescriptor( IAAFDigitalImageDescriptorSP sp )
 :	AxFileDescriptor( AxQueryInterface<IAAFDigitalImageDescriptor, IAAFFileDescriptor>(
 					sp, IID_IAAFFileDescriptor ) ),
 	_spIaafDigitalImageDescriptor( sp )
@@ -325,7 +325,7 @@ void AxDigitalImageDescriptor::SetVideoLineMap( aafUInt32  numberElements, const
 
 //=---------------------------------------------------------------------=
 
-AxCDCIDescriptor::AxCDCIDescriptor( IAAFCDCIDescriptorSP& sp )
+AxCDCIDescriptor::AxCDCIDescriptor( IAAFCDCIDescriptorSP sp )
 :	AxDigitalImageDescriptor( AxQueryInterface<IAAFCDCIDescriptor, IAAFDigitalImageDescriptor>(
 				sp, IID_IAAFDigitalImageDescriptor ) ),
 	_spIaafCDCIDescriptor( sp )
@@ -356,7 +356,7 @@ void AxCDCIDescriptor::SetColorRange( aafUInt32 ColorRange )
 
 //=---------------------------------------------------------------------=
 
-AxEssenceFormat::AxEssenceFormat( IAAFEssenceFormatSP& sp )
+AxEssenceFormat::AxEssenceFormat( IAAFEssenceFormatSP sp )
 :	_spIaafEssenceFormat( sp )
 {}
 

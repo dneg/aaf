@@ -30,11 +30,11 @@
 
 class AxEssenceMultiAccess {
 public:
-	AxEssenceMultiAccess( IAAFEssenceMultiAccessSP& spIaafEssenceMultiAccess );
+	AxEssenceMultiAccess( IAAFEssenceMultiAccessSP spIaafEssenceMultiAccess );
 	~AxEssenceMultiAccess();
 
 private:
-	AxEssenseMultiAccess();
+	AxEssenceMultiAccess();
 	AxEssenceMultiAccess( const AxEssenceMultiAccess& );
 	AxEssenceMultiAccess& operator=( const AxEssenceMultiAccess& );
 	
@@ -58,7 +58,7 @@ public:
 		aafUInt32 bytesRead;
 	};
 
-	AxEssenceAccess( IAAFEssenceAccessSP& spIaafEssenceAccess );
+	AxEssenceAccess( IAAFEssenceAccessSP spIaafEssenceAccess );
 	~AxEssenceAccess();
 
 	IAAFEssenceFormatSP GetEmptyFileFormat();
@@ -95,7 +95,7 @@ private:
 
 class AxLocator : public AxObject {
 public:
-	AxLocator( IAAFLocatorSP& spIaafLocator );
+	AxLocator( IAAFLocatorSP spIaafLocator );
 	~AxLocator();
 
 	void SetPath( const AxString& path );
@@ -116,7 +116,7 @@ private:
 
 class AxNetworkLocator : public AxLocator {
 public:
-	AxNetworkLocator( IAAFNetworkLocatorSP& spIaafNetworkLocator );
+	AxNetworkLocator( IAAFNetworkLocatorSP spIaafNetworkLocator );
 	~AxNetworkLocator();
 
 	void Initialize();
@@ -133,7 +133,7 @@ private:
 
 class AxDefObject : public AxObject {
 public:
-	AxDefObject( IAAFDefObjectSP& spIaafDefObject );
+	AxDefObject( IAAFDefObjectSP spIaafDefObject );
 	~AxDefObject();
 
 	aafUID_t GetAUID();
@@ -150,7 +150,7 @@ private:
 
 class AxDataDef: public AxDefObject {
 public:
-	AxDataDef( IAAFDataDefSP& spIaafDataDef );
+	AxDataDef( IAAFDataDefSP spIaafDataDef );
 	~AxDataDef();
 
 	bool IsSoundKind();
@@ -171,10 +171,10 @@ private:
 
 class AxOperationDef: public AxDefObject {
 public:
-	AxOperationDef( IAAFOperationDefSP& spIaafOperationDef );
+	AxOperationDef( IAAFOperationDefSP spIaafOperationDef );
 	~AxOperationDef();
 
-	Initialize( const aafUID_t&,
+	void Initialize( const aafUID_t&,
 				const AxString& name,
 				const AxString& desc );
 	
@@ -199,7 +199,7 @@ private:
 
 class AxEssenceDescriptor : public AxObject {
 public:
-	AxEssenceDescriptor( IAAFEssenceDescriptorSP& spIaafEssenceDescriptor );
+	AxEssenceDescriptor( IAAFEssenceDescriptorSP spIaafEssenceDescriptor );
 	~AxEssenceDescriptor();
 
 private:
@@ -214,7 +214,7 @@ private:
 
 class AxFileDescriptor : public AxEssenceDescriptor {
 public:
-	AxFileDescriptor( IAAFFileDescriptorSP& spIaafFileDescriptor );
+	AxFileDescriptor( IAAFFileDescriptorSP spIaafFileDescriptor );
 	~AxFileDescriptor();
 
 private:
@@ -229,7 +229,7 @@ private:
 
 class AxWAVEDescriptor : public AxFileDescriptor {
 public:
-	AxWAVEDescriptor( IAAFWAVEDescriptorSP& spIaafWAVEDescriptor );
+	AxWAVEDescriptor( IAAFWAVEDescriptorSP spIaafWAVEDescriptor );
 	~AxWAVEDescriptor();
 
 	void SetSummary( aafUInt32 size, aafDataValue_t  pSummary );
@@ -246,7 +246,7 @@ private:
 
 class AxDigitalImageDescriptor : public AxFileDescriptor {
 public:
-	AxDigitalImageDescriptor( IAAFDigitalImageDescriptorSP& spIaafDigitalImageDescriptor );
+	AxDigitalImageDescriptor( IAAFDigitalImageDescriptorSP spIaafDigitalImageDescriptor );
 	~AxDigitalImageDescriptor();
 
 	void SetStoredView( aafUInt32 StoredHeight, aafUInt32 StoredWidth);
@@ -273,7 +273,7 @@ private:
 
 class AxCDCIDescriptor : public AxDigitalImageDescriptor {
 public:
-	AxCDCIDescriptor( IAAFCDCIDescriptorSP& spIaafCDCIDescriptor );
+	AxCDCIDescriptor( IAAFCDCIDescriptorSP spIaafCDCIDescriptor );
 	~AxCDCIDescriptor();
 
 	void SetComponentWidth( aafInt32 ComponentWidth );
@@ -296,7 +296,7 @@ private:
 
 class AxEssenceFormat {
 public:
-	AxEssenceFormat( IAAFEssenceFormatSP& spIaafEssenceFormat );
+	AxEssenceFormat( IAAFEssenceFormatSP spIaafEssenceFormat );
 	~AxEssenceFormat();
 
 	void AddFormatSpecifier( const aafUID_t& essenceFormatCode,

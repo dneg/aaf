@@ -29,7 +29,7 @@ class AxContentStorage : public AxObject {
 
 public:
 	
-	AxContentStorage( IAAFContentStorageSP& spIaafContentStorage );
+	AxContentStorage( IAAFContentStorageSP spIaafContentStorage );
 	virtual ~AxContentStorage();
 
 	IAAFMobSP LookupMob( const aafMobID_t& );

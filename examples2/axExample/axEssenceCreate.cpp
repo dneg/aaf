@@ -92,15 +92,19 @@ void AddImageEssence( AxMasterMob& masterMob,
 	// the SourceMob.  So... let's get the source mob.  It is hanging off
 	// mob slot 1.
 	AxMobSlotIter axMobIter( masterMob.GetSlots() );
-	AxMobSlotIter::Pair nextSlot = axMobIter.NextOne();
-	if ( !nextSlot.first ) {
+	IAAFMobSlotSP nextSlot;
+	bool notAtEnd = axMobIter.NextOne( nextSlot );
+
+	if ( !notAtEnd ) {
 		throw AxEx( L"Where's the beef?" );
 	}
-	if ( axMobIter.NextOne().first ) {
+
+	IAAFMobSlotSP unused;
+	if ( axMobIter.NextOne( unused ) ) {
 		throw AxEx( L"More slots than expected." );
 	};
 
-	AxMobSlot axMobSlot( nextSlot.second );
+	AxMobSlot axMobSlot( nextSlot );
 
 	// The AxMobSlot::GetSegment() will return a segment interface.  We know that
 	// this is really a source clip, so "cast up" to source clip.
@@ -236,15 +240,19 @@ void AddAudioEssence( AxMasterMob& masterMob, AxHeader& axHeader )
 	// can be set.
 		
 	AxMobSlotIter axMobIter( masterMob.GetSlots() );
-	AxMobSlotIter::Pair nextSlot = axMobIter.NextOne();
-	if ( !nextSlot.first ) {
+	IAAFMobSlotSP nextSlot;
+	bool notAtEnd = axMobIter.NextOne( nextSlot );
+
+	if ( !notAtEnd ) {
 		throw AxEx( L"Where's the tofu?" );
 	}
-	if ( axMobIter.NextOne().first ) {
+
+	IAAFMobSlotSP unused;
+	if ( axMobIter.NextOne( unused ) ) {
 		throw AxEx( L"More slots than expected." );
 	};
 
-	AxMobSlot axMobSlot( nextSlot.second );
+	AxMobSlot axMobSlot( nextSlot );
 
 	// The AxMobSlot::GetSegment() will return a segment interface.  We know that
 	// this is really a source clip, so "cast up" to source clip.
@@ -311,19 +319,20 @@ void AxCreateEssenceExample( AxFile& axFile,
 	criteria.searchTag = kAAFByMobKind;
 	criteria.tags.mobKind = kAAFMasterMob;
 	AxMobIter axMobIter( axContentStorage.GetMobs( &criteria ) );
-	AxMobIter::Pair next;
+	IAAFMobSP nextMob;
+	bool notAtEnd;
 
-	// AxMasterMob has no copy ctor or operator=, hence use a pointer
-	typedef map< AxString, auto_ptr<AxMasterMob> > MobMap;
+	// Use pointer because AxMasterMob has no copy ctor or assignment
+	// operator.
+	typedef map< AxString, AxAutoPtr<AxMasterMob> > MobMap;
 	MobMap mobMap;
 
-	for( next = axMobIter.NextOne();
-		 next.first;
-		 next = axMobIter.NextOne() ) { 
+	for( notAtEnd = axMobIter.NextOne( nextMob );
+	     notAtEnd;
+	     notAtEnd = axMobIter.NextOne( nextMob ) ) { 
 
-			 auto_ptr<AxMasterMob> axMasterMob(
-				 new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>(
-					next.second, IID_IAAFMasterMob ) ) );
+			 AxAutoPtr<AxMasterMob> axMasterMob( new AxMasterMob( AxQueryInterface<IAAFMob,IAAFMasterMob>(
+					nextMob, IID_IAAFMasterMob ) ) );
 
 			 mobMap[ axMasterMob->GetName() ] = axMasterMob;
 		 }

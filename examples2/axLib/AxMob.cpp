@@ -22,7 +22,7 @@
 
 //=---------------------------------------------------------------------=
 
-AxMob::AxMob( IAAFMobSP& spIaafMob )
+AxMob::AxMob( IAAFMobSP spIaafMob )
 : AxObject( AxQueryInterface<IAAFMob, IAAFObject>(
 		   spIaafMob, IID_IAAFObject ) ),
 	_spIaafMob( spIaafMob )
@@ -116,7 +116,7 @@ IEnumAAFMobSlotsSP AxMob::GetSlots()
 
 //=---------------------------------------------------------------------=
 
-AxSearchSource::AxSearchSource( IAAFSearchSourceSP& spIaafSearchSource )
+AxSearchSource::AxSearchSource( IAAFSearchSourceSP spIaafSearchSource )
 : _spIaafSearchSource( spIaafSearchSource )
 {}
 
@@ -125,7 +125,7 @@ AxSearchSource::~AxSearchSource()
 
 //=---------------------------------------------------------------------=
 
-AxMasterMob::AxMasterMob( IAAFMasterMobSP& spIaafMasterMob )
+AxMasterMob::AxMasterMob( IAAFMasterMobSP spIaafMasterMob )
 :	AxMob( AxQueryInterface<IAAFMasterMob,IAAFMob>(
 		  spIaafMasterMob, IID_IAAFMob ) ),
     AxSearchSource( AxQueryInterface<IAAFMasterMob, IAAFSearchSource>(
@@ -163,7 +163,7 @@ IAAFEssenceAccessSP AxMasterMob::CreateEssence(	aafSlotID_t  masterSlotID,
 
 //=---------------------------------------------------------------------=
 
-AxMasterMobEx::AxMasterMobEx( IAAFMasterMobExSP& spIaafMasterMobEx )
+AxMasterMobEx::AxMasterMobEx( IAAFMasterMobExSP spIaafMasterMobEx )
 :	AxMasterMob( AxQueryInterface<IAAFMasterMobEx, IAAFMasterMob>(
 			spIaafMasterMobEx, IID_IAAFMasterMob ) ),
 	_spIaafMasterMobEx( spIaafMasterMobEx )
@@ -208,7 +208,7 @@ IAAFEssenceAccessSP AxMasterMob::OpenEssence( aafSlotID_t		slotId,
 }
 
 
-AxCompositionMob::AxCompositionMob( IAAFCompositionMobSP& spIaafCompositionMob )
+AxCompositionMob::AxCompositionMob( IAAFCompositionMobSP spIaafCompositionMob )
 :	AxMob( AxQueryInterface<IAAFCompositionMob,IAAFMob>(
 		  spIaafCompositionMob, IID_IAAFMob ) ),
  	_spIaafCompositionMob( spIaafCompositionMob )
@@ -220,7 +220,7 @@ AxCompositionMob::~AxCompositionMob()
 //=---------------------------------------------------------------------=
 
 
-AxSourceMob::AxSourceMob( IAAFSourceMobSP& spIaafSourceMob )
+AxSourceMob::AxSourceMob( IAAFSourceMobSP spIaafSourceMob )
 :	AxMob( AxQueryInterface<IAAFSourceMob,IAAFMob>(
 		  spIaafSourceMob, IID_IAAFMob ) ),
     AxSearchSource( AxQueryInterface<IAAFSourceMob, IAAFSearchSource>(

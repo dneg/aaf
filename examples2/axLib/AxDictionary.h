@@ -28,7 +28,7 @@
 class AxDictionary : public AxObject {
 
 public:
-	AxDictionary( IAAFDictionarySP& spIaafDictionary );
+	AxDictionary( IAAFDictionarySP spIaafDictionary );
 	~AxDictionary();
 
 	bool isKnownTypeDef( const aafUID_t& typeId );
@@ -43,7 +43,7 @@ public:
 	void RegisterOperationDef( IAAFOperationDefSP );
 
 	void RegisterKLVDataKey( const aafUID_t& uuid,
-							 IAAFTypeDefSP& spTypeDef );
+				 IAAFTypeDefSP spTypeDef );
 
 	IUnknownSP CreateInstance( const aafUID_t& auid,
 				  			   const IID& iid );

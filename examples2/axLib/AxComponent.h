@@ -52,7 +52,7 @@ private:
 class AxSegment : public AxComponent {
 
 public:
-	AxSegment( IAAFSegmentSP& spIaafSegment );
+	AxSegment( IAAFSegmentSP spIaafSegment );
 	~AxSegment();
 
 	operator IAAFSegmentSP ()
@@ -71,7 +71,7 @@ private:
 class AxTransition : public AxComponent {
 
 public:
-	AxTransition( IAAFTransitionSP& spIaafTransition );
+	AxTransition( IAAFTransitionSP spIaafTransition );
 	~AxTransition();
 
 	void Initialize( IAAFDataDefSP, aafLength_t, aafPosition_t, IAAFOperationGroupSP);
@@ -81,7 +81,7 @@ public:
 
 private:
 	AxTransition();
-	AxSegment( const AxTransition& );
+	AxTransition( const AxTransition& );
 	AxTransition& operator=( const AxTransition& );
 
 	IAAFTransitionSP _spIaafTransition;
@@ -92,7 +92,7 @@ private:
 class AxSequence : public AxSegment {
 
 public:
-	AxSequence( IAAFSequenceSP& spIaafSequence );
+	AxSequence( IAAFSequenceSP spIaafSequence );
 	~AxSequence();
 
 	void Initialize( IAAFDataDefSP spIaafDataDef );
@@ -113,7 +113,7 @@ private:
 class AxSourceReference : public AxSegment {
 
 public:
-	AxSourceReference( IAAFSourceReferenceSP& spIaafSourceReference );
+	AxSourceReference( IAAFSourceReferenceSP spIaafSourceReference );
 	~AxSourceReference();
 
 	// FIXME - Too large to return by value?
@@ -132,7 +132,7 @@ private:
 class AxSourceClip : public AxSourceReference {
 
 public:
-	AxSourceClip( IAAFSourceClipSP& spIaafSourceClip );
+	AxSourceClip( IAAFSourceClipSP spIaafSourceClip );
 	~AxSourceClip();
 
 	void Initialize( IAAFDataDefSP, const aafLength_t&, const aafSourceRef_t& );
@@ -153,7 +153,7 @@ private:
 class AxOperationGroup : public AxSegment {
 
 public:
-	AxOperationGroup( IAAFOperationGroupSP& spIaafOperationGroup );
+	AxOperationGroup( IAAFOperationGroupSP spIaafOperationGroup );
 	~AxOperationGroup();
 
 	void Initialize( IAAFDataDefSP, aafLength_t, IAAFOperationDefSP );

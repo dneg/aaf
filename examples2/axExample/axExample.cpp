@@ -17,7 +17,7 @@
 //
 //=---------------------------------------------------------------------
 
-#include "AxExample.h"
+#include "axExample.h"
 
 #include <AxInit.h>
 #include <AxFile.h>
@@ -42,7 +42,7 @@ void throwUsage()
 	throw AxEx( msg.str().c_str() );
 }
 
-int main( int argc, const char** argv )
+int real_main( int argc, const char** argv )
 {
 	using namespace std;
 	
@@ -121,3 +121,12 @@ int main( int argc, const char** argv )
 	return 0;
 }
 
+
+int main( int argc, char **argv )
+{
+	const char* debug_argv[] = { argv[0], "-file", "c:/cygwin/tmp/example.aaf", "-metadata", "-composition", "-essence" };
+
+	return real_main( sizeof(debug_argv)/sizeof(debug_argv[0]),
+ 				    debug_argv );
+
+}
