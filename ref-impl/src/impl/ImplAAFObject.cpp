@@ -401,6 +401,32 @@ ImplAAFObject::ImplAAFObject ()
 }
 
 
+/*
+template <typename T>
+static void CleanupObjRefs (OMProperty* p)
+{
+  OMStrongReferenceVectorProperty<T> * srv =
+	dynamic_cast<OMStrongReferenceVectorProperty<T>*>(p);
+  if (srv)
+	{
+	  size_t size = srv->getSize();
+	  for (size_t i = 0; i < size; i++)
+		{
+		  OMStorable* oldObj = srv->setValueAt (0, i);
+		  if (oldObj)
+			{
+			  ImplAAFObject * pObj =
+				dynamic_cast<ImplAAFObject*>(oldObj);
+			  assert (pObj);
+			  pObj->ReleaseReference ();
+			  pObj = 0;
+			}
+		}
+	}
+}
+*/
+
+
 ImplAAFObject::~ImplAAFObject ()
 {
   _cachedDefinition = 0; // we don't need to reference count this defintion
@@ -412,6 +438,41 @@ ImplAAFObject::~ImplAAFObject ()
 	   i <_addedPropCount;
 	   i++)
 	{
+	  // The template argument here *must* match the type allocated in
+	  // ImplAAFTypeDefFixedArray::pvtCreateOMPropertyMBS() and
+	  // ImplAAFTypeDefVariableArray::pvtCreateOMPropertyMBS().
+	  OMStrongReferenceVectorProperty<ImplAAFObject> * srv =
+		dynamic_cast<OMStrongReferenceVectorProperty<ImplAAFObject>*>(_addedProps[i]);
+	  if (srv)
+		{
+		  size_t size = srv->getSize();
+		  for (size_t i = 0; i < size; i++)
+			{
+			  ImplAAFObject* oldObj = srv->setValueAt (0, i);
+			  if (oldObj)
+				{
+				  oldObj->ReleaseReference ();
+				  oldObj = 0;
+				}
+			}
+		}
+	  else
+		{
+		  // The template argument here *must* match the type
+		  // allocated in
+		  // ImplAAFTypeDefStrongObjRef::pvtCreateOMPropertyMBS().
+		  OMStrongReferenceProperty<ImplAAFObject> * sro =
+			dynamic_cast<OMStrongReferenceProperty<ImplAAFObject>*>(_addedProps[i]);
+		  if (sro)
+			{
+			  ImplAAFObject* oldObj = sro->setValue (0);
+			  if (oldObj)
+				{
+				  oldObj->ReleaseReference ();
+				  oldObj = 0;
+				}
+			}
+		}
 	  delete _addedProps[i];
 	}
 }
