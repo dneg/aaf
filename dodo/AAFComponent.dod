@@ -44,16 +44,16 @@ AD_METHOD1(GetLength,
 	
 AD_XMETHOD1(SetDataDef,
 			[in],
-			objIn,
-			AAFDataDef,
+			objPass,
+			aafUID_t *,
 			datadef,
 			DataDef of this object,
-			sets the data definition property value on the input component object.)
+			sets the data definition property AUID on the input component object.)
 
 AD_XMETHOD1(GetDataDef,
 			[retval][out],
-			objOut,
-			AAFDataDef,
+			objPass,
+			aafUID_t *,
 			datadef,
 			DataDef of this object,
 			returns data definition object)
