@@ -44,20 +44,12 @@
 
 
 ImplAAFStreamPropertyValue::ImplAAFStreamPropertyValue () :
-  _streamProperty(NULL),
-  _propertyContainer(NULL)
+  _streamProperty(NULL)
 {}
 
 
 ImplAAFStreamPropertyValue::~ImplAAFStreamPropertyValue ()
 {
-#if defined(REFERENCE_PROPERTY_CONTAINER)
-  if (_propertyContainer)
-  {
-    _propertyContainer->ReleaseReference();
-    _propertyContainer = NULL;
-  }
-#endif // #if defined(REFERENCE_PROPERTY_CONTAINER)
 }
  
 
@@ -486,28 +478,16 @@ AAFRESULT ImplAAFStreamPropertyValue::Initialize (
   if (NULL == streamProperty)
     return AAFRESULT_INVALID_PARAM;
 
-  // Get the storable container for this property. Since this is a "direct 
-  // access" interface we need to hold onto a reference so tha the container
-  // is not deleted.
-  ImplAAFRoot * propertyContainer = dynamic_cast<ImplAAFRoot *>
-                                      (property->propertySet()->container());
-  assert (propertyContainer);
-  if (NULL == propertyContainer)
-    return AAFRESULT_INVALID_PARAM;
+  result = ImplAAFPropertyValue::Initialize(streamType, streamProperty);
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    _streamProperty = streamProperty;
+   
+    // This instance is now fully initialized.
+    setInitialized();
+  }
   
-  // Save our initialized member data.
-  SetType(const_cast<ImplAAFTypeDefStream *>(streamType));
-  _streamProperty = streamProperty;
-  _propertyContainer = propertyContainer;
-#if defined(REFERENCE_PROPERTY_CONTAINER)
-  _propertyContainer->AcquireReference();
-#endif // #if defined(REFERENCE_PROPERTY_CONTAINER)
-  
- 
-  // This instance is now fully initialized.
-  setInitialized();
-  
-  return AAFRESULT_SUCCESS;
+  return result;
 }
 
 //
