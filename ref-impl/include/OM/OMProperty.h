@@ -176,14 +176,14 @@ protected:
 
   OMPropertyId _propertyId;
   OMStoredForm _storedForm;
+
+private:
+
   const wchar_t* _name;
   char* _cName;
   const OMPropertySet* _propertySet; // The PropertySet that contains
                                      // this property
   const OMPropertyDefinition* _definition;
-
-private:
-
   bool _isOptional;
   bool _isPresent;
 
