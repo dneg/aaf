@@ -13,7 +13,7 @@
 #include "AAFResult.h"
 #include "aafTable.h"
 #include "aafErr.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"

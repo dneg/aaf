@@ -50,7 +50,7 @@ ImplAAFSequence::~ImplAAFSequence ()
 
 //***********************************************************
 //
-// SetInitialValue()
+// Initialize()
 //
 // This function sets the properties on a newly created sequence
 // object with the given property values. The length of the sequence is
@@ -74,7 +74,7 @@ ImplAAFSequence::~ImplAAFSequence ()
 //   - pDatadef is null.
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSequence::SetInitialValue (aafUID_t * pDatadef)
+    ImplAAFSequence::Initialize (aafUID_t * pDatadef)
 {
 	return (SetDataDef(pDatadef));
 }

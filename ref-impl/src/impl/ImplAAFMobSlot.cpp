@@ -101,10 +101,10 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
   //****************
-  // GetNameLength()
+  // GetNameBufLen()
   //
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFMobSlot::GetNameLength
+ImplAAFMobSlot::GetNameBufLen
 		(aafInt32	*pSize)	//@parm [in] length of the buffer provided to hold the slot name
 							// including the terminator
 {

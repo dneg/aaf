@@ -40,7 +40,7 @@
 #include "ImplAAFSourceClip.h"
 #include "aafCvt.h"
 #include "aafErr.h"
-#include "aafresult.h"
+#include "AAFResult.h"
 #include "ImplAAFObjectCreation.h"
 #include "AAFDefUIDs.h"
 #include "AAFUtils.h"
