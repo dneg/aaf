@@ -127,11 +127,7 @@ public:
 
 
 	STDMETHOD (SetResolutionID) ( aafInt32  resolutionID );
-	STDMETHOD (SetFirstFrameOffset) ( aafInt32  firstFrameOffset );
-	STDMETHOD (SetImageSize) ( aafInt32 imageSize );
 	STDMETHOD (SetFrameSampleSize) ( aafInt32 frameSampleSize );
-	STDMETHOD (SetFrameIndexByteOrder) ( aafInt16	frameIndexByteOrder );
-	STDMETHOD (SetOffsetToFrameIndexes) ( aafInt32	offsetToFrameIndexes );
 	STDMETHOD (SetMCProps) ( aafInt32 resolutionID, 
 				 aafInt32 frameSampleSize );
 
