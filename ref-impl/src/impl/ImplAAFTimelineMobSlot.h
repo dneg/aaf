@@ -22,9 +22,8 @@
 // aafPosition_t,
 // aafTrackID_t,
 
-const int CLSID_AAFTIMELINEMOBSLOT = 130;
 
-const int PID_TIMELINEMOBSLOT_EDITRATE	= 0;
+const int PID_TIMELINEMOBSLOT_EDITRATE	= 4;
 
 
 
