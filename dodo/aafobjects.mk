@@ -47,7 +47,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
 	AAFScopeReference \
-	AAFSelector \
 	AAFStaticMobSlot \
 	AAFTaggedValue \
 	AAFTextClip \
@@ -91,7 +90,6 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFPropertyValues \
 	EnumAAFProperties \
 	EnumAAFReferenceValues \
-	EnumAAFSegments \
 	EnumAAFTypeDefs 
 
 
@@ -131,6 +129,7 @@ HUMAN_TYPED_IMPL = \
 	AAFObject \
 	AAFPluggableDef \
 	AAFSegment \
+	AAFSelector \
 	AAFSequence \
 	AAFSourceClip \
 	AAFSourceMob \
@@ -147,7 +146,8 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
 	EnumAAFMobs \
-	EnumAAFPluginDescriptors
+	EnumAAFPluginDescriptors \
+	EnumAAFSegments 
 
 # The list of standard dodo targets.
 # AAFTypes have to be handled separately since no object is to be created.
