@@ -15,7 +15,7 @@
 #include "ImplAAFPluginManager.h"
 #endif
 
-#include "ImplAAFSession.h"
+#include "ImplAAFContext.h"
 
 #include <assert.h>
 #include <string.h>
@@ -37,12 +37,26 @@ const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x0
 const CLSID CLSID_AAFEssenceFileContainer = { 0xa7337030, 0xc103, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 extern "C" const aafClassID_t CLSID_EnumAAFLoadedPlugins;
 
-ImplAAFPluginManager::ImplAAFPluginManager ()
+ImplAAFPluginManager::ImplAAFPluginManager () :
+  _plugins(0),
+	_codecDesc(0)
 {}
 
 
 ImplAAFPluginManager::~ImplAAFPluginManager ()
-{}
+{
+	// Cleanup the non-persistent data...
+  if (_plugins)
+  {
+	  TableDispose(_plugins);
+	  _plugins = 0;
+  }
+  if (_codecDesc)
+  {
+	  TableDispose(_codecDesc);
+	  _codecDesc = 0;
+  }
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -90,9 +104,9 @@ AAFRESULT ImplAAFPluginManager::Init(void)
 
 ImplAAFPluginManager *ImplAAFPluginManager::GetPluginManager()
 {
-	ImplAAFPluginManager	*mgr;
+  //	ImplAAFPluginManager	*mgr;
 
-	return(ImplAAFSession::GetInstance()->GetPluginManager());
+	return(ImplAAFContext::GetInstance()->GetPluginManager());
 }
 
 AAFRESULT ImplAAFPluginManager::GetPluginInstance(
