@@ -187,6 +187,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
       element.restore();
       _vector.setAt(element, i);
       delete [] name;
+      name = 0; // for BoundsChecker
     }
   }
   delete vectorIndex;
