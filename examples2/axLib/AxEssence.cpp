@@ -347,6 +347,21 @@ void AxWAVEDescriptor::SetSummary( aafUInt32 size, aafDataValue_t  pSummary )
 	CHECK_HRESULT( _spIaafWAVEDescriptor->SetSummary( size, pSummary ) );
 }
 
+std::pair<int, std::auto_ptr<aafUInt8> > AxWAVEDescriptor::GetSummary()
+{
+	using namespace std;
+	
+	aafUInt32 size;
+
+	CHECK_HRESULT( _spIaafWAVEDescriptor->GetSummaryBufferSize( &size ) );
+
+	aafUInt8* buffer = new aafUInt8[ size ];
+
+	CHECK_HRESULT( _spIaafWAVEDescriptor->GetSummary( size, buffer ) );
+
+	return pair<int, std::auto_ptr<aafUInt8> >( size, auto_ptr<aafUInt8>( buffer ) );
+}
+
 //=---------------------------------------------------------------------=
 
 AxDigitalImageDescriptor::AxDigitalImageDescriptor( IAAFDigitalImageDescriptorSP sp )
@@ -398,7 +413,7 @@ void AxDigitalImageDescriptor::SetFrameLayout( aafFrameLayout_t FrameLayout )
 void AxDigitalImageDescriptor::SetVideoLineMap( aafUInt32  numberElements, const aafInt32*  pVideoLineMap )
 {
 	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetVideoLineMap( numberElements,
-								       const_cast<aafInt32*>(pVideoLineMap) ) );
+			                                            const_cast<aafInt32*>(pVideoLineMap) ) );
 }
 
 
@@ -422,6 +437,18 @@ void AxDigitalImageDescriptor::GetDisplayView( aafUInt32& DisplayedHeight, aafUI
 								      &DisplayedXOffset, &DisplayedYOffset ) );
 }
 
+
+aafFrameLayout_t AxDigitalImageDescriptor::GetFrameLayout()
+{
+	aafFrameLayout_t layout;
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetFrameLayout( &layout ) );
+	return layout;
+}
+
+void AxDigitalImageDescriptor::GetVideoLineMap( aafUInt32  numberElements, aafInt32*  pVideoLineMap )
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetVideoLineMap( numberElements, pVideoLineMap ) );
+}
 
 
 //=---------------------------------------------------------------------=

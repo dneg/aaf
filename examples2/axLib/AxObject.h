@@ -38,7 +38,11 @@ public:
     AxString GetClassName();
 
 	AxPropertyIter CreatePropertyIter();
-
+#if 0
+    IAAFPropertyDefSP RegisterOptionalPropertyDef ( aafUID_constref  id,
+									   const AxString& name,
+									   IAAFTypeDefSP spTypeDef );
+#endif
 	inline operator IAAFObjectSP ()
 	{ return _spIaafObject; }
 

@@ -269,6 +269,8 @@ public:
 
 	void SetSummary( aafUInt32 size, aafDataValue_t  pSummary );
 
+	std::pair<int, std::auto_ptr<aafUInt8> > GetSummary();
+
 private:
 	AxWAVEDescriptor();
 	AxWAVEDescriptor( const AxWAVEDescriptor& );
@@ -298,7 +300,7 @@ public:
 
 	void SetCompression( const aafUID_t& compression );
 
-	aafUID_t GetCompression();
+
 
 	void GetStoredView( aafUInt32& StoredHeight, aafUInt32& StoredWidth);
 
@@ -308,6 +310,12 @@ public:
 	void GetDisplayView( aafUInt32& DisplayedHeight, aafUInt32& DisplayedWidth,
 			             aafInt32& DisplayedXOffset, aafInt32& DisplayedYOffset );
 
+	aafFrameLayout_t GetFrameLayout();
+
+	// FIXME - surely we can do better than this
+	void GetVideoLineMap( aafUInt32  numberElements, aafInt32*  pVideoLineMap );
+
+	aafUID_t GetCompression();
 private:
 	AxDigitalImageDescriptor();
 	AxDigitalImageDescriptor( const AxDigitalImageDescriptor& );
