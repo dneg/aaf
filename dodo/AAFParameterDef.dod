@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFParameterDef\
@@ -35,7 +35,7 @@ AD_CLASS_UUID(20045fa2, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(20045fa1, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD3(Initialize,
+AD_XMETHOD4(Initialize,
 		   [in\, ref],
 		   objPass,
 		   aafUID_constref,
@@ -51,10 +51,15 @@ AD_XMETHOD3(Initialize,
 		   aafCharacter_constptr,
 		   pDescription,
 		   Description for new DefObject,
+		   [in],
+		   objIn,
+		   AAFTypeDef,
+		   pType,
+		   The type definition for all parameters that use this definition,
 		   Init all fields of a definition object.)
 
 
-AD_XMETHOD1(GetTypeDef,
+AD_XMETHOD1(GetTypeDefinition,
 		   [retval\,out],
 		   objOut,
 		   AAFTypeDef,
@@ -87,32 +92,6 @@ AD_XMETHOD1(GetTypeDef,
   // AAFRESULT_NO_ESSENCE_DESC
   //   - There is no AAFTypeDef.  There has to be one of some
   //     kind for this to be a valid operation definition.)
-
-
-AD_XMETHOD1(SetTypeDef,
-		   [in],
-		   objIn,
-		   AAFTypeDef,
-		   pTypeDef,
-		   Pointer to a type definition,
-     Sets the AAFTypeDef of this IAAFOperationDef to be the given
-  // one.
-  //
-  // Succeeds if all of the following are true:
-  // - the pTypeDef pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTypeDef is null.)
 
 
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(DisplayUnits,

@@ -25,60 +25,7 @@ AD_CLASS_UUID(FE717CA7, F04C, 11d3, 80, 0B, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(FE717CA8, F04C, 11d3, 80, 0B, 00, 10, 4B, C9, 15, 6D)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD3(Initialize,
-		[in\, ref],
-		objPass,
-		aafUID_constref,
-		id,
-		auid to be used to identify this type,
 
-		[in],
-		objIn,
-		AAFTypeDef,
-		pActualType,
-		the actual type of the data,
-
-		[in\, ref\, string],
-		objPass,
-		aafCharacter_constptr,
-		pTypeName,
-		friendly name of this type definition,
-
-     Initializes this type def to be identified by the given guid\, to
-  // have the given indirect type for its data.
-  //
-  // This method will fail if the given pActualType is not already in
-  // the current dictionary.
-  //
-  // This method must be called after allocation\, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  // - actualType is a valid value.
-  // - pTypeName
-  AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  //)
-
-
-AD_XMETHOD1(GetActualType,
-		[out],
-		objOut,
-		AAFTypeDef,
-		ppActualType,
-		the actual type definition,
-
-     Returns the actual type definition associated with this indirect
-  // type. 
-  //
-  // Succeeds if:
-  // - The ppActualType pointer is valid.
-  // - The type can be found in the dictionary.
-  AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppActualType\)
-  //)
 
 AD_XMETHOD2(CreateValueFromActualValue,
 			[in],
@@ -111,7 +58,13 @@ AD_XMETHOD2(CreateValueFromActualValue,
   // AAFRESULT_NOT_REGISTERED
   //  - struct offsets have not yet been registered for this typedef.)
 
-AD_XMETHOD3(CreateValueFromActualData,
+AD_XMETHOD4(CreateValueFromActualData,
+		[in],
+		objIn,
+		AAFTypeDef,
+		pActualType,
+		the actual type of the data,
+
 		[in\, size_is\(initDataSize\)],
 		objPass,
 		aafMemPtr_t,
@@ -135,6 +88,7 @@ AD_XMETHOD3(CreateValueFromActualData,
   // ppPropVal.
   //
   // Succeeds if all of the following are true:
+  // - the pActualType pointer is valid and registered
   // - the pInitData pointer is valid.
   // - the ppPropVal pointer is valid.
   // - initDataSize indicates pInitData is the correct size for 
@@ -144,7 +98,7 @@ AD_XMETHOD3(CreateValueFromActualData,
   // If this method fails nothing will be written to *ppPropVal.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInitData or ppPropVal\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pActualType or InitData or ppPropVal\)
   //
   // AAFRESULT_ILLEGAL_VALUE
   //   - initDataSize indicates pInitData is of the wrong size.

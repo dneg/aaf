@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFVaryingValue\
@@ -29,14 +29,44 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-AD_FORWARD_DECLARATION(AAFDataDef)
+#cAD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFControlPoint)
 AD_FORWARD_DECLARATION(EnumAAFControlPoints)
+AD_FORWARD_DECLARATION(AAFParameterDef)
 AD_FORWARD_DECLARATION(AAFInterpolationDef)
+
 AD_CLASS_UUID(91920d61, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(91920d60, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XMETHOD2(Initialize,
+			[in],
+			objIn,
+			AAFParameterDef,
+			pParameterDef,
+			Parameter definition for this object \(this determines the type of the varying value\),
+
+			[in],
+			objIn,
+			AAFInterpolationDef,
+			pInterpolation,
+			InterpolationDefinition object,
+
+     Initializes a new varying value object to be identified with the
+  // given the given parameter definition and interpolation definition.
+  //
+  // This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  // - pParameterDef and pInterpolation are a valid pointers.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_ALREADY_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pParameterDef or pInterpolation\)
+  // )
+
 AD_XMETHOD1(AddControlPoint,
 			[in],
 			objIn,
@@ -221,33 +251,6 @@ AD_XMETHOD1(GetInterpolationDefinition,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppInterpolation is null.)
-
-
-AD_XMETHOD1(SetInterpolationDefinition,
-			[in],
-			objIn,
-			AAFInterpolationDef,
-			pInterpolation,
-			InterpolationDefinition object,
-     Sets the InterpolationDefinition of this VaryingValue to be the
-  // given one. 
-  //
-  // Succeeds if all of the following are true:
-  // - the pEssence pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pInterpolation is null.)
-
 
 AD_XMETHOD1(GetValueBufLen,
 			[out],

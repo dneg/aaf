@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFTaggedValue\
@@ -32,19 +32,31 @@ AD_CLASS_UUID(e684d761, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(e684d762, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD2(Initialize,
+AD_XMETHOD4(Initialize,
 
 			[in\, string],
 			objPass,
 			aafCharacter_constptr,
 			pName,
-			User defined name of this tagged value object,
+			User defined name \(tag\) of this tagged value object,
 
 			[in],
 			objIn,
 			AAFTypeDef,
 			pTypeDef,
-			Type definition of this tagged value object,
+			Type Definition of the following value data,
+
+			[in], 
+			objPass,
+			aafUInt32, 
+			valueSize, 
+			Size of preallocated buffer,
+
+			[in\, size_is\(valueSize\)], 
+			objPass,
+			aafDataBuffer_t, 
+			pValue, 
+			buffer containing value,
 
      Initializes a new tagged value object to be identified with the
   // given the given type\, and with the given human-legible name.
@@ -55,9 +67,11 @@ AD_XMETHOD2(Initialize,
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
   // - pName is a valid pointer.
+  // - pTypeDef is a valid pointer and registered
+  // - pValue is a valid pointer
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName or pDataDef\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName or pTypeDef or pValue\)
   // )
 
 
@@ -165,33 +179,36 @@ AD_XMETHOD1(GetValueBufLen,
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.)
 
+AD_XMETHOD2(SetValue,
+			[in], 
+			objPass,
+			aafUInt32, 
+			valueSize, 
+			Size of preallocated buffer,
 
-AD_METHOD2(SetValue,
+			[in\, size_is\(valueSize\)], 
+			objPass,
+			aafDataBuffer_t, 
+			pValue, 
+			buffer containing value,
 
-		   [in],
-		   aafUInt32,
-		   valueSize,
-		   Size of preallocated buffer,
-
-		   [in\\\, size_is\\\(valueSize\\\)],
-		   aafDataBuffer_t,
-		   pValue,
-		   buffer containing value,
-		   The data value is set from a buffer of size valueSize.
+			The data value is set from a buffer of size valueSize and type.
   //
   // Succeeds if all of the following are true:
+  // - pTypeDef is valid and registered with the object's dictionary.
   // - the pValue pointer is valid.
   // 
   // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
+  // the listed errors is in effect\, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - pValue is null.)
+  //   - ppTypeDef is null.)
+
 AD_XCLASS_END(Concrete, StoredObject)

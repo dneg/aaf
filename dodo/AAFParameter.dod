@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFParameter\
@@ -34,26 +34,6 @@ AD_CLASS_UUID(9c568a82, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 1)
 
 AD_DEFAULT_UUID(9c568a81, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Abstract, StoredObject)
-AD_XMETHOD1(SetParameterDefinition,
-		   [in],
-		   objIn,
-		   AAFParameterDef,
-		   pParmDef,
-		   New parameter definition,
-     Sets the parameter definition property value on the input
-  // component object.  The length of an operation parameter is in the
-  // same edit units and has the same value as the IAAFOperationGroup
-  // enclosing this parameter.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\) )
-
 
 AD_XMETHOD1(GetParameterDefinition,
 		   [out\,retval],
@@ -81,40 +61,6 @@ AD_XMETHOD1(GetParameterDefinition,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppParmDef is null.)
-	
-
-AD_XMETHOD1(SetTypeDefinition,
-			[in],
-			objIn,
-			AAFTypeDef,
-			pTypeDef,
-			Type Definition of the data value inside of this object,
-     Sets the IAAFTypeDefinition of the data value inside this
-  // parameter to be the given one.  The data value is the value of
-  // the parameter.  It is often an integer or rational\, and may
-  // change over time.  An example of a value would be the \"level\"
-  // parameter of a video dissolve\, which has control points with a
-  // value of zero \(0 percent B material\) at the start\, to one
-  // \(100 percent B material\) at the end.  The data value will
-  // actually be stored in either AAFConstantValue or one of the
-  // AAFControlPoints inside of an AAFVaryingValue.
-  //
-  // Succeeds if all of the following are true:
-  // - the pTypeDef pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTypeDef is null.)
-
 
 AD_XMETHOD1(GetTypeDefinition,
 			[out\,retval],
