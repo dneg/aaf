@@ -1,0 +1,228 @@
+#startm .this-module 0
+AAFTypeDefSet\
+#endm
+#c
+#startm .parent-module 0
+AAFTypeDef\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// This interface is used to define variably-sized Array types used in
+// AAF persistent objects.
+//
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
+AD_CLASS_UUID(381e1f21, e7bb, 11d2, 84, 2a, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(381e1f22, e7bb, 11d2, 84, 2a, 00, 60, 08, 32, ac, b8)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_XMETHOD3(Initialize,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this type,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			type of each element to be contained in this set,
+
+			[in],
+			objPass,
+			wchar_t *,
+			pTypeName,
+			friendly name of this type definition,
+
+     Initializes this type def to contain elements of the given type.
+  //
+  // This method must be called after allocation\, and before
+  // any other method can be called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  // - pTypeDef is a valid pointer.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_ALREADY_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pTypeDef or pTypeName\))
+
+
+AD_XMETHOD1(GetType,
+			[out],
+			objOut,
+			AAFTypeDef,
+			ppTypeDef,
+			type of elements in this array,
+
+     Returns the type of elements in this set.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - ppTypeDef is a valid pointer.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
+
+
+AD_XMETHOD2(GetCount,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value of array,
+
+			[out],
+			objPass,
+			aafUInt32 *,
+			pCount,
+			count of elements in the specified set property value,
+
+     Returns number of elements in the referenced property value.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pPropVal is a valid pointer.
+  // - pCount is a valid pointer.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropVal or pCount\))
+
+
+AD_XMETHOD2(AddElement,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value corresponding to set to which element is added,
+
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pMemberPropVal,
+			value to be added to this set,
+
+			Adds an element to the set\, setting it to the
+  // value given in pMemberPropVal.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pInPropVal pointer is valid.
+  // - pMemberPropVal pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or pMemberPropVal\))
+
+
+AD_X2METHOD3(CreateValueFromValues,
+
+			 [in\, size_is\(numElements\)],
+			 objInArray,
+			 AAFPropertyValue,
+			 pElementValues,
+       array of property values for elements of set value which
+    // is to be created.,
+			 numElements,
+
+			 [in],
+			 objPass,
+			 aafUInt32,
+			 numElements,
+			 size of pElementValues array.,
+			 ,
+
+			 [out],
+			 objOut,
+			 AAFPropertyValue,
+			 ppPropVal,
+			 newly-created property value,
+			 ,
+
+     Creates a property value which contains a set type.
+  // The set elements in the property value are initialized to
+  // contain the given values\, passed in the pElementValues array.
+  // numElements\, which indicates the size of the pElementValues
+  // array\, determines the number of elements in the new set
+  // property value.
+  //
+  // Succeeds if all of the following are true:
+  // - the pElementValues pointer is valid.
+  // - the ppPropVal pointer is valid.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pElementValues or ppPropVal\))
+
+
+AD_XMETHOD3(CreateValueFromCArray,
+			[in\, size_is\(initDataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pInitData,
+			pointer to compile-time C array containing data to use,
+
+			[in],
+			objPass,
+			aafUInt32,
+			initDataSize,
+			size of data in pInitData\, in bytes,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppPropVal,
+			newly created property value,
+
+     Creates a property value which contains a set type.  The
+  // set elements in the property value are initialized from data in
+  // a C array which is pointed to by pInitData.  Requires that any
+  // structures declared within this array typedef have had their
+  // offsets registered with that type.  Returns the newly-created
+  // property value in ppPropVal.  The size of the newly-created set
+  // property value will be determined by the number of elements in
+  // the initialization C array\, as communicated by initDataSize.
+  //
+  // Succeeds if all of the following are true:
+  // - the pInitData pointer is valid.
+  // - the ppPropVal pointer is valid.
+  // - compile-time struct has had its member offests registered.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInitData or ppPropVal\)
+  // AAFRESULT_NOT_REGISTERED
+  //  - any contained struct offsets have not yet been registered for
+  //    that typedef.)
+
+
+AD_XMETHOD3(GetElements,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value to read,
+
+			[out],
+			objOut,
+			EnumAAFPropertyValues,
+			ppEnum,
+			enumerator across property values,
+
+     Returns an enumerator across elements in this set.
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - The pInPropVal pointer is valid.
+  // - The ppEnum pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pInPropVal or ppEnum\))
+AD_XCLASS_END(Concrete, StoredObject)
