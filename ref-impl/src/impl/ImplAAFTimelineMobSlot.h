@@ -22,11 +22,7 @@
 // aafSlotID_t,
 
 
-const int PID_TIMELINEMOBSLOT_EDITRATE	= 4;
-const int PID_TIMELINEMOBSLOT_ORIGIN	= 5;
-
-
-
+#include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFMobSlot_h__
 #include "ImplAAFMobSlot.h"
