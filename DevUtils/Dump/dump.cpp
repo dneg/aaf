@@ -2978,6 +2978,17 @@ void dumpProperties(IStorage* storage,
     fatalError("dumpProperties", "Property value stream too small.");
   }
 
+  if (version > 23) {
+    size_t correctSize = expectedStreamSize + 4 + (entries * 6);
+    if (actualStreamSize != correctSize) {
+      cerr << programName
+           << ": Warning : Property value stream wrong size"
+           << " (actual = " << actualStreamSize
+           << ", expected = " << correctSize <<" )." << endl;
+      warningCount = warningCount + 1;
+    }
+  }
+
   // Add in the size of the property value stream
   //
   if (version >= 21) {
