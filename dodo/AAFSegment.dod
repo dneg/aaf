@@ -22,21 +22,71 @@ AD_CLASS_UUID(7a2f0571, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(7a2f0570, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_METHOD3(SegmentOffsetToTC,
-		   [in],aafPosition_t, offset,,
-		   [out],aafTimecode_t *,tc,,
-		   [out],aafBool *,found,,
-		   Converts the given offset to timecode.)
+AD_METHOD2(SegmentOffsetToTC,				  
+		   [in],
+				aafPosition_t *, 
+				pOffset,
+				Pointer to a Segment Offset to be convert to Timecode,
+		   [out],
+				aafTimecode_t *,					   
+				pTimecode,
+				The converted timecode to be returned,
+		   Converts the given Segment offset to timecode.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pOffset pointer is valid.
+  // - the pTimeCode pointer is valid.
+  // 
+  // If this method fails the value of pTimecode is left unchanged.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any arg is NULL.)
 
-AD_METHOD4(SegmentTCToOffset,
-		   [in],aafTimecode_t,tc,,
-		   [in],aafRational_t,editRate,,
-		   [out],aafFrameOffset_t *,offset,,
-		   [out],aafBool *,found,,
-		   )
+AD_METHOD3(SegmentTCToOffset,
+		   [in],
+				aafTimecode_t *,
+				pTimecode,
+				Pointer to a timecode to be converted to Offset,
+		   [in],
+				aafRational_t *,
+				pEditRate,
+				The edit rate for the given timecode ,
+		   [out],
+				aafFrameOffset_t *,
+				pOffset,
+				Frame Offset to be returned if found,
+		   Converts the given Timecode to an Offset.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pTimeCode pointer is valid.
+  // - the pEditRate pointer is valid
+  // - the pFrameOffset pointer is valid.
+  // 
+  // If this method fails the value of pOffset is left unchanged.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - any arg is NULL.)
 
 AD_METHOD1(NumRepresentations,
-		   [out],aafInt32 *,count,,
-		   )
+		   [out],
+		   aafInt32 *,
+		   pCount,
+		   Pointer to Number of representations to be returned,
+		   This is a virtual method and should be overriden in the derived class.
+	// By default it always succeeds and sets the value of pCount to 1.)
 
 AD_CLASS_END
