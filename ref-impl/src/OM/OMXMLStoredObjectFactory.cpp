@@ -201,6 +201,9 @@ bool
 OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
 {
   TRACE("OMXMLStoredObjectFactory::isRecognized");
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+  PRECONDITION("Positionable raw storage", rawStorage->isPositionable());
+
   char signature[] = "<?XML VERSION=\"1.0\"?>"
   "<?OM SIGNATURE=\"{xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx}\"?>";
   char* p = strchr(signature, '{');
@@ -215,6 +218,7 @@ OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
     result = true;
   }
   delete [] buffer;
+  rawStorage->setPosition(0);
   return result;
 }
 
