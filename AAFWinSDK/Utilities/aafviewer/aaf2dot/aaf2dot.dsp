@@ -140,6 +140,15 @@ SOURCE=..\..\..\..\Utilities\aafviewer\src\aaf2dot\MapperSettings.cpp
 # Begin Source File
 
 SOURCE=..\..\..\..\Utilities\aafviewer\src\aaf2dot\Utilities.cpp
+
+!IF  "$(CFG)" == "aaf2dot - Win32 Release"
+
+# SUBTRACT CPP /O<none>
+
+!ELSEIF  "$(CFG)" == "aaf2dot - Win32 Debug"
+
+!ENDIF 
+
 # End Source File
 # End Group
 # Begin Group "Header Files"
