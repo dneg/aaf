@@ -64,6 +64,9 @@ AAFRESULT aafMobIDFromMajorMinor(
 		aafUInt8	UMIDType,	// 0x01-picture, 0x02-audio, 0x03-sound, 0x04-data
 		aafMobID_t *mobID);     /* OUT - Newly created Mob ID */
 
+// Initializes a new auid
+AAFRESULT aafAUIDNew(aafUID_t * auid);
+
 /************************************************************************
  *
  * Class, type, and property registration and Information
