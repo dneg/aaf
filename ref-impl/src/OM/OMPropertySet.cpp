@@ -28,6 +28,7 @@
 // @doc OMEXTERNAL
 #include "OMPropertySet.h"
 #include "OMProperty.h"
+#include "OMUtilities.h"
 
 #include "OMAssertions.h"
 
@@ -81,11 +82,11 @@ OMProperty* OMPropertySet::get(const OMPropertyId propertyId) const
   //   @parm Property name.
   //   @rdesc The <c OMProperty> with name <p propertyName>.
   //   @this const
-OMProperty* OMPropertySet::get(const char* propertyName) const
+OMProperty* OMPropertySet::get(const wchar_t* propertyName) const
 {
   TRACE("OMPropertySet::get");
 
-  PRECONDITION("Valid property name", validString(propertyName));
+  PRECONDITION("Valid property name", validWideString(propertyName));
   PRECONDITION("Property is present", isPresent(propertyName));
 
   OMPropertySetElement* element = find(propertyName);
@@ -185,7 +186,7 @@ bool OMPropertySet::isPresent(const OMPropertyId propertyId) const
   //         <p propertyName> is present <e bool.false> otherwise.
   //  @parm Property name.
   //  @this const
-bool OMPropertySet::isPresent(const char* propertyName) const
+bool OMPropertySet::isPresent(const wchar_t* propertyName) const
 {
   TRACE("OMPropertySet::isPresent");
 
@@ -304,7 +305,7 @@ OMPropertySet::OMPropertySetElement* OMPropertySet::find(
 }
 
 OMPropertySet::OMPropertySetElement* OMPropertySet::find(
-                                                const char* propertyName) const
+                                             const wchar_t* propertyName) const
 {
   TRACE("OMPropertySet::find");
 
@@ -312,7 +313,8 @@ OMPropertySet::OMPropertySetElement* OMPropertySet::find(
 
   for (size_t i = 0; i < _capacity; i++) {
     if (_propertySet[i]._valid) {
-      if (strcmp(_propertySet[i]._property->name(), propertyName) == 0) {
+      if (compareWideString(_propertySet[i]._property->name(),
+                            propertyName) == 0) {
         result = &_propertySet[i];
         break;
       }
