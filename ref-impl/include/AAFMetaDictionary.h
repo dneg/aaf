@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Fri Jun  4 15:38:42 EDT 1999
+// This file was generated on Fri Jun  4 16:30:42 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -2865,6 +2865,32 @@ AAF_PROPERTY(RenamedType,
   false,
   TypeDefinitionRename)
 AAF_CLASS_END(TypeDefinitionRename)
+AAF_CLASS_SEPARATOR()
+
+// TypeDefinitionExtendibleEnumeration
+//
+AAF_CLASS(TypeDefinitionExtendibleEnumeration,
+  AAF_LITERAL_AUID(0x065C0000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  TypeDefinition)
+AAF_PROPERTY(ElementNames,
+  AAF_LITERAL_AUID(0x065C0100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5d01,
+  StringArray,
+  false,
+  TypeDefinitionExtendibleEnumeration)
+AAF_PROPERTY(ElementValues,
+  AAF_LITERAL_AUID(0x065C0200,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+  0x5d02,
+  AUIDArray,
+  false,
+  TypeDefinitionExtendibleEnumeration)
+AAF_CLASS_END(TypeDefinitionExtendibleEnumeration)
 
 AAF_TABLE_END()
 
