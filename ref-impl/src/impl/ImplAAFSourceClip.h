@@ -3,8 +3,6 @@
 #ifndef __ImplAAFSourceClip_h__
 #define __ImplAAFSourceClip_h__
 
-#include "OMStorable.h"
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -14,22 +12,11 @@
 *                                          *
 \******************************************/
 
+#include "OMStorable.h"
 
 class ImplAAFDataDef;
 
 class ImplAAFMob;
-
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 
 #ifndef __ImplAAFSourceReference_h__
 #include "ImplAAFSourceReference.h"
@@ -65,12 +52,11 @@ public:
   virtual ~ImplAAFSourceClip ();
 
 
-
   //****************
-  // InitializeSourceClip()
+  // Initialize()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    InitializeSourceClip
+    Initialize
         (// @parm [in] Data Definition object
 		 aafUID_t * pDatadef  ,
 
@@ -171,6 +157,7 @@ private:
 	OMFixedSizeProperty<aafBool>		_fadeOutPresent;
 	OMFixedSizeProperty<aafPosition_t>	_startTime;
 
+	aafBool								_initialized;
 };
 
 #endif // ! __ImplAAFSourceClip_h__
