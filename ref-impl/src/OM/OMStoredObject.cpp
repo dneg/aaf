@@ -28,6 +28,7 @@
 // @doc OMEXTERNAL
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMStoredObject
 #include "OMStoredObject.h"
+
 #include "OMStoredPropertySetIndex.h"
 #include "OMProperty.h"
 #include "OMPropertySet.h"
@@ -43,8 +44,6 @@
 
 #include "OMAssertions.h"
 #include "OMUtilities.h"
-
-#include <iostream.h>
 
 #include "OMMSStructuredStorage.h"
 
@@ -70,19 +69,7 @@ static void convert(char* cName, size_t length, const wchar_t* name);
 static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
 #endif
 
-static void formatError(DWORD errorCode);
-
-static void check(HRESULT resultCode);
-
-static void checkFile(HRESULT resultCode, const wchar_t* fileName);
-
-static void checkStream(HRESULT resultCode, const wchar_t* streamName);
-
-static void checkStorage(HRESULT resultCode, const wchar_t* storageName);
-
-static void printError(const char* prefix, const char* type);
-
-static void printName(const wchar_t* name);
+static void check(HRESULT status);
 
 #if defined(OM_ENABLE_DEBUG)
 size_t OMStoredObject::_openStorages = 0;
@@ -400,17 +387,17 @@ OMStoredObject* OMStoredObject::openFile(const wchar_t* fileName,
   OMCHAR omFileName[256];
   convert(omFileName, 256, fileName);
 
-  HRESULT result;
   IStorage* storage = 0;
 
-  result = StgOpenStorage(
+  HRESULT status = StgOpenStorage(
     omFileName,
     0,
     openMode,
     0,
     0,
     &storage);
-  checkFile(result, fileName);
+  check(status);
+  ASSERT("StgOpenStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
   _openStorages = _openStorages + 1;
 #endif
@@ -429,15 +416,15 @@ OMStoredObject* OMStoredObject::createFile(const wchar_t* fileName)
   OMCHAR omFileName[256];
   convert(omFileName, 256, fileName);
 
-  HRESULT result;
   IStorage* storage = 0;
 
-  result = StgCreateDocfile(
+  HRESULT status = StgCreateDocfile(
     omFileName,
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_FAILIFTHERE,
     0,
     &storage);
-  checkFile(result, fileName);
+  check(status);
+  ASSERT("StgCreateDocfile() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
   _openStorages = _openStorages + 1;
 #endif
@@ -466,17 +453,17 @@ OMStoredObject* OMStoredObject::openFile(OMRawStorage* rawStorage,
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_DENY_WRITE;
   }
 
-  HRESULT result;
   IStorage* storage = 0;
 
-  result = StgOpenStorageOnILockBytes(
+  HRESULT status = StgOpenStorageOnILockBytes(
     iLockBytes,
     0,
     openMode,
     0,
     0,
     &storage);
-  check(result);
+  check(status);
+  ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
   _openStorages = _openStorages + 1;
 #endif
@@ -496,15 +483,15 @@ OMStoredObject* OMStoredObject::createFile(OMRawStorage* rawStorage)
   ILockBytes* iLockBytes = new OMRawStorageLockBytes(rawStorage);
   ASSERT("Valid heap pointer", iLockBytes != 0);
 
-  HRESULT result;
   IStorage* storage = 0;
 
-  result = StgCreateDocfileOnILockBytes(
+  HRESULT status = StgCreateDocfileOnILockBytes(
     iLockBytes,
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
     0,
     &storage);
-  check(result);
+  check(status);
+  ASSERT("StgCreateDocfileOnILockBytes() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
   _openStorages = _openStorages + 1;
 #endif
@@ -1445,13 +1432,14 @@ IStream* OMStoredObject::createStream(IStorage* storage,
   OMCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
 
-  HRESULT resultCode = storage->CreateStream(
+  HRESULT status = storage->CreateStream(
     omStreamName,
     mode,
     0,
     0,
     &stream);
-  checkStream(resultCode, streamName);
+  check(status);
+  ASSERT("IStorage::CreateStream() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
   _openStreams = _openStreams + 1;
 #endif
@@ -1477,13 +1465,14 @@ IStream* OMStoredObject::openStream(IStorage* storage,
   OMCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
 
-  HRESULT resultCode = storage->OpenStream(
+  HRESULT status = storage->OpenStream(
     omStreamName,
     0,
     mode,
     0,
     &stream);
-  checkStream(resultCode, streamName);
+  check(status);
+  ASSERT("IStorage::OpenStream() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
   _openStreams = _openStreams + 1;
 #endif
@@ -1732,13 +1721,14 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
   OMCHAR omStorageName[256];
   convert(omStorageName, 256, storageName);
 
-  HRESULT resultCode = storage->CreateStorage(
+  HRESULT status = storage->CreateStorage(
     omStorageName,
     mode,
     0,
     0,
     &newStorage);
-  checkStorage(resultCode, storageName);
+  check(status);
+  ASSERT("IStorage::CreateStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
   _openStorages = _openStorages + 1;
 #endif
@@ -1767,14 +1757,15 @@ IStorage* OMStoredObject::openStorage(IStorage* storage,
   OMCHAR omStorageName[256];
   convert(omStorageName, 256, storageName);
 
-  HRESULT resultCode = storage->OpenStorage(
+  HRESULT status = storage->OpenStorage(
     omStorageName,
     0,
     openMode,
     0,
     0,
     &newStorage);
-  checkStorage(resultCode, storageName);
+  check(status);
+  ASSERT("IStorage::OpenStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_ENABLE_DEBUG)
   _openStorages = _openStorages + 1;
 #endif
@@ -2099,12 +2090,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
   PRECONDITION("Valid output buffer size", length > 0);
 
   size_t status = wcstombs(cName, name, length);
-  if (status == (size_t)-1) {
-    cerr << getProgramName()
-      << ": Error : Conversion failed."
-      << endl;
-    // exit(EXIT_FAILURE); // tjb - error
-  }
+  ASSERT("wcstombs() succeeded", status != (size_t)-1);
 }
 
 #if defined(_WIN32) && defined(UNICODE)
@@ -2117,119 +2103,17 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name)
   PRECONDITION("Valid output buffer size", length > 0);
 
   size_t sourceLength = lengthOfWideString(name);
-  if (sourceLength + 1 < length) {
-    copyWideString(wcName, name, sourceLength + 1);
-  } else {
-    cerr << getProgramName()
-      << ": Error : Conversion failed."
-      << endl;
-    // exit(EXIT_FAILURE); // tjb - error
-  }
+  ASSERT("Output buffer large enough", length > sourceLength + 1);
+  copyWideString(wcName, name, sourceLength + 1);
 }
 
 #endif
 
-static void formatError(DWORD errorCode)
-{
-#if defined(_WIN32) || defined(WIN32)
-  OMCHAR buffer[256];
-
-  int status = FormatMessage(
-    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-    NULL,
-    errorCode,
-    LANG_SYSTEM_DEFAULT,
-    buffer, 256,
-    NULL);
-
-  if (status != 0) {
-    char message[256];
-    convert(message, 256, buffer);
-
-    int length = strlen(message);
-    // zap cr/lf
-    if (length >= 2) {
-      message[length - 2] = '\0';
-    }
-    cerr << "Error text = \"" << message << "\"" << endl;
-  } else {
-    cerr << "Error code = " << hex << errorCode << dec << endl;
-  }
-#else
-  cerr << "Error code = " << hex << errorCode << dec << endl;
-#endif
-}
-
-static void check(HRESULT resultCode)
+static void check(HRESULT status)
 {
   TRACE("check");
 
-  ASSERT("Valid program name", validString(getProgramName()));
-
-  if (FAILED(resultCode)) {
-    printError(getProgramName(), "Error");
-    formatError(resultCode);
+  if (FAILED(status)) {
+    // error handling NYI
   }
-  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
-}
-
-static void checkFile(HRESULT resultCode, const wchar_t* fileName)
-{
-  TRACE("checkFile");
-  PRECONDITION("Valid file name", validWideString(fileName));
-
-  ASSERT("Valid program name", validString(getProgramName()));
-
-  if (FAILED(resultCode)) {
-    printError(getProgramName(), "File error");
-    printName(fileName);
-    formatError(resultCode);
-  }
-  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
-}
-
-static void checkStream(HRESULT resultCode, const wchar_t* streamName)
-{
-  TRACE("checkStream");
-  PRECONDITION("Valid stream name", validWideString(streamName));
-
-  ASSERT("Valid program name", validString(getProgramName()));
-
-  if (FAILED(resultCode)) {
-    printError(getProgramName(), "Stream error");
-    printName(streamName);
-    formatError(resultCode);
-  }
-
-  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
-}
-
-static void checkStorage(HRESULT resultCode, const wchar_t* storageName)
-{
-  TRACE("checkStorage");
-  PRECONDITION("Valid storage name", validWideString(storageName));
-
-  ASSERT("Valid program name", validString(getProgramName()));
-
-  if (FAILED(resultCode)) {
-    printError(getProgramName(), "Storage error");
-    printName(storageName);
-    formatError(resultCode);
-  }
-
-  ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
-}
-
-static void printError(const char* prefix, const char* type)
-{
-  cerr << prefix << " : " << type << " : ";
-}
-
-static void printName(const wchar_t* name)
-{
-  TRACE("printName");
-  char cName[256];
-
-  convert(cName, 256, name);
-  cerr << "\"" << cName << "\" : ";
 }
