@@ -99,10 +99,6 @@ SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAIFCData.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -243,19 +239,11 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFHTMLClip.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFHTMLData.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFHTMLDescriptor.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFIdentification.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFImageData.cpp"
 # End Source File
 # Begin Source File
 
@@ -267,19 +255,11 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFIntraFrameMarker.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFJPEGData.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFLocator.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMasterMob.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMIDIData.cpp"
 # End Source File
 # Begin Source File
 
@@ -415,10 +395,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTextLocator.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTIFFData.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTIFFDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -504,10 +480,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefWeakObjRef.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFVaryingValue.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFWAVEData.cpp"
 # End Source File
 # Begin Source File
 

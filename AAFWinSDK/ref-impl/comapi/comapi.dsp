@@ -121,10 +121,6 @@ SOURCE=..\include\comidl\AAFRoot_i.c
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCData.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFAIFCDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -263,19 +259,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFHTMLClip.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFHTMLData.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFHTMLDescriptor.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFIdentification.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFImageData.cpp"
 # End Source File
 # Begin Source File
 
@@ -291,19 +279,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFIntraFrameMarker.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFJPEGData.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFLocator.cpp"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFMasterMob.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFMIDIData.cpp"
 # End Source File
 # Begin Source File
 
@@ -443,10 +423,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFTextLocator.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFTIFFData.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTIFFDescriptor.cpp"
 # End Source File
 # Begin Source File
@@ -536,10 +512,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFUnknown.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFVaryingValue.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFWAVEData.cpp"
 # End Source File
 # Begin Source File
 
