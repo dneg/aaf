@@ -23,7 +23,7 @@
 #include <AAFDefUIDs.h>
 #include <AAFFileKinds.h>
 
-#include <../../../../ref-impl/include/AAFSDKBuild.h>
+#include "../../../../ref-impl/include/AAFSDKBuild.h"
 
 #include <map>
 #include <string>
