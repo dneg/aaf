@@ -25,6 +25,8 @@
 //=---------------------------------------------------------------------=
 
 
+#include "ImplAAFPropertyDef.h"
+#include "ImplAAFTypeDef.h"
 
 #include "CEnumAAFKLVDataDefs.h"
 #include "ImplEnumAAFKLVDataDefs.h"

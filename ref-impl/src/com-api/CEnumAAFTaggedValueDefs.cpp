@@ -25,11 +25,14 @@
 //=---------------------------------------------------------------------=
 
 
+#include "ImplAAFPropertyDef.h"
+
 
 #include "CEnumAAFTaggedValueDefs.h"
 #include "ImplEnumAAFTaggedValueDefs.h"
 #include "AAFResult.h"
 #include "CAAFEnumValidation.h"
+
 
 #include "OMAssertions.h"
 #include "OMExceptions.h"
