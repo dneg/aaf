@@ -110,6 +110,7 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 		  ImplAAFObject *pObj = _dictionary->pvtCreateBaseClassInstance(&AUID_AAFClassDef);
 		  if (! pObj) return AAFRESULT_NOMEMORY;
 		  pObj->setClassFactory(_dictionary);
+		  pObj->pvtSetSoid (AUID_AAFClassDef);
 
 		  ImplAAFClassDef * pcd = static_cast<ImplAAFClassDef*>(pObj);
 		  assert (pcd);
