@@ -59,8 +59,6 @@ HRESULT CAAFClassFactory::InternalQueryInterface
 	REFIID riid,
 	void **ppvObj)
 {
-	HRESULT hr = S_OK;
-
 	if (!ppvObj)
 		return E_INVALIDARG;
 
