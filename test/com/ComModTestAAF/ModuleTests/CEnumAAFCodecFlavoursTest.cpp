@@ -239,14 +239,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		// Check with Next()
 		checkResult(pEnum->Reset ());
-		checkResult(pEnum->NextOne(&testFlavour));
+		checkResult(pEnum->Next(1,&testFlavour,NULL));
 		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
 						 AAFRESULT_TEST_FAILED);
 		
 		// Check out clones version
 		checkResult(pEnum->Reset ());
 		checkResult(pEnum->Clone (&pCloneEnum));
-		checkResult(pCloneEnum->NextOne(&testFlavour));
+		checkResult(pCloneEnum->Next(1,&testFlavour,NULL));
 		checkExpression (EqualAUID(&testFlavour, &checkFlavour) ? true : false,
 						 AAFRESULT_TEST_FAILED);
 	}
