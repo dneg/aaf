@@ -19,31 +19,43 @@ AD_CLASS_UUID(809c8ca5, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(809c8ca6, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD4(Initialize,
+AD_X2METHOD5(Initialize,
 			 [in],
 			 objPass,
 			 aafUID_t *,
 			 pID,
 			 auid to be used to identify this type,
+			 ,
+
+			 [in\, size_is\(numMembers\)],
+			 objInArray,
+			 AAFTypeDef,
+			 ppMemberTypes,
+       array of member types to be represented in this record
+    // type,
+			 numMembers,
 
 			 [in\, size_is\(numMembers\)],
 			 objPass,
-			 aafMemPtr_t,
-			 pMemberInfo,
-       array of member type/name pairs representing members of this
-	// record,
+			 aafString_t *,
+			 pMemberNames,
+       array of member names to be represented in this enumerated
+    // type,
+			 ,
 
 			 [in],
 			 objPass,
 			 aafUInt32,
 			 numMembers,
 			 number of members in pMemberInfo array,
+			 ,
 
 			 [in],
 			 objPass,
 			 wchar_t *,
 			 pTypeName,
 			 friendly name of this type definition,
+			 ,
 
      Initializes this type def to be identified by the given guid\, and
   // to contain the given members \(types and names\).  It is considered
@@ -55,10 +67,10 @@ AD_XMETHOD4(Initialize,
   // - pMemberInfo is a valid pointer.
   // - pTypeName is a valid pointer.
   // - all member names are unique.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pMemberInfo\\\, or pTypeName\)
+  //
   // AAFRESULT_DUPLICATE
   //   - a duplicate member name was given.)
 
@@ -84,11 +96,11 @@ AD_XMETHOD2(GetMemberType,
   // - Initialize\(\) has already been called on this object.
   // - the index exists in this record type def.
   // - The ppTypeDef pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\)
-  // AAFRESULT_BAD_PARAM
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - The given index is out of range for this record type def.)
 
 
@@ -107,7 +119,7 @@ AD_XMETHOD3(GetMemberName,
 
 			[in],
 			objPass,
-			aafInt32,
+			aafUInt32,
 			bufSize,
 			The size of the pName buffer\, in bytes,
 
@@ -127,14 +139,14 @@ AD_XMETHOD3(GetMemberName,
   // 
   // If this method fails nothing will be written to
   // *pName.
-  // 
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName\)
+  // 
   // AAFRESULT_SMALLBUF
   //   - bufSize indicates the buffer is too small to hold the string.
   //
-  // AAFRESULT_BAD_PARAM
+  // AAFRESULT_ILLEGAL_VALUE
   //   - the given integer value is not associated with a member of
   //     this type.)
 
@@ -148,7 +160,7 @@ AD_XMETHOD2(GetMemberNameBufLen,
 
 			[out],
 			objPass,
-			aafInt32 *,
+			aafUInt32 *,
 			pLen,
 			required buffer length\, in bytes,
 
@@ -164,11 +176,11 @@ AD_XMETHOD2(GetMemberNameBufLen,
   //   enumerated type.
   //
   // If this method fails nothing will be written to *pLen.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pLen\)
-  // AAFRESULT_BAD_PARAM
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - the given integer value is not associated with a member of
   //     this type.)
 
@@ -210,11 +222,11 @@ AD_X2METHOD3(CreateValueFromValues,
   // - numMembers matches the number of members in this record.
   //
   // If this method fails nothing will be written to *ppPropVal.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pMemberValues or ppPropVal\)
-  // AAFRESULT_BAD_PARAM
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - numMembers does not match GetCount\(\).)
 
 
@@ -251,11 +263,11 @@ AD_XMETHOD3(CreateValueFromStruct,
   // - compile-time struct has had its member offests registered.
   //
   // If this method fails nothing will be written to *ppPropVal.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInitData or ppPropVal\)
-  // AAFRESULT_BAD_PARAM
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - initDataSize indicates pInitData is of the wrong size.
   //
   // AAFRESULT_NOT_REGISTERED
@@ -292,11 +304,11 @@ AD_XMETHOD3(GetValue,
   // - the index exists in this record type def.
   // - The pInPropVal pointer is valid.
   // - The ppOutPropVal pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or ppOutPropVal\)
-  // AAFRESULT_BAD_PARAM
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - The given index is out of range for this record type def.)
 
 
@@ -331,11 +343,11 @@ AD_XMETHOD3(GetStruct,
   // - compile-time struct has had its member offests registered.
   //
   // If this method fails nothing will be written to *ppPropVal.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
-  // AAFRESULT_BAD_PARAM
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - dataSize indicates pData is too small.
   //
   // AAFRESULT_NOT_REGISTERED
@@ -371,11 +383,11 @@ AD_XMETHOD3(SetValue,
   // - the index exists in this record type def.
   // - The pInPropVal pointer is valid.
   // - The ppOutPropVal pointer is valid.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or ppOutPropVal\)
-  // AAFRESULT_BAD_PARAM
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - The given index is out of range for this record type def.)
 
 
@@ -410,11 +422,11 @@ AD_XMETHOD3(SetStruct,
   // - compile-time struct has had its member offests registered.
   //
   // If this method fails nothing will be written to *ppPropVal.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
-  // AAFRESULT_BAD_PARAM
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - dataSize indicates pData is not the correct size.
   //
   // AAFRESULT_NOT_REGISTERED
@@ -433,7 +445,6 @@ AD_XMETHOD1(GetCount,
   // Succeeds if:
   // - Initialize\(\) has already been called on this object.
   // - pCount is a valid pointer.
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
@@ -472,11 +483,11 @@ AD_XMETHOD3(RegisterMembers,
   // - pOffsets is a valid pointer.
   // - numMembers matches the number of members defined for this
   //   record type. 
-  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pOffsets\)
-  // AAFRESULT_BAD_COUNT
+  //
+  // AAFRESULT_ILLEGAL_VALUE
   //   - numMembers does not match number of members in this record
   //     type.)
 AD_XCLASS_END(Concrete, StoredObject)
