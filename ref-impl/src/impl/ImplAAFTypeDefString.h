@@ -207,6 +207,9 @@ public:
     pvtCreateOMPropertyMBS (OMPropertyId pid,
 							const char * name) const;
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RawAccessType
+        (ImplAAFTypeDef ** ppRawTypeDef);
 
 public:
   // Overrides from ImplAAFTypeDef
