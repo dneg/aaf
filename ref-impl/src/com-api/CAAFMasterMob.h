@@ -853,7 +853,7 @@ public:
   // METHOD NAME: CreateStaticEssence()
   //
   // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMasterMob | CreateStaticEssence |
+  // @mfunc AAFRESULT | AAFMasterMob2 | CreateStaticEssence |
   // Creates and initializes the objects required to represent static essence.
   // @end
   // 
@@ -885,7 +885,7 @@ public:
   // METHOD NAME: CreateEventEssence()
   //
   // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFMasterMob | CreateEventEssence |
+  // @mfunc AAFRESULT | AAFMasterMob2 | CreateEventEssence |
   // Creates and initializes the objects required to represent stream of events.
   // @end
   // 

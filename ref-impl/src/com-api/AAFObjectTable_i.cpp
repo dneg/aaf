@@ -174,7 +174,7 @@
 #include "CEnumAAFTaggedValueDefs.h"
 #include "CEnumAAFKLVDataDefs.h"
 #include "CAAFRecordingDescriptor.h"
-#include "CAAFAuxillaryDescriptor.h"
+#include "CAAFAuxiliaryDescriptor.h"
 
 //
 // Include Private AAF Objects in Table:
