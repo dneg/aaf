@@ -59,7 +59,7 @@
 
 ImplAAFTransition::ImplAAFTransition ():
 _effect( PID_Transition_Effect, "Effect"),
-_cutPoint( PID_Transition_CutPoint, "Cut Point")
+_cutPoint( PID_Transition_CutPoint, "CutPoint")
 {
 	_persistentProperties.put(_effect.address());
 	_persistentProperties.put(_cutPoint.address());
