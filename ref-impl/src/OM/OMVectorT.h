@@ -166,7 +166,6 @@ void OMVector<Element>::shrink(size_t capacity)
   // Calculate the new capacity
   //
   size_t newCapacity = nextHigherCapacity(capacity);
-  size_t oldCapacity = _capacity;
 
   if (newCapacity < _capacity) {
 
@@ -197,7 +196,7 @@ void OMVector<Element>::shrink(size_t capacity)
     //
     delete [] oldVector;
   }
-  POSTCONDITION("Size properly decreased", _capacity <= oldCapacity);
+  // POSTCONDITION("Size properly decreased", _capacity <= oldCapacity);
 }
 
   // @mfunc Is this <c OMVector> full ?
@@ -273,9 +272,9 @@ void OMVector<Element>::getAt(Element& value, const size_t index) const
   //   @tcarg class | Element | The type of an <c OMVector> element.
   //          This type must support operator = and operator ==.
   //   @parm The index.
-  //   @parm The value by reference.
+  //   @this const
 template <typename Element>
-Element& OMVector<Element>::getAt(const size_t index)
+Element& OMVector<Element>::getAt(const size_t index) const
 {
   TRACE("OMVector<Element>::getAt");
   PRECONDITION("Valid index", ((index >= 0) && (index < _count)));

@@ -97,7 +97,8 @@ public:
 
     // @cmember Get the value of the <p Element> at
     //          position <p index> in this <c OMVector>.
-  Element& getAt(const size_t index);
+    //   @this const;
+  Element& getAt(const size_t index) const;
 
     // @cmember Insert <p value> into this <c OMVector> at
     //          position <p index>. Existing values in this
