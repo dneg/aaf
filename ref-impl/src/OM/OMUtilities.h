@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -76,6 +76,10 @@ wchar_t* copyWideString(wchar_t* destination,
   //   @parm The wide character string to save.
   //   @rdesc The saved wide character string.
 wchar_t* saveWideString(const wchar_t* string);
+
+int compareWideString(const wchar_t* string1, const wchar_t* string2);
+
+char* convertWideString(const wchar_t* string);
 
   // @func Save a character string.
   //   @parm The character string to save.

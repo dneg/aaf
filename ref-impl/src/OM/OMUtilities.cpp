@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -33,6 +33,7 @@
 #include <iostream.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 static char programName[FILENAME_MAX] = "Object Manager";
 
@@ -121,6 +122,48 @@ wchar_t* saveWideString(const wchar_t* string)
   wchar_t* result = new wchar_t[length];
   ASSERT("Valid heap pointer", result != 0);
   copyWideString(result, string, length);
+  return result;
+}
+
+// if string1 >  string2 then result =  1
+// if string1 == string2 then result =  0
+// if string1 <  string2 then result = -1
+int compareWideString(const wchar_t* string1, const wchar_t* string2)
+{
+  TRACE("compareWideString");
+
+  PRECONDITION("Valid string", validWideString(string1));
+  PRECONDITION("Valid string", validWideString(string2));
+  int result = 0;
+  const wchar_t* s1 = string1;
+  const wchar_t* s2 = string2;
+  while (*s1 == *s2) {
+    if (*s1 == 0) {
+      break;
+    }
+    ++s1;
+    ++s2;
+  }
+
+  if ((*s1 == 0) && (*s2 == 0)) {
+    result = 0;
+  } else if (*s1 > *s2) {
+    result = 1;
+  } else if (*s1 < *s2) {
+    result = -1;
+  }
+  return result;
+}
+
+char* convertWideString(const wchar_t* string)
+{
+  TRACE("convertWideString");
+
+  PRECONDITION("Valid string", validWideString(string));
+  size_t length = lengthOfWideString(string);
+  char* result = new char[length + 1];
+  ASSERT("Valid heap pointer", result != 0);
+  size_t status = wcstombs(result, string, length + 1);
   return result;
 }
 
