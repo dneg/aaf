@@ -24,6 +24,7 @@
 
 #include <AxMob.h>
 #include <AxEssence.h>
+#include <AxDictionary.h>
 
 #include <assert.h>
 
@@ -182,6 +183,35 @@ void WAVEDescSet::Execute( const std::vector<AxString>& argv )
 
 	axWaveDesc.SetSummary( header.first, header.second.get() );
 
+}
+
+
+//=---------------------------------------------------------------------=
+
+
+AXFG_OP(
+  AIFCDesc,           
+  L"AIFCDesc",
+  L"Create buggy AIFC descriptor.",
+  L"FileName DescriptorName",
+  L"This is intended to test a bug.",
+  3,
+  3 ) 
+
+AIFCDesc::~AIFCDesc()
+{
+}
+
+void AIFCDesc::Execute( const std::vector<AxString>& argv )
+{
+	AxString fileName = argv[1];
+	AxString descName = argv[2];
+
+	IAAFAIFCDescriptorSP spDesc;
+	AxCreateInstance( DictionaryFromFileOp( fileName ), spDesc );
+
+	SetCOM( spDesc );
+	RegisterInstance( descName );
 }
 
 } // end of namespace
