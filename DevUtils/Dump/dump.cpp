@@ -53,6 +53,8 @@
 #define OM_OS_WINDOWS
 #elif defined(_MAC) || defined(macintosh)
 #define OM_OS_MACOS
+#elif defined(__MWERKS__) && defined(__MACH__)
+#define OM_OS_MACOSX
 #elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__) || \
       defined (__APPLE__) || defined(__CYGWIN__)
 #define OM_OS_UNIX
@@ -66,6 +68,8 @@
 #define OM_USE_WINDOWS_SS
 #elif defined(OM_OS_MACOS)
 #define OM_USE_MACINTOSH_SS
+#elif defined(OM_OS_MACOSX)
+#define OM_USE_WRAPPED_MACINTOSH_SS
 #elif defined(OM_OS_UNIX)
 #define OM_USE_REFERENCE_SS
 #else
@@ -85,6 +89,15 @@
 #include "storage.h"
 #include "initguid.h"
 #include "coguid.h"
+#elif defined(OM_USE_WRAPPED_MACINTOSH_SS)
+#include "wintypes.h"
+#include "macdef.h"
+#include "macpub.h"
+#include "compobj.h"
+#include "storage.h"
+#include "initguid.h"
+#include "coguid.h"
+#include "SSWrapper.h"
 #elif defined(OM_USE_REFERENCE_SS)
 #include "h/storage.h"
 #endif
