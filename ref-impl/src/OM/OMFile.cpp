@@ -28,6 +28,9 @@ OMFile::OMFile(const OMAccessMode mode,
   TRACE("OMFile::OMFile");
 
   setName("/");
+  _root->setContainingObject(this);
+  _root->setName("head");
+  _root->setStore(rootStoredObject());
 }
 
 OMFile::~OMFile(void)
@@ -88,9 +91,7 @@ void OMFile::save(void)
   TRACE("OMFile::save");
 
   if (_mode == modifyMode) {
-    _root->setContainingObject(this);
-    _root->setName("head");
-    _root->saveTo(*rootStoredObject());
+    _root->save();
   }
 }
 
@@ -111,9 +112,12 @@ void OMFile::close(void)
 {
   TRACE("OMFile::close");
 
+  _root->close();
+#if 0
   _rootStoredObject->close();
   delete _rootStoredObject;
   _rootStoredObject = 0;
+#endif
 }
 
 OMStorable* OMFile::root(void)
