@@ -73,6 +73,8 @@ typedef AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >
 typedef AxIterator< IAAFSmartPointer<IAAFComponent>,	 IEnumAAFComponents >	  AxComponentsIter;
 typedef AxIterator< IAAFSmartPointer<IAAFComponent>,	 IEnumAAFSegments >		  AxSegmentsIter;
 typedef AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >      AxClassDefIter;
+typedef AxIterator< IAAFSmartPointer<IAAFTypeDef>,       IEnumAAFTypeDefs >       AxTypeDefIter;
+typedef AxIterator< IAAFSmartPointer<IAAFPropertyDef>,   IEnumAAFPropertyDefs >   AxPropertyDefIter;
 
 // Records contain a set of named values that must be iterated over as well,
 // but don't have any sort of native iterator.  This wrapper presents
@@ -126,7 +128,7 @@ public:
 
 	void Reset();
 
-	auto_ptr<AxArrayIterator> Clone();
+	auto_ptr< AxArrayIterator<TypeDef> > Clone();
 	
 private:
 
