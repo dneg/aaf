@@ -43,6 +43,5 @@ ImplAAFInterpolationDef::~ImplAAFInterpolationDef ()
 
   
 
-OMDEFINE_STORABLE(ImplAAFInterpolationDef, AUID_AAFInterpolationDefinition);
 
 
