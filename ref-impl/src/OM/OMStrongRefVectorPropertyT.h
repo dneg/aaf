@@ -179,11 +179,12 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
     OMUInt32 localKey;
     for (size_t i = 0; i < entries; i++) {
       vectorIndex->iterate(context, localKey);
-      const char* name = elementName(localKey);
+      char* name = elementName(localKey);
       OMVectorElement<OMStrongObjectReference<ReferencedObject>,
                       ReferencedObject> element(this, name, localKey);
       element.restore();
       _vector.setAt(element, i);
+      delete [] name;
     }
   }
   delete vectorIndex;
@@ -251,10 +252,11 @@ ReferencedObject*
   if (index == count()) {
     // This is an append, make sure the new element is defined.
     OMUInt32 localKey = nextLocalKey();
-    const char* name = elementName(localKey);
+    char* name = elementName(localKey);
     OMVectorElement<OMStrongObjectReference<ReferencedObject>,
                     ReferencedObject> newElement(this, name, localKey);
     _vector.append(newElement);
+    delete [] name;
   }
 
   // Set the vector to contain the new object
