@@ -56,9 +56,12 @@ void OMPropertySet::put(OMProperty* property)
 {
   TRACE("OMPropertySet::put");
   // SAVE(_count);
+  PRECONDITION("Valid property", property != 0);
+  PRECONDITION("Valid property id", property->propertyId() >= 0);
+  PRECONDITION("Property not already installed",
+                                            !contains(property->propertyId()));
+
   OMPropertyId propertyId = property->propertyId();
-  PRECONDITION("Valid property id", propertyId >= 0);
-  PRECONDITION("Property not already installed", !contains(propertyId));
   OMPropertySetElement* element = find();
   if (element == 0) {
     grow(OMPROPERTYSET_CHUNKSIZE);
