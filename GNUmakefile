@@ -35,3 +35,8 @@ check : ss-impl ref-impl
 clean :
 	cd ss-impl/ref && $(MAKE) clean
 	cd ref-impl && $(MAKE) clean
+	cd DevUtils && $(MAKE) clean
+	cd Utilities && $(MAKE) clean
+	cd examples && $(MAKE) clean
+	cd test && $(MAKE) clean
+
