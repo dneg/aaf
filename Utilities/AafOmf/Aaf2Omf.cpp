@@ -467,19 +467,34 @@ HRESULT Aaf2Omf::AAFFileRead()
 				rc = pMob->GetNumComments(&numComments);
 				if (SUCCEEDED(rc) && (numComments > 0))
 				{
-					IEnumAAFMobComments*	pCommentIterator = NULL;
-					aafMobComment_t*		pMobComment = NULL;
+					IEnumAAFTaggedValues*	pCommentIterator = NULL;
+					IAAFTaggedValue*		pMobComment = NULL;
 					rc = pMob->EnumAAFAllMobComments(&pCommentIterator);
-					while ( (SUCCEEDED(rc)) && (SUCCEEDED(pCommentIterator->NextOne(pMobComment))))
+					while ( (SUCCEEDED(rc)) && (SUCCEEDED(pCommentIterator->NextOne(&pMobComment))))
 					{
-						char*	pszComment;
-						char*	pszCommName;
+						char*		pszComment;
+						char*		pszCommName;
+						aafWChar*	pwcComment;
+						aafWChar*	pwcName;
+						aafInt32	textSize;
+						aafUInt32	bytesRead;
 
-						UTLStrWToStrA(pMobComment->category, &pszCommName);
-						UTLStrWToStrA(pMobComment->comment, &pszComment);
+						pMobComment->GetNameBufLen(&textSize);
+						UTLMemoryAlloc((aafUInt32)textSize, (void **)&pwcName);
+						pMobComment->GetName(pwcName, textSize);
+
+						pMobComment->GetValueBufLen((aafUInt32 *)&textSize);
+						UTLMemoryAlloc((aafUInt32)textSize, (void **)&pwcComment);
+						pMobComment->GetValue((aafUInt32)textSize, (aafDataBuffer_t)pwcComment, &bytesRead);
+
+						UTLStrWToStrA(pwcName, &pszCommName);
+						UTLStrWToStrA(pwcComment, &pszComment);
 						rc = OMF2::omfiMobAppendComment(OMFFileHdl, OMFMob, pszCommName, pszComment);
 						UTLMemoryFree(pszCommName);
 						UTLMemoryFree(pszComment);
+						UTLMemoryFree(pwcName);
+						UTLMemoryFree(pwcComment);
+						pMobComment->Release();
 					}
 					pCommentIterator->Release();
 				}
@@ -934,7 +949,7 @@ HRESULT Aaf2Omf::TraverseMob(IAAFMob* pMob,
 	IAAFSegment*			pSegment = NULL;
 	IEnumAAFMobSlots*		pSlotIter = NULL;
 	aafNumSlots_t			numSlots;
-	aafSearchCrit_t			criteria;
+//	aafSearchCrit_t			criteria;
 	aafInt32				textSize;
 
 	rc = pMob->GetNumSlots(&numSlots);
