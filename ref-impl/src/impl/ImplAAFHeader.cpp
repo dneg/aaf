@@ -135,14 +135,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetPrimaryMobs (ImplEnumAAFMobs ** /*ppEnum*/)
+    ImplAAFHeader::EnumAAFPrimaryMobs (ImplEnumAAFMobs ** /*ppEnum*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetMobs (aafSearchCrit_t *  /*pSearchCriteria*/,
+    ImplAAFHeader::EnumAAFAllMobs (aafSearchCrit_t *  /*pSearchCriteria*/,
                            ImplEnumAAFMobs ** /*ppEnum*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
@@ -174,8 +174,24 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetMedia (aafMediaCriteria_t *  /*pMediaCriteria*/,
+    ImplAAFHeader::EnumAAFMediaObjects (aafMediaCriteria_t *  /*pMediaCriteria*/,
                            ImplEnumAAFMedia ** /*ppEnum*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::AppendMedia (ImplAAFMedia *  /*pMedia*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFHeader::RemoveMedia (ImplAAFMedia *  /*pMedia*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -213,7 +229,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetIdentification (aafUID_t *  /*pGeneration*/,
+    ImplAAFHeader::GetIdentificationByGen (aafUID_t *  /*pGeneration*/,
                            ImplAAFIdentification ** /*ppIdentification*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
@@ -221,7 +237,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetIdentificationList (ImplEnumAAFIdentifications ** /*ppEnum*/)
+    ImplAAFHeader::EnumAAFIdents (ImplEnumAAFIdentifications ** /*ppEnum*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -290,8 +306,23 @@ AAFRESULT
 	return(OM_ERR_NONE);
 }
 
+
+AAFRESULT 
+    ImplAAFHeader::AppendIdentification (ImplAAFIdentification * /*pIdent*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT 
+    ImplAAFHeader::RemoveIdentification (ImplAAFIdentification * /*pIdent*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetToolkitVersion (aafProductVersion_t *pToolkitVersion)
+    ImplAAFHeader::GetRefImplVersion (aafProductVersion_t *pToolkitVersion)
 {
 	*pToolkitVersion = _toolkitRev;
 	return (OM_ERR_NONE);
@@ -326,14 +357,6 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 	
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetByteOrder (aafInt16 *pByteOrder)
-{
-	*pByteOrder = _byteOrder;
-	return(OM_ERR_NONE);
-}
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::GetLastModified (aafTimeStamp_t *  /*pLastModified*/)
 {
@@ -463,7 +486,7 @@ aafBool ImplAAFHeader::IsMediaDataPresent(
 
 
 AAFRESULT ImplAAFHeader::AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
-						  AAFObject *dataObj)    /* IN - Input Mob */ 
+						  ImplAAFObject *dataObj)    /* IN - Input Mob */ 
 {
 #if FULL_TOOLKIT
 	XPROTECT(_file)
