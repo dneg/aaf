@@ -31,14 +31,23 @@
 #include "ImplAAFPropertyValue.h"
 #endif
 
-
-
-
-
 #include "AAFStoredObjectIDs.h"
 
 #ifndef __ImplAAFTypeDefCharacter_h__
 #include "ImplAAFTypeDefCharacter.h"
+#endif
+
+#include "AAFStoredObjectIDs.h"
+#include "AAFPropertyIDs.h"
+#include "ImplAAFObjectCreation.h"
+#include "AAFClassIDs.h"
+
+#ifndef __ImplAAFPropValData_h__
+#include "ImplAAFPropValData.h"
+#endif
+
+#ifndef __AAFTypeDefUIDs_h__
+#include "AAFTypeDefUIDs.h"
 #endif
 
 #include <assert.h>
@@ -49,7 +58,6 @@ const aafUInt32 kExternalCharacterSize = 2;
 
 ImplAAFTypeDefCharacter::ImplAAFTypeDefCharacter ()
 {}
-
 
 ImplAAFTypeDefCharacter::~ImplAAFTypeDefCharacter ()
 {}
@@ -66,29 +74,146 @@ AAFRESULT ImplAAFTypeDefCharacter::pvtInitialize (
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefCharacter::CreateValueFromCharacter (
-      aafCharacter  /*character*/,
-      ImplAAFPropertyValue ** /*ppCharacterValue*/)
+      aafCharacter  character,
+      ImplAAFPropertyValue ** ppCharacterValue)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefCharacter::GetCharacter (
-      ImplAAFPropertyValue * /*pCharacterValue*/,
-      aafCharacter *  /*pCharacter*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
+    if (! ppCharacterValue)
+		return AAFRESULT_NULL_PARAM;
+	
+	aafUInt32 cbChar = NativeSize();
+	
+	// Create a temporary pointer to copy to the smartptr
+	ImplAAFPropValData * tmp = (ImplAAFPropValData *)CreateImpl(CLSID_AAFPropValData);
+	if (NULL == tmp)
+		return AAFRESULT_NOMEMORY;
+	ImplAAFPropValDataSP pv;
+	pv = tmp;
+	
+	tmp->ReleaseReference(); // we don't need this reference anymore.
+	tmp = 0;
+	
+	AAFRESULT hr;
+	hr = pv->Initialize(this);
+	if (! AAFRESULT_SUCCEEDED (hr))
+		return hr;
+	
+	aafMemPtr_t pBits = NULL;
+	hr = pv->AllocateBits (cbChar, &pBits);
+	if (! AAFRESULT_SUCCEEDED (hr))
+		return hr;
+	
+	assert (pBits);
+	memcpy (pBits, &character, cbChar);
+	
+	*ppCharacterValue = pv;
+	(*ppCharacterValue)->AcquireReference ();
+	return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefCharacter::SetCharacter (
-      ImplAAFPropertyValue * /*pCharacterValue*/,
-      aafCharacter  /*character*/)
+      ImplAAFPropertyValue * pCharacterValue,
+      aafCharacter  character)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (! pCharacterValue)
+		return AAFRESULT_NULL_PARAM;
+	
+	//get a pointer to the Val Data
+	ImplAAFPropValDataSP pvd;
+	pvd = dynamic_cast<ImplAAFPropValData*>(pCharacterValue);
+	if (!pvd) return AAFRESULT_BAD_TYPE;
+	
+	// get the property value's embedded type
+	ImplAAFTypeDefSP pPropType;
+	AAFRESULT hr;
+	hr = pvd->GetType (&pPropType);
+	if (! AAFRESULT_SUCCEEDED (hr))
+	{
+		return hr;
+	}
+	assert (pPropType);
+	
+	//check to make sure that the size in the val data matches that of the native size
+	aafUInt32 cbChar = 0;
+	hr = pvd->GetBitsSize(&cbChar);
+	if (! AAFRESULT_SUCCEEDED (hr))
+	{
+		return hr;
+	}
+	
+	if (cbChar != NativeSize())
+	{
+		return AAFRESULT_BAD_TYPE;
+	}
+	
+	//ok all set with initial conditions
+	//now set the value to the incoming character
+	
+	aafMemPtr_t pBits = NULL;
+	hr = pvd->GetBits (&pBits);
+	if (AAFRESULT_FAILED(hr)) return hr;
+	assert (pBits);
+	
+	memcpy (pBits, &character, cbChar);
+	
+	return AAFRESULT_SUCCESS;
+	
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefCharacter::GetCharacter (
+      ImplAAFPropertyValue * pCharacterValue,
+      aafCharacter *  pCharacter)
+{
+	if (! pCharacterValue)
+		return AAFRESULT_NULL_PARAM;
+	
+	if (! pCharacter)
+		return AAFRESULT_NULL_PARAM;
+
+	//get a pointer to the Val Data
+	ImplAAFPropValDataSP pvd;
+	pvd = dynamic_cast<ImplAAFPropValData*>(pCharacterValue);
+	if (!pvd) return AAFRESULT_BAD_TYPE;
+	
+	// get the property value's embedded type
+	ImplAAFTypeDefSP pPropType;
+	AAFRESULT hr;
+	hr = pvd->GetType (&pPropType);
+	if (! AAFRESULT_SUCCEEDED (hr))
+	{
+		return hr;
+	}
+	assert (pPropType);
+	
+	//check to make sure that the size in the val data matches that of the native size
+	aafUInt32 cbChar = 0;
+	hr = pvd->GetBitsSize(&cbChar);
+	if (! AAFRESULT_SUCCEEDED (hr))
+	{
+		return hr;
+	}
+	
+	if (cbChar != NativeSize())
+	{
+		return AAFRESULT_BAD_TYPE;
+	}
+
+	//Now set the character from that contained in the prop val data
+
+	aafMemPtr_t pBits = NULL;
+	hr = pvd->GetBits (&pBits);
+	if (AAFRESULT_FAILED(hr)) return hr;
+	assert (pBits);
+	
+	memcpy (pCharacter, pBits, cbChar);
+	
+	return AAFRESULT_SUCCESS;
+}
+
+
 
 
 // Override from AAFTypeDef
