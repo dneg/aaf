@@ -190,13 +190,13 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void)
+aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 {
   return AAFTrue;
 }
 
 
-size_t ImplAAFTypeDefStrongObjRef::PropValSize (void)
+size_t ImplAAFTypeDefStrongObjRef::PropValSize (void) const
 {
   return sizeof (ImplAAFObject*);
 }

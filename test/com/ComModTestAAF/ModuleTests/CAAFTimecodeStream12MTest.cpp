@@ -232,7 +232,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafTimecode_t				startTC;
 	aafTimecodeSourceType_t		checkType;
 	aafRational_t				checkSpeed, testRate;
-	aafUInt32					checkSampleSize, checkUserDataLen, checkUserData;
+	aafUInt32					checkSampleSize, checkUserData;
+	// aafUInt32				checkUserDataLen;
 	aafPosition_t				offset;
 	AAFRESULT					status;
 	aafProductIdentification_t	ProductInfo;

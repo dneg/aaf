@@ -1190,12 +1190,29 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		if (OMF2::OM_ERR_NONE == OMFError)
 		{
 			if (fadeInPresent || fadeOutPresent)
+			  {
+				// Some 'magic' required to get types to match
+				OMF2::omfInt32 fadeInLen32 = (OMF2::omfInt32) fadeInLen;
+				OMF2::omfInt32 fadeOutLen32 = (OMF2::omfInt32) fadeOutLen;
+				// Check that narrowing of data type didn't throw away
+				// data
+				if (((aafLength_t) fadeInLen32) != fadeInLen)
+				  {
+					rc = AAFRESULT_INTERNAL_ERROR;
+					goto Cleanup;
+				  }
+				if (((aafLength_t) fadeOutLen32) != fadeOutLen)
+				  {
+					rc = AAFRESULT_INTERNAL_ERROR;
+					goto Cleanup;
+				  }
 				OMFError = OMF2::omfiSourceClipSetFade(OMFFileHdl, 
-												 *pOMFSegment,
-												 fadeInLen,
-												 (OMF2::omfFadeType_t)fadeInType,
-												 fadeOutLen,
-												 (OMF2::omfFadeType_t)fadeOutType);
+													   *pOMFSegment,
+													   fadeInLen32,
+													   (OMF2::omfFadeType_t)fadeInType,
+													   fadeOutLen32,
+													   (OMF2::omfFadeType_t)fadeOutType);
+			  }
 		}
 		else
 			rc = AAFRESULT_INTERNAL_ERROR;
@@ -1211,7 +1228,16 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		aafTimecode_t		AAFTimecode;
 
 		pTimecode->GetTimecode(&AAFTimecode);
-		timecode.startFrame = AAFTimecode.startFrame;
+
+		// Some 'magic' required to get types to match; make sure
+		// narrowing of type didn't throw away data
+		timecode.startFrame = (OMF2::omfFrameOffset_t) AAFTimecode.startFrame;
+		if ((aafFrameOffset_t) timecode.startFrame != AAFTimecode.startFrame)
+		{
+		  rc = AAFRESULT_INTERNAL_ERROR;
+		  goto Cleanup;
+		}
+
 		timecode.drop = (OMF2::omfDropType_t)AAFTimecode.drop;
 		timecode.fps = AAFTimecode.fps;
 		if (gpGlobals->bVerboseMode)
@@ -1239,7 +1265,16 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 		OMF2::omfEdgecode_t	OMFEdgecode;
 
 		pEdgecode->GetEdgecode(&edgecode);
-		OMFEdgecode.startFrame = edgecode.startFrame;
+
+		// Some 'magic' required to get types to match; make sure
+		// narrowing of type didn't throw away data
+		OMFEdgecode.startFrame = (OMF2::omfFrameOffset_t) edgecode.startFrame;
+		if ((aafFrameOffset_t) OMFEdgecode.startFrame != edgecode.startFrame)
+		{
+		  rc = AAFRESULT_INTERNAL_ERROR;
+		  goto Cleanup;
+		}
+
 		OMFEdgecode.filmKind = (OMF2::omfFilmType_t)edgecode.filmKind;
 		OMFEdgecode.codeFormat = (OMF2::omfEdgeType_t)edgecode.codeFormat;
 		memcpy(OMFEdgecode.header, edgecode.header, sizeof(edgecode.header));
@@ -1370,7 +1405,7 @@ HRESULT Aaf2Omf::GetUniqueNameFromAUID(aafUID_t Datadef,
 									   OMF2::omfUniqueNamePtr_t UniqueName)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	OMF2::omfBool			bFound;
+	// OMF2::omfBool			bFound;
 	char					szAUID[OMUNIQUENAME_SIZE];
 
 	if ( memcmp((char *)&Datadef, (char *)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0 )
@@ -1622,7 +1657,7 @@ HRESULT Aaf2Omf::ConvertLocator(IAAFEssenceDescriptor* pEssenceDesc,
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
-	OMF2::omfClassID_t		locType;
+	// OMF2::omfClassID_t		locType;
 
 	char*					pszLocatorPath = NULL;
 	char*					pszName = NULL;
@@ -1896,7 +1931,14 @@ CopyMedia:
 			}
 			else
 			{
-				nBlockSize = numBytes;
+			  // Some 'magic' required to get types to match; make sure
+			  // narrowing of type didn't throw away data
+			  nBlockSize = (aafUInt32) numBytes;
+			  if ((aafLength_t) nBlockSize != numBytes)
+			  {
+				rc = AAFRESULT_INTERNAL_ERROR;
+				goto Cleanup;
+			  }
 			}
 			rc = UTLMemoryAlloc(nBlockSize, &pBuffer);
 			AAFOffset = 0;
@@ -1959,9 +2001,9 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	OMF2::omfDDefObj_t		effectDatakind;
-	OMF2::omfLength_t		effectLength;
+	// OMF2::omfLength_t		effectLength;
 	OMF2::omfEDefObj_t		effectDef;
-	OMF2::omfDDefObj_t		OMFdatakind;
+	// OMF2::omfDDefObj_t		OMFdatakind;
 	OMF2::omfUniqueName_t	effectName;
 	OMF2::omfErr_t			OMFError;
 	OMF2::omfBool			bDefExists;
