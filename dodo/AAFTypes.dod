@@ -976,6 +976,25 @@ typedef enum _aafSearchDictionaryTag_t
 } aafSearchDictionaryTag_t;
 
 
+//********
+//
+// Enum indicating data "Endian-ness"
+// 
+typedef enum _aafByteOrder_t
+{
+  //
+  // Little Endian (e.g. Intel byte order)
+  //
+  kByteOrderLittle	= 0,
+
+  //
+  // Big Endian (e.g. Mac or Sparc byte order)
+  //
+  kByteOrderBig	= 1,
+
+} aafByteOrder_t;
+
+
 AD_CPP_QUOTE(#if 0)
 typedef struct _aafSearchDictionaryCrit_t
 {
