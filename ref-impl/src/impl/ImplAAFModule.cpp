@@ -513,6 +513,22 @@ STDAPI ImplAAFFileOpenTransient (
   return hr;
 }
 
+//***********************************************************
+//
+// AAFFileIsAAFFile()
+//
+// This function is implemented in aaflib. This stub is here only
+// because the dodo generated CAAFModule.cpp insists on it. This stub
+// is not and should not be called.
+//
+STDAPI ImplAAFFileIsAAFFile (
+  const aafCharacter *  /* pFileName */,
+  aafUID_t * /* pAAFFileKind */,
+  aafBool *  /* pFileIsAAFFile */)
+{
+  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+  return hr;
+}
 
 //***********************************************************
 //

@@ -327,6 +327,16 @@ STDAPI ImplAAFFileOpenTransient (
   // Pointer to buffer to receive pointer to new file.
   /*[out]*/ ImplAAFFile ** ppFile);
 
+//***********************************************************
+//
+// AAFFileIsAAFFile()
+//
+// Please see AAF.h for comments.
+//
+STDAPI ImplAAFFileIsAAFFile (
+  const aafCharacter *  pFileName,
+  aafUID_t * pAAFFileKind,
+  aafBool *  pFileIsAAFFile);
 
 //***********************************************************
 //
