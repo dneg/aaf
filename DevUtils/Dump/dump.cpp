@@ -168,6 +168,14 @@ typedef struct {
   OMUInt32 _elementName;
 } VectorIndexEntry;
 
+// Structure of a set index entry
+//
+typedef struct {
+  OMUInt32 _elementName;
+  OMUInt32 _referenceCount;
+  CLSID _key;
+} SetIndexEntry;
+
 // Byte ordering
 //
 typedef OMUInt16 ByteOrder;
@@ -332,6 +340,8 @@ static void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded);
 static void swapUInt16(OMUInt16* value);
 #endif
 static void swapUInt32(OMUInt32* value);
+static void readCLSID(IStream* stream, CLSID* value, bool swapNeeded);
+static void swapCLSID(CLSID* value);
 static void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry);
 static void printIndex(IndexEntry* index, OMUInt32 entries);
 static void readIndexEntry(IStream* stream,
@@ -355,6 +365,17 @@ static void readVectorIndexEntry(IStream* stream,
 static VectorIndexEntry* readVectorIndex(IStream* stream,
                                          OMUInt32 count,
                                          bool swapNeeded);
+static void dumpSetIndexEntry(OMUInt32 i,
+                              SetIndexEntry* setIndexEntry);
+static void printSetIndex(SetIndexEntry* setIndex,
+                          OMUInt32 count,
+                          OMUInt32 highWaterMark);
+static void readSetIndexEntry(IStream* stream,
+                              SetIndexEntry* entry,
+                              bool swapNeeded);
+static SetIndexEntry* readSetIndex(IStream* stream,
+                                   OMUInt32 count,
+                                   bool swapNeeded);
 static ByteOrder readByteOrder(IStream* stream);
 static void dumpObject(IStorage* storage, char* pathName, int isRoot);
 static OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version);
@@ -1169,6 +1190,22 @@ void swapUInt32(OMUInt32* value)
   p[2] = temp;
 }
 
+static void readCLSID(IStream* stream, CLSID* value, bool swapNeeded)
+{
+  read(stream, value, sizeof(CLSID));
+  if (swapNeeded) {
+    swapCLSID(value);
+  }
+}
+
+void swapCLSID(CLSID* value)
+{
+  swapUInt32(&value->Data1);
+  swapUInt16(&value->Data2);
+  swapUInt16(&value->Data3);
+  // no need to swap Data4
+}
+
 void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry)
 {
   ASSERT("Valid index entry", indexEntry != 0);
@@ -1432,6 +1469,79 @@ VectorIndexEntry* readVectorIndex(IStream* stream,
   return result;
 }
 
+void dumpSetIndexEntry(OMUInt32 i, SetIndexEntry* setIndexEntry)
+{
+  cout << setw(8) << i
+       << " : "
+       << setw(10) << setIndexEntry->_elementName
+       << "     "
+       << setw(8) << setIndexEntry->_referenceCount
+       << "     ";
+       printClsid(setIndexEntry->_key);
+}
+
+void printSetIndex(SetIndexEntry* setIndex,
+                      OMUInt32 count,
+                      OMUInt32 highWaterMark)
+{
+  cout << "Dump of set index" << endl;
+  cout << "( High water mark = " << highWaterMark
+       << ", Number of entries = " << count << " )" << endl;
+
+  if (count > 0) {
+    cout << setw(8) << "ordinal"
+         << "   "
+         << setw(10) << "local key"
+         << "   "
+         << setw(8) << "references"
+         << "     "
+         << setw(8) << "unique key"
+         << endl;
+
+    for (OMUInt32 i = 0; i < count; i++) {
+      dumpSetIndexEntry(i, &setIndex[i]);
+    }
+  } else {
+    cout << "empty" << endl;
+  }
+}
+
+void readSetIndexEntry(IStream* stream,
+                          SetIndexEntry* entry,
+                          bool swapNeeded)
+{
+  // Reading native set index entries not yet supported.
+  // Instead read the entire set index.
+  //
+  ASSERT("Swap needed", swapNeeded);
+  if (!swapNeeded) {
+    // NYI
+  } else {
+    SetIndexEntry newEntry;
+    readUInt32(stream, &newEntry._elementName, swapNeeded);
+    readUInt32(stream, &newEntry._referenceCount, swapNeeded);
+    readCLSID(stream, &newEntry._key, swapNeeded);
+    memcpy(entry, &newEntry, sizeof(SetIndexEntry));
+  }
+
+}
+
+SetIndexEntry* readSetIndex(IStream* stream,
+                                  OMUInt32 count,
+                                  bool swapNeeded)
+{
+  SetIndexEntry* result = new SetIndexEntry[count];
+  ASSERT("Successfully allocated set index array", result != 0);
+  if (!swapNeeded) {
+    read(stream, result, sizeof(SetIndexEntry) * count);
+  } else {
+    for (OMUInt32 i = 0; i < count; i++) {
+      readSetIndexEntry(stream, &result[i], swapNeeded);
+    }
+  }
+  return result;
+}
+
 OMUInt32 typeOf(IndexEntry* entry, OMUInt32 version)
 {
   OMUInt32 result;
@@ -1543,8 +1653,7 @@ void dumpContainedObjects(IStorage* storage,
     }
     break;
 
-    case TID_STRONG_OBJECT_REFERENCE_VECTOR:
-    case TID_STRONG_OBJECT_REFERENCE_SET : {
+    case TID_STRONG_OBJECT_REFERENCE_VECTOR: {
       // get name of vector index
       //
       char* suffix = " index";
@@ -1647,7 +1756,109 @@ void dumpContainedObjects(IStorage* storage,
       vectorIndex = 0;
     }
     break;
+    case TID_STRONG_OBJECT_REFERENCE_SET : {
+      // get name of set index
+      //
+      char* suffix = " index";
+      char* setName = new char[index[i]._length];
+      read(propertiesStream, index[i]._offset, setName, index[i]._length);
 
+      size_t size = strlen(setName) + strlen(suffix) + 1;
+      char* setIndexName = new char[size];
+      strcpy(setIndexName, setName);
+      strcat(setIndexName, suffix);
+
+      // Compute the pathname for this object
+      //
+      char thisPathName[256];
+      strcpy(thisPathName, pathName);
+      if (!isRoot) {
+        strcat(thisPathName, "/");
+      }
+      strcat(thisPathName, setName);
+
+      // open the set index stream
+      //
+      IStream* subStream = 0;
+      openStream(storage, setIndexName, &subStream);
+      if (subStream == 0) {
+        fatalError("dumpContainedObjects", "openStream() failed.");
+      }
+      size_t setIndexStreamSize = sizeOfStream(subStream, setIndexName);
+      totalStreamBytes = totalStreamBytes + setIndexStreamSize;
+
+      OMUInt32 _highWaterMark;
+      readUInt32(subStream, &_highWaterMark, swapNeeded);
+
+      OMUInt32 _count;
+      readUInt32(subStream, &_count, swapNeeded);
+      
+      // Read the set index.
+      //
+      SetIndexEntry* setIndex = readSetIndex(subStream,
+                                                      _count,
+                                                      swapNeeded);
+
+      // dump the set index
+      //
+      cout << endl;
+      cout << thisPathName << endl;
+      printSetIndex(setIndex, _count, _highWaterMark);
+
+      // for each set index entry
+      //
+      for (OMUInt32 entry = 0; entry < _count; entry++) {
+        //   compute storage name
+        char* elementName = new char[strlen(setName) + 1 + 1];
+        strcpy(elementName, setName);
+        strcat(elementName, _openArrayKeySymbol);
+        
+        char number[256];
+        sprintf(number, "%x", setIndex[entry]._elementName);
+        
+        size_t size = strlen(elementName) + strlen(number) + 1 + 1;
+        char* subStorageName = new char[size];
+        strcpy(subStorageName, elementName);
+        strcat(subStorageName, number);
+        strcat(subStorageName, _closeArrayKeySymbol);
+
+        // Compute the path name for this element
+        //
+        char thisPathName[256];
+        strcpy(thisPathName, pathName);
+        if (!isRoot) {
+          strcat(thisPathName, "/");
+        }
+        strcat(thisPathName, subStorageName);
+        
+        // open the storage
+        //
+        IStorage* subStorage = 0;
+        openStorage(storage, subStorageName, &subStorage);
+        if (storage == 0) {
+          fatalError("dumpContainedObjects", "openStorage() failed.");
+        }
+        // dump the object
+        //
+        dumpObject(subStorage, thisPathName, 0);
+
+        delete [] elementName;
+        elementName = 0;
+
+        delete [] subStorageName;
+        subStorageName = 0;
+      }
+
+      delete [] setName;
+      setName = 0;
+
+      delete [] setIndexName;
+      setIndexName = 0;
+
+      delete [] setIndex;
+      setIndex = 0;
+    }
+    break;
     case TID_WEAK_OBJECT_REFERENCE:
       // value is dumped when the property value stream is dumped
       break;
