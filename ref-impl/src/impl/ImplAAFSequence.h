@@ -114,7 +114,7 @@ public:
   static AAFRESULT test();
 
   // Interfaces visible inside the toolkit, but not exposed through the API
-  AAFRESULT GetNthComponent(aafInt32 index /* 0-based*/, ImplAAFComponent **ppComponent);
+  AAFRESULT GetNthComponent(aafUInt32 index, ImplAAFComponent **ppComponent);
 
 private:
 	OMStrongReferenceVectorProperty<ImplAAFComponent> _components;
