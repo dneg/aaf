@@ -19,28 +19,28 @@ AD_IDL(//
 // states:
 //
 // 1\) Open for Reading with AAFFileOpenExistingRead.  This file 
-//    object is associated with a filesystem file from which information
-//    is only to be read.
+//    object is associated with a filesystem file from which
+//    information is only to be read.
 //
 // 2\) Open for Modification with AAFFileOpenExistingModify or 
 //    AAFFileOpenNewModify.  This file object is associated with a
 //    filesystem file\, potentially containing data which is to be
 //    modified.
 //
-// 3\) Open as a Transient File with AAFFileOpenTransient.  This file 
+// 3\) Open as a Transient File with AAFFileOpenTransient.  This file
 //    object is not associated with any filesystem file\, but it may 
 //    still be used to contain AAF objects.
 //
 // 4\) Closed.  This file object is neither transient nor is it
 //    associated with any filesystem entities.
 //
-// When created and Initialize\(\)d\, objects implementing this interface
-// are initially in the Closed state.
+// When created and Initialize\(\)d\, objects implementing this
+// interface are initially in the Closed state.
 //
 // In general an IAAFFile-implementing object may not be transitioned
 // directly from one Open state to another; it must first be put
-// through the Closed state.  The exception is a Transient file\, which
-// may be transitioned directly from Transient to Open for
+// through the Closed state.  The exception is a Transient file\,
+// which may be transitioned directly from Transient to Open for
 // Modification via the SaveAs\(\) method.
 //
 // Any filesystem file can be opened for reading by multiple
@@ -164,7 +164,7 @@ AD_XMETHOD2(SaveAs,
 
 			[in\, string],
 			objPass,
-			aafCharacter *,
+			aafCharacter_constptr,
 			pFileName,
 			Null-terminated string containing name of filesystem file to
 	// which this file is to be saved.  Filename must be in a form

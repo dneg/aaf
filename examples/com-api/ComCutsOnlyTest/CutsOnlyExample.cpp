@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -44,8 +44,6 @@
 
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
-
-
 
 
 // There are differences in the microsoft and other compilers in the "Length" specifier
@@ -148,6 +146,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFComponent*				compFill = NULL;
 	IAAFLocator*				pLocator = NULL;
 	IAAFNetworkLocator*			pNetLocator = NULL;
+	IAAFDataDef *               pDdefPicture = 0;
+	IAAFClassDef *              pCDSourceMob = 0;
+	IAAFClassDef *              pCDTapeDescriptor = 0;
+	IAAFClassDef *              pCDFileDescriptor = 0;
+	IAAFClassDef *              pCDNetworkLocator = 0;
+	IAAFClassDef *              pCDMasterMob = 0;
+	IAAFClassDef *              pCDCompositionMob = 0;
+	IAAFClassDef *              pCDSequence = 0;
+	IAAFClassDef *              pCDSourceClip = 0;
+	IAAFClassDef *              pCDFiller = 0;
 	aafRational_t				videoRate = { 30000, 1001 };
 	aafMobID_t					tapeMobID, fileMobID, masterMobID;
 	aafTimecode_t				tapeTC = { 108000, kTcNonDrop, 30};
@@ -157,11 +165,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 
   
-  // delete any previous test file before continuing...
-  char chFileName[1000];
-  convert(chFileName, sizeof(chFileName), pFileName);
-  remove(chFileName);
-
+	// delete any previous test file before continuing...
+	char chFileName[1000];
+	convert(chFileName, sizeof(chFileName), pFileName);
+	remove(chFileName);
 
 	ProductInfo.companyName = L"Company Name";
 	ProductInfo.productName = L"Cuts Only Composition Example";
@@ -174,19 +181,38 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;
 
-  check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+	check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
 
 	check(pFile->GetHeader(&pHeader));
 
-  // Get the AAF Dictionary so that we can create valid AAF objects.
-  check(pHeader->GetDictionary(&pDictionary));
+	// Get the AAF Dictionary so that we can create valid AAF objects.
+	check(pHeader->GetDictionary(&pDictionary));
+
+	check(pDictionary->LookupClassDef(AUID_AAFSourceMob,
+									  &pCDSourceMob));
+	check(pDictionary->LookupClassDef(AUID_AAFTapeDescriptor,
+									  &pCDTapeDescriptor));
+	check(pDictionary->LookupClassDef(AUID_AAFFileDescriptor,
+									  &pCDFileDescriptor));
+	check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator,
+									  &pCDNetworkLocator));
+	check(pDictionary->LookupClassDef(AUID_AAFMasterMob,
+									  &pCDMasterMob));
+	check(pDictionary->LookupClassDef(AUID_AAFCompositionMob,
+									  &pCDCompositionMob));
+	check(pDictionary->LookupClassDef(AUID_AAFSequence,
+									  &pCDSequence));
+	check(pDictionary->LookupClassDef(AUID_AAFSourceClip,
+									  &pCDSourceClip));
+	check(pDictionary->LookupClassDef(AUID_AAFFiller,
+									  &pCDFiller));
 
 
 	//Make the Tape MOB
-	check(pDictionary->CreateInstance( AUID_AAFSourceMob,
+	check(pDictionary->CreateInstance( pCDSourceMob,
 						   IID_IAAFSourceMob, 
 						   (IUnknown **)&pTapeMob));
-	check(pDictionary->CreateInstance( AUID_AAFTapeDescriptor,
+	check(pDictionary->CreateInstance( pCDTapeDescriptor,
 						   IID_IAAFTapeDescriptor, 
 						   (IUnknown **)&pTapeDesc));
 	check(pTapeDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
@@ -195,7 +221,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aDesc = NULL;
 		
 	check(pTapeMob->AppendTimecodeSlot (videoRate, 0, tapeTC, TAPE_LENGTH));
-	check(pTapeMob->AddNilReference (1,TAPE_LENGTH, DDEF_Picture, videoRate));
+	check(pDictionary->LookupDataDef (DDEF_Picture, &pDdefPicture));
+	check(pTapeMob->AddNilReference (1,TAPE_LENGTH, pDdefPicture, videoRate));
 	check(pTapeMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->SetName (L"A Tape Mob"));
 	check(pHeader->AddMob(pMob));
@@ -205,16 +232,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	// Make a FileMob
-	check(pDictionary->CreateInstance( AUID_AAFSourceMob,
+	check(pDictionary->CreateInstance( pCDSourceMob,
 						   IID_IAAFSourceMob, 
 						   (IUnknown **)&pFileMob));
-	check(pDictionary->CreateInstance( AUID_AAFFileDescriptor,
+	check(pDictionary->CreateInstance( pCDFileDescriptor,
 						   IID_IAAFFileDescriptor, 
 						   (IUnknown **)&pFileDesc));
 	check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
 
 	// Make a locator, and attach it to the EssenceDescriptor
-	check(pDictionary->CreateInstance( AUID_AAFNetworkLocator,
+	check(pDictionary->CreateInstance( pCDNetworkLocator,
 							IID_IAAFNetworkLocator, 
 							(IUnknown **)&pNetLocator));		
 	check(pNetLocator->QueryInterface (IID_IAAFLocator, (void **)&pLocator));
@@ -231,7 +258,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
 	check(pFileMob->NewPhysSourceRef (videoRate,
-                           1, DDEF_Picture, sourceRef, fileLen));
+                           1, pDdefPicture, sourceRef, fileLen));
 
 	check(pFileMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->GetMobID (&fileMobID));
@@ -240,14 +267,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pMob = NULL;
 
 	//Make the Master MOB
-	check(pDictionary->CreateInstance( AUID_AAFMasterMob,
+	check(pDictionary->CreateInstance( pCDMasterMob,
 						   IID_IAAFMasterMob, 
 						   (IUnknown **)&pMasterMob));
 
 	sourceRef.sourceID = fileMobID;
 	sourceRef.sourceSlotID = 1;
 	sourceRef.startTime = 0;
-	check(pMasterMob->NewPhysSourceRef (videoRate, 1, DDEF_Picture, sourceRef, fileLen));
+	check(pMasterMob->NewPhysSourceRef (videoRate, 1, pDdefPicture, sourceRef, fileLen));
 	check(pMasterMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->GetMobID (&masterMobID));
 	check(pMob->SetName (L"A Master Mob"));
@@ -256,18 +283,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pMob = NULL;
 
 	// Create a Composition Mob
-	check(pDictionary->CreateInstance( AUID_AAFCompositionMob,
+	check(pDictionary->CreateInstance( pCDCompositionMob,
 						   IID_IAAFMob, 
 						   (IUnknown **)&pCompMob));
 	// Create a sequence
-	check(pDictionary->CreateInstance( AUID_AAFSequence,
+	check(pDictionary->CreateInstance( pCDSequence,
 			   IID_IAAFSequence, 
 			   (IUnknown **)&pSequence));		
 	check(pSequence->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
 	check(pSequence->QueryInterface(IID_IAAFComponent, (void **)&aComponent));
 
-	check(aComponent->SetDataDef(DDEF_Picture));
+	check(aComponent->SetDataDef(pDdefPicture));
 	check(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 	check(pMob->AppendNewTimelineSlot (videoRate, seg, 1, slotName, 0, &newSlot));
 
@@ -281,7 +308,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	// Create a SourceClip
-	check(pDictionary->CreateInstance( AUID_AAFSourceClip,
+	check(pDictionary->CreateInstance( pCDSourceClip,
 						   IID_IAAFSourceClip, 
 						   (IUnknown **)&compSclp));		
 
@@ -290,18 +317,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	sourceRef.startTime = 0;
 	check(compSclp->SetSourceReference (sourceRef));
 	check(compSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
-	check(aComponent->SetDataDef(DDEF_Picture));
+	check(aComponent->SetDataDef(pDdefPicture));
 	check(aComponent->SetLength (segLen));
 	check(pSequence->AppendComponent (aComponent));
 
 	// Create a filler - Get the component interface only (IID_IAAFComponent)
-	check(pDictionary->CreateInstance( AUID_AAFFiller,
+	check(pDictionary->CreateInstance( pCDFiller,
 									   IID_IAAFComponent, 
 									   (IUnknown **)&compFill));		
 
 	check(compFill->SetLength (fillLen));
-
-	check(compFill->SetDataDef(DDEF_Picture));
+	check(compFill->SetDataDef(pDdefPicture));
 	check(pSequence->AppendComponent (compFill));
 
 	seg->Release();
@@ -312,78 +338,200 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	pMob = NULL;
 	newSlot->Release();
 	newSlot = NULL;
+	pDdefPicture->Release();
+	pDdefPicture = 0;
 
 	check(pHeader->AddMob(pCompMob));
 
 cleanup:
 	// Cleanup and return
 	if (pNetLocator)
+	  {
 		pNetLocator->Release();
+		pNetLocator = 0;
+	  }
 
 	if (pLocator)
+	  {
 		pLocator->Release();
+		pLocator = 0;
+	  }
 
 	if (compFill)
+	  {
 		compFill->Release();
+		compFill = 0;
+	  }
 
 	if (compSclp)
+	  {
 		compSclp->Release();
+		compSclp = 0;
+	  }
 
 	if (masterSclp)
+	  {
 		masterSclp->Release();
+		masterSclp = 0;
+	  }
 
 	if (fileSclp)
+	  {
 		fileSclp->Release();
+		fileSclp = 0;
+	  }
 
 	if (pTapeDesc)
+	  {
 		pTapeDesc->Release();
+		pTapeDesc = 0;
+	  }
 
 	if (pFileDesc)
+	  {
 		pFileDesc->Release();
+		pFileDesc = 0;
+	  }
 
 	if (aComponent)
+	  {
 		aComponent->Release();
+		aComponent = 0;
+	  }
 
 	if (pSequence)
+	  {
 		pSequence->Release();
+		pSequence = 0;
+	  }
 
 	if (pTapeMob)
+	  {
 		pTapeMob->Release();
+		pTapeMob = 0;
+	  }
 
 	if (pFileMob)
+	  {
 		pFileMob->Release();
+		pFileMob = 0;
+	  }
 
 	if (pMasterMob)
+	  {
 		pMasterMob->Release();
+		pMasterMob = 0;
+	  }
 
 	if (aDesc)
+	  {
 		aDesc->Release();
+		aDesc = 0;
+	  }
 
 	if (pCompMob)
+	  {
 		pCompMob->Release();
+		pCompMob = 0;
+	  }
 
 	if (seg)
+	  {
 		seg->Release();
+		seg = 0;
+	  }
 
 	if (newSlot)
+	  {
 		newSlot->Release();
+		newSlot = 0;
+	  }
 
 	if (pMob)
+	  {
 		pMob->Release();
+		pMob = 0;
+	  }
 
 	if (pDictionary)
+	  {
 		pDictionary->Release();
+		pDictionary = 0;
+	  }
 
 	if (pHeader)
+	  {
 		pHeader->Release();
+		pHeader = 0;
+	  }
+
+	if (pDdefPicture)
+	  {
+		pDdefPicture->Release();
+		pDdefPicture = 0;
+	  }
+
+	if (pCDSourceMob)
+	  {
+		pCDSourceMob->Release();
+		pCDSourceMob = 0;
+	  }
+
+	if (pCDTapeDescriptor)
+	  {
+		pCDTapeDescriptor->Release();
+		pCDTapeDescriptor = 0;
+	  }
+
+	if (pCDFileDescriptor)
+	  {
+		pCDFileDescriptor->Release();
+		pCDFileDescriptor = 0;
+	  }
+
+	if (pCDNetworkLocator)
+	  {
+		pCDNetworkLocator->Release();
+		pCDNetworkLocator = 0;
+	  }
+
+	if (pCDMasterMob)
+	  {
+		pCDMasterMob->Release();
+		pCDMasterMob = 0;
+	  }
+
+	if (pCDCompositionMob)
+	  {
+		pCDCompositionMob->Release();
+		pCDCompositionMob = 0;
+	  }
+
+	if (pCDSequence)
+	  {
+		pCDSequence->Release();
+		pCDSequence = 0;
+	  }
+
+	if (pCDSourceClip)
+	  {
+		pCDSourceClip->Release();
+		pCDSourceClip = 0;
+	  }
+
+	if (pCDFiller)
+	  {
+		pCDFiller->Release();
+		pCDFiller = 0;
+	  }
 
 	if (pFile) 
 	{
 		pFile->Save();
 		pFile->Close();
 		pFile->Release();
+		pFile = 0;
 	}
-
 	
 	return moduleErrorTmp;
 }

@@ -1049,7 +1049,7 @@ AD_CPP_QUOTE(  #define aafArgIDType_constref         const aafArgIDType_t * cons
 AD_CPP_QUOTE(  #define aafEdgecodeHeader_constref    const aafEdgecodeHeader_t * const)
 AD_CPP_QUOTE(  #define aafEdgecode_constref          const aafEdgecode_t * const)
 AD_CPP_QUOTE(  #define aafEngine_constref            const aafEngine_t * const)
-AD_CPP_QUOTE(  #define aafHardwarePlatform_constrfef const aafHardwarePlatform_t * const)
+AD_CPP_QUOTE(  #define aafHardwarePlatform_constref  const aafHardwarePlatform_t * const)
 AD_CPP_QUOTE(  #define aafLength_constref            const aafLength_t * const)
 AD_CPP_QUOTE(  #define aafMediaCriteria_constref     const aafMediaCriteria_t * const)
 AD_CPP_QUOTE(  #define aafPluginAPI_constref         const aafPluginAPI_t * const)
