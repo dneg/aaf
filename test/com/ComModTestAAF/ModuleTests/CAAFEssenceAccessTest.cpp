@@ -386,7 +386,7 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 		ProductInfo.productName = L"Essence Data Test";
 		ProductInfo.productVersion = &v;
 		ProductInfo.productVersionString = NULL;
-		ProductInfo.productID = NIL_UID;
+		ProductInfo.productID = UnitTestProductID;
 		ProductInfo.platform = NULL;
 		
 		checkResult(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
