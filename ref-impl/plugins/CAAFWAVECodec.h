@@ -55,8 +55,10 @@ public:
   STDMETHOD (Finish)
      (void);
 
-  STDMETHOD (GetPluginID)(aafUID_t *result);
+  STDMETHOD (GetPluggableID)(aafUID_t *result);
+  STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
   STDMETHOD (GetEssenceDescriptorID)(aafUID_t *result);
+  STDMETHOD (GetEssenceDataID)(aafUID_t *result);
   STDMETHOD (GetPluggableDefinition)(IAAFDictionary *dict, IAAFPluggableDef **def);
   STDMETHOD (GetDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
 
@@ -85,22 +87,11 @@ public:
     (/*[in]*/ aafInt32  index, // Which data definition to get the ID for
      /*[out]*/ aafUID_t *  pVariant); // The returned dataDefinition 
 
-  // This function is called at startup by the plugin manager
-  STDMETHOD (GetMetaInfo)
-    (/*[out]*/ aafCodecMetaInfo_t *  pInfo); // The returned meta information about this codec 
-
   // Given a variant ID, return the human readable name
   STDMETHOD (GetCodecDisplayName)
     (/*[in]*/ aafUID_t  variant, // which variant of the codec to use
      /*[in,string]*/ wchar_t *  pName, // Human-readable name of the variant
      /*[in]*/ aafInt32  bufSize); // length of the buffer to hold variant Name 
-
-  // This function is called when opening a media stream on a file mob.
-  STDMETHOD (GetSelectInfo)
-    (/*[in]*/ IUnknown *fileMob, // See if the current codec can process data from this file mob
-     /*[out]*/ aafCodecSelectInfo_t *  pInfo); // The returned meta information about this codec 
-	
-
 	
   // Returns the number of channels which this codec can handle
 			// of the given essence kind
