@@ -33,6 +33,7 @@ using namespace std;
 #include <AAFXsMapper.h>
 #include <Utilities.h>
 #include <AxMetaDef.h>
+#include <AxIterator.h>
 
 
 //-----------------------------------------------------------------------------
