@@ -94,7 +94,7 @@ typedef AAF_INT64_TYPE aafInt64;
 #endif
 AD_CPP_QUOTE(#else)
 
-AD_CPP_QUOTE(#ifdef __MWERKS)
+AD_CPP_QUOTE(#ifdef __MWERKS__)
 AD_CPP_QUOTE(#if \(__MWERKS__ >= 0x1100\))
 AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
 AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
