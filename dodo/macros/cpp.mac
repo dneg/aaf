@@ -249,7 +249,7 @@ AD_CLASS_BEGIN\
 
 .this-module::.this-module (aafBool doInit)
   : _rep((Impl.this-module *)NULL),
-    _refCount(0)
+    _refCount(1)
 {
   if (doInit)
     {
