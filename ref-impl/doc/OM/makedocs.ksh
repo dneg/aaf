@@ -6,20 +6,22 @@
 # Autoduck works by extracting specially tagged comments from
 # the source files.
 #
-# ADROOT - Where autoduck was installed
+
 # OMDOC  - The Object Manager autoduck directory
 # SRC    - The Object Manager sources
 #
 if [ "${LOCAL}" == "" ]
 then
-  ADROOT="../bin"
   OMDOC=doc/OM
   SRC="src/OM/*.cpp src/OM/*.h include/OM/*.h"
 else
-  ADROOT="c:/program files/autoduck"
   OMDOC=docs
   SRC="src/*.cpp src/*.h"
 fi
+#
+# Where autoduck was installed
+#
+ADROOT="c:/program files/autoduck"
 #
 # The autoduck program
 #
