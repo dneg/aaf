@@ -38,9 +38,11 @@ run:
 aafobjects.all : aafobjects.list
 aafobjects.list : aafobjects.mk
 	$(SH_PREFIX) $(RM) -f aafobjects.list $(SH_SUFFIX)
-	$(SH_PREFIX) cp -f aafobjects.mk aafobjects.list $(SH_SUFFIX)
-	$(SH_PREFIX) cp -f aafobjects.mk $(SRC_DIR)/com-api $(SH_SUFFIX)
-	$(SH_PREFIX) cp -f aafobjects.mk $(INCLUDE_DIR)/com-api $(SH_SUFFIX)
+	$(SH_PREFIX) $(CP) aafobjects.mk aafobjects.list $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(SRC_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
+	$(SH_PREFIX) $(CP) aafobjects.mk $(SRC_DIR)/com-api $(SH_SUFFIX)
+	$(SH_PREFIX) $(RM) -f $(INCLUDE_DIR)/com-api/aafobjects.mk $(SH_SUFFIX)
+	$(SH_PREFIX) $(CP) aafobjects.mk $(INCLUDE_DIR)/com-api $(SH_SUFFIX)
 
 
 #targets: aafobjects.mk targets.mk depend.mk
