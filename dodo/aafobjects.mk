@@ -79,6 +79,7 @@ AAFCOMINTERFACESONLY = \
 HUMAN_TYPED_IMPL = \
 	AAFComponent \
 	AAFCompositionMob \
+	AAFContentStorage \
 	AAFEssenceDescriptor \
 	AAFFile \
 	AAFFileDescriptor \
