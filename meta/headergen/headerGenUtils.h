@@ -11,18 +11,4 @@ void validateArgs (int argc,
 				   char *& moduleName);
 
 
-struct replacementSpec_t
-{
-  const char * from;
-  const char * to;
-};
-
-// Checks to see if input exactly matches any "from" in the spec
-// array; if so, prints the associated "to" to os.  If not, prints the
-// input to os.
-void replaceAndPrint (const char * input,
-					  const replacementSpec_t * spec,
-					  ostream & os);
-
-
 #endif // ! __headerGenUtils_h__

@@ -4,47 +4,10 @@
 
 #include "headerGenUtils.h"
 
-static const replacementSpec_t replacements[] =
-{
-  { "ClassDefinition", "ClassDef" },
-  { "DataDefinition", "DataDef" },
-  { "DefinitionObject", "DefObject" },
-  { "EdgeCode", "Edgecode" },
-  { "OperationDefinition", "OperationDef" },
-  { "InterchangeObject", "Object" },
-  { "JPEGImageData", "JPEGData" },
-  { "MIDIFileData", "MIDIData" },
-  { "ParameterDefinition", "ParameterDef" },
-  // { "InterpolationDefinition", "InterpolationDef" },
-  { "PropertyDefinition", "PropertyDef" },
-  { "TypeDefinition", "TypeDef" },
-  { "TypeDefinitionCharacter", "TypeDefCharacter" },
-  { "TypeDefinitionEnumeration", "TypeDefEnum" },
-  { "TypeDefinitionExtendibleEnumeration", "TypeDefExtEnum" },
-  { "TypeDefinitionFixedArray", "TypeDefFixedArray" },
-  { "TypeDefinitionInteger", "TypeDefInt" },
-  { "TypeDefinitionRecord", "TypeDefRecord" },
-  { "TypeDefinitionRename", "TypeDefRename" },
-  { "TypeDefinitionSet", "TypeDefSet" },
-  { "TypeDefinitionStream", "TypeDefStream" },
-  { "TypeDefinitionString", "TypeDefString" },
-  { "TypeDefinitionIndirect", "TypeDefIndirect" },
-  { "TypeDefinitionOpaque", "TypeDefOpaque" },
-  { "TypeDefinitionStrongObjectReference", "TypeDefStrongObjRef" },
-  { "TypeDefinitionVariableArray", "TypeDefVariableArray" },
-  { "TypeDefinitionWeakObjectReference", "TypeDefWeakObjRef" },
-  { "UNIXLocator", "UnixLocator" },
-  { "CodecDefinition", "CodecDef" },
-  { "ContainerDefinition", "ContainerDef" },
-  { "PluginDefinition", "PluginDef" },
-  { "PluggableDefinition", "PluggableDef" },
-  { 0, 0 }
-};
-
 #define AAF_CLASS(name, dataid, parent, concrete) \
 cout << endl; \
 cout << "const aafUID_t AUID_AAF"; \
-replaceAndPrint (#name, replacements, cout); \
+cout << #name; \
 cout << " =" << endl; \
 dataid
 

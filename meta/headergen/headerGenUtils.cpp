@@ -60,28 +60,3 @@ void validateArgs (int argc,
   moduleName = argv[1];
 }
 
-
-// Checks to see if input exactly matches any "from" in the spec
-// array; if so, prints the associated "to" to os.  If not, prints the
-// input to os.
-void replaceAndPrint (const char * input,
-					  const replacementSpec_t * spec,
-					  ostream & os)
-{
-  assert (input);
-  assert (spec);
-
-  while (spec->from &&
-		 spec->to)
-	{
-	  assert (spec->from);
-	  if (! strcmp (spec->from, input))
-		{
-		  assert (spec->to);
-		  os << spec->to;
-		  return;
-		}
-	  spec++;
-	}
-  os << input;
-}
