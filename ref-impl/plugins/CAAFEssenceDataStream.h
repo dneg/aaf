@@ -93,7 +93,7 @@ public:
   STDMETHOD (SeekRelative)
     (/*[in]*/ aafInt32  byteOffset); // The relative byte offset into the stream. 
 
-  // Returns AAFTrue if the byte offset is within the stream.
+  // Returns kAAFTrue if the byte offset is within the stream.
   STDMETHOD (IsPosValid)
     (/*[in]*/ aafInt64  byteOffset, // The absolute byte offset into the stream.
      /*[out]*/ aafBool *  isValid); // The result. 
