@@ -73,10 +73,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFFiller)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFFillerTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFFiller_h__

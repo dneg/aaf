@@ -107,10 +107,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFCompositionMob)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFCompositionMobTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMFixedSizeProperty<aafLength_t>	_defaultFadeLen;
 	OMFixedSizeProperty<aafFadeType_t>	_defaultFadeType;

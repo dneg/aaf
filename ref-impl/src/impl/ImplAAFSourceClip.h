@@ -121,10 +121,6 @@ public:
 
 public:
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFSourceClipTest.cpp.
-  static AAFRESULT test();
-
 	virtual AAFRESULT TraverseToClip(aafLength_t length,
 					ImplAAFSegment **sclp,
 					 ImplAAFPulldown **pulldownObj,
