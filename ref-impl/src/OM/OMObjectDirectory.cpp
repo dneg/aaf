@@ -95,6 +95,8 @@ int OMObjectDirectory::count(void) const
 void OMObjectDirectory::dump(void) const
 {
   for (int i = 0; i < _current; i++) {
-    cout << i << " [" << _table[i]._object << "] \"" << _table[i]._name << "\"" << endl;
+    cout << i << " [" << _table[i]._object << "] \"";
+    printWideString(_table[i]._name);
+    cout << "\"" << endl;
   }
 }
