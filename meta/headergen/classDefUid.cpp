@@ -103,7 +103,7 @@ static void doFile (const char * moduleName)
 }
 
 
-void main (int argc, char ** argv)
+int main (int argc, char ** argv)
 {
   char* moduleName = 0;
   validateArgs(argc, argv, moduleName);
