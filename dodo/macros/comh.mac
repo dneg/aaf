@@ -96,7 +96,7 @@
 * notice appear in all copies of the software and related documentation,
 * and (ii) the name Avid Technology, Inc. may not be used in any
 * advertising or publicity relating to the software without the specific,
-*  prior written permission of Avid Technology, Inc.
+* prior written permission of Avid Technology, Inc.
 *
 * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
 * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -1670,53 +1670,53 @@ AD_CLASS_END\
 #c Some standard comment macros for use where APIs are commented
 #c
 #startm AD_STD_COMMENT_METH_ERR_NULL_PARAM 01
+//
   // AAFRESULT_NULL_PARAM
-  //   - %01 arg is NULL.
-  //\
+  //   - %01 arg is NULL.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_NO_INIT 00
+//
   // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //\
+  //   - This object has not yet had Initialize() called on it.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_ALREADY_INIT 00
+//
   // AAFRESULT_ALREADY_INITIALIZED
-  //   - This object has already had Initialize() called on it.
-  //\
+  //   - This object has already had Initialize() called on it.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_HEADER 00
+//
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
   // encountered in the order given below:
   // 
   // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //\
+  //   - succeeded.  (This is the only code indicating success.)\
 #endm
 
 #startm AD_STD_COMMENT_IFC_HEADER 00
+//
 // In addition to the specific error results listed for each method,
 // all methods in this interface may also return one of the following
 // values:
 // 
 // AAFRESULT_NOMEMORY
 //   - insufficient system memory is available to perform the
-//     operation.
-//\
+//     operation.\
 #endm
 
 #startm AD_STD_COMMENT_IFC_INIT 00
+//
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize() called on it through
 //     this object's primary interface.  Note that IAAFObject is a
 //     primary interface for an abstract class, so it is not
 //     appropriate for the Initialize() method to exist in this
 //     interface.  The Initialize() method is available through the
-//     concrete object's primary interface.
-//\
+//     concrete object's primary interface.\
 #endm
 
 #startm AD_STD_COMMENT_METH_STUB 00
@@ -1731,8 +1731,8 @@ AD_CLASS_END\
 #endm
 
 #startm AD_STD_COMMENT_METH_ADDREF 01
-  // *%01 is AddRef()ed before it is returned.
-  //\
+//
+  // *%01 is AddRef()ed before it is returned.\
 #endm
 
 
@@ -1836,6 +1836,28 @@ AD_CLASS_END\
 #c Macro Arg 22: function description
 #c
 #startm AD_XFUNCTION4 22
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a function which takes five arguments.
+#c
+#c Macro Arg 01: function name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c
+#c Macro Arg 27: function description
+#c
+#startm AD_XFUNCTION5 27
 #endm
 
 
