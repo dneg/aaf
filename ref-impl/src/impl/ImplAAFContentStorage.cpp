@@ -209,18 +209,26 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::AppendMob (ImplAAFMob *pMob)
 {
 	aafUID_t	mobID;
+	ImplAAFMob	*test;
 
 	if (NULL == pMob)
 		return AAFRESULT_NULL_PARAM;
 	
 	XPROTECT()
 	{
-		_mobs.appendValue(pMob);
-		// trr - We are saving a copy of pointer in _mobs so we need
-		// to bump its reference count.
-		pMob->AcquireReference();
 		CHECK(pMob->GetMobID(&mobID));
-		CHECK(TableAddUID(_mobIndex, mobID, pMob, kAafTableDupError));
+
+		// JeffB: Test is a throwaway, so don't bump the refcount
+		if(LookupMob (&mobID, &test) == AAFRESULT_MOB_NOT_FOUND)
+		{
+			_mobs.appendValue(pMob);
+			// trr - We are saving a copy of pointer in _mobs so we need
+			// to bump its reference count.
+			pMob->AcquireReference();
+			CHECK(TableAddUID(_mobIndex, mobID, pMob, kAafTableDupError));
+		}
+		else
+			RAISE(AAFRESULT_DUPLICATE_MOBID);
 	} /* XPROTECT */
 	XEXCEPT
 	{
