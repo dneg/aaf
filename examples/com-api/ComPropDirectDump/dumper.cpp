@@ -139,7 +139,7 @@ HRESULT dumpObject(IAAFObject *pContainer, int indent)
 
 	  cout << endl;
 	  printIndent (indent);
-	  cout << "***Dumping Object***\n";
+	  cout << "***Dumping Object***" << endl;
 
 	  // Enumerate across Properties
 	  while (AAFRESULT_SUCCEEDED (pPropEnum->NextOne (&pProp)))
@@ -203,7 +203,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 	  // Dump "damaged object" message.
 	  // Optionally, dump the property's bits using pPVal->GetBits().
 	  printIndent (indent);
-	  cout << "Unknown type def.\n";
+	  cout << "Unknown type def." << endl;
 	}
 
   else
@@ -256,7 +256,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			  {
 				cout << "0x" << hex << lo;
 			  }
-			cout << ".\n";
+			cout << "." << endl;
 
 			pTDI->Release();
 			pTDI = 0;
@@ -273,7 +273,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 
 			IAAFObject * pObj = 0;
 			checkResult(pTDO->GetObject(pPVal, &pObj));
-			cout << "Value: an object:\n";
+			cout << "Value: an object:" << endl;
 			dumpObject (pObj, indent+1);
 
 			pObj->Release();
@@ -362,7 +362,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			// Print the contents
 			char *mbBuf = make_mbstring(nameBufLen, nameBuf); // create an ansi/asci
 			checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
-			cout << "Value: " << mbBuf << "\n";
+			cout << "Value: " << mbBuf << endl;
 			delete[] mbBuf;
 			mbBuf = 0;
 			delete[] nameBuf;
@@ -384,7 +384,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			aafUInt32 numElems = 0;
 			checkResult(pTDFA->GetCount(&numElems));
 
-			cout << "Value: fixed-sized array[" << numElems << "]:\n";
+			cout << "Value: fixed-sized array[" << numElems << "]:" << endl;
 
 			aafUInt32 i;
 			for (i = 0; i < numElems; i++)
@@ -413,7 +413,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			aafUInt32 numElems;
 			checkResult(pTDVA->GetCount(pPVal, &numElems));
 
-			cout << "Value: variably-sized array[" << numElems << "]:\n";
+			cout << "Value: variably-sized array[" << numElems << "]:" << endl;
 
 			aafUInt32 i;
 			for (i = 0; i < numElems; i++)
@@ -476,7 +476,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 				// 1-byte integer characters; interpret as a
 				// NULL-terminated C string.
 				printIndent (indent);
-				cout << " value: \"" << buf << "\"\n";
+				cout << " value: \"" << buf << "\"" << endl;
 			  }
 			else if (2 == elemSize)
 			  {
@@ -485,7 +485,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 				// create an ansi/asci
 				char *mbBuf = make_mbstring(bufSize, (wchar_t*) buf);
 				checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
-				cout << " value: \"" << mbBuf << "\"\n";
+				cout << " value: \"" << mbBuf << "\"" << endl;
 				delete [] mbBuf;
 				mbBuf = 0;
 			  }
@@ -516,7 +516,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValue * pPVal, int indent)
 			aafUInt32 numMembers = 0;
 			checkResult(pTDR->GetCount(&numMembers));
 
-			cout << "Value: record of " << numMembers << " members:\n";
+			cout << "Value: record of " << numMembers << " members:" << endl;
 
 			// recursively dump each struct field
 			aafUInt32 i;
@@ -606,9 +606,9 @@ struct CAAFInitialize
 {
   CAAFInitialize(const char *dllname = NULL)
   {
-  	cout << "Attempting to load the AAF dll...\n";
+  	cout << "Attempting to load the AAF dll..." << endl;
     HRESULT hr = AAFLoad(dllname);
-    cout << ((SUCCEEDED(hr)) ? "DONE\n" : "FAILED\n");
+    cout << ((SUCCEEDED(hr)) ? "DONE" : "FAILED") << endl;
   }
 
   ~CAAFInitialize()
@@ -630,7 +630,7 @@ int main(int argc, char* argv[])
   CAAFInitialize aafInit;
 
   if (argc != 2) {
-    cerr << "Error : wrong number of arguments\n";
+    cerr << "Error : wrong number of arguments" << endl;
     return(1);
   }
 
@@ -640,10 +640,10 @@ int main(int argc, char* argv[])
   
   cout << "***Dumping file "
 	   << argv[1]
-	   << " using direct prop access***)\n";
+	   << " using direct prop access***)" << endl;
   dumpFile (pwFileName);
 
-  cout << "Done\n";
+  cout << "Done" << endl;
 
   return(0);
 }
