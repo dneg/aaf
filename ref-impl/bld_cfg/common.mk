@@ -34,7 +34,7 @@ RM = rm
 #
 baseclean:
 	${RM} -f *.o *.o86 *.oix *.ont *.obj
-	${RM} -f *.a *.a86 *.aix *.ant
+	${RM} -f *.a *.a86 *.aix *.ant *.lib
 	${RM} -f vc50.*
 	${RM} -f *~ .*~
 	${RM} -f makefile.bak makefile.dep makefile.dep.bak
