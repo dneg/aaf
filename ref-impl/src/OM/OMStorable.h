@@ -28,7 +28,7 @@ public:
   void clearContainingObject(void);
 
   void setContainingProperty(const OMProperty* containingProperty,
-                             const size_t index);
+                             const size_t key);
 
   void clearContainingProperty(void);
   
@@ -88,7 +88,7 @@ private:
   char* _pathName;
 
   OMProperty* _containingProperty;
-  size_t _index;
+  size_t _key;
 
   OMStoredObject* _store;
 
