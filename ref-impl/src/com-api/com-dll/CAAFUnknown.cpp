@@ -112,7 +112,11 @@ HRESULT CAAFUnknown::InternalQueryInterface
     *ppvObjOut = NULL;
 
     // We only support the IID_IUnknown interface 
-    if (IsEqualIID(riid, IID_IUnknown))
+    //
+    // Hack: We have to use aafIsEqualIID from AAFUtils.cpp here,
+    // but since this file is linked with some external apps
+    // let's use memcmp until we have user utilities library. - Alex,4-Oct-00
+    if (memcmp((void*)&riid, (void*)&IID_IUnknown, sizeof(IID)) == 0)
     { 
         *ppvObjOut = static_cast<IUnknown *>(GetPrivateUnknown()); 
         ((IUnknown *)*ppvObjOut)->AddRef();
