@@ -42,8 +42,9 @@ When a mob is initially created\\\, the Toolkit internally creates
   // a mobID for the new mob.  This method should be used to change
   // the mob's identity to an explicit mobID.)
 
-AD_METHOD1(GetName,
+AD_METHOD2(GetName,
 [in\\\,string], aafWChar *, pName, Mob Name,
+[in], aafInt32,bufLen, length of the buffer to hold Mob Name,
 This method will copy the mob name into the given string.)
 
 AD_METHOD1(GetNameLen,
