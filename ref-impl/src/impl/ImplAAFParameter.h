@@ -52,11 +52,6 @@ public:
     GetTypeDefinition (
       ImplAAFTypeDef **ppTypeDef);
 
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFParameter)
-
 private:
 
 	OMFixedSizeProperty<aafUID_t>				_parmDef;

@@ -404,9 +404,6 @@ public:
 	//@comm Replaces omfmGetNumChannels*/
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFMasterMob)
 
   // Internal to the SDK
   virtual AAFRESULT ReconcileMobLength(void);
