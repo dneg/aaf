@@ -278,7 +278,7 @@ static void ReadAAFFile(aafWChar * pFileName)
 		aafRational_t	rate;
 
 		check(mobIter->NextOne (&aMob));
-		check(aMob->GetName (name));
+		check(aMob->GetName (name, sizeof(slotName)));
 		check(aMob->GetMobID (&mobID));
 		formatMobID(chMobID, MAX_CLSID_BUFFER, &mobID);
 		convert(chName, sizeof(chName), name);
@@ -313,7 +313,7 @@ static void ReadAAFFile(aafWChar * pFileName)
 			for(s = 0; s < numSlots; s++)
 			{
 				check(slotIter->NextOne (&slot));
-				check(slot->GetName (slotName));
+				check(slot->GetName (slotName, sizeof(slotName)));
 				check(slot->GetSlotID(&trackID));
 				convert(chName, sizeof(chName), slotName);
 				printf("    Slot %ld: (ID %ld), is named '%s'\n",
