@@ -110,6 +110,19 @@ bool OMStrongReferenceVectorIterator<ReferencedObject>::after(void) const
   return _iterator.after();
 }
 
+  // @mfunc Is this <c OMStrongReferenceVectorIterator> validly
+  //        positioned on a <p ReferencedObject> ?
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc <e bool.true> if this <c OMStrongReferenceVectorIterator> is
+  //          positioned on a <p ReferencedObject>, <e bool.false>
+  //          otherwise.
+  //   @this const
+template <typename ReferencedObject>
+bool OMStrongReferenceVectorIterator<ReferencedObject>::valid(void) const
+{
+  return _iterator.valid();
+}
+
   // @mfunc Advance this <c OMStrongReferenceVectorIterator> to the next
   //        <p ReferencedObject>, if any.
   //        If the end of the associated

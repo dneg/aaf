@@ -83,6 +83,10 @@ public:
     //          the last <p ReferencedObject> ?
    virtual bool after(void) const;
 
+    // @cmember Is this <c OMStrongReferenceVectorIterator> validly
+    //          positioned on a <p ReferencedObject> ?
+  virtual bool valid(void) const;
+
     // @cmember Advance this <c OMStrongReferenceVectorIterator> to the
     //          next <p ReferencedObject>, if any.
     //          If the end of the associated
