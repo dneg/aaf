@@ -57,7 +57,7 @@
 #define CLSID_AAFUNIXLocator CLSID_AAFUnixLocator
 #define CLSID_AAFCodecDefinition CLSID_AAFCodecDef
 #define CLSID_AAFContainerDefinition CLSID_AAFContainerDef
-#define CLSID_AAFPluggableDefinition CLSID_AAFPluggableDef
+#define CLSID_AAFInterpolationDefinition CLSID_AAFInterpolationDef
 
 //
 // Include the AAF macro invocations.
