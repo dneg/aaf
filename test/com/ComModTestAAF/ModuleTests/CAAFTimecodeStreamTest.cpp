@@ -10,8 +10,8 @@
 \***********************************************/
 
 
-#ifndef __CAAFTimecodeStream_h__
-#include "CAAFTimecodeStream.h"
+#ifndef __AAF_h__
+#include "AAF.h"
 #endif
 
 #include <iostream.h>
