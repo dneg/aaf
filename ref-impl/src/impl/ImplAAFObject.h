@@ -25,8 +25,6 @@ class AAFObject;
 #include "OMStorable.h"
 #include "ImplAAFRoot.h"
 
-#include <assert.h>
-
 class ImplAAFObject : public OMStorable, public ImplAAFRoot
 {
 public:
