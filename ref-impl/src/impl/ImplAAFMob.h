@@ -252,8 +252,8 @@ public:
 		 ImplAAFTimelineMobSlot ** newSlot);  //@parm [out] Newly created slot
 
 
-  //****************
-  // GetAllMobSlots()
+  //***********
+  // GetSlots()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetSlots
