@@ -20,6 +20,7 @@
 #include "AAFTypes.h"
 #include "ImplAAFSession.h"
 #include "ImplAAFHeader.h"
+#include "ImplAAFDataDef.h"
 #include "AAFUtils.h"
 #include "aafErr.h"
 //#include "aafDefs.h"
@@ -29,14 +30,65 @@
 
 extern "C" const aafClassID_t CLSID_AAFHeader;
 
-ImplAAFFile::ImplAAFFile ()
-: _fmt(kAAFiMedia)
+ImplAAFFile::ImplAAFFile () :
+  _cookie(0),
+  _fmt(kAAFiMedia),
+  _container(0),
+  _byteOrder(0),
+  _openType(kOmUndefined),
+  _prevFile(0),
+  _head(0),
+  _semanticCheckEnable(AAFFalse),
+  _session(0),
+  _nilKind(0),
+  _pictureKind(0),
+  _soundKind(0)
 {}
 
 
 ImplAAFFile::~ImplAAFFile ()
-{}
+{
+  InternalReleaseObjects();
 
+  // cleanup the container.
+  delete _container;
+  _container = 0;
+
+#if MAYNEEDTHIS
+  if (0 != _session)
+  {
+    _session->ReleaseRef();
+    _session = 0;
+  }
+#endif //MAYNEEDTHIS
+}
+
+void ImplAAFFile::InternalReleaseObjects()
+{
+  if (0 != _soundKind)
+  {
+    _soundKind->ReleaseRef();
+    _soundKind = 0;
+  }
+
+  if (0 != _pictureKind)
+  {
+    _pictureKind->ReleaseRef();
+    _pictureKind = 0;
+  }
+
+  if (0 != _nilKind)
+  {
+    _nilKind->ReleaseRef();
+    _nilKind = 0;
+  }
+
+  if (0 != _head)
+  {
+    _head->ReleaseRef();
+    _head = 0;
+  }
+}
   //***********************************************************
   // METHOD NAME: Close()
   //
@@ -117,11 +169,36 @@ ImplAAFFile::~ImplAAFFile ()
 		{
 #if FULL_TOOLKIT
 		  if (_BentoErrorNumber)
+        // Release all of the pointers that we created or copied during
+        // the create or open methods.
+        InternalReleaseObjects();
+
 			_container->OMLAbortContainer();
+        
+        // Whenever a file is created or opened a new container is created.
+        // If we don't want to leak the container object and any objects
+        // in the associated OMFile object we had better delete the container
+        // object here.
+        delete _container;
+        _container = 0;
 		  else
+      {
 #endif
+        // Release all of the pointers that we created or copied during
+        // the create or open methods.
+        InternalReleaseObjects();
+
 			  _container->OMLCloseContainer();
+        
+        // Whenever a file is created or opened a new container is created.
+        // If we don't want to leak the container object and any objects
+        // in the associated OMFile object we had better delete the container
+        // object here.
+        delete _container;
+        _container = 0;
+
 #if FULL_TOOLKIT
+      }
 		  if (_BentoErrorRaised)
 			{
 				if(_BentoErrorNumber == CM_err_BadWrite)
@@ -173,6 +250,11 @@ ImplAAFFile::~ImplAAFFile ()
   )
   {
     *header = _head;
+
+    // We are returning a copy of the reference counted object.
+    if (_head)
+      _head->AcquireRef();
+
     return(AAFRESULT_SUCCESS);
   }
 
@@ -248,6 +330,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafWChar* stream,
 		_BentoErrorNumber = 0;
 		session->ResetBentoError();
 #endif
+		assert(NULL == _container);
 		_container = new OMContainer;
 		_container->OMLOpenContainer(stream, session->GetContainerSession(), myRefCon, "AAF", 
 									useMode, _head);
@@ -347,7 +430,6 @@ AAFRESULT ImplAAFFile::Create(
 			aafFileRev_t		rev)
 {
 	OMLRefCon        myRefCon;
-	ImplAAFHeader *     head;
 #ifdef FULL_TOOLKIT
 	aafErr_t		status;
 #endif
@@ -376,16 +458,15 @@ AAFRESULT ImplAAFFile::Create(
 
 		aafCheckBentoRaiseError(this, OM_ERR_BADSESSIONMETA);
 #endif
-		head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
-		_head = head;
-		if (head == NULL)
+		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
+		if (_head == NULL)
 		  RAISE(OM_ERR_BADHEAD);
 
 		_head->AddIdentificationObject(session->GetDefaultIdent());
 #if FULL_TOOLKIT
 		aafCheckBentoRaiseError(this, OM_ERR_BADHEAD);
 	
-		_head = head;
+		//_head = head; // already set above.
 		/* We now use datakinds in the whole API, not just 2.x
 		 */
 		_head->DatakindLookup(NODATAKIND, &_nilKind, &status);
@@ -395,7 +476,7 @@ AAFRESULT ImplAAFFile::Create(
 		_head->DatakindLookup(SOUNDKIND, &_soundKind, &status);
 		CHECK(status);
 #endif
-		
+		assert(NULL == _container);
 		_container = new OMContainer;
 		_container->OMLOpenNewContainer(stream, _head, session->GetContainerSession(), myRefCon,
 												"AAF",
@@ -510,6 +591,8 @@ AAFRESULT ImplAAFFile::OpenModify(
 	return (OM_ERR_NONE);
 }
 
+#if 0
 extern "C" const aafClassID_t CLSID_AAFFile;
 
 OMDEFINE_STORABLE(ImplAAFFile, CLSID_AAFFile);
+#endif
