@@ -191,9 +191,24 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetLastIdentification (ImplAAFIdentification ** /*ppIdentification*/)
+    ImplAAFHeader::GetLastIdentification (ImplAAFIdentification ** ppIdentification)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  assert(ppIdentification);
+
+  AAFRESULT result;
+  size_t size;
+  _identificationList.getSize(size);
+
+  if (size > 0) {
+    // For size entries the valid positions are 0 .. size - 1
+    // get the last one in the vector.
+    _identificationList.getValueAt(*ppIdentification, size - 1);
+    result = AAFRESULT_SUCCESS;
+  } else {
+    *ppIdentification = 0;
+    result = AAFRESULT_NOT_IMPLEMENTED; // tjb - Should be AAFRESULT_FAILURE
+  }
+  return result;
 }
 
 
