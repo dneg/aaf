@@ -30,6 +30,7 @@
 #define OMSTRONGREFPROPERTY_H
 
 #include "OMObjectReference.h"
+#include "OMPropertyBase.h"
 
   // @class Persistent strong reference (contained object)
   //        properties supported by the Object Manager.
