@@ -229,12 +229,14 @@ AAFRESULT STDMETHODCALLTYPE
 	  (8 != intSize))
 	return AAFRESULT_BAD_SIZE;
 
+  AAFRESULT hr;
+
+  hr = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
+	if (AAFRESULT_FAILED (hr))
+    return hr;
+
   _size = intSize;
   _isSigned = isSigned;
-  AAFRESULT hr = SetName (pTypeName);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  hr = SetAUID (id);
-  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   return AAFRESULT_SUCCESS;
 }
