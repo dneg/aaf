@@ -331,9 +331,15 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pPlugin->GetNumLocators(&count));
 		checkExpression (count == 2, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->EnumPluginLocators(&pEnumLoc));
+
+    pLoc->Release(); // this local variable was already has a reference that must be released!
+    pLoc = NULL;
 		checkResult(pEnumLoc->NextOne (&pLoc));
  		checkResult(pLoc->GetPath (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manuf1URL) == 0, AAFRESULT_TEST_FAILED);
+
+    pLoc->Release(); // this local variable was already has a reference that must be released!
+    pLoc = NULL;
 		checkResult(pEnumLoc->NextOne (&pLoc));
  		checkResult(pLoc->GetPath (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manuf2URL) == 0, AAFRESULT_TEST_FAILED);
@@ -352,9 +358,33 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
+	if (pEnumLoc)
+		pEnumLoc->Release();
+
+	if (pLoc)
+		pLoc->Release();
+
+  if (pNetLoc)
+		pNetLoc->Release();
+
+	if (pPlugin)
+		pPlugin->Release();
+
+	if (pEnumDesc)
+		pEnumDesc->Release();
+
+	if (pPluggable)
+		pPluggable->Release();
+
+	if (pEnumPluggable)
+		pEnumPluggable->Release();
+
+	if (pDictionary)
+		pDictionary->Release();
+
 	if (pHeader)
 		pHeader->Release();
-      
+
 	if (pFile)
 	{  // Close file
 		if (bFileOpen)

@@ -171,11 +171,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (pFile)
   {  // Close file
     if (bFileOpen)
-	{
-		pFile->Save();
-		pFile->Close();
-	}
-     pFile->Release();
+	  {
+		  pFile->Save();
+		  pFile->Close();
+	  }
+    pFile->Release();
   }
 
   return hr;
@@ -213,6 +213,18 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
+	if (pContainerDef)
+		pContainerDef->Release();
+
+	if (pPlugDef)
+		pPlugDef->Release();
+
+	if (pPlug)
+		pPlug->Release();
+
+  if (pDictionary)
+		pDictionary->Release();
+
 	if (pHeader)
 		pHeader->Release();
       
