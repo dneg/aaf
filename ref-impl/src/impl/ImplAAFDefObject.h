@@ -77,7 +77,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameBufLen
-        (aafInt32 *  nameLen);  //@parm [in,out] Definition Name length
+        (aafUInt32 *  nameLen);  //@parm [in,out] Definition Name length
 
 
   //****************
@@ -94,7 +94,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDescription
         (aafWChar *  description,  //@parm [in] Definition Description
-		 aafInt32 bufSize);	  //@parm [in] size of the buffer required to hold Definition Description + terminator
+		 aafUInt32 bufSize);	  //@parm [in] size of the buffer required to hold Definition Description + terminator
 
 
   //****************
@@ -102,7 +102,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDescriptionBufLen
-        (aafInt32 *  descriptionLen);  //@parm [in,out] Definition description length
+        (aafUInt32 *  descriptionLen);  //@parm [in,out] Definition description length
 
 
 public:
