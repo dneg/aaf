@@ -2,6 +2,8 @@
 # builds AAF COM API documentation using DocJet and Microsoft HTMLHelp Compiler
 
 DOCJET_PATH = C:/Program\ Files/TallTree/DocJet
+HTMLHELP_WORKSHOP = C:/Program\ Files/HTML\ Help\ Workshop
+WINZIP = C:/Program\ Files/winzip/wzzip
 DOCJET_BIN = $(DOCJET_PATH)/Program
 GENERATOR = $(DOCJET_BIN)/generator.exe
 SUMMARY_HOOK = $(DOCJET_PATH)/extensions/Summary\ Hook.dll
@@ -10,8 +12,8 @@ PERL	=	perl
 COMAPI_PATH = ../../include/com-api
 HTML_MAN_PATH = Documentation/New\ Standard\ HTML
 HTML_HELP_MAN_PATH = Documentation/New\ Standard\ HTMLHelp
-HTML_MAN = man.zip
-HTML_HELP_MAN = HHman.zip
+HTML_MAN = aafapiman.zip
+HTML_HELP_MAN = aafapi.chm
 
 .PHONY:	docjet
 
@@ -64,11 +66,18 @@ $(HTML_MAN):	$(HTML_MAN_PATH) $(HTML_MAN_PATH)/frontCover.html $(HTML_MAN_PATH)/
 #   Just echo the Errors from the logfile
 	grep -v Warning errors.txt
 #   Had to use find to list files thru stdio because there are too many for bash to glob
-	cd $(HTML_MAN_PATH); find . -print | zip -q ../../man -@
+	cd $(HTML_MAN_PATH); find . -print > ../../fileList.txt; $(WINZIP) ../../aafapiman.zip @../../fileList.txt
+	cd $(HTML_MAN_PATH); tar -T ../../fileList.txt -cvf ../../aafapiman.tgz
 
-$(HTML_HELP_MAN):	$(HTML_HELP_MAN_PATH) $(HTML_HELP_MAN_PATH)/frontCover.html $(HTML_MAN_PATH)/DigImgAreas.gif AAFTypes.h AAFnospace.idl 
+$(HTML_HELP_MAN):	$(HTMLHELP_WORKSHOP)/hhc $(HTML_HELP_MAN_PATH) $(HTML_HELP_MAN_PATH)/frontCover.html $(HTML_MAN_PATH)/DigImgAreas.gif AAFTypes.h AAFnospace.idl 
 	- $(GENERATOR) -v refHHDocFromIDL.djt 2> errorsHH.txt
 #   Just echo the Errors from the logfile
 	grep -v Warning errorsHH.txt
-#   Had to use find to list files thru stdio because there are too many for bash to glob
-	cd $(HTML_HELP_MAN_PATH);  zip -q ../../HHman apiman.chm apiman.chi
+#   Now compile again without CHI file
+	cp $(HTML_HELP_MAN_PATH)/aafapi.hhp $(HTML_HELP_MAN_PATH)/aafapi.tmp
+	sed 's/Create CHI file=yes/Create CHI file=No/' $(HTML_HELP_MAN_PATH)/aafapi.tmp > $(HTML_HELP_MAN_PATH)/aafapi.hhp
+	- $(HTMLHELP_WORKSHOP)/hhc $(HTML_HELP_MAN_PATH)/$(HTML_HELP_MAN)
+	cp $(HTML_HELP_MAN_PATH)/$(HTML_HELP_MAN) $(HTML_HELP_MAN)
+
+test:	test.idl
+	- $(GENERATOR) -v test.djt

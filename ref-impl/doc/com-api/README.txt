@@ -1,7 +1,7 @@
 Instructions for building an API Ref manual from the IDL with DocJet
 
 Original - Joshua Goldman, Avid
-Updated  - Simon Carter, AAF Assoc Dev Support
+Updated  - Simon Carter, AAF Assoc Dev Support (Sept 01)
 
 
 Requirements:
@@ -9,8 +9,9 @@ Requirements:
 Windows NT4, 2K
 DocJet from Talltree Software http://www.talltree.com/docjet/  (currently 4.0build7)
 DocJet 'team' licence (there are more than 1000 objects) $550
-Hacked DocJet 'Summary Hook' parser - to spilt Description at first sentence
-HTMLHelp SDK/Compiler from Microsoft
+Hacked DocJet 'Summary Hook' parser - to spilt Description at first sentence (DLL and source in this dir)
+HTMLHelp SDK/Compiler from Microsoft (might have to dig a bit, Seems to have disappeared off MSDN recently)
+Winzip including command line support add-on (better compression than Cygwin/GNU zip)
 Cygwin or equivalent for cvs, GnuMake, perl
 
 Steps
@@ -20,6 +21,7 @@ Steps
 2. From a cygwin shell (or equivalent) run Make in this directory (AAF/ref-impl/doc/com-api)
    
 2.1 The first step will be to copy CVS based files from this  directory into the DocJet destination dirs.
+   (Some of the paths might need changing - see the macros at the top of the makefile)
    This includes the Summary Hook extension which has been tweaked (See SummaryHook.cpp and diff with
    DocJet distribution) to allow the first sentence of a Comment to be isolated as the 'Summary'
    (quick one line description) and the remainder be passed as the 'Remarks' section.
@@ -38,11 +40,20 @@ Steps
    There will be loads of Warnings for missing sections but there should not be
    any major parsing 'Error D11042' could not decipher... or stuff gets left out of the HTML.
    
+----
+
+   generating the HTMLHelp .chm file..
+
+   In DocJet seperate configuration file refHHDoc|FromIDL.djt select output as Standard/HTMLHelp
+   Set the name to aafapi
+   If it finds it DocJet will also run HTMLHelp complier, BUT we want a manual without the additional CHI file
+   so the Makefile tweaks the HHP file to leave outthe CHI and re-runs the compiler.
 
 To edit the DocJet settings, double click on:
 
    RefDocFRomIDL.djt
 
+The aafapi.dof is derived from New Standard HTML format
 Basic mods to generic settings:
 Sources tab
 I've specified the Sources files listed above.
@@ -66,15 +77,15 @@ web link
 Automatics and Comment Sections tabs
 didn't do anything here
 
-11. Copy mhelp.chm to projects directory
+11. Makefile should leave new aafapi.chm, aafapiman.zip and aafapiman.tgz in this directory
 
-12. scp man.zip to aaf.sourceforge.net:/home/groups/a/aa/aaf/htdocs/docs/
+12. scp man.zip to aaf.sourceforge.net:/home/groups/a/aa/aaf/htdocs/docs/com-api
 
-13. Unzip on Unix into com-api-new directory using unzip.
+13. ssh to sourceforge and Unzip on into com-api-new directory using.
 
 14. Remove old com-api directory and rename new.
 
-15. Fixes to source
+TODO Fixes to source
     Get rid of incorrect stub only
     Fix cut-and-paste errors in comments
     Fix undocumented interfaces:
@@ -96,15 +107,6 @@ D:\aafview\coresw\AAF-toolkit\AAFWinSDK\Ref doc from aaf idl\..\include\AAFnoSpa
 D:\aafview\coresw\AAF-toolkit\AAFWinSDK\Ref doc from aaf idl\..\include\AAFnoSpace.idl(27962) : Warning D2000: Undocumented object, 'IEnumAAFTaggedValues'
 D:\aafview\coresw\AAF-toolkit\AAFWinSDK\Ref doc from aaf idl\..\include\AAFnoSpace.idl(28110) : Warning D2000: Undocumented object, 'IEnumAAFTypeDefs'
 
-Ascii Art Text illustration in IAAFDigitalImageDescriptor is in CVS as ImgDescArea.gif and .bmp for HTMLHelp
 
 -----------
 
-<SMC>
-how to generate HTMLHelp .chm file
-
-In DocJet configuration select output as Standard/HTMLHelp and make the files
-Should also run HTMLHelp complier
-Select the mhelp.hhp file and double click it to launch HTML Help workshop and hit the compile button
-
-This should give you a .chm and .chi file which need to be zipped together and uploaded.
