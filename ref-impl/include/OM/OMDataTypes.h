@@ -49,6 +49,9 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned __int64       OMUInt64;
 
+#define INT64_C(c)	c
+#define UINT64_C(c)	c
+
 #elif defined(OM_COMPILER_GCC_INTEL_LINUX) || defined(OM_COMPILER_GCC_X86_64_LINUX) \
    || defined(OM_COMPILER_SGICC_MIPS_SGI) || defined(OM_COMPILER_GCC_MIPS_SGI) \
    || defined(OM_COMPILER_GCC_PPC_MACOSX) || defined(OM_COMPILER_MWERKS_PPC_MACOSX) \
@@ -56,6 +59,8 @@ typedef unsigned __int64       OMUInt64;
    || defined(OM_COMPILER_GCC_INTEL_OPENBSD) || defined(OM_COMPILER_GCC_INTEL_CYGWIN)
 
 // Use ISO C99 (also ANSI and POSIX) fixed size integers
+
+#define __STDC_CONSTANT_MACROS	// needed in C++ to define INT64_C, UINT64_C
 #include <inttypes.h>
 typedef int8_t                 OMInt8;
 typedef int16_t                OMInt16;
