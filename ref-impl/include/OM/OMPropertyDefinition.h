@@ -50,9 +50,9 @@ public:
     //          <c OMPropertyDefinition>.
   virtual const char* name(void) const = 0;
 
-    // @cmember The unique identification of the <c OMProperty> defined by
-    //          this <c OMPropertyDefinition>.
-  virtual OMPropertyId identification(void) const = 0;
+    // @cmember The locally unique identification of the <c OMProperty>
+    //          defined by this <c OMPropertyDefinition>.
+  virtual OMPropertyId localIdentification(void) const = 0;
 
     // @cmember Is the <c OMProperty> defined by this
     //          <c OMPropertyDefinition> optional? 
