@@ -42,6 +42,9 @@ public:
     // @cmember Destroy this <c OMReferenceContainerIterator>.
   virtual ~OMReferenceContainerIterator(void) {}
 
+    // @cmember Create a copy of this <c OMReferenceContainerIterator>.
+  virtual OMReferenceContainerIterator<ReferencedObject>* copy(void) const = 0;
+
     // @cmember Reset this <c OMReferenceContainerIterator> to the given
     //          <p initialPosition>.
     //          If <p initialPosition> is specified as
