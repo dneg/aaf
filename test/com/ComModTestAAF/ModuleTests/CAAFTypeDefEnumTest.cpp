@@ -162,7 +162,7 @@ static HRESULT  createENUMType (IAAFDictionary * const pDict)
 	IAAFTypeDefEnumSP spENUM;
 	//checkResult(defs.cdTypeDefEnum()->
 		//CreateInstance (IID_IAAFTypeDefEnum, (IUnknown **) &spENUM));
-	HRESULT hr = pDict->CreateMetaInstance(AUID_AAFTypeDefEnum, IID_IAAFTypeDefEnum,
+	pDict->CreateMetaInstance(AUID_AAFTypeDefEnum, IID_IAAFTypeDefEnum,
 		(IUnknown **) &spENUM) ;
 
 	

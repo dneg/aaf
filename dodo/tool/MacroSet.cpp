@@ -63,7 +63,7 @@ void MacroSet::Append
 		return;
 	}
   // Made it here without finding our initial.  Add it.
-  assert ((tmp - _nameInitials) < sizeof (_nameInitials));
+  assert ((size_t)(tmp - _nameInitials) < sizeof (_nameInitials));
   *tmp++ = initial;
   *tmp = '\0';
 }

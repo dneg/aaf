@@ -54,12 +54,12 @@ WaveHeader::WaveHeader( int sampleRate,
 						int bytesPerSample,
 						int bitsPerSample,
 						int numChannels )
-: _sampleRate( sampleRate ),
+: _headerSize( HEADER_SIZE ),
+  _sampleRate( sampleRate ),
   _numSamples( numSamples ),
   _bytesPerSample( bytesPerSample ),
   _bitsPerSample( bitsPerSample ),
-  _numChannels( numChannels ),
-  _headerSize( HEADER_SIZE )
+  _numChannels( numChannels )
 {
 	memset( &_header, 0, sizeof(_header) );
 

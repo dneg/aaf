@@ -478,7 +478,7 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	aafUInt32			chunkSize;
 	aafBool				fmtFound = kAAFFalse, dataFound = kAAFFalse;
 	aafUInt8			chunkID[4];
- 	aafInt32			junk32, rate, bytesPerFrame;
+ 	aafInt32			junk32, rate, bytesPerFrame = 0;
 	aafUInt8			*ptr;
 
 	ptr = buf;

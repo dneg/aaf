@@ -170,8 +170,9 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
     }
     else {
       assert(0);
+	  return;
     }
-    
+
     spFile =
       CreateFileOfKind( fileName,
 			existance,

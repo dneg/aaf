@@ -192,8 +192,8 @@ void AddImageEssence( AxMasterMob& masterMob,
 	// With the essence descriptor, and format specifier, parameters set, we can
 	// now write some data.
 	
-	const int numSamples = 1;  // frames
-	const int numBytes = numSamples * rect.xSize * rect.ySize * 2;
+	const aafUInt32 numSamples = 1;  // frames
+	const aafUInt32 numBytes = numSamples * rect.xSize * rect.ySize * 2;
 
 	// Normally, one shouldn't place an array pointer inside an
 	// auto_ptr.  In this case we get a way with it because it is
@@ -311,11 +311,11 @@ void AddAudioEssence( AxMasterMob& masterMob, AxHeader& axHeader )
 	// At this point one should write meaningful data into the
 	// sample buffer.
 	
-	int samplesStillToWrite = numSamples;
+	aafUInt32 samplesStillToWrite = numSamples;
 
 	while ( samplesStillToWrite > 0 ) {
 	
-		int samplesToWriteThisTime = 100;
+		aafUInt32 samplesToWriteThisTime = 100;
 
 		if ( samplesToWriteThisTime > samplesStillToWrite ) {
 			samplesToWriteThisTime = samplesStillToWrite;

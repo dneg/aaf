@@ -162,7 +162,7 @@ static HRESULT  createEXTENUMType (IAAFDictionary * const pDict)
 	IAAFTypeDefExtEnumSP spEXTENUM;
 	//checkResult(defs.cdTypeDefExtEnum()->
 		//CreateInstance (IID_IAAFTypeDefExtEnum, (IUnknown **) &spEXTENUM));
-	HRESULT hr = pDict->CreateMetaInstance(AUID_AAFTypeDefExtEnum, IID_IAAFTypeDefExtEnum,
+	pDict->CreateMetaInstance(AUID_AAFTypeDefExtEnum, IID_IAAFTypeDefExtEnum,
 		(IUnknown **) &spEXTENUM) ;
 
 	

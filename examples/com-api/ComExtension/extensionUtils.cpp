@@ -662,9 +662,12 @@ ostream& operator<< (ostream& s,
   char * cstring = new char [numChars+1];
   assert (cstring);
 
-  size_t status = wcstombs(cstring, wstring, numChars);
-
+#ifdef _DEBUG
+  size_t status =
+#endif
+  wcstombs(cstring, wstring, numChars);
   assert (status != (size_t)-1);
+
   cstring[numChars] = '\0';
 
   s << cstring;

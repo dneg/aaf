@@ -225,7 +225,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFSourceMob*				pSourceMob = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFEssenceDescriptor*		pEssDesc = NULL;
-	IAAFImportDescriptor*		pImportDesc = NULL;
 	IEnumAAFMobs*				pMobIter = NULL;
 
 	aafNumSlots_t				numMobs;
@@ -298,7 +297,6 @@ extern "C" HRESULT CAAFImportDescriptor_test(
     testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	const size_t fileNameBufLen = 128;
 	aafWChar* pFileName = L"AAFImportDescriptorTest.aaf";
 
 	try

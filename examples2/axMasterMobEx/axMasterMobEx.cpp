@@ -240,11 +240,11 @@ public:
 						compression,
 						bytesPerPixel * width * height,
 						1 ),
-		  _numFramesToWrite( numFramesToWrite ),
 		  _width( width ),
 		  _height( height ),
 		  _bytesPerPixel( bytesPerPixel ),
-		  _rate( _rate )
+		  _rate( _rate ),
+		  _numFramesToWrite( numFramesToWrite )
 	{}
 
 	virtual ~VideoSampleSource()
@@ -317,9 +317,9 @@ public:
 						compression,
 						bytesPerSample,
 						10*1024*1024/bytesPerSample ),
-		  _numSamplesToWrite( numSamplesToWrite ),
 		  _bitsPerSample( bitsPerSample ),
-		  _bytesPerSample( bytesPerSample )
+		  _bytesPerSample( bytesPerSample ),
+		  _numSamplesToWrite( numSamplesToWrite )
 	{}
 
 	virtual ~AudioSampleSource()

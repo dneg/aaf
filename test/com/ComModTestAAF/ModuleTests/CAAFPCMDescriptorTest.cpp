@@ -174,7 +174,6 @@ HRESULT CAAFPCMDescriptor_test(
     testMode_t mode )
 {
     HRESULT  hr = AAFRESULT_NOT_IMPLEMENTED;
-    const size_t fileNameBufLen = 128;
     aafWChar* pFileName = L"AAFPCMDescriptorTest.aaf";
 
 

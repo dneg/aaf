@@ -58,7 +58,6 @@ AAFXsMapper::MapAAFClassDef( AxClassDef &axClassDef )
     }
 
   // first map the parent classdef
-  bool hasParent = false;
   AAFClassDefinition *parentClassDef = 0;
   try
     {

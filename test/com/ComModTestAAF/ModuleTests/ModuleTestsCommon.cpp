@@ -63,8 +63,6 @@ void CreateSimpleAAFFile(aafWChar * pFileName, aafWChar* pTestName,
 {
   aafProductIdentification_t  ProductInfo;
 
-  HRESULT hr = AAFRESULT_SUCCESS;
-
   aafProductVersion_t v;
   v.major = 1;
   v.minor = 0;

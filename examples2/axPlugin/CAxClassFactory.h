@@ -196,7 +196,7 @@ private:
 
 	// Object deletes itself when reference count drops to zero.
 	// Hence, destructor is declared private.
-	~CAxClassFactory()
+	virtual ~CAxClassFactory()
 	{}
 
 

@@ -220,7 +220,7 @@ void GetMobSlot::Execute( const std::vector<AxString>& argv )
 	GetInstance( mobName ).GetCOM( spMob );
 	AxMob axMob( spMob );
 
-	int slotIdVal = AxStringUtil::strtol( slotId );
+	aafSlotID_t slotIdVal = AxStringUtil::strtol( slotId );
 
 	AxMobSlotIter axSlotIter( axMob.GetSlots() );
 	IAAFMobSlotSP nextSlot;

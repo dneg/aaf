@@ -45,8 +45,8 @@ AxPropertyValueDump::AxPropertyValueDump( std::wostream& os,
 					  bool dumpValue,
 					  const AxString& sep )
 :	_os( os ),
-	_dumpValueType( dumpValueType ),
 	_dumpValue( dumpValue ),
+	_dumpValueType( dumpValueType ),
 	_sep( sep )
 {
 	if ( !_dumpValue ) {

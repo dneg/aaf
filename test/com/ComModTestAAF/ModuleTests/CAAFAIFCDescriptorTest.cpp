@@ -63,6 +63,8 @@ static const aafMobID_t	TEST_MobID =
 0x13, 0x00, 0x00, 0x00,
 {0x1f64f50a, 0x03fd, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
+
+#if defined(_WIN32)
   // Simple utilities to swap bytes.
   static void SwapBytes(void *buffer, size_t count)
   {
@@ -78,15 +80,13 @@ static const aafMobID_t	TEST_MobID =
       pBuffer[back] = tmp;
     }
   }
-
-#if defined(_WIN32)
-#define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,4); ptr += 4; }
-#define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,2); ptr += 2; }
-#define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
+  #define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,4); ptr += 4; }
+  #define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,2); ptr += 2; }
+  #define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
 #else
-#define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); ptr += 4; }
-#define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 4); ptr += 2; }
-#define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
+  #define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); ptr += 4; }
+  #define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 4); ptr += 2; }
+  #define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
 #endif
 
 // Cross-platform utility to delete a file.
@@ -217,7 +217,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 //		AIFCSummary summary;
 		unsigned char	writeBuf[SUMMARY_SIZE], *writePtr;
 		aafUInt32		longVal, lZero = 0, n;
-		aafUInt16		shortVal, sZero = 0;
+		aafUInt16		shortVal;
 		static char *compressionName = "Not compressed";
 		// Form Header
 		// typedef struct tAIFCFORMATCHUNK

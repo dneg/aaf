@@ -49,7 +49,6 @@ void
 AAFPropertyDefinition::BuildDot( AAFDotHome *dotHome, DotFactory *factory, DotGraph *graph, DotRecordNode *node )
 {
    aafUInt32 count = 0;
-   AAFTypeDefinition *typeDef = _typeDef;
    bool isArrayOrSet = false;
 
    AAFTypeDefinitionRef *typeRef = 0;

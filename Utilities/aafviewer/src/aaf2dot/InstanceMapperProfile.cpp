@@ -36,8 +36,8 @@ using namespace std;
 InstanceMapperProfile::InstanceMapperProfile() 
    : _dataDefRefs( true ), _onlyFirstDataDefRefs( false ), _dictionary( true ), 
      _taggedValues( true ), _klvData( true ), _essenceData( true ),
-     _concentrate( false ), _cluster( false ), _debug( false ), 
-     _maxAttributeLength( 128 ), _maxAttributeWidth( 40 )
+     _maxAttributeLength( 128 ), _maxAttributeWidth( 40 ),
+     _concentrate( false ), _cluster( false ), _debug( false )
 {
 }
 

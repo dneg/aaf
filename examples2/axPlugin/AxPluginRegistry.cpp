@@ -101,7 +101,7 @@ HRESULT AxPluginRegistry::GetClassObjectID( int index, CLSID *pClassID )
 	if ( _factoryV.empty() ) {
 		return CLASS_E_CLASSNOTAVAILABLE;
 	}
-	else if ( index >= 0  &&  index < _factoryV.size() ) {
+	else if ( index >= 0  &&  index < (int)(_factoryV.size()) ) {
 		*pClassID = _factoryV[index]->GetClassID();
 		return S_OK;
 	}

@@ -62,7 +62,7 @@ typedef std::deque< Stalker* > StalkerStack;
 class ObjectStalker : public Stalker
 {
   public:
-   ObjectStalker( DotRecordNode *node, std::string name ) : _node( node ), _name( name ),
+   ObjectStalker( DotRecordNode *node, std::string name ) : _name( name ), _node( node ),
       _subGraph( 0 ) {};
    virtual ~ObjectStalker() {};
 
@@ -124,7 +124,7 @@ class AAFDotInstanceMapper : public AxBaseObjRecIterListener
 {
   public:
    AAFDotInstanceMapper( InstanceMapperProfile profile );
-   ~AAFDotInstanceMapper();
+   virtual ~AAFDotInstanceMapper();
 
    void SetDotFactory( DotFactory *dotFactory );
    void SetDotGraph( DotGraph *graph );

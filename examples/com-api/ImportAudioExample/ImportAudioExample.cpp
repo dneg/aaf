@@ -268,11 +268,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 						pFormat->Release();
 						pFormat = NULL;
 		
-						aafUInt32 dataLen, bytesLeft, samplesRead, actualBytesRead;
+						aafUInt32 bytesLeft, samplesRead, actualBytesRead;
+						aafUInt32 dataLen = (sampleBits + 7) / 8;
 
-						if (sampleBits == 8) 
-							dataLen = 1;
-												
 						// Get the sample count
 						aafLength_t sampleCount;
 						check(pEssenceAccess->CountSamples(pSoundDef, &sampleCount));
@@ -482,7 +480,7 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	aafUInt32			chunkSize;
 	aafBool				fmtFound = kAAFFalse, dataFound = kAAFFalse;
 	aafUInt8			chunkID[4];
- 	aafInt32			junk32, rate, bytesPerFrame;
+ 	aafInt32			junk32, rate, bytesPerFrame = 0;
 	aafUInt8			*ptr;
 
 	ptr = buf;

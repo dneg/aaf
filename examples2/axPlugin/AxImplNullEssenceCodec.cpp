@@ -43,15 +43,15 @@
 //=---------------------------------------------------------------------=
 
 AxImplNullEssenceCodec::AxImplNullEssenceCodec()
-:	_descriptorAUID( AUID_AAFCDCIDescriptor ),
+:	_numSamples( 0 ),
+	_descriptorAUID( AUID_AAFCDCIDescriptor ),
 	_dataDefID( kAAFDataDef_Picture ),
 	_codecName( L"AxNullEssenceCodec" ),
 	_codecDesc( L"AAF Example Codec" ),
+	_categoryClassAUID( AUID_AAFCodecDef ),
 	_essenceDataAUID( AUID_AAFEssenceData ),
 	_essenceDataDefID( kAAFDataDef_Picture ),
-	_categoryClassAUID( AUID_AAFCodecDef ),
-	_pAccess( 0 ),
-	_numSamples( 0 )
+	_pAccess( 0 )
 {
 	// Init the flavours vector
 	// kAAFNilCodecFlavour must be supported
@@ -236,7 +236,7 @@ void AxImplNullEssenceCodec::UpdateEssenceDescriptor( IAAFSourceMobSP spSourceMo
 	axDesc.SetPaddingBits( _padBits );
 }
 
-int AxImplNullEssenceCodec::GetFrameSize()
+aafUInt32 AxImplNullEssenceCodec::GetFrameSize()
 {
 	// Verify minimal supported essence descriptor values.
 	// FIXME - Test this when the values are set.
@@ -330,7 +330,7 @@ void AxImplNullEssenceCodec::GetCodecDisplayName(
 		CHECK_HRESULT( AAFRESULT_SMALLBUF );
 	}
 		
-	int i;
+	size_t i;
 	for (i = 0;
 		 i < iter->second.size();
 		 i++ ) {

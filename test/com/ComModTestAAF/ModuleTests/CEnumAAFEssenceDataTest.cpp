@@ -296,7 +296,7 @@ void EnumEssenceDataTest::createFileMob(int itemNumber)
   char cBuffer[256];
   sprintf(cBuffer, "EnumEssenceDataTest File Mob %d", itemNumber);
   size_t count = mbstowcs(wcBuffer, cBuffer, strlen(cBuffer) + 1);
-  if (-1 == count)
+  if (static_cast<size_t>(-1) == count)
     check(AAFRESULT_INTERNAL_ERROR);
 
 

@@ -67,10 +67,6 @@ static aafVersionType_t sampleMaxAPIVersion = { 40, 41 };//, 42, 43, kAAFVersion
 static wchar_t *manufName[] = { L"A test plugin manufacturer", L"Another test plugin manufacturer" };
 static wchar_t *manufRev = L"Rev0.0.0a0";
 
-static aafBool	EqualVersion(aafVersionType_t *vers1, aafVersionType_t *vers2)
-{
-	return(memcmp((char *)vers1, (char *)vers2, sizeof(aafVersionType_t)) == 0 ? kAAFTrue : kAAFFalse);
-}
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)

@@ -421,7 +421,10 @@ static HRESULT localOpenFileMemStgRead
   if (FAILED (hr)) return hr;
 
   char cFileName[FILENAME_MAX];
-  size_t status = wcstombs(cFileName, pFileName, FILENAME_MAX);
+#ifdef _DEBUG
+  size_t status =
+#endif
+  wcstombs(cFileName, pFileName, FILENAME_MAX);
   assert (status != (size_t)-1);
 
   FILE * f = fopen (cFileName, "rb");
@@ -466,7 +469,10 @@ public:
 	  _extent (0)
   { assert (pFileName);
     char cFileName[FILENAME_MAX];
-	size_t status = wcstombs(cFileName, pFileName, FILENAME_MAX);
+#ifdef _DEBUG
+	size_t status =
+#endif
+	wcstombs(cFileName, pFileName, FILENAME_MAX);
 	assert (status != (size_t)-1);
 	if (kAAFFileAccess_write == access)
 	  _file = fopen (cFileName, "wb");
@@ -599,7 +605,10 @@ public:
     GetSize (aafUInt64 * pSize)
     { if (! pSize) return AAFRESULT_NULL_PARAM;
 	  long int oldPosition = ftell(_file);
-	  long int seekStatus = fseek(_file, 0, SEEK_END);
+#ifdef _DEBUG
+	  long int seekStatus =
+#endif
+	  fseek(_file, 0, SEEK_END);
 	  assert (seekStatus == 0);
 	  long int position = ftell(_file);
 	  *pSize = position;
@@ -628,8 +637,13 @@ public:
 
 private:
   void pvtSetPosition (aafUInt64 position)
-  { int seekStatus = fseek(_file, static_cast<long>(position), SEEK_SET);
-    assert (0 == seekStatus); }
+  {
+#ifdef _DEBUG
+    int seekStatus =
+#endif
+    fseek(_file, static_cast<long>(position), SEEK_SET);
+    assert (0 == seekStatus);
+  }
 
   int equalUID(const GUID & a, const GUID & b)
   { return (0 == memcmp((&a), (&b), sizeof (aafUID_t))); }
@@ -747,7 +761,10 @@ localCloseFileMemStgWrite (const aafWChar * pFileName,
   if (FAILED (hr)) return hr;
 
   char cFileName[FILENAME_MAX];
-  size_t status = wcstombs(cFileName, pFileName, FILENAME_MAX);
+#ifdef _DEBUG
+  size_t status =
+#endif
+  wcstombs(cFileName, pFileName, FILENAME_MAX);
   assert (status != (size_t)-1);
 
   FILE * f = fopen (cFileName, "wb");

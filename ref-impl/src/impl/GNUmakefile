@@ -31,6 +31,12 @@ AAFBASE ?= ../../..
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
+# Turn off error-on-warning behaviour for this directory
+# Workaround for "defined but not used" warnings in AAFMetaDictionary.h
+# FIXME: remove this once AAFMetaDictionary.h generation is fixed
+ifeq ($(CC),g++)
+  ADD_CFLAGS += -Wno-error
+endif
 
 # Include directories
 INCLUDES = -I. \

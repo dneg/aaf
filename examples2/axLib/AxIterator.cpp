@@ -18,7 +18,7 @@
 //
 //=---------------------------------------------------------------------=
 
-#if WIN32
+#ifdef _WIN32
 // Disable VC6 
 // warning C4660: template-class specialization 'AxArrayIterator<struct IAAFTypeDefFixedArray>' is already instantiated
 // etc
@@ -142,8 +142,8 @@ AxRecordIterator::AxRecordIterator( IAAFPropertyValueSP& spPropVal,
 				    IAAFTypeDefRecordSP& spTypeDef )
 :	_spPropVal( spPropVal ),
 	_spTypeDef( spTypeDef ),
-	_current( 0 ),
-	_count( AxTypeDefRecord(spTypeDef).GetCount() )
+	_count( AxTypeDefRecord(spTypeDef).GetCount() ),
+	_current( 0 )
 {}
 
 AxRecordIterator::~AxRecordIterator()

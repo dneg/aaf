@@ -73,8 +73,8 @@ public:
 	AxString GetDesc() const;
 	AxString GetUsage() const;
 	AxString GetNotes() const;
-	int GetMinArgC() const;
-	int GetMaxArgC() const;
+	size_t GetMinArgC() const;
+	size_t GetMaxArgC() const;
 
 protected:
 

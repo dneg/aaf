@@ -99,12 +99,12 @@ struct HeaderTest
   void writeOptionalProperties();
   void readOptionalProperties();
 
-  void createFileMob(int itemNumber);
+  void createFileMob(aafUInt32 itemNumber);
   void createEssenceData(IAAFSourceMob *pSourceMob);
   void openMobs();
   void openEssenceData();
 
-  int formatMobName(int itemNumber, wchar_t* mobName);
+  int formatMobName(aafUInt32 itemNumber, wchar_t* mobName);
   void cleanupReferences();
   void check(HRESULT hr);
   void removeTestFile(const wchar_t* pFileName);
@@ -544,7 +544,7 @@ void HeaderTest::readOptionalProperties()
 }
 
 
-int HeaderTest::formatMobName(int itemNumber, wchar_t* mobName)
+int HeaderTest::formatMobName(aafUInt32 itemNumber, wchar_t* mobName)
 {
   assert(0 <= itemNumber && gMaxMobCount > itemNumber);
   assert(NULL != mobName);
@@ -553,13 +553,13 @@ int HeaderTest::formatMobName(int itemNumber, wchar_t* mobName)
 
   sprintf(cBuffer, "HeaderTest File Mob %d", itemNumber);
   size_t count = mbstowcs(mobName, cBuffer, strlen(cBuffer) + 1);
-  if (-1 == count)
+  if (static_cast<size_t>(-1) == count)
     check(AAFRESULT_INTERNAL_ERROR);
   return count;
 }
 
 
-void HeaderTest::createFileMob(int itemNumber)
+void HeaderTest::createFileMob(aafUInt32 itemNumber)
 {
   assert(_pFile && _pHeader && _pDictionary);
   assert(NULL == _pSourceMob);

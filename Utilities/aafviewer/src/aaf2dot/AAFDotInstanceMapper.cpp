@@ -1143,7 +1143,6 @@ string
 AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue axPropertyValue,
 				   bool displayHex )
 {
-   bool fault = false;
    IAAFPropertyValueSP propValue( axPropertyValue.GetValue() );
 
    aafUInt8 bytes[8];
@@ -1185,15 +1184,15 @@ AAFDotInstanceMapper::GetIntValue( AxTypeDefInt &axTypeDefInt, AxPropertyValue a
       case 4:
 	 if (axTypeDefInt.IsSigned()) {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%lx", *((aafInt32*)bytes));
+	       strSize = sprintf(buffer, "0x%x", *((aafInt32*)bytes));
 	    } else {
-	       strSize = sprintf(buffer, "%ld", *((aafInt32*)bytes));
+	       strSize = sprintf(buffer, "%d", *((aafInt32*)bytes));
 	    }
 	 } else {
 	    if (displayHex) {
-	       strSize = sprintf(buffer, "0x%lx", *((aafUInt32*)bytes));
+	       strSize = sprintf(buffer, "0x%x", *((aafUInt32*)bytes));
 	    } else {
-	       strSize = sprintf(buffer, "%lu", *((aafUInt32*)bytes));
+	       strSize = sprintf(buffer, "%u", *((aafUInt32*)bytes));
 	    }
 	 }
 	 break;
@@ -1307,7 +1306,7 @@ AAFDotInstanceMapper::GetScopeReference( aafUInt32 relativeScope, aafUInt32 rela
    try
    {
       // go up the strong reference chain and find a MOB or a Nested Scope
-      DotRecordNode *mobOrNestedScopeNode;
+      DotRecordNode *mobOrNestedScopeNode = NULL;
       bool foundMobOrNestedScope = false;
       for ( ; !foundMobOrNestedScope; numPops++ )
       {

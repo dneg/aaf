@@ -191,7 +191,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
   ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
 
-#if USE_MEMORY_FILE
+#if defined(USE_MEMORY_FILE)
   check(MemoryFileOpenNewModify (0, &ProductInfo, &pFile));
 #else
   check(AAFFileOpenNewModifyEx (pFileName, &kAAFFileKind_Aaf4KBinary, 0, &ProductInfo, &pFile));
@@ -527,7 +527,7 @@ cleanup:
     pFile->Save();
     pFile->Close();
 
-#if USE_MEMORY_FILE
+#if defined(USE_MEMORY_FILE)
     check(MemoryFileSaveToDisk(pFileName, pFile));
 #endif
     finish = clock();

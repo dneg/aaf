@@ -112,7 +112,7 @@ public:
 		return(_pOperationGroup->LookupParameter(Id,&pParameter)
 			==AAFRESULT_SUCCESS?kAAFTrue:kAAFFalse);
 	}
-	~CEnumAAFParametersTest()
+	virtual ~CEnumAAFParametersTest()
 	{
 		if(_pOperationGroup)
 			_pOperationGroup->Release();

@@ -47,8 +47,8 @@ SourceInfo::~SourceInfo ()
 
 SourceInfo::SourceInfo
 (const SourceInfo & src)
-: _lineNumber (src._lineNumber),
-  _fileName (0)
+: _fileName (0),
+  _lineNumber (src._lineNumber)
 {
   allocate (src._fileName);
 }

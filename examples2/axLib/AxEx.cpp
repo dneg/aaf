@@ -100,10 +100,10 @@ AxExHResult::AxExHResult( HRESULT hr, const wchar_t* what )
 
 AxExHResult::AxExHResult( HRESULT hr, const char* file, int line )
 : AxEx(),
-  _widewhat( L"" ),
-  _what( "" ),
   _file( file ),
   _line( line ),	
+  _widewhat( L"" ),
+  _what( "" ),
   _hresult( hr )
 {
 	std::wostringstream os;

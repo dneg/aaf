@@ -727,8 +727,6 @@ static HRESULT CreateStaticEssenceAAFFile(
 	// !!!Previous revisions of this file contained variables here required to handle external essence
 	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
-	aafRational_t				editRate = {44100, 1};
-	aafRational_t				sampleRate = {44100, 1};
 	aafUID_t			 testContainer;
 
 	// delete any previous test file before continuing...
@@ -2225,7 +2223,7 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	aafUInt32			chunkSize;
 	aafBool				fmtFound = kAAFFalse, dataFound = kAAFFalse;
 	aafUInt8			chunkID[4];
-	aafInt32			junk32, rate, bytesPerFrame;
+	aafInt32			junk32, rate, bytesPerFrame = 0;
 	aafUInt8			*ptr;
 	
 	ptr = buf;

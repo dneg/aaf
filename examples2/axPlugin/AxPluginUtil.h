@@ -27,7 +27,7 @@
 
 #include <map>
 
-#if _DEBUG
+#ifdef _DEBUG
 #include <iostream>
 #endif
 
@@ -69,7 +69,7 @@ public:
 // implementation that, generally, has identical method
 // name and arguments but does not return an error code.
 
-#if _DEBUG
+#ifdef _DEBUG
 #define AX_PLUGIN_LOG_WHAT( EX )  std::wcout << L"Codec error: " << (EX).what() << std::endl; 
 #else
 #define AX_PLUGIN_LOG_WHAT( EX )

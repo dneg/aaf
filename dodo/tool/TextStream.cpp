@@ -33,8 +33,8 @@
 TextStream::TextStream
 (const char * src)
   : _pStorage (0),
-	_pData (0),
 	_numAllocated (0),
+	_pData (0),
 	_cachedLen (0)
 {
   if (src && *src)
@@ -59,10 +59,10 @@ TextStream::~TextStream ()
 TextStream::TextStream
 (const TextStream & src)
   : _pStorage (0),
-	_pData (0),
 	_numAllocated (0),
+	_pData (0),
 	_cachedLen (src._cachedLen),
-	 _startSi (src._startSi)
+	_startSi (src._startSi)
 {
   if (_cachedLen)
 	{
@@ -90,7 +90,7 @@ void TextStream::compress ()
     // not enough to bother
     return;
 
-#if DEBUG
+#ifdef DEBUG
   fprintf (stderr, "Diff is %d; compressing.\n", (int)(_pData - _pStorage));
 #endif
   char * newStorage = new char[strlen(_pData) + 1];
@@ -139,7 +139,7 @@ void TextStream::Clear ()
 }
 
 
-int TextStream::GetLength () const
+size_t TextStream::GetLength () const
 {
   //  if (_pData)
   //	{

@@ -360,7 +360,7 @@ int main( int argc, char** argv )
 
 	 // ... and run through all values registering
 	 // a renamed type for each opaque type.
-	 int count = renamePeskyOpaques( axDictionary, recIter );
+	 renamePeskyOpaques( axDictionary, recIter );
       }
 
 

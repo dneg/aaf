@@ -198,7 +198,7 @@ int main (int argc, char ** argv)
 
   TextStream tmpInput = input;
   macros.AddMacros (tmpInput, true);
-#if DEBUG
+#ifdef DEBUG
   fprintf (stderr, "Macro dump:\n");
   macros.dump (stderr);
 #endif
@@ -209,13 +209,13 @@ int main (int argc, char ** argv)
 	   repeats < 10 && changed;
 	   repeats++)
 	{
-#if DEBUG
+#ifdef DEBUG
 	  fprintf (stderr, "Pass %d...\n\n", repeats+1);
 #endif
 	  output.Clear();
 	  changed = macros.ApplyMacros (input, output);
 	  input = output;
-#if DEBUG
+#ifdef DEBUG
 	  fprintf (stderr, "\n\nOutput of this pass:\n");
 	  output.dump (stderr);
 	  fprintf (stderr, "\n\n");

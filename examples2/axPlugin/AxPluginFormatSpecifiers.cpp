@@ -61,17 +61,17 @@ const aafUID_t NULL_UID =  { 0x00000000, 0x0000, 0x0000,
 };
 
 AxPluginUntypedFormatSpecifier::AxPluginUntypedFormatSpecifier( int size )
-: _uid( NULL_UID ),
+: _readOnly( false ),
+  _uid( NULL_UID ),
   _valBuf( 0 ),
-  _valBufSize( size ),
-  _readOnly( false )
+  _valBufSize( size )
 {}
 
 AxPluginUntypedFormatSpecifier::AxPluginUntypedFormatSpecifier( aafUID_t uid, int size, bool readOnly )
-: _uid( uid ),
+: _readOnly( readOnly ),
+  _uid( uid ),
   _valBuf( 0 ),
-  _valBufSize( size ),
-  _readOnly( readOnly )
+  _valBufSize( size )
 {}
 
 AxPluginUntypedFormatSpecifier::~AxPluginUntypedFormatSpecifier()

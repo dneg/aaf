@@ -188,7 +188,7 @@ private:
 
 	// Return size of one frame in bytes.
 	// All frames assumed the same size.
-	int GetFrameSize();
+	aafUInt32 GetFrameSize();
 
 	// The descriptor object associated with this essence.
 	// SetEssenceDescriptor sets this pointer.

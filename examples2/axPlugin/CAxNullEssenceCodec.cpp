@@ -98,11 +98,9 @@ const aafUID_t CAX_AAF_CODEC_MANUFACTURER_ID =
 //=---------------------------------------------------------------------=
 
 CAxNullEssenceCodec::CAxNullEssenceCodec( IUnknown* pUnkOuter )
-:  CAxUnknown( pUnkOuter ),
-   CAxPlugin<AxImplPlugin>(
-		std::auto_ptr<AxImplPlugin>( new AxImplPlugin ) ),
-   CAxEssenceCodec<AxImplNullEssenceCodec>(
-		std::auto_ptr<AxImplNullEssenceCodec>( new AxImplNullEssenceCodec ) )
+:  CAxEssenceCodec<AxImplNullEssenceCodec>( std::auto_ptr<AxImplNullEssenceCodec>( new AxImplNullEssenceCodec ) ),
+   CAxPlugin<AxImplPlugin>( std::auto_ptr<AxImplPlugin>( new AxImplPlugin ) ),
+   CAxUnknown( pUnkOuter )
 {
 	//
 	// AxImplNullEssenceCodec init

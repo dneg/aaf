@@ -33,8 +33,8 @@ using namespace std;
 
 //-----------------------------------------------------------------------------
 AAFMetaDefinition::AAFMetaDefinition( string name, string auid, string description )
-   : _name( name ), _auid( auid ), _description( description ), 
-     _wasBuilt( false )
+   : _wasBuilt( false ), _name( name ), _auid( auid ),
+	_description( description )
 {
 }
 

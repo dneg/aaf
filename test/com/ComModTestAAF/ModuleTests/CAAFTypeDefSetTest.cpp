@@ -384,7 +384,6 @@ static bool EqualObject(IUnknown* pObject1, IUnknown* pObject2)
 
 void CAAFTypeDefSet_Create(aafCharacter_constptr fileName)
 {
-  HRESULT            hr = AAFRESULT_SUCCESS;
   aafProductIdentification_t  ProductInfo;
   IAAFFileSP pFile;
   IAAFHeaderSP pHeader;
@@ -430,7 +429,6 @@ void CAAFTypeDefSet_Create(aafCharacter_constptr fileName)
 
 void CAAFTypeDefSet_Open(aafCharacter_constptr fileName)
 {
-  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
   IAAFFileSP pFile;
   IAAFHeaderSP pHeader;
   IAAFDictionarySP pDictionary;
@@ -889,7 +887,6 @@ void CAAFTypeDefSet_Read(IAAFHeader* pHeader, IAAFDictionary* pDictionary)
       } 
       
        
-      HRESULT result = S_OK;
       aafUInt32 index;
       for (index = 0; index < kMyDefTestDataCount; ++index)
       {

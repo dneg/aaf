@@ -233,7 +233,7 @@ static HRESULT TestOneValue (aafUInt32 setDataSize,
 	}
 
   v8 = v4 = v2 = v1 = -1;
-  aafInt64 getVal;
+  aafInt64 getVal = -1;
   // OK, it should succeed.
   switch (getDataSize)
 	{

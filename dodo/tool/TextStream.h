@@ -62,7 +62,7 @@ struct TextStream
   //********
 
 
-  int GetLength () const;
+  size_t GetLength () const;
   //
   // Returns the number of characters contained in this TextStream.
   //
@@ -176,7 +176,7 @@ private:
   int			_numAllocated;
 
   char *		_pData;
-  int			_cachedLen;
+  size_t		_cachedLen;
 
   SourceInfo	_startSi;
 };

@@ -77,7 +77,7 @@ void VerifySetContents( IAAFSmartPointer<IEnumAAFPropertyValues> pEnumSetValues 
   bool isMarked[TestDescribedIDsVectorSize];
 
   // Load contents of set into array.
-  int i;
+  aafUInt32 i;
   for ( i = 0; i < TestDescribedIDsVectorSize; i++ ) {
     setVector[i] = GetNextUInt32( pEnumSetValues );
   }
@@ -93,7 +93,7 @@ void VerifySetContents( IAAFSmartPointer<IEnumAAFPropertyValues> pEnumSetValues 
 
   for ( i = 0; i < TestDescribedIDsVectorSize; i++ ) {
 
-	int j;
+	aafUInt32 j;
     for ( j = 0; j < TestDescribedIDsVectorSize; j++ ) {
       if ( !isMarked[j] &&  setVector[j] == TestDescribedSlotIDsVector[i] ) {
 		isMarked[j] = true;

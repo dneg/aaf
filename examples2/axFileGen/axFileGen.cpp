@@ -119,12 +119,12 @@ AxString AxFGOp::GetNotes() const
 	return AxFGOpFactoryRegistry::GetInstance().Get(_operationName).GetNotes();
 }
 
-int AxFGOp::GetMinArgC() const
+size_t AxFGOp::GetMinArgC() const
 {
 	return AxFGOpFactoryRegistry::GetInstance().Get(_operationName).GetMinArgC();
 }
 
-int AxFGOp::GetMaxArgC() const
+size_t AxFGOp::GetMaxArgC() const
 {
 	return AxFGOpFactoryRegistry::GetInstance().Get(_operationName).GetMaxArgC();
 }

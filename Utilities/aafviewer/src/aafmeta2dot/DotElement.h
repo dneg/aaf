@@ -42,6 +42,7 @@ class DotElement
 {
   public:
    DotElement( std::string name, std::string uid ) : _name( name ), _uid( uid ) {};
+   virtual ~DotElement() {}
 
    // write element to DOT file
    virtual void Write( std::ofstream &dotFile, DotProfile &profile ) = 0;

@@ -41,6 +41,7 @@ class DefaultNode : public DotElement
 {
   public:
    DefaultNode();
+   virtual ~DefaultNode() {}
 
    virtual void Write( std::ofstream &dotFile, DotProfile &profile );
 

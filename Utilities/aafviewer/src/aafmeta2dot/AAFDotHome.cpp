@@ -41,8 +41,8 @@ using namespace std;
 
 //-----------------------------------------------------------------------------
 AAFDotHome::AAFDotHome( string aafFilename, string dotFilename, AAFMetaMapProfile *profile )
-   : _aafFilename( aafFilename ), _dotFilename( dotFilename ), _profile( profile ),
-     AAFDefinitionHome()
+   : AAFDefinitionHome(),
+	_aafFilename( aafFilename ), _dotFilename( dotFilename ), _profile( profile )
 {
 }
 

@@ -55,8 +55,8 @@ public:
 	virtual const char* what() const throw();
 
 private:
-	std::string _what;
 	AxString _widewhat;
+	std::string _what;
 };
 
 class AxExHResult : public AxEx {
@@ -78,8 +78,8 @@ public:
 private:
 	const char* _file;
 	int _line;
-	std::string _what;
 	AxString _widewhat;
+	std::string _what;
 	HRESULT _hresult;
 };
 

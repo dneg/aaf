@@ -154,7 +154,7 @@ static HRESULT  createSTRType (IAAFDictionary * const pDict)
 	IAAFTypeDefStringSP spSTR;
 	//checkResult(defs.cdTypeDefString()->
 		//CreateInstance (IID_IAAFTypeDefString, (IUnknown **) &spSTR));
-	HRESULT hr = pDict->CreateMetaInstance(AUID_AAFTypeDefString, IID_IAAFTypeDefString,
+	pDict->CreateMetaInstance(AUID_AAFTypeDefString, IID_IAAFTypeDefString,
 		(IUnknown **) &spSTR) ;
 
 	

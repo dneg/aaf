@@ -41,9 +41,9 @@ using namespace std;
  
 //-----------------------------------------------------------------------------
 DotEdge::DotEdge( string name, string uid )
-   :	_source( 0 ), 
-	_target( 0 ),
-	DotElement( name, uid ) 
+   :	DotElement( name, uid ),
+	_source( 0 ), 
+	_target( 0 )
 {
 }
 

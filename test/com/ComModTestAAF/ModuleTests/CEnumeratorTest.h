@@ -45,6 +45,7 @@ class CEnumeratorTest
 {
   public:
 	CEnumeratorTest() {}
+	virtual ~CEnumeratorTest() {}
 	void Run(testMode_t mode);
 
   protected:
