@@ -28,12 +28,6 @@
 
 #include <stdio.h>
 
-//removed by Ian Baker 20031219
-//not needed for GCC Solaris build so is it ever used??
-//#if defined(sun)
-//#include <sys/stdtypes.h>
-//#endif
-
 #include "aafErr.h"
 #include "AAFTypes.h"
 
