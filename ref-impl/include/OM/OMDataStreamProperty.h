@@ -66,6 +66,17 @@ public:
              const OMUInt32 bytes,
              OMUInt32& bytesWritten);
 
+  // Direct property access interface
+
+    // @cmember The size of the raw bits of this
+    //          <c OMDataStreamProperty>. The size is given in bytes.
+  virtual size_t bitsSize(void) const;
+
+    // @cmember Get the raw bits of this <c OMDataStreamProperty>. The
+    //          raw bits are copied to the buffer at address <p bits>
+    //          which is <p size> bytes in size.
+  virtual void getBits(OMByte* bits, size_t size) const;
+
 private:
 
   void open(void);

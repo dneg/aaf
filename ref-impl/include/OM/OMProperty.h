@@ -11,6 +11,7 @@ const int TID_DATA                           = 0;
 const int TID_STRONG_OBJECT_REFERENCE        = 1;
 const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
 const int TID_WEAK_OBJECT_REFERENCE          = 3;
+const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 5;
 const int TID_DATA_STREAM                    = 4;
 
 class OMStoredObject;
@@ -62,6 +63,21 @@ public:
     //          the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
 
+  // Direct property access interface
+
+    // @cmember The size of the raw bits of this <c OMProperty>. The
+    //          size is given in bytes.
+  virtual size_t bitsSize(void) const = 0;
+
+    // @cmember Get the raw bits of this <c OMProperty>. The raw bits
+    //          are copied to the buffer at address <p bits> which is
+    //          <p size> bytes in size.
+  virtual void getBits(OMByte* bits, size_t size) const = 0;
+
+  // Temporary - get the type id of this OMProperty
+
+  int typeId(void) const;
+
 protected:
   int _propertyId;
   int _type;
@@ -97,6 +113,17 @@ public:
     // @cmember Get the value of this <c OMReferenceProperty>.
     //   @this const
   virtual void getValue(ReferencedObject*& object) const = 0;
+
+  // Direct property access interface
+
+    // @cmember The size of the raw bits of this
+    //          <c OMReferenceProperty>. The size is given in bytes.
+  virtual size_t bitsSize(void) const;
+
+    // @cmember Get the raw bits of this <c OMReferenceProperty>. The
+    //          raw bits are copied to the buffer at address <p bits>
+    //          which is <p size> bytes in size.
+  virtual void getBits(OMByte* bits, size_t size) const;
 
 protected:
   virtual ReferencedObject* pointer(void) const;
@@ -254,6 +281,17 @@ public:
     // @cmember The size of this <c OMSimpleProperty>.
     //   @this const
   size_t size(void) const;
+
+  // Direct property access interface
+
+    // @cmember The size of the raw bits of this
+    //          <c OMSimpleProperty>. The size is given in bytes.
+  virtual size_t bitsSize(void) const;
+
+    // @cmember Get the raw bits of this <c OMSimpleProperty>. The raw
+    //          bits are copied to the buffer at address <p bits> which
+    //          is <p size> bytes in size.
+  virtual void getBits(OMByte* bits, size_t size) const;
 
 protected:
   void get(void* value, size_t valueSize) const;
@@ -420,6 +458,19 @@ public:
     //          This <c OMStrongReferenceVectorProperty> must no longer
     //          attempt to access the <c OMStorable> with the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
+
+  // Direct property access interface
+
+    // @cmember The size of the raw bits of this
+    //          <c OMStrongReferenceVectorProperty>. The size is given
+    //          in bytes.
+  virtual size_t bitsSize(void) const;
+
+    // @cmember Get the raw bits of this
+    //          <c OMStrongReferenceVectorProperty>. The raw bits are
+    //          copied to the buffer at address <p bits> which is
+    //          <p size> bytes in size.
+  virtual void getBits(OMByte* bits, size_t size) const;
 
 private:
 
