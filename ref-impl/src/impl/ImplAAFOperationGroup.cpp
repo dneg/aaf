@@ -209,8 +209,19 @@ AAFRESULT STDMETHODCALLTYPE
 	if(sourceRef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	*sourceRef = _rendering;
-	_rendering->AcquireReference();
+//	if (_rendering.IsPresent())
+	{
+		if (_rendering)
+		{
+			*sourceRef = _rendering;
+			_rendering->AcquireReference();
+		}
+		else
+			return AAFRESULT_PROP_NOT_PRESENT;
+	}
+//	else
+//		return AAFRESULT_PROP_NOT_PRESENT;
+
 	return AAFRESULT_SUCCESS;
 }
 
