@@ -1,4 +1,4 @@
-\#
+#
 #
 # Advanced Authoring Format
 #
