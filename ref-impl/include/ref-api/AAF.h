@@ -163,6 +163,10 @@ interface IAAFRandomRawStorage;
 interface IAAFGetFileBits;
 interface IAAFSetFileBits;
 interface IAAFRandomFile;
+interface IAAFTaggedValueDefinition;
+interface IAAFKLVDataDefinition;
+interface IEnumAAFTaggedValueDefs;
+interface IEnumAAFKLVDataDefs;
 interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceMultiAccess;
@@ -171,6 +175,7 @@ interface IAAFMasterMobEx;
 interface IAAFMob2;
 interface IAAFTimelineMobSlot2;
 interface IAAFComponent2;
+interface IAAFDictionary2;
 #else
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
 typedef interface IAAFClassDef IAAFClassDef;
@@ -295,6 +300,10 @@ typedef interface IAAFRandomRawStorage IAAFRandomRawStorage;
 typedef interface IAAFGetFileBits IAAFGetFileBits;
 typedef interface IAAFSetFileBits IAAFSetFileBits;
 typedef interface IAAFRandomFile IAAFRandomFile;
+typedef interface IAAFTaggedValueDefinition IAAFTaggedValueDefinition;
+typedef interface IAAFKLVDataDefinition IAAFKLVDataDefinition;
+typedef interface IEnumAAFTaggedValueDefs IEnumAAFTaggedValueDefs;
+typedef interface IEnumAAFKLVDataDefs IEnumAAFKLVDataDefs;
 typedef interface IAAFEndian IAAFEndian;
 typedef interface IAAFSearchSource IAAFSearchSource;
 typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
@@ -303,6 +312,7 @@ typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 typedef interface IAAFMob2 IAAFMob2;
 typedef interface IAAFTimelineMobSlot2 IAAFTimelineMobSlot2;
 typedef interface IAAFComponent2 IAAFComponent2;
+typedef interface IAAFDictionary2 IAAFDictionary2;
 #endif
 
 // IAAFAIFCDescriptor
@@ -4557,10 +4567,15 @@ DECLARE_INTERFACE_(IAAFPluginDef, IUnknown)
 
 
 
+
+
+
+
 #ifndef __IAAFDictionary_INTERFACE_DEFINED__
 #define __IAAFDictionary_INTERFACE_DEFINED__
 
 EXTERN_C const IID IID_IAAFDictionary;
+
 
 #undef  INTERFACE
 #define INTERFACE   IAAFDictionary
@@ -5419,7 +5434,7 @@ DECLARE_INTERFACE_(IAAFDictionary, IUnknown)
   //
   // RegisterPluginDef()
   //
-  // Add the Interpolation definition object to the header's list of definitions.
+  // Add the plugin definition object to the header's list of definitions.
   //
   STDMETHOD(RegisterPluginDef) (THIS_
     // plugin definition Object
@@ -5477,10 +5492,20 @@ DECLARE_INTERFACE_(IAAFDictionary, IUnknown)
     // Total number of plugin definition objects
     /*[out, retval]*/ aafUInt32 *  pResult) PURE;
 
+
+
+
+
+
+
+
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFDictionary_INTERFACE_DEFINED__
-
 
 
 // IAAFEdgecode
@@ -33655,6 +33680,642 @@ DECLARE_INTERFACE_(IAAFRandomFile, IUnknown)
 
 
 
+// IAAFTaggedValueDefinition
+
+// ************************
+//
+// Interface IAAFTaggedValueDefinition
+//
+// ************************
+
+
+
+
+
+
+#ifndef __IAAFTaggedValueDefinition_INTERFACE_DEFINED__
+#define __IAAFTaggedValueDefinition_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFTaggedValueDefinition;
+
+
+#undef  INTERFACE
+#define INTERFACE   IAAFTaggedValueDefinition
+
+DECLARE_INTERFACE_(IAAFTaggedValueDefinition, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFTaggedValueDefinition methods *** */
+
+
+
+  //***********************************************************
+  //
+  // AddParentProperty()
+  //
+  // // Add a property definition to the tagged value definition.
+  //
+  // Return codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pParentProperty is null.
+  //
+  STDMETHOD(AddParentProperty) (THIS_
+    // Property definition to add.
+    /*[in]*/ IAAFPropertyDef * pParentProperty) PURE;
+
+  //***********************************************************
+  //
+  // GetParentProperties()
+  //
+  // // Writes an enumerator for the property definitions into *ppEnum.
+  // A reference is added to the new enumerator before it is returned.
+  //
+  // Return codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  STDMETHOD(GetParentProperties) (THIS_
+    // Property definition enumerator.
+    /*[out]*/ IEnumAAFPropertyDefs ** ppEnum) PURE;
+
+  //***********************************************************
+  //
+  // CountParentProperties()
+  //
+  // // Writes the total number of property definitions into *pNumProperties if,
+  // and only if, the method succeeds.
+  //
+  // Return codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  STDMETHOD(CountParentProperties) (THIS_
+    // Number of property definitions.
+    /*[out]*/ aafUInt32*  pNumProperties) PURE;
+
+  //***********************************************************
+  //
+  // RemoveParentProperty()
+  //
+  // // Removes the given property definition.
+  //
+  // Return codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  // AAFRESULT_NO_MORE_OBJECTS
+  //   - The property definition is not in this tagged value definition.
+  //
+  STDMETHOD(RemoveParentProperty) (THIS_
+    // Property to remove.
+    /*[in]*/ IAAFPropertyDef * pParentProperty) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFTaggedValueDefinition_INTERFACE_DEFINED__
+
+
+
+// IAAFKLVDataDefinition
+
+// ************************
+//
+// Interface IAAFKLVDataDefinition
+//
+// ************************
+
+
+
+
+
+
+
+#ifndef __IAAFKLVDataDefinition_INTERFACE_DEFINED__
+#define __IAAFKLVDataDefinition_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFKLVDataDefinition;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFKLVDataDefinition
+
+DECLARE_INTERFACE_(IAAFKLVDataDefinition, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFKLVDataDefinition methods *** */
+
+
+  //***********************************************************
+  //
+  // AddParentProperty()
+  //
+  // // Add a property definition to the KLV data definition.
+  // Return codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pParentProperty is null.
+  //
+  STDMETHOD(AddParentProperty) (THIS_
+    // Property definition to add.
+    /*[in]*/ IAAFPropertyDef * pParentProperty) PURE;
+
+  //***********************************************************
+  //
+  // GetParentProperties()
+  //
+  // // Writes an enumerator for the property definitions into *ppEnum.
+  // A reference is added to the new enumerator before it is returned.
+  //
+  // Return codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  STDMETHOD(GetParentProperties) (THIS_
+    // Property definition enumerator.
+    /*[out]*/ IEnumAAFPropertyDefs ** ppEnum) PURE;
+
+  //***********************************************************
+  //
+  // CountParentProperties()
+  //
+  // // Writes the total number of property definitions into *pNumProperties if,
+  // and only if, the method succeeds.
+  //
+  // Return codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  STDMETHOD(CountParentProperties) (THIS_
+    // Number of property definitions.
+    /*[out]*/ aafUInt32*  pNumProperties) PURE;
+
+  //***********************************************************
+  //
+  // RemoveParentProperty()
+  //
+  // // Removes the given property definition.
+  //
+  // Return codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  // AAFRESULT_NO_MORE_OBJECTS
+  //   - The property definition is not in this tagged value definition.
+  //
+  STDMETHOD(RemoveParentProperty) (THIS_
+    // Property to remove.
+    /*[in]*/ IAAFPropertyDef * pParentProperty) PURE;
+
+  //***********************************************************
+  //
+  // GetKLVDataType()
+  //
+  // // Writes the data definition object attached to this KLV data
+  // definition into the *ppTypeDef argument if, and only if, the call succeeds.
+  // If none exists, NULL is written to the *ppTypeDef argument.
+  //
+  // The returned data definition object, if it exists, is
+  // AddRef()ed before it is returned.
+  //
+  // Return codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppTypeDef is null.
+  //
+  STDMETHOD(GetKLVDataType) (THIS_
+    // Returned data definition object
+    /*[out]*/ IAAFTypeDef ** ppTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // SetKLVDataType()
+  //
+  // // Sets the date type of this KLV data definition to be the given one.
+  //
+  // Return codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTypeDef is null.
+  //
+  STDMETHOD(SetKLVDataType) (THIS_
+    // Data definition object
+    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFKLVDataDefinition_INTERFACE_DEFINED__
+
+
+
+// IEnumAAFTaggedValueDefs
+
+// ************************
+//
+// Interface IEnumAAFTaggedValueDefs
+//
+// ************************
+
+
+
+
+#ifndef __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
+#define __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IEnumAAFTaggedValueDefs;
+
+
+#undef  INTERFACE
+#define INTERFACE   IEnumAAFTaggedValueDefs
+
+DECLARE_INTERFACE_(IEnumAAFTaggedValueDefs, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IEnumAAFTaggedValueDefs methods *** */
+
+  //***********************************************************
+  //
+  // NextOne()
+  //
+  // Enumerates to the next element in the enumerators list. The
+  // caller is responsible for properly releasing the returned pointer
+  // when it is no longer needed.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppTaggedValueDefs pointer is valid.
+  // - there are TaggedValue Definition objects remaining to be returned.
+  // 
+  // If this method fails nothing is written to *ppTaggedValueDefs.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppTaggedValueDefs arg is NULL.
+  //
+  // AAFRESULT_NO_MORE_OBJECTS
+  //   - no TaggedValue Definition objects remaining to be returned.
+  //
+  STDMETHOD(NextOne) (THIS_
+    // The Next TaggedValue Definition
+    /*[out,retval]*/ IAAFTaggedValueDefinition ** ppTaggedValueDefs) PURE;
+
+
+  //***********************************************************
+  //
+  // Next()
+  //
+  // Enumerates the next count elements (AAFTaggedValueDefinition pointers) in the
+  // enumerator's list, returning them in the given array along with
+  // the actual number of enumerated elements in pNumFetched. The caller
+  // is responsible for properly releasing the returned pointers.
+  // 
+  // Succeeds if all of the following are true:
+  // - The ppTaggedValueDefs pointer is valid.
+  // - The pNumFetched pointer is valid. If count is 1, pNumFetched
+  //   can be NULL.
+  // - There are TaggedValue Definition objects remaining to be returned.
+  // 
+  // If this method fails nothing is written to *ppTaggedValueDefs or
+  // pNumFetched.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either ppTaggedValueDefs or pNumFetched arg is NULL.
+  //
+  STDMETHOD(Next) (THIS_
+    // number of TaggedValueDefs requested
+    /*[in]*/ aafUInt32  count,
+
+    // array to receive elements
+    /*[out, size_is(count), length_is(*pNumFetched)]*/ IAAFTaggedValueDefinition ** ppTaggedValueDefs,
+
+    // number of actual TaggedValue Definition objects fetched into ppTaggedValueDefs array
+    /*[out,ref]*/ aafUInt32 *  pNumFetched) PURE;
+
+
+  //***********************************************************
+  //
+  // Skip()
+  //
+  // Instructs the enumerator to skip the next count elements in the
+  // enumeration so that the next call to Next will not return those
+  // elements.
+  // 
+  // Succeeds if all of the following are true:
+  // - count is less than or equal to the number of remaining objects.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NO_MORE_OBJECTS
+  //   - count exceeded number of remaining objects.
+  //
+  STDMETHOD(Skip) (THIS_
+    // Number of elements to skip
+    /*[in]*/ aafUInt32  count) PURE;
+
+
+  //***********************************************************
+  //
+  // Reset()
+  //
+  // Instructs the enumerator to position itself at the beginning of
+  // the list of elements.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  STDMETHOD(Reset) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // Clone()
+  //
+  // Creates another enumerator with the same state as the current
+  // enumerator to iterate over the same list. This method makes it
+  // possible to record a point in the enumeration sequence in order
+  // to return to that point at a later time.
+  //
+  // Note: The caller must release this new enumerator separately from
+  // the first enumerator.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
+  //
+  STDMETHOD(Clone) (THIS_
+    // new enumeration
+    /*[out,retval]*/ IEnumAAFTaggedValueDefs ** ppEnum) PURE;
+
+  END_INTERFACE
+};
+#endif // __IEnumAAFTaggedValueDefs_INTERFACE_DEFINED__
+
+
+
+// IEnumAAFKLVDataDefs
+
+// ************************
+//
+// Interface IEnumAAFKLVDataDefs
+//
+// ************************
+
+
+
+
+#ifndef __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__
+#define __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IEnumAAFKLVDataDefs;
+
+
+#undef  INTERFACE
+#define INTERFACE   IEnumAAFKLVDataDefs
+
+DECLARE_INTERFACE_(IEnumAAFKLVDataDefs, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IEnumAAFKLVDataDefs methods *** */
+
+  //***********************************************************
+  //
+  // NextOne()
+  //
+  // Enumerates to the next element in the enumerators list. The
+  // caller is responsible for properly releasing the returned pointer
+  // when it is no longer needed.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppKLVDataDefs pointer is valid.
+  // - there are KLVData Definition objects remaining to be returned.
+  // 
+  // If this method fails nothing is written to *ppKLVDataDefs.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppKLVDataDefs arg is NULL.
+  //
+  // AAFRESULT_NO_MORE_OBJECTS
+  //   - no KLVData Definition objects remaining to be returned.
+  //
+  STDMETHOD(NextOne) (THIS_
+    // The Next KLVData Definition
+    /*[out,retval]*/ IAAFKLVDataDefinition ** ppKLVDataDefs) PURE;
+
+
+  //***********************************************************
+  //
+  // Next()
+  //
+  // Enumerates the next count elements (AAFKLVDataDefinition pointers) in the
+  // enumerator's list, returning them in the given array along with
+  // the actual number of enumerated elements in pNumFetched. The caller
+  // is responsible for properly releasing the returned pointers.
+  // 
+  // Succeeds if all of the following are true:
+  // - The ppKLVDataDefs pointer is valid.
+  // - The pNumFetched pointer is valid. If count is 1, pNumFetched
+  //   can be NULL.
+  // - There are KLVData Definition objects remaining to be returned.
+  // 
+  // If this method fails nothing is written to *ppKLVDataDefs or
+  // pNumFetched.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either ppKLVDataDefs or pNumFetched arg is NULL.
+  //
+  STDMETHOD(Next) (THIS_
+    // number of KLVDataDefs requested
+    /*[in]*/ aafUInt32  count,
+
+    // array to receive elements
+    /*[out, size_is(count), length_is(*pNumFetched)]*/ IAAFKLVDataDefinition ** ppKLVDataDefs,
+
+    // number of actual KLVData Definition objects fetched into ppKLVDataDefs array
+    /*[out,ref]*/ aafUInt32 *  pNumFetched) PURE;
+
+
+  //***********************************************************
+  //
+  // Skip()
+  //
+  // Instructs the enumerator to skip the next count elements in the
+  // enumeration so that the next call to Next will not return those
+  // elements.
+  // 
+  // Succeeds if all of the following are true:
+  // - count is less than or equal to the number of remaining objects.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NO_MORE_OBJECTS
+  //   - count exceeded number of remaining objects.
+  //
+  STDMETHOD(Skip) (THIS_
+    // Number of elements to skip
+    /*[in]*/ aafUInt32  count) PURE;
+
+
+  //***********************************************************
+  //
+  // Reset()
+  //
+  // Instructs the enumerator to position itself at the beginning of
+  // the list of elements.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  STDMETHOD(Reset) (THIS) PURE;
+
+
+  //***********************************************************
+  //
+  // Clone()
+  //
+  // Creates another enumerator with the same state as the current
+  // enumerator to iterate over the same list. This method makes it
+  // possible to record a point in the enumeration sequence in order
+  // to return to that point at a later time.
+  //
+  // Note: The caller must release this new enumerator separately from
+  // the first enumerator.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
+  //
+  STDMETHOD(Clone) (THIS_
+    // new enumeration
+    /*[out,retval]*/ IEnumAAFKLVDataDefs ** ppEnum) PURE;
+
+  END_INTERFACE
+};
+#endif // __IEnumAAFKLVDataDefs_INTERFACE_DEFINED__
+
+
+
 // IAAFEndian
 
 // ************************
@@ -36254,6 +36915,1093 @@ DECLARE_INTERFACE_(IAAFComponent2, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFComponent2_INTERFACE_DEFINED__
+
+
+
+// IAAFDictionary2
+
+// ************************
+//
+// Interface IAAFDictionary2
+//
+// ************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#ifndef __IAAFDictionary2_INTERFACE_DEFINED__
+#define __IAAFDictionary2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFDictionary2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFDictionary2
+
+DECLARE_INTERFACE_(IAAFDictionary2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFDictionary2 methods *** */
+
+  //***********************************************************
+  //
+  // CreateInstance()
+  //
+  // Creates a single uninitialized AAF object of the class associated 
+  // with a specified stored object id. 
+  // 
+  STDMETHOD(CreateInstance)(THIS_
+    // Class identifier (AUID) of the stored object. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in classes.
+    aafUID_constref id,
+
+    // Reference to the identifier of the interface
+    REFIID riid,
+
+    // Address of output variable that receives the 
+    // interface pointer requested in riid
+    IUnknown ** ppvObject) PURE;
+
+
+  //***********************************************************
+  //
+  // CreateMetaInstance()
+  //
+  // Creates a single uninitialized AAF meta class or type associated 
+  // with a specified stored object id. 
+  // 
+  STDMETHOD(CreateMetaInstance)(THIS_
+    // Identifier (id) of a class or type definition. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in definitions.
+    aafUID_constref id,
+
+    // Reference to the identifier of the interface
+    REFIID riid,
+
+    // Address of output variable that receives the 
+    // interface pointer requested in riid
+    IUnknown ** ppMetaDefinition) PURE;
+
+
+
+
+  //***********************************************************
+  //
+  // RegisterClassDef()
+  //
+  // Add the class definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pClassDef pointer is valid.
+  // - the ID contained in the class def is not already been
+  //   registered.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pClassDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The class def ID has already been registered.
+  //
+  STDMETHOD(RegisterClassDef) (THIS_
+    // Class Definition
+    /*[in]*/ IAAFClassDef * pClassDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupClassDef()
+  //
+  // Return the class definition with the given id.
+  // 
+  // Succeeds if:
+  // - The pClassID pointer is valid.
+  // - The ppClassDef pointer is valid.
+  // - the ID is a recognized id for a class definition.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pClassID or ppClassDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.
+  //
+  STDMETHOD(LookupClassDef) (THIS_
+    // Class Unique ID
+    /*[in, ref]*/ aafUID_constref  classId,
+
+    // Class Definition
+    /*[out,retval]*/ IAAFClassDef ** ppClassDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetClassDefs()
+  //
+  // Return an enumerator for all class definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
+  //
+  STDMETHOD(GetClassDefs) (THIS_
+    // Class Definition Enumeration
+    /*[out,retval]*/ IEnumAAFClassDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountClassDefs()
+  //
+  // Writes the number of class definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountClassDefs) (THIS_
+    // Total number of class definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+  //***********************************************************
+  //
+  // CreateForwardClassReference()
+  //
+  // Return the class definition with the given id.
+  // 
+  // Succeeds if:
+  // - The classId does not represent an existing forward class reference
+  //   or a class definition that has already been successfully registered.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.
+  //
+  STDMETHOD(CreateForwardClassReference) (THIS_
+    // Class Unique ID
+    /*[in, ref]*/ aafUID_constref  classId) PURE;
+
+  //***********************************************************
+  //
+  // HasForwardClassReference()
+  //
+  // Return kAAFTrue if the given class identification is a forward reference.
+  // 
+  // Succeeds if:
+  // - The pClassID pointer is valid.
+  // - The ppClassDef pointer is valid.
+  // - the ID is a recognized id for a class definition.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pClassID or ppClassDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.
+  //
+  STDMETHOD(HasForwardClassReference) (THIS_
+    // Class Unique ID
+    /*[in, ref]*/ aafUID_constref  classId,
+
+    // true if forward class reference; false if not a forward class reference
+    /*[out,retval]*/ aafBoolean_t *  pResult) PURE;
+
+  //***********************************************************
+  //
+  // RegisterTypeDef()
+  //
+  // Add the type definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the ID is not already been registered.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pClassDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.
+  //
+  STDMETHOD(RegisterTypeDef) (THIS_
+    // Type Definition Object
+    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupTypeDef()
+  //
+  // Return the type definition object with the given id.
+  // 
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  // - The ppTypeDef pointer is valid.
+  // - the ID is a recognized id for a type definition.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pTypeID or ppTypeDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a type definition ID.
+  //
+  STDMETHOD(LookupTypeDef) (THIS_
+    // Type Unique ID
+    /*[in, ref]*/ aafUID_constref  typeId,
+
+    // Type Definition Object
+    /*[out,retval]*/ IAAFTypeDef ** ppTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTypeDefs()
+  //
+  // Return an enumerator for all type definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
+  //
+  STDMETHOD(GetTypeDefs) (THIS_
+    // Type Def Enumeration
+    /*[out,retval]*/ IEnumAAFTypeDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountTypeDefs()
+  //
+  // Writes the number of type definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountTypeDefs) (THIS_
+    // Total number of type definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterOpaqueTypeDef()
+  //
+  // Add the opaquetype definition object to the dictionary.
+  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the definition is not already been registered with RegisterTypeDef.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTypeDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.
+  //
+  STDMETHOD(RegisterOpaqueTypeDef) (THIS_
+    // Type Definition Object
+    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupOpaqueTypeDef()
+  //
+  // Return the opaque type definition object with the given id.
+  // 
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  // - The ppTypeDef pointer is valid.
+  // - the ID is a recognized id for an opaque type definition.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either typeId or ppTypeDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a type definition ID.
+  //
+  STDMETHOD(LookupOpaqueTypeDef) (THIS_
+    // Type Unique ID
+    /*[in, ref]*/ aafUID_constref  typeId,
+
+    // Type Definition Object
+    /*[out,retval]*/ IAAFTypeDef ** ppTypeDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetOpaqueTypeDefs()
+  //
+  // Return an enumerator for all registered opaque type definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum arg is NULL.
+  //
+  STDMETHOD(GetOpaqueTypeDefs) (THIS_
+    // Type Def Enumeration
+    /*[out,retval]*/ IEnumAAFTypeDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountOpaqueTypeDefs()
+  //
+  // Writes the number of opaque type definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountOpaqueTypeDefs) (THIS_
+    // Total number of opaque type definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+  //***********************************************************
+  //
+  // RegisterKLVDataKey()
+  //
+  // Add the definition for the given KLV key to the runtime dictionary.
+  // The pTypeDef will often be kAAFTypeID_UInt8Array,
+  // but may be something else.  // 
+  // Succeeds if:
+  // - The pTypeDef pointer is valid.
+  // - the definition is not already been registered with RegisterTypeDef.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTypeDef arg is NULL.
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given type has already been registered.
+  //
+  STDMETHOD(RegisterKLVDataKey) (THIS_
+    // Key to define
+    /*[in]*/ aafUID_t  pUID,
+
+    // Type Definition Object
+    /*[in]*/ IAAFTypeDef * pTypeDef) PURE;
+
+  //***********************************************************
+  //
+  // RegisterDataDef()
+  //
+  // Add the data definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterDataDef) (THIS_
+    // Data Definition Object
+    /*[in]*/ IAAFDataDef * pDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupDataDef()
+  //
+  // Return the data definition object with the given id.
+  //
+  STDMETHOD(LookupDataDef) (THIS_
+    // Data Definition Unique ID
+    /*[in, ref]*/ aafUID_constref  dataDefinitionId,
+
+    // Data Definition Object
+    /*[out,retval]*/ IAAFDataDef ** ppDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDataDefs()
+  //
+  // Return an enumerator for aff data definitions.
+  //
+  STDMETHOD(GetDataDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFDataDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountDataDefs()
+  //
+  // Writes the number of data definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountDataDefs) (THIS_
+    // Total number of data definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterOperationDef()
+  //
+  // Add the operation definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterOperationDef) (THIS_
+    // Operation Definition Object
+    /*[in]*/ IAAFOperationDef * pOperationDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupOperationDef()
+  //
+  // Return the operation definition object with the given id.
+  //
+  STDMETHOD(LookupOperationDef) (THIS_
+    // Operation Def Unique ID
+    /*[in, ref]*/ aafUID_constref  operationId,
+
+    // Operation definition object
+    /*[out,retval]*/ IAAFOperationDef ** ppOperationDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetOperationDefs()
+  //
+  // Return an enumerator for all operation definitions.
+  //
+  STDMETHOD(GetOperationDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFOperationDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountOperationDefs()
+  //
+  // Writes the number of operation definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountOperationDefs) (THIS_
+    // Total number of operation definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterParameterDef()
+  //
+  // Add the parameter definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterParameterDef) (THIS_
+    // Parameter Definition Object
+    /*[in]*/ IAAFParameterDef * pParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupParameterDef()
+  //
+  // Return the parameter definition object with the given id.
+  //
+  STDMETHOD(LookupParameterDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // Parameter definition object
+    /*[out,retval]*/ IAAFParameterDef ** ppParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetParameterDefs()
+  //
+  // Return an enumerator for all parameter definitions.
+  //
+  STDMETHOD(GetParameterDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFParameterDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountParameterDefs()
+  //
+  // Writes the number of parameter definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountParameterDefs) (THIS_
+    // Total number of parameter definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterCodecDef()
+  //
+  // Add the codec definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterCodecDef) (THIS_
+    // Codec Definition Object
+    /*[in]*/ IAAFCodecDef * pParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupCodecDef()
+  //
+  // Return the codec definition object with the given id.
+  //
+  STDMETHOD(LookupCodecDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // Codec definition object
+    /*[out,retval]*/ IAAFCodecDef ** ppParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetCodecDefs()
+  //
+  // Return an enumerator for all codec definitions.
+  //
+  STDMETHOD(GetCodecDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFCodecDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountCodecDefs()
+  //
+  // Writes the number of codec definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountCodecDefs) (THIS_
+    // Total number of codec definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterContainerDef()
+  //
+  // Add the container definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterContainerDef) (THIS_
+    // Container Definition Object
+    /*[in]*/ IAAFContainerDef * pParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupContainerDef()
+  //
+  // Return the container definition object with the given id.
+  //
+  STDMETHOD(LookupContainerDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // Container definition object
+    /*[out,retval]*/ IAAFContainerDef ** ppParmDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetContainerDefs()
+  //
+  // Return an enumerator for all container definitions.
+  //
+  STDMETHOD(GetContainerDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFContainerDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountContainerDefs()
+  //
+  // Writes the number of container definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountContainerDefs) (THIS_
+    // Total number of container definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterInterpolationDef()
+  //
+  // Add the Interpolation definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterInterpolationDef) (THIS_
+    // Interpolation Definition Object
+    /*[in]*/ IAAFInterpolationDef * pInterpolationDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupInterpolationDef()
+  //
+  // Return the Interpolation definition object with the given id.
+  //
+  STDMETHOD(LookupInterpolationDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // Interpolation definition object
+    /*[out,retval]*/ IAAFInterpolationDef ** ppInterpolationDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetInterpolationDefs()
+  //
+  // Return an enumerator for aff Interpolation definitions.
+  //
+  STDMETHOD(GetInterpolationDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFInterpolationDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountInterpolationDefs()
+  //
+  // Writes the number of interpolation definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountInterpolationDefs) (THIS_
+    // Total number of interpolation definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterPluginDef()
+  //
+  // Add the plugin definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterPluginDef) (THIS_
+    // plugin definition Object
+    /*[in]*/ IAAFPluginDef * pPlugDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupPluginDef()
+  //
+  // Return the plugin descriptor object with the given id.
+  //
+  STDMETHOD(LookupPluginDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // plugin descriptor object
+    /*[out,retval]*/ IAAFPluginDef ** ppPlugDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetPluginDefs()
+  //
+  // Return an enumerator for all plugin descriptors.
+  //
+  STDMETHOD(GetPluginDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFPluginDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountPluginDefs()
+  //
+  // Writes the number of plugin definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountPluginDefs) (THIS_
+    // Total number of plugin definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterKLVDataDef()
+  //
+  // Add the KLVData definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterKLVDataDef) (THIS_
+    // plugin definition object
+    /*[in]*/ IAAFKLVDataDefinition * pDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupKLVDataDef()
+  //
+  // Return the KLVData descriptor object with the given id.
+  //
+  STDMETHOD(LookupKLVDataDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // KLVData descriptor object
+    /*[out,retval]*/ IAAFKLVDataDefinition ** ppDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetKLVDataDefs()
+  //
+  // Return an enumerator for all KLVData descriptors.
+  //
+  STDMETHOD(GetKLVDataDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFKLVDataDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountKLVDataDefs()
+  //
+  // Writes the number of KLVData definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountKLVDataDefs) (THIS_
+    // Total number of KLVData definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+  //***********************************************************
+  //
+  // RegisterTaggedValueDef()
+  //
+  // Add the tagged value definition object to the header's list of definitions.
+  //
+  STDMETHOD(RegisterTaggedValueDef) (THIS_
+    // tagged value definition Object
+    /*[in]*/ IAAFTaggedValueDefinition * pDef) PURE;
+
+
+  //***********************************************************
+  //
+  // LookupTaggedValueDef()
+  //
+  // Return the tagged value descriptor object with the given id.
+  //
+  STDMETHOD(LookupTaggedValueDef) (THIS_
+    // Parameter Unique ID
+    /*[in, ref]*/ aafUID_constref  parameterId,
+
+    // tagged value descriptor object
+    /*[out,retval]*/ IAAFTaggedValueDefinition ** ppDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetTaggedValueDefs()
+  //
+  // Return an enumerator for all tagged value descriptors.
+  //
+  STDMETHOD(GetTaggedValueDefs) (THIS_
+    // Definition Enumeration
+    /*[out,retval]*/ IEnumAAFTaggedValueDefs ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // CountTaggedValueDefs()
+  //
+  // Writes the number of tagged value definition objects into the
+  // *pResult argument.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pResult.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.
+  //
+  STDMETHOD(CountTaggedValueDefs) (THIS_
+    // Total number of tagged value definition objects
+    /*[out, retval]*/ aafUInt32 *  pResult) PURE;
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFDictionary2_INTERFACE_DEFINED__
 
 
 

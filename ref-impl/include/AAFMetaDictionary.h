@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Tue Mar 30 17:20:40 BST 2004
-// by user phil on system pilot16.
+// This file was generated on Sat Apr 17 09:42:36 EDT 2004
+// by user jpt on system warbler.localdomain.
 //
 // Key to macros.
 //
@@ -2258,6 +2258,26 @@ AAF_CLASS(Dictionary,
     false,
     false,
     Dictionary)
+  AAF_PROPERTY(KLVDataDefinitions,
+    // {06010104-050A-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x06010104,
+      0x050A, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x260a,
+    AAF_REFERENCE_TYPE(StrongReferenceSet, KLVDataDefinition),
+    false,
+    false,
+    Dictionary)
+  AAF_PROPERTY(TaggedValueDefinitions,
+    // {06010104-050B-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x06010104,
+      0x050B, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x260b,
+    AAF_REFERENCE_TYPE(StrongReferenceSet, TaggedValueDefinition),
+    false,
+    false,
+    Dictionary)
 AAF_CLASS_END(Dictionary,
   // {0D010101-0101-2200-060E-2B3402060101}
   AAF_LITERAL_AUID(0x0D010101,
@@ -3402,6 +3422,72 @@ AAF_CLASS_END(ImportDescriptor,
     0x0101, 0x4A00,
     0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
   PhysicalDescriptor,
+  true)
+AAF_CLASS_SEPARATOR()
+
+// TaggedValueDefinition
+//
+AAF_CLASS(TaggedValueDefinition,
+  // {0D010101-0101-4C00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4C00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  DefinitionObject,
+  true)
+  AAF_PROPERTY(TaggedValueParentProperties,
+    // {06010104-0305-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x06010104,
+      0x0305, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x6c01,
+    AAF_REFERENCE_TYPE(WeakReferenceSet, PropertyDefinition),
+    true,
+    false,
+    TaggedValueDefinition)
+AAF_CLASS_END(TaggedValueDefinition,
+  // {0D010101-0101-4C00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4C00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  DefinitionObject,
+  true)
+AAF_CLASS_SEPARATOR()
+
+// KLVDataDefinition
+//
+AAF_CLASS(KLVDataDefinition,
+  // {0D010101-0101-4D00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4D00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  DefinitionObject,
+  true)
+  AAF_PROPERTY(KLVDataParentProperties,
+    // {06010104-0304-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x06010104,
+      0x0304, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x6d01,
+    AAF_REFERENCE_TYPE(WeakReferenceSet, PropertyDefinition),
+    true,
+    false,
+    KLVDataDefinition)
+  AAF_PROPERTY(KLVDataType,
+    // {06010104-0109-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x06010104,
+      0x0109, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x4d02,
+    AAF_REFERENCE_TYPE(WeakReference, TypeDefinition),
+    false,
+    false,
+    KLVDataDefinition)
+AAF_CLASS_END(KLVDataDefinition,
+  // {0D010101-0101-4D00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4D00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  DefinitionObject,
   true)
 AAF_CLASS_SEPARATOR()
 
@@ -6048,6 +6134,28 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE(
   AAF_TYPE(KLVData))
 AAF_TYPE_SEPARATOR()
 
+// StrongReference<KLVDataDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+  AAF_REFERENCE_TYPE_NAME(StrongReference, KLVDataDefinition), 
+  // {05022000-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05022000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(KLVDataDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReference<TaggedValueDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE(
+  AAF_REFERENCE_TYPE_NAME(StrongReference, TaggedValueDefinition), 
+  // {05022100-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05022100,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(TaggedValueDefinition))
+AAF_TYPE_SEPARATOR()
+
 // StrongReferenceSet<ClassDefinition>
 //
 AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
@@ -6178,6 +6286,28 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(TypeDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<KLVDataDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+  AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, KLVDataDefinition), 
+  // {05050D00-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05050D00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(KLVDataDefinition))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceSet<TaggedValueDefinition>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
+  AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, TaggedValueDefinition), 
+  // {05050E00-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05050E00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(TaggedValueDefinition))
 AAF_TYPE_SEPARATOR()
 
 // StrongReferenceVector<Component>
@@ -6526,6 +6656,30 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(
   AAF_TYPE(CodecDefinition))
 AAF_TYPE_SEPARATOR()
 
+// WeakReference<PropertyDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE(
+  AAF_REFERENCE_TYPE_NAME(WeakReference, PropertyDefinition), 
+  // {05010C00-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05010C00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(PropertyDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(MetaDictionary, Root,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, PropertyDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(ClassDefinitions, MetaDictionary,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, PropertyDefinition))
+  AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(Properties, ClassDefinition,
+    AAF_REFERENCE_TYPE_NAME(WeakReference, PropertyDefinition))
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(
+  AAF_REFERENCE_TYPE_NAME(WeakReference, PropertyDefinition), 
+  // {05010C00-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05010C00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(PropertyDefinition))
+AAF_TYPE_SEPARATOR()
+
 // WeakReferenceSet<DataDefinition>
 //
 AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
@@ -6557,6 +6711,17 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(PluginDefinition))
+AAF_TYPE_SEPARATOR()
+
+// WeakReferenceSet<PropertyDefinition>
+//
+AAF_TYPE_DEFINITION_WEAK_REFERENCE_SET(
+  AAF_REFERENCE_TYPE_NAME(WeakReferenceSet, PropertyDefinition), 
+  // {05031000-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x05031000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(PropertyDefinition))
 AAF_TYPE_SEPARATOR()
 
 // WeakReferenceVector<OperationDefinition>

@@ -169,6 +169,10 @@
 #include "CAAFGetFileBits.h"
 #include "CAAFSetFileBits.h"
 #include "CAAFRandomFile.h"
+#include "CAAFTaggedValueDefinition.h"
+#include "CAAFKLVDataDefinition.h"
+#include "CEnumAAFTaggedValueDefs.h"
+#include "CEnumAAFKLVDataDefs.h"
 
 //
 // Include Private AAF Objects in Table:

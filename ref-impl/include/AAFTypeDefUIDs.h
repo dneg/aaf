@@ -381,6 +381,14 @@ const aafUID_t kAAFTypeID_TypeDefinitionStrongReference =
 const aafUID_t kAAFTypeID_KLVDataStrongReference =
 {0x05021c00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 
+//{05022000-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_KLVDataDefinitionStrongReference =
+{0x05022000, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
+//{05022100-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_TaggedValueDefinitionStrongReference =
+{0x05022100, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
 //{05050100-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_ClassDefinitionStrongReferenceSet =
 {0x05050100, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
@@ -428,6 +436,14 @@ const aafUID_t kAAFTypeID_PropertyDefinitionStrongReferenceSet =
 //{05050c00-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_TypeDefinitionStrongReferenceSet =
 {0x05050c00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
+//{05050d00-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_KLVDataDefinitionStrongReferenceSet =
+{0x05050d00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
+//{05050e00-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_TaggedValueDefinitionStrongReferenceSet =
+{0x05050e00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 
 //{05060100-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_ComponentStrongReferenceVector =
@@ -509,6 +525,10 @@ const aafUID_t kAAFTypeID_PluginDefinitionWeakReference =
 const aafUID_t kAAFTypeID_CodecDefinitionWeakReference =
 {0x05010b00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 
+//{05010c00-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_PropertyDefinitionWeakReference =
+{0x05010c00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
 //{05030d00-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_DataDefinitionWeakReferenceSet =
 {0x05030d00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
@@ -520,6 +540,10 @@ const aafUID_t kAAFTypeID_ParameterDefinitionWeakReferenceSet =
 //{05030f00-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_PluginDefinitionWeakReferenceSet =
 {0x05030f00, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
+
+//{05031000-0000-0000-060e-2b3401040101}
+const aafUID_t kAAFTypeID_PropertyDefinitionWeakReferenceSet =
+{0x05031000, 0x0000, 0x0000, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x04, 0x01, 0x01}};
 
 //{05040100-0000-0000-060e-2b3401040101}
 const aafUID_t kAAFTypeID_OperationDefinitionWeakReferenceVector =

@@ -172,5 +172,9 @@ EXTERN_C const CLSID CLSID_AAFRandomRawStorage;
 EXTERN_C const CLSID CLSID_AAFGetFileBits;
 EXTERN_C const CLSID CLSID_AAFSetFileBits;
 EXTERN_C const CLSID CLSID_AAFRandomFile;
+EXTERN_C const CLSID CLSID_AAFTaggedValueDefinition;
+EXTERN_C const CLSID CLSID_AAFKLVDataDefinition;
+EXTERN_C const CLSID CLSID_EnumAAFTaggedValueDefs;
+EXTERN_C const CLSID CLSID_EnumAAFKLVDataDefs;
 
 #endif // __AAFCLSIDs_h__
