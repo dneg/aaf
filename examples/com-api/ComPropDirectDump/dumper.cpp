@@ -425,7 +425,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				checkResult(hr);
 				
 				IAAFObjectSP pObj;
-				checkResult(pTDO->GetObject(pPVal, &pObj));
+				checkResult(pTDO->GetObject(pPVal, IID_IAAFObject, (IUnknown **)&pObj));
 				os << "Value: an object:" << endl;
 				checkResult (dumpObject (pObj, pDict, indent+1, os));
 				
