@@ -690,8 +690,11 @@ AAFRESULT STDMETHODCALLTYPE
 	// !!!Does not obey search criteria yet
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEnumMob(this));
-		CHECK(theEnum->Reset());
+		OMStrongReferenceVectorIterator<ImplAAFMobSlot>* iter = 
+			new OMStrongReferenceVectorIterator<ImplAAFMobSlot>(_slots);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFMobSlots, this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
@@ -854,8 +857,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEnumStrongProperty(this, &_userComments));
-		CHECK(theEnum->Reset());
+		OMStrongReferenceVectorIterator<ImplAAFTaggedValue>* iter = 
+			new OMStrongReferenceVectorIterator<ImplAAFTaggedValue>(_userComments);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFTaggedValues, this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
@@ -949,7 +955,7 @@ AAFRESULT STDMETHODCALLTYPE
 			new OMStrongReferenceVectorIterator<ImplAAFKLVData>(_KLVData);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
-		CHECK(theEnum->SetIterator(this, iter));
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFKLVData, this, iter));
 	  *ppEnum = theEnum;
 	}
   XEXCEPT

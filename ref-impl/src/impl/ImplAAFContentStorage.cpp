@@ -200,7 +200,7 @@ AAFRESULT STDMETHODCALLTYPE
 			new OMStrongReferenceSetIterator<OMMaterialIdentification, ImplAAFMob>(_mobs);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
-		CHECK(theEnum->SetIterator(this, iter));
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFMobs, this, iter));
 		CHECK(theEnum->SetCriteria(pSearchCriteria));
 	  *ppEnum = theEnum;
 	}
@@ -365,7 +365,7 @@ AAFRESULT STDMETHODCALLTYPE
 			new OMStrongReferenceSetIterator<OMMaterialIdentification, ImplAAFEssenceData>(_essenceData);
 		if(iter == 0)
 			RAISE(AAFRESULT_NOMEMORY);
-		CHECK(theEnum->SetIterator(this, iter));
+		CHECK(theEnum->Initialize(&CLSID_EnumAAFEssenceData, this, iter));
 	  *ppEnum = theEnum;
 	}
   XEXCEPT
