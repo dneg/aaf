@@ -11,20 +11,30 @@
 TOOLNAME=${0##*/}
 TOOLPATH=${0%/${TOOLNAME}}
 
-# tag date time
+if [[ ${#} != 1 ]]
+then
+  echo "$TOOLNAME : Error wrong number of arguments (${#})."
+  echo "$TOOLNAME : Usage : $TOOLNAME <tagdates>"
+  exit 1
+fi
 
-tagstuff=(\
-RC1 2001/04/17 22:14:43 \
-Build-0500 2001/07/13 20:30:53 \
-Build-0501 2001/07/29 18:58:27 \
-Build-0502 2001/10/29 14:27:11 \
-Build-0503 2002/02/26 17:20:24 \
-V101_RC1 2002/03/07 19:23:29 \
-V101_RC2 2002/03/29 17:01:49 \
-Build-0504 2002/04/05 00:43:27 \
-V101 2002/04/05 00:43:27 \
-Build-0505 2002/05/29 21:23:58 \
-)
+tagstufffile=${1}
+
+if [[ ! -s $tagstufffile ]]
+then
+  echo "$TOOLNAME : Can't find tag dates \"${tagstufffile}\"."
+  exit 1
+fi
+
+declare -a tagstuff
+let i=0;
+while read tag date time
+do
+  tagstuff[i]=$tag
+  tagstuff[i+1]=$date
+  tagstuff[i+2]=$time
+  let i=$i+3;
+done < $tagstufffile
 
 let n=${#tagstuff[@]}/3
 
