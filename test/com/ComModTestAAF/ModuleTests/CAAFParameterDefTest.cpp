@@ -21,7 +21,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
-#include "AAFDefUIDs.h"
+#include "AAFDataDefs.h"
 #include "aafUtils.h"
 
 // Cross-platform utility to delete a file.
@@ -110,7 +110,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDefObject*		pDefObject = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
-	aafUID_t			testDataDef = DDEF_Video;
+	aafUID_t			testDataDef = DDEF_Picture;
 /*	long				test;
 */
 
@@ -207,7 +207,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFParameterDef	*pParmDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
 	bool				bFileOpen = false;
-	aafUID_t			readDataDef, checkDataDef = DDEF_Video;
+	aafUID_t			readDataDef, checkDataDef = DDEF_Picture;
 	aafBool				readIsTimeWarp;
 	aafInt32			catLen, checkNumInputs;
 	aafUInt32			checkBypass, testLen;
