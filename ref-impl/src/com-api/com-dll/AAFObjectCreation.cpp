@@ -6,9 +6,6 @@
 #include <string.h>
 #include <assert.h>
 
-//JeffB: We currently have one object which exists in the file, but not in the API
-//extern "C" const aafClassID_t
-//CLSID_AAFContentStorage = { 0x54D4C481, 0x5F8B, 0x11d2, { 0x80, 0x73, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F} };
 
 // Creates and returns an Impl object based on the given class ID.
 // Will create the appropriate kind of API class and attach it.
@@ -30,11 +27,24 @@ ImplAAFRoot * CreateImpl (const aafClassID_t & rClassID)
 	//
 	memcpy(&classID, &rClassID, sizeof(CLSID));
 
-	hr = CoCreateInstance(classID,
-				NULL, 
-				CLSCTX_INPROC_SERVER, 
-				IID_IAAFRoot, 
-				(void **)&pIAAFRoot);
+	// The reference implementation must be "self-contained". We do
+	// not want any user supplied classes to be created and used
+	// instead on one our built-in classes.
+	//
+	// The simplest change is to just simulate a call to 
+	// CoCreateInstance:
+	//
+	// This code is invoked within the current module so we
+	// should just be able to call the DllGetClassObject entry point
+	// instead of calling CoCreateInstance and searching the 
+	// registry.
+	IClassFactory *pFactory = NULL;
+	hr = DllGetClassObject(classID, IID_IClassFactory, (void **)&pFactory);
+	if (SUCCEEDED(hr))
+	{
+		hr = pFactory->CreateInstance(NULL, IID_IAAFRoot, (void **)&pIAAFRoot);
+		pFactory->Release();
+	}
 
 	if (SUCCEEDED(hr))
 		pIAAFRoot->GetImplRep((void **)&implRoot);
