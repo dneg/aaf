@@ -16,7 +16,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -45,6 +45,11 @@
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "aafCvt.h"
+
+#include "ImplAAFDictionary.h"
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
+typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
 
 ImplAAFComponent::ImplAAFComponent ():
 	_dataDef(	PID_Component_DataDefinition,	"DataDefinition"),
@@ -101,31 +106,40 @@ AAFRESULT STDMETHODCALLTYPE
 
 	
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFComponent::SetDataDef (const aafUID_t & dataDef)
+    ImplAAFComponent::SetDataDef (ImplAAFDataDef * pDataDef)
 {
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
+  if (! pDataDef)
+	return AAFRESULT_NULL_PARAM;
 
-	_dataDef = dataDef;
+  aafUID_t auid;
+  AAFRESULT hr;
+  assert (pDataDef);
+  hr = pDataDef->GetAUID (&auid);
+  assert (AAFRESULT_SUCCEEDED (hr));
 
-	return aafError;
+  _dataDef = auid;
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFComponent::GetDataDef (aafUID_t*  pDataDef)
+    ImplAAFComponent::GetDataDef (ImplAAFDataDef ** ppDataDef)
 {
-    AAFRESULT aafError = AAFRESULT_SUCCESS;
+  if (! ppDataDef)
+	return AAFRESULT_NULL_PARAM;
 
-	if (pDataDef == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		*pDataDef = _dataDef;
-	}
+  ImplAAFDictionarySP pDict;
+  AAFRESULT hr;
+  hr = GetDictionary (&pDict);
+  assert (AAFRESULT_SUCCEEDED (hr));
+  ImplAAFDataDefSP pDataDef;
+  hr = pDict->LookupDataDef (_dataDef, &pDataDef);
+  assert (AAFRESULT_SUCCEEDED (hr));
 
-	return aafError;
+  *ppDataDef = pDataDef;
+  assert (*ppDataDef);
+  (*ppDataDef)->AcquireReference ();
+  return AAFRESULT_SUCCESS;
 }
 
 /*************************************************************************
@@ -147,16 +161,24 @@ AAFRESULT STDMETHODCALLTYPE
  *************************************************************************/
 AAFRESULT ImplAAFComponent::SetNewProps(
         aafLength_t length,			/* IN - Length property value */
-        const aafUID_t & dataDef)			/* IN - DataDef property value */
+        ImplAAFDataDef * pDataDef)			/* IN - DataDef property value */
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-	
-	_dataDef = dataDef;
-	if ( length < 0 )
-	  aafError = AAFRESULT_BAD_LENGTH;
-	else
-	  _length	= length;
-		
+	if (! pDataDef)
+	  return AAFRESULT_NULL_PARAM;
+
+	aafUID_t dataDef;
+	aafError = pDataDef->GetAUID (&dataDef);
+	if (AAFRESULT_SUCCEEDED (aafError))
+	  {
+		if ( length < 0 )
+		  aafError = AAFRESULT_BAD_LENGTH;
+		else
+		  {
+			_length	= length;
+			_dataDef = dataDef;
+		  }
+	  }
 	return aafError;
 }
 

@@ -14,7 +14,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -32,6 +32,7 @@
 
 
 class ImplAAFBuiltinClasses;
+class ImplAAFBuiltinDefs;
 class ImplAAFBuiltinTypes;
 class ImplAAFClassDef;
 class ImplAAFCodecDef;
@@ -97,10 +98,8 @@ public:
   // with a specified stored object id.
   virtual AAFRESULT STDMETHODCALLTYPE 
   CreateInstance (
-    // Class identifier (AUID) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    const aafUID_t & id,
+    // Class definition of the stored object to be created.
+    ImplAAFClassDef * pClassDef,
 
     // Address of output variable that receives the 
     // object pointer requested in pAUID
@@ -455,11 +454,11 @@ public:
   // Factory method for creating a Dictionary.
   static ImplAAFDictionary *CreateDictionary(void);
 
-  // internal utility factory method to create an ImplAAFObject given an auid.
+  // internal utility factory method to create an ImplAAFObject given a classdef.
   // This method was created to make it simpler to replace calls to "Deprecated"
   // call to CreateImpl which should only be used for instanciating transient
   // non-ImplAAFObject classes such as an enumerator.
-  ImplAAFObject *CreateImplObject(const aafUID_t & auid); 
+  ImplAAFObject *CreateImplObject(ImplAAFClassDef * pClassDef); 
 
   // Generates an OM PID corresponding to the given property def auid.
   AAFRESULT GenerateOmPid (const aafUID_t & rAuid,
@@ -513,6 +512,8 @@ public:
 
   bool IsAxiomaticClass (const aafUID_t & classID) const;
 
+  ImplAAFBuiltinDefs * GetBuiltinDefs ();
+
 private:
 
   bool pvtLookupAxiomaticTypeDef (const aafUID_t & typeID,
@@ -523,6 +524,7 @@ private:
 
   ImplAAFBuiltinClasses * _pBuiltinClasses;
   ImplAAFBuiltinTypes   * _pBuiltinTypes;
+  ImplAAFBuiltinDefs    * _pBuiltinDefs;
 
   OMStrongReferenceVectorProperty<ImplAAFCodecDef>         _codecDefinitions;
   OMStrongReferenceVectorProperty<ImplAAFContainerDef>     _containerDefinitions;

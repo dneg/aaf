@@ -136,7 +136,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if(! pResult) return(AAFRESULT_NULL_PARAM);
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _controlPoints.getSize();
+
+  return AAFRESULT_SUCCESS;
 }
 
 

@@ -37,6 +37,8 @@
 #include <stdio.h>
 #include <assert.h>
 
+#include "CAAFBuiltinDefs.h"
+
 
 static aafUID_t    fillerUID = DDEF_Timecode;
 static aafLength_t  fillerLength = 3200;
@@ -104,8 +106,9 @@ static HRESULT ObjectTest ()
 	  assert (pHeader);
 	  checkResult (pHeader->GetDictionary (&pDict));
 	  assert (pDict);
+	  CAAFBuiltinDefs defs (pDict);
 
-	  checkResult (pDict->CreateInstance (AUID_AAFCompositionMob,
+	  checkResult (pDict->CreateInstance (defs.cdCompositionMob(),
 										  IID_IAAFCompositionMob,
 										  (IUnknown **) &pCMob));
 	  assert (pCMob);

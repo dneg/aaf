@@ -62,6 +62,7 @@
 #endif
 
 #include "ImplAAFFile.h"
+#include "ImplAAFBuiltinDefs.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -560,7 +561,8 @@ AAFRESULT
     ImplAAFDictionary *pDictionary = GetDictionary();
     if (NULL == pDictionary)
       CHECK(AAFRESULT_NOMEMORY);
-    CHECK(pDictionary->CreateInstance(AUID_AAFIdentification, (ImplAAFObject **)&identObj));
+    CHECK(pDictionary->CreateInstance(pDictionary->GetBuiltinDefs()->cdIdentification(),
+									  (ImplAAFObject **)&identObj));
     if (NULL == identObj)
       CHECK(AAFRESULT_NOMEMORY);
     CHECK(identObj->SetCompanyName(pIdent->companyName));
@@ -696,7 +698,7 @@ ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
     ImplAAFDictionary *pDictionary = GetDictionary();
     if (NULL != pDictionary)
 	  {
-		pDictionary->CreateInstance (AUID_AAFContentStorage,
+		pDictionary->CreateInstance (pDictionary->GetBuiltinDefs()->cdContentStorage(),
 									 (ImplAAFObject **)&result);
 		_contentStorage = result;
 	  }

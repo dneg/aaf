@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -53,6 +53,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFBuiltinDefs.h"
 #include "AAFUtils.h"
 
 #include <assert.h>
@@ -121,7 +122,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::Initialize (
       const aafUID_t & classID,
       ImplAAFClassDef * pParentClass,
-      const wchar_t *  pClassName)
+      const aafCharacter * pClassName)
 {
   if (!pClassName) return AAFRESULT_NULL_PARAM;
 
@@ -146,7 +147,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::pvtInitialize (
       const aafUID_t & classID,
       const aafUID_t * pParentClassId,
-      const wchar_t *  pClassName)
+      const aafCharacter * pClassName)
 {
   if (!pClassName) return AAFRESULT_NULL_PARAM;
   if (! pParentClassId) return AAFRESULT_NULL_PARAM;
@@ -212,7 +213,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::RegisterNewPropertyDef (
       const aafUID_t &      id,
-      wchar_t *             pName,
+      const aafCharacter *  pName,
       ImplAAFTypeDef *      pTypeDef,
       aafBool               isOptional,
       ImplAAFPropertyDef ** ppPropDef)
@@ -263,7 +264,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::RegisterOptionalPropertyDef (
       const aafUID_t &      id,
-      wchar_t *             pName,
+      const aafCharacter *  pName,
       ImplAAFTypeDef *      pTypeDef,
       ImplAAFPropertyDef ** ppPropDef)
 {
@@ -433,7 +434,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::pvtRegisterPropertyDef (
       const aafUID_t &      id,
-      wchar_t *             pName,
+      const aafCharacter *  pName,
       const aafUID_t &      typeId,
       aafBool               isOptional,
       ImplAAFPropertyDef ** ppPropDef)
@@ -449,7 +450,8 @@ AAFRESULT STDMETHODCALLTYPE
   check_result (pDict->GenerateOmPid (id, omPid));
 
   ImplAAFPropertyDef * tmp =
-	(ImplAAFPropertyDef *)pDict->CreateImplObject (AUID_AAFPropertyDef);
+	(ImplAAFPropertyDef *)pDict->CreateImplObject
+	  (pDict->GetBuiltinDefs()->cdPropertyDef());
   if (!tmp) return AAFRESULT_NOMEMORY;
   pd = tmp;
   // Bobt: Hack bugfix! SmartPointer operator= will automatically

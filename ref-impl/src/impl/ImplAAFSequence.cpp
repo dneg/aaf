@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -41,6 +41,10 @@
 #include "AAFResult.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
+
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
+typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 
 
 extern "C" const aafClassID_t CLSID_EnumAAFComponents;
@@ -90,9 +94,12 @@ ImplAAFSequence::~ImplAAFSequence ()
 //   - pDatadef is null.
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSequence::Initialize (const aafUID_t & datadef)
+    ImplAAFSequence::Initialize (ImplAAFDataDef * pDataDef)
 {
-	return (SetDataDef(datadef));
+  if (! pDataDef)
+	return AAFRESULT_NULL_PARAM;
+
+  return (SetDataDef(pDataDef));
 }
 
 //***********************************************************
@@ -151,12 +158,11 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	size_t			numCpnts;
 	aafLength_t		sequLen, cpntLen, prevLen;
-	aafUID_t		sequDataDef, cpntDataDef;
+	ImplAAFDataDefSP sequDataDef, cpntDataDef;
 	aafBool			isPrevTran = AAFFalse, willConvert;
 	aafErr_t		aafError = AAFRESULT_SUCCESS;
 	implCompType_t	type;
 	ImplAAFDictionary	*pDict = NULL;
-	ImplAAFDataDef	*pDef = NULL;
 	AAFRESULT		status, sclpStatus;
 
 	if (pComponent == NULL)
@@ -170,14 +176,7 @@ AAFRESULT STDMETHODCALLTYPE
 		// Verify that component's datadef converts to sequence's datadef
 		GetDataDef(&sequDataDef);
 		pComponent->GetDataDef(&cpntDataDef);
-		
-		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDef(cpntDataDef, &pDef));
-		pDict->ReleaseReference();
-		pDict = NULL;
-		CHECK(pDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
-		pDef->ReleaseReference();
-		pDef = NULL;
+		CHECK(cpntDataDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
 		
 		if (willConvert == AAFFalse)
 			RAISE(AAFRESULT_INVALID_DATADEF);
@@ -274,12 +273,6 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
-		if(pDict != NULL)
-		  pDict->ReleaseReference();
-		pDict = 0;
-		if(pDef != NULL)
-		  pDef->ReleaseReference();
-		pDef = 0;
 	}
 	XEND;
 

@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -165,7 +165,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetName (
-      wchar_t *  pName,
+      aafCharacter *  pName,
       aafUInt32  bufSize)
 {
 	bool stat;
@@ -213,7 +213,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetDescription (
-      wchar_t * pDescription,
+      aafCharacter * pDescription,
       aafUInt32 bufSize)
 {
 	if (! pDescription)
@@ -338,8 +338,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetPluginVersionString (
-      wchar_t *pVersionString,
-      aafInt32  bufSize)
+      aafCharacter *pVersionString,
+      aafUInt32  bufSize)
 {
 	bool stat;
 
@@ -361,8 +361,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPluginDescriptor::GetProductVersionStringLen (
-      aafInt32 *pLen)
+    ImplAAFPluginDescriptor::GetPluginVersionStringBufLen (
+      aafUInt32 *pLen)
 {
 	if(pLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -390,8 +390,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetPluginManufacturerName (
-      wchar_t *  pManufacturerName,
-      aafInt32  bufSize)
+      aafCharacter *  pManufacturerName,
+      aafUInt32  bufSize)
 {
 	if(pManufacturerName == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -413,8 +413,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPluginDescriptor::GetProductManufacturerNameLen (
-      aafInt32 * pLen)
+    ImplAAFPluginDescriptor::GetPluginManufacturerNameBufLen (
+      aafUInt32 * pLen)
 {
 	if(pLen == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -538,7 +538,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetHardwarePlatform (
-      aafHardwarePlatform_t  hardwarePlatform)
+      aafHardwarePlatform_constref hardwarePlatform)
 {
 	_platform = hardwarePlatform;
 	return AAFRESULT_SUCCESS;
@@ -611,7 +611,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetEngine (
-      aafEngine_t  engine)
+      aafEngine_constref  engine)
 {
 	_engine = engine;
 	return AAFRESULT_SUCCESS;
@@ -687,7 +687,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPluginAPI (
-      aafPluginAPI_t  pluginAPI)
+      aafPluginAPI_constref  pluginAPI)
 {
 	_pluginAPI = pluginAPI;
 	return AAFRESULT_SUCCESS;

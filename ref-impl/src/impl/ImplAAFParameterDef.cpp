@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -102,8 +102,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::GetDisplayUnits (
-      wchar_t *pDisplayUnits,
-      aafInt32  bufSize)
+      aafCharacter *pDisplayUnits,
+      aafUInt32  bufSize)
 {
 	if(pDisplayUnits == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -125,7 +125,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::GetDisplayUnitsBufLen (
-      aafInt32 * pLen)
+      aafUInt32 * pLen)
 {
 	if(pLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -142,7 +142,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFParameterDef::SetDisplayUnits (
-      wchar_t *pDisplayUnits)
+      const aafCharacter *pDisplayUnits)
 {
 	if(pDisplayUnits == NULL)
 		return(AAFRESULT_NULL_PARAM);

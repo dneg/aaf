@@ -39,6 +39,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 const aafUInt32 gMaxMobCount = 5;
 
@@ -307,8 +309,10 @@ void HeaderTest::createFileMob(int itemNumber)
   wchar_t wcBuffer[128];
   formatMobName(itemNumber, wcBuffer);
 
+  CAAFBuiltinDefs defs (_pDictionary);
+
   // Create a Mob
-  check(_pDictionary->CreateInstance(AUID_AAFSourceMob,
+  check(_pDictionary->CreateInstance(defs.cdSourceMob(),
              IID_IAAFSourceMob, 
              (IUnknown **)&_pSourceMob));
 
@@ -318,7 +322,7 @@ void HeaderTest::createFileMob(int itemNumber)
 
   check(_pMob->SetName(wcBuffer));
   
-  check(_pDictionary->CreateInstance(AUID_AAFFileDescriptor,
+  check(_pDictionary->CreateInstance(defs.cdFileDescriptor(),
               IID_IAAFEssenceDescriptor, 
               (IUnknown **)&_pFileDescriptor));
 
@@ -350,9 +354,10 @@ void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
   assert(pSourceMob);
   assert(NULL == _pEssenceData);
 
+  CAAFBuiltinDefs defs (_pDictionary);
 
   // Attempt to create an AAFEssenceData.
-  check(_pDictionary->CreateInstance(AUID_AAFEssenceData,
+  check(_pDictionary->CreateInstance(defs.cdEssenceData(),
                          IID_IAAFEssenceData,
                          (IUnknown **)&_pEssenceData));
 
@@ -388,8 +393,8 @@ void HeaderTest::openMobs()
       check(AAFRESULT_TEST_FAILED);
 
 	wchar_t mobName[128], expectedMobName[128];
-    int expectedMobNameLen = (formatMobName(item, expectedMobName) + 1) * 2;
-	aafInt32 mobNameLen;
+    aafUInt32 expectedMobNameLen = (formatMobName(item, expectedMobName) + 1) * 2;
+	aafUInt32 mobNameLen;
 	check(_pMob->GetNameBufLen(&mobNameLen));
 	if (mobNameLen != expectedMobNameLen)
       check(AAFRESULT_TEST_FAILED);

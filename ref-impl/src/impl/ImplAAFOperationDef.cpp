@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -53,10 +53,16 @@
 #include "ImplAAFOperationDef.h"
 #endif
 
+#include "ImplAAFDictionary.h"
+#include "ImplAAFDataDef.h"
+
 #include <assert.h>
 #include <string.h>
 #include "AAFResult.h"
 #include "aafErr.h"
+
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 
 extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
@@ -98,24 +104,36 @@ ImplAAFOperationDef::~ImplAAFOperationDef ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationDef::GetDataDefinitionID(
-      aafUID_t *  pDataDefID)
+    ImplAAFOperationDef::GetDataDef(
+      ImplAAFDataDef ** ppDataDef)
 {
-	if(pDataDefID == NULL)
-		return(AAFRESULT_NULL_PARAM);
-	*pDataDefID = _dataDef;
-	
-	return AAFRESULT_SUCCESS;
+  if(! ppDataDef)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+  ImplAAFDictionarySP pDict;
+  hr = GetDictionary (&pDict);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  return pDict->LookupDataDef (_dataDef, ppDataDef);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationDef::SetDataDefinitionID (
-      const aafUID_t & dataDefID)
+    ImplAAFOperationDef::SetDataDef (
+      ImplAAFDataDef * pDataDef)
 {
-	_dataDef = dataDefID;
+  if (! pDataDef)
+	return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+  aafUID_t uid;
+  hr = pDataDef->GetAUID(&uid);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
+  _dataDef = uid;
 	
-	return AAFRESULT_SUCCESS;
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -271,8 +289,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::GetCategory (
-       wchar_t		*pCategory,
-		aafInt32	bufSize)
+       aafCharacter		*pCategory,
+		aafUInt32	bufSize)
 {
 	bool stat;
 
@@ -296,7 +314,7 @@ AAFRESULT STDMETHODCALLTYPE
   //
 AAFRESULT STDMETHODCALLTYPE
 	ImplAAFOperationDef::GetCategoryBufLen (
-			aafInt32 *		pLen)
+			aafUInt32 *		pLen)
 {
 	if(pLen == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -310,7 +328,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::SetCategory (
-      wchar_t *pCategory)
+      const aafCharacter *pCategory)
 {
 	if(pCategory == NULL)
 		return(AAFRESULT_NULL_PARAM);

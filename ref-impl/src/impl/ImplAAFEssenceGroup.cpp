@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -55,6 +55,9 @@
 #include "ImplAAFEssenceAccess.h"
 #include "ImplAAFSourceMob.h"
 
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
+
 extern "C" const aafClassID_t CLSID_AAFEssenceAccess;
 
 ImplAAFEssenceGroup::ImplAAFEssenceGroup ()
@@ -90,7 +93,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::SetStillFrame (
       ImplAAFSourceClip *stillFrame)
 {
-	aafUID_t	newDataDef, groupDataDef;
+	aafUID_t	newDataDef;
 	aafLength_t	oneLength, stillLength;
 	ImplAAFDictionary	*pDict = NULL;
 	ImplAAFDataDef	*pDef = NULL;
@@ -102,13 +105,18 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		/* Verify that groups's datakind converts to still's datakind */
-		CHECK(stillFrame->GetDataDef(&newDataDef));
-		CHECK(GetDataDef(&groupDataDef));
+	    ImplAAFDataDefSP pNewDataDef;
+		CHECK(stillFrame->GetDataDef(&pNewDataDef));
+		CHECK(pNewDataDef->GetAUID(&newDataDef));
+
+	    ImplAAFDataDefSP pGroupDataDef;
+		CHECK(GetDataDef(&pGroupDataDef));
+
 		CHECK(GetDictionary(&pDict));
 		CHECK(pDict->LookupDataDef(newDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
-		CHECK(pDef->DoesDataDefConvertTo(groupDataDef, &willConvert));
+		CHECK(pDef->DoesDataDefConvertTo(pGroupDataDef, &willConvert));
 		pDef->ReleaseReference();
 		pDef = NULL;
 
@@ -175,7 +183,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceGroup::AppendChoice (
       ImplAAFSourceClip *choice)
 {
-	aafUID_t	newDataDef, groupDataDef;
+    // aafUID_t	newDataDef;
 	aafLength_t	groupLength, newLength;
 	ImplAAFDictionary	*pDict = NULL;
 	ImplAAFDataDef	*pDef = NULL;
@@ -186,16 +194,21 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(choice->GetDataDef(&newDataDef));
-		CHECK(GetDataDef(&groupDataDef));
+	    ImplAAFDataDefSP pNewDataDef;
+		CHECK(choice->GetDataDef(&pNewDataDef));
+		// CHECK(pNewDataDef->GetAUID(&newDataDef));
+
+	    ImplAAFDataDefSP pGroupDataDef;
+		CHECK(GetDataDef(&pGroupDataDef));
+
 		/* Verify that groups's datakind converts to still's datakind */
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDef(newDataDef, &pDef));
+		// CHECK(pDict->LookupDataDef(newDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
-		CHECK(pDef->DoesDataDefConvertTo(groupDataDef, &willConvert));
-		pDef->ReleaseReference();
-		pDef = NULL;
+		CHECK(pNewDataDef->DoesDataDefConvertTo(pGroupDataDef, &willConvert));
+		// pDef->ReleaseReference();
+		// pDef = NULL;
 
 		if (willConvert == AAFFalse)
 			RAISE(AAFRESULT_INVALID_DATADEF);
@@ -216,9 +229,9 @@ AAFRESULT STDMETHODCALLTYPE
 		if(pDict != NULL)
 		  pDict->ReleaseReference();
 		pDict = 0;
-		if(pDef != NULL)
-		  pDef->ReleaseReference();
-		pDef = 0;
+		// if(pDef != NULL)
+		//   pDef->ReleaseReference();
+		// pDef = 0;
 	}
 	XEND;
 	

@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -73,6 +73,11 @@
 #include "ImplAAFFiller.h"
 #include "ImplAAFEdgecode.h"
 #include "ImplAAFPulldown.h"
+
+#include "ImplAAFBuiltinDefs.h"
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
+
 
 ImplAAFSourceMob::ImplAAFSourceMob ()
 : _essenceDesc(        PID_SourceMob_EssenceDescription,          "EssenceDescription")
@@ -148,7 +153,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFSourceMob::AddNilReference (aafSlotID_t slotID,
                            const aafLength_t & length,
-                           const aafUID_t & dataDef,
+                           ImplAAFDataDef * pDataDef,
                            const aafRational_t & editRate)
 {
 	ImplAAFSourceClip *		sub = NULL;
@@ -166,12 +171,13 @@ AAFRESULT STDMETHODCALLTYPE
     memset(&sourceRef, 0, sizeof(sourceRef));
 		CvtInt32toPosition(0, sourceRef.startTime);
 		CHECK(GetDictionary(&pDictionary));
-		sub = (ImplAAFSourceClip *)pDictionary->CreateImplObject(AUID_AAFSourceClip);
+		sub = (ImplAAFSourceClip *)pDictionary->CreateImplObject
+		  (pDictionary->GetBuiltinDefs()->cdSourceClip());
 		if(sub == NULL)
 			RAISE(E_FAIL);
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
-		CHECK(sub->Initialize (dataDef, length, sourceRef));
+		CHECK(sub->Initialize (pDataDef, length, sourceRef));
 		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, L"Test", zeroPos, 
 												&newSlot));
 		newSlot->ReleaseReference();
@@ -211,8 +217,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFSequence	*aSequ = NULL;
 	aafInt32         zeroL = 0L;
 	aafFrameLength_t maxLength;
-	aafUID_t		 timecodeKind = DDEF_Timecode;
-	AAFRESULT			aafError = AAFRESULT_SUCCESS;
+	AAFRESULT		 aafError = AAFRESULT_SUCCESS;
 	aafPosition_t	zeroPos;
 	aafLength_t		length, zeroLen;
 	ImplAAFTimelineMobSlot *	newSlot = NULL, *mobSlot = NULL;
@@ -235,27 +240,34 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(GetDictionary(&pDictionary));
-		tccp = (ImplAAFTimecode *)pDictionary->CreateImplObject(AUID_AAFTimecode);
+		tccp = (ImplAAFTimecode *)pDictionary->CreateImplObject
+		  (pDictionary->GetBuiltinDefs()->cdTimecode());
 		if(NULL == tccp)
 			RAISE(E_FAIL);
 
 		tccp->Initialize(length, &startTC);		 
  		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot) == AAFRESULT_SUCCESS)
 		{
-			aSequ = (ImplAAFSequence *)pDictionary->CreateImplObject(AUID_AAFSequence);
+			aSequ = (ImplAAFSequence *)pDictionary->CreateImplObject
+			  (pDictionary->GetBuiltinDefs()->cdSequence());
 			if(aSequ == NULL)
 				RAISE(E_FAIL);
-			CHECK(aSequ->Initialize(timecodeKind));
+			CHECK(aSequ->Initialize(pDictionary->
+									GetBuiltinDefs()->
+									ddTimecode()));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(mobSlot->SetSegment(aSequ));
 
 		} /* FindTimecodeSlot */
 		else
 		{
-			aSequ = (ImplAAFSequence *)pDictionary->CreateImplObject(AUID_AAFSequence);
+			aSequ = (ImplAAFSequence *)pDictionary->CreateImplObject
+			  (pDictionary->GetBuiltinDefs()->cdSequence());
 			if(aSequ == NULL)
 				RAISE(E_FAIL);
-			CHECK(aSequ->Initialize(timecodeKind));
+			CHECK(aSequ->Initialize(pDictionary->
+									GetBuiltinDefs()->
+									ddTimecode()));
 			CHECK(aSequ->AppendComponent(tccp));
 			CHECK(AppendNewTimelineSlot(editrate, aSequ, slotID,
 										L"Timecode", zeroPos, &newSlot));
@@ -335,19 +347,28 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(GetDictionary(&pDictionary));
-		filler1 = (ImplAAFFiller *)pDictionary->CreateImplObject(AUID_AAFFiller);
+		filler1 = (ImplAAFFiller *)pDictionary->CreateImplObject
+		  (pDictionary->GetBuiltinDefs()->cdFiller());
 		if(filler1 == NULL)
 			RAISE(E_FAIL);
-		CHECK(filler1->Initialize(DDEF_Edgecode, zeroLen));	
-		filler2 = (ImplAAFFiller *)pDictionary->CreateImplObject(AUID_AAFFiller);
+		CHECK(filler1->Initialize(pDictionary->
+								  GetBuiltinDefs()->
+								  ddEdgecode(), zeroLen));	
+		filler2 = (ImplAAFFiller *)pDictionary->CreateImplObject
+		  (pDictionary->GetBuiltinDefs()->cdFiller());
 		if(filler2 == NULL)
 			RAISE(E_FAIL);
-		CHECK(filler2->Initialize(DDEF_Edgecode, zeroLen));	
+		CHECK(filler2->Initialize(pDictionary->
+								  GetBuiltinDefs()->
+								  ddEdgecode(), zeroLen));	
 
-		ecSequence = (ImplAAFSequence *)pDictionary->CreateImplObject(AUID_AAFSequence);
+		ecSequence = (ImplAAFSequence *)pDictionary->CreateImplObject
+		  (pDictionary->GetBuiltinDefs()->cdSequence());
 		if(ecSequence == NULL)
 			RAISE(E_FAIL);
-		CHECK(ecSequence->Initialize(DDEF_Edgecode));	
+		CHECK(ecSequence->Initialize(pDictionary->
+									 GetBuiltinDefs()->
+									 ddEdgecode()));	
 
 		CvtInt32toLength(length32, length);
 		CvtInt32toPosition(startEC, startPos);
@@ -356,10 +377,11 @@ AAFRESULT STDMETHODCALLTYPE
 		edge.codeFormat = codeFormat;
 		strncpy((char *)&edge.header, (char *)&header, 8);
 		
-		edgecodeClip = (ImplAAFEdgecode *)pDictionary->CreateImplObject(AUID_AAFEdgecode);
+		edgecodeClip = (ImplAAFEdgecode *)pDictionary->CreateImplObject
+		  (pDictionary->GetBuiltinDefs()->cdEdgecode());
 		if(edgecodeClip == NULL)
 			RAISE(E_FAIL);
-		CHECK(edgecodeClip->Create(length, edge));	
+		CHECK(edgecodeClip->Initialize(length, edge));	
 		
 		CHECK(ecSequence->AppendComponent(filler1));
 		CHECK(ecSequence->AppendComponent(edgecodeClip));
@@ -446,17 +468,21 @@ AAFRESULT STDMETHODCALLTYPE
 		memset(&sourceRef, 0, sizeof(sourceRef));
 		CvtInt32toPosition(0, sourceRef.startTime);
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->CreateInstance(AUID_AAFSourceClip, (ImplAAFObject **)&sclp));
+		CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdSourceClip(),
+									(ImplAAFObject **)&sclp));
 
 		if(FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&slot) != AAFRESULT_SUCCESS)
 		{
-			CHECK(pDict->CreateInstance(AUID_AAFSequence, (ImplAAFObject **)&aSequ));
-			CHECK(pDict->CreateInstance(AUID_AAFFiller, (ImplAAFObject **)&filler1));
+			CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdSequence(),
+										(ImplAAFObject **)&aSequ));
+			CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdFiller(),
+										(ImplAAFObject **)&filler1));
 			if(aSequ == NULL || filler1 == NULL)
 				RAISE(E_FAIL);
 			CHECK(aSequ->AppendComponent(filler1));
 			CHECK(aSequ->AppendComponent(sclp));
-			CHECK(pDict->CreateInstance(AUID_AAFFiller, (ImplAAFObject **)&filler2));
+			CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdFiller(),
+										(ImplAAFObject **)&filler2));
 			CHECK(aSequ->AppendComponent(filler2));
 
 			/* (SPR#343) Change to validate multiple ranges */
@@ -500,7 +526,8 @@ AAFRESULT STDMETHODCALLTYPE
 						AddInt64toInt64(firstFillLen, &sequLen);
 						CHECK(segSequ->SetLength(sequLen));
 
-						CHECK(pDict->CreateInstance(AUID_AAFFiller, (ImplAAFObject **)&filler2));
+						CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdFiller(),
+													(ImplAAFObject **)&filler2));
 //!!!						filler2 = CreateImpl(CLSID_AAFFiller(_file, mediaKind, endFillLen);	
 						CHECK(segSequ->AppendComponent(sclp));
 						CHECK(segSequ->AppendComponent(filler2));
@@ -609,10 +636,16 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::NewPhysSourceRef (const aafRational_t & editrate,
 										aafSlotID_t  aMobSlot,
-										const aafUID_t & essenceKind,
+										ImplAAFDataDef * pEssenceKind,
 										aafSourceRef_t  ref,
 										aafLength_t  srcRefLength)
 {
+	if (! pEssenceKind)
+	  return AAFRESULT_NULL_PARAM;
+	aafUID_t essenceKind;
+	AAFRESULT hr = pEssenceKind->GetAUID(&essenceKind);
+	if (AAFRESULT_FAILED (hr))return hr;
+
 	return(ImplAAFMob::AddPhysSourceRef(kAAFForceOverwrite,
 										editrate,
 										aMobSlot,
@@ -627,10 +660,16 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::AppendPhysSourceRef (const aafRational_t & editrate,
 										   aafSlotID_t  aMobSlot,
-										   const aafUID_t & essenceKind,
+										   ImplAAFDataDef * pEssenceKind,
 										   aafSourceRef_t  ref,
 										   aafLength_t  srcRefLength)
 {
+	if (! pEssenceKind)
+	  return AAFRESULT_NULL_PARAM;
+	aafUID_t essenceKind;
+	AAFRESULT hr = pEssenceKind->GetAUID(&essenceKind);
+	if (AAFRESULT_FAILED (hr))return hr;
+
 	return(ImplAAFMob::AddPhysSourceRef(kAAFAppend,
 										editrate,
 										aMobSlot,
@@ -648,7 +687,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceMob::AddPulldownRef (aafAppendOption_t  addType,
 									  const aafRational_t & editrate,
 									  aafSlotID_t  aMobSlot,
-									  const aafUID_t & essenceKind,
+									  ImplAAFDataDef * pEssenceKind,
 									  aafSourceRef_t  ref,
 									  aafLength_t  srcRefLength,
 									  aafPulldownKind_t  pulldownKind,
@@ -670,6 +709,9 @@ AAFRESULT STDMETHODCALLTYPE
 	AAFRESULT			status = AAFRESULT_SUCCESS;
 	aafUInt32 			mask;
 		
+	if (! pEssenceKind)
+	  return AAFRESULT_NULL_PARAM;
+
 	XPROTECT()
 	{
 		GetDictionary(&dict);
@@ -679,8 +721,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 		CvtInt32toPosition(0, zeroPos);
 		{
-			CHECK(dict->CreateInstance(AUID_AAFPulldown, (ImplAAFObject **)&pdwn));
-			CHECK(pdwn->SetDataDef(essenceKind));
+			CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdPulldown(),
+									   (ImplAAFObject **)&pdwn));
+			CHECK(pdwn->SetDataDef(pEssenceKind));
 			CHECK(pdwn->SetPulldownKind(pulldownKind));
 			CHECK(pdwn->SetPhaseFrame(phaseFrame));
 			CHECK(pdwn->SetPulldownDirection(direction));
@@ -723,8 +766,9 @@ AAFRESULT STDMETHODCALLTYPE
 				if(numSegments == 0)
 				{
 					CHECK(sequence->AppendComponent(pdwn));
-					CHECK(dict->CreateInstance(AUID_AAFSourceClip, (ImplAAFObject **)&sclp));
-					CHECK(sclp->Initialize(essenceKind, srcRefLength, ref));
+					CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdSourceClip(),
+											   (ImplAAFObject **)&sclp));
+					CHECK(sclp->Initialize(pEssenceKind, srcRefLength, ref));
 				}
 				for(n = 0; n < numSegments; n++)
 				{
@@ -748,12 +792,13 @@ AAFRESULT STDMETHODCALLTYPE
 			}
 			
 			XASSERT(sclp != NULL, AAFRESULT_NOT_SOURCE_CLIP);
-			CHECK(sclp->Initialize(essenceKind, srcRefLength, ref));
+			CHECK(sclp->Initialize(pEssenceKind, srcRefLength, ref));
 		}
 		else
 		{
-			CHECK(dict->CreateInstance(AUID_AAFSourceClip, (ImplAAFObject **)&sclp));
-			CHECK(sclp->Initialize(essenceKind, srcRefLength, ref));
+			CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdSourceClip(),
+									   (ImplAAFObject **)&sclp));
+			CHECK(sclp->Initialize(pEssenceKind, srcRefLength, ref));
 			CHECK(AppendNewTimelineSlot(editrate, pdwn,
 								aMobSlot, NULL, zeroPos, &trkd) );
 		}
@@ -855,7 +900,6 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
  	ImplEnumAAFMobSlots		*slotIter = NULL;
   	aafBool					found = AAFFalse;
 	aafUInt32				phys;
-	aafUID_t				dataDef;
 
 	XPROTECT()
 	{
@@ -866,12 +910,15 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 		CHECK(GetSlots (&slotIter));
 		while((found != AAFTrue) && slotIter->NextOne(&slot) == AAFRESULT_SUCCESS)
 		{
-			CHECK(slot->GetDataDef (&dataDef));
-			if(EqualAUID(&dataDef, &DDEF_Timecode))
+		  ImplAAFDataDefSP pDataDef;
+		  CHECK(slot->GetDataDef (&pDataDef));
+		  aafUID_t dataDef;
+		  CHECK(pDataDef->GetAUID (&dataDef));
+		  if(EqualAUID(&dataDef, &DDEF_Timecode))
 			{
-				CHECK(slot->GetPhysicalNum (&phys));
-				if((phys == 0) || (phys == 1))
-					found = AAFTrue;
+			  CHECK(slot->GetPhysicalNum (&phys));
+			  if((phys == 0) || (phys == 1))
+				found = AAFTrue;
 			}
 		}
 		if(found != AAFTrue)

@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -42,6 +42,8 @@
 #ifndef __ImplAAFSourceReference_h__
 #include "ImplAAFSourceReference.h"
 #endif
+
+#include "ImplAAFDictionary.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -86,7 +88,7 @@ ImplAAFTransition::~ImplAAFTransition ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-	ImplAAFTransition::Create (const aafUID_t &			datadef,
+	ImplAAFTransition::Initialize (ImplAAFDataDef * pDataDef,
 							   aafLength_t				length,
 							   aafPosition_t			cutPoint,
 							   ImplAAFOperationGroup*	pOperationGroup)
@@ -96,9 +98,12 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pOperationGroup == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	if (pDataDef == NULL)
+		return AAFRESULT_NULL_PARAM;
+
 	XPROTECT()
 	{
-		CHECK(SetNewProps(length, datadef));
+		CHECK(SetNewProps(length, pDataDef));
 		_cutPoint = cutPoint;
 		if (_operationGroup)
 		  _operationGroup->ReleaseReference();

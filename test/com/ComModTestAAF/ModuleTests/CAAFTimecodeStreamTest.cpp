@@ -40,6 +40,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 
 
 // Cross-platform utility to delete a file.
@@ -114,9 +116,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
 		
 		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 			IID_IAAFCompositionMob, 
 			(IUnknown **)&pCompMob));
 		
@@ -127,7 +130,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pCompMob->Initialize(L"COMPMOB01"));
 		
-		checkResult(pDictionary->CreateInstance(AUID_AAFTimecodeStream,
+		checkResult(pDictionary->CreateInstance(defs.cdTimecodeStream(),
 			IID_IAAFTimecodeStream, 
 			(IUnknown **)&pTimecodeStream));		
 				

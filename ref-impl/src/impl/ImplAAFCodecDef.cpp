@@ -52,6 +52,9 @@
 #include "AafUtils.h"
 #include "ImplAAFDictionary.h"
 
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFDataDef> ImplAAFDataDefSP;
+
 extern "C" const aafClassID_t CLSID_EnumAAFDataDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFCodecFlavours;
 
@@ -72,12 +75,18 @@ ImplAAFCodecDef::~ImplAAFCodecDef ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::IsEssenceKindSupported (
-      const aafUID_t & essenceKind,
+      ImplAAFDataDef * pEssenceKind,
       aafBool* pIsSupported)
 {
 	ImplEnumAAFDataDefs	*dataEnum = NULL;
 	ImplAAFDataDef		*aVal = NULL;
 	aafBool				result = AAFFalse;
+
+	if (! pEssenceKind)
+	  return AAFRESULT_NULL_PARAM;
+
+	if (! pIsSupported)
+	  return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
@@ -85,7 +94,7 @@ AAFRESULT STDMETHODCALLTYPE
 		while((dataEnum->NextOne(&aVal) == AAFRESULT_SUCCESS)
 		   && (result == AAFFalse))
 		{
-			CHECK(aVal->IsDataDefOf(essenceKind, &result));
+			CHECK(aVal->IsDataDefOf(pEssenceKind, &result));
 			aVal->ReleaseReference();
 			aVal = NULL;
 		}
@@ -115,18 +124,21 @@ AAFRESULT STDMETHODCALLTYPE
  
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::AddEssenceKind (
-      const aafUID_t & essenceKind)
+      ImplAAFDataDef * pEssenceKind)
 {
 	aafUID_t	*tmp, newUID;
 	aafInt32	oldBufSize;
 	aafInt32	newBufSize;
+
+	if (! pEssenceKind)
+	  return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
 		oldBufSize = _dataDefs.size();
 		newBufSize = oldBufSize + sizeof(aafUID_t);
 		tmp = new aafUID_t[newBufSize];
-		newUID = essenceKind;
+		CHECK(pEssenceKind->GetAUID(&newUID));
 		if(tmp == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
 		if(oldBufSize != 0)
@@ -149,8 +161,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::RemoveEssenceKind (
-      const aafUID_t & essenceKind)
+      ImplAAFDataDef * pEssenceKind)
 {
+  if (! pEssenceKind)
+	return AAFRESULT_NULL_PARAM;
+
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 

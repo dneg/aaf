@@ -37,6 +37,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -97,53 +99,54 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   try
   {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+      // Remove the previous test file if any.
+      RemoveTestFile(pFileName);
 
 
-    // Create the file
+	  // Create the file
 	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
-		bFileOpen = true;
+	  bFileOpen = true;
  
-    // We can't really do anthing in AAF without the header.
-		checkResult(pFile->GetHeader(&pHeader));
+	  // We can't really do anthing in AAF without the header.
+	  checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
- 		
-		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+	  // Get the AAF Dictionary so that we can create valid AAF objects.
+	  checkResult(pHeader->GetDictionary(&pDictionary));
+	  CAAFBuiltinDefs defs (pDictionary);
+
+	  // Create a CompositionMob
+	  checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 							IID_IAAFCompositionMob, 
 							(IUnknown **)&pCompMob));
 
-    // Get a MOB interface
-		checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-		checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(newMobID));
+	  // Get a MOB interface
+	  checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	  checkResult(CoCreateGuid((GUID *)&newMobID));
+	  checkResult(pMob->SetMobID(newMobID));
 
-		checkResult(pCompMob->Initialize(L"COMPMOB01"));
+	  checkResult(pCompMob->Initialize(L"COMPMOB01"));
 		
-	    checkResult(pDictionary->CreateInstance(AUID_AAFEdgecode,
+	  checkResult(pDictionary->CreateInstance(defs.cdEdgecode(),
 								IID_IAAFEdgecode, 
 								(IUnknown **)&pEdgecode));		
 
-		startEC.startFrame = 108000;	// One hour
-		startEC.filmKind = kFt35MM;
-		startEC.codeFormat = kEtKeycode;
-		memcpy(&startEC.header,"DevDesk",7);
-		startEC.header[7] = '\0';
-		checkResult(pEdgecode->Create (zero, startEC));
-		checkResult(pEdgecode->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
+	  startEC.startFrame = 108000;	// One hour
+	  startEC.filmKind = kFt35MM;
+	  startEC.codeFormat = kEtKeycode;
+	  memcpy(&startEC.header,"DevDesk",7);
+	  startEC.header[7] = '\0';
+	  checkResult(pEdgecode->Initialize (zero, startEC));
+	  checkResult(pEdgecode->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
 
-		aafRational_t editRate = { 0, 1};
-		checkResult(pMob->AppendNewTimelineSlot (editRate,
-												 pSeg,
-												 0,
-												 L"edgecode",
-												 0,
-												 &pNewSlot));
+	  aafRational_t editRate = { 0, 1};
+	  checkResult(pMob->AppendNewTimelineSlot (editRate,
+											   pSeg,
+											   0,
+											   L"edgecode",
+											   0,
+											   &pNewSlot));
 		
-		checkResult(pHeader->AddMob(pMob));
+	  checkResult(pHeader->AddMob(pMob));
 	}
   catch (HRESULT& rResult)
   {

@@ -38,6 +38,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+#include "CAAFBuiltinDefs.h"
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -98,51 +100,52 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   try
   {
-    // Remove the previous test file if any.
-    RemoveTestFile(pFileName);
+      // Remove the previous test file if any.
+      RemoveTestFile(pFileName);
 
 
-    // Create the file
-		checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
-		bFileOpen = true;
+	  // Create the file
+	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+	  bFileOpen = true;
  
-    // We can't really do anthing in AAF without the header.
-		checkResult(pFile->GetHeader(&pHeader));
+	  // We can't really do anthing in AAF without the header.
+	  checkResult(pFile->GetHeader(&pHeader));
 
-    // Get the AAF Dictionary so that we can create valid AAF objects.
-    checkResult(pHeader->GetDictionary(&pDictionary));
+	  // Get the AAF Dictionary so that we can create valid AAF objects.
+	  checkResult(pHeader->GetDictionary(&pDictionary));
+	  CAAFBuiltinDefs defs (pDictionary);
  		
-		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
+	  // Create a CompositionMob
+	  checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
 							IID_IAAFCompositionMob, 
 							(IUnknown **)&pCompMob));
 
-    // Get a MOB interface
-		checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-		checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(newMobID));
+	  // Get a MOB interface
+	  checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+	  checkResult(CoCreateGuid((GUID *)&newMobID));
+	  checkResult(pMob->SetMobID(newMobID));
 
-		checkResult(pCompMob->Initialize(L"COMPMOB01"));
+	  checkResult(pCompMob->Initialize(L"COMPMOB01"));
 		
-    checkResult(pDictionary->CreateInstance(AUID_AAFTimecode,
+	  checkResult(pDictionary->CreateInstance(defs.cdTimecode(),
 								IID_IAAFTimecode, 
 								(IUnknown **)&pTimecode));		
 
-		startTC.startFrame = 108000;	// One hour
-		startTC.drop = kTcNonDrop;
-		startTC.fps = 30;
+	  startTC.startFrame = 108000;	// One hour
+	  startTC.drop = kTcNonDrop;
+	  startTC.fps = 30;
 	  checkResult(pTimecode->Initialize (zero, &startTC));
-		checkResult(pTimecode->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
+	  checkResult(pTimecode->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
 
-		aafRational_t editRate = { 0, 1};
-		checkResult(pMob->AppendNewTimelineSlot (editRate,
-												 pSeg,
-												 0,
-												 L"timecode",
-												 0,
-												 &pNewSlot));
+	  aafRational_t editRate = { 0, 1};
+	  checkResult(pMob->AppendNewTimelineSlot (editRate,
+											   pSeg,
+											   0,
+											   L"timecode",
+											   0,
+											   &pNewSlot));
 		
-		checkResult(pHeader->AddMob(pMob));
+	  checkResult(pHeader->AddMob(pMob));
 	}
   catch (HRESULT& rResult)
   {
