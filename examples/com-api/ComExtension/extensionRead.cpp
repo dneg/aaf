@@ -37,8 +37,8 @@
 // store personnel information relating to the staff which worked on a
 // project.
 //
-// See comments in extension.cpp for a discussion of what we're trying
-// to do and how we're doing it.
+// See comments in extensionWrite.cpp for a discussion of what we're
+// trying to do and how we're doing it.
 //
 
 bool extensionRead (const aafCharacter * filename)
@@ -80,8 +80,8 @@ bool extensionRead (const aafCharacter * filename)
   check (pDict->LookupType ((aafUID_t*) &kTypeID_PersonnelResourceStrongReferenceVector,
 							&ptd));
 
-  cout << "Verifying PersonnelMob has been created and added to"
-	   << " header." << endl;
+  cout << "Verifying PersonnelMob instance has been created and added" 
+	   << " to header." << endl;
   IAAFMobSP pMob;
   check (pHead->LookupMob ((aafUID_t*) &kMobID_Personnel,
 						   &pMob));
