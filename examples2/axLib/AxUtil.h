@@ -91,9 +91,11 @@ public:
 	// the usual notations.  Throws an exception if conversion
 	// failed.
 	static long strtol( const char* s );
+	static unsigned long strtoul( const char* s );
 
 	// This will convert to 8 bit chars, then convert.
 	static long strtol( const AxString& s );
+	static unsigned long strtoul( const AxString& s );
 };
 
 // Function template that will return a type name given a smart

@@ -212,9 +212,30 @@ long AxStringUtil::strtol( const char* s )
 		throw AxEx( L"strtol() failed, unable to convert: " + mbtowc( s ) );
 	}
 
-	if ( LONG_MAX == val ||
-		 LONG_MIN == val &&
+	if ( (LONG_MAX == val || LONG_MIN == val) &&
 		 errno == ERANGE ) {
+		throw AxEx( L"strtol() failed, value out of range: " + mbtowc( s ) );
+	}
+
+
+	return val;
+}
+
+//=---------------------------------------------------------------------=
+
+unsigned long AxStringUtil::strtoul( const char* s )
+{
+	unsigned long val;
+	char *addr_of_last_processed_char;
+
+	val = ::strtoul( s, &addr_of_last_processed_char, 0 );
+
+	// if no characters were converted
+	if ( s == addr_of_last_processed_char ) {
+		throw AxEx( L"strtoul() failed, unable to convert: " + mbtowc( s ) );
+	}
+
+	if ( ULONG_MAX == val && errno == ERANGE ) {
 		throw AxEx( L"strtol() failed, value out of range: " + mbtowc( s ) );
 	}
 
@@ -228,6 +249,14 @@ long AxStringUtil::strtol( const AxString& s )
 {
 	std::string s8 = wctomb( s );
 	return strtol( s8.c_str() );
+}
+
+//=---------------------------------------------------------------------=
+
+unsigned long AxStringUtil::strtoul( const AxString& s )
+{
+	std::string s8 = wctomb( s );
+	return strtoul( s8.c_str() );
 }
 
 //=---------------------------------------------------------------------=
