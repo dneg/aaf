@@ -147,14 +147,12 @@ OMXMLStoredObjectFactory::openModify(const wchar_t* /* fileName */)
   //   @rdesc An <c OMXMLStoredObject> representing the root object in
   //          the disk file.
 OMStoredObject*
-OMXMLStoredObjectFactory::createModify(const wchar_t* fileName,
-                                       const OMByteOrder byteOrder)
+OMXMLStoredObjectFactory::createModify(const wchar_t* NNAME(fileName),
+                                       const OMByteOrder NNAME(byteOrder))
 {
   TRACE("OMXMLStoredObjectFactory::createModify");
-  OMRawStorage* rawStorage = OMDiskRawStorage::openNewModify(fileName);
-  OMStoredObject* result = OMXMLStoredObject::createModify(rawStorage,
-                                                           byteOrder);
-  return result;
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
 }
 
   // @mfunc Create a new root <c OMXMLStoredObject> in the disk file
@@ -241,8 +239,10 @@ bool OMXMLStoredObjectFactory::compatibleNamedFile(
 {
   TRACE("OMXMLStoredObjectFactory::compatibleNamedFile");
 
-  // tjb -- missing checks ?
-  bool result = true;
+  // Directly accessed named files are not supported regardless of the
+  // access mode. Named files are supported via a disk file based
+  // implementation of OMRawStorage.
+  bool result = false;
   return result;
 }
 
