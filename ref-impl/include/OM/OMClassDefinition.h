@@ -28,5 +28,9 @@
 // @doc OMEXTERNAL
 #ifndef OMCLASSDEFINITION_H
 #define OMCLASSDEFINITION_H
-// Nothing yet
+
+class OMClassDefinition {
+  // Nothing yet
+};
+
 #endif
