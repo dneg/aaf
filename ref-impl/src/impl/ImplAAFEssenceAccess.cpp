@@ -7,19 +7,6 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-#ifndef __ImplAAFDataDef_h__
-#include "ImplAAFDataDef.h"
-#endif
-
 #ifndef __ImplAAFMasterMob_h__
 #include "ImplAAFMasterMob.h"
 #endif
@@ -153,24 +140,6 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		_channels[0].mediaKind = mediaKind;
 		_channels[0].trackID = masterSlotID;
 		_channels[0].physicalOutChan = 1;
-		
-		//!!! Handle tje other cases of destination and format (raw, no locator not allowed)
-		//	_destination = NULL;
-		//	_fileFormat = kAAFiMedia;
-		
-		/* Initialize the fields which are derived from information in
-		* the file mob or media descriptor.
-		*/
-///!!!		CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&_mdes));
-//!!!		CHECK(_mdes->SetSampleRate(&sampleRate));
-		
-		/* RPS-- don't use the 'best codec' method on WRITE. Instead,  */
-		/*   the toolkit now stores the codec ID in omfmFileMobNew()   */
-		/*   The string must be in the descriptor, assert as such.     */
-		/* JeffB -- This doesn't work when adding media to a cloned File Mob */
-		/* made by someone other than the toolkit.  So if the special string */
-		/* isn't there, find the best codec to handle the media descriptor */
-		/* */
 		
 		_codecID = codecID;
 		if(!EqualAUID(&codecID, &NoCodec))
@@ -466,11 +435,7 @@ AAFRESULT STDMETHODCALLTYPE
                            aafCompressEnable_t  compEnable)
 {
 	aafPosition_t	zeroPos;
-//	aafSlotID_t		tmpSlotID;
-//!!!	AAFIterate		*mobIter = NULL;
-//!!!	aafInt32 		numSlots, loop;
 	aafInt32		n;
-//!!!	aafBool			foundTrack;
 	ImplAAFMobSlot		*slot = NULL;
 	ImplAAFSegment		*seg = NULL;
 	aafUID_t		 mediaKind, fileMobID;
@@ -480,7 +445,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFHeader			*dataHead;
 	aafSourceRef_t	fileRef;
 	aafInt16		numCh;
-//	AAFRESULT		aafError;
+	AAFRESULT		aafError;
 	ImplAAFEssenceData		*essenceData = NULL;
 	AAFPluginManager	*plugins;
 	wchar_t				*nameBuf = NULL;
@@ -500,9 +465,6 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(slot->GetSegment(&seg));
 		CHECK(seg->GetDataDef(&mediaKind));
 		CHECK(seg->GetLength(&masterMobLength));
-		/* !!! NOTE: Assumes that file trackID's are 1-N */
-//!!!		CHECK(OpenFromFileMob((ImplAAFSourceMob *)sourceInfo.mob, sourceInfo.mobTrackID, openMode, mediaKind, 
-//												  (aafInt16)sourceInfo.mobTrackID, compEnable));
 
 		
 		CHECK(sourceInfo->GetMob((ImplAAFMob **)&fileMob));
@@ -528,13 +490,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 //!!!		_physicalOutChanOpen = physicalOutChan;
 		
-//!!!		CHECK(fileMob->LocateMediaFile(&_dataFile, &isAAF));
-//!!!		if(_dataFile == NULL)
-//			RAISE(AAFRESULT_MEDIA_NOT_FOUND);
-		
-//!!!		_rawFile = _dataFile->_rawFile;			/* If non-omfi file */
-//!!!		CHECK(_mdes->FindCodecForMedia(&_pvt->codecInfo));
-
 		ImplEnumAAFEssenceData	*myEnum;
 		ImplAAFEssenceData		*testData;
 		aafBool					found = AAFFalse;
@@ -554,7 +509,6 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 		if(found)
 		{
-//			CHECK(dataHead->LookupDataObject(fileMobID, &_dataObj));
 			IAAFEssenceDataStream	*edStream;
 			IUnknown				*edUnknown;
 
@@ -565,9 +519,8 @@ AAFRESULT STDMETHODCALLTYPE
 				(void **)&_stream));
 		
 			CHECK(_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
-//!!! This only works with a COM API
+			// This only works with a COM API
 			edUnknown = static_cast<IUnknown *> (essenceData->GetContainer());
-//	aafError = (essenceData->QueryInterface(IID_IUnknown, (void **)&edUnknown));
 			edStream->Init(edUnknown);
 		}
 		else
@@ -595,7 +548,8 @@ AAFRESULT STDMETHODCALLTYPE
 				{
 					status = container->OpenEssenceStreamAppend (nameBuf, &fileMobID, &_stream);
 				}
-				//!!!else error! RAISE, NOT set status
+				else
+					RAISE(AAFRESULT_MEDIA_OPENMODE);
 
 				if(status == AAFRESULT_SUCCESS)
 					found = AAFTrue;
@@ -625,16 +579,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
 		CHECK(_codec->Open(iFileMob, slotID, openMode, _stream));
-
-
-//!!!		if(openMode == kMediaOpenAppend)
-//		{
-//			CHECK(GetSampleCount(&numSamples));										  
-//			CHECK(AddInt32toInt64(1, &numSamples));
-//			CHECK(GotoFrameNumber(numSamples));
-//		}
-//!!!		if (mobIter)
-//		  delete mobIter;
 		
 		_masterMob = masterMob;
 	}
@@ -1125,34 +1069,27 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetNumChannels (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafMediaCriteria_t*  /*mediaCrit*/,
-                           ImplAAFDataDef * /*mediaKind*/,
-                           aafInt16*  /*numCh*/)
+    ImplAAFEssenceAccess::GetNumChannels (ImplAAFMasterMob *masterMob,
+                           aafSlotID_t  slotID,
+                           aafMediaCriteria_t*  mediaCrit,
+                           aafUID_t mediaKind,
+                           aafInt16* numCh)
 {
 #if FULL_TOOLKIT
 	aafPosition_t		zeroPos;
-	aafFindSourceInfo_t	sourceInfo;
-	AAFFileMob *			fileMob;
+	ImplAAFFindSourceInfo	*sourceInfo;
+	ImplAAFSourceMob *	fileMob;
 	
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
-
 	aafAssert(numCh != NULL, _mainFile, AAFRESULT_NULL_PARAM);
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
 		CvtInt32toPosition(0, zeroPos);	
-//!!!		if(IsMobKind(kFileMob))
-//!!!			fileMob = (AAFFileMob *)masterMob;	//!!CASTING
-//!!!		else
-		{
-			CHECK(masterMob->SearchSource(trackID, zeroPos,kFileMob,
-									mediaCrit, NULL, NULL, &sourceInfo));
-			fileMob = (AAFFileMob *)sourceInfo.mob;
-		}
-
-		CHECK(_codec->codecGetNumChannels(_mainFile, fileMob, mediaKind, numCh));
+		CHECK(masterMob->SearchSource(slotID, zeroPos,kFileMob,
+									   mediaCrit,
+									   NULL,
+									   &sourceInfo));
+		CHECK(sourceInfo->GetMob((ImplAAFMob **)&fileMob));
+		CHECK(_codec->GetNumChannels(fileMob, mediaKind, numCh));
 	}
 	XEXCEPT
 	XEND
@@ -1163,6 +1100,7 @@ AAFRESULT STDMETHODCALLTYPE
 #endif
 }
 
+
 	//@comm Returns the number of interleaved essence channels of a given type in the essence stream referenced by the given file mob
 	//@comm If the data format is not interleaved, then the answer will
 	// always be zero or one.  This function correctly returns zero
@@ -1172,8 +1110,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetLargestSampleSize (ImplAAFDataDef * /*mediaKind*/,
-                           aafUInt32*  /*maxSize*/)
+    ImplAAFEssenceAccess::GetLargestSampleSize (aafUID_t mediaKind,
+                           aafUInt32*  maxSize)
 {
 #if FULL_TOOLKIT
 	aafMaxSampleSize_t	parms;
@@ -1210,7 +1148,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetSampleFrameSize (ImplAAFDataDef *mediaKind,
+    ImplAAFEssenceAccess::GetSampleFrameSize (aafUID_t mediaKind,
                            aafPosition_t frameNum,
                            aafLength_t* frameSize)
 {
@@ -1275,7 +1213,7 @@ AAFRESULT STDMETHODCALLTYPE
 /****/
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::GetSampleCount (
-         ImplAAFDataDef * mediaKind,
+         aafUID_t mediaKind,
         aafLength_t *result)
 {
 //!!!	aafInt64		one;
@@ -1290,7 +1228,7 @@ AAFRESULT STDMETHODCALLTYPE
 //	  return(AAFRESULT_SUCCESS);
 //	}
 
-	return(_codec->GetNumSamples(DDEF_Audio/*!!!*/, result));
+	return(_codec->GetNumSamples(mediaKind, result));
 }
 
 	//@comm A video sample is one frame.
