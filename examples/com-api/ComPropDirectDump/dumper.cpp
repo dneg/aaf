@@ -137,7 +137,7 @@ static void convert(aafCharacter* wName, size_t length, const aafCharacter* name
     ++sourceLength;
   if (sourceLength < length - 1) {
     // Copy the string if there is enough room in the destinition buffer.
-    while (*wName++ = *name++)
+    while (0 != (*wName++ = *name++))
       ;
   } else {
 	cerr << "Error : Failed to copy '" << name << "'.\n\n";
@@ -962,13 +962,6 @@ int main(int argc, char* argv[])
   ofstream filestream;
   bool file_opened = false;
 
-  /* console window for mac */
-
-#if defined(macintosh) || defined(_MAC)
-	char dataFile[] = "COMPROPDIRECTDUMP.inp";
-	getInputData(&argc, argv, dataFile);
-#endif
-
   CComInitialize comInit;
   CAAFInitialize aafInit;
 
@@ -1042,10 +1035,6 @@ int main(int argc, char* argv[])
 		filestream.close ();
 	  exit (1);
 	}
-
-  #ifdef _MAC
-	cleanUpInputData(argc, argv);
-  #endif
 
   // Should have exited before now...
   assert (0); // not reached
