@@ -188,11 +188,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pInterpolationDef)
 		pInterpolationDef->Release();
 
-//!!!	if (pPlugDef)
-//		pPlugDef->Release();
+	if (pPlugDef)
+		pPlugDef->Release();
 
-//!!!	if (pPlug)
-//		pPlug->Release();
+	if (pPlug)
+		pPlug->Release();
 
   if (pDictionary)
 		pDictionary->Release();

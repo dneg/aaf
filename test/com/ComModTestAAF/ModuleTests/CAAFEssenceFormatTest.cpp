@@ -277,6 +277,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pHeader)
 		pHeader->Release();
 	
+	if (pFormat)
+		pFormat->Release();
+	
 	if (pFile)
 	{  // Close file
 		if (bFileOpen)
