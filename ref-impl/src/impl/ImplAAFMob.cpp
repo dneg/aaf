@@ -492,13 +492,11 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFTaggedValue*			pTaggedValue = NULL;
 	ImplEnumAAFTaggedValues*	pEnum = NULL;
-	ImplAAFTypeDef*				pTypeDef = NULL;
-	ImplAAFHeader*				pHeader = NULL;
-	ImplAAFDictionary*			pDictionary = NULL;
 	
 	aafWChar					oldTagName[64];
     aafBool						commentFound = AAFFalse;
-	aafUID_t					typeDefUID = CLSID_AAFTypeDefString;
+	aafUID_t					stringTypeUID = CLSID_AAFTypeDefString;
+	aafUInt32					numComments = 0;
 	
 	if (pTagName == NULL || pComment == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -506,39 +504,38 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(EnumAAFAllMobComments(&pEnum));
-		CHECK(pEnum->NextOne(&pTaggedValue));
-		while(pTaggedValue)
+		CHECK(GetNumComments(&numComments));
+		if (numComments > 0)
 		{
-			CHECK(pTaggedValue->GetName(oldTagName, sizeof(oldTagName)));
-			if (wcscmp(oldTagName, pTagName) == 0)
+			CHECK(EnumAAFAllMobComments(&pEnum));
+			CHECK(pEnum->NextOne(&pTaggedValue));
+			while(pTaggedValue)
 			{
-				commentFound = AAFTrue;
-				break;
+				CHECK(pTaggedValue->GetName(oldTagName, sizeof(oldTagName)));
+				if (wcscmp(oldTagName, pTagName) == 0)
+				{
+					commentFound = AAFTrue;
+					break;
+				}
+				pTaggedValue->ReleaseReference();
+				pTaggedValue = NULL;
+				pEnum->NextOne(&pTaggedValue);
 			}
-			pTaggedValue->ReleaseReference();
-			pTaggedValue = NULL;
-			pEnum->NextOne(&pTaggedValue);
+			pEnum->ReleaseReference();
 		}
 		if (commentFound)
 		{
 			// Update existing comment
-			CHECK(pTaggedValue->SetValue(wcslen(pComment), (unsigned char *)pComment));
-			pTaggedValue->ReleaseReference();
-			pTaggedValue = NULL;
+			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
 		}
 		else
 		{
 			// Create a new comment and add it to the list!
-			CHECK(this->MyHeadObject(&pHeader));
-			CHECK(pHeader->GetDictionary(&pDictionary));
-			CHECK(pDictionary->LookupType(&typeDefUID, &pTypeDef));
 			pTaggedValue = (ImplAAFTaggedValue *)CreateImpl(CLSID_AAFTaggedValue);
-			CHECK(pTaggedValue->Initialize(pTagName, pTypeDef));
-			CHECK(pTaggedValue->SetValue(wcslen(pComment), (unsigned char *)pComment));
-			pTaggedValue->ReleaseReference();
-			pTaggedValue = NULL;
-
+			CHECK(pTaggedValue->Initialize(pTagName, &stringTypeUID));
+			CHECK(pTaggedValue->SetValue((wcslen(pComment)*sizeof(aafWChar)+2), (aafDataValue_t)pComment));
+			_userComments.appendValue(pTaggedValue);
+			pTaggedValue->AcquireReference();
 		}
 	}
 	XEXCEPT
