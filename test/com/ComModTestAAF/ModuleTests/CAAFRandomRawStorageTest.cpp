@@ -280,6 +280,75 @@ static HRESULT localOpenFileDiskStgRead
   return (*ppFile)->Open();
 }
 
+//
+// Functions to open files using RawStorage API, using cached raw storages on
+// disk
+//
+const aafUInt32 CDRS_PAGE_COUNT =   64;
+const aafUInt32	CDRS_PAGE_SIZE  = 4096;
+
+static HRESULT localOpenFileCachedDiskStgWrite
+  (const aafWChar * pFileName,
+   IAAFFile ** ppFile)
+{
+  assert (pFileName);
+  assert (ppFile);
+
+  // Create a cached disk raw storage.
+  IAAFRawStorageSP pStg;
+  checkResult
+	(AAFCreateRawStorageCachedDisk (pFileName,
+							        kAAFFileExistence_new,
+							        kAAFFileAccess_modify,
+									CDRS_PAGE_COUNT,
+									CDRS_PAGE_SIZE,
+							        &pStg));
+
+  // create the file and open it.
+  checkResult
+	(AAFCreateAAFFileOnRawStorage (pStg,
+								   kAAFFileExistence_new,
+								   kAAFFileAccess_write,
+								   &aafFileKindAafSSBinary,
+								   0,
+								   &sIdent,
+								   ppFile));
+  assert (ppFile);
+  checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
+  return (*ppFile)->Open();
+}
+
+static HRESULT localOpenFileCachedDiskStgRead
+  (const aafWChar * pFileName,
+   IAAFFile ** ppFile)
+{
+  assert (pFileName);
+  assert (ppFile);
+
+  // Create a cached disk raw storage.
+  IAAFRawStorageSP pStg;
+  checkResult
+	(AAFCreateRawStorageCachedDisk (pFileName,
+							        kAAFFileExistence_existing,
+							        kAAFFileAccess_read,
+									CDRS_PAGE_COUNT,
+									CDRS_PAGE_SIZE,
+							        &pStg));
+
+  // create the file and open it.
+  checkResult
+	(AAFCreateAAFFileOnRawStorage (pStg,
+								   kAAFFileExistence_existing,
+								   kAAFFileAccess_read,
+								   0,
+								   0,
+								   0,
+								   ppFile));
+  assert (ppFile);
+  checkExpression (0 != (*ppFile), AAFRESULT_TEST_FAILED);
+  return (*ppFile)->Open();
+}
+
 
 
 //
@@ -706,6 +775,7 @@ struct fileInfo_t
   {
 	kStgTypeDisk
 	, kStgTypeDiskStg
+	, kStgTypeCachedDiskStg
 	, kStgTypeMemStg
 	, kStgTypeCustomStg
   }              storageType;
@@ -735,6 +805,15 @@ static const fileInfo_t sFileDescriptions[] =
 	  "Disk Storage",
 	  localOpenFileDiskStgWrite,
 	  localOpenFileDiskStgRead,
+	  localCloseDisk,
+	  localCloseDisk
+	},
+	{
+	  fileInfo_t::kStgTypeCachedDiskStg,
+	  L"AAFRandomRawStgTestCDisk.aaf",
+	  "Cached Disk Storage",
+	  localOpenFileCachedDiskStgWrite,
+	  localOpenFileCachedDiskStgRead,
 	  localCloseDisk,
 	  localCloseDisk
 	},
