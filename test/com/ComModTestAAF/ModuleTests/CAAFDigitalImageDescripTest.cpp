@@ -60,18 +60,26 @@ using namespace std;
 #define kDisplayYOffsetTestVal			8
 #define kAlphaTransparencyTestVal		kAAFMaxValueTransparent
 #define kImageAlignmentFactorTestVal	0
-#define kGammaNumTestVal				7
-#define kGammaDenTestVal				8
+#define kFieldDominanceTestVal	1
+#define kFieldStartOffsetTestVal	128
+#define kFieldEndOffsetTestVal	512
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
 0x13, 0x00, 0x00, 0x00,
 {0x4b8a7f32, 0x03fe, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
+static const aafUID_t kGammaTestVal =
+{0x04010101, 0x0101, 0x0000, { 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
-static const aafUID_t kAAFTEST_Gamma =
-{ 0xf866a603, 0xf254, 0x4f71, { 0x8e, 0x5a, 0x93, 0x32, 0xae, 0x5d, 0x8b, 0x66 } };
+static const aafUID_t kTransferCharacteristicTestVal =
+{0x04010101, 0x0102, 0x0000, { 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
+static const aafUID_t kColorPrimariesTestVal =
+{0x04010101, 0x0301, 0x0000, { 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x06}};
+
+static const aafUID_t kCodingEquationsTestVal =
+{0x04010101, 0x0201, 0x0000, { 0x06, 0x0E, 0x2B, 0x34, 0x04, 0x01, 0x01, 0x01}};
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -166,6 +174,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSourceMob*	pSourceMob = NULL;
 	IAAFMob*	pMob = NULL;
 	IAAFDigitalImageDescriptor*	pDIDesc = NULL;
+	IAAFDigitalImageDescriptor2*	pDIDesc2 = NULL;
 	IAAFEssenceDescriptor*	pEssDesc = NULL;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
@@ -218,8 +227,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDIDesc->SetDisplayView(kDisplayHeightTestVal, kDisplayWidthTestVal, kDisplayXOffsetTestVal, kDisplayYOffsetTestVal));
     checkResult(pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal));
     checkResult(pDIDesc->SetImageAlignmentFactor(kImageAlignmentFactorTestVal));
+    checkResult(pDIDesc->SetGamma(kGammaTestVal));
 
-    checkResult(pDIDesc->SetGamma(kAAFTEST_Gamma));
+    // Optional Properties accessed using IAAFDigitalImageDescriptor2
+		checkResult(pDIDesc->QueryInterface (IID_IAAFDigitalImageDescriptor2, (void **)&pDIDesc2));
+
+		// DID2::SetTransferCharacteristic() sets the same property as DID::SetGamma()
+    checkResult(pDIDesc2->SetTransferCharacteristic(kTransferCharacteristicTestVal));
+
+    checkResult(pDIDesc2->SetColorPrimaries(kColorPrimariesTestVal));
+    checkResult(pDIDesc2->SetCodingEquations(kCodingEquationsTestVal));
+    checkResult(pDIDesc2->SetFieldDominance(kFieldDominanceTestVal));
+    checkResult(pDIDesc2->SetFieldStartOffset(kFieldStartOffsetTestVal));
+    checkResult(pDIDesc2->SetFieldEndOffset(kFieldEndOffsetTestVal));
 
     // Save the initialized descriptor with the source mob.
     checkResult(pDIDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
@@ -236,6 +256,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   // Cleanup and return
   if (pEssDesc)
     pEssDesc->Release();
+
+  if (pDIDesc2)
+    pDIDesc2->Release();
 
   if (pDIDesc)
     pDIDesc->Release();
@@ -271,6 +294,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFSourceMob*	pSourceMob = NULL;
 	IAAFEssenceDescriptor*	pEssDesc = NULL;
 	IAAFDigitalImageDescriptor*	pDIDesc = NULL;
+	IAAFDigitalImageDescriptor2*	pDIDesc2 = NULL;
 	aafNumSlots_t	numMobs = 0;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
@@ -305,6 +329,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  aafUID_t				gamma;
 	  aafInt32				VideoLineMap[kVideoLineMapMaxElement];
 	  aafUID_t				compression, compTestVal;
+	  aafUID_t				transferChar;
+	  aafUID_t				colorPrimaries;
+	  aafUID_t				codingEquations;
+		aafFieldNumber_t fieldDominance = kAAFUnspecifiedField;
+	  aafUInt32				fieldStartOffset = 0;
+	  aafUInt32				fieldEndOffset = 0;
 
 	  memset(&compTestVal, 0, sizeof(aafUID_t));
 
@@ -354,8 +384,32 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
                     AAFRESULT_TEST_FAILED);
 
 		checkResult(pDIDesc->GetGamma(&gamma));
-				checkResult(pDIDesc->GetGamma(&gamma));
-		checkExpression(memcmp(&gamma,&kAAFTEST_Gamma, sizeof(kAAFTEST_Gamma))==0,AAFRESULT_TEST_FAILED);
+		checkExpression(memcmp(&gamma, &kTransferCharacteristicTestVal, sizeof(kTransferCharacteristicTestVal)) == 0,
+                    AAFRESULT_TEST_FAILED);
+
+    // Optional Properties accessed using IAAFDigitalImageDescriptor2
+		checkResult(pDIDesc->QueryInterface (IID_IAAFDigitalImageDescriptor2, (void **)&pDIDesc2));
+
+    checkResult(pDIDesc2->GetTransferCharacteristic(&transferChar));
+		checkExpression(memcmp(&transferChar, &kTransferCharacteristicTestVal, sizeof(kTransferCharacteristicTestVal)) == 0,
+                    AAFRESULT_TEST_FAILED);
+
+    checkResult(pDIDesc2->GetColorPrimaries(&colorPrimaries));
+		checkExpression(memcmp(&colorPrimaries, &kColorPrimariesTestVal, sizeof(kColorPrimariesTestVal)) == 0,
+                    AAFRESULT_TEST_FAILED);
+
+    checkResult(pDIDesc2->GetCodingEquations(&codingEquations));
+		checkExpression(memcmp(&codingEquations, &kCodingEquationsTestVal, sizeof(kCodingEquationsTestVal)) == 0,
+                    AAFRESULT_TEST_FAILED);
+
+    checkResult(pDIDesc2->GetFieldDominance(&fieldDominance));
+		checkExpression(fieldDominance == kFieldDominanceTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pDIDesc2->GetFieldStartOffset(&fieldStartOffset));
+		checkExpression(fieldStartOffset == kFieldStartOffsetTestVal, AAFRESULT_TEST_FAILED);
+
+    checkResult(pDIDesc2->GetFieldEndOffset(&fieldEndOffset));
+		checkExpression(fieldEndOffset == kFieldEndOffsetTestVal, AAFRESULT_TEST_FAILED);
 
   }
   catch (HRESULT& rResult)
@@ -366,6 +420,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   // Cleanup and return
   if (pEssDesc)
     pEssDesc->Release();
+
+  if (pDIDesc2)
+    pDIDesc2->Release();
 
   if (pDIDesc)
     pDIDesc->Release();

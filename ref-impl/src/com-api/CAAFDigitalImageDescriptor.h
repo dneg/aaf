@@ -39,6 +39,7 @@
 
 
 
+
 #ifndef __CAAFFileDescriptor_h__
 #include "CAAFFileDescriptor.h"
 #endif
@@ -46,6 +47,7 @@
 
 class CAAFDigitalImageDescriptor
   : public IAAFDigitalImageDescriptor,
+    public IAAFDigitalImageDescriptor2,
     public CAAFFileDescriptor
 {
 protected:
@@ -64,7 +66,8 @@ public:
   //
   // SetCompression()
   //
-  // // Sets the kind of compression and format of compression
+  // //
+  // Sets the kind of compression and format of compression
   // information of the video essence data.  This property is
   // optional.  If there is no compression, the property is omitted.
   // 
@@ -77,19 +80,17 @@ public:
   //   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetCompression) (
-    // Identifies a Codec definition for the desired compression and
-	// format of compression information. 
-    /*[in]*/ aafUID_constref  codecID);
+    // Optional. 
+    /*[in]*/ aafUID_constref  compression);
 
 
   //***********************************************************
   //
   // GetCompression()
   //
-  // Gets the kind of compression and format of compression
+  // // Gets the kind of compression and format of compression
   // information of the video essence data.  This property is
-  // optional.  If there is no compression, the null AUID is
-  // returned.
+  // optional.
   //
   // Succeeds if all of the following are true:
   // - the pCompression pointer is valid.
@@ -105,8 +106,7 @@ public:
   //   - pComporession arg is NULL.
   //
   STDMETHOD (GetCompression) (
-    // Identifies a Codec definition for the desired compression and
-	// format of compression information. 
+    // Optional. 
     /*[out]*/ aafUID_t *  pCompression);
 
 
@@ -632,8 +632,7 @@ public:
   //
   // SetGamma()
   //
-  // Sets the Gamma property.  Specifies the expected output gamma
-  // setting on the video display device.
+  // Sets the TransferCharacteristic property.
   //
   // Succeeds if all of the following are true:
   // - 
@@ -655,8 +654,7 @@ public:
   //
   // GetGamma()
   //
-  // Gets the Gamma property.  Specifies the expected output gamma
-  // setting on the video display device.
+  // Gets the TransferCharacteristic property.
   //
   // Succeeds if all of the following are true:
   // - pGamma is a valid pointer
@@ -730,6 +728,338 @@ public:
     // Optional. 
     /*[out]*/ aafUInt32 *  pImageAlignmentFactor);
 
+  //***********************************************************
+  // METHOD NAME: SetFieldDominance()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | SetFieldDominance |
+  // Sets the FieldDominance property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the FieldDominance property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_ILLEGAL_VALUE
+  //   - FieldDominance is not a valid value.
+  // @end
+  // 
+  STDMETHOD (SetFieldDominance)
+   (
+    // @parm [in] aafFieldNumber_t | FieldDominance | Optional.
+    aafFieldNumber_t  FieldDominance
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetFieldDominance()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | GetFieldDominance |
+  // Gets the FieldDominance property.
+  //
+  // Succeeds if all of the following are true:
+  // - pFieldDominance is a valid pointer
+  // 
+  // If this method fails, pFieldDominance will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFieldDominance is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetFieldDominance)
+   (
+    // @parm [out] aafFieldNumber_t * | pFieldDominance | Optional.
+    aafFieldNumber_t *  pFieldDominance
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetFieldStartOffset()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | SetFieldStartOffset |
+  // Sets the FieldStartOffset property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the FieldStartOffset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetFieldStartOffset)
+   (
+    // @parm [in] aafUInt32 | FieldStartOffset | Optional.
+    aafUInt32  FieldStartOffset
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetFieldStartOffset()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | GetFieldStartOffset |
+  // Gets the FieldStartOffset property.
+  //
+  // Succeeds if all of the following are true:
+  // - pFieldStartOffset is a valid pointer
+  // 
+  // If this method fails, pFieldStartOffset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFieldStartOffset is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetFieldStartOffset)
+   (
+    // @parm [out] aafUInt32 * | pFieldStartOffset | Optional.
+    aafUInt32 *  pFieldStartOffset
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetFieldEndOffset()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | SetFieldEndOffset |
+  // Sets the FieldEndOffset property.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails, the FieldEndOffset property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetFieldEndOffset)
+   (
+    // @parm [in] aafUInt32 | FieldEndOffset | Optional.
+    aafUInt32  FieldEndOffset
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetFieldEndOffset()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | GetFieldEndOffset |
+  // Gets the FieldEndOffset property.
+  //
+  // Succeeds if all of the following are true:
+  // - pFieldEndOffset is a valid pointer
+  // 
+  // If this method fails, pFieldEndOffset will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pFieldEndOffset is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetFieldEndOffset)
+   (
+    // @parm [out] aafUInt32 * | pFieldEndOffset | Optional.
+    aafUInt32 *  pFieldEndOffset
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetTransferCharacteristic()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | SetTransferCharacteristic |
+  // Sets the TransferCharacteristic property.
+  //
+  // Succeeds if all of the following are true:
+  // - 
+  // 
+  // If this method fails, the TransferCharacteristic property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetTransferCharacteristic)
+   (
+    // @parm [in] aafUID_constref | TransferCharacteristic | Optional
+    aafUID_constref  TransferCharacteristic
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetTransferCharacteristic()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | GetTransferCharacteristic |
+  // Gets the TransferCharacteristic property.
+  //
+  // Succeeds if all of the following are true:
+  // - pTransferCharacteristic is a valid pointer
+  // 
+  // If this method fails, pTransferCharacteristic will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pTransferCharacteristic is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetTransferCharacteristic)
+   (
+    // @parm [out] aafUID_t * | pTransferCharacteristic | Optional.
+    aafUID_t *  pTransferCharacteristic
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetCodingEquations()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | SetCodingEquations |
+  // Sets the CodingEquations property.
+  //
+  // Succeeds if all of the following are true:
+  // - 
+  // 
+  // If this method fails, the CodingEquations property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetCodingEquations)
+   (
+    // @parm [in] aafUID_constref | CodingEquations | Optional
+    aafUID_constref  CodingEquations
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetCodingEquations()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | GetCodingEquations |
+  // Gets the CodingEquations property.
+  //
+  // Succeeds if all of the following are true:
+  // - pCodingEquations is a valid pointer
+  // 
+  // If this method fails, pCodingEquations will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCodingEquations is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetCodingEquations)
+   (
+    // @parm [out] aafUID_t * | pCodingEquations | Optional.
+    aafUID_t *  pCodingEquations
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetColorPrimaries()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | SetColorPrimaries |
+  // Sets the ColorPrimaries property.
+  //
+  // Succeeds if all of the following are true:
+  // - 
+  // 
+  // If this method fails, the ColorPrimaries property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  // @end
+  // 
+  STDMETHOD (SetColorPrimaries)
+   (
+    // @parm [in] aafUID_constref | ColorPrimaries | Optional
+    aafUID_constref  ColorPrimaries
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetColorPrimaries()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFDigitalImageDescriptor2 | GetColorPrimaries |
+  // Gets the ColorPrimaries property.
+  //
+  // Succeeds if all of the following are true:
+  // - pColorPrimaries is a valid pointer
+  // 
+  // If this method fails, pColorPrimaries will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pColorPrimaries is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.
+  // @end
+  // 
+  STDMETHOD (GetColorPrimaries)
+   (
+    // @parm [out] aafUID_t * | pColorPrimaries | Optional.
+    aafUID_t *  pColorPrimaries
+  );
+
+
+
 protected:
   // 
   // Declare the QI that implements for the interfaces
@@ -750,5 +1080,4 @@ public:
 };
 
 #endif // ! __CAAFDigitalImageDescriptor_h__
-
 

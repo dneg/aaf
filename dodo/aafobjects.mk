@@ -30,21 +30,22 @@ AAFNONPERSISTENTOBJECTS=""
 # These are files which specify COM interfaces, but which are
 # implemented in other objects.
 AAFCOMINTERFACESONLY="\
+	AAFComponent2 \
+	AAFCompositionMob2 \
 	AAFDataDef2 \
+	AAFDictionary2 \
+	AAFDigitalImageDescriptor2 \
 	AAFEndian \
-	AAFHeader2 \
-	AAFSearchSource \
 	AAFEssenceDataEx \
 	AAFEssenceMultiAccess \
-	AAFTypeDefVariableArrayEx \
+	AAFHeader2 \
+	AAFMasterMob2 \
 	AAFMasterMobEx \
 	AAFMob2 \
-	AAFTimelineMobSlot2 \
-	AAFComponent2 \
-	AAFDictionary2 \
+	AAFSearchSource \
 	AAFSourceReference2 \
-	AAFMasterMob2 \
-	AAFCompositionMob2 "
+	AAFTimelineMobSlot2 \
+	AAFTypeDefVariableArrayEx "
 
 # These are the impl files that are typed by humans.  Be sure to
 # remove them from the other list.  As you check each one in, just add
