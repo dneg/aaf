@@ -33,7 +33,7 @@ AD_XMETHOD7(AudioMediaCreate,
 [in],objPass, aafTrackID_t,masterTrackID,,
 [in],objIn, AAFSourceMob,fileMob,and this file mob create audio,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
-[in],objPass, aafCompressEnable_t,enable,optionally compressing it,
+[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objPass, aafInt16,sampleSize,with this sample size,
 [in],objPass, aafInt16,obj,and this many channels,
 Creates an audio media stream.)
@@ -61,7 +61,7 @@ AD_XMETHOD9(VideoMediaCreate,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
 [in],objPass, aafTrackID_t,masterTrackID,masterTrackID,
 [in],objIn, AAFSourceMob,fileMob,and this file mob create video,
-[in],objPass, aafCompressEnable_t,enable,optionally compressing it,
+[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 [in],objPass, aafRational_t,editrate,editrate,
 [in],objPass, aafUInt32,StoredHeight,with this height,
 [in],objPass, aafUInt32,StoredWidth,and this width,
@@ -94,7 +94,7 @@ AD_XMETHOD6(Create,
 [in],objIn, AAFSourceMob,fileMob,and this file mob,
 [in],objIn, AAFDataDef,mediaKind,create media of this type,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
-[in],objPass, aafCompressEnable_t,enable,optionally compressing it,
+[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 Creates a single channel stream of media.)
 	//@comm Creates a single channel stream of media.  Convenience functions
 	// exist to create audio or video media, and a separate call
@@ -116,7 +116,7 @@ AD_XMETHOD6(MultiCreate,
 [in],objPass, aafInt16,arrayElemCount,this many channels,
 [in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
 [in],objPass, aafRational_t ,editRate,,
-[in],objPass, aafCompressEnable_t,enable,optionally compressing it,
+[in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 Creates a multi-channel interleaved stream of media.)
 	//@comm The media handle from this call can be used with
 	// WriteDataSamples or WriteMultiSamples but NOT with 
