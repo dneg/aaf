@@ -1,0 +1,241 @@
+/***********************************************************************
+*
+*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*
+* Permission to use, copy and modify this software and accompanying
+* documentation, and to distribute and sublicense application software
+* incorporating this software for any purpose is hereby granted,
+* provided that (i) the above copyright notice and this permission
+* notice appear in all copies of the software and related documentation,
+* and (ii) the name Avid Technology, Inc. may not be used in any
+* advertising or publicity relating to the software without the specific,
+* prior written permission of Avid Technology, Inc.
+*
+* THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+* WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+* IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,
+* SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR
+* OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF
+* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND
+* ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES
+* RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT
+* ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF
+* LIABILITY.
+*
+************************************************************************/
+
+// @doc OMINTERNAL
+#ifndef OMOBJECTREFERENCE_H
+#define OMOBJECTREFERENCE_H
+
+class OMProperty;
+
+  // @class Persistent references to persistent objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+template <typename ReferencedObject>
+class OMObjectReference {
+public:
+  // @access Public members.
+
+    // @cmember Constructor.
+  OMObjectReference(void);
+
+    // @cmember Constructor.
+  OMObjectReference(OMProperty* property, const char* name);
+
+    // @cmember Destructor.
+  ~OMObjectReference(void);
+
+    // @cmember Is this <c OMObjectReference> void ?
+  virtual bool isVoid(void) const = 0;
+
+    // @cmember Assignment.
+    //          This operator provides value semantics for <c OMContainer>.
+    //          This operator does not provide assignment of object references.
+  OMObjectReference<ReferencedObject>& operator=
+                              (const OMObjectReference<ReferencedObject>& rhs);
+
+    // @cmember Equality.
+    //          This operator provides value semantics for <c OMContainer>.
+    //          This operator does not provide equality of object references.
+  bool operator== (const OMObjectReference<ReferencedObject>& rhs) const;
+
+    // @cmember Save this <c OMObjectReference>.
+  virtual void save(void) const = 0;
+
+    // @cmember Close this <c OMObjectReference>.
+  virtual void close(void) = 0;
+
+    // @cmember Restore this <c OMObjectReference>.
+  virtual void restore(void) = 0;
+
+    // @cmember Get the value of this <c OMObjectReference>.
+    //          The value is a pointer to the <c ReferencedObject>.
+  virtual ReferencedObject* getValue(void) const = 0;
+
+    // @cmember Set the value of this <c OMObjectReference>.
+    //          The value is a pointer to the <c ReferencedObject>.
+  virtual ReferencedObject* setValue(const ReferencedObject* value) = 0;
+
+protected:
+  // @access Protected members.
+
+    // @cmember Is this <c OMObjectReference> in the loaded state. If false
+    //          there is a persisted representation of this
+    //          <c OMObjectReference> that can be loaded.
+  bool isLoaded(void) const;
+
+    // @cmember Put this <c OMObjectReference> into the loaded state.
+  void setLoaded(void);
+
+    // @cmember Remove this <c OMObjectReference> from the loaded state.
+  void clearLoaded(void);
+
+    // @cmember Load the persisted representation of this
+    //          <c OMObjectReference>.
+  virtual void load(void) = 0;
+
+    // @cmember The containing property.
+  OMProperty* _property;
+
+    // @cmember A pointer to the actual object.
+  ReferencedObject* _pointer;
+
+    // @cmember The state of this <c OMObjectReference>. This is false
+    //          if a persisted representation of this element exists that
+    //          has not yet been loaded, true otherwise.
+  bool _isLoaded;
+
+    // @cmember The name of this <c OMObjectReference>.
+    // tjb - why is there a name here and in OMContainerElement ?
+  const char* _name;
+
+};
+
+  // @class Persistent strong references to persistent objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @base public | <c OMObjectReference>
+template <typename ReferencedObject>
+class OMStrongObjectReference : public OMObjectReference<ReferencedObject> {
+public:
+  // @access Public members.
+
+    // @cmember Constructor.
+  OMStrongObjectReference(void);
+
+    // @cmember Constructor.
+  OMStrongObjectReference(OMProperty* property, const char* name);
+
+    // @cmember Destructor.
+  ~OMStrongObjectReference(void);
+
+    // @cmember Is this <c OMStrongObjectReference> void ?
+  virtual bool isVoid(void) const;
+
+    // @cmember Assignment.
+    //          This operator provides value semantics for <c OMContainer>.
+    //          This operator does not provide assignment of object references.
+  OMStrongObjectReference<ReferencedObject>& operator=
+                        (const OMStrongObjectReference<ReferencedObject>& rhs);
+
+    // @cmember Equality.
+    //          This operator provides value semantics for <c OMContainer>.
+    //          This operator does not provide equality of object references.
+  bool operator== (const OMStrongObjectReference<ReferencedObject>& rhs) const;
+
+    // @cmember Save this <c OMStrongObjectReference>.
+  virtual void save(void) const;
+
+    // @cmember Close this <c OMStrongObjectReference>.
+  virtual void close(void);
+
+    // @cmember Restore this <c OMStrongObjectReference>.
+  virtual void restore(void);
+
+    // @cmember Get the value of this <c OMStrongObjectReference>.
+    //          The value is a pointer to the <c ReferencedObject>.
+  virtual ReferencedObject* getValue(void) const;
+
+    // @cmember Set the value of this <c OMStrongObjectReference>.
+    //          The value is a pointer to the <c ReferencedObject>.
+  virtual ReferencedObject* setValue(const ReferencedObject* value);
+
+protected:
+  // @access Protected members.
+
+    // @cmember Load the persisted representation of this
+    //          <c OMStrongObjectReference>.
+  virtual void load(void);
+
+};
+
+  // @class Persistent weak references to persistent objects.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          object. This type must be a descendant of <c OMStorable>.
+  //   @base public | <c OMObjectReference>
+template <typename ReferencedObject>
+class OMWeakObjectReference : public OMObjectReference<ReferencedObject> {
+public:
+  // @access Public members.
+
+    // @cmember Constructor.
+  OMWeakObjectReference(void);
+
+    // @cmember Constructor.
+  OMWeakObjectReference(OMProperty* property, const char* name);
+
+    // @cmember Destructor.
+  ~OMWeakObjectReference(void);
+
+    // @cmember Is this <c OMWeakObjectReference> void ?
+  virtual bool isVoid(void) const;
+
+    // @cmember Assignment.
+    //          This operator provides value semantics for <c OMContainer>.
+    //          This operator does not provide assignment of object references.
+  OMWeakObjectReference<ReferencedObject>& operator=
+                          (const OMWeakObjectReference<ReferencedObject>& rhs);
+
+    // @cmember Equality.
+    //          This operator provides value semantics for <c OMContainer>.
+    //          This operator does not provide equality of object references.
+  bool operator== (const OMWeakObjectReference<ReferencedObject>& rhs) const;
+
+    // @cmember Save this <c OMWeakObjectReference>.
+  virtual void save(void) const;
+
+    // @cmember Close this <c OMWeakObjectReference>.
+  virtual void close(void);
+
+    // @cmember Restore this <c OMWeakObjectReference>.
+  virtual void restore(void);
+
+    // @cmember Get the value of this <c OMWeakObjectReference>.
+    //          The value is a pointer to the <c ReferencedObject>.
+  virtual ReferencedObject* getValue(void) const;
+
+    // @cmember Set the value of this <c OMWeakObjectReference>.
+    //          The value is a pointer to the <c ReferencedObject>.
+  virtual ReferencedObject* setValue(const ReferencedObject* value);
+
+  const char* pathName(void) const;
+
+  void setPathName(char* pathName);
+
+protected:
+
+  virtual void load(void);
+
+private:
+
+  char* _pathName;
+
+};
+
+#include "OMObjectReferenceT.h"
+
+#endif
+
