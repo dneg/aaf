@@ -54,7 +54,7 @@ public:
     // @cmember The stored object identifier for the class of this
     //          <c OMStorable>.
   virtual const OMClassId& classId(void) const = 0;
-  
+
 // private:
 
     // @cmember Attach this <c OMStorable>.
@@ -127,7 +127,7 @@ public:
 
     // @cmember Is this <c OMStorable> dirty ?
     //          A dirty object is one that has been modified since it
-    //          was last saved or that has never been saved at all. 
+    //          was last saved or that has never been saved at all.
   bool isDirty(void) const;
 
     // @cmember This object's property set.
