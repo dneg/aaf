@@ -3,206 +3,427 @@ AAFEffectDef\
 #endm
 #c
 #startm .parent-module 0
-AAFDefObject\
+AAFPluggableDef\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// The IAAFEffectDef interface is implemented by objects that specify an
+// effect definition.  Effect definitions specify which parameters are possible
+// on an effect\, while an IAAFGroup specifies specific parameters and input segments
+// for a particular effect invocation.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 
 AD_FORWARD_DECLARATION(AAFParameterDef)
 AD_FORWARD_DECLARATION(AAFLocator)
 AD_FORWARD_DECLARATION(EnumAAFLocators)
 AD_FORWARD_DECLARATION(EnumAAFParameterDefs)
-//AxD_FORWARD_DECLARATION(EnumAAFEffectDefs)
+AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
+AD_FORWARD_DECLARATION(AAFDataDef)
 
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
+/************************************************\
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
+\************************************************/
 
 AD_CLASS_UUID(14035d92, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(14035d91, 1ff5, 11d2, bf, 97, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 
-AD_METHOD1(GetAUID,
-		   [out\\\,retval],
-		   aafUID_t *,
-		   pAuid,
-		   Pointer to an AUID reference,
-		   Gets the AUID for this object.)
+AD_XMETHOD1(GetDataDefinitionID,
+			[out],
+			objPass,
+			aafUID_t *,
+			ppDataDef,
+			Returned DataDefinition object,
+			Places the IAAFDataDefinition object attached to this IAAFEffectDef into the
+  // *ppDataDef argument.  If none exists yet\, NULL is placed into the
+  // *ppDataDef argument.
+  //
+  // The returned IAAFDataDefinition object\, if it exists\, is
+  // AddRef\(\)ed before it is returned.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppDataDef pointer is valid.
+  // - A valid IAAFDataDefinition exists.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDataDef is null.
+  //
+  // AAFRESULT_NO_ESSENCE_DESC
+  //   - There is no IAAFDataDefinition.  There has to be one of some
+  //     kind for this to be a valid effect definition.)
 
-AD_METHOD1(GetEffectName,
-		   [out\\\,retval],
-		   aafString_t *,
-		   pstrName,
-		   Pointer to effect's name,
-		   Gets the effect definition's name.)
 
-AD_METHOD1(SetEffectName,
-		   [in],
-		   aafString_t,
-		   strDescription,
-		   description,
-		   Sets the description of this effect definition.)
-
-AD_METHOD1(GetDescription,
-		   [out\\\,retval],
-		   aafString_t *,
-		   pstrDescription,
-		   Pointer to description,
-		   Gets the description of the effect definition.)
-
-AD_METHOD1(SetDescription,
-		   [in],
-		   aafString_t,
-		   strDescription,
-		   description,
-		   Sets the description of the effect definition.)
+AD_XMETHOD1(SetDataDefinitionID,
+			[in],
+			objPass,
+			aafUID_t *,
+			pDataDef,
+			Essence Descriptor object,
+			Sets the IAAFDataDefinition of this IAAFEffectDef to be the given one.
+  //
+  // Succeeds if all of the following are true:
+  // - the pDataDef pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\(\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef is null.)
 
 AD_METHOD1(IsTimeWarp,
 		   [out\\\,retval],
 		   aafBool *,
 		   bIsTimeWarp,
 		   pointer to the return value, 
-		   Specifies that the duration of the input media can be different than the effect invocation)
+		   Returns the value of isTimeWarp.    IsTimeWarp is true if the length of an IAAFGroup
+  // is different from the lengths of the input segments.  For example\\\, a slow motion effect.
+  //
+  // Succeeds if all of the following are true:
+  // - the bIsTimeWarp pointer is valid.
+  // 
+  // If this method fails nothing will be written to *bIsTimeWarp.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - bIsTimeWarp arg is NULL.)
 
 AD_METHOD1(SetIsTimeWarp,
 		   [in],
 		   aafBool,
 		   IsTimeWarp,
 		   is timewarp value, 
-		   Sets the IsTimeWarp boolean.)
+		Sets the IsTimeWarp boolean.  IsTimeWarp is true if the length of an IAAFGroup
+  // is different from the lengths of the input segments.  For example\\\, a slow motion effect.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //		   .)
 
-//AxD_XMETHOD1(AppendDegradeToEffects,
-//			[in],
-//			objIn,
-//			AAFEffectDef,
-//			pEffectDef, 
-//			Degrade To Effect Definition Object,
-//			Add the effect definition object to the DegradeTo list of definitions.)
-//
-//AxD_XMETHOD1(RemoveDegradeToEffects,
-//			[in], 
-//			objIn,
-//			AAFEffectDef,
-//			pEffectDef, 
-//			Degrade To Effect Definition Object,
-//			Remove the effect definition object from the DegradeTo list of definitions.)
-//
-//AxD_XMETHOD1(GetDegradeToEffects,
-//			[out\,retval], 
-//			objOut,
-//			EnumAAFEffectDefs,
-//			ppEnum, 
-//			Effect Definition Enumeration,
-//			Return an enumerator for aaf effect definitions.)
-
-AD_METHOD1(GetManufacturerAUID,
-		   [out\\\,retval],
-		   aafUID_t *,
-		   pManufacturerAuid,
-		   Pointer to an AUID reference,
-		   Gets the Manufacturer AUID for this effect definition.)
-
-AD_METHOD1(SetManufacturerAUID,
-		   [in],
-		   aafUID_t,
-		   ManufacturerAuid,
-		   an AUID reference,
-		   Sets the Manufacturer AUID for this effect definition.)
-
-AD_XMETHOD1(AppendPluginLocator,
+AD_XMETHOD1(PrependDegradeToEffects,
 			[in],
 			objIn,
-			AAFLocator,
-			pAAFLocator, 
-			Plugin AAF Locator Object,
-			Add the effect definition object to the Plugin Locator list. )
+			AAFEffectDef,
+			pEffectDef, 
+			Degrade To Effect Definition Object,
+			Prepend another effect definition to the DegradeTo list of definitions.
+  // Use this function to add an effect definition to be scanned first when searching for
+  // the a replacement \(a more desirable alternate effect\).
+  // 
+  // Succeeds if all of the following are true:
+  // - the pEffectDef pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEffectDef is null.)
 
-AD_XMETHOD1(RemovePluginLocator,
-			[in], 
+AD_XMETHOD1(AppendDegradeToEffects,
+			[in],
 			objIn,
-			AAFLocator,
-			pAAFLocator, 
-			Plugin AAF Locator Object,
-			Add the effect definition object to the Plugin Locator list. )
+			AAFEffectDef,
+			pEffectDef, 
+			Degrade To Effect Definition Object,
+			Append another effect definition to the DegradeTo list of definitions.
+  // Use this function to add an effect definition to be scanned last when searching for
+  // the a replacement \(a less desirable alternate effect\).
+  // 
+  // Succeeds if all of the following are true:
+  // - the pEffectDef pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEffectDef is null.)
 
-AD_XMETHOD1(GetPluginLocators,
+AD_XMETHOD1(GetDegradeToEffects,
 			[out\,retval], 
 			objOut,
-			EnumAAFLocators,
+			EnumAAFEffectDefs,
 			ppEnum, 
-			Plugin Locator Enumeration,
-			Return an enumerator for aaf plugin locator.)
+			Effect Definition Enumeration,
+			Return an enumerator for aaf effect definitions\, ordered from the most desirable
+  // to the least desirable alternative.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
 
-AD_METHOD1(GetCategory,
-		   [out\\\,retval],
-		   aafString_t *,
-		   pstrCategory,
-		   Pointer to Category,
-		   Gets the category of the effect definition.)
 
-AD_METHOD1(SetCategory,
-		   [in],
-		   aafString_t,
-		   strCategory,
-		   category,
-		   Sets the category of the effect definition. Category is a name that describes  a group of effects.)
+AD_XMETHOD2(GetCategory,
+			[in\,string],
+			objPass,
+			wchar_t *,
+			pCategory,
+			Category Name,
+
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			length of the buffer to hold Category Name,
+
+			Writes the category name\, with a trailing null character\, into the
+  // pCategory buffer.  The buffer is allocated by the caller.  The size
+  // of the buffer is given by bufSize.  If the property name has not
+  // yet been set\, a zero-length string will be written \(that is\,
+  // only the trailing null character\).
+  // 
+  // Caller may call GetCategoryBufLen\(\) to determine the
+  // required buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pCategory pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to *pCategory.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCategory arg is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.)
+
+AD_XMETHOD1(GetCategoryBufLen,
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			Category Name,
+
+			Returns the length of buffer required for the GetCategory\(\) method.  
+  // The value is placed into the location
+  // specified by pLen. The value will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLen arg is NULL.)
+
+
+
+AD_XMETHOD1(SetCategory,
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pCategory,
+			Category Name,
+
+		   Sets the category of the effect definition. Category is a
+  // name that describes  a group of effects.  A copy is made of the data so the caller
+  // retains ownership of the *pCategory buffer and is responsible for
+  // de-allocating it. 
+  // 
+  // Succeeds if all of the following are true:
+  // - the pCategory pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pCategory arg is NULL.)
+
 
 AD_METHOD1(GetNumberInputs,
 		   [out\\\,retval],
 		   aafInt32 *,
 		   pNumberInputs,
 		   Pointer to Number of Inputs,
-		   Gets the Number of input media segments.)
+		   Gets the Number of input media segments.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pNumberInputs pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumberInputs.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberInputs arg is NULL.)
+
 
 AD_METHOD1(SetNumberInputs,
 		   [in],
 		   aafInt32,
 		   NumberInputs,
 		   Number of Inputs,
-		   Sets the Number of input media segments.)
+		   Sets the Number of input media segments.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 AD_METHOD1(GetBypass,
 		   [out\\\,retval],
 		   aafUInt32 *,
 		   pBypass,
 		   Pointer to a Bypass media segment index ,
-		   Gets the Bypass media segment index.)
+		   Gets the Bypass media segment index.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pBypass pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pBypass.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBypass arg is NULL.)
 
 AD_METHOD1(SetBypass,
 		   [in],
 		   aafUInt32,
-		   baypass,
+		   bypass,
 		   Bypass media segment index,
-		   Sets the media segment index.)
+		   Sets the media segment index.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
 
-AD_XMETHOD1(AppendParameterDefs,
+
+AD_XMETHOD1(AddParameterDefs,
 			[in],
 			objIn,
 			AAFParameterDef,
 			pAAFParameterDef, 
 			Parameter definition Object,
-			Add the Parameter Definition object to the list. )
+			Add the Parameter Definition object to the unordered list of parameter definitions.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pAAFParameterDef pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pAAFParameterDef is null.)
 
-AD_XMETHOD1(RemoveParameterDefs,
-			[in], 
-			objIn,
-			AAFParameterDef,
-			pAAFParameterDef, 
-			Parameter definition Object,
-			Remove the Parameter Definition object from the list. )
 
 AD_XMETHOD1(GetParameterDefinitions,
 			[out\,retval], 
@@ -210,6 +431,22 @@ AD_XMETHOD1(GetParameterDefinitions,
 			EnumAAFParameterDefs,
 			ppEnum, 
 			Parameter definition enumeration,
-			Return an enumerator for aaf Parameter definition.)
+			Return an enumerator for the unordered list of AAF Parameter definitions.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.)
+
 
 AD_XCLASS_END(Concrete, StoredObject)
