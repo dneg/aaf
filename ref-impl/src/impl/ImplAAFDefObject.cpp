@@ -407,6 +407,5 @@ AAFRESULT STDMETHODCALLTYPE
 const OMUniqueObjectIdentification&
   ImplAAFDefObject::identification(void) const
 {
-  const aafUID_t& r =_identification.reference();
-  return reinterpret_cast<const OMUniqueObjectIdentification&>(r);
+  return *reinterpret_cast<const OMUniqueObjectIdentification*>(&_identification.reference());
 }
