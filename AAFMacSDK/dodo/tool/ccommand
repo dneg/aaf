@@ -34,7 +34,7 @@ echo "{parameters}" > "{programName}.arg"
 # 
 alias SystemTask 'Evaluate index = 0;¶
 loop;¶
-	break if {index} >= 10;¶
+	break if {index} >= 1000;¶
 	Evaluate index = {index} + 1;¶
 end'
 
