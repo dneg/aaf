@@ -45,6 +45,11 @@
 #include "ImplAAFEssenceAccess.h"
 #endif
 
+
+#include "ImplAAFFindSourceInfo.h"
+#include "ImplEnumAAFEssenceData.h"
+
+
 #include <assert.h>
 #include <string.h>
 
@@ -76,6 +81,7 @@ extern "C" const CLSID CLSID_AAFDefaultStream;
 const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 //const IID IID_IAAFEssenceDataStream = { 0x298F2BE2, 0x96C0, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+const aafUID_t CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 
 ImplAAFEssenceAccess::ImplAAFEssenceAccess ()
 {
@@ -311,6 +317,8 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *masterMob,
 	
 	XPROTECT()
 	{
+		_openType = kAAFCreated;
+			
 		CHECK(masterMob->MyHeadObject(&head));
 
 		// Can't put raw media inside of an AAF File
@@ -991,7 +999,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(_codec->WriteRawData (buffer, (nSamples * sampleSize)));
+		CHECK(_codec->WriteRawData (buffer, sampleSize));
 	}
 	XEXCEPT
 	XEND
@@ -1009,43 +1017,26 @@ AAFRESULT STDMETHODCALLTYPE
 	
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::ReadRawData (aafInt32  /*nSamples*/,
-                           aafUInt32  /*buflen*/,
-                           aafDataBuffer_t  /*buffer*/,
-                           aafUInt32 *  /*bytesRead*/,
-                           aafUInt32 *  /*samplesRead*/)
+    ImplAAFEssenceAccess::ReadRawData (aafInt32  nSamples,
+                           aafUInt32  buflen,
+                           aafDataBuffer_t  buffer,
+                           aafUInt32 *bytesRead,
+                           aafUInt32 *samplesRead)
 {
-#if FULL_TOOLKIT
-	aafMultiXfer_t xfer;
 
-	aafAssertMediaHdl(this);
-	aafAssertValidFHdl(_mainFile);
-	aafAssertMediaInitComplete(_mainFile);
 	aafAssert(buffer != NULL, _mainFile, OM_ERR_BADDATAADDRESS);
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
-		xfer.subTrackNum = 1;
-		xfer.numSamples = nSamples;
-		xfer.buflen = buflen;
-		xfer.buffer = buffer;
-		xfer.bytesXfered = 0;
-		xfer.samplesXfered = 0;
-	
-		CHECK(_codec->codecReadBlocks(this, leaveInterleaved, 1, &xfer));
-		*bytesRead = xfer.bytesXfered;
-		*samplesRead = xfer.samplesXfered;
+		CHECK(_codec->ReadRawData (nSamples, buffer, bytesRead));
+		*samplesRead = *bytesRead;			//!!! Codec API needs to pass this out
 	}
 	XEXCEPT
 	{
-		*bytesRead = xfer.bytesXfered;
-		*samplesRead = xfer.samplesXfered;
+		*samplesRead = 0;			//!!! Codec API needs to pass this out
 	}
 	XEND
 	
-	return(OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
+	return(AAFRESULT_SUCCESS);
 }
 
 	//@comm A single video frame is ONE sample.
@@ -1126,6 +1117,21 @@ AAFRESULT STDMETHODCALLTYPE
 		 */
 		if(_codec != NULL)		/* A codec was opened */
 			CHECK(_codec->Close());
+
+		//!!!Set the length for now to 1 so that we can open it...
+		ImplAAFMobSlot	*tmpSlot;
+		ImplAAFSegment	*seg;
+		aafLength_t		len = 1;
+
+		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
+		{
+			CHECK(_masterMob->FindSlotBySlotID(1, &tmpSlot));
+			CHECK(tmpSlot->GetSegment(&seg));
+			CHECK(seg->SetLength(&len));
+			CHECK(_fileMob->FindSlotBySlotID(1, &tmpSlot));
+			CHECK(tmpSlot->GetSegment(&seg));
+			CHECK(seg->SetLength(&len));
+		}
 
 #if FULL_TOOLKIT
 		if((_openType == kAAFCreated) || (_openType == kAAFAppended))
@@ -1495,82 +1501,152 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::Open (ImplAAFMasterMob * /*masterMob*/,
-                           aafSlotID_t  /*slotID*/,
-                           aafMediaCriteria_t*  /*mediaCrit*/,
-                           aafMediaOpenMode_t  /*openMode*/,
-                           aafCompressEnable_t  /*compEnable*/)
+    ImplAAFEssenceAccess::Open (ImplAAFMasterMob *masterMob,
+                           aafSlotID_t  slotID,
+                           aafMediaCriteria_t*mediaCrit,
+                           aafMediaOpenMode_t  openMode,
+                           aafCompressEnable_t  compEnable)
 {
-#if FULL_TOOLKIT
 	aafPosition_t	zeroPos;
-	aafTrackID_t	tmpTrackID;
-	AAFIterate		*mobIter = NULL;
-	aafInt32 		numTracks, loop;
-	aafBool			foundTrack;
-	AAFMobSlot		*track = NULL;
-	AAFSegment		*seg = NULL;
-	AAFDataKind *	mediaKind;
+//	aafSlotID_t		tmpSlotID;
+//!!!	AAFIterate		*mobIter = NULL;
+//!!!	aafInt32 		numSlots, loop;
+	aafInt32		n;
+//!!!	aafBool			foundTrack;
+	ImplAAFMobSlot		*slot = NULL;
+	ImplAAFSegment		*seg = NULL;
+	aafUID_t		 mediaKind, fileMobID;
 	aafLength_t masterMobLength, one;
-	aafFindSourceInfo_t	sourceInfo;
+	ImplAAFFindSourceInfo *sourceInfo;
+	ImplAAFSourceMob		*fileMob;
+	ImplAAFHeader			*dataHead;
+	aafSourceRef_t	fileRef;
+	aafInt16		numCh;
+	AAFRESULT		aafError;
+	ImplAAFEssenceData		*essenceData = NULL;
+	AAFPluginManager	*plugins;
 
-	XPROTECT(_mainFile)
+	XPROTECT()
 	{
+		_openType = kAAFReadOnly;
 		CvtInt32toPosition(0, zeroPos);	
 		CvtInt32toLength(1, one);
-		CHECK(masterMob->SearchSource(trackID, zeroPos,kFileMob,
+		CHECK(masterMob->SearchSource(slotID, zeroPos,kFileMob,
 									   mediaCrit,
-									   NULL,
 									   NULL,
 									   &sourceInfo));
 									   
-		mobIter = new AAFIterate(_mainFile);
-		CHECK(masterMob->GetNumTracks(&numTracks));
-		for (loop = 1; loop <= numTracks; loop++)
-		{
-			CHECK(mobIter->MobGetNextTrack(masterMob, NULL, &track));
-			CHECK(track->GetTrackID(&tmpTrackID));
-			CHECK(track->GetSegment(&seg));
-			if (tmpTrackID == trackID)
-			{
-				foundTrack = TRUE;
-				break;
-			}
-		}
-		if (!foundTrack)
-		{
-			RAISE(OM_ERR_TRACK_NOT_FOUND);
-		}
-		CHECK(seg->GetDatakind(&mediaKind));
+		CHECK(masterMob->FindSlotBySlotID (slotID,&slot));
+		CHECK(slot->GetSegment(&seg));
+		CHECK(seg->GetDataDef(&mediaKind));
 		CHECK(seg->GetLength(&masterMobLength));
 		/* !!! NOTE: Assumes that file trackID's are 1-N */
-		CHECK(OpenFromFileMob((AAFFileMob *)sourceInfo.mob, sourceInfo.mobTrackID, openMode, mediaKind, 
-												  (aafInt16)sourceInfo.mobTrackID, compEnable));
-		_masterMob = masterMob;
+//!!!		CHECK(OpenFromFileMob((ImplAAFSourceMob *)sourceInfo.mob, sourceInfo.mobTrackID, openMode, mediaKind, 
+//												  (aafInt16)sourceInfo.mobTrackID, compEnable));
+
 		
-		/* JeffB: This code is here because files imported into the
-		 * Media Composer as PICT and then exported to AAF don't have
-		 * a REPT effect to indicate the freeze frame.  Since the
-		 * Media Composer code was written long ago, and there are many
-		 * files with this condition in the field, the toolkit will
-		 * handle it for pre 2.0 files.
-		 */
-		if(mobIter != NULL)
-		  {
-			 delete mobIter;
-			 mobIter = NULL;
-		  }
-	 }
+		CHECK(sourceInfo->GetMob((ImplAAFMob **)&fileMob));
+		CHECK(sourceInfo->GetReference(&fileRef));
+
+//		CHECK(InitMediaHandle(fileMob));
+//!!!		_compEnable = compEnable;
+//!!!		if(openMode == kMediaOpenAppend)
+//			_openType = kAAFAppended;
+//		else
+//			_openType = kAAFOpened;
+	
+		CHECK(fileMob->GetEssenceDescriptor((ImplAAFEssenceDescriptor **)&_mdes));
+		CHECK(fileMob->GetMobID(&fileMobID));
+
+		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		CHECK(plugins->GetCodecInstance(CLSID_AAFWaveCodec, _variety, &_codec));
+		CHECK(_codec->GetNumChannels(fileMobID, mediaKind, &numCh));
+		if (numCh == 0)
+		  RAISE(OM_ERR_INVALID_DATAKIND);
+
+		_channels = (aafSubChannel_t *) new aafSubChannel_t[1];
+		if(_channels == NULL)
+			RAISE(OM_ERR_NOMEMORY);
+		_numChannels = numCh;
+		for(n = 0; n < numCh; n++)
+		{
+			CvtInt32toLength(0, _channels[n].numSamples);
+			_channels[n].dataOffset = _dataStart;
+			_channels[n].mediaKind = mediaKind;
+			_channels[n].physicalOutChan = n+1;
+			_channels[n].trackID = slotID+n;
+		}
+//!!!		_physicalOutChanOpen = physicalOutChan;
+		
+//!!!		CHECK(fileMob->LocateMediaFile(&_dataFile, &isAAF));
+//!!!		if(_dataFile == NULL)
+//			RAISE(OM_ERR_MEDIA_NOT_FOUND);
+		
+//!!!		_rawFile = _dataFile->_rawFile;			/* If non-omfi file */
+//!!!		CHECK(_mdes->FindCodecForMedia(&_pvt->codecInfo));
+//!!!		if(isAAF)
+		{
+			ImplEnumAAFEssenceData	*myEnum;
+			ImplAAFEssenceData		*testData;
+			aafBool					found = AAFFalse;
+			aafUID_t				testMobID;
+
+			CHECK(fileMob->GetMobID(&fileMobID));
+			CHECK(fileMob->MyHeadObject(&dataHead));
+			CHECK(dataHead->EnumEssenceData (&myEnum));
+			while(myEnum->NextOne (&testData) == AAFRESULT_SUCCESS)
+			{
+				CHECK(testData->GetFileMobID (&testMobID));
+				if(EqualAUID(&fileMobID, &testMobID))
+				{
+					found = AAFTrue;
+					essenceData = testData;
+					break;
+				}
+			}
+			if(!found)
+				RAISE(AAFRESULT_MEDIA_NOT_FOUND);		//!!!No external media yet
+//			CHECK(dataHead->LookupDataObject(fileMobID, &_dataObj));
+		}
+//		else
+//			RAISE(AAFRESULT_MEDIA_NOT_FOUND);		//!!!No external media yet
+
+		aafError = CoCreateInstance(CLSID_AAFEssenceDataStream,
+			NULL, 
+			CLSCTX_INPROC_SERVER, 
+			IID_IAAFEssenceStream, 
+			(void **)&_stream);
+		
+		IAAFEssenceDataStream	*edStream;
+		IUnknown				*edUnknown;
+
+		//Assume not raw stream for now!!!
+		aafError = (_stream->QueryInterface(IID_IAAFEssenceDataStream, (void **)&edStream));
+
+        //!!! This only works with a COM API
+		edUnknown = static_cast<IUnknown *> (essenceData->GetContainer());
+
+//		aafError = (essenceData->QueryInterface(IID_IUnknown, (void **)&edUnknown));
+		edStream->Init(edUnknown);
+
+		CHECK(_codec->Open(fileMobID, openMode, _stream));
+//!!!		if(openMode == kMediaOpenAppend)
+//		{
+//			CHECK(GetSampleCount(&numSamples));										  
+//			CHECK(AddInt32toInt64(1, &numSamples));
+//			CHECK(GotoFrameNumber(numSamples));
+//		}
+//!!!		if (mobIter)
+//		  delete mobIter;
+		
+		_masterMob = masterMob;
+	}
 	XEXCEPT
 	{
-		if (mobIter)
-		  delete mobIter;
 	}
 	XEND
 	
 	return (OM_ERR_NONE);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 	//@comm If the essence is interleaved,
