@@ -224,6 +224,18 @@ void AdminMobGetNthPersonnel (IAAFDictionary * pDict,
 
 
 //
+// Create and registration functions.
+//
+void CreateAndRegisterPositionEnum (IAAFDictionary * pDict);
+void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict);
+void CreateAndRegisterPersonnelResourceReference(IAAFDictionary * pDict);
+void CreateAndRegisterPersonnelResourceReferenceVector(IAAFDictionary * pDict);
+void CreateAndRegisterAdminMob (IAAFDictionary * pDict);
+void DefineResourceClassExtensions(IAAFDictionary *pDict);
+
+
+
+//
 // Returns true if the positions match; returns false otherwise.
 //
 bool ArePositionsEqual (const ePosition & positionA, const ePosition & positionB);
