@@ -88,7 +88,7 @@
 #include <initguid.h>
 #include <coguid.h>
 #elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
-#include "storage.h"
+#include "h/storage.h"
 #else
 #include <objbase.h>
 #endif
