@@ -90,7 +90,7 @@ AAFRESULT ImplAAFObject::MyHeadObject
 		if(header == NULL)
 			RAISE(AAFRESULT_NULL_PARAM);
 
-		if(containingObject() == NULL)
+		if(!attached())
 			RAISE(AAFRESULT_NOT_IN_FILE); 
 
 		myFile = file();
