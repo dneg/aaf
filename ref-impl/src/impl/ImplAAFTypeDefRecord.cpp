@@ -365,6 +365,11 @@ AAFRESULT STDMETHODCALLTYPE
   pvd = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
   if (!pvd) return AAFRESULT_NOMEMORY;
 
+  // Bobt: Hack bugfix! SmartPointer operator= will automatically
+  // AddRef; CreateImpl *also* will addref, so we've got one too
+  // many.  Put us back to normal.
+  pvd->ReleaseReference ();
+
   hr = pvd->Initialize (this);
   if (AAFRESULT_FAILED(hr)) return hr;
 
@@ -445,6 +450,11 @@ AAFRESULT STDMETHODCALLTYPE
 
   pvdOut = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
   if (!pvdOut) return AAFRESULT_NOMEMORY;
+
+  // Bobt: Hack bugfix! SmartPointer operator= will automatically
+  // AddRef; CreateImpl *also* will addref, so we've got one too
+  // many.  Put us back to normal.
+  pvdOut->ReleaseReference ();
 
   hr = GetMemberType (index, &ptd);
   assert (AAFRESULT_SUCCEEDED (hr));
