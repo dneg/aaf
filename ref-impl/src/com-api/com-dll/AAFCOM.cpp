@@ -122,6 +122,7 @@ Initialize::Initialize()
 {
 	// Initialize the inproc server object.
 	g_AAFInProcServer.Init(AAFObjectMap, 0);
+    ImplAAFContext::GetInstance();
 }
 
 Initialize::~Initialize()
