@@ -17,16 +17,269 @@ AAFDigitalImageDescriptor\
 AD_HEAD
 
 
-/***********************************************\
-*  Stub only.   Implementation not yet added    *
-\***********************************************/
-
-
+AD_IDL(//
+// The IAAFRGBADescriptor interface is implemented by objects
+// which describe video content data formatted using RGBA formatting.
+//
+// In addition to the parameters inherited from AAFDigitalImageDescriptor\,
+// this interface adds Pixel layout \(order of R\, B\, G\, alpha\)
+// PixelStructure \(sizes of the various components\)\, Palette\, Palette Layout\,
+// and Palette Structure.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.  Note that
+//     IAAFDigitalImageDescriptor is a primary interface for an
+//     abstract class\, so it is not appropriate for the
+//     Initialize\(\) method to exist in this interface.  The
+//     Initialize\(\) method is available through the concrete
+//     object's primary interface.
+//)
 
 
 AD_CLASS_UUID(e684d771, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(e684d772, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
+
+AD_XMETHOD2(SetPixelLayout,
+			[in],
+				objPass,
+				aafUInt32,
+				numberElements,
+				The number of elements in each array,
+			[in],
+				objPass,
+				aafRGBAComponent_t*,
+				PixelLayoutArray,
+				Array of up to 8 aafRGBAComponent_t indicating component order and size.,
+
+			Sets the layout and structure of the components in a single pixel.
+  // The layout array is an Array of 8 aafRGBAComponent_t.  The \'Code\' field of the struct is
+  // from the set:
+  //   	kAAFCompNone
+  // 	kAAFCompAlpha
+  // 	kAAFCompBlue
+  // 	kAAFCompFill
+  // 	kAAFCompGreen
+  // 	kAAFCompPalette
+  // 	kAAFCompRed
+  // The \'Size\' field of the struct is the component size in bits.
+  // 
+  // If you set less than 8 entries\, the remaining entries will be padded with kAAFCompNone and a size of zero.
+  // If this method fails the PixelLayout property will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD2(GetPixelLayout,
+			[in],
+				objPass,
+				aafUInt32,
+				numberElements,
+				The number of elements in the array,
+			[out\, size_is\(numberElements\)],
+				objPass,
+				aafRGBAComponent_t*,
+				PixelLayoutArray,
+				Array to hold up to 8 aafRGBAComponent_t indicating component order and size.,
+			Gets the layout and structure of the components in a single pixel.
+  // The layout array is an Array of 8 aafRGBAComponent_t.  The \'Code\' field of the struct is
+  // from the set:
+  //   	kAAFCompNone
+  // 	kAAFCompAlpha
+  // 	kAAFCompBlue
+  // 	kAAFCompFill
+  // 	kAAFCompGreen
+  // 	kAAFCompPalette
+  // 	kAAFCompRed
+  //
+  // The \'Size\' field of the struct is the component size in bits.
+  // 
+  // If you Get more entries than were set\, the extra entries will be padded with kAAFCompNone and a size of zero.
+  //
+  // If this method fails\, PixelLayoutArray will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberElements or PixelLayoutArray or PixelStructureArray is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - numberElements indicates that the array is too small to hold
+  //     the data.)
+
+AD_XMETHOD2(SetPallete,
+			[in],
+				objPass,
+				aafUInt32,
+				numberElements,
+				The number of bytes in the array,
+
+			[in\, size_is\(numberElements\)],
+				objPass,
+				aafUInt8*,
+				pPalette,
+				Array to hold the palette information,
+
+			Sets the palette property.  The pallete must be in the form specified
+  // by the palette layout and palette structure parameters.
+  // 
+  // Succeeds if all of the following are true:
+  // - pPalette is a valid pointer
+  // 
+  // If this method fails\, the palette property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pPalette is NULL.)
+
+
+AD_XMETHOD2(GetPalette,
+			[in],
+				objPass,
+				aafUInt32,
+				numberRecords,
+				The number of bytes in the array,
+			[out\, size_is\(numberRecords\)],
+				objPass,
+				aafUInt8*,
+				pPalette,
+				Array to hold the palette information,
+			Sets the palette property.  The pallete must be in the form specified
+  // by the palette layout and palette structure parameters.
+  // The values are written to the array specified by pPalette\,
+  // which is of size numberElements.  The required size may be found
+  // by calling GetPaletteSize\(\).
+  // 
+  // Succeeds if all of the following are true:
+  // - pPalette is a valid pointer.
+  // - numberElements indicates the array is large enough to hold the
+  //   data.
+  // 
+  // If this method fails\, pPalette will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberElements is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - numberElements indicates that the array is too small to hold
+  //     the data.)
+
+
+AD_XMETHOD1(GetPaletteSize,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pNumberBytes,
+				The number of bytes in the array,
+			Get the number of bytes in the VideoLineMap property array.
+  // 
+  // Succeeds if all of the following are true:
+  // - pNumberBytes is a valid pointer
+  // 
+  // If this method fails\, *pNumberBytes will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberBytes is NULL.)
+
+AD_XMETHOD2(SetPaletteLayout,
+			[in],
+				objPass,
+				aafUInt32,
+				numberElements,
+				The number of bytes in the array,
+			[in],
+				objPass,
+				aafRGBAComponent_t*,
+				PaletteLayoutArray,
+				Array of up to 8 bytes indicating component size\, matching layout\, and terminated by a zero byte.,
+
+			Sets the layout and structure of the components in a single pixel.
+  // The layout array is an Array of 8 aafRGBAComponent_t.  The \'Code\' field of the struct is
+  // from the set:
+  //   	kAAFCompNone
+  // 	kAAFCompAlpha
+  // 	kAAFCompBlue
+  // 	kAAFCompFill
+  // 	kAAFCompGreen
+  // 	kAAFCompPalette
+  // 	kAAFCompRed
+  // The \'Size\' field of the struct is the component size in bits.
+  // 
+  // If you set less than 8 entries\, the remaining entries will be padded with kAAFCompNone and a size of zero.
+  // If this method fails the PaletteLayout property will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\))
+
+AD_XMETHOD2(GetPaletteLayout,
+			[in],
+				objPass,
+				aafUInt32,
+				numberElements,
+				The number of elements in each array,
+			[out\, size_is\(numberElements\)],
+				objPass,
+				aafRGBAComponent_t*,
+				PaletteLayoutArray,
+				Array to hold 8 aafRGBAComponent_t indicating component order and size.,
+  // The layout array is an Array of 8 aafRGBAComponent_t.  The \'Code\' field of the struct is
+  // from the set:
+  //   	kAAFCompNone
+  // 	kAAFCompAlpha
+  // 	kAAFCompBlue
+  // 	kAAFCompFill
+  // 	kAAFCompGreen
+  // 	kAAFCompPalette
+  // 	kAAFCompRed
+  //
+  // The \'Size\' field of the struct is the component size in bits.
+  // 
+  // If you Get more entries than were set\, the extra entries will be padded with kAAFCompNone and a size of zero.
+  //
+  // If this method fails\, PaletteLayoutArray will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumberElements or PaletteLayoutArray is NULL.
+  //
+  // AAFRESULT_SMALLBUF
+  //   - numberElements indicates that the array is too small to hold
+  //     the data.)
 
 AD_XCLASS_END(Concrete, StoredObject)
