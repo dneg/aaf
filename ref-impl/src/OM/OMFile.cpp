@@ -550,7 +550,7 @@ void OMFile::open(void)
       openRead();
     } else { // _mode == modifyMode
       openModify();
-	}
+    }
     ASSERT("No root object", _root == 0);
     _root = restoreRoot();
     ASSERT("Object Manager file", isOMFile());
