@@ -619,6 +619,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTaggedValuesTest.c
 
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CEnumAAFTypeDefsTest.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\ModuleTestsCommon.cpp
+# End Source File
 # End Group
 # Begin Group "AAF Libraries"
 
