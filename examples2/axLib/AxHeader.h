@@ -42,6 +42,10 @@ public:
 	IEnumAAFMobsSP GetMobs() const;
 	IEnumAAFMobsSP GetMobs(aafSearchCrit_t & searchCrit) const;
 
+
+	aafUInt32 CountIdentifications();
+	IAAFIdentificationSP GetIdentificationAt(aafUInt32 idno);
+
 	aafUInt32 CountEssence() const;
 
 	void AddMob( IAAFMobSP spIaafMob );
@@ -65,6 +69,17 @@ private:
 };
 
 std::wostream& operator<<( std::wostream& os, const AxHeader& obj );
+
+class AxIdentification : public AxObject  
+{
+public:
+	AxIdentification(IAAFIdentificationSP spIaafIdentification);
+	virtual ~AxIdentification(){};
+	aafUID_t GetProductID();
+private:
+	AxIdentification();
+	mutable IAAFIdentificationSP _spIaafIdentification;
+};
 
 #endif
 

@@ -118,6 +118,24 @@ IEnumAAFMobsSP AxHeader::GetMobs(aafSearchCrit_t & searchCrit) const
 	return spMobs;
 }
 
+aafUInt32 AxHeader::CountIdentifications()
+{
+	aafUInt32 idcount;
+
+	CHECK_HRESULT(_spIaafHeader->CountIdentifications(&idcount));
+
+	return idcount;
+}
+
+IAAFIdentificationSP AxHeader::GetIdentificationAt(aafUInt32 idno)
+{
+	IAAFIdentificationSP spIdent;
+
+	CHECK_HRESULT(_spIaafHeader->GetIdentificationAt(idno, &spIdent));
+
+	return spIdent;
+}
+
 aafUInt32 AxHeader::CountEssence() const
 {
 	aafUInt32 essenceCount;
@@ -149,3 +167,16 @@ std::wostream& operator<<( std::wostream& os, const AxHeader& obj )
 	return obj.dump( os );
 }
 
+AxIdentification::AxIdentification(IAAFIdentificationSP spIaafIdentification)
+:	AxObject( AxQueryInterface<IAAFIdentification,IAAFObject>(spIaafIdentification) ),
+	_spIaafIdentification(spIaafIdentification)
+{};
+
+aafUID_t AxIdentification::GetProductID()
+{
+	aafUID_t prodID;
+
+	CHECK_HRESULT( _spIaafIdentification->GetProductID(&prodID));
+
+	return prodID;
+}
