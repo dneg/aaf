@@ -325,6 +325,8 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		if (hr != AAFRESULT_SUCCESS)
 		  return hr;
 		dictionary->InitBuiltins();
+		dictionary->InitOMProperties ();
+
 		dictionary->ReleaseReference();
 		dictionary = 0;
 
@@ -454,7 +456,17 @@ ImplAAFFile::Save ()
 	// If any new modes are added then the following line will
 	// have to be updated.
 	if (kOmCreate == _openType || kOmModify == _openType) {
+	  // Assure no registration of def objects in dictionary during
+	  // save operation
+	  ImplAAFDictionarySP dictSP;
+	  AAFRESULT hr = _head->GetDictionary(&dictSP);
+	  dictSP->AssureClassPropertyTypes ();
+	  bool regWasEnabled = dictSP->SetEnableDefRegistration (false);
+
 	  _file->save();
+
+	  dictSP->SetEnableDefRegistration (regWasEnabled);
+
 	} else {
 	  return AAFRESULT_WRONG_OPENMODE;
 	}
@@ -480,8 +492,17 @@ ImplAAFFile::SaveAs (wchar_t * pFileName,
 	if (modeFlags)
 		return AAFRESULT_BAD_FLAGS;
 
+	// Assure no registration of def objects in dictionary during
+	// save operation
+	ImplAAFDictionarySP dictSP;
+	AAFRESULT hr = _head->GetDictionary(&dictSP);
+	dictSP->AssureClassPropertyTypes ();
+	bool regWasEnabled = dictSP->SetEnableDefRegistration (false);
+
 	assert(_file);
 	_file->saveAs(pFileName);
+
+	dictSP->SetEnableDefRegistration (regWasEnabled);
 
 	return AAFRESULT_SUCCESS;
 }
