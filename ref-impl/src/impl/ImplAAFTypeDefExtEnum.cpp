@@ -40,6 +40,10 @@
 #include "ImplAAFDictionary.h"
 #endif
 
+#ifndef __ImplAAFPropertyValue_h__
+#include "ImplAAFPropertyValue.h"
+#endif
+
 #ifndef __AAFTypeDefUIDs_h__
 #include "AAFTypeDefUIDs.h"
 #endif
@@ -186,6 +190,7 @@ ImplAAFTypeDefExtEnum::CreateValueFromName (
 	return hr;
 }
 
+// Note: The type of input pValue is validated in GetAUIDValue().
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefExtEnum::GetNameFromValue (
 										 ImplAAFPropertyValue * pValue,
@@ -199,8 +204,11 @@ ImplAAFTypeDefExtEnum::GetNameFromValue (
 		return AAFRESULT_NULL_PARAM;
 	
 	//Extract the AUID value from the PV;  use existing method on AUID!
+	// pValue type is validated in GetAUIDValue().
 	aafUID_t val = {0};
-	GetAUIDValue(pValue, &val);
+	HRESULT	 hr = GetAUIDValue(pValue, &val);
+	if( AAFRESULT_FAILED( hr ) )
+	    return hr;
 	
 	//Use an existing method on AUID, to find out the name!!! 
 	return (GetNameFromAUID(val, pName, bufSize));	
@@ -208,6 +216,7 @@ ImplAAFTypeDefExtEnum::GetNameFromValue (
 
 
 
+// Note: The type of input pValue is validated in GetAUIDValue().
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefExtEnum::GetNameBufLenFromValue (
 											   ImplAAFPropertyValue * pValue,
@@ -219,9 +228,12 @@ ImplAAFTypeDefExtEnum::GetNameBufLenFromValue (
 	if (! pLen)
 		return AAFRESULT_NULL_PARAM;
 	
-	//Extract the AUID value from the PV; use existing method on AUID!
+	//Extract the AUID value from the PV;  use existing method on AUID!
+	// pValue type is validated in GetAUIDValue().
 	aafUID_t val = {0};
-	GetAUIDValue(pValue, &val);
+	HRESULT	 hr = GetAUIDValue(pValue, &val);
+	if( AAFRESULT_FAILED( hr ) )
+	    return hr;
 	
 	//Use an existing method on AUID, to find out the Buffer Length!!! 
 	return (GetNameBufLenFromAUID(val, pLen));
@@ -328,6 +340,15 @@ ImplAAFTypeDefExtEnum::GetAUIDValue (
 	if (! pValueOut)
 		return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	spPropType;
+	if( AAFRESULT_FAILED( pPropValIn->GetType( &spPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (spPropType);
+	if( (ImplAAFTypeDef *)spPropType != this )
+		return AAFRESULT_BAD_TYPE;
+
 	AAFRESULT hr;
 	aafUID_t retval;
 	
@@ -360,6 +381,16 @@ ImplAAFTypeDefExtEnum::SetAUIDValue (
 	if (! pPropValToSet)
 		return AAFRESULT_NULL_PARAM;
 	
+	// Get the property value's embedded type and 
+	// check if it's the same as the local type.
+	ImplAAFTypeDefSP	spPropType;
+	if( AAFRESULT_FAILED( pPropValToSet->GetType( &spPropType ) ) )
+		return AAFRESULT_BAD_TYPE;
+	assert (spPropType);
+	if( (ImplAAFTypeDef *)spPropType != this )
+		return AAFRESULT_BAD_TYPE;
+
+
 	AAFRESULT hr;
 	
 	// Call this method to find out if this is a legal value
