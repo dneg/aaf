@@ -48,7 +48,7 @@
 #include <objbase.h>
 #endif
 
-const OMUInt32 currentVersion = 17;
+const OMUInt32 currentVersion = 18;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
                                sizeof(OMUInt32) +     // Version number
