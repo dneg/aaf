@@ -44,6 +44,8 @@ targets: $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 targets: $(UUID_DIR)/AAFPlugin_i.c
 targets: $(COMAPI_DIR)/AAFCLSIDs.h
 targets: $(IMPL_DIR)/AAFClassIDs.h
+targets: $(COMAPI_DIR)/AAFObjectTable.h
+targets: $(COMAPI_DIR)/AAFObjectTable_i.cpp
 
 
 $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
@@ -428,6 +430,97 @@ $(COMAPI_DIR)/AAFCLSIDs.h : aafobjects.mk
 	chmod -w $(COMAPI_DIR)/AAFCLSIDs.h
 
 
+$(COMAPI_DIR)/AAFObjectTable.h : aafobjects.mk
+	@ echo Generating reference AAFObjectTable.h...
+	@ $(RM) -f $(COMAPI_DIR)/AAFObjectTable.tmp
+	@ ( echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
+	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// This file contains invocations of the macros described below." ; \
+	    echo "//" ; \
+	    echo "// To use this file -" ; \
+	    echo "//   1) #define the macros to suit your usage" ; \
+	    echo "//   2) #include this file" ; \
+	    echo "//   3) #undef the macros" ; \
+	    echo "" ; \
+	    echo "// Default empty definitions so that you only have to define" ; \
+	    echo "// those macros you actually want to use." ; \
+	    echo "//" ; \
+	    echo \#ifndef AAF_BEGIN_OBJECT_MAP ; \
+	    echo \#define AAF_BEGIN_OBJECT_MAP\(x\) ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef AAF_END_OBJECT_MAP ; \
+	    echo \#define AAF_END_OBJECT_MAP\(\) ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef AAF_END_OBJECT_MAP ; \
+	    echo \#define AAF_OBJECT_ENTRY\(name\) ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo "" ; \
+	    echo "//" ; \
+	    echo "// Include all objects in the following table:" ; \
+	    echo "//" ; \
+	    echo AAF_BEGIN_OBJECT_MAP\(AAFObjectMap\) ; \
+	    for AAF in ${AAFOBJECTS} ; do \
+		echo "	AAF_OBJECT_ENTRY("$$AAF")" ; \
+	    done ; \
+	    echo AAF_END_OBJECT_MAP\(\) ; \
+	) > $(COMAPI_DIR)/AAFObjectTable.tmp
+	$(RM) -f $(COMAPI_DIR)/AAFObjectTable.h
+	mv $(COMAPI_DIR)/AAFObjectTable.tmp $(COMAPI_DIR)/AAFObjectTable.h
+	chmod -w $(COMAPI_DIR)/AAFObjectTable.h
+
+
+$(COMAPI_DIR)/AAFObjectTable_i.cpp : aafobjects.mk
+	@ echo Generating reference AAFObjectTable_i.cpp...
+	@ $(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.tmp
+	@ ( echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "// (C) Copyright 1998-1999 Avid Technology." ; \
+	    echo "// (C) Copyright 1998-1999 Microsoft Corporation." ; \
+	    echo "//" ; \
+	    echo "// This file was GENERATED for the AAF SDK on " ; \
+	    echo "//  "`date` ; \
+	    echo "//" ; \
+	    echo "// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF" ; \
+	    echo "// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO" ; \
+	    echo "// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A" ; \
+	    echo "// PARTICULAR PURPOSE." ; \
+	    echo "//=--------------------------------------------------------------------------=" ; \
+	    echo "" ; \
+	    echo "//" ; \
+	    echo "// Include the CLSID declarations..." ; \
+	    echo "//" ; \
+	    echo \#include \"AAFCLSIDs.h\" ; \
+	    echo "" ; \
+	    echo "//" ; \
+	    echo "// Include the appropriate header files:" ; \
+	    echo "//" ; \
+	    for AAF in ${AAFOBJECTS} ; do \
+	        echo \#include \"C$$AAF.h\" ; \
+	    done ; \
+	    echo "" ; \
+	    echo "//" ; \
+	    echo "// Include AAF Object Table:" ; \
+	    echo "//" ; \
+	    echo \#include \"AAFObjectTable.h\" ; \
+	) > $(COMAPI_DIR)/AAFObjectTable_i.tmp
+	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.cpp
+	mv $(COMAPI_DIR)/AAFObjectTable_i.tmp $(COMAPI_DIR)/AAFObjectTable_i.cpp
+	chmod -w $(COMAPI_DIR)/AAFObjectTable_i.cpp
+
+
+
 SRC_DIR = ../ref-impl/src
 
 .dod.exp :
@@ -571,6 +664,9 @@ clean:
 	$(RM) -f $(UUID_DIR)/AAF_i.c
 	$(RM) -f $(UUID_DIR)/AAFPlugin_i.c
 	$(RM) -f $(COMAPI_DIR)/AAFCLSIDs.h
+	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.tmp
+	$(RM) -f $(COMAPI_DIR)/AAFObjectTable.h
+	$(RM) -f $(COMAPI_DIR)/AAFObjectTable_i.cpp
 	@for file in $(AUTO_GEN_IMPL) ; do \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
