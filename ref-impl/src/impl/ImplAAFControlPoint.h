@@ -149,7 +149,7 @@ private:
 	OMFixedSizeProperty<aafUID_t>		_type;
 	OMFixedSizeProperty<aafRational_t>	_time;
 	OMVariableSizeProperty<aafUInt8>	_value;
-	OMFixedSizeProperty<aafUInt16>		_hint;
+	OMFixedSizeProperty<aafEditHint_t>	_hint;
 };
 
 #endif // ! __ImplAAFControlPoint_h__
