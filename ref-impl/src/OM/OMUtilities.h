@@ -122,6 +122,16 @@ wchar_t* findWideCharacter(const wchar_t* string, wchar_t character);
 
 size_t countWideCharacter(const wchar_t* string, wchar_t character);
 
+  // C strings <-> Pascal strings
+
+// Convert C string to Pascal string, truncate if too long.
+//
+void copyCToPString(unsigned char* pString, size_t size, const char* string);
+
+// Convert Pascal string to C string, truncate if too long.
+//
+void copyPToCString(char* string, size_t size, const unsigned char* pString);
+
   // @func The number of characters needed to represent <p i> as a
   //       hexadecimal string without leading zeros.
   //   @parm A non-zero unsigned integer.
