@@ -64,16 +64,18 @@ typedef IAAFSmartPointer<IAAFMobSlot>           IAAFMobSlotSP;
 	
 //Variable Array
 #define									TEST_VA_NAME	L"VA type Name"
-static  aafUID_t						TEST_VA_TYPE_ID =  {0}; //use CoCreateGuid() 
+static  aafUID_t						TEST_VA_TYPE_ID =  { 0x1464a4ae, 0x01a5, 0x11d4, { 0x80, 0x46, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
 
 static const aafUInt32					TEST_VA_COUNT =  5;
 #define		 TEST_ELEM_t				aafInt16
 static const aafUID_t					TEST_ELEM_TYPE_ID =	kAAFTypeID_Int16;
 static const TEST_ELEM_t				TEST_VA_VALUES [TEST_VA_COUNT] = {-27, 3000, -50, 94, -8};
 
+aafUID_t  some_int_id = { 0x14b66cc6, 0x1a1, 0x11d4, { 0x80, 0x46, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
+
 // Variable Array Property
 #define									TEST_PROP_NAME	L"VA Property Name"
-static  aafUID_t						TEST_PROP_ID = {0};  //use CoCreateGuid() 
+static  aafUID_t						TEST_PROP_ID = { 0x1464a4af, 0x01a5, 0x11d4, { 0x80, 0x46, 0x8, 0x0, 0x36, 0x21, 0x8, 0x4 } };
 
 // Mob id
 static  aafMobID_t						TEST_MobID = {0};
@@ -146,7 +148,6 @@ static HRESULT  createVAType (IAAFDictionary* const pDict)
 		CreateInstance (IID_IAAFTypeDefVariableArray, (IUnknown **) &spVA));
 	
 	//IAAFTypeDefVariableArray::Initialize
-	checkResult(CoCreateGuid((GUID *)&TEST_VA_TYPE_ID)); // Could use a better/more accurate UID generator
 	checkResult(spVA->Initialize(TEST_VA_TYPE_ID, spTD_elem,  TEST_VA_NAME));
 	
 	//  Register our new VA type def :
@@ -171,9 +172,6 @@ static HRESULT addVATypeToComponent(IAAFDictionary* const pDict)
 	//Lookup the TEST_VA_TYPE_ID we just created!
 	IAAFTypeDefSP spTD;
 	checkResult(pDict->LookupTypeDef (TEST_VA_TYPE_ID, &spTD));
-	
-	//Create a UID for the Property
-	checkResult(CoCreateGuid((GUID *)&TEST_PROP_ID)); // Could use a better/more accurate UID generator
 	
 	//	Register the Property
 	IAAFPropertyDefSP spPropDef;
@@ -402,8 +400,6 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	//first, create a new member, and add it to the array
 	IAAFTypeDefIntSP spNewInt;
 	checkResult(defs.cdTypeDefInt()->CreateInstance(IID_IAAFTypeDefInt, (IUnknown**)&spNewInt));
-	aafUID_t  some_int_id = {0};
-	checkResult(CoCreateGuid((GUID *)&some_int_id)); // Could use a better/more accurate UID generator
 	checkResult (spNewInt->Initialize (some_int_id, sizeof(TEST_ELEM_t), kAAFTrue, L"Some Int Name"));
 	TEST_ELEM_t  new_int = -115;
 	IAAFPropertyValueSP spNewInt_PV;
