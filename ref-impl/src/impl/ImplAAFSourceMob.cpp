@@ -41,7 +41,7 @@
 #include "aafCvt.h"
 #include "aafErr.h"
 #include "AAFResult.h"
-#include "ImplAAFObjectCreation.h"
+#include "ImplAAFDictionary.h"
 #include "AAFDefUIDs.h"
 #include "AAFUtils.h"
 #include "ImplEnumAAFMobSlots.h"
@@ -52,11 +52,6 @@
 #include "ImplAAFFiller.h"
 #include "ImplAAFEdgecode.h"
 
-extern "C" const aafClassID_t	CLSID_AAFSourceClip;
-extern "C" const aafClassID_t	CLSID_AAFSequence;
-extern "C" const aafClassID_t	CLSID_AAFTimecode;
-extern "C" const aafClassID_t	CLSID_AAFFiller;
-extern "C" const aafClassID_t	CLSID_AAFEdgecode;
 
 ImplAAFSourceMob::ImplAAFSourceMob ()
 : _essenceDesc(        PID_SourceMob_EssenceDescription,          "EssenceDescription")
@@ -138,6 +133,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafLength_t		zeroLen = CvtInt32toLength(0, zeroLen);
 	aafSourceRef_t	sourceRef;
 	ImplAAFTimelineMobSlot *	newSlot = NULL;		// Need version for non-timeline slots!!!
+	ImplAAFDictionary *pDictionary = NULL;
 	
 	if (editRate.denominator == 0)
 		return AAFRESULT_BADRATE;
@@ -147,9 +143,12 @@ AAFRESULT STDMETHODCALLTYPE
  		sourceRef.sourceID = NilMOBID;
 		sourceRef.sourceSlotID = 0;
 		CvtInt32toPosition(0, sourceRef.startTime);
-		sub = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
+		CHECK(GetDictionary(&pDictionary));
+		sub = (ImplAAFSourceClip *)pDictionary->CreateImplObject(AUID_AAFSourceClip);
 		if(sub == NULL)
-			return(E_FAIL);
+			RAISE(E_FAIL);
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
 		CHECK(sub->Initialize (dataDef, &length, sourceRef));
 		CHECK(AppendNewTimelineSlot(editRate, sub, slotID, L"Test", zeroPos, 
 												&newSlot));
@@ -162,6 +161,8 @@ AAFRESULT STDMETHODCALLTYPE
 			sub->ReleaseReference();
 		if(newSlot != NULL)
 			newSlot->ReleaseReference();
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
 	}
 	XEND;
 
@@ -189,6 +190,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafLength_t		length, zeroLen;
 	ImplAAFTimelineMobSlot *	newSlot = NULL, *mobSlot = NULL;
 	aafBool			fullLength = AAFFalse;
+	ImplAAFDictionary *pDictionary = NULL;
 
 	//!!!Validate tape mobs only, return AAFRESULT_TAPE_DESC_ONLY
 	if(length32 == FULL_LENGTH)
@@ -205,11 +207,15 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		tccp = (ImplAAFTimecode *)CreateImpl(CLSID_AAFTimecode);
+		CHECK(GetDictionary(&pDictionary));
+		tccp = (ImplAAFTimecode *)pDictionary->CreateImplObject(AUID_AAFTimecode);
+		if(NULL == tccp)
+			RAISE(E_FAIL);
+
 		tccp->Initialize(length, &startTC);		 
  		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot) == AAFRESULT_SUCCESS)
 		{
-			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
+			aSequ = (ImplAAFSequence *)pDictionary->CreateImplObject(AUID_AAFSequence);
 			if(aSequ == NULL)
 				RAISE(E_FAIL);
 			CHECK(aSequ->Initialize(&timecodeKind));
@@ -219,7 +225,7 @@ AAFRESULT STDMETHODCALLTYPE
 		} /* FindTimecodeSlot */
 		else
 		{
-			aSequ = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
+			aSequ = (ImplAAFSequence *)pDictionary->CreateImplObject(AUID_AAFSequence);
 			if(aSequ == NULL)
 				RAISE(E_FAIL);
 			CHECK(aSequ->Initialize(&timecodeKind));
@@ -245,6 +251,9 @@ AAFRESULT STDMETHODCALLTYPE
 			aSequ->ReleaseReference();
 		if(tccp != NULL)
 			tccp->ReleaseReference();
+
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
 	} /* XPROTECT */
 	XEXCEPT
 	{
@@ -254,6 +263,8 @@ AAFRESULT STDMETHODCALLTYPE
 			aSequ->ReleaseReference();
 		if(tccp != NULL)
 			tccp->ReleaseReference();
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
 	}
 	XEND;
 									
@@ -283,20 +294,24 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFTimelineMobSlot *	newSlot;
 	aafEdgecode_t	edge;
 	aafUID_t		edgekind = DDEF_Edgecode;
+	ImplAAFDictionary *pDictionary = NULL;
 
 	// Validate film mobs only, return AAFRESULT_FILM_DESC_ONLY
 	CvtInt32toPosition(0, zeroPos);
 	CvtInt32toLength(0, zeroLen);
 	XPROTECT()
 	{
-		filler1 = (ImplAAFFiller *)CreateImpl(CLSID_AAFFiller);
-		CHECK(filler1->Initialize(&edgekind, zeroLen));	
-		filler2 = (ImplAAFFiller *)CreateImpl(CLSID_AAFFiller);
-		CHECK(filler2->Initialize(&edgekind, zeroLen));	
-		if(filler1 == NULL || filler2 == NULL)
+		CHECK(GetDictionary(&pDictionary));
+		filler1 = (ImplAAFFiller *)pDictionary->CreateImplObject(AUID_AAFFiller);
+		if(filler1 == NULL)
 			RAISE(E_FAIL);
+		CHECK(filler1->Initialize(&edgekind, zeroLen));	
+		filler2 = (ImplAAFFiller *)pDictionary->CreateImplObject(AUID_AAFFiller);
+		if(filler2 == NULL)
+			RAISE(E_FAIL);
+		CHECK(filler2->Initialize(&edgekind, zeroLen));	
 
-		ecSequence = (ImplAAFSequence *)CreateImpl(CLSID_AAFSequence);
+		ecSequence = (ImplAAFSequence *)pDictionary->CreateImplObject(AUID_AAFSequence);
 		if(ecSequence == NULL)
 			RAISE(E_FAIL);
 		CHECK(ecSequence->Initialize(&edgekind));	
@@ -308,7 +323,7 @@ AAFRESULT STDMETHODCALLTYPE
 		edge.codeFormat = codeFormat;
 		strncpy((char *)&edge.header, (char *)&header, 8);
 		
-		edgecodeClip = (ImplAAFEdgecode *)CreateImpl(CLSID_AAFEdgecode);
+		edgecodeClip = (ImplAAFEdgecode *)pDictionary->CreateImplObject(AUID_AAFEdgecode);
 		if(edgecodeClip == NULL)
 			RAISE(E_FAIL);
 		CHECK(edgecodeClip->Create(length, edge));	
@@ -323,6 +338,8 @@ AAFRESULT STDMETHODCALLTYPE
 			filler1->ReleaseReference();
 		if(filler2 != NULL)
 			filler2->ReleaseReference();
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
 	} /* XPROTECT */
 	XEXCEPT
 	{
@@ -330,6 +347,8 @@ AAFRESULT STDMETHODCALLTYPE
 			filler1->ReleaseReference();
 		if(filler2 != NULL)
 			filler2->ReleaseReference();
+		if(pDictionary != NULL)
+			pDictionary->ReleaseReference();
 	}
 	XEND;
 
