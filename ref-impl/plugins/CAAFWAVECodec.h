@@ -236,6 +236,13 @@ public:
   STDMETHOD (GetEssenceFormatList)
     (/*[out]*/ IAAFEssenceFormat **pFormat); // An essence format result object 
 
+  STDMETHOD (GetIndexedSampleSize)
+    (aafUID_t dataDefID, aafPosition_t pos, aafLength_t *pResult);
+  STDMETHOD (GetLargestSampleSize)
+    (aafUID_t dataDefID, aafLength_t *pResult);
+  STDMETHOD (AddSampleIndexEntry)
+    (aafPosition_t pos);
+
 
 protected:
   // 
