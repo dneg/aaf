@@ -49,7 +49,7 @@ public:
   ~OMObjectReference(void);
 
     // @cmember Is this <c OMObjectReference> void ?
-  virtual bool isVoid(void) const = 0;
+  virtual bool isVoid(void) const;
 
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMContainer>.
