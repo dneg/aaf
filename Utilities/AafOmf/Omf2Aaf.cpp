@@ -3743,6 +3743,6 @@ void Omf2Aaf::GetAAFOperationDefinition(omfUniqueName_t effectID,
 }
 
 
-void Omf2Aaf::ConvertObjectProps(omfObject_t pOMFObject, aafUID_t &classID, IAAFObject* pObj)
+void Omf2Aaf::ConvertObjectProps(omfObject_t /*pOMFObject*/, aafUID_t &/*classID*/, IAAFObject* /*pObj*/)
 {
 }		
