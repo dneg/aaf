@@ -23,6 +23,7 @@ color Pale-Blue           CCFFFF
 color Purple              FFCCFF
 color Yellow              FFFFCC
 color Blue                CCCCFF
+color Green               00FF00
 
 # Components
 
@@ -43,8 +44,11 @@ component API Grey
   ref-impl/src/com-api/
   ref-impl/include/com-api/
   ref-impl/include/ref-api
-  AAF
   dodo/
+end
+
+component Project-and-Makefiles Green
+  AAF
 end
 
 component Documentation Pale-Blue
