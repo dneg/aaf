@@ -863,7 +863,7 @@ ImplAAFFile::Open ()
 			(&aafFileSignatureAafSSBinaryGUID);
 		  checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
 
-		if (_file->byteOrder() != hostByteOrder()) {
+		if (IsWriteable() && _file->byteOrder() != hostByteOrder()) {
 		  // Modify of foreign files not yet supported
 		  _file->close();
 		  _file = 0;
