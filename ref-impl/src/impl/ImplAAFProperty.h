@@ -18,6 +18,8 @@ class ImplAAFPropertyDef;
 
 class ImplAAFPropertyValue;
 
+class OMProperty;
+
 
 
 
@@ -67,7 +69,8 @@ public:
   //
   // non-published initialization method
   //
-  AAFRESULT Initialize (ImplAAFPropertyDef * pPropDef);
+  AAFRESULT Initialize (ImplAAFPropertyDef * pPropDef,
+						OMProperty * pOMProp);
 
 
 private:

@@ -12,8 +12,8 @@
 #include "ImplAAFPropertyDef.h"
 #endif
 
-#ifndef __ImplAAFPropertyValue_h__
-#include "ImplAAFPropertyValue.h"
+#ifndef __ImplAAFPropValData_h__
+#include "ImplAAFPropValData.h"
 #endif
 
 #ifndef __ImplAAFProperty_h__
@@ -29,7 +29,11 @@
 #include <assert.h>
 #include <string.h>
 
-extern "C" const aafClassID_t CLSID_AAFPropertyValue;
+extern "C" const aafClassID_t CLSID_AAFPropValData;
+
+
+#define RELEASE_IF_SET(obj) \
+    if (obj) { obj->ReleaseReference(); obj = NULL; }
 
 
 ImplAAFProperty::ImplAAFProperty ()
@@ -40,38 +44,68 @@ ImplAAFProperty::ImplAAFProperty ()
 
 ImplAAFProperty::~ImplAAFProperty ()
 {
-  if (_pPropVal)
-	_pPropVal->ReleaseReference();
-  if (_pPropDef)
-	_pPropDef->ReleaseReference();
+  RELEASE_IF_SET (_pPropVal);
+  RELEASE_IF_SET (_pPropDef);
 }
+
 
 AAFRESULT ImplAAFProperty::Initialize
 (
- ImplAAFPropertyDef * pPropDef
+ ImplAAFPropertyDef * pPropDef,
+ OMProperty * pOmProp
 )
 {
+  ImplAAFPropValData * pvd = NULL;
+  ImplAAFTypeDef * ptd = NULL;
+  AAFRESULT rReturned = AAFRESULT_SUCCESS;
+
   if (!pPropDef)
 	return AAFRESULT_NULL_PARAM;
 
-  ImplAAFPropertyValue * pv = NULL;
-  pv = (ImplAAFPropertyValue*) CreateImpl (CLSID_AAFPropertyValue);
-  if (! pv)
-	return E_FAIL;
-  assert (pv);
-  ImplAAFTypeDef * ptd = NULL;
-  AAFRESULT hr;
-  hr = pPropDef->GetTypeDef (&ptd);
-  if (AAFRESULT_FAILED(hr)) return hr;
-  assert (ptd);
-  hr = pv->Initialize (ptd);
-  if (AAFRESULT_FAILED(hr)) return hr;
-  ptd->ReleaseReference ();
-  _pPropVal = pv;
-  _pPropDef = pPropDef;
-  _pPropDef->AcquireReference();
+  if (!pOmProp)
+	return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_SUCCESS;
+  try
+	{
+
+	  _pPropDef = pPropDef;
+	  _pPropDef->AcquireReference ();
+
+	  AAFRESULT hr;
+	  hr = pPropDef->GetTypeDef (&ptd);
+	  if (AAFRESULT_FAILED(hr)) throw hr;
+	  assert (ptd);
+
+	  pvd = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
+	  if (! pvd) throw AAFRESULT_NOMEMORY;
+
+	  hr = pvd->Initialize (ptd);
+	  if (AAFRESULT_FAILED(hr)) throw hr;
+
+	  // set the storage in the prop value
+	  size_t bitsSize;
+	  assert (pOmProp);
+	  bitsSize = pOmProp->bitsSize ();
+	  aafMemPtr_t pBits = NULL;
+	  hr = pvd->AllocateBits (bitsSize, &pBits);
+	  if (! AAFRESULT_SUCCEEDED (hr)) throw hr;
+	  if (bitsSize)
+	  {
+		  assert (pBits);
+		  pOmProp->getBits (pBits, bitsSize);
+	  }
+	  _pPropVal = pvd;
+	}
+  catch (HRESULT &rCaught)
+	{
+	  rReturned = rCaught;
+
+	  RELEASE_IF_SET (_pPropDef);
+	  RELEASE_IF_SET (pvd);
+	}
+
+  RELEASE_IF_SET (ptd);
+  return rReturned;
 }
 
 
