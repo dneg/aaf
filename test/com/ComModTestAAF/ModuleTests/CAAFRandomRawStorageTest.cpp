@@ -243,7 +243,7 @@ static HRESULT localOpenFileDiskStgWrite
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
-								   kAAFFileAccess_write,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -311,7 +311,7 @@ static HRESULT localOpenFileCachedDiskStgWrite
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
-								   kAAFFileAccess_write,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -374,7 +374,7 @@ static HRESULT localOpenFileMemStgWrite
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
-								   kAAFFileAccess_write,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
@@ -663,7 +663,7 @@ static HRESULT localOpenFileCustomStgWrite
   checkResult
 	(AAFCreateAAFFileOnRawStorage (pStg,
 								   kAAFFileExistence_new,
-								   kAAFFileAccess_write,
+								   kAAFFileAccess_modify,
 								   &aafFileKindAafSSBinary,
 								   0,
 								   &sIdent,
