@@ -121,6 +121,15 @@ CAAFServer* g_pAAFServer = &g_AAFPluginServer;
 #include "AAFStoredObjectIDs.h"
 #undef INIT_AUID
 
+//
+// Define plugin constants.
+//
+#include "AAFPlugin_i.c"
+
+//
+// Define Personnel Extension constants.
+//
+#include "AAFPersonnelExtension_i.c"
 
 
 #if defined(_MAC)
