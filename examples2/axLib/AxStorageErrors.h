@@ -45,6 +45,8 @@
 // undefined types, pulls in numerous other header files, etc - all of
 // which are unnecessary insofar as these error codes are concerned.
 
+#if !defined(OS_WINDOWS)
+
 // Pick up the MAKE_SCODE macro from AAFResult.h
 #include <AAFResult.h>
 
@@ -158,10 +160,16 @@
 #define STG_S_CONVERTED \
     MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_STORAGE, 0x200)
 
+
+// endif !defined(OS_WINDOWS)
+#endif
+
+// These two don't seem to be defined in the Windoze header files.
 #define STG_S_BUFFEROVERFLOW \
     MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_STORAGE, 0x201)
 
 #define STG_S_TRYOVERWRITE \
     MAKE_SCODE(SEVERITY_SUCCESS, FACILITY_STORAGE, 0x202)    
+
 
 #endif
