@@ -123,7 +123,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
 	IAAFCodecDef*	pPlugDef = NULL;
-	IAAFDefObject	*pDef = NULL;
 	IAAFDataDef		*pDataDef = NULL;
 	IAAFClassDef	*classDef = NULL;
 	bool bFileOpen = false;
@@ -150,9 +149,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFCodecDef,
 								   (IUnknown **)&pPlugDef));
     
-		checkResult(pPlugDef->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
 		uid = CodecWave;
-		checkResult(pDef->Initialize (uid, L"TestCodec", L"TestCodecDescription"));
+		checkResult(pPlugDef->Initialize (uid, L"TestCodec", L"TestCodecDescription"));
 
 		checkResult(pPlugDef->AddEssenceKind (defs.ddMatte()));
 		checkResult(pDictionary->RegisterCodecDef(pPlugDef));
@@ -167,9 +165,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
   // Cleanup and return
-  if (pDef)
-    pDef->Release();
-
   if (classDef)
     classDef->Release();
 

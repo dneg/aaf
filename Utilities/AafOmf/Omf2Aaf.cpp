@@ -3645,7 +3645,6 @@ void Omf2Aaf::GetParameterDefinition(aafUID_t* pDefUID,
 {
 	AAFCheck				rc;
 
-	IAAFDefObject*		pDefObject = NULL;
 //	IAAFTypeDef*		ptmpTypeDef = NULL;
 	IAAFParameterDef*	ptmpParameterDef = NULL;
 
@@ -3665,21 +3664,13 @@ void Omf2Aaf::GetParameterDefinition(aafUID_t* pDefUID,
 		defs.cdParameterDef()->
 		  CreateInstance(IID_IAAFParameterDef,
 						 (IUnknown **) &ptmpParameterDef);
-		ptmpParameterDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
-		pDefObject->Initialize(*pDefUID, pwName, pwDesc);
+		ptmpParameterDef->Initialize(*pDefUID, pwName, pwDesc);
 		ptmpParameterDef->SetDisplayUnits(pwDisplayUnits);
 //		ptmpParameterDef->SetTypeDef(pTypeDef);
 		rc = pDictionary->RegisterParameterDef(ptmpParameterDef);
 	}
 
 	*ppParameterDef = ptmpParameterDef;
-
-	// Cleanup
-	if (pDefObject)
-	{
-		pDefObject->Release();
-		pDefObject = NULL;
-	}
 }
 
 // ============================================================================
@@ -3706,7 +3697,6 @@ void Omf2Aaf::GetAAFOperationDefinition(OMF2::omfUniqueName_t effectID,
 {
 	AAFCheck				rc;
 
-	IAAFDefObject*		pDefObject = NULL;
     aafWChar*			pwCategory = NULL;
 	aafWChar*			pwDesc = NULL;
 	aafWChar*			pwName = NULL;
@@ -3731,10 +3721,7 @@ void Omf2Aaf::GetAAFOperationDefinition(OMF2::omfUniqueName_t effectID,
 		defs.cdOperationDef()->
 		  CreateInstance(IID_IAAFOperationDef,
 						 (IUnknown **) ppEffectDef);
-		(*ppEffectDef)->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
-		pDefObject->Initialize(effectDefAUID, pwName, pwDesc);
-		pDefObject->Release();
-		pDefObject = NULL;
+		(*ppEffectDef)->Initialize(effectDefAUID, pwName, pwDesc);
 		pDictionary->RegisterOperationDef(*ppEffectDef);
 		(*ppEffectDef)->SetIsTimeWarp((aafBool)isTimeWarp);
 		(*ppEffectDef)->SetCategory(pwName);
@@ -3755,9 +3742,6 @@ void Omf2Aaf::GetAAFOperationDefinition(OMF2::omfUniqueName_t effectID,
 		delete [] pwDesc;
 	if (pwCategory)
 		delete [] pwCategory;
-
-	if (pDefObject)
-		pDefObject->Release();
 }
 
 
