@@ -12,6 +12,9 @@ decisions made in Kino.  The AAF file will contain embedded essence for the
 video and audio tracks of the DV files and can be imported into commercial
 non-linear editing applications that support AAF.
 
+eli2aaf is distributed under the terms of the GNU General Public License.
+See the file COPYING for full details of the license.
+
 Requirements
 ============
 
@@ -43,8 +46,8 @@ Usage
   The DV files referenced in the ELI file must be accessible when eli2aaf is
   executed.
 
-Limitations
-===========
+Known bugs or limitations
+=========================
 
  * Audio is only supported for PAL DV files at 48 kHz 16 bit sampling
 
