@@ -41,10 +41,6 @@ protected:
   virtual ~ImplAAFTransition ();
 
 public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTransition)
-
 
   //****************
   // Create()

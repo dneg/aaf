@@ -206,13 +206,6 @@ public:
          // @parm [out] Input segment
          ImplAAFSegment ** inputSegment);
 
-
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFOperationGroup)
-
 private:
 	OMFixedSizeProperty<aafUID_t>						_operationDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;

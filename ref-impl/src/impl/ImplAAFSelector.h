@@ -95,12 +95,6 @@ public:
 										ImplAAFOperationGroup **groupObject, aafInt32	*nestDepth,
 										ImplAAFComponent **found, aafBool *foundTransition);
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFSelector)
-
 private:
 	OMStrongReferenceProperty<ImplAAFSegment>		_selected;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>	_alternates;

@@ -143,12 +143,6 @@ private:
 							aafInt32 *result);
 	AAFRESULT MaskGetBits(aafUInt32 maskBits, char *maskones);
 
-
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFPulldown)
-
 private:
 	OMStrongReferenceProperty<ImplAAFSegment>	_inputSegment;
 	OMFixedSizeProperty<aafPulldownKind_t>		_pulldownKind;

@@ -109,11 +109,6 @@ public:
     pvtCreateOMProperty (OMPropertyId pid,
 						 const aafCharacter * name) const;
 
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFTypeDefRename)
-
 private:
   ImplAAFTypeDefSP BaseType () const;
 

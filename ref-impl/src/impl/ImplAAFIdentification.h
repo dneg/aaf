@@ -46,8 +46,6 @@ public:
     // const AUID* generation
     );
 
-  OMDECLARE_STORABLE(ImplAAFIdentification)
-
 
   virtual AAFRESULT STDMETHODCALLTYPE
 	Initialize ();
