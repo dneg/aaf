@@ -129,9 +129,8 @@ HRESULT STDMETHODCALLTYPE
 	{
 		//!!!Later, add in dataDefs supported & filedescriptor class
 	  	CHECK(dict->LookupClassDef(AUID_AAFCodecDef, &pcd));
-		CHECK(dict->CreateInstance(pcd,
-							IID_IAAFCodecDef, 
-							(IUnknown **)&codecDef));
+		CHECK(pcd->CreateInstance(IID_IAAFCodecDef, 
+								  (IUnknown **)&codecDef));
 		pcd->Release ();
 		pcd = 0;
 		uid = CodecWave;
@@ -185,9 +184,8 @@ HRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 	    CHECK(dict->LookupClassDef(AUID_AAFPluginDescriptor, &pcd));
-		CHECK(dict->CreateInstance(pcd,
-			IID_IAAFPluginDescriptor, 
-			(IUnknown **)&desc));
+		CHECK(pcd->CreateInstance(IID_IAAFPluginDescriptor, 
+								  (IUnknown **)&desc));
 		pcd->Release ();
 		pcd = 0;
 		*descPtr = desc;
@@ -197,9 +195,8 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
 		CHECK(desc->SetPluginVersionString(manufRev));
 		CHECK(dict->LookupClassDef(AUID_AAFNetworkLocator, &pcd));
-		CHECK(dict->CreateInstance(pcd,
-			IID_IAAFLocator, 
-			(IUnknown **)&pLoc));
+		CHECK(pcd->CreateInstance(IID_IAAFLocator, 
+								  (IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (manufURL));
 		CHECK(pLoc->QueryInterface(IID_IAAFNetworkLocator, (void **)&pNetLoc));
 		CHECK(desc->SetManufacturerInfo(pNetLoc));
@@ -215,9 +212,8 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(desc->SetSupportsAuthentication(AAFFalse));
 		
 		/**/
-		CHECK(dict->CreateInstance(pcd,
-			IID_IAAFLocator, 
-			(IUnknown **)&pLoc));
+		CHECK(pcd->CreateInstance(IID_IAAFLocator, 
+								  (IUnknown **)&pLoc));
 		pcd->Release ();
 		pcd = 0;
 		CHECK(pLoc->SetPath (downloadURL));

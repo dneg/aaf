@@ -338,9 +338,8 @@ HRESULT STDMETHODCALLTYPE
 
 		// Create the Codec Definition:
 	    checkResult(dict->LookupClassDef(AUID_AAFCodecDef, &pcd));
-		checkResult(dict->CreateInstance(pcd,
-							IID_IAAFCodecDef, 
-							(IUnknown **)&codecDef));
+		checkResult(pcd->CreateInstance(IID_IAAFCodecDef, 
+										(IUnknown **)&codecDef));
 		pcd->Release();
 		pcd = 0;
 		
@@ -415,9 +414,8 @@ HRESULT STDMETHODCALLTYPE
 	try
 	{
 	    checkResult(dict->LookupClassDef(AUID_AAFPluginDescriptor, &pcd));
-		checkResult(dict->CreateInstance(pcd,
-			IID_IAAFPluginDescriptor, 
-			(IUnknown **)&desc));
+		checkResult(pcd->CreateInstance(IID_IAAFPluginDescriptor, 
+										(IUnknown **)&desc));
 		pcd->Release ();
 		pcd = 0;
 
@@ -434,9 +432,8 @@ HRESULT STDMETHODCALLTYPE
 
 		// Create the network locator for the Manufacturer's web site: 
 		checkResult(dict->LookupClassDef(AUID_AAFNetworkLocator, &pcd));
-		checkResult(dict->CreateInstance(pcd,
-			IID_IAAFLocator, 
-			(IUnknown **)&pLoc));
+		checkResult(pcd->CreateInstance(IID_IAAFLocator, 
+										(IUnknown **)&pLoc));
 		checkResult(pLoc->SetPath (kManufURL));
 		checkResult(pLoc->QueryInterface(IID_IAAFNetworkLocator, (void **)&pNetLoc));
 		checkResult(desc->SetManufacturerInfo(pNetLoc));
@@ -447,9 +444,8 @@ HRESULT STDMETHODCALLTYPE
 
 		
 		// Create a Network locator to point to our default download site.
-		checkResult(dict->CreateInstance(pcd,
-			IID_IAAFLocator, 
-			(IUnknown **)&pLoc));
+		checkResult(pcd->CreateInstance(IID_IAAFLocator, 
+										(IUnknown **)&pLoc));
 		pcd->Release ();
 		pcd = 0;
 		checkResult(pLoc->SetPath (kDownloadURL));

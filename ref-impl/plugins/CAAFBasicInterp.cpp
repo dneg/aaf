@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -102,9 +102,9 @@ HRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 	    CAAFBuiltinDefs defs (dict);
-		CHECK(dict->CreateInstance(defs.cdInterpolationDefinition(),
-							IID_IAAFInterpolationDef, 
-							(IUnknown **)&interpDef));
+		CHECK(defs.cdInterpolationDefinition()->
+			  CreateInstance(IID_IAAFInterpolationDef, 
+							 (IUnknown **)&interpDef));
 		uid = LinearInterpolator;
 		CHECK(interpDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(obj->Initialize(uid, L"Basic Plugins", L"Handles step and linear interpolation."));
@@ -140,17 +140,17 @@ HRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 	    CAAFBuiltinDefs defs (dict);
-		CHECK(dict->CreateInstance(defs.cdPluginDescriptor(),
-			IID_IAAFPluginDescriptor, 
-			(IUnknown **)&desc));
+		CHECK(defs.cdPluginDescriptor()->
+			  CreateInstance(IID_IAAFPluginDescriptor, 
+							 (IUnknown **)&desc));
 		*descPtr = desc;
 		desc->AddRef();
 		CHECK(desc->Initialize(BASIC_INTERP_PLUGIN, L"Example interpolators", L"Handles step and linear interpolation."));
 		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
 		CHECK(desc->SetPluginVersionString(manufRev));
-		CHECK(dict->CreateInstance(defs.cdNetworkLocator(),
-			IID_IAAFLocator, 
-			(IUnknown **)&pLoc));
+		CHECK(defs.cdNetworkLocator()->
+			  CreateInstance(IID_IAAFLocator, 
+							 (IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (manufURL));
 		CHECK(pLoc->QueryInterface(IID_IAAFNetworkLocator, (void **)&pNetLoc));
 		CHECK(desc->SetManufacturerInfo(pNetLoc));
@@ -166,9 +166,9 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(desc->SetSupportsAuthentication(AAFFalse));
 		
 		/**/
-		CHECK(dict->CreateInstance(defs.cdNetworkLocator(),
-			IID_IAAFLocator, 
-			(IUnknown **)&pLoc));
+		CHECK(defs.cdNetworkLocator()->
+			  CreateInstance(IID_IAAFLocator, 
+							 (IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (downloadURL));
 		CHECK(desc->AppendLocator(pLoc));
 		desc->Release();	// We have addRefed for the return value
