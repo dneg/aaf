@@ -297,15 +297,39 @@ private:
 	void SetCurrentIndex(aafUInt32 currentIndex);
 	void SetWriteIndex(aafUInt32 writeIndex);
 
+	typedef struct _aafCompParams
+	{
+		int imageWidth;
+		int imageHeight;
+
+		aafColorSpace_t colorSpace;
+		int horizontalSubsampling;
+		int verticalSubsampling;
+
+		int blackReferenceLevel;
+		int whiteReferenceLevel;
+		int colorRange;
+
+		int quality; 
+
+		int rowBytes;
+		unsigned char *buffer;
+		long bufferSize;
+
+	} aafCompParams;
+
 	// Compress a single image data from the given buffer. Return the actual
 	// number of bytes written.
-	HRESULT CompressImage(const aafDataBuffer_t buffer, aafUInt32 bufLen, aafUInt32& bytesWritten);
+	HRESULT CompressImage(const aafCompParams& param);
 
 	// Decompress a single image from the current position in the stream returning
 	// the image data in buffer and the actual number of bytes written. Note: bufLen must
 	// be large enough to hold all of the decompressed data
-	HRESULT DecompressImage(const aafDataBuffer_t buffer, aafUInt32 bufLen, aafUInt32& bytesRead);
+	HRESULT DecompressImage(aafCompParams& param);
 
+	// Utility to get the current offset in the stream and add an
+	// entry to the sample index based on the given compressedDataSize.
+	void AddNewSampleIndex(aafUInt32 compressedDataSize); // throw HRESULT
 
 	// SampleIndex access methods : may be temporary. We need these methods
 	// to read/write the index because the SampleIndex property in EssenceData
