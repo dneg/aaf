@@ -495,11 +495,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMIDIDataTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFMIDIDescriptor.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFMIDIFileDescriptor.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMIDIDescriptorTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMIDIFileDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 
