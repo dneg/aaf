@@ -2,7 +2,6 @@
 EnumAAFIdentifications\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -67,7 +66,5 @@ AD_XMETHOD1(Clone,
   // record a point in the enumeration sequence in order to return to that point 
   // at a later time.
   // @comm The caller must release this new enumerator separately from the first enumerator.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_ROOT_CLASS_END
