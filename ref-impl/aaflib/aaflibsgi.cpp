@@ -40,9 +40,9 @@
 //
 #if defined(sgi)
 
-
 // Declare the public interface that must be implemented.
-#include "aaflib.h"
+#include "aafrdli.h"
+
 
 #include "AAFResult.h"
 
@@ -53,144 +53,72 @@
 #include <stdlib.h>
 
 
-class SGIAAFDLL : public AAFDLL
+
+AAFRDLIRESULT AAFLoadLibrary(const char* name, AAFLibraryHandle* pLibHandle)
 {
-public:
-  // Constructor and destructor.
-  SGIAAFDLL();
-  ~SGIAAFDLL();
-
-  // Implements SGI specific initialization of dll and entry points.
-  virtual HRESULT Load(const char *);
-  
-  // Implements SGI specific cleanup of dll and entry points.
-  virtual HRESULT Unload();
-
-private:
-  // The handle to the dll's module instance.
-  HINSTANCE _handle;
-};
-
-
-
-//***********************************************************
-//
-// Factory function just returns an instance of the currect platform
-// dll wrapper object.
-AAFDLL * MakeAAFDLL()
-{
-  return new SGIAAFDLL;
-}
-
-
-
-//***********************************************************
-//
-SGIAAFDLL::SGIAAFDLL()
-{
-  _handle = NULL;
-}
-
-
-
-//***********************************************************
-//
-SGIAAFDLL::~SGIAAFDLL()
-{
-}
-
-
-
-//***********************************************************
-//
-HRESULT SGIAAFDLL::Load(const char *dllname)
-{
-  const char* fcnName[] =
-  {
-    "AAFFileOpenExistingRead",
-    "AAFFileOpenExistingModify",
-    "AAFFileOpenNewModify",
-    "AAFFileOpenTransient",
-    "AAFGetPluginManager"
-  };
-
-  if (NULL == dllname)
-  { // use a realistic default name.
-    dllname = "aafcoapi.so";
-  }
+  if (NULL == name || NULL == pLibHandle)
+    return AAFRESULT_NULL_PARAM;
 
   // Attempt to load the library.
-  _handle = ::dlopen(dllname, RTLD_LAZY);
-  if (NULL == _handle)
+  *pLibHandle = ::dlopen(dllname, RTLD_LAZY);
+  if (NULL == *pLibHandle)
   {
     fprintf(stderr, "dlopen(\"%s\", RTLD_LAZY) failed.\n", dllname);
     return -1; // Need an AAFRESULT
   }
+	
+	return AAFRESULT_SUCCESS;
+}
 
-  //
-  // Attempt to initialize the entry points...
-  //
-  _pfnOpenExistingRead = (LPFNAAFFILEOPENEXISTINGREAD)
-                         ::dlsym(_handle, fcnName[0]);
-  if (NULL == _pfnOpenExistingRead)
-  {
-    fprintf(stderr, "dlsym(\"%s\") failed. %s\n", fcnName[0]);
-    return -2; // Need an AAFRESULT
-  }
+AAFRDLIRESULT AAFUnloadLibrary(AAFLibraryHandle libHandle)
+{
+  if (NULL == pLibHandle)
+    return AAFRESULT_NULL_PARAM;
 
-  _pfnOpenExistingModify = (LPFNAAFFILEOPENEXISTINGMODIFY)
-                           ::dlsym(_handle, fcnName[1]);
-  if (NULL == _pfnOpenExistingModify)
-  {
-    fprintf(stderr, "dlsym(\"%s\") failed.\n", fcnName[1]);
-    return -2; // Need an AAFRESULT
-  }
+	::dlclose(libHandle)
+	
+	return AAFRESULT_SUCCESS;
+}
 
-  _pfnOpenNewModify = (LPFNAAFFILEOPENNEWMODIFY)
-                      ::dlsym(_handle, fcnName[2]);
-  if (NULL == _pfnOpenNewModify)
-  {
-    dlmsg = dlerror();
-    fprintf(stderr, "dlsym(\"%s\") failed.\n", fcnName[2]);
-    return -2; // Need an AAFRESULT
-  }
+AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, AAFSymbolAddr* pSymbol)
+{
+  if (NULL == libHandle || NULL == symbolName || NULL == pSymbol)
+    return AAFRESULT_NULL_PARAM;
 
-  _pfnOpenTransient = (LPFNAAFFILEOPENTRANSIENT)
-                         ::dlsym(_handle, fcnName[3]);
-  if (NULL == _pfnOpenTransient)
-  {
-    fprintf(stderr, "dlsym(\"%s\") failed.\n", fcnName[3]);
-    return -2; // Need an AAFRESULT
-  }
 
-  _pfnGetPluginManager = (LPFNAAFGETPLUGINMANAGER)
-                         ::dlsym(_handle, fcnName[4]);
-  if (NULL == _pfnGetPluginManager)
+	*pSymbol = ::dlsym(libHandle, symbolName);
+  if (NULL == *pSymbol)
   {
     fprintf(stderr, "dlsym(\"%s\") failed.\n", fcnName[4]);
     return -2; // Need an AAFRESULT
   }
 
-  return S_OK;
+	return AAFRESULT_SUCCESS;
 }
 
 
 
-//***********************************************************
-//
-HRESULT SGIAAFDLL::Unload()
+/* Limited set of platform independent directory searching functions.*/
+AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, void *userData)
 {
-  if (_handle)
-  {
-    ::dlclose(_handle))
+	// Default implementation will just continue to use a hard-coded list of shared libaries.
 
-    // Reset the entry point function pointers to NULL.
-    ClearEntrypoints();
+	const char *pluginFileNames[] = 
+	{
+		"aafpgapi.so",
+		"aafintp.so",
+		NULL
+	};
+	AAFRDLIRESULT rc = AAFRESULT_SUCCESS;
 
-    _handle = NULL;
-  }
-  
-  return S_OK;
+	if (NULL == name || NULL == testProc)
+		return AAFRESULT_NULL_PARAM;
+
+	for (int i = 0; AAFRESULT_SUCCESS == rc && pluginFileNames[i]; ++i)
+		rc = testProc(pluginFileNames[i], false /* not a directory */, userData);
+
+	return rc;
 }
+
 
 #endif /* #if defined(sgi) */

@@ -31,9 +31,9 @@
 //
 #if defined(macintosh) || defined(_MAC)
 
-
 // Declare the public interface that must be implemented.
-#include "aaflib.h"
+#include "aafrdli.h"
+
 
 #include "AAFResult.h"
 
@@ -129,16 +129,29 @@ AAFRDLIRESULT AAFFindSymbol(AAFLibraryHandle libHandle, const char* symbolName, 
   return result;
 }
 
-AAFRDLIRESULT AAFGetLibraryInfo(AAFLibraryHandle libHandle, AAFLibInfo* pLibInfo)
+
+
+
+/* Limited set of platform independent directory searching functions.*/
+AAFRDLIRESULT AAFFindLibrary(const char* name, LPFNAAFTESTFILEPROC testProc, void *userData)
 {
-  AAFRDLIRESULT result = AAFRESULT_NOT_IMPLEMENTED;
-  
-  if (NULL == libHandle || NULL == pLibInfo || (NULL != pLibInfo || NULL == pLibInfo->nameBuffer))
-    return AAFRESULT_NULL_PARAM;
-  
+	// Default implementation will just continue to use a hard-coded list of shared libaries.
 
-  return result;
+	const char *pluginFileNames[] = 
+	{
+		"AAFPGAPI.DLL (PPC)",
+		"AAFINTP.DLL (PPC)",
+		NULL
+	};
+	AAFRDLIRESULT rc = AAFRESULT_SUCCESS;
+
+	if (NULL == name || NULL == testProc)
+		return AAFRESULT_NULL_PARAM;
+
+	for (int i = 0; AAFRESULT_SUCCESS == rc && pluginFileNames[i]; ++i)
+		rc = testProc(pluginFileNames[i], false /* not a directory */, userData);
+
+	return rc;
 }
-
 
 #endif /* #if defined(macintosh) || defined(_MAC) */

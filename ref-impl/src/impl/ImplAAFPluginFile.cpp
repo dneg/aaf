@@ -189,11 +189,8 @@ HRESULT ImplAAFPluginFile::Unload()
 {
   HRESULT result = AAFRESULT_SUCCESS;
 
-  if (IsLoaded())
+  if (NULL != _libHandle)
   {
-    // All object references should have been released!
-    assert(AAFRESULT_SUCCESS == CanUnloadNow());
-
     result = ::AAFUnloadLibrary((AAFLibraryHandle)_libHandle);
 
     if (AAFRESULT_SUCCEEDED(result))
@@ -212,8 +209,10 @@ HRESULT ImplAAFPluginFile::Unload()
 
 HRESULT ImplAAFPluginFile::CanUnloadNow()
 {
-  if (!IsLoaded())
+  if (!_libHandle)
     return AAFRESULT_NOT_INITIALIZED;
+	else if (!_pfnCanUnloadNow) // If entrypoint was not loaded then CanUnloadNow should return ok.
+		return S_OK;
 
   return _pfnCanUnloadNow();
 }
@@ -222,7 +221,7 @@ HRESULT ImplAAFPluginFile::CanUnloadNow()
 
 HRESULT ImplAAFPluginFile::GetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 {
-  if (!IsLoaded())
+  if (!(_libHandle && _pfnGetClassObject))
     return AAFRESULT_NOT_INITIALIZED;
 
   return _pfnGetClassObject(rclsid, riid, ppv);
@@ -232,7 +231,7 @@ HRESULT ImplAAFPluginFile::GetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* 
 
 ULONG ImplAAFPluginFile::GetClassCount()
 {
-  if (!IsLoaded())
+  if (!(_libHandle && _pfnGetClassCount))
     return 0;
 
   return _pfnGetClassCount();
@@ -242,7 +241,7 @@ ULONG ImplAAFPluginFile::GetClassCount()
 
 HRESULT ImplAAFPluginFile::GetClassObjectID(ULONG index, CLSID* pClassID)
 {
-  if (!IsLoaded())
+  if (!(_libHandle && _pfnGetClassObjectID))
     return AAFRESULT_NOT_INITIALIZED;
 
   return _pfnGetClassObjectID(index, pClassID);

@@ -36,15 +36,22 @@
 #include "AAFPlugin.h"
 #endif
 
+#include "aafrdli.h"
+
 #include "AAFPlugin_i.c"
 
 
 extern "C" const aafClassID_t CLSID_EnumAAFLoadedPlugins;
 
+// These routines must be defined in an appropriate place in the 
+// reference implementation shared library/DLL (Check the platform 
+// dependent entrypoint...
+extern "C" const char * AAFGetLibraryDirectory();
+extern "C" const char * AAFGetLibraryPath();
 
 
 // Dispose proc for values in pluginFiles table.
-static void	ImplAAFPluginFileDisposeProc(void *valuePtr)
+inline void	ImplAAFPluginFileDisposeProc(void *valuePtr)
 {
   if (valuePtr)
 	{
@@ -122,84 +129,108 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-AAFRESULT ImplAAFPluginManager::Init(void)
+
+// SEE HACK below...
+const CLSID CLSID_AAFEssenceDataStream = 
+{ 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+
+
+
+
+
+// Common structure used to share data with the following testLibraryProc
+typedef struct _AAFTestLibraryProcData
 {
-	// SEE HACK below...
-	const CLSID CLSID_AAFEssenceDataStream = 
-	{ 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+	ImplAAFPluginManager *plugins;
+  aafTable_t	*pluginFiles;
+	const char* currentLibraryPath;
+} AAFTestLibraryProcData;
 
 
-	// Currently the names of the standard plugins are hardcoded.
-	// The next version will search a "known directory" for all
-	// for all files where ImplAAFPluginFile::CreatePluginFile succeeds
-	// (i.e. all files that can be loaded as a shared library and 
-	// contains all of the expected exported functions.)
-	const char *pluginFileNames[] = 
+STDAPI_(AAFRDLIRESULT) testLibraryProc(const char* name, char isDirectory, void * userData)
+{
+	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
+	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath);
+
+
+
+	if (!isDirectory && 0 != strcmp(pData->currentLibraryPath, name))
 	{
-#if defined(_WIN32) || defined(WIN32)
-		"AAFPGAPI.DLL",
-		"AAFINTP.DLL",
-#elif defined(macintosh) || defined(_MAC)
-		"AAFPGAPI.DLL (PPC)",
-		"AAFINTP.DLL (PPC)",
-#else
-		"aafpgapi.so",
-		"aafintp.so",
-#endif
-		NULL
-	};
-	ImplAAFPluginFile *pPluginFile = NULL;
+		AAFRESULT rc = AAFRESULT_SUCCESS;
+		ImplAAFPluginFile *pPluginFile = NULL;
 
-
-	XPROTECT()
-	{
-		CHECK(NewUIDTable(NULL, 20, &_pluginFiles));
-		CHECK(NewUIDTable(NULL, 20, &_plugins));
-		CHECK(NewUIDTable(NULL, 20, &_codecDesc));
-		//!!! Here is where we should check the registry in a loop
-		// looking for plugins to load
-		// for each plugin found
-		//	RegisterPlugin()
-		
-		for (int pluginIndex = 0; pluginFileNames[pluginIndex]; ++pluginIndex)
+		rc = ImplAAFPluginFile::CreatePluginFile(name, &pPluginFile);
+		if (AAFRESULT_SUCCESS == rc)
 		{
 			ULONG classIDs = 0, index = 0;
 			CLSID classID;
-			CHECK(ImplAAFPluginFile::CreatePluginFile(pluginFileNames[pluginIndex], &pPluginFile));
+
 			classIDs = pPluginFile->GetClassCount();
 			for (index = 0; index < classIDs; ++index)
 			{
-				CHECK(pPluginFile->GetClassObjectID(index, &classID));
+				rc = pPluginFile->GetClassObjectID(index, &classID);
+				if (AAFRESULT_FAILED(rc))
+					break;
 
 				// Save the classID -> plugin file association.
-				CHECK(TableAddValuePtr(
-						_pluginFiles,
+				rc = TableAddValuePtr(
+						pData->pluginFiles,
 						&classID,
 						sizeof(CLSID),
 						pPluginFile,
-						kAafTableDupError));
-				
+						kAafTableDupError);
+				if (AAFRESULT_FAILED(rc))
+					break;
+
 				// We are saving a reference to the plugin file so bump its reference count.
 				pPluginFile->AcquireReference();
 
 				// Now attempt to register this class id for the current plugin file.
 				// HACK: Problem CAAFEssenceDataStream is NOT a plugin!
 				if (!IsEqualCLSID(CLSID_AAFEssenceDataStream, classID))
-					CHECK(RegisterPlugin(classID));
+				{
+					rc = (pData->plugins)->RegisterPlugin(classID);
+					if (AAFRESULT_FAILED(rc))
+						break;
+				}
 			}
 
 			pPluginFile->ReleaseReference();
 			pPluginFile = NULL;
 		}
+	}
 
-//		CHECK(RegisterPlugin(CLSID_AAFEssenceFileContainer));
-//		CHECK(RegisterPlugin(CLSID_AAFWaveCodec));
-//		CHECK(RegisterPlugin(CLSID_AAFBasicInterp));
+	// Ignore error results and continue processing plugins...
+	return 0;
+}
+
+
+AAFRESULT ImplAAFPluginManager::Init(void)
+{
+	XPROTECT()
+	{
+		CHECK(NewUIDTable(NULL, 20, &_pluginFiles));
+		CHECK(NewUIDTable(NULL, 20, &_plugins));
+		CHECK(NewUIDTable(NULL, 20, &_codecDesc));
+		
+		//
+		// Find all AAF plugin files and register them with 
+		// the reference implementation.
+		//		
+		const char* libraryDirectory = AAFGetLibraryDirectory();
+		assert(NULL != libraryDirectory);
+
+		// Setup common data needed by testLibraryProc callback.
+		AAFTestLibraryProcData testLibraryData;
+		testLibraryData.plugins = this;
+		testLibraryData.pluginFiles = _pluginFiles;
+		testLibraryData.currentLibraryPath = AAFGetLibraryPath();
+		assert(NULL != testLibraryData.currentLibraryPath);
+
+		CHECK(AAFFindLibrary(libraryDirectory, testLibraryProc, &testLibraryData));
 	}
 	XEXCEPT
 	{
-		if (pPluginFile)
-			pPluginFile->ReleaseReference();
 	}
 	XEND
 
