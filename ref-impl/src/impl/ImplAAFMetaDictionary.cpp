@@ -257,7 +257,7 @@ const OMClassId& ImplAAFMetaDictionary::classId(void) const
 
 
 // Override callback from OMStorable
-void ImplAAFMetaDictionary::onSave(void* clientContext) const
+void ImplAAFMetaDictionary::onSave(void* /*clientContext*/) const
 {
 }
 
@@ -1250,9 +1250,9 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMetaDictionary::CreateClassDef (
-      aafUID_constref classID,
+      aafUID_constref /*classID*/,
       aafCharacter_constptr pClassName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFClassDef * pParentClass,
       ImplAAFClassDef **ppNewClass)
 {
@@ -1265,9 +1265,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefVariableArray (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDef *pElementType,
       ImplAAFTypeDefVariableArray ** ppNewVariableArray)
 {
@@ -1280,11 +1280,11 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefFixedArray (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDef *pElementType,
-      aafUInt32  nElements,
+      aafUInt32  /*nElements*/,
       ImplAAFTypeDefFixedArray **pNewFixedArray)
 {
   if (!pTypeName || !pElementType || !pNewFixedArray) 
@@ -1296,12 +1296,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMetaDictionary::CreateTypeDefRecord (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDef ** ppMemberTypes,
       aafCharacter_constptr * pMemberNames,
-      aafUInt32 numMembers,
+      aafUInt32 /*numMembers*/,
       ImplAAFTypeDefRecord ** ppNewRecord)
 {
   if (!pTypeName || !ppMemberTypes || !pMemberNames || !ppNewRecord) 
@@ -1313,9 +1313,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMetaDictionary::CreateTypeDefRename (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDef *pBaseType,
       ImplAAFTypeDefRename ** ppNewRename)
 {
@@ -1328,9 +1328,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefString (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDef *pElementType,
       ImplAAFTypeDefString ** ppNewString)
 {
@@ -1343,9 +1343,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefStrongObjRef (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFClassDef * pTargetObjType,
       ImplAAFTypeDefStrongObjRef ** ppNewStrongObjRef)
 {
@@ -1358,12 +1358,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefWeakObjRef (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFClassDef * pTargetObjType,
       aafUID_constptr * pTargetHint,
-      aafUInt32 targetHintCount,
+      aafUInt32 /*targetHintCount*/,
       ImplAAFTypeDefWeakObjRef ** ppNewWeakObjRef)
 {
   if (!pTypeName || !pTargetObjType || !pTargetHint || !ppNewWeakObjRef) 
@@ -1375,9 +1375,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefStrongObjRefVector (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDefStrongObjRef * pStrongObjRef,
       ImplAAFTypeDefVariableArray ** ppNewStrongObjRefVector)
 {
@@ -1390,9 +1390,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefWeakObjRefVector (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDefWeakObjRef * pWeakObjRef,
       ImplAAFTypeDefVariableArray ** ppNewWeakObjRefVector)
 {
@@ -1405,9 +1405,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefStrongObjRefSet (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDefStrongObjRef * pStrongObjRef,
       ImplAAFTypeDefSet ** ppNewStrongObjRefSet)
 {
@@ -1420,9 +1420,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFMetaDictionary::CreateTypeDefWeakObjRefSet (
-      aafUID_constref typeID,
+      aafUID_constref /*typeID*/,
       aafCharacter_constptr pTypeName,
-      aafCharacter_constptr pDescription,
+      aafCharacter_constptr /*pDescription*/,
       ImplAAFTypeDefWeakObjRef * pWeakObjRef,
       ImplAAFTypeDefSet ** ppNewWeakObjRefSet)
 {
