@@ -42,11 +42,34 @@ AAF_BUILD_CONFIG_ASSY_386
 	- is defined to be non-zero if this platform supports Intel
 	  386 assembly code.
 
+AAF_BUILD_CONFIG_EXTERN_C_HEADER
+	- Evaluates to the appropriate "extern C" lead statement for
+	  shared C and C++ header files.  Should be put at the top of
+	  such a header file.
+
+AAF_BUILD_CONFIG_EXTERN_C_TRAILER
+	- Evaluates to the appropriate "extern C" trailing statement
+	  for shared C and C++ header files.  Should be put at the
+	  bottom of such a header file.
+
  */
 
 
 #if (__GNUC__ >= 2)
   #define AAF_BUILD_CONFIG_BUILTIN_BOOL	1
 #endif
+
+#if __cplusplus
+  #define AAF_BUILD_CONFIG_CPLUSPLUS 1
+#endif
+
+#if AAF_BUILD_CONFIG_CPLUSPLUS
+  #define AAF_BUILD_CONFIG_EXTERN_C_HEADER	extern "C" {
+  #define AAF_BUILD_CONFIG_EXTERN_C_TRAILER	}
+#else /* ! AAF_BUILD_CONFIG_CPLUSPLUS */
+  #define AAF_BUILD_CONFIG_EXTERN_C_HEADER
+  #define AAF_BUILD_CONFIG_EXTERN_C_TRAILER
+#endif /* ! AAF_BUILD_CONFIG_CPLUSPLUS */
+
 
 #endif /* ! _aaf_tk_bld_cfg_bld_cfg_h_ */
