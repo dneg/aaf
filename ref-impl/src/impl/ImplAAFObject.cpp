@@ -45,7 +45,21 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::GetStoredByteOrder (aafByteOrder_t *  /*pOrder*/)
+	ImplAAFObject::GetObjectClass (aafUID_t * /*pClass*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+	ImplAAFObject::EnumProperties (ImplEnumAAFProperties ** /*ppEnum*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFObject::GetStoredByteOrder (eAAFByteOrder_t *  /*pOrder*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -53,7 +67,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::GetNativeByteOrder (aafByteOrder_t *  /*pOrder*/)
+    ImplAAFObject::GetNativeByteOrder (eAAFByteOrder_t *  /*pOrder*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
