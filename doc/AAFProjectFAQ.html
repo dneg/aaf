@@ -68,7 +68,7 @@ source files ?</a> regenerating the generated source files.
 <P>$ export CVSROOT=:pserver:anonymous@cvs.aaf.sourceforge.net:/cvsroot/aaf<br>
   $ cvs login (Logging in to anonymous@cvs.aaf.sourceforge.net) CVS password: 
   <font color="#FF0000">&lt;no password - just hit return&gt;</font><br>
-  $ cvs checkout AAF ...<br>
+  $ cvs checkout AAFLinuxSDK ...<br>
   $ cd AAF<br>
   $ make ...<br>
   $ </p>
@@ -97,23 +97,35 @@ or <a href="mailto:terabrit@users.sourceforge.net">Oliver Morgan</a>
 <P> OK, I'm a developer. How do I obtain and build the AAF SDK ?</P>
 <p>How do I make checkins ?</P>
 <p>What's ssh ?</p>
-ssh stands for <i>Secure Shell</i>.<!-- [TBS - needs more explanation] --> Note 
-that you can't easily use the CVS sandbox you checked out anonymously with your 
-developer account. I suggest a separate checkout. See the AAF web page <a href="http://aaf.sourceforge.net/sshWin32.html">Using 
-CVS/ssh on Windows</a>.<br>
+SSH stands for <i>Secure SHell</i>. see this<a href="http://www.cert.org/security-improvement/implementations/i062_01.html"> 
+CERT paper</a><br>
+Note that you can't easily use the CVS workspace or sandbox you checked out anonymously 
+with your developer account because all the CVS directories embedded in your checked 
+out workspace contain a <b>Root</b> file specifing the original checkout parameters.<br>
+Although this can be overriden by explicitly forcing a new access method with 
+each command<font face="Courier New, Courier, mono" size="+1"><br>
+cvs -d :ext:<font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net:/cvsroot/aaf</font> 
+... <br>
+It's much more sanitary to do a new clean checkout.<br>
+Refer to the AAF web pages <a href="http://aaf.sourceforge.net/sshWin32.html">Using 
+CVS/ssh on Windows</a> or <a href="http://aaf.sourceforge.net/sshMacOS.html">Using 
+CVS/ssh on MacOS</a><br>
 <br>
-Using CVS/ssh on Linux.<br>
-$ export CVSROOT=:ext:@cvs.aaf.sourceforge.net:/cvsroot/aaf <br>
+<p>Using CVS/ssh on Linux </p>
+<br>
+$ export CVSROOT=:ext:<font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net:/cvsroot/aaf 
+<br>
 $ export CVS_RSH=ssh ... <br>
 $ cvs checkout -rRC1 AAFLinuxSDK<br>
 <font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net's 
 password: <font color="#FF0000">&lt;enter your password&gt;<br>
 </font>cvs server: Updating AAF ...<br>
+<br>
 $ cvs commit -m"Add new defrobnicate() member." frobber.cpp<br>
 <font color="#FF0000">&lt;developer name&gt;</font>@cvs.aaf.sourceforge.net's 
 password: <font color="#FF0000">&lt;enter your password&gt;<br>
 </font>...<br>
-$ <!--Using CVS/ssh on Macintosh [TBS] -->. 
+$ . 
 <p>Help - Redhat Linux 6.1 doesn't come with ssh pre-installed !</p>
 Unlike Redhat 7.x. you have to install ssh from an RPM. Note that SSH 2.0 can 
 be used despite notes to the contrary on SourceForge that state only SSH 1.5 is 
@@ -121,7 +133,7 @@ supported.
 <p>I get errors first time I use SSH access to SourceForge what's going on ?</p>
 SourceForge does not create a home directory for you until you attempt a real 
 login to the server (as opposed to a CVS session) with name and password:<br>
-ssh -l cvs.aaf.sourceforge.net 
+ssh -l <font color="#FF0000">&lt;myname&gt;</font> cvs.aaf.sourceforge.net 
 <p>My company's firewall is preventing me accessing sourceforge what do I need 
   to do ? </p>
 see tha AAF web page <a href="http://aaf.sourceforge.net/sshFirewall.html">Firewalls 
@@ -133,7 +145,7 @@ You may add new interfaces.
 You may not change existing interfaces. Here <b>interface</b> means interface 
 in the COM sense. e.g. IAAFEssenceAccess as defined in AAF.idl You may not change 
 existing interfaces as this would break binary compatibility. Binary compatibility 
-is the ability of an existing explication (perhaps one developned with an older 
+is the ability of an existing explication (perhaps one developed with an older 
 <b>aafdll</b>) to work correctly with a newer <b>aafdll</b>. In the newer <b>aafdll</b> 
 interfaces must not have changed otherwise code in the old application will not 
 work correctly. Newer applications can take advantage of new interfaces in in 
@@ -173,15 +185,26 @@ The AAF engineering committee is responsible for defining this process.<!--
   <li>Windows NT Version 4.0 Intel Visual C++ Version 6.0 (Service Pack 2)</li>
   <li>Windows 2000 Professional Intel Visual C++ Version 6.0 (Service Pack 2)</li>
   <li>Macintosh Mac OS 8.6 PPC Code Warrior 5 (IDE 4.0.4)</li>
-  <li>Macintosh Mac OS 9.0 PPC Code Warrior 5 (IDE 4.0.4)</li>
+  <li>Macintosh Mac OS 9.2 PPC Code Warrior 6 (IDE 4.1)</li>
   <li>Red Hat Linux 6.0 Intel gcc <!--[version TBS] --></li>
   <li>Red Hat Linux 6.1 Intel gcc 2.95.2</li>
   <li>Red Hat Linux 7.1 Intel gcc 2.96 [some functions NYI as of 5/25/01]</li>
   <li>SGI Irix 6.5 MIPS gcc 2.95.2</li>
   <li>SGI Irix 6.5 MIPS MIPSpro 7.2.1 (CC -n32)</li>
 </ul>
-<p>The above platforms are those on which the AAF project is known to build and 
-  run correctly. </p>
+<br>The above platforms are those on which the AAF project is known to build and 
+  run correctly.
+<p>
+Will the SDK compile with gcc 3.0 ?
+</p>
+No yet, Note gcc versions prior to 3.0 don't have support for wide
+streams (wostreams). I discovered this problem in gcc version 2.96.
+no-one has yet made any effort to fix this problem.
+<br>
+gcc 2.96 also has problems with basic_string<wchar_t>::c_str().  3.0
+fixes that as well.  (It looks like std lib string support was
+completely redone in 3.0)
+
 <P> What's the earliest MacOS that the SDK will work on ?</P>
 MacOS 8.6 is the earliest on which we've tested RC1. 
 <P> What about Macintosh OSX ?</P>
@@ -207,7 +230,17 @@ the C/C++ settings in the following projects ...<br>
 Go to Settings -&gt; C/C++ -&gt; General -&gt; Preprocessor Definitions and add 
 -DNO_W32_WFOPEN (make sure "Settings for:" says "All Configurations")<br>
 If you wish to create a single <b>aafdll</b> that runs on consumer versions of 
-Windows and on Windows Nt/2000, then different changes would be required. <!--
+Windows and on Windows Nt/2000, then different changes would be required.
+<P> What other tools will I need besides a C++ compiler ?</P>
+GNU make version 3.77<br>
+Perl version 5.002
+<!--
+For "Anonymous CVS Access" to the AAF 
+project on SourceForge you need a CVS client. We suggest the following clients 
+Operating System CVS Client Available from Windows NT/Windows 2000 WinCvs http://www.wincvs.org/ 
+Macintosh Mac OS 8.6/9.0 MacCVS Pro http://www.maccvs.org/ Note that there are 
+several other Macintosh CVS clients with similar sounding names. On Linux we suggest 
+the the cvs(1) command. 
 For brevity, let's refer collectively to Windows 95, Windows 98 and Windows ME 
 as consumer versions of Windows. We have not tested building and running AAF on 
 consumer versions Windows as we have the above platforms. However AAF does build 
@@ -230,14 +263,6 @@ I have notes on what I did. There are still a few warnings. I didn't bother gett
 the AAF/OMF converter to compile since there's no version of OMF for Linux yet. 
 Also remaining to be done are implementations of the functions AafPos2AnsiPos() 
 and AnsiPos2AafPos() in ref-impl/plugins/CAAFEssenceFileStream.cpp] 
-<P> What other tools will I need besides a C++ compiler ?</P>
-GNU make version 3.77 Perl version 5.002 For "Anonymous CVS Access" to the AAF 
-project on SourceForge you need a CVS client. We suggest the following clients 
-Operating System CVS Client Available from Windows NT/Windows 2000 WinCvs http://www.wincvs.org/ 
-Macintosh Mac OS 8.6/9.0 MacCVS Pro http://www.maccvs.org/ Note that there are 
-several other Macintosh CVS clients with similar sounding names. On Linux we suggest 
-the the cvs(1) command. 
---> 
 <P>When I open up AAFWinSDK.dsw I get a message "Unable to connect to source code 
   control project AAFStandardCodecs". How can I get rid of this ?</P>
 What's happening is that you have Visual Source Safe (Microsoft's source control 
@@ -279,11 +304,15 @@ to the platform from which you are adding the file. Fixing a file - checkout the
 file, convert the line ending to those appropriate to your platform (remembering 
 that they may have been mangled) and then check it back in. CVS will do the right 
 thing from then on. Line ending conventions Unix \n Windows \r \n Macintosh \r 
-<P> <!--<P>My binary file is messed up. What's going on ?</P>
-
-[TBS]
-
- --></P>
+<P>My binary file is messed up. What's going on ?</P>
+Chances are the file isn't correctly tagged as binary in CVS, check the CVS/Entries
+file for the current directory files that were orginally added as binary have the -kb flag against them.
+<p>I get the error message &quot;Connection refused&quot; from Sourceforge ?</p>
+<p>usw-pr-cvs.sourceforge.net: Connection refused cvs [history aborted]:end of 
+  file from server (consult above messages if any</p>
+Check you have a <b>CVS_RSH</b> environment variable correctly set to <b>SSH</b>
+<p>How can I add a MacOS alias (symbolic link or shortcut) to CVS ?<p>
+Use MacCVSpro, it seems to be smart enough to figure out the special type and convert it to Apple single.
 <HR>
 <P> What are the pieces of the AAF project ?</P>
 The AAF project consists of the following pieces - Tools needed to generate some 
@@ -335,7 +364,7 @@ to the thickness of the pipe.<br>
 Make sure you are checking out the platform specific module such as <b>AAFWinSDK</b> 
 rather than the default <b>AAF</b> module which contains the entire source tree.<br>
 <br>
-For thetime being if you just want the pre-built SDK for you platform you'll also 
+For the time being if you just want the pre-built SDK for you platform you'll also 
 get the source code needed to build it. <br>
 After the first checkout a <b>cvs update -d</b> command will be considerably faster 
 since it only needs to retrieve the changed files and new directories.<br>
@@ -361,7 +390,20 @@ one place you need only change the dodo input file. The original idea for dodo
 was that all the files it generated would eventually be maintained by hand at 
 which point dodo could be made extinct. Hence the name "dodo". However, dodo was 
 useful enough that it became used for code that is always generated, meaning that 
-dodo must be kept alive.<!--
+dodo must be kept alive.
+
+<P>Why does making dodo on Win2K fail with UNAME := $(shell uname) ?</P>
+
+The above is a GNUmake specific construct (It means run the uname command in the
+shell and put the output in the make symbol UNAME). You need GNUmake to use this
+makefile. GNUmake should be listed as one of the prerequisites for building Dodo on
+Windows.
+<br>
+Since the generated files are checked in to SourceForge you don't need to run
+dodo unless you are adding a new interface (you aren't allowed to change
+existing interfaces) or changing the generated code (in a compatible way).
+
+<!--
 
 [TBS - more detail on dodo input and output files.] --> 
 <HR>
@@ -371,6 +413,9 @@ I've seen this error too but could never track it down. It seems only to happen
 when compiling and linking from scratch and seems also to be related to the amount 
 of memory allocated to CodeWarrior (oddly enough allocating more memory seemed 
 to cause it more often). The error goes away if you try again. 
+<P> I get an out of memory error from CodeWarrior 6 when building <b>ModuleTests/CAAFDictionaryTest.cpp</b></p>
+This test does #include files like  AAFStoredObjectIDs.h, AAFTypeDefUIDs.h and
+AAFClassDefUIDs.h which do a lot of macro expansion via AAFMetaDictionary.h it seems to need more than 128MB for this !
 <HR>
 <P> When I build on Macintosh I get warnings. What's the house style guide say 
   on the acceptability of Warnings ?</P>
@@ -378,11 +423,7 @@ These warnings should be cleaned up, most are unused argument errors but some
 could indicate more serious problems. The intent is that warnings are not acceptable 
 and that the compiler should be set to the highest level of warnings as is practicable, 
 if possible the compiler should be set to treat all warnings as errors. For gcc 
-this means "-Wall -Werror". <!--[Note to FAQ maintainer, I believe that I've eliminated all warnings
-on Macintosh, at least for the Debug build. These post RC1 changes
-have been checked into SourceForge.]
-
- --> 
+this means "-Wall -Werror". 
 <HR>
 <P> When I build on Irix I get the following error. What's going on ?</P>
 "../../include/OM/OMContainerElement.h", line 36: error(1020): identifier "typename" 
@@ -634,10 +675,10 @@ focusing on where to find useful bits of information.
 <h4>doc</h4>
 <p>Currently obsolete, will have doc files </p>
 <h4>dodo</h4>
-<p>dodo is a tool we use to generate our header files.<br>
+<p><a href="http://aaf.sourceforge.net/dodo.html">dodo</a> is a tool we use to generate our header files.<br>
   This directory contains the dodo input file (*.dod). The dodo input files use 
   macros defined in *.mac files in the macros directory. The comments in the *.dod 
-  files end up in the API reference document.</p>
+  files end up in the <a href="http://aaf.sourceforge.net/doc/com-api/contentsf.html">API reference document</a>.</p>
 <h4>examples</h4>
 <p>Useful examples and some useful dump utilities meta Spreadsheet that defines 
   the AAF object model, used to generate the AAFMetaDictionary.h file and the 
@@ -913,16 +954,92 @@ Because there is ss-impl/ref/h/wchar.h the definition of __mbstate_t is not foun
 I have worked around this problem by changing the makefiles and the #include directive 
 for the structured storage reference implementation - these changes are checked 
 in (post RC1) to CVS on SourceForge. 
+<hr>
 <p>Was dodo written specifically for AAF or is it in-house an Avid tool ?Specifically 
   for AAF. It was originally intended to be thrown away, hence the name, the "dodo" 
   is an extinct flightless bird. </p>
 <P> How would you describe "dodo" ?</P>
 It' a macro processor. 
-<p>I get the error message &quot;Connection refused&quot; from Sourceforge ?</p>
-<p>usw-pr-cvs.sourceforge.net: Connection refused cvs [history aborted]:end of 
-  file from server (consult above messages if any</p>
-Check you have a CVS_RSH environment variable correctly set to SSH 
-<HR>
+<p>
+What is/was the the <i>intended</i> way to EXTEND an interface using dodo ?
+<br>
+(and I mean that in the proper legal  COM sense of course)
+</p>
+Before answering the dodo question let's make sure we have the terminology and
+rules straight.
+<br.
+You cannot extend individual interfaces you can however extend the API by adding
+new interfaces. You may not remove or change existing interfaces, this is in
+order to maintain compatibility of older applications with newer libraries. When
+a new interface is added it gets a new IID, only the new applications know that
+they can successfully QueryInterface() for that new IID.
+
+<p>Do new interfaces respond to both the new and
+the old UUIDs</p>
+
+No. It would break binary compatibility to get the new interface in response to
+a QI() for the old one.
+<br>
+Typically new interfaces are interfaces to new functionality, However, there's a
+common special case of adding a new interface to existing functionality.
+<br>
+Let's say I have (in no particular syntax)<br>
+<br>
+interface foo {<br>
+  method a();<br>
+  method b();<br>
+  .. lots of methods ...<br>
+  method p();<br>
+  method q();<br>
+}<br>
+<br>
+But I wish there was also an r() method. I could address this by adding the
+following new interface<br>
+<br>
+interface foo1 {<br>
+  method r(); // only<br>
+}<br>
+<br>
+foo1 has a different IID than foo.<br>
+<br>
+However new clients would have to use both foo and foo1. Another way I could
+address this would be to add the following new interface
+<br>
+interface fooEx {<br>
+  method a();<br>
+  method b();<br>
+  .. lots of methods ...<br>
+  method p();<br>
+  method q();<br>
+  method r();<br>
+}<br>
+<br>
+fooEx has the same methods as foo except with the addition of r(). This way new
+clients can ignore foo and only use fooEx. Note that, just as for foo1, fooEx
+has a different IID than foo. For the convenience of new clients we've repeated
+all the methods of foo (at least the ones we didn't want to "change") in fooEx.
+<br>
+Now since foo and fooEx are very similar interfaces we can (and probably should
+in AAF) have foo and fooEx share the same implementation. Note that this is an
+issue for implementors, not for clients, and is a different concept than having
+"the new interface respond to both the new and the old UUIDs".
+<br>
+For an example of how this is done in AAF see "interface
+IAAFTypeDefVariableArray" and "interface IAAFTypeDefVariableArrayEx".
+<br>
+The naming convention seems to be foo fooEx fooEx1 ...
+
+<p>is dodo capable of generating interfaces that share common implementation ?</p>
+
+You make fooEx.dod by copying foo.dod, giving it a new IID, and modifying it. If
+you want to share implementations, dodo knows, if you tell it, how to have an
+implementation support more than one interface, again see
+IAAFTypeDefVariableArray and IAAFTypeDefVariableArrayEx.
+<br>
+dodo also knows how to have the same interface supported by more that one
+implementation, see IAAFEndian.
+
+<hr>
 <P> What's the deal with Unicode and wchar_t ?</P>
 <p>What are the portability issues ?</p>
 The ANSI/ISO C way to support Unicode is via wchar_t (from <b>&lt;stddef.h</b>&gt;), 
@@ -984,7 +1101,7 @@ still preserving any HRESULT that may be available.
   I do the first copy by hand then it hangs on the next copy command and so on. 
   When a hang occurs I can't stop the build with the button in the tool bar. I 
   have to kill "vcspawn" with the task manager. After doing this a couple of times 
-  the system becomes unusable and I can't shut it down cleany. What's going wrong 
+  the system becomes unusable and I can't shut it down cleanly. What's going wrong 
   ?</p>
 Disable all anti-virus software. There are two different win api calls for spawning, 
 and one of them gets intercepted by Norton Anitvirus (and I've also seen the same 
@@ -1015,16 +1132,39 @@ Be careful not to check these modified project files back in to sourceforge.
 <hr>
 <p>I'm having problems getting CVS to work, is there any way to view individual 
   source files ?</p>
-<p>Yes, the <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/aaf/AAF/">CVS 
-  browse interface</a> on SourceForge allows you to download individual files 
-  as well as viewing the differences between versions. </p>
-<p>&nbsp;</p>
-<p>The C++ STL doesn't seem to be used anywhere in the current AAF implementation. 
+Yes, the <a href="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/aaf/AAF/">CVS 
+browse interface</a> on SourceForge allows you to download individual files as 
+well as viewing the differences between versions. 
+<hr>
+<p>The C++ Standard Template Library (STL) doesn't seem to be used anywhere in 
+  the current AAF implementation.<br>
   Is this a deliberate policy? if so, why? </p>
-Although STL is <font size="+1"><i>standard library</i></font> it is not present 
-on all platforms. For example, some compilers for embedded systems don't have 
-it. The only appearence of STL is in OM code for debug mode only and it's very 
-easy to turn it off (see <a href="#OMdebug">OMdebug</a> above ). 
+It is a deliberate policy. It was done for portability (i.e. portability between 
+different implementations) and to eliminate an extra dependency. At the time we 
+started AAF development (early 1998) the STL implementations in our first three 
+compilers (VC++ 5.0, or was it 4.0?, CodeWarrior 3, and the SGI C++ compiler [GNU 
+C++ was not on the list at that time]) were very inconsistent and patchy. The 
+STL implementations have improved since then, I'm using the STL on another project 
+where portability is less of a concern, but I still have to refer frequently to 
+"Effective STL" by Scott Meyers. I'd recommend sticking to this policy for the 
+AAF reference implementation. <br>
+<br>
+The only appearence of &lt;iostream&gt; is in the Object Manager code for debug, 
+and it's very easy to turn it off (see <a href="#OMdebug">OMdebug</a> above ). 
+<br>
+<br>
+<hr>
+<p>I ran one of the example programs that are distributed with the AAF toolkit 
+  and created an example AAF file.<br>
+  When I try to import the file into &lt;product x&gt; it doesn't work, why not ?</p>
+
+While those example programs do create AAF files they certainly do not create 
+AAF files with the correct contents such that they can successfully be imported 
+by &lt;product x&gt;. An AAF file can be thought of as a container. Having the correct 
+container is is not sufficient, one must also have the correct contents for the 
+file to be acceptable to the consumer. The AAF Association is aware of this issue 
+and is working on a solution variously known as "Templates" or "Operational Patterns".
+<hr>
 </BODY>
 </HTML>
  
