@@ -593,6 +593,148 @@ public:
 
 #ccccccccccccccccccccccccccc
 #c
+#c Inserts declaration for a method which takes ten arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: argument modifiers (e.g. [in])
+#c Argument27: argument type
+#c Argument28: argument name
+#c Argument29: argument comment
+#c Argument30: argument modifiers (e.g. [in])
+#c Argument31: argument type
+#c Argument32: argument name
+#c Argument33: argument comment
+#c Argument34: argument modifiers (e.g. [in])
+#c Argument35: argument type
+#c Argument36: argument name
+#c Argument37: argument comment
+#c Argument38: argument modifiers (e.g. [in])
+#c Argument39: argument type
+#c Argument40: argument name
+#c Argument41: argument comment
+#c Argument42: method description
+#c
+#startm AD_METHOD_10 42
+  //****************
+  // %01()
+  //
+  //@mfunc AAFRESULT | .this-module | %01 |
+  // %38
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01
+       (%03 %04,    //@parm %02 %05
+        %07 %08,    //@parm %06 %09
+        %11 %12,    //@parm %10 %13
+        %15 %16,    //@parm %14 %17
+        %19 %20,    //@parm %18 %21
+        %23 %24,    //@parm %22 %25
+        %27 %28,    //@parm %26 %29
+        %31 %32,    //@parm %30 %33
+        %35 %36,    //@parm %34 %37
+        %39 %40);   //@parm %38 %41
+  //@rdesc Returns an AAFResult status code
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes eleven arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: argument modifiers (e.g. [in])
+#c Argument27: argument type
+#c Argument28: argument name
+#c Argument29: argument comment
+#c Argument30: argument modifiers (e.g. [in])
+#c Argument31: argument type
+#c Argument32: argument name
+#c Argument33: argument comment
+#c Argument34: argument modifiers (e.g. [in])
+#c Argument35: argument type
+#c Argument36: argument name
+#c Argument37: argument comment
+#c Argument38: argument modifiers (e.g. [in])
+#c Argument39: argument type
+#c Argument40: argument name
+#c Argument41: argument comment
+#c Argument42: argument modifiers (e.g. [in])
+#c Argument43: argument type
+#c Argument44: argument name
+#c Argument45: argument comment
+#c Argument46: method description
+#c
+#startm AD_METHOD_11 46
+  //****************
+  // %01()
+  //
+  //@mfunc AAFRESULT | .this-module | %01 |
+  // %38
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01
+       (%03 %04,    //@parm %02 %05
+        %07 %08,    //@parm %06 %09
+        %11 %12,    //@parm %10 %13
+        %15 %16,    //@parm %14 %17
+        %19 %20,    //@parm %18 %21
+        %23 %24,    //@parm %22 %25
+        %27 %28,    //@parm %26 %29
+        %31 %32,    //@parm %30 %33
+        %35 %36,    //@parm %34 %37
+        %39 %40,    //@parm %38 %41
+        %43 %44);   //@parm %42 %45
+  //@rdesc Returns an AAFResult status code
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Ends a class definition
 #c
 #c Arguments: none
