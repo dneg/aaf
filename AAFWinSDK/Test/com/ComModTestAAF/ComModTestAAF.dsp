@@ -686,10 +686,6 @@ SOURCE=..\..\..\include\AAF.h
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\..\ref-impl\src\impl\aafCvt.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # End Source File
 # Begin Source File

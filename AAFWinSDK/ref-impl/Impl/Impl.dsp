@@ -82,10 +82,6 @@ LIB32=link.exe -lib
 # Name "Impl - Win32 Debug"
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\aafCvt.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\aafErr.cpp"
 # End Source File
 # Begin Source File

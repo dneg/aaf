@@ -91,10 +91,6 @@ LINK32=link.exe
 # Name "AAFBasicInterpolators - Win32 Debug"
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\aafCvt.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\plugins\AAFInterpCOM.cpp"
 # End Source File
 # Begin Source File
