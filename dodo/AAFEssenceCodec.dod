@@ -23,7 +23,7 @@ AD_IDL(//
 AD_CLASS_UUID(3631F7A1, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(3631F7A2, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, Transient)
 
 AD_IDL(//
 	//**************
@@ -389,4 +389,4 @@ AD_XMETHOD1(GetEssenceFormat,
 			Supply an essence format object specifying what data is
 			// required\, and it is filled in with the data values.)
 
-AD_CLASS_END
+AD_XCLASS_END(Abstract, Transient)
