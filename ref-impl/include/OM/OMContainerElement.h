@@ -237,7 +237,6 @@ private:
   // @class Elements of Object Manager reference sets.
   //   @base public | <c OMContainerElement>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename UniqueIdentification>
 class OMStrongReferenceSetElement : public OMStrongReferenceVectorElement {
 public:
   // @access Public members.
@@ -250,11 +249,11 @@ public:
                               const wchar_t* name,
                               OMUInt32 localKey,
                               OMUInt32 referenceCount,
-                              UniqueIdentification identification);
+                              void* identification,
+                              size_t identificationSize);
 
     // @cmember Copy constructor.
-  OMStrongReferenceSetElement(
-                 const OMStrongReferenceSetElement<UniqueIdentification>& rhs);
+  OMStrongReferenceSetElement(const OMStrongReferenceSetElement& rhs);
 
     // @cmember Destructor.
   ~OMStrongReferenceSetElement(void);
@@ -262,21 +261,19 @@ public:
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMSet>.
     //          This operator does not provide assignment of object references.
-  OMStrongReferenceSetElement<UniqueIdentification>& operator=(
-                 const OMStrongReferenceSetElement<UniqueIdentification>& rhs);
+  OMStrongReferenceSetElement& operator=(
+                                       const OMStrongReferenceSetElement& rhs);
 
     // @cmember Equality.
     //          This operator provides value semantics for <c OMSet>.
     //          This operator does not provide equality of object references.
-  bool operator== (
-           const OMStrongReferenceSetElement<UniqueIdentification>& rhs) const;
+  bool operator==(const OMStrongReferenceSetElement& rhs) const;
 
     // @cmember Set the value of this <c OMStrongReferenceSetElement>.
-  OMStorable* setValue(const UniqueIdentification& identification,
-                       const OMStorable* value);
+  OMStorable* setValue(void* identification, const OMStorable* value);
 
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
-  UniqueIdentification identification(void) const;
+  void* identification(void) const;
 
     // @cmember The count of weak references to this
     //          <c OMStrongReferenceSetElement>.
@@ -289,7 +286,8 @@ private:
     //          The element's unique key is in memory even when the
     //          referenced object is not. That way we can tell if an
     //          object is present in a container without loading the object.
-  UniqueIdentification _identification;
+  void* _identification;
+  size_t _identificationSize;
 
     // @cmember The count of weak references to this
     //          <c OMStrongReferenceSetElement>.
