@@ -124,7 +124,7 @@ HRESULT CAAFInProcServer::GetClassObject
   // Search the object table for the given class id.
   // Lookup the class id in the com object table.
   AAFComObjectInfo_t **ppResult = NULL;
-  AAFComObjectInfo_t key = {&rclsid, OLESTR("KEY"), NULL};
+  AAFComObjectInfo_t key = {&rclsid, OLESTR("KEY"), NULL, false};
   AAFComObjectInfo_t *pKey = &key;
   
   // Use standard library's binary search routine.
@@ -299,6 +299,29 @@ static int FormatRegBuffer
 }
 
 
+// Find the next valid index in the internal object table where
+// bRegister matches the entry in the table...
+const long kInvalidObjectIndex = -1;
+
+long CAAFInProcServer::GetRegisterIndex(long index)
+{
+	long nextIndex = kInvalidObjectIndex; // termination signal
+
+	if (index >= 0)
+	{
+		while ((index < (long)g_objectCount) && NULL != _pObjectInfo[index].pCLSID)
+		{
+			if (_pObjectInfo[index].bRegisterClass)
+			{
+				nextIndex = index;
+				break;
+			}	
+			++index;
+		}
+	}
+
+	return nextIndex;
+}
 
 
 HRESULT CAAFInProcServer::RegisterServer
@@ -379,7 +402,7 @@ HRESULT CAAFInProcServer::RegisterServer
   // Use g_AAFRegEntry data to register each object in the object info table.
   // Search the object table for the given class id.
   long int objectIndex = 0;
-  while (NULL != _pObjectInfo[objectIndex].pCLSID)
+  while (kInvalidObjectIndex != (objectIndex = GetRegisterIndex(objectIndex)))
   {
     // Convert the object's class id into a string suitable for the 
     // registry.
