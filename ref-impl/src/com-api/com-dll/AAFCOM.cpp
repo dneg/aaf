@@ -18,14 +18,8 @@
 //		To build a separate proxy/stub DLL, 
 //		run nmake -f aafcomps.mk in the project directory.
 
-#ifndef __AAFCOM_h__
-#include "AAFCOM.h"
-#endif
-
 
 #include "CAAFInProcServer.h"
-
-extern "C" AAFComObjectInfo_t *g_AAFObjectMap;
 
 // Include all object header files here: 
 #ifndef _CAAFObject_h_
@@ -33,9 +27,13 @@ extern "C" AAFComObjectInfo_t *g_AAFObjectMap;
 #endif
 
 
+
+
 CAAFInProcServer g_AAFInProcServer;
 CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 
+// Include the table the associates all of the CLSID's with class names and factory methods.
+#include "AAFObjectTable_i.cpp"
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -47,7 +45,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{	
 		// Initialize the inproc server object.
-		g_AAFInProcServer.Init(g_AAFObjectMap, hInstance);
+		g_AAFInProcServer.Init(AAFObjectMap, hInstance);
 
 		DisableThreadLibraryCalls(hInstance);
 	}
