@@ -223,4 +223,3 @@ aafErr_t ImplAAFTimecode::OffsetToTimecodeClip(aafPosition_t offset, ImplAAFTime
 }
 
 
-OMDEFINE_STORABLE(ImplAAFTimecode, AUID_AAFTimecode);
