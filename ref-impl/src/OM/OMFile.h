@@ -10,11 +10,13 @@ class OMObjectDirectory;
 
 class OMFile : public OMStorable {
 public:
-  OMFile(const char* name);
+
+  OMFile(const char* name, const OMAccessMode mode);
   ~OMFile(void);
 
-  static OMFile* open(const char* fileName);
-  static OMFile* create(const char* fileName);
+  static OMFile* openRead(const char* fileName);
+  static OMFile* openModify(const char* fileName);
+  static OMFile* createModify(const char* fileName);
 
   void close(void);
 
@@ -31,14 +33,18 @@ public:
 
 private:
 
-  void create(void);
-  void open(void);
+  void openRead(void);
+  void openModify(void);
+  void createModify(void);
 
   const char* _name;
   OMStoredObject* _root;
   
   OMClassFactory* _classFactory;
   OMObjectDirectory* _objectDirectory;
+
+  enum OMAccessMode _mode;
+
 };
 
 #endif
