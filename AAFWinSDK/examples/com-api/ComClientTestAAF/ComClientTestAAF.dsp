@@ -94,7 +94,7 @@ SOURCE="..\..\..\ref-impl\include\COMIDL\AAF_i.c"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\..\examples\com-api\clientTest\ComClientTestAAF.cpp"
+SOURCE="..\..\..\..\examples\com-api\comClientTest\ComClientTestAAF.cpp"
 # End Source File
 # End Target
 # End Project
