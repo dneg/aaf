@@ -339,7 +339,7 @@ void OMStoredObject::restore(OMPropertySet& properties)
     _index->iterate(context, propertyId, type, offset, length);
     OMProperty* p = properties.get(propertyId);
     ASSERT("Valid property", p != 0);
-    p->restoreFrom(*this, length);
+    p->restore(length);
   }
 
   validate(&properties, _index);
