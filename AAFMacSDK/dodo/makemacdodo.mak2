@@ -55,9 +55,6 @@
 	  echo "" ; ¶
 	  catenate AAFModule.frefh; ¶
 	  echo "" ; ¶
-	  echo "" ; ¶
-	  echo "EXTERN_C const CLSID CLSID_AAFFile;" ; ¶
-	  echo "" ; ¶
 	  echo '#endif // __AAF_h__' ; ¶
 	) > {refh}AAF.h
 	SetFile -t TEXT -c CWIE -a L {refh}AAF.h
