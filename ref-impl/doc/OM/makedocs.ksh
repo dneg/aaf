@@ -28,6 +28,9 @@ SRC="src/*.cpp src/*.h"
 #
 # Extract both the internal and external documentation
 #
+# OMEXTERNAL = documentation of interest to Object Manager clients
+# OMINTERNAL = documentation of interest to Object Manager developers
+#
 FLAGS="OMEXTERNAL | OMINTERNAL"
 #
 # The generated html file
