@@ -170,6 +170,8 @@ public:
   //
   // Non-published methods
   //
+	ImplAAFClassDef *
+		ImplAAFClassDef::PvtGetParent ();
 
   //****************
   // SetParent()
@@ -288,15 +290,24 @@ private:
   };
 
 
+  // Provide two level property search routines that are overloaded.
+
+  // Low-level recursive methods the OM find method instead of a linear search
+  // that will necessarily load all of the property definitions for the class
+  // definition instance.
+  AAFRESULT
+    generalLookupPropertyDef (
+      aafUID_constref propId,
+      ImplAAFPropertyDef ** ppPropDef);
+
   //
   // The generalized lookup method which uses a pvtPropertyIdentifier
   // as the property ID.
   //
-  AAFRESULT STDMETHODCALLTYPE
+  AAFRESULT 
     generalLookupPropertyDef (
       const pvtPropertyIdentifier & propId,
       ImplAAFPropertyDef ** ppPropDef);
-
 
   // OMWeakReferenceProperty<ImplAAFClassDef> _ParentClass;
   OMWeakReferenceProperty<ImplAAFClassDef>         _ParentClass;

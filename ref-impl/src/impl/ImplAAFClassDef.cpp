@@ -304,7 +304,34 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-AAFRESULT STDMETHODCALLTYPE
+  // Low-level recursive methods the OM find method instead of a linear search
+  // that will necessarily load all of the property definitions for the class
+  // definition instance.
+AAFRESULT
+    ImplAAFClassDef::generalLookupPropertyDef (
+      aafUID_constref propId,
+      ImplAAFPropertyDef ** ppPropDef)
+{
+	AAFRESULT result = AAFRESULT_SUCCESS;
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-MAR-11)
+	if (_Properties.find((*reinterpret_cast<const OMObjectIdentification *>(&propId)),
+                             *ppPropDef))
+	{
+		assert(NULL != *ppPropDef);
+    (*ppPropDef)->AcquireReference();
+	}
+	else
+	{
+    // no recognized class guid in dictionary
+    result = AAFRESULT_NO_MORE_OBJECTS; // s/b AAFRESULT_PROPERTY_NOT_FOUND
+	}
+
+	return (result);
+}
+
+AAFRESULT /*STDMETHODCALLTYPE*/
     ImplAAFClassDef::generalLookupPropertyDef (
       const pvtPropertyIdentifier & propId,
       ImplAAFPropertyDef ** ppPropDef)
@@ -716,8 +743,11 @@ void ImplAAFClassDef::InitOMProperties (ImplAAFObject * pObj)
 		  // property.
 		  pProp = ps->get (defPid);
 		}		  
-	  else if(defPid != PID_InterchangeObject_ObjClass)
-	  {
+		else if(defPid != PID_InterchangeObject_ObjClass
+			&& (defPid != PID_InterchangeObject_Generation)
+			&& (defPid != PID_PropertyDefinition_IsSearchable)
+			&& (defPid != PID_PropertyDefinition_DefaultValue))
+		{
 		  // Defined property wasn't found in OM property set.
 		  // We'll have to install one.
 		  pProp = propDefSP->CreateOMProperty ();
@@ -730,8 +760,11 @@ void ImplAAFClassDef::InitOMProperties (ImplAAFObject * pObj)
 		  ps->put (pProp);
 	  }
 	  
-	  if(defPid != PID_InterchangeObject_ObjClass)
-	  {
+	if(defPid != PID_InterchangeObject_ObjClass
+			&& (defPid != PID_InterchangeObject_Generation)
+			&& (defPid != PID_PropertyDefinition_IsSearchable)
+			&& (defPid != PID_PropertyDefinition_DefaultValue))
+	{
 		  ImplAAFPropertyDef * pPropDef =
 			  (ImplAAFPropertyDef*) propDefSP;
 		  OMPropertyDefinition * pOMPropDef =

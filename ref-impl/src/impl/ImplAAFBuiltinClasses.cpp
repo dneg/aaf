@@ -365,6 +365,11 @@ ImplAAFBuiltinClasses::InitBuiltinClassDef (const aafUID_t & rClassID,
 				// shallow tree with no loops, this shouldn't be a problem.
 				hr = _dictionary->LookupClassDef(*sBuiltinClassTable[i].pParentId, &parent);
  				assert (AAFRESULT_SUCCEEDED (hr));
+				// If the LookupClassDef method succeeded then there is already a strong reference
+				// in the dictionary that "owns" this class definition. The parent will be used 
+				// as a "weak reference" so it does not have to be reference counted. 
+				aafUInt32 test_count = parent->ReleaseReference ();
+				assert (0 < test_count);
 			}
 			else
 				parent = pClass;	// Hit an object whose parent is NULL, end the recursion.
