@@ -98,7 +98,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
                                                  _keyPropertyId,
                                                  keySize);
   ASSERT("Valid heap pointer", index != 0);
-  index->setHighWaterMark(localKey());
+  index->setFirstFreeKey(localKey());
   size_t position = 0;
 
   // Iterate over the set saving each element. The index entries
@@ -216,7 +216,7 @@ OMStrongReferenceSetProperty<UniqueIdentification,
                           setIndex->keySize() == sizeof(UniqueIdentification));
   ASSERT("Consistent key property ids",
                                   setIndex->keyPropertyId() == _keyPropertyId);
-  setLocalKey(setIndex->highWaterMark());
+  setLocalKey(setIndex->firstFreeKey());
 
   // Iterate over the index restoring the elements of the set.
   // Since the index entries are stored on disk in order of their

@@ -84,7 +84,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::save(
   size_t count = _vector.count();
   OMStoredVectorIndex* index = new OMStoredVectorIndex(count);
   ASSERT("Valid heap pointer", index != 0);
-  index->setHighWaterMark(localKey());
+  index->setFirstFreeKey(localKey());
   size_t position = 0;
 
   // Iterate over the vector saving each element
@@ -182,7 +182,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
   OMStoredVectorIndex* vectorIndex = 0;
   store->restore(vectorIndex, name());
   ASSERT("Valid vector index", vectorIndex->isValid());
-  setLocalKey(vectorIndex->highWaterMark());
+  setLocalKey(vectorIndex->firstFreeKey());
 
   // Iterate over the index restoring the elements of the vector
   //
