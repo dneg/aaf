@@ -199,6 +199,15 @@ else
 
     AAF_BUILD_NUMBER_CO=`grep "define AAF_BUILD_NUMBER" AAF/${AAFSDKBUILD_H} | awk '{print $3}'`;
     BUILD_TAG_CO=`printf "Build-%04d" $AAF_BUILD_NUMBER_CO`
+
+
+    # Move back the the base directory.
+    cd $BASE_DIR
+    if [ $? -ne 0 ]; then
+       echo Failed to change to base directory: $BASE_DIR
+       exit 1
+    fi
+
 fi
 
 # Check out or update the source tree.
