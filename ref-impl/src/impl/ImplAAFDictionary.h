@@ -76,7 +76,7 @@ class ImplAAFTypeDefSet;
 #endif
 
 
-#include "OMClassFactory.h"
+//#include "OMClassFactory.h"
 #include "OMStrongRefSetProperty.h"
 
 
@@ -91,7 +91,7 @@ class ImplAAFTypeDefSet;
 #include "ImplAAFPluginDef.h"
 
 class ImplAAFDictionary :
-  public OMClassFactory,
+//  public OMClassFactory,
 //  public ImplAAFObject
   public ImplAAFMetaDictionary // this is temporary!
 {
@@ -752,6 +752,10 @@ bool PvtIsTypePresent (
   bool pvtLookupAxiomaticTypeDef (const aafUID_t & typeID,
 							   ImplAAFTypeDef ** ppTypeDef);
 
+  // Initialize all of the axiomatic and required built-in definitions
+  // have been initialized. This should be called after the file has been opened.
+  void InitializeMetaDefinitions(void);
+
 
 private:
   bool pvtLookupAxiomaticClassDef (const aafUID_t & classID,
@@ -790,6 +794,10 @@ private:
   bool _OKToAssurePropTypes;
 
   bool _defRegistrationAllowed;
+
+  // Set to true when the all of the axiomatic and required built-in definitions
+  // have been initialized. This should be set after the file has been opened.
+  bool _metaDefinitionsInitialized;
 
   ImplAAFMetaDictionary *_metaDictionary;
 };
