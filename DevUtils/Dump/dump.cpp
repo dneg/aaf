@@ -204,6 +204,18 @@ const CLSID CLSID_AAFHeader =
 //           DigitalImageDescriptor. Several other minor changes.
 //  0.13   : Change PropertDefinition::pid to
 //           PropertyDefinition::LocalIdentification.
+//  0.14   : Implement all types, except for Stream, as defined in
+//           AAFMetaDictionary.h .  Previously most types were aliases
+//           to a more basic type (aafUIntXX for enums,
+//           InterchangeObject as target for all object references,
+//           and variable-array-of-uint8s for all others).  Now all
+//           types (except Stream) are implemented as defined in the
+//           MetaDictionary.  Note that *some* of the built-in defs
+//           (class and type) are *not* entered into the dictionary,
+//           so these files are not entirely self-describing.  This
+//           was done as a work-around, and should change in the
+//           future.  Stay tuned for a new version when this is
+//           fixed.
 //
 
 // The following may change at run time depending on the file format
@@ -215,7 +227,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 13;
+const OMUInt32 HIGHVERSION = 14;
 
 // Output format requested
 //
