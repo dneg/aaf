@@ -17,14 +17,14 @@ AD_INCLUDE(AAFTypes)
 
 AD_ROOT_CLASS_BEGIN
 
-AD_METHOD1(itsFile,
-		   [out],AAFFile **,aFile, ,
-		   Returns the AAFFile containing the object in persistent
+AD_XMETHOD1(itsFile,
+			[out],objOut,AAFFile,aFile, ,
+			Returns the AAFFile containing the object in persistent
   // store\, or NULL for transient objects.)
 
-AD_METHOD1(isForeignByteOrder,
-		   [out],aafBool *,isForeign,,
-		   Returns TRUE if the given object has a non-native byte
+AD_XMETHOD1(isForeignByteOrder,
+			[out],objPass,aafBool*,isForeign,,
+			Returns TRUE if the given object has a non-native byte
   // order.)
   //@comm This routine is optimized in the common case (objects byte order == file byte order).	
   //@comm Replaces ompvtIsForeignByteOrder
@@ -33,9 +33,9 @@ AD_METHOD0(Delete,
 		   Deletes an object from the given file.)
   //@comm Replaces omfsObjectDelete
 
-AD_METHOD2(IsTypeOf,
-		   [in],aafUID_t    ,aClass, AUID corresponding to a class,
-		   [out],aafBool*,Result, ,
+AD_XMETHOD2(IsTypeOf,
+		   [in],objPass,aafUID_t    ,aClass, AUID corresponding to a class,
+		   [out],objPass,aafBool*,Result, ,
 		   Test if an object is a member of the given class\, or a
   // member of one of its subclasses.) 
 
