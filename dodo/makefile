@@ -41,6 +41,7 @@ DODO_TARGETS = \
 	AAFMob.all  \
 	AAFMasterMob.all \
 	AAFMobSlot.all \
+	AAFParameter.all \
 	AAFTimelineMobSlot.all \
 	AAFObjectAttribute.all \
 	AAFSegment.all \
@@ -56,7 +57,7 @@ DODO_TARGETS = \
 
 #	AAFMedia.all \
 # Jeff hasn't finished with these yet
-#	AAFMediaFilmDescriptor.all \
+#	AAFMediaTapeDescriptor.all \
 #
 
 targets: $(DODO_TARGETS)
@@ -376,6 +377,19 @@ AAFObjectAttribute.comc : AAFObjectAttribute.exp macros/comc.mac
 AAFObjectAttribute.comh : AAFObjectAttribute.exp macros/comh.mac
 AAFObjectAttribute.implc : AAFObjectAttribute.exp macros/implc.mac
 AAFObjectAttribute.implh : AAFObjectAttribute.exp macros/implh.mac
+
+AAFParameter.all : AAFParameter.cpp AAFParameter.h
+AAFParameter.all : AAFParameter.comc AAFParameter.comh
+AAFParameter.all : AAFParameter.exp AAFParameter.idl
+AAFParameter.all : AAFParameter.implc AAFParameter.implh
+AAFParameter.exp : AAFUnitTest.exp macros/exp.mac
+AAFParameter.h : AAFParameter.exp macros/h.mac
+AAFParameter.cpp : AAFParameter.exp macros/cpp.mac
+AAFParameter.idl : AAFParameter.exp macros/idl.mac
+AAFParameter.comc : AAFParameter.exp macros/comc.mac
+AAFParameter.comh : AAFParameter.exp macros/comh.mac
+AAFParameter.implc : AAFParameter.exp macros/implc.mac
+AAFParameter.implh : AAFParameter.exp macros/implh.mac
 
 AAFSegment.all : AAFSegment.cpp AAFSegment.h
 AAFSegment.all : AAFSegment.comc AAFSegment.comh
