@@ -112,7 +112,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFile*			pFile = NULL;
 	IAAFHeader *        pHeader = NULL;
 	IAAFDictionary*		pDictionary = NULL;
-	IAAFEffectDef*		pEffectDef = NULL;
+	IAAFOperationDef*		pOperationDef = NULL;
 	IAAFParameterDef*	pParamDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
 	bool				bFileOpen = false;
@@ -134,30 +134,30 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
     
-		checkResult(pDictionary->CreateInstance(&AUID_AAFEffectDef,
-							  IID_IAAFEffectDef, 
-							  (IUnknown **)&pEffectDef));
+		checkResult(pDictionary->CreateInstance(&AUID_AAFOperationDef,
+							  IID_IAAFOperationDef, 
+							  (IUnknown **)&pOperationDef));
     
 		checkResult(pDictionary->CreateInstance(&AUID_AAFParameterDef,
 							  IID_IAAFParameterDef, 
 							  (IUnknown **)&pParamDef));
 
-		checkResult(pDictionary->RegisterEffectDefinition(pEffectDef));
+		checkResult(pDictionary->RegisterOperationDefinition(pOperationDef));
 		checkResult(pDictionary->RegisterParameterDefinition(pParamDef));
 
-		checkResult(pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
+		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->SetName (TEST_EFFECT_NAME));
 		checkResult(pDefObject->SetDescription (TEST_EFFECT_DESC));
 		pDefObject->Release();
 		pDefObject = NULL;
 
 //!!!Not testing the SetAUID on AAFDefObject
-		checkResult(pEffectDef->SetDataDefinitionID (&testDataDef));
-		checkResult(pEffectDef->SetIsTimeWarp (AAFFalse));
-		checkResult(pEffectDef->SetNumberInputs (TEST_NUM_INPUTS));
-		checkResult(pEffectDef->SetCategory (TEST_CATEGORY));
-		checkResult(pEffectDef->AddParameterDefs (pParamDef));
-		checkResult(pEffectDef->SetBypass (TEST_BYPASS));
+		checkResult(pOperationDef->SetDataDefinitionID (&testDataDef));
+		checkResult(pOperationDef->SetIsTimeWarp (AAFFalse));
+		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
+		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
+		checkResult(pOperationDef->AddParameterDefs (pParamDef));
+		checkResult(pOperationDef->SetBypass (TEST_BYPASS));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -167,8 +167,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject = NULL;
 
 #if 0
-		checkResult(pEffectDef->PrependDegradeToEffects (ImplAAFEffectDef  *pEffectDef));
-		checkResult(pEffectDef->AppendDegradeToEffects (ImplAAFEffectDef  *pEffectDef));
+		checkResult(pOperationDef->PrependDegradeToEffects (ImplAAFOperationDef  *pOperationDef));
+		checkResult(pOperationDef->AppendDegradeToEffects (ImplAAFOperationDef  *pOperationDef));
 #endif
 	}
 	catch (HRESULT& rResult)
@@ -181,8 +181,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	if (pDefObject)
 		pDefObject->Release();
 
-	if (pEffectDef)
-		pEffectDef->Release();
+	if (pOperationDef)
+		pOperationDef->Release();
 
 	if (pParamDef)
 		pParamDef->Release();
@@ -211,9 +211,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFile*			pFile = NULL;
 	IAAFHeader*			pHeader = NULL;
 	IAAFDictionary*		pDictionary = NULL;
-	IEnumAAFEffectDefs *pEffectEnum = NULL;
+	IEnumAAFOperationDefs *pEffectEnum = NULL;
 	IEnumAAFParameterDefs *pParmDefEnum = NULL;
-	IAAFEffectDef		*pEffectDef = NULL;
+	IAAFOperationDef		*pOperationDef = NULL;
 	IAAFParameterDef	*pParmDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
 	bool				bFileOpen = false;
@@ -232,11 +232,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-		checkResult(pDictionary->GetEffectDefinitions(&pEffectEnum));
-		checkResult(pEffectEnum->NextOne (&pEffectDef));
-		checkResult(pEffectDef->GetDataDefinitionID(&readDataDef));
+		checkResult(pDictionary->GetOperationDefinitions(&pEffectEnum));
+		checkResult(pEffectEnum->NextOne (&pOperationDef));
+		checkResult(pOperationDef->GetDataDefinitionID(&readDataDef));
 
-		checkResult(pEffectDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
+		checkResult(pOperationDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->GetName (checkName, sizeof(checkName)));
 		checkExpression(wcscmp(checkName, TEST_EFFECT_NAME) == 0, AAFRESULT_TEST_FAILED);
 		checkResult(pDefObject->GetDescription (checkName, sizeof(checkName)));
@@ -245,18 +245,18 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		pDefObject = NULL;
 		
 		checkExpression(EqualAUID(&readDataDef, &checkDataDef) == AAFTrue, AAFRESULT_TEST_FAILED);
-		checkResult(pEffectDef->IsTimeWarp (&readIsTimeWarp));
+		checkResult(pOperationDef->IsTimeWarp (&readIsTimeWarp));
 		checkExpression(readIsTimeWarp == AAFFalse, AAFRESULT_TEST_FAILED);
-		checkResult(pEffectDef->GetCategoryBufLen (&catLen));
+		checkResult(pOperationDef->GetCategoryBufLen (&catLen));
 		testLen = wcslen(TEST_CATEGORY);
-		checkResult(pEffectDef->GetCategory (checkCat, sizeof(checkCat)));
+		checkResult(pOperationDef->GetCategory (checkCat, sizeof(checkCat)));
 		checkExpression(wcscmp(checkCat, TEST_CATEGORY) == 0, AAFRESULT_TEST_FAILED);
 		checkExpression(testLen == wcslen(checkCat), AAFRESULT_TEST_FAILED);
-		checkResult(pEffectDef->GetBypass (&checkBypass));
+		checkResult(pOperationDef->GetBypass (&checkBypass));
 		checkExpression(checkBypass == TEST_BYPASS, AAFRESULT_TEST_FAILED);
-		checkResult(pEffectDef->GetNumberInputs (&checkNumInputs));
+		checkResult(pOperationDef->GetNumberInputs (&checkNumInputs));
 		checkExpression(checkNumInputs == TEST_NUM_INPUTS, AAFRESULT_TEST_FAILED);
-		checkResult(pEffectDef->GetParameterDefinitions (&pParmDefEnum));
+		checkResult(pOperationDef->GetParameterDefinitions (&pParmDefEnum));
 		checkResult(pParmDefEnum->NextOne (&pParmDef));
 
 		checkResult(pParmDef->GetDisplayUnits (checkName, sizeof(checkName)));
@@ -270,7 +270,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		pDefObject = NULL;
 
 #if 0
-    ImplAAFEffectDef::GetDegradeToEffects (ImplEnumAAFEffectDefs  **ppEnum)
+    ImplAAFOperationDef::GetDegradeToOperations (ImplEnumAAFOperationDefs  **ppEnum)
 #endif
 	}
 	catch (HRESULT& rResult)
@@ -291,8 +291,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pParmDefEnum)
 		pParmDefEnum->Release();
       
-	if (pEffectDef)
-		pEffectDef->Release();
+	if (pOperationDef)
+		pOperationDef->Release();
       
 	if (pDefObject)
 		pDefObject->Release();
