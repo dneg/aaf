@@ -615,12 +615,6 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/C.this-moduleTest.cpp.
   static HRESULT test();
-
-  //
-  // Return private implementation pointer for delegation.
-  // NOTE: This is NOT the pointer to the COM object's implementation
-  // object!
-  STDMETHOD(GetImplRep)(/*[retval, out]*/ void **);
 };
 
 #endif // ! __C.this-module_h__

@@ -607,13 +607,6 @@ DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07,
 #c
 #startm AD_CLASS_END 00
 
-  //
-  // Return private implementation pointer for delegation.
-  // NOTE: This is NOT the pointer to the COM object's implementation
-  // object!
-  //
-  STDMETHOD(GetImplRep)(THIS_ void **) PURE;
-
   END_INTERFACE
 };\
 #endm
