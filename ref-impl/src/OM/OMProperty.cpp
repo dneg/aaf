@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -26,7 +26,6 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
-#include "OMPropertyBase.h"
 
 #include "OMProperty.h"
 
@@ -553,66 +552,4 @@ void OMSimpleProperty::setBits(const OMByte* bits, size_t size)
   PRECONDITION("Valid size", size > 0);
 
   set(bits, size);
-}
-
-// class OMStringProperty
-
-  // @mfunc Constructor.
-  //   @parm The property id.
-  //   @parm The name of this <c OMStringProperty>.
-OMStringProperty::OMStringProperty(const OMPropertyId propertyId,
-                                   const char* name)
-: OMCharacterStringProperty<char>(propertyId, name)
-{
-  TRACE("OMStringProperty::OMStringProperty");
-  PRECONDITION("Valid name", validString(name));
-}
-
-  // @mfunc Destructor.
-OMStringProperty::~OMStringProperty(void)
-{
-  TRACE("OMStringProperty::~OMStringProperty");
-}
-
-  // @mfunc Assignment operator.
-  //   @parm The new value for this <c OMStringProperty>.
-  //   @rdesc The <c OMStringProperty> resulting from the assignment.
-OMStringProperty& OMStringProperty::operator = (const char* value)
-{
-  TRACE("OMStringProperty::operator =");
-  PRECONDITION("Valid value", value != 0);
-
-  assign(value);
-  return *this;
-}
-
-// class OMWideStringProperty
-
-  // @mfunc Constructor.
-  //   @parm The property id.
-  //   @parm The name of this <c OMWideStringProperty>.
-OMWideStringProperty::OMWideStringProperty(const OMPropertyId propertyId,
-                                           const char* name)
-: OMCharacterStringProperty<wchar_t>(propertyId, name)
-{
-  TRACE("OMWideStringProperty::OMWideStringProperty");
-  PRECONDITION("Valid name", validString(name));
-}
-
-  // @mfunc Destructor.
-OMWideStringProperty::~OMWideStringProperty(void)
-{
-  TRACE("OMWideStringProperty::~OMWideStringProperty");
-}
-
-  // @mfunc Assignment operator.
-  //   @parm The new value for this <c OMWideStringProperty>.
-  //   @rdesc The <c OMWideStringProperty> resulting from the assignment.
-OMWideStringProperty& OMWideStringProperty::operator = (const wchar_t* value)
-{
-  TRACE("OMWideStringProperty::operator =");
-  PRECONDITION("Valid string", validWideString(value));
-
-  assign(value);
-  return *this;
 }
