@@ -19,17 +19,12 @@
 //
 // Forward declaration
 //
-struct IAAFObject;
 class AAFObject;
 
 #include "AAFTypes.h"
-#if OM_PRESENT
 #include "OMStorable.h"
 
 class ImplAAFObject : public OMStorable
-#else
-class ImplAAFObject
-#endif
 {
 public:
   //
