@@ -100,7 +100,7 @@ public:
 
 	ImplAAFFile *GetTopFile(void);
 	void SetTopFile(ImplAAFFile *file);
-	OMLSession GetContainerSession(void);
+	OMLSession	GetContainerSession(void);
 	aafProductIdentification_t *GetDefaultIdent(void);
 
 private:
