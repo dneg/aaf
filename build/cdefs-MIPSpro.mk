@@ -48,7 +48,7 @@
 # MIPS_ABI is defined in the platform definition file
 #------------------------------------------------------------------------------
 CC = CC -$(MIPS_ABI)
-
+CCVERSION = CC -version
 
 #------------------------------------------------------------------------------
 # Debug info generation
