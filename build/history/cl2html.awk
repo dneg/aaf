@@ -12,52 +12,7 @@ BEGIN {
 
 /^[0-9]+-[0-9]+-[0-9]+/ {
   if (entrytext != "") {
-#    printf("<!--[%s]-->\n", entrytext);
-    gsub("\t", " ", entrytext);
-    entrytext = trim(entrytext, 3);
-    f = split(entrytext, fields, ":");
-#    printf("<!--[%d]-->\n", f);
-#    for (i = 1; i <= f; i++) {
-#      printf("<!--[%d : \"%s\"]-->\n", i, fields[i]);
-#    }
-    /* We should have at least a file name and a comment */
-    if (f < 2) {
-      printf("cl2html : Error near \"%s\"\n", entrytext) | "cat 1>&2";
-      exit(1);
-    }
-    if (match(fields[1], "/$")) {
-      /* The first field is a directory */
-      dir = fields[1];
-      files = trim(fields[2], 1);
-      gsub(" ", "", files);
-      n = split(files, names, ",");
-#      printf("<!--[%d]-->\n", n);
-#      for (i = 1; i <= n; i++) {
-#        printf("<!--[%d : \"%s\"]-->\n", i, names[i]);
-#      }
-      /* Insert directory names */
-      files = dir names[1];
-      for (i = 2; i <= n; i++) {
-        files = files ", " dir names[i];
-      }
-      cs = 3; /* Start of comment */
-    } else {
-      /* The first field is not a directory */
-      dir = "";
-      files = fields[1];
-      cs = 2; /* Start of comment */
-    }
-    /* Put comment back together - undo split on ":" */
-    comments = trim(fields[cs], 1);
-    for (i = cs + 1; i <= f; i++) {
-      comments = comments ":" fields[i]
-    }
-
-#    printf("<!--[dir      = \"%s\"]-->\n", dir);
-#    printf("<!--[files    = \"%s\"]-->\n", files);
-#    printf("<!--[comments = \"%s\"]-->\n", comments);
-    /* Print previous table row */
-    printRow(date, name, files, comments, color);
+    entry(entrytext);
   }
   /* Build new table row */
   date = $1;
@@ -111,4 +66,53 @@ function printTrailer() {
 # Remove first n characters of s
 function trim(s, n) {
   return substr(s, n + 1, length(s) - n);
+}
+
+function entry(entrytext) {
+#  printf("<!--[%s]-->\n", entrytext);
+  gsub("\t", " ", entrytext);
+  entrytext = trim(entrytext, 3);
+  f = split(entrytext, fields, ":");
+#  printf("<!--[%d]-->\n", f);
+#  for (i = 1; i <= f; i++) {
+#    printf("<!--[%d : \"%s\"]-->\n", i, fields[i]);
+#  }
+  /* We should have at least a file name and a comment */
+  if (f < 2) {
+    printf("cl2html : Error near \"%s\"\n", entrytext) | "cat 1>&2";
+    exit(1);
+  }
+  if (match(fields[1], "/$")) {
+    /* The first field is a directory */
+    dir = fields[1];
+    files = trim(fields[2], 1);
+    gsub(" ", "", files);
+    n = split(files, names, ",");
+#    printf("<!--[%d]-->\n", n);
+#    for (i = 1; i <= n; i++) {
+#      printf("<!--[%d : \"%s\"]-->\n", i, names[i]);
+#    }
+    /* Insert directory names */
+    files = dir names[1];
+    for (i = 2; i <= n; i++) {
+      files = files ", " dir names[i];
+    }
+    cs = 3; /* Start of comment */
+  } else {
+    /* The first field is not a directory */
+    dir = "";
+    files = fields[1];
+    cs = 2; /* Start of comment */
+  }
+  /* Put comment back together - undo split on ":" */
+  comments = trim(fields[cs], 1);
+  for (i = cs + 1; i <= f; i++) {
+    comments = comments ":" fields[i]
+  }
+
+#  printf("<!--[dir      = \"%s\"]-->\n", dir);
+#  printf("<!--[files    = \"%s\"]-->\n", files);
+#  printf("<!--[comments = \"%s\"]-->\n", comments);
+  /* Print previous table row */
+  printRow(date, name, files, comments, color);
 }
