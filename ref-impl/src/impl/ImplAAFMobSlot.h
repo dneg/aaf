@@ -111,7 +111,7 @@ public:
 
 
   //****************
-  // GetDataKind()
+  // GetDataDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDataDef
