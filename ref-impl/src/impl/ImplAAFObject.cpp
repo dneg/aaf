@@ -224,19 +224,8 @@ void ImplPropertyCollection::SetPropertyValue
   //
   assert (pOmProp);
   assert (pNewPropVal);
-  ImplAAFPropValData * pvd = dynamic_cast<ImplAAFPropValData*>(pNewPropVal);
-  assert (pvd);
-  aafMemPtr_t bits = 0;
-  aafUInt32 bitsSize;
-  hr = pvd->GetBits (&bits);
-  assert (bits);
+  hr = pNewPropVal->WriteTo(pOmProp);
   assert (AAFRESULT_SUCCEEDED (hr));
-  hr = pvd->GetBitsSize (&bitsSize);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  // OMSimpleProperty * pSimpleProp = dynamic_cast <OMSimpleProperty*>(pOmProp);
-  // assert (pSimpleProp);
-  // pSimpleProp->setBits (bits, bitsSize);
-  pOmProp->setBits (bits, bitsSize);
 }
 
 
