@@ -181,7 +181,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFKLVData					*pKLVData = NULL;
   IAAFTypeDef*					pBaseType = NULL;
   IAAFSourceReference 			*pSourceRef = NULL;
-  IAAFTimecode					*pTimecode;
+  IAAFTimecode					*pTimecode = NULL;
   aafTimecode_t					timecode;
   int 							i;
 
@@ -506,6 +506,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 						
 		checkExpression(pMob->RemoveComment(taggedVal) == AAFRESULT_OBJECT_NOT_ATTACHED, 
 													AAFRESULT_TEST_FAILED);
+		taggedVal->Release();
+		taggedVal = NULL;
 
 		enumTaggedVal->Reset();
 		enumTaggedVal->Skip(2);
@@ -784,15 +786,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				if ( 0 < s && s < 5 ) // These are the SourceClips
 				{
 					checkResult(slot->GetSegment(&pSegment));
-			  		checkResult(pSegment->
-			  			QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
-			  		pSegment->Release();
-				  	checkResult(pSourceClip->
-			  			QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
-			  		pSourceClip->Release();
+			  		checkResult(pSegment->QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
+				  	checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
 				    checkResult(pSourceRef->GetSourceID(&sourceID));
 				    checkExpression(memcmp(&sourceID, &MOBTestID3, sizeof(aafMobID_t)) == 0,
 				    													 AAFRESULT_TEST_FAILED);
+			  		pSourceRef->Release();
+			  		pSourceRef = NULL;
+			  		pSourceClip->Release();
+            pSourceClip = NULL;
+			  		pSegment->Release();
+            pSegment = NULL;
 				}
 				
 				slot->Release();
@@ -808,21 +812,19 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  {
 				checkResult(aMob->GetSlotAt(s, &slot));
 				checkResult(slot->GetSegment(&pSegment));
-  		  		checkResult(pSegment->
-  					QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
-	  	  		checkResult(pSourceClip->
-  					QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
+  		  		checkResult(pSegment->QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
+	  	  		checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
 	      		checkResult(pSourceRef->GetSourceID(&sourceID));
 	      		checkExpression(memcmp(&sourceID, &MOBTestID4, sizeof(aafMobID_t)) == 0,
 		   													 AAFRESULT_TEST_FAILED);
-		  		slot->Release();
-			  	slot = NULL;
-			  	pSegment->Release();
-			  	pSegment = NULL;
-			  	pSourceClip->Release();
-			  	pSourceClip = NULL;
 			  	pSourceRef->Release();
 			  	pSourceRef = NULL;
+			  	pSourceClip->Release();
+			  	pSourceClip = NULL;
+			  	pSegment->Release();
+			  	pSegment = NULL;
+		  		slot->Release();
+			  	slot = NULL;
 		  }
 
 		  // try it again with a MobID it won't find.  Make sure nothing changes
@@ -832,29 +834,26 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  {
 				checkResult(aMob->GetSlotAt(s, &slot));
 				checkResult(slot->GetSegment(&pSegment));
-  		  		checkResult(pSegment->
-  					QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
-	  	  		checkResult(pSourceClip->
-  					QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
+  		  		checkResult(pSegment->QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
+	  	  		checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
 	      		checkResult(pSourceRef->GetSourceID(&sourceID));
 	      		checkExpression(memcmp(&sourceID, &MOBTestID4, sizeof(aafMobID_t)) == 0,
 		   													 AAFRESULT_TEST_FAILED);
-		  		slot->Release();
-			  	slot = NULL;
-			  	pSegment->Release();
-			  	pSegment = NULL;
-			  	pSourceClip->Release();
-			  	pSourceClip = NULL;
 			  	pSourceRef->Release();
 			  	pSourceRef = NULL;
+			  	pSourceClip->Release();
+			  	pSourceClip = NULL;
+			  	pSegment->Release();
+			  	pSegment = NULL;
+		  		slot->Release();
+			  	slot = NULL;
 		  }
 
 		  // LookUpSlot
 		  checkResult(aMob->LookupSlot(4, &slot));
 		  checkResult(slot->GetSegment(&pSegment));
 		  checkResult(pSegment->QueryInterface (IID_IAAFSourceClip, (void **)&pSourceClip));
-		  checkResult(pSourceClip->
-		  			QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
+		  checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));
 		  checkResult(pSourceRef->GetSourceID(&sourceID));
 
 		  checkResult(slot->GetNameBufLen(&bufLen));
@@ -863,16 +862,18 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkExpression(wcscmp(slotName, slotNames[3]) == 0, AAFRESULT_TEST_FAILED);
 		  checkExpression(trackID == (4), AAFRESULT_TEST_FAILED);	
 
-		  checkExpression(aMob->LookupSlot(9, &slot) == AAFRESULT_SLOT_NOT_FOUND,
-													AAFRESULT_TEST_FAILED);
-		  slot->Release();
-		  slot = NULL;		
-		  pSegment->Release();
-		  pSegment = NULL;		
-		  pSourceClip->Release();
-		  pSourceClip = NULL;		
 		  pSourceRef->Release();
 		  pSourceRef = NULL;		
+		  pSourceClip->Release();
+		  pSourceClip = NULL;		
+		  pSegment->Release();
+		  pSegment = NULL;		
+		  slot->Release();
+		  slot = NULL;		
+
+      
+      checkExpression(aMob->LookupSlot(9, &slot) == AAFRESULT_SLOT_NOT_FOUND,
+													AAFRESULT_TEST_FAILED);
 
 		  checkExpression(aMob->LookupSlot(0, NULL) == AAFRESULT_NULL_PARAM,
 													AAFRESULT_TEST_FAILED);
@@ -912,20 +913,20 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 //		  checkExpression(timecode.drop == TCdrop, AAFRESULT_TEST_FAILED);
 //		  checkExpression(timecode.fps == TCfps, AAFRESULT_TEST_FAILED);
 															
-		  slot->Release();
-		  slot = NULL;
 		  pSegment->Release();
 		  pSegment = NULL;
+		  slot->Release();
+		  slot = NULL;
 		  
 		  // Pass in a segment that is not a timecode and make sure it returns correct hr
 		  checkResult(aMob->LookupSlot(1, &slot));
 		  checkResult(slot->GetSegment(&pSegment));
 //		  checkExpression(aMob->OffsetToMobTimecode(pSegment, &offset, &timecode) == AAFRESULT_TIMECODE_NOT_FOUND,
 //															AAFRESULT_TEST_FAILED);
-		  slot->Release();
-		  slot = NULL;
 		  pSegment->Release();
 		  pSegment = NULL;
+		  slot->Release();
+		  slot = NULL;
 
 		  // GetKLVData
 		  checkResult(pDictionary->LookupTypeDef (kAAFTypeID_UInt8Array, &pBaseType));
