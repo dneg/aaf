@@ -3004,7 +3004,13 @@ void dumpContainedObjects(IStorage* storage,
       //
       cout << endl;
       cout << thisPathName << endl;
-      printWeakCollectionIndex(containerType, collectionIndex, _count, _tag, keyPid, keySize, version);
+      printWeakCollectionIndex(containerType,
+                               collectionIndex,
+                               _count,
+                               _tag,
+                               keyPid,
+                               keySize,
+                               version);
 
       delete [] thisPathName;
       thisPathName = 0;
