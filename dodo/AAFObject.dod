@@ -13,14 +13,19 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_CLASS_UUID(B1A213AC, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+
+
 AD_INCLUDE(AAFTypes)
 
+
+AD_DEFAULT_UUID(B1A213AB, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_ROOT_CLASS_BEGIN
 
-AD_XMETHOD1(itsFile,
-			[out],objOut,AAFFile,aFile, ,
-			Returns the AAFFile containing the object in persistent
-  // store\, or NULL for transient objects.)
+// AxD_XMETHOD1(itsFile,
+// 			[out],objOut,AAFFile,aFile, ,
+// 			Returns the AAFFile containing the object in persistent
+//   // store\, or NULL for transient objects.)
 
 AD_XMETHOD1(isForeignByteOrder,
 			[out],objPass,aafBool*,isForeign,,
