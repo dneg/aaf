@@ -163,6 +163,17 @@ public:
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
 
 
+  // non-published overrides from AAFTypeDef
+  aafBool IsFixedSize (void) const;
+  size_t PropValSize (void) const;
+  aafBool IsRegistered (void) const;
+  size_t NativeSize (void) const;
+
+  virtual OMProperty * 
+    pvtCreateOMPropertyMBS (OMPropertyId pid,
+							const char * name) const;
+
+
   //*************************************************************
   //
   // Overrides from OMType, via inheritace through ImplAAFTypeDef
@@ -190,6 +201,7 @@ public:
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
 
+
 private:
   // names of elements in this record; stored as single wchar_t array
   // with embedded nulls
@@ -198,6 +210,7 @@ private:
   // array of values for elements.
   OMVariableSizeProperty<aafUID_t> _ElementValues;
 
+  ImplAAFTypeDefSP _cachedBaseType;
 
   //
   // private methods
@@ -211,7 +224,7 @@ private:
 					wchar_t * pName,
 					aafUInt32  bufSize);
 
-  ImplAAFTypeDef * GetBaseType (void);
+  ImplAAFTypeDefSP BaseType (void) const;
 
 
 public:
@@ -219,5 +232,17 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefExtEnum)
 };
+
+//
+// smart pointer
+//
+
+#ifndef __ImplAAFSmartPointer_h__
+// caution! includes assert.h
+#include "ImplAAFSmartPointer.h"
+#endif
+
+typedef ImplAAFSmartPointer<ImplAAFTypeDefExtEnum> ImplAAFTypeDefExtEnumSP;
+
 
 #endif // ! __ImplAAFTypeDefExtEnum_h__

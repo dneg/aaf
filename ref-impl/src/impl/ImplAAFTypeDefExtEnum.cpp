@@ -38,10 +38,6 @@
 
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
-#define RELEASE_IF_SET(obj) \
-    if (obj) { obj->ReleaseReference(); obj = NULL; }
-
-
 ImplAAFTypeDefExtEnum::ImplAAFTypeDefExtEnum ()
   :	_ElementNames  ( PID_TypeDefinitionExtendibleEnumeration_ElementNames,  "Element Names"),
 	_ElementValues ( PID_TypeDefinitionExtendibleEnumeration_ElementValues, "Element Values")
@@ -230,53 +226,31 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyValue * pPropValIn,
       aafUID_t * pValueOut)
 {
-  ImplAAFDictionary * pDict = 0;
-  ImplAAFTypeDef * ptd = 0;
-  ImplAAFTypeDefRecord * ptAuid = 0;
+  ImplAAFTypeDefSP ptd;
+  ImplAAFTypeDefRecordSP ptAuid;
 
   if (! pPropValIn)
 	return AAFRESULT_NULL_PARAM;
   if (! pValueOut)
 	return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  try
-	{
-	  AAFRESULT hr;
-	  aafUID_t retval;
+  AAFRESULT hr;
+  aafUID_t retval;
 
-	  hr = GetDictionary (&pDict);
-	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	  assert (pDict);
+  ptd = BaseType ();
+  assert (ptd);
 
-	  hr = pDict->LookupType (&kAAFTypeID_AUID ,&ptd);
-	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	  assert (ptd);
+  ptAuid = dynamic_cast<ImplAAFTypeDefRecord*> ((ImplAAFTypeDef*) ptd);
+  assert (ptAuid);
 
-	  ptAuid = dynamic_cast<ImplAAFTypeDefRecord*> (ptd);
-	  assert (ptAuid);
+  hr = ptAuid->GetStruct (pPropValIn, (aafMemPtr_t) &retval, sizeof (retval));
+  if (AAFRESULT_FAILED(hr))
+	return hr;
 
-	  hr = ptAuid->GetStruct (pPropValIn, (aafMemPtr_t) &retval, sizeof (retval));
-	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+  assert (pValueOut);
+  *pValueOut = retval;
 
-	  assert (pValueOut);
-	  *pValueOut = retval;
-	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  RELEASE_IF_SET (pDict);
-  RELEASE_IF_SET (ptd);
-
-  // Don't release this! It was dynamically-cast, not QI'd (and
-  // therefore not ref counted).
-  //RELEASE_IF_SET (ptAuid);
-
-  return rReturned;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -286,49 +260,27 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyValue * pPropValToSet,
       aafUID_t * pValueIn)
 {
-  ImplAAFDictionary * pDict = 0;
-  ImplAAFTypeDef * ptd = 0;
-  ImplAAFTypeDefRecord * ptAuid = 0;
+  ImplAAFTypeDefSP ptd;
+  ImplAAFTypeDefRecordSP ptAuid;
 
   if (! pPropValToSet)
 	return AAFRESULT_NULL_PARAM;
   if (! pValueIn)
 	return AAFRESULT_NULL_PARAM;
 
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  try
-	{
-	  AAFRESULT hr;
+  AAFRESULT hr;
 
-	  hr = GetDictionary (&pDict);
-	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	  assert (pDict);
+  ptd = BaseType ();
+  assert (ptd);
 
-	  hr = pDict->LookupType (&kAAFTypeID_AUID ,&ptd);
-	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	  assert (ptd);
+  ptAuid = dynamic_cast<ImplAAFTypeDefRecord*> ((ImplAAFTypeDef*) ptd);
+  assert (ptAuid);
 
-	  ptAuid = dynamic_cast<ImplAAFTypeDefRecord*> (ptd);
-	  assert (ptAuid);
+  hr = ptAuid->SetStruct (pPropValToSet, (aafMemPtr_t) pValueIn, sizeof (aafUID_t));
+  if (AAFRESULT_FAILED(hr))
+	return hr;
 
-	  hr = ptAuid->SetStruct (pPropValToSet, (aafMemPtr_t) pValueIn, sizeof (aafUID_t));
-	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  RELEASE_IF_SET (pDict);
-  RELEASE_IF_SET (ptd);
-
-  // Don't release this! It was dynamically-cast, not QI'd (and
-  // therefore not ref counted).
-  //RELEASE_IF_SET (ptAuid);
-
-  return rReturned;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -551,52 +503,35 @@ ImplAAFTypeDefExtEnum::GetElementNameBufLen (
 }
 
 
-ImplAAFTypeDef * ImplAAFTypeDefExtEnum::GetBaseType ()
+ImplAAFTypeDefSP ImplAAFTypeDefExtEnum::BaseType () const
 {
-  AAFRESULT hr;
-  ImplAAFDictionary * pDict = 0;
-  hr = GetDictionary (&pDict);
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (pDict);
+  if (! _cachedBaseType)
+	{
+	  AAFRESULT hr;
+	  ImplAAFDictionarySP pDict;
+	  hr = GetDictionary (&pDict);
+	  assert (AAFRESULT_SUCCEEDED(hr));
+	  assert (pDict);
 
-  ImplAAFTypeDef * ptd = 0;
-  hr = pDict->LookupType (&kAAFTypeID_AUID ,&ptd);
-  pDict->ReleaseReference ();
-  assert (AAFRESULT_SUCCEEDED(hr));
-  assert (ptd);
-
-  return ptd;
+	  hr = pDict->LookupType (&kAAFTypeID_AUID, &((ImplAAFTypeDefExtEnum*)this)->_cachedBaseType);
+	  assert (AAFRESULT_SUCCEEDED(hr));
+	  assert (_cachedBaseType);
+	}
+  return _cachedBaseType;
 }
 
 
 void ImplAAFTypeDefExtEnum::reorder(OMByte* bytes,
 									size_t bytesSize) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefExtEnum * pNonConstThis =
-	(ImplAAFTypeDefExtEnum *) this;
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
-  ptd->reorder (bytes, bytesSize);
-  ptd->ReleaseReference ();
+  BaseType()->reorder (bytes, bytesSize);
 }
 
 
 size_t ImplAAFTypeDefExtEnum::externalSize(OMByte* internalBytes,
 										   size_t internalBytesSize) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefExtEnum * pNonConstThis =
-	(ImplAAFTypeDefExtEnum *) this;
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
-  size_t result = ptd->externalSize (internalBytes, internalBytesSize);
-  ptd->ReleaseReference ();
-  return result;
+  return BaseType()->externalSize (internalBytes, internalBytesSize);
 }
 
 
@@ -606,35 +541,18 @@ void ImplAAFTypeDefExtEnum::externalize(OMByte* internalBytes,
 										size_t externalBytesSize,
 										OMByteOrder byteOrder) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefExtEnum * pNonConstThis =
-	(ImplAAFTypeDefExtEnum *) this;
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
-  ptd->externalize (internalBytes,
-					internalBytesSize,
-					externalBytes,
-					externalBytesSize,
-					byteOrder);
-  ptd->ReleaseReference ();
+  BaseType()->externalize (internalBytes,
+						   internalBytesSize,
+						   externalBytes,
+						   externalBytesSize,
+						   byteOrder);
 }
 
 
 size_t ImplAAFTypeDefExtEnum::internalSize(OMByte* externalBytes,
 										   size_t externalBytesSize) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefExtEnum * pNonConstThis =
-	(ImplAAFTypeDefExtEnum *) this;
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
-  size_t result = ptd->internalSize (externalBytes, externalBytesSize);
-  ptd->ReleaseReference ();
-  return result;
+  return BaseType()->internalSize (externalBytes, externalBytesSize);
 }
 
 
@@ -644,19 +562,47 @@ void ImplAAFTypeDefExtEnum::internalize(OMByte* externalBytes,
 										size_t internalBytesSize,
 										OMByteOrder byteOrder) const
 {
-  // BobT hack: need non-const this pointer in order to call
-  // GetBaseType(), and to do ReleaseReference() later.  Since we know
-  // we're not changing this object for real, we don't *really* mind
-  // cheating a bit on const-ness...
-  ImplAAFTypeDefExtEnum * pNonConstThis =
-	(ImplAAFTypeDefExtEnum *) this;
-  ImplAAFTypeDef * ptd = pNonConstThis->GetBaseType ();
-  ptd->internalize (internalBytes,
-					internalBytesSize,
-					externalBytes,
-					externalBytesSize,
-					byteOrder);
-  ptd->ReleaseReference ();
+  BaseType()->internalize (internalBytes,
+						   internalBytesSize,
+						   externalBytes,
+						   externalBytesSize,
+						   byteOrder);
+}
+
+
+aafBool ImplAAFTypeDefExtEnum::IsFixedSize (void) const
+{
+  return AAFTrue;
+}
+
+
+size_t ImplAAFTypeDefExtEnum::PropValSize (void) const
+{
+  return BaseType()->PropValSize ();
+}
+
+
+aafBool ImplAAFTypeDefExtEnum::IsRegistered (void) const
+{
+  return BaseType()->IsRegistered ();
+}
+
+
+size_t ImplAAFTypeDefExtEnum::NativeSize (void) const
+{
+  return BaseType()->NativeSize ();
+}
+
+
+OMProperty * ImplAAFTypeDefExtEnum::pvtCreateOMPropertyMBS
+  (OMPropertyId pid,
+   const char * name) const
+{
+  assert (name);
+  size_t elemSize = PropValSize ();
+  OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
+  assert (result);
+  return result;
 }
 
 
