@@ -71,14 +71,14 @@ public:
 	STDMETHOD (GetLength) (aafLength_t *  pLength);
 	STDMETHOD (SetIsInContainer) (aafBool  isAAF);
 	STDMETHOD (GetIsInContainer) (aafBool *  pIsAAF);
-	STDMETHOD (SetSampleRate) (aafRational_t *  pRate);
+	STDMETHOD (SetSampleRate) (const aafRational_t & rate);
 	STDMETHOD (GetSampleRate) (aafRational_t*  pRate);
-	STDMETHOD (SetContainerFormat) (aafUID_t *  pFormat);
+	STDMETHOD (SetContainerFormat) (const aafUID_t & format);
 	STDMETHOD (GetContainerFormat) (aafUID_t *  pFormat);
 	//
 	// DigitalImageDescriptor methods:
 	//
-	STDMETHOD (SetCompression) (aafUID_t *  pCodecID);
+	STDMETHOD (SetCompression) (const aafUID_t & codecID);
 	STDMETHOD (GetCompression) (aafUID_t *  pCompression);
 	STDMETHOD (SetStoredView) (aafUInt32  StoredHeight, aafUInt32  StoredWidth);
 	STDMETHOD (GetStoredView) (aafUInt32 *  pStoredHeight, aafUInt32 *  pStoredWidth);
