@@ -28,6 +28,8 @@
 #include "AxHrMap.h"
 #include "AxStorageErrors.h"
 
+#include <memory>
+
 #include <AAFResult.h>
 
 namespace {
@@ -377,10 +379,10 @@ AxHrMap::AxHrMap()
 
 const AxHrMap& AxHrMap::getInstance()
 {
-	static AxHrMap* instance = 0;
+	static std::auto_ptr< AxHrMap > instance;
 
-	if ( !instance ) {
-		instance = new AxHrMap;
+	if ( !instance.get() ) {
+		instance = std::auto_ptr< AxHrMap >( new AxHrMap );
 	}
 	
 	return *instance;

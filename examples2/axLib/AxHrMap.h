@@ -28,6 +28,7 @@
 class AxHrMap {
 
 public:
+	virtual ~AxHrMap();
 
 	static const AxHrMap& getInstance();
 
@@ -37,7 +38,6 @@ private:
 
 	AxHrMap();
 	AxHrMap( const AxHrMap& );
-	virtual ~AxHrMap();
 	AxHrMap& operator=( const AxHrMap& );
 
 	std::map<HRESULT,AxString> _map;
