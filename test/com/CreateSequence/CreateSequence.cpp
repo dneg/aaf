@@ -33,6 +33,8 @@
 
 #if USE_TIMER_LIB
 #include "UtlConsole.h"
+#else
+#include <time.h>
 #endif
 
 // Include the AAF interface declarations.
@@ -526,15 +528,22 @@ cleanup:
                 // printing file save time
                 aafUInt32 timerID, elapsedtime;
                 moduleErrorTmp = UTLStartPeriod(&timerID);
+#else
+                clock_t start = clock();
 #endif
                 pFile->Save();
 #if USE_TIMER_LIB
                 moduleErrorTmp = UTLEndPeriod(timerID, &elapsedtime);
+#else
+                clock_t finish = clock();
+                double duration = ((double) (finish - start) / CLOCKS_PER_SEC);
 #endif
                 pFile->Close();
                 pFile->Release();
 #if USE_TIMER_LIB
                 printf("Save time = %ld\n", elapsedtime);
+#else
+                printf("Save time = %f seconds\n", duration);
 #endif
         }
         
