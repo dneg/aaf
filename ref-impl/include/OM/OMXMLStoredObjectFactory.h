@@ -115,6 +115,14 @@ public:
     //          contained in <p rawStorage> is closed.
   virtual void close(OMRawStorage* rawStorage);
 
+private:
+  // @access Private members.
+
+    // @cmember Read the signature from the given raw storage.
+  static void readSignature(OMRawStorage* rawStorage,
+                            char* signature,
+                            size_t signatureSize);
+
 };
 
 #endif

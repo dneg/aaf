@@ -29,6 +29,8 @@
 #include "OMRawStorage.h"
 #include "OMDiskRawStorage.h"
 
+#include <ctype.h>
+
   // @mfunc Constructor.
 OMXMLStoredObjectFactory::OMXMLStoredObjectFactory(
                                         const OMStoredObjectEncoding& encoding,
@@ -177,11 +179,18 @@ OMXMLStoredObjectFactory::createWrite(const wchar_t* /* fileName */,
   //   @parm The name of the file.
   //   @rdesc True if the file is recognized, false otherwise.
 bool
-OMXMLStoredObjectFactory::isRecognized(const wchar_t* /* fileName */)
+OMXMLStoredObjectFactory::isRecognized(const wchar_t* fileName)
 {
   TRACE("OMXMLStoredObjectFactory::isRecognized");
-//ASSERT("Unimplemented code not reached", false);
-  return false;
+  bool result;
+  OMRawStorage* rawStorage = OMDiskRawStorage::openExistingRead(fileName);
+  if (rawStorage != 0) {
+    result = isRecognized(rawStorage);
+    delete rawStorage;
+  } else {
+    result = false;
+  }
+  return result;
 }
 
   // @mfunc Does <p rawStorage> contain a recognized file ?
@@ -189,11 +198,21 @@ OMXMLStoredObjectFactory::isRecognized(const wchar_t* /* fileName */)
   //   @parm The raw storage.
   //   @rdesc True if the file is recognized, false otherwise.
 bool
-OMXMLStoredObjectFactory::isRecognized(OMRawStorage* /* rawStorage */)
+OMXMLStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
 {
   TRACE("OMXMLStoredObjectFactory::isRecognized");
-//ASSERT("Unimplemented code not reached", false);
-  return false;
+  const char* signature = "<?xml version=\"1.0\"?>"
+  "<?OM signature=\"{58464141-000d-4d4f-060e-2b34010101ff}\"?>";
+  size_t bufferSize = strlen(signature) + 1;
+  char* buffer = new char[bufferSize];
+  ASSERT("Valid heap pointer", buffer != 0);
+  readSignature(rawStorage, buffer, bufferSize);
+  bool result = false;
+  if (strcmp(signature, buffer) == 0) {
+    result = true;
+  }
+  delete [] buffer;
+  return result;
 }
 
   // @mfunc Can a file be created successfully on the given
@@ -243,4 +262,26 @@ void OMXMLStoredObjectFactory::close(OMRawStorage* /* rawStorage */)
 {
   TRACE("OMXMLStoredObjectFactory::close");
   // Nothing to do.
+}
+
+  // @mfunc Read the signature from the given raw storage.
+  //   @parm TBS
+  //   @parm TBS
+  //   @parm TBS
+void OMXMLStoredObjectFactory::readSignature(OMRawStorage* rawStorage,
+                                             char* signature,
+                                             size_t signatureSize)
+{
+  TRACE("OMXMLStoredObjectFactory::readSignature");
+  size_t index = 0;
+  while (index < signatureSize - 1) {
+    char ch;
+    OMUInt32 x;
+    rawStorage->read(reinterpret_cast<OMByte*>(&ch), 1, x);
+    int c = ch;
+    if (isprint(c)) {
+      signature[index++] = ch;
+    }
+  }
+  signature[index] = 0;
 }
