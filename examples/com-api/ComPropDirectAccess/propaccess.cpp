@@ -30,6 +30,7 @@
 
 #include "AAF.h"
 
+
 #include "CAAFBuiltinDefs.h"
 
 //
@@ -242,7 +243,7 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
 }
 
 
-HRESULT createRenamedRational16 (IAAFDictionary * pDict)
+static HRESULT createRenamedRational16 (IAAFDictionary * pDict)
 {
   IAAFTypeDefRenameSP pRenamedRational16;
   CAAFBuiltinDefs defs (pDict);
@@ -599,7 +600,7 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
     ++sourceLength;
   if (sourceLength < length - 1) {
     // Copy the string if there is enough room in the destinition buffer.
-    while (*wName++ = *name++)
+    while (0 != (*wName++ = *name++))
       ;
   } else {
 	cerr << "\nError : Failed to copy \'" << name
@@ -772,7 +773,7 @@ struct CAAFInitialize
 };
 
 
-main()
+int main(int /* argc */, char** /* argv */)
 {
   CAAFInitialize aafInit;
 
