@@ -1,6 +1,7 @@
 #ifndef OMPORTABILITY_H
 #define OMPORTABILITY_H
 
+#if defined (_MSC_VER)      // Microsoft Visual C++
 
 #if _MSC_VER <= 1000
 // <= 1000 means earlier than version 5.0
