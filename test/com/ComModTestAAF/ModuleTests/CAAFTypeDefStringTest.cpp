@@ -70,7 +70,7 @@ static  const aafUID_t					TEST_STR_TYPE_ID =
 
 static const aafUInt32					TEST_STR_COUNT =  21;
 #define		 TEST_ELEM_t				aafUInt16
-static const aafUID_t					TEST_ELEM_TYPE_ID =	kAAFTypeID_UInt16;
+static const aafUID_t					TEST_ELEM_TYPE_ID =	kAAFTypeID_Character;
 //static const TEST_ELEM_t				TEST_STR_VALUES [TEST_STR_COUNT] = {L"This is a TEST String"};
 static const aafCharacter *			TEST_STR_VALUE = L"This is a TEST String";
 
