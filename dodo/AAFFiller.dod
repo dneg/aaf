@@ -16,6 +16,16 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+AD_IDL(//
+// The Filler class is a placeholder for an unknown value for the  
+// component duration.
+// Typically\\\, a Filler object is used in a Sequence to allow 
+// positioning of a Segment whem not all of the preceding material
+// has been specified.
+// If a Filler object is played\\\, applications can choose any 
+// appropiate blank media to play.
+// A Filler is a subclass of the Segment class. 
+//)
 
 AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(AAFDataDef)
@@ -28,6 +38,25 @@ AD_XMETHOD2(Create,
 	[in], objPass,aafUID_t *, pDataDef, Data Definition Object,
 	[in], objPass,aafLength_t, length, Length Property Value,
   // This function will create a new filler object with the given
-  // property values.)
+  // property values.
+  // 
+  // This method succeeds if all of the following are true:
+  // - the pDataDef pointer is valid.
+  // - length is equal or greater than zero.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef arg is NULL
+  //
+  // AAFRESULT_BAD_LENGTH
+  //   - length is negative.)
+
+)
 
 AD_CLASS_END
