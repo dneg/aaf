@@ -3476,6 +3476,8 @@ int main(int argumentCount, char* argumentVector[])
 #if defined(USE_DATAINPUT)
   char dataFile[] = "dump.inp";
   getInputData(&argumentCount, argumentVector, dataFile);
+#else
+  argumentCount = ccommand(&argumentVector); // console window for mac
 #endif
 #endif
 
