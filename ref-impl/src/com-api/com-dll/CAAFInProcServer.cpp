@@ -110,6 +110,8 @@ HRESULT CAAFInProcServer::Term()
   return S_OK;
 }
 
+
+
 HRESULT CAAFInProcServer::GetClassObject
 ( 
   REFCLSID rclsid,
@@ -151,7 +153,7 @@ HRESULT CAAFInProcServer::GetClassObject
   // We are through with this object.
   pAAFClassFactory->Release();
 
-  return S_OK;
+  return hr;
 }
 
 HRESULT CAAFInProcServer::CanUnloadNow( )
@@ -545,5 +547,30 @@ HRESULT CAAFInProcServer::UnregisterServer
   }
 
   return S_OK;
+}
+
+
+// Return the number of coclasses exported from this dll.
+ULONG CAAFInProcServer::GetClassCount( )
+{	
+	// Just return our global count computed by the Init() method.
+	return g_objectCount;
+}
+
+// Get the nth implementation coclass id.
+HRESULT CAAFInProcServer::GetClassObjectID(ULONG index, CLSID *pClassID)
+{
+	// Validate pre-conditions and parameters.
+  if (NULL == g_ppObjectInfoKey || 0 == GetClassCount())
+		return CLASS_E_CLASSNOTAVAILABLE;
+	if (index >= GetClassCount() || NULL == pClassID)
+		return E_INVALIDARG;
+
+	// Lookup the corresponding object info pointer from our table.
+	AAFComObjectInfo_t *pInfo = g_ppObjectInfoKey[index];
+	assert(NULL != pInfo);
+	memcpy(pClassID, pInfo->pCLSID, sizeof(CLSID));
+	
+	return S_OK;
 }
 
