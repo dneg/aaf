@@ -41,6 +41,7 @@ class ImplEnumAAFPluggableDefs;
 #include "OMClassFactory.h"
 
 
+#include "ImplAAFEffectDef.h"
 #include "ImplAAFPluggableDef.h"
 
 class ImplAAFDictionary :
@@ -242,6 +243,7 @@ public:
 
 private:
     OMStrongReferenceVectorProperty<ImplAAFPluggableDef> _pluginDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFEffectDef>	 _effectDefinitions;
 };
 
 #endif // ! __ImplAAFDictionary_h__

@@ -46,7 +46,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
 ImplAAFEffectDef::ImplAAFEffectDef ()
 : _dataDef(			PID_EffectDefinition_DataDefinition,	"DataDefinition"),
   _isTimeWarp(		PID_EffectDefinition_IsTimeWarp,		"IsTimeWarp"),
-  _degradeTo(	PID_EffectDefinition_DegradeTo,				"DegradeTo"),
+//!!!  _degradeTo(	PID_EffectDefinition_DegradeTo,				"DegradeTo"),
   _category(		PID_EffectDefinition_Category,			"Category"),
   _numInputs(		PID_EffectDefinition_NumberInputs,		"NumberInputs"),
   _bypass(			PID_EffectDefinition_Bypass,			"Bypass"),
@@ -54,7 +54,7 @@ ImplAAFEffectDef::ImplAAFEffectDef ()
 {
 	_persistentProperties.put(_dataDef.address());
 	_persistentProperties.put(_isTimeWarp.address());
-	_persistentProperties.put(_degradeTo.address());
+//!!!	_persistentProperties.put(_degradeTo.address());
 	_persistentProperties.put(_category.address());
 	_persistentProperties.put(_numInputs.address());
 	_persistentProperties.put(_bypass.address());
@@ -132,6 +132,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEffectDef::PrependDegradeToEffects (
       ImplAAFEffectDef  *pEffectDef)
 {
+#if 0	//!!!
 	aafUID_t	*tmp = NULL, newUID;
 	aafInt32	oldBufSize;
 	aafInt32	newBufSize;
@@ -148,7 +149,8 @@ AAFRESULT STDMETHODCALLTYPE
 		tmp = new aafUID_t[newBufSize];
 		if(tmp == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
-		_degradeTo.copyToBuffer(tmp, oldBufSize);
+		if(oldBufSize != 0)
+			_degradeTo.copyToBuffer(tmp, oldBufSize);
 		for(n = oldBufSize/sizeof(aafUID_t); n >= 0; n--)
 		{
 			tmp[n+1] = tmp[n];
@@ -165,12 +167,16 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return AAFRESULT_SUCCESS;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEffectDef::AppendDegradeToEffects (
       ImplAAFEffectDef  *pEffectDef)
 {
+#if 0	//!!!
 	aafUID_t	*tmp, newUID;
 	aafInt32	oldBufSize;
 	aafInt32	newBufSize;
@@ -186,7 +192,8 @@ AAFRESULT STDMETHODCALLTYPE
 		tmp = new aafUID_t[newBufSize];
 		if(tmp == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
-		_degradeTo.copyToBuffer(tmp, oldBufSize);
+		if(oldBufSize != 0)
+			_degradeTo.copyToBuffer(tmp, oldBufSize);
 		tmp[oldBufSize/sizeof(aafUID_t)] = newUID;
 		_degradeTo.setValue(tmp, newBufSize);
 		delete [] tmp;
@@ -199,12 +206,16 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	return AAFRESULT_SUCCESS;
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEffectDef::GetDegradeToEffects (
       ImplEnumAAFEffectDefs  **ppEnum)
 {
+#if 0	//!!!
 	if(ppEnum == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
@@ -214,6 +225,9 @@ AAFRESULT STDMETHODCALLTYPE
 	(*ppEnum)->SetEnumProperty(this, &_degradeTo);
 
 	return(AAFRESULT_SUCCESS);
+#else
+	return AAFRESULT_NOT_IMPLEMENTED;
+#endif
 }
 
 
@@ -324,7 +338,8 @@ AAFRESULT STDMETHODCALLTYPE
 		tmp = new aafUID_t[newBufSize];
 		if(tmp == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
-		_paramDefined.copyToBuffer(tmp, oldBufSize);
+		if(oldBufSize != 0)
+			_paramDefined.copyToBuffer(tmp, oldBufSize);
 		tmp[oldBufSize/sizeof(aafUID_t)] = newUID;
 		_paramDefined.setValue(tmp, newBufSize);
 		delete [] tmp;
