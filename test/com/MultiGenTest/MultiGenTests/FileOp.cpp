@@ -65,7 +65,7 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
   productInfo.platform = NULL;
 
   if ( argc < 2 ) {
-    throw UsageError("FileOp at least one argument is required");
+    throw UsageEx("FileOp at least one argument is required");
   }
 
   string which(argv[1]);
@@ -80,20 +80,19 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
   if ( which == "write" ) {
 
     if ( !fileName.get() ) {
-      throw UsageError("FileOp write expected filename");
+      throw UsageEx("FileOp write expected filename");
     }
 
     IAAFSmartPointer<IAAFFile> pFile;
     checkResult( AAFFileOpenNewModify( fileName.get(), 0, &productInfo,
 				       &iaafFile ) );
-	cout << "done" << endl;
 
     state.SetFile( iaafFile );
   }
   else if ( which == "read" ) {
 
     if ( !fileName.get() ) {
-      throw UsageError("FileOp read expected filename");
+      throw UsageEx("FileOp read expected filename");
     }
 
     checkResult( AAFFileOpenExistingRead( fileName.get(),
@@ -104,7 +103,7 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
   else if ( which == "modify" ) {
 
     if ( !fileName.get() ) {
-      throw UsageError("FileOp modify expected filename");
+      throw UsageEx("FileOp modify expected filename");
     }
 
     checkResult( AAFFileOpenExistingModify( fileName.get(),
@@ -125,7 +124,7 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
   }
   else {
     string msg("FileOp option unrecognized: " + which);
-    throw UsageError( msg );
+    throw UsageEx( msg );
   }
 
 }

@@ -43,7 +43,7 @@ void FindMasterMobs::RunTest( CmdState& state, int argc, char** argv )
 {
   // expect at least one argument (beyond argv[0])
   if ( argc < 2 ) {
-    throw UsageError( "FindMasterMob expects one more mob names as arguments." );
+    throw UsageEx( "FindMasterMob expects one more mob names as arguments." );
   }
   
   IAAFSmartPointer<IAAFFile> file = state.GetFile();
@@ -123,7 +123,7 @@ MULTIGEN_TEST_FACTORY( FindMasterMobsFactory,
 		       "[mob_name mob_name mob_name ...]",
 		       "" );
 
-MULTIGEN_TEST_FACTORY_LONG( FindMasterMobsOnlyFactory,
+MULTIGEN_TEST_FACTORY_LONG( FindMasterMobsExclusiveFactory,
 			    FindMasterMobsExclusive,
 			    FindMasterMobs,
 			    "Verify that named mobs are the only master mobs in the file.",
@@ -133,6 +133,6 @@ MULTIGEN_TEST_FACTORY_LONG( FindMasterMobsOnlyFactory,
 // Global static instance of factory.  Ctor will register this
 // instance with the MultiGenTestRegistry.
 FindMasterMobsFactory factoryA;
-FindMasterMobsOnlyFactory factoryB;
+FindMasterMobsExclusiveFactory factoryB;
 
 } // end of namespace

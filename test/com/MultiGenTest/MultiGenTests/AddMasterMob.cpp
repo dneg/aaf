@@ -23,27 +23,27 @@
 
 namespace {
 
-class AddMasterMob : public MultiGenTest
+class AddMasterMobs : public MultiGenTest
 { 
 public:
-  AddMasterMob( const char* name,
+  AddMasterMobs( const char* name,
 	const char* desc,
 	const char* usage,
 	const char* notes )
     : MultiGenTest( name, desc, usage, notes )
   {}
 
-  virtual ~AddMasterMob()
+  virtual ~AddMasterMobs()
   {}
 
   virtual void RunTest( CmdState& state, int argc, char** argv );
 };
 
-void AddMasterMob::RunTest( CmdState& state, int argc, char** argv )
+void AddMasterMobs::RunTest( CmdState& state, int argc, char** argv )
 {
   // expect at least one argument (beyond argv[0])
   if ( argc < 2 ) {
-    throw UsageError( "AddMasterMob expects one more mob names as arguments." );
+    throw UsageEx( "AddMasterMob expects one more mob names as arguments." );
   }
 
   IAAFSmartPointer<IAAFFile> file = state.GetFile();
@@ -73,7 +73,7 @@ void AddMasterMob::RunTest( CmdState& state, int argc, char** argv )
 }
 
 MULTIGEN_TEST_FACTORY( AddMasterMobFactory,
-		       AddMasterMob,
+		       AddMasterMobs,
 		       "Add one or more MasterMob's to a file.",
 		       "[mob_name mob_name mob_name ...]",
 		       "" );
