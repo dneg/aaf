@@ -64,7 +64,7 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 {
 	size_t status = wcstombs(cName, name, length);
 	if (status == (size_t)-1) {
-		fprintf(stderr, ": Error : Conversion failed.\n\n");
+        cerr << ": Error : Conversion failed." << endl;
 		exit(1);  
 	}
 }
@@ -501,12 +501,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 		// Now compare the data read from the AAF file to the actual WAV file
 		if (dataLen != AAFBytesRead)
 		{
-			printf("***Wrong number of bytes read ( was %ld , should be %ld)\n",
-				AAFBytesRead, WAVBytesRead);
+            cout << "***Wrong number of bytes read ( was "
+                 << AAFBytesRead
+                 << ", should be "
+                 << WAVBytesRead
+                 << ")"
+                 << endl;
 		}
 		if (memcmp( dataPtr, AAFDataBuf, dataLen) != 0)
 		{
-			printf("*** Data Read is different than the data in the WAV file ***\n");
+            cout << "*** Data Read is different than the data in the WAV file ***" << endl;
 		}
 		
 		if (pMasterMob)
@@ -722,8 +726,8 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 	aafWChar *	externalAAF = L"AAFEssenceAccessExtAAF.aaf";
 	testDataFile_t	dataFile;
 	
-	printf("    Internal Essence:\n");
-	printf("        WriteRawData\n");
+    cout << "    Internal Essence:" << endl;
+    cout << "        WriteRawData" << endl;
 	hr = CreateAAFFile(L"AAFEssenceAccessRaw.aaf", NULL, testRawCalls);
 	if(hr == AAFRESULT_SUCCESS)
 	{
@@ -733,7 +737,7 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 	/**/
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		printf("        WriteSamples\n");
+        cout << "        WriteSamples" << endl;
 		checkResult(CreateAAFFile(L"AAFEssenceAccess.aaf", NULL, testStandardCalls));
 	}
 	
@@ -744,7 +748,7 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 	/**/
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		printf("        WriteMultiSamples\n");
+        cout << "        WriteMultiSamples" << endl;
 		checkResult(CreateAAFFile(L"AAFEssenceAccessMulti.aaf", NULL, testMultiCalls));
 	}
 	if(hr == AAFRESULT_SUCCESS)
@@ -754,7 +758,7 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 	/**/
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		printf("        WriteFractionalSample\n");
+        cout << "        WriteFractionalSample" << endl;
 		checkResult(CreateAAFFile(L"AAFEssenceAccessFract.aaf", NULL, testFractionalCalls));
 	}
 	if(hr == AAFRESULT_SUCCESS)
@@ -766,8 +770,8 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 	dataFile.dataFormat = ContainerFile;
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		printf("    External Essence:\n");
-		printf("        WriteSamples (External Raw Essence)\n");
+        cout << "    External Essence:" << endl;
+        cout << "        WriteSamples (External Raw Essence)" << endl;
 		checkResult(CreateAAFFile(L"AAFEssenceAccessRawRef.aaf", &dataFile, testStandardCalls));
 	}
 	if(hr == AAFRESULT_SUCCESS)
@@ -779,7 +783,7 @@ extern "C" HRESULT CAAFEssenceAccess_test()
 	dataFile.dataFormat = ContainerAAF;
 	if(hr == AAFRESULT_SUCCESS)
 	{
-		printf("        WriteSamples (External AAF Essence)\n");
+        cout << "        WriteSamples (External AAF Essence)" << endl;
 		checkResult(CreateAAFFile(L"AAFEssenceAccessRef.aaf", &dataFile, testStandardCalls));
 	}
 	if(hr == AAFRESULT_SUCCESS)
