@@ -136,8 +136,17 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::GetPluggableID (aafUID_t *uid)
+    CAAFEssenceFileContainer::GetNumDefinitions (aafInt32 *pDefCount)
 {
+	//!!!Add error checking
+	*pDefCount = 1;
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFEssenceFileContainer::GetIndexedDefinitionID (aafInt32 index, aafUID_t *uid)
+{
+	//!!!Add error checking
 	*uid = ContainerFile;		// UID of the DefObject
 	return AAFRESULT_SUCCESS;
 }
@@ -151,11 +160,12 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::GetDefinitionObject (IAAFDictionary *dict, IAAFDefObject **def)
+    CAAFEssenceFileContainer::GetIndexedDefinitionObject (aafInt32 index, IAAFDictionary *dict, IAAFDefObject **def)
 {
 	aafUID_t			uid;
 	IAAFContainerDef	*container = NULL;
 	IAAFDefObject		*obj = NULL;
+	//!!!Add error checking
 	XPROTECT()
 	{
 		CHECK(dict->CreateInstance(&AUID_AAFContainerDef,
@@ -194,7 +204,7 @@ static wchar_t *manufName = L"Avid Technology, Inc.";
 static wchar_t *manufRev = L"Rev 0.1";
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceFileContainer::GetDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
+    CAAFEssenceFileContainer::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
 {
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;

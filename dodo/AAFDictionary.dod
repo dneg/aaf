@@ -19,8 +19,8 @@ AD_FORWARD_DECLARATION(AAFTypeDef)
 AD_FORWARD_DECLARATION(EnumAAFTypeDefs)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(EnumAAFDataDefs)
-AD_FORWARD_DECLARATION(AAFEffectDef)
-AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
+AD_FORWARD_DECLARATION(AAFOperationDef)
+AD_FORWARD_DECLARATION(EnumAAFOperationDefs)
 AD_FORWARD_DECLARATION(EnumAAFCodecDefs)
 AD_FORWARD_DECLARATION(EnumAAFContainerDefs)
 AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
@@ -90,6 +90,7 @@ AD_XMETHOD1(GetClassDefinitions,
   // - The ppEnum pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
+
 
 
 AD_XMETHOD1(RegisterType,
@@ -168,41 +169,42 @@ AD_XMETHOD1(GetDataDefinitions,
 Return an enumerator for aff data definitions.)
 
 
-AD_XMETHOD1(RegisterEffectDefinition,
-[in], objIn, AAFEffectDef, pEffectDef, Effect Definition Object,
-Add the effect definition object to the header's list of definitions.
-  // @devnote based on omfiEffectDefRegister.)
 
-AD_XMETHOD2(LookupEffectDefinition,
-[in\,ref], objPass, aafUID_t *, effectID, Effect Unique ID,
-[out\,retval], objOut, AAFEffectDef, ppEffectDef, Effect definition object,
-Return the effect definition object with the given id.
-  // @devnote based on omfiEffectDefLookup.)
+AD_XMETHOD1(RegisterOperationDefinition,
+[in], objIn, AAFOperationDef, pOperationDef, Operation Definition Object,
+Add the operation definition object to the header's list of definitions.)
 
-AD_XMETHOD1(GetEffectDefinitions,
-[out\,retval], objOut, EnumAAFEffectDefs, ppEnum, Definition Enumeration,
-Return an enumerator for all effect definitions.)
+AD_XMETHOD2(LookupOperationDefinition,
+[in\,ref], objPass, aafUID_t *, operationID, Operation Def Unique ID,
+[out\,retval], objOut, AAFOperationDef, ppOperationDef, Operation definition object,
+Return the operation definition object with the given id.)
+
+AD_XMETHOD1(GetOperationDefinitions,
+[out\,retval], objOut, EnumAAFOperationDefs, ppEnum, Definition Enumeration,
+Return an enumerator for all operation definitions.)
+
 
 AD_XMETHOD1(RegisterParameterDefinition,
 [in], objIn, AAFParameterDef, pParmDef, Parameter Definition Object,
-Add the effect definition object to the header's list of definitions.)
+Add the operation definition object to the header's list of definitions.)
 
 AD_XMETHOD2(LookupParameterDefinition,
 [in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
-[out\,retval], objOut, AAFParameterDef, ppParmDef, Effect definition object,
+[out\,retval], objOut, AAFParameterDef, ppParmDef, Parameter definition object,
 Return the parameter definition object with the given id.)
 
 AD_XMETHOD1(GetParameterDefinitions,
 [out\,retval], objOut, EnumAAFParameterDefs, ppEnum, Definition Enumeration,
 Return an enumerator for aff parameter definitions.)
 
+
 AD_XMETHOD1(RegisterCodecDefinition,
-[in], objIn, AAFCodecDef, pParmDef, Parameter Definition Object,
-Add the effect definition object to the header's list of definitions.)
+[in], objIn, AAFCodecDef, pParmDef, Codec Definition Object,
+Add the codec definition object to the header's list of definitions.)
 
 AD_XMETHOD2(LookupCodecDefinition,
 [in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
-[out\,retval], objOut, AAFCodecDef, ppParmDef, Effect definition object,
+[out\,retval], objOut, AAFCodecDef, ppParmDef, Codec definition object,
 Return the parameter definition object with the given id.)
 
 AD_XMETHOD1(GetCodecDefinitions,
@@ -210,12 +212,12 @@ AD_XMETHOD1(GetCodecDefinitions,
 Return an enumerator for aff parameter definitions.)
 
 AD_XMETHOD1(RegisterContainerDefinition,
-[in], objIn, AAFContainerDef, pParmDef, Parameter Definition Object,
-Add the effect definition object to the header's list of definitions.)
+[in], objIn, AAFContainerDef, pParmDef, Container Definition Object,
+Add the container definition object to the header's list of definitions.)
 
 AD_XMETHOD2(LookupContainerDefinition,
 [in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
-[out\,retval], objOut, AAFContainerDef, ppParmDef, Effect definition object,
+[out\,retval], objOut, AAFContainerDef, ppParmDef, Container definition object,
 Return the parameter definition object with the given id.)
 
 AD_XMETHOD1(GetContainerDefinitions,

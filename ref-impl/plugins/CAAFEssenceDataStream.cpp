@@ -176,7 +176,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceDataStream::omcFlushCache ()
+    CAAFEssenceDataStream::FlushCache ()
 {
   return S_OK; //AAFRESULT_NOT_IMPLEMENTED;
 }
