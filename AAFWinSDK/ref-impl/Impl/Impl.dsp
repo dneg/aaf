@@ -156,7 +156,15 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEffectInvocation.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceDescriptor.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFFile.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFFileDescriptor.cpp"
 # End Source File
 # Begin Source File
 
@@ -193,14 +201,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMasterMob.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMedia.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMediaDescriptor.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMediaFileDescriptor.cpp"
 # End Source File
 # Begin Source File
 
