@@ -37,8 +37,7 @@ public:
   ImplAAFSession ();
   virtual ~ImplAAFSession ();
 
-
-
+  OMDECLARE_STORABLE(AAFSession);
 
   //****************
   // EndSession()
