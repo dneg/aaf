@@ -111,6 +111,14 @@ ifndef UUIDLIB
     UUIDLIB = -luuid
 endif
 
+# For GNU/Linux always attempt to use the libdv library.
+# If this detection fails, LIBDV_PATH can be passed on the make command line.
+ifndef LIBDV_PATH
+	TMP_LIBDV_PATH := $(shell for f in /usr/local/lib /usr/lib /lib /usr/lib64 /lib64; do test -e $$f/libdv.a && echo $$f && break; done)
+	ifneq "$(TMP_LIBDV_PATH)" ""
+		LIBDV_PATH = $(TMP_LIBDV_PATH)
+	endif
+endif
 
 #------------------------------------------------------------------------------
 # Select UNICODE or ansi API's:
