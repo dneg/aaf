@@ -41,6 +41,7 @@ namespace OMF2
 }
 
 #include "AAFTypes.h"
+#include "aafcodecdefs.h"
 
 //#include "AAFUtils.h"
 AAFRESULT aafMobIDNew(aafUID_t *mobID);
@@ -186,6 +187,10 @@ HRESULT Omf2Aaf::OMFFileOpen(char * pFileName)
 
 		rc = AAFRESULT_BAD_SESSION;
 	}
+
+	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither,
+		"AvidPrivateEffectID", OMClassEFFE, OMF2::OMString,
+		OMF2::kPropOptional, &(gpGlobals->pvtEffectIDProp));
 
 	OMF2::omfsFileGetRev(OMFFileHdl, &OMFFileRev);
 	if (OMF2::kOmfRev2x == OMFFileRev)
@@ -1500,6 +1505,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 	IAAFOperationGroup*		pEffect = NULL;
 	IAAFNestedScope*		pNestedScope = NULL;
 	IAAFScopeReference*		pScopeRef = NULL;
+	IAAFTypeDef*			typeDef;
 	aafEdgecode_t			edgecode;
 	aafTimecode_t			timecode;
 	aafUID_t				datadef ;
@@ -1757,6 +1763,11 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 						pEffect->AddNewParameter(pParameter);
 						pParameter->SetParameterDefinition(pParameterDef);
 
+						pDictionary->LookupType(kAAFTypeID_Int32, &typeDef);
+						pParameter->SetTypeDefinition(typeDef);
+						typeDef->Release();
+						typeDef = NULL;
+	
 						pConstantValue->Release();
 						pConstantValue = NULL;
 						pParameter->Release();
@@ -2229,6 +2240,9 @@ HRESULT Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescript
 	aafUInt32			colorRange = 0;
 	aafInt16			paddingBits = 0;
 	aafInt32			videoLineMap[2];
+	aafUInt32			compLen;
+	char				*compress = NULL;
+	aafUID_t			AAFCompress;
 						
 	rc = pAAFDescriptor->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **)&pDigImageDesc);
 	if (FAILED(rc))
@@ -2358,6 +2372,19 @@ HRESULT Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescript
 		videoLineMap[1] = 0;
 
 	rc = pDigImageDesc->SetVideoLineMap( (sizeof(videoLineMap)/sizeof(aafInt32)), videoLineMap);
+
+	//
+	compLen = OMF2::omfsLengthString(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDCompression);
+	compress = new char[compLen+1];			
+	OMFError = OMF2::omfsReadString(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDCompression, compress,
+						compLen+1);
+	if(strcmp(compress, "JFIF") == 0)
+		AAFCompress = CodecJPEG;
+	else
+		AAFCompress = NoCodec;
+	rc = pDigImageDesc->SetCompression(AAFCompress);
+	delete [] compress;
+	compress = NULL;
 	pDigImageDesc->Release();
 	pDigImageDesc = NULL;
 
@@ -2473,7 +2500,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 				// TIFF File Descriptor
 				OMF2::omfBool			IsContiguous, IsUniform;
 				OMF2::omfInt32			leadingLines, trailingLines;
-				char					summary[1024];
+				char					summary[1024];	//!!!Fixed size
 				OMF2::omfJPEGTableID_t	data;
 				OMF2::omfDDefObj_t		datakind;
 				
@@ -2548,9 +2575,8 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 			else if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassWAVD, &OMFError) )
 			{
 				// WAVE File Descriptor
-				char					summary[1024];
 				OMF2::omfDDefObj_t		datakind;
-				
+				char					*summary;
 				aafUInt32				bytesRead;
 				aafUInt32				numBytes;
 
@@ -2563,6 +2589,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 					{
 						OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Sound", &datakind, &OMFError);
 						numBytes = (aafUInt32)OMF2::omfsLengthDataValue(OMFFileHdl, mediaDescriptor, OMF2::OMWAVDSummary);
+						summary = new char[numBytes];
 						OMFError = OMF2::omfsReadDataValue(OMFFileHdl,
 													 mediaDescriptor,
 													 OMF2::OMWAVDSummary,
@@ -2574,6 +2601,10 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 					}
 					else
 					{
+						numBytes = (aafUInt32)OMF2::omfsLengthVarLenBytes(OMFFileHdl,
+													   mediaDescriptor,
+													   OMF2::OMWAVDSummary);
+						summary = new char[numBytes];
 						OMFError = OMF2::omfsReadVarLenBytes(OMFFileHdl,
 													   mediaDescriptor,
 													   OMF2::OMWAVDSummary,
@@ -2583,6 +2614,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 													   &bytesRead);
 					}
 					rc = pWAVEDesc->SetSummary(bytesRead, (aafDataValue_t)summary);
+					delete [] summary;
 					rc = pWAVEDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssenceDesc);
 					pSourceMob->SetEssenceDescriptor(pEssenceDesc);
 					if (gpGlobals->bVerboseMode)
@@ -2597,7 +2629,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 			else if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassAIFD, &OMFError) )
 			{
 				// AIFC Audio File Descriptor
-				char					summary[1024];
+				char					summary[1024];		// Fixed size (see WAVE)
 				OMF2::omfDDefObj_t		datakind;
 				
 				aafUInt32				bytesRead;
@@ -2932,6 +2964,7 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 
 	IAAFControlPoint*		pControlPoint = NULL;
 	IAAFTypeDef*			pTypeDef = NULL;
+	IAAFInterpolationDef*	pInterp = NULL;
 
 //	aafUID_t				datadef;
 	aafRational_t			AAFCPTime;
@@ -2995,6 +3028,10 @@ HRESULT Omf2Aaf::ConvertOMFVaryingValue(OMF2::omfSegObj_t segment,
 		}
 		OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 	}
+	
+	// Need to translate other interpolators!!!
+	pInterp = CreateInterpolationDefinition(pDictionary, LinearInterpolator);
+	pVaryingValue->SetInterpolationDefinition(pInterp);
 
 	DecIndentLevel();
 	return rc;
@@ -3197,6 +3234,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 	IAAFSegment*			pSegment = NULL;
 	IAAFParameter*			pParameter = NULL;
 	IAAFParameterDef*		pParameterDef = NULL;
+	IAAFTypeDef*			typeDef = NULL;
 
 	aafUID_t				effectAUID ;
 	aafUID_t				effectDefAUID ;
@@ -3218,7 +3256,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		if (OMF2::OM_ERR_PROP_NOT_PRESENT == OMFError)
 			bypassOverride = 0;
 		// Get the AAF Effect definition interface pointer !!
-		if(OMF2::omfsReadUniqueName(OMFFileHdl, effect, gpGlobals->pvtEffectIDProp,
+		if(OMF2::omfsReadString(OMFFileHdl, effect, gpGlobals->pvtEffectIDProp,
 									MCEffectID, sizeof(MCEffectID)) == OMF2::OM_ERR_NONE)
 			(void)GetAAFEffectID(effectID, MCEffectID, &effectDefAUID);
 		else
@@ -3226,6 +3264,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 
 		ConvertOMFDatakind(effectDatakind, &effectAUID);
 		rc = ConvertOMFEffectDefinition(effectDef, effect, &pEffectDef);
+
 		if (strcmp(effectID, "omfi:effect:VideoSpeedControl") == 0)
 		{
 			rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefSpeedRatio, NULL, 
@@ -3303,6 +3342,12 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if (pParameter)
 					{
 						pParameter->SetParameterDefinition(pParameterDef);
+
+						pDictionary->LookupType(kAAFTypeID_Int32, &typeDef);
+						pParameter->SetTypeDefinition(typeDef);
+						typeDef->Release();
+						typeDef = NULL;
+
 						pEffect->AddNewParameter(pParameter);
 						pParameter->Release();
 						pParameter = NULL;
@@ -3375,6 +3420,12 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					if (pParameter)
 					{
 						pParameter->SetParameterDefinition(pParameterDef);
+
+						pDictionary->LookupType(kAAFTypeID_Rational, &typeDef);
+						pParameter->SetTypeDefinition(typeDef);
+						typeDef->Release();
+						typeDef = NULL;
+						
 						pEffect->AddNewParameter(pParameter);
 						pParameter->Release();
 						pParameter = NULL;
@@ -3410,6 +3461,10 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 					rc = pConstantValue->QueryInterface(IID_IAAFParameter, (void **)&pParameter);
 					pEffect->AddNewParameter(pParameter);
 					pParameter->SetParameterDefinition(pParameterDef);
+					pDictionary->LookupType(kAAFTypeID_Int32, &typeDef);
+					pParameter->SetTypeDefinition(typeDef);
+					typeDef->Release();
+					typeDef = NULL;
 
 					pConstantValue->Release();
 					pConstantValue = NULL;
@@ -3474,6 +3529,12 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 												L" ",
 												&pParameterDef);
 					pParameter->SetParameterDefinition(pParameterDef);
+
+					pDictionary->LookupType(kAAFTypeID_Rational, &typeDef);
+					pParameter->SetTypeDefinition(typeDef);
+					typeDef->Release();
+					typeDef = NULL;
+					
 					pEffect->AddNewParameter(pParameter);
 					pEffectDef->AddParameterDefs(pParameterDef);
 					pParameterDef->Release();
@@ -3545,6 +3606,12 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 						}
 					}
 					pParameter->SetParameterDefinition(pParameterDef);
+
+					pDictionary->LookupType(kAAFTypeID_Rational, &typeDef);
+					pParameter->SetTypeDefinition(typeDef);
+					typeDef->Release();
+					typeDef = NULL;
+					
 					pEffect->AddNewParameter(pParameter);
 					pParameter->Release();
 					pParameter = NULL;
@@ -3608,6 +3675,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 								if (pParameter)
 								{
 									pParameter->SetParameterDefinition(pParameterDef);
+									
+									//!!! Set parameter type (see other parameter)
 									pEffect->AddNewParameter(pParameter);
 									pParameter->Release();
 									pParameter = NULL;
@@ -3628,6 +3697,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 								if (pParameter)
 								{
 									pParameter->SetParameterDefinition(pParameterDef);
+									//!!! Set parameter type (see other parameter)
 									pEffect->AddNewParameter(pParameter);
 									pParameter->Release();
 									pParameter = NULL;
@@ -3812,7 +3882,7 @@ HRESULT Omf2Aaf::ConvertOMFEffectDefinition(OMF2::omfDDefObj_t	effectDef,
 			effectDataDef = DDEF_Picture;
 		}
 
-		if(OMF2::omfsReadUniqueName(OMFFileHdl, effect, gpGlobals->pvtEffectIDProp,
+		if(OMF2::omfsReadString(OMFFileHdl, effect, gpGlobals->pvtEffectIDProp,
 								MCEffectID, sizeof(MCEffectID)) != OMF2::OM_ERR_NONE)
 			MCEffectID[0] ='\0';
 		rc = GetAAFOperationDefinition( effectID,
