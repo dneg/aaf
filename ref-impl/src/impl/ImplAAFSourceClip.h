@@ -135,11 +135,10 @@ public:
 private:
 	OMFixedSizeProperty<aafLength_t>	_fadeInLength;
 	OMFixedSizeProperty<aafFadeType_t>	_fadeInType;
-	OMFixedSizeProperty<aafBool>		_fadeInPresent;
 	OMFixedSizeProperty<aafLength_t> 	_fadeOutLength;
 	OMFixedSizeProperty<aafFadeType_t>	_fadeOutType;
-	OMFixedSizeProperty<aafBool>		_fadeOutPresent;
 	OMFixedSizeProperty<aafPosition_t>	_startTime;
+
 };
 
 #endif // ! __ImplAAFSourceClip_h__
