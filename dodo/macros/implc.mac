@@ -55,10 +55,6 @@
 #include ".this-module.h"
 #endif
 
-#ifndef _I.this-module_h_
-#include "I.this-module.h"
-#endif
-
 #include <assert.h>
 
 
