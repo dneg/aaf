@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "Container.h"
-#include "ImplAAFObject.h"
-#include "AAFUtils.h"
-#include "aafCvt.h"
 
-#include "ImplAAFHeader.h"
+
+// TODO: rename to ImplAAFBaseClassFactory.h and rename this file to ImplAAFBaseClassFactory.cpp
+
+#include "Container.h"
+
+#include "ImplAAFObject.h"
 #include "OMFile.h"
 #include "OMClassFactory.h"
-#include "ImplAAFIdentification.h"
-#include "ImplAAFContentStorage.h"
 
 #include "ImplAAFObjectCreation.h"
 
@@ -138,54 +137,18 @@ static void InitializeAUIDTable(void)
 
 //!This file should be merged into other files over time
 
-OMContainer::OMContainer(void)
-  : _file(0)
+ImplAAFBaseClassFactory::ImplAAFBaseClassFactory(void)
 {
   // Initialize out lookup table for the built-in base class auids.
   if (0 == g_AUIDTable[0])
     InitializeAUIDTable();
 }
 
-OMContainer::~OMContainer(void)
+ImplAAFBaseClassFactory::~ImplAAFBaseClassFactory(void)
 {
-  // cleanup the file reference if on exists.
-  if (_file)
-  {
-    delete _file;
-    _file = 0;
-  }
 }
 
 
-
-
-// Close and save the file
-void OMContainer::OMLCloseContainer(void)
-{
-  _file->save();
-  _file->close();
-
-  // cleanup the file reference. We need to do this since
-  // every open of the container creates a new file.
-  if (_file)
-  {
-    delete _file;
-    _file = 0;
-  }
-
-}
-
-// Close without saving the file
-void OMContainer::OMLAbortContainer(void)
-{
-  // cleanup the file reference. We need to do this since
-  // every open of the container creates a new file.
-  if (_file)
-  {
-    delete _file;
-    _file = 0;
-  }
-}
 
 // Temporary function that looksup the code class id for the corresponding
 // auid.
@@ -238,145 +201,13 @@ static void registerClass(OMFile* file, const aafClassID_t& classId)
                             createObject);
 }
 
-static void registerPredefinedClasses(OMFile* file)
+void ImplAAFBaseClassFactory::RegisterPredefinedClasses(OMFile* file)
 {
-#if 1
+  assert(file);
+
   // Use the table to register the builtin classes.
   for (size_t i = 0; kTotalAUIDCount > i; ++i)
   {
     registerClass(file, *gAAFObjectTable[i].pAUID);
   }
-#else
-  registerClass(file, AUID_AAFClassDef);
-  registerClass(file, AUID_AAFComponent);
-  registerClass(file, AUID_AAFCompositionMob);
-  registerClass(file, AUID_AAFConstValue);
-  registerClass(file, AUID_AAFContentStorage);
-  registerClass(file, AUID_AAFControlPoint);
-  registerClass(file, AUID_AAFDataDef);
-  registerClass(file, AUID_AAFDefObject);
-  registerClass(file, AUID_AAFDictionary);
-  registerClass(file, AUID_AAFEdgecode);
-  registerClass(file, AUID_AAFEffectDef);
-  registerClass(file, AUID_AAFEffectInvocation);
-  registerClass(file, AUID_AAFEssenceData);
-  registerClass(file, AUID_AAFEssenceDescriptor);
-  registerClass(file, AUID_AAFFileDescriptor);
-  registerClass(file, AUID_AAFFiller);
-  registerClass(file, AUID_AAFHeader);
-  registerClass(file, AUID_AAFIdentification);
-  registerClass(file, AUID_AAFLocator);
-  registerClass(file, AUID_AAFMacLocator);
-  registerClass(file, AUID_AAFMasterMob);
-  registerClass(file, AUID_AAFMediaFilmDescriptor);
-  registerClass(file, AUID_AAFMediaGroup);
-  registerClass(file, AUID_AAFTapeDescriptor);
-  registerClass(file, AUID_AAFWAVEDescriptor);
-  registerClass(file, AUID_AAFDigitalImageDescriptor);
-  registerClass(file, AUID_AAFCDCIDescriptor);
-  registerClass(file, AUID_AAFMob);
-  registerClass(file, AUID_AAFMobSlot);
-  registerClass(file, AUID_AAFNestedScope);
-  registerClass(file, AUID_AAFNetworkLocator);
-  registerClass(file, AUID_AAFObject);
-  registerClass(file, AUID_AAFParameter);
-  registerClass(file, AUID_AAFParameterDef);
-  registerClass(file, AUID_AAFPropertyDef);
-  registerClass(file, AUID_AAFPulldown);
-  registerClass(file, AUID_AAFReferenceValue);
-  registerClass(file, AUID_AAFScopeReference);
-  registerClass(file, AUID_AAFSegment);
-  registerClass(file, AUID_AAFSequence);
-  registerClass(file, AUID_AAFSourceClip);
-  registerClass(file, AUID_AAFSourceMob);
-  registerClass(file, AUID_AAFSourceReference);
-  registerClass(file, AUID_AAFTimecode);
-  registerClass(file, AUID_AAFTimecodeStream);
-  registerClass(file, AUID_AAFTimecodeStream12M);
-  registerClass(file, AUID_AAFTimelineMobSlot);
-  registerClass(file, AUID_AAFTransition);
-  registerClass(file, AUID_AAFTypeDef);
-  registerClass(file, AUID_AAFUnixLocator);
-  registerClass(file, AUID_AAFVaryingValue);
-  registerClass(file, AUID_AAFWindowsLocator);
-#endif
 }
-
-// Open a file
-void OMContainer::OMLOpenContainer(aafWChar* stream,
-                                 OMLSession sessionData,
-                                 OMLRefCon attributes,
-                                 OMLconst_OMLGlobalName typeName, 
-                                 OMLContainerUseMode useFlags,
-								 openType_t type,
-                                 ImplAAFHeader*& header)
-{
-	assert(0 ==_file);
-	if (kOmModify == type )
-		_file = OMFile::openModify(stream);
-	else
-		_file = OMFile::openRead(stream);
-
-	registerPredefinedClasses(_file);
-
-	OMStorable* head = _file->restore();
-	header = dynamic_cast<ImplAAFHeader *>(head);
-}
-
-//Will remove this!
-void OMContainer::OMLSetContainerVersion1(void)
-{
-}
-
-//Create a file
-void OMContainer::OMLOpenNewContainer(aafWChar* stream,
-                                  ImplAAFHeader* head,
-                                  OMLSession sessionData,
-                                  OMLRefCon attributes,
-                                  OMLconst_OMLGlobalName typeName, 
-                                  OMLContainerUseMode useFlags,
-                                  OMLGeneration generation,
-                                  OMLContainerFlags containerFlags, ...)
-{
-  assert(0 ==_file);
-  _file = OMFile::createModify(stream, head);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// DEcrement the reference count
-void OMContainer::OMLReleaseObject(OMLObject theObject)
-{
-}
-
-
-
-
-// 'Nuff said
-void aafOMLError(OMLSession sessionData, OMLErrorString message, ...)
-{
-}
-
-// 'Nuff said
-OMLErrorString OMLVGetErrorString(OMLErrorString errorString, aafInt32 maxLength, 
-                                             OMLErrorNbr errorNumber, va_list inserts)
-{
-	return(0);
-}
-
-
