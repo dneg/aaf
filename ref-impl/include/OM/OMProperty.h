@@ -1,9 +1,10 @@
-// @doc
-
+// @doc OMEXTERNAL
 #ifndef OMPROPERTY_H
 #define OMPROPERTY_H
 
 #include "OMPortability.h"
+#include "OMTypes.h"
+
 #include <stddef.h>
 
 const int TID_NONE                           = 0;
@@ -14,6 +15,7 @@ const int TID_WEAK_OBJECT_REFERENCE          = 3;
 
 class OMStoredObject;
 class OMStorable;
+class OMPropertySet;
 
   // @class Abstract base class for persistent properties supported by
   //        the Object Manager.
@@ -22,10 +24,10 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMProperty(int pid, const char* name);
+  OMProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Constructor.
-  OMProperty(int pid, const int type, const char* name);
+  OMProperty(const OMPropertyId propertyId, const int type, const char* name);
 
     // @cmember Destructor.
   virtual ~OMProperty(void);
@@ -46,23 +48,25 @@ public:
 
     // @cmember The property id of this <c OMProperty>.
     // @this const
-  int pid(void) const;
+  const OMPropertyId propertyId(void) const;
 
-    // @cmember Inform this <c OMProperty> that it is a property of
-    //          the <c OMStorable> object <p containingObject>.
-  void setContainingObject(const OMStorable* containingObject);
+    // @cmember Inform this <c OMProperty> that it is a member of
+    //          the <c OMPropertySet> <p propertySet>.
+  void setPropertySet(const OMPropertySet* propertySet);
 
     // @cmember The address of this <c OMProperty> object.
   OMProperty* address(void);
 
 protected:
-  int _pid;
+  int _propertyId;
   int _type;
   const char* _name;
-  // The object that contains this property
+  // The PropertySet that contains this property
   //
-  const OMStorable* _containingObject;
+  const OMPropertySet* _propertySet;
 };
+
+// @doc OMINTERNAL
 
   // @class Abstract base class for persistent reference properties
   //        supported by the Object Manager.
@@ -75,7 +79,9 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMReferenceProperty(int pid, const int type, const char* name);
+  OMReferenceProperty(const OMPropertyId propertyId,
+                      const int type,
+                      const char* name);
 
     // @cmember Destructor.
   virtual ~OMReferenceProperty(void);
@@ -107,7 +113,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStrongReferenceProperty(int pid, const char* name);
+  OMStrongReferenceProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Destructor.
   virtual ~OMStrongReferenceProperty(void);
@@ -153,7 +159,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMWeakReferenceProperty(int pid, const char* name);
+  OMWeakReferenceProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Destructor.
   virtual ~OMWeakReferenceProperty(void);
@@ -192,10 +198,12 @@ public:
   // @access Public members. 
 
     // @cmember Constructor.
-  OMSimpleProperty(int pid, const char* name, size_t valueSize);
+  OMSimpleProperty(const OMPropertyId propertyId,
+                   const char* name,
+                   size_t valueSize);
 
     // @cmember Constructor.
-  OMSimpleProperty(int pid, const char* name);
+  OMSimpleProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Destructor.
   virtual ~OMSimpleProperty(void);
@@ -229,7 +237,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMFixedSizeProperty(int pid, const char* name);
+  OMFixedSizeProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Destructor.
   virtual ~OMFixedSizeProperty(void);
@@ -270,7 +278,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMVariableSizeProperty(int pid, const char* name);
+  OMVariableSizeProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Destructor.
   virtual ~OMVariableSizeProperty(void);
@@ -307,7 +315,9 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMCollectionProperty(int pid, const int type, const char* name);
+  OMCollectionProperty(const OMPropertyId propertyId,
+                       const int type,
+                       const char* name);
 
     // @cmember Destructor.
   virtual ~OMCollectionProperty(void);
@@ -326,7 +336,8 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStrongReferenceVectorProperty(int pid, const char* name);
+  OMStrongReferenceVectorProperty(const OMPropertyId propertyId,
+                                  const char* name);
 
     // @cmember Destructor.
   virtual ~OMStrongReferenceVectorProperty(void);
@@ -383,7 +394,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMCharacterStringProperty(int pid, const char * name);
+  OMCharacterStringProperty(const OMPropertyId propertyId, const char * name);
 
     // @cmember Destructor.
   virtual ~OMCharacterStringProperty(void);
@@ -425,7 +436,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMStringProperty(int pid, const char* name);
+  OMStringProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Destructor.
   virtual ~OMStringProperty(void);
@@ -442,7 +453,7 @@ public:
   // @access Public members.
 
     // @cmember Constructor.
-  OMWideStringProperty(int pid, const char* name);
+  OMWideStringProperty(const OMPropertyId propertyId, const char* name);
 
     // @cmember Destructor.
   virtual ~OMWideStringProperty(void);
