@@ -19,19 +19,19 @@ DODO = dodo.$(EXE)
 
 dodo-app:
 	@echo "\n======== [ /coresw/AAF-toolkit/dodo/tool ] \n"
-	cd tool ;  $(MAKE)
+	cd tool ;  $(MAKE) $(RELENG_MAKEFLAGS)
 
 test_only:
-	cd tool ; $(MAKE) test_only
-	$(MAKE) -f dodotargets.mak
-	$(MAKE) -f dododepend.mak
-	$(MAKE) -f maketargets.mak
+	cd tool ; $(MAKE) $(RELENG_MAKEFLAGS) test_only
+	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
+	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
+	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
 
 run:
-	$(MAKE) -f dodotargets.mak
-	$(MAKE) -f dododepend.mak
-	$(MAKE) -f maketargets.mak
-	cd tool ; $(MAKE) run
+	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
+	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
+	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
+	cd tool ; $(MAKE) $(RELENG_MAKEFLAGS) run
 
 
 
@@ -60,16 +60,16 @@ $(SRC_DIR)/com-api/aafobjects.mk : aafobjects.mk
 
 targets: 
 	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets\"\n"
-	$(MAKE) -f maketargets.mak
+	$(MAKE) -f maketargets.mak $(RELENG_MAKEFLAGS)
 
 
 targets.mk : aafobjects.mk
 	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building targets.mk\"\n"
-	$(MAKE) -f dodotargets.mak
+	$(MAKE) -f dodotargets.mak $(RELENG_MAKEFLAGS)
 
 depend.mk : aafobjects.mk
 	@echo "\n======== [ /coresw/AAF-toolkit/dodo ] \"Building depend.mk\"\n"
-	$(MAKE) -f dododepend.mak
+	$(MAKE) -f dododepend.mak $(RELENG_MAKEFLAGS)
 
 depend : targets.mk depend.mk
 
