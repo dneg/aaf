@@ -472,6 +472,16 @@ void OMStoredObject::save(const OMStrongReferenceSet& set)
                   element.referenceCount(),
                   key);
 
+#if defined(OM_ENABLE_DEBUG)
+    wchar_t* name = elementName(set.name(),
+                                set.propertyId(),
+                                element.localKey());
+    ASSERT("Consistent names", compareWideString(element.reference().name(),
+                                                 name) == 0);
+    delete [] name;
+    name = 0; // for BoundsChecker
+#endif
+
     // save the object
     //
     element.save();
