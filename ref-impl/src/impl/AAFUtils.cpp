@@ -59,6 +59,11 @@
 #endif
 
 #include "AAFUtils.h"
+
+#if defined(OS_SOLARIS)
+#include "../../uuid_gen/AAFUUIDUtils.h"
+#endif
+
 #include "aafCvt.h"
 #include "AAFResult.h"
 #include "AAFSDKBuild.h"
@@ -489,7 +494,12 @@ void aafCreateGUID( GUID *p_guid )
     assert( p_guid );
     CoCreateGuid( p_guid );
 
-#else
+#elif defined (OS_SOLARIS)
+
+	 assert(p_guid);
+	 aafUUIDCreate((aafUUID_t*) p_guid);
+ 
+#elif
 
     // {1994bd00-69de-11d2-b6bc-fcab70ff7331}
     static GUID	sTemplate = { 0x1994bd00,  0x69de,  0x11d2,
