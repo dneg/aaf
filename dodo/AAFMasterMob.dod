@@ -22,9 +22,9 @@ AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 AD_CLASS_BEGIN
 AD_XMETHOD5(AddMasterSlot,
 			[in],
-			  objIn,
-			  AAFDataDef,
-			  pMediaKind,
+			  objPass,
+			  aafUID_t *,
+			  pDataDef,
 			  Data kind of new slot,
 			[in],
 			  objPass,
