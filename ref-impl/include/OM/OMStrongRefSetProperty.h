@@ -164,7 +164,8 @@ public:
 
 private:
 
-  typedef OMStrongReferenceSetElement<ReferencedObject> SetElement;
+  typedef OMStrongReferenceSetElement<OMUniqueObjectIdentification,
+                                      ReferencedObject> SetElement;
 
   typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
 
