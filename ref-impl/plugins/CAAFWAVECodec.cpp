@@ -1486,11 +1486,13 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 
 {
 	aafInt32           chunksize, avgBytesPerSec, samplesPerSec;
-	aafUInt32		 bextSize, headerSize, n;
+	aafUInt32			headerSize;
 	aafInt32           zero = 0, len;
 	aafInt16           bytesPerFrame;
 	aafInt16           pcm_format = 1;
 	aafUInt8			*ptr = buffer, *nextChunk;
+#if INCLUDE_BEXT
+	aafUInt32			bextSize, headerSize, n;
 	char				bextDescription[256+1];
 	char				bextOriginator[32+1];
 	char				bextOriginatorReference[32+1];
@@ -1501,10 +1503,12 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 	char				bextReserved[254];
 	char				bextCodingHistory[512];
 	aafUInt16			bextLenCodingHistory;
-
+	aafTimeStamp_t		dateTime;
+#endif
 
 	XPROTECT()
 	{	
+#if INCLUDE_BEXT
 		if(_sampleRate.denominator != 0)
 		{
 			sprintf(bextCodingHistory, "PCM: %s, %d bits, %g hz\r\n", (_numCh == 2 ? "stereo" : "mono"),
@@ -1517,6 +1521,9 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 		bextLenCodingHistory = strlen(bextCodingHistory)+1;
 		bextSize = 256+32+32+10+8+8+2+sizeof(bextReserved)+bextLenCodingHistory;
 		headerSize = 36 + bextSize;
+#else
+		headerSize = 36;
+#endif
 
 		_numCh = numCh;
 		if(bufsize < headerSize)
@@ -1563,27 +1570,30 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 		ptr = buffer+ 4;
 		CHECK(fillSwappedWAVEData(&ptr, 4L, &len));	// Patch in
 
+#if INCLUDE_BEXT
 		// Set up for the broadcast chunk
-		for(n = 0; n < sizeof(bextDescription); n++)			bextDescription[n] = 0;
+		memset(bextDescription, 0, sizeof(bextDescription));
 		sprintf(bextDescription, "<tbd>");
 		/***/
-		for(n = 0; n < sizeof(bextOriginator); n++)				bextOriginator[n] = 0;
+		memset(bextOriginator, 0, sizeof(bextOriginator));
 		sprintf(bextOriginator, "<tbd>");
 		/***/
-		for(n = 0; n < sizeof(bextOriginatorReference); n++)	bextOriginatorReference[n] = 0;
+		memset(bextOriginatorReference, 0, sizeof(bextOriginatorReference));
 		sprintf(bextOriginatorReference, "<tbd>");
 		/***/
-		for(n = 0; n < sizeof(bextOriginationDate); n++)		bextOriginationDate[n] = 0;
-		sprintf(bextOriginationDate, "0000-00-00");
-		/***/
-		for(n = 0; n < sizeof(bextOriginationTime); n++)		bextOriginationTime[n] = 0;
-		sprintf(bextOriginationTime, "00:00:00");
+		memset(bextOriginationDate, 0, sizeof(bextOriginationDate));
+		memset(bextOriginationTime, 0, sizeof(bextOriginationTime));
+		AAFGetDateTime(&dateTime);
+		sprintf(bextOriginationDate, "%04d-%02d-%02d", dateTime.date.year,
+										dateTime.date.month, dateTime.date.day);
+		sprintf(bextOriginationTime, "%02d:%02d:%02d", dateTime.time.hour,
+										dateTime.time.minute, dateTime.time.second);
 		/***/
 		bextTimeReference = 0;
 		/***/
 		bextVersion = 0;
 		/***/
-		for(n = 0; n < sizeof(bextReserved); n++)	bextReserved[n] = 0;
+		memset(bextReserved, 0, sizeof(bextReserved));
 		/***/
 		
 		// Now write the broadcast chunk
@@ -1610,6 +1620,9 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 		ptr += sizeof(bextReserved);
 		memcpy(ptr, bextCodingHistory, bextLenCodingHistory);
 		ptr += bextLenCodingHistory;
+#else
+		ptr = nextChunk;
+#endif
 		
 		*bytesWritten = ptr - buffer;
 	}
