@@ -101,10 +101,6 @@ PostBuild_Cmds=regsvr32 /s ../../Debug/RefImpl/AAFCOAPI.dll
 # Name "comapi - Win32 Debug"
 # Begin Source File
 
-SOURCE=..\include\comidl\AAF_i.c
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\com-dll\AAFCOM.cpp"
 # End Source File
 # Begin Source File
