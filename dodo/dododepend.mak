@@ -33,16 +33,6 @@ depend.mk : aafobjects.mk
 	@ echo AAFTypes.all : AAFTypes.refh >> depend.tmp
 	@ echo AAFTypes.idl : macros/idl.mac macros/base.mac >> depend.tmp
 	@ echo AAFTypes.refh : macros/refh.mac macros/base.mac >> depend.tmp
-	@ echo "" >> depend.tmp
-	@ echo "#" >> depend.tmp
-	@ echo "#" >> depend.tmp
-	@ echo "#" special case the utility classes since they will not be exposed by com >> depend.tmp
-	@ echo AAFModuleTest.all...
-	@ echo "" >> depend.tmp
-	@ echo AAFModuleTest.all : AAFModuleTest.idl >> depend.tmp
-	@ echo AAFModuleTest.all : AAFModuleTest.refh >> depend.tmp
-	@ echo AAFModuleTest.idl : macros/idl.mac macros/base.mac >> depend.tmp
-	@ echo AAFModuleTest.refh : macros/refh.mac macros/base.mac >> depend.tmp
 	@ for base in $(DODO_TARGET_NAMES) ; do \
 		echo $$base.all... ; \
 		echo "" >> depend.tmp ; \

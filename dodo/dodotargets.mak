@@ -23,8 +23,7 @@ targets.mk : aafobjects.mk
 	@ echo "#" Special case AAFTypes since no object is to be built only headers... >> targets.tmp
 	@ echo "#" special case the utility classes since they will not be exposed by com >> targets.tmp 
 	@ echo DODO_TARGETS = '\' >> targets.tmp 
-	@ echo '	'AAFTypes.all' \' >> targets.tmp 
-	@ echo '	'AAFModuleTest.all \\\c>> targets.tmp 
+	@ echo '	'AAFTypes.all \\\c>> targets.tmp 
 	@ for base in $(AAFOBJECTS) $(AAFCOMINTERFACESONLY) ;  do \
 		echo '\' >> targets.tmp ; \
 		echo '	'$$base.all \\\c>> targets.tmp ; \
@@ -53,8 +52,7 @@ targets.mk : aafobjects.mk
 	@ echo '' >> targets.tmp
 	@ echo PLUGIN_TARGETS = '\' >> targets.tmp 
 	@ echo '	'AAFTypes.all' \' >> targets.tmp 
-	@ echo '	'AAFPluginTypes.all' \' >> targets.tmp 
-	@ echo '	'AAFModuleTest.all \\\c>> targets.tmp 
+	@ echo '	'AAFPluginTypes.all \\\c>> targets.tmp 
 	@ for base in $(PLUGIN_OBJECTS) ;  do \
 		echo '\' >> targets.tmp ; \
 		echo '	'$$base.all \\\c>> targets.tmp ; \
