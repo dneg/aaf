@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFTypeDefStruct\
+AAFTypeDefComposite\
 #endm
 #c
 #startm .parent-module 0
@@ -11,17 +11,8 @@ AD_IDL(//
 // This interface is used to define C-like structured types used in
 // AAF persistent objects.
 //
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/)
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
 AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 
@@ -29,63 +20,493 @@ AD_CLASS_UUID(809c8ca5, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(809c8ca6, 9884, 11d2, 84, 1f, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_METHOD0(Initialize,
-		   Initializes a newly allocated\, empty IAAFTypeDefStruct-supporting
-  // object.  This method must be called after allocation\, and before
-  // any other method can be called.
+AD_X2METHOD4(Initialize,
+			 [in],
+			 objPass,
+			 aafUID_t *,
+			 pID,
+			 auid to be used to identify this type,
+			 ,
+
+			 [in\, size_is\(numMembers\)],
+			 objInArrayCustom,
+			 aafTypeDefCompositeMemberPair_t *,
+			 pMemberInfo,
+       array of member type/name pairs representing members of this
+	// composite,
+
+      int localIdx;
+	  assert \\\(numMembers >= 0\\\);
+	  internalpMemberInfo = new ImplaafCompositeMemberPair_t **[numMembers];
+	  assert \\\(internalpMemberInfo\\\);
+
+	  for \\\(localIdx = 0; localIdx < numMembers; localIdx++\\\)
+		{
+		  HRESULT hStat;
+		  IAAFRoot * iObj;
+		  ImplAAFRoot *arg;
+		  hStat = pMemberInfo[localIdx]->QueryInterface
+			 \\\(IID_IAAFRoot\\\, \\\(void **\\\)&iObj\\\);
+		  assert \\\(SUCCEEDED \\\(hStat\\\)\\\);
+		  assert \\\(iObj\\\);
+		  hStat = iObj->GetImplRep\\\(\\\(void **\\\)&arg\\\);
+		  assert \\\(SUCCEEDED \\\(hStat\\\)\\\);
+		  iObj->Release\\\(\\\); // we are through with this interface pointer.
+		  internalpMemberInfo[localIdx].pType =
+			static_cast<ImplaafCompositeMemberPair_t **>\\\(arg\\\);
+		  assert \\\(internalpMemberInfo[localIdx].pType\\\);
+          // reuse same memory for name; don't take trouble to
+		  // allocate for internal struct
+		  internalpMemberInfo[localIdx].pName = pMemberInfo.pName;
+		  internalpMemberInfo[localIdx].size = pMemberInfo.size;
+		},
+
+			 [in],
+			 objPass,
+			 aafUInt32,
+			 numMembers,
+			 number of members in pMemberInfo array,
+			 ,
+
+			 [in],
+			 objPass,
+			 wchar_t *,
+			 pTypeName,
+			 friendly name of this type definition,
+			 ,
+
+     Initializes this type def to be identified by the given guid\, and
+  // to contain the given members \(types and names\).  It is considered
+  // an error if multiple members have the same name.
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
+  // - pID is a valid pointer.
+  // - pMemberInfo is a valid pointer.
+  // - pTypeName is a valid pointer.
+  // - all member names are unique.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_ALREADY_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pMemberInfo\\\, or pTypeName\)
+  // AAFRESULT_DUPLICATE
+  //   - a duplicate member name was given.)
 
 
-AD_XMETHOD2(EnumPropertyValues,
+AD_XMETHOD2(GetMemberType,
 			[in],
-			objIn,
-			AAFPropertyValue,
-			pPVal,
-			The Property Value which is to be read for this data,
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into members in this composite type,
 
 			[out],
 			objOut,
-			EnumAAFPropertyValues,
-			ppEnum,
-			The resulting enumerator,
+			AAFTypeDef,
+			ppTypeDef,
+			type definition of indexed member,
 
-			Returns an enumerator across property values contained in the
-  // struct assumed to be within the specified Property Value.  Each
-  // element accessed by the enumerator corresponds to one of the
-  // struct elements.  Assumes that the given Property Value refers to
-  // an AAF structure \(that is\, the AAFTypeDef associated with that
-  // PropertyValue has a type category ofkAAFTypeCategoryStruct\).
+     Returns the type definition of the indexed member in this
+  // composite type.  Index is zero-based\, and must be less than the
+  // value returned by GetCount\(\).
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - the index exists in this composite type def.
+  // - The ppTypeDef pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\)
+  // AAFRESULT_BAD_PARAM
+  //   - The given index is out of range for this composite type def.)
+
+
+AD_XMETHOD3(GetMemberName,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into members in this composite type,
+
+			[out\, size_is\(bufSize\)\, string],
+			objPass,
+			wchar_t *,
+			pName,
+			buffer into which the member name is written,
+
+			[in],
+			objPass,
+			aafInt32,
+			bufSize,
+			The size of the pName buffer\, in bytes,
+
+     Writes the human-legible tag associated with the indexed member
+  // in this composite type.  Index is zero-based\, and must be less
+  // than the value returned by GetCount\(\).  The name is written\,
+  // with a trailing null character\, into the pName buffer.  The
+  // buffer is allocated by the caller.  The size of the buffer is
+  // given by bufSize.
+  // 
+  // Caller may call GetMemberNameBufLen\(\) to determine the required
+  // buffer size.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pName pointer is valid.
+  // - bufSize indicates the buffer is large enough to hold the name.
+  // 
+  // If this method fails nothing will be written to
+  // *pName.
+  // 
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName\)
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates the buffer is too small to hold the string.
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - the given integer value is not associated with a member of
+  //     this type.)
+
+
+AD_XMETHOD2(GetMemberNameBufLen,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into members in this composite type,
+
+			[out],
+			objPass,
+			aafInt32 *,
+			pLen,
+			required buffer length\, in bytes,
+
+     Returns the length of buffer required for the GetMemberName\(\)
+  // method.  Index is zero-based\, and must be less than the value
+  // returned by GetCount\(\).  The value is placed into the location
+  // specified by pLen. The value will include space required for the
+  // trailing null character.
+  //
+  // Succeeds if all of the following are true:
+  // - the pLen pointer is valid.
+  // - the integer value is associated with a member of this
+  //   enumerated type.
+  //
+  // If this method fails nothing will be written to *pLen.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pLen\)
+  // AAFRESULT_BAD_PARAM
+  //   - the given integer value is not associated with a member of
+  //     this type.)
+
+
+AD_X2METHOD3(CreateValueFromValues,
+
+			 [in\, size_is\(numMembers\)],
+			 objInArray,
+			 AAFPropertyValue,
+			 pMemberValues,
+       array of property values for members of composite value which
+    // is to be created.,
+			 numMembers,
+
+			 [in],
+			 objPass,
+			 aafUInt32,
+			 numMembers,
+			 size of pMemberValues array.,
+			 ,
+
+			 [out],
+			 objOut,
+			 AAFPropertyValue,
+			 ppPropVal,
+			 newly-created property value,
+			 ,
+
+     Creates a property value which contains a composite type.  The
+  // composite members in the property value are initialized to
+  // contain the given values\, passed in the pMemberValues array.
+  // numMembers\, which indicates the size of the pMemberValues array\,
+  // must match the value returned by GetCount\(\).  Returns the
+  // newly-created property value in ppPropVal.
+  //
+  // Succeeds if all of the following are true:
+  // - the pMemberValues pointer is valid.
+  // - the ppPropVal pointer is valid.
+  // - numMembers matches the number of members in this composite.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pMemberValues or ppPropVal\)
+  // AAFRESULT_BAD_PARAM
+  //   - numMembers does not match GetCount\(\).)
+
+
+AD_XMETHOD3(CreateValueFromStruct,
+			[in\, size_is\(initDataSize\)],
+			objPass,
+			aafMemPtr_t *,
+			pInitData,
+			pointer to compile-time struct containing data to use,
+
+			[in],
+			objPass,
+			aafUInt32,
+			initDataSize,
+			size of data in pInitData,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppPropVal,
+			newly created property value,
+
+     Creates a property value which contains a composite type.  The
+  // composite members in the property value are initialized from data
+  // in a struct which is pointed to by pInitData.  Requires that the
+  // structure pointed to by pInitData has had its offsets registered
+  // with this type.  Returns the newly-created property value in
+  // ppPropVal.
+  //
+  // Succeeds if all of the following are true:
+  // - the pInitData pointer is valid.
+  // - the ppPropVal pointer is valid.
+  // - initDataSize indicates pInitData is the correct size.
+  // - compile-time struct has had its member offests registered.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInitData or ppPropVal\)
+  // AAFRESULT_BAD_PARAM
+  //   - initDataSize indicates pInitData is of the wrong size.
+  //
+  // AAFRESULT_NOT_REGISTERED
+  //  - struct offsets have not yet been registered for this typedef.)
+
+
+AD_XMETHOD3(GetValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pInPropVal,
+			property value to read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into members in this composite type,
+
+			[out],
+			objOut,
+			AAFPropertyValue,
+			ppOutPropVal,
+			value that is read,
+
+     Gets a single property value corresponding to the indicated
+  // composite member.  Places a property value representing the
+  // composite member identified by the index into ppOutPropval.
+  // Index is zero-based\, and must be less than the value returned by
+  // GetCount\(\).
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - the index exists in this composite type def.
+  // - The pInPropVal pointer is valid.
+  // - The ppOutPropVal pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or ppOutPropVal\)
+  // AAFRESULT_BAD_PARAM
+  //   - The given index is out of range for this composite type def.)
+
+
+AD_XMETHOD3(GetStruct,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value to read,
+			
+			[out\, size_is\(dataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer into which struct data should be written,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			size of pData buffer in bytes,
+
+     Copies all the member data contained in the given property value\,
+  // interpreted as a composite of this type\, into the struct pointed
+  // to by pData.  Requires that the struct pointed to by pData has
+  // had its offsets registered with this type.
+  //
+  // Succeeds if all of the following are true:
+  // - the pPropVal pointer is valid.
+  // - the pData pointer is valid.
+  // - dataSize indicates pData is large enough to hold the data.
+  // - compile-time struct has had its member offests registered.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
+  // AAFRESULT_BAD_PARAM
+  //   - dataSize indicates pData is too small.
+  //
+  // AAFRESULT_NOT_REGISTERED
+  //  - struct offsets have not yet been registered for this typedef.)
+
+
+AD_XMETHOD3(SetValue,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value to write,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			zero-based index into members in this composite type,
+
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pMemberPropVal,
+			value to be placed into this composite,
+
+     Sets the value of the single\, indicated composite member of the
+  // composite contained in pPropVal\, to the value contained in
+  // pMemberPropVal.  Index is zero-based\, and must be less than the
+  // value returned by GetCount\(\).
+  // 
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - the index exists in this composite type def.
+  // - The pInPropVal pointer is valid.
+  // - The ppOutPropVal pointer is valid.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or ppOutPropVal\)
+  // AAFRESULT_BAD_PARAM
+  //   - The given index is out of range for this composite type def.)
+
+
+AD_XMETHOD3(SetStruct,
+			[in],
+			objIn,
+			AAFPropertyValue,
+			pPropVal,
+			property value to write,
+
+			[in\, size_is\(dataSize\)],
+			objPass,
+			aafMemPtr_t,
+			pData,
+			buffer from which struct data should be read,
+
+			[in],
+			objPass,
+			aafUInt32,
+			dataSize,
+			size of pData buffer in bytes,
+
+     Copies all the member data contained in the struct pointed to by
+  // pData into the given property value\, interpreting the data as a composite of
+  // this type.  Requires that the struct pointed to by pData has had
+  // its offsets registered with this type.
+  //
+  // Succeeds if all of the following are true:
+  // - the pPropVal pointer is valid.
+  // - the pData pointer is valid.
+  // - dataSize indicates pData contains the correct amount of data.
+  // - compile-time struct has had its member offests registered.
+  //
+  // If this method fails nothing will be written to *ppPropVal.
+  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
+  // AAFRESULT_BAD_PARAM
+  //   - dataSize indicates pData is not the correct size.
+  //
+  // AAFRESULT_NOT_REGISTERED
+  //  - struct offsets have not yet been registered for this typedef.)
+
+
+AD_XMETHOD1(GetCount,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pCount,
+			count of members in this composite type,
+
+     Returns number of members in this composite type.
   //
   // Succeeds if:
-  // - The pPVal pointer is valid.
-  // - The ppEnum pointer is valid.
-  // - The given Property Value is a kAAFTypeCategoryStruct.
+  // - Initialize\(\) has already been called on this object.
+  // - pCount is a valid pointer.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
+
+
+AD_XMETHOD3(RegisterMembers,
+			[in],
+			objPass,
+			aafUInt32 *,
+			pOffsets,
+			array containing offset for each composite member,
+
+			[in],
+			objPass,
+			aafUInt32,
+			numMembers,
+			number of members in pOffsets,
+
+			[in],
+			objPass,
+			aafUInt32,
+			structSize,
+			size of this struct,
+
+     Allows client to register to the reference implementation a
+  // runtime C struct to represent objects of this TypeDef.  Offsets
+  // for each member in the struct are passed in as an array of
+  // integers; size indicates the number of members in the array.
+  // The offset is given in bytes from the start address of the
+  // struct.  This allows the reference implementation to write
+  // property values into compile-time-defined C structs intelligible
+  // by the local machine and compiler.
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - pOffsets is a valid pointer.
+  // - numMembers matches the number of members defined for this
+  //   composite type. 
   //
-  // AAFRESULT_NULL_PARAM
-  //   - Either pPVal or ppEnum pointer is NULL.
-  //
-  // AAFRESULT_BAD_TYPE_CATEGORY
-  //   - The given Property Value is not a kAAFTypeCategoryStruct.)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pOffsets\)
+  // AAFRESULT_BAD_COUNT
+  //   - numMembers does not match number of members in this composite
+  //     type.)
 AD_XCLASS_END(Concrete, StoredObject)
