@@ -100,7 +100,8 @@ public:
   virtual size_t NativeSize (void);
 
 private:
-  OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  OMFixedSizeProperty<aafUID_t>           _ElementType;
 };
 
 #endif // ! __ImplAAFTypeDefVariableArray_h__

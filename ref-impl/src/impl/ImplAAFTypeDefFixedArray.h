@@ -86,7 +86,8 @@ public:
   size_t NativeSize (void);
 
 private:
-  OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  OMFixedSizeProperty<aafUID_t>           _ElementType;
   OMFixedSizeProperty<aafUInt32>          _ElementCount;
 };
 
