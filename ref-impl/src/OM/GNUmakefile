@@ -40,7 +40,9 @@ include $(AAFBASE)/build/common.mk
 
 INCLUDES = -I. \
 	   -I../../include/OM \
-	   -I$(AAFBASE)/ss-impl/ref
+	   -I$(AAFBASE)/ss-impl/ref \
+       -I$(AAFBASE)/sss-impl/include
+
 
 CFLAGS +=  -DOM_PERMIT_ZERO_LENGTH -DOM_STACK_TRACE_ON_ASSERT
 
