@@ -308,15 +308,19 @@ void OMContainer::OMLOpenContainer(aafWChar* stream,
                                  OMLRefCon attributes,
                                  OMLconst_OMLGlobalName typeName, 
                                  OMLContainerUseMode useFlags,
+								 openType_t type,
                                  ImplAAFHeader*& header)
 {
-  assert(0 ==_file);
-  _file = OMFile::openRead(stream);
+	assert(0 ==_file);
+	if (kOmModify == type )
+		_file = OMFile::openModify(stream);
+	else
+		_file = OMFile::openRead(stream);
 
-  registerPredefinedClasses(_file);
+	registerPredefinedClasses(_file);
 
-  OMStorable* head = _file->restore();
-  header = dynamic_cast<ImplAAFHeader *>(head);
+	OMStorable* head = _file->restore();
+	header = dynamic_cast<ImplAAFHeader *>(head);
 }
 
 //Will remove this!
