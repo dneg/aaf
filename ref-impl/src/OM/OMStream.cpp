@@ -161,26 +161,6 @@ void OMStream::write(const OMByte* bytes,
 
 OMUInt64 OMStream::size(void) const
 {
-  TRACE("OMStream::size");
-  PRECONDITION("No error on stream", ferror(_file) == 0);
-
-  struct stat fileStat;
-  fflush( _file );
-#if defined(OM_DEBUG)
-  OMInt64 status =
-#endif
-
-  fstat( fileno( _file ), &fileStat );
-  ASSERT( "Successful fstat", status == 0 );
-  OMUInt64 result = fileStat.st_size;
-
-
-  return result;
-}
-
-/*
-OMUInt64 OMStream::size(void) const
-{
 TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
 	// where are we now?
@@ -218,7 +198,7 @@ TRACE("OMStream::size");
 
 	return result;
 }
-*/
+
 
 void OMStream::setSize(OMUInt64 newSize) 
 {
