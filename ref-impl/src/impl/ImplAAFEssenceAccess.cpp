@@ -744,7 +744,7 @@ AAFRESULT STDMETHODCALLTYPE
 		seg = NULL;
 		
 		CHECK(sourceInfo->GetMob((ImplAAFMob **)&fileMob));
-		CHECK(sourceInfo->GetReference(&fileRef));
+		CHECK(sourceInfo->GetSourceReference(&fileRef));
 		sourceInfo->ReleaseReference();
 		sourceInfo = NULL;
 
@@ -1066,7 +1066,7 @@ AAFRESULT STDMETHODCALLTYPE
 		seg = NULL;
 		
 		CHECK(sourceInfo->GetMob((ImplAAFMob **)&fileMob));
-		CHECK(sourceInfo->GetReference(&fileRef));
+		CHECK(sourceInfo->GetSourceReference(&fileRef));
 		sourceInfo->ReleaseReference();
 		sourceInfo = NULL;
 
