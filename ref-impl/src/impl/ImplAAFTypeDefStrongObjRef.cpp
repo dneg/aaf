@@ -31,10 +31,6 @@
 #include <string.h>
 
 
-#define RELEASE_IF_SET(obj) \
-    if (obj) { obj->ReleaseReference(); obj = NULL; }
-
-
 ImplAAFTypeDefStrongObjRef::ImplAAFTypeDefStrongObjRef ()
   : _referencedType (PID_TypeDefinitionStrongObjectReference_ReferencedType, "ReferencedType")
 {
@@ -81,7 +77,8 @@ AAFRESULT STDMETHODCALLTYPE
   OMStorable ** ppStorable = NULL;
   aafUInt32 bitsSize = 0;
   AAFRESULT hr;
-  ImplAAFPropValData * pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
+  ImplAAFPropValDataSP pvd;
+  pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
   assert (pvd);
 
   hr = pvd->AllocateBits (sizeof (OMStorable*), (aafMemPtr_t*) &ppStorable);
@@ -106,7 +103,8 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
   OMStorable ** ppStorable = NULL;
   aafUInt32 bitsSize = 0;
   AAFRESULT hr;
-  ImplAAFPropValData * pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
+  ImplAAFPropValDataSP pvd;
+  pvd = dynamic_cast<ImplAAFPropValData*>(pPropVal);
   assert (pvd);
 
   hr = pvd->GetBitsSize (&bitsSize);
@@ -116,7 +114,8 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
   if (AAFRESULT_FAILED(hr)) return hr;
   assert (*ppStorable);
   assert (ppObject);
-  ImplAAFObject * pObj = dynamic_cast<ImplAAFObject*>(*ppStorable);
+  ImplAAFObjectSP pObj;
+  pObj = dynamic_cast<ImplAAFObject*>(*ppStorable);
   assert (pObj);
   *ppObject = pObj;
   (*ppObject)->AcquireReference ();
@@ -126,42 +125,38 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStrongObjRef::GetObjectType (ImplAAFClassDef ** ppObjType)
+    ImplAAFTypeDefStrongObjRef::GetObjectType (ImplAAFClassDef ** ppObjType) const
 {
   if (! ppObjType) return AAFRESULT_NULL_PARAM;
 
-  ImplAAFHeader * pHead = NULL;
-  ImplAAFDictionary * pDict = NULL;
-  AAFRESULT rReturned = AAFRESULT_SUCCESS;
-  try
+  if (! _cachedObjType)
 	{
+	  ImplAAFHeaderSP pHead;
+	  ImplAAFDictionarySP pDict;
+
 	  AAFRESULT hr;
 	  hr = MyHeadObject(&pHead);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+		return hr;
 	  assert (pHead);
 	  hr = (pHead->GetDictionary(&pDict));
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
+		return hr;
 	  assert (pDict);
 
-	  ImplAAFClassDef * pcd = NULL;
+	  ImplAAFTypeDefStrongObjRef * pNonConstThis =
+		  (ImplAAFTypeDefStrongObjRef*) this;
 	  aafUID_t id = _referencedType;
-	  hr = pDict->LookupClass (&id, &pcd);
+	  hr = pDict->LookupClass (&id, &pNonConstThis->_cachedObjType);
 	  if (AAFRESULT_FAILED(hr))
-		throw hr;
-
-	  *ppObjType = pcd;
-	  (*ppObjType)->AcquireReference ();
+		return hr;
+	  assert (_cachedObjType);
 	}
-  catch (AAFRESULT &rCaught)
-	{
-	  rReturned = rCaught;
-	}
-  RELEASE_IF_SET (pHead);
-  RELEASE_IF_SET (pDict);
-
-  return rReturned;
+  assert (ppObjType);
+  *ppObjType = _cachedObjType;
+  assert (*ppObjType);
+  (*ppObjType)->AcquireReference ();
+  return AAFRESULT_SUCCESS;
 }
 
 // Override from AAFTypeDefObjectRef
@@ -193,6 +188,30 @@ aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 size_t ImplAAFTypeDefStrongObjRef::PropValSize (void) const
 {
   return sizeof (ImplAAFObject*);
+}
+
+
+aafBool ImplAAFTypeDefStrongObjRef::IsRegistered (void) const
+{
+  return AAFTrue;
+}
+
+
+size_t ImplAAFTypeDefStrongObjRef::NativeSize (void) const
+{
+  return sizeof (ImplAAFObject*);
+}
+
+
+OMProperty * ImplAAFTypeDefStrongObjRef::pvtCreateOMPropertyMBS
+  (OMPropertyId pid,
+   const char * name) const
+{
+  assert (name);
+  OMProperty * result =
+	new OMStrongReferenceProperty<ImplAAFObject> (pid, name);
+  assert (result);
+  return result;
 }
 
 
