@@ -106,7 +106,7 @@ public:
 
 private:
 	OMFixedSizeProperty<aafUID_t>		_dataDef;
-	OMFixedSizeProperty<aafInt64>		_length;
+	OMFixedSizeProperty<aafLength_t>	_length;
 };
 
 #endif // ! __ImplAAFComponent_h__
