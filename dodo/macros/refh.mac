@@ -70,6 +70,8 @@
 // .this-module Interface.
 //=--------------------------------------------------------------------------=
 //
+#ifndef __.this-module_h__
+#define __.this-module_h__
 
 #ifndef __AAFCOMPlatform_h__
 #include "AAFCOMPlatform.h"
@@ -102,6 +104,8 @@ interface I.this-module;
 // .this-module Interface.
 //=--------------------------------------------------------------------------=
 //
+#ifndef __.this-module_h__
+#define __.this-module_h__
 
 #ifndef __AAFCOMPlatformTypes_h__
 #include "AAFCOMPlatformTypes.h"
@@ -179,6 +183,8 @@ AD_CLASS_BEGIN\
 #c Arguments: none
 #c
 #startm AD_TYPES_END 00
+
+#endif // #ifndef __.this-module_h__\
 #endm
 
 
@@ -212,7 +218,7 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD1 07
   // %07
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05) PURE;\
 #endm
 
 
@@ -234,8 +240,8 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD2 12
   // %12
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10) PURE;\
 #endm
 
 
@@ -258,9 +264,9 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD3 17
   // %17
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15) PURE;\
 #endm
 
 
@@ -284,10 +290,10 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD4 22
   // %22
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20) PURE;\
 #endm
 
 
@@ -312,11 +318,11 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD5 27
   // %27
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25) PURE;\
 #endm
 
 
@@ -342,12 +348,12 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD6 32
   // %32
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30) PURE;\
 #endm
 
 
@@ -374,13 +380,13 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD7 37
   // %37
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35) PURE;\
 #endm
 
 
@@ -408,14 +414,14 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD8 42
   // %42
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35,
-	%37 .%38-adornment%39 .%38-indirection %40) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35,
+	/*%37*/ .%38-adornment%39 .%38-indirection %40) PURE;\
 #endm
 
 
@@ -444,15 +450,15 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD9 47
   // %47
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35,
-	%37 .%38-adornment%39 .%38-indirection %40,
-	%42 .%43-adornment%44 .%43-indirection %45) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35,
+	/*%37*/ .%38-adornment%39 .%38-indirection %40,
+	/*%42*/ .%43-adornment%44 .%43-indirection %45) PURE;\
 #endm
 
 
@@ -482,16 +488,16 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD_10 52
   // %52
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35,
-	%37 .%38-adornment%39 .%38-indirection %40,
-	%42 .%43-adornment%44 .%43-indirection %45,
-	%47 .%48-adornment%49 .%48-indirection %50) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35,
+	/*%37*/ .%38-adornment%39 .%38-indirection %40,
+	/*%42*/ .%43-adornment%44 .%43-indirection %45,
+	/*%47*/ .%48-adornment%49 .%48-indirection %50) PURE;\
 #endm
 
 
@@ -522,17 +528,17 @@ AD_CLASS_BEGIN\
 #startm AD_XMETHOD_11 57
   // %57
   STDMETHOD(%01) (THIS_
-	%02 .%03-adornment%04 .%03-indirection %05,
-	%07 .%08-adornment%09 .%08-indirection %10,
-	%12 .%13-adornment%14 .%13-indirection %15,
-	%17 .%18-adornment%19 .%18-indirection %20,
-	%22 .%23-adornment%24 .%23-indirection %25,
-	%27 .%28-adornment%29 .%28-indirection %30,
-	%32 .%33-adornment%34 .%33-indirection %35,
-	%37 .%38-adornment%39 .%38-indirection %40,
-	%42 .%43-adornment%44 .%43-indirection %45,
-	%47 .%48-adornment%49 .%48-indirection %50,
-	%52 .%53-adornment%54 .%53-indirection %55) PURE;\
+	/*%02*/ .%03-adornment%04 .%03-indirection %05,
+	/*%07*/ .%08-adornment%09 .%08-indirection %10,
+	/*%12*/ .%13-adornment%14 .%13-indirection %15,
+	/*%17*/ .%18-adornment%19 .%18-indirection %20,
+	/*%22*/ .%23-adornment%24 .%23-indirection %25,
+	/*%27*/ .%28-adornment%29 .%28-indirection %30,
+	/*%32*/ .%33-adornment%34 .%33-indirection %35,
+	/*%37*/ .%38-adornment%39 .%38-indirection %40,
+	/*%42*/ .%43-adornment%44 .%43-indirection %45,
+	/*%47*/ .%48-adornment%49 .%48-indirection %50,
+	/*%52*/ .%53-adornment%54 .%53-indirection %55) PURE;\
 #endm
 
 
@@ -616,10 +622,12 @@ DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07,
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  STDMETHOD(GetImplRep)(THIS_ char **) PURE;
+  STDMETHOD(GetImplRep)(THIS_ unsigned char **) PURE;
 
   END_INTERFACE
 };
+
+#endif // #ifndef __.this-module_h__\
 #endm
 
 
@@ -636,10 +644,12 @@ DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07,
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  STDMETHOD(GetImplRep)(THIS_ char **) PURE;
+  STDMETHOD(GetImplRep)(THIS_ unsigned char **) PURE;
 
   END_INTERFACE
-};\
+};
+
+#endif // #ifndef __.this-module_h__\
 #endm
 
 
@@ -744,7 +754,7 @@ DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07,
 #startm AD_GETOBJ_METHOD1 06
   // %06
   STDMETHOD(%01) (THIS_
-	%02 %03 ** I%04) PURE;\
+	/*%02*/ %03 ** I%04) PURE;\
 #endm
 
 
@@ -765,7 +775,7 @@ DEFINE_GUID(CLSID_.this-module, 0x%01, 0x%02, 0x%03, 0x%04, 0x%05, 0x%06, 0x%07,
 #startm AD_SETOBJ_METHOD1 06
   // %06
   STDMETHOD(%01) (THIS_
-	%02 %03 * I%04) PURE;\
+	/*%02*/ %03 * I%04) PURE;\
 #endm
 
 
