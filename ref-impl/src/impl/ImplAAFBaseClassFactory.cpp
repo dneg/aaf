@@ -42,8 +42,8 @@ void OMContainer::OMLCloseContainer(void)
 {
   if (_mode == writeMode) {
     *_file << *_head;
-    _file->close();
   }
+  _file->close();
 }
 
 // Close without saving the file
@@ -93,7 +93,7 @@ void OMContainer::OMLOpenContainer(OMLSession sessionData,
 {
   _mode = readMode;
   char *pathname = GetFileName(attributes);
-  _file = OMFile::open(pathname);
+  _file = OMFile::openRead(pathname);
 
   registerClass(_file, CLSID_AAFHeader);
   registerClass(_file, CLSID_AAFIdentification);
@@ -124,8 +124,8 @@ void OMContainer::OMLOpenNewContainer(OMLSession sessionData,
                                   OMLContainerFlags containerFlags, ...)
 {
   _mode = writeMode;
-	char *pathname = GetFileName(attributes);
-  _file = OMFile::create(pathname);
+  char *pathname = GetFileName(attributes);
+  _file = OMFile::createModify(pathname);
 }
 
 // OML Revision number
