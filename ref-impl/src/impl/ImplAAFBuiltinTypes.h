@@ -35,6 +35,14 @@
 
 #include "AAFTypes.h"
 
+#ifndef __ImplAAFSearchableStack_h__
+#include "ImplAAFSearchableStack.h"
+#endif
+
+#ifndef __ImplAAFUID_h__
+#include "ImplAAFUID.h"
+#endif
+
 class ImplAAFDictionary;
 class ImplAAFTypeDef;
 class ImplAAFTypeDefEnum;
@@ -54,17 +62,25 @@ public:
 								  ImplAAFTypeDef ** ppResult);
 
 
+  //
+  // Creates the requested type def object and initializes the OM
+  // properties therein.
+  //
+  AAFRESULT NewBuiltinTypeDef (const aafUID_t & rTypeID,
+							   ImplAAFTypeDef ** ppResult);
+
+  //
   // If the given type defs are built-in, will register their
   // offsets/sizes.
+  //
   static void RegisterExistingType (ImplAAFTypeDefEnum * ptde);
   static void RegisterExistingType (ImplAAFTypeDefRecord * ptdr);
 
 private:
 
-  AAFRESULT pvtCreateBuiltinTypeDef (const aafUID_t & rTypeID,
-									 ImplAAFTypeDef ** ppResult);
-
   ImplAAFDictionary* _dictionary; // pointer back to associated dictionary (temp)
+
+  ImplAAFSearchableStack<ImplAAFUID> _lookupStack;
 };
 
 #endif // ! __ImplAAFBuiltinTypes_h__
