@@ -410,7 +410,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 extern "C" HRESULT CEnumAAFPluginDescriptors_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"AAFPluginDescriptorTest.aaf";
+	aafWChar * pFileName = L"EnumAAFPluginDescTest.aaf";
 
 	try
 	{
