@@ -64,7 +64,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /Z7 /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /WX /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /I "../../../sss-impl/include" /D "_DEBUG" /D "OM_DEBUG" /D "OM_STACK_TRACE_ON_ASSERT" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "OM_USE_STORAGE_EX" /FR /YX /FD /c
+# ADD CPP /nologo /MDd /W3 /WX /GR /GX /Z7 /Od /I "../../../ref-impl/src/OM" /I "../../../ref-impl/include/Om" /I "../../../ref-impl/include" /I "../../../sss-impl/include" /D "_DEBUG" /D "OM_DEBUG" /D "OM_STACK_TRACE_ON_ASSERT" /D "_WIN32" /D "WIN32" /D "_WINDOWS" /D "UNICODE" /D "_UNICODE" /D "OM_USE_STORAGE_EX" /FR /YX /FD /c
 # SUBTRACT CPP /X
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
@@ -158,6 +158,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMGSFxMSSStoredObjectFactory.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMIntegerType.cpp"
 # End Source File
 # Begin Source File
@@ -187,31 +191,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObject.cpp"
-
-!IF  "$(CFG)" == "OM - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "OM - Win32 Debug"
-
-# SUBTRACT CPP /FA<none>
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredObjectFactory.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMMSxMSSStoredObjectFactory.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMSSxMSSStoredObjectFactory.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMGSFxMSSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -220,6 +203,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredStream.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMMSxMSSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -296,6 +283,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSSSStorageRWInputSource.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMSSSStructuredStorage.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMSSxMSSStoredObjectFactory.cpp"
 # End Source File
 # Begin Source File
 
@@ -392,6 +383,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredObjectFactory.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredStream.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\utf8.cpp"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -515,6 +510,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMGSFxMSSStoredObjectFactory.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMIdentitySet.h"
 # End Source File
 # Begin Source File
@@ -575,23 +574,15 @@ SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\include\OM\OMMSxMSSStoredObjectFactory.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\include\OM\OMGSFxMSSStoredObjectFactory.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\include\OM\OMSSxMSSStoredObjectFactory.h"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredStream.h"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMMSStructuredStorage.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMMSxMSSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
@@ -760,6 +751,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMSingleton.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMSingletonT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMSSxMSSStoredObjectFactory.h"
 # End Source File
 # Begin Source File
 
