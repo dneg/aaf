@@ -179,6 +179,13 @@ const aafUID_t AUID_TypeRenamedRational16 =
 const aafUID_t AUID_PropertyComponentOdor = 
 { 0x36847472, 0xd263, 0x11d2, { 0x84, 0x29, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
+//
+// new source mob id
+//{060c2b340205110101001000-13-00-00-00-{6d800930-9bcd-11d4-9f7f-080036210804}}
+static const aafMobID_t SRC_MobID = {
+{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
+0x13, 0x00, 0x00, 0x00, 
+{0x6d800930, 0x9bcd, 0x11d4, 0x9f, 0x7f, 0x08, 0x00, 0x36, 0x21, 0x08, 0x04}};
 
 
 #define PROPAGATE_RESULT(condition) \
@@ -602,46 +609,6 @@ static void convert(wchar_t* wName, size_t length, const wchar_t* name)
 }
 
 
-#if defined(_MAC) || defined(macintosh)
-// For some reason the CoCreateGuid() function is not implemented in the 
-// Microsoft Component Library...so we define something that should be
-// fairly unique on the mac.
-
-#include <Events.h>
-#include <time.h>
-
-STDAPI CoCreateGuid(GUID  *pguid)
-{
-  // {1994bd00-69de-11d2-b6bc-fcab70ff7331}
-  static GUID sTemplate = 
-    { 0x1994bd00, 0x69de, 0x11d2, { 0xb6, 0xbc, 0xfc, 0xab, 0x70, 0xff, 0x73, 0x31 } };
-
-  static bool sInitializedTemplate = false;
-  
-  if (NULL == pguid)
-    return E_INVALIDARG;
-    
-  if (!sInitializedTemplate)
-  {
-    time_t timer = time(NULL);
-    UInt32 ticks = TickCount();
-   
-    sTemplate.Data1 += timer + ticks;
-    
-    sInitializedTemplate = true;
-  }
-  
-  // Just bump the first member of the guid to emulate GUIDGEN behavior.
-  ++sTemplate.Data1;
-  
-  *pguid = sTemplate;
-  
-  return S_OK;
-}
-
-#endif
-
-
 static void ReadAAFFile(aafWChar * pFileName,
 						/*[in]*/ aafMobID_constref createdMobID)
 {
@@ -746,9 +713,7 @@ static void CreateAAFFile(aafWChar * pFileName,
   IAAFMobSP spMob;
   check (smob->QueryInterface (IID_IAAFMob, (void **)&spMob));
 
-  aafMobID_t newMobID;
-  check (CoCreateGuid((GUID *)&newMobID)); // hack: we need a utility function.
-  check (spMob->SetMobID(newMobID));
+  check (spMob->SetMobID(SRC_MobID));
   check (spMob->SetName(L"a Source Mob"));
 
   IAAFAIFCDescriptorSP  spAIFCDesc;
@@ -784,7 +749,7 @@ static void CreateAAFFile(aafWChar * pFileName,
   check (spFile->Close());
 
   // Return the created mob ID to the user.
-  createdMobID = newMobID;
+  createdMobID = SRC_MobID;
 }
 
 
