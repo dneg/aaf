@@ -58,8 +58,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimecode::Initialize (aafLength_t length,
                            aafTimecode_t *timecode)
 {
-	aafUID_t	tcddef = DDEF_Timecode;
-	
 	XPROTECT()
 	{
 		if (timecode == NULL)
@@ -71,7 +69,7 @@ AAFRESULT STDMETHODCALLTYPE
 			return AAFRESULT_INVALID_TIMECODE;
 		}
 
-		CHECK(SetNewProps(length, &tcddef));
+		CHECK(SetNewProps(length, DDEF_Timecode));
 		_start = timecode->startFrame;
 		if (timecode->drop == kTcDrop)
 		{
