@@ -11,7 +11,7 @@
 * advertising or publicity relating to the software without the specific,
 * prior written permission of Avid Technology, Inc.
 *
-* THE SOFTWARE IS PROVIDED 0 AND WITHOUT WARRANTY OF ANY KIND,
+* THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
 * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
 * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 * IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,
@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Thu Sep 16 15:33:16 EDT 1999
+// This file was generated on Thu Sep 16 16:55:33 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.

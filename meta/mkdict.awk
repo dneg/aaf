@@ -88,7 +88,7 @@ BEGIN {
   printf("* advertising or publicity relating to the software without the specific,\n");
   printf("* prior written permission of Avid Technology, Inc.\n");
   printf("*\n");
-  printf("* THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,\n");
+  printf("* THE SOFTWARE IS PROVIDED \"AS-IS\" AND WITHOUT WARRANTY OF ANY KIND,\n");
   printf("* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY\n");
   printf("* WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.\n");
   printf("* IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,\n");
