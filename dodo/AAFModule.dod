@@ -32,7 +32,6 @@ AD_CPP_QUOTE(\  // If the client is statically linking to the AAF dll's export)
 AD_CPP_QUOTE(\  // library then the following functions will always succeed:)
 AD_CPP_QUOTE(\  //***********************************************************)
 
-AD_CPP_QUOTE(\ EXTERN_C { )
 AD_XFUNCTION1(AAFLoad,
 
 			[in],
@@ -392,7 +391,5 @@ AD_XFUNCTION1(AAFGetPluginManager,
 
 			Returns an interface of the plugin manager\, which is used to select
   //			plugins for exporting.)
-
-AD_CPP_QUOTE(\ } )
 
 AD_MODULE_END
