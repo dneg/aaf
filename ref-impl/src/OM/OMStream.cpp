@@ -165,49 +165,13 @@ OMUInt64 OMStream::size(void)
   TRACE("OMStream::size");
   PRECONDITION("No error on stream", ferror(_file) == 0);
 
-#if (1)
   struct stat fileStat;
   fflush( _file );
   OMInt64 status = fstat( fileno( _file ), &fileStat );
   ASSERT( "Successful fstat", status == 0 );
   OMUInt64 result = fileStat.st_size;
 
-#else  //change method of finding size
-
-
-	// where are we now?
-	OMUInt64 oldposition = position();
-
-	// seek to end
-  errno = 0;
-
-#if defined( OM_OS_UNIX )
-
-	// all POSIX-compliant
-	int status = fseeko64( _file, (__off64_t)0, SEEK_END);
-  ASSERT("Successful seek", status == 0);
-	
-#elif defined( OM_OS_WINDOWS )
-
-	// we have to rely upon fseek( _file, 0, SEEK_END ) to do the right thing
-  int status = fseek(_file, 0L, SEEK_END);
-  ASSERT("Successful seek", status == 0);
-
-#else
-
-	// have to be regular ISO
-  int status = fseek(_file, 0L, SEEK_END);
-  ASSERT("Successful seek", status == 0);
-
-#endif
-
-	// where is the end?
-	OMUInt64 result = position();
-
-	// back to where we started from
-	setPosition( oldposition );
-#endif  //change method of finding size
-	return result;
+  return result;
 }
 
 void OMStream::setSize(OMUInt64 newSize)
