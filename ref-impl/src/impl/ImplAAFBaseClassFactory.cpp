@@ -41,7 +41,6 @@
 #define CLSID_AAFInterchangeObject CLSID_AAFObject
 #define CLSID_AAFJPEGImageData CLSID_AAFJPEGData
 #define CLSID_AAFMIDIFileData CLSID_AAFMIDIData
-#define CLSID_AAFMIDIFileDescriptor CLSID_AAFMIDIDescriptor
 #define CLSID_AAFParameterDefinition CLSID_AAFParameterDef
 #define CLSID_AAFPropertyDefinition CLSID_AAFPropertyDef
 #define CLSID_AAFTypeDefinition CLSID_AAFTypeDef
@@ -108,7 +107,7 @@ static AAFObjectEntry_t * g_AUIDTable[kTotalAUIDCount] = {0};
 
 
 // Declare a global instance of the factory so that the initialization
-// code will only be call once.
+// code will only be called once.
 static ImplAAFBaseClassFactory s_AAFBaseClassFactory;
 
 
@@ -189,37 +188,3 @@ const aafClassID_t* ImplAAFBaseClassFactory::LookupClassID(const aafUID_t* pAUID
   return (pClassID);
 }
 
-
-//
-// Factory method for all built-in classes.
-//
-ImplAAFObject* ImplAAFBaseClassFactory::CreateInstance(const aafUID_t* pAUID) 
-{
-
-  // Lookup the code class id for the given stored object id.
-  const aafClassID_t* id = LookupClassID(pAUID);
-  if (NULL == id)
-    return NULL;
-  
-  // Attempt to create the corresponding storable object.
-  ImplAAFRoot *impl = CreateImpl(*id);
-  if (NULL == impl)
-  { // This is a serious programming error. A stored object id was found in the file
-	  // with a known base class id but no base object could be created.
-    assert(NULL != impl);
-    return NULL;
-  }
-
-  // Make sure that the object we created was actually one of our
-  // ImplAAFObject derived classes.
-  ImplAAFObject* object = dynamic_cast<ImplAAFObject*>(impl);
-  if (NULL == object)
-  { // Not a valid object. Release the pointer so we don't leak memory.
-    impl->ReleaseReference();
-    impl = 0;
-    assert(NULL != object);
-	  return NULL;
-  }
-
-  return object;
-}
