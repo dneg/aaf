@@ -52,15 +52,18 @@ public:
 
     // @cmember Open the root <c OMStoredObject> in the disk file
     //          <p fileName> for reading only.
+    //   @devnote Soon to be obsolete.
   static OMStoredObject* openRead(const wchar_t* fileName);
 
     // @cmember Open the root <c OMStoredObject> in the disk file
     //          <p fileName> for modification.
+    //   @devnote Soon to be obsolete.
   static OMStoredObject* openModify(const wchar_t* fileName);
 
     // @cmember Create a new root <c OMStoredObject> in the disk file
     //          <p fileName>. The byte order of the newly created root
     //          is given by <p byteOrder>.
+    //   @devnote Soon to be obsolete.
   static OMStoredObject* createModify(const wchar_t* fileName,
                                       const OMByteOrder byteOrder);
 
@@ -80,9 +83,6 @@ public:
 
   // @access Public members.
 
-    // @cmember Constructor.
-  OMStoredObject(IStorage* s);
-
     // @cmember Destructor.
   ~OMStoredObject(void);
 
@@ -97,25 +97,20 @@ public:
     // @cmember Close this <c OMStoredObject>.
   void close(void);
 
-    // @cmember Save the <c OMClassId> <p cid> in this <c OMStoredObject>.
-  void save(const OMClassId& cid);
+    // @cmember The byte order of this <c OMStoredObject>.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
+  OMByteOrder byteOrder(void) const;
 
-    // @cmember Restore the class id of this <c OMStoredObject>.
-  void restore(OMClassId& cid);
+  // Saving and restoring properties
+
+    // @cmember Save the <c OMStoredObjectIdentification> <p id>
+    //          in this <c OMStoredObject>.
+  void save(const OMStoredObjectIdentification& id);
 
     // @cmember Save the <c OMPropertySet> <p properties> in this
     //          <c OMStoredObject>.
   void save(const OMPropertySet& properties);
-
-    // @cmember Restore the <c OMPropertySet> <p properties> into
-    //          this <c OMStoredObject>.
-  void restore(OMPropertySet& properties);
-
-    // @cmember Check that the <c OMPropertySet> <p propertySet> is
-    //          consistent with the <c OMStoredPropertySetIndex>
-    //          propertySetIndex.
-  void validate(const OMPropertySet* propertySet,
-                const OMStoredPropertySetIndex* propertySetIndex) const;
 
     // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
     //          <c OMStoredObject>, the vector is named <p vectorName>.
@@ -147,6 +142,14 @@ public:
                   OMStoredForm storedForm,
                   const wchar_t* name,
                   OMByteOrder byteOrder);
+
+    // @cmember Restore the <c OMStoredObjectIdentification>
+    //          of this <c OMStoredObject> into <p id>.
+  void restore(OMStoredObjectIdentification& id);
+
+    // @cmember Restore the <c OMPropertySet> <p properties> into
+    //          this <c OMStoredObject>.
+  void restore(OMPropertySet& properties);
 
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
@@ -289,8 +292,6 @@ public:
     // @cmember Close <p stream>.
   void closeStream(IStream*& stream);
 
-  OMByteOrder byteOrder(void) const;
-
   static void mapCharacters(wchar_t* name, size_t nameLength);
 
   static void mangleName(const wchar_t* clearName,
@@ -340,6 +341,17 @@ public:
   static void externalizeUInt16Array(const OMUInt16* internalArray,
                                      OMUInt16* externalArray,
                                      size_t elementCount);
+protected:
+  // @access Protected members.
+
+    // @cmember Constructor.
+  OMStoredObject(IStorage* s);
+
+    // @cmember Check that the <c OMPropertySet> <p propertySet> is
+    //          consistent with the <c OMStoredPropertySetIndex>
+    //          propertySetIndex.
+  void validate(const OMPropertySet* propertySet,
+                const OMStoredPropertySetIndex* propertySetIndex) const;
 
 private:
   // @access Private members.
