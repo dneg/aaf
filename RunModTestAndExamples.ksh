@@ -26,38 +26,6 @@ OLD_PATH=""
 
 Status=0
 
-RegisterTargetDLLs ()
-{	
-	Target=$1
-	Options=$2
-
-	print "Registering $Target $Options AAFPGAPI.dll"
-	if regsvr32 ${Options} ./AAFWINSDK/${Target}/RefImpl/AAFPGAPI.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-
-	print "Registering $Target $Options AAFCOAPI.dll"
-	if regsvr32 ${Options} ./AAFWINSDK/${Target}/RefImpl/AAFCOAPI.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-
-	print "Registering $Target $Options AAFINTP.dll "
-	if regsvr32 ${Options} ./AAFWINSDK/${Target}/RefImpl/AAFINTP.dll
-	then
-		print "    Succeeded"
-	else
-		print "    Failed"
-		exit -1
-	fi
-}
 
 
 SetPath ()
@@ -91,7 +59,7 @@ RunExamples ()
 	cd AAFWinSDK/$Target
 
 	cd Test
-	cp ../../Test/Com/Laser.wav .
+	cp ../../Test/Com/ComModTestAAF/Laser.wav .
 	ComModAAF
 
 	PrintSeparator
