@@ -110,6 +110,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDefinition.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMDictionary.cpp"
 # End Source File
 # Begin Source File
