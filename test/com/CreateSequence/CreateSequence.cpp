@@ -1,6 +1,6 @@
-// @doc INTERNAL
-// @com This file implements the first of Tim Bingham's scalability tests
-// @com This was hacked together by Chris Morgan.  Allegedly. 
+// @com Executable test program by Chris Morgan, intern for Avid Technology, Tewksbury 
+// @com This is used for scalability testing of AAF code.  Last modified on 7/23/99.
+
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -38,7 +38,9 @@
 
 // MAX is used for arrays when converting between types - set here for debugging. 
 const int MAX = 80;
-
+static char* programName;
+static char* niceFileName;
+static void usage(void);
 static aafWChar* slotName = L"SLOT1";
 static aafInt32 fadeInLen  = 1000;
 static aafInt32 fadeOutLen = 2000;
@@ -426,7 +428,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	pFile->Close();
 	pFile->Release();
 	pFile=NULL;
-	printf("Open time = %ld\n", elapsedtime);
+	printf("Open time = %ld\n\n", elapsedtime);
 cleanup:
 	if (pFile)
 		{
@@ -436,35 +438,72 @@ cleanup:
 	return AAFRESULT_SUCCESS;
 }
 
-//  Main adapted to use command-line arguments
-//  NOTE:  defining [0] prog-name; [1] Number N of components; [2] filename; 
-int main(int argc, char *argv[])
+//  A new usage function to make program more friendly
+void usage(void)
 {
-	// the second argument is stored as global variable N
-	char* Ns = argv[1];
-  char* expectedEnd = &Ns[strlen(Ns)];
-  char* end = 0;
-  long int N = strtoul(Ns, &end, 10);
-          if (end != expectedEnd) { // Some characters not consumed
-            printf("Error\n");
-            exit(EXIT_FAILURE);
-          }
+	printf("Usage:\n Createsequence.exe <Number of components in file> <file name>.aaf \n");
+	printf(" NB: Number is required to be integer greater than zero.\n");
+	printf(" Both arguments are required - no default is set.\n\n");
+}
+
+//  Main adapted to use command-line arguments with argument checking
+//  NOTE:  defining [0] program name; [1] Number N of components; [2] filename.aaf; 
+int main(int argumentCount, char *argumentVector[])
+{
+	programName = argumentVector[0];
+	
+	//  First check for correct number of arguments
+	//  printf("%ld\n",argumentCount);
+	if ((argumentCount < 2) || (argumentCount > 3))
+	{	
+		usage();
+		return 0;
+	}
+	//  Processing the second argument to be stored as global variable N
+	char* Ns = argumentVector[1];
+	char* expectedEnd = &Ns[strlen(Ns)];
+	char* end = 0;
+	long int N = strtoul(Ns, &end, 10);
+
+	//  Testing for correct second argument
+	if ((end != expectedEnd) || (N < 1))
+	{ 
+		printf("The first argument was of the incorrect form. [%s]\n\n",argumentVector[1]);
+		usage();
+		return 0;
+	}
+	
+	//  With no second argument, set output filename to CreateSequence<N>.aaf
+	if (argumentCount ==2)
+	{
+		niceFileName = Ns;
+		strcat (niceFileName,".aaf");
+	}
+	else 
+	{
+	//  Otherwise output to filename specified in the second argument
+	//  NB this case must have argC ==3 from earlier check
+
+	niceFileName = argumentVector[2];
+	strcat(niceFileName,".aaf");
+	}
+	//  and then carry on...
 
 	UTLInitTimers(1000);
 	CComInitialize comInit;
-
-	// finally output the file to the name specified in the arg
 	
 	aafWChar FileNameBuffer[MAX];
-	mbstowcs(FileNameBuffer,argv[2],MAX);
-
+	mbstowcs(FileNameBuffer,niceFileName,MAX);
+	
 	aafWChar * pwFileName = FileNameBuffer;
-  const char * pFileName = argv[2];
+	const char * pFileName = niceFileName;
 
-  checkFatal(CreateAAFFile(pwFileName, N));
-  
-  // Opening file and gathering statistics
- 	ReadAAFFile(pwFileName);
+	//  Give a nice output here too...
+	printf("Creating file %s with %ld components...\n\n",niceFileName,N);
+	checkFatal(CreateAAFFile(pwFileName, N));
+	
+	// Open the file and gather statistics
+	ReadAAFFile(pwFileName);
 
-  return(0);
+	return(0);
 }
