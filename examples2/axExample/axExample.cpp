@@ -35,10 +35,9 @@ void throwUsage()
 {
 	using namespace std;
 	wostringstream msg;
-	msg << L"Usage:\t" << L" -file filename" << endl;
-	msg << L"Usage:\t" << L" -file filename -metadata" << endl;
-	msg << L"Usage:\t" << L" -file filename -metadata -essence [-mpeg2]" << endl;
-	msg << L"Usage:\t" << L" -file filename -metadata -essence [-mpeg2] -composition" << endl;
+	msg << L"Usage:\t" << L"-file filename [-metadata] [-essence] [-composition] [-mpeg2]" << endl;
+	msg << L"Notes:\t" << L"Run -essence before composition.  Run -metadata before -essence." << endl;
+	msg << L"      \t" << L"The -mpeg2 option selects the mpeg codec (currently disabled)." << endl;
 	throw AxEx( msg.str().c_str() );
 }
 
@@ -64,25 +63,45 @@ int main( int argc, const char** argv )
 				
 		AxString fileName( AxStringUtil::mbtowc( fileNameArg.second ) );
 
+		bool openExisting = false;
+		
 		// Test if left over file from previous test exists.
+
+		// FIXME - logic implementted using an exception.  Fix AxFile
+		// interface, or add separate file io code to determine
+		// if a file exists before testing if it is an AAF file.
 		try {
 			if ( AxFile::isAAFFile( fileName ) ) {
 				wostringstream msg;
-				msg << L"AAF File already exists: ";
+				msg << L"Existing file will be modified: ";
 				msg << fileName << endl;
-				throw AxEx( msg.str().c_str() );
+				openExisting = true;
 			}
 		}
 		catch( const AxExHResult& ex ) {
-			//  AAFRESULT_FILE_NOT_FOUND is okay
+			//  AAFRESULT_FILE_NOT_FOUND is okay.  The file does
+			// not exist.
 			if ( ex.getHResult() != AAFRESULT_FILE_NOT_FOUND ) {
 				throw;
 			}
 		}
 
 		AxFile axFile;
-		wcout << L"New AAF File: " << fileName << endl;
-		axFile.OpenNewModify( fileName );
+
+		if ( openExisting ) {
+			wcout << L"Open existing AAF File: " << fileName << endl;
+			axFile.OpenExistingModify( fileName );
+		}
+		else {
+			wcout << L"Create new AAF File: " << fileName << endl;
+			axFile.OpenNewModify( fileName );
+		}
+
+
+		// Test each option argument and run the appropriate module.
+		// Each example module takes only the file as an argument,
+		// hence, these option can be run once at a time or all at
+		// once.
 
 		pair<bool,int> metaOpArg = args.get( "-metadata" );
 		if ( metaOpArg.first ) {
@@ -92,18 +111,12 @@ int main( int argc, const char** argv )
 
 		pair<bool,int> essOpArg = args.get( "-essence" );
 		if ( essOpArg.first ) {
-			if ( !metaOpArg.first ) {
-				throwUsage();
-			}
 			wcout << L"Creating essence..." << endl;
 			AxCreateEssenceExample( axFile, args );
 		}
 
 		pair<bool,int> compOpArg = args.get( "-composition" );
 		if ( compOpArg.first ) {
-			if ( !(metaOpArg.first && essOpArg.first) ) {
-				throwUsage();
-			}
 			wcout << L"Creating composition..." << endl;
 			AxCreateCompositionExample( axFile, args );
 		}
