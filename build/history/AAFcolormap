@@ -20,7 +20,7 @@ color Pale-Green          CCFFCC
 color Pink                FFCCCC
 color Grey                CCCCCC
 color Pale-Blue           CCFFFF
-color Purple              FFCCFF
+color Pale-Magenta        FFCCFF
 color Yellow              FFFFCC
 color Blue                CCCCFF
 color Green               00FF00
@@ -58,7 +58,7 @@ component Documentation Pale-Blue
   meta/
 end
 
-component Examples Purple
+component Examples Pale-Magenta
   test/
   examples/
   examples2/
