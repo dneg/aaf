@@ -69,16 +69,23 @@ AAFRESULT STDMETHODCALLTYPE
 
 	
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFComponent::SetDataDef (aafUID_t *  /*datadef*/)
+    ImplAAFComponent::SetDataDef (aafUID_t*  pDataDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	_dataDef = *pDataDef;
+	return aafError;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFComponent::GetDataDef (aafUID_t *  /*datadef*/)
+    ImplAAFComponent::GetDataDef (aafUID_t*  pDataDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	*pDataDef = _dataDef;
+
+	return aafError;
 }
 
 /*************************************************************************
@@ -109,6 +116,58 @@ AAFRESULT ImplAAFComponent::SetNewProps(
 	_dataDef = *dataDef;
 	_length	= length;
 
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT ImplAAFComponent::AccumulateLength(aafLength_t *length)
+{
+	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t rootLen,
+											ImplAAFMob *mob, ImplAAFMobSlot *track,
+											aafMediaCriteria_t *mediaCrit,
+											aafPosition_t currentObjPos,
+											aafEffectChoice_t *effectChoice,
+											ImplAAFComponent	*prevObject,
+											ImplAAFComponent *nextObject,
+#ifdef FULL_TOOLKIT
+											AAFScopeStack *scopeStack,
+#endif
+											aafPosition_t *diffPos, aafLength_t *minLength,
+											ImplAAFEffectDef **effeObject, aafInt32	*nestDepth,
+											ImplAAFComponent **found, aafBool *foundTransition)
+{
+#ifdef FULL_TOOLKIT
+  aafLength_t	tmpMinLen;
+  
+  XPROTECT(_file)
+	{
+	  *foundTransition = FALSE;
+	  *found = this;
+	  CHECK(GetLength(&tmpMinLen));
+	  if (Int64Less(tmpMinLen, rootLen))
+		{
+			*minLength = tmpMinLen;
+			if(diffPos != NULL)
+			{
+			  /* Figure out diffPos */
+			  *diffPos = rootPos;
+			  SubInt64fromInt64(currentObjPos, diffPos);
+			}
+		}
+	  else
+		{
+			*minLength = rootLen;
+			if(diffPos != NULL)
+			  CvtInt32toInt64(0, diffPos);
+		}
+	} /* XPROTECT */
+  XEXCEPT
+	{
+	}
+  XEND;
+#endif
 	return(AAFRESULT_SUCCESS);
 }
 
