@@ -51,6 +51,11 @@ $(AAFSDKBINDIR)/ComFileKindTest$(EXE) : $(CXXOBJS)
 endif
 
 
+.PHONY : check
+check : $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/ComFileKindTest$(EXE)
+
+
 .PHONY : clean
 clean :
 	@$(RM) $(CXXOBJS)
@@ -61,6 +66,5 @@ clean :
 
 .PHONY : realclean
 realclean : clean
-
 
 include $(AAFBASE)/build/rules.mk

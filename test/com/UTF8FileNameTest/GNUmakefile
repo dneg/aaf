@@ -51,6 +51,11 @@ $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE) : $(CXXOBJS)
 endif
 
 
+.PHONY : check
+check : $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/UTF8FileNameTest$(EXE)
+
+
 .PHONY : clean
 clean :
 	@$(RM) $(CXXOBJS)

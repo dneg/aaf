@@ -50,6 +50,14 @@ $(AAFSDKBINDIR)/CreateSequence$(EXE) : $(CXXOBJS)
 endif
 
 
+# Create a non-trivial Composition with 2000 elements in the sequence.
+# This creates an AAF file with 6001 mobs and exercises the Structured Storage
+# implementation.
+.PHONY : check
+check : $(AAFSDKBINDIR)/CreateSequence$(EXE)
+	env LD_LIBRARY_PATH=$(AAFSDKBINDIR):$(LD_LIBRARY_PATH) $(AAFSDKBINDIR)/CreateSequence$(EXE) 2000
+
+
 .PHONY : clean
 clean :
 	@$(RM) $(CXXOBJS)
@@ -63,4 +71,3 @@ realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
-

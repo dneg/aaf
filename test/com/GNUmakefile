@@ -53,6 +53,13 @@ ComFileKindTest :
 UTF8FileNameTest :
 	cd UTF8FileNameTest && $(MAKE)
 
+.PHONY : check
+check :
+	cd ComModTestAAF && $(MAKE) $@
+	cd CreateSequence && $(MAKE) $@
+	cd ComFileKindTest && $(MAKE) $@
+	cd UTF8FileNameTest && $(MAKE) $@
+
 .PHONY : clean
 clean :
 	cd ComModTestAAF && $(MAKE) GENDEPS=0 $@

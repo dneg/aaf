@@ -42,6 +42,11 @@ com :
 	cd com && $(MAKE)
 
 
+.PHONY : check
+check :
+	cd com && $(MAKE) $@
+
+
 .PHONY : clean
 clean :
 	cd com && $(MAKE) GENDEPS=0 $@
