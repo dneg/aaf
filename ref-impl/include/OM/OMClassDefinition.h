@@ -28,6 +28,9 @@
 
 class OMPropertyDefinition;
 
+  // @class Abstract base class used to define persistent classes
+  //        supported by the Object Manager.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMClassDefinition {
 public:
 
