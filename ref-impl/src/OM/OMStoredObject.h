@@ -266,6 +266,18 @@ public:
 
   OMByteOrder byteOrder(void) const;
 
+  static void reorderString(OMCharacter* string,
+                            size_t characterCount);
+
+  static void internalizeString(OMCharacter* externalString,
+                                wchar_t* internalString,
+                                size_t characterCount);
+
+  static void externalizeString(const wchar_t* internalString,
+                                OMCharacter* externalString,
+                                size_t characterCount);
+
+
 private:
   // @access Private members.
 
