@@ -75,6 +75,8 @@ public:
 
   MSSSLibrary(void);
 
+  ~MSSSLibrary(void);
+
   OMInt32 StgCreateDocfile(const SSCHAR* pwcsName,
                            OMUInt32 grfMode,
                            OMUInt32 reserved,
@@ -121,6 +123,12 @@ MSSSLibrary::MSSSLibrary(void)
   _pStgOpenStorageOnILockBytes(0),
   _pStgIsStorageFile(0)
 {
+}
+
+MSSSLibrary::~MSSSLibrary(void)
+{
+  OMDynamicLibrary::unloadLibrary(_ssLibrary);
+  _ssLibrary = 0;
 }
 
 OMInt32 MSSSLibrary::StgCreateDocfile(const SSCHAR* pwcsName,
@@ -303,6 +311,8 @@ public:
 
   MSCOMLibrary(void);
 
+  ~MSCOMLibrary(void);
+
   OMInt32 CoInitialize(void* pvReserved);
 
   void CoUninitialize(void);
@@ -321,6 +331,12 @@ MSCOMLibrary::MSCOMLibrary(void)
   _pCoInitialize(0),
   _pCoUninitialize(0)
 {
+}
+
+MSCOMLibrary::~MSCOMLibrary(void)
+{
+  OMDynamicLibrary::unloadLibrary(_coLibrary);
+  _coLibrary = 0;
 }
 
 OMInt32 MSCOMLibrary::CoInitialize(void* pvReserved)
@@ -394,5 +410,3 @@ void OMMSSFinalize(void)
   MSSSLibrary::destroy();
   MSCOMLibrary::destroy();
 }
-
-
