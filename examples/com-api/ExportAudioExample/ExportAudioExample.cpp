@@ -39,10 +39,6 @@ static aafSourceRef_t sourceRef;
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
 
-static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
-{
-	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
-}
 
 #define TEST_PATH	L"SomeFile.dat"
 
@@ -80,13 +76,6 @@ static void convert(char* cName, size_t length, const wchar_t* name)
   }
 }
 
-static void AUIDtoString(aafUID_t *uid, char *buf)
-{
-	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-			uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
-			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
-			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
-}
 
 typedef enum { testRawCalls, testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
 
@@ -133,7 +122,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFEssenceFormat*			pFormat = NULL;
 	IAAFEssenceFormat			*format = NULL;
 	IAAFLocator					*pLocator = NULL;
-	aafUID_t					masterMobID;
+	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
@@ -144,6 +133,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	aafUInt16					bitsPerSample, numCh;
 	aafInt32					n, numSpecifiers;
 	aafUID_t					essenceFormatCode, testContainer;
+  IAAFClassDef *pMasterMobDef = NULL;
+  IAAFClassDef *pNetworkLocatorDef = NULL;
+  IAAFDataDef *pSoundDef = NULL;
+
+
 	// Delete any previous test file before continuing...
 	char chFileName[1000];
 	convert(chFileName, sizeof(chFileName), pFileName);
@@ -175,10 +169,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	/* Get the AAF Dictionary from the file */
 	check(pHeader->GetDictionary(&pDictionary));
 	
+  /* Lookup class definitions for the objects we want to create. */
+  check(pDictionary->LookupClassDef(AUID_AAFMasterMob, &pMasterMobDef));
+  check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator, &pNetworkLocatorDef));
+
+  /* Lookup any necessary data definitions. */
+  check(pDictionary->LookupDataDef(DDEF_Sound, &pSoundDef));
+
 	/* Create a Mastermob */
 	
 	// Get a Master MOB Interface
-	check(pDictionary->CreateInstance( &AUID_AAFMasterMob,
+	check(pDictionary->CreateInstance(pMasterMobDef,
 						   IID_IAAFMasterMob, 
 						   (IUnknown **)&pMasterMob));
 	// Get a Mob interface and set its variables.
@@ -187,12 +188,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	check(pMob->SetName(L"A Master Mob"));
 	
 	// Add it to the file 
-	check(pHeader->AppendMob(pMob));
+	check(pHeader->AddMob(pMob));
 
 	if(dataFile != NULL)
 	{
 		// Make a locator, and attach it to the EssenceDescriptor
-		check(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
+		check(pDictionary->CreateInstance(pNetworkLocatorDef,
 								IID_IAAFLocator, 
 								(IUnknown **)&pLocator));		
 		check(pLocator->SetPath (dataFile->dataFilename));
@@ -223,7 +224,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		
 		/* Create the Essence Data specifying the codec, container, edit rate and sample rate */
 		check(pMasterMob->CreateEssence(1,				// Slot ID
-									DDEF_Sound,			// MediaKind
+									pSoundDef,			// MediaKind
 									CodecWave,			// codecID
 									editRate,			// edit rate
 									sampleRate,			// sample rate
@@ -271,6 +272,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 		/* Set the essence to indicate that you have finished writing the samples */
 		check(pEssenceAccess->CompleteWrite());
+
+    pEssenceAccess->Release();
+    pEssenceAccess = NULL;
 	}
 	else
 	{
@@ -279,18 +283,21 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 	/* Release COM interfaces */
 
-	if(pMasterMob)
-		pMasterMob->Release();
-	pMasterMob = NULL;
-	if(pMob)
-		pMob->Release();
+	pMob->Release();
 	pMob = NULL;
-	
-	if(pDictionary)
-		pDictionary->Release();
+	pMasterMob->Release();
+	pMasterMob = NULL;
+
+  pSoundDef->Release();
+  pSoundDef = NULL;
+  pNetworkLocatorDef->Release();
+  pNetworkLocatorDef = NULL;
+  pMasterMobDef->Release();
+  pMasterMobDef = NULL;
+
+	pDictionary->Release();
 	pDictionary = NULL;
-	if(pHeader)
-		pHeader->Release();
+	pHeader->Release();
 	pHeader = NULL;
 	
 	/* Save the AAF file */
@@ -299,35 +306,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	/* Close the AAF file */
 	pFile->Close();
 	pFile->Release();
-
 	pFile = NULL;
 
-	if (pEssenceAccess)
-	{	
-		pEssenceAccess->Release();
-		pEssenceAccess= NULL;
-	}
 
 cleanup:
 	// Cleanup and return
-	if (pEssenceAccess)
-		pEssenceAccess->Release();
-	
-	if (pMasterMob)
-		pMasterMob->Release();
-
-	if (pMob)
-		pMob->Release();
-
-	if (pDictionary)
-		pDictionary->Release();
-
-	if (pHeader)
-		pHeader->Release();
-
-	if (pFile)
-		pFile->Release(); 
-
 	if(pFormat)
 		pFormat->Release();
 
@@ -336,6 +319,37 @@ cleanup:
 
 	if(pLocator)
 		pLocator->Release();
+
+  if (pEssenceAccess)
+		pEssenceAccess->Release();
+	
+	if (pMasterMob)
+		pMasterMob->Release();
+
+	if (pMob)
+		pMob->Release();
+
+  if (pSoundDef)
+    pSoundDef->Release();
+
+  if (pNetworkLocatorDef)
+    pNetworkLocatorDef->Release();
+
+  if (pMasterMobDef)
+    pMasterMobDef->Release();
+
+	if (pDictionary)
+		pDictionary->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
+	if (pFile)
+  {
+    pFile->Close();
+		pFile->Release();
+  }
+
 
 	return moduleErrorTmp;
 }
@@ -505,6 +519,39 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	return(AAFRESULT_SUCCESS);
 }
 
+// Make sure all of our required plugins have been registered.
+static HRESULT RegisterRequiredPlugins(void)
+{
+  HRESULT hr = S_OK;
+	IAAFPluginManager	*mgr = NULL;
+
+  // Load the plugin manager 
+  check(AAFGetPluginManager(&mgr));
+
+  // Attempt load and register all of the plugins
+  // in the shared plugin directory.
+  check(mgr->RegisterSharedPlugins());
+
+  // Attempt to register all of the plugin files
+  // in the given directorys:
+  //check(mgr->RegisterPluginDirectory(directory1));
+  //check(mgr->RegisterPluginDirectory(directory2));
+
+
+  // Attempt to register all of the plugins in any
+  // of the given files:
+  //check(mgr->RegisterPluginFile(file1));
+  //check(mgr->RegisterPluginFile(file2));
+  //...
+
+cleanup:
+  if (mgr)
+    mgr->Release();
+
+	return moduleErrorTmp;
+}
+
+
 main()
 {
 	CComInitialize comInit;
@@ -513,7 +560,10 @@ main()
 	aafWChar *		pwFileName	= L"ExportAudioExample.aaf";
 	const char *	pFileName	= "ExportAudioExample.aaf";
 	
-	printf("Creating file %s using WriteSamples (Internal Media)...\n", pFileName);
+  // Make sure all of our required plugins have been registered.
+  checkFatal(RegisterRequiredPlugins());
+
+  printf("Creating file %s using WriteSamples (Internal Media)...\n", pFileName);
 	checkFatal(CreateAAFFile(pwFileName, NULL, testStandardCalls));
 
 	printf("DONE\n\n");
