@@ -86,7 +86,6 @@ template <class Type>
 void AxCreateInstance( IAAFDictionarySP spDict,
 	    	           IAAFSmartPointer<Type>& sp )
 {
-	Type* dummy;
 
 	AxCreateInstance( AxDictionary( spDict ), sp );
 }
