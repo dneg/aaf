@@ -71,6 +71,9 @@ bool RC1TestSupported(aafProductVersion_constref toolkitVersion);
 //
 // Comparison operators
 //
+bool operator ==( const aafUID_t uid1, const aafUID_t uid2 );
+bool operator !=( const aafUID_t uid1, const aafUID_t uid2 );
+
 bool operator ==( const aafRational_t& a, const aafRational_t& b );
 bool operator !=( const aafRational_t& a, const aafRational_t& b );
 

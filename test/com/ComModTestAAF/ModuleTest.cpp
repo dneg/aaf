@@ -138,6 +138,43 @@ HRESULT GetAAFVersions(IAAFHeader * pHeader,
 
 
 
+bool operator ==( const aafUID_t uid1, const aafUID_t uid2 )
+{
+    bool    are_equal = true;
+    int     i = 0;
+
+    for( i=0; i<8; i++ )
+    {
+        if( uid1.Data4[i] != uid2.Data4[i] )
+        {
+            are_equal = false;
+            break;
+        }
+    }
+
+    if( are_equal == true )
+    {
+        if( uid1.Data1 != uid2.Data1  ||
+            uid1.Data2 != uid2.Data2  ||
+            uid1.Data3 != uid2.Data3 )
+        {
+            are_equal = false;
+        }
+    }
+
+
+    return are_equal;
+}
+
+
+
+bool operator !=( const aafUID_t uid1, const aafUID_t uid2 )
+{
+    return (! operator==( uid1, uid2 ) );
+}
+
+
+
 bool operator ==( const aafRational_t& a, const aafRational_t& b )
 {
     bool  are_equal = true;
