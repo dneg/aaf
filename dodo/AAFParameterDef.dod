@@ -10,6 +10,7 @@ AAFDefinitionObject\
 AD_HEAD
 
 AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(AAFReferenceValue)
 AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 
 /******************************************\
@@ -37,14 +38,14 @@ AD_CLASS_BEGIN
 
 AD_METHOD1(GetControlDatakindID,
 		   [retval][out],
-		   aafAuid_t *,
+		   aafUID_t *,
 		   pControlDatakindID,
 		   Pointer to an AUID reference,
 		   Gets the datakind AUID for this control code definition.)
 
 AD_METHOD1(SetControlDatakindID,
 		   [in],
-		   aafAuid_t,
+		   aafUID_t,
 		   ControlDatakindID,
 		   an AUID reference,
 		   Sets the datakind AUID for this control code definition.)
@@ -70,7 +71,7 @@ AD_METHOD1(GetDisplayUnits,
 		   Pointer to Display Units,
 		   Gets the display units of the control code definition.)
 
-AD_METHOD1(SetDescription,
+AD_METHOD1(SetDisplayUnits,
 		   [in],
 		   aafString_t,
 		   strDisplayUnits,
@@ -96,7 +97,7 @@ AD_XMETHOD1(RemoveRefValue,
 AD_XMETHOD1(GetRefValues,
 			[out\,retval],
 			objOut,
-			EnumAAFReferenceValue,
+			EnumAAFReferenceValues,
 			ppEnum, 
 			Reference value Enumeration,
 			Return an enumerator for the reference values.)
