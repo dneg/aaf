@@ -1097,8 +1097,10 @@ HRESULT STDMETHODCALLTYPE
 
 		hr = _descriptorHelper.GetResolutionID( &_resolutionID );
 		checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+				 AAFRESULT_NO_MORE_OBJECTS == hr ||
 				 AAFRESULT_SUCCESS == hr, hr );
-		if( hr == AAFRESULT_PROP_NOT_PRESENT )
+		if( hr == AAFRESULT_PROP_NOT_PRESENT ||
+		    hr == AAFRESULT_NO_MORE_OBJECTS )
 		    _resolutionID = 0;
 
 		// Get the compression factor?
@@ -1160,7 +1162,8 @@ HRESULT STDMETHODCALLTYPE
 		SetWriteIndex(_startingIndex + 1);
 		
 		// Just in case...remap the "not present" error to success...
-		if (AAFRESULT_PROP_NOT_PRESENT == hr)
+		if (AAFRESULT_PROP_NOT_PRESENT == hr || 
+		    AAFRESULT_NO_MORE_OBJECTS == hr)
 			hr = AAFRESULT_SUCCESS;
 	}
 	catch (HRESULT& rhr)
