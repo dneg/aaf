@@ -93,6 +93,35 @@ bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs );
 
 //=---------------------------------------------------------------------=
 
+// ImplAAFCloneResovler is used to implement ImplAAFCloneExternal().
+// A pointer to an instance of this class is passed to "onCopy()"
+// implementations during OM traversals of the object/property graph.
+// It is used to resolve weak references to definition objects stored
+// in the dictionary, and to maintain a set of source references
+// (i.e. the id's of referenced mobs).
+//
+// The ResolveWeakReference(...) methods will resolve weak references
+// to any definition object that is derived from OMStorable and stored
+// in the dictionary.  The set of such classes is:
+//
+//   ImplAAFDataDef
+//   ImplAAFOperationDef
+//   ImplAAFParameterDef
+//   ImplAAFCodecDef
+//   ImplAAFContainerDef
+//   ImplAAFInterpolationDef
+//   ImplAAFPluginDef
+//
+// ImplAAFClassDefinition and ImplAAFTypeDef are not supported by the
+// ResolveWeakReference() methods because they are not derived from
+// OMStorable.  The are, respectively, derived from OMClassDefinition
+// and OMType.
+//
+// The AddSourceReference() and GetSourceReferences() methods are used
+// to collect the set of mob id's for all ImplAAFSourceReference
+// objects visited by an OM deepCopy() traversal.
+// 
+
 class ImplAAFCloneResolver {
  public:
 
@@ -133,19 +162,6 @@ class ImplAAFCloneResolver {
 	}
   }
 
-  // Add a mobID to the list, and get the list.
-  // AddSourceReference ignores mobID's that are already in the source
-  // reference list.
-  void AddSourceReference( const aafMobID_t mobID );
-  const OMVector<aafMobID_t>& GetSourceReferences() const;
-
-private:
-
-  // prohibited
-  ImplAAFCloneResolver();
-  ImplAAFCloneResolver( const ImplAAFCloneResolver& );
-  ImplAAFCloneResolver& operator==( const ImplAAFCloneResolver& );
-
   template <class Type>
   void CloneAndRegister( const Type* pSrcDef )
   {
@@ -177,6 +193,19 @@ private:
 	}
 
   }
+
+  // Add a mobID to the list, and get the list.
+  // AddSourceReference ignores mobID's that are already in the source
+  // reference list.
+  void AddSourceReference( const aafMobID_t mobID );
+  const OMVector<aafMobID_t>& GetSourceReferences() const;
+
+private:
+
+  // prohibited
+  ImplAAFCloneResolver();
+  ImplAAFCloneResolver( const ImplAAFCloneResolver& );
+  ImplAAFCloneResolver& operator==( const ImplAAFCloneResolver& );
 
   OMVector<aafMobID_t> _sourceIDList;
   ImplAAFDictionary* _pDstDict;
