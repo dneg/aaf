@@ -65,12 +65,17 @@ class ImplAAFScopeStack;
 class ImplAAFOperationGroup;
 
 
-
-
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
 #endif
 
+#ifndef __ImplAAFKLVData_h__
+#include "ImplAAFKLVData.h"
+#endif
+
+#ifndef __ImplEnumAAFKLVData_h__
+#include "ImplEnumAAFKLVData.h"
+#endif
 
 class ImplAAFMob : public ImplAAFObject
 {
@@ -287,6 +292,34 @@ public:
     GetComments
         (ImplEnumAAFTaggedValues ** ppEnum);  //@parm [out,retval] Mob Comments
 
+  //****************
+  // AppendKLVData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendKLVData
+        (ImplAAFKLVData * pData);  //@parm [in,ref] Data
+
+  //****************
+  // RemoveKLVData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveKLVData
+        (ImplAAFKLVData * pData);
+
+  //****************
+  // CountKLVData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountKLVData
+        (aafUInt32 *  pNumComments);  //@parm [out,retval] Number  of KLVData
+
+
+  //****************
+  // GetKLVData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetKLVData
+        (ImplEnumAAFKLVData ** ppEnum);  //@parm [out,retval] KLVData
 
 
   //****************
@@ -446,6 +479,7 @@ virtual AAFRESULT STDMETHODCALLTYPE
 	private:
     OMStrongReferenceVectorProperty<ImplAAFMobSlot> _slots;
     OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _userComments;
+    OMStrongReferenceVectorProperty<ImplAAFKLVData> _KLVData;
 };
 
 #endif // ! __ImplAAFMob_h__
