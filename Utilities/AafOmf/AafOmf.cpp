@@ -48,6 +48,7 @@ namespace OMF2
 
 #include "Aaf2Omf.h"
 #include "Omf2Aaf.h"
+#include "aafclassdefuids.h"
 
 //#include "AAFUtils.h"
 AAFRESULT aafMobIDNew(aafUID_t *mobID);
@@ -513,4 +514,236 @@ int main(int argc, char *argv[])
 		delete gpGlobals;
 
 	return(0);
+}
+
+
+void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession)
+{
+	OMF2::omfErr_t		OMFError;
+
+	// To get the CDCI codec related properties we first reister them in OMF
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ComponentWidth", OMClassCDCI, 
+									   OMF2::OMVersionType, OMF2::kPropRequired, 
+									   &(globals->omCDCIComponentWidth));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "HorizontalSubsampling", OMClassCDCI, 
+									   OMF2::OMBoolean, OMF2::kPropRequired, 
+									   &(globals->omCDCIHorizontalSubsampling));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ColorSiting", OMClassCDCI, 
+									   OMF2::OMBoolean, OMF2::kPropRequired, 
+									   &(globals->omCDCIColorSiting));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "BlackReferenceLevel", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &(globals->omCDCIBlackReferenceLevel));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "WhiteReferenceLevel", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &(globals->omCDCIWhiteReferenceLevel));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ColorRange", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &(globals->omCDCIColorRange));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "PaddingBits", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &(globals->omCDCIPaddingBits));
+}
+
+//***********************************************************
+//
+//	AddPropertyToClass()
+//
+//	Add an integer property to the class specified by ClassID
+//	in the AAF Dictionary.
+//
+//	Returns:
+//
+//		On Success: S_OK
+//		On Failure: A failed HRESULT
+//
+static HRESULT AddPropertyToClass(IAAFDictionary *dict, const aafUID_t* pClassID, const aafUID_t* pPropTypeID, const aafUID_t* pPropID, aafCharacter*  pName)
+{
+	IAAFClassDef*	pCD;
+	HRESULT			hr;
+
+	// Get the class definition.
+	hr = dict->LookupClass(*pClassID, &pCD);
+	if (SUCCEEDED(hr))
+	{
+		IAAFTypeDef*	pTypeDef;
+
+		hr = dict->LookupType(*pPropTypeID, &pTypeDef);
+		if (SUCCEEDED(hr))
+		{
+			IAAFPropertyDef*	pPropDef;
+
+			hr = pCD->AppendOptionalPropertyDef(*pPropID, pName, pTypeDef, &pPropDef);
+			if (SUCCEEDED(hr))
+			{
+				pPropDef->Release();
+			}
+			pTypeDef->Release();
+		}
+		pCD->Release();
+	}
+	
+	return hr;
+}
+
+
+void RegisterOMFMCPrivate(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession)
+{
+	OMF2::omfErr_t		OMFError;
+	
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither,
+		"AvidPrivateEffectID", OMClassEFFE, OMF2::OMString,
+		OMF2::kPropOptional, &(gpGlobals->pvtEffectIDProp));
+	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "AppCode", OMClassMOBJ, 
+									   OMF2::OMInt32, OMF2::kPropOptional, 
+									   &(globals->pvtAppCode));
+}
+
+void RegisterAAFMCPrivate(IAAFDictionary * dict)
+{
+	AAFRESULT	hr;
+	
+	hr = AddPropertyToClass(dict, &kAAFClassID_Mob,
+							&kAAFTypeID_Int32,
+							&AUID_PropertyMobAppCode,
+							L"AppCode");
+}
+
+//***********************************************************
+//
+//	SetIntegerPropOnObject()
+//
+//	Set an integer property to the AAF object specified by pObj.
+//	The value of the property is specified in value.
+//
+//	Returns:
+//
+//		On Success: S_OK
+//		On Failure: A failed HRESULT
+//
+HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID,
+							   aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
+{
+	IAAFPropertyValue*	pPV = NULL;
+	IAAFTypeDef*		pTD;
+	HRESULT				hr;
+
+	// Create a property value from the supplied value (pValue)
+	hr = dict->LookupType(*pIntTypeID, &pTD);
+	if (SUCCEEDED(hr))
+	{
+		IAAFTypeDefInt*	pTDInt;
+
+		hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
+		if (SUCCEEDED(hr))
+		{
+			// Now create a property value object with that value.
+			hr = pTDInt->CreateValue(pValue, ValueSize, &pPV);
+			pTDInt->Release();
+		}
+		pTD->Release();
+	}
+
+	// Add the property to the target object.
+	if (SUCCEEDED(hr))
+	{
+		if (SUCCEEDED(hr))
+		{
+			IAAFClassDef*	pCD;
+
+			// Get the class def for the object
+			hr = dict->LookupClass(*pClassID, &pCD);
+			if (SUCCEEDED(hr))
+			{
+				IAAFPropertyDef*	pPD;
+
+				hr = pCD->LookupPropertyDef(*pPropID, &pPD);
+				if (SUCCEEDED(hr))
+				{
+					// Set the propeter value on the target object
+					hr = pObj->SetPropertyValue(pPD, pPV);
+					pPD->Release();
+				}
+				pCD->Release();
+			}
+		}
+	}
+
+	if (pPV) pPV->Release();
+
+	return hr;
+}
+
+//***********************************************************
+//
+//	GetIntegerPropFromObject()
+//
+//	Get an integer property from the AAF object specified by pObj.
+//	The value of the property is returned in pValue.
+//
+//	Returns:
+//
+//		On Success: S_OK
+//		On Failure: A failed HRESULT
+//
+HRESULT GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID, aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
+{
+	IAAFPropertyValue*	pPV = NULL;
+	IAAFClassDef*		pCD;
+	HRESULT				hr;
+
+	// Get the property value for the target property
+	hr = dict->LookupClass(*pClassID, &pCD);
+	if (SUCCEEDED(hr))
+	{
+		IAAFPropertyDef*	pPD;
+
+		hr = pCD->LookupPropertyDef(*pPropID, &pPD);
+		if (SUCCEEDED(hr))
+		{
+			aafBool	present = AAFFalse;
+
+			pObj->IsPropertyPresent(pPD, &present);
+			if (present == AAFTrue)
+				hr = pObj->GetPropertyValue(pPD, &pPV);
+			else
+				hr = AAFRESULT_PROP_NOT_PRESENT;
+
+			pPD->Release();
+		}
+		pCD->Release();
+	}
+
+	if (SUCCEEDED(hr))
+	{
+		IAAFTypeDef* pTD;
+
+		// Get the type def from the dict with which to interpret this
+		// property value.
+		hr = dict->LookupType(*pIntTypeID, &pTD);
+		if (SUCCEEDED(hr))
+		{
+			IAAFTypeDefInt* pTDInt;
+			
+			hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
+			if (SUCCEEDED(hr))
+			{
+				pTDInt->GetInteger(pPV, pValue, ValueSize);
+				pTDInt->Release();
+			}
+			pTD->Release();
+		}
+	}
+
+	if (pPV) pPV->Release();
+
+	return hr;
 }
