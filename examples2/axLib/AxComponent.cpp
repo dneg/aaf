@@ -106,6 +106,17 @@ void AxSequence::AppendComponent( IAAFComponentSP spIaafComponent )
 	CHECK_HRESULT( _spIaafSequence->AppendComponent( spIaafComponent ) );
 }
 
+
+IEnumAAFComponentsSP AxSequence::GetComponents()
+{
+	IEnumAAFComponentsSP spIaafComponents;
+
+	CHECK_HRESULT( _spIaafSequence->GetComponents( &spIaafComponents ) );
+
+	return spIaafComponents;
+}
+
+
 //=---------------------------------------------------------------------=
 
 AxSourceReference::AxSourceReference( IAAFSourceReferenceSP spIaafSourceReference )

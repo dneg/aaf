@@ -240,6 +240,7 @@ template class AxIterator< IAAFSmartPointer<IAAFMobSlot>,       IEnumAAFMobSlots
 template class AxIterator< IAAFSmartPointer<IAAFDataDef>,       IEnumAAFDataDefs >;
 template class AxIterator< aafUID_t,                            IEnumAAFCodecFlavours >;
 template class AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >;
+template class AxIterator< IAAFSmartPointer<IAAFComponent>,		IEnumAAFComponents >;
 
 template class AxArrayIterator< IAAFTypeDefFixedArray >;
 template class AxArrayIterator< IAAFTypeDefVariableArray >;

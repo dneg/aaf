@@ -101,6 +101,8 @@ public:
 	
 	void AppendComponent( IAAFComponentSP );
 
+	IEnumAAFComponentsSP GetComponents();
+
 private:
 	AxSequence();
 	AxSequence( const AxSequence& );
