@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -195,7 +195,7 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define ASSERT(name, expression) \
   (expression) \
     ? (void)0  \
-    : assertionViolation("Assertion",    name, #expression, \
+    : assertionViolation("Assertion", name, #expression, \
                          currentRoutineName, __FILE__, __LINE__)
 
   // @func Assert (when enabled with OM_DEBUG) that the
@@ -266,6 +266,24 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define OLD(name) \
   oldValueOf##name
 
+  // @func Define, or redefine, ISO assert() to call
+  //       <f assertionViolation> instead of <f abort>. The behavior
+  //       of <f abort> is to exit the program, whereas the behavior
+  //       of <f assertionViolation> can be customized. The setting of
+  //       the ISO macro NDEBUG is honored.
+  //   @parm The condition expression. The expression should be
+  //         free of side effects.
+#if !defined(NDEBUG)
+#if defined(assert)
+#undef assert
+#endif
+#define assert(expression) \
+  (expression) \
+    ? (void)0  \
+    : assertionViolation("Assertion", "ISO assert", #expression, \
+                         "unknown", __FILE__, __LINE__)
+#endif
+
 #else
 
 #define TRACE(name)
@@ -293,6 +311,13 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define SAVE_EXPRESSION(name, expression, type)
 
 #define OLD(name)
+
+#if defined(NDEBUG)
+#if defined(assert)
+#undef assert
+#endif
+#define assert(expression)
+#endif
 
 #endif
 
