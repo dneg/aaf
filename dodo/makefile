@@ -24,7 +24,6 @@ run:
 .SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh
 								   
 DODO_TARGETS = \
-	AAFTypes.all \
 	AAFAttribute.all \
 	AAFAttributeArray.all \
 	AAFClassDefinition.all \
@@ -40,6 +39,7 @@ DODO_TARGETS = \
 	AAFEffectInvocation.all \
 	AAFFiller.all \
 	AAFHeader.all \
+	AAFIdentification.all \
 	AAFInt64.all \
 	AAFIntegerAttribute.all \
 	AAFLocator.all \
@@ -47,9 +47,8 @@ DODO_TARGETS = \
 	AAFMedia.all \
 	AAFMediaDescriptor.all \
 	AAFMediaFileDescriptor.all \
-	AAFMediaTapeDescriptor.all \
-	AAFMediaTapeDescriptor.all \
 	AAFMediaGroup.all  \
+	AAFMediaTapeDescriptor.all \
 	AAFMob.all  \
 	AAFMobSlot.all \
 	AAFNestedScope.all\
@@ -73,12 +72,12 @@ DODO_TARGETS = \
 	AAFTimelineMobSlot.all \
 	AAFTransition.all \
 	AAFTypeDefinition.all \
+	AAFTypes.all \
 	AAFUInt64.all \
 	AAFUnitTest.all \
 	AAFUnixLocator.all \
 	AAFVaryingValue.all \
 	AAFWindowsLocator.all \
-	AAFIdentification.all \
 	EnumAAFAttributes.all \
 	EnumAAFClassDefinitions.all \
 	EnumAAFComponents.all \
@@ -90,19 +89,15 @@ DODO_TARGETS = \
 	EnumAAFIdentifications.all \
 	EnumAAFLocators.all \
 	EnumAAFMedia.all \
-	EnumAAFMobs.all \
 	EnumAAFMobComments.all \
 	EnumAAFMobSlots.all \
+	EnumAAFMobs.all \
 	EnumAAFParameterSlots.all \
 	EnumAAFPropertyDefinitions.all \
 	EnumAAFReferenceValues.all \
 	EnumAAFSegments.all \
 	EnumAAFTypeDefinitions.all
 
-
-# Jeff hasn't finished with these yet
-#	AAFMediaTapeDescriptor.all \
-#
 
 targets: $(DODO_TARGETS)
 
