@@ -19,7 +19,7 @@
 
 PTFM_SUFX = nt
 OBJ = obj
-LIB = lib
+AAF_LIB = lib
 EXE = exe
 CC = cl
 LD = cl
