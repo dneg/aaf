@@ -124,6 +124,12 @@ static inline ULARGE_INTEGER fromOMUInt64(const OMUInt64& x)
 
 #endif
 
+// Initialization and finalization.
+//
+void OMMSSInitialize(void);
+
+void OMMSSFinalize(void);
+
 #if defined(OM_DYNAMIC_SS)
 // For dynamic linking to the Structured Storage library redirect
 // the following calls to wrapper functions.

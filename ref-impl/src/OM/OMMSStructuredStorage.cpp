@@ -369,4 +369,30 @@ void OMCoUninitialize(void)
   MSCOMLibrary::instance()->CoUninitialize();
 }
 
+#if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
+static int _COMIsInitialized; // automatically initialized to 0
+#endif
+
+void OMMSSInitialize(void)
+{
+#if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
+  if (!_COMIsInitialized) {
+    CoInitialize(0);
+    _COMIsInitialized = 1;
+  }
+#endif
+}
+
+void OMMSSFinalize(void)
+{
+#if defined(OM_WINDOWS_SS) || defined(OM_MACINTOSH_SS)
+  if (_COMIsInitialized) {
+    CoUninitialize();
+    _COMIsInitialized = 0;
+  }
+#endif
+  MSSSLibrary::destroy();
+  MSCOMLibrary::destroy();
+}
+
 
