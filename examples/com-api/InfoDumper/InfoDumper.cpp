@@ -1801,7 +1801,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 		aafInt64 val;
 		checkResult(pTDI->GetInteger(pPVal, (aafMemPtr_t) &val, sizeof (val)));
 		
-		aafInt32 hi = (aafUInt32) ((val & 0xffffffff00000000) >> 32);
+		aafInt32 hi = (aafUInt32) ((val & AAFCONSTINT64(0xffffffff00000000)) >> 32);
 		aafInt32 lo = (aafInt32) val & 0xffffffff;
 		if (hi && ((hi != ~0) || (lo >= 0)))
 		  {
