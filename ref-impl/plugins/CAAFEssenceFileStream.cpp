@@ -157,7 +157,7 @@ HRESULT STDMETHODCALLTYPE
   // Cleanup any previously allocated buffers. 
   CleanupBuffers();
 
-  // Computer the number of wide characters.
+  // Computer the number of wide and multibyte characters.
   size_t i;
   size_t charCount = 0;
   for (i = 0; pFilePath[i]; ++i)
@@ -172,13 +172,13 @@ HRESULT STDMETHODCALLTYPE
     _pwPath[i] = pFilePath[i];
   
   // Convert the wide character path the an ascii character path.
-  size_t byteCount = wcstombs( NULL, _pwPath, 0);
-  if (-1 == byteCount)
-    return E_INVALIDARG;
-  _pPath = (char *)CoTaskMemAlloc(byteCount + 1);
+  // Allocate the maximum possible multibyte string for the current
+  // locale.
+  size_t byteCount = (MB_CUR_MAX * (charCount - 1)) + 1;
+  _pPath = (char *)CoTaskMemAlloc(byteCount);
   if (NULL == _pPath)
     return AAFRESULT_NOMEMORY;
-  size_t convertedBytes = wcstombs( _pPath, _pwPath, byteCount + 1);
+  size_t convertedBytes = wcstombs( _pPath, _pwPath, byteCount);
   if (-1 == convertedBytes)
     return E_INVALIDARG;
 
