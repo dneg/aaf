@@ -68,7 +68,7 @@ public:
 
     // @cmember The current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.
-  OMUInt64 position(void) const;
+  virtual OMUInt64 position(void) const;
 
     // @cmember Set the current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.

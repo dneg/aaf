@@ -49,6 +49,10 @@ public:
     //          <c OMDataStreamProperty>.
   virtual void setSize(const OMUInt64 newSize) = 0;
 
+    // @cmember The current position for <f read()> and <f write()>, as an
+    //          offset in bytes from the begining of the data stream.
+  virtual OMUInt64 position(void) const = 0;
+
     // @cmember Set the current position for <f read()> and <f write()>, as an
     //          offset in bytes from the begining of the data stream.
   virtual void setPosition(const OMUInt64 offset) const = 0;
