@@ -1254,6 +1254,32 @@ AD_CLASS_END\
 
 #ccccccccccccccccccccccccccc
 #c
+#c Declaration for the dictionary's meta factory method.
+#c
+#startm AD_DICTIONARY_METAFACTORY 02
+  //***********************************************************
+  //
+  // %01()
+  //
+  // %02 
+  // 
+  HRESULT %01(
+    // Identifier (id) of a class or type definition. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in definitions.
+    [in, ref] aafUID_constref id,
+
+    // Reference to the identifier of the interface
+    [in, ref] REFIID riid,
+
+    // Address of output variable that receives the 
+    // interface pointer requested in riid
+    [out, iid_is(riid)] IUnknown ** ppMetaDefinition);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Declaration for the class definition's factory method.
 #c
 #startm AD_CLASSDEF_FACTORY 02

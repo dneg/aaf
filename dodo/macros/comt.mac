@@ -411,6 +411,14 @@ AD_CLASS_END\
 
 #ccccccccccccccccccccccccccc
 #c
+#c Declaration for the dictionary's meta factory method.
+#c
+#startm AD_DICTIONARY_METAFACTORY 02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Declaration for the class definition's factory method.
 #c
 #startm AD_CLASSDEF_FACTORY 02

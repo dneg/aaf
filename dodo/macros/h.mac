@@ -1522,6 +1522,33 @@ AD_CLASS_END\
 
 #ccccccccccccccccccccccccccc
 #c
+#c Declaration for the dictionary's meta factory method.
+#c
+#startm AD_DICTIONARY_METAFACTORY 02
+  //***********************************************************
+  // METHOD NAME: %01()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | .this-module | %01 |
+  // %02
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE 
+  %01 (
+    // Identifier (id) of a class or type definition. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in definitions.
+    const aafUID_t & id,
+
+    // Address of output variable that receives the 
+    // object pointer requested in pAUID
+    AAFMetaDefinition ** ppMetaDefinition);
+#endm
+
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Declaration for the class definition's factory method.
 #c
 #startm AD_CLASSDEF_FACTORY 02

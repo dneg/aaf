@@ -1227,6 +1227,50 @@ AAFRESULT STDMETHODCALLTYPE
 
 #ccccccccccccccccccccccccccc
 #c
+#c Declaration for the dictionary's meta factory method.
+#c
+#startm AD_DICTIONARY_METAFACTORY 02
+
+#ifndef __ImplAAFBaseClassFactory_h__
+#include "ImplAAFBaseClassFactory.h"
+#endif
+
+// %02
+AAFRESULT STDMETHODCALLTYPE 
+  Impl.this-module::%01 (
+    // Identifier (id) of a class or type definition. This is the
+    // corresponding SMPTE identifier (as a GUID) for all predefined
+    // built-in definitions.
+    const aafUID_t & id,
+
+    // Address of output variable that receives the 
+    // object pointer requested in id
+    ImplAAFMetaDefinition ** ppMetaObject)
+{
+  if (NULL == ppMetaObject)
+    return AAFRESULT_NULL_PARAM;
+  
+  // Look for the object in the built-in base class factory.
+  *ppMetaObject = ImplAAFBaseClassFactory::CreateInstance(&id);
+
+  if (NULL == *ppMetaObject)
+  {
+    // TBD:
+    // Search the rest of the dictionary for extension classes.
+    // 
+  }
+  
+
+  if (NULL == *ppMetaObject)
+    return AAFRESULT_INVALID_CLASS_ID;
+  else
+    return AAFRESULT_SUCCESS;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Declaration for the class definition's factory method.
 #c
 #startm AD_CLASSDEF_FACTORY 02
