@@ -575,7 +575,6 @@ AAFRESULT PvtIsPropertyDefDuplicate(
   // represents the given AUID.  Doesn't init its OM properties.
   //
   ImplAAFObject* pvtInstantiate(const aafUID_t & id) const;
-  ImplAAFStorable* pvtInstantiateStorable(const aafUID_t & id) const;
 
   //
   // If the given AUID is known to the code, instantiates an object of
@@ -583,8 +582,6 @@ AAFRESULT PvtIsPropertyDefDuplicate(
   // properties.
   //
   static ImplAAFObject* pvtCreateBaseClassInstance(const aafUID_t & id);
-  static ImplAAFStorable* pvtCreateBaseClassStorableInstance(const aafUID_t & id);
-
 
   // Generates an OM PID corresponding to the given property def auid.
   AAFRESULT GenerateOmPid (const aafUID_t & rAuid,
