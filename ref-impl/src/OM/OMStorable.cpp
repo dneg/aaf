@@ -81,8 +81,8 @@ void OMStorable::save(void) const
     opened = true;
   }
 
-  store()->save(classId());
-  store()->save(_persistentProperties);
+  OMStorable* nonConstThis = const_cast<OMStorable*>(this);
+  store()->save(*nonConstThis);
 
   // Temporary brute force solution to the Microsoft Structured
   // Storage built in limit on the number of open storage elements
