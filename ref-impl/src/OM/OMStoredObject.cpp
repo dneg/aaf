@@ -287,7 +287,7 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   PRECONDITION("Already open", _open);
   PRECONDITION("Valid index", index != 0);
   PRECONDITION("At start of index stream", streamPosition(_indexStream) == 0);
-  PRECONDITION("Valid index", index->isValid());
+  PRECONDITION("Valid index", index->isValid(0));
 
   // The number of entries in the index.
   //
@@ -382,7 +382,7 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   
   streamSetPosition(_indexStream, 0);
   POSTCONDITION("At start of index stream", streamPosition(_indexStream) == 0);
-  POSTCONDITION("Valid index", index->isValid());
+  POSTCONDITION("Valid index", index->isValid(0));
   return index;
 }
 
