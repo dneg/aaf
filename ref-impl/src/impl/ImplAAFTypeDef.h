@@ -151,6 +151,14 @@ public:
   // Returns true if this type may be used as an element of a string.
   virtual bool IsStringable () const;
 
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
+
 protected:
   // Helper function to return the raw type of UInt8Array (if
   // applicable for the derived type)

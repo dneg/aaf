@@ -411,3 +411,16 @@ AAFRESULT STDMETHODCALLTYPE
   memcpy (pBits, pData, propSize);
   return AAFRESULT_SUCCESS;
 }
+
+
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefArray::onSave(void* clientContext) const
+{
+  ImplAAFTypeDef::onSave(clientContext);
+}
+
+void ImplAAFTypeDefArray::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDef::onRestore(clientContext);
+}

@@ -1069,3 +1069,25 @@ bool ImplAAFTypeDefRecord::IsVariableArrayable () const
 
 bool ImplAAFTypeDefRecord::IsStringable () const
 { return false; }
+
+
+
+
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDefRecord::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefRecord));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefRecord::onSave(void* clientContext) const
+{
+  ImplAAFTypeDef::onSave(clientContext);
+}
+
+void ImplAAFTypeDefRecord::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDef::onRestore(clientContext);
+}

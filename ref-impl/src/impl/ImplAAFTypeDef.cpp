@@ -191,3 +191,26 @@ bool ImplAAFTypeDef::IsVariableArrayable () const
 
 bool ImplAAFTypeDef::IsStringable () const
 { assert (0); return false; }
+
+
+
+
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDef::classId(void) const
+{
+  // This should be overridden by each specific type definition.
+  return ImplAAFMetaDefinition::classId();
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDef::onSave(void* clientContext) const
+{
+  ImplAAFMetaDefinition::onSave(clientContext);
+}
+
+void ImplAAFTypeDef::onRestore(void* clientContext) const
+{
+  ImplAAFMetaDefinition::onRestore(clientContext);
+}

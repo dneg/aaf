@@ -448,3 +448,25 @@ bool ImplAAFTypeDefFixedArray::IsVariableArrayable () const
 
 bool ImplAAFTypeDefFixedArray::IsStringable () const
 { return false; }
+
+
+
+
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDefFixedArray::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefFixedArray));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefFixedArray::onSave(void* clientContext) const
+{
+  ImplAAFTypeDefArray::onSave(clientContext);
+}
+
+void ImplAAFTypeDefFixedArray::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDefArray::onRestore(clientContext);
+}
