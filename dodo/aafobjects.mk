@@ -21,8 +21,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFRGBADescriptor \
 	AAFTextLocator \
 	AAFTIFFData \
-	AAFTimecodeStream \
-	AAFTimecodeStream12M \
 	AAFTypeDefSet \
 	AAFWAVEData
 
@@ -120,6 +118,8 @@ HUMAN_TYPED_IMPL = \
 	AAFTextClip \
 	AAFTransition \
 	AAFTIFFDescriptor \
+	AAFTimecodeStream \
+	AAFTimecodeStream12M \
 	AAFTypeDef \
 	AAFTypeDefInt \
 	AAFTypeDefRename \

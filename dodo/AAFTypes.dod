@@ -325,6 +325,12 @@ typedef enum _aafSwapNeeded_t
 	kAAFNeverSwap = 1
 } aafSwapNeeded_t;
 
+typedef enum _aafTimecodeSourceType_t
+{
+	kAAFTimecodeLTC = 0,
+	kAAFTimecodeVITC = 1
+} aafTimecodeSourceType_t;
+
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
 AD_CPP_QUOTE(\ * Mob specific data types)
