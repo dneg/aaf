@@ -268,7 +268,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 #ifdef BOB_TEST
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -303,7 +303,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -344,7 +344,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -390,7 +390,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -441,7 +441,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -497,7 +497,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -558,7 +558,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -624,7 +624,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -695,7 +695,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -771,7 +771,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -852,7 +852,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -938,7 +938,7 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT stat;
 
   Impl.this-module * ptr;
-  void * pO;
+  ImplAAFRoot * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
@@ -1172,17 +1172,24 @@ AAFRESULT STDMETHODCALLTYPE
 #c session by creating the first session object.
 #c
 #startm AD_BEGIN_SESSION 00
+
+#include "ImplAAFObjectCreation.h"
+
+extern "C" const aafClassID_t CLSID_AAFSession;
+
 AAFRESULT STDMETHODCALLTYPE
     AAFSession::BeginSession (aafProductIdentification_t * pIdent,
         AAFSession ** ppSession)
 {
 #ifdef BOB_TEST
-  AAFSession * pObj;
-  pObj = new AAFSession;
-  assert (pObj);
-  assert (ppSession);
-  *ppSession = pObj;
-  pObj->SetDefaultIdentification(pIdent);
+
+  assert(ppSession);
+  ImplAAFSession* pSession = static_cast<ImplAAFSession*>(CreateImpl(CLSID_AAFSession));
+  assert(pSession);
+  *ppSession = static_cast<AAFSession*>(pSession->GetContainer());
+
+  pSession->BeginSession(pIdent);
+
   return AAFRESULT_SUCCESS;
 
 #else
