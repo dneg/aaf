@@ -1555,15 +1555,13 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
 	OMF2::omfObject_t		mediaDescriptor;
-//	OMF2::omfProperty_t		OMFProperty;
-//	OMF2::omfClassID_t		locType, mediaDescriptorType;
 
 	IAAFEssenceDescriptor*	pEssenceDesc = NULL;
 	IAAFTapeDescriptor*		pTapeDesc = NULL;
 	IAAFFileDescriptor*		pFileDesc = NULL;
 	IAAFTIFFDescriptor*		pTiffDesc = NULL;	
 	IAAFAIFCDescriptor*		pAifcDesc = NULL;
-	IAAFUnixLocator*			pUnixLocator = NULL;
+	IAAFUnixLocator*		pUnixLocator = NULL;
 	IAAFLocator*			pLocator = NULL;
 
 	if (bVerboseMode)
@@ -1575,11 +1573,49 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 	{
 		if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassMDTP, (OMF2::omfErr_t *)&rc))
 		{
+			OMF2::omfTapeCaseType_t		formFactor;
+			OMF2::omfVideoSignalType_t	videoSignal;
+			OMF2::omfTapeFormatType_t	tapeFormat;
+			OMF2::omfLength_t			length;
+			char						manufacturer[64], model[64];
+			OMF2::omfInt32				manuSize, modelSize;
+
+			aafWChar*					pwManufacturer = NULL;
+			aafWChar*					pwModel = NULL;
+
 			rc = pDictionary->CreateInstance(&AUID_AAFTapeDescriptor,
 											 IID_IAAFTapeDescriptor,
 											 (IUnknown **)&pTapeDesc);
 			if (SUCCEEDED( rc) )
 			{
+				manuSize = modelSize = 64;
+				rc = OMF2::omfmTapeMobGetDescriptor(OMFFileHdl, 
+													obj,
+													&formFactor,
+													&videoSignal,
+													&tapeFormat,
+													&length,
+													manuSize, manufacturer,
+													modelSize, model);
+				if (SUCCEEDED(rc))
+				{
+					if (strlen(manufacturer) > 0)
+					{
+						UTLStrAToStrW(manufacturer, &pwManufacturer);
+						pTapeDesc->SetTapeManufacturer(pwManufacturer);
+						UTLMemoryFree(pwManufacturer);
+					}
+					if (strlen(model) > 0)
+					{
+						UTLStrAToStrW(model, &pwModel);
+						pTapeDesc->SetTapeModel(pwModel);
+						UTLMemoryFree(pwModel);
+					}
+					pTapeDesc->SetTapeFormFactor((aafTapeCaseType_t)formFactor);
+					pTapeDesc->SetSignalType((aafVideoSignalType_t)videoSignal);
+					pTapeDesc->SetTapeFormat((aafTapeFormatType_t)tapeFormat);
+					pTapeDesc->SetTapeLength((aafLength_t)length);
+				}
 				rc = pTapeDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssenceDesc);
 				pSourceMob->SetEssenceDescriptor(pEssenceDesc);
 				if (bVerboseMode)
@@ -1593,11 +1629,49 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 		}
 		else if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassTIFD, (OMF2::omfErr_t *)&rc) )
 		{
+			OMF2::omfBool			IsContiguous, IsUniform;
+			OMF2::omfInt32			leadingLines, trailingLines;
+			char					summary[1024];
+			OMF2::omfJPEGTableID_t	data;
+			OMF2::omfDDefObj_t		datakind;
+			
+			aafUInt32				bytesRead;
+
 			rc = pDictionary->CreateInstance(&AUID_AAFTIFFDescriptor,
 											 IID_IAAFTIFFDescriptor,
 											 (IUnknown **)&pTiffDesc);
 			if (SUCCEEDED( rc) )
 			{
+
+				rc = OMF2::omfsReadBoolean( OMFFileHdl,
+											mediaDescriptor,
+											OMF2::OMTIFDIsContiguous, &IsContiguous);
+				rc = OMF2::omfsReadBoolean( OMFFileHdl,
+											mediaDescriptor,
+											OMF2::OMTIFDIsUniform,
+											&IsUniform);
+				rc = OMF2::omfsReadInt32(OMFFileHdl,
+										 mediaDescriptor,
+										 OMF2::OMTIFDLeadingLines, 
+										 &leadingLines);
+				rc = OMF2::omfsReadInt32(OMFFileHdl,
+										 mediaDescriptor,
+										 OMF2::OMTIFDTrailingLines, 
+										 &trailingLines);
+				OMF2::omfiDatakindLookup(OMFFileHdl, "omfi:data:Picture", &datakind, (OMF2::omfErr_t *)&rc);
+				rc = OMF2::omfsReadDataValue(OMFFileHdl,
+											 mediaDescriptor,
+											 OMF2::OMTIFDSummary,
+											 datakind,
+											 summary,
+											 0,
+											 sizeof(summary),
+											 &bytesRead);
+				rc = OMF2::omfsReadJPEGTableIDType( OMFFileHdl,
+													mediaDescriptor,
+													OMF2::OMTIFDJPEGTableID, 
+													&data);
+
 				rc = pTiffDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssenceDesc);
 				pSourceMob->SetEssenceDescriptor(pEssenceDesc);
 				if (bVerboseMode)
