@@ -801,7 +801,7 @@ AD_CLASS_BEGIN\
     /*%08*/ .%09-adornment%10 .%09-indirection %11,
 
     // %18
-    /*%14*/ .%15-adornment%16 .%15-indirection %17),
+    /*%14*/ .%15-adornment%16 .%15-indirection %17,
 
     // %24
     /*%20*/ .%21-adornment%22 .%21-indirection %23) PURE;\
