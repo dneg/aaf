@@ -295,6 +295,10 @@ public:
 
 	void SetVideoLineMap( aafUInt32  numberElements, const aafInt32*  pVideoLineMap );
 
+	void SetCompression( const aafUID_t& compression );
+
+	aafUID_t GetCompression();
+
 private:
 	AxDigitalImageDescriptor();
 	AxDigitalImageDescriptor( const AxDigitalImageDescriptor& );

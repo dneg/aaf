@@ -357,6 +357,20 @@ AxDigitalImageDescriptor::AxDigitalImageDescriptor( IAAFDigitalImageDescriptorSP
 AxDigitalImageDescriptor::~AxDigitalImageDescriptor()
 {}
 
+void AxDigitalImageDescriptor::SetCompression( const aafUID_t& compression )
+{
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetCompression( compression ) );
+}
+		
+aafUID_t AxDigitalImageDescriptor::GetCompression()
+{
+	aafUID_t compression;
+
+	CHECK_HRESULT( _spIaafDigitalImageDescriptor->GetCompression( &compression ) );
+
+	return compression;
+}
+
 void AxDigitalImageDescriptor::SetStoredView( aafUInt32 StoredHeight, aafUInt32 StoredWidth)
 {
 	CHECK_HRESULT( _spIaafDigitalImageDescriptor->SetStoredView( StoredHeight, StoredWidth) );
