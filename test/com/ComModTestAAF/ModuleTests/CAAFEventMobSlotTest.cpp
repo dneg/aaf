@@ -157,7 +157,7 @@ extern "C" HRESULT CAAFEventMobSlot_test()
 
 // Test edit rate for the event mob slot.
 const aafRational_t EventMobSlotTest::_editRate = { 2997, 100 };
-const aafPosition_t _position = 0;
+const aafPosition_t EventMobSlotTest::_position = 0;
 const wchar_t *_eventComment = L"Event::Comment:This is a test event";
 
 EventMobSlotTest::EventMobSlotTest() :
@@ -265,7 +265,6 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
   IAAFComponent *pComponent = NULL;
   IAAFDataDef *pDataDef = NULL;
   IAAFComponent *pComp = NULL;
-  AAFRESULT	hr;
 
   CAAFBuiltinDefs defs (_pDictionary);
 
@@ -275,8 +274,8 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 		checkResult(defs.cdDataDef()->
 					CreateInstance (IID_IAAFDataDef,
 									(IUnknown **)&pDataDef));
-	  hr = pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data");
-	  hr = _pDictionary->RegisterDataDef (pDataDef);
+	  pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data");
+	  _pDictionary->RegisterDataDef (pDataDef);
 	// Create a concrete subclass of event
     checkResult(defs.cdCommentMarker()->
 				CreateInstance(IID_IAAFEvent, 
@@ -325,10 +324,8 @@ void EventMobSlotTest::CreateEventMobSlot()
 {
   assert(_pHeader && _pDictionary);
 
-  HRESULT hr = S_OK;
   aafPosition_t position;
   IAAFEvent *pEvent = NULL;
-  IAAFComponent *pComponent = NULL;
   IAAFSegment *pSegment = NULL;
   IAAFEventMobSlot *pEventMobSlot = NULL;
   IAAFMobSlot *pMobSlot = NULL;
@@ -427,7 +424,6 @@ void EventMobSlotTest::OpenEventMobSlot()
 {
   assert(_pHeader);
 
-  HRESULT hr = S_OK;
   IAAFMob *pMob = NULL;
   IEnumAAFMobSlots *pEnumSlots = NULL;
   IAAFMobSlot *pMobSlot = NULL;
@@ -515,7 +511,6 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
 {
   assert(_pHeader && _pDictionary);
 
-  HRESULT hr = S_OK;
   aafPosition_t position;
   IAAFSequence *pSequence = NULL;
   IAAFEvent *pEvent = NULL;
@@ -660,7 +655,6 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
 {
   assert(_pHeader);
 
-  HRESULT hr = S_OK;
   IAAFMob *pMob = NULL;
   IEnumAAFMobSlots *pEnumSlots = NULL;
   IAAFMobSlot *pMobSlot = NULL;
