@@ -537,7 +537,8 @@ void ImplAAFTypeDefInt::reorder(OMByte* bytes,
   assert (IsFixedSize());
   assert (PropValSize() == bytesSize);
   assert (bytes);
-  reorderInteger (bytes, bytesSize);
+  if (bytesSize > 1)
+	reorderInteger (bytes, bytesSize);
 }
 
 
