@@ -203,7 +203,30 @@ AAFRESULT STDMETHODCALLTYPE
 								   aafWChar*	pTapeName,
 								   aafInt32		bufSize)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFFindSourceInfo	*info = NULL;
+	ImplAAFMob				*mob = NULL;
+
+	XPROTECT()
+	{
+		CHECK(SearchSource (masterSlotID, 0, kTapeMob, NULL, NULL,
+									NULL, &info));
+		CHECK(info->GetMob(&mob));
+		CHECK(mob->GetName(pTapeName, bufSize));
+		info->ReleaseReference();
+		info = NULL;
+		mob->ReleaseReference();
+		mob = NULL;
+	}
+	XEXCEPT
+	{
+		if(info != NULL)
+			info->ReleaseReference();
+		if(mob != NULL)
+			mob->ReleaseReference();
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -423,7 +446,8 @@ AAFRESULT STDMETHODCALLTYPE
 									ImplAAFComponent**		ppThisCpnt,
 									ImplAAFFindSourceInfo**	ppSourceInfo)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return(InternalSearchSource(slotID, offset, mobKind, pMediaCrit, pEffectChoice,
+										   ppThisCpnt, ppSourceInfo));
 }
 
 //***********************************************************
