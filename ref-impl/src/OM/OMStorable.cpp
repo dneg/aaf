@@ -12,7 +12,7 @@
 
 OMStorable::OMStorable(void)
 : _persistentProperties(), _containingObject(0), _name(0),
-  _pathName(0), _containingProperty(0), _index(0)
+  _pathName(0), _containingProperty(0), _index(0), _store(0)
 {
   TRACE("OMStorable::OMStorable");
   _persistentProperties.setContainer(this);
@@ -30,6 +30,11 @@ OMStorable::~OMStorable(void)
   _name = 0;
   delete [] _pathName;
   _pathName = 0;
+}
+
+void OMStorable::save(void) const
+{
+  saveTo(*store());
 }
 
 void OMStorable::saveTo(OMStoredObject& s) const
@@ -79,6 +84,7 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   // give the object a name, all new objects need a name and so here
   // we baptize them
   object->setName(name);
+  object->setStore(&s);
   f->objectDirectory()->insert(object->pathName(), object);
   object->restoreContentsFrom(s);
   return object;
@@ -159,6 +165,25 @@ const char* OMStorable::pathName(void) const
   }
   ASSERT("Valid path name", validString(_pathName));
   return _pathName;
+}
+
+OMStoredObject* OMStorable::store(void) const
+{
+  if (_store == 0) {
+    OMStorable* container = containingObject();
+    ASSERT("Valid container", container != 0);
+    OMStorable* nonConstThis = const_cast<OMStorable*>(this);
+    nonConstThis->_store = container->store()->create(name());
+  }
+  POSTCONDITION("Valid store", _store != 0);
+  return _store;
+}
+
+void OMStorable::setStore(OMStoredObject* store)
+{
+  PRECONDITION("Valid store", store != 0);
+  PRECONDITION("No previous valid store", _store == 0);
+  _store = store;
 }
 
 char* OMStorable::makePathName(void)
