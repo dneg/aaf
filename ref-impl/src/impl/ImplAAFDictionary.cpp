@@ -126,7 +126,8 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _pBuiltinTypes (0),
 
   _initStarted   (AAFFalse),
-  _OKToInitProps (AAFFalse)
+  _OKToInitProps (AAFFalse),
+  _lastGeneratedPid (0)
 {
   _persistentProperties.put (_operationDefinitions.address());
   _persistentProperties.put (_parameterDefinitions.address());
@@ -311,6 +312,8 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
     pDictionary->setClassFactory(pDictionary);
   }
   
+  pDictionary->pvtSetSoid (AUID_AAFDictionary);
+
   return pDictionary;
 }
 
@@ -326,40 +329,86 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 
   // Is this a request to create the dictionary?
   if (memcmp(pAUID, &AUID_AAFDictionary, sizeof(aafUID_t)) == 0)
-  { // The result is just this instance.
-    result = const_cast<ImplAAFDictionary*>(this);
-    // Bump the reference count.
-    AcquireReference();
-  } 
+	{ // The result is just this instance.
+	  result = const_cast<ImplAAFDictionary*>(this);
+	  // Bump the reference count.
+	  AcquireReference();
+	} 
   else
-  { // Create an instance of the class corresponsing to the given
-    // stored object id.
-
-    // Try the built-in dictionary first.
-    //
-    result = pvtCreateBaseClassInstance(pAUID);
-    if (result == 0)
-    {
-      // Not in the built-in dictionary, try the current dictionary.
-      // TBD
-      //
-    }
-  }
-
-  if (NULL != result && ((ImplAAFDictionary *)result != this))
 	{
-	  // If we created an object then give it a reference to the
-	  // factory (dictionary) that was used to created it.
+	  // Create an instance of the class corresponsing to the given
+	  // stored object id.  In other words, we instantiate an
+	  // implementation object which can represent this stored object
+	  // in code.  In the case of built-in types, each one *has* a
+	  // code object which can represent it.  However in the case of
+	  // client-defined classes, the best we can do is instantiate the
+	  // most-derived code object which is an inheritance parent of
+	  // the desired class.
+
+	  // First see if this is a built-in class.
 	  //
-	  result->setClassFactory(this);
+	  result = pvtCreateBaseClassInstance(pAUID);
+	  while (result == 0)
+		{
+		  assert (pAUID);
+		  aafUID_t parentAUID = *pAUID;
+		  
+		  // Not a built-in class; find the nearest built-in parent.
+		  // That is, iterate up the inheritance hierarchy until we
+		  // find a class which we know how to instantiate.
+		  //
+		  ImplAAFClassDefSP pcd;
+		  AAFRESULT hr;
+		  hr = ((ImplAAFDictionary*)this)->LookupClass (&parentAUID, &pcd);
+		  if (AAFRESULT_FAILED (hr))
+			{
+			  // AUID does not correspond to any class in the
+			  // dictionary; bail out with NULL result
+			  assert (0 == result);
+			  break;
+			}
+		  pcd->pvtGetParentAUID (parentAUID);
+		  const aafUID_t kNullUID = { 0 } ;
+		  if (EqualAUID (&parentAUID, &kNullUID))
+			{
+			  // Class was apparently registered, but no appropriate
+			  // parent class found!  This should not happen, as every
+			  // registered class must have a registered parent class.
+			  // The only exception is AAFObject, which would have
+			  // been found by the earlier
+			  // pvtCreateBaseClassInstance() call.
+			  assert (0);
+			}
+		  result = pvtCreateBaseClassInstance(&parentAUID);
+		}
 	}
 
-  // Initialize the OM properties on this object.
-  //
-  ImplAAFObjectSP pObj;
-  pObj = static_cast<ImplAAFObject*>(result);
-  assert (pObj);
-  pvtInitObjectProperties (pObj);
+  if (result)
+	{
+	  ImplAAFObjectSP pObj;
+	  pObj = static_cast<ImplAAFObject*>(result);
+	  assert (pObj);
+
+	  if ((ImplAAFDictionary *)result != this)
+		{
+		  // If we created an object then give it a reference to the
+		  // factory (dictionary) that was used to created it.
+		  //
+		  result->setClassFactory(this);
+
+		  // Set this object's stored ID.  Be sure to set it to the
+		  // requested ID, not the instantiated one.  (These will be
+		  // different if the requested ID is a client-supplied
+		  // extension class.)
+		  assert (pAUID);
+		  pObj->pvtSetSoid (*pAUID);
+		}
+
+
+	  // Initialize the OM properties on this object.
+	  //
+	  pvtInitObjectProperties (pObj);
+	}
 
   return result;
 }
@@ -1932,15 +1981,73 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
   if (AAFRESULT_SUCCEEDED (hr))
 	{
 	  rOutPid = result;
-	  return AAFRESULT_SUCCESS;
 	}
+  else
+	{
+	  // Generate an om pid for user-extended properties (either in
+	  // user-extended classes, or from user-added properties to
+	  // existing classes).
+	  //
+	  // OM PID rules:
+	  // - guaranteed to be unique within this file
+	  // - not guaranteed to be unique across files
+	  // - all builtin properties have a fixed prop<->PID mapping
+	  // - all user properties not guaranted a mapping across files
+	  // - all builtin properties have *non-negative* PIDs
+	  // - all user properties have *negative* PIDs.
+	  // 
+	  // Specifics of this implementation:
+	  // If _lastGeneratedPid is zero, it means this is the first time
+	  // we've tried to do this since this dictionary was instantiated
+	  // in this memory space.  That could have occurred when opening
+	  // an existing file, which potentially has user PIDs already
+	  // allocated.  Therefore we'll have to look through all existing
+	  // properties to determine what user PIDs have already been
+	  // allocated.
+	  //
+	  if (0 >= _lastGeneratedPid)
+		{
+		  // _lastGeneratedPid cannot be positive!
+		  assert (0 == _lastGeneratedPid);
 
-  // This is where we'd generate an om pid for user-extended
-  // properties (either in user-extended classes, or from user-added
-  // properties to existing classes).
-  //
-  // However, for now we're only dealing with builtin types.
-  return E_FAIL;
+		  // must be signed!
+		  aafInt32 tmpUserPid = 0;
+		  // Make sure we aren't cheating ourselves
+		  assert (sizeof (OMPropertyId) == sizeof (aafInt32));
+
+		  // Need to determine which user PIDs have already been used.
+		  ImplEnumAAFClassDefsSP enumClassDefs;
+
+		  hr = GetClassDefinitions (&enumClassDefs);
+		  if (AAFRESULT_FAILED (hr))
+			return hr;
+		  ImplAAFClassDefSP classDef;
+		  while (AAFRESULT_SUCCEEDED
+				 (enumClassDefs->NextOne (&classDef)))
+			{
+			  ImplEnumAAFPropertyDefsSP enumPropDefs;
+			  hr = classDef->GetPropertyDefs (&enumPropDefs);
+			  if (AAFRESULT_FAILED (hr))
+				return hr;
+			  ImplAAFPropertyDefSP propDef;
+			  while (AAFRESULT_SUCCEEDED
+					 (enumPropDefs->NextOne (&propDef)))
+				{
+				  // must be signed!
+				  aafInt32 tmpPid = (aafInt32) propDef->OmPid ();
+				  if (tmpPid < tmpUserPid)
+					tmpUserPid = tmpPid;
+				}
+			}
+		  assert (tmpUserPid <= 0);
+		  _lastGeneratedPid = tmpUserPid;
+		}
+
+	  result = (OMPropertyId) --_lastGeneratedPid;
+	  assert (((aafInt32) result) < 0);
+	  rOutPid = result;
+	}
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -2061,4 +2168,3 @@ void ImplAAFDictionary::pvtObjFifo::Append (ImplAAFObject * obj)
 
 
 
-OMDEFINE_STORABLE(ImplAAFDictionary, AUID_AAFDictionary);
