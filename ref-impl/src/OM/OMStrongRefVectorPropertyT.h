@@ -242,7 +242,8 @@ ReferencedObject*
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::setValueAt");
   PRECONDITION("Valid index", index <= count());
-  
+  PRECONDITION("Valid object", object != 0);
+
   if (index == count()) {
     // This is an append, make sure the new element is defined.
     OMUInt32 localKey = nextLocalKey();
@@ -375,6 +376,8 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::appendValue(
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::appendValue");
 
+  PRECONDITION("Valid object", object != 0);
+
   setValueAt(object, count());
 
 }
@@ -390,6 +393,8 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::prependValue(
                                                 const ReferencedObject* object)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::prependValue");
+
+  PRECONDITION("Valid object", object != 0);
 
   insertAt(object, 0);
 }
@@ -407,6 +412,8 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::insert(
                                                 const ReferencedObject* object)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::insert");
+
+  PRECONDITION("Valid object", object != 0);
 
   appendValue(object);
 }
@@ -426,7 +433,8 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::insertAt(
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::insertAt");
 
   PRECONDITION("Valid index", index <= count());
-  
+  PRECONDITION("Valid object", object != 0);
+
   OMUInt32 localKey = nextLocalKey();
   wchar_t* name = elementName(localKey);
   VectorElement newElement(this, name, localKey);
@@ -640,6 +648,9 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::findIndex(
                            const ReferencedObject* object, size_t& index) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::findIndex");
+
+  PRECONDITION("Valid object", object != 0);
+
   bool result = false;
 
   VectorIterator iterator(_vector, OMBefore);
@@ -896,6 +907,7 @@ OMStrongReferenceVectorProperty<ReferencedObject>::setObjectAt(
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::setObjectAt");
 
   PRECONDITION("Valid index", index < count());
+  PRECONDITION("Valid object", object != 0);
 
   // TBS
   return 0;
@@ -935,7 +947,7 @@ OMStrongReferenceVectorProperty<ReferencedObject>::appendObject(
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::appendObject");
 
-  PRECONDITION("Valid object ", object != 0);
+  PRECONDITION("Valid object", object != 0);
 
   insertObjectAt(object, count());
 }
@@ -953,7 +965,7 @@ OMStrongReferenceVectorProperty<ReferencedObject>::prependObject(
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::prependObject");
 
-  PRECONDITION("Valid object ", object != 0);
+  PRECONDITION("Valid object", object != 0);
 
   insertObjectAt(object, 0);
 }
@@ -997,7 +1009,7 @@ OMStrongReferenceVectorProperty<ReferencedObject>::insertObjectAt(
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::insertObjectAt");
 
   PRECONDITION("Valid index", index <= count());
-  PRECONDITION("Valid object ", object != 0);
+  PRECONDITION("Valid object", object != 0);
 
   // TBS
 }
