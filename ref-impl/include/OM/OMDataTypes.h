@@ -233,14 +233,14 @@ typedef OMObjectIdentification OMStoredObjectIdentification;
 // For uniquely identifying an object instance.
 //
 typedef OMObjectIdentification OMUniqueObjectIdentification;
-const OMUniqueObjectIdentification nullOMUniqueObjectIdentification = {0};
+const OMUniqueObjectIdentification nullOMUniqueObjectIdentification = {0,0,0,{0}};
 
 // For backwards compatibility - all instances of OMClassId should
 // eventually be replaced with OMStoredObjectIdentification.
 //
 typedef OMStoredObjectIdentification OMClassId;
 
-const OMClassId nullOMClassId = {0};
+const OMClassId nullOMClassId = {0,0,0,{0}};
 
 // A UMID in all but name.
 //
@@ -334,7 +334,7 @@ inline bool operator > (const OMKLVKey& lhs,
 // Stored object encodings
 //
 typedef OMObjectIdentification OMStoredObjectEncoding;
-const OMStoredObjectEncoding nullOMStoredObjectEncoding = {0};
+const OMStoredObjectEncoding nullOMStoredObjectEncoding = {0,0,0,{0}};
 
 // Property instance tags.
 //
