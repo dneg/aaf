@@ -1,17 +1,13 @@
 // @doc INTERNAL
 // @com This file implements the module test for CAAFPluginDescriptor
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
+/***********************************************\
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \******************************************/
-
- 
-
-
 
 
 #include "AAF.h"
@@ -30,6 +26,7 @@ static wchar_t *manuf2URL = L"www.avid.com";
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "aafUtils.h"
 
@@ -123,15 +120,16 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	IAAFFile*		pFile = NULL;
-  IAAFHeader *        pHeader = NULL;
-  IAAFDictionary*  pDictionary = NULL;
+  IAAFHeader *      pHeader = NULL;
+  IAAFDictionary*	pDictionary = NULL;
   IAAFDefObject*	pPlugDef = NULL;
   IAAFCodecDef*		pCodecDef = NULL;
   IAAFPluginDescriptor *pDesc;
   IAAFNetworkLocator *pNetLoc, *pNetLoc2, *pNetLoc3;
-  IAAFLocator *pLoc, *pLoc2, *pLoc3;
+  IAAFLocator		*pLoc, *pLoc2, *pLoc3;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
-  bool bFileOpen = false;
+  bool				bFileOpen = false;
+  aafUID_t			uid;
 	HRESULT			hr = S_OK;
 /*	long			test;
 */
@@ -200,6 +198,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
                                           (void **)&pCodecDef));
+	uid = DDEF_Matte;
+	checkResult(pCodecDef->AppendEssenceKind (&uid));
 	checkResult(pDictionary->RegisterCodecDefinition(pCodecDef));
 	/**/
 	checkResult(pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
