@@ -146,12 +146,12 @@ OMSSIStorage::StgCreateStorageEx( const TCHAR FAR* in_filename,
 	RootStorage* rootstorage = 0;
 	Storage *storage = 0;
 	*out_storage = 0;
-	wchar_t storageName[256];
+	wchar_t storageName[FILENAME_MAX];
 
 #ifndef OM_UNICODE_APIS
-	convertStringToWideString(storageName, in_filename, 256);
+	convertStringToWideString(storageName, in_filename, FILENAME_MAX);
 #else
-	copyWideString (storageName, in_filename, 256);
+	copyWideString (storageName, in_filename, FILENAME_MAX);
 #endif
 	sresult status = createStructuredStorageEx(
 						storageName,
@@ -190,11 +190,11 @@ OMSSIStorage::StgOpenStorageEx( const TCHAR FAR* in_filename,
 	RootStorage* rootstorage = 0;
 	Storage *storage = 0;
 	*out_storage = 0;
-	wchar_t storageName[256];
+	wchar_t storageName[FILENAME_MAX];
 #ifndef OM_UNICODE_APIS
-	convertStringToWideString(storageName, in_filename, 256);
+	convertStringToWideString(storageName, in_filename, FILENAME_MAX);
 #else
-	copyWideString (storageName, in_filename, 256);
+	copyWideString (storageName, in_filename, FILENAME_MAX);
 #endif
 	sresult status = openStructuredStorageEx(
 						storageName,
@@ -292,11 +292,11 @@ OMSSIStorage::CreateStream(
 
 	Stream *stream;
 	sresult status = SSTG_OK;
-	wchar_t streamName[256];
+	wchar_t streamName[FILENAME_MAX];
 #ifndef OM_UNICODE_APIS
-	convertStringToWideString(streamName, pwcsName, 256);
+	convertStringToWideString(streamName, pwcsName, FILENAME_MAX);
 #else
-	copyWideString (streamName, pwcsName, 256);
+	copyWideString (streamName, pwcsName, FILENAME_MAX);
 #endif
 	if( (status = ::openStream( _storage, streamName, &stream)) == SSTG_OK )
 	{
@@ -328,11 +328,11 @@ OMSSIStorage::OpenStream(
 
 	Stream *stream;
 	sresult status = SSTG_OK;
-	wchar_t streamName[256];
+	wchar_t streamName[FILENAME_MAX];
 #ifndef OM_UNICODE_APIS
-	convertStringToWideString(streamName, pwcsName, 256);
+	convertStringToWideString(streamName, pwcsName, FILENAME_MAX);
 #else
-	copyWideString (streamName, pwcsName, 256);
+	copyWideString (streamName, pwcsName, FILENAME_MAX);
 #endif
 	if( (status = ::openStream( _storage, streamName, &stream)) == SSTG_OK )
 	{
@@ -358,11 +358,11 @@ OMSSIStorage::CreateStorage(
 	//FIXME: not interpreting grfMode
 	sresult status = SSTG_OK;
 	Storage *storage;
-	wchar_t storageName[256];
+	wchar_t storageName[FILENAME_MAX];
 #ifndef OM_UNICODE_APIS
-	convertStringToWideString(storageName, pwcsName, 256);
+	convertStringToWideString(storageName, pwcsName, FILENAME_MAX);
 #else
-	copyWideString (storageName, pwcsName, 256);
+	copyWideString (storageName, pwcsName, FILENAME_MAX);
 #endif
 
 	//If storage already exists reopen, else create new storage
@@ -390,11 +390,11 @@ OMSSIStorage::OpenStorage(
 	//FIXME: not interpreting grfMode
 	sresult status = SSTG_OK;
 	Storage *storage;
-	wchar_t storageName[256];
+	wchar_t storageName[FILENAME_MAX];
 #ifndef OM_UNICODE_APIS
-	convertStringToWideString(storageName, pwcsName, 256);
+	convertStringToWideString(storageName, pwcsName, FILENAME_MAX);
 #else
-	copyWideString (storageName, pwcsName, 256);
+	copyWideString (storageName, pwcsName, FILENAME_MAX);
 #endif
 
 	//If storage already exists reopen, else create new storage

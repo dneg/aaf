@@ -184,7 +184,7 @@ private:
 	GsfStorage*		_storage;
 	GsfAccessMode	_mode;				// TODO: does gsf store this somewhere?
 	ULONG 			_referenceCount;
-	char 			_storageName[256];	// TODO: does gsf store this somewhere?
+	char 			_storageName[FILENAME_MAX];	// TODO: does gsf store this somewhere?
 };
 
 
@@ -269,7 +269,7 @@ private:
 	GsfStream*			_stream;
 	GsfAccessMode	_mode;				// TODO: does gsf store this somewhere?
 	ULONG 			_referenceCount;
-	char 			_streamName[256];	// TODO: does gsf store this somewhere?
+	char 			_streamName[FILENAME_MAX];	// TODO: does gsf store this somewhere?
 };
 
 void OMGSFInitialize();
