@@ -28,15 +28,8 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
-#if defined(_MAC) || defined(macintosh)
-#include <initguid.h> // define all of the AAF guids.
+// Include the AAF interface declarations.
 #include "AAF.h"
-#else
-#include "AAF.h"
-// TODO: This should not be here, I added them for now to get a good link.
-const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-#endif
-
 
 
 // Include the defintions for the AAF Stored Object identifiers.
