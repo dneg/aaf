@@ -29,6 +29,8 @@ targets.mk : aafobjects.mk
 		echo '\' >> targets.tmp ; \
 		echo '	'$$base.all \\\c>> targets.tmp ; \
 	  done
+	@ echo '\' >> targets.tmp
+	@ echo '	'AAFModule.all \\\c>> targets.tmp ;
 	@ echo '' >> targets.tmp
 	@ echo '' >> targets.tmp
 	@ echo FIDL_TARGETS = \\\c >> targets.tmp 
@@ -36,6 +38,8 @@ targets.mk : aafobjects.mk
 		echo '\' >> targets.tmp ; \
 		echo '	'$$base.fidl \\\c>> targets.tmp ; \
 	  done
+	@ echo '\' >> targets.tmp
+	@ echo '	'AAFModule.fidl \\\c>> targets.tmp ;
 	@ echo '' >> targets.tmp
 	@ echo '' >> targets.tmp
 	@ echo FREFH_TARGETS = \\\c >> targets.tmp 
@@ -43,6 +47,8 @@ targets.mk : aafobjects.mk
 		echo '\' >> targets.tmp ; \
 		echo '	'$$base.frefh \\\c>> targets.tmp ; \
 	  done
+	@ echo '\' >> targets.tmp
+	@ echo '	'AAFModule.frefh \\\c>> targets.tmp ;
 	@ echo '' >> targets.tmp
 	@ echo '' >> targets.tmp
 	@ echo PLUGIN_TARGETS = '\' >> targets.tmp 

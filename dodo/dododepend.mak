@@ -20,6 +20,13 @@ depend.mk : aafobjects.mk
 	@ echo Creating depend.tmp ...
 	@ rm -f depend.tmp
 	@ echo "#" This file automatically generated make. > depend.tmp
+	@ echo "#" Special case AAFModule since no object is to be built only headers... >> depend.tmp
+	@ echo AAFModule.all...
+	@ echo AAFModule.all : AAFModule.fidl >> depend.tmp
+	@ echo AAFModule.all : AAFModule.frefh >> depend.tmp
+	@ echo AAFModule.fidl : macros/fidl.mac macros/base.mac >> depend.tmp
+	@ echo AAFModule.frefh : macros/frefh.mac macros/base.mac >> depend.tmp
+	@ echo "" >> depend.tmp
 	@ echo "#" Special case AAFTypes since no object is to be built only headers... >> depend.tmp
 	@ echo AAFTypes.all...
 	@ echo AAFTypes.all : AAFTypes.idl >> depend.tmp
