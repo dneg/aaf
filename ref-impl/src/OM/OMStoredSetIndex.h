@@ -54,6 +54,14 @@ public:
     //          this <c OMStoredSetIndex>.
   void setFirstFreeKey(OMUInt32 firstFreeKey);
 
+    // @cmember The last free key in the set of local keys assigned to
+    //          this <c OMStoredSetIndex>.
+  OMUInt32 lastFreeKey(void) const;
+
+    // @cmember Set the last free key in the set of local keys assigned to
+    //          this <c OMStoredSetIndex>.
+  void setLastFreeKey(OMUInt32 lastFreeKey);
+
   size_t keySize(void) const;
 
   OMPropertyId keyPropertyId(void) const;
@@ -88,6 +96,7 @@ public:
 private:
 
   OMUInt32 _firstFreeKey;
+  OMUInt32 _lastFreeKey;
   size_t _capacity;
   size_t _entries;
   OMPropertyId _keyPropertyId; // Id of property that is the key

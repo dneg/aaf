@@ -54,6 +54,14 @@ public:
     //          this <c OMStoredVectorIndex>.
   void setFirstFreeKey(OMUInt32 firstFreeKey);
 
+    // @cmember The last free key in the set of local keys assigned to
+    //          this <c OMStoredVectorIndex>.
+  OMUInt32 lastFreeKey(void) const;
+
+    // @cmember Set the last free key in the set of local keys assigned to
+    //          this <c OMStoredVectorIndex>.
+  void setLastFreeKey(OMUInt32 lastFreeKey);
+
     // @cmember Insert a new element in this <c OMStoredVectorIndex>
     //          at position <p position> with local key <p localKey>.
     //          The local key of an element is an integer.
@@ -78,6 +86,7 @@ public:
 private:
 
   OMUInt32 _firstFreeKey;
+  OMUInt32 _lastFreeKey;
   size_t _capacity;
   size_t _entries;
   OMUInt32* _localKeys;

@@ -34,7 +34,8 @@
 OMStoredSetIndex::OMStoredSetIndex(size_t capacity,
                                    OMUInt32 keyPid,
                                    OMUInt32 keySize)
-: _firstFreeKey(0), _capacity(capacity), _entries(0),
+: _firstFreeKey(0), _lastFreeKey(~(OMUInt32)0),
+  _capacity(capacity), _entries(0),
   _keyPropertyId(keyPid), _keySize(keySize),
   _localKeys(0), _referenceCounts(0), _keys(0)
 {
@@ -86,6 +87,27 @@ void OMStoredSetIndex::setFirstFreeKey(OMUInt32 firstFreeKey)
   TRACE("OMStoredSetIndex::setFirstFreeKey");
 
   _firstFreeKey = firstFreeKey;
+}
+
+  // @mfunc The last free key in the set of local keys assigned to
+  //        this <c OMStoredSetIndex>.
+  //   @rdesc The highest previously allocated local key.
+  //   @this const
+OMUInt32 OMStoredSetIndex::lastFreeKey(void) const
+{
+  TRACE("OMStoredSetIndex::lastFreeKey");
+
+  return _lastFreeKey;
+}
+
+  // @mfunc Set the last free key in the set of local keys assigned to
+  //        this <c OMStoredSetIndex>.
+  //   @parm The highest allocated local key.
+void OMStoredSetIndex::setLastFreeKey(OMUInt32 lastFreeKey)
+{
+  TRACE("OMStoredSetIndex::setLastFreeKey");
+
+  _lastFreeKey = lastFreeKey;
 }
 
 size_t OMStoredSetIndex::keySize(void) const

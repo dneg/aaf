@@ -32,7 +32,8 @@
   // @mfunc Constructor.
   //   @parm The capacity of this <c OMStoredVectorIndex>.
 OMStoredVectorIndex::OMStoredVectorIndex(size_t capacity)
-: _firstFreeKey(0), _capacity(capacity), _entries(0), _localKeys(0)
+: _firstFreeKey(0), _lastFreeKey(~(OMUInt32)0),
+  _capacity(capacity), _entries(0), _localKeys(0)
 {
   TRACE("OMStoredVectorIndex::OMStoredVectorIndex");
 
@@ -72,6 +73,27 @@ void OMStoredVectorIndex::setFirstFreeKey(OMUInt32 firstFreeKey)
   TRACE("OMStoredVectorIndex::setFirstFreeKey");
 
   _firstFreeKey = firstFreeKey;
+}
+
+  // @mfunc The last free key in the set of local keys assigned to
+  //        this <c OMStoredVectorIndex>.
+  //   @rdesc The highest previously allocated local key.
+  //   @this const
+OMUInt32 OMStoredVectorIndex::lastFreeKey(void) const
+{
+  TRACE("OMStoredVectorIndex::lastFreeKey");
+
+  return _lastFreeKey;
+}
+
+  // @mfunc Set the last free key in the set of local keys assigned to
+  //        this <c OMStoredVectorIndex>.
+  //   @parm The highest allocated local key.
+void OMStoredVectorIndex::setLastFreeKey(OMUInt32 lastFreeKey)
+{
+  TRACE("OMStoredVectorIndex::setLastFreeKey");
+
+  _lastFreeKey = lastFreeKey;
 }
 
   // @mfunc Insert a new element in this <c OMStoredVectorIndex>
