@@ -134,10 +134,17 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFNestedScope::CountSegments (aafUInt32 * pResult)
 {
-  if(pResult == NULL)
-	return(AAFRESULT_NULL_PARAM);
+  // Validate input pointer...
+  if (NULL == pResult)
+    return (AAFRESULT_NULL_PARAM);
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  size_t numSegments;
+
+	_slots.getSize(numSegments);
+	
+	*pResult = numSegments;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 
