@@ -21,7 +21,7 @@ AD_CLASS_UUID(66e855f1, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(66e855f0, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
-AD_XMETHOD1(SetInitialValue,
+AD_XMETHOD1(Initialize,
 			[in],
 			objPass,
 			aafUID_t *,
@@ -34,7 +34,8 @@ AD_XMETHOD1(SetInitialValue,
   // added to the length of the sequence.
   // 
   // Succeeds if all of the following are true:
-  // - the pDatadef pointer is valid.
+  // - this object has not yet been initialized.
+  // - the pDataDef pointer is valid.
   // 
   // If this method fails no state is changed.
   // 
@@ -44,6 +45,9 @@ AD_XMETHOD1(SetInitialValue,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
   //
   // AAFRESULT_NULL_PARAM
   //   - pDatadef is null.)
@@ -68,6 +72,7 @@ AD_XMETHOD1(AppendComponent,
   // reference count of the component is incremented.
   // 
   // Succeeds if all of the following are true:
+  // - this object has already been initialized.
   // - the pComponent pointer is valid.
   // 
   // If this method fails no state is changed.
@@ -78,6 +83,9 @@ AD_XMETHOD1(AppendComponent,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
   //
   // AAFRESULT_NULL_PARAM
   //   - pComponent is null.
@@ -95,8 +103,7 @@ AD_XMETHOD1(AppendComponent,
   //     sequence can not contain back to back transitions.
   //
   // AAFRESULT_INSUFF_TRAN_MATERIAL
-  //   - There is not enough source material to add this component.
-  //)
+  //   - There is not enough source material to add this component.)
 
 
 AD_XMETHOD1(RemoveComponent,
@@ -110,7 +117,8 @@ AD_XMETHOD1(RemoveComponent,
   // of the sequence is decremented by the size of the component.
   // 
   // Succeeds if all of the following are true:
-  // - the -pComponent pointer is valid.
+  // - this object has already been initialized.
+  // - the pComponent pointer is valid.
   // 
   // If this method fails no state is changed.
   // 
@@ -120,6 +128,9 @@ AD_XMETHOD1(RemoveComponent,
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
   //
   // AAFRESULT_NULL_PARAM
   //   - pComponent is null.)
@@ -134,6 +145,7 @@ AD_XMETHOD1(GetNumComponents,
 			This function returns the number of components in the sequence.
   // 
   // Succeeds if all of the following are true:
+  // - this object has already been initialized.
   // - the pNumCpnts pointer is valid.
   // 
   // If this method fails no state is changed.
@@ -145,6 +157,9 @@ AD_XMETHOD1(GetNumComponents,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
   // AAFRESULT_NULL_PARAM
   //   - pNumCpnts is null.)
 
@@ -155,10 +170,11 @@ AD_XMETHOD1(EnumComponents,
 			EnumAAFComponents,
 			ppEnum,
 			Component Enumeration,
-			Places an IEnumAAFComponents enumerator for the components contained in the sequence
-  // into the *ppEnum argument.
+			Places an IEnumAAFComponents enumerator for the components
+  // contained in the sequence into the *ppEnum argument.
   // 
   // Succeeds if all of the following are true:
+  // - this object has already been initialized.
   // - the ppEnum pointer is valid.
   // 
   // If this method fails nothing will be written to *ppEnum.
@@ -170,12 +186,14 @@ AD_XMETHOD1(EnumComponents,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.
   //
   // E_FAIL
-  //   - Failed to create the enumerator.
-  //)
+  //   - Failed to create the enumerator.)
 
 
 AD_OVERRIDE(.method-SegmentOffsetToTC)
