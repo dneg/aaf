@@ -34,10 +34,6 @@
 #include "ImplAAFPropertyDef.h"
 #endif
 
-//#ifndef __ImplAAFDefObject_h__
-//#include "ImplAAFDefObject.h"
-//#endif
-
 #ifndef __ImplAAFTypeDef_h__
 #include "ImplAAFTypeDef.h"
 #endif
@@ -211,6 +207,7 @@ AAFRESULT STDMETHODCALLTYPE
       const aafCharacter *  pName,
       ImplAAFTypeDef *      pTypeDef,
       aafBool               isOptional,
+      aafBool               isIsUniqueIdentifier,
       ImplAAFPropertyDef ** ppPropDef)
 {
   // This will only work if this class has not yet been registered.
@@ -246,10 +243,25 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
+  // Check that this class or any parent class is already uniquely
+  // identified.
+  if (isIsUniqueIdentifier)
+  {
+    aafBoolean_t alreadyUniquelyIdentified = kAAFFalse;
+    hr = IsUniquelyIdentified(&alreadyUniquelyIdentified);
+    if (AAFRESULT_FAILED(hr))
+      return hr;
+    
+    // "There can be only one" unique identifier per class.
+    if (alreadyUniquelyIdentified)
+      return AAFRESULT_ALREADY_UNIQUELY_IDENTIFIED;
+  }
+
   return pvtRegisterPropertyDef (id,
 								 pName,
 								 typeId,
 								 isOptional,
+                 isIsUniqueIdentifier,
 								 ppPropDef);
 }
 
@@ -287,6 +299,7 @@ AAFRESULT STDMETHODCALLTYPE
 								 pName,
 								 typeId,
 								 kAAFTrue,
+                 kAAFFalse, /* cannot be a unique identifier */
 								 ppPropDef);
 }
 
@@ -439,6 +452,103 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+
+// Check that this class or any parent class is already uniquely
+// identified.
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFClassDef::IsUniquelyIdentified (
+      aafBoolean_t * isUniquelyIdentified)
+{
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+	if (! isUniquelyIdentified)
+    return AAFRESULT_NULL_PARAM;
+	
+  if (NULL != pvtGetUniqueIdentifier())
+    *isUniquelyIdentified = kAAFTrue;
+  else
+    *isUniquelyIdentified = kAAFFalse;
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+// Check that this class or any parent class is already uniquely
+// identified.
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFClassDef::GetUniqueIdentifier (
+      ImplAAFPropertyDef ** ppUniqueIdentifier)
+{
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+	if (! ppUniqueIdentifier)
+    return AAFRESULT_NULL_PARAM;
+
+  *ppUniqueIdentifier = pvtGetUniqueIdentifier();
+  if (*ppUniqueIdentifier)
+  {
+    (*ppUniqueIdentifier)->AcquireReference();
+    return AAFRESULT_SUCCESS;
+  }
+  else
+  {
+    // The unique identifier property in property definition
+    // is optional. So if our low-level search did not find
+    // a property definition with this property we should 
+    // return corresponding result code.
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+}
+
+
+// Find the unique identifier property defintion for this class or any parent class
+// (RECURSIVE)
+ImplAAFPropertyDef * ImplAAFClassDef::pvtGetUniqueIdentifier(void) // result is NOT reference counted.
+{
+  ImplAAFPropertyDef *result = NULL;
+
+  aafBoolean_t isRoot, isUniquelyIdentified;
+  AAFRESULT hr = IsRoot(&isRoot);
+  if (AAFRESULT_FAILED(hr))
+    return NULL;
+
+  // Look for the unique identifier in the parent class(es) before looking in the
+  // current class definition.
+  if (!isRoot)
+  {
+    ImplAAFClassDefSP pParent;
+    hr = GetParent(&pParent);
+    if (AAFRESULT_FAILED(hr))
+      return NULL;
+
+    result = pParent->pvtGetUniqueIdentifier();
+  }
+
+  // If we have not already found the unique identifier in a parent
+  // class then continue to look in this class' propert definitions.
+  if (!result)
+  {
+	  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFPropertyDef>propertyDefinitions(_Properties);
+	  while(++propertyDefinitions)
+	  {
+		  ImplAAFPropertyDef *pProperty = propertyDefinitions.value();
+		  if (pProperty)
+		  {
+		    hr = pProperty->GetIsUniqueIdentifier(&isUniquelyIdentified);
+        if (AAFRESULT_FAILED(hr))
+          return NULL;
+        if (isUniquelyIdentified)
+        {
+          result = pProperty;
+          break;
+        }
+		  }
+	  }
+  }
+
+  return result;
+}
+
+
 // SetParent is SDK INTERNAL
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::SetParent (
@@ -493,6 +603,7 @@ AAFRESULT STDMETHODCALLTYPE
       const aafCharacter *  pName,
       const aafUID_t &      typeId,
       aafBool               isOptional,
+      aafBool               isUniqueIdentifier,
       ImplAAFPropertyDef ** ppPropDef)
 {
   if (! pName) return AAFRESULT_NULL_PARAM;
@@ -515,7 +626,8 @@ AAFRESULT STDMETHODCALLTYPE
 								omPid,
 								pName,
 								typeId,
-								isOptional));
+								isOptional,
+                isUniqueIdentifier));
 
 //  ImplAAFPropertyDef * pdTemp = pd;
 //  _Properties.appendValue(pdTemp);

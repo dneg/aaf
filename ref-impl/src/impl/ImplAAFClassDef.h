@@ -107,6 +107,9 @@ public:
          // @parm [in] true if new property is to be optional
          aafBool  isOptional,
 
+         // @parm [in] true if new property is a unique identifier
+         aafBool  isUniqueIdentifier,
+
          // @parm [out] return pointer to newly created property def
          ImplAAFPropertyDef ** ppPropDef);
 
@@ -165,6 +168,21 @@ public:
     IsRoot
         (aafBool* isRootClass);
 
+  //****************
+  // IsUniquelyIdentified
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsUniquelyIdentified
+        (aafBoolean_t * isUniquelyIdentified);
+
+  //****************
+  // GetUniqueIdentifier
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetUniqueIdentifier
+        (ImplAAFPropertyDef ** ppUniqueIdentifier);
+
+
 public:
 
   //****************
@@ -208,6 +226,7 @@ public:
          const aafCharacter *  pName,
          const aafUID_t & typeId,
          aafBool  isOptional,
+         aafBool  isUniqueIdentifier,
          ImplAAFPropertyDef ** ppPropDef);
 
 
@@ -234,6 +253,10 @@ public:
   void AssurePropertyTypesLoaded ();
 
   void InitOMProperties (ImplAAFObject * pObj);
+
+  // Find the unique identifier property defintion for this class or any parent class
+  // (RECURSIVE)
+  ImplAAFPropertyDef * pvtGetUniqueIdentifier(void); // result is NOT reference counted.
 
 private:
 

@@ -537,7 +537,8 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 			 propInfo->tag,
 			 propInfo->name,
 			 *propInfo->pTypeGuid,
-			 propInfo->mandatory ? kAAFFalse : kAAFTrue);
+			 propInfo->mandatory ? kAAFFalse : kAAFTrue,
+			 propInfo->isUniqueIdentifier ? kAAFTrue : kAAFFalse);
 
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  propDef->SetOMPropCreateFunc (propInfo->omPropCreateFunc);
@@ -726,6 +727,7 @@ void ImplAAFBuiltinClasses::RegisterBuiltinProperties
 				 sBuiltinPropTable[i].name,
 				 *sBuiltinPropTable[i].pTypeGuid,
 				 sBuiltinPropTable[i].mandatory ? kAAFFalse : kAAFTrue,
+				 sBuiltinPropTable[i].isUniqueIdentifier ? kAAFTrue : kAAFFalse,
 				 &pd);
 			  assert (AAFRESULT_SUCCEEDED (hr));
 
