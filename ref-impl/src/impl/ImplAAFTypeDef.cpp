@@ -205,7 +205,7 @@ OMProperty * ImplAAFTypeDef::pvtCreateOMProperty
    const aafCharacter * name) const
 {
   assert (name);
-  size_t wNameLen = wcslen (name);
+  size_t wNameLen = wcslen (name) + 1;
 
   // Convert the prop name
   char * nameBuf = new char [wNameLen];
