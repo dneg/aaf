@@ -82,10 +82,10 @@ function printHeader() {
 function printRow(date, name, files, comments, color) {
   printf("\
 <TR>\n\
-  <TD width=\"50\" height=\"22\">%s</TD>\n\
-  <TD height=\"22\" width=\"112\" bgcolor=\"%s\">%s</TD>\n\
-  <TD colspan=\"2\" height=\"22\" bgcolor=\"%s\">%s</TD>\n\
-  <TD colspan=\"3\" height=\"22\" bgcolor=\"%s\">%s</TD>\n\
+  <TD>%s</TD>\n\
+  <TD bgcolor=\"%s\">%s</TD>\n\
+  <TD bgcolor=\"%s\">%s</TD>\n\
+  <TD bgcolor=\"%s\">%s</TD>\n\
 </TR>\n",
     date, color, name, color, files, color, comments);
 }
