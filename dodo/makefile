@@ -25,9 +25,12 @@ run:
 								   
 DODO_TARGETS = \
 	AAFAttribute.all \
+	AAFAttributeArray.all \
 	AAFComponent.all \
 	AAFCompositionMob.all \
 	AAFConstValue.all \
+	AAFControlPoint.all \
+	AAFDataDefinition.all \
 	AAFEdgecode.all \
 	AAFFiller.all \
 	AAFInt64.all \
@@ -35,7 +38,8 @@ DODO_TARGETS = \
 	AAFLocator.all \
 	AAFMediaDescriptor.all \
 	AAFMediaFileDescriptor.all \
-	AAFMediaFilmDescriptor.all \
+	AAFMediaTapeDescriptor.all \
+	AAFMediaTapeDescriptor.all \
 	AAFMediaGroup.all  \
 	AAFObject.all \
 	AAFMob.all  \
@@ -51,12 +55,16 @@ DODO_TARGETS = \
 	AAFSourceReference.all \
 	AAFString.all \
 	AAFStringAttribute.all \
+	AAFTimecode.all \
+	AAFTimecodeStream.all \
+	AAFTimecodeStream12M.all \
 	AAFUInt64.all \
 	AAFUnitTest.all \
 	AAFUnixLocator.all \
 	AAFVaryingValue.all \
 	AAFWindowsLocator.all \
 	AAFMedia.all
+
 # Jeff hasn't finished with these yet
 #	AAFMediaTapeDescriptor.all \
 #
@@ -134,6 +142,19 @@ AAFAttribute.comh : AAFAttribute.exp macros/comh.mac
 AAFAttribute.implc : AAFAttribute.exp macros/implc.mac
 AAFAttribute.implh : AAFAttribute.exp macros/implh.mac
 
+AAFAttributeArray.all : AAFAttributeArray.cpp AAFAttributeArray.h
+AAFAttributeArray.all : AAFAttributeArray.comc AAFAttributeArray.comh
+AAFAttributeArray.all : AAFAttributeArray.exp AAFAttributeArray.idl
+AAFAttributeArray.all : AAFAttributeArray.implc AAFAttributeArray.implh
+AAFAttributeArray.exp : AAFUnitTest.exp AAFObject.exp macros/exp.mac
+AAFAttributeArray.h : AAFAttributeArray.exp macros/h.mac
+AAFAttributeArray.cpp : AAFAttributeArray.exp macros/cpp.mac
+AAFAttributeArray.idl : AAFAttributeArray.exp macros/idl.mac
+AAFAttributeArray.comc : AAFAttributeArray.exp macros/comc.mac
+AAFAttributeArray.comh : AAFAttributeArray.exp macros/comh.mac
+AAFAttributeArray.implc : AAFAttributeArray.exp macros/implc.mac
+AAFAttributeArray.implh : AAFAttributeArray.exp macros/implh.mac
+
 AAFComponent.all : AAFComponent.cpp AAFComponent.h
 AAFComponent.all : AAFComponent.comc AAFComponent.comh
 AAFComponent.all : AAFComponent.exp AAFComponent.idl
@@ -172,6 +193,32 @@ AAFConstValue.comc : AAFConstValue.exp macros/comc.mac
 AAFConstValue.comh : AAFConstValue.exp macros/comh.mac
 AAFConstValue.implc : AAFConstValue.exp macros/implc.mac
 AAFConstValue.implh : AAFConstValue.exp macros/implh.mac
+
+AAFControlPoint.all : AAFControlPoint.cpp AAFControlPoint.h
+AAFControlPoint.all : AAFControlPoint.comc AAFControlPoint.comh
+AAFControlPoint.all : AAFControlPoint.exp AAFControlPoint.idl
+AAFControlPoint.all : AAFControlPoint.implc AAFControlPoint.implh
+AAFControlPoint.exp : AAFUnitTest.exp macros/exp.mac
+AAFControlPoint.h : AAFControlPoint.exp macros/h.mac
+AAFControlPoint.cpp : AAFControlPoint.exp macros/cpp.mac
+AAFControlPoint.idl : AAFControlPoint.exp macros/idl.mac
+AAFControlPoint.comc : AAFControlPoint.exp macros/comc.mac
+AAFControlPoint.comh : AAFControlPoint.exp macros/comh.mac
+AAFControlPoint.implc : AAFControlPoint.exp macros/implc.mac
+AAFControlPoint.implh : AAFControlPoint.exp macros/implh.mac
+
+AAFDataDefinition.all : AAFDataDefinition.cpp AAFDataDefinition.h
+AAFDataDefinition.all : AAFDataDefinition.comc AAFDataDefinition.comh
+AAFDataDefinition.all : AAFDataDefinition.exp AAFDataDefinition.idl
+AAFDataDefinition.all : AAFDataDefinition.implc AAFDataDefinition.implh
+AAFDataDefinition.exp : AAFUnitTest.exp macros/exp.mac
+AAFDataDefinition.h : AAFDataDefinition.exp macros/h.mac
+AAFDataDefinition.cpp : AAFDataDefinition.exp macros/cpp.mac
+AAFDataDefinition.idl : AAFDataDefinition.exp macros/idl.mac
+AAFDataDefinition.comc : AAFDataDefinition.exp macros/comc.mac
+AAFDataDefinition.comh : AAFDataDefinition.exp macros/comh.mac
+AAFDataDefinition.implc : AAFDataDefinition.exp macros/implc.mac
+AAFDataDefinition.implh : AAFDataDefinition.exp macros/implh.mac
 
 AAFEdgecode.all : AAFEdgecode.cpp AAFEdgecode.h
 AAFEdgecode.all : AAFEdgecode.comc AAFEdgecode.comh
@@ -236,6 +283,17 @@ AAFLocator.idl : AAFLocator.exp macros/idl.mac
 AAFLocator.implc : AAFLocator.exp macros/implc.mac
 AAFLocator.implh : AAFLocator.exp macros/implh.mac
 
+AAFMacLocator.all : AAFMacLocator.cpp AAFMacLocator.h
+AAFMacLocator.all : AAFMacLocator.comc AAFMacLocator.comh
+AAFMacLocator.all : AAFMacLocator.exp AAFMacLocator.idl
+AAFMacLocator.all : AAFMacLocator.implc AAFMacLocator.implh
+AAFMacLocator.exp : AAFUnitTest.exp AAFLocator.exp macros/exp.mac
+AAFMacLocator.h : AAFMacLocator.exp macros/h.mac
+AAFMacLocator.cpp : AAFMacLocator.exp macros/cpp.mac
+AAFMacLocator.idl : AAFMacLocator.exp macros/idl.mac
+AAFMacLocator.implc : AAFMacLocator.exp macros/implc.mac
+AAFMacLocator.implh : AAFMacLocator.exp macros/implh.mac
+
 AAFMedia.all : AAFMedia.cpp AAFMedia.h
 AAFMedia.all : AAFMedia.comc AAFMedia.comh
 AAFMedia.all : AAFMedia.exp AAFMedia.idl
@@ -275,18 +333,31 @@ AAFMediaFileDescriptor.comh : AAFMediaFileDescriptor.exp macros/comh.mac
 AAFMediaFileDescriptor.implc : AAFMediaFileDescriptor.exp macros/implc.mac
 AAFMediaFileDescriptor.implh : AAFMediaFileDescriptor.exp macros/implh.mac
 
-AAFMediaFilmDescriptor.all : AAFMediaFilmDescriptor.cpp AAFMediaFilmDescriptor.h
-AAFMediaFilmDescriptor.all : AAFMediaFilmDescriptor.comc AAFMediaFilmDescriptor.comh
-AAFMediaFilmDescriptor.all : AAFMediaFilmDescriptor.exp AAFMediaFilmDescriptor.idl
-AAFMediaFilmDescriptor.all : AAFMediaFilmDescriptor.implc AAFMediaFilmDescriptor.implh
-AAFMediaFilmDescriptor.exp : AAFUnitTest.exp AAFMediaDescriptor.exp macros/exp.mac
-AAFMediaFilmDescriptor.h : AAFMediaFilmDescriptor.exp macros/h.mac
-AAFMediaFilmDescriptor.cpp : AAFMediaFilmDescriptor.exp macros/cpp.mac
-AAFMediaFilmDescriptor.idl : AAFMediaFilmDescriptor.exp macros/idl.mac
-AAFMediaFilmDescriptor.comc : AAFMediaFilmDescriptor.exp macros/comc.mac
-AAFMediaFilmDescriptor.comh : AAFMediaFilmDescriptor.exp macros/comh.mac
-AAFMediaFilmDescriptor.implc : AAFMediaFilmDescriptor.exp macros/implc.mac
-AAFMediaFilmDescriptor.implh : AAFMediaFilmDescriptor.exp macros/implh.mac
+AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.cpp AAFMediaTapeDescriptor.h
+AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.comc AAFMediaTapeDescriptor.comh
+AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.exp AAFMediaTapeDescriptor.idl
+AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.implc AAFMediaTapeDescriptor.implh
+AAFMediaTapeDescriptor.exp : AAFUnitTest.exp AAFMediaDescriptor.exp macros/exp.mac
+AAFMediaTapeDescriptor.h : AAFMediaTapeDescriptor.exp macros/h.mac
+AAFMediaTapeDescriptor.cpp : AAFMediaTapeDescriptor.exp macros/cpp.mac
+AAFMediaTapeDescriptor.idl : AAFMediaTapeDescriptor.exp macros/idl.mac
+AAFMediaTapeDescriptor.comc : AAFMediaTapeDescriptor.exp macros/comc.mac
+AAFMediaTapeDescriptor.comh : AAFMediaTapeDescriptor.exp macros/comh.mac
+AAFMediaTapeDescriptor.implc : AAFMediaTapeDescriptor.exp macros/implc.mac
+AAFMediaTapeDescriptor.implh : AAFMediaTapeDescriptor.exp macros/implh.mac
+
+AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.cpp AAFMediaTapeDescriptor.h
+AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.comc AAFMediaTapeDescriptor.comh
+AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.exp AAFMediaTapeDescriptor.idl
+AAFMediaTapeDescriptor.all : AAFMediaTapeDescriptor.implc AAFMediaTapeDescriptor.implh
+AAFMediaTapeDescriptor.exp : AAFUnitTest.exp AAFMediaDescriptor.exp macros/exp.mac
+AAFMediaTapeDescriptor.h : AAFMediaTapeDescriptor.exp macros/h.mac
+AAFMediaTapeDescriptor.cpp : AAFMediaTapeDescriptor.exp macros/cpp.mac
+AAFMediaTapeDescriptor.idl : AAFMediaTapeDescriptor.exp macros/idl.mac
+AAFMediaTapeDescriptor.comc : AAFMediaTapeDescriptor.exp macros/comc.mac
+AAFMediaTapeDescriptor.comh : AAFMediaTapeDescriptor.exp macros/comh.mac
+AAFMediaTapeDescriptor.implc : AAFMediaTapeDescriptor.exp macros/implc.mac
+AAFMediaTapeDescriptor.implh : AAFMediaTapeDescriptor.exp macros/implh.mac
 
 AAFMediaGroup.all : AAFMediaGroup.cpp AAFMediaGroup.h
 AAFMediaGroup.all : AAFMediaGroup.comc AAFMediaGroup.comh
@@ -483,6 +554,45 @@ AAFStringAttribute.comh : AAFStringAttribute.exp macros/comh.mac
 AAFStringAttribute.implc : AAFStringAttribute.exp macros/implc.mac
 AAFStringAttribute.implh : AAFStringAttribute.exp macros/implh.mac
 
+AAFTimecode.all : AAFTimecode.cpp AAFTimecode.h
+AAFTimecode.all : AAFTimecode.comc AAFTimecode.comh
+AAFTimecode.all : AAFTimecode.exp AAFTimecode.idl
+AAFTimecode.all : AAFTimecode.implc AAFTimecode.implh
+AAFTimecode.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFTimecode.h : AAFTimecode.exp macros/h.mac
+AAFTimecode.cpp : AAFTimecode.exp macros/cpp.mac
+AAFTimecode.idl : AAFTimecode.exp macros/idl.mac
+AAFTimecode.comc : AAFTimecode.exp macros/comc.mac
+AAFTimecode.comh : AAFTimecode.exp macros/comh.mac
+AAFTimecode.implc : AAFTimecode.exp macros/implc.mac
+AAFTimecode.implh : AAFTimecode.exp macros/implh.mac
+
+AAFTimecodeStream.all : AAFTimecodeStream.cpp AAFTimecodeStream.h
+AAFTimecodeStream.all : AAFTimecodeStream.comc AAFTimecodeStream.comh
+AAFTimecodeStream.all : AAFTimecodeStream.exp AAFTimecodeStream.idl
+AAFTimecodeStream.all : AAFTimecodeStream.implc AAFTimecodeStream.implh
+AAFTimecodeStream.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFTimecodeStream.h : AAFTimecodeStream.exp macros/h.mac
+AAFTimecodeStream.cpp : AAFTimecodeStream.exp macros/cpp.mac
+AAFTimecodeStream.idl : AAFTimecodeStream.exp macros/idl.mac
+AAFTimecodeStream.comc : AAFTimecodeStream.exp macros/comc.mac
+AAFTimecodeStream.comh : AAFTimecodeStream.exp macros/comh.mac
+AAFTimecodeStream.implc : AAFTimecodeStream.exp macros/implc.mac
+AAFTimecodeStream.implh : AAFTimecodeStream.exp macros/implh.mac
+
+AAFTimecodeStream12M.all : AAFTimecodeStream12M.cpp AAFTimecodeStream12M.h
+AAFTimecodeStream12M.all : AAFTimecodeStream12M.comc AAFTimecodeStream12M.comh
+AAFTimecodeStream12M.all : AAFTimecodeStream12M.exp AAFTimecodeStream12M.idl
+AAFTimecodeStream12M.all : AAFTimecodeStream12M.implc AAFTimecodeStream12M.implh
+AAFTimecodeStream12M.exp : AAFUnitTest.exp AAFTimecodeStream.exp macros/exp.mac
+AAFTimecodeStream12M.h : AAFTimecodeStream12M.exp macros/h.mac
+AAFTimecodeStream12M.cpp : AAFTimecodeStream12M.exp macros/cpp.mac
+AAFTimecodeStream12M.idl : AAFTimecodeStream12M.exp macros/idl.mac
+AAFTimecodeStream12M.comc : AAFTimecodeStream12M.exp macros/comc.mac
+AAFTimecodeStream12M.comh : AAFTimecodeStream12M.exp macros/comh.mac
+AAFTimecodeStream12M.implc : AAFTimecodeStream12M.exp macros/implc.mac
+AAFTimecodeStream12M.implh : AAFTimecodeStream12M.exp macros/implh.mac
+
 AAFUInt64.all : AAFUInt64.cpp AAFUInt64.h
 AAFUInt64.all : AAFUInt64.comc AAFUInt64.comh
 AAFUInt64.all : AAFUInt64.exp AAFUInt64.idl
@@ -547,16 +657,3 @@ AAFWindowsLocator.comc : AAFWindowsLocator.exp macros/comc.mac
 AAFWindowsLocator.comh : AAFWindowsLocator.exp macros/comh.mac
 AAFWindowsLocator.implc : AAFWindowsLocator.exp macros/implc.mac
 AAFWindowsLocator.implh : AAFWindowsLocator.exp macros/implh.mac
-
-#AAFMedia.all : AAFMedia.cpp AAFMedia.h
-#AAFMedia.all : AAFMedia.comc AAFMedia.comh
-#AAFMedia.all : AAFMedia.exp AAFMedia.idl
-#AAFMedia.all : AAFMedia.implc AAFMedia.implh
-#AAFMedia.exp : AAFUnitTest.exp AAFLocator.exp macros/exp.mac
-#AAFMedia.h : AAFMedia.exp macros/h.mac
-#AAFMedia.cpp : AAFMedia.exp macros/cpp.mac
-#AAFMedia.idl : AAFMedia.exp macros/idl.mac
-#AAFMedia.comc : AAFMedia.exp macros/comc.mac
-#AAFMedia.comh : AAFMedia.exp macros/comh.mac
-#AAFMedia.implc : AAFMedia.exp macros/implc.mac
-#AAFMedia.implh : AAFMedia.exp macros/implh.mac
