@@ -25,12 +25,6 @@
 CAAFInProcServer g_AAFInProcServer;
 CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 
-#ifdef AAF_MODULE_TEST
-// Include the module test object in the object table.
-#ifndef __CAAFModuleTest_h__
-#include "CAAFModuleTest.h"
-#endif
-#endif // AAF_MODULE_TEST
 
 // Include the table the associates all of the CLSID's with class names and factory methods.
 #include "AAFObjectTable_i.cpp"
