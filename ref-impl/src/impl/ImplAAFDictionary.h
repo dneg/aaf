@@ -41,6 +41,10 @@ class ImplEnumAAFContainerDefs;
 
 class ImplAAFContainerDef;
 
+class ImplEnumAAFInterpolationDefs;
+
+class ImplAAFInterpolationDef;
+
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
 #endif
@@ -53,6 +57,7 @@ class ImplAAFContainerDef;
 #include "ImplAAFDefObject.h"
 #include "ImplAAFCodecDef.h"
 #include "ImplAAFContainerDef.h"
+#include "ImplAAFInterpolationDef.h"
 #include "ImplAAFTypeDef.h"
 
 class ImplAAFDictionary :
@@ -269,6 +274,33 @@ public:
 
     AAFRESULT LookupContainerDefinition(aafUID_t *containerID, ImplAAFContainerDef **result);
 
+  //****************
+  // RegisterInterpolationDefinition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RegisterInterpolationDefinition
+        // @parm [in] Interpolation Definition Object
+        (ImplAAFInterpolationDef * pInterpolationDef);
+
+  //****************
+  // LookupInterpolationDefinition()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupInterpolationDefinition
+        (// @parm [in,ref] Interpolation Unique ID
+         aafUID_t *  InterpolationID,
+
+         // @parm [out,retval] Interpolation definition object
+         ImplAAFInterpolationDef ** ppInterpolationDef);
+
+  //****************
+  // GetInterpolationDefinitions()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetInterpolationDefinitions
+        // @parm [out,retval] Definition Enumeration
+        (ImplEnumAAFInterpolationDefs ** ppEnum);
+
 public:
   // Declare this class to be storable.
   //
@@ -312,6 +344,7 @@ private:
     OMStrongReferenceVectorProperty<ImplAAFParameterDef>	_parameterDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFTypeDef>			_typeDefinitions;
     OMStrongReferenceVectorProperty<ImplAAFClassDef>		_classDefinitions;
+    OMStrongReferenceVectorProperty<ImplAAFInterpolationDef>	_interpolationDefinitions;
 };
 
 #endif // ! __ImplAAFDictionary_h__
