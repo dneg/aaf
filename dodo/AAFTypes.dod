@@ -60,8 +60,7 @@ AD_CPP_QUOTE(#else // __MWERKS__)
 typedef wchar_t		aafWChar;
 AD_CPP_QUOTE(#endif // __MWERKS__)
 
-
-typedef aafUInt32		AAFRESULT;
+typedef aafInt32		AAFRESULT;
 
 
 AD_CPP_QUOTE(#ifndef NULL)
@@ -145,18 +144,7 @@ AD_CPP_QUOTE(#endif)
 
 AD_CPP_QUOTE(#endif)
 
-
-
-
-
-typedef struct _aafString_t
-{
-	aafInt32	length;
-	aafWChar	*value;
-} aafString_t;
-
-
-
+typedef [string] wchar_t * aafString_t;
 
 AD_CPP_QUOTE(/************************************************************)
 AD_CPP_QUOTE(\ *)
@@ -174,8 +162,8 @@ typedef aafInt64   		aafLength_t;
 
 AD_CPP_QUOTE(/*** Types for mob slots***/)
 typedef aafInt64  		aafPosition_t;
-typedef aafUInt32		aafFrameOffset_t;
-typedef aafUInt32		aafFrameLength_t;
+typedef aafInt64		aafFrameOffset_t;
+typedef aafInt64		aafFrameLength_t;
 typedef aafUInt32   	aafSlotID_t;  
 
 typedef aafInt8			*aafCodecID_t;
@@ -456,8 +444,8 @@ typedef enum _aafPulldownDir_t
 
 typedef struct _aafMobComment_t
 {
-	aafString_t * category;
-	aafString_t * comment;
+	aafString_t category;
+	aafString_t comment;
 } aafMobComment_t;
 
 
@@ -711,7 +699,7 @@ typedef struct _aafSearchCrit_t
         [case(kByMobKind)]
 			aafMobKind_t mobKind;
         [case(kByName)]
-			aafString_t *name;
+			aafString_t name;
         [case(kByClass)]
 			aafClassID_t objClass;	// shouldn't this be a pointer?
         [case(kByDataDef)]
@@ -731,7 +719,7 @@ AD_CPP_QUOTE(\    union)
 AD_CPP_QUOTE(\    {)
 AD_CPP_QUOTE(\        aafUID_t        mobID;		// shouldn't this be a pointer?)
 AD_CPP_QUOTE(\        aafMobKind_t    mobKind;)
-AD_CPP_QUOTE(\        aafString_t       *name;)
+AD_CPP_QUOTE(\        aafString_t       name;)
 AD_CPP_QUOTE(\        aafClassID_t      objClass;	// shouldn't this be a pointer?)
 AD_CPP_QUOTE(\        aafUID_t		 datadef;	// shouldn't this be a pointer?)
 AD_CPP_QUOTE(\        aafCriteriaType_t mediaCrit;)
@@ -764,7 +752,7 @@ typedef struct _aafDefinitionCrit_t
 	union 
 	{
 		aafDefinitionKind_t	defKind;
-		aafString_t         *name;
+		aafString_t         name;
 		aafClassID_t        objClass;	// shouldn't this be a pointer?
 	} tags;
 } aafDefinitionCrit_t;
@@ -841,7 +829,7 @@ typedef struct _aafSearchDictionaryCrit_t
         [case(kByTypeID)]
             aafUID_t	* typeID;
         [case(kByClassName)]
-            aafString_t * name;
+            aafString_t   name;
         [default] ;
     } ;
 
@@ -864,7 +852,7 @@ AD_CPP_QUOTE(\		aafUID_t    * classID;)
 AD_CPP_QUOTE(\		aafUID_t    * parentClassID;)
 AD_CPP_QUOTE(\		aafUID_t	* propertyID;)
 AD_CPP_QUOTE(\		aafUID_t	* typeID;)
-AD_CPP_QUOTE(\		aafString_t * name;)
+AD_CPP_QUOTE(\		aafString_t   name;)
 AD_CPP_QUOTE(\	} tags;)
 AD_CPP_QUOTE(} aafSearchDictionaryCrit_t;)
 

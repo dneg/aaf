@@ -10,7 +10,6 @@
 AAFPERSISTENTOBJECTS = \
 	AAFAIFCData \
 	AAFAIFCDescriptor \
-	AAFClassDef \
 	AAFCommentMarker \
 	AAFConstValue \
 	AAFControlPoint \
@@ -38,7 +37,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFPluggableCode \
 	AAFPluginManager \
 	AAFPulldown \
-	AAFPropertyDef \
 	AAFReferenceValue \
 	AAFRGBADescriptor \
 	AAFScopeReference \
@@ -49,17 +47,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFTIFFData \
 	AAFTimecodeStream \
 	AAFTimecodeStream12M \
-	AAFTypeDef \
-	AAFTypeDefInt \
-	AAFTypeDefRename \
-	AAFTypeDefEnum \
-	AAFTypeDefFixedArray \
 	AAFTypeDefSet \
-	AAFTypeDefStream \
-	AAFTypeDefString \
-	AAFTypeDefObjectRef \
-	AAFTypeDefStrongObjRef \
-	AAFTypeDefWeakObjRef \
 	AAFTypeDefRecord \
 	AAFUnixLocator \
 	AAFVaryingValue \
@@ -70,8 +58,6 @@ AAFPERSISTENTOBJECTS = \
 # These are all of the other non-persistent objects:
 AAFNONPERSISTENTOBJECTS = \
 	AAFRoot \
-	AAFProperty \
-	AAFPropertyValue \
 	EnumAAFClassDefs \
 	EnumAAFCodecFlavours \
 	EnumAAFControlPoints \
@@ -85,7 +71,6 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFParameterDefs \
 	EnumAAFPropertyDefs \
 	EnumAAFPropertyValues \
-	EnumAAFProperties \
 	EnumAAFReferenceValues \
 	EnumAAFTypeDefs 
 
@@ -101,6 +86,7 @@ AAFCOMINTERFACESONLY = \
 # its name here and remove it from either list above where it occurs.
 # Do not add the 'Impl'prefix here.
 HUMAN_TYPED_IMPL = \
+	AAFClassDef \
 	AAFCodecDef \
 	AAFComponent \
 	AAFCompositionMob \
@@ -128,6 +114,9 @@ HUMAN_TYPED_IMPL = \
 	AAFMobSlot \
 	AAFNetworkLocator \
 	AAFObject \
+	AAFProperty \
+	AAFPropertyDef \
+	AAFPropertyValue \
 	AAFPluggableDef \
 	AAFPluginDescriptor \
 	AAFSegment \
@@ -141,6 +130,16 @@ HUMAN_TYPED_IMPL = \
 	AAFTapeDescriptor \
 	AAFTransition \
 	AAFTIFFDescriptor \
+	AAFTypeDef \
+	AAFTypeDefInt \
+	AAFTypeDefRename \
+	AAFTypeDefEnum \
+	AAFTypeDefFixedArray \
+	AAFTypeDefStream \
+	AAFTypeDefString \
+	AAFTypeDefStrongObjRef \
+	AAFTypeDefWeakObjRef \
+	AAFTypeDefObjectRef \
 	AAFTypeDefVariableArray \
 	AAFWAVEDescriptor \
 	EnumAAFComponents \
@@ -148,6 +147,7 @@ HUMAN_TYPED_IMPL = \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
 	EnumAAFMobs \
+	EnumAAFProperties \
 	EnumAAFPluggableDefs \
 	EnumAAFPluginDescriptors \
 	EnumAAFPluginLocators \
