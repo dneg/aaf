@@ -244,6 +244,9 @@ clean:
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.idl
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF.h
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFTypes.h
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFModuleTest.h
 	@for file in $(AUTO_GEN_IMPL) ; do \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
