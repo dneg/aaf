@@ -41,7 +41,8 @@
 // Prototypes that must be implemented but NOT exported.
 extern "C" const char * AAFGetLibraryDirectory();
 extern "C" const char * AAFGetLibraryPath();
-
+extern "C" const char * AAFGetLibrarySharedDirectoryName();
+extern "C" const char * AAFGetLibraryPluginPrefix();
 
 #include "CAAFInProcServer.h"
 #include "ImplAAFContext.h"
@@ -342,4 +343,26 @@ const char * AAFGetLibraryDirectory()
 const char * AAFGetLibraryPath()
 {
 	return g_AAFInProcServer.GetServerPath();
+}
+
+// For DR3 just use a fixed, hard-coded string. For RC1 we need to store
+// this string and possibly the plugin prefix in external resources for
+// each platform. transdel-2000-JUL-27
+const char * AAFGetLibrarySharedDirectoryName()
+{
+    static char g_SharedDirectoryName[260];
+
+    strcpy(g_SharedDirectoryName, "aafext");
+    
+    return g_SharedDirectoryName;
+}
+
+
+const char * AAFGetLibraryPluginPrefix()
+{
+    static char g_PluginPrefix[4];
+
+    strcpy(g_PluginPrefix, "aaf");
+    
+    return g_PluginPrefix;
 }
