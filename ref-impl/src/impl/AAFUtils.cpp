@@ -556,7 +556,7 @@ AAFRESULT aafMobIDNew(
 	return(OM_ERR_NONE);
 }
 
-#if 0	//!!! Add functions from the end of the file as needed 
+#if FULL_TOOLKIT	//!!! Add functions from the end of the file as needed 
 
 
 /************************
