@@ -206,8 +206,7 @@ void OMDataStreamProperty::read(OMByte* buffer,
 
   ASSERT("Valid stream", _stream != 0);
   OMStoredObject* s = _propertySet->container()->store();
-  s->readFromStream(_stream, buffer, bytes);
-  bytesRead = bytes; // tjb
+  s->readFromStream(_stream, buffer, bytes, bytesRead);
 }
 
   // @mfunc  Attempt to write the number of bytes given by <p bytes>
@@ -229,8 +228,7 @@ void OMDataStreamProperty::write(const OMByte* buffer,
   ASSERT("Valid stream", _stream != 0);
 
   OMStoredObject* s = _propertySet->container()->store();
-  s->writeToStream(_stream, (void*)buffer, bytes);
-  bytesWritten = bytes; // tjb
+  s->writeToStream(_stream, buffer, bytes, bytesWritten);
 }
 
 
