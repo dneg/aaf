@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -70,18 +70,16 @@ ImplAAFTypeDefExtEnum::~ImplAAFTypeDefExtEnum ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefExtEnum::Initialize (
-      const aafUID_t * pID,
-      wchar_t * pTypeName)
+      const aafUID_t & id,
+      const aafCharacter * pTypeName)
 {
-  if (!pID)
-	return AAFRESULT_NULL_PARAM;
   if (!pTypeName)
     return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  hr = SetAUID (pID);
+  hr = SetAUID (id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   return AAFRESULT_SUCCESS;
@@ -149,21 +147,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefExtEnum::GetNameFromAUID (
-      aafUID_t * pValue,
+      const aafUID_t & value,
       wchar_t * pName,
       aafUInt32 bufSize)
 {
   if (! pName)
 	return AAFRESULT_NULL_PARAM;
 
-  if (! pValue)
-	return AAFRESULT_NULL_PARAM;
-
   AAFRESULT hr;
   aafUInt32 len;
   // following call may return AAFRESULT_ILLEGAL_VALUE if value isn't
   // recognized
-  hr = GetNameBufLenFromAUID (pValue, &len);
+  hr = GetNameBufLenFromAUID (value, &len);
   if (AAFRESULT_FAILED(hr))
 	return hr;
 
@@ -182,7 +177,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = GetElementValue (i, &val);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
-	  if (EqualAUID (&val, pValue))
+	  if (EqualAUID (&val, &value))
 		{
 		  // given integer value matches value of "i"th element.
 		  hr = GetElementName(i, pName, bufSize);
@@ -201,13 +196,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefExtEnum::GetNameBufLenFromAUID (
-      aafUID_t * pValue,
+      const aafUID_t & value,
       aafUInt32 * pLen)
 {
   if (! pLen)
-	return AAFRESULT_NULL_PARAM;
-
-  if (! pValue)
 	return AAFRESULT_NULL_PARAM;
 
   aafUInt32 i;
@@ -222,7 +214,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = GetElementValue (i, &val);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
-	  if (EqualAUID (&val, pValue))
+	  if (EqualAUID (&val, &value))
 		{
 		  aafUInt32 len;
 		  hr = GetElementNameBufLen(i, &len);
@@ -276,21 +268,19 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefExtEnum::SetAUIDValue (
       ImplAAFPropertyValue * pPropValToSet,
-      aafUID_t * pValueIn)
+      const aafUID_t & valueIn)
 {
   ImplAAFTypeDefSP ptd;
   ImplAAFTypeDefRecordSP ptAuid;
 
   if (! pPropValToSet)
 	return AAFRESULT_NULL_PARAM;
-  if (! pValueIn)
-	return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
 
   // Call this method to find out if this is a legal value
   aafUInt32 tmp; // unused
-  hr = GetNameBufLenFromAUID (pValueIn, &tmp);
+  hr = GetNameBufLenFromAUID (valueIn, &tmp);
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
@@ -300,7 +290,7 @@ AAFRESULT STDMETHODCALLTYPE
   ptAuid = dynamic_cast<ImplAAFTypeDefRecord*> ((ImplAAFTypeDef*) ptd);
   assert (ptAuid);
 
-  hr = ptAuid->SetStruct (pPropValToSet, (aafMemPtr_t) pValueIn, sizeof (aafUID_t));
+  hr = ptAuid->SetStruct (pPropValToSet, (aafMemPtr_t) &valueIn, sizeof (aafUID_t));
   if (AAFRESULT_FAILED(hr))
 	return hr;
 
@@ -311,11 +301,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefExtEnum::AppendElement (
-      aafUID_t * pValue,
-      wchar_t * pName)
+      const aafUID_t & value,
+      const aafCharacter * pName)
 {
-  if (! pValue)
-	return AAFRESULT_NULL_PARAM;
   if (! pName)
 	return AAFRESULT_NULL_PARAM;
 
@@ -362,8 +350,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  valsBuf = new aafUID_t[origNumElems+1];
 	  if (origNumElems)
 		_ElementValues.getValue (valsBuf, origNumElems*sizeof(aafUID_t));
-	  assert (pValue);
-	  valsBuf[origNumElems] = *pValue;
+	  valsBuf[origNumElems] = value;
 
 
 	  // Copy newly-appended name and value buffers out.  Do these
@@ -539,7 +526,7 @@ ImplAAFTypeDefSP ImplAAFTypeDefExtEnum::BaseType () const
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (pDict);
 
-	  hr = pDict->LookupType (&kAAFTypeID_AUID, &((ImplAAFTypeDefExtEnum*)this)->_cachedBaseType);
+	  hr = pDict->LookupType (kAAFTypeID_AUID, &((ImplAAFTypeDefExtEnum*)this)->_cachedBaseType);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (_cachedBaseType);
 	}

@@ -15,7 +15,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -58,10 +58,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] friendly name of this type definition
-         wchar_t *  pTypeName);
+         const aafCharacter * pTypeName);
 
 
   //****************
@@ -119,7 +119,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameFromAUID
         (// @parm [in] value of element to get
-         aafUID_t *  pValue,
+         const aafUID_t & value,
 
          // @parm [out, size_is(bufSize), string] buffer into which the element name is written
          wchar_t *  pName,
@@ -134,7 +134,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetNameBufLenFromAUID
         (// @parm [in] value of element to get
-         aafUID_t *  pValue,
+         const aafUID_t & value,
 
          // @parm [out] required buffer length, in bytes
          aafUInt32 *  pLen);
@@ -161,7 +161,7 @@ public:
          ImplAAFPropertyValue * pPropValToSet,
 
          // @parm [in] new value of the enum represented by the given property value
-         aafUID_t *  pValueIn);
+         const aafUID_t & valueIn);
 
 
   //****************
@@ -170,10 +170,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendElement
         (// @parm [in] value of appended element
-         aafUID_t * pValue,
+         const aafUID_t & value,
 
          // @parm [in] name of appended element
-         wchar_t * pName);
+         const aafCharacter * pName);
 
 
   // Override from AAFTypeDef
