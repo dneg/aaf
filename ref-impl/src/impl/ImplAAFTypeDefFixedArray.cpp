@@ -187,7 +187,7 @@ void ImplAAFTypeDefFixedArray::reorder(OMByte* externalBytes,
   aafUInt32 elem = 0;
 
   ImplAAFTypeDefSP ptd = BaseType ();
-  aafUInt32 elemSize = ptd->NativeSize ();
+  aafUInt32 elemSize = ptd->PropValSize ();
   aafInt32 numBytesLeft = externalBytesSize;
 
   for (elem = 0; elem < numElems; elem++)

@@ -602,7 +602,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = GetMemberType (i, &ptd);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (ptd);
-	  offset += ptd->PropValSize();
+	  offset += ptd->NativeSize();
 	}
 
   // offset now points into prop storage
@@ -628,7 +628,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   hr = pvdOut->AllocateFromPropVal (pvdIn,
 									offset,
-									ptd->PropValSize(),
+									ptd->NativeSize(),
 									NULL);
   if (AAFRESULT_FAILED(hr)) return hr;
   assert (ppOutPropVal);
