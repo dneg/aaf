@@ -434,6 +434,7 @@ OMStorable* OMContainerElement<ObjectReference>::getValue(void) const
   //        but has not yet been loaded then the value returned is 0.
   //   @tcarg class | ObjectReference | The type of the contained object
   //          reference
+  //   @rdesc A pointer to the reference <c OMStorable>, if loaded.
 template <typename ObjectReference>
 OMStorable* OMContainerElement<ObjectReference>::pointer(void) const
 {
