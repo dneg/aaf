@@ -39,30 +39,30 @@ public:
 	AAFRational(aafInt32 newNum, aafInt32 newDenom) { num = newNum; denom = newDenom; };
 	AAFRational(aafRational_t newVal) { num = newVal.numerator; denom = newVal.denominator; };
 	// ------- copy constructor
-	AAFRational(AAFRational& s);
+	AAFRational(const AAFRational& s);
 	// ------- destructor
 	~AAFRational() { }
 	// ---------- assignment
-	AAFRational& operator=(AAFRational& s);
+	AAFRational& operator=(const AAFRational& s);
 	// ---------- conversion to double *
-	operator double() { return (double)num / (double)denom; }
-	operator aafRational_t();
-	AAFRational operator+(AAFRational& s);
-	AAFRational operator-(AAFRational& s);
-	AAFRational operator*(AAFRational& s);
-	AAFRational operator/(AAFRational& s);
+	operator double() const { return (double)num / (double)denom; }
+	operator aafRational_t() const;
+	AAFRational operator+(const AAFRational& s) const;
+	AAFRational operator-(const AAFRational& s) const;
+	AAFRational operator*(const AAFRational& s) const;
+	AAFRational operator/(const AAFRational& s) const;
 	// ------- relational operators
-	aafBool operator==(AAFRational& s)
+	aafBool operator==(const AAFRational& s) const
 	{ return (aafBool) (num == s.num ? AAFTrue : AAFFalse); }
-	aafBool operator!=(AAFRational& s)
+	aafBool operator!=(const AAFRational& s) const
 		{ return (aafBool) (num != s.num ? AAFTrue : AAFFalse); }
-	aafBool operator>(AAFRational& s)
+	aafBool operator>(const AAFRational& s) const
 		{ return (aafBool) ((double)*this > (double)s ? AAFTrue : AAFFalse); }
-	aafBool operator<(AAFRational& s)
+	aafBool operator<(const AAFRational& s) const
 		{ return (aafBool) ((double)*this < (double)s ? AAFTrue : AAFFalse); }
-	aafBool operator<=(AAFRational& s)
+	aafBool operator<=(const AAFRational& s) const
 		{ return (aafBool) (*this > s ? AAFFalse : AAFTrue); }
-	aafBool operator>=(AAFRational& s)
+	aafBool operator>=(const AAFRational& s) const
 		{ return (aafBool) (*this < s ? AAFFalse : AAFTrue); }
 };
 
