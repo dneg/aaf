@@ -26,55 +26,55 @@ AD_DEFAULT_UUID(B1A2137E, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_CLASS_BEGIN
 
 AD_METHOD1(GetCompanyName,
-[out\,retval], aafString_t *, companyName, The Company Name,
+[out\,retval], aafString_t *, pCompanyName, The Company Name,
 Return the Company name property.)
 
 AD_METHOD1(GetProductName,
-[out\,retval], aafString_t *, productName, The Product Name,
+[out\,retval], aafString_t *, pProductName, The Product Name,
 Return the Product name property.)
 
 AD_METHOD1(GetProductVersionString,
-[out\,retval], aafString_t *, productVersionString, The Product Version String,
+[out\,retval], aafString_t *, pProductVersionString, The Product Version String,
 Return the Product Version String property.)
 
 AD_METHOD1(GetProductID,
-[out\,retval], aafUID_t *, productID, The Product ID,
+[out\,retval], aafUID_t *, pProductID, The Product ID,
 Return the Product ID property.)
 
 AD_METHOD1(GetDate,
-[out\,retval], aafTimeStamp_t *, timestamp, The date-time stamp,
+[out\,retval], aafTimeStamp_t *, pTimestamp, The date-time stamp,
 Return the Data-time Stamp property. This is a read-only property.)
 
 AD_METHOD1(GetToolkitVersion,
-[out\,retval], aafProductVersion_t *, productVersion, The Toolkit Version,
+[out\,retval], aafProductVersion_t *, pToolkitVersion, The Toolkit Version,
 Return the Toolkit Version property. This is a read-only property.)
 
 AD_METHOD1(GetPlatform,
-[out\,retval], aafString_t *, platform, The Platform,
+[out\,retval], aafString_t *, pPlatform, The Platform,
 Return the Platform property.)
 
 AD_METHOD1(GetGeneration,
-[out\,retval], aafUID_t *, generation, The unique generation,
+[out\,retval], aafUID_t *, pGeneration, The unique generation,
 Return the unique generation property. This is a read-only property.)
 
 AD_METHOD1(SetCompanyName,
-[in\,ref], aafString_t *, companyName, The Company Name,
+[in\,ref], aafString_t *, pCompanyName, The Company Name,
 Set the Company name property.)
 
 AD_METHOD1(SetProductName,
-[in\,ref], aafString_t *, productName, The Product Name,
+[in\,ref], aafString_t *, pProductName, The Product Name,
 Set the Product name property.)
 
 AD_METHOD1(SetProductVersion,
-[in\,ref], aafProductVersion_t *, productVersion, The Product Version,
+[in\,ref], aafProductVersion_t *, pProductVersion, The Product Version,
 Set the Product Version property.)
 
 AD_METHOD1(SetProductVersionString,
-[in\,ref], aafString_t *, productVersionString, The Product Version String,
+[in\,ref], aafString_t *, pProductVersionString, The Product Version String,
 Set the Product Version String property.)
 
 AD_METHOD1(SetProductID,
-[in\,ref], aafUID_t *, productID, The Product ID,
+[in\,ref], aafUID_t *, pProductID, The Product ID,
 Set the Product ID property.)
 	
 
