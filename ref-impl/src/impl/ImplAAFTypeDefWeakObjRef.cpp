@@ -74,14 +74,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! pObject) return AAFRESULT_NULL_PARAM;
 
-  aafMemPtr_t pBits;
-  AAFRESULT hr;
-  hr = pPropVal->GetBits (&pBits);
-  if (AAFRESULT_FAILED (hr)) return hr;
-
-  memcpy (pBits, pObject, sizeof (ImplAAFObject*));
-
-  return AAFRESULT_SUCCESS;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -92,14 +85,7 @@ ImplAAFTypeDefWeakObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! ppObject) return AAFRESULT_NULL_PARAM;
 
-  aafMemPtr_t pBits;
-  AAFRESULT hr;
-  hr = pPropVal->GetBits (&pBits);
-  if (AAFRESULT_FAILED (hr)) return hr;
-
-  memcpy (*ppObject, pBits, sizeof (ImplAAFObject*));
-
-  return AAFRESULT_SUCCESS;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
