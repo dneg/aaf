@@ -69,7 +69,7 @@ OMStorable::~OMStorable(void)
 void OMStorable::save(void) const
 {
   TRACE("OMStorable::save");
-  
+
   bool opened = false;
   if (_store == 0 ) {
     opened = true;
@@ -431,7 +431,7 @@ bool OMStorable::persistent(void) const
 
   // @mfunc Is this <c OMStorable> dirty ?
   //        A dirty object is one that has been modified since it
-  //        was last saved or that has never been saved at all. 
+  //        was last saved or that has never been saved at all.
 bool OMStorable::isDirty(void) const
 {
   TRACE("OMStorable::isDirty");
