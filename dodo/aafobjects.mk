@@ -32,6 +32,7 @@ AAFNONPERSISTENTOBJECTS=""
 AAFCOMINTERFACESONLY="\
 	AAFDataDef2 \
 	AAFEndian \
+	AAFHeader2 \
 	AAFSearchSource \
 	AAFEssenceDataEx \
 	AAFEssenceMultiAccess \
