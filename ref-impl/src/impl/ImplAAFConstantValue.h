@@ -1,37 +1,20 @@
 //@doc
-//@class    AAFConstValue | Implementation class for AAFConstValue
-#ifndef __ImplAAFConstValue_h__
-#define __ImplAAFConstValue_h__
-
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
+//@class    AAFConstantValue | Implementation class for AAFConstantValue
+#ifndef __ImplAAFConstantValue_h__
+#define __ImplAAFConstantValue_h__
 
 /***********************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
+*                                               *
+* Advanced Authoring Format                     *
+*                                               *
 * Copyright (c) 1998-1999 Avid Technology, Inc. *
 * Copyright (c) 1998-1999 Microsoft Corporation *
-*												*
+*                                               *
 \***********************************************/
 
+
 class ImplAAFDataDef;
-
 class ImplAAFParameter;
-
-
-
-
-
 
 
 #ifndef __ImplAAFParameter_h__
@@ -39,17 +22,17 @@ class ImplAAFParameter;
 #endif
 
 
-class ImplAAFConstValue : public ImplAAFParameter
+class ImplAAFConstantValue : public ImplAAFParameter
 {
 public:
   //
   // Constructor/destructor
   //
   //********
-  ImplAAFConstValue ();
+  ImplAAFConstantValue ();
 
 protected:
-  virtual ~ImplAAFConstValue ();
+  virtual ~ImplAAFConstantValue ();
 
 public:
 
@@ -95,16 +78,16 @@ public:
 public:
   // Declare this class to be storable.
   //
-  OMDECLARE_STORABLE(ImplAAFConstValue)
+  OMDECLARE_STORABLE(ImplAAFConstantValue)
 
   // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFConstValueTest.cpp.
+  // in /test/ImplAAFConstantValueTest.cpp.
   static AAFRESULT test();
 
 private:
 OMVariableSizeProperty<aafUInt8>	_value;
 };
 
-#endif // ! __ImplAAFConstValue_h__
+#endif // ! __ImplAAFConstantValue_h__
 
 
