@@ -228,7 +228,6 @@ AAFRESULT ImplAAFPulldown::MapOffset(aafPosition_t offset,
 			   aafLength_t *numFrames,
 			   aafInt32 *srcPhase)
 {
-  ImplAAFSegment*	pulldownCVAL = NULL;
   aafUInt32     maskBits;
   aafBool       drop;
   aafUInt32     phaseOffset = 0;
