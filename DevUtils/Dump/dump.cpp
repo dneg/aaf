@@ -104,29 +104,29 @@ typedef unsigned int       OMUInt32;
 // Structure of property index header
 //
 typedef struct {
-  OMInt16 _byteOrder;
-  OMInt32 _formatVersion;
-  OMInt32 _entryCount;
+  OMUInt16 _byteOrder;
+  OMUInt32 _formatVersion;
+  OMUInt32 _entryCount;
 } IndexHeader;
 
 // Structure of a property index entry
 //
 typedef struct {
-  OMInt32 _pid;
-  OMInt32 _type;
-  OMInt32 _offset;
-  OMInt32 _length;
+  OMUInt32 _pid;
+  OMUInt32 _type;
+  OMUInt32 _offset;
+  OMUInt32 _length;
 } IndexEntry;
 
 // Structure of a vector index entry
 //
 typedef struct {
-  OMInt32 _elementName;
+  OMUInt32 _elementName;
 } VectorIndexEntry;
 
 // Byte ordering
 //
-typedef OMInt16 ByteOrder;
+typedef OMUInt16 ByteOrder;
 const ByteOrder unspecifiedEndian = 0;
 const ByteOrder littleEndian      = 0x4949;
 const ByteOrder bigEndian         = 0x4d4d;
@@ -235,38 +235,38 @@ static void dumpStorage(IStorage* storage,
                         int isRoot);
 static void read(IStream* stream, void* address, size_t size);
 static void read(IStream* stream, size_t offset, void* address, size_t size);
-static void readInt8(IStream* stream, OMInt8* value);
-static void readInt16(IStream* stream, OMInt16* value, bool swapNeeded);
-static void readInt32(IStream* stream, OMInt32* value, bool swapNeeded);
-static void swapInt16(OMInt16* value);
-static void swapInt32(OMInt32* value);
-static void dumpIndexEntry(OMInt32 i, IndexEntry* indexEntry);
-static void printIndex(IndexEntry* index, OMInt32 entries);
+static void readUInt8(IStream* stream, OMUInt8* value);
+static void readUInt16(IStream* stream, OMUInt16* value, bool swapNeeded);
+static void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded);
+static void swapUInt16(OMUInt16* value);
+static void swapUInt32(OMUInt32* value);
+static void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry);
+static void printIndex(IndexEntry* index, OMUInt32 entries);
 static void readIndexEntry(IStream* stream,
                            IndexEntry* entry,
                            bool swapNeeded);
-static IndexEntry* readIndex(IStream* stream, OMInt32 count, bool swapNeeded);
-static char* typeName(OMInt32 type);
+static IndexEntry* readIndex(IStream* stream, OMUInt32 count, bool swapNeeded);
+static char* typeName(OMUInt32 type);
 static void openStorage(IStorage* parentStorage,
                         char* storageName,
                         IStorage** subStorage);
-static void dumpVectorIndexEntry(OMInt32 i,
+static void dumpVectorIndexEntry(OMUInt32 i,
                                  VectorIndexEntry* vectorIndexEntry);
 static void printVectorIndex(VectorIndexEntry* vectorIndex,
-                             OMInt32 count,
-                             OMInt32 highWaterMark);
+                             OMUInt32 count,
+                             OMUInt32 highWaterMark);
 static void readVectorIndexEntry(IStream* stream,
                            VectorIndexEntry* entry,
                            bool swapNeeded);
 static VectorIndexEntry* readVectorIndex(IStream* stream,
-                                         OMInt32 count,
+                                         OMUInt32 count,
                                          bool swapNeeded);
 static ByteOrder readByteOrder(IStream* stream);
 static void dumpObject(IStorage* storage, char* pathName, int isRoot);
 static void dumpContainedObjects(IStorage* storage,
                                  IStream* propertiesStream,
                                  IndexEntry* index,
-                                 OMInt32 entries,
+                                 OMUInt32 entries,
                                  char* pathName,
                                  int isRoot,
                                  bool swapNeeded);
@@ -275,7 +275,7 @@ static void dumpDataStream(IStream* stream,
                            const char* streamName);
 static void dumpProperties(IStorage* storage,
                            IndexEntry* index,
-                           OMInt32 entries,
+                           OMUInt32 entries,
                            char* pathName,
                            int isRoot,
                            bool swapNeeded);
@@ -449,25 +449,25 @@ void reportAssertionFailure(char* name,
 //
 void checkSizes(void)
 {
-  ASSERT("Correct definition for OMInt8",  sizeof(OMInt8)  == 1);
-  ASSERT("Correct definition for OMInt16", sizeof(OMInt16) == 2);
-  ASSERT("Correct definition for OMInt32", sizeof(OMInt32) == 4);
+  ASSERT("Correct definition for OMUInt8",  sizeof(OMUInt8)  == 1);
+  ASSERT("Correct definition for OMUInt16", sizeof(OMUInt16) == 2);
+  ASSERT("Correct definition for OMUInt32", sizeof(OMUInt32) == 4);
 
-  if (sizeof(OMInt8) != 1) {
-    fatalError("checkSizes", "Incorrect definition for OMInt8");
+  if (sizeof(OMUInt8) != 1) {
+    fatalError("checkSizes", "Incorrect definition for OMUInt8.");
   }
-  if (sizeof(OMInt16) != 2) {
-    fatalError("checkSizes", "Incorrect definition for OMInt16");
+  if (sizeof(OMUInt16) != 2) {
+    fatalError("checkSizes", "Incorrect definition for OMUInt16.");
   }
-  if (sizeof(OMInt32) != 4) {
-    fatalError("checkSizes", "Incorrect definition for OMInt32");
+  if (sizeof(OMUInt32) != 4) {
+    fatalError("checkSizes", "Incorrect definition for OMUInt32.");
   }
 }
 
 ByteOrder hostByteOrder(void)
 {
-  OMInt16 word = 0x1234;
-  OMInt8  byte = *((OMInt8*)&word);
+  OMUInt16 word = 0x1234;
+  OMUInt8  byte = *((OMUInt8*)&word);
   ByteOrder result;
 
   ASSERT("Valid byte order", ((byte == 0x12) || (byte == 0x34)));
@@ -927,31 +927,31 @@ void read(IStream* stream, size_t offset, void* address, size_t size)
   read(stream, address, size);
 }
 
-void readInt8(IStream* stream, OMInt8* value)
+void readUInt8(IStream* stream, OMUInt8* value)
 {
-  read(stream, value, sizeof(OMInt8));
+  read(stream, value, sizeof(OMUInt8));
 }
 
-void readInt16(IStream* stream, OMInt16* value, bool swapNeeded)
+void readUInt16(IStream* stream, OMUInt16* value, bool swapNeeded)
 {
-  read(stream, value, sizeof(OMInt16));
+  read(stream, value, sizeof(OMUInt16));
   if (swapNeeded) {
-    swapInt16(value);
+    swapUInt16(value);
   }
 }
 
-void readInt32(IStream* stream, OMInt32* value, bool swapNeeded)
+void readUInt32(IStream* stream, OMUInt32* value, bool swapNeeded)
 {
-  read(stream, value, sizeof(OMInt32));
+  read(stream, value, sizeof(OMUInt32));
   if (swapNeeded) {
-    swapInt32(value);
+    swapUInt32(value);
   }
 }
 
-void swapInt16(OMInt16* value)
+void swapUInt16(OMUInt16* value)
 {
-  OMInt8* p = (OMInt8*)value;
-  OMInt8 temp;
+  OMUInt8* p = (OMUInt8*)value;
+  OMUInt8 temp;
 
   temp = p[0];
   p[0] = p[1];
@@ -959,10 +959,10 @@ void swapInt16(OMInt16* value)
 
 }
 
-void swapInt32(OMInt32* value)
+void swapUInt32(OMUInt32* value)
 {
-  OMInt8* p = (OMInt8*)value;
-  OMInt8 temp;
+  OMUInt8* p = (OMUInt8*)value;
+  OMUInt8 temp;
 
   temp = p[0];
   p[0] = p[3];
@@ -973,7 +973,7 @@ void swapInt32(OMInt32* value)
   p[2] = temp;
 }
 
-void dumpIndexEntry(OMInt32 i, IndexEntry* indexEntry)
+void dumpIndexEntry(OMUInt32 i, IndexEntry* indexEntry)
 {
   ASSERT("Valid index entry", indexEntry != 0);
   cout << setw(12) << i;
@@ -986,7 +986,7 @@ void dumpIndexEntry(OMInt32 i, IndexEntry* indexEntry)
   cout << endl;
 }
 
-void printIndex(IndexEntry* index, OMInt32 entries)
+void printIndex(IndexEntry* index, OMUInt32 entries)
 {
   ASSERT("Valid index", index != 0);
   if (entries > 0) {
@@ -996,7 +996,7 @@ void printIndex(IndexEntry* index, OMInt32 entries)
     cout << setw(12) << "offset";
     cout << setw(12) << "length";
     cout << endl;
-    for (OMInt32 i = 0; i < entries; i++) {
+    for (OMUInt32 i = 0; i < entries; i++) {
       dumpIndexEntry(i, &index[i]);
     }
   } else {
@@ -1015,29 +1015,29 @@ void readIndexEntry(IStream* stream, IndexEntry* entry, bool swapNeeded)
     // NYI
   } else {
     IndexEntry newEntry;
-    readInt32(stream, &newEntry._pid, swapNeeded);
-    readInt32(stream, &newEntry._type, swapNeeded);
-    readInt32(stream, &newEntry._offset, swapNeeded);
-    readInt32(stream, &newEntry._length, swapNeeded);
+    readUInt32(stream, &newEntry._pid, swapNeeded);
+    readUInt32(stream, &newEntry._type, swapNeeded);
+    readUInt32(stream, &newEntry._offset, swapNeeded);
+    readUInt32(stream, &newEntry._length, swapNeeded);
     memcpy(entry, &newEntry, sizeof(IndexEntry));
   }
 }
 
-IndexEntry* readIndex(IStream* stream, OMInt32 count, bool swapNeeded)
+IndexEntry* readIndex(IStream* stream, OMUInt32 count, bool swapNeeded)
 {
   IndexEntry* result = new IndexEntry[count];
   ASSERT("Successfully allocated index array", result != 0);
   if (!swapNeeded) {
     read(stream, result, sizeof(IndexEntry) * count);
   } else {
-    for (OMInt32 i = 0; i < count; i++) {
+    for (OMUInt32 i = 0; i < count; i++) {
       readIndexEntry(stream, &result[i], swapNeeded);
     }
   }
   return result;
 }
 
-char* typeName(OMInt32 type)
+char* typeName(OMUInt32 type)
 {
   char * result;
   
@@ -1092,7 +1092,7 @@ void openStorage(IStorage* parentStorage,
   }
 }
 
-void dumpVectorIndexEntry(OMInt32 i, VectorIndexEntry* vectorIndexEntry)
+void dumpVectorIndexEntry(OMUInt32 i, VectorIndexEntry* vectorIndexEntry)
 {
   cout << setw(8) << i
        << " : "
@@ -1100,8 +1100,8 @@ void dumpVectorIndexEntry(OMInt32 i, VectorIndexEntry* vectorIndexEntry)
 }
 
 void printVectorIndex(VectorIndexEntry* vectorIndex,
-                      OMInt32 count,
-                      OMInt32 highWaterMark)
+                      OMUInt32 count,
+                      OMUInt32 highWaterMark)
 {
   cout << "Dump of vector index" << endl;
   cout << "( High water mark = " << highWaterMark
@@ -1112,7 +1112,7 @@ void printVectorIndex(VectorIndexEntry* vectorIndex,
          << "   "
          << setw(8) << "key" << endl;
 
-    for (OMInt32 i = 0; i < count; i++) {
+    for (OMUInt32 i = 0; i < count; i++) {
       dumpVectorIndexEntry(i, &vectorIndex[i]);
     }
   } else {
@@ -1132,14 +1132,14 @@ void readVectorIndexEntry(IStream* stream,
     // NYI
   } else {
     VectorIndexEntry newEntry;
-    readInt32(stream, &newEntry._elementName, swapNeeded);
+    readUInt32(stream, &newEntry._elementName, swapNeeded);
     memcpy(entry, &newEntry, sizeof(VectorIndexEntry));
   }
 
 }
 
 VectorIndexEntry* readVectorIndex(IStream* stream,
-                                  OMInt32 count,
+                                  OMUInt32 count,
                                   bool swapNeeded)
 {
   VectorIndexEntry* result = new VectorIndexEntry[count];
@@ -1147,7 +1147,7 @@ VectorIndexEntry* readVectorIndex(IStream* stream,
   if (!swapNeeded) {
     read(stream, result, sizeof(VectorIndexEntry) * count);
   } else {
-    for (OMInt32 i = 0; i < count; i++) {
+    for (OMUInt32 i = 0; i < count; i++) {
       readVectorIndexEntry(stream, &result[i], swapNeeded);
     }
   }
@@ -1157,12 +1157,12 @@ VectorIndexEntry* readVectorIndex(IStream* stream,
 void dumpContainedObjects(IStorage* storage,
                           IStream* propertiesStream,
                           IndexEntry* index,
-                          OMInt32 entries,
+                          OMUInt32 entries,
                           char* pathName,
                           int isRoot,
                           bool swapNeeded)
 {
-  for (OMInt32 i = 0; i < entries; i++) {
+  for (OMUInt32 i = 0; i < entries; i++) {
 
     switch (index[i]._type) {
       
@@ -1233,11 +1233,11 @@ void dumpContainedObjects(IStorage* storage,
         fatalError("dumpContainedObjects", "openStream() failed.");
       }
 
-      OMInt32 _highWaterMark;
-      readInt32(subStream, &_highWaterMark, swapNeeded);
+      OMUInt32 _highWaterMark;
+      readUInt32(subStream, &_highWaterMark, swapNeeded);
 
-      OMInt32 _count;
-      readInt32(subStream, &_count, swapNeeded);
+      OMUInt32 _count;
+      readUInt32(subStream, &_count, swapNeeded);
       
       // Read the vector index.
       //
@@ -1253,7 +1253,7 @@ void dumpContainedObjects(IStorage* storage,
 
       // for each vector index entry
       //
-      for (OMInt32 entry = 0; entry < _count; entry++) {
+      for (OMUInt32 entry = 0; entry < _count; entry++) {
         //   compute storage name
         char* elementName = new char[strlen(vectorName) + 1 + 1];
         strcpy(elementName, vectorName);
@@ -1393,7 +1393,7 @@ void dumpDataStream(IStream* stream,
 
 void dumpProperties(IStorage* storage,
                     IndexEntry* index,
-                    OMInt32 entries,
+                    OMUInt32 entries,
                     char* pathName,
                     int isRoot,
                     bool swapNeeded)
@@ -1405,7 +1405,7 @@ void dumpProperties(IStorage* storage,
     fatalError("dumpProperties", "openStream() failed.");
   }
 
-  for (OMInt32 i = 0; i < entries; i++) {
+  for (OMUInt32 i = 0; i < entries; i++) {
 
     // Count this property
     //
@@ -1424,7 +1424,7 @@ void dumpProperties(IStorage* storage,
     cout << "property " << i << " "
          << "( " << typeName(index[i]._type) << " )" << endl;
 
-    for (OMInt32 byteCount = 0; byteCount < index[i]._length; byteCount++) {
+    for (OMUInt32 byteCount = 0; byteCount < index[i]._length; byteCount++) {
 
       unsigned char ch;
       DWORD bytesRead;
@@ -1470,7 +1470,7 @@ ByteOrder readByteOrder(IStream* stream)
   _openArrayKeySymbol = (char*)openArrayKeySymbol;
   _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
-  OMInt16 byteOrder;
+  OMUInt16 byteOrder;
   read(stream, &byteOrder, sizeof(byteOrder));
 
   ByteOrder result;
@@ -1487,8 +1487,8 @@ ByteOrder readByteOrder(IStream* stream)
 
     // Read version number from start of stream.
     //
-    OMInt32 version;
-    read(stream, 0, &version, sizeof(OMInt32)); 
+    OMUInt32 version;
+    read(stream, 0, &version, sizeof(OMUInt32)); 
 
     ByteOrder hostOrder = hostByteOrder();
     if (version == 0x00000001) {                // native version number 1 
@@ -1544,7 +1544,7 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
     fatalError("dumpObject", "Property index stream empty");
   }
 
-  OMInt16 _byteOrder = readByteOrder(stream);
+  OMUInt16 _byteOrder = readByteOrder(stream);
 
   if (isRoot) {
     // The byte ordering of the root property index specifies the byte
@@ -1582,11 +1582,11 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
     swapNeeded = false;
   }
 
-  OMInt32 _formatVersion;
-  readInt32(stream, &_formatVersion, swapNeeded);
+  OMUInt32 _formatVersion;
+  readUInt32(stream, &_formatVersion, swapNeeded);
 
-  OMInt32 _entryCount;
-  readInt32(stream, &_entryCount, swapNeeded);
+  OMUInt32 _entryCount;
+  readUInt32(stream, &_entryCount, swapNeeded);
 
   // Compute the header size which is as follows ...
   //
