@@ -120,11 +120,10 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
 {
   HRESULT rc = S_OK;
   IAAFPluginManager *pPluginManager = NULL;
-  IAAFPlugin *pPlugin = NULL;
+  IAAFClassExtension *pClassExtension = NULL;
   IAAFFile *pFile=NULL;
   IAAFHeader *pHead=NULL;
   IAAFDictionary *pDict=NULL;
-  IAAFDefObject *pDefObject = NULL;
   IAAFAdminMob *pAdminMob=NULL;
   IAAFMob *pMob=NULL;
   IAAFPersonnelResource *pPersResource=NULL;
@@ -172,19 +171,10 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
     check (pHead->GetDictionary(&pDict));
 
     // Ask the plugins to register and initialize all necessary defintions.
-    check (pPluginManager->CreateInstance(CLSID_AAFAdminMob, NULL, IID_IAAFPlugin, (void **)&pPlugin));
-
-    aafInt32 defCount = 0;
-    check (pPlugin->GetNumDefinitions(&defCount));
-    for (aafInt32 i = 0; i < defCount; ++i)
-    {
-      check (pPlugin->GetIndexedDefinitionObject(i, pDict, &pDefObject));
-      pDefObject->Release();
-      pDefObject = NULL;
-    }
-
-    pPlugin->Release();
-    pPlugin = NULL;
+    check (pPluginManager->CreateInstance(CLSID_AAFAdminMob, NULL, IID_IAAFClassExtension, (void **)&pClassExtension));
+    check (pClassExtension->RegisterDefinitions(pDict));
+    pClassExtension->Release();
+    pClassExtension = NULL;
       
     pPluginManager->Release();
     pPluginManager = NULL;
@@ -262,10 +252,8 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
     pAdminMob->Release();
   if (pMob)
     pMob->Release();
-  if (pPlugin)
-    pPlugin->Release();
-  if (pDefObject)
-    pDefObject->Release();
+  if (pClassExtension)
+    pClassExtension->Release();
   if (pDict)
     pDict->Release();
   if (pHead)

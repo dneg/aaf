@@ -712,9 +712,10 @@ AAFRESULT ImplAAFPluginManager::RegisterPluginFactory(
 AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 {
 	IAAFPlugin	*plugin			= NULL;
+  IAAFClassExtension *pClassExtension = NULL;
 	IAAFEssenceCodec	*codec	= NULL;
 	aafUID_t	uid;
-	aafInt32 defIndex, defCount;
+	aafUInt32 defIndex, defCount;
 
 
   // Now attempt to register this class id for the current plugin file.
@@ -734,10 +735,20 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
                IID_IAAFPlugin, 
                (void **)&plugin));
 
+    // Get the Class extension interface.
+    if (SUCCEEDED(plugin->QueryInterface(IID_IAAFClassExtension, (void **)&pClassExtension)))
+    {
+      // TBD: Use this interface to filter for class extension plugins.
+      // We need to store whether or note this is a class extension with the
+      // CLSID...
+      pClassExtension->Release();
+      pClassExtension = NULL;
+    }
+
     //
     // NOTE: This version supports a multiple plugins per definition (id).
     //
-    CHECK(plugin->GetNumDefinitions (&defCount));
+    CHECK(plugin->CountDefinitions (&defCount));
     for(defIndex = 0; defIndex < defCount; ++defIndex)
     {
       CHECK(plugin->GetIndexedDefinitionID(defIndex, &uid));
@@ -769,6 +780,8 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 	}
 	XEXCEPT
 	{
+    if (NULL != pClassExtension)
+      pClassExtension->Release();
 		if(codec != NULL)
 			codec->Release();
 		if(plugin != NULL)
@@ -862,7 +875,7 @@ AAFRESULT
 	IAAFPluginDescriptor	*desc = NULL;
 	IUnknown				*iUnk = NULL;
 	IAAFDictionary			*iDictionary = NULL;
-	aafInt32				n, count;
+	aafUInt32				n, count;
 	aafUID_t				testID;
 	aafBool					found;
 
@@ -871,7 +884,7 @@ AAFRESULT
 		iUnk = static_cast<IUnknown *> (pDictionary->GetContainer());
 		CHECK(iUnk->QueryInterface(IID_IAAFDictionary, (void **)&iDictionary));
 		CHECK(GetPluginInstance(pluginDefID, &plugin));
-		CHECK(plugin->GetNumDefinitions (&count));
+		CHECK(plugin->CountDefinitions (&count));
 		found = kAAFFalse;
 		for(n = 0; n < count && !found; n++)
 		{
