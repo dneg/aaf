@@ -36,7 +36,7 @@ class ImplAAFFindSourceInfo;
 
 class ImplAAFScopeStack;
 
-class ImplAAFEffect;
+class ImplAAFOperationGroup;
 
 
 
@@ -357,12 +357,12 @@ AAFRESULT
 	aafPosition_t offset,             /* IN */
 	aafMobKind_t mobKind,             /* IN */
 	aafMediaCriteria_t *pMediaCrit,    /* IN */
-	aafEffectChoice_t *pEffectChoice,  /* IN */  /* NOTE: take this arg out? */
+	aafOperationChoice_t *pOperationChoice,  /* IN */  /* NOTE: take this arg out? */
 	ImplAAFFindSourceInfo **ppSourceInfo);  /* OUT */
 
 	virtual AAFRESULT MobFindLeaf(ImplAAFMobSlot *track,
 					 aafMediaCriteria_t *mediaCrit,
-					 aafEffectChoice_t *effectChoice,
+					 aafOperationChoice_t *operationChoice,
 					 ImplAAFComponent *rootObj,
 					 aafPosition_t rootPos,
 					 aafLength_t rootLen,
@@ -373,7 +373,7 @@ AAFRESULT
 					 ImplAAFComponent **foundObj,
 					 aafLength_t *minLength,
 					 aafBool *foundTransition,
-					 ImplAAFEffect **effeObject,
+					 ImplAAFOperationGroup **groupObject,
 					 aafInt32	*nestDepth,
 					 aafPosition_t *diffPos);
 
@@ -394,7 +394,7 @@ virtual AAFRESULT MobFindSource(
 					   aafLength_t length,   /* expected length of clip */
 					   aafMobKind_t mobKind,
 					   aafMediaCriteria_t *mediaCrit,
-					   aafEffectChoice_t *effectChoice,
+					   aafOperationChoice_t *operationChoice,
 					   ImplAAFFindSourceInfo *sourceInfo,
 					   aafBool *foundSource);
 

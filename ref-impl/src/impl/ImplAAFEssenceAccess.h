@@ -68,7 +68,7 @@ public:
 
  //Sets which variety of the codec ID is to be used.)
   virtual AAFRESULT STDMETHODCALLTYPE
-	SetEssenceCodecVariety(aafUID_t variety);
+	SetEssenceCodecFlavour(aafUID_t variety);
 
   //****************
   // Create()
@@ -210,7 +210,7 @@ public:
          aafInt16  arrayElemCount,
 
          // @parm [out,size_is(arrayElemCount)] referencing this array
-         aafmMultiXfer_t *  xferArray);
+         aafmMultiXfer_t *  xferArray, aafmMultiResult_t *resultArray);
 	//@comm arrayElemCount is the size of the array or transfer operations.
 	// xferArray points to an array of transfer parameters.  All fields
 	// in this array except for bytesXferred must be set up before
@@ -444,7 +444,7 @@ public:
          aafInt16  elemCount,
 
          // @parm [out, size_is(elemCount)] 
-         aafmMultiXfer_t *  xferArray);
+         aafmMultiXfer_t *  xferArray, aafmMultiResult_t *resultArray);
 	//@comm arrayElemCount is the size of the array or transfer operations.
 	// xferArray points to an array of transfer parameters.  All fields
 	// in this array except for bytesXferred must be set up before
@@ -457,9 +457,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     ReadFractionalSample
-        (aafUInt32	nBytes,
-		// @parm [in] 
-         aafUInt32  bufLen,
+        (aafUInt32  bufLen,
 
          // @parm [out, size_is(bufLen),length_is(*bytesRead)] 
          aafDataBuffer_t  buffer,
@@ -472,7 +470,7 @@ public:
   // GotoFrameNumber()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SeektoEditFrame
+    Seek
         // @parm [in] 
         (aafInt64  frameNum);
 	//@comm Useful only on reading, you
