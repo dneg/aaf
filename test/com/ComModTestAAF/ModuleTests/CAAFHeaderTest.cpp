@@ -9,9 +9,7 @@
 *                                          *
 \******************************************/
 
-#ifndef __CAAFHeader_h__
-#include "CAAFHeader.h"
-#endif
+#include "AAF.h"
 
 #include <iostream.h>
 #include <stdlib.h>
@@ -65,7 +63,7 @@ struct HeaderTest
   aafUID_t _mobID[gMaxMobCount];
 };
 
-HRESULT CAAFHeader::test()
+extern "C" HRESULT CAAFHeader_test()
 {
   HRESULT hr = AAFRESULT_SUCCESS;
   wchar_t fileName[] = L"HeaderTest.aaf";
@@ -78,12 +76,12 @@ HRESULT CAAFHeader::test()
   }
   catch (HRESULT& ehr)
   {
-    // thrown by HeaderTest::check() method.
+    // thrown by HeaderTest_check() method.
     hr = ehr;
   }
   catch (...)
   {
-    cerr << "CAAFHeader::test...Caught general C++"
+    cerr << "CAAFHeader_test...Caught general C++"
     " exception!" << endl; 
   }
 

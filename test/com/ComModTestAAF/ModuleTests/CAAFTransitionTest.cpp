@@ -1,5 +1,5 @@
 // @doc INTERNAL
-// @com This file implements the module test for CAAFDefinitionObject
+// @com This file implements the module test for CAAFTransition
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -9,9 +9,7 @@
 *                                          *
 \******************************************/
 
-#ifndef __CAAFTransition_h__
-#include "CAAFTransition.h"
-#endif
+#include "AAF.h"
 
 
 #include <iostream.h>
@@ -477,7 +475,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	return hr;
 }
 
-HRESULT CAAFTransition::test()
+extern "C" HRESULT CAAFTransition_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	aafWChar * pFileName = L"TransitionTest.aaf";
@@ -490,7 +488,7 @@ HRESULT CAAFTransition::test()
 	}
 	catch (...)
 	{
-	  cerr << "CAAFTransition::test...Caught general C++"
+	  cerr << "CAAFTransition_test...Caught general C++"
 		" exception!" << endl; 
 	  hr = AAFRESULT_TEST_FAILED;
 	}

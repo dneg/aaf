@@ -14,16 +14,11 @@
 
 
 
-#include "CAAFTimecodeStream.h"
-#include "CAAFTimecodeStream.h"
-#ifndef __CAAFTimecodeStream_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFTimecodeStream::test()
+extern "C" HRESULT CAAFTimecodeStream_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }

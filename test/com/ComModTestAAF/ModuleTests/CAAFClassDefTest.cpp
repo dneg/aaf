@@ -17,16 +17,11 @@
 
 
 
-#include "CAAFClassDef.h"
-#include "CAAFClassDef.h"
-#ifndef __CAAFClassDef_h__
-#error - improperly defined include guard
-#endif
-
+#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
 
-HRESULT CAAFClassDef::test()
+extern "C" HRESULT CAAFClassDef_test()
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
