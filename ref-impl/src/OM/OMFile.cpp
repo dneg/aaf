@@ -659,6 +659,38 @@ OMFile::OMAccessMode OMFile::accessMode(void) const
   return _mode;
 }
 
+  // @cmember Is it possible to read from this <c OMFile> ?
+  //  @rdesc True if this <c OMFile> is readable, false otherwise.
+  //   @this const
+bool OMFile::isReadable(void) const
+{
+  TRACE("OMFile::isReadable");
+
+  bool result;
+  if ((accessMode() == readOnlyMode) || (accessMode() == modifyMode)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+  // @cmember Is it possible to write to this <c OMFile> ?
+  //  @rdesc True if this <c OMFile> is writable, false otherwise.
+  //   @this const
+bool OMFile::isWritable(void) const
+{
+  TRACE("OMFile::isWritable");
+
+  bool result;
+  if ((accessMode() == writeOnlyMode) || (accessMode() == modifyMode)) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
   // @mfunc Is this file recognized by the Object Manager ?
   //   @rdesc True if this file is recognized by the Object Manager,
   //          false otherwise.
