@@ -146,6 +146,21 @@ bool OMRedBlackTreeIterator<Key, Value>::after(void) const
   return result;
 }
 
+  // @mfunc The number of <p Value>s in the associated
+  //        <c OMRedBlackTree>.
+  //   @tcarg class | Key | The type of the unique key that identifies
+  //          the contained values.
+  //   @tcarg class | Value | The type of the contained values.
+  //   @rdesc The number of <p Value>s.
+  //   @this const
+template <typename Key, typename Value>
+size_t OMRedBlackTreeIterator<Key, Value>::count(void) const
+{
+  TRACE("OMRedBlackTreeIterator<Key, Value>::count");
+
+  return _tree->count();
+}
+
   // @mfunc Advance this <c OMRedBlackTreeIterator> to the next <p Value>,
   //        if any.
   //        If the end of the associated <c OMRedBlackTree> is not

@@ -83,6 +83,10 @@ public:
     //          <p Value> ?
    virtual bool after(void) const;
 
+    // @cmember The number of <p Value>s in the associated
+    //          <c OMRedBlackTree>.
+  virtual size_t count(void) const;
+
     // @cmember Advance this <c OMRedBlackTreeIterator> to the next <p Value>,
     //          if any.
     //          If the end of the associated <c OMRedBlackTree> is not

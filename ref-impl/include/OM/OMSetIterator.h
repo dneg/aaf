@@ -86,6 +86,10 @@ public:
     //          <p Element> ?
    virtual bool after(void) const;
 
+    // @cmember The number of <p Elements>s in the associated
+    //          <c OMSet>.
+  virtual size_t count(void) const;
+
     // @cmember Advance this <c OMSetIterator> to the next <p Element>,
     //          if any.
     //          If the end of the associated <c OMSet> is not

@@ -120,6 +120,21 @@ bool OMSetIterator<Key, Element>::after(void) const
   return _iterator.after();
 }
 
+  // @mfunc The number of <p Elements>s in the associated
+  //        <c OMSet>.
+  //   @tcarg class | Key | The type of the unique key that identifies
+  //          the contained elements.
+  //   @tcarg class | Element | The type of the contained elements.
+  //   @rdesc The number of <p Elements>s
+  //   @this const
+template <typename Key, typename Element>
+size_t OMSetIterator<Key, Element>::count(void) const
+{
+  TRACE("OMSetIterator<Key, Element>::count");
+
+  return _iterator.count();
+}
+
   // @mfunc Advance this <c OMSetIterator> to the next <p Element>,
   //        if any.
   //        If the end of the associated <c OMSet> is not
