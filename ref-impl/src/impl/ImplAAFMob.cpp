@@ -42,12 +42,14 @@
 #include "ImplAAFHeader.h"
 #include "ImplAAFContentStorage.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFTimelineMobSlot.h"
 
 #include <assert.h>
 #include "AAFResult.h"
 #include "aafCvt.h"
 
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
+extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
 extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
 
 ImplAAFMob::ImplAAFMob ()
@@ -372,7 +374,41 @@ AAFRESULT STDMETHODCALLTYPE
 		 aafPosition_t  origin,
 		 ImplAAFTimelineMobSlot ** newSlot)  //@parm [out] Newly created slot
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFTimelineMobSlot	*aSlot = NULL;
+	ImplAAFMobSlot			*tmpSlot;
+///fLength_t length = CvtInt32toLength(0, length);
+///	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
+	aafErr_t aafError = OM_ERR_NONE;
+
+	*newSlot = NULL;
+	aafAssert((segment != NULL), _file, AAFRESULT_NULL_PARAM);
+
+	XPROTECT()
+	  {
+		aSlot = (ImplAAFTimelineMobSlot *)CreateImpl (CLSID_AAFTimelineMobSlot);
+		  {
+//!!!			CHECK(tmpSlot->WriteRational(OMMSLTEditRate, editRate));
+			CHECK(aSlot->SetSegment(segment));
+			CHECK(aSlot->SetSlotID(slotID));
+			CHECK(aSlot->SetName(slotName));
+			CHECK(aSlot->SetEditRate(&editRate));
+			CHECK(aSlot->SetOrigin(origin));
+
+			/* Append new slot to mob */
+			tmpSlot = aSlot;
+			_slots.appendValue(tmpSlot);
+		  }
+	  } /* XPROTECT */
+
+	XEXCEPT
+	  {
+//!!!	    tmpSlot->Delete();
+		return(XCODE());
+	  }
+	XEND;
+
+	*newSlot = aSlot;
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT STDMETHODCALLTYPE
