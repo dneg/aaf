@@ -38,7 +38,7 @@ AD_XMETHOD3(Next,
 			objOut, AAFClassDefinition, ppClassDefinitions, array to receive class definitions,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
 			number of actual ClassDefinitions fetched into ppClassDefinitions array,
-			Enumerates the next count elements \(AD_AAFTYPES\(AAFClassDefinition\) pointers\) in 
+			Enumerates the next count elements \(AAFClassDefinition pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
   // properly releasing the returned pointers.)

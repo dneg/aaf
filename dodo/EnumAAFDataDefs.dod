@@ -33,7 +33,7 @@ AD_XMETHOD3(Next,
 			objOut, AAFDataDefinition, ppDataDefinition, array to receive data definitions,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
 			number of actual DataDefinition fetched into ppDataDefinition array,
-			Enumerates the next count elements \(AD_AAFTYPES\(AAFDataDefinition\) pointers\) in 
+			Enumerates the next count elements \(AAFDataDefinition pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pcFetched. The caller is responsible for 
   // properly releasing the returned pointers.)
@@ -41,7 +41,7 @@ AD_XMETHOD3(Next,
 AD_METHOD1(Skip,
 		   [in], aafUInt32, count, Number of elements to skip,
 		   Instructs the enumerator to skip the next count elements in the enumeration so that 
-  // the next call to AD_AAFTYPES\(EnumAAFDataDefinition\)::Next will not return 
+  // the next call to EnumAAFDataDefinition::Next will not return 
   // those elements.)
 
 AD_METHOD0(Reset,
