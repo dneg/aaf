@@ -26,14 +26,17 @@
 #include "ImplEnumAAFMobSlots.h"
 #endif
 
-#ifndef __ImplEnumAAFMobComments_h__
-#include "ImplEnumAAFMobComments.h"
-#endif
-
 #ifndef __ImplAAFOperationGroup_h__
 #include "ImplAAFOperationGroup.h"
 #endif
 
+#ifndef __ImplAAFTaggedValue_h__
+#include "ImplAAFTaggedValue.h"
+#endif
+
+#ifndef __ImplEnumAAFTaggedValues_h__
+#include "ImplEnumAAFTaggedValues.h"
+#endif
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
@@ -62,21 +65,26 @@
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
 extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
 extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
+extern "C" const aafClassID_t CLSID_EnumAAFTaggedValues;
 extern "C" const aafClassID_t CLSID_AAFSourceClip;
 extern "C" const aafClassID_t CLSID_AAFFindSourceInfo;
+extern "C" const aafClassID_t CLSID_AAFTypeDefString;
+extern "C" const aafClassID_t CLSID_AAFTaggedValue;
 
 ImplAAFMob::ImplAAFMob ()
 : _mobID(			PID_Mob_MobID,			"MobID"),
   _name(			PID_Mob_Name,			"Name"),
   _creationTime(    PID_Mob_CreationTime,	"CreationTime"),
-  _lastModified(    PID_Mob_LastModified,		"LastModified"),
-  _slots(			PID_Mob_Slots,			"Slots")
+  _lastModified(    PID_Mob_LastModified,	"LastModified"),
+  _slots(			PID_Mob_Slots,			"Slots"),
+  _userComments(	PID_Mob_UserComments,	"UserComments")
 {
 	_persistentProperties.put(_mobID.address());
 	_persistentProperties.put(_name.address());
 	_persistentProperties.put(_creationTime.address());
 	_persistentProperties.put(_lastModified.address());
 	_persistentProperties.put(_slots.address());
+	_persistentProperties.put(_userComments.address());
 	(void)aafMobIDNew(&_mobID);		// Move this out of constructor when we get 2-stage create
 	AAFGetDateTime(&_creationTime);
 	AAFGetDateTime(&_lastModified);
@@ -479,54 +487,59 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::AppendComment (aafWChar *  /*category*/,
-                           aafWChar *  /*comment*/)
+    ImplAAFMob::AppendComment ( aafWChar*  pTagName,
+								aafWChar*  pComment)
 {
-#if FULL_TOOLKIT
-	aafProperty_t		prop;
-	aafInt32			n, cnt;
-	AAFObject			*attb, *head;
-    char				oldCommentName[64];
-    aafBool				commentFound;
-    aafAttributeKind_t	kind;
+	ImplAAFTaggedValue*			pTaggedValue = NULL;
+	ImplEnumAAFTaggedValues*	pEnum = NULL;
+	ImplAAFTypeDef*				pTypeDef = NULL;
+	ImplAAFHeader*				pHeader = NULL;
+	ImplAAFDictionary*			pDictionary = NULL;
 	
-	aafAssertValidFHdl(_file);
-	aafAssert((category != NULL), _file, AAFRESULT_NULLOBJECT);
-	aafAssert((comment != NULL), _file, AAFRESULT_NULLOBJECT);
+	aafWChar					oldTagName[64];
+    aafBool						commentFound = AAFFalse;
+	aafUID_t					typeDefUID = CLSID_AAFTypeDefString;
+	
+	if (pTagName == NULL || pComment == NULL)
+		return AAFRESULT_NULL_PARAM;
 
-	XPROTECT(_file)
+
+	XPROTECT()
 	{
-			head = this;
-		
+		CHECK(EnumAAFAllMobComments(&pEnum));
+		CHECK(pEnum->NextOne(&pTaggedValue));
+		while(pTaggedValue)
 		{
-			prop = OMMOBJUserAttributes;
-		}
-
-		commentFound = AAFFalse;
-		cnt = head->GetNumAttributes(prop);
-		for(n = 1; n <= cnt; n++)
-		{
-			CHECK(head->ReadNthAttribute(prop, &attb, n));
-			CHECK(attb->ReadAttrKind(OMATTBKind, &kind));
-			CHECK(attb->ReadString(OMATTBName, oldCommentName, sizeof(oldCommentName)));
-			if((kind == kAAFObjectAttribute) &&
-			   (strcmp(oldCommentName, comment) == 0))
+			CHECK(pTaggedValue->GetName(oldTagName, sizeof(oldTagName)));
+			if (wcscmp(oldTagName, pTagName) == 0)
 			{
 				commentFound = AAFTrue;
-				CHECK(attb->WriteString(OMATTBName, comment));
 				break;
 			}
+			pTaggedValue->ReleaseReference();
+			pTaggedValue = NULL;
+			pEnum->NextOne(&pTaggedValue);
 		}
-			
-		if(!commentFound)
+		if (commentFound)
 		{
-			attb = new AAFAttribute(_file);
-			CHECK(attb->WriteAttrKind(OMATTBKind, kAAFStringAttribute));
-			CHECK(attb->WriteString(OMATTBName, category));
-			CHECK(attb->WriteString(OMATTBStringAttribute, comment));
-			CHECK(head->AppendAttribute(prop, attb));
+			// Update existing comment
+			CHECK(pTaggedValue->SetValue(wcslen(pComment), (unsigned char *)pComment));
+			pTaggedValue->ReleaseReference();
+			pTaggedValue = NULL;
 		}
+		else
+		{
+			// Create a new comment and add it to the list!
+			CHECK(this->MyHeadObject(&pHeader));
+			CHECK(pHeader->GetDictionary(&pDictionary));
+			CHECK(pDictionary->LookupType(&typeDefUID, &pTypeDef));
+			pTaggedValue = (ImplAAFTaggedValue *)CreateImpl(CLSID_AAFTaggedValue);
+			CHECK(pTaggedValue->Initialize(pTagName, pTypeDef));
+			CHECK(pTaggedValue->SetValue(wcslen(pComment), (unsigned char *)pComment));
+			pTaggedValue->ReleaseReference();
+			pTaggedValue = NULL;
 
+		}
 	}
 	XEXCEPT
 	{
@@ -535,9 +548,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 	
 	return(AAFRESULT_SUCCESS);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 //****************
@@ -551,35 +561,41 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::GetNumComments (aafUInt32 *  /*pEnum*/)
+    ImplAAFMob::GetNumComments (aafUInt32*  pNumComments)
 {
-#if FULL_TOOLKIT
-	aafAssert((numComments != NULL), _file, AAFRESULT_NULLOBJECT);
-	*numComments = 0;
+	size_t	numComments;
 
-	XPROTECT(_file)
-	  {
-	  	{
-	  		*numComments = GetNumAttributes(OMMOBJUserAttributes);
-	  	}
-	}
-	XEXCEPT
-	{
-		return(XCODE());
-	}
-	XEND;
+	if (pNumComments == NULL)
+		return AAFRESULT_NULL_PARAM;
+
+	_userComments.getSize(numComments);
+
+	*pNumComments = numComments;
 
 	return(AAFRESULT_SUCCESS);
-#else
-  return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMob::EnumAAFAllMobComments (ImplEnumAAFMobComments ** /*ppEnum*/)
+    ImplAAFMob::EnumAAFAllMobComments (ImplEnumAAFTaggedValues** ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplEnumAAFTaggedValues*	theEnum = (ImplEnumAAFTaggedValues *)CreateImpl(CLSID_EnumAAFTaggedValues);
+
+	XPROTECT()
+	{
+		CHECK(theEnum->SetEnumStrongProperty(this, &_userComments));
+		CHECK(theEnum->Reset());
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
