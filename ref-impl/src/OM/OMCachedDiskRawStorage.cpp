@@ -241,11 +241,12 @@ void OMCachedDiskRawStorage::writeAt(OMUInt64 position,
   PRECONDITION("Writable", isWritable());
   PRECONDITION("Positionable", isPositionable());
 
+  OMUInt64 lastPosition = position + byteCount;
+  if (lastPosition > _size) {
+    _size = lastPosition;
+  }
   writeCachedAt(position, bytes, byteCount, bytesWritten);
   _position = position + bytesWritten;
-  if (_position > _size) {
-    _size = _position;
-  }
 }
 
   // @mfunc The current extent of this <c OMCachedDiskRawStorage> in bytes.
