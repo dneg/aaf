@@ -51,8 +51,6 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
-#include "ImplAAFBuiltinDefs.h"
-#include "ImplAAFHeader.h"
 #include "AAFUtils.h"
 
 #include <assert.h>
@@ -89,9 +87,15 @@ extern "C" const aafClassID_t CLSID_AAFObject;
 
 
 ImplAAFClassDef::ImplAAFClassDef ()
-  : _ParentClass  ( PID_ClassDefinition_ParentClass,  L"ParentClass", L"/Dictionary/ClassDefinitions", PID_MetaDefinition_Identification),
-	_Properties   ( PID_ClassDefinition_Properties,   L"Properties", PID_MetaDefinition_Identification),
-	_IsConcrete   ( PID_ClassDefinition_IsConcrete,   L"IsConcrete"),
+  : _ParentClass  ( PID_ClassDefinition_ParentClass,  
+                    L"ParentClass",
+                    L"/MetaDictionary/ClassDefinitions", 
+                    PID_MetaDefinition_Identification),
+    _Properties   ( PID_ClassDefinition_Properties,
+                    L"Properties",
+                    PID_MetaDefinition_Identification),
+    _IsConcrete   ( PID_ClassDefinition_IsConcrete,   
+                    L"IsConcrete"),
 	_propTypesLoaded (false),
 	_BootstrapParent(0)
 {
@@ -499,6 +503,10 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	GetAUID (&uid);
 	*isRoot = memcmp(&uid, &AUID_AAFObject, sizeof(aafUID_t)) == 0;
+  	if (!(*isRoot))
+	  *isRoot = memcmp(&uid, &AUID_AAFMetaDefinition, sizeof(aafUID_t)) == 0;
+  	if (!(*isRoot))
+	  *isRoot = memcmp(&uid, &AUID_AAFMetaDictionary, sizeof(aafUID_t)) == 0;
 
 	return AAFRESULT_SUCCESS;
 }

@@ -30,17 +30,14 @@
 #include "ImplAAFMetaDictionary.h"
 #endif
 
-#ifndef __ImplAAFClassDef_h__
-#include "ImplAAFClassDef.h"
+#ifndef __ImplAAFDictionary_h__
+#include "ImplAAFDictionary.h"
 #endif
 
 #ifndef __ImplEnumAAFClassDefs_h__
 #include "ImplEnumAAFClassDefs.h"
 #endif
 
-#ifndef __ImplAAFTypeDef_h__
-#include "ImplAAFTypeDef.h"
-#endif
 
 #ifndef __ImplEnumAAFTypeDefs_h__
 #include "ImplEnumAAFTypeDefs.h"
@@ -60,6 +57,7 @@
 #include "ImplAAFObjectCreation.h"
 #include "aafErr.h"
 
+
 #include <assert.h>
 
 #ifndef USE_AAFOBJECT_MODEL
@@ -75,6 +73,7 @@
 
 #endif
 
+extern "C" const aafClassID_t CLSID_AAFMetaDictionary;
 extern "C" const aafClassID_t CLSID_EnumAAFClassDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 
@@ -85,7 +84,8 @@ ImplAAFMetaDictionary::ImplAAFMetaDictionary () :
                      PID_MetaDefinition_Identification),
   _classDefinitions (PID_MetaDictionary_ClassDefinitions,
                      L"ClassDefinitions", 
-                     PID_MetaDefinition_Identification)
+                     PID_MetaDefinition_Identification),
+  _dataDictionary(NULL)
 {
   _persistentProperties.put (_typeDefinitions.address());
   _persistentProperties.put (_classDefinitions.address());
@@ -172,28 +172,116 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
 }
 
 
+
+
+// Factory method for creating a MetaDictionary.
+ImplAAFMetaDictionary *ImplAAFMetaDictionary::CreateMetaDictionary(void)
+{
+  ImplAAFMetaDictionary * pMetaDictionary = NULL;
+
+  ImplAAFRoot *pObject = CreateImpl(CLSID_AAFMetaDictionary);
+  if (pObject)
+  {
+    pMetaDictionary = dynamic_cast<ImplAAFMetaDictionary *>(pObject);
+    assert(NULL != pMetaDictionary);
+    if (NULL != pMetaDictionary)
+    {
+      // If we created a dictionary then give it a reference to a factory
+      // (dictionary) to satisfy the OMStorable class invariant: Every OMStorabe
+      // must have a reference to a factory. Since the meta dictionary is not created
+      // by the OMClassFactory interface we just set the factory to "itself".
+      //
+//
+//      pMetaDictionary->setClassFactory(pMetaDictionary);
+
+      // NOTE: We will probably need to change the previous
+      // line to use a "setMetaClassFactory()" (to be provided by OM)
+      // transdel:2000-APR-11  
+    }
+    else
+    {
+      // Cleanup the "invalid" meta dictionary object.
+      pObject->ReleaseReference();
+      pObject = NULL;
+    }
+  }
+  
+  return pMetaDictionary;
+}
+
+
+
+
 //
 // Create an instance of the appropriate derived class, given the class id.
 //  This method implements the OMClassFactory interface.
 //
-//OMStorable* ImplAAFMetaDictionary::create(const OMClassId& /*classId*/) const
-//{
-//  return NULL;
-//}
+OMStorable* ImplAAFMetaDictionary::create(const OMClassId& classId) const
+{
+  OMStorable* storable = NULL;
+
+  // If we are creating the meta dictionary then just return this.
+  if (0 == memcmp(&AUID_AAFMetaDictionary, &classId, sizeof(classId)))
+  {
+    storable = const_cast<ImplAAFMetaDictionary *>(this);
+  }
+  else
+  {
+    //
+    // Temporary: For compatibility use the "data" dictionary OMFactory to create 
+    // meta data objects.
+    //
+    // This needs to be replaced with code that only creates "meta" data objects:
+    // class definitions, property definitions and type definitions.
+    // transdel:2000-APR-11
+    //
+//    storable = dataDictionary()->create(classId);
+
+    //
+    // Create the appropriate meta definition object for the given
+    // classId.
+    // transdel:2000-MAY-16
+    //
+    ImplAAFMetaDefinition *pMetaObject = NULL;
+    AAFRESULT result = (const_cast<ImplAAFMetaDictionary *>(this))->CreateMetaInstance((*reinterpret_cast<const aafUID_t *>(&classId)), &pMetaObject);
+    assert(AAFRESULT_SUCCEEDED(result));
+    storable = pMetaObject;
+  }
+
+  // Set the class factory for the meta-data objects to this meta dictionary.
+  storable->setClassFactory(this);
+
+  return (storable);
+}
 
 
 //
 // Define the symbol for the stored object id
 //
-//const OMClassId& ImplAAFMetaDictionary::classId(void) const
-//{
-//  return *reinterpret_cast<const OMClassId* const>(&AUID_AAFMetaDictionary);
-//}
+const OMClassId& ImplAAFMetaDictionary::classId(void) const
+{
+  return *reinterpret_cast<const OMClassId* const>(&AUID_AAFMetaDictionary);
+}
 
 
-//void ImplAAFMetaDictionary::onSave(void* /*clientContext*/) const
-//{
-//}
+
+// Override callback from OMStorable
+void ImplAAFMetaDictionary::onSave(void* clientContext) const
+{
+}
+
+// Temporary method to set the 
+void ImplAAFMetaDictionary::setDataDictionary(ImplAAFDictionary *dataDictionary)
+{
+  assert(!_dataDictionary);
+  _dataDictionary = dataDictionary;
+}
+
+ImplAAFDictionary * ImplAAFMetaDictionary::dataDictionary(void) const
+{
+  assert (NULL != _dataDictionary);
+  return (_dataDictionary);
+}
 
 
 //////////////////////////////
@@ -201,6 +289,11 @@ ImplAAFMetaDictionary::~ImplAAFMetaDictionary ()
 //////////////////////////////
 
 
+
+
+//////////////////////////////
+//
+//////////////////////////////
 
 ImplAAFMetaDictionary::ForwardClassReference::ForwardClassReference()
 {
@@ -304,11 +397,11 @@ void ImplAAFMetaDictionary::addAxiomaticTypeDefinition(ImplAAFTypeDef *pTypeDef)
 ImplAAFClassDef * ImplAAFMetaDictionary::findAxiomaticClassDefinition(aafUID_constref classId) const // NOT REFERENCE COUNTED!
 {
   // NOTE: The following type cast is temporary. It should be removed as soon
-  // as the OM has a declarative sytax to include the type
-  // of the key used in the set. (trr:2000-FEB-29)
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-29)
   ImplAAFClassDef* axiomaticClassDefinition;
-  if (_axiomaticClassDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&classId)),
-                                      axiomaticClassDefinition))
+	if (_axiomaticClassDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&classId)),
+                             axiomaticClassDefinition))
   {
     return axiomaticClassDefinition;
   }
@@ -322,11 +415,11 @@ ImplAAFClassDef * ImplAAFMetaDictionary::findAxiomaticClassDefinition(aafUID_con
 ImplAAFPropertyDef * ImplAAFMetaDictionary::findAxiomaticPropertyDefinition(aafUID_constref propertyId) const // NOT REFERENCE COUNTED!
 {
   // NOTE: The following type cast is temporary. It should be removed as soon
-  // as the OM has a declarative sytax to include the type
-  // of the key used in the set. (trr:2000-FEB-29)
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-29)
   ImplAAFPropertyDef* axiomaticPropertyDefinition;
-  if (_axiomaticPropertyDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&propertyId)),
-                                         axiomaticPropertyDefinition))
+	if (_axiomaticPropertyDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&propertyId)),
+                             axiomaticPropertyDefinition))
   {
     return axiomaticPropertyDefinition;
   }
@@ -340,11 +433,11 @@ ImplAAFPropertyDef * ImplAAFMetaDictionary::findAxiomaticPropertyDefinition(aafU
 ImplAAFTypeDef * ImplAAFMetaDictionary::findAxiomaticTypeDefinition(aafUID_constref typeId) const // NOT REFERENCE COUNTED!
 {
   // NOTE: The following type cast is temporary. It should be removed as soon
-  // as the OM has a declarative sytax to include the type
-  // of the key used in the set. (trr:2000-FEB-29)
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-29)
   ImplAAFTypeDef* axiomaticTypeDefinition;
-  if (_axiomaticTypeDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&typeId)),
-                                     axiomaticTypeDefinition))
+	if (_axiomaticTypeDefinitions.find((*reinterpret_cast<const OMObjectIdentification *>(&typeId)),
+                             axiomaticTypeDefinition))
   {
     return axiomaticTypeDefinition;
   }
@@ -417,21 +510,9 @@ ImplAAFMetaDefinition * ImplAAFMetaDictionary::pvtCreateMetaDefinition(const aaf
   // requested ID, not the instantiated one.  (These will be
   // different if the requested ID is a client-supplied
   // extension class.)
-  metaDefinition->pvtSetSoid (auid);
+//  metaDefinition->pvtSetSoid (auid);
 
   return metaDefinition;
-}
-
-
-
-//
-// Create an instance of the appropriate derived class, given the class id.
-//  This method implements the OMClassFactory interface.
-//
-OMStorable* ImplAAFMetaDictionary::create(const OMClassId& classId) const
-{
-  assert (0); // Overriden by subclass.
-  return NULL;
 }
 
 
@@ -441,13 +522,43 @@ OMStorable* ImplAAFMetaDictionary::create(const OMClassId& classId) const
 AAFRESULT STDMETHODCALLTYPE 
   ImplAAFMetaDictionary::CreateMetaInstance (
     // Stored Object ID of the meta object to be created.
-    aafUID_constref /* classId */,
+    aafUID_constref classId,
 
     // Address of output variable that receives the 
     // object pointer requested in auid
-    ImplAAFMetaDefinition ** /* ppMetaObject */)
+    ImplAAFMetaDefinition ** ppMetaObject)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  AAFRESULT hr = AAFRESULT_SUCCESS;
+
+  if (!ppMetaObject) 
+    return AAFRESULT_NULL_PARAM;
+
+
+  // Lookup the class definition for the given classId. If the class
+  // definition is one of the "built-in" class definitions then the
+  // definition will be created and registered with the dictionary
+  // if necessary. (TRR 2000-MAY-16)
+  ImplAAFClassDefSP pClassDef;
+  hr = dataDictionary()->LookupClassDef (classId, &pClassDef);
+  if (AAFRESULT_FAILED (hr))
+    return hr;
+
+
+  // Create the correct definition object.
+  *ppMetaObject = pvtCreateMetaDefinition(classId);
+  if (NULL == *ppMetaObject)
+  {
+    // Return the most likely cause...
+    return AAFRESULT_INVALID_CLASS_ID;
+  }
+
+  
+  // Make sure that we have connected all of the OMProperties
+  // to the correct ImplAAFPropertyDefs.
+  (*ppMetaObject)->InitOMProperties(pClassDef);
+
+
+  return hr;
 }
 
 
@@ -535,7 +646,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 
   if (NULL == pClassDef)
-  return AAFRESULT_NULL_PARAM;
+    return AAFRESULT_NULL_PARAM;
   
   // Get the AUID of the new class to register.
   aafUID_t newAUID;
@@ -569,7 +680,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFClassDefs ** ppEnum)
 {
   if (NULL == ppEnum)
-  return AAFRESULT_NULL_PARAM;
+    return AAFRESULT_NULL_PARAM;
   *ppEnum = 0;
   
   ImplEnumAAFClassDefs *theEnum = (ImplEnumAAFClassDefs *)CreateImpl (CLSID_EnumAAFClassDefs);
@@ -844,27 +955,6 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-// Factory function to create an unitialized meta defintion for the 
-// given auid.
-static ImplAAFRoot * pvtCreateImpl(const aafUID_t & auid)
-{
-
-  // Lookup the code class id for the given stored object id.
-  const aafClassID_t* id = ImplAAFBaseClassFactory::LookupClassID(auid);
-  if (NULL == id)
-    return NULL;
-  
-  // Attempt to create the corresponding storable object.
-  ImplAAFRoot *impl = ::CreateImpl(*id);
-  if (NULL == impl)
-  { // This is a serious programming error. A stored object id was found in the file
-    // with a known base class id but no base object could be created.
-    assert(NULL != impl);
-    return NULL;
-  }
-
-  return impl;
-}
 
 
 // Create all of the axiomatic classes as uninitialized objects.

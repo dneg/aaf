@@ -49,6 +49,7 @@
 #include "AAFResult.h"
 #include "AAFUtils.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFMetaDictionary.h"
 #include "ImplAAFBuiltinDefs.h"
 
 #include <assert.h>
@@ -326,7 +327,11 @@ ImplAAFBuiltinClasses::NewBuiltinClassDef (const aafUID_t & rClassID,
 	  if (EqualAUID (sBuiltinClassTable[i].pThisId, &rClassID))
 		{
 		  // We've found the desired class in our table.
+#if 1
+		  ImplAAFClassDef * pcd = (ImplAAFClassDef*)(_dictionary->metaDictionary())->pvtCreateMetaDefinition(AUID_AAFClassDef);
+#else // #if 1
 		  ImplAAFClassDef * pcd = (ImplAAFClassDef*)_dictionary->pvtInstantiate(AUID_AAFClassDef);
+#endif // #else // #if 1
 		  assert (pcd);
       pcd->InitOMProperties(_dictionary->GetBuiltinDefs()->cdClassDef());
 
@@ -534,14 +539,20 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 
     // Check that all of the current manual table entries are in the automatically generated
     // set.
-    ImplAAFPropertyDef *pAxiomaticProperty = _dictionary->findAxiomaticPropertyDefinition(propInfo->id);
+    ImplAAFPropertyDef *pAxiomaticProperty = metaDictionary()->findAxiomaticPropertyDefinition(propInfo->id);
     assert (pAxiomaticProperty);
 
-    ImplAAFTypeDef *pAxiomaticType = _dictionary->findAxiomaticTypeDefinition(*propInfo->pTypeGuid);
+    ImplAAFTypeDef *pAxiomaticType = metaDictionary()->findAxiomaticTypeDefinition(*propInfo->pTypeGuid);
     assert (pAxiomaticType);
 #endif
+
+#if 1
+		  ImplAAFMetaDefinition * obj = 
+                        (_dictionary->metaDictionary())->pvtCreateMetaDefinition(AUID_AAFPropertyDef);
+#else // #if 1
 		  ImplAAFObject * obj =
 			_dictionary->pvtInstantiate (AUID_AAFPropertyDef);
+#endif // #else // #if 1
 		  assert (obj);
 		  ImplAAFPropertyDef * propDef =
 			dynamic_cast<ImplAAFPropertyDef*>(obj);
@@ -611,11 +622,15 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
 #if !defined(NDEBUG) && USE_AAFOBJECT_MODEL
     // Check that all of the current manual table entries are in the automatically generated
     // set.
-    ImplAAFClassDef *pAxiomaticClass = _dictionary->findAxiomaticClassDefinition(*sAxClassIDs[classIdx]);
+    ImplAAFClassDef *pAxiomaticClass = metaDictionary()->findAxiomaticClassDefinition(*sAxClassIDs[classIdx]);
     assert (pAxiomaticClass);
 #endif
 	  // instantiate the class def object
+#if 1
+          ImplAAFMetaDefinition * tmp = (_dictionary->metaDictionary())->pvtCreateMetaDefinition(AUID_AAFClassDef);
+#else // #if 1
 	  ImplAAFObject * tmp = _dictionary->pvtInstantiate (AUID_AAFClassDef);
+#endif // #else // #if 1
 	  assert (tmp);
 	  _axClassDefs[classIdx] = dynamic_cast<ImplAAFClassDef*>(tmp);
 	  assert (_axClassDefs[classIdx]);

@@ -42,8 +42,20 @@
 #endif
 
 
+#ifndef __ImplAAFClassDef_h_
+#include "ImplAAFClassDef.h"
+#endif
+
 #ifndef __ImplAAFDictionary_h_
 #include "ImplAAFDictionary.h"
+#endif
+
+#ifndef __ImplAAFMetaDictionary_h_
+#include "ImplAAFMetaDictionary.h"
+#endif
+
+#ifndef __ImplEnumAAFPropertyDefs_h__
+#include "ImplEnumAAFPropertyDefs.h"
 #endif
 
 //#include "AAFStoredObjectIDs.h"
@@ -221,6 +233,37 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+// Gets the dictionary used to create this instance.
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFMetaDefinition::GetDictionary(ImplAAFDictionary **ppDictionary) const
+{
+  if(NULL == ppDictionary)
+    return AAFRESULT_NULL_PARAM;
+
+  *ppDictionary = dynamic_cast<ImplAAFDictionary *>(classFactory());
+
+  if (NULL == *ppDictionary)
+  {
+    // The other OMFactory is the meta dictionary. If so, then return the 
+    // data dictionary set when the meta dictionary was created.
+    // (NOTE: This may be temporary code...transdel:2000-APR-14)
+    ImplAAFMetaDictionary *pMetaDictionary = dynamic_cast<ImplAAFMetaDictionary *>(classFactory());
+    if (pMetaDictionary)
+    {
+      *ppDictionary = pMetaDictionary->dataDictionary(); // not reference counted!
+    }
+  }  
+  
+  assert(NULL != *ppDictionary);
+  if (NULL == *ppDictionary)
+    return AAFRESULT_INVALID_OBJ;
+  
+  // Bump the reference count...
+  (*ppDictionary)->AcquireReference();
+  
+  return AAFRESULT_SUCCESS;
+}
+
 
 
 // Associate the existing OMProperties with corresponding property definitions from
@@ -228,9 +271,92 @@ AAFRESULT STDMETHODCALLTYPE
 // for the parent class of the given class until current class is a "root" class.
 void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
 {
+#if 0
   // Since ImplAAFMetaDefinition is still a subclass of ImplAAFObject we
   // should just delegate property initialization:
   ImplAAFObject::InitOMProperties(pClassDef);
+#else //#if 0
+
+  assert (pClassDef);
+  AAFRESULT hr;
+
+  //
+  // Init base class properties first
+  //
+  ImplAAFClassDefSP parentSP;
+  hr = pClassDef->GetParent (&parentSP);
+  // check that only a "root" will have no parent class definition.
+  assert (AAFRESULT_SUCCEEDED(hr) || (AAFRESULT_FAILED(hr) && AAFRESULT_IS_ROOT_CLASS == hr));
+  if(AAFRESULT_SUCCEEDED(hr))
+  {
+    assert (parentSP);
+    InitOMProperties (parentSP);
+  }
+
+  // See if currently existing OM properties are defined in the class
+  // def.
+  //
+  OMPropertySet * ps = propertySet();
+  assert (ps);
+  const size_t propCount = ps->count();
+
+  // Loop through properties of this class
+  ImplEnumAAFPropertyDefsSP pdEnumSP;
+  hr = pClassDef->GetPropertyDefs (&pdEnumSP);
+  assert (AAFRESULT_SUCCEEDED (hr));
+
+  ImplAAFPropertyDefSP propDefSP;
+  while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&propDefSP)))
+  {
+    OMPropertyId defPid = propDefSP->OmPid ();
+    // assert (ps->isAllowed (defPid));
+    OMProperty * pProp = 0;
+    if (ps->isPresent (defPid))
+    {
+      // Defined property was already in property set.  (Most
+      // probably declared in the impl constructor.)  Get that
+      // property.
+      pProp = ps->get (defPid);
+    }      
+    else if(defPid != PID_InterchangeObject_ObjClass
+      && (defPid != PID_InterchangeObject_Generation)
+      && (defPid != PID_PropertyDefinition_DefaultValue))
+    {
+      assert (0);
+#if 0
+      // Defined property wasn't found in OM property set.
+      // We'll have to install one.
+      pProp = propDefSP->CreateOMProperty ();
+      assert (pProp);
+      
+      // Remember this property so we can delete it later.
+      RememberAddedProp (pProp);
+      
+      // Add the property to the property set.
+      ps->put (pProp);
+#endif
+    }
+    
+  if(defPid != PID_InterchangeObject_ObjClass
+      && (defPid != PID_InterchangeObject_Generation)
+      && (defPid != PID_PropertyDefinition_DefaultValue))
+  {
+      ImplAAFPropertyDef * pPropDef =
+        (ImplAAFPropertyDef*) propDefSP;
+      OMPropertyDefinition * pOMPropDef =
+        dynamic_cast<OMPropertyDefinition*>(pPropDef);
+      assert (pOMPropDef);
+      
+      assert (pProp);
+      pProp->initialize (pOMPropDef);
+      
+      pPropDef = 0;
+      pOMPropDef = 0;
+    }
+    propDefSP = 0;
+    pProp = 0;
+  }
+#endif // #else // #if 0
 }
 
 const OMUniqueObjectIdentification&
@@ -267,11 +393,11 @@ const OMClassId& ImplAAFMetaDefinition::classId(void) const
 void ImplAAFMetaDefinition::onSave(void* clientContext) const
 {
   // TEMPORARY: Parent class will not always be ImplAAFObject!
-  ImplAAFObject::onSave(clientContext);
+//  ImplAAFObject::onSave(clientContext);
 }
 
 void ImplAAFMetaDefinition::onRestore(void* clientContext) const
 {
   // TEMPORARY: Parent class will not always be ImplAAFObject!
-  ImplAAFObject::onRestore(clientContext);
+//  ImplAAFObject::onRestore(clientContext);
 }

@@ -34,17 +34,19 @@
 #include "AAFTypes.h"
 #endif
 
-#ifndef __ImplAAFObject_h__
-#include "ImplAAFObject.h"
-#endif
+#include "ImplAAFRoot.h"
 
+#include "OMStorable.h"
+#include "OMFixedSizeProperty.h"
 #include "OMWideStringProperty.h"
 
 class ImplAAFDictionary;
-class Definition; // the base class for all of the AAFObjectModel definitions.
+class ImplAAFClassDef;
 
 
-class ImplAAFMetaDefinition : public ImplAAFObject
+class ImplAAFMetaDefinition : 
+  public ImplAAFRoot,
+  public OMStorable
 {
 public:
   //
@@ -132,6 +134,12 @@ public:
 
 public:
   // Private SDK methods.
+
+
+  // Gets the dictionary used to create this instance.
+  virtual AAFRESULT STDMETHODCALLTYPE 
+    GetDictionary(ImplAAFDictionary **ppDictionary) const;
+
 
   // Associate the existing OMProperties with corresponding property definitions from
   // the given class definition. NOTE: This call is recursive, it calls itself again

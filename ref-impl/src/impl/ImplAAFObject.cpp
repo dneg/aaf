@@ -52,6 +52,7 @@
 #include "OMFile.h"
 #include "ImplAAFHeader.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFMetaDictionary.h"
 #include "ImplAAFClassDef.h"
 #include "ImplAAFProperty.h"
 #include "ImplAAFPropertyDef.h"
@@ -915,6 +916,19 @@ ImplAAFObject::GetDictionary(ImplAAFDictionary **ppDictionary) const
     return AAFRESULT_NULL_PARAM;
 
   *ppDictionary = dynamic_cast<ImplAAFDictionary *>(classFactory());
+
+  if (NULL == *ppDictionary)
+  {
+    // The other OMFactory is the meta dictionary. If so, then return the 
+    // data dictionary set when the meta dictionary was created.
+    // (NOTE: This may be temporary code...transdel:2000-APR-14)
+    ImplAAFMetaDictionary *pMetaDictionary = dynamic_cast<ImplAAFMetaDictionary *>(classFactory());
+    if (pMetaDictionary)
+    {
+      *ppDictionary = pMetaDictionary->dataDictionary(); // not reference counted!
+    }
+  }  
+  
   assert(NULL != *ppDictionary);
   if (NULL == *ppDictionary)
     return AAFRESULT_INVALID_OBJ;

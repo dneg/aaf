@@ -57,7 +57,7 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 ImplAAFTypeDefEnum::ImplAAFTypeDefEnum ()
   : _ElementType   ( PID_TypeDefinitionEnumeration_ElementType,
                      L"ElementType",
-                     L"/Dictionary/TypeDefinitions",
+                     L"/MetaDictionary/TypeDefinitions",
                      PID_MetaDefinition_Identification),
 	_ElementNames  ( PID_TypeDefinitionEnumeration_ElementNames,  L"ElementNames"),
 	_ElementValues ( PID_TypeDefinitionEnumeration_ElementValues, L"ElementValues"),

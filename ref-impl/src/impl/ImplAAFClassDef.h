@@ -30,6 +30,7 @@
  *
  ************************************************************************/
 
+class ImplAAFObject;
 class ImplEnumAAFPropertyDefs;
 class ImplAAFDefObject;
 class ImplAAFPropertyDef;

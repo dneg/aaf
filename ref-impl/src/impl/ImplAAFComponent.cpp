@@ -54,9 +54,14 @@ typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
 extern "C" const aafClassID_t CLSID_EnumAAFKLVData;
 
 ImplAAFComponent::ImplAAFComponent ():
-	_dataDef(	PID_Component_DataDefinition,	L"DataDefinition", L"/Dictionary/DataDefinitions", PID_DefinitionObject_Identification),
-	_length(	PID_Component_Length,	L"Length"),
-	_KLVData(	PID_Component_KLVData, L"KLVData")
+  _dataDef( PID_Component_DataDefinition,
+            L"DataDefinition", 
+            L"/Header/Dictionary/DataDefinitions",
+            PID_DefinitionObject_Identification),
+  _length( PID_Component_Length,
+           L"Length"),
+  _KLVData( PID_Component_KLVData,
+            L"KLVData")
 {
 	_persistentProperties.put(   _dataDef.address());
 	_persistentProperties.put(   _length.address());

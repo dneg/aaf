@@ -30,16 +30,21 @@
  *
  ************************************************************************/
 
-#include "ImplAAFObject.h"
-#include "OMClassFactory.h"
+#include "OMDictionary.h"
 #include "OMStrongRefSetProperty.h"
+
+#ifndef __ImplAAFClassDef_h__
+#include "ImplAAFClassDef.h"
+#endif
+
+#ifndef __ImplAAFTypeDef_h__
+#include "ImplAAFTypeDef.h"
+#endif
+
 #include "OMReferenceSet.h"
 
 // Forward declarations:
-
 class ImplAAFMetaDefinition;
-class ImplAAFClassDef;
-class ImplAAFTypeDef;
 class ImplAAFMetaDefinition;
 class ImplAAFTypeDefVariableArray;
 class ImplAAFTypeDefFixedArray;
@@ -53,6 +58,7 @@ class ImplAAFTypeDefSet;
 
 class ImplEnumAAFClassDefs;
 class ImplEnumAAFTypeDefs;
+class ImplAAFDictionary;
 
 #include "ImplAAFClassDef.h"
 #include "ImplAAFPropertyDef.h"
@@ -77,9 +83,8 @@ typedef enum _aafObjectCreationMode_e
 
 
 class ImplAAFMetaDictionary :
-  public ImplAAFObject,
-  public OMClassFactory 
-//  public OMStorable
+  public ImplAAFRoot,
+  public OMDictionary
 {
 public:
   //
@@ -92,6 +97,13 @@ protected:
   virtual ~ImplAAFMetaDictionary ();
 
 public:
+
+  //
+  // Factory method to create an instance of ImplAAFMetaDictionary
+  //
+  static ImplAAFMetaDictionary *CreateMetaDictionary(void);
+
+
   //
   // Create an instance of the appropriate derived class, given the
   // class id.  Initializes the OM properties.
@@ -103,12 +115,17 @@ public:
   //
   // This method implements the required OMStorable interface method
   //
-  //  virtual const OMClassId& classId(void) const;
+  virtual const OMClassId& classId(void) const;
 
   // Override callbacks from OMStorable
-  //  virtual void onSave(void* clientContext) const;
+  virtual void onSave(void* clientContext) const;
   //  virtual void onRestore(void* clientContext) const;
 
+
+
+
+  //
+  // Class and type access methods ...
 
 
   //****************
@@ -374,6 +391,11 @@ public:
       ImplAAFTypeDefSet ** ppNewWeakObjRefSet);
 
 public:
+  //
+  // Methods private to the SDK
+  //
+
+
   // These are low-level OMSet tests for containment.
   bool containsClass(aafUID_constref classId);
   bool containsType(aafUID_constref typeId);
@@ -481,6 +503,16 @@ private:
 
   OMSet<OMUniqueObjectIdentification, ForwardClassReference> _forwardClassReferences;
 
+  //
+  // Temporary data members used while converting to the "two-roots" containment
+  // model.
+  //
+private:
+  ImplAAFDictionary *_dataDictionary;
+
+public:
+  void setDataDictionary(ImplAAFDictionary *dataDictionary);
+  ImplAAFDictionary * dataDictionary(void) const;
 };
 
 #endif // #ifndef __ImplAAFMetaDictionary_h__

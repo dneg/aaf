@@ -41,7 +41,7 @@
 ImplAAFParameterDef::ImplAAFParameterDef ()
 : _typeDef     ( PID_ParameterDefinition_Type,
                  L"Type",
-                 L"/Dictionary/TypeDefinitions",
+                 L"/MetaDictionary/TypeDefinitions",
                  PID_MetaDefinition_Identification),
   _displayUnits(	PID_ParameterDefinition_DisplayUnits,			L"DisplayUnits")
 {

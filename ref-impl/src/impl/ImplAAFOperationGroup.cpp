@@ -87,7 +87,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFParameters;
 const aafUID_t kNullID = {0};
 
 ImplAAFOperationGroup::ImplAAFOperationGroup ()
-: _operationDefinition( PID_OperationGroup_OperationDefinition, L"OperationDefinition", L"/Dictionary/OperationDefinitions", PID_DefinitionObject_Identification),
+: _operationDefinition( PID_OperationGroup_OperationDefinition, L"OperationDefinition", L"/Header/Dictionary/OperationDefinitions", PID_DefinitionObject_Identification),
   _inputSegments( PID_OperationGroup_InputSegments, L"InputSegments"),
   _parameters( PID_OperationGroup_Parameters, L"Parameters", PID_DefinitionObject_Identification),
   _bypassOverride( PID_OperationGroup_BypassOverride, L"BypassOverride"),

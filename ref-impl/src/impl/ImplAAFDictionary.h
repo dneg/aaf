@@ -71,12 +71,8 @@ class ImplAAFTypeDefSet;
 #include "ImplAAFObject.h"
 #endif
 
-#ifndef __ImplAAFMetaDictionary_h__
-#include "ImplAAFMetaDictionary.h"
-#endif
 
-
-//#include "OMClassFactory.h"
+#include "OMClassFactory.h"
 #include "OMStrongRefSetProperty.h"
 
 
@@ -91,9 +87,8 @@ class ImplAAFTypeDefSet;
 #include "ImplAAFPluginDef.h"
 
 class ImplAAFDictionary :
-//  public OMClassFactory,
-//  public ImplAAFObject
-  public ImplAAFMetaDictionary // this is temporary!
+  public OMClassFactory,
+  public ImplAAFObject
 {
 public:
   //

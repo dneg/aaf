@@ -29,6 +29,10 @@
 #include "ImplAAFDictionary.h"
 #endif
 
+#ifndef __ImplAAFMetaDictionary_h__
+#include "ImplAAFMetaDictionary.h"
+#endif
+
 #ifndef __ImplAAFClassDef_h__
 #include "ImplAAFClassDef.h"
 #endif
@@ -169,10 +173,6 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _persistentProperties.put(_dataDefinitions.address());
   _persistentProperties.put(_pluginDefinitions.address());
 
-
-  // Set the pointer to the current meta dictionary.
-  // WARNING: this is (temporarily) recursive!
-  _metaDictionary = const_cast<ImplAAFDictionary *>(this);
 }
 
 
@@ -277,16 +277,9 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 // Return a pointer to the meta dictionary.
 ImplAAFMetaDictionary *ImplAAFDictionary::metaDictionary(void) const
 {
-  //
-  // The first version of the meta dictionary is actually implemented
-  // as the parent class of this Dictionary. (this is temporary)
-  // transdel:2000-APR-07
-  //
-  assert (0);
-
-  // Unfortunately the following definition for the MetaDictionary is 
-  // recursive because some of the methods in the meta dictionary have
-  // the same signature as this dictionary. (transdel:2000-APR-07)
+  // Return the dictionary for creating meta objects, classes, types and 
+  // properties.
+  assert(NULL != _metaDictionary);
   return (_metaDictionary);
 }
 
@@ -372,11 +365,28 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
   const aafUID_t * auid  = reinterpret_cast<const aafUID_t*>(&classId);
   ImplAAFDictionary * pNonConstThis = (ImplAAFDictionary*) this;
 
-  ImplAAFClassDefSP pcd;
-  hr = pNonConstThis->LookupClassDef(*auid, &pcd);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  
-  return CreateAndInit (pcd);
+  if (memcmp(auid, &AUID_AAFMetaDictionary, sizeof(aafUID_t)) == 0)
+  { // TEMPORARY: Set the factory of the meta dictionary to this dictionary.
+    metaDictionary()->setClassFactory(this);
+    // Do not bump the reference count. The meta dictionary is currently
+    // not publicly available and it is owned by ImplAAFFile not be another
+    // OMStorable or ImplAAFObject.
+	  return metaDictionary();
+  } 
+  else
+  {
+    // Call the sample top-level dictionary method that is called
+    // by the API client to create objects.
+    ImplAAFObject *pObject = NULL;
+    hr = pNonConstThis->CreateInstance(*auid, &pObject);
+    assert (AAFRESULT_SUCCEEDED (hr));
+    return pObject;
+  }
+  // ImplAAFClassDefSP pcd;
+  // hr = pNonConstThis->LookupClassDef(*auid, &pcd);
+  // assert (AAFRESULT_SUCCEEDED (hr));
+  //
+  // return CreateAndInit (pcd);
 }
 
 
@@ -395,7 +405,7 @@ ImplAAFDictionary::CreateAndInit(ImplAAFClassDef * pClassDef) const
 	{
 	  pNewObject->InitOMProperties (pClassDef);
 
-	  // Attempt to initialize the any class extensions associated
+	  // Attempt to initialize any class extensions associated
 	  // with this object. Only the most derived extension that has an
 	  // associated  plugin is created.
 	  // QUESTION: How should we "deal with" failure? We really need
@@ -540,6 +550,7 @@ AAFRESULT STDMETHODCALLTYPE
     // object pointer requested in auid
     ImplAAFMetaDefinition ** ppMetaObject)
 {
+#if 0  
   if (!ppMetaObject)
     return AAFRESULT_NULL_PARAM;
 
@@ -564,8 +575,7 @@ AAFRESULT STDMETHODCALLTYPE
   }
 
   return (result);
-
-#if 0  
+#else // #if 0
   // Ask the meta dictionary to create the meta definition
   return (metaDictionary()->CreateMetaInstance(classId, ppMetaObject));
 #endif
@@ -580,16 +590,14 @@ AAFRESULT ImplAAFDictionary::dictLookupClassDef (
       ImplAAFClassDef ** ppClassDef)
 {
   // Ask the meta dictionary to see if the class has already in the set.
-  return (ImplAAFMetaDictionary::LookupClassDef(classID, ppClassDef));
-//	return (metaDictionary()->LookupClassDef(classID, ppClassDef));
+  return (metaDictionary()->LookupClassDef(classID, ppClassDef));
 }
 
 bool ImplAAFDictionary::PvtIsClassPresent (
       const aafUID_t & classID)
 {
   // Defer to the meta dictionary.
-  return(ImplAAFMetaDictionary::containsClass(classID));
-//  return(metaDictionary()->containsClass(classID));
+  return(metaDictionary()->containsClass(classID));
 }
 
 bool
@@ -758,8 +766,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafUID_constref classId)
 {
   // Defer to the meta dictionary.
-  return (ImplAAFMetaDictionary::CreateForwardClassReference(classId));
-//  return (metaDictionary()->CreateForwardClassReference(classId));
+  return (metaDictionary()->CreateForwardClassReference(classId));
 }
 
 
@@ -769,8 +776,7 @@ AAFRESULT STDMETHODCALLTYPE
       aafBoolean_t * pResult)
 {
   // Defer to the meta dictionary.
-  return (ImplAAFMetaDictionary::HasForwardClassReference(classId, pResult));
-//  return (metaDictionary()->HasForwardClassReference(classId, pResult));
+  return (metaDictionary()->HasForwardClassReference(classId, pResult));
 }
 
 
@@ -780,8 +786,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
   assert (_defRegistrationAllowed);
   // Defer to the meta dictionary.
-  return (ImplAAFMetaDictionary::RegisterClassDef(pClassDef));
-//  return (metaDictionary()->RegisterClassDef(pClassDef));
+  return (metaDictionary()->RegisterClassDef(pClassDef));
 }
 
 
@@ -790,8 +795,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplEnumAAFClassDefs ** ppEnum)
 {
   // Defer to the meta dictionary.
-  return (ImplAAFMetaDictionary::GetClassDefs(ppEnum));
-//  return (metaDictionary()->GetClassDefs(ppEnum));
+  return (metaDictionary()->GetClassDefs(ppEnum));
 }
 
 
@@ -801,8 +805,7 @@ AAFRESULT STDMETHODCALLTYPE
         (aafUInt32 * pResult)
 {
   // Defer to the meta dictionary.
-  return (ImplAAFMetaDictionary::CountClassDefs(pResult));
-//  return (metaDictionary()->CountClassDefs(pResult));
+  return (metaDictionary()->CountClassDefs(pResult));
 }
 
 
@@ -814,8 +817,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (_defRegistrationAllowed);
 
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::RegisterTypeDef(pTypeDef));
-//	return(metaDictionary()->RegisterTypeDef(pTypeDef));
+  return(metaDictionary()->RegisterTypeDef(pTypeDef));
 }
 
 
@@ -824,16 +826,14 @@ AAFRESULT ImplAAFDictionary::dictLookupTypeDef (
       ImplAAFTypeDef ** ppTypeDef)
 {
   // Defer to the meta dictionary.
-	return (ImplAAFMetaDictionary::LookupTypeDef(typeID, ppTypeDef));
-//	return (metaDictionary()->LookupTypeDef(typeID, ppTypeDef));
+  return (metaDictionary()->LookupTypeDef(typeID, ppTypeDef));
 }
 
 bool ImplAAFDictionary::PvtIsTypePresent (
       const aafUID_t & typeID)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::containsType(typeID));
-//	return(metaDictionary()->containsType(typeID));
+  return(metaDictionary()->containsType(typeID));
 }
 
 /*static*/
@@ -1054,8 +1054,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplEnumAAFTypeDefs ** ppEnum)
 {
   // Defer to the meta dictionary.
-  return(ImplAAFMetaDictionary::GetTypeDefs(ppEnum));
-//	return(metaDictionary()->GetTypeDefs(ppEnum));
+  return(metaDictionary()->GetTypeDefs(ppEnum));
 }
 
 
@@ -1064,8 +1063,7 @@ AAFRESULT STDMETHODCALLTYPE
         (aafUInt32 * pResult)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CountTypeDefs(pResult));
-//	return(metaDictionary()->CountTypeDefs(pResult));
+  return(metaDictionary()->CountTypeDefs(pResult));
 }
 
 
@@ -1075,8 +1073,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef * pTypeDef)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::RegisterOpaqueTypeDef(pTypeDef));
-//	return(metaDictionary()->RegisterOpaqueTypeDef(pTypeDef));
+  return(metaDictionary()->RegisterOpaqueTypeDef(pTypeDef));
 }
 
 
@@ -1086,8 +1083,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef ** ppTypeDef)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::LookupOpaqueTypeDef(typeID, ppTypeDef));
-//	return(metaDictionary()->LookupOpaqueTypeDef(typeID, ppTypeDef));
+  return(metaDictionary()->LookupOpaqueTypeDef(typeID, ppTypeDef));
 }
 
 
@@ -1096,8 +1092,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplEnumAAFTypeDefs ** ppEnum)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::GetOpaqueTypeDefs(ppEnum));
-//	return(metaDictionary()->GetOpaqueTypeDefs(ppEnum));
+  return(metaDictionary()->GetOpaqueTypeDefs(ppEnum));
 }
 
 
@@ -1106,8 +1101,7 @@ AAFRESULT STDMETHODCALLTYPE
         (aafUInt32 * pResult)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CountOpaqueTypeDefs(pResult));
-//	return(metaDictionary()->CountOpaqueTypeDefs(pResult));
+  return(metaDictionary()->CountOpaqueTypeDefs(pResult));
 }
 
 
@@ -1135,7 +1129,6 @@ AAFRESULT STDMETHODCALLTYPE
 		
 	return AAFRESULT_SUCCESS;
 }
-
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterDataDef (
@@ -2220,8 +2213,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFClassDef **ppNewClass)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateClassDef(classID, pClassName, pDescription, pParentClass, ppNewClass));
-//	return(metaDictionary()->CreateClassDef(classID, pClassName, pDescription, pParentClass, ppNewClass));
+  return(metaDictionary()->CreateClassDef(classID, pClassName, pDescription, pParentClass, ppNewClass));
 }
 
 
@@ -2234,8 +2226,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefVariableArray ** ppNewVariableArray)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefVariableArray(typeID, pTypeName, pDescription, pElementType, ppNewVariableArray));
-//	return(metaDictionary()->CreateTypeDefVariableArray(typeID, pTypeName, pDescription, pElementType, ppNewVariableArray));
+  return(metaDictionary()->CreateTypeDefVariableArray(typeID, pTypeName, pDescription, pElementType, ppNewVariableArray));
 }
 
 
@@ -2249,8 +2240,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefFixedArray **pNewFixedArray)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefFixedArray(typeID, pTypeName, pDescription, pElementType, nElements, pNewFixedArray));
-//	return(metaDictionary()->CreateTypeDefFixedArray(typeID, pTypeName, pDescription, pElementType, nElements, pNewFixedArray));
+  return(metaDictionary()->CreateTypeDefFixedArray(typeID, pTypeName, pDescription, pElementType, nElements, pNewFixedArray));
 }
 
 
@@ -2265,8 +2255,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefRecord ** ppNewRecord)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefRecord(typeID, pTypeName, pDescription, ppMemberTypes, pMemberNames, numMembers, ppNewRecord));
-//	return(metaDictionary()->CreateTypeDefRecord(typeID, pTypeName, pDescription, ppMemberTypes, pMemberNames, numMembers, ppNewRecord));
+  return(metaDictionary()->CreateTypeDefRecord(typeID, pTypeName, pDescription, ppMemberTypes, pMemberNames, numMembers, ppNewRecord));
 }
 
 
@@ -2279,8 +2268,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefRename ** ppNewRename)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefRename(typeID, pTypeName, pDescription, pBaseType, ppNewRename));
-//	return(metaDictionary()->CreateTypeDefRename(typeID, pTypeName, pDescription, pBaseType, ppNewRename));
+  return(metaDictionary()->CreateTypeDefRename(typeID, pTypeName, pDescription, pBaseType, ppNewRename));
 }
 
 
@@ -2293,8 +2281,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefStream ** ppNewStream)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefStream(typeID, pTypeName, pDescription, pElementType, ppNewStream));
-//	return(metaDictionary()->CreateTypeDefStream(typeID, pTypeName, pDescription, pElementType, ppNewStream));
+  return(metaDictionary()->CreateTypeDefStream(typeID, pTypeName, pDescription, pElementType, ppNewStream));
 }
 
 
@@ -2307,8 +2294,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefString ** ppNewString)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefString(typeID, pTypeName, pDescription, pElementType, ppNewString));
-//	return(metaDictionary()->CreateTypeDefString(typeID, pTypeName, pDescription, pElementType, ppNewString));
+  return(metaDictionary()->CreateTypeDefString(typeID, pTypeName, pDescription, pElementType, ppNewString));
 }
 
 
@@ -2321,8 +2307,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefStrongObjRef ** ppNewStrongObjRef)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefStrongObjRef(typeID, pTypeName, pDescription, pTargetObjType, ppNewStrongObjRef));
-//	return(metaDictionary()->CreateTypeDefStrongObjRef(typeID, pTypeName, pDescription, pTargetObjType, ppNewStrongObjRef));
+  return(metaDictionary()->CreateTypeDefStrongObjRef(typeID, pTypeName, pDescription, pTargetObjType, ppNewStrongObjRef));
 }
 
 
@@ -2337,8 +2322,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefWeakObjRef ** ppNewWeakObjRef)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefWeakObjRef(typeID, pTypeName, pDescription, pTargetObjType, pTargetHint, targetHintCount, ppNewWeakObjRef));
-//	return(metaDictionary()->CreateTypeDefWeakObjRef(typeID, pTypeName, pDescription, pTargetObjType, pTargetHint, targetHintCount, ppNewWeakObjRef));
+  return(metaDictionary()->CreateTypeDefWeakObjRef(typeID, pTypeName, pDescription, pTargetObjType, pTargetHint, targetHintCount, ppNewWeakObjRef));
 }
 
 
@@ -2351,8 +2335,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefVariableArray ** ppNewStrongObjRefVector)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefStrongObjRefVector(typeID, pTypeName, pDescription, pStrongObjRef, ppNewStrongObjRefVector));
-//	return(metaDictionary()->CreateTypeDefStrongObjRefVector(typeID, pTypeName, pDescription, pStrongObjRef, ppNewStrongObjRefVector));
+  return(metaDictionary()->CreateTypeDefStrongObjRefVector(typeID, pTypeName, pDescription, pStrongObjRef, ppNewStrongObjRefVector));
 }
 
 
@@ -2365,8 +2348,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefVariableArray ** ppNewWeakObjRefVector)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefWeakObjRefVector(typeID, pTypeName, pDescription, pWeakObjRef, ppNewWeakObjRefVector));
-//	return(metaDictionary()->CreateTypeDefWeakObjRefVector(typeID, pTypeName, pDescription, pWeakObjRef, ppNewWeakObjRefVector));
+  return(metaDictionary()->CreateTypeDefWeakObjRefVector(typeID, pTypeName, pDescription, pWeakObjRef, ppNewWeakObjRefVector));
 }
 
 
@@ -2379,8 +2361,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefSet ** ppNewStrongObjRefSet)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefStrongObjRefSet(typeID, pTypeName, pDescription, pStrongObjRef, ppNewStrongObjRefSet));
-//	return(metaDictionary()->CreateTypeDefStrongObjRefSet(typeID, pTypeName, pDescription, pStrongObjRef, ppNewStrongObjRefSet));
+  return(metaDictionary()->CreateTypeDefStrongObjRefSet(typeID, pTypeName, pDescription, pStrongObjRef, ppNewStrongObjRefSet));
 }
 
 
@@ -2393,6 +2374,5 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDefSet ** ppNewWeakObjRefSet)
 {
   // Defer to the meta dictionary.
-	return(ImplAAFMetaDictionary::CreateTypeDefWeakObjRefSet(typeID, pTypeName, pDescription, pWeakObjRef, ppNewWeakObjRefSet));
-//	return(metaDictionary()->CreateTypeDefWeakObjRefSet(typeID, pTypeName, pDescription, pWeakObjRef, ppNewWeakObjRefSet));
+  return(metaDictionary()->CreateTypeDefWeakObjRefSet(typeID, pTypeName, pDescription, pWeakObjRef, ppNewWeakObjRefSet));
 }

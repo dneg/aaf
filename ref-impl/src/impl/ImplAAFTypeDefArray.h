@@ -32,6 +32,7 @@
 #include "ImplAAFTypeDef.h"
 #endif
 
+class ImplAAFPropertyValue;
 
 class ImplAAFTypeDefArray : public ImplAAFTypeDef
 {
