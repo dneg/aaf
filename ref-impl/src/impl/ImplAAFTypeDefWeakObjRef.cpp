@@ -55,7 +55,7 @@
 
 
 ImplAAFTypeDefWeakObjRef::ImplAAFTypeDefWeakObjRef ()
-  : _referencedType (PID_TypeDefinitionWeakObjectReference_ReferencedType, "ReferencedType")
+  : _referencedType (PID_TypeDefinitionWeakObjectReference_ReferencedType, "ReferencedType", "/Dictionary/ClassDefinitions", PID_DefinitionObject_Identification)
 {
   _persistentProperties.put(_referencedType.address());
 }
@@ -118,25 +118,14 @@ ImplAAFTypeDefWeakObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefWeakObjRef::GetObjectType (ImplAAFClassDef ** ppObjType)
 {
-  if (! ppObjType) return AAFRESULT_NULL_PARAM;
+  if (! ppObjType)
+	return AAFRESULT_NULL_PARAM;
 
-  if (! _cachedObjType)
-	{
-	  ImplAAFDictionarySP pDict;
+   if(_referencedType.isVoid())
+		return AAFRESULT_OBJECT_NOT_FOUND;
+  ImplAAFClassDef *pClassDef = _referencedType;
 
-	  AAFRESULT hr;
-	  hr = (GetDictionary(&pDict));
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (pDict);
-
-	  hr = pDict->LookupClassDef (_referencedType, &_cachedObjType);
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (_cachedObjType);
-	}
-  assert (ppObjType);
-  *ppObjType = _cachedObjType;
+  *ppObjType = pClassDef;
   assert (*ppObjType);
   (*ppObjType)->AcquireReference ();
   return AAFRESULT_SUCCESS;
@@ -188,9 +177,14 @@ aafBool ImplAAFTypeDefWeakObjRef::IsFixedSize (void) const
 
 size_t ImplAAFTypeDefWeakObjRef::PropValSize (void) const
 {
+	ImplAAFClassDef	*pClassDef;
+	aafUID_t		tmpID;
+
   // Temp change: currently weak refs are represented as auids.
   // return BaseType()->PropValSize();
-  aafUID_t tmpID = _referencedType;
+	pClassDef = _referencedType;
+	pClassDef->GetAUID(&tmpID);
+
 	if(memcmp(&tmpID, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
 	{
 		return sizeof (aafMobID_t);
@@ -210,9 +204,13 @@ aafBool ImplAAFTypeDefWeakObjRef::IsRegistered (void) const
 
 size_t ImplAAFTypeDefWeakObjRef::NativeSize (void) const
 {
-  // Temp change: currently weak refs are represented as auids.
+	ImplAAFClassDef	*pClassDef;
+	aafUID_t		tmpID;
+
+	// Temp change: currently weak refs are represented as auids.
   // return sizeof (ImplAAFObject*);
-  aafUID_t tmpID = _referencedType;
+	pClassDef = _referencedType;
+	pClassDef->GetAUID(&tmpID);
 	if(memcmp(&tmpID, &kAAFClassID_Mob, sizeof(aafUID_t)) == 0)
 	{
 		return sizeof (aafMobID_t);
