@@ -128,9 +128,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMob*					pMob = NULL;
 	IAAFCompositionMob*			pCompMob = NULL;
 
+	aafSearchCrit_t				criteria;
 	aafDefaultFade_t			defaultFade;
 	aafProductIdentification_t	ProductInfo;
-	aafNumSlots_t				numMobs, n;
+	aafNumSlots_t				numMobs;
 	HRESULT						hr;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
