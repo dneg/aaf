@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Mon Mar 22 12:22:36 EST 1999
+// This file was generated on Tue Mar 23 18:06:12 EST 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1676,7 +1676,7 @@ AAF_PROPERTY(FrameLayout,
   LayoutType,
   true,
   DigitalImageDescriptor)
-AAF_PROPERTY(VideoLIneMap,
+AAF_PROPERTY(VideoLineMap,
   AAF_LITERAL_AUID(0x06474142,
     0x0D00, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
