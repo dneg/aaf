@@ -551,7 +551,7 @@ ImplAAFFile::Save ()
 	  aafUID_t latestGen;
 	  hr = pLatestIdent->GetGenerationID (&latestGen);
 	  if (AAFRESULT_FAILED (hr)) return hr;
-	  _file->save(&latestGen);
+	  _file->saveFile(&latestGen);
 
 	  dictSP->SetEnableDefRegistration (regWasEnabled);
 

@@ -249,12 +249,12 @@ bool OMFile::validSignature(const OMFileSignature& signature)
 }
 
   // @mfunc Save all changes made to the contents of this
-  //        <c OMFile>. It is not possible to <mf OMFile::save>
+  //        <c OMFile>. It is not possible to save
   //        read-only or transient files.
   //   @parm Client context for callbacks.
-void OMFile::save(void* clientOnSaveContext)
+void OMFile::saveFile(void* clientOnSaveContext)
 {
-  TRACE("OMFile::save");
+  TRACE("OMFile::saveFile");
 
   _clientOnSaveContext = clientOnSaveContext;
 
