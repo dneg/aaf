@@ -71,9 +71,6 @@ AAFRESULT STDMETHODCALLTYPE
 	aafNumSlots_t	cur = _current, siz;
 	aafBool			found = kAAFFalse;
 
-	if (ppMob == NULL)
-		return AAFRESULT_NULL_PARAM;
-
     XPROTECT()
 	{
 		CHECK(_cStorage->CountMobs (kAAFAllMob, &siz));
@@ -125,10 +122,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	ImplAAFMob**	ppMob;
 	aafUInt32		numMobs;
-	HRESULT			hr = S_OK;
+	HRESULT			hr;
 
-	if (pFetched == NULL || ppMobs == NULL)
-		return AAFRESULT_NULL_PARAM;
+	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+		return E_INVALIDARG;
 
 	// Point at the first component in the array.
 	ppMob = ppMobs;
