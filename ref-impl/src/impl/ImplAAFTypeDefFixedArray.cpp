@@ -145,8 +145,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT
 ImplAAFTypeDefFixedArray::GetElements (
-								ImplAAFPropertyValue *pInPropVal,
-								ImplEnumAAFPropertyValues **ppEnum)
+								ImplAAFPropertyValue */*pInPropVal*/,
+								ImplEnumAAFPropertyValues **/*ppEnum*/)
 {
 	return AAFRESULT_NOT_IN_CURRENT_VERSION;
 }
