@@ -48,7 +48,7 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Sat Apr 17 09:42:36 EDT 2004
+// This file was generated on Sun May  2 20:12:36 EDT 2004
 // by user jpt on system warbler.localdomain.
 //
 // Key to macros.
@@ -1178,6 +1178,26 @@ AAF_CLASS(SourceReference,
     0x1102,
     AAF_TYPE(UInt32),
     true,
+    false,
+    SourceReference)
+  AAF_PROPERTY(ChannelIDs,
+    // {06010103-0700-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x06010103,
+      0x0700, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x1103,
+    AAF_TYPE(UInt32Array),
+    false,
+    false,
+    SourceReference)
+  AAF_PROPERTY(MonoSourceSlotIDs,
+    // {06010103-0800-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x06010103,
+      0x0800, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x1104,
+    AAF_TYPE(UInt32Array),
+    false,
     false,
     SourceReference)
 AAF_CLASS_END(SourceReference,
@@ -3425,6 +3445,62 @@ AAF_CLASS_END(ImportDescriptor,
   true)
 AAF_CLASS_SEPARATOR()
 
+// RecordingDescriptor
+//
+AAF_CLASS(RecordingDescriptor,
+  // {0D010101-0101-4B00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4B00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  PhysicalDescriptor,
+  true)
+AAF_CLASS_END(RecordingDescriptor,
+  // {0D010101-0101-4B00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4B00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  PhysicalDescriptor,
+  true)
+AAF_CLASS_SEPARATOR()
+
+// AuxiliaryDescriptor
+//
+AAF_CLASS(AuxiliaryDescriptor,
+  // {0D010101-0101-4E00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4E00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  PhysicalDescriptor,
+  true)
+  AAF_PROPERTY(MimeType,
+    // {04090200-0000-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x04090200,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x3a08,
+    AAF_TYPE(String),
+    true,
+    false,
+    AuxiliaryDescriptor)
+  AAF_PROPERTY(CharSet,
+    // {04090300-0000-0000-060E-2B3401010108}
+    AAF_LITERAL_AUID(0x04090300,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x08),
+    0x3a08,
+    AAF_TYPE(String),
+    false,
+    false,
+    AuxiliaryDescriptor)
+AAF_CLASS_END(AuxiliaryDescriptor,
+  // {0D010101-0101-4E00-060E-2B3402060101}
+  AAF_LITERAL_AUID(0x0D010101,
+    0x0101, 0x4E00,
+    0x06, 0x0E, 0x2B, 0x34, 0x02, 0x06, 0x01, 0x01),
+  PhysicalDescriptor,
+  true)
+AAF_CLASS_SEPARATOR()
+
 // TaggedValueDefinition
 //
 AAF_CLASS(TaggedValueDefinition,
@@ -3439,7 +3515,7 @@ AAF_CLASS(TaggedValueDefinition,
     AAF_LITERAL_AUID(0x06010104,
       0x0305, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
-    0x6c01,
+    0x4c01,
     AAF_REFERENCE_TYPE(WeakReferenceSet, PropertyDefinition),
     true,
     false,
@@ -3467,7 +3543,7 @@ AAF_CLASS(KLVDataDefinition,
     AAF_LITERAL_AUID(0x06010104,
       0x0304, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
-    0x6d01,
+    0x4d01,
     AAF_REFERENCE_TYPE(WeakReferenceSet, PropertyDefinition),
     true,
     false,
@@ -5377,6 +5453,16 @@ AAF_TYPE_DEFINITION_FIXED_ARRAY(UInt8Array12,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(UInt8), 12)
+AAF_TYPE_SEPARATOR()
+
+// UInt32Array
+//
+AAF_TYPE_DEFINITION_VARYING_ARRAY(UInt32Array, 
+  // {04010900-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x04010900,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
+  AAF_TYPE(UInt32))
 AAF_TYPE_SEPARATOR()
 
 // Int32Array

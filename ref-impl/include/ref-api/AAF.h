@@ -20529,6 +20529,9 @@ DECLARE_INTERFACE_(IAAFSourceReference, IUnknown)
 
 
 
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFSourceReference_INTERFACE_DEFINED__
@@ -38554,6 +38557,77 @@ DECLARE_INTERFACE_(IAAFSourceReference2, IUnknown)
   //
   STDMETHOD(GetChannelIDsSize) (THIS_
     // Number of elements in the pChannelIDs array
+    /*[out]*/ aafUInt32 *  numberElements) PURE;
+
+  //***********************************************************
+  //
+  // SetMonoSourceSlotIDs()
+  //
+  // For reference from a multi-channel MobSlot to multiple mono MobSlots.
+// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
+// object.
+
+// 
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null 
+  //
+  STDMETHOD(SetMonoSourceSlotIDs) (THIS_
+    // Number of elements in the pMonoSourceSlotIDs array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of slot IDs
+    /*[in]*/ aafUInt32*  pMonoSourceSlotIDs) PURE;
+
+
+  //***********************************************************
+  //
+  // GetMonoSourceSlotIDs()
+  //
+  // // Get the mono slot IDs that are referenced by this object.  Refer to
+// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present
+//
+// AAFRESULT_SMALLBUF
+//   - pMonoSourceSlotIDs is too small
+  //
+  STDMETHOD(GetMonoSourceSlotIDs) (THIS_
+    // Number of elements in the pMonoSourceSlotIDs array
+    /*[in]*/ aafUInt32  numberElements,
+
+    // Array of channel IDs
+    /*[in]*/ aafUInt32*  pMonoSourceSlotIDs) PURE;
+
+  //***********************************************************
+  //
+  // GetMonoSourceSlotIDsSize()
+  //
+  // // Get the number of mono slot IDs stored by this SourceReference.
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present
+  //
+  STDMETHOD(GetMonoSourceSlotIDsSize) (THIS_
+    // Number of elements in the pMonoSourceSlotIDs array
     /*[out]*/ aafUInt32 *  numberElements) PURE;
 
 
