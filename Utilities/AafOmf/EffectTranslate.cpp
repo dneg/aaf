@@ -205,10 +205,20 @@ HRESULT EffectTranslate::GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr
 	OMF2::omfUniqueName_t	OMFEffectID;
 	OMF2::omfUniqueName_t	ExtendedEffectID;
 	char				*init = (char *)aafUID;
+	char				*effectPrefix = "omfi:effect:";
+	long				prefixLen = strlen(effectPrefix);
 
 	for(n = 0; n < sizeof(aafUID_t); n++)
 		init[n] = 0;
-	
+
+	if(strncmp(OMFEffectIDPtr, effectPrefix, prefixLen) == 0)
+		strcpy(OMFEffectID, OMFEffectIDPtr+prefixLen);
+	else
+		strcpy(OMFEffectID, OMFEffectIDPtr);
+	if(ExtendedEffectIDPtr != NULL)
+		strcpy(ExtendedEffectID, ExtendedEffectIDPtr);
+	else
+		ExtendedEffectID[0] = '\0';
 	for(n = 0; (n < numStdEntries) && !found; n++)
 	{
 		if(stdXlateTable[n].omfEffectID != NULL)
