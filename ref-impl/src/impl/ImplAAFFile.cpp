@@ -837,12 +837,17 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 
 	  break;
 	case kAAFFileExistence_existing:
+		//Ian Baker 8 mar 2004
+		//If the file exisits then FileKind is irrelevant. 
+		//Several tests pass NULL for pFileKind in this case and this seems reasonable.
+		//So in this case it seems better to set it to "Dont Care" rather than throwing an error
 	  if (! pFileKind)
-		return AAFRESULT_NULL_PARAM;
+		  pFileKind=&aafFileKindDontCare;
+
 
 			// can specify DontCare or a required FileKind on open existing
       if (!equalUID(*pFileKind,aafFileKindDontCare) && !OMFile::hasFactory(ENCODING(*pFileKind)))
-        return AAFRESULT_FILEKIND_NOT_REGISTERED;
+      return AAFRESULT_FILEKIND_NOT_REGISTERED;
 
 	  break;
 	default:
@@ -968,6 +973,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 			}
 
 		  const OMStoredObjectEncoding aafFileEncoding = ENCODING(*pFileKind);
+
 
 		  if (kAAFFileAccess_modify == access)
 			{
@@ -1519,6 +1525,21 @@ void ImplAAFFile::registerFactories(void)
 #if defined( OS_WINDOWS )
 // DEFAULT for this build is SchemaSoft 512.
 
+#if defined(USE_SS)
+     OMFile::registerFactory(ENCODING(DEFAULTFileKind),
+                          new OMSSSStoredObjectFactory(AAFSSSEncoding,
+													 Signature_SSBinary,
+                                                       L"AAF-S",
+                                                       L"AAF Schemasoft SS"));
+	OMFile::registerFactory(AAFMSSEncoding,
+	    new OMMSSStoredObjectFactory(AAFMSSEncoding,
+                                                       Signature_SSBinary,
+                                                       L"AAF-M",
+                                                       L"AAF Microsoft SS"));
+
+
+
+#else
 		OMFile::registerFactory(ENCODING(DEFAULTFileKind),
                           new OMMSSStoredObjectFactory(AAFMSSEncoding,
                                                        Signature_SSBinary,
@@ -1530,7 +1551,7 @@ void ImplAAFFile::registerFactories(void)
  						       Signature_SSBinary,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
-
+#endif
 	  	OMFile::registerFactory(AAFM4KEncoding,
                           new OMMSSStoredObjectFactory(AAFM4KEncoding,
                                                        Signature_SSBin_4K,
