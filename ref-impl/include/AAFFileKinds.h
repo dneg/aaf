@@ -41,6 +41,10 @@ const aafUID_t aafFileKindAafSSSBinary =
 const aafUID_t aafFileKindAafS4KBinary = 
 {0x42464141, 0x9640, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
+// the enum to select the Microsoft implementation with 4096 byte sectors
+const aafUID_t aafFileKindAafM4KBinary = 
+{0x42464141, 0xa838, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
+
 // AAF files encoded as XML (text).
 //
 // used in prototype only (TEST/ComFileKindTest)
@@ -58,7 +62,9 @@ const aafUID_t aafFileKindMxfKlvBinary =
 // this MUST match what is selected in ImplAAFFile.cpp
 #if defined( OS_WINDOWS )
 // DEFAULT for this build is SchemaSoft 512.
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary;
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+//NOTE: Add default 4k binary
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary;
 
 #elif defined( OS_MACOS )
 // DEFAULT is Microsoft 512 (via MacOLE). SchemaSoft not yet ported
@@ -74,7 +80,10 @@ const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
 
 #elif defined( OS_LINUX )
 // DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
-const aafUID_t aafFileKindAafSSBinary = aafFileKindAafMSSBinary;
+//NOTE: change to Schemasoft for testing
+const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary;
+//NOTE: Add default 4k binary
+const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary;
 
 #elif defined( OS_FREEBSD )
 // DEFAULT is Microsoft 512 (via librefstg). SchemaSoft not yet ported
