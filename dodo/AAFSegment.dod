@@ -38,26 +38,26 @@ AD_METHOD4(SegmentTCToOffset,
 		   [out],aafBool *,found,,
 		   )
 
-AD_METHOD4(FindSubSegment,
-		   [in],aafPosition_t,offset,,
-		   [out],aafPosition_t *,sequPosPtr,,
-		   [out],AAFSegment **,subseg,,
-		   [out],aafBool *,found,,
-		   )
+AD_XMETHOD4(FindSubSegment,
+			[in],objPass,aafPosition_t,offset,,
+			[out],objPass,aafPosition_t *,sequPosPtr,,
+			[out],objOut,AAFSegment,subseg,,
+			[out],objPass,aafBool *,found,,
+			)
 
-AD_METHOD6(TraverseToClip,
-		   [in],aafLength_t,length,,
-		   [out],AAFSegment **,sclp,,
-		   [out],AAFPulldown **,pulldownObj,,
-		   [out],aafInt32 *,pulldownPhase,,
-		   [out],aafLength_t *,sclpLen,,
-		   [out],aafBool *,isMask,,
-		   )
+AD_XMETHOD6(TraverseToClip,
+			[in],objPass,aafLength_t,length,,
+			[out],objOut,AAFSegment,sclp,,
+			[out],objOut,AAFPulldown,pulldownObj,,
+			[out],objPass,aafInt32 *,pulldownPhase,,
+			[out],objPass,aafLength_t *,sclpLen,,
+			[out],objPass,aafBool *,isMask,,
+			)
 
-AD_METHOD3(OffsetToTimecodeClip,
-		   [in],aafPosition_t,offset,,
-		   [out],AAFTimecode **,result,,
-		   [out],aafPosition_t *,tcStartPos,,
+AD_XMETHOD3(OffsetToTimecodeClip,
+			[in],objPass,aafPosition_t,offset,,
+			[out],objOut,AAFTimecode,result,,
+			[out],objPass,aafPosition_t *,tcStartPos,,
 		   )
 
 AD_METHOD1(NumRepresentations,

@@ -202,7 +202,7 @@ AD_METHOD2(DoesDatakindConvertTo,
 		   Sets return value to TRUE if the datakind of the given object
 		   // can be converted to the datakind specified in the IN 
 		   // parameter with the datakindName string.)
-		   
+				 
 AD_METHOD2(IsDatakindOf,
 		   [retval][out],AAFBool *,bIsDatakindOf, pointer to result,
 		   [in],AAFString, datakindname, DatakindName to compare against
