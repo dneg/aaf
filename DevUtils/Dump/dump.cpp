@@ -3936,6 +3936,11 @@ int main(int argumentCount, char* argumentVector[])
 {
   checkSizes();
 
+#if defined(_MAC) || defined(macintosh)
+#if defined(USECONSOLE)
+  argumentCount = ccommand(&argumentVector); // console window for mac
+#endif
+#endif
 
   programName = baseName(argumentVector[0]);
   int fileCount = 0;
