@@ -99,7 +99,7 @@ void DeleteImpl (ImplAAFRoot *& pObj)
 // Initializes the given Impl object's container by calling
 // the container's initialization method.
 
-AAFRESULT InitializePluginFromDefinitionProc(
+static AAFRESULT InitializePluginFromDefinitionProc(
   aafUID_constref defID, 
   REFCLSID clsid, 
   IAAFRoot * pRoot)
