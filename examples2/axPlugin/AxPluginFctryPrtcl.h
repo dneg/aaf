@@ -19,7 +19,7 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include <AAFCOMPlatformTypes.h>
+#include <AAFCOMPlatform.h>
 #include <AAFSmartPointer.h>
 
 // Implementations of AxPluginFctryPrtcl are registered with

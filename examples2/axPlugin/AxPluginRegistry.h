@@ -19,7 +19,7 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include <AAFCOMPlatformTypes.h>
+#include <AAFCOMPlatform.h>
 
 class AxPluginFctryPrtcl;
 

@@ -21,7 +21,7 @@
 
 #include "AxPluginUtil.h"
 
-#include <AAFCOMPlatformTypes.h>
+#include <AAFCOMPlatform.h>
 
 #include <assert.h>
 
@@ -74,6 +74,15 @@ class CAxClassFactoryFriend_nonexistant;
 
 template <class ComObjectType>
 class CAxClassFactory : public CAxClassFactoryCounters, public IClassFactory {
+
+public:
+
+// Schlock required to declare LockServer
+#if defined(OS_MACOS)
+	typedef OLEBOOL LockServerBool_t;
+#else
+	typedef BOOL    LookServerBool_t;
+#endif
 
 public:
 
@@ -153,7 +162,7 @@ public:
 	}
 
 	STDMETHOD(LockServer)(
-		BOOL fLock			   //Increments or decrements the lock count
+		LockServerBool_t fLock			   //Increments or decrements the lock count
 	)
 	{
 		if (fLock) {

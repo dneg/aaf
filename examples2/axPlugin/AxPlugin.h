@@ -19,7 +19,7 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include "AAFCOMPlatformTypes.h"
+#include "AAFCOMPlatform.h"
 
 // Just a convient place to put a collection of static functions
 // that are used by the library entry points.

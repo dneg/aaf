@@ -19,8 +19,9 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include <AAFResult.h>
 #include <AAFPlugin.h>
+#include <AAFResult.h>
+
 
 #include <memory>
 

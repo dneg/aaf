@@ -16,17 +16,14 @@
 // 
 //=---------------------------------------------------------------------=
 
+
+
 #include "AxPlugin.h"
 
 #include "AxPluginRegistry.h"
 #include "CAxClassFactory.h"
 #include "CAxNullEssenceCodec.h"
 #include "CAxUnknown.h"
-
-// Include the definitions for all of the interface IID's.
-// This defines the IID's for the plugin interfaces.  This
-// should only be included in one of the libraries files.
-#include <AAFPlugin_i.c>
 
 bool AxPlugin::CanUnloadNow()
 {
