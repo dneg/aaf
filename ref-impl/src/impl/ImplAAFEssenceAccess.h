@@ -42,7 +42,7 @@ class ImplAAFFileDescriptor;
 class ImplAAFHeader;
 class ImplAAFLocator;
 class ImplAAFMasterMob;
-class ImplAAFPluginDescriptor;
+class ImplAAFPluginDef;
 class ImplAAFSourceClip;
 class ImplAAFSourceMob;
 class ImplAAFEssenceSampleIndex;
@@ -579,7 +579,7 @@ public:
 	AAFRESULT CreateContainerDef (ImplAAFHeader *head);
 	AAFRESULT CreateCodecDef(ImplAAFHeader *head,
 							 const aafUID_t & codecDef,
-							 IAAFPluginDescriptor **newDesc);
+							 IAAFPluginDef **newDesc);
 	AAFRESULT CreateEssenceFileFromLocator (ImplAAFHeader *srcHead,
 											ImplAAFLocator *loc,
 											ImplAAFFile **result);
@@ -613,7 +613,7 @@ private:
   IAAFEssenceData *_internalEssenceData;
 	IAAFEssenceStream		*_stream;
 	aafOpenType_t			_openType;
-	IAAFPluginDescriptor	*_codecDescriptor;
+	IAAFPluginDef		*_codecDescriptor;
 	ImplAAFFile				*_dataFile;
 	ImplAAFSourceMob		*_dataFileMob;
 };

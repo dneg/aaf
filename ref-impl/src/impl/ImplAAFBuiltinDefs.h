@@ -207,7 +207,7 @@ public:
   CLASS_DEF_METHOD(OperationGroup);
   CLASS_DEF_METHOD(Parameter);
   CLASS_DEF_METHOD(ParameterDef);
-  CLASS_DEF_METHOD(PluginDescriptor);
+  CLASS_DEF_METHOD(PluginDef);
   CLASS_DEF_METHOD(PropertyDef);
   CLASS_DEF_METHOD(Pulldown);
   CLASS_DEF_METHOD(ScopeReference);
