@@ -43,12 +43,9 @@ public:
 
 #if defined (OM_ENABLE_DEBUG)
 
-#include <string.h>
-
-#include <iostream.h>
-#include <stdlib.h>
 #include <ctype.h>
 
+#include "OMOStream.h"
 #include "OMUtilities.h"
 
 #if defined(OM_ENABLE_STACK_TRACE)
@@ -61,17 +58,17 @@ void reportAssertionViolation(char* assertionKind,
                               char* expressionString,
                               char* routineName,
                               char* fileName,
-                              size_t lineNumber)
+                              OMUInt32 lineNumber)
 {
-  cerr << assertionKind
-       << " \"" << assertionName << "\" violated in routine \""
-       << routineName  << "\"." << endl;
-  cerr << "The violation occurred at line " << lineNumber
-       << " in file \"" << fileName << "\"." << endl;
-  cerr << "The condition \"" << expressionString << "\" was false." << endl;
+  omlog << assertionKind
+        << " \"" << assertionName << "\" violated in routine \""
+        << routineName  << "\"." << endl;
+  omlog << "The violation occurred at line " << lineNumber
+        << " in file \"" << fileName << "\"." << endl;
+  omlog << "The condition \"" << expressionString << "\" was false." << endl;
 
 #if defined(OM_ENABLE_STACK_TRACE)
-  printStackTrace(cerr);
+  printStackTrace(omlog);
 #endif
 
 #if defined(OM_EXIT_ON_ASSERT)
@@ -126,7 +123,7 @@ bool validOMString(const OMCharacter* string)
 
 void trace(const char* routineName)
 {
-  cerr << "Enter \"" << routineName << "\"." << endl;
+  omlog << "Enter \"" << routineName << "\"." << endl;
 }
 
 #endif
@@ -135,10 +132,10 @@ void trace(const char* routineName)
 
 void obsolete(const char* routineName, const char* newRoutineName)
 {
-  cerr << "The routine \""
-       << routineName
-       << "\" is obsolete. Please use \""
-       << newRoutineName << "\" instead." << endl;
+  omlog << "The routine \""
+        << routineName
+        << "\" is obsolete. Please use \""
+        << newRoutineName << "\" instead." << endl;
 }
 
 #endif

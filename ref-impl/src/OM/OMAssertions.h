@@ -74,7 +74,7 @@ void reportAssertionViolation(char* assertionKind,
                               char* expressionString,
                               char* routineName,
                               char* fileName,
-                              size_t lineNumber);
+                              OMUInt32 lineNumber);
 
   // @func Is the given string valid ? Use <f validString> in
   //       expressions passed to the assertion macros
