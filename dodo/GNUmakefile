@@ -1,18 +1,20 @@
 
-include ../build/defs.mk
+AAFBASE ?= ..
 
-INCLUDE_DIR = ../ref-impl/include/com-api
-SRC_DIR = ../ref-impl/src/com-api
+include $(AAFBASE)/build/defs.mk
 
-#.PHONY : all
+INCLUDE_DIR = $(AAFBASE)/ref-impl/include/com-api
+SRC_DIR = $(AAFBASE)/ref-impl/src/com-api
+
+.PHONY : all
 all : dodoTool aafObjects targets.mk depend.mk targets
 
-#.PHONY : dodoTool
+.PHONY : dodoTool
 dodoTool :
 	@echo "[Building dodo/tool]\n"
 	cd tool && $(MAKE)
 
-#.PHONY : aafObjects
+.PHONY : aafObjects
 aafObjects : $(INCLUDE_DIR)/aafobjects.mk $(SRC_DIR)/aafobjects.mk
 
 $(INCLUDE_DIR)/aafobjects.mk : aafobjects.mk
