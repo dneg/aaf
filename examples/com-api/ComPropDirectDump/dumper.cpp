@@ -627,7 +627,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 
 
 
-static void dumpFile (wchar_t * pwFileName)
+static void dumpFile (wchar_t * pwFileName, const char * name)
 {
   assert (pwFileName);
 
@@ -636,7 +636,16 @@ static void dumpFile (wchar_t * pwFileName)
   IAAFObjectSP     pHdrObj;
   IAAFDictionarySP pDict;
 
-  checkResult (AAFFileOpenExistingRead (pwFileName, 0, &pFile));
+  HRESULT hr;
+
+  hr = AAFFileOpenExistingRead (pwFileName, 0, &pFile);
+  if (! SUCCEEDED (hr))
+	{
+	  cerr << "File " << name
+		   << " is either missing or is an illegal AAF file."
+		   << endl;
+	  exit (1);
+	}
   checkResult (pFile->GetHeader (&pHeader));
   checkResult (pHeader->GetDictionary (&pDict));
   checkResult (pHeader->QueryInterface (IID_IAAFObject,
@@ -703,7 +712,7 @@ int main(int argc, char* argv[])
   cout << "***Dumping file "
 	   << argv[1]
 	   << " using direct prop access***)" << endl;
-  dumpFile (pwFileName);
+  dumpFile (pwFileName, argv[1]);
 
   cout << "Done" << endl;
 
