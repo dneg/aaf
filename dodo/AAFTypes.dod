@@ -42,7 +42,7 @@ typedef wchar_t			aafCharacter;
 #endif
 
 AD_CPP_QUOTE(#else)
-AD_CPP_QUOTE(#include <AAFPlatform.h>)
+AD_CPP_QUOTE_INCLUDE(AAFPlatform.h)
 AD_CPP_QUOTE(#endif  // #if 0)
 
 
