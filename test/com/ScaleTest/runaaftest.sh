@@ -17,11 +17,13 @@
 # The Original Code of this file is Copyright 1998-2004, Licensor of the
 # AAF Association.
 #
+# The Initial Developer of the Original Code of this file and the
+# Licensor of the AAF Association is British Broadcasting Corporation.
+# All rights reserved.
+#
 ###############################################################################
 #
 #	Shell script for testing scalability.
-#
-#	Copyright (C) 2004 Anuradha Suraparaju <asuraparaju@users.sourceforge.net>
 #
 ###############################################################################
 

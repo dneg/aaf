@@ -2,8 +2,6 @@
 #
 # README for Scalability testscript usage
 #
-# Copyright (C) 2004 Anuradha Suraparaju <asuraparaju@users.sourceforge.net>
-#
 ##############################################################################
 
 NOTE: Requires a Bourne shell to run the scripts
