@@ -57,8 +57,12 @@ extern "C" const aafClassID_t CLSID_AAFPropertyValue;
 
 
 ImplAAFTypeDefFixedArray::ImplAAFTypeDefFixedArray ()
-  : _ElementType  ( PID_TypeDefinitionFixedArray_ElementType,  "ElementType", "/Dictionary/TypeDefinitions", PID_DefinitionObject_Identification),
-    _ElementCount ( PID_TypeDefinitionFixedArray_ElementCount, "ElementCount")
+  : _ElementType  ( PID_TypeDefinitionFixedArray_ElementType,  
+                    "ElementType", 
+                    "/Dictionary/TypeDefinitions", 
+                    PID_MetaDefinition_Identification),
+    _ElementCount ( PID_TypeDefinitionFixedArray_ElementCount, 
+                    "ElementCount")
 {
   _persistentProperties.put(_ElementType.address());
   _persistentProperties.put(_ElementCount.address());

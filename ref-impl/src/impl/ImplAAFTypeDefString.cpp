@@ -56,7 +56,10 @@
 extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefString::ImplAAFTypeDefString ()
-  : _ElementType  ( PID_TypeDefinitionString_ElementType,  "ElementType", "/Dictionary/TypeDefinitions", PID_DefinitionObject_Identification)
+  : _ElementType  ( PID_TypeDefinitionString_ElementType,
+                    "ElementType", 
+                    "/Dictionary/TypeDefinitions", 
+                    PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_ElementType.address());
 }

@@ -57,7 +57,10 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 
 ImplAAFTypeDefVariableArray::ImplAAFTypeDefVariableArray ()
-  : _ElementType  ( PID_TypeDefinitionVariableArray_ElementType,  "ElementType", "/Dictionary/TypeDefinitions", PID_DefinitionObject_Identification)
+  : _ElementType  ( PID_TypeDefinitionVariableArray_ElementType,
+                    "ElementType", 
+                    "/Dictionary/TypeDefinitions", 
+                    PID_MetaDefinition_Identification)
 {
   _persistentProperties.put(_ElementType.address());
 }
