@@ -1,0 +1,223 @@
+#c /******************************************\
+#c *                                          *
+#c * Advanced Authoring Format                *
+#c *                                          *
+#c * Copyright (c) 1998 Avid Technology, Inc. *
+#c * Copyright (c) 1998 Microsoft Corporation *
+#c *                                          *
+#c \******************************************/
+
+
+
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+#c
+#c AutoDodo macro file for use in intermediate export files for use in
+#c other AutoDodo source files.
+#c
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_BEGIN 00
+#endm
+
+
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes no arguments.
+#c
+#c Argument1: method name
+#c Argument2: method description
+#c
+#startm AD_METHOD0 02
+\\\#startm .method-%01 00
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 ();\\
+\\\#endm
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#startm AD_METHOD1 06
+\\\#startm .method-%01 00
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ %03 %04);\\
+\\\#endm
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes two arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: method description
+#c
+#startm AD_METHOD2 10
+\\\#startm .method-%01 00
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08);\\
+\\\#endm
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes three arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: method description
+#c
+#startm AD_METHOD3 14
+\\\#startm .method-%01 00
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12);\\
+\\\#endm
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes four arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: method description
+#c
+#startm AD_METHOD4 18
+\\\#startm .method-%01 00
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16);\\
+\\\#endm
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes five arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: method description
+#c
+#startm AD_METHOD5 22
+\\\#startm .method-%01 00
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20);\\
+\\\#endm
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes six arguments.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: argument modifiers (e.g. [in])
+#c Argument7: argument type
+#c Argument8: argument name
+#c Argument9: argument comment
+#c Argument10: argument modifiers (e.g. [in])
+#c Argument11: argument type
+#c Argument12: argument name
+#c Argument13: argument comment
+#c Argument14: argument modifiers (e.g. [in])
+#c Argument15: argument type
+#c Argument16: argument name
+#c Argument17: argument comment
+#c Argument18: argument modifiers (e.g. [in])
+#c Argument19: argument type
+#c Argument20: argument name
+#c Argument21: argument comment
+#c Argument22: argument modifiers (e.g. [in])
+#c Argument23: argument type
+#c Argument24: argument name
+#c Argument25: argument comment
+#c Argument26: method description
+#c
+#startm AD_METHOD6 26
+\\\#startm .method-%01 00
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (/*%02*/ %03 %04, /*%06*/ %07 %08, /*%10*/ %11 %12, /*%14*/ %15 %16, /*%18*/ %19 %20, /*%22*/ %23 %24);\\
+\\\#endm
+#endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_CLASS_END 00
+#endm
