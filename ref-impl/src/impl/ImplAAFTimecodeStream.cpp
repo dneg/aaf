@@ -228,7 +228,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafPosition_t	testOffset, scanStart;
 	aafTimecode_t	baseTimecode, testTimecode;
 	aafPosition_t	increment = pTimecode->fps * 10;	// Skip at 10 second intervals
-	aafBool			found = AAFFalse;
+	aafBool			found = kAAFFalse;
 	aafInt32		error;
 	aafLength_t		len, numSamples;
 	aafUInt32		sampleSize;
@@ -256,7 +256,7 @@ AAFRESULT STDMETHODCALLTYPE
 			{
 				// TEST: Path #1 through code
 				*pOffset = testOffset;
-				found = AAFTrue;
+				found = kAAFTrue;
 			}
 			else
 			{
@@ -272,7 +272,7 @@ AAFRESULT STDMETHODCALLTYPE
 					{
 						// TEST: Path #2 through code
 						*pOffset = testOffset;
-						found = AAFTrue;
+						found = kAAFTrue;
 					}
 				}
 			}
@@ -324,7 +324,7 @@ AAFRESULT STDMETHODCALLTYPE
 				{
 					// TEST: Path #6 through code
 					*pOffset = testOffset;
-					found = AAFTrue;
+					found = kAAFTrue;
 					break;
 				}
 			}
@@ -343,13 +343,13 @@ AAFRESULT STDMETHODCALLTYPE
 				{
 					// TEST: Path #7 through code
 					*pOffset = testOffset;
-					found = AAFTrue;
+					found = kAAFTrue;
 					break;
 				}
 			}
 		}
 
-		if(found == AAFFalse)
+		if(found == kAAFFalse)
 		{
 			// TEST: Path #8 through code
 			return AAFRESULT_TIMECODE_NOT_FOUND;

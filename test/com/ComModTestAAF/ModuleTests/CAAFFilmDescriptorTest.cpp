@@ -40,7 +40,7 @@
 
 static aafWChar* Manufacturer = L"Sony";
 static aafWChar* Model = L"MyModel";
-static aafFilmType_t FilmFormat = kFt35MM;
+static aafFilmType_t FilmFormat = kAAFFt35MM;
 static aafUInt32 FrameRate = 24;
 static aafUInt8 PerfPerFrame = 4;
 static aafRational_t	AspectRatio = { 1000, 1 };	// !!!Find a real aspect ratio
@@ -93,7 +93,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
@@ -181,13 +181,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.platform = NULL;
 	
 	checkResult(AAFFileOpenExistingRead(pFileName, 0, &pFile));
 	checkResult(pFile->GetHeader(&pHeader));
-	checkResult(pHeader->CountMobs(kAllMob, &numMobs));
+	checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 	checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 	checkResult(pHeader->GetMobs(NULL, &pMobIter));
 	checkResult(pMobIter->NextOne(&pMob));

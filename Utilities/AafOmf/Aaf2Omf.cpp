@@ -109,13 +109,13 @@ void Aaf2Omf::ConvertFile ()
 	if (gpGlobals->bOMFFileOpen)
 	{
 		CloseOutputFile();
-		gpGlobals->bOMFFileOpen = AAFFalse;
+		gpGlobals->bOMFFileOpen = kAAFFalse;
 	}
 
 	if (gpGlobals->bAAFFileOpen)
 	{
 		CloseInputFile();
-		gpGlobals->bAAFFileOpen = AAFFalse;
+		gpGlobals->bAAFFileOpen = kAAFFalse;
 	}
 }
 // ============================================================================
@@ -196,7 +196,7 @@ void Aaf2Omf::OpenInputFile ()
 
 	pAAF->RegisterAAFProperties(pDictionary);
 
-	gpGlobals->bAAFFileOpen = AAFTrue;
+	gpGlobals->bAAFFileOpen = kAAFTrue;
 	delete [] pwFileName;
 }
 // ============================================================================
@@ -208,7 +208,7 @@ void Aaf2Omf::OpenOutputFile ()
 {
 	AAFCheck							rc;
 	OMFCheck							OMFError;
-	aafBool								bSessionStarted = AAFFalse;
+	aafBool								bSessionStarted = kAAFFalse;
 	
 	OMF2::omfProductIdentification_t	OMFProductInfo;
 	char*								pszCompanyName = NULL;
@@ -329,7 +329,7 @@ void Aaf2Omf::OpenOutputFile ()
 		RegisterCodecProperties(gpGlobals, OMFSession);
 		pOMF->RegisterOMFProperties(gpGlobals, OMFSession);
 		
-		bSessionStarted = AAFTrue;
+		bSessionStarted = kAAFTrue;
 		if (OMF2::omfmInit(OMFSession) != OMF2::OM_ERR_NONE )
 		{
 			OMF2::omfsEndSession(OMFSession);
@@ -347,7 +347,7 @@ void Aaf2Omf::OpenOutputFile ()
 		}
 		
 		
-		gpGlobals->bOMFFileOpen = AAFTrue;
+		gpGlobals->bOMFFileOpen = kAAFTrue;
 		// Clean up and exit 
 	}
 	catch(...)
@@ -478,13 +478,13 @@ void Aaf2Omf::AAFFileRead()
 	IAAFEssenceData*		pEssenceData = NULL;
 	aafSearchCrit_t			criteria;
 
-	rc = pHeader->CountMobs(kAllMob, &nAAFNumMobs);
+	rc = pHeader->CountMobs(kAAFAllMob, &nAAFNumMobs);
 	if (gpGlobals->bVerboseMode)
 	{
 		printf(" Found: %ld Mobs in the input file\n", nAAFNumMobs);
 	}
-	criteria.searchTag = kByMobKind;
-	criteria.tags.mobKind = kAllMob;
+	criteria.searchTag = kAAFByMobKind;
+	criteria.tags.mobKind = kAAFAllMob;
 	rc = pHeader->GetMobs(&criteria, &pMobIter);
 	while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
 	{
@@ -647,7 +647,7 @@ void Aaf2Omf::ConvertCompositionMob(IAAFCompositionMob* pCompMob,
 	IAAFMob					*pMob = NULL;
 	aafDefaultFade_t		DefaultFade;
 	
-	OMFError = OMF2::omfiCompMobNew(OMFFileHdl, pMobName, (OMF2::omfBool)AAFFalse, pOMFCompMob);
+	OMFError = OMF2::omfiCompMobNew(OMFFileHdl, pMobName, (OMF2::omfBool)kAAFFalse, pOMFCompMob);
 	
 	ConvertMobIDtoUID(pMobID, &OMFMobID);
 	OMFError = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFCompMob, OMFMobID);
@@ -657,13 +657,13 @@ void Aaf2Omf::ConvertCompositionMob(IAAFCompositionMob* pCompMob,
 		OMFFade.fadeLength = DefaultFade.fadeLength;
 		switch (DefaultFade.fadeType)
 		{
-		case kFadeNone:
+		case kAAFFadeNone:
 			OMFFade.fadeType = OMF2::kFadeNone;
 			break;
-		case kFadeLinearAmp:
+		case kAAFFadeLinearAmp:
 			OMFFade.fadeType = OMF2::kFadeLinearAmp;
 			break;
-		case kFadeLinearPower:
+		case kAAFFadeLinearPower:
 			OMFFade.fadeType = OMF2::kFadeLinearPower;
 			break;
 		}
@@ -706,7 +706,7 @@ void Aaf2Omf::ConvertMasterMob(IAAFMasterMob* pMasterMob,
 	
 	OMF2::omfUID_t		OMFMobID;
 	
-	OMFError = OMF2::omfmMasterMobNew(OMFFileHdl, pMobName, (OMF2::omfBool)AAFTrue, pOMFMasterMob);
+	OMFError = OMF2::omfmMasterMobNew(OMFFileHdl, pMobName, (OMF2::omfBool)kAAFTrue, pOMFMasterMob);
 	
 	ConvertMobIDtoUID(pMobID, &OMFMobID);
 	OMFError = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFMasterMob, OMFMobID);
@@ -1423,7 +1423,7 @@ void Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 			printf("%sProcessing Timecode Clip of length: %ld\n ", gpGlobals->indentLeader, (int)length);
 			IncIndentLevel();
 			printf("%sstart Frame\t: %ld\n", gpGlobals->indentLeader, timecode.startFrame);
-			if (timecode.drop == AAFTrue)
+			if (timecode.drop == kAAFTrue)
 				printf("%sdrop\t\t: True\n", gpGlobals->indentLeader);
 			else
 				printf("%sdrop\t\t: False\n", gpGlobals->indentLeader);
@@ -2040,7 +2040,7 @@ void Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	IAAFSourceMob*			pSourceMob = NULL;
 	IAAFObject*				pAAFObject = NULL;
 	aafMobID_t				mobID;
-	aafBool					bConvertMedia = AAFFalse;
+	aafBool					bConvertMedia = kAAFFalse;
 	
 	// get the file mob id
 	rc = pEssenceData->GetFileMobID(&mobID);
@@ -2199,7 +2199,7 @@ CopyMedia:
 		aafLength_t		numBytes;
 		aafUInt32		nBlockSize;
 		aafUInt32		numBytesRead;
-		aafBool			bMore = AAFFalse;
+		aafBool			bMore = kAAFFalse;
 		
 		rc = pEssenceData->GetSize(&numBytes);
 		if (numBytes > 0)
@@ -2207,7 +2207,7 @@ CopyMedia:
 			if (numBytes > (2 * 1048576))
 			{
 				nBlockSize = 2 * 1048576;	// only allocate 2 Meg
-				bMore = AAFTrue;			// you going to need more than one read/write
+				bMore = kAAFTrue;			// you going to need more than one read/write
 			}
 			else
 			{
@@ -2761,24 +2761,24 @@ void Aaf2Omf::ConvertParameter(	IAAFParameter*		pParm,
 				omfTime.denominator = aafTime.denominator;
 				testRC = pPoint->GetEditHint(&aafEditHint);
 				if(testRC == AAFRESULT_PROP_NOT_PRESENT)
-					aafEditHint = kNoEditHint;
+					aafEditHint = kAAFNoEditHint;
 				else
 					rc = testRC;
 				switch(aafEditHint)
 				{
-				case kNoEditHint:
+				case kAAFNoEditHint:
 					omfEditHint = OMF2::kNoEditHint;
 					break;
-				case kProportional:
+				case kAAFProportional:
 					omfEditHint = OMF2::kProportional;
 					break;
-				case kRelativeLeft:
+				case kAAFRelativeLeft:
 					omfEditHint = OMF2::kRelativeLeft;
 					break;
-				case kRelativeRight:
+				case kAAFRelativeRight:
 					omfEditHint = OMF2::kRelativeRight;
 					break;
-				case kRelativeFixed:
+				case kAAFRelativeFixed:
 					omfEditHint = OMF2::kRelativeFixed;
 					break;
 					//!!!Handle default case

@@ -189,18 +189,18 @@ static HRESULT InitGlobalVars( void )
 	if (gpGlobals == NULL)
 		return AAFRESULT_NOMEMORY;
 
-	gpGlobals->bAAFFileOpen = AAFFalse;
-	gpGlobals->bConvertAllObjects = AAFFalse;
-	gpGlobals->bCreateTOCFile = AAFFalse;
-	gpGlobals->bDefFile = AAFFalse;
-	gpGlobals->bLogFile = AAFFalse;
+	gpGlobals->bAAFFileOpen = kAAFFalse;
+	gpGlobals->bConvertAllObjects = kAAFFalse;
+	gpGlobals->bCreateTOCFile = kAAFFalse;
+	gpGlobals->bDefFile = kAAFFalse;
+	gpGlobals->bLogFile = kAAFFalse;
 	gpGlobals->pLogger = NULL;
-	gpGlobals->bOMFFileOpen = AAFFalse;
-	gpGlobals->bVerboseMode = AAFFalse;
+	gpGlobals->bOMFFileOpen = kAAFFalse;
+	gpGlobals->bVerboseMode = kAAFFalse;
 	gpGlobals->numIndents = 0;
 	gpGlobals->pProgramName = NULL;
-	gpGlobals->bDeleteOutput  = AAFTrue;
-	gpGlobals->bConvertAAFFile  = AAFFalse;
+	gpGlobals->bDeleteOutput  = kAAFTrue;
+	gpGlobals->bConvertAAFFile  = kAAFFalse;
 
 	gpGlobals->nNumAAFMobs = 0;
 	gpGlobals->nNumAAFObjects = 0;
@@ -329,10 +329,10 @@ static HRESULT GetUserInput(int argc, char* argv[])
 				switch( flag )
 				{
 					case 'v':
-						gpGlobals->bVerboseMode = AAFTrue;
+						gpGlobals->bVerboseMode = kAAFTrue;
 						break;
 					case 's':
-						gpGlobals->bConvertAllObjects = AAFTrue;
+						gpGlobals->bConvertAllObjects = kAAFTrue;
 						break;
 					case 'p':
 						if ((i + 1 < argc)&& (*argv[i+1] != '-'))
@@ -341,7 +341,7 @@ static HRESULT GetUserInput(int argc, char* argv[])
 							pFileName = argv[i];
 							if (strlen(pFileName))
 							{
-								gpGlobals->bLogFile = AAFTrue;
+								gpGlobals->bLogFile = kAAFTrue;
 								strcpy(gpGlobals->sLogFileName, pFileName);
 							}
 						}
@@ -353,7 +353,7 @@ static HRESULT GetUserInput(int argc, char* argv[])
 							pFileName = argv[i];
 							if (strlen(pFileName))
 							{
-								gpGlobals->bDefFile = AAFTrue;
+								gpGlobals->bDefFile = kAAFTrue;
 								strcpy(gpGlobals->sDefinitionFileName, pFileName);
 							}
 						}
@@ -365,7 +365,7 @@ static HRESULT GetUserInput(int argc, char* argv[])
 							pFileName = argv[i];
 							if (strlen(pFileName))
 							{
-								gpGlobals->bCreateTOCFile = AAFTrue;
+								gpGlobals->bCreateTOCFile = kAAFTrue;
 								strcpy(gpGlobals->sTOCFileName, pFileName);
 							}
 						}
@@ -390,11 +390,11 @@ static HRESULT GetUserInput(int argc, char* argv[])
 					}
 					if (strcmp(lc, "nr") == 0)
 					{
-						gpGlobals->bDeleteOutput = AAFFalse;
+						gpGlobals->bDeleteOutput = kAAFFalse;
 					}
 					else if ( strcmp(lc, "omf") == 0 ) 
 					{
-						gpGlobals->bConvertAAFFile = AAFTrue;
+						gpGlobals->bConvertAAFFile = kAAFTrue;
 					}
 					else
 						rc = AAFRESULT_BAD_FLAGS;

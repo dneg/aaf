@@ -129,7 +129,7 @@ EnumEssenceDataTest::EnumEssenceDataTest():
   _productInfo.productVersion.minor = 0;
   _productInfo.productVersion.tertiary = 0;
   _productInfo.productVersion.patchLevel = 0;
-  _productInfo.productVersion.type = kVersionUnknown;
+  _productInfo.productVersion.type = kAAFVersionUnknown;
   _productInfo.productVersionString = NULL;
   _productInfo.productID = UnitTestProductID;
   _productInfo.platform = NULL;

@@ -43,7 +43,7 @@
 
 
 static aafInt32 fadeInLen  = 1000;
-static aafFadeType_t fadeInType = kFadeLinearAmp;
+static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
 static aafRational_t fadeInEditUnit = { 25, 1};
 
 
@@ -98,7 +98,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  ProductInfo.productVersion.minor = 0;
 	  ProductInfo.productVersion.tertiary = 0;
 	  ProductInfo.productVersion.patchLevel = 0;
-	  ProductInfo.productVersion.type = kVersionUnknown;
+	  ProductInfo.productVersion.type = kAAFVersionUnknown;
 	  ProductInfo.productVersionString = NULL;
 	  ProductInfo.productID = UnitTestProductID;
 	  ProductInfo.platform = NULL;
@@ -189,7 +189,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.platform = NULL;
 
@@ -200,12 +200,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
-		checkResult(pHeader->CountMobs( kAllMob, &numMobs ));
+		checkResult(pHeader->CountMobs( kAAFAllMob, &numMobs ));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
 		// Enumerate over all Composition Mobs
-		criteria.searchTag = kByMobKind;
-		criteria.tags.mobKind = kCompMob;
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFCompMob;
 		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while (pMobIter && (pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS))
 		{
@@ -216,7 +216,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
       checkExpression( (defaultFade.fadeLength == fadeInLen) &&
 				  (defaultFade.fadeType == fadeInType) &&
 				  (memcmp( &( defaultFade.fadeEditUnit), &fadeInEditUnit, sizeof( fadeInEditUnit ))== 0) &&
-				  (defaultFade.valid == AAFTrue), 
+				  (defaultFade.valid == kAAFTrue), 
          AAFRESULT_TEST_FAILED);
 
 			pCompMob->Release();

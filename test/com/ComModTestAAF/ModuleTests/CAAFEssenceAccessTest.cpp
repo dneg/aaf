@@ -204,7 +204,7 @@ extern "C" HRESULT CAAFEssenceAccess_test();
 
 static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
 {
-	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
+	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
 
 #define TEST_PATH	L"SomeFile.dat"
@@ -369,7 +369,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		ProductInfo.productVersion.minor = 0;
 		ProductInfo.productVersion.tertiary = 0;
 		ProductInfo.productVersion.patchLevel = 0;
-		ProductInfo.productVersion.type = kVersionUnknown;
+		ProductInfo.productVersion.type = kAAFVersionUnknown;
 		ProductInfo.productVersionString = NULL;
 		ProductInfo.productID = NIL_UID;
 		ProductInfo.platform = NULL;
@@ -440,7 +440,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 			CodecWave,		// codecID
 			editRate,		// edit rate
 			sampleRate,		// sample rate
-			kSDKCompressionDisable,
+			kAAFCompressionDisable,
 			pLocator,	// In current file
 			testContainer,	// In AAF Format
 			&pEssenceAccess));// Compress disabled
@@ -611,10 +611,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 		
 		// Here we checkResult on the number of mobs in the file. 
 		// Get the number of master mobs in the file (should be one)
-		checkResult(pHeader->CountMobs(kMasterMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAAFMasterMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
-		criteria.searchTag = kByMobKind;
-		criteria.tags.mobKind = kMasterMob;
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFMasterMob;
 		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
@@ -636,8 +636,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			// Open the Essence Data
 			checkResult(pMasterMob->OpenEssence(	1,						// SlotID 1
 				NULL,				// mediaCriteria (Don't care)
-				kMediaOpenReadOnly,	// Open mode
-				kSDKCompressionDisable,// Compress disabled
+				kAAFMediaOpenReadOnly,	// Open mode
+				kAAFCompressionDisable,// Compress disabled
 				&pEssenceAccess));
 			
 			// Open and read the Wave file (for comparison)
@@ -895,7 +895,7 @@ static HRESULT CreateJPEGAAFFile(
 	try
 	{
 		checkExpression((1 == horizontalSubsample || 
-			              (2 == horizontalSubsample && kColorSpaceYUV == colorSpace)),
+			              (2 == horizontalSubsample && kAAFColorSpaceYUV == colorSpace)),
 										AAFRESULT_TEST_FAILED);
 		
 		// delete any previous test file before continuing...
@@ -909,7 +909,7 @@ static HRESULT CreateJPEGAAFFile(
 		}
 
 
-		if (kColorSpaceYUV == colorSpace && 2 == horizontalSubsample)
+		if (kAAFColorSpaceYUV == colorSpace && 2 == horizontalSubsample)
 		{
 			compressedBuffer = const_cast<aafDataBuffer_t>(compressed422JFIF);
 			compressedBufferSize = sizeof(compressed422JFIF);
@@ -921,9 +921,9 @@ static HRESULT CreateJPEGAAFFile(
 		}
 
 
-		if (compressEnable == kSDKCompressionEnable)
+		if (compressEnable == kAAFCompressionEnable)
 		{
-			if (kColorSpaceYUV == colorSpace)
+			if (kAAFColorSpaceYUV == colorSpace)
 			{
 				if (2 == horizontalSubsample)
 				{
@@ -963,7 +963,7 @@ static HRESULT CreateJPEGAAFFile(
 		ProductInfo.productVersion.minor = 0;
 		ProductInfo.productVersion.tertiary = 0;
 		ProductInfo.productVersion.patchLevel = 0;
-		ProductInfo.productVersion.type = kVersionUnknown;
+		ProductInfo.productVersion.type = kAAFVersionUnknown;
 		ProductInfo.productVersionString = NULL;
 		ProductInfo.productID = NIL_UID;
 		ProductInfo.platform = NULL;
@@ -1052,7 +1052,7 @@ static HRESULT CreateJPEGAAFFile(
 		checkResult(pFormat->AddFormatSpecifier (kAAFSampledRect, sizeof(rc), (aafDataBuffer_t)&rc));
 		checkResult(pFormat->AddFormatSpecifier (kAAFDisplayRect, sizeof(rc), (aafDataBuffer_t)&rc));
 
-		if (compressEnable == kSDKCompressionEnable)
+		if (compressEnable == kAAFCompressionEnable)
 		{
 			aafUInt8 quality = 75;
 			checkResult(pFormat->AddFormatSpecifier (kAAFCompressionQuality, sizeof(quality), (aafDataBuffer_t)&quality));
@@ -1065,7 +1065,7 @@ static HRESULT CreateJPEGAAFFile(
 
 
 		// Change the output pixel format / color space if necessary.
-		if (compressEnable == kSDKCompressionEnable && defaultPixelColorSpace != colorSpace)
+		if (compressEnable == kAAFCompressionEnable && defaultPixelColorSpace != colorSpace)
 		{
 			// NOTE: TransformParameters have not been implemented yet!
 			// For now just use the PutFileFormat method.
@@ -1073,7 +1073,7 @@ static HRESULT CreateJPEGAAFFile(
 			checkResult(pEssenceAccess->GetEmptyFileFormat (&pTransformFormat));
 
 
-			if (kColorSpaceYUV == colorSpace)
+			if (kAAFColorSpaceYUV == colorSpace)
 			{
 				checkResult(pTransformFormat->AddFormatSpecifier (kAAFCDCIHorizSubsampling, sizeof(horizontalSubsample), (aafDataBuffer_t)&horizontalSubsample));
 			}
@@ -1253,13 +1253,13 @@ static HRESULT ReadJPEGAAFFile(
 	try
 	{
 		checkExpression((1 == horizontalSubsample || 
-			              (2 == horizontalSubsample && kColorSpaceYUV == colorSpace)),
+			              (2 == horizontalSubsample && kAAFColorSpaceYUV == colorSpace)),
 										AAFRESULT_TEST_FAILED);
 		
 
-		if (compressEnable == kSDKCompressionEnable)
+		if (compressEnable == kAAFCompressionEnable)
 		{
-			if (kColorSpaceYUV == colorSpace)
+			if (kAAFColorSpaceYUV == colorSpace)
 			{
 				if (2 == horizontalSubsample)
 				{
@@ -1286,7 +1286,7 @@ static HRESULT ReadJPEGAAFFile(
 		}
 		else
 		{
-			if (kColorSpaceYUV == colorSpace && 2 == horizontalSubsample)
+			if (kAAFColorSpaceYUV == colorSpace && 2 == horizontalSubsample)
 			{
 				compressedBufferSize = sizeof(compressed422JFIF);
 				compressedBuffer = new aafUInt8[compressedBufferSize];
@@ -1313,10 +1313,10 @@ static HRESULT ReadJPEGAAFFile(
 		
 		// Here we checkResult on the number of mobs in the file. 
 		// Get the number of master mobs in the file (should be one)
-		checkResult(pHeader->CountMobs(kMasterMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAAFMasterMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
-		criteria.searchTag = kByMobKind;
-		criteria.tags.mobKind = kMasterMob;
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFMasterMob;
 		checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
@@ -1338,7 +1338,7 @@ static HRESULT ReadJPEGAAFFile(
 			// Open the Essence Data
 			checkResult(pMasterMob->OpenEssence(STD_SLOT_ID,						// SlotID 1
 				NULL,				// mediaCriteria (Don't care)
-				kMediaOpenReadOnly,	// Open mode
+				kAAFMediaOpenReadOnly,	// Open mode
 				compressEnable,// Compression
 				&pEssenceAccess));
 
@@ -1388,7 +1388,7 @@ static HRESULT ReadJPEGAAFFile(
 
 
 			// Change the output pixel format / color space if necessary.
-			if (compressEnable == kSDKCompressionEnable)
+			if (compressEnable == kAAFCompressionEnable)
 			{
 				// NOTE: TransformParameters have not been implemented yet!
 				// For now just use the PutFileFormat method.
@@ -1417,7 +1417,7 @@ static HRESULT ReadJPEGAAFFile(
 
 			
 			// Validate the buffer size.
-			if (kSDKCompressionDisable == compressEnable)
+			if (kAAFCompressionDisable == compressEnable)
 			{	// If the data is compressed then the size of the buffer should be the
 				// same as the original compressed JFIF data.
 				checkExpression(compressedBufferSize == sampleBufferSize, AAFRESULT_TEST_FAILED);
@@ -1440,7 +1440,7 @@ static HRESULT ReadJPEGAAFFile(
 			{
 				aafLength_t sampleSize;
 				checkResult(pEssenceAccess->GetSampleFrameSize(defs.ddPicture(), index, &sampleSize));
-				if (kSDKCompressionDisable == compressEnable)
+				if (kAAFCompressionDisable == compressEnable)
 					checkExpression(compressedBufferSize == sampleSize, AAFRESULT_TEST_FAILED);
 				else
 					checkExpression(sampleBufferSize == sampleSize, AAFRESULT_TEST_FAILED);
@@ -1495,7 +1495,7 @@ static HRESULT ReadJPEGAAFFile(
 					pMultiEssence = NULL;
 				}
 				
-				if (kSDKCompressionDisable == compressEnable)
+				if (kAAFCompressionDisable == compressEnable)
 				{	// If compression is disabled then compare the bytes read to the original
 					// compressedJFIF data buffer.
 					if (compressedBufferSize != AAFBytesRead)
@@ -1573,7 +1573,7 @@ static HRESULT ReadJPEGAAFFile(
 	if (NULL != AAFDataBuf)
 	{
 #ifdef _DEBUG
- 		if (kSDKCompressionDisable == compressEnable)
+ 		if (kAAFCompressionDisable == compressEnable)
 		{
 			if (2 == horizontalSubsample)
 				HexDumpBuffer("compressed422JFIF.jpg", AAFDataBuf, AAFBytesRead);
@@ -1705,7 +1705,7 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	aafInt32			formSize;
 	aafInt16			pcm_format, junk16;
 	aafUInt32			chunkSize;
-	aafBool				fmtFound = AAFFalse, dataFound = AAFFalse;
+	aafBool				fmtFound = kAAFFalse, dataFound = kAAFFalse;
 	aafUInt8			chunkID[4];
 	aafInt32			junk32, rate, bytesPerFrame;
 	aafUInt8			*ptr;
@@ -1748,14 +1748,14 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 			// WAVE field Sample Width
 			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)bitsPerSample);
 			bytesPerFrame = (((*bitsPerSample) + 7) / 8) * (*numCh);
-			fmtFound = AAFTrue;
+			fmtFound = kAAFTrue;
 		} else if (memcmp(&chunkID, "data", (size_t) 4) == 0)
 		{
 			*dataLen = chunkSize / bytesPerFrame;
 			// Positioned at beginning of audio data
 			*dataOffset = ptr - buf;
 			
-			dataFound = AAFTrue;
+			dataFound = kAAFTrue;
 		}
 		
 		if((ptr-buf) > formSize)
@@ -1850,159 +1850,159 @@ HRESULT CAAFEssenceAccess_test()
 
   cout << "    Internal Essence (JPEG):" << endl;
   cout << "        WriteRawData" << endl;
-	hr = CreateJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+	hr = CreateJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGRaw.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, testStandardCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression disabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEG.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEG.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEG.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGComp.aaf",NULL, kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteMultiSamples (compression disabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
 	}
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteMultiSamples (compression enabled, RGB)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kSDKCompressionDisable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, testMultiCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testMultiCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testMultiCalls);
 	}
 
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, YUV)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kSDKCompressionDisable, kColorSpaceYUV, 1, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kSDKCompressionDisable, kColorSpaceYUV, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kSDKCompressionEnable, kColorSpaceYUV, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 1, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 
 
 	if (SUCCEEDED(hr))
 	{
 		cout << "        WriteSamples (compression enabled, YUV 4-2-2)" << endl;
-		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kSDKCompressionEnable, kColorSpaceYUV, 2, testStandardCalls);
+		hr = CreateJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceYUV, 2, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 	  cout << "        ReadRawData" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kSDKCompressionDisable, kColorSpaceYUV, 2, testRawCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, testRawCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression disabled, YUV)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kSDKCompressionDisable, kColorSpaceYUV, 2, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionDisable, kAAFColorSpaceYUV, 2, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, YUV 4-2-2)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kSDKCompressionEnable, kColorSpaceYUV, 2, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceYUV, 2, testStandardCalls);
 	}
 	if (SUCCEEDED(hr))
 	{
 		cout << "        ReadSamples (compression enabled, RGB)" << endl;
-		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kSDKCompressionEnable, kColorSpaceRGB, 1, testStandardCalls);
+		hr = ReadJPEGAAFFile(L"EssenceAccessJPEGCompYUV422.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, testStandardCalls);
 	}
 
 

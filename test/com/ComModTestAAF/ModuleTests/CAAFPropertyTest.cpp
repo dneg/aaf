@@ -103,7 +103,7 @@ static HRESULT ObjectTest ()
 	  ProductInfo.productVersion.minor = 0;
 	  ProductInfo.productVersion.tertiary = 0;
 	  ProductInfo.productVersion.patchLevel = 0;
-	  ProductInfo.productVersion.type = kVersionUnknown;
+	  ProductInfo.productVersion.type = kAAFVersionUnknown;
 	  ProductInfo.productVersionString = NULL;
 	  ProductInfo.productID = -1;
 	  ProductInfo.platform = NULL;
@@ -123,7 +123,7 @@ static HRESULT ObjectTest ()
 	  assert (pTypeDefInt);
 	  checkResult (pTypeDefInt->Initialize (&TypeID_Local1,
 											1,
-											AAFTrue,
+											kAAFTrue,
 											L"Fake local 1-byte signed int type");
 	  
 	  checkResult (pDict->CreateInstance (defs.cdPropertyDef(),

@@ -200,7 +200,7 @@ HRESULT STDMETHODCALLTYPE
 		pcd->Release();
 		pcd = 0;
 		uid = ContainerFile;
-		CHECK(container->SetEssenceIsIdentified(AAFFalse));
+		CHECK(container->SetEssenceIsIdentified(kAAFFalse));
 		CHECK(container->Initialize(uid, L"Raw file Container", L"Essence is in a non-container file."));
 		CHECK(container->QueryInterface(IID_IAAFDefObject, (void **)def));
 		container->Release();
@@ -266,9 +266,9 @@ HRESULT STDMETHODCALLTYPE
 
 		CHECK(desc->SetManufacturerID(MANUF_JEFFS_PLUGINS));
 		CHECK(desc->SetPluginManufacturerName(manufName));
-		CHECK(desc->SetIsSoftwareOnly(AAFTrue));
-		CHECK(desc->SetIsAccelerated(AAFFalse));
-		CHECK(desc->SetSupportsAuthentication(AAFFalse));
+		CHECK(desc->SetIsSoftwareOnly(kAAFTrue));
+		CHECK(desc->SetIsAccelerated(kAAFFalse));
+		CHECK(desc->SetSupportsAuthentication(kAAFFalse));
 		
 		/**/
 		CHECK(pcd->CreateInstance(IID_IAAFLocator, 

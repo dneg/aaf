@@ -228,7 +228,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 {
-  return AAFTrue;
+  return kAAFTrue;
 }
 
 
@@ -240,7 +240,7 @@ size_t ImplAAFTypeDefStrongObjRef::PropValSize (void) const
 
 aafBool ImplAAFTypeDefStrongObjRef::IsRegistered (void) const
 {
-  return AAFTrue;
+  return kAAFTrue;
 }
 
 

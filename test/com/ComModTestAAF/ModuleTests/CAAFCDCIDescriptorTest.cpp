@@ -43,7 +43,7 @@
 // Default testing values for CDCI
 #define kCWTest		8
 #define kHSTest		2
-#define kCSTest		kCoSiting
+#define kCSTest		kAAFCoSiting
 #define kBRLTest	16
 #define kWRLTest	255
 #define kCRTest		255
@@ -52,7 +52,7 @@
 // default test values for DID
 #define kStoredHeightTestVal			248
 #define kStoredWidthTestVal				720
-#define kFrameLayoutTestVal				kSeparateFields
+#define kFrameLayoutTestVal				kAAFSeparateFields
 #define kVideoLineMapSizeTestVal		2
 #define kVideoLineMap1TestVal			10
 #define kVideoLineMap2TestVal			11
@@ -66,7 +66,7 @@
 #define kDisplayWidthTestVal			718
 #define kDisplayXOffsetTestVal			7
 #define kDisplayYOffsetTestVal			8
-#define kAlphaTransparencyTestVal		kMaxValueTransparent
+#define kAlphaTransparencyTestVal		kAAFMaxValueTransparent
 #define kImageAlignmentFactorTestVal	0
 #define kGammaNumTestVal				7
 #define kGammaDenTestVal				8
@@ -135,7 +135,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
@@ -144,11 +144,11 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 	switch (mode)
 	{
-	case kMediaOpenReadOnly:
+	case kAAFMediaOpenReadOnly:
 		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
 		break;
 
-	case kMediaOpenAppend:
+	case kAAFMediaOpenAppend:
 		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
 		break;
 
@@ -192,7 +192,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   RemoveTestFile(pFileName);
 
 	// Create the AAF file
-	hr = OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader);
+	hr = OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader);
 	if (FAILED(hr))
 		return hr;
 
@@ -287,11 +287,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
 	// Open the AAF file
-	hr = OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader);
+	hr = OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader);
 	if (FAILED(hr))
 		return hr;
 
-	hr = pHeader->CountMobs(kAllMob, &numMobs);
+	hr = pHeader->CountMobs(kAAFAllMob, &numMobs);
 	if (1 != numMobs)
 	{
 		hr = AAFRESULT_TEST_FAILED;

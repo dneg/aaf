@@ -259,7 +259,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(SearchSource (masterSlotID, 0, kTapeMob, NULL, NULL,
+		CHECK(SearchSource (masterSlotID, 0, kAAFTapeMob, NULL, NULL,
 									&info));
 		CHECK(info->GetMob(&mob));
 		CHECK(mob->GetName(pTapeName, bufSize));
@@ -324,7 +324,7 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(SearchSource (masterSlotID, 0, kTapeMob, NULL, NULL,
+		CHECK(SearchSource (masterSlotID, 0, kAAFTapeMob, NULL, NULL,
 									&info));
 		CHECK(info->GetMob(&mob));
 		CHECK(mob->GetNameBufLen(pLen));
@@ -594,7 +594,7 @@ AAFRESULT STDMETHODCALLTYPE
 //
 // GetMobKind()
 //
-// Returns kMasterMob in *pMobKind.
+// Returns kAAFMasterMob in *pMobKind.
 // 
 // AAFRESULT_SUCCESS
 //   - succeeded.  (This is the only code indicating success.)
@@ -608,7 +608,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pMobKind == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	*pMobKind = kMasterMob;
+	*pMobKind = kAAFMasterMob;
 
 	return AAFRESULT_SUCCESS;
 }

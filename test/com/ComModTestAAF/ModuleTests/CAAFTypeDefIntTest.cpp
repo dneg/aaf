@@ -435,7 +435,7 @@ static HRESULT TestTypeDefInt ()
 	  ProductInfo.productVersion.minor = 0;
 	  ProductInfo.productVersion.tertiary = 0;
 	  ProductInfo.productVersion.patchLevel = 0;
-	  ProductInfo.productVersion.type = kVersionUnknown;
+	  ProductInfo.productVersion.type = kAAFVersionUnknown;
 	  ProductInfo.productVersionString = NULL;
 	  ProductInfo.productID = UnitTestProductID;
 	  ProductInfo.platform = NULL;
@@ -455,7 +455,7 @@ static HRESULT TestTypeDefInt ()
 	  // 1-byte signed
 	  checkResult (CreateOneTypeDef (pDict,
 									 1,                 // 1-byte (8-bit) int
-									 AAFTrue,           // signed
+									 kAAFTrue,           // signed
 									 TypeID_LocalInt8,
 									 L"Local 8-bit signed int",
 									 &ptds8));
@@ -464,7 +464,7 @@ static HRESULT TestTypeDefInt ()
   // 2-byte signed
 	  checkResult (CreateOneTypeDef (pDict,
 									 2,                 // 2-byte (16-bit) int
-									 AAFTrue,           // signed
+									 kAAFTrue,           // signed
 									 TypeID_LocalInt16,
 									 L"Local 8-bit signed int",
 									 &ptds16));
@@ -473,7 +473,7 @@ static HRESULT TestTypeDefInt ()
   // 4-byte signed
 	  checkResult (CreateOneTypeDef (pDict,
 									 4,                 // 4-byte (32-bit) int
-									 AAFTrue,           // signed
+									 kAAFTrue,           // signed
 									 TypeID_LocalInt32,
 									 L"Local 32-bit signed int",
 									 &ptds32));
@@ -482,7 +482,7 @@ static HRESULT TestTypeDefInt ()
   // 8-byte signed
 	  checkResult (CreateOneTypeDef (pDict,
 									 8,                 // 8-byte (64-bit) int
-									 AAFTrue,           // signed
+									 kAAFTrue,           // signed
 									 TypeID_LocalInt64,
 									 L"Local 64-bit signed int",
 									 &ptds64));
@@ -491,7 +491,7 @@ static HRESULT TestTypeDefInt ()
   // 1-byte unsigned
 	  checkResult (CreateOneTypeDef (pDict,
 									 1,                 // 1-byte (8-bit) int
-									 AAFFalse,          // unsigned
+									 kAAFFalse,          // unsigned
 									 TypeID_LocalUInt8,
 									 L"Local 8-bit unsigned int",
 									 &ptdu8));
@@ -500,7 +500,7 @@ static HRESULT TestTypeDefInt ()
   // 2-byte unsigned
 	  checkResult (CreateOneTypeDef (pDict,
 									 2,                 // 2-byte (16-bit) int
-									 AAFFalse,          // unsigned
+									 kAAFFalse,          // unsigned
 									 TypeID_LocalUInt16,
 									 L"Local 8-bit unsigned int",
 									 &ptdu16));
@@ -509,7 +509,7 @@ static HRESULT TestTypeDefInt ()
   // 4-byte unsigned
 	  checkResult (CreateOneTypeDef (pDict,
 									 4,                 // 4-byte (32-bit) int
-									 AAFFalse,          // unsigned
+									 kAAFFalse,          // unsigned
 									 TypeID_LocalUInt32,
 									 L"Local 32-bit unsigned int",
 									 &ptdu32));
@@ -518,7 +518,7 @@ static HRESULT TestTypeDefInt ()
   // 8-byte unsigned
 	  checkResult (CreateOneTypeDef (pDict,
 									 8,                 // 8-byte (64-bit) int
-									 AAFFalse,          // unsigned
+									 kAAFFalse,          // unsigned
 									 TypeID_LocalUInt64,
 									 L"Local 64-bit unsigned int",
 									 &ptdu64));
@@ -566,7 +566,7 @@ static HRESULT TestTypeDefInt ()
 									 setData,
 									 getSize,
 									 pvSize,
-									 sign? AAFTrue : AAFFalse,
+									 sign? kAAFTrue : kAAFFalse,
 									 td);
 
 				  //

@@ -137,7 +137,7 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 		if (Int64LessEqual(begPos, offset) &&
 			Int64Less(offset, endPos))
 		{
-			*found = AAFTrue;
+			*found = kAAFTrue;
 			*subseg = this;
 			// We are returning a reference to this object so bump the ref count
 			AcquireReference();
@@ -145,7 +145,7 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 		}
 		else
 		{
-			*found = AAFFalse;
+			*found = kAAFFalse;
 			*subseg = NULL;
 			*sequPosPtr = 0;
 		}

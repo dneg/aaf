@@ -203,7 +203,7 @@ static void RegisterNewClass (IAAFDictionary * pDictionary)
 	(pNewFillClass->RegisterNewPropertyDef (kPropAUID_NewFill_Odor,
 											L"Odor",
 											ptd,
-											AAFFalse,  // mandatory
+											kAAFFalse,  // mandatory
 											0));
 
   // Register it in the dictionary.
@@ -334,7 +334,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* IID of def to pass to Init */ IID_IAAFTypeDefInt,
 				  /* SP of def to use with Init */ IAAFTypeDefIntSP,
 				  /* Init() invocation */
-				  Initialize (kTestTypeID, 1, AAFFalse, L"TestUInt8"),
+				  Initialize (kTestTypeID, 1, kAAFFalse, L"TestUInt8"),
 				  /* IID of type to QI */          IID_IAAFDefObject,
 				  /* SP for type to QI */          IAAFDefObjectSP,
 				  /* IID of def to register */     IID_IAAFTypeDef,
@@ -548,7 +548,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
@@ -557,11 +557,11 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 	switch (mode)
 	{
-	case kMediaOpenReadOnly:
+	case kAAFMediaOpenReadOnly:
 		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
 		break;
 
-	case kMediaOpenAppend:
+	case kAAFMediaOpenAppend:
 		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
 		break;
 
@@ -612,7 +612,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  RemoveTestFile(pFileName);
 		
 	  // Create the AAF file
-	  checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader));
+	  checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader));
 		
 	  // Get the AAF Dictionary so that we can create valid AAF objects.
 	  checkResult(pHeader->GetDictionary(&pDictionary));
@@ -761,10 +761,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
   try
 	{
 	  // Open the AAF file
-	  checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
+	  checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
 		
 	  // Validate that there is only one composition mob.
-	  checkResult(pHeader->CountMobs(kCompMob, &numMobs));
+	  checkResult(pHeader->CountMobs(kAAFCompMob, &numMobs));
 	  checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 		
 	  // Get the AAF Dictionary so that we can create valid AAF objects.
@@ -772,8 +772,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  CAAFBuiltinDefs defs (pDictionary);
 
 	  // Check a data definition from a composition MOB in order to test weak references
-	  criteria.searchTag = kByMobKind;
-	  criteria.tags.mobKind = kCompMob;
+	  criteria.searchTag = kAAFByMobKind;
+	  criteria.tags.mobKind = kAAFCompMob;
 	  checkResult(pHeader->GetMobs(&criteria, &pMobIter));
 	  while (pMobIter && pMobIter->NextOne(&pMob) == AAFRESULT_SUCCESS)
 		{					
@@ -790,10 +790,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		  checkResult(pComp->GetDataDef(&pDataDef));
 		  checkResult(pDataDef->IsSoundKind(&testBool));
-		  checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
+		  checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 
 		  checkResult(pDataDef->IsDataDefOf(defs.ddPictureWithMatte(), &testBool));
-		  checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+		  checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 		
 		  // Make sure first component is a filler, and is our extended
 		  // class.  To do that, we'll compare the class def we looked
@@ -850,7 +850,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				}
 			}
 		  // make sure we found it the hard way.
-		  checkExpression(found == AAFTrue, AAFRESULT_TEST_FAILED);
+		  checkExpression(found == kAAFTrue, AAFRESULT_TEST_FAILED);
 
 		  // Get the 'odor' property from our new fill clip.  Make
 		  // sure it is set to the value we think it should be

@@ -52,7 +52,7 @@ const wchar_t kPersonnelResourceDescription[] = L"Handles Access to Personnel Re
 const wchar_t kPersonnelMobDisplayName[] = L"Example AAF Personel Mob Class Extension";
 const wchar_t kPersonnelMobDescription[] = L"Handles Access to Personnel Mob AAF objects";
 
-const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kVersionBeta};
+const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kAAFVersionBeta};
 
 //
 // Plugin Descriptor information
@@ -723,9 +723,9 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(desc->SetPluginVersionString(kManufRev));
 		checkResult(desc->SetManufacturerID(MANUF_AVID_PLUGINS));
 		checkResult(desc->SetPluginManufacturerName(kManufName));
-		checkResult(desc->SetIsSoftwareOnly(AAFTrue));
-		checkResult(desc->SetIsAccelerated(AAFFalse));
-		checkResult(desc->SetSupportsAuthentication(AAFFalse));
+		checkResult(desc->SetIsSoftwareOnly(kAAFTrue));
+		checkResult(desc->SetIsAccelerated(kAAFFalse));
+		checkResult(desc->SetSupportsAuthentication(kAAFFalse));
 
 		// Create the network locator for the Manufacturer's web site: 
 		checkResult(defs.cdNetworkLocator()->

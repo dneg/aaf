@@ -195,8 +195,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 	
-	if ( formFactor < kTapeCaseNull ||
-		 formFactor > kNagraAudioTape )
+	if ( formFactor < kAAFTapeCaseNull ||
+		 formFactor > kAAFNagraAudioTape )
 	{
 		aafError = AAFRESULT_BAD_TYPE;
 	}
@@ -238,8 +238,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (videoSignal < kVideoSignalNull ||
-		videoSignal > kSECAMSignal)
+	if (videoSignal < kAAFVideoSignalNull ||
+		videoSignal > kAAFSECAMSignal)
 	{
 		aafError = AAFRESULT_BAD_TYPE;
 	}
@@ -281,8 +281,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (tapeFormat < kTapeFormatNull ||
-		tapeFormat > kHi8Format)
+	if (tapeFormat < kAAFTapeFormatNull ||
+		tapeFormat > kAAFHi8Format)
 	{
 		aafError = AAFRESULT_BAD_TYPE;
 	}
@@ -358,7 +358,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTapeDescriptor::GetOwningMobKind (aafMobKind_t *pMobKind)
 {
-	*pMobKind = kTapeMob;		// Abstract superclass, only match "all"
+	*pMobKind = kAAFTapeMob;		// Abstract superclass, only match "all"
 	return(AAFRESULT_SUCCESS);
 }
 

@@ -55,10 +55,10 @@ const aafUID_t ID_MANUFACTURER = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x0
 static aafVersionType_t samplePluginVersion = { 0, 0 };//, 0, 0, kVersionReleased };
 static aafVersionType_t sampleMinPlatformVersion = { 1, 2 }; //, 3, 4, kVersionDebug };
 static aafVersionType_t sampleMinEngineVersion = { 5, 6 }; //7, 9, kVersionPatched };
-static aafVersionType_t sampleMinAPIVersion = { 10, 11 };//, 12, 13, kVersionBeta };
+static aafVersionType_t sampleMinAPIVersion = { 10, 11 };//, 12, 13, kAAFVersionBeta };
 static aafVersionType_t sampleMaxPlatformVersion = { 31, 32 };//3, 34, kVersionDebug };
 static aafVersionType_t sampleMaxEngineVersion = { 35, 36 };//, 37, 39, kVersionPatched };
-static aafVersionType_t sampleMaxAPIVersion = { 40, 41 };//, 42, 43, kVersionBeta };
+static aafVersionType_t sampleMaxAPIVersion = { 40, 41 };//, 42, 43, kAAFVersionBeta };
 
 #define	MobName			L"MasterMOBTest"
 #define	NumMobSlots		3
@@ -68,7 +68,7 @@ static wchar_t *manufRev = L"Rev0.0.0a0";
 
 static aafBool	EqualVersion(aafVersionType_t *vers1, aafVersionType_t *vers2)
 {
-	return(memcmp((char *)vers1, (char *)vers2, sizeof(aafVersionType_t)) == 0 ? AAFTrue : AAFFalse);
+	return(memcmp((char *)vers1, (char *)vers2, sizeof(aafVersionType_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
 
 // Cross-platform utility to delete a file.
@@ -113,14 +113,14 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 
 	*ppFile = NULL;
 
-	if(mode == kMediaOpenAppend)
+	if(mode == kAAFMediaOpenAppend)
 		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
 	else
 		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
@@ -170,7 +170,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	  // Create the AAF file
-	  checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));
+	  checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));
     bFileOpen = true;
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
@@ -205,9 +205,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDesc->SetManufacturerInfo(pNetLoc));
 		checkResult(pDesc->SetManufacturerID(manufacturer));
 		checkResult(pDesc->SetPluginManufacturerName(manufName[n]));
-		checkResult(pDesc->SetIsSoftwareOnly(AAFTrue));
-		checkResult(pDesc->SetIsAccelerated(AAFFalse));
-		checkResult(pDesc->SetSupportsAuthentication(AAFFalse));
+		checkResult(pDesc->SetIsSoftwareOnly(kAAFTrue));
+		checkResult(pDesc->SetIsAccelerated(kAAFFalse));
+		checkResult(pDesc->SetSupportsAuthentication(kAAFFalse));
 		
 		//!!!	aafProductVersion_t samplePluginVersion = { 0, 0, 0, 0, kVersionReleased };
 		/**/
@@ -311,7 +311,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	try
 	{
 		// Open the AAF file
-		checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
+		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
 		bFileOpen = true;
 		
 		checkResult(pHeader->GetDictionary(&pDictionary));
@@ -323,20 +323,20 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		/* Read and check the first element */
 		checkResult(pEnumDesc->NextOne (&pPlugin));
 		checkResult(pPlugin->GetAUID(&testUID));
-		checkExpression(EqualAUID(&testUID, &TestPluginDesc) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &TestPluginDesc) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		pPlugin->Release();
 		pPlugin = NULL;
 		/* Read and check the second element */
 		checkResult(pEnumDesc->NextOne (&pPlugin));
 		checkResult(pPlugin->GetAUID(&testUID));
-		checkExpression(EqualAUID(&testUID, &TestPluginDesc2) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &TestPluginDesc2) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		pPlugin->Release();
 		pPlugin = NULL;
 		/* Reset, and check the first element again*/
 		checkResult(pEnumDesc->Reset());
 		checkResult(pEnumDesc->NextOne (&pPlugin));
 		checkResult(pPlugin->GetAUID(&testUID));
-		checkExpression(EqualAUID(&testUID, &TestPluginDesc) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &TestPluginDesc) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		pPlugin->Release();
 		pPlugin = NULL;
 		/* Reset, Skip, and check the second element again*/
@@ -344,7 +344,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pEnumDesc->Skip(1));
 		checkResult(pEnumDesc->NextOne (&pPlugin));
 		checkResult(pPlugin->GetAUID(&testUID));
-		checkExpression(EqualAUID(&testUID, &TestPluginDesc2) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &TestPluginDesc2) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		pPlugin->Release();
 		pPlugin = NULL;
 		/* Reset, and read both elements */
@@ -352,9 +352,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pEnumDesc->Next (2, (IAAFPluginDescriptor **)&pArray, &resultCount));
 		checkExpression (resultCount == 2, AAFRESULT_TEST_FAILED);
 		checkResult(pArrayDef[0]->GetAUID(&testUID));
-		checkExpression(EqualAUID(&testUID, &TestPluginDesc) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &TestPluginDesc) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pArrayDef[1]->GetAUID(&testUID));
-		checkExpression(EqualAUID(&testUID, &TestPluginDesc2) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &TestPluginDesc2) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		pArrayDef[0]->Release();
 		pArrayDef[0] = NULL;
 		pArrayDef[1]->Release();
@@ -367,7 +367,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pClonePlug->Reset());
 		checkResult(pClonePlug->NextOne (&pPlugin));
 		checkResult(pPlugin->GetAUID(&testUID));
-		checkExpression(EqualAUID(&testUID, &TestPluginDesc) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &TestPluginDesc) == kAAFTrue, AAFRESULT_TEST_FAILED);
 
 		pEnumPluggable->Release();
 		pEnumPluggable = NULL;

@@ -141,7 +141,7 @@ HRESULT STDMETHODCALLTYPE
   if (NULL == isValid)
     return E_INVALIDARG;
   
-  *isValid = AAFFalse;
+  *isValid = kAAFFalse;
 
   if (0 <= byteOffset)
   {
@@ -152,7 +152,7 @@ HRESULT STDMETHODCALLTYPE
 
     if (byteOffset < length)
     {
-      *isValid = AAFTrue;
+      *isValid = kAAFTrue;
     }
     else if (byteOffset == length)
     {
@@ -160,7 +160,7 @@ HRESULT STDMETHODCALLTYPE
       // we don't know whether or not the next
       // file operation will be a read or a write
       // so we just return true.
-      *isValid = AAFTrue;
+      *isValid = kAAFTrue;
     }
   }
 

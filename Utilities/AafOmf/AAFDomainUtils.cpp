@@ -296,12 +296,12 @@ HRESULT AAFDomainUtils::GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_
 	hr = pCD->LookupPropertyDef(*pPropID, &pPD);
 	AutoRelease<IAAFPropertyDef> r2( pPD );
 
-	aafBool	present = AAFFalse;
+	aafBool	present = kAAFFalse;
 	pObj->IsPropertyPresent(pPD, &present);
 	IAAFPropertyValue*	pPV = NULL;
 	AutoRelease<IAAFPropertyValue> r3;
 
-	if (present == AAFTrue)
+	if (present == kAAFTrue)
 	{
 		hr = pObj->GetPropertyValue(pPD, &pPV);
 		r3 = pPV;
@@ -473,10 +473,10 @@ HRESULT AAFDomainUtils::GetObjRefArrayPropFromObject(IAAFObject* pObj, aafUID_t*
 		hr = pCD->LookupPropertyDef(*pPropID, &pPD);
 		if (SUCCEEDED(hr))
 		{
-			aafBool	present = AAFFalse;
+			aafBool	present = kAAFFalse;
 
 			pObj->IsPropertyPresent(pPD, &present);
-			if (present == AAFTrue)
+			if (present == kAAFTrue)
 				hr = pObj->GetPropertyValue(pPD, &pPVVarArray);
 			else
 				hr = AAFRESULT_PROP_NOT_PRESENT;
@@ -649,10 +649,10 @@ HRESULT AAFDomainUtils::GetObjRefPropFromObject(IAAFObject* pObj, aafUID_t* pCla
 		hr = pCD->LookupPropertyDef(*pPropID, &pPD);
 		if (SUCCEEDED(hr))
 		{
-			aafBool	present = AAFFalse;
+			aafBool	present = kAAFFalse;
 
 			pObj->IsPropertyPresent(pPD, &present);
-			if (present == AAFTrue)
+			if (present == kAAFTrue)
 				hr = pObj->GetPropertyValue(pPD, &pPV);
 			else
 				hr = AAFRESULT_PROP_NOT_PRESENT;

@@ -675,7 +675,7 @@ aafErr_t Int64ToString(
 	aafInt64		workval, zero;
 	char			tmpBuf[64];
 	aafInt32		numDigits, remainder, src, dest;
-	aafBool			negative = AAFFalse;
+	aafBool			negative = kAAFFalse;
 	
 	if(buf == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -695,7 +695,7 @@ aafErr_t Int64ToString(
 			if(Int64Less(workval, zero))
 			{
 				NegateInt64(&workval);
-				negative = AAFTrue;
+				negative = kAAFTrue;
 			}
 			while(Int64Greater(workval, zero))
 			{
@@ -778,9 +778,9 @@ aafBool Int64Equal(
 	for(n = 0; n <= 3; n++)
 	{
 		if(a.words[n] != b.words[n])
-			return AAFFalse;
+			return kAAFFalse;
 	}
-	return(AAFTrue);
+	return(kAAFTrue);
 }
 
 /*****/
@@ -1040,7 +1040,7 @@ aafErr_t TimecodeToString(
 		  RAISE(AAFRESULT_INTERN_TOO_SMALL);
 		}
 
-	  if (timeCode.drop == kTcDrop)
+	  if (timeCode.drop == kAAFTcDrop)
 		wcscpy(tcString, L"00;00;00;00");
 	  else 
 		wcscpy(tcString, L"00:00:00:00");
@@ -1140,11 +1140,11 @@ aafErr_t StringToTimecode(
 		}
 		
 		/* Prescan for drop/nondrop */
-		drop = kTcNonDrop;
+		drop = kAAFTcNonDrop;
 		for (c = &tcString[len-1]; c >= tcString; c--)
 			if (*c == ';')
 			{
-				drop = kTcDrop;
+				drop = kAAFTcDrop;
 				break;
 			}
 			
@@ -1152,7 +1152,7 @@ aafErr_t StringToTimecode(
 			if (intFRate == 25)
 			{
 				multiplier = PALnondropTbl;
-				drop = kTcNonDrop;
+				drop = kAAFTcNonDrop;
 			}
 			
 			for (c = &tcString[len-1]; c >= tcString; c--)
@@ -1182,9 +1182,9 @@ aafErr_t StringToTimecode(
 			}
 			
 			if (!drop)
-				(*timecode).drop = kTcNonDrop;
+				(*timecode).drop = kAAFTcNonDrop;
 			else 
-				(*timecode).drop = kTcDrop;
+				(*timecode).drop = kAAFTcDrop;
 			
 			(*timecode).fps = (aafUInt16)intFRate;
 			(*timecode).startFrame = total;

@@ -139,6 +139,6 @@ STDMETHODIMP CAAFClassFactory::LockServer
 	AAFBOOL fLock
 )
 {
-  g_pAAFServer->Lock((fLock) ? AAFTrue : AAFFalse);
+  g_pAAFServer->Lock((fLock) ? kAAFTrue : kAAFFalse);
 	return S_OK;
 }

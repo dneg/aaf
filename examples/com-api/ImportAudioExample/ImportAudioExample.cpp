@@ -166,12 +166,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 	// Here we check on the number of mobs in the file. 
 	// Get the number of master mobs in the file (must not be zero)
-	check(pHeader->CountMobs(kMasterMob, &numMobs));
+	check(pHeader->CountMobs(kAAFMasterMob, &numMobs));
 	if (numMobs != 0)
 	{
 		printf("Found %ld Master Mobs\n", numMobs);
-		criteria.searchTag = kByMobKind;
-		criteria.tags.mobKind = kMasterMob;
+		criteria.searchTag = kAAFByMobKind;
+		criteria.tags.mobKind = kAAFMasterMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
 		while(AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
@@ -203,10 +203,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					check(pMobSlot->GetDataDef(&pDataDef));
 
 					// Check that we have a sound file by examining its data definition
-					aafBool bIsSoundKind = AAFFalse;
+					aafBool bIsSoundKind = kAAFFalse;
 					check(pDataDef->IsSoundKind(&bIsSoundKind));
 
-					if (AAFTrue == bIsSoundKind)
+					if (kAAFTrue == bIsSoundKind)
 					{
 						// Prepare to get audio data: first get MobSlotID
 						check(pMobSlot->GetSlotID(&MobSlotID));
@@ -218,8 +218,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 						// Open the Essence Data
 						check(pMasterMob->OpenEssence(MobSlotID,
 												 	  NULL,	
-													  kMediaOpenReadOnly,
-													  kSDKCompressionDisable, 
+													  kAAFMediaOpenReadOnly,
+													  kAAFCompressionDisable, 
 													  &pEssenceAccess));
 						
 						// Get the information about the format of the audio data
@@ -463,7 +463,7 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	aafInt32			formSize;
 	aafInt16			pcm_format, junk16;
 	aafUInt32			chunkSize;
-	aafBool				fmtFound = AAFFalse, dataFound = AAFFalse;
+	aafBool				fmtFound = kAAFFalse, dataFound = kAAFFalse;
 	aafUInt8			chunkID[4];
  	aafInt32			junk32, rate, bytesPerFrame;
 	aafUInt8			*ptr;
@@ -506,14 +506,14 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 			// WAVE field Sample Width
 			scanSwappedWAVEData(&ptr, sizeof(aafUInt16), (aafUInt8 *)bitsPerSample);
 			bytesPerFrame = (((*bitsPerSample) + 7) / 8) * (*numCh);
-			fmtFound = AAFTrue;
+			fmtFound = kAAFTrue;
 		} else if (memcmp(&chunkID, "data", (size_t) 4) == 0)
 		{
 			*dataLen = chunkSize / bytesPerFrame;
 			// Positioned at beginning of audio data
 			*dataOffset = ptr - buf;
 	
-			dataFound = AAFTrue;
+			dataFound = kAAFTrue;
 		}
 	
 		if((ptr-buf) > formSize)

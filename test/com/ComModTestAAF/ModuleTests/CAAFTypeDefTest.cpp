@@ -80,7 +80,7 @@ static HRESULT TestTypeDef ()
   ProductInfo.productVersion.minor = 0;
   ProductInfo.productVersion.tertiary = 0;
   ProductInfo.productVersion.patchLevel = 0;
-  ProductInfo.productVersion.type = kVersionUnknown;
+  ProductInfo.productVersion.type = kAAFVersionUnknown;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
@@ -111,7 +111,7 @@ static HRESULT TestTypeDef ()
 
   hr = pTypeDefInt->Initialize (TypeID_LocalInt32,
 								4,        // 4-byte (32-bit) int
-								AAFTrue,  // signed
+								kAAFTrue,  // signed
 								L"Local 32-bit int");
   if (! SUCCEEDED (hr)) return hr;
 

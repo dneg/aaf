@@ -96,7 +96,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
@@ -152,7 +152,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pTimecodeStream->SetSourceType(kAAFTimecodeLTC));
 
 		startTC.startFrame = 108000;		// 1 hour, non-drop
-		startTC.drop = kTcNonDrop;
+		startTC.drop = kAAFTcNonDrop;
 		startTC.fps = 30;
 
 		// Set up:
@@ -274,7 +274,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.platform = NULL;
 
@@ -289,7 +289,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
-		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
     checkResult(pHeader->GetMobs( NULL, &pMobIter));
@@ -317,7 +317,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 		checkResult(pTimecodeStream->GetPositionTimecode(0, &startTC));
         checkExpression(startTC.startFrame == 108000, AAFRESULT_TEST_FAILED);
-        checkExpression(startTC.drop == kTcNonDrop, AAFRESULT_TEST_FAILED);
+        checkExpression(startTC.drop == kAAFTcNonDrop, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.fps == 30, AAFRESULT_TEST_FAILED);
 
 
@@ -334,41 +334,41 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		offset = 0;		// Group 1 lower bound	 
 		checkResult(pSeg->SegmentOffsetToTC(&offset, &startTC));
         checkExpression(startTC.startFrame == 108000, AAFRESULT_TEST_FAILED);
-        checkExpression(startTC.drop == kTcNonDrop, AAFRESULT_TEST_FAILED);
+        checkExpression(startTC.drop == kAAFTcNonDrop, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.fps == 30, AAFRESULT_TEST_FAILED);
 		/****/
 		offset = 60;	// Group 2 lower bound
 		checkResult(pSeg->SegmentOffsetToTC(&offset, &startTC));
         checkExpression(startTC.startFrame == 108090, AAFRESULT_TEST_FAILED);
-        checkExpression(startTC.drop == kTcNonDrop, AAFRESULT_TEST_FAILED);
+        checkExpression(startTC.drop == kAAFTcNonDrop, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.fps == 30, AAFRESULT_TEST_FAILED);
 		/****/
 		offset = 120;	// Group 3 Lower Bound
 		checkResult(pSeg->SegmentOffsetToTC(&offset, &startTC));
         checkExpression(startTC.startFrame == (108000L * 2L), AAFRESULT_TEST_FAILED);
-        checkExpression(startTC.drop == kTcNonDrop, AAFRESULT_TEST_FAILED);
+        checkExpression(startTC.drop == kAAFTcNonDrop, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.fps == 30, AAFRESULT_TEST_FAILED);
 		/****/
 		offset = 121;	// Group 3 Middle
 		checkResult(pSeg->SegmentOffsetToTC(&offset, &startTC));
         checkExpression(startTC.startFrame == (108000L * 2L)+1, AAFRESULT_TEST_FAILED);
-        checkExpression(startTC.drop == kTcNonDrop, AAFRESULT_TEST_FAILED);
+        checkExpression(startTC.drop == kAAFTcNonDrop, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.fps == 30, AAFRESULT_TEST_FAILED);
 		/****/
 		offset = 179;	// Group 3 UpperBound
 		checkResult(pSeg->SegmentOffsetToTC(&offset, &startTC));
         checkExpression(startTC.startFrame == (108000L * 2L)+59, AAFRESULT_TEST_FAILED);
-        checkExpression(startTC.drop == kTcNonDrop, AAFRESULT_TEST_FAILED);
+        checkExpression(startTC.drop == kAAFTcNonDrop, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.fps == 30, AAFRESULT_TEST_FAILED);
 		/****/
 		offset = 180;	// Group 3 lower bound
 		checkResult(pSeg->SegmentOffsetToTC(&offset, &startTC));
         checkExpression(startTC.startFrame == 0, AAFRESULT_TEST_FAILED);
-        checkExpression(startTC.drop == kTcNonDrop, AAFRESULT_TEST_FAILED);
+        checkExpression(startTC.drop == kAAFTcNonDrop, AAFRESULT_TEST_FAILED);
         checkExpression(startTC.fps == 30, AAFRESULT_TEST_FAILED);
 
 		/**********/
-        startTC.drop = kTcNonDrop;
+        startTC.drop = kAAFTcNonDrop;
         startTC.fps = 30;
         startTC.startFrame = 108000;		// Group 1 lower bound (Tests path #1 through code)
 		checkResult(pSeg->SegmentTCToOffset(&startTC, &testRate, &offset));

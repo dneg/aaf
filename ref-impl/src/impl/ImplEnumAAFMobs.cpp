@@ -51,7 +51,7 @@ ImplEnumAAFMobs::ImplEnumAAFMobs ()
 {
 	_current = 0;
 	_cStorage = NULL;
-	_criteria.searchTag = kNoSearch;
+	_criteria.searchTag = kAAFNoSearch;
 }
 
 
@@ -69,29 +69,29 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFMobs::NextOne (ImplAAFMob **ppMob)
 {
 	aafNumSlots_t	cur = _current, siz;
-	aafBool			found = AAFFalse;
+	aafBool			found = kAAFFalse;
 
     XPROTECT()
 	{
-		CHECK(_cStorage->CountMobs (kAllMob, &siz));
+		CHECK(_cStorage->CountMobs (kAAFAllMob, &siz));
 		if(cur < siz)
 		{
-			found = AAFFalse;
+			found = kAAFFalse;
 			do {
 				CHECK(_cStorage->GetNthMob (cur, ppMob));
 				_current = ++cur;
 				switch(_criteria.searchTag)
 				{
-				case kNoSearch:
-					found = AAFTrue;
+				case kAAFNoSearch:
+					found = kAAFTrue;
 					break;
 
-				case kByMobKind:
+				case kAAFByMobKind:
 					aafMobKind_t	kind;
 				
 					CHECK((*ppMob)->GetMobKind (&kind));
-					if((kind == _criteria.tags.mobKind) || (kAllMob == _criteria.tags.mobKind))
-						found = AAFTrue;
+					if((kind == _criteria.tags.mobKind) || (kAAFAllMob == _criteria.tags.mobKind))
+						found = kAAFTrue;
 					break;
 				default:
 					return AAFRESULT_NOT_IN_CURRENT_VERSION;
@@ -160,11 +160,11 @@ AAFRESULT STDMETHODCALLTYPE
 
  	switch(_criteria.searchTag)
 	{
-		case kNoSearch:
-			_cStorage->CountMobs(kAllMob, &siz);
+		case kAAFNoSearch:
+			_cStorage->CountMobs(kAAFAllMob, &siz);
 			break;
 
-		case kByMobKind:
+		case kAAFByMobKind:
 			_cStorage->CountMobs(_criteria.tags.mobKind, &siz);
 			break;
 
@@ -241,7 +241,7 @@ AAFRESULT
     ImplEnumAAFMobs::SetCriteria(aafSearchCrit_t *pCriteria)
 {
 	if(NULL == pCriteria)
-		_criteria.searchTag = kNoSearch;
+		_criteria.searchTag = kAAFNoSearch;
 	else
 		_criteria = *pCriteria;
 

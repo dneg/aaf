@@ -40,9 +40,9 @@
 
 static aafWChar* Manufacturer = L"Sony";
 static aafWChar* Model = L"MyModel";
-static aafTapeCaseType_t FormFactor = kVHSVideoTape;
-static aafVideoSignalType_t VideoSignalType = kPALSignal;
-static aafTapeFormatType_t TapeFormat = kVHSFormat;
+static aafTapeCaseType_t FormFactor = kAAFVHSVideoTape;
+static aafVideoSignalType_t VideoSignalType = kAAFPALSignal;
+static aafTapeFormatType_t TapeFormat = kAAFVHSFormat;
 static aafLength_t TapeLength = 3200 ;
 
 
@@ -95,7 +95,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
@@ -224,7 +224,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.platform = NULL;
 
@@ -235,7 +235,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		hr = pFile->GetHeader(&pHeader);
 		if (AAFRESULT_SUCCESS == hr)
 		{
-			hr = pHeader->CountMobs(kAllMob, &numMobs);
+			hr = pHeader->CountMobs(kAAFAllMob, &numMobs);
 			if (AAFRESULT_SUCCESS == hr)
 			{
 				if (1 == numMobs )

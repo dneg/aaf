@@ -58,7 +58,7 @@ ImplAAFCDCIDescriptor::ImplAAFCDCIDescriptor ()
 	_horizontalSubsampling = 1; // valid values are 1 and 2?
 
 	// Initialize Optional properties
-	_colorSiting = kCoSiting;
+	_colorSiting = kAAFCoSiting;
 	_blackReferenceLevel = 0;
 	_whiteReferenceLevel = 255;
 	_colorRange = 255;

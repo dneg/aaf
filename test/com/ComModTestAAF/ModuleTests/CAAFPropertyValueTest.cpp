@@ -88,7 +88,7 @@ static HRESULT TestPropertyValue ()
   ProductInfo.productVersion.minor = 0;
   ProductInfo.productVersion.tertiary = 0;
   ProductInfo.productVersion.patchLevel = 0;
-  ProductInfo.productVersion.type = kVersionUnknown;
+  ProductInfo.productVersion.type = kAAFVersionUnknown;
   ProductInfo.productVersionString = NULL;
   ProductInfo.productID = UnitTestProductID;
   ProductInfo.platform = NULL;
@@ -119,7 +119,7 @@ static HRESULT TestPropertyValue ()
 
   hr = pTypeDef->Initialize (TypeID_LocalInt32,
 							 4,        // 4-byte (32-bit) int
-							 AAFTrue,  // signed
+							 kAAFTrue,  // signed
 							 L"Local 32-bit int");
   if (! SUCCEEDED (hr)) return hr;
 
@@ -191,10 +191,10 @@ static HRESULT TestPropertyValue ()
 
   // Test IsDefinedType ()
   // (Currently only returns true.)
-  aafBool b = AAFFalse;
+  aafBool b = kAAFFalse;
   hr = pv->IsDefinedType (&b);
 	if (! SUCCEEDED (hr)) return hr;
-  if (AAFTrue != b)
+  if (kAAFTrue != b)
 	return AAFRESULT_TEST_FAILED;
 
   pTypeDefUnknown->Release();
