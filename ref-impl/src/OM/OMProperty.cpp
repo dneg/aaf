@@ -54,7 +54,7 @@ OMProperty* OMProperty::address(void)
   return this;
 }
 
-void OMProperty::detach(const OMStorable* object, const size_t index)
+void OMProperty::detach(const OMStorable* object, const size_t key)
 {
   TRACE("OMProperty::detach");
   PRECONDITION("Valid object", object != 0);
