@@ -138,7 +138,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFControlPoint::SetEditHint (
       aafEditHint_t  editHint)
 {
-	_hint = (aafUInt16)editHint;
+	_hint = editHint;
 	return AAFRESULT_SUCCESS;
 }
 
