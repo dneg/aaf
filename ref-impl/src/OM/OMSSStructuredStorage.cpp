@@ -553,7 +553,7 @@ ULONG STDMETHODCALLTYPE
 OMSSIStream::Release(void)
 {
 	TRACE("OMSSIStream::Release");
-	ULONG result = --_referenceCount;
+	--_referenceCount;
 	sresult status = SSTG_OK;
 	if (_referenceCount == 0)
 	{
