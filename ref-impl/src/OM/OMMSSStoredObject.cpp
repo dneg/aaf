@@ -1107,6 +1107,7 @@ void OMMSSStoredObject::restore(OMDataSet& property,
 
     property.insert(value);
   }
+  delete [] value;
   delete [] buffer;
 }
 
