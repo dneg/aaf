@@ -36,6 +36,18 @@ extern void _AssertProc(char* cond, char* file, SINT4 line);
 #define ASSERT(x)
 #endif /* DEBUG */
 
+#ifdef OM_DEBUG
+//we must use Schemasofts debug malloc routines under debug or
+// the heap corruption tests will fail
+#define ss_malloc dbgMalloc
+
+void * dbgMalloc(size_t cb);
+
+
+#else   /* OM_DEBUG */
+#define ss_malloc  malloc
+#endif   /* OM_DEBUG */
+
 extern "C" {
 
 size_t SsrwOMRawFread(
@@ -136,7 +148,7 @@ SSRWIS* SsrwConnectToOMRaw(const OMRawStorage* in_pRaw)
 
     SSRWIS*     pIS = NULL;
 
-    pIS = (struct _SsrwInputSource *) malloc(sizeof(SSRWIS));
+    pIS = (struct _SsrwInputSource *) ss_malloc(sizeof(SSRWIS));
     if (pIS != NULL)
     {
         memset( pIS, 0, sizeof(SSRWIS));
