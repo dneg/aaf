@@ -28,6 +28,10 @@
 // @doc OMINTERNAL
 #include "OMRawStorage.h"
 #include "OMAssertions.h"
+#include "OMUtilities.h"
+
+#include <limits.h>
+#include <errno.h>
 
 #include "OMDiskRawStorage.h"
 
@@ -43,8 +47,13 @@ OMDiskRawStorage::openExistingRead(const wchar_t* fileName)
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  // TBS
-  return 0;
+  FILE* file = wfopen(fileName, L"rb");
+  ASSERT("File successfully opened", file != 0); // tjb - error
+
+  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::readOnlyMode);
+  ASSERT("Valid heap pointer", result != 0);
+
+  return result;
 }
 
   // @mfunc Create an <c OMDiskRawStorage> object by opening an existing
@@ -59,8 +68,13 @@ OMDiskRawStorage::openExistingModify(const wchar_t* fileName)
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  // TBS
-  return 0;
+  FILE* file = wfopen(fileName, L"r+b");
+  ASSERT("File successfully opened", file != 0); // tjb - error
+
+  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
+  ASSERT("Valid heap pointer", result != 0);
+
+  return result;
 }
 
   // @mfunc Create an <c OMDiskRawStorage> object by creating a new
@@ -75,8 +89,13 @@ OMDiskRawStorage::openNewModify(const wchar_t* fileName)
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  // TBS
-  return 0;
+  FILE* file = wfopen(fileName, L"wb");
+  ASSERT("File successfully opened", file != 0); // tjb - error
+
+  OMDiskRawStorage* result = new OMDiskRawStorage(file, OMFile::modifyMode);
+  ASSERT("Valid heap pointer", result != 0);
+
+  return result;
 }
 
   // @mfunc Constructor.
@@ -84,10 +103,15 @@ OMDiskRawStorage::openNewModify(const wchar_t* fileName)
   //   @parm The access mode.
 OMDiskRawStorage::OMDiskRawStorage(FILE* file,
                                    OMFile::OMAccessMode accessMode)
+: _file(file),
+  _mode(accessMode)
 {
   TRACE("OMDiskRawStorage::OMDiskRawStorage");
 
-  // TBS
+  PRECONDITION("Valid file", _file != 0);
+  PRECONDITION("Valid mode", (_mode == OMFile::readOnlyMode)  ||
+                             (_mode == OMFile::writeOnlyMode) ||
+                             (_mode == OMFile::modifyMode));
 }
 
   // @mfunc Destructor.
@@ -95,7 +119,9 @@ OMDiskRawStorage::~OMDiskRawStorage(void)
 {
   TRACE("OMDiskRawStorage::~OMDiskRawStorage");
 
-  // TBS
+  PRECONDITION("Valid file", _file != 0);
+  fclose(_file);
+  _file = 0;
 }
 
   // @mfunc Attempt to read the number of bytes given by <p byteCount>
@@ -119,7 +145,17 @@ void OMDiskRawStorage::readAt(OMUInt64 offset,
 {
   TRACE("OMDiskRawStorage::readAt");
 
-  // TBS
+  PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
+                             (_mode == OMFile::readOnlyMode));
+
+  ASSERT("Supported offset", offset <= LONG_MAX); // tjb - limit
+  long int liOffset = static_cast<long int>(offset);
+
+  int seekStatus = fseek(_file, liOffset, SEEK_SET);
+  ASSERT("Successful seek", seekStatus == 0); // tjb - error
+  size_t actualByteCount = fread(bytes, 1, byteCount, _file);
+
+  bytesRead = actualByteCount;
 }
 
   // @mfunc Attempt to write the number of bytes given by <p byteCount>
@@ -142,7 +178,17 @@ void OMDiskRawStorage::writeAt(OMUInt64 offset,
 {
   TRACE("OMDiskRawStorage::writeAt");
 
-  // TBS
+  PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
+                             (_mode == OMFile::writeOnlyMode));
+
+  ASSERT("Supported offset", offset <= LONG_MAX); // tjb - limit
+  long int liOffset = static_cast<long int>(offset);
+
+  int seekStatus = fseek(_file, liOffset, SEEK_SET);
+  ASSERT("Successful seek", seekStatus == 0); // tjb - error
+  size_t actualByteCount = fwrite(bytes, 1, byteCount, _file);
+
+  bytesWritten = actualByteCount;
 }
 
   // @mfunc The current size of this <c OMDiskRawStorage> in bytes.
@@ -150,10 +196,17 @@ void OMDiskRawStorage::writeAt(OMUInt64 offset,
   //   @this const
 OMUInt64 OMDiskRawStorage::size(void) const
 {
-  TRACE("OMDiskRawStorage::setSize");
+  TRACE("OMDiskRawStorage::size");
 
-  // TBS
-  return 0;
+  long int seekStatus = fseek(_file, 0, SEEK_END);
+  ASSERT("Successful seek", seekStatus == 0); // tjb - error
+
+  errno = 0;
+  long int position = ftell(_file);
+  ASSERT("Successful tell", IMPLIES(position == -1L, errno == 0));
+
+  OMUInt64 result = position;
+  return result;
 }
 
   // @mfunc Set the size of this <c OMDiskRawStorage> to <p newSize> bytes.
@@ -167,5 +220,36 @@ void OMDiskRawStorage::setSize(OMUInt64 newSize)
 {
   TRACE("OMDiskRawStorage::setSize");
 
-  // TBS
+  PRECONDITION("Valid mode", (_mode == OMFile::modifyMode) ||
+                             (_mode == OMFile::writeOnlyMode));
+
+  OMUInt64 currentSize = size();
+
+  if (newSize > currentSize) {
+
+#if 1
+    // Extend by writing a single byte.
+	//
+    OMByte nullByte = 0;
+    OMUInt32 bytesWritten = 0;
+
+    writeAt(newSize - 1, &nullByte, 1, bytesWritten);
+    ASSERT("Successful write", bytesWritten == 1);
+#else
+    // Harbison and Steele (3rd Ed. page 305) claim that
+    // fseek(_file, positive, SEEK_END) extends the file,
+    // but this is not true in a least one implementation
+    // (Microsoft VC++ 6.0).
+    OMUInt64 additionalBytes = newSize - currentSize;
+
+    ASSERT("Supported offset", additionalBytes <= LONG_MAX); // tjb - limit
+    long int liAdditionalBytes = static_cast<long int>(additionalBytes);
+
+    int seekStatus = fseek(_file, liAdditionalBytes, SEEK_END);
+    ASSERT("Successful seek", seekStatus == 0); // tjb - error
+#endif
+
+    ASSERT("Size properly changed", size() == newSize);
+  }
+  // else no ANSI way to truncate the file in place
 }
