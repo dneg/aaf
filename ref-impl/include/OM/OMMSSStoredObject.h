@@ -474,6 +474,15 @@ private:
   void setClass(IStorage* storage, const OMClassId& cid);
   void getClass(IStorage* storage, OMClassId& cid);
 
+    // @cmember Write the signature to the given raw storage.
+  static void writeSignature(OMRawStorage* rawStorage,
+                             const OMFileSignature& signature);
+
+    // @cmember Write the signature to the given file.
+    //   @devnote Soon to be obsolete.
+  static void writeSignature(const wchar_t* fileName,
+                             const OMFileSignature& signature);
+
   IStorage* _storage;
   OMStoredPropertySetIndex* _index;
   IStream* _properties;

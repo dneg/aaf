@@ -271,17 +271,9 @@ public:
 private:
   // @access Private members.
 
-    // @cmember Write the signature to the given file.
-  static void writeSignature(const wchar_t* fileName,
-                             const OMFileSignature& signature);
-
     // @cmember Read the signature from the given file.
   static void readSignature(const wchar_t* fileName,
                             OMFileSignature& signature);
-
-    // @cmember Write the signature to the given raw storage.
-  static void writeSignature(OMRawStorage* rawStorage,
-                             const OMFileSignature& signature);
 
     // @cmember Read the signature from the given raw storage.
   static void readSignature(OMRawStorage* rawStorage,
