@@ -510,15 +510,15 @@ void FileCmd::ReadFile( const char* fileName )
 	// Exception proof the open file handle... one less thing to worry about.
 	OpenedFile openFile( fp );
 
-	// This is an ad hoc parser, the structure which might politely be
+	// This is an ad hoc parser, the structure might politely be
 	// described as ... ahhh... organic.
 	// ... oh let's be honest.. IT'S A POS.. nearly!  I plan to replace it with a real
 	// state machine driven parser... also it looks like it not possible to avoid
-	// defining a small grammer for the file.  Complication arise when supporting
+	// defining a small grammer for the file.  Complications arise when supporting
 	// end of line comments in a mid command position, or mid quote.  The parser
-	// below uses the awkward "/#" to identify end of line comments..  A clear start of
+	// uses the awkward "\#" to identify end of line comments..  A clear start of
 	// command grammer would resolve this..  It is also required to support white
-	// space independent parsiing... that would do away with all the escaped end
+	// space independent parsing... that would do away with all the escaped end
 	// of lines.
 
 	// Various parser state variables.
@@ -795,7 +795,7 @@ void ProcessCommandLineArgs( int argc, char** argv )
 
 //=---------------------------------------------------------------------=
 
-// Only use when the program is existing.
+// Only use when the program is exiting.
 // Decrementing all the references will cause
 // the objects to self destruct.
 ClearInstanceRegistry()
@@ -844,7 +844,7 @@ void Usage( const char* argv0 )
   using namespace std;
 
   cout << "Usage: " << argv0 << endl;
-  cout << "        [{-r|-run} OpName Arg1 Arg2 ....] ..." << endl;              
+  cout << "        [{-r|-run} OpName Arg1 Arg2 ....] [{-f|-file} command_file]..." << endl;              
   cout << endl;
   cout << "Registered Operations:" << endl << endl;
 
@@ -859,13 +859,13 @@ int main( int argc, char **argv )
 	
 	try {
 
-		AxInit axInit;
-	
 		if ( 1 == argc ) {
 			Usage( argv[0] );
 			throw AxFGEx( L"No arguments." );
 		}
 
+		AxInit axInit;
+	
 		ProcessCommandLineArgs( argc, argv );
 
 		ClearInstanceRegistry();
