@@ -141,7 +141,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment*		pSegment = NULL;
 	IAAFNestedScope*		pNestedScope = NULL;
 	IAAFCompositionMob*	pCompMob = NULL;
-	aafUID_t			NewMobID, referencedMobID;
+	aafMobID_t			NewMobID, referencedMobID;
 	aafInt32			fadeInLen  = 1000;
 	aafInt32			fadeOutLen = 2000;
 	aafFadeType_t		fadeInType = kFadeLinearAmp;

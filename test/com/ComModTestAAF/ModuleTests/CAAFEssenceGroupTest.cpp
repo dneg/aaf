@@ -89,7 +89,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFComponent*				pComponent = NULL;
 	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newMobID, referencedMobID;
+	aafMobID_t					newMobID, referencedMobID;
 	aafLength_t					stillLength = 1, segLen = SUBSEG_LENGTH;
 	AAFRESULT					hr = AAFRESULT_SUCCESS;
 
