@@ -47,6 +47,12 @@
 #include "CAAFTimelineMobSlot.h"
 #include "ImplAAFTimelineMobSlot.h"
 
+#include "CAAFEventMobSlot.h"
+#include "ImplAAFEventMobSlot.h"
+
+#include "CAAFStaticMobSlot.h"
+#include "ImplAAFStaticMobSlot.h"
+
 #include "CAAFFile.h"
 #include "ImplAAFFile.h"
 
@@ -2310,6 +2316,170 @@ HRESULT STDMETHODCALLTYPE
 
   return hr;
 }
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::AppendNewStaticSlot (IAAFSegment * pSegment,
+        aafSlotID_t  slotID,
+        aafCharacter_constptr  pSlotName,
+        IAAFStaticMobSlot ** ppNewSlot)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pSegment
+  //
+  ImplAAFSegment * internalpSegment = NULL;
+  if (pSegment)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pSegment->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpSegment = static_cast<ImplAAFSegment*>(arg);
+      assert (internalpSegment);
+    }
+
+
+
+  //
+  // set up for ppNewSlot
+  //
+  ImplAAFStaticMobSlot * internalppNewSlot = NULL;
+  ImplAAFStaticMobSlot ** pinternalppNewSlot = NULL;
+  if (ppNewSlot)
+    {
+      pinternalppNewSlot = &internalppNewSlot;
+    }
+
+  hr = ptr->AppendNewStaticSlot (internalpSegment,
+    slotID,
+    pSlotName,
+    pinternalppNewSlot);
+  //
+  // no cleanup necessary for pSegment
+  //
+
+
+
+  //
+  // cleanup for ppNewSlot
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppNewSlot)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppNewSlot->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFStaticMobSlot, (void **)ppNewSlot);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppNewSlot->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::AppendNewEventSlot (aafRational_t  editRate,
+        IAAFSegment * pSegment,
+        aafSlotID_t  slotID,
+        aafCharacter_constptr  pSlotName,
+        aafPosition_t  origin,
+        IAAFEventMobSlot ** ppNewSlot)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+  //
+  // set up for pSegment
+  //
+  ImplAAFSegment * internalpSegment = NULL;
+  if (pSegment)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pSegment->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpSegment = static_cast<ImplAAFSegment*>(arg);
+      assert (internalpSegment);
+    }
+
+
+
+
+  //
+  // set up for ppNewSlot
+  //
+  ImplAAFEventMobSlot * internalppNewSlot = NULL;
+  ImplAAFEventMobSlot ** pinternalppNewSlot = NULL;
+  if (ppNewSlot)
+    {
+      pinternalppNewSlot = &internalppNewSlot;
+    }
+
+  hr = ptr->AppendNewEventSlot (editRate,
+    internalpSegment,
+    slotID,
+    pSlotName,
+    origin,
+    pinternalppNewSlot);
+
+  //
+  // no cleanup necessary for pSegment
+  //
+
+
+
+
+  //
+  // cleanup for ppNewSlot
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppNewSlot)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppNewSlot->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IAAFEventMobSlot, (void **)ppNewSlot);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppNewSlot->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
 
 
 //
