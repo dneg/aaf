@@ -32,11 +32,11 @@ ImplAAFIdentification::~ImplAAFIdentification ()
 ImplAAFIdentification::ImplAAFIdentification():
 _companyName(         PID_Identification_CompanyName,          "CompanyName"),
 _productName(         PID_Identification_ProductName,          "ProductName"),
-// _productVersion(   PID_Identification_ProductVersion,       "ProductVersion")
+_productVersion(      PID_Identification_ProductVersion,       "ProductVersion"),
 _productVersionString(PID_Identification_ProductVersionString, "ProductVersionString"),
 // _productId(        PID_Identification_ProductID,            "ProductID"),
 _date(                PID_Identification_Date,                 "Date"),
-// _toolKitVersion(   PID_Identification_ToolkitVersion,       "ToolkitVersion"),
+_toolkitVersion(      PID_Identification_ToolkitVersion,       "ToolkitVersion"),
 _platform(            PID_Identification_Platform,             "Platform")
 // _generation(       PID_Identification_GenerationAUID,       "GenerationAUID")
 {
@@ -44,11 +44,11 @@ _platform(            PID_Identification_Platform,             "Platform")
   //
   _persistentProperties.put(   _companyName.address());
   _persistentProperties.put(   _productName.address());
-  // _persistentProperties.put(_productVersion.address());
+  _persistentProperties.put(_productVersion.address());
   _persistentProperties.put(   _productVersionString.address());
   // _persistentProperties.put(_productId.address());
   _persistentProperties.put(   _date.address());
-  // _persistentProperties.put(_toolKitVersion.address());
+  _persistentProperties.put(_toolkitVersion.address());
   _persistentProperties.put(   _platform.address());
   // _persistentProperties.put(_generation.address());
 
@@ -76,11 +76,11 @@ ImplAAFIdentification::ImplAAFIdentification(
                                      ):
 _companyName(         PID_Identification_CompanyName,          "Company Name"),
 _productName(         PID_Identification_ProductName,          "Product Name"),
-// _productVersion(   PID_Identification_ProductVersion,       "Product Version")
+_productVersion(      PID_Identification_ProductVersion,       "Product Version"),
 _productVersionString(PID_Identification_ProductVersionString, "Product Version String"),
 // _productId(        PID_Identification_ProductID,            "Product ID"),
 _date(                PID_Identification_Date,                 "Date"),
-// _toolKitVersion(   PID_Identification_ToolkitVersion,       "Toolkit Version"),
+_toolkitVersion(      PID_Identification_ToolkitVersion,       "Toolkit Version"),
 _platform(            PID_Identification_Platform,             "Platform")
 // _generation(       PID_Identification_GenerationAUID,       "Generation AUID")
 {
@@ -88,11 +88,11 @@ _platform(            PID_Identification_Platform,             "Platform")
   //
   _persistentProperties.put(   _companyName.address());
   _persistentProperties.put(   _productName.address());
-  // _persistentProperties.put(_productVersion.address());
+  _persistentProperties.put(_productVersion.address());
   _persistentProperties.put(   _productVersionString.address());
   // _persistentProperties.put(_productId.address());
   _persistentProperties.put(   _date.address());
-  // _persistentProperties.put(_toolKitVersion.address());
+  _persistentProperties.put(_toolkitVersion.address());
   _persistentProperties.put(   _platform.address());
   // _persistentProperties.put(_generation.address());
 
@@ -100,11 +100,11 @@ _platform(            PID_Identification_Platform,             "Platform")
   //
   _companyName = companyName;
   _productName = productName;
-  // _productVersion.???;
+	_productVersion = *productVersion;
   _productVersionString = productVersionString;
-  // _productId.???;
+	// _productId.???;
   _date = date;
-  // _toolKitVersion.???;
+	_toolkitVersion = *toolKitVersion;
   _platform = platform;
   // _generation.???;
 
@@ -184,13 +184,15 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetProductVersion (aafProductVersion_t * pV)
+    ImplAAFIdentification::GetProductVersion (aafProductVersion_t* productVersion)
 {
-  if (! pV)
+	if (! productVersion)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+	
+	*productVersion = _productVersion;
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -248,13 +250,16 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::GetRefImplVersion (aafProductVersion_t * pV)
+    ImplAAFIdentification::GetRefImplVersion (aafProductVersion_t* productVersion)
 {
-  if (! pV)
+	if (! productVersion)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+	
+	*productVersion = _toolkitVersion;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -328,13 +333,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFIdentification::SetProductVersion (aafProductVersion_t * pV)
+    ImplAAFIdentification::SetProductVersion (aafProductVersion_t* productVersion)
 {
-  if (! pV)
+	
+	if (! productVersion)
 	{
-	  return AAFRESULT_NULL_PARAM;
+		return AAFRESULT_NULL_PARAM;
 	}
-  return AAFRESULT_NOT_IMPLEMENTED;
+
+	_productVersion = *productVersion;
+
+	return AAFRESULT_SUCCESS;
 }
 
 
