@@ -155,7 +155,7 @@ void trace(const char* routineName);
   // @func Universal quantifier. Evaluate <p expression> for all
   //       elements, 0 .. <p elementCount> of a collection. Use
   //       <p index> as the name of the index. The <p expression>
-  //       is most usfully one of the assertion macros such as
+  //       is most usefully one of the assertion macros such as
   //       <f PRECONDITION>, <f POSTCONDITION> or <f ASSERT>.
   //   @parm The index.
   //   @parm The number of elements in the collection.
