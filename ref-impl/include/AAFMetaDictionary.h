@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Tue Apr 11 15:23:39 EDT 2000
-// by user bedell on system JBEDELL2.
+// This file was generated on 
+// by user  on system .
 //
 // Key to macros.
 //
@@ -1301,6 +1301,15 @@ AAF_CLASS(ClassDefinition,
     0x1c02,
     AAF_REFERENCE_TYPE(StrongReferenceSet, PropertyDefinition),
     false,
+    false,
+    ClassDefinition)
+  AAF_PROPERTY(IsConcrete,
+    AAF_LITERAL_AUID(0x06444103,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
+    0x1c03,
+    AAF_TYPE(Boolean),
+    true,
     false,
     ClassDefinition)
 AAF_CLASS_END(ClassDefinition)
