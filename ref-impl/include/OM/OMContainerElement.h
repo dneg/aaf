@@ -82,7 +82,6 @@ private:
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMSetElement : public OMVectorElement<ReferencedObject> {
 public:
-public:
   // @access Public members.
 
     // @cmember Constructor.
