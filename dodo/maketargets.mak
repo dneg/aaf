@@ -53,13 +53,17 @@ $(INCLUDE_DIR)/com-api/AAF.idl : $(FIDL_TARGETS)
 	    echo \#endif ; \
 	    echo "" ; \
 	    echo \#ifndef DO_NO_IMPORTS ; \
+	    echo import \"objidl.idl\"\; ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef DO_NO_IMPORTS ; \
 	    echo import \"AAFTypes.idl\"\; ; \
 	    echo \#endif ; \
 	    echo "" ; \
-	    for class in $(DODO_TARGET_NAMES) ; do \
+	    for class in $(DODO_TARGET_NAMES) $(AAFCOMINTERFACESONLY) ; do \
 	    	echo interface I$$class\;; \
 	    done ; \
-	    for class in $(DODO_TARGET_NAMES); do \
+	    for class in $(DODO_TARGET_NAMES) $(AAFCOMINTERFACESONLY) ; do \
 	    	echo ""; \
 	    	echo "// I$$class"; \
 	    	echo ""; \
@@ -218,21 +222,28 @@ clean:
 	$(RM) -f *.comc *.comh *.comt *.refh *.frefh
 	$(RM) -f *.implc *.implh
 	$(RM) -f core
-	$(RM) -f $(SRC_DIR)/cpp-api/AAF*.cpp
-	$(RM) -f $(SRC_DIR)/cpp-api/EnumAAF*.cpp
-	$(RM) -f $(SRC_DIR)/com-api/CAAF*.h
-	$(RM) -f $(SRC_DIR)/com-api/CAAF*.cpp
-	$(RM) -f $(SRC_DIR)/com-api/CEnumAAF*.h
-	$(RM) -f $(SRC_DIR)/com-api/CEnumAAF*.cpp
+	@for file in $(AAFOBJECTS) ; do \
+		echo $(RM) -f $(SRC_DIR)/cpp-api/$$file.cpp ; \
+		$(RM) -f $(SRC_DIR)/cpp-api/$$file.cpp ; \
+		echo $(RM) -f $(SRC_DIR)/com-api/C$$file.h ; \
+		$(RM) -f $(SRC_DIR)/com-api/C$$file.h ; \
+		echo $(RM) -f $(SRC_DIR)/com-api/C$$file.cpp ; \
+		$(RM) -f $(SRC_DIR)/com-api/C$$file.cpp ; \
+		echo $(RM) -f $(INCLUDE_DIR)/cpp-api/$$file.h ; \
+		$(RM) -f $(INCLUDE_DIR)/cpp-api/$$file.h ; \
+		echo $(RM) -f $(INCLUDE_DIR)/ref-api/$$file.h ; \
+		$(RM) -f $(INCLUDE_DIR)/ref-api/$$file.h ; \
+	done
+	$(RM) -f $(SRC_DIR)/cpp-api/test/AAF*Test.cpp
+	$(RM) -f $(SRC_DIR)/cpp-api/test/EnumAAF*Test.cpp
+	$(RM) -f $(SRC_DIR)/com-api/test/CAAF*Test.cpp
+	$(RM) -f $(SRC_DIR)/com-api/test/CEnumAAF*Test.cpp
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.idl
-	$(RM) -f $(INCLUDE_DIR)/cpp-api/AAF*.h
-	$(RM) -f $(INCLUDE_DIR)/cpp-api/EnumAAF*.h
-	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF*.h
 	@for file in $(AUTO_GEN_IMPL) ; do \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
 		$(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
