@@ -38,6 +38,9 @@
 //              24-Jan-2000
 //              Added new conditional macro IOS_FMT_FLAGS for CodeWarrior Pro5.
 //
+// Terry Skotz 4-27-2000 Terry_Skotz@avid.com
+//			   added support for DataInput.h so dump can get input from text
+//				file.
 
 //
 // Usage:
@@ -74,7 +77,7 @@
 #include <string.h>
 
 #if defined(_MAC) || defined(macintosh)
-#include <console.h>
+#include "DataInput.h"
 
 #include "wintypes.h"
 #include "compobj.h"
@@ -3465,9 +3468,10 @@ int main(int argumentCount, char* argumentVector[])
 {
   checkSizes();
 
-#if defined(_MAC) || defined(macintosh)
-  argumentCount = ccommand(&argumentVector); // console window for mac
-#endif
+  #if defined(_MAC) || defined(macintosh)
+  char dataFile[] = "dump.inp";
+  getInputData(&argumentCount, argumentVector, dataFile);
+  #endif
 
   // Initialize com library for this process.
   CComInitialize comInit;
@@ -3706,6 +3710,10 @@ int main(int argumentCount, char* argumentVector[])
     break;
 
   }
+
+  #ifdef _MAC
+  cleanUpInputData(argumentCount, argumentVector);
+  #endif
 
   return (EXIT_SUCCESS);
 }
