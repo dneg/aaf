@@ -84,7 +84,7 @@ public:
 
   STDMETHOD (GetIndexedDefinitionObject)(aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def);
 
-  STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
+  STDMETHOD (CreateDescriptor)(IAAFDictionary *dict, IAAFPluginDef **desc);
 
   //
   // IAAFEssenceFileContainer interface methods.

@@ -182,8 +182,8 @@ AD_XMETHOD2(CreateDescriptor,
 			The dictionary to use when creating the descriptor,
 			[out],
 			objOut,
-			AAFPluginDescriptor,
-			pPluginDesc,
+			AAFPluginDef,
+			pPluginDef,
 			The interface of the pluggable definition,
 
 			This method manufactures a plugin descriptor of the correct
@@ -195,9 +195,9 @@ AD_XMETHOD2(CreateDescriptor,
   // manager in order to add the correct plugin descriptors to a file.
   //
   // Succeeds if all of the following are true:
-  // - the pPluginDesc pointer is valid.
+  // - the pPluginDef pointer is valid.
   // 
-  // If this method fails nothing will be written to *pPluginDesc.
+  // If this method fails nothing will be written to *pPluginDef.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -207,6 +207,6 @@ AD_XMETHOD2(CreateDescriptor,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pPluginDesc arg is NULL.)
+  //   - pPluginDef arg is NULL.)
 
 AD_XCLASS_END(Abstract, Transient)

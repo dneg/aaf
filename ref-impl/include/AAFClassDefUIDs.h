@@ -71,6 +71,7 @@ id;
 #define kAAFClassID_UNIXLocator kAAFClassID_UnixLocator
 #define kAAFClassID_CodecDefinition kAAFClassID_CodecDef
 #define kAAFClassID_ContainerDefinition kAAFClassID_ContainerDef
+#define kAAFClassID_PluginDefinition kAAFClassID_PluginDef
 #define kAAFClassID_PluggableDefinition kAAFClassID_PluggableDef
 
 #include "AAFMetaDictionary.h"

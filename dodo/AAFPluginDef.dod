@@ -6,11 +6,11 @@
 #c*													*
 #c\*************************************************/
 #startm .this-module 0
-AAFPluginDescriptor\
+AAFPluginDef\
 #endm
 #c
 #startm .parent-module 0
-AAFObject\
+AAFDefObject\
 #endm
 #c
 AD_HEAD
@@ -54,24 +54,6 @@ AD_XMETHOD3(Initialize,
 			Description for new DefObject,
 
 			Init all fields of a definition object.)
-
-
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
-     the Name of this definition.)
-
-
-AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Description,
-     the Description of this definition.)
-
-
-AD_XMETHOD1(GetAUID,
-			[retval\, out],
-			objPass,
-			aafUID_t *,
-			pAuid,
-			Pointer to an AUID reference,
-			Gets the AUID for this object.)
-
 
 AD_XMETHOD1(GetCategoryClass,
 			[out],
@@ -1110,5 +1092,22 @@ AD_XMETHOD1(GetLocators,
   //
   // E_FAIL
   //   - Failed to create the enumerator.)
+
+  AD_XMETHOD1(SetDefinitionObjectID,
+		   [in],
+		   objPass,
+		   aafUID_t,
+		   pDef,
+		   AUID of an AAFDefinitionObject,
+		   Sets the definition object handled by this plugin.)
+
+  AD_XMETHOD1(GetDefinitionObjectID,
+		   [retval\,out],
+		   objPass,
+		   aafUID_t*,
+		   ppDef,
+		   AUID of an AAFDefinitionObject,
+		   Gets the definition object handled by this plugin.)
+
 AD_XCLASS_END(Concrete, StoredObject)
 

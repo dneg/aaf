@@ -85,6 +85,7 @@
 #define CLSID_AAFUNIXLocator CLSID_AAFUnixLocator
 #define CLSID_AAFCodecDefinition CLSID_AAFCodecDef
 #define CLSID_AAFContainerDefinition CLSID_AAFContainerDef
+#define CLSID_AAFPluginDefinition CLSID_AAFPluginDef
 #define CLSID_AAFInterpolationDefinition CLSID_AAFInterpolationDef
 
 //
