@@ -150,8 +150,8 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_memBytesPerSample = 0;
 	_bitsPerSample = 0;
 	_numberOfSamples = 0;
+	_padBytesPerRow = 0;
 	_headerLoaded = false;
-	
 	
 }
 
@@ -962,13 +962,13 @@ HRESULT STDMETHODCALLTYPE
         aafmMultiResult_t *  resultBlock)
 {
 	HRESULT hr = S_OK;
-	aafInt32 n;
+	aafUInt32 n;
 
 	if (NULL == resultBlock)
 		return AAFRESULT_NULL_PARAM;
 	
 	// Initialize the return values.
-	for (n = 0; n < xferBlockCount; n++)
+	for (n = 0; n < (aafUInt32)xferBlockCount; n++)
 	{
 		resultBlock[n].bytesXfered = 0;
 		resultBlock[n].samplesXfered = 0;
@@ -998,11 +998,12 @@ HRESULT STDMETHODCALLTYPE
 			checkExpression(_fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE);
 			
 			// Setup the compression parameters.
-			aafCompParams param;
+			aafCompressionParams param;
 
 			// Get the dimensions of the image data to compress.
 			param.imageWidth = _imageWidth;
-			param.imageHeight = (kSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
+			param.imageHeight = _imageHeight;
+//			param.imageHeight = (kSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
 
 			param.colorSpace = _pixelFormat;
 			param.horizontalSubsampling = _horizontalSubsampling;
@@ -1015,12 +1016,28 @@ HRESULT STDMETHODCALLTYPE
 			param.quality = 75; 
 
 			// Compute the number of bytes in a single row of pixel data.
-			param.rowBytes = (xferBlock[0].buflen / xferBlock[0].numSamples) / _imageHeight;
+			param.rowBytes = (_imageWidth * 3) + _padBytesPerRow;
 
-			// Calculate the size of the image data to be compressed.
+			// Calculate the size of the sample data to be compressed.
 			param.bufferSize = param.rowBytes * param.imageHeight;
 
-			for (n = 0; n < xferBlockCount; n++)
+			// Make sure the given buffer is really large enough for the complete
+			// uncompressed pixel data.
+			checkExpression(param.bufferSize < xferBlock[0].buflen, AAFRESULT_SMALLBUF);
+			
+			// Adjust the parameters for separate fields...
+			if (kSeparateFields == _frameLayout)
+			{
+				param.imageHeight /= 2;
+				param.bufferSize = param.rowBytes * param.imageHeight;
+			}
+			
+
+			// Make sure that we are already at the end of the stream.
+			if (_currentIndex < _writeIndex)
+				Seek(_writeIndex);
+
+			for (n = 0; n < xferBlock[0].numSamples; n++)
 			{
 				param.buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
 				checkResult(CompressImage(param));
@@ -1034,22 +1051,24 @@ HRESULT STDMETHODCALLTYPE
 					resultBlock[0].bytesXfered += param.bufferSize;
 				}
 				
-				// Add a new entry to the index and update the sample count...
-				AddNewSampleIndex(xferBlock[0].buflen);
-				
 				// Update the return values.
 				resultBlock[0].samplesXfered++;
+
+				// Add a new entry to the index and update the sample count...
+				AddNewCompressedSample();
 			}
 		}
 		else
 		{
 			// Data is already compressed so we can just write the data 
 			// using the "raw" interface. WriteRawData will update frame index if necessary.
-			checkResult(WriteRawData(xferBlock[0].numSamples, xferBlock[0].buffer, xferBlock[0].buflen));
+			checkResult(WriteRawData(xferBlock[0].numSamples,
+			                         xferBlock[0].buffer,
+			                         xferBlock[0].buflen));
 			
 			// Update the return values...
 			resultBlock[0].bytesXfered = xferBlock[0].buflen;
-			resultBlock[0].samplesXfered++;
+			resultBlock[0].samplesXfered += xferBlock[0].numSamples;
 		}
 	}
 	catch (HRESULT& rhr)
@@ -1075,13 +1094,13 @@ HRESULT STDMETHODCALLTYPE
         aafmMultiResult_t *  resultBlock)
 {
 	HRESULT hr = S_OK;
-	aafInt32 n;
+	aafUInt32 n;
 
 	if (NULL == resultBlock)
 		return AAFRESULT_NULL_PARAM;
 	
 	// Initialize the return values.
-	for (n = 0; n < xferBlockCount; n++)
+	for (n = 0; n < (aafUInt32)xferBlockCount; n++)
 	{
 		resultBlock[n].bytesXfered = 0;
 		resultBlock[n].samplesXfered = 0;
@@ -1101,11 +1120,48 @@ HRESULT STDMETHODCALLTYPE
 	{
 		if (kSDKCompressionEnable == _compressEnable)
 		{
-			// If we are being asked compress the given buffer then
-			// the we should have already calculated the size of a sample.
+			// If we are being asked decompress the given buffer.
+			
+			// Setup the decompression parameters.
+			aafCompressionParams param;
 
-		
-		
+			// Get the dimensions of the image data to compress.
+			param.imageWidth = _imageWidth;
+			param.imageHeight = (kSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
+
+			param.colorSpace = _pixelFormat;
+			param.horizontalSubsampling = _horizontalSubsampling;
+			param.verticalSubsampling = _verticalSubsampling;
+			param.blackReferenceLevel = _blackReferenceLevel;
+			param.whiteReferenceLevel = _whiteReferenceLevel;
+			param.colorRange = _colorRange;
+
+			// Default quality (until we have support for custom tables.)
+			param.quality = 75; // ignored for input.
+
+			// Compute the number of bytes in a single row of pixel data.
+			param.rowBytes = (xferBlock[0].buflen / xferBlock[0].numSamples) / _imageHeight;
+
+			// Calculate the size of the image data to be compressed.
+			param.bufferSize = param.rowBytes * param.imageHeight;
+
+			for (n = 0; n < xferBlock[0].numSamples; n++)
+			{
+				param.buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
+				checkResult(DecompressImage(param));
+				resultBlock[0].bytesXfered += param.bufferSize;
+
+				if (kSeparateFields == _frameLayout)
+				{
+					// Compress the second field right after the first field.
+					param.buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
+					checkResult(DecompressImage(param));
+					resultBlock[0].bytesXfered += param.bufferSize;
+				}
+
+				// Update the current index.
+				SetCurrentIndex(_currentIndex + 1);
+			}
 		}
 		else
 		{
@@ -1240,10 +1296,9 @@ HRESULT STDMETHODCALLTYPE
 		checkExpression(_currentIndex >= _startingIndex, AAFRESULT_NOT_WRITEABLE);
 		checkAssertion(_currentIndex <= _writeIndex);
 
-		// MAKE SURE THAT WE ARE ALWASY SETUP to APPEND. HOW SHOULD WE HANDLE
-		// OVERWRITING A PREVIOUS SAMPLE SIZE HAS CHANGED?
+		// Make sure that we are already at the end of the stream.
 		if (_currentIndex < _writeIndex)
-			SetCurrentIndex(_writeIndex);
+			Seek(_writeIndex);
 
 
 		// We should only be able to write to the end of the stream. This should be 
@@ -1255,13 +1310,8 @@ HRESULT STDMETHODCALLTYPE
 		// Write the compressed sample data.
 		checkResult(_stream->Write(buffer, buflen));
 
-		if (_currentIndex == _writeIndex)
-		{ // Add a new entry to the index and update the sample count...
-			AddNewSampleIndex(buflen);
-		}
-
-		// Update the current index.
-		SetCurrentIndex(_currentIndex + 1);
+		// Add a new entry to the index and update the sample count...
+		AddNewCompressedSample();
 	}
 	catch (HRESULT& rhr)
 	{
@@ -1376,6 +1426,8 @@ typedef struct _aafEssenceFormatData_t
 		aafInt32 expInt32;
 		aafInt16 expUInt16;
 		aafInt16 expInt16;
+		aafInt16 expUInt8;
+		aafInt16 expInt8;
 		aafRational_t expRational;
 		aafRect_t expRect;
 		aafColorSpace_t expColorSpace;
@@ -1550,6 +1602,11 @@ HRESULT STDMETHODCALLTYPE
 				checkExpression(bytesRead == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
 				_colorRange = param.operand.expUInt32;
 			}
+			else if (EqualAUID(&kAAFPadBytesPerRow, &param.opcode))
+			{	// Validate the in-memory size.
+				checkExpression(bytesRead == sizeof(param.operand.expUInt16), AAFRESULT_INVALID_PARM_SIZE);
+				_padBytesPerRow = param.operand.expUInt16;
+			}
 			
 			
 		} // for (i = 0...)
@@ -1697,6 +1754,11 @@ HRESULT STDMETHODCALLTYPE
 				param.operand.expCompSizeArray[2] = 8;
 				param.operand.expCompSizeArray[3] = 0;
 				checkResult(fmt->AddFormatSpecifier (kAAFRGBCompSizes, sizeof(param.operand.expCompSizeArray), (aafDataBuffer_t)&param.operand.expCompSizeArray));
+			}
+			else if (EqualAUID(&kAAFPadBytesPerRow, &param.opcode))
+			{	// Write out the current pad bytes per row.
+				param.operand.expUInt16 = _padBytesPerRow;
+				checkResult(fmt->AddFormatSpecifier (kAAFPadBytesPerRow, sizeof(param.operand.expUInt16), (aafDataBuffer_t)&param.operand.expUInt16));
 			}
 			else
 			{	// The given opcode was not handled!
@@ -2026,7 +2088,7 @@ cplusplus_error_exit (j_common_ptr cinfo)
 
 // Compress a single image data from the given buffer. Return the actual
 // number of bytes written.
-HRESULT CAAFJPEGCodec::CompressImage(const aafCompParams& param)
+HRESULT CAAFJPEGCodec::CompressImage(const aafCompressionParams& param)
 {
 	HRESULT hr = S_OK;
 
@@ -2174,7 +2236,7 @@ HRESULT CAAFJPEGCodec::CompressImage(const aafCompParams& param)
 // Decompress a single image from the current position in the stream returning
 // the image data in buffer and the actual number of bytes written. Note: bufLen must
 // be large enough to hold all of the decompressed data
-HRESULT CAAFJPEGCodec::DecompressImage(aafCompParams& param)
+HRESULT CAAFJPEGCodec::DecompressImage(aafCompressionParams& param)
 {
 	HRESULT hr = S_OK;
 
@@ -2327,13 +2389,14 @@ HRESULT CAAFJPEGCodec::DecompressImage(aafCompParams& param)
 
 // Utility to get the current offset in the stream and add an
 // entry to the sample index based on the given compressedDataSize.
-void CAAFJPEGCodec::AddNewSampleIndex(aafUInt32 compressedDataSize)
+void CAAFJPEGCodec::AddNewCompressedSample()
 {
 	aafPosition_t offset;
 	checkResult(_stream->GetPosition(&offset));
-	offset -= compressedDataSize;
 
 	checkResult(AddSampleIndexEntry(offset));
+
+	// Update the number of samples.
 	SetNumberOfSamples(_numberOfSamples + 1);
 
 	// Update the current index.
@@ -2471,8 +2534,11 @@ HRESULT CAAFJPEGCodec::AllocateSampleIndex(
 
 		if (newcount > _maxIndex)
 		{
-			// Add extra elements to minimize resizing overhead.
-			newcount += kDefaultSampleIndexIncrement;
+			if (kMediaOpenReadOnly != _openMode)
+			{
+				// Add extra elements to minimize resizing overhead.
+				newcount += kDefaultSampleIndexIncrement;
+			}
 
 			pSampleIndex = new aafPosition_t[newcount];
 			checkExpression(NULL != pSampleIndex, E_OUTOFMEMORY);
