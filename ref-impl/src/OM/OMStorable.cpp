@@ -433,6 +433,16 @@ void OMStorable::onSave(void*) const
   // nothing to do in this default implementation
 }
 
+  // @mfunc Inform this <c OMStorable> that it has just been restored.
+  //        The <p clientContext> passed is the one that was specified
+  //        in the currently active call to <mf OMStorable::restore>.
+  //   @parm void *| clientContext | A context for the client.
+  //   @this const
+void OMStorable::onRestore(void*) const
+{
+  // nothing to do in this default implementation
+}
+
 char* OMStorable::makePathName(void)
 {
   TRACE("OMStorable::makePathName");
