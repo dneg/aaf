@@ -27,42 +27,49 @@ DODO_TARGETS = \
 	AAFTypes.all \
 	AAFAttribute.all \
 	AAFAttributeArray.all \
+	AAFClassDefinition.all \
 	AAFComponent.all \
 	AAFCompositionMob.all \
 	AAFConstValue.all \
+	AAFControlCodeDefinition.all \
 	AAFControlPoint.all \
 	AAFDataDefinition.all \
 	AAFEdgecode.all \
+	AAFEffectDefinition.all \
 	AAFEffectInvocation.all \
 	AAFFiller.all \
 	AAFInt64.all \
 	AAFIntegerAttribute.all \
 	AAFLocator.all \
+	AAFMasterMob.all \
 	AAFMediaDescriptor.all \
 	AAFMediaFileDescriptor.all \
 	AAFMediaTapeDescriptor.all \
 	AAFMediaTapeDescriptor.all \
 	AAFMediaGroup.all  \
-	AAFObject.all \
 	AAFMob.all  \
-	AAFMasterMob.all \
-	AAFSourceMob.all \
 	AAFMobSlot.all \
-	AAFParameter.all \
-	AAFReferenceValue.all \
-	AAFTimelineMobSlot.all \
+	AAFNestedScope.all\
+	AAFObject.all \
 	AAFObjectAttribute.all \
+	AAFParameter.all \
 	AAFParameterSlot.all \
+	AAFPropertyDefinition.all \
+	AAFReferenceValue.all \
+	AAFScopeReference.all \
 	AAFSegment.all \
 	AAFSequence.all \
 	AAFSourceClip.all \
+	AAFSourceMob.all \
 	AAFSourceReference.all \
 	AAFString.all \
 	AAFStringAttribute.all \
 	AAFTimecode.all \
 	AAFTimecodeStream.all \
 	AAFTimecodeStream12M.all \
+	AAFTimelineMobSlot.all \
 	AAFTransition.all \
+	AAFTypeDefinition.all \
 	AAFUInt64.all \
 	AAFUnitTest.all \
 	AAFUnixLocator.all \
@@ -184,6 +191,19 @@ AAFAttributeArray.comh : AAFAttributeArray.exp macros/comh.mac
 AAFAttributeArray.implc : AAFAttributeArray.exp macros/implc.mac
 AAFAttributeArray.implh : AAFAttributeArray.exp macros/implh.mac
 
+AAFClassDefinition.all : AAFClassDefinition.cpp AAFClassDefinition.h
+AAFClassDefinition.all : AAFClassDefinition.comc AAFClassDefinition.comh
+AAFClassDefinition.all : AAFClassDefinition.exp AAFClassDefinition.idl
+AAFClassDefinition.all : AAFClassDefinition.implc AAFClassDefinition.implh
+AAFClassDefinition.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFClassDefinition.h : AAFClassDefinition.exp macros/h.mac
+AAFClassDefinition.cpp : AAFClassDefinition.exp macros/cpp.mac
+AAFClassDefinition.idl : AAFClassDefinition.exp macros/idl.mac
+AAFClassDefinition.comc : AAFClassDefinition.exp macros/comc.mac
+AAFClassDefinition.comh : AAFClassDefinition.exp macros/comh.mac
+AAFClassDefinition.implc : AAFClassDefinition.exp macros/implc.mac
+AAFClassDefinition.implh : AAFClassDefinition.exp macros/implh.mac
+
 AAFComponent.all : AAFComponent.cpp AAFComponent.h
 AAFComponent.all : AAFComponent.comc AAFComponent.comh
 AAFComponent.all : AAFComponent.exp AAFComponent.idl
@@ -223,6 +243,19 @@ AAFConstValue.comh : AAFConstValue.exp macros/comh.mac
 AAFConstValue.implc : AAFConstValue.exp macros/implc.mac
 AAFConstValue.implh : AAFConstValue.exp macros/implh.mac
 
+AAFControlCodeDefinition.all : AAFControlCodeDefinition.cpp AAFControlCodeDefinition.h
+AAFControlCodeDefinition.all : AAFControlCodeDefinition.comc AAFControlCodeDefinition.comh
+AAFControlCodeDefinition.all : AAFControlCodeDefinition.exp AAFControlCodeDefinition.idl
+AAFControlCodeDefinition.all : AAFControlCodeDefinition.implc AAFControlCodeDefinition.implh
+AAFControlCodeDefinition.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFControlCodeDefinition.h : AAFControlCodeDefinition.exp macros/h.mac
+AAFControlCodeDefinition.cpp : AAFControlCodeDefinition.exp macros/cpp.mac
+AAFControlCodeDefinition.idl : AAFControlCodeDefinition.exp macros/idl.mac
+AAFControlCodeDefinition.comc : AAFControlCodeDefinition.exp macros/comc.mac
+AAFControlCodeDefinition.comh : AAFControlCodeDefinition.exp macros/comh.mac
+AAFControlCodeDefinition.implc : AAFControlCodeDefinition.exp macros/implc.mac
+AAFControlCodeDefinition.implh : AAFControlCodeDefinition.exp macros/implh.mac
+
 AAFControlPoint.all : AAFControlPoint.cpp AAFControlPoint.h
 AAFControlPoint.all : AAFControlPoint.comc AAFControlPoint.comh
 AAFControlPoint.all : AAFControlPoint.exp AAFControlPoint.idl
@@ -261,6 +294,19 @@ AAFEdgecode.comc : AAFEdgecode.exp macros/comc.mac
 AAFEdgecode.comh : AAFEdgecode.exp macros/comh.mac
 AAFEdgecode.implc : AAFEdgecode.exp macros/implc.mac
 AAFEdgecode.implh : AAFEdgecode.exp macros/implh.mac
+
+AAFEffectDefinition.all : AAFEffectDefinition.cpp AAFEffectDefinition.h
+AAFEffectDefinition.all : AAFEffectDefinition.comc AAFEffectDefinition.comh
+AAFEffectDefinition.all : AAFEffectDefinition.exp AAFEffectDefinition.idl
+AAFEffectDefinition.all : AAFEffectDefinition.implc AAFEffectDefinition.implh
+AAFEffectDefinition.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFEffectDefinition.h : AAFEffectDefinition.exp macros/h.mac
+AAFEffectDefinition.cpp : AAFEffectDefinition.exp macros/cpp.mac
+AAFEffectDefinition.idl : AAFEffectDefinition.exp macros/idl.mac
+AAFEffectDefinition.comc : AAFEffectDefinition.exp macros/comc.mac
+AAFEffectDefinition.comh : AAFEffectDefinition.exp macros/comh.mac
+AAFEffectDefinition.implc : AAFEffectDefinition.exp macros/implc.mac
+AAFEffectDefinition.implh : AAFEffectDefinition.exp macros/implh.mac
 
 AAFEffectInvocation.all : AAFEffectInvocation.cpp AAFEffectInvocation.h
 AAFEffectInvocation.all : AAFEffectInvocation.comc AAFEffectInvocation.comh
@@ -466,6 +512,19 @@ AAFMobSlot.comh : AAFMobSlot.exp macros/comh.mac
 AAFMobSlot.implc : AAFMobSlot.exp macros/implc.mac
 AAFMobSlot.implh : AAFMobSlot.exp macros/implh.mac
 
+AAFNestedScope.all : AAFNestedScope.cpp AAFNestedScope.h
+AAFNestedScope.all : AAFNestedScope.comc AAFNestedScope.comh
+AAFNestedScope.all : AAFNestedScope.exp AAFNestedScope.idl
+AAFNestedScope.all : AAFNestedScope.implc AAFNestedScope.implh
+AAFNestedScope.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFNestedScope.h : AAFNestedScope.exp macros/h.mac
+AAFNestedScope.cpp : AAFNestedScope.exp macros/cpp.mac
+AAFNestedScope.idl : AAFNestedScope.exp macros/idl.mac
+AAFNestedScope.comc : AAFNestedScope.exp macros/comc.mac
+AAFNestedScope.comh : AAFNestedScope.exp macros/comh.mac
+AAFNestedScope.implc : AAFNestedScope.exp macros/implc.mac
+AAFNestedScope.implh : AAFNestedScope.exp macros/implh.mac
+
 AAFTimelineMobSlot.all : AAFTimelineMobSlot.cpp AAFTimelineMobSlot.h
 AAFTimelineMobSlot.all : AAFTimelineMobSlot.comc AAFTimelineMobSlot.comh
 AAFTimelineMobSlot.all : AAFTimelineMobSlot.exp AAFTimelineMobSlot.idl
@@ -478,6 +537,19 @@ AAFTimelineMobSlot.comc : AAFTimelineMobSlot.exp macros/comc.mac
 AAFTimelineMobSlot.comh : AAFTimelineMobSlot.exp macros/comh.mac
 AAFTimelineMobSlot.implc : AAFTimelineMobSlot.exp macros/implc.mac
 AAFTimelineMobSlot.implh : AAFTimelineMobSlot.exp macros/implh.mac
+
+AAFScopeReference.all : AAFScopeReference.cpp AAFScopeReference.h
+AAFScopeReference.all : AAFScopeReference.comc AAFScopeReference.comh
+AAFScopeReference.all : AAFScopeReference.exp AAFScopeReference.idl
+AAFScopeReference.all : AAFScopeReference.implc AAFScopeReference.implh
+AAFScopeReference.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFScopeReference.h : AAFScopeReference.exp macros/h.mac
+AAFScopeReference.cpp : AAFScopeReference.exp macros/cpp.mac
+AAFScopeReference.idl : AAFScopeReference.exp macros/idl.mac
+AAFScopeReference.comc : AAFScopeReference.exp macros/comc.mac
+AAFScopeReference.comh : AAFScopeReference.exp macros/comh.mac
+AAFScopeReference.implc : AAFScopeReference.exp macros/implc.mac
+AAFScopeReference.implh : AAFScopeReference.exp macros/implh.mac
 
 AAFObject.all : AAFObject.cpp AAFObject.h
 AAFObject.all : AAFObject.comc AAFObject.comh
@@ -530,6 +602,19 @@ AAFParameterSlot.comc : AAFParameterSlot.exp macros/comc.mac
 AAFParameterSlot.comh : AAFParameterSlot.exp macros/comh.mac
 AAFParameterSlot.implc : AAFParameterSlot.exp macros/implc.mac
 AAFParameterSlot.implh : AAFParameterSlot.exp macros/implh.mac
+
+AAFPropertyDefinition.all : AAFPropertyDefinition.cpp AAFPropertyDefinition.h
+AAFPropertyDefinition.all : AAFPropertyDefinition.comc AAFPropertyDefinition.comh
+AAFPropertyDefinition.all : AAFPropertyDefinition.exp AAFPropertyDefinition.idl
+AAFPropertyDefinition.all : AAFPropertyDefinition.implc AAFPropertyDefinition.implh
+AAFPropertyDefinition.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFPropertyDefinition.h : AAFPropertyDefinition.exp macros/h.mac
+AAFPropertyDefinition.cpp : AAFPropertyDefinition.exp macros/cpp.mac
+AAFPropertyDefinition.idl : AAFPropertyDefinition.exp macros/idl.mac
+AAFPropertyDefinition.comc : AAFPropertyDefinition.exp macros/comc.mac
+AAFPropertyDefinition.comh : AAFPropertyDefinition.exp macros/comh.mac
+AAFPropertyDefinition.implc : AAFPropertyDefinition.exp macros/implc.mac
+AAFPropertyDefinition.implh : AAFPropertyDefinition.exp macros/implh.mac
 
 AAFReferenceValue.all : AAFReferenceValue.cpp AAFReferenceValue.h
 AAFReferenceValue.all : AAFReferenceValue.comc AAFReferenceValue.comh
@@ -673,6 +758,19 @@ AAFTransition.comc : AAFTransition.exp macros/comc.mac
 AAFTransition.comh : AAFTransition.exp macros/comh.mac
 AAFTransition.implc : AAFTransition.exp macros/implc.mac
 AAFTransition.implh : AAFTransition.exp macros/implh.mac
+
+AAFTypeDefinition.all : AAFTypeDefinition.cpp AAFTypeDefinition.h
+AAFTypeDefinition.all : AAFTypeDefinition.comc AAFTypeDefinition.comh
+AAFTypeDefinition.all : AAFTypeDefinition.exp AAFTypeDefinition.idl
+AAFTypeDefinition.all : AAFTypeDefinition.implc AAFTypeDefinition.implh
+AAFTypeDefinition.exp : AAFUnitTest.exp AAFSegment.exp macros/exp.mac
+AAFTypeDefinition.h : AAFTypeDefinition.exp macros/h.mac
+AAFTypeDefinition.cpp : AAFTypeDefinition.exp macros/cpp.mac
+AAFTypeDefinition.idl : AAFTypeDefinition.exp macros/idl.mac
+AAFTypeDefinition.comc : AAFTypeDefinition.exp macros/comc.mac
+AAFTypeDefinition.comh : AAFTypeDefinition.exp macros/comh.mac
+AAFTypeDefinition.implc : AAFTypeDefinition.exp macros/implc.mac
+AAFTypeDefinition.implh : AAFTypeDefinition.exp macros/implh.mac
 
 AAFUInt64.all : AAFUInt64.cpp AAFUInt64.h
 AAFUInt64.all : AAFUInt64.comc AAFUInt64.comh
