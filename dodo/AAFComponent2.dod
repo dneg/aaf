@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFComponent\
+AAFComponent2\
 #endm
 #c
 #startm .parent-module 0
@@ -30,11 +30,8 @@ AAFObject\
 #endm
 #c
 #c #import ./AAFObject.exp
-#import ./AAFComponent2.exp
 AD_HEAD
 AD_IDL(//
-// IAAFComponent is DEPRECATED\, please use IAAFComponent2.
-//
 // The component class represents an essence element.  A Component is
 // an abastract class with two subclasses: Segment and Transition.
 // The GetLength and SetLength only aplies to time-varying media and
@@ -51,7 +48,7 @@ AD_IDL(//
 //
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that IAAFComponent is a
+//     this object's primary interface.  Note that IAAFComponent2 is a
 //     primary interface for an abstract class\, so it is not
 //     appropriate for the Initialize\(\) method to exist in this
 //     interface.  The Initialize\(\) method is available through the
@@ -60,11 +57,18 @@ AD_IDL(//
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFKLVData)
 AD_FORWARD_DECLARATION(EnumAAFKLVData)
+AD_FORWARD_DECLARATION(EnumAAFTaggedValues)
 
-AD_CLASS_UUID(38e6f8a0, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
+AD_CLASS_UUID(7ca3a884, 9440, 4b6a, 8c, a2, 08, e0, 0e, 8f, 83, c6)
 
-AD_DEFAULT_UUID(38e6f8a1, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
-AD_COM_EXT_CLASS_BEGIN(public IAAFComponent2)
+AD_DEFAULT_UUID(c703e7f5, b97f, 44fb, 87, da, a4, 12, e6, 0e, a6, aa)
+AD_XCLASS_BEGIN(Abstract, StoredObject)
+
+#c
+#c Original AAFComponent methods
+#c
+
+
 AD_METHOD1(SetLength,
 		   [in],
 		   aafLength_constref,
@@ -271,18 +275,160 @@ AD_XMETHOD1(RemoveKLVData,
   // AAFRESULT_OBJECT_NOT_FOUND
   //   - the given KLV data object is not in this component.)
 
+
 #c
-#c AAFComponent2 methods
+#c New AAFComponent2 methods
 #c
 
-AD_COM_METH(.method-AppendComment)
-AD_COM_METH(.method-CountComments)
-AD_COM_METH(.method-GetComments)
-AD_COM_METH(.method-RemoveComment)
-AD_COM_METH(.method-AppendAttribute)
-AD_COM_METH(.method-CountAttributes)
-AD_COM_METH(.method-GetAttributes)
-AD_COM_METH(.method-RemoveAttribute)
+AD_XMETHOD2( AppendComment,
+	     [in], objPass, aafCharacter_constptr, pName,
+ 	     The attribute name.,
+	     [in], objPass, aafCharacter_constptr, pValue,
+             The attribute value.,
+	     Append and attribute name/value pair to the attribute list. )
 
-AD_COM_EXT_CLASS_END(AAFComponent2)
+   // Creates a new tagged value, initializes it with the specified comment
+   // name/value pair, and appends it to the comment list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
 
+AD_XMETHOD1( CountComments,
+	     [out], objPass, aafUInt32*, pNumComments,
+	     Pointer to comment count.,
+	     Return the number of comments contained by this component )
+
+   // Returns the number of comments on this component.
+   //
+   // Succeeds if:
+   //   - pNumComments is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumComments is null
+  
+
+AD_XMETHOD1( GetComments,
+	     [out], objOut, EnumAAFTaggedValues, ppEnum,
+	     Pointer to the new enumerator object created by this method.,
+	     Return a comment enumerator for this component. )
+
+   // Creates an enumerator for this component\'s comments.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+AD_XMETHOD1( RemoveComment,
+	     [in], objIn, AAFTaggedValue, pComment,
+	     Pointer to the tagged value comment.,
+	     Remove a comment \(tagged value\).)
+
+   // Removes a component comment.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+AD_XMETHOD2( AppendAttribute,
+	     [in], objPass, aafCharacter_constptr, pName,
+ 	     The attribute name.,
+	     [in], objPass, aafCharacter_constptr, pValue,
+             The attribute value.,
+	     Append and attribute name/value pair to the attribute list. )
+
+   // Creates a new tagged value, initializes it with the specified attribute
+   // name/value pair, and appends it to the attribute list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+AD_XMETHOD1( CountAttributes,
+	     [out], objPass, aafUInt32*, pNumAttributes,
+	     Pointer to attribute count.,
+	     Return the number of attributes contained by this component )
+
+   // Returns the number of attributes on this component.
+   //
+   // Succeeds if:
+   //   - pNumAttributes is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumAttributes is null
+  
+
+AD_XMETHOD1( GetAttributes,
+	     [out], objOut, EnumAAFTaggedValues, ppEnum,
+	     Pointer to the new enumerator object created by this method.,
+	     Return an attribute enumerator for this component. )
+
+   // Creates an enumerator for this component\'s attributes.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+AD_XMETHOD1( RemoveAttribute,
+	     [in], objIn, AAFTaggedValue, pAttribute,
+	     Pointer to the tagged value attribute.,
+	     Remove an attribute \(tagged value\).)
+
+   // Removes a component attribute.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+
+
+
+AD_XCLASS_END(Abstract, StoredObject)
