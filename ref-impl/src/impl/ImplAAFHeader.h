@@ -43,7 +43,6 @@ class ImplAAFFile;
 
 #include "aafErr.h"
 #include "ImplAAFObject.h"
-//#include "ImplAAFSession.h"
 #include "ImplAAFIdentification.h"
 #include "ImplAAFContentStorage.h"
 #include "ImplAAFDictionary.h"
@@ -51,7 +50,6 @@ class ImplAAFFile;
 
 class AAFDataKind;
 class AAFEffectDef;
-class ImplAAFSession;
 
 
 class ImplAAFHeader : public ImplAAFObject
