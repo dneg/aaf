@@ -297,8 +297,7 @@ private:
 
   IStorage* _storage;
   OMStoredPropertySetIndex* _index;
-  IStream* _indexStream;
-  IStream* _propertiesStream;
+  IStream* _properties;
   size_t _offset;
 
   bool _open;
