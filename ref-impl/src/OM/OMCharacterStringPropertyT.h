@@ -59,7 +59,7 @@ OMCharacterStringProperty<CharacterType>::~OMCharacterStringProperty(void)
   //   @rdesc The result of the conversion as a value of type
   //          pointer to <p CharacterType>.
 template <typename CharacterType>
-OMCharacterStringProperty<CharacterType>::operator const CharacterType* ()
+OMCharacterStringProperty<CharacterType>::operator const CharacterType*() const
 {
   return reinterpret_cast<const CharacterType*>(_bits);
 }

@@ -53,7 +53,7 @@ public:
     // @cmember Type conversion. Convert an
     //          <c OMCharacterStringProperty> into a
     //          string of <p CharacterType> characters.
-  operator const CharacterType* ();
+  operator const CharacterType* () const;
 
     // @cmember Assign the string <p characterString> to this
     //          <c OMCharacterStringProperty>.
