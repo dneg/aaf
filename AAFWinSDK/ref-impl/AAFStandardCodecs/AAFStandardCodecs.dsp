@@ -23,8 +23,8 @@ CFG=AAFStandardCodecs - Win32 Debug
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
-# PROP Scc_ProjName ""
-# PROP Scc_LocalPath ""
+# PROP Scc_ProjName "AAFStandardCodecs"
+# PROP Scc_LocalPath "..\..\.."
 CPP=cl.exe
 MTL=midl.exe
 RSC=rc.exe
@@ -108,6 +108,14 @@ SOURCE="..\..\..\ref-impl\src\impl\AAFUtils.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\plugins\CAAFAIFCCodec.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\plugins\CAAFCDCICodec.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\plugins\CAAFCDCIDescriptorHelper.cpp"
 # End Source File
 # Begin Source File
 
