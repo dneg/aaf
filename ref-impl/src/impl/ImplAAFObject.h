@@ -75,14 +75,6 @@ public:
   // in /test/ImplAAFObjectTest.cpp.
   static AAFRESULT test();
 
-  void InitContainer (void * pContainer);
-
-  void * GetContainer ();
-
-private:
-
-  void * _pContainer;
-
 };
 
 #endif // ! __ImplAAFObject_h__
