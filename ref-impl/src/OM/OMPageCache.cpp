@@ -64,10 +64,10 @@ OMPageCache::~OMPageCache(void)
   //        from offset <p position> into the buffer at address <p bytes>
   //        from this <c OMPageCache>.
   //        The actual number of bytes read is returned in <p bytesRead>.
-  //   @parm TBS.
-  //   @parm TBS.
-  //   @parm TBS.
-  //   @parm TBS.
+  //   @parm The position at which to start reading.
+  //   @parm The buffer into which the bytes are read.
+  //   @parm The number of bytes to read.
+  //   @parm The number of bytes actually read.
 void OMPageCache::readCachedAt(OMUInt64 position,
                                OMByte* bytes,
                                OMUInt32 byteCount,
@@ -109,10 +109,10 @@ void OMPageCache::readCachedAt(OMUInt64 position,
   //        to this <c OMPageCache>.
   //        The actual number of bytes written is returned in
   //        <p bytesWritten>.
-  //   @parm TBS.
-  //   @parm TBS.
-  //   @parm TBS.
-  //   @parm TBS.
+  //   @parm The position at which to start writing.
+  //   @parm The buffer from which the bytes are written.
+  //   @parm The number of bytes to write.
+  //   @parm The number of bytes actually written.
 void OMPageCache::writeCachedAt(OMUInt64 position,
                                 const OMByte* bytes,
                                 OMUInt32 byteCount,
@@ -219,7 +219,7 @@ void OMPageCache::writeCachedPage(OMUInt64 page,
   //        returned is already in use for <p page>, or newly created,
   //        or previously occupied by the least recently used page.
   //   @parm The page number.
-  //   @rdesc TBS.
+  //   @rdesc The <t CacheEntry> for page number <p page>.
 OMPageCache::CacheEntry* OMPageCache::cacheEntry(OMUInt64 page)
 {
   TRACE("OMPageCache::cacheEntry");
