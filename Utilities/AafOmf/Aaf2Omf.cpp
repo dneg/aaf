@@ -32,7 +32,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream.h>
-#include <memory>
+#include <cstdlib>
 
 namespace OMF2
 {
@@ -177,8 +177,7 @@ void Aaf2Omf::OpenInputFile ()
 	AAFCheck					rc;
 
 	// convert file name to Wide char
-	std::auto_ptr<wchar_t> pwFile( new wchar_t[strlen(gpGlobals->sInFileName)+1] );
-	aafWChar*	pwFileName = pwFile.get();
+	aafWChar*	pwFileName = new wchar_t[strlen(gpGlobals->sInFileName)+1];
 	mbstowcs(pwFileName, gpGlobals->sInFileName, strlen(gpGlobals->sInFileName)+1);
 
 	try
@@ -194,6 +193,7 @@ void Aaf2Omf::OpenInputFile ()
 	}
 	gpGlobals->pLogger->Log( kLogInfo, "AAF file \"%s\" opened succesfully.\n", gpGlobals->sInFileName);
 	gpGlobals->bAAFFileOpen = kAAFTrue;
+	delete pwFileName;
 }
 
 // ============================================================================
@@ -222,14 +222,6 @@ void Aaf2Omf::OpenOutputFile ()
 	aafUInt32							textSize = 0;
 	aafProductVersion_t					productVersion;
 	
-	std::auto_ptr<char>		APpszCompanyName( NULL );
-	std::auto_ptr<char>		APpszProductName( NULL );
-    std::auto_ptr<char>		APpszProductVersionString( NULL );
-    std::auto_ptr<char>		APpszPlatform( NULL );
-	std::auto_ptr<wchar_t>	APpwCompanyName( NULL ); 
-	std::auto_ptr<wchar_t>	APpwProductName( NULL );
-	std::auto_ptr<wchar_t>	APpwProductVersionString( NULL );
-	std::auto_ptr<wchar_t>	APpwPlatform( NULL );
 
 	try
 	{
@@ -258,68 +250,56 @@ void Aaf2Omf::OpenOutputFile ()
 
 		if (textSize > 0)
 		{
-			APpwCompanyName = std::auto_ptr<wchar_t>( new wchar_t[textSize] );
-			pwCompanyName = APpwCompanyName.get();
+			pwCompanyName = new wchar_t[textSize];
 			pIdent->GetCompanyName(pwCompanyName, textSize);
-			APpszCompanyName = std::auto_ptr<char>( new char[textSize/sizeof(wchar_t)] );
-			pszCompanyName = APpszCompanyName.get();
+			pszCompanyName = new char[textSize/sizeof(wchar_t)];
 			wcstombs(pszCompanyName, pwCompanyName, textSize/sizeof(wchar_t));
 		}
 		else
 		{
-			APpszCompanyName = std::auto_ptr<char> ( new char[ sizeof( src ) ] );
-			pszCompanyName = APpszCompanyName.get();
+			pszCompanyName = new char[ sizeof( src ) ];
 			strcpy(pszCompanyName, src);
 		}
 		
 		pIdent->GetProductNameBufLen(&textSize);
 		if (textSize > 0)
 		{
-			APpwProductName = std::auto_ptr<wchar_t>( new wchar_t[textSize] );
-			pwProductName = APpwProductName.get();
+			pwProductName = new wchar_t[textSize];
 			pIdent->GetProductName(pwProductName, textSize);
-			APpszProductName = std::auto_ptr<char >( new char[textSize/sizeof(wchar_t)] );
-			pszProductName = APpszProductName.get();
+			pszProductName = new char[textSize/sizeof(wchar_t)];
 			wcstombs(pszProductName, pwProductName, textSize/sizeof(wchar_t));
 		}
 		else
 		{
-			APpszProductName = std::auto_ptr<char> ( new char[ sizeof( src ) ] );
-			pszProductName =  APpszProductName.get();
+			pszProductName =  new char[ sizeof( src ) ];
 			strcpy(pszProductName, src);
 		}
 		
 		pIdent->GetProductVersionStringBufLen(&textSize);
 		if (textSize > 0)
 		{
-			APpwProductVersionString = std::auto_ptr<wchar_t>( new wchar_t[textSize] );
-			pwProductVersionString = APpwProductVersionString.get();
+			pwProductVersionString = new wchar_t[textSize];
 			pIdent->GetProductVersionString(pwProductVersionString, textSize);
-			APpszProductVersionString = std::auto_ptr<char >( new char[textSize/sizeof(wchar_t)] );
-			pszProductVersionString = APpszProductVersionString.get();
+			pszProductVersionString = new char[textSize/sizeof(wchar_t)];
 			wcstombs(pszProductVersionString, pwProductVersionString, textSize/sizeof(wchar_t));
 		}
 		else
 		{
-			APpszProductVersionString = std::auto_ptr<char >( new char[sizeof( src ) ] );
-			pszProductVersionString = APpszProductVersionString.get();
+			pszProductVersionString = new char[sizeof( src ) ];
 			strcpy(pszProductVersionString, src);
 		}
 		
 		pIdent->GetPlatformBufLen(&textSize);
 		if (textSize > 0)
 		{
-			APpwPlatform = std::auto_ptr<wchar_t >( new wchar_t[textSize/sizeof(wchar_t)] );
-			pwPlatform = APpwPlatform.get();
+			pwPlatform = new wchar_t[textSize/sizeof(wchar_t)];
 			pIdent->GetPlatform(pwPlatform, textSize);
-			APpszPlatform = std::auto_ptr<char >(new char[textSize/sizeof(wchar_t)]);
-			pszPlatform = APpszPlatform.get();
+			pszPlatform = new char[textSize/sizeof(wchar_t)];
 			wcstombs(pszPlatform, pwPlatform, textSize/sizeof(wchar_t));
 		}
 		else
 		{
-			APpszPlatform = std::auto_ptr<char >(new char[sizeof(src)] );
-			pszPlatform = APpszPlatform.get();
+			pszPlatform = new char[sizeof(src)];
 			strcpy(pszPlatform, src);
 		}
 		
@@ -365,6 +345,22 @@ void Aaf2Omf::OpenOutputFile ()
 	
 	gpGlobals->pLogger->Log( kLogInfo, "OMF file: %s created succesfully\n", 
 			gpGlobals->sOutFileName);
+	if(pszCompanyName)
+		delete pszCompanyName;
+	if(pszProductName)
+		delete pszProductName;
+	if(pszProductVersionString)
+		delete pszProductVersionString;
+	if(pszPlatform)
+		delete pszPlatform;
+	if(pwCompanyName)
+		delete pwCompanyName;
+	if(pwProductName)
+		delete pwProductName;
+	if(pwProductVersionString)
+		delete pwProductVersionString;
+	if(pwPlatform)
+		delete pwPlatform;
 }
 
 // ============================================================================
@@ -447,13 +443,12 @@ void Aaf2Omf::AAFFileRead()
 		gpGlobals->nNumAAFMobs++;
 		// Get Mob Info
 		pMob->GetNameBufLen(&nameLength);
-		std::auto_ptr<wchar_t> APpwMobName( new wchar_t[nameLength/sizeof(wchar_t)] );
-		wchar_t *pwMobName  = APpwMobName.get();
+		wchar_t *pwMobName  = new wchar_t[nameLength/sizeof(wchar_t)];
 		rc = pMob->GetName(pwMobName, nameLength);
 		rc = pMob->GetMobID(&MobID);
-		std::auto_ptr<char> APpszMobName( new char[nameLength/sizeof(wchar_t)] );
-		char *pszMobName = APpszMobName.get();
+		char *pszMobName = new char[nameLength/sizeof(wchar_t)];
 		wcstombs(pszMobName, pwMobName, nameLength/sizeof(wchar_t));
+		delete pwMobName;
 		// Is this a composition Mob?
 		if (SUCCEEDED(pMob->QueryInterface(IID_IAAFCompositionMob, (void **)&pCompMob)))
 		{
@@ -488,6 +483,7 @@ void Aaf2Omf::AAFFileRead()
 				}
 			}
 		}
+		delete pszMobName;
 		if (OMFMob)
 		{
 			TraverseMob(pMob, &OMFMob);
@@ -510,29 +506,29 @@ void Aaf2Omf::AAFFileRead()
 						pMobComment->GetNameBufLen(&nameSize);
 						if( nameSize > 0 )
 						{
-							std::auto_ptr<aafWChar> APpwcName (new aafWChar [nameSize/sizeof(aafWChar)] );
-							aafWChar *pwcName = APpwcName.get();
+							aafWChar *pwcName = new aafWChar [nameSize/sizeof(aafWChar)];
 							pMobComment->GetName(pwcName, nameSize);
-							std::auto_ptr<char> APpszCommName( new char[nameSize/sizeof(aafWChar)] );
-							char *pszCommName =  APpszCommName.get();
+							char *pszCommName =  new char[nameSize/sizeof(aafWChar)];
 							wcstombs(pszCommName, pwcName, nameSize/sizeof(aafWChar));
 							pMobComment->GetValueBufLen((aafUInt32 *)&textSize);
 							if( textSize > 0 )
 							{
-								std::auto_ptr<aafWChar> APpwcComment( new aafWChar[textSize/sizeof(aafWChar)] );
-								aafWChar* pwcComment = APpwcComment.get();
+								aafWChar* pwcComment = new aafWChar[textSize/sizeof(aafWChar)];
 								pMobComment->GetValue((aafUInt32)textSize, (aafDataBuffer_t)pwcComment, &bytesRead);
-								std::auto_ptr<char> APpszComment( new char[textSize/sizeof(aafWChar)] );
-								char *pszComment =  APpszComment.get();
+								char *pszComment =  new char[textSize/sizeof(aafWChar)];
 								wcstombs(pszComment, pwcComment, textSize/sizeof(aafWChar));
 								OMFError = OMF2::omfiMobAppendComment(OMFFileHdl, OMFMob, pszCommName, pszComment);
 								gpGlobals->pLogger->Log( kLogInfo, "Comment \"%s\" of length %ld was converted.\n", pszCommName, textSize );
 								gpGlobals->pLogger->Log( kLogInfo, "Comment value = \"%s\".\n", pszComment);
+								delete pwcComment;
+								delete pszComment;
 							}
 							else
 							{
 								gpGlobals->pLogger->Log( kLogError, "Zero length comment value encountered. Comment not converted.\n" );
 							}
+							delete pwcName;
+							delete pszCommName;
 						}
 						else
 						{
@@ -2270,7 +2266,7 @@ void Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 	aafUInt32				byPass, bypassOverride, *byPassPtr;
 	aafUInt32				textSize;
 	aafBool					isATimeWarp;
-	aafInt32				n;
+	aafUInt32				n;
 	aafUInt32				numSources,numParameters;
 	aafWChar*				pwDesc = NULL;
 	aafWChar*				pwName = NULL;
