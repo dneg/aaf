@@ -44,10 +44,13 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
+#include "ImplAAFObjectCreation.h"
 
 #include <assert.h>
 #include <string.h>
 
+
+extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 ImplAAFTypeDefStrongObjRef::ImplAAFTypeDefStrongObjRef ()
   : _referencedType (PID_TypeDefinitionStrongObjectReference_ReferencedType, "ReferencedType")
@@ -189,10 +192,38 @@ AAFRESULT STDMETHODCALLTYPE
 
 // Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStrongObjRef::CreateValue (/*[in]*/ ImplAAFObject * /*pObj*/,
-      /*[out]*/ ImplAAFPropertyValue ** /*ppPropVal*/)
+    ImplAAFTypeDefStrongObjRef::CreateValue (/*[in]*/ ImplAAFObject * pObj,
+      /*[out]*/ ImplAAFPropertyValue ** ppPropVal)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pObj)
+	return AAFRESULT_NULL_PARAM;
+  if (! ppPropVal)
+	return AAFRESULT_NULL_PARAM;
+
+  ImplAAFPropValData * pvd = 0;
+  pvd = (ImplAAFPropValData*) CreateImpl (CLSID_AAFPropValData);
+  if (!pvd) return AAFRESULT_NOMEMORY;
+
+  ImplAAFPropValDataSP spPvd;
+  spPvd = pvd;
+  // SmartPointer operator= will automatically
+  // AddRef; CreateImpl *also* will addref, so we've got one too
+  // many.  Put us back to normal.
+  pvd->ReleaseReference ();
+  pvd = 0;
+
+  AAFRESULT hr;
+  hr = spPvd->Initialize (this);
+  if (AAFRESULT_FAILED (hr)) return hr;
+
+  hr = SetObject (spPvd, pObj);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+  assert (ppPropVal);
+  *ppPropVal = spPvd;
+  assert (*ppPropVal);
+  (*ppPropVal)->AcquireReference ();
+  return AAFRESULT_SUCCESS;
 }
 
 
