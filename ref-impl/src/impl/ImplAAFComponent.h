@@ -8,7 +8,7 @@ class ImplAAFDataDef;
 class ImplAAFMob;
 class ImplAAFMobSlot;
 class ImplAAFEffectDef;
-class ImplAAFGroup;
+class ImplAAFEffect;
 class ImplAAFScopeStack;
 
 /******************************************\
@@ -94,7 +94,7 @@ public:
 										ImplAAFComponent *nextObject,
 										ImplAAFScopeStack *scopeStack,
 										aafPosition_t *diffPos, aafLength_t *minLength,
-										ImplAAFGroup **effeObject, aafInt32	*nestDepth,
+										ImplAAFEffect **effeObject, aafInt32	*nestDepth,
 										ImplAAFComponent **found, aafBool *foundTransition);
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kComponent; return AAFRESULT_SUCCESS;}
