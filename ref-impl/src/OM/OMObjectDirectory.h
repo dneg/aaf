@@ -26,6 +26,8 @@ public:
   //
   int count(void) const;
 
+  void destroyAll(void (*destroy)(OMStorable*&));
+
   void dump(void) const;
 
 private:

@@ -8,7 +8,10 @@ class OMStorable;
 
 class OMPropertySet {
 public:
+
   OMPropertySet(void);
+
+  ~OMPropertySet(void);
 
   OMProperty* get(const int pid) const;
   void put(OMProperty* property);

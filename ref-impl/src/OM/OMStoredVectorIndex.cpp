@@ -12,6 +12,14 @@ OMStoredVectorIndex::OMStoredVectorIndex(size_t size)
   }
 }
 
+OMStoredVectorIndex::~OMStoredVectorIndex(void)
+{
+  TRACE("OMStoredVectorIndex::~OMStoredVectorIndex");
+
+  delete [] _names;
+  _names = 0;
+}
+
 size_t OMStoredVectorIndex::highWaterMark(void) const
 {
   TRACE("OMStoredVectorIndex::highWaterMark");

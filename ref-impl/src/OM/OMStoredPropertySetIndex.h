@@ -7,6 +7,9 @@ class OMStoredPropertySetIndex {
 public:
   
   OMStoredPropertySetIndex(size_t capacity);
+
+  ~OMStoredPropertySetIndex(void);
+
   void insert(int pid, int type, size_t offset, size_t length);
   
   struct IndexEntry;
@@ -15,7 +18,11 @@ public:
 
   size_t entries(void) const;
 
-  void iterate(size_t& context, int& pid, int& type, size_t& offset, size_t& length) const;
+  void iterate(size_t& context,
+               int& pid,
+               int& type,
+               size_t& offset,
+               size_t& length) const;
 
   bool isDirty(void);
   void setDirty(void);

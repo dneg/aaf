@@ -13,7 +13,16 @@ OMStoredPropertySetIndex::OMStoredPropertySetIndex(size_t capacity)
   }
 }
 
-void OMStoredPropertySetIndex::insert(int pid, int type, size_t offset, size_t length)
+OMStoredPropertySetIndex::~OMStoredPropertySetIndex(void)
+{
+  delete [] _table;
+  _table = 0;
+}
+
+void OMStoredPropertySetIndex::insert(int pid,
+                                      int type,
+                                      size_t offset,
+                                      size_t length)
 {
   IndexEntry* entry = find(pid);
 
@@ -36,7 +45,8 @@ void OMStoredPropertySetIndex::insert(int pid, int type, size_t offset, size_t l
 
 }
 
-OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(int pid) const
+OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
+                                                                 int pid) const
 {
   OMStoredPropertySetIndex::IndexEntry* result = 0;
 
@@ -57,7 +67,11 @@ size_t OMStoredPropertySetIndex::entries(void) const
   return _entries;
 }
 
-void OMStoredPropertySetIndex::iterate(size_t& context, int& pid, int& type, size_t& offset, size_t& length) const
+void OMStoredPropertySetIndex::iterate(size_t& context,
+                                       int& pid,
+                                       int& type,
+                                       size_t& offset,
+                                       size_t& length) const
 {
   OMStoredPropertySetIndex::IndexEntry* entry = 0;
   size_t start = context;
@@ -119,7 +133,8 @@ bool OMStoredPropertySetIndex::isSorted(void)
   return result;
 }
 
-OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(void) const
+OMStoredPropertySetIndex::IndexEntry* OMStoredPropertySetIndex::find(
+                                                                    void) const
 {
   OMStoredPropertySetIndex::IndexEntry* result = 0;
 

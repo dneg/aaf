@@ -1,7 +1,9 @@
 #ifndef OMUTILITIES_H
 #define OMUTILITIES_H
 
+#if !defined(OMSTANDALONE)
 #include "AAFTypes.h"
+#endif
 
 #include "OMTypes.h"
 
@@ -11,6 +13,7 @@ const char* getProgramName(void);
 
 ByteOrder hostByteOrder(void);
 
+#if !defined(OMSTANDALONE)
 //
 // Converts wide character string (pwString) to a single-byte string
 // (pbString).  It is the caller's responsibility to allocate the
@@ -26,5 +29,7 @@ void OMUwc2sb (char * pbString,
 //
 void OMUsb2wc (aafWChar * pwString,
 			   const char * pbString);
+
+#endif
 
 #endif

@@ -6,7 +6,9 @@
 #include <assert.h>
 #include <string.h>
 
+#if !defined(OMSTANDALONE)
 #include "AAFTypes.h"
+#endif
 
 char* programName = 0;
 
@@ -45,6 +47,7 @@ ByteOrder hostByteOrder(void)
 }
 
 
+#if !defined(OMSTANDALONE)
 void OMUwc2sb (char * pbString,
 			   const aafWChar * pwString)
 {
@@ -70,3 +73,4 @@ void OMUsb2wc (aafWChar * pwString,
 	}
   *pwString = (char) *pbString;
 }
+#endif

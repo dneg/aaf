@@ -6,6 +6,7 @@
 class OMStoredVectorIndex {
 public:
   OMStoredVectorIndex(size_t size);
+  ~OMStoredVectorIndex(void);
   size_t highWaterMark(void) const;
   void insert(size_t position, size_t name);
   size_t entries(void) const;

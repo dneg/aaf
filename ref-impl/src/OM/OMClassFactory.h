@@ -13,6 +13,8 @@ public:
   //
   OMClassFactory(int capacity);
 
+  virtual ~OMClassFactory(void);
+
   // Register a class id and its associated creation function.
   //
   void add(const OMClassId& classId, OMStorable* (*create)(const OMClassId&));
