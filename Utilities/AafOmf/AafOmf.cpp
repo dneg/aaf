@@ -1095,6 +1095,87 @@ HRESULT AafOmf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 	return rc;
 }
 // ============================================================================
+// ConvertOMFSelector
+//
+//			This function converts an OMF Selector object and all the objects it
+// contains or references.
+//			
+// Returns: AAFRESULT_SUCCESS if succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFSelector( OMF2::omfObject_t selector, IAAFSelector* pSelector )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	OMF2::omfLength_t		OMFLength;
+	OMF2::omfDDefObj_t		OMFDatakind;
+	OMF2::omfSegObj_t		OMFSelected;
+	OMF2::omfNumSlots_t		numAlternates;
+
+	IAAFComponent*			pComponent = NULL;
+	IAAFSegment*			pSegment = NULL;
+	aafUID_t				datadef ;
+
+	rc = OMF2::omfiSelectorGetInfo( OMFFileHdl, 
+									selector,
+									&OMFDatakind,
+									&OMFLength,
+									&OMFSelected);
+
+	if (SUCCEEDED(rc))
+	{        
+		rc = ConvertOMFDatakind(OMFDatakind, &datadef);
+		pSelector->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
+		pComponent->SetDataDef(&datadef);
+		pComponent->SetLength((aafLength_t *)&OMFLength);
+		pComponent->Release();
+		pComponent = NULL;
+		if (bVerboseMode)
+			UTLstdprintf("%sProcessing Selector object of length = %ld\n", indentLeader, (int)OMFLength);
+		rc = ProcessOMFComponent(OMFSelected, &pComponent);
+		if (SUCCEEDED(rc))
+		{
+			rc = pComponent->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
+			rc = pSelector->SetSelectedSegment(pSegment);
+			rc = OMF2::omfiSelectorGetNumAltSlots(OMFFileHdl,
+												  selector,
+												  &numAlternates);
+			if (SUCCEEDED(rc) && numAlternates > 0)
+			{
+				OMF2::omfIterHdl_t		OMFIterator;
+				int						i;
+				OMF2::omfSegObj_t		OMFAltSelected;
+
+				IAAFComponent*			pAltComponent = NULL;
+				IAAFSegment*			pAltSegment = NULL;
+
+				OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
+				IncIndentLevel();
+				for (i = 0; i <(int)numAlternates;i++)
+				{
+					rc = OMF2::omfiSelectorGetNextAltSlot(OMFIterator,
+														  selector,
+														  NULL, 
+														  &OMFAltSelected);
+					rc = ProcessOMFComponent(OMFAltSelected, &pAltComponent);
+					if (SUCCEEDED(rc))
+					{
+						rc = pAltComponent->QueryInterface(IID_IAAFSegment, (void **)&pAltSegment);
+						rc = pSelector->AppendAlternateSegment(pAltSegment);
+						pAltSegment->Release();
+					}
+					pAltComponent->Release();
+				}
+				DecIndentLevel();
+				OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
+			}
+			pSegment->Release();
+			pComponent->Release();
+		}
+	}
+	return rc;
+}
+// ============================================================================
 // ProcessOMFComponent
 //
 //			This function will :
@@ -1122,7 +1203,6 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent*
 	OMF2::omfTimecode_t		OMFTimecode;
 	OMF2::omfEffObj_t		OMFEffect;
 	OMF2::omfPosition_t		OMFCutPoint;
-	OMF2::omfSegObj_t		OMFSelected;
 
 	IAAFSequence*			pSequence = NULL;
 	IAAFSourceClip*			pSourceClip = NULL;
@@ -1130,6 +1210,7 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent*
 	IAAFEdgecode*			pEdgecode = NULL;
 	IAAFFiller*				pFiller = NULL;
 	IAAFTransition*			pTransition = NULL;
+	IAAFSelector*			pSelector = NULL;
 	IAAFGroup*				pEffect = NULL;
 	aafEdgecode_t			edgecode;
 	aafTimecode_t			timecode;
@@ -1296,24 +1377,14 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent*
 	}
 	else if (OMF2::omfiIsASelector(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
-		rc = OMF2::omfiSelectorGetInfo( OMFFileHdl, 
-										OMFSegment,
-										&OMFDatakind,
-										&OMFLength,
-										&OMFSelected);
-		if (SUCCEEDED(rc))
-		{        
-			rc = ConvertOMFDatakind(OMFDatakind, &datadef);
-			if (bVerboseMode)
-			{
-				UTLstdprintf("%sProcessing Selector of length: %ld\n ", indentLeader, (int)OMFLength);
-			}
-			rc = pDictionary->CreateInstance(&AUID_AAFFiller,
-											  IID_IAAFFiller,
-											  (IUnknown **) &pFiller);
-			rc = pFiller->Initialize( &datadef, (aafLength_t)OMFLength);
-			rc = pFiller->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
-		}
+		rc = pDictionary->CreateInstance(&AUID_AAFSelector,
+										  IID_IAAFSelector,
+										  (IUnknown **) &pSelector);
+		IncIndentLevel();
+		rc = ConvertOMFSelector(OMFSegment, pSelector);
+		rc = pSelector->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
+		pSelector->Release();
+		DecIndentLevel();
 	}
 	else if (OMF2::omfiIsAMediaGroup(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
@@ -1673,6 +1744,12 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 													&data);
 
 				rc = pTiffDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssenceDesc);
+				pTiffDesc->SetIsUniform((aafBool)IsUniform);
+				pTiffDesc->SetIsContiguous((aafBool)IsContiguous);
+				pTiffDesc->SetLeadingLines((aafInt32)leadingLines);
+				pTiffDesc->SetTrailingLines((aafInt32)trailingLines);
+				pTiffDesc->SetJPEGTableID((aafJPEGTableID_t)data);
+				pTiffDesc->SetSummary((aafUInt32)bytesRead, (aafDataValue_t) summary);
 				pSourceMob->SetEssenceDescriptor(pEssenceDesc);
 				if (bVerboseMode)
 					UTLstdprintf("%sAdded a TIFF Essence Descriptor to a Source MoB\n", indentLeader);
