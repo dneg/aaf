@@ -510,6 +510,42 @@ void OMStorable::setClassFactory(const OMClassFactory* classFactory)
   POSTCONDITION("Valid class factory", _classFactory != 0);
 }
 
+  // @mfunc Create a shallow copy of this <c OMStorable>.
+  //         In a shallow copy, strong references are not followed.
+  //         That is, contained objects are not copied.
+  //   @rdesc TBS
+  //  @this const
+OMStorable* OMStorable::shallowCopy(void) const
+{
+  TRACE("OMStorable::shallowCopy");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  return 0;
+}
+
+  // @mfunc Create a deep copy of this <c OMStorable>, attach the
+  //        copy to <p destination>.  In a deep copy, strong
+  //        references are followed. That is, contained objects are copied.
+  //        This function copies the entire object tree rooted at this
+  //        <c OMStorable>. This root object is treated
+  //        differently than the contained objects in that only the
+  //        strong references are copied. Clients may choose to create
+  //        <p destination> using <mf OMStorable::shallowCopy>.
+  //        All strong reference properties of this <c OMStorable> must
+  //        be present in the property set of <p destination>. The values
+  //        of the strong reference properties of <p destination> must
+  //        be void and are replaced by those of this <c OMStorable>.
+  //        Any properties of <p destination> not also in this
+  //        <c OMStorable> are left unchanged.
+  //  @parm TBS
+  //  @parm TBS
+  //  @this const
+void OMStorable::deepCopyTo(OMStorable* /* destination */,
+                            void* /* clientContext */) const
+{
+  TRACE("OMStorable::deepCopyTo");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
   // @mfunc Inform this <c OMStorable> that it is about to be saved.
   //        The <p clientContext> passed is the one that was specified
   //        in the currently active call to <mf OMStorable::save>.
@@ -526,6 +562,23 @@ void OMStorable::onSave(void*) const
   //   @parm void *| clientContext | A context for the client.
   //   @this const
 void OMStorable::onRestore(void*) const
+{
+  // nothing to do in this default implementation
+}
+
+  // @mfunc Inform this <c OMStorable> that it has just been copied by
+  //        <mf OMStorable::deepCopyTo>. The <p clientContext> passed is
+  //        the one that was specified in the currently active call
+  //        to <mf OMStorable::deepCopyTo>. When <mf OMStorable::onCopy>
+  //        is called only the shallow portion of the deep copy to be
+  //        performed by <mf OMStorable::deepCopyTo> has been completed.
+  //        That is, this <c OMStorable> contains copies of all of the
+  //        properties of the souce <c OMStorable> except for strong
+  //        references (contained objects). Those properties wll be
+  //        copied after <mf OMStorable::onCopy> returns.
+  //   @parm void *| clientContext | A context for the client.
+  //   @this const
+void OMStorable::onCopy(void*) const
 {
   // nothing to do in this default implementation
 }
