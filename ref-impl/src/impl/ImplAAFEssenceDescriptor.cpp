@@ -35,6 +35,10 @@
 
 #include <assert.h>
 #include "AAFResult.h"
+#include "aafErr.h"
+#include "ImplAAFObjectCreation.h"
+
+extern "C" const aafClassID_t CLSID_EnumAAFLocators;
 
 ImplAAFEssenceDescriptor::ImplAAFEssenceDescriptor ()
 : _locators(         PID_ESSENCE_DESC_LOCATORS,          "locators")
@@ -92,12 +96,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::EnumAAFAllLocators (ImplEnumAAFLocators **ppEnum)
 {
-#if FULL_TOOLKIT
 	ImplEnumAAFLocators		*theEnum = (ImplEnumAAFLocators *)CreateImpl (CLSID_EnumAAFLocators);
 		
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEssenceDescriptor(this));
+		CHECK(theEnum->SetEssenceDesc(this));
 		CHECK(theEnum->Reset());
 		*ppEnum = theEnum;
 	}
@@ -108,9 +111,6 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 	
 	return(AAFRESULT_SUCCESS);
-#else
-	return AAFRESULT_NOT_IMPLEMENTED;
-#endif
 }
 
   //@comm The number of locators may be zero if the essence is in the current file.
@@ -122,6 +122,16 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+// Internal to the toolkit functions
+AAFRESULT
+    ImplAAFEssenceDescriptor::GetNthLocator (aafInt32 index, ImplAAFLocator **ppLocator)
+{
+	ImplAAFLocator	*obj;
+	_locators.getValueAt(obj, index);
+	*ppLocator = obj;
+
+	return AAFRESULT_SUCCESS;
+}
 
 extern "C" const aafClassID_t CLSID_AAFEssenceDescriptor;
 
