@@ -48,7 +48,7 @@ typedef IAAFSmartPointer<IAAFDataDef> IAAFDataDefSP;
 #define	NumMobSlots		3
 
 static aafWChar *		slotNames[NumMobSlots] = { L"VIDEO SLOT", L"AUDIO SLOT1", L"AUDIO SLOT2"};
-static const aafUID_t *	slotDDefs[NumMobSlots] = {&DDEF_Picture, &DDEF_Sound, &DDEF_Sound};
+static const aafUID_t *	slotDDefs[NumMobSlots] = {&kAAFDataDef_Picture, &kAAFDataDef_Sound, &kAAFDataDef_Sound};
 static aafRational_t	slotRates[NumMobSlots] = { {2997,100}, {44100, 1}, {48000, 1}};
 static aafWChar* Manufacturer = L"Sony";
 static aafWChar* Model = L"MyModel";

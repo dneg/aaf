@@ -69,7 +69,7 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-static const aafUID_t DDEF_TEST = 
+static const aafUID_t kAAFDataDef_Test = 
 { 0x81831639, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 
@@ -277,7 +277,7 @@ void GPITriggerTest::CreateGPITrigger()
 		checkResult(defs.cdDataDef()->
 					CreateInstance (IID_IAAFDataDef,
 									(IUnknown **)&pDataDef));
-	  checkResult(pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data"));
+	  checkResult(pDataDef->Initialize (kAAFDataDef_Test, L"Test", L"Test data"));
 	  checkResult(_pDictionary->RegisterDataDef (pDataDef));
 
 	// Create a GPITrigger

@@ -153,7 +153,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFEssenceGroup, 
 								   (IUnknown **)&essenceGroup));
 		checkResult(essenceGroup->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (defs.ddSound()));
+		checkResult(pComponent->SetDataDef (defs.ddkAAFSound()));
 		checkResult(pComponent->SetLength (segLen));
 		pComponent->Release();
 		pComponent = NULL;
@@ -162,7 +162,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFSourceClip, 
 								   (IUnknown **)&pSourceClip));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (defs.ddSound()));
+		checkResult(pComponent->SetDataDef (defs.ddkAAFSound()));
 		checkResult(pComponent->SetLength (stillLength));
 		checkResult(essenceGroup->SetStillFrame(pSourceClip)); 
 		pComponent->Release();
@@ -175,7 +175,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFSourceClip, 
 								   (IUnknown **)&pSourceClip));
 		sourceRef.startTime=2;
-		checkResult(pSourceClip->Initialize(defs.ddSound(),segLen,sourceRef));
+		checkResult(pSourceClip->Initialize(defs.ddkAAFSound(),segLen,sourceRef));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 		checkResult(essenceGroup->AppendChoice(pSegment)); 
 		pSegment->Release();
@@ -194,7 +194,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				CreateInstance(IID_IAAFSourceClip, 
 				(IUnknown **)&pSourceClip));
 			sourceRef.startTime=0;
-			checkResult(pSourceClip->Initialize(defs.ddSound(),segLen,sourceRef));
+			checkResult(pSourceClip->Initialize(defs.ddkAAFSound(),segLen,sourceRef));
 			checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 			checkResult(essenceGroup->PrependChoice(pSegment)); 
 			pSegment->Release();
@@ -208,7 +208,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				CreateInstance(IID_IAAFSourceClip, 
 				(IUnknown **)&pSourceClip));
 			sourceRef.startTime=1;
-			checkResult(pSourceClip->Initialize(defs.ddSound(),segLen,sourceRef));
+			checkResult(pSourceClip->Initialize(defs.ddkAAFSound(),segLen,sourceRef));
 			checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
 			checkResult(essenceGroup->InsertChoiceAt(1,pSegment)); 
 			pSegment->Release();

@@ -222,7 +222,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDef = NULL;
 		
 		//!!!Not testing the INIT on AAFDefObject
-		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
+		checkResult(pOperationDef->SetDataDef (defs.ddkAAFPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));

@@ -199,7 +199,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFSourceClip, 
 								   (IUnknown **)&pSourceClip));		
 		 checkResult(pSourceClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		 checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 		pComponent->Release();
 		pComponent = NULL;
 
@@ -214,14 +214,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFFiller, 
 								   (IUnknown **)&pFiller));
 		// Set its properties.
-	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
+	    checkResult(pFiller->Initialize(defs.ddkAAFPicture(), fillerLength));
 
 		// Now create a selector 
 	    checkResult(defs.cdPulldown()->
 					CreateInstance(IID_IAAFPulldown, 
 								   (IUnknown **)&pPulldown));
 		 checkResult(pPulldown->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		 checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 		pComponent->Release();
 		pComponent = NULL;
 

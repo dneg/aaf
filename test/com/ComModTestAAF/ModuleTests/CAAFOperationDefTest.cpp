@@ -183,7 +183,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 			
 			
-			checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
+			checkResult(pOperationDef->SetDataDef (defs.ddkAAFPicture()));
 			checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
 			checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 			checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -288,7 +288,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 		
-		checkResult(pReadDataDef->IsDataDefOf(defs.ddPicture(), &bResult));
+		checkResult(pReadDataDef->IsDataDefOf(defs.ddkAAFPicture(), &bResult));
 		checkExpression(bResult == kAAFTrue, AAFRESULT_TEST_FAILED);
 						
 		checkResult(pOperationDef->IsTimeWarp (&readIsTimeWarp));

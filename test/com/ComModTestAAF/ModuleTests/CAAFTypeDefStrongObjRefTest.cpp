@@ -279,12 +279,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult (defs.cdFiller()->
 				   CreateInstance(IID_IAAFFiller,
 								  (IUnknown **)&fill1));
-	  checkResult (fill1->Initialize (defs.ddPictureWithMatte(), 13));
+	  checkResult (fill1->Initialize (defs.ddkAAFPictureWithMatte(), 13));
 	  IAAFFillerSP fill2;
 	  checkResult (defs.cdFiller()->
 				   CreateInstance(IID_IAAFFiller,
 								  (IUnknown **)&fill2));
-	  checkResult (fill2->Initialize (defs.ddPictureWithMatte(), 26));
+	  checkResult (fill2->Initialize (defs.ddkAAFPictureWithMatte(), 26));
 
 	  // get the AAFObject interfaces
 	  IAAFObjectSP fillObj1;

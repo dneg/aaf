@@ -253,7 +253,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
                                           (void **)&pCodecDef));
-	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
+	checkResult(pCodecDef->AddEssenceKind (defs.ddkAAFMatte()));
 	checkResult(pCodecDef->Initialize (kAAFNoCodec, L"TestCodec", L"Just a test"));
 	uid = kAAFClassID_WAVEDescriptor;
 	checkResult(pDictionary->LookupClassDef(uid, &pClassDef));

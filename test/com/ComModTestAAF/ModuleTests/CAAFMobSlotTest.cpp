@@ -137,7 +137,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									   (IUnknown **)&sclp));		
 			
 			checkResult(sclp->QueryInterface (IID_IAAFComponent, (void **)&pComp));
-			checkResult(pComp->SetDataDef (defs.ddPicture()));
+			checkResult(pComp->SetDataDef (defs.ddkAAFPicture()));
 			pComp->Release();
 			pComp = NULL;
 			checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
@@ -224,7 +224,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafSlotID_t				s;
 	aafUInt32				length;
 	HRESULT					hr = S_OK;
-	aafUID_t				readUID, typeUID = DDEF_Picture;
+	aafUID_t				readUID, typeUID = kAAFDataDef_Picture;
 	
 	try
 	{

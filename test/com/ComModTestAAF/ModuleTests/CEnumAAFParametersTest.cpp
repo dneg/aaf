@@ -140,7 +140,7 @@ void CEnumAAFParametersTest::CreateOperationGroup(IAAFDictionary *pDictionary)
 	checkResult(pOperationDef->Initialize (kTestEffectID,L"An effect name",
 		L"An effect description"));
 
-	checkResult(pOperationDef->SetDataDef(defs.ddPicture()));
+	checkResult(pOperationDef->SetDataDef(defs.ddkAAFPicture()));
 	checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
 	checkResult(pOperationDef->SetNumberInputs(3));
 	checkResult(pOperationDef->SetCategory(kTestCategoryID));
@@ -165,7 +165,7 @@ void CEnumAAFParametersTest::CreateOperationGroup(IAAFDictionary *pDictionary)
 	// Create & initialize operation group
 	checkResult(defs.cdOperationGroup()->CreateInstance(
 		IID_IAAFOperationGroup,(IUnknown **)&_pOperationGroup));
-	checkResult(_pOperationGroup->Initialize(defs.ddPicture(),60,
+	checkResult(_pOperationGroup->Initialize(defs.ddkAAFPicture(),60,
 		pOperationDef));
 
 	// Add parameters to operation group

@@ -154,7 +154,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFTimecodeStream12M, 
 								   (IUnknown **)&pTimecodeStream12M));		
 		 checkResult(pTimecodeStream12M->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		 checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 		pComponent->Release();
 		pComponent = NULL;
 		 

@@ -326,7 +326,7 @@ static void CreateTypeDefOpaqueFile(aafWChar *pFilename)
 	IAAFSequenceSP pSequence;
 	checkResult(pDictionary->CreateInstance(AUID_AAFSequence,IID_IAAFSequence,
 		(IUnknown**)&pSequence));
-	checkResult(pSequence->Initialize(defs.ddSound()));
+	checkResult(pSequence->Initialize(defs.ddkAAFSound()));
 
 	// Set value of our new property to property value created above
 	IAAFObjectSP pObject;

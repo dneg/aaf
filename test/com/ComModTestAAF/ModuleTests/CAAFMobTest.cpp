@@ -275,7 +275,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  checkResult(pSourceRef->SetSourceID(MOBTestID3));
 
 		  checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		  checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		  checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 
 		  checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
@@ -350,7 +350,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					  CreateInstance(IID_IAAFFiller, 
 									 (IUnknown **)&filler));		
 
-		checkResult(filler->Initialize(defs.ddSound(), 10));
+		checkResult(filler->Initialize(defs.ddkAAFSound(), 10));
 		checkResult(filler->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
 		checkResult(mSlot->SetName(slotNames[0]));
@@ -380,7 +380,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					  CreateInstance(IID_IAAFFiller, 
 									 (IUnknown **)&filler));		
 
-		checkResult(filler->Initialize(defs.ddSound(), 10));
+		checkResult(filler->Initialize(defs.ddkAAFSound(), 10));
 		checkResult(filler->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
 		checkResult(mSlot->SetName(slotNames[6]));
@@ -415,7 +415,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		assert(pComponent == NULL);
 		checkResult(pTimecode->QueryInterface(IID_IAAFComponent,(void **)&pComponent));
-		checkResult(pComponent->SetDataDef(defs.ddTimecode()));
+		checkResult(pComponent->SetDataDef(defs.ddkAAFTimecode()));
 		pComponent->Release();
 		pComponent = NULL;
 
@@ -454,7 +454,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSourceRef->SetSourceID(MOBTestID_Static));
 
 		checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 
 		checkResult(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
 
@@ -493,7 +493,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		//and initialize reqruied properties
 		checkResult(event->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 		event->SetPosition(1);
 
 		aafRational_t EventeditRate = { 0, 1};

@@ -166,7 +166,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&pOperationDef));
 		checkResult(pOperationDef->Initialize(TEST_EFFECT_AUID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
   		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
-		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
+		checkResult(pOperationDef->SetDataDef (defs.ddkAAFPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -272,7 +272,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		pDefObject = NULL;
 		
 		aafBool bResult = kAAFFalse;
-		checkResult(pReadDataDef->IsDataDefOf(defs.ddPicture(), &bResult));
+		checkResult(pReadDataDef->IsDataDefOf(defs.ddkAAFPicture(), &bResult));
 		checkExpression(bResult == kAAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pOperationDef->IsTimeWarp (&readIsTimeWarp));
 		checkExpression(readIsTimeWarp == kAAFFalse, AAFRESULT_TEST_FAILED);

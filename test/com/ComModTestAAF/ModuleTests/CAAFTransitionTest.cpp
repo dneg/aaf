@@ -196,7 +196,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 
-		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
+		checkResult(pOperationDef->SetDataDef (defs.ddkAAFPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -231,7 +231,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get a component interface and 
 		checkResult(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 		// set the Data definition for it !
-		checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 		// Release the component - because we need to reuse the pointer later
 		pComponent->Release();
 		pComponent = NULL;
@@ -253,7 +253,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Get a component interface
 		checkResult(pFiller->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
 		// Set values for the filler
-	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
+	    checkResult(pFiller->Initialize(defs.ddkAAFPicture(), fillerLength));
 		// append the filler to the sequence
 		checkResult(pSequence->AppendComponent(pComponent));
 
@@ -273,7 +273,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFOperationGroup,
 								   (IUnknown **)&pOperationGroup));
 
-		checkResult(pOperationGroup->Initialize(defs.ddPicture(), transitionLength, pOperationDef));
+		checkResult(pOperationGroup->Initialize(defs.ddkAAFPicture(), transitionLength, pOperationDef));
 
     // Create a constant value parameter.
 		checkResult(defs.cdConstantValue()->
@@ -293,7 +293,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFSegment,
 								   (IUnknown **) &pEffectFiller));
 		 checkResult(pEffectFiller->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		 checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 		pComponent->Release();
 		pComponent = NULL;
 		checkResult(pOperationGroup->AppendInputSegment (pEffectFiller));
@@ -309,14 +309,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		sourceRef.sourceID = zeroMobID;
 		sourceRef.sourceSlotID = 0;
 		sourceRef.startTime = 0;
-		checkResult(pSourceClip->Initialize (defs.ddPicture(),
+		checkResult(pSourceClip->Initialize (defs.ddkAAFPicture(),
 											 effectLen,
 											 sourceRef));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference,
 												 (void **)&pSourceRef));
 		checkResult(pOperationGroup->SetRender (pSourceRef));
 
-		checkResult(pTransition->Initialize (defs.ddPicture(),
+		checkResult(pTransition->Initialize (defs.ddkAAFPicture(),
 											 transitionLength,
 											 cutPoint,
 											 pOperationGroup));
@@ -337,7 +337,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(pFiller->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
 		// Set values for the filler
-	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
+	    checkResult(pFiller->Initialize(defs.ddkAAFPicture(), fillerLength));
 		// append the filler to the sequence
 		checkResult(pSequence->AppendComponent(pComponent));
 		pComponent->Release();

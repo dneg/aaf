@@ -272,10 +272,10 @@ static void CreateTypeDefRenameFile(aafWChar *pFilename)
 
 	// Set up sequence
 	IAAFSmartPointer<IAAFComponent> pComponent;
-	checkResult(pSequence->Initialize(defs.ddSound()));
+	checkResult(pSequence->Initialize(defs.ddkAAFSound()));
 	checkResult(defs.cdFiller()->CreateInstance(IID_IAAFComponent,
 		(IUnknown **)&pComponent));
-	checkResult(pComponent->SetDataDef(defs.ddSound()));
+	checkResult(pComponent->SetDataDef(defs.ddkAAFSound()));
 	checkResult(pComponent->SetLength(1000));
 	checkResult(pSequence->AppendComponent(pComponent));
 	  

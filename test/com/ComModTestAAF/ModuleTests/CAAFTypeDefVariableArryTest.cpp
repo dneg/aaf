@@ -931,7 +931,7 @@ static HRESULT CreateAAFFile(aafWChar *  pFileName)
 		/// first, create  Filler 
 		IAAFFillerSP  spFill;
 		checkResult(defs.cdFiller()->CreateInstance(IID_IAAFFiller, (IUnknown**)&spFill));
-		checkResult(spFill->Initialize(defs.ddSound(), 10));
+		checkResult(spFill->Initialize(defs.ddkAAFSound(), 10));
 		
 		checkResult(createVAFiller(pDict, spFill));
 

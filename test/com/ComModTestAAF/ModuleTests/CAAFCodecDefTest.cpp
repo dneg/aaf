@@ -167,7 +167,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		uid = kAAFCodecWAVE;
 		checkResult(pPlugDef->Initialize (uid, L"TestCodec", L"TestCodecDescription"));
 
-		checkResult(pPlugDef->AddEssenceKind (defs.ddMatte()));
+		checkResult(pPlugDef->AddEssenceKind (defs.ddkAAFMatte()));
 		checkResult(pDictionary->RegisterCodecDef(pPlugDef));
 		uid = kAAFClassID_WAVEDescriptor;
 		checkResult(pDictionary->LookupClassDef(uid, &classDef));
@@ -248,9 +248,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
 		checkResult(pDictionary->LookupCodecDef(codecID, &pCodec));
 
-		checkResult(pCodec->IsEssenceKindSupported (defs.ddMatte(), &testResult));
+		checkResult(pCodec->IsEssenceKindSupported (defs.ddkAAFMatte(), &testResult));
 		checkExpression (testResult == kAAFTrue, AAFRESULT_TEST_FAILED);
-		checkResult(pCodec->IsEssenceKindSupported (defs.ddPicture(), &testResult));
+		checkResult(pCodec->IsEssenceKindSupported (defs.ddkAAFPicture(), &testResult));
 		checkExpression (testResult == kAAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pCodec->EnumCodecFlavours (&pEnum));
 		checkResult(pEnum->NextOne (&readFlavour));

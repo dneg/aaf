@@ -83,7 +83,7 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
 					 (IUnknown **)&pSequence);		
  	if (SUCCEEDED(hr))
 	{
-		pSequence->Initialize(defs.ddSound());
+		pSequence->Initialize(defs.ddkAAFSound());
 
 		//
 		//	Add some segments.  Need to test failure conditions
@@ -101,7 +101,7 @@ static HRESULT CreateAAFSequence(IAAFDictionary *pDictionary,
  			if (FAILED(hr))
 				break;
 
-			pComponent->SetDataDef(defs.ddSound());
+			pComponent->SetDataDef(defs.ddkAAFSound());
 			pComponent->SetLength(len);
 			hr = pSequence->AppendComponent(pComponent);
 

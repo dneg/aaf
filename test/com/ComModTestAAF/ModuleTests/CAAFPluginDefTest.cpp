@@ -246,7 +246,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
                                           (void **)&pCodecDef));
     checkResult(pCodecDef->Initialize (CODEC_DEF_ID, L"Test", L"Really, just a test."));
-	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
+	checkResult(pCodecDef->AddEssenceKind (defs.ddkAAFMatte()));
 	checkResult(pDictionary->LookupClassDef(kAAFClassID_EssenceDescriptor, &pClassDef));
 	checkResult(pCodecDef->SetFileDescriptorClass (pClassDef));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));

@@ -200,7 +200,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool useEx )
 
 	  // Create the file.
 	  if ( useEx ) {
-	    aafUID_t fileKind = aafFileKindAaf4KBinary;
+	    aafUID_t fileKind = kAAFFileKind_Aaf4KBinary;
 	    checkResult(AAFFileOpenNewModifyEx(pFileName, &fileKind, 0, &ProductInfo, &pFile));
 	  }
 	  else {

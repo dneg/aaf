@@ -122,7 +122,7 @@ void CreateSimpleAAFFile(aafWChar * pFileName, aafWChar* pTestName,
   CheckResult(defs.cdSourceClip()->
 	      CreateInstance(IID_IAAFSourceClip, 
 			     (IUnknown **)&pSourceClip));
-  CheckResult(pSourceClip->Initialize( defs.ddPicture(), 1, srcRef));
+  CheckResult(pSourceClip->Initialize( defs.ddkAAFPicture(), 1, srcRef));
 
   IAAFSmartPointer<IAAFSegment>	pSeg;
   CheckResult(pSourceClip->QueryInterface(IID_IAAFSegment, (void **)&pSeg));
@@ -142,7 +142,7 @@ void CreateSimpleAAFFile(aafWChar * pFileName, aafWChar* pTestName,
 	      CreateInstance(IID_IAAFSourceClip, 
 			     (IUnknown **)&pEndSourceClip));
   memset( &srcRef, 0, sizeof(srcRef) );
-  CheckResult(pEndSourceClip->Initialize( defs.ddPicture(), 1, srcRef));
+  CheckResult(pEndSourceClip->Initialize( defs.ddkAAFPicture(), 1, srcRef));
   
   IAAFSmartPointer<IAAFSegment>	pEndSeg;
   CheckResult(pEndSourceClip->QueryInterface(IID_IAAFSegment, (void **)&pEndSeg));
@@ -164,7 +164,7 @@ void CreateSimpleAAFFile(aafWChar * pFileName, aafWChar* pTestName,
   pFilePointers->pCompositionMob = pMob;
   pFilePointers->pReferencedMasterMob = pReferencedMob;
 
-  IAAFSmartPointer<IAAFDataDef> pDataDef( defs.ddPicture() );
+  IAAFSmartPointer<IAAFDataDef> pDataDef( defs.ddkAAFPicture() );
   pFilePointers->pDataDef = pDataDef;
 }
 
@@ -261,7 +261,7 @@ IAAFSmartPointer<IAAFSourceMob> AddChainedSourceMob( SimpleFilePointers* pFilePo
 			     (IUnknown **)&pSourceClip));
   aafSourceRef_t srcRef;
   memset( &srcRef, 0, sizeof(srcRef) );
-  CheckResult(pSourceClip->Initialize( defs.ddPicture(), 1, srcRef));
+  CheckResult(pSourceClip->Initialize( defs.ddkAAFPicture(), 1, srcRef));
 
   IAAFSmartPointer<IAAFSegment>	pSeg;
   CheckResult(pSourceClip->QueryInterface(IID_IAAFSegment, (void **)&pSeg));

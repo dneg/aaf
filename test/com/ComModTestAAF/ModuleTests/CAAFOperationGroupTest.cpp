@@ -276,7 +276,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pOperationDef->Initialize (effectID, TEST_EFFECT_NAME, TEST_EFFECT_DESC));
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
-		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
+		checkResult(pOperationDef->SetDataDef (defs.ddkAAFPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (3));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -310,8 +310,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				(IUnknown **)&pFiller));
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 			checkResult(pComponent->SetLength(TEST_EFFECT_LEN+2));
-			checkResult(pComponent->SetDataDef(defs.ddPicture()));
-			checkResult(pOperationGroup->Initialize(defs.ddPicture(),
+			checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
+			checkResult(pOperationGroup->Initialize(defs.ddkAAFPicture(),
 				TEST_EFFECT_LEN,
 				pOperationDef));
 
@@ -359,7 +359,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				(IUnknown **)&pFiller));
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 			checkResult(pComponent->SetLength(TEST_EFFECT_LEN+3));
-			checkResult(pComponent->SetDataDef(defs.ddPicture()));
+			checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 			checkResult(pOperationGroup->AppendInputSegment (pFiller));
 			pFiller->Release();
 			pFiller = NULL;
@@ -378,7 +378,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				(IUnknown **)&pFiller));
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 			checkResult(pComponent->SetLength(TEST_EFFECT_LEN));
-			checkResult(pComponent->SetDataDef(defs.ddPicture()));
+			checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 			checkResult(pOperationGroup->PrependInputSegment (pFiller));
 			pComponent->Release();
 			pComponent = NULL;
@@ -391,7 +391,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				(IUnknown **)&pFiller));
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 			checkResult(pComponent->SetLength(TEST_EFFECT_LEN+1));
-			checkResult(pComponent->SetDataDef(defs.ddPicture()));
+			checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 			checkResult(pOperationGroup->InsertInputSegmentAt(1,pFiller));
 			pComponent->Release();
 			pComponent = NULL;
@@ -406,7 +406,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			sourceRef.sourceID = zeroMobID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
-			checkResult(pSourceClip->Initialize (defs.ddPicture(),
+			checkResult(pSourceClip->Initialize (defs.ddkAAFPicture(),
 				TEST_EFFECT_LEN,
 				sourceRef));
 			checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));

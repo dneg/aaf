@@ -159,7 +159,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				CreateInstance(IID_IAAFCodecDef, 
 							   (IUnknown **)&pCodecDef));
     
-	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
+	checkResult(pCodecDef->AddEssenceKind (defs.ddkAAFMatte()));
 	uid = kAAFNoCodec;
 	checkResult(pCodecDef->Initialize (uid, sName1, sDescription1));
 	checkResult(pDictionary->LookupClassDef(kAAFClassID_EssenceDescriptor, &pClass));
@@ -171,7 +171,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				CreateInstance(IID_IAAFCodecDef, 
 							   (IUnknown **)&pCodecDef));
     
-	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
+	checkResult(pCodecDef->AddEssenceKind (defs.ddkAAFMatte()));
 	uid = TESTID_2;
 	checkResult(pCodecDef->Initialize (uid, sName2, sDescription2));
 	checkResult(pCodecDef->SetFileDescriptorClass (pClass));

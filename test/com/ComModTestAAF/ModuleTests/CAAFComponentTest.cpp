@@ -88,7 +88,7 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-#define TEST_DDEF	DDEF_Sound
+#define TEST_DDEF	kAAFDataDef_Sound
 #define TEST_LENGTH	42L
 
 

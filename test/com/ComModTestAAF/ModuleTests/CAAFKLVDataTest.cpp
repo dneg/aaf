@@ -54,7 +54,7 @@ typedef IAAFSmartPointer<IAAFTypeDefOpaque> IAAFTypeDefOpaqueSP;
 typedef IAAFSmartPointer<IAAFKLVData> IAAFKLVDataSP;
 
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
-static const aafUID_t *	slotDDefs[5] = {&DDEF_Picture, &DDEF_Sound, &DDEF_Sound, &DDEF_Picture, &DDEF_Picture};
+static const aafUID_t *	slotDDefs[5] = {&kAAFDataDef_Picture, &kAAFDataDef_Sound, &kAAFDataDef_Sound, &kAAFDataDef_Picture, &kAAFDataDef_Picture};
 static aafLength_t	slotsLength[5] = { 297, 44100, 44100, 44100, 44100};
 
 static aafSourceRef_t sourceRef; 

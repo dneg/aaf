@@ -643,7 +643,7 @@ void CAAFTypeDefIndirect_create (aafCharacter_constptr pFileName)
   checkResult (pMobSlot->SetName (L"AAFIndirectTypeTest-MobSlot"));
 
   checkResult (defs.cdSequence()->CreateInstance(IID_IAAFSequence, (IUnknown **)&pSequence));
-  checkResult (pSequence->Initialize(defs.ddPicture()));
+  checkResult (pSequence->Initialize(defs.ddkAAFPicture()));
 
 
   // Test kAAFTypeID_String

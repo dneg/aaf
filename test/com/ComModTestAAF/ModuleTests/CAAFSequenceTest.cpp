@@ -171,7 +171,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  	  checkResult(defs.cdSequence()->
 				  CreateInstance(IID_IAAFSequence, 
 								 (IUnknown **)&pSequence));		
-	  checkResult(pSequence->Initialize(defs.ddSound()));
+	  checkResult(pSequence->Initialize(defs.ddkAAFSound()));
 
 	  // Append two components onto sequence
 	  for(i = 0; i < 2; i++)
@@ -180,7 +180,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			  CreateInstance(IID_IAAFComponent, 
 			  (IUnknown **)&pComponent));
 		  
-		  checkResult(pComponent->SetDataDef(defs.ddSound()));
+		  checkResult(pComponent->SetDataDef(defs.ddkAAFSound()));
 		  checkResult(pComponent->SetLength(COMPONENT_TEST_LENGTH+i+2));
 		  checkResult(pSequence->AppendComponent(pComponent));
 		  
@@ -196,7 +196,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Now prepend a component
 		checkResult(defs.cdFiller()->CreateInstance(IID_IAAFComponent, 
 			(IUnknown **)&pComponent));
-		checkResult(pComponent->SetDataDef(defs.ddSound()));
+		checkResult(pComponent->SetDataDef(defs.ddkAAFSound()));
 		checkResult(pComponent->SetLength(COMPONENT_TEST_LENGTH));
 		checkResult(pSequence->PrependComponent(pComponent));
 		pComponent->Release();
@@ -205,7 +205,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// Now insert a component in the middle
 		checkResult(defs.cdFiller()->CreateInstance(IID_IAAFComponent, 
 			(IUnknown **)&pComponent));
-		checkResult(pComponent->SetDataDef(defs.ddSound()));
+		checkResult(pComponent->SetDataDef(defs.ddkAAFSound()));
 		checkResult(pComponent->SetLength(COMPONENT_TEST_LENGTH+1));
 		checkResult(pSequence->InsertComponentAt(1,pComponent));
 		pComponent->Release();
@@ -340,7 +340,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					checkResult(pDefObj->GetAUID(&dataDef));
 					pDefObj->Release();
 					pDefObj = 0;
-					checkExpression(memcmp(&DDEF_Sound, &dataDef, sizeof(aafUID_t)) == 0,
+					checkExpression(memcmp(&kAAFDataDef_Sound, &dataDef, sizeof(aafUID_t)) == 0,
 					                AAFRESULT_TEST_FAILED);
 
 					checkResult(pComp->GetLength(&len));
@@ -362,7 +362,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					checkResult(pDefObj->GetAUID(&dataDef));
 					pDefObj->Release();
 					pDefObj = 0;
-					checkExpression(memcmp(&DDEF_Sound, &dataDef, sizeof(aafUID_t)) == 0,
+					checkExpression(memcmp(&kAAFDataDef_Sound, &dataDef, sizeof(aafUID_t)) == 0,
 					                AAFRESULT_TEST_FAILED);
 
 					checkResult(pComp->GetLength(&len));

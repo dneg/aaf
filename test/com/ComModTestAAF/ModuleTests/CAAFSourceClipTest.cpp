@@ -149,7 +149,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFSourceClip, 
 								   (IUnknown **)&sclp));
 		 checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 checkResult(pComponent->SetDataDef(defs.ddSound()));
+		 checkResult(pComponent->SetDataDef(defs.ddkAAFSound()));
 		pComponent->Release();
 		pComponent = NULL;
 								 		

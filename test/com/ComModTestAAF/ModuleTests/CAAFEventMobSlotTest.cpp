@@ -69,7 +69,7 @@ inline void checkExpression(bool expression, HRESULT r)
     throw r;
 }
 
-static const aafUID_t DDEF_TEST = 
+static const aafUID_t kAAFDataDef_Test = 
 { 0x81831639, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 class EventMobSlotTest
@@ -291,7 +291,7 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
 		checkResult(defs.cdDataDef()->
 					CreateInstance (IID_IAAFDataDef,
 									(IUnknown **)&pDataDef));
-	  pDataDef->Initialize (DDEF_TEST, L"Test", L"Test data");
+	  pDataDef->Initialize (kAAFDataDef_Test, L"Test", L"Test data");
 	  _pDictionary->RegisterDataDef (pDataDef);
 	// Create a concrete subclass of event
     checkResult(defs.cdCommentMarker()->
@@ -300,7 +300,7 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
     checkResult(pEvent->SetPosition(*position));
     checkResult(pEvent->SetComment(comment));
 	checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComp));
-	checkResult(pComp->SetDataDef(defs.ddPicture()));
+	checkResult(pComp->SetDataDef(defs.ddkAAFPicture()));
 	pComp->Release();
 	pComp = NULL;
 	pDataDef->Release();
@@ -311,7 +311,7 @@ IAAFEvent *EventMobSlotTest::CreateAnEvent(aafPosition_t* position,
       // Get the segment inteface to add to the mob slot
       checkResult(pEvent->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 	  CAAFBuiltinDefs defs (_pDictionary);
-	  checkResult(pComponent->SetDataDef(defs.ddPicture()));
+	  checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 
       // Add the event to the sequence.
       checkResult(pSequence->AppendComponent(pComponent));
@@ -556,7 +556,7 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
 							   (IUnknown **)&pSequence));
      checkResult(pSequence->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 
-	 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+	 checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 	 pComponent->Release();
 	 pComponent = NULL;
 

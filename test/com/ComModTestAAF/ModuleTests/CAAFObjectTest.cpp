@@ -291,7 +291,7 @@ static HRESULT ObjectWriteTest ()
 		  IAAFSequenceSP pSequence;
 		  checkResult (pClassDef->CreateInstance (IID_IAAFSequence,
 			  (IUnknown **)&pSequence));
-		  checkResult(pSequence->Initialize(defs.ddSound()));
+		  checkResult(pSequence->Initialize(defs.ddkAAFSound()));
 		  
 		  // Add sequence to composition Mob
 		  IAAFSegmentSP pSegment;

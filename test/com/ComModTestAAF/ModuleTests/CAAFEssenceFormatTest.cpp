@@ -233,7 +233,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			dataPtr = dataBuff + dataOffset;
 
 			checkResult(pMasterMob->CreateEssence (1,
-				defs.ddSound(),
+				defs.ddkAAFSound(),
 				kAAFCodecWAVE,
 				rate,
 				rate,

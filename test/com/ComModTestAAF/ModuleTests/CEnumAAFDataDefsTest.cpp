@@ -172,7 +172,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdSequence()->
 					CreateInstance(IID_IAAFSequence, 
 								   (IUnknown **)&pSequence));		
-		checkResult(pSequence->Initialize(defs.ddPicture()));
+		checkResult(pSequence->Initialize(defs.ddkAAFPicture()));
 		
 		//
 		//	Add some segments.  Need to test failure conditions
@@ -189,11 +189,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			
 			if(i == 0)
 			{
-				checkResult(pComponent->SetDataDef(defs.ddPictureWithMatte()));
+				checkResult(pComponent->SetDataDef(defs.ddkAAFPictureWithMatte()));
 			}
 			else
 			{
-				checkResult(pComponent->SetDataDef(defs.ddPicture()));
+				checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 			}
 
 			checkResult(pComponent->SetLength(len));
@@ -417,32 +417,32 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					
 					if(index == 0)	// First segment is Picture with Matte, converts to picture
 					{
-						checkResult(pDataDef->IsDataDefOf(defs.ddPictureWithMatte(),
+						checkResult(pDataDef->IsDataDefOf(defs.ddkAAFPictureWithMatte(),
 														  &testBool));
 						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->IsPictureKind(&testBool));
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
 						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->DoesDataDefConvertTo (defs.ddPicture(), &testBool));
+						checkResult(pDataDef->DoesDataDefConvertTo (defs.ddkAAFPicture(), &testBool));
 						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 					}
 					else		// First segment is Picture, converts from picture with Matte
 					{
-						checkResult(pDataDef->IsDataDefOf(defs.ddPicture(), &testBool));
+						checkResult(pDataDef->IsDataDefOf(defs.ddkAAFPicture(), &testBool));
 						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->IsPictureKind(&testBool));
 						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
-						checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddPictureWithMatte(),
+						checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddkAAFPictureWithMatte(),
 																	  &testBool));
 						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 					}
-					checkResult(pDataDef->DoesDataDefConvertTo (defs.ddSound(),
+					checkResult(pDataDef->DoesDataDefConvertTo (defs.ddkAAFSound(),
 																&testBool));
 					checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
-					checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddSound(), &testBool));
+					checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddkAAFSound(), &testBool));
 					checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 					
 					pComp->Release();

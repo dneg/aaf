@@ -135,7 +135,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  // Add some slots
 	  for(test = 0; test < 2; test++)
 	  {
-		  checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddSound(), audioRate));
+		  checkResult(pSourceMob->AddNilReference (test+1, 0, defs.ddkAAFSound(), audioRate));
 	  }
 
 	  // Test AppendTimecodeSlot()

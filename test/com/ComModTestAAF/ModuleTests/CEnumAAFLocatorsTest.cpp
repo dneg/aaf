@@ -89,7 +89,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafUInt32					numLocators;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	bool bFileOpen = false;
-//	aafUID_t					ddef = DDEF_Sound;
+//	aafUID_t					ddef = kAAFDataDef_Sound;
 
 	aafProductVersion_t v;
 	v.major = 1;

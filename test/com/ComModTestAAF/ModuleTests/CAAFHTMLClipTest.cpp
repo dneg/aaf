@@ -278,7 +278,7 @@ void HTMLClipTest::CreateHTMLClip()
     checkResult(pHTMLClip->SetEndAnchor(const_cast<wchar_t *>(_endAnchor)));
      checkResult(pHTMLClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
 
-	 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+	 checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 	 pComponent->Release();
 	 pComponent = NULL;
 

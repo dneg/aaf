@@ -458,7 +458,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 	IAAFOperationDefSP od;
 	checkResult (pDict->LookupOperationDef (kTestOperationDefID,
 										    &od));
-	checkResult (od->SetDataDef (defs.ddMatte()));
+	checkResult (od->SetDataDef (defs.ddkAAFMatte()));
   }  
   
   RegisterOneDef (/* dictionary*/                  pDict,
@@ -492,7 +492,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 	IAAFClassDefSP pClassDef;
 	checkResult (pDict->LookupCodecDef (kTestCodecDefID,
 										&cd));
-	checkResult (cd->AddEssenceKind (defs.ddMatte()));
+	checkResult (cd->AddEssenceKind (defs.ddkAAFMatte()));
 	checkResult(pDict->LookupClassDef(kAAFClassID_EssenceDescriptor, &pClassDef));
 	checkResult(cd->SetFileDescriptorClass (pClassDef));
   }  
@@ -734,7 +734,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				  CreateInstance(IID_IAAFSequence, 
 								 (IUnknown **)&pSequence));		
 
-	  checkResult(pSequence->Initialize(defs.ddPicture()));
+	  checkResult(pSequence->Initialize(defs.ddkAAFPicture()));
 		
 	  //
 	  //	Add some segments.  Need to test failure conditions
@@ -754,7 +754,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			  checkResult
 				(pNewFillClassDef->CreateInstance(IID_IAAFComponent, 
 												  (IUnknown**)&pComponent));
-			  checkResult(pComponent->SetDataDef(defs.ddPictureWithMatte()));
+			  checkResult(pComponent->SetDataDef(defs.ddkAAFPictureWithMatte()));
 			}
 		  else
 			{
@@ -762,7 +762,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				(defs.cdFiller()->CreateInstance(IID_IAAFComponent, 
 												 (IUnknown**)&pComponent));
 
-			  checkResult(pComponent->SetDataDef(defs.ddPicture()));
+			  checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 			}
 
 		  checkResult(pComponent->SetLength(len));
@@ -891,7 +891,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		  checkResult(pDataDef->IsSoundKind(&testBool));
 		  checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 
-		  checkResult(pDataDef->IsDataDefOf(defs.ddPictureWithMatte(), &testBool));
+		  checkResult(pDataDef->IsDataDefOf(defs.ddkAAFPictureWithMatte(), &testBool));
 		  checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 		
 		  // Make sure first component is a filler, and is our extended

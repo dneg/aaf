@@ -267,7 +267,7 @@ void TextClipTest::CreateTextClip()
 			  CreateInstance(IID_IAAFTextClip, 
 							 (IUnknown **)&pTextClip));
   checkResult(pTextClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-  checkResult(pComponent->SetDataDef(defs.ddPicture()));
+  checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
   pComponent->Release();
   pComponent = NULL;
 

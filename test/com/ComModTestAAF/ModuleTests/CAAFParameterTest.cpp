@@ -204,7 +204,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
 
 
-		checkResult(pOperationDef->SetDataDef (defs.ddPicture()));
+		checkResult(pOperationDef->SetDataDef (defs.ddkAAFPicture()));
 		checkResult(pOperationDef->SetIsTimeWarp (kAAFFalse));
 		checkResult(pOperationDef->SetNumberInputs (TEST_NUM_INPUTS));
 		checkResult(pOperationDef->SetCategory (TEST_CATEGORY));
@@ -237,8 +237,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pFiller->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
 			checkResult(pComponent->SetLength(effectLen));
 			CAAFBuiltinDefs defs (pDictionary);
-			checkResult(pComponent->SetDataDef(defs.ddPicture()));
- 			checkResult(pOperationGroup->Initialize(defs.ddPicture(),
+			checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
+ 			checkResult(pOperationGroup->Initialize(defs.ddkAAFPicture(),
 													TEST_EFFECT_LEN,
 													pOperationDef));
 
@@ -261,7 +261,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			sourceRef.sourceID = zeroMobID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
-			checkResult(pSourceClip->Initialize (defs.ddPicture(),
+			checkResult(pSourceClip->Initialize (defs.ddkAAFPicture(),
 												 effectLen,
 												 sourceRef));
 			checkResult(pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef));

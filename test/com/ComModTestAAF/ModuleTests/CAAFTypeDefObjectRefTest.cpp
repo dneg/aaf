@@ -217,7 +217,7 @@ static void CreateTypeDefObjectRefFile(aafWChar *pFilename)
 	IAAFFillerSP pFiller;
 	checkResult(defs.cdFiller()->CreateInstance(IID_IAAFFiller,
 		(IUnknown **)&pFiller));
-	checkResult(pFiller->Initialize(defs.ddPicture(),22));
+	checkResult(pFiller->Initialize(defs.ddkAAFPicture(),22));
 	IAAFObjectSP pObject;
 	checkResult(pFiller->QueryInterface(IID_IAAFObject,(void **)&pObject));
 
@@ -241,7 +241,7 @@ static void CreateTypeDefObjectRefFile(aafWChar *pFilename)
 	IAAFFillerSP pNewFiller;
 	checkResult(defs.cdFiller()->CreateInstance(IID_IAAFFiller,
 		(IUnknown **)&pNewFiller));
-	checkResult(pNewFiller->Initialize(defs.ddPicture(),36));
+	checkResult(pNewFiller->Initialize(defs.ddkAAFPicture(),36));
 	IAAFObjectSP pNewObject;
 	checkResult(pNewFiller->QueryInterface(IID_IAAFObject,(void **)&pNewObject));
 
@@ -275,7 +275,7 @@ static void CreateTypeDefObjectRefFile(aafWChar *pFilename)
 	IAAFSequenceSP pSequence;
 	checkResult(pDictionary->CreateInstance(AUID_AAFSequence,IID_IAAFSequence,
 		(IUnknown**)&pSequence));
-	checkResult(pSequence->Initialize(defs.ddSound()));
+	checkResult(pSequence->Initialize(defs.ddkAAFSound()));
 
 	// Set value of our new property to property value created above
 	checkResult(pSequence->QueryInterface(IID_IAAFObject,(void**)&pObject));
@@ -373,11 +373,11 @@ static void ReadTypeDefObjectRefFile(aafWChar *pFilename)
 	checkExpression(returnedLength==36);
 	IAAFDataDefSP pDataDef;
 	checkResult(pComponent->GetDataDef(&pDataDef));
-	// Can't use a smart pointer here, since defs.ddPicture() does not 
+	// Can't use a smart pointer here, since defs.ddkAAFPicture() does not 
 	// AcquireReference()
-	IAAFDataDef *pExpectedDataDef=defs.ddPicture();
+	IAAFDataDef *pExpectedDataDef=defs.ddkAAFPicture();
 	checkExpression(AreUnksSame(pDataDef,pExpectedDataDef)==kAAFTrue);
-	// No need to Release() pExpectedDataDef, since defs.ddPicture() does not
+	// No need to Release() pExpectedDataDef, since defs.ddkAAFPicture() does not
 	// AcquireReference()
 
 	pFile->Close();

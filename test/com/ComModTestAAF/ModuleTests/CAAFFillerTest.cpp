@@ -40,7 +40,7 @@ using namespace std;
 
 #include "CAAFBuiltinDefs.h"
 
-static aafUID_t    fillerUID = DDEF_Timecode;
+static aafUID_t    fillerUID = kAAFDataDef_Timecode;
 static aafLength_t  fillerLength = 3200;
 
 static const 	aafMobID_t	TEST_MobID =
@@ -136,7 +136,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pFiller->QueryInterface (IID_IAAFSegment,
 										   (void **)&pSegment));
 	  // Set filler properties
-	  checkResult(pFiller->Initialize(defs.ddTimecode(), fillerLength));
+	  checkResult(pFiller->Initialize(defs.ddkAAFTimecode(), fillerLength));
 	  // append the filler to the MOB tree
 	  aafRational_t editRate = { 0, 1};
 	  checkResult(pMob->AppendNewTimelineSlot(editRate,

@@ -142,7 +142,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					  CreateInstance(IID_IAAFSourceClip, 
 									 (IUnknown **)&sclp));		
 		 checkResult(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
-		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		 checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 		pComponent->Release();
 		pComponent = NULL;
 
