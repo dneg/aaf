@@ -79,10 +79,6 @@
 #include <string.h>
 
 
-// Weak references may not be in v1.0...
-#ifndef ENABLE_WEAK_REFERENCES
-#define ENABLE_WEAK_REFERENCES 1
-#endif
 
 extern "C" const aafClassID_t CLSID_AAFWeakRefValue;
 
@@ -140,21 +136,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED(result))
     return result;
   
-#if ENABLE_WEAK_REFERENCES
-  
-  // TEMPORARY (for debugging): Allocate and initialize a weak reference property.
-//  if (!_targetPids)
-//  {
-//    result = const_cast<ImplAAFTypeDefWeakObjRef *>(this)->SyncTargetPidsFromTargetSet();
-//  }
 
   return result;
-
-#else // #if ENABLE_WEAK_REFERENCES
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_WEAK_REFERENCES
 }
 
 
@@ -223,7 +206,6 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFTypeDefWeakObjRef::CreateValue (/*[in]*/ ImplAAFRoot * pObj,
     /*[out]*/ ImplAAFPropertyValue ** ppPropVal)
 {
-#if ENABLE_WEAK_REFERENCES
   if (! pObj)
 	return AAFRESULT_NULL_PARAM;
   if (! ppPropVal)
@@ -256,12 +238,6 @@ AAFRESULT STDMETHODCALLTYPE
   }
   
   return result;
-
-#else // #if ENABLE_WEAK_REFERENCES
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_WEAK_REFERENCES
 }
 
 
@@ -272,7 +248,6 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! pObj) return AAFRESULT_NULL_PARAM;
 
-#if ENABLE_WEAK_REFERENCES
   if (! isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
 
@@ -292,12 +267,6 @@ AAFRESULT STDMETHODCALLTYPE
   {
     return AAFRESULT_INVALID_PARAM;
   }
-
-#else // #if ENABLE_WEAK_REFERENCES
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_WEAK_REFERENCES
 }
 
 
@@ -309,7 +278,6 @@ ImplAAFTypeDefWeakObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
   if (! ppObject) return AAFRESULT_NULL_PARAM;
   *ppObject = NULL;
 
-#if ENABLE_WEAK_REFERENCES
   if (! isInitialized())
     return AAFRESULT_NOT_INITIALIZED;
   
@@ -328,12 +296,6 @@ ImplAAFTypeDefWeakObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
   {
     return AAFRESULT_INVALID_PARAM;
   }
-
-#else // #if ENABLE_WEAK_REFERENCES
-    
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-    
-#endif // #else // #if ENABLE_WEAK_REFERENCES
 }
 
 
