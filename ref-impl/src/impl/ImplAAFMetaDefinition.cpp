@@ -390,14 +390,16 @@ const OMClassId& ImplAAFMetaDefinition::classId(void) const
 }
 
 // Override callbacks from OMStorable
-void ImplAAFMetaDefinition::onSave(void* clientContext) const
+void ImplAAFMetaDefinition::onSave(void* /*clientContext*/) const
 {
-  // TEMPORARY: Parent class will not always be ImplAAFObject!
-//  ImplAAFObject::onSave(clientContext);
+  // MetaDefinitions are not generation-tracked since they are
+  // immutable.
 }
 
-void ImplAAFMetaDefinition::onRestore(void* clientContext) const
+void ImplAAFMetaDefinition::onRestore(void* /*clientContext*/) const
 {
-  // TEMPORARY: Parent class will not always be ImplAAFObject!
-//  ImplAAFObject::onRestore(clientContext);
+  // clientContext currently unused
+
+  // Cast away constness (maintaining logical constness)
+  ((ImplAAFMetaDefinition*) this)->setInitialized ();
 }
