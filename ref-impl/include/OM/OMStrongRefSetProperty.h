@@ -225,6 +225,14 @@ private:
     //          identifier of objects in this set.
   OMPropertyId _keyPropertyId;
 
+    // OMStrongReferenceSetProperty can't be assigned - declare but
+    // don't define
+  OMStrongReferenceSetProperty& operator = (
+                                      const OMStrongReferenceSetProperty& rhs);
+
+    // OMStrongReferenceSetProperty can't be copied - declare but don't define
+  OMStrongReferenceSetProperty(const OMStrongReferenceSetProperty& rhs);
+
 };
 
 #include "OMStrongRefSetPropertyT.h"

@@ -125,6 +125,12 @@ private:
 
   OMStrongObjectReference _reference;
 
+    // OMStrongReferenceProperty can't be assigned - declare but don't define
+  OMStrongReferenceProperty& operator = (const OMStrongReferenceProperty& rhs);
+
+    // OMStrongReferenceProperty can't be copied - declare but don't define
+  OMStrongReferenceProperty(const OMStrongReferenceProperty& rhs);
+
 };
 
 #include "OMStrongRefPropertyT.h"

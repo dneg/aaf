@@ -162,6 +162,12 @@ private:
   OMStoredStream* _stream;
   OMByteOrder _byteOrder;
 
+    // OMDataStreamProperty can't be assigned - declare but don't define
+  OMDataStreamProperty& operator = (const OMDataStreamProperty& rhs);
+
+    // OMDataStreamProperty can't be copied - declare but don't define
+  OMDataStreamProperty(const OMDataStreamProperty& rhs);
+
 };
 
 #endif

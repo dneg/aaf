@@ -259,6 +259,15 @@ private:
 
   friend class OMStrongReferenceVectorIterator<ReferencedObject>;
 
+    // OMStrongReferenceVectorProperty can't be assigned - declare but
+    // don't define
+  OMStrongReferenceVectorProperty& operator = (
+                                   const OMStrongReferenceVectorProperty& rhs);
+
+    // OMStrongReferenceVectorProperty can't be copied - declare but
+    // don't define
+  OMStrongReferenceVectorProperty(const OMStrongReferenceVectorProperty& rhs);
+
 };
 
 #include "OMStrongRefVectorPropertyT.h"

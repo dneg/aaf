@@ -184,6 +184,12 @@ private:
   bool _isOptional;
   bool _isPresent;
 
+    // OMProperty can't be assigned - declare but don't define
+  OMProperty& operator = (const OMProperty& rhs);
+
+    // OMProperty can't be copied - declare but don't define
+  OMProperty(const OMProperty& rhs);
+
 };
 
   // @class Abstract base class for simple (data) persistent
@@ -248,6 +254,15 @@ protected:
 
   size_t _size;
   unsigned char* _bits;
+
+private:
+
+    // OMSimpleProperty can't be assigned - declare but don't define
+  OMSimpleProperty& operator = (const OMSimpleProperty& rhs);
+
+    // OMSimpleProperty can't be copied - declare but don't define
+  OMSimpleProperty(const OMSimpleProperty& rhs);
+
 };
 
 #endif
