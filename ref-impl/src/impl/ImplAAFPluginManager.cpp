@@ -834,7 +834,7 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 	// HACK: Problem CAAFEssenceDataStream is NOT a plugin! This class
 	// should be INSIDE the reference implementation not in an external
 	// plugin!
-	if (IsEqualCLSID(CLSID_AAFEssenceDataStream, pluginClass))
+	if (aafIsEqualCLSID(CLSID_AAFEssenceDataStream, pluginClass))
 		return AAFRESULT_SUCCESS;
 	
 	
