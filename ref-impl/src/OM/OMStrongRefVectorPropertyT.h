@@ -248,11 +248,16 @@ OMStrongReferenceVectorProperty<ReferencedObject>::clearValueAt(
   PRECONDITION("Valid index", index < count());
 
   VectorElement& element = _vector.getAt(index);
-  ReferencedObject* oldObject = element.setValue(0);
 
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(0);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   POSTCONDITION("Object properly cleared",
                                          _vector.getAt(index).getValue() == 0);
-  return oldObject;
+  return result;
 }
 
   // @mfunc The value of this <c OMStrongReferenceVectorProperty>
