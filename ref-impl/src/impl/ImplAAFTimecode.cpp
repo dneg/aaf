@@ -94,6 +94,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
 	timecode->startFrame = _start;
+
 	if (AAFTrue == _drop)
 	{
 		timecode->drop = kTcDrop;
