@@ -18,6 +18,11 @@ OMProperty::~OMProperty(void)
 {
 }
 
+void OMProperty::close(void)
+{
+  // nothing to do for most descendants of OMProperty
+}
+
   // @mfunc The name of this <c OMProperty>.
   //   @rdesc The property name.
   //   @this const
@@ -114,9 +119,15 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
   memcpy(_bits, value, _size);
 }
 
-void OMSimpleProperty::saveTo(OMStoredObject& s) const
+void OMSimpleProperty::save(void) const
 {
-  s.write(_propertyId, _type, _bits, _size);
+  ASSERT("Valid property set", _propertySet != 0);
+  OMStorable* container = _propertySet->container();
+  ASSERT("Valid container", container != 0);
+  ASSERT("Container is attached", container->attached());
+  OMStoredObject* s = container->store();
+
+  s->write(_propertyId, _type, _bits, _size);
 }
 
 
