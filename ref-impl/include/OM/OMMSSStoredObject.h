@@ -458,6 +458,8 @@ protected:
     // @cmember Close <p stream>.
   void closeStream(IStream*& stream);
 
+  void writeName(const wchar_t* name);
+
     // @cmember The persisted value of <p property> is its name.
     //          Write the property name and enter it into the property index.
   void saveName(const OMProperty& property, const wchar_t* name);

@@ -2504,6 +2504,22 @@ void OMMSSStoredObject::closeStream(IStream*& stream)
 #endif
 }
 
+void OMMSSStoredObject::writeName(const wchar_t* name)
+{
+  TRACE("OMMSSStoredObject::writeName");
+
+  size_t characterCount = lengthOfWideString(name) + 1;
+  OMCharacter* buffer = new OMCharacter[characterCount];
+  ASSERT("Valid heap pointer", buffer != 0);
+  externalizeString(name, buffer, characterCount);
+  if (_reorderBytes) {
+    reorderString(buffer, characterCount);
+  }
+  size_t byteCount = characterCount * sizeof(OMCharacter);
+  writeToStream(_properties, buffer, byteCount);
+  delete [] buffer;
+}
+
   // @mfunc The persisted value of <p property> is its name.
   //        Write the property name and enter it into the property index.
   //   @parm The property.
