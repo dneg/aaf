@@ -405,6 +405,14 @@ OMObject* OMWeakReferenceProperty<ReferencedObject>::setObject(
   return setValue(p);
 }
 
+template <typename ReferencedObject>
+OMWeakObjectReference&
+OMWeakReferenceProperty<ReferencedObject>::reference(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::reference");
+
+  return const_cast<OMWeakObjectReference&>(_reference);
+}
 
 template <typename ReferencedObject>
 OMPropertyId

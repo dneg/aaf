@@ -115,6 +115,8 @@ public:
     // @cmember set the value of this <c OMWeakReferenceProperty>.
   virtual OMObject* setObject(const OMObject* object);
 
+  virtual OMWeakObjectReference& reference(void) const;
+
   virtual OMPropertyId keyPropertyId(void) const;
 
   virtual OMPropertyTag targetTag(void) const;
