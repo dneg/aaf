@@ -43,6 +43,8 @@
 #include "OMDataVector.h"
 #include "OMArrayType.h"
 #include "OMDataContainerIterator.h"
+#include "OMDataSet.h"
+#include "OMSetType.h"
 
 #include "OMClassFactory.h"
 #include "OMClassDefinition.h"
@@ -364,6 +366,66 @@ void OMXMLStoredObject::save(const OMDataVector& property)
 #endif
 }
 
+void OMXMLStoredObject::save(const OMDataSet& property)
+{
+#if 0 // tjb - Not yet
+  TRACE("OMXMLStoredObject::save(OMDataSet)");
+  const OMType* propertyType = property.type();
+  ASSERT("Valid property type", propertyType != 0);
+  const OMSetType* st = dynamic_cast<const  OMSetType*>(propertyType);
+  ASSERT("Correct type", st != 0);
+  OMType* elementType = st->elementType();
+  ASSERT("Fixed size elements", elementType->isFixedSize());
+  OMUInt32 size = elementType->externalSize();
+  OMUInt32 count = property.count();
+
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<data-set>" << endl;
+
+  _stream << indent;
+  _stream << beginl;
+  _stream << "<!-- data-set contains " << dec << count
+          << " elements -->" << endl;
+  _stream << beginl;
+  _stream << "<!-- size of each element is " << dec << size
+          << " bytes -->" << endl;
+  _stream << outdent;
+
+  OMUInt32 ordinal = 0; // tjb - right size ?
+  OMDataContainerIterator* iterator = property.createIterator();
+  while (++(*iterator)) {
+
+    _stream << indent;
+    _stream << beginl;
+    _stream << "<!-- element " << dec << ordinal << " of " << dec << count
+            << " in data-set \"" << property.name() << "\" -->" << endl;
+
+    _stream << beginl;
+    _stream << "<data>" << endl;
+
+    // Get a pointer to the element
+    const OMByte* bits = iterator->currentElement();
+
+    for (size_t i = 0; i < size; i++) {
+      OMByte b = bits[i];
+      print((char) b);
+    }
+    flush();
+
+    _stream << beginl;
+    _stream << "</data>" << endl;
+    ordinal = ordinal + 1;
+    _stream << outdent;
+
+  }
+  delete iterator;
+  _stream << beginl;
+  _stream << "</data-set>" << endl;
+  _stream << outdent;
+#endif
+}
+
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
   //        <c OMXMLStoredObject>.
   //   @parm The <c OMStrongReference> to save.
@@ -676,6 +738,13 @@ void OMXMLStoredObject::restore(OMDataVector& /* property */,
                                 size_t /* externalSize */)
 {
   TRACE("OMXMLStoredObject::restore(OMDataVector)");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
+void OMXMLStoredObject::restore(OMDataSet& /* property */,
+                                size_t /* externalSize */)
+{
+  TRACE("OMXMLStoredObject::restore(OMDataSet)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
