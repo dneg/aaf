@@ -35,7 +35,7 @@ AD_INCLUDE(AAFTypes)
 AD_CLASS_UUID(e44be454, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(e44be453, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_METHOD2(Create,
 	[in],aafUInt32,RelativeScope, Number of nested scopes to pass to find the Nested Scope slot,
@@ -56,4 +56,4 @@ AD_METHOD1(GetRelativeSlot,
 		   Pointer to a Relative Slot,
 		   Gets the number of f slots that preced the slot containing the Scope Reference.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
