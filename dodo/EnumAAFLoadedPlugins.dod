@@ -28,6 +28,7 @@ AD_IDL(//
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+AD_FORWARD_DECLARATION(AAFPluggableDef)
 
 
 /***********************************************\
