@@ -277,11 +277,11 @@ void OMStreamProperty<Element>::appendElements(OMUInt32 elementCount,
   //   @tcarg class | Element | The type of an <c OMStreamProperty> element.
   //   @parm The element.
 template <typename Element>
-void OMStreamProperty<Element>::appendElement(const Element element)
+void OMStreamProperty<Element>::appendElement(const Element* element)
 {
   TRACE("OMStreamProperty<Element>::appendElement");
 
-  writeElements(elementCount(), 1, &element);
+  writeElements(elementCount(), 1, element);
 }
 
   // @mfunc The index of the current <p Element>.

@@ -109,7 +109,7 @@ public:
 
     // @cmember Write a single <p Element> to the end of
     //          this <c OMStreamProperty>.
-  void appendElement(const Element element);
+  void appendElement(const Element* element);
 
   // Stream positioning and count of elements
 
