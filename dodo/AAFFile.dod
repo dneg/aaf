@@ -11,38 +11,53 @@ AD_IDL(//
 // An object supporting IAAFFile may be in one of the following
 // states:
 //
-// 1\) Closed.  This object is not associated with any storage.  Even
-//    so\, it may contain transient objects.
+// 1\) Closed.  This file object is neither transient nor is it
+//    associated with any filesystem entities.
 //
-// 2\) Open for Reading.  This object is associated with a storage from
-//    which information is only to be read.
+// 2\) Open for Reading.  This file object is associated with a
+//    filesystem file from which information is only to be read.
 //
-// 3\) Open for Modification.  This object is associated with a
-//    storage\, potentially containing data which is to be modified.
+// 3\) Open for Modification.  This file object is associated with a
+//    filesystem file\, potentially containing data which is to be
+//    modified.
 //
-// 4\) Open as a Transient File.  This object is not associated with
-//    any storage\, but it may still be used to contain AAF objects.
+// 4\) Open as a Transient File.  This file object is not associated
+//    with any filesystem file\, but it may still be used to contain
+//    AAF objects.
 //
 // When created and Initialize\(\)d\, objects implementing this interface
 // are initially in the Closed state.
 //
-// Whenever the state of an IAAFFile-implementing object is changed
-// from any of the Open states to Closed\, any changes made since the
-// last Save\(\) are lost.
-//
-// An IAAFFile-implementing object may not be transitioned directly
-// from one Open state to another; it must first be put through the
-// Closed state.
+// In general an IAAFFile-implementing object may not be transitioned
+// directly from one Open state to another; it must first be put
+// through the Closed state.  The exception is a Transient file\, which
+// may be transitioned directly from Transient to Open for
+// Modification via the SaveAs\(\) method.
 //
 // Any filesystem file can be opened for reading by multiple
 // IAAFFile-supporting objects.
 //
 // It is not recommended to Close an IAAFFile-implementing object
 // which contains objects to which outstanding references are held in
-// client code.  In fact\, the standard Close method will not allow
-// this to happen.  If an emergency Close is required \(such as when
-// references were discarded without releasing them\)\, the ForceClose
-// method can be used.
+// client code.  Nevertheless\, even if that is done\, the Close\(\)
+// method will succeed and all referenced objects will be put into a
+// Detached state in which may cause any methods on such objects to
+// fail with the error status of AAFRESULT_NOT_IN_FILE.
+//
+// The Revert feature allows any unsaved changes to be discarded. The
+// state of this object and all contained objects will return to that
+// when it was last saved or opened\, whichever is most recent.  Note
+// that Revert will only succeed if this object was opened as
+// Revertable.  If it was not opened as Revertable\, then the
+// implementation reserves the right to optimize memory usage by
+// potentially writing the state of "dirty" objects to the file
+// automatically at any time.  The disadvantage of using Revertable
+// mode is that all unsaved changes must be kept in memory and cannot
+// be dumped to disk until explicitly commanded.  Note that transient
+// files are never considered Revertable.
+//
+// Note also that changes to essence\, even on a file marked
+// Revertable\, must be committed to disk and cannot be reverted.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -68,8 +83,10 @@ AD_METHOD0(Initialize,
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -94,9 +111,7 @@ AD_XMETHOD2(OpenExistingRead,
 			File open mode flags.  May be any of the following ORed together.
 	// All other bits must be set to zero.
     //  - kAAFFileModeUnbuffered - to indicate buffered mode.  Default
-    //    is buffered.
-    //  - kAAFFileModeAsync - to indicate asynchronous mode.  Default is
-    //    synchronous mode.,
+    //    is buffered.,
 
 			Associates this IAAFFile-supporting object with an existing
   // filesystem file that contains data which is only to be read.
@@ -104,20 +119,26 @@ AD_XMETHOD2(OpenExistingRead,
   // - Opens the existing named file in the filesystem for reading.
   // - Associates this object with that filesystem file.
   // - Places this object into the Open state.
-  // - This AAFFile object then can be used to refer to all AAF
-  //   objects contained within the file.
+  // - This AAFFile object then can be used as the root of the
+  //   containment tree representing all AAF objects contained within
+  //   the file.
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - This object is currently Closed.
   // - The pFileName argument is valid.
-  // - Valid flags have been specified.
+  // - Only valid flags have been specified.
+  // - A valid combination of flags has been specified.
   // - The named file exists in the filesystem.
   // - The named filesystem file is readable.
-  // - The named file is a valid AAF file.
+  // - The named file represents itself as a valid AAF file.  Even if
+  //   this succeeds\, it is not guaranteed that the named file is in
+  //   fact a valid AAF file.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -131,7 +152,10 @@ AD_XMETHOD2(OpenExistingRead,
   //   - the pFileName pointer arg is NULL.
   //
   // AAFRESULT_BAD_FLAGS
-  //   - illegal flags were specified.
+  //   - one or more illegal flags were specified.
+  //
+  // AAFRESULT_BAD_FLAG_COMBINATION
+  //   - illegal combination of otherwise valid flags was specified.
   //
   // AAFRESULT_FILE_NOT_FOUND
   //   - The named file does not exist in the filesystem.
@@ -139,8 +163,8 @@ AD_XMETHOD2(OpenExistingRead,
   // AAFRESULT_NOT_READABLE
   //   - The named file cannot be read.
   //
-  // AAFRESULT_NOTAAFFILE
-  //   - The named file is not a valid AAF file.)
+  // AAFRESULT_NOT_AAF_FILE
+  //   - The named file does not claim to be a valid AAF file.)
 
 
 AD_XMETHOD3(OpenExistingModify,
@@ -159,18 +183,16 @@ AD_XMETHOD3(OpenExistingModify,
 			modeFlags,
 			File open mode flags.  May be any of the following ORed together.
 	// All other bits must be set to zero.
-    //  - kAAFFileModeUnbuffered - to indicate buffered mode.  Default
-    //    is buffered.
-    //  - kAAFFileModeAsync - to indicate asynchronous mode.  Default is
-    //    synchronous mode.
-    //  - kAAFFileModeTransacted - to indicate transacted mode.  Default
-    //    is non-transacted mode.,
+    //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
+	//    Default is buffered.
+    //  - kAAFFileModeRevertable - to indicate that Revert is possible
+	//    on this file \(for all changes except those to essence\).,
 
 			[in],
 			objPass,
 			aafProductIdentification_t *,
 			pIdent,
-			Identification which is to be associated with this file.,
+			Identification of the application which is modifying this file.,
 
 			Associates this IAAFFile-supporting object with an existing
   // filesystem file that contains data which is to be read and
@@ -180,21 +202,28 @@ AD_XMETHOD3(OpenExistingModify,
   //   writing.
   // - Associates this object with that filesystem file.
   // - Places this object into the Open state.
-  // - This AAFFile object then can be used to refer to all AAF
-  //   objects contained within the file.
+  // - This AAFFile object then can be used as the root of the
+  //   containment tree representing all AAF objects contained within
+  //   the file.
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - This object is currently Closed.
   // - The pFileName argument is valid.
   // - The pIdent argument is valid.
+  // - Only valid flags have been specified.
+  // - A valid combination of flags has been specified.
   // - The named file exists in the filesystem.
   // - The named filesystem file is readable.
   // - The named filesystem file is writable.
-  // - The named file is a valid AAF file.
+  // - The named file represents itself as a valid AAF file.  Even if
+  //   this succeeds\, it is not guaranteed that the named file is in
+  //   fact a valid AAF file.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -206,6 +235,12 @@ AD_XMETHOD3(OpenExistingModify,
   //
   // AAFRESULT_NULL_PARAM
   //   - either pFileName or pIdent pointer argument is NULL.
+  //
+  // AAFRESULT_BAD_FLAGS
+  //   - one or more illegal flags were specified.
+  //
+  // AAFRESULT_BAD_FLAG_COMBINATION
+  //   - illegal combination of otherwise valid flags was specified.
   //
   // AAFRESULT_FILE_NOT_FOUND
   //   - The named file does not exist in the filesystem.
@@ -236,18 +271,16 @@ AD_XMETHOD3(OpenNewModify,
 			modeFlags,
 			File open mode flags.  May be any of the following ORed together.
 	// All other bits must be set to zero.
-    //  - kAAFFileModeUnbuffered - to indicate buffered mode.  Default
-    //    is buffered.
-    //  - kAAFFileModeAsync - to indicate asynchronous mode.  Default is
-    //    synchronous mode.
-    //  - kAAFFileModeTransacted - to indicate transacted mode.  Default
-    //    is non-transacted mode.,
+    //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
+	//    Default is buffered.
+    //  - kAAFFileModeRevertable - to indicate that Revert is possible
+	//    on this file \(for all changes except those to essence\).,
 
 			[in],
 			objPass,
 			aafProductIdentification_t *,
 			pIdent,
-			Identification which is to be associated with this file.,
+			Identification of the application which is creating this file.,
 
 			Associates this IAAFFile-supporting object with a newly-created
   // filesystem file that contains data which is to be read and
@@ -257,22 +290,27 @@ AD_XMETHOD3(OpenNewModify,
   // - Opens the filesystem file for reading and writing.
   // - Associates this object with that filesystem file.
   // - Places this object into the Open state.
-  // - This AAFFile object then can be used to refer to all AAF
-  //   objects contained within the file.
+  // - This AAFFile object then can be used as the root of the
+  //   containment tree representing all AAF objects contained within
+  //   the file.
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - This object is currently closed.
   // - The pFileName argument is valid.
   // - The pIdent argument is valid.
+  // - Only valid flags have been specified.
+  // - A valid combination of flags has been specified.
   // - The named file exists in the filesystem.
   // - The named filesystem file is readable.
   // - The named filesystem file is writable.
   // - The named file is a valid AAF file.
   // - There is sufficient space in the filesystem to create the file.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -284,6 +322,12 @@ AD_XMETHOD3(OpenNewModify,
   //
   // AAFRESULT_NULL_PARAM
   //   - either pFileName or pIdent pointer argument is NULL.
+  //
+  // AAFRESULT_BAD_FLAGS
+  //   - one or more illegal flags were specified.
+  //
+  // AAFRESULT_BAD_FLAG_COMBINATION
+  //   - illegal combination of otherwise valid flags was specified.
   //
   // AAFRESULT_FILE_EXISTS
   //   - The named file already exists in the filesystem.
@@ -312,13 +356,17 @@ AD_XMETHOD1(OpenTransient,
   // with a filesystem file.  Associates the given identification with
   // this file.
   //
+  // Transient files are never considered Revertable.
+  //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - The pIdent argument is valid.
   // - This object is currently closed.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -336,54 +384,29 @@ AD_METHOD0(Close,
 		   Dissociates this IAAFFile-supporting object from its
   // currently-associated filesystem file\, closing that filesystem
   // file in the process.  Any AAF objects which were contained within
-  // this object will then be no longer available to the client.
+  // this object will then no longer be available to the client.
   //
   // If the client is maintaining any references to any objects which
-  // are contained in this object\, then this method will fail.
+  // are contained in this object\, those objects will be marked as
+  // dissociated\, and methods on them will fail.
   //
-  // Note: any unSave\(\)d changes will not be written to the filesystem
-  // file before it is closed.
+  // If this file is Revertable and there are unsaved changes\, this
+  // method will fail.  The client may remedy the situaion by calling
+  // one of Save\(\)\, SaveAs\(\)\, or Revert\(\) before calling
+  // Close\(\).
   //
-  // This method will succeed only if all of the following are true:
-  // - This object is currently associated with a filesystem file.
-  // - There are no outstanding references to contained objects.
-  // - The associated filesystem file can be successfully closed.
-  //
-  // Returns one of the following:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_OUTSTANDING_REFS
-  //   - The client has outstanding references to objects contained in
-  //     this file.
-  //
-  // AAFRESULT_NOT_OPEN
-  //   - This object is not already associated with any filesystem
-  //     file.)
-
-
-AD_METHOD0(ForceClose,
-		   Dissociates this IAAFFile-supporting object from its
-  // currently-associated filesystem file\, closing that filesystem
-  // file in the process.  Any AAF objects which were contained within
-  // this object will then be no longer available to the client.
-  //
-  // This method will succeed even if the client is maintaining any
-  // references to any objects which are contained in this object.
-  //
-  // Note: any unSave\(\)d changes will not be written to the filesystem
-  // file before it is closed.
+  // If this file is not Revertable\, any unsaved changes will be
+  // written to the file before the Close operation is complete.
   //
   // This method will succeed only if all of the following are true:
   // - This object is currently associated with a filesystem file.
-  // - The associated filesystem file can be successfully closed.
+  // - This file is not revertable\, or if it is revertable there are
+  //   no unsaved changes.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -392,7 +415,10 @@ AD_METHOD0(ForceClose,
   //
   // AAFRESULT_NOT_OPEN
   //   - This object is not already associated with any filesystem
-  //     file.)
+  //     file.
+  //
+  // AAFRESULT_UNSAVED_CHANGES
+  //   - This file is Revertable\, and there are unsaved changes.)
 
 
 AD_METHOD0(Save,
@@ -411,8 +437,10 @@ AD_METHOD0(Save,
   // Note: This method guarantees that upon return\, the filesystem
   // file will always be left in a consistent and valid state.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -444,19 +472,28 @@ AD_XMETHOD2(SaveAs,
 			objPass,
 			aafUInt32,
 			modeFlags,
-			File open mode flags.  May be any of the following ORed together.
-	// All other bits must be set to zero.
-    //  - kAAFFileModeUnbuffered - to indicate buffered mode.  Default
-    //    is buffered.
-    //  - kAAFFileModeAsync - to indicate asynchronous mode.  Default is
-    //    synchronous mode.
-    //  - kAAFFileModeTransacted - to indicate transacted mode.  Default
-    //    is non-transacted mode.,
+			File open mode flags for new filesystem file.  May be any of
+	// the following ORed together.  All other bits must be set to
+	// zero.
+    //  - kAAFFileModeUnbuffered - to indicate unbuffered mode.
+	//    Default is buffered.
+    //  - kAAFFileModeRevertable - to indicate that Revert is possible
+	//    on this file \(for all changes except those to essence\).,
 
 			Saves this IAAFFile-supporting object into a newly-created
   // filesystem file.  This object will then be associated with the
-  // new filesystem file\, and the old filesystem file will be closed
-  // without having any additional changes written to it.
+  // new filesystem file.
+  //
+  // If the old file was opened as Revertable\, any unsaved changes
+  // will not be saved to old file before it is closed.  If the old
+  // file was not opened as revertable\, all unsaved changes to that
+  // old file will be saved before it is closed.  In either case\, the
+  // old file will be closed\, and all changes will be saved to the
+  // new file.
+  //
+  // Note: This method guarantees that upon return\, both the old and
+  // the new filesystem files will always be left in a consistent and
+  // valid state.
   // 
   // Does the following:
   // - Creates a new file in the filesystem with the given name.
@@ -471,14 +508,18 @@ AD_XMETHOD2(SaveAs,
   // - This object has already been Initialize\(\)d.
   // - This object is currently open.
   // - The pFileName argument is valid.
+  // - Only valid flags have been specified.
+  // - A valid combination of flags has been specified.
   // - The named file does not exist in the filesystem.
   // - The named filesystem file is readable.
   // - The named filesystem file is writable.
   // - There is sufficient space in the filesystem to create and write
   //   the file.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -490,6 +531,12 @@ AD_XMETHOD2(SaveAs,
   //
   // AAFRESULT_NULL_PARAM
   //   - pFileName pointer argument is NULL.
+  //
+  // AAFRESULT_BAD_FLAGS
+  //   - one or more illegal flags were specified.
+  //
+  // AAFRESULT_BAD_FLAG_COMBINATION
+  //   - illegal combination of flags was specified.
   //
   // AAFRESULT_FILE_EXISTS
   //   - The named file already exists in the filesystem.
@@ -512,13 +559,23 @@ AD_METHOD0(Revert,
   // contents are brought back to reflect the state of the filesystem
   // file.
   //
+  // This will only work if this file was opened as revertable and is
+  // not a transient file.
+  //
+  // Any changes to essence are not revertable.
+  //
   // This method will succeed only if all of the following are true:
   // - This object has already been Initialize\(\)d.
   // - This object is currently associated with a filesystem file for
   //   reading or modification.
+  // - Any unsaved changes do not involve unrevertable essence
+  //   changes.
+  // - This object is revertable and is not transient.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -529,7 +586,14 @@ AD_METHOD0(Revert,
   //   - This object is not associated with an open filesystem file.
   //
   // AAFRESULT_WRONG_OPENMODE
-  //   - This object is not open for reading or modification.)
+  //   - This object is not open for reading or modification.
+  //
+  // AAFRESULT_MEDIA_NOT_REVERTABLE
+  //   - This object is revertable and changes were made to essence
+  //     which do not allow this object to be reverted.
+  //
+  // AAFRESULT_NOT_REVERTABLE
+  //   - This object is not revertable.)
 
 
 AD_XMETHOD1(GetHeader,
@@ -538,7 +602,7 @@ AD_XMETHOD1(GetHeader,
 			AAFHeader,
 			ppHeader,
 			Set to header of the current file,
-  // Returns the IAAFHeader-supporting object associated with this
+			Returns the IAAFHeader-supporting object associated with this
   // file.  If this object has never been associated with a file\, a
   // new empty IAAFHeader-supporting object will be created and
   // returned.  The returned header is AddRef\(\)ed before it is
@@ -550,8 +614,10 @@ AD_XMETHOD1(GetHeader,
   // - the given header pointer is valid.
   // - this object contains a header.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
@@ -577,8 +643,10 @@ AD_XMETHOD1(GetRevision,
   // - This object has already been Initialize\(\)d.
   // - the given revision pointer is valid.
   //
-  // Returns one of the following:
-  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
