@@ -252,9 +252,13 @@ bool OMStrongReferenceProperty<ReferencedObject>::isVoid(void) const
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::isVoid");
 
-  bool result = false;
+  bool result;
 
-  ASSERT("Unimplemented code not reached", false);
+  if (_reference.getValue() == 0) {
+    result = true;
+  } else {
+    result = false;
+  }
 
   return result;
 }
@@ -269,7 +273,7 @@ void OMStrongReferenceProperty<ReferencedObject>::remove(void)
   TRACE("OMStrongReferenceProperty<ReferencedObject>::remove");
   PRECONDITION("Property is optional", isOptional());
   PRECONDITION("Optional property is present", isPresent());
-  PRECONDITION("Property is void", _reference.getValue() == 0);
+  PRECONDITION("Property is void", isVoid());
   clearPresent();
   POSTCONDITION("Optional property no longer present", !isPresent());
 }

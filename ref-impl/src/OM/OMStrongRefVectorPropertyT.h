@@ -491,7 +491,7 @@ template <typename ReferencedObject>
 size_t OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue(
                                           const ReferencedObject* object) const
 {
-  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeValue");
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue");
 
   ASSERT("Unimplemented code not reached", false);
   return 0;
@@ -524,7 +524,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::grow(
   // @mfunc Is this <c OMStrongReferenceVectorProperty> void ?
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
-  //          <c OMStorable> and <c OMUnique>.
+  //          <c OMStorable>.
   //   @rdesc True if this <c OMStrongReferenceVectorProperty> is void,
   //          false otherwise. 
   //   @this const
@@ -533,10 +533,20 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::isVoid(void) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::isVoid");
 
-  bool result = false;
+  bool result = true;
 
-  ASSERT("Unimplemented code not reached", false);
-
+  OMVectorIterator<
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject> > iterator(_vector, OMBefore);
+  while (++iterator) {
+    OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                    ReferencedObject>& element = iterator.value();
+    ReferencedObject* object = element.getValue();
+    if (object != 0) {
+      result = false;
+      break;
+    }
+  }
   return result;
 }
 
@@ -550,8 +560,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::remove(void)
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::remove");
   PRECONDITION("Property is optional", isOptional());
   PRECONDITION("Optional property is present", isPresent());
-  FORALL(i, count(),
-    PRECONDITION("Property is void", _vector.getAt(i).getValue() == 0));
+  PRECONDITION("Property is void", isVoid());
   clearPresent();
   POSTCONDITION("Optional property no longer present", !isPresent());
 }

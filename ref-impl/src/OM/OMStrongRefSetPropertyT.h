@@ -410,10 +410,20 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::isVoid(void) const
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::isVoid");
 
-  bool result = false;
+  bool result = true;
 
-  ASSERT("Unimplemented code not reached", false);
-
+  OMSetIterator<OMUniqueObjectIdentification,
+    OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                 ReferencedObject> > iterator(_set, OMBefore);
+  while (++iterator) {
+    OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                 ReferencedObject>& element = iterator.value();
+    ReferencedObject* object = element.getValue();
+    if (object != 0) {
+      result = false;
+      break;
+    }
+  }
   return result;
 }
 
@@ -425,11 +435,11 @@ template <typename ReferencedObject>
 void OMStrongReferenceSetProperty<ReferencedObject>::remove(void)
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::remove");
+
   PRECONDITION("Property is optional", isOptional());
   PRECONDITION("Optional property is present", isPresent());
-
-  ASSERT("Unimplemented code not reached", false);
-
+  PRECONDITION("Property is void", isVoid());
+  clearPresent();
   POSTCONDITION("Optional property no longer present", !isPresent());
 }
   // @mfunc The size of the raw bits of this
