@@ -261,6 +261,11 @@ static void printIdentification(IAAFIdentification* pIdent)
   check(pIdent->GetPlatform(wchName, sizeof (wchName)));
   convert(chName, sizeof(chName), wchName);
   printf("Platform             = \"%s\"\n", chName);
+
+  aafUID_t generationID;
+  check(pIdent->GetGenerationID(&generationID));
+  formatGUID(chName, sizeof(chName), &generationID);
+  printf("GenerationID         = %s\n", chName);
 }
 
 static void ReadAAFFile(aafWChar * pFileName)
