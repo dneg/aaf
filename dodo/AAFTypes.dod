@@ -461,13 +461,13 @@ typedef struct _aafMobComment_t
 
 typedef enum _aafRGBAComponentKind_t
 {
-	None = 0x30,
-	Alpha = 0x41,
-	Blue = 0x42,
-	Fill = 0x46,
-	Green = 0x47,
-	Palette = 0x50,
-	Red = 0x52
+	kCompNone = 0x30,
+	kCompAlpha = 0x41,
+	kCompBlue = 0x42,
+	kCompFill = 0x46,
+	kCompGreen = 0x47,
+	kCompPalette = 0x50,
+	kCompRed = 0x52
 }	aafRGBAComponentKind_t;
 
 typedef struct _aafRGBAComponent_t
