@@ -43,7 +43,8 @@ aafobjects.list : aafobjects.mk
 	$(SH_PREFIX) cp -f aafobjects.mk $(INCLUDE_DIR)/com-api $(SH_SUFFIX)
 
 
-targets: aafobjects.mk targets.mk depend.mk
+#targets: aafobjects.mk targets.mk depend.mk
+targets: 
 	$(SH_PREFIX) $(MAKE) -f maketargets.mak $(SH_SUFFIX)
 
 
