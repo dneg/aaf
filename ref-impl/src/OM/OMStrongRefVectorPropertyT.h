@@ -174,6 +174,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
                                                            size_t externalSize)
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::restore");
+  PRECONDITION("Consistent property size", externalSize == strlen(name()) + 1);
 
   // get the name of the vector index stream
   //
@@ -183,7 +184,6 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
   ASSERT("Valid store", store != 0);
 
   store->read(_propertyId, _storedForm, propertyName, externalSize);
-  ASSERT("Consistent property size", externalSize == strlen(propertyName) + 1);
   ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
   delete [] propertyName;
 
@@ -463,6 +463,7 @@ bool OMStrongReferenceVectorProperty<ReferencedObject>::containsValue(
                                           const ReferencedObject* object) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::containsValue");
+  PRECONDITION("Valid object", object != 0);
 
   bool result = false;
   OMVectorIterator<
@@ -493,6 +494,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::removeValue(
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeValue");
 
+  PRECONDITION("Valid object", object != 0);
   PRECONDITION("Object is present", containsValue(object));
 
   size_t index = indexOfValue(object);
@@ -515,7 +517,8 @@ template <typename ReferencedObject>
 ReferencedObject*
 OMStrongReferenceVectorProperty<ReferencedObject>::removeAt(const size_t index)
 {
-  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeLast");
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeAt");
+  PRECONDITION("Valid index", (index >= 0) && (index <= count()));
 
   ReferencedObject* result = setValueAt(0, index);
   _vector.removeAt(index);
@@ -571,6 +574,7 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue(
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue");
 
+  PRECONDITION("Valid object", object != 0);
   PRECONDITION("Object is present", containsValue(object));
 
   size_t result;
@@ -604,6 +608,8 @@ size_t OMStrongReferenceVectorProperty<ReferencedObject>::countOfValue(
                                           const ReferencedObject* object) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::countOfValue");
+
+  PRECONDITION("Valid object", object != 0);
   size_t result = 0;
 
   OMVectorIterator<

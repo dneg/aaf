@@ -84,8 +84,8 @@ void OMStrongReferenceSetProperty<ReferencedObject>::save(
   //
   size_t count = _set.count();
   OMStoredSetIndex* index = new OMStoredSetIndex(count);
-  index->setHighWaterMark(localKey());
   ASSERT("Valid heap pointer", index != 0);
+  index->setHighWaterMark(localKey());
   size_t position = 0;
 
   // Iterate over the set saving each element. The index entries
@@ -180,6 +180,7 @@ void OMStrongReferenceSetProperty<ReferencedObject>::restore(
                                                            size_t externalSize)
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::restore");
+  PRECONDITION("Consistent property size", externalSize == strlen(name()) + 1);
 
   // get the name of the set index stream
   //
@@ -189,7 +190,6 @@ void OMStrongReferenceSetProperty<ReferencedObject>::restore(
   ASSERT("Valid store", store != 0);
 
   store->read(_propertyId, _storedForm, propertyName, externalSize);
-  ASSERT("Consistent property size", externalSize == strlen(propertyName) + 1);
   ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
   delete [] propertyName;
 
