@@ -43,6 +43,15 @@ class OMPropertySet;
 class OMPropertyTable;
 class OMStoredVectorIndex;
 class OMStoredSetIndex;
+class OMSimpleProperty;
+class OMStrongReference;
+class OMStrongReferenceVector;
+class OMStrongReferenceSet;
+class OMWeakReference;
+class OMWeakReferenceVector;
+class OMWeakReferenceSet;
+class OMDataStream;
+class OMStoredStream;
 
   // @class In-memory representation of a persistent object.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
@@ -116,6 +125,34 @@ public:
     //          <c OMStoredObject>.
   void save(const OMPropertySet& properties);
 
+    // @cmember Save the <c OMSimpleProperty> <p property> in this
+    //          <c OMStoredObject>.
+  void save(const OMSimpleProperty& property);
+
+    // @cmember Save the <c OMStrongReference> <p singleton> in this
+    //          <c OMStoredObject>.
+  void save(const OMStrongReference& singleton);
+
+    // @cmember Save the <c OMStrongReferenceVector> <p vector> in this
+    //          <c OMStoredObject>.
+  void save(const OMStrongReferenceVector& vector);
+
+    // @cmember Save the <c OMStrongReferenceSet> <p set> in this
+    //          <c OMStoredObject>.
+  void save(const OMStrongReferenceSet& set);
+
+    // @cmember Save the <c OMWeakReference> <p singleton> in this
+    //          <c OMStoredObject>.
+  void save(const OMWeakReference& singleton);
+
+    // @cmember Save the <c OMWeakReferenceVector> <p vector> in this
+    //          <c OMStoredObject>.
+  void save(const OMWeakReferenceVector& vector);
+
+    // @cmember Save the <c OMWeakReferenceSet> <p set> in this
+    //          <c OMStoredObject>.
+  void save(const OMWeakReferenceSet& set);
+
     // @cmember Save the <c OMStoredVectorIndex> <p vector> in this
     //          <c OMStoredObject>, the vector is named <p vectorName>.
   void save(const OMStoredVectorIndex* vector, const wchar_t* vectorName);
@@ -127,6 +164,10 @@ public:
     // @cmember Save the <c OMPropertyTable> <p table> in this
     //          <c OMStoredObject>.
   void save(const OMPropertyTable* table);
+
+    // @cmember Save the <c OMDataStream> <p stream> in this
+    //          <c OMStoredObject>.
+  void save(const OMDataStream& stream);
 
     // @cmember Save a single weak reference.
   void save(OMPropertyId propertyId,
@@ -155,6 +196,36 @@ public:
     //          this <c OMStoredObject>.
   void restore(OMPropertySet& properties);
 
+    // @cmember Restore the <c OMSimpleProperty> <p property> into this
+    //          <c OMStoredObject>.
+    //   @devnote The externalSize argument to this member function doesn't
+    //            make sense for all derived instances of <c OMStoredObject>.
+  void restore(OMSimpleProperty& property, size_t externalSize);
+
+    // @cmember Restore the <c OMStrongReference> <p singleton> into this
+    //          <c OMStoredObject>.
+  void restore(OMStrongReference& singleton, size_t externalSize);
+
+    // @cmember Restore the <c OMStrongReferenceVector> <p vector> into this
+    //          <c OMStoredObject>.
+  void restore(OMStrongReferenceVector& vector, size_t externalSize);
+
+    // @cmember Restore the <c OMStrongReferenceSet> <p set> into this
+    //          <c OMStoredObject>.
+  void restore(OMStrongReferenceSet& set, size_t externalSize);
+
+    // @cmember Restore the <c OMWeakReference> <p singleton> into this
+    //          <c OMStoredObject>.
+  void restore(OMWeakReference& singleton, size_t externalSize);
+
+    // @cmember Restore the <c OMWeakReferenceVector> <p vector> into this
+    //          <c OMStoredObject>.
+  void restore(OMWeakReferenceVector& vector, size_t externalSize);
+
+    // @cmember Restore the <c OMWeakReferenceSet> <p set> into this
+    //          <c OMStoredObject>.
+  void restore(OMWeakReferenceSet& set, size_t externalSize);
+
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
   void restore(OMStoredVectorIndex*& vector, const wchar_t* vectorName);
@@ -165,6 +236,10 @@ public:
 
     // @cmember Restore the <c OMPropertyTable> in this <c OMStoredObject>.
   void restore(OMPropertyTable*& table);
+
+    // @cmember Restore the <c OMDataStream> <p stream> into this
+    //          <c OMStoredObject>.
+  void restore(OMDataStream& stream, size_t externalSize);
 
     // @cmember Restore a single weak reference.
   void restore(OMPropertyId propertyId,
