@@ -11,80 +11,42 @@ AD_IDL(//
 // This interface is used to access instances of properties contained
 // in AAF persistent objects.
 //
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-/***********************************************\
-*	Stub only.   Implementation not yet added.	*
-\***********************************************/)
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(83057d73, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
 
 AD_DEFAULT_UUID(83057d74, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
 AD_XCLASS_BEGIN(Concrete, Transient)
-AD_METHOD0(Initialize,
-		   Initializes a newly allocated\, empty IAAFProperty-supporting
-  // object.  This method must be called after allocation\, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
-
-
 AD_XMETHOD1(GetDefinition,
 			[out],
 			objOut,
 			AAFPropertyDef,
-			ppDef,
+			ppPropDef,
 			This property's definition,
 
             Returns the definition of this property.
   //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
-  // - The ppDef pointer is valid.
+  // - The ppPropDef pointer is valid.
   // - The associated property definition can be found in the
   //   dictionary.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The ppDef pointer is NULL.
-  //
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppPropDef\)
   // AAFRESULT_BAD_PROP
   //   - The definition for this property could not be found in the
   //     dictionary.)
 
 
-AD_XMETHOD1(GetPropertyValue,
+AD_XMETHOD1(GetValue,
             [out],
             objOut,
             AAFPropertyValue,
-		    ppPVal,
+		    ppValue,
 		    The Property Value object associated with this property.,
 
 		    Returns the Property Value object associated with this property.
@@ -93,16 +55,7 @@ AD_XMETHOD1(GetPropertyValue,
   // - This object has already been Initialize\(\)d.
   // - The ppPval pointer is valid.
   //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The ppPval pointer is NULL.)
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NO_INIT
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppValue\))
 AD_XCLASS_END(Concrete, Transient)
