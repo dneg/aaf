@@ -62,7 +62,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFTypeDefRename \
 	AAFTypeDefEnum \
 	AAFTypeDefFixedArray \
-	AAFTypeDefVariableArray \
 	AAFTypeDefStream \
 	AAFTypeDefString \
 	AAFTypeDefObjectRef \
@@ -142,6 +141,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
 	AAFTransition \
+	AAFTypeDefVariableArray \
 	AAFWAVEDescriptor \
 	EnumAAFComponents \
 	EnumAAFEssenceData \
