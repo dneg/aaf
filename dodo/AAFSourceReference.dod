@@ -156,5 +156,8 @@ AD_XMETHOD1(SetSourceMobSlotID,
 AD_COM_METH(.method-SetChannelIDs)
 AD_COM_METH(.method-GetChannelIDs)
 AD_COM_METH(.method-GetChannelIDsSize)
+AD_COM_METH(.method-SetMonoSourceSlotIDs)
+AD_COM_METH(.method-GetMonoSourceSlotIDs)
+AD_COM_METH(.method-GetMonoSourceSlotIDsSize)
 
 AD_COM_EXT_CLASS_END(AAFSourceReference2)

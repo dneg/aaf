@@ -232,5 +232,77 @@ AD_XMETHOD1(GetChannelIDsSize,
 // AAFRESULT_PROP_NOT_PRESENT
 //   - the property is not present)
 
+AD_XMETHOD2(SetMonoSourceSlotIDs,
+		[in],
+		objPass,
+		aafUInt32,
+		numberElements,
+		Number of elements in the pMonoSourceSlotIDs array,
+		[in],
+		objPass,
+		aafUInt32*,
+		pMonoSourceSlotIDs,
+		Array of slot IDs,
+
+	   For reference from a multi-channel MobSlot to multiple mono MobSlots.
+// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
+// object.
+
+// 
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null )
+
+
+AD_XMETHOD2(GetMonoSourceSlotIDs,
+		[in],
+		objPass,
+		aafUInt32,
+		numberElements,
+		Number of elements in the pMonoSourceSlotIDs array,
+		[in],
+		objPass,
+		aafUInt32*,
+		pMonoSourceSlotIDs,
+		Array of channel IDs,
+
+// Get the mono slot IDs that are referenced by this object.  Refer to
+// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
+// Return codes:
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present
+//
+// AAFRESULT_SMALLBUF
+//   - pMonoSourceSlotIDs is too small)
+
+AD_XMETHOD1(GetMonoSourceSlotIDsSize,
+		[out],
+		objPass,
+		aafUInt32 *,
+		numberElements,
+		Number of elements in the pMonoSourceSlotIDs array,
+
+// Get the number of mono slot IDs stored by this SourceReference.
+//
+// AAFRESULT_SUCCESS
+//   - succeeded
+//
+// AAFRESULT_NULL_PARAM
+//   - pMonoSourceSlotIDs is null
+//
+// AAFRESULT_PROP_NOT_PRESENT
+//   - the property is not present)
+
 
 AD_XCLASS_END(Abstract, StoredObject)
