@@ -13,239 +13,113 @@
 
 
 
-#ifndef __ImplAAFSession_h__
-#include "ImplAAFSession.h"
+#ifndef __ImplAAFContext_h__
+#include "ImplAAFContext.h"
 #endif
 
 #include "ImplAAFObjectCreation.h"
-#include "ImplAAFFile.h"
+
 #include "AAFResult.h"
 
 #include <assert.h>
 #include "ImplAAFPluginManager.h"
 
-#if defined(__MWERKS__)
-#include <wstring.h>	// include wcslen declaration.
-#endif
-
 extern "C" const aafClassID_t CLSID_AAFPluginManager;
 
-// single instance of this class; initialized by first call to GetInstance().
-/*static*/ ImplAAFSession * ImplAAFSession::_singleton; // = 0;
 
-/*static*/ ImplAAFSession * ImplAAFSession::GetInstance ()
+
+// Make private helper class a friend so that it
+// may call the destructor. This helper class is used
+// to ensure that the singleton context instance is 
+// cleaned up properly.
+
+class ImplAAFContextHelper
+{
+public:
+  ImplAAFContextHelper();
+  ~ImplAAFContextHelper();
+};
+
+
+
+
+
+// single instance of this class; initialized by first call to GetInstance().
+/*static*/ ImplAAFContext * ImplAAFContext::_singleton = 0;
+
+// Create an instance of the context helper. The helper's destructor will delete the context.
+static ImplAAFContextHelper g_ContextHelper;
+
+
+
+
+// Create and save the context.
+ImplAAFContextHelper::ImplAAFContextHelper()
+{
+}
+
+// Cleanup the context singleton if one exists.
+ImplAAFContextHelper::~ImplAAFContextHelper()
+{
+  if (ImplAAFContext::_singleton)
+  {
+    delete ImplAAFContext::_singleton;
+  }
+}
+
+
+/*static*/ ImplAAFContext * ImplAAFContext::GetInstance ()
 {
   if (! _singleton)
-	{
-	  _singleton = new ImplAAFSession;
-	  _singleton->InitPluginManager(); 
-	}
+  {
+    _singleton = new ImplAAFContext;
+    assert(_singleton);
+    if (_singleton)
+      _singleton->InitPluginManager(); 
+  }
   return _singleton;
 }
 
-
-
-ImplAAFSession::ImplAAFSession ()
+ImplAAFContext::ImplAAFContext ()
 {
-	_plugins = NULL;
+  // There Can Be Only One!
+  assert(NULL == _singleton);
+  _singleton = this;
+
+  _plugins = NULL;
 }
 
-void ImplAAFSession::InitPluginManager (void)
+ImplAAFContext::~ImplAAFContext ()
 {
-	if(_plugins == NULL)
-	{
-		_plugins = (ImplAAFPluginManager *)CreateImpl(CLSID_AAFPluginManager);
-		_plugins->Init();
-	}
+  if (_plugins)
+  {
+    _plugins->ReleaseReference();
+    _plugins = 0;
+  }
+  
+  // Thare Can Be Only One!
+  _singleton = 0;
 }
 
-class ImplAAFPluginManager *ImplAAFSession::GetPluginManager (void)
+void ImplAAFContext::InitPluginManager (void)
 {
-	AcquireImplReference(_plugins);
-	return(_plugins);
+  if(_plugins == NULL)
+  {
+    _plugins = (ImplAAFPluginManager *)CreateImpl(CLSID_AAFPluginManager);
+    assert(NULL != _plugins);
+    if (_plugins)
+      _plugins->Init();
+  }
 }
 
-
-ImplAAFSession::~ImplAAFSession ()
-{}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSession::EndSession ()
+class ImplAAFPluginManager *ImplAAFContext::GetPluginManager (void)
 {
-  return AAFRESULT_SUCCESS;
+  if (_plugins)
+    _plugins->AcquireReference();
+  return(_plugins);
 }
 
-//****************
-// CreateFile()
-//
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFSession::CreateFile (aafWChar *  pwFilePath,
-							aafFileRev_t  rev,
-							ImplAAFFile ** ppFile)
-{
-//  ImplAAFRoot	*pRoot;
-  if (! pwFilePath)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-
-  if (! ppFile)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-
-//  pRoot = CreateImpl(CLSID_AAFFile);
-//  if (!pRoot)
-//	{
-//	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
-//	}
-
-//  *ppFile = static_cast<ImplAAFFile*>(pRoot);
-//  (*ppFile)->Create(pwFilePath, this, rev);
-
-//  return(AAFRESULT_SUCCESS);
-}
-
-
-//****************
-// OpenReadFile()
-//
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFSession::OpenReadFile(aafWChar *  pwFilePath,
-							 ImplAAFFile ** ppFile)
-{
-//  ImplAAFRoot	*pRoot;
-
-  if (! pwFilePath)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-
-  if (! ppFile)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-
-
-//  pRoot = CreateImpl(CLSID_AAFFile);
-//  if (!pRoot)
-//	{
-//	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
-//	}
-//
-//  *ppFile = static_cast<ImplAAFFile*>(pRoot);
-//  (*ppFile)->OpenRead(pwFilePath, this);
-//
-//  return(AAFRESULT_SUCCESS);
-}
-
-
-//****************
-// OpenModifyFile()
-//
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFSession::OpenModifyFile (aafWChar *  pwFilePath,
-								ImplAAFFile ** ppFile)
-{
-//  AAFRESULT hr;
-//  ImplAAFRoot	*pRoot;
-
-  if (! pwFilePath)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-
-  if (! ppFile)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-
-//  pRoot = CreateImpl(CLSID_AAFFile);
-//  if (!pRoot)
-//	{
-//	  return(0x80004005L);	// TODO: change this to AAFRESULT_FAILED
-//	}
-//
-//  *ppFile = static_cast<ImplAAFFile*>(pRoot);
-//  hr = (*ppFile)->OpenModify(pwFilePath, this);
-//
-//  return(hr);
-}
-
-ImplAAFFile *ImplAAFSession::GetTopFile()
-{
-	return(_topFile);
-}
-
-void ImplAAFSession::SetTopFile(ImplAAFFile *file)
-{
-	_topFile = file;
-}
-
-aafProductIdentification_t *ImplAAFSession::GetDefaultIdent(void)
-{
-	return(_defaultIdent);
-}
-
-  //***********************************************************
-  // METHOD NAME: SetCurrentIdentification()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFSession | SetCurrentIdentification |
-  // Sets the object which identifies the creator of the file.
-  // @end
-  // 
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFSession::SetDefaultIdentification (aafProductIdentification_t * pIdent)
-{
-  if (! pIdent)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-
-  _defaultIdent = pIdent;
-
-  return(AAFRESULT_SUCCESS);
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFSession::GetIdentification (aafProductIdentification_t * pIdent)
-{
-  if (! pIdent)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-
-  //
-  // BobT: Horrible hack! We want to return the identification to the
-  // user, but our aafProductIdentification_t struct only contains
-  // pointers!  Fix it later; for now we'll return pointers to
-  // internal data (DANGEROUS!) to the caller...
-  //
-  assert (_defaultIdent);
-  *pIdent = *_defaultIdent;
-
-  return (AAFRESULT_SUCCESS);
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFSession::BeginSession (
-    aafProductIdentification_t  *ident
-  )
-{
-  return SetDefaultIdentification(ident);
-}
-
-// extern "C" const aafClassID_t CLSID_AAFSession;
-// CLSID for AAFSession
-// {F0C10891-3073-11D2-804A-006008143E6F
-const aafClassID_t CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11D2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+// extern "C" const aafClassID_t CLSID_AAFContext;
+// CLSID for AAFContext
+// {1B5D0F20-FCC5-11d2-BFBC-00104BC9156D}
+const aafClassID_t CLSID_AAFContext = { 0x1b5d0f20, 0xfcc5, 0x11d2, { 0xbf, 0xbc, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
