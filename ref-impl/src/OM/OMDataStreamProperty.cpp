@@ -7,7 +7,7 @@
 
 OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
                                            const char* name)
-  : OMProperty(propertyId, TID_DATA_STREAM, name),_stream(0)
+  : OMProperty(propertyId, SF_DATA_STREAM, name),_stream(0)
 {
 }
 
@@ -28,7 +28,7 @@ void OMDataStreamProperty::save(void) const
   //
   const char* streamName = name();
   store->write(_propertyId,
-               _type,
+               _storedForm,
                (void*)streamName,
                strlen(streamName) + 1);
 
@@ -54,7 +54,7 @@ void OMDataStreamProperty::restore(size_t size)
   char* streamName = new char[size];
   ASSERT("Valid heap pointer", streamName != 0);
   store->read(_propertyId,
-              _type,
+              _storedForm,
               streamName,
               size);
   ASSERT("Consistent property size", size == strlen(streamName) + 1);
