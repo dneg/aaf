@@ -473,6 +473,75 @@ OMProperty* OMFile::findPropertyPath(const wchar_t* propertyPathName) const
   return result;
 }
 
+OMPropertyId* OMFile::path(const wchar_t* propertyPathName) const
+{
+  TRACE("OMFile::path");
+
+  wchar_t delimiter = L'/';
+  PRECONDITION("Valid property path name", validWideString(propertyPathName));
+  PRECONDITION("Path name is absolute", propertyPathName[0] == delimiter);
+  PRECONDITION("Valid root", _root != 0);
+
+  // Allocate result
+  //
+  size_t count = countWideCharacter(propertyPathName, delimiter);
+  OMPropertyId* result = new OMPropertyId[count + 1];
+  ASSERT("Valid heap pointer", result != 0);
+
+  // Parse path name
+  //
+  wchar_t* path = saveWideString(propertyPathName);
+  wchar_t* element = path;
+  element++; // skip first '/'
+  const OMStorable* storable = _root;
+  OMProperty* property = 0;
+
+  size_t index = 0;
+  wchar_t* end = findWideCharacter(element, delimiter);
+
+  while (end != 0) {
+    *end = 0;
+    property = storable->findProperty(element);
+    result[index] = property->propertyId();
+    index = index + 1;
+    storable = storable->find(element);
+    ASSERT("Valid storable pointer", storable != 0);
+    element = ++end;
+    end = findWideCharacter(element, delimiter);
+  }
+
+  if ((element != 0) && (lengthOfWideString(element) > 0)) {
+    property = storable->findProperty(element);
+    result[index] = property->propertyId();
+    index = index + 1;
+  }
+
+  result[index] = 0;
+
+  delete [] path;
+  return result;
+}
+
+OMProperty* OMFile::findProperty(const OMPropertyId* path) const
+{
+  TRACE("OMFile::findProperty");
+
+  PRECONDITION("Valid root", _root != 0);
+
+  size_t count = lengthOfPropertyPath(path);
+  const OMStorable* storable = _root;
+
+  for (size_t index = 0; index < count - 1; index++) {
+    OMPropertyId pid = path[index];
+    storable = storable->find(pid);
+    ASSERT("Valid storable pointer", storable != 0);
+  }
+
+  OMProperty* result = storable->findProperty(path[count - 1]);
+
+  return result;
+}
+
 const OMClassId& OMFile::classId(void) const
 {
   TRACE("OMFile::classId");
