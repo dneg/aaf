@@ -297,7 +297,12 @@ private:
   {
     //@access Public Members
   public:
-    //@cmember Implements non-delegating <om IUnknown.QueryInterface>.
+    STDMETHOD_(void, SetParentUnknown)(CAAFUnknown *parent)
+    {
+      m_This = parent; 
+    }
+
+     //@cmember Implements non-delegating <om IUnknown.QueryInterface>.
     STDMETHOD(QueryInterface)(REFIID riid, void **ppvObjOut)
 		{
 			return This()->InternalQueryInterface(riid, ppvObjOut);
@@ -319,7 +324,9 @@ private:
     //@access Private Members
     private:
       //@cmember Return pointer to outer object's this pointer.
-      CAAFUnknown *This();
+      CAAFUnknown *This() { return m_This; }
+      CAAFUnknown *m_This; 
+
   };
 
   // so they can reference themselves in CAAFUnknown from pMainUnknown()

@@ -65,6 +65,7 @@ CAAFUnknown::CAAFUnknown
 {
 	m_pUnkOuter = (pUnkOuter) ? pUnkOuter : GetPrivateUnknown();
 	g_pAAFServer->IncrementActiveObjects();
+	m_UnkPrivate.SetParentUnknown(this);
 }
 
 //=--------------------------------------------------------------------------=
@@ -158,24 +159,5 @@ ULONG CAAFUnknown::InternalRelease
     if (0 == m_cRef)
         delete this;
     return cRef;
-}
-
-//=--------------------------------------------------------------------------=
-// CAAFUnknown::CAAFPrivateUnknown::This()
-//=--------------------------------------------------------------------------=
-// @mfunc CAAFUnknown::CAAFPrivateUnknown::This() |
-// Return pointer to outer object's this pointer.
-//
-// @comm
-// This method is used when we're sitting in the private unknown object, and we 
-// need to get at the pointer for the main unknown. It is slightly better to do 
-// this pointer arithmetic than have to store a pointer to the parent.
-//
-inline CAAFUnknown *CAAFUnknown::CAAFPrivateUnknown::This
-(
-    void
-)
-{
-    return (CAAFUnknown *)((LPBYTE)this - offsetof(CAAFUnknown, m_UnkPrivate));
 }
 
