@@ -32,6 +32,7 @@
 #include "CAAFUnknown.h"
 #endif
 
+
 // We meed the following definition for a bool type since
 // the Win32 used BOOL as an int and ActiveX SDK, MacOLE use
 // unsigned long for OLEBOOL.
@@ -59,13 +60,15 @@ public:
 	
 protected:
 	// CAAFUnknown override
-    virtual HRESULT InternalQueryInterface(REFIID riid, void **ppv);
+    STDMETHOD(InternalQueryInterface)(REFIID riid, void **ppv);
+
+  // Wrapper to call the private _pfnCreate proc.
+  HRESULT CallClassFactoryFunction(IUnknown *, void **);
 
 public:
     // IClassFactory methods 
-    STDMETHOD(CreateInstance)(IUnknown * punkOuter, REFIID riid, void ** ppv); 
+    STDMETHOD(CreateInstance)(IUnknown * pUnkOuter, REFIID riid, void ** ppv); 
     STDMETHOD(LockServer)(AAFBOOL fLock);     
-     
 
 private:
 	AAFCreateComObjectProc _pfnCreate;
