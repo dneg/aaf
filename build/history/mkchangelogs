@@ -26,6 +26,15 @@
 #   - contains a log of the changes between two repository tags.
 #   - is placed in its own file.
 #
+# Notes :
+#
+# File dependencies -
+#
+# "cvs log"    -> Changes-$t1-$t2.log  ->
+# "cvs2cl.pl"  -> Changes-$t1-$t2.clog ->
+# "cl2html.awk -> Changes-$t1-$t2.html
+#
+#
 # Author : Tim Bingham " Tim_Bingham@avid.com
 #
 
