@@ -217,7 +217,7 @@ void ImplAAFTypeDefVariableArray::reorder(OMByte* externalBytes,
   assert (ptd);
 
   assert (ptd->IsFixedSize ());
-  aafUInt32 extElemSize = PropValSize ();
+  aafUInt32 extElemSize = ptd->PropValSize ();
   aafUInt32 numElems = externalBytesSize / extElemSize;
   aafInt32 numBytesLeft = externalBytesSize;
   aafUInt32 elem = 0;
