@@ -36,6 +36,7 @@
 
 class OMClassFactory;
 class OMObjectDirectory;
+class OMPropertyTable;
 class OMStoredObject;
 
 // @class Files supported by the Object Manager.
@@ -164,6 +165,9 @@ public:
     // @cmember Retrieve the <c OMClassFactory> from this <c OMFile>.
   const OMClassFactory* classFactory(void) const;
 
+    // @cmember Retrieve the <c OMPropertyTable> from this <c OMFile>.
+  OMPropertyTable* referencedProperties(void);
+
     // @cmember Retrieve the <c OMObjectDirectory> from this <c OMFile>.
   OMObjectDirectory* objectDirectory(void);
 
@@ -178,6 +182,10 @@ public:
 
     // @cmember The signature of this <c OMFile>.
   OMFileSignature signature(void) const;
+
+    // @cmember Find the property instance in this <c OMFile>
+    //          named by <p propertyPathName>.
+  virtual OMProperty* findPropertyPath(const char* propertyPathName) const;
 
   // OMStorable overrides.
   //
@@ -203,6 +211,7 @@ private:
   
   const OMClassFactory* _classFactory;
   OMObjectDirectory* _objectDirectory;
+  OMPropertyTable* _referencedProperties;
 
   enum OMAccessMode _mode;
   enum OMLoadMode _loadMode;
