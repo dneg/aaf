@@ -84,6 +84,7 @@
 //#include "omPvt.h" 
 //#include "AAFPrivate.h"
 #include "AAFUtils.h"
+#include "aafresult.h"
 
 /* Moved math.h down here to make NEXT's compiler happy */
 #include <math.h>
@@ -122,10 +123,10 @@ aafErr_t MakeInt64(aafInt32 high, aafInt32 low, aafInt64 *out)
 		out->words[2] = (aafUInt16)((low >> 16L) & 0xFFFF);
 		out->words[3] = (aafUInt16)(low & 0xFFFF);
 #endif
-		return(OM_ERR_NONE);
+		return(AAFRESULT_SUCCESS);
 	}
 	else
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 }
 
 aafErr_t DecomposeInt64(aafInt64 in, aafInt32 *high, aafInt32 *low)
@@ -142,7 +143,7 @@ aafErr_t DecomposeInt64(aafInt64 in, aafInt32 *high, aafInt32 *low)
 		*low = ((aafUInt32)in.words[2] << 16L) | in.words[3];
 #endif
 
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -158,7 +159,7 @@ aafErr_t DecomposeInt64(aafInt64 in, aafInt32 *high, aafInt32 *low)
  *		is not updated.
  *
  * Possible Errors:
- * 		OM_ERR_NULL_PARAM -- A NULL result pointer.
+ * 		AAFRESULT_NULL_PARAM -- A NULL result pointer.
  */
 #if !PORT_USE_NATIVE64
 aafErr_t CvtInt32toInt64(
@@ -179,10 +180,10 @@ aafErr_t CvtInt32toInt64(
 		}
 		out->words[2] = (aafUInt16)((in >> 16L) & 0xFFFF);
 		out->words[3] = (aafUInt16)(in & 0xFFFF);
-		return(OM_ERR_NONE);
+		return(AAFRESULT_SUCCESS);
 	}
 	else
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 }
 
 aafErr_t CvtUInt32toInt64(
@@ -195,10 +196,10 @@ aafErr_t CvtUInt32toInt64(
 		out->words[1] = 0;
 		out->words[2] = (aafUInt16)((in >> 16L) & 0xFFFF);
 		out->words[3] = (aafUInt16)(in & 0xFFFF);
-		return(OM_ERR_NONE);
+		return(AAFRESULT_SUCCESS);
 	}
 	else
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 }
 #endif
 
@@ -215,8 +216,8 @@ aafErr_t CvtUInt32toInt64(
  *		is not updated.
  *
  * Possible Errors:
- *		OM_ERR_OVERFLOW64 - Arithmetic overflow.
- * 		OM_ERR_NULL_PARAM -- A NULL result pointer.
+ *		AAFRESULT_OVERFLOW64 - Arithmetic overflow.
+ * 		AAFRESULT_NULL_PARAM -- A NULL result pointer.
  */
 aafErr_t AddInt32toInt64(
 			aafUInt32	in,			/* IN - Add this aafUInt32 to */
@@ -227,11 +228,11 @@ aafErr_t AddInt32toInt64(
 #endif
 
 	if(out == NULL)
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 		
 #if PORT_USE_NATIVE64
 	*out += in;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	CvtInt32toInt64(in, &src);
 	return (AddInt64toInt64(src, out));
@@ -251,8 +252,8 @@ aafErr_t AddInt32toInt64(
  *		is not updated.
  *
  * Possible Errors:
- *		OM_ERR_OVERFLOW64 - Arithmetic overflow.
- * 		OM_ERR_NULL_PARAM -- A NULL result pointer.
+ *		AAFRESULT_OVERFLOW64 - Arithmetic overflow.
+ * 		AAFRESULT_NULL_PARAM -- A NULL result pointer.
  */
 aafErr_t AddInt64toInt64(
 			aafInt64	in,		/* IN - Add this aafInt64 to */
@@ -264,11 +265,11 @@ aafErr_t AddInt64toInt64(
 #endif
 
 	if(out == NULL)
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 
 #if PORT_USE_NATIVE64
 	*out += in;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	inSign = in.words[0] & 0x8000;
 	in2Sign = out->words[0] & 0x8000;
@@ -281,9 +282,9 @@ aafErr_t AddInt64toInt64(
 	outSign = out->words[0] & 0x8000;
 
 	if((inSign == in2Sign) && (outSign != in2Sign))
-		return (OM_ERR_OVERFLOW64);
+		return (AAFRESULT_OVERFLOW64);
 	else
-		return (OM_ERR_NONE);
+		return (AAFRESULT_SUCCESS);
 #endif
 }
 
@@ -301,8 +302,8 @@ aafErr_t AddInt64toInt64(
  *		is not updated.
  *
  * Possible Errors:
- *		OM_ERR_INTERNAL_NEG64 - Result would be negative.
- * 		OM_ERR_NULL_PARAM -- A NULL result pointer.
+ *		AAFRESULT_INTERNAL_NEG64 - Result would be negative.
+ * 		AAFRESULT_NULL_PARAM -- A NULL result pointer.
  */
 aafErr_t SubInt64fromInt64(
 			aafInt64	in,		/* IN - Subtract this aafInt64 from */
@@ -316,11 +317,11 @@ aafErr_t SubInt64fromInt64(
 #endif
 
 	if(out == NULL)
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 
 #if PORT_USE_NATIVE64
 	*out -= in;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	inSign = in.words[0] & 0x8000;
 	in2Sign = out->words[0] & 0x8000;
@@ -336,9 +337,9 @@ aafErr_t SubInt64fromInt64(
 
 	outSign = out->words[0] & 0x8000;
 	if((inSign != in2Sign) && (outSign != in2Sign))
-		return (OM_ERR_OVERFLOW64);
+		return (AAFRESULT_OVERFLOW64);
 	else
-		return (OM_ERR_NONE);
+		return (AAFRESULT_SUCCESS);
 #endif
 }
 
@@ -348,7 +349,7 @@ aafErr_t SubInt32fromInt64(
 {
 #if PORT_USE_NATIVE64
 	*out -= in;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	aafInt64		largeIn;
 
@@ -385,8 +386,8 @@ static void NegateInt64(aafInt64 *out)
  *		is not updated.
  *
  * Possible Errors:
- *		OM_ERR_OVERFLOW64 - Arithmetic overflow.
- * 		OM_ERR_NULL_PARAM -- A NULL result pointer.
+ *		AAFRESULT_OVERFLOW64 - Arithmetic overflow.
+ * 		AAFRESULT_NULL_PARAM -- A NULL result pointer.
  */
 aafErr_t MultInt32byInt64(
 			aafInt32	in,	/* IN - Multiply this aafInt32 */
@@ -401,11 +402,11 @@ aafErr_t MultInt32byInt64(
 #endif
 	
 	if(out == NULL)
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 
 #if PORT_USE_NATIVE64
 	*out = ((long)in) * in2;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	CvtInt32toInt64(in, &in1);
 	inSign = in1.words[0] & 0x8000;
@@ -447,9 +448,9 @@ aafErr_t MultInt32byInt64(
 	}
 	
 	if(result[0] == 0 && result[1] == 0 && result[2] == 0 && result[3] == 0)
-		return(OM_ERR_NONE);
+		return(AAFRESULT_SUCCESS);
 	else
-		return(OM_ERR_OVERFLOW64);
+		return(AAFRESULT_OVERFLOW64);
 #endif
 }
 
@@ -465,7 +466,7 @@ static aafErr_t shiftRight(aafInt64 *in)
 	in->words[1] = (aafUInt16)((in->words[1] >> 1) | (carry0 << 15L));
 	in->words[2] = (aafUInt16)((in->words[2] >> 1) | (carry1 << 15L));
 	in->words[3] = (aafUInt16)((in->words[3] >> 1) | (carry2 << 15L));
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 #endif
 
@@ -483,7 +484,7 @@ aafErr_t DivideInt64byInt32(
 	
 	XPROTECT()
 	{
-		XASSERT(in2 != 0, OM_ERR_ZERO_DIVIDE);
+		XASSERT(in2 != 0, AAFRESULT_ZERO_DIVIDE);
 #if PORT_USE_NATIVE64
 		if(result != NULL)
 			*result = in / ((long)in2);
@@ -516,13 +517,13 @@ aafErr_t DivideInt64byInt32(
 			
 			do
 			{
-				XASSERT (j >= 0, OM_ERR_INTERNAL_DIVIDE);
+				XASSERT (j >= 0, AAFRESULT_INTERNAL_DIVIDE);
 				AddInt64toInt64(*result, result);
 				if (Int64GreaterEqual(num64, den64))
 				{
 					CHECK(AddInt32toInt64(1, result));
 					CHECK(SubInt64fromInt64(den64, &num64));
-					XASSERT(Int64Less(num64, den64), OM_ERR_INTERNAL_DIVIDE);
+					XASSERT(Int64Less(num64, den64), AAFRESULT_INTERNAL_DIVIDE);
 				}
 				CHECK(shiftRight(&den64));
 			}
@@ -545,7 +546,7 @@ aafErr_t DivideInt64byInt32(
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -566,37 +567,37 @@ aafErr_t DivideInt64byInt32(
  *		is not updated.
  *
  * Possible Errors:
- *		OM_ERR_OFFSET_SIZE -- Truncation occurred.
- * 		OM_ERR_NULL_PARAM -- A NULL result pointer.
+ *		AAFRESULT_OFFSET_SIZE -- Truncation occurred.
+ * 		AAFRESULT_NULL_PARAM -- A NULL result pointer.
  */
 aafErr_t TruncInt64toInt32(				/* OK */
 			aafInt64		in,		/* IN - Truncate this value */
 			aafInt32		*out)		/* OUT - to 32-bits and put the result here */
 {
 	if(out == NULL)
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 
 #if PORT_USE_NATIVE64
 	*out = (aafInt32)(in & 0xFFFFFFFF);
 	if(*out != in)
 	{
 		if((aafInt32)(-in & 0xFFFFFFFF) != *out)
-			return (OM_ERR_OFFSET_SIZE);
+			return (AAFRESULT_OFFSET_SIZE);
 	}
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	if ((in.words[0] == 0) && (in.words[1] == 0) && ((aafInt16)in.words[2] >= 0))
 	{
 		*out = ((aafInt32) (in.words[2] & 0x7FFF) << 16L) | (in.words[3]);
-		return (OM_ERR_NONE);
+		return (AAFRESULT_SUCCESS);
 	}
 	else if ((in.words[0] == 0xFFFF) && (in.words[1] == 0xFFFF) && ((aafInt16)in.words[2] <= 0))
 	{
 		*out = ((aafInt32) in.words[2] << 16L) | (in.words[3]);
-		return (OM_ERR_NONE);
+		return (AAFRESULT_SUCCESS);
 	}
 	else
-		return (OM_ERR_OFFSET_SIZE);
+		return (AAFRESULT_OFFSET_SIZE);
 #endif
 }
 
@@ -605,20 +606,20 @@ aafErr_t TruncInt64toUInt32(				/* OK */
 			aafUInt32	*out)		/* OUT - to 32-bits and put the result here */
 {
 	if(out == NULL)
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 
 #if PORT_USE_NATIVE64
 	*out = (aafUInt32)(in & 0xFFFFFFFF);
 	if(*out != in)
-		return (OM_ERR_OFFSET_SIZE);
-	return(OM_ERR_NONE);
+		return (AAFRESULT_OFFSET_SIZE);
+	return(AAFRESULT_SUCCESS);
 #else
 	if ((in.words[0] == 0) && (in.words[1] == 0))
 	{
 		*out = ((aafUInt32) in.words[2] << 16L) | (in.words[3]);
-		return (OM_ERR_NONE);
+		return (AAFRESULT_SUCCESS);
 	} else
-		return (OM_ERR_OFFSET_SIZE);
+		return (AAFRESULT_OFFSET_SIZE);
 #endif
 }
 
@@ -631,17 +632,17 @@ aafErr_t Int64AndInt64(
 #endif
 
 	if(out == NULL)
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 
 #if PORT_USE_NATIVE64
 	*out &= in;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 #else
 	for (j = 3; j >= 0; j--)
 	{
 		out->words[j] &= in.words[j];
 	}
-	return (OM_ERR_NONE);
+	return (AAFRESULT_SUCCESS);
 #endif
 }
 
@@ -657,8 +658,8 @@ aafErr_t Int64AndInt64(
  *		Error code (see below).
  *
  * Possible Errors:
- *		OM_ERR_NULL_PARAM - Buffer pointer is NULL.
- *		OM_ERR_NOT_IMPLEMENTED - Currently only handles bases 10 & 16.
+ *		AAFRESULT_NULL_PARAM - Buffer pointer is NULL.
+ *		AAFRESULT_NOT_IMPLEMENTED - Currently only handles bases 10 & 16.
  */
 aafErr_t Int64ToString(
 			aafInt64	in,			/* IN - Print this number */
@@ -672,7 +673,7 @@ aafErr_t Int64ToString(
 	aafBool			negative = AAFFalse;
 	
 	if(buf == NULL)
-		return(OM_ERR_NULL_PARAM);
+		return(AAFRESULT_NULL_PARAM);
 
 	XPROTECT()
 	{
@@ -714,7 +715,7 @@ aafErr_t Int64ToString(
 	XEXCEPT
 	XEND
 	
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -852,70 +853,70 @@ void testUint64(void)
 	/***** Check some simple add conditions *****/
 	/* Both #'s positive */
 	tmp = test1;
-	if(AddInt64toInt64(test2, &tmp) != OM_ERR_NONE)
+	if(AddInt64toInt64(test2, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed add (error).\n");
 	if(Int64NotEqual(tmp, test3))
 		testErr("failed add value.\n");
 
 	/* Positive + negative */
 	tmp = test1;
-	if(AddInt64toInt64(testNeg1, &tmp) != OM_ERR_NONE)
+	if(AddInt64toInt64(testNeg1, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed add positive + negative (error).\n");
 	if(Int64NotEqual(tmp, test1m1))
 		testErr("failed add positive + negative value.\n");
 
 	/* Negative + negative */
 	tmp = testNeg1;
-	if(AddInt64toInt64(testNeg1, &tmp) != OM_ERR_NONE)
+	if(AddInt64toInt64(testNeg1, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed add negative + negative (error).\n");
 	if(Int64NotEqual(tmp, testNeg2))
 		testErr("failed add negative + negative value.\n");
 
 	/* Check for expected overflow */
 /* !!!	tmp = test1;
-	if(AddInt64toInt64(testF, &tmp) != OM_ERR_OVERFLOW64)
+	if(AddInt64toInt64(testF, &tmp) != AAFRESULT_OVERFLOW64)
 		testErr("missing expected overflow.\n");
 */	
 	/*************************************************/
 	/***** Check some simple subtract conditions *****/
 	/* (pos - pos = pos) */
 	tmp = test4;
-	if(SubInt64fromInt64(test3, &tmp) != OM_ERR_NONE)
+	if(SubInt64fromInt64(test3, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed subtract (pos - pos = pos) (error).\n");
 	if(Int64NotEqual(tmp, test1))
 		testErr("failed subtract (pos - pos = pos) value.\n");
 
 	/* (pos - pos = neg) */
 	tmp = test1;
-	if(SubInt64fromInt64(test1p1, &tmp) != OM_ERR_NONE)
+	if(SubInt64fromInt64(test1p1, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed subtract (pos - pos = neg) (error).\n");
 	if(Int64NotEqual(tmp, testNeg1))
 		testErr("failed subtract (pos - pos = neg) value.\n");
 
 	/* (pos - neg = pos) */
 	tmp = test1;
-	if(SubInt64fromInt64(testNeg1, &tmp) != OM_ERR_NONE)
+	if(SubInt64fromInt64(testNeg1, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed subtract (pos - neg = pos) (error).\n");
 	if(Int64NotEqual(tmp, test1p1))
 		testErr("failed subtract (pos - neg = pos) value.\n");
 
 	/* (pos - pos = zero) */
 	tmp = test1;
-	if(SubInt64fromInt64(test1, &tmp) != OM_ERR_NONE)
+	if(SubInt64fromInt64(test1, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed subtract (error).\n");
 	if(Int64NotEqual(tmp, test0))
 		testErr("failed subtract value.\n");
 
 	/* (neg - neg = zero) */
 	tmp = testNeg1;
-	if(SubInt64fromInt64(testNeg1, &tmp) != OM_ERR_NONE)
+	if(SubInt64fromInt64(testNeg1, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed subtract (neg - neg = zero) (error).\n");
 	if(Int64NotEqual(tmp, test0))
 		testErr("failed subtract (neg - neg = zero) value.\n");
 	
 	/* Check for borrow without error */
 	tmp = test3a;
-	if(SubInt64fromInt64(test3, &tmp) != OM_ERR_NONE)
+	if(SubInt64fromInt64(test3, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed borrow without error (error).\n");
 	if(Int64NotEqual(tmp, test3b))
 		testErr("failed borrow without error (value).\n");
@@ -923,31 +924,31 @@ void testUint64(void)
 	/********************************************/
 	/* Check some simple multiply conditions */
 	/* (pos * pos = pos) */
-	if(MultInt32byInt64(2, test2, &tmp) != OM_ERR_NONE)
+	if(MultInt32byInt64(2, test2, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed simple multiply (error).\n");
 	if(Int64NotEqual(tmp, test4))
 		testErr("failed simple multiply (value).\n");
 
 	/* (pos * neg = neg) */
-	if(MultInt32byInt64(2, testNeg1, &tmp) != OM_ERR_NONE)
+	if(MultInt32byInt64(2, testNeg1, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed (pos * neg = neg) multiply (error).\n");
 	if(Int64NotEqual(tmp, testNeg2))
 		testErr("failed (pos * neg = neg) multiply (value).\n");
 
 	/* (neg * pos = neg) */
-	if(MultInt32byInt64(-1, test2, &tmp) != OM_ERR_NONE)
+	if(MultInt32byInt64(-1, test2, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed (neg * pos = neg) multiply (error).\n");
 	if(Int64NotEqual(tmp, test2Neg))
 		testErr("failed (neg * pos = neg) multiply (value).\n");
 	
 	/* (neg * neg = pos) */
-	if(MultInt32byInt64(-2, test2Neg, &tmp) != OM_ERR_NONE)
+	if(MultInt32byInt64(-2, test2Neg, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed (neg * neg = pos) multiply (error).\n");
 	if(Int64NotEqual(tmp, test4))
 		testErr("failed (neg * neg = pos) multiply (value).\n");
 	
 	/* Test 31-bit rollover */
-	if(MultInt32byInt64(2, testRoll, &tmp) != OM_ERR_NONE)
+	if(MultInt32byInt64(2, testRoll, &tmp) != AAFRESULT_SUCCESS)
 		testErr("failed multiply 31 bit rollover (error).\n");
 	if(Int64NotEqual(tmp, testRoll2))
 		testErr("failed multiply 31 bit rollover (value).\n");
@@ -1003,7 +1004,7 @@ void testUint64(void)
  * Argument Notes:
  *      TimecodeToString() assumes that an already allocated character
  *      array is passed in as tcString.  The length of the array is
- *      in strLen.  The function will return an error (OM_ERR_INTERN_TOO_SMALL)
+ *      in strLen.  The function will return an error (AAFRESULT_INTERN_TOO_SMALL)
  *      if strLen is too small to hold the string representation of the
  *      timecode.
  *
@@ -1026,13 +1027,13 @@ aafErr_t TimecodeToString(
 #if FULL_TOOLKIT
 	register int i, ten;
   aafInt16 hours, minutes, seconds, frames;
-  aafErr_t aafError = OM_ERR_NONE;
+  aafErr_t aafError = AAFRESULT_SUCCESS;
 
   XPROTECT()
 	{
 	  if ((tcString == NULL) || (strLen < 12))
 		{
-		  RAISE(OM_ERR_INTERN_TOO_SMALL);
+		  RAISE(AAFRESULT_INTERN_TOO_SMALL);
 		}
 
 	  if (timeCode.drop == kTcDrop)
@@ -1077,7 +1078,7 @@ aafErr_t TimecodeToString(
   XEND;
 #endif
 
-  return(OM_ERR_NONE);
+  return(AAFRESULT_SUCCESS);
 }
 
 /*************************************************************************
@@ -1130,7 +1131,7 @@ aafErr_t StringToTimecode(
 
 	  if (len == 0 || len > 12)
 		{
-		  RAISE(OM_ERR_INVALID_TIMECODE);
+		  RAISE(AAFRESULT_INVALID_TIMECODE);
 		}
 
 	  strncpy(tcString, timecodeString, len);
@@ -1138,7 +1139,7 @@ aafErr_t StringToTimecode(
 	  intFRate = roundFrameRate(frameRate);
 	  if (intFRate == 0)
 		{
-		  RAISE(OM_ERR_INVALID_TIMECODE);
+		  RAISE(AAFRESULT_INVALID_TIMECODE);
 		}
 
 	  /* Prescan for drop/nondrop */
@@ -1179,7 +1180,7 @@ aafErr_t StringToTimecode(
 		  else if (*c != ' ' && *c != ':' && *c != '.' && *c != ';' && *c != '+')
 			{
 			  total = 0;		/* error condition */
-			  RAISE(OM_ERR_INVALID_TIMECODE);
+			  RAISE(AAFRESULT_INVALID_TIMECODE);
 			}
 		}
 	  
@@ -1198,7 +1199,7 @@ aafErr_t StringToTimecode(
 	}
   XEND;
 #endif
-  return(OM_ERR_NONE);
+  return(AAFRESULT_SUCCESS);
 }
 
 
