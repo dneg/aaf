@@ -47,32 +47,32 @@ OMMSSStoredStream::~OMMSSStoredStream(void)
   ASSERT("Unimplemented code not reached", false);
 }
 
-void OMMSSStoredStream::read(void* data, size_t size) const
+void OMMSSStoredStream::read(void* /* data */, size_t /* size */) const
 {
   TRACE("OMMSSStoredStream::read");
   // tjb TBS
   ASSERT("Unimplemented code not reached", false);
 }
 
-void OMMSSStoredStream::read(OMByte* data,
-                             const OMUInt32 bytes,
-                             OMUInt32& bytesRead) const
+void OMMSSStoredStream::read(OMByte* /* data */,
+                             const OMUInt32 /* bytes */,
+                             OMUInt32& /* bytesRead */) const
 {
   TRACE("OMMSSStoredStream::read");
   // tjb TBS
   ASSERT("Unimplemented code not reached", false);
 }
 
-void OMMSSStoredStream::write(void* data, size_t size)
+void OMMSSStoredStream::write(void* /* data */, size_t /* size */)
 {
   TRACE("OMMSSStoredStream::write");
   // tjb TBS
   ASSERT("Unimplemented code not reached", false);
 }
 
-void OMMSSStoredStream::write(const OMByte* data,
-                              const OMUInt32 bytes,
-                              OMUInt32& bytesWritten)
+void OMMSSStoredStream::write(const OMByte* /* data */,
+                              const OMUInt32 /* bytes */,
+                              OMUInt32& /* bytesWritten */)
 {
   TRACE("OMMSSStoredStream::write");
   // tjb TBS
@@ -86,7 +86,7 @@ OMUInt64 OMMSSStoredStream::size(void) const
   return 0; // tjb TBS
 }
 
-void OMMSSStoredStream::setSize(const OMUInt64 newSize)
+void OMMSSStoredStream::setSize(const OMUInt64 /* newSize */)
 {
   TRACE("OMMSSStoredStream::setSize");
   // tjb TBS
@@ -100,7 +100,7 @@ OMUInt64 OMMSSStoredStream::position(void) const
   return 0; // tjb TBS
 }
 
-void OMMSSStoredStream::setPosition(const OMUInt64 offset)
+void OMMSSStoredStream::setPosition(const OMUInt64 /* offset */)
 {
   TRACE("OMMSSStoredStream::setPosition");
   // tjb TBS
