@@ -123,6 +123,8 @@ public:
 	// FIXME - Too large to return by value?
 	aafMobID_t GetSourceID();
 
+	aafSlotID_t GetSourceMobSlotID();
+
 private:
 	AxSourceReference();
 	AxSourceReference( const AxSourceReference& );

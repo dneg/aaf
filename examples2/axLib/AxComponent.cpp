@@ -136,6 +136,15 @@ aafMobID_t AxSourceReference::GetSourceID()
 	return uid;
 }
 
+aafSlotID_t AxSourceReference::GetSourceMobSlotID()
+{
+	aafSlotID_t slotid;
+
+	CHECK_HRESULT( _spIaafSourceReference->GetSourceMobSlotID( &slotid ) );
+
+	return slotid;
+}
+
 //=---------------------------------------------------------------------=
 
 AxSourceClip::AxSourceClip( IAAFSourceClipSP spIaafSourceClip )
