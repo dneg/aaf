@@ -71,7 +71,6 @@ void AAFDomainUtils::SetDictionary(IAAFDictionary *dict)
 IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictionary *dict, aafUID_t interpolationDefID)
 {
 	IAAFInterpolationDef	*interpDef;
-	IAAFDefObject			*defObject;
 	AAFRESULT				rc;
 
 	CAAFBuiltinDefs defs (dict);
@@ -85,10 +84,9 @@ IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictiona
 	(void)(defs.cdInterpolationDefinition()->
 		   CreateInstance(IID_IAAFInterpolationDef,
 						  (IUnknown **)&interpDef));
-	(void)(interpDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
 	if(memcmp(&interpolationDefID, &LinearInterpolator, sizeof(aafUID_t)) == 0)
 	{
- 		(void)(defObject->Initialize(interpolationDefID, L"LinearInterp", L"Linear keyframe interpolation"));
+ 		(void)(interpDef->Initialize(interpolationDefID, L"LinearInterp", L"Linear keyframe interpolation"));
 		dict->RegisterInterpolationDef(interpDef);
 	}
 	else
@@ -97,8 +95,6 @@ IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictiona
 		interpDef = NULL;
 	}
 
-	defObject->Release();
-
 //cleanup:
 	return(interpDef);
 }
@@ -106,41 +102,12 @@ IAAFInterpolationDef *AAFDomainUtils::CreateInterpolationDefinition(IAAFDictiona
 IAAFTypeDef *AAFDomainUtils::CreateTypeDefinition(IAAFDictionary *pDict, aafUID_t typeDefID)
 {
 	IAAFTypeDef		*typeDef;
-	IAAFDefObject	*defObject;
-	AAFRESULT		rc;
 
 	CAAFBuiltinDefs defs (pDict);
 
 //	dprintf("AEffect::CreateTypeDefinition()\n");	//JeffB:
-	rc = pDict->LookupTypeDef(typeDefID,&typeDef);
-	if(rc == AAFRESULT_SUCCESS && typeDef != NULL)
-		return typeDef;
-
-	CHECKAAF(defs.cdTypeDef()->
-			 CreateInstance(IID_IAAFTypeDef,
-							(IUnknown **)&typeDef));
-	CHECKAAF(typeDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
-	if(memcmp(&typeDefID, &kAAFTypeID_Rational, sizeof(aafUID_t)) == 0)
-	{
- 		CHECKAAF(defObject->Initialize(typeDefID, L"Rational", L"Rational Number"));
-	}
-	else if(memcmp(&typeDefID, &kAAFTypeID_Int32, sizeof(aafUID_t)) == 0)
-	{
- 		CHECKAAF(defObject->Initialize(typeDefID, L"Int32", L"32-bit signed integer"));
-	}
-	else
-	{
-		typeDef->Release();
-		typeDef = NULL;
-	}
-
-	if(typeDef != NULL)
-		pDict->RegisterTypeDef(typeDef);
-//cleanup:
-	if(defObject != NULL)
-		defObject->Release();
-
-	return(typeDef);
+	CHECKAAF(pDict->LookupTypeDef(typeDefID,&typeDef));
+	return typeDef;
 }
 
 void AAFDomainUtils::AAFAddOnePoint(IAAFDictionary *dict, aafRational_t percentTime, long buflen, void *buf, IAAFTypeDef *typeDef, IAAFVaryingValue *pVVal)
@@ -210,7 +177,6 @@ IAAFVaryingValue *AAFDomainUtils::AAFAddEmptyVaryingVal(IAAFDictionary *dict, IA
 IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDict, aafUID_t parmDefID)
 {
 	IAAFParameterDef	*parmDef;
-	IAAFDefObject		*defObject;
 	IAAFTypeDef			*typeDef;
 	AAFRESULT			rc;
 	aafUID_t			typeUID;
@@ -225,16 +191,15 @@ IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDic
 	CHECKAAF(defs.cdParameterDef()->
 			 CreateInstance(IID_IAAFParameterDef,
 							(IUnknown **)&parmDef));
-	CHECKAAF(parmDef->QueryInterface(IID_IAAFDefObject, (void **) &defObject));
 
 	if(memcmp(&parmDefID, &kAAFParameterDefLevel, sizeof(aafUID_t)) == 0)
 	{
-    	CHECKAAF(defObject->Initialize(parmDefID, L"Level", L"fractional 0-1 inclusive"));
+    	CHECKAAF(parmDef->Initialize(parmDefID, L"Level", L"fractional 0-1 inclusive"));
 		typeUID = kAAFTypeID_Rational;
 	}
 	else if(memcmp(&parmDefID, &kAAFParameterDefSMPTEWipeNumber, sizeof(aafUID_t)) == 0)
 	{
-    	CHECKAAF(defObject->Initialize(parmDefID, L"WipeCode", L"SMPTE Wipe Code"));
+    	CHECKAAF(parmDef->Initialize(parmDefID, L"WipeCode", L"SMPTE Wipe Code"));
 		typeUID = kAAFTypeID_Int32;
 	}
 	else
@@ -255,8 +220,6 @@ IAAFParameterDef *AAFDomainUtils::CreateParameterDefinition(IAAFDictionary *pDic
 		CHECKAAF(pDict->RegisterParameterDef(parmDef));
 	}
 //cleanup:
-	if(defObject != NULL)
-		defObject->Release();
 
 	return(parmDef);
 }
