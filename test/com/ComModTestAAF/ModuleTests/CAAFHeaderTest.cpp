@@ -621,6 +621,8 @@ void HeaderTest::openEssenceData()
   // Make sure that the essence data still references
   // a valid mob.
   check(_pEssenceData->GetFileMob(&_pSourceMob));
+  _pSourceMob->Release();
+  _pSourceMob = NULL;
   _pEssenceData->Release();
   _pEssenceData = NULL;
 
