@@ -36,9 +36,12 @@
 #include "AAFTypes.h"
 #endif
 
+#ifndef __ImplAAFOperationDef_h__
+#include "ImplAAFOperationDef.h"
+#endif
+
 
 class ImplAAFDataDef;
-class ImplAAFOperationDef;
 class ImplAAFParameter;
 class ImplEnumAAFOperationDefs;
 class ImplEnumAAFParameterDefs;
@@ -257,7 +260,7 @@ public:
          aafUInt32  index);
 
 private:
-	OMFixedSizeProperty<aafUID_t>						_operationDefinition;
+	OMWeakReferenceProperty<ImplAAFOperationDef>		_operationDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
 	OMStrongReferenceSetProperty<ImplAAFParameter>		_parameters;
 	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
