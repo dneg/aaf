@@ -115,6 +115,11 @@ public:
   // in /test/ImplAAFEssenceDescriptorTest.cpp.
   static AAFRESULT test();
 
+public:
+	// Functions internal to the toolkit
+	virtual AAFRESULT STDMETHODCALLTYPE
+		GetOwningMobKind (aafMobKind_t *pMobKind);
+
 private:
     OMStrongReferenceVectorProperty<ImplAAFLocator> _locators;
 };
