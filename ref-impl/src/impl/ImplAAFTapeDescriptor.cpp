@@ -97,7 +97,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		*pLen = _manufacturer.length()+1;
+		*pLen = _manufacturer.size();
 	}
 
 	return aafError;
@@ -151,7 +151,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		*pLen = _model.length()+1;
+		*pLen = _model.size();
 	}
 
 	return aafError;
