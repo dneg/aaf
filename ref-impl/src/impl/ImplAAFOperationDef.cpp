@@ -270,14 +270,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::RemoveDegradeToOperationAt (
 	  aafUInt32 index)
 {
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountDegradeToOperations (&count);
-  if (AAFRESULT_FAILED (hr)) return hr;
-  if (index >= count)
-	return AAFRESULT_BADINDEX;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountDegradeToOperations (&count);
+	if (AAFRESULT_FAILED (hr)) return hr;
+	if (index >= count)
+		return AAFRESULT_BADINDEX;
+	
+	return AAFRESULT_NOT_IMPLEMENTED;
+//!!!	_degradeTo.removeAt(index);
+//	return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -301,7 +303,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! pResult) return AAFRESULT_NULL_PARAM;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+  *pResult = _degradeTo.count();
+  return AAFRESULT_SUCCESS;
 }
 
 

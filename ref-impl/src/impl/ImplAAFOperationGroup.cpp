@@ -559,5 +559,13 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::RemoveInputSegmentAt (aafUInt32  index)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafInt32 count;
+	AAFRESULT hr;
+	hr = CountSourceSegments (&count);
+	if (AAFRESULT_FAILED (hr)) return hr;
+	if (index >= (aafUInt32)count)
+		return AAFRESULT_BADINDEX;
+	
+	_inputSegments.removeAt(index);
+	return AAFRESULT_SUCCESS;
 }
