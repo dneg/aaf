@@ -48,6 +48,19 @@ static const OMFileSignature aafFileSignature  =
  0xff0d, 0x4d4f,
 {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
+
+//
+// File Format Version
+//
+// Update this when incompatible changes are made to AAF file format
+// version. 
+//
+//    0 : Tue Jan 11 17:08:26 EST 2000
+//        Initial Release version.
+//
+static const aafUInt32 sCurrentAAFObjectModelVersion = 0;
+
+
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
 {
@@ -128,6 +141,22 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		_head = dynamic_cast<ImplAAFHeader *>(head);
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
+		// Check for file format version.
+		if (_head->IsObjectModelVersionPresent())
+		  {
+			// If property isn't present, the default version is 0,
+			// which is always (supposed to be) legible.  If it is
+			// present, find out the version number to determine if
+			// the file is legible.
+			if (_head->GetObjectModelVersion() >
+				sCurrentAAFObjectModelVersion)
+			  {
+				// File version is higher than the version understood
+				// by this toolkit.  Therefore this file cannot be read.
+				return AAFRESULT_FILEREV_DIFF;
+			  }
+		  }
+
 		// Now that the file is open and the header has been
 		// restored, complete the initialization of the
 		// dictionary. We obtain the dictionary via the header
@@ -216,6 +245,22 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		_head = dynamic_cast<ImplAAFHeader *>(head);
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
+		// Check for file format version.
+		if (! _head->IsObjectModelVersionPresent())
+		  {
+			// If property isn't present, the default version is 0,
+			// which is always (supposed to be) legible.  If it is
+			// present, find out the version number to determine if
+			// the file is legible.
+			if (_head->GetObjectModelVersion() >
+				sCurrentAAFObjectModelVersion)
+			  {
+				// File version is higher than the version understood
+				// by this toolkit.  Therefore this file cannot be read.
+				return AAFRESULT_FILEREV_DIFF;
+			  }
+		  }
+
 		// Now that the file is open and the header has been
 		// restored, complete the initialization of the
 		// dictionary. We obtain the dictionary via the header
@@ -313,6 +358,20 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		// Make sure the header is initialized with our previously created
 		// dictionary.
 		_head->SetDictionary(_factory);
+
+		// Set the file format version.
+		//
+		// BobT Fri Jan 21 14:37:43 EST 2000: the default behavior is
+		// that if the version isn't present, it's assumed to Version
+		// 0.  Therefore if the current version is 0, don't write out
+		// the property.  We do this so that hackers examining written
+		// files won't know that a mechanism exists to mark future
+		// incompatible versions, and so will work harder to make any
+		// future changes compatible.
+		if (sCurrentAAFObjectModelVersion)
+		  {
+			_head->SetObjectModelVersion(sCurrentAAFObjectModelVersion);
+		  }
 
 		// Add the ident to the header.
 		checkResult(_head->AddIdentificationObject(&_ident));
