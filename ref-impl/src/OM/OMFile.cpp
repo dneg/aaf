@@ -467,6 +467,15 @@ void OMFile::removeAllFactories(void)
   _factory.clear();
 }
 
+OMFile::FactorySetIterator* OMFile::factories(void)
+{
+  TRACE("OMFile::factories");
+
+  FactorySetIterator* result = new FactorySetIterator(_factory, OMBefore);
+  POSTCONDITION("Valid iterator", result != 0);
+  return result;
+}
+
   // @mfunc Save all changes made to the contents of this
   //        <c OMFile>. It is not possible to save
   //        read-only or transient files.

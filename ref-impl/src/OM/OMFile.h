@@ -171,6 +171,8 @@ public:
 
   static void removeAllFactories(void);
 
+  static FactorySetIterator* factories(void);
+
   // @access Public members.
 
     // @cmember Destructor.
