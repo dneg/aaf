@@ -104,8 +104,8 @@ static aafInt32 dropTbl[] = {
   1L, 10L, FPSEC, FPSEC*10, DFPMIN, DFP10M, DFPHR, DFPHR*10 };
 static aafInt32 PALnondropTbl[] = { 
   1L, 10L, PALFPSEC, PALFPSEC*10, PALFPMIN, PALFPMIN*10, PALFPHR, PALFPHR*10 };
-static aafInt32 PALdropTbl[]    = { 
-  1L, 10L, PALFPSEC, PALFPSEC*10, PALFPMIN, PALFPMIN*10, PALFPHR, PALFPHR*10 };
+//static aafInt32 PALdropTbl[]    = { 
+//  1L, 10L, PALFPSEC, PALFPSEC*10, PALFPMIN, PALFPMIN*10, PALFPHR, PALFPHR*10 };
 /* End of Timecode definitions */
 
 aafErr_t MakeInt64(aafInt32 high, aafInt32 low, aafInt64 *out)
