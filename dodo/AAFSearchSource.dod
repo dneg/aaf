@@ -21,7 +21,7 @@ AD_IDL(//
 //)
 AD_DEFAULT_UUID(332CBDD0, 5425, 11D2, AA, 7A, 10, 00, 3D, 00, 00, 00)
 AD_CLASS_BEGIN
-AD_XMETHOD7(SearchSource,
+AD_XMETHOD6(SearchSource,
 			[in],
 			  objPass,
 			  aafSlotID_t,
@@ -49,11 +49,6 @@ AD_XMETHOD7(SearchSource,
 			  Effect Choice,
 			[out],
 			  objOut,
-			  AAFComponent,
-			  ppThisCpnt,
-			  The found component,
-			[out],
-			  objOut,
 			  AAFFindSourceInfo,
 			  ppSourceInfo,
 			  Source Information,
@@ -70,10 +65,9 @@ AD_XMETHOD7(SearchSource,
   // before they are returned.
   //
   // Succeeds if all of the following are true:
-  // - the ppThisCpnt pointer is valid.
+  //    ppSourceInfo is non-NULL
+  //	a Mob of the requested kind is found
   // \(other conditions here\)
-  // 
-  // If this method fails nothing is written to *ppThisCpnt.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -84,6 +78,12 @@ AD_XMETHOD7(SearchSource,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppCpnt is null.
+  //
+  // OM_ERR_INVALID_MOBTYPE
+  //	- The enumerator is out of range \(bad cast\, or writing toolkit newer than reader\)
+  //
+  // OM_ERR_TRAVERSAL_NOT_POSS
+  //	- Can not find a mob of the given kind. 
   //
   // \(other codes here.\))
 AD_CLASS_END
