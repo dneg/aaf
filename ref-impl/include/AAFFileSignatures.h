@@ -39,7 +39,7 @@ const aafInt8 aafObjectModelDevelopmentVersion = 0;
 // indicates a released version.
 
 // If you change aafObjectModelDevelopmentVersion above you must also
-// change the signatures below.
+// change the signatures below (a program is available).
 
 // The aafObjectModelDevelopmentVersion appears in the signatures as
 // follows
@@ -47,8 +47,7 @@ const aafInt8 aafObjectModelDevelopmentVersion = 0;
 //   - Bytes 73 (most significant) and 74 (least significant) of
 //     the text signatures.
 
-// The signature for structured storage binary AAF files. This
-// includes the structured storage file signature.
+// AAF files encoded as structured storage (binary).
 //
 const aafUInt8 aafFileSignatureAafSSBinary[] = {
   0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
@@ -59,8 +58,7 @@ const aafUInt8 aafFileSignatureAafSSBinary[] = {
 const aafUID_t aafFileSignatureAafSSBinaryGUID = 
 {0x42464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The signature for structured storage binary MXF files. This includes
-// the structured storage file signature.
+// MXF files encoded as structured storage (binary).
 //
 const aafUInt8 aafFileSignatureMxfSSBinary[] = {
   0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
@@ -71,7 +69,7 @@ const aafUInt8 aafFileSignatureMxfSSBinary[] = {
 const aafUID_t aafFileSignatureMxfSSBinaryGUID = 
 {0x4246584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The signature for XML text AAF files.
+// AAF files encoded as XML (text).
 //
 const aafUInt8 aafFileSignatureAafXmlText[] = {
   0x3c, 0x3f, 0x78, 0x6d, 0x6c, 0x20, 0x76, 0x65,
@@ -85,10 +83,11 @@ const aafUInt8 aafFileSignatureAafXmlText[] = {
   0x42, 0x33, 0x34, 0x30, 0x31, 0x30, 0x31, 0x30,
   0x31, 0x30, 0x30, 0x7d, 0x22, 0x3f, 0x3e
 };
+
 const aafUID_t aafFileSignatureAafXmlTextGUID = 
 {0x58464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The signature for XML text MXF files.
+// MXF files encoded as XML (text).
 //
 const aafUInt8 aafFileSignatureMxfXmlText[] = {
   0x3c, 0x3f, 0x78, 0x6d, 0x6c, 0x20, 0x76, 0x65,
@@ -106,7 +105,7 @@ const aafUInt8 aafFileSignatureMxfXmlText[] = {
 const aafUID_t aafFileSignatureMxfXmlTextGUID = 
 {0x5846584d, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The signature for SMPTE KLV binary AAF files.
+// AAF files encoded as SMPTE KLV (binary).
 //
 const aafUInt8 aafFileSignatureAafKlvBinary[] = {
   0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
@@ -117,7 +116,7 @@ const aafUInt8 aafFileSignatureAafKlvBinary[] = {
 const aafUID_t aafFileSignatureAafKlvBinaryGUID = 
 {0x4b464141, 0x000d, 0x4d4f, {0x06, 0x0e, 0x2b, 0x34, 0x01, 0x01, 0x01, 0xff}};
 
-// The signature for SMPTE KLV binary MXF files.
+// MXF files encoded as SMPTE KLV (binary).
 //
 const aafUInt8 aafFileSignatureMxfKlvBinary[] = {
   0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1,
