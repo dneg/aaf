@@ -3,7 +3,7 @@
 #define OMFILE_H
 
 #include "OMStorable.h"
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 
 #include <stddef.h>
 
