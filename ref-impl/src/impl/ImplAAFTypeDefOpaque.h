@@ -63,6 +63,50 @@ public:
          // @parm [out] the type id of the actual data
          aafUID_t *  pActualTypeID);
 
+  virtual AAFRESULT STDMETHODCALLTYPE
+   GetHandle (
+    // value to get data from.
+    ImplAAFPropertyValue * pPropVal,
+
+    // Size of preallocated buffer
+    aafUInt32  handleSize,
+
+    // Preallocated buffer to hold handle
+    aafDataBuffer_t  pHandle,
+
+    // Number of actual bytes read
+    aafUInt32*  bytesRead);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+   GetHandleBufLen (
+    // value to set.
+   ImplAAFPropertyValue * pPropVal,
+
+    // Pointer to an variable used to return the length
+   aafUInt32 *  pLen);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+	SetHandle (
+    // value to write data to.
+    ImplAAFPropertyValue * pPropVal,
+
+    // Size of preallocated buffer
+	aafUInt32  handleSize,
+
+    // buffer containing handle
+	aafDataBuffer_t  pHandle);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreateValueFromHandle (
+    // pointer to buffer containing handle to use
+     aafMemPtr_t  pInitData,
+
+    // size of handle in pInitData
+    aafUInt32  initDataSize,
+
+    // newly created property value
+    ImplAAFPropertyValue ** ppOpaquePropertyValue);
+  
   // Override from AAFTypeDef
   virtual AAFRESULT STDMETHODCALLTYPE
     GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
