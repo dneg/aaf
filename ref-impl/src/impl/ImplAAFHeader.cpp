@@ -10,6 +10,7 @@
 
 
 #include "AAFTypes.h"
+#include "AAFResult.h"
 #include "aafTable.h"
 #include "aafErr.h"
 
@@ -110,11 +111,15 @@ ImplAAFHeader::~ImplAAFHeader ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::LookupMob (aafUID_t *mobID,
+    ImplAAFHeader::LookupMob (aafUID_t *pMobID,
                            ImplAAFMob **ppMob)
 {
+    if ((! pMobID) || (! ppMob))
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
 	ImplAAFContentStorage *cstore = _contentStorage;
-	return(cstore->LookupMob(mobID, ppMob));
+	return(cstore->LookupMob(pMobID, ppMob));
 }
 
 
@@ -122,6 +127,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::GetNumMobs (aafMobKind_t mobKind,
                            aafNumSlots_t *pNumMobs)
 {
+    if (! pNumMobs)
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
 	ImplAAFContentStorage *cstore = _contentStorage;
 	return(cstore->GetNumMobs(mobKind, pNumMobs));
 }
@@ -130,6 +139,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::EnumAAFPrimaryMobs (ImplEnumAAFMobs **ppEnum)
 {
+    if (! ppEnum)
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
 	ImplAAFContentStorage *cstore = _contentStorage;
 	return(cstore->GetPrimaryMobs(ppEnum));
 }
@@ -139,6 +152,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::EnumAAFAllMobs (aafSearchCrit_t *pSearchCriteria,
                            ImplEnumAAFMobs **ppEnum)
 {
+    if (! ppEnum)
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
 	ImplAAFContentStorage *cstore = _contentStorage;
 	return(cstore->GetMobs(pSearchCriteria, ppEnum));
 }
@@ -147,6 +164,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::AppendMob (ImplAAFMob *pMob)
 {
+    if (! pMob)
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
 	ImplAAFContentStorage *cstore = _contentStorage;
 	return(cstore->AppendMob(pMob));
 }
@@ -155,6 +176,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::RemoveMob (ImplAAFMob *pMob)
 {
+    if (! pMob)
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
 	ImplAAFContentStorage *cstore = _contentStorage;
 	return(cstore->RemoveMob(pMob));
 }
@@ -164,10 +189,14 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::IsMediaDataPresent (aafUID_t *pFileMobID,
                            aafFileFormat_t fmt,
-                           aafBool *result)
+                           aafBool *pResult)
 {
+    if ((! pFileMobID) || (! pResult))
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
 	ImplAAFContentStorage *cstore = _contentStorage;
-	return(cstore->IsMediaDataPresent(pFileMobID, fmt, result));
+	return(cstore->IsMediaDataPresent(pFileMobID, fmt, pResult));
 }
 
 
@@ -175,6 +204,10 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::EnumAAFMediaObjects (aafMediaCriteria_t *pMediaCriteria,
                            ImplEnumAAFMedia **ppEnum)
 {
+    if ((! pMediaCriteria) || (! ppEnum))
+	  {
+		return AAFRESULT_NULL_PARAM;
+	  }
 	ImplAAFContentStorage *cstore = _contentStorage;
 	return(cstore->GetMedia(pMediaCriteria, ppEnum));
 }
@@ -182,24 +215,36 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::AppendMedia (ImplAAFMedia *  /*pMedia*/)
+    ImplAAFHeader::AppendMedia (ImplAAFMedia * pMedia)
 {
+  if (! pMedia)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::RemoveMedia (ImplAAFMedia *  /*pMedia*/)
+    ImplAAFHeader::RemoveMedia (ImplAAFMedia * pMedia)
 {
+  if (! pMedia)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetDictionary (ImplAAFDictionary ** /*ppDictionary*/)
+    ImplAAFHeader::GetDictionary (ImplAAFDictionary ** ppDictionary)
 {
+  if (! ppDictionary)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
@@ -208,7 +253,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::GetLastIdentification (ImplAAFIdentification ** ppIdentification)
 {
-  assert(ppIdentification);
+  if (! ppIdentification)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
 
   AAFRESULT result;
   size_t size;
@@ -228,16 +276,24 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetIdentificationByGen (aafUID_t *  /*pGeneration*/,
-                           ImplAAFIdentification ** /*ppIdentification*/)
+    ImplAAFHeader::GetIdentificationByGen (aafUID_t * pGeneration,
+                           ImplAAFIdentification ** ppIdentification)
 {
+  if ((! pGeneration) || (! ppIdentification))
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumAAFIdents (ImplEnumAAFIdentifications ** /*ppEnum*/)
+    ImplAAFHeader::EnumAAFIdents (ImplEnumAAFIdentifications ** ppEnum)
 {
+  if (! ppEnum)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
@@ -307,15 +363,23 @@ AAFRESULT
 
 
 AAFRESULT 
-    ImplAAFHeader::AppendIdentification (ImplAAFIdentification * /*pIdent*/)
+    ImplAAFHeader::AppendIdentification (ImplAAFIdentification * pIdent)
 {
+  if (! pIdent)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT 
-    ImplAAFHeader::RemoveIdentification (ImplAAFIdentification * /*pIdent*/)
+    ImplAAFHeader::RemoveIdentification (ImplAAFIdentification * pIdent)
 {
+  if (! pIdent)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
@@ -323,14 +387,22 @@ AAFRESULT
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::GetRefImplVersion (aafProductVersion_t *pToolkitVersion)
 {
-	*pToolkitVersion = _toolkitRev;
-	return (OM_ERR_NONE);
+  if (! pToolkitVersion)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  *pToolkitVersion = _toolkitRev;
+  return (AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::GetFileRevision (aafVersionType_t *pRevision)
 {
+  if (! pRevision)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
 #if FULL_TOOLKIT
 	XPROTECT(_file)
 	{
@@ -357,8 +429,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 	
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetLastModified (aafTimeStamp_t *  /*pLastModified*/)
+    ImplAAFHeader::GetLastModified (aafTimeStamp_t * pTimeStamp)
 {
+  if (! pTimeStamp)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
