@@ -156,6 +156,9 @@
 				RelativePath=".\AxPluginFormatSpecifiers.cpp">
 			</File>
 			<File
+				RelativePath=".\AxPluginIIDs.cpp">
+			</File>
+			<File
 				RelativePath=".\AxPluginRegistry.cpp">
 			</File>
 			<File
