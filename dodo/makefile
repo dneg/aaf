@@ -4,7 +4,7 @@
 #                                          #
 ############################################
 
-all : dodo-app targets
+all : dodo-app depend targets
 
 BLD_CFG_DIR = ../ref-impl/bld_cfg
 
