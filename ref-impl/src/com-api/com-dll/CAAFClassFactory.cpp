@@ -11,8 +11,8 @@
 // Implementation for the AAFClassFactory class.
 //
 
-#ifndef __aaftypes_h__
-#include "aaftypes.h"
+#ifndef __AAFTypes_h__
+#include "AAFTypes.h"
 #endif
 
 #ifndef __CAAFClassFactory_h__
@@ -22,11 +22,6 @@
 #ifndef __CAAFServer_h__
 #include "CAAFServer.h"
 #endif
-
-#ifndef __AAFSmartPtr_h__
-#include "AAFSmartPtr.h"	// our smart pointer impementation that
-#endif						// will hide all reference counting methods.
-
 
 
 
@@ -76,8 +71,8 @@ STDMETHODIMP CAAFClassFactory::CreateInstance
 	*ppvObj = NULL;
 	
 	// Ask the callback function to create the object instance.
-	AAFSmartPtr<IUnknown> spObject;
-	hr = _pfnCreate(pUnkOuter, (void **)&spObject);
+	IUnknown* pUnknown = NULL;
+	hr = _pfnCreate(pUnkOuter, (void **)&pUnknown);
 	if (FAILED(hr))
 		return hr;
 		
@@ -85,7 +80,11 @@ STDMETHODIMP CAAFClassFactory::CreateInstance
 	// this call succeeds than the reference count should be two if 
 	// it fails then the reference count will still be one and the 
 	// following spObject release will delete the object.
-	return spObject->QueryInterface(riid, ppvObj);
+	hr = pUnknown->QueryInterface(riid, ppvObj);
+
+	pUnknown->Release();
+
+	return hr;
 }
 
 
@@ -94,7 +93,7 @@ STDMETHODIMP CAAFClassFactory::LockServer
 	BOOL fLock
 )
 {
-	g_pAAFServer->Lock(static_cast<AAFBool>(fLock));
+	g_pAAFServer->Lock(static_cast<aafBool>(fLock));
 	return S_OK;
 }
 
