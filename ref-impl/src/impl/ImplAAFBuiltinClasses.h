@@ -112,7 +112,7 @@ private:
   {
 	wchar_t *        name;
 	aafUID_t         id;
-	aafUInt32        tag;
+	OMPropertyId     tag;
 	const aafUID_t * pTypeGuid;
 	const aafUID_t * pOwnerClassGuid;
 	bool             mandatory;

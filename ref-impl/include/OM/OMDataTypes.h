@@ -123,18 +123,18 @@ typedef OMUInt8                OMByte;
 typedef OMUInt8                OMCharacter;
 typedef OMUInt16               OMWideCharacter;
 
-typedef OMUInt32 OMPropertyId;
-typedef OMUInt32 OMPropertySize;
-typedef OMUInt32 OMPropertyCount;
+typedef OMUInt16 OMPropertyId;
+typedef OMUInt16 OMPropertySize;
+typedef OMUInt16 OMPropertyCount;
 typedef OMUInt32 OMPropertyOffset;
-typedef OMUInt32 OMStoredForm;
-typedef OMUInt32 OMVersion;
-typedef OMUInt32 OMKeySize;
+typedef OMUInt16 OMStoredForm;
+typedef OMUInt8  OMVersion;
+typedef OMUInt8  OMKeySize;
 
-typedef OMUInt16 OMByteOrder;
+typedef OMUInt8 OMByteOrder;
 
-const OMByteOrder littleEndian      = 0x4949; // 'II' for Intel
-const OMByteOrder bigEndian         = 0x4d4d; // 'MM' for Motorola
+const OMByteOrder littleEndian      = 0x4c; // 'L' for little
+const OMByteOrder bigEndian         = 0x42; // 'B' for big
 
 #include <string.h>  // For use of memcmp() below.
 
@@ -238,7 +238,7 @@ typedef OMObjectIdentification OMFileSignature;
 
 // Property instance tags.
 //
-typedef OMUInt32 OMPropertyTag;
+typedef OMUInt16 OMPropertyTag;
 
 const OMPropertyTag nullOMPropertyTag = ~(OMPropertyTag)0;
 
