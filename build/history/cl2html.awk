@@ -78,7 +78,7 @@ function printKey() {
   printf("<tr><th>Color</th><th>Component</th></tr>\n");
   for (i in names) {
     printf("<tr>\n");
-    printf("<td bgcolor=\"%s\">&nbsp</td>\n", colors[names[i]]);
+    printf("<td bgcolor=\"%s\">&nbsp;</td>\n", colors[names[i]]);
     printf("<td>%s</td>\n", i);
     printf("</tr>\n");
   }
