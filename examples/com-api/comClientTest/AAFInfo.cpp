@@ -168,7 +168,7 @@ static void ReadAAFFile(aafWChar * pFileName)
         pIdent = NULL;
 
         aafNumSlots_t n;
-        hr = pHeader->CountMobs(kAllMob, &n);
+        hr = pHeader->CountMobs(kAAFAllMob, &n);
         check(hr);
         printf("Number of Mobs       = %d\n", n);
       }

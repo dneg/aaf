@@ -318,7 +318,7 @@ bool IsOptionalPropertyPresent (IAAFObject * pObj,
     throw;
   }
 
-  return (AAFTrue == r) ? true : false;
+  return (kAAFTrue == r) ? true : false;
 }
 
 // Main functions for PersonnelResource
@@ -1170,14 +1170,14 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
     check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_GivenName,
 									   L"GivenName",
 									   ptd_String,
-									   AAFFalse,	// mandatory
+									   kAAFFalse,	// mandatory
 									   &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
     check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_FamilyName,
 									    L"FamilyName",
 									    ptd_String,
-									    AAFFalse,	// mandatory
+									    kAAFFalse,	// mandatory
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1198,7 +1198,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
     check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_Position,
 									    L"Position",
 									    ptd_Position,
-									    AAFFalse,   // mandatory
+									    kAAFFalse,   // mandatory
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1219,7 +1219,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
     check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_ContractID,
 									    L"ContractID",
 									    ptd_ui32,
-									    AAFTrue,    // optional
+									    kAAFTrue,    // optional
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1233,7 +1233,7 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
     check (pcd->RegisterNewPropertyDef (kPropID_PersonnelResource_Role,
 									    L"Role",
 									    ptd_String,
-									    AAFTrue,    // optional
+									    kAAFTrue,    // optional
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;
@@ -1514,7 +1514,7 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
     check (pcd->RegisterNewPropertyDef (kPropID_AdminMob_Personnel,
 									    L"Personnel",
 									    ptd_PersonnelVector,
-									    AAFFalse,
+									    kAAFFalse,
 									    &pd_unused));
     pd_unused->Release();
     pd_unused=NULL;

@@ -332,7 +332,7 @@ AAFRESULT ImplAAFPluginManager::ForEachPluginWithDefinitionDo(
   if (NULL != _plugins)
   {
     aafTableIterate_t iter;
-    aafBool found = AAFFalse;
+    aafBool found = kAAFFalse;
    
 
     result = ::TableFirstEntryMatching(_plugins, &iter, (void *)&defID, &found);
@@ -364,12 +364,12 @@ bool ImplAAFPluginManager::FindPluginFromDefintion(
   aafUID_constref	pluginID,
   CLSID& clsid)
 {
-	aafBool		found = AAFFalse;
+	aafBool		found = kAAFFalse;
 
   if (NULL != _plugins)
 	  TableUIDLookupBlock(_plugins, pluginID, sizeof(CLSID), &clsid, &found);
 
-  return (AAFTrue == found);
+  return (kAAFTrue == found);
 }
 
 
@@ -377,12 +377,12 @@ bool ImplAAFPluginManager::FindPluginFromEssenceDesc(
   aafUID_constref	essenceDesc,
   CLSID& clsid)
 {
-	aafBool		found = AAFFalse;
+	aafBool		found = kAAFFalse;
 
   if (NULL != _codecDesc)
 	  TableUIDLookupBlock(_codecDesc, essenceDesc, sizeof(CLSID), &clsid, &found);
 
-  return (AAFTrue == found);
+  return (kAAFTrue == found);
 }
 
 
@@ -872,7 +872,7 @@ AAFRESULT
 		CHECK(iUnk->QueryInterface(IID_IAAFDictionary, (void **)&iDictionary));
 		CHECK(GetPluginInstance(pluginDefID, &plugin));
 		CHECK(plugin->GetNumDefinitions (&count));
-		found = AAFFalse;
+		found = kAAFFalse;
 		for(n = 0; n < count && !found; n++)
 		{
 			CHECK(plugin->GetIndexedDefinitionID (n, &testID));
@@ -885,7 +885,7 @@ AAFRESULT
 
 				desc->Release();
 				desc = NULL;
-				found = AAFTrue;
+				found = kAAFTrue;
 			}
 		}
 		//!!!Assert found

@@ -69,8 +69,8 @@ static void usage(void);
 static aafWChar* slotName = L"SLOT1";
 static aafInt32 fadeInLen  = 1000;
 static aafInt32 fadeOutLen = 2000;
-static aafFadeType_t fadeInType = kFadeLinearAmp;
-static aafFadeType_t fadeOutType = kFadeLinearPower;
+static aafFadeType_t fadeInType = kAAFFadeLinearAmp;
+static aafFadeType_t fadeOutType = kAAFFadeLinearPower;
 static aafSourceRef_t sourceRef; 
 
 
@@ -159,7 +159,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 	IAAFDataDef *               pDdefPicture = 0;
 	aafRational_t				videoRate = { 30000, 1001 };
 	aafMobID_t					tapeMobID, fileMobID, masterMobID;
-	aafTimecode_t				tapeTC = { 108000, kTcNonDrop, 30};
+	aafTimecode_t				tapeTC = { 108000, kAAFTcNonDrop, 30};
 	aafLength_t					fileLen = FILE1_LENGTH;
 	aafLength_t					fillLen = FILL_LENGTH;
 	aafLength_t					segLen = SEG_LENGTH;
@@ -181,7 +181,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;

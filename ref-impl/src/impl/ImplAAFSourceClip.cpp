@@ -86,10 +86,10 @@ AAFRESULT STDMETHODCALLTYPE
   _startTime = sourceRef.startTime;
 
   _fadeInLength		= 0;
-  _fadeInType		= kFadeNone;
+  _fadeInType		= kAAFFadeNone;
 	
   _fadeOutLength		= 0;
-  _fadeOutType	= kFadeNone;
+  _fadeOutType	= kAAFFadeNone;
 
   return AAFRESULT_SUCCESS;
 }
@@ -132,22 +132,22 @@ AAFRESULT STDMETHODCALLTYPE
 		*fadeInType		= _fadeInType;
 		if (_fadeInLength > 0)
 		{
-			*fadeInPresent	= AAFTrue;
+			*fadeInPresent	= kAAFTrue;
 		}
 		else
 		{
-			*fadeInPresent = AAFFalse;
+			*fadeInPresent = kAAFFalse;
 		}
 
 		*fadeOutLen		= _fadeOutLength;
 		*fadeOutType	= _fadeOutType;
 		if (_fadeOutLength > 0)
 		{
-			*fadeOutPresent	= AAFTrue;
+			*fadeOutPresent	= kAAFTrue;
 		}
 		else
 		{
-			*fadeOutPresent = AAFFalse;
+			*fadeOutPresent = kAAFFalse;
 		}
 	}
 

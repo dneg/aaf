@@ -158,7 +158,7 @@ HRESULT extensionWritePlugin (const aafCharacter * filename)
     ProductInfo.productVersion.minor = 0;
     ProductInfo.productVersion.tertiary = 0;
     ProductInfo.productVersion.patchLevel = 0;
-    ProductInfo.productVersion.type = kVersionUnknown;
+    ProductInfo.productVersion.type = kAAFVersionUnknown;
     ProductInfo.productVersionString = 0;
     ProductInfo.productID = NULL_UID;
     ProductInfo.platform = 0;

@@ -55,10 +55,10 @@ const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E,
 aafVersionType_t samplePluginVersion = { 0, 0 };//, 0, 0, kVersionReleased };
 aafVersionType_t sampleMinPlatformVersion = { 1, 2 }; //, 3, 4, kVersionDebug };
 aafVersionType_t sampleMinEngineVersion = { 5, 6 }; //7, 9, kVersionPatched };
-aafVersionType_t sampleMinAPIVersion = { 10, 11 };//, 12, 13, kVersionBeta };
+aafVersionType_t sampleMinAPIVersion = { 10, 11 };//, 12, 13, kAAFVersionBeta };
 aafVersionType_t sampleMaxPlatformVersion = { 31, 32 };//3, 34, kVersionDebug };
 aafVersionType_t sampleMaxEngineVersion = { 35, 36 };//, 37, 39, kVersionPatched };
-aafVersionType_t sampleMaxAPIVersion = { 40, 41 };//, 42, 43, kVersionBeta };
+aafVersionType_t sampleMaxAPIVersion = { 40, 41 };//, 42, 43, kAAFVersionBeta };
 
 #define	MobName			L"MasterMOBTest"
 #define	NumMobSlots		3
@@ -68,7 +68,7 @@ static wchar_t *manufRev = L"Rev0.0.0a0";
 
 aafBool	EqualVersion(aafVersionType_t *vers1, aafVersionType_t *vers2)
 {
-	return(memcmp((char *)vers1, (char *)vers2, sizeof(aafVersionType_t)) == 0 ? AAFTrue : AAFFalse);
+	return(memcmp((char *)vers1, (char *)vers2, sizeof(aafVersionType_t)) == 0 ? kAAFTrue : kAAFFalse);
 }
 
 // Cross-platform utility to delete a file.
@@ -112,14 +112,14 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 
 	*ppFile = NULL;
 
-	if(mode == kMediaOpenAppend)
+	if(mode == kAAFMediaOpenAppend)
 		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
 	else
 		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
@@ -168,7 +168,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	  // Create the AAF file
-	  checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));
+	  checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, /*&pSession,*/ &pFile, &pHeader));
     bFileOpen = true;
 
     // Get the AAF Dictionary so that we can create valid AAF objects.
@@ -195,9 +195,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pDesc->SetManufacturerInfo(pNetLoc));
     checkResult(pDesc->SetManufacturerID(manufacturer));
     checkResult(pDesc->SetPluginManufacturerName(manufName));
-    checkResult(pDesc->SetIsSoftwareOnly(AAFTrue));
-    checkResult(pDesc->SetIsAccelerated(AAFFalse));
-    checkResult(pDesc->SetSupportsAuthentication(AAFFalse));
+    checkResult(pDesc->SetIsSoftwareOnly(kAAFTrue));
+    checkResult(pDesc->SetIsAccelerated(kAAFFalse));
+    checkResult(pDesc->SetSupportsAuthentication(kAAFFalse));
  
 //!!!	aafProductVersion_t samplePluginVersion = { 0, 0, 0, 0, kVersionReleased };
     /**/
@@ -324,7 +324,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	try
 	{
 		// Open the AAF file
-		checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
+		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
 		bFileOpen = true;
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
@@ -337,7 +337,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 	  
 		checkResult(pPlugin->GetCategoryClass(&testUID));
-		checkExpression(EqualAUID(&testUID, &category) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &category) == kAAFTrue, AAFRESULT_TEST_FAILED);
 
 //	checkResult(pPlugin->GetPluginVersion(aafProductVersion_t *  pVersion));
 		checkResult(pPlugin->GetPluginVersionString(testString, sizeof(testString)));
@@ -358,28 +358,28 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		pLoc = NULL;
 		checkExpression (wcscmp(testString, manuf2URL) == 0, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->GetManufacturerID(&testUID));
-		checkExpression(EqualAUID(&testUID, &manufacturer) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testUID, &manufacturer) == kAAFTrue, AAFRESULT_TEST_FAILED);
 
 		/**/
 		checkResult(pPlugin->GetHardwarePlatform(&testPlatform));
-		checkExpression(EqualAUID(&testPlatform, &kAAFPlatformIndependant) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testPlatform, &kAAFPlatformIndependant) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->GetPlatformVersionRange(&testMinVersion, &testMaxVersion));
-		checkExpression(EqualVersion(&testMinVersion, &sampleMinPlatformVersion) == AAFTrue, AAFRESULT_TEST_FAILED);
-		checkExpression(EqualVersion(&testMaxVersion, &sampleMaxPlatformVersion) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualVersion(&testMinVersion, &sampleMinPlatformVersion) == kAAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualVersion(&testMaxVersion, &sampleMaxPlatformVersion) == kAAFTrue, AAFRESULT_TEST_FAILED);
 
 		/**/
  		checkResult(pPlugin->GetEngine(&testEngine));
-		checkExpression(EqualAUID(&testEngine, &kAAFNoEngine) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testEngine, &kAAFNoEngine) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->GetEngineVersionRange(&testMinVersion, &testMaxVersion));
-		checkExpression(EqualVersion(&testMinVersion, &sampleMinEngineVersion) == AAFTrue, AAFRESULT_TEST_FAILED);
-		checkExpression(EqualVersion(&testMaxVersion, &sampleMaxEngineVersion) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualVersion(&testMinVersion, &sampleMinEngineVersion) == kAAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualVersion(&testMaxVersion, &sampleMaxEngineVersion) == kAAFTrue, AAFRESULT_TEST_FAILED);
 
 		/**/
 		checkResult(pPlugin->GetPluginAPI(&testAPI));
-		checkExpression(EqualAUID(&testAPI, &kAAFEssencePluginAPI) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualAUID(&testAPI, &kAAFEssencePluginAPI) == kAAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->GetPluginAPIVersionRange(&testMinVersion, &testMaxVersion));
-		checkExpression(EqualVersion(&testMinVersion, &sampleMinAPIVersion) == AAFTrue, AAFRESULT_TEST_FAILED);
-		checkExpression(EqualVersion(&testMaxVersion, &sampleMaxAPIVersion) == AAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualVersion(&testMinVersion, &sampleMinAPIVersion) == kAAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(EqualVersion(&testMaxVersion, &sampleMaxAPIVersion) == kAAFTrue, AAFRESULT_TEST_FAILED);
 
 		/**/
 		checkResult(pPlugin->CountLocators(&count));
@@ -397,11 +397,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression (wcscmp(testString, manuf2URL) == 0, AAFRESULT_TEST_FAILED);
 		
 		checkResult(pPlugin->IsSoftwareOnly(&testBool));
- 		checkExpression(testBool == AAFTrue, AAFRESULT_TEST_FAILED);
+ 		checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->IsAccelerated(&testBool));
- 		checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
+ 		checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->SupportsAuthentication(&testBool));
-		checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
+		checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
 	{

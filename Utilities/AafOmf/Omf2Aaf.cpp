@@ -172,16 +172,16 @@ void Omf2Aaf::OpenOutputFile ()
 // ============================================================================
 void Omf2Aaf::OMFFileOpen(char * pFileName)
 {
-	aafBool				bSessionStarted = AAFFalse;
+	aafBool				bSessionStarted = kAAFFalse;
 	OMFCheck			ret;
 	gpGlobals->pLogger->Log( kLogInfo,"Opening OMF file \"%s\"\n", pFileName);
 	try
 	{
 		ret = OMF2::omfsBeginSession(0, &OMFSession);
-		bSessionStarted = AAFTrue;
+		bSessionStarted = kAAFTrue;
 		ret = OMF2::omfmInit(OMFSession);
 		ret = OMF2::omfsOpenFile((OMF2::fileHandleType)pFileName, OMFSession, &OMFFileHdl);
-		gpGlobals->bOMFFileOpen = AAFTrue;
+		gpGlobals->bOMFFileOpen = kAAFTrue;
 	}
 	catch( ExceptionBase )
 	{
@@ -218,7 +218,7 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 	aafWChar*				pwProductName;
     aafWChar*				pwProductVersionString;
     aafWChar*				pwPlatform;
-	aafBool					bAddExtraIdent = AAFFalse;
+	aafBool					bAddExtraIdent = kAAFFalse;
 	aafProductIdentification_t	ProductInfo;
 
 	std::auto_ptr<wchar_t> pwFile( new wchar_t[strlen(pFileName)+1] );
@@ -278,7 +278,7 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 		mbstowcs(pwPlatform, text, strlen(text)+1);
 		ProductInfo.platform = pwPlatform;
 		rc = AAFFileOpenNewModify(pwFileName, 0, &ProductInfo, &pFile);
-		bAddExtraIdent = AAFTrue;
+		bAddExtraIdent = kAAFTrue;
 	}
 	else
 	{
@@ -288,14 +288,14 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 		ProductInfo.productVersion.minor = 0;
 		ProductInfo.productVersion.tertiary = 0;
 		ProductInfo.productVersion.patchLevel = 0;
-		ProductInfo.productVersion.type = kVersionDebug;
+		ProductInfo.productVersion.type = kAAFVersionDebug;
 		ProductInfo.productVersionString = NULL;
 		ProductInfo.productID = ProductID;
 		ProductInfo.platform = NULL;
 		rc = AAFFileOpenNewModify(pwFileName, 0, &ProductInfo, &pFile);
 	}
 
-	gpGlobals->bAAFFileOpen = AAFTrue;
+	gpGlobals->bAAFFileOpen = kAAFTrue;
 	rc = pFile->GetHeader(&pHeader);
 	rc = pHeader->GetDictionary(&pDictionary);
 	CAAFBuiltinDefs defs (pDictionary);
@@ -314,7 +314,7 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 		ProductInfo.productVersion.minor = 0;
 		ProductInfo.productVersion.tertiary = 0;
 		ProductInfo.productVersion.patchLevel = 0;
-		ProductInfo.productVersion.type = kVersionDebug;
+		ProductInfo.productVersion.type = kAAFVersionDebug;
 		ProductInfo.productVersionString = NULL;
 		ProductInfo.productID = ProductID ;
 		ProductInfo.platform = NULL;
@@ -623,7 +623,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 	AutoRelease<IAAFMob>	pmob;
 	IAAFSourceMob*			pSourceMob;
 	AutoRelease<IAAFSourceMob> pSource;
-	aafBool					bConvertMedia = AAFFalse;
+	aafBool					bConvertMedia = kAAFFalse;
 
 	CAAFBuiltinDefs defs (pDictionary);
 
@@ -676,7 +676,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			strcat(propName, ":Data");
 		}
 
-		bConvertMedia = AAFTrue;
+		bConvertMedia = kAAFTrue;
 	}
 	else if (strncmp(id, "AIFC", 4) == 0)
 	{
@@ -702,7 +702,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			strncat(propName, id, (size_t)4);
 			strcat(propName, ":Data");
 		}
-		bConvertMedia = AAFTrue;
+		bConvertMedia = kAAFTrue;
 	}
 	else if (strncmp(id, "WAVE", 4) == 0 )
 	{
@@ -728,7 +728,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			strncat(propName, id, (size_t)4);
 			strcat(propName, ":Data");
 		}
-		bConvertMedia = AAFTrue;
+		bConvertMedia = kAAFTrue;
 	}
 	else if (strncmp(id, "JPEG", 4) == 0)
 	{
@@ -754,7 +754,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			strcat(propName, "IDAT");
 			strcat(propName, ":Data");
 		}
-		bConvertMedia = AAFTrue;
+		bConvertMedia = kAAFTrue;
 	}
 	else
 	{
@@ -773,7 +773,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 		aafUInt32			nBlockSize;
 		aafUInt32			numBytesRead;
 		aafUInt32			numBytesWritten;
-		aafBool				bMore = AAFFalse;
+		aafBool				bMore = kAAFFalse;
 		
 
 		// find out how big the data is 
@@ -807,7 +807,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 			if (numBytes > (2 * 1048576))
 			{
 				nBlockSize = 2 * 1048576;		// only allocate 2 Meg
-				bMore = AAFTrue;			// you going to need more than one read/write
+				bMore = kAAFTrue;			// you going to need more than one read/write
 			}
 			else
 			{
@@ -1018,13 +1018,13 @@ void Omf2Aaf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
 		switch(OMFDefaultFade.fadeType)
 		{
 			case OMF2::kFadeNone: 
-				AAFDefaultFade.fadeType = kFadeNone;
+				AAFDefaultFade.fadeType = kAAFFadeNone;
 				break;
 			case OMF2::kFadeLinearAmp:
-				AAFDefaultFade.fadeType = kFadeLinearAmp;
+				AAFDefaultFade.fadeType = kAAFFadeLinearAmp;
 				break;
 			case OMF2::kFadeLinearPower:
-				AAFDefaultFade.fadeType = kFadeLinearPower;
+				AAFDefaultFade.fadeType = kAAFFadeLinearPower;
 				break;
 		}
 		AAFDefaultFade.fadeEditUnit.numerator = OMFDefaultFade.fadeEditUnit.numerator;
@@ -1032,11 +1032,11 @@ void Omf2Aaf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
 	}
 	else
 	{
-		AAFDefaultFade.fadeType = kFadeNone;
+		AAFDefaultFade.fadeType = kAAFFadeNone;
 		AAFDefaultFade.fadeEditUnit.numerator = 0;
 		AAFDefaultFade.fadeEditUnit.denominator = 1;
 		AAFDefaultFade.fadeLength = 0;
-		AAFDefaultFade.valid = AAFFalse;
+		AAFDefaultFade.valid = kAAFFalse;
 	}
 
 	// Set default fade values
@@ -1227,7 +1227,7 @@ void Omf2Aaf::ConvertOMFSelector( OMF2::omfObject_t selector, IAAFSelector* pSel
 	}
 	else
 	{
-		aafBool					bDoneSelected = AAFFalse;
+		aafBool					bDoneSelected = kAAFFalse;
 		if (OMFSelected)
 		{
 			IAAFComponent*			pComponent;
@@ -1239,7 +1239,7 @@ void Omf2Aaf::ConvertOMFSelector( OMF2::omfObject_t selector, IAAFSelector* pSel
 				rc = pComponent->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
 				AutoRelease<IAAFSegment> pseg( pSegment );
 				rc = pSelector->SetSelectedSegment(pSegment);
-				bDoneSelected = AAFTrue;
+				bDoneSelected = kAAFTrue;
 			}
 		}
 
@@ -1358,7 +1358,7 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 		gpGlobals->pLogger->Log( kLogInfo, "%slength\t\t: %ld\n", gpGlobals->indentLeader, (int)OMFLength);
 		gpGlobals->pLogger->Log( kLogInfo, "%sstart Frame\t: %ld\n", gpGlobals->indentLeader, timecode.startFrame);
 		gpGlobals->pLogger->Log( kLogInfo, "%sdrop\t\t: %s\n", gpGlobals->indentLeader, 
-			timecode.drop == AAFTrue ? "True" : "False" );
+			timecode.drop == kAAFTrue ? "True" : "False" );
 		gpGlobals->pLogger->Log( kLogInfo, "%sFrames/second\t: %ld\n", gpGlobals->indentLeader, timecode.fps);     
 		DecIndentLevel();	
 		
@@ -1490,7 +1490,7 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 
 					IAAFOperationDef*		pEffectDef;
 					GetAAFOperationDefinition("omfi::effectSimpleMonoAudioDissolve", NULL, "Simple Mono Audio Dissolve", "Combines two mono audio streams",
-									-1, AAFFalse, 2, DDEF_Sound, &pEffectDef);
+									-1, kAAFFalse, 2, DDEF_Sound, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					IAAFParameterDef*		pParameterDef;
@@ -1520,7 +1520,7 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 					IAAFOperationDef* pEffectDef;
 					GetAAFOperationDefinition("omfi::effectSimpleVideoDissolve", NULL, 
 									"Simple Video Dissolve", "Combines two video streams",
-									-1, AAFFalse, 2, DDEF_PictureWithMatte, &pEffectDef);
+									-1, kAAFFalse, 2, DDEF_PictureWithMatte, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					IAAFParameterDef* pParameterDef;
@@ -1555,7 +1555,7 @@ void Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent** 
 					IAAFOperationDef* pEffectDef;
 					GetAAFOperationDefinition("omfi:effect:SMPTEVideoWipe", NULL, 
 									"SMPTE Video Wipe", "Combines two video streams according to SMPTE ",
-									-1, AAFFalse, 2, DDEF_Picture, &pEffectDef);
+									-1, kAAFFalse, 2, DDEF_Picture, &pEffectDef);
 					AutoRelease<IAAFOperationDef> peffdef( pEffectDef );
 
 					rc = pEffect->Initialize(pDataDef, (aafLength_t)OMFLength, pEffectDef);
@@ -2008,7 +2008,7 @@ void Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor,
 
 	aafInt32			componentWidth = 0;
 	aafUInt32			horizontalSubsampling = 0;
-	aafColorSiting_t	colorSiting = kCoSiting;
+	aafColorSiting_t	colorSiting = kAAFCoSiting;
 	aafUInt32			blackReferenceLevel = 0;
 	aafUInt32			whiteReferenceLevel = 0;
 	aafUInt32			colorRange = 0;
@@ -2843,7 +2843,7 @@ void Omf2Aaf::ConvertOMFScopeRef(OMF2::omfSegObj_t segment,
 // ============================================================================
 void Omf2Aaf::OMFFileClose()
 {
-	if( gpGlobals->bOMFFileOpen == AAFTrue )
+	if( gpGlobals->bOMFFileOpen == kAAFTrue )
 	{
 		OMFCheck check = OMF2::omfsCloseFile(OMFFileHdl);
 		OMFFileHdl = NULL;

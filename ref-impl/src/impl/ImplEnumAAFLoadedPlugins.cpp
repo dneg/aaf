@@ -53,7 +53,7 @@ extern "C" const aafUID_t CLSID_EnumAAFLoadedPlugins;
 
 ImplEnumAAFLoadedPlugins::ImplEnumAAFLoadedPlugins ()
 {
-	_isFirst = AAFTrue;
+	_isFirst = kAAFTrue;
 	_manager = ImplAAFPluginManager::GetPluginManager();
 }
 
@@ -143,7 +143,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFLoadedPlugins::Reset ()
 {
-	_isFirst = AAFTrue;
+	_isFirst = kAAFTrue;
 	return AAFRESULT_SUCCESS;
 }
 

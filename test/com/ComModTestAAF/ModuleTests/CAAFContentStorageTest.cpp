@@ -185,7 +185,7 @@ _bufferSize(0)
 	_productInfo.productVersion.minor = 0;
 	_productInfo.productVersion.tertiary = 0;
 	_productInfo.productVersion.patchLevel = 0;
-	_productInfo.productVersion.type = kVersionUnknown;
+	_productInfo.productVersion.type = kAAFVersionUnknown;
 	_productInfo.productVersionString = NULL;
 	_productInfo.productID = UnitTestProductID;
 	_productInfo.platform = NULL;
@@ -364,9 +364,9 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	uid.Data3 = 0;
 	checkExpression(_pHeader->LookupMob(uid, &testMob) != AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED);
 	/***/
-	check(_pHeader->CountMobs(kFileMob, &readNumMobs));
+	check(_pHeader->CountMobs(kAAFFileMob, &readNumMobs));
 	checkExpression(2 == readNumMobs, AAFRESULT_TEST_FAILED);
-	check(_pHeader->CountMobs(kMasterMob, &readNumMobs));
+	check(_pHeader->CountMobs(kAAFMasterMob, &readNumMobs));
 	checkExpression(0 == readNumMobs, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID1;
@@ -378,15 +378,15 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	testMob = NULL;
 	/***/
 	uid = kTestMobID2;
-    check(_pHeader->IsEssenceDataPresent (uid, kAAFiMedia, &testBool));
-	checkExpression(AAFTrue == testBool, AAFRESULT_TEST_FAILED);
+    check(_pHeader->IsEssenceDataPresent (uid, kAAFEssence, &testBool));
+	checkExpression(kAAFTrue == testBool, AAFRESULT_TEST_FAILED);
 	/***/
 	uid = kTestMobID2;
  	uid.Data1 = 0;	// Invalidate the mobID
 	uid.Data2 = 0;
 	uid.Data3 = 0;
-	check(_pHeader->IsEssenceDataPresent (uid, kAAFiMedia, &testBool));
-	checkExpression(AAFFalse == testBool, AAFRESULT_TEST_FAILED);
+	check(_pHeader->IsEssenceDataPresent (uid, kAAFEssence, &testBool));
+	checkExpression(kAAFFalse == testBool, AAFRESULT_TEST_FAILED);
 
 	/***/
 	pEnum->Release();

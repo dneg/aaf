@@ -73,7 +73,7 @@ inline void checkExpression(bool expression, HRESULT r)
 #define PRODUCT_NAME		L"AAFDictionary Test"
 #define TEST_VERSION		L"TEST VERSION"
 
-static aafProductVersion_t			testVersion =  { 1, 0, 0, 0, kVersionUnknown };
+static aafProductVersion_t			testVersion =  { 1, 0, 0, 0, kAAFVersionUnknown };
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {

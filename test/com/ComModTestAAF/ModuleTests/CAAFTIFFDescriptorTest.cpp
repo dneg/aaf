@@ -124,7 +124,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
 	ProductInfo.productVersion.patchLevel = 0;
-	ProductInfo.productVersion.type = kVersionUnknown;
+	ProductInfo.productVersion.type = kAAFVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
@@ -133,11 +133,11 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 
 	switch (mode)
 	{
-	case kMediaOpenReadOnly:
+	case kAAFMediaOpenReadOnly:
 		hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
 		break;
 
-	case kMediaOpenAppend:
+	case kAAFMediaOpenAppend:
 		hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
 		break;
 
@@ -218,7 +218,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 		// Create the AAF file
-		checkResult(OpenAAFFile(pFileName, kMediaOpenAppend, &pFile, &pHeader));
+		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader));
 
 		// Get the AAF Dictionary so that we can create valid AAF objects.
 		checkResult(pHeader->GetDictionary(&pDictionary));
@@ -237,8 +237,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFTIFFDescriptor, 
 								   (IUnknown **)&pTIFFDesc));		
 		checkResult(pTIFFDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
-		checkResult(pTIFFDesc->SetIsUniform(AAFFalse));
-		checkResult(pTIFFDesc->SetIsContiguous(AAFTrue));
+		checkResult(pTIFFDesc->SetIsUniform(kAAFFalse));
+		checkResult(pTIFFDesc->SetIsContiguous(kAAFTrue));
 		checkResult(pTIFFDesc->SetLeadingLines((aafInt32)10));
 		checkResult(pTIFFDesc->SetTrailingLines((aafInt32)20));
 		checkResult(pTIFFDesc->SetJPEGTableID((aafJPEGTableID_t)0));
@@ -303,9 +303,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	try
 	{
 		// Open the AAF file
-		checkResult(OpenAAFFile(pFileName, kMediaOpenReadOnly, &pFile, &pHeader));
+		checkResult(OpenAAFFile(pFileName, kAAFMediaOpenReadOnly, &pFile, &pHeader));
 
-		checkResult(pHeader->CountMobs(kAllMob, &numMobs));
+		checkResult(pHeader->CountMobs(kAAFAllMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
 		checkResult(pHeader->GetMobs(NULL, &pMobIter));
@@ -323,8 +323,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkResult(pTIFFDesc->GetSummaryBufferSize(&size));
 		checkExpression(size == 34, AAFRESULT_TEST_FAILED);
 		checkResult(pTIFFDesc->GetSummary(size, summary));
-		checkExpression(isContiguous == AAFTrue, AAFRESULT_TEST_FAILED);
-		checkExpression(isUniform == AAFFalse, AAFRESULT_TEST_FAILED);
+		checkExpression(isContiguous == kAAFTrue, AAFRESULT_TEST_FAILED);
+		checkExpression(isUniform == kAAFFalse, AAFRESULT_TEST_FAILED);
 		checkExpression(leadingLines == 10, AAFRESULT_TEST_FAILED);
 		checkExpression(trailingLines == 20, AAFRESULT_TEST_FAILED);
 #if defined(_WIN32) || defined(WIN32)
