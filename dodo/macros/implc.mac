@@ -175,8 +175,7 @@ Impl.this-module::~Impl.this-module ()
 
 
 Impl.this-module::Impl.this-module ()
-: _pComParent (0),
-  _pCppParent (0)
+: _pContainer (0)
 {}
 
 
@@ -184,21 +183,11 @@ Impl.this-module::~Impl.this-module ()
 {}
 
 
-void Impl.this-module::InitComParent (I.this-module * pComParent)
+void Impl.this-module::InitContainer (void * pContainer)
 {
-  assert (! _pComParent);
-  _pComParent = pComParent;
-  assert (_pComParent);
-  assert (! _pCppParent);
-}
-
-
-void Impl.this-module::InitCppParent (.this-module * pCppParent)
-{
-  assert (! _pCppParent);
-  _pCppParent = pCppParent;
-  assert (_pCppParent);
-  assert (! _pComParent);
+  assert (! _pContainer);
+  _pContainer = pContainer;
+  assert (_pContainer);
 }
 #endm
 
@@ -593,19 +582,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 class IAAFObject;
 
-I.this-module * Impl.this-module::GetCOMParent ()
+void * Impl.this-module::GetContainer ()
 {
-  assert (_pComParent);
-  assert (! _pCppParent);
-  return _pComParent;
-}
-
-
-.this-module * Impl.this-module::GetCppParent ()
-{
-  assert (! _pComParent);
-  assert (_pCppParent);
-  return _pCppParent;
+  assert (_pContainer);
+  return _pContainer;
 }
 #endm
 
@@ -706,60 +686,6 @@ Impl.this-module::Impl.this-module (.%02-adornment%03 .%02-indirection /*%04*/,
 	.%12-adornment%13 .%12-indirection /*%14*/,
 	.%17-adornment%18 .%17-indirection /*%19*/)
 {}
-#endm
-
-
-#ccccccccccccccccccccccccccc
-#c
-#c Inserts declaration for a method which takes one argument, which is
-#c a pointer to an AAF object which is to be returned to the caller.
-#c This is different from the normal METHOD macro because the
-#c _rep will probably have the object in a different form.
-#c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
-#c
-#c NOTE!!! This macro takes as type, the object itself, not the
-#c pointer to it.  The indirection will be added by the macro
-#c expansion.
-#c
-#startm AD_GETOBJ_METHOD1 06
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (Impl%03 ** %04)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-#endm
-
-
-#ccccccccccccccccccccccccccc
-#c
-#c Inserts declaration for a method which takes one argument, which is
-#c a pointer to an AAF object which is to be passed in from the caller.
-#c This is different from the normal METHOD macro because the
-#c _rep will probably have the object in a different form.
-#c
-#c NOTE!!! This macro takes as type, the object itself, not the
-#c pointer to it.  The indirection will be added by the macro
-#c expansion.
-#c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
-#c
-#startm AD_SETOBJ_METHOD1 06
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (Impl%03 * %04)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
 #endm
 
 
