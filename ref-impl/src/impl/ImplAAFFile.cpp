@@ -549,7 +549,7 @@ ImplAAFFile::Save ()
 	  hr = _head->GetLastIdentification (&pLatestIdent);
 	  if (AAFRESULT_FAILED (hr)) return hr;
 	  aafUID_t latestGen;
-	  hr = pLatestIdent->GetGeneration (&latestGen);
+	  hr = pLatestIdent->GetGenerationID (&latestGen);
 	  if (AAFRESULT_FAILED (hr)) return hr;
 	  _file->save(&latestGen);
 
