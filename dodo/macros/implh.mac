@@ -91,7 +91,7 @@ class Impl%01;
 #c Argument: class name
 #c
 #startm AD_FORWARD_DECLARATION 01
-	class %01;
+class %01;
 #endm
 
 #ccccccccccccccccccccccccccc
@@ -175,7 +175,7 @@ class Impl.this-module : public Impl.parent-module
 //
 // Forward declaration
 //
-class I.this-module;
+struct I.this-module;
 class .this-module;
 
 
