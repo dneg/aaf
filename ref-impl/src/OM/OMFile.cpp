@@ -676,7 +676,7 @@ bool OMFile::isOMFile(void) const
   return result;
 }
 
-  // @mfuncThe name of this <c OMFile>.
+  // @mfunc The name of this <c OMFile>.
   //   @rdesc The name of this <c OMFile>.
 const wchar_t* OMFile::fileName(void) const
 {
