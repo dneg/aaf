@@ -37,6 +37,7 @@
 class OMStoredObject;
 class OMFile;
 class OMClassFactory;
+class OMClassDefinition;
 
   // @class Abstract base class for all objects that may be stored by
   //        the Object Manager.
@@ -54,6 +55,12 @@ public:
     // @cmember The stored object identifier for the class of this
     //          <c OMStorable>.
   virtual const OMClassId& classId(void) const = 0;
+
+    // @cmember Set the <c OMClassDefinition> defining this <c OMStorable>.
+  virtual void setDefinition(const OMClassDefinition* definition);
+
+    // @cmember The <c OMClassDefinition> defining this <c OMStorable>.
+  virtual const OMClassDefinition* definition(void) const;
 
 // private:
 
@@ -172,6 +179,7 @@ private:
 
   OMStoredObject* _store;
   const OMClassFactory* _classFactory;
+  const OMClassDefinition* _definition;
 
     // OMStorables can't be assigned  - declare but don't define
   OMStorable& operator = (const OMStorable& rhs);
