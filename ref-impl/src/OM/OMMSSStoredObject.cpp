@@ -457,12 +457,15 @@ void OMMSSStoredObject::save(const OMStoredObjectIdentification& id)
   setClass(_storage, id);
 }
 
+static const wchar_t* const propertyStreamName = L"properties";
+
   // @mfunc Save the <c OMPropertySet> <p properties> in this
   //        <c OMMSSStoredObject>.
   //   @parm The <c OMPropertySet> to save.
 void OMMSSStoredObject::save(const OMPropertySet& properties)
 {
   TRACE("OMMSSStoredObject::save(OMPropertySet)");
+
   PRECONDITION("Already open", _open);
   PRECONDITION("At start of value stream", streamPosition(_properties) == 0);
   PRECONDITION("At start of value stream", _offset == 0);
@@ -823,7 +826,11 @@ void OMMSSStoredObject::save(const OMPropertyTable* table)
 
   PRECONDITION("Valid property table", table != 0);
 
-  IStream* stream = createStream(L"referenced properties");
+#if defined(OM_BUFFERED_STREAMS)
+  IStream* stream = createBufferedStream(_storage, L"referenced properties");
+#else
+  IStream* stream = createStream(_storage, L"referenced properties");
+#endif
 
   // byte order
   writeUInt8ToStream(stream, _byteOrder);
@@ -1216,7 +1223,11 @@ void OMMSSStoredObject::restore(OMPropertyTable*& table)
 {
   TRACE("OMMSSStoredObject::restore");
 
-  IStream* stream = openStream(L"referenced properties");
+#if defined(OM_BUFFERED_STREAMS)
+  IStream* stream = openBufferedStream(_storage, L"referenced properties");
+#else
+  IStream* stream = openStream(_storage, L"referenced properties");
+#endif
 
   // byte order
   OMByteOrder byteOrder;
@@ -1405,7 +1416,11 @@ void OMMSSStoredObject::save(const OMStoredVectorIndex* vector,
 
   // Create the stream.
   //
+#if defined(OM_BUFFERED_STREAMS)
+  IStream* vectorIndexStream = createBufferedStream(_storage, vectorIndexName);
+#else
   IStream* vectorIndexStream = createStream(_storage, vectorIndexName);
+#endif
   delete [] vectorIndexName;
 
   // Write the count of elements.
@@ -1454,7 +1469,11 @@ void OMMSSStoredObject::save(const OMStoredSetIndex* set,
 
   // Create the stream.
   //
+#if defined(OM_BUFFERED_STREAMS)
+  IStream* setIndexStream = createBufferedStream(_storage, setIndexName);
+#else
   IStream* setIndexStream = createStream(_storage, setIndexName);
+#endif
   delete [] setIndexName;
 
   // Write the count of elements.
@@ -1575,7 +1594,11 @@ void OMMSSStoredObject::save(const wchar_t* collectionName,
 
   // Create the stream.
   //
+#if defined(OM_BUFFERED_STREAMS)
+  IStream* indexStream = createBufferedStream(_storage, indexName);
+#else
   IStream* indexStream = createStream(_storage, indexName);
+#endif
   delete [] indexName;
 
   // Write the count of elements.
@@ -1663,7 +1686,11 @@ void OMMSSStoredObject::restore(OMStoredVectorIndex*& vector,
 
   // Open the stream.
   //
+#if defined(OM_BUFFERED_STREAMS)
+  IStream* vectorIndexStream = openBufferedStream(_storage, vectorIndexName);
+#else
   IStream* vectorIndexStream = openStream(_storage, vectorIndexName);
+#endif
   delete [] vectorIndexName;
 
   // Read the count of elements.
@@ -1725,7 +1752,11 @@ void OMMSSStoredObject::restore(OMStoredSetIndex*& set,
 
   // Open the stream.
   //
+#if defined(OM_BUFFERED_STREAMS)
+  IStream* setIndexStream = openBufferedStream(_storage, setIndexName);
+#else
   IStream* setIndexStream = openStream(_storage, setIndexName);
+#endif
   delete [] setIndexName;
 
   // Read the count of elements.
@@ -1858,7 +1889,11 @@ void OMMSSStoredObject::restore(const wchar_t* collectionName,
 
   // Open the stream.
   //
+#if defined(OM_BUFFERED_STREAMS)
+  IStream* indexStream = openBufferedStream(_storage, indexName);
+#else
   IStream* indexStream = openStream(_storage, indexName);
+#endif
   delete [] indexName;
 
   // Read the count of elements.
@@ -2794,8 +2829,6 @@ OMMSSStoredObject* OMMSSStoredObject::createFile(OMRawStorage* rawStorage)
   return newStoredObject;
 }
 
-static const wchar_t* const propertyStreamName = L"properties";
-
 void OMMSSStoredObject::create(const OMByteOrder byteOrder)
 {
   TRACE("OMMSSStoredObject::create");
@@ -2810,7 +2843,11 @@ void OMMSSStoredObject::create(const OMByteOrder byteOrder)
     _reorderBytes = true;
   }
   _mode = OMFile::modifyMode;
+#if defined(OM_BUFFERED_STREAMS)
+  _properties = createBufferedStream(_storage, propertyStreamName);
+#else
   _properties = createStream(_storage, propertyStreamName);
+#endif
   _open = true;
 }
 
@@ -2822,7 +2859,11 @@ void OMMSSStoredObject::open(const OMFile::OMAccessMode mode)
                              (mode == OMFile::readOnlyMode));
 
   _mode = mode;
+#if defined(OM_BUFFERED_STREAMS)
+  _properties = openBufferedStream(_storage, propertyStreamName);
+#else
   _properties = openStream(_storage, propertyStreamName);
+#endif
   _open = true;
 }
 
