@@ -25,8 +25,6 @@ class AAFObject;
 #include "OMStorable.h"
 #include "ImplAAFRoot.h"
 
-#include <assert.h>
-
 class ImplAAFObject : public OMStorable, public ImplAAFRoot
 {
 public:
@@ -92,19 +90,6 @@ public:
     aafByteOrder_t *  pOrder
   );
 
-
-  // tjb - this is temporary and should be removed
-#if 0
-  virtual const OMClassId& classId(void) const
-  {
-    // This function must be overidden by subclasses. It is pure
-    // virtual on OMStorable. It is defined here since some dodo
-    // generated code attempts to instantiate this class.
-    //
-    assert(!"This code should not be reached.");
-    return nullOMClassId;
-  }
-#endif
 
 public:
 	// Interfaces ivisible inside the toolkit, but not exposed through the API
