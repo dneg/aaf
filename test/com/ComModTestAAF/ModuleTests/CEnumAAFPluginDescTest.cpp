@@ -239,7 +239,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pLoc2->SetPath (manuf2URL));
 		checkResult(pDesc->AppendLocator(pLoc2));
 		/**/
-		checkResult(pDesc->SetDefinitionObjectID(NoCodec));
+		checkResult(pDesc->SetDefinitionObjectID(kAAFNoCodec));
 		pNetLoc->Release();
 		pNetLoc = NULL;
 		pNetLoc2->Release();
@@ -255,7 +255,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pPlugDef->QueryInterface (IID_IAAFCodecDef,
                                           (void **)&pCodecDef));
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
-	checkResult(pCodecDef->Initialize (NoCodec, L"TestCodec", L"Just a test"));
+	checkResult(pCodecDef->Initialize (kAAFNoCodec, L"TestCodec", L"Just a test"));
 	uid = kAAFClassID_WAVEDescriptor;
 	checkResult(pDictionary->LookupClassDef(uid, &pClassDef));
 	checkResult(pCodecDef->SetFileDescriptorClass (pClassDef));
