@@ -1145,13 +1145,13 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 	//	
 	// Now, assuming pComponent has a length:
 	//
-	// If this sequence has no length property, use a defalt
+	// If this sequence has no length property, use a default
 	// sequence length of zero, and update the sequence length.
 	//
 	// If this sequence has a length,  then update the
 	// this sequence's length.
 	//
-	// If the component is a transition do not add its length, else, add its length.
+	// If the component is a transition subtract its length, else, add its length.
 	
 	AAFRESULT status;
 
@@ -1168,15 +1168,20 @@ AAFRESULT ImplAAFSequence::UpdateSequenceLength( ImplAAFComponent* pComponent )
 		return status;
 	}
 	
-	if ( !dynamic_cast<ImplAAFTransition*>( pComponent ) )  {
+	if ( dynamic_cast<ImplAAFTransition*>( pComponent ) )  {
+
+		SubInt64fromInt64( compLength, &seqLength );
+	}
+	else {
 
 		AddInt64toInt64( compLength, &seqLength );
-	
-		status = SetLength( seqLength );
-		if ( AAFRESULT_SUCCESS != status ) {
-			return status;
-		}
 	}
+	status = SetLength( seqLength );
+	if ( AAFRESULT_SUCCESS != status ) {
+		return status;
+	}
+
+
 
 
 	return AAFRESULT_SUCCESS;
