@@ -96,35 +96,35 @@ static HRESULT checkModeFlags ()
   HRESULT temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_EAGER_LOADING,
-						  AAFRESULT_NOT_IMPLEMENTED);
+						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_REVERTABLE,
-						  AAFRESULT_NOT_IMPLEMENTED);
+						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_UNBUFFERED,
-						  AAFRESULT_NOT_IMPLEMENTED);
+						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_RECLAIMABLE,
-						  AAFRESULT_NOT_IMPLEMENTED);
+						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_USE_LARGE_SS_SECTORS,
-						  AAFRESULT_NOT_IMPLEMENTED);
+						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_CLOSE_FAIL_DIRTY,
-						  AAFRESULT_NOT_IMPLEMENTED);
+						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_DEBUG0_ON,
-						  AAFRESULT_NOT_IMPLEMENTED);
+						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
   temphr = checkModeFlag (AAF_FILE_MODE_DEBUG1_ON,
-						  AAFRESULT_NOT_IMPLEMENTED);
+						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
   aafUInt32 i;
@@ -251,6 +251,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   HRESULT						hr = S_OK;
   aafWChar					name[500];
   aafMobID_t					mobID;
+  aafFileRev_t					testRev;
 
   aafProductVersion_t v;
   v.major = 1;
@@ -292,7 +293,10 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  mobIter->Release();
 	  mobIter = NULL;
 
-	  checkResult(pFile->Close());
+	checkResult(pFile->GetRevision(&testRev));
+    checkExpression(kAAFRev1 == testRev, AAFRESULT_TEST_FAILED);
+
+	checkResult(pFile->Close());
     bFileOpen = false;
 
   }
