@@ -24,6 +24,7 @@
 #include <assert.h>
 #include "AAFResult.h"
 #include "ImplAAFObjectCreation.h"
+#include "aafUtils.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFMobs;
 
@@ -71,7 +72,7 @@ AAFRESULT STDMETHODCALLTYPE
 					aafUID_t	testMOBID;
 
 					CHECK((*ppMob)->GetMobID (&testMOBID));
-					if(memcmp(&testMOBID, &(_criteria.tags.mobID), sizeof(testMOBID) == 0))
+					if(EqualAUID(&testMOBID, &(_criteria.tags.mobID)))
 						found = AAFTrue;
 					break;
 

@@ -19,13 +19,15 @@
 #include "ImplAAFEvent.h"
 #endif
 
+#include "ImplAAFDictionary.h"
+#include "ImplAAFDataDef.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "aafCvt.h"
-
+#include "aafUtils.h"
 
 
 
@@ -79,7 +81,9 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
   ImplAAFSequence *pSequence = NULL;
   ImplAAFEvent *pEvent = NULL;
   ImplAAFComponent *pComponent = NULL;
-
+  ImplAAFDictionary *pDict = NULL;
+  ImplAAFDataDef *pDef = NULL;
+  aafBool	willConvert;
 
   if (NULL == pSegment)
     return AAFRESULT_NULL_PARAM;
@@ -122,8 +126,17 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
       
       // The component must have the same data definition [id] as the sequence.
       CHECK(pComponent->GetDataDef(&componentDataDef));
-      if (0 != memcmp(&sequDataDef, &componentDataDef, sizeof(sequDataDef)))
-        RAISE(AAFRESULT_OBJECT_SEMANTIC);
+ 
+	  CHECK(GetDictionary(&pDict));
+	  CHECK(pDict->LookupDataDefintion(&componentDataDef, &pDef));
+	  pDict->ReleaseReference();
+	  pDict = NULL;
+	  CHECK(pDef->DoesDataDefConvertTo(&sequDataDef, &willConvert));
+	  pDef->ReleaseReference();
+	  pDef = NULL;
+
+	  if (willConvert == AAFFalse)
+		  RAISE(AAFRESULT_OBJECT_SEMANTIC);
 
       // Get the runtime type info for validation.
       aafUID_t firstComponentType;
@@ -150,9 +163,16 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
 
         // The component must have the same data definition [id] as the
         // sequence.
-        CHECK(pComponent->GetDataDef(&componentDataDef));
-        if (0 != memcmp(&sequDataDef, &componentDataDef, sizeof(sequDataDef)))
-          RAISE(AAFRESULT_OBJECT_SEMANTIC);
+		CHECK(GetDictionary(&pDict));
+		CHECK(pDict->LookupDataDefintion(&componentDataDef, &pDef));
+		pDict->ReleaseReference();
+		pDict = NULL;
+		CHECK(pDef->DoesDataDefConvertTo(&sequDataDef, &willConvert));
+		pDef->ReleaseReference();
+		pDef = NULL;
+
+		if (willConvert == AAFFalse)
+			RAISE(AAFRESULT_INVALID_DATADEF);
 
         // Validate that this event is the "same" type of event as the
         // first component of the sequence.
@@ -195,6 +215,10 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
   {
     if (NULL != pComponent)
       pComponent->ReleaseReference();
+    if (NULL != pDict)
+      pDict->ReleaseReference();
+    if (NULL != pDef)
+      pDef->ReleaseReference();
   }
   XEND;
 

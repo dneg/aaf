@@ -138,7 +138,9 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::GetNumDefinitions (aafInt32 *pDefCount)
 {
-	//!!!Add error checking
+	if(pDefCount == NULL)
+		return AAFRESULT_NULL_PARAM;
+	
 	*pDefCount = 1;
 	return AAFRESULT_SUCCESS;
 }
@@ -146,7 +148,9 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileContainer::GetIndexedDefinitionID (aafInt32 index, aafUID_t *uid)
 {
-	//!!!Add error checking
+	if(uid == NULL)
+		return AAFRESULT_NULL_PARAM;
+
 	*uid = ContainerFile;		// UID of the DefObject
 	return AAFRESULT_SUCCESS;
 }
@@ -165,7 +169,9 @@ HRESULT STDMETHODCALLTYPE
 	aafUID_t			uid;
 	IAAFContainerDef	*container = NULL;
 	IAAFDefObject		*obj = NULL;
-	//!!!Add error checking
+	if((dict == NULL) || (def == NULL))
+		return AAFRESULT_NULL_PARAM;
+
 	XPROTECT()
 	{
 		CHECK(dict->CreateInstance(&AUID_AAFContainerDef,
@@ -194,7 +200,6 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
-//!!!Need some real values for the descriptor
 static wchar_t *manufURL = L"http://www.avid.com";
 static wchar_t *downloadURL = L"ftp://ftp.avid.com/pub/";
 const aafUID_t MANUF_JEFFS_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
