@@ -33,16 +33,19 @@
 
   // @mfunc Constructor.
 OMMSSStoredObjectFactory::OMMSSStoredObjectFactory(
-                                        const OMStoredObjectEncoding& encoding,
-                                        const wchar_t* name,
-                                        const wchar_t* description)
-: OMStoredObjectFactory(encoding, name, description)
+                                 const OMStoredObjectEncoding& encoding,
+                                 const OMUniqueObjectIdentification& signature,
+                                 const wchar_t* name,
+                                 const wchar_t* description)
+: OMStoredObjectFactory(encoding, signature, name, description)
 {
   TRACE("OMMSSStoredObjectFactory::OMMSSStoredObjectFactory");
 
   PRECONDITION("Valid name", validWideString(name));
   PRECONDITION("Valid name", validWideString(description));
   PRECONDITION("Valid encoding", encoding != nullOMStoredObjectEncoding);
+  PRECONDITION("Valid signature",
+                                signature != nullOMUniqueObjectIdentification);
 }
 
   // @mfunc Destructor.
@@ -85,7 +88,7 @@ OMMSSStoredObjectFactory::openModify(OMRawStorage* rawStorage)
 {
   TRACE("OMMSSStoredObjectFactory::openModify");
 
-  writeSignature(rawStorage, nullOMStoredObjectEncoding);
+  writeSignature(rawStorage, nullOMUniqueObjectIdentification);
   return OMMSSStoredObject::openModify(rawStorage);
 }
 
@@ -139,7 +142,7 @@ OMMSSStoredObjectFactory::openModify(const wchar_t* fileName)
 {
   TRACE("OMMSSStoredObjectFactory::openModify");
 
-  writeSignature(fileName, nullOMStoredObjectEncoding);
+  writeSignature(fileName, nullOMUniqueObjectIdentification);
   return OMMSSStoredObject::openModify(fileName);
 }
 
@@ -198,7 +201,7 @@ OMMSSStoredObjectFactory::isRecognized(const wchar_t* fileName)
     size_t status = fread(&sssig, sizeof(sssig), 1, f);
     if (status == 1) {
       if (memcmp(sssig, MSSSignature, sizeof(MSSSignature)) == 0) {
-        OMStoredObjectEncoding sig;
+        OMUniqueObjectIdentification sig;
         OMByte* s = reinterpret_cast<OMByte*>(&sig);
         status = fread(s, sizeof(sig), 1, f);
         if (status == 1) {
@@ -237,7 +240,7 @@ OMMSSStoredObjectFactory::isRecognized(OMRawStorage* rawStorage)
   rawStorage->readAt(0, sssig, sizeof(sssig), count);
   if (count == sizeof(sssig)) {
     if (memcmp(sssig, MSSSignature, sizeof(MSSSignature)) == 0) {
-      OMStoredObjectEncoding sig;
+      OMUniqueObjectIdentification sig;
       OMByte* s = reinterpret_cast<OMByte*>(&sig);
       rawStorage->readAt(8, s, sizeof(sig), count);
       if (count == sizeof(sig)) {
@@ -310,7 +313,7 @@ void OMMSSStoredObjectFactory::close(const wchar_t* fileName,
 
   if (isWritable) {
     // The encoding is used as the signature.
-    writeSignature(fileName, encoding());
+    writeSignature(fileName, signature());
   }
 }
 
@@ -324,7 +327,7 @@ void OMMSSStoredObjectFactory::close(OMRawStorage* rawStorage,
 
   if (isWritable) {
     // The encoding is used as the signature.
-    writeSignature(rawStorage, encoding());
+    writeSignature(rawStorage, signature());
   }
 }
 
@@ -332,12 +335,12 @@ void OMMSSStoredObjectFactory::close(OMRawStorage* rawStorage,
   //   @parm The raw storage.
   //   @parm The signature.
 void OMMSSStoredObjectFactory::writeSignature(
-                                       OMRawStorage* rawStorage,
-                                       const OMStoredObjectEncoding& signature)
+                                 OMRawStorage* rawStorage,
+                                 const OMUniqueObjectIdentification& signature)
 {
   TRACE("OMMSSStoredObjectFactory::writeSignature");
 
-  OMStoredObjectEncoding sig = signature;
+  OMUniqueObjectIdentification sig = signature;
   if (hostByteOrder() != littleEndian) {
     OMByte* s = reinterpret_cast<OMByte*>(&sig);
     size_t size = sizeof(OMUniqueObjectIdentification);
@@ -356,14 +359,14 @@ void OMMSSStoredObjectFactory::writeSignature(
   //   @parm The file name.
   //   @parm The signature.
 void OMMSSStoredObjectFactory::writeSignature(
-                                       const wchar_t* fileName,
-                                       const OMStoredObjectEncoding& signature)
+                                 const wchar_t* fileName,
+                                 const OMUniqueObjectIdentification& signature)
 {
   TRACE("OMMSSStoredObjectFactory::writeSignature");
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  OMStoredObjectEncoding sig = signature;
+  OMUniqueObjectIdentification sig = signature;
 
   if (hostByteOrder() != littleEndian) {
     OMByte* s = reinterpret_cast<OMByte*>(&sig);

@@ -38,6 +38,7 @@ public:
 
     // @cmember Constructor.
   OMMSSStoredObjectFactory(const OMStoredObjectEncoding& encoding,
+                           const OMUniqueObjectIdentification& signature,
                            const wchar_t* name,
                            const wchar_t* description);
 
@@ -121,11 +122,11 @@ private:
 
     // @cmember Write the signature to the given raw storage.
   static void writeSignature(OMRawStorage* rawStorage,
-                             const OMStoredObjectEncoding& signature);
+                             const OMUniqueObjectIdentification& signature);
 
     // @cmember Write the signature to the given file.
   static void writeSignature(const wchar_t* fileName,
-                             const OMStoredObjectEncoding& signature);
+                             const OMUniqueObjectIdentification& signature);
 
 };
 

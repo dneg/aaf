@@ -40,6 +40,7 @@ public:
 
     // @cmember Constructor.
   OMStoredObjectFactory(const OMStoredObjectEncoding& encoding,
+                        const OMUniqueObjectIdentification& signature,
                         const wchar_t* name,
                         const wchar_t* description);
 
@@ -55,6 +56,10 @@ public:
     // @cmember The key used to identify the encoding of
     //          <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
   virtual OMStoredObjectEncoding encoding(void) const;
+
+    // @cmember Used to identify files created
+    //          by this <c OMStoredObjectFactory>.
+  virtual OMUniqueObjectIdentification signature(void) const;
 
     // @cmember The name used to identify the encoding of
     //          <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
@@ -134,6 +139,7 @@ private:
   // @access Private members.
 
   OMStoredObjectEncoding _encoding;
+  OMUniqueObjectIdentification _signature;
   wchar_t* _name;
   wchar_t* _description;
 

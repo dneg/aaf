@@ -30,10 +30,12 @@
 
   // @mfunc Constructor.
 OMStoredObjectFactory::OMStoredObjectFactory(
-                                        const OMStoredObjectEncoding& encoding,
-                                        const wchar_t* name,
-                                        const wchar_t* description)
+                                 const OMStoredObjectEncoding& encoding,
+                                 const OMUniqueObjectIdentification& signature,
+                                 const wchar_t* name,
+                                 const wchar_t* description)
 : _encoding(encoding),
+  _signature(signature),
   _name(saveWideString(name)),
   _description(saveWideString(description))
 {
@@ -62,6 +64,15 @@ OMStoredObjectEncoding OMStoredObjectFactory::encoding(void) const
 {
   TRACE("OMStoredObjectFactory::encoding");
   return _encoding;
+}
+
+  // @mfunc Used to identify files created
+  //        by this <c OMStoredObjectFactory>.
+  //   @rdesc The signature.
+OMUniqueObjectIdentification OMStoredObjectFactory::signature(void) const
+{
+  TRACE("OMStoredObjectFactory::signature");
+  return _signature;
 }
 
   // @mfunc The name used to identify the encoding of

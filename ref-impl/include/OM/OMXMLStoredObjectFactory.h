@@ -38,6 +38,7 @@ public:
 
     // @cmember Constructor.
   OMXMLStoredObjectFactory(const OMStoredObjectEncoding& encoding,
+                           const OMUniqueObjectIdentification& signature,
                            const wchar_t* name,
                            const wchar_t* description);
 
