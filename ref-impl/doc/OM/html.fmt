@@ -8,6 +8,10 @@
 ;  - fix links to overloaded member functions
 ;  - make souce file names hyper-links
 
+[constant]
+
+.define=title,Object Manager Documentation for Developers
+
 [PARAGRAPH]
 
 ; New C paragraph tags
