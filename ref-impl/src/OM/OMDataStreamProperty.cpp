@@ -277,5 +277,13 @@ void OMDataStreamProperty::setBits(const OMByte* ANAME(bits),
   ASSERT("Unimplemented code not reached", false);
 }
 
+const wchar_t* OMDataStreamProperty::storedName(void) const
+{
+  TRACE("OMDataStreamProperty::storedName");
 
-
+  if (_storedName == 0) {
+    OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
+    p->_storedName = OMStoredObject::streamName(_name, propertyId());
+  }
+  return _storedName;
+}
