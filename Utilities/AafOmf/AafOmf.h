@@ -44,11 +44,14 @@ namespace OMF2
 #include "omPublic.h"
 #include "omMedia.h"
 }
+// AAF Utilities Infra-structure 
+#include "UtlConsole.h"
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+  
 #if defined(_MAC) || defined(macintosh)
 #include <initguid.h> // define all of the AAF guids.
 #include "AAF.h"
@@ -65,6 +68,8 @@ const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x
 
 
 #define FAILURE (2)
+
+const int MAX_INDENT = 8;
 
 // ============================================================================
 // char to wide char conversion function prototypes
@@ -101,6 +106,8 @@ public:
 
 public:
 	void Usage( void );
+	void IncIndentLevel( void );
+	void DecIndentLevel( void );
 	HRESULT GetUserInput(int argc, char* argv[]);
 	HRESULT OpenInputFile( void );
 	HRESULT OpenOutputFile( void );
@@ -148,6 +155,10 @@ private:
 	aafInt32				nNumAAFProperties;
 	aafInt32				nNumUndefinedOMFObjects;
 	aafInt32				nNumUndefinedOMFProperties;
+
+	// For display and print purposes
+	aafInt16				numIndents;
+	char					indentLeader[MAX_INDENT+1];	
 
     OMF2::omfSessionHdl_t	OMFSession;
 	OMF2::omfHdl_t			OMFFileHdl;
