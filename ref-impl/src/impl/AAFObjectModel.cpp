@@ -852,6 +852,28 @@ const aafUInt32 kTypeDefinitionStrongReferenceVectorCount =
 // Create an array of all weak reference types.
 //
 
+#define AAF_TYPE(name) name
+#define AAF_REFERENCE_TYPE(type, target) AAF_TYPE(target##type)
+#define AAF_REFERENCE_TYPE_NAME(type, target) AAF_TYPE(target##type)
+#define MY_PROPERTY_ID(name, parent) &kAAFPropID_##parent##_##name
+#define MY_ARRAY_NAME(name) s_WRPropID_##name
+
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type) \
+static aafUID_constptr MY_ARRAY_NAME(name)[] = \
+{ \
+
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_MEMBER(name, parent, container) \
+  MY_PROPERTY_ID(name, parent),
+  
+#define AAF_TYPE_DEFINITION_WEAK_REFERENCE_END(name) \
+	NULL \
+};
+
+#include "AAFMetaDictionary.h"
+#undef MY_PROPERTY_ID
+
+
+
 #define MY_TYPE_NAME(name) L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 #define MY_TARGET_ID(name) AUID_AAF##name
@@ -867,7 +889,9 @@ static TypeDefinitionWeakReference sTypeDefinitionWeakReferences [] = \
     TypeDefinitionWeakReference( \
     MY_TYPE_NAME(name), \
     (aafUID_constptr) &MY_TYPE_ID(name), \
-    (aafUID_constptr) &MY_TARGET_ID(type)),
+    (aafUID_constptr) &MY_TARGET_ID(type), \
+    MY_ARRAY_ELEMENT_COUNT(MY_ARRAY_NAME(name)) - 1, \
+    MY_ARRAY_NAME(name)),
 #define AAF_TYPE_TABLE_END() \
 };
 
@@ -876,6 +900,8 @@ static TypeDefinitionWeakReference sTypeDefinitionWeakReferences [] = \
 #undef MY_TYPE_NAME
 #undef MY_TYPE_ID
 #undef MY_TARGET_ID
+
+#undef MY_ARRAY_NAME
 
 
 const aafUInt32 kTypeDefinitionWeakReferenceCount = 
@@ -2256,8 +2282,8 @@ void PropertyDefinition::Initialize (void)
 
   // POSTCONDITION: if the class and type definitions do not exist then
   // the meta dictionary is invalid.
-  assert (_typeDefinition);
-  assert (_container);
+  assert (_typeDefinition && TypeDefinition::null() != _typeDefinition);
+  assert (_container && ClassDefinition::null() != _container);
 }
 
 void PropertyDefinition::makeAxiomatic (void) const
@@ -2394,7 +2420,7 @@ void TypeDefinitionEnumeration::Initialize (void)
   // POSTCONDITION: if the type definition does not exist then either
   // the meta dictionary is invalid or the sort/search mechnism is 
   // broken.
-  assert (_typeDefinition);
+  assert (_typeDefinition && TypeDefinition::null() != _typeDefinition);
 }
 
 const ClassDefinition *
@@ -2475,7 +2501,7 @@ void TypeDefinitionVariableArray::Initialize(void)
   // POSTCONDITION: if the type definition does not exist then either
   // the meta dictionary is invalid or the sort/search mechnism is 
   // broken.
-  assert (_elementType);
+  assert (_elementType && TypeDefinition::null() != _elementType);
 }
 
 void TypeDefinitionVariableArray::makeAxiomatic (void) const
@@ -2634,7 +2660,7 @@ void DefinitionRecordField::Initialize()
   // POSTCONDITION: if the type definition does not exist then either
   // the meta dictionary is invalid or the sort/search mechnism is 
   // broken.
-  assert (_typeDefinition);
+  assert (_typeDefinition && TypeDefinition::null() != _typeDefinition);
 }
 
 void TypeDefinitionRename::Initialize()
@@ -2647,7 +2673,7 @@ void TypeDefinitionRename::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_renamedType);
+  assert (_renamedType && TypeDefinition::null() != _renamedType);
 }
 
 void TypeDefinitionRename::makeAxiomatic (void) const
@@ -2717,7 +2743,7 @@ void TypeDefinitionString::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_stringType);
+  assert (_stringType && TypeDefinition::null() != _stringType);
 }
 
 void TypeDefinitionString::makeAxiomatic (void) const
@@ -2819,7 +2845,7 @@ void TypeDefinitionSet::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_elementType);
+  assert (_elementType && TypeDefinition::null() != _elementType);
 }
 
 void TypeDefinitionSet::makeAxiomatic (void) const
@@ -2887,7 +2913,7 @@ void TypeDefinitionObjectReference::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_target);
+  assert (_target && ClassDefinition::null() != _target);
 }
 
 void TypeDefinitionObjectReference::makeAxiomatic (void) const
@@ -2943,8 +2969,6 @@ bool TypeDefinitionObjectReference::visitPostOrder(VisitDefinitionProcType f, vo
 const ClassDefinition *
   TypeDefinitionStrongReference::classDefinition(void) const
 {
-  // error C2065: 'AUID_AAFTypeDefinitionStrongReference' : undeclared identifier
-//  return objectModel()->findClassDefinition (&AUID_AAFTypeDefinitionStrongReference);
   return objectModel()->findClassDefinition (&AUID_AAFTypeDefinitionStrongObjectReference);
 }
 
@@ -2966,7 +2990,7 @@ void TypeDefinitionStrongReferenceVector::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (type);
+  assert (type && TypeDefinition::null() != type);
 }
 
 const ClassDefinition *
@@ -2975,11 +2999,62 @@ const ClassDefinition *
   return objectModel()->findClassDefinition (&AUID_AAFTypeDefinitionVariableArray);
 }
 
+
+
+void TypeDefinitionWeakReference::Initialize(void)
+{
+	TypeDefinitionObjectReference::Initialize();
+
+	assert (targetSetCount() > 1);
+
+  // NOTE: The first property in array since it it special
+  // and connot be found in the global list of properties (this
+  // property is private to the OM). It NUST be one of the
+  // "two-roots" of the file.
+	assert((0 == memcmp(_targetSet[0], &kAAFPropID_Root_MetaDictionary, sizeof(aafUID_t))) ||
+	       (0 == memcmp(_targetSet[0], &kAAFPropID_Root_Header, sizeof(aafUID_t))));
+
+	// Make sure all of the other properties are in the dictionary.
+	const PropertyDefinition *propertyDefinition = NULL;
+	const TypeDefinition * typeDefinition = NULL;
+	for (aafUInt32 i = 1; i < targetSetCount(); i++)
+	{
+    propertyDefinition = objectModel()->findPropertyDefinition(_targetSet[i]);
+    assert (propertyDefinition && PropertyDefinition::null() != propertyDefinition);
+	}
+}
+
+void TypeDefinitionWeakReference::makeAxiomatic (void) const
+{
+  if (!axiomatic())
+  {
+    // Make this definition and its class definition axiomatic
+    TypeDefinitionObjectReference::makeAxiomatic();
+
+    // Make all of the referenced property definitions axiomatic.
+    // Skip over the first property in array since it it special
+    // and connot be found in the global list of properties (this
+    // property is private to the OM).
+    const PropertyDefinition *propertyDefinition = NULL;
+    for (aafUInt32 i = 1; i < targetSetCount(); ++i)
+    {
+    	propertyDefinition = objectModel()->findPropertyDefinition(targetAt(i));
+      propertyDefinition->container()->makeAxiomatic();
+    }
+  }
+}
+
+
+aafUID_constptr
+  TypeDefinitionWeakReference::targetAt(aafUInt32 index) const
+{
+	assert (targetSetCount() > index);
+	return _targetSet[index];
+}
+
 const ClassDefinition *
   TypeDefinitionWeakReference::classDefinition(void) const
 {
-  // error C2065: 'AUID_AAFTypeDefinitionWeakReference' : undeclared identifier
-//  return objectModel()->findClassDefinition (&AUID_AAFTypeDefinitionWeakReference);
   return objectModel()->findClassDefinition (&AUID_AAFTypeDefinitionWeakObjectReference);
 }
 
@@ -3000,7 +3075,7 @@ void TypeDefinitionWeakReferenceVector::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (type);
+  assert (type && TypeDefinition::null() != type);
 }
 
 const ClassDefinition *
@@ -3022,7 +3097,7 @@ void TypeDefinitionStream::Initialize()
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
-  assert (_elementType);
+  assert (_elementType && TypeDefinition::null() != _elementType);
 }
 
 void TypeDefinitionStream::makeAxiomatic (void) const
