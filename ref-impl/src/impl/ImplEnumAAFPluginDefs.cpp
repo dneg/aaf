@@ -79,6 +79,8 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			value;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
+  static const aafUID_t nullID = { 0 };
+
 
 	if(_enumProp != NULL)
 		numElem = _enumProp->size() / sizeof(aafUID_t);
@@ -103,7 +105,7 @@ AAFRESULT STDMETHODCALLTYPE
 			_enumProp->getValueAt(&value, _current);
 			CHECK(_enumObj->MyHeadObject(&head));
 			CHECK(head->GetDictionary (&dict));
-			if(EqualAUID(&value, &NilMOBID))		///!!! TEMP: to work without optional parms, handle NIL ID
+			if(EqualAUID(&value, &nullID))		///!!! TEMP: to work without optional parms, handle NIL ID
 				RAISE(AAFRESULT_NO_MORE_OBJECTS)	//!!!
 			CHECK(dict->LookupPluginDef (value, ppAAFPluginDescriptor));
 			head->ReleaseReference();
