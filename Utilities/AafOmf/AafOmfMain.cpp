@@ -33,7 +33,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream.h>
-#include <memory>
 #ifdef macintosh
 	#include "DataInput.h"
 #endif 
@@ -313,17 +312,18 @@ int main(int argc, char *argv[])
 	ExceptionBase::SetLogger( gpGlobals->pLogger );
 	// **************************************************************************
 
+	AAFDomainExtensionUtils	*aafDomain = new AAFDomainExtensionUtils;
+	OMFDomainExtensionUtils	*omfDomain = new OMFDomainExtensionUtils;
+	EffectTranslate			*effectTranslate = new EffectTranslate;
+
 	try
 	{
 		AAFCheck check;
-		std::auto_ptr<AAFDomainExtensionUtils> aafDomain( new AAFDomainExtensionUtils );
-		std::auto_ptr<OMFDomainExtensionUtils> omfDomain( new OMFDomainExtensionUtils );
-		std::auto_ptr<EffectTranslate> effectTranslate( new EffectTranslate );
 		if (gpGlobals->bConvertAAFFile)
 		{
 			// User indicated input file must be an AAF 
 			// Convert AAF to OMF
-			ExtendedAaf2Omf		AAFMain( aafDomain.get(), omfDomain.get(), effectTranslate.get() );
+			ExtendedAaf2Omf		AAFMain( aafDomain, omfDomain, effectTranslate );
 			AAFMain.ConvertFile();
 		}
 		else
@@ -331,7 +331,7 @@ int main(int argc, char *argv[])
 			// User indicated Input file must be an OMF file
 			// Conert OMF to AAF
 			check = IsOMFFile(gpGlobals->sInFileName);
-			ExtendedOmf2Aaf		OMFMain ( aafDomain.get(), omfDomain.get(), effectTranslate.get() );
+			ExtendedOmf2Aaf		OMFMain ( aafDomain, omfDomain, effectTranslate );
 			OMFMain.ConvertFile();
 		}
 
@@ -362,6 +362,9 @@ int main(int argc, char *argv[])
 
 	// If we get here then the gpGlobals was created.
 	delete gpGlobals;
+	delete aafDomain;
+	delete omfDomain;
+	delete effectTranslate;
 
 	return( hr );
 }
