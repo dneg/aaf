@@ -781,7 +781,8 @@ typedef enum _aafSearchTag_e
 	kAAFByName = 3, 
 	kAAFByClass = 4, 
 	kAAFByDataDef = 5,
-	kAAFByMediaCrit = 6
+	kAAFByMediaCrit = 6,
+	kAAFByUsageCode = 7
 } aafSearchTag_e;
 
 
@@ -821,6 +822,7 @@ AD_CPP_QUOTE(\        aafString_t       name;)
 AD_CPP_QUOTE(\        aafClassID_t      objClass;	// shouldn't this be a pointer?)
 AD_CPP_QUOTE(\        aafUID_t		 datadef;	// shouldn't this be a pointer?)
 AD_CPP_QUOTE(\        aafCriteriaType_t mediaCrit;)
+AD_CPP_QUOTE(\        aafUID_t          usageCode;)
 AD_CPP_QUOTE(\    } tags;)
 AD_CPP_QUOTE(} aafSearchCrit_t;)
 
