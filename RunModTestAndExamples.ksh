@@ -165,8 +165,6 @@ VerifyFiles ()
 			CheckExitCode $Stat   "     $File  <- dump.exe reported error.  See ${File}.dump.log"
 			mv tempdump.log ${File}.dump.log
 		fi
-#when running the debug version, an exception is thrown requiring user intervention so I an restrcting it to release
-if [ $Target = "Release" ] && [ ! $File = "AAFDictionaryTest.aaf" ]; then			
 		RemoveIfExists ${File}.AAFDump.log
 		${UtilitiesDir}/AAFDump "$File" > tempdump.log
 		Stat=$?
@@ -175,7 +173,6 @@ if [ $Target = "Release" ] && [ ! $File = "AAFDictionaryTest.aaf" ]; then
 			CheckExitCode $Stat   "     $File  <- AAFDump.exe reported error.  See ${File}.AAFDump.log"
 			mv tempdump.log ${File}.AAFDump.log
 		fi
-fi
 
 		RemoveIfExists ${File}.CPDDump.log
 		${ExamplesDir}/ComPropDirectDump "$File" > tempdump.log
