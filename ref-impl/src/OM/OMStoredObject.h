@@ -15,10 +15,12 @@ class OMStoredObject {
 public:
   OMStoredObject(IStorage* s);
 
+  static OMStoredObject* create(const char* fileName);
+  static OMStoredObject* open(const char* fileName);
+  OMStoredObject* openStoragePath(const char* storagePathName);
+
   void save(OMProperty* p);
   void restore(OMPropertySet& properties);
-  void create(void);
-  void open(void);
   void close(void);
   void write(int pid, int type, void* start, size_t size);
   void read(int pid, int type, void* start, size_t size);
@@ -29,7 +31,10 @@ public:
   void save(const OMStoredVectorIndex* index, const char* vectorName);
   OMStoredVectorIndex* restore(const char* vectorName);
 private:
-  
+
+  void create(void);
+  void open(void);
+
   void save(OMStoredPropertySetIndex *index);
   OMStoredPropertySetIndex* restore(void);
   
