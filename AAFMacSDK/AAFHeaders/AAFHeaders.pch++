@@ -1,0 +1,26 @@
+/*
+ *	AAFHeaders.pch++
+ *
+ *	Script to generate the 'AAFHeaders<xxx>++' precompiled header for Metrowerks C/C++.
+ *  Copyright © 1993 metrowerks inc.  All rights reserved.
+ */
+
+/*
+ *	Support for automatically naming the precompiled header file ...
+ */
+#if __POWERPC__
+#pragma precompile_target "AAFHeadersPPC++"
+#elif __CFM68K__
+#pragma precompile_target "AAFHeadersCFM68K++"
+#else
+#pragma precompile_target "AAFHeaders68K++"
+#endif
+
+/*
+ *	Now just include the "AAFHeaders.c" source file ...
+ */
+
+#pragma once on
+
+#include "AAFHeaders.c"
+
