@@ -33,6 +33,19 @@
 
 namespace {
 
+#if defined( _MSC_VER )
+// MS VC++ cannot cope with a 64bit int passed to the ostream << operator
+// so use this ugly workaround where it is converted to a string first.
+static char str_int64_workaround[30];	// big enough for 2**64-1 as decimal
+static const char *ostream_int64(aafInt64 value)
+{
+	sprintf(str_int64_workaround, "%I64d", value);
+	return str_int64_workaround;
+}
+#else
+#define ostream_int64
+#endif
+
 //====================================================================
 
 template <class Type>
@@ -384,8 +397,8 @@ void CountSamples::RunTest( CmdState& state, int argc, char** argv)
 
   if ( expectedCount != count ) {
     stringstream anError;
-    anError << "sample counts do not match ("
-	    << count << " != " << expectedCount << ")";
+    anError << "sample counts do not match (" << ostream_int64(count)
+		<< " != " << ostream_int64(expectedCount) << ")";
     throw TestFailedEx( anError.str() );
   }
 }
