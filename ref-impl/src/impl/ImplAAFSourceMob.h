@@ -317,6 +317,9 @@ public:
   // in /test/ImplAAFSourceMobTest.cpp.
   static AAFRESULT test();
 
+  // SDK Internal
+  virtual AAFRESULT ReconcileMobLength(void);
+
 private:
 AAFRESULT FindTimecodeClip(
 				aafFrameOffset_t	position,
