@@ -46,6 +46,15 @@ OMUInt64 OMDataStreamProperty::size(void) const
   return 0;
 }
 
+  // @mfunc Set the size, in bytes, of the data in this
+  //        <c OMDataStreamProperty>.
+  //   @rdesc  The new size, in bytes, of the data in this
+  //           <c OMDataStreamProperty>.
+void OMDataStreamProperty::setSize(const OMUInt64 newSize)
+{
+  // stub
+}
+
   // @mfunc The current position for <f read()> and <f write()>, as an
   //        offset in bytes from the begining of the data stream.
   //        The valid range for <p offset> is 0 .. <f size()>.
