@@ -1,0 +1,125 @@
+
+About the automatically generated cvs change logs
+
+What are they ?
+
+The change logs are a set of automatically generated pages, each page
+contains a single html table containing the changes between two tags.
+For example, the page
+http://aaf.sourceforge.net/build/Changes-V101-Build-0505.html
+contains a log of changes made between the tags V101 and Build-0505
+
+An index, also automatically generated, is at -
+http://aaf.sourceforge.net/build/Changes-index.html
+
+Note that changes made since the most recent tag don't appear in any
+change log.
+
+How the generation process works
+
+The script build/history/AAFmkchangelogs generates a complete set of pages
+and an index for the tags (and their dates) specified in
+build/history/AAFtagdates.
+
+How to add a new change log
+
+The following instructions assume you are adding a new tag and want to
+create a new page and an updated index.
+
+There are 6 steps
+
+1) apply the new tag
+
+2) add the new tag and the corresponding date and time to AAFtagdates
+
+3) generate a complete set of new pages and a new index
+
+4) upload the new/changed pages and updated index to the web site
+
+5) commit AAFtagdates
+
+6) browse to http://aaf.sourceforge.net/build/Changes-index.html and
+   admire your handiwork
+
+Apply a the new tag
+
+This can be done with the "cvs tag <tagname>" or "cvs rtag<tagname>"
+commands. The only difference between the two is that rtag doesn't
+require a working copy. Both commands work on the repository and
+operate recursively (by default). So to tag all file in the repository
+the easiest way is to cd to the root of a working copy. For example -
+
+$ cd your-working-copy/AAF
+$ cvs rtag Build-506
+ 
+Add the new tag and the corresponding date and time to AAFtagdates
+
+You can do this by noting UTC when you create the tag or by using
+method given below for finding the dates/times corresponding to cvs
+tags. Either way you must add the tag and its date/time to the
+AAFtagdates file.
+
+Generate a complete set of new pages and a new index
+
+The cvs commands used by the AAFmkchangelogs script must be able to
+find the cvs repository so you must set the CVSROOT environment
+variable or set your current directory somewhere inside a valid cvs
+working copy. The commands also operate recursively so to produce
+change logs for the entire AAF tree, the easiest way is to cd to the
+root of a working copy. For example -
+
+$ cd your-working-copy/AAF
+$ ./build/history/AAFmkchangelogs
+
+Note that this step regenerates all the pages and creates an completly
+new index. This may seem wasteful but is useful to ensure that the
+generated pages are up to date with other changes. For example, a
+change to the color map (AAFcolormap) might cause all pages to be
+generated differently.
+
+Upload the new (or changed) pages and updated index to the web site
+
+[TBS]
+
+Commit AAFtagdates
+
+[TBS]
+
+Finding the dates/times corresponding to cvs tags
+
+The following method is one way to find the dates/times of tags
+already applied to the cvs repository. This method was used to create
+the initial contents of AAFtagdates
+
+$ cd your-working-copy/AAF
+$ cvs log > Everything.log
+$ cat Everything.log | awk -f build/history/flatlog.awk  > Everything.flog
+$ for t in RC1 Build-0500 Build-0501 Build-0502 \
+           Build-0503 Build-0504 Build-0505
+> do
+> grep -w $t Everything.flog | sort -r -k 3 -k 4 | \
+    head -n 1 | awk '{printf("%s %s %s\n", $7, $3, $4)}'
+> done
+RC1 2001/04/17 22:14:43
+Build-0500 2001/07/13 20:30:53
+Build-0501 2001/07/29 18:58:27
+Build-0502 2001/10/29 14:27:11
+Build-0503 2002/02/26 17:20:24
+Build-0504 2002/04/05 00:43:27
+Build-0505 2002/05/29 21:23:58
+$
+
+Why are the dates/times needed, why not just use the tags ?
+
+If you apply tag T1 at date/time D1 and tag T2 at date/time D2 the
+commands "cvs log -rT1:T2" and "cvs log -rD1:D2" don't (for reasons
+not fully understood by the author) produce the same (or even
+equivalent) output. The output of "cvs log -rD1:D2" is the output we
+need in this case.
+
+How do I get a log of all the changes that have been made since the
+most recent tag in AAFtagdates ?
+
+[TBS]
+
+Tim Bingham 30-October-2002
