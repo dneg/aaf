@@ -2003,6 +2003,375 @@ void ImplAAFDictionary::InitializeMetaDefinitions(void)
 	kAAFFalse - type def is not in a dictionary.
  *************************************************************************/
 aafBoolean_t aafLookupTypeDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFTypeDef		*p_typedef )
+{
+    assert( p_holder );
+    assert( p_typedef );
+
+    AAFRESULT		hr = AAFRESULT_TYPE_NOT_FOUND; // Important init.
+    aafUID_t		typedef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the type def we're looking for.
+    p_typedef->GetAUID( &typedef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFTypeDef		*p_tmp_typedef = NULL;
+
+	hr = p_dict->LookupTypeDef( typedef_id, &p_tmp_typedef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_typedef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupOperationDef()
+
+	This helper function searches for specified operation definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_operdef	- operation definition to look for.
+
+    Returns:
+	kAAFTrue - operation definition found in given objects dictionary.
+	kAAFFalse - operation def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupOperationDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFOperationDef		*p_operdef )
+{
+    assert( p_holder );
+    assert( p_operdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		operdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the operation def we're looking for.
+    p_operdef->GetAUID( &operdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFOperationDef		*p_tmp_operdef = NULL;
+
+	hr = p_dict->LookupOperationDef( operdef_id, &p_tmp_operdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_operdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupParameterDef()
+
+	This helper function searches for specified parameter definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_paramdef	- parameter definition to look for.
+
+    Returns:
+	kAAFTrue - parameter definition found in given objects dictionary.
+	kAAFFalse - parameter def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupParameterDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFParameterDef		*p_paramdef )
+{
+    assert( p_holder );
+    assert( p_paramdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		paramdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the parameter def we're looking for.
+    p_paramdef->GetAUID( &paramdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFParameterDef		*p_tmp_paramdef = NULL;
+
+	hr = p_dict->LookupParameterDef( paramdef_id, &p_tmp_paramdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_paramdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupClassDef()
+
+	This helper function searches for specified class definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_classdef	- class definition to look for.
+
+    Returns:
+	kAAFTrue - class definition found in given objects dictionary.
+	kAAFFalse - class def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupClassDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFClassDef		*p_classdef )
+{
+    assert( p_holder );
+    assert( p_classdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		classdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the class def we're looking for.
+    p_classdef->GetAUID( &classdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFClassDef		*p_tmp_classdef = NULL;
+
+	hr = p_dict->LookupClassDef( classdef_id, &p_tmp_classdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_classdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupDataDef()
+
+	This helper function searches for specified data definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_datadef	- data definition to look for.
+
+    Returns:
+	kAAFTrue - data definition found in given objects dictionary.
+	kAAFFalse - data def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupDataDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFDataDef		*p_datadef )
+{
+    assert( p_holder );
+    assert( p_datadef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		datadef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the data def we're looking for.
+    p_datadef->GetAUID( &datadef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFDataDef		*p_tmp_datadef = NULL;
+
+	hr = p_dict->LookupDataDef( datadef_id, &p_tmp_datadef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_datadef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupCodecDef()
+
+	This helper function searches for specified codec definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_codecdef	- codec definition to look for.
+
+    Returns:
+	kAAFTrue - codec definition found in given objects dictionary.
+	kAAFFalse - codec def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupCodecDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFCodecDef		*p_codecdef )
+{
+    assert( p_holder );
+    assert( p_codecdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		codecdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the codec def we're looking for.
+    p_codecdef->GetAUID( &codecdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFCodecDef		*p_tmp_codecdef = NULL;
+
+	hr = p_dict->LookupCodecDef( codecdef_id, &p_tmp_codecdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_codecdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupContainerDef()
+
+	This helper function searches for specified container definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_containerdef	- container definition to look for.
+
+    Returns:
+	kAAFTrue - container definition found in given objects dictionary.
+	kAAFFalse - container def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupContainerDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFContainerDef		*p_containerdef )
+{
+    assert( p_holder );
+    assert( p_containerdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		containerdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the container def we're looking for.
+    p_containerdef->GetAUID( &containerdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFContainerDef		*p_tmp_containerdef = NULL;
+
+	hr = p_dict->LookupContainerDef( containerdef_id, &p_tmp_containerdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_containerdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupInterpolationDef()
+
+	This helper function searches for specified interpolation definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_interpoldef	- interpolation definition to look for.
+
+    Returns:
+	kAAFTrue - interpolation definition found in given objects dictionary.
+	kAAFFalse - interpolation def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupInterpolationDef( 
+    ImplAAFObject	*p_holder,
+    ImplAAFInterpolationDef		*p_interpoldef )
+{
+    assert( p_holder );
+    assert( p_interpoldef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		interpoldef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the interpolation def we're looking for.
+    p_interpoldef->GetAUID( &interpoldef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFInterpolationDef		*p_tmp_interpoldef = NULL;
+
+	hr = p_dict->LookupInterpolationDef( interpoldef_id, &p_tmp_interpoldef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_interpoldef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/****/
+/*************************************************************************
+    aafLookupTypeDef()
+
+	This helper function searches for specified type definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_typedef	- type definition to look for.
+
+    Returns:
+	kAAFTrue - type definition found in given objects dictionary.
+	kAAFFalse - type def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupTypeDef( 
     ImplAAFMetaDefinition	*p_holder,
     ImplAAFTypeDef		*p_typedef )
 {
@@ -2028,7 +2397,329 @@ aafBoolean_t aafLookupTypeDef(
 	p_dict->ReleaseReference();
     }
 
-    // If failed this function will only return AAFRESULT_TYPE_NOT_FOUND.
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupOperationDef()
+
+	This helper function searches for specified operation definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_operdef	- operation definition to look for.
+
+    Returns:
+	kAAFTrue - operation definition found in given objects dictionary.
+	kAAFFalse - operation def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupOperationDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFOperationDef		*p_operdef )
+{
+    assert( p_holder );
+    assert( p_operdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		operdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the operation def we're looking for.
+    p_operdef->GetAUID( &operdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFOperationDef		*p_tmp_operdef = NULL;
+
+	hr = p_dict->LookupOperationDef( operdef_id, &p_tmp_operdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_operdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupParameterDef()
+
+	This helper function searches for specified parameter definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_paramdef	- parameter definition to look for.
+
+    Returns:
+	kAAFTrue - parameter definition found in given objects dictionary.
+	kAAFFalse - parameter def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupParameterDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFParameterDef		*p_paramdef )
+{
+    assert( p_holder );
+    assert( p_paramdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		paramdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the parameter def we're looking for.
+    p_paramdef->GetAUID( &paramdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFParameterDef		*p_tmp_paramdef = NULL;
+
+	hr = p_dict->LookupParameterDef( paramdef_id, &p_tmp_paramdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_paramdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupClassDef()
+
+	This helper function searches for specified class definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_classdef	- class definition to look for.
+
+    Returns:
+	kAAFTrue - class definition found in given objects dictionary.
+	kAAFFalse - class def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupClassDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFClassDef		*p_classdef )
+{
+    assert( p_holder );
+    assert( p_classdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		classdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the class def we're looking for.
+    p_classdef->GetAUID( &classdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFClassDef		*p_tmp_classdef = NULL;
+
+	hr = p_dict->LookupClassDef( classdef_id, &p_tmp_classdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_classdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupDataDef()
+
+	This helper function searches for specified data definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_datadef	- data definition to look for.
+
+    Returns:
+	kAAFTrue - data definition found in given objects dictionary.
+	kAAFFalse - data def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupDataDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFDataDef		*p_datadef )
+{
+    assert( p_holder );
+    assert( p_datadef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		datadef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the data def we're looking for.
+    p_datadef->GetAUID( &datadef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFDataDef		*p_tmp_datadef = NULL;
+
+	hr = p_dict->LookupDataDef( datadef_id, &p_tmp_datadef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_datadef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupCodecDef()
+
+	This helper function searches for specified codec definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_codecdef	- codec definition to look for.
+
+    Returns:
+	kAAFTrue - codec definition found in given objects dictionary.
+	kAAFFalse - codec def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupCodecDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFCodecDef		*p_codecdef )
+{
+    assert( p_holder );
+    assert( p_codecdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		codecdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the codec def we're looking for.
+    p_codecdef->GetAUID( &codecdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFCodecDef		*p_tmp_codecdef = NULL;
+
+	hr = p_dict->LookupCodecDef( codecdef_id, &p_tmp_codecdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_codecdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupContainerDef()
+
+	This helper function searches for specified container definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_containerdef	- container definition to look for.
+
+    Returns:
+	kAAFTrue - container definition found in given objects dictionary.
+	kAAFFalse - container def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupContainerDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFContainerDef		*p_containerdef )
+{
+    assert( p_holder );
+    assert( p_containerdef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		containerdef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the container def we're looking for.
+    p_containerdef->GetAUID( &containerdef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFContainerDef		*p_tmp_containerdef = NULL;
+
+	hr = p_dict->LookupContainerDef( containerdef_id, &p_tmp_containerdef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_containerdef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
+    return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
+}
+
+
+
+/*************************************************************************
+    aafLookupInterpolationDef()
+
+	This helper function searches for specified interpolation definition in 
+	given object's dictionary.
+
+    Inputs:
+	p_holder	- definition object to look in.
+	p_interpoldef	- interpolation definition to look for.
+
+    Returns:
+	kAAFTrue - interpolation definition found in given objects dictionary.
+	kAAFFalse - interpolation def is not in a dictionary.
+ *************************************************************************/
+aafBoolean_t aafLookupInterpolationDef( 
+    ImplAAFMetaDefinition	*p_holder,
+    ImplAAFInterpolationDef		*p_interpoldef )
+{
+    assert( p_holder );
+    assert( p_interpoldef );
+
+    AAFRESULT		hr = AAFRESULT_OBJECT_NOT_FOUND; // Important init.
+    aafUID_t		interpoldef_id;
+    ImplAAFDictionary	*p_dict = NULL;
+
+
+    // Get UID of the interpolation def we're looking for.
+    p_interpoldef->GetAUID( &interpoldef_id );
+
+    if( p_holder->GetDictionary( &p_dict ) == AAFRESULT_SUCCESS )
+    {
+	ImplAAFInterpolationDef		*p_tmp_interpoldef = NULL;
+
+	hr = p_dict->LookupInterpolationDef( interpoldef_id, &p_tmp_interpoldef );
+	if( hr == AAFRESULT_SUCCESS )
+	    p_tmp_interpoldef->ReleaseReference();
+
+	p_dict->ReleaseReference();
+    }
+
+
     return (hr == AAFRESULT_SUCCESS ? kAAFTrue : kAAFFalse);
 }
 
