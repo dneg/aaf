@@ -152,8 +152,6 @@ OMUInt64 OMDataStreamProperty::position(void) const
   TRACE("OMDataStreamProperty::position");
 
   OMUInt64 result = stream()->position();
-
-  POSTCONDITION("Valid position", result <= size());
   return result;
 }
 
