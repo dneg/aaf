@@ -3,9 +3,14 @@
 
 //#define CHECKMEMORYLEAKS // Uncomment this line to turn leak checking on
 
+// Symbols needed for OLE/ActiveX headers.
 #define _MAC
 #define NONAMELESSUNION
 
+// We need to include some of the mac headers before the ole/ActiveX headers
+// so that certain include guards will be properly defined. This will keep
+// the OLE/ActiveX headers from attempting to include files that do not
+// exist on the macintosh such as <codefrag.h>.
 #include "MacHeaders.h"
 
 
@@ -24,10 +29,10 @@
 
 // Define to enable the module testing of the shared library.
 #define AAF_MODULE_TEST
-//#include "AXControlHeaders.h"
-#ifndef _DEBUG
-#define _DEBUG
-#endif
+
+//#ifndef _DEBUG
+//#define _DEBUG
+//#endif
 
 
 // AAF OM symbols
