@@ -222,7 +222,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetAUID (
-      aafUID_t *pAuid)
+      aafUID_t *pAuid) const
 {
   if (pAuid == NULL)
 	{
