@@ -119,11 +119,11 @@ SOURCE="..\..\..\ref-impl\plugins\CAAFDefaultStream.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp"
+SOURCE="..\..\..\ref-impl\plugins\CAAFEssenceDataStream.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\plugins\CAAFObjectStream.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp"
 # End Source File
 # Begin Source File
 
