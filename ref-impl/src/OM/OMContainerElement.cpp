@@ -233,3 +233,102 @@ OMWeakReferenceVectorElement::identification(void) const
 
   return _reference.identification();
 }
+
+// class OMWeakReferenceSetElement
+
+  // @mfunc Constructor.
+OMWeakReferenceSetElement::OMWeakReferenceSetElement(void)
+: OMContainerElement<OMWeakObjectReference>()
+{
+  TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
+}
+
+  // @mfunc Constructor.
+  //   @parm The <c OMProperty> (a set property) that contains this
+  //         <c OMWeakReferenceSetElement>.
+  //   @parm The unique key of this <c OMWeakReferenceSetElement>.
+  //   @parm A tag identifying the <c OMStrongReferenceSetProperty>
+  //         in which the target resides.
+OMWeakReferenceSetElement::OMWeakReferenceSetElement(
+                                   OMProperty* property,
+                                   OMUniqueObjectIdentification identification,
+                                   OMPropertyTag targetTag)
+: OMContainerElement<OMWeakObjectReference>(
+  OMWeakObjectReference(property, identification, targetTag))
+{
+  TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
+}
+
+  // @mfunc Copy constructor.
+  //   @parm The <c OMWeakReferenceSetElement> to copy.
+OMWeakReferenceSetElement::OMWeakReferenceSetElement(
+                                          const OMWeakReferenceSetElement& rhs)
+: OMContainerElement<OMWeakObjectReference>(rhs)
+{
+  TRACE("OMWeakReferenceSetElement::OMWeakReferenceSetElement");
+}
+
+  // @mfunc Destructor.
+OMWeakReferenceSetElement::~OMWeakReferenceSetElement(void)
+{
+  TRACE("OMWeakReferenceSetElement::~OMWeakReferenceSetElement");
+}
+
+  // @mfunc Assignment.
+  //        This operator provides value semantics for <c OMSet>.
+  //        This operator does not provide assignment of object references.
+  //   @parm The <c OMWeakReferenceSetElement> to be assigned.
+  //   @rdesc The <c OMWeakReferenceSetElement> resulting from
+  //          the assignment.
+OMWeakReferenceSetElement&
+OMWeakReferenceSetElement::operator= (const OMWeakReferenceSetElement& rhs)
+{
+  TRACE("OMWeakReferenceSetElement::operator=");
+
+  if (*this == rhs) {
+    return *this; // early return !
+  }
+
+  OMContainerElement<OMWeakObjectReference>::operator=(rhs);
+  return *this;
+}
+
+  // @mfunc Equality.
+  //        This operator provides value semantics for <c OMSet>.
+  //        This operator does not provide equality of object references.
+  //   @parm The <c OMWeakReferenceSetElement> to be compared.
+  //   @rdesc True if the values are the same, false otherwise.
+bool OMWeakReferenceSetElement::operator== (
+                                    const OMWeakReferenceSetElement& rhs) const
+{
+  TRACE("OMWeakReferenceSetElement::operator==");
+
+  bool result = OMContainerElement<OMWeakObjectReference>::operator==(rhs);
+
+  return result;
+}
+
+  // @mfunc Set the value of this <c OMContainerElement>.
+  //   @parm TBS
+  //   @parm A pointer to the new <c OMStorable>.
+  //   @rdesc A pointer to previous <c OMStorable>, if any.
+OMStorable*
+OMWeakReferenceSetElement::setValue(
+                            const OMUniqueObjectIdentification& identification,
+                            const OMStorable* value)
+{
+  TRACE("OMWeakReferenceSetElement::setValue");
+  OBSOLETE("OMContainerElement<ObjectReference>::reference");
+
+  return _reference.setValue(identification, value);
+}
+
+  // @mfunc The unique key of this <c OMWeakReferenceSetElement>.
+  //   @rdesc  The unique key of this <c OMWeakReferenceSetElement>.
+OMUniqueObjectIdentification
+OMWeakReferenceSetElement::identification(void) const
+{
+  TRACE("OMWeakReferenceSetElement::identification");
+
+  return _reference.identification();
+}
