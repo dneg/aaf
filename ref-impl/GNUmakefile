@@ -22,9 +22,9 @@
 
 .PHONY : all
 all :
-	cd src && $(MAKE)
 	cd aafiid && $(MAKE)
 	cd aaflib && $(MAKE)
+	cd src && $(MAKE)
 	cd libjpeg && $(MAKE)
 	cd plugins && $(MAKE)
 

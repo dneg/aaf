@@ -54,8 +54,8 @@ CXXFILES2 = $(CXXFILES_TMP:com-dll/%=%)
 #/AAFSunSunOSSDK/g++/sss-impl/debug/libSSRW2C.a
 # $(AAFBUILDDIR)/ss-impl/$(AAFTARGETDIR)/librefstg$(LIB)
 
-ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/$(AAFTARGETDIR)/libSSRW2C$(LIB)),$(AAFBUILDDIR)/sss-impl/$(AAFTARGETDIR)/libSSRW2C$(LIB))
-STORAGE_LIBS=$(AAFBUILDDIR)/sss-impl/$(AAFTARGETDIR)/libSSRW2C$(LIB)
+ifeq ($(wildcard $(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)),$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB))
+STORAGE_LIBS=$(AAFBUILDDIR)/sss-impl/libSSRW2C$(LIB)
 else
 STORAGE_LIBS=
 endif
