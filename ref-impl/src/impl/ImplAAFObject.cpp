@@ -227,9 +227,10 @@ void ImplPropertyCollection::SetPropertyValue
   assert (AAFRESULT_SUCCEEDED (hr));
   hr = pvd->GetBitsSize (&bitsSize);
   assert (AAFRESULT_SUCCEEDED (hr));
-  OMSimpleProperty * pSimpleProp = dynamic_cast <OMSimpleProperty*>(pOmProp);
-  assert (pSimpleProp);
-  pSimpleProp->setBits (bits, bitsSize);
+  // OMSimpleProperty * pSimpleProp = dynamic_cast <OMSimpleProperty*>(pOmProp);
+  // assert (pSimpleProp);
+  // pSimpleProp->setBits (bits, bitsSize);
+  pOmProp->setBits (bits, bitsSize);
 }
 
 
