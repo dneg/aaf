@@ -30,6 +30,16 @@
 #include "ImplAAFMob.h"
 #endif
 
+#ifndef __ImplAAFObject_h__
+#include "ImplAAFObject.h"
+#endif
+
+#include "OMStorable.h"
+
+const int PID_COMPOSITIONMOB_DEFAULTFADELENGTH	= 6;
+const int PID_COMPOSITIONMOB_DEFAULTFADETYPE	= 7;
+const int PID_COMPOSITIONMOB_DEFAULTFADEEDITUNIT= 8;
+
 
 class ImplAAFCompositionMob : public ImplAAFMob
 {
@@ -50,7 +60,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetInitialValues
 	    (// @parm [in] Mob name [optional]
-         aafString_t *  name,
+         aafWChar *  name,
 
 		 // @parm [in] Whether or not the mob is a primary mob
 		 aafBool  isPrimary);
@@ -124,6 +134,12 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFCompositionMobTest.cpp.
   static AAFRESULT test();
+
+private:
+	OMFixedSizeProperty<aafLength_t>	_defaultFadeLen;
+	OMFixedSizeProperty<aafFadeType_t>	_defaultFadeType;
+	OMFixedSizeProperty<aafRational_t>	_defaultFadeEditUnit;
+
 };
 
 #endif // ! __ImplAAFCompositionMob_h__
