@@ -33,7 +33,6 @@
 
 template <typename Element>
 class OMContainerIterator;
-class OMStrongReferenceSetElement;
 
   // @class Persistent sets of uniquely identified strongly referenced
   //        (contained) objects supported by the Object Manager.
@@ -51,12 +50,6 @@ public:
 
     // @cmember Destructor.
   virtual ~OMStrongReferenceSet(void);
-
-  virtual OMContainerIterator<OMStrongReferenceSetElement>*
-                                                     iterator(void) const  = 0;
-
-  virtual void insert(void* key,
-                      const OMStrongReferenceSetElement& element) = 0;
 
   virtual void find(void* key, OMStorable*& object) const = 0;
 

@@ -33,7 +33,6 @@
 
 template <typename Element>
 class OMContainerIterator;
-class OMWeakReferenceSetElement;
 
   // @class Persistent sets of uniquely identified weakly referenced
   //        (non-contained) objects supported by the Object Manager.
@@ -51,12 +50,6 @@ public:
 
     // @cmember Destructor.
   virtual ~OMWeakReferenceSet(void);
-
-  virtual OMContainerIterator<OMWeakReferenceSetElement>*
-                                                      iterator(void) const = 0;
-
-  virtual void insert(void* key,
-                      const OMWeakReferenceSetElement& element) = 0;
 
   virtual OMPropertyId keyPropertyId(void) const = 0;
 
