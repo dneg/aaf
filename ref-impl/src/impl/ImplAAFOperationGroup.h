@@ -218,10 +218,10 @@ public:
 
 private:
 //	OMFixedSizeProperty<aafUID_t>						_effectDefinition;
-	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
-	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
-	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
-	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
+//	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
+//	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
+//	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
+//	OMStrongReferenceProperty<ImplAAFSourceReference>	_rendering;
 };
 
 #endif // ! __ImplAAFGroup_h__
