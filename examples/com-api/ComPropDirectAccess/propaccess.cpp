@@ -128,6 +128,7 @@ typedef IAAFSmartPointer<IAAFPropertyDef>       IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>     IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFSegment>           IAAFSegmentSP;
 typedef IAAFSmartPointer<IAAFSourceMob>         IAAFSourceMobSP;
+typedef IAAFSmartPointer<IAAFTimelineMobSlot>   IAAFTimelineMobSlotSP;
 typedef IAAFSmartPointer<IAAFTypeDef>           IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefRecord>     IAAFTypeDefRecordSP;
 typedef IAAFSmartPointer<IAAFTypeDefRename>     IAAFTypeDefRenameSP;
@@ -191,8 +192,8 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
   const aafUInt32 kNumMembers = 2;
 
   // Get the pre-defined type for int16
-  PROPAGATE_RESULT(pDict->LookupType(kAAFTypeID_Int16,
-									 &pTDInt16));
+  PROPAGATE_RESULT(pDict->LookupTypeDef(kAAFTypeID_Int16,
+										&pTDInt16));
 
   // load up arrays to initialize our new typedef
   IAAFTypeDef * memberTypes[kNumMembers] =
@@ -221,7 +222,7 @@ HRESULT createRational16Type (IAAFDictionary * pDict)
   IAAFTypeDefSP spTypeDef;
   PROPAGATE_RESULT(pTDRational16->QueryInterface(IID_IAAFTypeDef,
 												 (void**)&spTypeDef));
-  PROPAGATE_RESULT(pDict->RegisterType(spTypeDef));
+  PROPAGATE_RESULT(pDict->RegisterTypeDef(spTypeDef));
 
   return S_OK;
 }
@@ -233,8 +234,8 @@ HRESULT createRenamedRational16 (IAAFDictionary * pDict)
 
   // look up existing type
   IAAFTypeDefSP pTDRational16;
-  PROPAGATE_RESULT(pDict->LookupType(AUID_TypeRational16,
-									 &pTDRational16));
+  PROPAGATE_RESULT(pDict->LookupTypeDef(AUID_TypeRational16,
+										&pTDRational16));
 
   // create new (rename) type
   PROPAGATE_RESULT(pDict->CreateInstance(AUID_AAFTypeDefRename,
@@ -264,8 +265,8 @@ HRESULT registerRational16StructOffsets (IAAFDictionary * pDict)
 {
   // Get the Rational16 type out of the dictionary
   IAAFTypeDefSP spTypeDef;
-  PROPAGATE_RESULT(pDict->LookupType(AUID_TypeRational16,
-									 &spTypeDef));
+  PROPAGATE_RESULT(pDict->LookupTypeDef(AUID_TypeRational16,
+										&spTypeDef));
 
   IAAFTypeDefRecordSP spTypeDefRecord;
   PROPAGATE_RESULT(spTypeDef->QueryInterface(IID_IAAFTypeDefRecord,
@@ -297,20 +298,20 @@ HRESULT addRational16ToComponent (IAAFDictionary * pDict)
   IAAFClassDefSP pCDComponent;
 
   // Get the class def for AAFComponent
-  PROPAGATE_RESULT(pDict->LookupClass(AUID_AAFComponent,
-									  &pCDComponent));
+  PROPAGATE_RESULT(pDict->LookupClassDef(AUID_AAFComponent,
+										 &pCDComponent));
 
   // Get the Rational16 type out of the dictionary
   IAAFTypeDefSP pTDRational16;
-  PROPAGATE_RESULT(pDict->LookupType(AUID_TypeRational16,
-									 &pTDRational16));
+  PROPAGATE_RESULT(pDict->LookupTypeDef(AUID_TypeRational16,
+										&pTDRational16));
 
   IAAFPropertyDefSP pJunk;
   PROPAGATE_RESULT(pCDComponent->
-				   AppendOptionalPropertyDef(AUID_PropertyComponentOdor,
-											 L"Odor",       // prop name
-											 pTDRational16, // prop ID
-											 &pJunk));
+				   RegisterOptionalPropertyDef(AUID_PropertyComponentOdor,
+											   L"Odor",       // prop name
+											   pTDRational16, // prop ID
+											   &pJunk));
 
   return S_OK;
 }
@@ -346,8 +347,8 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
   // Get the property definition for Component::Odor
   //
   IAAFClassDefSP pCDComponent;
-  PROPAGATE_RESULT(pDict->LookupClass(AUID_AAFComponent,
-									  &pCDComponent));
+  PROPAGATE_RESULT(pDict->LookupClassDef(AUID_AAFComponent,
+										 &pCDComponent));
   IAAFPropertyDefSP pPDComponentOdor;
   PROPAGATE_RESULT(pCDComponent->
 				   LookupPropertyDef(AUID_PropertyComponentOdor,
@@ -383,8 +384,8 @@ HRESULT createStinkyFiller (IAAFDictionary * pDict,
   //
   IAAFTypeDefSP spTypeDef;
   PROPAGATE_RESULT (pDict->
-					LookupType (AUID_TypeRational16,
-								&spTypeDef));
+					LookupTypeDef (AUID_TypeRational16,
+								   &spTypeDef));
   IAAFTypeDefRecordSP spTypeDefRat16;
   PROPAGATE_RESULT(spTypeDef->
 				   QueryInterface(IID_IAAFTypeDefRecord,
@@ -443,8 +444,8 @@ HRESULT checkStinkyFiller (IAAFDictionary * pDict,
   // Get the property def for Component::Odor
   //
   IAAFClassDefSP pCDComponent;
-  PROPAGATE_RESULT(pDict->LookupClass(AUID_AAFComponent,
-									  &pCDComponent));
+  PROPAGATE_RESULT(pDict->LookupClassDef(AUID_AAFComponent,
+										 &pCDComponent));
   IAAFPropertyDefSP pPDComponentOdor;
   PROPAGATE_RESULT(pCDComponent->
 				   LookupPropertyDef(AUID_PropertyComponentOdor,
@@ -472,8 +473,8 @@ HRESULT checkStinkyFiller (IAAFDictionary * pDict,
   //
   IAAFTypeDefSP spTypeDef;
   PROPAGATE_RESULT (pDict->
-					LookupType (AUID_TypeRational16,
-								&spTypeDef));
+					LookupTypeDef (AUID_TypeRational16,
+								   &spTypeDef));
   IAAFTypeDefRecordSP spTypeDefRat16;
   PROPAGATE_RESULT(spTypeDef->
 				   QueryInterface(IID_IAAFTypeDefRecord,
@@ -642,12 +643,12 @@ static void ReadAAFFile(aafWChar * pFileName,
   check (spHeader->LookupMob (createdMobID, &spMob));
 
   aafNumSlots_t numSlots = 0;
-  check (spMob->GetNumSlots (&numSlots));
+  check (spMob->CountSlots (&numSlots));
   // we only put one in
   assert (1 == numSlots);
 
   IEnumAAFMobSlotsSP spSlotEnum;
-  check (spMob->EnumAAFAllMobSlots (&spSlotEnum));
+  check (spMob->GetSlots (&spSlotEnum));
 
   IAAFMobSlotSP spMobSlot;
   // Since we only put one in, just bother with the first one.
@@ -751,14 +752,16 @@ static void CreateAAFFile(aafWChar * pFileName,
   check (createStinkyFiller (spDictionary, &spFill));
   IAAFSegmentSP seg;
   check (spFill->QueryInterface (IID_IAAFSegment, (void **)&seg));
-  IAAFMobSlotSP newSlot;
-  check (spMob->AppendNewSlot (seg, // segment to put into new slot
-							  1,   // slot number
-							  L"Slot 1",
-							  &newSlot));
+  IAAFTimelineMobSlotSP newSlot;
+  check (spMob->AppendNewTimelineSlot (audioRate,
+									   seg, // segment to put into new slot
+									   1,   // slot number
+									   L"Slot 1",
+									   0,
+									   &newSlot));
 
   // Add the newly created and initialized Mob to the end of the mob index.
-  check (spHeader->AppendMob(spMob));
+  check (spHeader->AddMob(spMob));
   
   // save and exit.
   check (spFile->Save());

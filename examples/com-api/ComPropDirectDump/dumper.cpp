@@ -633,12 +633,12 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 
 			IAAFTypeDefSP ptd;
 			assert (pDict);
-			checkResult (pDict->LookupType (kAAFTypeID_AUID, &ptd));
+			checkResult (pDict->LookupTypeDef (kAAFTypeID_AUID, &ptd));
 			IUnknown * pUnkAUID = 0;
 			checkResult(ptd->QueryInterface(IID_IUnknown,
 											(void**)&pUnkAUID));
 			assert (pDict);
-			checkResult (pDict->LookupType (kAAFTypeID_TimeStamp, &ptd));
+			checkResult (pDict->LookupTypeDef (kAAFTypeID_TimeStamp, &ptd));
 			IUnknown * pUnkTimeStamp = 0;
 			checkResult(ptd->QueryInterface(IID_IUnknown,
 											(void**)&pUnkTimeStamp));
@@ -665,7 +665,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 				os << " } }" << endl;
 			  }
 
-			if (pUnkTest == pUnkTimeStamp)
+			else if (pUnkTest == pUnkTimeStamp)
 			  {
 				// dump it as an aafTimeStamp_t
 				aafTimeStamp_t ts;
