@@ -169,11 +169,17 @@ OMFile* OMFile::file(void) const
   return const_cast<OMFile*>(this);
 }
 
-bool OMFile::persistent(void)
+bool OMFile::inFile(void) const
+{
+  TRACE("OMFile::inFile");
+  return true;
+}
+
+bool OMFile::persistent(void) const
 {
   TRACE("OMFile::persistent");
 
-  // By definition a file is persistent.
+  // Transient files NYI so by definition a file is persistent.
   //
   return true;
 }
