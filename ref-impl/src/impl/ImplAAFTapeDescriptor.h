@@ -180,6 +180,10 @@ public:
   // in /test/ImplAAFTapeDescriptorTest.cpp.
   static AAFRESULT test();
 
+  // Return this objects stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 	// Persistent properties
 private:
 	OMFixedSizeProperty<aafTapeCaseType_t>		_formFactor;

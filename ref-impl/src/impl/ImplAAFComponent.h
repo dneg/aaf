@@ -111,6 +111,10 @@ public:
   // in /test/ImplAAFComponentTest.cpp.
   static AAFRESULT test();
 
+  // Return this object's stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 private:
 	OMFixedSizeProperty<aafUID_t>		_dataDef;
 	OMFixedSizeProperty<aafInt64>		_length;

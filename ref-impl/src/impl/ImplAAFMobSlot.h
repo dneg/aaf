@@ -145,6 +145,10 @@ public:
   // in /test/ImplAAFMobSlotTest.cpp.
   static AAFRESULT test();
 
+  // Return this objects stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 protected:
 	OMWideStringProperty				_name;
 	OMFixedSizeProperty<aafUInt32>		_trackID;
