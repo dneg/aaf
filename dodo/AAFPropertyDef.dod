@@ -27,7 +27,7 @@ AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(dfbd6522, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
 
 AD_DEFAULT_UUID(dfbd6521, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty IAAFPropertyDef-supporting
   // object.  This method must be called after allocation\, and before
@@ -678,4 +678,4 @@ AD_XMETHOD1(GetRefValues,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
