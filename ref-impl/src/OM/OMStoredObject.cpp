@@ -1711,7 +1711,8 @@ void OMStoredObject::restoreName(OMProperty& /* property */,
   ASSERT("Unimplemented code not reached", false);
 }
 
-void OMStoredObject::mapCharacters(wchar_t* /* name */, size_t /* nameLength */)
+void OMStoredObject::mapCharacters(wchar_t* /* name */,
+                                   size_t /* nameLength */)
 {
   TRACE("OMStoredObject::mapCharacters");
 
@@ -2117,9 +2118,13 @@ wchar_t* OMStoredObject::collectionIndexStreamName(
   PRECONDITION("Valid collection name", validWideString(collectionName));
 
   wchar_t* suffix = L" index";
-  wchar_t* indexName = new wchar_t[lengthOfWideString(collectionName) + lengthOfWideString(suffix) + 1];
+  size_t length = lengthOfWideString(collectionName) +
+                  lengthOfWideString(suffix) + 1;
+  wchar_t* indexName = new wchar_t[length];
   ASSERT("Valid heap pointer", indexName != 0);
-  copyWideString(indexName, collectionName, lengthOfWideString(collectionName) + 1);
+  copyWideString(indexName,
+                 collectionName,
+                 lengthOfWideString(collectionName) + 1);
   concatenateWideString(indexName, suffix, lengthOfWideString(suffix) + 1);
 
   return indexName;
