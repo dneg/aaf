@@ -133,10 +133,10 @@ public:
 					 aafBool *isMask);
 
 private:
-	OMFixedSizeProperty<aafInt32>		_fadeInLen;
+	OMFixedSizeProperty<aafLength_t>	_fadeInLength;
 	OMFixedSizeProperty<aafFadeType_t>	_fadeInType;
 	OMFixedSizeProperty<aafBool>		_fadeInPresent;
-	OMFixedSizeProperty<aafInt32> 		_fadeOutLen;
+	OMFixedSizeProperty<aafLength_t> 	_fadeOutLength;
 	OMFixedSizeProperty<aafFadeType_t>	_fadeOutType;
 	OMFixedSizeProperty<aafBool>		_fadeOutPresent;
 	OMFixedSizeProperty<aafPosition_t>	_startTime;
