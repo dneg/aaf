@@ -1,0 +1,69 @@
+#startm .this-module 0
+AAFProperty\
+#endm
+#c
+#startm .parent-module 0
+AAFRoot\
+#endm
+#c
+AD_HEAD
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+AD_FORWARD_DECLARATION(AAFPropertyDef)
+AD_FORWARD_DECLARATION(AAFPropertyValue)
+AD_CLASS_UUID(83057d73, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
+
+AD_DEFAULT_UUID(83057d74, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
+AD_CLASS_BEGIN
+AD_XMETHOD1(GetDefinition,
+			[out],
+			objOut,
+			AAFPropertyDef,
+			ppDef,
+			This property's definition,
+
+            Returns the definition of this property.
+  //
+  // Succeeds if:
+  // - The ppDef pointer is valid.
+  // - The associated property definition can be found in the
+  //   dictionary.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - Either pPVal or pSize pointer is NULL.
+  //
+  // AAFRESULT_BAD_PROP
+  //   - The definition for this property could not be found in the
+  //     dictionary.)
+
+
+AD_XMETHOD1(GetPropertyValue,
+            [out],
+            objOut,
+            AAFPropertyValue,
+		    ppPVal,
+		    The Property Value object associated with this property.,
+
+		    Returns the Property Value object associated with this property.
+  //
+  // Succeeds if:
+  // - The ppPval pointer is valid.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - The ppPval pointer is NULL.)
+AD_CLASS_END
