@@ -171,7 +171,7 @@ public:
   // Non-published methods
   //
 	ImplAAFClassDef *
-		ImplAAFClassDef::PvtGetParent ();
+		PvtGetParent ();
 
   //****************
   // SetParent()
