@@ -324,6 +324,19 @@ void OMSimpleProperty::setSize(size_t newSize)
   }
 }
 
+void OMSimpleProperty::shallowCopyTo(OMProperty* destination) const
+{
+  TRACE("OMSimpleProperty::shallowCopyTo");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
+void OMSimpleProperty::deepCopyTo(OMProperty* /* destination */,
+                                  void* /* clientContext */) const
+{
+  TRACE("OMSimpleProperty::deepCopyTo");
+  // Nothing to do - this is a deep copy
+}
+
   // @mfunc Get the value of this <c OMSimpleProperty>.
   //   @parm The buffer to receive the property value.
   //   @parm size_t | valueSize | The size of the buffer.
