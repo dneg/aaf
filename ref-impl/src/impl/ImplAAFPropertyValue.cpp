@@ -91,7 +91,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pIsDefined)
 	return AAFRESULT_NULL_PARAM;
   // Currently the type returned by GetType() is always the defined type.
-  *pIsDefined = AAFTrue;
+  *pIsDefined = kAAFTrue;
   return AAFRESULT_SUCCESS;
 }
 
