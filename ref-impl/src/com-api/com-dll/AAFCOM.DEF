@@ -40,4 +40,5 @@ EXPORTS		AAFFileIsAAFFile
 EXPORTS		AAFGetPluginManager
 EXPORTS		AAFCreateRawStorageMemory
 EXPORTS		AAFCreateRawStorageDisk
+EXPORTS		AAFCreateRawStorageCachedDisk
 EXPORTS		AAFCreateAAFFileOnRawStorage
