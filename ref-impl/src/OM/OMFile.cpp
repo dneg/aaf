@@ -279,7 +279,7 @@ OMStoredObject* OMFile::rootStoredObject(void)
 }
 
   // @mfunc Retrieve the <c OMClassFactory> from this <c OMFile>.
-  //   @rdesc The <c OMClassfactory> used to create objects in this file.
+  //   @rdesc The <c OMClassFactory> used to create objects in this file.
   //   @this const
 const OMClassFactory* OMFile::classFactory(void) const
 {
