@@ -21,6 +21,7 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMKLVStoredObject
 #include "OMKLVStoredObject.h"
 
 #include "OMRawStorage.h"

@@ -30,6 +30,8 @@ class OMRawStorage;
 
 class OMIOStreamManipulator;
 
+  // @class IOStreams on <c OMRawStorage>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMIOStream {
 public:
 

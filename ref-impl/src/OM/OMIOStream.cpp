@@ -21,6 +21,7 @@
 //=---------------------------------------------------------------------=
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMIOStream
 #include "OMIOStream.h"
 
 #include "OMDataTypes.h"

@@ -23,5 +23,8 @@
 // @doc OMEXTERNAL
 #ifndef OMTYPEDEFINITION_H
 #define OMTYPEDEFINITION_H
+  // @class OMTypeDefinition | Definitions of types supported by the
+  //        Object Manager
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 // Nothing yet
 #endif
