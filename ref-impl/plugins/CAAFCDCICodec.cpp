@@ -27,14 +27,16 @@
 #include "CAAFCDCICodec.h"
 
 #include <assert.h>
+#include <string.h>
 #include "AAFResult.h"
 
 #include "AAF.h"
 
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "aafCvt.h"
-#include "aafDataDefs.h"
-#include "aafDefUIDs.h"
+#include "AAFDataDefs.h"
+#include "AAFDefUIDs.h"
+#include "AAFClassDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFCodecDefs.h"
 #include "AAFEssenceFormats.h"
@@ -43,7 +45,7 @@
 
 
 // {C995E9A9-4156-11d4-A367-009027DFCA6A}
-static const CLSID CLSID_AAFCDCICodec = 
+const CLSID CLSID_AAFCDCICodec = 
 { 0xc995e9a9, 0x4156, 0x11d4, { 0xa3, 0x67, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 // This plugin currently only supports a single definition
@@ -79,10 +81,10 @@ static wchar_t *kManufRev = L"Rev 0.1";
 const aafUID_t MANUF_AVID_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
 
-const aafUID_t NULL_ID = {0};
+const aafUID_t NULL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 const aafRational_t NULL_RATIONAL = {0, 0};
 const aafRational_t DEFAULT_ASPECT_RATIO = {4, 3};
-const aafUInt32		numComponents = 3;
+
 
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
@@ -116,31 +118,26 @@ CAAFCDCICodec::CAAFCDCICodec (IUnknown * pControllingUnknown)
 	_access = NULL;
 	_stream = NULL;
 	_openMode = kAAFMediaOpenReadOnly;
-	_compressEnable = kAAFCompressionEnable;
-	_length = 0;  // 64 bit int
+	_length = 0;
 	_sampleRate = NULL_RATIONAL;
-	_containerFormat = NULL_ID;
-	_codecID = kAAFCodecCDCI;
+	_containerFormat = NULL_UID;
+	_compression = NULL_UID;
 	_storedHeight = 0;
 	_storedWidth = 0;
-	_sampledHeight = 0;  // SampledView
+	_sampledHeight = 0;
 	_sampledWidth = 0;
 	_sampledXOffset = 0;
 	_sampledYOffset = 0;
-	_displayHeight = 0;  // SampledView
+	_displayHeight = 0;
 	_displayWidth = 0;
 	_displayXOffset = 0;
 	_displayYOffset = 0;
 	_frameLayout = kAAFFullFrame;
-	_videoLineMapSize = sizeof(_videoLineMap)/sizeof(aafInt32);
-
-	// initialize the video line map.
-	for (aafUInt32 i = 0; i < _videoLineMapSize; ++i)
-		_videoLineMap[i] = 0;
-
+	_videoLineMapSize = 0;
+	_videoLineMap[0] = _videoLineMap[1] = 0;
 	_imageAspectRatio = NULL_RATIONAL;
 	_alphaTransparency = kAAFMinValueTransparent;
-	_gamma = NULL_RATIONAL;
+	_gamma = NULL_UID;
 	_imageAlignmentFactor = 0;
 	_componentWidth = kDefaultComponentWidth;
 	_horizontalSubsampling = 1;
@@ -154,16 +151,14 @@ CAAFCDCICodec::CAAFCDCICodec (IUnknown * pControllingUnknown)
 	_imageWidth = 0;
 	_fileBytesPerSample = 0;
 	_descriptorFlushed = kAAFFalse;
-	_pixelFormat = kAAFColorSpaceRGB;
+	_pixelFormat = kAAFColorSpaceYUV;
 	_fieldDominance = kAAFNoDominant;
-	_memBitsPerPixel = kDefaultPixelWidth;
+	_fieldStartOffset = 0;
+	_fieldEndOffset = 0;
 	_bitsPerPixelAvg = kDefaultPixelWidth;
-	_memBytesPerSample = 0;
 	_bitsPerSample = 0;
 	_numberOfSamples = 0;
 	_padBytesPerRow = 0;
-	_clientFillStart = 0;
-	_clientFillEnd = 0;
 }
 
 
@@ -193,12 +188,6 @@ void CAAFCDCICodec::SetEssenceStream(IAAFEssenceStream *stream)
 		if (NULL != stream)
 			stream->AddRef();
 	}
-}
-
-void CAAFCDCICodec::SetCompressionEnabled (aafCompressEnable_t compEnable)
-{
-	// make sure parameter has a valid value.
-	_compressEnable = (compEnable == kAAFCompressionEnable) ? kAAFCompressionEnable : kAAFCompressionDisable;
 }
 
 void CAAFCDCICodec::SetNumberOfSamples(const aafLength_t& numberOfSamples)
@@ -242,6 +231,58 @@ HRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+
+// MediaComposer property extensions to AAFDigitalImageDescriptor.
+const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+const aafCharacter kAAFPropName_DIDResolutionID[] = { 'R','e','s','o','l','u','t','i','o','n','I','D','\0' };
+const aafCharacter kAAFPropName_DIDFrameSampleSize[] = { 'F','r','a','m','e','S','a','m','p','l','e','S','i','z','e','\0' };
+
+
+HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs( 
+    IAAFDictionary	*p_dict )
+{
+    HRESULT		hr = S_OK;
+    IAAFClassDef	*p_did_classdef = NULL;
+    IAAFTypeDef		*p_typedef_int32 = NULL;
+
+
+    try
+    {
+	// Get DigitalImage descriptor class definition and
+	// and integer type definition.
+	checkResult( p_dict->LookupClassDef( kAAFClassID_DigitalImageDescriptor, 
+	    &p_did_classdef ) );
+	checkResult( p_dict->LookupTypeDef( kAAFTypeID_Int32, 
+	    &p_typedef_int32 ) );
+
+
+	// Register legacy property definitions
+	checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
+	    kAAFPropID_DIDResolutionID, kAAFPropName_DIDResolutionID, 
+	    p_typedef_int32, NULL ) );
+
+	checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
+	    kAAFPropID_DIDFrameSampleSize, kAAFPropName_DIDFrameSampleSize, 
+	    p_typedef_int32, NULL ) );
+
+    }
+    catch( HRESULT& rhr )
+    {
+	hr = rhr; // return thrown error code.
+    }
+
+    if( p_did_classdef )
+	p_did_classdef->Release();
+    if( p_typedef_int32 )
+	p_typedef_int32->Release();
+
+
+    return hr;
+}
+
+
+
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetIndexedDefinitionObject (aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def)
 {
@@ -262,8 +303,10 @@ HRESULT STDMETHODCALLTYPE
 	{
 		//!!!Later, add in dataDefs supported & filedescriptor class
 
+		checkResult( CreateLegacyPropDefs( dict ) );
+
 		// Create the Codec Definition:
-	    checkResult(dict->LookupClassDef(AUID_AAFCodecDef, &pcd));
+		checkResult(dict->LookupClassDef(AUID_AAFCodecDef, &pcd));
 		checkResult(pcd->CreateInstance(IID_IAAFCodecDef, 
 										(IUnknown **)&codecDef));
 		pcd->Release();
@@ -531,9 +574,7 @@ HRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 
 	if (EqualAUID(&DDEF_Picture, &essenceKind))
-	{
 		*pNumChannels = 1;
-	}
 	else
 		*pNumChannels = 0;
 	
@@ -548,14 +589,15 @@ HRESULT STDMETHODCALLTYPE
 	HRESULT hr = S_OK;
 	aafUInt32		storedWidth, storedHeight;
 	aafInt16		padBits;
-	aafInt32		compWidth, bitsPerPixel;
-	aafUInt32	subSampling;
-	aafRational_t sampleRate = NULL_RATIONAL;
-	aafFrameLayout_t frameLayout;
-	aafUInt32 numFields = 0;
-	aafUInt32 bitsPerSample; // uncompressed.
+	aafUInt32		compWidth, bitsPerPixel;
+	aafUInt32		subSampling;
+	aafRational_t		sampleRate = NULL_RATIONAL;
+	aafFrameLayout_t	frameLayout;
+	aafUInt32		numFields = 0;
+	aafUInt32		bitsPerSample; // uncompressed.
+	aafUID_t		compressionID = NULL_UID;
 
-	
+
 	if (NULL == fileMob || NULL == stream || NULL == pSelectInfo)
 		return AAFRESULT_NULL_PARAM;
 
@@ -574,10 +616,9 @@ HRESULT STDMETHODCALLTYPE
 
 		// Get the compression code id from the descriptor and make sure that we
 		// can handle it in this codec.
-		aafUID_t codecID = NULL_ID;
-		hr = descriptorHelper.GetCompression(&codecID);
+		hr = descriptorHelper.GetCompression(&compressionID);
 		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_SUCCESS == hr && EqualAUID(&codecID, &kAAFCodecCDCI) && 0 == padBits)
+		if (AAFRESULT_SUCCESS == hr && EqualAUID(&compressionID, &kAAFCodecCDCI) && 0 == padBits)
 		{
 			pSelectInfo->willHandleMDES = kAAFTrue;
 		}
@@ -600,7 +641,7 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(descriptorHelper.GetStoredView(&storedHeight, &storedWidth));
 		checkResult(descriptorHelper.GetComponentWidth(&compWidth));
 
-		checkResult(_descriptorHelper.GetFrameLayout(&frameLayout));
+		checkResult(descriptorHelper.GetFrameLayout(&frameLayout));
 
 		switch (frameLayout)
 		{
@@ -628,7 +669,7 @@ HRESULT STDMETHODCALLTYPE
 				bitsPerPixel = (compWidth * 3) + padBits;
 				break;
 				
-			/* 4:2:2 = two-pixels get 2 samples of luma, 1 of each chroma channel, avg == 2 */							
+			/* 4:2:2 = two-pixels get 2 samples of luma, 1 of each chroma channel, avg == 2 */
 			case 2:
 				bitsPerPixel = (compWidth * 2) + padBits;					
 				break;
@@ -697,722 +738,628 @@ HRESULT STDMETHODCALLTYPE
 	return HRESULT_NOT_IMPLEMENTED;
 }
 
-		
+
+
+// Check input arguments.
+// Use the given source mob to initialize codec's descriptor helper.
+// Use the descriptor helper to read codec parameters from descriptor.
+// Set appropriate open mode.
+// Set parameters which require specific initialization upon essence creation.
+// Save the given essence stream to use with codec.
+// Call UpdateCalculatedData() to set calculated parameters.
+// Finally, put modified codec parameters back to descriptor calling 
+//  UpdateDescriptor().
+//
 HRESULT STDMETHODCALLTYPE
-CAAFCDCICodec::Create (IAAFSourceMob *unk,
+CAAFCDCICodec::Create (IAAFSourceMob *p_srcmob,
   aafUID_constref flavour,
   aafUID_constref essenceKind,
   aafRational_constref sampleRate,
   IAAFEssenceStream * stream,
   aafCompressEnable_t compEnable)
 {
-	HRESULT hr = S_OK;
-	IAAFSourceMob			*fileMob = NULL;
+    HRESULT	    hr = S_OK;
 
-	
-	if (NULL == unk || NULL == stream )
-		return AAFRESULT_NULL_PARAM;
-  else if (kAAFTrue != EqualAUID(&kAAFNilCodecFlavour, &flavour))
-    return AAFRESULT_NULL_PARAM;
-
-
-	try
-	{
-		// Initialize the descriptor helper:
-		checkResult(_descriptorHelper.Initialize(unk));
-
-    checkExpression(kAAFTrue == EqualAUID(&essenceKind, &DDEF_Picture),
-			              AAFRESULT_INVALID_DATADEF);
     
-		_sampleRate = sampleRate;	// There is only one type of sample supported.
-    
-    // We are allowed to write to the given stream.
-		_openMode = kAAFMediaOpenAppend;
+    // Check input arguments.
+    if( NULL == p_srcmob || NULL == stream )
+	return AAFRESULT_NULL_PARAM;
 
-		// Save the given essence stream.
-		SetEssenceStream(stream);
+    if( EqualAUID( &kAAFNilCodecFlavour, &flavour) != kAAFTrue )
+	return AAFRESULT_NULL_PARAM;
 
-    // whether or not we will be compressing the samples as they are written.
-    SetCompressionEnabled(compEnable);
-		
-		// What are the descriptor properties that need to be initialized at this point???
-		// ?????
-		
-		// Use omfi code as a guide...
 
-		// Set the default aspect ratio: (Can't we always determine this from the image dimensions? /* TRR */)
-		_imageAspectRatio = DEFAULT_ASPECT_RATIO;
+    try
+    {
+	    // Check essence kind
+	    checkExpression( kAAFTrue == EqualAUID(&essenceKind, &DDEF_Picture),
+		AAFRESULT_INVALID_DATADEF );
 
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
+	    // Initialize the descriptor helper:
+	    checkResult(_descriptorHelper.Initialize(p_srcmob));
 
-	// Cleanup
+	    // Initialize codec parameters reading descriptor information.
+	    ReadDescriptor( _descriptorHelper );
 
-	return hr;
+	    // We are allowed to write to the given stream.
+	    _openMode = kAAFMediaOpenAppend;
+
+	    // Save the given essence stream.
+	    SetEssenceStream(stream);
+
+	    // Reset some parameters.
+	    _imageAspectRatio = DEFAULT_ASPECT_RATIO;
+	    _sampleRate = sampleRate;
+	    _length = 0;
+	    _numberOfSamples = 0;
+	    UpdateCalculatedData();
+
+	    // Update descriptor.
+	    UpdateDescriptor( _descriptorHelper );
+    }
+    catch (HRESULT& rhr)
+    {
+	    hr = rhr; // return thrown error code.
+    }
+    catch (...)
+    {
+	    // We CANNOT throw an exception out of a COM interface method!
+	    // Return a reasonable exception code.
+	    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+    // Cleanup
+
+    return hr;
 }
 
 
+
+// Check input arguments.
+// Use the given source mob to initialize codec's descriptor helper.
+// Use the descriptor helper to read codec parameters from descriptor.
+// Set appropriate open mode.
+// Save the given essence stream to use with codec.
+//
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::Open (IAAFSourceMob *unk,
+    CAAFCDCICodec::Open (IAAFSourceMob *p_srcmob,
 		aafMediaOpenMode_t  openMode,
     IAAFEssenceStream * stream,
     aafCompressEnable_t compEnable)
 {
-	HRESULT hr = S_OK;
-	IAAFContainerDef	*containerDef;
-	IAAFDefObject		*defObj;
-	
-	if (NULL == unk || NULL == stream)
-		return AAFRESULT_NULL_PARAM;
-
-	try
-	{
-		// Initialize the descriptor helper:
-		checkResult(_descriptorHelper.Initialize(unk));
-
-    // Save the mode to the given stream.
-		_openMode = openMode;
-
-		// Save the given essence stream.
-		SetEssenceStream(stream);
-
-    // whether or not we will be decompressing the samples as they are read.
-    SetCompressionEnabled(compEnable);
-		
-		// What are the descriptor properties that need to be initialized at this point???
-		// ????? use omcCDCI.c as a guide:
+    HRESULT hr = S_OK;
 
 
-		//
-		// FileDescriptor methods:
-		//
-		checkResult(_descriptorHelper.GetLength(&_length));
-		checkAssertion(_length < 0xFFFFFFFF);
-		_numberOfSamples = (aafUInt32)_length; // The length in the file descriptor (mdes in omfi) seems to be in samples.
-		checkResult(_descriptorHelper.GetSampleRate(&_sampleRate));
-		checkResult(_descriptorHelper.GetContainerFormat(&containerDef));
-		checkResult(containerDef->QueryInterface(IID_IAAFDefObject, (void **)&defObj));
-		checkResult(defObj->GetAUID(&_containerFormat));
-		containerDef->Release();
-		defObj->Release();
+    // Check input arguments.
+    if( p_srcmob == NULL || stream == NULL )
+	return AAFRESULT_NULL_PARAM;
 
-		//
-		// DigitalImageDescriptor methods:
-		//
-		checkResult(_descriptorHelper.GetCompression(&_codecID));
-//		checkAssertion(kAAFTrue == EqualAUID(&_codecID, &CodecCDCI));
-		checkResult(_descriptorHelper.GetStoredView(&_storedHeight, &_storedWidth));
-		_imageHeight = _storedHeight;
-		_imageWidth = _storedWidth;
-				
-		hr = _descriptorHelper.GetSampledView(&_sampledHeight, &_sampledWidth, 
-			                                    &_sampledXOffset, &_sampledYOffset);
-		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_PROP_NOT_PRESENT == hr)
-		{
-			_sampledWidth = _imageWidth;
-			_sampledHeight = _imageHeight;
-			_sampledXOffset = 0;
-			_sampledYOffset = 0;
-		}
+    try
+    {
+	// Initialize the descriptor helper:
+	checkResult( _descriptorHelper.Initialize( p_srcmob ) );
 
-		hr = _descriptorHelper.GetDisplayView(&_displayHeight, &_displayWidth, 
-			                                    &_displayXOffset, &_displayYOffset);
-		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_PROP_NOT_PRESENT == hr)
-		{
-			_displayWidth = _imageWidth;
-			_displayHeight = _imageHeight;
-			_displayXOffset = 0;
-			_displayYOffset = 0;
-		}
+	// Save the mode to the given stream.
+	_openMode = openMode;
 
-		checkResult(_descriptorHelper.GetImageAspectRatio(&_imageAspectRatio));
-		checkResult(_descriptorHelper.GetFrameLayout(&_frameLayout));
+	// Save the given essence stream.
+	SetEssenceStream(stream);
+
+	// Initialize codec parameters reading descriptor information.
+	ReadDescriptor( _descriptorHelper );
+    }
+    catch (HRESULT& rhr)
+    {
+	    hr = rhr; // return thrown error code.
+    }
+    catch(...)
+    {
+	    // We CANNOT throw an exception out of a COM interface method!
+	    // Return a reasonable exception code.
+	    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
 
 
-		// Get VideoLineMap
-		if (kAAFFullFrame != _frameLayout)
-		{
-			hr = _descriptorHelper.GetVideoLineMapSize(&_videoLineMapSize);
-			checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-			if (AAFRESULT_PROP_NOT_PRESENT == hr || 0 == _videoLineMapSize)
-			{
-				_videoLineMap[0] = _videoLineMap[1] = 0;
-			}
-			else
-			{
-				checkAssertion(2 > _videoLineMapSize);
-				checkResult(_descriptorHelper.GetVideoLineMap(_videoLineMapSize, _videoLineMap));
-
-				if (_frameLayout != kAAFSeparateFields && _frameLayout != kAAFMixedFields && 2 == _videoLineMapSize)
-				{
-					// There were two elements in the video line mab no corresponding froma layout type.
-					// Should this be an error in the descriptor? 
-					_videoLineMap[1] = 0;
-				}
-			}
-		} // if (kAAFFullFrame != _frameLayout)
-
-
-		checkResult(_descriptorHelper.GetComponentWidth(&_componentWidth));
-
-
-		checkResult(_descriptorHelper.GetHorizontalSubsampling(&_horizontalSubsampling));
-//		checkResult(_descriptorHelper.GetVerticalSubsampling(&_verticalSubsampling));
-		checkResult(_descriptorHelper.GetPaddingBits(&_paddingBits));
-
-
-		hr = _descriptorHelper.GetColorSiting(&_colorSiting);
-		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_PROP_NOT_PRESENT == hr)
-			_colorSiting = kAAFCoSiting;
-
-		hr = _descriptorHelper.GetBlackReferenceLevel(&_blackReferenceLevel);
-		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_PROP_NOT_PRESENT == hr)
-			_blackReferenceLevel = 0;
-
-		hr = _descriptorHelper.GetWhiteReferenceLevel(&_whiteReferenceLevel);
-		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_PROP_NOT_PRESENT == hr)
-			_whiteReferenceLevel = (1U << _componentWidth) - 1;
-
-		hr = _descriptorHelper.GetColorRange(&_colorRange);
-		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_PROP_NOT_PRESENT == hr)
-			_colorRange = (1U << _componentWidth) - 2;
-
-		// Get the compression factor?
-		//
-		//status = omfsReadInt32(main, media->mdes, pers->omAvJPEDResolutionID, &pdata->CDCI.CDCITableID);
-		//if (status != OM_ERR_NONE)
-		//	pdata->CDCI.CDCITableID = 0;
-		
-		UpdateCalculatedData();
-
-		// Attempt to create and load the sample index from the end of the essence stream.
-		// For now just fail if the index cannot be found.
-		aafLength_t samples;
-
-    // Make sure that we have created the sample index.
-    checkResult(ReadNumberOfSamples(_stream, samples));
-		SetNumberOfSamples(samples);
-
-		// Reset the position to the start of the data so that the next read will 
-		// be from the correct position.
-		checkResult(Seek(0));
-		
-		// Just in case...remap the "not present" error to success...
-		if (AAFRESULT_PROP_NOT_PRESENT == hr)
-			hr = AAFRESULT_SUCCESS;
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
-
-	// Cleanup
-	return hr;
+    return hr;
 }
 
 
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::WriteSamples (aafUInt32  nSamples,
-        aafUInt32  buflen,
-        aafDataBuffer_t  buffer,
-        aafUInt32 *samplesWritten,
-        aafUInt32 *bytesWritten)
+
+HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
+	aafUInt32	nSamples,
+        aafUInt32	buflen,
+        aafDataBuffer_t	buffer,
+        aafUInt32	*pTotalSamplesWritten,
+        aafUInt32	*pTotalBytesWritten)
 {
-	HRESULT hr = S_OK;
-	aafUInt32 n, rowBytes, bufferSize;
-	aafUInt32 bytesXfered = 0, samplesXfered = 0; // TBD: Need to be return arguments.
-	aafUInt32 localWritten;
-
-	if (NULL == buffer || NULL == samplesWritten || NULL == bytesWritten)
-		return AAFRESULT_NULL_PARAM;
-	// We only support writing a single block at a time.
-	else if (0 == nSamples)
-		return AAFRESULT_INVALID_PARAM;
-	// this codec only handles a single channel
-	else if (1 != nSamples)
-		return AAFRESULT_CODEC_CHANNELS;
+    HRESULT	hr = S_OK;
+    aafUInt32	n;
+    aafUInt32	sampleBytesWritten;	// Number of sample bytes written.
+    aafUInt32	sampleSize;		// Number of bytes per sample.
+    aafUInt32	alignmentBytes = 0;	// Number of alignment bytes.
+    aafUInt8	*pAligmentBuffer = NULL;// Padding bytes to be written.
 
 
+    try
+    {
+	// Check input args
+	checkExpression( buffer != NULL && pTotalSamplesWritten != NULL && 
+		pTotalBytesWritten != NULL, AAFRESULT_NULL_PARAM );
 
-	*bytesWritten = 0;
-	try
+	// Init output
+	*pTotalBytesWritten = 0;
+	*pTotalSamplesWritten = 0;
+
+	// More input args check
+	checkExpression( nSamples != 0, AAFRESULT_INVALID_PARAM );
+
+	// Preconditions.
+	checkAssertion( NULL != _stream );
+	checkExpression( _componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE );
+	checkExpression( _fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE );
+
+	sampleSize = _fileBytesPerSample;
+
+	// Make sure the given buffer is really large enough for the complete
+	// pixel data.
+	checkExpression( sampleSize*nSamples <= buflen, AAFRESULT_SMALLBUF );
+
+
+
+	// Write samples one by one aligning them if necessary.
+	for( n=0; n<nSamples; n++ )
 	{
-		// Preconditions:
-		checkAssertion(NULL != _stream);
-
-    checkExpression(_componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE);
-		/* this codec only allows one-channel media */
-
-			// If we are being asked compress the given buffer then
-			// the we should have already calculated the size of a sample.
-			checkExpression(_fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE);
-
-			// Compute the number of bytes in a single row of pixel data.
-			if (1 == _horizontalSubsampling)
-			{
-				rowBytes = (_imageWidth * numComponents) + _padBytesPerRow;
-			}
-			else if (2 == _horizontalSubsampling)
-			{	// Add an extra byte if with is odd. NOTE: This will never
-				// happen with full 601 frame.
-				rowBytes = (_imageWidth * (numComponents - 1)) + (_imageWidth % 2) + _padBytesPerRow;
-			}
-				
-
-			// Calculate the size of the sample data to be compressed.
-			bufferSize = rowBytes * _imageHeight;
-
-			// Make sure the given buffer is really large enough for the complete
-			// uncompressed pixel data.
-			checkExpression(bufferSize <= buflen, AAFRESULT_SMALLBUF);
-			
-			// Adjust the parameters for separate fields...
-			if (kAAFSeparateFields == _frameLayout)
-			{
-				bufferSize = rowBytes * (_imageHeight/2);
-			}
-			
+	    sampleBytesWritten = 0;
+	    checkResult( _stream->Write( sampleSize, buffer, 
+		&sampleBytesWritten));
+	    buffer += sampleBytesWritten;
+	    *pTotalBytesWritten += sampleBytesWritten;
 
 
-			for (n = 0; n < nSamples; n++)
-			{
-				/* Step 2: specify data destination (eg, an IAAFEssenceStream) */
-				/* Note: steps 2 and 3 can be done in either order. */
-//				CDCI_essencestream_dest(&cinfo, _stream);
+	    // Add padding for _imageAlignmentFactor.
+	    // Do not count these bytes when returning 
+	    // total number of bytes written.
+	    if( _imageAlignmentFactor > 0 )
+	    {
+		alignmentBytes = sampleBytesWritten % _imageAlignmentFactor;
 
-				
-				buffer = &buffer[bytesXfered];
-				checkResult(_stream->Write(bufferSize, buffer, &localWritten));
-				bytesXfered += localWritten;
-
-				if (kAAFSeparateFields == _frameLayout)
-				{
-					// Compress the second field right after the first field.
-					buffer = &buffer[bytesXfered];
-					checkResult(_stream->Write(bufferSize, buffer, &localWritten));
-					bytesXfered += localWritten;
-				}
-
-				// Add padding for _imageAlignmentFactor
-				if (0 < _imageAlignmentFactor)
-				{
-					aafUInt32 alignmentBytes = bytesXfered % _imageAlignmentFactor;
-
-					// TODO: Allocate and use a "aligmentBuffer" so that all of the padding
-					// be written in a single write operation.
-					aafUInt32 i;
-					aafUInt8 ch = 0;
-					for (i = 0; i < alignmentBytes; ++i)
-						checkResult(_stream->Write(1, &ch, &localWritten));
-				}
-
-				// Update the return values.
-				samplesXfered++;
-			}
-		
-		*samplesWritten = samplesXfered;
-		*bytesWritten = bytesXfered;
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
-
-
-	return hr;
-}
-
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::WriteBlocks (aafDeinterleave_t  inter,
-        aafUInt16  xferBlockCount,
-        aafmMultiXfer_t *  xferBlock,
-        aafmMultiResult_t *  resultBlock)
-{
-	HRESULT		hr = S_OK;
-	aafUInt32	n, bufferSize, rowBytes, bytesWritten;
-	aafUInt8	*buffer;
-
-	if (NULL == resultBlock)
-		return AAFRESULT_NULL_PARAM;
-	
-	// Initialize the return values.
-	for (n = 0; n < (aafUInt32)xferBlockCount; n++)
-	{
-		resultBlock[n].bytesXfered = 0;
-		resultBlock[n].samplesXfered = 0;
-	}
-	
-	if (NULL == xferBlock)
-		return AAFRESULT_NULL_PARAM;
-	// We only support writing a single block at a time.
-	else if (1 != xferBlockCount)
-		return AAFRESULT_ONESAMPLEWRITE;
-	else if (0 == xferBlock[0].numSamples)
-		return AAFRESULT_INVALID_PARAM;
-	// this codec only handles a single channel
-	else if (1 != xferBlock[0].numSamples /*xferBlock[0].subTrackNum*/)
-		return AAFRESULT_CODEC_CHANNELS;
-
-
-
-	try
-	{
-		// Preconditions:
-		checkAssertion(NULL != _stream);
-
-    checkExpression(_componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE);
-		/* this codec only allows one-channel media */
-
-		if (kAAFCompressionEnable == _compressEnable)
+		if( alignmentBytes > 0)
 		{
-			// If we are being asked compress the given buffer then
-			// the we should have already calculated the size of a sample.
-			checkExpression(_fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE);
-
-			// Compute the number of bytes in a single row of pixel data.
-			if (1 == _horizontalSubsampling)
-			{
-				rowBytes = (_imageWidth * numComponents) + _padBytesPerRow;
-			}
-			else if (2 == _horizontalSubsampling)
-			{	// Add an extra byte if with is odd. NOTE: This will never
-				// happen with full 601 frame.
-				rowBytes = (_imageWidth * (numComponents - 1)) + (_imageWidth % 2) + _padBytesPerRow;
-			}
-				
-
-			// Calculate the size of the sample data to be compressed.
-			bufferSize = rowBytes * _imageHeight;
-
-			// Make sure the given buffer is really large enough for the complete
-			// uncompressed pixel data.
-			checkExpression(bufferSize <= xferBlock[0].buflen, AAFRESULT_SMALLBUF);
-			
-			// Adjust the parameters for separate fields...
-			if (kAAFSeparateFields == _frameLayout)
-			{
-				bufferSize = rowBytes * (_imageHeight/2);
-			}
-			
-
-
-			for (n = 0; n < xferBlock[0].numSamples; n++)
-			{
-				/* Step 2: specify data destination (eg, an IAAFEssenceStream) */
-				/* Note: steps 2 and 3 can be done in either order. */
-//				CDCI_essencestream_dest(&cinfo, _stream);
-
-				
-				buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
-				checkResult(_stream->Write(bufferSize, buffer, &bytesWritten));
-				resultBlock[0].bytesXfered += bytesWritten;
-
-				if (kAAFSeparateFields == _frameLayout)
-				{
-					// Compress the second field right after the first field.
-					buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
-					checkResult(_stream->Write(bufferSize, buffer, &bytesWritten));
-					resultBlock[0].bytesXfered += bytesWritten;
-				}
-
-				// Add padding for _imageAlignmentFactor
-				if (0 < _imageAlignmentFactor)
-				{
-					aafUInt32 alignmentBytes = resultBlock[0].bytesXfered % _imageAlignmentFactor;
-
-					// TODO: Allocate and use a "aligmentBuffer" so that all of the padding
-					// for the can be written in a single write operation.
-					aafUInt32 i;
-					aafUInt8 ch = 0;
-					aafUInt32 bytesWritten;
-					for (i = 0; i < alignmentBytes; ++i)
-						checkResult(_stream->Write(1, &ch, &bytesWritten));
-				}
-
-				// Update the return values.
-				resultBlock[0].samplesXfered++;
-			}
+		    pAligmentBuffer = new aafUInt8[ alignmentBytes ];
+		    memset( static_cast<void*>(pAligmentBuffer), 0, 
+			    alignmentBytes );
+		    checkResult( _stream->Write( 
+			    alignmentBytes, 
+			    static_cast<aafDataBuffer_t>(pAligmentBuffer), 
+			    &sampleBytesWritten ) );
+		    delete[] pAligmentBuffer;
+		    pAligmentBuffer = NULL;
 		}
-		else
-		{
-			// Data is already compressed so we can just write the data 
-			// using the "raw" interface. WriteRawData will update frame index if necessary.
-			checkResult(WriteRawData(xferBlock[0].numSamples,
-			                         xferBlock[0].buffer,
-			                         xferBlock[0].buflen));
-			
-			// Update the return values...
-			resultBlock[0].bytesXfered = xferBlock[0].buflen;
-			resultBlock[0].samplesXfered += xferBlock[0].numSamples;
-		}
+	    }
+
+	    SetNumberOfSamples( _numberOfSamples + 1 );
+
+	    // Update total number of samples written.
+	    (*pTotalSamplesWritten)++;
 	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
+    }
+    catch (HRESULT& rhr)
+    {
+	hr = rhr; // return thrown error code.
+    }
+    catch (...)
+    {
+	// We CANNOT throw an exception out of a COM interface method!
+	// Return a reasonable exception code.
+	hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+    delete[] pAligmentBuffer;
 
 
-	return hr;
+    return hr;
 }
 
 
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::ReadSamples (aafUInt32  nSamples,
-        aafUInt32  buflen,
-        aafDataBuffer_t  buffer,
-        aafUInt32 *  samplesRead,
-        aafUInt32 *  bytesRead)
+
+/*
+	nSamples		- number of samples to read.
+	buflen			- size of the buffer to hold read data.
+	buffer			- buffer to hold read data.
+	pTotalSamplesRead	- number of read samples.
+	pTotalBytesRead		- number of read bytes. This covers only 
+				    number of bytes transfered to user buffer. 
+				    Alignment bytes are not counted here.
+*/
+HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
+	aafUInt32	nSamples,
+	aafUInt32	buflen,
+	aafDataBuffer_t	buffer,
+	aafUInt32	*pTotalSamplesRead,
+	aafUInt32	*pTotalBytesRead )
 {
-	HRESULT hr = S_OK;
-	aafUInt32 n, rowBytes, bufferSize, imageHeight;
-	aafUInt32 sampleSize = 0;
+    HRESULT	hr = S_OK;
+    aafUInt32	n;
+    aafUInt32	sampleBytesRead;	// Number of sample bytes read.
+    aafUInt32	sampleSize;		// Number of bytes per sample.
+    aafUInt32	alignmentBytes;		// Number of unused alignment bytes.
 
 
-	if (NULL == buffer || NULL == samplesRead || NULL == bytesRead)
-		return AAFRESULT_NULL_PARAM;
-	// We only support writing a single block at a time.
-	// this codec only handles a single channel
-	else if (1 != nSamples)
-		return AAFRESULT_CODEC_CHANNELS;
-//	else if (_currentIndex >= _writeIndex)
-//		return (AAFRESULT_EOF);
+    try
+    {
+	// Check input args
+	checkExpression( buffer != NULL && pTotalSamplesRead != NULL && 
+		pTotalBytesRead != NULL, AAFRESULT_NULL_PARAM );
 
-  // Initialize the return parameters.
-  *samplesRead = 0;
-  *bytesRead = 0;
+	// Init output
+	*pTotalSamplesRead = 0;
+	*pTotalBytesRead = 0;
+
+	// More input args check
+	checkExpression( nSamples != 0, AAFRESULT_INVALID_PARAM );
+
+	// Preconditions.
+	checkAssertion( NULL != _stream );
+	checkExpression( _componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE );
+	checkExpression( _fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE );
+
+	sampleSize = _fileBytesPerSample;
+
+	// Make sure the given buffer is really large enough for the complete
+	// pixel data.
+	checkExpression( sampleSize*nSamples <= buflen, AAFRESULT_SMALLBUF );
 
 
-	try
+
+	// Read samples one by one skipping alignment data
+	for( n = 0; n < nSamples; n++ )
 	{
-		
-		if (kAAFCompressionEnable == _compressEnable)
-		{ // If we are being asked decompress the given buffer.
-			// Get the dimensions of the image data to compress.
-			imageHeight = (kAAFSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
-
-			// Compute the number of bytes in a single row of pixel data.
-			rowBytes = (buflen / nSamples) / _imageHeight;
-
-			// Calculate the size of the image data to be compressed.
-			bufferSize = rowBytes * imageHeight;
-
-			for (n = 0; n < nSamples; n++)
-			{
-				/* Step 2: specify data source (eg, an IAAFEssenceStream) */
-				// Setup the data source to read an entire sample frame into memory.
-//				CDCI_essencestream_src(&cinfo, _stream, _fileBytesPerSample);
+	    sampleBytesRead = 0;
+	    checkResult( _stream->Read( sampleSize, buffer, &sampleBytesRead ));
+	    buffer += sampleBytesRead;
+	    *pTotalBytesRead += sampleBytesRead;
 
 
-				buffer = &buffer[*bytesRead];
-//				checkResult(DecompressImage(param, cinfo));
-				*bytesRead += bufferSize;
+	    // If sample is aligned skip unused alignment bytes.
+	    // Do not count these bytes when returning total number of 
+	    // bytes read.
+	    if( _imageAlignmentFactor > 0 )
+	    {
+		alignmentBytes = sampleBytesRead % _imageAlignmentFactor;
+		if( alignmentBytes > 0)
+		    checkResult( _stream->Seek( alignmentBytes ) );
+	    }
 
-				if (kAAFSeparateFields == _frameLayout)
-				{
-					// Compress the second field right after the first field.
-					buffer = &buffer[*bytesRead];
-//					checkResult(DecompressImage(param, cinfo));
-					*bytesRead += bufferSize;
-				}
-
-				*samplesRead++;
-				// Update the current index.
-//				SetCurrentIndex(_currentIndex + 1);
-				//checkResult(Seek(_currentIndex + 1));
-			}
-		}
-		else
-		{
-			// Data is already compressed so we can just write the data 
-			// using the "raw" interface. WriteRawData will update frame index if necessary.
-			checkResult(ReadRawData(nSamples, buflen, buffer, bytesRead, samplesRead));
-		}
-
+	    // Update total number of samples read.
+	    (*pTotalSamplesRead)++;
 	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
+    }
+    catch (HRESULT& rhr)
+    {
+	hr = rhr; // return thrown error code.
+    }
+    catch (...)
+    {
+	// We CANNOT throw an exception out of a COM interface method!
+	// Return a reasonable exception code.
+	hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
 
 
-	// Cleanup
-	return hr;
+
+    return hr;
 }
 
 
 
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::ReadBlocks (aafDeinterleave_t  inter,
-        aafUInt16  xferBlockCount,
-        aafmMultiXfer_t *  xferBlock,
-        aafmMultiResult_t *  resultBlock)
-{
-	HRESULT hr = S_OK;
-	aafUInt32 n, bufferSize, rowBytes, imageHeight;
-	aafUInt32 sampleSize = 0;
-	aafUInt8	*buffer;
+/*
+    Seek
 
+    Seek to a particular sample frame on the media.
 
-	if (NULL == resultBlock)
-		return AAFRESULT_NULL_PARAM;
-	
-	// Initialize the return values.
-	for (n = 0; n < (aafUInt32)xferBlockCount; n++)
-	{
-		resultBlock[n].bytesXfered = 0;
-		resultBlock[n].samplesXfered = 0;
-	}
-	
-	if (NULL == xferBlock)
-		return AAFRESULT_NULL_PARAM;
-	// We only support writing a single block at a time.
-	else if (1 != xferBlockCount)
-		return AAFRESULT_ONESAMPLEWRITE;
-	// this codec only handles a single channel
-	else if (1 != xferBlock[0].numSamples)
-		return AAFRESULT_CODEC_CHANNELS;
-//	else if (_currentIndex >= _writeIndex)
-//		return (AAFRESULT_EOF);
+    Input:
+	sampleFrame	- zero-based number of frame to seek to.
 
-
-	try
-	{
-
-			/* Step 1: allocate and initialize CDCI decompression object */
-
-			/* We set up the normal CDCI error routines, then override error_exit. */
-//			cinfo.err = CDCI_std_error(&jerr);
-//			jerr.error_exit = cplusplus_error_exit;
-
-			/* Now we can initialize the CDCI decompression object. */
-//			CDCI_create_decompress(&cinfo);
-
-
-			// Get the dimensions of the image data to compress.
-			imageHeight = (kAAFSeparateFields == _frameLayout) ? (_imageHeight / 2) : _imageHeight;
-
-			// Compute the number of bytes in a single row of pixel data.
-			rowBytes = (xferBlock[0].buflen / xferBlock[0].numSamples) / _imageHeight;
-
-			// Calculate the size of the image data to be compressed.
-			bufferSize = rowBytes * imageHeight;
-
-			for (n = 0; n < xferBlock[0].numSamples; n++)
-			{
-				/* Step 2: specify data source (eg, an IAAFEssenceStream) */
-				// Setup the data source to read an entire sample frame into memory.
-//				sampleSize = GetSampleSizeFromIndex(_currentIndex);
-//				CDCI_essencestream_src(&cinfo, _stream, sampleSize);
-
-
-				buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
-//				checkResult(DecompressImage(param, cinfo));
-				resultBlock[0].bytesXfered += bufferSize;
-
-				if (kAAFSeparateFields == _frameLayout)
-				{
-					// Compress the second field right after the first field.
-					buffer = &xferBlock[0].buffer[resultBlock[0].bytesXfered];
-//					checkResult(DecompressImage(param, cinfo));
-					resultBlock[0].bytesXfered += bufferSize;
-				}
-
-				++resultBlock[0].samplesXfered;
-				// Update the current index.
-//				SetCurrentIndex(_currentIndex + 1);
-				//checkResult(Seek(_currentIndex + 1));
-			}
-
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
-
-	// Cleanup
-	return hr;
-}
-
-
+    Return:
+    AAFRESULT_SUCCESS		- success.
+    AAFRESULT_BADFRAMEOFFSET	- invalid frame number.
+    AAFRESULT_BADSAMPLEOFFSET	- invalid offset in the essnce stream.
+				    This error is returned by stream->Seek().
+    AAFRESULT_NOT_INITIALIZED	- returned by stream->Seek().
+    AAFRESULT_UNEXPECTED_EXCEPTION
+*/
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::Seek (aafPosition_t  sampleFrame)
 {
-	HRESULT hr = S_OK;
+    HRESULT	hr = S_OK;
+    aafUInt32	alignmentBytes = _imageAlignmentFactor > 0 ? 
+		(_fileBytesPerSample % _imageAlignmentFactor) : 0;
 
-	try
+
+    try
+    {
+	checkAssertion(NULL != _stream);
+	checkExpression( sampleFrame <= _numberOfSamples, 
+	    AAFRESULT_BADFRAMEOFFSET );
+	checkResult(_stream->Seek( (_fileBytesPerSample + alignmentBytes) * 
+	    sampleFrame) );
+    }
+    catch (HRESULT& rhr)
+    {
+	hr = rhr; // return thrown error code.
+    }
+    catch (...)
+    {
+	// We CANNOT throw an exception out of a COM interface method!
+	// Return a reasonable exception code.
+	hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+    return hr;
+}
+
+
+
+// Helper utility to make sure the current information in the codec is 
+// synchronized with the given descriptor information . 
+// Called in Open and Create methods.
+HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadDescriptor( 
+    CAAFCDCIDescriptorHelper&	descriptorHelper )
+{
+    HRESULT		hr = S_OK;
+    IAAFContainerDef	*pContainerDef = NULL;
+    IAAFDefObject	*pDefObj = NULL;
+
+
+    try
+    {
+	//
+	// FileDescriptor methods:
+	//
+
+	// Length is optional property. If it's not present 
+	// set it to 0.
+	hr = descriptorHelper.GetLength( &_length );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _length = 0;
+
+	_numberOfSamples = (aafUInt32)_length;
+
+	// SampleRate is optional property. If it's not present 
+	// set it to 0.
+	hr = descriptorHelper.GetSampleRate( &_sampleRate );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _sampleRate = NULL_RATIONAL;
+
+	// ContainerFormat
+	// pContainerDef and pDefObj released below...
+	checkResult(descriptorHelper.GetContainerFormat(&pContainerDef));
+	checkResult(pContainerDef->QueryInterface(IID_IAAFDefObject, 
+	    (void **)&pDefObj));
+	checkResult(pDefObj->GetAUID(&_containerFormat));
+
+
+	//
+	// DigitalImageDescriptor methods
+	//
+
+	// Compression is optional property. If it's not present
+	// set it to default value. 
+	hr = descriptorHelper.GetCompression( &_compression );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _compression = NULL_UID;
+
+	// Stored view
+	checkResult( descriptorHelper.GetStoredView(
+	    &_storedHeight, &_storedWidth ) );
+	_imageHeight = _storedHeight;
+	_imageWidth = _storedWidth;
+
+	// Sampled view is optional property. If it's not present 
+	// set sampled view to be the same as stored view.
+	hr = descriptorHelper.GetSampledView(
+	    &_sampledHeight, &_sampledWidth,
+	    &_sampledXOffset, &_sampledYOffset );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+
+	if( AAFRESULT_PROP_NOT_PRESENT == hr )
 	{
-		checkAssertion(NULL != _stream);
-		checkExpression(sampleFrame <= _numberOfSamples, AAFRESULT_BADFRAMEOFFSET);
-		checkResult(_stream->Seek((_fileBytesPerSample + _clientFillStart + _clientFillEnd) * sampleFrame));
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	    _sampledWidth = _storedWidth;
+	    _sampledHeight = _storedHeight;
+	    _sampledXOffset = 0;
+	    _sampledYOffset = 0;
 	}
 
-	// Cleanup
-	return hr;
+	// Display view is optional property. If it's not present 
+	// set display view to be the same as stored view.
+	hr = descriptorHelper.GetDisplayView( 
+	    &_displayHeight, &_displayWidth, 
+	    &_displayXOffset, &_displayYOffset );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if (AAFRESULT_PROP_NOT_PRESENT == hr)
+	{
+	    _displayWidth = _storedWidth;
+	    _displayHeight = _storedHeight;
+	    _displayXOffset = 0;
+	    _displayYOffset = 0;
+	}
+
+	// FrameLayout (required).
+	checkResult(descriptorHelper.GetFrameLayout( &_frameLayout ) );
+
+	// VideoLineMap (required).
+	// Video line map contains either 1 or 2 values depending
+	// on frame layout. 
+	checkResult( descriptorHelper.GetVideoLineMapSize( 
+	    &_videoLineMapSize ) );
+	checkResult( descriptorHelper.GetVideoLineMap(
+	    _videoLineMapSize, _videoLineMap ) );
+
+	// ImageAspectRatio (required).
+	checkResult(descriptorHelper.GetImageAspectRatio(
+	    &_imageAspectRatio));
+
+	// AlphaTransparency (optional).
+	hr = descriptorHelper.GetAlphaTransparency( &_alphaTransparency );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _alphaTransparency = kAAFMinValueTransparent;
+
+	// Gamma (optional).
+	hr = descriptorHelper.GetGamma( &_gamma );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _gamma = NULL_UID;
+
+	// ImageAlignmentFactor (optional).
+	hr = descriptorHelper.GetImageAlignmentFactor( 
+	    &_imageAlignmentFactor );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _imageAlignmentFactor = 0;
+
+	// FieldDominance (optional)
+	// Although FieldDominance is optional property I would expect it 
+	// to be there for 2 fields layout. But if it's not there, let 
+	// user decide what to do.
+	hr = descriptorHelper.GetFieldDominance( &_fieldDominance );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr);
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _fieldDominance = kAAFNoDominant;
+
+	// FieldStartOffset (optional)
+	hr = descriptorHelper.GetFieldStartOffset( &_fieldStartOffset );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _fieldStartOffset = 0;
+
+	// Get FieldEndOffset (optional)
+	hr = descriptorHelper.GetFieldEndOffset( &_fieldEndOffset );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _fieldEndOffset = 0;
+
+
+ 	//
+	// CDCIDescriptor
+	//
+
+	// ComponentWidth (required)
+	checkResult( descriptorHelper.GetComponentWidth(&_componentWidth));
+	// Check for supported values.
+	checkExpression( _componentWidth == 8 || 
+			 _componentWidth == 10 ||
+			 _componentWidth == 16, AAFRESULT_BADPIXFORM );
+
+	// HorizontalSubsampling (required)
+	checkResult(descriptorHelper.GetHorizontalSubsampling(
+	    &_horizontalSubsampling ) );
+	checkExpression( _horizontalSubsampling == 1 || 
+			 _horizontalSubsampling == 2, 
+			 AAFRESULT_BADPIXFORM );
+
+	// VerticalSubsampling (optional)
+	// Currently we don't handle VerticalSubsampling other 
+	// than 1.
+	hr = descriptorHelper.GetVerticalSubsampling(
+		    &_verticalSubsampling );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	    _verticalSubsampling = 1;
+	checkExpression( _verticalSubsampling == 1, AAFRESULT_BADPIXFORM );
+
+
+
+	// ColorSiting (optional)
+	// Do not check for supported values because ColorSiting does not
+	// participate in codec's internal calculations. 
+	// Let user handle it.
+	hr = descriptorHelper.GetColorSiting(&_colorSiting);
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr);
+	if (AAFRESULT_PROP_NOT_PRESENT == hr)
+		_colorSiting = kAAFCoSiting;
+
+	// BlackReferenceLevel (optional)
+	hr = descriptorHelper.GetBlackReferenceLevel( 
+	    &_blackReferenceLevel );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr);
+	if (AAFRESULT_PROP_NOT_PRESENT == hr)
+		_blackReferenceLevel = 0;
+
+	// WhiteReferenceLevel (optional)
+	hr = descriptorHelper.GetWhiteReferenceLevel( 
+	    &_whiteReferenceLevel );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr);
+	if (AAFRESULT_PROP_NOT_PRESENT == hr)
+	    _whiteReferenceLevel = (1U << _componentWidth) - 1;
+
+	// ColorRange (optional)
+	hr = descriptorHelper.GetColorRange(&_colorRange);
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if (AAFRESULT_PROP_NOT_PRESENT == hr)
+		_colorRange = (1U << _componentWidth) - 1;
+
+	// PaddingBits (optional)
+	hr = descriptorHelper.GetPaddingBits( &_paddingBits );
+	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
+			 AAFRESULT_SUCCESS == hr, hr );
+	if (AAFRESULT_PROP_NOT_PRESENT == hr)
+		_paddingBits = 0;
+
+
+	UpdateCalculatedData();
+    }
+    catch (HRESULT& rhr)
+    {
+	    hr = rhr; // return thrown error code.
+    }
+    catch (...)
+    {
+	    // We CANNOT throw an exception out of a COM interface method!
+	    // Return a reasonable exception code.
+	    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+    // Cleanup
+    if( pContainerDef != NULL )
+	pContainerDef->Release();
+    if( pDefObj != NULL )
+	pDefObj->Release();
+
+
+    return hr;
 }
 
 
 void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper)
 {
+	// Update FileDescriptor properties
 	checkResult(descriptorHelper.SetLength(_numberOfSamples));
-	//	checkResult(descriptorHelper.SetIsInContainer(_isInAAFContainer));
 	checkResult(descriptorHelper.SetSampleRate(_sampleRate));
-	//	checkResult(descriptorHelper.SetContainerFormat(_containerFormat));
-	checkResult(descriptorHelper.SetCompression(_codecID));
+
+	// Update DigitalImageDescriptor properties
+	checkResult(descriptorHelper.SetCompression(_compression));
 	checkResult(descriptorHelper.SetStoredView(_storedHeight, _storedWidth));
 	checkResult(descriptorHelper.SetSampledView(_sampledHeight, _sampledWidth, _sampledXOffset, _sampledYOffset));
 	checkResult(descriptorHelper.SetDisplayView(_displayHeight, _displayWidth, _displayXOffset, _displayYOffset));
@@ -1420,8 +1367,13 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	checkResult(descriptorHelper.SetVideoLineMap(_videoLineMapSize, _videoLineMap));
 	checkResult(descriptorHelper.SetImageAspectRatio(_imageAspectRatio));
 	checkResult(descriptorHelper.SetAlphaTransparency(_alphaTransparency));
-//	checkResult(descriptorHelper.SetGamma(_gamma));
+	checkResult(descriptorHelper.SetGamma(_gamma));
 	checkResult(descriptorHelper.SetImageAlignmentFactor(_imageAlignmentFactor));
+	checkResult(descriptorHelper.SetFieldDominance(_fieldDominance));
+	checkResult(descriptorHelper.SetFieldStartOffset(_fieldStartOffset));
+	checkResult(descriptorHelper.SetFieldEndOffset(_fieldEndOffset));
+
+	// CDCIDescriptor methods:
 	checkResult(descriptorHelper.SetComponentWidth(_componentWidth));
 	checkResult(descriptorHelper.SetHorizontalSubsampling(_horizontalSubsampling));
 	checkResult(descriptorHelper.SetColorSiting(_colorSiting));
@@ -1429,226 +1381,130 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	checkResult(descriptorHelper.SetWhiteReferenceLevel(_whiteReferenceLevel));
 	checkResult(descriptorHelper.SetColorRange(_colorRange));
 	checkResult(descriptorHelper.SetPaddingBits(_paddingBits));
+
+	checkResult(descriptorHelper.SetMCProps( 0x97, _fileBytesPerSample ) );
 }
 
 
 // Routine to keep calculated member data up-to-date.
-void CAAFCDCICodec::UpdateCalculatedData(void)
+void CAAFCDCICodec::UpdateCalculatedData( void )
 {
-	aafUInt32 numFields = 0;
-
-		// We currently only support 601 4-4-4 and 4-2-2.
-//	checkExpression((1 == _verticalSubsampling && 1 == _horizontalSubsampling) ||
-//								  (1 == _verticalSubsampling && 2 == _horizontalSubsampling && 
-//									 kAAFColorSpaceYUV == _pixelFormat),
-//				          AAFRESULT_BADPIXFORM); // AAFRESULT_BADLAYOUT
+    aafUInt32 numFields = 0;
 
 
-	switch (_frameLayout)
-	{
-		case kAAFFullFrame:
-		case kAAFOneField:
-			numFields = 1;
-			break;
-	
-		case kAAFSeparateFields:
-		case kAAFMixedFields:
-			numFields = 2;
-			break;
-	
-		default:
-			break;
-	} /* end switch */
-
-	// The is true for RGB or YUV. (no alpha support)
-	_memBitsPerPixel = _componentWidth * 3;
+    // Number of fields per frame
+    if( _frameLayout == kAAFSeparateFields ||
+	_frameLayout == kAAFMixedFields )
+	numFields = 2;
+    else
+	numFields = 1;
 
 
-	// Computer the file bytes per sample.
-	_fileBytesPerSample = 0;
-	_bitsPerPixelAvg = 0;
-	_bitsPerSample = 0;
+    // Computer the file bytes per sample.
+    _fileBytesPerSample = 0;
+    _bitsPerPixelAvg = 0;
+    _bitsPerSample = 0;
 
-	if (kAAFColorSpaceRGB == _pixelFormat)
-	{
-		// If the output color space is RGB then decompressed sample size
-		// ignores any subsampling in the compressed image since the 
-		// decompressor will upsample the pixels for us.
-		_bitsPerPixelAvg = (aafInt16)((_componentWidth * 3) + _paddingBits);
-		_bitsPerSample = ((_bitsPerPixelAvg * _imageWidth) + _padBytesPerRow) * _imageHeight;
-	}							
-	else
-	{
-		/* 4:4:4 = 1 sample for each of luma and two chroma channels */   
-		if (_horizontalSubsampling == 1)
-		{
-			_bitsPerPixelAvg = (aafInt16)((_componentWidth * 3) + _paddingBits);
-			_bitsPerSample = (aafInt32) _imageWidth * (aafInt32) _imageHeight *
-	  								(_componentWidth * 3) * numFields; // trr: is this reall correct? Why do we care about numFields since we are using the full _imageHeight?
-		}							
-		/* 4:2:2 = two-pixels get 2 samples of luma, 1 of each chroma channel, avg == 2 */							
-		else if (_horizontalSubsampling == 2)						
-		{
-			_bitsPerPixelAvg = (aafInt16)((_componentWidth * 2) + _paddingBits);
-			_bitsPerSample = (aafInt32) _imageWidth * (aafInt32) _imageHeight *
-	  								(_componentWidth * 2) * numFields;
-		}
-	}
 
-	_fileBytesPerSample = (_bitsPerSample + 7) / 8;
-	_memBytesPerSample = _fileBytesPerSample;
+    //
+    // Calculate number of bits per pixel. 
+    // Be aware that for 4:2:2 format number of bits per pi
+    // 4:4:4 = 1 sample for each of luma and two chroma channels
+    if (_horizontalSubsampling == 1)
+    {
+	_bitsPerPixelAvg = (aafInt16)((_componentWidth * 3) + _paddingBits);
 
+	// Number of bits per sample = num bits per field * num of fields.
+	// Number of bits per field  = num bits per image pixels + 
+	//	    num bits per client fill (field start/end offsets)..
+	// Number of bits per image pixels = num bits per line * num of 
+	//	    lines (height).
+	// Number of bits per line = num of bits per pixel * width + num 
+	//	    of padding bits per line.
+	//
+	// Note that number of padding bits per line is not number of padding
+	//	    bits per pixel.
+	_bitsPerSample = ( (_imageWidth * _bitsPerPixelAvg + 
+				_padBytesPerRow * 8) * _imageHeight  + 
+				(_fieldStartOffset + _fieldEndOffset) * 8 ) *
+				numFields;
+    }
+    // 4:2:2 = two-pixels get 2 samples of luma, 1 of each chroma channel, 
+    // avg == 2
+    //
+    // Note: Supported component sizes named by the spec are 8, 10 and 16 bits.
+    //		With these values YCrYCb will always be on a byte boundary. 
+    else if (_horizontalSubsampling == 2)
+    {
+	_bitsPerPixelAvg = (aafInt16)((_componentWidth * 2) + _paddingBits);
+
+	// See comments for 4:4:4
+	_bitsPerSample = ( (_imageWidth/2  * (_componentWidth*4 + _paddingBits)+
+				_padBytesPerRow * 8) * _imageHeight  + 
+				(_fieldStartOffset + _fieldEndOffset) * 8 ) *
+				numFields;
+    }
+
+    checkAssertion( _bitsPerPixelAvg % 8  ==  0 );
+
+
+    _fileBytesPerSample = (_bitsPerSample + 7) / 8;
 }
 
 
+/*
+    CompleteWrite
+
+    Keeps essence descriptor information up to date.
+
+    Input:
+    fileMob	- file source mob we want to keep in sync 
+		    with the original one. This parameter is optional.
+
+    Return:
+    AAFRESULT_ASSERTION_VIOLATION
+    AAFRESULT_UNEXPECTED_EXCEPTION
+*/
 HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::CompleteWrite (IAAFSourceMob *fileMob)
+    CAAFCDCICodec::CompleteWrite (IAAFSourceMob *fileMob = NULL)
 {
-	HRESULT hr = S_OK;
+    HRESULT hr = S_OK;
 
-	try
-	{
-		// Flush the CDCI data source (if necessary)
 
-		// Write the sample index onto the end of the stream.
-//		checkResult(WriteSampleIndex());
+    try
+    {
+	// Make sure the descriptor information is up-to-date.
+	UpdateDescriptor(_descriptorHelper); // throw HRESULT
 
-		// Make sure the descriptor information is up-to-date.
-		UpdateDescriptor(_descriptorHelper); // throw HRESULT
 
-		if (NULL != fileMob)
-		{	// Initialize the descriptor helper:
-			CAAFCDCIDescriptorHelper descriptorHelper;
-			checkResult(descriptorHelper.Initialize(fileMob));
+	// Handle the source mob we want to keep synchronized.
+	if (NULL != fileMob)
+	{	// Initialize the descriptor helper:
+	    CAAFCDCIDescriptorHelper descriptorHelper;
+	    checkResult(descriptorHelper.Initialize(fileMob));
 
-			// Make sure the descriptor information is up-to-date.
-			UpdateDescriptor(descriptorHelper); // throw HRESULT
-		}
-
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	    // Make sure the descriptor information is up-to-date.
+	    UpdateDescriptor(descriptorHelper); // throw HRESULT
 	}
 
-	return hr;
+    }
+    catch (HRESULT& rhr)
+    {
+	    hr = rhr; // return thrown error code.
+    }
+    catch (...)
+    {
+	    // We CANNOT throw an exception out of a COM interface method!
+	    // Return a reasonable exception code.
+	    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+    return hr;
 }		
 
 
 
 
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::WriteRawData (
-			aafUInt32 nSamples, 
-			aafDataBuffer_t  buffer,
-      aafUInt32  buflen)
-{
-	HRESULT hr = S_OK;
-  aafUInt32 bytesWritten;
-
-	// Validate input parameters:
-	if (0 == nSamples || NULL == buffer || 0 == buflen)
-		return AAFRESULT_NULL_PARAM;
-	// For now we only support writing a single sample since it would be too time consuming
-	// to scan for SOI and EOI markers...
-	else if (1 != nSamples)
-		return AAFRESULT_ONESAMPLEWRITE;
-	
-
-
-	try
-	{
-		// Preconditions:
-		checkAssertion(NULL != _stream);
-		
-		// Make sure that we have been opened for append.		
-		checkExpression(kAAFMediaOpenAppend == _openMode, AAFRESULT_NOT_WRITEABLE);
-
-
-
-		// We should only be able to write to the end of the stream. This should be 
-		// enforced by the implementation of the IAAFEssenceStream. This is why we 
-		// compute the offset to the start from the position after the write 
-		// operation just in case the seek position had to be reset to the end by the
-		// implementation of the IAAFEssenceStream.
-
-		// Write the compressed sample data.
-		checkResult(_stream->Write(buflen, buffer, &bytesWritten));
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
-
-	// Cleanup
-	return hr;
-}
-
-
-
-
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::ReadRawData (aafUInt32 nSamples,
-		aafUInt32  buflen,
-        aafDataBuffer_t  buffer,
-        aafUInt32 *  bytesRead,
-        aafUInt32 *  samplesRead)
-{
-	HRESULT hr = S_OK;
-
-	// Validate input parameters:
-	// For now we only support writing a single sample since it would be too time consuming
-	// to scan for SOI and EOI markers...
-	if (0 == nSamples || NULL == buffer || 0 == buflen || 
-		  NULL == bytesRead || NULL == samplesRead)
-		return AAFRESULT_NULL_PARAM;
-	else if (1 != nSamples)
-		return AAFRESULT_ONESAMPLEWRITE;
-
-	*bytesRead = 0;
-	*samplesRead = 0;
-
-	try
-	{
-		checkAssertion(NULL != _stream);
-		checkExpression(buflen >= _fileBytesPerSample, AAFRESULT_SMALLBUF);
-
-		aafPosition_t offset;
-		checkResult(_stream->GetPosition(&offset));
-		checkResult(_stream->Read(_fileBytesPerSample, buffer, bytesRead));
-
-		*samplesRead = 1; // we currently only support one sample reads...
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
-
-	// Cleanup
-	return hr;
-}
-
-
-
-	
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::CreateDescriptorFromStream (IAAFEssenceStream * pStream,
         IAAFSourceMob *fileMob)
@@ -1685,501 +1541,755 @@ typedef struct _aafEssenceFormatData_t
 	aafInt32 size;
 	union
 	{
-		aafUInt8 expData[kMaxEssenceFormatData];
-		aafUInt32 expUInt32;
-		aafInt32 expInt32;
-		aafUInt16 expUInt16;
-		aafInt16 expInt16;
-		aafUInt8 expUInt8;
-		aafInt8 expInt8;
-		aafRational_t expRational;
-		aafRect_t expRect;
-		aafColorSpace_t expColorSpace;
-		aafCompArray_t expCompArray;
-		aafCompSizeArray_t expCompSizeArray;
-		aafFrameLayout_t expFrameLayout;
-		aafVideoLineMap_t expVideoLineMap;
-		aafColorSiting_t expColorSiting;
+	    aafUInt8		expData[kMaxEssenceFormatData];
+	    aafUInt32		expUInt32;
+	    aafInt32		expInt32;
+	    aafUInt16		expUInt16;
+	    aafInt16		expInt16;
+	    aafUInt8		expUInt8;
+	    aafInt8		expInt8;
+	    aafRational_t	expRational;
+	    aafBoolean_t	expBoolean;
+	    aafRect_t		expRect;
+	    aafColorSpace_t	expColorSpace;
+	    aafCompArray_t	expCompArray;
+	    aafCompSizeArray_t	expCompSizeArray;
+	    aafFrameLayout_t	expFrameLayout;
+	    aafVideoLineMap_t	expVideoLineMap;
+	    aafColorSiting_t	expColorSiting;
+	    aafFieldDom_t	expFieldDominance;
+	    aafAlphaTransparency_t expAlphaTransparency;
+	    aafUID_t		expUID;
 	} operand;
 } aafEssenceFormatData_t;
 
 
-static void GetFormatParam(
-  const aafEssenceFormatData_t& param, 
-  aafUInt32& num) // throw HRESULT
-{
-	if (param.size == 1)
-		num = param.operand.expUInt8;
-	else if (param.size == 2)
-		num = param.operand.expUInt16;
-	else if (param.size == 4)
-		num = param.operand.expUInt32;
-	else
-		throw HRESULT(AAFRESULT_INVALID_PARM_SIZE);
-}
+
+#define ADD_FORMAT_SPECIFIER( f, id, p ) \
+		(f->AddFormatSpecifier( \
+			id, \
+			sizeof(p), \
+			reinterpret_cast<aafDataBuffer_t>(&(p))))
 
 
-static void GetFormatParam(
-  const aafEssenceFormatData_t& param, 
-  aafInt32& num) // throw HRESULT
-{
-	if (param.size == 1)
-		num = param.operand.expInt8;
-	else if (param.size == 2)
-		num = param.operand.expInt16;
-	else if (param.size == 4)
-		num = param.operand.expInt32;
-	else
-		throw HRESULT(AAFRESULT_INVALID_PARM_SIZE);
-}
-
-
-		
+//  kAAFPixelSize is calculated value and cannot be set. 
+//	Set kAAFCDCIPadBits, kAAFCDCICompWidth and kAAFCDCIHorizSubsampling
+//	to change kAAFPixelSize.
+// 
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::PutEssenceFormat (IAAFEssenceFormat * pFormat)
 {
-	HRESULT hr = S_OK;
-	aafInt32		numSpecifiers, i;
-	aafEssenceFormatData_t param;
-	aafUInt32 numFields = 0;
-	aafFrameLayout_t frameLayout = _frameLayout;
-	aafUInt32 horizontalSubsampling = _horizontalSubsampling;
-
-	if (NULL == pFormat)
-		return AAFRESULT_NULL_PARAM;
+    HRESULT			hr = S_OK;
+    aafInt32			numSpecifiers, i;
+    aafEssenceFormatData_t	param;
 
 
-	try
+    if (NULL == pFormat)
+	    return AAFRESULT_NULL_PARAM;
+
+
+    try
+    {
+	checkResult(pFormat->NumFormatSpecifiers (&numSpecifiers));
+
+
+
+	for (i = 0; i < numSpecifiers; ++i)
 	{
-		checkResult(pFormat->NumFormatSpecifiers (&numSpecifiers));
+		memset(&param, 0, sizeof(param));
+		checkResult(pFormat->GetIndexedFormatSpecifier (i, 
+			&param.opcode, sizeof(param.operand.expData), param.operand.expData, &param.size));
+		
 
-		// Get the frame layout first so that we can figure out how many fields
-		// there are in the sample. We 
-		for (i = 0; i < numSpecifiers; ++i)
-		{
-			memset(&param, 0, sizeof(param));
-			checkResult(pFormat->GetIndexedFormatSpecifier (i, 
-				&param.opcode, sizeof(param.operand.expData), param.operand.expData, &param.size));
+		if (EqualAUID(&kAAFPixelFormat, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expColorSpace), AAFRESULT_INVALID_PARM_SIZE);
 
-			if (EqualAUID(&kAAFFrameLayout, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expFrameLayout), AAFRESULT_INVALID_PARM_SIZE);
-				// Validate the frame layout:
-				switch (param.operand.expFrameLayout)
-				{
-					case kAAFFullFrame:
-					case kAAFOneField:
-						numFields = 1;
-						break;
-				
-					case kAAFSeparateFields:
-					case kAAFMixedFields:
-						numFields = 2;
-						break;
-				
-					default:
-						// Invalid frame layout!
-						checkExpression(numFields != 0, AAFRESULT_BADEXPORTLAYOUT);
-						break;
-				} /* end switch */	
+			// Currently we only support the following pixel transformations.
+			checkExpression(kAAFColorSpaceRGB == param.operand.expColorSpace ||
+					      kAAFColorSpaceYUV == param.operand.expColorSpace,
+					      AAFRESULT_BADPIXFORM);
 
-				// Save the frame layout
-				frameLayout = param.operand.expFrameLayout;
-
-				// What do we do if the codec is asked to change the frame layout
-				// after samples have already been written to the stream? This
-				// should be a error in essence access...
-				checkAssertion(frameLayout != _frameLayout && 0 < _numberOfSamples);
-			}
-			else if (EqualAUID(&kAAFCDCIHorizSubsampling, &param.opcode))
-			{
-				horizontalSubsampling = param.operand.expUInt32;
-				switch (horizontalSubsampling)
-				{
-				case 1:
-				case 2:
-					break;
-					
-				default:
-					throw HRESULT(AAFRESULT_BADPIXFORM);
-				}
-			}
+			_pixelFormat = param.operand.expColorSpace;
 		}
-
-
-		for (i = 0; i < numSpecifiers; ++i)
+		else if (EqualAUID(&kAAFFrameLayout, &param.opcode))
 		{
-			memset(&param, 0, sizeof(param));
-			checkResult(pFormat->GetIndexedFormatSpecifier (i, 
-				&param.opcode, sizeof(param.operand.expData), param.operand.expData, &param.size));
+			// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expFrameLayout), AAFRESULT_INVALID_PARM_SIZE);
+
+
+			// @@@
+			// What do we do if the codec is asked to change the frame layout
+			// after samples have already been written to the stream? This
+			// should be a error in essence access...
+			checkAssertion( param.operand.expFrameLayout == _frameLayout || _numberOfSamples == 0 );
+
+
+			// Validate the frame layout:
+			checkExpression( 
+			    param.operand.expFrameLayout == kAAFFullFrame ||
+			    param.operand.expFrameLayout == kAAFOneField ||
+			    param.operand.expFrameLayout == kAAFSeparateFields ||
+			    param.operand.expFrameLayout == kAAFMixedFields,
+			    AAFRESULT_BADEXPORTLAYOUT );
+
+
+			_frameLayout = param.operand.expFrameLayout;
+		}
+		else if( EqualAUID( &kAAFFieldDominance, &param.opcode ) )
+		{
+			// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expFieldDominance), AAFRESULT_INVALID_PARM_SIZE);
+
+			// 1 or 2 are valid values
+			checkExpression( param.operand.expFieldDominance == 1 || 
+					    param.operand.expFieldDominance == 2,
+					    AAFRESULT_ILLEGAL_VALUE );
+
+			_fieldDominance = param.operand.expFieldDominance;
+		}
+		else if (EqualAUID(&kAAFStoredRect, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expRect), AAFRESULT_INVALID_PARM_SIZE);
 			
-			if (EqualAUID(&kAAFNumChannels, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expInt32), AAFRESULT_INVALID_PARM_SIZE);
-				// We only support a single channel.
-				checkExpression(1 == param.operand.expInt32, AAFRESULT_CODEC_CHANNELS);
-			}
-			else if (EqualAUID(&kAAFVideoLineMap, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expVideoLineMap), AAFRESULT_INVALID_PARM_SIZE);
-				_videoLineMap[0] = param.operand.expVideoLineMap[0];
-				_videoLineMap[1] = param.operand.expVideoLineMap[1];
-			}
-			else if (EqualAUID(&kAAFStoredRect, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expRect), AAFRESULT_INVALID_PARM_SIZE);
-				
-				_storedWidth = param.operand.expRect.xSize;
-				_storedHeight = param.operand.expRect.ySize;
-				_imageWidth = _storedWidth;
-				_imageHeight = _storedHeight;
-			}
-			else if (EqualAUID(&kAAFSampledRect, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expRect), AAFRESULT_INVALID_PARM_SIZE);
-				
-				_sampledXOffset = param.operand.expRect.xOffset;
-				_sampledYOffset = param.operand.expRect.yOffset;
-				_sampledHeight = param.operand.expRect.ySize;
-				_sampledWidth = param.operand.expRect.xSize;
-				_sampledHeight = param.operand.expRect.ySize;
-			}
-			else if (EqualAUID(&kAAFDisplayRect, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expRect), AAFRESULT_INVALID_PARM_SIZE);
-				
-				_displayXOffset = param.operand.expRect.xOffset;
-				_displayYOffset = param.operand.expRect.yOffset;
-				_displayHeight = param.operand.expRect.ySize;
-				_displayWidth = param.operand.expRect.xSize;
-				_displayHeight = param.operand.expRect.ySize;
-			}
-			else if (EqualAUID(&kAAFAspectRatio, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expRational), AAFRESULT_INVALID_PARM_SIZE);
-				
-				_imageAspectRatio = param.operand.expRational;
-			}
-			else if (EqualAUID(&kAAFPixelFormat, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expColorSpace), AAFRESULT_INVALID_PARM_SIZE);
+			_storedWidth = param.operand.expRect.xSize;
+			_storedHeight = param.operand.expRect.ySize;
+			_imageWidth = _storedWidth;
+			_imageHeight = _storedHeight;
+		}
+		else if (EqualAUID(&kAAFSampledRect, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expRect), AAFRESULT_INVALID_PARM_SIZE);
+			
+			_sampledXOffset = param.operand.expRect.xOffset;
+			_sampledYOffset = param.operand.expRect.yOffset;
+			_sampledHeight = param.operand.expRect.ySize;
+			_sampledWidth = param.operand.expRect.xSize;
+			_sampledHeight = param.operand.expRect.ySize;
+		}
+		else if (EqualAUID(&kAAFDisplayRect, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expRect), AAFRESULT_INVALID_PARM_SIZE);
+			
+			_displayXOffset = param.operand.expRect.xOffset;
+			_displayYOffset = param.operand.expRect.yOffset;
+			_displayHeight = param.operand.expRect.ySize;
+			_displayWidth = param.operand.expRect.xSize;
+			_displayHeight = param.operand.expRect.ySize;
+		}
+		else if (EqualAUID(&kAAFAspectRatio, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expRational), AAFRESULT_INVALID_PARM_SIZE);
 
-				// Currently we only support the following pixel transformations.
-				checkExpression(kAAFColorSpaceRGB == param.operand.expColorSpace ||
-					              kAAFColorSpaceYUV == param.operand.expColorSpace,
-					              AAFRESULT_BADPIXFORM);
+			_imageAspectRatio = param.operand.expRational;
+		}
+		else if( EqualAUID( &kAAFAlphaTransparency, &param.opcode ) )
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expAlphaTransparency), AAFRESULT_INVALID_PARM_SIZE);
 
-				_pixelFormat = param.operand.expColorSpace;
-			}
-			else if (EqualAUID(&kAAFCDCICompWidth, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expInt16), AAFRESULT_INVALID_PARM_SIZE);
-				
-				// We currently only support 8 bit components...
-				_componentWidth = param.operand.expInt16;
-			}
-			else if (EqualAUID(&kAAFCDCIColorSiting, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expColorSiting), AAFRESULT_INVALID_PARM_SIZE);
-				
-				// We currently only support 8 bit components...
-				_colorSiting = param.operand.expColorSiting;
-			}
-			else if (EqualAUID(&kAAFCDCIBlackLevel, &param.opcode))
-			{	// Validate the in-memory size.
-				::GetFormatParam(param, _blackReferenceLevel);
-			}
-			else if (EqualAUID(&kAAFCDCIWhiteLevel, &param.opcode))
-			{	// Validate the in-memory size.
-				::GetFormatParam(param, _whiteReferenceLevel);
-			}
-			else if (EqualAUID(&kAAFCDCIColorRange, &param.opcode))
-			{	// Validate the in-memory size.
-				::GetFormatParam(param, _colorRange);
-			}
-			else if (EqualAUID(&kAAFPadBytesPerRow, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expUInt16), AAFRESULT_INVALID_PARM_SIZE);
-				_padBytesPerRow = param.operand.expUInt16;
-			}
-			else if (EqualAUID(&kAAFCDCIClientFillStart, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expUInt16), AAFRESULT_INVALID_PARM_SIZE);
-				_clientFillStart = param.operand.expUInt16;
-			}
-			else if (EqualAUID(&kAAFCDCIClientFillEnd, &param.opcode))
-			{	// Validate the in-memory size.
-				checkExpression(param.size == sizeof(param.operand.expUInt16), AAFRESULT_INVALID_PARM_SIZE);
-				_clientFillEnd = param.operand.expUInt16;
-			}		
-		} // for (i = 0...)
+		    // kAAFMinValueTransparent or kAAFMaxValueTransparent are valid values
+		    checkExpression( param.operand.expAlphaTransparency == kAAFMinValueTransparent || 
+					param.operand.expAlphaTransparency == kAAFMaxValueTransparent,
+					AAFRESULT_ILLEGAL_VALUE );
+
+		    _alphaTransparency = param.operand.expAlphaTransparency;
+		}
+		else if( EqualAUID( &kAAFGamma, &param.opcode ) )
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expUID), AAFRESULT_INVALID_PARM_SIZE);
+
+		    _gamma = param.operand.expUID;
+		}
+		else if( EqualAUID( &kAAFImageAlignmentFactor, &param.opcode ) )
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+		    _imageAlignmentFactor = param.operand.expUInt32;
+		}
+		else if (EqualAUID(&kAAFVideoLineMap, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expVideoLineMap), AAFRESULT_INVALID_PARM_SIZE);
+			_videoLineMap[0] = param.operand.expVideoLineMap[0];
+			_videoLineMap[1] = param.operand.expVideoLineMap[1];
+		}
+		else if (EqualAUID(&kAAFCDCICompWidth, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+			// 8, 10 or 16 are valid values
+			checkExpression( param.operand.expUInt32 == 8 || 
+					 param.operand.expUInt32 == 10 ||
+					 param.operand.expUInt32 == 16, AAFRESULT_ILLEGAL_VALUE );
+
+			_componentWidth = param.operand.expUInt32;
+		}
+		else if( EqualAUID( &kAAFCDCIHorizSubsampling, &param.opcode ) )
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+		    // 1 or 2 are valid values
+		    checkExpression( param.operand.expUInt32 == 1 || param.operand.expUInt32 == 2,
+					AAFRESULT_BADPIXFORM );
+
+		    _horizontalSubsampling = param.operand.expUInt32;
+		}
+		else if (EqualAUID(&kAAFCDCIColorSiting, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expColorSiting), AAFRESULT_INVALID_PARM_SIZE);
+			
+			// 0, 1 or 2 are valid values
+			checkExpression( param.operand.expColorSiting == 0 || 
+					 param.operand.expColorSiting == 1 ||
+					 param.operand.expColorSiting == 2, AAFRESULT_ILLEGAL_VALUE );
+
+			// We currently only support 8 bit components...
+			_colorSiting = param.operand.expColorSiting;
+		}
+		else if (EqualAUID(&kAAFCDCIBlackLevel, &param.opcode))
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+		    _blackReferenceLevel = param.operand.expUInt32;
+		}
+		else if (EqualAUID(&kAAFCDCIWhiteLevel, &param.opcode))
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+		    _whiteReferenceLevel = param.operand.expUInt32;
+		}
+		else if (EqualAUID(&kAAFCDCIColorRange, &param.opcode))
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+		    _colorRange = param.operand.expUInt32;
+		}
+		else if( EqualAUID( &kAAFCDCIPadBits, &param.opcode ) )
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expInt16), AAFRESULT_INVALID_PARM_SIZE);
+
+		    _paddingBits = param.operand.expInt16;
+		}
+		else if (EqualAUID(&kAAFPadBytesPerRow, &param.opcode))
+		{	// Validate the in-memory size.
+			checkExpression(param.size == sizeof(param.operand.expUInt16), AAFRESULT_INVALID_PARM_SIZE);
+
+			_padBytesPerRow = param.operand.expUInt16;
+		}
+		else if( EqualAUID( &kAAFFieldStartOffset, &param.opcode ) )
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+		    _fieldStartOffset = param.operand.expUInt32;
+		}
+		else if( EqualAUID( &kAAFFieldEndOffset, &param.opcode ) )
+		{
+		    // Validate the in-memory size.
+		    checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
+
+		    _fieldEndOffset = param.operand.expUInt32;
+		}
+		else if (EqualAUID( &kAAFSampleRate, &param.opcode ) )
+		{
+			// Validate the in-memory size.
+			checkExpression( param.size == sizeof(param.operand.expRational), AAFRESULT_INVALID_PARM_SIZE);
+			_sampleRate = param.operand.expRational;
+		}
+		// Below are parameters which are accessible for client to read 
+		// but not to modify. Some of them are constant for this codec
+		// (like kAAFNumChannels), some are calculated values like 
+		// kAAFMaxSampleBytes.
+		// This implementation ignores them.
+		else if( EqualAUID( &kAAFNumChannels, &param.opcode ) ||
+			 EqualAUID( &kAAFPixelSize, &param.opcode ) ||
+			 EqualAUID( &kAAFMaxSampleBytes, &param.opcode ) ||
+			 EqualAUID( &kAAFWillTransferLines, &param.opcode ) ||
+			 EqualAUID( &kAAFIsCompressed, &param.opcode ) )
+		{
+		    // Do nothing
+		}
+		else
+		    throw HRESULT( AAFRESULT_ILLEGAL_FILEFMT );
 
 		
-		if (horizontalSubsampling != _horizontalSubsampling)
-			_horizontalSubsampling = horizontalSubsampling;
+	} // for (i = 0...)
 
-		UpdateCalculatedData();
+	
+	UpdateCalculatedData();
 
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
+    }
+    catch (HRESULT& rhr)
+    {
+	    hr = rhr; // return thrown error code.
+    }
+    catch (...)
+    {
+	    // We CANNOT throw an exception out of a COM interface method!
+	    // Return a reasonable exception code.
+	    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
 
-	// Cleanup
+    // Cleanup
 
-	return hr;
+    return hr;
 }
 
 
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::GetEssenceFormat (IAAFEssenceFormat *pTemplate, IAAFEssenceFormat **pResult)
+
+HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetEssenceFormat(
+	IAAFEssenceFormat	*pTemplate,
+	IAAFEssenceFormat	**pResult)
 {
-	HRESULT hr = S_OK;
-	IAAFEssenceFormat	*fmt = NULL;
-	aafInt32 numSpecifiers, i;
-	aafEssenceFormatData_t param;
+    HRESULT			hr = S_OK;
+    IAAFEssenceFormat		*p_fmt = NULL;
+    aafInt32			numSpecifiers;
+    aafInt32			i;
+    aafEssenceFormatData_t	param;
 
-	if (NULL == pTemplate || NULL == pResult)
-		return AAFRESULT_NULL_PARAM;
 
-	// Initialize out parameter in case of failure.
-	*pResult = NULL;
+    if( NULL == pTemplate || NULL == pResult )
+	return AAFRESULT_NULL_PARAM;
 
-	try
+    // Initialize out parameter in case of failure.
+    *pResult = NULL;
+
+    try
+    {
+	// Start with an "empty" file format specifier.
+	checkResult( _access->GetEmptyFileFormat( &p_fmt ) );
+	
+	checkResult( pTemplate->NumFormatSpecifiers( &numSpecifiers ) );
+
+	// Use the data in the given template to create and initialize
+	// a corresponding data from the codec.
+	for( i=0; i<numSpecifiers; i++ )
 	{
-		// Start with an "empty" file format specifier.
-		checkResult(_access->GetEmptyFileFormat(&fmt));
-		
-		checkResult(pTemplate->NumFormatSpecifiers (&numSpecifiers));
-
-		// Use the data in the given template to create and initialize
-		// a corresponding data from the codec.
-		for (i = 0; i < numSpecifiers; ++i)
-		{
-			memset(&param, 0, sizeof(param));
-			checkResult(pTemplate->GetIndexedFormatSpecifier (i, 
-				&param.opcode, sizeof(param.operand.expData), param.operand.expData, &param.size));
+	    memset( &param, 0, sizeof(param) );
+	    checkResult( pTemplate->GetIndexedFormatSpecifier( 
+		i, &param.opcode, sizeof(param.operand.expData), 
+		param.operand.expData, &param.size ) );
 
 
-			if (EqualAUID(&kAAFNumChannels, &param.opcode))
-			{	// We only support a single channel...		
-				param.operand.expInt32 = kDefaultNumCh;
-				checkResult(fmt->AddFormatSpecifier (kAAFNumChannels, sizeof(param.operand), (aafDataBuffer_t)&param.operand));
-			}
-			else if (EqualAUID(&kAAFVideoLineMap, &param.opcode))
-			{	// Write out both values from the video line map. The frameLayout will determine which entries are
-				// valid.
-				param.operand.expVideoLineMap[0] = _videoLineMap[0];
-				param.operand.expVideoLineMap[1] = _videoLineMap[1];
-				checkResult(fmt->AddFormatSpecifier (kAAFVideoLineMap, sizeof(param.operand.expVideoLineMap), (aafDataBuffer_t)&param.operand.expVideoLineMap));
-			}
-			else if (EqualAUID(&kAAFPixelSize, &param.opcode))
-			{	// Write out the current bitsPerPixel (make sure that this has been computed!
-				checkAssertion(0 != _bitsPerPixelAvg);
-				param.operand.expInt16 = _bitsPerPixelAvg;
-				checkResult(fmt->AddFormatSpecifier (kAAFPixelSize, sizeof(param.operand.expInt16), (aafDataBuffer_t)&param.operand.expInt16));
-			}
-			else if (EqualAUID(&kAAFStoredRect, &param.opcode))
-			{	// Write out the current image dimentions for the default stored rectangle.
-				param.operand.expRect.xOffset = param.operand.expRect.yOffset = 0;
-				param.operand.expRect.xSize = _imageWidth;
-				param.operand.expRect.ySize = _imageHeight;
-				checkResult(fmt->AddFormatSpecifier (kAAFStoredRect, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expRect));
-			}
-			else if (EqualAUID(&kAAFSampledRect, &param.opcode))
-			{	// Write out the current sampled rectangle.
-				param.operand.expRect.xOffset = _sampledXOffset;
-				param.operand.expRect.yOffset = _sampledYOffset;
-				param.operand.expRect.xSize = _sampledWidth;
-				param.operand.expRect.ySize = _sampledHeight;
-				checkResult(fmt->AddFormatSpecifier (kAAFSampledRect, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expRect));
-			}
-			else if (EqualAUID(&kAAFDisplayRect, &param.opcode))
-			{	// Write out the current sampled rectangle.
-				param.operand.expRect.xOffset = _displayXOffset;
-				param.operand.expRect.yOffset = _displayYOffset;
-				param.operand.expRect.xSize = _displayWidth;
-				param.operand.expRect.ySize = _displayHeight;
-				checkResult(fmt->AddFormatSpecifier (kAAFDisplayRect, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expRect));
-			}
-			else if (EqualAUID(&kAAFAspectRatio, &param.opcode))
-			{	// Write out the current aspect ratio.				
-				param.operand.expRational = _imageAspectRatio;
-				checkResult(fmt->AddFormatSpecifier (kAAFAspectRatio, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expRational));
-			}
-			else if (EqualAUID(&kAAFCDCICompWidth, &param.opcode))
-			{	// We currently only support 8 bit components...
-				param.operand.expInt16 = (aafInt16)_componentWidth;
-				checkResult(fmt->AddFormatSpecifier (kAAFCDCICompWidth, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expInt16));
-			}
-			else if (EqualAUID(&kAAFCDCIColorSiting, &param.opcode))
-			{	// Write out the current color siting value.
-				param.operand.expColorSiting = _colorSiting;
-				checkResult(fmt->AddFormatSpecifier (kAAFCDCIColorSiting, sizeof(param.operand.expColorSiting), (aafDataBuffer_t)&param.operand.expColorSiting));
-			}
-			else if (EqualAUID(&kAAFCDCIBlackLevel, &param.opcode))
-			{	// Write out the current black reference level.
-				param.operand.expUInt32 = _blackReferenceLevel;
-				checkResult(fmt->AddFormatSpecifier (kAAFCDCIBlackLevel, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
-			}
-			else if (EqualAUID(&kAAFCDCIWhiteLevel, &param.opcode))
-			{	// Write out the current white reference level.
-				param.operand.expUInt32 = _whiteReferenceLevel;
-				checkResult(fmt->AddFormatSpecifier (kAAFCDCIWhiteLevel, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
-			}
-			else if (EqualAUID(&kAAFCDCIColorRange, &param.opcode))
-			{	// Write out the current color range.
-				param.operand.expUInt32 = _colorRange;
-				checkResult(fmt->AddFormatSpecifier (kAAFCDCIColorRange, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
-			}
-			else if (EqualAUID(&kAAFPixelFormat, &param.opcode))
-			{	// Write out the current pixel format.
-				param.operand.expColorSpace = _pixelFormat;
-				checkResult(fmt->AddFormatSpecifier (kAAFPixelFormat, sizeof(param.operand.expColorSpace), (aafDataBuffer_t)&param.operand.expColorSpace));
-			}
-			else if (EqualAUID(&kAAFRGBCompLayout, &param.opcode) && kAAFColorSpaceRGB ==_pixelFormat)
-			{	// Default to standard component order.
-				param.operand.expCompArray[0] = 'R';
-				param.operand.expCompArray[1] = 'G';
-				param.operand.expCompArray[2] = 'B';
-				param.operand.expCompArray[3] = 0;
-				checkResult(fmt->AddFormatSpecifier (kAAFRGBCompLayout, sizeof(param.operand.expCompArray), (aafDataBuffer_t)&param.operand.expCompArray));
-			}
-			else if (EqualAUID(&kAAFRGBCompSizes, &param.opcode) && kAAFColorSpaceRGB ==_pixelFormat)
-			{	// Default to standard component order.
-				param.operand.expCompSizeArray[0] = 8;
-				param.operand.expCompSizeArray[1] = 8;
-				param.operand.expCompSizeArray[2] = 8;
-				param.operand.expCompSizeArray[3] = 0;
-				checkResult(fmt->AddFormatSpecifier (kAAFRGBCompSizes, sizeof(param.operand.expCompSizeArray), (aafDataBuffer_t)&param.operand.expCompSizeArray));
-			}
-			else if (EqualAUID(&kAAFPadBytesPerRow, &param.opcode))
-			{	// Write out the current pad bytes per row.
-				param.operand.expUInt16 = _padBytesPerRow;
-				checkResult(fmt->AddFormatSpecifier (kAAFPadBytesPerRow, sizeof(param.operand.expUInt16), (aafDataBuffer_t)&param.operand.expUInt16));
-			}
-			else
-			{	// The given opcode was not handled!
-				throw HRESULT(AAFRESULT_INVALID_OP_CODEC);
-			}
-		}
+	    if( EqualAUID( &kAAFPixelFormat, &param.opcode ) )
+	    {
+		// Write out the current pixel format.
+		param.operand.expColorSpace = _pixelFormat;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFPixelFormat, param.operand.expColorSpace ) );
+	    }
+	    else if( EqualAUID( &kAAFFrameLayout, &param.opcode ) )
+	    {
+		// Write out the current framelayout.
+		param.operand.expFrameLayout = _frameLayout;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFFrameLayout, param.operand.expFrameLayout ) );
+	    }
+	    else if( EqualAUID( &kAAFFieldDominance, &param.opcode ) )
+	    {
+		// Write out the current framelayout.
+		param.operand.expFieldDominance = _fieldDominance;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFFieldDominance, param.operand.expFieldDominance ));
+	    }
+	    else if( EqualAUID( &kAAFStoredRect, &param.opcode ) )
+	    {
+		// Write out the current image dimentions for 
+		// the default stored rectangle.
+		param.operand.expRect.xOffset = 0;
+		param.operand.expRect.yOffset = 0;
+		param.operand.expRect.xSize = _storedWidth;
+		param.operand.expRect.ySize = _storedHeight;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFStoredRect, param.operand.expRect ));
+	    }
+	    else if( EqualAUID( &kAAFSampledRect, &param.opcode ) )
+	    {
+		// Write out the current sampled rectangle.
+		param.operand.expRect.xOffset = _sampledXOffset;
+		param.operand.expRect.yOffset = _sampledYOffset;
+		param.operand.expRect.xSize = _sampledWidth;
+		param.operand.expRect.ySize = _sampledHeight;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFSampledRect, param.operand.expRect ));
+	    }
+	    else if( EqualAUID( &kAAFDisplayRect, &param.opcode ) )
+	    {
+		// Write out the current displayed rectangle.
+		param.operand.expRect.xOffset = _displayXOffset;
+		param.operand.expRect.yOffset = _displayYOffset;
+		param.operand.expRect.xSize = _displayWidth;
+		param.operand.expRect.ySize = _displayHeight;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFDisplayRect, param.operand.expRect ) );
+	    }
+	    else if( EqualAUID( &kAAFPixelSize, &param.opcode ) )
+	    {
+		/// Write out the current bitsPerPixel 
+		// (make sure that this has been computed!
+		checkAssertion( _bitsPerPixelAvg != 0 );
+		param.operand.expInt16 = _bitsPerPixelAvg;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFPixelSize, param.operand.expInt16 ) );
+	    }
+	    else if( EqualAUID( &kAAFAspectRatio, &param.opcode ) )
+	    {
+		// Write out the current aspect ratio.
+		param.operand.expRational = _imageAspectRatio;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFAspectRatio, param.operand.expRational ) );
+	    }
+	    else if( EqualAUID( &kAAFAlphaTransparency, &param.opcode ) )
+	    {
+		// Write out the current alpha transparency.
+		param.operand.expAlphaTransparency = _alphaTransparency;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFAlphaTransparency, 
+		    param.operand.expAlphaTransparency ) );
+	    }
+	    else if( EqualAUID( &kAAFGamma, &param.opcode ) )
+	    {
+		// Write out the current gamma value.
+		param.operand.expUID = _gamma;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFGamma, param.operand.expUID ) );
+	    }
+	    else if( EqualAUID( &kAAFImageAlignmentFactor, &param.opcode ) )
+	    {
+		// Write out the current alignment.
+		param.operand.expUInt32 = _imageAlignmentFactor;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFImageAlignmentFactor, param.operand.expUInt32 ) );
+	    }
+	    else if( EqualAUID( &kAAFVideoLineMap, &param.opcode ) )
+	    {
+		// Write out both values from the video line map. 
+		// The frameLayout will determine which entries are valid.
+		param.operand.expVideoLineMap[0] = _videoLineMap[0];
+		param.operand.expVideoLineMap[1] = _videoLineMap[1];
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFVideoLineMap, param.operand.expVideoLineMap ) );
+	    }
+	    else if( EqualAUID( &kAAFWillTransferLines, &param.opcode ) )
+	    {
+		// CDCI codec does not transfer separate lines.
+		param.operand.expBoolean = kAAFFalse;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFWillTransferLines, param.operand.expBoolean ) );
+	    }
+	    else if( EqualAUID( &kAAFIsCompressed, &param.opcode ) )
+	    {
+		// CDCI codec does not handle compressed data.
+		param.operand.expBoolean = kAAFFalse;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFIsCompressed, param.operand.expBoolean ) );
+	    }
+	    else if( EqualAUID( &kAAFCDCICompWidth, &param.opcode ) )
+	    {
+		param.operand.expUInt32 = _componentWidth;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCICompWidth, param.operand.expUInt32 ) );
+	    }
+	    else if( EqualAUID( &kAAFCDCIHorizSubsampling, &param.opcode ) )
+	    {
+		param.operand.expUInt32 = _horizontalSubsampling;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIHorizSubsampling, param.operand.expUInt32 ) );
+	    }
+	    else if( EqualAUID( &kAAFCDCIColorSiting, &param.opcode ) )
+	    {
+		// Write out the current color siting value.
+		param.operand.expColorSiting = _colorSiting;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIColorSiting, param.operand.expColorSiting ) );
+	    }
+	    else if( EqualAUID( &kAAFCDCIBlackLevel, &param.opcode ) )
+	    {
+		// Write out the current black reference level.
+		param.operand.expUInt32 = _blackReferenceLevel;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIBlackLevel, param.operand.expUInt32));
+	    }
+	    else if( EqualAUID( &kAAFCDCIWhiteLevel, &param.opcode ) )
+	    {
+		// Write out the current white reference level.
+		param.operand.expUInt32 = _whiteReferenceLevel;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIWhiteLevel, param.operand.expUInt32));
+	    }
+	    else if( EqualAUID( &kAAFCDCIColorRange, &param.opcode ) )
+	    {
+		// Write out the current color range.
+		param.operand.expUInt32 = _colorRange;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIColorRange, param.operand.expUInt32 ) );
+	    }
+	    else if( EqualAUID( &kAAFCDCIPadBits, &param.opcode ) )
+	    {
+		// Write out the current padding bits value.
+		param.operand.expInt16 = _paddingBits;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIPadBits, param.operand.expInt16 ) );
+	    }
+	    else if( EqualAUID( &kAAFFieldStartOffset, &param.opcode ) )
+	    {
+		param.operand.expUInt32 = _fieldStartOffset;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFFieldStartOffset, param.operand.expUInt32 ) );
+	    }
+	    else if( EqualAUID( &kAAFFieldEndOffset, &param.opcode ) )
+	    {
+		param.operand.expUInt32 = _fieldEndOffset;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFFieldEndOffset, param.operand.expUInt32 ) );
+	    }
+	    else if( EqualAUID( &kAAFPadBytesPerRow, &param.opcode ) )
+	    {
+		// Write out the current pad bytes per row.
+		param.operand.expUInt16 = _padBytesPerRow;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFPadBytesPerRow, param.operand.expUInt16 ) );
+	    }
+	    else if( EqualAUID( &kAAFMaxSampleBytes, &param.opcode ) )
+	    {
+		// Write out the sample size.
+		param.operand.expUInt32 = _fileBytesPerSample;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFMaxSampleBytes, param.operand.expUInt32 ) );
+	    }
+	    else if( EqualAUID( &kAAFSampleRate, &param.opcode ) )
+	    {
+		// Write out the current sample rate value.
+		param.operand.expRational = _sampleRate;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFSampleRate, param.operand.expRational ) );
+	    }
+	    else if( EqualAUID( &kAAFNumChannels, &param.opcode ) )
+	    {
+		/// We only support a single channel...
+		param.operand.expUInt32 = kDefaultNumCh;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFNumChannels, param.operand.expUInt32 ) );
+	    }
+	    else
+	    {	
+		// The given opcode was not handled!
+		throw HRESULT(AAFRESULT_INVALID_OP_CODEC);
+	    }
 
 
-		// If the format specifier has been completely initialized
-		// then return this value to the caller (clear local variable
-		// so that we don't perform an extra release).
-		*pResult = fmt;
-		fmt = NULL;
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
+	}  // for(i)
 
-	// Cleanup
-	if (NULL != fmt) // should delete the object on failure
-		fmt->Release();
 
-	return hr;
+	// If the format specifier has been completely initialized
+	// then return this value to the caller (clear local variable
+	// so that we don't perform an extra release).
+	*pResult = p_fmt;
+	p_fmt = NULL;
+    }
+    catch (HRESULT& rhr)
+    {
+	hr = rhr; // return thrown error code.
+    }
+    catch (...)
+    {
+	// We CANNOT throw an exception out of a COM interface method!
+	// Return a reasonable exception code.
+	hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+    }
+
+
+    // Cleanup
+    if (NULL != p_fmt) // should delete the object on failure
+	p_fmt->Release();
+
+
+
+    return hr;
+
 }
 
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetDefaultEssenceFormat(IAAFEssenceFormat **pResult)
 {
-	HRESULT hr = S_OK;
-	IAAFEssenceFormat	*fmt = NULL;
-	aafEssenceFormatData_t param;
+	HRESULT			hr = S_OK;
+	IAAFEssenceFormat	*p_fmt = NULL;
+	aafEssenceFormatData_t	param;
 
 	
 	if (NULL == pResult)
 		return AAFRESULT_NULL_PARAM;
 
+
 	// Initialize out parameter in case of failure.
 	*pResult = NULL;
+
+
 
 	try
 	{
 		// Start with an "empty" file format specifier.
-		checkResult(_access->GetEmptyFileFormat(&fmt));
+		checkResult( _access->GetEmptyFileFormat( &p_fmt ) );
 		
-		// This codec only handles a single channel of Picture data.
-		param.operand.expInt32 = kDefaultNumCh;
-		checkResult(fmt->AddFormatSpecifier (kAAFNumChannels, sizeof(param.operand), (aafDataBuffer_t)&param.operand));
-		
-		// Write the frameLayout as its enum type and size.
-		param.operand.expFrameLayout = _frameLayout;
-		checkResult(fmt->AddFormatSpecifier (kAAFFrameLayout, sizeof(param.operand.expFrameLayout), (aafDataBuffer_t)&param.operand.expFrameLayout));
 
-		// Write out both values from the video line map. The frameLayout will determine which entries are
-		// valid.
+		// Write out the current pixel format.
+		param.operand.expColorSpace = _pixelFormat;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFPixelFormat, param.operand.expColorSpace ) );
+
+		// Write out the current framelayout.
+		param.operand.expFrameLayout = _frameLayout;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFFrameLayout, param.operand.expFrameLayout ) );
+
+		// Write out the current framelayout.
+		param.operand.expFieldDominance = _fieldDominance;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFFieldDominance, param.operand.expFieldDominance ));
+
+		// Write out the current image dimentions for 
+		// the default stored rectangle.
+		param.operand.expRect.xOffset = 0;
+		param.operand.expRect.yOffset = 0;
+		param.operand.expRect.xSize = _storedWidth;
+		param.operand.expRect.ySize = _storedHeight;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFStoredRect, param.operand.expRect ));
+
+		// Write out the current sampled rectangle.
+		param.operand.expRect.xOffset = _sampledXOffset;
+		param.operand.expRect.yOffset = _sampledYOffset;
+		param.operand.expRect.xSize = _sampledWidth;
+		param.operand.expRect.ySize = _sampledHeight;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFSampledRect, param.operand.expRect ));
+
+		// Write out the current displayed rectangle.
+		param.operand.expRect.xOffset = _displayXOffset;
+		param.operand.expRect.yOffset = _displayYOffset;
+		param.operand.expRect.xSize = _displayWidth;
+		param.operand.expRect.ySize = _displayHeight;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFDisplayRect, param.operand.expRect ) );
+
+		/// Write out the current bitsPerPixel 
+		// (make sure that this has been computed!
+		checkAssertion( _bitsPerPixelAvg != 0 );
+		param.operand.expInt16 = _bitsPerPixelAvg;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFPixelSize, param.operand.expInt16 ) );
+
+		// Write out the current aspect ratio.
+		param.operand.expRational = _imageAspectRatio;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFAspectRatio, param.operand.expRational ) );
+
+		// Write out the current alpha transparency.
+		param.operand.expAlphaTransparency = _alphaTransparency;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFAlphaTransparency, 
+		    param.operand.expAlphaTransparency ) );
+
+		// Write out the current gamma value.
+		param.operand.expUID = _gamma;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFGamma, param.operand.expUID ) );
+
+		// Write out the current alignment.
+		param.operand.expUInt32 = _imageAlignmentFactor;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFImageAlignmentFactor, param.operand.expUInt32 ) );
+
+		// Write out both values from the video line map. 
+		// The frameLayout will determine which entries are valid.
 		param.operand.expVideoLineMap[0] = _videoLineMap[0];
 		param.operand.expVideoLineMap[1] = _videoLineMap[1];
-		checkResult(fmt->AddFormatSpecifier (kAAFVideoLineMap, sizeof(param.operand.expVideoLineMap), (aafDataBuffer_t)&param.operand.expVideoLineMap));
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFVideoLineMap, param.operand.expVideoLineMap ) );
 
-		// Write out the current bitsPerPixel (make sure that this has been computed!
-		checkAssertion(0 != _bitsPerPixelAvg);
-		param.operand.expInt16 = _bitsPerPixelAvg;
-		checkResult(fmt->AddFormatSpecifier (kAAFPixelSize, sizeof(param.operand.expInt16), (aafDataBuffer_t)&param.operand.expInt16));
+		// CDCI codec does not transfer separate lines.
+		param.operand.expBoolean = kAAFFalse;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFWillTransferLines, param.operand.expBoolean ) );
 
-		// Write out the current image dimentions for the default stored rectangle.
-		param.operand.expRect.xOffset = param.operand.expRect.yOffset = 0;
-		param.operand.expRect.xSize = _imageWidth;
-		param.operand.expRect.ySize = _imageWidth;
-		checkResult(fmt->AddFormatSpecifier (kAAFStoredRect, sizeof(param.operand.expRect), (aafDataBuffer_t)&param.operand.expRect));
+		// CDCI codec does not handle compressed data.
+		param.operand.expBoolean = kAAFFalse;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFIsCompressed, param.operand.expBoolean ) );
 
-		
-		// Write out the current component width.
-		param.operand.expInt16 = (aafInt16)_componentWidth;
-		checkResult(fmt->AddFormatSpecifier (kAAFCDCICompWidth, sizeof(param.operand.expInt16), (aafDataBuffer_t)&param.operand.expInt16));
+		param.operand.expUInt32 = _componentWidth;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCICompWidth, param.operand.expUInt32 ) );
 
+		param.operand.expUInt32 = _horizontalSubsampling;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIHorizSubsampling, param.operand.expUInt32 ) );
 
-		// Set the sample format and color space and component order and size.
-		// Initially use the same setup as omcCDCI.c...
-		//
-		if ((kAAFCompressionEnable == _compressEnable) && (kAAFColorSpaceRGB == _pixelFormat))
-		{
-			param.operand.expColorSpace = kAAFColorSpaceRGB;
-			checkResult(fmt->AddFormatSpecifier (kAAFPixelFormat,  sizeof(param.operand.expColorSpace), (aafDataBuffer_t)&param.operand.expColorSpace));
+		// Write out the current color siting value.
+		param.operand.expColorSiting = _colorSiting;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIColorSiting, param.operand.expColorSiting ) );
 
-			// Default to standard component order.
-			param.operand.expCompArray[0] = 'R';
-			param.operand.expCompArray[1] = 'G';
-			param.operand.expCompArray[2] = 'B';
-			param.operand.expCompArray[3] = 0;
-			checkResult(fmt->AddFormatSpecifier (kAAFRGBCompLayout, sizeof(param.operand.expCompArray), (aafDataBuffer_t)param.operand.expCompArray));
-				
-			// We currently only support an 8 bit component width in software.
-			param.operand.expCompSizeArray[0] = 8;
-			param.operand.expCompSizeArray[1] = 8;
-			param.operand.expCompSizeArray[2] = 8;
-			param.operand.expCompSizeArray[3] = 0;
-			checkResult(fmt->AddFormatSpecifier (kAAFRGBCompSizes, sizeof(param.operand.expCompSizeArray), (aafDataBuffer_t)param.operand.expCompSizeArray));
-		}
-		else
-		{
-			param.operand.expColorSpace = kAAFColorSpaceYUV;
-			checkResult(fmt->AddFormatSpecifier (kAAFPixelFormat, sizeof(param.operand.expColorSpace), (aafDataBuffer_t)&param.operand.expColorSpace)); 
-		}
+		// Write out the current black reference level.
+		param.operand.expUInt32 = _blackReferenceLevel;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIBlackLevel, param.operand.expUInt32));
 
+		// Write out the current white reference level.
+		param.operand.expUInt32 = _whiteReferenceLevel;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIWhiteLevel, param.operand.expUInt32));
+
+		// Write out the current color range.
+		param.operand.expUInt32 = _colorRange;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIColorRange, param.operand.expUInt32 ) );
+
+		// Write out the current padding bits value.
+		param.operand.expInt16 = _paddingBits;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFCDCIPadBits, param.operand.expInt16 ) );
+
+		param.operand.expUInt32 = _fieldStartOffset;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFFieldStartOffset, param.operand.expUInt32 ) );
+
+		param.operand.expUInt32 = _fieldEndOffset;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFFieldEndOffset, param.operand.expUInt32 ) );
+
+		// Write out the current pad bytes per row.
+		param.operand.expUInt16 = _padBytesPerRow;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFPadBytesPerRow, param.operand.expUInt16 ) );
+
+		// Write out the sample size.
+		param.operand.expUInt32 = _fileBytesPerSample;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFMaxSampleBytes, param.operand.expUInt32 ) );
+
+		// Write out the current sample rate value.
+		param.operand.expRational = _sampleRate;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFSampleRate, param.operand.expRational ) );
+
+		/// We only support a single channel...
+		param.operand.expUInt32 = kDefaultNumCh;
+		checkResult( ADD_FORMAT_SPECIFIER( 
+		    p_fmt, kAAFNumChannels, param.operand.expUInt32 ) );
 
 		// If the format specifier has been completely initialized
 		// then return this value to the caller (clear local variable
 		// so that we don't perform an extra release).
-		*pResult = fmt;
-		fmt = NULL;
+		*pResult = p_fmt;
+		p_fmt = NULL;
 	}
 	catch (HRESULT& rhr)
 	{
@@ -2192,9 +2302,11 @@ HRESULT STDMETHODCALLTYPE
 		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
 	}
 
+
 	// Cleanup
-	if (NULL != fmt) // should delete the object on failure
-		fmt->Release();
+	if (NULL != p_fmt) // should delete the object on failure
+		p_fmt->Release();
+
 
 	return hr;
 }
@@ -2221,55 +2333,27 @@ HRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::GetIndexedSampleSize (aafUID_constref dataDefID,
-										 aafPosition_t pos,
-										 aafLength_t *pResult)
+HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetIndexedSampleSize (
+    aafUID_constref	dataDefID,
+    aafPosition_t	pos,
+    aafLength_t		*pResult)
 {
-	HRESULT hr = S_OK;
-
-
-	if (NULL == pResult)
-		return AAFRESULT_NULL_PARAM;
 	if(pos < 0 || pos > _numberOfSamples) // zero based sample index.
 		return AAFRESULT_EOF;
 
-	// Initialize the return value.
-	*pResult = 0;
 
-	try
-	{
-		if(EqualAUID(&dataDefID, &DDEF_Picture))
-		{
-			// The samples will be uncompressed so return the previously
-			// computed value for a single uncompressed sample.
-			*pResult = _fileBytesPerSample;
-		}
-		else
-		{	// We only support picture...
-			return AAFRESULT_CODEC_CHANNELS;
-		}
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
-
-	// Cleanup
-	return hr;
+	// All samlples are the same... 
+	return GetLargestSampleSize( dataDefID, pResult );
 }
 
-HRESULT STDMETHODCALLTYPE
-    CAAFCDCICodec::GetLargestSampleSize (aafUID_constref dataDefID,
-										 aafLength_t *pResult)
+
+
+HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetLargestSampleSize(
+    aafUID_constref	dataDefID,
+    aafLength_t		*pResult )
 {
-	HRESULT hr = S_OK;
+	HRESULT hr = AAFRESULT_SUCCESS;
+
 
 	if (NULL == pResult)
 		return AAFRESULT_NULL_PARAM;
@@ -2280,16 +2364,13 @@ HRESULT STDMETHODCALLTYPE
 	{
 		if(EqualAUID(&dataDefID, &DDEF_Picture))
 		{ 
-			// The samples will be uncompressed so return the previously
-			// computed value for a single uncompressed sample.
+			// The samples will be uncompressed so return the 
+			// previously computed value for a single 
+			// uncompressed sample.
 			*pResult = _fileBytesPerSample;
 		}
 		else
-			return AAFRESULT_CODEC_CHANNELS ;
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
+			hr = AAFRESULT_CODEC_CHANNELS;
 	}
 	catch (...)
 	{
@@ -2298,101 +2379,11 @@ HRESULT STDMETHODCALLTYPE
 		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
 	}
 
-	// Cleanup
+
 	return hr;
 }
 
 
-
-
-
-
-
-
-HRESULT CAAFCDCICodec::ReadNumberOfSamples(
-	IAAFEssenceStream *stream,
-	aafLength_t& numberOfSamples)
-{
-	HRESULT hr = S_OK;
-
-	if(NULL == stream)
-		return AAFRESULT_NULL_PARAM;
-
-	
-	try
-	{
-		// assume 64bit integer support
-		aafLength_t streamSize;
-		aafUInt32 bytesRead = 0;
-
-		checkResult(stream->GetLength(&streamSize));
-		// Make sure there is enough room to read the trailer.
-//		checkExpression(streamSize >= kAAFCDCI_MarkerSize, AAFRESULT_NOFRAMEINDEX);
-		
-#if 0
-		// Read and validate the trailer...
-		AAFCDCI_Trailer trailer;
-		memset(&trailer, 0, sizeof(trailer));
-
-		// make sure the last 8 bytes match our expected end marker.
-		offset = streamSize - kAAFCDCI_MarkerSize;
-		checkResult(stream->Seek(offset));
-		checkResult(stream->Read(kAAFCDCI_MarkerSize, trailer.endMarker, &bytesRead));
-		checkAssertion(kAAFCDCI_MarkerSize == bytesRead);
-		checkExpression(0 == memcmp(kAAFCDCI_end, trailer.endMarker, kAAFCDCI_MarkerSize),
-			              AAFRESULT_NOFRAMEINDEX);
-		
-		// Read the 8 bytes size of the trailer. This is always in big-endian just like 
-		// the CDCI stream...
-		offset = streamSize - (kAAFCDCI_MarkerSize + sizeof(aafLength_t));
-		checkResult(stream->Seek(offset));
-		checkResult(stream->Read(sizeof(aafLength_t), (aafDataBuffer_t)&trailer.sizeOfTrailer, &bytesRead));
-		checkAssertion(sizeof(aafLength_t) == bytesRead);
-		// Swap the data if necessary...
-		if (INTEL_ORDER == _nativeByteOrder)
-			AAFByteSwap64((aafInt64 *)&trailer.sizeOfTrailer);
-
-		// Make sure that there are enough bytes in the stream to read the rest of the trailer.
-		checkExpression(streamSize >= trailer.sizeOfTrailer, AAFRESULT_NOFRAMEINDEX);
-		offset = streamSize - trailer.sizeOfTrailer;
-		checkResult(stream->Seek(offset));
-
-		// Read and validate the startMaker...
-		checkResult(stream->Read(kAAFCDCI_MarkerSize, trailer.startMarker, &bytesRead));
-		checkAssertion(kAAFCDCI_MarkerSize == bytesRead);
-		checkExpression(0 == memcmp(kAAFCDCI_start, trailer.startMarker, kAAFCDCI_MarkerSize),
-			              AAFRESULT_NOFRAMEINDEX);
-
-		// Read the numberOfSamples in the sample index.
-		checkResult(stream->Read(sizeof(aafLength_t), (aafDataBuffer_t)&trailer.numberOfSamples, &bytesRead));
-		checkAssertion(sizeof(aafLength_t) == bytesRead);
-		// Swap the data if necessary...
-		if (INTEL_ORDER == _nativeByteOrder)
-			AAFByteSwap64((aafInt64 *)&trailer.numberOfSamples);
-
-		numberOfSamples = trailer.numberOfSamples;
-
-		// Set the position to the end of the essence data so that we 
-		// are ready to read the sample index.
-		offset = streamSize - trailer.sizeOfTrailer;
-		offset -= numberOfSamples * sizeof(aafPosition_t);
-		checkResult(stream->Seek(offset));
-#endif
-	}
-	catch (HRESULT& rhr)
-	{
-		hr = rhr; // return thrown error code.
-	}
-	catch (...)
-	{
-		// We CANNOT throw an exception out of a COM interface method!
-		// Return a reasonable exception code.
-		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
-	}
-
-	// Cleanup
-	return hr;
-}
 
 //
 // COM Infrastructure
@@ -2405,20 +2396,18 @@ HRESULT CAAFCDCICodec::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
-    HRESULT hr = S_OK;
-
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
     // We support the IAAFEssenceCodec interface 
-    if (riid == IID_IAAFEssenceCodec) 
+    if( aafIsEqualIID( riid, IID_IAAFEssenceCodec ) )
     { 
         *ppvObj = (IAAFEssenceCodec *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
-		// and the IAAFPlugin interface.
-    else if (riid == IID_IAAFPlugin) 
+    // and the IAAFPlugin interface.
+    else if( aafIsEqualIID( riid, IID_IAAFPlugin ) )
     { 
         *ppvObj = (IAAFPlugin *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
