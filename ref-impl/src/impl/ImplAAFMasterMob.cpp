@@ -116,7 +116,7 @@ AAFRESULT STDMETHODCALLTYPE
 									 const aafWChar*	pSlotName)
 {
 	aafLength_t	slotLength;
-	aafUID_t	sourceMobID;
+	aafMobID_t	sourceMobID;
 	HRESULT		hr = AAFRESULT_SUCCESS;
 	ImplAAFMobSlot*	pMobSlot;
 	ImplAAFTimelineMobSlot* pTimelineMobSlot = NULL;

@@ -81,7 +81,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFCompositionMob*			pCompMob = NULL;
 	IAAFMob*					pMob = NULL;
 
-	aafUID_t					newMobID;
+	aafMobID_t					newMobID;
 	aafProductIdentification_t	ProductInfo;
 	HRESULT						hr = S_OK;
 

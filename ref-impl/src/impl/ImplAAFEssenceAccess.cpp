@@ -186,7 +186,7 @@ ImplAAFEssenceAccess::Create (ImplAAFMasterMob *    masterMob,
 	IAAFPlugin				*plugin = NULL;
 	IAAFEssenceContainer	*container = NULL;
 	IAAFPlugin				*plug = NULL;
-	aafUID_t			fileMobUID;
+	aafMobID_t			fileMobUID;
 	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
 	AAFRESULT			aafError = AAFRESULT_SUCCESS;
 	ImplAAFDictionary	*dataDict = NULL;
@@ -455,7 +455,8 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFPlugin				*plugin = NULL;
 	IAAFEssenceContainer	*container = NULL;
 	IAAFPlugin				*plug = NULL;
-	aafUID_t				fileMobUID, essenceKind;
+	aafMobID_t				fileMobUID;
+	aafUID_t				essenceKind;
 	aafLength_t				oneLength = CvtInt32toLength(1, oneLength);
 	AAFRESULT				aafError = AAFRESULT_SUCCESS;
 	ImplAAFDictionary		*dataDict = NULL;
@@ -756,7 +757,8 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFLocator			*pLoc = NULL;
 	aafPosition_t	zeroPos;
 	aafInt32		n;
-	aafUID_t		 mediaKind, fileMobID, myFileCLSID;
+	aafUID_t		 mediaKind, myFileCLSID;
+	aafMobID_t		 fileMobID;
 	aafLength_t masterMobLength, one;
 	aafSourceRef_t	fileRef;
 	aafInt16		numCh;
@@ -1094,7 +1096,8 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFLocator			*pLoc = NULL;
 	aafPosition_t	zeroPos;
 	aafInt32		n;
-	aafUID_t		 mediaKind, fileMobID, myFileCLSID;
+	aafUID_t		 mediaKind, myFileCLSID;
+	aafMobID_t		 fileMobID;
 	aafLength_t masterMobLength, one;
 	aafSourceRef_t	fileRef;
 	aafInt16		numCh;
@@ -2669,7 +2672,7 @@ AAFRESULT
 ImplAAFEssenceAccess::CreateFileMob (ImplAAFHeader *       newHead,
 									 aafBool			   addSlots,
 									 aafSlotID_t		   slotID,
-									 const aafUID_t *	   newMobID,
+									 aafMobID_constptr	   newMobID, /* optional */
 									 const aafUID_t &	   mediaKind,
 									 const aafRational_t & editRate,
 									 const aafRational_t & sampleRate,

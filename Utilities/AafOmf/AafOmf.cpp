@@ -67,11 +67,11 @@ namespace OMF2
 #include "EffectTranslate.h"
 
 //#include "AAFUtils.h"
-AAFRESULT aafMobIDNew(aafUID_t *mobID);
-AAFRESULT aafMobIDFromMajorMinor(
-        aafUInt32	major,
-		aafUInt32	minor,
-		aafUID_t *mobID);     /* OUT - Newly created Mob ID */
+//AAFRESULT aafMobIDNew(aafMobID_t *mobID);
+//AAFRESULT aafMobIDFromMajorMinor(
+//        aafUInt32	major,
+//		aafUInt32	minor,
+//		aafMobID_t *mobID);     /* OUT - Newly created Mob ID */
 
 
 // ============================================================================
@@ -122,6 +122,17 @@ void AUIDtoString(aafUID_t *uid, char *buf)
 			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
 			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
 }
+
+void MobIDtoString(aafMobID_t *mobID, char *buf)
+{
+	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
+			mobID->Data1, mobID->Data2, mobID->Data3, (int)mobID->Data4[0],
+			(int)mobID->Data4[1], (int)mobID->Data4[2], (int)mobID->Data4[3], (int)mobID->Data4[4],
+			(int)mobID->Data4[5], (int)mobID->Data4[6], (int)mobID->Data4[7]);
+}
+
+
+
 struct SMPTELabel
 {
 	aafUInt32	MobIDMajor;
@@ -137,14 +148,14 @@ struct SMPTELabel
 
 union label
 {
-	aafUID_t			guid;
+	aafMobID_t			mobID;
 	struct SMPTELabel	smpte;
 };
 
 AAFRESULT aafMobIDFromMajorMinor(
         aafUInt32	major,
 		aafUInt32	minor,
-		aafUID_t *mobID)     /* OUT - Newly created Mob ID */
+		aafMobID_t *mobID)     /* OUT - Newly created Mob ID */
 {
 	union label		aLabel;
 	
@@ -159,7 +170,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 	aLabel.smpte.MobIDMajor = major;
 	aLabel.smpte.MobIDMinor = minor;
 
-	*mobID = aLabel.guid;
+	*mobID = aLabel.mobID;
 	return(AAFRESULT_SUCCESS);
 }
 

@@ -596,7 +596,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFSequenceSP   pSequence;
   IAAFSegmentSP    pSegment;
   IAAFComponentSP  pComponent;
-  aafUID_t         NewMobID;
+  aafMobID_t         NewMobID;
   int              i;
   HRESULT          hr = S_OK;
 	

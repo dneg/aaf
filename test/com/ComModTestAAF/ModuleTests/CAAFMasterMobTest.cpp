@@ -50,7 +50,7 @@ static aafVideoSignalType_t VideoSignalType = kPALSignal;
 static aafTapeFormatType_t TapeFormat = kVHSFormat;
 static aafLength_t TapeLength = 3200 ;
 
-static GUID		NewMobID;	// NOTE: this should really be aafUID_t, but problems w/ IsEqualGUID()
+static aafMobID_t		NewMobID;
 #define TAPE_MOB_OFFSET	10
 #define TAPE_MOB_LENGTH	60
 #define TAPE_MOB_NAME	L"A Tape Mob"
@@ -152,7 +152,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	HRESULT			hr = S_OK;
 	long			test;
 	aafSourceRef_t	ref;
-	aafUID_t		tapeMobID;
+	aafMobID_t		tapeMobID;
 	IAAFEssenceDescriptor*		pEssDesc = NULL;
 	IAAFTapeDescriptor*			pTapeDesc = NULL;
 
@@ -178,9 +178,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Set the IAAFMob properties
 		checkResult(CoCreateGuid((GUID *)&NewMobID));
-		aafUID_t NewMobAUID;
-		memcpy (&NewMobAUID, &NewMobID, sizeof (aafUID_t));
-		checkResult(pMob->SetMobID(NewMobAUID));
+		aafMobID_t mobID;
+		memcpy (&mobID, &NewMobID, sizeof (mobID));
+		checkResult(pMob->SetMobID(mobID));
 		checkResult(pMob->SetName(MobName));
 		
 		checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
@@ -259,7 +259,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			pDesc = NULL;
 			
 			// Append source MOB to header
-			aafUID_t				TempUID;
+			aafMobID_t				TempUID;
 			checkResult(pSrcMob->QueryInterface(IID_IAAFMob, (void **) &pTempMob));
 			checkResult(CoCreateGuid((GUID *)&TempUID));
 			checkResult(pTempMob->SetMobID(TempUID));
@@ -364,7 +364,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	  {
 		  aafWChar			name[500];
 		  aafNumSlots_t		numSlots = 0;
-		  GUID				mobID;
+		  aafMobID_t				mobID;
 
 		  // TODO: Test Master MOB specific methods here
 		  checkResult(pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob));
@@ -372,8 +372,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		  checkResult(pMob->GetName(name, sizeof(name)));
 		  checkExpression(wcscmp(name, MobName) == 0, AAFRESULT_TEST_FAILED);
 
-		  checkResult(pMob->GetMobID((aafUID_t *)&mobID));
-		  checkExpression(0 != IsEqualGUID(mobID, NewMobID), AAFRESULT_TEST_FAILED);
+		  checkResult(pMob->GetMobID(&mobID));
+		  checkExpression(0 == memcmp(&mobID, &NewMobID, sizeof(mobID)), AAFRESULT_TEST_FAILED);
 
 		  checkResult(pMob->CountSlots(&numSlots));
 		  checkExpression(NumMobSlots == numSlots, AAFRESULT_TEST_FAILED);

@@ -36,9 +36,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
-#include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
-
 
 
 // Cross-platform utility to delete a file.
@@ -76,7 +74,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary*  pDictionary = NULL;
 	IAAFSourceReference	*pSourceReference = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					inSourceID, outSourceID;
+	aafMobID_t					inSourceID, outSourceID;
 	aafUInt32 inMobSlotID, outMobSlotID;
 	HRESULT						hr = S_OK;
 
@@ -116,8 +114,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// module-specific tests go here
 		//		Set Values.	
-
-		inSourceID = DDEF_Picture;   // Could have been any other value !
+		checkResult(CoCreateGuid((GUID *)&inSourceID));
 		checkResult(pSourceReference->SetSourceID( inSourceID));
 		
 		inMobSlotID = 100;   // Could have been any other value !

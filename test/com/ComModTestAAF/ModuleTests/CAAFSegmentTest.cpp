@@ -86,7 +86,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafRational_t				audioRate = { 44100, 1 };
 	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newMobID, referencedMobID;
+	aafMobID_t					newMobID, referencedMobID;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";

@@ -91,7 +91,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment			*seg = NULL;
 	IAAFSourceClip		*sclp = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t			newUID, referencedMobID;
+	aafMobID_t			newMobID, referencedMobID;
 	HRESULT				hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -131,8 +131,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								  (IUnknown **)&pCompMob));
 
 		checkResult(pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
-		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(newUID));
+		checkResult(CoCreateGuid((GUID *)&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"AAFTaggedValuesTest"));
 
 		// append a comment to this mob !!
@@ -287,7 +287,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		{
 			aafWChar		name[500], slotName[500];
 			aafNumSlots_t	numSlots;
-			aafUID_t		mobID;
+			aafMobID_t		mobID;
 			aafSlotID_t		trackID;
 
 			checkResult(mobIter->NextOne (&aMob));

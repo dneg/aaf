@@ -49,7 +49,7 @@
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFControlPoint; // generated
 
-static aafUID_t	zeroID = { 0 };
+static aafMobID_t	zeroMobID = { 0 };
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 // Cross-platform utility to delete a file.
@@ -297,7 +297,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFSourceClip, 
 							  (IUnknown **)&pSourceClip));
 			aafSourceRef_t	sourceRef;
-			sourceRef.sourceID = zeroID;
+			sourceRef.sourceID = zeroMobID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
 			checkResult(pSourceClip->Initialize (DDEF_Picture, effectLen, sourceRef));

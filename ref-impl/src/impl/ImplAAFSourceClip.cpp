@@ -227,7 +227,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFSourceClip::GetSourceReference (aafSourceRef_t*	pSourceRef)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-	aafUID_t	sourceID;
+	aafMobID_t	sourceID;
 	aafSlotID_t slotID;
 
 	XPROTECT()
@@ -286,19 +286,10 @@ AAFRESULT STDMETHODCALLTYPE
     aafInt32	tmp1xSourcePosition = 0;
 	aafInt16	tmp1xTrackNum = 0;
 	AAFRESULT   aafError = AAFRESULT_SUCCESS;
+  static const aafMobID_t nullMobID = {0};
 	
-	/* If UID is NUL - make the rest of the fields 0 too. */
-	if( (sourceRef.sourceID.Data1 == NilMOBID.Data1) && 
-		(sourceRef.sourceID.Data2 == NilMOBID.Data2) &&
-		(sourceRef.sourceID.Data3 == NilMOBID.Data3) &&
-		(sourceRef.sourceID.Data4[0] == NilMOBID.Data4[0]) &&
-		(sourceRef.sourceID.Data4[1] == NilMOBID.Data4[1]) &&
-		(sourceRef.sourceID.Data4[2] == NilMOBID.Data4[2]) &&
-		(sourceRef.sourceID.Data4[3] == NilMOBID.Data4[3]) &&
-		(sourceRef.sourceID.Data4[4] == NilMOBID.Data4[4]) &&
-		(sourceRef.sourceID.Data4[5] == NilMOBID.Data4[5]) &&
-		(sourceRef.sourceID.Data4[6] == NilMOBID.Data4[6]) &&
-		(sourceRef.sourceID.Data4[7] == NilMOBID.Data4[7]) 	)
+	/* If MobID is NUL - make the rest of the fields 0 too. */
+	if(memcmp(&sourceRef.sourceID, &nullMobID, sizeof(sourceRef.sourceID)) == 0)
 	{
 		sourceRef.sourceSlotID = 0;
 		CvtInt32toPosition(0, sourceRef.startTime);	

@@ -84,7 +84,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafLength_t					testLength = TEST_LENGTH;
 	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newMobID, referencedMobID, dataDef = TEST_DDEF;
+	aafMobID_t					newMobID, referencedMobID;
+	aafUID_t					dataDef = TEST_DDEF;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";

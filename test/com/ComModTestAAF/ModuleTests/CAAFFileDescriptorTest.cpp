@@ -83,7 +83,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFileDescriptor *pFileDesc = NULL;
 	
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
+	aafMobID_t					newMobID;
 	HRESULT						hr = S_OK;
 	
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -124,8 +124,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		
-		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(newUID));
+		checkResult(CoCreateGuid((GUID *)&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"FileDescriptorTest"));
 		
 		// Add some slots
@@ -235,7 +235,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		{
 			aafWChar		name[500];
 			aafNumSlots_t	numSlots;
-			aafUID_t		mobID;
+			aafMobID_t		mobID;
 			aafSlotID_t		trackID;
 			
 			checkResult(mobIter->NextOne (&aMob));

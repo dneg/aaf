@@ -93,7 +93,7 @@ private:
   bool _bWritableFile;
   IAAFHeader *_pHeader;
   IAAFDictionary *_pDictionary;
-  aafUID_t _compositionMobID;
+  aafMobID_t _compositionMobID;
 
   // MobSlot static data
   static const wchar_t* _slotName;
@@ -105,7 +105,7 @@ private:
   static const wchar_t* _eventComment;
 };
 
-const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+const aafUID_t NIL_UID = { 0 };
 
 extern "C" HRESULT CAAFEvent_test()
 {

@@ -74,7 +74,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob			*pMob = NULL;
 	IAAFEssenceDescriptor *edesc = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
+	aafMobID_t					newMobID;
 	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -114,8 +114,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 
-	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-	  checkResult(pMob->SetMobID(newUID));
+	  checkResult(CoCreateGuid((GUID *)&newMobID)); // hack: we need a utility function.
+	  checkResult(pMob->SetMobID(newMobID));
 	  checkResult(pMob->SetName(L"File Mob"));
 	
  	  checkResult(pDictionary->CreateInstance(AUID_AAFFileDescriptor,
@@ -135,8 +135,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							IID_IAAFMob, 
 							(IUnknown **)&pMob));
 
-	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-	  checkResult(pMob->SetMobID(newUID));
+	  checkResult(CoCreateGuid((GUID *)&newMobID)); // hack: we need a utility function.
+	  checkResult(pMob->SetMobID(newMobID));
 	  checkResult(pMob->SetName(L"Master Mob"));
 
 	  checkResult(pHeader->AddMob(pMob));
@@ -150,8 +150,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFMob, 
 							  (IUnknown **)&pMob));
 
-	  checkResult(CoCreateGuid((GUID *)&newUID)); // hack: we need a utility function.
-	  checkResult(pMob->SetMobID(newUID));
+	  checkResult(CoCreateGuid((GUID *)&newMobID)); // hack: we need a utility function.
+	  checkResult(pMob->SetMobID(newMobID));
   	checkResult(pMob->SetName(L"Composition Mob"));
 
 	  checkResult(pHeader->AddMob(pMob));

@@ -86,7 +86,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob						*pMob = NULL;
 	IAAFEssenceDescriptor		*edesc = NULL;
 	IAAFTapeDescriptor*			pTapeDescriptor = NULL;
-	aafUID_t					newUID;
+	aafMobID_t					newMobID;
 	aafUInt32					numLocators;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	aafRational_t	audioRate = { 44100, 1 };
@@ -127,8 +127,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								(IUnknown **)&pSourceMob));
 
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(newUID));
+		checkResult(CoCreateGuid((GUID *)&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"TextLocatorTestSourceMOB"));
 		
 		checkResult(pDictionary->CreateInstance(AUID_AAFTapeDescriptor,
@@ -256,7 +256,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		for(n = 0; n < numMobs; n++)
 		{
 			aafWChar		name[500];
-			aafUID_t		mobID;
+			aafMobID_t		mobID;
 
 			checkResult(pMobIter->NextOne (&pMob));
 			checkResult(pMob->GetName (name, sizeof(name)));

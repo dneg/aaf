@@ -251,7 +251,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 											  IID_IAAFMob, 
 											  (IUnknown **)&pMob));
-	  aafUID_t mobID;
+	  aafMobID_t mobID;
 	  checkResult(CoCreateGuid((GUID *)&mobID));
 	  checkResult(pMob->SetMobID(mobID));
 	  checkResult(pMob->SetName(L"TestCompMob"));

@@ -49,14 +49,14 @@ public:
 	HRESULT ConvertFile( void );
 
 protected:
-	void ConvertAUIDtoUID(aafUID_t* pMobID, OMF2::omfUID_t* pOMFMobID);
+	void ConvertMobIDtoUID(aafMobID_constptr pMobID, OMF2::omfUID_t* pOMFMobID);
 	HRESULT OpenOutputFile( void );
 	void CloseInputFile( void );
 	void CloseOutputFile(void );
 	HRESULT AAFFileRead( void );
-	virtual HRESULT ConvertCompositionMob(IAAFCompositionMob* pCompMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
-	HRESULT ConvertMasterMob(IAAFMasterMob* pMasterMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
-	HRESULT ConvertSourceMob(IAAFSourceMob* pSourceMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafUID_t* MobID);
+	virtual HRESULT ConvertCompositionMob(IAAFCompositionMob* pCompMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
+	HRESULT ConvertMasterMob(IAAFMasterMob* pMasterMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
+	HRESULT ConvertSourceMob(IAAFSourceMob* pSourceMob, OMF2::omfMobObj_t* pOMFCompMob, char* pMobName, aafMobID_t* pMobID);
 	HRESULT TraverseMob(IAAFMob* pMob, OMF2::omfMobObj_t* pOMFMob);
 	HRESULT ProcessComponent(IAAFComponent* pComponent, OMF2::omfObject_t* pOMFSegment);
 	HRESULT ConvertAAFDatadef(aafUID_t Datadef, OMF2::omfDDefObj_t* pDatakind);

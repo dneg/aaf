@@ -80,7 +80,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment		*seg = NULL;
 	IAAFSourceClip	*sclp = NULL;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
+	aafMobID_t					newMobID;
 	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -119,8 +119,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFMob, 
 							  (IUnknown **)&pMob));
 
-		checkResult(CoCreateGuid((GUID *)&newUID));
-	  checkResult(pMob->SetMobID(newUID));
+		checkResult(CoCreateGuid((GUID *)&newMobID));
+	  checkResult(pMob->SetMobID(newMobID));
 	  checkResult(pMob->SetName(L"EnumAAFTaggedValuesTest"));
 		// append some comments to this mob !!
 	  for (test = 0; test < 3; test++)
@@ -247,7 +247,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	  {
 		  aafWChar		name[500], slotName[500];
 		  aafNumSlots_t	numSlots;
-		  aafUID_t		mobID;
+		  aafMobID_t		mobID;
 		  aafSlotID_t		trackID;
 
 		  checkResult(mobIter->NextOne (&aMob));
@@ -266,6 +266,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			  checkExpression(wcscmp(tag, TagNames[com])== 0, AAFRESULT_TEST_FAILED);
 			  checkExpression(wcscmp(Value, Comments[com])== 0, AAFRESULT_TEST_FAILED);
 			  pComment->Release();
+        pComment = NULL;
 		  }
 		  // now check reset
 		  checkResult(pCommentIterator->Reset());
@@ -275,6 +276,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkExpression(wcscmp(tag, TagNames[0])== 0, AAFRESULT_TEST_FAILED);
 		  checkExpression(wcscmp(Value, Comments[0])== 0, AAFRESULT_TEST_FAILED);
 		  pComment->Release();
+      pComment = NULL;
 		  // test skip
 		  checkResult(pCommentIterator->Skip(1));
 		  checkResult(pCommentIterator->NextOne(&pComment));
@@ -283,6 +285,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkExpression(wcscmp(tag, TagNames[2])== 0, AAFRESULT_TEST_FAILED);
 		  checkExpression(wcscmp(Value, Comments[2])== 0, AAFRESULT_TEST_FAILED);
 		  pComment->Release();
+      pComment = NULL;
 		  // test clone
 		  checkResult(pCommentIterator->Clone(&pCloneIterator));
 		  checkResult(pCloneIterator->Reset());
@@ -292,10 +295,12 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkExpression(wcscmp(tag, TagNames[0])== 0, AAFRESULT_TEST_FAILED);
 		  checkExpression(wcscmp(Value, Comments[0])== 0, AAFRESULT_TEST_FAILED);
 		  pComment->Release();
-		  
+		  pComment = NULL;
 		
 		  pCommentIterator->Release();
+      pCommentIterator = NULL;
 		  pCloneIterator->Release();
+      pCloneIterator = NULL;
 			
 		  checkResult(aMob->CountSlots (&numSlots));
 		  checkExpression(5 == numSlots, AAFRESULT_TEST_FAILED);
@@ -328,6 +333,15 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
   if (slotIter)
     slotIter->Release();
+
+  if (pComment)
+    pComment->Release();
+
+  if (pCloneIterator)
+    pCloneIterator->Release();
+
+  if (pCommentIterator)
+    pCommentIterator->Release();
 
   if (aMob)
     aMob->Release();

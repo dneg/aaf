@@ -163,7 +163,7 @@ void CAAFEssenceFileStream::RemoveFileStreamFromContainer()
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileStream::Init (const aafCharacter * pFilePath,
-        const aafUID_t * pMobID)
+        aafMobID_constptr pMobID)
 {
   if (NULL == pFilePath)
     return E_INVALIDARG;
@@ -184,7 +184,7 @@ HRESULT STDMETHODCALLTYPE
   charCount = i + 1; // include the terminating null.
 
   // Copy the wide character path name.
-  _pwPath = (wchar_t *)CoTaskMemAlloc(charCount * sizeof(wchar_t));
+  _pwPath = new wchar_t[charCount];
   if (NULL == _pwPath)
     return AAFRESULT_NOMEMORY;
   for (i = 0; i < charCount; ++i)
@@ -194,7 +194,7 @@ HRESULT STDMETHODCALLTYPE
   // Allocate the maximum possible multibyte string for the current
   // locale.
   size_t byteCount = (MB_CUR_MAX * (charCount - 1)) + 1;
-  _pPath = (char *)CoTaskMemAlloc(byteCount);
+  _pPath = new char[byteCount];
   if (NULL == _pPath)
     return AAFRESULT_NOMEMORY;
   size_t convertedBytes = wcstombs( _pPath, _pwPath, byteCount);
@@ -205,10 +205,10 @@ HRESULT STDMETHODCALLTYPE
   // Copy the optional mobID it it exists.
   if (pMobID)
   {
-    _pMobID = (aafUID_t *)CoTaskMemAlloc(sizeof(aafUID_t));
-    if (NULL == _pwPath)
+    _pMobID = new aafMobID_t;
+    if (NULL == _pMobID)
       return AAFRESULT_NOMEMORY;
-    memcpy(_pMobID, pMobID, sizeof(aafUID_t));
+    memcpy(_pMobID, pMobID, sizeof(aafMobID_t));
   }
 
 
@@ -221,19 +221,19 @@ void CAAFEssenceFileStream::CleanupBuffers(void)
 {
   if (_pwPath)
   {
-    CoTaskMemFree((void *)_pwPath);
+    delete [] _pwPath;
     _pwPath = NULL;
   }
 
   if (_pMobID)
   {
-    CoTaskMemFree((void *)_pMobID);
+    delete _pMobID;
     _pMobID = NULL;
   }
 
   if (_pPath)
   {
-    CoTaskMemFree((void *)_pPath);
+    delete [] _pPath;
     _pPath = NULL;
   }
 }
@@ -315,7 +315,7 @@ CAAFEssenceFileStream::FileStreamOp CAAFEssenceFileStream::SetStreamOp(FileStrea
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileStream::Create (const aafCharacter *  pFilePath,
-        const aafUID_t *  pMobID)
+        aafMobID_constptr  pMobID)
 {
   HRESULT hr = Init(pFilePath, pMobID);
   if (AAFRESULT_SUCCESS != hr)
@@ -344,7 +344,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileStream::OpenRead (const aafCharacter * pFilePath,
-        const aafUID_t * pMobID)
+        aafMobID_constptr pMobID)
 {
   HRESULT hr = Init(pFilePath, pMobID);
   if (AAFRESULT_SUCCESS != hr)
@@ -368,7 +368,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceFileStream::OpenAppend (const aafCharacter * pFilePath,
-        const aafUID_t *  pMobID)
+        aafMobID_constptr  pMobID)
 {
   HRESULT hr = Init(pFilePath, pMobID);
   if (AAFRESULT_SUCCESS != hr)

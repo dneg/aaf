@@ -50,7 +50,7 @@
 //static aafTapeFormatType_t TapeFormat = kVHSFormat;
 //static aafLength_t TapeLength = 3200 ;
 
-static GUID		NewMobID;	// NOTE: this should really be aafUID_t, but problems w/ IsEqualGUID()
+static aafMobID_t		NewMobID;
 //#define TAPE_MOB_OFFSET	10
 //#define TAPE_MOB_LENGTH	60
 //#define TAPE_MOB_NAME	L"A Tape Mob"
@@ -174,8 +174,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Set the IAAFMob properties
 		checkResult(CoCreateGuid((GUID *)&NewMobID));
-		aafUID_t NewMobAUID;
-		memcpy (&NewMobAUID, &NewMobID, sizeof (aafUID_t));
+		aafMobID_t NewMobAUID;
+		memcpy (&NewMobAUID, &NewMobID, sizeof (NewMobID));
 		checkResult(pMob->SetMobID(NewMobAUID));
 		checkResult(pMob->SetName(MobName));
 		

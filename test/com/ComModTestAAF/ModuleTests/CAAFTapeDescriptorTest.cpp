@@ -83,7 +83,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFTapeDescriptor*			pTapeDesc = NULL;
 
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
+	aafMobID_t					newMobID;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 
@@ -121,8 +121,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 					if (AAFRESULT_SUCCESS == hr)
 					{
-						CoCreateGuid((GUID *)&newUID);
-						pMob->SetMobID(newUID);
+						CoCreateGuid((GUID *)&newMobID);
+						pMob->SetMobID(newMobID);
 						pMob->SetName(L"TapeDescriptorTest");
 						hr = pDictionary->CreateInstance(AUID_AAFTapeDescriptor,
 												IID_IAAFTapeDescriptor, 

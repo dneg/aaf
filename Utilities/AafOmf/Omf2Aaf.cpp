@@ -50,11 +50,11 @@ namespace OMF2
 #include "aafcodecdefs.h"
 
 //#include "AAFUtils.h"
-AAFRESULT aafMobIDNew(aafUID_t *mobID);
-AAFRESULT aafMobIDFromMajorMinor(
-        aafUInt32	major,
-		aafUInt32	minor,
-		aafUID_t *mobID);     /* OUT - Newly created Mob ID */
+//AAFRESULT aafMobIDNew(aafUID_t *mobID);
+//AAFRESULT aafMobIDFromMajorMinor(
+//        aafUInt32	major,
+//		aafUInt32	minor,
+//		aafUID_t *mobID);     /* OUT - Newly created Mob ID */
 
 //#include "aafCvt.h"
 
@@ -629,7 +629,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 		mediaID = inMediaID;
 	}
 
-	aafUID_t	mobID;
+	aafMobID_t	mobID;
 	rc = aafMobIDFromMajorMinor(mediaID.major, mediaID.minor, &mobID);
 	rc = pHeader->LookupMob(mobID, &pMob);
 	pmob = pMob;
@@ -909,7 +909,7 @@ void Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 	gpGlobals->pLogger->Log( kLogInfo, "%sMob Name: %s\n", gpGlobals->indentLeader, src );
 
 	// Convert OMF MobID into AAF AUID and set mob id
-	aafUID_t				AAFMobUID;
+	aafMobID_t				AAFMobUID;
 	aafCheck = aafMobIDFromMajorMinor(OMFMobID.major, OMFMobID.minor, &AAFMobUID);
 	aafCheck = pMob->SetMobID(AAFMobUID);
 
@@ -2896,7 +2896,6 @@ void Omf2Aaf::AAFFileClose( )
 
 	return;
 }
-static aafUID_t	zeroID = { 0 };
 
 // ============================================================================
 // ConvertOMFEffects

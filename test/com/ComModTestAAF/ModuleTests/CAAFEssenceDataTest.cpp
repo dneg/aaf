@@ -342,9 +342,9 @@ void EssenceDataTest::createFileMob()
 
   check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
   
-  aafUID_t newUID = {0};
-  check(CoCreateGuid((GUID *)&newUID));
-  check(_pMob->SetMobID(newUID));
+  aafMobID_t newMobID = {0};
+  check(CoCreateGuid((GUID *)&newMobID));
+  check(_pMob->SetMobID(newMobID));
   check(_pMob->SetName(L"EssenceDataTest File Mob"));
   
   check(_pDictionary->CreateInstance(AUID_AAFFileDescriptor,

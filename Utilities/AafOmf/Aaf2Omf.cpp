@@ -157,11 +157,11 @@ HRESULT Aaf2Omf::ConvertFile ()
 	return (rc);
 }
 // ============================================================================
-// ConvertAUIDtoUID
-//			This function reduces an AUID into an OMF UID.
+// ConvertMobIDtoUID
+//			This function reduces an MobID into an OMF UID.
 //
 // ============================================================================
-void Aaf2Omf::ConvertAUIDtoUID(aafUID_t* pMobID, 
+void Aaf2Omf::ConvertMobIDtoUID(aafMobID_constptr pMobID, 
 							   OMF2::omfUID_t* pOMFMobID)
 {
 	struct SMPTELabel
@@ -179,12 +179,12 @@ void Aaf2Omf::ConvertAUIDtoUID(aafUID_t* pMobID,
 
 	union label
 	{
-		aafUID_t			auid;
+		aafMobID_t			mobID;
 		struct SMPTELabel	smpte;
 	};
 
 	union label aLabel;
-	memcpy((void *)&aLabel.auid, pMobID, sizeof(aafUID_t));
+	memcpy((void *)&aLabel.mobID, pMobID, sizeof(aLabel.mobID));
 
 	pOMFMobID->prefix = aLabel.smpte.MobIDPrefix;
 	pOMFMobID->major = aLabel.smpte.MobIDMajor;
@@ -506,7 +506,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 	{
 		aafInt32	nameLength = 0;
 		aafWChar*	pwMobName = NULL;
-		aafUID_t	MobID;
+		aafMobID_t	MobID;
 		char		szMobID[64];
 		char*		pszMobName = NULL;
 
@@ -549,7 +549,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 				}
 				else
 				{
-					AUIDtoString(&MobID, szMobID);
+					MobIDtoString(&MobID, szMobID);
 					printf("Unrecognized Mob kind encountered ID: %s\n", szMobID);
 //					fprintf(stderr,"Unrecognized Mob kind encountered ID: %s\n", szMobID);
 				}
@@ -661,7 +661,7 @@ HRESULT Aaf2Omf::AAFFileRead()
 HRESULT Aaf2Omf::ConvertCompositionMob(IAAFCompositionMob* pCompMob,
 									   OMF2::omfMobObj_t* pOMFCompMob,
 									   char* pMobName,
-									   aafUID_t* pMobID)
+									   aafMobID_t* pMobID)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
@@ -674,7 +674,7 @@ HRESULT Aaf2Omf::ConvertCompositionMob(IAAFCompositionMob* pCompMob,
 	OMFError = OMF2::omfiCompMobNew(OMFFileHdl, pMobName, (OMF2::omfBool)AAFFalse, pOMFCompMob);
 	if (OMF2::OM_ERR_NONE == OMFError)
 	{
-		ConvertAUIDtoUID(pMobID, &OMFMobID);
+		ConvertMobIDtoUID(pMobID, &OMFMobID);
 		OMFError = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFCompMob, OMFMobID);
 		if (OMF2::OM_ERR_NONE == OMFError)
 		{
@@ -729,7 +729,7 @@ HRESULT Aaf2Omf::ConvertCompositionMob(IAAFCompositionMob* pCompMob,
 HRESULT Aaf2Omf::ConvertMasterMob(IAAFMasterMob* pMasterMob,
 								  OMF2::omfMobObj_t* pOMFMasterMob,
 								  char* pMobName,
-								  aafUID_t* pMobID)
+								  aafMobID_t* pMobID)
 {
 	HRESULT				rc = AAFRESULT_SUCCESS;
 	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
@@ -740,7 +740,7 @@ HRESULT Aaf2Omf::ConvertMasterMob(IAAFMasterMob* pMasterMob,
 	OMFError = OMF2::omfmMasterMobNew(OMFFileHdl, pMobName, (OMF2::omfBool)AAFTrue, pOMFMasterMob);
 	if (OMF2::OM_ERR_NONE == OMFError)
 	{
-		ConvertAUIDtoUID(pMobID, &OMFMobID);
+		ConvertMobIDtoUID(pMobID, &OMFMobID);
 		OMFError = OMF2::omfiMobSetIdentity(OMFFileHdl, *pOMFMasterMob, OMFMobID);
 		if (OMF2::OM_ERR_NONE == OMFError)
 		{
@@ -772,7 +772,7 @@ HRESULT Aaf2Omf::ConvertMasterMob(IAAFMasterMob* pMasterMob,
 HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 								  OMF2::omfMobObj_t* pOMFSourceMob,
 								  char* pMobName,
-								  aafUID_t* pMobID)
+								  aafMobID_t* pMobID)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	OMF2::omfErr_t			OMFError = OMF2::OM_ERR_NONE;
@@ -804,7 +804,7 @@ HRESULT Aaf2Omf::ConvertSourceMob(IAAFSourceMob* pSourceMob,
 
 	IncIndentLevel();
 
-	ConvertAUIDtoUID(pMobID, &OMFMobID);
+	ConvertMobIDtoUID(pMobID, &OMFMobID);
 	rc = pEssenceDesc->QueryInterface(IID_IAAFTapeDescriptor,(void **)&pTapeDesc);
 	if (SUCCEEDED(rc))
 	{
@@ -1404,7 +1404,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 							 &fadeOutLen,
 							 &fadeOutType,
 							 &fadeOutPresent);
-		ConvertAUIDtoUID(&ref.sourceID, &OMFSourceRef.sourceID);
+		ConvertMobIDtoUID(&ref.sourceID, &OMFSourceRef.sourceID);
 		OMFSourceRef.sourceTrackID = (OMF2::omfTrackID_t)ref.sourceSlotID;
 		OMFSourceRef.startTime = (OMF2::omfPosition_t)ref.startTime;
 		// Create OMF Source Clip
@@ -1988,7 +1988,7 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 	IAAFMob*				pMob = NULL;
 	IAAFSourceMob*			pSourceMob = NULL;
 	IAAFObject*				pAAFObject = NULL;
-	aafUID_t				mobID;
+	aafMobID_t				mobID;
 	aafBool					bConvertMedia = AAFFalse;
 
 	// get the file mob id
@@ -2007,7 +2007,7 @@ HRESULT Aaf2Omf::ConvertEssenceDataObject( IAAFEssenceData* pEssenceData)
 		return rc;
 	}
 
-	ConvertAUIDtoUID(&mobID, &mediaID);
+	ConvertMobIDtoUID(&mobID, &mediaID);
 	OMFError = OMF2::omfsFindSourceMobByID(OMFFileHdl, mediaID, &OMFSourceMob);
 	if (OMFError != OMF2::OM_ERR_NONE)
 	{

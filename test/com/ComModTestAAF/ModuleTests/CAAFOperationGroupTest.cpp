@@ -43,7 +43,7 @@
 #include "aafUtils.h"
 #include "AAFDefUIDs.h"
 
-static aafUID_t	zeroID = { 0 };
+static aafMobID_t	zeroMobID = { 0 };
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 // Cross-platform utility to delete a file.
@@ -245,7 +245,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFSourceClip, 
 							  (IUnknown **)&pSourceClip));
 			aafSourceRef_t	sourceRef;
-			sourceRef.sourceID = zeroID;
+			sourceRef.sourceID = zeroMobID;
 			sourceRef.sourceSlotID = 0;
 			sourceRef.startTime = 0;
 			checkResult(pSourceClip->Initialize (testDataDef, effectLen, sourceRef));
@@ -350,7 +350,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFFiller*			pFill = NULL;
 	IAAFSourceReference *pSourceRef = NULL;
 	bool				bFileOpen = false;
-	aafUID_t			readSourceID;
+	aafMobID_t			readSourceID;
 	aafBool				readIsTimeWarp;
 	aafInt32			catLen, checkNumInputs, testNumSources, testNumParam;
 	aafUInt32			checkBypass, testLen;
@@ -437,7 +437,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			/**/
 			checkResult(pOperationGroup->GetRender (&pSourceRef));
 			checkResult(pSourceRef->GetSourceID (&readSourceID));
-			checkExpression(EqualAUID(&readSourceID, &zeroID) == AAFTrue, AAFRESULT_TEST_FAILED);
+			checkExpression(memcmp(&readSourceID, &zeroMobID, sizeof(zeroMobID)) == 0, AAFRESULT_TEST_FAILED);
 			pOperationGroup->Release();
 			pOperationGroup = NULL;
 			pSlot->Release();

@@ -76,7 +76,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFEssenceDescriptor *edesc = NULL;
 	aafRational_t	audioRate = { 44100, 1 };
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
+	aafMobID_t					newMobID;
 	aafUInt32					numLocators;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	bool bFileOpen = false;
@@ -116,8 +116,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		// Initialize mob properties:
 		checkResult(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
-		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(newUID));
+		checkResult(CoCreateGuid((GUID *)&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"EssenceDescriptorTest"));
 		
 		// Create the descriptor:
@@ -228,7 +228,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		for(n = 0; n < numMobs; n++)
 		{
 			aafWChar		name[500];
-			aafUID_t		mobID;
+			aafMobID_t		mobID;
 
 			checkResult(mobIter->NextOne (&aMob));
 			checkResult(aMob->GetName (name, sizeof(name)));

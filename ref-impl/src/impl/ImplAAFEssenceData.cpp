@@ -47,7 +47,7 @@
 #include "AAFResult.h"
 
 
-const aafUID_t kNullID = {0};
+const aafMobID_t kNullMobID = {0};
 
 ImplAAFEssenceData::ImplAAFEssenceData () :
   _fileMobID(PID_EssenceData_MobID,	"MobID"),
@@ -58,7 +58,7 @@ ImplAAFEssenceData::ImplAAFEssenceData () :
   _persistentProperties.put(_mediaData.address());
 
   // Initial default property values.
-  _fileMobID = kNullID;
+  _fileMobID = kNullMobID;
 }
 
 
@@ -224,7 +224,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFEssenceDescriptor *pEssenceDescriptor = NULL;
   ImplAAFFileDescriptor *pFileDescriptor = NULL;
   ImplAAFHeader *pHeader = NULL;
-  aafUID_t mobID;
+  aafMobID_t mobID;
 
   if(NULL == pFileMob)
     return(AAFRESULT_NULL_PARAM);
@@ -292,7 +292,7 @@ AAFRESULT STDMETHODCALLTYPE
   ImplAAFSourceMob *pSourceMob = NULL;
   ImplAAFEssenceDescriptor *pEssenceDescriptor = NULL;
   ImplAAFHeader *pHeader = NULL;
-  aafUID_t mobID;
+  aafMobID_t mobID;
 
   if(NULL == ppFileMob)
     return(AAFRESULT_NULL_PARAM);
@@ -352,7 +352,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceData::GetFileMobID (aafUID_t *  pFileMobID)
+    ImplAAFEssenceData::GetFileMobID (aafMobID_t *  pFileMobID)
 {
   if (NULL == pFileMobID)
     return AAFRESULT_NULL_PARAM;

@@ -81,7 +81,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFFilmDescriptor*			pFilmDesc = NULL;
 	
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newUID;
+	aafMobID_t					newMobID;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	
 	
@@ -108,8 +108,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					IID_IAAFSourceMob, 
 					(IUnknown **)&pSourceMob));
 	checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
-	CoCreateGuid((GUID *)&newUID);
-	pMob->SetMobID(newUID);
+	CoCreateGuid((GUID *)&newMobID);
+	pMob->SetMobID(newMobID);
 	pMob->SetName(L"FilmDescriptorTest");
 	checkResult(pDictionary->CreateInstance(AUID_AAFFilmDescriptor,
 							IID_IAAFFilmDescriptor, 

@@ -87,7 +87,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafRational_t				audioRate = { 44100, 1 };
 	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
-	aafUID_t					newMobID, referencedMobID;
+	aafMobID_t					newMobID, referencedMobID;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -221,7 +221,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafBool						fadeInPresent;
 	aafBool						fadeOutPresent;
 	HRESULT						hr = AAFRESULT_SUCCESS;
-	aafUID_t					rReferencedMobID;
+	aafMobID_t					rReferencedMobID;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
 	ProductInfo.productName = L"AAFSourceClip Test. NOT!";
@@ -280,7 +280,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 				checkResult(pSourceClip->ResolveRef(&pReferencedMob));
 				checkResult(pReferencedMob->GetMobID(&rReferencedMobID));
-				checkExpression(0 != EqualAUID(&rReferencedMobID, &sourceRef.sourceID), 
+				checkExpression(0 == memcmp(&rReferencedMobID, &sourceRef.sourceID, sizeof(rReferencedMobID)), 
 				                AAFRESULT_TEST_FAILED);
 
 				pSlot->Release();

@@ -281,7 +281,7 @@ static void HexDumpBuffer(const char* label, aafDataBuffer_t buffer, aafUInt32 b
 #endif // #ifdef _DEBUG
 
 
-static void AUIDtoString(aafUID_t *uid, char *buf)
+static void MobIDtoString(aafMobID_t *uid, char *buf)
 {
 	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
 		uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
@@ -334,7 +334,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFEssenceFormat			*format = NULL;
 	IAAFLocator					*pLocator = NULL;
 	// !!!Previous revisions of this file contained variables here required to handle external essence
-	aafUID_t					masterMobID;
+	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
@@ -588,7 +588,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	aafNumSlots_t				numMobs, numSlots;
 	aafSearchCrit_t				criteria;
 	aafRational_t				readSampleRate;
-	aafUID_t					mobID;
+	aafMobID_t					mobID;
 	aafWChar					namebuf[1204];
 	unsigned char				AAFDataBuf[4096];
 	aafUInt32					AAFBytesRead, samplesRead;
@@ -623,7 +623,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			checkResult(pMob->GetMobID (&mobID));
 			checkResult(pMob->GetName (namebuf, sizeof(namebuf)));
 			convert(mobName, sizeof(mobName), namebuf);
-			AUIDtoString(&mobID, mobIDstr);
+			MobIDtoString(&mobID, mobIDstr);
 			// Make sure we have one slot 
 			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);
@@ -872,7 +872,7 @@ static HRESULT CreateJPEGAAFFile(
 	IAAFEssenceFormat			*format = NULL;
 	IAAFEssenceFormat* pTransformFormat = NULL;
 	IAAFLocator					*pLocator = NULL;
-	aafUID_t					masterMobID;
+	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {30000, 1001};
 	aafRational_t				sampleRate = {30000, 1001};
@@ -1234,7 +1234,7 @@ static HRESULT ReadJPEGAAFFile(
 	aafNumSlots_t				numMobs, numSlots;
 	aafSearchCrit_t				criteria;
 //	aafRational_t				readSampleRate;
-	aafUID_t					mobID;
+	aafMobID_t					mobID;
 	aafWChar					namebuf[1204];
 	aafDataBuffer_t				AAFDataBuf = NULL;
 	aafUInt32					AAFBytesRead = 0, samplesRead = 0;
@@ -1325,7 +1325,7 @@ static HRESULT ReadJPEGAAFFile(
 			checkResult(pMob->GetMobID (&mobID));
 			checkResult(pMob->GetName (namebuf, sizeof(namebuf)));
 			convert(mobName, sizeof(mobName), namebuf);
-			AUIDtoString(&mobID, mobIDstr);
+			MobIDtoString(&mobID, mobIDstr);
 			// Make sure we have one slot 
 			checkResult(pMob->CountSlots(&numSlots));
 			checkExpression(1 == numSlots, AAFRESULT_TEST_FAILED);

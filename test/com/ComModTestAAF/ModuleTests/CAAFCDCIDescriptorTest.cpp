@@ -189,7 +189,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFHeader*		pHeader = NULL;
 	IAAFDictionary*	pDictionary = NULL;
 	IAAFSourceMob*	pSourceMob = NULL;
-	aafUID_t		newUID;
+	aafMobID_t		newMobID;
 	HRESULT			hr = AAFRESULT_SUCCESS;
 
 
@@ -218,8 +218,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		  {
 			  IAAFCDCIDescriptor*	pCDCIDesc = NULL;
 
-			  CoCreateGuid((GUID *)&newUID);
-			  pMob->SetMobID(newUID);
+			  CoCreateGuid((GUID *)&newMobID);
+			  pMob->SetMobID(newMobID);
 			  pMob->SetName(L"CDCIDescriptorTest");
 			  hr = pDictionary->CreateInstance(AUID_AAFCDCIDescriptor,
 									  IID_IAAFCDCIDescriptor, 

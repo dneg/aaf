@@ -174,7 +174,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*				pMob = NULL;
 	IAAFTIFFDescriptor*		pTIFFDesc = NULL;
 	IAAFEssenceDescriptor*	pEssDesc = NULL;
-	aafUID_t				newUID;
+	aafMobID_t				newMobID;
 	HRESULT					hr = AAFRESULT_SUCCESS;
 	aafUInt8				summary[512];
 	aafUInt16				numEntries = 2;
@@ -227,8 +227,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							(IUnknown **)&pSourceMob));
 		checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
-		checkResult(CoCreateGuid((GUID *)&newUID));
-		checkResult(pMob->SetMobID(newUID));
+		checkResult(CoCreateGuid((GUID *)&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"TIFFDescriptorTest"));
 		checkResult(pDictionary->CreateInstance(AUID_AAFTIFFDescriptor,
 									  IID_IAAFTIFFDescriptor, 

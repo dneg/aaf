@@ -67,10 +67,6 @@ static aafSourceRef_t sourceRef;
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
 
-static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
-{
-	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
-}
 
 #define TEST_PATH	L"SomeFile.dat"
 
@@ -108,12 +104,12 @@ static void convert(char* cName, size_t length, const wchar_t* name)
   }
 }
 
-static void AUIDtoString(aafUID_t *uid, char *buf)
+static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
 	sprintf(buf, "%08lx-%04x-%04x-%02x%02x%02x%02x%02x%02x%02x%02x",
-			uid->Data1, uid->Data2, uid->Data3, (int)uid->Data4[0],
-			(int)uid->Data4[1], (int)uid->Data4[2], (int)uid->Data4[3], (int)uid->Data4[4],
-			(int)uid->Data4[5], (int)uid->Data4[6], (int)uid->Data4[7]);
+			uid.Data1, uid.Data2, uid.Data3, (int)uid.Data4[0],
+			(int)uid.Data4[1], (int)uid.Data4[2], (int)uid.Data4[3], (int)uid.Data4[4],
+			(int)uid.Data4[5], (int)uid.Data4[6], (int)uid.Data4[7]);
 }
 
 typedef enum { testRawCalls, testStandardCalls, testMultiCalls, testFractionalCalls } testType_t;
@@ -167,7 +163,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 	IAAFEssenceFormat			*format = NULL;
 	IAAFLocator					*pLocator = NULL;
 	// !!!Previous revisions of this file contained variables here required to handle external essence
-	aafUID_t					masterMobID;
+	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {44100, 1};
 	aafRational_t				sampleRate = {44100, 1};
@@ -478,7 +474,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 	aafNumSlots_t				numMobs, numSlots;
 	aafSearchCrit_t				criteria;
-	aafUID_t					mobID, dataID = DDEF_Sound;
+	aafMobID_t					mobID;
+	aafUID_t					dataID = DDEF_Sound;
 	aafWChar					namebuf[1204];
 	unsigned char						*AAFDataBuf = NULL;
 	aafUInt32					AAFBytesRead, samplesRead;
@@ -512,7 +509,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 			check(pMob->GetMobID (&mobID));
 			check(pMob->GetName (namebuf, sizeof(namebuf)));
 			convert(mobName, sizeof(mobName), namebuf);
-			AUIDtoString(&mobID, mobIDstr);
+			MobIDtoString(mobID, mobIDstr);
 			printf("    MasterMob Name = '%s'\n", mobName);
 			printf("        (mobID %s)\n", mobIDstr);
 			// Make sure we have one slot 

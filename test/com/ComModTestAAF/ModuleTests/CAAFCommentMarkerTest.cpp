@@ -86,7 +86,7 @@ private:
 	bool _bWritableFile;
 	IAAFHeader *_pHeader;
 	IAAFDictionary *_pDictionary;
-	aafUID_t _compositionMobID;
+	aafMobID_t _compositionMobID;
 	
 	// MobSlot static data
 	static const wchar_t* _slotName;

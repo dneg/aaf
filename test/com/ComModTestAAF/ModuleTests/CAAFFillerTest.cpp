@@ -82,7 +82,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFTimelineMobSlot*        pSlot = NULL;
   IAAFSegment*        pSegment = NULL;
   aafProductIdentification_t  ProductInfo;
-  aafUID_t          newMobID;
+  aafMobID_t          newMobID;
   HRESULT            hr = AAFRESULT_SUCCESS;
 
 
