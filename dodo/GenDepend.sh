@@ -31,6 +31,32 @@ echo AAFRoot.comh : macros/comh.mac macros/base.mac
 echo AAFRoot.implc : macros/implc.mac macros/base.mac
 echo AAFRoot.implh : macros/implh.mac macros/base.mac
 echo AAFRoot.exp : macros/exp.mac macros/base.mac
+echo ""
+echo "#" Special case private objects since they should not have a public module test...
+for base in AAFRoot ${PRIVATE_AAFOBJECTS} ; do \
+	echo "" ; \
+	echo $base.all : $base.comc $base.comh ; \
+	echo $base.all : $base.comt ; \
+	echo $base.all : $base.implc $base.implh ; \
+	echo $base.all : $base.fidl ; \
+	echo $base.all : $base.frefh ; \
+	echo $base.comc : macros/comc.mac macros/base.mac ; \
+	echo $base.comh : macros/comh.mac macros/base.mac ; \
+	echo $base.implc : macros/implc.mac macros/base.mac ; \
+	echo $base.implh : macros/implh.mac macros/base.mac ; \
+	echo $base.fidl : macros/fidl.mac macros/base.mac ; \
+	echo $base.frefh : macros/frefh.mac macros/base.mac ; \
+	echo $base.exp : macros/exp.mac macros/base.mac ; \
+	for import in `grep '^\#import' $base.dod | sed -e 's,\#import,,' | sed -e 's,.*/,,'` ; do \
+		echo $base.comc : $import ; \
+		echo $base.comh : $import ; \
+		echo $base.implc : $import ; \
+		echo $base.implh : $import ; \
+		echo $base.fidl : $import ; \
+		echo $base.frefh : $import ; \
+		echo $base.exp : $import ; \
+	done ; \
+done
 for base in ${DODO_TARGET_NAMES} ; do \
 	echo "" ; \
 	echo $base.all : $base.comc $base.comh ; \
