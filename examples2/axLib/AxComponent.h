@@ -103,6 +103,8 @@ public:
 
 	IEnumAAFComponentsSP GetComponents();
 
+	aafUInt32 CountComponents();
+
 private:
 	AxSequence();
 	AxSequence( const AxSequence& );

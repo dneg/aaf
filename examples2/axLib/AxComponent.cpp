@@ -116,6 +116,14 @@ IEnumAAFComponentsSP AxSequence::GetComponents()
 	return spIaafComponents;
 }
 
+aafUInt32 AxSequence::CountComponents()
+{
+	aafUInt32 numComponents;
+
+	CHECK_HRESULT( _spIaafSequence->CountComponents( &numComponents ) );
+
+	return numComponents;
+}
 
 //=---------------------------------------------------------------------=
 
