@@ -32,7 +32,14 @@
 
 2) Running dodo on Unix/Linux
 
-     TBS
+  Run GNU make on GNUmakefile in the dodo directory as follows -
+
+     $ cd dodo
+     $ make
+
+  Note
+   - "make --just-print" (same as "make -n") doesn't work because the
+     recursive makefiles don't pass on MAKEFLAGS properly.
 
 3) Running dodo from MPW on Macintosh
 
