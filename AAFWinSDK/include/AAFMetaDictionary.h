@@ -44,7 +44,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri May 17 15:14:08 EDT 2002
+// This file was generated on Fri May 17 15:22:36 EDT 2002
 // by user tjb on system tjb.avid.com.
 //
 // Key to macros.
@@ -269,7 +269,7 @@
 //     id        = the auid used to identify the type [*]
 //     type      = the element type [*]
 //
-//AAF_TYPE_DEFINITION_STRONG_REFERENCE(name, id, type)
+// AAF_TYPE_DEFINITION_STRONG_REFERENCE(name, id, type)
 //
 //   Define an AAF strong reference type.
 //
@@ -293,7 +293,7 @@
 //     id        = the auid used to identify the type [*]
 //     type      = the target type [*]
 //
-//AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type)
+// AAF_TYPE_DEFINITION_WEAK_REFERENCE(name, id, type)
 //
 //   Define an AAF weak reference type.
 //
@@ -333,7 +333,7 @@
 //     id        = the auid used to identify the type [*]
 //     type      = the target type [*]
 //
-//AAF_TYPE_DEFINITION_STREAM(name, id)
+// AAF_TYPE_DEFINITION_STREAM(name, id)
 //
 //   Define an AAF stream type.
 //
@@ -344,6 +344,14 @@
 //
 //   Separate one AAF type definition from another.
 //
+// AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8)
+//
+//   Define an AUID.
+//
+//     l         = Data1
+//     w1        = Data2
+//     w2        = Data3
+//     b1-b8     = Data4
 //
 
 // Default empty definitions so that you only have to define
@@ -6194,6 +6202,8 @@ AAF_TYPE_TABLE_END()
 #undef AAF_TYPE_DEFINITION_STREAM
 
 #undef AAF_TYPE_SEPARATOR
+
+#undef AAF_LITERAL_AUID
 
 //
 // End of automatically generated file.
