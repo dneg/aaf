@@ -241,6 +241,7 @@ public:
 	void Initialize( IAAFDataDefSP, aafLength_t, IAAFOperationDefSP );
 
 	void AppendInputSegment( IAAFSegmentSP );
+	void AddParameter( IAAFParameterSP );
 
 	IAAFOperationDefSP GetOperationDef();
 	aafUInt32 CountSourceSegments();
