@@ -6,7 +6,6 @@ AAFMediaDescriptor\
 AAFObject\
 #endm
 #c
-#import ./AAFUnitTest.exp
 #import ./AAFObject.exp
 AD_HEAD
 /******************************************\
@@ -21,6 +20,10 @@ AD_HEAD
 #c AD_INCLUDE(myVector)
 AD_FORWARD_DECLARATION(AAFLocator)
 
+AD_CLASS_UUID(94659784, 2a3c, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(94659783, 2a3c, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
+
 AD_CLASS_BEGIN
 
 AD_METHOD1(GetNumLocators,
@@ -33,8 +36,6 @@ AD_XMETHOD2(GetNthLocator,
 			[out],objOut,AAFLocator,result,Returns a reference to the object,
 			Gets a particular locator from this media descriptor.)
   //@comm The number of locators may be zero if the media is in the current file.
-
-AD_OVERRIDE(.method-Test)
 
 
 AD_CLASS_END
