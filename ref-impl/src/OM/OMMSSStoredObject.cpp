@@ -2035,7 +2035,7 @@ void OMMSSStoredObject::write(OMPropertyId propertyId,
   //   @parm void* | start | The start address of the buffer to hold the
   //         property value.
   //   @parm size_t | size | The size of the buffer in bytes.
-void OMMSSStoredObject::read(OMPropertyId propertyId,
+void OMMSSStoredObject::read(OMPropertyId ANAME(propertyId),
                              OMStoredForm ANAME(storedForm),
                              void* start,
                              size_t size)
