@@ -100,7 +100,7 @@ ImplAAFDigitalImageDescriptor::ImplAAFDigitalImageDescriptor ()
 	_videoLineMap.setValue(videoLineMap, 2*sizeof(aafInt32));
 	// Initialize Optional properties
 
-	_compression = NoCodec;
+	_compression = kAAFNoCodec;
 	_sampledHeight = 0;
 	_sampledWidth = 0;
 	_sampledXOffset = 0;
