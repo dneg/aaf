@@ -244,6 +244,8 @@ template class AxIterator< aafUID_t,                            IEnumAAFCodecFla
 template class AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >;
 template class AxIterator< IAAFSmartPointer<IAAFComponent>,		IEnumAAFComponents >;
 template class AxIterator< IAAFSmartPointer<IAAFSegment>,		IEnumAAFSegments >;
+template class AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >;
+
 
 template class AxArrayIterator< IAAFTypeDefFixedArray >;
 template class AxArrayIterator< IAAFTypeDefVariableArray >;

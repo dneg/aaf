@@ -64,14 +64,15 @@ private:
 
 typedef AxIterator< IAAFSmartPointer<IAAFProperty>,      IEnumAAFProperties >	  AxPropertyIter;
 typedef AxIterator< IAAFSmartPointer<IAAFPropertyValue>, IEnumAAFPropertyValues > AxPropertyValueIter;
-typedef AxIterator< IAAFSmartPointer<IAAFMob>,           IEnumAAFMobs >		  AxMobIter;
+typedef AxIterator< IAAFSmartPointer<IAAFMob>,           IEnumAAFMobs >		      AxMobIter;
 typedef AxIterator< IAAFSmartPointer<IAAFEssenceData>,   IEnumAAFEssenceData >	  AxEssenceIter;
-typedef AxIterator< IAAFSmartPointer<IAAFMobSlot>,       IEnumAAFMobSlots >	  AxMobSlotIter;
+typedef AxIterator< IAAFSmartPointer<IAAFMobSlot>,       IEnumAAFMobSlots >	      AxMobSlotIter;
 typedef AxIterator< IAAFSmartPointer<IAAFDataDef>,       IEnumAAFDataDefs >       AxDataDefsIter;
 typedef AxIterator< aafUID_t,                            IEnumAAFCodecFlavours >  AxCodecFlavoursIter;
 typedef AxIterator< aafUID_t,                            IEnumAAFLoadedPlugins >  AxLoadedPluginsIter;
 typedef AxIterator< IAAFSmartPointer<IAAFComponent>,	 IEnumAAFComponents >	  AxComponentsIter;
 typedef AxIterator< IAAFSmartPointer<IAAFComponent>,	 IEnumAAFSegments >		  AxSegmentsIter;
+typedef AxIterator< IAAFSmartPointer<IAAFClassDef>,      IEnumAAFClassDefs >      AxClassDefIter;
 
 // Records contain a set of named values that must be iterated over as well,
 // but don't have any sort of native iterator.  This wrapper presents
