@@ -70,6 +70,10 @@
 #include "ImplAAFTypeDefIndirect.h"
 #endif
 
+#ifndef __ImplAAFTypeDefOpaque_h__
+#include "ImplAAFTypeDefOpaque.h"
+#endif
+
 #ifndef __ImplAAFTypeDefStrongObjRef_h__
 #include "ImplAAFTypeDefStrongObjRef.h"
 #endif
@@ -691,6 +695,47 @@ static AAFRESULT CreateNewIndirectType (const aafUID_t & idToCreate,
 }
 
 
+static AAFRESULT CreateNewOpaqueType (const aafUID_t & idToCreate,
+									ImplAAFDictionary * pDict,
+									ImplAAFTypeDef ** ppCreatedTypeDef)
+{
+  assert (pDict);
+  AAFRESULT hr;
+
+  // Go through the list, attempting to identify the requested
+  // ID.
+  TypeOpaque * curOpaque = s_AAFAllTypeOpaques;
+  while (curOpaque->isValid)
+	{
+	  // Check to see if the current ID matches the ID of the type
+	  // def we want to create.
+	  if (! memcmp (&idToCreate, &curOpaque->typeID, sizeof (aafUID_t)))
+		{		
+		  // Yes, this is the one.
+		  ImplAAFTypeDefOpaque * ptd = 0;
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefOpaque()->
+			CreateInstance ((ImplAAFObject**) &ptd);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert (ptd);
+
+		  AAFRESULT hr = ptd->pvtInitialize (curOpaque->typeID,
+										  curOpaque->typeName);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+
+		  assert (ppCreatedTypeDef);
+		  *ppCreatedTypeDef = ptd;
+		  (*ppCreatedTypeDef)->AcquireReference ();
+		  ptd->ReleaseReference ();
+		  ptd = 0;
+		  return AAFRESULT_SUCCESS;
+		}
+
+	  curOpaque++;
+	}
+  return AAFRESULT_NO_MORE_OBJECTS;
+}
+
+
 static AAFRESULT CreateNewStrongRefType (const aafUID_t & idToCreate,
 									ImplAAFDictionary * pDict,
 									ImplAAFTypeDef ** ppCreatedTypeDef)
@@ -1073,6 +1118,11 @@ AAFRESULT ImplAAFBuiltinTypes::NewBuiltinTypeDef
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
   hr = CreateNewIndirectType (idToCreate,
+							   _dictionary,
+							   ppCreatedTypeDef);
+  if (AAFRESULT_SUCCEEDED (hr))	return hr;
+
+  hr = CreateNewOpaqueType (idToCreate,
 							   _dictionary,
 							   ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;

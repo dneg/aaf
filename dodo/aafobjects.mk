@@ -117,6 +117,7 @@ HUMAN_TYPED_IMPL="\
 	AAFTypeDefStrongObjRef \
 	AAFTypeDefWeakObjRef \
 	AAFTypeDefObjectRef \
+	AAFTypeDefOpaque \
 	AAFTypeDefVariableArray \
 	AAFVaryingValue \
 	AAFWAVEDescriptor \
