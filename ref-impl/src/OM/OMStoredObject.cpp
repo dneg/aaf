@@ -718,7 +718,7 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
 
   // Calculate the stream name for the index.
   //
-  char* vectorIndexName = vectorIndexStreamName(vectorName);
+  char* vectorIndexName = collectionIndexStreamName(vectorName);
 
   // Create the stream.
   //
@@ -768,7 +768,7 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
 
   // Calculate the stream name for the index.
   //
-  char* setIndexName = setIndexStreamName(setName);
+  char* setIndexName = collectionIndexStreamName(setName);
 
   // Create the stream.
   //
@@ -919,7 +919,7 @@ void OMStoredObject::save(const char* collectionName,
 
   // Calculate the stream name for the index.
   //
-  char* indexName = setIndexStreamName(collectionName);
+  char* indexName = collectionIndexStreamName(collectionName);
 
   // Create the stream.
   //
@@ -970,7 +970,7 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
 
   // Calculate the stream name for the index.
   //
-  char* vectorIndexName = vectorIndexStreamName(vectorName);
+  char* vectorIndexName = collectionIndexStreamName(vectorName);
 
   // Open the stream.
   //
@@ -1033,7 +1033,7 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
 
   // Calculate the stream name for the index.
   //
-  char* setIndexName = setIndexStreamName(setName);
+  char* setIndexName = collectionIndexStreamName(setName);
 
   // Open the stream.
   //
@@ -1108,38 +1108,22 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   set = setIndex;
 }
 
-  // @mfunc The stream name for the index of a vector named <p vectorName>.
-  //   @parm The vector name.
-  //   @rdesc The stream name for the vector index.
-char* OMStoredObject::vectorIndexStreamName(const char* vectorName)
+  // @mfunc The stream name for the index of a collection
+  //        named <p collectionName>.
+  //   @parm The collection name.
+  //   @rdesc The stream name for the collection index.
+char* OMStoredObject::collectionIndexStreamName(const char* collectionName)
 {
-  TRACE("OMStoredObject::vectorIndexStreamName");
-  PRECONDITION("Valid vector name", validString(vectorName));
+  TRACE("OMStoredObject::collectionIndexStreamName");
+  PRECONDITION("Valid vector name", validString(collectionName));
 
   char* suffix = " index";
-  char* vectorIndexName = new char[strlen(vectorName) + strlen(suffix) + 1];
-  ASSERT("Valid heap pointer", vectorIndexName != 0);
-  strcpy(vectorIndexName, vectorName);
-  strcat(vectorIndexName, suffix);
+  char* indexName = new char[strlen(collectionName) + strlen(suffix) + 1];
+  ASSERT("Valid heap pointer", indexName != 0);
+  strcpy(indexName, collectionName);
+  strcat(indexName, suffix);
 
-  return vectorIndexName;
-}
-
-  // @mfunc The stream name for the index of a set named <p setName>.
-  //   @parm The set name.
-  //   @rdesc The stream name for the set index.
-char* OMStoredObject::setIndexStreamName(const char* setName)
-{
-  TRACE("OMStoredObject::setIndexStreamName");
-  PRECONDITION("Valid set name", validString(setName));
-
-  char* suffix = " index";
-  char* setIndexName = new char[strlen(setName) + strlen(suffix) + 1];
-  ASSERT("Valid heap pointer", setIndexName != 0);
-  strcpy(setIndexName, setName);
-  strcat(setIndexName, suffix);
-
-  return setIndexName;
+  return indexName;
 }
 
   // @mfunc Restore the <c OMPropertyTable> in this <c OMStoredObject>.
@@ -1249,7 +1233,7 @@ void OMStoredObject::restore(const char* collectionName,
   
   // Calculate the stream name for the index.
   //
-  char* indexName = setIndexStreamName(collectionName);
+  char* indexName = collectionIndexStreamName(collectionName);
 
   // Open the stream.
   //
