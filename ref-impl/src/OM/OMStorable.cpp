@@ -240,30 +240,12 @@ void OMStorable::setStore(OMStoredObject* store)
   _store = store;
 }
 
-  // @mfunc Is this <c OMStorable> a persistent object ?
-  //        Persistent objects are associated with a persistent
-  //        store (disk file).
-  //   @rdesc True if this <c OMStorable> is persistent, false
-  //          otherwise.
-bool OMStorable::persistent(void)
-{
-  TRACE("OMStorable::persistent");
-
-  bool result;
-  OMStorable* container = containingObject();
-  if (container != 0) {
-    result = container->persistent();
-  } else {
-    result = false;
-  }
-  return result;
-}
-
   // @mfunc Is this <c OMStorable> attached to (owned by) another
   //        OMStorable ?
   //   @rdesc True if this <c OMStorable> is attached, false
   //          otherwise.
-bool OMStorable::attached(void)
+  //   @this const
+bool OMStorable::attached(void) const
 {
   TRACE("OMStorable::attached");
 
@@ -275,6 +257,46 @@ bool OMStorable::attached(void)
     result = false;
   }
 
+  return result;
+}
+
+  // @mfunc Is this <c OMStorable> associated with an <c OMFile> ?
+  //   @rdesc True if this <c OMStorable> is associated with an
+  //          <c OMFile> , false otherwise.
+  //   @this const
+bool OMStorable::inFile(void) const
+{
+  TRACE("OMStorable::inFile");
+  //PRECONDITION("object is attached", attached());
+
+  bool result;
+  OMStorable* container = containingObject();
+  if (container != 0) {
+    result = container->inFile();
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+  // @mfunc Is this <c OMStorable> a persistent object ?
+  //        Persistent objects are associated with a persistent
+  //        store (disk file).
+  //   @rdesc True if this <c OMStorable> is persistent, false
+  //          otherwise.
+  //   @this const
+bool OMStorable::persistent(void) const
+{
+  TRACE("OMStorable::persistent");
+  //PRECONDITION("object is in file", inFile());
+
+  bool result;
+  OMStorable* container = containingObject();
+  if (container != 0) {
+    result = container->persistent();
+  } else {
+    result = false;
+  }
   return result;
 }
 

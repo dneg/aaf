@@ -266,6 +266,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
+	  if (inFile())
+          {
 		hr = MyHeadObject(&head);
 		if(hr == AAFRESULT_SUCCESS)
 		{			
@@ -293,12 +295,11 @@ AAFRESULT STDMETHODCALLTYPE
 			head->ReleaseReference();
 			head = NULL;
 		}
-		else if (hr == AAFRESULT_NOT_IN_FILE)
-		{
-			_mobID = *newMobID;
-		}
 		else
 			RAISE(hr);
+	  }
+          else
+		 _mobID = *newMobID;
 
 	} /* XPROTECT */
 	XEXCEPT
