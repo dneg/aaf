@@ -168,7 +168,7 @@ AxString AxStringUtil::mbtowc( const char* cstr )
 {
 	std::wostringstream os;
 
-	int i;
+	size_t i;
 	for (i = 0; i < strlen(cstr); i++ ){ 
 		wchar_t wc;
 		if ( -1 != ::mbtowc( &wc, &cstr[i], 1 ) ) {
@@ -187,7 +187,7 @@ std::string AxStringUtil::wctomb( const AxString& s )
 	std::stringstream os;
 	const wchar_t* ws = s.c_str();
 	
-	int i;
+	size_t i;
 	for (i = 0; i < s.length(); i++ ){ 
 		char c;
 		if ( -1 != ::wctomb( &c, ws[i] ) ) {

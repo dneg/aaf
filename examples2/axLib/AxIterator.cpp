@@ -100,7 +100,7 @@ template <class Type, class EnumeratorType>
 auto_ptr< vector< Type > > 
 AxIterator<Type, EnumeratorType>::Next( aafUInt32 count )
 {
-	int i;
+	aafUInt32 i;
 
 	auto_ptr< vector< Type > >
 		typeV( new vector< Type > );

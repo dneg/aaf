@@ -106,7 +106,7 @@ private:
 	IAAFTypeDefRecordSP _spTypeDef;
 
 	aafUInt32 _count;
-	int _current;
+	aafUInt32 _current;
 };
 
 
@@ -118,7 +118,7 @@ private:
 // IAAFTypeDef{Fixed,Variable}Array::GetElements() interface is
 // implemented, hence, this class is redundant.
 //
-// Type is indented to be IAAFTypeDefFixedArray or IAAFTypeDefVariableArray
+// Type is intended to be IAAFTypeDefFixedArray or IAAFTypeDefVariableArray
 
 template <class TypeDef>
 class AxArrayIterator {
@@ -140,7 +140,7 @@ private:
 	TypeDefSP _spTypeDef;
 	IAAFPropertyValueSP _spPropVal;
 	aafUInt32 _count;
-	int _current;
+	aafUInt32 _current;
 };
 
 typedef AxArrayIterator<IAAFTypeDefFixedArray> AxFixedArrayIterator;
