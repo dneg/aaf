@@ -6,7 +6,6 @@ AAFVaryingValue\
 AAFParameter\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -16,6 +15,11 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+
+AD_CLASS_UUID(91920d61, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(91920d60, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
 AD_XMETHOD5(AddPoint,
@@ -23,23 +27,21 @@ AD_XMETHOD5(AddPoint,
 			[in],objPass,aafEditHint_t, editHint, Edit hint,
 			[in],objIn,AAFDataDefinition, datadef, pointer to data definition object,
 			[in],objPass,aafInt32, valueSize, Size of value data,
-			[in],objPass,void *, pValue, Ponter to the value data,
+			[in\, size_is\(valueSize\)],objPass, char *, pValue, Ponter to the value data,
 			This function adds a control point in time order into a varying
 			// value object.)
 
 AD_XMETHOD3(GetInfo,
-			[retval][out],objOut,AAFDataDefinition, pDatadef, Data Definition  object,
 			[out], objPass, aafLength_t *, pLength, Length of varying value object,
-		   [out], objPass, aafInterpKind_t *, pInterpolation, Interpolation method,
+		    [out], objPass, aafInterpKind_t *, pInterpolation, Interpolation method,
+			[out\,retval],objOut,AAFDataDefinition, pDatadef, Data Definition  object,
 		   This function returns the required property values for the varying
 		   // value object.)
 
 AD_METHOD1(GetNumPoints,
-		   [retval][out],aafInt32 *, pNumPoints, Number of control points,
+		   [out\\\,retval],aafInt32 *, pNumPoints, Number of control points,
 		   This function gets the number of control points in the varying
 		   // value object.)
-
-AD_OVERRIDE(.method-Test)
 
 AD_CLASS_END
 
