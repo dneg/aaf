@@ -8,7 +8,6 @@ AAFComponent\
 #c
 #import ./AAFComponent.exp
 AD_HEAD
-AD_INCLUDE(AAFTypes)
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -17,10 +16,12 @@ AD_INCLUDE(AAFTypes)
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFPulldown)
 AD_FORWARD_DECLARATION(AAFTimecode)
-AD_FORWARD_DECLARATION(AAFSequence)
+
+AD_CLASS_UUID(7a2f0571, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
+
+AD_DEFAULT_UUID(7a2f0570, 1ba3, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_CLASS_BEGIN
 
