@@ -38,6 +38,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
+#include "ModuleTest.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 
@@ -98,8 +99,6 @@ private:
   bool _bWritableFile;
   IAAFHeader *_pHeader;
   IAAFDictionary *_pDictionary;
-  aafMobID_t _eventMobID1;
-  aafMobID_t _eventMobID2;
 
   // EventMobSlot static data
   static const aafRational_t _editRate;
@@ -108,8 +107,29 @@ private:
   static const wchar_t* _slotName;
 };
 
+//{060c2b340205110101001000-13-00-00-00-{f827fde6-8d6f-11d4-a380-009027dfca6a}}
 
-extern "C" HRESULT CAAFEventMobSlot_test()
+static const aafMobID_t gEventMobID1 = {
+
+{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
+
+0x13, 0x00, 0x00, 0x00, 
+
+{0xf827fde6, 0x8d6f, 0x11d4, 0xa3, 0x80, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a}};
+
+//{060c2b340205110101001000-13-00-00-00-{f8d86bea-8d6f-11d4-a380-009027dfca6a}}
+
+static const aafMobID_t gEventMobID2 = {
+
+{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00}, 
+
+0x13, 0x00, 0x00, 0x00, 
+
+{0xf8d86bea, 0x8d6f, 0x11d4, 0xa3, 0x80, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x6a}};
+
+
+extern "C" HRESULT CAAFEventMobSlot_test(testMode_t mode);
+extern "C" HRESULT CAAFEventMobSlot_test(testMode_t mode)
 {
   HRESULT hr = S_OK;
   aafProductIdentification_t	ProductInfo = {0};
@@ -136,7 +156,8 @@ extern "C" HRESULT CAAFEventMobSlot_test()
   try
   {
     // Attempt to create a test file
-    test.Create(pFileName, &ProductInfo);
+	if(mode == kAAFUnitTestReadWrite)
+  	  test.Create(pFileName, &ProductInfo);
 
     // Attempt to read the test file.
     test.Open(pFileName);
@@ -166,8 +187,6 @@ EventMobSlotTest::EventMobSlotTest() :
   _pHeader(NULL),
   _pDictionary(NULL)
 {
-  memset(&_eventMobID1, 0, sizeof(_eventMobID1));
-  memset(&_eventMobID2, 0, sizeof(_eventMobID1));
 }
 
 EventMobSlotTest::~EventMobSlotTest()
@@ -372,12 +391,13 @@ void EventMobSlotTest::CreateEventMobSlot()
     pMobSlot->Release();
     pMobSlot = NULL;
 
+    // Save the id of the composition mob that contains our test
+    // event mob slot.
+    checkResult(pMob->SetMobID(gEventMobID1));
+
     // Attach the mob to the header...
     checkResult(_pHeader->AddMob(pMob));
 
-    // Save the id of the composition mob that contains our test
-    // event mob slot.
-    checkResult(pMob->GetMobID(&_eventMobID1));
     pMob->Release();
     pMob = NULL;
   }
@@ -436,7 +456,7 @@ void EventMobSlotTest::OpenEventMobSlot()
   try
   {
     // Get the composition mob that we created to hold the
-    checkResult(_pHeader->LookupMob(_eventMobID1, &pMob));
+    checkResult(_pHeader->LookupMob(gEventMobID1, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
     checkResult(pMob->GetSlots(&pEnumSlots));
@@ -591,12 +611,13 @@ void EventMobSlotTest::CreateEventSequenceMobSlot()
     pMobSlot->Release();
     pMobSlot = NULL;
 
+    // Save the id of the composition mob that contains our test
+    // event mob slot.
+    checkResult(pMob->SetMobID(gEventMobID2));
+
     // Attach the mob to the header...
     checkResult(_pHeader->AddMob(pMob));
 
-    // Save the id of the composition mob that contains our test
-    // event mob slot.
-    checkResult(pMob->GetMobID(&_eventMobID2));
     pMob->Release();
     pMob = NULL;
   }
@@ -667,7 +688,7 @@ void EventMobSlotTest::OpenEventSequenceMobSlot()
   try
   {
     // Get the composition mob that we created to hold the
-    checkResult(_pHeader->LookupMob(_eventMobID2, &pMob));
+    checkResult(_pHeader->LookupMob(gEventMobID2, &pMob));
 
     // Get the first mob slot and check that it is an event mob slot.
     checkResult(pMob->GetSlots(&pEnumSlots));
