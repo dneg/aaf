@@ -37,9 +37,6 @@
 #if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
 #define OM_COMPILER_MSC_INTEL_WINDOWS
 #define OM_OS_WINDOWS
-#elif defined(__MWERKS__) && defined(__POWERPC__) && defined(macintosh)
-#define OM_COMPILER_MWERKS_PPC_MACOS
-#define OM_OS_MACOS
 #elif defined(__MWERKS__) && defined(__MACH__)
 #define OM_COMPILER_MWERKS_PPC_MACOSX
 #define OM_OS_MACOSX
@@ -72,4 +69,3 @@
 #endif
 
 #endif
-
