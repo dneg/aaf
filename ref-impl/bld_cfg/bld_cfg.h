@@ -1,5 +1,5 @@
-#ifndef _bld_cfg_AAFBuildConfig_h_
-#define _bld_cfg_AAFBuildConfig_h_
+#ifndef _aaf_tk_bld_cfg_bld_cfg_h_
+#define _aaf_tk_bld_cfg_bld_cfg_h_
 
 /******************************************\
 *                                          *
@@ -49,4 +49,4 @@ AAF_BUILD_CONFIG_ASSY_386
   #define AAF_BUILD_CONFIG_BUILTIN_BOOL	1
 #endif
 
-#endif /* ! _bld_cfg_AAFBuildConfig_h_ */
+#endif /* ! _aaf_tk_bld_cfg_bld_cfg_h_ */
