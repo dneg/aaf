@@ -224,7 +224,7 @@ aafUInt32 Impl.this-module::AcquireRef()
 {
   // Delegate to global function to increment the reference
   // count for this implementation object's COM or C++ API object.
-  return 1; //AcquireImplReference(this);
+  return AcquireImplReference(this);
 }
 
 // Decrement the object reference count and delete the container.
@@ -234,7 +234,7 @@ aafUInt32 Impl.this-module::ReleaseRef()
   // reference to this implementation object. Tell the container to
   // Delete itself. The container's destructor will delete this
   // object.
-  return 1; // ReleaseImplReference(this);
+  return ReleaseImplReference(this);
 }
 
 // Just return the count. (this could be inline in the header...)
@@ -242,7 +242,7 @@ aafUInt32 Impl.this-module::RefCount()
 {
   // Delegate to global function to return the reference
   // count for this implementation object's COM or C++ API object.
-  return 1; //ReferenceImplCount(this);
+  return ReferenceImplCount(this);
 }
 
 void Impl.this-module::InitContainer (void * pContainer)
