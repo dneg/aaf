@@ -399,8 +399,7 @@ ImplAAFObject::ImplAAFObject ()
 	_cachedDefinition (0),
 	_apSavedProps (0),
 	_savedPropsSize (0),
-	_savedPropsCount (0),
-	_isInitialized (kAAFFalse)
+	_savedPropsCount (0)
 {
   _persistentProperties.put(_generation.address());
 
@@ -1199,19 +1198,6 @@ AAFRESULT STDMETHODCALLTYPE
 	  _generation.remove();
 	}
   return AAFRESULT_SUCCESS;
-}
-
-
-aafBool ImplAAFObject::isInitialized () const
-{
-  return _isInitialized;
-}
-
-
-void ImplAAFObject::setInitialized ()
-{
-  _isInitialized = kAAFTrue;
-  assert (isInitialized());
 }
 
 

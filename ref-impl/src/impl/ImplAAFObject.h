@@ -282,13 +282,6 @@ private:
   //
   // number of those props that are actually used
   aafUInt32 _savedPropsCount;
-  
-  aafBool	_isInitialized;
-
-
-protected:
-  aafBool isInitialized (void) const;
-  void    setInitialized (void);
 };
 
 //
