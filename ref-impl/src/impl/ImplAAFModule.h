@@ -47,10 +47,6 @@
 #include "ImplAAFFile.h"
 #include "ImplAAFObjectCreation.h"
 
-extern "C" const aafClassID_t CLSID_AAFFile;
-
-#include <assert.h>
-
 
 //***********************************************************
 //
