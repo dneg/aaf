@@ -323,7 +323,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	checkResult(spTypeDef->QueryInterface(IID_IAAFTypeDefString, (void**)&spSTR));
 	
 	//get the array out of it ...
-	TEST_ELEM_t	check_str [TEST_STR_COUNT] = {0};  //init a checking variable
+	TEST_ELEM_t	check_str [128] = {0};  //init a checking variable; select a reasonable size buffer
 	
 	//IAAFTypeDefString::GetCount()
 	aafUInt32 check_count = 0;
@@ -354,7 +354,7 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 
 	//::SetCString ...
 	// Set it
-	const aafCharacter* const NEW_STR = L"Another String";
+	const aafCharacter* const NEW_STR = L"Another One";
 	wcscpy(check_str, NEW_STR);
 	aafUInt32 cstr_size = wcslen(check_str) * sizeof(aafCharacter);
 	spSTR->SetCString(spPropVal, (aafMemPtr_t) check_str, cstr_size);
@@ -364,7 +364,22 @@ static HRESULT verifyContents (IAAFHeader* const pHeader, IAAFDictionary* const 
 	//VERIFY values:
 	checkExpression( wcsncmp(check_str, NEW_STR, wcslen(NEW_STR)) == 0, AAFRESULT_TEST_FAILED );
 
-	
+	//Append elements
+	const aafCharacter* const APPEND_STR = L" Bites the Dust";
+	wcscpy(check_str, APPEND_STR);
+	cstr_size = wcslen(check_str) * sizeof(aafCharacter);
+	spSTR->AppendElements(spPropVal, (aafMemPtr_t) check_str); //, cstr_size);
+	//Read it back
+	memset(check_str, 0, sizeof(check_str)); //initialize 
+	checkResult(spSTR->GetElements(spPropVal, (aafMemPtr_t) check_str, sizeof(check_str)));
+	//VERIFY values:
+	//verify first part of the string
+	checkExpression( wcsncmp(check_str, NEW_STR, wcslen(NEW_STR)) == 0, AAFRESULT_TEST_FAILED );
+	cstr_size = wcslen(NEW_STR); //point to the "append" part of the string
+	//verify second part of the string
+	checkExpression( wcsncmp(&check_str[cstr_size], APPEND_STR, wcslen(APPEND_STR)) == 0, AAFRESULT_TEST_FAILED );
+
+
 	return S_OK;
 	
 }//verifyContents()
@@ -529,13 +544,6 @@ extern "C" HRESULT CAAFTypeDefString_test()
 		hr = CreateAAFFile(	pFileName );
 		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );	
-		
-		if (hr == AAFRESULT_SUCCESS)
-		{
-			hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-			cout << "The following AAFTypeDefString Method(s) have not been implemented:" << endl;
-			cout << "\tAppendElements():   No implementation, No test" << endl;
-		}
 		
 	}//try
 	catch (...)
