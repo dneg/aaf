@@ -84,6 +84,8 @@ AAFRESULT ImplAAFWeakRefArrayValue::Initialize (
   return result;
 }
 
+
+
 //
 // WriteTo
 //
@@ -92,3 +94,67 @@ AAFRESULT STDMETHODCALLTYPE ImplAAFWeakRefArrayValue::WriteTo(
 {
   return (ImplAAFRefArrayValue::WriteTo(pOmProp));
 }
+
+
+
+
+  
+//
+// ImplAAFRefContainer overrides
+//
+
+// Return the type of object references in the container.
+ImplAAFTypeDefObjectRef * ImplAAFWeakRefArrayValue::GetElementType(void) const // the result is NOT reference counted.
+{
+  ImplAAFTypeDefObjectRef * pContainerElementType = NULL;
+  ImplAAFTypeDefArray *pContainerType = NULL;
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  ImplAAFTypeDefSP pType, pElementType;
+  
+  result = GetType(&pType);
+  assert(AAFRESULT_SUCCEEDED(result));
+  if (AAFRESULT_SUCCEEDED(result))
+  {
+    pContainerType = dynamic_cast<ImplAAFTypeDefArray *>((ImplAAFTypeDef *)pType); // extract obj from smartptr
+    assert(NULL != pContainerType);
+    if (NULL != pContainerType)
+    {
+      result = pContainerType->GetType(&pElementType);
+      assert(AAFRESULT_SUCCEEDED(result));
+      if (AAFRESULT_SUCCEEDED(result))
+      {
+        pContainerElementType = dynamic_cast<ImplAAFTypeDefWeakObjRef *>((ImplAAFTypeDef *)pType); // extract obj from smartptr
+      }
+    }
+  }
+  
+  assert(pContainerElementType);
+  return pContainerElementType;
+}
+
+
+// Perform specialized validation for an object before it is added
+// to a container.
+AAFRESULT ImplAAFWeakRefArrayValue::ValidateNewObject(ImplAAFStorable *pNewObject) const
+{
+  assert (isInitialized());
+  if (!isInitialized())
+    return AAFRESULT_NOT_INITIALIZED;
+
+  assert(NULL != pNewObject);
+  if (!pNewObject->attached())
+  {
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
+  }
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+// Perform any specialized cleanup of any object after it has been removed
+// from the container.
+bool ImplAAFWeakRefArrayValue::usesReferenceCounting(void) const
+{
+  return false;
+}
+  

@@ -59,6 +59,9 @@ public:
   AAFRESULT Initialize (const ImplAAFTypeDefWeakObjRef *referenceType,
                         OMProperty *property);
 
+  virtual AAFRESULT STDMETHODCALLTYPE GetObject(ImplAAFStorable **ppObject) const;
+  virtual AAFRESULT STDMETHODCALLTYPE SetObject(ImplAAFStorable *pObject);
+
   virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
 };
 
