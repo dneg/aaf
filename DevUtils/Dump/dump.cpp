@@ -87,11 +87,6 @@
 #endif
 
 #if defined(_MAC) || defined(macintosh)
-#if !defined(USE_DATAINPUT)
-#include <console.h>
-#else
-#include "DataInput.h"
-#endif
 
 #include "wintypes.h"
 #include "compobj.h"
@@ -118,6 +113,16 @@ typedef char OMCHAR;
 typedef int bool;
 const bool false = 0;
 const bool true = 1;
+#endif
+#endif
+
+// Console input for Macintosh (two different methods).
+//
+#if defined(OM_OS_MACOS)
+#if !defined(USE_DATAINPUT)
+#include <console.h>
+#else
+#include "DataInput.h"
 #endif
 #endif
 
