@@ -47,7 +47,8 @@ OMWeakReferenceSetProperty<ReferencedObject>::
                                         SF_WEAK_OBJECT_REFERENCE_SET,
                                         name),
   _targetTag(nullOMPropertyTag),
-  _targetName(saveString(targetName))
+  _targetName(saveString(targetName)),
+  _keyPropertyId(0 /* tjb */)
 {
   TRACE("OMWeakReferenceSetProperty<ReferencedObject>::"
                                                  "OMWeakReferenceSetProperty");
@@ -124,7 +125,8 @@ void OMWeakReferenceSetProperty<ReferencedObject>::save(
           propertyName,
           index,
           count,
-          tag);
+          tag,
+          _keyPropertyId);
   delete [] index;
 }
 
@@ -188,16 +190,19 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
   OMUniqueObjectIdentification* setIndex = 0;
   size_t entries;
   OMPropertyTag tag;
+  OMPropertyId keyPropertyId;
   store->restore(_propertyId,
                  _storedForm,
                  propertyName,
                  externalSize,
                  setIndex,
                  entries,
-                 tag);
+                 tag,
+                 keyPropertyId);
 
   ASSERT("Valid set index", IMPLIES(entries != 0, setIndex != 0));
   ASSERT("Valid set index", IMPLIES(entries == 0, setIndex == 0));
+  ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
   ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
   _targetTag = tag;
   delete [] propertyName;

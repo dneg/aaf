@@ -48,7 +48,8 @@ OMWeakReferenceVectorProperty<ReferencedObject>::
                                         SF_WEAK_OBJECT_REFERENCE_VECTOR,
                                         name),
   _targetTag(nullOMPropertyTag),
-  _targetName(saveString(targetName))
+  _targetName(saveString(targetName)),
+  _keyPropertyId(0 /* tjb */)
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::"
                                               "OMWeakReferenceVectorProperty");
@@ -126,7 +127,8 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(
           propertyName,
           index,
           count,
-          tag);
+          tag,
+          _keyPropertyId);
   delete [] index;
 }
 
@@ -187,16 +189,19 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::restore(
   OMUniqueObjectIdentification* vectorIndex = 0;
   size_t entries;
   OMPropertyTag tag;
+  OMPropertyId keyPropertyId;
   store->restore(_propertyId,
                  _storedForm,
                  propertyName,
                  externalSize,
                  vectorIndex,
                  entries,
-                 tag);
+                 tag,
+                 keyPropertyId);
 
   ASSERT("Valid vector index", IMPLIES(entries != 0, vectorIndex != 0));
   ASSERT("Valid vector index", IMPLIES(entries == 0, vectorIndex == 0));
+  ASSERT("Consistent key property ids", keyPropertyId == _keyPropertyId);
   ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
   _targetTag = tag;
   delete [] propertyName;

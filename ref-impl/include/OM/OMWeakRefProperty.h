@@ -102,6 +102,7 @@ private:
   OMWeakObjectReference<ReferencedObject> _reference;
   OMPropertyTag _targetTag;
   char* _targetName;
+  OMPropertyId _keyPropertyId;
 
 };
 
