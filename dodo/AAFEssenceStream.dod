@@ -28,22 +28,50 @@ AD_METHOD2(Write,
 			aafInt32,
 			buflen,
 			of this size,
-			Write some number of bytes to the stream exactly and with no formatting or compression.)
+			Write some number of bytes to the stream exactly and with no formatting or compression.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pBuffer or pBytesRead is null.
+	//
+	// AAFRESULT_STREAM_FULL
+	//   - The essence can not be written because of a fault such as a disk full error in the
+	// underlying operating system.)
 
 AD_METHOD3(Read,
 			[in],
 			aafUInt32,
 			buflen,
 			to a buffer of this size,
-			[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],
+			[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*pBytesRead\\\)],
 			aafDataBuffer_t,
-			buffer,
+			pBuffer,
 			here is the buffer,
 			[out\\\,ref],
 			aafUInt32 *,
-			bytesRead,
+			pBytesRead,
 			Return bytes actually read,
-			Read some number of bytes from the stream exactly and with no formatting or compression.)
+			Read some number of bytes from the stream exactly and with no formatting or compression.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pBuffer or pBytesRead is null.
+	//
+	// AAFRESULT_END_OF_ESSENCE
+	//   - Hit either the end-of-file on a raw essence file\\\, or the end of the essence property.
+	//	The pBytesRead parameter correctly reflects the number of bytes actually read.)
 
 AD_METHOD1(Seek,
 			[in],
@@ -51,48 +79,102 @@ AD_METHOD1(Seek,
 			byteOffset,
 			The absolute byte offset into the stream.,
 			Seek to the absolute byte offset into the stream.)
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	//
+	// AAFRESULT_STREAM_BOUNDS
+	//   - The new position would be outside of the bounds of the stream.)
 
 AD_METHOD1(SeekRelative,
 			[in],
 			aafInt32,
 			byteOffset,
 			The relative byte offset into the stream.,
-			Seek forward or backward the given byte count.)
-
-AD_METHOD2(IsPosValid,
-			[in],
-			aafInt64,
-			byteOffset,
-			The absolute byte offset into the stream.,
-			[out],
-			aafBool *,
-			isValid,
-			The result.,
-			Returns AAFTrue if the byte offset is within the stream.)
+			Seek forward or backward the given byte count.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	//
+	// AAFRESULT_STREAM_BOUNDS
+	//   - The new position would be outside of the bounds of the stream.)
 
 AD_METHOD1(GetPosition,
 			[out],
 			aafInt64 *,
-			position,
+			pPosition,
 			The position within the stream.,
-			Returns the position within the stream.)
+			Returns the position within the stream.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pPosition is null.)
 
 AD_METHOD1(GetLength,
 			[out],
 			aafInt64 *,
-			position,
+			pLength,
 			The length of the stream.,
-			Returns the length of the stream.)
+			Returns the length of the stream.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pLength is null.)
 
-AD_METHOD0(omcFlushCache, Ensure that all bits are written.)
+AD_IDL(//
+// NOTE: Methods which help support optional buffering or caching of the essence
+// data.  Caching is not required to be supported\, and may actually reduce performance.
+// on some platforms.  If your stream does not support caching\, then return AAFRESULT_SUCCESS
+// for these calls.
+//)
+
+AD_METHOD0(FlushCache, Ensure that all bits are written.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	// 
+	// AAFRESULT_STREAM_FULL
+	//   - The essence can not be written because of a fault such as a disk full error in the
+	// underlying operating system.)
 
 AD_METHOD1(SetCacheSize,
 			[in],
 			aafInt32,
 			itsSize,
-			The size of the cache buffer.,
+			The size of the cache buffer.  Zero is a valid size\\\, and means to turn caching off,
 			Sets the size of the cache buffer used for further operations.
-			// Destroys the current contents of the cache.)
+			// Destroys the current contents of the cache.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\) )
 
 AD_XCLASS_END(Abstract, Transient)
 

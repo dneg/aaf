@@ -9,9 +9,9 @@ AAFObject\
 AD_HEAD
 AD_IDL(//
 // The IAAFControlPoint interface is implemented by objects that an individual point value
-// of a parameter whose value changes during the effect.  IAAFControlPoints must be added to
-// and IAAFVaryingValue\, which is then added to the IAAFEffect.  For parameters which are
-// constant in value during the effect\, use IAAFConstValue.
+// of a parameter whose value changes during the operation group.  IAAFControlPoints must be added to
+// and IAAFVaryingValue\, which is then added to the IAAFOperationGroup.  For parameters which are
+// constant in value during the operation group\, use IAAFConstValue.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -44,7 +44,7 @@ AD_METHOD1(GetTime,
 			aafRational_t *,
 			pTime,
 			Pointer to an aafRational_t,
-	Returns the position of the control point within an effect\\\, expressed as a rational
+	Returns the position of the control point within an operation group\\\, expressed as a rational
   // running from 0 to 1.
   // 
   // Succeeds if all of the following are true:
@@ -74,7 +74,7 @@ AD_METHOD1(GetEditHint,
 			pEditHint,
 			Pointer to an aafEditHint_t,
 			Returns the edit hint of the control point\\\, which describes how to alter the
-  // position if the AAFEffect is made longer or shorter.
+  // position if the AAFOperationGroup is made longer or shorter.
   //
   // Succeeds if all of the following are true:
   // - the pEditHint pointer is valid.
@@ -153,7 +153,7 @@ AD_METHOD3(GetValue,
 
 AD_METHOD1(SetTime,
 		   [in], aafRational_t, pTime,Control Point time,
-			Sets the position of the control point within an effect\\\, expressed as a rational
+			Sets the position of the control point within an operation group\\\, expressed as a rational
   // running from 0 to 1.
   // 
   // This method will return the following codes.  If more than one of
@@ -169,7 +169,7 @@ AD_METHOD1(SetTime,
 AD_METHOD1(SetEditHint,
 		   [in], aafEditHint_t, editHint,Control Point Edit hint,
 		   Sets the control point Edit hint value\\\, which describes how to alter the
-  // position if the AAFEffect is made longer or shorter.
+  // position if the AAFOperationGroup is made longer or shorter.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\\\, it will return the first one

@@ -9,10 +9,10 @@ AAFDefObject\
 AD_HEAD
 AD_IDL(//
 // The IAAFParameterDef interface is implemented by objects that specify a
-// definition of an effect parameter.  The parameterDef object is separate from the
-// effect definition to allow some parameters\, for example level\, to be specified
-// once for multiple effect definitions.
-// Parmeter definitions define the possible values and display units of a single effect
+// definition of an operation group parameter.  The parameterDef object is separate from the
+// operation definition to allow some parameters\, for example level\, to be specified
+// once for multiple operation definitions.
+// Parmeter definitions define the possible values and display units of a single operation
 // parameter.
 //
 // In addition to the specific error results listed for each method\,
@@ -74,7 +74,7 @@ AD_XMETHOD1(GetTypeDef,
   //
   // AAFRESULT_NO_ESSENCE_DESC
   //   - There is no AAFTypeDef.  There has to be one of some
-  //     kind for this to be a valid effect definition.)
+  //     kind for this to be a valid operation definition.)
 
 AD_XMETHOD1(SetTypeDef,
 		   [in],
@@ -82,7 +82,7 @@ AD_XMETHOD1(SetTypeDef,
 		   AAFTypeDef,
 		   ppTypeDef,
 		   Pointer to a type definition,
-			Sets the AAFTypeDef of this IAAFEffectDef to be the given one.
+			Sets the AAFTypeDef of this IAAFOperationDef to be the given one.
   //
   // Succeeds if all of the following are true:
   // - the ppTypeDef pointer is valid.
@@ -177,8 +177,8 @@ AD_XMETHOD1(SetDisplayUnits,
 			pDisplayUnits,
 			DisplayUnits,
 
-		   Sets the DisplayUnits of the effect definition. DisplayUnits is a
-  // name that describes  a group of effects.  A copy is made of the data so the caller
+		   Sets the DisplayUnits of the operation definition. DisplayUnits is a
+  // name that describes  a group of operation groups.  A copy is made of the data so the caller
   // retains ownership of the *pDisplayUnits buffer and is responsible for
   // de-allocating it. 
   // 

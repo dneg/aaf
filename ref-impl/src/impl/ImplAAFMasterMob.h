@@ -187,8 +187,8 @@ public:
     // @parm [in] aafMediaCriteria_t * | pMediaCrit | Media Criteria
     aafMediaCriteria_t *  pMediaCrit,
 
-    // @parm [in] aafEffectChoice_t * | pEffectChoice | Effect Choice
-    aafEffectChoice_t *  pEffectChoice,
+    // @parm [in] aafOperationChoice_t * | pOperationChoice | Operation Choice
+    aafOperationChoice_t *  pOperationChoice,
 
     // @parm [out] AAFFindSourceInfo | ppSourceInfo | Source Information
     ImplAAFFindSourceInfo ** ppSourceInfo

@@ -19,6 +19,14 @@ AD_IDL(//
 // The AAFPluginManager keeps a copy of each codec in a table\, along
 // with cached copies of pertinant metadata about the codec\, and
 // instantiates a copy of the codec for each media stream.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
 //)
 AD_CLASS_UUID(3631F7A1, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
@@ -31,40 +39,117 @@ AD_IDL(//
 	// NOT for each instance of a codec.
 	//)
 
+
 AD_XMETHOD1(SetEssenceAccess,
 		   [in],
 		   objIn,
-		   Unknown,
-		   access,
-		   Set the essence access associated with the codec as a factory creating AAFEssenceFormat,
-			 Set the essence access associated with the codec as
-	// a factory creating AAFEssenceFormat,)
+		   AAFEssenceAccess,
+		   pEssenceAccess,
+		   The associated IAAFEssenceAccess,
+		   Set the essence access associated with the codec.   The AAFEssenceAccess object
+	// is the factory object for creating AAFEssenceFormats\, so it would be best to store
+	// away this pointer inside of the codec\, doing an AddRef\(\).
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pEssenceAccess is null.)
 
-AD_XMETHOD2(GetIndexedVariantID,
+
+
+AD_XMETHOD1(GetFlavourCount,
+		   [out],
+		   objPass,
+		   aafInt32*,
+		   pCount,
+		   Number of flavours supported,
+			 Some codecs have different variants or flavours of the media handled by a single codec.
+	// \(For example\, the Avid AVR codec handles multiple AVRs.\)
+	// This call returns the number of flavours \(usually one\) supported by this codec.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pCount is null.)
+
+
+AD_XMETHOD2(GetIndexedFlavourID,
 		   [in],
 		   objPass,
 		   aafInt32,
 		   index,
-		   Which variant to get the ID for,
+		   Which flavour to get the ID for,
 		   [out],
 		   objPass,
 		   aafUID_t *,
 		   pVariant,
-		   The returned variant ID,
-			 Some codecs have variants handled by a single codec.
+		   The returned flavour ID,
+			 Some codecs have flavour handled by a single codec.
 	// \(For example\, the Avid AVR codec handles multiple AVRs.\)
-	// The number of variants is returned by GetMetaInfo\, and cached
+	// The number of flavours is returned by GetFlavourCount\(\)\, and cached
 	// by the AAFPluginManager.
-	//)
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pVariant is null.
+	//
+	// AAFRESULT_OUT_OF_RANGE
+	//   - index must be \>\= 0 and \< the number of flavours returned in GetFlavourCount\(\). )
 
 	
-AD_XMETHOD1(SetCompression,
+AD_XMETHOD1(SetCompressionEnabled,
 		   [in],
 		   objPass,
-		   aafCompressEnable_t,
+		   aafBool,
 		   enableCompression,
 		   isCompressionEnabled,
 		   Sets a value indicating whether the SDK is handling the compression.)
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\) )
+
+AD_XMETHOD1(GetDataDefinitionCount,
+		   [out],
+		   objPass,
+		   aafInt32*,
+		   pCount,
+		   Number of essence data definitions supported,
+			 Some codecs support formats which can encode multiple types of essence.  For example\,
+	// interleaved video and audio.
+	// This call returns the number of essence data definitions \(usually one\) supported by this codec.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pCount is null.)
+
+
+
 
 AD_XMETHOD2(GetIndexedDataDefinition,
 		   [in],
@@ -80,101 +165,146 @@ AD_XMETHOD2(GetIndexedDataDefinition,
 	// All codecs handle at least one kind of media \(picture\, sound\, control\)
 	// but some handle more than one.  The kind of media is specified by an
 	// AAFDataDefinition.  The numnber of data definitions is returned by
-	// GetMetaInfo\, and cached by the AAFPluginManager.)
+	// GetDataDefinitionCount\, and cached by the AAFPluginManager.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pVariant is null.)
+
 
 AD_XMETHOD3(GetCodecDisplayName,
 			[in],
 			objPass,
 			aafUID_t,
 			variant,
-			which variant of the codec to use,
+			which flavour of the codec to use\, or kNoCodecFlavour,
 			[in\,string],
 			objPass,
 			wchar_t *,
 			pName,
-			Human-readable name of the variant,
+			Human-readable name of the flavour,
 			[in],
 			objPass,
 			aafInt32,
 			bufSize,
-			length of the buffer to hold variant Name,
-			Given a variant ID\, return the human readable name)
+			length of the buffer to hold flavour Name,
+			Given a flavour ID\, return the human readable name
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pName is null.)
+
 	
 AD_IDL(//
 	//**************
 	// General purpose codec functions\, always callable \(whether or not
 	// Open or Create have been called.\)  These are called by AAFEssenceAccess
-	// to before the stream is actually opened.
+	// to before the stream is actually opened\, and therefore may not rely on data
+	// which is created during open or create.  This is why they take so many parameters.
 	//)
 	
+
 AD_XMETHOD4(GetNumChannels,
-		   [in],
-		   objIn,
-		   Unknown,
-		   fileMob,
-		   Get the number of processable channels on this file mob,
-		   [in],
-		   objPass,
-		   aafUID_t,
-		   essenceKind,
-		   This is the type of essence to open,
+			[in],
+			objIn,
+			Unknown,
+			fileMob,
+			Get the number of processable channels on this file mob,
+			[in],
+			objPass,
+			aafUID_t,
+			essenceKind,
+			This is the type of essence to open,
 			[in],
 			objIn,
 			AAFEssenceStream,
 			stream,
-			Here is an essence stream with the raw data,
-		   [out],
-		   objPass,
-		   aafInt16 *,
-		   pNumChannels,
-		   The number of channels present,
-			Returns the number of channels which this codec can handle
-			// of the given essence kind)
-
-AD_XMETHOD2(GetNumSamples,
-		    [in],
-		    objPass,
-		    aafUID_t,
-		    essenceKind,
-			Tell how many samples of this type are on the mob,
+			Here is an essence stream with the data,
 			[out],
 			objPass,
-			aafLength_t *,
-			pNumSamples,
-			The number of samples present on this track,
-			Return the number of samples present on a given track of the essence.)
+			aafInt16 *,
+			pNumChannels,
+			The number of channels present,
+			Returns the number of channels which this codec can handle
+	// of the given essence kind.  If the essence kind is not handled by this
+	// codec at all\, then return zero channels through pNumChannels\, and return
+	// AAFRESULT_SUCCESS.
+	//
+	// The AAFEssenceStream is owned by IAAFEssenceAccess\, and
+	// therefore should not AddRef\(\) it.  The codec may seek and read the stream as much\,
+	// as required to determine the number of channels.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pNumChannels is null.)
 
-AD_XMETHOD5(SemanticCheck,
-		   [in],
+
+AD_XMETHOD6(ValidateEssence,
+			[in],
 			objIn,
-		   Unknown,
-		   fileMob,
-		   Run a check on this file mob,
-		   [in],
+			AAFSourceMob,
+			fileMob,
+			Run a check on this file mob,
+			[in],
+			objIn,
+			AAFEssenceStream,
+			stream,
+			and this essence data stream,
+			[in],
 			objPass,
-		   aafCheckVerbose_t,
-		   verbose,
-		   This is the verbosity level of the output,
-		   [out],
+			aafCheckVerbose_t,
+			verbose,
+			This is the verbosity level of the output,
+			[in],
 			objPass,
-		   aafCheckWarnings_t *,
-		   outputWarnings,
-		   This determines whether the output contains warnings,
+			aafCheckWarnings_t,
+			outputWarnings,
+			This determines whether the output contains warnings,
 			[in\,string],
 			objPass,
 			wchar_t *,
-			pName,
+			pErrorText,
 			Human-readable text describing problems \(or lack therof\) with the media,
 			[in],
 			objPass,
 			aafInt32,
 			bufSize,
-			length of the buffer to hold variant Name,
+			length of the buffer to hold the error result,
 			Returns a \(possibly zero-length\) string listing any problems
-			//found with the essence\, or the relationship between variables
-			// in the essence descriptor\, and any such values contained within
-			// the essence data)
+			//found with the essence.
+	//
+	// This method validates the metadata associated with the essence data.  It may compare
+	// fields within the data\, and also compare metadata against values in the IAAFFileDescriptor.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pErrorText is null.)
 		
+
 AD_XMETHOD5(Create,
 			[in],
 			objIn,
@@ -190,7 +320,7 @@ AD_XMETHOD5(Create,
 			objIn,
 			AAFEssenceStream,
 			stream,
-			Here is an essence stream with the raw data,
+			Here is an essence stream with the data,
 			[in],
 			objPass,
 			aafInt32,
@@ -202,7 +332,21 @@ AD_XMETHOD5(Create,
 			createParms,
 			Here are the create parameters,
 			Create a media data object\, and attach the correct type of
-			//EssenceDescriptor to the fileMob)
+			//EssenceDescriptor to the fileMob.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pEssenceAccess is null.
+	//
+	// AAFRESULT_STREAM_FULL
+	//   - The essence can not be written because of a fault such as a disk full error in the
+	// underlying operating system.)
 
 AD_XMETHOD4(Open,
 			[in],
@@ -226,13 +370,51 @@ AD_XMETHOD4(Open,
 			stream,
 			Here is an essence stream with the raw data,
 			Open a media data object.)
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pEssenceAccess is null.
+	//
+	// AAFRESULT_ESSENCE_NOT_FOUND
+	//   - The essence could not be located inside of the current file, or by following
+	//		any of the locators.)
 	
 AD_IDL(//
 	//**************
 	// Essence access codec functions\, Open or Create must have been called.
 	//)
 
-AD_XMETHOD3(WriteBlocks,
+
+AD_XMETHOD2(GetNumSamples,
+		    [in],
+		    objPass,
+		    aafUID_t,
+		    essenceKind,
+			Tell how many samples of this type are on the mob,
+			[out],
+			objPass,
+			aafLength_t *,
+			pNumSamples,
+			The number of samples present on this track,
+			Return the number of samples present on a given track of the essence.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	//
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pNumSamples is null.)
+
+AD_XMETHOD4(WriteBlocks,
 			[in],
 			objPass,
 			aafDeinterleave_t,
@@ -246,11 +428,31 @@ AD_XMETHOD3(WriteBlocks,
 			[in],
 			objPass,
 			aafmMultiXfer_t *,
-			xferBlock,
+			pTransferParm,
 			One or more blocks containing buffer pointer and length,
-			Write blocks from one or more buffers\, interleaving if needed.)
+			[out],
+			objPass,
+			aafmMultiResult_t *,
+			pResultParm,
+			One or more blocks containing results,
+			Write blocks from one or more buffers\, interleaving if needed.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pTransferParm is null.
+	//
+	// AAFRESULT_STREAM_FULL
+	//   - The essence can not be written because of a fault such as a disk full error in the
+	// underlying operating system.)
 
-AD_XMETHOD3(ReadBlocks,
+
+AD_XMETHOD4(ReadBlocks,
 			[in],
 			objPass,
 			aafDeinterleave_t,
@@ -264,9 +466,32 @@ AD_XMETHOD3(ReadBlocks,
 			[in],
 			objPass,
 			aafmMultiXfer_t *,
-			xferBlock,
+			pTransferParm,
 			One or more blocks containing buffer pointer and length,
-			Read blocks into one or more buffers\, de-interleaving if needed.)
+			[out],
+			objPass,
+			aafmMultiResult_t *,
+			pResultParm,
+			One or more blocks containing results,
+			Read blocks into one or more buffers\, de-interleaving if needed.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pTransferParm is null.
+	//
+	// AAFRESULT_SMALLBUF
+	//   - The buffer is not large enough to hold the data
+	//
+	// AAFRESULT_END_OF_ESSENCE
+	//   - Hit either the end-of-file on a raw essence file\\\, or the end of the essence property.
+	//	The bytesRead fields inside of pTransferParm correctly reflect the number of bytes and complete
+	//  samples on each track.)
 
 AD_XMETHOD1(Seek,
 			[in],
@@ -276,23 +501,47 @@ AD_XMETHOD1(Seek,
 			The sample frame to seek to.,
 			Seek to a particular sample frame on the media.  The
 			// sample frame is one frame for picture\, and one sample
-			// times the number of interleaved channels for audio.)
+			// times the number of interleaved channels for audio.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\) )
 
 AD_XMETHOD1(CompleteWrite,
 			[in],
 			objIn,
-			Unknown,
-			unk,
+			AAFSourceMob,
+			pDescriptor,
 			Optional second essence descriptor to also update,
-			Close the media stream\, ready to open another or Finish.)
+			Close the media stream\, ready to open another or Finish.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pDescriptor is null.
+	//
+	// AAFRESULT_STREAM_FULL
+	//   - The essence can not be written because of a fault such as a disk full error in the
+	// underlying operating system.)
 		
 AD_IDL(	// Old video write/read lines become fractional samples)
+
+
+
 
 AD_XMETHOD2(WriteFractionalSample,
 			[in\,size_is\(buflen\)],
 			objPass,
 			aafDataBuffer_t,
-			buffer,
+			pBuffer,
 			to a buffer,
 			[in],
 			objPass,
@@ -302,8 +551,21 @@ AD_XMETHOD2(WriteFractionalSample,
 			Write some number of bytes to the stream\,
 			// formatting it as usual.  When the number of bytes passes
 			//the size of a sample frame\, then the number of sample frames is
-			// bumped by one.)
-
+			// bumped by one.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pBuffer is null.
+	//
+	// AAFRESULT_STREAM_FULL
+	//   - The essence can not be written because of a fault such as a disk full error in the
+	// underlying operating system.)
 
 
 AD_XMETHOD3(ReadFractionalSample,
@@ -312,20 +574,32 @@ AD_XMETHOD3(ReadFractionalSample,
 			aafUInt32,
 			buflen,
 			to a buffer of this size,
-			[out\, size_is\(buflen\)\, length_is\(*bytesRead\)],
+			[out\, size_is\(buflen\)\, length_is\(*pBytesRead\)],
 			objPass,
 			aafDataBuffer_t,
-			buffer,
+			pBuffer,
 			here is the buffer,
 			[out\,ref],
 			objPass,
 			aafUInt32 *,
-			bytesRead,
+			pBytesRead,
 			Return bytes actually read,
 			Read some number of bytes to the stream\, removing any
-			// formatting.  When the number of bytes passes
-			//the size of a sample frame\, then the number of sample frames read is
-			// bumped by one.)
+			// formatting.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pBuffer or pBytesRead is null.
+	//
+	// AAFRESULT_END_OF_ESSENCE
+	//   - Hit either the end-of-file on a raw essence file\\\, or the end of the essence property.
+	//	The pBytesRead parameter correctly reflects the number of bytes actually read.)
 
 
 
@@ -336,13 +610,29 @@ AD_METHOD3(WriteRawData,
 			Write this many samples,
 			[in\\\,size_is\\\(buflen\\\)],
 			aafDataBuffer_t,
-			buffer,
+			pBuffer,
 			to a buffer,
 			[in],
 			aafUInt32,
 			buflen,
 			of this size,
-			Write some number of bytes to the stream exactly and with no formatting or compression.)
+			Write some number of bytes to the stream exactly and with no formatting or compression.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	//
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pBuffer is null.
+	//
+	// AAFRESULT_STREAM_FULL
+	//   - The essence can not be written because of a fault such as a disk full error in the
+	// underlying operating system.)
+
 
 
 
@@ -354,26 +644,41 @@ AD_METHOD5(ReadRawData,
 			[in],
 			aafUInt32,
 			buflen,
-			to a buffer of this size,
-			[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*bytesRead\\\)],
+			read into a buffer of this size,
+			[out\\\, size_is\\\(buflen\\\)\\\, length_is\\\(*pBytesRead\\\)],
 			aafDataBuffer_t,
-			buffer,
+			pBuffer,
 			here is the buffer,
 			[out\\\,ref],
 			aafUInt32 *,
-			bytesRead,
+			pBytesRead,
 			Return bytes actually read,
 			[out\\\,ref],
 			aafUInt32 *,
-			samplesRead,
+			pSamplesRead,
 			Return samples actually read,
-			Read some number of bytes from the stream exactly and with no formatting or compression.)
+			Read some number of bytes from the stream exactly and with no formatting or compression.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\\\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \\\(This is the only code indicating success.\\\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pBuffer\\\, pBytesRead\\\, or pSamplesRead is null.
+	//
+	// AAFRESULT_END_OF_ESSENCE
+	//   - Hit either the end-of-file on a raw essence file\\\, or the end of the essence property.
+	//	The pBytesRead parameter correctly reflects the number of bytes actually read.)
 
 AD_IDL(//
 	//**************
 	// Misc. Functions
 	//)
 	
+
 AD_XMETHOD2(CreateDescriptorFromStream,
 			[in],
 			objIn,
@@ -382,11 +687,24 @@ AD_XMETHOD2(CreateDescriptorFromStream,
 			A raw file stream,
 			[in],
 			objIn,
-			Unknown,
+			AAFSourceMob,
 			pSourceMob,
 			Put the finished descriptor on this source mob,
 			Given some raw essence \(like a WAVE file\)\, create
-			// an AAFEssenceDescriptor to match\, with all fields filled in.)
+			// an AAFEssenceDescriptor to match\, with all fields filled in.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pStream or pSourceMob is null.)
+
+
+
 
 
 
@@ -396,7 +714,17 @@ AD_XMETHOD1(GetCurrentEssenceStream,
 			AAFEssenceStream,
 			ppStream,
 			The current essence stream,
-			Return the current essence stream.)
+			Return the current essence stream.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - ppStream is null.)
 		
 AD_XMETHOD1(PutEssenceFormat,
 			[in],
@@ -404,7 +732,17 @@ AD_XMETHOD1(PutEssenceFormat,
 			AAFEssenceFormat,
 			pFormat,
 			An essence format object,
-			Set the format of the data.)
+			Set the format of the data.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pFormat is null.)
 
 AD_XMETHOD2(GetEssenceFormat,
 			[in],
@@ -415,18 +753,38 @@ AD_XMETHOD2(GetEssenceFormat,
 			[out],
 			objOut,
 			AAFEssenceFormat,
-			pNewFormat,
+			ppNewFormat,
 			A new essence format object with the data filled in,
 			Supply an essence format object specifying what data is
-			// required\, and it is filled in with the data values.)
+			// required\, and it is filled in with the data values.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pFormatTemplate or ppNewFormat is null.)
 			
 AD_XMETHOD1(GetEssenceFormatList,
 			[out],
 			objOut,
 			AAFEssenceFormat,
-			pNewFormat,
+			ppNewFormat,
 			An essence format with all valid parameter names filled in,
-			Returns an essence format object specifying which parameters may be set with the current codec.)
+			Returns an essence format object specifying which parameters may be set with the current codec.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - ppNewFormat is null.)
 
 AD_XMETHOD1(GetEssenceDescriptorID,
 			[out],
@@ -434,14 +792,36 @@ AD_XMETHOD1(GetEssenceDescriptorID,
 			aafUID_t *,
 			pDescriptorID,
 			The stored object AUID of the essence descriptor class,
-			Returns the stored object AUID of the essence descriptor class associated with this codec.)
+			Returns the stored object AUID of the essence descriptor class associated with this codec.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pDescriptorID is null.)
+
 
 AD_XMETHOD1(GetEssenceDataID,
 			[out],
 			objPass,
 			aafUID_t *,
-			pDescriptorID,
+			pEssenceDataID,
 			The stored object AUID of the essence data class,
-			Returns the stored object AUID of the essence data class associated with this codec.)
+			Returns the stored object AUID of the essence data class associated with this codec.
+	// 
+	// This method should return only the following codes.  If more than one of
+	// the listed errors is in effect\, it should return the first one
+	// encountered in the order given below:
+	// 
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_NULL_PARAM
+	//   - pEssenceDataID is null.)
+
 
 AD_XCLASS_END(Abstract, Transient)

@@ -89,7 +89,7 @@ public:
     (/*[out]*/ aafInt64 *  position); // The length of the stream. 
 
   // Ensure that all bits are written.
-  STDMETHOD (omcFlushCache)
+  STDMETHOD (FlushCache)
      ();
 
 

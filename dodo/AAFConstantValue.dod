@@ -9,8 +9,8 @@ AAFParameter\
 AD_HEAD
 AD_IDL(//
 // The IAAFConstValue interface is implemented by objects that specify a parameter
-// whose value is constant for an entire effect.  Use IAAFVaryingValue and one or
-// more IAAFControlPoints for parameters which change in value during the effect.
+// whose value is constant for an entire operation group.  Use IAAFVaryingValue and one or
+// more IAAFControlPoints for parameters which change in value during the operation group.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following

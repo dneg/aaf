@@ -9,7 +9,7 @@ AAFObject\
 AD_HEAD
 AD_IDL(//
 // The IAAFParameter interface is implemented by objects that specify an
-// Instantiation of an effect parameter.  It is an abstract class\, so you should use
+// Instantiation of an operation parameter.  It is an abstract class\, so you should use
 // AAFConstantValue or AAFVaryingValue.
 //
 // In addition to the specific error results listed for each method\,
@@ -52,8 +52,8 @@ AD_XMETHOD1(SetParameterDefinition,
 		   pParmDef,
 		   New parameter definition,
 			Sets the parameter definition property value on the input component object.
-  // The length of an effect parameter is in the same edit units and has the
-  // same value as the IAAFEffect enclosing this parameter.
+  // The length of an operation parameter is in the same edit units and has the
+  // same value as the IAAFOperationGroup enclosing this parameter.
   // 
   // If this method fails no state will be changed.
   // 
@@ -71,9 +71,9 @@ AD_XMETHOD1(GetParameterDefinition,
 		   AAFParameterDef,
 		   ppParmDef,
 		   New parameter definition,
-			Places the parameter definition of the effect parameter into the
-  // *ppParmDef argument.  The length of an effect parameter is in the same
-  // edit units and has the same value as the IAAFEffect enclosing this parameter.
+			Places the parameter definition of the operation parameter into the
+  // *ppParmDef argument.  The length of an operation parameter is in the same
+  // edit units and has the same value as the IAAFOperationGroup enclosing this parameter.
   //
   // Succeeds if all of the following are true:
   // - the ppParmDef pointer is valid.

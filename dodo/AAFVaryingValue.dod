@@ -9,8 +9,8 @@ AAFParameter\
 AD_HEAD
 AD_IDL(//
 // The IAAFVaryingValue interface is implemented by objects that specify a parameter
-// whose value changes during the effect.  The actual values are stored in one or
-// more IAAFControlPoints.  For parameters which are constant in value during the effect\,
+// whose value changes during the operation group.  The actual values are stored in one or
+// more IAAFControlPoints.  For parameters which are constant in value during the operation group\,
 // use IAAFConstValue.
 //
 // In addition to the specific error results listed for each method\,
@@ -110,7 +110,7 @@ AD_XMETHOD1(GetValueBufLen,
   //   - pLen arg is NULL.)
 
 AD_METHOD4(GetInterpolatedValue,
-		    [in],aafRational_t, inputValue, Position along the effect,
+		    [in],aafRational_t, inputValue, Position along the operation group,
 			[in],aafInt32,valueSize,Size of preallocated buffer,
 			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
 			[out],aafInt32*,bytesRead,Number of actual bytes read,

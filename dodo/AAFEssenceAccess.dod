@@ -16,18 +16,19 @@ AD_HEAD
 *										        *
 \************************************************/
 
+AD_IDL(//
 // AAFEssenceAccess is an interace which provides streaming access over essence data.  This
-// interfaces deals with essence data which is in an uncompressed form, and handles compression
-// or decompression of the data if required.  For access to data in raw form, call the
-// GetEssenceSampleStream method on this interface, which gives access to the underlying stream
-// used by the essence codecs and AAFEssenceAccess.
+// interfaces deals with essence data which is in an uncompressed form\, and handles compression
+// or decompression of the data if required.  For access to data in raw form\, call QueryInterface\(\)
+// on this interface which gives access to raw I\/O methods.
 //
 // You should call the CreateEssence or OpenEssence calls on AAFMasterMob in order to get an
-// interface pointer to AAFEssenceAccess, as there is no public create or open method in the interface.
+// interface pointer to AAFEssenceAccess\, as there is no public create or open method in the interface.
 //
-// A number of errors can be returned from most method calls.  These are:
+// A number of errors can be returned from most method calls\,  These are:
 //		AAFRESULT_NOMEMORY -- The system ran out of memory processing the method
 //		AAFRESULT_NULL_PARAM -- A NULL parameter was passed in which was required.
+)
 
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFSourceClip)
@@ -39,18 +40,18 @@ AD_CLASS_UUID(aed97eb1, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(aed97eb0, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, Transient)
 
-AD_XMETHOD1(SetEssenceCodecVariety,
-[in],objPass, aafUID_t,variety,and this sub-variety,
-Sets which variety of the codec ID is to be used. )
-	//@comm An example of a variety would be a number of standard starting JPEG tables.
+
+AD_XMETHOD1(SetEssenceCodecFlavour,
+[in],objPass, aafUID_t,flavour,The particular flavour,
+Sets which flavour of the codec ID is to be used. )
+	//@comm An example of a flavour would be a number of standard starting JPEG tables.
 
 /****/
 AD_METHOD3(WriteSamples,
 [in],aafUInt32,nSamples,write this many samples,
-[in\\\,size_is\\\(buflen\\\)],aafDataBuffer_t,buffer,to a buffer,
+[in\\\,size_is\\\(buflen\\\)],aafDataBuffer_t,buffer,from a buffer,
 [in],aafUInt32,buflen,of this size,
 Writes data to a single-channel essence stream.)
-	//@comm Takes a essence handle, so the essence must have been opened or created.
 	// A single video frame is ONE sample.
 	// Buflen must be large enough to hold the total sample size.
 	//@comm Possible Errors:
@@ -58,11 +59,23 @@ Writes data to a single-channel essence stream.)
 	// AAFRESULT_SINGLE_CHANNEL_OP -- Tried to write to an interleaved stream.
 	// AAFRESULT_BADDATAADDRESS -- The buffer must not be a NULL pointer.
 
+
 /****/
-AD_METHOD2(WriteMultiSamples,
+AD_METHOD3(WriteMultiSamples,
 [in],aafUInt16,arrayElemCount,Do this many transfers,
-[out\\\,size_is\\\(arrayElemCount\\\)],aafmMultiXfer_t *,xferArray,referencing this array,
-Writes multiple channels worth of sample data to an interleaved data stream in the natural order for the CODEC.)
+[in\\\,size_is\\\(arrayElemCount\\\)],aafmMultiXfer_t *,xferArray,referencing this array,
+[out\\\,size_is\\\(arrayElemCount\\\)],aafmMultiResult_t *,resultArray,putting results into this array,
+Writes multiple channels worth of sample data to an interleaved data stream in the natural order for the CODEC.
+// The multiXfer_t structure has the following fields\\\, which specify one channel of data:
+//		essenceDef		[IN] -- The essence type definition
+//		physical		[IN] - The physical input-output channel
+//		numSamples		[IN] -- The number of samples to transfer
+//		buflen			[IN] -- The size of the buffer
+//		buffer			[IN] -- The buffer for this
+// The multiResult_t structure has the following fields\\\, which return result for one channel of data:
+//		bytesXfered		[OUT] -- The total number of bytes transferred
+//		samplesXfered	[OUT] -- The total number of samples transferred
+)
 	//@comm arrayElemCount is the number of elementss in the array of transfer operations.
 	// xferArray points to an array of transfer parameters.  All fields
 	// in this array except for bytesXferred must be set up before
@@ -78,20 +91,20 @@ Writes partual samples of essence to a stream.)
 	//@comm Writes fractional samples of essence to the stream. When enough bytes
 	// have been written to constitute one sample, then the number of samples will
 	// be incremented by one. This function is useful in low-memory situations.  
-	//@comm The buffer must be large enough to hold the number of bytes specified. 
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// AAFRESULT_BADRWLINES -- This function only works for video essence.
 	
 /****/
 AD_XMETHOD2(GetLargestSampleSize,
-[in],objPass, aafUID_t,mediaKind,and this essence type,
+[in],objPass, aafUID_t,dataDef,for this essence type,
 [out],objPass, aafUInt32*,maxSize,the largest sample size,
 Returns the size in bytes of the largest sample for a given essence type.)
 	//@comm For uncompressed data, or the output of the software codec,
 	// the sample size will propably be a constant.
 	//@comm The essence type parameter exists to support codecs with multiple
 	// interleaved essence types.
+	// Add illegal media kind error.
+
 
 /****/
 AD_XMETHOD3(GetSampleFrameSize,
@@ -120,10 +133,11 @@ Sets a series of format objects which will be used to describe the in-memory for
 	 
 /****/
 AD_XMETHOD2(GetSampleCount,
-[in],objPass, aafUID_t,mediaKind,For this essence type,
+[in],objPass, aafUID_t,dataDef,For this essence dataDef,
 [out],objPass,aafLength_t *,result,find out how many samples are present,
 Returns the number of samples of the given essence type on the given essence stream.)
 	//@comm A video sample is one frame.
+	//Invalid essence type
 
 /****/
 AD_METHOD5(ReadSamples,
@@ -139,44 +153,61 @@ Read a given number of samples from an opened essence stream.)
 	// Buflen is in bytes, and should be large enough to hold the samples
 	// after the requested transforms have been applied.
 	//@comm Possible Errors:
-	// 	Standard errors (see top of file).
-	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like EOF) while reading.
+	// 	Standard errors \\\(see top of file\\\).
+	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence \\\(like EOF\\\) while reading.
+	// 	AAFRESULT_SMALLBUF -- Buffer too small for samples.
+
+
+
 /****/
-AD_METHOD2(ReadMultiSamples,
-[in],aafUInt16,elemCount,Do this many transfers,
-[out\\\, size_is\\\(elemCount\\\)],aafmMultiXfer_t *,xferArray,referencing this array,
-Reads one or more channels from an interleaved data stream)
+AD_XMETHOD3(ReadMultiSamples,
+[in],objPass,aafUInt16,elemCount,Do this many transfers,
+[in\, size_is\(elemCount\)],objPass,aafmMultiXfer_t *,xferArray,referencing this array,
+[out\, size_is\(elemCount\)],objPass,aafmMultiResult_t *,resultArray,putting results into this array,
+Reads one or more channels from an interleaved data stream.)
+// The multiXfer_t structure has the following fields\, which specify one channel of data:
+//		essenceDef		[IN] -- The essence type definition
+//		physical		[IN] - The physical input-output channel
+//		numSamples		[IN] -- The number of samples to transfer
+//		buflen			[IN] -- The size of the buffer
+//		buffer			[IN] -- The buffer for this
+// The multiResult_t structure has the following fields\, which return result for one channel of data:
+//		bytesXfered		[OUT] -- The total number of bytes transferred
+//		samplesXfered	[OUT] -- The total number of samples transferred
 	//@comm arrayElemCount is the size of the array or transfer operations.
 	// xferArray points to an array of transfer parameters.  All fields
 	// in this array except for bytesXferred must be set up before
 	// doing the transfer.  Some of the fields in the xferArray structure are status results
 	// like bytesXferred and samplesXferred.
 	//@comm Possible Errors:
-	// 	Standard errors (see top of file).
-	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like EOF) while reading.
+	// 	Standard errors \(see top of file\).
+	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence \(like EOF\) while reading.
 	
-/****/
-AD_METHOD4(ReadFractionalSample,
-[in],aafUInt32,nBytes,Read this many bytes,
-[in],aafUInt32,bufLen,into a buffer of this size,
-[out\\\, size_is\\\(bufLen\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,transfer into this buffer,
-[out\\\,ref],aafUInt32*,bytesRead,The number of bytes actuall transferred,
-Reads fractional samples from a file.)
-	//@comm This function allows reading
-	// video frames in pieces, for low-memory situations.  When enough lines
-	// have been read to constitute a frame, then the number of samples read
-	// be incremented by one.
-	//@comm The buffer must be large enough to hold the specified number of bytes.
-	//@comm Possible Errors:
-	// 	Standard errors (see top of file).
-	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence (like EOF) while reading.
+
+
 
 /****/
-AD_METHOD1(SeektoEditFrame,
-[in],aafPosition_t,sampleFrameNum,A 0-based offset in units of the slot edit rate to seek to.,
+AD_METHOD3(ReadFractionalSample,
+[in],aafUInt32,nBytes,Read this many bytes,
+[out\\\, size_is\\\(nBytes\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,buffer,transfer into this buffer,
+[out\\\,ref],aafUInt32*,bytesRead,The number of bytes actually transferred,
+Reads fractional samples from a file.)
+	//@comm This function allows reading
+	// video frames in pieces, for low-memory situations.
+	//@comm The buffer must be large enough to hold the specified number of bytes.
+	//@comm Possible Errors:
+	// 	Standard errors \\\(see top of file\\\).
+	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence \\\(like EOF\\\) while reading.
+
+
+/****/
+AD_METHOD1(Seek,
+[in],aafPosition_t,sampleFrameNum,A 0-based offset in units of the sample rate to seek to.,
 The seek function for essence.)
 	//@comm Useful only on reading, you can't seek aound while writing essence.
 	//@comm An audio frame is one sample across all channels.
+	// 	AAFRESULT_END_OF_ESSENCE -- Hit the end of the essence \\\(like EOF\\\) while reading.
+
 
 /****/
 AD_XMETHOD2(GetFileFormat,
@@ -259,7 +290,7 @@ Writes pre-interleaved data to a essence stream.)
 	// nSamples * the maximum sample size.
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	// AAFRESULT_BADDATAADDRESS -- The buffer must not be a NULL pointer.
 	
 /****/
 AD_METHOD5(ReadRawData,
@@ -273,7 +304,7 @@ Read pre-interleaved data from a essence stream.)
 	//@comm Buflen must be large enough to hold nSamples * the maximum sample size.
 	//@comm Possible Errors:
 	// Standard errors (see top of file).
-	// OM_ERR_BADDATAADDRESS -- The buffer must not be a NULL pointer.
+	// AAFRESULT_BADDATAADDRESS -- The buffer must not be a NULL pointer.
 
 /****/
 AD_METHOD0(CompleteWrite,
