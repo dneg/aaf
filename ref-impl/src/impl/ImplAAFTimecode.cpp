@@ -67,7 +67,7 @@ AAFRESULT STDMETHODCALLTYPE
 		{
 			return AAFRESULT_NULL_PARAM;
 		}
-		if ((timecode->drop != kTcDrop) && (timecode->drop != kTcNonDrop))
+		if ((timecode->drop != kAAFTcDrop) && (timecode->drop != kAAFTcNonDrop))
 		{
 			return AAFRESULT_INVALID_TIMECODE;
 		}
@@ -77,13 +77,13 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(SetNewProps(length,
 						  pDict->GetBuiltinDefs()->ddTimecode()));
 		_start = timecode->startFrame;
-		if (timecode->drop == kTcDrop)
+		if (timecode->drop == kAAFTcDrop)
 		{
-		  _drop = AAFTrue;
+		  _drop = kAAFTrue;
 		}
 		else
 		{
-		  _drop = AAFFalse;
+		  _drop = kAAFFalse;
 		}
 		_FPS = timecode->fps;
 	}
@@ -105,13 +105,13 @@ AAFRESULT STDMETHODCALLTYPE
 
 	timecode->startFrame = _start;
 
-	if (AAFTrue == _drop)
+	if (kAAFTrue == _drop)
 	{
-		timecode->drop = kTcDrop;
+		timecode->drop = kAAFTcDrop;
 	}
 	else
 	{
-		timecode->drop = kTcNonDrop;
+		timecode->drop = kAAFTcNonDrop;
 	}
 	timecode->fps = _FPS;
 	return(AAFRESULT_SUCCESS);
@@ -126,18 +126,18 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
-	if ((timecode->drop != kTcDrop) && (timecode->drop != kTcNonDrop))
+	if ((timecode->drop != kAAFTcDrop) && (timecode->drop != kAAFTcNonDrop))
 	{
 		return AAFRESULT_INVALID_TIMECODE;
 	}
 	_start = timecode->startFrame;
-	if (timecode->drop == kTcDrop)
+	if (timecode->drop == kAAFTcDrop)
 	{
-		_drop = AAFTrue;
+		_drop = kAAFTrue;
 	}
 	else
 	{
-		_drop = AAFFalse;
+		_drop = kAAFFalse;
 	}
 	_FPS = timecode->fps;
 

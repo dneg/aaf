@@ -435,18 +435,18 @@ aafBool TableIncludesKey(
 	aafBool		result;
 	
 	if((table == NULL) || (table->cookie != TABLE_COOKIE))
-		return(AAFFalse);
+		return(kAAFFalse);
 	if(table->compare == NULL)
-		return(AAFFalse);
+		return(kAAFFalse);
 
-	result = AAFFalse;
+	result = kAAFFalse;
 	n = _lookup(table, key);
 	entry = table->hashTable[n];
 	while(entry != NULL)
 	{
 		if (table->compare( key, entry->local))
 		{
-			result = AAFTrue;
+			result = kAAFTrue;
 			break;
 		}
 
@@ -533,7 +533,7 @@ aafErr_t TableLookupBlock(
   if(table->compare == NULL)
     return(AAFRESULT_TABLE_MISSING_COMPARE);
 
-  *found = AAFFalse;
+  *found = kAAFFalse;
   n = _lookup(table, key);
   entry = table->hashTable[n];
   while((entry != NULL) && !(*found))
@@ -543,7 +543,7 @@ aafErr_t TableLookupBlock(
 	  if(entry->type == valueIsBlock)
 	    {
 	      memcpy(valuePtr, ((char *)entry->local)+entry->keyLen, valueLen);
-	      *found = AAFTrue;
+	      *found = kAAFTrue;
 	    }
 	  /* 	result = entry->local+entry->keyLen;	*/
 	  break;
@@ -697,7 +697,7 @@ aafErr_t TableNextEntry(
 	XPROTECT()
 	{
 		XASSERT(foundPtr != NULL, AAFRESULT_NULL_PARAM);
-		*foundPtr = AAFFalse;
+		*foundPtr = kAAFFalse;
 	
 		table = iter->table;
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
@@ -711,7 +711,7 @@ aafErr_t TableNextEntry(
 			{
 				entry = iter->nextEntry;
 				if (table->compare(iter->srchKey, entry->local))
-					*foundPtr = AAFTrue;
+					*foundPtr = kAAFTrue;
 				iter->nextEntry = entry->link;
 			}
 		}
@@ -723,12 +723,12 @@ aafErr_t TableNextEntry(
 				{
 					entry = iter->nextEntry;
 					if (iter->srch == kTableSrchAny)
-						*foundPtr = AAFTrue;
+						*foundPtr = kAAFTrue;
 					/* NOTE: entry->dup will be != NULL for every duplicate entry EXCEPT the
 					 *			last entry, satisfying the one of each unique requirement
 					 */
 					else if((iter->srch == kTableSrchUnique) && (entry->dup == NULL))
-						*foundPtr = AAFTrue;
+						*foundPtr = kAAFTrue;
 					iter->nextEntry = entry->link;
 				}
 				if(!*foundPtr)
@@ -828,7 +828,7 @@ aafErr_t TableSearchDataValue(
 	XPROTECT()
 	{
 		XASSERT(foundPtr != NULL, AAFRESULT_NULL_PARAM);
-		*foundPtr = AAFFalse;
+		*foundPtr = kAAFFalse;
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
 				AAFRESULT_TABLE_BAD_HDL);
 	
@@ -839,7 +839,7 @@ aafErr_t TableSearchDataValue(
 			if((valueLen == iter.valueLen) && 
 				(memcmp(value, iter.valuePtr, iter.valueLen) == 0))
 			{
-				*foundPtr = AAFTrue;
+				*foundPtr = kAAFTrue;
 				memcpy(key, iter.key, keyLen);
 			}
 			CHECK(TableNextEntry(&iter, &more));
@@ -876,7 +876,7 @@ aafErr_t TableDispose(
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
 				AAFRESULT_TABLE_BAD_HDL);
-		DisposeList(table, AAFFalse);
+		DisposeList(table, kAAFFalse);
 	
 		if(table->hashTable != NULL)
 			delete[] table->hashTable; // tomr 99-11-17 : use array delete to match new char[] allocator.
@@ -936,7 +936,7 @@ aafErr_t TableDisposeItems(
 	{
 		XASSERT((table != NULL) && (table->cookie == TABLE_COOKIE), 
 				AAFRESULT_TABLE_BAD_HDL);
-		DisposeList(table, AAFTrue);
+		DisposeList(table, kAAFTrue);
 	}
 	XEXCEPT
 	XEND
@@ -1055,7 +1055,7 @@ static aafBool cmpSensitive( void *temp1, void *temp2)
 	char *a = (char *)temp1;
 	char *b = (char *)temp2;
 
-	return(strcmp(a, b) == 0 ? AAFTrue : AAFFalse);
+	return(strcmp(a, b) == 0 ? kAAFTrue : kAAFFalse);
 }
 	
 static aafBool cmpInsensitive( void *temp1, void *temp2)
@@ -1066,13 +1066,13 @@ static aafBool cmpInsensitive( void *temp1, void *temp2)
 	for ( ; (*a != '\0') && (*b != '\0'); a++, b++)
 	{	
         if (tolower(*a) != tolower (*b))
-			return (AAFFalse);
+			return (kAAFFalse);
 	}
 
 	if ((*b != '\0') || (*a != '\0'))
-		return (AAFFalse);
+		return (kAAFFalse);
 		
-	return (AAFTrue);
+	return (kAAFTrue);
 }
 
 /************************
@@ -1182,7 +1182,7 @@ static aafBool	Uidcompare(void *temp1, void *temp2)
 
   return( (key1->Data1 == key2->Data1) && (key1->Data2 == key2->Data2) &&
 	 (key1->Data3 == key2->Data3) && (memcmp(key1->Data4, key2->Data4, 8) == 0)
-	 ? AAFTrue : AAFFalse);
+	 ? kAAFTrue : kAAFFalse);
 }
 
 
@@ -1359,7 +1359,7 @@ static aafBool	Mobidcompare(void *temp1, void *temp2)
 
   return( (key1->Data1 == key2->Data1) && (key1->Data2 == key2->Data2) &&
 	 (key1->Data3 == key2->Data3) && (memcmp(key1->Data4, key2->Data4, 8) == 0)
-	 ? AAFTrue : AAFFalse);
+	 ? kAAFTrue : kAAFFalse);
 }
 
 
@@ -1531,7 +1531,7 @@ static aafBool	SlotIDcompare(void *temp1, void *temp2)
   aafInt32 key1 = *((aafInt32 *)temp1);
   aafInt32 key2 = *((aafInt32 *)temp2);
 
-  return( (key1 == key2) ? AAFTrue : AAFFalse);
+  return( (key1 == key2) ? kAAFTrue : kAAFFalse);
 }
 
 /************************
@@ -1662,7 +1662,7 @@ void testaafTable(void)
 
   /******************************/
   printf("    Creating the test table\n");
-  NewStringTable(NULL, AAFFalse, NULL, 32, &test);
+  NewStringTable(NULL, kAAFFalse, NULL, 32, &test);
   for(val = 0; val < 4; val++)
     TableAddStringBlock(test, keys[val], &val, sizeof(val), 
 			    kaafTableDupAddDup);
