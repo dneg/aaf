@@ -669,6 +669,43 @@ void OMFile::readSignature(const wchar_t* fileName,
   }
 }
 
+  // @mfunc Write the signature to the given raw storage.
+  //   @parm The raw storage.
+  //   @parm The signature.
+void OMFile::writeSignature(OMRawStorage* rawStorage,
+                            const OMFileSignature& signature)
+{
+  TRACE("OMFile::writeSignature");
+
+  OMFileSignature sig = signature;
+  if (hostByteOrder() != littleEndian) {
+    OMStoredObject::reorderUniqueObjectIdentification(sig);
+  }
+
+  OMUInt32 count;
+  rawStorage->setPosition(8);
+  rawStorage->write(reinterpret_cast<const OMByte*>(&sig), sizeof(sig), count);
+  ASSERT("All bytes written", count == sizeof(sig));
+}
+
+  // @mfunc Read the signature from the given raw storage.
+  //   @parm The raw storage.
+  //   @parm The signature.
+void OMFile::readSignature(OMRawStorage* rawStorage,
+                           OMFileSignature& signature)
+{
+  TRACE("OMFile::readSignature");
+
+  PRECONDITION("Valid raw storage", rawStorage != 0);
+
+  OMUInt32 count;
+  rawStorage->setPosition(8);
+  rawStorage->read(reinterpret_cast<OMByte*>(&signature),
+                   sizeof(signature),
+                   count);
+  ASSERT("All bytes read", count == sizeof(signature));
+}
+
 OMFile::OMFileEncoding OMFile::encodingOf(const OMFileSignature& signature)
 {
   TRACE("OMFile::encodingOf");
