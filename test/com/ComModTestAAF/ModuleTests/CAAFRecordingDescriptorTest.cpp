@@ -26,29 +26,114 @@
 //
 //=---------------------------------------------------------------------=
 
+#include "ModuleTestsCommon.h"
 
+#include <ModuleTest.h>
 
+#include <AAF.h>
+#include <AAFResult.h>
+#include <AAFTypes.h>
+#include <AAFStoredObjectIDs.h>
 
+#include <iostream>
+using namespace std;
 
-
-
-
-
-
-
-
-#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
-#include "AAFResult.h"
-
-// Required function prototype.
-extern "C" HRESULT CAAFRecordingDescriptor_test(void);
-
-HRESULT CAAFRecordingDescriptor_test()
+static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  try {
+    using namespace mtc;
+
+    IAAFSmartPointer<IAAFHeader> pHeader;
+    IAAFSmartPointer<IAAFDictionary> pDict;
+    SimpleFilePointers filePointers;
+    CreateSimpleAAFFile( pFileName, 
+			 L"RecordingDescriptor Test",
+			 &filePointers );
+
+    IAAFSmartPointer<IAAFSourceMob> spSourceMob = AddChainedSourceMob( &filePointers );
+
+    // Finally... add the recording descriptor.
+    IAAFSmartPointer<IAAFRecordingDescriptor> pRecDesc;
+    CheckResult( filePointers.pDictionary->CreateInstance( AUID_AAFRecordingDescriptor,
+							   IID_IAAFRecordingDescriptor,
+							   (IUnknown**)&pRecDesc ) );
+    CheckResult( pRecDesc->Initialize() );
+
+    IAAFSmartPointer<IAAFEssenceDescriptor> pDesc;
+    CheckResult( pRecDesc->QueryInterface( IID_IAAFEssenceDescriptor, (void**)&pDesc ) );
+    CheckResult( spSourceMob->SetEssenceDescriptor( pDesc ) );
+
+    CheckResult( filePointers.pFile->Save() );
+    CheckResult( filePointers.pFile->Close() );
+  }
+  catch( const AAFRESULT& hr ) {
+    return hr;
+  }
+
+  return AAFRESULT_SUCCESS;
 }
 
+static HRESULT ReadAAFFile(aafWChar * pFileName)
+{
+  try {
+    using namespace mtc;
 
+    SimpleFilePointers filePointers;
+    ReadSimpleAAFFile( pFileName, &filePointers );
 
+    // Get the source mob, and check that the RecordingDescriptor is
+    // attached.
+    IAAFSmartPointer<IAAFSourceClip> pSourceClip
+      = GetSourceClipFromSlot( filePointers.pReferencedMasterMob, 1 );
 
+    IAAFSmartPointer<IAAFMob> pMob;
+    CheckResult( pSourceClip->ResolveRef( &pMob ) );
+    
+    IAAFSmartPointer<IAAFSourceMob> pSourceMob;
+    CheckResult( pMob->QueryInterface( IID_IAAFSourceMob, (void**)&pSourceMob ) );
 
+    IAAFSmartPointer<IAAFEssenceDescriptor> pDesc;
+    CheckResult( pSourceMob->GetEssenceDescriptor( &pDesc ) );
+
+    // Finally...
+    IAAFSmartPointer<IAAFRecordingDescriptor> pRecDesc;
+    CheckResult( pDesc->QueryInterface( IID_IAAFRecordingDescriptor, (void**)&pRecDesc ));
+
+    CheckResult( filePointers.pFile->Close() );
+  }
+  catch( const AAFRESULT& hr ) {
+    cout << "failed hr = " << hr << endl;
+    return hr;
+  }
+
+  return AAFRESULT_SUCCESS;
+}
+
+// Required function prototype.
+extern "C" HRESULT CAAFRecordingDescriptor_test(testMode_t mode);
+
+HRESULT CAAFRecordingDescriptor_test(testMode_t mode)
+{
+  HRESULT hr = AAFRESULT_SUCCESS;
+  aafCharacter* pFileName = L"AAFRecordingDescriptorTest.aaf";
+
+  try {
+    if ( kAAFUnitTestReadWrite == mode ) {
+      hr = CreateAAFFile(pFileName);
+    }
+    else {
+      hr = AAFRESULT_SUCCESS;
+    }
+
+    if ( AAFRESULT_SUCCESS == hr ) {
+      hr = ReadAAFFile(pFileName);
+    }
+  }
+  catch (...) {
+    cerr << "CAAFRecordingDescriptor_test...Caught general C++"
+	 << " exception!" << endl; 
+    hr = AAFRESULT_TEST_FAILED;
+  }
+
+  return hr;
+}

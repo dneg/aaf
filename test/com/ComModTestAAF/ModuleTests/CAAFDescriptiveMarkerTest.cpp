@@ -26,43 +26,129 @@
 //
 //=---------------------------------------------------------------------=
 
+#include "ModuleTestsCommon.h"
 
+#include <ModuleTest.h>
 
+#include <AAF.h>
+#include <AAFResult.h>
+#include <AAFTypes.h>
+#include <AAFStoredObjectIDs.h>
 
+#include <iostream>
+using namespace std;
 
-
-
-
-
-
-
-
-
-#include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
-#include "AAFResult.h"
-
-// Required function prototype.
-extern "C" HRESULT CAAFDescriptiveMarker_test(void);
-
-HRESULT CAAFDescriptiveMarker_test()
+static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  try {
+    using namespace mtc;
+
+    IAAFSmartPointer<IAAFHeader> pHeader;
+    IAAFSmartPointer<IAAFDictionary> pDict;
+    SimpleFilePointers filePointers;
+    CreateSimpleAAFFile( pFileName, 
+			 L"DescriptiveMarker",
+			 &filePointers );
+
+    // Add add a timeline, and add a DescriptiveMarker to the
+    // composition mob.
+    IAAFSmartPointer<IAAFDescriptiveMarker> pDescMarker;
+    CheckResult( filePointers.pDictionary->CreateInstance( AUID_AAFDescriptiveMarker,
+							   IID_IAAFDescriptiveMarker,
+							   (IUnknown**)&pDescMarker ));
+
+    CheckResult( pDescMarker->Initialize() );
+
+    IAAFSmartPointer<IAAFSegment> pSeg;
+    CheckResult(pDescMarker->QueryInterface( IID_IAAFSegment, (void**)&pSeg ));
+
+    IAAFSmartPointer<IAAFComponent> pComp;
+    CheckResult( pDescMarker->QueryInterface( IID_IAAFComponent, (void**)&pComp ));
+    CheckResult( pComp->SetDataDef( filePointers.pDataDef ));
+	
+    IAAFSmartPointer<IAAFTimelineMobSlot> pNewSlot;
+    CheckResult( filePointers.pCompositionMob->AppendNewTimelineSlot(TEST_EditRate,
+								     pSeg,
+								     2,
+								     L"Descriptive Content",
+								     0,
+								     &pNewSlot ));
+
+
+    // FIXME - test framework set here.
+#if 0
+    IAAFSmartPointer<IAAFDescriptiveFramework> pDescFramework;
+    CheckResult( filePointers.pDictionary->CreateInstance( AUID_AAFDescriptiveFramework,
+							   IID_IAAFDescriptiveFramework,
+							   (IUnknown**)&pDescFramework ) );
+    CheckResult( pDescMarker->SetDescriptiveFramework( pDescFramework ) );
+#endif
+
+    CheckResult( filePointers.pFile->Save() );
+    CheckResult( filePointers.pFile->Close() );
+  }
+  catch( const AAFRESULT& hr ) {
+    return hr;
+  }
+
+  return AAFRESULT_SUCCESS;
 }
 
+static HRESULT ReadAAFFile(aafWChar * pFileName)
+{
+  try {
+    using namespace mtc;
 
+    SimpleFilePointers filePointers;
+    ReadSimpleAAFFile( pFileName, &filePointers );
 
+    // Get slot 2 from the composition and verify that that attached
+    // segment is a DescriptiveMarker.
+    
+    IAAFSmartPointer<IAAFMobSlot> pSlot = GetSlotById( filePointers.pCompositionMob, 2 );
 
+    IAAFSmartPointer<IAAFSegment> pSeg;
+    CheckResult( pSlot->GetSegment( &pSeg ) );
 
+    IAAFSmartPointer<IAAFDescriptiveMarker> pDescMarker;
+    CheckResult( pSeg->QueryInterface( IID_IAAFDescriptiveMarker, (void**)&pDescMarker ) );
+    
+    // FIXME - Test framework get here.
 
+    CheckResult( filePointers.pFile->Close() );
+  }
+  catch( const AAFRESULT& hr ) {
+    cout << "failed hr = " << hr << endl;
+    return hr;
+  }
 
+  return AAFRESULT_SUCCESS;
+}
 
+// Required function prototype.
+extern "C" HRESULT CAAFDescriptiveMarker_test(testMode_t mode);
+HRESULT CAAFDescriptiveMarker_test(testMode_t mode)
+{
+  HRESULT hr = AAFRESULT_SUCCESS;
+  aafCharacter* pFileName = L"AAFDescriptiveMarkerTest.aaf";
 
+  try {
+    if ( kAAFUnitTestReadWrite == mode ) {
+      hr = CreateAAFFile(pFileName);
+    }
+    else {
+      hr = AAFRESULT_SUCCESS;
+    }
 
+    if ( AAFRESULT_SUCCESS == hr ) {
+      hr = ReadAAFFile(pFileName);
+    }
+  }
+  catch (...) {
+    cerr << "CAAFDescriptiveMarker_test...Caught general C++"
+	 << " exception!" << endl; 
+    hr = AAFRESULT_TEST_FAILED;
+  }
 
-
-
-
-
-
-
-
+  return hr;
+}
