@@ -157,6 +157,10 @@ public:
   static bool isRecognized(OMRawStorage* rawStorage,
                            OMStoredObjectEncoding& encoding);
 
+  static void initialize(void);
+
+  static void finalize(void);
+
   typedef OMSet<OMStoredObjectEncoding, OMStoredObjectFactory*> FactorySet;
   typedef OMSetIterator<OMStoredObjectEncoding,
                         OMStoredObjectFactory*> FactorySetIterator;

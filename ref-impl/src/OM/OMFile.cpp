@@ -455,6 +455,16 @@ bool OMFile::isRecognized(OMRawStorage* rawStorage,
   return result;
 }
 
+void OMFile::initialize(void)
+{
+  TRACE("OMFile::initialize");
+}
+
+void OMFile::finalize(void)
+{
+  TRACE("OMFile::finalize");
+}
+
 void OMFile::registerFactory(const OMStoredObjectEncoding& encoding,
                              OMStoredObjectFactory* factory)
 {

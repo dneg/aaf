@@ -28,6 +28,7 @@
 #include "OMAssertions.h"
 #include "OMUtilities.h"
 #include "OMDictionary.h"
+#include "OMFile.h"
 #include "OMUniqueObjectIdentType.h"
 #include "OMIntegerType.h"
 
@@ -38,6 +39,7 @@ void OMObjectManager::initialize(void)
 #if defined(OM_DEBUG)
   checkTypes();
 #endif
+  OMFile::initialize();
   OMDictionary::initialize();
 }
 
@@ -52,4 +54,5 @@ void OMObjectManager::finalize(void)
   OMUniqueObjectIdentificationType::destroy();
 
   OMDictionary::finalize();
+  OMFile::finalize();
 }
