@@ -241,6 +241,7 @@ AAFRESULT STDMETHODCALLTYPE
   XEXCEPT
   {  // save the error code.
     result = (XCODE());
+	NO_PROPAGATE();
   }
   XEND;
 
@@ -305,6 +306,7 @@ AAFRESULT STDMETHODCALLTYPE
   XEXCEPT
   {  // save the error code.
     result = (XCODE());
+	NO_PROPAGATE();
   }
   XEND;
 
