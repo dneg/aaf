@@ -59,7 +59,7 @@ HUMAN_TYPED_IMPL = \
 	AAFCommentMarker \
 	AAFComponent \
 	AAFCompositionMob \
-	AAFConstValue \
+	AAFConstantValue \
 	AAFContainerDef \
 	AAFContentStorage \
 	AAFControlPoint \
