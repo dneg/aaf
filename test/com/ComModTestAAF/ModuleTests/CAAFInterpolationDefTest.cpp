@@ -39,6 +39,7 @@
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
+#include "AAFInterpolatorDefs.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -146,6 +147,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFInterpolationDef, 
 								   (IUnknown **)&pInterpolationDef));
     
+		checkResult(pInterpolationDef->Initialize(NoInterpolator, L"Test", L"Test"));
 		checkResult(pDictionary->RegisterInterpolationDef(pInterpolationDef));
 	}
 	catch (HRESULT& rResult)
