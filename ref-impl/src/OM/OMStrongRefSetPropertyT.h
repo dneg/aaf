@@ -213,6 +213,21 @@ size_t OMStrongReferenceSetProperty<ReferencedObject>::count(void) const
   return _set.count();
 }
 
+  // @mfunc Get the size of this <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //     @rdesc The size of this <c OMStrongReferenceSetProperty>.
+  //     @this const
+template <typename ReferencedObject>
+size_t OMStrongReferenceSetProperty<ReferencedObject>::getSize(void) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::getSize");
+  OBSOLETE("OMStrongReferenceSetProperty<ReferencedObject>::count");
+
+  return count();
+}
+
 template <typename ReferencedObject>
 void OMStrongReferenceSetProperty<ReferencedObject>::insert(
                                                 const ReferencedObject* object)

@@ -214,6 +214,7 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::getSize(
                                                             size_t& size) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::getSize");
+  OBSOLETE("OMStrongReferenceVectorProperty<ReferencedObject>::count");
 
   size = count();
 }
@@ -228,6 +229,7 @@ template <typename ReferencedObject>
 size_t OMStrongReferenceVectorProperty<ReferencedObject>::getSize(void) const
 {
   TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::getSize");
+  OBSOLETE("OMStrongReferenceVectorProperty<ReferencedObject>::count");
 
   return count();
 }
