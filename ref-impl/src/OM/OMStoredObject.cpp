@@ -406,6 +406,16 @@ void OMStoredObject::save(const OMStrongReferenceVector& vector)
     //
     index->insert(position, element.localKey());
 
+#if defined(OM_ENABLE_DEBUG)
+    wchar_t* name = elementName(vector.name(),
+                                vector.propertyId(),
+                                element.localKey());
+    ASSERT("Consistent names", compareWideString(element.reference().name(),
+                                                 name) == 0);
+    delete [] name;
+    name = 0; // for BoundsChecker
+#endif
+
     // save the object
     //
     element.save();
