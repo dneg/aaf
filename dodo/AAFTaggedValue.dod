@@ -47,10 +47,10 @@ AD_XMETHOD2(Initialize,
 			pName,
 			User defined name of this tagged value object,
 			[in],
-			objIn,
-			AAFTypeDef,
-			pTypeDef,
-			Type definition of this tagged value object,
+			objPass,
+			aafUID_t *,
+			pDatadef,
+			Data definition of this tagged value object,
 
      Initializes a new tagged value object to be identified with the
   // given the given type\, and with the given human-legible name.
@@ -60,11 +60,11 @@ AD_XMETHOD2(Initialize,
   //
   // Succeeds if:
   // - Initialize\(\) has not yet been called on this object.
-  // - pTypeDef is a valid pointer.
+  // - pDatadef is a valid pointer.
   // - pName is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pTypeDef or pName\)
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pDatadef or pName\)
   // )
 
 AD_XMETHOD2(GetName,
