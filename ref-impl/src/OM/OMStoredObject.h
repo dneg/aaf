@@ -215,16 +215,29 @@ public:
     // @cmember Reorder the OMUInt32 <p i>.
   static void reorderUInt32(OMUInt32& i);
 
-    // @cmember Read a UniqueObjectIdentification from <p stream> into <p id>.
+    // @cmember Read a UniqueObjectIdentification from <p stream>
+    //          into <p id>.
     //          If <p reorderBytes> is true then the bytes are reordered.
   void readUniqueObjectIdentificationFromStream(
                                               IStream* stream,
                                               OMUniqueObjectIdentification& id,
                                               bool reorderBytes);
 
+    // @cmember Read a UniqueMaterialIdentification from <p stream>
+    //          into <p id>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void readUniqueMaterialIdentificationFromStream(
+                                            IStream* stream,
+                                            OMUniqueMaterialIdentification& id,
+                                            bool reorderBytes);
+
     // @cmember Reorder the UniqueObjectIdentification <p id>.
   static void reorderUniqueObjectIdentification(
                                              OMUniqueObjectIdentification& id);
+
+    // @cmember Reorder the UniqueMaterialIdentification <p id>.
+  static void reorderUniqueMaterialIdentification(
+                                           OMUniqueMaterialIdentification& id);
 
     // @cmember Size of <p stream> in bytes.
   OMUInt64 streamSize(IStream* stream) const;
