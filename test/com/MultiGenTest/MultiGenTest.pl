@@ -86,7 +86,7 @@ sub ExecuteCommand {
     # FIXME ... started out here wanting to call system() with a
     # list... had trouble with that... but got system() to work if I
     # passed a single string... had trouble getting the return status
-    # back from rcs... besides, system only returns 24 bits of exit
+    # back from rsh... besides, system only returns 24 bits of exit
     # status... that's no good... so use open() and parse the output
     # to extract the status values.  Great that works, but I think
     # open() can still take a command list rather than a string, so
@@ -97,7 +97,10 @@ sub ExecuteCommand {
 	$cmd .= "$item ";
     }    
 
-    open( PROCESS, "$cmd |" ) or die "Failed to open process: $cmd";
+#    select( undef, undef, undef, 0.25 );
+#    sleep 1;
+
+    $pid = open( PROCESS, "$cmd |" ) or die "Failed to open process: $cmd";
 
     my($status) = 0xdeadbeef;
     while ( <PROCESS> ) {
@@ -108,7 +111,10 @@ sub ExecuteCommand {
 	    $status = $_;
 	}
     }
-    close(PROCESS);
+
+    my($sshstatus) = close(PROCESS)
+	or warn $! ? "system error closing proccess $pid: $sshstatus" :
+	             "process status error from process $pid: $sshstatus" ;
 
     $status;
 }
@@ -255,6 +261,7 @@ sub CopyFile {
 		  $full_src,
 		  $full_dst );
 
+    # FIXME - no status check
     ExecuteCommand( $CFG{CopyHost}, @args );
 }
 
@@ -281,10 +288,11 @@ sub PrintConfigSummary {
     }
     print "\n\n";
 
+    print "AAFComLibPath:\n";
     foreach $version ( @{$CFG{Versions}} ) {
-	print "Version $version:\n";
+	print "\tVersion $version:\n";
 	foreach $machine ( @{$CFG{Platforms}} ) {
-	    print "\t$machine: $CFG{$version}{$machine}\n"
+	    print "\t\t$machine: $CFG{AAFComLibPath}{$version}{$machine}\n"
 	    }
 	print "\n";
     }
@@ -304,6 +312,29 @@ sub PrintConfigSummary {
 	foreach $platform ( @{$CFG{Platforms}} ) {
 	    print "\t\t$platform: $CFG{MultiGenTestPath}{$version}{$platform}\n";
         }
+    }
+    print "\n";
+
+    print "File Implementations: \n";
+    foreach $version ( @{$CFG{Versions}} ) {
+	print "\tVersion: ${version}\n";
+	foreach $platform ( @{$CFG{Platforms}} ) {
+	    print "\t\t${platform}:\t";
+	    foreach $fileimpl (  @{$CFG{FileImpl}{$version}{$platform}} ) {
+		print "${fileimpl}\t";
+	    }
+	    print "\n";
+	}
+    }
+    print "\n";
+
+    print "Compatible File Implementations:\n";
+    foreach $key ( keys %{$CFG{CompatFileImpl}} ) {
+	printf "\t${key}:\t";
+	for $fileimpl ( @{$CFG{CompatFileImpl}{$key}} ) {
+	    print "$fileimpl\t";
+	}
+	print "\n";
     }
     print "\n";
 
