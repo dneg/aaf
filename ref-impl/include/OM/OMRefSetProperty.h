@@ -46,6 +46,20 @@ public:
     // @cmember Destructor.
   virtual ~OMReferenceSetProperty(void);
 
+    // @cmember Remove the <c OMObject> identified by <p identification>
+    //          from this <c OMReferenceSetProperty>.
+  virtual OMObject* remove(void* identification) = 0;
+
+    // @cmember Does this <c OMReferenceSetProperty> contain an
+    //          <c OMObject> identified by <p identification> ?
+  virtual bool contains(void* identification) const = 0;
+
+    // @cmember Find the <c OMObject> in this <c OMReferenceSetProperty>
+    //          identified by <p identification>.  If the object is found
+    //          it is returned in <p object> and the result is < e bool.true>.
+    //          If the object is not found the result is <e bool.false>.
+  virtual bool findObject(void* identification, OMObject*& object) const = 0;
+
 };
 
 #endif
