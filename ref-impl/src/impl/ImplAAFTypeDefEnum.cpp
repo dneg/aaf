@@ -614,7 +614,7 @@ ImplAAFTypeDefEnum::GetIntegerValue (
 	if( AAFRESULT_FAILED( pPropValIn->GetType( &spPropType ) ) )
 		return AAFRESULT_BAD_TYPE;
 	assert (spPropType);
-	if( spPropType != this )
+	if( (ImplAAFTypeDef *)spPropType != this )
 		return AAFRESULT_BAD_TYPE;
 
 
@@ -743,7 +743,7 @@ ImplAAFTypeDefEnum::SetIntegerValue (
 	if( AAFRESULT_FAILED( pPropValToSet->GetType( &spPropType ) ) )
 		return AAFRESULT_BAD_TYPE;
 	assert (spPropType);
-	if( spPropType != this )
+	if( (ImplAAFTypeDef *)spPropType != this )
 		return AAFRESULT_BAD_TYPE;
 
 	AAFRESULT hr;
