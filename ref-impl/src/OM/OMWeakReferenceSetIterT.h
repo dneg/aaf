@@ -240,10 +240,19 @@ OMWeakReferenceSetIterator<ReferencedObject>::setValue(
   PRECONDITION("Matching keys",
     IMPLIES(newObject != 0 , newObject->identification() == identification()));
 
+  OMUniqueObjectIdentification id = nullOMUniqueObjectIdentification;
+  if (newObject != 0) {
+    id = newObject->identification();
+  }
+
   SetElement& element = _iterator.value();
 
-  ReferencedObject* result = element.setValue(newObject);
-
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(id, newObject);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
@@ -261,8 +270,12 @@ OMWeakReferenceSetIterator<ReferencedObject>::clearValue(void)
 
   SetElement& element = _iterator.value();
 
-  ReferencedObject* result = element.setValue(0);
-
+  ReferencedObject* result = 0;
+  OMStorable* p = element.setValue(nullOMUniqueObjectIdentification, 0);
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   return result;
 }
 
