@@ -31,15 +31,18 @@
 #include "OMUtilities.h"
 #include "OMClassFactory.h"
 
+#include "ImplAAFDataDef.h"
 #include "ImplAAFDictionary.h"
 #include "ImplAAFHeader.h"
-#include "ImplAAFDataDef.h"
+#include "ImplAAFIdentification.h"
 
 #include "AAFStoredObjectIDs.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFBuiltinDefs.h"
 #include "ImplAAFFileSignatures.h"
 
+#include "ImplAAFSmartPointer.h"
+typedef ImplAAFSmartPointer<ImplAAFIdentification> ImplAAFIdentificationSP;
 
 #include <assert.h>
 
@@ -542,7 +545,16 @@ ImplAAFFile::Save ()
 	  dictSP->AssureClassPropertyTypes ();
 	  bool regWasEnabled = dictSP->SetEnableDefRegistration (false);
 
-	  _file->save(0);
+	  // OMFile::save() allows us to pass a client context to be
+	  // regurgitated to the OMStorable::onSave() callback.  We'll use
+	  // it to pass the AUID of the latest generation.
+	  ImplAAFIdentificationSP pLatestIdent;
+	  hr = _head->GetLastIdentification (&pLatestIdent);
+	  if (AAFRESULT_FAILED (hr)) return hr;
+	  aafUID_t latestGen;
+	  hr = pLatestIdent->GetGeneration (&latestGen);
+	  if (AAFRESULT_FAILED (hr)) return hr;
+	  _file->save(&latestGen);
 
 	  dictSP->SetEnableDefRegistration (regWasEnabled);
 
