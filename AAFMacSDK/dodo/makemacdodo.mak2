@@ -59,11 +59,11 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAF.h"
 
 
-"{comh}AAFPrivate.h" Ä "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
-	echo "{comh}AAFPrivate.h"
-	if "`exists -f "{comh}AAFPrivate.h"`"
-		SetFile -a l "{comh}AAFPrivate.h"
-		Delete -i -ay "{comh}AAFPrivate.h"
+"{refh}AAFPrivate.h" Ä "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
+	echo "{refh}AAFPrivate.h"
+	if "`exists -f "{refh}AAFPrivate.h"`"
+		SetFile -a l "{refh}AAFPrivate.h"
+		Delete -i -ay "{refh}AAFPrivate.h"
 	end
 	( echo "//=--------------------------------------------------------------------------=" ; ¶
 	  echo "// (C) Copyright 1998-2000 Avid Technology." ; ¶
@@ -103,8 +103,8 @@
 	  end ; ¶
 	  echo "" ; ¶
 	  echo '#endif // __AAFPrivate_h__' ; ¶
-	) > "{comh}AAFPrivate.h"
-	SetFile -t TEXT -c CWIE -a L "{comh}AAFPrivate.h"
+	) > "{refh}AAFPrivate.h"
+	SetFile -t TEXT -c CWIE -a L "{refh}AAFPrivate.h"
 
 
 "{refh}AAFPlugin.h" Ä "{macdodo}macaafobjects.mk" {PLUGIN_FREFH_TARGETS}
@@ -273,11 +273,11 @@
 	SetFile -t TEXT -c CWIE -a L "{refh}AAFPlugin_i.c"
 
 
-"{comh}AAFPrivate_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
-	echo "{comh}AAFPrivate_i.c"
-	if "`exists -f "{comh}AAFPrivate_i.c"`"
-		SetFile -a l "{comh}AAFPrivate_i.c"
-		Delete -i -ay "{comh}AAFPrivate_i.c"
+"{refh}AAFPrivate_i.c" Ä "{dod}aafobjects.mk" "{dod}dod2iid.pl" "{macdodo}macaafobjects.mk" {GENERATED_PRIVATE_FREFH}
+	echo "{refh}AAFPrivate_i.c"
+	if "`exists -f "{refh}AAFPrivate_i.c"`"
+		SetFile -a l "{refh}AAFPrivate_i.c"
+		Delete -i -ay "{refh}AAFPrivate_i.c"
 	end
 	( echo "/* this file contains the actual definitions of */" ; ¶
 	  echo "/* the IIDs and CLSIDs */" ; ¶
@@ -326,8 +326,8 @@
 	  echo "}" ; ¶
 	  echo '#endif' ; ¶
 	  echo "" ; ¶
-	) > "{comh}AAFPrivate_i.c"
-	SetFile -t TEXT -c CWIE -a L "{comh}AAFPrivate_i.c"
+	) > "{refh}AAFPrivate_i.c"
+	SetFile -t TEXT -c CWIE -a L "{refh}AAFPrivate_i.c"
 
 
 
