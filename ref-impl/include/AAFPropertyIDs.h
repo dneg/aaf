@@ -17,6 +17,4 @@ const int PID_##container##_##name = tag;
 
 #include "AAFMetaDictionary.h"
 
-#undef AAF_PROPERTY
-
 #endif

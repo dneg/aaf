@@ -60,8 +60,6 @@
 //
 // Include the AAF macro invocations.
 #include "AAFMetaDictionary.h"
-// cleanup symbols.
-#undef AAF_CLASS
 
 
 
@@ -74,11 +72,6 @@ typedef struct tagAAFObjectEntry_t
 	const aafClassID_t* pClassID;
 } AAFObjectEntry_t;
 
-// cleanup symbols.
-#undef AAF_TABLE_BEGIN
-#undef AAF_CLASS
-#undef AAF_CLASS_SEPARATOR
-#undef AAF_TABLE_END
 #define AAF_TABLE_BEGIN() static AAFObjectEntry_t gAAFObjectTable[] = {
 
 #define AAF_CLASS(name, id, parent)\
@@ -91,11 +84,6 @@ typedef struct tagAAFObjectEntry_t
 // Include the AAF macro invocations.
 // This will define all of the entries in the gAAFObjectTable.
 #include "AAFMetaDictionary.h"
-// cleanup symbols.
-#undef AAF_TABLE_BEGIN
-#undef AAF_CLASS
-#undef AAF_CLASS_SEPARATOR
-#undef AAF_TABLE_END
 
 // Define a table of pointers to entries on the gAAFObjectTable. We use 
 // this table to sort and search for AUID's in the gAAFObjectTable.
