@@ -1,0 +1,54 @@
+#
+# Color map for AAF cvs change log
+#
+
+# Syntax is
+#
+# <directory-prefix>        <color>
+#
+# Colors are 6 digit hex RRGGBB 
+#
+
+# Lime green
+
+ref-impl/src/OM/          CCFFCC
+ref-impl/include/OM/      CCFFCC
+ref-impl/dtd/             CCFFCC
+
+# Pink
+
+ref-impl/src/impl/        FFCCCC
+ref-impl/include/         FFCCCC
+ref-impl/plugins/         FFCCCC
+ref-impl/aaflib/          FFCCCC
+
+# Grey
+
+ref-impl/src/com-api/     CCCCCC
+ref-impl/include/com-api/ CCCCCC
+ref-impl/include/ref-api  CCCCCC
+AAF                       CCCCCC
+dodo/                     CCCCCC
+
+# Pale blue
+
+ref-impl/doc/             CCFFFF
+LEGAL/                    CCFFFF
+doc/                      CCFFFF
+meta/                     CCFFFF
+
+# Purple
+
+test/                     FFCCFF
+examples/                 FFCCFF
+examples2/                FFCCFF
+
+# Yellow
+
+DevUtils/                 FFFFCC
+Utilities/                FFFFCC
+OMF/                      FFFFCC
+
+# Blue
+
+build/                    CCCCFF
