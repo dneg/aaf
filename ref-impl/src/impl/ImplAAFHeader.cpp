@@ -216,7 +216,7 @@ AAFRESULT STDMETHODCALLTYPE
 // based on omfmIsMediaDataPresent
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::IsMediaDataPresent (aafUID_t *pFileMobID,
+    ImplAAFHeader::IsEssenceDataPresent (aafUID_t *pFileMobID,
                            aafFileFormat_t fmt,
                            aafBool *pResult)
 {
@@ -225,28 +225,28 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NULL_PARAM;
 	  }
 	ImplAAFContentStorage *cstore = GetContentStorage();
-	return(cstore->IsMediaDataPresent(pFileMobID, fmt, pResult));
+	return(cstore->IsEssenceDataPresent(pFileMobID, fmt, pResult));
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::EnumAAFMediaObjects (aafMediaCriteria_t *pMediaCriteria,
-                           ImplEnumAAFMedia **ppEnum)
+    ImplAAFHeader::EnumEssenceData (aafMediaCriteria_t *pMediaCriteria,
+                           ImplEnumAAFEssenceData **ppEnum)
 {
     if ((! pMediaCriteria) || (! ppEnum))
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
 	ImplAAFContentStorage *cstore = GetContentStorage();
-	return(cstore->GetMedia(pMediaCriteria, ppEnum));
+	return(cstore->EnumEssenceData(pMediaCriteria, ppEnum));
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::AppendMedia (ImplAAFMedia * pMedia)
+    ImplAAFHeader::AppendEssenceData (ImplAAFEssenceData * pEssenceData)
 {
-  if (! pMedia)
+  if (! pEssenceData)
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
@@ -256,9 +256,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::RemoveMedia (ImplAAFMedia * pMedia)
+    ImplAAFHeader::RemoveEssenceData (ImplAAFEssenceData * pEssenceData)
 {
-  if (! pMedia)
+  if (! pEssenceData)
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
