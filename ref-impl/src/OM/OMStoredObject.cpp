@@ -33,6 +33,7 @@
 #include "OMStoredVectorIndex.h"
 #include "OMStoredSetIndex.h"
 #include "OMDataTypes.h"
+#include "OMPropertyTable.h"
 
 #include "OMAssertions.h"
 #include "OMUtilities.h"
@@ -48,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMUInt32 currentVersion = 18;
+const OMUInt32 currentVersion = 19;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
                                sizeof(OMUInt32) +     // Version number
@@ -841,6 +842,43 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
   delete [] setIndexName;
 }
 
+  // @mfunc Save the <c OMPropertyTable> <p table> in this
+  //        <c OMStoredObject>.
+  //   @parm The table to save.
+void OMStoredObject::save(const OMPropertyTable* table)
+{
+  TRACE("OMPropertyTable::save");
+
+  PRECONDITION("Valid property table", table != 0);
+
+  IStream* stream = createStream("referenced properties");
+
+  // byte order
+  ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
+  writeToStream(stream, &_byteOrder, sizeof(_byteOrder));
+
+  // count of strings
+  OMUInt32 count = table->count();
+  writeToStream(stream, &count, sizeof(count));
+ 
+  // count of bytes
+  OMUInt32 byteCount = 0;
+  for (size_t i = 0; i < count; i++) {
+    byteCount = byteCount + strlen(table->valueAt(i)) + 1;
+  }
+  writeToStream(stream, &byteCount, sizeof(byteCount));
+
+  // sequence of null terminated strings
+  for (size_t j = 0; j < count; j++) {
+    const char* p = table->valueAt(j);
+    writeToStream(stream, (void*)p, strlen(p));
+    const OMByte null = 0;
+    writeToStream(stream, (void*)&null, sizeof(null));
+  }
+
+  closeStream(stream);
+}
+
   // @mfunc Restore the vector named <p vectorName> into this
   //        <c OMStoredObject>.
   //   @parm The name of the vector.
@@ -987,6 +1025,50 @@ char* OMStoredObject::setIndexStreamName(const char* setName)
   strcat(setIndexName, suffix);
 
   return setIndexName;
+}
+
+  // @mfunc Restore the <c OMPropertyTable> in this <c OMStoredObject>.
+  //   @parm A pointer to the newly restored <c OMPropertyTable> by reference.
+void OMStoredObject::restore(OMPropertyTable*& table)
+{
+  TRACE("OMPropertyTable::restore");
+
+  IStream* stream = openStream("referenced properties");
+
+  // byte order
+  OMByteOrder byteOrder;
+  readFromStream(stream, &byteOrder, sizeof(byteOrder));
+  bool reorderBytes;
+  if (byteOrder == hostByteOrder()) {
+    reorderBytes = false;
+  } else {
+    reorderBytes = true;
+  }
+
+  // count of strings
+  OMUInt32 count;
+  readUInt32FromStream(stream, count, reorderBytes);
+  table = new OMPropertyTable();
+  ASSERT("Valid heap pointer", table != 0);
+ 
+  if (count > 0) {
+    // count of bytes
+    OMUInt32 byteCount;
+    readUInt32FromStream(stream, byteCount, reorderBytes);
+
+    // sequence of null terminated strings
+    char* buffer = new char[byteCount];
+    ASSERT("Valid heap pointer", buffer != 0);
+    char* p = buffer;
+    readFromStream(stream, buffer, byteCount);
+    for (size_t i = 0; i < count; i++) {
+      table->insert(p);
+      p = p + strlen(p) + 1;
+    }
+    delete [] buffer;
+  }
+
+  closeStream(stream);
 }
 
 IStream* OMStoredObject::createStream(IStorage* storage,
