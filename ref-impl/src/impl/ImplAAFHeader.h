@@ -34,13 +34,15 @@
 
 class ImplAAFMob;
 class ImplAAFEssenceData;
-class ImplEnumAAFMobs;
-class ImplEnumAAFEssenceData;
 class ImplAAFDictionary;
 class ImplAAFIdentification;
-class ImplEnumAAFIdentifications;
 class ImplAAFFile;
 
+template <class T> 
+class ImplAAFEnumerator;
+class ImplEnumAAFMobs;
+typedef ImplAAFEnumerator<ImplAAFEssenceData> ImplEnumAAFEssenceData;
+typedef ImplAAFEnumerator<ImplAAFIdentification> ImplEnumAAFIdentifications;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
