@@ -640,7 +640,7 @@ void Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj, OMF2::omfUID_t i
 	}
 
 	aafMobID_t	mobID;
-	rc = aafMobIDFromMajorMinor(mediaID.major, mediaID.minor, &mobID);
+	rc = aafMobIDFromMajorMinor(42, mediaID.major, mediaID.minor, 4, &mobID);
 	rc = pHeader->LookupMob(mobID, &pMob);
 	pmob = pMob;
 	rc = pMob->QueryInterface(IID_IAAFSourceMob, (void **)&pSourceMob);
@@ -949,7 +949,7 @@ void Omf2Aaf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
 
 	// Convert OMF MobID into AAF AUID and set mob id
 	aafMobID_t				AAFMobUID;
-	aafCheck = aafMobIDFromMajorMinor(OMFMobID.major, OMFMobID.minor, &AAFMobUID);
+	aafCheck = aafMobIDFromMajorMinor(42, OMFMobID.major, OMFMobID.minor, 4, &AAFMobUID);
 	aafCheck = pMob->SetMobID(AAFMobUID);
 
 	// Set comments
@@ -1811,8 +1811,10 @@ void Omf2Aaf::ConvertOMFSourceClip(OMF2::omfObject_t sourceclip,
 									 &fadeoutLen, &OMFFadeoutType, &fadeoutPresent);
 
 	ConvertOMFDataDef(datakind, &pDataDef);
-		rc = aafMobIDFromMajorMinor(OMFSourceRef.sourceID.major,
+		rc = aafMobIDFromMajorMinor(42,
+									OMFSourceRef.sourceID.major,
 									OMFSourceRef.sourceID.minor,
+									4,
 									&sourceRef.sourceID);
 		sourceRef.sourceSlotID = OMFSourceRef.sourceTrackID;
 		sourceRef.startTime    = OMFSourceRef.startTime;

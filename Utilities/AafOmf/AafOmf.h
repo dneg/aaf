@@ -142,8 +142,10 @@ void DecIndentLevel( void );
 void AUIDtoString(aafUID_t *uid, char *buf);
 void MobIDtoString(aafMobID_t *uid, char *buf);
 AAFRESULT aafMobIDFromMajorMinor(
+        aafUInt32	prefix,
         aafUInt32	major,
 		aafUInt32	minor,
+		aafUInt8	UMIDType,
 		aafMobID_t *mobID);     /* OUT - Newly created Mob ID */
 void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession);
 HRESULT InitGlobalVars( void );
