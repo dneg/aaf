@@ -31,17 +31,12 @@ AD_IDL(//
 //     operation.
 //)
 #c AD_INCLUDE(myVector)
-
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFDataDef)
-
-
 AD_CLASS_UUID(e58a8568, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(e58a8567, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-
-/****/
 AD_XMETHOD1(SetStillFrame,
 [in], objIn, AAFSourceClip, pStillFrame,Still Frame source clip ,
 sets the still frame property on a essence group to be the source clip passed as the stillFrame argument.)
@@ -59,7 +54,7 @@ sets the still frame property on a essence group to be the source clip passed as
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\(\) called on it.)
     
-/****/
+
 AD_XMETHOD1(GetStillFrame,
 [out], objOut, AAFSourceClip, ppStillFrame,Still Frame source clip ,
 Gets the still frame property on a essence group.)
@@ -77,7 +72,7 @@ Gets the still frame property on a essence group.)
   // AAFRESULT_NOT_INITIALIZED
   //   - This object has not yet had Initialize\(\) called on it.)
 
-/****/
+
 AD_XMETHOD1(AppendChoice,
 [in], objIn, AAFSourceClip, pChoice,Source clip to add as a choice ,
 			Append another choice to this AAFEssenceGroup.
@@ -97,8 +92,73 @@ AD_XMETHOD1(AppendChoice,
   // AAFRESULT_NULL_PARAM
   //   - pChoice is null.)
 
-/****/
-AD_XMETHOD1(GetNumChoices,
+
+AD_XMETHOD1(PrependChoice,
+			[in],
+			objIn,
+			AAFSourceClip,
+			pChoice,
+			Source clip to add as a choice,
+
+			Prepend another choice to this AAFEssenceGroup.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pChoice pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pChoice is null.)
+
+
+AD_XMETHOD2(InsertChoiceAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			place to insert new choice,
+
+			[in],
+			objIn,
+			AAFSourceClip,
+			pChoice,
+			Source clip to add as a choice,
+
+     Insert another choice to this AAFEssenceGroup at the given
+  // index.  Choices already existing at the given and higher indices
+  // will be moved up by one index to accommodate.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pChoice pointer is valid.
+  // - index is less than or equal to the value returned by
+  //   CountChoices\(\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pChoice is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than the value returned by
+  //     CountChoices\(\).)
+
+
+AD_XMETHOD1(CountChoices,
 [out], objPass, aafUInt32* , pCount,The number of representations contained within.,
 			Return the number of choices attached to this AAFEssenceGroup.\, excepting the still frame.
   // 
@@ -117,8 +177,8 @@ AD_XMETHOD1(GetNumChoices,
   // AAFRESULT_NULL_PARAM
   //   - pCount is null.)
 
-/****/
-AD_XMETHOD2(GetIndexedChoice,
+
+AD_XMETHOD2(GetChoiceAt,
 [in], objPass, aafUInt32, index,The 0-based index into the array,
 [out], objOut, AAFSourceClip , ppChoice,The representation at that index,
 		   Given an index\, returns the corresponding source clip choice.
@@ -141,4 +201,35 @@ AD_XMETHOD2(GetIndexedChoice,
   // AAFRESULT_NULL_PARAM
   //   - ppChoice arg is NULL.)
 
+
+AD_XMETHOD1(RemoveChoiceAt,
+
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			The 0-based index into the array,
+
+     Removes the choice at the given index.  Items already existing at
+  // higher indices will be moved down by one index to accommodate.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppChoice pointer is valid.
+  // - index is less than the value returned by CountChoices\(\).
+  // 
+  // If this method fails no state will be changed.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppChoice arg is NULL.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than or equal to the value returned by
+  //     CountChoices\(\).)
 AD_XCLASS_END(Concrete, StoredObject)

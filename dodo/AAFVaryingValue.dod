@@ -37,20 +37,19 @@ AD_CLASS_UUID(91920d61, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(91920d60, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD1(AppendPoint,
+AD_XMETHOD1(AddControlPoint,
 			[in],
 			objIn,
 			AAFControlPoint,
-			pPoint,
+			pControlPoint,
 			pointer to IAAFControlPoint object,
 
-     Appends a control point to the end a IAAFVaryingValue object\,
-  // which implies that it occurs at a later time than existing point.
+     Adds a control point to the AAFVaryingValue object.
   // The point will be sorted by time order\, not the order in which
   // the points were added.
   // 
   // Succeeds if all of the following are true:
-  // - the pPoint pointer is valid.
+  // - the pControlPoint pointer is valid.
   // 
   // If this method fails no state will be changed.
   // 
@@ -62,7 +61,7 @@ AD_XMETHOD1(AppendPoint,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pPoint is null.)
+  //   - pControlPoint is null.)
 
 
 AD_XMETHOD1(GetControlPoints,
@@ -89,6 +88,108 @@ AD_XMETHOD1(GetControlPoints,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
+
+
+AD_XMETHOD1(CountControlPoints,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pResult,
+			Number of control points,
+			This function returns the number of control points in the sequence.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the pResult pointer is valid.
+  // 
+  // If this method fails no state is changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pResult is null.)
+
+
+AD_XMETHOD2(GetControlPointAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of control point to retrieve,
+
+			[out\, retval],
+			objOut,
+			AAFControlPoint,
+			ppControlPoint,
+			Retrieved control point,
+     This function retrieves the input control point at the given index in
+  // the given sequence.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - the ppControlPoint pointer is valid.
+  // - index is less than the value returned by
+  //   CountControlPoints\(\).
+  // 
+  // If this method fails nothing will be written to *ppControlPoint.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pControlPoint is null.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than or equal to the value returned by
+  //     CountControlPoints\(\).)
+
+
+AD_XMETHOD1(RemoveControlPointAt,
+			[in],
+			objPass,
+			aafUInt32,
+			index,
+			index of control point to remove,
+     This function removes the input control point at the given index in
+  // the given sequence.  Control points already existing at indices
+  // higher than the given index will be moved to the next lower index
+  // to accommodate.
+  // 
+  // Succeeds if all of the following are true:
+  // - this object has already been initialized.
+  // - index is less than the value returned by
+  //   CountControlPoints\(\).
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.
+  //
+  // AAFRESULT_BADINDEX
+  //   - index is greater than or equal to the value returned by
+  //     CountControlPoints\(\).)
 
 
 AD_XMETHOD1(GetInterpolationDefinition,
