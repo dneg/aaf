@@ -240,6 +240,25 @@ void OMStrongReferenceProperty<ReferencedObject>::restore(size_t externalSize)
 
 }
 
+  // @mfunc  Is this <c OMStrongReferenceProperty> void ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @rdesc True if this <c OMStrongReferenceProperty> is void, false
+  //          otherwise
+  //   @this const
+template<typename ReferencedObject>
+bool OMStrongReferenceProperty<ReferencedObject>::isVoid(void) const
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::isVoid");
+
+  bool result = false;
+
+  ASSERT("Unimplemented code not reached", false);
+
+  return result;
+}
+
   // @mfunc Remove this optional <c OMStrongReferenceProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of

@@ -398,6 +398,25 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::find(
   return result;
 }
 
+  // @mfunc Is this <c OMStrongReferenceSetProperty> void ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @rdesc True if this <c OMStrongReferenceSetProperty> is void,
+  //          false otherwise. 
+  //   @this const
+template <typename ReferencedObject>
+bool OMStrongReferenceSetProperty<ReferencedObject>::isVoid(void) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::isVoid");
+
+  bool result = false;
+
+  ASSERT("Unimplemented code not reached", false);
+
+  return result;
+}
+
   // @mfunc Remove this optional <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of

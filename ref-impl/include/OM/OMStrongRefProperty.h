@@ -86,6 +86,9 @@ public:
 
   // Optional property interface
 
+    // @cmember Is this <c OMStrongReferenceProperty> void ?
+  virtual bool isVoid(void) const;
+
     // @cmember Remove this optional <c OMStrongReferenceProperty>.
   virtual void remove(void);
 

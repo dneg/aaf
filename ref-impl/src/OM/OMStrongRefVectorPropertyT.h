@@ -521,6 +521,25 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::grow(
   }
 }
 
+  // @mfunc Is this <c OMStrongReferenceVectorProperty> void ?
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @rdesc True if this <c OMStrongReferenceVectorProperty> is void,
+  //          false otherwise. 
+  //   @this const
+template <typename ReferencedObject>
+bool OMStrongReferenceVectorProperty<ReferencedObject>::isVoid(void) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::isVoid");
+
+  bool result = false;
+
+  ASSERT("Unimplemented code not reached", false);
+
+  return result;
+}
+
   // @mfunc Remove this optional <c OMStrongReferenceVectorProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
