@@ -442,21 +442,21 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/)
+      /*%07*/ %09 .%08-indirection /*%10*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -466,7 +466,7 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/)
+      /*%07*/ %09 .%08-indirection /*%10*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -513,7 +513,7 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10)
+        %09 .%08-indirection %10)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -528,7 +528,7 @@ AAFRESULT STDMETHODCALLTYPE
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10));
+    .%08-internalname(%10));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
   return stat;
@@ -551,7 +551,7 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10)
+        .%08-adornment%09 .%08-indirection %10)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -566,7 +566,7 @@ HRESULT STDMETHODCALLTYPE
 .%03-setup(%04, %05)
 .%08-setup(%09, %10)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10));
+    .%08-internalname(%10));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
   return hr;
@@ -599,24 +599,24 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -626,8 +626,8 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -679,8 +679,8 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -696,8 +696,8 @@ AAFRESULT STDMETHODCALLTYPE
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15));
+    .%08-internalname(%10),
+    .%13-internalname(%15));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -722,8 +722,8 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -739,8 +739,8 @@ HRESULT STDMETHODCALLTYPE
 .%08-setup(%09, %10)
 .%13-setup(%14, %15)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15));
+    .%08-internalname(%10),
+    .%13-internalname(%15));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -775,27 +775,27 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -805,9 +805,9 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -865,9 +865,9 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -884,9 +884,9 @@ AAFRESULT STDMETHODCALLTYPE
 .%13-setup(%14, %15)
 .%18-setup(%19, %20)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -914,9 +914,9 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -933,9 +933,9 @@ HRESULT STDMETHODCALLTYPE
 .%13-setup(%14, %15)
 .%18-setup(%19, %20)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -972,30 +972,30 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1005,10 +1005,10 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1073,10 +1073,10 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -1094,10 +1094,10 @@ AAFRESULT STDMETHODCALLTYPE
 .%18-setup(%19, %20)
 .%23-setup(%24, %25)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1127,10 +1127,10 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -1148,10 +1148,10 @@ HRESULT STDMETHODCALLTYPE
 .%18-setup(%19, %20)
 .%23-setup(%24, %25)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1190,33 +1190,33 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1226,11 +1226,11 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1300,11 +1300,11 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -1323,11 +1323,11 @@ AAFRESULT STDMETHODCALLTYPE
 .%23-setup(%24, %25)
 .%28-setup(%29, %30)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1359,11 +1359,11 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -1382,11 +1382,11 @@ HRESULT STDMETHODCALLTYPE
 .%23-setup(%24, %25)
 .%28-setup(%29, %30)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1427,36 +1427,36 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1466,12 +1466,12 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1547,12 +1547,12 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -1572,12 +1572,12 @@ AAFRESULT STDMETHODCALLTYPE
 .%28-setup(%29, %30)
 .%33-setup(%34, %35)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1610,12 +1610,12 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -1635,12 +1635,12 @@ HRESULT STDMETHODCALLTYPE
 .%28-setup(%29, %30)
 .%33-setup(%34, %35)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1683,39 +1683,39 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35,
-	  /*%37*/ .%38-adornment%39 .%38-indirection %40);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35,
+      /*%37*/ .%38-adornment%39 .%38-indirection %40);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35,
-	  /*%37*/ .%38-adornment%39 .%38-indirection %40);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35,
+      /*%37*/ .%38-adornment%39 .%38-indirection %40);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/,
-	  /*%37*/ %39 .%38-indirection /*%40*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/,
+      /*%37*/ %39 .%38-indirection /*%40*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1725,13 +1725,13 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/,
-	  /*%37*/ %39 .%38-indirection /*%40*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/,
+      /*%37*/ %39 .%38-indirection /*%40*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -1813,13 +1813,13 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35,
+        %39 .%38-indirection %40)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -1840,13 +1840,13 @@ AAFRESULT STDMETHODCALLTYPE
 .%33-setup(%34, %35)
 .%38-setup(%39, %40)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1881,13 +1881,13 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35,
-		.%38-adornment%39 .%38-indirection %40)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35,
+        .%38-adornment%39 .%38-indirection %40)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -1908,13 +1908,13 @@ HRESULT STDMETHODCALLTYPE
 .%33-setup(%34, %35)
 .%38-setup(%39, %40)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -1959,42 +1959,42 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35,
-	  /*%37*/ .%38-adornment%39 .%38-indirection %40,
-	  /*%42*/ .%43-adornment%44 .%43-indirection %45);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35,
+      /*%37*/ .%38-adornment%39 .%38-indirection %40,
+      /*%42*/ .%43-adornment%44 .%43-indirection %45);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35,
-	  /*%37*/ .%38-adornment%39 .%38-indirection %40,
-	  /*%42*/ .%43-adornment%44 .%43-indirection %45);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35,
+      /*%37*/ .%38-adornment%39 .%38-indirection %40,
+      /*%42*/ .%43-adornment%44 .%43-indirection %45);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/,
-	  /*%37*/ %39 .%38-indirection /*%40*/,
-	  /*%42*/ %44 .%43-indirection /*%45*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/,
+      /*%37*/ %39 .%38-indirection /*%40*/,
+      /*%42*/ %44 .%43-indirection /*%45*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2004,14 +2004,14 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/,
-	  /*%37*/ %39 .%38-indirection /*%40*/,
-	  /*%42*/ %44 .%43-indirection /*%45*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/,
+      /*%37*/ %39 .%38-indirection /*%40*/,
+      /*%42*/ %44 .%43-indirection /*%45*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2099,14 +2099,14 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40,
-		%44 .%43-indirection %45)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35,
+        %39 .%38-indirection %40,
+        %44 .%43-indirection %45)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -2128,14 +2128,14 @@ AAFRESULT STDMETHODCALLTYPE
 .%38-setup(%39, %40)
 .%43-setup(%44, %45)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -2172,14 +2172,14 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35,
-		.%38-adornment%39 .%38-indirection %40,
-		.%43-adornment%44 .%43-indirection %45)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35,
+        .%38-adornment%39 .%38-indirection %40,
+        .%43-adornment%44 .%43-indirection %45)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -2201,14 +2201,14 @@ HRESULT STDMETHODCALLTYPE
 .%38-setup(%39, %40)
 .%43-setup(%44, %45)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -2255,45 +2255,45 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35,
-	  /*%37*/ .%38-adornment%39 .%38-indirection %40,
-	  /*%42*/ .%43-adornment%44 .%43-indirection %45,
-	  /*%47*/ .%48-adornment%49 .%48-indirection %50);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35,
+      /*%37*/ .%38-adornment%39 .%38-indirection %40,
+      /*%42*/ .%43-adornment%44 .%43-indirection %45,
+      /*%47*/ .%48-adornment%49 .%48-indirection %50);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35,
-	  /*%37*/ .%38-adornment%39 .%38-indirection %40,
-	  /*%42*/ .%43-adornment%44 .%43-indirection %45,
-	  /*%47*/ .%48-adornment%49 .%48-indirection %50);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35,
+      /*%37*/ .%38-adornment%39 .%38-indirection %40,
+      /*%42*/ .%43-adornment%44 .%43-indirection %45,
+      /*%47*/ .%48-adornment%49 .%48-indirection %50);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/,
-	  /*%37*/ %39 .%38-indirection /*%40*/,
-	  /*%42*/ %44 .%43-indirection /*%45*/,
-	  /*%47*/ %49 .%48-indirection /*%50*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/,
+      /*%37*/ %39 .%38-indirection /*%40*/,
+      /*%42*/ %44 .%43-indirection /*%45*/,
+      /*%47*/ %49 .%48-indirection /*%50*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2303,15 +2303,15 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/,
-	  /*%37*/ %39 .%38-indirection /*%40*/,
-	  /*%42*/ %44 .%43-indirection /*%45*/,
-	  /*%47*/ %49 .%48-indirection /*%50*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/,
+      /*%37*/ %39 .%38-indirection /*%40*/,
+      /*%42*/ %44 .%43-indirection /*%45*/,
+      /*%47*/ %49 .%48-indirection /*%50*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2406,15 +2406,15 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40,
-		%44 .%43-indirection %45,
-		%49 .%48-indirection %50)
+        %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35,
+        %39 .%38-indirection %40,
+        %44 .%43-indirection %45,
+        %49 .%48-indirection %50)
 {
 #ifdef BOB_TEST
   AAFRESULT stat;
@@ -2437,15 +2437,15 @@ AAFRESULT STDMETHODCALLTYPE
 .%43-setup(%44, %45)
 .%48-setup(%49, %50)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45),
-	.%48-internalname(%50));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45),
+    .%48-internalname(%50));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -2484,15 +2484,15 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35,
-		.%38-adornment%39 .%38-indirection %40,
-		.%43-adornment%44 .%43-indirection %45,
-		.%48-adornment%49 .%48-indirection %50)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35,
+        .%38-adornment%39 .%38-indirection %40,
+        .%43-adornment%44 .%43-indirection %45,
+        .%48-adornment%49 .%48-indirection %50)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -2515,15 +2515,15 @@ HRESULT STDMETHODCALLTYPE
 .%43-setup(%44, %45)
 .%48-setup(%49, %50)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45),
-	.%48-internalname(%50));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45),
+    .%48-internalname(%50));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -2572,48 +2572,48 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35,
-	  /*%37*/ .%38-adornment%39 .%38-indirection %40,
-	  /*%42*/ .%43-adornment%44 .%43-indirection %45,
-	  /*%47*/ .%48-adornment%49 .%48-indirection %50,
-	  /*%52*/ .%53-adornment%54 .%53-indirection %55);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35,
+      /*%37*/ .%38-adornment%39 .%38-indirection %40,
+      /*%42*/ .%43-adornment%44 .%43-indirection %45,
+      /*%47*/ .%48-adornment%49 .%48-indirection %50,
+      /*%52*/ .%53-adornment%54 .%53-indirection %55);\\
 \\\#endm
 
 \\\#startm .method-%01-comh 00
   // Override from .this-module
   STDMETHOD (%01)
      (/*%02*/ .%03-adornment%04 .%03-indirection %05,
-	  /*%07*/ .%08-adornment%09 .%08-indirection %10,
-	  /*%12*/ .%13-adornment%14 .%13-indirection %15,
-	  /*%17*/ .%18-adornment%19 .%18-indirection %20,
-	  /*%22*/ .%23-adornment%24 .%23-indirection %25,
-	  /*%27*/ .%28-adornment%29 .%28-indirection %30,
-	  /*%32*/ .%33-adornment%34 .%33-indirection %35,
-	  /*%37*/ .%38-adornment%39 .%38-indirection %40,
-	  /*%42*/ .%43-adornment%44 .%43-indirection %45,
-	  /*%47*/ .%48-adornment%49 .%48-indirection %50,
-	  /*%52*/ .%53-adornment%54 .%53-indirection %55);\\
+      /*%07*/ .%08-adornment%09 .%08-indirection %10,
+      /*%12*/ .%13-adornment%14 .%13-indirection %15,
+      /*%17*/ .%18-adornment%19 .%18-indirection %20,
+      /*%22*/ .%23-adornment%24 .%23-indirection %25,
+      /*%27*/ .%28-adornment%29 .%28-indirection %30,
+      /*%32*/ .%33-adornment%34 .%33-indirection %35,
+      /*%37*/ .%38-adornment%39 .%38-indirection %40,
+      /*%42*/ .%43-adornment%44 .%43-indirection %45,
+      /*%47*/ .%48-adornment%49 .%48-indirection %50,
+      /*%52*/ .%53-adornment%54 .%53-indirection %55);\\
 \\\#endm
 
 \\\#startm .method-%01-cpp 01
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     %%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/,
-	  /*%37*/ %39 .%38-indirection /*%40*/,
-	  /*%42*/ %44 .%43-indirection /*%45*/,
-	  /*%47*/ %49 .%48-indirection /*%50*/,
-	  /*%52*/ %54 .%53-indirection /*%55*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/,
+      /*%37*/ %39 .%38-indirection /*%40*/,
+      /*%42*/ %44 .%43-indirection /*%45*/,
+      /*%47*/ %49 .%48-indirection /*%50*/,
+      /*%52*/ %54 .%53-indirection /*%55*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2623,16 +2623,16 @@ HRESULT STDMETHODCALLTYPE
   // Override from .this-module
   AAFRESULT STDMETHODCALLTYPE
     Impl%%01::%01 (/*%02*/ %04 .%03-indirection /*%05*/,
-	  /*%07*/ %09 .%08-indirection /*%10*/,
-	  /*%12*/ %14 .%13-indirection /*%15*/,
-	  /*%17*/ %19 .%18-indirection /*%20*/,
-	  /*%22*/ %24 .%23-indirection /*%25*/,
-	  /*%27*/ %29 .%28-indirection /*%30*/,
-	  /*%32*/ %34 .%33-indirection /*%35*/,
-	  /*%37*/ %39 .%38-indirection /*%40*/,
-	  /*%42*/ %44 .%43-indirection /*%45*/,
-	  /*%47*/ %49 .%48-indirection /*%50*/,
-	  /*%52*/ %54 .%53-indirection /*%55*/)
+      /*%07*/ %09 .%08-indirection /*%10*/,
+      /*%12*/ %14 .%13-indirection /*%15*/,
+      /*%17*/ %19 .%18-indirection /*%20*/,
+      /*%22*/ %24 .%23-indirection /*%25*/,
+      /*%27*/ %29 .%28-indirection /*%30*/,
+      /*%32*/ %34 .%33-indirection /*%35*/,
+      /*%37*/ %39 .%38-indirection /*%40*/,
+      /*%42*/ %44 .%43-indirection /*%45*/,
+      /*%47*/ %49 .%48-indirection /*%50*/,
+      /*%52*/ %54 .%53-indirection /*%55*/)
   {
     return AAFRESULT_NOT_IMPLEMENTED;
   }\\
@@ -2733,7 +2733,7 @@ HRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-cpp 01
 AAFRESULT STDMETHODCALLTYPE
     AD_EXPORT_THIS_MODULE::%01 (%04 .%03-indirection %05,
-	    %09 .%08-indirection %10,
+        %09 .%08-indirection %10,
         %14 .%13-indirection %15,
         %19 .%18-indirection %20,
         %24 .%23-indirection %25,
@@ -2766,16 +2766,16 @@ AAFRESULT STDMETHODCALLTYPE
 .%48-setup(%49, %50)
 .%53-setup(%54, %55)
   stat = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45),
-	.%48-internalname(%50),
-	.%53-internalname(%55));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45),
+    .%48-internalname(%50),
+    .%53-internalname(%55));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
@@ -2816,16 +2816,16 @@ AAFRESULT STDMETHODCALLTYPE
 \\\#startm .method-%01-com-meth-comc 01
 HRESULT STDMETHODCALLTYPE
     CAD_EXPORT_THIS_MODULE::%01 (.%03-adornment%04 .%03-indirection %05,
-		.%08-adornment%09 .%08-indirection %10,
-		.%13-adornment%14 .%13-indirection %15,
-		.%18-adornment%19 .%18-indirection %20,
-		.%23-adornment%24 .%23-indirection %25,
-		.%28-adornment%29 .%28-indirection %30,
-		.%33-adornment%34 .%33-indirection %35,
-		.%38-adornment%39 .%38-indirection %40,
-		.%43-adornment%44 .%43-indirection %45,
-		.%48-adornment%49 .%48-indirection %50,
-		.%53-adornment%54 .%53-indirection %55)
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20,
+        .%23-adornment%24 .%23-indirection %25,
+        .%28-adornment%29 .%28-indirection %30,
+        .%33-adornment%34 .%33-indirection %35,
+        .%38-adornment%39 .%38-indirection %40,
+        .%43-adornment%44 .%43-indirection %45,
+        .%48-adornment%49 .%48-indirection %50,
+        .%53-adornment%54 .%53-indirection %55)
 {
 #ifdef BOB_TEST
   HRESULT hr;
@@ -2849,16 +2849,16 @@ HRESULT STDMETHODCALLTYPE
 .%48-setup(%49, %50)
 .%53-setup(%54, %55)
   hr = ptr->%01 (.%03-internalname(%05),
-	.%08-internalname(%10),
-	.%13-internalname(%15),
-	.%18-internalname(%20),
-	.%23-internalname(%25),
-	.%28-internalname(%30),
-	.%33-internalname(%35),
-	.%38-internalname(%40),
-	.%43-internalname(%45),
-	.%48-internalname(%50),
-	.%53-internalname(%55));
+    .%08-internalname(%10),
+    .%13-internalname(%15),
+    .%18-internalname(%20),
+    .%23-internalname(%25),
+    .%28-internalname(%30),
+    .%33-internalname(%35),
+    .%38-internalname(%40),
+    .%43-internalname(%45),
+    .%48-internalname(%50),
+    .%53-internalname(%55));
 .%03-cleanup(%04, %05)
 .%08-cleanup(%09, %10)
 .%13-cleanup(%14, %15)
