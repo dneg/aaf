@@ -133,14 +133,14 @@ ImplAAFHeader::~ImplAAFHeader ()
 	}
 
 	// Release the content storage pointer.
-	ImplAAFContentStorage *contentStorage = _contentStorage.setValue(0);
+	ImplAAFContentStorage *contentStorage = _contentStorage.clearValue();
 	if (contentStorage) {
 	  contentStorage->ReleaseReference();
 	  contentStorage = 0;
 	}
 
 	// Release the dictionary pointer.
-	ImplAAFDictionary *dictionary = _dictionary.setValue(0);
+	ImplAAFDictionary *dictionary = _dictionary.clearValue();
 	if (dictionary) {
 	  dictionary->ReleaseReference();
 	  dictionary = 0;
