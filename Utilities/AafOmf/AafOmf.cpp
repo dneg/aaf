@@ -1845,27 +1845,41 @@ HRESULT AafOmf::ConvertOMFLocator(OMF2::omfObject_t obj,
 	char					locatorPath[128];
 
     aafWChar*				pwLocatorPath;
-	IAAFUnixLocator*		pUnixLocator = NULL;
-	IAAFDOSLocator*			pDOSLocator = NULL;
-	IAAFMacLocator*			pMACLocator = NULL;
+//	IAAFUnixLocator*		pUnixLocator = NULL;
+//	IAAFDOSLocator*			pDOSLocator = NULL;
+//	IAAFMacLocator*			pMACLocator = NULL;
+	IAAFNetworkLocator*		pNetworkLocator = NULL;
 	IAAFLocator*			pLocator = NULL;
 
 	rc = OMF2::omfiIteratorAlloc(OMFFileHdl, &locatorIter);
 	rc = OMF2::omfmMobGetNextLocator(locatorIter, obj, &OMFLocator);
-	while(SUCCEEDED(rc) &&(OMFLocator != NULL))
+	while((rc == OMF2::OM_ERR_NONE) &&(OMFLocator != NULL))
 	{
 		rc = OMF2::omfmLocatorGetInfo(OMFFileHdl, OMFLocator, locType, 128, locatorPath);
 		if (SUCCEEDED(rc))
 		{
 			UTLStrAToStrW(locatorPath, &pwLocatorPath);
+			rc = pDictionary->CreateInstance(&AUID_AAFNetworkLocator,
+											 IID_IAAFNetworkLocator,
+											 (IUnknown **)&pNetworkLocator);
+			rc = pNetworkLocator->QueryInterface(IID_IAAFLocator, (void **)&pLocator);
+			if (SUCCEEDED(rc))
+			{
+				rc = pLocator->SetPath(pwLocatorPath);
+				rc = pEssenceDesc->AppendLocator(pLocator);
+				if (bVerboseMode)
+					UTLstdprintf("%sAdded a Network locator to the Essence Descriptor\n", indentLeader);
+			}
+/*			This code is commented out because AAF implements only
+			one type of Locator for now. 
 			if (OMF2::omfsIsTypeOf(OMFFileHdl, OMFLocator, OMClassUNXL, (OMF2::omfErr_t *)&rc) )
 			{
 				rc = pDictionary->CreateInstance(&AUID_AAFUnixLocator,
 												 IID_IAAFUnixLocator,
 												 (IUnknown **)&pUnixLocator);
 				rc = pUnixLocator->QueryInterface(IID_IAAFLocator, (void **)&pLocator);
-				pLocator->SetPath(pwLocatorPath);
-				pEssenceDesc->AppendLocator(pLocator);
+				rc = pLocator->SetPath(pwLocatorPath);
+				rc = pEssenceDesc->AppendLocator(pLocator);
 				if (bVerboseMode)
 					UTLstdprintf("%sAdded a UNIX locator to the Essence Descriptor\n", indentLeader);
 				if (pUnixLocator)
@@ -1935,11 +1949,13 @@ HRESULT AafOmf::ConvertOMFLocator(OMF2::omfObject_t obj,
 
 				UTLerrprintf("%sERROR:Unrecognazible locator found\n", indentLeader);
 			}
+*/
 			UTLMemoryFree(pwLocatorPath);
 		}
 		rc = OMF2::omfmMobGetNextLocator(locatorIter, obj, &OMFLocator);
 	}
-	OMF2::omfiIteratorDispose(OMFFileHdl, locatorIter);
+
+	rc = OMF2::omfiIteratorDispose(OMFFileHdl, locatorIter);
 
 	if (pLocator)
 		pLocator->Release();
@@ -1960,20 +1976,26 @@ HRESULT AafOmf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescripto
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	OMF2::omfFrameLayout_t	frameLayout;
+	OMF2::omfProperty_t		omCDCIComponentWidth;
+	OMF2::omfProperty_t		omCDCIHorizontalSubsampling;
+	OMF2::omfProperty_t		omCDCIColorSiting;
+	OMF2::omfProperty_t		omCDCIBlackReferenceLevel;
+	OMF2::omfProperty_t		omCDCIWhiteReferenceLevel;
+	OMF2::omfProperty_t		omCDCIColorRange;
+	OMF2::omfProperty_t		omCDCIPaddingBits;
+	OMF2::omfPosition_t		zeroPos = 0;
+	OMF2::omfPosition_t		fourPos = 0;
 
 	IAAFDigitalImageDescriptor*	pDigImageDesc = NULL;
-	IAAFFileDescriptor*			pFileDesc = NULL;
 
 	aafUInt32			Height = 0;
 	aafUInt32			Width = 0;
 	aafInt32			XOffset = 0;
 	aafInt32			YOffset = 0;
 	aafInt32			alphaTransparency = 0;
-	aafLength_t			length = 0;
 	aafInt32			alignmentFactor;
 
 	aafFrameLayout_t	AAFFrameLayout;
-	aafRational_t		sampleRate;
 	aafRational_t		gamma;
 	aafRational_t		aspectRatio;
 
@@ -1984,19 +2006,8 @@ HRESULT AafOmf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescripto
 	aafUInt32			whiteReferenceLevel = 0;
 	aafUInt32			colorRange = 0;
 	aafInt16			paddingBits = 0;
-
-	rc = pAAFDescriptor->QueryInterface(IID_IAAFFileDescriptor, (void **)&pFileDesc);
-	if (FAILED(rc))
-		return rc;
-
-	rc = OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLSampleRate, (OMF2::omfRational_t *)&sampleRate);
-	rc = pFileDesc->SetSampleRate(&sampleRate);
-
-	rc = OMF2::omfsReadLength(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLLength, (OMF2::omfLength_t *)&length);
-	rc = pFileDesc->SetLength(length);
-	pFileDesc->Release();
-	pFileDesc = NULL;
-
+	aafInt32			videoLineMap[2];
+						
 	rc = pAAFDescriptor->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **)&pDigImageDesc);
 	if (FAILED(rc))
 		return rc;
@@ -2096,9 +2107,60 @@ HRESULT AafOmf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescripto
 	rc = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDFieldAlignment, &alignmentFactor);
 	rc = pDigImageDesc->SetImageAlignmentFactor(alignmentFactor);
 
+	rc  = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDVideoLineMap, 
+						   zeroPos, OMF2::kSwabIfNeeded, OMF2::OMInt32Array,
+						   sizeof(aafInt32), &videoLineMap[0]); 
+
+	omfsCvtInt32toPosition(sizeof(aafInt32), fourPos);
+	rc  = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDVideoLineMap, 
+						   fourPos, OMF2::kSwabIfNeeded, OMF2::OMInt32Array,
+						   sizeof(aafInt32), &videoLineMap[1]); 
+
+	rc = pDigImageDesc->SetVideoLineMap( (sizeof(videoLineMap)/sizeof(aafInt32)), videoLineMap);
 	pDigImageDesc->Release();
 	pDigImageDesc = NULL;
 
+	// To get the CDCI codec related properties we first reister them in OMF
+	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ComponentWidth", OMClassCDCI, 
+									   OMF2::OMVersionType, OMF2::kPropRequired, 
+									   &omCDCIComponentWidth);
+	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "HorizontalSubsampling", OMClassCDCI, 
+									   OMF2::OMBoolean, OMF2::kPropRequired, 
+									   &omCDCIHorizontalSubsampling);
+	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ColorSiting", OMClassCDCI, 
+									   OMF2::OMBoolean, OMF2::kPropRequired, 
+									   &omCDCIColorSiting);
+	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "BlackReferenceLevel", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &omCDCIBlackReferenceLevel);
+	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "WhiteReferenceLevel", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &omCDCIWhiteReferenceLevel);
+	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "ColorRange", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &omCDCIColorRange);
+	rc = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+									   "PaddingBits", OMClassCDCI, 
+									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   &omCDCIPaddingBits);
+	// Next we read the values
+	rc  = OMF2::omfsReadInt32(OMFFileHdl, mediaDescriptor, omCDCIComponentWidth, &componentWidth); 
+	rc  = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIHorizontalSubsampling, &horizontalSubsampling); 
+	rc = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, omCDCIHorizontalSubsampling, 
+						  zeroPos, OMF2::kSwabIfNeeded, OMF2::OMColorSitingType,
+						  sizeof(colorSiting), (void *)&(colorSiting));
+	rc  = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIBlackReferenceLevel, &blackReferenceLevel); 
+	rc  = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIWhiteReferenceLevel, &whiteReferenceLevel); 
+	rc  = OMF2::omfsReadUInt32(OMFFileHdl, mediaDescriptor, omCDCIColorRange, &colorRange); 
+	rc  = OMF2::OMReadProp(OMFFileHdl, mediaDescriptor, omCDCIPaddingBits, 
+						   zeroPos, OMF2::kSwabIfNeeded, OMF2::OMInt16,
+						   sizeof(paddingBits), &paddingBits); 
 	// Now set the EssenceDescriptor
 	rc = pAAFDescriptor->SetComponentWidth(componentWidth);
 	rc = pAAFDescriptor->SetHorizontalSubsampling(horizontalSubsampling);
@@ -2135,37 +2197,21 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 	IAAFAIFCDescriptor*		pAifcDesc = NULL;
 	IAAFCDCIDescriptor*		pCDCIDesc = NULL;
 
+	aafLength_t				length = 0;
+	aafRational_t			sampleRate;
+
+
 	if (bVerboseMode)
 		UTLstdprintf("Converting OMF Source MOB to AAF\n");
 
 
 	IncIndentLevel();
 	rc = OMF2::omfmMobGetMediaDescription(OMFFileHdl, obj, &mediaDescriptor);
-	if (SUCCEEDED(rc))
+	if (rc == OMF2::OM_ERR_NONE)
 	{
 		if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassMDFL, (OMF2::omfErr_t *)&rc))
 		{
 			// File Source Mob
-			// Retrieve any locator info from the Source mob
-			rc = OMF2::omfmMobGetNumLocators(OMFFileHdl, obj, &numLocators);
-			if ((SUCCEEDED(rc)) &&(numLocators > 0))
-			{
-				rc = pDictionary->CreateInstance(&AUID_AAFFileDescriptor,
-												 IID_IAAFFileDescriptor,
-												 (IUnknown **)&pFileDesc);
-				rc = pFileDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssenceDesc);
-				rc = ConvertOMFLocator(obj, pEssenceDesc);
-				if (SUCCEEDED(rc))
-				{
-					pSourceMob->SetEssenceDescriptor(pEssenceDesc);
-				}
-				else
-				{
-					if (bVerboseMode)
-						UTLstdprintf("%sCannot convert Locator\n", indentLeader);
-					UTLerrprintf("%sERROR:Cannot convert Locator\n", indentLeader);
-				}
-			}
 			if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassTIFD, (OMF2::omfErr_t *)&rc) )
 			{
 				// TIFF File Descriptor
@@ -2317,6 +2363,21 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 				UTLerrprintf("%sERROR:Cannot translate this Media File Descriptor: %s\n", indentLeader, id) ;
 				nNumUndefinedOMFObjects++;
 			}
+			// Retrieve and set generic File Descriptor properties.
+			rc = pEssenceDesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc);
+			if (SUCCEEDED(rc))
+			{
+				rc = OMF2::omfsReadRational(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLSampleRate, (OMF2::omfRational_t *)&sampleRate);
+				if (rc == OMF2::OM_ERR_NONE)
+					rc = pFileDesc->SetSampleRate(&sampleRate);
+
+				rc = OMF2::omfsReadLength(OMFFileHdl, mediaDescriptor, OMF2::OMMDFLLength, (OMF2::omfLength_t *)&length);
+				if (rc == OMF2::OM_ERR_NONE)
+					rc = pFileDesc->SetLength(length);
+
+				pFileDesc->Release();
+				pFileDesc = NULL;
+			}
 		}
 		else
 		{
@@ -2411,6 +2472,24 @@ HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 					if (bVerboseMode)
 						UTLstdprintf("%s %s ---> %s\n", indentLeader, id, superID);
 				}
+			}
+		}
+		// Retrieve any locator info from the Source mob
+		rc = OMF2::omfmMobGetNumLocators(OMFFileHdl, obj, &numLocators);
+		if ((SUCCEEDED(rc)) &&(numLocators > 0))
+		{
+			rc = ConvertOMFLocator(obj, pEssenceDesc);
+			if (SUCCEEDED(rc))
+			{
+//				pSourceMob->SetEssenceDescriptor(pEssenceDesc);
+				if (bVerboseMode)
+					UTLstdprintf("%sConverted %ld Locators\n", indentLeader, (int)numLocators);
+			}
+			else
+			{
+				if (bVerboseMode)
+					UTLstdprintf("%sCannot convert Locator\n", indentLeader);
+				UTLerrprintf("%sERROR:Cannot convert Locator\n", indentLeader);
 			}
 		}
 	}
