@@ -147,6 +147,8 @@ public:
   virtual AAFRESULT ConvertToMyRate(aafPosition_t tmpPos,
 										  ImplAAFMobSlot *srcSlot,
 										aafPosition_t *convertPos);
+  virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
+
 
 public:
   // Declare the module test method. The implementation of the will be be

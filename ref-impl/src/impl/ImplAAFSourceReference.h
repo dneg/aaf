@@ -79,6 +79,10 @@ public:
 		// @parm [in] Source Mob ID to set
         (aafSlotID_t   mobSlotID);
 
+public:
+	//SDK-private
+
+	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
 
 
 public:

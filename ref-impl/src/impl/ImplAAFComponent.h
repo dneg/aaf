@@ -98,6 +98,7 @@ public:
 										ImplAAFComponent **found, aafBool *foundTransition);
 
 	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kComponent; return AAFRESULT_SUCCESS;}
+	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
 
 
   // Declare the module test method. The implementation of the will be be
