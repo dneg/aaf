@@ -29,7 +29,7 @@ AD_FORWARD_DECLARATION(AAFDataDef)
 AD_CLASS_UUID(38e6f8a8, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 AD_DEFAULT_UUID(38e6f8a9, 2a2c, 11d2, 84, 11, 00, 60, 08, 32, ac, b8)
 
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD2(Initialize,
 			[in],
 			objPass,
@@ -67,4 +67,4 @@ AD_XMETHOD2(Initialize,
   //
   // AAFRESULT_BAD_LENGTH
   //   - length is negative.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

@@ -25,7 +25,7 @@ AD_IDL(//
 AD_CLASS_UUID(4c2e1691, 8ae6, 11d2, 81, 3c, 00, 60, 97, 31, 01, 72)
 
 AD_DEFAULT_UUID(4c2e1692, 8ae6, 11d2, 81, 3c, 00, 60, 97, 31, 01, 72)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty
   // IAAFWaveDescriptor-supporting object.  This method must be
@@ -128,4 +128,4 @@ AD_XMETHOD2(SetSummary,
   //   - pSummary arg is NULL.
   //)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)
