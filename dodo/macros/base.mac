@@ -1,0 +1,488 @@
+#c /******************************************\
+#c *                                          *
+#c * Advanced Authoring Format                *
+#c *                                          *
+#c * Copyright (c) 1998 Avid Technology, Inc. *
+#c * Copyright (c) 1998 Microsoft Corporation *
+#c *                                          *
+#c \******************************************/
+
+
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+#c
+#c AutoDodo macro file with common macros
+#c
+#ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one non-object
+#c argument.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c
+#c Macro Arg 06: method description
+#c
+#startm AD_METHOD1 06
+AD_XMETHOD1(%01, %02, objPass, %03, %04, %05, %06)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes two non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c
+#c Macro Arg 10: method description
+#c
+#startm AD_METHOD2 10
+AD_XMETHOD2(%01,
+			%02, objPass, %03, %04, %05,
+			%06, objPass, %07, %08, %09,
+			%10)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes three non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c
+#c Macro Arg 14: method description
+#c
+#startm AD_METHOD3 14
+AD_XMETHOD3(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes four non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c metharg 4	14				15			16			17
+#c
+#c Macro Arg 18: method description
+#c
+#startm AD_METHOD4 18
+AD_XMETHOD4(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14, objPass, %15, %16, %17,
+	%18)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes five non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c metharg 4	14				15			16			17
+#c metharg 5	18				19			20			21
+#c
+#c Macro Arg 22: method description
+#c
+#startm AD_METHOD5 22
+AD_XMETHOD5(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14, objPass, %15, %16, %17,
+	%18, objPass, %19, %20, %21,
+	%22)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes six non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c metharg 4	14				15			16			17
+#c metharg 5	18				19			20			21
+#c metharg 6	22				23			24			25
+#c
+#c Macro Arg 26: method description
+#c
+#startm AD_METHOD6 26
+AD_XMETHOD6(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14, objPass, %15, %16, %17,
+	%18, objPass, %19, %20, %21,
+	%22, objPass, %23, %24, %25,
+	%26)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes seven non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c metharg 4	14				15			16			17
+#c metharg 5	18				19			20			21
+#c metharg 6	22				23			24			25
+#c metharg 7	26				27			28			29
+#c
+#c Macro Arg 30: method description
+#c
+#startm AD_METHOD7 30
+AD_XMETHOD7(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14, objPass, %15, %16, %17,
+	%18, objPass, %19, %20, %21,
+	%22, objPass, %23, %24, %25,
+	%26, objPass, %27, %28, %29,
+	%30)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes eight non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c metharg 4	14				15			16			17
+#c metharg 5	18				19			20			21
+#c metharg 6	22				23			24			25
+#c metharg 7	26				27			28			29
+#c metharg 8	30				31			32			33
+#c
+#c Macro Arg 34: method description
+#c
+#startm AD_METHOD8 34
+AD_XMETHOD8(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14, objPass, %15, %16, %17,
+	%18, objPass, %19, %20, %21,
+	%22, objPass, %23, %24, %25,
+	%26, objPass, %27, %28, %29,
+	%30, objPass, %31, %32, %33,
+	%34)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes nine non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c metharg 4	14				15			16			17
+#c metharg 5	18				19			20			21
+#c metharg 6	22				23			24			25
+#c metharg 7	26				27			28			29
+#c metharg 8	30				31			32			33
+#c metharg 9	34				35			36			37
+#c
+#c Macro Arg 38: method description
+#c
+#startm AD_METHOD9 38
+AD_XMETHOD9(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14, objPass, %15, %16, %17,
+	%18, objPass, %19, %20, %21,
+	%22, objPass, %23, %24, %25,
+	%26, objPass, %27, %28, %29,
+	%30, objPass, %31, %32, %33,
+	%34, objPass, %35, %36, %37,
+	%38)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes ten non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c metharg 4	14				15			16			17
+#c metharg 5	18				19			20			21
+#c metharg 6	22				23			24			25
+#c metharg 7	26				27			28			29
+#c metharg 8	30				31			32			33
+#c metharg 9	34				35			36			37
+#c metharg 10	38				39			40			41
+#c
+#c Macro Arg 42: method description
+#c
+#startm AD_METHOD_10 42
+AD_XMETHOD_10(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14, objPass, %15, %16, %17,
+	%18, objPass, %19, %20, %21,
+	%22, objPass, %23, %24, %25,
+	%26, objPass, %27, %28, %29,
+	%30, objPass, %31, %32, %33,
+	%34, objPass, %35, %36, %37,
+	%38, objPass, %39, %40, %41,
+	%42)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes eleven non-object
+#c arguments.
+#c
+#c Macro Arg 01: method name
+#c
+#c Macro arguments 02+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	02				03			04			05
+#c metharg 2	06				07			08			09
+#c metharg 3	10				11			12			13
+#c metharg 4	14				15			16			17
+#c metharg 5	18				19			20			21
+#c metharg 6	22				23			24			25
+#c metharg 7	26				27			28			29
+#c metharg 8	30				31			32			33
+#c metharg 9	34				35			36			37
+#c metharg 10	38				39			40			41
+#c metharg 11	42				43			44			45
+#c
+#c Macro Arg 46: method description
+#c
+#startm AD_METHOD_11 46
+AD_XMETHOD_11(%01,
+	%02, objPass, %03, %04, %05,
+	%06, objPass, %07, %08, %09,
+	%10, objPass, %11, %12, %13,
+	%14, objPass, %15, %16, %17,
+	%18, objPass, %19, %20, %21,
+	%22, objPass, %23, %24, %25,
+	%26, objPass, %27, %28, %29,
+	%30, objPass, %31, %32, %33,
+	%34, objPass, %35, %36, %37,
+	%38, objPass, %39, %40, %41,
+	%42, objPass, %43, %44, %45,
+	%46)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes one non-object
+#c argument.  Constructor name is assumed to be .this-module.
+#c
+#c Macro arguments 01+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	01				02			03			04
+#c
+#c Macro Arg 05: method description
+#c
+#startm AD_CONSTRUCTOR1 05
+AD_XCONSTRUCTOR1(%01, objPass, %02, %03, %04,
+				 %05)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes two non-object
+#c arguments.  Constructor name is assumed to be .this-module.
+#c
+#c Macro arguments 01+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	01				02			03			04
+#c metharg 2	05				06			07			08
+#c
+#c Macro Arg 09: method description
+#c
+#startm AD_CONSTRUCTOR2 09
+AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
+				 %05, objPass, %06, %07, %08,
+				 %09)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes three non-object
+#c arguments.  Constructor name is assumed to be .this-module.
+#c
+#c Macro arguments 01+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	01				02			03			04
+#c metharg 2	05				06			07			08
+#c metharg 3	09				10			11			12
+#c
+#c Macro Arg 13: method description
+#c
+#startm AD_CONSTRUCTOR3 13
+AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
+				 %05, objPass, %06, %07, %08,
+				 %09, objPass, %10, %11, %12,
+				 %13)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes four non-object
+#c arguments.  Constructor name is assumed to be .this-module.
+#c
+#c Macro arguments 01+:
+#c 
+#c meth arg #	arg modifiers	arg type	arg name	arg comment
+#c ----------   -------------   --------    --------    -----------
+#c metharg 1	01				02			03			04
+#c metharg 2	05				06			07			08
+#c metharg 3	09				10			11			12
+#c metharg 3	13				14			15			16
+#c
+#c Macro Arg 17: method description
+#c
+#startm AD_CONSTRUCTOR4 17
+AD_XCONSTRUCTOR2(%01, objPass, %02, %03, %04,
+				 %05, objPass, %06, %07, %08,
+				 %09, objPass, %10, %11, %12,
+				 %13, objPass, %14, %15, %16,
+				 %17)
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c The following macros assist in passing arguments to methods of the
+#c contained implementation class:
+#c
+#c The objIn macros are for use with pointers to objects that are
+#c passed into the method.  The Type argument is the base type, with
+#c no indirection specified.  For example, if you're passing in
+#c AObject*, AObject should be specified for the Type argument.#c
+#c
+#c The objOut macros are for use with pointers to pointers to objects
+#c that are passed out of the method.  The Type argument is the base
+#c type, with no indirection specified.  For example, if you're
+#c passing in AObject**, AObject should be specified for the Type
+#c argument.
+#c
+#c The objPass macros are for use with any kind of data which is
+#c passed exactly into or out of the method.
+#c
+
+
+#startm .objIn-indirection 00
+*\
+#endm
+
+
+#startm .objPass-indirection 00
+#endm
+
+
+#startm .objOut-indirection 00
+**\
+#endm
