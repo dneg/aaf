@@ -141,4 +141,34 @@ size_t ImplAAFTypeDefFixedArray::PropValSize (void)
 }
 
 
+aafBool ImplAAFTypeDefFixedArray::IsRegistered (void)
+{
+  // true if underlying type is registered
+  ImplAAFTypeDef * elemType = NULL;
+  AAFRESULT hr;
+  hr = GetType (&elemType);
+  assert (AAFRESULT_SUCCEEDED(hr));
+  assert (elemType);
+  aafBool result = elemType->IsRegistered();
+  elemType->ReleaseReference ();
+  return result;
+}
+
+
+size_t ImplAAFTypeDefFixedArray::NativeSize (void)
+{
+  assert (IsRegistered());
+
+  size_t result;
+  ImplAAFTypeDef * elemType = NULL;
+  AAFRESULT hr;
+  hr = GetType (&elemType);
+  assert (AAFRESULT_SUCCEEDED(hr));
+  assert (elemType);
+  result = elemType->NativeSize() * _ElementCount;
+  elemType->ReleaseReference();
+  return result;
+}
+
+
 OMDEFINE_STORABLE(ImplAAFTypeDefFixedArray, AUID_AAFTypeDefFixedArray);

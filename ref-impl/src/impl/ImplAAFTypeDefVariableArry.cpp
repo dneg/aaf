@@ -153,4 +153,18 @@ size_t ImplAAFTypeDefVariableArray::PropValSize (void)
 }
 
 
+aafBool ImplAAFTypeDefVariableArray::IsRegistered (void)
+{
+  assert (IsFixedSize());
+  return AAFFalse;
+}
+
+
+size_t ImplAAFTypeDefVariableArray::NativeSize (void)
+{
+  assert (0);
+  return 0; // not reached!
+}
+
+
 OMDEFINE_STORABLE(ImplAAFTypeDefVariableArray, AUID_AAFTypeDefVariableArray);

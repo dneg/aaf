@@ -135,8 +135,13 @@ public:
   // If this->IsFixedSize(), then will return the size of property
   // values of this type.  If not fixed size, will assert().
   virtual size_t PropValSize (void);
+
+  // Returns true if offsets have been registered for this type def.
+  virtual aafBool IsRegistered (void);
+
+  // If this->IsRegistered(), then will return the native in-memory
+  // size of this type.  If not registered, will assert().
+  virtual size_t NativeSize (void);
 };
 
 #endif // ! __ImplAAFTypeDef_h__
-
-

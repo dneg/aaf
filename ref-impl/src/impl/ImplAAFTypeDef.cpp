@@ -126,4 +126,18 @@ size_t ImplAAFTypeDef::PropValSize (void)
 }
 
 
+aafBool ImplAAFTypeDef::IsRegistered (void)
+{
+  assert (0);
+  return AAFFalse; // not reached!
+}
+
+
+size_t ImplAAFTypeDef::NativeSize (void)
+{
+  assert (0);
+  return 0; // not reached!
+}
+
+
 OMDEFINE_STORABLE(ImplAAFTypeDef, AUID_AAFTypeDef);
