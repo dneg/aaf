@@ -1670,6 +1670,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			essenceDescClass, codecID;
 	aafBool					found = kAAFFalse, isIdentified;
 	aafUID_t				testFormat;
+	aafRational_t 		mmobRate;
 
 	
 	XPROTECT()
@@ -1677,6 +1678,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(masterMob->MyHeadObject(&compHead));
 		CHECK(masterMob->FindSlotBySlotID (slotID,&slot));
 		CHECK(slot->GetSegment(&seg));
+		CHECK(((ImplAAFTimelineMobSlot*)slot)->GetEditRate(&mmobRate));
 		slot->ReleaseReference();
 		slot = NULL;
 
@@ -1690,6 +1692,7 @@ AAFRESULT STDMETHODCALLTYPE
 		_openType = kAAFReadOnly;
 		CvtInt32toPosition(0, Pos);	
 
+		// comparison performed in units of Master mob edit rate
 		while (Pos < masterMobLength) 
 		{
 			aafAccessor_t access;
@@ -1915,8 +1918,17 @@ AAFRESULT STDMETHODCALLTYPE
 			CHECK(InstallEssenceAccessIntoCodec());
 		
 			CHECK(access.codec->Open(iFileMob, openMode, access.stream, compEnable));
-			
-			Pos += access.length;
+		
+			// Samples in Source mob are in Sample Rate which might be different
+			// to the Master mob edit rate. So we need to convert the samples
+			// into units of Master mob edit rate to check Pos against 
+			// Master mob length
+			aafRational_t smobRate;
+			CHECK(access.mdes->GetSampleRate(&smobRate));
+			aafPosition_t curPos;
+			CHECK(AAFConvertEditRate(smobRate, access.length, mmobRate, kRoundCeiling, &curPos));
+			Pos += curPos;
+
 			_codecList.append(access);
 
 			iFileMob->Release();
