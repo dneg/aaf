@@ -2,7 +2,7 @@ INSTALL_H_DIR=../../ref-impl/include
 EXE=
 OBJ=.o
 COMPILE=c++
-COMPILEFLAGS=-I../../AAFi686LinuxSDK/g++/include
+COMPILEFLAGS=-I.. -I../../AAFi686LinuxSDK/g++/include
 LINK=c++
 
 PROGS=classDefUid$(EXE) \
@@ -25,51 +25,47 @@ all : $(PROGS) \
 headerGenUtils$(OBJ) : headerGenUtils.cpp headerGenUtils.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
-AAFMetaDictionary.h : ../AAFMetaDictionary.h
-	cp ../AAFMetaDictionary.h AAFMetaDictionary.h
-
-
 # targets for each program
 classDefUid$(EXE) : headerGenUtils$(OBJ) classDefUid$(OBJ)
 	$(LINK) $^ -o $@
 
 classDefUid$(OBJ) : classDefUid.cpp headerGenUtils.h \
-        AAFMetaDictionary.h literalAuidDef.h 
+        ../AAFMetaDictionary.h literalAuidDef.h 
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 extEnumUid$(EXE) : headerGenUtils$(OBJ) extEnumUid$(OBJ)
 	$(LINK) $^ -o $@
 
 extEnumUid$(OBJ) : extEnumUid.cpp headerGenUtils.h \
-        AAFMetaDictionary.h literalAuidDef.h
+        ../AAFMetaDictionary.h literalAuidDef.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 propertyDefUid$(EXE) : headerGenUtils$(OBJ) propertyDefUid$(OBJ)
 	$(LINK) $^ -o $@
 
 propertyDefUid$(OBJ) : propertyDefUid.cpp headerGenUtils.h \
-        AAFMetaDictionary.h literalAuidDef.h
+        ../AAFMetaDictionary.h literalAuidDef.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 propertyId$(EXE) : headerGenUtils$(OBJ) propertyId$(OBJ)
 	$(LINK) $^ -o $@
 
 propertyId$(OBJ) : propertyId.cpp headerGenUtils.h \
-        AAFMetaDictionary.h literalAuidDef.h
+        ../AAFMetaDictionary.h literalAuidDef.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 storedObjectUid$(EXE) : headerGenUtils$(OBJ) storedObjectUid$(OBJ)
 	$(LINK) $^ -o $@
 
 storedObjectUid$(OBJ) : storedObjectUid.cpp headerGenUtils.h \
-        AAFMetaDictionary.h literalAuidDef.h
+        ../AAFMetaDictionary.h literalAuidDef.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 typeDefUid$(EXE) : headerGenUtils$(OBJ) typeDefUid$(OBJ)
 	$(LINK) $^ -o $@
 
 typeDefUid$(OBJ) : typeDefUid.cpp headerGenUtils.h \
-        AAFMetaDictionary.h literalAuidDef.h
+        ../AAFMetaDictionary.h literalAuidDef.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
 # targets for generated source files
@@ -135,7 +131,6 @@ clean:
 	rm -rf AAFPropertyIDs.h
 	rm -rf AAFStoredObjectIDs.h
 	rm -rf AAFTypeDefUIDs.h
-	rm -rf AAFMetaDictionary.h
 
 install: $(INSTALL_H_DIR)/AAFClassDefUIDs.h \
         $(INSTALL_H_DIR)/AAFExtEnum.h \
