@@ -19,91 +19,17 @@
 #include "CAAFUnknown.h"
 
 
+#ifndef __CAAFJPEGDescriptorHelper_h__
+#include "CAAFJPEGDescriptorHelper.h"
+#endif
+
+#include "AAFUtils.h" // AAFByteOrder
+
+
+
 // ID for this Plugin's CoClass.
 EXTERN_C const CLSID CLSID_AAFJPEGCodec;
 
-
-class CJPEGDescriptorHelper
-{
-public:
-	CJPEGDescriptorHelper();
-	~CJPEGDescriptorHelper();
-	
-	HRESULT Initialize(IAAFSourceMob *filemob);
-	void Clear(void);
-
-	bool operator==(const CJPEGDescriptorHelper& rhs);
-	bool operator!=(const CJPEGDescriptorHelper& rhs);
-
-	//
-	// EssenceDescriptor methods:
-	//
-	STDMETHOD (GetNumLocators) (aafInt32 *  pCount);
-	STDMETHOD (AppendLocator) (IAAFLocator * pLocator);
-	STDMETHOD (PrependLocator) (IAAFLocator * pLocator);
-	STDMETHOD (EnumAAFAllLocators) (IEnumAAFLocators ** ppEnum);
-	//
-	// FileDescriptor methods:
-	//
-	STDMETHOD (SetLength) (aafLength_t  length);
-	STDMETHOD (GetLength) (aafLength_t *  pLength);
-	STDMETHOD (SetIsInContainer) (aafBool  isAAF);
-	STDMETHOD (GetIsInContainer) (aafBool *  pIsAAF);
-	STDMETHOD (SetSampleRate) (aafRational_t *  pRate);
-	STDMETHOD (GetSampleRate) (aafRational_t*  pRate);
-	STDMETHOD (SetContainerFormat) (aafUID_t *  pFormat);
-	STDMETHOD (GetContainerFormat) (aafUID_t *  pFormat);
-	//
-	// DigitalImageDescriptor methods:
-	//
-	STDMETHOD (SetCompression) (aafUID_t *  pCodecID);
-	STDMETHOD (GetCompression) (aafUID_t *  pCompression);
-	STDMETHOD (SetStoredView) (aafUInt32  StoredHeight, aafUInt32  StoredWidth);
-	STDMETHOD (GetStoredView) (aafUInt32 *  pStoredHeight, aafUInt32 *  pStoredWidth);
-	STDMETHOD (SetSampledView) (aafUInt32  SampledHeight, aafUInt32  SampledWidth, aafInt32  SampledXOffset, aafInt32  SampledYOffset);
-	STDMETHOD (GetSampledView) (aafUInt32 *  pSampledHeight, aafUInt32 *  pSampledWidth, aafInt32 *  pSampledXOffset, aafInt32 *  pSampledYOffset);
-	STDMETHOD (SetDisplayView) (aafUInt32  DisplayHeight, aafUInt32  DisplayWidth, aafInt32  DisplayXOffset, aafInt32  DisplayYOffset);
-	STDMETHOD (GetDisplayView) (aafUInt32 *  pDisplayHeight, aafUInt32 *  pDisplayWidth, aafInt32 *  pDisplayXOffset, aafInt32 *  pDisplayYOffset);
-	STDMETHOD (SetFrameLayout) (aafFrameLayout_t  FrameLayout);
-	STDMETHOD (GetFrameLayout) (aafFrameLayout_t *  pFrameLayout);
-	STDMETHOD (SetVideoLineMap) (aafUInt32  numberElements, aafInt32 *  pVideoLineMap);
-	STDMETHOD (GetVideoLineMap) (aafUInt32  numberElements, aafInt32 *  pVideoLineMap);
-	STDMETHOD (GetVideoLineMapSize) (aafUInt32 *  pNumberElements);
-	STDMETHOD (SetImageAspectRatio) (aafRational_t  ImageAspectRatio);
-	STDMETHOD (GetImageAspectRatio) (aafRational_t *  pImageAspectRatio);
-	STDMETHOD (SetAlphaTransparency) (aafAlphaTransparency_t  AlphaTransparency);
-	STDMETHOD (GetAlphaTransparency) (aafAlphaTransparency_t *  pAlphaTransparency);
-	STDMETHOD (SetGamma) (aafRational_t  Gamma);
-	STDMETHOD (GetGamma) (aafRational_t *  pGamma);
-	STDMETHOD (SetImageAlignmentFactor) (aafInt32  ImageAlignmentFactor);
-	STDMETHOD (GetImageAlignmentFactor) (aafInt32 *  pImageAlignmentFactor);
-	//
-	// CDCIDescriptor methods:
-	//
-	STDMETHOD (SetComponentWidth) (aafInt32  ComponentWidth);
-	STDMETHOD (GetComponentWidth) (aafInt32 *  pComponentWidth);
-	STDMETHOD (SetHorizontalSubsampling) (aafUInt32  HorizontalSubsampling);
-	STDMETHOD (GetHorizontalSubsampling) (aafUInt32 *  pHorizontalSubsampling);
-	STDMETHOD (SetColorSiting) (aafColorSiting_t  ColorSiting);
-	STDMETHOD (GetColorSiting) (aafColorSiting_t *  pColorSiting);
-	STDMETHOD (SetBlackReferenceLevel) (aafUInt32  BlackReferenceLevel);
-	STDMETHOD (GetBlackReferenceLevel) (aafUInt32 *  pBlackReferenceLevel);
-	STDMETHOD (SetWhiteReferenceLevel) (aafUInt32  WhiteReferenceLevel);
-	STDMETHOD (GetWhiteReferenceLevel) (aafUInt32 *  pWhiteReferenceLevel);
-	STDMETHOD (SetColorRange) (aafUInt32  ColorRange);
-	STDMETHOD (GetColorRange) (aafUInt32 *  pColorRange);
-	STDMETHOD (SetPaddingBits) (aafInt16  PaddingBits);
-	STDMETHOD (GetPaddingBits) ( aafInt16 *  pPaddingBits);
-
-
-private:
-	IUnknown *_filemob_unk; // used for equality testing.
-	IAAFSourceMob *_filemob;
-	IAAFEssenceDescriptor *_edes;
-	IAAFFileDescriptor *_filedes;
-	IAAFDigitalImageDescriptor *_dides;
-	IAAFCDCIDescriptor *_cdcides;  // Compressed digital image descriptor
-};
 
 
 
@@ -367,12 +293,38 @@ public:
 
 private:
 	void SetEssenceStream(IAAFEssenceStream *stream);
+	void SetNumberOfSamples(const aafLength_t& numberOfSamples);
+	void SetCurrentIndex(aafUInt32 currentIndex);
+	void SetWriteIndex(aafUInt32 writeIndex);
+
+	// Compress a single image data from the given buffer. Return the actual
+	// number of bytes written.
+	HRESULT CompressImage(const aafDataBuffer_t buffer, aafUInt32 bufLen, aafUInt32& bytesWritten);
+
+	// Decompress a single image from the current position in the stream returning
+	// the image data in buffer and the actual number of bytes written. Note: bufLen must
+	// be large enough to hold all of the decompressed data
+	HRESULT DecompressImage(const aafDataBuffer_t buffer, aafUInt32 bufLen, aafUInt32& bytesRead);
+
+
+	// SampleIndex access methods : may be temporary. We need these methods
+	// to read/write the index because the SampleIndex property in EssenceData
+	// is not implemented. Also, these methods will allow all essence streams
+	// to be treated the sample, whether in an AAF file or not.
+
+	HRESULT ReadNumberOfSamples(IAAFEssenceStream *stream,
+		                         aafLength_t& numberOfSamples);
+	HRESULT AllocateSampleIndex(const aafLength_t& numberOfSamples);
+	HRESULT ReadSampleIndex();
+	HRESULT WriteSampleIndex();
 
 private:
+	AAFByteOrder		_nativeByteOrder;
+
 	IAAFEssenceAccess	*_access;
 	IAAFEssenceStream	*_stream; // stream for jpeg sample data.
 
-	CJPEGDescriptorHelper _descriptorHelper;
+	CAAFJPEGDescriptorHelper _descriptorHelper;
 
 	aafMediaOpenMode_t _openMode; // Either read-only or for append.
 	aafCompressEnable_t _compressEnable;   // if true then should receive and deliver uncompressed data.
@@ -403,7 +355,7 @@ private:
 	aafFrameLayout_t _frameLayout;
 
 	aafUInt32 _videoLineMapSize; // s/b 2, VideoLineMap
-	aafInt32  _videoLineMap[2];
+	aafVideoLineMap_t  _videoLineMap;
 
 	aafRational_t _imageAspectRatio;
 	aafAlphaTransparency_t _alphaTransparency;
@@ -421,11 +373,18 @@ private:
 	aafInt16 _paddingBits;
 
 	// Misc. data copied from omf codec
+	aafUInt32 _imageHeight; 
+	aafUInt32 _imageWidth;
 	aafUInt32 _fileBytesPerSample;
 	aafBool _descriptorFlushed;
-	aafInt32 _currentIndex;
+	aafUInt32 _startingIndex; // index that we cannot write before...
+	aafUInt32 _currentIndex;
+	aafUInt32 _writeIndex;
 	aafUInt32 _maxIndex;
-	aafPosition_t *_frameIndex;
+	aafPosition_t *_sampleIndex;
+
+	aafColorSpace_t _pixelFormat;
+	aafCompArray_t _compArray;
 
 	//jpeg_tables     compressionTables[3];
 	//aafBool _customTables;
@@ -435,6 +394,9 @@ private:
 	aafInt16 _bitsPerPixelAvg;
 	aafInt32 _memBytesPerSample;
 	aafUInt32 _bitsPerSample;
+
+	// Copied from WaveCodec...(may be renamed...)
+	aafLength_t	_numberOfSamples; /* was _sampleFrames in WaveCodec) */
 
 
 	bool _headerLoaded; // has the jpeg header been loaded?
