@@ -23,7 +23,101 @@
 
 #include <AxEssence.h>
 
+#include <math.h>
+#include <assert.h>
+
 namespace {
+
+// The tone generator can generate a single cycle and repeat it, or 
+// generate every sample.  The single cycle approach is efficient, but
+// suffers as the tone frequency approaches the nyquist frequence because
+// we can only generate tones that are integer multiples of the
+// sample_freq/tone_freq.  The error introduced by this grows as the tone_freq
+// increases.  Since, in generate we assume nothing about the sample frequency
+// or the tone frequency, choose the more accurate approach and generate every
+// sample.
+
+class ToneGenerator {
+public:
+	ToneGenerator( int toneFequency,
+				   int sampleFrequency,
+		           int level,
+				   int bitsPerSample );
+
+	~ToneGenerator();
+
+	void Reset();
+
+	aafUInt32 NextSample();
+
+private:
+
+	int _toneFrequency;
+	int _sampleFrequency;
+	int _level;
+	int _bitsPerSample;
+	int _bytesPerSample;
+
+	unsigned long _time;
+
+	double _normalizedFrequency;
+
+	double _normalizedLevel;
+
+	// Where the heck is M_PI on windows?
+	double _pi;
+};
+
+
+ToneGenerator::ToneGenerator( int toneFrequency,
+							  int sampleFrequency,
+							  int level,
+							  int bitsPerSample )
+: _toneFrequency( toneFrequency ),
+  _sampleFrequency( sampleFrequency ),
+  _level( level ),
+  _bitsPerSample( bitsPerSample ),
+  _time(0),
+  _pi(2.0*asin(1.0))
+{
+	if ( _bitsPerSample > 32 ) {
+		throw AxFGEx( L"Tone generator limited to 32 bits per sample." );
+	}
+
+	if ( _toneFrequency > _sampleFrequency/2 ) {
+		throw AxFGEx( L"Nyquist frequency exceeded." );
+	}
+	
+	// Get 2*pi in their now as well...
+	_normalizedFrequency = (2.0 * _pi * _toneFrequency) / _sampleFrequency;
+
+	// Sine is from -1.0 to 1.0.
+	// (1+sin(wt))/2 gives 0.0 to 1.0, centered on 0.5
+	// Max value is 2^bits_per_sample
+	// Reduce this by level/100 percent.
+	// Thus, value of sample i is:  level/100 * (2^bits_per_sample-1) * (1+sin(w*i))/2
+	//
+	// Combine constants:  _normalizedLevel * (1 + sin(_normalizeFrequency * i) )
+
+	_normalizedLevel = (level/100.0) * (pow(2.0, _bitsPerSample)-1) / 2.0;  
+}
+
+ToneGenerator::~ToneGenerator()
+{}
+
+void ToneGenerator::Reset() 
+{
+	_time = 0;
+}
+
+inline aafUInt32 ToneGenerator::NextSample()
+{
+	double val;
+
+	val = _normalizedLevel * (1 + ::sin(_normalizedFrequency * _time++));
+
+	return static_cast<aafUInt32>(val);
+}
 
 //=---------------------------------------------------------------------=
 
@@ -45,8 +139,14 @@ public:
   virtual std::auto_ptr< SampleSrcBuffer > GetNext();
 
 private:
+	int _toneFrequency;
+	int _toneLevel;
 	int _count;
 	WaveHeader _waveHeader;
+
+	// auto_ptr so that we don't have to construct until
+	// Execute time.
+	std::auto_ptr<ToneGenerator> _toneGen;
 };
 
 
@@ -85,24 +185,70 @@ void ToneSource::Execute( const std::vector<AxString>& argv )
 	WaveHeader waveHeader( waveHeaderBuffer );
 
 	_waveHeader = waveHeader;
+	
+	// Only mono support for the moment.
+	if ( 1  != _waveHeader.GetNumChannels() ) {
+		throw AxFGEx( L"Only mono support exists." );
+	}
+
+	_toneGen = std::auto_ptr<ToneGenerator>(
+					new ToneGenerator( freqVal,
+					 				   _waveHeader.GetSampleRate(),
+									   levelVal,
+									   _waveHeader.GetBitsPerSample() ) );
 
 	RegisterInstance( sourceName );
 }
 
 void ToneSource::Reset()
 {
+	_toneGen->Reset();
 	_count = 0;
 }
 
 std::auto_ptr< SampleSrcBuffer > ToneSource::GetNext()
 {
-	auto_ptr<aafUInt8> buf( new aafUInt8[ _waveHeader.GetAudioDataSizeInBytes() ] );
-
 	if ( 1 == _count ) {
 		return std::auto_ptr< SampleSrcBuffer >( new SimpleSampleSrcBuffer() );
 	}
 
-	// Fill in the tone here!
+	auto_ptr<aafUInt8> buf( new aafUInt8[ _waveHeader.GetAudioDataSizeInBytes() ] );
+
+	// yikes... there's gotta be a better way...
+
+	if ( 1 == _waveHeader.GetBytesPerSample() ) {
+		aafUInt8* buf8 = buf.get();
+		int i;
+		for( i = 0; i < _waveHeader.GetNumSamples(); i++ ) {
+			buf8[i] = _toneGen->NextSample();
+		}
+	}
+	else if ( 2 == _waveHeader.GetBytesPerSample() ) {
+		aafUInt16* buf16 = reinterpret_cast<aafUInt16*>(buf.get());
+
+		// just in case... better check
+		assert( reinterpret_cast<aafUInt64>(buf16) % 2== 0 );
+	
+		int i;
+		for( i = 0; i < _waveHeader.GetNumSamples(); i++ ) {
+			buf16[i] = _toneGen->NextSample();
+		}
+	}
+	else if ( 4 == _waveHeader.GetBytesPerSample() ) {
+		aafUInt32* buf32 = reinterpret_cast<aafUInt32*>(buf.get());
+
+		// just in case... better check
+		assert( reinterpret_cast<aafUInt64>(buf32) % 4== 0 );
+	
+		int i;
+		for( i = 0; i < _waveHeader.GetNumSamples(); i++ ) {
+			buf32[i] = _toneGen->NextSample();
+		}
+
+	}
+	else {
+		throw AxFGEx( L"unsupported byte per sample size" );
+	}
 
 	_count++;
 
@@ -113,5 +259,3 @@ std::auto_ptr< SampleSrcBuffer > ToneSource::GetNext()
 }
 
 } // end of namespace
-
-
