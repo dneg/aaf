@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -169,7 +169,6 @@ public:
     // @cmember Set the current position for <f read()> and <f write()>, as an
     //          offset in bytes from the beginning of this
     //          <c OMMappedFileRawStorage>.
-    //          precondition - isPositionable()
   virtual void setPosition(OMUInt64 newPosition) const;
 
     // @cmember Synchronize this <c OMMappedFileRawStorage> with its external
