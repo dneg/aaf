@@ -196,8 +196,7 @@ bool OMVectorIterator<Element>::operator++()
   POSTCONDITION("Consistent result", IMPLIES(!result,  after()));
   POSTCONDITION("Consistent result", IMPLIES( result,  valid()));
   POSTCONDITION("Consistent result", IMPLIES(!result, !valid()));
-  POSTCONDITION("Valid index",
-               IMPLIES(valid(), (_index >= 0) && (_index < _vector->count())));
+  POSTCONDITION("Valid index", IMPLIES(valid(), _index < _vector->count()));
   return result;
 }
 
@@ -249,8 +248,7 @@ bool OMVectorIterator<Element>::operator--()
   POSTCONDITION("Consistent result", IMPLIES(!result,  before()));
   POSTCONDITION("Consistent result", IMPLIES( result,  valid()));
   POSTCONDITION("Consistent result", IMPLIES(!result, !valid()));
-  POSTCONDITION("Valid index",
-               IMPLIES(valid(), (_index >= 0) && (_index < _vector->count())));
+  POSTCONDITION("Valid index", IMPLIES(valid(), _index < _vector->count()));
   return result;
 }
 
@@ -307,7 +305,7 @@ size_t OMVectorIterator<Element>::index(void) const
 
   size_t result = _index;
 
-  POSTCONDITION("Valid index", (_index >= 0) && (_index < _vector->count()));
+  POSTCONDITION("Valid index", _index < _vector->count());
 
   return result;
 }
