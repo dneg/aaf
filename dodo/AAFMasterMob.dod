@@ -28,7 +28,7 @@ AD_HEAD
 // aafBool
 // AAFDataDefinition [ a.k.a. AAFDataKind ]
 // aafTrackID_t
-// aafString
+// aafString_t
 // AAFSourceClip      [ was AAFFileMob ]
 // aafMediaCriteria_t
 // aafCriteriaType_t
@@ -36,6 +36,10 @@ AD_HEAD
 // aafEffectChoice_t
 // AAFComponent
 // aafFindSourceInfo_t
+
+AD_FORWARD_DECLARATION(AAFSourceClip)
+AD_FORWARD_DECLARATION(AAFSourceMob)
+AD_FORWARD_DECLARATION(AAFComponent)
 
 AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 
@@ -50,7 +54,7 @@ AD_METHOD5(AddMasterTrack,
 [in], aafTrackID_t, trackID, TrackID of new Master Mob track.,
 [in], aafTrackID_t, fileTrackID, TrackID of File Source Mob track to be associated with the new
   // Master Mob track.,
-[in\,ref], aafString *, trackName, Name to assign to new track in Master Mob. If track
+[in\,ref], aafString_t *, trackName, Name to assign to new track in Master Mob. If track
   // Name is passed in with zero length\, then the track is not assigned a name. Track
   // names are not used by the Toolkit\, and exist only so the user can name
   // tracks.,
@@ -63,7 +67,7 @@ This function adds a track to the specified Master Mob that references the speci
 
 AD_METHOD2(GetTapeName,
 [in], aafInt32, masterTrackID, TrackID of the Master Mob track.,
-[in\,out], aafString *, tapeName, The returned name.,
+[in\,out], aafString_t *, tapeName, The returned name.,
 Returns the name of the videotape that the media was derived from.
   // @commThis function finds the videotape Source Mob associated with a Master Mob
   // track and returns the name of the videotape\, which is stored in the Mobs Name
@@ -94,7 +98,7 @@ Returns the indexed media representation for the specified Master Mob\,
   // yourself.
   // This method uses an integer index\, not an iterator.
   // The function GetRepresentationSourceClip takes an index
-  // between 1 and the number of representations \(inclusive\)\, and returns the
+  // between 1 and the number of representations [inclusive]\, and returns the
   // indexed File Source Mob. You can make calls to functions such as
   // omfmGetVideoInfo and omfmIsMediaContiguous to determine which
   // media is the best fit.)
@@ -128,9 +132,9 @@ Returns the Source Clip on the specified track of a Master Mob that references
   // of interface?)
 
 AD_METHOD7(SearchSource,
-[in], aafTrackID_t, trackID, Track ID of the track \(Mob Slot\) to get information about.,
+[in], aafTrackID_t, trackID, Track ID of the track [Mob Slot] to get information about.,
 [in], aafPosition_t, offset, Offset within the track to get information about.,
-[in], aafMobKind, mobKind, Kind of referenced Mob to get information about. 
+[in], aafMobKind_t, mobKind, Kind of referenced Mob to get information about. 
   // @ex Possible values for MobKind_t are: |
   //	kCompMob
   //	kMasterMob
