@@ -29,6 +29,10 @@ protected:
   virtual ~ImplAAFWAVEDescriptor ();
 
 public:
+  virtual AAFRESULT STDMETHODCALLTYPE
+	Initialize ();
+
+
   //****************
   // GetSummary()
   //
