@@ -158,8 +158,9 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	else
 	{
-		theEnum->ReleaseReference();
-		*ppEnum = NULL;
+	  theEnum->ReleaseReference();
+	  theEnum = 0;
+	  *ppEnum = NULL;
 	}
 
 	return hr;
