@@ -1,9 +1,9 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-1999 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFTypes\
@@ -537,6 +537,32 @@ typedef struct _aafUID_t
     aafUInt8  Data4[8];
 } aafUID_t;
 
+AD_CPP_QUOTE(/*)
+AD_CPP_QUOTE(\ * Type used to uniquely identify an AAF Mob.)
+AD_CPP_QUOTE(\ * This is a temporary definition provided for compatibility with)
+AD_CPP_QUOTE(\ * earlier versions of the toolkit. The final definition for)
+AD_CPP_QUOTE(\ * aafMobID_t may look more like the definition of aafMobIDX_t below.)
+AD_CPP_QUOTE(\ * During this transistion clients can define MOBID_IS_AUID)
+AD_CPP_QUOTE(\ * while converting their applications/plugins to use aafMobID_t)
+AD_CPP_QUOTE(\ * instead of aafUID_t for mob ids.)
+AD_CPP_QUOTE(\ */)
+#ifdef MOBID_IS_AUID
+  typedef struct _aafUID_t aafMobID_t;
+#else
+  typedef struct _aafMobIDX_t aafMobID_t;
+#endif
+
+typedef struct  _aafMobIDX_t
+{
+    aafUInt32 Data1;
+    aafUInt16 Data2;
+    aafUInt16 Data3;
+    aafUInt8 Data4[ 8 ];
+    // other data...
+    //aafUInt8 Data5[ 16 ]; //???
+}	aafMobIDX_t;
+
+
 typedef struct _aafProductIdentification_t
 {
 	aafCharacter			*companyName;
@@ -674,7 +700,7 @@ typedef struct _aafEdgecode_t
 AD_CPP_QUOTE(/*** Types for clips ***/)
 typedef struct _aafSourceRef_t
 {
-	aafUID_t        sourceID;
+	aafMobID_t        sourceID;
 	aafSlotID_t    sourceSlotID;
 	aafPosition_t   startTime;
 } aafSourceRef_t;
@@ -738,7 +764,7 @@ typedef struct _aafSearchCrit_t
     [switch_is(searchTag)] union
     {
         [case(kByMobID)]
-			aafUID_t mobID;		// shouldn't this be a pointer?
+			aafMobID_t mobID;		// shouldn't this be a pointer?
         [case(kByMobKind)]
 			aafMobKind_t mobKind;
         [case(kByName)]
@@ -760,7 +786,7 @@ AD_CPP_QUOTE({)
 AD_CPP_QUOTE(\    aafSearchTag_t     searchTag;)
 AD_CPP_QUOTE(\    union)
 AD_CPP_QUOTE(\    {)
-AD_CPP_QUOTE(\        aafUID_t        mobID;		// shouldn't this be a pointer?)
+AD_CPP_QUOTE(\        aafMobID_t        mobID;		// shouldn't this be a pointer?)
 AD_CPP_QUOTE(\        aafMobKind_t    mobKind;)
 AD_CPP_QUOTE(\        aafString_t       name;)
 AD_CPP_QUOTE(\        aafClassID_t      objClass;	// shouldn't this be a pointer?)
@@ -964,6 +990,7 @@ AD_CPP_QUOTE(#if 0)
     typedef aafRational_t *              aafRational_constref;
     typedef aafTimeStamp_t *             aafTimeStamp_constref;
     typedef aafUID_t *                   aafUID_constref;
+    typedef aafMobID_t *                 aafMobID_constref;
     typedef aafVersionType_t *           aafVersionType_constref;
   #else
     /* MIDL 1.1 definitions */
@@ -984,6 +1011,7 @@ AD_CPP_QUOTE(#if 0)
     typedef aafRational_t                aafRational_constref;
     typedef aafTimeStamp_t               aafTimeStamp_constref;
     typedef aafUID_t                     aafUID_constref;
+    typedef aafMobID_t                   aafMobID_constref;
     typedef aafVersionType_t             aafVersionType_constref;
   #endif
 
@@ -992,6 +1020,7 @@ AD_CPP_QUOTE(#if 0)
   typedef aafOperationChoice_t *         aafOperationChoice_constptr;
   typedef aafSearchCrit_t *              aafSearchCrit_constptr;
   typedef aafUID_t *                     aafUID_constptr;
+  typedef aafMobID_t *                   aafMobID_constptr;
 
 AD_CPP_QUOTE(#endif // 0)
 
@@ -1013,6 +1042,7 @@ AD_CPP_QUOTE(  #define aafSourceRef_constref        const aafSourceRef_t &)
 AD_CPP_QUOTE(  #define aafTimeStamp_constref        const aafTimeStamp_t &)
 AD_CPP_QUOTE(  #define aafTimecode_constref         const aafTimecode_t &)
 AD_CPP_QUOTE(  #define aafUID_constref              const aafUID_t &)
+AD_CPP_QUOTE(  #define aafMobID_constref            const aafMobID_t &)
 AD_CPP_QUOTE(  #define aafVersionType_constref      const aafVersionType_t &)
 AD_CPP_QUOTE(#else // !__cplusplus)
 AD_CPP_QUOTE(  #define aafArgIDType_constref         const aafArgIDType_t * const)
@@ -1032,6 +1062,7 @@ AD_CPP_QUOTE(  #define aafSourceRef_constref         const aafSourceRef_t * cons
 AD_CPP_QUOTE(  #define aafTimeStamp_constref         const aafTimeStamp_t * const)
 AD_CPP_QUOTE(  #define aafTimecode_constref          const aafTimecode_t * const)
 AD_CPP_QUOTE(  #define aafUID_constref               const aafUID_t * const)
+AD_CPP_QUOTE(  #define aafMobID_constref             const aafMobID_t * const)
 AD_CPP_QUOTE(  #define aafVersionType_constref       const aafVersionType_t * const)
 AD_CPP_QUOTE(#endif // !__cplusplus)
 
@@ -1040,5 +1071,6 @@ AD_CPP_QUOTE(  #define aafMediaCriteria_constptr     const aafMediaCriteria_t *)
 AD_CPP_QUOTE(  #define aafOperationChoice_constptr   const aafOperationChoice_t *)
 AD_CPP_QUOTE(  #define aafSearchCrit_constptr        const aafSearchCrit_t *)
 AD_CPP_QUOTE(  #define aafUID_constptr               const aafUID_t *)
+AD_CPP_QUOTE(  #define aafMobID_constptr             const aafMobID_t *)
 
 AD_TYPES_END
