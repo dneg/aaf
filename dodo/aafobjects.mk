@@ -13,7 +13,6 @@ AAFPERSISTENTOBJECTS = \
 	AAFClassDef \
 	AAFCodecDef \
 	AAFContainerDef \
-	AAFDictionary \
 	AAFCommentMarker \
 	AAFConstValue \
 	AAFControlPoint \
@@ -105,6 +104,7 @@ HUMAN_TYPED_IMPL = \
 	AAFComponent \
 	AAFCompositionMob \
 	AAFContentStorage \
+	AAFDictionary \
 	AAFEdgecode \
 	AAFEssenceAccess \
 	AAFEssenceData \
