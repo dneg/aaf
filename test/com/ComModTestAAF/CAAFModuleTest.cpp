@@ -154,6 +154,8 @@ HRESULT CAAFModuleTest::Test
 					cout<< "PARTIAL SUCCESS\n" << endl;
 				else if (AAFRESULT_NOT_IMPLEMENTED == hr)
 					cout << "NOT IMPLEMENTED!\n" << endl;
+				else if (AAFRESULT_NOT_IN_CURRENT_VERSION == hr)
+					cout << "SUCCEEDED.  One or more methods not implemented in the current SDK.\n" << endl;				
 				else if (AAFRESULT_UNEXPECTED_EXCEPTION == hr)
 					cout << "FAILED WITH UNEXPECTED EXCEPTION!\n" << endl;
 				else
@@ -195,6 +197,14 @@ HRESULT CAAFModuleTest::Test
 			}
 
 		for ( index = 0; index < testCount; ++index )
+			if ( AAFRESULT_NOT_IN_CURRENT_VERSION == testResults[index] )
+			{
+				cout<< setiosflags(ios::left)<< setw(4)<< ++passCount;  
+				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				cout << "SUCCEEDED.  One or more methods will be implemented in a future SDK." << endl;				
+			}
+
+			for ( index = 0; index < testCount; ++index )
 			if ( AAFRESULT_TEST_PARTIAL_SUCCESS == testResults[index] )
 			{
 				cout<< setiosflags(ios::left)<< setw(4)<< ++partialSuccessCount + passCount;  
@@ -205,6 +215,7 @@ HRESULT CAAFModuleTest::Test
 		for ( index = 0; index < testCount; ++index )
 			if ( AAFRESULT_SUCCESS != testResults[index] &&
 				 AAFRESULT_NOT_IMPLEMENTED != testResults[index] &&
+				 AAFRESULT_NOT_IN_CURRENT_VERSION != testResults[index] &&
 				 AAFRESULT_TEST_PARTIAL_SUCCESS != testResults[index] )
 			{
 				cout<< setiosflags(ios::left)<< setw(4)<< ++failCount + partialSuccessCount + passCount;  
