@@ -33,6 +33,14 @@ class ImplAAFEffectDef;
 const int PID_IDENTIFICATION_DATADEF           = 0;
 const int PID_IDENTIFICATION_LENGTH            = 1;
 
+typedef 
+enum _implCompType_t
+    {
+		kTransition	= 0,
+		kSegment	= 1,
+		kComponent	=2
+	} implCompType_t;
+
 class ImplAAFComponent : public ImplAAFObject
 {
 public:
@@ -95,6 +103,9 @@ public:
 										aafPosition_t *diffPos, aafLength_t *minLength,
 										ImplAAFEffectDef **effeObject, aafInt32	*nestDepth,
 										ImplAAFComponent **found, aafBool *foundTransition);
+
+	virtual AAFRESULT GetComponentType(implCompType_t* pType) {*pType = kComponent; return AAFRESULT_SUCCESS;}
+
 
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFComponentTest.cpp.
