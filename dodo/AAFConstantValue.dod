@@ -6,7 +6,6 @@ AAFConstValue\
 AAFParameter\
 #endm
 #c
-#import ./AAFUnitTest.exp
 AD_HEAD
 /******************************************\
 *                                          *
@@ -55,11 +54,5 @@ The data value is set from a buffer of size valueSize.)
 //private:
 //	void			*_value;
 //	omfUInt32		_valueLen;
-
-  //
-  // IAAFUnitTest interface method overrides
-  //
-AD_OVERRIDE(.method-Test)
-
 
 AD_CLASS_END
