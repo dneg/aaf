@@ -150,17 +150,18 @@ public:
   // Copying.
 
     // @cmember Create a shallow copy of this <c OMStorable>.
-    //          In a shallow copy, strong references are not followed.
-    //          That is, contained objects are not copied.
+    //          In a shallow copy, contained objects (strong object
+    //          references) and streams are not copied.
   OMStorable* shallowCopy(void) const;
 
     // @cmember Create a deep copy of this <c OMStorable>, attach the
-    //          copy to <p destination>.  In a deep copy, strong
-    //          references are followed. That is, contained objects are copied.
+    //          copy to <p destination>.
+    //          In a deep copy, contained objects (strong object
+    //          references) and streams are copied.
     //          This function copies the entire object tree rooted at this
-    //          <c OMStorable>. This root object is treated
-    //          differently than the contained objects in that only the
-    //          strong references are copied. Clients may choose to create
+    //          <c OMStorable>. The root object is treated differently than
+    //          the contained objects in that only the strong references
+    //          and streams are copied. Clients may choose to create
     //          <p destination> using <mf OMStorable::shallowCopy>.
     //          All strong reference properties of this <c OMStorable> must
     //          be present in the property set of <p destination>. The values
@@ -216,10 +217,10 @@ private:
   const OMClassFactory* _classFactory;
   const OMClassDefinition* _definition;
 
-    // OMStorables can't be assigned  - declare but don't define
+    // OMStorable can't be assigned - declare but don't define
   OMStorable& operator = (const OMStorable& rhs);
 
-    // OMStorables can't be copied - declare but don't define
+    // OMStorable can't be copied - declare but don't define
   OMStorable(const OMStorable& rhs);
 
 };
