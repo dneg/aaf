@@ -368,7 +368,7 @@ typedef enum _AAFDataDefinitionMatch_t
 	  
 typedef enum _aafAppendOption_t
 {
-	kAAFAppendIfAbsent = 0,
+	kAAFAppend = 0,
 	kAAFForceOverwrite = 1
 } aafAppendOption_t;
 
