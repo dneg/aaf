@@ -26,7 +26,7 @@
 #include "OMAssertions.h"
 #include "OMDynamicLibrary.h"
 
-static OMDynamicLibrary* _ssLibrary = 0;
+#include "OMSingleton.h"
 
 #if defined(OM_OS_WINDOWS)
 #define LINKAGE __stdcall
@@ -36,6 +36,7 @@ wchar_t* coLibraryName = L"ole32.dll";
 #define LINKAGE
 wchar_t* ssLibraryName = L"Microsoft Structured Storage";
 wchar_t* coLibraryName = L"Microsoft Component Library";
+#elif defined(OM_OS_MACOSX)
 #elif defined(OM_OS_UNIX)
 #define LINKAGE
 wchar_t* ssLibraryName = L"StructuredStorage.so";
@@ -64,11 +65,169 @@ typedef OMInt32 (LINKAGE *pStgOpenStorageOnILockBytes_t)(ILockBytes*,
                                                          IStorage**);
 typedef OMInt32 (LINKAGE *pStgIsStorageFile_t)(const SSCHAR*);
 
-pStgCreateDocfile_t pStgCreateDocfile = 0;
-pStgCreateDocfileOnILockBytes_t pStgCreateDocfileOnILockBytes = 0;
-pStgOpenStorage_t pStgOpenStorage = 0;
-pStgOpenStorageOnILockBytes_t pStgOpenStorageOnILockBytes = 0;
-pStgIsStorageFile_t pStgIsStorageFile = 0;
+class MSSSLibrary;
+
+class MSSSLibrary : public OMSingleton<MSSSLibrary> {
+public:
+
+  MSSSLibrary(void);
+
+  OMInt32 StgCreateDocfile(const SSCHAR* pwcsName,
+                           OMUInt32 grfMode,
+                           OMUInt32 reserved,
+                           IStorage** ppstgOpen);
+
+  OMInt32 StgCreateDocfileOnILockBytes(ILockBytes* plkbyt,
+                                       OMUInt32 grfMode,
+                                       OMUInt32 reserved,
+                                       IStorage** ppstgOpen);
+
+  OMInt32 StgOpenStorage(SSCHAR* pwcsName,
+                         IStorage* pstgPriority,
+                         OMUInt32 grfMode,
+                         SSCHAR** snbExclude,
+                         OMUInt32 reserved,
+                         IStorage** ppstgOpen);
+
+  OMInt32 StgOpenStorageOnILockBytes(ILockBytes* plkbyt,
+                                     IStorage* pstgPriority,
+                                     OMUInt32 grfMode,
+                                     SSCHAR** snbExclude,
+                                     OMUInt32 reserved,
+                                     IStorage** ppstgOpen);
+
+  OMInt32 StgIsStorageFile(const SSCHAR* pwcsName);
+
+private:
+
+  OMDynamicLibrary* library(void);
+
+  OMDynamicLibrary* _ssLibrary;
+  pStgCreateDocfile_t _pStgCreateDocfile;
+  pStgCreateDocfileOnILockBytes_t _pStgCreateDocfileOnILockBytes ;
+  pStgOpenStorage_t _pStgOpenStorage;
+  pStgOpenStorageOnILockBytes_t _pStgOpenStorageOnILockBytes;
+  pStgIsStorageFile_t _pStgIsStorageFile;
+};
+
+MSSSLibrary::MSSSLibrary(void)
+: _ssLibrary(0),
+  _pStgCreateDocfile(0),
+  _pStgCreateDocfileOnILockBytes(0),
+  _pStgOpenStorage(0),
+  _pStgOpenStorageOnILockBytes(0),
+  _pStgIsStorageFile(0)
+{
+}
+
+OMInt32 MSSSLibrary::StgCreateDocfile(const SSCHAR* pwcsName,
+                                      OMUInt32 grfMode,
+                                      OMUInt32 reserved,
+                                      IStorage** ppstgOpen)
+{
+  TRACE("MSSSLibrary::StgCreateDocfile");
+
+  if (_pStgCreateDocfile == 0) {
+    _pStgCreateDocfile = (pStgCreateDocfile_t)library()->findSymbol(
+                                                           "StgCreateDocfile");
+  }
+  ASSERT("Symbol found", _pStgCreateDocfile != 0);
+  OMInt32 result = (*_pStgCreateDocfile)(pwcsName,
+                                        grfMode,
+                                        reserved,
+                                        ppstgOpen);
+  return result;
+}
+
+OMInt32 MSSSLibrary::StgCreateDocfileOnILockBytes(ILockBytes* plkbyt,
+                                                  OMUInt32 grfMode,
+                                                  OMUInt32 reserved,
+                                                  IStorage** ppstgOpen)
+{
+  TRACE("MSSSLibrary::StgCreateDocfileOnILockBytes");
+
+  if (_pStgCreateDocfileOnILockBytes == 0) {
+    _pStgCreateDocfileOnILockBytes =
+                       (pStgCreateDocfileOnILockBytes_t)library()->findSymbol(
+                                               "StgCreateDocfileOnILockBytes");
+  }
+  ASSERT("Symbol found", _pStgCreateDocfileOnILockBytes != 0);
+  OMInt32 result = (*_pStgCreateDocfileOnILockBytes)(plkbyt,
+                                                    grfMode,
+                                                    reserved,
+                                                    ppstgOpen);
+  return result;
+}
+
+OMInt32 MSSSLibrary::StgOpenStorage(SSCHAR* pwcsName,
+                                    IStorage* pstgPriority,
+                                    OMUInt32 grfMode,
+                                    SSCHAR** snbExclude,
+                                    OMUInt32 reserved,
+                                    IStorage** ppstgOpen)
+{
+  TRACE("MSSSLibrary::StgOpenStorage");
+
+  if (_pStgOpenStorage == 0) {
+    _pStgOpenStorage = (pStgOpenStorage_t)library()->findSymbol(
+                                                             "StgOpenStorage");
+  }
+  ASSERT("Symbol found", _pStgOpenStorage!= 0);
+  OMInt32 result = (*_pStgOpenStorage)(pwcsName,
+                                      pstgPriority,
+                                      grfMode,
+                                      snbExclude,
+                                      reserved,
+                                      ppstgOpen);
+  return result;
+}
+
+OMInt32 MSSSLibrary::StgOpenStorageOnILockBytes(ILockBytes* plkbyt,
+                                     IStorage* pstgPriority,
+                                     OMUInt32 grfMode,
+                                     SSCHAR** snbExclude,
+                                     OMUInt32 reserved,
+                                     IStorage** ppstgOpen)
+{
+  TRACE("MSSSLibrary::StgOpenStorageOnILockBytes");
+
+  if (_pStgOpenStorageOnILockBytes == 0) {
+    _pStgOpenStorageOnILockBytes =
+                         (pStgOpenStorageOnILockBytes_t)library()->findSymbol(
+                                                 "StgOpenStorageOnILockBytes");
+  }
+  ASSERT("Symbol found", _pStgOpenStorageOnILockBytes != 0);
+  OMInt32 result = (*_pStgOpenStorageOnILockBytes)(plkbyt,
+                                                  pstgPriority,
+                                                  grfMode,
+                                                  snbExclude,
+                                                  reserved,
+                                                  ppstgOpen);
+  return result;
+}
+
+OMInt32 MSSSLibrary::StgIsStorageFile(const SSCHAR* pwcsName)
+{
+  TRACE("MSSSLibrary::StgIsStorageFile");
+
+  if (_pStgIsStorageFile == 0) {
+    _pStgIsStorageFile = (pStgIsStorageFile_t)library()->findSymbol(
+                                                           "StgIsStorageFile");
+  }
+  ASSERT("Symbol found", _pStgIsStorageFile!= 0);
+  OMInt32 result = (*_pStgIsStorageFile)(pwcsName);
+  return result;
+}
+
+OMDynamicLibrary* MSSSLibrary::library(void)
+{
+  TRACE("MSSSLibrary::library");
+  if (_ssLibrary == 0) {
+    _ssLibrary = OMDynamicLibrary::loadLibrary(ssLibraryName);
+  }
+  ASSERT("Library loaded", _ssLibrary != 0);
+  return _ssLibrary;
+}
 
 OMInt32 OMStgCreateDocfile(const SSCHAR* pwcsName,
                            OMUInt32 grfMode,
@@ -76,21 +235,10 @@ OMInt32 OMStgCreateDocfile(const SSCHAR* pwcsName,
                            IStorage** ppstgOpen)
 {
   TRACE("OMStgCreateDocfile");
-  if (_ssLibrary == 0) {
-    _ssLibrary = OMDynamicLibrary::loadLibrary(ssLibraryName);
-  }
-  ASSERT("Library loaded", _ssLibrary != 0);
-
-  if (pStgCreateDocfile == 0) {
-    pStgCreateDocfile = (pStgCreateDocfile_t)_ssLibrary->findSymbol(
-                                                           "StgCreateDocfile");
-  }
-  ASSERT("Symbol found", pStgCreateDocfile != 0);
-  OMInt32 result = (*pStgCreateDocfile)(pwcsName,
-                                        grfMode,
-                                        reserved,
-                                        ppstgOpen);
-  return result;
+  return MSSSLibrary::instance()->StgCreateDocfile(pwcsName,
+                                                   grfMode,
+                                                   reserved,
+                                                   ppstgOpen);
 }
 
 OMInt32 OMStgCreateDocfileOnILockBytes(ILockBytes* plkbyt,
@@ -99,22 +247,10 @@ OMInt32 OMStgCreateDocfileOnILockBytes(ILockBytes* plkbyt,
                                        IStorage** ppstgOpen)
 {
   TRACE("OMStgCreateDocfileOnILockBytes");
-  if (_ssLibrary == 0) {
-    _ssLibrary = OMDynamicLibrary::loadLibrary(ssLibraryName);
-  }
-  ASSERT("Library loaded", _ssLibrary != 0);
-
-  if (pStgCreateDocfileOnILockBytes == 0) {
-    pStgCreateDocfileOnILockBytes =
-                       (pStgCreateDocfileOnILockBytes_t)_ssLibrary->findSymbol(
-                                               "StgCreateDocfileOnILockBytes");
-  }
-  ASSERT("Symbol found", pStgCreateDocfileOnILockBytes != 0);
-  OMInt32 result = (*pStgCreateDocfileOnILockBytes)(plkbyt,
-                                                    grfMode,
-                                                    reserved,
-                                                    ppstgOpen);
-  return result;
+  return MSSSLibrary::instance()->StgCreateDocfileOnILockBytes(plkbyt,
+                                                               grfMode,
+                                                               reserved,
+                                                               ppstgOpen);
 }
 
 OMInt32 OMStgOpenStorage(SSCHAR* pwcsName,
@@ -124,24 +260,12 @@ OMInt32 OMStgOpenStorage(SSCHAR* pwcsName,
                          OMUInt32 reserved,
                          IStorage** ppstgOpen)
 {
-  TRACE("OMStgOpenStorage");
-  if (_ssLibrary == 0) {
-    _ssLibrary = OMDynamicLibrary::loadLibrary(ssLibraryName);
-  }
-  ASSERT("Library loaded", _ssLibrary != 0);
-
-  if (pStgOpenStorage == 0) {
-    pStgOpenStorage = (pStgOpenStorage_t)_ssLibrary->findSymbol(
-                                                             "StgOpenStorage");
-  }
-  ASSERT("Symbol found", pStgOpenStorage!= 0);
-  OMInt32 result = (*pStgOpenStorage)(pwcsName,
-                                      pstgPriority,
-                                      grfMode,
-                                      snbExclude,
-                                      reserved,
-                                      ppstgOpen);
-  return result;
+  return MSSSLibrary::instance()->StgOpenStorage(pwcsName,
+                                                 pstgPriority,
+                                                 grfMode,
+                                                 snbExclude,
+                                                 reserved,
+                                                 ppstgOpen);
 }
 
 OMInt32 OMStgOpenStorageOnILockBytes(ILockBytes* plkbyt,
@@ -152,81 +276,94 @@ OMInt32 OMStgOpenStorageOnILockBytes(ILockBytes* plkbyt,
                                      IStorage** ppstgOpen)
 {
   TRACE("OMStgOpenStorageOnILockBytes");
-  if (_ssLibrary == 0) {
-    _ssLibrary = OMDynamicLibrary::loadLibrary(ssLibraryName);
-  }
-  ASSERT("Library loaded", _ssLibrary != 0);
-
-  if (pStgOpenStorageOnILockBytes == 0) {
-    pStgOpenStorageOnILockBytes =
-                         (pStgOpenStorageOnILockBytes_t)_ssLibrary->findSymbol(
-                                                 "StgOpenStorageOnILockBytes");
-  }
-  ASSERT("Symbol found", pStgOpenStorageOnILockBytes != 0);
-  OMInt32 result = (*pStgOpenStorageOnILockBytes)(plkbyt,
-                                                  pstgPriority,
-                                                  grfMode,
-                                                  snbExclude,
-                                                  reserved,
-                                                  ppstgOpen);
-  return result;
+  return MSSSLibrary::instance()->StgOpenStorageOnILockBytes(plkbyt,
+                                                             pstgPriority,
+                                                             grfMode,
+                                                             snbExclude,
+                                                             reserved,
+                                                             ppstgOpen);
 }
 
 OMInt32 OMStgIsStorageFile(const SSCHAR* pwcsName)
 {
   TRACE("OMStgIsStorageFile");
-  if (_ssLibrary == 0) {
-    _ssLibrary = OMDynamicLibrary::loadLibrary(ssLibraryName);
-  }
-  ASSERT("Library loaded", _ssLibrary != 0);
-
-  if (pStgIsStorageFile == 0) {
-    pStgIsStorageFile = (pStgIsStorageFile_t)_ssLibrary->findSymbol(
-                                                           "StgIsStorageFile");
-  }
-  ASSERT("Symbol found", pStgIsStorageFile!= 0);
-  OMInt32 result = (*pStgIsStorageFile)(pwcsName);
-  return result;
+  return MSSSLibrary::instance()->StgIsStorageFile(pwcsName);
 }
-
-static OMDynamicLibrary* _coLibrary = 0;
 
 typedef OMInt32 (LINKAGE *pCoInitialize_t)(void*);
 typedef void (LINKAGE *pCoUninitialize_t)(void);
 
-pCoInitialize_t pCoInitialize = 0;
-pCoUninitialize_t pCoUninitialize = 0;
+class MSCOMLibrary;
 
-OMInt32 OMCoInitialize(void* pvReserved)
+class MSCOMLibrary : public OMSingleton<MSCOMLibrary> {
+public:
+
+  MSCOMLibrary(void);
+
+  OMInt32 CoInitialize(void* pvReserved);
+
+  void CoUninitialize(void);
+
+private:
+
+  OMDynamicLibrary* library(void);
+
+  OMDynamicLibrary* _coLibrary;
+  pCoInitialize_t _pCoInitialize;
+  pCoUninitialize_t _pCoUninitialize;
+};
+
+MSCOMLibrary::MSCOMLibrary(void)
+: _coLibrary(0),
+  _pCoInitialize(0),
+  _pCoUninitialize(0)
 {
-  TRACE("OMCoInitialize");
+}
+
+OMInt32 MSCOMLibrary::CoInitialize(void* pvReserved)
+{
+  TRACE("MSCOMLibrary::CoInitialize");
+
+  if (_pCoInitialize == 0) {
+    _pCoInitialize = (pCoInitialize_t)library()->findSymbol("CoInitialize");
+  }
+  ASSERT("Symbol found", _pCoInitialize!= 0);
+  OMInt32 result = (*_pCoInitialize)(pvReserved);
+  return result;
+}
+
+void MSCOMLibrary::CoUninitialize(void)
+{
+  TRACE("MSCOMLibrary::OMCoUninitialize");
+
+  if (_pCoUninitialize == 0) {
+    _pCoUninitialize = (pCoUninitialize_t)library()->findSymbol(
+                                                             "CoUninitialize");
+  }
+  ASSERT("Symbol found", _pCoUninitialize!= 0);
+  (*_pCoUninitialize)();
+}
+
+OMDynamicLibrary* MSCOMLibrary::library(void)
+{
+  TRACE("MSCOMLibrary::library");
   if (_coLibrary == 0) {
     _coLibrary = OMDynamicLibrary::loadLibrary(coLibraryName);
   }
   ASSERT("Library loaded", _coLibrary != 0);
+  return _coLibrary;
+}
 
-  if (pCoInitialize == 0) {
-    pCoInitialize = (pCoInitialize_t)_coLibrary->findSymbol("CoInitialize");
-  }
-  ASSERT("Symbol found", pCoInitialize!= 0);
-  OMInt32 result = (*pCoInitialize)(pvReserved);
-  return result;
+OMInt32 OMCoInitialize(void* pvReserved)
+{
+  TRACE("OMCoInitialize");
+  return MSCOMLibrary::instance()->CoInitialize(pvReserved);
 }
 
 void OMCoUninitialize(void)
 {
   TRACE("OMCoUninitialize");
-  if (_coLibrary == 0) {
-    _coLibrary = OMDynamicLibrary::loadLibrary(coLibraryName);
-  }
-  ASSERT("Library loaded", _coLibrary != 0);
-
-  if (pCoUninitialize == 0) {
-    pCoUninitialize = (pCoUninitialize_t)_coLibrary->findSymbol(
-                                                             "CoUninitialize");
-  }
-  ASSERT("Symbol found", pCoUninitialize!= 0);
-  (*pCoUninitialize)();
+  MSCOMLibrary::instance()->CoUninitialize();
 }
 
 
