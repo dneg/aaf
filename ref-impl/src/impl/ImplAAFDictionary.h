@@ -85,8 +85,10 @@ protected:
   virtual ~ImplAAFDictionary ();
 
 public:
-  // Create an instance of the appropriate derived class, given the class id.
-  //  This method implements the OMClassFactory interface.
+  // Create an instance of the appropriate derived class, given the
+  // class id.  Initializes the OM properties.
+  // 
+  // This method implements the OMClassFactory interface.
   //
   OMStorable* create(const OMClassId& classId) const;
 
@@ -98,8 +100,8 @@ public:
   // with a specified stored object id.
   virtual AAFRESULT STDMETHODCALLTYPE 
   CreateInstance (
-    // Class definition of the stored object to be created.
-    ImplAAFClassDef * pClassDef,
+    // ID of the stored object to be created.
+    aafUID_constref classId,
 
     // Address of output variable that receives the 
     // object pointer requested in pAUID
@@ -451,14 +453,39 @@ public:
   // make sure built-in types are initialized.
   void InitBuiltins();
 
+  //
+  // Toolkit-internal "Create" methods
+  //
+
   // Factory method for creating a Dictionary.
   static ImplAAFDictionary *CreateDictionary(void);
 
-  // internal utility factory method to create an ImplAAFObject given a classdef.
-  // This method was created to make it simpler to replace calls to "Deprecated"
-  // call to CreateImpl which should only be used for instanciating transient
-  // non-ImplAAFObject classes such as an enumerator.
-  ImplAAFObject *CreateImplObject(ImplAAFClassDef * pClassDef); 
+  // internal utility factory method to create an ImplAAFObject given
+  // a classdef.  This method was created to make it simpler to
+  // replace calls to "Deprecated" call to CreateImpl which should
+  // only be used for instanciating transient non-ImplAAFObject
+  // classes such as an enumerator.
+  ImplAAFObject *CreateImplObject(aafUID_constref classID); 
+
+  //
+  // Instantiates an object of the given class and initializes its OM
+  // properties.
+  //
+  ImplAAFObject * CreateAndInit(ImplAAFClassDef * pClassDef) const;
+
+  //
+  // Instantiates the most derived class known to the code which
+  // represents the given AUID.  Doesn't init its OM properties.
+  //
+  ImplAAFObject* pvtInstantiate(const aafUID_t & id) const;
+
+  //
+  // If the given AUID is known to the code, instantiates an object of
+  // that type.  Otherwise, returns NULL.  Doesn't init its OM
+  // properties.
+  //
+  static ImplAAFObject* pvtCreateBaseClassInstance(const aafUID_t & id);
+
 
   // Generates an OM PID corresponding to the given property def auid.
   AAFRESULT GenerateOmPid (const aafUID_t & rAuid,
@@ -486,12 +513,6 @@ public:
 	 // @parm [out,retval] Type Definition Object
 	 ImplAAFTypeDef ** ppTypeDef);
 
-
-  static ImplAAFObject* pvtCreateBaseClassInstance(const aafUID_t & id);
-
-  // Similar to create(), but takes an AUID as argument and doesn't
-  // init properties.
-  ImplAAFObject* pvtInstantiate(const aafUID_t & id) const;
 
   // Attempt to register the sizes of this type def if it is a
   // built-in type.  Currently implemented for Enum and Record
