@@ -107,10 +107,6 @@ public:
   // in /test/ImplAAFSessionTest.cpp.
   static AAFRESULT test();
 
-  void InitContainer (void * pContainer);
-
-  void * GetContainer ();
-
 	ImplAAFFile *GetTopFile(void);
 	void SetTopFile(ImplAAFFile *file);
 	OMLSession	GetContainerSession(void);
@@ -118,7 +114,6 @@ public:
 
 private:
 
-	void * _pContainer;
 	ImplAAFFile	*_topFile;
 	aafProductIdentification_t	*_defaultIdent;
 };
