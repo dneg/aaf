@@ -12,7 +12,7 @@
 
 OMStorable::OMStorable(void)
 : _persistentProperties(), _containingObject(0), _name(0),
-  _pathName(0), _containingProperty(0), _index(0), _store(0)
+  _pathName(0), _containingProperty(0), _key(0), _store(0)
 {
   TRACE("OMStorable::OMStorable");
   _persistentProperties.setContainer(this);
@@ -22,7 +22,7 @@ OMStorable::~OMStorable(void)
 {
   TRACE("OMStorable::~OMStorable");
   if (_containingProperty != 0) {
-    _containingProperty->detach(this, _index);
+    _containingProperty->detach(this, _key);
     _containingProperty = 0;
   }
 
@@ -114,14 +114,14 @@ void OMStorable::clearContainingObject(void)
 }
 
 void OMStorable::setContainingProperty(const OMProperty* containingProperty,
-                                       const size_t index)
+                                       const size_t key)
 {
   TRACE("OMStorable::setContainingProperty");
   PRECONDITION("Object not already attached", _containingProperty == 0);
   PRECONDITION("Valid property", containingProperty != 0);
 
   _containingProperty = const_cast<OMProperty*>(containingProperty);
-  _index = index;
+  _key = key;
 
   POSTCONDITION("Object properly attached", _containingProperty != 0);
 }
