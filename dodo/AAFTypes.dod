@@ -75,12 +75,12 @@ typedef enum _aafBoolean_e
 } aafBoolean_e;
 
 AD_CPP_QUOTE(#ifndef MAX_NUM_RGBA_COMPS)
-AD_CPP_QUOTE(#define MAX_NUM_RGBA_COMPS 8 /* limit on the size of component arrays */)
+AD_CPP_QUOTE(#define MAX_NUM_RGBA_COMPS 6 /* limit on the size of component arrays */)
 AD_CPP_QUOTE(#if 0)
 typedef aafInt32 aafMAX_NUM_RGBA_COMPS;
 typedef enum _aafMAX_NUM_RGBA_COMPS_e
 {
-  MAX_NUM_RGBA_COMPS = 8
+  MAX_NUM_RGBA_COMPS = 6				// Lower to 6 to match type object
 } aafMAX_NUM_RGBA_COMPS_e;
 AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#endif)
