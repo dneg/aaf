@@ -26,28 +26,33 @@ AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
+AD_XMETHOD1(GetName,
+			[out\, retval],
+			objPass,
+			aafString_t *,
+			pstrName,
+			Pointer to name,
+			Gets the unique name that identifies this datakind object.)
 
 
-AD_METHOD1(GetName,
-		   [out\\\,retval],
-		   aafString_t *,
-		   pstrName,
-		   Pointer to name,
-		   Gets the unique name that identifies this datakind object.)
+AD_XMETHOD1(GetParentAUID,
+			[out\, retval],
+			objPass,
+			aafUID_t *,
+			pAuid,
+			Pointer to an AUID reference,
+			Gets the Parent class AUID for this object.  If there is no
+  // parent\, returns the NULL AUID.)
 
-AD_METHOD1(GetParentAUID,
-		   [out\\\,retval],
-		   aafUID_t *,
-		   pAuid,
-		   Pointer to an AUID reference,
-		   Gets the Parent class AUID for this object.)
 
-AD_METHOD1(SetParentAUID,
-		   [in],
-		   aafUID_t,
-		   ParentAuid,
-		   Parent class AUID,
-		   Sets the Parent's AUID.)
+AD_XMETHOD1(SetParentAUID,
+			[in],
+			objPass,
+			aafUID_t,
+			ParentAuid,
+			Parent class AUID,
+			Sets the Parent's AUID.)
+
 
 AD_XMETHOD1(AppendPropertyDef,
 		    [in],
@@ -57,6 +62,7 @@ AD_XMETHOD1(AppendPropertyDef,
 		    Property Definition to be added,
 		    Add the Property Definition to the class definition.)
 
+
 AD_XMETHOD1(RemovePropertyDef,
 		    [in],
 		    objIn,
@@ -65,12 +71,12 @@ AD_XMETHOD1(RemovePropertyDef,
 		    Property Definition to be removed,
 		    Remove Property Definition from the class definition.)
 
+
 AD_XMETHOD1(GetPropertyDefs,
-		   [out\,retval],
+		   [out\, retval],
 		    objOut,
 		    EnumAAFPropertyDefs,
 		    ppEnum,
 		    Property Definition enumeration,
 		    Returns an enumerator for aaf property definitions.)
-		    		
 AD_CLASS_END
