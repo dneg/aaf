@@ -51,7 +51,7 @@ CXXFILES = read.cpp \
 
 
 $(AAFSDKBINDIR)/ComExtensionRead$(EXE) : $(CXXOBJS)
-	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
+	$(LD) $(CXXOBJS) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
 
 
 CXXFILES2 = write.cpp \
@@ -61,7 +61,7 @@ CXXFILES2 = write.cpp \
 
 
 $(AAFSDKBINDIR)/ComExtensionWrite$(EXE) : $(CXXOBJS2)
-	$(LD) $(CXXOBJS2) -L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
+	$(LD) $(CXXOBJS2) -L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
 
 
 .PHONY : clean

@@ -66,7 +66,7 @@ CXXFILES2 = extensionReadPlugin.cpp \
 
 $(AAFSDKBINDIR)/ComPersonnelPluginWrite$(EXE) : $(CXXOBJS2)
 	$(LD) $(CXXOBJS2) $(OBJDIR)/extensionUtils$(OBJ) \
-	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
+	-L$(AAFSDKLIBDIR) -laaflib -laafiid  $(LIBCIO) -o $@
 
 
 .PHONY : clean
