@@ -356,14 +356,26 @@ HRESULT GetUserInput(int argc, char* argv[])
 			else if ((c == '-') && (strlen(pNextArgument) > 2))
 			{
 				char* pArg = &pNextArgument[1];
-				
-				if (_stricmp(pArg, "nr") == 0)
+				char  lc[4];
+				memset(lc, 0, sizeof(lc));
+				unsigned int i ;
+				unsigned int j = strlen(pArg);
+				if (strlen(pArg) <=3)
 				{
-					gpGlobals->bDeleteOutput = AAFFalse;
-				}
-				else if ( _stricmp(pArg, "OMF") == 0 ) 
-				{
-					gpGlobals->bConvertAAFFile = AAFTrue;
+					for (i = 0; i < j; i++, pArg++)
+					{
+						lc[i] = tolower(*pArg);
+					}
+					if (strcmp(lc, "nr") == 0)
+					{
+						gpGlobals->bDeleteOutput = AAFFalse;
+					}
+					else if ( strcmp(lc, "omf") == 0 ) 
+					{
+						gpGlobals->bConvertAAFFile = AAFTrue;
+					}
+					else
+						rc = AAFRESULT_BAD_FLAGS;
 				}
 				else
 					rc = AAFRESULT_BAD_FLAGS;
