@@ -489,7 +489,7 @@ static void dumpSetIndexEntry(OMUInt32 i,
 static void printSetIndex(SetIndexEntry* setIndex,
                           OMUInt32 count,
                           OMUInt32 highWaterMark);
-static void printWeakCollectionIndex(OMUInt32 containerType,
+static void printWeakCollectionIndex(int containerType,
                                      WeakCollectionIndexEntry* collectionIndex,
                                      OMUInt32 count,
                                      OMUInt32 tage);
@@ -1638,7 +1638,7 @@ void printSetIndex(SetIndexEntry* setIndex,
   }
 }
 
-void printWeakCollectionIndex(OMUInt32 containerType,
+void printWeakCollectionIndex(int containerType,
                               WeakCollectionIndexEntry* collectionIndex,
                               OMUInt32 count,
                               OMUInt32 tag)
@@ -1769,7 +1769,7 @@ void dumpContainedObjects(IStorage* storage,
 {
   for (OMUInt32 i = 0; i < entries; i++) {
 
-    OMUInt32 containerType = typeOf(&index[i], version);
+    int containerType = typeOf(&index[i], version);
     switch (containerType) {
       
     case TID_DATA:
