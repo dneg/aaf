@@ -1229,7 +1229,7 @@ HRESULT AafOmf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFSegment** 
 			rc = pDictionary->CreateInstance(&AUID_AAFTransition,
 											  IID_IAAFTransition,
 											  (IUnknown **) &pTransition);
-//			rc = pTransition->Create();
+//			rc = pTransition->Create(&datadef, (aafLength_t)OMFLength, (aafPosition_t)OMFCutPoint, pEffect);
 			rc = pTransition->QueryInterface(IID_IAAFSegment, (void **)ppSegment);
 
 		}
