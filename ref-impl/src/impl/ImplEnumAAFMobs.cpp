@@ -25,27 +25,140 @@
  *
  ************************************************************************/
 
-
-#ifndef __ImplAAFMob_h__
-#include "ImplAAFMob.h"
-#endif
-
-
-
-
-
-
-#ifndef __ImplEnumAAFMobs_h__
 #include "ImplEnumAAFMobs.h"
-#endif
 
-#include <assert.h>
+ImplEnumAAFMobs::ImplEnumAAFMobs()
+{
+	_criteria.searchTag = kAAFNoSearch;
+}
+
+AAFRESULT STDMETHODCALLTYPE 
+	ImplEnumAAFMobs::NextOne(ImplAAFMob ** ppMob)
+{
+	if(ppMob==NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	AAFRESULT ar;
+	ImplAAFMob *pCandidate;
+	while((ar=ImplAAFEnumerator<ImplAAFMob>::NextOne(&pCandidate))
+		==AAFRESULT_SUCCESS)
+	{
+		// Check for Mob that matches our search criteria
+		switch(_criteria.searchTag)
+		{
+		case kAAFNoSearch:
+			(*ppMob)=pCandidate;
+			return(AAFRESULT_SUCCESS);
+
+		case kAAFByMobKind:
+			aafMobKind_t	kind;
+				
+			ar = pCandidate->GetMobKind (&kind);
+			if(ar != AAFRESULT_SUCCESS)
+				return ar;
+			if((kind == _criteria.tags.mobKind) 
+				|| (kAAFAllMob == _criteria.tags.mobKind))
+			{
+				(*ppMob)=pCandidate;
+				return(AAFRESULT_SUCCESS);
+			}
+			break;
+
+		default:
+			return(AAFRESULT_NOT_IN_CURRENT_VERSION);
+		};
+	}
+	return(AAFRESULT_NO_MORE_OBJECTS);
+}
+	
+AAFRESULT STDMETHODCALLTYPE 
+	ImplEnumAAFMobs::Next(
+		aafUInt32  count,
+		ImplAAFMob ** ppMobs,
+		aafUInt32 *  pFetched)
+{
+	aafUInt32			numMobs;
+	AAFRESULT			ar=AAFRESULT_SUCCESS;
+
+	if(ppMobs==NULL||pFetched==NULL)
+		return(AAFRESULT_NULL_PARAM);
+	
+	if(count==0)
+		return(AAFRESULT_INVALID_PARAM);
+
+	for (numMobs = 0; numMobs < count; numMobs++)
+	{
+		ar = NextOne(&ppMobs[numMobs]);
+		if (FAILED(ar))
+			break;
+	}
+	
+	if (pFetched)
+		*pFetched=numMobs;
+
+	return(ar);
+}
+
+AAFRESULT STDMETHODCALLTYPE 
+	ImplEnumAAFMobs::Skip(aafUInt32  count)
+{
+	if(count==0)
+		return(AAFRESULT_INVALID_PARAM);
+
+	aafUInt32 n;
+	
+	for(n=1;n<=count;n++)
+	{
+		// Defined behavior of skip is to NOT advance at all if it would push 
+		// us off of the end
+		ImplAAFMob *pMob;
+		AAFRESULT ar = NextOne(&pMob);
+		if(ar==AAFRESULT_NO_MORE_OBJECTS)
+		{
+			// Off the end, decrement n and iterator back to the starting 
+			// position
+			while(n>=1)
+			{
+				--(*_pIterator);
+				n--;
+			}
+			return(ar);
+		}
+		else if(FAILED(ar))
+		{
+			return(ar);
+		}
+	}
+
+	return(AAFRESULT_SUCCESS);
+}
+
+// Clone() wrapper for pointer compatibility
+
+AAFRESULT STDMETHODCALLTYPE 
+	ImplEnumAAFMobs::Clone(ImplEnumAAFMobs ** ppEnum)
+{
+	// MSDEV requires reinterpret_cast here, even though 
+	// ImplAAFEnumerator<ImplAAFMob> is the base class for ImplEnumAAFMobs.
+	return(ImplAAFEnumerator<ImplAAFMob>::Clone(
+		reinterpret_cast<ImplAAFEnumerator<ImplAAFMob>**>(ppEnum)));
+}
+
+AAFRESULT ImplEnumAAFMobs::SetCriteria(aafSearchCrit_t *pCriteria)
+{
+	if(NULL == pCriteria)
+		_criteria.searchTag = kAAFNoSearch;
+	else
+		_criteria = *pCriteria;
+
+	return AAFRESULT_SUCCESS;
+}
+
+#if(0)
+
 #include "AAFResult.h"
 #include "ImplAAFObjectCreation.h"
 #include "aafUtils.h"
-
-extern "C" const aafClassID_t CLSID_EnumAAFMobs;
-
 
 ImplEnumAAFMobs::ImplEnumAAFMobs () : _enumObj(0), _iterator(0)
 {
@@ -170,16 +283,6 @@ AAFRESULT STDMETHODCALLTYPE
 	return ar;
 }
 
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFMobs::Reset ()
-{
-	AAFRESULT ar = AAFRESULT_SUCCESS;
-	_iterator->reset();
-	return ar;
-}
-
-
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFMobs::Clone (ImplEnumAAFMobs **ppEnum)
 {
@@ -208,7 +311,7 @@ AAFRESULT STDMETHODCALLTYPE
 //Internal
 
 AAFRESULT
-    ImplEnumAAFMobs::SetCriteria(aafSearchCrit_t *pCriteria)
+	ImplEnumAAFMobs::SetCriteria(aafSearchCrit_t *pCriteria)
 {
 	if(NULL == pCriteria)
 		_criteria.searchTag = kAAFNoSearch;
@@ -218,23 +321,4 @@ AAFRESULT
 	return AAFRESULT_SUCCESS;
 }
 
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFMobs::SetIterator(
-                        ImplAAFObject *pObj,
-                        OMReferenceContainerIterator<ImplAAFMob>* iterator)
-{
-	AAFRESULT ar = AAFRESULT_SUCCESS;
-	
-	if (_enumObj)
-		_enumObj->ReleaseReference();
-	_enumObj = 0;
-	
-	_enumObj = pObj;
-	if (pObj)
-		pObj->AcquireReference();
-	
-	delete _iterator;
-	_iterator = iterator;
-	return ar;
-}
+#endif
