@@ -5,9 +5,9 @@
 
 
 /* File created by MIDL compiler version 5.01.0164 */
-/* at Fri Dec 14 12:01:07 2001
+/* at TIMESTAMP REMOVED
  */
-/* Compiler settings for AAF.idl:
+/* Compiler settings for ../ref-impl/include/com-api/AAF.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
     error checks: allocation ref bounds_check enum stub_data 
 */
