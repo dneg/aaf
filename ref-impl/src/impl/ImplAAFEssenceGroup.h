@@ -164,6 +164,7 @@ public:
 			ImplAAFSegment		**retSrcClip);
 	virtual AAFRESULT ChangeContainedReferences(aafMobID_constref from,
 												aafMobID_constref to);
+	virtual AAFRESULT ValidateChoice(ImplAAFSegment *choice);
 
 private:
 	OMStrongReferenceVectorProperty<ImplAAFSegment>	_choices;
