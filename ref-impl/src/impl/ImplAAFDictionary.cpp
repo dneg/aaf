@@ -888,6 +888,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (AAFRESULT_SUCCEEDED(hr)); \
   assert (pTD); \
   RegisterType (pTD); \
+  pTD->ReleaseReference(); \
 }
 
 
@@ -898,6 +899,7 @@ AAFRESULT STDMETHODCALLTYPE
   assert (AAFRESULT_SUCCEEDED(hr)); \
   assert (pCD); \
   RegisterClass (pCD); \
+  pCD->ReleaseReference(); \
 }
 
 
