@@ -16,11 +16,17 @@
 
 //#include "CAAFEssenceFormat.h"
 //#include "ImplAAFEssenceFormat.h"
+#include "aafErr.h"
 
+#define SAMPLE_SIZE		2			// For prototype, assume 16-bit samples
 
 // CLSID for AAFEssenceCodec 
 //{8D7B04B1-95E1-11d2-8089-006008143E6F}
 const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
+
+const IID IID_IAAFSourceMob = { 0xB1A2137C, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
+const IID IID_IAAFWAVEDescriptor = { 0x4c2e1692, 0x8ae6, 0x11d2, { 0x81, 0x3c, 0x00, 0x60, 0x97, 0x31, 0x01, 0x72 } };
+const IID IID_IAAFFileDescriptor = { 0xe58a8561, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
 
 #if 0 //!!!
 CAAFPlugin::CAAFPlugin (IUnknown * pControllingUnknown, aafBool doInit)
@@ -147,7 +153,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetSelectInfo (aafUID_t  fileMobID,
+    CAAFWaveCodec::GetSelectInfo (IUnknown *fileMob,
         aafCodecSelectInfo_t *  pInfo)
 {
   return HRESULT_NOT_IMPLEMENTED;
@@ -157,7 +163,7 @@ HRESULT STDMETHODCALLTYPE
 
 	
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetNumChannels (aafUID_t  fileMobID,
+    CAAFWaveCodec::GetNumChannels (IUnknown *fileMob,
         aafUID_t  essenceKind,
         aafInt16 *  pNumChannels)
 {
@@ -167,7 +173,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::SemanticCheck (aafUID_t  fileMobID,
+    CAAFWaveCodec::SemanticCheck (IUnknown *fileMob,
         aafCheckVerbose_t  verbose,
         aafCheckWarnings_t *  warning,
         wchar_t *  pName,
@@ -178,21 +184,56 @@ HRESULT STDMETHODCALLTYPE
 
 		
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::Create (aafUID_t  fileMobID,
+    CAAFWaveCodec::Create (IUnknown *unk,
         aafUID_t  variant,
         IAAFEssenceStream * stream)
 {
+	//Just some random data to write for a summary
+	unsigned char			someData[] = { 1, 2, 3, 4, 5, 6 };
+	IAAFSourceMob			*fileMob;
+	IAAFEssenceDescriptor	*mdes;
+	IAAFFileDescriptor		*fileDesc;
+	AAFRESULT				aafError;
+	aafRational_t			defaultRate;
+
+	defaultRate.numerator = 44100;
+	defaultRate.denominator = 1;
+
 	_stream = stream;
+	XPROTECT()
+	{
+		aafError = (unk->QueryInterface(IID_IAAFSourceMob, (void **)&fileMob));
+		CHECK(fileMob->GetEssenceDescriptor(&mdes));
+		aafError = (mdes->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&_mdes));
+		CHECK(_mdes->SetSummary (sizeof(someData), someData));
+		aafError = (mdes->QueryInterface(IID_IAAFFileDescriptor, (void **)&fileDesc));
+		CHECK(fileDesc->SetSampleRate (&defaultRate));
+	}
+	XEXCEPT
+	XEND;
+
 	return AAFRESULT_SUCCESS;
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::Open (aafUID_t  fileMobID,
+    CAAFWaveCodec::Open (IUnknown *unk,
         aafMediaOpenMode_t  openMode,
         IAAFEssenceStream * stream)
 {
+	AAFRESULT		aafError;
+	IAAFSourceMob	*fileMob;
+	IAAFEssenceDescriptor *edes;
+
 	_stream = stream;
+	XPROTECT()
+	{
+		aafError = (unk->QueryInterface(IID_IAAFSourceMob, (void **)&fileMob));
+		CHECK(fileMob->GetEssenceDescriptor(&edes));
+		aafError = (edes->QueryInterface(IID_IAAFWAVEDescriptor, (void **)&_mdes));
+	}
+	XEXCEPT
+	XEND;
 	return AAFRESULT_SUCCESS;
 }
 
@@ -227,7 +268,21 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::Close ()
 {
-  return HRESULT_SUCCESS;
+	aafInt64	byteLen, sampleLen;
+	aafErr_t	aafError;
+	IAAFFileDescriptor *fileDesc;
+
+	XPROTECT()
+	{
+		CHECK(_stream->GetLength (&byteLen));
+		sampleLen = byteLen / SAMPLE_SIZE;
+		aafError = (_mdes->QueryInterface(IID_IAAFFileDescriptor, (void **)&fileDesc));
+		CHECK(fileDesc->SetLength(sampleLen));
+	}
+	XEXCEPT
+	XEND;
+
+	return HRESULT_SUCCESS;
 }
 
 		
@@ -266,11 +321,15 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::ReadRawData (aafUInt32  buflen,
+    CAAFWaveCodec::ReadRawData (aafUInt32 nSamples,
+		aafUInt32  buflen,
         aafDataBuffer_t  buffer,
-        aafUInt32 *  bytesRead)
+        aafUInt32 *  bytesRead,
+        aafUInt32 *  samplesRead)
 {
-	_stream->Read (buflen, buffer, bytesRead);
+	//!!!Later Check that buflen > nSamples * SAMPLE_SIZE;
+	_stream->Read (nSamples * SAMPLE_SIZE, buffer, bytesRead);
+	*samplesRead = (*bytesRead)/SAMPLE_SIZE;
 	return HRESULT_SUCCESS;
 }
 
@@ -279,7 +338,7 @@ HRESULT STDMETHODCALLTYPE
 	
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::CreateDescriptorFromStream (IAAFEssenceStream * pStream,
-        aafUID_t  pSourceMobID)
+        IUnknown *fileMob)
 {
   return HRESULT_NOT_IMPLEMENTED;
 }
