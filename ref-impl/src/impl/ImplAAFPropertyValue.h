@@ -39,6 +39,8 @@ class ImplAAFTypeDef;
 #include "ImplAAFRoot.h"
 #endif
 
+class OMProperty;
+
 
 class ImplAAFPropertyValue : public ImplAAFRoot
 {
@@ -67,6 +69,8 @@ public:
         // @parm [out] result
         (aafBool *  pIsDefined);
 
+
+  virtual AAFRESULT STDMETHODCALLTYPE WriteTo(OMProperty* pOmProp);
 
 protected:
   virtual ~ImplAAFPropertyValue ();

@@ -100,3 +100,11 @@ const ImplAAFTypeDef * ImplAAFPropertyValue::pvtGetType (void) const
 {
   return _pType;
 }
+
+AAFRESULT STDMETHODCALLTYPE ImplAAFPropertyValue::WriteTo(
+      OMProperty* pOmProp)
+{
+  // This method should be pure virtual but dodo won't allow it
+  assert(false);
+  return AAFRESULT_SUCCESS;
+}
