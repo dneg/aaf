@@ -325,10 +325,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT ImplAAFSourceClip::TraverseToClip(aafLength_t length,
 											ImplAAFSegment **sclp,
-											ImplAAFPulldown **/*pulldownObj*/,
-											aafInt32 */*pulldownPhase*/,
+											ImplAAFPulldown ** /*pulldownObj*/,
+											aafInt32 * /*pulldownPhase*/,
 											aafLength_t *sclpLen,
-											aafBool */*isMask*/)
+											aafBool * /*isMask*/)
 {
 	XPROTECT()
 	{
