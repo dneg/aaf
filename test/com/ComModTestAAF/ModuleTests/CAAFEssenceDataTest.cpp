@@ -32,12 +32,17 @@ struct EssenceDataTest
 
   void createFileMob();
   void createEssenceData(IAAFSourceMob *pSourceMob);
-	void openEssenceData();
+  void openEssenceData();
 
-  void writeEssenceData(IAAFEssenceData *pEssenceData);
-  void readEssenceData(IAAFEssenceData *pEssenceData);
+  void writeEssenceData(IAAFEssenceData *pEssenceData,
+		        const aafDataBuffer_t data,
+			aafUInt32 dataSize);
+  void readEssenceData(IAAFEssenceData *pEssenceData,
+		        const aafDataBuffer_t data,
+			aafUInt32 dataSize);
 
   void cleanupReferences();
+  void setBufferSize(aafUInt32 bufferSize);
   void check(HRESULT hr);
 
   // Shared member data:
@@ -51,9 +56,10 @@ struct EssenceDataTest
   IAAFSourceMob *_pSourceMob;
   IAAFEssenceDescriptor *_pEssenceDescriptor;
   IAAFFileDescriptor *_pFileDescriptor;
-	IEnumAAFEssenceData *_pEnumEssenceData;
+  IEnumAAFEssenceData *_pEnumEssenceData;
   IAAFEssenceData *_pEssenceData;
   aafDataBuffer_t _buffer;
+  aafUInt32 _bufferSize;
 
   static const char _smiley[];
   static const char _frowney[];
@@ -68,18 +74,11 @@ HRESULT CAAFEssenceData::test()
   try
   {
     edt.createFile(fileName);
-		edt.openFile(fileName);
-
-#ifndef TIM_TEST
-		// todo:
-		// om support for reading immediately after writing (access violation)
-		// om support for position and size for unopened/created streams (assertion)
-
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-#endif
+    edt.openFile(fileName);
   }
   catch (HRESULT& ehr)
   {
+    // thrown by EssenceDataTest::check() method.
     hr = ehr;
   }
   catch (...)
@@ -110,7 +109,7 @@ const char EssenceDataTest::_smiley[] =        /* 16x16 smiley face */
   "  ***  **  ***  "
   "   ****  ****   "
   "    ********    "
-  "      ****      ";
+  "      ****     ";
 
 const char EssenceDataTest::_frowney[] =        /* 16x16 frowney face */
   "      ****      "
@@ -128,7 +127,7 @@ const char EssenceDataTest::_frowney[] =        /* 16x16 frowney face */
   "  ************  "
   "   **********   "
   "    ********    "
-  "      ****      ";
+  "      ****     ";
 
 
 
@@ -141,9 +140,10 @@ EssenceDataTest::EssenceDataTest():
   _pSourceMob(NULL),
   _pEssenceDescriptor(NULL),
   _pFileDescriptor(NULL),
-	_pEnumEssenceData(NULL),
+  _pEnumEssenceData(NULL),
   _pEssenceData(NULL),
-  _buffer(NULL)
+  _buffer(NULL),
+  _bufferSize(0)
 {
   _productInfo.companyName = L"AAF Developers Desk";
   _productInfo.productName = L"EssenceData Module Test";
@@ -222,6 +222,25 @@ void EssenceDataTest::cleanupReferences()
   }
 }
 
+void EssenceDataTest::setBufferSize(aafUInt32 bufferSize)
+{
+  // Allocate the buffer.
+  if (NULL != _buffer && bufferSize > _bufferSize)
+  {
+    CoTaskMemFree(_buffer);
+    _buffer = NULL;
+  }
+
+  // Allocate the buffer.
+  if (NULL == _buffer)
+  {
+    _bufferSize = bufferSize;
+    _buffer = static_cast<aafDataBuffer_t>(CoTaskMemAlloc(_bufferSize));
+    if (NULL == _buffer)
+      check(AAFRESULT_NOMEMORY);
+  }
+}
+
 inline void EssenceDataTest::check(HRESULT hr)
 {
   if (AAFRESULT_SUCCESS != (_hr = hr))
@@ -258,7 +277,7 @@ void EssenceDataTest::openFile(wchar_t *pFileName)
   _bFileOpen = true;
   check(_pFile->GetHeader(&_pHeader));
 
-	openEssenceData();
+  openEssenceData();
 
   cleanupReferences();
 }
@@ -319,6 +338,8 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
   assert(_pFile && _pHeader);
   assert(pSourceMob);
   assert(NULL == _pEssenceData);
+  
+
 
 
   // Attempt to create an AAFEssenceData.
@@ -331,17 +352,27 @@ void EssenceDataTest::createEssenceData(IAAFSourceMob *pSourceMob)
   check(_pEssenceData->SetFileMob(pSourceMob));
   check(_pHeader->AppendEssenceData(_pEssenceData));
   
-  writeEssenceData(_pEssenceData);
+  writeEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
+  writeEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));
 
   // Read back the data before saving and/or closing the file
-#ifdef TIM_TEST
   check(_pEssenceData->SetPosition(0));
   aafPosition_t dataPosition = 0;
   check(_pEssenceData->GetPosition(&dataPosition));
   if (dataPosition != 0)
     check(AAFRESULT_TEST_FAILED);
-  readEssenceData(_pEssenceData);
-#endif
+
+  // Validate the current essence size.
+  aafLength_t essenceSize = 0;
+  aafLength_t expectedEssenceSize = sizeof(_smiley) + sizeof(_frowney);
+  check(_pEssenceData->GetSize(&essenceSize));
+  if (essenceSize != expectedEssenceSize)
+    check(AAFRESULT_TEST_FAILED);
+  
+
+  readEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
+  readEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));
+
   _pEssenceData->Release();
   _pEssenceData = NULL;
 }
@@ -353,33 +384,45 @@ void EssenceDataTest::openEssenceData()
   assert(NULL == _pEssenceData);
   assert(NULL == _pSourceMob);
 
-	
-	check(_pHeader->EnumEssenceData(&_pEnumEssenceData));
-	while (AAFRESULT_SUCCESS == (_hr = _pEnumEssenceData->NextOne(&_pEssenceData)))
-	{
-		// Validate the essence.
-		readEssenceData(_pEssenceData);
+  
+  check(_pHeader->EnumEssenceData(&_pEnumEssenceData));
+  while (AAFRESULT_SUCCESS == (_hr = _pEnumEssenceData->NextOne(&_pEssenceData)))
+  {
+    // Validate the essence.
+    // Validate the current essence size.
+    aafLength_t essenceSize = 0;
+    aafLength_t expectedEssenceSize = sizeof(_smiley) + sizeof(_frowney);
+    check(_pEssenceData->GetSize(&essenceSize));
+    if (essenceSize != expectedEssenceSize)
+      check(AAFRESULT_TEST_FAILED);
 
-		// Make sure that the essence data still references
-		// a valid mob.
-		check(_pEssenceData->GetFileMob(&_pSourceMob));
+    // Validate that the correct data can be read back.
+    readEssenceData(_pEssenceData, (aafDataBuffer_t)_smiley, sizeof(_smiley));
+    readEssenceData(_pEssenceData, (aafDataBuffer_t)_frowney, sizeof(_frowney));
 
-		_pSourceMob->Release();
-		_pSourceMob = NULL;
+    // Make sure that the essence data still references
+    // a valid mob.
+    check(_pEssenceData->GetFileMob(&_pSourceMob));
 
-		_pEssenceData->Release();
-		_pEssenceData = NULL;
-	}
+    _pSourceMob->Release();
+    _pSourceMob = NULL;
 
-	if (AAFRESULT_NO_MORE_OBJECTS == _hr)
-		_hr = AAFRESULT_SUCCESS;
-	check(_hr);	
+    _pEssenceData->Release();
+    _pEssenceData = NULL;
+  }
+  // It is ok to run out of objects.
+  if (AAFRESULT_NO_MORE_OBJECTS == _hr)
+    _hr = AAFRESULT_SUCCESS;
+  else
+    check(_hr);  
 
-	_pEnumEssenceData->Release();
-	_pEnumEssenceData = NULL;
+  _pEnumEssenceData->Release();
+  _pEnumEssenceData = NULL;
 }
 
-void EssenceDataTest::writeEssenceData(IAAFEssenceData *pEssenceData)
+void EssenceDataTest::writeEssenceData(IAAFEssenceData *pEssenceData,
+				       const aafDataBuffer_t data,
+				       aafUInt32 dataSize)
 {
   assert(NULL != pEssenceData);
 
@@ -390,50 +433,28 @@ void EssenceDataTest::writeEssenceData(IAAFEssenceData *pEssenceData)
   aafPosition_t expectedPosition = 0;
   aafPosition_t dataPosition = 0;
   aafUInt32 bytesWritten = 0;
-  aafUInt32 bytes = strlen(_smiley) + 1; 
+
 
   // Save the starting position.
-#ifdef TIM_TEST
   check(pEssenceData->GetPosition(&startingPosition));
-#endif
-  // Write the "smiley face" into the mediaData propert
+
   bytesWritten = 0;
-  check(pEssenceData->Write(bytes, (aafDataBuffer_t)_smiley, &bytesWritten));
+  check(pEssenceData->Write(dataSize, data, &bytesWritten));
   // Make sure that we wrote the expected number of bytes.
-  if (bytesWritten != bytes)
+  if (bytesWritten != dataSize)
     check(AAFRESULT_TEST_FAILED);
 
-
   // Make sure the position is supported correctly.
-#ifdef TIM_TEST
-  expectedPosition = startingPosition + bytes;
+  expectedPosition = startingPosition + dataSize;
   dataPosition = 0;
   check(pEssenceData->GetPosition(&dataPosition));
   if (dataPosition != expectedPosition)
     check(AAFRESULT_TEST_FAILED);
-#endif
-  
-  // Test sequencial writes...
-  //
-  // Write the "frowney face" into the mediaData propert
-  bytes = strlen(_frowney)+ 1;
-  bytesWritten = 0;
-  check(pEssenceData->Write(bytes, (aafDataBuffer_t)_frowney, &bytesWritten));
-  // Make sure that we wrote the expected number of bytes.
-  if (bytesWritten != bytes)
-    check(AAFRESULT_TEST_FAILED);
-
-  // Make sure the position is supported correctly.
-#ifdef TIM_TEST
-  expectedPosition += bytes;
-  dataPosition = 0;
-  check(pEssenceData->GetPosition(&dataPosition));
-  if (dataPosition != expectedPosition)
-    check(AAFRESULT_TEST_FAILED);
-#endif
 }
 
-void EssenceDataTest::readEssenceData(IAAFEssenceData *pEssenceData)
+void EssenceDataTest::readEssenceData(IAAFEssenceData *pEssenceData,
+				      const aafDataBuffer_t data,
+				      aafUInt32 dataSize)
 {
   assert(NULL != pEssenceData);
 
@@ -444,56 +465,33 @@ void EssenceDataTest::readEssenceData(IAAFEssenceData *pEssenceData)
   aafPosition_t expectedPosition = 0;
   aafPosition_t dataPosition = 0;
   aafUInt32 bytesRead = 0;
-  aafUInt32 bytes = strlen(_smiley) + 1; 
+
+  
 
   // Save the starting position.
-#ifdef TIM_TEST
   check(pEssenceData->GetPosition(&startingPosition));
-#endif
-  // Allocate the buffer.
-  if (NULL == _buffer)
-  {
-    _buffer = static_cast<aafDataBuffer_t>(CoTaskMemAlloc(bytes));
-    if (NULL == _buffer)
-      check(AAFRESULT_NOMEMORY);
-  }
 
-  // Validate that "smiley face" was written.
+  // Make sure the buffer is large enough to hold the data.
+  setBufferSize(dataSize);
+
+  // Read dataSize bytes from the essence data.
   bytesRead = 0;
-  check(pEssenceData->Read(bytes, _buffer, &bytesRead));
+  check(pEssenceData->Read(dataSize, _buffer, &bytesRead));
   // Make sure that we read the expected number of bytes.
-  if (bytesRead != bytes)
+  if (bytesRead != dataSize)
     check(AAFRESULT_TEST_FAILED);
 
   // Make sure the position is supported correctly.
-#ifdef TIM_TEST
-  expectedPosition = startingPosition + bytes;
+  expectedPosition = startingPosition + dataSize;
   dataPosition = 0;
   check(pEssenceData->GetPosition(&dataPosition));
   if (dataPosition != expectedPosition)
     check(AAFRESULT_TEST_FAILED);
-#endif
-  // Compare the bytes
-  if (0 != strcmp(_smiley, (char *)_buffer))
-    check(AAFRESULT_TEST_FAILED);
 
 
-  // Validate that "frowney face" was written.
-  bytesRead = 0;
-  check(pEssenceData->Read(bytes, _buffer, &bytesRead));
-  // Make sure that we read the expected number of bytes.
-  if (bytesRead != bytes)
-    check(AAFRESULT_TEST_FAILED);
-
-  // Make sure the position is supported correctly.
-#ifdef TIM_TEST
-  expectedPosition += bytes;
-  dataPosition = 0;
-  check(pEssenceData->GetPosition(&dataPosition));
-  if (dataPosition != expectedPosition)
-    check(AAFRESULT_TEST_FAILED);
-#endif
-  // Compare the bytes
-  if (0 != strcmp(_frowney, (char *)_buffer))
+  // Compare the bytes we read to the given input data.
+  // (this is assumed to match the original data written
+  // to the essence data)
+  if (0 != memcmp(data, (char *)_buffer, dataSize))
     check(AAFRESULT_TEST_FAILED);
 }
