@@ -358,6 +358,8 @@ AD_XMETHOD1(OpenTransient,
   //
   // Transient files are never considered Revertable.
   //
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - The pIdent argument is valid.
@@ -504,6 +506,8 @@ AD_XMETHOD2(SaveAs,
   // - This AAFFile object then can be used to refer to all AAF
   //   objects contained within the file.
   //
+  // NOTE! Stub only.   Implementation not yet added.
+  //
   // Succeeds if:
   // - This object has already been Initialize\(\)d.
   // - This object is currently open.
@@ -563,6 +567,8 @@ AD_METHOD0(Revert,
   // not a transient file.
   //
   // Any changes to essence are not revertable.
+  //
+  // NOTE! Stub only.   Implementation not yet added.
   //
   // This method will succeed only if all of the following are true:
   // - This object has already been Initialize\(\)d.
