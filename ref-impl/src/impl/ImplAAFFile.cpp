@@ -307,7 +307,6 @@ ImplAAFFile::Close ()
 
 #if FULL_TOOLKIT
   AAFFile *tstFile;
-  clearBentoErrors();
   aafAssert((_topMedia == NULL) || (_closeMediaProc != NULL), 
 			this,
 			OM_ERR_MEDIA_CANNOT_CLOSE);
@@ -377,7 +376,7 @@ ImplAAFFile::Close ()
 		  InternalReleaseObjects();
 
 #if FULL_TOOLKIT
-		  if (_BentoErrorNumber)
+		  if (_ContainerErrorNumber)
 			_container->OMLAbortContainer();
 		  else
 			{
@@ -535,8 +534,8 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafWChar* stream,
 			{
 			  _container->OMLAbortContainer();
 			}
-		  else if(myRefCon != NULL)
-			OMLFree((OMContainer *)NULL, myRefCon, session->GetContainerSession());
+//!!!		  else if(myRefCon != NULL)
+//!!!			OMLFree((OMContainer *)NULL, myRefCon, session->GetContainerSession());
 
 		  /* Set to previous file or NULL */
 		  session->SetTopFile(_prevFile);
@@ -556,9 +555,6 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafWChar* stream,
  *		given revision.
  *
  * Argument Notes:
- *		Stream -- Must be of a type which matches the Bento file handler.
- *		ie:	a SFReply record pointer for omfmacsf.c
- *				or a path string for aafansic.c
  *
  * ReturnValue:
  *		Error code (see below).
@@ -635,9 +631,6 @@ AAFRESULT ImplAAFFile::Create(
  * 	Opens an AAF file read-only.
  *
  * Argument Notes:
- *		Stream -- Must be of a type which matches the Bento file handler.
- *		ie:	a SFReply record pointer for omfmacsf.c
- *				or a path string for aafansic.c
  *
  * ReturnValue:
  *		Error code (see below).
@@ -666,9 +659,6 @@ AAFRESULT ImplAAFFile::OpenRead(
  * 	Opens an AAF file for update (read-write).
  *
  * Argument Notes:
- *		Stream -- Must be of a type which matches the Bento file handler.
- *		ie:	a SFReply record pointer for omfmacsf.c
- *				or a path string for aafansic.c
  *
  * ReturnValue:
  *		Error code (see below).
