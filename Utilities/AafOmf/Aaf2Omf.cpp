@@ -2435,11 +2435,6 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  1, kfSlot,
 										(OMF2::omfLength_t)length));
 		}
-		if(pEffect->GetParameterByArgID(kAAFParamID_AvidGlobalKF, &pParameter) == AAFRESULT_SUCCESS)
-		{
-			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  globalSlot, kfSlot,
-										(OMF2::omfLength_t)length));
-		}
 #if 0
 		if(pEffect->GetParameterByArgID(kAAFParameterDefAmplitude, &pParameter) == AAFRESULT_SUCCESS)
 		{
@@ -2523,6 +2518,40 @@ HRESULT Aaf2Omf::ConvertEffects(IAAFOperationGroup* pEffect,
 										(OMF2::omfLength_t)length));
 		}
 #endif
+		// Handle effect global parameter last so that it ends up second-to-last
+		// in the array.  This makes the regression script easier, as this is where
+		// Composer always puts this slot.
+		if(pEffect->GetParameterByArgID(kAAFParamID_AvidGlobalKF, &pParameter) == AAFRESULT_SUCCESS)
+		{
+			checkAAF(ConvertParameter(pParameter, (*pOMFEffect),  globalSlot, kfSlot,
+										(OMF2::omfLength_t)length));
+		}
+
+		// Find the keyframe slot, and move it to the last position in the array.  This
+		// also makes the regression script easier, as this is where
+		// Composer always puts the keyframe slot.
+		{
+			aafInt32				n, numSlots;
+			OMF2::omfObject_t		slot;
+			OMF2::omfArgIDType_t	testSlotID;
+
+			numSlots = OMF2::omfsLengthObjRefArray(OMFFileHdl, (*pOMFEffect),
+								OMF2::OMEFFEEffectSlots);
+			for(n = 1; n < numSlots; n++)	// If n == numSlots, it's already there
+			{
+				(void)OMF2::omfsGetNthObjRefArray(OMFFileHdl, (*pOMFEffect),
+								OMF2::OMEFFEEffectSlots, &slot, n);
+				(void)OMF2::omfiEffectSlotGetInfo(OMFFileHdl, slot, &testSlotID, NULL);
+				if(testSlotID == kfSlot)
+				{
+					(void)OMF2::omfsRemoveNthObjRefArray(OMFFileHdl, (*pOMFEffect),
+									OMF2::OMEFFEEffectSlots, n);
+					(void)OMF2::omfsAppendObjRefArray(OMFFileHdl, (*pOMFEffect),
+									OMF2::OMEFFEEffectSlots, slot);
+					break;
+				}
+			}
+		}
 	}
 cleanup:
 	DecIndentLevel();
