@@ -27,10 +27,10 @@ CXXFILES = AAFPluginCOM.cpp \
 
 SUPOBJS = $(OBJDIR)/aafCvt.o \
 	  $(OBJDIR)/AAFUtils.o \
-	  $(OBJDIR)/../../com-dll/obj/com-dll/CAAFClassFactory.o \
-	  $(OBJDIR)/../../com-dll/obj/com-dll/CAAFServer.o \
-	  $(OBJDIR)/../../com-dll/obj/com-dll/CAAFUnknown.o \
-	  $(OBJDIR)/../../com-dll/obj/com-dll/CAAFInProcServer.o
+	  $(OBJDIR)/../../com-dll/obj/CAAFClassFactory.o \
+	  $(OBJDIR)/../../com-dll/obj/CAAFServer.o \
+	  $(OBJDIR)/../../com-dll/obj/CAAFUnknown.o \
+	  $(OBJDIR)/../../com-dll/obj/CAAFInProcServer.o
 
 .PHONY : all
 all : aafpgapi aafintp
