@@ -111,14 +111,14 @@ AAFRESULT STDMETHODCALLTYPE
       if(hr == AAFRESULT_SUCCESS)
       {
 				siz++;
-        aMob->ReleaseRef();
+        aMob->ReleaseReference();
         aMob = NULL;
       }
  		} while(hr == AAFRESULT_SUCCESS);
 		if(hr == AAFRESULT_NO_MORE_MOBS)
 			hr = AAFRESULT_SUCCESS;
     if (mobEnum)
-      mobEnum->ReleaseRef();
+      mobEnum->ReleaseReference();
 	}
 	
 	*pNumMobs = siz;

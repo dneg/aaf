@@ -335,6 +335,9 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	*newSlot = tmpSlot;
+	if (tmpSlot)
+		tmpSlot->AcquireReference();
+
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -351,7 +354,7 @@ AAFRESULT STDMETHODCALLTYPE
 		 ImplAAFTimelineMobSlot ** newSlot)  //@parm [out] Newly created slot
 {
 	ImplAAFTimelineMobSlot	*aSlot = NULL;
-	ImplAAFMobSlot			*tmpSlot;
+	ImplAAFMobSlot			*tmpSlot = NULL;
 ///fLength_t length = CvtInt32toLength(0, length);
 ///	aafLength_t	mobLength = CvtInt32toLength(0, mobLength);
 	aafErr_t aafError = OM_ERR_NONE;
@@ -383,6 +386,9 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND;
 
 	*newSlot = aSlot;
+	if (aSlot)
+		aSlot->AcquireReference();
+
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -648,10 +654,6 @@ AAFRESULT STDMETHODCALLTYPE
 				foundSlot = AAFTrue;
 				break;
 			}
-      
-      // We are done with the temporary slot. (getValueAt() has incremented the
-      // object's reference count.
-      tmpSlot->ReleaseRef();
 		}
 		if (!foundSlot)
 		{
@@ -1191,11 +1193,16 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT
     ImplAAFMob::GetNthMobSlot (aafInt32 index /*0-based*/, ImplAAFMobSlot **ppMobSlot)
 {
+	AAFRESULT rc = AAFRESULT_SUCCESS;
 	ImplAAFMobSlot	*obj;
 	_slots.getValueAt(obj, index);
+	if (obj)
+		obj->AcquireReference();
+	else
+		rc = AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
 	*ppMobSlot = obj;
 
-	return AAFRESULT_SUCCESS;
+	return rc;
 }
 
 extern "C" const aafClassID_t CLSID_AAFMob;
