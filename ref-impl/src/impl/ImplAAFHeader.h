@@ -273,6 +273,10 @@ public:
   // in /test/ImplAAFHeaderTest.cpp.
   static AAFRESULT test();
 
+  // Return this objects stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 public:
 	// Interfaces visible inside the toolkit, but not exposed through the API
 	AAFRESULT AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
