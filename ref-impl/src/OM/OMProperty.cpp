@@ -2,6 +2,8 @@
 #include "OMProperty.h"
 
 #include "OMStorable.h"
+#include "OMType.h"
+#include "OMUtilities.h"
 
 #include <memory.h>
 
@@ -106,6 +108,125 @@ void OMProperty::detach(const OMStorable* object, const size_t key)
   // nothing to do for most descendants of OMProperty
 }
 
+  // @mfunc Write this property to persistent store, performing
+  //        any necessary externalization and byte reordering.
+  //   @parm The property id.
+  //   @parm The stored form to use for this property.
+  //   @parm The bytes of this property in internal (in memory) form.
+  //   @parm The actual size of the bytes of this property.
+  //   @this const
+void OMProperty::write(OMPropertyId propertyId,
+                       int storedForm,
+                       OMByte* internalBytes,
+                       size_t internalBytesSize) const
+{
+  TRACE("OMProperty::write");
+
+  PRECONDITION("Valid internal bytes", internalBytes != 0);
+  PRECONDITION("Valid internal bytes size", internalBytesSize > 0);
+
+  ASSERT("Valid property set", _propertySet != 0);
+  OMStorable* container = _propertySet->container();
+  ASSERT("Valid container", container != 0);
+  ASSERT("Container is persistent", container->persistent());
+  OMStoredObject* store = container->store();
+  ASSERT("Valid stored object", store != 0);
+
+  if (_type != 0) { // tjb - temporary, should be PRECONDITION below
+
+    PRECONDITION("Valid property type", _type != 0);
+
+    // Allocate buffer for property value
+    size_t externalBytesSize = _type->externalSize(internalBytes,
+                                                   internalBytesSize);
+    OMByte* buffer = new OMByte[externalBytesSize];
+    ASSERT("Valid heap pointer", buffer != 0);
+
+    // Externalize property value
+    _type->externalize(internalBytes,
+                       internalBytesSize,
+                       buffer,
+                       externalBytesSize,
+                       store->byteOrder());
+  
+    // Reorder property value
+    if (store->byteOrder() != hostByteOrder()) {
+      _type->reorder(buffer, externalBytesSize);
+    }
+
+    // Write property value
+    store->write(propertyId, storedForm, buffer, externalBytesSize);
+    delete [] buffer;
+
+  } else {
+    // tjb - temporary, no type information, do it the old way
+    //
+    store->write(propertyId, storedForm, internalBytes, internalBytesSize);
+  }
+}
+
+  // @mfunc Read this property from persistent store, performing
+  //        any necessary byte reordering and internalization.
+  //   @parm The property id.
+  //   @parm The stored from to use for this property.
+  //   @parm The buffer in which to place the internal (in memory)
+  //         form of the bytes of this property.
+  //   @parm The size of the buffer in which to place the internal
+  //         (in memory) form of the bytes of this property.
+  //   @parm The size of the external (on disk) form of the bytes of
+  //         this propery.
+  //   @this const
+void OMProperty::read(OMPropertyId propertyId,
+                      int storedForm,
+                      OMByte* internalBytes,
+                      size_t internalBytesSize,
+                      size_t externalBytesSize)
+{
+  TRACE("OMProperty::read");
+
+  PRECONDITION("Valid internal bytes", internalBytes != 0);
+  PRECONDITION("Valid internal bytes size", internalBytesSize > 0);
+  PRECONDITION("Valid external bytes size", externalBytesSize > 0);
+
+  OMStoredObject* store = _propertySet->container()->store();
+  ASSERT("Valid store", store != 0);
+
+  if (_type != 0) { // tjb - temporary, should be PRECONDITION below
+
+    PRECONDITION("Valid property type", _type != 0);
+
+    // Allocate buffer for property value
+    OMByte* buffer = new OMByte[externalBytesSize];
+    ASSERT("Valid heap pointer", buffer != 0);
+
+    // Read property value
+    store->read(propertyId, storedForm, buffer, externalBytesSize);
+
+    // Reorder property value
+    if (store->byteOrder() != hostByteOrder()) {
+      _type->reorder(buffer, externalBytesSize);
+    }
+
+    // Internalize property value
+    size_t requiredBytesSize = _type->internalSize(buffer, externalBytesSize);
+    ASSERT("Property value buffer large enough",
+                                       internalBytesSize >= requiredBytesSize);
+
+    _type->internalize(buffer,
+                       externalBytesSize,
+                       internalBytes,
+                       requiredBytesSize,
+                       hostByteOrder());
+    delete [] buffer;
+  } else {
+    // tjb - temporary, no type information, do it the old way
+    //
+    ASSERT("Property value buffer large enough",
+                                       internalBytesSize >= externalBytesSize);
+    store->read(propertyId, storedForm, internalBytes, externalBytesSize);
+  }
+}
+
 // @doc OMINTERNAL
 
 // class OMSimpleProperty
@@ -182,13 +303,7 @@ void OMSimpleProperty::save(void) const
 {
   TRACE("OMSimpleProperty::save");
 
-  ASSERT("Valid property set", _propertySet != 0);
-  OMStorable* container = _propertySet->container();
-  ASSERT("Valid container", container != 0);
-  ASSERT("Container is persistent", container->persistent());
-  OMStoredObject* s = container->store();
-
-  s->write(_propertyId, _storedForm, _bits, _size);
+  write(_propertyId, _storedForm, _bits, _size);
 }
 
   // @mfunc Restore this <c OMSimpleProperty>, the external (persisted)
@@ -202,7 +317,7 @@ void OMSimpleProperty::restore(size_t externalSize)
   OMStoredObject* store = _propertySet->container()->store();
   ASSERT("Valid store", store != 0);
 
-  store->read(_propertyId, _storedForm, _bits, _size);
+  read(_propertyId, _storedForm, _bits, _size, externalSize);
 }
 
   // @mfunc The size of the raw bits of this
