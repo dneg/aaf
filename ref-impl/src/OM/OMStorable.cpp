@@ -88,7 +88,9 @@ void OMStorable::close(void)
       OMProperty* p = 0;
       _persistentProperties.iterate(context, p);
       ASSERT("Valid property", p != 0);
-      p->close();
+      if (!p->isOptional() || p->isPresent()) {
+        p->close();
+      }
     }
 
     _store->close();
