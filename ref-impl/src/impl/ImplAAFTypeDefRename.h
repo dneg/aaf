@@ -62,27 +62,6 @@ public:
 
 
   //****************
-  // GetName()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetName
-        (// @parm [out, size_is(bufSize), string] buffer into which the name is written
-         wchar_t *  pName,
-
-         // @parm [in] The size of the pName buffer, in bytes
-         aafInt32  bufSize);
-
-
-  //****************
-  // GetNameBufLen()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetNameBufLen
-        // @parm [out] required buffer length, in bytes
-        (aafInt32 *  pLen);
-
-
-  //****************
   // GetValue()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
@@ -100,11 +79,11 @@ public:
   //
   //*************************************************************
 
-  /*
-  virtual void reorder(OMByte* bytes,
-                       size_t bytesSize) const;
+  virtual void reorder(OMByte* externalBytes,
+                       size_t externalBytesSize) const;
 
-  virtual size_t externalSize(void) const;
+  virtual size_t externalSize(OMByte* internalBytes,
+							  size_t internalBytesSize) const;
 
   virtual void externalize(OMByte* internalBytes,
                            size_t internalBytesSize,
@@ -112,23 +91,24 @@ public:
                            size_t externalBytesSize,
                            OMByteOrder byteOrder) const;
 
-  virtual size_t internalSize(void) const;
+  virtual size_t internalSize(OMByte* externalBytes,
+							  size_t externalBytesSize) const;
 
   virtual void internalize(OMByte* externalBytes,
                            size_t externalBytesSize,
                            OMByte* internalBytes,
                            size_t internalBytesSize,
                            OMByteOrder byteOrder) const;
-						   */
+
 
 public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefRename)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTypeDefRenameTest.cpp.
-  static AAFRESULT test();
+private:
+  // OMWeakReferenceProperty<ImplAAFTypeDef> _RenamedType;
+  OMFixedSizeProperty<aafUID_t>           _RenamedType;
 };
 
 #endif // ! __ImplAAFTypeDefRename_h__
