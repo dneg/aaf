@@ -1644,6 +1644,7 @@ AD_CLASS_END\
   //
   // %02
   //
+  // STDAPI %01 ();
  
 cpp_quote("STDAPI %01 ();")
 cpp_quote("")\
