@@ -347,8 +347,10 @@ void OMSSSStoredObject::close(void)
     delete _index;
     _index = 0;
 
-		if( _root == 0) closeStorage(_storage);
-		else closeStorage(_root);
+		if( _root == 0) 
+			closeStorage(_storage);
+		else 
+			closeStorage(_root);
 
     _open = false;
   }
@@ -2648,6 +2650,7 @@ void OMSSSStoredObject::closeStream(Stream*& stream)
 #else
   ::closeStream( &stream );
 #endif
+
 #if defined(OM_DEBUG)
   decrementOpenStreamCount();
 #endif
@@ -3087,7 +3090,8 @@ OMSSSStoredObject* OMSSSStoredObject::openFile(OMRawStorage* rawStorage,
 
   sresult status = SSTG_OK;
 
-	status = openStructuredStorageInOMRawStorage( rawStorage, openMode, &rootstorage );
+
+  status = openStructuredStorageInOMRawStorage( rawStorage, openMode, &rootstorage );
 
   checkStatus(status);
   ASSERT("openStructuredStorageInOMRawStorageEx() succeeded", SUCCEEDED(status));
