@@ -35,6 +35,12 @@ protected:
 
 public:
 
+  // SetAUID()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Init
+        // @parm [in] Pointer to an AUID reference
+        (aafUID_t *  pAuid, wchar_t *name, wchar_t *description);
   //****************
   // GetAUID()
   //
