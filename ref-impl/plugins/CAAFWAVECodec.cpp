@@ -247,14 +247,20 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetFlavourCount(aafInt32 *pCount)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	if(pCount == NULL)
+		return AAFRESULT_NULL_PARAM;
+	*pCount = 1;
+	return AAFRESULT_SUCCESS;
 }
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::GetIndexedFlavourID (aafInt32  index,
         aafUID_t *  pVariant)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	if(pVariant == NULL)
+		return AAFRESULT_NULL_PARAM;
+	*pVariant = NilCodecVariety;	// s/b Flavour
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -1118,6 +1124,41 @@ HRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	XEND
 
+	return (AAFRESULT_SUCCESS);
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetIndexedSampleSize (aafUID_t dataDefID, aafPosition_t pos, aafLength_t *pResult)
+{
+	aafUID_t	uid = DDEF_Sound;
+	if(pResult == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	if(pos < 0 || pos >=_sampleFrames)
+		return(AAFRESULT_EOF);
+	if(EqualAUID(&dataDefID, &uid))
+		*pResult = _bytesPerFrame;
+	else
+		return(AAFRESULT_CODEC_CHANNELS);
+
+	return (AAFRESULT_SUCCESS);
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetLargestSampleSize (aafUID_t dataDefID, aafLength_t *pResult)
+{
+	aafUID_t	uid = DDEF_Sound;
+	if(pResult == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	if(EqualAUID(&dataDefID, &uid))
+		*pResult = _bytesPerFrame;
+	else
+		return(AAFRESULT_CODEC_CHANNELS);
+	return (AAFRESULT_SUCCESS);
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::AddSampleIndexEntry (aafPosition_t pos)
+{
 	return (AAFRESULT_SUCCESS);
 }
 
