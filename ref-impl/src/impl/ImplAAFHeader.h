@@ -89,7 +89,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupMob
-        (const aafUID_t & mobID,   //@parm [in,ref] The Mob ID
+        (aafMobID_constref mobID,   //@parm [in,ref] The Mob ID
 		 ImplAAFMob ** ppMob);  //@parm [out,retval] Matching Mob
 
 
@@ -143,7 +143,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     IsEssenceDataPresent
         (// @parm [in] A Unique File Mob ID
-		 const aafUID_t & fileMobID,
+		 aafMobID_constref fileMobID,
 
 		 // @parm [in] The Essence File Format
 		 aafFileFormat_t  fmt,
