@@ -621,5 +621,23 @@ void OMWeakReferenceSetProperty<ReferencedObject>::setBits(const OMByte* bits,
 
 }
 
+template<typename ReferencedObject>
+OMPropertyTag
+OMWeakReferenceSetProperty<ReferencedObject>::targetTag(void) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::targetTag");
+
+  PRECONDITION("Property is attached to file", container()->inFile());
+
+  OMWeakReferenceSetProperty<ReferencedObject>* nonConstThis =
+               const_cast<OMWeakReferenceSetProperty<ReferencedObject>*>(this);
+  if (_targetTag == nullOMPropertyTag) {
+    nonConstThis->_targetTag =
+                           file()->referencedProperties()->insert(_targetName);
+  }
+  POSTCONDITION("Valid target property tag", _targetTag != nullOMPropertyTag);
+  return _targetTag;
+}
+
 #endif
 

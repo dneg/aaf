@@ -99,8 +99,7 @@ ReferencedObject* OMWeakReferenceProperty<ReferencedObject>::setValue(
   PRECONDITION("Source container object and target object in same file",
                                         container()->file() == object->file());
 
-  _targetTag = file()->referencedProperties()->insert(_targetName);
-  _reference.setTargetTag(_targetTag);
+  _reference.setTargetTag(targetTag());
 #endif
   ReferencedObject* result = _reference.setValue(object);
   setPresent();
@@ -176,7 +175,7 @@ void OMWeakReferenceProperty<ReferencedObject>::save(void) const
 
   PRECONDITION("Non-void weak reference", !_reference.isVoid());
 
-  OMPropertyTag tag = file()->referencedProperties()->insert(_targetName);
+  OMPropertyTag tag = targetTag();
 
   const OMUniqueObjectIdentification& id = _reference.identification();
   store()->save(_propertyId, _storedForm, id, tag, _keyPropertyId);
@@ -287,6 +286,23 @@ void OMWeakReferenceProperty<ReferencedObject>::setBits(const OMByte* bits,
 
   const ReferencedObject* p = *(const ReferencedObject**)bits;
   setValue(p);
+}
+
+template<typename ReferencedObject>
+OMPropertyTag OMWeakReferenceProperty<ReferencedObject>::targetTag(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::targetTag");
+
+  PRECONDITION("Property is attached to file", container()->inFile());
+
+  OMWeakReferenceProperty<ReferencedObject>* nonConstThis =
+                  const_cast<OMWeakReferenceProperty<ReferencedObject>*>(this);
+  if (_targetTag == nullOMPropertyTag) {
+    nonConstThis->_targetTag =
+                           file()->referencedProperties()->insert(_targetName);
+  }
+  POSTCONDITION("Valid target property tag", _targetTag != nullOMPropertyTag);
+  return _targetTag;
 }
 
 #endif

@@ -100,6 +100,8 @@ public:
 
 private:
 
+  OMPropertyTag targetTag(void) const;
+
   OMWeakObjectReference<ReferencedObject> _reference;
   OMPropertyTag _targetTag;
   const wchar_t* _targetName;

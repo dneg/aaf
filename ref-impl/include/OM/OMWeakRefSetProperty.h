@@ -171,6 +171,8 @@ private:
 
   typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
 
+  OMPropertyTag targetTag(void) const;
+
   // The set of references.
   OMSet<OMUniqueObjectIdentification, SetElement> _set;
   OMPropertyTag _targetTag;

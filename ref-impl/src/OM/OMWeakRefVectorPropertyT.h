@@ -80,7 +80,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::save(void) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  OMPropertyTag tag = file()->referencedProperties()->insert(_targetName);
+  OMPropertyTag tag = targetTag();
 
   // create a vector index
   //
@@ -286,8 +286,7 @@ ReferencedObject* OMWeakReferenceVectorProperty<ReferencedObject>::setValueAt(
   //
   VectorElement& element = _vector.getAt(index);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
-  _targetTag = file()->referencedProperties()->insert(_targetName);
-  element.reference().setTargetTag(_targetTag);
+  element.reference().setTargetTag(targetTag());
 #endif
   ReferencedObject* oldObject = element.setValue(object);
   setPresent();
@@ -800,6 +799,24 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::setBits(
     setValueAt(object, i);
   }
 
+}
+
+template<typename ReferencedObject>
+OMPropertyTag
+OMWeakReferenceVectorProperty<ReferencedObject>::targetTag(void) const
+{
+  TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::targetTag");
+
+  PRECONDITION("Property is attached to file", container()->inFile());
+
+  OMWeakReferenceVectorProperty<ReferencedObject>* nonConstThis =
+            const_cast<OMWeakReferenceVectorProperty<ReferencedObject>*>(this);
+  if (_targetTag == nullOMPropertyTag) {
+    nonConstThis->_targetTag =
+                           file()->referencedProperties()->insert(_targetName);
+  }
+  POSTCONDITION("Valid target property tag", _targetTag != nullOMPropertyTag);
+  return _targetTag;
 }
 
 #endif

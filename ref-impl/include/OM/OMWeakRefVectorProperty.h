@@ -204,6 +204,8 @@ private:
 
   typedef OMVectorIterator<VectorElement> VectorIterator;
 
+  OMPropertyTag targetTag(void) const;
+
     // The vector of references.
   OMVector<VectorElement> _vector;
   OMPropertyTag _targetTag;
