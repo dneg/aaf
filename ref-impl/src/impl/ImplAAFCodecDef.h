@@ -31,13 +31,17 @@
  ************************************************************************/
 
 
-class ImplAAFClassDef;
 class ImplEnumAAFCodecFlavours;
 
 
 #ifndef __ImplAAFDefObject_h__
 #include "ImplAAFDefObject.h"
 #endif
+
+#ifndef __ImplAAFClassDef_h__
+#include "ImplAAFClassDef.h"
+#endif
+
 #include "OMReferenceContainerIter.h"
 
 #include "ImplEnumAAFDataDefs.h"
@@ -156,7 +160,7 @@ public:
 
 private:
 	DataDefWeakRefArrayProp_t			_dataDefs;
-	OMFixedSizeProperty<aafUID_t>		_fileDescClass;
+	OMWeakReferenceProperty<ImplAAFClassDef> _fileDescClass;
 };
 
 #endif // ! __ImplAAFCodecDef_h__
