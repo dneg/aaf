@@ -324,7 +324,7 @@ void ProcessCommandLineArgs( int argc, char** argv )
       MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
 
       if ( !registry.IsKnown( cmd->GetArgV()[0] ) ) {
-  	    string anError( string( "Unkown test: " ) +
+  	    string anError( string( "Unknown test: " ) +
 			    string( cmd->GetArgV()[0] ) );
 		throw anError;
       }
