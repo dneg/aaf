@@ -77,6 +77,19 @@ public:
     //          the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
 
+  // Optional property interface
+
+    // @cmember Is this an optional property ? 
+    //   @this const
+  bool isOptional(void) const;
+
+    // @cmember Is this optional property present ?
+    //   @this const
+  bool isPresent(void) const;
+
+    // @cmember Remove this optional property.
+  void remove(void);
+
   // Direct property access interface
 
     // @cmember The size of the raw bits of this <c OMProperty>. The
@@ -89,7 +102,7 @@ public:
   virtual void getBits(OMByte* bits, size_t size) const = 0;
 
 protected:
-  // @access Public members.
+  // @access Protected members.
 
     // @cmember Write this property to persistent store, performing
     //          any necessary externalization and byte reordering.
@@ -108,12 +121,25 @@ protected:
             size_t internalBytesSize,
             size_t externalBytesSize);
 
+    // @cmember Set the bit that indicates that this optional <c OMProperty>
+    //          is present.
+  void setPresent(void);
+
+    // @cmember Clear the bit that indicates that this optional <c OMProperty>
+    //          is present.
+  void clearPresent(void);
+
   int _propertyId;
   int _storedForm; // The on-disk representation used (one of the SF_* values)
   const char* _name;
   const OMPropertySet* _propertySet; // The PropertySet that contains
                                      // this property
   const OMType* _type;
+
+private:
+
+  bool _isOptional;
+  bool _isPresent;
 
 };
 
