@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Mon Nov  1 15:55:07 EST 2004
-// by user akharkev on system akharkevichxp2.
+// This file was generated on Thu Nov  4 12:24:04 GMT 2004
+// by user phil on system pilot16.
 //
 // Key to macros.
 //
@@ -5745,8 +5745,8 @@ AAF_TYPE_SEPARATOR()
 // ScanningDirectionType
 //
 AAF_TYPE_DEFINITION_ENUMERATION(ScanningDirectionType, 
-  // {02010125-0000-0000-060E-2B3401040101}
-  AAF_LITERAL_AUID(0x02010125,
+  // {02010128-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010128,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
   AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningLeftToRightTopToBottom,
@@ -5766,8 +5766,8 @@ AAF_TYPE_DEFINITION_ENUMERATION(ScanningDirectionType,
   AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(ScanningBottomToTopRightToLeft,
     7, ScanningDirectionType)
 AAF_TYPE_DEFINITION_ENUMERATION_END(ScanningDirectionType, 
-  // {02010125-0000-0000-060E-2B3401040101}
-  AAF_LITERAL_AUID(0x02010125,
+  // {02010128-0000-0000-060E-2B3401040101}
+  AAF_LITERAL_AUID(0x02010128,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01), AAF_TYPE(UInt8))
 AAF_TYPE_SEPARATOR()
