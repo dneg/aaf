@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Tue Mar  7 17:04:18 EST 2000
-// by user transdel on system TRANSDEL.
+// This file was generated on Mon Mar 13 18:03:25 EST 2000
+// by user bedell on system JBEDELLPC.
 //
 // Key to macros.
 //
@@ -496,7 +496,7 @@ AAF_CLASS(InterchangeObject,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x0102,
-    AAF_REFERENCE_TYPE(WeakReference, Identification),
+    AAF_TYPE(AUID),
     false,
     InterchangeObject)
 AAF_CLASS_END(InterchangeObject)
