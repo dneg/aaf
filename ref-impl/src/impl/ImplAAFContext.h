@@ -20,7 +20,7 @@
 // Forward declaration
 //
 class ImplAAFFile;
-class AAFPluginManager;
+class ImplAAFPluginManager;
 
 
 class ImplAAFSession : public ImplAAFRoot
@@ -107,7 +107,7 @@ public:
   void SetTopFile(ImplAAFFile *file);
   aafProductIdentification_t *GetDefaultIdent(void);
   void InitPluginManager (void);
-  AAFPluginManager *GetPluginManager (void);
+  ImplAAFPluginManager *GetPluginManager (void);
 
 private:
 
@@ -123,7 +123,7 @@ private:
 
   ImplAAFFile	*_topFile;
   aafProductIdentification_t	*_defaultIdent;
-  class AAFPluginManager		*_plugins;
+  class ImplAAFPluginManager	*_plugins;
 
 };
 
