@@ -930,7 +930,7 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
 		padBuf[kStartPadding-1] = 0xD9;
 		checkResult(_stream->Seek(0));
 		checkResult(_stream->Write(kStartPadding, padBuf, &bytesWritten));
-		delete padBuf;
+		delete [] padBuf;
 		checkResult(AddSampleIndexEntry(kStartPadding));
 		// setupStream()
 	}
@@ -4235,7 +4235,7 @@ HRESULT CAAFJPEGCodec::WriteSampleIndex32()
 		bufferLen = (count16+2) * sizeof(aafUInt32);		// Ad zero byte to end
 		checkResult(_stream->Write(bufferLen, (aafDataBuffer_t)tempBuf, &bytesWritten));
 
-		delete tempBuf;
+		delete [] tempBuf;
 
 		checkResult(_descriptorHelper.PutFrameIndexProperties(startPos32+2, _nativeByteOrder));
 	}
