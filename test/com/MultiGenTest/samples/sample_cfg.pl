@@ -5,7 +5,7 @@
 
 $LinuxBaseDir = "/home/aaftest";   # This is the local directory on the Linux server.
 $IrixBaseDir  = "/mnt/aaftest";    # /home/aaftest on the Linux server accessed via NFS.
-$Win2KBaseDir = "g:";              # /home/aaftest on the Linxu server accessed via Samba
+$Win2KBaseDir = "g:";              # /home/aaftest on the Linux server accessed via Samba
 
 $LinuxAAFDir = "~jpt/aaf/V101_RC1/AAF/AAFi686LinuxSDK/g++";
 $IrixAAFDir  = "~jpt/AAF/V101_RC1/AAF/AAFMipsIrixSDK/MIPSpro";
@@ -90,8 +90,8 @@ $SharedTestDirPath = "testfiles";
   # program on each platform.  This can by anything.  Typically it
   # will simply be ssh or rsh.  The command is expressed as an array
   # of arguments not as a single string.  The machine on which
-  # MultiGenTest.pl is executed (i.e. the local machine) does require
-  # a remote shell, hence it simply has a empty entry.
+  # MultiGenTest.pl is executed (i.e. the local machine) does not
+  # require a remote shell, hence, it simply has a empty entry.
 
   SysExecArgs => 
 	{ Win2K => [],
@@ -113,7 +113,7 @@ $SharedTestDirPath = "testfiles";
   #
   # These are CFG entries are a bit ad-hoc at the moment.  A better
   # approach might to let the tests fail, then check if the failure
-  # was expected.  How could that be generically expressed.
+  # was expected.  How could that be generically expressed?
   #
   # Versions  - array of library versions that do support modify.
   # ByteOrder - exclude modify tests if the byte ordering of the 
@@ -144,7 +144,7 @@ $SharedTestDirPath = "testfiles";
   # In this case, the files are all stored on a Linux server, while
   # the MultiGenTest.pl script is run on a Win2K machine.  It is
   # assumed that executing the copy directly on the server will be the
-  # fast way to copy a file, hence, the copy command is executed on
+  # fastest way to copy a file, hence, the copy command is executed on
   # that machine.
 
   CopyHost    => "Linux",
