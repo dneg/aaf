@@ -140,11 +140,14 @@ bool OMXMLStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
   //        If so, the result is true, and the encoding in <p encoding>.
   //   @parm The signature to check.
   //   @rdesc True if the signature is recognized, false otherwise.
-bool OMXMLStoredObject::isRecognized(const OMFileSignature& /* signature */)
+bool OMXMLStoredObject::isRecognized(const OMFileSignature& signature)
 {
   TRACE("OMXMLStoredObject::isRecognized");
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  char tag = ((char)((signature.Data1 & 0xff000000) >> 24));
+  if (tag == 'X') {
+    result = true;
+  }
   return result;
 }
 

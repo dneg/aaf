@@ -125,7 +125,7 @@ bool OMKLVStoredObject::isRecognized(const OMFileSignature& /* signature */)
 {
   TRACE("OMKLVStoredObject::isRecognized");
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  // ASSERT("Unimplemented code not reached", false);
   return result;
 }
 

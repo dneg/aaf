@@ -237,12 +237,31 @@ OMMSSStoredObject* OMMSSStoredObject::createModify(OMRawStorage* rawStorage,
   //   @parm The name of the file to check.
   //   @parm If recognized, the file signature.
   //   @rdesc True if the file is recognized, false otherwise.
-bool OMMSSStoredObject::isRecognized(const wchar_t* /* fileName */,
-                                     OMFileSignature& /* signature */)
+bool OMMSSStoredObject::isRecognized(const wchar_t* fileName,
+                                     OMFileSignature& signature)
 {
   TRACE("OMMSSStoredObject::isRecognized");
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  OMFileSignature sig;
+  FILE* f = wfopen(fileName, L"rb");
+  if (f != 0) {
+    size_t status = fseek(f, 8, SEEK_SET);
+    if (status == 0) {
+      status = fread(&sig, sizeof(sig), 1, f);
+      if (status == 1) {
+        fclose(f);
+        if (hostByteOrder() != littleEndian) {
+          OMByte* s = reinterpret_cast<OMByte*>(&sig);
+          size_t size = sizeof(OMUniqueObjectIdentification);
+          OMUniqueObjectIdentificationType::instance()->reorder(s, size);
+        }
+        if (isRecognized(sig)) {
+          result = true;
+          signature = sig;
+        }
+      }
+    }
+  }
   return result;
 }
 
@@ -253,12 +272,29 @@ bool OMMSSStoredObject::isRecognized(const wchar_t* /* fileName */,
   //   @parm If recognized, the file signature.
   //   @rdesc True if the <c OMRawStorage> contains a recognized
   //          file, false otherwise.
-bool OMMSSStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
-                                     OMFileSignature& /* signature */)
+bool OMMSSStoredObject::isRecognized(OMRawStorage* rawStorage,
+                                     OMFileSignature& signature)
 {
   TRACE("OMMSSStoredObject::isRecognized");
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  OMFileSignature sig;
+  OMUInt32 count;
+  rawStorage->readAt(8,
+                     reinterpret_cast<OMByte*>(&sig),
+                     sizeof(sig),
+                     count);
+
+  if (count == sizeof(sig)) {
+    if (hostByteOrder() != littleEndian) {
+      OMByte* s = reinterpret_cast<OMByte*>(&sig);
+      size_t size = sizeof(OMUniqueObjectIdentification);
+      OMUniqueObjectIdentificationType::instance()->reorder(s, size);
+    }
+    if (isRecognized(sig)) {
+      result = true;
+      signature = sig;
+    }
+  }
   return result;
 }
 
@@ -266,11 +302,14 @@ bool OMMSSStoredObject::isRecognized(OMRawStorage* /* rawStorage */,
   //        If so, the result is true, and the encoding in <p encoding>.
   //   @parm The signature to check.
   //   @rdesc True if the signature is recognized, false otherwise.
-bool OMMSSStoredObject::isRecognized(const OMFileSignature& /* signature */)
+bool OMMSSStoredObject::isRecognized(const OMFileSignature& signature)
 {
   TRACE("OMMSSStoredObject::isRecognized");
   bool result = false;
-  ASSERT("Unimplemented code not reached", false);
+  char tag = ((char)((signature.Data1 & 0xff000000) >> 24));
+  if (tag == 'B') {
+    result = true;
+  }
   return result;
 }
 
