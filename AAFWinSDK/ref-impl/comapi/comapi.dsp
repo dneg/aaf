@@ -170,11 +170,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFContentStorageTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFControlCodeDef.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFControlCodeDefTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFParameterDefTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -668,11 +668,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFComponentsTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFControlCodeDefs.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterDefs.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFControlCodeDefsTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterDefsTest.cpp"
 # End Source File
 # Begin Source File
 
