@@ -132,18 +132,16 @@ HRESULT Omf2Aaf::ConvertFile ()
 HRESULT Omf2Aaf::OpenOutputFile ()
 {
 	HRESULT		rc = AAFRESULT_SUCCESS;
-	aafBool		bOverride = AAFFalse;
 
 	if (strlen(gpGlobals->sOutFileName) == 0)
 	{
 		char*	pExt;
-		bOverride = AAFTrue;
 		strcpy(gpGlobals->sOutFileName, gpGlobals->sInFileName);
 		pExt= strrchr(gpGlobals->sOutFileName, '.');
 		strcpy(pExt,".aaf");
 	}
 	
-	if (bOverride)
+	if (gpGlobals->bDeleteOutput)
 	{
 		UTLstdprintf("Previous file: %s will be overwritten\n", gpGlobals->sOutFileName);
 		deleteFile(gpGlobals->sOutFileName);
@@ -1339,7 +1337,7 @@ HRESULT Omf2Aaf::ConvertOMFSelector( OMF2::omfObject_t selector, IAAFSelector* p
 				IAAFSegment*			pAltSegment = NULL;
 
 				OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
-				IncIndentLevel();
+//				IncIndentLevel();
 				for (i = 0; i <(int)numAlternates;i++)
 				{
 					OMFError = OMF2::omfiSelectorGetNextAltSlot(OMFIterator,
@@ -1355,7 +1353,7 @@ HRESULT Omf2Aaf::ConvertOMFSelector( OMF2::omfObject_t selector, IAAFSelector* p
 					}
 					pAltComponent->Release();
 				}
-				DecIndentLevel();
+//				DecIndentLevel();
 				OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 			}
 			pSegment->Release();
@@ -1434,6 +1432,8 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 		pSourceClip->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
 		if (gpGlobals->bVerboseMode)
 			UTLstdprintf("%sProcessing SourceClip\n", gpGlobals->indentLeader);
+
+		pSourceClip->Release();
 	}
 	else if (OMF2::omfiIsATimecodeClip(OMFFileHdl, OMFSegment, &OMFError) )
 	{
@@ -1528,6 +1528,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 		{
 			rc = ConvertOMFEffects(OMFSegment, pEffect);
 			rc = pEffect->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
+	
 		}
 		pEffect->Release();
 		pEffect = NULL;
@@ -1553,6 +1554,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 			{
 				rc = pDictionary->CreateInstance(&AUID_AAFTransition, IID_IAAFTransition, (IUnknown **)&pTransition);
 				rc = pDictionary->CreateInstance(&AUID_AAFOperationGroup, IID_IAAFOperationGroup, (IUnknown **) &pEffect);
+				IncIndentLevel();
 				rc = ConvertOMFEffects(OMFEffect, pEffect);
 				if (SUCCEEDED(rc))
 				{
@@ -1560,6 +1562,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 					rc = pTransition->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
 					pEffect->Release();
 				}
+				DecIndentLevel();
 				pTransition->Release();
 			}
 			else
@@ -1658,12 +1661,10 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 		rc = pDictionary->CreateInstance(&AUID_AAFSelector,
 										  IID_IAAFSelector,
 										  (IUnknown **) &pSelector);
-		IncIndentLevel();
 		rc = ConvertOMFSelector(OMFSegment, pSelector);
 		rc = pSelector->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
 		pSelector->Release();
 		pSelector = NULL;
-		DecIndentLevel();
 	}
 	else if (OMF2::omfiIsAMediaGroup(OMFFileHdl, OMFSegment, &OMFError) )
 	{
@@ -1748,7 +1749,6 @@ HRESULT Omf2Aaf::ConvertOMFSourceClip(OMF2::omfObject_t sourceclip,
 	OMF2::omfFadeType_t		OMFFadeoutType;
 	OMF2::omfBool			fadeinPresent, fadeoutPresent;
 
-	IAAFComponent*			pComponent = NULL;
 	aafUID_t				datadef;
 	aafSourceRef_t			sourceRef;
 	aafFadeType_t			fadeinType, fadeoutType;
@@ -1869,6 +1869,10 @@ HRESULT Omf2Aaf::TraverseOMFSequence(OMF2::omfObject_t sequence, IAAFSequence* p
 						rc = pSequence->AppendComponent(pComponent);
 						pComponent->Release();
 						pComponent = NULL;
+					}
+					else
+					{
+						UTLstdprintf("%sThis Component could not be added to file",gpGlobals->indentLeader);
 					}
 				}
 			}
@@ -2837,106 +2841,6 @@ void Omf2Aaf::AAFFileClose( )
 static aafUID_t	zeroID = { 0 };
 
 // ============================================================================
-// SetEffectOptionalProperties
-//
-//			This function sets the optional properties of an Effect to default 
-//			values. 
-//	NOTE:	This is a temporary hack to allow OM to succesfully write the AAF
-//			file. Once optional properties are supported this function should be
-//			removed or modified to handle the properties correctly and not just
-//			making them from thin air!!! 
-//			
-// Returns: None
-//
-// ============================================================================
-HRESULT Omf2Aaf::SetEffectOptionalProperties(OMF2::omfEffObj_t	effect,
-											 IAAFOperationGroup*		pEffect,
-											 aafLength_t		effectLength,
-											 aafUID_t			effectDatadef)
-{
-	HRESULT					rc = AAFRESULT_SUCCESS;
-	OMF2::omfSegObj_t		OMFSourceClip;		
-	OMF2::omfArgIDType_t	bypassOverride;
-	OMF2::omfNumSlots_t		numSlots;
-
-	IAAFSourceReference*	pSourceRef= NULL;
-	IAAFSegment*			pFiller = NULL;
-	IAAFComponent*			pComponent = NULL;
-	IAAFSourceClip*			pSourceClip = NULL;
-	IAAFParameter*			pParameter = NULL;
-	IAAFParameterDef*		pParameterDef = NULL;
-	aafSourceRef_t			sourceRef;
-
-	// Create a source clip objet and Get Render
-	rc = pDictionary->CreateInstance(&AUID_AAFSourceClip, IID_IAAFSourceClip, (IUnknown **)&pSourceClip);
-	if (SUCCEEDED(rc))
-	{
-		rc = OMF2::omfiEffectGetFinalRender(OMFFileHdl, effect, &OMFSourceClip);
-		if (OMF2::OM_ERR_NONE == rc)
-		{
-			rc = ConvertOMFSourceClip(OMFSourceClip, pSourceClip);
-		}
-		else
-		{
-			sourceRef.sourceID = zeroID;
-			sourceRef.sourceSlotID = 0;
-			sourceRef.startTime = 0;
-			pSourceClip->Initialize (&effectDatadef, &effectLength, sourceRef);
-		}
-	}
-	pSourceClip->QueryInterface (IID_IAAFSourceReference, (void **)&pSourceRef);
-	pEffect->SetRender(pSourceRef);
-	
-	// Get bypassOverride
-	rc = OMF2::omfiEffectGetBypassOverride(OMFFileHdl, effect, &bypassOverride);
-	if (rc != OMF2::OM_ERR_NONE )
-		bypassOverride = 1;
-	pEffect->SetBypassOverride((aafUInt32) bypassOverride);
-
-	rc = OMF2::omfiEffectGetNumSlots(OMFFileHdl, effect, &numSlots);
-	if (numSlots > 0)
-	{
-		OMF2::omfIterHdl_t		OMFIterator;
-		OMF2::omfESlotObj_t		OMFEffectSlot;
-		OMF2::omfArgIDType_t	argID;
-		OMF2::omfSegObj_t		argValue;
-
-		OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
-		for (int i = 0;i < numSlots;i++)
-		{
-			rc = OMF2::omfiEffectGetNextSlot(OMFIterator, effect, NULL, &OMFEffectSlot);
-			if (OMF2::OM_ERR_NONE == rc)
-			{
-				OMF2::omfiEffectSlotGetInfo(OMFFileHdl, OMFEffectSlot, &argID, &argValue);
-
-			}
-		}
-		OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
-	}
-	else
-	{
-		// this code is necesary while optional properties must be present !
-		// tlk
-		pDictionary->CreateInstance(&AUID_AAFFiller, IID_IAAFSegment, (IUnknown **)&pFiller);
-		pFiller->QueryInterface(IID_IAAFComponent, (void **)&pComponent);
-		pComponent->SetLength(&effectLength);
-		pComponent->SetDataDef(&effectDatadef);
-		pEffect->AppendNewInputSegment(pFiller);
-	}
-
-	pDictionary->CreateInstance(&AUID_AAFParameter, IID_IAAFParameter, (IUnknown **) &pParameter);
-//	pParameter->SetParameterDefinition(pParameterDef);
-
-	pEffect->AddNewParameter(pParameter);
-
-	pComponent->Release();
-	pFiller->Release();
-	pSourceRef->Release();
-	pSourceClip->Release();
-	pParameter->Release();
-	return rc;
-}
-// ============================================================================
 // ConvertOMFEffects
 //
 //			This function reads an OMF effect object, converts its properties
@@ -2980,6 +2884,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 	aafUID_t				effectAUID ;
 	aafUID_t				effectDefAUID ;
 
+	IncIndentLevel();
+
 	if (OMF2::kOmfRev2x == OMFFileRev)
 	{
 		OMFError = OMF2::omfiEffectGetInfo(OMFFileHdl, effect, &effectDatakind, &effectLength, &effectDef);
@@ -2992,7 +2898,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		OMFError = OMF2::omfiEffectDefGetInfo(OMFFileHdl, effectDef, idSize, effectID, nameSize, effectDefName,
 									0, NULL, NULL, NULL);
 		OMFError = OMF2::omfiEffectGetBypassOverride(OMFFileHdl, effect, &bypassOverride);
-		if (OMF2::OM_ERR_PROP_NOT_PRESENT)
+		if (OMF2::OM_ERR_PROP_NOT_PRESENT == OMFError)
 			bypassOverride = 0;
 		if (strcmp(effectID, "omfi:effect:VideoSpeedControl") == 0)
 		{
@@ -3045,7 +2951,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				}
 			}
 		}
-		else if (strcmp(effectID, "omfi:effect:VideoDissolve") == 0)
+		else if ((strcmp(effectID, "omfi:effect:VideoDissolve") == 0) ||
+				 (strcmp(effectID, "omfi:effect:SimpleVideoDissolve") == 0) )
 		{
 			OMFError = OMF2::omfeVideoDissolveGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment);
 			if(OMF2::OM_ERR_NONE == OMFError)
@@ -3169,7 +3076,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 				}
 			}
 		}
-		else if (strcmp(effectID, "omfi:effect:MonoAudioDissolve") == 0)
+		else if ((strcmp(effectID, "omfi:effect:MonoAudioDissolve") == 0) ||
+				 (strcmp(effectID, "omfi:effect:SimpleMonoAudioDissolve") == 0))
 		{
 			OMFError = OMF2::omfeMonoAudioDissolveGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &inputSegmentB, &levelSegment);
 			if(OMF2::OM_ERR_NONE == OMFError)
@@ -3289,7 +3197,7 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		}
 		else if (OMF2::OM_ERR_PROP_NOT_PRESENT == OMFError)
 		{
-			// we need to add this code hear until optional arguments are implemented !!!
+			// we need to add this code here until optional arguments are implemented !!!
 			IAAFSourceReference*	pNULLSourceRef= NULL;
 			IAAFSourceClip*			pNULLSourceClip = NULL;
 			aafSourceRef_t			sourceRef;
@@ -3306,7 +3214,6 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 			pNULLSourceClip->Release();
 			pNULLSourceClip = NULL;
 		}
-//		rc = SetEffectOptionalProperties(effect, pEffect, (aafLength_t)effectLength, effectAUID);
 	}
 
 	if (pEffectDef)
@@ -3317,7 +3224,8 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 
 	if (pRenderSegment)
 		pRenderSegment->Release();
-
+	
+	DecIndentLevel();
 	return rc;
 }
 // ============================================================================
@@ -3375,6 +3283,8 @@ HRESULT Omf2Aaf::ConvertOMFEffectDefinition(OMF2::omfDDefObj_t	effectDef,
 			(*ppEffectDef)->SetIsTimeWarp((aafBool)isTimeWarp);
 			(*ppEffectDef)->SetCategory(pwName);
 			(*ppEffectDef)->SetBypass((aafUInt32 )bypassOverride);
+			// Set degradeTo to itself for now because we do not have optional properties !!!
+			(*ppEffectDef)->AppendDegradeToOperations(*ppEffectDef);
 			if (memcmp((const void *)&effectDefAUID, (const void*)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0)
 				(*ppEffectDef)->SetNumberInputs((aafInt32)2);
 			else

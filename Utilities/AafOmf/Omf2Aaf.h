@@ -76,8 +76,6 @@ public:
 	HRESULT ConvertOMFSelector(OMF2::omfObject_t selector, IAAFSelector* pSelector);
 	HRESULT ConvertOMFLocator(OMF2::omfObject_t locator, IAAFEssenceDescriptor* pEssenceDesc);
 	HRESULT ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor, IAAFCDCIDescriptor* pAAFDescriptor);
-	HRESULT SetEffectOptionalProperties(OMF2::omfEffObj_t effect, IAAFOperationGroup* pEffect,
-										aafLength_t effectLength, aafUID_t effectDatadef);
 	HRESULT ConvertOMFEffects(OMF2::omfEffObj_t effect, IAAFOperationGroup* pEffect);
 	HRESULT ConvertOMFEffectDefinition(OMF2::omfDDefObj_t effectDef, aafUID_t* pEffectAUID, IAAFOperationDef** ppEffectDef);
 	void CreateParameterDefinition(IAAFOperationDef*	pEffectDef);

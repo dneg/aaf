@@ -47,7 +47,6 @@
 
 #endif
 
-
 #include "AAFTypes.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
@@ -82,6 +81,8 @@ typedef struct _AafOmfGlobals
 	aafBool			bAAFFileOpen;
 	aafBool			bLogFile;
 	aafBool			bDefFile;
+	aafBool			bDeleteOutput;
+	aafBool			bConvertAAFFile;
 
 	// For Statistical summary
 	aafInt32		nNumOMFMobs;
