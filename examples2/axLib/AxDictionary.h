@@ -42,7 +42,9 @@ public:
 	IAAFClassDefSP LookupClassDef( const aafUID_t& classId );
 	IAAFDataDefSP LookupDataDef( const aafUID_t& dataDefId );
 	IAAFOperationDefSP LookupOperationDef( const aafUID_t& opDefId );
+	IAAFParameterDefSP LookupParameterDef( const aafUID_t& interpDefId );
 	IAAFContainerDefSP LookupContainerDef( const aafUID_t& contDefId );
+	IAAFInterpolationDefSP LookupInterpolationDef( const aafUID_t& interpDefId );
 	IAAFCodecDefSP LookupCodecDef( const aafUID_t& codecDefId );
 
 	IEnumAAFClassDefsSP GetClassDefs();
