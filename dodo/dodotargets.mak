@@ -18,14 +18,18 @@ include aafobjects.mk
 
 targets.mk : aafobjects.mk
 	@echo Creating targets.mk ...
-	@rm -f targets.mk
-	@echo # This file automatically generated make. > targets.mk
-	@echo # Special case AAFTypes since no object is to be built only headers... > depend.mk
-	@echo # special case the utility classes since they will not be exposed by com > depend.mk
-	@echo DODO_TARGETS = AAFTypes.all \>> targets.mk
-	$(SH_PREFIX) for base in $(DODO_TARGET_NAMES) ;  do \
-		echo \\t$$base.all \\>> targets.mk ; \
+	@$(SH_PREFIX) rm -f targets.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo # This file automatically generated make. > targets.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo # Special case AAFTypes since no object is to be built only headers... > targets.tmp $(SH_SUFFIX)
+	@$(SH_PREFIX) echo # special case the utility classes since they will not be exposed by com > targets.tmp  $(SH_SUFFIX)
+	@$(SH_PREFIX) echo DODO_TARGETS = \\>> targets.tmp  $(SH_SUFFIX)
+	@$(SH_PREFIX) echo \\tAAFTypes.all \\c>> targets.tmp  $(SH_SUFFIX)
+	$(SH_PREFIX) for base in $(AAFOBJECTS) ;  do \
+		echo \\>> targets.tmp ; \
+		echo \\t$$base.all \\c>> targets.tmp ; \
 	done $(SH_SUFFIX)
+	@$(SH_PREFIX) echo \\n>> targets.tmp $(SH_SUFFIX)
+	$(SH_PREFIX) mv targets.tmp targets.mk $(SH_SUFFIX)
 	@echo "Done with targets.mk."
 
 
