@@ -207,7 +207,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD1 07
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05)
 {
   AAFRESULT stat;
 
@@ -243,8 +243,8 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD2 12
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10)
 {
   AAFRESULT stat;
 
@@ -284,9 +284,9 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD3 17
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15)
 {
   AAFRESULT stat;
 
@@ -330,10 +330,10 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD4 22
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15,
+		.%18-adornment%19 .%18-indirection %20)
 {
   AAFRESULT stat;
 
@@ -381,11 +381,11 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD5 27
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15,
+		.%18-adornment%19 .%18-indirection %20,
+		.%23-adornment%24 .%23-indirection %25)
 {
   AAFRESULT stat;
 
@@ -437,12 +437,12 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD6 32
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15,
+		.%18-adornment%19 .%18-indirection %20,
+		.%23-adornment%24 .%23-indirection %25,
+		.%28-adornment%29 .%28-indirection %30)
 {
   AAFRESULT stat;
 
@@ -498,13 +498,13 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD7 37
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15,
+		.%18-adornment%19 .%18-indirection %20,
+		.%23-adornment%24 .%23-indirection %25,
+		.%28-adornment%29 .%28-indirection %30,
+		.%33-adornment%34 .%33-indirection %35)
 {
   AAFRESULT stat;
 
@@ -564,14 +564,14 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD8 42
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15,
+		.%18-adornment%19 .%18-indirection %20,
+		.%23-adornment%24 .%23-indirection %25,
+		.%28-adornment%29 .%28-indirection %30,
+		.%33-adornment%34 .%33-indirection %35,
+		.%38-adornment%39 .%38-indirection %40)
 {
   AAFRESULT stat;
 
@@ -635,15 +635,15 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD9 47
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40,
-		%44 .%43-indirection %45)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15,
+		.%18-adornment%19 .%18-indirection %20,
+		.%23-adornment%24 .%23-indirection %25,
+		.%28-adornment%29 .%28-indirection %30,
+		.%33-adornment%34 .%33-indirection %35,
+		.%38-adornment%39 .%38-indirection %40,
+		.%43-adornment%44 .%43-indirection %45)
 {
   AAFRESULT stat;
 
@@ -711,16 +711,16 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD_10 52
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40,
-		%44 .%43-indirection %45,
-		%49 .%48-indirection %50)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15,
+		.%18-adornment%19 .%18-indirection %20,
+		.%23-adornment%24 .%23-indirection %25,
+		.%28-adornment%29 .%28-indirection %30,
+		.%33-adornment%34 .%33-indirection %35,
+		.%38-adornment%39 .%38-indirection %40,
+		.%43-adornment%44 .%43-indirection %45,
+		.%48-adornment%49 .%48-indirection %50)
 {
   AAFRESULT stat;
 
@@ -792,17 +792,17 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_XMETHOD_11 57
 AAFRESULT STDMETHODCALLTYPE
-    C.this-module::%01 (%04 .%03-indirection %05,
-		%09 .%08-indirection %10,
-		%14 .%13-indirection %15,
-		%19 .%18-indirection %20,
-		%24 .%23-indirection %25,
-		%29 .%28-indirection %30,
-		%34 .%33-indirection %35,
-		%39 .%38-indirection %40,
-		%44 .%43-indirection %45,
-		%49 .%48-indirection %50,
-		%54 .%53-indirection %55)
+    C.this-module::%01 (.%03-adornment%04 .%03-indirection %05,
+		.%08-adornment%09 .%08-indirection %10,
+		.%13-adornment%14 .%13-indirection %15,
+		.%18-adornment%19 .%18-indirection %20,
+		.%23-adornment%24 .%23-indirection %25,
+		.%28-adornment%29 .%28-indirection %30,
+		.%33-adornment%34 .%33-indirection %35,
+		.%38-adornment%39 .%38-indirection %40,
+		.%43-adornment%44 .%43-indirection %45,
+		.%48-adornment%49 .%48-indirection %50,
+		.%53-adornment%54 .%53-indirection %55)
 {
   AAFRESULT stat;
 
@@ -984,7 +984,7 @@ AAF_DEFINE_FACTORY(.this-module)
 #c Macro Arg 06: method description
 #c
 #startm AD_XCONSTRUCTOR1 06
-C.this-module::C.this-module (%03 .%02-indirection %04)
+C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04)
 {
 .%02-setup(%03, %04)
   Impl.this-module * newRep;
@@ -1011,8 +1011,8 @@ C.this-module::C.this-module (%03 .%02-indirection %04)
 #c Macro Arg 11: method description
 #c
 #startm AD_XCONSTRUCTOR2 11
-C.this-module::C.this-module (%03 .%02-indirection %04,
-	%08 .%07-indirection %09)
+C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
+	.%07-adornment%08 .%07-indirection %09)
 {
 .%02-setup(%03, %04)
 .%07-setup(%08, %09)
@@ -1043,9 +1043,9 @@ C.this-module::C.this-module (%03 .%02-indirection %04,
 #c Macro Arg 16: method description
 #c
 #startm AD_XCONSTRUCTOR3 16
-C.this-module::C.this-module (%03 .%02-indirection %04,
-	%08 .%07-indirection %09,
-	%13 .%12-indirection %14)
+C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
+	.%07-adornment%08 .%07-indirection %09,
+	.%12-adornment%13 .%12-indirection %14)
 {
 .%02-setup(%03, %04)
 .%07-setup(%08, %09)
@@ -1080,10 +1080,10 @@ C.this-module::C.this-module (%03 .%02-indirection %04,
 #c Macro Arg 21: method description
 #c
 #startm AD_XCONSTRUCTOR4 21
-C.this-module::C.this-module (%03 .%02-indirection %04,
-							  %08 .%07-indirection %09,
-							  %13 .%12-indirection %14,
-							  %18 .%17-indirection %19)
+C.this-module::C.this-module (.%02-adornment%03 .%02-indirection %04,
+							  .%07-adornment%08 .%07-indirection %09,
+							  .%12-adornment%13 .%12-indirection %14,
+							  .%17-adornment%18 .%17-indirection %19)
 {
 .%02-setup(%03, %04)
 .%07-setup(%08, %09)
@@ -1443,4 +1443,39 @@ pinternal%01\
     {
 	  *%02 = NULL;
 	}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c The following macros assist in passing arguments to methods of the
+#c contained implementation class:
+#c
+#c The objIn macros are for use with pointers to objects that are
+#c passed into the method.  The Type argument is the base type, with
+#c no indirection specified.  For example, if you're passing in
+#c AObject*, AObject should be specified for the Type argument.#c
+#c
+#c The objOut macros are for use with pointers to pointers to objects
+#c that are passed out of the method.  The Type argument is the base
+#c type, with no indirection specified.  For example, if you're
+#c passing in AObject**, AObject should be specified for the Type
+#c argument.
+#c
+#c The objPass macros are for use with any kind of data which is
+#c passed exactly into or out of the method.
+#c
+
+
+#startm .objIn-adornment 00
+I\
+#endm
+
+
+#startm .objPass-adornment 00
+#endm
+
+
+#startm .objOut-adornment 00
+I\
 #endm

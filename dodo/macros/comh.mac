@@ -190,7 +190,7 @@ public:
 #startm AD_XMETHOD1 07
   // %07
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05); // %06 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05); // %06 \
 #endm
 
 
@@ -212,8 +212,8 @@ public:
 #startm AD_XMETHOD2 12
   // %12
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10); // %11 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10); // %11 \
 #endm
 
 
@@ -236,9 +236,9 @@ public:
 #startm AD_XMETHOD3 17
   // %17
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15); // %16 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15); // %16 \
 #endm
 
 
@@ -262,10 +262,10 @@ public:
 #startm AD_XMETHOD4 22
   // %22
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15, // %16
-	 /*%17*/ %19 .%18-indirection %20); // %21 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
+	 /*%17*/ .%18-adornment%19 .%18-indirection %20); // %21 \
 #endm
 
 
@@ -290,11 +290,11 @@ public:
 #startm AD_XMETHOD5 27
   // %27
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15, // %16
-	 /*%17*/ %19 .%18-indirection %20, // %21
-	 /*%22*/ %24 .%23-indirection %25); // %26 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
+	 /*%17*/ .%18-adornment%19 .%18-indirection %20, // %21
+	 /*%22*/ .%23-adornment%24 .%23-indirection %25); // %26 \
 #endm
 
 
@@ -320,12 +320,12 @@ public:
 #startm AD_XMETHOD6 32
   // %32
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15, // %16
-	 /*%17*/ %19 .%18-indirection %20, // %21
-	 /*%22*/ %24 .%23-indirection %25, // %26
-	 /*%27*/ %29 .%28-indirection %30); // %31 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
+	 /*%17*/ .%18-adornment%19 .%18-indirection %20, // %21
+	 /*%22*/ .%23-adornment%24 .%23-indirection %25, // %26
+	 /*%27*/ .%28-adornment%29 .%28-indirection %30); // %31 \
 #endm
 
 
@@ -352,13 +352,13 @@ public:
 #startm AD_XMETHOD7 37
   // %37
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15, // %16
-	 /*%17*/ %19 .%18-indirection %20, // %21
-	 /*%22*/ %24 .%23-indirection %25, // %26
-	 /*%27*/ %29 .%28-indirection %30, // %31
-	 /*%32*/ %34 .%33-indirection %35); // %36 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
+	 /*%17*/ .%18-adornment%19 .%18-indirection %20, // %21
+	 /*%22*/ .%23-adornment%24 .%23-indirection %25, // %26
+	 /*%27*/ .%28-adornment%29 .%28-indirection %30, // %31
+	 /*%32*/ .%33-adornment%34 .%33-indirection %35); // %36 \
 #endm
 
 
@@ -386,14 +386,14 @@ public:
 #startm AD_XMETHOD8 42
   // %42
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15, // %16
-	 /*%17*/ %19 .%18-indirection %20, // %21
-	 /*%22*/ %24 .%23-indirection %25, // %26
-	 /*%27*/ %29 .%28-indirection %30, // %31
-	 /*%32*/ %34 .%33-indirection %35, // %36
-	 /*%37*/ %39 .%38-indirection %40); // %41 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
+	 /*%17*/ .%18-adornment%19 .%18-indirection %20, // %21
+	 /*%22*/ .%23-adornment%24 .%23-indirection %25, // %26
+	 /*%27*/ .%28-adornment%29 .%28-indirection %30, // %31
+	 /*%32*/ .%33-adornment%34 .%33-indirection %35, // %36
+	 /*%37*/ .%38-adornment%39 .%38-indirection %40); // %41 \
 #endm
 
 
@@ -422,15 +422,15 @@ public:
 #startm AD_XMETHOD9 47
   // %47
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15, // %16
-	 /*%17*/ %19 .%18-indirection %20, // %21
-	 /*%22*/ %24 .%23-indirection %25, // %26
-	 /*%27*/ %29 .%28-indirection %30, // %31
-	 /*%32*/ %34 .%33-indirection %35, // %36
-	 /*%37*/ %39 .%38-indirection %40, // %41
-	 /*%42*/ %44 .%43-indirection %45); // %46 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
+	 /*%17*/ .%18-adornment%19 .%18-indirection %20, // %21
+	 /*%22*/ .%23-adornment%24 .%23-indirection %25, // %26
+	 /*%27*/ .%28-adornment%29 .%28-indirection %30, // %31
+	 /*%32*/ .%33-adornment%34 .%33-indirection %35, // %36
+	 /*%37*/ .%38-adornment%39 .%38-indirection %40, // %41
+	 /*%42*/ .%43-adornment%44 .%43-indirection %45); // %46 \
 #endm
 
 
@@ -460,16 +460,16 @@ public:
 #startm AD_XMETHOD_10 52
   // %52
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15, // %16
-	 /*%17*/ %19 .%18-indirection %20, // %21
-	 /*%22*/ %24 .%23-indirection %25, // %26
-	 /*%27*/ %29 .%28-indirection %30, // %31
-	 /*%32*/ %34 .%33-indirection %35, // %36
-	 /*%37*/ %39 .%38-indirection %40, // %41
-	 /*%42*/ %44 .%43-indirection %45, // %46
-	 /*%47*/ %49 .%48-indirection %50); // %51 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
+	 /*%17*/ .%18-adornment%19 .%18-indirection %20, // %21
+	 /*%22*/ .%23-adornment%24 .%23-indirection %25, // %26
+	 /*%27*/ .%28-adornment%29 .%28-indirection %30, // %31
+	 /*%32*/ .%33-adornment%34 .%33-indirection %35, // %36
+	 /*%37*/ .%38-adornment%39 .%38-indirection %40, // %41
+	 /*%42*/ .%43-adornment%44 .%43-indirection %45, // %46
+	 /*%47*/ .%48-adornment%49 .%48-indirection %50); // %51 \
 #endm
 
 
@@ -500,17 +500,17 @@ public:
 #startm AD_XMETHOD_11 57
   // %57
   STDMETHOD_(AAFRESULT, %01)
-    (/*%02*/ %04 .%03-indirection %05, // %06
-	 /*%07*/ %09 .%08-indirection %10, // %11
-	 /*%12*/ %14 .%13-indirection %15, // %16
-	 /*%17*/ %19 .%18-indirection %20, // %21
-	 /*%22*/ %24 .%23-indirection %25, // %26
-	 /*%27*/ %29 .%28-indirection %30, // %31
-	 /*%32*/ %34 .%33-indirection %35, // %36
-	 /*%37*/ %39 .%38-indirection %40, // %41
-	 /*%42*/ %44 .%43-indirection %45, // %46
-	 /*%47*/ %49 .%48-indirection %50, // %51
-	 /*%52*/ %54 .%53-indirection %55); // %56 \
+    (/*%02*/ .%03-adornment%04 .%03-indirection %05, // %06
+	 /*%07*/ .%08-adornment%09 .%08-indirection %10, // %11
+	 /*%12*/ .%13-adornment%14 .%13-indirection %15, // %16
+	 /*%17*/ .%18-adornment%19 .%18-indirection %20, // %21
+	 /*%22*/ .%23-adornment%24 .%23-indirection %25, // %26
+	 /*%27*/ .%28-adornment%29 .%28-indirection %30, // %31
+	 /*%32*/ .%33-adornment%34 .%33-indirection %35, // %36
+	 /*%37*/ .%38-adornment%39 .%38-indirection %40, // %41
+	 /*%42*/ .%43-adornment%44 .%43-indirection %45, // %46
+	 /*%47*/ .%48-adornment%49 .%48-indirection %50, // %51
+	 /*%52*/ .%53-adornment%54 .%53-indirection %55); // %56 \
 #endm
 
 
@@ -623,7 +623,7 @@ private:
 #c Macro Arg 06: method description
 #c
 #startm AD_XCONSTRUCTOR1 06
-    C.this-module (%03 .%02-indirection %04);\
+    C.this-module (.%02-adornment%03 .%02-indirection %04);\
 #endm
 
 
@@ -642,8 +642,8 @@ private:
 #c Macro Arg 11: method description
 #c
 #startm AD_XCONSTRUCTOR2 11
-    C.this-module (%03 .%02-indirection %04,
-		%08 .%07-indirection %09);\
+    C.this-module (.%02-adornment%03 .%02-indirection %04,
+		.%07-adornment%08 .%07-indirection %09);\
 #endm
 
 
@@ -663,9 +663,9 @@ private:
 #c Macro Arg 16: method description
 #c
 #startm AD_XCONSTRUCTOR3 16
-    C.this-module (%03 .%02-indirection %04,
-		%08 .%07-indirection %09,
-		%13 .%12-indirection %14);\
+    C.this-module (.%07-adornment%03 .%02-indirection %04,
+		.%07-adornment%08 .%07-indirection %09,
+		.%12-adornment%13 .%12-indirection %14);\
 #endm
 
 
@@ -686,10 +686,10 @@ private:
 #c Macro Arg 21: method description
 #c
 #startm AD_XCONSTRUCTOR4 21
-    C.this-module (%03 .%02-indirection %04,
-		%08 .%07-indirection %09,
-		%13 .%12-indirection %14,
-		%18 .%17-indirection %19);\
+    C.this-module (.%02-adornment%03 .%02-indirection %04,
+		.%07-adornment%08 .%07-indirection %09,
+		.%12-adornment%13 .%12-indirection %14,
+		.%17-adornment%18 .%17-indirection %19);\
 #endm
 
 
@@ -863,4 +863,39 @@ extern "C" IID IID_I.this-module;
 // CLSID for .this-module 
 // {%01-%02-%03-%04%05-%06%07%08%09%10%11}
 extern "C" CLSID CLSID_.this-module;
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c The following macros assist in passing arguments to methods of the
+#c contained implementation class:
+#c
+#c The objIn macros are for use with pointers to objects that are
+#c passed into the method.  The Type argument is the base type, with
+#c no indirection specified.  For example, if you're passing in
+#c AObject*, AObject should be specified for the Type argument.#c
+#c
+#c The objOut macros are for use with pointers to pointers to objects
+#c that are passed out of the method.  The Type argument is the base
+#c type, with no indirection specified.  For example, if you're
+#c passing in AObject**, AObject should be specified for the Type
+#c argument.
+#c
+#c The objPass macros are for use with any kind of data which is
+#c passed exactly into or out of the method.
+#c
+
+
+#startm .objIn-adornment 00
+I\
+#endm
+
+
+#startm .objPass-adornment 00
+#endm
+
+
+#startm .objOut-adornment 00
+I\
 #endm
