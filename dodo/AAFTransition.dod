@@ -1,0 +1,68 @@
+#startm .this-module 0
+AAFTransition\
+#endm
+#c
+#startm .parent-module 0
+AAFComponent\
+#endm
+#c
+#import ./AAFUnitTest.exp
+#import ./AAFComponent.exp
+AD_HEAD
+
+AD_INCLUDE(AAFTypes)
+AD_FORWARD_DECLARATION(AAFEffectInvocation)
+AD_FORWARD_DECLARATION(AAFDataDefinition)
+
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+AD_CLASS_BEGIN
+
+AD_CONSTRUCTOR4(
+		   [in], AAFDataDefinition *, datadef, Data Definition object,
+		   [in], aafLength_t, length, Length property value,
+		   [in], aafPosition_t, cutPoint, The point at which a cut would be inserted if the transition were removed,
+		   [in], AAFEffectInvocation *, effect, A reference to an effect invocation object,
+		   Constructor which allows specification of starting values.)	 
+
+AD_METHOD1(GetCutPoint,
+		   [out],
+		   aafPosition_t *,
+		   cutPoint,
+		   Cut Point,
+		   Gets the point at which a cut would be inserted if the transition were removed.)
+	//@comm Replaces part of omfsTransitionGetInfo
+AD_METHOD1(GetEffect,
+		   [out],
+		   AAFEffectInvocation *,
+		   effObj,
+		   Effect used by transition,
+		   Gets the effect invocation associated with the transition.)
+	//@comm Replaces part of omfsTransitionGetInfo
+
+AD_METHOD1(SetCutPoint,
+		   [in],
+		   aafPosition_t,
+		   cutPoint,
+		   Cut Point,
+		   Sets the point at which a cut would be inserted if the transition were removed.)
+
+AD_METHOD1(SetEffect,
+		   [in],
+		   AAFEffectInvocation *,
+		   effObj,
+		   Effect used by transition,
+		   Sets the effect invocation associated with the transition.)
+
+AD_OVERRIDE(.method-Test)
+
+
+AD_CLASS_END
+
