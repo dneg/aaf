@@ -51,6 +51,8 @@ INCLUDES = -I. \
 # Optional libgsf support is enabled by LIBGSF_PATH variable
 # E.g. "make LIBGSF_PATH=/usr/local"
 ifndef LIBGSF_PATH
+DEPS:=$(filter-out %/OMGSFStructuredStorage.d,$(DEPS))
+DEPS:=$(filter-out %/OMGSFxMSSStoredObjectFactory.d,$(DEPS))
 CXXOBJS:=$(filter-out %/OMGSFStructuredStorage.o,$(CXXOBJS))
 CXXOBJS:=$(filter-out %/OMGSFxMSSStoredObjectFactory.o,$(CXXOBJS))
 endif
