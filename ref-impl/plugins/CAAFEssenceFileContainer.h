@@ -70,7 +70,7 @@ public:
   STDMETHOD (GetPluggableID)(aafUID_t *result);
   STDMETHOD (GetPluginDescriptorID)(aafUID_t *result);
 
-  STDMETHOD (GetPluggableDefinition)(IAAFDictionary *dict, IAAFPluggableDef **def);
+  STDMETHOD (GetDefinitionObject)(IAAFDictionary *dict, IAAFDefObject **def);
 
   STDMETHOD (GetDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
 

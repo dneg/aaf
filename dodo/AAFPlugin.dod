@@ -36,7 +36,7 @@ AD_XMETHOD1(GetPluggableID,
 			pPluginID,
 			The unique media object id,
 
-			This method returns the unique ID of the AAFPluggableDef associated with this Plugin.
+			This method returns the unique ID of the AAFDefObject associated with this Plugin.
   //
   // Succeeds if all of the following are true:
   // - the pPluginID pointer is valid.
@@ -77,7 +77,7 @@ AD_XMETHOD1(GetPluginDescriptorID,
   // AAFRESULT_NULL_PARAM
   //   - pPluginID arg is NULL.)
 
-AD_XMETHOD2(GetPluggableDefinition,
+AD_XMETHOD2(GetDefinitionObject,
 			[in],
 			objIn,
 			AAFDictionary,
@@ -85,18 +85,18 @@ AD_XMETHOD2(GetPluggableDefinition,
 			The dictionary to use when creating the definition,
 			[out],
 			objOut,
-			AAFPluggableDef,
-			pPluggableDef,
+			AAFDefObject,
+			pDefObject,
 			The interface of the pluggable definition,
 
-			This method manufactures a pluggable definition of the correct
+			This method manufactures a definition object of the correct
   // class for this plugin\, and fills in the values.  You must call QueryInterface
   // on the result in order to find the corret interface.
   //
   // Succeeds if all of the following are true:
-  // - the pPluggableDef pointer is valid.
+  // - the pDefObject pointer is valid.
   // 
-  // If this method fails nothing will be written to *pPluggableDef.
+  // If this method fails nothing will be written to *pDefObject.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -106,7 +106,7 @@ AD_XMETHOD2(GetPluggableDefinition,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pPluggableDef arg is NULL.)
+  //   - pDefObject arg is NULL.)
 
 AD_XMETHOD2(GetDescriptor,
 			[in],
