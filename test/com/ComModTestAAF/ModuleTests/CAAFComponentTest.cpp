@@ -53,6 +53,16 @@ static const	aafMobID_t	TEST_referencedMobID =
 {0xc2fff2f0, 0x03fd, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
 
+namespace {
+
+const aafCharacter* AttributeNames[]  = { L"Star Count", L"Mob Count" };
+const aafCharacter* AttributeValues[] = { L"Billions and Billions", L"Thousands and Thousands" };
+
+const aafCharacter* CommentNames[]   = { L"Component Comment A Name", L"Component Comment B Name" };
+const aafCharacter* CommentValues[] = { L"Component Comment A Value", L"Component Comment B Value" };
+
+};
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -81,17 +91,72 @@ inline void checkExpression(bool expression, HRESULT r)
 #define TEST_DDEF	DDEF_Sound
 #define TEST_LENGTH	42L
 
+
+void CheckNameValuePairs( IEnumAAFTaggedValues* pEnum, 
+			  const aafCharacter* nameArray[], 
+			  const aafCharacter* valueArray[],
+			  int nameValArraySize )
+{			  
+  // "name" is 500 chars long... sized more than
+  // large enough for a simple test.
+  aafCharacter strbuf[500];
+  int count = 0;
+  HRESULT atthr = AAFRESULT_SUCCESS;
+
+  IAAFTaggedValue* pTagVal = 0;
+  for( atthr = pEnum->NextOne( &pTagVal );
+       atthr == AAFRESULT_SUCCESS;
+       atthr = pEnum->NextOne( &pTagVal ) ) {
+    
+    /// check the name
+
+    aafUInt32 bufLen = 0;
+    checkResult( pTagVal->GetNameBufLen(&bufLen) );
+    
+    checkExpression( count < nameValArraySize, AAFRESULT_TEST_FAILED );
+    checkResult( pTagVal->GetName( strbuf, bufLen ) );
+    checkExpression( wcscmp(strbuf, nameArray[count] ) == 0, AAFRESULT_TEST_FAILED );
+    
+    
+    // check the value, 
+    
+    IAAFTypeDef* pTypeDef = NULL;
+    checkResult( pTagVal->GetTypeDefinition( &pTypeDef ) );
+    // It should be a string.
+    IAAFTypeDefString* pTDString = NULL;
+    checkResult( pTypeDef->QueryInterface( IID_IAAFTypeDefString, reinterpret_cast<void**>(&pTDString) ) );
+    checkResult( pTagVal->GetValue( sizeof(strbuf),
+				    reinterpret_cast<aafDataBuffer_t>(strbuf), &bufLen ) );
+    checkExpression( wcscmp( valueArray[count], strbuf ) == 0, AAFRESULT_TEST_FAILED );
+    
+    
+    pTypeDef->Release();
+    pTypeDef = NULL;
+    
+    pTDString->Release();
+    pTDString = NULL;
+    
+    pTagVal->Release();
+    pTagVal = NULL;
+    
+    count++;
+  }
+
+  checkExpression( count == nameValArraySize, AAFRESULT_TEST_FAILED );
+}
+
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	// IAAFSession*				pSession = NULL;
 	IAAFFile*					pFile = NULL;
 	IAAFHeader*					pHeader = NULL;
-  IAAFDictionary*  pDictionary = NULL;
+	IAAFDictionary*  pDictionary = NULL;
 	IAAFMob*					pMob = NULL;
 	IAAFMob*					pReferencedMob = NULL;
 	IAAFTimelineMobSlot*		newSlot = NULL;
 	IAAFComponent*				comp = NULL;
 	IAAFSegment*				seg = NULL;
+	IAAFComponent2*             pComp2 = NULL;
 	IAAFDataDef *               pDataDef = 0;
 	aafLength_t					testLength = TEST_LENGTH;
 	bool bFileOpen = false;
@@ -167,6 +232,19 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		checkResult(pHeader->AddMob(pMob));
 		checkResult(pHeader->AddMob(pReferencedMob));
+
+
+
+		// Get the IAAFComponent2 interface from the
+		// SourceClip object and test the attribute and user
+		// comment methods.
+		checkResult( seg->QueryInterface( IID_IAAFComponent2, reinterpret_cast<void**>(&pComp2) ) );
+		checkResult( pComp2->AppendAttribute( AttributeNames[0], AttributeValues[0] ) );
+		checkResult( pComp2->AppendAttribute( AttributeNames[1], AttributeValues[1] ) );
+		checkResult( pComp2->AppendComment( CommentNames[0], CommentValues[0] ) );
+		checkResult( pComp2->AppendComment( CommentNames[1], CommentValues[1] ) );
+
+
 	}
   catch (HRESULT& rResult)
   {
@@ -180,6 +258,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		newSlot = 0;
 	  }
 
+	if (pComp2)
+	  {
+		pComp2->Release();
+		pComp2 = 0;
+	  }
 	if (seg)
 	  {
 		seg->Release();
@@ -250,6 +333,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFSegment*				pSegment = NULL;
 	IAAFComponent*				comp = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
+	IAAFComponent2*                         pComp2 = NULL;
 	IAAFDataDef *               pDataDef = 0;
 	IAAFDefObject *             pDefObj = 0;
 	aafLength_t					testLength;
@@ -289,11 +373,16 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 				checkResult(pMob->GetSlots(&pSlotIter));
 				while (AAFRESULT_SUCCESS == pSlotIter->NextOne(&pSlot))
 				{
-					// The segment should be a source clip...
+					// The segment should be a source clip, and should
+				        // support IAAFComponent2.
 					checkResult(pSlot->GetSegment(&pSegment));
 					checkResult(pSegment->QueryInterface (IID_IAAFComponent,
 						(void **)&comp));
-					checkResult(comp->GetDataDef (&pDataDef));
+					checkResult(pSegment->QueryInterface (IID_IAAFComponent2,
+						(void **)&pComp2));
+					checkResult(pSegment->QueryInterface (IID_IAAFSourceClip,
+						(void **)&pSourceClip));
+					checkResult(pComp2->GetDataDef (&pDataDef));
 					checkResult(pDataDef->QueryInterface (IID_IAAFDefObject,
 						(void **)&pDefObj));
 					checkResult(pDefObj->GetAUID (&testUID));
@@ -302,12 +391,34 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 					pDefObj->Release ();
 					pDefObj = 0;
 					checkExpression(memcmp(&testUID, &checkUID, sizeof(testUID)) == 0, AAFRESULT_TEST_FAILED);
-					checkResult(comp->GetLength (&testLength));
+					checkResult(pComp2->GetLength (&testLength));
 					checkExpression(TEST_LENGTH == testLength, AAFRESULT_TEST_FAILED);
+
+
+					// Verify the attributes and comments.
+					IEnumAAFTaggedValues* pEnumComments = NULL;
+					checkResult( pComp2->GetComments( &pEnumComments ) );
+					CheckNameValuePairs( pEnumComments, CommentNames, CommentValues, 
+							     sizeof(CommentNames)/sizeof(CommentNames[0]) );
+					pEnumComments->Release();
+					pEnumComments = NULL;
+
+
+					IEnumAAFTaggedValues* pEnumAttributes = NULL;
+					checkResult( pComp2->GetAttributes( &pEnumAttributes ) );
+					CheckNameValuePairs( pEnumAttributes, AttributeNames, AttributeValues, 
+							     sizeof(AttributeNames)/sizeof(AttributeNames[0]) );
+					pEnumAttributes->Release();
+					pEnumAttributes = NULL;
+
 					comp->Release();
 					comp = NULL;
 					pSegment->Release();
 					pSegment = NULL;
+					pSourceClip->Release();
+					pSourceClip = NULL;
+					pComp2->Release();
+					pComp2 = NULL;
 					
 					pSlot->Release();
 					pSlot = NULL;
