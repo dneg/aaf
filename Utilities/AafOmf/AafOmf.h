@@ -104,7 +104,7 @@ public:
 	HRESULT GetUserInput(int argc, char* argv[]);
 	HRESULT OpenInputFile( void );
 	HRESULT OpenOutputFile( void );
-	aafBool IsOMFFile(char* pFileName);
+	aafBool IsOMFFile(FILE* pStream);
 	HRESULT OMFFileOpen( char* pFileName );
 	HRESULT	TOCFileCreate( void ); 
 	void OMFFileClose( void );
@@ -115,13 +115,15 @@ public:
 	HRESULT ConvertOMFHeader( void );
 	HRESULT ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj);
 	HRESULT ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
-	HRESULT ParseOMFMOBObject( OMF2::omfObject_t obj );
 	HRESULT ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob );
-	HRESULT ConvertOMFCompositionObject( OMF2::omfObject_t obj );
-	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj );
-	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj );
-	HRESULT ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob );
-	HRESULT ConvertOMFSequence( OMF2::omfObject_t obj, IAAFSequence* pSequence );
+	HRESULT ConvertOMFCompositionObject( OMF2::omfObject_t obj,IAAFCompositionMob* pCompMob );
+	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj, IAAFMasterMob* pMasterMob );
+	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj, IAAFSourceMob* pSourceMob );
+	HRESULT TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob );
+	HRESULT ProcessOMFComponent( OMF2::omfObject_t obj, IAAFSegment** ppSegment );
+	HRESULT TraverseOMFComponent( OMF2::omfObject_t obj );
+	HRESULT	ConvertOMFSequence( OMF2::omfObject_t sequence, IAAFSequence* pSequence);
+	HRESULT ConvertOMFComponentProperties(OMF2::omfObject_t sequence, IAAFComponent* pComponent);
 
 	char*					pProgramName;
 
