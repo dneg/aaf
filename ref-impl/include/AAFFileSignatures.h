@@ -28,20 +28,6 @@
 
 // AAF (and MXF) file signatures as byte streams.
 
-const aafInt8 aafObjectModelDevelopmentVersion = 0;
-
-// Development versions start at -1 and count down. Version 0
-// indicates a released version.
-
-// If you change aafObjectModelDevelopmentVersion above you must also
-// change the signatures below (a program is available).
-
-// The aafObjectModelDevelopmentVersion appears in the signatures as
-// follows
-//   - Byte 13 of the binary signatures.
-//   - Bytes 73 (most significant) and 74 (least significant) of
-//     the text signatures.
-
 // AAF files encoded as structured storage (binary).
 //
 const aafUInt8 aafFileSignatureAafSSBinary[] = {
