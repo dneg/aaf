@@ -51,6 +51,8 @@ OMStoredObjectFactory::~OMStoredObjectFactory(void)
 
   delete [] _name;
   _name = 0;
+  delete [] _description;
+  _description = 0;
 }
 
   // @mfunc The key used to identify the encoding of
