@@ -108,7 +108,7 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplAAFLocator	*obj = NULL;
 
 	_locators.getSize(siz);
-	for(siz-1; n >= 0; n--)
+	for(n = siz-1; n >= 0; n--)
 	{
 		_locators.getValueAt(obj, n);
 		_locators.setValueAt(obj, n+1);
