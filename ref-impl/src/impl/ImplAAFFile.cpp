@@ -81,10 +81,8 @@ static const aafUInt32 sCurrentAAFObjectModelVersion = 0;
 
 // this is the installation default. aafFileKindAafSSBinary set to MSS, SSS or other in AAFFileKinds.h
 #define AAFSSEncoding ENCODING(aafFileKindAafSSBinary)
-#define AAFSSAltEncoding ENCODING(aafFileKindAafSSAlternate)
 //NOTE: add 4k encoding
 #define AAF4KEncoding ENCODING(aafFileKindAaf4KBinary)
-#define AAF4KAltEncoding ENCODING(aafFileKindAaf4KAlternate)
 
 
 // local function for simplifying error handling.
@@ -117,7 +115,6 @@ static bool areAllModeFlagsDefined (aafUInt32 modeFlags)
 	AAF_FILE_MODE_UNBUFFERED |
 	AAF_FILE_MODE_RECLAIMABLE |
 	AAF_FILE_MODE_USE_LARGE_SS_SECTORS |
-	AAF_FILE_MODE_USE_ALTERNATE_LIBRARY |
 	AAF_FILE_MODE_CLOSE_FAIL_DIRTY |
 	AAF_FILE_MODE_DEBUG0_ON |
 	AAF_FILE_MODE_DEBUG1_ON;
@@ -139,10 +136,9 @@ static bool areAllModeFlagsDefined (aafUInt32 modeFlags)
 //
 static bool areAllModeFlagsSupported (aafUInt32 modeFlags)
 {
-	//NOTE: Eager loading included for test purposes
-	// similarly Alternate library
+	//NOTE: Eager loading and large sector support included
   static const aafUInt32 kSupportedFlags =
-	AAF_FILE_MODE_USE_LARGE_SS_SECTORS | AAF_FILE_MODE_EAGER_LOADING | AAF_FILE_MODE_USE_ALTERNATE_LIBRARY;
+	AAF_FILE_MODE_USE_LARGE_SS_SECTORS | AAF_FILE_MODE_EAGER_LOADING;
 
   if (modeFlags & (~kSupportedFlags))
 	{
@@ -598,17 +594,11 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		//NOTE: Depending on LARGE sectors flag set encoding 
 		if (modeFlags & AAF_FILE_MODE_USE_LARGE_SS_SECTORS)
 		{
-			if (modeFlags & AAF_FILE_MODE_USE_ALTERNATE_LIBRARY)
-				aafFileEncoding	= AAF4KEncoding;
-			else
-				aafFileEncoding	= AAF4KAltEncoding;
+			aafFileEncoding	= AAF4KEncoding;
 		}
 		else
 		{
-			if (modeFlags & AAF_FILE_MODE_USE_ALTERNATE_LIBRARY)
-				aafFileEncoding	= AAFSSAltEncoding;
-			else
-				aafFileEncoding	= AAFSSEncoding;
+			aafFileEncoding	= AAFSSEncoding;
 		}
 		
 
