@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "aaf2dot"=.\aaf2dot\aaf2dot.dsp - Package Owner=<4>
+Project: "aaf2dot"=".\aaf2dot\aaf2dot.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -18,7 +18,22 @@ Package=<4>
 
 ###############################################################################
 
-Project: "axLib"=..\..\..\examples2\axLib\axLib.dsp - Package Owner=<4>
+Project: "aafmeta2dot"=".\aafmeta2dot\aafmeta2dot.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name axLib
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "axLib"="..\..\..\examples2\axLib\axLib.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
