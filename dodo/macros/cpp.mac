@@ -1879,16 +1879,18 @@ AD_CLASS_END\
 // %02
 AAFRESULT STDMETHODCALLTYPE 
   .this-module::%01 (
-    // Class identifier (AUID) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    const aafUID_t & id,
+    // Class definition of the stored object to be created.
+    AAFClassDef * pClassDef,
 
     // Address of output variable that receives the 
     // object pointer requested in pAUID
     AAFObject ** ppvObject)
 {
   AAFRESULT result = AAFRESULT_SUCCESS;
+
+  // BobT NOTE 12/21/1999! This won't compile since we've changed the
+  // class ID from AUID to pointer-to-class-def.  If we ever use these
+  // things (that is C++ api) again, we'll have to fix.
 
   // Validate the input arguments.
   if (NULL == pAUID || NULL == ppvObject)

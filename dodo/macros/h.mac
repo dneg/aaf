@@ -1510,10 +1510,8 @@ AD_CLASS_END\
   // 
   virtual AAFRESULT STDMETHODCALLTYPE 
   %01 (
-    // Class identifier (AUID) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    const aafUID_t & id,
+    // Class definition of the stored object to be created.
+	AAFClassDef * pClassDef,
 
     // Address of output variable that receives the 
     // object pointer requested in pAUID

@@ -1196,20 +1196,18 @@ AD_CLASS_BEGIN\
 // %02
 AAFRESULT STDMETHODCALLTYPE 
   Impl.this-module::%01 (
-    // Class identifier (AUID) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    const aafUID_t & id,
+    // Class definition of the stored object to be created.
+    ImplAAFClassDef * pClassDef,
 
     // Address of output variable that receives the 
-    // object pointer requested in id
+    // object pointer requested in pClassDef
     ImplAAFObject ** ppvObject)
 {
   if (NULL == ppvObject)
     return AAFRESULT_NULL_PARAM;
   
   // Look for the object in the built-in base class factory.
-  *ppvObject = ImplAAFBaseClassFactory::CreateInstance(&id);
+  *ppvObject = ImplAAFBaseClassFactory::CreateInstance(pClassDef);
 
   if (NULL == *ppvObject)
   {

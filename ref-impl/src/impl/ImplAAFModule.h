@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -125,7 +125,7 @@ STDAPI ImplAAFFileOpenExistingRead (
   // Null-terminated string containing name of filesystem file to be
   // opened for reading.  Filename must be in a form that would be
   // acceptable to StgOpenStorage() for this platform.
-  /*[in, string]*/ wchar_t *  pFileName,
+  /*[in, string]*/ const aafCharacter *  pFileName,
 
   // File open mode flags.  May be any of the following ORed together.
   // All other bits must be set to zero.
@@ -198,7 +198,7 @@ STDAPI ImplAAFFileOpenExistingModify (
   // Null-terminated string containing name of filesystem file to be
   // opened for modification.  Filename must be in a form that would
   // be acceptable to StgOpenStorage() for this platform.
-  /*[in, string]*/ wchar_t *  pFileName,
+  /*[in, string]*/ const aafCharacter *  pFileName,
 
   // File open mode flags.  May be any of the following ORed together.
   // All other bits must be set to zero.
@@ -267,7 +267,7 @@ STDAPI ImplAAFFileOpenNewModify (
   // Null-terminated string containing name of filesystem file to be
   // opened for modification.  Filename must be in a form that would
   // be acceptable to StgOpenStorage() for this platform.
-  /*[in, string]*/ wchar_t *  pFileName,
+  /*[in, string]*/ const aafCharacter *  pFileName,
 
   // File open mode flags.  May be any of the following ORed together.
   // All other bits must be set to zero.

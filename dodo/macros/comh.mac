@@ -1558,10 +1558,8 @@ AD_CLASS_END\
 #startm AD_DICTIONARY_FACTORY 02
   // %02 
   STDMETHOD (%01)
-   (// Class identifier (AUID) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    /*[in, ref]*/ aafUID_constref id,
+   (// Class definition of the stored object to be created.
+    /*[in]*/ IAAFClassDef * pClassDef,
 
     // Reference to the identifier of the interface
     /*[in, ref]*/ REFIID riid,

@@ -1416,10 +1416,8 @@ AD_CLASS_END\
   // %02 
   // 
   HRESULT %01(
-    // Class identifier (id) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    [in, ref] aafUID_constref id,
+    // Class definition of the stored object to be created.
+    [in] IAAFClassDef * pClassDef,
 
     // Reference to the identifier of the interface
     [in, ref] REFIID riid,
@@ -1567,8 +1565,8 @@ cpp_quote("")\
   // %07
   // 
   // STDAPI %01 (
-    //  %06
-    //  %02 .%03-adornment%04 .%03-indirection %05);
+    // %06
+    // %02 .%03-adornment%04 .%03-indirection %05);
 
 cpp_quote("STDAPI %01 (.%03-adornment%04 .%03-indirection %05);")
 cpp_quote("")\
@@ -1598,11 +1596,11 @@ cpp_quote("")\
   // %12
   // 
   // STDAPI %01 (
-    //  %06
-    //  %02 .%03-adornment%04 .%03-indirection %05,
+    // %06
+    // %02 .%03-adornment%04 .%03-indirection %05,
     //
-    //  %11
-    //  %07 .%08-adornment%09 .%08-indirection %10);
+    // %11
+    // %07 .%08-adornment%09 .%08-indirection %10);
 
 cpp_quote("STDAPI %01 (")
 cpp_quote("          .%03-adornment%04 .%03-indirection %05,")

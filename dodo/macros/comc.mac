@@ -2563,10 +2563,8 @@ AD_CLASS_END\
 //
 // %02
 HRESULT C.this-module::%01
-   (// Class identifier (AUID) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
-    /*[in, ref]*/ aafUID_constref id,
+   (// Class definition of the stored object to be created.
+    /*[in]*/ IAAFClassDef * pClassDef,
 
     // Reference to the identifier of the interface
     /*[in, ref]*/ REFIID riid,
@@ -2591,9 +2589,28 @@ HRESULT C.this-module::%01
     return AAFRESULT_INTERNAL_ERROR;
   }
 
+  //
+  // set up for pClassDef
+  //
+  ImplAAFClassDef * internalpClassDef = NULL;
+  if (pClassDef)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pClassDef->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpClassDef = static_cast<ImplAAFClassDef*>(arg);
+      assert (internalpClassDef);
+    }
+
   // Create the corresponding impl object.
   ImplAAFObject *pObject = NULL;
-  result = pImpl.this-module->CreateInstance(id, &pObject);
+  result = pImpl.this-module->CreateInstance(internalpClassDef, &pObject);
   if (AAFRESULT_SUCCESS != result)
     return result;
 
