@@ -192,7 +192,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetDictionary
-        (ImplAAFDictionary ** ppDictionary);  //@parm [out,retval] The AAF Dictionary
+        (ImplAAFDictionary ** ppDictionary) const;  //@parm [out,retval] The AAF Dictionary
 
 
 
@@ -306,7 +306,7 @@ AAFRESULT SetModified(void);		// To NOW
 private:
 	// These are private accessor methods.
 	ImplAAFContentStorage *GetContentStorage(void);
-	ImplAAFDictionary *GetDictionary(void);
+	ImplAAFDictionary *GetDictionary(void) const;
 
 private:
 
