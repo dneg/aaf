@@ -1,4 +1,4 @@
-#
+\#
 #
 # Advanced Authoring Format
 #
@@ -9,17 +9,17 @@
 # aaf object:
 AAFPERSISTENTOBJECTS = \
 	AAFAttribute \
-	AAFClassDefinition \
+	AAFClassDef \
 	AAFDictionary \
 	AAFComponent \
 	AAFCompositionMob \
 	AAFConstValue \
-	AAFControlCodeDefinition \
+	AAFControlCodeDef \
 	AAFControlPoint \
-	AAFDataDefinition \
-	AAFDefinitionObject \
+	AAFDataDef \
+	AAFDefObject \
 	AAFEdgecode \
-	AAFEffectDefinition \
+	AAFEffectDef \
 	AAFEffectInvocation \
 	AAFFiller \
 	AAFFindSourceInfo \
@@ -42,7 +42,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFParameter \
 	AAFParameterSlot \
 	AAFPulldown \
-	AAFPropertyDefinition \
+	AAFPropertyDef \
 	AAFReferenceValue \
 	AAFScopeReference \
 	AAFSegment \
@@ -57,7 +57,7 @@ AAFPERSISTENTOBJECTS = \
 	AAFTimecodeStream12M \
 	AAFTimelineMobSlot \
 	AAFTransition \
-	AAFTypeDefinition \
+	AAFTypeDef \
 	AAFUnixLocator \
 	AAFVaryingValue \
 	AAFWindowsLocator
@@ -69,13 +69,13 @@ AAFNONPERSISTENTOBJECTS = \
 	AAFFile \
 	AAFMedia \
 	EnumAAFAttributes \
-	EnumAAFClassDefinitions \
+	EnumAAFClassDefs \
 	EnumAAFComponents \
-	EnumAAFControlCodeDefinitions \
+	EnumAAFControlCodeDefs \
 	EnumAAFControlPoints \
-	EnumAAFDataDefinitions \
-	EnumAAFDefinitions \
-	EnumAAFEffectDefinitions \
+	EnumAAFDataDefs \
+	EnumAAFDefs \
+	EnumAAFEffectDefs \
 	EnumAAFIdentifications \
 	EnumAAFLocators \
 	EnumAAFMedia \
@@ -83,10 +83,10 @@ AAFNONPERSISTENTOBJECTS = \
 	EnumAAFMobSlots \
 	EnumAAFMobs \
 	EnumAAFParameterSlots \
-	EnumAAFPropertyDefinitions \
+	EnumAAFPropertyDefs \
 	EnumAAFReferenceValues \
 	EnumAAFSegments \
-	EnumAAFTypeDefinitions 
+	EnumAAFTypeDefs 
 
 
 # The list of standard dodo targets.
