@@ -494,15 +494,17 @@ static void dumpProperties(IStorage* storage,
 static void openStorage(char* fileName, IStorage** storage);
 static void dumpFileHex(char* fileName);
 static void dumpFile(char* fileName);
-static void dumpFileProperties(char* fileName);
+static void dumpFileProperties(char* fileName, const char* label);
 static FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
-static bool readSignature(const wchar_t* fileName,
-                          unsigned char* signature,
-                          size_t signatureSize);
+static int readSignature(FILE* file,
+                         unsigned char* signature,
+                         size_t signatureSize);
 static bool isRecognizedSignature(unsigned char* signature,
                                   size_t signatureSize,
                                   GUID* fileKind);
-static bool isAnAAFFile(const wchar_t* fileName, GUID* fileKind);
+static int isAnAAFFile(const wchar_t* fileName,
+                       GUID* fileKind,
+                       bool* fileIsAAFFile);
 static void usage(void);
 
 static void printInteger(const size_t value, char* label);
@@ -2410,7 +2412,7 @@ void dumpFileHex(char* fileName)
 
   infile = fopen(fileName, "rb");
   if (infile != NULL) {
-  
+    cout << "Hex dump." << endl;  
     while((ch = fgetc(infile)) != EOF) {
       dumper.print((char)ch);
     }
@@ -2441,7 +2443,8 @@ void dumpFile(char* fileName)
   if (!check(fileName, result)) {
     fatalError("dumpFile", "IStorage::Stat() failed.");
   }
-  
+
+  cout << "Raw dump." << endl;  
   dumpStorage(storage, &statstg, "/", 1);
   
   // Having called Stat() specifying STATFLAG_DEFAULT
@@ -2456,7 +2459,7 @@ void dumpFile(char* fileName)
   printStatistics();
 }
 
-void dumpFileProperties(char* fileName)
+void dumpFileProperties(char* fileName, const char* label)
 {
   resetStatistics();
 
@@ -2467,6 +2470,7 @@ void dumpFileProperties(char* fileName)
     fatalError("dumpFileProperties", "openStorage() failed.");
   }
 
+  cout << label << endl;
   dumpObject(storage, "/", 1);
     
   // Releasing the last reference to the root storage closes the file.
@@ -2502,25 +2506,19 @@ FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
 // Read the file signature. Assumes that no valid file may be shorter
 // than the longest signature.
 //
-bool readSignature(const wchar_t* fileName,
-                   unsigned char* signature,
-                   size_t signatureSize)
+int readSignature(FILE* file,
+                  unsigned char* signature,
+                  size_t signatureSize)
 {
-  bool result = false;
+  int result = 0;
   unsigned char* sig = new unsigned char[signatureSize];
 
-  FILE* f = wfopen(fileName, L"rb");
-  if (f != 0) {
-    size_t status = fread(sig, signatureSize, 1, f);
-    if (status == 1) {
-      memcpy(signature, sig, signatureSize);
-      result = true;
-    } else {
-      result = false;
-    }
-    fclose(f);
+  size_t status = fread(sig, signatureSize, 1, file);
+  if (status == 1) {
+    memcpy(signature, sig, signatureSize);
+    result = 0;
   } else {
-    result = false;
+    result = 1;  // Can't read signature
   }
 
   delete [] sig;
@@ -2565,18 +2563,25 @@ bool isRecognizedSignature(unsigned char* signature,
 
 // Does the given file purport to be an AAF file ?
 //
-static bool isAnAAFFile(const wchar_t* fileName, CLSID* fileKind)
+static int isAnAAFFile(const wchar_t* fileName,
+                       CLSID* fileKind,
+                       bool* fileIsAAFFile)
 {
-  bool result = false;
+  int result = 0;
   unsigned char* signature = new unsigned char[maxSignatureSize];
-  if (readSignature(fileName, signature, maxSignatureSize)) {
-    if (isRecognizedSignature(signature, maxSignatureSize, fileKind)) {
-      result = true;
+  FILE* f = wfopen(fileName, L"rb");
+  if (f != 0) {
+    int status = readSignature(f, signature, maxSignatureSize);
+    if (status == 0) {
+      if (isRecognizedSignature(signature, maxSignatureSize, fileKind)) {
+        * fileIsAAFFile = true;
+      }
     } else {
-      result = false;
+      result = 1; // Can't read signature
     }
+    fclose(f);
   } else {
-    result = false;
+    result = 1; // Can't open file
   }
   delete [] signature;
   return result;
@@ -2976,55 +2981,61 @@ int main(int argumentCount, char* argumentVector[])
   switch (option) {
   case hexadecimal:
     for (i = flagCount + 1; i < argumentCount; i++) {
-      cout << "Hex dump." << endl;
       dumpFileHex(argumentVector[i]);
     }
     break;
 
   case raw:
     for (i = flagCount + 1; i < argumentCount; i++) {
-      cout << "Raw dump." << endl;
       dumpFile(argumentVector[i]);
     }
     break;
 
   case property:
     for (i = flagCount + 1; i < argumentCount; i++) {
-      cout << "Property dump." << endl;
-      dumpFileProperties(argumentVector[i]);
+      dumpFileProperties(argumentVector[i], "Property dump.");
     }
     break;
 
   case aaf:
     for (i = flagCount + 1; i < argumentCount; i++) {
-      cout << "AAF property dump." << endl;
       wchar_t wcFileName[FILENAME_MAX];
       size_t status = mbstowcs(wcFileName, argumentVector[i], FILENAME_MAX);
       ASSERT("Convert succeeded", status != (size_t)-1);
       CLSID x = {0};
-      if (isAnAAFFile(wcFileName, &x)) {
-        if ((memcmp(&x, &aafFileKindAafSSBinary, sizeof(CLSID)) == 0) ||
-            (memcmp(&x, &aafFileKindMxfSSBinary, sizeof(CLSID)) == 0)) {
-          dumpFileProperties(argumentVector[i]);
-        } else if ((memcmp(&x, &aafFileKindAafXmlText, sizeof(CLSID)) == 0) ||
-                   (memcmp(&x, &aafFileKindMxfXmlText, sizeof(CLSID)) == 0)) {
-          cerr << programName
-               << ": \""
-               << argumentVector[i]
-               << "\" is an XML format AAF file."
-              << endl;
+      bool b = false;
+      int s = isAnAAFFile(wcFileName, &x, &b);
+      if (s == 0) {
+        if (b) {
+          if ((memcmp(&x, &aafFileKindAafSSBinary, sizeof(CLSID)) == 0) ||
+              (memcmp(&x, &aafFileKindMxfSSBinary, sizeof(CLSID)) == 0)) {
+            dumpFileProperties(argumentVector[i], "AAF property dump.");
+          } else {
+            if ((memcmp(&x, &aafFileKindAafXmlText, sizeof(CLSID)) == 0) ||
+                (memcmp(&x, &aafFileKindMxfXmlText, sizeof(CLSID)) == 0)) {
+              cerr << programName
+                   << ": \""
+                   << argumentVector[i]
+                   << "\" is an XML format AAF file."
+                   << endl;
+            } else {
+              cerr << programName
+                   << ": Error : \""
+                   << argumentVector[i]
+                   << "\" is not a recognized kind of AAF file."
+                  << endl;
+            }
+          }
         } else {
           cerr << programName
                << ": Error : \""
                << argumentVector[i]
-               << "\" is not a recognized kind of AAF file."
-              << endl;
+               << "\" is not an AAF file."
+               << endl;
         }
       } else {
-        cerr << programName
-             << ": Error : \""
-             << argumentVector[i]
-             << "\" is not an AAF file."
+        cerr << programName <<": Error: "
+             << "File \"" << argumentVector[i] << "\" not found."
              << endl;
       }
     }
