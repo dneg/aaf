@@ -1536,20 +1536,21 @@ void OMMSSStoredObject::save(OMPropertyId propertyId,
   TRACE("OMMSSStoredObject::save");
 
   // tag, key pid, key size, key
-  const size_t size = sizeof(tag) +
-                      sizeof(OMPropertyId) + sizeof(OMKeySize) + sizeof(id);
-  OMByte buffer[size];
-  OMByte* p = &buffer[0];
-  memcpy(p, &tag, sizeof(tag));
-  p += sizeof(tag);
-  memcpy(p , &keyPropertyId, sizeof(keyPropertyId));
-  p += sizeof(keyPropertyId);
-  OMKeySize keySize = sizeof(id);
-  memcpy(p, &keySize, sizeof(keySize));
-  p += sizeof(keySize);
-  memcpy(p, &id, sizeof(id));
+  OMPropertySize size = sizeof(OMPropertyTag) +
+                        sizeof(OMPropertyId) +
+                        sizeof(OMKeySize) +
+                        sizeof(OMUniqueObjectIdentification);
+  writeUInt16ToStream(_properties, tag, _reorderBytes);
+  writeUInt16ToStream(_properties, keyPropertyId, _reorderBytes);
+  OMUniqueObjectIdentification key = id;
+  OMKeySize keySize = sizeof(key);
+  writeUInt8ToStream(_properties, keySize);
+  writeUniqueObjectIdentificationToStream(_properties, key, _reorderBytes);
 
-  write(propertyId, storedForm, (void *)buffer, size);
+  // Index entry.
+  //
+  _index->insert(propertyId, storedForm, _offset, size);
+  _offset += size;
 }
 
   // @mfunc Save a collection (vector/set) of weak references.
@@ -2832,16 +2833,16 @@ void OMMSSStoredObject::save(OMStoredPropertySetIndex* index)
   // Write byte order flag.
   //
   ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
-  writeToStream(_properties, &_byteOrder, sizeof(_byteOrder));
+  writeUInt8ToStream(_properties, _byteOrder);
 
   // Write version number.
   //
   OMVersion version = currentVersion;
-  writeToStream(_properties, &version, sizeof(version));
+  writeUInt8ToStream(_properties, version);
 
   // Write count of entries.
   //
-  writeToStream(_properties, &entries, sizeof(entries));
+  writeUInt16ToStream(_properties, entries, _reorderBytes);
 
   // Write entries.
   //
@@ -2852,9 +2853,9 @@ void OMMSSStoredObject::save(OMStoredPropertySetIndex* index)
   size_t context = 0;
   for (size_t i = 0; i < entries; i++) {
     index->iterate(context, propertyId, type, offset, length);
-    writeToStream(_properties, &propertyId, sizeof(propertyId));
-    writeToStream(_properties, &type, sizeof(type));
-    writeToStream(_properties, &length, sizeof(length));
+    writeUInt16ToStream(_properties, propertyId, _reorderBytes);
+    writeUInt16ToStream(_properties, type, _reorderBytes);
+    writeUInt16ToStream(_properties, length, _reorderBytes);
   }
 
   streamSetPosition(_properties, 0);
