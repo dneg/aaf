@@ -44,6 +44,17 @@ AXFG_OP_FACTORY_DECLARATION_B(
   3,
   3 )
 
+AXFG_OP_FACTORY_DECLARATION_B(
+  MobSlotSet,
+  MobSlotSetName,
+  L"MobSlotSetName",
+  L"Set the mob slot name.",
+  L"MobSlotName slot_name",
+  L"",
+  3,
+  3 )
+
+
 MobSlotSet::~MobSlotSet()
 {}
 
@@ -61,10 +72,14 @@ void MobSlotSet::Execute( const std::vector<AxString>& argv )
 		AxString physNum = argv[2];
 		axSlot.SetPhysicalNum( AxStringUtil::strtol( physNum ) );
 	}
+	else if ( opName == L"MobSlotSetName" ) {
+		AxString name = argv[2];
+		axSlot.SetName( name );
+	}
 	else {
 		// This should never happen in a correct implementation.
 		// If it does, one of strings used in the above opName
-		// comparisons is probably wrong.
+		// comparisons does not match the factory name.
 		throw AxFGEx( L"bad implementation" );
 	}
 }

@@ -136,7 +136,32 @@ void AppendSlot::Execute( const std::vector<AxString>& argv )
 	axMob.AppendSlot( spSlot );
 }
 
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  SetMobName,           
+  L"SetMobName",
+  L"Set mob name.",
+  L"MobName mob_name",
+  L"MobName is a reference to an axFileGen object.  mob_name is the persistent AAF name.",
+  3,
+  3 ) 
+
+SetMobName::~SetMobName()
+{}
+
+void SetMobName::Execute( const std::vector<AxString>& argv )
+{
+	AxString mobName = argv[1];
+	AxString name    = argv[2];
+
+	IAAFMobSP spMob;
+	GetInstance( mobName ).GetCOM( spMob );
+	AxMob axMob( spMob );
+	axMob.SetName( name );
+}
 
 //=---------------------------------------------------------------------=
+
 
 } // end of namespace

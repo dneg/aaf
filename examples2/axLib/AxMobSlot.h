@@ -32,7 +32,7 @@ public:
 
 	aafSlotID_t GetSlotID();
 
-	void SetName( AxString name );
+	void SetName( const AxString& name );
 	void SetSegment( IAAFSegmentSP sp );
 	void SetPhysicalNum( aafUInt32 val );
 	void SetSlotID( aafSlotID_t val );

@@ -29,7 +29,7 @@ AxMobSlot::~AxMobSlot()
 {}
 
 
-void AxMobSlot::SetName( AxString name )
+void AxMobSlot::SetName( const AxString& name )
 {
 	CHECK_HRESULT( _spIaafMobSlot->SetName( name.c_str() ) );
 }

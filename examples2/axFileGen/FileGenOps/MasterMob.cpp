@@ -35,10 +35,10 @@ AXFG_OP(
   MasterMob,           
   L"MasterMob",
   L"Creates a new master mob and adds it to the file.",
-  L"FileName MobName",
-  L"Refererence the new mob using MobName.",
-  3,
-  3 ) 
+  L"FileName MobName mob_name",
+  L"MobName is your reference to the object.  mob_name is the persistent mob name",
+  4,
+  4 ) 
 
 MasterMob::~MasterMob()
 {}
@@ -47,14 +47,19 @@ void MasterMob::Execute( const std::vector<AxString>& argv )
 {
 	AxString fileName    = argv[1];
 	AxString mobName     = argv[2];
+	AxString name        = argv[3];
 
 	IAAFMasterMobSP spMasMob;
 	AxCreateInstance( DictionaryFromFileOp( fileName ), spMasMob );
 
 	AxMasterMob axMasMob( spMasMob );
 
+	// FIXME - Why does the composition mob initialize take a name,
+	// but the master mob doesn't???
 	axMasMob.Initialize();
 
+	axMasMob.SetName( name );
+	
 	AxHeader( HeaderFromFileOp(fileName) ).AddMob( axMasMob );
 
 	SetCOM( spMasMob );
