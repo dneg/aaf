@@ -618,15 +618,28 @@ Yes, we're sure.
   ?</P>
 No it really is a miracle :-) Seriously,<!-- <a href="../COMaaf.html"> see </a>[TBS - more detail needed on how we don't really use COM] --> 
 <P> OK. So what C++ features does the code use and which does it avoid ?</P>
-- Features we use - "bool" - class templates (including "typename") - static_cast&lt;&gt;, 
-dynamic_cast&lt;&gt;, const_cast&lt;&gt; and reinterpret_cast&lt;&gt; - Features 
-we have avoided - "mutable" - "namespace" - standard template library - class 
-type_info, typeid operator - function templates - class/function template specialization 
-- class/function template partial specialization - covariant virtual function 
-return types - unbound friend class/function template declarations - Other - note 
-that we do use wchar_t from &lt;stddef.h&gt; and the wcs functions (e.g. wcslen()) 
-from &lt;wchar.h&gt;. Since this is a relatively new addition to the ISO C libraries 
-it may raise portability issues. 
+Features we use
+<ul>
+<li> "bool"
+<li> class templates (including "typename")
+<li> static_cast&lt;&gt;, dynamic_cast&lt;&gt;, const_cast&lt;&gt;
+     and reinterpret_cast&lt;&gt;
+</ul>
+Features we have avoided
+<ul>
+<li> "mutable"
+<li> "namespace"
+<li> standard template library
+<li> class type_info, typeid operator
+<li> function templates, class/function template specialization,
+     class/function template partial specialization
+<li> covariant virtual function return types
+<li> unbound friend class/function template declarations
+<li> Other - note that we do use wchar_t from &lt;stddef.h&gt; and the wcs
+     functions (e.g. wcslen()) from &lt;wchar.h&gt;. Since this is a relatively
+     new addition to the ISO C libraries it may raise portability issues. 
+</ul>
+
 <HR>
 <P> I thought the AAF code was supposed to be portable, why does the code contain 
   references to IStorage and IStream ? Aren't those Windows specific things ?</P>
