@@ -144,7 +144,7 @@ const aafUID_t aafFileKindAaf4KAlternate = aafFileKindPathalogical_Value;
 #elif defined( OS_SOLARIS )
 // DEFAULT is SSS 512. MSS not available
 const aafUID_t aafFileKindAafSSBinary = aafFileKindAafSSSBinary_Value;
-const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSBinary_Value;
+const aafUID_t aafFileKindAafSSAlternate = aafFileKindAafSSSBinary_Value;
 // default 4k binary
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 const aafUID_t aafFileKindAaf4KAlternate = aafFileKindAafS4KBinary_Value;
