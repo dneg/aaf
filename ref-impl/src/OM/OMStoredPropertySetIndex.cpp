@@ -198,7 +198,7 @@ bool OMStoredPropertySetIndex::isValid(OMPropertyOffset baseOffset) const
       if (currentOffset != position) {
         result = false;  // gap or overlap
         break;
-	  }
+      }
       // this entry is valid, calculate the expected next position
       position = position + currentLength;
     }
