@@ -16,7 +16,7 @@
 #include "CAAFModuleTest.h"
 #endif
 
-#include <ostream.h>
+#include <iostream.h>
 #include <string.h>
 
 //
@@ -153,6 +153,11 @@ STDMETHODIMP CAAFModuleTest::Test
 		}
 	}
 	return hr;
+}
+
+HRESULT CAAFModuleTest::test()
+{
+	return S_OK;
 }
 
 
