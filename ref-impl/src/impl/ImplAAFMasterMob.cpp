@@ -3,6 +3,7 @@
 * Advanced Authoring Format                *
 *                                          *
 * Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
 
@@ -100,12 +101,14 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t	sourceMobID;
 	HRESULT		hr = AAFRESULT_SUCCESS;
 	ImplAAFMobSlot*	pMobSlot;
+	ImplAAFTimelineMobSlot* pTimelineMobSlot = NULL;
 	aafUID_t	DataDef;
 	ImplAAFSegment*	pSegment = NULL;
 	ImplAAFSourceClip*	pSrcClip = NULL;
 	aafSourceRef_t		ref;
 	aafPosition_t		zeroPos;
-	ImplAAFMobSlot	*pNewSlot = NULL;
+	ImplAAFTimelineMobSlot	*pNewTimelineSlot = NULL;
+	aafRational_t  editRate;
   ImplAAFDictionary *pDictionary = NULL;
 
 
@@ -119,6 +122,11 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pSourceMob->GetMobID(&sourceMobID));
 
 		CHECK(pSourceMob->FindSlotBySlotID(sourceSlotID, &pMobSlot));
+		pTimelineMobSlot = dynamic_cast<ImplAAFTimelineMobSlot *>(pMobSlot);
+		if (NULL == pTimelineMobSlot)
+			RAISE(AAFRESULT_SLOT_NOT_FOUND); // please use the correct error code!
+//		CHECK(pMobSlot->QueryInterface(IID_IAAFTimelineMobSlot,(void **) &pTimelineMobSlot));
+		CHECK(pTimelineMobSlot->GetEditRate(&editRate));
 
 		CHECK(pMobSlot->GetSegment(&pSegment));
 
@@ -148,29 +156,27 @@ AAFRESULT STDMETHODCALLTYPE
 		pDictionary = NULL;
 
 		CHECK(pSrcClip->Initialize(pDataDef, &slotLength, ref));
-		CHECK(AppendNewSlot(pSrcClip, masterSlotID, pSlotName, &pNewSlot));
+		CHECK(AppendNewTimelineSlot(editRate,pSrcClip, masterSlotID, pSlotName, 
+									zeroPos,&pNewTimelineSlot));
 
-		pNewSlot->ReleaseReference();
-		pNewSlot = NULL;
+		pNewTimelineSlot->ReleaseReference();
+		pNewTimelineSlot = NULL;
 
-		if(pSrcClip)
-			pSrcClip->ReleaseReference();
+		pSrcClip->ReleaseReference();
 		pSrcClip = NULL;
 	}
 	XEXCEPT
 	{
+		if(pNewTimelineSlot != NULL)
+			pNewTimelineSlot->ReleaseReference();
 		if(pSegment != NULL)
-		  pSegment->ReleaseReference();
-		pSegment = 0;
-		if(pNewSlot != NULL)
-		  pNewSlot->ReleaseReference();
-		pNewSlot = 0;
+			pSegment->ReleaseReference();
+		if(pMobSlot != NULL)
+			pMobSlot->ReleaseReference();
 		if(pSrcClip != NULL)
-		  pSrcClip->ReleaseReference();
-		pSrcClip = 0;
+			pSrcClip->ReleaseReference();
 		if(pDictionary != NULL)
-		  pDictionary->ReleaseReference();
-		pDictionary = 0;
+			pDictionary->ReleaseReference();
 	}
 	XEND;
 	return hr;
@@ -239,11 +245,9 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(info != NULL)
-		  info->ReleaseReference();
-		info = 0;
+			info->ReleaseReference();
 		if(mob != NULL)
-		  mob->ReleaseReference();
-		mob = 0;
+			mob->ReleaseReference();
 	}
 	XEND;
 
@@ -306,11 +310,9 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if(info != NULL)
-		  info->ReleaseReference();
-		info = 0;
+			info->ReleaseReference();
 		if(mob != NULL)
-		  mob->ReleaseReference();
-		mob = 0;
+			mob->ReleaseReference();
 	}
 	XEND;
 
@@ -693,26 +695,19 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 	XEXCEPT
 	{
 		if(slotIter != NULL)
-		  slotIter->ReleaseReference();
-		slotIter = 0;
+			slotIter->ReleaseReference();
 		if(fileSlotIter != NULL)
-		  fileSlotIter->ReleaseReference();
-		fileSlotIter = 0;
+			fileSlotIter->ReleaseReference();
 		if(fileSlot != NULL)
-		  fileSlot->ReleaseReference();
-		fileSlot = 0;
+			fileSlot->ReleaseReference();
 		if(slot != NULL)
-		  slot->ReleaseReference();
-		slot = 0;
+			slot->ReleaseReference();
 		if(fileSeg != NULL)
-		  fileSeg->ReleaseReference();
-		fileSeg = 0;
+			fileSeg->ReleaseReference();
 		if(seg != NULL)
-		  seg->ReleaseReference();
-		seg = 0;
+			seg->ReleaseReference();
 		if(fileMob != NULL)
-		  fileMob->ReleaseReference();
-		fileMob = 0;
+			fileMob->ReleaseReference();
 	}
 	XEND
 		
