@@ -1899,7 +1899,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(_codec->GetEssenceFormatList(&iResultFormat));	// !!!COM Dependency
+		CHECK(_codec->GetDefaultEssenceFormat(&iResultFormat));	// !!!COM Dependency
 		CHECK(iResultFormat->QueryInterface (IID_IAAFRoot, (void **)&iObj));
 		iResultFormat->Release();
 		iResultFormat = NULL;
