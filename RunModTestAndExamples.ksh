@@ -1,5 +1,6 @@
 #! C:/mksnt/sh.exe
 # Terry Skotz
+# modified by Tom Ransdell 15-DEC-1999.
 
 CHECK_DEBUG=0
 CHECK_RELEASE=0
@@ -169,14 +170,6 @@ VerifyFiles ()
 			CheckExitCode $Stat   "     $File  <- dump.exe reported error.  See ${File}.dump.log"
 			mv tempdump.log ${File}.dump.log
 		fi
-		RemoveIfExists ${File}.AAFDump.log
-		${UtilitiesDir}/AAFDump "$File" > tempdump.log
-		Stat=$?
-		print "  $Stat    AAFDump.exe"
-		if [ $Stat -ne 0 ]; then
-			CheckExitCode $Stat   "     $File  <- AAFDump.exe reported error.  See ${File}.AAFDump.log"
-			mv tempdump.log ${File}.AAFDump.log
-		fi
 
 		RemoveIfExists ${File}.CPDDump.log
 		${ExamplesDir}/ComPropDirectDump "$File" > tempdump.log
@@ -343,8 +336,8 @@ RunMainScript ()
 		cat ComPersonnelPluginWrite.txt | grep -v 'extensionPlugin\.aaf' > ComPersonnelPluginWrite1.txt
 		diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt
 		Stat=$?
-		CheckExitCode $Stat "diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt"
 		if [ Stat -ne 0 ]; then
+		    CheckExitCode $Stat "diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt"
 		    echo "Edit sources in ComExtensionWrite and ComPersonnelPluginWrite"
 		    echo "until diff ComExtensionWrite1.txt ComPersonnelPluginWrite1.txt"
 		    echo "detects no differences."
@@ -371,7 +364,7 @@ PrintExitCodes ()
 	if [ AAFWATCHDOG -eq 1 ]; then
 		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/AAFWatchDog/AAFWatchDog.log
 		print "\nAll Generated Test and Example files have been run thru the following programs:" >> D:/AAFWatchDog/AAFWatchDog.log
-		print "ComAAFInfo, dump, AAFDump, ComPropDirectDump, ComPropDirectAccess" >> D:/AAFWatchDog/AAFWatchDog.log
+		print "ComAAFInfo, dump, ComPropDirectDump, ComPropDirectAccess" >> D:/AAFWatchDog/AAFWatchDog.log
 	fi
 }
 
