@@ -39,6 +39,15 @@ IAAFMobSP AxContentStorage::LookupMob( const aafMobID_t& id )
 	return spIaafMob;
 }
 
+IAAFEssenceDataSP AxContentStorage::LookupEssenceData( const aafMobID_t& id )
+{
+	IAAFEssenceDataSP spIaafEssenceData;
+
+	CHECK_HRESULT( _spIaafContentStorage->LookupEssenceData( id, &spIaafEssenceData ) );
+
+	return spIaafEssenceData;
+}
+
 IEnumAAFMobsSP AxContentStorage::GetMobs(  const aafSearchCrit_t* pCriteria ) const
 {
     IEnumAAFMobsSP spIEnumAAFMobs;
