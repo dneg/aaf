@@ -33,9 +33,10 @@
 #include "OMStrongRefProperty.h"
 #include "OMDictionary.h"
 
-// @class Concrete sub-class of the abstract OMStorable for use as the
-//        root object in a file that may be managed by the Object Manager.
-//
+  // @class Concrete sub-class of the abstract OMStorable for use as the
+  //        root object in a file that may be managed by the Object Manager.
+  //   @base public | <c OMStorable>
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMRootStorable : public OMStorable {
 public:
 
