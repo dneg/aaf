@@ -450,14 +450,15 @@ int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2)
   return result;
 }
 
-// _wfopen() is in the W32 API on Windows 95, 98 and ME but with an
-// implementation that always fails. By default we use _wfopen() when
-// compiled on/for the W32 API, this can be overridden by defining
-// NO_W32_WFOPEN.
+// _wfopen() and _wremove() are in the W32 API on Windows 95, 98 and
+// ME but with an implementation that always fails. By default we use
+// _wfopen() when compiled on/for the W32 API, this can be overridden
+// by defining NO_W32_WFUNCS.
 
-#if !defined(NO_W32_WFOPEN)
+#if !defined(NO_W32_WFUNCS)
 #if defined(OM_OS_WINDOWS)
 #define W32_WFOPEN
+#define W32_WREMOVE
 #endif
 #endif
 
@@ -482,6 +483,25 @@ FILE* wfopen(const wchar_t* fileName, const wchar_t* mode)
   ASSERT("Convert succeeded", status != (size_t)-1);
 
   result = fopen(cFileName, cMode);
+#endif
+  return result;
+}
+
+// Just like ANSI remove() except for wchar_t* file names.
+int wremove(const wchar_t* fileName)
+{
+  TRACE("wremove");
+  ASSERT("Valid file name", fileName != 0);
+
+  int result = 0;
+#if defined(W32_WREMOVE)
+  result = _wremove(fileName);
+#else
+  char cFileName[FILENAME_MAX];
+  size_t status = wcstombs(cFileName, fileName, FILENAME_MAX);
+  ASSERT("Convert succeeded", status != (size_t)-1);
+
+  result = remove(cFileName);
 #endif
   return result;
 }

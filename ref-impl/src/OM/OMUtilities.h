@@ -170,4 +170,10 @@ int comparePropertyPath(const OMPropertyId* path1, const OMPropertyId* path2);
   //   @rdesc An ANSI FILE* 
 FILE* wfopen(const wchar_t* fileName, const wchar_t* mode);
 
+  // @func Remove the named file. Just like ANSI remove() except for
+  //       wchar_t* file names.
+  //   @parm The file name.
+  //   @rdesc 0 if the file is successfuly deleted -1 otherwise. 
+int wremove(const wchar_t* fileName);
+
 #endif
