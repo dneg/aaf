@@ -79,8 +79,9 @@ AAFNONPERSISTENTOBJECTS = \
 # These are files which specify COM interfaces, but which are
 # implemented in other objects.
 AAFCOMINTERFACESONLY = \
-	AAFEndian
-
+	AAFEndian \
+	AAFSearchSource \
+	AAFMobPrivate
 
 # These are the impl files that are typed by humans.  Be sure to
 # remove them from the other list.  As you check each one in, just add
