@@ -42,7 +42,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <strings.h>		// for strncasecmp()
 #include <assert.h>
 #include <time.h>
 #include <math.h>
@@ -809,8 +808,10 @@ void AAFByteSwap64(
 //
 // NB. ':' is acceptable unescaped in the fpath component
 
-#ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strcasecmp
+#ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strncasecmp
 #define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
+#else
+#include <strings.h>	// strncasecmp()
 #endif
 
 static bool acceptable_pchar(unsigned char c)
