@@ -68,14 +68,6 @@ AAFRESULT STDMETHODCALLTYPE
 					found = AAFTrue;
 					break;
 
-				case kByMobID:
-					aafUID_t	testMOBID;
-
-					CHECK((*ppMob)->GetMobID (&testMOBID));
-					if(EqualAUID(&testMOBID, &(_criteria.tags.mobID)))
-						found = AAFTrue;
-					break;
-
 				case kByMobKind:
 					aafMobKind_t	kind;
 				
@@ -83,15 +75,8 @@ AAFRESULT STDMETHODCALLTYPE
 					if((kind == _criteria.tags.mobKind) || (kAllMob == _criteria.tags.mobKind))
 						found = AAFTrue;
 					break;
-				case kByName:
-//				aafString_t *name;
-				case kByClass:
-//				aafClassID_t objClass;	// shouldn't this be a pointer?
-				case kByDataDef:
-//				aafUID_t datadef;	// shouldn't this be a pointer?
-				case kByMediaCrit:
-//				aafCriteriaType_t mediaCrit;
-					RAISE(AAFRESULT_NOT_IMPLEMENTED);
+				default:
+					return AAFRESULT_NOT_IN_CURRENT_VERSION;
 				}
 				if(!found)
 					(*ppMob)->ReleaseReference();
@@ -161,16 +146,8 @@ AAFRESULT STDMETHODCALLTYPE
 			_cStorage->GetNumMobs(_criteria.tags.mobKind, &siz);
 			break;
 
-		case kByMobID:
-		case kByName:
-//			aafString_t *name;
-		case kByClass:
-//			aafClassID_t objClass;	// shouldn't this be a pointer?
-		case kByDataDef:
-//			aafUID_t datadef;	// shouldn't this be a pointer?
-		case kByMediaCrit:
-//		aafCriteriaType_t mediaCrit;
-			return(AAFRESULT_NOT_IMPLEMENTED);
+		default:
+			return AAFRESULT_NOT_IN_CURRENT_VERSION;
 		}
 
 	if(newCurrent < siz)
