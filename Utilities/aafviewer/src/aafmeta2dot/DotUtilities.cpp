@@ -40,14 +40,14 @@ ProcessRecordString( string s )
 {
    string ret = s;
    int index = 0;
-   while ( index < ret.size() )
+   while ( index < (int)ret.size() )
    {
       // escape special characters
       if ( ret[ index ] == '\n' )
       {
 	 ret.erase( index, 1 );
 	 ret.insert( index, "\\n" );
-	 index += 2;
+	 index += 1;
       }
       // escape special characters in quotes
       else if ( ret[ index ] == '"' ||
@@ -93,7 +93,7 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
    {
       return "";
    }
-   else if ( attribute.size() > maxLength )
+   else if ( (int)attribute.size() > maxLength )
    {
       retAttribute.resize( maxLength - 1 );
       retAttribute.resize( maxLength, '~' );
@@ -103,14 +103,14 @@ LimitAttributeSize( string attribute, int maxLength, int maxWidth )
    int newLineIndex = maxWidth;
    int index = 0;
    bool escape = false;
-   while ( index < retAttribute.size() )
+   while ( index < (int)retAttribute.size() )
    {
       if (index == newLineIndex)
       {
 	 if (escape)
 	 {
 	    index++;
-	    if (index < retAttribute.size())
+	    if (index < (int)retAttribute.size())
 	    {
 	       retAttribute.insert(index,"\\n");
 	    }
