@@ -7,12 +7,121 @@
 #include "OMAssertions.h"
 #include "OMUtilities.h"
 
+#include <iostream.h>
+
 #include <windows.h>
+
+static void convert(wchar_t* wcName, size_t length, const char* name);
+
+static void convert(char* cName, size_t length, wchar_t* name);
+
+static void formatError(DWORD errorCode);
+
+static int check(HRESULT resultCode);
+
+static int checkFile(HRESULT resultCode, const char* fileName);
+
+static int checkStream(HRESULT resultCode, const char* streamName);
+
+static int checkStorage(HRESULT resultCode, const char* storageName);
+
+static void printError(const char* prefix, const char* type);
+
+static void printName(const char* name);
+
 
 OMStoredObject::OMStoredObject(struct IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
   _offset(0), _classId(0), _open(false)
 {
+}
+
+OMStoredObject* OMStoredObject::create(const char* fileName)
+{
+  TRACE("createFile");
+  PRECONDITION("Valid file name", validString(fileName));
+
+  wchar_t wcFileName[256];
+  convert(wcFileName, 256, fileName);
+
+  HRESULT result;
+  IStorage* storage;
+
+  result = StgCreateDocfile(
+    wcFileName,
+    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
+    0,
+    &storage);
+  if (!checkFile(result, fileName)) {
+    exit(FAILURE);
+  }
+
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  newStoredObject->create();
+
+  return newStoredObject;
+}
+
+OMStoredObject* OMStoredObject::open(const char* fileName)
+{
+  TRACE("openFile");
+  PRECONDITION("Valid file name", validString(fileName));
+
+  wchar_t wcFileName[256];
+  convert(wcFileName, 256, fileName);
+
+  HRESULT result;
+  IStorage* storage;
+
+  result = StgOpenStorage(
+    wcFileName,
+    0,
+    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
+    0,
+    0,
+    &storage);
+  if (!checkFile(result, fileName)) {
+    exit(FAILURE);
+  }
+
+  OMStoredObject* newStoredObject = new OMStoredObject(storage);
+  newStoredObject->open();
+
+  return newStoredObject;
+}
+
+OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
+{
+  TRACE("OMFile::openStoragePath");
+  PRECONDITION("Valid stream path name", validString(storagePathName));
+  PRECONDITION("Path name is absolute", storagePathName[0] == '/');
+
+  char* path = new char[strlen(storagePathName) + 1];
+  strcpy(path, storagePathName);
+  
+  char* element = path;
+  element++; // skip first '/'
+
+  OMStoredObject* storage = this;
+  OMStoredObject* result = 0;
+
+  char* end = strchr(element, '/');
+  
+  while (end != 0) {
+    *end = 0;
+    storage = storage->openSubStorage(element);
+    ASSERT("Valid storage pointer", storage != 0);
+    element = ++end;
+    end = strchr(element, '/');
+  }
+
+  if ((element != 0) && (strlen(element) > 0)) {
+    result = storage->openSubStorage(element);
+  } else {
+    result = storage;
+  }
+  
+  return result;
 }
 
 void OMStoredObject::save(OMProperty* p)
@@ -201,6 +310,7 @@ OMStoredObject* OMStoredObject::createSubStorage(const char* name)
 
   IStorage* newStorage = createStorage(_storage, name);
   OMStoredObject* result = new OMStoredObject(newStorage);
+  result->create();
   return result;
 }
 
@@ -210,6 +320,7 @@ OMStoredObject* OMStoredObject::openSubStorage(const char* name)
 
   IStorage* newStorage = openStorage(_storage, name);
   OMStoredObject* result = new OMStoredObject(newStorage);
+  result->open();
   return result;
 }
 
@@ -498,4 +609,144 @@ void OMStoredObject::streamSeek(IStream* stream, size_t offset)
 #else
   ASSERT("Small stream", oldPosition.HighPart == 0);
 #endif
+}
+
+static void convert(wchar_t* wcName, size_t length, const char* name)
+{
+  TRACE("convert");
+  PRECONDITION("Valid input name", validString(name));
+  PRECONDITION("Valid output buffer", wcName != 0);
+  PRECONDITION("Valid output buffer size", length > 0);
+  
+  ASSERT("Valid program name", validString(getProgramName()));
+
+  size_t status = mbstowcs(wcName, name, length);
+  if (status == (size_t)-1) {
+    cerr << getProgramName()
+      << "Error : Failed to convert \""
+      << name
+      << "\" to a wide character string."
+      << endl;
+    exit(FAILURE);  
+  }
+}
+
+static void convert(char* cName, size_t length, wchar_t* name)
+{
+  ASSERT("Valid program name", validString(getProgramName()));
+
+  size_t status = wcstombs(cName, name, length);
+  if (status == (size_t)-1) {
+    cerr << getProgramName()
+      << ": Error : Conversion failed."
+      << endl;
+    exit(FAILURE);  
+  }
+}
+
+static void formatError(DWORD errorCode)
+{
+  wchar_t buffer[256];
+
+  int status = FormatMessage(
+    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+    NULL,
+    errorCode,
+    LANG_SYSTEM_DEFAULT,
+    buffer, 256,
+    NULL);
+
+  char message[256];
+
+  convert(message, 256, buffer);
+
+  if (status != 0) {
+    int length = strlen(message);
+    // zap cr/lf
+    if (length >= 2) {
+      message[length - 2] = '\0';
+    }
+    cerr << message << endl;
+  } else {
+    cerr << "Error code = " << hex << errorCode << dec << endl;
+  }
+
+}
+
+static int check(HRESULT resultCode)
+{
+  TRACE("check");
+
+  ASSERT("Valid program name", validString(getProgramName()));
+
+  if (FAILED(resultCode)) {
+    printError(getProgramName(), "Error");
+    formatError(resultCode);
+    return FALSE;
+  } else {
+    return TRUE;
+  }
+}
+
+static int checkFile(HRESULT resultCode, const char* fileName)
+{
+  TRACE("checkFile");
+  PRECONDITION("Valid file name", validString(fileName));
+
+  ASSERT("Valid program name", validString(getProgramName()));
+
+  if (FAILED(resultCode)) {
+    printError(getProgramName(), "File error");
+    printName(fileName);
+    formatError(resultCode);
+    return FALSE;
+  } else {
+    return TRUE;
+  }
+}
+
+static int checkStream(HRESULT resultCode, const char* streamName)
+{
+  TRACE("checkStream");
+  PRECONDITION("Valid stream name", validString(streamName));
+
+  ASSERT("Valid program name", validString(getProgramName()));
+
+  if (FAILED(resultCode)) {
+    printError(getProgramName(), "Stream error");
+    printName(streamName);
+    formatError(resultCode);
+    return FALSE;
+  } else {
+    return TRUE;
+  }
+
+}
+
+static int checkStorage(HRESULT resultCode, const char* storageName)
+{
+  TRACE("checkStorage");
+  PRECONDITION("Valid storage name", validString(storageName));
+
+  ASSERT("Valid program name", validString(getProgramName()));
+
+  if (FAILED(resultCode)) {
+    printError(getProgramName(), "Storage error");
+    printName(storageName);
+    formatError(resultCode);
+    return FALSE;
+  } else {
+    return TRUE;
+  }
+
+}
+
+static void printError(const char* prefix, const char* type)
+{
+  cerr << prefix << ": " << type << ": ";
+}
+
+static void printName(const char* name)
+{
+  cerr << "\"" << name << "\": ";
 }
