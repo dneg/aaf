@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Tue Jun 22 15:32:47 EDT 1999
+// This file was generated on Tue Jun 22 17:09:32 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -992,22 +992,6 @@ AAF_PROPERTY(Type,
   RefAUID,
   true,
   PropertyDefinition)
-AAF_PROPERTY(MinimumRev,
-  AAF_LITERAL_AUID(0x06444502,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2002,
-  VersionType,
-  false,
-  PropertyDefinition)
-AAF_PROPERTY(MaximumRev,
-  AAF_LITERAL_AUID(0x06444503,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2003,
-  VersionType,
-  false,
-  PropertyDefinition)
 AAF_PROPERTY(IsSearchable,
   AAF_LITERAL_AUID(0x06444504,
     0x0000, 0x0000,
@@ -1030,14 +1014,6 @@ AAF_PROPERTY(DefaultValue,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x2006,
   DataValue,
-  false,
-  PropertyDefinition)
-AAF_PROPERTY(ReferenceValues,
-  AAF_LITERAL_AUID(0x06444507,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x2007,
-  ObjRefArray,
   false,
   PropertyDefinition)
 AAF_CLASS_END(PropertyDefinition)
