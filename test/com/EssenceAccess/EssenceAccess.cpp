@@ -150,6 +150,7 @@ char* externalkind = "";
 char* kind = "";
 char* location = "";
 
+
 //  Note: function modified to take N as an argument
 static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType, long int N)
 {
@@ -379,6 +380,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 		
 		// close essence data file
 		fclose(pWavFile);
+    pWavFile = NULL;
 
 		// Finish writing the destination
 		check(pEssenceAccess->CompleteWrite());
@@ -417,6 +419,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, tes
 
 cleanup:
 	// Cleanup and return
+  if (pWavFile)
+    fclose(pWavFile);
+
+  if(pFormat)
+		pFormat->Release();
+
+	if(format)
+		format->Release();
+
+	if(pLocator)
+		pLocator->Release();
+
 	if (pEssenceAccess)
 		pEssenceAccess->Release();
 	
@@ -439,14 +453,11 @@ cleanup:
 		pHeader->Release();
 
 	if (pFile)
-		pFile->Release(); 
+  {
+    pFile->Close();
+		pFile->Release();
+  }
 
-	if(pFormat)
-		pFormat->Release();
-	if(format)
-		format->Release();
-	if(pLocator)
-		pLocator->Release();
 
 	return moduleErrorTmp;
 }
@@ -469,7 +480,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	aafSearchCrit_t				criteria;
 	aafUID_t					mobID, dataID = DDEF_Sound;
 	aafWChar					namebuf[1204];
-	unsigned char						*AAFDataBuf;
+	unsigned char						*AAFDataBuf = NULL;
 	aafUInt32					AAFBytesRead, samplesRead;
 	FILE*						pWavFile = NULL;
 //	size_t						WAVBytesRead;
@@ -527,6 +538,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					// read in the essence data
 					WAVBytesRead = fread(WAVDataBuf, sizeof(unsigned char), sizeof(WAVDataBuf), pWavFile);
 					fclose(pWavFile);
+          pWavFile = NULL
 					check(loadWAVEHeader(WAVDataBuf,
 										&bitsPerSample,
 										&numCh,
@@ -655,6 +667,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 					}
 #endif
 					delete [] AAFDataBuf;
+          AAFDataBuf = NULL;
+
+          if (pWavFile)
+          { // close essence data file
+		        fclose(pWavFile);
+            pWavFile = NULL;
+          }
 #if 0
 				}
 				else
@@ -697,6 +716,11 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
 cleanup:
 	// Cleanup and return
+  if (AAFDataBuf)
+    delete [] AAFDataBuf;
+
+  if (pWavFile)
+    fclose(pWavFile);
 
 	if (pRawEssence)
 		pRawEssence->Release();
@@ -900,6 +924,39 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 }
 
 
+// Make sure all of our required plugins have been registered.
+static HRESULT RegisterRequiredPlugins(void)
+{
+  HRESULT hr = S_OK;
+	IAAFPluginManager	*mgr = NULL;
+
+  // Load the plugin manager 
+  check(AAFGetPluginManager(&mgr));
+
+  // Attempt load and register all of the plugins
+  // in the shared plugin directory.
+  check(mgr->RegisterSharedPlugins());
+
+  // Attempt to register all of the plugin files
+  // in the given directorys:
+  //check(mgr->RegisterPluginDirectory(directory1));
+  //check(mgr->RegisterPluginDirectory(directory2));
+
+
+  // Attempt to register all of the plugins in any
+  // of the given files:
+  //check(mgr->RegisterPluginFile(file1));
+  //check(mgr->RegisterPluginFile(file2));
+  //...
+
+cleanup:
+  if (mgr)
+    mgr->Release();
+
+	return moduleErrorTmp;
+}
+
+
 //  A new usage function to make program more friendly
 void usage(void)
 {
@@ -948,6 +1005,10 @@ int main(int argumentCount, char *argumentVector[])
 
 	CComInitialize comInit;
 	CAAFInitialize aafInit;
+
+  // Make sure all of our required plugins have been registered.
+  checkFatal(RegisterRequiredPlugins());
+
 
 	//  The new, non-interleaved code to fix the caching issues relating to statistic gathering
 
