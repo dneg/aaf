@@ -1467,21 +1467,6 @@ AAFRESULT ImplAAFEssenceAccess::SetEssenceDestination(
 	return AAFRESULT_SUCCESS;
 }
 
-#if 0
-AAFRESULT ImplAAFEssenceAccess::ValidateEssence(
-				ImplAAFSourceMob *fileMob,
-        aafCheckVerbose_t	verbose,
-        aafCheckWarnings_t outputWarnings,
-        aafUInt32	bufSize,
-        aafCharacter * pErrorText,
-        aafUInt32* pBytesRead)
-{
-  // Just call the codec's ValidateEssence method
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-#endif
-
 
 
  //Sets which flavour of the codec ID is to be used.)
@@ -2149,19 +2134,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 /****/
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetStoredByteOrder (eAAFByteOrder_t *  /*pOrder*/)
-{
-	return AAFRESULT_NOT_IMPLEMENTED;		//!!!
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFEssenceAccess::GetNativeByteOrder (eAAFByteOrder_t *  /*pOrder*/)
-{
-	return AAFRESULT_NOT_IMPLEMENTED;		//!!!
-}
 
 AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFHeader *head, ImplAAFContainerDef **result)
 {
