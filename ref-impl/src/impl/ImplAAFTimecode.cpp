@@ -191,7 +191,11 @@ AAFRESULT STDMETHODCALLTYPE
 // CHECK(AAFConvertEditRate(_editRate, oldStart,
 //		  							*pEditRate , kRoundFloor, &newStart));
 //!!!		CHECK(TruncInt64toInt32(_offset, &frameOffset));	/* OK FRAMEOFFSET */
-		CHECK(TruncInt64toUInt32(oldStart, pOffset));		/* OK FRAMEOFFSET */
+		// BobT 3/26/99: change aafFrameOffset_t to 64-bit, so we need to use a
+		// 32-bit temp for this function call.
+		aafUInt32 offset32;
+		CHECK(TruncInt64toUInt32(oldStart, &offset32));		/* OK FRAMEOFFSET */
+		*pOffset = offset32;
 
 	   /* check for out of bound timecode */
 	   if (pTimecode->startFrame < startTC.startFrame) 
