@@ -85,7 +85,7 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafLength_t	slotLength;
 	aafUID_t	sourceMobID;
-	HRESULT		hr;
+	HRESULT		hr = AAFRESULT_SUCCESS;
 	ImplAAFMobSlot*	pMobSlot;
 	aafUID_t	DataDef;
 	ImplAAFSegment*	pSegment = NULL;
