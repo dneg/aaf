@@ -8,7 +8,6 @@ AAFDefinitionObject\
 #c
 AD_HEAD
 
-AD_INCLUDE(AAFTypes)
 AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 AD_FORWARD_DECLARATION(AAFReferenceValue)
 
@@ -35,9 +34,9 @@ AD_CLASS_UUID(dfbd6522, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(dfbd6521, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR2([in],aafUID_t,	Auid,auid for this definition object,
-				[in], aafString_t, PropertyName, Specifies the name of this property,
-				Constructs this object.)
+//AxD_CONSTRUCTOR2([in],aafUID_t,	Auid,auid for this definition object,
+//				[in], aafString_t, PropertyName, Specifies the name of this property,
+//				Constructs this object.)
 
 AD_METHOD1(GetAUID,
 		   [retval][out],
@@ -59,6 +58,20 @@ AD_METHOD1(GetTypeAUID,
 		   pTypeAuid,
 		   Pointer to the Type Definitions AUID,
 		   Gets the Type Definition's AUID associated with this object.)
+
+AD_METHOD1(SetPropertyID,
+		   [in\\\,ref],
+		   aafUID_t *,
+		   pPropertyID,
+		   Property Definition's AUID,
+		   Sets the Property Definitions AUID associated with this object.)
+
+AD_METHOD1(SetPropertyName,
+		   [in\\\,ref],
+		   aafString_t *,
+		   pPropertyName,
+		   Property Definition's name,
+		   Sets the Property Definitions name associated with this object.)
 
 AD_METHOD1(SetTypeAUID,
 		   [in],
@@ -152,7 +165,7 @@ AD_METHOD1(SetDefaultValue,
 		   Sets the default data value of this property definition.)
 
 AD_XMETHOD1(AppendRefValue,
-			[in\,ref],
+			[in],
 			objIn,
 			AAFReferenceValue,
 			pRefValue, 
@@ -160,7 +173,7 @@ AD_XMETHOD1(AppendRefValue,
 			Add the reference value  to the property definition.)
 
 AD_XMETHOD1(RemoveRefValue,
-			[in\,ref],
+			[in],
 			objIn,
 			AAFReferenceValue,
 			pRefValue, 
