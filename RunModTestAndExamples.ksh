@@ -1,6 +1,6 @@
 #! C:/mksnt/sh.exe
 # Terry Skotz
-# modified by Tom Ransdell 15-DEC-1999.
+# modified by Tom Ransdell 15-DEC-1999, 05-JAN-2000.
 
 CHECK_DEBUG=0
 CHECK_RELEASE=0
@@ -15,6 +15,9 @@ CREATESEQUENCE=0
 ESSENCEACCESS=0
 AAFINFO=0
 AAFOMFTEST=0
+EXPORTAUDIOEXAMPLE=0
+EXPORTSIMPLECOMPOSITION=0
+IMPORTAUDIOEXAMPLE=0
 PERSONNELEXTENSIONTEST=0
 PERSONNELEXTENSIONDIFF=0
 ALL=0
@@ -40,6 +43,9 @@ PrintHelp ()
 	echo "-ea = EssenceAccess"
 	echo "-cs = CreateSequence"
 	echo "-pe = Personnel Extension tests"
+	echo "-eae = ExportAudioExample"
+	echo "-esc = ExportSimpleComposition"
+	echo "-iae = ImportAudioExample"
 	echo "-t  = dump\n\n"
 	echo "-s  = update AAFWatchDog.log with exit code results"
 	echo "-pp = Print PATH variable\n\n"
@@ -76,6 +82,9 @@ do
 		-i ) AAFINFO=1;;
 		-ao ) AAFOMFTEST=1;;
 		-pe ) PERSONNELEXTENSIONTEST=1;;
+		-eae ) EXPORTAUDIOEXAMPLE=1;;
+		-esc ) EXPORTSIMPLECOMPOSITION=1;;
+		-iae ) IMPORTAUDIOEXAMPLE=1;;
 		-p ) PRINTPATH=1;;
 		-s ) AAFWATCHDOG=1;;
 		-h ) PrintHelp
@@ -348,6 +357,41 @@ RunMainScript ()
 		cd $TargetDir
 	fi
 
+	
+	if [ EXPORTAUDIOEXAMPLE -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ExportAudioExample"
+		cd Examples/Com
+		ExportAudioExample
+		CheckExitCode $? "ExportAudioExample" 
+
+		VerifyFiles "ExportAudioExample.aaf"
+
+		cd $TargetDir
+	fi
+
+	
+	if [ EXPORTSIMPLECOMPOSITION -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ExportSimpleComposition"
+		cd Examples/Com
+		ExportSimpleComposition
+		CheckExitCode $? "ExportSimpleComposition" 
+
+		VerifyFiles "ExportSimpleComposition.aaf"
+
+		cd $TargetDir
+	fi
+
+	
+	if [ IMPORTAUDIOEXAMPLE -eq 1 ] || [ ALL -eq 1 ]; then
+		PrintSeparator "Running ImportAudioExample"
+		cd Examples/Com
+		ImportAudioExample
+		CheckExitCode $? "ImportAudioExample" 
+
+		VerifyFiles "ExportAudioExample.aaf"
+
+		cd $TargetDir
+	fi
 
 	cd $START_DIR
 
