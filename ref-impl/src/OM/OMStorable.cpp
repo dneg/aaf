@@ -13,7 +13,7 @@ OMStorable::OMStorable(void)
 : _persistentProperties(), _containingObject(0), _name(0), _pathName(0)
 {
   TRACE("OMStorable::OMStorable");
-  _persistentProperties.setContainingObject(this);
+  _persistentProperties.setContainer(this);
 }
 
 OMStorable::~OMStorable(void)
@@ -30,7 +30,7 @@ void OMStorable::saveTo(OMStoredObject& s) const
   
   size_t context = 0;
   //_file->objectDirectory()->insert(pathName(), this);
-  s.saveClassId(classId());
+  s.save(classId());
   for (size_t i = 0; i < _persistentProperties.count(); i++)
   {
     OMProperty* p = 0;
@@ -56,16 +56,20 @@ void OMStorable::restoreContentsFrom(OMStoredObject& s)
   s.restore(_persistentProperties);
 }
 
-OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject, const char* name, OMStoredObject& s)
+OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
+                                    const char* name,
+                                    OMStoredObject& s)
 {
   TRACE("OMStorable::restoreFrom");
-  OMClassId cid = s.restoreClassId();
+  OMClassId cid;
+  s.restore(cid);
   OMFile* f = containingObject->file();
   OMStorable* object = f->classFactory()->create(cid);
   ASSERT("Registered class id", object != 0);
   // give the object a parent, no orphans allowed
   object->setContainingObject(containingObject);
-  // give the object a name, all new objects need a name and so here we baptize them
+  // give the object a name, all new objects need a name and so here
+  // we baptize them
   object->setName(name);
   f->objectDirectory()->insert(object->pathName(), object);
   object->restoreContentsFrom(s);
