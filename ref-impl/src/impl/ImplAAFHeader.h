@@ -53,7 +53,6 @@ class AAFDataKind;
 class AAFEffectDef;
 class ImplAAFSession;
 
-#include "AAFPropertyIDs.h"
 
 class ImplAAFHeader : public ImplAAFObject
 {
