@@ -59,13 +59,6 @@ int OMObjectDirectory::count(void) const
   return _current;
 }
 
-void OMObjectDirectory::destroyAll(void (*destroy)(OMStorable*&))
-{
-  for (int i = 0; i < _current; i++) {
-    (*destroy)(_table[i]._object);
-  }
-}
-
 void OMObjectDirectory::dump(void) const
 {
   for (int i = 0; i < _current; i++) {
