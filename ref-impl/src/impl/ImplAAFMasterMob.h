@@ -132,30 +132,30 @@ public:
   // GetRepresentationSourceClip()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetRepresentationSourceClip
+    GetRepresentation
         (// @parm [in] Slot ID
 		 aafSlotID_t  slotID,
 
 		 // @parm [in] Index of requested representation
 		 aafUInt32  index,
 
-		 // @parm [out] Requested Source Clip
-         ImplAAFSourceClip ** ppSourceClip);
+		 // @parm [out] Requested Segment
+         ImplAAFSegment ** ppSegment);
 
 
   //****************
   // GetCriteriaSourceClip()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetCriteriaSourceClip
+    GetCriteriaSegment
         (// @parm [in] Slot ID
 		 aafSlotID_t  slotID,
 
 		 // @parm [in] Index of requested representation
 		 aafMediaCriteria_t *  pCriteria,
 
-		 // @parm [out] Requested Source Clip
-         ImplAAFSourceClip ** ppSourceClip);
+		 // @parm [out] Requested Segment
+         ImplAAFSegment ** ppSegment);
 
 
   //***********************************************************

@@ -276,7 +276,7 @@ AD_XMETHOD2(GetNumRepresentations,
   //   - The Master Slot specified by slotID was not found.)
 
 
-AD_XMETHOD3(GetRepresentationSourceClip,
+AD_XMETHOD3(GetRepresentation,
 			[in],
 			  objPass,
 			  aafSlotID_t,
@@ -289,7 +289,7 @@ AD_XMETHOD3(GetRepresentationSourceClip,
 			  Index of requested representation,
 			[out],
 			  objOut,
-			  AAFSourceClip,
+			  AAFSegment,
 			  ppSourceClip,
 			  Requested Source Clip,
      This method returns the indexed media representation for the
@@ -332,7 +332,7 @@ AD_XMETHOD3(GetRepresentationSourceClip,
   //   - No Source Mob at specified index.)
 
 
-AD_XMETHOD3(GetCriteriaSourceClip,
+AD_XMETHOD3(GetCriteriaSegment,
 			[in],
 			  objPass,
 			  aafSlotID_t,
@@ -362,22 +362,22 @@ AD_XMETHOD3(GetCriteriaSourceClip,
 
 			[out],
 			  objOut,
-			  AAFSourceClip,
-			  ppSourceClip,
-			  Requested Source Clip,
-     Returns the Source Clip on the specified slot of a Master Mob
+			  AAFSegment,
+			  ppSegment,
+			  Requested Segment,
+     Returns the Segment on the specified slot of a Master Mob
   // that references the Source Mob that best meets the specified
   // criteria.  This function will work whether multiple media
   // representations exist or not.
   //
-  // The returned source clip is AddRef\(\)ed before it is returned.
+  // The returned segment is AddRef\(\)ed before it is returned.
   //
   // NOTE! Stub only.   Implementation not yet added.
   //
   // Succeeds if all of the following are true:
-  // - the ppSourceClip pointer is valid.
+  // - the ppSegment pointer is valid.
   //
-  // If this method fails nothing will be written to *ppSourceClip.
+  // If this method fails nothing will be written to *ppSegment.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -390,7 +390,7 @@ AD_XMETHOD3(GetCriteriaSourceClip,
   //   - This object has not yet had Initialize\(\) called on it.
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppSourceClip arg is NULL.
+  //   - ppSegment arg is NULL.
   //
   // AAFRESULT_SLOT_NOTFOUND
   //   - The specified Master Slot was not found.)

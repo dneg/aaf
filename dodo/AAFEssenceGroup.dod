@@ -75,7 +75,7 @@ AD_XMETHOD1(GetStillFrame,
 
 
 AD_XMETHOD1(AppendChoice,
-[in], objIn, AAFSourceClip, pChoice,Source clip to add as a choice ,
+[in], objIn, AAFSegment, pChoice,Source clip to add as a choice ,
      Append another choice to this AAFEssenceGroup.
   // 
   // Succeeds if all of the following are true:
@@ -97,7 +97,7 @@ AD_XMETHOD1(AppendChoice,
 AD_XMETHOD1(PrependChoice,
 			[in],
 			objIn,
-			AAFSourceClip,
+			AAFSegment,
 			pChoice,
 			Source clip to add as a choice,
 
@@ -129,7 +129,7 @@ AD_XMETHOD2(InsertChoiceAt,
 
 			[in],
 			objIn,
-			AAFSourceClip,
+			AAFSegment,
 			pChoice,
 			Source clip to add as a choice,
 
@@ -182,7 +182,7 @@ AD_XMETHOD1(CountChoices,
 
 AD_XMETHOD2(GetChoiceAt,
 [in], objPass, aafUInt32, index,The 0-based index into the array,
-[out], objOut, AAFSourceClip , ppChoice,The representation at that index,
+[out], objOut, AAFSegment , ppChoice,The representation at that index,
      Given an index\, returns the corresponding source clip choice.
   // 
   // Succeeds if all of the following are true:
