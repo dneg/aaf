@@ -49,20 +49,21 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     AddMasterSlot
-        (// @parm [in] Data kind of new slot
+        (// @parm [in] Data kind of new Master Mob slot
 		 aafUID_t * pDataDef,
 
-		 // @parm [in] SlotID of new Master Mob slot
-		 aafSlotID_t  slotID,
+		 // @parm [in] Slot ID of the Source Mob slot to be added to the Master Mob
+         aafSlotID_t  sourceSlotID,
 
-		 // @parm [in] File Source Mob slot ID
-         aafSlotID_t  fileSlotID,
+		 // @parm [in] Source Mob containing the slot to be added to the Master Mob
+         ImplAAFSourceMob * pSourceMob,
+
+		 // @parm [in] SlotID assigned to the new Master Mob slot
+		 aafSlotID_t  masterSlotID,
 
 		 // @parm [in, string] Name to assign to new slot in Master Mob
-		 aafWChar *  pSlotName,
+		 aafWChar *  pSlotName);
 
-		 // @parm [in] File Source Mob associated with new slot
-         ImplAAFSourceMob * pFileMob);
 
 
   //****************

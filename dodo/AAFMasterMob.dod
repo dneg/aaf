@@ -29,38 +29,39 @@ AD_XMETHOD5(AddMasterSlot,
 			[in],
 			  objPass,
 			  aafSlotID_t,
-			  slotID,
-			  SlotID of new Master Mob slot,
+			  sourceSlotID,
+			  Slot ID of the Source Mob slot to be added to the Master Mob,
+			[in],
+			  objIn,
+			  AAFSourceMob,
+			  pSourceMob,
+			  Source Mob containing the slot to be added to the Master Mob,
 			[in],
 			  objPass,
 			  aafSlotID_t,
-			  fileSlotID,
-			  File Source Mob slot ID,
+			  masterSlotID,
+			  SlotID assigned to the new Master Mob slot,
 			[in\, string],
 			  objPass,
 			  aafWChar *,
 			  pSlotName,
 			  Name to assign to new slot in Master Mob,
-			[in],
-			  objIn,
-			  AAFSourceMob,
-			  pFileMob,
-			  File Source Mob associated with new slot,
 			This function adds a slot to the specified Master Mob that
-  // references the specified File Source Mob. The new slot in the
-  // Master Mob contains a Source Clip that specifies the File Source
-  // Mob in its source reference properties. Typically this is done
-  // automatically by passing the Master Mob handle to
+  // references the specified a slot in the specified Source Mob. The
+  // new slot in the Master Mob contains a Source Clip that specifies
+  // the Source Mob in its source reference properties.  Typically this
+  // is done automatically by passing the Master Mob handle to
   // AAFMedia::Create\, but this function allows you to add it later.
   //
-  // Note: The mediaKind  parameter requires a data kind valid for a
-  // media stream. Valid data kinds are:
-  // - Picture
-  // - Sound
+  // The pDataDef parameter requires a data kind valid for a media
+  // stream. Valid data kinds are:
+  //
+  // - DDEF_Video
+  // - DDEF_Audio
   //
   // Note: If pSlotName is passed in with zero length\, then the
   // slot is not assigned a name.  Slot names are not used by the
-  // Toolkit\, and exist only so the user can name slots.
+  // SDK\, and exist only so the user can name slots.
   // 
   // Succeeds if all of the following are true:
   // \(more conditions here\)
@@ -74,7 +75,20 @@ AD_XMETHOD5(AddMasterSlot,
   // AAFRESULT_SUCCESS
   //   - succeeded.  \(This is the only code indicating success.\)
   //
-  // \(more results here\))
+  // AAFRESULT_NULL_PARAM
+  //   - One or more of the following parameters are NULL pSourceMob\,
+  //     pDataDef\, and pSlotName.
+  //
+  // AAFRESULT_INVALID_DATAKIND
+  //   - The data kind of the source MOB slot to be added to the Master
+  //     Mob does not match what is specfied in pDataDef.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Source Mob slot was not found.
+  //
+  // AAFRESULT_SLOT_EXISTS
+  //   - The specified Master slot ID already exists.
+  //)
 
 
 AD_XMETHOD3(GetTapeName,
@@ -120,8 +134,15 @@ AD_XMETHOD3(GetTapeName,
   // AAFRESULT_NULL_PARAM
   //   - pTapeName arg is NULL.
   //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
+  //
+  // AAFRESULT_NOT_TAPEMOB
+  //   - The specified Master Slot does not contain a Tape MOB.
+  //
   // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.)
+  //   - bufSize indicates the buffer is too small to hold the string.
+  //)
 
 
 AD_XMETHOD2(GetTapeNameBufLen,
@@ -153,7 +174,14 @@ AD_XMETHOD2(GetTapeNameBufLen,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.)
+  //   - pLen arg is NULL.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
+  //
+  // AAFRESULT_NOT_TAPEMOB
+  //   - The specified Master Slot does not contain a Tape MOB.
+  //)
 
 
 AD_XMETHOD2(GetNumRepresentations,
@@ -169,12 +197,11 @@ AD_XMETHOD2(GetNumRepresentations,
 			  number of representations,
   // This function returns the number of media representations
   // available for the specified SlotID on a specified Master
-  // Mob. This function is meant to work with
-  // GetRepresentationSourceClip\, so that you can iterate through
-  // all of the choices yourself.  In most cases\, you can use
-  // GetCriteriaSourceClip to handle multiple
-  // representations. this function and
-  // GetRepresentationSourceClip are lower-level functions.
+  // Mob.  This function is meant to work with GetRepresentationSourceClip\,
+  // so that you can iterate through all of the choices yourself.
+  // In most cases\, you can use GetCriteriaSourceClip to handle multiple
+  // representations. This function and GetRepresentationSourceClip are
+  // lower-level functions.
   //
   // Succeeds if all of the following are true:
   // - the pNumReps pointer is valid.
@@ -189,7 +216,11 @@ AD_XMETHOD2(GetNumRepresentations,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pNumReps arg is NULL.)
+  //   - pNumReps arg is NULL.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
+  //)
 
 
 AD_XMETHOD3(GetRepresentationSourceClip,
@@ -214,8 +245,8 @@ AD_XMETHOD3(GetRepresentationSourceClip,
   // of the choices yourself.  This method uses an integer index\, not
   // an iterator.  The function GetRepresentationSourceClip takes an
   // index between 1 and the number of representations [inclusive]\,
-  // and returns the indexed File Source Mob. You can make calls to
-  // functions such as AAFMedia::GetVideoInfo and AAFMedia::IsMediaContiguous to
+  // and returns the indexed Source Mob. You can make calls to functions
+  // such as AAFMedia::GetVideoInfo and AAFMedia::IsMediaContiguous to
   // determine which media is the best fit.
   //
   // Succeeds if all of the following are true:
@@ -231,7 +262,14 @@ AD_XMETHOD3(GetRepresentationSourceClip,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppSourceClip arg is NULL.)
+  //   - ppSourceClip arg is NULL.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
+  //
+  // AAFRESULT_BADINDEX
+  //   - No Source Mob at specified index.
+  //)
 
 
 AD_XMETHOD3(GetCriteriaSourceClip,
@@ -251,7 +289,7 @@ AD_XMETHOD3(GetCriteriaSourceClip,
 			  ppSourceClip,
 			  Requested Source Clip,
   // Returns the Source Clip on the specified slot of a Master Mob
-  // that references the File Source Mob that best meets the specified
+  // that references the Source Mob that best meets the specified
   // criteria.  This function will work whether multiple media
   // representations exist or not.
   //
@@ -287,7 +325,11 @@ AD_XMETHOD3(GetCriteriaSourceClip,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppSourceClip arg is NULL.)
+  //   - ppSourceClip arg is NULL.
+  //
+  // AAFRESULT_SLOT_NOTFOUND
+  //   - The specified Master Slot was not found.
+  //)
 
 
 AD_COM_METH(.method-SearchSource)
