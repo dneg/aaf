@@ -373,7 +373,7 @@ void OMStoredObject::save(const OMWeakReferenceSet& set)
   //   @parm The table to save.
 void OMStoredObject::save(const OMPropertyTable* table)
 {
-  TRACE("OMPropertyTable::save");
+  TRACE("OMStoredObject::save");
 
   PRECONDITION("Valid property table", table != 0);
 
@@ -746,7 +746,7 @@ void OMStoredObject::restore(OMStrongReferenceSet& set, size_t externalSize)
   //   @parm TBS
 void OMStoredObject::restore(OMWeakReference& singleton, size_t externalSize)
 {
-  TRACE("OMPropertyTable::restore");
+  TRACE("OMStoredObject::restore");
   ASSERT("Unimplemented code not reached", false);
 }
 
@@ -775,7 +775,7 @@ void OMStoredObject::restore(OMWeakReferenceSet& set, size_t externalSize)
   //   @parm A pointer to the newly restored <c OMPropertyTable> by reference.
 void OMStoredObject::restore(OMPropertyTable*& table)
 {
-  TRACE("OMPropertyTable::restore");
+  TRACE("OMStoredObject::restore");
 
   IStream* stream = openStream(L"referenced properties");
 
@@ -1230,9 +1230,9 @@ void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
   PRECONDITION("Valid size", size > 0);
 
   unsigned long bytesRead;
-  HRESULT result = stream->Read(data, size, &bytesRead);
-  check(result);
-
+  HRESULT status = stream->Read(data, size, &bytesRead);
+  check(status);
+  ASSERT("IStream::Read() succeeded", SUCCEEDED(status));
   ASSERT("Successful read", bytesRead == size);
 }
 
@@ -1253,8 +1253,9 @@ void OMStoredObject::readFromStream(IStream* stream,
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  HRESULT result = stream->Read(data, bytes, &bytesRead);
-  check(result);
+  HRESULT status = stream->Read(data, bytes, &bytesRead);
+  check(status);
+  ASSERT("IStream::Read() succeeded", SUCCEEDED(status));
 }
 
   // @mfunc Write <p size> bytes from the buffer at address <p data>
@@ -1270,9 +1271,9 @@ void OMStoredObject::writeToStream(IStream* stream, void* data, size_t size)
   PRECONDITION("Valid size", size > 0);
 
   unsigned long bytesWritten;
-  HRESULT resultCode = stream->Write(data, size, &bytesWritten);
-  check(resultCode);
-
+  HRESULT status = stream->Write(data, size, &bytesWritten);
+  check(status);
+  ASSERT("IStream::Write() succeeded", SUCCEEDED(status));
   ASSERT("Successful write", bytesWritten == size);
 }
 
@@ -1293,8 +1294,9 @@ void OMStoredObject::writeToStream(IStream* stream,
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", bytes > 0);
 
-  HRESULT resultCode = stream->Write(data, bytes, &bytesWritten);
-  check(resultCode);
+  HRESULT status = stream->Write(data, bytes, &bytesWritten);
+  check(status);
+  ASSERT("IStream::Write() succeeded", SUCCEEDED(status));
 }
 
   // @mfunc Read an OMUInt8 from <p stream> into <p i>. If
@@ -1455,7 +1457,7 @@ OMUInt64 OMStoredObject::streamSize(IStream* stream) const
   STATSTG statstg;
   HRESULT status = stream->Stat(&statstg, STATFLAG_NONAME);
   check(status);
-
+  ASSERT("IStream::Stat() succeeded", SUCCEEDED(status));
   OMUInt64 result = toOMUInt64(statstg.cbSize);
   return result;
 }
@@ -1470,6 +1472,7 @@ void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
   ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
   HRESULT status = stream->SetSize(newStreamSize);
   check(status);
+  ASSERT("IStream::SetSize() succeeded", SUCCEEDED(status));
 }
 
   // @mfunc The current position for <f readFromStream()> and
@@ -1489,7 +1492,7 @@ OMUInt64 OMStoredObject::streamPosition(IStream* stream) const
   ULARGE_INTEGER position;
   HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
   check(status);
-
+  ASSERT("IStream::Seek() succeeded", SUCCEEDED(status));
   result = toOMUInt64(position);
   return result;
 }
@@ -1512,6 +1515,7 @@ void OMStoredObject::streamSetPosition(IStream* stream, const OMUInt64 offset)
   memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
   HRESULT status = stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
   check(status);
+  ASSERT("IStream::Seek() succeeded", SUCCEEDED(status));
 }
 
   // @mfunc Close <p stream>.
@@ -1522,8 +1526,8 @@ void OMStoredObject::closeStream(IStream*& stream)
   PRECONDITION("Valid stream", stream != 0);
 
 #if defined(OM_ENABLE_DEBUG)
-  HRESULT resultCode = stream->Release();
-  ASSERT("Reference count is 0.", resultCode == 0);
+  HRESULT status = stream->Release();
+  ASSERT("Reference count is 0.", status == 0);
 #else
   stream->Release();
 #endif
@@ -2203,8 +2207,8 @@ void OMStoredObject::closeStorage(IStorage*& storage)
   PRECONDITION("Valid storage", storage != 0);
 
 #if defined(OM_ENABLE_DEBUG)
-  HRESULT resultCode = storage->Release();
-  ASSERT("Reference count is 0.", resultCode == 0);
+  HRESULT status = storage->Release();
+  ASSERT("Reference count is 0.", status == 0);
 #else
   storage->Release();
 #endif
@@ -2214,7 +2218,6 @@ void OMStoredObject::closeStorage(IStorage*& storage)
 #endif
 }
 
-
 void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
 {
   TRACE("OMStoredObject::setClass");
@@ -2222,8 +2225,9 @@ void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
 
   GUID g;
   memcpy(&g, &cid, sizeof(GUID));
-  HRESULT resultCode = storage->SetClass(g);
-  check(resultCode);
+  HRESULT status = storage->SetClass(g);
+  check(status);
+  ASSERT("IStorage::SetClass() succeeded", SUCCEEDED(status));
 }
 
 void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
@@ -2232,9 +2236,9 @@ void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
   PRECONDITION("Valid storage", storage != 0);
 
   STATSTG statstg;
-  HRESULT result = storage->Stat(&statstg, STATFLAG_NONAME);
-  check(result);
-
+  HRESULT status = storage->Stat(&statstg, STATFLAG_NONAME);
+  check(status);
+  ASSERT("IStorage::Stat() succeeded", SUCCEEDED(status));
   memcpy(&cid, &statstg.clsid, sizeof(OMClassId));
 }
 
