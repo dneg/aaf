@@ -64,11 +64,14 @@
 #include "aafUtils.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFPluggableDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFEffectDefs;
 
 ImplAAFDictionary::ImplAAFDictionary ()
-: _pluginDefinitions(PID_Dictionary_PluginDefinitions, "PluginDefinitions")
+: _pluginDefinitions(PID_Dictionary_PluginDefinitions, "PluginDefinitions"),
+  _effectDefinitions(PID_Dictionary_EffectDefinitions, "EffectDefinitions")
 {
   _persistentProperties.put(_pluginDefinitions.address());
+  _persistentProperties.put(_effectDefinitions.address());
 }
 
 
@@ -80,6 +83,16 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	for (i = 0; i < size; i++)
 	{
 		ImplAAFPluggableDef *pPlug =_pluginDefinitions.setValueAt(0, i);
+		if (pPlug)
+		{
+		  pPlug->ReleaseReference();
+		}
+	}
+
+	size_t effectDefSize = _effectDefinitions.getSize();
+	for (i = 0; i < effectDefSize; i++)
+	{
+		ImplAAFEffectDef *pPlug =_effectDefinitions.setValueAt(0, i);
 		if (pPlug)
 		{
 		  pPlug->ReleaseReference();
@@ -238,26 +251,97 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterEffectDefinition (
-      ImplAAFEffectDef * /*pEffectDef*/)
+      ImplAAFEffectDef *pEffectDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (NULL == pEffectDef)
+		return AAFRESULT_NULL_PARAM;
+	
+	_effectDefinitions.appendValue(pEffectDef);
+	// trr - We are saving a copy of pointer in _pluginDefinitions
+	// so we need to bump its reference count.
+	pEffectDef->AcquireReference();
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupEffectDefinition (
-      aafUID_t *  /*effectID*/,
-      ImplAAFEffectDef ** /*ppEffectDef*/)
+      aafUID_t *effectID,
+      ImplAAFEffectDef **ppEffectDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplEnumAAFEffectDefs		*effectEnum = NULL;
+	ImplAAFEffectDef			*effectDef = NULL;
+	aafBool						defFound;
+	AAFRESULT					status;
+	aafUID_t					testAUID;
+
+	XPROTECT()
+	{
+		CHECK(GetEffectDefinitions (&effectEnum));
+		status = effectEnum->NextOne (&effectDef);
+		defFound = AAFFalse;
+		while(status == AAFRESULT_SUCCESS && !defFound)
+		{
+			CHECK(effectDef->GetAUID (&testAUID));
+			if(EqualAUID(effectID, &testAUID))
+			{
+				defFound = AAFTrue;
+				*ppEffectDef = effectDef;
+				effectDef->AcquireReference();
+				break;
+			}
+			effectDef->ReleaseReference();
+			effectDef = NULL;
+			status = effectEnum->NextOne (&effectDef);
+		}
+		if(effectDef != NULL)
+		{
+			effectDef->ReleaseReference();
+			effectDef = NULL;
+		}
+		effectEnum->ReleaseReference();
+		effectEnum = NULL;
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	{
+		if(effectEnum != NULL)
+			effectEnum->ReleaseReference();
+		if(effectDef != NULL)
+			effectDef->ReleaseReference();
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::GetEffectDefinitions (
-      ImplEnumAAFEffectDefs ** /*ppEnum*/)
+      ImplEnumAAFEffectDefs **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFEffectDefs *theEnum = (ImplEnumAAFEffectDefs *)CreateImpl (CLSID_EnumAAFEffectDefs);
+	
+	XPROTECT()
+	{
+		CHECK(theEnum->SetEnumStrongProperty(this, &_effectDefinitions));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT STDMETHODCALLTYPE
