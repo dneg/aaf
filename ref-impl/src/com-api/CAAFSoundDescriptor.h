@@ -79,9 +79,6 @@ public:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD (SetCompression) (
     // Identifies kind of compression and format of
 	// compression information. 
@@ -107,9 +104,6 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pCompression arg is NULL.
@@ -140,9 +134,6 @@ public:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD (SetChannelCount) (
     // The number of channels of sound represented
 	// by this descriptor. 
@@ -166,9 +157,6 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pChannelCount arg is NULL.
@@ -197,9 +185,6 @@ public:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD (SetAudioSamplingRate) (
     // Sample rate of audio essence. 
     /*[in]*/ aafRational_t  rate);
@@ -222,9 +207,6 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pRate arg is NULL.
@@ -253,9 +235,6 @@ public:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD (SetIsLocked) (
     // Is number of samples per frame locked to video? 
     /*[in]*/ aafBoolean_t  locked);
@@ -280,9 +259,6 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pLocked arg is NULL.
@@ -313,9 +289,6 @@ public:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD (SetElectroSpatialFormulation) (
     // Electro-spatial form of the signal. 
     /*[in]*/ aafElectroSpatialFormulation_t  formulation);
@@ -339,9 +312,6 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pFormulation arg is NULL.
@@ -371,9 +341,6 @@ public:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD (SetAudioRefLevel) (
     // Audio reference level. 
     /*[in]*/ aafInt8  level);
@@ -396,9 +363,6 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pLevel arg is NULL.
@@ -428,9 +392,6 @@ public:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD (SetDialNorm) (
     // Dial norm. 
     /*[in]*/ aafInt8  dialNorm);
@@ -453,9 +414,6 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pDialNorm arg is NULL.
@@ -485,9 +443,6 @@ public:
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
   //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
   STDMETHOD (SetQuantizationBits) (
     // Number of quantization bits. 
     /*[in]*/ aafUInt32  bitsCount);
@@ -509,9 +464,6 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
   //
   // AAFRESULT_NULL_PARAM
   //   - pBitsCount arg is NULL.
