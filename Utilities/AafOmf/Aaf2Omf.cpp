@@ -67,6 +67,13 @@ Aaf2Omf::Aaf2Omf() : pFile(NULL), pHeader(NULL), pDictionary(NULL)
 // ============================================================================
 Aaf2Omf::~Aaf2Omf()
 {
+	if (pHeader)
+		pHeader->Release();
+	if (pDictionary)
+		pDictionary->Release();
+	if (pFile)
+		pFile->Release();
+
 }
 // ============================================================================
 // ConvertFile
@@ -1352,12 +1359,12 @@ HRESULT Aaf2Omf::ConvertAAFDatadef(aafUID_t Datadef,
 	OMF2::omfBool			bFound;
 	char					szAUID[64];
 
-	if ( memcmp((char *)&Datadef, (char *)&DDEF_Video, sizeof(aafUID_t)) == 0 )
+	if ( memcmp((char *)&Datadef, (char *)&DDEF_Picture, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:Picture");
 		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
 	}
-	else if ( memcmp((char *)&Datadef, (char *)&DDEF_Audio, sizeof(aafUID_t)) == 0 )
+	else if ( memcmp((char *)&Datadef, (char *)&DDEF_Sound, sizeof(aafUID_t)) == 0 )
 	{
 		strcpy(datakindName, "omfi:data:Sound");
 		bFound = OMF2::omfiDatakindLookup(OMFFileHdl, datakindName, pDatakind, (OMF2::omfErr_t *) &rc);
