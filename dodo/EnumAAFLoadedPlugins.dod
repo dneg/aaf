@@ -7,7 +7,7 @@ AAFRoot\
 #c
 AD_HEAD
 AD_IDL(//
-// An object which allows iteration over all of the AAFPluggableDefinitions
+// An object which allows iteration over all of the AAFDefObject
 // managed by the AAFPluginManager.  This is useful when adding something pluggable
 // into an AAF file\, as you know what choices are locally available.
 //
@@ -28,7 +28,7 @@ AD_IDL(//
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-AD_FORWARD_DECLARATION(AAFPluggableDef)
+AD_FORWARD_DECLARATION(AAFDefObject)
 
 
 /***********************************************\
