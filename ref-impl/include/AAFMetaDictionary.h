@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Tue Jun 22 17:09:32 EDT 1999
+// This file was generated on Tue Jun 22 17:40:49 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -957,14 +957,6 @@ AAF_PROPERTY(Type,
   0x1f01,
   RefAUID,
   true,
-  ParameterDefinition)
-AAF_PROPERTY(ReferenceValues,
-  AAF_LITERAL_AUID(0x06444402,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  0x1f02,
-  ObjRefArray,
-  false,
   ParameterDefinition)
 AAF_PROPERTY(DisplayUnits,
   AAF_LITERAL_AUID(0x06444403,
@@ -2406,16 +2398,6 @@ AAF_PROPERTY(PointList,
   ObjRefArray,
   true,
   VaryingValue)
-AAF_CLASS_END(VaryingValue)
-AAF_CLASS_SEPARATOR()
-
-// ReferenceValue
-//
-AAF_CLASS(ReferenceValue,
-  AAF_LITERAL_AUID(0x064E0000,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  InterchangeObject)
 AAF_PROPERTY(Value,
   AAF_LITERAL_AUID(0x064E0100,
     0x0000, 0x0000,
@@ -2423,7 +2405,7 @@ AAF_PROPERTY(Value,
   0x4f01,
   DataValue,
   true,
-  ReferenceValue)
+  VaryingValue)
 AAF_PROPERTY(DisplayValue,
   AAF_LITERAL_AUID(0x064E0200,
     0x0000, 0x0000,
@@ -2431,7 +2413,7 @@ AAF_PROPERTY(DisplayValue,
   0x4f02,
   String,
   false,
-  ReferenceValue)
+  VaryingValue)
 AAF_PROPERTY(Significance,
   AAF_LITERAL_AUID(0x064E0300,
     0x0000, 0x0000,
@@ -2439,8 +2421,8 @@ AAF_PROPERTY(Significance,
   0x4f03,
   ReferenceType,
   true,
-  ReferenceValue)
-AAF_CLASS_END(ReferenceValue)
+  VaryingValue)
+AAF_CLASS_END(VaryingValue)
 AAF_CLASS_SEPARATOR()
 
 // TaggedValue
