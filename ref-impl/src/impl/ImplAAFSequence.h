@@ -164,6 +164,13 @@ public:
   AAFRESULT
     SetNthComponent (aafUInt32 index, ImplAAFComponent* pComponent);
 
+	virtual AAFRESULT TraverseToClip( aafLength_t length,
+									  ImplAAFSegment **sclp,
+									  ImplAAFPulldown **pulldownObj,
+									  aafInt32 *pulldownPhase,
+									  aafLength_t *sclpLen,
+									  aafBool *isMask);
+
 private:
 	OMStrongReferenceVectorProperty<ImplAAFComponent> _components;
 

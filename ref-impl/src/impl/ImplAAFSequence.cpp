@@ -26,6 +26,7 @@
 #include "ImplAAFDataDef.h"
 #include "ImplEnumAAFComponents.h"
 #include "ImplAAFSequence.h"
+#include "ImplAAFSourceClip.h"
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
 
@@ -781,3 +782,45 @@ AAFRESULT
 	return hr;
 }
 
+
+AAFRESULT ImplAAFSequence::TraverseToClip(aafLength_t length,
+											ImplAAFSegment **sclp,
+											ImplAAFPulldown ** /*pulldownObj*/,
+											aafInt32 * /*pulldownPhase*/,
+											aafLength_t *sclpLen,
+											aafBool * /*isMask*/)
+{
+	XPROTECT()
+	{
+		aafUInt32	count = 0;
+		CHECK(CountComponents( &count ));
+		if( count != 1 )
+		    return(AAFRESULT_TRAVERSAL_NOT_POSS);
+
+		ImplAAFComponent *p_component = NULL;
+		CHECK(GetComponentAt( 0, &p_component ));
+
+		ImplAAFSourceClip *p_src_clip = dynamic_cast<ImplAAFSourceClip*>( p_component );
+		if( !p_src_clip )
+		{
+		    p_component->ReleaseReference();
+		    p_component = NULL;
+		    return(AAFRESULT_TRAVERSAL_NOT_POSS);
+		}
+
+		*sclp = p_src_clip;
+
+		CHECK((*sclp)->GetLength(sclpLen));
+		if (Int64Less(length, *sclpLen))
+		{
+			*sclpLen = length;
+		}
+	} /* XPROTECT */
+	
+	XEXCEPT
+	{
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
+}
