@@ -791,7 +791,7 @@ int main(int argc, char* argv[])
 		  exit (1);
 		}
 	  char * outfilename = argv[2];
-	  filestream.open (outfilename, ios::out, filebuf::openprot);
+	  filestream.open (outfilename, ios::out);
 	  if (filestream.rdstate() && ios::failbit)
 		{
 		  cerr << "Output file " << outfilename << " could not be"
