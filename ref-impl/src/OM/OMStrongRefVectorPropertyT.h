@@ -909,8 +909,10 @@ OMStrongReferenceVectorProperty<ReferencedObject>::setObjectAt(
   PRECONDITION("Valid index", index < count());
   PRECONDITION("Valid object", object != 0);
 
-  // TBS
-  return 0;
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  return setValueAt(p, index);
 }
 
   // @mfunc The value of this <c OMStrongReferenceVectorProperty>
@@ -930,8 +932,7 @@ OMStrongReferenceVectorProperty<ReferencedObject>::getObjectAt(
 
   PRECONDITION("Valid index", index < count());
 
-  // TBS
-  return 0;
+  return valueAt(index);
 }
 
   // @mfunc Append the given <p OMObject> <p object> to
@@ -988,8 +989,7 @@ OMStrongReferenceVectorProperty<ReferencedObject>::removeObjectAt(
 
   PRECONDITION("Valid index", index < count());
 
-  // TBS
-  return 0;
+  return removeAt(index);
 }
 
   // @mfunc Insert <p object> into this <c OMStrongReferenceVectorProperty>
@@ -1011,7 +1011,10 @@ OMStrongReferenceVectorProperty<ReferencedObject>::insertObjectAt(
   PRECONDITION("Valid index", index <= count());
   PRECONDITION("Valid object", object != 0);
 
-  // TBS
+  const ReferencedObject* p = dynamic_cast<const ReferencedObject*>(object);
+  ASSERT("Object is correct type", p != 0);
+
+  insertAt(p, index);
 }
 
 #endif
