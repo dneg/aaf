@@ -256,7 +256,6 @@ private:
   // StructuredProperty<aafProductVersion_t> _toolkitVersion;
   OMWideStringProperty                             _platform;
   // FixedSizeProperty<AUID>                 _generation;
-  aafBool									 _initialized;
 };
 
 #endif // ! __ImplAAFIdentification_h__
