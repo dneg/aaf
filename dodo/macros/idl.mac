@@ -25,7 +25,7 @@
 #startm AD_CLASS_BEGIN 00
 #import "Unknown.idl"
 
-interface .this-module : IUnknown
+interface I.this-module : IUnknown
 {
 #endm
 
@@ -71,6 +71,7 @@ AD_CLASS_BEGIN
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (%02 %03 %04);
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -119,6 +120,7 @@ AD_CLASS_BEGIN
     %01 (%02 %03 %04, %06 %07 %08, %10 %11 %12);
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes four arguments.
@@ -147,6 +149,7 @@ AD_CLASS_BEGIN
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (%02 %03 %04, %06 %07 %08, %10 %11 %12, %14 %15 %16);
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -180,6 +183,7 @@ AD_CLASS_BEGIN
   virtual AAFRESULT STDMETHODCALLTYPE
     %01 (%02 %03 %04, %06 %07 %08, %10 %11 %12, %14 %15 %16, %18 %19 %20);
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -218,6 +222,7 @@ AD_CLASS_BEGIN
     %01 (%02 %03 %04, %06 %07 %08, %10 %11 %12, %14 %15 %16, %18 %19 %20, %22 %23 %24);
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Ends a class definition
@@ -226,4 +231,101 @@ AD_CLASS_BEGIN
 #c
 #startm AD_CLASS_END 00
 }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_END 00
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Specifies an overridden method
+#c
+#c Argument: method declaration
+#c
+#startm AD_OVERRIDE 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes one argument.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument modifiers (e.g. [in])
+#c Argument2: argument type
+#c Argument3: argument name
+#c Argument4: argument comment
+#c Argument5: constructor description
+#c
+#startm AD_CONSTRUCTOR1 05
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes two arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument modifiers (e.g. [in])
+#c Argument2: argument1 type
+#c Argument3: argument1 name
+#c Argument4: argument1 comment
+#c Argument5: argument modifiers (e.g. [in])
+#c Argument6: argument2 type
+#c Argument7: argument2 name
+#c Argument8: argument2 comment
+#c Argument9: constructor description
+#c
+#startm AD_CONSTRUCTOR2 09
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument, which is
+#c a pointer to an AAF object which is to be returned to the caller.
+#c This is different from the normal METHOD macro because the
+#c _rep will probably have the object in a different form.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#startm AD_GETOBJ_METHOD1 06
+  // %06
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (%02 %03 ** I%04);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument, which is
+#c a pointer to an AAF object which is to be passed in from the caller.
+#c This is different from the normal METHOD macro because the
+#c _rep will probably have the object in a different form.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#startm AD_SETOBJ_METHOD1 06
+  // %06
+  virtual AAFRESULT STDMETHODCALLTYPE
+    %01 (%02 %03 * I%04);
 #endm

@@ -28,23 +28,33 @@
 #include ".this-module.h"
 #endif
 
-#ifndef _J.this-module_h_
-#include "J.this-module.h"
+#ifndef _Impl.this-module_h_
+#include "Impl.this-module.h"
 #endif
 
 #include <assert.h>
 
 
-.this-module::.this-module ()
+.this-module::.this-module (AAFBool doInit)
+: .parent-module (AAFFalse)
 {
-  _rep = new J.this-module;
-  assert (_rep);
+  if (doInit)
+	{
+	  Impl.this-module * newRep;
+	  rewRep = new Impl.this-module;
+	  assert (newRep);
+	  InitRep (newRep);
+	  newRep->InitCppParent (this);
+	}
 }
 
 
 .this-module::~.this-module ()
 {
-  delete _rep;
+  Impl.this-module * rep;
+  rep = GetRepObject ();
+  assert (rep);
+  delete rep;
 }
 #endm
 
@@ -56,7 +66,52 @@
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-AD_CLASS_BEGIN
+#ifndef _.this-module_h_
+#include ".this-module.h"
+#endif
+
+#ifndef _Impl.this-module_h_
+#include "Impl.this-module.h"
+#endif
+
+#include <assert.h>
+
+
+.this-module::.this-module (AAFBool doInit)
+{
+  if (doInit)
+	{
+	  Impl.this-module * newRep;
+	  rewRep = new Impl.this-module;
+	  assert (newRep);
+	  InitRep (newRep);
+	  newRep->InitCppParent (this);
+	}
+}
+
+
+.this-module::~.this-module ()
+{
+  Impl.this-module * rep;
+  rep = GetRepObject ();
+  assert (rep);
+  delete rep;
+}
+
+
+void .this-module::InitRep (Impl.this-module * newRep)
+{
+  assert (newRep);
+  _rep = newRep;
+  newRep->InitCppParent (this);
+}
+
+
+Impl.this-module * .this-module::GetRepObject ()
+{
+  assert (_rep);
+  return _rep;
+}
 #endm
 
 
@@ -72,7 +127,10 @@ AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 ()
 {
   .this-module * ptr;
-  ptr = static_cast<.this-module*> (_rep);
+  ImplAAFObject * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<.this-module*> (pO);
   assert (ptr);
   return ptr->%01();
 }
@@ -95,11 +153,15 @@ AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04)
 {
   .this-module * ptr;
-  ptr = static_cast<.this-module*> (_rep);
+  ImplAAFObject * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04);
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -121,7 +183,10 @@ AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08)
 {
   .this-module * ptr;
-  ptr = static_cast<.this-module*> (_rep);
+  ImplAAFObject * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08);
 }
@@ -152,11 +217,15 @@ AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08, %11, %12)
 {
   .this-module * ptr;
-  ptr = static_cast<.this-module*> (_rep);
+  ImplAAFObject * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08,%12);
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -186,11 +255,15 @@ AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08, %11 %12, %15, %16)
 {
   .this-module * ptr;
-  ptr = static_cast<.this-module*> (_rep);
+  ImplAAFObject * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16);
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -224,11 +297,15 @@ AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20)
 {
   .this-module * ptr;
-  ptr = static_cast<.this-module*> (_rep);
+  ImplAAFObject * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16,%20);
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -266,11 +343,15 @@ AAFRESULT STDMETHODCALLTYPE
     .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24)
 {
   .this-module * ptr;
-  ptr = static_cast<.this-module*> (_rep);
+  ImplAAFObject * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<.this-module*> (pO);
   assert (ptr);
   return ptr->%01 (%04,%08,%12,%16,%20,%24);
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -279,4 +360,157 @@ AAFRESULT STDMETHODCALLTYPE
 #c Arguments: none
 #c
 #startm AD_CLASS_END 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Ends a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_ROOT_CLASS_END 00
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Specifies an overridden method
+#c
+#c Argument: method declaration
+#c
+#startm AD_OVERRIDE 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes one argument.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument modifiers (e.g. [in])
+#c Argument2: argument type
+#c Argument3: argument name
+#c Argument4: argument comment
+#c Argument5: constructor description
+#c
+#startm AD_CONSTRUCTOR1 05
+.this-module::.this-module (%02 %03)
+{
+  Impl.this-module * newRep;
+  rewRep = new Impl.this-module (%03);
+  assert (newRep);
+  InitRep (newRep);
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a constructor which takes two arguments.
+#c Constructor name is assumed to be .this-module.
+#c
+#c Argument1: argument modifiers (e.g. [in])
+#c Argument2: argument1 type
+#c Argument3: argument1 name
+#c Argument4: argument1 comment
+#c Argument5: argument modifiers (e.g. [in])
+#c Argument6: argument2 type
+#c Argument7: argument2 name
+#c Argument8: argument2 comment
+#c Argument9: constructor description
+#c
+#startm AD_CONSTRUCTOR2 09
+.this-module::.this-module (%02 %03,%06 %07)
+{
+  Impl.this-module * newRep;
+  rewRep = new Impl.this-module (%03, %07);
+  assert (newRep);
+  InitRep (newRep);
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument, which is
+#c a pointer to an AAF object which is to be returned to the caller.
+#c This is different from the normal METHOD macro because the
+#c _rep will probably have the object in a different form.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#c NOTE!!! This macro takes as type, the object itself, not the
+#c pointer to it.  The indirection will be added by the macro
+#c expansion.
+#c
+#startm AD_GETOBJ_METHOD1 06
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::%01 (%03 ** %04)
+{
+  ImplAAFObject * pThisO;
+  Impl%03 * repObj;
+  %03  * retObj;
+  AAFRESULT stat;
+
+  pThisO = GetRepObject ();
+  assert (pThisO);
+
+  stat = pThisO->%01 (&repObj);
+  if (FAILED (stat))
+	{
+	  return stat;
+	}
+  assert (repObj);
+  retObj = repObj->GetCppParent();
+  assert (retObj);
+  assert (%04);
+  *%04 = retObj;
+}
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Inserts declaration for a method which takes one argument, which is
+#c a pointer to an AAF object which is to be passed in from the caller.
+#c This is different from the normal METHOD macro because the
+#c _rep will probably have the object in a different form.
+#c
+#c NOTE!!! This macro takes as type, the object itself, not the
+#c pointer to it.  The indirection will be added by the macro
+#c expansion.
+#c
+#c Argument1: method name
+#c Argument2: argument modifiers (e.g. [in])
+#c Argument3: argument type
+#c Argument4: argument name
+#c Argument5: argument comment
+#c Argument6: method description
+#c
+#startm AD_SETOBJ_METHOD1 06
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::%01 (%03 * %04)
+{
+  ImplAAFObject* pArgO;
+  ImplAAFObject* pThisO;
+  Impl%03 * repObj;
+  AAFRESULT stat;
+
+  pThisO = GetRepObject ();
+  assert (pThisO);
+
+  assert (%04);
+  pArgO = %04->GetRepObject ();
+  assert (pArgO);
+  repObj = static_cast<Impl%03*> (pArgO);
+  assert (repObj);
+  stat = pThisO->%01 (repObj);
+  return stat;
+}
 #endm
