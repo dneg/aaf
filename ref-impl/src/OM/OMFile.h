@@ -196,10 +196,12 @@ private:
   // @access Private members.
 
     // @cmember Write the signature to the given file.
-  void writeSignature(const wchar_t* fileName);
+  static void writeSignature(const wchar_t* fileName,
+                             const OMFileSignature& signature);
 
     // @cmember Read the signature from the given file.
-  void readSignature(const wchar_t* fileName);
+  static void readSignature(const wchar_t* fileName,
+                            OMFileSignature& signature);
 
   OMRootStorable* _root;
   OMStoredObject* _rootStore;
