@@ -413,6 +413,8 @@ static void ReadAAFFile(aafWChar * pFileName)
   }
 }
 
+const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
+
 static void CreateAAFFile(aafWChar * pFileName)
 {
   IAAFFile *          pFile = NULL;
@@ -435,7 +437,7 @@ static void CreateAAFFile(aafWChar * pFileName)
   ProductInfo.productVersion.patchLevel = 0;
   ProductInfo.productVersion.type = kVersionUnknown;
   ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = -1;
+  ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
   
   check(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));

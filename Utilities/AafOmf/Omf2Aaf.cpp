@@ -68,6 +68,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 // Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
+const aafUID_t ProductID = { 0x3B4794A1, 0x299C, 0x11d3, { 0x80, 0xAE, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
 extern AafOmfGlobals* gpGlobals;
 // ============================================================================
@@ -298,7 +299,7 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 		ProductInfo.productVersion.patchLevel = 0;
 		ProductInfo.productVersion.type = kVersionDebug;
 		ProductInfo.productVersionString = NULL;
-		ProductInfo.productID = 42;
+		ProductInfo.productID = ProductID;
 		ProductInfo.platform = NULL;
 		rc = AAFFileOpenNewModify(pwFileName, 0, &ProductInfo, &pFile);
 	}
@@ -324,7 +325,7 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 				ProductInfo.productVersion.patchLevel = 0;
 				ProductInfo.productVersion.type = kVersionDebug;
 				ProductInfo.productVersionString = NULL;
-				ProductInfo.productID = 42;
+				ProductInfo.productID = ProductID ;
 				ProductInfo.platform = NULL;
 				pIdent->SetCompanyName(ProductInfo.companyName);
 				pIdent->SetProductName(ProductInfo.productName);

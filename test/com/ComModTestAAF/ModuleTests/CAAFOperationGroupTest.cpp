@@ -23,6 +23,7 @@
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "aafUtils.h"
+#include "AAFDefUIDs.h"
 
 static aafUID_t	zeroID = { 0 };
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
@@ -81,7 +82,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	ProductInfo.productVersion.patchLevel = 0;
 	ProductInfo.productVersion.type = kVersionUnknown;
 	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
+	ProductInfo.productID = UnitTestProductID;
 	ProductInfo.platform = NULL;
 
 	*ppFile = NULL;
