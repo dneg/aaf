@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <memory.h>
+#include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"

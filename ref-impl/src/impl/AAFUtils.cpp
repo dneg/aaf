@@ -163,7 +163,10 @@
 #include "AAFUtils.h"
 #include "aafCvt.h"
 #include "AAFResult.h"
+#ifdef __sgi
+// For CoCreateGuid()
 #include "AAFCOMPlatform.h"
+#endif
 
 /* Moved math.h down here to make NEXT's compiler happy */
 #include <math.h>
