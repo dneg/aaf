@@ -27,6 +27,7 @@
 
 #include <assert.h>
 #include <string.h>
+#include <sys/types.h>		// for off_t
 #include <stdlib.h>
 #include "AAFResult.h"
 
