@@ -253,11 +253,21 @@ void OMWeakReferenceSetProperty<ReferencedObject>::insert(
 
   PRECONDITION("Valid object", object != 0);
   PRECONDITION("Object is not present", !containsValue(object));
-
+#if defined(OM_VALIDATE_WEAK_REFERENCES)
+  PRECONDITION("Source container object attached to file",
+                                                        container()->inFile());
+  PRECONDITION("Target object attached to file", object->inFile());
+  PRECONDITION("Source container object and target object in same file",
+                                        container()->file() == object->file());
+#endif
   // Set the set to contain the new object
   //
   OMUniqueObjectIdentification key = object->identification();
   SetElement newElement(this, key, _targetTag);
+#if defined(OM_VALIDATE_WEAK_REFERENCES)
+  _targetTag = file()->referencedProperties()->insert(_targetName);
+  newElement.reference().setTargetTag(_targetTag);
+#endif
   newElement.setValue(object);
   _set.insert(newElement);
   setPresent();
