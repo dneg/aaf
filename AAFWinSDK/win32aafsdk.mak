@@ -245,7 +245,6 @@ TARGET_H_FILES = \
 	$(AAFSDK_INCLUDE)\AAFExtEnum.h \
 	$(AAFSDK_INCLUDE)\AAFFileKinds.h \
 	$(AAFSDK_INCLUDE)\AAFFileMode.h \
-	$(AAFSDK_INCLUDE)\AAFFileSignatures.h \
 	$(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h \
 	$(AAFSDK_INCLUDE)\AAFMetaDictionary.h \
 	$(AAFSDK_INCLUDE)\AAFOperationCategories.h \
@@ -513,9 +512,6 @@ $(AAFSDK_INCLUDE)\AAFFileKinds.h : $(TOOLKIT_INCLUDE)\AAFFileKinds.h
 
 $(AAFSDK_INCLUDE)\AAFFileMode.h : $(TOOLKIT_INCLUDE)\AAFFileMode.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFFileMode.h $@
-
-$(AAFSDK_INCLUDE)\AAFFileSignatures.h : $(TOOLKIT_INCLUDE)\AAFFileSignatures.h
-	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFFileSignatures.h $@
 
 $(AAFSDK_INCLUDE)\AAFInterpolatorDefs.h : $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h
 	$(UPDATE) $(TOOLKIT_INCLUDE)\AAFInterpolatorDefs.h $@
