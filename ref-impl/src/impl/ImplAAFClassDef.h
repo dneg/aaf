@@ -159,11 +159,6 @@ public:
          ImplAAFPropertyDef ** ppPropDef);
 
 
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFClassDef)
-
-
   //****************
   // LookupPropertyDefbyOMPid()
   //
@@ -174,6 +169,11 @@ public:
 
          // @parm [out] resulting property definition
          ImplAAFPropertyDef ** ppPropDef) const;
+
+
+  // Returns the AUID of the parent class.  Returns the NULL auid if
+  // this is the end of the line.
+  void pvtGetParentAUID (aafUID_t & result);
 
 
 private:
