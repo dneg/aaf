@@ -19,7 +19,7 @@
 
 typedef enum
 {
-	kOmCreate, kOmModify, kOmOpenRead
+	kOmCreate, kOmModify, kOmOpenRead, kOmUndefined = -1
 }				openType_t;
 
 //
@@ -32,7 +32,7 @@ class AAFMedia;
 class ImplAAFHeader;
 struct IAAFSession;
 class ImplAAFSession;
-class ImplAAFDataDefinition;
+class ImplAAFDataDef;
 
 class ImplAAFFile : public ImplAAFRoot
 {
@@ -43,9 +43,9 @@ public:
   //********
   ImplAAFFile ();
   virtual ~ImplAAFFile ();
-
+#if 0
   OMDECLARE_STORABLE(ImplAAFFile)
-
+#endif
   //***********************************************************
   // METHOD NAME: Close()
   //
@@ -96,6 +96,8 @@ private:
 								   ImplAAFSession * session,
 								   OMLContainerUseMode useMode, 
 								   openType_t type);
+  
+  void InternalReleaseObjects();
 
 		aafInt32       	_cookie;
 		aafFileFormat_t _fmt;
@@ -116,9 +118,9 @@ private:
 #endif
 		aafBool         _semanticCheckEnable;	//!!!  /* Used to stop recursion in checks */
 		ImplAAFSession		 *_session;		//!!!  used by file checker
-		ImplAAFDataDefinition *	_nilKind;// !!!
-		ImplAAFDataDefinition *	_pictureKind;// !!!
-		ImplAAFDataDefinition *	_soundKind;// !!!
+		ImplAAFDataDef *	_nilKind;// !!!
+		ImplAAFDataDef *	_pictureKind;// !!!
+		ImplAAFDataDef *	_soundKind;// !!!
 #ifdef AAF_ERROR_TRACE
 		char			*_stackTrace;	//!!!	
 		aafInt32		_stackTraceSize;	//!!!	
