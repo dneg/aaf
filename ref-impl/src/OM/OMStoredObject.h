@@ -248,6 +248,9 @@ public:
                               OMPropertyId pid,
                               OMUInt32 localKey);
 
+protected:
+  // @access Protected members.
+
     // @cmember Constructor.
   OMStoredObject(IStorage* s);
 
