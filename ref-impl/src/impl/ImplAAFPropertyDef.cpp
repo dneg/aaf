@@ -401,6 +401,10 @@ void ImplAAFPropertyDef::onRestore(void* clientContext) const
     // as an AUID to be consistent with the implementation.
     AAF_PATCH_PROPETY_TYPE(PID_PropertyDefinition_Type, kAAFTypeID_AUID)
 
+    // In DR4 and earlier there were a couple of types that incorrectly used String instead of StringArray.
+//    AAF_PATCH_PROPETY_TYPE(PID_TypeDefinitionExtendibleEnumeration_ElementNames, kAAFTypeID_StringArray)
+//    AAF_PATCH_PROPETY_TYPE(PID_TypeDefinitionRecord_MemberNames, kAAFTypeID_StringArray)
+    
   AAF_END_TYPE_PATCHES()
 
 

@@ -54,16 +54,6 @@ ImplAAFTypeDefObjectRef::~ImplAAFTypeDefObjectRef ()
 {}
 
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefObjectRef::pvtInitialize (
-      const aafUID_t & /*pID*/,
-      const ImplAAFClassDef * /*pRefdObjID*/,
-      const aafCharacter * /*pTypeName*/)
-{
-  // This is a virtual function should be implemented in a derived class.
-  return AAFRESULT_INTERNAL_ERROR;
-}
-
 
 
 AAFRESULT STDMETHODCALLTYPE

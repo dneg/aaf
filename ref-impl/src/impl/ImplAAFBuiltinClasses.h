@@ -53,6 +53,7 @@
 
 class ImplAAFClassDef;
 class ImplAAFDictionary;
+class ClassDefinition;
 
 class ImplAAFBuiltinClasses
 {
@@ -83,13 +84,6 @@ public:
   // axiomatic; returns false otherwise.
   bool IsAxiomaticClass (const aafUID_t & classId) const;
 
-  // Returns the number of axiomatic classes.
-  aafUInt32 CountAxClasses () const;
-
-  // Assure that the types of all properties of all axiomatic classes
-  // are loaded.
-  void AssurePropertyTypes ();
-
 private:
 
   // Identifies all properties defined as built-in for the given
@@ -97,119 +91,18 @@ private:
   // def.  Will not work for client-extended properties of built-in
   // classes, or for client-extended classes.
   void RegisterBuiltinProperties
-    (ImplAAFClassDef * pClassDef) const;
+    (const ClassDefinition * classDefinition, 
+     ImplAAFClassDef * pClassDef) const;
 
 
   //
   // Initializes this object and populates it with property definitions.
   //
   AAFRESULT InitBuiltinClassDef (const aafUID_t & rClassID,
+								 const ClassDefinition * classDefinition,
 								 ImplAAFClassDef * pClass);
 
 
-  struct PropTblEntry
-  {
-	wchar_t *        name;
-	aafUID_t         id;
-	OMPropertyId     tag;
-	const aafUID_t * pTypeGuid;
-	const aafUID_t * pOwnerClassGuid;
-	bool             mandatory;
-  bool             isUniqueIdentifier; // this property is a unique identifier for the class
-	ImplAAFOMPropertyCreateFunc_t omPropCreateFunc;
-	PropTblEntry *   nextProp;  // null if this is the last one
-  };
-
-  struct ClassTblEntry
-  {
-    const aafUID_t     * pThisId;
-	const aafCharacter * pName;
-	const aafUID_t     * pParentId;
-	ClassTblEntry      * pParent;     // null for root
-	PropTblEntry       * pProperties; // null for none
-	bool                 isConcrete;
-  };
-
-
-  static OMProperty * CreateOMPropTypeSimple
-  (OMPropertyId pid,
-   const wchar_t * name);
-
-  static OMProperty * CreateOMPropTypeWeakReference
-  (OMPropertyId pid,
-   const wchar_t * name);
-
-  static OMProperty * CreateOMPropTypeWeakReferenceSet
-  (OMPropertyId pid,
-   const wchar_t * name);
-
-  static OMProperty * CreateOMPropTypeWeakReferenceVector
-  (OMPropertyId pid,
-   const wchar_t * name);
-
-  static OMProperty * CreateOMPropTypeStrongReference
-  (OMPropertyId pid,
-   const wchar_t * name);
-
-  static OMProperty * CreateOMPropTypeStrongReferenceSet
-  (OMPropertyId pid,
-   const wchar_t * name);
-
-  static OMProperty * CreateOMPropTypeStrongReferenceVector
-  (OMPropertyId pid,
-   const wchar_t * name);
-
-
-
-  // a struct to keep track of property defs while we're initializing
-  struct PropDefRecord
-  {
-	OMPropertyId         pid;
-	ImplAAFPropertyDefSP pPropDef;
-	aafUID_t             ownerClassId;
-  };
-
-
-  // Returns the number of axiomatic properties.
-  aafUInt32 _numAxProps;
-  bool      _numAxPropsInited;
-  aafUInt32 countAxProps () const;
-
-  // Returns the axiomatic property definition corresponding to the
-  // given OM Property ID.
-  ImplAAFPropertyDef * lookupAxProp (OMPropertyId pid);
-
-  // Initialiaztion function which instantiates all axiomatic
-  // properties and initializes them as much as it can.
-  void instantiateProps ();
-
-  // Initialiaztion function which instantiates all axiomatic classes
-  // and initializes them as much as it can.
-  void instantiateClasses ();
-  void FinishInitClasses ();
-
-  static ClassTblEntry sBuiltinClassTable[];
-  static const aafUInt32 ksNumClassDefs;
-
-  static PropTblEntry sBuiltinPropTable[];
-  static const aafUInt32 ksNumPropDefs;
-
-  // Look up our private struct-defining-a-class corresponding to the
-  // given classId.
-  static ClassTblEntry * lookupClassEntry (const aafUID_t & classId);
-
-  // flag to detect if buitin tables have been initialized, and
-  // function to do the initialization.
-  static bool sBuiltinsInited;
-  static bool sInitBuiltins ();
-
-  static const aafUID_t * sAxClassIDs[];
-  static const aafUInt32 ksNumAxClasses;
-
-  PropDefRecord * _axPropDefs;
-
-  // array of class def smart pointers which will be the axiomatic class defs.
-  ImplAAFClassDefSP * _axClassDefs;
 
   ImplAAFDictionary* _dictionary; // pointer back to associated dictionary (temp)
 

@@ -128,7 +128,6 @@
 #include <assert.h>
 
 
-
 static AAFRESULT CreateNewIntegerType (const aafUID_t & idToCreate,
 								  ImplAAFDictionary * pDict,
 								  ImplAAFTypeDef ** ppCreatedTypeDef)
@@ -171,7 +170,6 @@ static AAFRESULT CreateNewIntegerType (const aafUID_t & idToCreate,
 	}
   return AAFRESULT_NO_MORE_OBJECTS;
 }
-
 
 //
 // We have the following structures to work with, defined in
@@ -809,176 +807,6 @@ static AAFRESULT CreateNewStringType (const aafUID_t & idToCreate,
 }
 
 
-static AAFRESULT CreateNewCharacterType (const aafUID_t & idToCreate,
-									ImplAAFDictionary * pDict,
-									ImplAAFTypeDef ** ppCreatedTypeDef)
-{
-  assert (pDict);
-  AAFRESULT hr;
-
-  // Go through the character list, attempting to identify the requested
-  // ID.
-  TypeCharacter * curCharacter = s_AAFAllTypeCharacters;
-  while (curCharacter->isValid)
-	{
-	  // Check to see if the current ID matches the ID of the type
-	  // def we want to create.
-	  if (! memcmp (&idToCreate, &curCharacter->typeID, sizeof (aafUID_t)))
-		{		
-      assert(curCharacter->size == 2); // we only persist 2 byte unicode characters.
-
-		  // Yes, this is the one.
-		  // Create an impl typedefinteger object (as yet uninitialized)
-		  ImplAAFTypeDefCharacter * ptd = 0;
-		  hr = pDict->CreateMetaInstance (AUID_AAFTypeDefCharacter, (ImplAAFMetaDefinition **) &ptd);
-		  if (AAFRESULT_FAILED (hr))
-			return hr;
-		  assert (ptd);
-
-		  AAFRESULT hr = ptd->pvtInitialize (curCharacter->typeID,
-										  curCharacter->typeName);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-
-		  assert (ppCreatedTypeDef);
-		  *ppCreatedTypeDef = ptd;
-		  (*ppCreatedTypeDef)->AcquireReference ();
-		  ptd->ReleaseReference ();
-		  ptd = 0;
-		  return AAFRESULT_SUCCESS;
-		}
-
-	  curCharacter++;
-	}
-  return AAFRESULT_NO_MORE_OBJECTS;
-}
-
-
-static AAFRESULT CreateNewIndirectType (const aafUID_t & idToCreate,
-									ImplAAFDictionary * pDict,
-									ImplAAFTypeDef ** ppCreatedTypeDef)
-{
-  assert (pDict);
-  AAFRESULT hr;
-
-  // Go through the character list, attempting to identify the requested
-  // ID.
-  TypeIndirect * curIndirect = s_AAFAllTypeIndirects;
-  while (curIndirect->isValid)
-	{
-	  // Check to see if the current ID matches the ID of the type
-	  // def we want to create.
-	  if (! memcmp (&idToCreate, &curIndirect->typeID, sizeof (aafUID_t)))
-		{		
-		  // Yes, this is the one.
-		  // Create an impl typedefinteger object (as yet uninitialized)
-		  ImplAAFTypeDefIndirect * ptd = 0;
-		  hr = pDict->CreateMetaInstance (AUID_AAFTypeDefIndirect, (ImplAAFMetaDefinition **) &ptd);
-		  if (AAFRESULT_FAILED (hr))
-			return hr;
-		  assert (ptd);
-
-		  AAFRESULT hr = ptd->Initialize (curIndirect->typeID, curIndirect->typeName);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-
-		  assert (ppCreatedTypeDef);
-		  *ppCreatedTypeDef = ptd;
-		  (*ppCreatedTypeDef)->AcquireReference ();
-		  ptd->ReleaseReference ();
-		  ptd = 0;
-		  return AAFRESULT_SUCCESS;
-		}
-
-	  curIndirect++;
-	}
-  return AAFRESULT_NO_MORE_OBJECTS;
-}
-
-
-static AAFRESULT CreateNewOpaqueType (const aafUID_t & idToCreate,
-									ImplAAFDictionary * pDict,
-									ImplAAFTypeDef ** ppCreatedTypeDef)
-{
-  assert (pDict);
-  AAFRESULT hr;
-
-  // Go through the list, attempting to identify the requested
-  // ID.
-  TypeOpaque * curOpaque = s_AAFAllTypeOpaques;
-  while (curOpaque->isValid)
-	{
-	  // Check to see if the current ID matches the ID of the type
-	  // def we want to create.
-	  if (! memcmp (&idToCreate, &curOpaque->typeID, sizeof (aafUID_t)))
-		{		
-		  // Yes, this is the one.
-		  ImplAAFTypeDefOpaque * ptd = 0;
-		  hr = pDict->CreateMetaInstance (AUID_AAFTypeDefOpaque, (ImplAAFMetaDefinition **) &ptd);
-		  if (AAFRESULT_FAILED (hr))
-			return hr;
-		  assert (ptd);
-
-		  AAFRESULT hr = ptd->Initialize (curOpaque->typeID,
-										  curOpaque->typeName);
-		  assert (AAFRESULT_SUCCEEDED (hr));
-
-		  assert (ppCreatedTypeDef);
-		  *ppCreatedTypeDef = ptd;
-		  (*ppCreatedTypeDef)->AcquireReference ();
-		  ptd->ReleaseReference ();
-		  ptd = 0;
-		  return AAFRESULT_SUCCESS;
-		}
-
-	  curOpaque++;
-	}
-  return AAFRESULT_NO_MORE_OBJECTS;
-}
-
-
-static AAFRESULT CreateNewStreamType (const aafUID_t & idToCreate,
-									ImplAAFDictionary * pDict,
-									ImplAAFTypeDef ** ppCreatedTypeDef)
-{
-  assert (pDict);
-  AAFRESULT hr = AAFRESULT_SUCCESS;
-  aafUInt32 index, count;
-  assert (ppCreatedTypeDef);
-
-  // Go through the list, attempting to identify the requested
-  // ID.
-  TypeStream * curStream = &s_AAFAllTypeStreams[0];
-  for (index = 0, count = (sizeof(s_AAFAllTypeStreams) / sizeof(TypeStream)); index < count; ++index)
-  {
-    // Check to see if the current ID matches the ID of the type
-    // def we want to create.
-    if (! memcmp (&idToCreate, curStream->typeID, sizeof (aafUID_t)))
-    {          
-      // Yes, this is the one.
-      ImplAAFTypeDefStream * ptd = 0;
-      hr = pDict->CreateMetaInstance (AUID_AAFTypeDefStream, (ImplAAFMetaDefinition **) &ptd);
-      if (AAFRESULT_FAILED (hr))
-        return hr;
-
-      hr = ptd->pvtInitialize (*curStream->typeID,
-                               curStream->typeName);
-      assert (AAFRESULT_SUCCEEDED (hr));
-      if (AAFRESULT_SUCCEEDED (hr))
-      {
-        *ppCreatedTypeDef = ptd; // refcount is 1.
-        ptd = NULL;
-      }
-      else
-      {
-        ptd->ReleaseReference ();
-      }
-      return hr;
-    }
-
-    curStream++;
-  }
-  return AAFRESULT_NO_MORE_OBJECTS;
-}
-
 
 static AAFRESULT CreateNewStrongRefType (const aafUID_t & idToCreate,
 									ImplAAFDictionary * pDict,
@@ -1387,24 +1215,9 @@ AAFRESULT ImplAAFBuiltinTypes::NewBuiltinTypeDef
 							ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
-  hr = CreateNewCharacterType (idToCreate,
-							   _dictionary,
-							   ppCreatedTypeDef);
-  if (AAFRESULT_SUCCEEDED (hr))	return hr;
-
   hr = CreateNewStringType (idToCreate,
 							_dictionary,
 							ppCreatedTypeDef);
-  if (AAFRESULT_SUCCEEDED (hr))	return hr;
-
-  hr = CreateNewIndirectType (idToCreate,
-							   _dictionary,
-							   ppCreatedTypeDef);
-  if (AAFRESULT_SUCCEEDED (hr))	return hr;
-
-  hr = CreateNewOpaqueType (idToCreate,
-							   _dictionary,
-							   ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
   hr = CreateNewStrongRefType (idToCreate,
@@ -1435,11 +1248,6 @@ AAFRESULT ImplAAFBuiltinTypes::NewBuiltinTypeDef
   hr = CreateNewWeakRefVectorType (idToCreate,
 								   _dictionary,
 								   ppCreatedTypeDef);
-  if (AAFRESULT_SUCCEEDED (hr))	return hr;
-
-  hr = CreateNewStreamType (idToCreate,
-                            _dictionary,
-                            ppCreatedTypeDef);
   if (AAFRESULT_SUCCEEDED (hr))	return hr;
 
   // all known types failed

@@ -111,11 +111,15 @@ public:
 
 
   // Override from AAFTypeDefObjectRef
-  virtual AAFRESULT STDMETHODCALLTYPE
+  AAFRESULT STDMETHODCALLTYPE
     pvtInitialize
         (const aafUID_t & id,
          const ImplAAFClassDef *pType,
-         const aafCharacter * pTypeName);
+         const aafCharacter * pTypeName,
+         aafUInt32  ids,
+         aafUID_constptr  pTargetSet,
+         OMPropertyId * _targetPids = NULL,
+         OMPropertyId _uniqueIdentifierPid = 0);
 
   aafUInt32 GetTargetPidCount(void) const;
   const OMPropertyId * GetTargetPids(void) const;
