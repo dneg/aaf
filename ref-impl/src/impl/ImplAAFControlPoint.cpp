@@ -61,10 +61,14 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFControlPoint::GetEditHint (
       aafEditHint_t *pEditHint)
 {
-	aafUInt16	intHint;
-	
 	if(pEditHint == NULL)
 		return AAFRESULT_NULL_PARAM;
+
+	if (!_hint.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
+	aafUInt16	intHint;
+		
 	intHint = _hint;
 	*pEditHint = (aafEditHint_t)intHint;
 	return AAFRESULT_SUCCESS;

@@ -33,10 +33,15 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFContainerDef::EssenceIsIdentified (
       aafBool *pEssenceIsIdentified)
 {
+	
 	if (pEssenceIsIdentified == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
+	
+	else if (!_isIdentified.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	else
 	{
 		*pEssenceIsIdentified = _isIdentified;

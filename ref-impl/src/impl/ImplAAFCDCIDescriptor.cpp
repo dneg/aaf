@@ -175,11 +175,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetColorSiting (aafColorSiting_t* pColorSiting)
 {
-	if(!_colorSiting.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-
 	if (pColorSiting == NULL)
 		return AAFRESULT_NULL_PARAM;
+
+	if(!_colorSiting.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pColorSiting = _colorSiting;
 
@@ -190,11 +190,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetBlackReferenceLevel (aafUInt32* pBlackReferenceLevel)
 {
-	if(!_blackReferenceLevel.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-
 	if (pBlackReferenceLevel == NULL)
 		return AAFRESULT_NULL_PARAM;
+
+	if(!_blackReferenceLevel.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
 
 	*pBlackReferenceLevel = _blackReferenceLevel;
 
@@ -205,12 +205,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetWhiteReferenceLevel (aafUInt32* pWhiteReferenceLevel)
 {
-	if(!_whiteReferenceLevel.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-	
 	if (pWhiteReferenceLevel == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	if(!_whiteReferenceLevel.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	*pWhiteReferenceLevel = _whiteReferenceLevel;
 
 	return AAFRESULT_SUCCESS;
@@ -220,12 +220,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetColorRange (aafUInt32* pColorRange)
 {
-	if(!_colorRange.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-	
 	if (pColorRange == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	if(!_colorRange.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	*pColorRange = _colorRange;
 
 	return AAFRESULT_SUCCESS;
@@ -235,12 +235,12 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCDCIDescriptor::GetPaddingBits (aafInt16* pPaddingBits)
 {
-	if(!_paddingBits.isPresent())
-		return AAFRESULT_PROP_NOT_PRESENT;
-	
 	if (pPaddingBits == NULL)
 		return AAFRESULT_NULL_PARAM;
 
+	if(!_paddingBits.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	
 	*pPaddingBits = _paddingBits;
 
 	return AAFRESULT_SUCCESS;
