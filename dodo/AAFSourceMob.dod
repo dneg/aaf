@@ -336,7 +336,7 @@ AD_XMETHOD5(SpecifyValidCodeRange,
   //   - The specified slotID already exists.)
 
 
-AD_XMETHOD7(AddPhysSourceRef,
+AD_XMETHOD5(AppendPhysSourceRef,
 			[in],
 			  objPass,
 			  aafRational_t,
@@ -348,28 +348,18 @@ AD_XMETHOD7(AddPhysSourceRef,
 			  aMobSlot,
 			  SlotID of slot to contain reference,
 			[in],
-			  objIn,
-			  AAFDataDef,
+				objPass,
+				aafUID_t *,
 			  pEssenceKind,
 			Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
     // - Picture
     // - Sound,
 			[in],
-			  objIn,
-			  AAFSegment,
-			  pSourceRefObj,
-			  Physical Source Mob that is being referenced,
-			[in],
 			  objPass,
-			  aafPosition_t,
-			  srcRefOffset,
-			  Offset in the physical Source Mob,
-			[in],
-			  objPass,
-			  aafInt32,
-			  srcRefSlot,
-			  SlotID of slot in physical Source Mob,
+			  aafSourceRef_t,
+			  ref,
+			  Reference to a Physical Source Mob,
 			[in],
 			  objPass,
 			  aafLength_t,
@@ -407,8 +397,73 @@ AD_XMETHOD7(AddPhysSourceRef,
   //
   // \(other codes here.\))
 
+AD_XMETHOD5(NewPhysSourceRef,
+			[in],
+			  objPass,
+			  aafRational_t,
+			  editrate,
+			  Edit rate of slot to contain reference,
+			[in],
+			  objPass,
+			  aafSlotID_t,
+			  aMobSlot,
+			  SlotID of slot to contain reference,
+			[in],
+				objPass,
+				aafUID_t *,
+			  pEssenceKind,
+			Data kind of slot to contain reference.  Requires a data kind
+	// valid for a essence stream.  Valid data kinds are:
+    // - Picture
+    // - Sound,
+			[in],
+			  objPass,
+			  aafSourceRef_t,
+			  ref,
+			  Reference to a Physical Source Mob,
+			[in],
+			  objPass,
+			  aafLength_t,
+			  srcRefLength,
+			  Length of the Source Clip,
+  // Connects the specified Source Mob with the physical Source Mob
+  // that describes the previous generation of essence.  If a physical
+  // Source Mob\, such as a File Source Mob or tape Source Mob\,
+  // references another physical Source Mob as its ancestor\, with
+  // no pulldown\, then this function makes the connection between the
+  // two.
+  //
+  // Functionally\, this is a helper function to create a slot with an
+  // AAFSourceClip referencing a particular piece of media.  This
+  // function takes many parameters because the components of an
+  // aafSourceRef_t have been broken out as separate parameters.
+  //
+  // The ancestor of an AAFSourceMob with an AAFFileDescriptor is often an
+  // AAFTapeDescriptor or NIL.
+  //
+  // Succeeds if all of the following are true:
+  // - the pEssenceKind pointer is valid.
+  // - the pSourceRefObj pointer is valid.
+  // \(other conditions here\)
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - either pEssenceKind or pSourceRefObj is null.
+  //
+  // \(other codes here.\))
 
-AD_XMETHOD_10(AddPulldownRef,
+AD_XMETHOD9(AddPulldownRef,
+		  	  [in],
+			  objPass,
+			    aafAppendOption_t,
+			    addType,
+			    Tells whether to overwrite an existing slot segment\, or create a sequence and append,
 			  [in],
 				objPass,
 				aafRational_t,
@@ -420,28 +475,18 @@ AD_XMETHOD_10(AddPulldownRef,
 				aMobSlot,
 				SlotID of slot to contain reference,
 			  [in],
-				objIn,
-				AAFDataDef,
+				objPass,
+				aafUID_t *,
 				pEssenceKind,
 			  Data kind of slot to contain reference.  Requires a data kind
 	// valid for a essence stream.  Valid data kinds are:
     // - Picture
     // - Sound,
-			  [in],
-				objIn,
-				AAFSegment,
-				pSourceRefObj,
-				Physical Source Mob that is being referenced,
-			  [in],
-				objPass,
-				aafPosition_t,
-				srcRefOffset,
-				Offset in the physical Source Mob,
-			  [in],
-				objPass,
-				aafInt32,
-				srcRefSlot,
-				SlotID of slot in physical Source Mob,
+			[in],
+			  objPass,
+			  aafSourceRef_t,
+			  ref,
+			  Reference to a Physical Source Mob,
 			  [in],
 				objPass,
 				aafLength_t,
