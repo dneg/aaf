@@ -37,6 +37,7 @@
 
 #include "AAFStoredObjectIDs.h"
 #include "ImplAAFObjectCreation.h"
+#include "ImplAAFBuiltinDefs.h"
 
 
 #include <assert.h>
@@ -343,7 +344,10 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		if (hr != AAFRESULT_SUCCESS)
 		  return hr;
 		dictionary->InitBuiltins();
-		dictionary->InitOMProperties ();
+		dictionary->
+		  GetBuiltinDefs()->
+		  cdDictionary()->
+		  InitOMProperties (dictionary);
 
 		dictionary->ReleaseReference();
 		dictionary = 0;
