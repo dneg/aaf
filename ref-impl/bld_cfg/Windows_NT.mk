@@ -27,6 +27,7 @@ LFLAGS =
 CFLAGS = /nologo /Gi-
 OBJFILE = /Fo$*.${OBJ}
 EXEFLAG = /Fo
+DLL_LINK_FLAGS = /DLL
 
 SH_PREFIX = 
 SH_SUFFIX = 
