@@ -20,26 +20,23 @@ AD_HEAD
 AD_CLASS_BEGIN
 
   //@access Public Members
-AD_METHOD1(AAFCompositionMob,[in],OMLObject,obj, , Constructor from persistent store.)
-
-
-AD_METHOD2(AAFCompositionMob,
-		   [in],AAFString *,name,Mob name [optional],
+AD_CONSTRUCTOR2(
+			[in],aafString_t *,name,Mob name [optional],
 		   [in],aafBool,isPrimary,Whether or not the mob is a primary mob,
 		   Constructor given name and primary mob status.)
   //@rdesc Error code [see below].
 	
 
 AD_METHOD1(IsMobKind,
-		   [in],omfMobKind_t,mobKind,One of the defined mob kinds,
-		   Ask if mob is of a particular AAFMobKind_t.)
+		   [in],aafMobKind_t,mobKind,One of the defined mob kinds,
+		   Ask if mob is of a particular aafMobKind_t.)
   //@comm<tab>ex:	kCompMob, kMasterMob, kFileMob, kTapeMob, kFilmMob,
   //<tab>		kPrimaryMob, kAllMob	//@rdesc TRUE if mob is the requested mob kind.
   //@comm Override
 
 
 AD_METHOD1(GetDefaultFade,
-		   [out],AAFDefaultFade_t *,result,a default fade struct,
+		   [out],aafDefaultFade_t *,result,a default fade struct,
 		   Get the default fade for this composition.)
   //@rdesc Error code [see below].
   //@comm If there is no default fade, this function returns with no error,
@@ -49,9 +46,9 @@ AD_METHOD1(GetDefaultFade,
 	
 
 AD_METHOD3(SetDefaultFade,
-		   [in],omfLength_t  ,fadeLength  ,Default fade length,
-		   [in],omfFadeType_t,fadeType    ,default fade type,
-		   [in],omfRational_t,fadeEditUnit,default fade edit unit,
+		   [in],aafLength_t  ,fadeLength  ,Default fade length,
+		   [in],aafFadeType_t,fadeType    ,default fade type,
+		   [in],aafRational_t,fadeEditUnit,default fade edit unit,
 		   Adds the default crossfade properties to the Mob.)
   //@rdesc Error code [see below].
   //@comm Maps to omfiMobSetDefaultFade

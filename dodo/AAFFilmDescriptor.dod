@@ -18,6 +18,8 @@ AD_HEAD
 *                                          *
 \******************************************/
 
+AD_INCLUDE(AAFTypes)
+
 AD_CLASS_BEGIN
 
 //@access Public Members
@@ -45,62 +47,47 @@ Gets the optional model or brand of the film stock.)
 
 /****/
 AD_METHOD1(GetFilmFormat,
-[in],OMLObject,obj,,
-Constructor from persistant store.)
-aafErr_t GetFilmFormat(
-		  omfFilmType_t *filmFormat); /* OUT - Film Format 
-												*      (kFt35MM, kFt16MM, kFt8MM, kFt65MM)
-												*/
+[out],aafFilmType_t*,filmFormat,filmFormat,
+Get the film format.)
+	//@comm Film format may be: kFt35MM, kFt16MM, kFt8MM, kFt65MM
 
 /****/
 AD_METHOD1(GetFrameRate,
-[in],OMLObject,obj,,
-Constructor from persistant store.)
-aafErr_t GetFrameRate(
-		  omfUInt32 *frameRate);      /* OUT - Frame Rate */
+[out],aafUInt32*,rate,Frame Rate,
+Get the frame rate of the film.)
 
 /****/
 AD_METHOD1(GetPerfPerFrame,
-[in],OMLObject,obj,,
-Constructor from persistant store.)
-aafErr_t GetPerfPerFrame(
-		  omfUInt8 *perfPerFrame);   /* OUT - Perforations per frame */
+[out],aafUInt8*,perfPerFrame,Perforations per frame,
+Get the number of perforations per frame.)
 
 /****/
 AD_METHOD1(GetFilmAspectRatio,
-[in],OMLObject,obj,,
-Constructor from persistant store.)
-aafErr_t GetFilmAspectRatio(
-		  omfRational_t *aspectRatio);/* OUT - Film Aspect Ratio  */
+[out],aafRational_t*,aspectRatio,Film Aspect Ratio,
+Get the image aspect ratio.)
 
 /****/
 AD_METHOD1(SetFilmFormat,
-[in],OMLObject,obj,,
-Constructor from persistant store.)
-aafErr_t SetFilmFormat(
-		  omfFilmType_t filmFormat); /* IN - Film Format (optional) 
-												*      (kFt35MM, kFt16MM, kFt8MM, kFt65MM)
-												*/
+[in],aafFilmType_t,filmFormat,Film Format,
+Set the film format.)
+	//@comm kFt35MM, kFt16MM, kFt8MM, kFt65MM
 
 /****/
 AD_METHOD1(SetFrameRate,
-[in],OMLObject,obj,,
-Constructor from persistant store.)
-aafErr_t SetFrameRate(
-		  omfUInt32 frameRate);      /* IN - Frame Rate (optional) */
+[in],aafUInt32,rate,Frame Rate,
+Set the frame rate of the film.)
 
 /****/
 AD_METHOD1(SetPerfPerFrame,
-[in],OMLObject,obj,,
-Constructor from persistant store.)
-aafErr_t SetPerfPerFrame(
-		  omfUInt8 perfPerFrame);    /* IN - Perforations per frame
-												*      (optional)
-												*/
+[in],aafUInt8,perfPerFrame,Perforations per frame,
+Set the number of perforations per frame.)
 
 /****/
 AD_METHOD1(SetFilmAspectRatio,
-[in],OMLObject,obj,,
-Constructor from persistant store.)
-aafErr_t SetFilmAspectRatio(
-		  omfRational_t aspectRatio);/* IN - Film Aspect Ratio (optional) */
+[in],aafRational_t,aspectRatio,Film Aspect Ratio,
+Set the image aspect ratio.)
+
+AD_OVERRIDE(.method-Test)
+
+AD_CLASS_END
+   
