@@ -132,6 +132,12 @@ static PropertyDefinition sPropertyDefinitions[] = \
 #define AAF_TABLE_END() \
 };
 
+// TEMPORARY:
+// The following three lines were copied from ImplAAFBuiltinClasses.cpp
+// String arrays are currently implemented as a single
+// null-character-delimited string
+#define kAAFTypeID_StringArray kAAFTypeID_String
+
 
 #include "AAFMetaDictionary.h"
 
@@ -140,6 +146,8 @@ static PropertyDefinition sPropertyDefinitions[] = \
 #undef MY_TYPE_ID
 #undef MY_CONTAINER_ID
 #undef MY_PROPERTY_ID
+
+#undef kAAFTypeID_StringArray
 
 //
 // Create a static table of the properties for each class.
@@ -299,7 +307,7 @@ static TypeDefinition * sTypeDefinitionsById[kTypeDefinitionCount];
 // Create an array of all Integer types.
 //
 
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 #define MY_TYPE_SIGN(signed) kAAF##signed
 
@@ -407,7 +415,7 @@ const aafUInt32 kTypeDefinitionEnumerationCount =
 //
 // Create an array of all Variable Array types.
 //
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 #define AAF_TYPE(name) kAAFTypeID_##name
 
@@ -434,7 +442,7 @@ const aafUInt32 kTypeDefinitionVariableArrayCount =
 //
 // Create an array of all Fixed Array types.
 //
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 #define AAF_TYPE(type) MY_TYPE_ID(type)
 
@@ -557,7 +565,7 @@ const aafUInt32 kTypeDefinitionRecordCount =
 //
 // Create an array of all Renamed types.
 //
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 #define AAF_TYPE(type) MY_TYPE_ID(type) /* NOT used for RENAME macro! */
 
@@ -584,7 +592,7 @@ const aafUInt32 kTypeDefinitionRenameCount =
 //
 // Create an array of all string types.
 //
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 #define AAF_TYPE(type) MY_TYPE_ID(type) /* NOT used for STRING macro! */
 
@@ -661,7 +669,7 @@ static DefinitionExtendibleEnumerationMember * \
 //
 // Create an array of all string types.
 //
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) &kAAFTypeID_##name
 #define MY_ARRAY_COUNT(name) \
   MY_ARRAY_ELEMENT_COUNT(MY_EXTENDIBLE_MEMBER_ARRAY(name))
@@ -692,7 +700,7 @@ const aafUInt32 kTypeDefinitionExtendibleEnumerationCount =
 //
 // Create an array of all Character types.
 //
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) &kAAFTypeID_##name
 
 #define AAF_TYPE_TABLE_BEGIN() \
@@ -713,42 +721,13 @@ TypeDefinitionCharacter sTypeDefinitionCharacters [] = \
 const aafUInt32 kTypeDefinitionCharacterCount = 
   MY_ARRAY_ELEMENT_COUNT(sTypeDefinitionCharacters);
 
-#if 0 
-// This is an abstract class. There should be NO instances in the
-// Meta Dictionary or in an AAF file.
-//
-// Create an array of all set types.
-//
-#define MY_TYPE_NAME(name) L###name
-#define MY_TYPE_ID(name) &kAAFTypeID_##name
-#define AAF_TYPE(name)	MY_TYPE_ID(name)
-
-#define AAF_TYPE_TABLE_BEGIN() \
-static TypeDefinitionSet sTypeDefinitionSets [] = \
-{
-#define AAF_TYPE_DEFINITION_SET(name, id, type) \
-    TypeDefinitionSet(MY_TYPE_NAME(name), \
-    MY_TYPE_ID(name), \
-    MY_TYPE_ID(type)),
-#define AAF_TYPE_TABLE_END() \
-};
-
-#include "AAFMetaDictionary.h"
-
-#undef MY_TYPE_NAME
-#undef MY_TYPE_ID
-
-
-const aafUInt32 kTypeDefinitionSetCount = 
-  MY_ARRAY_ELEMENT_COUNT(sTypeDefinitionSets);
-#endif
 
 
 //
 // Create an array of all strong reference types.
 //
 
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"kAAFTypeID_" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 #define MY_TARGET_ID(name) AUID_AAF##name
 
@@ -782,7 +761,7 @@ const aafUInt32 kTypeDefinitionStrongReferenceCount =
 // Create an array of all strong reference set types.
 //
 
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"kAAFTypeID_" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 #define MY_TARGET_ID(type) MY_TYPE_ID(type)
 
@@ -816,7 +795,7 @@ const aafUInt32 kTypeDefinitionStrongReferenceSetCount =
 // Create an array of all strong reference vector types.
 //
 
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"kAAFTypeID_" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 //#define MY_TARGET_ID(name) AUID_AAF##name
 #define MY_TARGET_ID(type) MY_TYPE_ID(type)
@@ -948,7 +927,7 @@ const aafUInt32 kTypeDefinitionWeakReferenceSetCount =
 // Create an array of all weak reference vector types.
 //
 
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"kAAFTypeID_" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 //#define MY_TARGET_ID(name) AUID_AAF##name
 #define MY_TARGET_ID(type) MY_TYPE_ID(type)
@@ -1013,7 +992,7 @@ const aafUInt32 kTypeDefinitionStreamCount =
 // Create an array of all indirect types.
 //
 
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 
 
@@ -1040,7 +1019,7 @@ const aafUInt32 kTypeDefinitionIndirectCount =
 // Create an array of all opaque types.
 //
 
-#define MY_TYPE_NAME(name) L###name
+#define MY_TYPE_NAME(name) L"aaf" L###name
 #define MY_TYPE_ID(name) kAAFTypeID_##name
 
 
@@ -1560,7 +1539,7 @@ void AAFObjectModel::InitializeAxiomaticDefinitions(void)
   findTypeDefinition(&kAAFTypeID_UInt8)->makeAxiomatic();
   findTypeDefinition(&kAAFTypeID_UInt16)->makeAxiomatic();
   findTypeDefinition(&kAAFTypeID_UInt32)->makeAxiomatic();
-  findTypeDefinition(&kAAFTypeID_UInt64)->makeAxiomatic();
+//  findTypeDefinition(&kAAFTypeID_UInt64)->makeAxiomatic(); // TEMPORARY: for compatibility
   findTypeDefinition(&kAAFTypeID_Int8)->makeAxiomatic();
   findTypeDefinition(&kAAFTypeID_Int16)->makeAxiomatic();
   findTypeDefinition(&kAAFTypeID_Int32)->makeAxiomatic();
