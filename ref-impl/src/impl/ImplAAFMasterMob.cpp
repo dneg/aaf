@@ -280,7 +280,33 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetTapeNameBufLen (aafInt32	masterSlotID,
 										 aafInt32*  pLen)
 {
-	return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFFindSourceInfo	*info = NULL;
+	ImplAAFMob				*mob = NULL;
+
+	if(pLen == NULL)
+		return AAFRESULT_NULL_PARAM;
+	
+	XPROTECT()
+	{
+		CHECK(SearchSource (masterSlotID, 0, kTapeMob, NULL, NULL,
+									&info));
+		CHECK(info->GetMob(&mob));
+		CHECK(mob->GetNameBufLen(pLen));
+		info->ReleaseReference();
+		info = NULL;
+		mob->ReleaseReference();
+		mob = NULL;
+	}
+	XEXCEPT
+	{
+		if(info != NULL)
+			info->ReleaseReference();
+		if(mob != NULL)
+			mob->ReleaseReference();
+	}
+	XEND;
+
+	return AAFRESULT_SUCCESS;
 }
 
 //***********************************************************
