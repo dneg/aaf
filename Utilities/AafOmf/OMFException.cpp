@@ -40,9 +40,9 @@ Returns:
 	None.
 ********************************************************************/
 
-void OMFException::Check( OMF2::omfErr_t errCode, const char *fmt, ... ) 
+void OMFException::Check( omfErr_t errCode, const char *fmt, ... ) 
 {
-	if( errCode != OMF2::OM_ERR_NONE )
+	if( errCode != OM_ERR_NONE )
 	{
 		if( fmt != 0 && iLogger != 0 )
 		{

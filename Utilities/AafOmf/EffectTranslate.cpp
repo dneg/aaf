@@ -33,11 +33,8 @@
 #include <stdlib.h>
 #include <iostream.h>
 
-namespace OMF2
-{
 #include "omPublic.h"
 #include "omMedia.h"
-}
 
 // OMF Includes
 
@@ -55,12 +52,12 @@ namespace OMF2
 static bool LookupAAFIDInTable(aafUID_t					&AAFEffectID,
 							aafUInt32				numEntries,
 							effectXlate_t			*table,
-							OMF2::omfUniqueNamePtr_t effectID,
-							OMF2::omfUniqueNamePtr_t ExtendedEffectID);
+							omfUniqueNamePtr_t effectID,
+							omfUniqueNamePtr_t ExtendedEffectID);
 static void AddDirectionalPart(IAAFOperationGroup *effect,
-									  OMF2::omfUniqueNamePtr_t ExtendedEffectID);
+									  omfUniqueNamePtr_t ExtendedEffectID);
 static void BuildWipeEffectID(IAAFOperationGroup *effect,
-									  OMF2::omfUniqueNamePtr_t ExtendedEffectID);
+									  omfUniqueNamePtr_t ExtendedEffectID);
 
 EffectTranslate::EffectTranslate()
 {
@@ -101,8 +98,8 @@ EffectTranslate::~EffectTranslate()
 
 
 	HRESULT EffectTranslate::GetEffectIDs(IAAFOperationGroup *effect,
-									   OMF2::omfUniqueNamePtr_t effectID,
-									   OMF2::omfUniqueNamePtr_t ExtendedEffectID)
+									   omfUniqueNamePtr_t effectID,
+									   omfUniqueNamePtr_t ExtendedEffectID)
 {
 	IAAFOperationDef		*pOpDef = NULL;
 	IAAFDefObject			*pDef = NULL;
@@ -143,8 +140,8 @@ EffectTranslate::~EffectTranslate()
 static bool LookupAAFIDInTable(aafUID_t					&AAFEffectID,
 							aafUInt32				numEntries,
 							effectXlate_t			*xlateTable,
-							OMF2::omfUniqueNamePtr_t effectID,
-							OMF2::omfUniqueNamePtr_t ExtendedEffectID)
+							omfUniqueNamePtr_t effectID,
+							omfUniqueNamePtr_t ExtendedEffectID)
 {
 	bool		found = false;
 	aafUInt32	n;
@@ -191,15 +188,15 @@ bool EffectTranslate::isPrivateEffect(aafUID_t& uid)
 	return result;
 }
 
-HRESULT EffectTranslate::GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
-						OMF2::omfUniqueNamePtr_t ExtendedEffectIDPtr,
+HRESULT EffectTranslate::GetAAFEffectID(	omfUniqueNamePtr_t OMFEffectIDPtr,
+						omfUniqueNamePtr_t ExtendedEffectIDPtr,
 						aafUID_t	*aafUID)
 {
 	HRESULT				rc = AAFRESULT_SUCCESS;
 	long				n, numStdEntries = sizeof(stdXlateTable)/sizeof(effectXlate_t);
 	bool				found = false;
-	OMF2::omfUniqueName_t	OMFEffectID;
-	OMF2::omfUniqueName_t	ExtendedEffectID;
+	omfUniqueName_t	OMFEffectID;
+	omfUniqueName_t	ExtendedEffectID;
 	char				*init = (char *)aafUID;
 	char				*effectPrefix = "omfi:effect:";
 	long				prefixLen = strlen(effectPrefix);

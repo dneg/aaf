@@ -33,11 +33,8 @@
 #include <stdlib.h>
 #include <iostream.h>
 
-namespace OMF2
-{
 #include "omPublic.h"
 #include "omMedia.h"
-}
 
 #include "AafOmf.h"
 #include "AAFDomainUtils.h"

@@ -38,11 +38,11 @@ public:
 
 
 	virtual HRESULT GetEffectIDs(IAAFOperationGroup *effect,
-									   OMF2::omfUniqueNamePtr_t effectID,
-									   OMF2::omfUniqueNamePtr_t MCEffectID);
+									   omfUniqueNamePtr_t effectID,
+									   omfUniqueNamePtr_t MCEffectID);
 
-	virtual HRESULT GetAAFEffectID(	OMF2::omfUniqueNamePtr_t OMFEffectIDPtr,
-						OMF2::omfUniqueNamePtr_t MCEffectIDPtr,
+	virtual HRESULT GetAAFEffectID(	omfUniqueNamePtr_t OMFEffectIDPtr,
+						omfUniqueNamePtr_t MCEffectIDPtr,
 						aafUID_t	*aafUID);
 	virtual bool RequiresNestedScope(aafUID_t &effectDefAUID);
 };

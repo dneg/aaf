@@ -35,11 +35,9 @@
 #ifdef macintosh
 	#include <console.h>
 #endif 
-namespace OMF2
-{
+
 #include "omPublic.h"
 #include "omMedia.h"
-}
 
 #include "AAFException.h"
 #include "OMFException.h"
@@ -330,37 +328,37 @@ HRESULT IsOMFFile (char * pFileName )
 	return rc;
 }
 
-void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSession)
+void RegisterCodecProperties(AafOmfGlobals *globals, omfSessionHdl_t OMFSession)
 {
 	OMFCheck	OMFError;
 
 	// To get the CDCI codec related properties we first reister them in OMF
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = omfsRegisterDynamicProp(OMFSession, kOmfTstRevEither, 
 									   "ComponentWidth", OMClassCDCI, 
-									   OMF2::OMVersionType, OMF2::kPropRequired, 
+									   OMVersionType, kPropRequired, 
 									   &(globals->omCDCIComponentWidth));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = omfsRegisterDynamicProp(OMFSession, kOmfTstRevEither, 
 									   "HorizontalSubsampling", OMClassCDCI, 
-									   OMF2::OMBoolean, OMF2::kPropRequired, 
+									   OMBoolean, kPropRequired, 
 									   &(globals->omCDCIHorizontalSubsampling));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = omfsRegisterDynamicProp(OMFSession, kOmfTstRevEither, 
 									   "ColorSiting", OMClassCDCI, 
-									   OMF2::OMBoolean, OMF2::kPropRequired, 
+									   OMBoolean, kPropRequired, 
 									   &(globals->omCDCIColorSiting));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = omfsRegisterDynamicProp(OMFSession, kOmfTstRevEither, 
 									   "BlackReferenceLevel", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   OMInt32, kPropRequired, 
 									   &(globals->omCDCIBlackReferenceLevel));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = omfsRegisterDynamicProp(OMFSession, kOmfTstRevEither, 
 									   "WhiteReferenceLevel", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   OMInt32, kPropRequired, 
 									   &(globals->omCDCIWhiteReferenceLevel));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = omfsRegisterDynamicProp(OMFSession, kOmfTstRevEither, 
 									   "ColorRange", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   OMInt32, kPropRequired, 
 									   &(globals->omCDCIColorRange));
-	OMFError = OMF2::omfsRegisterDynamicProp(OMFSession, OMF2::kOmfTstRevEither, 
+	OMFError = omfsRegisterDynamicProp(OMFSession, kOmfTstRevEither, 
 									   "PaddingBits", OMClassCDCI, 
-									   OMF2::OMInt32, OMF2::kPropRequired, 
+									   OMInt32, kPropRequired, 
 									   &(globals->omCDCIPaddingBits));
 }

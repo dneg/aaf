@@ -33,11 +33,8 @@
 #include <stdlib.h>
 #include <iostream.h>
 
-namespace OMF2
-{
 #include "omPublic.h"
 #include "omMedia.h"
-}
 
 // OMF Includes
 
@@ -74,7 +71,7 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 
 #define checkOMF(a)  \
 { moduleErrorTmp = a; \
-	if (moduleErrorTmp != OMF2::OM_ERR_NONE) \
+	if (moduleErrorTmp != OM_ERR_NONE) \
 	{ \
 	    LogError(moduleErrorTmp, __LINE__, __FILE__);\
 		goto cleanup; \
