@@ -250,3 +250,21 @@ bool ImplAAFTypeDefCharacter::IsStringable () const
 
 
 
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDefCharacter::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefCharacter));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefCharacter::onSave(void* clientContext) const
+{
+  ImplAAFTypeDef::onSave(clientContext);
+}
+
+void ImplAAFTypeDefCharacter::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDef::onRestore(clientContext);
+}
