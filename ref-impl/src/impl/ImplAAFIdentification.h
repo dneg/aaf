@@ -53,6 +53,7 @@ public:
   
   ImplAAFIdentification();
 
+  /*
   ImplAAFIdentification(
     const wchar_t* companyName,
     const wchar_t* productName,
@@ -64,7 +65,7 @@ public:
     const wchar_t* platform
     // const AUID* generation
     );
-
+	*/
 
   virtual AAFRESULT STDMETHODCALLTYPE
 	Initialize ();
