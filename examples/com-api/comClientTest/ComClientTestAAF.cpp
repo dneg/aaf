@@ -223,7 +223,7 @@ static void ReadAAFFile(aafWChar * pFileName)
       if (SUCCEEDED(hr))
       {
         IAAFIdentification *pIdent = NULL;
-        aafInt32 numMobs = 0;
+        aafNumSlots_t numMobs = 0;
 
 
         hr = pHeader->GetLastIdentification(&pIdent);
@@ -255,7 +255,7 @@ static void ReadAAFFile(aafWChar * pFileName)
         }
         if (SUCCEEDED(hr)) // EnumAAFAllMobs && GetNumMobs SUCCEEDED
         {
-          aafInt32 n = 0;
+          aafUInt32 n = 0;
 
 
           for(n = 0; n < numMobs; n++)
@@ -360,7 +360,7 @@ static void ReadAAFFile(aafWChar * pFileName)
                 if(SUCCEEDED(hr))
                 {
                   IAAFMobSlot    *slot = NULL;
-                  aafInt32 s;
+                  aafUInt32 s;
 
 
                   for(s = 0; s < numSlots; s++)
