@@ -2,6 +2,7 @@
 #define OMSTOREDOBJECT_H
 
 #include "OMPortability.h"
+#include "OMTypes.h"
 
 struct IStorage;
 struct IStream;
@@ -24,8 +25,8 @@ public:
   void close(void);
   void write(int pid, int type, void* start, size_t size);
   void read(int pid, int type, void* start, size_t size);
-  void saveClassId(const int cid);
-  int restoreClassId(void);
+  void saveClassId(const OMClassId& cid);
+  OMClassId restoreClassId(void);
   OMStoredObject* createSubStorage(const char* name);
   OMStoredObject* openSubStorage(const char* name);
   void save(const OMStoredVectorIndex* index, const char* vectorName);
@@ -52,8 +53,8 @@ private:
   size_t streamOffset(IStream* stream);
   void streamSeek(IStream* stream, size_t offset);
 
-  void setClass(IStorage* storage, int cid);
-  void getClass(IStorage* storage, int& cid);
+  void setClass(IStorage* storage, const OMClassId& cid);
+  void getClass(IStorage* storage, OMClassId& cid);
 
   IStorage* _storage;
   OMStoredPropertySetIndex* _index;
@@ -61,7 +62,6 @@ private:
   IStream* _propertiesStream;
   size_t _offset;
 
-  int _classId;
   bool _open;
 };
 

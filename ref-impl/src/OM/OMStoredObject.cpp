@@ -3,6 +3,7 @@
 #include "OMProperty.h"
 #include "OMPropertySet.h"
 #include "OMStoredVectorIndex.h"
+#include "OMTypes.h"
 
 #include "OMAssertions.h"
 #include "OMUtilities.h"
@@ -53,7 +54,7 @@ static void printName(const char* name);
 
 OMStoredObject::OMStoredObject(struct IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
-  _offset(0), _classId(0), _open(false)
+  _offset(0), _open(false)
 {
 }
 
@@ -160,9 +161,14 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
   PRECONDITION("Already open", _open);
   PRECONDITION("Sorted index", index->isSorted());
 
+  // Write byte order flag.
+  //
+  short int byteOrder = hostByteOrder();
+  writeToStream(_indexStream, &byteOrder, sizeof(byteOrder));
+
   // Write version number.
   //
-  int version = 1;
+  int version = 2;
   writeToStream(_indexStream, &version, sizeof(version));
   
   // Write count of entries.
@@ -193,12 +199,18 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   PRECONDITION("Already open", _open);
   PRECONDITION("At start of index stream", streamOffset(_indexStream) == 0);
 
+  // Read byte order flag.
+  //
+  short int byteOrder;
+  readFromStream(_indexStream, &byteOrder, sizeof(byteOrder));
+  ASSERT("Valid byte order flag", byteOrder == 0x4949);
+
   // Read version number.
   //
   int version;
   readFromStream(_indexStream, &version, sizeof(version));
   ASSERT("Valid version number", version > 0);
-  ASSERT("Recognized version number", version == 1);
+  ASSERT("Recognized version number", version == 2);
   
   // Read count of entries.
   //
@@ -248,14 +260,17 @@ void OMStoredObject::restore(OMPropertySet& properties)
   
 }
 
+static const char* const propertyIndexStreamName = "property index";
+static const char* const propertyValueStreamName = "property values";
+ 
 void OMStoredObject::create(void)
 {
   TRACE("OMStoredObject::create");
   PRECONDITION("Not already open", !_open);
 
   _index = new OMStoredPropertySetIndex(50);
-  _indexStream = createStream(_storage, "property index");
-  _propertiesStream = createStream(_storage, "properties");
+  _indexStream = createStream(_storage, propertyIndexStreamName);
+  _propertiesStream = createStream(_storage, propertyValueStreamName);
   _open = true;
 }
 
@@ -264,8 +279,8 @@ void OMStoredObject::open(void)
   TRACE("OMStoredObject::open");
   PRECONDITION("Not already open", !_open);
 
-  _indexStream = openStream(_storage, "property index");
-  _propertiesStream = openStream(_storage, "properties");
+  _indexStream = openStream(_storage, propertyIndexStreamName);
+  _propertiesStream = openStream(_storage, propertyValueStreamName);
   _open = true;
   _index = restore();
 }
@@ -309,20 +324,20 @@ void OMStoredObject::read(int pid, int type, void* start, size_t size)
   readFromStream(_propertiesStream, start, size);
 }
 
-void OMStoredObject::saveClassId(const int cid)
+void OMStoredObject::saveClassId(const OMClassId& cid)
 {
   TRACE("OMStoredObject::saveClassId");
 
-  _classId = cid;
-  setClass(_storage, _classId);
+  setClass(_storage, cid);
 }
 
-int OMStoredObject::restoreClassId(void)
+OMClassId OMStoredObject::restoreClassId(void)
 {
   TRACE("OMStoredObject::restoreClassId");
 
-  getClass(_storage, _classId);
-  return _classId;
+  OMClassId cid;
+  getClass(_storage, cid);
+  return cid;
 }
 
 OMStoredObject* OMStoredObject::createSubStorage(const char* name)
@@ -570,17 +585,13 @@ void OMStoredObject::readFromStream(IStream* stream, void* data, size_t size)
   ASSERT("Successful read", bytesRead == size);
 }
 
-void OMStoredObject::setClass(IStorage* storage, int cid)
+void OMStoredObject::setClass(IStorage* storage, const OMClassId& cid)
 {
   TRACE("OMStoredObject::setClass");
   PRECONDITION("Valid storage", storage != 0);
 
-#if 0
-  struct _GUID g = {0,0,0, {0, 0, 0, 0, 0, 0, 0, 0}};
-#else
-  GUID g = {0};
-#endif
-  g.Data4[7] = (unsigned char)cid;
+  GUID g;
+  memcpy(&g, &cid, sizeof(GUID));
   HRESULT resultCode = storage->SetClass(g);
   if (!check(resultCode)) {
     exit(FAILURE);
@@ -588,7 +599,7 @@ void OMStoredObject::setClass(IStorage* storage, int cid)
 
 }
 
-void OMStoredObject::getClass(IStorage* storage, int& cid)
+void OMStoredObject::getClass(IStorage* storage, OMClassId& cid)
 {
   TRACE("OMStoredObject::getClass");
 
@@ -597,7 +608,7 @@ void OMStoredObject::getClass(IStorage* storage, int& cid)
   if (!check(result)) {
     exit(FAILURE);
   }
-  cid = statstg.clsid.Data4[7];
+  memcpy(&cid, &statstg.clsid, sizeof(OMClassId));
 }
 
 size_t OMStoredObject::streamOffset(IStream* stream)

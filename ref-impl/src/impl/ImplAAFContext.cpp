@@ -176,3 +176,6 @@ ImplAAFSession::BeginSession (
   return SetDefaultIdentification(ident);
 }
 
+extern "C" const aafClassID_t CLSID_AAFSession;
+
+OMDEFINE_STORABLE(AAFSession, CLSID_AAFSession);
