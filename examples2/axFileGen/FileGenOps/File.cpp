@@ -19,8 +19,30 @@
 #include <axFileGen.h>
 
 #include <AxFile.h>
+#include <AxUtil.h>
+
+#include <stdio.h>
 
 namespace {
+
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  RemoveFile,
+  L"RemoveFile",
+  L"Delete a file from the filesystem.",
+  L"file_name",
+  L"Only works with 8 bit file names.  No error checking is performed.",
+  2,
+  2 );
+
+RemoveFile::~RemoveFile()
+{}
+
+void RemoveFile::Execute( const std::vector<AxString>& args )
+{
+	::remove( AxStringUtil::wctomb(args[1]).c_str() );
+}
 
 //=---------------------------------------------------------------------=
 
