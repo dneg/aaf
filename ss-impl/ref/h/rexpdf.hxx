@@ -38,6 +38,10 @@ public:
     virtual ~CRootExposedDocFile(void);
 
     STDMETHOD(Stat) (STATSTGW *pstatstg, DWORD grfStatFlag);
+
+#ifndef _UNICODE
+    STDMETHOD(Stat) (STATSTG *pstatstg, DWORD grfStatFlag);
+#endif
     
 private:
     SCODE Init(ILockBytes *plstBase,

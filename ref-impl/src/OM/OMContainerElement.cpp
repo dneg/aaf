@@ -189,7 +189,7 @@ OMStrongReferenceSetElement::OMStrongReferenceSetElement(
 {
   TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
 
-  delete [] _identification;
+  delete [] reinterpret_cast<OMByte*>(_identification);
   _identification = new OMByte[_identificationSize];
   ASSERT("Valid heap pointer", _identification != 0);
   memcpy(_identification, rhs._identification, _identificationSize);
@@ -199,7 +199,7 @@ OMStrongReferenceSetElement::OMStrongReferenceSetElement(
 OMStrongReferenceSetElement::~OMStrongReferenceSetElement(void)
 {
   TRACE("OMStrongReferenceSetElement::~OMStrongReferenceSetElement");
-  delete [] _identification;
+  delete [] reinterpret_cast<OMByte*>(_identification);
 }
 
   // @mfunc Assignment.
@@ -219,7 +219,7 @@ OMStrongReferenceSetElement::operator= (const OMStrongReferenceSetElement& rhs)
 
   OMStrongReferenceVectorElement::operator=(rhs);
   _identificationSize = rhs._identificationSize;
-  delete [] _identification;
+  delete [] reinterpret_cast<OMByte*>(_identification);
   _identification = 0; // for BoundsChecker
   _identification = new OMByte[_identificationSize];
   ASSERT("Valid heap pointer", _identification != 0);
@@ -276,7 +276,7 @@ OMStorable* OMStrongReferenceSetElement::setValue(void* identification,
   TRACE("OMStrongReferenceSetElement::setValue");
   OBSOLETE("OMContainerElement<ObjectReference>::reference");
 
-  delete [] _identification;
+  delete [] reinterpret_cast<OMByte*>(_identification);
   _identification = 0 ; // for BoundsChecker
   _identification = new OMByte[_identificationSize];
   ASSERT("Valid heap pointer", _identification != 0);

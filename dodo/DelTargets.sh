@@ -4,6 +4,17 @@
 #                                               #
 #################################################
 
+if [ -z "${SRC_DIR}" ] || \
+   [ -z "${PRIVATE_AAFOBJECTS}" ] || \
+   [ -z "${AAFOBJECTS}" ] || \
+   [ -z "${INCLUDE_DIR}" ] || \
+   [ -z "${AUTO_GEN_IMPL}" ] || \
+   [ -z "${TEST_DIR}" ];
+then
+	echo DelTargets.sh: One of the required variables is not set.
+	exit 1
+fi
+
 for file in ${PRIVATE_AAFOBJECTS} ${AAFOBJECTS} ; do \
 	echo rm -f ${SRC_DIR}/com-api/C$file.h ; \
 	rm -f ${SRC_DIR}/com-api/C$file.h ; \
