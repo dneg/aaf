@@ -91,10 +91,10 @@ public:
 
 
   //****************
-  // AppendNewPropertyDef()
+  // RegisterNewPropertyDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendNewPropertyDef
+    RegisterNewPropertyDef
         (// @parm [in] auid to be used to identify this property
          const aafUID_t & id,
 
@@ -112,10 +112,10 @@ public:
 
 
   //****************
-  // AppendOpionalPropertyDef()
+  // RegisterOpionalPropertyDef()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    AppendOptionalPropertyDef
+    RegisterOptionalPropertyDef
         (// @parm [in] auid to be used to identify this property
          const aafUID_t & id,
 
@@ -174,11 +174,11 @@ public:
 		const aafCharacter * pClassName);
 
 
-  // Private method to unconditionally append a property def (ignoring
+  // Private method to unconditionally register a property def (ignoring
   // whether or not property is optional or not, or if this class has
   // already been registered).
   AAFRESULT STDMETHODCALLTYPE
-    pvtAppendPropertyDef
+    pvtRegisterPropertyDef
         (const aafUID_t & id,
          wchar_t *  pName,
          const aafUID_t & typeId,
@@ -188,7 +188,7 @@ public:
 
   // Appends an existing property def object.
   AAFRESULT STDMETHODCALLTYPE
-    pvtAppendExistingPropertyDef
+    pvtRegisterExistingPropertyDef
         (// PropertyDef to append
 		 ImplAAFPropertyDef * pPropDef);
 

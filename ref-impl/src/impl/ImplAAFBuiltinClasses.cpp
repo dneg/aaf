@@ -480,10 +480,11 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 		  ImplAAFObject * obj =
 			_dictionary->pvtInstantiate (AUID_AAFPropertyDef);
 		  assert (obj);
-		  ImplAAFPropertyDef * propDef = dynamic_cast<ImplAAFPropertyDef*>(obj);
+		  ImplAAFPropertyDef * propDef =
+			dynamic_cast<ImplAAFPropertyDef*>(obj);
 		  assert (propDef);
 		  
-		  AAFRESULT hr = propDef->Initialize
+		  AAFRESULT hr = propDef->pvtInitialize
 			(propInfo->id,
 			 propInfo->tag,
 			 propInfo->name,
@@ -560,7 +561,7 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
 		  assert (propDef);
 			  
 		  hr = _axClassDefs[classIdx]->
-			pvtAppendExistingPropertyDef (propDef);
+			pvtRegisterExistingPropertyDef (propDef);
 		  assert (AAFRESULT_SUCCEEDED (hr));
 		  pte = pte->nextProp;
 		}
@@ -645,7 +646,7 @@ void ImplAAFBuiltinClasses::RegisterBuiltinProperties
 			  // Yup, in this class.
 
 			  ImplAAFPropertyDef * pd = 0;
-			  hr = pClassDef->pvtAppendPropertyDef
+			  hr = pClassDef->pvtRegisterPropertyDef
 				(sBuiltinPropTable[i].id,
 				 sBuiltinPropTable[i].name,
 				 *sBuiltinPropTable[i].pTypeGuid,
@@ -827,7 +828,7 @@ void ImplAAFBuiltinClasses::AssurePropertyTypes ()
 	  AAFRESULT hr;
 	  assert (_dictionary);
 	  pcd = 0;
-	  hr = _dictionary->LookupClass (*sAxClassIDs[i], &pcd);
+	  hr = _dictionary->LookupClassDef (*sAxClassIDs[i], &pcd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  assert (pcd);
 	  pcd->AssurePropertyTypesLoaded ();

@@ -81,7 +81,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(GetDataDefinitions (&dataEnum));
+		CHECK(GetEssenceKinds (&dataEnum));
 		while((dataEnum->NextOne(&aVal) == AAFRESULT_SUCCESS)
 		   && (result == AAFFalse))
 		{
@@ -113,8 +113,8 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
  
- AAFRESULT STDMETHODCALLTYPE
-    ImplAAFCodecDef::AppendEssenceKind (
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCodecDef::AddEssenceKind (
       const aafUID_t & essenceKind)
 {
 	aafUID_t	*tmp, newUID;
@@ -145,6 +145,25 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCodecDef::RemoveEssenceKind (
+      const aafUID_t & essenceKind)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFCodecDef::CountEssenceKinds (
+      aafUInt32 * pResult)
+{
+  if (! pResult) return AAFRESULT_NULL_PARAM;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
 
 
 
@@ -223,7 +242,7 @@ AAFRESULT STDMETHODCALLTYPE
 		classID = _fileDescClass;
 		status = GetDictionary(&pDict);
 		if(status == AAFRESULT_SUCCESS)
-			status = pDict->LookupClass(classID, ppClass);
+			status = pDict->LookupClassDef(classID, ppClass);
 	}
 
 	return status;
@@ -311,7 +330,7 @@ AAFRESULT STDMETHODCALLTYPE
   
 // SDK-private
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFCodecDef::GetDataDefinitions (
+    ImplAAFCodecDef::GetEssenceKinds (
       ImplEnumAAFDataDefs  **ppEnum)
 {
 	if(ppEnum == NULL)

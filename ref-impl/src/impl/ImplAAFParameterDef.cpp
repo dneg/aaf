@@ -66,7 +66,7 @@ AAFRESULT STDMETHODCALLTYPE
 	{
 		uid = _typeDef;
 		CHECK(GetDictionary(&dict));
-		CHECK(dict->LookupType (_typeDef, ppTypeDef));
+		CHECK(dict->LookupTypeDef (_typeDef, ppTypeDef));
 		dict->ReleaseReference();
 		dict = NULL;
 	}

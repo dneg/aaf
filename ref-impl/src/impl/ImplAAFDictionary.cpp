@@ -380,7 +380,7 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 		  //
 		  ImplAAFClassDefSP pcd;
 		  AAFRESULT hr;
-		  hr = ((ImplAAFDictionary*)this)->LookupClass (parentAUID, &pcd);
+		  hr = ((ImplAAFDictionary*)this)->LookupClassDef (parentAUID, &pcd);
 		  if (AAFRESULT_FAILED (hr))
 			{
 			  // AUID does not correspond to any class in the
@@ -470,7 +470,7 @@ ImplAAFObject *ImplAAFDictionary::CreateImplObject(const aafUID_t& auid)
 
 
 
-AAFRESULT ImplAAFDictionary::dictLookupClass (
+AAFRESULT ImplAAFDictionary::dictLookupClassDef (
       const aafUID_t & classID,
       ImplAAFClassDef ** ppClassDef)
 {
@@ -487,7 +487,7 @@ AAFRESULT ImplAAFDictionary::dictLookupClass (
 
   XPROTECT()
 	{
-	  CHECK(GetClassDefinitions (&classEnum));
+	  CHECK(GetClassDefs (&classEnum));
 	  status = classEnum->NextOne (&classDef);
 	  defFound = AAFFalse;
 	  while(status == AAFRESULT_SUCCESS && !defFound)
@@ -545,7 +545,7 @@ ImplAAFDictionary::IsAxiomaticClass (const aafUID_t &classID) const
 
 
 bool
-ImplAAFDictionary::pvtLookupAxiomaticClass (const aafUID_t &classID,
+ImplAAFDictionary::pvtLookupAxiomaticClassDef (const aafUID_t &classID,
 										   ImplAAFClassDef **
 										   ppClassDef)
 {
@@ -563,7 +563,7 @@ ImplAAFDictionary::pvtLookupAxiomaticClass (const aafUID_t &classID,
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupClass (
+    ImplAAFDictionary::LookupClassDef (
       const aafUID_t & classID,
       ImplAAFClassDef ** ppClassDef)
 {
@@ -572,7 +572,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (! ppClassDef) return AAFRESULT_NULL_PARAM;
 
-  if (pvtLookupAxiomaticClass (classID, &classDef))
+  if (pvtLookupAxiomaticClassDef (classID, &classDef))
 	{
 	  // Yes, this is an axiomatic class.  classDef should be filled
 	  // in.  Assure that it's in the dictionary, and return it.
@@ -593,7 +593,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // Not axiomatic.  Check to see if it's already in the dict.
-  status = dictLookupClass (classID, ppClassDef);
+  status = dictLookupClassDef (classID, ppClassDef);
   if (AAFRESULT_SUCCEEDED (status))
 	{
 	  // Yup, already here. Pass on the good news.
@@ -619,7 +619,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Yup, found it in builtins.  Register it.
   assert (classDef);
-  status = RegisterClass (classDef);
+  status = RegisterClassDef (classDef);
   if (AAFRESULT_FAILED (status))
 	return status;
 		  
@@ -633,7 +633,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterClass (
+    ImplAAFDictionary::RegisterClassDef (
       ImplAAFClassDef * pClassDef)
 {
   assert (_defRegistrationAllowed);
@@ -649,7 +649,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Is this class already registered ?
   ImplAAFClassDef * pExistingClassDef = NULL;
-  hr = dictLookupClass(newAUID, &pExistingClassDef);
+  hr = dictLookupClassDef (newAUID, &pExistingClassDef);
 
   if (hr != AAFRESULT_SUCCESS)
 	{
@@ -669,7 +669,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetClassDefinitions (
+    ImplAAFDictionary::GetClassDefs (
       ImplEnumAAFClassDefs ** ppEnum)
 {
   if (NULL == ppEnum)
@@ -700,7 +700,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterType (
+    ImplAAFDictionary::CountClassDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterTypeDef (
       ImplAAFTypeDef * pTypeDef)
 {
   assert (_defRegistrationAllowed);
@@ -716,7 +727,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Is this type already registered ?
   ImplAAFTypeDef * pExistingTypeDef = NULL;
-  hr = dictLookupType(newAUID, &pExistingTypeDef);
+  hr = dictLookupTypeDef (newAUID, &pExistingTypeDef);
 
   if (hr != AAFRESULT_SUCCESS) {
     // This type is not yet registered, add it to the dictionary.
@@ -743,7 +754,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-AAFRESULT ImplAAFDictionary::dictLookupType (
+AAFRESULT ImplAAFDictionary::dictLookupTypeDef (
       const aafUID_t & typeID,
       ImplAAFTypeDef ** ppTypeDef)
 {
@@ -758,7 +769,7 @@ AAFRESULT ImplAAFDictionary::dictLookupType (
 
   XPROTECT()
 	{
-	  CHECK(GetTypeDefinitions (&typeEnum));
+	  CHECK(GetTypeDefs (&typeEnum));
 	  status = typeEnum->NextOne (&typeDef);
 	  defFound = AAFFalse;
 	  while(status == AAFRESULT_SUCCESS && !defFound)
@@ -870,7 +881,7 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
 };
 
 bool
-ImplAAFDictionary::pvtLookupAxiomaticType (const aafUID_t &typeID,
+ImplAAFDictionary::pvtLookupAxiomaticTypeDef (const aafUID_t &typeID,
 										   ImplAAFTypeDef **
 										   ppTypeDef)
 {
@@ -921,7 +932,7 @@ ImplAAFDictionary::pvtLookupAxiomaticType (const aafUID_t &typeID,
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupType (
+    ImplAAFDictionary::LookupTypeDef (
       const aafUID_t & typeID,
       ImplAAFTypeDef ** ppTypeDef)
 {
@@ -930,7 +941,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 
-  if (pvtLookupAxiomaticType (typeID, &typeDef))
+  if (pvtLookupAxiomaticTypeDef (typeID, &typeDef))
 	{
 	  // Yes, this is an axiomatic type.  typeDef should be filled
 	  // in.  Assure that it's in the dictionary, and return it.
@@ -949,7 +960,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // Not axiomatic.  Check to see if it's already in the dict.
-  status = dictLookupType (typeID, ppTypeDef);
+  status = dictLookupTypeDef (typeID, ppTypeDef);
   if (AAFRESULT_SUCCEEDED (status))
 	{
 	  // Yup, already here. Pass on the good news.
@@ -974,7 +985,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
   // Yup, found it in builtins.  Register it.
   assert (typeDef);
-  status = RegisterType (typeDef);
+  status = RegisterTypeDef (typeDef);
   if (AAFRESULT_FAILED (status))
 	return status;
 		  
@@ -988,7 +999,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetTypeDefinitions (
+    ImplAAFDictionary::GetTypeDefs (
       ImplEnumAAFTypeDefs ** ppEnum)
 {
 	if (NULL == ppEnum)
@@ -1018,7 +1029,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterDataDefinition (
+    ImplAAFDictionary::CountTypeDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterDataDef (
       ImplAAFDataDef *pDataDef)
 {
   assert (_defRegistrationAllowed);
@@ -1034,7 +1056,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Is this type already registered ?
   ImplAAFDataDef * pExistingDataDef = NULL;
-  hr = LookupDataDefinition(newAUID, &pExistingDataDef);
+  hr = LookupDataDef(newAUID, &pExistingDataDef);
 
   if (hr != AAFRESULT_SUCCESS) {
     // This type is not yet registered, add it to the dictionary.
@@ -1062,7 +1084,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupDataDefinition (
+    ImplAAFDictionary::LookupDataDef (
       const aafUID_t & dataDefinitionID,
       ImplAAFDataDef **ppDataDef)
 {
@@ -1074,7 +1096,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(GetDataDefinitions (&dataEnum));
+		CHECK(GetDataDefs (&dataEnum));
 		status = dataEnum->NextOne (&dataDef);
 		defFound = AAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
@@ -1121,7 +1143,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetDataDefinitions (
+    ImplAAFDictionary::GetDataDefs (
       ImplEnumAAFDataDefs **ppEnum)
 {
 	if (NULL == ppEnum)
@@ -1152,7 +1174,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterOperationDefinition (
+    ImplAAFDictionary::CountDataDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterOperationDef (
       ImplAAFOperationDef *pOperationDef)
 {
   assert (_defRegistrationAllowed);
@@ -1170,7 +1203,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupOperationDefinition (
+    ImplAAFDictionary::LookupOperationDef (
       const aafUID_t & effectID,
       ImplAAFOperationDef **ppOperationDef)
 {
@@ -1182,7 +1215,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(GetOperationDefinitions (&effectEnum));
+		CHECK(GetOperationDefs (&effectEnum));
 		status = effectEnum->NextOne (&effectDef);
 		defFound = AAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
@@ -1229,7 +1262,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetOperationDefinitions (
+    ImplAAFDictionary::GetOperationDefs (
       ImplEnumAAFOperationDefs **ppEnum)
 {
 	if (NULL == ppEnum)
@@ -1257,8 +1290,19 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterParameterDefinition (
+    ImplAAFDictionary::CountOperationDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterParameterDef (
       ImplAAFParameterDef *pParameterDef)
 {
   assert (_defRegistrationAllowed);
@@ -1276,7 +1320,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupParameterDefinition (
+    ImplAAFDictionary::LookupParameterDef (
       const aafUID_t & parameterID,
       ImplAAFParameterDef **ppParameterDef)
 {
@@ -1288,7 +1332,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(GetParameterDefinitions (&parameterEnum));
+		CHECK(GetParameterDefs (&parameterEnum));
 		status = parameterEnum->NextOne (&parameterDef);
 		defFound = AAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
@@ -1335,7 +1379,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetParameterDefinitions (
+    ImplAAFDictionary::GetParameterDefs (
       ImplEnumAAFParameterDefs **ppEnum)
 {
 	if (NULL == ppEnum)
@@ -1363,8 +1407,19 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterCodecDefinition (
+    ImplAAFDictionary::CountParameterDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterCodecDef (
       ImplAAFCodecDef *pPlugDef)
 {
   assert (_defRegistrationAllowed);
@@ -1415,7 +1470,7 @@ AAFRESULT
   return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFDictionary::LookupCodecDefinition
+AAFRESULT ImplAAFDictionary::LookupCodecDef
   (const aafUID_t & defID,
    ImplAAFCodecDef **result)
 {
@@ -1466,7 +1521,7 @@ AAFRESULT ImplAAFDictionary::LookupCodecDefinition
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetCodecDefinitions (
+    ImplAAFDictionary::GetCodecDefs (
       ImplEnumAAFCodecDefs **ppEnum)
 {
 	if (NULL == ppEnum)
@@ -1496,7 +1551,18 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterContainerDefinition (
+    ImplAAFDictionary::CountCodecDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterContainerDef (
       ImplAAFContainerDef *pPlugDef)
 {
   assert (_defRegistrationAllowed);
@@ -1513,7 +1579,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupContainerDefinition
+    ImplAAFDictionary::LookupContainerDef
 	  (const aafUID_t & defID,
 	   ImplAAFContainerDef **result)
 {
@@ -1597,7 +1663,7 @@ AAFRESULT
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetContainerDefinitions (
+    ImplAAFDictionary::GetContainerDefs (
       ImplEnumAAFContainerDefs **ppEnum)
 {
 	if (NULL == ppEnum)
@@ -1626,79 +1692,90 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::CountContainerDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
 void ImplAAFDictionary::InitBuiltins()
 {
   ImplAAFDataDef	*dataDef = NULL;
   AAFRESULT		hr;
 
-  hr = LookupDataDefinition (DDEF_Picture, &dataDef);
+  hr = LookupDataDef (DDEF_Picture, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Picture, L"Picture", L"Picture data");
-	  hr = RegisterDataDefinition (dataDef);
+	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  hr = LookupDataDefinition (DDEF_Sound, &dataDef);
+  hr = LookupDataDef (DDEF_Sound, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Sound, L"Sound", L"Sound data");
-	  hr = RegisterDataDefinition (dataDef);
+	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  hr = LookupDataDefinition (DDEF_Timecode, &dataDef);
+  hr = LookupDataDef (DDEF_Timecode, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Timecode, L"Timecode", L"Timecode data");
-	  hr = RegisterDataDefinition (dataDef);
+	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  hr = LookupDataDefinition (DDEF_Edgecode, &dataDef);
+  hr = LookupDataDef (DDEF_Edgecode, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Edgecode, L"Edgecode", L"Edgecode data");
-	  hr = RegisterDataDefinition (dataDef);
+	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
   
-  hr = LookupDataDefinition (DDEF_Matte, &dataDef);
+  hr = LookupDataDef (DDEF_Matte, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_Matte, L"Matte", L"Matte data");
-	  hr = RegisterDataDefinition (dataDef);
+	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  hr = LookupDataDefinition (DDEF_PictureWithMatte, &dataDef);
+  hr = LookupDataDef (DDEF_PictureWithMatte, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
 	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
 	  hr = dataDef->Initialize (DDEF_PictureWithMatte, L"PictureWithMatte", L"PictureWithMatte data");
-	  hr = RegisterDataDefinition (dataDef);
+	  hr = RegisterDataDef (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
@@ -1731,7 +1808,7 @@ void ImplAAFDictionary::InitBuiltins()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterInterpolationDefinition (
+    ImplAAFDictionary::RegisterInterpolationDef (
       ImplAAFInterpolationDef *pInterpolationDef)
 {
   assert (_defRegistrationAllowed);
@@ -1749,7 +1826,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupInterpolationDefinition (
+    ImplAAFDictionary::LookupInterpolationDef (
       const aafUID_t & interpolationID,
       ImplAAFInterpolationDef **ppInterpolationDef)
 {
@@ -1761,7 +1838,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(GetInterpolationDefinitions (&InterpolationEnum));
+		CHECK(GetInterpolationDefs (&InterpolationEnum));
 		status = InterpolationEnum->NextOne (&InterpolationDef);
 		defFound = AAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
@@ -1808,7 +1885,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetInterpolationDefinitions (
+    ImplAAFDictionary::GetInterpolationDefs (
       ImplEnumAAFInterpolationDefs **ppEnum)
 {
 	if (NULL == ppEnum)
@@ -1836,8 +1913,19 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterPluginDescriptor (		//!!! Bring this out through the IDL
+    ImplAAFDictionary::CountInterpolationDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::RegisterPluginDef (		//!!! Bring this out through the IDL
       ImplAAFPluginDescriptor *pDesc)
 {
   assert (_defRegistrationAllowed);
@@ -1855,7 +1943,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupPluginDescriptor (		//!!! Bring this out through the IDL
+    ImplAAFDictionary::LookupPluginDef (		//!!! Bring this out through the IDL
       const aafUID_t & interpolationID,
       ImplAAFPluginDescriptor **ppPluginDesc)
 {
@@ -1867,7 +1955,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(GetPluginDescriptors (&pEnum));
+		CHECK(GetPluginDefs (&pEnum));
 		status = pEnum->NextOne (&pDesc);
 		defFound = AAFFalse;
 		while(status == AAFRESULT_SUCCESS && !defFound)
@@ -1914,7 +2002,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetPluginDescriptors (		//!!! Bring this out through the IDL
+    ImplAAFDictionary::GetPluginDefs (		//!!! Bring this out through the IDL
       ImplEnumAAFPluginDescriptors **ppEnum)
 {
 	if (NULL == ppEnum)
@@ -1941,6 +2029,17 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	return(AAFRESULT_SUCCESS);
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::CountPluginDefs
+        (aafUInt32 * pResult)
+{
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
 
 
 AAFRESULT ImplAAFDictionary::GenerateOmPid
@@ -1998,7 +2097,7 @@ AAFRESULT ImplAAFDictionary::GenerateOmPid
 		  // Need to determine which user PIDs have already been used.
 		  ImplEnumAAFClassDefsSP enumClassDefs;
 
-		  hr = GetClassDefinitions (&enumClassDefs);
+		  hr = GetClassDefs (&enumClassDefs);
 		  if (AAFRESULT_FAILED (hr))
 			return hr;
 		  ImplAAFClassDefSP classDef;
@@ -2061,7 +2160,7 @@ void ImplAAFDictionary::AssureClassPropertyTypes ()
 
   _OKToAssurePropTypes = true;
 
-  hr = GetClassDefinitions (&enumClassDefs);
+  hr = GetClassDefs (&enumClassDefs);
   assert (AAFRESULT_SUCCEEDED (hr));
 
   // do axiomatic classes

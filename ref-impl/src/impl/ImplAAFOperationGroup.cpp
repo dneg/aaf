@@ -185,7 +185,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 	//@comm  This function takes an already created OperationGroup definition object as an argument.
-	//@comm  To add slots to the OperationGroup, call AddNewSlot.
+	//@comm  To add slots to the OperationGroup, call AddSlot.
 	//@comm  To add renderings, call SetRender.
 
 AAFRESULT STDMETHODCALLTYPE
@@ -203,7 +203,7 @@ AAFRESULT STDMETHODCALLTYPE
 		defUID = _operationDefinition;
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupOperationDefinition(defUID, OperationDef));
+		CHECK(dict->LookupOperationDef(defUID, OperationDef));
 		dict->ReleaseReference();
 		dict = 0;
 		head->ReleaseReference();
@@ -300,7 +300,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiOperationGroupGetBypassOverride
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::GetNumSourceSegments (aafInt32 *pNumSources)
+    ImplAAFOperationGroup::CountSourceSegments (aafInt32 *pNumSources)
 {
    size_t numSlots;
 
@@ -317,7 +317,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::GetNumParameters (aafInt32 * pNumParameters)
+    ImplAAFOperationGroup::CountParameters (aafInt32 * pNumParameters)
 {
    size_t numSlots;
 
@@ -362,7 +362,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::AddNewParameter (ImplAAFParameter *pValue)
+    ImplAAFOperationGroup::AddParameter (ImplAAFParameter *pValue)
 {
 	if(pValue == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -376,7 +376,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces part of omfiOperationGroupAddNewSlot
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::AppendNewInputSegment (ImplAAFSegment * value)
+    ImplAAFOperationGroup::AppendInputSegment (ImplAAFSegment * value)
 {
 	_inputSegments.appendValue(value);
 	value->AcquireReference();
@@ -385,6 +385,29 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 	//@comm Replaces part of omfiOperationGroupAddNewSlot
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationGroup::PrependInputSegment (ImplAAFSegment * value)
+{
+  if (! value)
+	return AAFRESULT_NULL_PARAM;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationGroup::InsertInputSegmentAt
+      (aafUInt32 index,
+	   ImplAAFSegment * value)
+{
+  if (! value)
+	return AAFRESULT_NULL_PARAM;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::SetRender (ImplAAFSourceReference *sourceRef)
@@ -411,7 +434,7 @@ AAFRESULT STDMETHODCALLTYPE
 	//@comm Replaces omfiOperationGroupSetBypassOverride
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::GetParameterByArgID (aafArgIDType_t  argID,
+    ImplAAFOperationGroup::LookupParameter (aafArgIDType_t  argID,
                            ImplAAFParameter ** ppParameter)
 {
 	ImplAAFParameter	*parm = NULL;
@@ -426,7 +449,7 @@ AAFRESULT STDMETHODCALLTYPE
 			RAISE(AAFRESULT_NULL_PARAM);
 	
 		found = AAFFalse;
-		CHECK(GetNumParameters (&numParm))
+		CHECK(CountParameters (&numParm))
 		for(n = 0; n < numParm; n++)
 		{
 			_parameters.getValueAt(parm, n);
@@ -465,7 +488,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::GetIndexedInputSegment (aafInt32  index,
+    ImplAAFOperationGroup::GetParameters
+        (// @parm [out] enumerator across parameters
+         ImplEnumAAFParameters ** ppEnum)
+{
+  if (! ppEnum)
+	return AAFRESULT_NULL_PARAM;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationGroup::GetInputSegmentAt (aafUInt32  index,
                            ImplAAFSegment ** ppInputSegment)
 {
 	ImplAAFSegment	*obj;
@@ -486,6 +521,8 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-
-
-
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationGroup::RemoveInputSegmentAt (aafUInt32  index)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}

@@ -210,7 +210,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFClassDef::AppendNewPropertyDef (
+    ImplAAFClassDef::RegisterNewPropertyDef (
       const aafUID_t &      id,
       wchar_t *             pName,
       ImplAAFTypeDef *      pTypeDef,
@@ -236,7 +236,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = GetAUID (&thisClassID);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 
-	  hr = pDict->dictLookupClass (thisClassID, &pClassDef);
+	  hr = pDict->dictLookupClassDef (thisClassID, &pClassDef);
 	  if (AAFRESULT_SUCCEEDED (hr))
 		{
 		  // pClassDef is unused; we only want to know the result of
@@ -252,16 +252,16 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
-  return pvtAppendPropertyDef (id,
-							   pName,
-							   typeId,
-							   isOptional,
-							   ppPropDef);
+  return pvtRegisterPropertyDef (id,
+								 pName,
+								 typeId,
+								 isOptional,
+								 ppPropDef);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFClassDef::AppendOptionalPropertyDef (
+    ImplAAFClassDef::RegisterOptionalPropertyDef (
       const aafUID_t &      id,
       wchar_t *             pName,
       ImplAAFTypeDef *      pTypeDef,
@@ -289,11 +289,11 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
-  return pvtAppendPropertyDef (id,
-							   pName,
-							   typeId,
-							   AAFTrue,
-							   ppPropDef);
+  return pvtRegisterPropertyDef (id,
+								 pName,
+								 typeId,
+								 AAFTrue,
+								 ppPropDef);
 }
 
 
@@ -411,7 +411,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	  ImplAAFClassDefSP tmp;
 	  assert (! _cachedParentClass);
-	  hr = pDict->LookupClass (parentClass, &tmp);
+	  hr = pDict->LookupClassDef (parentClass, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 	  // If _cachedParentClass was set during process of looking this
@@ -431,7 +431,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFClassDef::pvtAppendPropertyDef (
+    ImplAAFClassDef::pvtRegisterPropertyDef (
       const aafUID_t &      id,
       wchar_t *             pName,
       const aafUID_t &      typeId,
@@ -458,7 +458,7 @@ AAFRESULT STDMETHODCALLTYPE
   tmp->ReleaseReference ();
   tmp = 0;
 
-  check_result (pd->Initialize (id,
+  check_result (pd->pvtInitialize (id,
 								omPid,
 								pName,
 								typeId,
@@ -479,7 +479,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFClassDef::pvtAppendExistingPropertyDef
+ImplAAFClassDef::pvtRegisterExistingPropertyDef
 (ImplAAFPropertyDef * pPropDef)
 {
   if (!pPropDef)

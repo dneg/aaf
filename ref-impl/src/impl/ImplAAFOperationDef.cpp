@@ -144,7 +144,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationDef::PrependDegradeToOperations (
+    ImplAAFOperationDef::PrependDegradeToOperation (
       ImplAAFOperationDef  *pOperationDef)
 {
 	aafUID_t	*tmp = NULL, newUID;
@@ -184,7 +184,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationDef::AppendDegradeToOperations (
+    ImplAAFOperationDef::AppendDegradeToOperation (
       ImplAAFOperationDef  *pOperationDef)
 {
 	aafUID_t	*tmp, newUID;
@@ -219,6 +219,37 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationDef::InsertDegradeToOperationAt (
+	  aafUInt32 index,
+      ImplAAFOperationDef  *pOperationDef)
+{
+  if (! pOperationDef) return AAFRESULT_NULL_PARAM;
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountDegradeToOperations (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  if (index > count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationDef::RemoveDegradeToOperationAt (
+	  aafUInt32 index)
+{
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountDegradeToOperations (&count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::GetDegradeToOperations (
       ImplEnumAAFOperationDefs  **ppEnum)
 {
@@ -231,6 +262,15 @@ AAFRESULT STDMETHODCALLTYPE
 	(*ppEnum)->SetEnumProperty(this, &_degradeTo);
 
 	return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationDef::CountDegradeToOperations (
+	  aafUInt32 * pResult)
+{
+  if (! pResult) return AAFRESULT_NULL_PARAM;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
@@ -334,7 +374,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationDef::AddParameterDefs (
+    ImplAAFOperationDef::AddParameterDef (
       ImplAAFParameterDef *pAAFParameterDef)
 {
 	aafUID_t					*tmp, newUID, oldUID;
@@ -352,7 +392,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(pAAFParameterDef->GetAUID(&newUID));
-		CHECK(GetParameterDefinitions(&pEnum));
+		CHECK(GetParameterDefs(&pEnum));
 		pEnum->NextOne(&pParmDef);
 		while(pParmDef)
 		{
@@ -408,7 +448,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationDef::GetParameterDefinitions (
+    ImplAAFOperationDef::GetParameterDefs (
       ImplEnumAAFParameterDefs **ppEnum)
 {
 	if(ppEnum == NULL)
@@ -422,7 +462,23 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationDef::CountParameterDefs (
+      aafUInt32 * pResult)
+{
+	if(pResult == NULL)
+		return(AAFRESULT_NULL_PARAM);
 
+	return(AAFRESULT_NOT_IMPLEMENTED);
+}
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFOperationDef::LookupParameterDef (
+	  const aafUID_t & /*parameterDefId*/,
+	  ImplAAFParameterDef ** ppParameterDef)
+{
+	if(ppParameterDef == NULL)
+		return(AAFRESULT_NULL_PARAM);
 
-
+	return(AAFRESULT_NOT_IMPLEMENTED);
+}

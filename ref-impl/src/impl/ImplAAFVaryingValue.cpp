@@ -91,16 +91,16 @@ ImplAAFVaryingValue::~ImplAAFVaryingValue ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFVaryingValue::AppendPoint (
+    ImplAAFVaryingValue::AddControlPoint (
       ImplAAFControlPoint *pPoint)
 {
-	if(pPoint == NULL)
-		return(AAFRESULT_NULL_PARAM);
+  if(pPoint == NULL)
+	return(AAFRESULT_NULL_PARAM);
 
-	_controlPoints.appendValue(pPoint);
-	pPoint->AcquireReference();
+  _controlPoints.appendValue(pPoint);
+  pPoint->AcquireReference();
 
-	return(AAFRESULT_SUCCESS);
+  return(AAFRESULT_SUCCESS);
 }
 
 
@@ -128,6 +128,52 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	return(AAFRESULT_SUCCESS);
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFVaryingValue::CountControlPoints (
+      aafUInt32 * pResult)
+{
+  if(! pResult) return(AAFRESULT_NULL_PARAM);
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFVaryingValue::GetControlPointAt (
+      aafUInt32 index,
+	  ImplAAFControlPoint ** ppControlPoint)
+{
+  if(! ppControlPoint) return(AAFRESULT_NULL_PARAM);
+
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountControlPoints (& count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFVaryingValue::RemoveControlPointAt (
+      aafUInt32 index)
+{
+  aafUInt32 count;
+  AAFRESULT hr;
+  hr = CountControlPoints (& count);
+  if (AAFRESULT_FAILED (hr)) return hr;
+  if (index >= count)
+	return AAFRESULT_BADINDEX;
+
+	return AAFRESULT_NOT_IMPLEMENTED;
+}
+
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -187,7 +233,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
 		interpID = _interpolation;
-		CHECK(dict->LookupInterpolationDefinition(interpID, ppDef));
+		CHECK(dict->LookupInterpolationDef(interpID, ppDef));
 //		(*ppDef)->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;

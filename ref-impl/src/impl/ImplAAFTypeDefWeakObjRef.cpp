@@ -134,7 +134,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return hr;
 	  assert (pDict);
 
-	  hr = pDict->LookupClass (_referencedType, &_cachedObjType);
+	  hr = pDict->LookupClassDef (_referencedType, &_cachedObjType);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (_cachedObjType);
@@ -176,7 +176,7 @@ ImplAAFTypeDefSP ImplAAFTypeDefWeakObjRef::BaseType () const
 
 	  ImplAAFTypeDefWeakObjRef * pNonConstThis =
 		(ImplAAFTypeDefWeakObjRef *) this;
-	  hr = pDict->LookupType (kAAFTypeID_AUID, &pNonConstThis->_cachedAuidType);
+	  hr = pDict->LookupTypeDef (kAAFTypeID_AUID, &pNonConstThis->_cachedAuidType);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (_cachedAuidType);
 	}
