@@ -44,6 +44,7 @@ extern "C" const char * AAFGetLibraryPath();
 extern "C" const char * AAFGetLibrarySharedDirectoryName();
 extern "C" const char * AAFGetLibraryPluginPrefix();
 
+#include "AAFTypes.h"
 #include "CAAFInProcServer.h"
 #include "ImplAAFContext.h"
 
@@ -60,7 +61,7 @@ CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 
 #include <string.h>
 
-#if defined(_MAC)
+#if defined( OS_MACOS )
 
 // Make sure we have defined IID_IUnknown and IID_IClassFactory.
 #include <initguid.h>
@@ -105,9 +106,9 @@ void pascal DllTerminationRoutine();
 
 
 #pragma export on
-#endif // #if defined(_MAC)
+#endif // #if defined( OS_MACOS )
 
-#if defined(__sgi)
+#if defined( OS_UNIX )
 
 class Initialize {
 public:
@@ -126,9 +127,9 @@ Initialize::~Initialize()
 
 Initialize init;
 
-#endif
+#endif  // OS_UNIX
 
-#if defined(WIN32) || defined(_WIN32)
+#if defined( OS_WINDOWS )
 // Include the entry point for the windows dll.
 /////////////////////////////////////////////////////////////////////////////
 // DLL Entry Point
@@ -163,7 +164,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/)
 	return TRUE;    // ok
 }
 
-#endif
+#endif  // OS_WINDOWS
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -202,7 +203,7 @@ STDAPI DllUnregisterServer(void)
 
 
 
-#if defined(_MAC)
+#if defined( OS_MACOS )
 //
 //  DllGetVersion
 //
@@ -348,7 +349,7 @@ DllTerminationRoutine()
 
 
 #pragma export off
-#endif // #if defined(_MAC)
+#endif // #if defined( OS_MACOS )
 
 
 //
