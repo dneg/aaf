@@ -74,7 +74,7 @@ private:                                                        \
 public:
 
 #define OMDEFINE_STORABLE(className, classId)                   \
-const OMClassId* const Impl##className::_classId =              \
+const OMClassId* const className::_classId =                    \
 reinterpret_cast<const OMClassId* const>(&classId);
 
 #endif
