@@ -146,8 +146,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	aafProductIdentification_t	ProductInfo;
 
-	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"Make AVR Example";
+	ProductInfo.companyName = L"Company Name";
+	ProductInfo.productName = L"Cuts Only Composition Example";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -283,11 +283,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	sourceRef.startTime = 0;
 	check(compSclp->SetSourceReference (sourceRef));
 	check(compSclp->QueryInterface (IID_IAAFComponent, (void **)&aComponent));
-
+	check(aComponent->SetDataDef(&videoDef));
 	check(aComponent->SetLength (&segLen));
 	check(pSequence->AppendComponent (aComponent));
 
-	// Create a filler
+	// Create a filler - Get the component interface only (IID_IAAFComponent)
 	check(CoCreateInstance( CLSID_AAFFiller,
 									   NULL, 
 									   CLSCTX_INPROC_SERVER, 
@@ -295,6 +295,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									   (void **)&compFill));		
 
 	check(compFill->SetLength (&fillLen));
+	check(compFill->SetDataDef(&videoDef));
 	check(pSequence->AppendComponent (compFill));
 
 	seg->Release();
