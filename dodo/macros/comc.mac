@@ -1962,8 +1962,11 @@ pinternal%01\
   //
   // cleanup for %02
   //
-  delete[] internal%02;
-  internal%02 = 0;
+  if (internal%02)
+    {
+      delete[] internal%02;
+      internal%02 = 0;
+    }
 #endm
 
 
@@ -1978,8 +1981,11 @@ pinternal%01\
   //
   // cleanup for %02
   //
-  delete[] internal%02;
-  internal%02 = 0;
+  if (internal%02)
+    {
+      delete[] internal%02;
+      internal%02 = 0;
+    }
 #endm
 
 
@@ -2011,11 +2017,14 @@ pinternal%01\
       IUnknown *pUnknown;
       HRESULT hStat;
 
-      pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
-      hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
-      assert (SUCCEEDED (hStat));
-      //pUnknown->Release();
-      internal%02->ReleaseReference(); // We are through with this pointer.
+      if (internal%02)
+        {
+          pUnknown = static_cast<IUnknown *> (internal%02->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_I%01, (void **)%02);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internal%02->ReleaseReference(); // We are through with this pointer.
+        }
     }
 #endm
 
