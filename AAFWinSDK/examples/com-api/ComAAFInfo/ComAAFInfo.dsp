@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="ComAAFInfo" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 5.00
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
@@ -17,13 +17,12 @@ CFG=ComAAFInfo - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "ComAAFInfo - Win32 Release" (based on\
- "Win32 (x86) Console Application")
-!MESSAGE "ComAAFInfo - Win32 Debug" (based on\
- "Win32 (x86) Console Application")
+!MESSAGE "ComAAFInfo - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "ComAAFInfo - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
+# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
@@ -65,7 +64,7 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /Zi /Od /I "../../../../ref-impl/include/com-api" /I "../../../../ref-impl/include/OM" /I "../../../ref-impl/include/comidl" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /YX /FD /c
+# ADD CPP /nologo /MTd /W3 /Gm /GR /GX /ZI /Od /I "../../../../ref-impl/include/com-api" /I "../../../../ref-impl/include/OM" /I "../../../ref-impl/include/comidl" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D "_UNICODE" /D "UNICODE" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe

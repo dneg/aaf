@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="ComEssenceDataTest" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 5.00
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Console Application" 0x0103
@@ -13,18 +13,16 @@ CFG=ComEssenceDataTest - Win32 Debug
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
-!MESSAGE NMAKE /f "ComEssenceDataTest.mak"\
- CFG="ComEssenceDataTest - Win32 Debug"
+!MESSAGE NMAKE /f "ComEssenceDataTest.mak" CFG="ComEssenceDataTest - Win32 Debug"
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "ComEssenceDataTest - Win32 Release" (based on\
- "Win32 (x86) Console Application")
-!MESSAGE "ComEssenceDataTest - Win32 Debug" (based on\
- "Win32 (x86) Console Application")
+!MESSAGE "ComEssenceDataTest - Win32 Release" (based on "Win32 (x86) Console Application")
+!MESSAGE "ComEssenceDataTest - Win32 Debug" (based on "Win32 (x86) Console Application")
 !MESSAGE 
 
 # Begin Project
+# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
@@ -68,7 +66,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "../../../../ref-impl/include" /I "../../../../ref-impl/include/com-api" /I "../../../../ref-impl/include/OM" /I "../../../ref-impl/include/comidl" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "OM_ENABLE_DEBUG" /YX /FD /c
+# ADD CPP /nologo /W3 /Gm /GX /ZI /Od /I "../../../../ref-impl/include" /I "../../../../ref-impl/include/com-api" /I "../../../../ref-impl/include/OM" /I "../../../ref-impl/include/comidl" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_UNICODE" /D "UNICODE" /D "OM_ENABLE_DEBUG" /YX /FD /c
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
 # ADD RSC /l 0x409 /d "_DEBUG"
 BSC32=bscmake.exe
