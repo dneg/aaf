@@ -257,13 +257,17 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-  assert (_pBuiltinClasses);
-  delete _pBuiltinClasses;
-  _pBuiltinClasses = 0;
+  if (_pBuiltinClasses)
+	{
+	  delete _pBuiltinClasses;
+	  _pBuiltinClasses = 0;
+	}
 
-  assert (_pBuiltinTypes);
-  delete _pBuiltinTypes;
-  _pBuiltinTypes = 0;
+  if (_pBuiltinTypes)
+	{
+	  delete _pBuiltinTypes;
+	  _pBuiltinTypes = 0;
+	}
 
   if (_pBuiltinDefs)
 	{
