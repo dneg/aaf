@@ -524,7 +524,7 @@ static void convertName(char* cName,
                         char** tag);
 static void indent(int level);
 static void getClass(IStorage* storage, CLSID* clsid, const char* fileName);
-static void printClsid(const CLSID& clsid);
+static void printClsid(const CLSID& clsid, ostream& stream);
 static void printRawKey(OMByte* key, size_t keySize);
 static void printUMID(const UMID& umid);
 static void openStream(IStorage* storage,
@@ -1196,7 +1196,7 @@ void getClass(IStorage* storage, CLSID* clsid, const char* fileName)
   *clsid = statstg.clsid;
 }
 
-void printClsid(const CLSID& clsid)
+void printClsid(const CLSID& clsid, ostream& stream)
 {
   char cs[256];
 
@@ -1207,7 +1207,7 @@ void printClsid(const CLSID& clsid)
   } else {
     convert(cs, 256, s);
   }
-  cout << cs;
+  stream << cs;
 }
 
 void printRawKey(OMByte* key, size_t keySize)
@@ -1239,7 +1239,7 @@ void printUMID(const UMID& umid)
   cout << "-";
   cout << setfill('0') << setw(2) << hex << (int)umid.instanceLow;
   cout << "-";
-  printClsid(umid.material);
+  printClsid(umid.material, cout);
   cout << "}";
   cout.setf(savedFlags, ios::basefield);
   cout.fill(savedFill);
@@ -1327,7 +1327,7 @@ void printStat(STATSTG* statstg, char* tag)
   if (statstg->type == STGTY_STORAGE) {
     indent(6);
     cout << "clsid  = ";
-    printClsid(statstg->clsid);
+    printClsid(statstg->clsid, cout);
     cout << endl;
   }
 
@@ -2020,9 +2020,9 @@ void dumpSetIndexEntry(OMUInt32 i,
   printReferenceCount(setIndexEntry->_referenceCount);
   cout << "     ";
   if (printKey) {
-    printClsid(setIndexEntry->_key);
+    printClsid(setIndexEntry->_key, cout);
   } else {
-    printClsid(nullCLSID);
+    printClsid(nullCLSID, cout);
   }
   cout << endl;
 }
@@ -2182,7 +2182,7 @@ void printWeakCollectionIndex(int containerType,
     for (OMUInt32 i = 0; i < count; i++) {
       cout << setw(8) << i;
       cout << " : ";
-      printClsid(collectionIndex[i]._key);
+      printClsid(collectionIndex[i]._key, cout);
       cout << endl;
     }
   } else {
@@ -3353,7 +3353,7 @@ void dumpObject(IStorage* storage,
 
   CLSID clsid;
   getClass(storage, &clsid, pathName);
-  printClsid(clsid);
+  printClsid(clsid, cout);
   cout << endl;
 
   char* endianity;
