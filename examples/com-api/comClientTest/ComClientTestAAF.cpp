@@ -350,7 +350,7 @@ static void ReadAAFFile(aafWChar * pFileName)
                   aafInt32 numLocators;
 
 
-                  hr = smob->GetEssenceDescription(&essenceDesc);
+                  hr = smob->GetEssenceDescriptor(&essenceDesc);
                   check(hr); // display error message
                   if (SUCCEEDED(hr))
                   {
@@ -552,7 +552,7 @@ static void CreateAAFFile(aafWChar * pFileName)
     check(fileDesc->SetSampleRate(&audioRate));
 
     check(essenceDesc->AppendLocator (pLocator));
-    check(smob->SetEssenceDescription(essenceDesc));
+    check(smob->SetEssenceDescriptor(essenceDesc));
 
     // Add some slots
     for(testSlot = 0; testSlot < 3; testSlot++)
