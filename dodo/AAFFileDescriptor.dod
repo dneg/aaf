@@ -9,7 +9,7 @@ AAFEssenceDescriptor\
 #import ./AAFEssenceDescriptor.exp
 AD_HEAD
 AD_IDL(//
-// The IAAFEssenceDescriptor interface is implemented by objects which
+// The IAAFFileDescriptor interface is implemented by objects which
 // describe the format of the content data associated with a File
 // Source mob or the media associated with a Physical Source mob.
 //
