@@ -18,7 +18,7 @@
 #include <objbase.h>
 #endif
 
-const int currentVersion = 3;
+const int currentVersion = 4;
 
 #if defined(__sgi)
 #define OMQUADPART(x) x.u.QuadPart
