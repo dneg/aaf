@@ -131,11 +131,6 @@ static void doFile(const char* moduleName)
   cout << "// AAF type definition UIDs." << endl
        << "//" << endl << endl;
 
-  // Some one is depending on this from the old way of implementing
-  // the headers.
-  cout << "#define TYPE_GUID_NAME(type) kAAFTypeID_##type" << endl;
-  cout << endl;
-
   size_t i = 0;
   for (i = 0; i < sizeof(types)/sizeof(types[0]); i++){
     printDefinition("const aafUID_t",
