@@ -110,7 +110,7 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="C:\dev\ASPA\win32\bin\aafext\AAFPGAPI.dll"
+				OutputFile="../../Debug/RefImpl/aafext/AAFPGAPI.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,msvcrt.lib,libcd.lib,libcmtd.lib"

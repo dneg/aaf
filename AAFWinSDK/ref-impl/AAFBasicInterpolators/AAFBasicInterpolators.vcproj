@@ -110,7 +110,7 @@
 				Name="VCLinkerTool"
 				IgnoreImportLibrary="TRUE"
 				AdditionalOptions="/MACHINE:I386"
-				OutputFile="C:\dev\ASPA\win32\bin\aafext/AAFINTP.dll"
+				OutputFile="../../Debug/RefImpl/aafext/AAFINTP.dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				IgnoreDefaultLibraryNames="libc.lib,libcmt.lib,msvcrt.lib,libcd.lib,libcmtd.lib"
