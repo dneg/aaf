@@ -49,6 +49,14 @@ AD_XMETHOD2(GetIndexedVariantID,
 	//)
 
 	
+AD_XMETHOD1(SetCompression,
+		   [in],
+		   objPass,
+		   aafCompressEnable_t,
+		   enable,
+		   isCompressionEnabled,
+		   Sets a value indicating whether the SDK is handling the compression.)
+
 AD_XMETHOD2(GetIndexedDataDefinition,
 		   [in],
 		   objPass,
@@ -175,12 +183,17 @@ AD_XMETHOD3(Create,
 			Create a media data object\, and attach the correct type of
 			//EssenceDescriptor to the fileMob)
 
-AD_XMETHOD2(Open,
+AD_XMETHOD3(Open,
 			[in],
 			objPass,
 			aafUID_t,
 			fileMobID,
 			Open the essence attached to this file mob,
+			[in],
+			objPass,
+			aafMediaOpenMode_t,
+			openMode,
+			In this mode,
 			[in],
 			objIn,
 			AAFEssenceStream,

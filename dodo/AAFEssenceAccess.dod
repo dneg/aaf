@@ -18,22 +18,17 @@ AD_HEAD
 \******************************************/
 
 
-/***********************************************\
-*  Stub only.   Implementation not yet added    *
-\***********************************************/
-
-
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFMasterMob)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFEssenceFormat)
+AD_FORWARD_DECLARATION(AAFLocator)
 
 AD_CLASS_UUID(aed97eb1, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(aed97eb0, 2bc8, 11D2, bf, aa, 00, 60, 97, 11, 62, 12)
-
-AD_COM_EXT_CLASS_BEGIN(public IAAFEndian)
+AD_CLASS_BEGIN
 
 /****/
 AD_XMETHOD7(CreateAudioEssence,
@@ -46,7 +41,7 @@ AD_XMETHOD7(CreateAudioEssence,
 [in],objPass, aafInt16,obj,and this many channels,
 Initializes an audio essence stream.)
 //@comm Creates either a single stream of audio essence, or interleaved
-// audio-only data.  A separate call (MediaMultiCreate) exists 
+// audio-only data.  A separate call \(MediaMultiCreate\) exists 
 // in order to create interleaved audio and video data.
 // 
 //@comm The essence object initialized from this call can be used with
@@ -54,13 +49,13 @@ Initializes an audio essence stream.)
 // or WriteDataLines.
 // 
 // Argument Notes:
-//@comm If you are creating the essence, and then attaching it to a master
+//@comm If you are creating the essence\, and then attaching it to a master
 // mob, then the "masterMob" field may be left NULL.
 // 
 //@comm The numChannels field refers to the number of interleaved
 // channels on a single data stream.  
 // 
-//@comm The sample rate should be the actual samples per second, not the
+//@comm The sample rate should be the actual samples per second\, not the
 // edit rate.
 //@comm omfmAudioMediaCreate
 
@@ -77,53 +72,63 @@ AD_XMETHOD9(VideoMediaCreate,
 [in],objPass, aafRational_t,ratio,image aspect ratio,
 Creates an audio essence stream.)
 //@comm Creates a single stream of video essence.  A separate call
-// (MediaMultiCreate) exists to create interleaved audio and
+// \(MediaMultiCreate\) exists to create interleaved audio and
 // video data.
 //@comm The essence object initialized from this call can be used with
-// WriteDataSamples or WriteDataLines, but NOT with
+// WriteDataSamples or WriteDataLines\, but NOT with
 // WriteMultiSamples.
-//@comm If you are creating the essence, and then attaching it to a master
+//@comm If you are creating the essence\, and then attaching it to a master
 // mob, then the "masterMob" field may be left NULL.
 //@comm The storedHeight and storedWidth are the dimensions of the frame
-// as stored on disk (or as it should be restored by the codec.  The
+// as stored on disk \(or as it should be restored by the codec.  The
 // displayRect and sampledRect are set to:
-// 	(0,0 @ sampledWidth, sampledHeight).
+// 	\(0\,0 @ sampledWidth\, sampledHeight\).
 //@comm If the displayed rectangle is not the same as the stored rectangle
-// (as with the old leadingLines and trailingLines), then you should
-// call SetDisplayRect().
+// \(as with the old leadingLines and trailingLines\)\, then you should
+// call SetDisplayRect\(\).
 //@comm The frame layout contains the number of fields and whether they are
-// interlaced, but does not specify field dominance.
+// interlaced\, but does not specify field dominance.
 //@comm Replaces omfmVideoMediaCreate
 
+AD_XMETHOD2(SetEssenceDestination,
+[in],objIn,	  AAFLocator,destination,Optionally create the file HERE.,
+[in],objPass, aafFileFormat_t,fileFormat,with this format,
+Sets where the essence created by create\(\) will be created.)
+
+AD_XMETHOD1(SetEssenceCodecVariety,
+[in],objPass, aafUID_t,variety,and this sub-variety,
+Sets which variety of the codec ID is to be used.)
+
 /****/
-AD_XMETHOD6(Create,
-[in],objIn, AAFMasterMob,masterMob,on this master mob,
+AD_XMETHOD7(Create,
+[in],objIn,   AAFMasterMob,masterMob,on this master mob,
 [in],objPass, aafSlotID_t,masterSlotID,,
-[in],objIn, AAFSourceMob,fileMob,and this file mob,
-[in],objIn, AAFDataDef,mediaKind,create essence of this type,
+[in],objPass, aafUID_t,mediaKind,create essence of this type,
+[in],objPass, aafUID_t,codecID,using this codec,
+[in],objPass, aafRational_t,editRate,with this edit rate,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 Creates a single channel stream of essence.)
 	//@comm Creates a single channel stream of essence.  Convenience functions
-	// exist to create audio or video essence, and a separate call
-	// (MultiCreate) exists to create interleaved audio and
+	// exist to create audio or video essence\, and a separate call
+	// \(MultiCreate\) exists to create interleaved audio and
 	// video data.
 	//@comm The essence handle from this call can be used with
-	// WriteDataSamples  and possibly WriteDataLines, but NOT with
+	// WriteDataSamples  and possibly WriteDataLines\, but NOT with
 	// WriteMultiSamples.
-	//@comm If you are creating the essence, and then attaching it to a master
+	//@comm If you are creating the essence\, and then attaching it to a master
 	// mob, then the "masterMob" field may be left NULL.
-	// For video, the sampleRate should be the edit rate of the file mob.
-	// For audio, the sample rate should be the actual samples per second.
+	// For video\, the sampleRate should be the edit rate of the file mob.
+	// For audio\, the sample rate should be the actual samples per second.
 	//@comm Replaces omfmMediaCreate
+
 	
 /****/
-AD_XMETHOD6(MultiCreate,
+AD_XMETHOD5(MultiCreate,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
-[in],objIn, AAFSourceMob,fileMob,and this file mob create,
+[in],objPass, aafUID_t,codecID,using this codec,
 [in],objPass, aafInt16,arrayElemCount,this many channels,
 [in\,ref\,size_is\(arrayElemCount\)],objPass, aafmMultiCreate_t *,mediaArray,using these definitions,
-[in],objPass, aafRational_t ,editRate,,
 [in],objPass, aafCompressEnable_t,Enable,optionally compressing it,
 Creates a multi-channel interleaved stream of essence.)
 	//@comm The essence handle from this call can be used with
@@ -639,8 +644,4 @@ Get the video signal type [NTSC/PAL/SECAM].)
 	//@comm Replaces omfmSourceGetVideoSignalType */
 
 
-AD_COM_METH(.method-GetStoredByteOrder)
-
-
-AD_COM_METH(.method-GetNativeByteOrder)
-AD_COM_EXT_CLASS_END(AAFEndian)
+AD_CLASS_END
