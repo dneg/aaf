@@ -32,15 +32,11 @@
 #include "AAFPropertyDefs.h"
 #include "AAFTypeDefUIDs.h"
 
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#include <string.h> // memcmp?
-#endif
-
 #include <assert.h>
 #include <stdlib.h>
 #include <stddef.h>
-
+#include <string.h>
+#include <wchar.h>
 
 // Needed for the auid of the "Root" class.
 const static aafUID_t NULL3_AUID = { 0 };

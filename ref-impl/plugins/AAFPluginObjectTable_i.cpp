@@ -31,7 +31,7 @@
 #include "CAAFEssenceDataStream.h"
 #include "CAAFEssenceFileContainer.h"
 #include "CAAFAIFCCodec.h"
-#include "CAAFWaveCodec.h"
+#include "CAAFWAVECodec.h"
 #include "CAAFJPEGCodec.h"
 
 //

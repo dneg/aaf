@@ -146,9 +146,15 @@
 #include <memory.h>		/* For AAFMalloc() and AAFFree() */
 #include <OSUtils.h>
 #endif
-//#ifdef _WIN32
+#ifdef _WIN32
 #include <time.h>
-//#endif
+#elif defined (__sgi) || defined (__FreeBSD__)
+  #include <time.h>
+  #include <sys/time.h>
+  #include <unistd.h>
+  #include <sys/types.h>
+  #include <sys/times.h>
+#endif
 
 //#include "omPublic.h"
 //#include "omPvt.h" 
@@ -157,7 +163,7 @@
 #include "AAFUtils.h"
 #include "aafCvt.h"
 #include "AAFResult.h"
-
+#include "AAFCOMPlatform.h"
 
 /* Moved math.h down here to make NEXT's compiler happy */
 #include <math.h>
@@ -421,6 +427,13 @@ static aafInt32 powi(
 #elif defined(_WIN32)
 #include <time.h>
 #define HZ CLK_TCK
+#elif defined (__sgi) || defined (__FreeBSD__)
+#include <time.h>
+#ifdef CLK_TCK
+#define HZ CLK_TCK
+#else
+#define HZ CLOCKS_PER_SEC
+#endif
 #endif
 
 /*
@@ -597,7 +610,9 @@ AAFRESULT aafMobIDFromMajorMinor(
 // Microsoft Component Library...so we define something that should be
 // fairly unique on the mac.
 
+#if defined(_MAC) || defined(macintosh)
 #include <Events.h>
+#endif
 #include <time.h>
 
 static void pvtMacCreateGuid(GUID  *pguid)
@@ -614,8 +629,12 @@ static void pvtMacCreateGuid(GUID  *pguid)
   if (!sInitializedTemplate)
   {
     time_t timer = time(NULL);
+#ifndef __sgi // temp
     aafUInt32 ticks = TickCount();
     sTemplate.Data1 += timer + ticks;
+#else
+    sTemplate.Data1 += timer;
+#endif
     sInitializedTemplate = true;
   }
   
