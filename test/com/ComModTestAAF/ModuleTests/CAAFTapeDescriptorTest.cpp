@@ -43,7 +43,7 @@ static aafWChar* Model = L"MyModel";
 static aafTapeCaseType_t FormFactor = kAAFVHSVideoTape;
 static aafVideoSignalType_t VideoSignalType = kAAFPALSignal;
 static aafTapeFormatType_t TapeFormat = kAAFVHSFormat;
-static aafLength_t TapeLength = 3200 ;
+static aafUInt32 TapeLength = 3200 ;
 
 static const 	aafMobID_t	TEST_MobID =
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -217,7 +217,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafTapeCaseType_t			readFormFactor;
 	aafVideoSignalType_t		readVideoSignalType;
 	aafTapeFormatType_t			readTapeFormat;
-	aafLength_t					readTapeLength ;
+	aafUInt32					readTapeLength ;
 	aafUInt32					length;
 
 	HRESULT						hr = AAFRESULT_SUCCESS;
