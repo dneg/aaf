@@ -249,10 +249,8 @@ private:
 	
 	ImplAAFTypeDefSP _cachedBaseType;
 	
-	//
-	// private methods
-	//
-	
+
+public:
 	
 	ImplAAFTypeDefSP BaseType (void) const;
 	
