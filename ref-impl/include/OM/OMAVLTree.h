@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -28,11 +28,11 @@
 template <typename Key, typename Value>
 class OMAVLTree {
 public:
-  
+
   OMAVLTree(void);
 
   ~OMAVLTree(void);
-  
+
   bool insert(const Key k, Value v);
 
   bool find(const Key k, Value& v) const;
@@ -57,7 +57,7 @@ private:
   struct Node;
 
   bool insert(Node*& subTree, Key k, Value v, bool& heightChanged);
-  
+
   void leftRotation(Node*& subTree);
 
   void rightRotation(Node*& subTree);
@@ -65,7 +65,7 @@ private:
   void leftRightRotation(Node*& subTree);
 
   void rightLeftRotation(Node*& subTree);
-  
+
   bool remove(Node*& subTree, Key k, bool& heightChanged);
 
   void balanceLeft(Node*& subTree, bool& heightChanged);
@@ -97,7 +97,7 @@ private:
   void destroy(Node* subTree);
 
   Node* _root;
-  
+
   struct Node {
     Key _key;
     Value _value;
@@ -105,7 +105,7 @@ private:
     Node* _left;
     Node* _right;
   };
-  
+
 };
 
 #include "OMAVLTreeT.h"

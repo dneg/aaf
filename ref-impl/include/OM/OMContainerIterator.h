@@ -5,15 +5,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 // The Initial Developer of the Original Code of this file and the
 // Licensor of the AAF Association is Avid Technology.
 // All rights reserved.
@@ -77,7 +77,7 @@ public:
     //          If the end of the associated <c OMContainer> is reached
     //          then the result is <e bool.false>,
     //          <mf OMContainerIterator::valid> becomes <e bool.false> and
-    //          <mf OMContainerIterator::after> becomes <e bool.true>. 
+    //          <mf OMContainerIterator::after> becomes <e bool.true>.
   virtual bool operator++() = 0;
 
     // @cmember Retreat this <c OMContainerIterator> to the previous
@@ -89,7 +89,7 @@ public:
     //          If the beginning of the associated <c OMContainer> is
     //          reached then the result is <e bool.false>,
     //          <mf OMContainerIterator::valid> becomes <e bool.false> and
-    //          <mf OMContainerIterator::before> becomes <e bool.true>. 
+    //          <mf OMContainerIterator::before> becomes <e bool.true>.
   virtual bool operator--() = 0;
 
     // @cmember Return the <p Element> in the associated <c OMContainer>
