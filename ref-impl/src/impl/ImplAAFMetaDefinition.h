@@ -34,7 +34,7 @@
 #include "AAFTypes.h"
 #endif
 
-#include "ImplAAFRoot.h"
+#include "ImplAAFStorable.h"
 
 #include "OMStorable.h"
 #include "OMFixedSizeProperty.h"
@@ -45,8 +45,7 @@ class ImplAAFClassDef;
 
 
 class ImplAAFMetaDefinition : 
-  public ImplAAFRoot,
-  public OMStorable
+  public ImplAAFStorable
 {
 public:
   //
@@ -160,6 +159,14 @@ public:
   virtual void onSave(void* clientContext) const;
   virtual void onRestore(void* clientContext) const;
 
+  
+  // Overrides of ImplAAFStorable.
+  // Return true if this is a meta object
+  // NOTE: These objects will eventually owned by the Object Manager.
+  virtual bool metaObject(void) const;
+  
+  // Return true is this is a data object (Interchange object).
+  virtual bool dataObject(void) const;
 
 private:
 

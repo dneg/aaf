@@ -523,7 +523,7 @@ AAFRESULT ImplAAFTypeDefWeakObjRef::SyncTargetPidsFromTargetSet(void)
       if (index < lastIndex)
         valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatStrongObjRef);
       else
-#ifndef LAST_ELEMENT_CAN_BE_A_STRONGREFERENCEVECTOR
+#ifdef LAST_ELEMENT_CAN_BE_A_STRONGREFERENCEVECTOR
         valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatVariableArray);
 #else
         valid = findReferencedClassDefintion(pPropertyDef, &pClassDef, uniqueIdentifierPid, kAAFTypeCatSet);
@@ -619,16 +619,15 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
   // This code will be updated when there is a non-template contructor for a weak reference.
   // transdel:2000-JUN-23.
   OMProperty * result = NULL;
-  const wchar_t *targetName = L"THIS IS AN OBSOLETE INTERFACE...";
   
   switch (_uniqueIdentifierPid)
   {
     case PID_MetaDefinition_Identification:
-      result = new OMWeakReferenceProperty<ImplAAFMetaDefinition>(pid, name, targetName, _uniqueIdentifierPid);
+      result = new OMWeakReferenceProperty<ImplAAFMetaDefinition>(pid, name, _uniqueIdentifierPid, _targetPids);
       break;
       
     case PID_DefinitionObject_Identification:
-      result = new OMWeakReferenceProperty<ImplAAFDefObject>(pid, name, targetName, _uniqueIdentifierPid);
+      result = new OMWeakReferenceProperty<ImplAAFDefObject>(pid, name, _uniqueIdentifierPid, _targetPids);
       break;
     
     default:

@@ -25,6 +25,17 @@
  *
  ************************************************************************/
 
+// Conditional symbol for testing the creation of a new optional 
+// strong reference set property on the dictionary. This is experimental
+// because the AAFDictionary is still considered "axiomatic" by
+// ImplAAFBuiltinClasses and itself. The problem is that the
+// class definitions for such axiomatic objects are unpersisted
+// but NOT used by the DM, the "builtin" class definition is used instead!
+// 2000-SEPT-14 transdel.
+#ifndef SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+#define SUPPORT_EXPERIMENTAL_OPTIONAL_SETS 0
+#endif
+
 
 #ifndef __ImplEnumAAFPropertyDefs_h__
 #include "ImplEnumAAFPropertyDefs.h"
@@ -323,7 +334,28 @@ AAFRESULT STDMETHODCALLTYPE
   // Test to see if this class is axiomatic; if so, then we can't
   // augment it.
   if (pDict->IsAxiomaticClass (myAuid))
-	return AAFRESULT_NOT_EXTENDABLE;
+  {
+#if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+
+		// TEMPORARY HACK:
+		// Explicitely allow the selected "private" classes to be extended
+		// with optional properties. NOTE: These classes cannot be subclassed.
+		// There should really be different types of class definitions to 
+		// handle these (and other) special cases.
+		// 2000-SEPT-13 transdel
+		if ((0 != memcmp(&myAuid, &AUID_AAFHeader, sizeof(aafUID_t))) &&
+		    (0 != memcmp(&myAuid, &AUID_AAFDictionary, sizeof(aafUID_t))) &&
+		    (0 != memcmp(&myAuid, &AUID_AAFContentStorage, sizeof(aafUID_t))))
+		{
+			return AAFRESULT_NOT_EXTENDABLE;
+		}
+
+#else // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+
+		return AAFRESULT_NOT_EXTENDABLE;
+		
+#endif // #else // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+	}
 
   aafUID_t typeId;
   hr = pTypeDef->GetAUID (&typeId);

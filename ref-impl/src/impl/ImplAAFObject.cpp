@@ -25,6 +25,17 @@
  *
  ************************************************************************/
 
+// Conditional symbol for testing the creation of a new optional 
+// strong reference set property on the dictionary. This is experimental
+// because the AAFDictionary is still considered "axiomatic" by
+// ImplAAFBuiltinClasses and itself. The problem is that the
+// class definitions for such axiomatic objects are unpersisted
+// but NOT used by the DM, the "builtin" class definition is used instead!
+// 2000-SEPT-14 transdel.
+#ifndef SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+#define SUPPORT_EXPERIMENTAL_OPTIONAL_SETS 0
+#endif
+
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -936,6 +947,7 @@ AAFRESULT STDMETHODCALLTYPE
     ar=InitProperties();
 	if (AAFRESULT_FAILED(ar))
 		return ar;
+    assert (_pProperties);
   }
 
   *ppPropVal = NULL;
@@ -944,6 +956,48 @@ AAFRESULT STDMETHODCALLTYPE
   if(AAFRESULT_FAILED(ar))
 	  return(ar);
 
+#if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+
+  AAFRESULT ar = AAFRESULT_SUCCESS;
+
+  ImplAAFClassDefSP pClass;
+  ar = GetDefinition (&pClass);
+  assert (AAFRESULT_SUCCEEDED (ar));
+
+  const OMPropertyId pid = pPropDef->OmPid ();
+
+  ImplAAFPropertyDefSP pTempProp;
+  ar = pClass->LookupPropertyDefbyOMPid (pid, &pTempProp);
+  // pTempProp is unused
+  if (AAFRESULT_FAILED (ar))
+	return AAFRESULT_BAD_PROP;
+
+
+
+  // Make sure the given property exists and has been
+  // initialized.
+  OMProperty *pOMProperty = InitOMProperty(pPropDef, propertySet());
+  if (!pOMProperty)
+  {
+    // Initialization failed! Determine the type of failure...
+    if (pPropDef->OmPid() == PID_InterchangeObject_ObjClass)
+      return (AAFRESULT_BAD_PROP);
+    else
+      return (AAFRESULT_NOMEMORY);
+  }
+
+  ar = pPropertyType->CreatePropertyValue(pOMProperty, ppPropVal);
+  if(AAFRESULT_FAILED(ar))
+	  return(ar);
+  assert(NULL != *ppPropVal);
+  
+  // Make sure the new property value will be returned by a subsequent call
+  // to GetPropertyValue. We need to do this because, among other things,
+  // the property value is cached in the "property collection".
+  return (SetPropertyValue(pPropDef, *ppPropVal));
+	
+#else // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+
   // Look up OM property in property collection
   OMProperty *pOMProperty;
   ar=_pProperties->LookupOMProperty(pPropDef->OmPid(),&pOMProperty);
@@ -951,6 +1005,8 @@ AAFRESULT STDMETHODCALLTYPE
 	  return(AAFRESULT_BAD_PROP);
 
   return(pPropertyType->CreatePropertyValue(pOMProperty,ppPropVal));
+
+#endif // #else // #if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
 }
 
 
@@ -1118,6 +1174,9 @@ void ImplAAFObject::InitOMProperties (ImplAAFClassDef * pClassDef)
   ImplAAFPropertyDefSP propDefSP;
   while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&propDefSP)))
 	{
+#if SUPPORT_EXPERIMENTAL_OPTIONAL_SETS
+    InitOMProperty(propDefSP, ps);
+#else
 	  OMPropertyId defPid = propDefSP->OmPid ();
 	  // assert (ps->isAllowed (defPid));
 	  OMProperty * pProp = 0;
@@ -1160,9 +1219,57 @@ void ImplAAFObject::InitOMProperties (ImplAAFClassDef * pClassDef)
 		  pPropDef = 0;
 		  pOMPropDef = 0;
 	  }
-	  propDefSP = 0;
 	  pProp = 0;
+#endif
+	  propDefSP = 0;
   }
+}
+
+  
+// Same as above for a single property (not recursive).
+OMProperty * ImplAAFObject::InitOMProperty(ImplAAFPropertyDef * pPropertyDef, OMPropertySet * ps)
+{
+  OMPropertyId defPid = pPropertyDef->OmPid ();
+  // assert (ps->isAllowed (defPid));
+  OMProperty * pProp = 0;
+  if (ps->isPresent (defPid))
+	{
+	  // Defined property was already in property set.  (Most
+	  // probably declared in the impl constructor.)  Get that
+	  // property.
+	  pProp = ps->get (defPid);
+	}		  
+	else if(defPid != PID_InterchangeObject_ObjClass
+		/* && (defPid != PID_InterchangeObject_Generation)
+		 && (defPid != PID_PropertyDefinition_DefaultValue) */)
+	{
+	  // Defined property wasn't found in OM property set.
+	  // We'll have to install one.
+	  pProp = pPropertyDef->CreateOMProperty ();
+	  assert (pProp);
+	  
+	  // Remember this property so we can delete it later.
+	  RememberAddedProp (pProp);
+	  
+	  // Add the property to the property set.
+	  ps->put (pProp);
+  }
+  
+  if(defPid != PID_InterchangeObject_ObjClass
+     /* && (defPid != PID_InterchangeObject_Generation)
+        && (defPid != PID_PropertyDefinition_DefaultValue) */)
+  {
+  	  OMPropertyDefinition * pOMPropDef =
+  		  dynamic_cast<OMPropertyDefinition*>(pPropertyDef);
+  	  assert (pOMPropDef);
+  	  
+  	  assert (pProp);
+  	  pProp->initialize (pOMPropDef);
+  	  
+  	  pOMPropDef = 0;
+  }
+  
+  return pProp;
 }
 
 
@@ -1313,3 +1420,19 @@ void ImplAAFObject::onRestore(void* /*clientContext*/) const
   // Cast away constness (maintaining logical constness)
   ((ImplAAFObject*) this)->setInitialized ();
 }
+
+
+// Overrides of ImplAAFStorable.
+// Return true if this is a meta object
+// NOTE: These objects will eventually owned by the Object Manager.
+bool ImplAAFObject::metaObject(void) const
+{
+  return false;
+}
+
+// Return true is this is a data object (Interchange object).
+bool ImplAAFObject::dataObject(void) const
+{
+  return true;
+}
+

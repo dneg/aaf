@@ -33,10 +33,9 @@
 
 
 class ImplAAFPropertyValue;
-
 class ImplEnumAAFPropertyValues;
-
-
+class ImplAAFTypeDefRecord;
+class ImplAAFPropertyDef;
 
 
 
@@ -80,7 +79,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     GetElementType
         // @parm [out] type of elements in this array
-        (ImplAAFTypeDef ** ppTypeDef);
+        (ImplAAFTypeDef ** ppTypeDef) const;
 
   //****************
   // AddElement()
@@ -188,6 +187,10 @@ public:
          ImplEnumAAFPropertyValues ** ppEnum);
 
 
+  // Override from AAFTypeDef
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetTypeCategory (/*[out]*/ eAAFTypeCategory_t *  pTid);
+
 public:
   //****************
   // pvtInitialize()
@@ -202,6 +205,9 @@ public:
 
          // @parm [in] friendly name of this type definition
          const aafCharacter *  pTypeName);
+         
+  ImplAAFTypeDefRecord* STDMETHODCALLTYPE 
+    GetUIDType(ImplAAFTypeDef* pElementType, AAFRESULT& result) const;
 
 public:
   // Overrides from ImplAAFTypeDef
@@ -211,6 +217,16 @@ public:
   virtual bool IsVariableArrayable () const;
   virtual bool IsStringable () const;
 
+
+  virtual OMProperty * 
+    pvtCreateOMProperty (OMPropertyId pid,
+							const wchar_t * name) const;
+
+  // Allocate and initialize the correct subclass of ImplAAFPropertyValue 
+  // for the given OMProperty.
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CreatePropertyValue(OMProperty *property, 
+                        ImplAAFPropertyValue ** pPropertyValue) const;
 
 
   // override from OMStorable.
@@ -225,6 +241,12 @@ private:
   // Persistent properties
   //
   OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  
+  //
+  // Non-persistent data.
+  //
+  ImplAAFPropertyDef* _uidProperty; // pid for the uid
+  ImplAAFTypeDefRecord* _uidType; // cached type for the unique identifier property.
 };
 
 #endif // ! __ImplAAFTypeDefSet_h__

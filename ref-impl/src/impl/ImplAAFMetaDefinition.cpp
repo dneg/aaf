@@ -404,3 +404,21 @@ void ImplAAFMetaDefinition::onRestore(void* /*clientContext*/) const
   // Cast away constness (maintaining logical constness)
   ((ImplAAFMetaDefinition*) this)->setInitialized ();
 }
+
+
+// Overrides of ImplAAFStorable.
+// Return true if this is a meta object
+// NOTE: These objects will eventually owned by the Object Manager.
+bool ImplAAFMetaDefinition::metaObject(void) const
+{
+  return true;
+}
+
+// Return true is this is a data object (Interchange object).
+bool ImplAAFMetaDefinition::dataObject(void) const
+{
+  return false;
+}
+
+
+

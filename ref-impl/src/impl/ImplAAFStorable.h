@@ -73,4 +73,13 @@ public:
 
 typedef ImplAAFSmartPointer<ImplAAFStorable> ImplAAFStorableSP;
 
+
+//
+// Inlude the generic enumerator for storables.
+//
+#ifndef __ImplAAFEnumerator_h__
+#include "ImplAAFEnumerator.h"
+#endif
+typedef ImplAAFEnumerator<ImplAAFStorable> ImplEnumAAFStorables;
+
 #endif // ! __ImplAAFStorable_h__
