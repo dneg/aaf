@@ -77,7 +77,7 @@ HRESULT STDMETHODCALLTYPE
 	if(uid == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	*uid = CodecWave;		// UID of the WAVE codec definition
+	*uid = kAAFCodecWAVE;		// UID of the WAVE codec definition
 	return AAFRESULT_SUCCESS;
 }
 
@@ -121,7 +121,7 @@ HRESULT STDMETHODCALLTYPE
 								  (IUnknown **)&codecDef));
 		pcd->Release ();
 		pcd = 0;
-		uid = CodecWave;
+		uid = kAAFCodecWAVE;
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(codecDef->Initialize(uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
 		CAAFBuiltinDefs defs (dict);
@@ -310,7 +310,7 @@ HRESULT STDMETHODCALLTYPE
 {
 	if(pFlavour == NULL)
 		return AAFRESULT_NULL_PARAM;
-	*pFlavour = NilCodecFlavour;
+	*pFlavour = kAAFNilCodecFlavour;
 	return AAFRESULT_SUCCESS;
 }
 

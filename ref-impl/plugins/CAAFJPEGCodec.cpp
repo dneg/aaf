@@ -122,7 +122,7 @@ CAAFJPEGCodec::CAAFJPEGCodec (IUnknown * pControllingUnknown)
 	_length = 0;  // 64 bit int
 	_sampleRate = NULL_RATIONAL;
 	_containerFormat = NULL_ID;
-	_codecID = CodecJPEG;
+	_codecID = kAAFCodecJPEG;
 	_storedHeight = 0;
 	_storedWidth = 0;
 	_sampledHeight = 0;  // SampledView
@@ -291,7 +291,7 @@ HRESULT STDMETHODCALLTYPE
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;
 
-	*uid = CodecJPEG;		// UID of the JPEG codec definition
+	*uid = kAAFCodecJPEG;		// UID of the JPEG codec definition
 
 	return AAFRESULT_SUCCESS;
 }
@@ -342,7 +342,7 @@ HRESULT STDMETHODCALLTYPE
 		
 		// Initialize the standard Definition properties.
 		checkResult(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
-		uid = CodecJPEG;
+		uid = kAAFCodecJPEG;
 		checkResult(codecDef->Initialize(uid, 
 		                      const_cast<wchar_t *>(kDisplayName),
 		                      const_cast<wchar_t *>(kDescription)));
@@ -532,7 +532,7 @@ HRESULT STDMETHODCALLTYPE
 	if(pFlavour == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	*pFlavour = NilCodecFlavour;
+	*pFlavour = kAAFNilCodecFlavour;
 
 	return AAFRESULT_SUCCESS;
 }
@@ -643,7 +643,7 @@ HRESULT STDMETHODCALLTYPE
 		aafUID_t codecID = NULL_ID;
 		hr = descriptorHelper.GetCompression(&codecID);
 		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_SUCCESS == hr && EqualAUID(&codecID, &CodecJPEG) && 0 == padBits)
+		if (AAFRESULT_SUCCESS == hr && EqualAUID(&codecID, &kAAFCodecJPEG) && 0 == padBits)
 		{
 			pSelectInfo->willHandleMDES = kAAFTrue;
 		}
@@ -782,7 +782,7 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
 	
 	if (NULL == unk || NULL == stream )
 		return AAFRESULT_NULL_PARAM;
-  else if (kAAFTrue != EqualAUID(&NilCodecFlavour, &flavour))
+  else if (kAAFTrue != EqualAUID(&kAAFNilCodecFlavour, &flavour))
     return AAFRESULT_NULL_PARAM;
 
 
