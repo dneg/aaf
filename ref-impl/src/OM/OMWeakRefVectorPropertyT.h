@@ -477,7 +477,7 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::insertAt(
   OMUniqueObjectIdentification key = object->identification();
   VectorElement newElement(this, key, _targetTag);
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
-  element.reference().setTargetTag(targetTag());
+  newElement.reference().setTargetTag(targetTag());
 #endif
   newElement.setValue(object);
   _vector.insertAt(newElement, index);
