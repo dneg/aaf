@@ -556,14 +556,7 @@ static void dumpFile (wchar_t * pwFileName)
   IAAFHeader * pHeader = NULL;
   IAAFObject * pHdrObj = NULL;
 
-  checkResult(CoCreateInstance(CLSID_AAFFile,
-							   NULL, 
-							   CLSCTX_INPROC_SERVER, 
-							   IID_IAAFFile, 
-							   (void **)&pFile));
-  assert (pFile);
-  checkResult(pFile->Initialize());
-  checkResult(pFile->OpenExistingRead(pwFileName, 0));
+  checkResult(AAFFileOpenExistingRead(pwFileName, 0, &pFile));
   checkResult(pFile->GetHeader(&pHeader));
   assert (pHeader);
   checkResult(pHeader->QueryInterface(IID_IAAFObject,
@@ -595,6 +588,21 @@ struct CComInitialize
   }
 };
 
+// simple helper class to initialize and cleanup AAF library.
+struct CAAFInitialize
+{
+  CAAFInitialize(const char *dllname = NULL)
+  {
+  	printf("Attempting to load the AAF dll...\n");
+    HRESULT hr = AAFLoad(dllname);
+    (SUCCEEDED(hr)) ? printf("DONE\n") : printf("FAILED\n");
+  }
+
+  ~CAAFInitialize()
+  {
+    AAFUnload();
+  }
+};
 
 
 int main(int argc, char* argv[])
@@ -606,6 +614,7 @@ int main(int argc, char* argv[])
 	#endif
 
   CComInitialize comInit;
+  CAAFInitialize aafInit;
 
   if (argc != 2) {
     fprintf(stderr, "Error : wrong number of arguments\n");
