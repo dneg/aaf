@@ -60,7 +60,7 @@ public:
     // @cmember Save this <c OMStrongReferenceSetProperty>.
   virtual void save(void* clientContext) const;
 
-    // @cmember Close this <c OMProperty>.
+    // @cmember Close this <c OMStrongReferenceSetProperty>.
   virtual void close(void);
 
     // @cmember Restore this <c OMStrongReferenceSetProperty>, the
@@ -75,13 +75,13 @@ public:
     // @cmember Get the size of this <c OMStrongReferenceSetProperty>.
   size_t getSize(void) const;
 
-  // Set access functions go here
-
+    // @cmember Insert <p object> into this
+    //          <c OMStrongReferenceSetProperty>.
   void insert(const ReferencedObject* object);
 
-    // @cmember Append the given <p ReferencedObject> <p value> to
+    // @cmember Append the given <p ReferencedObject> <p object> to
     //          this <c OMStrongReferenceSetProperty>.
-  void appendValue(const ReferencedObject*& value);
+  void appendValue(const ReferencedObject* object);
 
     // @cmember Remove the <p ReferencedObject> identified by
     //          <p identification> from this <c OMStrongReferenceSetProperty>.

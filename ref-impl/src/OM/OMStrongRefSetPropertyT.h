@@ -33,6 +33,9 @@
 #include "OMStoredSetIndex.h"
 #include "OMStrongReferenceSetIter.h"
 
+  // @mfunc Constructor.
+  //   @parm The property id.
+  //   @parm The name of this <c OMStrongReferenceSetProperty>.
 template <typename ReferencedObject>
 OMStrongReferenceSetProperty<ReferencedObject>::
                     OMStrongReferenceSetProperty(const OMPropertyId propertyId,
@@ -45,6 +48,7 @@ OMStrongReferenceSetProperty<ReferencedObject>::
                                                "OMStrongReferenceSetProperty");
 }
 
+  // @mfunc Destructor.
 template <typename ReferencedObject>
 OMStrongReferenceSetProperty<ReferencedObject>::
                                             ~OMStrongReferenceSetProperty(void)
@@ -230,6 +234,12 @@ size_t OMStrongReferenceSetProperty<ReferencedObject>::getSize(void) const
   return count();
 }
 
+  // @mfunc Insert <p object> into this
+  //        <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm The object to insert.
 template <typename ReferencedObject>
 void OMStrongReferenceSetProperty<ReferencedObject>::insert(
                                                 const ReferencedObject* object)
@@ -254,21 +264,21 @@ void OMStrongReferenceSetProperty<ReferencedObject>::insert(
   //POSTCONDITION("Optional property is present", isPresent());
 }
 
-  // @mfunc Append the given <p ReferencedObject> <p value> to
+  // @mfunc Append the given <p ReferencedObject> <p object> to
   //        this <c OMStrongReferenceSetProperty>.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @parm A pointer to a <p ReferencedObject> by reference.
+  //   @parm A pointer to a <p ReferencedObject>.
 template <typename ReferencedObject>
 void OMStrongReferenceSetProperty<ReferencedObject>::appendValue(
-                                                const ReferencedObject*& value)
+                                                const ReferencedObject* object)
 {
   TRACE("OMStrongReferenceSetProperty<ReferencedObject>::appendValue");
-  PRECONDITION("Valid object", value != 0);
+  PRECONDITION("Valid object", object != 0);
 
   OBSOLETE("OMStrongReferenceSetProperty<ReferencedObject>::insert");
-  insert(value);
+  insert(object);
 }
 
   // @mfunc Remove the <p ReferencedObject> identified by
@@ -352,8 +362,8 @@ bool OMStrongReferenceSetProperty<ReferencedObject>::contains(
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
   //          <c OMStorable>.
-  //   @parm A pointer to a <p ReferencedObject> by reference.
   //   @parm The unique identification of the desired object, the search key.
+  //   @parm A pointer to a <p ReferencedObject> by reference.
   //   @rdesc True if the object is found, false otherwise.
   //   @this const
 template <typename ReferencedObject>
