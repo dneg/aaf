@@ -64,7 +64,7 @@ public:
          ImplAAFProperty* * pElem);
 
   AAFRESULT
-    ImplPropertyCollection::Init (OMPropertySet * pPropSet);
+    /*ImplPropertyCollection::*/Init (OMPropertySet * pPropSet);
 
 private:
   AAFRESULT initProperty(aafUInt32 index);
@@ -437,4 +437,4 @@ AAFRESULT ImplAAFObject::MyHeadObject
 //
 // Define the symbol for the stored object id
 //
-OMDEFINE_STORABLE(ImplAAFObject, AUID_AAFObject);
+OMDEFINE_STORABLE(ImplAAFObject, AUID_AAFObject)
