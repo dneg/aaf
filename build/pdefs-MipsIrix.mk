@@ -69,7 +69,14 @@ include $(AAFBASE)/build/cdefs-$(COMPILER).mk
 # -xansi option is specified. Other compilers need them to be 
 # set explicitly.
 #------------------------------------------------------------------------------
-PLATFORM_CFLAGS = -Dsgi $(MODULE_PLATFORM_CFLAGS)
+#
+# 1152 - variable set but never referenced
+# 1174 - variable declared but never referenced
+# 1107 - A signed bit field has a length of 1 bit.
+# 1681 - virtual function override intended?
+# 1460 - function decalred inline after being called
+
+PLATFORM_CFLAGS = -Dsgi -woff 1552,1174,1107,1681,1460 $(MODULE_PLATFORM_CFLAGS) 
 
 # iostream support on Irix is provided by libCio
 # Include this as part of the link command.
