@@ -91,6 +91,7 @@ DODO_TARGETS = \
 	EnumAAFLocators.all \
 	EnumAAFMedia.all \
 	EnumAAFMobs.all \
+	EnumAAFMobComments.all \
 	EnumAAFMobSlots.all \
 	EnumAAFParameterSlots.all \
 	EnumAAFPropertyDefinitions.all \
@@ -1023,6 +1024,19 @@ EnumAAFMedia.comc : EnumAAFMedia.exp macros/comc.mac
 EnumAAFMedia.comh : EnumAAFMedia.exp macros/comh.mac
 EnumAAFMedia.implc : EnumAAFMedia.exp macros/implc.mac
 EnumAAFMedia.implh : EnumAAFMedia.exp macros/implh.mac
+
+EnumAAFMobComments.all : EnumAAFMobComments.cpp EnumAAFMobComments.h
+EnumAAFMobComments.all : EnumAAFMobComments.comc EnumAAFMobComments.comh
+EnumAAFMobComments.all : EnumAAFMobComments.exp EnumAAFMobComments.idl
+EnumAAFMobComments.all : EnumAAFMobComments.implc EnumAAFMobComments.implh
+EnumAAFMobComments.exp : AAFUnitTest.exp macros/exp.mac
+EnumAAFMobComments.h : EnumAAFMobComments.exp macros/h.mac
+EnumAAFMobComments.cpp : EnumAAFMobComments.exp macros/cpp.mac
+EnumAAFMobComments.idl : EnumAAFMobComments.exp macros/idl.mac
+EnumAAFMobComments.comc : EnumAAFMobComments.exp macros/comc.mac
+EnumAAFMobComments.comh : EnumAAFMobComments.exp macros/comh.mac
+EnumAAFMobComments.implc : EnumAAFMobComments.exp macros/implc.mac
+EnumAAFMobComments.implh : EnumAAFMobComments.exp macros/implh.mac
 
 EnumAAFMobs.all : EnumAAFMobs.cpp EnumAAFMobs.h
 EnumAAFMobs.all : EnumAAFMobs.comc EnumAAFMobs.comh
