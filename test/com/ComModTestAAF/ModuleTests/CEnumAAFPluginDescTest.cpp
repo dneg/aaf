@@ -367,6 +367,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pEnumLoc)
 		pEnumLoc->Release();
 	
+	if (pEnumPluggable)
+		pEnumPluggable->Release();
+	
 	if (pEnumDesc)
 		pEnumDesc->Release();
 	
@@ -381,10 +384,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	
 	if (pPlugin)
 		pPlugin->Release();
-	
-	if (pEnumDesc)
-		pEnumDesc->Release();
-	
+		
 	if (pCodecDef)
 		pCodecDef->Release();
 	if (pDefObj)

@@ -127,9 +127,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDictionary*	pDictionary = NULL;
   IAAFDefObject*	pPlugDef = NULL;
   IAAFCodecDef*		pCodecDef = NULL;
-  IAAFPluginDescriptor *pDesc;
-  IAAFNetworkLocator *pNetLoc, *pNetLoc2, *pNetLoc3;
-  IAAFLocator		*pLoc, *pLoc2, *pLoc3;
+  IAAFPluginDescriptor *pDesc = NULL;
+  IAAFNetworkLocator *pNetLoc = NULL, *pNetLoc2 = NULL, *pNetLoc3 = NULL;
+  IAAFLocator		*pLoc = NULL, *pLoc2 = NULL, *pLoc3 = NULL;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
   bool				bFileOpen = false;
   aafUID_t			uid;
@@ -226,6 +226,25 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   // Cleanup and return
   if (pPlugDef)
     pPlugDef->Release();
+
+  if (pCodecDef)
+    pCodecDef->Release();
+
+  if (pDesc)
+    pDesc->Release();
+
+  if (pNetLoc)
+    pNetLoc->Release();
+  if (pNetLoc2)
+    pNetLoc2->Release();
+  if (pNetLoc3)
+    pNetLoc3->Release();
+  if (pLoc)
+    pLoc->Release();
+  if (pLoc2)
+    pLoc2->Release();
+  if (pLoc3)
+    pLoc3->Release();
 
   if (pDictionary)
     pDictionary->Release();
@@ -352,6 +371,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
+	if (pEnumPluggable)
+		pEnumPluggable->Release();
+
 	if (pCloneEnum)
 		pCloneEnum->Release();
 
