@@ -23,5 +23,14 @@
 // @doc OMPRIVATE
 #ifndef STACKTRACE_H
 #define STACKTRACE_H
-// Nothing yet
+
+class OMOStream;
+
+// @module OMStackTrace | Display a stack trace.
+//   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
+
+void printStackTrace(OMOStream& s);
+
+void setImageName(const char* imageName);
+
 #endif
