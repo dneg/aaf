@@ -17,3 +17,65 @@
 //=---------------------------------------------------------------------=
 
 #include "AxPluginUtil.h"
+
+#include <memory>
+#include <algorithm>
+
+namespace {
+
+class MaxIntFunc {
+public:
+	MaxIntFunc()
+		: _val( 1 << (8*sizeof(int) - 1) )
+	{}
+
+	~MaxIntFunc()
+	{}
+
+	void operator()( AxPluginNameMap::PairType pair )
+	{
+		int size = pair.second.size();
+		if ( size > _val ) {
+			_val = size;
+		}
+	}
+
+	int GetVal()
+	{
+		return _val;
+	}
+
+private:
+	int _val;
+
+};
+
+} // end of namespace
+
+
+//=---------------------------------------------------------------------=
+
+bool AxPluginNameMap::IsFound( const aafUID_t& uid )
+{
+	if ( find(uid) == end() ) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+
+int AxPluginNameMap::GetMaxStringSize()
+{
+	MaxIntFunc max;
+
+	std::for_each( begin(), end(), max );
+
+	return max.GetVal();
+}
+
+int AxPluginNameMap::GetMaxCBufferSize()
+{
+	return (GetMaxStringSize()+1)*sizeof(CharTraits::char_type);
+}

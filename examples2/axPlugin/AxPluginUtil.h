@@ -21,9 +21,39 @@
 
 #include <AxEx.h>
 
+#include <AxTypes.h>
+
+#include <map>
+
 //
 // Miscellaneous items.
 //
+
+// FIXME - This is similar to AxPluginSpecifierMap.  If a generic means
+// to implement GetMaxValBufSize() is determined, then a generic implementation
+// is possible.
+
+class AxPluginNameMap
+	: public std::map<aafUID_t, AxString>
+{
+public:
+
+	typedef std::map<aafUID_t, AxString>::iterator IterType;
+	typedef std::pair<aafUID_t, AxString>		   PairType;
+	typedef AxCharTraits                           CharTraits;
+
+	// Use this to double check if a uid is in the map before
+	// using operator[]().
+	bool IsFound( const aafUID_t& uid );
+
+	// Returns largest string size in characters.
+	int GetMaxStringSize();
+
+	// Return size of buffer (in bytes) required to store largest string.
+	// Including null terminator required by C string.
+	int GetMaxCBufferSize();
+
+};
 
 // Call object OBJ method NAME using args ARGS.
 // Catch hresult exception and return error value, or
