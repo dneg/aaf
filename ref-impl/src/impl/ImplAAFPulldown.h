@@ -36,6 +36,7 @@
 #include "ImplAAFSegment.h"
 #endif
 
+#include "OMStrongRefProperty.h"
 
 class ImplAAFPulldown : public ImplAAFSegment
 {

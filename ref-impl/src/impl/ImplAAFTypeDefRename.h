@@ -37,6 +37,7 @@
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMWeakRefProperty.h"
 
 class ImplAAFTypeDefRename : public ImplAAFTypeDef
 {

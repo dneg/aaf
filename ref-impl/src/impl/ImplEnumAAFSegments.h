@@ -39,6 +39,8 @@ class ImplAAFSelector;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMStrongRefVectorProperty.h"
+
 typedef OMStrongReferenceVectorProperty<ImplAAFSegment> SegmentStrongRefArrayProp_t;
 
 

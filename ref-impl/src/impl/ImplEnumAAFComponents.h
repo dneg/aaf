@@ -44,6 +44,8 @@ class ImplAAFSequence;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMStrongRefVectorProperty.h"
+
 typedef OMStrongReferenceVectorProperty<ImplAAFComponent> ComponentStrongRefArrayProp_t;
 
 class ImplEnumAAFComponents : public ImplAAFRoot

@@ -40,6 +40,10 @@
 #include "ImplAAFOperationDef.h"
 #endif
 
+#include "OMStrongRefProperty.h"
+#include "OMStrongRefVectorProperty.h"
+#include "OMStrongRefSetProperty.h"
+#include "OMWeakRefProperty.h"
 
 class ImplAAFDataDef;
 class ImplAAFParameter;

@@ -35,6 +35,9 @@
 class ImplEnumAAFPluginLocators;
 
 
+#include "OMStrongRefProperty.h"
+#include "OMStrongRefVectorProperty.h"
+#include "OMWideStringProperty.h"
 
 #ifndef __ImplAAFDefObject_h__
 #include "ImplAAFDefObject.h"

@@ -61,6 +61,7 @@ class ImplEnumAAFSegments;
 #include "ImplAAFSegment.h"
 #endif
 
+#include "OMStrongRefVectorProperty.h"
 
 class ImplAAFNestedScope : public ImplAAFSegment
 {

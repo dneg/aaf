@@ -36,6 +36,8 @@ class ImplAAFTypeDef;
 #include "ImplAAFObject.h"
 #endif
 #include "OMReferenceContainerIter.h"
+#include "OMVariableSizeProperty.h"
+#include "OMStrongRefVectorProperty.h"
 
 typedef OMVariableSizeProperty<aafUID_t> typeDefWeakRefArrayProp_t;
 typedef OMStrongReferenceVectorProperty<ImplAAFTypeDef> typeDefStrongRefArrayProp_t;

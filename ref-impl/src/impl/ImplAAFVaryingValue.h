@@ -46,6 +46,9 @@ class ImplEnumAAFControlPoints;
 #include "ImplAAFInterpolationDef.h"
 #endif
 
+#include "OMWeakRefProperty.h"
+#include "OMStrongRefVectorProperty.h"
+
 #include "ImplEnumAAFControlPoints.h"
 
 class ImplAAFVaryingValue : public ImplAAFParameter

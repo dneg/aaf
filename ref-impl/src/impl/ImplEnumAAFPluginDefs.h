@@ -41,6 +41,8 @@ class ImplAAFDefObject;
 
 #include "OMReferenceContainerIter.h"
 
+#include "OMVariableSizeProperty.h"
+
 typedef OMVariableSizeProperty<aafUID_t> PluginDefWeakRefArrayProp_t;
 
 class ImplEnumAAFPluginDefs : public ImplAAFRoot

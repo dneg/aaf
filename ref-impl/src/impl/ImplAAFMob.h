@@ -34,6 +34,9 @@
 #include "ImplAAFMobSlot.h"
 #endif
 
+#include "OMStrongRefVectorProperty.h"
+#include "OMWideStringProperty.h"
+
 #ifndef __ImplAAFTimelineMobSlot_h__
 #include "ImplAAFTimelineMobSlot.h"
 #endif

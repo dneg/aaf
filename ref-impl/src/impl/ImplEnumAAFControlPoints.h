@@ -37,6 +37,8 @@ class ImplAAFControlPoint;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMVariableSizeProperty.h"
+#include "OMStrongRefVectorProperty.h"
 
 typedef OMVariableSizeProperty<aafUID_t> ControlPointWeakRefArrayProp_t;
 typedef OMStrongReferenceVectorProperty<ImplAAFControlPoint> ControlPointStrongRefArrayProp_t;

@@ -43,6 +43,7 @@ class ImplEnumAAFCodecFlavours;
 #endif
 
 #include "OMReferenceContainerIter.h"
+#include "OMWeakRefProperty.h"
 
 #include "ImplEnumAAFDataDefs.h"
 

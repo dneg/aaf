@@ -41,6 +41,8 @@ class ImplAAFTaggedValue;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMStrongRefVectorProperty.h"
+
 typedef OMStrongReferenceVectorProperty<ImplAAFTaggedValue> taggedValueStrongRefArrayProp_t;
 
 class ImplEnumAAFTaggedValues : public ImplAAFRoot

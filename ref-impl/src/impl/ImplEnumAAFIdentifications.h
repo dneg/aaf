@@ -39,6 +39,9 @@ class ImplAAFIdentification;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMVariableSizeProperty.h"
+#include "OMStrongRefVectorProperty.h"
+
 typedef OMVariableSizeProperty<aafUID_t> identWeakRefArrayProp_t;
 typedef OMStrongReferenceVectorProperty<ImplAAFIdentification> identStrongRefArrayProp_t;
 

@@ -41,6 +41,8 @@ class ImplAAFKLVData;
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMStrongRefVectorProperty.h"
+
 typedef OMStrongReferenceVectorProperty<ImplAAFKLVData> KLVDataStrongRefArrayProp_t;
 
 class ImplEnumAAFKLVData : public ImplAAFRoot

@@ -49,6 +49,7 @@ class ImplEnumAAFLocators;
 #include "ImplAAFLocator.h"
 #endif
 
+#include "OMStrongRefVectorProperty.h"
 
 
 class ImplAAFEssenceDescriptor : public ImplAAFObject

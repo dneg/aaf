@@ -43,6 +43,8 @@ class ImplAAFDataDef;
 #include "ImplAAFComponent.h"
 #endif
 
+#include "OMStrongRefProperty.h"
+
 #ifndef __ImplAAFOperationGroup_h__
 #include "ImplAAFOperationGroup.h"
 #endif

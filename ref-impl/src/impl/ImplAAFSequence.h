@@ -49,6 +49,7 @@ class ImplEnumAAFComponents;
 #include "ImplAAFSegment.h"
 #endif
 
+#include "OMStrongRefVectorProperty.h"
 
 class ImplAAFSequence : public ImplAAFSegment
 {

@@ -54,6 +54,7 @@ class ImplAAFDataDef;
 #endif
 
 #include "OMReferenceCOntainerIter.h"
+#include "OMWeakRefVectorProperty.h"
 
 typedef OMWeakReferenceVectorProperty<ImplAAFDataDef> DataDefWeakRefArrayProp_t;
 
