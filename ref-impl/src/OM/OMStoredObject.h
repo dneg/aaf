@@ -266,6 +266,34 @@ public:
 
   OMByteOrder byteOrder(void) const;
 
+  static void mapCharacters(wchar_t* name, size_t nameLength);
+
+  static void mangleName(const wchar_t* clearName,
+                         OMPropertyId pid,
+                         wchar_t* mangledName,
+                         size_t mangledNameSize);
+
+  static wchar_t* streamName(const wchar_t* propertyName,
+                             OMPropertyId pid);
+
+  static wchar_t* referenceName(const wchar_t* propertyName,
+                                OMPropertyId pid);
+
+  static wchar_t* collectionName(const wchar_t* propertyName,
+                                 OMPropertyId pid);
+
+  static wchar_t* elementName(const wchar_t* propertyName,
+                              OMPropertyId pid,
+                              OMUInt32 localKey);
+
+  void writeName(OMPropertyId pid,
+                 OMStoredForm storedForm,
+                 const wchar_t* name);
+
+  wchar_t* readName(OMPropertyId pid,
+                    OMStoredForm storedForm,
+                    size_t size);
+
   static void reorderString(OMCharacter* string,
                             size_t characterCount);
 
@@ -276,7 +304,6 @@ public:
   static void externalizeString(const wchar_t* internalString,
                                 OMCharacter* externalString,
                                 size_t characterCount);
-
 
 private:
   // @access Private members.
