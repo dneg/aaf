@@ -19,11 +19,12 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_INCLUDE(AAFTypes)
+
 AD_FORWARD_DECLARATION(AAFMediaDescriptor)
 AD_FORWARD_DECLARATION(AAFDataDefinition)
 AD_FORWARD_DECLARATION(AAFFindSourceInfo)
 AD_FORWARD_DECLARATION(AAFComponent)
+AD_FORWARD_DECLARATION(AAFSegment)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Types required by this module:
