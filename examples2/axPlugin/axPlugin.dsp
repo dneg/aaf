@@ -120,6 +120,10 @@ SOURCE=.\AxPluginFormatSpecifiers.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\AxPluginIIDs.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\AxPluginRegistry.cpp
 # End Source File
 # Begin Source File
