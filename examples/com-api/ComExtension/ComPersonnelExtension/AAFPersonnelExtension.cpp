@@ -310,7 +310,7 @@ DllInitializationRoutine(CFragInitBlockPtr initBlkPtr)
 	__initialize(initBlkPtr);
 
 	// Initialize the inproc server object with a copy of the contents of the initBlkPtr.
-	g_AAFPluginServer.Init(AAFPluginObjectMap, (HINSTANCE)&DllData.InitBlock);
+	g_AAFPluginServer.Init((HINSTANCE)&DllData.InitBlock);
 
 	if (!DllData.Inited && DllData.InitBlock.fragLocator.where == kDataForkCFragLocator)
 	{
