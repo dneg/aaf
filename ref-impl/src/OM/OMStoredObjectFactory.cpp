@@ -37,7 +37,8 @@ OMStoredObjectFactory::OMStoredObjectFactory(
 : _encoding(encoding),
   _signature(signature),
   _name(saveWideString(name)),
-  _description(saveWideString(description))
+  _description(saveWideString(description)),
+	_better(0)
 {
   TRACE("OMStoredObjectFactory::OMStoredObjectFactory");
 
@@ -92,3 +93,21 @@ const wchar_t* OMStoredObjectFactory::description(void) const
   TRACE("OMStoredObjectFactory::description");
   return _description;
 }
+
+    // @mfunc A previouslyregistered implementation   of 
+    //          <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
+  //   @rdesc a pointer to any "better" factories.
+const OMStoredObjectFactory* OMStoredObjectFactory::better(void) const
+{
+  TRACE("OMStoredObjectFactory::better");
+  return _better;
+}
+
+    // @mfunc Indicate a previously registered implementation of 
+    //          <c OMStoredObject>s created by this <c OMStoredObjectFactory>.
+void OMStoredObjectFactory::setBetter( OMStoredObjectFactory* const better )
+{
+  TRACE("OMStoredObjectFactory::setBetter");
+	_better = better;
+}
+
