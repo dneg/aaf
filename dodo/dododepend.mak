@@ -82,12 +82,7 @@ depend.mk : aafobjects.mk
       done
 	@ echo "" >> depend.tmp
 	for file in $(HUMAN_TYPED_IMPL) ; do \
-		grep -v $$file\.impl depend.tmp > depend.tmp2 ; \
-		rm depend.tmp ; \
-		mv depend.tmp2 depend.tmp ; \
-      done
-	for file in $(HUMAN_TYPED_COMTEST) ; do \
-		grep -v $$file\.comt depend.tmp > depend.tmp2 ; \
+		grep -v $$file\.impl depend.tmp | grep -v $$file\.comt > depend.tmp2 ; \
 		rm depend.tmp ; \
 		mv depend.tmp2 depend.tmp ; \
       done
