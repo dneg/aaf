@@ -115,7 +115,7 @@ static HRESULT checkModeFlags ()
 {
   HRESULT temphr;
 
-  temphr = checkModeFlag (AAF_FILE_MODE_EAGER_LOADING,
+  temphr = checkModeFlag (AAF_FILE_MODE_LAZY_LOADING,
 						  AAFRESULT_NOT_IN_CURRENT_VERSION);
   if (AAFRESULT_FAILED (temphr)) return temphr;
 
