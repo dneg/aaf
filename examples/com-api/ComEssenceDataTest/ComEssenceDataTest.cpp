@@ -753,7 +753,12 @@ void TestPluginManager(void)
 	IAAFPluginManager	*mgr = NULL;
 
 //	check(AAFGetPluginManager(&mgr));
-cleanup:
+
+	// BobT 9/15/99: comment out cleanup label because it is only used
+	// in the check macro.  Since the above line is commented out, the
+	// cleanup: label yields a warning in VC++.  Un-comment it when
+	// the above line is un-commented.
+// cleanup:
 	return;
 }
 
