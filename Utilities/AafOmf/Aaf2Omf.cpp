@@ -1041,7 +1041,7 @@ HRESULT Aaf2Omf::ProcessComponent(IAAFComponent* pComponent,
 	IAAFFiller*				pFiller = NULL;
 	IAAFTransition*			pTransition = NULL;
 	IAAFSelector*			pSelector = NULL;
-	IAAFGroup*				pEffect = NULL;
+	IAAFEffect*				pEffect = NULL;
 	IAAFEffectDef*			pEffectDef = NULL;
 	IAAFParameterDef*		pParameterDef = NULL;
 	IAAFDefObject*			pDefObject = NULL;
