@@ -2430,9 +2430,7 @@ AAFRESULT ImplAAFMob::CloneDependencies(
     spSlot->GetSegment(&spSegment);
 
     AAFMobCollectingComponentVisitor mobCollector;
-#if 0 // Commented out until Accept is implemented
     spSegment->Accept(mobCollector);
-#endif
 
 
     // Clone each of the referenced mobs
