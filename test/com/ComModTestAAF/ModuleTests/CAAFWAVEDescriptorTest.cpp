@@ -85,7 +85,7 @@ typedef struct tWAVEFORMATEX
     // Ignore extra information for now trr: 1999-02-19
   }
 
-  #define SWAPSUMMARY(summary) SwapSummary(summery);
+  #define SWAPSUMMARY(summary) SwapSummary(summary);
 #endif
 
 
