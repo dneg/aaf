@@ -963,23 +963,8 @@ cleanup:
 	return moduleErrorTmp;
 }
 
-// simple helper class to initialize and cleanup COM library.
-struct CComInitialize
-{
-  CComInitialize()
-  {
-    CoInitialize(NULL);
-  }
-
-  ~CComInitialize()
-  {
-    CoUninitialize();
-  }
-};
-
 int main(int argc, char *argv[])
 {
-  CComInitialize comInit;
   aafWChar * pwFileName = L"CutsOnly.aaf";
   const char * pFileName = "CutsOnly .aaf";
 
