@@ -117,6 +117,7 @@ static HRESULT convert(char* cName, size_t length, const wchar_t* name)
   	return S_OK;
 }
 
+const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
@@ -165,7 +166,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersion.patchLevel = 0;
 	ProductInfo.productVersion.type = kVersionUnknown;
 	ProductInfo.productVersionString = NULL;
-	ProductInfo.productID = -1;
+	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;
 
   check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
