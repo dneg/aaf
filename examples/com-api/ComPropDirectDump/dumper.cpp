@@ -57,6 +57,7 @@ typedef IAAFSmartPointer<IAAFPropertyDef>          IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFTypeDef>              IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFDefObject>            IAAFDefObjectSP;
 typedef IAAFSmartPointer<IAAFDictionary>           IAAFDictionarySP;
+typedef IAAFSmartPointer<IAAFTypeDefIndirect>      IAAFTypeDefIndirectSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>           IAAFTypeDefIntSP;
 typedef IAAFSmartPointer<IAAFTypeDefObjectRef>     IAAFTypeDefObjectRefSP;
 typedef IAAFSmartPointer<IAAFClassDef>             IAAFClassDefSP;
@@ -727,6 +728,25 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			  }
 			break;
 		  }
+
+		case kAAFTypeCatIndirect:
+		  {
+			// Print out elements of array.
+			IAAFTypeDefIndirectSP pIndirectType;
+			checkResult(pTD->QueryInterface(IID_IAAFTypeDefIndirect,
+										   (void**)&pIndirectType));
+
+			os << "Value [indirect]:" << endl;
+
+			// Get the actual value
+      IAAFPropertyValueSP pActualValue;
+			checkResult(pIndirectType->GetActualValue(pPVal, &pActualValue));
+			// recursively dump prop value
+			dumpPropertyValue (pActualValue, pDict, indent+1, os);
+
+			break;
+		  }
+
 
 		default:
 		  os << "***Unknown type category " << dec << (int) tid
