@@ -55,6 +55,10 @@ public:
   STDMETHOD (Finish)
      (void);
 
+  STDMETHOD (GetPluginID)(aafUID_t *result);
+  STDMETHOD (GetEssenceDescriptorID)(aafUID_t *result);
+  STDMETHOD (GetPluggableDefinition)(IAAFDictionary *dict, IAAFPluggableDef **def);
+  STDMETHOD (GetDescriptor)(IAAFDictionary *dict, IAAFPluginDescriptor **desc);
 
   STDMETHOD (SetEssenceAccess)
     (/*[in]*/ IUnknown *access); // Set the AAFEssenceAccess used as a factory for AAFEssenceFormat
