@@ -971,7 +971,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(_codec->WriteRawData (buffer, sampleSize));
+		CHECK(_codec->WriteRawData (nSamples, buffer, sampleSize));
 	}
 	XEXCEPT
 	XEND
