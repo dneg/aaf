@@ -197,6 +197,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defResults[2]->AppendDegradeToOperation (defResults[2]));
 		checkResult(defResults[0]->AppendDegradeToOperation (defResults[1]));
 		checkResult(defResults[0]->PrependDegradeToOperation (defResults[2]));
+		// Add an extra one to delete for the test
+//!!!		checkResult(defResults[0]->CountDegradeToOperations(&numDegrade));
+//		checkExpression(2 == numDegrade, AAFRESULT_TEST_FAILED);
+//		checkResult(defResults[0]->AppendDegradeToOperation (defResults[1]));
+//		checkResult(defResults[0]->CountDegradeToOperations(&numDegrade));
+//		checkExpression(3 == numDegrade, AAFRESULT_TEST_FAILED);
+//		checkResult(defResults[0]->RemoveDegradeToOperationAt (2));
+//		checkResult(defResults[0]->CountDegradeToOperations(&numDegrade));
+//		checkExpression(2 == numDegrade, AAFRESULT_TEST_FAILED);
+
 		for(index = 0; index < 3; index++)
 		{
 			defResults[index]->Release();

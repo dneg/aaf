@@ -170,6 +170,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafUID_t			parmID = kTestParmID;
 	aafRational_t		testLevel1 = kTestLevel1;
 	aafRational_t		testLevel2 = kTestLevel2;
+	aafUInt32			numPoints;
 /*	long				test;
 */
 
@@ -271,6 +272,22 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
 			pControlPoint->Release();
 			pControlPoint = NULL;
+
+			// Add an extra control point, in order to test delete
+			checkResult(defs.cdControlPoint()->
+						CreateInstance(IID_IAAFControlPoint, 
+									   (IUnknown **)&pControlPoint));
+			checkResult(pControlPoint->SetTypeDefinition (pTypeDef));
+			checkResult(pControlPoint->SetTime(endTime));
+			checkResult(pControlPoint->SetValue(sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
+			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
+			pControlPoint->Release();
+			pControlPoint = NULL;
+			checkResult(pVaryingValue->CountControlPoints (&numPoints));
+ 			checkExpression(3 == numPoints, AAFRESULT_TEST_FAILED);
+			checkResult(pVaryingValue->RemoveControlPointAt(2));
+			checkResult(pVaryingValue->CountControlPoints (&numPoints));
+ 			checkExpression(2 == numPoints, AAFRESULT_TEST_FAILED);
 
 			checkResult(pVaryingValue->QueryInterface (IID_IAAFParameter, (void **)&pParm));
 			checkResult(pParm->SetParameterDefinition (pParamDef));
