@@ -225,7 +225,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (NULL == pMob)
 		return AAFRESULT_NULL_PARAM;
-	
+
+	if (pMob->attached ())
+	    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	XPROTECT()
 	{
 		CHECK(pMob->GetMobID(&mobID));
@@ -389,7 +392,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (NULL == pEssenceData)
 		return AAFRESULT_NULL_PARAM;
-	
+
+	if (pEssenceData->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	XPROTECT()
 	{
 		CHECK(pEssenceData->GetFileMobID(&mobID));
