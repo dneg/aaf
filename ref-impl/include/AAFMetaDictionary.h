@@ -48,8 +48,8 @@
 //
 // AAFMetaDict.csv 
 //
-// This file was generated on Thu Mar 11 17:41:38 GMT 2004
-// by user stuartc on system pilot20.
+// This file was generated on Wed Mar 24 09:12:36 EST 2004
+// by user jpt on system warbler.localdomain.
 //
 // Key to macros.
 //
@@ -635,6 +635,26 @@ AAF_CLASS(Component,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x02),
     0x0203,
     AAF_REFERENCE_TYPE(StrongReferenceVector, KLVData),
+    false,
+    false,
+    Component)
+  AAF_PROPERTY(UserComments,
+    // {03020102-1600-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x03020102,
+      0x1600, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x0204,
+    AAF_REFERENCE_TYPE(StrongReferenceVector, TaggedValue),
+    false,
+    false,
+    Component)
+  AAF_PROPERTY(Attributes,
+    // {03010210-0800-0000-060E-2B3401010107}
+    AAF_LITERAL_AUID(0x03010210,
+      0x0800, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x07),
+    0x0205,
+    AAF_REFERENCE_TYPE(StrongReferenceVector, TaggedValue),
     false,
     false,
     Component)
