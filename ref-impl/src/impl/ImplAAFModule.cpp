@@ -666,8 +666,7 @@ STDAPI ImplAAFFileIsAAFFile (
   aafUID_t * /* pAAFFileKind */,
   aafBool *  /* pFileIsAAFFile */)
 {
-  HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-  return hr;
+  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 //***********************************************************
