@@ -334,25 +334,15 @@ void OMSimpleProperty::write(OMPropertyId propertyId,
 
   // @mfunc Read this property from persistent store, performing
   //        any necessary byte reordering and internalization.
-  //   @parm The property id.
-  //   @parm The stored from to use for this property.
-  //   @parm The buffer in which to place the internal (in memory)
-  //         form of the bytes of this property.
-  //   @parm The size of the buffer in which to place the internal
-  //         (in memory) form of the bytes of this property.
   //   @parm The size of the external (on disk) form of the bytes of
   //         this propery.
   //   @this const
-void OMSimpleProperty::read(OMPropertyId propertyId,
-                            int storedForm,
-                            OMByte* internalBytes,
-                            size_t internalBytesSize,
-                            size_t externalBytesSize)
+void OMSimpleProperty::read(size_t externalBytesSize)
 {
   TRACE("OMSimpleProperty::read");
 
-  PRECONDITION("Valid internal bytes", internalBytes != 0);
-  PRECONDITION("Valid internal bytes size", internalBytesSize > 0);
+  PRECONDITION("Valid internal bytes", _bits != 0);
+  PRECONDITION("Valid internal bytes size", _size > 0);
   PRECONDITION("Valid external bytes size", externalBytesSize > 0);
 
   OMStoredObject* store = _propertySet->container()->store();
@@ -377,7 +367,7 @@ void OMSimpleProperty::read(OMPropertyId propertyId,
     ASSERT("Valid heap pointer", buffer != 0);
 
     // Read property value
-    store->read(propertyId, storedForm, buffer, externalBytesSize);
+    store->read(_propertyId, _storedForm, buffer, externalBytesSize);
 
     // Reorder property value
     if (store->byteOrder() != hostByteOrder()) {
@@ -386,21 +376,19 @@ void OMSimpleProperty::read(OMPropertyId propertyId,
 
     // Internalize property value
     size_t requiredBytesSize = type->internalSize(buffer, externalBytesSize);
-    ASSERT("Property value buffer large enough",
-                                       internalBytesSize >= requiredBytesSize);
+    ASSERT("Property value buffer large enough", _size >= requiredBytesSize);
 
     type->internalize(buffer,
                       externalBytesSize,
-                      internalBytes,
+                      _bits,
                       requiredBytesSize,
                       hostByteOrder());
     delete [] buffer;
   } else {
     // tjb - temporary, no type information, do it the old way
     //
-    ASSERT("Property value buffer large enough",
-                                       internalBytesSize >= externalBytesSize);
-    store->read(propertyId, storedForm, internalBytes, externalBytesSize);
+    ASSERT("Property value buffer large enough", _size >= externalBytesSize);
+    store->read(_propertyId, _storedForm, _bits, externalBytesSize);
   }
   setPresent();
 }
@@ -461,7 +449,7 @@ void OMSimpleProperty::restore(size_t externalSize)
   TRACE("OMSimpleProperty::restore");
   ASSERT("Sizes match", externalSize == _size);
 
-  read(_propertyId, _storedForm, _bits, _size, externalSize);
+  read(externalSize);
 }
 
   // @mfunc Is this an optional property ? 
