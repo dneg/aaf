@@ -340,21 +340,5 @@ HRESULT CEnumAAFContainerDefs::test()
 	{
 		cerr << "CEnumAAFContainerDefs::test...Caught general C++ exception!" << endl; 
 	}
-
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following CEnumAAFContainerDefs methods have not been tested:" << endl; 
-		cout << "     Clone" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
-
 	return hr;
 }
-
-//    CEnumAAFContainerDefs::NextOne (IAAFContainerDef ** ppPluggableDef)
-//        aafUInt32 *  pFetched)
-//    CEnumAAFContainerDefs::Skip (aafUInt32  count)
-//    CEnumAAFContainerDefs::Reset ()
-//   CEnumAAFContainerDefs::Clone (IEnumAAFContainerDefs ** ppEnum)
