@@ -193,6 +193,8 @@ ImplAAFEssenceAccess::~ImplAAFEssenceAccess ()
 	OMVectorIterator<aafAccessor_t> i(_codecList, OMBefore);
 	++i;
 	while (!i.after()) {
+		if (i.value().fileMob)
+			i.value().fileMob->ReleaseReference();
 		if (i.value().mdes)
 			i.value().mdes->ReleaseReference();
 		if (i.value().dataFile)
