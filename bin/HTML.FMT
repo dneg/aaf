@@ -1,0 +1,1991 @@
+[token]
+.output=html,htm
+.token=^p,<P>
+.token=^t,&#09;
+.token=\,\\
+.token=<,&lt;
+.token=>,&gt;
+.highcharmask=&#%d;
+;
+; example-specific character tokens
+.context=example
+.token=^p,
+
+[extension]
+
+; Filename extension types
+; .ext=<extension_text>, c|asm|bas
+
+.ext=c,c
+.ext=cpp,c
+.ext=cxx,c
+.ext=inl,c
+.ext=d,c
+.ext=h,c
+.ext=hpp,c
+.ext=hxx,c
+.ext=asm,asm
+.ext=bas,bas
+.ext=mst,bas
+.ext=frm,bas
+.ext=inc,bas
+.ext=cls,bas
+.ext=java,c
+
+[constant]
+
+; String constants
+; .output=doc|html|html
+; .define=<constant_name>, <constant_text>
+
+.output=html
+.define=title,Help
+.define=doc_header,Autoduck Output
+.define=cb,<B>
+.define=cbe,</B>
+.define=ci,<I>
+.define=cie,</I>
+.define=cul, 
+.define=cule,
+.define=culd,{\uldb 
+.define=culde,}
+.define=par,<P>
+.define=line,<BR>
+.define=page,<HR>
+.define=tab,&#09;
+.define=plain,
+.define=clink,{link}
+.define=clinkte,{link end}
+.define=heading_4,<H4>
+.define=heading_3,<H3>
+.define=heading_2,<H2>
+.define=heading_1,<H1>
+.define=heading_4e,</H4>
+.define=heading_3e,</H3>
+.define=heading_2e,</H2>
+.define=heading_1e,</H1>
+.define=normal,
+.define=table_text,
+.define=ex,<PRE>
+.define=exe,</PRE>
+.define=header_rule,<HR>
+.define=rh1,<H1>
+.define=rmh,<H3>
+.define=rmhe,</H3>
+.define=term1,<DT>
+.define=term2,<DT>
+.define=term3,<DT>
+.define=def1,<DD>
+.define=def2,<DD>
+.define=def3,<DD>
+.define=rule,<HR>
+.define=indexlink, 
+
+[file]
+; ********************************************
+; Help file headers
+; ********************************************
+.output=html
+.pre=<HTML>
+
+<HEAD>
+
+<TITLE>$(title)</TITLE>
+
+<META NAME="GENERATOR" CONTENT="Autoduck, by erica@microsoft.com">
+</HEAD>
+
+<BODY>
+
+
+.post=</BODY>
+
+</HTML>
+
+
+[topic]
+;
+; *****************************************
+; Java Topics
+; *****************************************
+
+; [<modifier>] class <class name> [extends <class name>] [implements <interface name> [, <interface name>]]
+; the implements list is tagged as a separate set of @jimp paragraph tags.
+
+.tag=jclass, html, 5, 20, $2
+.parsesource=jclass
+.pre=$(page)
+<A NAME=$!c><H1>$!n  class</H1></A>
+$[jclass]$(par)
+$5$(par)
+Defined in: $!P$(par)
+
+
+; // [<modifier list>] <type name> <method name> [throws <class name>] (parameter list)
+; // @jmethod [<modifier list>] | <type name> | <class name> | <method name> | [<throws class name>] | description
+
+.tag=jmethod, html, 6, 20, $3.$4
+.order=rdesc jparm comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n method</H1></A>
+$[jmethod]$(par)
+$6$(par)
+Defined in: $!P$(par)
+.post=Back to <A HREF=###3>$3</A>
+
+;
+; *****************************************
+; Basic Topics
+; *****************************************
+
+.tag=bfunc, html, 4, 20, $2
+.order=rdesc bparm comm ex
+.parsesource=bfunc
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[bfunc]
+$4$(par)
+Defined in: $!P$(par)
+
+.tag=bsub, html, 3, 20, $2
+.order=rdesc bparm comm ex
+.parsesource=bsub
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[bsub]
+$3$(par)
+Defined in: $!P$(par)
+
+.tag=btype, html, 3, 20, $2
+.order=bfield comm ex
+.parsesource=btype
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[bstruct]
+$3$(par)
+Defined in: $!P$(par)
+
+.tag=bclass, html, 2, 20, $1
+.order=bprop bfield bmeth comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$1 class$(par)
+Defined in: $!P$(par)
+
+.tag=bproperty, html, 6, 20, $3
+.context=$5__$3
+.order=bparm comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[bpropertyt]$(par)
+$6$(par)
+Defined in: $!P$(par)
+
+;
+; ***********************************************************
+; C Language topics
+; ***********************************************************
+
+; Functions
+
+.tag=func, html, 3, 20, $2
+.order=syntax rdesc parm parmvar comm ex
+.parsesource=function
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[function]
+$3$(par)
+Defined in: $!P$(par)
+
+.tag=cb, html, 3, 20, $2
+.order=syntax rdesc parm parmvar comm ex
+.parsesource=function
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[function]
+$3$(par)
+Defined in: $!P$(par)
+
+; Messages
+
+
+.tag=msg, html, 2, 30, $1
+.order=rdesc parm comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$2$(par)
+Defined in: $!P$(par)
+
+; Constants
+
+
+.tag=const, html, 3, 30, $2
+.order=comm ex
+.parsesource=constant
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$(cb)const $1 $2;$(cbe)$(par)
+Defined in: $!P$(par)
+$3$(par)
+
+; Data types (typedefs, etc.)
+
+
+.tag=type, html, 2, 50, $1
+.order=field comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$2$(par)
+Defined in: $!P$(par)
+
+; Structures
+
+
+.tag=struct, html, 2, 50, $1
+.parsesource=struct
+.order=field comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n structure</H1></A>
+$[structure]
+$2$(par)
+Defined in: $!P$(par)
+
+; Modules
+
+
+.tag=module, html, 2, 10, $1
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+Filename: $!P$(par)
+$(rmh)Description$(rmhe)
+$2$(par)
+
+; Enumeration Types
+
+.tag=enum, html, 2, 50, $1
+.order=emem comm ex
+.parsesource=enum
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[enum]
+$2$(par)
+Defined in: $!P$(par)
+
+; ***********************************************************
+; C++ Language topics
+; ***********************************************************
+
+; Classes
+
+.tag=class, html, 2, 20, $1
+.parsesource=class
+.pre=$(page)
+<A NAME=$!c><H1>$!n class</H1></A>
+$[class]
+$2$(par)
+Defined in: $!P$(par)
+
+; Member Classes
+
+.tag=mclass, html, 3, 20, $1::$2
+.parsesource=class
+.pre=\page
+<A NAME=$!c><H1>$!n</H1></A>
+$[mclass]
+$3$(par)
+Defined in: $!P$(par)
+
+; Member functions
+
+.tag=mfunc, html, 4, 20, $2::$3
+.context=$2__$3
+.if=exists($2)
+.order=syntax rdesc parm comm ex
+.parsesource=memberfunction
+.post=Back to <A HREF=###2>#2</A>
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[mfunction]
+$4$(par)
+Defined in: $!P$(par)
+
+.tag=mfunc, html, 4, 20, $2::$3
+.context=$2__$3
+.order=syntax rdesc parm comm ex
+.parsesource=memberfunction
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[mfunction]
+$4$(par)
+Defined in: $!P$(par)
+
+; Member data
+
+.tag=mdata, html, 4, 20, $2::$3
+.order=comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[mdata]
+$4$(par)
+
+; Member structure
+
+.tag=mstruct, html, 3, 50, $1::$2
+.order=field comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n structure</H1></A>
+$[structure]
+$3$(par)
+Defined in: $!P$(par)
+
+; Member enumerations
+;
+.tag=menum, html, 3, 50, $1::$2
+.order=emem comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$[enum]
+$3$(par)
+Defined in: $!P$(par)
+;
+
+;
+; ***********************************************************
+; OLE topics
+; ***********************************************************
+
+; Objects
+; @object	Point2D | Represents a two-dimensional coordinate.
+
+.tag=object, html, 2, 20, $1
+.pre=$(page)
+<A NAME=$!c><H1>$!n object</H1></A>
+$2$(par)
+Defined in: $!P$(par)
+
+; Interfaces
+
+.tag=interface, html, 2, 20, $1
+.context=$1_int
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$2$(par)
+Defined in: $!P$(par)
+
+; Object methods
+
+.tag=method, html, 4, 20, $2::$3
+.context=$2__$3_meth
+.order=rvalue rdesc parm comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n method</H1></A>
+$[method]
+$4$(par)
+Defined in: $!P$(par)
+
+; Object properties
+
+.tag=property, html, 4, 20, $2::$3
+.order=rdesc comm ex
+.context=$2__$3_prop property
+.pre=$(page)
+<A NAME=$!c><H1>$!n property</H1></A>
+$(rmh)Data Type$(rmhe)
+$(cb)$1$(cbe)$(par)
+$(rmh)Description$(rmhe)
+$4$(par)
+Defined in: $!P$(par)
+
+; Object events
+
+.tag=event, html, 3, 20, $1::$2
+.context=$1__$2_event
+.order=parm comm ex
+.pre=$(page)
+<A NAME=$!c><H1>$!n event</H1></A>
+$[event]
+$(rmh)Description$(rmhe)
+$3$(par)
+Defined in: $!P$(par)
+;
+; ***********************************************************
+; Overview Topics
+; ***********************************************************
+
+.tag=topic, html, 2, 5, $1
+.pre=$(page)
+<A NAME=$!c><H1>$!n</H1></A>
+$2$(par)
+
+;
+; ***********************************************************
+; Contents topics
+; ***********************************************************
+
+.tag=contents1, html, 2, 0, __aaa$1
+.pre=$(heading_1)<A NAME=$!c>$1</A>$(heading_1e)$(par)
+$(indexlink)$2$(par)
+
+.tag=contents2, html, 2, 0, _aaa$1
+.pre=$(page)$(heading_1)<A NAME=$!c>$1</A>$(heading_1e)$(par)
+$(indexlink)$2$(par)
+
+; ***********************************************************************
+; ***********************************************************************
+; Paragraph section
+
+[paragraph]
+;
+; ***********************************************************
+; Java tags
+; ***********************************************************
+;
+; // [<modifier list>] <type name> <method name> [throws <class name>] (parameter list)
+.tag=jmeth, html, 6, 1
+.parsesource=jmethod
+.pre=$(rmh)Methods$(rmhe)
+<DL>
+.format=$(term1)$(cb)$[jmodifier]$[jmtype]$[jmlinkname]$[jthrows]$5$(cbe)
+$(def1)$6$(par)
+.post=</DL>
+.map=jmethod,$1,$2,$t.2,$3,$4,$6
+
+; Parameters
+.tag=jparm, html, 3, 1
+.parsesource=jparameter
+.pre=$(rmh)Parameters$(rmhe)
+<DL>
+.format=$(term1)$(ci)$2$(cie)
+$(def1)$3$(par)
+
+.post=</DL>
+
+
+;
+; ***********************************************************
+; Basic tags
+; ***********************************************************
+;
+.tag=bparm, html, 4, 1
+.parsesource=bparameter
+.pre=$(rmh)Parameters$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)$(ci)$2$(cie)
+$(def1)$4$(par)
+
+.tag=bfield, html, 3, 1
+.parsesource=bfield
+.pre=$(rmh)Fields$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)$1
+$(def1)$3$(par)
+
+.tag=bprop, html, 6, 1
+.parsesource=bproperty
+.map=bproperty,$1,$2,$3,$5,$t.1,$6
+.pre=$(rmh)Properties$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)[1 $1] [2 $2] [3 $3] [4 $4] [5 $5]
+$(def1)$6$(par)
+
+
+;
+; ***********************************************************
+; C Tags
+; ***********************************************************
+
+; Parameters
+.tag=parm, html, 3, 1
+.parsesource=parameter
+.pre=$(rmh)Parameters$(rmhe)
+<DL>
+.format=$(term1)$(ci)$2$(cie)
+$(def1)$3$(par)
+
+.post=</DL>
+
+; Optional Parameters
+.tag=parmopt, html, 4, 1
+.parsesource=parameteropt
+.pre=$[parmopthead]
+<DL>
+
+.post=</DL>
+
+.format=$(term1)$(ci)$2$(cie)$(par)
+$(def1)$4$(par)
+
+; Variable length parameter list
+.tag=parmvar, html, 1, 1
+.pre=$(rmh)Parameters$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)...$(cbe)$(par)
+$(def1)$1$(par)
+
+; Class template arguments 
+.tag=tcarg, html, 3, 1
+.parsesource=parameter
+.pre=$(rmh)Class Template Arguments$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)$(ci)$2$(cie)
+$(def1)$3
+
+; Function template arguments 
+.tag=tfarg, html, 3, 1
+.parsesource=parameter
+.pre=$(rmh)Function Template Arguments$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)$(ci)$2$(cie)
+$(def1)$3
+
+.tag=field, html, 3, 1
+.parsesource=field
+.pre=$(rmh)Members$(rmhe)
+<DL>
+.post=</DL>
+
+.format=$(term1)$(cb)$2$(cbe)
+$(def1)$3
+
+.tag=flag, html, 2, 2
+.pre=<DL>
+
+.post=</DL>
+
+.format=$(term2)$1
+$(def2)$2$(par)
+
+.tag=rdesc, html, 1, 1
+.pre=$(rmh)Return Value$(rmhe)
+.format=$1$(par)
+
+.tag=emem, html, 2, 1
+.parsesource=emem
+.pre=$(rmh)Members$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)$1$(cbe)
+$(def1)$2
+
+.tag=field, html, 3, 1
+.parsesource=parameter
+.pre=$(rmh)Members$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)$2$(cbe)$(par)
+$(def1)$3$(par)
+
+; Global variables
+.tag=globalv, html, 3, 1
+.parsesource=parameter
+.pre=$(rmh)Global Variables$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)<A HREF=##$1>$1</A> $(cb)$2$(cbe)
+$(def1)$3$(par)
+
+.if=exists($1)
+
+.tag=globalv, html, 3, 1
+.parsesource=parameter
+.pre=$(rmh)Global Variables$(rmhe)
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)$1 $2$(cbe)
+$(def1)$3$(par)
+;
+; ***********************************************************
+; Misc Tags
+; ***********************************************************
+
+.tag=comm, html, 1, 1
+.pre=$(rmh)Comments$(rmhe)
+
+.format=$1$(par)
+
+.tag=xref, html, 1, 1
+.pre=$(rmh)See Also$(rmhe)
+.format=$1$(par)
+
+.tag=ex, html, 2, 1, 1
+.pre=$(rmh)Example$(rmhe)
+.format=$1$(par)
+$(ex)$2
+$(exe)
+
+.tag=iex, html, 1, 8, 1
+.format=$(ex)$1$(par)
+$(ex)$(par)
+
+.post=$(exe)
+
+.tag=devnote, html, 1, 1
+.pre=$(rmh)<font color=##c71a1d>Developer Notes</font>$(rmhe)
+.format=<font color=##c71a1d> $1</font>$(par)
+
+.tag=todo, html, 1, 1
+.pre=$(rmh)<font color=##c71a1d> To Do</font>$(rmhe)
+.format=<font color=##c71a1d> $1</font>$(par)
+
+.tag=syntax, html, 1, 1
+.pre=$(rmh)Syntax$(rmhe)
+.format=$1$(par)
+
+;
+; ***********************************************************
+; C++ Tags
+; ***********************************************************
+
+.tag=access, html, 1, 1
+.pre=$(rmh)Class Members$(rmhe)
+.format=$(cb)$1$(cbe)
+
+;@CMEMBER
+; Replacement for @member - uses automatic parsing, 4 fields
+
+; link name and type - data member
+
+.tag=cmember, html, 4, 1
+.pre=$[classhdr]
+<DL>
+.format=$(term1)<A HREF=###1>$1</A> <A HREF=###class.1__#2>$2</A>
+$(def1)$4$(par)
+
+.post=</DL>
+
+.if=exists($class.1__$<2),fieldempty(3),exists($1)
+.parsesource=classmember
+.map=mfunc,$1,$t.1,$2,$4
+.map=menum,$t.1,$2,$4
+.map=mstruct,$t.1,$2,$4
+.map=mclass,$t.1,$2,$4
+
+; link name and type - function member
+
+.tag=cmember, html, 4, 1
+.pre=$[classhdr]
+<DL>
+.post=</DL>
+.format=$(term1)<A HREF=###1>$1</A> <A HREF=###class.1__#2>$2</A>$(cb)$3$(cbe)
+$(def1)$4$(par)
+
+.if=exists($class.1__$<2),exists($1)
+.parsesource=classmember
+
+; link name - data member
+
+.tag=cmember, html, 4, 1
+.pre=$[classhdr]
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)$1$(cbe) <A HREF=###class.1__#2>$2</A>
+$(def1)$4$(par)
+
+.if=exists($class.1__$<2),fieldempty(3)
+.parsesource=classmember
+
+; link name - function member, no return value
+
+.tag=cmember, html, 4, 1
+.pre=$[classhdr]
+<DL>
+.post=</DL>
+.format=$(term1)<A HREF=###class.1__#2>$2</A>$(cb)$3$(cbe)
+$(def1)$4$(par)
+
+.if=exists($class.1__$<2),fieldempty(1)
+.parsesource=classmember
+
+; link name - function member
+
+.tag=cmember, html, 4, 1
+.pre=$[classhdr]
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)$1$(cbe) <A HREF=###class.1__#2>$2</A>$(cb)$3$(cbe)
+$(def1)$4$(par)
+
+.if=exists($class.1__$<2)
+.parsesource=classmember
+
+; no links or doc - data member
+
+.tag=cmember, html, 4, 1
+.pre=$[classhdr]
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)$1 $2$(cbe)
+$(def1)$4$(par)
+
+.parsesource=classmember
+.if=fieldempty(3)
+.map=mfunc,$1,$t.1,$2,$4
+.map=menum,$t.1,$2,$4
+.map=mstruct,$t.1,$2,$4
+.map=mclass,$t.1,$2,$4
+
+; no links or doc - function member, no return value
+
+.tag=cmember, html, 4, 1
+.pre=$[classhdr]
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)$2$3$(cbe)
+$(def1)$4$(par)
+
+.parsesource=classmember
+.if=fieldempty(1)
+
+; no links or doc - function member
+
+.tag=cmember, html, 4, 1
+.pre=$[classhdr]
+<DL>
+.post=</DL>
+.format=$(term1)$(cb)$1 $2$3$(cbe)
+$(def1)$4$(par)
+
+.parsesource=classmember
+
+; Old @member tag
+
+.tag=member, html, 2, 1
+.format=$(term1)<A HREF=###class.1__#1>$1</A>$(par)
+$(def1)$2$(par)
+
+.if=exists($class.1::$1)
+
+.tag=member, html, 2, 1
+.format=$(term1)$(cb)$1$(cbe)$(par)
+$(def1)$2$(par)
+
+; used to specify base classes for a C++ class
+;
+; in an "@interface" topic we actually show the base class.
+; in an "@class" topic the base class shows up in the diagram.
+
+.tag=base, html, 2, 1
+.pre=$(rmh)Based On$(rmhe)
+.format=<A HREF=##$2_int>$2</A>$(par)
+.if=exists($2_int), tagexists(interface)
+
+.tag=base, html, 2, 1
+.pre=$(rmh)Based On$(rmhe)
+.format=$(cb)$2$(cbe)$(par)
+.if=tagexists(interface)
+
+.tag=base, html, 2, 1
+.format=
+
+; used to add "const" keyword to end of member function diagram
+
+.tag=this, html, 1, 1
+.format=
+
+;
+; ***********************************************************
+; OLE Tags
+; ***********************************************************
+
+; *** Methods ***
+
+;link type and name
+
+.tag=meth, html, 3, 1
+.map=method,$1,$t.1,$2,$3
+.parsesource=method
+.pre=$(rmh)Methods$(rmhe)
+<DL>
+.format=$(term1)<A HREF=###1>$1</A> <A HREF=##I#interface.1__#2_meth>$2</A>
+$(def1)$3$(par)
+
+.post=</DL>
+
+.if=exists($1),exists($interface.1__$2_meth)
+
+; link name
+
+.tag=meth, html, 3, 1
+.parsesource=method
+.pre=$(rmh)Methods$(rmhe)
+<DL>
+.format=$(term1)$(cb)$1$(cbe) <A HREF=###interface.1__#2_meth>$2</A>
+$(def1)$3$(par)
+
+.post=</DL>
+
+.if=exists($interface.1__$2_meth)
+
+; link type only
+
+.tag=meth, html, 3, 1
+.parsesource=method
+.pre=$(rmh)Methods$(rmhe)
+<DL>
+.format=$(term1)<A HREF=###1>$1</A> $(cb)$2$(cbe)
+$(def1)$3$(par)
+
+.post=</DL>
+
+.if=exists($1)
+
+; no links or doc
+
+.tag=meth, html, 3, 1
+.parsesource=method
+.map=method,$1,$t.1,$2,$3
+.pre=$(rmh)Methods$(rmhe)
+<DL>
+.format=$(term1)$(cb)$1 $2$(cbe)
+$(def1)$3$(par)
+
+.post=</DL>
+
+; *** Properties ***
+
+;link type and name, if type is an interface
+
+.tag=prop, html, 3, 1
+.map=property,$1,$t.1,$2,$3
+.parsesource=method
+.pre=$(rmh)Properties$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)<A HREF=###1_int>$1</A> <A HREF=###interface.1__#2_prop>$2</A>
+$(def1)$3$(par)
+
+.if=tagexists(interface),exists($1_int),exists($interface.1::$2_prop)
+
+;link type and name
+
+.tag=prop, html, 3, 1
+.parsesource=method
+.pre=$(rmh)Properties$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)<A HREF=###1>$1</A> <A HREF=###interface.1__#2_prop>$2</A>
+$(def1)$3$(par)
+
+.if=exists($1),exists($interface.1::$2_prop)
+
+;link name only
+
+.tag=prop, html, 3, 1
+.parsesource=method
+.pre=$(rmh)Properties$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)$(cb)$1$(cbe) <A HREF=###interface.1__#2_prop>$2</A>
+$(def1)$3$(par)
+
+.if=exists($interface.1::$2_prop)
+
+; link type only, if type is an interface
+
+.tag=prop, html, 3, 1
+.parsesource=method
+.pre=$(rmh)Properties$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)<A HREF=###1_int>$1</A> $(cb)$2$(cbe)
+$(def1)$3$(par)
+
+.if=exists($1_int)
+
+; link type only
+
+.tag=prop, html, 3, 1
+.parsesource=method
+.pre=$(rmh)Properties$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)<A HREF=###1>$1</A> $(cb)$2$(cbe)
+$(def1)$3$(par)
+
+.if=exists($1)
+
+; link neither, or doc
+
+.tag=prop, html, 3, 1
+.parsesource=method
+.map=property,$1,$t.1,$2,$3
+.pre=$(rmh)Properties$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)$(cb)$1 $2$(cbe)
+$(def1)$3$(par)
+
+; *** Events *** 
+
+;link name
+
+.tag=eve, html, 2, 1
+.parsesource=method
+.map=event,$t.1,$1,$2
+.pre=$(rmh)Events$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)<A HREF=###interface.1__#1_event>$1</A>
+$(def1)$2$(par)
+
+.if= exists($interface.1::$1_event)
+
+; no link, or doc
+
+.tag=eve, html, 2, 1
+.parsesource=method
+.map=event,$t.1,$1,$2
+.pre=$(rmh)Events$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)$(cb)$1$(cbe)
+$(def1)$2$(par)
+
+.tag=rvalue, html, 2, 1
+.pre=<TABLE>
+<TR><TD><B>Return Value</B></TD><TD><B>Description</B></TD></TR>
+.format=<TR><TD>$1</TD><TD>$2</TD></TR>
+.post=</TABLE>
+
+; link interface name
+
+.tag=supint, html, 2, 1
+.pre=$(rmh)Supported Interfaces$(rmhe)
+<DL>
+
+.post=</DL>
+
+
+.format=$(term1)<A HREF=###1_int>$1</A>
+$(def1)$2$(par)
+
+.if=exists($1_int)
+
+; no link, or doc
+
+.tag=supint, html, 2, 1
+.pre=$(rmh)Supported Interfaces$(rmhe)
+<DL>
+
+.post=</DL>
+
+
+.format=$(term1)$(cb)$1$(cbe)
+$(def1)$2$(par)
+
+; link interface name
+
+.tag=reqint, html, 2, 1
+.pre=$(rmh)Required Interfaces$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)<A HREF=###1_int>$1</A>
+$(def1)$2$(par)
+
+.if=exists($1_int)
+
+; no link, or doc
+
+.tag=reqint, html, 2, 1
+.pre=$(rmh)Required Interfaces$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)$(cb)$1$(cbe)
+$(def1)$2$(par)
+
+; link interface name
+
+.tag=optint, html, 2, 1
+.pre=$(rmh)Optional Interfaces$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)<A HREF=###1_int>$1</A>
+$(def1)$2$(par)
+
+.if=exists($1_int)
+
+; no link, or doc
+
+.tag=optint, html, 2, 1
+.pre=$(rmh)Optional Interfaces$(rmhe)
+<DL>
+
+.post=</DL>
+
+.format=$(term1)$(cb)$1$(cbe)
+$(def1)$2$(par)
+
+; Interfaces/objects that support a property or method
+
+.tag=supby, html, 1, 1
+.pre=$(rmh)Supported By$(rmhe)
+<DL>
+
+.post=</DL>
+
+
+.format=$(cb)$1$(cbe)$(par)
+
+; Interfaces that an object expects to consume
+
+.tag=consumes, html, 1, 1
+.pre=$(rmh)Consumes$(rmhe)
+.format=$(cb)$1$(cbe)$(par)
+
+; Abstract object types to which an abstract object type belongs
+
+.tag=is, html, 1, 1
+.pre=$(rmh)Is A$(rmhe)
+.format=$(cb)$1$(cbe)$(par)
+
+; Aggregates
+
+; link interface name
+
+.tag=aggregates, html, 2, 1
+.pre=$(rmh)Aggregated Objects$(rmhe)
+.format=$(term1)<A HREF=###1>$1</A>
+$(def1)$2$(par)
+
+.if=exists($1)
+
+; no link, or doc
+
+.tag=aggregates, html, 2, 1
+.pre=$(rmh)Aggregated Objects$(rmhe)
+.format=$(term1)$(cb)$1$(cbe)
+$(def1)$2$(par)
+
+; ******************************************
+; Miscellaneous tags
+; ******************************************
+
+.tag=normal,html,1,1
+.format=$1$(par)
+
+.tag=head1, html, 2, 1
+.if=fieldempty(2)
+.format=$(heading_1)$1$(heading_1e)$(par)
+
+.tag=head2, html, 2, 1
+.if=fieldempty(2)
+.format=$(heading_2)$1$(heading_2e)$(par)
+
+.tag=head3, html, 2, 1
+.if=fieldempty(2)
+.format=$(heading_3)$1$(heading_3e)$(par)
+
+.tag=group, html, 1, 8
+.format=$(heading_3)$1$(heading_3e)$(par)
+
+.tag=end, html, 0, 8
+.format=
+
+; ******************************************
+; Index tags
+; ******************************************
+
+.tag=index, html, 2, 1
+.pre=<MENU COMPACT>
+
+.format=$[index:$1:$2]$(par)
+.post=</MENU>
+
+.tag=subindex,html,1,1
+.format=$(indexlink)<A HREF=#_aaa#1>$1</A>$(par)
+
+[text]
+
+.tag=cp, html, 0
+.format=\'a9 
+.tag=tm, html, 0
+.format=\'99 
+.tag=rtm, html, 0
+.format=\'ae 
+.tag=en-, html, 0
+.format=\'97 
+.tag=em-, html, 0
+.format=\'96 
+.tag=lq, html, 0
+.format=\'91 
+.tag=rq, html, 0
+.format=\'92 
+.tag=gt, html, 0
+.format=>
+.tag=lt, html, 0
+.format=<
+.tag=tab, html, 0
+.format=$(tab)
+.tag=nl, html, 0
+.format=$(line)
+.tag=cmt, html, 0
+.format=//
+;
+; ******************************************
+; Build elements
+; ******************************************
+.tag=date,html,0
+.format=$!d
+.tag=filename,html,0
+.format=$!F
+.tag=filepath,html,0
+.format=$!P
+.tag=tname,html,0
+.format=$!n
+.tag=tcontext,html,0
+.format=$!c
+
+;
+; ******************************************
+; Graphics
+; ******************************************
+.tag=bmp, html, 1
+.format=$(bitmap)$1$(bitmape)
+.tag=f, html, 1
+.format=$(cb)$1$(cbe)
+.if=$1=$func.2
+
+.tag=f, html, 1
+.format=<A HREF=##$1>$1</A>
+.if=exists($1)
+
+.tag=f, html, 1
+.format=$(cb)$1$(cbe)
+;
+; ******************************************
+; Messages
+; ******************************************
+
+.tag=m, html, 1
+.format=$1
+.if=$1=$msg.1
+
+.tag=m, html, 1
+.format=<A HREF=##$1>$1</A>
+.if=exists($1)
+
+.tag=m, html, 1
+.format=$1
+;
+; ******************************************
+; Structures
+; ******************************************
+
+.tag=t, html, 1
+.format=$(cb)$1$(cbe)
+.if=$1=$struct.1
+
+.tag=t, html, 1
+.format=$(cb)$1$(cbe)
+.if=$1=$enum.1
+
+.tag=t, html, 1
+.format=<A HREF=##$1>$1</A>
+.if=exists($1)
+
+.tag=t, html, 1
+.format=$(cb)$1$(cbe)
+;
+; ******************************************
+; Parameters
+; ******************************************
+
+.tag=p, html, 1
+.format=$(ci)$1$(cie)
+;
+; ******************************************
+; Structure and Enumeration Elements
+; ******************************************
+
+.tag=e, html, 2
+.format=$(cb)$2$(cbe)
+.if=$1=$struct.1
+.tag=e, html, 2
+.format=$(cb)$2$(cbe)
+.if=$1=$enum.1
+.tag=e, html, 2
+.format=<A HREF=##$1>$2</A>
+.if=exists($1)
+.tag=e, html, 2
+.format=$(cb)$2$(cbe)
+
+;
+; ******************************************
+; Classes
+; ******************************************
+
+.tag=c, html, 1
+.format=$(cb)$1$(cbe)
+.if=$1=$class.1
+.tag=c, html, 1
+.format=<A HREF=##$1>$1</A>
+.if=exists($1)
+.tag=c, html, 1
+.format=$(cb)$1$(cbe)
+
+;
+; ******************************************
+; Enumerations
+; ******************************************
+
+.tag=enum, html, 2
+.format=$(cb)$1$(cbe)
+.if=$1=$enum.1,fieldempty(2)
+.tag=enum, html, 2
+.format=<A HREF=##$1>$1</A>
+.if=exists($1),fieldempty(2)
+.tag=enum, html, 2
+.format=$(cb)$1$(cbe),fieldempty(2)
+
+.tag=enum, html, 2
+.format=$(cb)$2::$1$(cbe)
+.if=$1=$enum.1
+.tag=enum, html, 2
+.format=<A HREF=##$2::$1>$2::$1</A>
+.if=exists($2__$1)
+.tag=enum, html, 2
+.format=$(cb)$2::$1$(cbe)
+;
+; ******************************************
+; Member Functions
+; ******************************************
+
+; circular reference, make bold
+;
+.tag=mf, html, 2
+.format=$(cb)$2$(cbe)
+.if=fieldempty(1),$2=$mfunc.3
+.if=$1=$mfunc.2,$2=$mfunc.3
+
+; same class, different function, link target exists: omit class name & link
+;
+.tag=mf, html, 2
+.format=<A HREF=##$class.1$mfunc.2$mdata.2::$2>$2</A>
+.if=fieldempty(1),exists($class.1$mfunc.2$mdata.2::$2)
+.if=exists($1::$2),$1=$class.1$mfunc.2$mdata.2
+
+; different class, link target exists: output class::function & link
+;
+.tag=mf, html, 2
+.format=<A HREF=##$1__$2>$1::$2</A>
+.if=exists($1::$2)
+
+; same class, no link target: omit class name & bold
+;
+.tag=mf, html, 2
+.format=$(cb)$2$(cbe)
+.if=fieldempty(1)
+.if=$1=$class.1$mfunc.2$mdata.2
+
+; nothing to link to, within different class
+;
+.tag=mf, html, 2
+.format=$(cb)$1::$2$(cbe)
+;
+; ******************************************
+; Member data
+; ******************************************
+
+; circular reference, make bold
+;
+.tag=md, html, 2
+.format=$(cb)$2$(cbe)
+.if=fieldempty(1),$2=$mdata.3
+.if=$1=$mfunc.2,$2=$mdata.3
+
+; same class, different function, link target exists: omit class name & link
+;
+.tag=md, html, 2
+.format=<A HREF=##$class.1$mfunc.2$mdata.2::$2>$2</A>
+.if=fieldempty(1),exists($class.1$mfunc.2$mdata.2::$2)
+.if=exists($1::$2),$1=$class.1$mfunc.2$mdata.2
+
+; different class, link target exists: output class::function & link
+;
+.tag=md, html, 2
+.format=<A HREF=##$1::$2>$1::$2</A>
+.if=exists($1::$2)
+
+; same class, no link target: omit class name & bold
+;
+.tag=md, html, 2
+.format=$(cb)$2$(cbe)
+.if=fieldempty(1)
+.if=$1=$class.1$mfunc.2$mdata.2
+
+; nothing to link to, within different class
+;
+.tag=md, html, 2
+.format=$(cb)$1::$2$(cbe)
+
+;
+; ******************************************
+; OLE Objects
+; ******************************************
+
+.tag=o, html, 1
+.format=$(cb)$1$(cbe)
+.if=$1=$abstract.1$object.1
+.tag=o, html, 1
+.format=<A HREF=##$1 object>$1</A>
+.if=exists($1)
+.tag=o, html, 1
+.format=$(cb)$1$(cbe)
+;
+; ******************************************
+; OLE Interfaces
+; ******************************************
+
+.tag=i, html, 1
+.format=$(cb)$1$(cbe)
+.if=$1=$interface.1
+.tag=i, html, 1
+.format=<A HREF=##$1_int>$1</A>
+.if=exists($1_int)
+.tag=i, html, 1
+.format=$(cb)$1$(cbe)
+;
+; ******************************************
+; OLE Methods
+; ******************************************
+
+; circular reference, make bold
+; example: <om .Bar> appearing in @method ret|IFoo|Bar
+
+.tag=om, html, 2
+.format=$(cb)$2$(cbe)
+.if=tagexists(method),fieldempty(1),$2=$method.3
+.if=$1=$method.2,$2=$method.3
+
+; @abstract or @object tag, empty field, link 
+; example: <om .Bar> appearing in @abstract Foo or @object Foo
+
+.tag=om, html, 2
+.format=<A HREF=##I$abstract.1$object.1__$2_meth>$2</A>
+.if=tagexists(object),fieldempty(1),exists(I$object.1__$2_meth)
+.if=tagexists(abstract),fieldempty(1),exists(I$abstract.1__$2_meth)
+
+; @method, @interface, @property, @event, empty field, link
+; example: <om .Bar> appearing in @interface IFoo
+
+.tag=om, html, 2
+.format=<A HREF=##$method.2$property.2$interface.1$event.1__$2_meth>$2</A>
+.if=fieldempty(1),exists($method.2$property.2$interface.1$event.1__$2_meth)
+
+; @object, @abstract, same object, link
+; example: <om IFoo.Bar> appearing in @object Foo
+
+.tag=om, html, 2
+.format=<A HREF=##I$object.1$abstract.1::$2_meth>$2</A>
+.if=tagexists(object),$1=I$object.1,exists(I$object.1__$2_meth)
+.if=tagexists(abstract),$1=I$abstract.1,exists(I$abstract.1__$2_meth)
+
+; @method, @interface, @property, @event, same interface, link
+; example: <om IFoo.Bar> appearing in @method ret|IFoo|Bar
+
+.tag=om, html, 2
+.format=<A HREF=##$method.2$property.2$interface.1$event.1__$2_meth>$2</A>
+.if=$1=$method.2$property.2$interface.1$event.1,exists($method.2$property.2$interface.1$event.1__$2_meth)
+
+; different interface, link
+; example: <om IFoo.Bar> appearing in @method ret|IBar|Foo
+
+.tag=om, html, 2
+.format=<A HREF=##$1__$2_meth>$1::$2</A>
+.if=exists($1__$2_meth)
+
+; same interface, no link
+; example: <om IFoo.Bar> appearing in @method ret|IBar|Foo but no
+;               IFoo::Bar defined
+
+.tag=om, html, 2
+.format=$(cb)$2$(cbe)
+.if=tagexists(object),$1=I$object.1
+.if=tagexists(abstract),$1=I$abstract.1
+.if=$1=$method.2$property.2$interface.1$event.1
+.if=fieldempty(1)
+
+; default: html fields, 
+; example: <om IFoo.Bar> output with "IFoo.Bar" in bold
+.tag=om, html, 2
+.format=$(cb)$1::$2$(cbe)
+
+;
+; ******************************************
+; OLE Properties
+; ******************************************
+
+; circular reference, make bold
+; example: <op .Bar> appearing in @property type|IFoo|Bar
+
+.tag=op, html, 2
+.format=$(cb)$2$(cbe)
+.if=tagexists(property),fieldempty(1),$2=$property.3
+.if=$1=$property.2,$2=$property.3
+
+; @abstract or @object tag, empty field, link 
+; example: <op .Bar> appearing in @abstract Foo or @object Foo
+
+.tag=op, html, 2
+.format=<A HREF=##I$abstract.1$object.1__$2 property>$2</A>
+.if=tagexists(object),fieldempty(1),exists(I$object.1__$2_prop)
+.if=tagexists(abstract),fieldempty(1),exists(I$abstract.1__$2_prop)
+
+; @method, @interface, @property, @event, empty field, link
+; example: <op .Bar> appearing in @interface IFoo
+
+.tag=op, html, 2
+.format=<A HREF=##$method.2$property.2$interface.1$event.1__$2 property>$2</A>
+.if=fieldempty(1),exists($method.2$property.2$interface.1$event.1__$2_prop)
+
+; @object, @abstract, same object, link
+; example: <op IFoo.Bar> appearing in @object Foo
+
+.tag=op, html, 2
+.format=<A HREF=##I$object.1$abstract.1::$2 property>$2</A>
+.if=tagexists(object),$1=I$object.1,exists(I$object.1__$2_prop)
+.if=tagexists(abstract),$1=I$abstract.1,exists(I$abstract.1__$2_prop)
+
+; @method, @interface, @property, @event, same interface, link
+; example: <op IFoo.Bar> appearing in @method ret|IFoo|Bar
+
+.tag=op, html, 2
+.format=<A HREF=##$method.2$property.2$interface.1$event.1__$2 property>$2</A>
+.if=$1=$method.2$property.2$interface.1$event.1,exists($method.2$property.2$interface.1$event.1__$2_prop)
+
+; different interface, link
+; example: <op IFoo.Bar> appearing in @method ret|IBar|Foo
+
+.tag=op, html, 2
+.format=<A HREF=##$1__$2 property>$1::$2</A>
+.if=exists($1::$2_prop)
+
+; same interface, no link
+; example: <op IFoo.Bar> appearing in @method ret|IBar|Foo but no
+;               IFoo::Bar defined
+
+.tag=op, html, 2
+.format=$(cb)$2$(cbe)
+.if=tagexists(object),$1=I$object.1
+.if=tagexists(abstract),$1=I$abstract.1
+.if=$1=$method.2$property.2$interface.1$event.1
+.if=fieldempty(1)
+
+; default: html fields, 
+; example: <op IFoo.Bar> output with "IFoo.Bar" in bold
+.tag=op, html, 2
+.format=$(cb)$1::$2$(cbe)
+
+; ******************************************
+; OLE Events
+; ******************************************
+; See "OLE Methods" for descriptions/examples of each block
+
+; circular reference
+
+.tag=oe, html, 2
+.format=$(cb)$2$(cbe)
+.if=fieldempty(1),$2=$event.1
+.if=$1=$event.1,$2=$event.2
+
+; link, ref. same interface within @object, @abstract, 
+; omit interface prefix
+
+.tag=oe, html, 2
+.format=<A HREF=##I$abstract.1$object.1__$2 event>$2</A>
+.if=tagexists(object),fieldempty(1),exists(I$object.1__$2_event)
+.if=tagexists(abstract),fieldempty(1),exists(I$abstract.1__$2_event)
+.if=tagexists(object),$1=I$object.1,exists(I$object.1__$2_event)
+.if=tagexists(abstract),$1=I$abstract.1,exists(I$abstract.1__$2_event)
+
+; link, ref. same interface within @method, @property, @interface, @event
+; omit interface prefix
+
+.tag=oe, html, 2
+.format=<A HREF=##$event.1$method.2$property.2$interface.1__$2 event>$2</A>
+.if=fieldempty(1),exists($event.1$method.2$property.2$interface.1__$2_event)
+.if=$1=$event.1$method.2$property.2$interface.1,exists($1__$2_event)
+
+; no link, ref. same interface
+; omit interface prefix
+
+.tag=oe, html, 2
+.format=$(cb)$2$(cbe)
+.if=fieldempty(1)
+.if=$1=I$object.1$abstract.1
+.if=$1=$method.2$property.2$interface.1$event.1
+
+; link
+.tag=oe, html, 2
+.format=<A HREF=##$1__$2 event>$1::$2</A>
+.if=exists($1::$2_event)
+
+;
+; default
+.tag=oe, html, 2
+.format=$(cb)$1::$2$(cbe)
+
+; ******************************************
+; Misc weirdness
+; ******************************************
+.tag=index, html, 2
+.format=$[index:$1:$2]
+
+.tag=y, html, 1
+.format=$(ci)$1$(cie)
+
+.tag=l, html, 1
+.format=$1
+.if=$1=$topic.1
+
+.tag=l, html, 1
+.format=<A HREF=##$1>$1</A>
+
+[diagram]
+
+; Visual Basic type diagram
+
+.tag=bstruct, html, bfield
+.pre=$(ex)$[bmod]Type
+
+.post=End Type
+
+$(par)$(exe)
+
+.format=$[bfield]
+
+.tag=bfield, html, none
+.if=fieldempty(2)
+.pre=$(tab)$1
+.format=
+
+.tag=bfield, html, none
+.pre=$(tab)$1 As $2
+
+.format=
+
+; Visual Basic subroutine diagram
+
+.tag=bfunc, html, bparm
+.pre= $[bmod]$(cb)Function$(cbe) $(cb)$2($(cbe)
+.post=$(cb))$(cbe)$[btype]$(par)
+.formatfirst=$[bparm]
+.format=$(cb), $(cbe)$[bparm]
+
+.tag=bsub, html, bparm
+.pre= $[bmod]$(cb)Sub$(cbe) $(cb)$2($(cbe)
+.post=$(cb))$(cbe)$(par)
+.formatfirst=$[bparm]
+.format=$(cb), $(cbe)$[bparm]
+
+.tag=bparm, html, none
+.if=fieldempty(1)
+.pre=$(ci)$2$(cie)$[btype]
+.format=
+
+.tag=bparm, html, none
+.pre=$(cb)$1$(cbe) $(ci)$2$(cie)$[btype]
+.format=
+
+.tag=bparm, html, none
+.if=fieldempty(1)
+.format=
+.pre=$(ci)$2$(cie) $(cb)As $3$(cbe)
+
+.tag=bparm, html, none
+.format=
+.pre=$(cb)$1$(cbe) $(ci)$2$(cie) $(cb)As $3$(cbe)
+
+
+
+.tag=bmod, html, bmod
+.if=fieldempty(1)
+.format=
+
+.tag=bmod, html, bmod
+.format=
+.pre=$(cb)$1$(cbe) 
+
+.tag=btype, html, btype
+.if=fieldempty(3)
+.format=
+
+.tag=btype, html, btype
+.format=
+.pre= $(cb)As $3$(cbe)
+
+.tag=bpropertyt, html, bparm
+.pre=$(cb)$[bpropmodst]$2 $3(
+.post=$[bproptypet]
+.formatfirst=$[bparm]
+.format=$(cb), $(cbe)$[bparm]
+
+.tag=bpropmodst, html, bparm ; bparm is unused
+.pre=
+.if=fieldempty(1)
+
+.tag=bpropmodst, html, bparm ; bparm is unused
+.pre=$1 
+
+.tag=bproptypet, html, bparm ; bparm is unused
+.pre=
+.if=fieldempty(5)
+
+.tag=bproptypet, html, bparm ; bparm is unused
+.pre=$5 
+
+; ***************************************************
+; C/C++ diagrams
+; ***************************************************
+
+
+.tag=parmopthead, html, parm
+.cancelifpresent=parm
+.pre=$(rmh)Parameters$(rmhe)
+.format=
+
+.tag=parmopt, html, parmopt
+.cancelifpresent=syntax
+.format=$(cb), $1$(cbe) $(ci)$2$(cie) $(cb)= $3$(cbe)
+.if=tagexists(parm)
+
+.tag=parmopt, html, parmopt
+.cancelifpresent=syntax
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie) $(cb)= $3$(cbe)
+.format=$(cb), $1$(cbe) $(ci)$2$(cie) $(cb)= $3$(cbe)
+
+; *** Function diagram ******
+;
+; No return value, parameters
+
+.tag=function, html, parm
+.cancelifpresent=syntax
+.pre= $[ftemplate]$(cb)$1$(cbe) $(cb)$2($(cbe)
+.post=$[parmopt]$[vararg]$(cb)) $this.1$(cbe)$(par)
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie)
+.format=$(cb), $1$(cbe) $(ci)$2$(cie)
+.if=fieldempty(1), tagexists(parm)
+.if=fieldempty(1), tagexists(parmopt)
+
+; No return value, no parameters
+
+.tag=function, html, parm
+.cancelifpresent=syntax
+.pre= $[ftemplate]$(cb)$2(void$(cbe)
+.post=$[parmopt]$[vararg]$(cb)) $this.1$(cbe)$(par)
+.format=
+.if=fieldempty(1)
+
+; Return value, parameters
+;
+.tag=function, html, parm
+.cancelifpresent=syntax
+.pre= $[ftemplate]$(cb)$1$(cbe) $(cb)$2($(cbe)
+.post=$[parmopt]$[vararg]$(cb)) $this.1$(cbe)$(par)
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie)
+.format=$(cb), $1$(cbe) $(ci)$2$(cie)
+.if=tagexists(parm)
+.if=tagexists(parmopt)
+
+; Return value, no parameters
+;
+.tag=function, html, parm
+.cancelifpresent=syntax
+.pre= $[ftemplate]$(cb)$1$(cbe) $(cb)$2(void$(cbe)
+.post=$[parmopt]$[vararg]$(cb)) $this.1$(cbe)$(par)
+.format=
+;
+
+; *** Member Functions ******
+
+; No return value, parameters
+
+.tag=mfunction, html, parm
+.cancelifpresent=syntax
+.pre= $[template]$(cb)$2$(cbe)$[tcarg]$(cb)::$3$[tfarg]($(cbe)
+.post=$[parmopt]$[vararg]$(cb)) $this.1$(cbe)$(par)
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie)
+.format=$(cb), $1$(cbe) $(ci)$2$(cie)
+.if=fieldempty(1), tagexists(parm)
+.if=fieldempty(1), tagexists(parmopt)
+
+; No return value, no parameters
+
+.tag=mfunction, html, parm
+.cancelifpresent=syntax
+.pre=$[template]$(cb)$2$(cbe)$[tcarg]$(cb)::$3$[tfarg](void$(cbe)
+.post=$[parmopt]$[vararg]$(cb)) $this.1$(cbe)$(par)
+.format=
+.if=fieldempty(1)
+
+; Return value, parameters
+;
+.tag=mfunction, html, parm
+.cancelifpresent=syntax
+.pre= $[template]$(cb)$1$(cbe) $(cb)$2$(cbe)$[tcarg]$(cb)::$3$[tfarg]($(cbe)
+.post=$[parmopt]$[vararg]$(cb)) $this.1$(cbe)$(par)
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie)
+.format=$(cb), $1$(cbe) $(ci)$2$(cie)
+.if=tagexists(parm)
+.if=tagexists(parmopt)
+
+; Return value, no parameters
+;
+.tag=mfunction, html, parm
+.cancelifpresent=syntax
+.pre= $[template]$(cb)$1$(cbe) $(cb)$2$(cbe)$[tcarg]$(cb)::$3$[tfarg](void$(cbe)
+.post=$[parmopt]$[vararg]$(cb)) $this.1$(cbe)$(par)
+.format=
+;
+
+; **** OLE2 Method ********
+
+.tag=method, html, parm
+.cancelifpresent=syntax
+.pre= $(cb)$1 $3($(cbe)
+.post=$(cb))$(cbe)$(par)
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie)
+.format=$(cb), $1$(cbe) $(ci)$2$(cie)
+
+; **** OLE2 Event ********
+
+.tag=event, html, parm
+.cancelifpresent=syntax
+.pre= $(cb)$1($(cbe)
+.post=$(cb))$(cbe)$(par)
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie)
+.format=$(cb), $1$(cbe) $(ci)$2$(cie)
+
+; **** Structure ********
+
+.tag=structure, html, field
+.pre=$(ex)struct {
+
+.format=$(tab)$1 $2;
+
+.post=} $1;
+$(exe)
+
+; **** Enumeration ********
+
+.tag=enum, html, emem
+.pre=$(ex)enum $1 {
+
+.formatfirst=$(tab)$1
+.format=,
+$(tab)$1
+.post=,
+};
+$(exe)
+
+; **** Class *****************
+
+.tag=class, html, base
+.pre=$1 $(cb)class $1$(cbe)
+.formatfirst=$(cb): $1 $2$(cbe)
+.format=$(cb), $1 $2$(cbe)
+.post=$(par)
+
+; **** Member Class *****************
+
+.tag=mclass, html, base
+.pre=$[template]$(cb)class $1::$2$(cbe)
+.formatfirst=$(cb): $1 $2$(cbe)
+.format=$(cb), $1 $2$(cbe)
+.post=$(par)
+
+; **** Template specification for classes or member functions
+
+.tag=template, html, tcarg
+.pre=$(cb)template &##60;$(cbe)
+.formatfirst=$(cb)$1 $(cbe)$(ci)$2$(cie)
+.format=, $(cb)$1 $(cbe)$(ci)$2$(cie)
+.post=$(cb)&##62;$(cbe)$(line)
+.if=tagexists(tcarg)
+
+.tag=template, html, tcarg
+.format=
+
+; **** Template specification for functions
+
+.tag=ftemplate, html, tfarg
+.pre=$(cb)template &##60;$(cbe)
+.formatfirst=$(cb)$1 $(cbe)$(ci)$2$(cie)
+.format=, $(cb)$1 $(cbe)$(ci)$2$(cie)
+.post=$(cb)&##62;$(cbe)$(line)
+.if=tagexists(tfarg)
+
+.tag=ftemplate, html, tfarg
+.format=
+
+; **** member function args list
+
+.tag=tcarg, html, tcarg
+.pre=$(cb)&##60;$(cbe)
+.formatfirst=$(ci)$2$(cie)
+.format=$(cb), $(cbe)$(ci)$2$(cie)
+.post=$(cb)&##62;$(cbe)
+.if=tagexists(tcarg)
+
+.tag=tcarg, html, targ
+.format=
+
+; **** function args list
+
+.tag=tfarg, html, tfarg
+.pre=$(cb)&##60;$(cbe)
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie)
+.format=$(cb), $(cbe)$(cb)$1$(cbe) $(ci)$2$(cie)
+.post=$(cb)&##62;$(cbe)
+.if=tagexists(tfarg)
+
+.tag=tfarg, html, tfarg
+.format=
+
+; ****** function variable args
+.tag=vararg, html, parmvar
+.format=$(cb), ...$(cbe)
+.if=tagexists(parmvar)
+
+; ****** function variable args
+.tag=vararg, html, parmvar
+.format=
+
+; ****** Member data diagram
+
+.tag=mdata, html, parm
+.cancelifpresent=syntax
+.pre=<A HREF=##$1>$1</A> <A HREF=##$2>$2</A>$(cb)::$3$(cbe)
+.post=$(par)
+.format=
+.if=exists($1),exists($2)
+
+.tag=mdata, html, parm
+.cancelifpresent=syntax
+.pre=$(cb)$1$(cbe) <A HREF=##$2>$2</A>$(cb)::$3$(cbe)
+.post=$(par)
+.format=
+.if=exists($2)
+
+.tag=mdata, html, parm
+.cancelifpresent=syntax
+.pre=<A HREF=##$1>$1</A> $(cb)$2$(cbe)$(cb)::$3$(cbe)
+.post=$(par)
+.format=
+.if=exists($1)
+
+.tag=mdata, html, parm
+.cancelifpresent=syntax
+.pre=$(cb)$1 $2::$3$(cbe)
+.post=$(par)
+.format=
+
+.tag=classhdr, html, parm
+.cancelifpresent=access
+.pre=$(rmh)Class Members$(rmhe)
+.format=
+
+; **** Java class *******************
+
+; public class updatecontrols extends Applet implements Bananalet, Pearlet, Cotlet
+
+.tag=jclass, html, parm ; <parm> is unused
+
+.pre=$(cb)$[jmodifier]class $2$[jextends]$[jimplements]$(cbe)
+.format=
+
+.tag=jmodifier, html, parm ; <parm> is unused
+.format=
+.if=fieldempty(1)
+
+.tag=jmodifier, html, parm ; <parm> is unused
+.pre=$1 
+.format=
+
+.tag=jextends, html, parm ; <parm> is unused
+.format=
+.if=fieldempty(3)
+
+.tag=jextends, html, parm ; <parm> is unused
+.pre= extends $3
+.format=
+
+.tag=jimplements, html, parm ; <parm> is unused
+.format=
+.if=fieldempty(4)
+
+.tag=jimplements, html, parm ; <parm> is unused
+.pre= implements $4
+.format=
+
+; public class updatecontrols extends Applet implements Bananalet, Pearlet, Cotlet
+
+.tag=jmeth, html, jparm
+.pre=$(cb)$[jmodifier]$2 $3$[jthrows]$4
+.format=
+.post=$(cbe)
+
+.tag=jmethod, html, jparm
+.pre=$(cb)$[jmodifier]$2 $4$[jthrows]$(cbe)(
+.formatfirst=$(cb)$1$(cbe) $(ci)$2$(cie)
+.format=$(cb), $1$(cbe) $(ci)$2$(cie)
+.post=$(cb))$(cbe)
+
+.tag=jmtype, html, parm ; <parm> is unused
+.pre= 
+.if=fieldempty(2)
+
+.tag=jmtype, html, parm ; <parm> is unused
+.pre=$2 
+
+.tag=jmlinkname, html, parm ; <parm> is unused
+.if=exists($jclass.2::$3)
+.pre=<A HREF=###jclass.2__#3>$3</A>
+
+.tag=jmlinkname, html, parm ; <parm> is unused
+.pre=$3
+
+.tag=jthrows, html, parm ; <parm> is unused
+.format=
+.if=fieldempty(4)
+
+.tag=jthrows, html, parm ; <parm> is unused
+.format= throws $4
+
+.tag=jextends, html, parm ; <parm> is unused
+.pre= throws $4
+.format=
+
+
+[index]
+.output=html
+.format=<LI><A HREF=#$!c>$!n</A>
+
