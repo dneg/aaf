@@ -90,7 +90,15 @@ SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMContainerElement.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMContainerProperty.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMDataStream.cpp"
 # End Source File
 # Begin Source File
 
@@ -110,6 +118,18 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFile.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMIdentitySetT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMIntegerType.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMKLVStoredObject.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMMappedFileRawStorage.cpp"
 # End Source File
 # Begin Source File
@@ -118,7 +138,23 @@ SOURCE="..\..\..\ref-impl\src\OM\OMMemoryRawStorage.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMMSSSStoredObject.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMMSSStoredStream.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMObjectDirectory.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMObjectReference.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMOStream.cpp"
 # End Source File
 # Begin Source File
 
@@ -162,6 +198,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMRootStorable.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMSingletonT.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMStorable.cpp"
 # End Source File
 # Begin Source File
@@ -182,7 +222,23 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMStrongReference.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStrongReferenceSet.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMStrongReferenceVector.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMType.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMUniqueObjectIdentType.cpp"
 # End Source File
 # Begin Source File
 
@@ -190,7 +246,23 @@ SOURCE="..\..\..\ref-impl\src\OM\OMUtilities.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMWeakReference.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMWeakReferenceSet.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMWeakReferenceVector.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMWideStringProperty.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredObject.cpp"
 # End Source File
 # End Group
 # Begin Group "Header Files"
@@ -234,6 +306,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMContainerProperty.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMDataStream.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMDataStreamProperty.h"
 # End Source File
 # Begin Source File
@@ -262,11 +338,31 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMIdentitySet.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMIntegerType.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMKLVStoredObject.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMMappedFileRawStorage.h"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMMemoryRawStorage.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMMSSSStoredObject.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMMSSStoredStream.h"
 # End Source File
 # Begin Source File
 
@@ -287,6 +383,18 @@ SOURCE="..\..\..\ref-impl\include\OM\OMObjectReference.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMObjectReferenceT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMObjectSet.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMObjectVector.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMOStream.h"
 # End Source File
 # Begin Source File
 
@@ -335,6 +443,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMRedBlackTreeIteratorT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMRedBlackTreeT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMReferenceContainer.h"
 # End Source File
 # Begin Source File
 
@@ -406,6 +518,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMSetT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMSingleton.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMStorable.h"
 # End Source File
 # Begin Source File
@@ -422,6 +538,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStoredSetIndex.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMStoredStream.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMStoredVectorIndex.h"
 # End Source File
 # Begin Source File
@@ -434,11 +554,23 @@ SOURCE="..\..\..\ref-impl\src\OM\OMStreamPropertyT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMStrongReference.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMStrongReferenceSet.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMStrongReferenceSetIter.h"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMStrongReferenceSetIterT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMStrongReferenceVector.h"
 # End Source File
 # Begin Source File
 
@@ -478,6 +610,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMType.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMUniqueObjectIdentType.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMUtilities.h"
 # End Source File
 # Begin Source File
@@ -506,11 +642,23 @@ SOURCE="..\..\..\ref-impl\src\OM\OMVectorT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMWeakReference.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMWeakReferenceSet.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMWeakReferenceSetIter.h"
 # End Source File
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMWeakReferenceSetIterT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMWeakReferenceVector.h"
 # End Source File
 # Begin Source File
 
@@ -547,6 +695,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWeakRefVectorPropertyT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMWideStringProperty.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMXMLStoredObject.h"
 # End Source File
 # End Group
 # End Target
