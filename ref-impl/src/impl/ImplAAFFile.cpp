@@ -74,13 +74,14 @@ static const aafProductIdentification_t kNullIdent = { 0 };
 // Update this when incompatible changes are made to AAF file format
 // version. 
 //
-//    0 : Tue Jan 11 17:08:26 EST 2000
+//    kAAFRev1 : Tue Jan 11 17:08:26 EST 2000
 //        Initial Release version.
 //
-//    1 : Wed May 19 19:18:00 EST 2004
-//        AAF Version 1.1
+//    kAAFRev2 : Wed May 19 19:18:00 EST 2004
+//        UInt32Set and AUIDSet types added to built-in model as part
+//        of AAF v1.1. This is not compatible with older toolkits.
 //
-static const aafUInt32 sCurrentAAFObjectModelVersion = 1;
+static const aafFileRev_t sCurrentAAFObjectModelVersion = kAAFRev2;
 
 
 // FileKind from the point of view of the OM
@@ -292,7 +293,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 			// present, find out the version number to determine if
 			// the file is legible.
 			if (_head->GetObjectModelVersion() >
-				sCurrentAAFObjectModelVersion)
+				  static_cast<aafUInt32>(sCurrentAAFObjectModelVersion))
 			  {
 				// File version is higher than the version understood
 				// by this toolkit.  Therefore this file cannot be read.
@@ -432,7 +433,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 			// present, find out the version number to determine if
 			// the file is legible.
 			if (_head->GetObjectModelVersion() >
-				sCurrentAAFObjectModelVersion)
+				  static_cast<aafUInt32>(sCurrentAAFObjectModelVersion))
 			  {
 				// File version is higher than the version understood
 				// by this toolkit.  Therefore this file cannot be read.
@@ -1069,7 +1070,7 @@ ImplAAFFile::Open ()
 			  // present, find out the version number to determine if
 			  // the file is legible.
 			  if (_head->GetObjectModelVersion() >
-				  sCurrentAAFObjectModelVersion)
+				  static_cast<aafUInt32>(sCurrentAAFObjectModelVersion))
 				{
 				  // File version is higher than the version
 				  // understood by this toolkit.  Therefore this file
@@ -1395,17 +1396,31 @@ ImplAAFFile::Close ()
 //
 // DESCRIPTION:
 // @mfunc AAFRESULT | AAFFile | GetRevision |
-// Get the revision of the ciurrent AAF file.
+// Get the revision of the current AAF file.
 // @end
 // 
 AAFRESULT STDMETHODCALLTYPE
-ImplAAFFile::GetRevision
- (
-  // @parm aafFileRev_t * | rev | [out] Revision of the current file
-  aafFileRev_t *  rev
- )
+ImplAAFFile::GetRevision (aafFileRev_t *  rev)
 {
-  *rev = kAAFRev1;
+	if (! _initialized)
+		return AAFRESULT_NOT_INITIALIZED;
+
+	if (! rev)
+		return AAFRESULT_NULL_PARAM;
+
+	ImplAAFHeader* header;
+	AAFRESULT hr = GetHeader(&header);
+	if (hr != AAFRESULT_SUCCESS)
+		  return hr;
+
+	aafUInt32 ObjectModelVersion = 0;
+	if (header->IsObjectModelVersionPresent())
+			ObjectModelVersion = header->GetObjectModelVersion();
+	header->ReleaseReference();
+	header=0;
+
+	*rev = ObjectModelVersion;
+
   return(AAFRESULT_SUCCESS);
 }
 
