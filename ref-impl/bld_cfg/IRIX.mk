@@ -18,6 +18,7 @@ CC = CC
 LD = CC
 LFLAGS = -Olimit 1026
 CFLAGS = -Olimit 1026
+ARFLAGS = -r
 OBJFILE = -o $*.${OBJ}
 EXEFILE = -o unittest.${EXE}
 
