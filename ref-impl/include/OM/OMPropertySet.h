@@ -3,8 +3,6 @@
 
 #include "OMPortability.h"
 
-#define MAXIMUMPROPERTIES (10)
-
 class OMProperty;
 class OMStorable;
 
@@ -13,12 +11,37 @@ public:
   OMPropertySet(void);
 
   OMProperty* get(const int pid) const;
-  void put(OMProperty* p);
+  void put(OMProperty* property);
+  void iterate(size_t& context, OMProperty*& property) const;
+  bool contains(const int pid) const;
   size_t count(void) const;
   void setContainingObject(const OMStorable* containingObject);
+protected:
+  static bool equal(const int& pida, const int& pidb);
+
 private:
-  OMProperty* _propertySet[MAXIMUMPROPERTIES];
-  size_t _count;
+
+  struct OMPropertySetElement;
+
+  // OMPropertySetElement for 'pid' or null if not found.
+  //
+  OMPropertySetElement* find(int pid) const;
+
+  // First free entry or null if full.
+  //
+  OMPropertySetElement* find(void) const;
+
+  void grow(const size_t additionalElements);
+
+  struct OMPropertySetElement {
+    int _pid;
+    OMProperty* _property;
+    bool _valid;
+  };
+  OMPropertySetElement* _propertySet;  // Representation
+  size_t _capacity;                    // Number of potential elements
+  size_t _count;                       // Number of usable elements
+
   const OMStorable* _containingObject;
 };
 
