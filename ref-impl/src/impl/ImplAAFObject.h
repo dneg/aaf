@@ -94,13 +94,6 @@ public:
 public:
 	// Interfaces ivisible inside the toolkit, but not exposed through the API
   
-  // OMReferenceCounted interface inherited from OMStorable.
-  // Client code should use AcquireRef(), ReleaseRef() and RefCount() inherited
-  // from ImplAAFRoot.
-  virtual size_t AcquireReference();
-  virtual size_t ReleaseReference();
-  virtual size_t ReferenceCount();
-
 	// Gets the head object of the file containing this object.
 	// This function is used to maintain MOB and Definition tables in the
 	// head object.
