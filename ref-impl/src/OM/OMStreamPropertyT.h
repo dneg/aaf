@@ -141,9 +141,6 @@ void OMStreamProperty<Element>::readElements(OMUInt32 elementCount,
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Valid buffer", elements != 0);
 
-  OMStoredObject* store = _propertySet->container()->store();
-  ASSERT("Valid store", store != 0);
-
   const OMType* elementType = type(); // Temporary, _element_ type !
   ASSERT("Valid element type", elementType != 0);
 
@@ -161,7 +158,7 @@ void OMStreamProperty<Element>::readElements(OMUInt32 elementCount,
     ASSERT("All bytes read", actualByteCount == externalBytesSize);
 
     // Reorder an element of the property value
-    if (store->byteOrder() != hostByteOrder()) {
+    if (store()->byteOrder() != hostByteOrder()) {
       elementType->reorder(buffer, sizeof(Element));
     }
 
@@ -194,9 +191,6 @@ void OMStreamProperty<Element>::writeElements(OMUInt32 elementCount,
   PRECONDITION("Valid element count", elementCount > 0);
   PRECONDITION("Valid buffer", elements != 0);
 
-  OMStoredObject* store = _propertySet->container()->store();
-  ASSERT("Valid store", store != 0);
-
   const OMType* elementType = type();
   ASSERT("Valid element type", elementType != 0);
 
@@ -217,10 +211,10 @@ void OMStreamProperty<Element>::writeElements(OMUInt32 elementCount,
                              sizeof(Element),
                              buffer,
                              externalBytesSize,
-                             store->byteOrder());
+                             store()->byteOrder());
 
     // Reorder an element of the property value
-    if (store->byteOrder() != hostByteOrder()) {
+    if (store()->byteOrder() != hostByteOrder()) {
       elementType->reorder(buffer, externalBytesSize);
     }
 
