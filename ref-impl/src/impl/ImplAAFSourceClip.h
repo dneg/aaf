@@ -112,10 +112,10 @@ public:
         (ImplAAFMob ** mob);
 
   //****************
-  // GetRef()
+  // GetSourceReference()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetRef
+    GetSourceReference
 		// @parm [out] Source Reference
         (aafSourceRef_t *  sourceRef);
 
@@ -137,10 +137,10 @@ public:
 		 aafFadeType_t  fadeOutType);
 
   //****************
-  // SetRef()
+  // SetSourceReference()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    SetRef
+    SetSourceReference
 		// @parm [in] Source Reference
         (aafSourceRef_t  sourceRef);
 
