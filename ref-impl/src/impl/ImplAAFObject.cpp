@@ -479,7 +479,7 @@ ImplAAFObject::~ImplAAFObject ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::SetGeneration (aafUID_t *  /*pGeneration*/)
+    ImplAAFObject::SetGeneration (const aafUID_t & /*generation*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -514,7 +514,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  assert (AAFRESULT_SUCCEEDED (hr));
 
 	  ImplAAFClassDef * tmp;
-	  hr = pDict->LookupClass(&classID, &tmp);
+	  hr = pDict->LookupClass(classID, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 	  if (! _cachedDefinition)

@@ -69,7 +69,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetGeneration
 		// @parm [in] Generation ID to which this object is to be set
-        (aafUID_t *  pGeneration);
+        (const aafUID_t & generation);
 
 
   //****************

@@ -56,7 +56,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] Type of values in this enumeration
          ImplAAFTypeDef * pType,
@@ -73,7 +73,7 @@ public:
          aafUInt32  numElems,
 
          // @parm [in] friendly name of this type definition
-         wchar_t *  pTypeName);
+         const aafCharacter * pTypeName);
 
 
   //****************
@@ -245,10 +245,10 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     pvtInitialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] Type of values in this enumeration
-         const aafUID_t * pTypeId,
+         const aafUID_t & typeId,
 
          // @parm [in, size_is(numElems)] array of element values to be represented in this enumerated
     // type
@@ -262,7 +262,7 @@ public:
          aafUInt32  numElems,
 
          // @parm [in] friendly name of this type definition
-         wchar_t *  pTypeName);
+         const aafCharacter * pTypeName);
 
 
 private:

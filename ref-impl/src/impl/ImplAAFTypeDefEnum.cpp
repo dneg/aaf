@@ -73,12 +73,12 @@ ImplAAFTypeDefEnum::~ImplAAFTypeDefEnum ()
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefEnum::Initialize (
-      const aafUID_t * pID,
+      const aafUID_t & id,
       ImplAAFTypeDef * pType,
       aafInt64 * pElementValues,
       aafString_t * pElementNames,
       aafUInt32 numElements,
-      wchar_t * pTypeName)
+      const wchar_t * pTypeName)
 {
   if (!pType)
 	return AAFRESULT_NULL_PARAM;
@@ -97,8 +97,8 @@ ImplAAFTypeDefEnum::Initialize (
   assert (AAFRESULT_SUCCEEDED(hr));
   _ElementType = typeUID;
 
-  return pvtInitialize (pID,
-						&typeUID,
+  return pvtInitialize (id,
+						typeUID,
 						pElementValues,
 						pElementNames,
 						numElements,
@@ -108,22 +108,20 @@ ImplAAFTypeDefEnum::Initialize (
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefEnum::pvtInitialize (
-      const aafUID_t * pID,
-      const aafUID_t * pTypeId,
+      const aafUID_t & id,
+      const aafUID_t & typeId,
       aafInt64 * pElementValues,
       aafString_t * pElementNames,
       aafUInt32 numElements,
-      wchar_t * pTypeName)
+      const wchar_t * pTypeName)
 {
-  if (!pID)
-	return AAFRESULT_NULL_PARAM;
   if (!pTypeName)
     return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  hr = SetAUID (pID);
+  hr = SetAUID (id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   aafUInt32 i;
@@ -152,8 +150,7 @@ ImplAAFTypeDefEnum::pvtInitialize (
 	  tmpNamePtr += wcslen (pElementNames[i]) + 1;
 	}
 
-  assert (pTypeId);
-  _ElementType = *pTypeId;
+  _ElementType = typeId;
 
   _ElementNames.setValue (namesBuf, totalNameSize * sizeof(wchar_t));
   delete[] namesBuf;
@@ -179,8 +176,7 @@ ImplAAFTypeDefEnum::GetElementType (
 
 	  ImplAAFTypeDefEnum * pNonConstThis =
 		  (ImplAAFTypeDefEnum *) this;
-	  aafUID_t id = _ElementType;
-	  hr = pDict->LookupType (&id, &pNonConstThis->_cachedBaseType);
+	  hr = pDict->LookupType (_ElementType, &pNonConstThis->_cachedBaseType);
 	  if (AAFRESULT_FAILED(hr)) return hr;
 	}
   assert (ppTypeDef);
@@ -380,19 +376,19 @@ ImplAAFTypeDefEnum::GetIntegerValue (
   switch (localIntSize)
 	{
 	case 1:
-	  hr = pDict->LookupType (&kAAFTypeID_UInt8, &ptd);
+	  hr = pDict->LookupType (kAAFTypeID_UInt8, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  break;
 	case 2:
-	  hr = pDict->LookupType (&kAAFTypeID_UInt16, &ptd);
+	  hr = pDict->LookupType (kAAFTypeID_UInt16, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  break;
 	case 4:
-	  hr = pDict->LookupType (&kAAFTypeID_UInt32, &ptd);
+	  hr = pDict->LookupType (kAAFTypeID_UInt32, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  break;
 	case 8:
-	  hr = pDict->LookupType (&kAAFTypeID_UInt64, &ptd);
+	  hr = pDict->LookupType (kAAFTypeID_UInt64, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  break;
 	}
@@ -497,19 +493,19 @@ ImplAAFTypeDefEnum::SetIntegerValue (
   switch (localIntSize)
 	{
 	case 1:
-	  hr = pDict->LookupType (&kAAFTypeID_UInt8, &ptd);
+	  hr = pDict->LookupType (kAAFTypeID_UInt8, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  break;
 	case 2:
-	  hr = pDict->LookupType (&kAAFTypeID_UInt16, &ptd);
+	  hr = pDict->LookupType (kAAFTypeID_UInt16, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  break;
 	case 4:
-	  hr = pDict->LookupType (&kAAFTypeID_UInt32, &ptd);
+	  hr = pDict->LookupType (kAAFTypeID_UInt32, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  break;
 	case 8:
-	  hr = pDict->LookupType (&kAAFTypeID_UInt64, &ptd);
+	  hr = pDict->LookupType (kAAFTypeID_UInt64, &ptd);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 	  break;
 	}

@@ -215,12 +215,11 @@ ImplAAFTypeDefInt::~ImplAAFTypeDefInt ()
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFTypeDefInt::Initialize (
-      const aafUID_t *  pID,
+      const aafUID_t & id,
       aafUInt8  intSize,
       aafBool  isSigned,
-      wchar_t *  pTypeName)
+      const aafCharacter * pTypeName)
 {
-  assert (pID);
   assert (intSize > 0);
   assert (pTypeName);
 
@@ -234,7 +233,7 @@ AAFRESULT STDMETHODCALLTYPE
   _isSigned = isSigned;
   AAFRESULT hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  hr = SetAUID (pID);
+  hr = SetAUID (id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   return AAFRESULT_SUCCESS;
