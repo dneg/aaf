@@ -88,7 +88,7 @@ AD_XMETHOD1(CountPropertyDefs,
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
 
-AD_XMETHOD5(RegisterNewPropertyDef,
+AD_XMETHOD6(RegisterNewPropertyDef,
 			[in\, ref],
 			objPass,
 			aafUID_constref,
@@ -112,6 +112,12 @@ AD_XMETHOD5(RegisterNewPropertyDef,
 			aafBoolean_t,
 			isOptional,
 			true if new property is to be optional,
+
+			[in],
+			enumIn,
+			aafBoolean_t,
+			isUniqueIdentifier,
+			true if new property is to be the unique identifier of the class,
 
 			[out],
 			objOut,
@@ -144,6 +150,9 @@ AD_XMETHOD5(RegisterNewPropertyDef,
   //
   // AAFRESULT_OBJECT_ALREADY_ATTACHED
   //   - This class has already been registered.
+  //
+  // AAFRESULT_ALREADY_UNIQUELY_INDENTIFED
+  //   - This class already has a unique indentifier property.
   //
   // AAFRESULT_BAD_PARAM
   //   - The given ID has already been registered.)
@@ -254,7 +263,7 @@ AD_XMETHOD1(GetParent,
 AD_XMETHOD1(IsRoot,
 			[out\, retval],
 			objPass,
-			aafBool*,
+			aafBoolean_t*,
 			isRoot,
 			Is this a root \(base\) class,
 
@@ -266,6 +275,39 @@ AD_XMETHOD1(IsRoot,
   // - The ppClassDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\))
+
+
+AD_XMETHOD1(IsUniquelyIdentified,
+			[out\, retval],
+			objPass,
+			aafBoolean_t*,
+			pIsUniquelyIdentified,
+			Is this a UniquelyIdentified class,
+
+     Returns true if this class is uniquely identified.
+  // 
+  // Succeeds if:
+  // - The pIsUniquelyIdentified pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pIsUniquelyIdentified\))
+
+
+AD_XMETHOD1(GetUniqueIdentifier,
+			[out\, retval],
+			objOut,
+			AAFPropertyDef,
+			ppUniqueIdentifier,
+			Is this a UniquelyIdentified class,
+
+     Returns true if this class is uniquely identified.
+  // 
+  // Succeeds if:
+  // - The ppUniqueIdentifier pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppUniqueIdentifier\)
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - If this class definition does not have a unique identifier property definition.)
 
 
 AD_CLASSDEF_FACTORY(CreateInstance,
