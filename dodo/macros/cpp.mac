@@ -172,7 +172,6 @@
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
-      newRep->InitContainer (this);
 #endif
     }
 }
@@ -217,7 +216,6 @@
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
-      newRep->InitContainer (this);
 #endif
     }
 }
