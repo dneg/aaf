@@ -19,26 +19,30 @@
 // 
 //=---------------------------------------------------------------------=
 
+#include <AxEx.h>
+
 //
 // Miscellaneous items.
 //
 
-#include <AAFTypes.h>
+// Call object OBJ method NAME using args ARGS.
+// Catch hresult exception and return error value, or
+// any other exception and return error code, or return
+// S_OK on success.
+// Use to implement COM interfaces that wrap an underlying
+// implementation that, generally, has identical method
+// name and arguments but does not return an error code.
 
-bool operator==( const aafUID_t& uidL, const aafUID_t& uidR );
-
-inline bool operator!=( const aafUID_t& uidL, const aafUID_t& uidR )
-{
-	return !(uidL == uidR);
-}
-
-#if !defined(OS_WINDOWS)
-bool operator==( const tagGUID& uidL, const tagGUID& uidR );
-
-inline bool operator!=( const tagGUID& uidL, const tagGUID& uidR )
-{
-	return !(uidL == uidR);
-}
-#endif
+#define AX_PLUGIN_TRY( OBJ, NAME, ARGS )		\
+	try {										\
+		(OBJ)->NAME ARGS ;						\
+	}											\
+	catch( const AxExHResult& ex ) {			\
+		return ex.getHResult();					\
+	}											\
+	catch( ... ) {								\
+		return AAFRESULT_UNEXPECTED_EXCEPTION;	\
+	}											\
+	return S_OK;
 
 #endif

@@ -43,7 +43,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "AXPLUGIN_EXPORTS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /O2 /I "../../AAFWinSDK/include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "AXPLUGIN_EXPORTS" /YX /FD /c
+# ADD CPP /nologo /MD /W3 /GR /GX /O2 /I "../../AAFWinSDK/include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "AXPLUGIN_EXPORTS" /YX /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -92,6 +92,10 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
+SOURCE=.\AxImplNullEssenceCodec.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\AxPlugin.cpp
 # End Source File
 # Begin Source File
@@ -105,6 +109,10 @@ SOURCE=.\AxPluginFctry.cpp
 # Begin Source File
 
 SOURCE=.\AxPluginFctryPrtcl.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\AxPluginFormatSpecifiers.cpp
 # End Source File
 # Begin Source File
 
@@ -140,6 +148,10 @@ SOURCE=.\CAxUnknown.cpp
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
 # Begin Source File
 
+SOURCE=.\AxImplNullEssenceCodec.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\AxPlugin.h
 # End Source File
 # Begin Source File
@@ -149,6 +161,10 @@ SOURCE=.\AxPluginFctry.h
 # Begin Source File
 
 SOURCE=.\AxPluginFctryPrtcl.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\AxPluginFormatSpecifiers.h
 # End Source File
 # Begin Source File
 

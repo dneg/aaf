@@ -1,3 +1,4 @@
+
 //=---------------------------------------------------------------------=
 //
 // The contents of this file are subject to the AAF SDK Public
@@ -24,7 +25,7 @@ class WaveHeader {
 public:
 	WaveHeader();
 	
-	WaveHeader( AxBuffer<aafUInt8> buf );
+	WaveHeader( AxBuffer<aafUInt8>& buf );
 	
 	WaveHeader( int sampleRate,
 				int numSamples,
@@ -105,14 +106,5 @@ private:
 
 };
 
-namespace {
-
-//=---------------------------------------------------------------------=
-
-
-
-
-
-} // end of namespace
 
 

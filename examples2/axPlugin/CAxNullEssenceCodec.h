@@ -19,187 +19,48 @@
 // 
 //=---------------------------------------------------------------------=
 
-
 #include "CAxUnknown.h"
+#include "CAxPlugin.h"
+#include "CAxEssenceCodec.h"
 
-#include <AAFPlugin.h>
+#include "AxImplNullEssenceCodec.h"
+#include "AxImplPlugin.h"
+#include "AxPlugin.h"
 
 // CAxNullEssenceCodec - sample implementation of an AAF Plugin.
-// This example implements IAAFPlugin (as must all AAF plugins),
-// and IAAFEssenceCodec.
+//
 // The IUknown implementation is provided by CAxUnknown.
-
-// The implementation of this of CAxNullEssenceCodec is complete to
-// the extent necessary to exectute the axPlugInfo program.
+//
+// The IAAFPlugin implementation is provided by CAxPlugin and AxImplPlugin.
+// CAxPlugin implements the IAAFPlugin COM interface by wrapping an instance of
+// AxImplPlugin.  CAxPlugin catches exceptions and returns HRESULT's to the caller.
+// AxImplPlugin has a set of methods that match CAxPlugin.  However, these methods al
+// use a void return type.  AxImplPlugin reports routine errors by throwing AxExHResult.
+// The CAxPlugin and AxImplPlugins are generic and resusable.  The CAxNullEssenceCodec
+// illustrates how to initialize AxImplePlugin.
+//
+// CAxEssenceCodec implements the IAAFEssenceCodec COM interface by wrapping an instance
+// AxImplEssenceCodec.  CAxEssenceCodec catches exceptions and returns HRESULT's to the
+// caller.  CAxEssenceCodec is generic and reusable.
+// AxImplNullEssenceCodec has a set of methods that match CAxEssenceCodec except they all
+// have a void return type.  AxImplNullEssenceCodec is an example codec implementation
+// that is not reusable without modification.
 
 class CAxNullEssenceCodec
-: public IAAFEssenceCodec,
-  public IAAFPlugin,
+: public CAxEssenceCodec<AxImplNullEssenceCodec>,
+  public CAxPlugin<AxImplPlugin>,
   public CAxUnknown
 {
 public:
 
+	CAxNullEssenceCodec( IUnknown * pUnkOuter );
+	virtual ~CAxNullEssenceCodec();
+
 	CAXUNKNOWN_DECLARE_IUNKNOWN_METHODS
 	
-	// Override CAxUnknown::NondelegatingQueryInterface() in order to added
+	// Override CAxUnknown::NondelegatingQueryInterface() in order to add
 	// support for the interfaces supported by this class.
 	STDMETHOD( NondelegatingQueryInterface(const IID& iid, void** ppv) );
-
-	//
-	// IAAFPlugin Interface
-	//
-
-	STDMETHOD(CountDefinitions)(
-		aafUInt32 *pDefCount );
-
-	STDMETHOD(GetIndexedDefinitionID)(
-		aafUInt32 index, aafUID_t *result );
-
-	STDMETHOD(GetPluginDescriptorID)(
-		aafUID_t *result );
-
-    STDMETHOD(GetIndexedDefinitionObject)( 
-		aafUInt32 index,
-        IAAFDictionary *dict,
-        IAAFDefObject **def );
- 
-	STDMETHOD(CreateDescriptor)(
-		IAAFDictionary *dict,
-		IAAFPluginDef **desc );
-		
-	//
-	// IAAFEssenceCodec interface methods
-	//
-
-	STDMETHOD(SetEssenceAccess)(
-		IAAFEssenceAccess * pEssenceAccess );
-
-	STDMETHOD(CountFlavours)(
-		aafUInt32*  pCount );
-
-	STDMETHOD(GetIndexedFlavourID)(
-		aafUInt32  index,
-		aafUID_t *  pVariant );
- 
-	STDMETHOD(CountDataDefinitions)(
-		aafUInt32*  pCount );
-
-	STDMETHOD(GetIndexedDataDefinition) (
-		aafUInt32  index,
-		aafUID_t *  pDataDefID );
-
-	STDMETHOD(GetMaxCodecDisplayNameLength) (
-		aafUInt32*  pBufSize );
-
-	STDMETHOD(GetCodecDisplayName) (
-		aafUID_constref  flavour,
-		aafCharacter *  pName,
-		aafUInt32  bufSize );
-	
-	STDMETHOD(CountChannels) (
-		IAAFSourceMob * fileMob,
-		aafUID_constref  essenceKind,
-		IAAFEssenceStream * stream,
-		aafUInt16 *  pNumChannels );
-
-	STDMETHOD(GetSelectInfo) (
-		IAAFSourceMob * fileMob,
-		IAAFEssenceStream * stream,
-		aafSelectInfo_t *  pSelectInfo );
-
-	STDMETHOD(ValidateEssence) (
-		IAAFSourceMob * fileMob,
-		IAAFEssenceStream * stream,
-		aafCheckVerbose_t  verbose,
-		aafCheckWarnings_t  outputWarnings,
-		aafUInt32  bufSize,
-		aafCharacter *  pErrorText,
-		aafUInt32*  pBytesRead);
-
-	STDMETHOD(Create) (
-		IAAFSourceMob * fileMob,
-		aafUID_constref  flavour,
-		aafUID_constref  essenceKind,
-		aafRational_constref  sampleRate,
-		IAAFEssenceStream * stream,
-		aafCompressEnable_t  compEnable);
-
-	STDMETHOD(Open) (
-		IAAFSourceMob * fileMob,
-		aafMediaOpenMode_t  openMode,
-		IAAFEssenceStream * stream,
-		aafCompressEnable_t  compEnable);
-	
-	STDMETHOD(CountSamples) (
-		aafUID_constref  essenceKind,
-		aafLength_t *  pNumSamples);
-
-	STDMETHOD(WriteSamples) (
-		aafUInt32  nSamples,
-		aafUInt32  buflen,
-		aafDataBuffer_t  buffer,
-		aafUInt32 *  samplesWritten,
-		aafUInt32 *  bytesWritten);
-
-	STDMETHOD(ReadSamples) (
-		aafUInt32  nSamples,
-		aafUInt32  buflen,
-		aafDataBuffer_t  buffer,
-		aafUInt32 *  samplesRead,
-		aafUInt32 *  bytesRead);
-
-	STDMETHOD(Seek) (
-		aafPosition_t  sampleFrame);
-
-
-	STDMETHOD(CompleteWrite) (
-		IAAFSourceMob * pFileMob);
-
-	STDMETHOD(CreateDescriptorFromStream) (
-		IAAFEssenceStream * pStream,
-		IAAFSourceMob * pSourceMob);
-
-	STDMETHOD(GetCurrentEssenceStream) (
-		IAAFEssenceStream ** ppStream);
-
-	STDMETHOD(PutEssenceFormat) (
-		IAAFEssenceFormat * pFormat);
-	
-	STDMETHOD(GetEssenceFormat) (
-		IAAFEssenceFormat * pFormatTemplate,
-		IAAFEssenceFormat ** ppNewFormat);
-
-	STDMETHOD(GetDefaultEssenceFormat) (
-		IAAFEssenceFormat ** ppNewFormat);
-
-	STDMETHOD(GetEssenceDescriptorID) (
-		aafUID_t *  pDescriptorID);
-
-	STDMETHOD(GetEssenceDataID) (
-		aafUID_t *  pEssenceDataID);
-	
-	STDMETHOD(GetIndexedSampleSize) (
-		aafUID_constref  essenceDefID,
-		aafPosition_t  sampleOffset,
-		aafLength_t *  pLength);
-
-	STDMETHOD(GetLargestSampleSize) (
-		aafUID_constref  essenceDefID,
-		aafLength_t *  pLength);
-
-	CAxNullEssenceCodec( IUnknown * pUnkOuter );
-
-	~CAxNullEssenceCodec();
-
-private:
-
-	aafUInt32 _numSupportedDefinitions;
-	aafUID_t  _codecDefAUID;
-	aafUInt32  _numFlavours;
-
-	const wchar_t* _codecName;
-	const wchar_t* _codecDesc;
 };
-
 
 #endif

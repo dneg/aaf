@@ -42,6 +42,7 @@ private:
 	IAAFMetaDefinitionSP _spIaafMetaDefinition;
 };
 
+
 //=---------------------------------------------------------------------=
 
 class AxClassDef : public AxMetaDefinition {
@@ -72,6 +73,9 @@ public:
 
 	IEnumAAFPropertyDefsSP GetPropertyDefs();
 	IAAFPropertyDefSP LookupPropertyDef( const aafUID_t& propertyId );
+
+	operator IAAFClassDefSP ()
+	{ return _spIaafClassDef; }
 
 private:
 	IAAFClassDefSP _spIaafClassDef;

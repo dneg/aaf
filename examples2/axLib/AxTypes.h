@@ -30,6 +30,7 @@
 // Could have just used wstring, but the AAF SDK goes to the trouble of 
 // typedef'ing aafCharacter, so AxString follows that example.
 typedef ::std::basic_string<aafCharacter> AxString;
+typedef ::std::char_traits<aafCharacter> AxCharTraits;
 
 class AxProductIdentification 
 {
@@ -85,6 +86,10 @@ inline bool operator!=( const aafUID_t& uidL, const aafUID_t& uidR )
 {
 	return !(uidL == uidR);
 }
+
+// This has no real meaning, but permits use of aafUID_t
+// as the key of a std::map<>
+bool operator<( const aafUID_t& uidL, const aafUID_t& uidR );
 
 #if !defined(OS_WINDOWS)
 bool operator==( const tagGUID& uidL, const tagGUID& uidR );

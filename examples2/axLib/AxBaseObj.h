@@ -19,30 +19,45 @@
 // 
 //=---------------------------------------------------------------------=
 
+#include "AxEx.h"
+
 #include <AxSmartPointer.h>
 
-// AxBaseObj has no methods.  It is used to pass represent any
-// object property or property value in an AAF file. Code using the
-// class is expected to cast to one of the known concrete
-// implementations in order to proceed with processing.
+// AxBaseObj - the root object in the COM wrapper inheritance
+// treel.  A better name would be AxUnknown.
+// It exposes the QueryInterface() method because it is an easy
+// way to extract a bare pointer to the underlying COM interface.
 
 class AxBaseObj {
 public:
 
-	AxBaseObj()
-	{}
+	AxBaseObj();
 
-	AxBaseObj( IUnknownSP sp )
-		: _spIUnknown( sp ) {}
+	AxBaseObj( IUnknownSP sp );
 
 	virtual ~AxBaseObj() = 0;
+
+	template <class T>
+	void QueryInterface( const IID& iid, T** pPntr )
+	{
+		CHECK_HRESULT( _spIUnknown->QueryInterface( iid,
+						reinterpret_cast<void**>(pPntr) ) );
+	}
+
+	template <class T>
+	void QueryInterface( T** pPntr )
+	{
+		T* dummy = 0;
+		QueryInterface( AxIID(dummy), pPntr );
+	}
 
 	inline operator IUnknownSP ()
 	{ return _spIUnknown; }
 
 private:
-	mutable IUnknownSP _spIUnknown;
+	IUnknownSP _spIUnknown;
 };
+
 
 template < class ObjType >
 class AxBaseObjAny : public AxBaseObj {

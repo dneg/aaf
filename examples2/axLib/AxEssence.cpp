@@ -179,6 +179,64 @@ AxString AxDefObject::GetDescription()
 	return AxDescriptionToString( _spIaafDefObject );
 }
 
+
+//=---------------------------------------------------------------------=
+
+AxPluginDef::AxPluginDef( IAAFPluginDefSP spIaafPluginDef )
+:	AxDefObject( AxQueryInterface<IAAFPluginDef, IAAFDefObject>(spIaafPluginDef) ),
+	_spIaafPluginDef( spIaafPluginDef )
+{}
+
+AxPluginDef::~AxPluginDef()
+{}
+
+void AxPluginDef::Initialize( const aafUID_t& uid,
+							 const AxString& name,
+							 const AxString& desc )
+{
+	CHECK_HRESULT( _spIaafPluginDef->Initialize( uid, name.c_str(), desc.c_str() ) );
+}
+
+void AxPluginDef::SetCategoryClass( const aafUID_t& uid )
+{                          
+	CHECK_HRESULT( _spIaafPluginDef->SetCategoryClass( uid ) );
+}
+
+void AxPluginDef::SetPluginVersionString( const AxString& ver )
+{
+	CHECK_HRESULT( _spIaafPluginDef->SetPluginVersionString( ver.c_str() ) );
+}
+
+void AxPluginDef::SetManufacturerID( const aafUID_t& uid )
+{
+	CHECK_HRESULT( _spIaafPluginDef->SetManufacturerID( uid ) );
+}
+
+void AxPluginDef::SetPluginManufacturerName( const AxString& name)
+{
+	CHECK_HRESULT( _spIaafPluginDef->SetPluginManufacturerName( name.c_str() ) );
+}
+
+void AxPluginDef::SetIsSoftwareOnly( bool isSoftware )
+{
+	CHECK_HRESULT( _spIaafPluginDef->SetIsSoftwareOnly( isSoftware ) );
+}
+
+void AxPluginDef::SetIsAccelerated( bool isAccel )
+{
+	CHECK_HRESULT( _spIaafPluginDef->SetIsAccelerated( isAccel ) );
+}
+
+void AxPluginDef::SetSupportsAuthentication( bool supportsAuth )
+{
+	CHECK_HRESULT( _spIaafPluginDef->SetSupportsAuthentication( supportsAuth ) );
+}
+
+void AxPluginDef::SetManufacturerInfo( IAAFNetworkLocatorSP manuInfo )
+{
+	CHECK_HRESULT( _spIaafPluginDef->SetManufacturerInfo( manuInfo ) );
+}
+
 //=---------------------------------------------------------------------=
 
 AxCodecDef::AxCodecDef( IAAFCodecDefSP spIaafCodecDef )
@@ -188,6 +246,23 @@ AxCodecDef::AxCodecDef( IAAFCodecDefSP spIaafCodecDef )
 
 AxCodecDef::~AxCodecDef()
 {}
+
+void AxCodecDef::Initialize( const aafUID_t& uid,
+							 const AxString& name,
+							 const AxString& desc )
+{
+	CHECK_HRESULT( _spIaafCodecDef->Initialize( uid, name.c_str(), desc.c_str() ) );
+}
+
+void AxCodecDef::SetFileDescriptorClass( IAAFClassDefSP spClass )
+{
+	CHECK_HRESULT( _spIaafCodecDef->SetFileDescriptorClass( spClass ) );
+}
+
+void AxCodecDef::AddEssenceKind( IAAFDataDefSP spEssenceKind )
+{
+	CHECK_HRESULT( _spIaafCodecDef->AddEssenceKind( spEssenceKind ) );
+}
 
 aafBoolean_t AxCodecDef::IsEssenceKindSupported( IAAFDataDefSP spIaafDataDef )
 {

@@ -26,7 +26,7 @@
 WaveHeader::WaveHeader()
 {}
 
-WaveHeader::WaveHeader( AxBuffer<aafUInt8> buf )
+WaveHeader::WaveHeader( AxBuffer<aafUInt8>& buf )
 {
 	// no can do yet
 	if ( buf.GetSize() != HEADER_SIZE ) {

@@ -176,6 +176,11 @@ std::wostream& operator<<( std::wostream& os, const aafProductVersion_t& pv )
 	return os;
 }
 
+bool operator<( const aafUID_t& uidL, const aafUID_t& uidR )
+{
+	return 0 > ::memcmp( &uidL, &uidR, sizeof( aafUID_t ) );
+}
+
 bool operator==( const aafUID_t& uidL, const aafUID_t& uidR )
 {
 	return 0 == ::memcmp( &uidL, &uidR, sizeof( aafUID_t ) );

@@ -120,6 +120,9 @@ public:
 
 	void Initialize();
 
+	inline operator IAAFNetworkLocatorSP ()
+	{ return _spIaafNetworkLocator; }
+
 private:
 	AxNetworkLocator();
 	AxNetworkLocator( const AxNetworkLocator& );
@@ -129,7 +132,7 @@ private:
 };
 
 //=---------------------------------------------------------------------=
-
+// FIXME - Move this to separate file.
 class AxDefObject : public AxObject {
 public:
 	AxDefObject( IAAFDefObjectSP spIaafDefObject );
@@ -152,12 +155,49 @@ private:
 	IAAFDefObjectSP _spIaafDefObject;
 };
 
+
+
 //=---------------------------------------------------------------------=
+// FIXME - Move this to separate file.
+
+class AxPluginDef : public AxDefObject {
+public:
+	AxPluginDef( IAAFPluginDefSP spIaafPluginDef );
+	~AxPluginDef();
+
+	void Initialize( const aafUID_t& uid,
+					 const AxString& name,
+					 const AxString& desc );
+
+	void SetCategoryClass( const aafUID_t& uid );
+	void SetPluginVersionString( const AxString& ver );
+	void SetManufacturerID( const aafUID_t& uid );
+	void SetPluginManufacturerName( const AxString& name);
+	void SetIsSoftwareOnly( bool isSoftware );
+	void SetIsAccelerated( bool isAccel );
+	void SetSupportsAuthentication( bool supportsAuth );
+	void SetManufacturerInfo( IAAFNetworkLocatorSP manuInfo );
+
+private:
+	IAAFPluginDefSP _spIaafPluginDef;
+};
+
+//=---------------------------------------------------------------------=
+// FIXME - Move this to separate file.
 
 class AxCodecDef : public AxDefObject {
 public:
+
 	AxCodecDef( IAAFCodecDefSP spIaafCodecDef );
 	~AxCodecDef();
+
+	void Initialize( const aafUID_t& uid,
+					 const AxString& name,
+					 const AxString& desc );
+
+	void SetFileDescriptorClass( IAAFClassDefSP spClass );
+
+	void AddEssenceKind( IAAFDataDefSP spEssenceKind );
 
 	aafBoolean_t IsEssenceKindSupported( IAAFDataDefSP spIaafDataDef );
 
@@ -169,7 +209,6 @@ public:
 
 	IEnumAAFCodecFlavoursSP EnumCodecFlavours();
 
-
 private:
 	AxCodecDef();
 	AxCodecDef( const AxCodecDef& );
@@ -179,6 +218,7 @@ private:
 };
 
 //=---------------------------------------------------------------------=
+// FIXME - Move this to separate file.
 
 class AxDataDef: public AxDefObject {
 public:
@@ -200,6 +240,8 @@ private:
 };
 
 //=---------------------------------------------------------------------=
+
+// FIXME - Move this to separate file.
 
 // FIXME a file to contain all definition object wrappers would be
 // a better place for this.

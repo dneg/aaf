@@ -16,14 +16,4 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include "AxBaseObj.h"
-
-AxBaseObj::AxBaseObj()
-{}
-
-AxBaseObj::AxBaseObj( IUnknownSP sp )
-	: _spIUnknown( sp )
-{}
-
-AxBaseObj::~AxBaseObj()
-{}
+#include "CAxPlugin.h"

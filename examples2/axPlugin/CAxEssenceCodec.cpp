@@ -16,14 +16,6 @@
 // 
 //=---------------------------------------------------------------------=
 
-#include "AxBaseObj.h"
 
-AxBaseObj::AxBaseObj()
-{}
+#include "CAxEssenceCodec.h"
 
-AxBaseObj::AxBaseObj( IUnknownSP sp )
-	: _spIUnknown( sp )
-{}
-
-AxBaseObj::~AxBaseObj()
-{}

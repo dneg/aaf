@@ -17,7 +17,6 @@
 //=---------------------------------------------------------------------=
 
 #include <axFileGen.h>
-
 namespace {
 
 //=---------------------------------------------------------------------=
@@ -42,6 +41,10 @@ void Alias::Execute( const std::vector<AxString>& argv )
 	AxFGOp& op = GetInstance( name );
 	op.RegisterInstance( alias );
 }
+
+
+///////////////////////////////////////////////////////////////////////////
+
 
 } // end of namespace
 
