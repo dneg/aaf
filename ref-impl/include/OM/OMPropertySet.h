@@ -1,9 +1,9 @@
-// @doc
-
+// @doc OMEXTERNAL
 #ifndef OMPROPERTYSET_H
 #define OMPROPERTYSET_H
 
 #include "OMPortability.h"
+#include "OMTypes.h"
 
 class OMProperty;
 class OMStorable;
@@ -20,8 +20,8 @@ public:
   ~OMPropertySet(void);
 
     // @cmember Get the <c OMProperty> associated with the property id
-    //          <p pid>.
-  OMProperty* get(const int pid) const;
+    //          <p propertyId>.
+  OMProperty* get(const OMPropertyId propertyId) const;
 
     // @cmember Insert the <c OMProperty> <p property> into this
     //          <c OMPropertySet>.
@@ -32,28 +32,34 @@ public:
   void iterate(size_t& context, OMProperty*& property) const;
 
     // @cmember Does this <c OMPropertySet> contain an <c OMProperty>
-    //          with property id <p pid> ?
-  bool contains(const int pid) const;
+    //          with property id <p propertyId> ?
+  bool contains(const OMPropertyId propertyId) const;
 
     // @cmember The number of <c OMProperty> objects in this
     //          <c OMPropertySet>.
   size_t count(void) const;
 
-    // @cmember Inform this <c OMPropertySet> that it contains the
-    //          <c OMProperty> objects of the <c OMStorable>
-    //          <p containingObject>.
-  void setContainingObject(const OMStorable* containingObject);
+    // @cmember This <c OMPropertySet> is contained by the given
+    //          <c OMStorable> object <p container>. The <c OMProperty>
+    //          objects in this <c OMPropertySet> are the properties of
+    //          the given <c OMStorable> object <p container>.
+  void setContainer(const OMStorable* container);
+
+    // @cmember The <c OMStorable> object that contains this
+    //          <c OMPropertySet>.
+  OMStorable* container(void) const;
 
 protected:
-  static bool equal(const int& pida, const int& pidb);
+  static bool equal(const OMPropertyId& propertyIda,
+                    const OMPropertyId& propertyIdb);
 
 private:
 
   struct OMPropertySetElement;
 
-  // OMPropertySetElement for 'pid' or null if not found.
+  // OMPropertySetElement for 'propertyId' or null if not found.
   //
-  OMPropertySetElement* find(const int pid) const;
+  OMPropertySetElement* find(const OMPropertyId propertyId) const;
 
   // First free entry or null if full.
   //
@@ -62,7 +68,7 @@ private:
   void grow(const size_t additionalElements);
 
   struct OMPropertySetElement {
-    int _pid;
+    OMPropertyId _propertyId;
     OMProperty* _property;
     bool _valid;
   };
@@ -70,7 +76,7 @@ private:
   size_t _capacity;                    // Number of potential elements
   size_t _count;                       // Number of usable elements
 
-  const OMStorable* _containingObject;
+  const OMStorable* _container;
 };
 
 #endif
