@@ -44,6 +44,19 @@
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFNestedScope; // generated
 
+
+
+static const	aafMobID_t	TEST_MobID = 
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xc8e35d46, 0x0403, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
+static const	aafMobID_t	TEST_referencedMobID = 
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xcf95980c, 0x0403, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
+
+
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
 {
@@ -145,7 +158,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment*		pSegment = NULL;
 	IAAFNestedScope*		pNestedScope = NULL;
 	IAAFCompositionMob*	pCompMob = NULL;
-	aafMobID_t			NewMobID, referencedMobID;
 	aafInt32			fadeInLen  = 1000;
 	aafInt32			fadeOutLen = 2000;
 	aafFadeType_t		fadeInType = kAAFFadeLinearAmp;
@@ -173,8 +185,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(defs.cdMasterMob()->
 					CreateInstance(IID_IAAFMob, 
 								   (IUnknown **)&pReferencedMob));
-		checkResult(CoCreateGuid((GUID *)&referencedMobID));
-		checkResult(pReferencedMob->SetMobID(referencedMobID));
+		checkResult(pReferencedMob->SetMobID(TEST_referencedMobID));
 		checkResult(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
 		checkResult(pHeader->AddMob(pReferencedMob));
 		pReferencedMob->Release();
@@ -187,8 +198,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	    // get a IAAFMob interface
 		checkResult(pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
-		checkResult(CoCreateGuid((GUID *)&NewMobID));
-		checkResult(pMob->SetMobID(NewMobID));
+		checkResult(pMob->SetMobID(TEST_MobID));
 		checkResult(pMob->SetName(L"AAFNestedScopeTest"));
 	  
 		// Create a Source clip 
@@ -202,7 +212,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 		// Set the properties for the SourceClip
 		checkResult(pSourceClip->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
-		sourceRef.sourceID = referencedMobID;
+		sourceRef.sourceID = TEST_referencedMobID;
 		sourceRef.sourceSlotID = 0;
 		sourceRef.startTime = 0;
 		checkResult(pSourceClip->SetSourceReference(sourceRef));
