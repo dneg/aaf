@@ -144,7 +144,7 @@ public:
 
 private:
   // the size of this integer type in bytes
-  OMFixedSizeProperty<aafUInt32> _size;
+  OMFixedSizeProperty<aafUInt8> _size;
 
   // true if this integer type is signed; false for unsigned
   OMFixedSizeProperty<aafBool>   _isSigned;

@@ -103,7 +103,8 @@ public:
 
 
 private:
-  OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  // OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
+  OMFixedSizeProperty<aafUID_t>           _ElementType;
 
 
 public:
