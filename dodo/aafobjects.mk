@@ -130,7 +130,8 @@ AUTO_GEN_IMPL = \
 # its name here and remove it from AUTO_GEN_COMTEST (below).
 # Do not add the 'Test' suffix here.
 HUMAN_TYPED_COMTEST = \
-	AAFMob
+	AAFMob \
+	AAFSourceMob
 
 # Build the list of all objects that have automatically-generated
 # COM Test classes.
@@ -204,7 +205,6 @@ AUTO_GEN_COMTEST = \
 	AAFEssenceDescriptor \
 	AAFFileDescriptor \
 	AAFSegment \
-	AAFSourceMob \
 	AAFMobSlot \
 	AAFTimelineMobSlot \
 	AAFSourceReference \
