@@ -105,7 +105,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(stillFrame->GetDataDef(&newDataDef));
 		CHECK(GetDataDef(&groupDataDef));
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDefintion(&newDataDef, &pDef));
+		CHECK(pDict->LookupDataDefinition(&newDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
 		CHECK(pDef->DoesDataDefConvertTo(&groupDataDef, &willConvert));
@@ -190,7 +190,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(GetDataDef(&groupDataDef));
 		/* Verify that groups's datakind converts to still's datakind */
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDefintion(&newDataDef, &pDef));
+		CHECK(pDict->LookupDataDefinition(&newDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
 		CHECK(pDef->DoesDataDefConvertTo(&groupDataDef, &willConvert));
