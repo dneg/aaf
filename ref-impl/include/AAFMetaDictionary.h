@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Wed Apr  5 13:30:34 EDT 2000
-// by user transdel on system TRANSDEL.
+// This file was generated on Thu Apr  6 18:01:14 EDT 2000
+// by user bedell on system JBEDELL2.
 //
 // Key to macros.
 //
@@ -892,7 +892,7 @@ AAF_CLASS(Selector,
       0x0200, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x0f02,
-    AAF_REFERENCE_TYPE(StrongReferenceSet, Segment),
+    AAF_REFERENCE_TYPE(StrongReferenceVector, Segment),
     false,
     Selector)
 AAF_CLASS_END(Selector)
@@ -1329,7 +1329,7 @@ AAF_CLASS(OperationDefinition,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x1e06,
-    AAF_TYPE(String),
+    AAF_TYPE(AUID),
     false,
     OperationDefinition)
   AAF_PROPERTY(NumberInputs,
@@ -1780,7 +1780,7 @@ AAF_CLASS(EssenceData,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x2701,
-    AAF_REFERENCE_TYPE(WeakReference, Mob),
+    AAF_TYPE(MobID),
     true,
     EssenceData)
   AAF_PROPERTY(Data,
@@ -1796,7 +1796,7 @@ AAF_CLASS(EssenceData,
       0x0100, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x2b01,
-    AAF_TYPE(PositionArray),
+    AAF_TYPE(DataStream),
     false,
     EssenceData)
 AAF_CLASS_END(EssenceData)
@@ -1928,7 +1928,7 @@ AAF_CLASS(DigitalImageDescriptor,
       0x0500, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x3205,
-    AAF_TYPE(Int32),
+    AAF_TYPE(UInt32),
     false,
     DigitalImageDescriptor)
   AAF_PROPERTY(SampledXOffset,
@@ -2008,7 +2008,7 @@ AAF_CLASS(DigitalImageDescriptor,
       0x0F00, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x320f,
-    AAF_TYPE(Rational),
+    AAF_TYPE(AlphaTransparency),
     false,
     DigitalImageDescriptor)
   AAF_PROPERTY(Gamma,
@@ -2016,7 +2016,7 @@ AAF_CLASS(DigitalImageDescriptor,
       0x1000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x3210,
-    AAF_TYPE(Rational),
+    AAF_TYPE(AUID),
     false,
     DigitalImageDescriptor)
   AAF_PROPERTY(ImageAlignmentFactor,
@@ -2043,7 +2043,7 @@ AAF_CLASS(CDCIDescriptor,
       0x4101, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x3301,
-    AAF_TYPE(Int32),
+    AAF_TYPE(UInt32),
     true,
     CDCIDescriptor)
   AAF_PROPERTY(HorizontalSubsampling,
@@ -2336,7 +2336,7 @@ AAF_CLASS(TapeDescriptor,
       0x0000, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x3a04,
-    AAF_TYPE(Length),
+    AAF_TYPE(UInt32),
     false,
     TapeDescriptor)
   AAF_PROPERTY(ManufacturerID,
@@ -3563,6 +3563,19 @@ AAF_TYPE_DEFINITION_ENUMERATION(ReferenceType,
 AAF_TYPE_DEFINITION_ENUMERATION_END(ReferenceType)
 AAF_TYPE_SEPARATOR()
 
+// AlphaTransparency
+//
+AAF_TYPE_DEFINITION_ENUMERATION(AlphaTransparency, 
+  AAF_LITERAL_AUID(0x0C020F00,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C), AAF_TYPE(UInt8))
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFMinValueTransparent,
+    0, AlphaTransparency)
+  AAF_TYPE_DEFINITION_ENUMERATION_MEMBER(kAAFMaxValueTransparent,
+    1, AlphaTransparency)
+AAF_TYPE_DEFINITION_ENUMERATION_END(AlphaTransparency)
+AAF_TYPE_SEPARATOR()
+
 // UInt8Array8
 //
 AAF_TYPE_DEFINITION_FIXED_ARRAY(UInt8Array8, 
@@ -3861,6 +3874,39 @@ AAF_TYPE_DEFINITION_STREAM(DataStream,
   AAF_LITERAL_AUID(0x0C0A0000,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C))
+AAF_TYPE_SEPARATOR()
+
+// GammaType
+//
+AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(GammaType, 
+  AAF_LITERAL_AUID(0x0C0B0000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C))
+AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(GammaType)
+AAF_TYPE_SEPARATOR()
+
+// CategoryType
+//
+AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION(CategoryType, 
+  AAF_LITERAL_AUID(0x0C0C0000,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C))
+  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(kAAFPluginCatagoryEffect,
+    AAF_LITERAL_AUID(0x0C0C0100,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
+    CategoryType)
+  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(kAAFPluginCatagoryCodec,
+    AAF_LITERAL_AUID(0x0C0C0200,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
+    CategoryType)
+  AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_MEMBER(kAAFPluginCatagoryInterpolation,
+    AAF_LITERAL_AUID(0x0C0C0300,
+      0x0000, 0x0000,
+      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
+    CategoryType)
+AAF_TYPE_DEFINITION_EXTENDIBLE_ENUMERATION_END(CategoryType)
 AAF_TYPE_SEPARATOR()
 
 // DataValue
