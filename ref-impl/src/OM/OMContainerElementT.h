@@ -27,6 +27,8 @@
 
 // @doc OMINTERNAL
 
+#include "OMAssertions.h"
+
 // class OMVectorElement<ReferencedObject>
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMVectorElement
 
@@ -34,7 +36,7 @@
   //   @tcarg class | ReferencedObject | The type of the referenced object.
 template <typename ReferencedObject>
 OMVectorElement<ReferencedObject>::OMVectorElement(void)
-  : _pointer(0)
+: _pointer(0)
 {
   TRACE("OMVectorElement<ReferencedObject>::OMVectorElement");
 }
@@ -45,7 +47,7 @@ OMVectorElement<ReferencedObject>::OMVectorElement(void)
 template <typename ReferencedObject>
 OMVectorElement<ReferencedObject>::OMVectorElement(
                                                const ReferencedObject* pointer)
-  : _pointer(const_cast<ReferencedObject*>(pointer))
+: _pointer(const_cast<ReferencedObject*>(pointer))
 {
   TRACE("OMVectorElement<ReferencedObject>::OMVectorElement");
 }
@@ -456,7 +458,15 @@ OMContainerElement<ObjectReference, ReferencedObject>::getValue(void) const
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::getValue");
   OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
-  return _reference.getValue();
+  OMStorable* p = _reference.getValue();
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  } else {
+    result = 0;
+  }
+  return result;
 }
 
   // @mfunc Set the value of this <c OMContainerElement>.
@@ -474,7 +484,15 @@ OMContainerElement<ObjectReference, ReferencedObject>::setValue(
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::setValue");
   OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
-  return _reference.setValue(value);
+  OMStorable* p = _reference.setValue(value);
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  } else {
+    result = 0;
+  }
+  return result;
 }
 
   // @mfunc The value of this <c OMContainerElement> as a pointer.
@@ -492,7 +510,15 @@ OMContainerElement<ObjectReference, ReferencedObject>::pointer(void) const
   TRACE("OMContainerElement<ObjectReference, ReferencedObject>::pointer");
   OBSOLETE("OMContainerElement<ObjectReference, ReferencedObject>::reference");
 
-  return _reference.pointer();
+  OMStorable* p = _reference.pointer();
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  } else {
+    result = 0;
+  }
+  return result;
 }
 
 // class OMStrongReferenceVectorElement<ReferencedObject>
