@@ -68,7 +68,7 @@
 
 
 
-const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 1, kAAFVersionBeta};
+const aafProductVersion_t AAFReferenceImplementationVersion = {1, 0, 0, 4, kAAFVersionBeta};
 
 
 
