@@ -645,10 +645,6 @@ void ImplAAFHeader::SetDictionary(ImplAAFDictionary *pDictionary)
   _dictionary = pDictionary;
   if (pDictionary)
     pDictionary->AcquireReference();
-
-  // If this hasn't been done before, make sure the dictionary has had
-  // its properties initialized.
-  _dictionary->pvtInitCriticalBuiltins ();
 }
 
 AAFRESULT ImplAAFHeader::SetToolkitRevisionCurrent()
@@ -694,11 +690,6 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary()
 {
   ImplAAFDictionary	*result = _dictionary;
   assert(result);
-
-  // If this hasn't been done before, make sure the dictionary has had
-  // its properties initialized.
-  _dictionary->pvtInitCriticalBuiltins ();
-
 
   return(result);
 }
