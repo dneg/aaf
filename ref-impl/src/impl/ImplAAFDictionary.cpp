@@ -176,10 +176,10 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-	size_t containerDefSize = _containerDefinitions.getSize();
-	for (i = 0; i < containerDefSize; i++)
+	OMStrongReferenceSetIterator<ImplAAFContainerDef>containerDefinitions(_containerDefinitions);
+	while(++containerDefinitions)
 	{
-		ImplAAFContainerDef *pContainer = _containerDefinitions.setValueAt(0, i);
+		ImplAAFContainerDef *pContainer = containerDefinitions.setValue(0);
 		if (pContainer)
 		{
 		  pContainer->ReleaseReference();
@@ -251,16 +251,17 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 		}
 	}
 
-  size_t dataDefSize = _dataDefinitions.getSize();
+	size_t dataDefSize = _dataDefinitions.getSize();
   for (i = 0; i < dataDefSize; i++)
 	{
-	  ImplAAFDataDef *pDDef = _dataDefinitions.setValueAt(0, i);
-	  if (pDDef)
+	  ImplAAFDataDef *pOps = _dataDefinitions.setValueAt(0, i);
+	  if (pOps)
 		{
-		  pDDef->ReleaseReference();
-		  pDDef = 0;
+		  pOps->ReleaseReference();
+		  pOps = 0;
 		}
 	}
+
 
   assert (_pBuiltinClasses);
   delete _pBuiltinClasses;
@@ -1626,47 +1627,63 @@ AAFRESULT STDMETHODCALLTYPE
 	  (const aafUID_t & defID,
 	   ImplAAFContainerDef **result)
 {
-	ImplAAFContainerDef			*container = NULL;
-	aafBool						defFound;
-	aafUID_t					testAUID;
-	aafUInt32					n, numContainers;
+  if (!result) return AAFRESULT_NULL_PARAM;
 
-	XPROTECT()
+  ImplEnumAAFContainerDefs		*containerEnum = NULL;
+  ImplAAFContainerDef			*containerDef = NULL;
+  aafBool						defFound;
+  AAFRESULT					status;
+  aafUID_t					testAUID;
+
+  if (! result)
+	return AAFRESULT_NULL_PARAM;
+
+  XPROTECT()
 	{
-		*result = NULL;
-		CHECK(GetNumContainerDefs(&numContainers));
-		defFound = kAAFFalse;
-		for(n = 0; n < numContainers && !defFound; n++)
+	  CHECK(GetContainerDefs (&containerEnum));
+	  status = containerEnum->NextOne (&containerDef);
+	  defFound = kAAFFalse;
+	  while(status == AAFRESULT_SUCCESS && !defFound)
 		{
-			CHECK(GetNthContainerDef (n, &container));
-			CHECK(container->GetAUID (&testAUID));
-			if(EqualAUID(&defID, &testAUID))
+		  CHECK(containerDef->GetAUID (&testAUID));
+		  if(EqualAUID(&defID, &testAUID))
 			{
-				defFound = kAAFTrue;
-				*result = container;
-				container->AcquireReference();
-				break;
+			  defFound = kAAFTrue;
+			  *result = containerDef;
+			  containerDef->AcquireReference();
+			  break;
 			}
-			container->ReleaseReference();
-			container = NULL;
+		  containerDef->ReleaseReference();
+		  containerDef = NULL;
+		  status = containerEnum->NextOne (&containerDef);
 		}
-		if(container != NULL)
+	  if(containerDef != NULL)
 		{
-			container->ReleaseReference();
-			container = NULL;
+		  containerDef->ReleaseReference();
+		  containerDef = NULL;
 		}
-		if(!defFound)
-			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	  containerEnum->ReleaseReference();
+	  containerEnum = NULL;
+	  if(!defFound)
+		{
+		  // no recognized class guid in dictionary
+		  RAISE(AAFRESULT_NO_MORE_OBJECTS);
+		}
 	}
-	XEXCEPT
+  XEXCEPT
 	{
-		if(container != NULL)
-		  {
-			container->ReleaseReference();
-			container = 0;
-		  }
+	  if(containerEnum != NULL)
+		{
+		  containerEnum->ReleaseReference();
+		  containerEnum = 0;
+		}
+	  if(containerDef != NULL)
+		{
+		  containerDef->ReleaseReference();
+		  containerDef = 0;
+		}
 	}
-	XEND
+  XEND
 	
 	return(AAFRESULT_SUCCESS);
 }
@@ -1679,29 +1696,9 @@ AAFRESULT
   if(pNumContainerDefs == NULL)
     return AAFRESULT_NULL_PARAM;
   
-  _containerDefinitions.getSize(siz);
+  siz = _containerDefinitions.count();
   
   *pNumContainerDefs = siz;
-  return AAFRESULT_SUCCESS;
-}
-
-AAFRESULT
-    ImplAAFDictionary::GetNthContainerDef (aafInt32 index, ImplAAFContainerDef **ppPluggableDefs)
-{
-  if (NULL == ppPluggableDefs)
-    return AAFRESULT_NULL_PARAM;
-
-  ImplAAFContainerDef *obj = NULL;
-  _containerDefinitions.getValueAt(obj, index);
-  *ppPluggableDefs = obj;
-	
-  // trr - We are returning a copy of pointer stored in _mobs so we need
-  // to bump its reference count.
-  if (obj)
-    obj->AcquireReference();
-  else
-    return AAFRESULT_NO_MORE_OBJECTS;
-
   return AAFRESULT_SUCCESS;
 }
 
@@ -1717,7 +1714,11 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(theEnum->SetEnumStrongProperty(this, &_containerDefinitions));
+		OMStrongReferenceSetIterator<ImplAAFContainerDef>* iter = 
+			new OMStrongReferenceSetIterator<ImplAAFContainerDef>(_containerDefinitions);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
 		*ppEnum = theEnum;
 	}
 	XEXCEPT
