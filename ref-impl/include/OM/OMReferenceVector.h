@@ -31,6 +31,7 @@
 
 #include "OMVector.h"
 #include "OMContainerElement.h"
+#include "OMObjectVector.h"
 
 template <typename ReferencedObject>
 class OMReferenceVectorIterator;
@@ -43,9 +44,10 @@ class OMVectorIterator;
   //        Objects are accessible by index. The order of objects is
   //        determined externally. Duplicate objects are allowed.
   //   @tcarg class | ReferencedObject | The type of the referenced object.
+  //   @base public | <c OMObjectVector>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
-class OMReferenceVector {
+class OMReferenceVector : public OMObjectVector {
 public:
   // @access Public members.
 
@@ -140,6 +142,51 @@ public:
     //          can contain at least <p capacity> <p ReferencedObject>s
     //          without having to be resized.
   void grow(const size_t capacity);
+
+    // @cmember Insert <p object> into this <c OMReferenceVector>.
+  virtual void insertObject(const OMObject* object);
+
+    // @cmember Does this <c OMReferenceVector> contain <p object> ?
+  virtual bool containsObject(const OMObject* object) const;
+
+    // @cmember Remove <p object> from this <c OMReferenceVector>.
+  virtual void removeObject(const OMObject* object);
+
+    // @cmember Remove all objects from this <c OMReferenceVector>.
+  virtual void removeAllObjects(void);
+
+    // @cmember Create an <c OMReferenceContainerIterator> over this
+    //          <c OMReferenceVector>.
+  virtual OMReferenceContainerIterator* createIterator(void) const;
+
+    // @cmember Set the value of this <c OMReferenceVector>
+    //          at position <p index> to <p object>.
+  virtual OMObject* setObjectAt(const OMObject* object,
+                                const size_t index);
+
+    // @cmember The value of this <c OMReferenceVector>
+    //          at position <p index>.
+  virtual OMObject* getObjectAt(const size_t index) const;
+
+    // @cmember Append the given <p OMObject> <p object> to
+    //          this <c OMReferenceVector>.
+  virtual void appendObject(const OMObject* object);
+
+    // @cmember Prepend the given <p OMObject> <p object> to
+    //          this <c OMReferenceVector>.
+  virtual void prependObject(const OMObject* object);
+
+    // @cmember Remove the object from this
+    //          <c OMReferenceVector> at position <p index>.
+    //          Existing objects in this <c OMReferenceVector>
+    //          at <p index> + 1 and higher are shifted down one index
+    //          position.
+  virtual OMObject* removeObjectAt(const size_t index);
+
+    // @cmember Insert <p object> into this <c OMReferenceVector>
+    //          at position <p index>. Existing objects at <p index> and
+    //          higher are shifted up one index position.
+  virtual void insertObjectAt(const OMObject* object, const size_t index);
 
 private:
 

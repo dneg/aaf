@@ -31,6 +31,7 @@
 
 #include "OMSet.h"
 #include "OMContainerElement.h"
+#include "OMObjectSet.h"
 
 template <typename UniqueIdentification, typename ReferencedObject>
 class OMReferenceSetIterator;
@@ -45,9 +46,10 @@ class OMSetElement;
   //   @tcarg class | ReferencedObject | The type of the referenced objects.
   //   @tcarg class | UniqueIdentification | The type of the unique key
   //          used to identify the referenced objects.
+  //   @base public | <c OMReferenceContainer>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename UniqueIdentification, typename ReferencedObject>
-class OMReferenceSet {
+class OMReferenceSet : public OMObjectSet {
 public:
   // @access Public members.
 
@@ -111,6 +113,36 @@ public:
                     ReferencedObject*& object) const;
 
   bool isValidIdentification(UniqueIdentification& id) const;
+
+    // @cmember Insert <p object> into this <c OMReferenceSet>.
+  virtual void insertObject(const OMObject* object);
+
+    // @cmember Does this <c OMReferenceSet> contain <p object> ?
+  virtual bool containsObject(const OMObject* object) const;
+
+    // @cmember Remove <p object> from this <c OMReferenceSet>.
+  virtual void removeObject(const OMObject* object);
+
+    // @cmember Remove all objects from this <c OMReferenceSet>.
+  virtual void removeAllObjects(void);
+
+    // @cmember Create an <c OMReferenceContainerIterator> over this
+    //          <c OMReferenceSet>.
+  virtual OMReferenceContainerIterator* createIterator(void) const;
+
+    // @cmember Remove the <c OMObject> identified by <p identification>
+    //          from this <c OMReferenceSet>.
+  virtual OMObject* remove(void* identification);
+
+    // @cmember Does this <c OMReferenceSet> contain an
+    //          <c OMObject> identified by <p identification> ?
+  virtual bool contains(void* identification) const;
+
+    // @cmember Find the <c OMObject> in this <c OMReferenceSet>
+    //          identified by <p identification>.  If the object is found
+    //          it is returned in <p object> and the result is < e bool.true>.
+    //          If the object is not found the result is <e bool.false>.
+  virtual bool findObject(void* identification, OMObject*& object) const;
 
 private:
 
