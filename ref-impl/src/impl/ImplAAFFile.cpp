@@ -90,11 +90,8 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 	try
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openRead(pFileName);
+		_file = OMFile::openRead(pFileName, _classFactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
-
-		// Register the base classes with the file.
-		_classFactory->RegisterPredefinedClasses(_file);
 
 		// Restore the header.
 		OMStorable* head = _file->restore();
@@ -168,11 +165,8 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 	try 
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openModify(pFileName);
+		_file = OMFile::openModify(pFileName, _classFactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
-
-		// Register the base classes with the file.
-		_classFactory->RegisterPredefinedClasses(_file);
 
 		// Restore the header.
 		OMStorable* head = _file->restore();
@@ -260,11 +254,8 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		checkResult(_head->AddIdentificationObject(&_ident));
 		  
 		// Attempt to create the file.
-		_file = OMFile::createModify(pFileName, _head);
+		_file = OMFile::createModify(pFileName, _classFactory, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
-
-		// Register the base classes with the file.
-		_classFactory->RegisterPredefinedClasses(_file);
 
 		_open = AAFTrue;
 		_openType = kOmCreate;
