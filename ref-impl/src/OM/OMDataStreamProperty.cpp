@@ -531,6 +531,7 @@ void OMDataStreamProperty::setStreamAccess(OMDataStreamAccess* streamAccess)
   TRACE("OMDataStreamProperty::setStreamAccess");
   PRECONDITION("No existing stream access", !hasStreamAccess());
   _streamAccess = streamAccess;
+  setPresent();
   POSTCONDITION("Has stream access", hasStreamAccess());
 }
 
