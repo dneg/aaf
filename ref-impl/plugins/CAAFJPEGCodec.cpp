@@ -2589,15 +2589,15 @@ HRESULT STDMETHODCALLTYPE
 				param.operand.expUInt32 = _horizontalSubsampling;
 				checkResult(fmt->AddFormatSpecifier (kAAFCDCIHorizSubsampling, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
 			}
-			else if (EqualAUID(&kAAFCDCIClientFillStart, &param.opcode))
+			else if (EqualAUID(&kAAFFieldStartOffset, &param.opcode))
 			{	// Write out the current pad bytes per row.
 				param.operand.expUInt32 = 0;
-				checkResult(fmt->AddFormatSpecifier (kAAFCDCIClientFillStart, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
+				checkResult(fmt->AddFormatSpecifier (kAAFFieldStartOffset, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
 			}
-			else if (EqualAUID(&kAAFCDCIClientFillEnd, &param.opcode))
+			else if (EqualAUID(&kAAFFieldEndOffset, &param.opcode))
 			{	// Write out the current pad bytes per row.
 				param.operand.expUInt32 = 0;
-				checkResult(fmt->AddFormatSpecifier (kAAFCDCIClientFillEnd, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
+				checkResult(fmt->AddFormatSpecifier (kAAFFieldEndOffset, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
 			}
 
 			else if (EqualAUID(&kAAFCDCIPadBits, &param.opcode))
@@ -2741,10 +2741,10 @@ HRESULT STDMETHODCALLTYPE
 		checkResult(fmt->AddFormatSpecifier (kAAFAlphaTransparency, sizeof(param.operand.expAlphaTransparency), (aafDataBuffer_t)&param.operand.expAlphaTransparency));
 
 		param.operand.expUInt32 = 0;
-		checkResult(fmt->AddFormatSpecifier (kAAFCDCIClientFillStart, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
+		checkResult(fmt->AddFormatSpecifier (kAAFFieldStartOffset, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
 
 		param.operand.expUInt32 = 0;
-		checkResult(fmt->AddFormatSpecifier (kAAFCDCIClientFillEnd, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
+		checkResult(fmt->AddFormatSpecifier (kAAFFieldEndOffset, sizeof(param.operand.expUInt32), (aafDataBuffer_t)&param.operand.expUInt32));
 
 		param.operand.expFieldDominance = _pixelFormat;
 		checkResult(fmt->AddFormatSpecifier (kAAFFieldDominance, sizeof(param.operand.expFieldDominance), (aafDataBuffer_t)&param.operand.expFieldDominance));
