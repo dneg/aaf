@@ -61,12 +61,13 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
 
   // @mfunc Temporary pseudo-constructor for clients which provide
   //         a type definition.
-  //   @parm The property id.
-  //   @parm The name of this <c OMProperty>.
-  //   @parm The type of this <c OMProperty>.
-  //   @parm True if this is an optional property, false otherwise.
-void OMProperty::initialize(const OMPropertyId propertyId,
-                            const char* name,
+  //   @parm const OMPropertyId | propertyId | The property id.
+  //   @parm const char* | name | The name of this <c OMProperty>.
+  //   @parm OMType* | type | The type of this <c OMProperty>.
+  //   @parm const bool | isOptional | True if this is an optional property,
+  //         false otherwise.
+void OMProperty::initialize(const OMPropertyId ANAME(propertyId),
+                            const char* ANAME(name),
                             OMType* type,
                             const bool isOptional)
 {
