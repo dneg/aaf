@@ -132,6 +132,11 @@ static void printError(const char* prefix, const char* type);
 
 static void printName(const wchar_t* name);
 
+#if defined(OM_ENABLE_DEBUG)
+size_t OMStoredObject::_openStorages = 0;
+size_t OMStoredObject::_openStreams = 0;
+#endif
+
   // @mfunc Constructor.
   //   @parm The IStorage for the persistent representation of
   //         this <c OMStoredObject>.
@@ -398,6 +403,9 @@ OMStoredObject* OMStoredObject::openFile(const wchar_t* fileName,
     0,
     &storage);
   checkFile(result, fileName);
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
 
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
   ASSERT("Valid heap pointer", newStoredObject != 0);
@@ -422,6 +430,9 @@ OMStoredObject* OMStoredObject::createFile(const wchar_t* fileName)
     0,
     &storage);
   checkFile(result, fileName);
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
 
   OMStoredObject* newStoredObject = new OMStoredObject(storage);
   ASSERT("Valid heap pointer", newStoredObject != 0);
@@ -1359,6 +1370,9 @@ IStream* OMStoredObject::createStream(IStorage* storage,
     0,
     &stream);
   checkStream(resultCode, streamName);
+#if defined(OM_ENABLE_DEBUG)
+  _openStreams = _openStreams + 1;
+#endif
 
   return stream;
 }
@@ -1388,6 +1402,9 @@ IStream* OMStoredObject::openStream(IStorage* storage,
     0,
     &stream);
   checkStream(resultCode, streamName);
+#if defined(OM_ENABLE_DEBUG)
+  _openStreams = _openStreams + 1;
+#endif
 
   return stream;
   
@@ -1407,6 +1424,9 @@ void OMStoredObject::closeStream(IStream*& stream)
   stream->Release();
 #endif
   stream = 0;
+#if defined(OM_ENABLE_DEBUG)
+  _openStreams = _openStreams - 1;
+#endif
 }
 
 OMByteOrder OMStoredObject::byteOrder(void) const
@@ -1637,6 +1657,9 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
     0,
     &newStorage);
   checkStorage(resultCode, storageName);
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
 
   return newStorage;
 }
@@ -1670,6 +1693,9 @@ IStorage* OMStoredObject::openStorage(IStorage* storage,
     0,
     &newStorage);
   checkStorage(resultCode, storageName);
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages + 1;
+#endif
 
   return newStorage;
 }
@@ -1686,6 +1712,9 @@ void OMStoredObject::closeStorage(IStorage*& storage)
   storage->Release();
 #endif
   storage = 0;
+#if defined(OM_ENABLE_DEBUG)
+  _openStorages = _openStorages - 1;
+#endif
 }
 
   // @mfunc Write <p size> bytes from the buffer at address <p data>
