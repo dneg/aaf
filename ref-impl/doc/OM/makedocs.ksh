@@ -12,16 +12,19 @@ ADFLAGS="OMEXTERNAL | OMINTERNAL"
 # SRC="OMPropertySet.h OMPropertySet.cpp OMProperty.h OMProperty.cpp OMStoredObject.h OMStoredObject.cpp"
 #SRC="OMPropertySet.h OMPropertySet.cpp OMProperty.h OMProperty.cpp OMStoredObject.h OMStoredObject.cpp OMPropertyT.h OMDataStreamProperty.cpp OMDataStreamProperty.h OMStorable.h OMStorable.cpp"
 #SRC="../src/OMPropertySet.h ../src/OMPropertySet.cpp ../src/OMProperty.h ../src/OMProperty.cpp ../src/OMStoredObject.h ../src/OMStoredObject.cpp ../src/OMPropertyT.h ../src/OMDataStreamProperty.cpp ../src/OMDataStreamProperty.h ../src/OMStorable.h ../src/OMStorable.cpp"
-SRC="../src/*.cpp ../src/*.h"
+#SRC="../src/*.cpp ../src/*.h"
+SRC="src/*.cpp src/*.h"
 #
-print SRC="$SRC"
+# print SRC="$SRC"
 #
-OUT=OM
+#OUT=OM
+OUT=docs/OM
 #
 PRODS="${OUT}.htm ${OUT}.hlp ${OUT}.doc"
 #
 HFMT="c:/program files/autoduck/html.fmt"
-CONT="OM.d"
+#CONT="OM.d"
+CONT="docs/OM.d"
 #
 # Windows help file output
 #
