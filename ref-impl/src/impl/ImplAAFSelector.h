@@ -82,6 +82,12 @@ public:
         // @parm [in] Segment to append to the Alternate list of segments
         (ImplAAFSegment * pSegment);
 
+  //****************
+  // RemoveAlternateSegment()
+  //
+	virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveAlternateSegment
+		(ImplAAFSegment* pSegment);
 
   //****************
   // GetNumAlternateSegments()
