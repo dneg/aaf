@@ -129,6 +129,11 @@ public:
             OMPropertyTag tag,
             OMPropertyId keyPropertyId);
 
+  void saveStream(OMPropertyId pid,
+                  OMStoredForm storedForm,
+                  const wchar_t* name,
+                  OMByteOrder byteOrder);
+
     // @cmember Restore the vector named <p vectorName> into this
     //          <c OMStoredObject>.
   void restore(OMStoredVectorIndex*& vector, const wchar_t* vectorName);
@@ -153,6 +158,12 @@ public:
                size_t &count,
                OMPropertyTag& tag,
                OMPropertyId& keyPropertyId);
+
+  void restoreStream(OMPropertyId pid,
+                     OMStoredForm storedForm,
+                     size_t size,
+                     wchar_t** name,
+                     OMByteOrder* byteOrder);
 
     // @cmember Write a property value to this <c OMStoredObject>. The
     //          property value to be written occupies <p size> bytes at
