@@ -63,8 +63,8 @@ bool extensionRead (const aafCharacter * filename)
   IAAFTypeDef *ptd=NULL;
   IAAFClassDef *pcd=NULL;
 
-  cout << "Verifying role enum type has been registered." << endl;
-  check (pDict->LookupType (kTypeID_eRole, &ptd));
+  cout << "Verifying position enum type has been registered." << endl;
+  check (pDict->LookupType (kTypeID_ePosition, &ptd));
   ptd->Release();
   ptd=NULL;
 
@@ -125,7 +125,80 @@ bool extensionRead (const aafCharacter * filename)
   if (foundAdmin) 
   {
 	  cout << "Printing contents of Admin Mob." << endl;
-	  PrintPersonnelResources (pDict, pMob);
+	  aafUInt32 numPersonnel;
+	  AdminMobGetNumPersonnel(pDict, pMob, &numPersonnel);
+      cout << "There are " << numPersonnel
+	   << " personnel record objects." << endl;
+
+      // Print each element in the array.
+      aafUInt32 i;
+      for (i = 0; i < numPersonnel; i++)
+	  {
+		  IAAFObject *personnelResource;
+		  AdminMobGetNthPersonnel(pDict, pMob, i,
+							   &personnelResource);
+		  aafUInt32 bufferLen,numChars;
+		  PersonnelResourceGetGivenNameBufLen (personnelResource, &bufferLen);
+		  numChars = bufferLen/sizeof(aafCharacter);
+
+
+		  aafCharacter *givenName = new aafCharacter [numChars+1];
+		  PersonnelResourceGetGivenName (personnelResource,
+										  givenName,
+										  bufferLen+2);
+          cout << "Given Name:     " << givenName << endl;
+		  delete[] givenName;
+
+		  PersonnelResourceGetFamilyNameBufLen (personnelResource, &bufferLen);
+		  numChars = bufferLen/sizeof(aafCharacter);
+
+
+		  aafCharacter *familyName = new aafCharacter [numChars];
+		  PersonnelResourceGetFamilyName (personnelResource,
+										  familyName,
+										  bufferLen);
+          cout << "Family Name:    " << familyName << endl;
+		  delete[] familyName;
+
+		  ePosition position;
+		  PersonnelResourceGetPosition (personnelResource,
+							 &position);
+		  cout << "Position:       ";
+		  PrintPosition (pDict, position);
+		  cout << endl;
+
+		  HRESULT retStatus;
+		  contractID_t cid;
+		  retStatus = PersonnelResourceGetContractID (personnelResource,
+								   &cid);
+		  if (retStatus == AAFRESULT_PROP_NOT_PRESENT) 
+		  {
+			  cout << "No ContractID defined" << endl;
+		  } else if (SUCCEEDED(retStatus))
+		  {
+			  cout << "ContractID:     " << dec << cid << endl;
+		  } else check (retStatus);
+
+		  retStatus = PersonnelResourceGetActorNameBufLen (personnelResource,
+										   &bufferLen);
+		  if (retStatus == AAFRESULT_PROP_NOT_PRESENT) 
+		  {
+			  cout << "No ActorRole defined" << endl;
+		  } else if (SUCCEEDED(retStatus))
+		  {
+			numChars = bufferLen/sizeof(aafCharacter);
+			aafCharacter *actorRole = new aafCharacter [numChars];
+		    check(PersonnelResourceGetActorName (personnelResource,
+										  actorRole,
+										  bufferLen));
+            cout << "ActorRole:      " << actorRole << endl;
+		    delete[] actorRole;
+		  }
+		  cout << endl;
+		  personnelResource->Release();
+		  personnelResource=NULL;
+	  }
+
 	  pMob->Release();
 	  pMob=NULL;
   } else
