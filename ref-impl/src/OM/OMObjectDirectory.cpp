@@ -29,6 +29,7 @@
 #include "OMObjectDirectory.h"
 #include "OMAssertions.h"
 #include "OMPortability.h"
+#include "OMUtilities.h"
 
 #include <string.h>
 #include <iostream.h>
@@ -77,9 +78,7 @@ void OMObjectDirectory::insert(const char* name, const OMStorable* p)
   TRACE("OMObjectDirectory::insert");
 
   if (_current < _capacity) {
-    char* n = new char[strlen(name) + 1];
-    ASSERT("Valid heap pointer", n != 0);
-    strcpy(n , name);
+    char* n = saveString(name);
     _table[_current]._object = const_cast<OMStorable *>(p);
     _table[_current]._name = n;
     _current++;
