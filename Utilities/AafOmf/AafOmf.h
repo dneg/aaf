@@ -113,6 +113,7 @@ public:
 	HRESULT ConvertOMFSourceClip( OMF2::omfObject_t sourceclip, IAAFSourceClip* pSourceClip);
 	HRESULT ConvertOMFComponentProperties(OMF2::omfObject_t sequence, IAAFComponent* pComponent);
 	HRESULT ConvertOMFTransition(OMF2::omfObject_t transition, IAAFTransition* pTransition);
+	HRESULT ConvertOMFSelector(OMF2::omfObject_t selector, IAAFSelector* pSelector);
 
 	char*					pProgramName;
 
