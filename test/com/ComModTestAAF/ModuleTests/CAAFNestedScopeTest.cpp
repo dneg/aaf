@@ -139,6 +139,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFMob*			pReferencedMob = NULL;
 	IAAFSourceClip*		pSourceClip = NULL;
 	IAAFFiller*			pFiller = NULL;
+	IAAFComponent*		pComponent = NULL;
 	IAAFSegment*		pSegment = NULL;
 	IAAFNestedScope*		pNestedScope = NULL;
 	IAAFCompositionMob*	pCompMob = NULL;
@@ -192,6 +193,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
  		checkResult(defs.cdSourceClip()->
 					CreateInstance(IID_IAAFSourceClip, 
 								   (IUnknown **)&pSourceClip));		
+		 checkResult(pSourceClip->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
 
 		// Set the properties for the SourceClip
 		checkResult(pSourceClip->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
@@ -211,6 +216,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	    checkResult(defs.cdNestedScope()->
 					CreateInstance(IID_IAAFNestedScope, 
 								   (IUnknown **)&pNestedScope));
+		 checkResult(pNestedScope->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 checkResult(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
 
 		// Get a segment interface from the source clip
 		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
@@ -273,6 +282,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (pSegment)
 		pSegment->Release();
+
+	if (pComponent)
+		pComponent->Release();
 
 	if (pNestedScope)
 		pNestedScope->Release();
