@@ -216,9 +216,9 @@ size_t ImplAAFTypeDefCharacter::NativeSize (void) const
 }
 
 
-OMProperty * ImplAAFTypeDefCharacter::pvtCreateOMPropertyMBS
+OMProperty * ImplAAFTypeDefCharacter::pvtCreateOMProperty
   (OMPropertyId pid,
-   const char * name) const
+   const wchar_t * name) const
 {
   assert (name);
 

@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*              Copyright (c) 1998-2000 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -29,8 +29,8 @@
 #include "OMRootStorable.h"
 
 OMRootStorable::OMRootStorable(void)
-: _clientRoot(0xFFFF, "Header"),
-  _dictionary(0xFFFE, "MetaDictionary")
+: _clientRoot(0xFFFF, L"Header"),
+  _dictionary(0xFFFE, L"MetaDictionary")
 {
   _persistentProperties.put(_clientRoot.address());
   _persistentProperties.put(_dictionary.address());
@@ -41,8 +41,8 @@ OMRootStorable::OMRootStorable(void)
 
 OMRootStorable::OMRootStorable(OMStorable* clientRoot,
                                OMDictionary* dictionary)
-: _clientRoot(0xFFFF, "Header"),
-  _dictionary(0xFFFE, "MetaDictionary")
+: _clientRoot(0xFFFF, L"Header"),
+  _dictionary(0xFFFE, L"MetaDictionary")
 {
   _persistentProperties.put(_clientRoot.address());
   _persistentProperties.put(_dictionary.address());
