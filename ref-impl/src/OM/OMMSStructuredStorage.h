@@ -33,14 +33,13 @@
 //         of Microsoft Structured Storage.
 //   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
 
-// Figure out which Microsoft supplied Structured Storage implementation
-// to use. Here there are three different implementations to consider.
+// Use the standard implementation on MS Windows platforms (ole32.dll).
 //
-// 1) The standard implementation on Windows platforms
-//    for which OM_USE_WINDOWS_SS is defined
-// 2) The reference implementation
-//    for which OM_USE_REFERENCE_SS is defined
-//
+// The Microsoft reference implementation is broken and will not be
+// fixed, so no Microsoft implementation is available for other platforms.
+// However, the definitions in the reference implementation are still
+// needed by the OM.
+
 #if defined(OM_OS_WINDOWS)
 #define OM_USE_WINDOWS_SS
 #elif defined(OM_OS_UNIX)
