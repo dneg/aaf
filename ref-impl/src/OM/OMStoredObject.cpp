@@ -49,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMUInt32 currentVersion = 19;
+const OMUInt32 currentVersion = 20;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +  // Byte order flag
                                sizeof(OMUInt32) +     // Version number
@@ -822,7 +822,15 @@ void OMStoredObject::save(const OMStoredSetIndex* set,
   OMUInt32 entries = set->entries();
   writeToStream(setIndexStream, &entries, sizeof(entries));
 
+  // Write the key pid.
+  //
+  OMUInt32 pid = set->keyPropertyId();
+  writeToStream(setIndexStream, &pid, sizeof(pid));
+
+  // Write the key size.
+  //
   OMUInt32 keySize = set->keySize();
+  writeToStream(setIndexStream, &keySize, sizeof(keySize));
 
   // For each element write the element name, reference count and key.
   //
@@ -898,10 +906,19 @@ void OMStoredObject::save(OMPropertyId propertyId,
 {
   TRACE("OMStoredObject::save");
 
-  const size_t size = sizeof(id) + sizeof(tag);
+  // tag, key pid, key size, key
+  const size_t size = sizeof(tag) +
+                      sizeof(OMPropertyId) + sizeof(OMUInt32) + sizeof(id);
   OMByte buffer[size];
-  memcpy(buffer, &id, sizeof(id));
-  memcpy(buffer + sizeof(id), &tag, sizeof(tag));
+  OMByte* p = &buffer[0];
+  memcpy(p, &tag, sizeof(tag));
+  p += sizeof(tag);
+  memcpy(p , &keyPropertyId, sizeof(keyPropertyId));
+  p += sizeof(keyPropertyId);
+  OMUInt32 keySize = sizeof(id);
+  memcpy(p, &keySize, sizeof(keySize));
+  p += sizeof(keySize);
+  memcpy(p, &id, sizeof(id));
 
   write(propertyId, type, (void *)buffer, size); 
 }
@@ -949,6 +966,15 @@ void OMStoredObject::save(OMPropertyId propertyId,
   // Write the tag.
   //
   writeToStream(indexStream, &tag, sizeof(tag));
+
+  // Write the key pid.
+  //
+  writeToStream(indexStream, &keyPropertyId, sizeof(keyPropertyId));
+
+  // Write key size.
+  //
+  OMUInt32 keySize = sizeof(OMUniqueObjectIdentification);
+  writeToStream(indexStream, &keySize, sizeof(keySize));
 
   if (count > 0) {
     // For each element write the element unique identifier
@@ -1047,8 +1073,15 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   OMUInt32 entries;
   readUInt32FromStream(setIndexStream, entries, _reorderBytes);
 
-  OMUInt32 keyPid = 0;
-  OMUInt32 keySize = sizeof(OMUniqueObjectIdentification);
+  // Read the key pid.
+  //
+  OMUInt32 keyPid;
+  readUInt32FromStream(setIndexStream, keyPid, _reorderBytes);
+
+  // Read the key size.
+  //
+  OMUInt32 keySize;
+  readUInt32FromStream(setIndexStream, keySize, _reorderBytes);
 
   // Create an index.
   //
@@ -1066,11 +1099,19 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
     readUInt32FromStream(setIndexStream, name, _reorderBytes);
     OMUInt32 count;
     readUInt32FromStream(setIndexStream, count, _reorderBytes);
-    OMUniqueObjectIdentification key;
-    readUniqueObjectIdentificationFromStream(setIndexStream,
-                                             key,
-                                             _reorderBytes);
-    setIndex->insert(i, name, count, &key);
+    if (keySize == 16) {
+      OMUniqueObjectIdentification key;
+      readUniqueObjectIdentificationFromStream(setIndexStream,
+                                               key,
+                                               _reorderBytes);
+      setIndex->insert(i, name, count, &key);
+    } else if (keySize == 32) {
+      OMUniqueMaterialIdentification key;
+      readUniqueMaterialIdentificationFromStream(setIndexStream,
+                                                 key,
+                                                 _reorderBytes);
+      setIndex->insert(i, name, count, &key);
+    }
   }
 
   // Close the stream.
@@ -1175,17 +1216,27 @@ void OMStoredObject::restore(OMPropertyId propertyId,
 {
   TRACE("OMStoredObject::restore");
 
-  const size_t size = sizeof(id) + sizeof(tag);
+  // tag, key pid, key size, key
+  const size_t size = sizeof(tag) +
+                      sizeof(OMPropertyId) + sizeof(OMUInt32) + sizeof(id);
   OMByte buffer[size];
+  OMByte* p = &buffer[0];
 
   read(propertyId, type, buffer, size);
-  memcpy(&id, buffer, sizeof(id));
-  memcpy(&tag, buffer + sizeof(id), sizeof(tag));
-  keyPropertyId = 0 /* tjb */;
+  memcpy(&tag, p, sizeof(tag));
+  p += sizeof(tag);
+  memcpy(&keyPropertyId, p, sizeof(keyPropertyId));
+  p += sizeof(keyPropertyId);
+  OMUInt32 keySize;
+  memcpy(&keySize, p, sizeof(keySize));
+  p += sizeof(keySize);
+  memcpy(&id, p, sizeof(id));
 
   if (byteOrder() != hostByteOrder()) {
-	reorderUniqueObjectIdentification(id);
 	reorderUInt32(tag); // assumes sizeof(tag) == 4
+	reorderUInt32(keyPropertyId);
+	reorderUInt32(keySize);
+	reorderUniqueObjectIdentification(id);
   }
 }
 
@@ -1230,7 +1281,14 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   //
   readUInt32FromStream(indexStream, tag, _reorderBytes);
 
-  keyPropertyId = 0 /* tjb */;
+  // Read the key pid.
+  //
+  readUInt32FromStream(indexStream, keyPropertyId, _reorderBytes);
+
+  // Read the key size.
+  //
+  OMUInt32 keySize;
+  readUInt32FromStream(indexStream, keySize, _reorderBytes);
 
   // Create an index.
   //
