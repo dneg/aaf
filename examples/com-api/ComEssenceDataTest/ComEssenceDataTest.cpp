@@ -238,7 +238,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 									kSDKCompressionDisable));// Compress disabled
 
 	// open the Essence file to be included in this AAF file("Laser.wav")
-	pWavFile = fopen("Laser.wav", "r+b");
+	pWavFile = fopen("Laser.wav", "r");
 	if (pWavFile)
 	{
 		// read in the essence data
@@ -361,7 +361,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 											kSDKCompressionDisable));// Compress disabled
 
 				// Open and read the Wave file (for comparison)
-				pWavFile = fopen("Laser.wav", "r+b");
+				pWavFile = fopen("Laser.wav", "r");
 				if (pWavFile)
 				{
 					// read in the essence data
