@@ -859,7 +859,7 @@ HRESULT STDMETHODCALLTYPE
 				
 		hr = _descriptorHelper.GetSampledView(&_sampledHeight, &_sampledWidth, 
 			                                    &_sampledXOffset, &_sampledYOffset);
-		checkResult(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr);
+		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_PROP_NOT_PRESENT == hr)
 		{
 			_sampledWidth = _imageWidth;
@@ -870,7 +870,7 @@ HRESULT STDMETHODCALLTYPE
 
 		hr = _descriptorHelper.GetDisplayView(&_displayHeight, &_displayWidth, 
 			                                    &_displayXOffset, &_displayYOffset);
-		checkResult(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr);
+		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_PROP_NOT_PRESENT == hr)
 		{
 			_displayWidth = _imageWidth;
@@ -887,7 +887,7 @@ HRESULT STDMETHODCALLTYPE
 		if (kFullFrame != _frameLayout)
 		{
 			hr = _descriptorHelper.GetVideoLineMapSize(&_videoLineMapSize);
-			checkResult(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr);
+			checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 			if (AAFRESULT_PROP_NOT_PRESENT == hr || 0 == _videoLineMapSize)
 			{
 				_videoLineMap[0] = _videoLineMap[1] = 0;
@@ -917,22 +917,22 @@ HRESULT STDMETHODCALLTYPE
 
 
 		hr = _descriptorHelper.GetColorSiting(&_colorSiting);
-		checkResult(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr);
+		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_PROP_NOT_PRESENT == hr)
 			_colorSiting = kCoSiting;
 
 		hr = _descriptorHelper.GetBlackReferenceLevel(&_blackReferenceLevel);
-		checkResult(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr);
+		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_PROP_NOT_PRESENT == hr)
 			_blackReferenceLevel = 0;
 
 		hr = _descriptorHelper.GetWhiteReferenceLevel(&_whiteReferenceLevel);
-		checkResult(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr);
+		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_PROP_NOT_PRESENT == hr)
 			_whiteReferenceLevel = (1U << _componentWidth) - 1;
 
 		hr = _descriptorHelper.GetColorRange(&_colorRange);
-		checkResult(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr);
+		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
 		if (AAFRESULT_PROP_NOT_PRESENT == hr)
 			_colorRange = (1U << _componentWidth) - 2;
 
