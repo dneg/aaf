@@ -145,10 +145,44 @@ sub find_start_of_enum
 # starting line of an enum.
 sub find_end_of_enum 
 {
+  my $lastLine = '';
+  
+  # There are many substitution operations on this line.
+  $_ = $line;
+
   # Find the last line that defines the enum.
-  if ($line =~ /}/) {
+  if (/}/) {
+    $lastLine = $_;
+    s/}.*$//;     # remove the '}' and any trailing characters.
+                  # continue and see if there was any member on this line.
+  } 
+
+  # Filter out any unnecessary text.
+  s/{//;          # remove any '{'.
+  s/\,.*$//;      # remove any commas and trailing characters.
+  s/^\s*//;       # remove all leading whitespace.
+  s/^\n$//;       # remove any blank lines.
+  $line = $_;
+
+  if ($line ne '') { # skip any blank lines.
+    # At this point the line should be either:
+    # memberName or
+    # memberName = value
+    /^(\w+)\s*|$/ or die "Unexpected or malformed enum member.\n";
+    $enumMember = new EnumMemberStruct;
+    $enumMember->name($1);
+
+    # Save this enum member inside the current enum.
+    $enum->member($enum->num, $enumMember);
+    $enum->num($enum->num + 1);
+
+    # Grow the current expression string.
+    $enumString = join ('', $enumString, $line);
+  }
+
+  if ($lastLine ne '') {
     # Save the enum name if one exists.
-    if ($line =~ /}\s*(\w+)\s*;/) {
+    if ($lastLine =~ /}\s*(\w+)\s*;/) {
       if ($1 ne '') {
         $enum->name($1);
         printf "%s\n", $enum->name;
@@ -169,31 +203,6 @@ sub find_end_of_enum
 
     # Start over looking for the start of the enum.
     $processLine = \&find_start_of_enum;
-
-  } else {
-    # Filter out any unnecessary text.
-    $_ = $line;
-    s/{//;          # remove any '{'.
-    s/\,.*$//;      # remove any commas and trailing characters.
-    s/^\s*//;       # remove all leading whitespace.
-    s/^\n$//;       # remove any blank lines.
-    $line = $_;
-
-    if ($line ne '') { # skip any blank lines.
-      # At this point the line should be either:
-      # memberName or
-      # memberName = value
-      /^(\w+)\s*|$/ or die "Unexpected or malformed enum member.\n";
-      $enumMember = new EnumMemberStruct;
-      $enumMember->name($1);
-
-      # Save this enum member inside the current enum.
-      $enum->member($enum->num, $enumMember);
-      $enum->num($enum->num + 1);
-
-      # Grow the current expression string.
-      $enumString = join ('', $enumString, $line);
-    }
   }
 }
 
