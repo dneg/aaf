@@ -137,7 +137,7 @@ AAFRESULT STDMETHODCALLTYPE
 	check_hr ( pvd->GetType (&pPropType) );
 	assert (pPropType);
 	//Make sure the TD of the pv passed in, matches that of the ImplAAFTypeDefCharacter
-	if (pPropType != this)
+	if ((ImplAAFTypeDef *)pPropType != this) // call operator ImplAAFTypeDef *
 		return AAFRESULT_BAD_TYPE;
 	
 	//check to make sure that the size in the val data matches that of the native size
@@ -184,7 +184,7 @@ AAFRESULT STDMETHODCALLTYPE
 	check_hr ( pvd->GetType (&pPropType) );
 	assert (pPropType);
 	//Make sure the TD of the pv passed in, matches that of the ImplAAFTypeDefCharacter
-	if (pPropType != this)
+	if ((ImplAAFTypeDef *)pPropType != this) // call operator ImplAAFTypeDef *
 		return AAFRESULT_BAD_TYPE;
 	
 	//check to make sure that the size in the val data matches that of the native size
