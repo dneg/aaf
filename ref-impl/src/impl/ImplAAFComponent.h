@@ -47,6 +47,13 @@ class ImplAAFScopeStack;
 #include "ImplAAFObject.h"
 #endif
 
+#ifndef __ImplAAFKLVData_h__
+#include "ImplAAFKLVData.h"
+#endif
+
+#ifndef __ImplEnumAAFKLVData_h__
+#include "ImplEnumAAFKLVData.h"
+#endif
 
 typedef 
 enum _implCompType_t
@@ -97,6 +104,34 @@ public:
     GetDataDef
         (ImplAAFDataDef ** ppDataDef);  //@parm [retval][out] DataDef of this object
 
+  //****************
+  // AppendKLVData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendKLVData
+        (ImplAAFKLVData * pData);  //@parm [in,ref] Data
+
+  //****************
+  // RemoveKLVData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveKLVData
+        (ImplAAFKLVData * pData);
+
+  //****************
+  // CountKLVData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    CountKLVData
+        (aafUInt32 *  pNumComments);  //@parm [out,retval] Number  of KLVData
+
+
+  //****************
+  // GetKLVData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetKLVData
+        (ImplEnumAAFKLVData ** ppEnum);  //@parm [out,retval] KLVData
 
 public:
 	AAFRESULT SetNewProps(
@@ -123,6 +158,7 @@ public:
 private:
 	OMWeakReferenceProperty<ImplAAFDataDef>		_dataDef;
 	OMFixedSizeProperty<aafLength_t>	_length;
+    OMStrongReferenceVectorProperty<ImplAAFKLVData> _KLVData;
 };
 
 #endif // ! __ImplAAFComponent_h__
