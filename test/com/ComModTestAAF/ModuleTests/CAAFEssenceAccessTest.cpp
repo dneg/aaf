@@ -30,6 +30,13 @@
 #include <iostream>
 using namespace std;
 
+#include "AAFPlatform.h"
+
+#if !defined(COMPILER_MSC)
+#include <unistd.h>
+#else
+#include <direct.h>
+#endif
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
