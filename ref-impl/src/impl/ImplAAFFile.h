@@ -12,13 +12,8 @@
 *                                          *
 \******************************************/
 
-#ifndef __AAFTypes_h__
 #include "AAFTypes.h"
-#endif
-
-#ifndef __ImplAAFRoot_h__
-#include "AAFRoot.h"
-#endif
+#include "ImplAAFRoot.h"
 
 #include "Container.h"
 
