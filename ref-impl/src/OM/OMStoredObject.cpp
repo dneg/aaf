@@ -25,6 +25,7 @@
 #include "OMStoredObject.h"
 
 #include "OMUtilities.h"
+#include "OMDataStream.h"
 
   // @mfunc Destructor.
 OMStoredObject::~OMStoredObject(void)
@@ -36,6 +37,31 @@ wchar_t* OMStoredObject::streamName(const wchar_t* propertyName,
                                     OMPropertyId pid)
 {
   return referenceName(propertyName, pid);
+}
+
+OMUInt16 OMStoredObject::_seed = 0;
+
+wchar_t* OMStoredObject::temporaryFileName(const OMDataStream& stream)
+{
+  TRACE("OMStoredObject::temporaryFileName");
+
+  // TBS - tjb
+  // The name currently computed here is not unique enough.
+  // It may not always be possible to buffer streams on disk like this.
+  wchar_t* sName = streamName(stream.name(), stream.propertyId());
+  size_t length = lengthOfWideString(sName);
+  wchar_t* name = new wchar_t[length + 5 + 4 + 1];
+  ASSERT("Valid heap pointer", name != 0);
+  wchar_t sSeed[4];
+  _seed = _seed + 1;
+  toWideString(_seed, sSeed, 4);
+  copyWideString(name, L"0000-", 6);
+  size_t seedLength = lengthOfWideString(sSeed);
+  copyWideString(name + (4 - seedLength), sSeed, seedLength);
+  concatenateWideString(name, sName, length + 1);
+  concatenateWideString(name, L".oms", 4);
+  delete [] sName;
+  return name;
 }
 
 wchar_t* OMStoredObject::referenceName(const wchar_t* propertyName,
