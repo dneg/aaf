@@ -26,8 +26,8 @@ AAFPERSISTENTOBJECTS = \
 	AAFLocator \
 	AAFMacLocator \
 	AAFMasterMob \
-	AAFMediaDescriptor \
-	AAFMediaFileDescriptor \
+	AAFEssenceDescriptor \
+	AAFFileDescriptor \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup  \
 	AAFMediaTapeDescriptor \
