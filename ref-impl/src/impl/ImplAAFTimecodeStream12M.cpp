@@ -1,14 +1,3 @@
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-*                                          *
-\******************************************/
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -35,6 +24,9 @@
  * LIABILITY.
  *
  ************************************************************************/
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
 \***********************************************/
 
 // The byte stream is layed out as a sequence of bits numbered 0-79 with bit 0 being
