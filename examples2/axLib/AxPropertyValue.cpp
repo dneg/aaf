@@ -88,7 +88,7 @@ AxPropertyValue::AxPropertyValue( IAAFPropertyValueSP spIaafPropertyValue )
 
 AxPropertyValue::AxPropertyValue( const AxPropertyValue& other )
 :	_spIaafPropertyValue( other._spIaafPropertyValue ),
-	AxBaseObj( AxQueryInterface<IAAFPropertyValue, IUnknown>( _spIaafPropertyValue )) 
+	AxBaseObj( AxQueryInterface<IAAFPropertyValue, IUnknown>( other._spIaafPropertyValue )) 
 {}
 
 AxPropertyValue::~AxPropertyValue()
