@@ -53,6 +53,24 @@ ImplAAFDataDef::~ImplAAFDataDef ()
 
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDataDef::Initialize (
+      const aafUID_t & id,
+	  const aafWChar * pName,
+	  const aafWChar * pDesc)
+{
+	if (pName == NULL || pDesc == NULL)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+	  return pvtInitialize(id, pName, pDesc);
+	}
+	return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::IsPictureKind (
       aafBool *bIsPictureKind)
 {

@@ -343,8 +343,8 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdDataDef(),
-				  /* IID of def to pass to Init */ IID_IAAFDefObject,
-				  /* SP of def to use with Init */ IAAFDefObjectSP,
+				  /* IID of def to pass to Init */ IID_IAAFDataDef,
+				  /* SP of def to use with Init */ IAAFDataDefSP,
 				  /* Init() invocation */
 				  Initialize (kTestDataDefID, L"TestDataDef", L"Desc"),
 				  /* IID of type to QI */          IID_IAAFDefObject,
@@ -355,8 +355,8 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdOperationDef(),
-				  /* IID of def to pass to Init */ IID_IAAFDefObject,
-				  /* SP of def to use with Init */ IAAFDefObjectSP,
+				  /* IID of def to pass to Init */ IID_IAAFOperationDef,
+				  /* SP of def to use with Init */ IAAFOperationDefSP,
 				  /* Init() invocation */
 				  Initialize (kTestOperationDefID, L"TestOperationDef", L"Desc"),
 				  /* IID of type to QI */          IID_IAAFDefObject,
@@ -367,8 +367,8 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdParameterDef(),
-				  /* IID of def to pass to Init */ IID_IAAFDefObject,
-				  /* SP of def to use with Init */ IAAFDefObjectSP,
+				  /* IID of def to pass to Init */ IID_IAAFParameterDef,
+				  /* SP of def to use with Init */ IAAFParameterDefSP,
 				  /* Init() invocation */
 				  Initialize (kTestParameterDefID, L"TestParameterDef", L"Desc"),
 				  /* IID of type to QI */          IID_IAAFDefObject,
@@ -379,8 +379,8 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdCodecDef(),
-				  /* IID of def to pass to Init */ IID_IAAFDefObject,
-				  /* SP of def to use with Init */ IAAFDefObjectSP,
+				  /* IID of def to pass to Init */ IID_IAAFCodecDef,
+				  /* SP of def to use with Init */ IAAFCodecDefSP,
 				  /* Init() invocation */
 				  Initialize (kTestCodecDefID, L"TestCodecDef", L"Desc"),
 				  /* IID of type to QI */          IID_IAAFDefObject,
@@ -400,8 +400,8 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdContainerDef(),
-				  /* IID of def to pass to Init */ IID_IAAFDefObject,
-				  /* SP of def to use with Init */ IAAFDefObjectSP,
+				  /* IID of def to pass to Init */ IID_IAAFContainerDef,
+				  /* SP of def to use with Init */ IAAFContainerDefSP,
 				  /* Init() invocation */
 				  Initialize (kTestContainerDefID, L"TestContainerDef", L"Desc"),
 				  /* IID of type to QI */          IID_IAAFDefObject,
@@ -412,8 +412,8 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
   
   RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdInterpolationDefinition(),
-				  /* IID of def to pass to Init */ IID_IAAFDefObject,
-				  /* SP of def to use with Init */ IAAFDefObjectSP,
+				  /* IID of def to pass to Init */ IID_IAAFInterpolationDef,
+				  /* SP of def to use with Init */ IAAFInterpolationDefSP,
 				  /* Init() invocation */
 				  Initialize (kTestInterpolationDefID, L"TestInterpolationDef", L"Desc"),
 				  /* IID of type to QI */          IID_IAAFDefObject,
