@@ -31,6 +31,9 @@
 #include <iostream.h>
 
 #include <assert.h>
+#include <stdio.h>
+#include <stddef.h>
+#include <string.h>
 #include <ctype.h>
 #include <console.h> /* Mac command line window */
 #include <Processes.h>
