@@ -39,8 +39,6 @@
 #include <stdlib.h>
 #include <iostream.h>
 
-
-
 // OMF Includes
 namespace OMF2
 {
@@ -58,38 +56,15 @@ namespace OMF2
 #else
 #include "AAF.h"
 // TODO: This should not be here, I added them for now to get a good link.
-const CLSID CLSID_AAFComponent = { 0x38e6f8a0, 0x2a2c, 0x11d2, { 0x84, 0x11, 0x00, 0x60, 0x08, 0x32, 0xac, 0xb8 } };
-const CLSID CLSID_AAFCompositionMob = { 0x91920d64, 0x2a2e, 0x11D2, { 0xbf, 0xA3, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
 const CLSID CLSID_AAFFile = { 0x9346ACD2, 0x2713, 0x11d2, { 0x80, 0x35, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-const CLSID CLSID_AAFFiller = { 0x38e6f8a8, 0x2a2c, 0x11d2, { 0x84, 0x11, 0x00, 0x60, 0x08, 0x32, 0xac, 0xb8 } };
-const CLSID CLSID_AAFHeader = { 0xB1A21383, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_AAFIdentification = { 0xB1A2137F, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_AAFLocator = { 0xe58a8565, 0x2a3e, 0x11D2, { 0xbf, 0xA4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
-const CLSID CLSID_AAFMasterMob = { 0xb1a21373, 0x1a7d, 0x11d2, { 0xbf, 0x78, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
-const CLSID CLSID_AAFEssenceDescriptor = { 0x94659784, 0x2a3c, 0x11D2, { 0xbf, 0xA4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
-const CLSID CLSID_AAFFileDescriptor = { 0xe58a8562, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
-const CLSID CLSID_AAFTapeDescriptor = { 0xe58a856a, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
-const CLSID CLSID_AAFMob = { 0xB1A21375, 0x1A7D, 0x11d2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_AAFMobSlot = { 0xB1A21377, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_AAFNetworkLocator = { 0x2c1097b1, 0x69d6, 0x11d2, { 0x84, 0x1b, 0x00, 0x60, 0x08, 0x32, 0xac, 0xb8 } };
-const CLSID CLSID_AAFObject = { 0xB1A213AC, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_AAFSegment = { 0x7a2f0571, 0x1ba3, 0x11D2, { 0xbf, 0xaa, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
-const CLSID CLSID_AAFSequence = { 0x66e855f1, 0x2bc2, 0x11d2, { 0xbf, 0xaa, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
-const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
-const CLSID CLSID_AAFSourceClip = { 0x38e6f8a5, 0x2a2c, 0x11d2, { 0x84, 0x11, 0x00, 0x60, 0x08, 0x32, 0xac, 0xb8 } };
-const CLSID CLSID_AAFSourceMob = { 0xB1A2137D, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_AAFSourceReference = { 0x92B88034, 0x2B2B, 0x11d2, { 0xBF, 0x7E, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_AAFTimecode = { 0x92B88036, 0x2B2B, 0x11d2, { 0xBF, 0x7E, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_AAFTimelineMobSlot = { 0xB1A21379, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_EnumAAFComponents = { 0xB1A21395, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_EnumAAFIdentifications = { 0xB1A21385, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_EnumAAFLocators = { 0xB1A2139F, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_EnumAAFMobSlots = { 0xB1A21389, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-const CLSID CLSID_EnumAAFMobs = { 0xB1A21387, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 
 #endif
 
-#define SUCCESS (1)
+// Include the defintions for the AAF Stored Object identifiers.
+#define INIT_AUID
+#include "AAFStoredObjectIDs.h"
+
+
 #define FAILURE (2)
 
 // ============================================================================
@@ -127,47 +102,50 @@ public:
 
 public:
 	void Usage( void );
-	HRESULT GetUserInput(int argc, char* argv[], char* pInfile, char* pOutFile);
-	void SetOMFFileName(char* pFileName)
-	{
-		strcpy(sOMFFileName, pFileName);
-	}
-	void SetAAFFileName(char * pFileName)
-	{
-		convert(wcAAFFileName, sizeof(wcAAFFileName), pFileName);
-	}
+	HRESULT GetUserInput(int argc, char* argv[]);
+	HRESULT OpenInputFile( void );
+	HRESULT OpenOutputFile( void );
 	aafBool IsOMFFile(char* pFileName);
-	HRESULT OMFFileOpen( void );
+	HRESULT OMFFileOpen( char* pFileName );
 	HRESULT	TOCFileCreate( void ); 
 	void OMFFileClose( void );
-	HRESULT AAFFileOpen( void );
+	HRESULT AAFFileOpen( char* pFileName );
 	HRESULT AAFDefinitionFileOpen( void );
 	void AAFFileClose(void );
 	HRESULT OMFFileRead( void );
 	HRESULT ConvertOMFHeader( void );
-	HRESULT ConvertOMFMOBObject( OMF2::omfObject_t obj );
-	HRESULT ConvertOMFCompositionObject( OMF2::omfObject_t obj, IAAFCompositionMob* pCompMob );
-	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj, IAAFMasterMob* pMasterMob );
+	HRESULT ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj);
+	HRESULT ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj);
+	HRESULT ParseOMFMOBObject( OMF2::omfObject_t obj );
+	HRESULT ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob );
+	HRESULT ConvertOMFCompositionObject( OMF2::omfObject_t obj );
+	HRESULT ConvertOMFMasterMob( OMF2::omfObject_t obj );
+	HRESULT ConvertOMFSourceMob( OMF2::omfObject_t obj );
+	HRESULT ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob );
 
 	char*					pProgramName;
 
 private:
 	aafBool					bVerboseMode;
 	aafBool					bCreateTOCFile;
+	aafBool					bConvertAllObjects;
 	aafBool					bOMFFileOpen;
 	aafBool					bAAFFileOpen;
-	char					sOMFFileName[256];
+	aafBool					bLogFile;
+	aafBool					bDefFile;
+	char					sInFileName[256];
 	char					sTOCFileName[256];
 	char					sDefinitionFileName[256];
-	aafWChar				wcAAFFileName[256];
+	char					sOutFileName[256];
 	char					sLogFileName[256];
-	aafInt32				nMobIdPrefix;
 
 	// For Statistical summary
 	aafInt32				nNumOMFObjects;
 	aafInt32				nNumAAFObjects;
 	aafInt32				nNumOMFProperties;
 	aafInt32				nNumAAFProperties;
+	aafInt32				nNumUndefinedOMFObjects;
+	aafInt32				nNumUndefinedOMFProperties;
 
     OMF2::omfSessionHdl_t	OMFSession;
 	OMF2::omfHdl_t			OMFFileHdl;
@@ -175,12 +153,20 @@ private:
 
 	IAAFFile*				pFile;
 	IAAFHeader*				pHeader;
+	IAAFDictionary*			pDictionary;
 };
 
 // ============================================================================
-// Global Variables
+// Global Variables and functions
 // ============================================================================
 
+void Indent(int numSpaces)
+{
+	for (int i = 0; i < numSpaces;i++)
+	{
+		cout<<" ";
+	}
+}
 void reportAssertionFailure(char* name,
                             char* expressionString,
                             char* fileName,
@@ -284,16 +270,57 @@ void deleteFile(const wchar_t* fileName)
 	//.. ignore error which typically happens if the file doesn;t exist
 
 }
+// ============================================================================
+// Delete a file given its  name
+// ============================================================================
+void deleteFile(char* fileName)
+{
+
+	int result = remove(fileName);
+	//.. ignore error which typically happens if the file doesn;t exist
+
+}
+
+char* baseName(char* fullName)
+{
+	char* result;
+#if defined(WIN32)
+	const int delimiter = '\\';
+#elif defined(_MAC) || defined(macintosh)
+	const int delimiter = ':';
+#else
+	const in delimiter = '/';
+#endif
+	result = strrchr(fullName, delimiter);
+	if (result == 0)
+	{
+		result = fullName;
+	}
+	else if (strlen(result) == 0) 
+	{
+		result = fullName;
+	}
+	else 
+	{
+		result++;
+	}
+
+	return result;
+}
 
 // ============================================================================
 // Constructor
 // ============================================================================
-AafOmf::AafOmf() : pFile(NULL), pHeader(NULL), bOMFFileOpen(AAFFalse), bAAFFileOpen(AAFFalse),
-	nNumOMFObjects(0), nNumAAFObjects(0), nNumOMFProperties(0), nNumAAFProperties(0)
+AafOmf::AafOmf() : pFile(NULL), pHeader(NULL), pDictionary(NULL),
+	bOMFFileOpen(AAFFalse), bAAFFileOpen(AAFFalse),
+	bCreateTOCFile(AAFFalse), bConvertAllObjects(AAFFalse), bLogFile(AAFFalse), bDefFile(AAFFalse), 
+	nNumOMFObjects(0), nNumAAFObjects(0), nNumOMFProperties(0), nNumAAFProperties(0),
+	nNumUndefinedOMFObjects(0), nNumUndefinedOMFProperties(0)
 {
-	memset(sOMFFileName, 0, sizeof(sOMFFileName));
-	memset(wcAAFFileName, 0, sizeof(wcAAFFileName));
+	memset(sInFileName, 0, sizeof(sInFileName));
+	memset(sOutFileName, 0, sizeof(sOutFileName));
 	memset(sLogFileName, 0, sizeof(sLogFileName));
+	memset(sDefinitionFileName, 0, sizeof(sDefinitionFileName));
 
 }
 
@@ -323,18 +350,19 @@ AafOmf::~AafOmf()
 // ============================================================================
 void AafOmf::Usage( void )
 {
-	cout << "=================================================================================" << endl;
+	cout << "================================================================================" << endl;
 	cout << pProgramName<<" : OMFI to AAF file conversion Version 0.01.00"<< endl;
 	cout << "Usage: "<< endl;
-	cout << pProgramName<< " [-v] [-p logfile] <infile> [-d deffile] [-t tocfile] [outfile]"<< endl;
+	cout << pProgramName<< " [-v] [-s] [-p logfile] [-d deffile] [-t tocfile] <infile> [outfile]"<< endl;
 	cout << endl;
-	cout << "    -v         = Verbose - give progress report (optional)" << endl;
-	cout << "    -p logfile = Log file name(optional)" << endl;
-	cout << "    infile     = input file name (required)"<< endl;
-	cout << "    -d deffile = Definition file (optional)" << endl;
-	cout << "    -t tocfile = Dump OMFI Table of contents (optional)" << endl;
-	cout << "    outfile    = output file name (optional)" << endl;
-	cout << "=================================================================================" << endl;
+	cout << "-v         = Verbose - give progress report (optional)" << endl;
+	cout <<	"-s         = Straight conversion. Do NOT discard unnecessary objects (optional)"<<endl;
+	cout << "-p logfile = Log file name(optional)" << endl;
+	cout << "-d deffile = Definition file (optional)" << endl;
+	cout << "-t tocfile = Dump OMFI Table of contents (optional)" << endl;
+	cout << "infile     = input file name (required)"<< endl;
+	cout << "outfile    = output file name (optional)" << endl;
+	cout << "================================================================================" << endl;
 }
 
 // ============================================================================
@@ -343,61 +371,127 @@ void AafOmf::Usage( void )
 //		Parse program arguments and extract names of OMF and AAF files.
 //
 // ============================================================================
-HRESULT AafOmf::GetUserInput(int argc, char* argv[], char* pInFile, char* pOutFile)
+HRESULT AafOmf::GetUserInput(int argc, char* argv[])
 {
 	HRESULT			rc = AAFRESULT_SUCCESS;
 	aafInt32		nFileCount = 0;
 
-	pProgramName = argv[0];
-	
-	for (int i = 1; i < argc; i++)
+	if (argc > 1)
 	{
-		char*	pNextArgument = argv[i];
-		char	c = pNextArgument[0];
+		for (int i = 1; i < argc; i++)
+		{
+			char*	pNextArgument = argv[i];
+			char	c = pNextArgument[0];
+			char*	pFileName;
 
-		if ((c == '-') && (strlen(pNextArgument) >= 2))
-		{
-			char flag = pNextArgument[1];
-			switch( flag )
+			if ((c == '-') && (strlen(pNextArgument) >= 2))
 			{
-				case 'm':
-//					bIgnoreErrors = AAFTrue;
-					break;
-				case 'v':
-					bVerboseMode = AAFTrue;
-					break;
-				case 'd':
-//					bOverride = AAFTrue;
-					break;
-				case 't':
-//					bConvertAAFFile = AAFTrue;
-					break;
-				default:
-					rc = -1;
-					break;
+				char flag = pNextArgument[1];
+				switch( flag )
+				{
+					case 'v':
+						bVerboseMode = AAFTrue;
+						break;
+					case 's':
+						bConvertAllObjects = AAFTrue;
+						break;
+					case 'p':
+						if ((i + 1 < argc)&& (*argv[i+1] != '-'))
+						{
+							i++;	// Consume the value
+							pFileName = argv[i];
+							if (strlen(pFileName))
+							{
+								bLogFile = AAFTrue;
+								strcpy(sLogFileName, pFileName);
+							}
+						}
+						break;
+					case 'd':
+						if ((i + 1 < argc)&& (*argv[i+1] != '-'))
+						{
+							i++;	// Consume the value
+							pFileName = argv[i];
+							if (strlen(pFileName))
+							{
+								bDefFile = AAFTrue;
+								strcpy(sDefinitionFileName, pFileName);
+							}
+						}
+						break;
+					case 't':
+						if ((i + 1 < argc)&& (*argv[i+1] != '-'))
+						{
+							i++;	// Consume the value
+							pFileName = argv[i];
+							if (strlen(pFileName))
+							{
+								bCreateTOCFile = AAFTrue;
+								strcpy(sTOCFileName, pFileName);
+							}
+						}
+						break;
+					default:
+						rc = AAFRESULT_BAD_FLAGS;
+						break;
+				}
 			}
-		}
-		else
-		{
-			switch(nFileCount)
+			else
 			{
-				case 0:
-					strcpy(pInFile, argv[i]);
-					nFileCount++;
-					break;
-				case 1:
-					strcpy(pOutFile, argv[i]);
-					nFileCount++;
-					break;
-				case 2:
-				default:
-					strcpy(sLogFileName, argv[i]);
-					break;
+				nFileCount += 1;
+				if (nFileCount == 1)
+					strcpy(sInFileName, argv[i]);
+				else
+					strcpy(sOutFileName, argv[i]);
 			}
 		}
 	}
-	if (argc < 3)
-		rc = -1;
+	else
+		rc = AAFRESULT_BAD_FLAGS;
+
+	return rc;
+}
+// ============================================================================
+// OpenInputFile
+//			This function determines the input file type and opens the file.
+//
+// ============================================================================
+HRESULT AafOmf::OpenInputFile ()
+{
+	HRESULT		rc = AAFRESULT_SUCCESS;
+
+	if (IsOMFFile(sInFileName))
+		rc = OMFFileOpen(sInFileName);
+
+	return rc;
+}
+
+// ============================================================================
+// OpenOutputFile
+//			This function creates the output file.
+//
+// ============================================================================
+HRESULT AafOmf::OpenOutputFile ()
+{
+	HRESULT		rc = AAFRESULT_SUCCESS;
+	aafBool		bOverride = AAFFalse;
+
+	if (strlen(sOutFileName) == 0)
+	{
+		char*	pExt;
+		bOverride = AAFTrue;
+		strcpy(sOutFileName, sInFileName);
+		pExt= strrchr(sOutFileName, '.');
+		strcpy(pExt,".aaf");
+	}
+	
+	if (bOverride)
+	{
+		cout <<"Previous file : "<<sOutFileName<<" will be overwritten"<<endl;
+		deleteFile(sOutFileName);
+	}
+
+	rc = AAFFileOpen(sOutFileName);
 
 	return rc;
 }
@@ -440,7 +534,10 @@ aafBool AafOmf::IsOMFFile (char *pFileName)
 	
 		fclose(pStream);
 	}
-
+	else
+	{
+		cout << "Cannot find input file: "<< pFileName<< endl;
+	}
 
 	return bReturn;
 }
@@ -450,7 +547,7 @@ aafBool AafOmf::IsOMFFile (char *pFileName)
 //		Open an OMF File
 //
 // ============================================================================
-HRESULT AafOmf::OMFFileOpen()
+HRESULT AafOmf::OMFFileOpen(char * pFileName)
 {
 	HRESULT				rc = AAFRESULT_SUCCESS;
 	aafBool				bSessionStarted = AAFFalse;
@@ -460,24 +557,24 @@ HRESULT AafOmf::OMFFileOpen()
 		bSessionStarted = AAFTrue;
 		if (OMF2::OM_ERR_NONE == OMF2::omfmInit(OMFSession))
 		{
-			rc = OMF2::omfsOpenFile((OMF2::fileHandleType)sOMFFileName, OMFSession, &OMFFileHdl);
+			rc = OMF2::omfsOpenFile((OMF2::fileHandleType)pFileName, OMFSession, &OMFFileHdl);
 
 		}
 		else
-			rc = -1;
+			rc = AAFRESULT_BADOPEN;
 	}
 	else 
 	{
 		if (bSessionStarted)
 			OMF2::omfsEndSession(OMFSession);
 
-		rc = -1;
+		rc = AAFRESULT_BAD_SESSION;
 	}
 
 	OMF2::omfsFileGetRev(OMFFileHdl, &OMFFileRev);
 	if (OMF2::kOmfRev2x != OMFFileRev)
 	{
-		rc = -1 ;
+		rc = AAFRESULT_FILEREV_NOT_SUPP ;
 		cout << "OMFI File Revision 1.0 is NOT supported"<<endl<<endl;
 		OMF2::omfsCloseFile(OMFFileHdl);
 		OMF2::omfsEndSession(OMFSession);
@@ -486,7 +583,7 @@ HRESULT AafOmf::OMFFileOpen()
 	{
 		if (bVerboseMode)
 		{
-			cout << "OMF File : "<< sOMFFileName<<" opened succesfully"<< endl;
+			cout << "OMF File : "<< pFileName<<" opened succesfully"<< endl;
 			bOMFFileOpen = AAFTrue;
 		}
 	}
@@ -499,13 +596,13 @@ HRESULT AafOmf::OMFFileOpen()
 //		Open an AAF File
 //
 // ============================================================================
-HRESULT AafOmf::AAFFileOpen( )
+HRESULT AafOmf::AAFFileOpen( char* pFileName)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 
 	OMF2::omfObject_t		OMFHeadObject, OMFIdent;
 	char					text[256];
-	char					sFileName[256];
+	aafWChar				wcFileName[256];
 	aafInt32				nOMFIdentifications;
 	aafWChar				CompanyName[256];
 	aafWChar				ProductName[256];
@@ -513,12 +610,8 @@ HRESULT AafOmf::AAFFileOpen( )
     aafWChar				Platform[256];
 
 	aafProductIdentification_t	ProductInfo;
-
-//	if (bOverride)
-	{
-		// Delete the file if exists.
-		deleteFile(wcAAFFileName);
-	}
+	
+	convert(wcFileName, sizeof(wcFileName), pFileName);
 	rc = CoCreateInstance(CLSID_AAFFile, NULL, CLSCTX_INPROC_SERVER, IID_IAAFFile, (void **)&pFile);
 	if (AAFRESULT_SUCCESS == rc)
 	{
@@ -552,8 +645,7 @@ HRESULT AafOmf::AAFFileOpen( )
 						strcpy(text, "<Not Specified>");
 					convert(Platform, sizeof(Platform), text);
 					ProductInfo.platform = Platform;
-					convert(sFileName, 256, wcAAFFileName);
-					rc = pFile->OpenNewModify(wcAAFFileName, 0, &ProductInfo);
+					rc = pFile->OpenNewModify(wcFileName, 0, &ProductInfo);
 					rc = pFile->Close();
 					ProductInfo.companyName = L"Company Name";
 					ProductInfo.productName = L"OMF to AAF File Conversion";
@@ -565,7 +657,7 @@ HRESULT AafOmf::AAFFileOpen( )
 					ProductInfo.productVersionString = NULL;
 					ProductInfo.productID = -1;
 					ProductInfo.platform = NULL;
-					rc = pFile->OpenExistingModify(wcAAFFileName, 0, &ProductInfo);
+					rc = pFile->OpenExistingModify(wcFileName, 0, &ProductInfo);
 				}
 			}
 			else
@@ -580,18 +672,19 @@ HRESULT AafOmf::AAFFileOpen( )
 				ProductInfo.productVersionString = NULL;
 				ProductInfo.productID = -1;
 				ProductInfo.platform = NULL;
-				rc = pFile->OpenNewModify(wcAAFFileName, 0, &ProductInfo);
-				convert(sFileName, 256, wcAAFFileName);
+				rc = pFile->OpenNewModify(wcFileName, 0, &ProductInfo);
 			}
 		}
 		bAAFFileOpen = AAFTrue;
 		rc = pFile->GetHeader(&pHeader);
+		if (AAFRESULT_SUCCESS == rc)
+			rc = pHeader->GetDictionary(&pDictionary);
 	}
 	else
 		rc = AAFRESULT_INTERNAL_ERROR;
 
 	if (bVerboseMode)
-		cout << "AAF File : "<< sFileName<<" opened succesfully"<< endl;
+		cout << "AAF File : "<< pFileName<<" Created succesfully"<< endl;
 
 	return rc;
 }
@@ -623,12 +716,13 @@ HRESULT AafOmf::OMFFileRead()
 		rc = OMF2::omfiGetNumMobs( OMFFileHdl, OMF2::kAllMob, &nOMFNumMobs);
 		if (AAFRESULT_SUCCESS == rc)
 		{
+			cout <<"Found : "<<nOMFNumMobs<<" Mobs in the input file"<<endl;
 			for (nOMFMobCount = 0; nOMFMobCount < nOMFNumMobs; nOMFMobCount++)
 			{
 				rc = OMF2::omfiGetNextMob(OMFMobIter, NULL, &OMFMob);
 				if (AAFRESULT_SUCCESS == rc)
 				{
-					rc = ConvertOMFMOBObject(OMFMob);
+					rc = ParseOMFMOBObject(OMFMob);
 				}
 			}
 		}
@@ -653,36 +747,46 @@ HRESULT AafOmf::ConvertOMFHeader( void )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
 	OMF2::omfObject_t		OMFHeader, OMFObject;
-	OMF2::omfClassID_t		objClass;
 
-	char					id[5];
 	aafInt32				numDefs, numEntries;
 
 
 	rc = OMF2::omfsGetHeadObject( OMFFileHdl, &OMFHeader );
+	if (bVerboseMode)
+		cout<<"Processing OMF Header"<<endl;
 	if (OMF2::OM_ERR_NONE == rc)
 	{
 		//From the OMF header we will extract all definition Objects and Class Dictionary
 		// First we process the Data definitions
 		numDefs = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADDefinitionObjects);
-		for (int i = 1;i <numDefs;i++)
+		if (bVerboseMode)
+		{
+			Indent(4);
+			cout<<"Found : "<<numDefs<< " Data Definitions"<<endl;
+		}
+		for (int i = 1;i <= numDefs;i++)
 		{
 			rc = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADDefinitionObjects, &OMFObject, i);
 			if (OMF2::OM_ERR_NONE == rc)
 			{
 				// Process the given Data Definition object.
-				rc = OMF2::omfsReadClassID(OMFFileHdl, OMFObject, OMF2::OMOOBJObjClass, objClass);
+				rc = ConvertOMFDataDefinitionObject(OMFObject);
 			}
 		}
 		// Now we process the class dictionary
 		numEntries = OMF2::omfsLengthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary);
-		for (int j = 1;j <numEntries; j++)
+		if (bVerboseMode)
 		{
-			rc = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary, &OMFObject, i);
+			Indent(4);
+			cout<<"Found : "<<numEntries<< " Class Definitions"<<endl;
+		}
+		for (int j = 0;j < numEntries; j++)
+		{
+			rc = OMF2::omfsGetNthObjRefArray(OMFFileHdl, OMFHeader, OMF2::OMHEADClassDictionary, &OMFObject, j+1);
 			if (OMF2::OM_ERR_NONE == rc)
 			{
 				// Process the given Class Dictionary object.
-				rc = OMF2::omfsReadClassID(OMFFileHdl, OMFObject, OMF2::OMCLSDClassID, id);
+				rc = ConvertOMFClassDictionaryObject(OMFObject);
 			}
 		}
 	}
@@ -692,7 +796,63 @@ HRESULT AafOmf::ConvertOMFHeader( void )
 	return rc;
 }
 // ============================================================================
-// ConvertOMFMOBObject
+// ConvertOMFDataDefinitionObject
+//
+//			This function is called by the ConvertOMFHeader module for each 
+//			Data definition found in the header, all relevant data from the
+//			OMF DDEF is extracted and converted into the AAF Class dictionary.
+//			
+// Returns: AAFRESULT_SUCCESS if Header object is converted succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFDataDefinitionObject( OMF2::omfObject_t obj )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	OMF2::omfClassID_t		objClass;
+	char					id[5];
+
+	rc = OMF2::omfsReadClassID(OMFFileHdl, obj, OMF2::OMOOBJObjClass, objClass);
+	if (OMF2::OM_ERR_NONE == rc && bVerboseMode)
+	{
+		strncpy(id, objClass, 4);
+		id[4] = '\0';
+		Indent(8);
+		cout<<"Processing : "<<id <<" "<<endl;
+	}
+
+	return rc;
+}
+// ============================================================================
+// ConvertOMFClassDictionaryObject
+//
+//			This function is called by the ConvertOMFHeader module for each 
+//			Class Dictionary object found in the header, all relevant data from the
+//			OMF Class dictionary is extracted and converted into the AAF Class
+//			dictionary.
+//			
+// Returns: AAFRESULT_SUCCESS if Header object is converted succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFClassDictionaryObject( OMF2::omfObject_t obj )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	char					id[5];
+
+	memset(id, 0, sizeof(id));
+	rc = OMF2::omfsReadClassID(OMFFileHdl, obj, OMF2::OMCLSDClass, id);
+	if ( OMF2::OM_ERR_PROP_NOT_PRESENT == rc )
+		cout << "*** Invalid Class Id ***"<<endl;
+	else if (bVerboseMode)
+	{
+		Indent(8);
+		cout<<"Processing : "<<id <<" Class Definition"<<endl;
+	}
+
+	return rc;
+}
+
+// ============================================================================
+// ParseOMFMOBObject
 //
 //			This function is invoked by the ConvertMobCallBack routine for 
 //			each OMF Mob object encountered. 
@@ -707,36 +867,17 @@ HRESULT AafOmf::ConvertOMFHeader( void )
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj )
+HRESULT AafOmf::ParseOMFMOBObject( OMF2::omfObject_t obj )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	char					sMobName[32];
-	aafWChar				wcMobName[32];
-	aafInt32				numComments;
-	aafInt32				times;
 
-	OMF2::omfClassID_t		objClass;
-	OMF2::omfUID_t			mobID;
 	OMF2::omfProperty_t		idProp;
-	OMF2::omfIterHdl_t		OMFIterator;
+	OMF2::omfClassID_t		objClass;
 
-	IAAFCompositionMob*		pCompMob = NULL;
-	IAAFMasterMob*			pMasterMob = NULL;
-	IAAFMob*				pMob = NULL;
 
 	char					tmpClass[5];
-
 	// Get OMF Mob information data
 
-	rc = OMF2::omfiMobGetInfo(OMFFileHdl, obj, &mobID, 32, sMobName, NULL, NULL);
-	if (AAFRESULT_SUCCESS == rc)
-		convert(wcMobName, 32, sMobName);
-	else
-		convert(wcMobName, 32, "Name NOT provided");
-
-	rc = OMF2::omfiMobGetNumComments(OMFFileHdl, obj, &numComments);
-	if (AAFRESULT_SUCCESS != rc)
-		numComments = 0;
 
 	idProp = OMF2::OMOOBJObjClass;
 	rc = OMF2::omfsReadClassID(OMFFileHdl, obj, idProp, objClass );
@@ -744,76 +885,123 @@ HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj )
 	{
 		strncpy(tmpClass, objClass, 4);
 		if (!strncmp(tmpClass, "CMOB", 4) )
-		{
-			// Create the new Composition Mob
-			rc = CoCreateInstance(CLSID_AAFCompositionMob, 
-			 					  NULL,
-								  CLSCTX_INPROC_SERVER,
-								  IID_IAAFCompositionMob,
-								  (void **)&pCompMob);
-			if (AAFRESULT_SUCCESS == rc)
-			{
-				ConvertOMFCompositionObject( obj, pCompMob);
-				rc = pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-				pCompMob->Release();
-			}
-		}
+			rc = ConvertOMFCompositionObject( obj );
 		else if (!strncmp(tmpClass, "MMOB", 4) )
-		{
-			// Create a Master Mob 
-			rc = CoCreateInstance(CLSID_AAFMasterMob, 
-			 					  NULL,
-								  CLSCTX_INPROC_SERVER,
-								  IID_IAAFMasterMob,
-								  (void **)&pMasterMob);
-			if (AAFRESULT_SUCCESS == rc)
-			{
-				ConvertOMFMasterMob( obj, pMasterMob);
-				rc = pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-			}
-
-		}
+			ConvertOMFMasterMob( obj );
+		else if ( !strncmp(tmpClass, "SMOB", 4) )
+			ConvertOMFSourceMob( obj );
 		else
 		{
-		}
-		// Here we update all the MOB related fields
-		if (AAFRESULT_SUCCESS == rc)
-		{
-			pMob->SetName(wcMobName);
-			// 
-			// pMob-SetUID(); ??
-			// Set comments
-			if (numComments > 0)
-			{
-				// Allocate the iterator
-				OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
-				for (times = 0; times < numComments; times++)
-				{
-					char		sCommentName[64];
-					aafWChar	wcCommentName[64];
-					char		sCommentValue[256];
-					aafWChar	wcCommentValue[256];
-
-					rc = OMF2::omfiMobGetNextComment(OMFIterator, obj, sizeof(sCommentName), sCommentName, sizeof(sCommentValue), sCommentValue);
-					if (AAFRESULT_SUCCESS == rc)
-					{
-						convert(wcCommentName, sizeof(sCommentName), sCommentName);
-						convert(wcCommentValue, sizeof(sCommentValue), sCommentValue);
-						pMob->AppendComment(wcCommentName, wcCommentValue);
-					}
-				}
-				// Release the iterator
-				OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
-			}
-			rc = pHeader->AppendMob(pMob);
-			pMob->Release();
+			tmpClass[4] = '\0';
+			cout<<"Unrecognized Mob Class ID : "<<tmpClass<<endl;
 		}
 	}
-	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
-		cout << "Converted OMF MOB generic data to AAF"<< endl;
+	else
+	{
+		cout<<"Cannot read OMF Class ID"<< endl;
+	}
+
 	return rc;
 }
 
+// ============================================================================
+// ConvertOMFMOBObject
+//
+//			This function is converts all the mob basic data (name, MobId, etc.) 
+//			
+// Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj, IAAFMob* pMob )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	char					sMobName[32];
+	aafWChar				wcMobName[32];
+	aafInt32				numComments;
+	aafInt32				times;
+
+	OMF2::omfUID_t			OMFMobID;
+	OMF2::omfIterHdl_t		OMFIterator;
+
+	struct SMPTELabel
+	{
+		aafUInt32	MobIDMajor;
+		aafUInt32	MobIDMinor;
+		aafUInt8	oid;
+		aafUInt8	size;
+		aafUInt8	ulcode;
+		aafUInt8	SMPTE;
+		aafUInt8	Registry;
+		aafUInt8	unused;
+		aafUInt16	MobIDPrefix;
+	};
+
+	union label
+	{
+		aafUID_t			auid;
+		struct SMPTELabel	smpte;
+	};
+
+	union label aLabel;
+
+	rc = OMF2::omfiMobGetInfo(OMFFileHdl, obj, &OMFMobID, 32, sMobName, NULL, NULL);
+	if (AAFRESULT_SUCCESS == rc)
+		convert(wcMobName, 32, sMobName);
+	else
+		convert(wcMobName, 32, "Name NOT provided");
+
+
+	if (bVerboseMode)
+	{
+		Indent(8);
+		cout<<"Mob Name : "<<sMobName<<endl;
+	}
+	// Set Name
+	pMob->SetName(wcMobName);
+
+	// Convert OMF MobID into AAF AUID
+	aLabel.smpte.MobIDMajor = OMFMobID.major;
+	aLabel.smpte.MobIDMinor = OMFMobID.minor;
+		
+	aLabel.smpte.oid = 0x06;
+	aLabel.smpte.size = 0x0E;
+	aLabel.smpte.ulcode = 0x2B;
+	aLabel.smpte.SMPTE = 0x34;
+	aLabel.smpte.Registry = 0x02;
+	aLabel.smpte.unused = 0;
+	aLabel.smpte.MobIDPrefix = 42;		// Means its an OMF Uid
+
+	// Set MobID
+	pMob->SetMobID(&aLabel.auid);
+
+	// Set comments
+	rc = OMF2::omfiMobGetNumComments(OMFFileHdl, obj, &numComments);
+	if (AAFRESULT_SUCCESS == rc && numComments > 0)
+	{
+		// Allocate the iterator
+		OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
+		for (times = 0; times < numComments; times++)
+		{
+			char		sCommentName[64];
+			aafWChar	wcCommentName[64];
+			char		sCommentValue[256];
+			aafWChar	wcCommentValue[256];
+
+			rc = OMF2::omfiMobGetNextComment(OMFIterator, obj, sizeof(sCommentName), sCommentName, sizeof(sCommentValue), sCommentValue);
+			if (AAFRESULT_SUCCESS == rc)
+			{
+				convert(wcCommentName, sizeof(sCommentName), sCommentName);
+				convert(wcCommentValue, sizeof(sCommentValue), sCommentValue);
+				pMob->AppendComment(wcCommentName, wcCommentValue);
+			}
+		}
+
+		// Release the iterator
+		OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
+	}
+
+	return rc;
+}
 // ============================================================================
 // ConvertOMFCompositionObject
 //
@@ -825,49 +1013,105 @@ HRESULT AafOmf::ConvertOMFMOBObject( OMF2::omfObject_t obj )
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-HRESULT AafOmf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
-											 IAAFCompositionMob* pCompMob)
+HRESULT AafOmf::ConvertOMFCompositionObject(OMF2::omfObject_t obj)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	aafInt32				numSlots;
-	aafInt32				numTracks;
-	aafInt32				times;
 
 	OMF2::omfClassID_t		objClass;
 	OMF2::omfDefaultFade_t	OMFDefaultFade;
-	OMF2::omfIterHdl_t		OMFIterator;
 
 	IAAFMob*				pMob = NULL;
+	IAAFCompositionMob*		pCompMob = NULL;
 	aafUID_t				CompMobID;
 	aafDefaultFade_t		AAFDefaultFade;
 	
-
-	rc = OMF2::omfiMobGetDefaultFade(OMFFileHdl, obj, &OMFDefaultFade);
-	if (AAFRESULT_SUCCESS == rc && OMFDefaultFade.valid)
+	// Create a new Composition Mob
+	rc = pDictionary->CreateInstance(&AUID_AAFCompositionMob, 
+	 								 IID_IAAFCompositionMob,
+									 (IUnknown **)&pCompMob);
+	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
+		cout << "Created AAF composition MOB "<< endl;
+	if (AAFRESULT_SUCCESS == rc )
 	{
-		AAFDefaultFade.fadeLength   = OMFDefaultFade.fadeLength;
-		switch(OMFDefaultFade.fadeType)
+		// get Composition mob information
+		rc = OMF2::omfiMobGetDefaultFade(OMFFileHdl, obj, &OMFDefaultFade);
+		if (AAFRESULT_SUCCESS == rc && OMFDefaultFade.valid)
 		{
-			case OMF2::kFadeNone: 
-				AAFDefaultFade.fadeType = kFadeNone;
-				break;
-			case OMF2::kFadeLinearAmp:
-				AAFDefaultFade.fadeType = kFadeLinearAmp;
-				break;
-			case OMF2::kFadeLinearPower:
-				AAFDefaultFade.fadeType = kFadeLinearPower;
-				break;
+			AAFDefaultFade.fadeLength   = OMFDefaultFade.fadeLength;
+			switch(OMFDefaultFade.fadeType)
+			{
+				case OMF2::kFadeNone: 
+					AAFDefaultFade.fadeType = kFadeNone;
+					break;
+				case OMF2::kFadeLinearAmp:
+					AAFDefaultFade.fadeType = kFadeLinearAmp;
+					break;
+				case OMF2::kFadeLinearPower:
+					AAFDefaultFade.fadeType = kFadeLinearPower;
+					break;
+			}
+			AAFDefaultFade.fadeEditUnit.numerator = OMFDefaultFade.fadeEditUnit.numerator;
+			AAFDefaultFade.fadeEditUnit.denominator = OMFDefaultFade.fadeEditUnit.denominator;
 		}
-		AAFDefaultFade.fadeEditUnit.numerator = OMFDefaultFade.fadeEditUnit.numerator;
-		AAFDefaultFade.fadeEditUnit.denominator = OMFDefaultFade.fadeEditUnit.denominator;
+
+		// Set default fade values
+		if (OMFDefaultFade.valid)
+			pCompMob->SetDefaultFade(AAFDefaultFade.fadeLength,
+									 AAFDefaultFade.fadeType,
+									 AAFDefaultFade.fadeEditUnit);
+
+
+
+		rc = pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+		if (AAFRESULT_SUCCESS == rc)
+		{
+			rc = ConvertOMFMOBObject(obj, pMob);
+			if (AAFRESULT_SUCCESS == rc)
+			{
+				ConvertOMFMobSlots( obj, pMob);
+				rc = pHeader->AppendMob(pMob);
+			}
+			pMob->Release();
+		}
+
 	}
 
-	// Set default fade values
-	if (OMFDefaultFade.valid)
-		pCompMob->SetDefaultFade(AAFDefaultFade.fadeLength,
-								 AAFDefaultFade.fadeType,
-								 AAFDefaultFade.fadeEditUnit);
+	if (pCompMob)
+		pCompMob->Release();
 
+	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
+		cout << "Converted OMF Composition MOB to AAF"<< endl;
+	return rc;
+}
+// ============================================================================
+// ConvertOMFMobSlots
+//
+//			This function converts all the mob slots in the given OMF mob object 
+//			
+// Returns: AAFRESULT_SUCCESS if succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFMobSlots( OMF2::omfObject_t obj, IAAFMob* pMob )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+	aafInt32				times;
+	aafInt32				numSlots;
+	aafInt32				numTracks;
+
+	OMF2::omfIterHdl_t		OMFIterator;
+	OMF2::omfMSlotObj_t		OMFSlot;
+	OMF2::omfMSlotObj_t		OMFSegment;
+	OMF2::omfTrackID_t		OMFTrackID;
+	OMF2::omfRational_t		OMFeditRate;
+	OMF2::omfPosition_t		OMFOrigin;
+	OMF2::omfErr_t			OMFError;
+	char					sTrackName[32];
+	aafWChar				wcTrackName[32];					
+
+	IAAFMobSlot*		pMobSlot = NULL;
+	IAAFSegment*		pSegment = NULL;
+	IAAFSequence*		pSequence = NULL;
+	IAAFTimelineMobSlot* pTimelineMobSlot = NULL;
 
 	rc = OMF2::omfiMobGetNumSlots(OMFFileHdl, obj, &numSlots);
 	if (AAFRESULT_SUCCESS != rc)
@@ -877,55 +1121,45 @@ HRESULT AafOmf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
 	if (AAFRESULT_SUCCESS != rc)
 		numTracks = 0;
 
-	// Set Slots
-	if (numSlots >0)
+	if (bVerboseMode)
 	{
-		OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
-				
-		for (times = 0; times < numSlots; times++)
+		Indent(4);
+		cout<<"Found : "<<numSlots<<" sub tracks"<<endl;
+	}
+	OMF2::omfiIteratorAlloc(OMFFileHdl, &OMFIterator);
+	for (times = 0; times < numSlots; times++)
+	{
+		rc = OMF2::omfiMobGetNextSlot(OMFIterator, obj, NULL, &OMFSlot);
+		if (AAFRESULT_SUCCESS == rc)
 		{
-			OMF2::omfMSlotObj_t	OMFSlot;
-			OMF2::omfMSlotObj_t	OMFSegment;
-			OMF2::omfTrackID_t	OMFTrackID;
-			OMF2::omfRational_t	OMFeditRate;
-			OMF2::omfPosition_t	OMFOrigin;
-			OMF2::omfErr_t		OMFError;
-			char				sTrackName[32];
-			aafWChar			wcTrackName[32];					
-
-			IAAFMobSlot*		pMobSlot = NULL;
-
-			rc = OMF2::omfiMobGetNextSlot(OMFIterator, obj, NULL, &OMFSlot);
-			if (AAFRESULT_SUCCESS == rc)
+			rc = OMF2::omfiMobSlotGetInfo(OMFFileHdl, OMFSlot, &OMFeditRate, &OMFSegment);
+			if (OMF2::omfiMobSlotIsTrack(OMFFileHdl, OMFSlot, &OMFError))
 			{
-				rc = OMF2::omfiMobSlotGetInfo(OMFFileHdl, OMFSlot, &OMFeditRate, &OMFSegment);
-				if (OMF2::omfiMobSlotIsTrack(OMFFileHdl, OMFSlot, &OMFError))
+				rc = OMF2::omfiTrackGetInfo(OMFFileHdl, obj, OMFSlot, &OMFeditRate, sizeof(sTrackName),
+								sTrackName, &OMFOrigin, &OMFTrackID, &OMFSegment);
+				if (AAFRESULT_SUCCESS == rc)
 				{
-					rc = OMF2::omfiTrackGetInfo(OMFFileHdl, obj, OMFSlot, &OMFeditRate, sizeof(sTrackName),
-									sTrackName, &OMFOrigin, &OMFTrackID, &OMFSegment);
-						
-//							rc = CoCreateInstance(CLSID_AAFMobSlot,
-//												  NULL,
-//												  CLSCTX_INPROC_SERVER,
-//												  IID_IAAFMOBSLOT,
-//												  (void **)pMobSlot);
-//							pMob->AppendSlot( pMobSlot );
+					rc = pDictionary->CreateInstance(&AUID_AAFSequence,
+													 IID_IAAFSequence,
+													 (IUnknown **)&pSequence);
+					pSequence->QueryInterface(IID_IAAFSegment, (void **)&pSegment);
+					convert(wcTrackName, sizeof(wcTrackName), sTrackName);
+					pMob->AppendNewSlot( pSegment, (aafSlotID_t)OMFTrackID, wcTrackName, &pMobSlot );
+					if (bVerboseMode)
+					{
+						Indent(8);
+						cout<<"Converted SlotID : "<<(int)OMFTrackID<<" Name : "<<sTrackName<<endl;
+					} 
 				}
-				
 			}
+			
 		}
-
-		OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 	}
 
-	if (pMob)
-		pMob->Release();
+	OMF2::omfiIteratorDispose(OMFFileHdl, OMFIterator);
 
-	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
-		cout << "Converted OMF Composition MOB to AAF"<< endl;
 	return rc;
 }
-
 // ============================================================================
 // ConvertOMFMasterMob
 //
@@ -935,16 +1169,74 @@ HRESULT AafOmf::ConvertOMFCompositionObject(OMF2::omfObject_t obj,
 // Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
 //
 // ============================================================================
-HRESULT AafOmf::ConvertOMFMasterMob(OMF2::omfObject_t obj,
-											 IAAFMasterMob* pMasterMob)
+HRESULT AafOmf::ConvertOMFMasterMob(OMF2::omfObject_t obj )
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	IAAFMasterMob*			pMasterMob = NULL;
+	IAAFMob*				pMob = NULL;
 	
+	// Create a Master Mob 
+	rc = pDictionary->CreateInstance(&AUID_AAFMasterMob,
+									 IID_IAAFMasterMob,
+									 (IUnknown **)&pMasterMob);
+	if (AAFRESULT_SUCCESS == rc)
+	{
+		rc = pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+		if (AAFRESULT_SUCCESS == rc)
+		{
+			ConvertOMFMOBObject(obj, pMob );
+			rc = pHeader->AppendMob(pMob );
+			pMob->Release();
+		}
+	}
+	
+	if (pMasterMob)
+		pMasterMob->Release();
+
 	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
 		cout << "Converted OMF Master MOB to AAF"<< endl;
 	return rc;
 }
 
+// ============================================================================
+// ConvertOMFSourceMob
+//
+//			This function extracts all the properties of an OMF Source MOB,
+//			sets the equivalent AAF properties and 
+//			
+// Returns: AAFRESULT_SUCCESS if MOB object is converted succesfully
+//
+// ============================================================================
+HRESULT AafOmf::ConvertOMFSourceMob(OMF2::omfObject_t obj )
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	IAAFSourceMob*			pSourceMob = NULL;
+	IAAFMob*				pMob = NULL;
+	
+	// Create a Master Mob 
+	rc = pDictionary->CreateInstance(&AUID_AAFSourceMob,
+									 IID_IAAFSourceMob,
+									 (IUnknown **)&pSourceMob);
+	if (AAFRESULT_SUCCESS == rc)
+	{
+		rc = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
+		if (AAFRESULT_SUCCESS == rc)
+		{
+			ConvertOMFMOBObject(obj, pMob );
+			rc = pHeader->AppendMob(pMob );
+			pMob->Release();
+		}
+	}
+	
+	if (pSourceMob)
+		pSourceMob->Release();
+
+	if (AAFRESULT_SUCCESS == rc && bVerboseMode)
+		cout << "Converted OMF Source MOB to AAF"<< endl;
+	return rc;
+}
 void AafOmf::OMFFileClose()
 {
 	OMF2::omfsCloseFile(OMFFileHdl);
@@ -953,13 +1245,23 @@ void AafOmf::OMFFileClose()
 
 void AafOmf::AAFFileClose( )
 {
+	if (pDictionary)
+	{
+		pDictionary->Release();
+		pDictionary = NULL;
+	}
+
 	if (pHeader)
+	{
 		pHeader->Release();
+		pHeader = NULL;
+	}
 
 	if (pFile)
 	{
 		pFile->Close();
 		pFile->Release();
+		pFile = NULL;
 	}
 }
 // ============================================================================
@@ -972,29 +1274,18 @@ int main(int argc, char *argv[])
 {
 	CComInitialize	comInit;
 	AafOmf			theApp;
-	char			sInFile[256];
-	char			sOutFile[256];
 
 	HRESULT			rc;
 
 
 
-	if (AAFRESULT_SUCCESS == theApp.GetUserInput(argc, argv, sInFile, sOutFile) )
+	theApp.pProgramName = baseName(argv[0]);
+	cout << theApp.pProgramName << ": Version 0.01.00" << endl;
+	if (AAFRESULT_SUCCESS == theApp.GetUserInput(argc, argv) )
 	{
-		cout << theApp.pProgramName << ": Version 0.01.00" << endl;
-		if (!theApp.IsOMFFile (sInFile))
+		if (AAFRESULT_SUCCESS == theApp.OpenInputFile() )
 		{
-			theApp.SetAAFFileName ( sInFile);
-			theApp.SetOMFFileName ( sOutFile);
-		}
-		else
-		{
-			theApp.SetAAFFileName ( sOutFile);
-			theApp.SetOMFFileName ( sInFile);
-		}
-		if (AAFRESULT_SUCCESS == theApp.OMFFileOpen() )
-		{
-			if (AAFRESULT_SUCCESS == theApp.AAFFileOpen() )
+			if (AAFRESULT_SUCCESS == theApp.OpenOutputFile() )
 			{
 					rc = theApp.ConvertOMFHeader( );
 					if (AAFRESULT_SUCCESS == rc)
@@ -1002,14 +1293,6 @@ int main(int argc, char *argv[])
 					else
 						fatalError("Main", "Could not convert OMF Header Object");
 			}
-			else
-			{
-				fatalError ("Main","Could not open AAF File ");
-			}
-		}
-		else
-		{
-			fatalError ("Main","Could not open OMF File");
 		}
 	}
 	else
