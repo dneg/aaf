@@ -231,12 +231,12 @@ static void CreateTypeDefRenameFile(aafWChar *pFilename)
 	checkResult(pTypeDefInt->CreateValue((aafMemPtr_t)&five,sizeof(five),
 		&pIntPropertyValue));
 
-	// Use GetValue() to cast integer prop. val. to word prop. val
+	// Use CreateValue() to create work prop. val. from integer prop. val
 	IAAFPropertyValueSP pWordPropertyValue;
 	IAAFTypeDefRenameSP pWordTypeDefRename;
 	checkResult(pWordTypeDef->QueryInterface(IID_IAAFTypeDefRename,
 		(void**)&pWordTypeDefRename));
-	checkResult(pWordTypeDefRename->GetValue(pIntPropertyValue,
+	checkResult(pWordTypeDefRename->CreateValue(pIntPropertyValue,
 		&pWordPropertyValue));
 	checkExpression(PropValTypeIs(pWordPropertyValue,(aafUID_t*)&AUID_Word)
 		==kAAFTrue);
