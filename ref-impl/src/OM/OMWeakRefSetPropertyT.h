@@ -632,7 +632,7 @@ OMWeakReferenceSetProperty<ReferencedObject>::targetTag(void) const
                const_cast<OMWeakReferenceSetProperty<ReferencedObject>*>(this);
   if (_targetTag == nullOMPropertyTag) {
     nonConstThis->_targetTag =
-                           file()->referencedProperties()->insert(_targetName);
+                  file()->referencedProperties()->insert(targetPropertyPath());
   }
   POSTCONDITION("Valid target property tag", _targetTag != nullOMPropertyTag);
   return _targetTag;
