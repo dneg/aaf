@@ -245,6 +245,14 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMasterMobTest.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMetaDefinitionTest.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMetaDictionaryTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTests\CAAFMobSlotTest.cpp
 # End Source File
 # Begin Source File
