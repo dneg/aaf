@@ -11,6 +11,7 @@
 #include "ImplAAFSourceMob.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #ifndef __ImplAAFEssenceData_h__
@@ -342,20 +343,4 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-extern "C" const aafClassID_t CLSID_AAFEssenceData;
-
-OMDEFINE_STORABLE(ImplAAFEssenceData, CLSID_AAFEssenceData);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFEssenceData::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-  {
-    return AAFRESULT_NULL_PARAM;
-  }
-  memcpy (pClass, &CLSID_AAFEssenceData, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
-
+OMDEFINE_STORABLE(ImplAAFEssenceData, AUID_AAFEssenceData);

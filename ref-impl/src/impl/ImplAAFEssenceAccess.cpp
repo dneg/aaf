@@ -2454,23 +2454,6 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-extern "C" const aafClassID_t CLSID_AAFEssenceAccess;
-
-OMDEFINE_STORABLE(ImplAAFEssenceAccess, CLSID_AAFEssenceAccess);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFEssenceAccess::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFEssenceAccess, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
-
-
 
 
 
