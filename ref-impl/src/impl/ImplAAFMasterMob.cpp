@@ -449,7 +449,33 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+//****************
+// NewPhysSourceRef()
+//
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMasterMob::NewPhysSourceRef (aafRational_t  editrate,
+                           aafSlotID_t  aMobSlot,
+                           aafUID_t *pEssenceKind,
+							aafSourceRef_t  ref,
+                           aafLength_t  srcRefLength)
+{
+	return(ImplAAFMob::AddPhysSourceRef(kAAFForceOverwrite, editrate, aMobSlot,
+							pEssenceKind, ref, srcRefLength));
+}
 
+//****************
+// AppendPhysSourceRef()
+//
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMasterMob::AppendPhysSourceRef (aafRational_t  editrate,
+                           aafSlotID_t  aMobSlot,
+                           aafUID_t *pEssenceKind,
+							aafSourceRef_t  ref,
+                           aafLength_t  srcRefLength)
+{
+	return(ImplAAFMob::AddPhysSourceRef(kAAFAppend, editrate, aMobSlot,
+							pEssenceKind, ref, srcRefLength));
+}
 extern "C" const aafClassID_t CLSID_AAFMasterMob;
 
 OMDEFINE_STORABLE(ImplAAFMasterMob, CLSID_AAFMasterMob);
