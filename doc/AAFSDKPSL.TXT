@@ -1,0 +1,432 @@
+AAF SDK PUBLIC SOURCE LICENSE AGREEMENT
+
+THIS DOCUMENT IS A LEGAL AGREEMENT BETWEEN YOU (EITHER AN INDIVIDUAL OR AN 
+ENTITY) AND THE CONTRIBUTORS TO THE ADVANCED AUTHORING FORMAT SOFTWARE 
+DEVELOPMENT KIT ("AAF SDK"). PLEASE READ THESE TERMS CAREFULLY BEFORE USING 
+THE AAF SDK. THE CONTRIBUTORS ARE WILLING TO LICENSE THE AAF SDK TO YOU ONLY 
+UPON THE CONDITION THAT YOU ACCEPT ALL OF THE TERMS CONTAINED IN THIS LICENSE 
+AGREEMENT. BY CLICKING ON THE "ACCEPT" BUTTON, YOU ARE CONSENTING TO BE BOUND 
+BY ALL THE TERMS AND CONDITIONS CONTAINED IN THIS LICENSE AGREEMENT. IF YOU DO 
+NOT AGREE TO ALL OF THESE TERMS, THEN THE CONTRIBUTORS ARE UNWILLING TO 
+LICENSE THE AAF SDK TO YOU, IN WHICH EVENT YOU SHOULD CLICK THE "DO NOT ACCEPT" 
+BUTTON AND THE INSTALLATION WILL NOT PROCEED. YOU AGREE THAT YOUR USE, 
+INSTALLATION OR COPYING OF THE AAF SDK ACKNOWLEDGES THAT YOU HAVE READ THIS 
+LICENSE, UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS.ANY 
+THIRD PARTY SOFTWARE THAT MAY BE PROVIDED WITH THE AAF SDK IS INCLUDED FOR USE 
+AT YOUR OPTION. IF YOU CHOOSE TO USE SUCH SOFTWARE, THEN SUCH USE SHALL BE 
+GOVERNED BY SUCH THIRD PARTY'S LICENSE AGREEMENT. 
+
+1. Definitions
+1.1.
+"AAF SDK" means the Original Code and any Modifications thereto. 
+1.2.
+"Adopter of AAF" means any individual or entity (and its Affiliates) that has accepted the 
+terms and conditions and has executed a copy of the Adopters' Agreement as set forth in 
+Exhibit B, and has delivered the executed copy to one of the Promoters. 
+1.3.
+"Affiliate" is an entity which directly or indirectly controls, is controlled by, or is under common 
+control with another entity, so long as such control exists. "Control" means beneficial 
+ownership of more than fifty percent of voting stock or equity in an entity.
+1.4.
+"Agreement" means this document.
+1.5.
+"Contributor" means any individual or entity (and its Affiliates) that makes Modifications to 
+the AAF SDK, including the Initial Developer.
+1.6.
+"Contributor Version" means the AAF SDK including the Modifications made by a 
+Contributor, whether in Executable form or Source Code. 
+1.7.
+"Executable" means computer program code in any form other than Source Code. 
+1.8.
+"Initial Developer" means the individual or entity (and its Affiliates) identified as the Initial 
+Developer in the notice set forth in Exhibit A.
+1.9.
+"Larger Work" means a work that combines Original Code and/or Modifications, or portions 
+thereof, with computer program code not governed by the terms of this Agreement.
+1.10.
+"Modification" means any addition to or deletion from the substance or structure of either 
+the Original Code or any other Modification, or any addition to or deletion from the contents 
+of a file containing Original Code or other Modification, or any new file that contains any part 
+of the Original Code or other Modification.
+1.11.
+"Original Code" means the AAF SDK Source Code containing the notice set forth in Exhibit 
+A that is first distributed under this Agreement by the Initial Developer.
+1.12.
+"Source Code" means the preferred form of a computer program for making modifications to 
+it, including all modules it contains, plus any associated interface definition files, or scripts 
+used to control compilation and installation of an Executable.
+1.13. 
+"Standard" means the Advanced Authoring Format (AAF) as defined in the AAF 
+Specification, and any Updates thereto, authored, adopted, and published by the 
+Promoters of AAF. Information about the Standard is available from the Standards body. 
+1.14.
+"Standards Body" means the AAF Association, or its successor in interest, or any successor 
+appointed by the AAF Association for the purpose of maintaining the Standard and the AAF 
+SDK, and its Affiliates.
+1.15.
+"You" (or "Your") means an individual or a legal entity named at the end of this Agreement, 
+and its Affiliates. 
+
+2. License Grant.
+Subject to the terms and conditions of this Agreement, each Contributor hereby 
+grants You a worldwide, royalty-free, nontransferable, nonexclusive license: 
+
+2.1 under copyrights, to reproduce and prepare derivative works of the AAF SDK solely for your 
+internal purposes.
+2.2 under copyrights, and subject to the Distribution Requirements of Section 3 below, to 
+combine the AAF SDK with other computer program code not governed by the terms of this 
+Agreement to create a Larger Work, and to distribute the AAF SDK compiled in Executable 
+form only as linked into such a Larger Work. Such Larger Work may be distributed if and only 
+if the AAF SDK so compiled and linked to the Larger Work complies with all requirements of 
+the Standard and all other requirements set out by the Standards Body that are in effect sixty 
+(60) days before such distribution or sixty (60) days prior to withdrawal by You as an Adopter; 
+and
+2.3 under a claim of any patent or patent application licensable by the Contributor and 
+necessarily infringed by the making, using, selling, offering for sale or importing of its 
+Contributor Version, to make, use, sell, offer for sale and import, the Contributor Version of 
+such Contributor in Executable form only as linked into a Larger Work. This patent license 
+shall apply to a claim of a patent licensable by a Contributor only if, at the time the 
+Contributor delivers to the Standards Body its Contributor Version, the Contributor Version 
+necessarily infringes the claim, and, in the event of withdrawal by You as an Adopter, only to 
+the extent You have used the Contributor Version sixty (60) days prior to such withdrawal. No 
+license under any claim of any patent is granted: 1) for code that You delete from the AAF 
+SDK; 2) separate from the AAF SDK; or 3) for infringements caused by: i) Your Modifications 
+of the AAF SDK or ii) the combination of the AAF SDK with other software or devices, 
+including but not limited to Your Modifications or any Larger Work. Nothing in this patent 
+license shall be deemed to alter the patent license granted by You or any Contributor in the 
+Adopter's Agreement.
+
+2.4 Subject to the Distribution Requirements under Section 3 below, under copyrights, to 
+distribute to Adopters of AAF the AAF SDK, and/or Your Modifications and/or Your 
+Contributor Version of the AAF SDK in Source Code form and to grant to such Adopters of 
+AAF the rights granted in this Agreement if and only if Your Modifications and/or Your 
+Contributor Version of the AAF SDK comply with all requirements of the Standard and all 
+other requirements set out by the Standards Body that are in effect sixty (60) days before 
+such distribution.
+
+2.5 No other rights. You neither grant nor receive any license or right to use any trademark, trade 
+name, or maskwork hereunder. Except for the rights expressly provided by this Agreement, a) 
+You shall not have any other rights in the AAF SDK, and b) You neither grant nor receive, by 
+implication, estoppel or otherwise, any rights to any patents, copyrights or other intellectual 
+property rights. 
+
+3. Distribution Requirements
+3.1 Delivery of Source Code to Standards Body. You agree to deliver to the Standards Body 
+Your Modifications and/or Your Contributor Version in Source Code form within sixty (60) days 
+after You first distribute any Larger Work under Section 2.1 above or after You first distribute 
+Your Modifications and/or Your Contributor Version under Section 2.3 above. You may 
+deliver to the Standards Body Your Modifications and/or Your Contributor Version even if 
+they do not comply with all requirements of the Standard and all other requirements set out 
+by the Standards Body if You also deliver to the Standards Body a description of any 
+deviation from the Standard resulting from Your Modifications.
+3.2 Grant Back of Your Modifications to the Standards Body.
+Subject to the terms and conditions 
+of this Agreement, You hereby grant to the Standards Body a worldwide, nonexclusive, 
+royalty-free license to reproduce and to distribute to Adopters of AAF Your Modifications 
+and/or Your Contributor Version of the AAF SDK in Source Code form under the terms and 
+conditions of this Agreement, and to grant to such Adopters of AAF the rights granted in this 
+Agreement.
+
+3.3 Required Notice in Source Code.
+You must duplicate or retain the notice in Exhibit A in each 
+file of the Source Code for the AAF SDK. If it is not possible to put such notice in a particular 
+Source Code file due to its structure, then You must include such notice in a file called 
+"LEGAL" in a location (such as a relevant directory) where a user would be likely to look for 
+such a notice. If You created one or more Modification(s) You may add Your name as a 
+Contributor to such a notice in any file containing such Modification(s).
+
+3.4 Required Notice for Larger Works.
+You must duplicate this Agreement in any documentation 
+for a Larger Work. You must include a notice stating that the Source Code version of the AAF 
+SDK is available from the Standards Body to Adopters of AAF under the terms of this 
+Agreement. The notice and this Agreement must be conspicuously included in the Larger 
+Work, related documentation or collateral in which You describe recipients' rights or ownership 
+rights relating to the AAF SDK.
+
+3.5 Licenses Granted by You for Larger Works.
+You may distribute a Larger Work under Section 
+2.1 under a license of Your choice, which may contain terms different from this Agreement, 
+provided that You are in compliance with the terms of this Agreement. If You distribute the 
+Larger Work under a different license, then You must make it absolutely clear that any terms 
+which differ from this Agreement are offered by You alone, not by any Contributor. You 
+hereby agree to indemnify each Contributor for any liability incurred by the Contributor as a 
+result of any such terms You offer. You may choose to offer, and to charge a fee for, 
+warranty, support, indemnity or liability obligations to one or more recipients of a Larger Work. 
+However, You may do so only on Your own behalf, and not on behalf of any Contributor. You 
+must make it absolutely clear than any such warranty, support, indemnity or liability obligation 
+is offered by You alone, and You hereby agree to indemnify other Contributors for any liability 
+incurred by them as a result of warranty, support, indemnity or liability terms You offer. 
+
+4. Application of this Agreement.
+This Agreement applies to code to which a Contributor has  attached the notice in Exhibit A.
+
+5. DISCLAIMER OF WARRANTY. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, 
+THE AAF SDK IS PROVIDED "AS IS" AND WITH ALL FAULTS, AND EACH CONTRIBUTOR 
+HEREBY DISCLAIMS ALL WARRANTIES AND CONDITIONS, EITHER EXPRESS, IMPLIED OR 
+STATUTORY, WITH RESPECT TO THE AAF SDK (OR ANY ELEMENT THEREOF), INCLUDING BUT 
+NOT LIMITED ANY (IF ANY) IMPLIED WARRANTIES OR CONDITIONS OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT OF THIRD PARTY'S RIGHTS, 
+TITLE, QUIET ENJOYMENT, QUIET POSSESSION, QUALITY, LACK OF NEGLIGENCE, LACK OF 
+WORKMANLIKE PERFORMANCE, LACK OF VIRUSES, ACCURACY OR COMPLETENESS OR 
+RESPONSES, RESULTS OR PERFORMANCE. WITHOUT LIMITING THE FOREGOING, EACH 
+CONTRIBUTOR HEREBY DISCLAIMS ANY (IF ANY) WARRANTY (A) REGARDING THE ACCURACY 
+OR COMPLETENESS OF THE AAF SDK, AND (B) THAT THE AAF SDK IS APPROPRIATE FOR ANY 
+PARTICULAR USE OR THAT USE OF THE AAF SDK WILL BE UNINTERRUPTED OR ERROR-FREE. 
+THE ENTIRE RISK AS TO THE USE, QUALITY AND PERFORMANCE OF THE AAF SDK IS WITH 
+YOU. THIS DISCLAIMER IS AN ESSENTIAL PART OF THIS AGREEMENT. NO DISTRIBUTION OF 
+THE AAF SDK IS AUTHORIZED EXCEPT UNDER THIS DISCLAIMER.
+
+6. Termination.
+6.1 By breach.
+This Agreement and the rights granted hereunder will terminate automatically if 
+You fail to comply with terms herein and fail to cure such breach within 30 days of becoming 
+aware of the breach. Provisions which, by their nature, must remain in effect beyond the 
+termination of this Agreement under this Section 6.1 shall survive. Any license granted by you 
+to any Contributor, the Standards Body or any Adopter of AAF, and any end user license 
+agreement for Larger Works containing or linking to the AAF SDK in Executable form that 
+have been validly granted by You hereunder prior to termination shall continue in full force 
+and shall extend to entities who become Adopters of AAF (and their customers provided in 
+the license) even after such termination.
+
+6.2. Upon Withdrawal by You as an Adopter of AAF. 
+This Agreement and the rights granted hereunder will terminate upon withdrawal by You as 
+an Adopter under the terms set forth in the Withdrawal provisions in the Adopter's Agreement 
+in Exhibit B. Provisions which, by their nature, must remain in effect beyond the termination of 
+this Agreement under this Section 6.2 shall survive.
+Any license granted by you more than 60 days prior to withdrawal to any 
+Contributor, the Standards Body or any Adopter of AAF, and any end user license 
+agreement for Larger Works containing or linking to the AAF SDK in Executable form that 
+have been validly granted by You hereunder prior to Your withdrawal shall continue in full 
+force and shall extend to entities who become Adopters of AAF (and their customers 
+provided in the license) even after such withdrawal. The license to you under Sections 2.2 
+and 2.3 shall survive after the date of such withdrawal. No license shall be deemed granted 
+or received by You less than 60 days prior to or after the date of such withdrawal.
+
+6.3 By Cessation of Control of Affiliates.
+In the event that control of an Affiliate ceases to exist, 
+such Affiliate will be deemed to have withdrawn pursuant to the terms set forth in the 
+Withdrawal provisions in the Adopter's Agreement in Exhibit B, resulting in termination of this 
+Agreement under Section 6.2 above. 
+
+7. LIMITATION OF LIABILITY. IN NO EVENT SHALL ANY CONTRIBUTOR BE LIABLE TO ANY 
+PERSON FOR ANY DIRECT, INDIRECT, SPECIAL, GENERAL, ECONOMIC, INCIDENTAL, 
+PUNITIVE, OR CONSEQUENTIAL DAMAGES (INCLUDING BUT NOT LIMITED TO DAMAGES FOR 
+LOST PROFITS, LOSS OF GOODWILL, OR BUSINESS INTERRUPTION), OR FOR ANY DAMAGES 
+RESULTING FROM LOSS OF USE, LOSS OF DATA OR LOSS OF ANTICIPATED PROFITS, IN ANY 
+WAY RELATED TO USE OF OR INABILITY TO USE THE AAF SDK, OR OTHERWISE IN 
+CONNECTION WITH ANY PROVISION OF THIS AGREEMENT, EVEN IF THE CONTRIBUTOR HAS 
+BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. THE SOLE AND EXCLUSIVE REMEDY 
+FOR LACK OF SATISFACTION WITH THE AAF SDK IS TO DISCONTINUE USING THE AAF SDK. 
+THIS LIMITATION OF LIABILITY SHALL NOT APPLY TO LIABILITY FOR DEATH OR PERSONAL 
+INJURY RESULTING FROM SUCH PARTY'S NEGLIGENCE TO THE EXTENT APPLICABLE LAW 
+PROHIBITS SUCH LIMITATION. SOME JURISDICTIONS DO NOT ALLOW THE EXCLUSION OR 
+LIMITATION OF INCIDENTAL OR CONSEQUENTIAL DAMAGES, SO THIS EXCLUSION AND 
+LIMITATION MAY NOT APPLY TO YOU.
+
+8. U.S. Government End Users.
+U.S. Government: If the AAF SDK is being acquired by or on behalf 
+of the U.S. Government or by a U.S. Government prime contractor or subcontractor (at any tier), then 
+the Government's rights in the AAF SDK and accompanying documentation shall be only as set forth 
+in this agreement; this is in accordance with 48 C.F.R. 227.7201 through 227.7202-4 (for Department 
+of Defense (DoD) acquisitions) and with 48 C.F.R. 2.101 and 12.212 (for non-DoD acquisitions).
+
+9. Miscellaneous.
+This Agreement and Your executed Adopter's agreement shall constitute the 
+complete and exclusive agreement concerning the subject matter hereof. The Exhibits identified in 
+this Agreement are incorporated herein by reference and made a part hereof. If any provision of this 
+Agreement is held to be unenforceable for any reason in a jurisdiction, such provision shall be 
+reformed only to the extent necessary to make it enforceable, and such holding shall not affect the 
+enforceability of such provision under other circumstances or in other jurisdictions, or of the remaining 
+provisions hereof under all circumstances. None of the provisions of this Agreement shall be deemed 
+to have been waived by any act or acquiescence on the part of any Contributor, its agents or 
+employees, but only by an instrument in writing signed by them. With respect to disputes in which at 
+least one party is a citizen of, or an entity chartered or registered to do business in the United States 
+of America, any litigation relating to this License shall be subject to the jurisdiction of the Federal 
+Courts of the Commonwealth of Massachusetts, with the losing party responsible for costs, including 
+without limitation, court costs and reasonable attorneys' fees and expenses. The application of the 
+United Nations Convention on Contracts for the International Sale of Goods is expressly excluded. 
+Any law or regulation which provides that the language of a contract shall be construed against the 
+drafter shall not apply to this License. 
+
+10. Effective Date.
+The terms and conditions of this Agreement will become effective and are 
+contingent upon receipt from You by a Promoter of a copy of the Adopter's Agreement in Exhibit B 
+signed by Your authorized representative. This Agreement shall be deemed to be have been 
+entered into subsequent to the effective date of the Adopters' Agreement entered into by You. You 
+hereby represent and warrant that You have full authority to execute this Agreement and grant the 
+licenses set forth herein.
+11. In witness of this Agreement, the Adopter has executed this Agreement below: 
+
+EXHIBIT A - Required Notice.
+The contents of this file are subject to the AAF SDK Toolkit Public Source License Agreement (the 
+"License"); You may not use this file except in compliance with the License. The License is available 
+in AAFSDKPSL.DOC, or you may obtain a copy of the License from the AAF Association or its 
+successor. 
+
+Software distributed under the License is distributed on an "AS IS" basis, WITHOUT WARRANTY OF 
+ANY KIND, either express or implied. See the License for the specific language governing rights and 
+limitations under the License. 
+
+The Original Code is Copyright 1997-2001, Licensor of the AAF Association. 
+
+The Initial Developer of the Original Code and the Licensor of the AAF Association is Avid 
+Technology, Inc. All rights reserved. 
+
+Portions created by [Contributor name] are Copyright [year], [Contributor name]. All rights reserved. 
+
+Contributors and Additional Licensors of the AAF Association: [Contributor name]
+
+EXHIBIT B - Adopter's Agreement 
+Advanced Authoring Format Adopter's Agreement
+This is a patent license agreement among parties wishing to adopt the Advanced Authoring Format 
+Specification. As used in this Agreement: 
+_ The "Promoters" are the AAF Association, Microsoft Corporation, Adobe Systems 
+Incorporated, Avid Technology, Inc., Matrox Electronic Systems Ltd., Pinnacle Systems, Inc., 
+Sonic Foundry, Inc., Discreet Logic, Inc., and Sony Corporation. 
+_ "Adopter" is the entity named at the end of this Agreement. 
+_ "Fellow Adopters" are the Promoters and any other entity which executes a copy of this 
+Agreement and delivers it to one of the Promoters. 
+_ "Affiliate" is an entity which directly or indirectly controls, is controlled by, or is under common 
+control with another entity, so long as such control exists. In the event such control ceases to 
+exist, such Affiliate will be deemed to have withdrawn pursuant to the terms set forth in the 
+Withdrawal provisions below. "Control" means beneficial ownership of more than fifty percent 
+of the voting stock or equity in an entity. 
+_ "Specification" is the specification entitled Advanced Authoring Format ("AAF") authored, 
+adopted, and published by the Promoters, including any Updates thereto. 
+_ "Update(s)" means any new updates, revisions, versions or extensions of the Specification 
+issued and adopted and published by the Promoters. 
+_ "Licensee's Product(s)" means a product that implements and complies with the relevant 
+portions of the Specification and any Updates as set forth in the Test Suites. 
+_ "Test Suites" means that portion of the Specification or Updates that list the requirements for 
+Licensee's Products to be considered compliant with the Specification or Updates. 
+The following terms and conditions will become effective and are contingent upon receipt by a 
+Promoter of a copy of this Agreement signed by an authorized representative of Adopter:
+Licenses:
+_ Grants of Licenses. The following license has been granted by the Promoters to each other 
+under the terms of the Advanced Authoring Format Promotersâ Agreement (copy of which to 
+be attached to the executed copy of this Agreement). Upon Adopterâs execution of this 
+Agreement, it is granted by Adopter to all Fellow Adopters, and the grants of all Fellow 
+Adopters shall extend to Adopter. In each case, the party (Promoter, Adopter, or Fellow 
+Adopter) granting the covenant is referred to as the "Licensor". 
+Subject to the terms and conditions of this Agreement Adopter and its Affiliates grants to 
+each Fellow Adopter and its Affiliates (together "Licensee"), under any claim of a patent or 
+patent application otherwise infringed directly or indirectly (contributorily or by inducement) 
+and owned by the Adopter or its Affiliates, a non-exclusive, royalty-free, non-transferable, 
+world-wide license (without rights to sublicense except as part of the transfer of a 
+Licenseeâs Product to allow use of such product by an end-user) to make, have made, use, 
+sell, offer to sell, license, and import Licenseeâs products, where infringement of such 
+claims would not have occurred but for implementation of and compliance with the relevant 
+portions of such Specification and Updates. Such license is contingent on the Licenseeâs 
+Product fully complying with a version of the Specification and Updates as determined by 
+passing the Test Suites to the extent required for such a product.
+_ Copyright License. This Agreement also includes a personal, non-exclusive, royalty-free, non-
+transferable, world-wide, limited license from Promoters to Adopter to use, copy, modify and 
+distribute any copyrighted material in the Specification and Updates only for the purpose of 
+implementing the AAF Specification and Updates to the extent necessary to create a 
+Licenseeâs Product . Adopter acknowledges and agrees that Adopter has no right to use or 
+distribute such copyrighted material separate from Licenseeâs Product. 
+Withdrawal
+_ Adopter may withdraw at any time by providing written notice to the Promoters. The effect of 
+such withdrawal is that all licenses granted by a withdrawing Adopter and its Affiliates with 
+respect to the Specification and Updates adopted and published by the Promoters more than 
+60 days prior to the date of withdrawal shall continue in full force and shall extend to entities 
+who become Adopters (and their Affiliates and customers as provided in the license) even 
+after such withdrawal. Further, the licenses granted to such Adopter and its Affiliates shall 
+continue to apply with respect to the Specification and any Updates adopted and published 
+by the Promoters more than 60 days prior to the date of withdrawal. No license shall be 
+deemed granted or received by such Adopter and its Affiliates as to Updates adopted and 
+published less than 60 days prior to or after the date of such withdrawal. 
+_ For compatibility purposes, it is intended that once a particular technology is included in a 
+licensed Specification or Update, if that technology would infringe a particular patent claim 
+but for the rights granted under this Agreement, Promoters and Adopters will be able to 
+continue to use that same technology as set out in the Specification or Update in all future 
+Updates. Thus, a technology that has been licensed by the withdrawing Adopter and 
+included in the Specification or an Update adopted more than 60 days prior to the date of 
+withdrawal of such Adopter, such technology shall continue to be licensed in Updates 
+adopted after the withdrawal to the extent the same patent claims would apply to the 
+technology before the withdrawal as after the withdrawal. 
+General
+_ No Other Licenses. Adopter neither grants nor receives any license to or right to use any 
+trademark, trade name, or maskwork hereunder. Except for the rights expressly provided by 
+this Agreement, Adopter neither grants nor receives, by implication, or estoppel, or otherwise, 
+any rights under any patents, copyrights, or other intellectual property rights. 
+_ Limited Warranty. Adopter hereby represents and warrants that it has full authority to execute 
+this Agreement and grant the licenses set forth herein. In addition, Adopter acknowledges 
+that the Specification is provided "AS IS" WITH NO WARRANTIES WHATSOEVER, 
+WHETHER EXPRESS, IMPLIED OR STATUTORY, INCLUDING, BUT NOT LIMITED TO ANY 
+WARRANTY OF MERCHANTABILITY, NONINFRINGEMENT, FITNESS FOR ANY 
+PARTICULAR OR INTENDED PURPOSE, OR ANY WARRANTY OTHERWISE ARISING OUT 
+OF ANY PROPOSAL, SPECIFICATION, UPDATE, OR SAMPLE. 
+_ Damages. In no event will Promoters, Adopter or Fellow Adopters be liable to the other for 
+any loss of profits, loss of use, incidental, consequential, indirect, or special damages arising 
+out of this Agreement, whether or not such party had advance notice of the possibility of 
+such damages. 
+_ Publicity.	Adopter consents to the public disclosure and use of its name for purposes of 
+publicly promoting the AAF Specification. 
+_ Notices. Notices shall be in writing and sent to the Promoters at the following address or at 
+such addresses as the Promoters may later specify by written notice. 
+
+For Microsoft
+Microsoft Corporation
+Assoc. Gen. Counsel (IP)
+One Microsoft Way
+Redmond, WA 98052
+
+For Adobe Systems
+Adobe Systems Incorporated
+General Counsel
+345 Park Avenue
+San Jose, CA 95110-2704
+
+For Avid Technology
+Avid Technology, Inc.
+Attn: Director, Business 
+Development
+Metropolitan Technology Park
+Tewksbury, MA 01876
+with a copy to:
+"General Counselâs Office" at 
+the same address. 
+
+For Matrox
+Matrox Electronic Systems
+Attn: Video Products Group
+VP Product Development
+1055 St-Regis Blvd.
+Dorval, P.Q. H9P 2T4
+
+For Pinnacle Systems
+Pinnacle Systems, Inc.
+Attn: Chairman
+280 N. Bernardo Ave.
+Mountain View, CA 94043
+
+For Sonic Foundry
+Sonic Foundry, Inc.
+Attn: Development Director
+754 Williamson Street
+Madison, WI 53703
+
+For Discreet Logic
+Discreet Logic, Inc.
+[INFORMATION 
+FORTHCOMING]
+For Sony Corporation
+Sony Corporation
+[INFORMATION 
+FORTHCOMING]
+ 
+  
+_ Addition of New Promoters. Upon mutual agreement by a majority vote of the Promoters, new 
+companies can be added as Promoters to the AAF Promotersâ Agreement. Such new 
+companies will be required to execute a copy of the AAF Promotersâ Agreement before 
+gaining Promoter status. 
+_ Standards Submission. The Promoters anticipate that the AAF Specification may be 
+submitted to a standards body. As part of such a submission, the Adopter understands that 
+when AAF is accepted as a standard, the Promoters will make the Adopterâs Agreement 
+available for any third party wishing to implement the AAF Specification. 
+_ Governing Law. This Agreement shall be construed and controlled by the laws of the State of 
+Washington. 
+_ Complete Agreement. This Agreement sets forth the entire understanding between Adopter 
+and the Promoters and supersedes all prior agreements and understandings related hereto. 
+In witness of this Agreement, the Adopter has executed this Agreement below:
