@@ -412,6 +412,7 @@ HRESULT STDMETHODCALLTYPE
 		
 		// Support "Picture" type of data definition.
 		CAAFBuiltinDefs defs (dict);
+		checkResult(codecDef->AddEssenceKind (defs.ddkAAFPicture()));
 		checkResult(codecDef->AddEssenceKind (defs.ddPicture()));
 
 		
@@ -680,8 +681,11 @@ HRESULT STDMETHODCALLTYPE
 	if (NULL == fileMob || NULL == stream || NULL == pNumChannels)
 		return AAFRESULT_NULL_PARAM;
 
-	if (EqualAUID(&DDEF_Picture, &essenceKind))
+	if(EqualAUID(&essenceKind, &kAAFDataDef_Picture)
+		|| EqualAUID(&essenceKind, &DDEF_Picture))
+	{
 		*pNumChannels = 1;
+	}
 	else
 		*pNumChannels = 0;
 	
@@ -821,7 +825,8 @@ HRESULT STDMETHODCALLTYPE
 	if (NULL == pNumSamples)
 		return AAFRESULT_NULL_PARAM;
 
-	if(EqualAUID(&essenceKind, &DDEF_Picture))
+	if(EqualAUID(&essenceKind, &kAAFDataDef_Picture)
+		|| EqualAUID(&essenceKind, &DDEF_Picture))
 	{
 		*pNumSamples = _numberOfSamples;
 	}
@@ -884,8 +889,9 @@ CAAFCDCICodec::Create (IAAFSourceMob *p_srcmob,
     try
     {
 	    // Check essence kind
-	    checkExpression( kAAFTrue == EqualAUID(&essenceKind, &DDEF_Picture),
-		AAFRESULT_INVALID_DATADEF );
+		checkExpression( kAAFTrue == EqualAUID(&essenceKind, &kAAFDataDef_Picture)
+			|| kAAFTrue == EqualAUID(&essenceKind, &DDEF_Picture),
+			AAFRESULT_INVALID_DATADEF );
 
 		// Sets whether or not to compress samples as they are written
 		SetCompressionEnabled(compEnable);
@@ -2778,7 +2784,8 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetLargestSampleSize(
 
 	try
 	{
-		if(EqualAUID(&dataDefID, &DDEF_Picture))
+		if(EqualAUID(&dataDefID, &kAAFDataDef_Picture)
+			|| EqualAUID(&dataDefID, &DDEF_Picture))
 		{ 
 			// The samples will be uncompressed so return the 
 			// previously computed value for a single 

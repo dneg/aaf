@@ -131,6 +131,7 @@ HRESULT STDMETHODCALLTYPE
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(codecDef->Initialize(uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
 		CAAFBuiltinDefs defs (dict);
+		CHECK(codecDef->AddEssenceKind (defs.ddkAAFSound()));
 		CHECK(codecDef->AddEssenceKind (defs.ddSound()));
 	  	CHECK(dict->LookupClassDef(AUID_AAFWAVEDescriptor, &fileClass));
 		CHECK(codecDef->SetFileDescriptorClass (fileClass));
@@ -378,7 +379,8 @@ HRESULT STDMETHODCALLTYPE
 {
 	XPROTECT()
 	{
-		if(EqualAUID(&essenceKind, &DDEF_Sound))
+		if(EqualAUID(&essenceKind, &kAAFDataDef_Sound)
+			|| EqualAUID(&essenceKind, &DDEF_Sound))
 		{
 			if(!_headerLoaded)
 			{
@@ -441,7 +443,8 @@ HRESULT STDMETHODCALLTYPE
         aafUID_constref essenceKind,
         aafLength_t *  pNumSamples)
 {
-	if(EqualAUID(&essenceKind, &DDEF_Sound))
+	if(EqualAUID(&essenceKind, &kAAFDataDef_Sound)
+		|| EqualAUID(&essenceKind, &DDEF_Sound))
 	{
 		*pNumSamples = _sampleFrames;
 	}
@@ -535,7 +538,7 @@ HRESULT STDMETHODCALLTYPE
   // then write all of the interleaved samples together.
   aafmMultiXfer_t xferBlock;
   aafmMultiResult_t resultBlock;
-  aafUID_t ddef = DDEF_Sound;
+  aafUID_t ddef = kAAFDataDef_Sound;
 
   resultBlock.bytesXfered = 0;
   resultBlock.samplesXfered = 0;
@@ -723,7 +726,7 @@ HRESULT STDMETHODCALLTYPE
   // then read all of the interleaved samples together.
   aafmMultiXfer_t xferBlock;
   aafmMultiResult_t resultBlock;
-  aafUID_t ddef = DDEF_Sound;
+  aafUID_t ddef = kAAFDataDef_Sound;
 
 	resultBlock.bytesXfered = 0;
 	resultBlock.samplesXfered = 0;
@@ -1274,7 +1277,8 @@ HRESULT STDMETHODCALLTYPE
 	if(pos < 0 || pos >=_sampleFrames)
 		return(AAFRESULT_EOF);
 
-	if(EqualAUID(&dataDefID, &DDEF_Sound))
+	if(EqualAUID(&dataDefID, &kAAFDataDef_Sound)
+		|| EqualAUID(&dataDefID, &DDEF_Sound))
 		*pResult = _bytesPerFrame;
 	else
 		return(AAFRESULT_CODEC_CHANNELS);
@@ -1289,7 +1293,8 @@ HRESULT STDMETHODCALLTYPE
 	if(pResult == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	if(EqualAUID(&dataDefID, &DDEF_Sound))
+	if(EqualAUID(&dataDefID, &kAAFDataDef_Sound)
+		|| EqualAUID(&dataDefID, &DDEF_Sound))
 		*pResult = _bytesPerFrame;
 	else
 		return(AAFRESULT_CODEC_CHANNELS);

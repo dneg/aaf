@@ -133,6 +133,7 @@ CAAFAIFCCodec::GetIndexedDefinitionObject (aafUInt32 index, IAAFDictionary *dict
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		CHECK(codecDef->Initialize(uid, L"AIFC Codec", L"Handles RIFF AIFC data."));
 		CAAFBuiltinDefs defs (dict);
+		CHECK(codecDef->AddEssenceKind (defs.ddkAAFSound()));
 		CHECK(codecDef->AddEssenceKind (defs.ddSound()));
 		CHECK(dict->LookupClassDef(AUID_AAFAIFCDescriptor, &fileClass));
 		CHECK(codecDef->SetFileDescriptorClass (fileClass));
@@ -380,7 +381,8 @@ CAAFAIFCCodec::CountChannels (IAAFSourceMob * /*fileMob*/,
 {
 	XPROTECT()
 	{
-		if(EqualAUID(&essenceKind, &DDEF_Sound))
+		if(EqualAUID(&essenceKind, &kAAFDataDef_Sound)
+			|| EqualAUID(&essenceKind, &DDEF_Sound))
 		{
 			if(!_headerLoaded)
 			{
@@ -443,7 +445,8 @@ CAAFAIFCCodec::CountSamples (
 							 aafUID_constref essenceKind,
 							 aafLength_t *  pNumSamples)
 {
-	if(EqualAUID(&essenceKind, &DDEF_Sound))
+	if(EqualAUID(&essenceKind, &kAAFDataDef_Sound)
+		|| EqualAUID(&essenceKind, &DDEF_Sound))
 	{
 		*pNumSamples = _sampleFrames;
 	}
@@ -537,7 +540,7 @@ CAAFAIFCCodec::WriteSamples (aafUInt32  nSamples,
 	// then write all of the interleaved samples together.
 	aafmMultiXfer_t xferBlock;
 	aafmMultiResult_t resultBlock;
-	aafUID_t ddef = DDEF_Sound;
+	aafUID_t ddef = kAAFDataDef_Sound;
 	
 	resultBlock.bytesXfered = 0;
 	resultBlock.samplesXfered = 0;
@@ -738,7 +741,7 @@ CAAFAIFCCodec::ReadSamples (aafUInt32  nSamples,
 	// then read all of the interleaved samples together.
 	aafmMultiXfer_t xferBlock;
 	aafmMultiResult_t resultBlock;
-	aafUID_t ddef = DDEF_Sound;
+	aafUID_t ddef = kAAFDataDef_Sound;
 	
 	resultBlock.bytesXfered = 0;
 	resultBlock.samplesXfered = 0;
@@ -1289,7 +1292,8 @@ CAAFAIFCCodec::GetIndexedSampleSize
 	if(pos < 0 || pos >=_sampleFrames)
 		return(AAFRESULT_EOF);
 	
-	if(EqualAUID(&dataDefID, &DDEF_Sound))
+	if(EqualAUID(&dataDefID, &kAAFDataDef_Sound)
+		|| EqualAUID(&dataDefID, &DDEF_Sound))
 		*pResult = _bytesPerFrame;
 	else
 		return(AAFRESULT_CODEC_CHANNELS);
@@ -1304,7 +1308,8 @@ CAAFAIFCCodec::GetLargestSampleSize (aafUID_constref dataDefID,
 	if(pResult == NULL)
 		return(AAFRESULT_NULL_PARAM);
 	
-	if(EqualAUID(&dataDefID, &DDEF_Sound))
+	if(EqualAUID(&dataDefID, &kAAFDataDef_Sound)
+		|| EqualAUID(&dataDefID, &DDEF_Sound))
 		*pResult = _bytesPerFrame;
 	else
 		return(AAFRESULT_CODEC_CHANNELS);

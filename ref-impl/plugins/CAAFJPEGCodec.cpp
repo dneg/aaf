@@ -433,6 +433,7 @@ HRESULT STDMETHODCALLTYPE
 		
 		// Support "Picture" type of data definition.
 		CAAFBuiltinDefs defs (dict);
+		checkResult(codecDef->AddEssenceKind (defs.ddkAAFPicture()));
 		checkResult(codecDef->AddEssenceKind (defs.ddPicture()));
 
 		
@@ -697,7 +698,8 @@ HRESULT STDMETHODCALLTYPE
 	if (NULL == fileMob || NULL == stream || NULL == pNumChannels)
 		return AAFRESULT_NULL_PARAM;
 
-	if (EqualAUID(&DDEF_Picture, &essenceKind))
+	if(EqualAUID(&essenceKind, &kAAFDataDef_Picture)
+		|| EqualAUID(&essenceKind, &DDEF_Picture))
 	{
 		*pNumChannels = 1;
 	}
@@ -842,7 +844,8 @@ HRESULT STDMETHODCALLTYPE
 	if (NULL == pNumSamples)
 		return AAFRESULT_NULL_PARAM;
 
-	if(EqualAUID(&essenceKind, &DDEF_Picture))
+	if(EqualAUID(&essenceKind, &kAAFDataDef_Picture)
+		|| EqualAUID(&essenceKind, &DDEF_Picture))
 	{
 		*pNumSamples = _numberOfSamples;
 	}
@@ -892,8 +895,9 @@ CAAFJPEGCodec::Create (IAAFSourceMob *unk,
 		// Initialize the descriptor helper:
 		checkResult(_descriptorHelper.Initialize(unk));
 
-    checkExpression(kAAFTrue == EqualAUID(&essenceKind, &DDEF_Picture),
-			              AAFRESULT_INVALID_DATADEF);
+		checkExpression( kAAFTrue == EqualAUID(&essenceKind, &kAAFDataDef_Picture)
+			|| kAAFTrue == EqualAUID(&essenceKind, &DDEF_Picture),
+			AAFRESULT_INVALID_DATADEF );
     
 		_sampleRate = sampleRate;	// There is only one type of sample supported.
     
@@ -2673,7 +2677,7 @@ HRESULT STDMETHODCALLTYPE
 			{	// Write out the current color siting value.
 				aafLength_t	maxLen;
 
-				GetLargestSampleSize (DDEF_Picture, &maxLen);
+				GetLargestSampleSize (kAAFDataDef_Picture, &maxLen);
 				param.operand.expInt32 = (aafUInt32)maxLen;
 				checkResult(fmt->AddFormatSpecifier (kAAFMaxSampleBytes, sizeof(param.operand.expInt32), (aafDataBuffer_t)&param.operand.expInt32));
 			}
@@ -3012,7 +3016,8 @@ HRESULT STDMETHODCALLTYPE
 
 	try
 	{
-		if(EqualAUID(&dataDefID, &DDEF_Picture))
+		if(EqualAUID(&dataDefID, &kAAFDataDef_Picture)
+			|| EqualAUID(&dataDefID, &DDEF_Picture))
 		{
 			if (kAAFCompressionDisable == _compressEnable)
 			{ // The samples are compressed to we can so get the size of the sample
@@ -3058,7 +3063,8 @@ HRESULT STDMETHODCALLTYPE
 
 	try
 	{
-		if(EqualAUID(&dataDefID, &DDEF_Picture))
+		if(EqualAUID(&dataDefID, &kAAFDataDef_Picture)
+			|| EqualAUID(&dataDefID, &DDEF_Picture))
 		{ 
 			if (kAAFCompressionDisable == _compressEnable)
 			{ // If data is compressed, and will not be software decompressed, find
