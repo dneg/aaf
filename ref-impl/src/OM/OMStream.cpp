@@ -240,9 +240,14 @@ OMUInt64 OMStream::position(void) const
 
 #if defined( OM_OS_UNIX )
 
+#if defined(OM_COMPILER_SGICC_MIPS_SGI)
+  OMInt64 position = ftell64( _file );
+  ASSERT("Successful tell", IMPLIES(position == static_cast<OMInt64>(-1), errno == 0));
+#else
 	// all POSIX-compliant
   __off64_t position = ftello64( _file );
   ASSERT("Successful tell", IMPLIES(position == (__off64_t)-1, errno == 0));
+#endif
 	
 #elif defined( OM_OS_WINDOWS )
 
@@ -273,10 +278,18 @@ void OMStream::setPosition(OMUInt64 newPosition)
 
 #if defined( OM_OS_UNIX )
 
+
+#if defined(OM_COMPILER_SGICC_MIPS_SGI)
+	OMUInt64 position = newPosition;
+	int status = fseek64( _file, position, SEEK_SET );
+
+#else
 	// all POSIX-compliant
 	__off64_t position = newPosition;
 	int status = fseeko64( _file, position, SEEK_SET);
-  ASSERT("Successful seek", status == 0);
+#endif
+
+	ASSERT("Successful seek", status == 0);
 	
 #elif defined( OM_OS_WINDOWS )
 
