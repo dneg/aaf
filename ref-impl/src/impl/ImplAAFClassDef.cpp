@@ -89,7 +89,8 @@ extern "C" const aafClassID_t CLSID_EnumAAFPropertyDefs;
 
 ImplAAFClassDef::ImplAAFClassDef ()
   : _ParentClass  ( PID_ClassDefinition_ParentClass,  "ParentClass"),
-	_Properties   ( PID_ClassDefinition_Properties,   "Properties")
+	_Properties   ( PID_ClassDefinition_Properties,   "Properties"),
+	_propTypesLoaded (false)
 {
   _persistentProperties.put(_ParentClass.address());
   _persistentProperties.put(_Properties.address());
@@ -126,24 +127,41 @@ AAFRESULT STDMETHODCALLTYPE
   if (!pClassName) return AAFRESULT_NULL_PARAM;
 
   HRESULT hr;
+  aafUID_t parentId;
+  if (pParentClass)
+	{
+	  hr = pParentClass->GetAUID(&parentId);
+	  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
+	}
+  else
+	{
+	  aafUID_t NULL_UID = { 0 };
+	  parentId = NULL_UID;
+	}
+
+  return pvtInitialize (pID, &parentId, pClassName);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFClassDef::pvtInitialize (
+      const aafUID_t * pID,
+      const aafUID_t * pParentClassId,
+      const wchar_t *  pClassName)
+{
+  if (!pID) return AAFRESULT_NULL_PARAM;
+  if (!pClassName) return AAFRESULT_NULL_PARAM;
+  if (! pParentClassId) return AAFRESULT_NULL_PARAM;
+
+
+  HRESULT hr;
   hr = SetName (pClassName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  aafUID_t id;
-  if (pParentClass)
-	{
-	  hr = pParentClass->GetAUID(&id);
-	  if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-	}
-  else
-	{
-	  aafUID_t NULL_UID = { 0 };
-	  id = NULL_UID;
-	}
-  _ParentClass = id;
+  _ParentClass = *pParentClassId;
 
   return AAFRESULT_SUCCESS;
 }
@@ -203,6 +221,9 @@ AAFRESULT STDMETHODCALLTYPE
 {
   // This will only work if this class has not yet been registered.
 
+  if (! pTypeDef)
+	return AAFRESULT_NULL_PARAM;
+
   AAFRESULT hr;
   ImplAAFDictionarySP pDict;
   hr = GetDictionary (&pDict);
@@ -227,9 +248,15 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // If we're here, we're not already registered.  OK to continue.
+
+  aafUID_t typeId;
+  hr = pTypeDef->GetAUID (&typeId);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
   return pvtAppendPropertyDef (pID,
 							   pName,
-							   pTypeDef,
+							   &typeId,
 							   isOptional,
 							   ppPropDef);
 }
@@ -242,26 +269,18 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFTypeDef *      pTypeDef,
       ImplAAFPropertyDef ** ppPropDef)
 {
+  if (! pTypeDef)
+	return AAFRESULT_NULL_PARAM;
+  aafUID_t typeId;
+  AAFRESULT hr;
+  hr = pTypeDef->GetAUID (&typeId);
+  if (AAFRESULT_FAILED (hr))
+	return hr;
+
   return pvtAppendPropertyDef (pID,
 							   pName,
-							   pTypeDef,
+							   &typeId,
 							   AAFTrue,
-							   ppPropDef);
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFClassDef::pvtAppendNewPropertyDef (
-      aafUID_t *  pID,
-	  wchar_t *  pName,
-	  ImplAAFTypeDef * pTypeDef,
-	  aafBool  isOptional,
-	  ImplAAFPropertyDef ** ppPropDef)
-{
-  return pvtAppendPropertyDef (pID,
-							   pName,
-							   pTypeDef,
-							   isOptional,
 							   ppPropDef);
 }
 
@@ -381,9 +400,16 @@ AAFRESULT STDMETHODCALLTYPE
 	  if (AAFRESULT_FAILED (hr)) return hr;
 	  assert (pDict);
 
-	  hr = pDict->LookupClass (&parentClass, &_cachedParentClass);
+	  ImplAAFClassDefSP tmp;
+	  assert (! _cachedParentClass);
+	  hr = pDict->LookupClass (&parentClass, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
+	  // If _cachedParentClass was set during process of looking this
+	  // up, then simply throw away the most recently looked-up one
+	  // (in tmp).
+	  if (! _cachedParentClass)
+		_cachedParentClass = tmp;
 	  assert (_cachedParentClass);
 	}
   assert (ppClassDef);
@@ -399,13 +425,13 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::pvtAppendPropertyDef (
       aafUID_t *            pID,
       wchar_t *             pName,
-      ImplAAFTypeDef *      pTypeDef,
+      const aafUID_t *      pTypeId,
       aafBool               isOptional,
       ImplAAFPropertyDef ** ppPropDef)
 {
   if (! pID) return AAFRESULT_NULL_PARAM;
   if (! pName) return AAFRESULT_NULL_PARAM;
-  if (! pTypeDef) return AAFRESULT_NULL_PARAM;
+  if (! pTypeId) return AAFRESULT_NULL_PARAM;
 
   ImplAAFDictionarySP pDict;
   ImplAAFPropertyDefSP pd;
@@ -429,7 +455,7 @@ AAFRESULT STDMETHODCALLTYPE
   check_result (pd->Initialize (pID,
 								omPid,
 								pName,
-								pTypeDef,
+								pTypeId,
 								isOptional));
 
   ImplAAFPropertyDef * pdTemp = pd;
@@ -441,6 +467,20 @@ AAFRESULT STDMETHODCALLTYPE
 	*ppPropDef = pd;
 	(*ppPropDef)->AcquireReference ();
   }
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFClassDef::pvtAppendExistingPropertyDef
+(ImplAAFPropertyDef * pPropDef)
+{
+  if (!pPropDef)
+	return AAFRESULT_NULL_PARAM;
+
+  _Properties.appendValue(pPropDef);
+  pPropDef->AcquireReference ();
 
   return AAFRESULT_SUCCESS;
 }
@@ -468,3 +508,40 @@ aafBool ImplAAFClassDef::pvtPropertyIdentifierAUID::DoesMatch
   return (EqualAUID (&_id, &testUID) ? AAFTrue : AAFFalse);
 }
 
+
+void ImplAAFClassDef::AssurePropertyTypesLoaded ()
+{
+  if (! _propTypesLoaded)
+	{
+	  _propTypesLoaded = true;
+
+	  AAFRESULT hr;
+	  ImplAAFClassDefSP spDef;
+	  spDef	= this;
+	  assert (spDef);
+	  while (1)
+		{
+		  // Loop through this class and all its parents
+		  ImplEnumAAFPropertyDefsSP pdEnumSP;
+		  hr = spDef->GetPropertyDefs (&pdEnumSP);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+
+		  ImplAAFPropertyDefSP propDefSP;
+
+		  // Loop through all properties of this class
+		  while (AAFRESULT_SUCCEEDED (pdEnumSP->NextOne (&propDefSP)))
+			{
+			  // return value unused; just force the lookup.
+			  propDefSP->type ();
+			}
+
+		  // Look at the parent of this class
+		  ImplAAFClassDefSP parentSP;
+		  hr = spDef->GetParent (&parentSP);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  if (! parentSP)
+			break;
+		  spDef = parentSP;
+		}
+	}
+}
