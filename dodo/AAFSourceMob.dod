@@ -25,16 +25,16 @@ AD_XMETHOD1(GetEssenceDescription,
 			[out],
 			objOut,
 			AAFEssenceDescriptor,
-			ppMdes,
+			ppEssence,
 			Returned Essence Descriptor object,
 			Places the Essence Descriptor object attached to this Mob into the
-  // ppMdes argument.
+  // ppEssence argument.
   //
   // Succeeds if all of the following are true:
-  // - the ppMdes pointer is valid.
+  // - the ppEssence pointer is valid.
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppMdes.
+  // If this method fails nothing is written to *ppEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -44,7 +44,7 @@ AD_XMETHOD1(GetEssenceDescription,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - ppMdes is null.
+  //   - ppEssence is null.
   //
   // \(other codes here.\))
 
@@ -53,15 +53,15 @@ AD_XMETHOD1(SetEssenceDescription,
 			[in],
 			objIn,
 			AAFEssenceDescriptor,
-			pMdes,
+			pEssence,
 			Essence Descriptor object,
 			Sets the Essence Descriptor of this Mob to be the given one.
   //
   // Succeeds if all of the following are true:
-  // - the pMdes pointer is valid.
+  // - the pEssence pointer is valid.
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *pMdes.
+  // If this method fails nothing is written to *pEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -71,7 +71,7 @@ AD_XMETHOD1(SetEssenceDescription,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - pMdes is null.
+  //   - pEssence is null.
   //
   // \(other codes here.\))
 
@@ -85,7 +85,7 @@ AD_XMETHOD2(Setup,
 			[in],
 			  objPass,
 			  aafClassID_t *,
-			  pMdesClass,
+			  pEssenceClass,
 			  ClassID of Essence Descriptor,
 			This function creates Source Mobs that are not in the standard
   // set \(that is\, not File Source Mobs\, tape Source Mobs\, or film
@@ -104,7 +104,7 @@ AD_XMETHOD2(Setup,
   //
   // Succeeds if all of the following are true:
   // - the pName pointer is valid.
-  // - the pMdesClass pointer is valid.
+  // - the pEssenceClass pointer is valid.
   // \(other conditions here\)
   // 
   // This method will return the following codes.  If more than one of
@@ -115,7 +115,7 @@ AD_XMETHOD2(Setup,
   //   - succeeded.  \(This is the only code indicating success.\)
   //
   // AAFRESULT_NULL_PARAM
-  //   - either pName or pMdesClass is null.
+  //   - either pName or pEssenceClass is null.
   //
   // \(other codes here.\))
 
@@ -202,7 +202,7 @@ AD_XMETHOD4(AddTimecodeClip,
   // Succeeds if all of the following are true:
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppMdes.
+  // If this method fails nothing is written to *ppEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -271,7 +271,7 @@ AD_XMETHOD7(AddEdgecodeClip,
   // Succeeds if all of the following are true:
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppMdes.
+  // If this method fails nothing is written to *ppEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -322,7 +322,7 @@ AD_XMETHOD5(ValidateTimecodeRange,
   // - the pEssenceKind pointer is valid.
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppMdes.
+  // If this method fails nothing is written to *ppEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -400,7 +400,7 @@ AD_XMETHOD7(AddPhysSourceRef,
   // - the pSourceRefObj pointer is valid.
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppMdes.
+  // If this method fails nothing is written to *ppEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
@@ -488,7 +488,7 @@ AD_XMETHOD_10(AddPulldownRef,
   // - the pSourceRefObj pointer is valid.
   // \(other conditions here\)
   // 
-  // If this method fails nothing is written to *ppMdes.
+  // If this method fails nothing is written to *ppEssence.
   // 
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect\, it will return the first one
