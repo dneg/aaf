@@ -51,7 +51,7 @@ typedef struct tagAAFComObjectInfo
 #define AAF_BEGIN_OBJECT_MAP(x) static AAFComObjectInfo_t x[] = {
 #define AAF_LAST_ENTRY() { NULL, NULL, NULL, false }
 #define AAF_END_OBJECT_MAP()  AAF_LAST_ENTRY() };
-#define AAF_OBJECT_ENTRYX(class,reg) { &CLSID_##class, OLESTR(#class), &C##class##::COMCreate, reg },
+#define AAF_OBJECT_ENTRYX(class,reg) { &CLSID_##class, OLESTR(#class), &C##class::COMCreate, reg },
 
 // Define standard entries do not register the class.
 #define AAF_OBJECT_ENTRY(class) AAF_OBJECT_ENTRYX(class,false)
