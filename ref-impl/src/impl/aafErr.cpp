@@ -77,8 +77,7 @@ char *aafGetErrorString(
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-char *aafGetExpandedErrorString(AAFFile * file,
-											aafErr_t code,
+char *aafGetExpandedErrorString(aafErr_t code,
 											aafInt16 buflen,
 											char *buffer)
 {
@@ -129,7 +128,6 @@ char *aafGetExpandedErrorString(AAFFile * file,
  *		Standard errors (see top of file).
  */
 void aafRegErr(
-			AAFFile *		file,
 			aafErr_t		msgcode)
 {
 }
@@ -152,7 +150,6 @@ void aafRegErr(
  *		<none>.
  */
 void aafRegErrDebug(
-			AAFFile *		file,
 			aafErr_t		ec,
 			char			*filename,
 			aafInt16		line)
@@ -182,7 +179,6 @@ void aafRegErrDebug(
  *		<none>.
  */
 void aafReregErrDebug(
-			AAFFile * file,
 			aafErr_t msgcode,
 			char *filename,
 			aafInt16 line)
@@ -215,15 +211,15 @@ void aafReregErrDebug(
  * Possible Errors:
  *		<none>.
  */
-void aafPrintStackTrace(
-			AAFFile * file)
-{
-   if (file != NULL)
-	  {
-		 printf("***Stack trace from last error****\n");
-		 printf("%s\n", file->_stackTrace);
-	  }
-}
+//!!!void aafPrintStackTrace(
+//			AAFFile * file)
+//{
+  // if (file != NULL)
+	//  {
+//		 printf("***Stack trace from last error****\n");
+//		 printf("%s\n", file->_stackTrace);
+//	  }
+//}
 #endif
 
 /************************
