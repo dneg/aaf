@@ -297,39 +297,39 @@ private:
 	void SetCurrentIndex(aafUInt32 currentIndex);
 	void SetWriteIndex(aafUInt32 writeIndex);
 
-	typedef struct _aafCompParams
+	typedef struct _aafCompressionParams
 	{
-		int imageWidth;
-		int imageHeight;
+		aafUInt32 imageWidth;
+		aafUInt32 imageHeight;
 
 		aafColorSpace_t colorSpace;
-		int horizontalSubsampling;
-		int verticalSubsampling;
+		aafUInt32 horizontalSubsampling;
+		aafUInt32 verticalSubsampling;
 
-		int blackReferenceLevel;
-		int whiteReferenceLevel;
-		int colorRange;
+		aafUInt32 blackReferenceLevel;
+		aafUInt32 whiteReferenceLevel;
+		aafUInt32 colorRange;
 
 		int quality; 
 
-		int rowBytes;
-		unsigned char *buffer;
-		long bufferSize;
+		aafUInt32 rowBytes;
+		aafDataBuffer_t buffer;
+		aafUInt32 bufferSize;
 
-	} aafCompParams;
+	} aafCompressionParams;
 
 	// Compress a single image data from the given buffer. Return the actual
 	// number of bytes written.
-	HRESULT CompressImage(const aafCompParams& param);
+	HRESULT CompressImage(const aafCompressionParams& param);
 
 	// Decompress a single image from the current position in the stream returning
 	// the image data in buffer and the actual number of bytes written. Note: bufLen must
 	// be large enough to hold all of the decompressed data
-	HRESULT DecompressImage(aafCompParams& param);
+	HRESULT DecompressImage(aafCompressionParams& param);
 
-	// Utility to get the current offset in the stream and add an
-	// entry to the sample index based on the given compressedDataSize.
-	void AddNewSampleIndex(aafUInt32 compressedDataSize); // throw HRESULT
+	// Utility to get the current offset in the stream and add
+	// it the the sample index
+	void AddNewCompressedSample(); // throw HRESULT
 
 	// SampleIndex access methods : may be temporary. We need these methods
 	// to read/write the index because the SampleIndex property in EssenceData
@@ -421,6 +421,8 @@ private:
 
 	// Copied from WaveCodec...(may be renamed...)
 	aafLength_t	_numberOfSamples; /* was _sampleFrames in WaveCodec) */
+
+	aafUInt16 _padBytesPerRow;
 
 
 	bool _headerLoaded; // has the jpeg header been loaded?
