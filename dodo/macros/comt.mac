@@ -101,7 +101,7 @@ HRESULT C.this-module::test()
 #startm AD_ROOT_CLASS_BEGIN 00
 #include "C.this-module.h"
 #include "C.this-module.h"
-#ifndef _C.this-module_h_
+#ifndef __C.this-module_h__
 #error - improperly defined include guard
 #endif
 
