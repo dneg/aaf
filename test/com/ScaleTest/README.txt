@@ -1,8 +1,31 @@
 ###############################################################################
+# $Id$
 #
-# README for Scalability testscript usage
+# README for Scalability tests
+#
+# The ScaleTest subdirectory contains two types of test:
+#
+# a) ScaleTest (executable) which tests the 2GB filesize limit
+#
+# b) runaaftest.sh (script) tests AAF metadata file scalability and provides
+#    timings which can be used to benchmark stored format implementations
 #
 ##############################################################################
+
+ScaleTest executable
+--------------------
+
+Run the ScaleTest command without arguments to test whether the toolkit can
+write a larger than 2GB AAF file, close it, open it and correctly read back
+the data.
+
+  ScaleTest.exe  (Win32)
+
+  ScaleTest      (Posix)
+
+
+runaaftest.sh script
+--------------------
 
 NOTE: Requires a Bourne shell to run the scripts
       E.g. Bash under Linux or MSYS under MS Windows
