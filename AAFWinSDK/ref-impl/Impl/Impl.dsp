@@ -138,10 +138,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFContentStorage.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFControlPoint.cpp"
 # End Source File
 # Begin Source File
@@ -270,6 +266,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameter.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterDef.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFParameterSlot.cpp"
 # End Source File
 # Begin Source File
@@ -386,10 +386,6 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFComponents.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterDefs.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFControlPoints.cpp"
 # End Source File
 # Begin Source File
@@ -430,6 +426,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFMobSlots.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterDefs.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterSlots.cpp"
 # End Source File
 # Begin Source File
@@ -439,6 +439,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFProperties.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPropertyDefs.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPropertyValues.cpp"
 # End Source File
 # Begin Source File
 

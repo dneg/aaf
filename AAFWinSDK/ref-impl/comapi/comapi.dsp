@@ -170,14 +170,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFContentStorageTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFParameterDefTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFControlPoint.cpp"
 # End Source File
 # Begin Source File
@@ -440,6 +432,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameter.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFParameterDefTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFParameterSlot.cpp"
 # End Source File
 # Begin Source File
@@ -668,14 +668,6 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFComponentsTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterDefs.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterDefsTest.cpp"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFControlPoints.cpp"
 # End Source File
 # Begin Source File
@@ -756,6 +748,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFMobsTest.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterDefs.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterDefsTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFParameterSlots.cpp"
 # End Source File
 # Begin Source File
@@ -777,6 +777,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPropertyDefs.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPropertyDefsTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPropertyValues.cpp"
 # End Source File
 # Begin Source File
 
