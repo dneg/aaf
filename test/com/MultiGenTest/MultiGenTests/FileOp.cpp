@@ -43,7 +43,7 @@ public:
   KindMap()
   {
     #define ADD_KIND( X ) \
-    _kindMap[ string( #X ) ] = aafFileKindAaf##X;
+    _kindMap[ string( #X ) ] = kAAFFileKind_Aaf##X;
 
     ADD_KIND( M512Binary );
     ADD_KIND( S512Binary );
