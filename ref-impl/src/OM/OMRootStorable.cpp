@@ -91,4 +91,8 @@ void OMRootStorable::initialize(OMStorable* clientRoot,
 
   _clientRoot = clientRoot;
   _dictionary = dictionary;
+
+  _clientRoot.initialize(OMDictionary::find(0x0002));
+  _dictionary.initialize(OMDictionary::find(0x0001));
+
 }
