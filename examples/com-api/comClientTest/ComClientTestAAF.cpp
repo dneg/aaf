@@ -466,6 +466,7 @@ static void CreateAAFFile(aafWChar * pFileName)
   IAAFEssenceDescriptor *essenceDesc = NULL;
   aafRational_t  audioRate = { 44100, 1 };
   IAAFLocator    *pLocator = NULL;
+	IAAFComponent*		pComponent = NULL;
 
   for(test = 0; test < 5; test++)
   {
@@ -503,6 +504,10 @@ static void CreateAAFFile(aafWChar * pFileName)
        check(defs.cdSourceClip()->
 			 CreateInstance(IID_IAAFSourceClip, 
 							(IUnknown **)&sclp));
+		 check(sclp->QueryInterface(IID_IAAFComponent, (void **)&pComponent));
+		 check(pComponent->SetDataDef(defs.ddPicture()));
+		pComponent->Release();
+		pComponent = NULL;
       check(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
       check(pMob->AppendNewTimelineSlot
 			(editRate,
@@ -547,6 +552,9 @@ static void CreateAAFFile(aafWChar * pFileName)
   // Cleanup
   pDictionary->Release();
   pDictionary = NULL;
+
+	if (pComponent)
+		pComponent->Release();
 
   pHeader->Release();
   pHeader = NULL;
