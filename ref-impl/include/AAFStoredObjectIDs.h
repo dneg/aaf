@@ -36,7 +36,6 @@
 #define AUID_AAFEffectDefinition AUID_AAFEffectDef
 #define AUID_AAFEssenceGroup AUID_AAFMediaGroup
 #define AUID_AAFFilmDescriptor AUID_AAFMediaFilmDescriptor
-#define AUID_AAFGroup AUID_AAFEffectInvocation
 #define AUID_AAFInterchangeObject AUID_AAFObject
 #define AUID_AAFJPEGImageData AUID_AAFJPEGData
 #define AUID_AAFMIDIFileData AUID_AAFMIDIData
