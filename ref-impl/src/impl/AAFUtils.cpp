@@ -237,7 +237,9 @@ aafBool isObjFunc(AAFFile * file,       /* IN - File Handle */
 void AAFGetDateTime(aafTimeStamp_t *time)
 {
 #if defined(_MAC) || defined(macintosh)
-	GetDateTime(&(time->TimeVal));
+	unsigned long tmpTime;
+	GetDateTime(&tmpTime);
+	time->TimeVal = tmpTime;
 	time->IsGMT = FALSE;
 #elif  defined(_WIN32)
 	time->TimeVal = (long) clock();
