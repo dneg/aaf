@@ -86,6 +86,8 @@ ImplAAFIdentification::Initialize
   aafCharacter_constptr productVersionString,
   aafUID_constref productID)
 {
+  if (isInitialized ()) return AAFRESULT_ALREADY_INITIALIZED;
+
   if (! companyName)          return AAFRESULT_NULL_PARAM;
   if (! productName)          return AAFRESULT_NULL_PARAM;
   if (! productVersionString) return AAFRESULT_NULL_PARAM;
@@ -110,6 +112,8 @@ ImplAAFIdentification::Initialize
   AAFGetDateTime (&timestamp);
   _date = timestamp;
 
+  setInitialized ();
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -118,6 +122,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetCompanyName (aafWChar *  pName,
 										   aafUInt32 bufSize)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   bool stat;
   if (! pName)
 	{
@@ -135,6 +141,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetCompanyNameBufLen (aafUInt32 *  pLen)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   if (! pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -149,6 +157,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductName (aafWChar *  pProductName,
 										   aafUInt32 bufSize)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   bool stat;
   if (! pProductName)
 	{
@@ -166,6 +176,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductNameBufLen (aafUInt32 *  pLen)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   if (! pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -179,6 +191,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductVersion (aafProductVersion_t* productVersion)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
 	if (! productVersion)
 	{
 		return AAFRESULT_NULL_PARAM;
@@ -197,6 +211,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductVersionString (aafWChar *  pVS,
 													aafUInt32 bufSize)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   bool stat;
   if (! pVS)
 	{
@@ -214,6 +230,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductVersionStringBufLen (aafUInt32 *  pLen)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   if (! pLen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -227,6 +245,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetProductID (aafUID_t * pPID)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   if (! pPID)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -241,6 +261,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetDate (aafTimeStamp_t * pTS)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   if (! pTS)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -253,6 +275,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetRefImplVersion (aafProductVersion_t* productVersion)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
 	if (! productVersion)
 	{
 		return AAFRESULT_NULL_PARAM;
@@ -273,6 +297,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetPlatform (aafWChar *  pPlatform,
 										aafUInt32 bufSize)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
 	if (! pPlatform)
 	{
 		return AAFRESULT_NULL_PARAM;
@@ -297,6 +323,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetPlatformBufLen (aafUInt32 *  pLen)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
 	if (! pLen)
 	{
 		return AAFRESULT_NULL_PARAM;
@@ -315,6 +343,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::GetGeneration (aafUID_t *  pGen)
 {
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
   if (! pGen)
 	{
 	  return AAFRESULT_NULL_PARAM;
@@ -356,7 +386,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFIdentification::SetProductVersion (aafProductVersion_constref productVersion)
 {
-	
+  if (! isInitialized ()) return AAFRESULT_NOT_INITIALIZED;
+
 	_productVersion = productVersion;
 
 	return AAFRESULT_SUCCESS;
