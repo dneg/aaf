@@ -42,3 +42,6 @@ EXPORTS		AAFFileOpenExistingModify
 EXPORTS		AAFFileOpenNewModify
 EXPORTS		AAFFileOpenTransient
 EXPORTS		AAFGetPluginManager
+EXPORTS		AAFCreateRawStorageMemory
+EXPORTS		AAFCreateRawStorageDisk
+EXPORTS		AAFCreateAAFFileOnRawStorage
