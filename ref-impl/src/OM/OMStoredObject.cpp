@@ -49,7 +49,7 @@
 #include <objbase.h>
 #endif
 
-const OMVersion currentVersion = 25;
+const OMVersion currentVersion = 26;
 
 const size_t indexHeaderSize = sizeof(OMByteOrder) +
                                sizeof(OMVersion) +
@@ -124,13 +124,11 @@ static void check(HRESULT resultCode);
 
 static void checkFile(HRESULT resultCode, const wchar_t* fileName);
 
-static void checkStream(HRESULT resultCode, const char* streamName);
+static void checkStream(HRESULT resultCode, const wchar_t* streamName);
 
-static void checkStorage(HRESULT resultCode, const char* storageName);
+static void checkStorage(HRESULT resultCode, const wchar_t* storageName);
 
 static void printError(const char* prefix, const char* type);
-
-static void printName(const char* name);
 
 static void printName(const wchar_t* name);
 
@@ -431,8 +429,8 @@ OMStoredObject* OMStoredObject::createFile(const wchar_t* fileName)
   return newStoredObject;
 }
 
-static const char* const propertyStreamName = "properties";
- 
+static const wchar_t* const propertyStreamName = L"properties";
+
 void OMStoredObject::create(const OMByteOrder byteOrder)
 {
   TRACE("OMStoredObject::create");
@@ -581,10 +579,10 @@ void OMStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
   //        <c OMStoredObject>.
   //   @parm The name of the stream to open.
   //   @rdesc An open stream.
-IStream* OMStoredObject::openStream(const char* streamName)
+IStream* OMStoredObject::openStream(const wchar_t* streamName)
 {
   TRACE("OMStoredObject::openStream");
-  PRECONDITION("Valid stream name", validString(streamName));
+  PRECONDITION("Valid stream name", validWideString(streamName));
 
   return openStream(_storage, streamName);
 }
@@ -593,10 +591,10 @@ IStream* OMStoredObject::openStream(const char* streamName)
   //        this <c OMStoredObject>.
   //   @parm The name of the stream to create.
   //   @rdesc An open stream.
-IStream* OMStoredObject::createStream(const char* streamName)
+IStream* OMStoredObject::createStream(const wchar_t* streamName)
 {
   TRACE("OMStoredObject::createStream");
-  PRECONDITION("Valid stream name", validString(streamName));
+  PRECONDITION("Valid stream name", validWideString(streamName));
 
   return createStream(_storage, streamName);
 }
@@ -624,10 +622,10 @@ void OMStoredObject::restore(OMClassId& cid)
   //   @parm The name to be used for the new <c OMStoredObject>.
   //   @rdesc A new <c OMStoredObject> contained by this
   //          <c OMStoredObject>.
-OMStoredObject* OMStoredObject::create(const char* name)
+OMStoredObject* OMStoredObject::create(const wchar_t* name)
 {
   TRACE("OMStoredObject::create");
-  PRECONDITION("Valid name", validString(name));
+  PRECONDITION("Valid name", validWideString(name));
 
   IStorage* newStorage = createStorage(_storage, name);
   OMStoredObject* result = new OMStoredObject(newStorage);
@@ -641,10 +639,10 @@ OMStoredObject* OMStoredObject::create(const char* name)
   //   @parm The name of the existing <c OMStoredObject>.
   //   @rdesc The existing <c OMStoredObject> contained by this
   //          <c OMStoredObject>.
-OMStoredObject* OMStoredObject::open(const char* name)
+OMStoredObject* OMStoredObject::open(const wchar_t* name)
 {
   TRACE("OMStoredObject::open");
-  PRECONDITION("Valid name", validString(name));
+  PRECONDITION("Valid name", validWideString(name));
 
   IStorage* newStorage = openStorage(_storage, name, _mode);
   OMStoredObject* result = new OMStoredObject(newStorage);
@@ -710,15 +708,15 @@ void OMStoredObject::validate(
   //   @parm The <c OMStoredVectorIndex> to save.
   //   @parm The name of the vector.
 void OMStoredObject::save(const OMStoredVectorIndex* vector,
-                          const char* vectorName)
+                          const wchar_t* vectorName)
 {
   TRACE("OMStoredObject::save");
   PRECONDITION("Valid vector", vector != 0);
-  PRECONDITION("Valid vector name", validString(vectorName));
+  PRECONDITION("Valid vector name", validWideString(vectorName));
 
   // Calculate the stream name for the index.
   //
-  char* vectorIndexName = collectionIndexStreamName(vectorName);
+  wchar_t* vectorIndexName = collectionIndexStreamName(vectorName);
 
   // Create the stream.
   //
@@ -760,15 +758,15 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
   //   @parm The <c OMStoredSetIndex> to save.
   //   @parm The name of the set.
 void OMStoredObject::save(const OMStoredSetIndex* set,
-                          const char* setName)
+                          const wchar_t* setName)
 {
   TRACE("OMStoredObject::save");
   PRECONDITION("Valid set", set != 0);
-  PRECONDITION("Valid set name", validString(setName));
+  PRECONDITION("Valid set name", validWideString(setName));
 
   // Calculate the stream name for the index.
   //
-  char* setIndexName = collectionIndexStreamName(setName);
+  wchar_t* setIndexName = collectionIndexStreamName(setName);
 
   // Create the stream.
   //
@@ -830,7 +828,7 @@ void OMStoredObject::save(const OMPropertyTable* table)
 
   PRECONDITION("Valid property table", table != 0);
 
-  IStream* stream = createStream("referenced properties");
+  IStream* stream = createStream(L"referenced properties");
 
   // byte order
   ASSERT("Index in native byte order", _byteOrder == hostByteOrder());
@@ -905,7 +903,7 @@ void OMStoredObject::save(OMPropertyId propertyId,
   //         targets reside.
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
-void OMStoredObject::save(const char* collectionName,
+void OMStoredObject::save(const wchar_t* collectionName,
                           const OMUniqueObjectIdentification* index,
                           size_t count,
                           OMPropertyTag tag,
@@ -915,11 +913,11 @@ void OMStoredObject::save(const char* collectionName,
 
   PRECONDITION("Valid index", IMPLIES(count != 0, index!= 0));
   PRECONDITION("Valid index", IMPLIES(count == 0, index== 0));
-  PRECONDITION("Valid collection name", validString(collectionName));
+  PRECONDITION("Valid collection name", validWideString(collectionName));
 
   // Calculate the stream name for the index.
   //
-  char* indexName = collectionIndexStreamName(collectionName);
+  wchar_t* indexName = collectionIndexStreamName(collectionName);
 
   // Create the stream.
   //
@@ -963,14 +961,14 @@ void OMStoredObject::save(const char* collectionName,
   //   @parm The name of the vector.
   //   @rdesc The newly restored <c OMStoredVectorIndex>.
 void OMStoredObject::restore(OMStoredVectorIndex*& vector,
-                             const char* vectorName)
+                             const wchar_t* vectorName)
 {
   TRACE("OMStoredObject::restore");
-  PRECONDITION("Valid vector name", validString(vectorName));
+  PRECONDITION("Valid vector name", validWideString(vectorName));
 
   // Calculate the stream name for the index.
   //
-  char* vectorIndexName = collectionIndexStreamName(vectorName);
+  wchar_t* vectorIndexName = collectionIndexStreamName(vectorName);
 
   // Open the stream.
   //
@@ -1026,14 +1024,14 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   //   @parm The name of the set.
   //   @rdesc The newly restored <c OMStoredSetIndex>.
 void OMStoredObject::restore(OMStoredSetIndex*& set,
-                             const char* setName)
+                             const wchar_t* setName)
 {
   TRACE("OMStoredObject::restore");
-  PRECONDITION("Valid set name", validString(setName));
+  PRECONDITION("Valid set name", validWideString(setName));
 
   // Calculate the stream name for the index.
   //
-  char* setIndexName = collectionIndexStreamName(setName);
+  wchar_t* setIndexName = collectionIndexStreamName(setName);
 
   // Open the stream.
   //
@@ -1112,16 +1110,17 @@ void OMStoredObject::restore(OMStoredSetIndex*& set,
   //        named <p collectionName>.
   //   @parm The collection name.
   //   @rdesc The stream name for the collection index.
-char* OMStoredObject::collectionIndexStreamName(const char* collectionName)
+wchar_t* OMStoredObject::collectionIndexStreamName(
+                                                 const wchar_t* collectionName)
 {
   TRACE("OMStoredObject::collectionIndexStreamName");
-  PRECONDITION("Valid vector name", validString(collectionName));
+  PRECONDITION("Valid collection name", validWideString(collectionName));
 
-  char* suffix = " index";
-  char* indexName = new char[strlen(collectionName) + strlen(suffix) + 1];
+  wchar_t* suffix = L" index";
+  wchar_t* indexName = new wchar_t[lengthOfWideString(collectionName) + lengthOfWideString(suffix) + 1];
   ASSERT("Valid heap pointer", indexName != 0);
-  strcpy(indexName, collectionName);
-  strcat(indexName, suffix);
+  copyWideString(indexName, collectionName, lengthOfWideString(collectionName) + 1);
+  concatenateWideString(indexName, suffix, lengthOfWideString(suffix) + 1);
 
   return indexName;
 }
@@ -1132,7 +1131,7 @@ void OMStoredObject::restore(OMPropertyTable*& table)
 {
   TRACE("OMPropertyTable::restore");
 
-  IStream* stream = openStream("referenced properties");
+  IStream* stream = openStream(L"referenced properties");
 
   // byte order
   OMByteOrder byteOrder;
@@ -1223,7 +1222,7 @@ void OMStoredObject::restore(OMPropertyId propertyId,
   //         targets reside.
   //   @parm The id of the property whose value is the unique
   //         identifier of objects in the target set.
-void OMStoredObject::restore(const char* collectionName,
+void OMStoredObject::restore(const wchar_t* collectionName,
                              const OMUniqueObjectIdentification*& index,
                              size_t &count,
                              OMPropertyTag& tag,
@@ -1233,7 +1232,7 @@ void OMStoredObject::restore(const char* collectionName,
   
   // Calculate the stream name for the index.
   //
-  char* indexName = collectionIndexStreamName(collectionName);
+  wchar_t* indexName = collectionIndexStreamName(collectionName);
 
   // Open the stream.
   //
@@ -1287,11 +1286,11 @@ void OMStoredObject::restore(const char* collectionName,
 }
 
 IStream* OMStoredObject::createStream(IStorage* storage,
-                                      const char* streamName)
+                                      const wchar_t* streamName)
 {
   TRACE("OMStoredObject::createStream");
   PRECONDITION("Valid storage", storage != 0);
-  PRECONDITION("Valid stream name", validString(streamName));
+  PRECONDITION("Valid stream name", validWideString(streamName));
   PRECONDITION("Valid mode", _mode == OMFile::modifyMode);
 
   DWORD mode = STGM_DIRECT | STGM_READWRITE |
@@ -1312,11 +1311,12 @@ IStream* OMStoredObject::createStream(IStorage* storage,
   return stream;
 }
 
-IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
+IStream* OMStoredObject::openStream(IStorage* storage,
+                                    const wchar_t* streamName)
 {
   TRACE("OMStoredObject::openStream");
   PRECONDITION("Valid storage", storage != 0);
-  PRECONDITION("Valid stream name", validString(streamName));
+  PRECONDITION("Valid stream name", validWideString(streamName));
   
   DWORD mode;
   if (_mode == OMFile::modifyMode) {
@@ -1532,11 +1532,11 @@ void OMStoredObject::externalizeString(const wchar_t* internalString,
 }
 
 IStorage* OMStoredObject::createStorage(IStorage* storage,
-                                        const char* storageName)
+                                        const wchar_t* storageName)
 {
   TRACE("createStorage");
   PRECONDITION("Valid storage", storage != 0);
-  PRECONDITION("Valid storage name", validString(storageName));
+  PRECONDITION("Valid storage name", validWideString(storageName));
   PRECONDITION("Valid mode", _mode == OMFile::modifyMode);
 
   DWORD mode = STGM_DIRECT | STGM_READWRITE |
@@ -1558,12 +1558,12 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
 }
 
 IStorage* OMStoredObject::openStorage(IStorage* storage,
-                                      const char* storageName,
+                                      const wchar_t* storageName,
                                       const OMFile::OMAccessMode mode)
 {
   TRACE("openStorage");
   PRECONDITION("Valid storage", storage != 0);
-  PRECONDITION("Valid storage name", validString(storageName));
+  PRECONDITION("Valid storage name", validWideString(storageName));
   PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
                              (mode == OMFile::readOnlyMode));
 
@@ -2035,10 +2035,10 @@ static void checkFile(HRESULT resultCode, const wchar_t* fileName)
   ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
 }
 
-static void checkStream(HRESULT resultCode, const char* streamName)
+static void checkStream(HRESULT resultCode, const wchar_t* streamName)
 {
   TRACE("checkStream");
-  PRECONDITION("Valid stream name", validString(streamName));
+  PRECONDITION("Valid stream name", validWideString(streamName));
 
   ASSERT("Valid program name", validString(getProgramName()));
 
@@ -2051,10 +2051,10 @@ static void checkStream(HRESULT resultCode, const char* streamName)
   ASSERT("Succeeded", SUCCEEDED(resultCode)); // tjb - error
 }
 
-static void checkStorage(HRESULT resultCode, const char* storageName)
+static void checkStorage(HRESULT resultCode, const wchar_t* storageName)
 {
   TRACE("checkStorage");
-  PRECONDITION("Valid storage name", validString(storageName));
+  PRECONDITION("Valid storage name", validWideString(storageName));
 
   ASSERT("Valid program name", validString(getProgramName()));
 
@@ -2070,11 +2070,6 @@ static void checkStorage(HRESULT resultCode, const char* storageName)
 static void printError(const char* prefix, const char* type)
 {
   cerr << prefix << " : " << type << " : ";
-}
-
-static void printName(const char* name)
-{
-  cerr << "\"" << name << "\" : ";
 }
 
 static void printName(const wchar_t* name)
