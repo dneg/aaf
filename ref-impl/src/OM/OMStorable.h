@@ -56,21 +56,12 @@ public:
   
 // private:
 
-    // @cmember Inform this <c OMStorable> that it is contained
-    //          (owned) by the <c OMStorable> <p containingObject>.
-  void setContainingObject(const OMStorable* containingObject);
+    // @cmember Attach this <c OMStorable>.
+  void attach(const OMStorable* container, const char* name);
 
-    // @cmember Inform this <c OMStorable> that it is no longer contained.
-  void clearContainingObject(void);
+    // @cmember Detach this <c OMStorable>.
+  void detach(void);
 
-    // @cmember Inform this <c OMStorable> that it is contained
-    //          within the <c OMProperty> <p containingProperty>.
-  void setContainingProperty(const OMProperty* containingProperty);
-
-    // @cmember Inform this <c OMStorable> that it is no longer
-    //          contained within any <c OMProperty>.
-  void clearContainingProperty(void);
-  
     // @cmember Give this <c OMStorable> a name.
   void setName(const char* name);
 
@@ -146,18 +137,12 @@ protected:
     // @cmember The name of this <c OMStorable>.
   const char* name(void) const;
 
-    // @cmember The <c OMStorable> that contains (owns) this
-    //          <c OMStorable>.
-  OMStorable* containingObject(void) const;
-
   OMPropertySet _persistentProperties;
 
 private:
-  const OMStorable* _containingObject;
+  const OMStorable* _container;
   char* _name;
   char* _pathName;
-
-  OMProperty* _containingProperty;
 
   OMStoredObject* _store;
   const OMClassFactory* _classFactory;
