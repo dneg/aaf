@@ -193,7 +193,7 @@ AD_XMETHOD2(Copy,
   // nation Mob name is desired.,
 [out], objOut, AAFMob, ppDestMob, Destination Mob,
   // This function copies the specified Mob into a destination Mob in the same
-  // OMF file. The new Mob is returned through the destMob parameter. The func\-
+  // AAF file. The new Mob is returned through the destMob parameter. The func\-
   // tion gives the destination Mob a new MobID and the name specified in the
   // destMobName parameter. The function also copies all private data.)
 
