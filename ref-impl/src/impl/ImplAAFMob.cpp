@@ -1567,6 +1567,16 @@ AAFRESULT STDMETHODCALLTYPE
 			      ImplAAFFile * destFile,
 			      ImplAAFMob ** destMob)
 {
+	if(destFile == NULL)
+        {
+		return AAFRESULT_NULL_PARAM;
+        }
+	if(destMob == NULL)
+        {
+		return AAFRESULT_NULL_PARAM;
+        }
+
+
 	HRESULT hr = AAFRESULT_SUCCESS;
 
 	XPROTECT()
@@ -1603,9 +1613,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 					OMStorable* pNewStorable = spEssenceData->shallowCopy(spDstDict);
 					ImplAAFEssenceData* pNewEssenceData = dynamic_cast<ImplAAFEssenceData*>(pNewStorable);
-					if ( !pNewEssenceData ) {
-						RAISE(AAFRESULT_BAD_TYPE);
-					}
+					assert( pNewEssenceData );
 					
 					ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
 					CHECK( destFile->GetHeader(&spDstHeader) );
@@ -1652,9 +1660,7 @@ AAFRESULT STDMETHODCALLTYPE
 			OMStorable* pNewStorable = shallowCopy(spDstDict);
 		
 			ImplAAFMob* pNewMob = dynamic_cast<ImplAAFMob*>(pNewStorable);
-			if ( !pNewMob ) {
-				RAISE(AAFRESULT_BAD_TYPE);
-			}
+			assert( pNewMob );
 
 			ImplAAFSmartPointer<ImplAAFHeader> spDstHeader;
 			CHECK( destFile->GetHeader(&spDstHeader) );
@@ -2391,9 +2397,8 @@ void AAFMobCollectingComponentVisitor::VisitSourceClip(
 OMIdentitySetIterator<aafMobID_t>*
 AAFMobCollectingComponentVisitor::MobIDs() const
 {
-    OMIdentitySetIterator<aafMobID_t>* p = new OMIdentitySetIterator<aafMobID_t>(_referencedMobs,
+    return new OMIdentitySetIterator<aafMobID_t>(_referencedMobs,
                                                  OMBefore);
-    return 0;
 }
 
 
