@@ -25,7 +25,6 @@
 ImplAAFIdentification::~ImplAAFIdentification ()
 {}
 
-// tjb - this is temporary and should be removed
 ImplAAFIdentification::ImplAAFIdentification():
 _companyName(         PID_IDENTIFICATION_COMPANYNAME,          "companyName"),
 _productName(         PID_IDENTIFICATION_PRODUCTNAME,          "productName"),
@@ -103,10 +102,10 @@ _platform(            PID_IDENTIFICATION_PLATFORM,             "platform")
 
 };
 
-int ImplAAFIdentification::classId(void) const
-{
-  return CLSID_AAFIDENTIFICATION;
-}
+
+extern "C" const aafClassID_t CLSID_AAFIdentification;
+
+OMDEFINE_STORABLE(AAFIdentification, CLSID_AAFIdentification);
 
 static void stringPropertyToAAFString(aafString_t *aafString, OMStringProperty& stringProperty)
 {
