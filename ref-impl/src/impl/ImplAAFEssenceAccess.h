@@ -673,7 +673,7 @@ public:
 	//Toolkit private functions
 	AAFRESULT MakeAAFContainerDef(ImplAAFHeader *head, ImplAAFContainerDef **result);
 	AAFRESULT CreateContainerDef (ImplAAFHeader *head);
-	AAFRESULT CreateCodecDef(ImplAAFHeader *head, aafUID_t codecDef);
+	AAFRESULT CreateCodecDef(ImplAAFHeader *head, aafUID_t codecDef, IAAFPluginDescriptor **newDesc);
 	AAFRESULT CreateEssenceFileFromLocator (ImplAAFHeader *srcHead, ImplAAFLocator *loc, ImplAAFFile **result);
 	AAFRESULT ModifyEssenceFileFromLocator (ImplAAFHeader *srcHead, ImplAAFLocator *loc, ImplAAFFile **result);
 	AAFRESULT CreateFileMob (ImplAAFHeader *newHead, aafSlotID_t slotID, aafUID_t *newMobID,
@@ -696,7 +696,6 @@ private:
 	IAAFPluginDescriptor	*_codecDescriptor;
 	ImplAAFFile				*_dataFile;
 	ImplAAFSourceMob		*_dataFileMob;
-	ImplAAFDictionary		*_compDictionary;
 };
 
 #endif // ! __ImplAAFEssenceAccess_h__
