@@ -92,13 +92,18 @@ public:
          // @parm [out,retval] Class Definition
          ImplAAFClassDef ** ppClassDef);
 
+
   //****************
   // RegisterClass()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     RegisterClass
-        // @parm [in] Class Definition
-        (ImplAAFClassDef * pClassDef);
+        (// @parm [in] ID by which class is to be known
+         aafUID_t * pClassAUID,
+
+         // @parm [in] Class Definition
+         ImplAAFClassDef * pClassDef);
+
 
   //****************
   // GetClassDefinitions()
@@ -114,8 +119,11 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     RegisterType
-        // @parm [in] Type Definition Object
-        (ImplAAFTypeDef * pTypeDef);
+        (// @parm [in] ID by which type is to be known
+         aafUID_t * pTypeAUID,
+
+         // @parm [in] Type Definition Object
+         ImplAAFTypeDef * pTypeDef);
 
   //****************
   // LookupType()
