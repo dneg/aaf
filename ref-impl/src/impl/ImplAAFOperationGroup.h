@@ -217,7 +217,7 @@ public:
   static AAFRESULT test();
 
 private:
-	OMFixedSizeProperty<aafUID_t>						_effectDefinition;
+//	OMFixedSizeProperty<aafUID_t>						_effectDefinition;
 	OMStrongReferenceVectorProperty<ImplAAFSegment>		_inputSegments;
 	OMStrongReferenceVectorProperty<ImplAAFParameter>	_parameters;
 	OMFixedSizeProperty<aafUInt32>						_bypassOverride;
