@@ -1,0 +1,114 @@
+#c/*************************************************\
+#c*													*
+#c* Advanced Authoring Format						*
+#c*													*
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.	*
+#c*													*
+#c\*************************************************/
+#startm .this-module 0
+AAFRandomFile\
+#endm
+#startm .parent-module 0
+AAFFile\
+#endm
+#c
+AD_HEAD
+AD_IDL(//
+// Specialized file interface for use with files which exist on
+// storage media which has random access capability.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
+AD_FORWARD_DECLARATION(AAFGetFileBits)
+AD_FORWARD_DECLARATION(AAFSetFileBits)
+AD_CLASS_UUID(3CC80283, 72A8, 11D4, B8, 0D, 00, 00, 86, 3F, 2C, 27)
+
+AD_DEFAULT_UUID(3CC80284, 72A8, 11D4, B8, 0D, 00, 00, 86, 3F, 2C, 27)
+AD_XCLASS_BEGIN(Concrete, Transient)
+AD_XMETHOD1(GetFileBits,
+			[out],
+			objOut,
+			AAFGetFileBits,
+			ppGetFileBits,
+			The interface to the GetFileBits object,
+
+     Since the purpose of this method is to obtain file data after a
+  // file has been created\, it will only succeed if this file has
+  // already been Open\(\)ed and then Close\(\)d\, or if it was never
+  // opened with write access.
+  // 
+  // Succeeds if:
+  // - The ppGetFileBits argument is valid
+  // - This file has been opened for write or modify\, and has been
+  //   subsequently closed.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppGetFileBits\)
+  //
+  // AAFRESULT_BADOPEN
+  // - This file has never been opened
+  //
+  // AAFRESULT_NOT_WRITEABLE
+  // - This file has never been opened for write or modify
+  //
+  // AAFRESULT_BADCLOSE
+  // - This file has not been closed after being opened.)
+
+
+AD_METHOD0(Revert,
+
+		   Reverts this file to the previously-saved state.
+  AD_STD_COMMENT_METH_STUB
+  AD_STD_COMMENT_METH_ERR_HEADER)
+
+
+AD_XMETHOD1(SaveAs,
+			[in],
+			objIn,
+			AAFFile,
+			pDestFile,
+       The destination file into which the contents of this file are to
+    // be written.,
+
+     Associates this file with the storage specified in pDestFile.
+  // Any objects contained in pDestFile will be lost.
+  // 
+  // Behaves in a manner similar to SaveCopyAs\(\)\, except that
+  // SaveAs\(\) will change this object to be associated with the new
+  // file.
+  // 
+  // Special case: if f->SaveAs\(f\) is called\, passing this as the
+  // save-to argument\, the operation will save everything including
+  // things which have not changed.
+  AD_STD_COMMENT_METH_STUB
+  AD_STD_COMMENT_METH_ERR_HEADER)
+
+
+AD_XMETHOD1(SetFileBits,
+			[out],
+			objOut,
+			AAFSetFileBits,
+			ppSetFileBits,
+			The interface to the SetFileBits object,
+
+     Since the purpose of this method is to specify file data with
+  // which a file is to be created\, it will only succeed if this file
+  // has not yet been Open\(\)ed.
+  //
+  // Succeeds if:
+  // - The ppSetFileBits argument is valid
+  // - This file has not yet been opened.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppSetFileBits\)
+  //
+  // AAFRESULT_BADOPEN
+  // - This file has has already been opened
+  //
+  // AAFRESULT_NOT_READABLE
+  // - This read or modify has not been specified for this file)
+AD_XCLASS_END(Concrete, Transient)
