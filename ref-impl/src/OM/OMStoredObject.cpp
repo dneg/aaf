@@ -956,6 +956,34 @@ void OMStoredObject::save(const wchar_t* collectionName,
   delete [] indexName;
 }
 
+void OMStoredObject::saveStream(OMPropertyId pid,
+                                OMStoredForm storedForm,
+                                const wchar_t* name,
+                                OMByteOrder byteOrder)
+{
+  TRACE("OMStoredObject::saveStream");
+
+  // Byte order
+  //
+  writeToStream(_properties, &byteOrder, sizeof(byteOrder));
+
+  // Name
+  //
+  size_t characterCount = lengthOfWideString(name) + 1;
+  OMCharacter* buffer = new OMCharacter[characterCount];
+  ASSERT("Valid heap pointer", buffer != 0);
+  externalizeString(name, buffer, characterCount);
+  ASSERT("Native byte order", _byteOrder == hostByteOrder());
+  size_t byteCount = characterCount * sizeof(OMCharacter);
+  writeToStream(_properties, buffer, byteCount);
+
+  // Index entry.
+  //
+  OMPropertySize size = byteCount + 1;
+  _index->insert(pid, storedForm, _offset, size);
+  _offset += size;
+}
+
   // @mfunc Restore the vector named <p vectorName> into this
   //        <c OMStoredObject>.
   //   @parm The name of the vector.
@@ -1283,6 +1311,29 @@ void OMStoredObject::restore(const wchar_t* collectionName,
   delete [] indexName;
 
   index = collectionIndex;
+}
+
+void OMStoredObject::restoreStream(OMPropertyId pid,
+                                   OMStoredForm storedForm,
+                                   size_t size,
+                                   wchar_t** name,
+                                   OMByteOrder* byteOrder)
+{
+  TRACE("OMStoredObject::restoreStream");
+
+  OMByte* buffer = new OMByte[size];
+  ASSERT("Valid heap pointer", buffer != 0);
+  read(pid, storedForm, buffer, size);
+  *byteOrder = buffer[0];
+  size_t characterCount = (size - 1) / sizeof(OMCharacter);
+  OMCharacter* externalName = (OMCharacter*)(buffer + 1);
+  if (_reorderBytes) {
+    reorderString(externalName, characterCount);
+  }
+  *name = new wchar_t[characterCount];
+  ASSERT("Valid heap pointer", *name != 0);
+  internalizeString(externalName, *name, characterCount);
+  delete [] buffer;
 }
 
 IStream* OMStoredObject::createStream(IStorage* storage,
