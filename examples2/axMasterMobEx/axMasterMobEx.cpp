@@ -195,7 +195,7 @@ public:
 
 	virtual bool AtEnd() = 0;
 
-	virtual pair<int, AutoPtr<aafUInt8> > GetSamples() = 0;
+	virtual pair<int, AxAutoPtr<aafUInt8> > GetSamples() = 0;
 
 private:
 
@@ -254,12 +254,12 @@ public:
 		return _numFramesToWrite > 0 ? false : true;
 	}
 
-	virtual pair<int, AutoPtr<aafUInt8> > GetSamples()
+	virtual pair<int, AxAutoPtr<aafUInt8> > GetSamples()
 	{
 		const int numSamples = GetNumSamplesPerChunk();  // frames
 		const int numBytes = GetSampleByteSize();
 
-		AutoPtr<aafUInt8> pixels( new aafUInt8 [numBytes] );
+		AxAutoPtr<aafUInt8> pixels( new aafUInt8 [numBytes] );
 
 		// Fill with random data.
 		int i;
@@ -269,7 +269,7 @@ public:
 		}
 
 		_numFramesToWrite -= numSamples;
-		pair<int, AutoPtr<aafUInt8> > ret(numSamples, pixels);
+		pair<int, AxAutoPtr<aafUInt8> > ret(numSamples, pixels);
 		return ret;
 	}
 	
@@ -320,7 +320,7 @@ public:
 		return _numSamplesToWrite > 0 ? false : true;
 	}
 
-	virtual pair<int, AutoPtr<aafUInt8> > GetSamples()
+	virtual pair<int, AxAutoPtr<aafUInt8> > GetSamples()
 	{
 		// FIXME - Hardcoded: write 10 MByte at a time.
 		
@@ -332,7 +332,7 @@ public:
 		
 		const int numBytes = numSamples * _bytesPerSample;
 
-		AutoPtr<aafUInt8> samples( new aafUInt8 [numBytes] );
+		AxAutoPtr<aafUInt8> samples( new aafUInt8 [numBytes] );
 
 		// Fill with random data.
 		int i;
@@ -342,7 +342,7 @@ public:
 		}
 
 		_numSamplesToWrite -= numSamples;
-		pair<int, AutoPtr<aafUInt8> > ret(numSamples, samples );
+		pair<int, AxAutoPtr<aafUInt8> > ret(numSamples, samples );
 		return ret;
 	}
 	
@@ -676,7 +676,7 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 
 	while ( !sampleSource->AtEnd() ) {
 	
-		pair<int, AutoPtr<aafUInt8> > samples = sampleSource->GetSamples();
+		pair<int, AxAutoPtr<aafUInt8> > samples = sampleSource->GetSamples();
 
 		int numSamplesToWriteThisTime = samples.first;
 		int numSamplesWrittenThisTime = 0;
