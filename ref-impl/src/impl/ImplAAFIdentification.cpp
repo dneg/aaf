@@ -17,10 +17,6 @@
 #include "ImplAAFIdentification.h"
 #endif
 
-#ifndef __AAFIdentification_h__
-#include "AAFIdentification.h"
-#endif
-
 #include <assert.h>
 
 
