@@ -34,6 +34,9 @@ next if ( /^ CC / );
 next if ( /^cd / );
 next if ( /^cp / );
 next if ( /\-\-\- C\+\+ prelinker/ );
+next if ( /^real/ );
+next if ( /^user/ );
+next if ( /^sys/ );
 
 print;
 
