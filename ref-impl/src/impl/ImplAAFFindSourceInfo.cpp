@@ -133,7 +133,7 @@ ImplAAFFindSourceInfo::SetComponent(
 }
 
 AAFRESULT STDMETHODCALLTYPE
-		ImplAAFFindSourceInfo::GetReference(aafSourceRef_t *pSourceRef)
+		ImplAAFFindSourceInfo::GetSourceReference(aafSourceRef_t *pSourceRef)
 {
 	if (pSourceRef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -160,10 +160,30 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFFindSourceInfo::GetMob(ImplAAFMob **ppMob)
 {
+	if(ppMob == NULL)
+		return AAFRESULT_NULL_PARAM;
 	*ppMob = _mob;
 	if (*ppMob)
 	  (*ppMob)->AcquireReference();
 	else
 	  return AAFRESULT_NULLOBJECT;
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFFindSourceInfo::GetEditRate(aafRational_t *pEditRate)
+{
+	if(pEditRate == NULL)
+		return AAFRESULT_NULL_PARAM;
+	*pEditRate = _editRate;
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+ImplAAFFindSourceInfo::GetLength(aafLength_t *pLength)
+{
+	if(pLength == NULL)
+		return AAFRESULT_NULL_PARAM;
+	*pLength = _length;
 	return AAFRESULT_SUCCESS;
 }
