@@ -29,6 +29,7 @@
 #include "AAFResult.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
+#include "ImplAAFMob.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFSegments;
 
@@ -276,6 +277,119 @@ AAFRESULT
 }
 
 
+
+AAFRESULT
+	ImplAAFSelector::GetMinimumBounds(aafPosition_t rootPos, aafLength_t rootLen,
+										ImplAAFMob *mob, ImplAAFMobSlot *track,
+										aafMediaCriteria_t *mediaCrit,
+										aafPosition_t currentObjPos,
+										aafOperationChoice_t *effectChoice,
+										ImplAAFComponent	*prevObject,
+										ImplAAFComponent *nextObject,
+										ImplAAFScopeStack *scopeStack,
+										aafPosition_t *diffPos, aafLength_t *minLength,
+										ImplAAFOperationGroup **effeObject, aafInt32	*nestDepth,
+										ImplAAFComponent **foundObj, aafBool *foundTransition)
+{  
+	ImplAAFSegment		*selected = NULL;
+	ImplAAFComponent	*tmpFound = NULL;
+	aafLength_t	tmpMinLen;
+	
+	XPROTECT()
+	{
+	*foundObj = NULL;
+	
+	  CHECK(GetSelectedSegment(&selected));
+	  if (selected)
+		{
+		  CHECK(mob->MobFindLeaf(track, mediaCrit, effectChoice,
+							selected, rootPos, rootLen,
+							prevObject, nextObject, 
+							scopeStack, 
+							currentObjPos, &tmpFound, &tmpMinLen, foundTransition,
+							effeObject, nestDepth, diffPos));
+		  if (tmpFound)
+			{
+			  *foundObj = tmpFound;
+			  if (Int64Less(tmpMinLen, rootLen))
+				*minLength = tmpMinLen;
+			  else
+				*minLength = rootLen;
+			}
+		  else
+			{
+			  RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
+			}
+		}
+	  else
+		{
+		  RAISE(AAFRESULT_TRAVERSAL_NOT_POSS);
+		}
+	} /* XPROTECT */
+  XEXCEPT
+	{
+	}
+  XEND;
+
+  return(AAFRESULT_SUCCESS);
+}
+#if 0
+aafErr_t ImplAAFSelector::Verify(char *buf, validateData_t *result)
+{
+
+	AAFSegment * slot = NULL;
+	aafLength_t parentLen, slotLen, selectedLen;
+	char	 parentLenBuf[32], slotLenBuf[32], selectedLenBuf[32];
+	aafInt32 numSlots, loop;
+	
+	AAFIterate	*iter;
+	
+	XPROTECT(_file)
+	{
+		/* Verify length of slots == length of parent */
+			CHECK(GetLength(&parentLen));
+			CHECK(GetLength(&selectedLen));
+		if (Int64NotEqual(selectedLen, parentLen))
+		{
+		      CHECK(Int64ToString(selectedLen, 10, sizeof(selectedLenBuf), selectedLenBuf));  
+		      CHECK(Int64ToString(parentLen, 10, sizeof(parentLenBuf), parentLenBuf));  
+			fprintf(result->textOut, "*** ERROR: %s Selector length (%s) != length of selected slot (%s)\n", 
+				buf, selectedLenBuf, parentLenBuf);
+			result->numErrors++;
+		}
+
+		iter = new AAFIterate(_file);
+		CHECK(GetNumAltSlots(&numSlots));
+		for (loop = 1; loop <= numSlots; loop++)
+		{
+			CHECK(iter->SelectorGetNextAltSlot(this, NULL, &slot));
+			if (slot)
+			{
+			    CHECK(slot->GetLength(&slotLen));
+				if (Int64NotEqual(parentLen, slotLen))
+				{
+		      		CHECK(Int64ToString(parentLen, 10, sizeof(parentLenBuf), parentLenBuf));  
+		      		CHECK(Int64ToString(slotLen, 10, sizeof(slotLenBuf), slotLenBuf));  
+					fprintf(result->textOut, "*** ERROR: %s Selector length (%s) != length of Selector Alternate slot (%s)\n", 
+						buf, parentLenBuf, slotLenBuf);
+					result->numErrors++;
+				}
+			}
+		} /* for */
+
+		delete iter;
+		iter = NULL;
+	 	} /* XPROTECT */
+  XEXCEPT
+	{
+	  if (iter)
+		delete iter;
+	}
+  XEND;
+
+  return(AAFRESULT_SUCCESS);
+}
+#endif
 
 OMDEFINE_STORABLE(ImplAAFSelector, AUID_AAFSelector);
 

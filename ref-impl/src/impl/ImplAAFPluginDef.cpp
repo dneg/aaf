@@ -38,7 +38,10 @@
 extern "C" const aafClassID_t CLSID_EnumAAFPluginLocators;
 
 
-ImplAAFPluginDescriptor::ImplAAFPluginDescriptor ():
+ImplAAFPluginDescriptor::ImplAAFPluginDescriptor ()
+: _name           (		PID_PluginDescriptor_Name,				"Name"),
+  _description    (		PID_PluginDescriptor_Description,		"Description"),
+  _identification (		PID_PluginDescriptor_Identification,	"Identification"),
  _categoryClass(		PID_PluginDescriptor_CategoryClass,		"CategoryClass"),
  _pluginVersion(        PID_PluginDescriptor_VersionNumber,     "VersionNumber"),
  _pluginVersionString(	PID_PluginDescriptor_VersionString,		"VersionString"),
@@ -59,6 +62,9 @@ ImplAAFPluginDescriptor::ImplAAFPluginDescriptor ():
  _locators(				PID_PluginDescriptor_Locators,			"Locators"),
  _authentication(		PID_PluginDescriptor_Authentication,	"Authentication")
 {
+  _persistentProperties.put(_name.address());
+  _persistentProperties.put(_description.address());
+  _persistentProperties.put(_identification.address());
   _persistentProperties.put(_categoryClass.address());
   _persistentProperties.put(_pluginVersion.address());
   _persistentProperties.put(_pluginVersionString.address());
@@ -102,6 +108,149 @@ ImplAAFPluginDescriptor::~ImplAAFPluginDescriptor ()
 	}
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::Init (
+      aafUID_t *pAuid, aafWChar *pName, aafWChar *pDesc)
+{
+	if (pAuid == NULL || pName == NULL || pDesc == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_identification = *pAuid;
+		_name = pName;
+		_description = pDesc;
+	}
+	return AAFRESULT_SUCCESS;
+}
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::SetName (
+      wchar_t *  pName)
+{
+  if (! pName)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+
+  _name = pName;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::GetName (
+      wchar_t *  pName,
+      aafUInt32  bufSize)
+{
+  bool stat;
+  if (! pName)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  stat = _name.copyToBuffer(pName, bufSize);
+  if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;
+	}
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::GetNameBufLen (
+      aafUInt32 *  pBufSize)  //@parm [in,out] Definition Name length
+{
+  if (! pBufSize)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  *pBufSize = _name.size();
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::SetDescription (
+      wchar_t * pDescription)
+{
+  if (! pDescription)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+
+  _description = pDescription;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::GetDescription (
+      wchar_t * pDescription,
+      aafUInt32 bufSize)
+{
+  bool stat;
+  if (! pDescription)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  stat = _description.copyToBuffer(pDescription, bufSize);
+  if (! stat)
+	{
+	  return AAFRESULT_SMALLBUF;
+	}
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::GetDescriptionBufLen (
+      aafUInt32 * pBufSize)  //@parm [in,out] Definition Name length
+{
+  if (! pBufSize)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  *pBufSize = _description.size();
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::GetAUID (
+      aafUID_t *pAuid)
+{
+  if (pAuid == NULL)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  else
+	{
+	  *pAuid = _identification;
+	}
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFPluginDescriptor::SetAUID (
+      aafUID_t *pAuid)
+{
+  if (pAuid == NULL)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+  else
+	{
+	  _identification = *pAuid;
+	}
+  return AAFRESULT_SUCCESS;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::GetCategoryClass (
