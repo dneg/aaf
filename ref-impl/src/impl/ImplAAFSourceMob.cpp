@@ -206,6 +206,55 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+//****************
+// AddStaticNilReference()
+//
+AAFRESULT STDMETHODCALLTYPE
+   ImplAAFSourceMob::AddStaticNilReference (
+						aafSlotID_t slotID,
+						ImplAAFDataDef * pDataDef)
+{
+	ImplAAFSourceClip *		sub = NULL;
+	aafSourceRef_t	sourceRef;
+	ImplAAFStaticMobSlot *	newSlot = NULL;		
+	ImplAAFDictionary *pDictionary = NULL;
+
+	
+	XPROTECT()
+	{
+		memset(&sourceRef, 0, sizeof(sourceRef));
+		CvtInt32toPosition(0, sourceRef.startTime);
+
+		CHECK(GetDictionary(&pDictionary));
+		CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
+			  CreateInstance ((ImplAAFObject**) &sub));
+		pDictionary->ReleaseReference();
+		pDictionary = NULL;
+
+		CHECK(sub->Initialize (pDataDef, 0, sourceRef));
+		CHECK(AppendNewStaticSlot( sub, slotID, L"Static", 	&newSlot));
+		
+		newSlot->ReleaseReference();
+		newSlot = NULL;
+		sub->ReleaseReference();
+		sub = NULL;
+	}
+	XEXCEPT
+	{
+		if(sub != NULL)
+		  sub->ReleaseReference();
+		sub = NULL;
+		if(newSlot != NULL)
+		  newSlot->ReleaseReference();
+		newSlot = NULL;
+		if(pDictionary != NULL)
+		  pDictionary->ReleaseReference();
+		pDictionary = NULL;
+	}
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
+}
 
 //****************
 // AddTimecodeClip()

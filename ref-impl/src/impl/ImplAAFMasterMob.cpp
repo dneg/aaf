@@ -122,12 +122,14 @@ AAFRESULT STDMETHODCALLTYPE
 	HRESULT		hr = AAFRESULT_SUCCESS;
 	ImplAAFMobSlot*	pMobSlot;
 	ImplAAFTimelineMobSlot* pTimelineMobSlot = NULL;
+	ImplAAFStaticMobSlot* pStaticMobSlot = NULL;
 	aafUID_t	segDataDef;
 	ImplAAFSegment*	pSegment = NULL;
 	ImplAAFSourceClip*	pSrcClip = NULL;
 	aafSourceRef_t		ref;
 	aafPosition_t		zeroPos;
 	ImplAAFTimelineMobSlot	*pNewTimelineSlot = NULL;
+	ImplAAFStaticMobSlot	*pNewStaticSlot = NULL;
 	aafRational_t  editRate;
   ImplAAFDictionary *pDictionary = NULL;
 
@@ -144,53 +146,106 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pSourceMob->FindSlotBySlotID(sourceSlotID, &pMobSlot));
 		pTimelineMobSlot = dynamic_cast<ImplAAFTimelineMobSlot *>(pMobSlot);
 		if (NULL == pTimelineMobSlot)
-			RAISE(AAFRESULT_SLOT_NOT_FOUND); // please use the correct error code!
-//		CHECK(pMobSlot->QueryInterface(IID_IAAFTimelineMobSlot,(void **) &pTimelineMobSlot));
-		CHECK(pTimelineMobSlot->GetEditRate(&editRate));
+		{
+			// there is scope for refactoring this block and the else block to have
+			//more common code.
+			//I have chosen not to at the moment as I will be adding event slots as well
+			//After adding the event slot will be the  time to refactor
+			pStaticMobSlot = dynamic_cast<ImplAAFStaticMobSlot *>(pMobSlot);
+			if (NULL == pStaticMobSlot)
+				RAISE(AAFRESULT_SLOT_NOT_FOUND); // please use the correct error code!
+			
+			CHECK(pMobSlot->GetSegment(&pSegment));
+			pSegment->GetLength(&slotLength);
+			ImplAAFDataDefSP pSegDataDef;
+			pSegment->GetDataDef(&pSegDataDef);
+			pSegDataDef->GetAUID(&segDataDef);
+			pSegment->ReleaseReference();
+			pSegment = NULL;
 
-		CHECK(pMobSlot->GetSegment(&pSegment));
+			// Make sure the slot contains the expected media type.
+			aafUID_t dataDef;
+			CHECK(pDataDef->GetAUID(&dataDef));
+			if (!EqualAUID(&segDataDef, &dataDef))
+				RAISE(AAFRESULT_INVALID_DATADEF);
 
-		pSegment->GetLength(&slotLength);
-		ImplAAFDataDefSP pSegDataDef;
-		pSegment->GetDataDef(&pSegDataDef);
-		pSegDataDef->GetAUID(&segDataDef);
-		pSegment->ReleaseReference();
-		pSegment = NULL;
+			pMobSlot->ReleaseReference();
+			pMobSlot = NULL;
 
-		// Make sure the slot contains the expected media type.
-		aafUID_t dataDef;
-		CHECK(pDataDef->GetAUID(&dataDef));
-		if (!EqualAUID(&segDataDef, &dataDef))
-			RAISE(AAFRESULT_INVALID_DATADEF);
+		// Add the master slot
 
-		pMobSlot->ReleaseReference();
-		pMobSlot = NULL;
+			CvtInt32toPosition(0, zeroPos);
+			ref.sourceID = sourceMobID;
+			ref.sourceSlotID = sourceSlotID;
+			ref.startTime = zeroPos;
+			CHECK(GetDictionary(&pDictionary));
+			CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
+				CreateInstance((ImplAAFObject**) &pSrcClip));
 
-	// Add the master slot
+			pDictionary->ReleaseReference();
+			pDictionary = NULL;
 
-		CvtInt32toPosition(0, zeroPos);
-		ref.sourceID = sourceMobID;
-		ref.sourceSlotID = sourceSlotID;
-		ref.startTime = zeroPos;
-		CHECK(GetDictionary(&pDictionary));
-		CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
-			  CreateInstance((ImplAAFObject**) &pSrcClip));
+			CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
+			CHECK(AppendNewStaticSlot(pSrcClip, masterSlotID, pSlotName, 
+										&pNewStaticSlot));
 
-		pDictionary->ReleaseReference();
-		pDictionary = NULL;
+			pNewStaticSlot->ReleaseReference();
+			pNewStaticSlot = NULL;
 
-		CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
-		CHECK(AppendNewTimelineSlot(editRate,pSrcClip, masterSlotID, pSlotName, 
-									zeroPos,&pNewTimelineSlot));
+			pSrcClip->ReleaseReference();
+			
+		}
+		else
+		{
+	//		CHECK(pMobSlot->QueryInterface(IID_IAAFTimelineMobSlot,(void **) &pTimelineMobSlot));
+			CHECK(pTimelineMobSlot->GetEditRate(&editRate));
 
-		pNewTimelineSlot->ReleaseReference();
-		pNewTimelineSlot = NULL;
+			CHECK(pMobSlot->GetSegment(&pSegment));
 
-		pSrcClip->ReleaseReference();
-		pSrcClip = NULL;
+			pSegment->GetLength(&slotLength);
+			ImplAAFDataDefSP pSegDataDef;
+			pSegment->GetDataDef(&pSegDataDef);
+			pSegDataDef->GetAUID(&segDataDef);
+			pSegment->ReleaseReference();
+			pSegment = NULL;
+
+			// Make sure the slot contains the expected media type.
+			aafUID_t dataDef;
+			CHECK(pDataDef->GetAUID(&dataDef));
+			if (!EqualAUID(&segDataDef, &dataDef))
+				RAISE(AAFRESULT_INVALID_DATADEF);
+
+			pMobSlot->ReleaseReference();
+			pMobSlot = NULL;
+
+		// Add the master slot
+
+			CvtInt32toPosition(0, zeroPos);
+			ref.sourceID = sourceMobID;
+			ref.sourceSlotID = sourceSlotID;
+			ref.startTime = zeroPos;
+			CHECK(GetDictionary(&pDictionary));
+			CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
+				CreateInstance((ImplAAFObject**) &pSrcClip));
+
+			pDictionary->ReleaseReference();
+			pDictionary = NULL;
+
+			CHECK(pSrcClip->Initialize(pDataDef, slotLength, ref));
+			CHECK(AppendNewTimelineSlot(editRate,pSrcClip, masterSlotID, pSlotName, 
+										zeroPos,&pNewTimelineSlot));
+
+			pNewTimelineSlot->ReleaseReference();
+			pNewTimelineSlot = NULL;
+
+			pSrcClip->ReleaseReference();
+			pSrcClip = NULL;
+		}
 	}
 	XEXCEPT
 	{
+		if(pNewStaticSlot != NULL)
+			pNewStaticSlot->ReleaseReference();
 		if(pNewTimelineSlot != NULL)
 			pNewTimelineSlot->ReleaseReference();
 		if(pSegment != NULL)
@@ -1201,15 +1256,51 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMasterMob::CreateStaticEssence (aafSlotID_t  /*masterSlotID*/,
-                           ImplAAFDataDef * /*pMediaKind*/,
-                           aafUID_constref  /*codecID*/,
-                           aafCompressEnable_t  /*Enable*/,
-                           ImplAAFLocator * /*destination*/,
-                           aafUID_constref  /*fileFormat*/,
-                           ImplAAFEssenceAccess ** /*access*/)
+    ImplAAFMasterMob::CreateStaticEssence (aafSlotID_t  masterSlotID,
+                           ImplAAFDataDef * pMediaKind,
+                           aafUID_constref  codecID,
+                           aafCompressEnable_t  enable,
+                           ImplAAFLocator * destination,
+                           aafUID_constref  fileFormat,
+                           ImplAAFEssenceAccess ** result)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    ImplAAFEssenceAccess	*access = NULL;
+	aafRational_t editRate= {1,1};
+	aafRational_t sampleRate= {1,1};
+
+  if (NULL == result)
+    return AAFRESULT_NULL_PARAM;
+
+  if (! pMediaKind)
+	return AAFRESULT_NULL_PARAM;
+  aafUID_t mediaKind;
+  AAFRESULT hr = pMediaKind->GetAUID(&mediaKind);
+  if (AAFRESULT_FAILED (hr))return hr;
+
+	access = (ImplAAFEssenceAccess *)CreateImpl (CLSID_AAFEssenceAccess);
+
+	XPROTECT()
+	{
+    if (NULL == access)
+      RAISE(AAFRESULT_NOMEMORY);
+
+		if(destination != NULL)
+		{
+			CHECK(access->SetEssenceDestination(destination, fileFormat));
+		}
+		
+		CHECK(access->CreateEx(this, masterSlotID, mediaKind, codecID, editRate, sampleRate, enable,Static));
+	  
+    *result = access;
+	}
+	XEXCEPT
+  {
+		if (access)
+      access->ReleaseReference();
+  }
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT STDMETHODCALLTYPE

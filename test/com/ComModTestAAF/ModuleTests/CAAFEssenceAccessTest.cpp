@@ -30,7 +30,7 @@
 #include <iostream>
 using namespace std;
 
-#include "AAFPlatform.h"
+//#include "AAFPluginManager.h"
 
 #include "AAFTypes.h"
 #include "AAFResult.h"
@@ -188,193 +188,6 @@ static const aafUInt8 compressed422JFIF[] =
   0x28,0x00,0x03,0xFF,0xD9
 };
 
-
-// The URL conversion routines are also in ref-impl/src/impl/AAFUtils.cpp
-// TODO: We need to create a general-purpose library which all tests and
-// perhaps all examples have access to instead of duplicating code.
-
-#ifdef _MSC_VER			// MS VC++ dosen't provide POSIX strcasecmp, getcwd
-#define strncasecmp(s1, s2, n) strnicmp(s1, s2, n)
-#include <direct.h>
-#define getcwd(buf, size) _getcwd(buf, size)
-#else
-#include <unistd.h>		// getcwd
-#endif
-
-static bool acceptable_pchar(unsigned char c)
-{
-	static const unsigned char isAcceptable[96] =
-	/*	0x0 0x1 0x2 0x3 0x4 0x5 0x6 0x7 0x8 0x9 0xA 0xB 0xC 0xD 0xE 0xF */
-	{
-	    0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xF,0xE,0x0,0xF,0xF,0xC, /* 2x  !"#$%&'()*+,-./   */
-	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x8,0x0,0x0,0x0,0x0,0x0, /* 3x 0123456789:;<=>?   */
-	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF, /* 4x @ABCDEFGHIJKLMNO   */
-	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x0,0x0,0x0,0x0,0xF, /* 5x PQRSTUVWXYZ[\]^_   */
-	    0x0,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF, /* 6x `abcdefghijklmno   */
-	    0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0xF,0x0,0x0,0x0,0x0,0x0  /* 7x pqrstuvwxyz{\}~DEL */
-	};
-
-	return (c >= 32 && c < 128 && isAcceptable[c - 32]);
-}
-
-static void escapeURI(const char *str, char *result)
-{
-	const char	*p, hex[] = "0123456789ABCDEF";
-    char		*q;
-
-    if (!str || !result)
-		return;
-
-    for (q = result, p = str; *p; p++)
-	{
-    	unsigned char a = *p;
-		if (!acceptable_pchar(a))
-		{
-		    *q++ = '%';
-		    *q++ = hex[a >> 4];
-		    *q++ = hex[a & 15];
-		}
-		else
-			*q++ = *p;
-    }
-    *q++ = '\0';
-}
-
-static char asciiHexToChar (char c)
-{
-    return  c >= '0' && c <= '9' ?  c - '0' 
-    	    : c >= 'A' && c <= 'F'? c - 'A' + 10
-    	    : c - 'a' + 10;	/* accept lowercase letters too */
-}
-
-// From RFC 1738
-//
-// <scheme>:<scheme-specific-part>
-// ; the scheme is in lower case; interpreters should use case-ignore
-//	scheme		= 1*[ lowalpha | digit | "+" | "-" | "." ]
-//
-// For file scheme:
-//	fileurl		= "file://" [ host | "localhost" ] "/" fpath
-
-static void unescapeURI(char *str)
-{
-    char *p = str;
-    char *q = str;
-
-    while (*p)
-	{
-        if (*p == '%')		// URI hex escape char
-		{
-			p++;
-			if (*p)
-				*q = asciiHexToChar(*p++) * 16;
-			if (*p)
-				*q = *q + asciiHexToChar(*p);
-			p++;
-			q++;
-		}
-		else
-		    *q++ = *p++; 
-    }
-    *q++ = 0;
-}
-
-static void wcsconvertURLtoFilepath(wchar_t *url, wchar_t *filepath)
-{
-	// Convert to char* for ease of processing.
-	// (wcsncasecmp and similiar are not available everywhere)
-	unsigned tlen = wcslen(url);
-	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
-	wcstombs(tmp, url, tlen+1);
-
-	// If no file scheme is found, assume a simple filepath and not a URI.
-	// Note that other schemes such as http and ftp are not supported.
-	if (strncasecmp(tmp, "file://", strlen("file://")) != 0)
-	{
-		wcscpy(filepath, url);
-		delete [] tmp;
-		return;
-	}
-
-	// Skip over the file://[host]/ to point to the fpath.
-	char *fpath = tmp + strlen("file://");
-	while (*fpath && *fpath != '/')
-		fpath++;
-
-#ifdef _WIN32
-	// WIN32 filepaths must start with a drive letter, so remove the
-	// initial '/' from the URL.
-	if (*fpath == '/')
-		fpath++;
-#endif
-
-	unescapeURI(fpath);
-
-	mbstowcs(filepath, fpath, strlen(fpath)+1);		// convert back to wcs
-	delete [] tmp;
-}
-
-static void wcsconvertFilepathtoURL(wchar_t *filepath, wchar_t *url)
-{
-	// convert to char* for ease of processing
-	int tlen = wcslen(filepath);
-	char *tmp = new char[tlen+1];		// +1 includes terminating '\0'
-	wcstombs(tmp, filepath, tlen+1);
-
-#ifdef _WIN32
-	// On WIN32 backslash is the directory separator, not a regular filename
-	// character like under Unix or in a URL.  So convert them to the URL
-	// directory separator, forward slash '/', to preserve the hierarchy.
-	char *p = tmp;
-	while (*p)
-	{
-		if (*p == '\\')
-			*p = '/';
-		p++;
-	}
-#endif
-	// worst case: every char must be hex-escaped - therefore multiply by 3
-	char *escaped = new char[tlen*3+1];
-	escapeURI(tmp, escaped);
-
-	// prepare the file scheme URL (+1 for '/', +1 for '\0')
-	char *mb_url = new char[strlen(escaped) + strlen("file://") +1 +1];
-	strcpy(mb_url, "file://");
-	if (*escaped != '/')		// ensure a leading path slash is present
-		strcat(mb_url, "/");
-	strcat(mb_url, escaped);
-
-	mbstowcs(url, mb_url, strlen(mb_url)+1);		// convert back to wcs
-	delete [] mb_url;
-	delete [] escaped;
-	delete [] tmp;
-}
-
-// Assumes the file passed in is a relative filepath to the current
-// directory e.g. "test.aaf".
-static aafWChar *makeURLfromFileInCwd(aafWChar *file, aafWChar *url)
-{
-	char		cwd[FILENAME_MAX];
-	if (getcwd(cwd, sizeof(cwd)) == NULL)
-	{
-		perror("getcwd");
-		return NULL;
-	}
-
-	aafWChar	wide_cwd[FILENAME_MAX];
-	mbstowcs(wide_cwd, cwd, strlen(cwd)+1);
-
-	// Append file to cwd to give absolute path to the file
-	wcscat(wide_cwd, L"/");
-	wcscat(wide_cwd, file);
-
-	wcsconvertFilepathtoURL(wide_cwd, url);
-
-	return url;
-}
-
-
-
 // Prototype to satisfy the CW compiler.
 extern "C" HRESULT CAAFEssenceAccess_test(testMode_t mode);
 
@@ -488,10 +301,10 @@ const AAFByteOrder INTEL_ORDER		      = 0x4949; // 'II' for Intel
 const AAFByteOrder MOTOROLA_ORDER         = 0x4d4d; // 'MM' for Motorola
 
 
-static AAFByteOrder getNativeByteOrder(void);
-static void ByteSwap32(
+static AAFByteOrder GetNativeByteOrder(void);
+static void AAFByteSwap32(
 				   aafInt32 *lp);	/* IN/OUT -- Byte swap this value */
-static void ByteSwap16(
+static void AAFByteSwap16(
 				   aafInt16 * wp);	/* IN/OUT -- Byte swap this value */
 void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
 void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data);
@@ -513,6 +326,210 @@ typedef IAAFSmartPointer<IAAFEssenceFormat> IAAFEssenceFormatSP;
 const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 static HRESULT hrSetTransformParameters=0;
+
+static HRESULT CreateStaticEssenceAAFFile(
+	aafWChar * pFileName, 
+	testDataFile_t *dataFile, 
+	testType_t testType,
+	aafUID_t codecID,
+	aafBool bCallSetTransformParameters=kAAFFalse)
+{
+	HRESULT hr = AAFRESULT_SUCCESS;
+	IAAFFile*					pFile = NULL;
+	IAAFHeader*					pHeader = NULL;
+	IAAFDictionary*					pDictionary = NULL;
+	IAAFMob*					pMob = NULL;
+	IAAFMasterMob*				pMasterMob = NULL;
+	IAAFMasterMob2*				pMasterMob2 = NULL;
+	
+	IAAFEssenceAccess*			pEssenceAccess = NULL;
+	IAAFEssenceMultiAccess*		pMultiEssence = NULL;
+	IAAFEssenceFormatSP			pFormat;
+	IAAFEssenceFormat			*format = NULL;
+	IAAFLocator					*pLocator = NULL;
+	// !!!Previous revisions of this file contained variables here required to handle external essence
+	aafMobID_t					masterMobID;
+	aafProductIdentification_t	ProductInfo;
+	aafRational_t				editRate = {44100, 1};
+	aafRational_t				sampleRate = {44100, 1};
+	FILE*						pWavFile = NULL;
+	aafUID_t			 testContainer;
+
+	// delete any previous test file before continuing...
+	char chNameBuffer[1000];
+
+	try
+	{
+
+		convert(chNameBuffer, sizeof(chNameBuffer), pFileName);
+		remove(chNameBuffer);
+		if(dataFile != NULL)
+		{
+			// delete any previous test file before continuing...
+			char chNameBuffer[1000];
+			convert(chNameBuffer, sizeof(chNameBuffer), dataFile->dataFilename);
+			remove(chNameBuffer);
+		}
+		
+		aafProductVersion_t v;
+		v.major = 1;
+		v.minor = 0;
+		v.tertiary = 0;
+		v.patchLevel = 0;
+		v.type = kAAFVersionUnknown;
+		ProductInfo.companyName = L"AAF Developers Desk";
+		ProductInfo.productName = L"Essence Data Test";
+		ProductInfo.productVersion = &v;
+		ProductInfo.productVersionString = NULL;
+		ProductInfo.productID = UnitTestProductID;
+		ProductInfo.platform = NULL;
+		
+		checkResult(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
+		checkResult(pFile->GetHeader(&pHeader));
+
+		// Get the AAF Dictionary so that we can create valid AAF objects.
+		checkResult(pHeader->GetDictionary(&pDictionary));
+		CAAFBuiltinDefs defs (pDictionary);
+		
+		// !!!Previous revisions of this file contained code here required to handle external essence
+		
+		// Get a Master MOB Interface
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMasterMob, 
+								   (IUnknown **)&pMasterMob));
+		// Get a Mob interface and set its variables.
+		checkResult(pMasterMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
+		checkResult(pMob->GetMobID(&masterMobID));
+		checkResult(pMob->SetName(L"A Master Mob"));
+		
+		// Add it to the file 
+		checkResult(pHeader->AddMob(pMob));
+		
+		
+			pLocator = NULL;
+			testContainer = ContainerAAF;
+
+
+		
+		checkResult(pMasterMob->QueryInterface(IID_IAAFMasterMob2, (void **)&pMasterMob2));
+		// now create the Essence data file
+
+		checkResult(pMasterMob2->CreateStaticEssence(STD_SLOT_ID+1,				// Slot ID
+			defs.ddPicture(),	// MediaKind
+			kAAFCodecJPEG,		// codecID
+			kAAFCompressionDisable, // compression
+			pLocator,	// In current file
+			testContainer,	// In AAF Format
+			&pEssenceAccess));// Compress disabled
+
+		
+/*
+		checkResult(pEssenceAccess->GetFileFormatParameterList (&format));
+		checkResult(format->NumFormatSpecifiers (&numSpecifiers));
+		for(n = 0; n < numSpecifiers; n++)
+		{
+			checkResult(format->GetIndexedFormatSpecifier (n, &essenceFormatCode, 0, NULL, NULL));
+		}
+		format->Release();
+		format = NULL;
+		
+		// Tell the AAFEssenceAccess what the format is.
+		checkResult(pEssenceAccess->GetEmptyFileFormat (&pFormat));
+		checkResult(pFormat->NumFormatSpecifiers (&numSpecifiers));
+		
+		aafInt32	sampleSize = bitsPerSample;
+		checkResult(pFormat->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(sampleSize), (aafUInt8 *)&sampleSize));
+		checkResult(pEssenceAccess->PutFileFormat (pFormat));
+		*/
+
+		// At the time this test was written, SetTransformParameters() returned
+		// AAFRESULT_NOT_IN_CURRENT_VERSION, and therefore did not need to be 
+		// tested.  We simply store the HRESULT from SetTransformParameters(), and
+		// check at the end of CAAFEssenceAccess_test(testMode_t mode) if the function still
+		// returns that code.
+	//	if(bCallSetTransformParameters==kAAFTrue)
+	//		hrSetTransformParameters=pEssenceAccess->SetTransformParameters(
+	//			pFormat);
+
+		// NIL flavour is the only one available for kAAFCodecWAVE
+	//	checkResult(pEssenceAccess->SetEssenceCodecFlavour(kAAFNilCodecFlavour));
+
+		// write out the data
+/*
+			checkResult(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded bytes/sample ==1// Number of Samples
+						      sizeof(dataBuff),// buffer size
+				          dataPtr,	// THE data
+									&samplesWritten,
+									&bytesWritten));
+
+*/
+
+	
+		// Finish writing the destination
+//		checkResult(pEssenceAccess->CompleteWrite());
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+		
+		
+	// Cleanup and return
+	if (pMultiEssence)
+		pMultiEssence->Release();
+	
+	if(format)
+		format->Release();
+
+	if (pEssenceAccess)
+		pEssenceAccess->Release();
+
+	if (pWavFile)
+		fclose(pWavFile);
+	
+	if(pLocator)
+		pLocator->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pMasterMob)
+		pMasterMob->Release();
+
+	if(pDictionary)
+		pDictionary->Release();
+
+	if(pHeader)
+		pHeader->Release();
+
+	if (pFile)
+	{ // Preserve previous errors...
+		HRESULT local_hr = pFile->Save();
+		if (FAILED(local_hr) && SUCCEEDED(hr))
+			hr = local_hr;
+		local_hr = pFile->Close();
+		if (FAILED(local_hr) && SUCCEEDED(hr))
+			hr = local_hr;
+		pFile->Release();
+	}
+	
+
+	return hr;
+}
+
+
+
+
+
+
+
 
 static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile, testType_t testType,
 								  aafUID_t codecID,aafBool bCallSetTransformParameters=kAAFFalse)
@@ -542,18 +559,18 @@ static HRESULT CreateAudioAAFFile(aafWChar * pFileName, testDataFile_t *dataFile
 	aafUID_t			essenceFormatCode, testContainer;
   aafUInt32 samplesWritten, bytesWritten;
 	// delete any previous test file before continuing...
+	char chNameBuffer[1000];
 
 	try
 	{
-		char chNameBuffer[FILENAME_MAX];
+
 		convert(chNameBuffer, sizeof(chNameBuffer), pFileName);
 		remove(chNameBuffer);
 		if(dataFile != NULL)
 		{
 			// delete any previous test file before continuing...
-			aafWChar	filepath[FILENAME_MAX];
-			wcsconvertURLtoFilepath(dataFile->dataFilename, filepath);
-			convert(chNameBuffer, sizeof(chNameBuffer), filepath);
+			char chNameBuffer[1000];
+			convert(chNameBuffer, sizeof(chNameBuffer), dataFile->dataFilename);
 			remove(chNameBuffer);
 		}
 		
@@ -1053,6 +1070,7 @@ static HRESULT CreateVideoAAFFile(
 //	aafUInt32					bytesWritten;
 	aafInt32			n, numSpecifiers;
 	aafUID_t			essenceFormatCode, testContainer;
+	char chNameBuffer[1000];
 	aafCharacter wNameBuffer[500];
 	aafDataBuffer_t rgbColorBuffer = NULL, compressedBuffer = NULL;
 	aafDataBuffer_t writeBuffer = NULL;
@@ -1067,15 +1085,12 @@ static HRESULT CreateVideoAAFFile(
 										AAFRESULT_TEST_FAILED);
 		
 		// delete any previous test file before continuing...
-		char chNameBuffer[FILENAME_MAX];
 		convert(chNameBuffer, sizeof(chNameBuffer), pFileName);
 		remove(chNameBuffer);
 		if(dataFile != NULL)
 		{
 			// delete any previous test file before continuing...
-			aafWChar	filepath[FILENAME_MAX];
-			wcsconvertURLtoFilepath(dataFile->dataFilename, filepath);
-			convert(chNameBuffer, sizeof(chNameBuffer), filepath);
+			convert(chNameBuffer, sizeof(chNameBuffer), dataFile->dataFilename);
 			remove(chNameBuffer);
 		}
 
@@ -1175,7 +1190,8 @@ static HRESULT CreateVideoAAFFile(
 			pLocator = NULL;
 			testContainer = ContainerAAF;
 		}
-		
+
+
 		
 		// now create the Essence data file
 		checkResult(pMasterMob->CreateEssence(STD_SLOT_ID,				// Slot ID
@@ -1389,12 +1405,19 @@ static HRESULT ReadVideoAAFFile(
 	IAAFEssenceFormatSP			pFormat;
 	aafNumSlots_t				numMobs, numSlots;
 	aafSearchCrit_t				criteria;
+//	aafRational_t				readSampleRate;
 	aafMobID_t					mobID;
 	aafWChar					namebuf[1204];
 	aafDataBuffer_t				AAFDataBuf = NULL;
 	aafUInt32					AAFBytesRead = 0, samplesRead = 0;
 	aafDataBuffer_t checkBuffer = NULL, compressedBuffer = NULL;
 	aafUInt32 checkBufferSize = 0, compressedBufferSize = 0;
+//	unsigned char				sampleDataBuf[4096], *dataPtr;
+//	size_t						sampleBytesRead;
+//	aafUInt32					dataOffset, dataLen;
+//	aafUInt16					bitsPerSample, numCh;
+//	char chNameBuffer[1000];
+
 	
 
 	try
@@ -1744,7 +1767,7 @@ static HRESULT ReadVideoAAFFile(
 
 //**********************
 // Extra code required to scan the original WAVE headers and extract metadata parameters & data offset
-AAFByteOrder getNativeByteOrder(void)
+AAFByteOrder GetNativeByteOrder(void)
 {
 	aafInt16 word = 0x1234;
 	aafInt8  byte = *((aafInt8*)&word);
@@ -1760,7 +1783,7 @@ AAFByteOrder getNativeByteOrder(void)
 	return result;
 }
 
-void ByteSwap32(
+void AAFByteSwap32(
 				   aafInt32 *lp)	/* IN/OUT -- Byte swap this value */
 {
 	register unsigned char *cp = (unsigned char *) lp;
@@ -1774,7 +1797,7 @@ void ByteSwap32(
 	cp[1] = t;
 }
 
-void ByteSwap16(
+void AAFByteSwap16(
 				   aafInt16 * wp)	/* IN/OUT -- Byte swap this value */
 {
 	register unsigned char *cp = (unsigned char *) wp;
@@ -1793,15 +1816,15 @@ void scanWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
 
 void scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
 {
-	AAFByteOrder	nativeByteOrder = getNativeByteOrder()
+	AAFByteOrder	nativeByteOrder = GetNativeByteOrder()
 		;
 	memcpy(data, *srcBufHdl, maxsize);
 	(*srcBufHdl) += maxsize;
 	
 	if ((maxsize == sizeof(aafInt32)) && (INTEL_ORDER != nativeByteOrder))
-		ByteSwap32((aafInt32 *) data);
+		AAFByteSwap32((aafInt32 *) data);
 	else if ((maxsize == sizeof(aafInt16)) && (INTEL_ORDER != nativeByteOrder))
-		ByteSwap16((aafInt16 *) data);
+		AAFByteSwap16((aafInt16 *) data);
 }
 
 AAFRESULT loadWAVEHeader(aafUInt8 *buf,
@@ -1877,20 +1900,32 @@ AAFRESULT loadWAVEHeader(aafUInt8 *buf,
 	return(AAFRESULT_SUCCESS);
 }
 
+
 HRESULT CAAFEssenceAccess_test(testMode_t mode);
 HRESULT CAAFEssenceAccess_test(testMode_t mode)
 {
 	AAFRESULT	hr = S_OK;
-
-	aafWChar	tmpURL[FILENAME_MAX];
-
+	
 	aafWChar *	rawDataWave = L"EssenceAccessExtRaw.wav";
 	aafWChar *	rawDataAifc = L"EssenceAccessExtRaw.aif";
 	aafWChar *	externalWaveAAF = L"EssenceAccessExtWAV.aaf";
 	aafWChar *	externalAifcAAF = L"EssenceAccessExtAIF.aaf";
 	testDataFile_t	dataFile;
+
+	cout << endl << endl;
+	cout << "    Static Essence " << endl;
+  
+	/**/
+	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
+	{
+        cout << "        WriteSamples" << endl;
+		hr = CreateStaticEssenceAAFFile(L"StaticEssenceAccess.aaf", NULL, testStandardCalls, kAAFCodecWAVE,kAAFTrue);
+	}
 	
-  cout << "    Internal Essence (WAVE)" << endl;
+	if(hr == AAFRESULT_SUCCESS)
+	{
+		cout << "    Internal Essence (WAVE)" << endl;
+	}
   
 	/**/
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
@@ -1919,7 +1954,7 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	}
 	/**/
 	/**/
-	dataFile.dataFilename = makeURLfromFileInCwd(rawDataWave, tmpURL);
+	dataFile.dataFilename = rawDataWave;
 	dataFile.dataFormat = ContainerFile;
 	if(hr == AAFRESULT_SUCCESS)
 	    cout << "    External Essence (WAVE)" << endl;
@@ -1935,7 +1970,7 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 		hr = ReadAAFFile(L"EssenceAccessRawRef.aaf", testStandardCalls, kAAFCodecWAVE);
 	}
 	/**/
-	dataFile.dataFilename = makeURLfromFileInCwd(externalWaveAAF, tmpURL);
+	dataFile.dataFilename = externalWaveAAF;
 	dataFile.dataFormat = ContainerAAF;
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
@@ -1948,7 +1983,7 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
        		 cout << "        ReadSamples (External AAF Essence)" << endl;
 		hr = ReadAAFFile(L"EssenceAccessRef.aaf", testStandardCalls, kAAFCodecWAVE);
 	}
-
+	
 	if(hr == AAFRESULT_SUCCESS)
 		  cout << "    Internal Essence (AIFC)" << endl;
   
@@ -1979,7 +2014,7 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	}
 	/**/
 	/**/
-	dataFile.dataFilename = makeURLfromFileInCwd(rawDataAifc, tmpURL);
+	dataFile.dataFilename = rawDataAifc;
 	dataFile.dataFormat = ContainerFile;
 	if(hr == AAFRESULT_SUCCESS)
 		cout << "    External Essence (AIFC)" << endl;
@@ -1995,7 +2030,7 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 		hr = ReadAAFFile(L"EssenceAccessRawRefAIFC.aaf", testStandardCalls, kAAFCODEC_AIFC);
 	}
 	/**/
-	dataFile.dataFilename = makeURLfromFileInCwd(externalAifcAAF, tmpURL);
+	dataFile.dataFilename = externalAifcAAF;
 	dataFile.dataFormat = ContainerAAF;
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{

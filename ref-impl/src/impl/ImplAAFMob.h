@@ -38,6 +38,10 @@
 #include "ImplAAFTimelineMobSlot.h"
 #endif
 
+#ifndef __ImplAAFStaticMobSlot_h__
+#include "ImplAAFStaticMobSlot.h"
+#endif
+
 #ifndef __ImplAAFTaggedValue_h__
 #include "ImplAAFTaggedValue.h"
 #endif
