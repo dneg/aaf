@@ -22,23 +22,13 @@ OMStorable::OMStorable(void)
 OMStorable::~OMStorable(void)
 {
   TRACE("OMStorable::~OMStorable");
-#if 0
-  // This assertion is to be preferred over the code below. The
-  // assertion will trigger if an attempt is made to delete an object
-  // that is still attached. That is, the assertion detects an attempt
-  // to create a dangling strong reference. Unfortunately this
-  // assertion will trigger during execution of the code that is
-  // currently recommended to be present in client destructors.  The
-  // drawback of the code below is that it sliently compensates for
-  // client programming errors.
+
+  // This assertion will trigger if an attempt is made to delete an
+  // object that is still attached. That is, the assertion detects an
+  // attempt to create a dangling strong reference.
   //
-  ASSERT("Object not attached", _containingProperty == 0);
-#else
-  if (_containingProperty != 0) {
-    _containingProperty->detach(this, _key);
-    _containingProperty = 0;
-  }
-#endif
+  PRECONDITION("Object not referenced", _containingProperty == 0);
+
   delete [] _name;
   _name = 0;
   delete [] _pathName;
