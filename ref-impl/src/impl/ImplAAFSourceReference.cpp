@@ -29,7 +29,7 @@
 
 ImplAAFSourceReference::ImplAAFSourceReference ():
 	_sourceID(			PID_SOURCEREFERENCE_SOURCEID,		"sourceId"),
-	_sourceMobSlotId(	PID_SOURCEREFERENCE_SRCMOBSLOTID,	"sourceMobSlotId")
+	_sourceMobSlotId(	PID_SOURCEREFERENCE_SOURCEMOBSLOTID,	"sourceMobSlotId")
 {
 	_persistentProperties.put(		_sourceID.address());
 	_persistentProperties.put(		_sourceMobSlotId.address());
