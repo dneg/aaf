@@ -1385,7 +1385,7 @@ static bool InitializeTypeDefinitionOpaque(
 // Install all of the callback procs into the MetaDictionary.
 void InstallAAFObjectModelProcs(void)
 {
-  bool sInstalled = false;
+  static bool sInstalled = false;
 
   if (sInstalled)
   {
