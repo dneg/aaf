@@ -76,7 +76,9 @@ public:
   static OMStorable* restoreFrom(const OMStorable* container,
                                  const char* name,
                                  OMStoredObject& s);
-  
+
+  virtual void restoreContents(void);
+
     // @cmember The <c OMFile> in which this <c OMStorable> has a
     //          persistent representation.
   virtual OMFile* file(void) const;
