@@ -211,7 +211,7 @@ public:
 
 private:
 
-  typedef OMWeakReferenceSetElement<ReferencedObject> SetElement;
+  typedef OMWeakReferenceSetElement SetElement;
 
   typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
 

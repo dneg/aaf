@@ -281,7 +281,7 @@ void OMWeakReferenceSetProperty<ReferencedObject>::insert(
 #if defined(OM_VALIDATE_WEAK_REFERENCES)
   newElement.reference().setTargetTag(targetTag());
 #endif
-  newElement.setValue(object);
+  newElement.setValue(key, object);
   _set.insert(key, newElement);
   setPresent();
 
@@ -355,7 +355,12 @@ OMWeakReferenceSetProperty<ReferencedObject>::remove(
   SetElement* element = 0;
   bool found = _set.find(identification, &element);
   ASSERT("Object found", found);
-  ReferencedObject* result = element->setValue(0);
+  OMStorable* p = element->setValue(nullOMUniqueObjectIdentification, 0);
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
   _set.remove(identification);
 
   POSTCONDITION("Object is not present", !contains(identification));
