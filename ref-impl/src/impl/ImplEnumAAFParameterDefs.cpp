@@ -108,10 +108,14 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 		//!!!Else assert
 		_current++;
-				head->ReleaseReference();
-		head = NULL;
-		dict->ReleaseReference();
-		dict = NULL;
+		if (head) {
+			head->ReleaseReference();
+			head = NULL;
+		}
+		if (dict) {
+			dict->ReleaseReference();
+			dict = NULL;
+		}
 	}
 	XEXCEPT
 	{

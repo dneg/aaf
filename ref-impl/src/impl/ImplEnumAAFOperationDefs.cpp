@@ -102,10 +102,14 @@ AAFRESULT STDMETHODCALLTYPE
 		//!!!Else assert
 		(*ppEffectDef)->AcquireReference();
 		_current++;
-		head->ReleaseReference();
-		head = NULL;
-		dict->ReleaseReference();
-		dict = NULL;
+		if (head) {
+			head->ReleaseReference();
+			head = NULL;
+		}
+		if (dict) {
+			dict->ReleaseReference();
+			dict = NULL;
+		}
 	}
 	XEXCEPT
 	{
