@@ -21,7 +21,7 @@
 
 #include <AAFCOMPlatformTypes.h>
 
-#include <AxPluginUtil.h>
+#include "AxPluginUtil.h"
 
 // CAxUnkown is a standard implementation of IUnkown.
 //
