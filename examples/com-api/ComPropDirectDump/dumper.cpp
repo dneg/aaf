@@ -61,6 +61,7 @@ typedef IAAFSmartPointer<IAAFTypeDefObjectRef>     IAAFTypeDefObjectRefSP;
 typedef IAAFSmartPointer<IAAFClassDef>             IAAFClassDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefRename>        IAAFTypeDefRenameSP;
 typedef IAAFSmartPointer<IAAFTypeDefEnum>          IAAFTypeDefEnumSP;
+typedef IAAFSmartPointer<IAAFTypeDefExtEnum>       IAAFTypeDefExtEnumSP;
 typedef IAAFSmartPointer<IAAFTypeDefFixedArray>    IAAFTypeDefFixedArraySP;
 typedef IAAFSmartPointer<IAAFTypeDefVariableArray> IAAFTypeDefVariableArraySP;
 typedef IAAFSmartPointer<IAAFTypeDefString>        IAAFTypeDefStringSP;
@@ -414,6 +415,40 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			break;
 		  }
 
+		case kAAFTypeCatExtEnum:
+		  {
+			// Print enum element's text tag
+			IAAFTypeDefExtEnumSP pTDE;
+			checkResult(pTD->QueryInterface(IID_IAAFTypeDefExtEnum,
+										   (void**)&pTDE));
+
+			// first, get the AUID value
+			aafUID_t enumValue;
+			checkResult(pTDE->GetAUIDValue(pPVal, &enumValue));
+
+			// now, get the text tag for that value.  Start with name
+			// buf len, and allocating a buffer to hold the name
+			wchar_t * nameBuf;
+			aafUInt32 nameBufLen;
+			checkResult(pTDE->GetNameBufLenFromAUID(&enumValue, &nameBufLen));
+			// don't forget NameBufLen is in bytes, not wchar_ts
+			nameBuf = (wchar_t*) new aafUInt8[nameBufLen];
+
+			// and now get the name itself
+			checkResult(pTDE->GetNameFromAUID(&enumValue, nameBuf, nameBufLen));
+
+			// Print the contents
+			char *mbBuf = make_mbstring(nameBufLen, nameBuf); // create an ansi/asci
+			checkExpression(NULL != mbBuf, AAFRESULT_NOMEMORY);
+			cout << "Value: " << mbBuf << endl;
+			delete[] mbBuf;
+			mbBuf = 0;
+			delete[] nameBuf;
+			nameBuf = 0;
+
+			break;
+		  }
+
 		case kAAFTypeCatFixedArray:
 		  {
 			// Print out elements of array.
@@ -492,6 +527,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 			aafUInt32 count = 0;
 			aafUInt32 elemSize = 0;
 			checkResult(pTDS->GetCount(pPVal, &count));
+			count ++; // make room for terminator
 			checkResult(pETDInt->GetSize (&elemSize));
 			bufSize = count * elemSize;
 
@@ -501,6 +537,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 
 			// get bits
 			aafUInt8 * buf = new aafUInt8[bufSize];
+			memset (buf, 0, bufSize);  // zero all, including terminator
 			checkResult(pTDS->GetElements(pPVal, buf, bufSize));
 
 			// Now determine size of integral elements
@@ -617,7 +654,7 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 		  }
 
 		default:
-		  cout << "Unknown type category " << (int) tid << "." << endl;
+		  cout << "Unknown type category " << dec << (int) tid << "." << endl;
 		  break;
 		}
 	} // !pTD
