@@ -49,7 +49,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Thu Apr  6 18:01:14 EDT 2000
+// This file was generated on Fri Apr  7 10:37:52 EDT 2000
 // by user bedell on system JBEDELL2.
 //
 // Key to macros.
@@ -655,33 +655,6 @@ AAF_CLASS(Event,
 AAF_CLASS_END(Event)
 AAF_CLASS_SEPARATOR()
 
-// IntraFrameMarker
-//
-AAF_CLASS(IntraFrameMarker,
-  AAF_LITERAL_AUID(0x06414144,
-    0x4100, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  Event,
-  true)
-  AAF_PROPERTY(HotSpotRect,
-    AAF_LITERAL_AUID(0x06414144,
-      0x4101, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x0701,
-    AAF_TYPE(Rectangle),
-    false,
-    IntraFrameMarker)
-  AAF_PROPERTY(HotSpotMatte,
-    AAF_LITERAL_AUID(0x06414144,
-      0x4102, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x0702,
-    AAF_REFERENCE_TYPE(StrongReference, SourceClip),
-    false,
-    IntraFrameMarker)
-AAF_CLASS_END(IntraFrameMarker)
-AAF_CLASS_SEPARATOR()
-
 // GPITrigger
 //
 AAF_CLASS(GPITrigger,
@@ -760,7 +733,7 @@ AAF_CLASS(OperationGroup,
       0x0300, 0x0000,
       0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
     0x0b03,
-    AAF_REFERENCE_TYPE(StrongReferenceSet, Parameter),
+    AAF_REFERENCE_TYPE(StrongReferenceVector, Parameter),
     false,
     OperationGroup)
   AAF_PROPERTY(BypassOverride,
@@ -2149,17 +2122,6 @@ AAF_CLASS(HTMLDescriptor,
   FileDescriptor,
   true)
 AAF_CLASS_END(HTMLDescriptor)
-AAF_CLASS_SEPARATOR()
-
-// MIDIFileDescriptor
-//
-AAF_CLASS(MIDIFileDescriptor,
-  AAF_LITERAL_AUID(0x06474144,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  FileDescriptor,
-  true)
-AAF_CLASS_END(MIDIFileDescriptor)
 AAF_CLASS_SEPARATOR()
 
 // TIFFDescriptor
@@ -4313,16 +4275,6 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
   AAF_TYPE(OperationDefinition))
 AAF_TYPE_SEPARATOR()
 
-// StrongReferenceSet<Parameter>
-//
-AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
-  AAF_REFERENCE_TYPE_NAME(StrongReferenceSet, Parameter), 
-  AAF_LITERAL_AUID(0x0C0B0109,
-    0x0000, 0x0000,
-    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
-  AAF_TYPE(Parameter))
-AAF_TYPE_SEPARATOR()
-
 // StrongReferenceSet<ParameterDefinition>
 //
 AAF_TYPE_DEFINITION_STRONG_REFERENCE_SET(
@@ -4471,6 +4423,16 @@ AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
   AAF_TYPE(KLVData))
+AAF_TYPE_SEPARATOR()
+
+// StrongReferenceVector<Parameter>
+//
+AAF_TYPE_DEFINITION_STRONG_REFERENCE_VECTOR(
+  AAF_REFERENCE_TYPE_NAME(StrongReferenceVector, Parameter), 
+  AAF_LITERAL_AUID(0x0C0B0209,
+    0x0000, 0x0000,
+    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x0C),
+  AAF_TYPE(Parameter))
 AAF_TYPE_SEPARATOR()
 
 // WeakReference<ClassDefinition>
