@@ -119,12 +119,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFIdentifications::Next (
-      aafInt32  count,
+      aafUInt32  count,
       ImplAAFIdentification ** ppIdentifications,
-      aafInt32 * pNumFetched)
+      aafUInt32 * pNumFetched)
 {
 	ImplAAFIdentification**	ppDef;
-	aafInt32				numDefs;
+	aafUInt32				numDefs;
 	HRESULT					hr;
 
 	if ((pNumFetched == NULL && count != 1) || (pNumFetched != NULL && count == 1))

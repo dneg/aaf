@@ -53,13 +53,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Next
         (// @parm [in] number of identifications requested
-         aafInt32  count,
+         aafUInt32  count,
 
          // @parm [out, size_is(count), length_is(*pNumFetched)] array to receive identification objects
          ImplAAFIdentification ** ppIdentifications,
 
          // @parm [out] number of actual Identifications fetched into ppIdentifications array
-         aafInt32 *  pNumFetched);
+         aafUInt32 *  pNumFetched);
 
 
   //****************
