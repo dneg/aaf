@@ -7,6 +7,21 @@ AAFDefObject\
 #endm
 #c
 AD_HEAD
+/******************************************\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\******************************************/
+
+ 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 AD_FORWARD_DECLARATION(EnumAAFReferenceValues)
 AD_FORWARD_DECLARATION(AAFReferenceValue)
 AD_CLASS_UUID(dfbd6522, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
