@@ -200,10 +200,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pNestedScope->AppendSegment(pSegment));
 		// Release the intreface so we can reuse the pointer
 		pSegment->Release();
+		pSegment = NULL;
 		checkResult(pFiller->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 		checkResult(pNestedScope->AppendSegment(pSegment));
 		// Release the intreface so we can reuse the pointer
 		pSegment->Release();
+		pSegment = NULL;
 		checkResult(pNestedScope->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 	    // append the Selector to the MOB tree
 		checkResult(pMob->AppendNewSlot(pSegment, 1, L"SelectorSlot", &pMobSlot)); 
@@ -311,14 +313,19 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				checkResult(pNestedScope->GetSlots(&pSegIter));
 				checkResult(pSegIter->NextOne(&pSegment));
 				checkResult(pSegment->QueryInterface(IID_IAAFSourceClip, (void **)&pSourceClip));
+				pSegment->Release();
+				pSegment = NULL;
 
 				while (pSegIter && pSegIter->NextOne(&pSegment) == AAFRESULT_SUCCESS)
 				{
 					// Make sure further segmenta are filler
 					checkResult(pSegment->QueryInterface(IID_IAAFFiller, (void **)&pFiller));
+					pSegment->Release();
+					pSegment = NULL;
 					pFiller->Release();
 					pFiller = NULL;
 				}
+
 				pSegIter->Release();
 				pSegIter = NULL;
 
@@ -327,9 +334,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 				pNestedScope->Release();
 				pNestedScope = NULL;
-
-				pSegment->Release();
-				pSegment = NULL;
 
 				pSlot->Release();
 				pSlot = NULL;
@@ -395,7 +399,6 @@ extern "C" HRESULT CAAFNestedScope_test()
 	{
 		hr = CreateAAFFile(pFileName);
 		if (SUCCEEDED(hr))
-		
 			hr = ReadAAFFile(pFileName);
 	}
 	catch (...)
