@@ -25,7 +25,7 @@ PROGNAME = aaf2dot
 
 
 
-PACKAGE = Utilities
+PACKAGE = Utilities/aaf2dot
 
 AAFBASE ?= ../../../../
 
