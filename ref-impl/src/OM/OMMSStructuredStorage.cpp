@@ -303,17 +303,19 @@ OMInt32 OMStgOpenStorageOnILockBytes(ILockBytes* plkbyt,
 
 //Below are the definititions for MS Strucutred Storage Library
 
-typedef unsigned int ULONG;     // 4 bytes
-typedef unsigned short USHORT;  // 2 bytes
-typedef short OFFSET;           // 2 bytes
-typedef ULONG SECT;             // 4 bytes
-typedef ULONG FSINDEX;          // 4 bytes
-typedef USHORT FSOFFSET;        // 2 bytes
-typedef USHORT WCHAR;           // 2 bytes
-typedef ULONG DFSIGNATURE;      // 4 bytes
+#if !defined(OM_OS_WINDOWS)
 typedef unsigned char BYTE;     // 1 byte
 typedef unsigned short WORD;    // 2 bytes
+typedef unsigned short USHORT;  // 2 bytes
+typedef unsigned int ULONG;     // 4 bytes
 typedef unsigned int DWORD;     // 4 bytes
+typedef USHORT WCHAR;           // 2 bytes
+typedef short OFFSET;           // 2 bytes
+typedef USHORT FSOFFSET;        // 2 bytes
+#endif
+typedef ULONG SECT;             // 4 bytes
+typedef ULONG FSINDEX;          // 4 bytes
+typedef ULONG DFSIGNATURE;      // 4 bytes
 typedef ULONG StrID;            // 4 bytes
 
 //FAT Entries
