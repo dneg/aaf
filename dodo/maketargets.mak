@@ -33,7 +33,7 @@ INCLUDE_DIR = ../ref-impl/include
 IMPL_DIR = ../ref-impl/src/impl
 UUID_DIR = ../ref-impl/include/ref-api
 COMAPI_DIR = ../ref-impl/src/com-api
-TEST_DIR = ../test/com
+TEST_DIR = ../test/com/ComModTestAAF/ModuleTests
 
 targets: $(DODO_TARGETS)
 targets: $(PLUGIN_TARGETS)
