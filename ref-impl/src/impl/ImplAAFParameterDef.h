@@ -15,9 +15,9 @@
 
 
 
-class ImplAAFReferenceValue;
 
 class ImplEnumAAFReferenceValues;
+#include "ImplAAFReferenceValue.h"
 
 
 /***********************************************\
@@ -124,8 +124,12 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFParameterDefTest.cpp.
   static AAFRESULT test();
+
+private:
+	OMFixedSizeProperty<aafUID_t>							_dataDef;
+    OMStrongReferenceVectorProperty<ImplAAFReferenceValue>	_refVal;
+	OMWideStringProperty									_displayUnits;
 };
 
 #endif // ! __ImplAAFParameterDef_h__
-
 
