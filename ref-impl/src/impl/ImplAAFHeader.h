@@ -244,16 +244,6 @@ public:
 		// @parm [in] Identification to append
         (ImplAAFIdentification * pIdent);
 
-
-  //****************
-  // RemoveIdentification()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    RemoveIdentification
-		// @parm [in] Identification to remove
-        (ImplAAFIdentification * pIdent);
-
-
   //****************
   // GetRefImplVersion()
   //
