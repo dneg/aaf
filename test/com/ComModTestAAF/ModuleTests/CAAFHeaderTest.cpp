@@ -438,8 +438,9 @@ void HeaderTest::createFileMob(int itemNumber)
 
   check(_pMob->SetName(wcBuffer));
   
-  check(defs.cdFileDescriptor()->
-		CreateInstance(IID_IAAFEssenceDescriptor, 
+  // create concrete subclass of FileDescriptor
+  check(defs.cdHTMLDescriptor()->
+		CreateInstance(IID_IAAFFileDescriptor, 
 					   (IUnknown **)&_pFileDescriptor));
 
   check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
