@@ -33,6 +33,10 @@
 #include "ImplAAFTypeDefString.h"
 #endif
 
+#ifndef __ImplAAFTypeDefInt_h__
+#include "ImplAAFTypeDefInt.h"
+#endif
+
 #ifndef __ImplAAFHeader_h_
 #include "ImplAAFHeader.h"
 #endif
@@ -477,8 +481,41 @@ OMProperty * ImplAAFTypeDefString::pvtCreateOMPropertyMBS
    const char * name) const
 {
   assert (name);
-  // Don't specify size for variably-sized properties
-  OMProperty * result = new OMSimpleProperty (pid, name);
+
+  ImplAAFTypeDefSP ptd = BaseType ();
+  assert (ptd);
+
+  OMProperty * result = 0;
+
+  ImplAAFTypeDefInt * ptdi = 
+	dynamic_cast<ImplAAFTypeDefInt*>((ImplAAFTypeDef*) ptd);
+  if (ptdi)
+	{
+	  // element is integral type
+	  aafUInt32 intSize;
+	  AAFRESULT hr;
+	  hr = ptdi->GetSize (&intSize);
+	  switch (intSize)
+		{
+		case 1:
+		  result = new OMVariableSizeProperty<aafUInt8> (pid, name);
+		  break;
+		case 2:
+		  result = new OMVariableSizeProperty<aafUInt16> (pid, name);
+		  break;
+		case 4:
+		  result = new OMVariableSizeProperty<aafUInt32> (pid, name);
+		  break;
+		case 8:
+		  result = new OMVariableSizeProperty<aafInt64> (pid, name);
+		  break;
+		default:
+		  // We only support strings of those types.
+		  assert (0);
+		}
+	}
+
+  // If result wasn't set above, we don't support the type.
   assert (result);
   return result;
 }
