@@ -83,6 +83,8 @@ public:
     //          <c OMPropertySet>.
   size_t count(void) const;
 
+  size_t countPresent(void) const;
+
     // @cmember This <c OMPropertySet> is contained by the given
     //          <c OMStorable> object <p container>. The <c OMProperty>
     //          objects in this <c OMPropertySet> are the properties of
