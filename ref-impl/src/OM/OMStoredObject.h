@@ -93,132 +93,132 @@ public:
   // @access Public members.
 
     // @cmember Destructor.
-  ~OMStoredObject(void);
+  virtual ~OMStoredObject(void);
 
     // @cmember Create a new <c OMStoredObject>, named <p name>,
     //          contained by this <c OMStoredObject>.
     //   @devnote The name argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
-  OMStoredObject* create(const wchar_t* name);
+  virtual OMStoredObject* create(const wchar_t* name);
 
     // @cmember Open an exsiting <c OMStoredObject>, named <p name>,
     //          contained by this <c OMStoredObject>.
     //   @devnote The name argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
-  OMStoredObject* open(const wchar_t* name);
+  virtual OMStoredObject* open(const wchar_t* name);
 
     // @cmember Close this <c OMStoredObject>.
-  void close(void);
+  virtual void close(void);
 
     // @cmember The byte order of this <c OMStoredObject>.
     //   @devnote This member function doesn't make sense for all
     //            derived instances of <c OMStoredObject>.
-  OMByteOrder byteOrder(void) const;
+  virtual OMByteOrder byteOrder(void) const;
 
   // Saving and restoring properties
 
     // @cmember Save the <c OMStoredObjectIdentification> <p id>
     //          in this <c OMStoredObject>.
-  void save(const OMStoredObjectIdentification& id);
+  virtual void save(const OMStoredObjectIdentification& id);
 
     // @cmember Save the <c OMPropertySet> <p properties> in this
     //          <c OMStoredObject>.
-  void save(const OMPropertySet& properties);
+  virtual void save(const OMPropertySet& properties);
 
     // @cmember Save the <c OMSimpleProperty> <p property> in this
     //          <c OMStoredObject>.
-  void save(const OMSimpleProperty& property);
+  virtual void save(const OMSimpleProperty& property);
 
     // @cmember Save the <c OMStrongReference> <p singleton> in this
     //          <c OMStoredObject>.
-  void save(const OMStrongReference& singleton);
+  virtual void save(const OMStrongReference& singleton);
 
     // @cmember Save the <c OMStrongReferenceVector> <p vector> in this
     //          <c OMStoredObject>.
-  void save(const OMStrongReferenceVector& vector);
+  virtual void save(const OMStrongReferenceVector& vector);
 
     // @cmember Save the <c OMStrongReferenceSet> <p set> in this
     //          <c OMStoredObject>.
-  void save(const OMStrongReferenceSet& set);
+  virtual void save(const OMStrongReferenceSet& set);
 
     // @cmember Save the <c OMWeakReference> <p singleton> in this
     //          <c OMStoredObject>.
-  void save(const OMWeakReference& singleton);
+  virtual void save(const OMWeakReference& singleton);
 
     // @cmember Save the <c OMWeakReferenceVector> <p vector> in this
     //          <c OMStoredObject>.
-  void save(const OMWeakReferenceVector& vector);
+  virtual void save(const OMWeakReferenceVector& vector);
 
     // @cmember Save the <c OMWeakReferenceSet> <p set> in this
     //          <c OMStoredObject>.
-  void save(const OMWeakReferenceSet& set);
+  virtual void save(const OMWeakReferenceSet& set);
 
     // @cmember Save the <c OMPropertyTable> <p table> in this
     //          <c OMStoredObject>.
     //   @devnote Does this member function make sense for all
     //            derived instances of <c OMStoredObject> ?
-  void save(const OMPropertyTable* table);
+  virtual void save(const OMPropertyTable* table);
 
     // @cmember Save the <c OMDataStream> <p stream> in this
     //          <c OMStoredObject>.
-  void save(const OMDataStream& stream);
+  virtual void save(const OMDataStream& stream);
 
     // @cmember Restore the <c OMStoredObjectIdentification>
     //          of this <c OMStoredObject> into <p id>.
-  void restore(OMStoredObjectIdentification& id);
+  virtual void restore(OMStoredObjectIdentification& id);
 
     // @cmember Restore the <c OMPropertySet> <p properties> into
     //          this <c OMStoredObject>.
-  void restore(OMPropertySet& properties);
+  virtual void restore(OMPropertySet& properties);
 
     // @cmember Restore the <c OMSimpleProperty> <p property> into this
     //          <c OMStoredObject>.
     //   @devnote The externalSize argument to this member function doesn't
     //            make sense for all derived instances of <c OMStoredObject>.
-  void restore(OMSimpleProperty& property, size_t externalSize);
+  virtual void restore(OMSimpleProperty& property, size_t externalSize);
 
     // @cmember Restore the <c OMStrongReference> <p singleton> into this
     //          <c OMStoredObject>.
-  void restore(OMStrongReference& singleton, size_t externalSize);
+  virtual void restore(OMStrongReference& singleton, size_t externalSize);
 
     // @cmember Restore the <c OMStrongReferenceVector> <p vector> into this
     //          <c OMStoredObject>.
-  void restore(OMStrongReferenceVector& vector, size_t externalSize);
+  virtual void restore(OMStrongReferenceVector& vector, size_t externalSize);
 
     // @cmember Restore the <c OMStrongReferenceSet> <p set> into this
     //          <c OMStoredObject>.
-  void restore(OMStrongReferenceSet& set, size_t externalSize);
+  virtual void restore(OMStrongReferenceSet& set, size_t externalSize);
 
     // @cmember Restore the <c OMWeakReference> <p singleton> into this
     //          <c OMStoredObject>.
-  void restore(OMWeakReference& singleton, size_t externalSize);
+  virtual void restore(OMWeakReference& singleton, size_t externalSize);
 
     // @cmember Restore the <c OMWeakReferenceVector> <p vector> into this
     //          <c OMStoredObject>.
-  void restore(OMWeakReferenceVector& vector, size_t externalSize);
+  virtual void restore(OMWeakReferenceVector& vector, size_t externalSize);
 
     // @cmember Restore the <c OMWeakReferenceSet> <p set> into this
     //          <c OMStoredObject>.
-  void restore(OMWeakReferenceSet& set, size_t externalSize);
+  virtual void restore(OMWeakReferenceSet& set, size_t externalSize);
 
     // @cmember Restore the <c OMPropertyTable> in this <c OMStoredObject>.
     //   @devnote Does this member function make sense for all
     //            derived instances of <c OMStoredObject> ?
-  void restore(OMPropertyTable*& table);
+  virtual void restore(OMPropertyTable*& table);
 
     // @cmember Restore the <c OMDataStream> <p stream> into this
     //          <c OMStoredObject>.
-  void restore(OMDataStream& stream, size_t externalSize);
+  virtual void restore(OMDataStream& stream, size_t externalSize);
 
   // Stream manipulation
 
     // @cmember Open the <c OMStoredStream> representing the property
     //          <p stream> contained within this <c OMStoredObject>.
-  OMStoredStream* openStoredStream(const OMDataStream& property);
+  virtual OMStoredStream* openStoredStream(const OMDataStream& property);
 
     // @cmember Create an <c OMStoredStream> representing the property
     //          <p stream> contained within this <c OMStoredObject>.
-  OMStoredStream* createStoredStream(const OMDataStream& property);
+  virtual OMStoredStream* createStoredStream(const OMDataStream& property);
 
   // Name manipulation.
 
