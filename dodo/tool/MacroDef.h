@@ -142,4 +142,4 @@ private:
 };
 
 
-#endif _MacroDef_h_
+#endif // ! _MacroDef_h_
