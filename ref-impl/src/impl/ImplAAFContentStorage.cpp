@@ -254,11 +254,30 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::RemoveMob (ImplAAFMob *pMob)
 {
+	aafMobID_t	mobID;
+
 	if (NULL == pMob)
 		return AAFRESULT_NULL_PARAM;
+		
+	if (!pMob->attached())
+		return AAFRESULT_MOB_NOT_FOUND;	
+		
+	XPROTECT()
+	{
+		CHECK(pMob->GetMobID(&mobID));
 
-	_mobs.removeValue(pMob);
-	pMob->ReleaseReference(); // the set no longer owns this reference.
+		if(_mobs.contains((*reinterpret_cast<const OMMaterialIdentification *>(&mobID))))
+		{
+			_mobs.removeValue(pMob);
+			pMob->ReleaseReference(); // the set no longer owns this reference.
+		}
+		else
+			RAISE(AAFRESULT_MOB_NOT_FOUND);
+	}
+	XEXCEPT
+	{
+	}
+	XEND;
 	
 	return(AAFRESULT_SUCCESS);
 }
@@ -403,11 +422,30 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFContentStorage::RemoveEssenceData (ImplAAFEssenceData * pEssenceData)
 {
+	aafMobID_t	mobID;
+
 	if (NULL == pEssenceData)
 		return AAFRESULT_NULL_PARAM;
 
-	_essenceData.removeValue(pEssenceData);
-	pEssenceData->ReleaseReference();
+	if (!pEssenceData->attached())
+		return AAFRESULT_ESSENCE_NOT_FOUND;
+
+	XPROTECT()
+	{
+		CHECK(pEssenceData->GetFileMobID(&mobID));
+
+		if(_essenceData.contains((*reinterpret_cast<const OMMaterialIdentification *>(&mobID))))
+		{
+			_essenceData.removeValue(pEssenceData);
+			pEssenceData->ReleaseReference();
+		}
+		else
+			RAISE(AAFRESULT_ESSENCE_NOT_FOUND);
+	} 
+	XEXCEPT
+	{
+	}
+	XEND;
 	
 	return(AAFRESULT_SUCCESS);
 }
