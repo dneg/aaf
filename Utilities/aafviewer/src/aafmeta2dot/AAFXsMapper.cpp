@@ -197,7 +197,7 @@ AAFXsMapper::MapAAFTypeDef( AxTypeDef &axTypeDef )
   else if ( axTypeDef.GetTypeCategory() == kAAFTypeCatInt )
     {
       AxTypeDefInt axTypeDefInt( AxQueryInterface< IAAFTypeDef, IAAFTypeDefInt >( axTypeDef ) );
-      typeDef = new AAFTypeDefinitionInt( name, uid, description, axTypeDefInt.GetSize(), 
+      typeDef = new AAFTypeDefinitionInt( name, uid, description, (aafUInt8)axTypeDefInt.GetSize(), 
 					      axTypeDefInt.IsSigned() );
       _defHome->AddDefinition( typeDef );
     }
