@@ -272,8 +272,7 @@ void OMWeakReferenceProperty<ReferencedObject>::close(void)
   //          <c OMStorable>.
   //   @parm The external (persisted) size of the <c OMWeakReferenceProperty>.
 template <typename ReferencedObject>
-void OMWeakReferenceProperty<ReferencedObject>::restore(
-                                                    size_t ANAME(externalSize))
+void OMWeakReferenceProperty<ReferencedObject>::restore(size_t externalSize)
 {
   TRACE("OMWeakReferenceProperty<ReferencedObject>::restore");
 
