@@ -279,6 +279,7 @@ OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
   } else if (mode == readOnlyMode) {
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
   }
+
   OMCHAR omFileName[256];
   convert(omFileName, 256, fileName);
 
@@ -641,13 +642,20 @@ IStream* OMStoredObject::createStream(IStorage* storage,
   TRACE("OMStoredObject::createStream");
   PRECONDITION("Valid storage", storage != 0);
 
+  DWORD mode;
+  if (_mode == modifyMode) {
+    mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
+  } else if (_mode == readOnlyMode) {
+    mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
+  }
+
   IStream* stream = 0;
   OMCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
 
   HRESULT resultCode = storage->CreateStream(
     omStreamName,
-    STGM_DIRECT | STGM_WRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
+    mode,
     0,
     0,
     &stream);
@@ -664,6 +672,13 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
   PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid stream name", validString(streamName));
   
+  DWORD mode;
+  if (_mode == modifyMode) {
+    mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
+  } else if (_mode == readOnlyMode) {
+    mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
+  }
+
   IStream* stream = 0;
   OMCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
@@ -671,7 +686,7 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
   HRESULT resultCode = storage->OpenStream(
     omStreamName,
     0,
-    STGM_DIRECT | STGM_READ | STGM_SHARE_EXCLUSIVE,
+    mode,
     0,
     &stream);
   if (!checkStream(resultCode, streamName)) {
@@ -701,14 +716,20 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
   PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid storage name", validString(storageName));
 
+  DWORD mode;
+  if (_mode == modifyMode) {
+    mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
+  } else if (_mode == readOnlyMode) {
+    mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
+  }
+
   IStorage* newStorage = 0;
   OMCHAR omStorageName[256];
   convert(omStorageName, 256, storageName);
 
   HRESULT resultCode = storage->CreateStorage(
     omStorageName,
-    // STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
-    STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE,
+    mode,
     0,
     0,
     &newStorage);
