@@ -401,6 +401,23 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::removeValue(
   ASSERT("Unimplemented code not reached", false);
 }
 
+  // @mfunc The index of the <p ReferencedObject*> <p object>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable>.
+  //   @parm A pointer to the <p ReferencedObject> to find.
+  //   @rdesc The index.
+  //   @this const
+template <typename ReferencedObject>
+size_t OMStrongReferenceVectorProperty<ReferencedObject>::indexOfValue(
+                                          const ReferencedObject* object) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::removeValue");
+
+  ASSERT("Unimplemented code not reached", false);
+  return 0;
+}
+
   // @mfunc Increase the capacity of this
   //        <c OMStrongReferemceVectorProperty> so that it
   //        can contain at least <p capacity> <p ReferencedObject>s

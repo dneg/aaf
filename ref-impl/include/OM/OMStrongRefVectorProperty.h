@@ -114,6 +114,9 @@ public:
     //          <c OMStrongReferenceVectorProperty>.
   void removeValue(const ReferencedObject* object);
 
+    // @cmember The index of the <p ReferencedObject*> <p object>.
+  size_t indexOfValue(const ReferencedObject* object) const;
+
     // @cmember Increase the capacity of this
     //          <c OMStrongReferenceVectorProperty> so that it
     //          can contain at least <p capacity> <p ReferencedObject>s
