@@ -723,6 +723,29 @@ static TypeStream s_AAFAllTypeStreams [] = \
 
 #include "AAFMetaDictionary.h"
 
+//
+// Pass 25:  Do stuff for set types.
+//
+#define AAF_TYPE_TABLE_BEGIN()  \
+struct TypeSet         \
+{                               \
+  const wchar_t *  typeName;    \
+  aafUID_t         typeId;      \
+  const aafUID_t * pRefdTypeId; \
+  int              isValid;     \
+};                              \
+                                \
+static TypeSet s_AAFAllTypeSets [] = {
+
+#define AAF_TYPE(x) kAAFTypeID_##x
+#define AAF_TYPE_DEFINITION_SET(name, id, type) \
+  {L###name, id, (aafUID_t *)& type, 1},
+
+#define AAF_TYPE_TABLE_END()  \
+0 };
+
+#include "AAFMetaDictionary.h"
+
 #undef MY_TYPE_ID
 #undef MY_TYPE_NAME
 

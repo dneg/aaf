@@ -720,7 +720,39 @@ const aafUInt32 kTypeDefinitionCharacterCount =
 
 
 //
+// Create an array of all set types.
+//
 
+#define MY_TYPE_NAME(name) L"kAAFTypeID_" L###name
+#define MY_TYPE_ID(name) kAAFTypeID_##name
+#define MY_TARGET_ID(type) MY_TYPE_ID(type)
+
+#define AAF_TYPE(name) name //name##StrongReference
+#define AAF_REFERENCE_TYPE_NAME(type, target) target##type
+
+
+#define AAF_TYPE_TABLE_BEGIN()  \
+static TypeDefinitionValueSet sTypeDefinitionValueSets [] = \
+{
+#define AAF_TYPE_DEFINITION_SET(name, id, type) \
+    TypeDefinitionValueSet( \
+    MY_TYPE_NAME(name), \
+    (aafUID_constptr) &MY_TYPE_ID(name), \
+    (aafUID_constptr) &MY_TARGET_ID(type)),
+#define AAF_TYPE_TABLE_END() \
+};
+
+#include "AAFMetaDictionary.h"
+
+#undef MY_TYPE_NAME
+#undef MY_TYPE_ID
+#undef MY_TARGET_ID
+
+const aafUInt32 kTypeDefinitionValueSetCount = 
+  MY_ARRAY_ELEMENT_COUNT(sTypeDefinitionValueSets);
+
+
+//
 // Create an array of all strong reference types.
 //
 
@@ -1334,6 +1366,12 @@ void AAFObjectModel::SortTypeDefinitions(void)
   for (i = 0; i < kTypeDefinitionCharacterCount; ++i)
   {
     sTypeDefinitions[actualTypeCount++] = &sTypeDefinitionCharacters[i];
+  }
+
+  // sTypeDefinitionValueSets
+  for (i = 0; i < kTypeDefinitionValueSetCount; ++i)
+  {
+    sTypeDefinitions[actualTypeCount++] = &sTypeDefinitionValueSets[i];
   }
 
   // TypeDefinitionStrongReference
@@ -2817,9 +2855,8 @@ void TypeDefinitionSet::Initialize()
   // PRECONDITION: we should only initialize once.
   assert (!_elementType);
 
-  // Lookup the type definition; it must be one of the object reference types.
-  _elementType = dynamic_cast<const TypeDefinitionObjectReference *>
-                          (objectModel()->findTypeDefinition (elementTypeId()));
+  // Lookup the type definition.
+  _elementType = objectModel()->findTypeDefinition (elementTypeId());
 
   // POSTCONDITION: if the type definition does not exist then
   // the meta dictionary is invalid
