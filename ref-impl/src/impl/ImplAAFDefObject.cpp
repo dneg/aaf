@@ -340,9 +340,12 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::CountPluginDefs
         (aafUInt32 * pResult)
 {
-  if (! pResult)
-	return AAFRESULT_NULL_PARAM;
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (! pResult)
+		return AAFRESULT_NULL_PARAM;
+	return AAFRESULT_NOT_IMPLEMENTED;
+// !!Put this back when we have weak references
+//	*pResult = _descriptors.count();
+//	return AAFRESULT_SUCCESS;
 }
 
 
@@ -351,19 +354,22 @@ AAFRESULT STDMETHODCALLTYPE
         (aafUInt32 index,
 		 ImplAAFPluginDescriptor * pPluginDescriptor)
 {
-  if (! pPluginDescriptor)
-	return AAFRESULT_NULL_PARAM;
-
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountPluginDefs (&count);
-  if (AAFRESULT_FAILED (hr))
-	return hr;
-
-  if (index > count)
-	return AAFRESULT_BADINDEX;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (! pPluginDescriptor)
+		return AAFRESULT_NULL_PARAM;
+	
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountPluginDefs (&count);
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+	
+	if (index > count)
+		return AAFRESULT_BADINDEX;
+	
+	return AAFRESULT_NOT_IMPLEMENTED;
+// !!Put this back when we have weak references
+//	_descriptors.insertAt(pPluginDescriptor, index);
+//	return AAFRESULT_SUCCESS;
 }
 
 
@@ -372,19 +378,22 @@ AAFRESULT STDMETHODCALLTYPE
         (aafUInt32 index,
 		 ImplAAFPluginDescriptor ** ppPluginDescriptor)
 {
-  if (! ppPluginDescriptor)
-	return AAFRESULT_NULL_PARAM;
-
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountPluginDefs (&count);
-  if (AAFRESULT_FAILED (hr))
-	return hr;
-
-  if (index >= count)
-	return AAFRESULT_BADINDEX;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (! ppPluginDescriptor)
+		return AAFRESULT_NULL_PARAM;
+	
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountPluginDefs (&count);
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+	
+	if (index >= count)
+		return AAFRESULT_BADINDEX;
+	
+	return AAFRESULT_NOT_IMPLEMENTED;
+// !!Put this back when we have weak references
+//	_descriptors.getValueAt(ppPluginDescriptor, index);
+//	return AAFRESULT_SUCCESS;
 }
 
 
@@ -392,16 +401,19 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::RemovePluginDefAt
         (aafUInt32 index)
 {
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountPluginDefs (&count);
-  if (AAFRESULT_FAILED (hr))
-	return hr;
-
-  if (index >= count)
-	return AAFRESULT_BADINDEX;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUInt32 count;
+	AAFRESULT hr;
+	hr = CountPluginDefs (&count);
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+	
+	if (index >= count)
+		return AAFRESULT_BADINDEX;
+	
+	return AAFRESULT_NOT_IMPLEMENTED;
+// !!Put this back when we have weak references
+//	_descriptors.removeAt(index);
+//	return AAFRESULT_SUCCESS;
 }
 
 const OMUniqueObjectIdentification&
