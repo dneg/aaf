@@ -57,7 +57,7 @@
 #include "ImplAAFFileDescriptor.h"
 #include "aafdefuids.h"
 #include "ImplAAFObjectCreation.h"
-#include "ImplAAFSession.h"
+#include "ImplAAFContext.h"
 #include "ImplAAFWAVEDescriptor.h"	//!!!
 #include "ImplEnumAAFLocators.h"	//!!!
 #include "ImplAAFFile.h"
@@ -198,7 +198,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		_codecID = codecID;
 		
 		
-		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		//!!!Handle case where multiple codecs exist for a codecID
 		CHECK(plugins->GetPluginInstance(_codecID, &plugin));
 		CHECK(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&_codec));
@@ -618,7 +618,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(fileMob->GetMobID(&fileMobID));
 		CHECK(_mdes->GetObjectClass(&essenceDescClass));
 
-		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
 
 
@@ -1969,7 +1969,7 @@ ImplAAFEssenceAccess::CreateContainerDef (ImplAAFHeader *head)
 
 	XPROTECT()
 	{
-		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(head->GetDictionary (&dict));
 		if(dict->LookupPluggableDef (&_fileFormat, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
 		{
@@ -2047,7 +2047,7 @@ ImplAAFEssenceAccess::CreateCodecDef (ImplAAFHeader *head, aafUID_t codecID, IAA
 
 	XPROTECT()
 	{
-		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
+		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(head->GetDictionary (&dict));	//!!!Only makes essence in the current file?
 		if(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
 		{
