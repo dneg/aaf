@@ -14,17 +14,6 @@
 *                                          *
 \******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
-
 
 #ifndef __ImplAAFMob_h__
 #include "ImplAAFMob.h"
@@ -140,8 +129,6 @@ private:
 	OMFixedSizeProperty<aafLength_t>	_defaultFadeLen;
 	OMFixedSizeProperty<aafFadeType_t>	_defaultFadeType;
 	OMFixedSizeProperty<aafRational_t>	_defaultFadeEditUnit;
-
 };
 
 #endif // ! __ImplAAFCompositionMob_h__
-
