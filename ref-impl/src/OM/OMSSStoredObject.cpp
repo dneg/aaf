@@ -882,9 +882,10 @@ OMRootStorable* OMSSStoredObject::restore(OMFile& file)
   root->restoreContents();
 
 #if defined(OM_DEBUG)
-  OMDictionary *metaDictionary = root->dictionary();
-  ASSERT("Consistent dictionaries", metaDictionary == file.dictionary());
+  OMDictionary *metaDictionary =
 #endif
+  root->dictionary();
+  ASSERT("Consistent dictionaries", metaDictionary == file.dictionary());
   root->setClassFactory(file.classFactory());
 
   file.setLoadMode(savedLoadMode);
