@@ -301,6 +301,7 @@ private:
 	void SetCurrentIndex(aafUInt32 currentIndex);
 	void SetWriteIndex(aafUInt32 writeIndex);
 	aafUInt32 GetSampleSizeFromIndex(const aafPosition_t& pos); // throw HRESULT
+	void CreateLegacyPropDefs(IAAFDictionary *p_dict);
 
 	typedef struct _aafCompressionParams
 	{
