@@ -315,9 +315,9 @@
 /* Testing Error Codes */
 #define AAFRESULT_TEST_FAILED               MAKE_AAFHRESULT(0x01F4)
 #define AAFRESULT_TEST_PARTIAL_SUCCESS      MAKE_AAFHRESULT(0x01F5)
-#define AAFRESULT_NOT_IMPLEMENTED                           0x80004001L
+#define AAFRESULT_NOT_IMPLEMENTED                           ((HRESULT)0x80004001L)
 #define AAFRESULT_SUCCESS                                   0
-#define HRESULT_NOT_IMPLEMENTED                             0x80004001L
+#define HRESULT_NOT_IMPLEMENTED                             ((HRESULT)0x80004001L)
 #define HRESULT_SUCCESS                                     0
 
 /* Property access error codes */
