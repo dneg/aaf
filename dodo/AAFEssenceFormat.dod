@@ -45,6 +45,7 @@ AD_METHOD3(AddFormatSpecifier,
 			// valueSize argument.	
 
 
+/****/
 AD_METHOD4(GetFormatSpecifier,
 			[in],aafUID_t,essenceFormatCode,From aaddefuids.h,
 			[in],aafInt32,valueSize,Size of preallocated buffer,
@@ -54,4 +55,16 @@ AD_METHOD4(GetFormatSpecifier,
 			//@comm The actual number of bytes read is returned in
 			// bytesRead.  If the buffer is not big enough to return the entire
 			// value, an error is returned.
+/****/
+AD_METHOD1(NumFormatSpecifiers,
+			[out],aafInt32*,numSpecifiers,The number of specifiers present.,
+			The data value is returned in a preallocated buffer of size valueSize.)
+/****/
+AD_METHOD5(GetIndexedFormatSpecifier,
+			[in],aafInt32,index,0-based index,
+			[out],aafUID_t*,essenceFormatCode,From aaddefuids.h,
+			[in],aafInt32,valueSize,Size of preallocated buffer,
+			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,value,Preallocated buffer to hold value,
+			[out],aafInt32*,bytesRead,Number of actual bytes read,
+			The data value is returned in a preallocated buffer of size valueSize.)
 AD_XCLASS_END(Concrete, Transient)
