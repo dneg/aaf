@@ -450,6 +450,9 @@ extern "C" HRESULT CAAFEssenceGroup_test()
 		hr = CreateAAFFile(	pFileName );
 		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );
+		
+		if(hr == AAFRESULT_SUCCESS)
+			hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
 	}
 	catch (...)
 	{

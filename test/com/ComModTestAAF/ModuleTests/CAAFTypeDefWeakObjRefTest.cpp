@@ -111,7 +111,7 @@ HRESULT CAAFTypeDefWeakObjRef_test()
 
 #else // #if ENABLE_WEAK_REFERENCES
     
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IN_CURRENT_VERSION;
     
 #endif // #else // #if ENABLE_WEAK_REFERENCES
 }
