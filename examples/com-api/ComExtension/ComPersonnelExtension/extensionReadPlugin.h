@@ -1,0 +1,58 @@
+#ifndef __extensionReadPlugin_h__
+#define __extensionReadPlugin_h__
+/***********************************************************************
+ *
+ *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *
+ * Permission to use, copy and modify this software and accompanying 
+ * documentation, and to distribute and sublicense application software
+ * incorporating this software for any purpose is hereby granted, 
+ * provided that (i) the above copyright notice and this permission
+ * notice appear in all copies of the software and related documentation,
+ * and (ii) the name Avid Technology, Inc. may not be used in any
+ * advertising or publicity relating to the software without the specific,
+ *  prior written permission of Avid Technology, Inc.
+ *
+ * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ * IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,
+ * SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR
+ * OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND
+ * ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES
+ * RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT
+ * ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF
+ * LIABILITY.
+ *
+ ************************************************************************/
+
+
+#include "AAFTypes.h"
+
+//
+// This example code is intended to show how AAF may be extended to
+// store personnel information relating to the staff which worked on a
+// project.
+//
+// See comments in extensionWrite.cpp for a discussion of what we're
+// trying to do and how we're doing it.
+//
+
+//
+// Reads the aaf file specified by filename.  Assumes it was created
+// by the extensionPluginWrite utility; tests its contents to verify that
+// they are correct.  Returns true if correct; returns false if there
+// was any error found.
+//
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+HRESULT extensionReadPlugin (const aafCharacter * filename);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // ! __extensionReadPlugin_h__
