@@ -82,14 +82,6 @@ AD_XMETHOD2(GetIndexedDataDefinition,
 	// AAFDataDefinition.  The numnber of data definitions is returned by
 	// GetMetaInfo\, and cached by the AAFPluginManager.)
 
-AD_XMETHOD1(GetMetaInfo,
-		   [out],
-		   objPass,
-		   aafCodecMetaInfo_t *,
-		   pInfo,
-		   The returned meta information about this codec,
-		   This function is called at startup by the plugin manager)
-
 AD_XMETHOD3(GetCodecDisplayName,
 			[in],
 			objPass,
@@ -107,19 +99,6 @@ AD_XMETHOD3(GetCodecDisplayName,
 			bufSize,
 			length of the buffer to hold variant Name,
 			Given a variant ID\, return the human readable name)
-
-AD_XMETHOD2(GetSelectInfo,
-		   [in],
-		   objIn,
-		   Unknown,
-		   fileMobID,
-		   See if the current codec can process data from this file mob,
-		   [out],
-		   objPass,
-		   aafCodecSelectInfo_t *,
-		   pInfo,
-		   The returned meta information about this codec,
-		   This function is called when opening a media stream on a file mob.)
 	
 AD_IDL(//
 	//**************
@@ -449,7 +428,15 @@ AD_XMETHOD1(GetEssenceDescriptorID,
 			objPass,
 			aafUID_t *,
 			pDescriptorID,
-			The stored object AUID of the essence descriptor,
-			Returns the stored object AUID of the essence descriptor associated with this codec.)
+			The stored object AUID of the essence descriptor class,
+			Returns the stored object AUID of the essence descriptor class associated with this codec.)
+
+AD_XMETHOD1(GetEssenceDataID,
+			[out],
+			objPass,
+			aafUID_t *,
+			pDescriptorID,
+			The stored object AUID of the essence data class,
+			Returns the stored object AUID of the essence data class associated with this codec.)
 
 AD_XCLASS_END(Abstract, Transient)
