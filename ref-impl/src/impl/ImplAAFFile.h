@@ -44,6 +44,8 @@ public:
   ImplAAFFile ();
   virtual ~ImplAAFFile ();
 
+  OMDECLARE_STORABLE(AAFFile);
+
   //***********************************************************
   // METHOD NAME: Close()
   //

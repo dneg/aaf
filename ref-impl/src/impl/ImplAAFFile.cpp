@@ -209,7 +209,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 	aafErr_t      		status;
 	aafInt32			errnum;
 #endif
-	aafErr_t      		finalStatus = OM_ERR_NONE;
+	aafErr_t                finalStatus = OM_ERR_NONE;
 
 	if (session == NULL)
 	  return(OM_ERR_BAD_SESSION);	
@@ -348,7 +348,7 @@ AAFRESULT ImplAAFFile::Create(
 {
 	OMLRefCon        myRefCon;
 	ImplAAFHeader *     head;
-#if FULL_TOOLKIT
+#ifdef FULL_TOOLKIT
 	aafErr_t		status;
 #endif
 
@@ -508,3 +508,7 @@ AAFRESULT ImplAAFFile::OpenModify(
   
 	return (OM_ERR_NONE);
 }
+
+extern "C" const aafClassID_t CLSID_AAFFile;
+
+OMDEFINE_STORABLE(AAFFile, CLSID_AAFFile);

@@ -8,7 +8,7 @@
 #include <string.h>
 
 OMFile::OMFile(const char* name)
-: _name(name), _root(0)
+: _name(name), _root(0), _classFactory(0), _objectDirectory(0)
 {
   TRACE("OMFile::OMFile");
 
@@ -72,8 +72,6 @@ OMFile& OMFile::operator << (const OMStorable& o)
   return *this;
 }
 
-OMClassFactory* OMFile::_classFactory = 0;
-
 OMClassFactory* OMFile::classFactory(void)
 {
   TRACE("OMFile::classFactory");
@@ -85,8 +83,6 @@ OMClassFactory* OMFile::classFactory(void)
   return _classFactory;
 }
 
-OMObjectDirectory* OMFile::_objectDirectory = 0;
-
 OMObjectDirectory* OMFile::objectDirectory(void)
 {
   TRACE("OMFile::objectDirectory");
@@ -97,11 +93,13 @@ OMObjectDirectory* OMFile::objectDirectory(void)
   return _objectDirectory;
 }
 
-int OMFile::classId(void) const
+const OMClassId& OMFile::classId(void) const
 {
   TRACE("OMFile::classId");
+  OMClassId g = {0};
+  g.Data4[7] = (unsigned char)63;
 
-  return 63;
+  return g;
 }
 
 OMFile* OMFile::file(void) const
