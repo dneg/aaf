@@ -58,7 +58,7 @@ typedef IAAFSmartPointer<IAAFMobSlot>               IAAFMobSlotSP;
 typedef IAAFSmartPointer<IAAFObject>                IAAFObjectSP;
 typedef IAAFSmartPointer<IAAFOperationDef>          IAAFOperationDefSP;
 typedef IAAFSmartPointer<IAAFParameterDef>          IAAFParameterDefSP;
-typedef IAAFSmartPointer<IAAFPluginDescriptor>      IAAFPluginDescriptorSP;
+typedef IAAFSmartPointer<IAAFPluginDef>				IAAFPluginDefSP;
 typedef IAAFSmartPointer<IAAFPropertyDef>           IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>         IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFSegment>               IAAFSegmentSP;
@@ -77,7 +77,7 @@ typedef IAAFSmartPointer<IEnumAAFMobSlots>          IEnumAAFMobSlotsSP;
 typedef IAAFSmartPointer<IEnumAAFMobs>              IEnumAAFMobsSP;
 typedef IAAFSmartPointer<IEnumAAFOperationDefs>     IEnumAAFOperationDefsSP;
 typedef IAAFSmartPointer<IEnumAAFParameterDefs>     IEnumAAFParameterDefsSP;
-typedef IAAFSmartPointer<IEnumAAFPluginDescriptors> IEnumAAFPluginDescriptorsSP;
+typedef IAAFSmartPointer<IEnumAAFPluginDefs>		IEnumAAFPluginDefsSP;
 typedef IAAFSmartPointer<IEnumAAFTypeDefs>          IEnumAAFTypeDefsSP;
 typedef IAAFSmartPointer<IUnknown>                  IUnknownSP;
 
@@ -133,7 +133,7 @@ static const aafUID_t kTestInterpolationDefID =
 { 0x8cf6dbb3, 0x7bfc, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
 // {8CF6DBB4-7BFC-11d3-844F-00600832ACB8}
-static const aafUID_t kTestPluginDescriptorID = 
+static const aafUID_t kTestPluginDefID = 
 { 0x8cf6dbb4, 0x7bfc, 0x11d3, { 0x84, 0x4f, 0x0, 0x60, 0x8, 0x32, 0xac, 0xb8 } };
 
 // Test MobID
@@ -477,15 +477,15 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* reg method on pDict */        RegisterInterpolationDef);
   
   RegisterOneDef (/* dictionary*/                  pDict,
-				  /* def object's class */         defs.cdPluginDescriptor(),
-				  /* IID of def to pass to Init */ IID_IAAFPluginDescriptor,
-				  /* SP of def to use with Init */ IAAFPluginDescriptorSP,
+				  /* def object's class */         defs.cdPluginDef(),
+				  /* IID of def to pass to Init */ IID_IAAFPluginDef,
+				  /* SP of def to use with Init */ IAAFPluginDefSP,
 				  /* Init() invocation */
-				  Initialize (kTestPluginDescriptorID, L"TestPluginDescriptor", L"Desc"),
+				  Initialize (kTestPluginDefID, L"TestPluginDef", L"Desc"),
 				  /* IID of type to QI */          IID_IAAFObject,
 				  /* SP for type to QI */          IAAFObjectSP,
-				  /* IID of def to register */     IID_IAAFPluginDescriptor,
-				  /* SP for def to register */     IAAFPluginDescriptorSP,
+				  /* IID of def to register */     IID_IAAFPluginDef,
+				  /* SP for def to register */     IAAFPluginDefSP,
 				  /* reg method on pDict */        RegisterPluginDef);
   
   return AAFRESULT_SUCCESS;
@@ -574,14 +574,14 @@ static HRESULT LookupDefs (IAAFDictionary * pDict)
 				/* get-enum method on pDict */ GetInterpolationDefs);
 
   LookupOneDef (/* dictionary */               pDict,
-				/* ID of def to look up */     kTestPluginDescriptorID,
-				/* def's name */               L"TestPluginDescriptor",
-				/* IID of def for lookup */    IID_IAAFPluginDescriptor,
-				/* SP of def to lookup */      IAAFPluginDescriptorSP,
+				/* ID of def to look up */     kTestPluginDefID,
+				/* def's name */               L"TestPluginDef",
+				/* IID of def for lookup */    IID_IAAFPluginDef,
+				/* SP of def to lookup */      IAAFPluginDefSP,
 				/* lookup method on pDict */   LookupPluginDef,
-				/* IID of def for name */      IID_IAAFPluginDescriptor,
-				/* SP of def for name */       IAAFPluginDescriptorSP,
-				/* SP of enumerator */         IEnumAAFPluginDescriptorsSP,
+				/* IID of def for name */      IID_IAAFDefObject,
+				/* SP of def for name */       IAAFDefObjectSP,
+				/* SP of enumerator */         IEnumAAFPluginDefsSP,
 				/* get-enum method on pDict */ GetPluginDefs);
 
   return AAFRESULT_SUCCESS;
