@@ -2071,6 +2071,18 @@ void OMMSSStoredObject::readUInt8FromStream(IStream* stream,
   readFromStream(stream, &i, sizeof(OMUInt8));
 }
 
+  // @mfunc Write an OMUInt8 from <p i> to <p stream>.
+  //   @parm The stream to write to.
+  //   @parm The OMUInt8 to write.
+void OMMSSStoredObject::writeUInt8ToStream(IStream* stream,
+                                           OMUInt8& i)
+{
+  TRACE("OMMSSStoredObject::writeUInt8ToStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  writeToStream(stream, &i, sizeof(OMUInt8));
+}
+
   // @mfunc Read an OMUInt16 from <p stream> into <p i>. If
   //        <p reorderBytes> is true then the bytes are reordered.
   //   @parm The stream from which to read.
@@ -2087,6 +2099,25 @@ void OMMSSStoredObject::readUInt16FromStream(IStream* stream,
   if (reorderBytes) {
     reorderUInt16(i);
   }
+}
+
+  // @mfunc Write an OMUInt16 from <p i> to <p stream>. If
+  //        <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream to write to.
+  //   @parm The OMUInt16 to write.
+  //   @parm If true then reorder the bytes.
+void OMMSSStoredObject::writeUInt16ToStream(IStream* stream,
+                                            OMUInt16& i,
+                                            bool reorderBytes)
+{
+  TRACE("OMMSSStoredObject::writeUInt16ToStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  OMUInt16 si = i;
+  if (reorderBytes) {
+    reorderUInt16(si);
+  }
+  writeToStream(stream, &si, sizeof(OMUInt16));
 }
 
   // @mfunc Reorder the OMUInt16 <p i>.
@@ -2122,6 +2153,25 @@ void OMMSSStoredObject::readUInt32FromStream(IStream* stream,
   }
 }
 
+  // @mfunc Write an OMUInt32 from <p i> to <p stream>. If
+  //        <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream to write to.
+  //   @parm The OMUInt32 to write.
+  //   @parm If true then reorder the bytes.
+void OMMSSStoredObject::writeUInt32ToStream(IStream* stream,
+                                            OMUInt32& i,
+                                            bool reorderBytes)
+{
+  TRACE("OMMSSStoredObject::writeUInt32ToStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  OMUInt32 si = i;
+  if (reorderBytes) {
+    reorderUInt32(si);
+  }
+  writeToStream(stream, &si, sizeof(OMUInt32));
+}
+
   // @mfunc Reorder the OMUInt32 <p i>.
   //   @parm The OMUInt32 to reorder.
 void OMMSSStoredObject::reorderUInt32(OMUInt32& i)
@@ -2138,6 +2188,70 @@ void OMMSSStoredObject::reorderUInt32(OMUInt32& i)
   temp = p[1];
   p[1] = p[2];
   p[2] = temp;
+
+}
+
+  // @mfunc Read an OMUInt64 from <p stream> into <p i>. If
+  //        <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream from which to read.
+  //   @parm The resulting OMUInt64.
+  //   @parm If true then reorder the bytes.
+void OMMSSStoredObject::readUInt64FromStream(IStream* stream,
+                                             OMUInt64& i,
+                                             bool reorderBytes)
+{
+  TRACE("OMMSSStoredObject::readUInt64FromStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  readFromStream(stream, &i, sizeof(OMUInt64));
+  if (reorderBytes) {
+    reorderUInt64(i);
+  }
+}
+
+  // @mfunc Write an OMUInt64 from <p i> to <p stream>. If
+  //        <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream to write to.
+  //   @parm The OMUInt64 to write.
+  //   @parm If true then reorder the bytes.
+void OMMSSStoredObject::writeUInt64ToStream(IStream* stream,
+                                            OMUInt64& i,
+                                            bool reorderBytes)
+{
+  TRACE("OMMSSStoredObject::writeUInt64ToStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  OMUInt64 si = i;
+  if (reorderBytes) {
+    reorderUInt64(si);
+  }
+  writeToStream(stream, &si, sizeof(OMUInt64));
+}
+
+  // @mfunc Reorder the OMUInt64 <p i>.
+  //   @parm The OMUInt64 to reorder.
+void OMMSSStoredObject::reorderUInt64(OMUInt64& i)
+{
+  TRACE("OMMSSStoredObject::reorderUInt64");
+
+  OMUInt8* p = (OMUInt8*)&i;
+  OMUInt8 temp;
+
+  temp = p[0];
+  p[0] = p[7];
+  p[7] = temp;
+
+  temp = p[1];
+  p[1] = p[6];
+  p[6] = temp;
+
+  temp = p[2];
+  p[2] = p[5];
+  p[5] = temp;
+
+  temp = p[3];
+  p[3] = p[4];
+  p[4] = temp;
 
 }
 
@@ -2160,6 +2274,26 @@ void OMMSSStoredObject::readUniqueObjectIdentificationFromStream(
   }
 }
 
+  // @mfunc Write a UniqueObjectIdentification from <p id> to <p stream>.
+  //        If <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream to write to.
+  //   @parm The OMUniqueObjectIdentification to write.
+  //   @parm If true then reorder the bytes.
+void OMMSSStoredObject::writeUniqueObjectIdentificationToStream(
+                                              IStream* stream,
+                                              OMUniqueObjectIdentification& id,
+                                              bool reorderBytes)
+{
+  TRACE("OMMSSStoredObject::writeUniqueObjectIdentificationToStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  OMUniqueObjectIdentification sid = id;
+  if (reorderBytes) {
+    reorderUniqueObjectIdentification(sid);
+  }
+  writeToStream(stream, &sid, sizeof(OMUniqueObjectIdentification));
+}
+
   // @mfunc Read a UniqueMaterialIdentification from <p stream> into <p id>.
   //        If <p reorderBytes> is true then the bytes are reordered.
   //   @parm The stream from which to read.
@@ -2177,6 +2311,26 @@ void OMMSSStoredObject::readUniqueMaterialIdentificationFromStream(
   if (reorderBytes) {
     reorderUniqueMaterialIdentification(id);
   }
+}
+
+  // @mfunc Write a UniqueMaterialIdentification from <p id> to <p stream>.
+  //        If <p reorderBytes> is true then the bytes are reordered.
+  //   @parm The stream to write to.
+  //   @parm The OMUniqueMaterialIdentification to write.
+  //   @parm If true then reorder the bytes.
+void OMMSSStoredObject::writeUniqueMaterialIdentificationToStream(
+                                            IStream* stream,
+                                            OMUniqueMaterialIdentification& id,
+                                            bool reorderBytes)
+{
+  TRACE("OMMSSStoredObject::writeUniqueMaterialIdentificationToStream");
+  PRECONDITION("Valid stream", stream != 0);
+
+  OMUniqueMaterialIdentification sid = id;
+  if (reorderBytes) {
+    reorderUniqueMaterialIdentification(sid);
+  }
+  writeToStream(stream, &sid, sizeof(OMUniqueMaterialIdentification));
 }
 
   // @mfunc Reorder the OMUniqueObjectIdentification <p id>.

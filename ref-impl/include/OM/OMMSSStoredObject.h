@@ -363,9 +363,16 @@ protected:
     // @cmember Read an OMUInt8 from <p stream> into <p i>.
   void readUInt8FromStream(IStream* stream, OMUInt8& i);
 
+    // @cmember Write an OMUInt8 from <p i> to <p stream>.
+  void writeUInt8ToStream(IStream* stream, OMUInt8& i);
+
     // @cmember Read an OMUInt16 from <p stream> into <p i>.
     //          If <p reorderBytes> is true then the bytes are reordered.
   void readUInt16FromStream(IStream* stream, OMUInt16& i, bool reorderBytes);
+
+    // @cmember Write an OMUInt16 from <p i> to <p stream>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void writeUInt16ToStream(IStream* stream, OMUInt16& i, bool reorderBytes);
 
     // @cmember Reorder the OMUInt16 <p i>.
   static void reorderUInt16(OMUInt16& i);
@@ -374,8 +381,23 @@ protected:
     //          If <p reorderBytes> is true then the bytes are reordered.
   void readUInt32FromStream(IStream* stream, OMUInt32& i, bool reorderBytes);
 
+    // @cmember Write an OMUInt32 from <p i> to <p stream>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void writeUInt32ToStream(IStream* stream, OMUInt32& i, bool reorderBytes);
+
     // @cmember Reorder the OMUInt32 <p i>.
   static void reorderUInt32(OMUInt32& i);
+
+    // @cmember Read an OMUInt64 from <p stream> into <p i>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void readUInt64FromStream(IStream* stream, OMUInt64& i, bool reorderBytes);
+
+    // @cmember Write an OMUInt64 from <p i> to <p stream>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void writeUInt64ToStream(IStream* stream, OMUInt64& i, bool reorderBytes);
+
+    // @cmember Reorder the OMUInt64 <p i>.
+  static void reorderUInt64(OMUInt64& i);
 
     // @cmember Read a UniqueObjectIdentification from <p stream>
     //          into <p id>.
@@ -385,10 +407,26 @@ protected:
                                               OMUniqueObjectIdentification& id,
                                               bool reorderBytes);
 
+    // @cmember Write a UniqueObjectIdentification from <p id>
+    //          to <p stream>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void writeUniqueObjectIdentificationToStream(
+                                              IStream* stream,
+                                              OMUniqueObjectIdentification& id,
+                                              bool reorderBytes);
+
     // @cmember Read a UniqueMaterialIdentification from <p stream>
     //          into <p id>.
     //          If <p reorderBytes> is true then the bytes are reordered.
   void readUniqueMaterialIdentificationFromStream(
+                                            IStream* stream,
+                                            OMUniqueMaterialIdentification& id,
+                                            bool reorderBytes);
+
+    // @cmember Write a UniqueMaterialIdentification from <p id>
+    //          to <p stream>.
+    //          If <p reorderBytes> is true then the bytes are reordered.
+  void writeUniqueMaterialIdentificationToStream(
                                             IStream* stream,
                                             OMUniqueMaterialIdentification& id,
                                             bool reorderBytes);
