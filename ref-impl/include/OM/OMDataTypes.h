@@ -134,6 +134,7 @@ typedef OMUInt8 OMByteOrder;
 
 const OMByteOrder littleEndian      = 0x4c; // 'L' for little
 const OMByteOrder bigEndian         = 0x42; // 'B' for big
+const OMByteOrder unspecified       = 0x55; // 'U' for unspecified
 
 #include <string.h>  // For use of memcmp() below.
 
