@@ -119,7 +119,7 @@ PropertyType* OMFixedSizeProperty<PropertyType>::operator &(void)
 {
   return reinterpret_cast<PropertyType*>(_bits);
 }
-  
+
   // @mfunc Convert this <c OMFixedSizeProperty> into a const
   //        reference to a <p PropertyType>.
   //   @tcarg class | PropertyType | The type of the property. This

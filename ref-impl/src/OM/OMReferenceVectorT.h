@@ -68,7 +68,7 @@ ReferencedObject* OMReferenceVector<ReferencedObject>::setValueAt(
 {
   TRACE("OReferenceVector<ReferencedObject>::setValueAt");
   PRECONDITION("Valid index", index <= count());
-  
+
   if (index == count()) {
     // This is an append, make sure the new element is defined.
     VectorElement newElement(object);
@@ -96,7 +96,7 @@ OMReferenceVector<ReferencedObject>::clearValueAt(const size_t index)
 {
   TRACE("OReferenceVector<ReferencedObject>::clearValueAt");
   PRECONDITION("Valid index", index < count());
-  
+
   VectorElement& element = _vector.getAt(index);
   ReferencedObject* oldObject = element.setValue(0);
 
@@ -221,7 +221,7 @@ void OMReferenceVector<ReferencedObject>::insertAt(
   TRACE("OMReferenceVector<ReferencedObject>::insertAt");
 
   PRECONDITION("Valid index", index <= count());
-  
+
   VectorElement newElement(object);
   _vector.insertAt(newElement, index);
 

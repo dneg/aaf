@@ -130,7 +130,7 @@ private:
   void leftRotate(Node* n);
 
   void rightRotate(Node* n);
- 
+
   void rebalance(Node* x);
 
   void traverseInOrder(
