@@ -42,7 +42,7 @@ public:
 
     // @cmember Constructor.
   OMContainerProperty(const OMPropertyId propertyId,
-                      const int storedForm,
+                      const OMStoredForm storedForm,
                       const char* name);
 
     // @cmember Destructor.
