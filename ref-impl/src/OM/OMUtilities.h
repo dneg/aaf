@@ -33,17 +33,49 @@
 
 #include <stddef.h>
 
+  // @func Set the name of the program to be use in error messages.
+  //   @parm The program name.
 void setProgramName(const char* name);
 
+  // @func Get the name of the program to be used in error messages.
+  //   @rdesc The program name.
 const char* getProgramName(void);
 
+  // @func Get the byte order used on the host computer.
+  //   @rdesc The host byte order.
 OMByteOrder hostByteOrder(void);
 
+  // @func The length of the wide character string <p string> in characters
+  //       excluding the terminating null character. Same as strlen(),
+  //       but for wide characters.
+  //   @parm The wide character string.
+  //   @rdesc The wide character string length in characters.
 size_t lengthOfWideString(const wchar_t* string);
 
+  // @func Copy a wide character string. Same as strncpy(), but for wide
+  //       characters. Exactly <p length> characters are always written to
+  //       the <p destination> buffer. The <p destination> buffer must be
+  //       at least <p length> characters in size. If the buffer is too
+  //       small this error is not detected. If <p length> is greater than
+  //       the length of <p source> then then <p destination> is padded
+  //       with nulls and <p destination> will be properly null terminated.
+  //       If <p length> is less than the length of <p source> only length
+  //       characters will be copied and <p destination> will not be properly
+  //       null terminated. If the <p source> and <p destination> wide
+  //       character strings overlap this error is not detected,.
+  //   @parm The destination buffer.
+  //   @parm The wide character string to copy.
+  //   @parm The number of characters to copy.
+  //   @rdesc The resulting wide character string.
 wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
                         const size_t length);
+
+  // @func Save a wide character string. Same as strsave() but for wide
+  //       characters.
+  //   @parm The wide character string to save.
+  //   @rdesc The saved wide character string.
+wchar_t* saveWideString(const wchar_t* string);
 
 size_t lengthOfOMWideString(const OMWideCharacter* string);
 

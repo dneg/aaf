@@ -52,6 +52,8 @@ void setProgramName(const char* name)
 
 const char* getProgramName(void)
 {
+  TRACE("getProgramName");
+
   return programName;
 }
 
@@ -73,10 +75,11 @@ OMByteOrder hostByteOrder(void)
   return result;
 }
 
-// Same as strlen(), but for wide characters.
-//
 size_t lengthOfWideString(const wchar_t* string)
 {
+  TRACE("lengthOfWideString");
+
+  PRECONDITION("Valid string", validWideString(string));
   const wchar_t* p = string;
   size_t length = 0;
   while (*p != 0) {
@@ -86,12 +89,16 @@ size_t lengthOfWideString(const wchar_t* string)
   return length;
 }
 
-// Same as strncpy(), but for wide characters.
-//
 wchar_t* copyWideString(wchar_t* destination,
                         const wchar_t* source,
                         const size_t length)
 {
+  TRACE("lengthOfWideString");
+
+  PRECONDITION("Valid destination", destination != 0);
+  PRECONDITION("Valid source string", validWideString(source));
+  PRECONDITION("Valid length", length > 0);
+
   wchar_t* d = destination;
   const wchar_t* s = source;
   size_t i = 0;
@@ -103,6 +110,18 @@ wchar_t* copyWideString(wchar_t* destination,
     *d++ = 0;
   }
   return destination;
+}
+
+wchar_t* saveWideString(const wchar_t* string)
+{
+  TRACE("saveWideString");
+
+  PRECONDITION("Valid string", validWideString(string));
+  size_t length = lengthOfWideString(string) + 1;
+  wchar_t* result = new wchar_t[length];
+  ASSERT("Valid heap pointer", result != 0);
+  copyWideString(result, string, length);
+  return result;
 }
 
 size_t lengthOfOMWideString(const OMWideCharacter* string)
