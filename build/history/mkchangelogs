@@ -96,7 +96,8 @@ while [[ i -gt 0 ]]
 do
  ptag=${tagnames[i - 1]}
  tag=${tagnames[i]}
- echo "<li><a href=\"Changes-${ptag}-${tag}.html\">${ptag} -> ${tag}</a>"
+ file=Changes-${ptag}-${tag}.html
+ echo "<li><a href=\"${file}\">${ptag} -> ${tag}</a>"
  let i=$i-1
 done >> $index
 echo "</ul>" >> $index
