@@ -643,9 +643,14 @@ void create_mastermob_and_write_essence( AxHeader axHeader,
 
 	AxDictionary axDictionary( axHeader.GetDictionary() );
 
+	AxMasterMob axMasterMob(
+		AxCreateInstance<IAAFMasterMob>( axDictionary ) );
+	axMasterMob.Initialize();
+
+
 	AxMasterMobEx axMasterMobEx(
-		AxCreateInstance<IAAFMasterMob,IAAFMasterMobEx>( axDictionary ) );
-	axMasterMobEx.Initialize();
+		AxQueryInterface<IAAFMasterMob,IAAFMasterMobEx>( axMasterMob ) );
+
 
 	axHeader.AddMob( axMasterMobEx );
 

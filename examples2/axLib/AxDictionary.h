@@ -79,18 +79,6 @@ IAAFSmartPointer<Type> AxCreateInstance( AxDictionary& dict )
 	return sp;
 }
 
-template <class CreateType, class RetType>
-IAAFSmartPointer<RetType> AxCreateInstance( AxDictionary& dict )
-{
-	CreateType* dummy = 0;
-
-	IUnknownSP spIUnknown = dict.CreateInstance( AxAUID(dummy), AxIID(dummy) );
-
-	IAAFSmartPointer<RetType> sp;
-	AxQueryInterface( spIUnknown, sp );
-	return sp;
-}
-
 template <class Type>
 IAAFSmartPointer<Type> AxCreateMetaInstance( AxDictionary& dict )
 {
