@@ -30,8 +30,8 @@
 #include "ImplEnumAAFMobComments.h"
 #endif
 
-#ifndef __ImplAAFGroup_h__
-#include "ImplAAFGroup.h"
+#ifndef __ImplAAFEffect_h__
+#include "ImplAAFEffect.h"
 #endif
 
 
@@ -1379,7 +1379,7 @@ AAFRESULT ImplAAFMob::InternalSearchSource(
 	aafSlotID_t				nextTrackID;
 	ImplAAFFindSourceInfo	*sourceInfo = NULL ;
 	ImplAAFComponent		*leafObj = NULL;
-	ImplAAFGroup	*effeObject;
+	ImplAAFEffect	*effeObject;
 	
 	if(ppSourceInfo == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -1497,7 +1497,7 @@ AAFRESULT ImplAAFMob::MobFindLeaf(ImplAAFMobSlot *track,
 								  ImplAAFComponent **foundObj,
 								  aafLength_t *minLength,
 								  aafBool *foundTransition,
-								  ImplAAFGroup **effeObject,
+								  ImplAAFEffect **effeObject,
 								  aafInt32	*nestDepth,
 								  aafPosition_t *diffPos)
 {
@@ -1648,7 +1648,7 @@ AAFRESULT ImplAAFMob::MobFindSource(
 	ImplAAFPulldown			*pulldownObj = NULL;
 	ImplAAFSegment			*rootObj = NULL;
 	ImplAAFComponent		*leafObj = NULL;
-	ImplAAFGroup	*effeObject = NULL;
+	ImplAAFEffect	*effeObject = NULL;
 	ImplAAFMob				*nextMob = NULL;
 	aafSlotID_t				foundTrackID;
 	aafBool					nextFoundSource = AAFFalse, foundTransition = AAFFalse;
