@@ -279,6 +279,99 @@ static AAFRESULT CreateNewEnumerationType (const aafUID_t & idToCreate,
   return AAFRESULT_NO_MORE_OBJECTS;
 }
 
+//
+// Looks up idToCreate in the structures.  If found, creates and
+// initializes a type def to match (using the supplied dictionary),
+// and returns it in ppCreatedTypeDef.  Returns true if successful;
+// returns false if not found.  Does not register the new type.
+//
+static AAFRESULT CreateNewExtEnumerationType (const aafUID_t & idToCreate,
+									  ImplAAFDictionary * pDict,
+									  ImplAAFTypeDef ** ppCreatedTypeDef)
+{
+  assert (pDict);
+  AAFRESULT hr;
+
+  // Go through the enumeration list, attempting to identify the requested
+  // ID.
+  TypeEnumeration ** curEnumeration = s_AAFAllTypeEnumerations;
+  while (*curEnumeration)
+	{
+	  // Check to see if the current enumeration matches the ID of the type
+	  // def we want to create.
+	  if (! memcmp (&idToCreate, &(*curEnumeration)->typeID, sizeof (aafUID_t)))
+		{		
+		  // Yes, this is the one.
+
+		  // Create an impl enumeration object (as yet uninitialized)
+		  ImplAAFTypeDefEnum * ptd = 0;
+		  hr = pDict->GetBuiltinDefs()->cdTypeDefEnum()->
+			CreateInstance ((ImplAAFObject**) &ptd);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert (ptd);
+
+		  // count up how many members in this enumeration
+		  aafUInt32 numMembers = 0;
+		  TypeEnumerationMember ** pMember = (*curEnumeration)->members;
+		  while (*pMember)
+			{
+			  numMembers++;
+			  pMember++;
+			}
+	  
+		  ImplAAFTypeDefSP pElemType;
+		  // Look up the type of this enumeration
+		  hr = pDict->LookupTypeDef(*(*curEnumeration)->pElementTypeId, &pElemType);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+		  assert (pElemType);
+
+		  // allocate arrays to hold memberTypes pointers and memberNames.
+		  aafInt64 * memberValues =	new aafInt64 [numMembers];
+		  assert (memberValues);
+	  
+		  aafString_t * memberNames = 
+			new aafString_t[numMembers];
+		  assert (memberNames);
+
+		  // fill the types and names arrays.
+		  aafUInt32 i;
+		  for (i = 0; i < numMembers; i++)
+			{
+			  memberValues[i] = (*curEnumeration)->members[i]->memberValue;
+			  memberNames[i] = (*curEnumeration)->members[i]->memberName;
+			  assert (memberNames[i]);
+			}
+
+		  // use those arrays to initialize the type def
+		  hr = ptd->Initialize ((*curEnumeration)->typeID,
+								pElemType,
+								memberValues,
+								memberNames,
+								numMembers,
+								(*curEnumeration)->typeName);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+
+		  hr = ptd->RegisterSize ((*curEnumeration)->size);
+		  assert (AAFRESULT_SUCCEEDED (hr));
+
+		  // clean up
+		  delete[] memberValues;
+		  delete[] memberNames;
+
+		  assert (ppCreatedTypeDef);
+		  *ppCreatedTypeDef = ptd;
+		  (*ppCreatedTypeDef)->AcquireReference ();
+		  ptd->ReleaseReference ();
+		  ptd = 0;
+		  return AAFRESULT_SUCCESS;
+		}
+
+	  curEnumeration++;
+	}
+  return AAFRESULT_NO_MORE_OBJECTS;
+}
+
+
 
 //
 // We have the following structures to work with, defined in
