@@ -383,7 +383,7 @@ $(AAFSDK_INCLUDE)\AAFPlugin_i.c : $(TOOLKIT_PLUGINS)\AAFPlugin_i.c
 $(AAFSDK_LIB)\aafiid.lib : $(TOOLKIT_TARGET_REFIMPL)\aafiid.lib
 	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafiid.lib "$(AAFSDK_LIB)\"
 
-$(AAFSDK_LIB)\aafcoapi.lib : $(TOOLKIT_DEBUG_REFIMPL)\aafcoapi.lib
+$(AAFSDK_LIB)\aafcoapi.lib : $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.lib
 	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafcoapi.lib "$(AAFSDK_LIB)\"
 
 
