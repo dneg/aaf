@@ -207,7 +207,7 @@ function createColorMap(file) {
 }
 
 function rowcolor(files) {
-  result = "#CCCCFF"; /* Blue */
+  result = "#FFFFFF"; /* White */
   /* Get first file */
   split(files, fns, ",");
   ff = fns[1];
