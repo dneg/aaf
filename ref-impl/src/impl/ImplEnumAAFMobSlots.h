@@ -98,7 +98,7 @@ public:
 public:
   // Declare this class to be storable.
   //
-  OMDECLARE_STORABLE(ImplEnumAAFMobSlots);
+  OMDECLARE_STORABLE(ImplEnumAAFMobSlots)
 
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplEnumAAFMobSlotsTest.cpp.
