@@ -562,7 +562,7 @@ OMWeakObjectReference::operator= (const OMWeakObjectReference& rhs)
 {
   TRACE("OMWeakObjectReference::operator=");
 
-  if (*this == rhs) {
+  if (this == &rhs) {
     return *this; // early return !
   }
   OMObjectReference::operator=(rhs);
