@@ -28,9 +28,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "aafErr.h"		// TODO: this file needs to be moved to a public include directory...
 #include "AAFTypes.h"
-#include "AAFUtils.h"	// TODO: this file needs to be moved to a public include directory...
 
 #if defined(_MAC) || defined(macintosh)
 #include <wprintf.h>
@@ -38,17 +36,13 @@
 #include "AAF.h"
 #else
 #include "AAF.h"
-// TODO: these should not be here, I added them for now to get a good link
-// Need to modify Win32 project to include  midl generated AAF_i.c IID definition file.
+// TODO: This should not be here, I added them for now to get a good link.
 const CLSID CLSID_AAFSession = { 0xF0C10891, 0x3073, 0x11d2, { 0x80, 0x4A, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 #endif
 
-
-const aafProductVersion_t AAFToolkitVersion = {2, 1, 0, 1, kVersionBeta};
-
-static void     FatalErrorCode(aafErr_t errcode, int line, char *file)
+static void     FatalErrorCode(HRESULT errcode, int line, char *file)
 {
-  printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
+  wprintf(L"Error '%0x' returned at line %d in %s\n", errcode, line, file);
   exit(1);
 }
 
@@ -58,10 +52,10 @@ static void     FatalError(char *message)
   exit(1);
 }
 
-static aafErr_t moduleErrorTmp = OM_ERR_NONE;/* note usage in macro */
+static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
 #define check(a)  \
 { moduleErrorTmp = a; \
-  if (moduleErrorTmp != OM_ERR_NONE) \
+  if (!SUCCEEDED(moduleErrorTmp)) \
      FatalErrorCode(moduleErrorTmp, __LINE__, __FILE__);\
 }
 
@@ -97,7 +91,11 @@ static void ReadAAFFile(unsigned char * pFileName)
 
 	ProductInfo.companyName = (unsigned char *)"AAF Developers Desk. NOT!";
 	ProductInfo.productName = (unsigned char *)"Make AVR Example. NOT!";
-	ProductInfo.productVersion = AAFToolkitVersion;
+	ProductInfo.productVersion.major = 1;
+	ProductInfo.productVersion.minor = 0;
+	ProductInfo.productVersion.tertiary = 0;
+	ProductInfo.productVersion.patchLevel = 0;
+	ProductInfo.productVersion.type = kVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
@@ -136,7 +134,11 @@ static void CreateAAFFile(unsigned char * pFileName)
 
 	ProductInfo.companyName = (unsigned char *)"AAF Developers Desk";
 	ProductInfo.productName = (unsigned char *)"Make AVR Example";
-	ProductInfo.productVersion = AAFToolkitVersion;
+	ProductInfo.productVersion.major = 1;
+	ProductInfo.productVersion.minor = 0;
+	ProductInfo.productVersion.tertiary = 0;
+	ProductInfo.productVersion.patchLevel = 0;
+	ProductInfo.productVersion.type = kVersionUnknown;
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
@@ -176,9 +178,12 @@ struct CComInitialize
 main()
 {
 	CComInitialize comInit;
+	unsigned char * pFileName = (unsigned char *)"Foo.aaf";
 
-	CreateAAFFile((unsigned char *)"Foo.aaf");
-	ReadAAFFile((unsigned char *)"Foo.aaf");
+  	wprintf(L"***Creating file %s\n", pFileName);
+	CreateAAFFile(pFileName);
+  	wprintf(L"***Re-opening file %s\n", pFileName);
+	ReadAAFFile(pFileName);
 
 	wprintf(L"Done\n");
 
