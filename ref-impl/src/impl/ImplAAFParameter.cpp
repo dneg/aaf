@@ -52,7 +52,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			newUID;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
-	ImplAAFPluggableDef	*def;
+	ImplAAFParameterDef	*def;
 
 	if(pParmDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -130,7 +130,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t			newUID;
 	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
-	ImplAAFPluggableDef	*def;
+	ImplAAFTypeDef		*def;
 
 	if(pTypeDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -141,7 +141,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(pTypeDef->MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
 // Weak references not yet refcounted
-//		if(dict->LookupPluggableDef(&newUID, &def) == AAFRESULT_SUCCESS)
+//		if(dict->LookupTypeDef(&newUID, &def) == AAFRESULT_SUCCESS)
 //			def->ReleaseReference();
 
 		_typeDef = newUID;
