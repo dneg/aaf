@@ -38,6 +38,16 @@ AAFStoredObjectIDs.h \
 AAFExtEnum.h \
 AAFPropertyIDs.h \
 AAFTypeDefUIDs.h \
+AAFOperationDefs.h \
+AAFParameterDefs.h \
+AAFDataDefs.h \
+AAFContainerDefs.h \
+AAFInterpolatorDefs.h \
+AAFOPDefs.h \
+AAFKLVDataDefs.h \
+AAFTaggedValueDefs.h \
+AAFPluginDefs.h \
+AAFCompressionDefs.h \
 "
 
 SOURCE=./include

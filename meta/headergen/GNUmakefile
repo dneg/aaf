@@ -52,7 +52,12 @@ all : $(PROGS) \
         $(GEN_H_DIR)/AAFDataDefs.h \
         $(GEN_H_DIR)/AAFContainerDefs.h \
         $(GEN_H_DIR)/AAFInterpolatorDefs.h \
-        $(GEN_H_DIR)/AAFOPDefs.h
+        $(GEN_H_DIR)/AAFOPDefs.h \
+		$(GEN_H_DIR)/AAFKLVDataDefs.h \
+		$(GEN_H_DIR)/AAFTaggedValueDefs.h \
+		$(GEN_H_DIR)/AAFPluginDefs.h \
+		$(GEN_H_DIR)/AAFCodecDefs.h \
+		$(GEN_H_DIR)/AAFCompressionDefs.h
 
 
 # utilities
@@ -109,6 +114,8 @@ genDefInstances$(OBJ) : genDefInstances.cpp headerGenUtils.h \
         ../AAFMetaDictionary.h
 	$(COMPILE) $(COMPILEFLAGS) -c $< -o $@
 
+
+
 # targets for generated source files
 $(GEN_H_DIR) :
 	mkdir $(GEN_H_DIR)
@@ -130,6 +137,8 @@ $(GEN_H_DIR)/AAFStoredObjectIDs.h : storedObjectUid$(EXE)
 
 $(GEN_H_DIR)/AAFTypeDefUIDs.h : typeDefUid$(EXE)
 	./typeDefUid AAFTypeDefUIDs > $(GEN_H_DIR)/AAFTypeDefUIDs.h
+
+
 
 # targets for generated Definition Object instance header files
 
@@ -153,8 +162,25 @@ $(GEN_H_DIR)/AAFInterpolatorDefs.h : genDefInstances$(EXE)
 $(GEN_H_DIR)/AAFOPDefs.h : genDefInstances$(EXE)
 	./genDefInstances OPDefinition kAAF > $(GEN_H_DIR)/AAFOPDefs.h
 
+$(GEN_H_DIR)/AAFKLVDataDefs.h : genDefInstances$(EXE)
+	./genDefInstances KLVDataDefinition kAAF > $(GEN_H_DIR)/AAFKLVDataDefs.h
 
-#install targets
+$(GEN_H_DIR)/AAFTaggedValueDefs.h : genDefInstances$(EXE)
+	./genDefInstances TaggedValueDefinition kAAF > $(GEN_H_DIR)/AAFTaggedValueDefs.h
+
+$(GEN_H_DIR)/AAFPluginDefs.h : genDefInstances$(EXE)
+	./genDefInstances PluginDefinition kAAF > $(GEN_H_DIR)/AAFPluginDefs.h
+
+$(GEN_H_DIR)/AAFCodecDefs.h : genDefInstances$(EXE)
+	./genDefInstances CodecDefinition kAAF > $(GEN_H_DIR)/AAFCodecDefs.h
+
+$(GEN_H_DIR)/AAFCompressionDefs.h : genDefInstances$(EXE)
+	./genDefInstances CompressionDefinition kAAF > $(GEN_H_DIR)/AAFCompressionDefs.h
+
+
+
+# install targets
+
 $(INSTALL_H_DIR)/AAFClassDefUIDs.h : $(GEN_H_DIR)/AAFClassDefUIDs.h
 	cp $(GEN_H_DIR)/AAFClassDefUIDs.h $(INSTALL_H_DIR)/AAFClassDefUIDs.h
 
@@ -173,7 +199,9 @@ $(INSTALL_H_DIR)/AAFStoredObjectIDs.h : $(GEN_H_DIR)/AAFStoredObjectIDs.h
 $(INSTALL_H_DIR)/AAFTypeDefUIDs.h : $(GEN_H_DIR)/AAFTypeDefUIDs.h
 	cp $(GEN_H_DIR)/AAFTypeDefUIDs.h $(INSTALL_H_DIR)/AAFTypeDefUIDs.h
 
-# targets for generated Definition Object instance header files
+
+
+# install targets for generated Definition Object instance header files
 
 $(INSTALL_H_DIR)/AAFOperationDefs.h : $(GEN_H_DIR)/AAFOperationDefs.h
 	cp $(GEN_H_DIR)/AAFOperationDefs.h kAAF_ $(INSTALL_H_DIR)/AAFOperationDefs.h
@@ -193,6 +221,22 @@ $(INSTALL_H_DIR)/AAFInterpolatorDefs.h : $(GEN_H_DIR)/AAFInterpolatorDefs.h
 $(INSTALL_H_DIR)/AAFOPDefs.h : $(GEN_H_DIR)/AAFOPDefs.h
 	cp $(GEN_H_DIR)/AAFOPDefs.h $(INSTALL_H_DIR)/AAFOPDefs.h
 
+$(INSTALL_H_DIR)/AAFKLVDataDefs.h : $(GEN_H_DIR)/AAFKLVDataDefs.h
+	cp $(GEN_H_DIR)/AAFKLVDataDefs.h $(INSTALL_H_DIR)/AAFKLVDataDefs.h
+
+$(INSTALL_H_DIR)/AAFTaggedValueDefs.h : $(GEN_H_DIR)/AAFTaggedValueDefs.h
+	cp $(GEN_H_DIR)/AAFTaggedValueDefs.h $(INSTALL_H_DIR)/AAFTaggedValueDefs.h
+
+$(INSTALL_H_DIR)/AAFPluginDefs.h : $(GEN_H_DIR)/AAFPluginDefs.h
+	cp $(GEN_H_DIR)/AAFPluginDefs.h $(INSTALL_H_DIR)/AAFPluginDefs.h
+
+$(INSTALL_H_DIR)/AAFCodecDefs.h : $(GEN_H_DIR)/AAFCodecDefs.h
+	cp $(GEN_H_DIR)/AAFCodecDefs.h $(INSTALL_H_DIR)/AAFCodecDefs.h
+
+$(INSTALL_H_DIR)/AAFCompressionDefs.h : $(GEN_H_DIR)/AAFCompressionDefs.h
+	cp $(GEN_H_DIR)/AAFCompressionDefs.h $(INSTALL_H_DIR)/AAFCompressionDefs.h
+
+
 
 # other targets
 clean:
@@ -204,10 +248,32 @@ clean:
 	rm -rf $(GEN_H_DIR)/AAFPropertyIDs.h
 	rm -rf $(GEN_H_DIR)/AAFStoredObjectIDs.h
 	rm -rf $(GEN_H_DIR)/AAFTypeDefUIDs.h
+	rm -rf $(GEN_H_DIR)/AAFOperationDefs.h
+	rm -rf $(GEN_H_DIR)/AAFParameterDefs.h
+	rm -rf $(GEN_H_DIR)/AAFDataDefs.h
+	rm -rf $(GEN_H_DIR)/AAFContainerDefs.h
+	rm -rf $(GEN_H_DIR)/AAFInterpolatorDefs.h
+	rm -rf $(GEN_H_DIR)/AAFOPDefs.h
+	rm -rf $(GEN_H_DIR)/AAFKLVDataDefs.h
+	rm -rf $(GEN_H_DIR)/AAFTaggedValueDefs.h
+	rm -rf $(GEN_H_DIR)/AAFPluginDefs.h
+	rm -rf $(GEN_H_DIR)/AAFCodecDefs.h
+	rm -rf $(GEN_H_DIR)/AAFCompressionDefs.h
 
 install: $(INSTALL_H_DIR)/AAFClassDefUIDs.h \
         $(INSTALL_H_DIR)/AAFExtEnum.h \
         $(INSTALL_H_DIR)/AAFPropertyDefs.h \
         $(INSTALL_H_DIR)/AAFPropertyIDs.h \
         $(INSTALL_H_DIR)/AAFStoredObjectIDs.h \
-        $(INSTALL_H_DIR)/AAFTypeDefUIDs.h
+        $(INSTALL_H_DIR)/AAFTypeDefUIDs.h \
+		$(INSTALL_H_DIR)/AAFOperationDefs.h \
+		$(INSTALL_H_DIR)/AAFParameterDefs.h \
+		$(INSTALL_H_DIR)/AAFDataDefs.h \
+		$(INSTALL_H_DIR)/AAFContainerDefs.h \
+		$(INSTALL_H_DIR)/AAFInterpolatorDefs.h \
+		$(INSTALL_H_DIR)/AAFOPDefs.h \
+		$(INSTALL_H_DIR)/AAFKLVDataDefs.h \
+		$(INSTALL_H_DIR)/AAFTaggedValueDefs.h \
+		$(INSTALL_H_DIR)/AAFPluginDefs.h \
+		$(INSTALL_H_DIR)/AAFCodecDefs.h \
+		$(INSTALL_H_DIR)/AAFCompressionDefs.h
