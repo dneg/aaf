@@ -20,35 +20,50 @@
 #
 ###############################################################################
 
-.PHONY : all
-all :
-	cd uuid_gen && $(MAKE)
-	cd src && $(MAKE)
-	cd uuid_gen && $(MAKE)
-	cd aafiid && $(MAKE)
-	cd aaflib && $(MAKE)
-	cd libjpeg && $(MAKE)
-	cd plugins && $(MAKE)
+PACKAGE = uuid_gen
 
-.PHONY : check
-check :
-	cd ../test/com/ComModTestAAF && $(MAKE) check
+AAFBASE ?= ../..
+
+
+# Common definitions
+include $(AAFBASE)/build/common.mk
+
+
+# Include directories
+INCLUDES = -I../include/ref-api \
+	   -I../include
+
+
+.PHONY : all
+
+ifeq ($(AAFPLATFORM),SunSunOS)
+all : uuid_gen
+else
+all:
+	$(warning uuid_gen library is only required for Solaris)
+	$(warning and so is not being built)
+endif
+
+.PHONY : uuid_gen
+uuid_gen : $(OBJDIR) $(LIBDIR) $(LIBDIR)/libuuid_gen$(LIB)
+
+
+$(LIBDIR)/libuuid_gen$(LIB) : $(CXXOBJS)
+	$(LD_STAT_LIB) $@ $(CXXOBJS)
+
+
 
 .PHONY : clean
-clean :
-	cd uuid_gen && $(MAKE) GENDEPS=0 $@
-	cd plugins && $(MAKE) GENDEPS=0 $@
-	cd libjpeg && $(MAKE) GENDEPS=0 $@
-	cd aaflib && $(MAKE) GENDEPS=0 $@
-	cd aafiid && $(MAKE) GENDEPS=0 $@
-	cd src && $(MAKE) GENDEPS=0 $@
+clean:
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(DEPS)
+	@$(RM) $(LIBDIR)/uuid_gen$(LIB)
+	@$(RMDIR) $(OBJDIR)/ii_files
+
 
 .PHONY : realclean
-realclean :
-	cd uuid_gen && $(MAKE) GENDEPS=0 $@
-	cd plugins && $(MAKE) GENDEPS=0 $@
-	cd libjpeg && $(MAKE) GENDEPS=0 $@
-	cd aaflib && $(MAKE) GENDEPS=0 $@
-	cd aafiid && $(MAKE) GENDEPS=0 $@
-	cd src && $(MAKE) GENDEPS=0 $@
+realclean : clean
+
+
+include $(AAFBASE)/build/rules.mk
 
