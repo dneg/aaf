@@ -65,6 +65,8 @@
 #include "ImplEnumAAFLocators.h"
 #include "ImplAAFFile.h"
 #include "AAFStoredObjectIDs.h"
+#include "AAFContainerDefs.h"
+#include "AAFCodecDefs.h"
 
 #define DEFAULT_FILE_SLOT	1
 
@@ -79,7 +81,7 @@ ImplAAFEssenceAccess::ImplAAFEssenceAccess ()
 
 	_fileFormat = ContainerAAF;
 	_codecID = NoCodec;
-	_variety = NilCodecVariety;
+	_variety = NilCodecFlavour;
 	_destination = NULL;
 	_compFileMob = NULL;
 	_numChannels = 0;
