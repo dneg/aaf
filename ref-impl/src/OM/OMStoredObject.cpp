@@ -174,7 +174,7 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   //
   short int byteOrder;
   readFromStream(_indexStream, &byteOrder, sizeof(byteOrder));
-  ASSERT("Valid byte order flag", byteOrder == 0x4949);
+  ASSERT("Valid byte order flag", byteOrder == hostByteOrder());
 
   // Read version number.
   //
