@@ -192,7 +192,6 @@ TOOLKIT_DEBUG_REFIMPL = $(AAFTOOLKIT)\AAFWinSDK\Debug\RefImpl
 TOOLKIT_RELEASE_REFIMPL = $(AAFTOOLKIT)\AAFWinSDK\Release\RefImpl
 TOOLKIT_DEBUG_REFIMPL_EXT = $(AAFTOOLKIT)\AAFWinSDK\Debug\RefImpl\aafext
 TOOLKIT_RELEASE_REFIMPL_EXT = $(AAFTOOLKIT)\AAFWinSDK\Release\RefImpl\aafext
-OMF_LIBS = $(AAFTOOLKIT)\Omf\WinLibs
 
 
 #
@@ -201,15 +200,12 @@ OMF_LIBS = $(AAFTOOLKIT)\Omf\WinLibs
 !if "$(CFG)"=="FULL"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
 TOOLKIT_TARGET_REFIMPL_EXT = $(TOOLKIT_RELEASE_REFIMPL_EXT)
-OMF_DLL_NAME = "omfToolkit.dll"
 !elseif "$(CFG)"=="Debug"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_DEBUG_REFIMPL)
 TOOLKIT_TARGET_REFIMPL_EXT = $(TOOLKIT_DEBUG_REFIMPL_EXT)
-OMF_DLL_NAME = "omfToolkitd.dll"
 !elseif "$(CFG)"=="Release"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
 TOOLKIT_TARGET_REFIMPL_EXT = $(TOOLKIT_RELEASE_REFIMPL_EXT)
-OMF_DLL_NAME = "omfToolkit.dll"
 !else
 !ERROR Unknown configuration!
 !endif
@@ -323,8 +319,7 @@ TARGET_LIB_FILES = \
 RELEASE_DLL_FILES = \
 	$(AAFSDK_BIN)\aafcoapi.dll \
 	$(AAFSDK_BIN_EXT)\aafintp.dll \
-	$(AAFSDK_BIN_EXT)\aafpgapi.dll \
-	$(AAFSDK_BIN)\omfToolkit.dll
+	$(AAFSDK_BIN_EXT)\aafpgapi.dll
 
 #
 # Release dynamic link libraries.
@@ -332,8 +327,7 @@ RELEASE_DLL_FILES = \
 DEBUG_DLL_FILES = \
 	$(AAFSDK_DEBUG)\aafcoapi.dll \
 	$(AAFSDK_DEBUG_EXT)\aafintp.dll \
-	$(AAFSDK_DEBUG_EXT)\aafpgapi.dll \
-	$(AAFSDK_DEBUG)\omfToolkitd.dll
+	$(AAFSDK_DEBUG_EXT)\aafpgapi.dll
 
 
 #
@@ -634,9 +628,6 @@ $(AAFSDK_BIN_EXT)\aafintp.dll : $(TOOLKIT_TARGET_REFIMPL_EXT)\aafintp.dll
 $(AAFSDK_BIN_EXT)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL_EXT)\aafpgapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL_EXT)\aafpgapi.dll $(AAFSDK_BIN_EXT)\
 
-$(AAFSDK_BIN)\omfToolkit.dll : $(OMF_LIBS)\$(OMF_DLL_NAME)
-	$(CP) $(CP_OPTS) $(OMF_LIBS)\$(OMF_DLL_NAME) $(AAFSDK_BIN)\omfToolkit.dll
-	
 
 #
 # Dependency and build rules for the Debug DLL targets.
@@ -649,9 +640,6 @@ $(AAFSDK_DEBUG_EXT)\aafintp.dll : $(TOOLKIT_DEBUG_REFIMPL_EXT)\aafintp.dll
 
 $(AAFSDK_DEBUG_EXT)\aafpgapi.dll : $(TOOLKIT_DEBUG_REFIMPL_EXT)\aafpgapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_DEBUG_REFIMPL_EXT)\aafpgapi.dll $(AAFSDK_DEBUG_EXT)\
-
-$(AAFSDK_DEBUG)\omfToolkitd.dll : $(OMF_LIBS)\omfToolkitd.dll
-	$(CP) $(CP_OPTS) $(OMF_LIBS)\omfToolkitd.dll $(AAFSDK_DEBUG)\
 
 
 #

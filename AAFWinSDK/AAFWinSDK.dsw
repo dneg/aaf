@@ -581,15 +581,6 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name axPluginInfo
     End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name eli2aaf
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name aaf2dot
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name aafmeta2dot
-    End Project Dependency
 }}}
 
 ###############################################################################
@@ -606,7 +597,13 @@ Package=<4>
     Project_Dep_Name MakeSDK
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name AafOmf
+    Project_Dep_Name eli2aaf
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name aaf2dot
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name aafmeta2dot
     End Project Dependency
 }}}
 
