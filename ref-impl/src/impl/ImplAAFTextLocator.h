@@ -73,11 +73,7 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTextLocator)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTextLocatorTest.cpp.
-  static AAFRESULT test();
-
-	// Persistent data
+  // Persistent data
 private:
 	OMWideStringProperty                      _name;
 };

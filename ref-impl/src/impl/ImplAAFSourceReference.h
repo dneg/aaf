@@ -90,9 +90,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFSourceReference)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFSourceReferenceTest.cpp.
-  static AAFRESULT test();
 private:
 	OMFixedSizeProperty<aafUID_t>	_sourceID;
 	OMFixedSizeProperty<aafInt32>	_sourceMobSlotId;

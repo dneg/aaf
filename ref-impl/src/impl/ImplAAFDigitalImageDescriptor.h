@@ -249,10 +249,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFDigitalImageDescriptor)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFDigitalImageDescriptorTest.cpp.
-  static AAFRESULT test();
-
 protected:
 	OMFixedSizeProperty<aafUID_t>				_compression;
 	OMFixedSizeProperty<aafUInt32>				_storedHeight;

@@ -57,9 +57,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFContainerDef)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFContainerDefTest.cpp.
-  static AAFRESULT test();
 private:
 	OMFixedSizeProperty<aafBool>					_isIdentified;
 };

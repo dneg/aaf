@@ -60,10 +60,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFNetworkLocator)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFNetworkLocatorTest.cpp.
-  static AAFRESULT test();
-
 private:
   OMWideStringProperty                             _path;
 };

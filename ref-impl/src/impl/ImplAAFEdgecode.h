@@ -72,10 +72,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFEdgecode)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEdgecodeTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMFixedSizeProperty<aafPosition_t>			_start;
 	OMFixedSizeProperty<aafFilmType_t>			_filmType;

@@ -170,10 +170,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTIFFDescriptor)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTIFFDescriptorTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMFixedSizeProperty<aafBool>			_isUniform;
 	OMFixedSizeProperty<aafBool>			_isContiguous;

@@ -143,9 +143,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFControlPoint)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFControlPointTest.cpp.
-  static AAFRESULT test();
 private:
 	OMFixedSizeProperty<aafUID_t>		_type;
 	OMFixedSizeProperty<aafRational_t>	_time;

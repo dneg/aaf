@@ -101,10 +101,6 @@ public:
 	virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
 
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFComponentTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMFixedSizeProperty<aafUID_t>		_dataDef;
 	OMFixedSizeProperty<aafLength_t>	_length;

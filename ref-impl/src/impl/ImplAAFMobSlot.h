@@ -150,11 +150,6 @@ public:
   virtual AAFRESULT ChangeContainedReferences(aafUID_t *from, aafUID_t *to);
 
 
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFMobSlotTest.cpp.
-  static AAFRESULT test();
-
 protected:
 	OMWideStringProperty				_name;
 	OMFixedSizeProperty<aafUInt32>		_trackID;

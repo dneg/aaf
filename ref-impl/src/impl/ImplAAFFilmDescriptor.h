@@ -182,10 +182,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFFilmDescriptor)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFFilmDescriptorTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMWideStringProperty				_manufacturer;
 	OMWideStringProperty				_model;

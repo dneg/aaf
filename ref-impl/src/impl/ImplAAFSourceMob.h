@@ -316,10 +316,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFSourceMob)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFSourceMobTest.cpp.
-  static AAFRESULT test();
-
   // SDK Internal
   virtual AAFRESULT ReconcileMobLength(void);
 

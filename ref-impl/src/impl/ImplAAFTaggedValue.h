@@ -138,10 +138,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTaggedValue)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTaggedValueTest.cpp.
-  static AAFRESULT test();
-
 	// persistent data
 	OMWideStringProperty				_name;
 	OMFixedSizeProperty<aafUID_t>		_type;

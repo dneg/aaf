@@ -79,10 +79,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFAIFCDescriptor)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFAIFCDescriptorTest.cpp.
-  static AAFRESULT test();
-
   // Persistent Properties
 private:
 	OMVariableSizeProperty<aafUInt8> _summary;

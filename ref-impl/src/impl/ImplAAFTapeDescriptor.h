@@ -156,10 +156,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTapeDescriptor)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTapeDescriptorTest.cpp.
-  static AAFRESULT test();
-
   virtual AAFRESULT	STDMETHODCALLTYPE
 		GetOwningMobKind (aafMobKind_t *pMobKind);
 

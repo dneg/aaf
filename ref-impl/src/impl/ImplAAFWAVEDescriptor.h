@@ -68,10 +68,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFWAVEDescriptor)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFWAVEDescriptorTest.cpp.
-  static AAFRESULT test();
-
 private:
 	OMVariableSizeProperty<aafUInt8> _summary;
 
