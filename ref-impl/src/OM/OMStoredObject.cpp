@@ -41,7 +41,7 @@
 #if defined(_MAC) || defined(macintosh)
 #include "wintypes.h"
 #include <storage.h>
-#elif defined(__sgi)
+#elif defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
 #include "storage.h"
 #else
 #include <objbase.h>
@@ -58,7 +58,7 @@ const size_t indexEntrySize  = sizeof(OMPropertyId) + // Property id
                                sizeof(OMUInt32) +     // Offset
                                sizeof(OMUInt32);      // Length
 
-#if defined(_MAC) || defined(macintosh) || defined(__sgi)
+#if defined(_MAC) || defined(macintosh) || defined(__sgi) || defined(__linux__) || defined (__FreeBSD__)
 
 // The Macintosh and SGI (SS reference implementation) declarations
 // for LARGE_INTEGER and ULARGE_INTEGER don't have a QuadPart.
