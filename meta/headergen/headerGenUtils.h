@@ -29,4 +29,11 @@ void printDefinition(const char* type,
                      const aafUID_t& identifier,
                      ostream& s);
 
+void printDefinition(const char* type,
+                     const char* prefix,
+                     const char* name,
+                     size_t width,
+                     int identifier,
+                     ostream& s);
+
 #endif // ! __headerGenUtils_h__

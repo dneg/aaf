@@ -35,15 +35,12 @@ static void doFile(const char* moduleName)
     }
   }
   for (i = 0; i < sizeof(properties)/sizeof(properties[0]); i++) {
-    cout.flags(ios::left);
-    cout.fill(' ');
-    cout << "const int PID_" << setw(maxNameLength) << properties[i].name
-         << " = ";
-    cout.flags(ios::right);
-    cout.fill('0');
-    cout << "0x" << hex;
-    cout.setf(ios::uppercase);
-    cout << setw(4) << properties[i].identifier << ";" << endl;
+    printDefinition("const int",
+                    "PID_",
+                    properties[i].name,
+                    maxNameLength,
+                    properties[i].identifier,
+                    cout);
   }
   printEndGuard(moduleName, cout);
 }
