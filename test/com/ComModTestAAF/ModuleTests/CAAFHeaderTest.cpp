@@ -87,6 +87,23 @@ extern "C" HRESULT CAAFHeader_test()
 
   // Cleanup our object if it exists.
 
+  // When all of the functionality of this class is tested, we can return success.
+	// When a method and its unit test have been implemented, remove it from the list.
+	if (SUCCEEDED(hr))
+	{
+		cout << "The following AAFHeader methods have not been implemented:" << endl; 
+		cout << "     LookupMob" << endl; 
+		cout << "     IsEssenceDataPresent - needs unit test" << endl; 
+		cout << "     GetLastIdentification" << endl; 
+		cout << "     GetIdentificationByGen - needs unit test" << endl; 
+		cout << "     GetNumIdents - needs unit test" << endl; 
+		cout << "     EnumAAFIdents - needs unit test" << endl; 
+		cout << "     GetRefImplVersion - needs unit test" << endl; 
+		cout << "     GetFileRevision - needs unit test" << endl; 
+		cout << "     GetLastModified - needs unit test" << endl; 
+		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+	}
+
   return hr;
 }
 
@@ -409,66 +426,4 @@ void HeaderTest::openEssenceData()
   _pEnumEssenceData->Release();
   _pEnumEssenceData = NULL;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
