@@ -83,7 +83,7 @@
 #include <string.h>
 #include "aafErr.h"
 #include "AAFUtils.h"
-
+#include "AAFDataDefs.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFDefObjects;
 extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
@@ -92,6 +92,7 @@ extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFCodecDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFContainerDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFInterpolationDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFDataDefs;
 
 extern aafUID_t gTypeID_AUID;
 extern aafUID_t gTypeID_UInt8;
@@ -118,6 +119,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _typeDefinitions      (PID_Dictionary_TypeDefinitions,      "TypeDefinitions"),
   _classDefinitions      (PID_Dictionary_ClassDefinitions,    "ClassDefinitions"),
   _interpolationDefinitions      (PID_Dictionary_InterpolationDefinitions,    "InterpolationDefinitions"),
+  _dataDefinitions      (PID_Dictionary_DataDefinitions,    "DataDefinitions"),
   _pBuiltins (0)
 {
   _persistentProperties.put (_operationDefinitions.address());
@@ -127,6 +129,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _persistentProperties.put(_codecDefinitions.address());
   _persistentProperties.put(_containerDefinitions.address());
   _persistentProperties.put(_interpolationDefinitions.address());
+  _persistentProperties.put(_dataDefinitions.address());
 }
 
 
@@ -198,6 +201,16 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 	  if (pInterp)
 		{
 		  pInterp->ReleaseReference();
+		}
+	}
+
+  size_t dataDefSize = _dataDefinitions.getSize();
+  for (i = 0; i < dataDefSize; i++)
+	{
+	  ImplAAFDataDef *pDDef = _dataDefinitions.setValueAt(0, i);
+	  if (pDDef)
+		{
+		  pDDef->ReleaseReference();
 		}
 	}
 
@@ -517,26 +530,116 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::RegisterDataDefintion (
-      ImplAAFDataDef * /*pDataDef*/)
+      ImplAAFDataDef *pDataDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (NULL == pDataDef)
+	return AAFRESULT_NULL_PARAM;
+	
+  // Get the AUID of the new type to register.
+  aafUID_t newAUID;
+  HRESULT hr = pDataDef->GetAUID(&newAUID);
+  if (hr != AAFRESULT_SUCCESS)
+    return hr;
+
+  // Is this type already registered ?
+  ImplAAFDataDef * pExistingDataDef = NULL;
+  hr = LookupDataDefintion(&newAUID, &pExistingDataDef);
+
+  if (hr != AAFRESULT_SUCCESS) {
+    // This type is not yet registered, add it to the dictionary.
+    _dataDefinitions.appendValue(pDataDef);
+    pDataDef->AcquireReference();
+    // Set up the (non-persistent) dictionary pointer.
+    pDataDef->SetDict(this);
+  } else {
+    // This type is already registered, probably because it was
+    // already in the persisted dictionary.
+    // Set up the (non-persistent) dictionary pointer.
+    pExistingDataDef->SetDict(this);
+    pExistingDataDef->ReleaseReference();
+  }
+
+  return(AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupDataDefintion (
-      aafUID_t *  /*pDataDefintionID*/,
-      ImplAAFDataDef ** /*ppDataDef*/)
+      aafUID_t *pDataDefintionID,
+      ImplAAFDataDef **ppDataDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplEnumAAFDataDefs		*dataEnum = NULL;
+	ImplAAFDataDef			*dataDef = NULL;
+	aafBool						defFound;
+	AAFRESULT					status;
+	aafUID_t					testAUID;
+
+	XPROTECT()
+	{
+		CHECK(GetDataDefinitions (&dataEnum));
+		status = dataEnum->NextOne (&dataDef);
+		defFound = AAFFalse;
+		while(status == AAFRESULT_SUCCESS && !defFound)
+		{
+			CHECK(dataDef->GetAUID (&testAUID));
+			if(EqualAUID(pDataDefintionID, &testAUID))
+			{
+				defFound = AAFTrue;
+				*ppDataDef = dataDef;
+				dataDef->AcquireReference();
+				break;
+			}
+			dataDef->ReleaseReference();
+			dataDef = NULL;
+			status = dataEnum->NextOne (&dataDef);
+		}
+		if(dataDef != NULL)
+		{
+			dataDef->ReleaseReference();
+			dataDef = NULL;
+		}
+		dataEnum->ReleaseReference();
+		dataEnum = NULL;
+		if(!defFound)
+			 RAISE(AAFRESULT_NO_MORE_OBJECTS);
+	}
+	XEXCEPT
+	{
+		if(dataEnum != NULL)
+			dataEnum->ReleaseReference();
+		if(dataDef != NULL)
+			dataDef->ReleaseReference();
+	}
+	XEND
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::GetDataDefinitions (
-      ImplEnumAAFDataDefs ** /*ppEnum*/)
+      ImplEnumAAFDataDefs **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFDataDefs *theEnum = (ImplEnumAAFDataDefs *)CreateImpl (CLSID_EnumAAFDataDefs);
+	
+	XPROTECT()
+	{
+		CHECK(theEnum->SetEnumStrongProperty(this, &_dataDefinitions));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+			theEnum->ReleaseReference();
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
@@ -1018,6 +1121,57 @@ void ImplAAFDictionary::InitBuiltins()
   REGISTER_TYPE_BUILTIN(_pBuiltins->TypeDefFadeType);
 
   REGISTER_CLASS_BUILTIN(_pBuiltins->ClassDefObject);
+
+  ImplAAFDataDef	*dataDef = NULL;
+	AAFRESULT		hr;
+	aafUID_t		uid;
+	hr = CreateInstance (&AUID_AAFDataDef,
+							(ImplAAFObject **)&dataDef);
+	uid = DDEF_Picture;
+	hr = dataDef->Init (&uid, L"Picture", L"Picture data");
+    hr = RegisterDataDefintion (dataDef);
+	dataDef->ReleaseReference();
+	dataDef = NULL;
+	/***!!!*/
+	hr = CreateInstance (&AUID_AAFDataDef,
+							(ImplAAFObject **)&dataDef);
+	uid = DDEF_Sound;
+	hr = dataDef->Init (&uid, L"Sound", L"Sound data");
+    hr = RegisterDataDefintion (dataDef);
+	dataDef->ReleaseReference();
+	dataDef = NULL;
+	/***!!!*/
+	hr = CreateInstance (&AUID_AAFDataDef,
+							(ImplAAFObject **)&dataDef);
+	uid = DDEF_Timecode;
+	hr = dataDef->Init (&uid, L"Timecode", L"Timecode data");
+    hr = RegisterDataDefintion (dataDef);
+	dataDef->ReleaseReference();
+	dataDef = NULL;
+	/***!!!*/
+	hr = CreateInstance (&AUID_AAFDataDef,
+							(ImplAAFObject **)&dataDef);
+	uid = DDEF_Edgecode;
+	hr = dataDef->Init (&uid, L"Edgecode", L"Edgecode data");
+    hr = RegisterDataDefintion (dataDef);
+	dataDef->ReleaseReference();
+	dataDef = NULL;
+	/***!!!*/
+	hr = CreateInstance (&AUID_AAFDataDef,
+							(ImplAAFObject **)&dataDef);
+	uid = DDEF_Matte;
+	hr = dataDef->Init (&uid, L"Matte", L"Matte data");
+    hr = RegisterDataDefintion (dataDef);
+	dataDef->ReleaseReference();
+	dataDef = NULL;
+	/***!!!*/
+	hr = CreateInstance (&AUID_AAFDataDef,
+							(ImplAAFObject **)&dataDef);
+	uid = DDEF_PictureWithMatte;
+	hr = dataDef->Init (&uid, L"PictureWithMatte", L"PictureWithMatte data");
+    hr = RegisterDataDefintion (dataDef);
+	dataDef->ReleaseReference();
+	dataDef = NULL;
 }
 
 AAFRESULT
