@@ -31,6 +31,18 @@
 
 #include "AAFResult.h"
 
+//
+// Define the platform specific default dll name.
+//
+#if defined(WIN32) || defined(_WIN32)
+#define DEFAULT_AAFDLL_NAME "AAFCOAPI.dll"
+#elif defined(macintosh) || defined(_MAC)
+#define DEFAULT_AAFDLL_NAME "AAFCOAPI.DLL (PPC)"
+#else
+#define DEFAULT_AAFDLL_NAME "aafcoapi.so"
+#endif
+
+
 
 
 // ASSERT code copied from OM...
@@ -107,7 +119,7 @@ STDAPI AAFLoad(const char * dllname)
     return AAFRESULT_ALREADY_INITIALIZED;
 
   // Create the appropriate dll wrapper
-  pAAFDLL = MakeAAFDLL();
+  pAAFDLL = AAFDLL::MakeAAFDLL();
   if (NULL == pAAFDLL)
     return AAFRESULT_NOMEMORY;
 
@@ -306,7 +318,8 @@ STDAPI AAFGetPluginManager (
 //***********************************************************
 //
 // Constructor for the base class
-AAFDLL::AAFDLL()
+AAFDLL::AAFDLL() :
+  _libHandle(NULL)
 {
   TRACE("AAFDLL::AAFDLL");
   ASSERT("There Can Be Only One!", NULL == _singleton);
@@ -342,6 +355,85 @@ AAFDLL::~AAFDLL()
 AAFDLL * AAFDLL::GetAAFDLL()
 {
   return _singleton;
+}
+
+
+//***********************************************************
+//
+// Factory function just returns an instance of the currect platform
+// dll wrapper object.
+AAFDLL * AAFDLL::MakeAAFDLL()
+{
+  AAFDLL *pAAFDLL =  new AAFDLL;
+  return pAAFDLL;
+}
+
+
+//***********************************************************
+//
+HRESULT AAFDLL::Load(const char *dllname)
+{
+  HRESULT rc = S_OK;
+
+
+  if (NULL == dllname)
+  { // use a realistic default name.
+    dllname = DEFAULT_AAFDLL_NAME;
+  }
+
+  // Attempt to load the library.
+  rc = ::AAFLoadLibrary(dllname, &_libHandle);
+
+  if (AAFRESULT_SUCCESS != rc)
+    return rc;
+
+  //
+  // Attempt to initialize the entry points...
+  //
+  rc = ::AAFFindSymbol(_libHandle, "AAFFileOpenExistingRead", (AAFSymbolAddr *)&_pfnOpenExistingRead);
+  if (AAFRESULT_FAILED(rc))
+    return rc;
+
+  rc = ::AAFFindSymbol(_libHandle, "AAFFileOpenExistingModify", (AAFSymbolAddr *)&_pfnOpenExistingModify);
+  if (AAFRESULT_FAILED(rc))
+    return rc;
+
+  rc = ::AAFFindSymbol(_libHandle, "AAFFileOpenNewModify", (AAFSymbolAddr *)&_pfnOpenNewModify);
+  if (AAFRESULT_FAILED(rc))
+    return rc;
+
+  rc = ::AAFFindSymbol(_libHandle, "AAFFileOpenTransient", (AAFSymbolAddr *)&_pfnOpenTransient);
+  if (AAFRESULT_FAILED(rc))
+    return rc;
+
+  rc = ::AAFFindSymbol(_libHandle, "AAFGetPluginManager", (AAFSymbolAddr *)&_pfnGetPluginManager);
+  if (AAFRESULT_FAILED(rc))
+    return rc;
+
+  return rc;
+}
+
+
+
+//***********************************************************
+//
+HRESULT AAFDLL::Unload()
+{
+  HRESULT rc = S_OK;
+
+  if (_libHandle)
+  {
+    rc = ::AAFUnloadLibrary(_libHandle);
+    if (AAFRESULT_SUCCEEDED(rc))
+    {
+      // Reset the entry point function pointers to NULL.
+      ClearEntrypoints();
+
+      _libHandle = NULL;
+    }
+  }
+  
+  return rc;
 }
 
 
@@ -414,63 +506,3 @@ HRESULT AAFDLL::GetPluginManager (
   ASSERT("Valid dll callback function", _pfnGetPluginManager);
   return _pfnGetPluginManager(ppPluginManager);  
 }
- 
-
-
-
-
-
-
-// Define UNKNOWNAAFDLL to satisfy the compiler and linker for platforms
-// where there is not a working implementation.
-
-#if defined(UNKNOWNAAFDLL)
-
-
-//***********************************************************
-//
-class UnknownAAFDLL : public AAFDLL
-{
-public:
-  // Implements Unknown platform specific initialization of dll and entry points.
-  virtual HRESULT Load(const char *dllname);
-  
-  // Implements Unknown platform specific cleanup of dll and entry points.
-  virtual HRESULT Unload();
-
-private:
-  // The handle to the dll's module instance.
-};
-
-
-
-//***********************************************************
-//
-// Factory function just returns an instance of the currect platform
-// dll wrapper object.
-AAFDLL * MakeAAFDLL()
-{
-  AAFDLL *pAAFDLL =  new UnknownAAFDLL;
-  return pAAFDLL;
-}
-
-
-
-//***********************************************************
-//
-HRESULT UnknownAAFDLL::Load(const char *)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-//***********************************************************
-//
-HRESULT UnknownAAFDLL::Unload()
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
- 
-
-#endif /* #if defined(UNKNOWNAAFDLL) */
