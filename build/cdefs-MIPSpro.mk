@@ -73,7 +73,7 @@ ADD_CFLAGS = -no_auto_include -prelink -xansi -G 0
 # 
 # Make all char declarations to be signed char declarations.
 #------------------------------------------------------------------------------
-ADD_CFLAGS += -signed
+ADD_CFLAGS += -signed -LANG:std
 
 
 #------------------------------------------------------------------------------
