@@ -227,6 +227,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	HRESULT						hr = S_OK;
 	aafWChar		tag[64];
 	aafWChar		Value[64];
+	aafSearchCrit_t	criteria;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"AAFMob Test";
@@ -248,13 +249,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		// We can't really do anthing in AAF without the header.
   		checkResult(pFile->GetHeader(&pHeader));
 
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = kCompMob;
 
-		checkResult(pHeader->GetNumMobs(kAllMob, &numMobs));
+
+		checkResult(pHeader->GetNumMobs(kCompMob, &numMobs));
 		checkExpression(1 == numMobs, AAFRESULT_TEST_FAILED);
 
 
-		aafSearchCrit_t		criteria;
-		criteria.searchTag = kNoSearch;
 		checkResult(pHeader->EnumAAFAllMobs (&criteria, &mobIter));
 
 		for(n = 0; n < numMobs; n++)
