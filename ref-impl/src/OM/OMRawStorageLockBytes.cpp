@@ -82,7 +82,6 @@ OMRawStorageLockBytes::~OMRawStorageLockBytes(void)
 
   PRECONDITION("Valid reference count", _referenceCount == 0);
 
-  delete _rawStorage;
   _rawStorage = 0;
 }
 
