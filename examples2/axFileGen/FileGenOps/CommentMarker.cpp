@@ -61,6 +61,33 @@ void CommentMarker::Execute( const std::vector<AxString>& argv )
 	RegisterInstance( commentMarkerName );
 }
 
+//=---------------------------------------------------------------------=
+
+AXFG_OP(
+  CommentMarkerSetPos,           
+  L"CommentMarkerSetPos",
+  L"Set the position of a comment marker",
+  L"CommentMarkerName position",
+  L"",
+  3,
+  3 ) 
+
+CommentMarkerSetPos::~CommentMarkerSetPos()
+{}
+
+void CommentMarkerSetPos::Execute( const std::vector<AxString>& argv )
+{
+	AxString commentMarkerName = argv[1];
+	AxString position          = argv[2];
+
+	IAAFCommentMarkerSP spCommentMarker;
+	GetInstance( commentMarkerName ).GetCOM( spCommentMarker );
+	AxCommentMarker axCommentMarker( spCommentMarker );
+
+	axCommentMarker.SetPosition( AxStringUtil::strtol( position ) );
+}
+
+
 } // end of namespace
 
 
