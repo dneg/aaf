@@ -1,0 +1,317 @@
+/***********************************************************************
+*
+*              Copyright (c) 1998-1999 Avid Technology, Inc.
+*
+* Permission to use, copy and modify this software and accompanying
+* documentation, and to distribute and sublicense application software
+* incorporating this software for any purpose is hereby granted,
+* provided that (i) the above copyright notice and this permission
+* notice appear in all copies of the software and related documentation,
+* and (ii) the name Avid Technology, Inc. may not be used in any
+* advertising or publicity relating to the software without the specific,
+* prior written permission of Avid Technology, Inc.
+*
+* THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+* WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+* IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,
+* SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR
+* OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF
+* OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND
+* ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES
+* RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT
+* ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF
+* LIABILITY.
+*
+************************************************************************/
+
+// @doc OMEXTERNAL
+#ifndef OMSTRONGREFSETPROPERTYT_H
+#define OMSTRONGREFSETPROPERTYT_H
+
+#include "OMAssertions.h"
+#include "OMStoredSetIndex.h"
+#include "OMStrongReferenceSetIter.h"
+
+template <typename ReferencedObject>
+OMStrongReferenceSetProperty<ReferencedObject>::
+                    OMStrongReferenceSetProperty(const OMPropertyId propertyId,
+                                                 const char* name)
+: OMContainerProperty(propertyId, SF_STRONG_OBJECT_REFERENCE_SET, name)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::"
+                                               "OMStrongReferenceSetProperty");
+}
+
+template <typename ReferencedObject>
+OMStrongReferenceSetProperty<ReferencedObject>::
+                                            ~OMStrongReferenceSetProperty(void)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::"
+                                              "~OMStrongReferenceSetProperty");
+
+}
+
+  // @mfunc Save this <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm Client context for callbacks.
+  //   @this const
+template <typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::save(
+                                                     void* clientContext) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::save");
+
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
+  ASSERT("Valid property set", _propertySet != 0);
+  OMStorable* container = _propertySet->container();
+  ASSERT("Valid container", container != 0);
+  ASSERT("Container is persistent", container->persistent());
+  OMStoredObject* s = container->store();
+
+  const char* propertyName = name();
+
+  // create a set index
+  //
+  size_t count = _set.count();
+  OMStoredSetIndex* index = new OMStoredSetIndex(count);
+  index->setHighWaterMark(localKey());
+  ASSERT("Valid heap pointer", index != 0);
+  size_t position = 0;
+
+  // Iterate over the set saving each element. The index entries
+  // are written in order of their unique keys.
+  //
+  OMSetIterator<OMUniqueObjectIdentification,
+                OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                             ReferencedObject> > iterator(_set, OMBefore);
+  while (++iterator) {
+
+    OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                 ReferencedObject>& element = iterator.value();
+
+    // enter into the index
+    //
+    index->insert(position,
+                  element.localKey(),
+                  element.referenceCount(),
+                  element.identification());
+
+    // save the object
+    //
+    element.save(clientContext);
+
+    position = position + 1;
+
+  }
+
+  // save the set index
+  //
+  ASSERT("Valid set index", index->isValid());
+  s->save(index, name());
+  delete index;
+
+  // make an entry in the property index
+  //
+  s->write(_propertyId,
+           _storedForm,
+           (void *)propertyName,
+           strlen(propertyName) + 1);
+
+}
+
+  // @mfunc Close this <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+template <typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::close(void)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::close");
+
+  OMSetIterator<OMUniqueObjectIdentification,
+                OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                             ReferencedObject> > iterator(_set, OMBefore);
+  while (++iterator) {
+    OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                 ReferencedObject>& element = iterator.value();
+    element.close();
+  }
+}
+
+  // @mfunc Restore this <c OMStrongReferenceSetProperty>, the external
+  //        (persisted) size of the <c OMStrongReferenceSetProperty> is
+  //        <p externalSize>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The external (persisted) size of the
+  //         <c OMStrongReferenceSetProperty>.
+template <typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::restore(
+                                                           size_t externalSize)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::restore");
+
+  // get the name of the set index stream
+  //
+  char* propertyName = new char[externalSize];
+  ASSERT("Valid heap pointer", propertyName != 0);
+  OMStoredObject* store = _propertySet->container()->store();
+  ASSERT("Valid store", store != 0);
+
+  store->read(_propertyId, _storedForm, propertyName, externalSize);
+  ASSERT("Consistent property size", externalSize == strlen(propertyName) + 1);
+  ASSERT("Consistent property name", strcmp(propertyName, name()) == 0);
+  delete [] propertyName;
+
+  // restore the index
+  //
+  OMStoredSetIndex* setIndex = 0;
+  store->restore(setIndex, name());
+  ASSERT("Valid set index", setIndex->isValid());
+  setLocalKey(setIndex->highWaterMark());
+
+  // Iterate over the index restoring the elements of the set.
+  // Since the index entries are stored on disk in order of their
+  // unique keys this loop is the worst cast order of insertion. This
+  // code will eventually be replaced by code that inserts the keys in
+  // "binary search" order. That is the middle key is inserted first
+  // then (recursively) all the keys below the middle key followed by
+  // (recursively) all the keys above the middle key.
+  //
+  size_t entries = setIndex->entries();
+  size_t context = 0;
+  OMUInt32 localKey;
+  OMUInt32 count;
+  OMUniqueObjectIdentification key;
+  for (size_t i = 0; i < entries; i++) {
+    setIndex->iterate(context, localKey, count, key);
+    char* name = elementName(localKey);
+    OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                 ReferencedObject> element(this, name, localKey, key);
+    element.restore();
+    _set.insert(element);
+    delete [] name;
+    name = 0; // for BoundsChecker
+  }
+  delete setIndex;
+  setPresent();
+}
+
+  // @mfunc The number of <p ReferencedObject>s in this
+  //        <c OMStrongReferenceSetProperty>.
+  //   @this const
+template <typename ReferencedObject>
+size_t OMStrongReferenceSetProperty<ReferencedObject>::count(void) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::count");
+
+  return _set.count();
+}
+
+template <typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::insert(
+                                                const ReferencedObject* object)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::insert");
+
+  PRECONDITION("Valid object", object != 0);
+
+  // Set the set to contain the new object
+  //
+  const size_t localKey = nextLocalKey();
+  char* name = elementName(localKey);
+  OMUniqueObjectIdentification key = object->identification();
+
+  OMSetElement<OMStrongObjectReference<ReferencedObject>,
+               ReferencedObject> newElement(this, name, localKey, key);
+  newElement.setValue(object);
+  _set.insert(newElement);
+  setPresent();
+  delete [] name;
+
+  //POSTCONDITION("Optional property is present", isPresent());
+}
+
+  // @mfunc Remove this optional <c OMStrongReferenceSetProperty>.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+template <typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::remove(void)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::remove");
+  PRECONDITION("Property is optional", isOptional());
+  PRECONDITION("Optional property is present", isPresent());
+
+  ASSERT("Unimplemented code not reached", false);
+
+  POSTCONDITION("Optional property no longer present", !isPresent());
+}
+  // @mfunc The size of the raw bits of this
+  //        <c OMStrongReferenceSetProperty>. The size is given in bytes.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @rdesc The size of the raw bits of this
+  //          <c OMStrongReferenceSetProperty> in bytes.
+  //   @this const
+template<typename ReferencedObject>
+size_t OMStrongReferenceSetProperty<ReferencedObject>::bitsSize(void) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::bitsSize");
+
+  ASSERT("Unimplemented code not reached", false);
+
+  return 0;
+}
+
+  // @mfunc Get the raw bits of this <c OMStrongReferenceSetProperty>.
+  //        The raw bits are copied to the buffer at address <p bits> which
+  //        is <p size> bytes in size.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The address of the buffer into which the raw bits are copied.
+  //   @parm The size of the buffer.
+  //   @this const
+template<typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::getBits(OMByte* bits,
+                                                             size_t size) const
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::getBits");
+  PRECONDITION("Optional property is present",
+                                           IMPLIES(isOptional(), isPresent()));
+  PRECONDITION("Valid bits", bits != 0);
+  PRECONDITION("Valid size", size >= bitsSize());
+
+  ASSERT("Unimplemented code not reached", false);
+}
+
+  // @mfunc Set the raw bits of this
+  //        <c OMStrongReferenceSetProperty>. The raw bits are
+  //        copied from the buffer at address <p bits> which is
+  //        <p size> bytes in size.
+  //   @tcarg class | ReferencedObject | The type of the referenced
+  //          (contained) object. This type must be a descendant of
+  //          <c OMStorable> and <c OMUnique>.
+  //   @parm The address of the buffer from which the raw bits are copied.
+  //   @parm The size of the buffer.
+template<typename ReferencedObject>
+void OMStrongReferenceSetProperty<ReferencedObject>::setBits(
+                                                            const OMByte* bits,
+                                                            size_t size)
+{
+  TRACE("OMStrongReferenceSetProperty<ReferencedObject>::setBits");
+  PRECONDITION("Valid bits", bits != 0);
+  PRECONDITION("Valid size", size >= bitsSize());
+
+  ASSERT("Unimplemented code not reached", false);
+}
+
+#endif
+
