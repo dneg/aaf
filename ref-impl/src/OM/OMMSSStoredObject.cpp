@@ -401,7 +401,7 @@ void OMMSSStoredObject::save(const OMDataVector& property)
   // Save as if this were an OMSimpleProperty
 
   OMPropertyId propertyId = property.propertyId();
-  OMStoredForm storedForm = SF_DATA;
+  OMStoredForm storedForm = SF_DATA; // != property.storedForm() !
   const OMType* propertyType = property.type();
   ASSERT("Valid property type", propertyType != 0);
   const OMArrayType* at = dynamic_cast<const OMArrayType*>(propertyType);
@@ -458,7 +458,7 @@ void OMMSSStoredObject::save(const OMDataSet& property)
   // Save as if this were an OMSimpleProperty
 
   OMPropertyId propertyId = property.propertyId();
-  OMStoredForm storedForm = SF_DATA;
+  OMStoredForm storedForm = SF_DATA; // != property.storedForm() !
   const OMType* propertyType = property.type();
   ASSERT("Valid property type", propertyType != 0);
   const OMSetType* st = dynamic_cast<const OMSetType*>(propertyType);
