@@ -31,6 +31,7 @@ class ImplEnumAAFEffectDefs;
 
 class ImplAAFPluggableDefinition;
 
+class ImplEnumAAFPluggableDefs;
 
 
 #ifndef __ImplAAFObject_h__
@@ -182,7 +183,21 @@ public:
         // @parm [out,retval] Definition Enumeration
         (ImplEnumAAFEffectDefs ** ppEnum);
 
+  //****************
+  // RegisterPluggableDefinitions()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RegisterPluggableDefinition
+        // @parm [in] Pluggable Definition
+        (ImplAAFPluggableDef * pPlugDef);
 
+  //****************
+  // GetPluggableDefinitions()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    GetPluggableDefinitions
+        // @parm [out,retval] Definition Enumeration
+        (ImplEnumAAFPluggableDefs ** ppEnum);
 
 
 public:
@@ -193,6 +208,19 @@ public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplAAFDictionaryTest.cpp.
   static AAFRESULT test();
+
+public:
+	// Internal to the SDK
+  //****************
+  // GetNumEssenceData()
+  //
+  virtual AAFRESULT
+    GetNumPluggableDefs
+        (aafUInt32 *  pNumPluggableDefs);  //@parm [out,retval] Total number of pluggable defs
+
+  virtual AAFRESULT
+    GetNthPluggableDef (aafInt32 index, ImplAAFPluggableDef **ppEnum);
+
 private:
     OMStrongReferenceVectorProperty<ImplAAFPluggableDef> _pluginDefinitions;
 };
