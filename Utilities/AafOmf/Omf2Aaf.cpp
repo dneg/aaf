@@ -2132,14 +2132,14 @@ void Omf2Aaf::ConvertOMFCDCIDescriptorLocator(OMF2::omfObject_t mediaDescriptor,
 	rc = pDigImageDesc->SetVideoLineMap( (sizeof(videoLineMap)/sizeof(aafInt32)), videoLineMap);
 
 	//
-	aafUID_t AAFCompress = NoCodec;
+	aafUID_t AAFCompress = kAAFNoCodec;
 	aafUInt32 compLen = OMF2::omfsLengthString(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDCompression);
 	if( compLen > 0 )
 	{
 		char compress[ 64 ] = "";
 		OMFError = OMF2::omfsReadString(OMFFileHdl, mediaDescriptor, OMF2::OMDIDDCompression, compress, compLen+1);
 		if(strcmp(compress, "JFIF") == 0)
-			AAFCompress = CodecJPEG;
+			AAFCompress = kAAFCodecJPEG;
 	}
 	rc = pDigImageDesc->SetCompression(AAFCompress);
 	pDigImageDesc->Release();
