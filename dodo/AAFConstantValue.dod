@@ -29,7 +29,7 @@ AD_XMETHOD4(SetInitialValues,
 			[in],objIn,AAFDataDefinition,datadef,DataDefinition object,
 			[in],objPass,aafLength_t,length,Length property value,
 			[in],objPass,aafInt32,valueSize,Size of the value data,
-			[in\, size_is\(valueSize\)],objPass,char *,value,Value data,
+			[in\, size_is\(valueSize\)],objPass,aafDataBuffer_t,value,Value data,
 			Constructor given starting parameters)
 			//@comm The value data is passed in as a void * through the "value"
 			// argument.  The size of the value must be passed through the
@@ -39,7 +39,7 @@ AD_XMETHOD4(SetInitialValues,
 /****/
 AD_METHOD3(GetValue,
 			[in],aafInt32,valueSize,Size of preallocated buffer,
-			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],char *,value,Preallocated buffer to hold value,
+			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,value,Preallocated buffer to hold value,
 			[out],aafInt32*,bytesRead,Number of actual bytes read,
 			The data value is returned in a preallocated buffer of size valueSize.)
 			//@comm The actual number of bytes read is returned in
@@ -51,7 +51,7 @@ AD_METHOD3(GetValue,
 /****/
 AD_METHOD2(SetValue,
 			[in],aafInt32,valueSize, Size of preallocated buffer,
-			[in\\\, size_is\\\(valueSize\\\)],char *,value, buffer containing value,
+			[in\\\, size_is\\\(valueSize\\\)],aafDataBuffer_t,value, buffer containing value,
 			The data value is set from a buffer of size valueSize.)
 
 //@com Internal
