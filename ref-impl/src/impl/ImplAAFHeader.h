@@ -39,23 +39,22 @@ class ImplAAFFile;
 
 #include "aafTable.h"
 
-#if OM_PRESENT
 #include "aafErr.h"
 #include "ImplAAFObject.h"
-#include "ImplAAFSession.h"
+//#include "ImplAAFSession.h"
 #include "ImplAAFIdentification.h"
 
 #include "OMProperty.h"
 
 class AAFDataKind;
 class AAFEffectDef;
+class ImplAAFSession;
 
 const int CLSID_AAFHEADER = 43;
 
 const int PID_HEADER_BYTEORDER          = 0;
 const int PID_HEADER_LASTMODIFIED       = 1;
 const int PID_HEADER_IDENTIFICATIONLIST = 2;
-#endif
 
 class ImplAAFHeader : public ImplAAFObject
 {
@@ -253,15 +252,11 @@ private:
 		aafVersionType_t	_fileRev;
 		aafProductVersion_t	_toolkitRev;
 
-#if OM_PRESENT
 		// Persistent properties
     //
 		OMFixedSizeProperty<aafInt16>                      _byteOrder;
 		OMFixedSizeProperty<aafTimeStamp_t>                _lastModified;
-    OMStrongReferenceVectorProperty<AAFIdentification> _identificationList;
-#else
-		aafInt16	_byteOrder;
-#endif
+    OMStrongReferenceVectorProperty<ImplAAFIdentification> _identificationList;
 };
 
 #endif // ! __ImplAAFHeader_h__
