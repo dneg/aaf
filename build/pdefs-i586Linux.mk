@@ -106,6 +106,12 @@ ifndef UUIDLIB
     UUIDLIB = -luuid
 endif
 
+# libdv is used to provide DV functionality in the CDCICodec.
+# For GNU/Linux target assume libdv is available as a system library
+# so the only required link flag is -ldv when linking libaafpgapi.so
+ADD_CFLAGS += -DUSE_LIBDV
+OPT_CODEC_LIBS += -ldv
+
 # Optional libgsf support is enabled by the LIBGSF_PATH variable which must
 # contain the path to the installed libgsf includes and library
 # e.g. make LIBGSF_PATH=/usr/local

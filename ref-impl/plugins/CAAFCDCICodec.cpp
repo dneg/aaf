@@ -23,6 +23,7 @@
 //=---------------------------------------------------------------------=
 #include "CAAFCDCICodec.h"
 
+#include <stdarg.h>		// for varargs
 #include <assert.h>
 #include <string.h>
 #include "AAFResult.h"
@@ -55,7 +56,12 @@ const aafUInt32 kSupportedDefinitions = 1;
 const aafUInt32 kSupportedCodeFlavours = 1;
 
 const wchar_t kDisplayName[] = L"AAF CDCI Codec";
-const wchar_t kDescription[] = L"Handles YUV and YCbCr";
+const wchar_t kDescription[] = L"Handles uncompressed YUV & YCbCr and (compressed) IEC 61834 DV family";
+
+// DV Compression IDs supported (kLegacy_DV is found in AAF files output by some Avid products)
+aafUID_t kLegacy_DV = { 0xedb35390, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+aafUID_t kIEC_DV_625_50 = { 0x04010202, 0x0201, 0x0200, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01 } };
+aafUID_t kIEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01 } };
 
 const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kAAFVersionBeta};
 const aafRational_t		kDefaultRate = { 30000, 1001 };
@@ -72,8 +78,6 @@ const aafUID_t AVID_CDCI_PLUGIN =
 
 static wchar_t *kManufURL = L"http://www.avid.com";
 static wchar_t *kDownloadURL = L"ftp://ftp.avid.com/pub/";
-static aafVersionType_t samplePluginVersion = { 0, 1 };
-
 static wchar_t *kManufName = L"Avid Technology, Inc.";
 static wchar_t *kManufRev = L"Rev 0.1";
 
@@ -85,6 +89,24 @@ const aafUID_t NULL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 const aafRational_t NULL_RATIONAL = {0, 0};
 const aafRational_t DEFAULT_ASPECT_RATIO = {4, 3};
 
+// Use libdv API terminology when using the libdv API where
+// "PAL" & "NTSC" mean 625/50 and 525/60 respectively
+const int DV_PAL_FRAME_SIZE = 144000;
+const int DV_NTSC_FRAME_SIZE = 120000;
+bool formatPAL = false;
+
+
+// Debugging log function which is optimised away for default builds
+inline void plugin_trace(const char *fmt, ...)
+{
+#ifdef PLUGIN_TRACE
+	va_list		ap;
+
+	va_start(ap, fmt);
+	vfprintf(stderr, fmt, ap);
+	va_end(ap);
+#endif
+}
 
 // local function for simplifying error handling.
 inline void checkResult(AAFRESULT r)
@@ -105,7 +127,27 @@ inline void checkAssertion(bool test)
     throw HRESULT(AAFRESULT_ASSERTION_VIOLATION);
 }
 
+inline bool IsDV(const aafUID_t &compId)
+{
+	if (EqualAUID(&compId, &kLegacy_DV) ||
+		EqualAUID(&compId, &kIEC_DV_625_50) ||
+		EqualAUID(&compId, &kIEC_DV_525_60))
+	{
+		return true;
+	}
+	return false;
+}
 
+inline bool IsSupportedCompressionID(const aafUID_t &compId)
+{
+	if (EqualAUID(&compId, &NULL_UID) ||
+		EqualAUID(&compId, &AAF_CMPR_AUNC422) ||
+		IsDV(compId))
+	{
+		return true;
+	}
+	return false;
+}
 
 
 // Constructor
@@ -113,6 +155,7 @@ inline void checkAssertion(bool test)
 CAAFCDCICodec::CAAFCDCICodec (IUnknown * pControllingUnknown)
   : CAAFUnknown (pControllingUnknown)
 {
+	plugin_trace("CAAFCDCICodec::CAAFCDCICodec() constructor\n");
 
 	_nativeByteOrder = GetNativeByteOrder();
 	_access = NULL;
@@ -166,6 +209,7 @@ CAAFCDCICodec::CAAFCDCICodec (IUnknown * pControllingUnknown)
 
 CAAFCDCICodec::~CAAFCDCICodec ()
 {
+	plugin_trace("CAAFCDCICodec::~CAAFCDCICodec()\n");
   // Do NOT release the _access interface since this object
   // contains the reference to this codec instance! We need
   // avoid the dreaded reference counting cycle of death!
@@ -180,6 +224,7 @@ CAAFCDCICodec::~CAAFCDCICodec ()
 // Only save a new reference.
 void CAAFCDCICodec::SetEssenceStream(IAAFEssenceStream *stream)
 {
+	plugin_trace("CAAFCDCICodec::SetEssenceStream()\n");
 	if (_stream != stream)
 	{
 		if (NULL != _stream)
@@ -188,6 +233,11 @@ void CAAFCDCICodec::SetEssenceStream(IAAFEssenceStream *stream)
 		if (NULL != stream)
 			stream->AddRef();
 	}
+}
+
+void CAAFCDCICodec::SetCompressionEnabled(aafCompressEnable_t compEnable)
+{
+	_compressEnable = (compEnable == kAAFCompressionEnable) ? kAAFCompressionEnable : kAAFCompressionDisable;
 }
 
 void CAAFCDCICodec::SetNumberOfSamples(const aafLength_t& numberOfSamples)
@@ -201,6 +251,7 @@ void CAAFCDCICodec::SetNumberOfSamples(const aafLength_t& numberOfSamples)
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::CountDefinitions (aafUInt32 *pDefCount)
 {
+	plugin_trace("CAAFCDCICodec::CountDefinitions()\n");
 	if(NULL == pDefCount)
 		return AAFRESULT_NULL_PARAM;
 
@@ -212,6 +263,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetIndexedDefinitionID (aafUInt32 /* index */, aafUID_t *uid)
 {
+	plugin_trace("CAAFCDCICodec::GetIndexedDefinitionID()\n");
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;
 
@@ -223,6 +275,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetPluginDescriptorID (aafUID_t *uid)
 {
+	plugin_trace("CAAFCDCICodec::GetPluginDescriptorID()\n");
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;
 
@@ -232,32 +285,36 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
-// MediaComposer property extensions to AAFDigitalImageDescriptor.
-const aafUID_t kAAFPropID_DIDResolutionID = { 0xce2aca4d, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
-const aafUID_t kAAFPropID_DIDFrameSampleSize = { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
-const aafCharacter kAAFPropName_DIDResolutionID[] = { 'R','e','s','o','l','u','t','i','o','n','I','D','\0' };
-const aafCharacter kAAFPropName_DIDFrameSampleSize[] = { 'F','r','a','m','e','S','a','m','p','l','e','S','i','z','e','\0' };
-
-
 // The method creates some descriptor properties to handle legacy CDCI 
-// variations.
+// variations and legacy DV variations.
 HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs( 
     IAAFDictionary	*p_dict )
 {
+	plugin_trace("CAAFCDCICodec::CreateLegacyPropDefs()\n");
     HRESULT		hr = S_OK;
     IAAFClassDef	*p_did_classdef = NULL;
+    IAAFClassDef	*p_cdci_classdef = NULL;
+    IAAFTypeDef		*p_typedef_int64 = NULL;
     IAAFTypeDef		*p_typedef_int32 = NULL;
+    IAAFTypeDef		*p_typedef_int16 = NULL;
     IAAFPropertyDef	*p_propdef = NULL;
 
 
     try
     {
-	// Get DigitalImage descriptor class definition and
+	// Get CDCI descriptor class definition,
+	// DigitalImage descriptor class definition and
 	// and integer type definition.
 	checkResult( p_dict->LookupClassDef( kAAFClassID_DigitalImageDescriptor, 
 	    &p_did_classdef ) );
+	checkResult( p_dict->LookupClassDef( kAAFClassID_CDCIDescriptor, 
+	    &p_cdci_classdef ) );
+	checkResult( p_dict->LookupTypeDef( kAAFTypeID_Int64, 
+	    &p_typedef_int64 ) );
 	checkResult( p_dict->LookupTypeDef( kAAFTypeID_Int32, 
 	    &p_typedef_int32 ) );
+	checkResult( p_dict->LookupTypeDef( kAAFTypeID_Int16, 
+	    &p_typedef_int16 ) );
 
 
 	// Register legacy property definitions
@@ -273,16 +330,46 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs(
 	p_propdef->Release();
 	p_propdef = NULL;
 
+	checkResult( p_cdci_classdef->RegisterOptionalPropertyDef( 
+	    kAAFPropID_CDCIOffsetToFrameIndexes, 
+		kAAFPropName_CDCIOffsetToFrameIndexes, 
+	    p_typedef_int32, &p_propdef ) );
+	p_propdef->Release();
+	p_propdef = NULL;
+
+	checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
+	    kAAFPropID_DIDFrameIndexByteOrder, kAAFPropName_DIDFrameIndexByteOrder, 
+	    p_typedef_int16, &p_propdef ) );
+	p_propdef->Release();
+	p_propdef = NULL;
+
+	checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
+	    kAAFPropID_DIDFirstFrameOffset, kAAFPropName_DIDFirstFrameOffset, 
+	    p_typedef_int32, &p_propdef ) );
+	p_propdef->Release();
+	p_propdef = NULL;
+
+	checkResult( p_did_classdef->RegisterOptionalPropertyDef( 
+	    kAAFPropID_DIDImageSize, kAAFPropName_DIDImageSize, 
+	    p_typedef_int64, &p_propdef ) );
+	p_propdef->Release();
+	p_propdef = NULL;
     }
     catch( HRESULT& rhr )
     {
 	hr = rhr; // return thrown error code.
     }
 
+    if( p_cdci_classdef )
+	p_cdci_classdef->Release();
     if( p_did_classdef )
 	p_did_classdef->Release();
+    if( p_typedef_int64 )
+	p_typedef_int64->Release();
     if( p_typedef_int32 )
 	p_typedef_int32->Release();
+    if( p_typedef_int16 )
+	p_typedef_int16->Release();
     if( p_propdef )
 	p_propdef->Release();
 
@@ -295,6 +382,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs(
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetIndexedDefinitionObject (aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def)
 {
+	plugin_trace("CAAFCDCICodec::GetIndexedDefinitionObject()\n");
 	HRESULT hr = S_OK;
 	IAAFCodecDef	*codecDef = NULL;
 	IAAFClassDef	*fileClass = NULL;
@@ -388,6 +476,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDef **descPtr)
 {
+	plugin_trace("CAAFCDCICodec::CreateDescriptor()\n");
 	HRESULT hr = S_OK;
 	IAAFPluginDef	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
@@ -486,6 +575,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::SetEssenceAccess(IAAFEssenceAccess *access)
 {
+	plugin_trace("CAAFCDCICodec::SetEssenceAccess()\n");
 	if(access == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -504,6 +594,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::CountFlavours(aafUInt32 *pCount)
 {
+	plugin_trace("CAAFCDCICodec::CountFlavours()\n");
 	if(pCount == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -516,6 +607,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetIndexedFlavourID (aafUInt32  /* index */,
         aafUID_t *  pFlavour)
 {
+	plugin_trace("CAAFCDCICodec::GetIndexedFlavourID()\n");
 	if(pFlavour == NULL)
 		return AAFRESULT_NULL_PARAM;
 
@@ -527,6 +619,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::CountDataDefinitions (aafUInt32 *pDefCount)
 {
+	plugin_trace("CAAFCDCICodec::CountDataDefinitions()\n");
 	if (NULL == pDefCount)
 		return AAFRESULT_NULL_PARAM;
 
@@ -539,6 +632,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetIndexedDataDefinition (aafUInt32  /* index */,
         aafUID_t * pFlavour)
 {
+	plugin_trace("CAAFCDCICodec::GetIndexedDataDefinition()\n");
 	if (NULL == pFlavour)
 		return AAFRESULT_NULL_PARAM;
 
@@ -549,6 +643,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetMaxCodecDisplayNameLength (
         aafUInt32  *bufSize)
 {
+	plugin_trace("CAAFCDCICodec::GetMaxCodecDisplayNameLength()\n");
 	if (NULL == bufSize)
 		return AAFRESULT_NULL_PARAM;
 	
@@ -562,6 +657,7 @@ HRESULT STDMETHODCALLTYPE
         aafCharacter *  pName,
         aafUInt32  bufSize)
 {
+	plugin_trace("CAAFCDCICodec::GetCodecDisplayName()\n");
 	if (NULL == pName)
 		return AAFRESULT_NULL_PARAM;
 	if (0 >= bufSize)
@@ -580,6 +676,7 @@ HRESULT STDMETHODCALLTYPE
         IAAFEssenceStream *stream,
         aafUInt16 *  pNumChannels)
 {
+	plugin_trace("CAAFCDCICodec::CountChannels()\n");
 	if (NULL == fileMob || NULL == stream || NULL == pNumChannels)
 		return AAFRESULT_NULL_PARAM;
 
@@ -596,6 +693,7 @@ HRESULT STDMETHODCALLTYPE
         IAAFEssenceStream *stream,
         aafSelectInfo_t *  pSelectInfo)
 {
+	plugin_trace("CAAFCDCICodec::GetSelectInfo()\n");
 	HRESULT hr = S_OK;
 	aafUInt32		storedWidth, storedHeight;
 	aafInt16		padBits;
@@ -628,7 +726,7 @@ HRESULT STDMETHODCALLTYPE
 		// can handle it in this codec.
 		hr = descriptorHelper.GetCompression(&compressionID);
 		checkExpression(AAFRESULT_PROP_NOT_PRESENT == hr || AAFRESULT_SUCCESS == hr, hr);
-		if (AAFRESULT_SUCCESS == hr && EqualAUID(&compressionID, &kAAFCodecCDCI) && 0 == padBits)
+		if (AAFRESULT_SUCCESS == hr && IsSupportedCompressionID(compressionID) && 0 == padBits)
 		{
 			pSelectInfo->willHandleMDES = kAAFTrue;
 		}
@@ -719,6 +817,7 @@ HRESULT STDMETHODCALLTYPE
         aafUID_constref essenceKind,
         aafLength_t *  pNumSamples)
 {
+	plugin_trace("CAAFCDCICodec::CountSamples()\n");
 	if (NULL == pNumSamples)
 		return AAFRESULT_NULL_PARAM;
 
@@ -741,6 +840,7 @@ HRESULT STDMETHODCALLTYPE
 		wchar_t *  pName,
         aafUInt32  *bytesWritten)
 {
+	plugin_trace("CAAFCDCICodec::ValidateEssence()\n");
 	if (NULL == fileMob || NULL == stream ||
 		  NULL == pName   || NULL == bytesWritten)
 		return AAFRESULT_NULL_PARAM;
@@ -766,8 +866,10 @@ CAAFCDCICodec::Create (IAAFSourceMob *p_srcmob,
   aafUID_constref essenceKind,
   aafRational_constref sampleRate,
   IAAFEssenceStream * stream,
-  aafCompressEnable_t /* compEnable */)
+  aafCompressEnable_t compEnable)
 {
+	plugin_trace("CAAFCDCICodec::Create()\n");
+
     HRESULT	    hr = S_OK;
 
     
@@ -784,6 +886,9 @@ CAAFCDCICodec::Create (IAAFSourceMob *p_srcmob,
 	    // Check essence kind
 	    checkExpression( kAAFTrue == EqualAUID(&essenceKind, &DDEF_Picture),
 		AAFRESULT_INVALID_DATADEF );
+
+		// Sets whether or not to compress samples as they are written
+		SetCompressionEnabled(compEnable);
 
 	    // Initialize the descriptor helper:
 	    checkResult(_descriptorHelper.Initialize(p_srcmob));
@@ -835,8 +940,9 @@ HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::Open (IAAFSourceMob *p_srcmob,
 		aafMediaOpenMode_t  openMode,
     IAAFEssenceStream * stream,
-    aafCompressEnable_t /* compEnable */)
+    aafCompressEnable_t compEnable)
 {
+	plugin_trace("CAAFCDCICodec::Open()\n");
     HRESULT hr = S_OK;
 
 
@@ -846,17 +952,34 @@ HRESULT STDMETHODCALLTYPE
 
     try
     {
-	// Initialize the descriptor helper:
-	checkResult( _descriptorHelper.Initialize( p_srcmob ) );
+		// Initialize the descriptor helper:
+		checkResult( _descriptorHelper.Initialize( p_srcmob ) );
 
-	// Save the mode to the given stream.
-	_openMode = openMode;
+		// Save the mode to the given stream.
+		_openMode = openMode;
 
-	// Save the given essence stream.
-	SetEssenceStream(stream);
+		// Save the given essence stream.
+		SetEssenceStream(stream);
 
-	// Initialize codec parameters reading descriptor information.
-	ReadDescriptor( _descriptorHelper );
+		// Sets whether or not to decompress the samples as they are read.
+	    SetCompressionEnabled(compEnable);
+
+		// Initialize codec parameters reading descriptor information.
+		hr = ReadDescriptor( _descriptorHelper );
+		checkExpression (hr == S_OK, hr);
+
+		if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
+		{
+#ifdef USE_LIBDV
+			// Setup libdv defaults and quality parameters
+			_decoder = dv_decoder_new( FALSE, FALSE, FALSE );
+			_decoder->quality = DV_QUALITY_BEST;
+			_decoder->prev_frame_decoded = 0;
+#else
+			// Can't decompress without libdv
+			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+#endif
+		}
     }
     catch (HRESULT& rhr)
     {
@@ -882,6 +1005,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
         aafUInt32	*pTotalSamplesWritten,
         aafUInt32	*pTotalBytesWritten)
 {
+	plugin_trace("CAAFCDCICodec::WriteSamples()\n");
     HRESULT	hr = S_OK;
     aafUInt32	n;
     aafUInt32	sampleBytesWritten;	// Number of sample bytes written.
@@ -914,6 +1038,9 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
 	checkAssertion( NULL != _stream );
 	checkExpression( _componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE );
 	checkExpression( _fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE );
+#ifdef USE_LIBDV
+	checkAssertion( !(_compressEnable == kAAFCompressionEnable && NULL == _encoder ));
+#endif
 
 	sampleSize = _fileBytesPerSample;
 
@@ -926,9 +1053,43 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::WriteSamples(
 	// Write samples one by one aligning them if necessary.
 	for( n=0; n<nSamples; n++ )
 	{
-	    sampleBytesWritten = 0;
-	    checkResult( _stream->Write( sampleSize, buffer, 
-		&sampleBytesWritten));
+		if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
+		{
+#ifdef USE_LIBDV
+			// metadata to be stored in DV frame header
+			time_t	datetime = time(NULL);
+
+			// Write YUY2 formatted video frames
+			dv_encode_full_frame(_encoder,
+						&buffer,			// uncompressed video samples
+						e_dv_color_yuv,		// options are yuv/rgb/bgr0
+						_dv_buffer );		// DV frame
+
+			// We have no audio to encode, so audio stream will be empty
+
+			dv_encode_metadata(_dv_buffer,		// DV frame
+						_encoder->isPAL,		// isPAL
+						_encoder->is16x9,		// is16x9
+						&datetime,				// record date & time
+						n);						// frame counter for timestamp
+
+			dv_encode_timecode(_dv_buffer,		// DV frame
+						_encoder->isPAL,		// isPAL
+						n);						// frame counter for timecode
+
+		    sampleBytesWritten = 0;
+		    checkResult( _stream->Write( _encoder->isPAL ? DV_PAL_FRAME_SIZE : DV_NTSC_FRAME_SIZE, _dv_buffer, &sampleBytesWritten));
+#else
+			// Can't compress without libdv
+			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+#endif
+		}
+		else
+		{
+	    	sampleBytesWritten = 0;
+	    	checkResult( _stream->Write( sampleSize, buffer, 
+				&sampleBytesWritten));
+		}
 	    buffer += sampleBytesWritten;
 	    *pTotalBytesWritten += sampleBytesWritten;
 
@@ -995,6 +1156,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 	aafUInt32	*pTotalSamplesRead,
 	aafUInt32	*pTotalBytesRead )
 {
+	plugin_trace("CAAFCDCICodec::ReadSamples()\n");
     HRESULT	hr = S_OK;
     aafUInt32	n;
     aafUInt32	sampleBytesRead;	// Number of sample bytes read.
@@ -1019,8 +1181,14 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 	checkAssertion( NULL != _stream );
 	checkExpression( _componentWidth != 0, AAFRESULT_ZERO_PIXELSIZE );
 	checkExpression( _fileBytesPerSample != 0, AAFRESULT_ZERO_SAMPLESIZE );
+#ifdef USE_LIBDV
+	checkAssertion( !(_compressEnable == kAAFCompressionEnable && NULL == _decoder ));
+#endif
 
 	sampleSize = _fileBytesPerSample;
+
+	plugin_trace("CAAFCDCICodec::ReadSamples() sampleSize=%d nSamples=%d sampleSize*nSamples=%d buflen=%d\n",
+				sampleSize, nSamples, sampleSize*nSamples, buflen);
 
 	// Make sure the given buffer is really large enough for the complete
 	// pixel data.
@@ -1032,10 +1200,47 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 	for( n = 0; n < nSamples; n++ )
 	{
 	    sampleBytesRead = 0;
-	    checkResult( _stream->Read( sampleSize, buffer, &sampleBytesRead ));
-	    buffer += sampleBytesRead;
-	    *pTotalBytesRead += sampleBytesRead;
 
+		if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
+		{
+#ifdef USE_LIBDV
+			unsigned int bufsize = formatPAL ? DV_PAL_FRAME_SIZE : DV_NTSC_FRAME_SIZE;
+
+		    checkResult( _stream->Read( bufsize, _dv_buffer, &sampleBytesRead ));
+
+			// parse DV frame header
+			if (dv_parse_header(_decoder, _dv_buffer) < 0)
+			{
+				plugin_trace("CAAFCDCICodec::ReadSamples dv_parse_header() failed for sample %d\n", n);
+		    	throw HRESULT( AAFRESULT_DECOMPRESS );	// i.e. Software Decompression Failed
+			}
+
+			// setup libdv pixel "pitches" array
+			_pitches[0]  = _decoder->width * 2;
+			_pitches[1]  = 0;
+			_pitches[2]  = 0;
+
+			dv_decode_full_frame(_decoder,
+							_dv_buffer,
+							e_dv_color_yuv,
+							&buffer,
+							_pitches);
+
+			buffer += sampleSize;
+			*pTotalBytesRead += sampleSize;
+
+			_decoder->prev_frame_decoded = 1;
+#else
+			// Can't decompress without libdv
+			throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+#endif
+		}
+		else
+		{
+	    	checkResult( _stream->Read( sampleSize, buffer, &sampleBytesRead ));
+	    	buffer += sampleBytesRead;
+	    	*pTotalBytesRead += sampleBytesRead;
+		}
 
 	    // If sample is aligned skip unused alignment bytes.
 	    // Do not count these bytes when returning total number of 
@@ -1088,6 +1293,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadSamples(
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::Seek (aafPosition_t  sampleFrame)
 {
+	plugin_trace("CAAFCDCICodec::Seek()\n");
     HRESULT	hr = S_OK;
     aafUInt32	alignmentBytes = _imageAlignmentFactor > 0 ? 
 		(_fileBytesPerSample % _imageAlignmentFactor) : 0;
@@ -1098,9 +1304,19 @@ HRESULT STDMETHODCALLTYPE
 	checkAssertion(NULL != _stream);
 	checkExpression( sampleFrame <= _numberOfSamples, 
 	    AAFRESULT_BADFRAMEOFFSET );
-	checkResult(_stream->Seek( (_fileBytesPerSample + alignmentBytes) * 
-	    sampleFrame) );
+
+	if (IsDV(_compression))
+	{
+		int frameLen = formatPAL ? DV_PAL_FRAME_SIZE: DV_NTSC_FRAME_SIZE;
+		checkResult(_stream->Seek( (frameLen + alignmentBytes) * 
+	    	sampleFrame) );
+	}
+	else
+	{
+		checkResult(_stream->Seek( (_fileBytesPerSample + alignmentBytes) * 
+	    	sampleFrame) );
     }
+	}
     catch (HRESULT& rhr)
     {
 	hr = rhr; // return thrown error code.
@@ -1124,6 +1340,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadDescriptor( 
     CAAFCDCIDescriptorHelper&	descriptorHelper )
 {
+	plugin_trace("CAAFCDCICodec::ReadDescriptor()\n");
     HRESULT		hr = S_OK;
     IAAFContainerDef	*pContainerDef = NULL;
     IAAFDefObject	*pDefObj = NULL;
@@ -1178,6 +1395,15 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadDescriptor(
 	    &_storedHeight, &_storedWidth ) );
 	_imageHeight = _storedHeight;
 	_imageWidth = _storedWidth;
+
+	if (IsDV(_compression))
+	{
+		// Derive DV format from imageHeight
+		if (_imageHeight == 288)
+			formatPAL = true;
+		else
+			formatPAL = false;
+	}
 
 	// Sampled view is optional property. If it's not present 
 	// set sampled view to be the same as stored view.
@@ -1286,22 +1512,30 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadDescriptor(
 	// HorizontalSubsampling (required)
 	checkResult(descriptorHelper.GetHorizontalSubsampling(
 	    &_horizontalSubsampling ) );
-	checkExpression( _horizontalSubsampling == 1 || 
-			 _horizontalSubsampling == 2, 
-			 AAFRESULT_BADPIXFORM );
+
+	if (IsDV(_compression))
+	{
+		checkExpression( _horizontalSubsampling == 1 || 
+				 _horizontalSubsampling == 2 ||
+				 _horizontalSubsampling == 4, 
+				 AAFRESULT_BADPIXFORM );
+	}
+	else
+	{
+		checkExpression( _horizontalSubsampling == 1 || 
+				 _horizontalSubsampling == 2, 
+				 AAFRESULT_BADPIXFORM );
+	}
 
 	// VerticalSubsampling (optional)
-	// Currently we don't handle VerticalSubsampling other 
-	// than 1.
 	hr = descriptorHelper.GetVerticalSubsampling(
 		    &_verticalSubsampling );
 	checkExpression( AAFRESULT_PROP_NOT_PRESENT == hr || 
 			 AAFRESULT_SUCCESS == hr, hr );
 	if( hr == AAFRESULT_PROP_NOT_PRESENT )
+	{
 	    _verticalSubsampling = 1;
-	checkExpression( _verticalSubsampling == 1, AAFRESULT_BADPIXFORM );
-
-
+	}
 
 	// ColorSiting (optional)
 	// Do not check for supported values because ColorSiting does not
@@ -1345,6 +1579,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadDescriptor(
 
 
 	UpdateCalculatedData();
+	hr = S_OK; //reset hr here
     }
     catch (HRESULT& rhr)
     {
@@ -1371,6 +1606,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::ReadDescriptor(
 
 void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper)
 {
+	plugin_trace("CAAFCDCICodec::UpdateDescriptor()\n");
 	// Update FileDescriptor properties
 	checkResult(descriptorHelper.SetLength(_numberOfSamples));
 	checkResult(descriptorHelper.SetSampleRate(_sampleRate));
@@ -1393,6 +1629,7 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	// CDCIDescriptor methods:
 	checkResult(descriptorHelper.SetComponentWidth(_componentWidth));
 	checkResult(descriptorHelper.SetHorizontalSubsampling(_horizontalSubsampling));
+	checkResult(descriptorHelper.SetVerticalSubsampling(_verticalSubsampling));
 	checkResult(descriptorHelper.SetColorSiting(_colorSiting));
 	checkResult(descriptorHelper.SetBlackReferenceLevel(_blackReferenceLevel));
 	checkResult(descriptorHelper.SetWhiteReferenceLevel(_whiteReferenceLevel));
@@ -1407,13 +1644,32 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	    checkResult( descriptorHelper.SetFrameSampleSize( 
 		_fileBytesPerSample ) );
 	}
+	if( EqualAUID(&_compression,&kLegacy_DV))
+	{
+	    checkResult( descriptorHelper.SetOffsetToFrameIndexes( 0 ) );
+	    checkResult( descriptorHelper.SetFrameIndexByteOrder( 0x4949) );
+	    checkResult( descriptorHelper.SetFirstFrameOffset( 0 ) );
 
+		if (formatPAL)
+		{
+	    	checkResult( descriptorHelper.SetResolutionID( 0x8d ) );
+	    	checkResult( descriptorHelper.SetFrameSampleSize(DV_PAL_FRAME_SIZE));
+	    	checkResult( descriptorHelper.SetImageSize( _numberOfSamples * DV_PAL_FRAME_SIZE ) );
+		}
+		else
+		{
+	    	checkResult( descriptorHelper.SetResolutionID( 0x8c ) );
+	    	checkResult( descriptorHelper.SetFrameSampleSize( DV_NTSC_FRAME_SIZE));
+			checkResult( descriptorHelper.SetImageSize( _numberOfSamples * DV_NTSC_FRAME_SIZE ) );
+		}
+	}
 }
 
 
 // Routine to keep calculated member data up-to-date.
 void CAAFCDCICodec::UpdateCalculatedData( void )
 {
+	plugin_trace("CAAFCDCICodec::UpdateCalculatedData()\n");
     aafUInt32 numFields = 0;
 
 
@@ -1431,49 +1687,69 @@ void CAAFCDCICodec::UpdateCalculatedData( void )
     _bitsPerSample = 0;
 
 
-    //
-    // Calculate number of bits per pixel. 
-    // Be aware that for 4:2:2 format number of bits per pi
-    // 4:4:4 = 1 sample for each of luma and two chroma channels
-    if (_horizontalSubsampling == 1)
-    {
-	_bitsPerPixelAvg = (aafInt16)((_componentWidth * 3) + _paddingBits);
-
-	// Number of bits per sample = num bits per field * num of fields.
-	// Number of bits per field  = num bits per image pixels + 
-	//	    num bits per client fill (field start/end offsets)..
-	// Number of bits per image pixels = num bits per line * num of 
-	//	    lines (height).
-	// Number of bits per line = num of bits per pixel * width + num 
-	//	    of padding bits per line.
-	//
-	// Note that number of padding bits per line is not number of padding
-	//	    bits per pixel.
-	_bitsPerSample = ( (_imageWidth * _bitsPerPixelAvg + 
-				_padBytesPerRow * 8) * _imageHeight  + 
-				(_fieldStartOffset + _fieldEndOffset) * 8 ) *
-				numFields;
-    }
-    // 4:2:2 = two-pixels get 2 samples of luma, 1 of each chroma channel, 
-    // avg == 2
-    //
-    // Note: Supported component sizes named by the spec are 8, 10 and 16 bits.
-    //		With these values YCrYCb will always be on a byte boundary. 
-    else if (_horizontalSubsampling == 2)
-    {
-	_bitsPerPixelAvg = (aafInt16)((_componentWidth * 2) + _paddingBits);
-
-	// See comments for 4:4:4
-	_bitsPerSample = ( (_imageWidth/2  * (_componentWidth*4 + _paddingBits)+
-				_padBytesPerRow * 8) * _imageHeight  + 
-				(_fieldStartOffset + _fieldEndOffset) * 8 ) *
-				numFields;
-    }
-
+   	if (_horizontalSubsampling == 1)
+		_bitsPerPixelAvg = (aafInt16)((_componentWidth * 3) + _paddingBits);
+	else
+		_bitsPerPixelAvg = (aafInt16)((_componentWidth * 2) + _paddingBits);
     checkAssertion( _bitsPerPixelAvg % 8  ==  0 );
 
+	if (IsDV(_compression))
+	{
+		if (_compressEnable == kAAFCompressionDisable)
+		{
+			// input data is already compressed DV frames
+			if ( formatPAL)
+				_fileBytesPerSample = DV_PAL_FRAME_SIZE;
+			else
+				_fileBytesPerSample = DV_NTSC_FRAME_SIZE;
+		}
+		else
+		{
+			// Uncompressed video to be compressed as DV or decompressed from DV.
+			// Since _imageHeight represents one field use _imageHeight*2 for height.
+			_fileBytesPerSample = _imageWidth * _imageHeight*2 * 2;
+		}
+		_bitsPerSample = _fileBytesPerSample * 8;
+	}
+	else if (_compressEnable == kAAFCompressionEnable || EqualAUID(&NULL_UID, &_compression) || EqualAUID(&AAF_CMPR_AUNC422, &_compression))
+	{
+    	//
+	    // Calculate number of bits per pixel. 
+    	// Be aware that for 4:2:2 format number of bits per pi
+    	// 4:4:4 = 1 sample for each of luma and two chroma channels
+    	if (_horizontalSubsampling == 1)
+    	{
+		// Number of bits per sample = num bits per field * num of fields.
+		// Number of bits per field  = num bits per image pixels + 
+		//	    num bits per client fill (field start/end offsets)..
+		// Number of bits per image pixels = num bits per line * num of 
+		//	    lines (height).
+		// Number of bits per line = num of bits per pixel * width + num 
+		//	    of padding bits per line.
+		//
+		// Note that number of padding bits per line is not number of padding
+		//	    bits per pixel.
+			_bitsPerSample = ( (_imageWidth * _bitsPerPixelAvg + 
+					_padBytesPerRow * 8) * _imageHeight  + 
+					(_fieldStartOffset + _fieldEndOffset) * 8 ) *
+					numFields;
+   	 	}
+   	 	// 4:2:2 = two-pixels get 2 samples of luma, 1 of each chroma channel, 
+   	 	// avg == 2
+    	//
+    	// Note: Supported component sizes named by the spec are 8, 10 and 16 bits.
+    	//		With these values YCrYCb will always be on a byte boundary. 
+    	else if (_horizontalSubsampling == 2)
+    	{
+			// See comments for 4:4:4
+			_bitsPerSample = ( (_imageWidth/2  * (_componentWidth*4 + _paddingBits)+
+				_padBytesPerRow * 8) * _imageHeight  + 
+				(_fieldStartOffset + _fieldEndOffset) * 8 ) *
+				numFields;
+    	}
 
-    _fileBytesPerSample = (_bitsPerSample + 7) / 8;
+    	_fileBytesPerSample = (_bitsPerSample + 7) / 8;
+	}
 }
 
 
@@ -1493,6 +1769,7 @@ void CAAFCDCICodec::UpdateCalculatedData( void )
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::CompleteWrite (IAAFSourceMob *fileMob = NULL)
 {
+	plugin_trace("CAAFCDCICodec::CompleteWrite()\n");
     HRESULT hr = S_OK;
 
 
@@ -1534,6 +1811,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::CreateDescriptorFromStream (IAAFEssenceStream * pStream,
         IAAFSourceMob *fileMob)
 {
+	plugin_trace("CAAFCDCICodec::CreateDescriptorFromStream()\n");
 	if (NULL == pStream || NULL == fileMob)
 		return AAFRESULT_NULL_PARAM;
 
@@ -1546,6 +1824,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetCurrentEssenceStream (IAAFEssenceStream ** ppStream)
 {
+	plugin_trace("CAAFCDCICodec::GetCurrentEssenceStream()\n");
 	if (NULL == ppStream)
 		return AAFRESULT_NULL_PARAM;
 	if (NULL == _stream)
@@ -1606,6 +1885,7 @@ typedef struct _aafEssenceFormatData_t
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::PutEssenceFormat (IAAFEssenceFormat * pFormat)
 {
+	plugin_trace("CAAFCDCICodec::PutEssenceFormat()\n");
     HRESULT			hr = S_OK;
     aafInt32			numSpecifiers, i;
     aafEssenceFormatData_t	param;
@@ -1629,7 +1909,14 @@ HRESULT STDMETHODCALLTYPE
 
 		if (EqualAUID(&kAAFCompression, &param.opcode))
 		{	// Validate the in-memory size.
+			aafUID_t		nullCompID = NULL_UID;
 			checkExpression(param.size == sizeof(param.operand.expUID), AAFRESULT_INVALID_PARM_SIZE);
+
+
+			// Only DV compressions supported for compressed CDCI
+			checkExpression (EqualAUID(&nullCompID, &param.operand.expUID) ||
+					EqualAUID(&kIEC_DV_625_50, &param.operand.expUID) ||
+					EqualAUID(&kIEC_DV_525_60, &param.operand.expUID),AAFRESULT_BADCOMPR);
 
 			memcpy( &_compression, &(param.operand.expUID), 
 			    sizeof(param.operand.expUID) );
@@ -1764,9 +2051,10 @@ HRESULT STDMETHODCALLTYPE
 		    // Validate the in-memory size.
 		    checkExpression(param.size == sizeof(param.operand.expUInt32), AAFRESULT_INVALID_PARM_SIZE);
 
-		    // 1 or 2 are valid values
-		    checkExpression( param.operand.expUInt32 == 1 || param.operand.expUInt32 == 2,
-					AAFRESULT_BADPIXFORM );
+		    // 1, 2 or 4 are valid values
+		    checkExpression( param.operand.expUInt32 == 1 ||
+					param.operand.expUInt32 == 2 ||
+					param.operand.expUInt32 == 4, AAFRESULT_BADPIXFORM );
 
 		    _horizontalSubsampling = param.operand.expUInt32;
 		}
@@ -1843,6 +2131,11 @@ HRESULT STDMETHODCALLTYPE
 			_fieldStartOffset = 0;
 			_fieldEndOffset = 4;
 		}
+		else if (EqualAUID( &kAAFLegacyDV, &param.opcode ) )
+		{
+			memcpy( &_compression, &kLegacy_DV, sizeof(_compression) );
+		}
+
 		// Below are parameters which are accessible for client to read 
 		// but not to modify. Some of them are constant for this codec
 		// (like kAAFNumChannels), some are calculated values like 
@@ -1862,7 +2155,63 @@ HRESULT STDMETHODCALLTYPE
 		
 	} // for (i = 0...)
 
-	
+	// compression should be disabled for non-DV data
+	if (_compressEnable == kAAFCompressionEnable)
+		checkExpression (IsDV(_compression),AAFRESULT_BADCOMPR);
+
+	// Allow only supported combinations of subsampling and height
+	if (IsDV(_compression))
+	{
+		// Use attributes of known IEC DV formats to derive
+		// VerticalSubsampling
+		if (_imageHeight == 288)
+			_verticalSubsampling = 2;	// for IEC_DV_625_50
+		else
+			_verticalSubsampling = 1;	// for IEC_DV_525_60
+
+		// Only 4:2:0 and 4:1:1 DV color sampling supported by libdv
+		checkExpression( _verticalSubsampling == 1 || _verticalSubsampling == 2, AAFRESULT_BADPIXFORM );
+
+		// 4:2:2 is not supported by libdv (e.g DVCPRO 50)
+		checkExpression( !(_verticalSubsampling == 1 && _horizontalSubsampling == 2), AAFRESULT_BADPIXFORM );
+
+		if (EqualAUID(&_compression, &kLegacy_DV))
+		{
+			// Experiment showed that legacy applications require display size set equal to stored size
+			// (e.g. Avid Xpress DV)
+			_displayWidth = _storedWidth;
+			_displayHeight = _storedHeight;
+		}
+	}
+	else
+	{
+		// for all other (non-DV) CDCI video
+		checkExpression( _verticalSubsampling == 1, AAFRESULT_BADPIXFORM );
+	}
+
+	// If compression is set, set DV params
+	if (_compressEnable == kAAFCompressionEnable && IsDV(_compression))
+	{
+		if (_imageHeight == 288)
+			formatPAL = true;
+		else
+			formatPAL = false;
+
+#ifdef USE_LIBDV
+		// Setup libdv encoder object, defaults and tuning parameters
+		_encoder = dv_encoder_new( FALSE, FALSE, FALSE );
+		_encoder->isPAL = formatPAL ? 1: 0;			
+		_encoder->is16x9 = (_imageAspectRatio.numerator == 16 && _imageAspectRatio.denominator == 9) ? 1: 0;
+		_encoder->vlc_encode_passes = 3;
+		_encoder->static_qno = 0;
+		_encoder->force_dct = DV_DCT_AUTO;
+#else
+		// Can't compress without libdv
+		throw HRESULT( AAFRESULT_INVALID_OP_CODEC );
+#endif
+	}
+
+	UpdateDescriptor( _descriptorHelper );
 	UpdateCalculatedData();
 
     }
@@ -1888,6 +2237,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetEssenceFormat(
 	IAAFEssenceFormat	*pTemplate,
 	IAAFEssenceFormat	**pResult)
 {
+	plugin_trace("CAAFCDCICodec::GetEssenceFormat()\n");
     HRESULT			hr = S_OK;
     IAAFEssenceFormat		*p_fmt = NULL;
     aafInt32			numSpecifiers;
@@ -2167,6 +2517,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetEssenceFormat(
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetDefaultEssenceFormat(IAAFEssenceFormat **pResult)
 {
+	plugin_trace("CAAFCDCICodec::GetDefaultEssenceFormat()\n");
 	HRESULT			hr = S_OK;
 	IAAFEssenceFormat	*p_fmt = NULL;
 	aafEssenceFormatData_t	param;
@@ -2273,8 +2624,12 @@ HRESULT STDMETHODCALLTYPE
 		checkResult( ADD_FORMAT_SPECIFIER( 
 		    p_fmt, kAAFWillTransferLines, param.operand.expBoolean ) );
 
-		// CDCI codec does not handle compressed data.
-		param.operand.expBoolean = kAAFFalse;
+		// DV is the only form of compressed CDCI supported
+		if (IsDV(_compression))
+			param.operand.expBoolean = kAAFTrue;
+		else
+			param.operand.expBoolean = kAAFFalse;
+		
 		checkResult( ADD_FORMAT_SPECIFIER( 
 		    p_fmt, kAAFIsCompressed, param.operand.expBoolean ) );
 
@@ -2368,6 +2723,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetEssenceDescriptorID (aafUID_t *uid)
 {
+	plugin_trace("CAAFCDCICodec::GetEssenceDescriptorID()\n");
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;
 
@@ -2379,6 +2735,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFCDCICodec::GetEssenceDataID (aafUID_t *uid)
 {
+	plugin_trace("CAAFCDCICodec::GetEssenceDataID()\n");
 	if(NULL == uid)
 		return AAFRESULT_NULL_PARAM;
 
@@ -2392,6 +2749,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetIndexedSampleSize (
     aafPosition_t	pos,
     aafLength_t		*pResult)
 {
+	plugin_trace("CAAFCDCICodec::GetIndexedSampleSize()\n");
 	if(pos < 0 || pos > _numberOfSamples) // zero based sample index.
 		return AAFRESULT_EOF;
 
@@ -2406,6 +2764,7 @@ HRESULT STDMETHODCALLTYPE CAAFCDCICodec::GetLargestSampleSize(
     aafUID_constref	dataDefID,
     aafLength_t		*pResult )
 {
+	plugin_trace("CAAFCDCICodec::GetLargestSampleSize()\n");
 	HRESULT hr = AAFRESULT_SUCCESS;
 
 

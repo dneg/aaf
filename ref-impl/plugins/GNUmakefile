@@ -98,7 +98,7 @@ $(DYN_PGAPI_LIB) : $(CXXOBJS)
 	-L$(LIBDIR) $(SUPOBJS) $(CXXOBJS) -o $@ \
 	$(AAFBUILDDIR)/aaflib/$(AAFTARGETDIR)/libaaflib$(LIB) \
 	$(AAFBUILDDIR)/aafiid/$(AAFTARGETDIR)/libaafiid$(LIB) \
-	-ljpeg
+	-ljpeg $(OPT_CODEC_LIBS)
 
 
 CXXFILES2 = AAFInterpCOM.cpp \
