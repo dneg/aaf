@@ -36,7 +36,7 @@ int main( int argc, char** argv )
 	try {
 		long hresult = AxStringUtil::strtoul( argv[1] );
 	
-		wcout << AxHrMap::getInstance().getStr( hresult );
+		wcout << AxHrMap::getInstance().getStr( hresult ) << endl;
 	}
 
 	catch( const AxEx& ex ) {

@@ -26,38 +26,21 @@
 //
 //=---------------------------------------------------------------------=
 
-
-
-
-
-
-
-
-
+#include <ModuleTest.h>
 
 #include "AAFTypes.h" //Use #include "AAF.h" for functional module test.
 #include "AAFResult.h"
 
+HRESULT KLVDataDefinitionTest( aafCharacter* pFileName,
+			       aafCharacter* pTestName,
+			       testMode_t mode );
+
 // Required function prototype.
-extern "C" HRESULT CEnumAAFKLVDataDefs_test(void);
+extern "C" HRESULT CEnumAAFKLVDataDefs_test(testMode_t mode);
 
-HRESULT CEnumAAFKLVDataDefs_test()
+HRESULT CEnumAAFKLVDataDefs_test(testMode_t mode)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  return KLVDataDefinitionTest( L"EnumAAFKLVDataDefTest.aaf", 
+				L"CEnumAAFKLVDataDef_test",
+				mode );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

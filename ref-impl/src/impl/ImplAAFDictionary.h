@@ -553,8 +553,8 @@ public:
   // 
   virtual AAFRESULT STDMETHODCALLTYPE
   LookupKLVDataDef (
-    // @parm [in, ref] aafUID_constref | parameterId | Parameter Unique ID
-    aafUID_constref  parameterId,
+    // @parm [in, ref] aafUID_constref | defId | KLV data definition ID
+    aafUID_constref  defId,
 
     // @parm [out,retval] AAFKLVDataDefinition | ppDef | KLVData descriptor object
     ImplAAFKLVDataDefinition ** ppDef
@@ -628,8 +628,8 @@ public:
   // 
   virtual AAFRESULT STDMETHODCALLTYPE
   LookupTaggedValueDef (
-    // @parm [in, ref] aafUID_constref | parameterId | Parameter Unique ID
-    aafUID_constref  parameterId,
+    // @parm [in, ref] aafUID_constref | defId | tagged value definition ID
+    aafUID_constref  defId,
 
     // @parm [out,retval] AAFTaggedValueDefinition | ppDef | tagged value descriptor object
     ImplAAFTaggedValueDefinition ** ppDef

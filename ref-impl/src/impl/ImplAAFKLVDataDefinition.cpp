@@ -66,6 +66,21 @@ ImplAAFKLVDataDefinition::ImplAAFKLVDataDefinition ()
 ImplAAFKLVDataDefinition::~ImplAAFKLVDataDefinition ()
 {}
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFKLVDataDefinition::Initialize (
+      const aafUID_t & id,
+      const aafWChar * pName,
+      const aafWChar * pDesc)
+{
+	if (pName == NULL || pDesc == NULL)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+	  return pvtInitialize(id, pName, pDesc);
+	}
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFKLVDataDefinition::AddParentProperty (
@@ -113,7 +128,7 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   }
 
-  if ( _klvDataTypeDef.isPresent() ) {
+  if ( !_klvDataTypeDef.isPresent() ) {
     return AAFRESULT_PROP_NOT_PRESENT;
   }
 

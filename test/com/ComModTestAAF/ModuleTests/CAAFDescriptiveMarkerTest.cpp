@@ -131,8 +131,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
     SimpleFilePointers filePointers;
     ReadSimpleAAFFile( pFileName, &filePointers );
 
-    RegisterDescriptiveTestFramework( filePointers.pDictionary );
-
     // Get slot 2 from the composition and verify that that attached
     // segment is a DescriptiveMarker.
     

@@ -74,6 +74,8 @@ extern "C" const aafClassID_t CLSID_EnumAAFInterpolationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFPluginDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFKLVDataDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFTaggedValueDefs;
 
 
 
@@ -1773,55 +1775,176 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_SUCCESS;
 }
 
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterKLVDataDef (ImplAAFKLVDataDefinition * /*pDef*/)
+    ImplAAFDictionary::RegisterKLVDataDef (ImplAAFKLVDataDefinition* pDef )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  assert (_defRegistrationAllowed);
+
+  if ( NULL == pDef ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+  
+  if ( pDef->attached() ) {
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+  }
+
+  _klvDataDefinitions.appendValue(pDef);
+  pDef->AcquireReference();
+  
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupKLVDataDef (aafUID_constref  /*parameterId*/,
-                           ImplAAFKLVDataDefinition ** /*ppDef*/)
+    ImplAAFDictionary::LookupKLVDataDef (aafUID_constref  id,
+					 ImplAAFKLVDataDefinition ** ppDef )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if ( !ppDef ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  
+  if ( _klvDataDefinitions.find( *reinterpret_cast<const OMObjectIdentification*>(&id),
+				 *ppDef) ) {
+    assert( *ppDef );
+    (*ppDef)->AcquireReference();
+  }
+  else {
+    result = AAFRESULT_NO_MORE_OBJECTS;
+  }
+  
+  return result;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetKLVDataDefs (ImplEnumAAFKLVDataDefs ** /*ppEnum*/)
+    ImplAAFDictionary::GetKLVDataDefs (ImplEnumAAFKLVDataDefs** ppEnum )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if ( NULL == ppEnum ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  *ppEnum = 0;
+  
+  ImplEnumAAFKLVDataDefs *theEnum = (ImplEnumAAFKLVDataDefs *)CreateImpl (CLSID_EnumAAFKLVDataDefs);
+  
+  XPROTECT()
+  {
+    OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFKLVDataDefinition>* iter = 
+      new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFKLVDataDefinition>(_klvDataDefinitions);
+    if ( !iter ) {
+      RAISE(AAFRESULT_NOMEMORY);
+    }
+    CHECK( theEnum->Initialize(&CLSID_EnumAAFKLVDataDefs,this,iter) );
+    *ppEnum = theEnum;
+  }
+  XEXCEPT
+  {
+    if ( theEnum )
+      {
+	theEnum->ReleaseReference();
+	theEnum = 0;
+      }
+  }
+  XEND;
+  
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::CountKLVDataDefs (aafUInt32 *  /*pResult*/)
+    ImplAAFDictionary::CountKLVDataDefs (aafUInt32 *pResult)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if(pResult == NULL)
+    return AAFRESULT_NULL_PARAM;
+  
+  *pResult = _klvDataDefinitions.count();
+  
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::RegisterTaggedValueDef (ImplAAFTaggedValueDefinition * /*pDef*/)
+    ImplAAFDictionary::RegisterTaggedValueDef (ImplAAFTaggedValueDefinition* pDef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  assert (_defRegistrationAllowed);
+
+  if ( NULL == pDef ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+  
+  if ( pDef->attached() ) {
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+  }
+
+  _taggedValueDefinitions.appendValue(pDef);
+  pDef->AcquireReference();
+  
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::LookupTaggedValueDef (aafUID_constref  /*parameterId*/,
-                           ImplAAFTaggedValueDefinition ** /*ppDef*/)
+    ImplAAFDictionary::LookupTaggedValueDef (aafUID_constref  id,
+					     ImplAAFTaggedValueDefinition ** ppDef )
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if ( !ppDef ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  
+  if ( _taggedValueDefinitions.find( *reinterpret_cast<const OMObjectIdentification*>(&id),
+				     *ppDef) ) {
+    assert( *ppDef );
+    (*ppDef)->AcquireReference();
+  }
+  else {
+    result = AAFRESULT_NO_MORE_OBJECTS;
+  }
+  
+  return result;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::GetTaggedValueDefs (ImplEnumAAFTaggedValueDefs ** /*ppEnum*/)
+    ImplAAFDictionary::GetTaggedValueDefs (ImplEnumAAFTaggedValueDefs** ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if ( NULL == ppEnum ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  *ppEnum = 0;
+  
+  ImplEnumAAFTaggedValueDefs *theEnum = (ImplEnumAAFTaggedValueDefs *)CreateImpl (CLSID_EnumAAFTaggedValueDefs);
+  
+  XPROTECT()
+  {
+    OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTaggedValueDefinition>* iter = 
+      new OMStrongReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTaggedValueDefinition>(_taggedValueDefinitions);
+    if ( !iter ) {
+      RAISE(AAFRESULT_NOMEMORY);
+    }
+    CHECK( theEnum->Initialize(&CLSID_EnumAAFTaggedValueDefs,this,iter) );
+    *ppEnum = theEnum;
+  }
+  XEXCEPT
+  {
+    if ( theEnum )
+      {
+	theEnum->ReleaseReference();
+	theEnum = 0;
+      }
+  }
+  XEND;
+  
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::CountTaggedValueDefs (aafUInt32 *  /*pResult*/)
+    ImplAAFDictionary::CountTaggedValueDefs (aafUInt32* pResult)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if(pResult == NULL)
+    return AAFRESULT_NULL_PARAM;
+  
+  *pResult = _taggedValueDefinitions.count();
+  
+  return AAFRESULT_SUCCESS;
 }
 
 

@@ -40,7 +40,6 @@
 #include "AAFPropertyIDs.h"
 #endif
 
-#include "ImplAAFWeakRefSetUtil.h"
 #include "AAFStoredObjectIDs.h"
 
 #include <assert.h>
@@ -53,12 +52,26 @@ ImplAAFTaggedValueDefinition::ImplAAFTaggedValueDefinition ()
 
 ImplAAFTaggedValueDefinition::~ImplAAFTaggedValueDefinition ()
 {}
-
-
+  
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTaggedValueDefinition::Initialize (
+      const aafUID_t & id,
+      const aafWChar * pName,
+      const aafWChar * pDesc)
+{
+	if (pName == NULL || pDesc == NULL)
+	{
+	  return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+	  return pvtInitialize(id, pName, pDesc);
+	}
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::AddParentProperty (
-      ImplAAFPropertyDef* pParentProperty )
+     ImplAAFPropertyDef* /*pParentProperty*/ )
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -66,7 +79,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::GetParentProperties (
-      ImplEnumAAFPropertyDefs** ppEnum )
+       ImplEnumAAFPropertyDefs** /*ppEnum*/ )
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -74,7 +87,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTaggedValueDefinition::CountParentProperties (
-      aafUInt32*  pNumProperties )
+							 aafUInt32* /*pNumProperties*/ )
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -86,7 +99,4 @@ AAFRESULT STDMETHODCALLTYPE
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
-
-
-
 
