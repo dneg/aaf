@@ -36,7 +36,7 @@
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
-#include "AAFRESULT.h"
+#include "AAFResult.h"
 #include "aafCvt.h"
 #include "AAFUtils.h"
 
@@ -44,7 +44,7 @@
 typedef ImplAAFSmartPointer<ImplAAFDataDef>    ImplAAFDataDefSP;
 typedef ImplAAFSmartPointer<ImplAAFDictionary> ImplAAFDictionarySP;
 
-#include <typeinfo.h>
+#include <typeinfo>
 
 extern "C" const aafClassID_t CLSID_EnumAAFComponents;
 
