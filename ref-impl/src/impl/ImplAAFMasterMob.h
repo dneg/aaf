@@ -223,6 +223,44 @@ public:
     aafMobKind_t *  pMobKind
   );
 
+  //****************
+  // NewPhysSourceRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    NewPhysSourceRef
+        (// @parm [in] Edit rate of slot to contain reference
+		 aafRational_t  editrate,
+
+		 // @parm [in] SlotID of slot to contain reference
+		 aafSlotID_t  aMobSlot,
+
+		 // @parm [in] Data kind of slot to contain reference
+         aafUID_t * pEssenceKind,
+
+		aafSourceRef_t  ref,
+
+		 // @parm [in] Length of the Source Clip
+         aafLength_t  srcRefLength);
+
+  //****************
+  // AddPhysSourceRef()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendPhysSourceRef
+        (// @parm [in] Edit rate of slot to contain reference
+		 aafRational_t  editrate,
+
+		 // @parm [in] SlotID of slot to contain reference
+		 aafSlotID_t  aMobSlot,
+
+		 // @parm [in] Data kind of slot to contain reference
+         aafUID_t * pEssenceKind,
+
+		aafSourceRef_t  ref,
+
+		 // @parm [in] Length of the Source Clip
+         aafLength_t  srcRefLength);
+
 
 
 public:
