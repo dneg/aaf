@@ -209,7 +209,6 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
 	IAAFNetworkLocator		*pNetLoc = NULL;
-	IAAFDefObject			*defObject = NULL;
 	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
 	aafUID_t				plugID = EXAMPLE_FILE_PLUGIN;
 	
@@ -219,10 +218,7 @@ HRESULT STDMETHODCALLTYPE
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
 		*descPtr = desc;
-		CHECK(desc->QueryInterface(IID_IAAFDefObject, (void **)&defObject));
-		CHECK(defObject->Init(&plugID, L"Essence File Container", L"Handles non-container files."));
-		defObject->Release();
-		defObject = NULL;
+		CHECK(desc->Init(&plugID, L"Essence File Container", L"Handles non-container files."));
 
 		CHECK(desc->SetCategoryClass(&category));
 		CHECK(desc->SetPluginVersionString(manufRev));
@@ -262,8 +258,6 @@ HRESULT STDMETHODCALLTYPE
 			pLoc->Release();
 		if(pNetLoc != NULL)
 			pNetLoc->Release();
-		if(defObject != NULL)
-			defObject->Release();
 	}
 	XEND
 
