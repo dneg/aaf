@@ -47,62 +47,23 @@
 #include "CAAFBuiltinDefs.h"
 
 
-typedef struct tChunk
-{
-	char	ckID[4];
-	long	ckDataSize;
-	char	ckData;
-} Chunk;
+#define FORM_HDR_SIZE		12
+#define COMM_CHUNK_SIZE		46
+#define SSND_CHUNK_SIZE		16
+#define SUMMARY_SIZE		FORM_HDR_SIZE+COMM_CHUNK_SIZE+SSND_CHUNK_SIZE
 
-typedef struct tAIFCFORMATCHUNK
-{
-    char	ckID[4];		// "FORM"
-	long	ckDataSize;
-	char	formType[4];	// "AIFC"
-} FormAIFCChunk;
-
-typedef struct tCommonChunk
-{
-	char			ckID[4];		// "COMM"
-	long			ckDataSize;
-	short			numChannels;
-	unsigned long	numSampleFrames;
-	short			sampleSize;
-	unsigned char	sampleRate[10];	// This should be IEEE floating point number
-	char			compressionType[4];
-	unsigned char	compNameLength;
-	char			compressionName[15];
-} CommonChunk;
-
-typedef struct tSoundDataChunk
-{
-	char			ckID[4];		// "SSND"
-	long			ckDataSize;
-	unsigned long	offset;
-	unsigned long	blockSize;
-	char			soundData;
-} SoundDataChunk;
-
-typedef struct tAIFCSUMMARY
-{
-	FormAIFCChunk	formChunk;
-	CommonChunk		commChunk;
-	SoundDataChunk	ssndChunk;
-} AIFCSummary;
+//typedef struct tAIFCSUMMARY
+//{
+//	FormAIFCChunk	formChunk;		// size 12
+//	CommonChunk		commChunk;
+//	SoundDataChunk	ssndChunk;
+//} AIFCSummary;
 
 // our test Mob id 
 static const aafMobID_t	TEST_MobID = 
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
 0x13, 0x00, 0x00, 0x00,
 {0x1f64f50a, 0x03fd, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
-
-//#if defined( OS_WINDOWS )
-//  // Wave data does not have to be swapped on Windows platforms.
- // #define SWAPSUMMARY(summary)
-//#else
-  // Assume all other platforms are big-endian.
-  // this will change when we adapt the sdk to
-  // other platforms...
 
   // Simple utilities to swap bytes.
   static void SwapBytes(void *buffer, size_t count)
@@ -120,20 +81,15 @@ static const aafMobID_t	TEST_MobID =
     }
   }
 
-  static void SwapSummary(AIFCSummary&	summary)
-  {
-    SwapBytes(&summary.commChunk, sizeof(summary.commChunk ));
-    SwapBytes(&summary.formChunk, sizeof(summary.formChunk ));
-    SwapBytes(&summary.ssndChunk, sizeof(summary.ssndChunk ));
-
-	// tlk I am not completely convinced that this will work
-	// on a MAC. but anyhow the whole AIFC data is bogus and
-	// all we try to do here is unit test the AIFCDescriptor
-	// Get/Setsummary modules !!! 1999, 4, 21
-  }
-
-  #define SWAPSUMMARY(summary) SwapSummary(summary);
-//#endif
+#if defined(_WIN32)
+#define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,4); ptr += 4; }
+#define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 4); SwapBytes(ptr,2); ptr += 2; }
+#define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
+#else
+#define WRITE_LONG(ptr, val) { memcpy(ptr, val, 4); ptr += 4; }
+#define WRITE_SHORT(ptr, val) { memcpy(ptr, val, 4); ptr += 2; }
+#define WRITE_CHARS(ptr, val, len) { memcpy(ptr, val, len); ptr += len; }
+#endif
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -260,40 +216,80 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 					CreateInstance(IID_IAAFAIFCDescriptor, 
 								   (IUnknown **)&pAIFCDesc));		
 
-		AIFCSummary summary;
-		memset(&summary, 0, sizeof(summary)); // initialize all of the bytes...
-		
-		strcpy(summary.formChunk.ckID , "FORM");
-		strcpy(summary.formChunk.formType , "AIFC");
-		summary.formChunk.ckDataSize = sizeof(AIFCSummary) - 8;
-		strcpy(summary.commChunk.ckID, "COMM");
-		summary.commChunk.ckDataSize = sizeof(CommonChunk);
-		summary.commChunk.numChannels = 1;
-		summary.commChunk.numSampleFrames = 0;
-		summary.commChunk.sampleSize = 16;
-		summary.commChunk.sampleRate[0] = 0x40;
-		summary.commChunk.sampleRate[1] = 0x0E;
-		summary.commChunk.sampleRate[2] = 0xac;
-		summary.commChunk.sampleRate[3] = 0x44;
-		summary.commChunk.sampleRate[4] = 0x0;
-		summary.commChunk.sampleRate[5] = 0x0;
-		summary.commChunk.sampleRate[6] = 0x0;
-		summary.commChunk.sampleRate[7] = 0x0;
-		summary.commChunk.sampleRate[8] = 0x0;
-		summary.commChunk.sampleRate[9] = 0x0;
-		strcpy(summary.commChunk.compressionType, "NONE");
-		strcpy(summary.commChunk.compressionName, "Not compressed");
-		summary.commChunk.compNameLength = strlen(summary.commChunk.compressionName );
+//		AIFCSummary summary;
+		unsigned char	writeBuf[SUMMARY_SIZE], *writePtr;
+		aafUInt32		longVal, lZero = 0, n;
+		aafUInt16		shortVal, sZero = 0;
+		static char *compressionName = "Not compressed";
+		// Form Header
+		// typedef struct tAIFCFORMATCHUNK
+		// {
+		//		char	ckID[4];		// "FORM"
+		// 		long	ckDataSize;
+		// 		char	formType[4];	// "AIFC"
+		// } FormAIFCChunk;
+		writePtr = writeBuf;
+		WRITE_CHARS(writePtr, "FORM", 4);
+		WRITE_CHARS(writePtr, "AIFC", 4);
+		longVal = sizeof(writeBuf) - 8;
+		WRITE_LONG(writePtr, &longVal);
 
-		strcpy(summary.ssndChunk.ckID, "SSND");
-		summary.ssndChunk.ckDataSize = 0;
-		summary.ssndChunk.offset = 0;
-		summary.ssndChunk.soundData = 0;
+		// COMM Chunk
+		// typedef struct tCommonChunk
+		// {
+		// 		char			ckID[4];		// "COMM"
+		// 		long			ckDataSize;
+		// 		short			numChannels;
+		// 		unsigned long	numSampleFrames;
+		// 		short			sampleSize;
+		// 		unsigned char	sampleRate[10];	// This should be IEEE floating point number
+		// 		char			compressionType[4];
+		// 		unsigned char	compNameLength;
+		// 		char			compressionName[15];
+		// } CommonChunk;
+		WRITE_CHARS(writePtr, "COMM", 4);	// ckID
+		longVal = 46;	// sizeof(CommonChunk) with no padding
+		WRITE_LONG(writePtr, &longVal);		// ckDataSize
+		shortVal = 1;
+		WRITE_SHORT(writePtr, &shortVal);	// numChannels
+		WRITE_LONG(writePtr, &lZero);		// numSampleFrames
+		shortVal = 16;
+		WRITE_SHORT(writePtr, &shortVal);	// sampleSize
+		*writePtr++ = 0x40;					// SampleRate
+		*writePtr++ = 0x0E;
+		*writePtr++ = (char)0xac;
+		*writePtr++ = 0x44;
+		*writePtr++ = 0x0;
+		*writePtr++ = 0x0;
+		*writePtr++ = 0x0;
+		*writePtr++ = 0x0;
+		*writePtr++ = 0x0;
+		*writePtr++ = 0x0;
+		WRITE_CHARS(writePtr, "NONE", 4);	// CompressionType
+		*writePtr++ = strlen(compressionName);
+		WRITE_CHARS(writePtr, compressionName, strlen(compressionName)); // compressionName
+		for(n = 15 - strlen(compressionName); n >= 1; n--)
+			*writePtr++ = 0;	// Chunks must not be an odd length
+
+		// Sound Chunk
+		// typedef struct tSoundDataChunk
+		// {
+		// 	char			ckID[4];		// "SSND"
+		// 	long			ckDataSize;
+		// 	unsigned long	offset;
+		// 	unsigned long	blockSize;
+		// 	char			soundData;
+		// } SoundDataChunk;
+		WRITE_CHARS(writePtr, "SSND", 4);		// ckID
+		WRITE_LONG(writePtr, &lZero);			// ckDataSize
+		WRITE_LONG(writePtr, &lZero);			// offset
+		WRITE_LONG(writePtr, &lZero);			// blockSize
+		// Check that writePtr-writeBuf == sizeof(writeBuf);
 
 		// NOTE: The elements in the summary structure need to be byte swapped
 		// on Big Endian system (i.e. the MAC).
-		SWAPSUMMARY(summary)
-		checkResult(pAIFCDesc->SetSummary(sizeof(AIFCSummary), (aafDataValue_t)&summary));
+//		SWAPSUMMARY(summary)
+		checkResult(pAIFCDesc->SetSummary(SUMMARY_SIZE, (aafDataValue_t)writeBuf));
 
 		checkResult(pAIFCDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc));
 		checkResult(pSourceMob->SetEssenceDescriptor(pEssDesc));
@@ -367,26 +363,18 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		// if there is an Essence Descriptor then it MUST be an (essence) AIFC Descriptor
 		checkResult(pEssDesc->QueryInterface(IID_IAAFAIFCDescriptor, (void **) &pAIFCDesc));
 
-		AIFCSummary summary;
+		unsigned char summary[SUMMARY_SIZE];
 	    aafUInt32		size = 0;
 
 		checkResult(pAIFCDesc->GetSummaryBufferSize(&size));
-		checkExpression(size == sizeof(AIFCSummary), AAFRESULT_TEST_FAILED);
+		checkExpression(size == sizeof(summary), AAFRESULT_TEST_FAILED);
 
 
 		checkResult(pAIFCDesc->GetSummary(size, (aafDataValue_t)&summary));
 	
-		// NOTE: The elements in the summary structure need to be byte swapped
-		//       on Big Endian system (i.e. the MAC).
-	// Result depends upon format of the file AND the current machine, not just the current machine.
-		if(summary.formChunk.ckID[0] != 'F')
-		{
-			SwapSummary(summary);
-		}
-
-		checkExpression((strncmp(summary.commChunk.ckID, "COMM", 4) == 0) &&
-						(strncmp(summary.formChunk.ckID, "FORM", 4) == 0) &&
-						(strncmp(summary.ssndChunk.ckID, "SSND", 4) == 0),
+		checkExpression((strncmp((char*)summary+FORM_HDR_SIZE, "COMM", 4) == 0) &&
+						(strncmp((char*)summary, "FORM", 4) == 0) &&
+						(strncmp((char*)summary+FORM_HDR_SIZE+COMM_CHUNK_SIZE, "SSND", 4) == 0),
 		                AAFRESULT_TEST_FAILED);
 	}
 	catch (HRESULT& rResult)
