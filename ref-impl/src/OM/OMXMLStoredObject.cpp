@@ -28,13 +28,16 @@
 // @doc OMINTERNAL
 #include "OMXMLStoredObject.h"
 
+#include "OMRawStorage.h"
+
   // @mfunc Open the root <c OMXMLStoredObject> in the raw storage
   //        <p rawStorage> for reading only.
   //   @parm The raw storage in which to open the file.
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
-OMXMLStoredObject* OMXMLStoredObject::openRead(OMRawStorage* /* rawStorage */)
+OMXMLStoredObject* OMXMLStoredObject::openRead(OMRawStorage* ANAME(rawStorage))
 {
   TRACE("OMXMLStoredObject::openRead");
+  PRECONDITION("Compatible raw storage", rawStorage->isReadable());
   ASSERT("Unimplemented code not reached", false); // tjb TBS
   return 0;
 }
@@ -44,9 +47,11 @@ OMXMLStoredObject* OMXMLStoredObject::openRead(OMRawStorage* /* rawStorage */)
   //   @rdesc An <c OMXMLStoredObject> representing the root object.
   //        <p rawStorage> for modification.
 OMXMLStoredObject* OMXMLStoredObject::openModify(
-                                                OMRawStorage* /* rawStorage */)
+                                               OMRawStorage* ANAME(rawStorage))
 {
   TRACE("OMXMLStoredObject::openModify");
+  PRECONDITION("Compatible raw storage",
+                         rawStorage->isReadable() && rawStorage->isWritable());
   ASSERT("Unimplemented code not reached", false); // tjb TBS
   return 0;
 }
@@ -61,6 +66,8 @@ OMXMLStoredObject* OMXMLStoredObject::createModify(OMRawStorage* rawStorage,
                                                    const OMByteOrder byteOrder)
 {
   TRACE("OMXMLStoredObject::createModify");
+  PRECONDITION("Compatible raw storage",
+                         rawStorage->isReadable() && rawStorage->isWritable());
   OMXMLStoredObject* result = new OMXMLStoredObject(rawStorage, byteOrder);
   ASSERT("Valid heap pointer", result != 0);
   return result;
