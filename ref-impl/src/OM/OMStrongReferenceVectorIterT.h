@@ -238,6 +238,25 @@ OMStrongReferenceVectorIterator<ReferencedObject>::setValue(
   return result;
 }
 
+  // @mfunc Set the <p ReferencedObject> in the associated
+  //        <c OMStrongReferenceVectorProperty> at the position currently
+  //        designated by this <c OMStrongReferenceVectorIterator> to 0.
+  //        The previous <p ReferencedObject>, if any, is returned.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The previous <p ReferencedObject> if any, otherwise 0.
+template <typename ReferencedObject>
+ReferencedObject*
+OMStrongReferenceVectorIterator<ReferencedObject>::clearValue(void)
+{
+  TRACE("OMStrongReferenceVectorIterator<ReferencedObject>::clearValue");
+
+  VectorElement& element = _iterator.value();
+
+  ReferencedObject* result = element.setValue(0);
+
+  return result;
+}
+
   // @mfunc Return the index of the <p ReferencedObject> in the
   //        associated <c OMStrongReferenceVectorProperty> at the position
   //        currently designated by this

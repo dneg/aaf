@@ -240,6 +240,25 @@ OMWeakReferenceSetIterator<ReferencedObject>::setValue(
   return result;
 }
 
+  // @mfunc Set the <p ReferencedObject> in the associated
+  //        <c OMWeakReferenceSetProperty> at the position currently
+  //        designated by this <c OMWeakReferenceSetIterator> to 0.
+  //        The previous <p ReferencedObject>, if any, is returned.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The previous <p ReferencedObject> if any, otherwise 0.
+template <typename ReferencedObject>
+ReferencedObject*
+OMWeakReferenceSetIterator<ReferencedObject>::clearValue(void)
+{
+  TRACE("OMWeakReferenceSetIterator<ReferencedObject>::clearValue");
+
+  SetElement& element = _iterator.value();
+
+  ReferencedObject* result = element.setValue(0);
+
+  return result;
+}
+
   // @mfunc Return the <p Key> of the <p ReferencedObject> in the
   //        associated <c OMWeakReferenceSetProperty> at the position
   //        currently designated by this <c OMWeakReferenceSetIterator>.

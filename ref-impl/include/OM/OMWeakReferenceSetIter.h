@@ -142,6 +142,12 @@ public:
     //          existing <p ReferencedObject>.
    virtual ReferencedObject* setValue(const ReferencedObject* newObject);
 
+    // @cmember Set the <p ReferencedObject> in the associated
+    //          <c OMWeakReferenceSetProperty> at the position currently
+    //          designated by this <c OMWeakReferenceSetIterator> to 0.
+    //          The previous <p ReferencedObject>, if any, is returned.
+   virtual ReferencedObject* clearValue(void);
+
     // @cmember Return the <p Key> of the <p ReferencedObject> in the
     //          associated <c OMWeakReferenceSetProperty> at the position
     //          currently designated by this <c OMWeakReferenceSetIterator>.
