@@ -1,0 +1,316 @@
+#c *********************************************************************
+#c
+#c $Id$ $Name$
+#c
+#c The contents of this file are subject to the AAF SDK Public
+#c Source License Agreement (the "License"); You may not use this file
+#c except in compliance with the License.  The License is available in
+#c AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+#c Association or its successor.
+#c
+#c Software distributed under the License is distributed on an "AS IS"
+#c basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+#c the License for the specific language governing rights and limitations
+#c under the License.
+#c
+#c The Original Code of this file is Copyright 1998-2004, Licensor of the
+#c AAF Association.
+#c
+#c The Initial Developer of the Original Code of this file and the
+#c Licensor of the AAF Association is Avid Technology.
+#c All rights reserved.
+#c
+#c *********************************************************************
+#startm .this-module 0
+AAFTimelineMobSlot2\
+#endm
+#c
+#startm .parent-module 0
+AAFMobSlot\
+#endm
+#c
+#c #import ./AAFMobSlot.exp
+AD_HEAD
+AD_IDL(//
+// The IAAFTimelineMobSlot interface is implemented by objects which
+// contain time-varying timeline essence.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// Types required by this module:
+//
+// aafBool
+// aafRational_t
+// aafPosition_t
+// aafTrackID_t
+//)
+AD_CLASS_UUID(c7fae88b, ce9f, 445b, 89, 7f, 46, 17, 51, 2e, b2, 31)
+
+AD_DEFAULT_UUID(db347978, ba72, 4bdf, a1, 88, 81, 72, ea, 5c, 5f, 00)
+AD_XCLASS_BEGIN(Concrete, StoredObject)
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, empty
+  // IAAFTimelineMobSlot2-supporting object.  This method must be
+  // called after allocation\, and before any other method can be
+  // called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
+
+
+AD_METHOD1(GetEditRate,
+		   [out\\\,retval], 
+		   aafRational_t *, 
+		   pEditRate, 
+		   Edit rate property value,
+		   This method will get the edit rate for this mob slot.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pEditRate pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pEditRate arg is NULL.)
+
+
+AD_METHOD1(SetEditRate,
+		   [in], 
+		   aafRational_constref, 
+		   editRate, 
+		   Edit rate property value,
+		   This method will get set edit rate for this mob slot.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
+
+
+AD_METHOD1(GetOrigin,
+		   [out\\\,retval],
+		   aafPosition_t *,
+		   pOrigin,
+		   Origin property value,
+		   This method will return the origin of this mob slot.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pOrigin pointer is valid.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pOrigin arg is NULL.)
+
+
+AD_METHOD1(SetOrigin,
+		   [in],
+		   aafPosition_t,
+		   origin,
+		   Origin property value,
+		   This method will set the origin of this mob slot.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\\\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\).
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - This object has not yet had Initialize\\\(\\\) called on it.)
+
+AD_METHOD1(GetMarkIn,
+		   [out\\\,retval],
+		   aafPosition_t *,
+		   result,
+		   MarkIn property value,
+  Gets the MarkIn property of this TimelineMobSlot.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the result pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *result.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMarkIn arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+AD_METHOD1(SetMarkIn,
+		   [in],
+		   aafPosition_t,
+		   value,
+		   MarkIn property value,
+
+  Sets the MarkIn property of this TimelineMobSlot.
+  // This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  //
+  // If this method fails the MarkIn property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+AD_METHOD1(GetMarkOut,
+		   [out\\\,retval],
+		   aafPosition_t *,
+		   result,
+		   MarkOut property value,
+  Gets the MarkOut property of this TimelineMobSlot.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the result pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *result.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pMarkIn arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+AD_METHOD1(SetMarkOut,
+		   [in],
+		   aafPosition_t,
+		   value,
+		   MarkOut property value,
+
+  Sets the MarkOut property of this TimelineMobSlot.
+  // This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  //
+  // If this method fails the MarkOut property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+AD_METHOD1(GetUserPos,
+		   [out\\\,retval],
+		   aafPosition_t *,
+		   result,
+		   UserPos property value,
+  Gets the UserPos property of this TimelineMobSlot.
+  // This property is optional.
+  // 
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  // - the result pointer is valid.
+  // - the property is present.
+  // 
+  // If this method fails nothing will be written to *result.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - result arg is NULL.
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - the property is not present.)
+
+AD_METHOD1(SetUserPos,
+		   [in],
+		   aafPosition_t,
+		   value,
+		   UserPos property value,
+
+  Sets the UserPos property of this TimelineMobSlot.
+  // This property is optional.
+  //
+  // Succeeds if all of the following are true:
+  // - the object is initialized.
+  //
+  // If this method fails the UserPos property will not be
+  // changed.
+  //
+  // This method will return the following codes:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \\\(This is the only code indicating success.\\\)
+  //
+  // AAFRESULT_NOT_INITIALIZED
+  //   - the object is not initialized.)
+
+AD_XCLASS_END(Concrete, StoredObject)
