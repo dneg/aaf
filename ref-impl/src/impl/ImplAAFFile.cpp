@@ -242,6 +242,9 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 	if (! pFileName)
 		return AAFRESULT_NULL_PARAM;
 
+	if (! pIdent)
+		return AAFRESULT_NULL_PARAM;
+
 	if (modeFlags)
 		return AAFRESULT_BAD_FLAGS;
 
@@ -269,7 +272,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		_byteOrder = hostByteOrder();
 		_head->SetByteOrder(_byteOrder);
 
-		 //JeffB!!! We must decide whether def-only files have a content storage
+		//JeffB!!! We must decide whether def-only files have a content storage
 		checkResult(_head->GetContentStorage(&pCStore));
 		pCStore->ReleaseReference(); // need to release this pointer!
 
@@ -280,8 +283,6 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		_open = AAFTrue;
 		_openType = kOmCreate;
 		GetRevision(&_setrev);
-
-
 	}
 	catch (AAFRESULT &rc)
 	{
@@ -315,10 +316,66 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 	if (! _initialized)
 		return AAFRESULT_NOT_INITIALIZED;
 
-
 	if (_open)
 		return AAFRESULT_ALREADY_OPEN;
 
+	if (! pIdent)
+		return AAFRESULT_NULL_PARAM;
+
+	pS = ImplAAFSession::GetInstance();
+	assert (pS);
+
+	memcpy (&_ident, pIdent, sizeof (_ident));
+
+	try
+	{
+		// Create the header for the OM manager to use as the root
+		// for the file.
+		_head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
+		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
+		
+		// Make sure the header is initialized with our previously created
+		// dictionary.
+		_head->SetDictionary(_dictionary);
+
+		// Add the ident to the header.
+		checkResult(_head->AddIdentificationObject(&_ident));
+		  
+		// Set the byte order
+		_byteOrder = hostByteOrder();
+		_head->SetByteOrder(_byteOrder);
+
+		//JeffB!!! We must decide whether def-only files have a content storage
+		checkResult(_head->GetContentStorage(&pCStore));
+		pCStore->ReleaseReference(); // need to release this pointer!
+
+		// Attempt to create the file.
+		_file = OMFile::openNewTransient(_dictionary, _byteOrder, _head);
+		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
+
+		_open = AAFTrue;
+		_openType = kOmTransient;
+		GetRevision(&_setrev);
+	}
+	catch (AAFRESULT &rc)
+	{
+		stat = rc;
+
+		// Cleanup after failure.
+		if (_file)
+		{
+			_file->close();
+			_file = 0;
+		}
+
+		if (NULL == _head)
+		{
+			_head->ReleaseReference();
+			_head = 0;
+		}
+	}
+
+	return stat;
 	pS = ImplAAFSession::GetInstance();
 	assert (pS);
 
