@@ -12,10 +12,6 @@
 #include "ImplAAFPropValData.h"
 #endif
 
-#ifndef __ImplAAFPropValWeakRefVect_h__
-#include "ImplAAFPropValWeakRefVect.h"
-#endif
-
 #ifndef __ImplAAFTypeDefVariableArray_h__
 #include "ImplAAFTypeDefVariableArray.h"
 #endif
