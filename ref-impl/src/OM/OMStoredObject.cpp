@@ -181,25 +181,25 @@ void OMStoredObject::save(OMStoredPropertySetIndex* index)
 
   // Write byte order flag.
   //
-  short int byteOrder = hostByteOrder();
+  OMByteOrder byteOrder = hostByteOrder();
   writeToStream(_indexStream, &byteOrder, sizeof(byteOrder));
 
   // Write version number.
   //
-  int version = 2;
+  OMUInt32 version = 2;
   writeToStream(_indexStream, &version, sizeof(version));
   
   // Write count of entries.
   //
-  size_t entries = index->entries();
+  OMUInt32 entries = index->entries();
   writeToStream(_indexStream, &entries, sizeof(entries));
   
   // Write entries.
   //
   OMPropertyId propertyId;
-  int type;
-  size_t offset;
-  size_t length;
+  OMUInt32 type;
+  OMUInt32 offset;
+  OMUInt32 length;
   size_t context = 0;
   for (size_t i = 0; i < entries; i++) {
     index->iterate(context, propertyId, type, offset, length);
@@ -218,29 +218,29 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
 
   // Read byte order flag.
   //
-  short int byteOrder;
+  OMByteOrder byteOrder;
   readFromStream(_indexStream, &byteOrder, sizeof(byteOrder));
   ASSERT("Valid byte order flag", byteOrder == hostByteOrder());
 
   // Read version number.
   //
-  int version;
+  OMUInt32 version;
   readFromStream(_indexStream, &version, sizeof(version));
   ASSERT("Valid version number", version > 0);
   ASSERT("Recognized version number", version == 2);
   
   // Read count of entries.
   //
-  size_t entries;
-  readFromStream(_indexStream, &entries, sizeof(size_t));
+  OMUInt32 entries;
+  readFromStream(_indexStream, &entries, sizeof(entries));
   OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
   
   // Read entries.
   //
   OMPropertyId propertyId;
-  int type;
-  size_t offset;
-  size_t length;
+  OMUInt32 type;
+  OMUInt32 offset;
+  OMUInt32 length;
   for (size_t i = 0; i < entries; i++) {
     readFromStream(_indexStream, &propertyId, sizeof(propertyId));
     readFromStream(_indexStream, &type, sizeof(type));
@@ -266,9 +266,9 @@ void OMStoredObject::restore(OMPropertySet& properties)
   size_t entries = _index->entries();
   
   OMPropertyId propertyId;
-  int type;
-  size_t offset;
-  size_t length;
+  OMUInt32 type;
+  OMUInt32 offset;
+  OMUInt32 length;
   size_t context = 0;
   for (size_t i = 0; i < entries; i++) {
     _index->iterate(context, propertyId, type, offset, length);
@@ -571,18 +571,18 @@ void OMStoredObject::save(const OMStoredVectorIndex* vector,
 
   // Write the high water mark.
   //
-  size_t highWaterMark = vector->highWaterMark();
+  OMUInt32 highWaterMark = vector->highWaterMark();
   writeToStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
 
   // Write the count of elements.
   //
-  size_t entries = vector->entries();
+  OMUInt32 entries = vector->entries();
   writeToStream(vectorIndexStream, &entries, sizeof(entries));
 
   // Write the element names.
   //
   size_t context = 0;
-  size_t name;
+  OMUInt32 name;
   for (size_t i = 0; i < entries; i++) {
     vector->iterate(context, name);
     writeToStream(vectorIndexStream, &name, sizeof(name));
@@ -615,12 +615,12 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
 
   // Read the high water mark.
   //
-  size_t highWaterMark;
+  OMUInt32 highWaterMark;
   readFromStream(vectorIndexStream, &highWaterMark, sizeof(highWaterMark));
 
   // Read the count of elements.
   //
-  size_t entries;
+  OMUInt32 entries;
   readFromStream(vectorIndexStream, &entries, sizeof(entries));
 
   // Create an index.
@@ -630,7 +630,7 @@ void OMStoredObject::restore(OMStoredVectorIndex*& vector,
   // Read the element names, placing them in the index.
   //
   for (size_t i = 0; i < entries; i++) {
-    size_t name;
+    OMUInt32 name;
     readFromStream(vectorIndexStream, &name, sizeof(name));
     vectorIndex->insert(i, name);
   }
