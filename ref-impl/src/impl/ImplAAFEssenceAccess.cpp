@@ -45,7 +45,7 @@
 #include "AAFPlugin.h"
 #endif
 
-#include "AAFPluginManager.h"
+#include "ImplAAFPluginManager.h"
 #include "aafUtils.h"
 #include "aafCvt.h"
 #include "aafUtils.h"
@@ -72,6 +72,7 @@ extern "C" const IID IID_IAAFEssenceCodec = { 0x3631F7A2, 0x9121, 0x11D2, { 0x80
 extern "C" const CLSID CLSID_AAFDefaultStream;
 extern "C" const IID IID_IAAFEssenceSampleStream = { 0x63E12802, 0xCCE5, 0x11D2, { 0x80, 0x98, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 extern "C" const IID IID_IAAFEssenceContainer = {0xa7337031,0xc103,0x11d2,{0x80,0x8a,0x00,0x60,0x08,0x14,0x3e,0x6f}};
+extern "C" const IID IID_IAAFPlugin = {0x3631F7A4,0x9121,0x11d2,{0x80,0x88,0x00,0x60,0x08,0x14,0x3e,0x6f}};
 
 const CLSID CLSID_AAFEssenceDataStream = { 0x42A63FE1, 0x968A, 0x11d2, { 0x80, 0x89, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
 const IID IID_IAAFEssenceDataStream = { 0xCDDB6AB1, 0x98DC, 0x11d2, { 0x80, 0x8a, 0x00, 0x60, 0x08, 0x14, 0x3e, 0x6f } };
@@ -105,7 +106,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 	ImplAAFSourceMob	*fileMob;
 	ImplAAFMobSlot		*tmpSlot;
 	ImplAAFHeader		*head;
-	AAFPluginManager	*plugins;
+	ImplAAFPluginManager *plugins;
 	aafCodecMetaInfo_t	metaInfo;
 	ImplAAFFileDescriptor *mdes;
 	ImplAAFDictionary	*dict;
@@ -147,9 +148,11 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		if(!EqualAUID(&codecID, &NoCodec))
 		{
 			IUnknown	*iAccess;
+			IAAFPlugin	*plugin;
 
 			plugins = ImplAAFSession::GetInstance()->GetPluginManager();
-			CHECK(plugins->GetCodecInstance(_codecID, _variety, &_codec));
+			CHECK(plugins->GetPluginInstance(_codecID, /*_variety*/ &plugin));
+			CHECK(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&_codec));
 
 			createBlock.mediaKind = &mediaKind;
 			createBlock.subTrackNum = 0;		//!!!
@@ -181,22 +184,67 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 			
 			ImplAAFPluggableDef	*pluggable;
 			ImplAAFContainerDef	*containerDef;
+			IAAFPlugin			*plug;
+			IAAFPluggableDef	*pluggableDef;
+			IAAFDictionary		*dictInterface;
+			IUnknown			*pUnknown;
 
 			CHECK(head->GetDictionary (&dict));	//!!!Only makes essence in the current file?
 			if(dict->LookupPluggableDef (&_fileFormat, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
 			{
+				
+				//!!!This should call into the pluginmanager instead of using if?
 				if(EqualAUID(&_fileFormat, &ContainerAAF))
 				{
 					CHECK(MakeAAFContainerDef(&containerDef));
 					CHECK(dict->RegisterPluggableDefinition (containerDef));
 				}
-				else if(EqualAUID(&_fileFormat, &ContainerFile))
+				else
 				{
-					CHECK(MakeFileContainerDef(&containerDef));
-					CHECK(dict->RegisterPluggableDefinition (containerDef));
+					
+					pUnknown = static_cast<IUnknown *> (dict->GetContainer());
+					CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+					CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
+					CHECK(plug->GetPluggableDefinition (dictInterface, &pluggableDef));
+					//					CHECK(pluggableDef->QueryInterface(IID_IAAFContainerDef, (void **)&containerInterface));
+					//					containerDef = static_cast<ImplAAFContainerDef*> (rootInterface->GetRepObject ());
+					CHECK(dictInterface->RegisterPluggableDefinition (pluggableDef));
+					//!!!Remember to do all releases here!
 				}
-				//!!!Else error
 			}
+
+			if(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable) != AAFRESULT_SUCCESS)
+			{
+				
+				
+				pUnknown = static_cast<IUnknown *> (dict->GetContainer());
+				CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+				CHECK(plugins->GetPluginInstance(codecID, &plug));
+				CHECK(plug->GetPluggableDefinition (dictInterface, &pluggableDef));
+				//					CHECK(pluggableDef->QueryInterface(IID_IAAFContainerDef, (void **)&containerInterface));
+				//					containerDef = static_cast<ImplAAFContainerDef*> (rootInterface->GetRepObject ());
+				CHECK(dictInterface->RegisterPluggableDefinition (pluggableDef));
+				//!!!Remember to do all releases here!
+				CHECK(dict->LookupPluggableDef (&codecID, (ImplAAFPluggableDef **)&pluggable));
+			}
+
+			aafInt32	numExisting;
+			CHECK(pluggable->GetNumDescriptors(&numExisting));
+			if(numExisting == 0)	// If pluginDescriptor is not in place
+			{
+				IAAFPluginDescriptor	*pluginDesc;
+				IAAFPluggableDef		*pluggableInterface;
+
+				pUnknown = static_cast<IUnknown *> (dict->GetContainer());
+				CHECK(pUnknown->QueryInterface(IID_IAAFDictionary, (void **)&dictInterface));
+				CHECK(plugins->GetPluginInstance(codecID, &plug));
+				CHECK(plug->GetDescriptor (dictInterface, &pluginDesc));
+				pUnknown = static_cast<IUnknown *> (pluggable->GetContainer());
+				CHECK(pUnknown->QueryInterface(IID_IAAFPluggableDef, (void **)&pluggableInterface));
+				CHECK(pluggableInterface->AppendPluginDescriptor (pluginDesc));
+				//!!!Remember to do all releases here!
+			}
+
 			CHECK(mdes->SetContainerFormat (&_fileFormat));
 			CHECK(mdes->SetSampleRate(&sampleRate));
 			CHECK(fileMob->SetEssenceDescriptor(mdes));
@@ -238,12 +286,15 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		else
 		{
 			IAAFEssenceContainer	*container;
+			IAAFPlugin				*plug;
+
 			_destination->GetPathBufLen(&buflen);
 			nameBuf = new wchar_t[buflen];
 			if(nameBuf == NULL)
 				RAISE(AAFRESULT_NOMEMORY);
 			CHECK(_destination->GetPath(nameBuf, buflen));
-			CHECK(plugins->GetContainerInstance(_fileFormat, &container));
+			CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
+			CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
 			CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
 			delete nameBuf;
 			nameBuf = NULL;
@@ -466,7 +517,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafSourceRef_t	fileRef;
 	aafInt16		numCh;
 	ImplAAFEssenceData		*essenceData = NULL;
-	AAFPluginManager	*plugins;
+	ImplAAFPluginManager *plugins;
 	wchar_t				*nameBuf = NULL;
 	aafInt32			buflen;
 	aafUID_t			essenceDescClass;
@@ -503,7 +554,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 		plugins = ImplAAFSession::GetInstance()->GetPluginManager();
 		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
-		CHECK(plugins->GetCodecInstance(CLSID_AAFWaveCodec, _variety, &_codec));
+//!!!@		CHECK(plugins->GetCodecInstance(CLSID_AAFWaveCodec, _variety, &_codec));
 
 		IUnknown	*iFileMob, *iAccess;
 
@@ -515,28 +566,35 @@ AAFRESULT STDMETHODCALLTYPE
 		ImplEnumAAFEssenceData	*myEnum;
 		ImplAAFEssenceData		*testData;
 		ImplAAFDictionary		*dict;
-		ImplAAFPluggableDef		*pluggable;
-		aafBool					found = AAFFalse;
+		ImplAAFContainerDef		*containerDef;
+		aafBool					found = AAFFalse, isIdentified;
 		aafUID_t				testMobID, testFormat;
 
 		//!!!!Currently, doesn't handle external AAF files
 		CHECK(_mdes->GetContainerFormat (&testFormat));
+		_fileFormat = testFormat;
 		CHECK(fileMob->MyHeadObject(&dataHead));	// !!!Make this be in the data file
 		CHECK(dataHead->GetDictionary (&dict));
-		CHECK(dict->LookupPluggableDef (&testFormat, &pluggable));
-
-		CHECK(fileMob->GetMobID(&fileMobID));
-		CHECK(dataHead->EnumEssenceData (&myEnum));
-		while(myEnum->NextOne (&testData) == AAFRESULT_SUCCESS  && !found)
+		CHECK(dict->LookupPluggableDef (&testFormat, (ImplAAFPluggableDef**)&containerDef));
+//		containerDef = static_cast<ImplAAFContainerDef*>(pluggable);
+		CHECK(containerDef->EssenceIsIdentified (&isIdentified));
+		if(isIdentified)
 		{
-			CHECK(testData->GetFileMobID (&testMobID));
-			if(EqualAUID(&fileMobID, &testMobID))
+			CHECK(fileMob->GetMobID(&fileMobID));
+			CHECK(dataHead->EnumEssenceData (&myEnum));
+			while(myEnum->NextOne (&testData) == AAFRESULT_SUCCESS  && !found)
 			{
-				found = AAFTrue;
-				essenceData = testData;
+				CHECK(testData->GetFileMobID (&testMobID));
+				if(EqualAUID(&fileMobID, &testMobID))
+				{
+					found = AAFTrue;
+					essenceData = testData;
+				}
 			}
 		}
-		if(found)
+		else
+			found = AAFFalse;
+		if(found == AAFTrue)
 		{
 			IAAFEssenceDataStream	*edStream;
 			IUnknown				*edUnknown;
@@ -562,12 +620,15 @@ AAFRESULT STDMETHODCALLTYPE
 			while(!found && (enumLocate->NextOne (&pLoc) == AAFRESULT_SUCCESS))
 			{
 				IAAFEssenceContainer	*container;
+				IAAFPlugin				*plug;
+				
 				pLoc->GetPathBufLen(&buflen);
 				nameBuf = new wchar_t[buflen];
 				if(nameBuf == NULL)
 					RAISE(AAFRESULT_NOMEMORY);
 				CHECK(pLoc->GetPath(nameBuf, buflen));
-				CHECK(plugins->GetContainerInstance(_fileFormat, &container));
+				CHECK(plugins->GetPluginInstance(_fileFormat, &plug));
+				CHECK(plug->QueryInterface(IID_IAAFEssenceContainer, (void **)&container));
 
 				if(openMode == kMediaOpenReadOnly)
 				{
@@ -1657,6 +1718,7 @@ AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFContainerDef **result
 		CHECK(obj->SetAUID(&uid));
 		CHECK(obj->SetName(L"AAF Container"));
 		CHECK(obj->SetDescription(L"Essence is in an AAF file."));
+		CHECK(obj->SetEssenceIsIdentified(AAFTrue));
 		*result = obj;
 	}
 	XEXCEPT
@@ -1666,30 +1728,30 @@ AAFRESULT ImplAAFEssenceAccess::MakeAAFContainerDef(ImplAAFContainerDef **result
 }
 
 
-AAFRESULT ImplAAFEssenceAccess::MakeFileContainerDef(ImplAAFContainerDef **result)
-{
-	ImplAAFContainerDef	*obj;
-	aafUID_t			uid;
-	
-	if(result == NULL)
-		return(AAFRESULT_NULL_PARAM);
-	XPROTECT()
-	{
-		obj = (ImplAAFContainerDef *)CreateImpl (CLSID_AAFContainerDef);
-		if(obj == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-		uid = ContainerFile;
-		CHECK(obj->SetAUID(&uid));
-		CHECK(obj->SetName(L"Raw file Container"));
-		CHECK(obj->SetDescription(L"Essence is in a non-container file."));
-		*result = obj;
-	}
-	XEXCEPT
-	XEND
-	
-	return AAFRESULT_SUCCESS;
-}
-
+//AAFRESULT ImplAAFEssenceAccess::MakeFileContainerDef(ImplAAFContainerDef **result)
+//{	//!!! Get rid of this function
+//	ImplAAFContainerDef	*obj;
+//	aafUID_t			uid;
+//	
+//	if(result == NULL)
+//		return(AAFRESULT_NULL_PARAM);
+//	XPROTECT()
+//	{
+//		obj = (ImplAAFContainerDef *)CreateImpl (CLSID_AAFContainerDef);
+//		if(obj == NULL)
+//			RAISE(AAFRESULT_NOMEMORY);
+//		uid = ContainerFile;
+//		CHECK(obj->SetAUID(&uid));
+//		CHECK(obj->SetName(L"Raw file Container"));
+//		CHECK(obj->SetDescription(L"Essence is in a non-container file."));
+//		CHECK(obj->SetEssenceIsIdentified(AAFFalse));
+//		*result = obj;
+//	}
+//	XEXCEPT
+//	XEND
+//	
+//	return AAFRESULT_SUCCESS;
+//}
 
 
 
@@ -1881,234 +1943,6 @@ aafErr_t     AAFMedia::LocateMediaFile(
 	return (AAFRESULT_SUCCESS);
 }
 
-
-/************************
- * Function: SetupCodecInfo (INTERNAL)
- *
- * 		Attempt to open media in the current file.  This involves
- *		searching for the correct mobID in an AAF file.  The result
- *		is then passed to the correct codec (based upon the media
- *		descriptor) which determines if the media is valid.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-
-
- #define incrementListPtr(lp, t) lp = (t *) ((char *)lp + sizeof(t))
-
-/************************
- * VideoOpCount
- *
- * 		Returns the length of an operation list.  Loop through
- *		the list, looking for the end marker, counting the 
- *		loops.
- *
- * Argument Notes:
- *		If list is NULL, count is zero.
- *
- * ReturnValue:
- *		Count of operations in list.
- *
- * Possible Errors:
- *		None.
- */
-
-aafInt32 AAFMedia::VideoOpCount(
-				aafVideoMemOp_t *list)
-{
-	aafInt32 count = 0;
-
-	aafAssertValidFHdl(_mainFile);
-
-	while (list && list->opcode != kAAFVFmtEnd)
-	{
-		incrementListPtr(list, aafVideoMemOp_t);		/* point to next operation */
-		count++;	/* got another one! */
-	}
-	
-	return(count);
-}
-	
-/************************
- * VideoOpInit
- *
- * 		Sets a list to be empty.
- *
- * Argument Notes:
- *		'list' is a pointer to the head of an operation list.
- *		Insert an end marker in the head of the list.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		AAFRESULT_SUCCESS
- *		AAFRESULT_NULL_PARAM
- */
- 
-aafErr_t AAFMedia::VideoOpInit(
-				aafVideoMemOp_t *list)
-{
-	aafInt32 count = 0;
-
-	aafAssertValidFHdl(_mainFile);
-	aafAssert(list, _mainFile, AAFRESULT_NULL_PARAM);
-
-	list->opcode = kAAFVFmtEnd;
-	
-	return(AAFRESULT_SUCCESS);
-}
-
-/************************
- * VideoOpAppend
- *
- * 		Puts an operation in a list.
- *
- * Argument Notes:
- *		operation is a struct value, list is a pointer to
- *		the head of an operation list, force indicates whether 
- *		or not to overwrite a previously stored operation.  
- *		If force is kAAFForceOverwrite, then overwrite.
- *		If force is kAAFAppendIfAbsent, then don't do anything
- *		if the operation already exists.  maxLength is the
- *		number of items (including the end marker) that can
- *		be stored in 'list'
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		AAFRESULT_SUCCESS
- *		AAFRESULT_NULL_PARAM
- *		AAFRESULT_OPLIST_OVERFLOW
- */
- 
-aafErr_t AAFMedia::VideoOpAppend(
-				aafAppendOption_t force,
-				aafVideoMemOp_t item, 
-				aafVideoMemOp_t *list,
-				aafInt32 maxLength)
-{
-	aafVideoFmtOpcode_t savedOpcode;
-	aafInt32 count = 0;
-
-	aafAssertValidFHdl(_mainFile);
-	aafAssert(list, _mainFile, AAFRESULT_NULL_PARAM);
-
-	while (list->opcode != kAAFVFmtEnd &&
-		   list->opcode != item.opcode)
-	{
-		incrementListPtr(list, aafVideoMemOp_t);				/* point to next operation */
-		count++;
-	}
-	
-	/* if the number of items counted in the list plus
-	   the end marker is greater than or equal to the 
-	   maximum number of items allowed in the list, then
-	   return an overflow error, since there's no way to
-	   add the item to the list.  If the item matches a
-	   previous entry, then this error should not be raised
-	   unless the list is overflowing to begin with.
-	*/
-	
-	if ((count + 1) >= maxLength)
-		return(AAFRESULT_OPLIST_OVERFLOW);
-	
-	savedOpcode = list->opcode; /* why did the loop terminate? */
-	
-	/* At this time, 'list' points to either a previously
-	   stored operation, or the end marker.  If the force
-	   code is kAAFForceOverwrite, then write the item into
-	   the list regardless.  Otherwise, only write the item
-	   if 'list' is pointing at the end marker */
-	   
-	if (force == kAAFForceOverwrite || 
-		savedOpcode == kAAFVFmtEnd)
-	{
-		*list = item;
-		incrementListPtr(list, aafVideoMemOp_t);
-	}
-	
-	/* if the opcode is kAAFVFmtEnd, then the item wasn't found,
-	   so it was appended, overwriting the end marker. Now restore
-	   the end marker. We assume that 'list' has been incremented
-	   past the old end marker, which is why we have to use 
-	   'savedOpcode'. */
-	if (savedOpcode == kAAFVFmtEnd)
-		list->opcode = kAAFVFmtEnd;
-
-	
-	return(AAFRESULT_SUCCESS);
-}
-	
-/************************
- * VideoOpMerge
- *
- * 		Merges two lists.
- *
- * Argument Notes:
- *		source is a pointer to the head of the source list, 
- *		destination is a pointer to the head of a destination
- *		list. Force indicates whether 
- *		or not to overwrite previously stored operations.  
- *		If force is kAAFForceOverwrite, then overwrite.
- *		If force is kAAFAppendIfAbsent, then don't do anything
- *		if the operations already exist.  maxDestLength is the
- *		number of items (including the end marker) that can
- *		be stored in 'destination'
- *
- *		ASSUMPTION: destination points to enough memory to store
- *		the additional item!
- *
- * ReturnValue:
- *		'destination' will receive the merged operations.
- *
- *		The function returns an error code (see below).
- *
- * Possible Errors:
- *		AAFRESULT_SUCCESS
- *		AAFRESULT_NULL_PARAM
- *		AAFRESULT_OPLIST_OVERFLOW
- */
- 
-aafErr_t AAFMedia::VideoOpMerge(
-				aafAppendOption_t force,
-				aafVideoMemOp_t *source, 
-				aafVideoMemOp_t *destination,
-				aafInt32 maxDestLength)
-{
-
-	/* the algorithm will be simple for now (It's not efficient,
-	   n-squared, but should be okay given the small magnitude
-	   expected).  Loop through the source, appending the items
-	   one at a time into the destination, passing along 'force'. */
-	   
-	aafAssertValidFHdl(_mainFile);
-	aafAssert(source, _mainFile, AAFRESULT_NULL_PARAM);
-	aafAssert(destination, _mainFile, AAFRESULT_NULL_PARAM);
-
-	XPROTECT(_mainFile)
-	{
-		while (source->opcode != kAAFVFmtEnd)
-		{
-			CHECK(VideoOpAppend(force, *source,
-									destination, maxDestLength));
-			incrementListPtr(source, aafVideoMemOp_t);
-		}
-	}
-	XEXCEPT
-	XEND
-	
-	return(AAFRESULT_SUCCESS);
-}
-	
 /************************
  * SetStreamCacheSize
  *
@@ -2274,89 +2108,5 @@ aafErr_t AAFMedia::SourceGetVideoSignalType(aafVideoSignalType_t *signalType)
 	
 	*signalType = kVideoSignalNull;
 	return(AAFRESULT_SUCCESS);
-}
-
-/************************
- * Function: DisposeCodecPersist	(INTERNAL)
- *
- * 		This is a private callback from the omfsEndSession call.  Certain
- *		per-process data is allocated by the media layer, and needs to be
- *		released when the session ends.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-aafErr_t DisposeCodecPersist(AAFSession *sess)
-{
-	aafBool				more;
-	omTableIterate_t	iter;
-	codecTable_t		codec_table;
-	
-	XPROTECT(NULL)
-	{
-		CHECK(TableFirstEntry(sess->_codecID, &iter, &more));
-		while(more)
-		{
-			if(iter.valuePtr != NULL)
-			{
-				memcpy(&codec_table, iter.valuePtr, sizeof(codec_table));
-				if(codec_table.persist != NULL)
-					AAFFree(codec_table.persist);
-			}
-			CHECK(TableNextEntry(&iter, &more));
-		}
-	}
-	XEXCEPT
-	XEND
-	
-	return(AAFRESULT_SUCCESS);
-}
-
-/************************
- * Function: PerFileMediaInit (INTERNAL)
- *
- * 		This function is a callback from the openFile and createFile
- *		group of functions.  This callback exists in order to allow the
- *		media layer to be independant, and yet have information of its
- *		own in the opaque file handle.
- *
- *    (NOTE: the data object cache needs to be set up whether or not
- *           the media layer exists, so the guts of this function were
- *           moved to omFile.c:BuildMediaCache().  This function shell was
- *           left for future expansion.)
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-aafErr_t PerFileMediaInit(AAFFile *file)
-{	
-	return(AAFRESULT_SUCCESS);
-}
-
-AAFFile *AAFMedia::itsMainFile(void)
-{
-	return(_mainFile);
-}
-
-AAFFile *AAFMedia::itsDataFile(void)
-{
-	return(_dataFile);
-}
-
-AAFMediaDescriptor *AAFMedia::itsMediaDescriptor(void)
-{
-	return(_mdes);
 }
 #endif
