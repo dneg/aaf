@@ -1,0 +1,529 @@
+/***********************************************************************
+ *
+ *              Copyright (c) 1998-1999 Avid Technology, Inc.
+ *
+ * Permission to use, copy and modify this software and accompanying 
+ * documentation, and to distribute and sublicense application software
+ * incorporating this software for any purpose is hereby granted, 
+ * provided that (i) the above copyright notice and this permission
+ * notice appear in all copies of the software and related documentation,
+ * and (ii) the name Avid Technology, Inc. may not be used in any
+ * advertising or publicity relating to the software without the specific,
+ *  prior written permission of Avid Technology, Inc.
+ *
+ * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ * IN NO EVENT SHALL AVID TECHNOLOGY, INC. BE LIABLE FOR ANY DIRECT,
+ * SPECIAL, INCIDENTAL, PUNITIVE, INDIRECT, ECONOMIC, CONSEQUENTIAL OR
+ * OTHER DAMAGES OF ANY KIND, OR ANY DAMAGES WHATSOEVER ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE AND
+ * ACCOMPANYING DOCUMENTATION, INCLUDING, WITHOUT LIMITATION, DAMAGES
+ * RESULTING FROM LOSS OF USE, DATA OR PROFITS, AND WHETHER OR NOT
+ * ADVISED OF THE POSSIBILITY OF DAMAGE, REGARDLESS OF THE THEORY OF
+ * LIABILITY.
+ *
+ ************************************************************************/
+#include "CAAFAdminMob.h"
+
+#include <assert.h>
+#include "AAFResult.h"
+
+#include "AAF.h"
+
+#include "extensionUtils.h"
+
+#include "aafDataDefs.h"
+#include "aafDefUIDs.h"
+#include "AAFStoredObjectIDs.h"
+
+
+
+
+
+
+// Both plugins currently only support a single definition
+const aafInt32 kSupportedDefinitions = 1;
+
+
+const wchar_t kAdminMobDisplayName[] = L"Example AAF Admin Mob Class Extension";
+const wchar_t kAdminMobDescription[] = L"Handles Access to Personnel Mob AAF objects";
+
+const aafProductVersion_t kAAFPluginVersion = {1, 0, 0, 1, kVersionBeta};
+
+//
+// Plugin Descriptor information
+//
+// {A9757BD4-A046-11d3-BFFA-00104BC9156D}
+static const aafUID_t AVID_PERSONNELMOB_PLUGIN = 
+{ 0xa9757bd5, 0xa046, 0x11d3, { 0xbf, 0xfa, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
+
+
+static wchar_t *kManufURL = L"http://www.avid.com";
+static wchar_t *kDownloadURL = L"ftp://ftp.avid.com/pub/";
+static aafVersionType_t samplePluginVersion = { 0, 1 };
+
+static wchar_t *kManufName = L"Avid Technology, Inc.";
+static wchar_t *kManufRev = L"Rev 0.1";
+
+// Should be shared by all built-in plugins created by AVID. /* TRR */
+const aafUID_t MANUF_AVID_PLUGINS = { 0xA6487F21, 0xE78F, 0x11d2, { 0x80, 0x9E, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
+
+
+const aafUID_t NULL_ID = {0};
+
+// local function for simplifying error handling.
+inline void checkResult(AAFRESULT r)
+{
+  if (AAFRESULT_SUCCESS != r)
+    throw HRESULT(r);
+}
+
+inline void checkExpression(bool test, AAFRESULT r)
+{
+  if (!test)
+    throw r;
+}
+
+inline void checkAssertion(bool test)
+{
+  if (!test)
+    throw HRESULT(AAFRESULT_ASSERTION_VIOLATION);
+}
+
+
+
+
+// Constructor
+
+CAAFAdminMob::CAAFAdminMob (IUnknown * pControllingUnknown)
+  : CAAFUnknown (pControllingUnknown),
+  _bInitializedObject(false),
+  _pObject(NULL),
+  _pMob(NULL)
+{
+}
+
+
+// Desctructor
+
+CAAFAdminMob::~CAAFAdminMob ()
+{
+}
+
+
+
+// This is an interface pointer back into the object that owns this extension.
+// since extensions are implemented as an aggregate the object the object
+// lifetimes are tied together. This means that we do not reference count
+// this interface pointer. If we did then this extension as well as the 
+// controlling/owning object will never be deleted.
+HRESULT CAAFAdminMob::InitializeObject()
+{
+  HRESULT hr = S_OK;
+
+  if (!_bInitializedObject)
+  {
+    if (NULL == _pObject)
+    {
+      // See if this objects controlling unknown supports the
+      // IAAFObject interface. This should NOT fail!
+      hr = QueryInterface(IID_IAAFObject, (void **)&_pObject);
+      if (SUCCEEDED(hr))
+      {
+        // don't reference count this interface.
+        _pObject->Release();
+      }
+    }
+
+    if (NULL == _pMob)
+    {
+      // See if this objects controlling unknown supports the
+      // IAAFMob interface. This should NOT fail!
+      // Since we are using the extensionUtils routines we
+      // also cache the Mob interface pointer.
+      hr = QueryInterface(IID_IAAFMob, (void **)&_pMob);
+      if (SUCCEEDED(hr))
+      {
+        // don't reference count this interface.
+        _pMob->Release();
+      }
+    }
+
+    if (SUCCEEDED(hr))
+      _bInitializedObject = true;
+  }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+CAAFAdminMob::Initialize
+     (void)
+{
+  HRESULT hr = S_OK;
+
+  try
+  {
+    hr = InitializeObject();
+  }
+  catch (...)
+  {
+    // We CANNOT throw an exception out of a COM interface method!
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+CAAFAdminMob::CountPersonnelResources
+     (aafUInt32 * count)
+{
+  HRESULT hr = S_OK;
+
+  if (NULL == count)
+    return E_INVALIDARG;
+
+  
+  try
+  {
+    checkResult(InitializeObject());
+    AdminMobGetNumPersonnel (NULL, _pMob, count);
+  }
+  catch (HRESULT &rhr)
+  {
+    // Catch any explicitly thrown by this plugin or utility function.
+    hr = rhr;
+  }
+  catch (...)
+  {
+    // We CANNOT throw an exception out of a COM interface method!
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+CAAFAdminMob::AppendPersonnelResource
+     (IAAFPersonnelResource * pPersonnelResource)
+{
+  HRESULT hr = S_OK;
+  IAAFDictionary *pDictionary = NULL;
+  IAAFObject *pPersonnelObject = NULL;
+
+  if (NULL == pPersonnelResource)
+    return E_INVALIDARG;
+
+  try
+  {
+    checkResult(InitializeObject());
+    checkResult(_pObject->GetDictionary(&pDictionary));
+    checkResult(pPersonnelResource->QueryInterface(IID_IAAFObject, (void **)&pPersonnelObject));
+    AdminMobAppendResource(pDictionary, _pMob, pPersonnelObject);
+  }
+  catch (HRESULT &rhr)
+  {
+    // Catch any explicitly thrown by this plugin or utility function.
+    hr = rhr;
+  }
+  catch (...)
+  {
+    // We CANNOT throw an exception out of a COM interface method!
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  // Cleanup
+  if (pPersonnelObject)
+    pPersonnelObject->Release();
+  if (pDictionary)
+    pDictionary->Release();
+
+  return hr;
+}
+
+
+
+HRESULT STDMETHODCALLTYPE
+CAAFAdminMob::GetPersonnelResourceAt
+     (aafUInt32 index, IAAFPersonnelResource **ppPersonnelResource)
+{
+  HRESULT hr = S_OK;
+  aafUInt32 count = 0;
+  IAAFObject *pPersonnelResource = NULL;
+
+  if (NULL == ppPersonnelResource)
+    return E_INVALIDARG;
+
+  
+  try
+  {
+    checkResult(CountPersonnelResources(&count)); // calls InitializeObject
+    checkExpression(index < count, E_INVALIDARG);
+
+    AdminMobGetNthPersonnel(NULL, _pMob, index, &pPersonnelResource); 
+    checkResult(pPersonnelResource->QueryInterface(IID_IAAFPersonnelResource, (void **)ppPersonnelResource));  
+  }
+  catch (HRESULT &rhr)
+  {
+    // Catch any explicitly thrown by this plugin or utility function.
+    hr = rhr;
+  }
+  catch (...)
+  {
+    // We CANNOT throw an exception out of a COM interface method!
+    // Return a reasonable exception code.
+    //
+    hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+  }
+
+  // Cleanup
+  if (pPersonnelResource)
+    pPersonnelResource->Release();
+
+  return hr;
+}
+
+
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFAdminMob::Start (void)
+{
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFAdminMob::Finish (void)
+{
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFAdminMob::GetNumDefinitions (aafInt32 *pDefCount)
+{
+	if(NULL == pDefCount)
+		return AAFRESULT_NULL_PARAM;
+
+	*pDefCount = kSupportedDefinitions;
+
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFAdminMob::GetIndexedDefinitionID (aafInt32 index, aafUID_t *uid)
+{
+	if(NULL == uid)
+		return AAFRESULT_NULL_PARAM;
+
+	*uid = kClassID_AdminMob;		// UID of the AdminMob class definition
+
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFAdminMob::GetPluginDescriptorID (aafUID_t *uid)
+{
+	if(NULL == uid)
+		return AAFRESULT_NULL_PARAM;
+
+	*uid = AVID_PERSONNELMOB_PLUGIN;		// UID of the PluginDescriptor
+
+	return AAFRESULT_SUCCESS;
+}
+
+HRESULT STDMETHODCALLTYPE CAAFAdminMob::GetIndexedDefinitionObject(
+    aafInt32 index, 
+    IAAFDictionary *pDictionary, 
+    IAAFDefObject **pDef)
+{
+	HRESULT hr = S_OK;
+	IAAFClassDef	*pClassDef = NULL;
+
+  
+	if((pDictionary == NULL) || (pDef == NULL))
+		return AAFRESULT_NULL_PARAM;
+
+	// Don't we need to validate the index as well? /* TRR??? */
+	if (0 > kSupportedDefinitions || kSupportedDefinitions <= index)
+		return AAFRESULT_BADINDEX;
+
+	try
+	{
+		//!!!Later, add in dataDefs supported & filedescriptor class
+
+    // Register the extensible enumeration describing Position in the
+    // dictionary.
+    CreateAndRegisterPositionEnum (pDictionary);
+
+    // Create a class definition describing PesonnelResource objects and
+    // register it in the dictionary.
+    CreateAndRegisterPersonnelResource (pDictionary);
+
+    // Create a type definition describing references to
+    // PersonnelResource objects, and register it.
+    CreateAndRegisterPersonnelResourceReference (pDictionary);
+
+    // Create a type definition describing vectors of references to
+    // PersonnelResource objects, and register it.
+    CreateAndRegisterPersonnelResourceReferenceVector (pDictionary);
+
+    // Create a class definition describing AdminMob objects, and
+    // register it.
+    CreateAndRegisterAdminMob (pDictionary);
+
+
+    checkResult(pDictionary->LookupClassDef(kClassID_AdminMob, &pClassDef));
+    checkResult(pClassDef->QueryInterface(IID_IAAFDefObject, (void **)pDef));
+  }
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+  // Cleanup
+  if (pClassDef)
+    pClassDef->Release();
+
+	return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFAdminMob::CreateDescriptor (IAAFDictionary *dict, IAAFPluginDescriptor **descPtr)
+{
+	HRESULT hr = S_OK;
+	IAAFPluginDescriptor	*desc = NULL;
+	IAAFLocator				*pLoc = NULL;
+ 	IAAFNetworkLocator		*pNetLoc = NULL;
+	
+	if ((NULL == dict) || (NULL == descPtr))
+		return AAFRESULT_NULL_PARAM;
+	
+	// Initialize return parameter.
+	*descPtr = NULL;
+
+	try
+	{
+		checkResult(dict->CreateInstance(AUID_AAFPluginDescriptor,
+			IID_IAAFPluginDescriptor, 
+			(IUnknown **)&desc));
+
+		checkResult(desc->Initialize(AVID_PERSONNELMOB_PLUGIN,
+		                       const_cast<wchar_t *>(kAdminMobDisplayName),
+		                       const_cast<wchar_t *>(kAdminMobDescription)));
+		checkResult(desc->SetCategoryClass(AUID_AAFDefObject));
+		checkResult(desc->SetPluginVersionString(kManufRev));
+		checkResult(desc->SetManufacturerID(MANUF_AVID_PLUGINS));
+		checkResult(desc->SetPluginManufacturerName(kManufName));
+		checkResult(desc->SetIsSoftwareOnly(AAFTrue));
+		checkResult(desc->SetIsAccelerated(AAFFalse));
+		checkResult(desc->SetSupportsAuthentication(AAFFalse));
+
+		// Create the network locator for the Manufacturer's web site: 
+		checkResult(dict->CreateInstance(AUID_AAFNetworkLocator,
+			IID_IAAFLocator, 
+			(IUnknown **)&pLoc));
+		checkResult(pLoc->SetPath (kManufURL));
+		checkResult(pLoc->QueryInterface(IID_IAAFNetworkLocator, (void **)&pNetLoc));
+		checkResult(desc->SetManufacturerInfo(pNetLoc));
+		pNetLoc->Release();
+		pNetLoc = NULL;
+		pLoc->Release();
+		pLoc = NULL;
+
+		
+		// Create a Network locator to point to our default download site.
+		checkResult(dict->CreateInstance(AUID_AAFNetworkLocator,
+			IID_IAAFLocator, 
+			(IUnknown **)&pLoc));
+		checkResult(pLoc->SetPath (kDownloadURL));
+		checkResult(desc->AppendLocator(pLoc));
+	
+		pLoc->Release();
+		pLoc = NULL;
+
+		*descPtr = desc; // reference count already incremented, we do not need to call AddRef()
+		desc = NULL;
+	}
+	catch (HRESULT& rhr)
+	{
+		hr = rhr; // return thrown error code.
+	}
+	catch (...)
+	{
+		// We CANNOT throw an exception out of a COM interface method!
+		// Return a reasonable exception code.
+		hr = AAFRESULT_UNEXPECTED_EXCEPTION;
+	}
+
+	// Cleanup...
+	if (NULL != desc)
+		desc->Release();
+	if (NULL != pLoc)
+		pLoc->Release();
+	if (NULL != pNetLoc)
+		pNetLoc->Release();
+
+
+	return hr;
+}
+
+
+//
+// COM Infrastructure
+// 
+
+// What interfaces does this plugin support
+// Override of CAAFUnknown method.
+HRESULT CAAFAdminMob::InternalQueryInterface
+(
+    REFIID riid,
+    void **ppvObj)
+{
+    HRESULT hr = S_OK;
+
+    if (NULL == ppvObj)
+        return E_INVALIDARG;
+
+    // We support the IAAFAdminMob interface 
+    if (riid == IID_IAAFAdminMob) 
+    { 
+        *ppvObj = (IAAFAdminMob *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+		// and the IAAFPlugin interface.
+    else if (riid == IID_IAAFPlugin) 
+    { 
+        *ppvObj = (IAAFPlugin *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    // Always delegate back to base implementation.
+    return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
+}
+
+//
+// Define the contrete object support implementation.
+// 
+AAF_DEFINE_FACTORY(AAFAdminMob)
