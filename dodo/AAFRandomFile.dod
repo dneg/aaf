@@ -67,7 +67,7 @@ AD_METHOD0(Revert,
   AD_STD_COMMENT_METH_ERR_HEADER)
 
 
-AD_XMETHOD1(SaveAs,
+AD_XMETHOD1(SaveAsFile,
 			[in],
 			objIn,
 			AAFFile,
