@@ -84,8 +84,8 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
     }
 
     IAAFSmartPointer<IAAFFile> pFile;
-    checkResult( AAFFileOpenNewModify( fileName.get(), 0, &productInfo,
-				       &iaafFile ) );
+    CHECK_HRESULT( AAFFileOpenNewModify( fileName.get(), 0, &productInfo,
+					 &iaafFile ) );
 
     state.SetFile( iaafFile );
   }
@@ -95,9 +95,9 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
       throw UsageEx("FileOp read expected filename");
     }
 
-    checkResult( AAFFileOpenExistingRead( fileName.get(),
-					  0,
-					  &iaafFile ) );
+    CHECK_HRESULT( AAFFileOpenExistingRead( fileName.get(),
+					    0,
+					    &iaafFile ) );
     state.SetFile( iaafFile );
   }
   else if ( which == "modify" ) {
@@ -106,10 +106,11 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
       throw UsageEx("FileOp modify expected filename");
     }
 
-    checkResult( AAFFileOpenExistingModify( fileName.get(),
-					    0,
-					    &productInfo,
-					    &iaafFile ) );
+    CHECK_HRESULT( AAFFileOpenExistingModify( fileName.get(),
+					      0,
+					      &productInfo,
+					      &iaafFile ) );
+
     state.SetFile( iaafFile );
   }
   else if ( which == "save" ) {
