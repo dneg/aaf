@@ -229,6 +229,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 							aafProductIdentification_t * pIdent)
 {
 	ImplAAFSession * pS;
+	ImplAAFContentStorage	*pCStore;
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 	if (! _initialized)
@@ -263,6 +264,9 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		_byteOrder = hostByteOrder();
 		_head->SetByteOrder(_byteOrder);
 
+		 //JeffB!!! We must decide whether def-only files have a content storage
+		_head->GetContentStorage(&pCStore);
+
 		// Attempt to create the file.
 		_file = OMFile::createModify(pFileName, _classFactory, _byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
@@ -270,6 +274,8 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		_open = AAFTrue;
 		_openType = kOmCreate;
 		GetRevision(&_setrev);
+
+
 	}
 	catch (AAFRESULT &rc)
 	{
