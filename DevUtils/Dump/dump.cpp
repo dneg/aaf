@@ -490,6 +490,7 @@ size_t totalFileBytes;
 // Validity checking
 //
 size_t warningCount = 0;
+size_t errorCount = 0;
 
 // Prototypes for local functions.
 //
@@ -503,6 +504,7 @@ static ByteOrder hostByteOrder(void);
 static const char* byteOrder(ByteOrder bo);
 static void formatError(DWORD errorCode);
 static void fatalError(char* routineName, char* message);
+static void error(char* routineName, char* message);
 static void warning(char* routineName, char* message);
 static void printError(const char* prefix,
                        const char* fileName,
@@ -1027,6 +1029,15 @@ void fatalError(char* routineName, char* message)
        << message << endl;
 
   exit(EXIT_FAILURE);
+}
+
+void error(char* routineName, char* message)
+{
+  cerr << programName
+       << ": Error in routine \"" << routineName << "\". "
+       << message << endl;
+
+  errorCount = errorCount + 1;
 }
 
 void warning(char* routineName, char* message)
@@ -1805,9 +1816,7 @@ bool isValid(const IndexEntry* index, const OMUInt32 entries)
     // Check length
     if (currentLength == 0) {
       reportBadIndexEntry(i, &index[i]);
-      fatalError("isValid", "Property set index entry has zero length.");
-      result = false;
-      break;
+      error("isValid", "Property set index entry has zero length.");
     }
     if (i == 0) {
       // First entry
@@ -4304,7 +4313,7 @@ int main(int argumentCount, char* argumentVector[])
   }
 
   int result;
-  if (warningCount == 0) {
+  if ((warningCount == 0) || (errorCount == 0)){
     result = EXIT_SUCCESS;
   } else {
     result = 2;
