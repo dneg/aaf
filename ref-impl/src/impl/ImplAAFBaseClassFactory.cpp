@@ -100,7 +100,7 @@ extern "C" const aafClassID_t CLSID_AAFMasterMob;
 extern "C" const aafClassID_t CLSID_AAFMedia;
 extern "C" const aafClassID_t CLSID_AAFMediaFilmDescriptor;
 extern "C" const aafClassID_t CLSID_AAFMediaGroup;
-extern "C" const aafClassID_t CLSID_AAFMediaTapeDescriptor;
+extern "C" const aafClassID_t CLSID_AAFTapeDescriptor;
 extern "C" const aafClassID_t CLSID_AAFMob;
 extern "C" const aafClassID_t CLSID_AAFMobSlot;
 extern "C" const aafClassID_t CLSID_AAFNestedScope;
@@ -189,7 +189,7 @@ void registerPredefinedClasses(OMFile* file)
   registerClass(file, CLSID_AAFMedia);
   registerClass(file, CLSID_AAFMediaFilmDescriptor);
   registerClass(file, CLSID_AAFMediaGroup);
-  registerClass(file, CLSID_AAFMediaTapeDescriptor);
+  registerClass(file, CLSID_AAFTapeDescriptor);
   registerClass(file, CLSID_AAFMob);
   registerClass(file, CLSID_AAFMobSlot);
   registerClass(file, CLSID_AAFNestedScope);
