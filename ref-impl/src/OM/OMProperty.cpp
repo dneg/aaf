@@ -50,10 +50,7 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
 : _propertyId(propertyId), _storedForm(storedForm),
   _storedName(0), _name(name),
   _propertySet(0), _definition(0),
-  // _isOptional(false),
-  // BobT: make optional by default, to hack around problem where
-  // props may be restored before they're initialized by DM.
-  _isOptional(true),
+  _isOptional(false),
   _isPresent(false)
 {
   TRACE("OMProperty::OMProperty");
@@ -198,12 +195,11 @@ const OMType* OMProperty::type(void) const
 {
   TRACE("OMProperty::type");
 
-  // PRECONDITION("Valid property definition", _definition != 0);
+  PRECONDITION("Valid property definition", _definition != 0);
 
-  const OMType* result = 0;
-  if (_definition != 0) {
-    result = _definition->type();
-  }
+  const OMType* result = _definition->type();
+
+//  POSTCONDITION("Valid result", result != 0);
   return result;
 }
 
