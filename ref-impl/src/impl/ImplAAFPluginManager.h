@@ -34,7 +34,7 @@
 
 
 class ImplEnumAAFLoadedPlugins;
-class ImplAAFPluginDescriptor;
+class ImplAAFPluginDef;
 class ImplAAFDictionary;
 class ImplAAFDefObject;
 
@@ -152,8 +152,8 @@ AAFRESULT UnregisterAllPlugins(void);
 AAFRESULT Init(void);
 
 // Internal to the toolkit functions
-AAFRESULT GetFirstLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc);
-AAFRESULT GetNextLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDescriptor **ppDesc);
+AAFRESULT GetFirstLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDef **ppDesc);
+AAFRESULT GetNextLoadedPlugin (aafTableIterate_t *iter, ImplAAFPluginDef **ppDesc);
 
 AAFRESULT CreatePluginDefinition (aafUID_t  pluginDefID,
         ImplAAFDictionary * pDictionary,

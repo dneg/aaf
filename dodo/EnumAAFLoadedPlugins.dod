@@ -28,6 +28,7 @@ AD_IDL(//
 //)
 
 AD_FORWARD_DECLARATION(AAFDefObject)
+AD_FORWARD_DECLARATION(AAFPluginDef)
 
 AD_CLASS_UUID(AB4D9F13, DD69, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
 
@@ -37,19 +38,19 @@ AD_XCLASS_BEGIN(Concrete, Transient)
 AD_XMETHOD1(NextOne,
 			[out\,retval],
 			objOut,
-			AAFPluginDescriptor,
-			ppAAFPluginDescriptor,
-			The Next AAFPluginDescriptor,
+			AAFPluginDef,
+			ppAAFPluginDef,
+			The Next AAFPluginDef,
 			Enumerates to the next element in the enumerators list. The caller is responsible 
   // for properly releasing the returned pointer when it is no longer needed.
   // @comm This is a just simplified version of the Next method. )
 
 AD_X2METHOD3(Next,
-			[in], objPass, aafUInt32, count, number of AAFPluginDescriptor requested,xxx,xxx,
+			[in], objPass, aafUInt32, count, number of AAFPluginDef requested,xxx,xxx,
 			[out\, size_is\(count\)\, length_is\(*pFetched\)],
-			objOutArray, AAFPluginDescriptor, ppAAFPluginDesc, array to receive AAFPluginDescriptors,count,*pFetched,
+			objOutArray, AAFPluginDef, ppAAFPluginDef, array to receive AAFPluginDefs,count,*pFetched,
 			[out\,ref], objPass, aafUInt32 *, pFetched,
-			number of actual AAFPluginDescriptor fetched into ppAAFPluginDesc array,xxx,xxx,
+			number of actual AAFPluginDef fetched into ppAAFPluginDef array,xxx,xxx,
 			Enumerates the next count elements \(AAFPluginDesc pointers\) in 
   // the enumerator's list\, returning them in the given array along with the actual 
   // number of enumerated elements in pFetched. The caller is responsible for 

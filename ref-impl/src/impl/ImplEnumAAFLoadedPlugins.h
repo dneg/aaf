@@ -32,7 +32,7 @@
  ************************************************************************/
 
 
-class ImplAAFPluginDescriptor;
+class ImplAAFPluginDef;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -63,18 +63,18 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     NextOne
         // @parm [out,retval] The Next AAFPluginDescriptor
-        (ImplAAFPluginDescriptor ** ppAAFPluginDescriptor);
+        (ImplAAFPluginDef ** ppAAFPluginDescriptor);
 
   //****************
   // Next()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     Next
-        (// @parm [in] number of AAFPluginDescriptor requested
+        (// @parm [in] number of AAFPluginDef requested
          aafUInt32  count,
 
          // @parm [out, size_is(count), length_is(*pFetched)] array to receive AAFPluginDescriptors
-         ImplAAFPluginDescriptor ** ppAAFPluginDesc,
+         ImplAAFPluginDef ** ppAAFPluginDesc,
 
          // @parm [out,ref] number of actual AAFPluginDescriptor fetched into ppAAFPluginDesc array
          aafUInt32 *  pFetched);
