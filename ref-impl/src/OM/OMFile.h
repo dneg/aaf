@@ -153,49 +153,6 @@ public:
 
   // @access Public members.
 
-    // @cmember Constructor. Create an <c OMFile> object representing
-    //          an existing external file.
-  OMFile(const wchar_t* fileName,
-         void* clientOnRestoreContext,
-         const OMAccessMode mode,
-         OMStoredObject* store,
-         const OMClassFactory* factory,
-         OMDictionary* dictionary,
-         const OMLoadMode loadMode);
-
-    // @cmember Constructor. Create an <c OMFile> object representing
-    //          a new external file.
-  OMFile(const wchar_t* fileName,
-         void* clientOnRestoreContext,
-         OMFileSignature signature,
-         const OMAccessMode mode,
-         OMStoredObject* store,
-         const OMClassFactory* factory,
-         OMDictionary* dictionary,
-         OMRootStorable* root);
-
-    // @cmember Constructor. Create an <c OMFile> object representing
-    //          an existing external file.
-    // @devnote Will superceed OMFile::OMFile (for existing files) above.
-  OMFile(OMRawStorage* rawStorage,
-         void* clientOnRestoreContext,
-         const OMAccessMode mode,
-         const OMClassFactory* factory,
-         OMDictionary* dictionary,
-         const OMLoadMode loadMode);
-
-    // @cmember Constructor. Create an <c OMFile> object representing
-    //          a new external file.
-    // @devnote Will superceed OMFile::OMFile (for new files) above.
-  OMFile(OMRawStorage* rawStorage,
-         void* clientOnRestoreContext,
-         OMFileSignature signature,
-         const OMAccessMode mode,
-         const OMClassFactory* factory,
-         OMDictionary* dictionary,
-         OMRootStorable* root,
-         const OMByteOrder byteOrder);
-
     // @cmember Destructor.
   ~OMFile(void);
 
@@ -311,6 +268,49 @@ public:
 
 private:
   // @access Private members.
+
+    // @cmember Constructor. Create an <c OMFile> object representing
+    //          an existing external file.
+  OMFile(const wchar_t* fileName,
+         void* clientOnRestoreContext,
+         const OMAccessMode mode,
+         OMStoredObject* store,
+         const OMClassFactory* factory,
+         OMDictionary* dictionary,
+         const OMLoadMode loadMode);
+
+    // @cmember Constructor. Create an <c OMFile> object representing
+    //          a new external file.
+  OMFile(const wchar_t* fileName,
+         void* clientOnRestoreContext,
+         OMFileSignature signature,
+         const OMAccessMode mode,
+         OMStoredObject* store,
+         const OMClassFactory* factory,
+         OMDictionary* dictionary,
+         OMRootStorable* root);
+
+    // @cmember Constructor. Create an <c OMFile> object representing
+    //          an existing external file.
+    // @devnote Will superceed OMFile::OMFile (for existing files) above.
+  OMFile(OMRawStorage* rawStorage,
+         void* clientOnRestoreContext,
+         const OMAccessMode mode,
+         const OMClassFactory* factory,
+         OMDictionary* dictionary,
+         const OMLoadMode loadMode);
+
+    // @cmember Constructor. Create an <c OMFile> object representing
+    //          a new external file.
+    // @devnote Will superceed OMFile::OMFile (for new files) above.
+  OMFile(OMRawStorage* rawStorage,
+         void* clientOnRestoreContext,
+         OMFileSignature signature,
+         const OMAccessMode mode,
+         const OMClassFactory* factory,
+         OMDictionary* dictionary,
+         OMRootStorable* root,
+         const OMByteOrder byteOrder);
 
     // @cmember Read the signature from the given file.
   static void readSignature(const wchar_t* fileName,
