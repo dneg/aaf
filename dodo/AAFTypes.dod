@@ -321,8 +321,8 @@ AD_CPP_QUOTE(} aafJPEGcomponent_t;)
 
 typedef enum _aafCompressEnable_t
 {
-	kRefImplCompressionEnable = 0, 
-	kRefImplCompressionDisable = 1
+	kToolkitCompressionEnable = 0, 
+	kToolkitCompressionDisable = 1
 } aafCompressEnable_t;
 
 typedef enum _aafFileFormat_t
@@ -577,7 +577,7 @@ typedef struct _aafProductIdentification_t
 	aafProductVersion_t	productVersion;
 } aafProductIdentification_t;
 
-AD_CPP_QUOTE(extern const aafProductVersion_t AAFRefImplVersion;)
+AD_CPP_QUOTE(extern const aafProductVersion_t AAFToolkitVersion;)
 
 typedef struct _aafTimeStamp_t
 {
@@ -928,7 +928,7 @@ typedef enum _aafIdentificationCritType_t
 	kNoIdSearch = 0, 
 	kByIdProductID = 1, 
 	kByIdGeneration = 2, 
-	kByIdRefImplVersion = 3
+	kByIdToolkitVersion = 3
 } aafIdentificationCritType_t;
 
 typedef struct _aafIdentificationCrit_t
@@ -938,7 +938,7 @@ typedef struct _aafIdentificationCrit_t
 	{
 		aafUID_t		    productID;
 		aafUID_t            generation;
-		aafProductVersion_t refImplVersion;
+		aafProductVersion_t toolkitVersion;
 	} tags;
 } aafIdentificationCrit_t;
 
