@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -164,6 +164,17 @@ public:
     //          for network streams would return false. An implementation
     //          for memory files would return true.
   virtual bool isPositionable(void) const = 0;
+
+    // @cmember The current position for <f read()> and <f write()>, as an
+    //          offset in bytes from the beginning of this
+    //          <c OMRawStorage>.
+  virtual OMUInt64 position(void) const = 0;
+
+    // @cmember Set the current position for <f read()> and <f write()>, as an
+    //          offset in bytes from the beginning of this
+    //          <c OMRawStorage>.
+    //          precondition - isPositionable()
+  virtual void setPosition(OMUInt64 newPosition) const = 0;
 
     // @cmember Synchronize this <c OMRawStorage> with its external
     //          representation.
