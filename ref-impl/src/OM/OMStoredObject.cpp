@@ -42,8 +42,10 @@
 #include "OMMemoryRawStorage.h"
 #include "OMRawStorageLockBytes.h"
 
+#include "OMContainerElement.h"
 #include "OMObjectReference.h"
 #include "OMStrongReference.h"
+#include "OMStrongReferenceVector.h"
 #include "OMWeakReference.h"
 
 #include "OMAssertions.h"
@@ -374,10 +376,49 @@ void OMStoredObject::save(const OMStrongReference& singleton)
   // @mfunc Save the <c OMStrongReferenceVector> <p vector> in this
   //        <c OMStoredObject>.
   //   @parm The vector of strong references to save.
-void OMStoredObject::save(const OMStrongReferenceVector& /* vector */)
+void OMStoredObject::save(const OMStrongReferenceVector& vector)
 {
   TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
+
+  // create a vector index
+  //
+  size_t count = vector.count();
+  OMStoredVectorIndex* index = new OMStoredVectorIndex(count);
+  ASSERT("Valid heap pointer", index != 0);
+  index->setFirstFreeKey(vector.localKey());
+  size_t position = 0;
+
+  // Iterate over the vector saving each element
+  //
+  OMContainerIterator<OMStrongReferenceVectorElement>& iterator =
+                                                            *vector.iterator();
+  while (++iterator) {
+
+    OMStrongReferenceVectorElement& element = iterator.value();
+
+    // enter into the index
+    //
+    index->insert(position, element.localKey());
+
+    // save the object
+    //
+    element.save();
+
+    position = position + 1;
+  }
+  delete &iterator;
+
+  // save the vector index
+  //
+  ASSERT("Valid vector index", index->isValid());
+  wchar_t* name = collectionName(vector.name(), vector.propertyId());
+  save(index, name);
+  delete index;
+
+  // make an entry in the property index
+  //
+  saveName(vector, name);
+  delete [] name;
 }
 
   // @mfunc Save the <c OMStrongReferenceSet> <p set> in this
@@ -596,11 +637,42 @@ void OMStoredObject::restore(OMStrongReference& singleton,
   //        <c OMStoredObject>.
   //   @parm TBS
   //   @parm TBS
-void OMStoredObject::restore(OMStrongReferenceVector& /* vector */,
-                             size_t /* externalSize */)
+void OMStoredObject::restore(OMStrongReferenceVector& vector,
+                             size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyId vectorId = vector.propertyId();
+  const wchar_t* vectorName = vector.name();
+
+  // restore the index
+  //
+  OMStoredVectorIndex* vectorIndex = 0;
+  wchar_t* name = collectionName(vectorName, vectorId);
+  restoreName(vector, name, externalSize);
+  restore(vectorIndex, name);
+  delete [] name;
+  ASSERT("Valid vector index", vectorIndex->isValid());
+  vector.setLocalKey(vectorIndex->firstFreeKey());
+
+  // Iterate over the index restoring the elements of the vector
+  //
+  size_t entries = vectorIndex->entries();
+  if (entries > 0) {
+    vector.grow(entries); // Set the vector size
+    size_t context = 0;
+    OMUInt32 localKey;
+    for (size_t i = 0; i < entries; i++) {
+      vectorIndex->iterate(context, localKey);
+      wchar_t* name = elementName(vectorName, vectorId, localKey);
+      OMStrongReferenceVectorElement element(&vector, name, localKey);
+      element.restore();
+      vector.insert(i, element);
+      delete [] name;
+      name = 0; // for BoundsChecker
+    }
+  }
+  delete vectorIndex;
 }
 
   // @mfunc Restore the <c OMStrongReferenceSet> <p set> into this
