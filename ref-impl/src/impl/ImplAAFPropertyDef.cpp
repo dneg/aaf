@@ -38,7 +38,7 @@
 ImplAAFPropertyDef::ImplAAFPropertyDef ()
   : _Type(PID_PropertyDefinition_Type, "Type"),
     _IsOptional(PID_PropertyDefinition_IsOptional, "IsOptional"),
-    _pid(PID_PropertyDefinition_pid, "pid")
+    _pid(PID_PropertyDefinition_LocalIdentification, "LocalIdentification")
 {
   _persistentProperties.put (_Type.address());
   _persistentProperties.put (_IsOptional.address());
