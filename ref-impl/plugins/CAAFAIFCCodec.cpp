@@ -528,6 +528,7 @@ CAAFAIFCCodec::WriteSamples (aafUInt32  nSamples,
 	if (0 == nSamples)
 		return AAFRESULT_INVALID_PARAM;
 
+	// AIFC format is limited to 2GB filesize
 	aafPosition_t offset;
 	checkResult(_stream->GetPosition(&offset));
 	if ( offset + buflen >  (aafPosition_t)2*1024*1024*1024-1 ) {

@@ -524,6 +524,8 @@ HRESULT STDMETHODCALLTYPE
   if (0 == nSamples)
     return AAFRESULT_INVALID_PARAM;
 
+  // A WAVE file is limited to 4GB officially, but in practice many
+  // applications treat WAVE as limited to 2GB.
   aafPosition_t offset;
   checkResult(_stream->GetPosition(&offset));
   if ( offset + buflen > (aafPosition_t)2*1024*1024*1024-1 ) {
