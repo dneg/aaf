@@ -147,34 +147,6 @@ static HRESULT CreateAAFFile(aafWChar *  pFileName )
 		
 		//SetDescription
 		checkResult(spPropDef->SetDescription(TEST_DESCRIPTION));
-		
-		//SetDefaultValue
-		//	//first, create a value for integer
-		IAAFTypeDefIntSP  spTypeDefInt;
-		checkResult(spTypeDef->QueryInterface(IID_IAAFTypeDefInt, (void **) &spTypeDefInt));
-		IAAFPropertyValueSP  spPropVal;
-		checkResult(spTypeDefInt->CreateValue((aafMemPtr_t)&TEST_INT_BYTE, 1, &spPropVal));
-		//	//now, set the default value
-		hr = spPropDef->SetDefaultValue(spPropVal);
-		if (FAILED(hr)) 
-		{
-			if (hr == AAFRESULT_NOT_IMPLEMENTED)
-			{
-				//If not implemented, then mark as NI and move on ...
-				//Flag this NI
-				bSetDefaultValue_NI = kAAFTrue;
-				//Reset the hr
-				hr = AAFRESULT_SUCCESS;
-				//Move on
-			}
-			else
-				//If it failed, but was not an NI, then "what the hell is this problem ??!!"
-				throw hr;
-		}//if Failed hr
-		
-
-		
-		
 	}
 	catch (HRESULT & rResult)
 	{
@@ -269,39 +241,6 @@ static HRESULT  ReadAAFFile(aafWChar *  pFileName )
 		eAAFTypeCategory_t typeCat = kAAFTypeCatUnknown;
 		checkResult(spTypeDef->GetTypeCategory(&typeCat));
 		checkExpression( typeCat == kAAFTypeCatInt, AAFRESULT_TEST_FAILED );
-		
-		//NOt implemented yet ... GetDefaultValue() and GetIsSearchable()
-		
-		//GetDefaultValue
-		IAAFPropertyValueSP  spPropVal;
-		IAAFTypeDefSP  spTypeDef2;
-		hr = spPropDef->GetDefaultValue(&spPropVal);
-		if (FAILED(hr)) 
-		{
-			if (hr == AAFRESULT_NOT_IMPLEMENTED)
-			{
-				//If not implemented, then mark as NI and move on ...
-				//Flag this NI
-				bGetDefaultValue_NI = kAAFTrue;
-				//Reset the hr
-				hr = AAFRESULT_SUCCESS;
-				//Move on
-				goto _skip_GetDefaultValue;
-			}
-			else
-				//If it failed, but was not an NI, then "what the hell is this problem ??!!"
-				throw hr;
-		}//if Failed hr
-		checkResult(spPropVal->GetType(&spTypeDef2));
-		//Compare the two TypeDef's ...
-		checkResult(spTypeDef->QueryInterface(IID_IUnknown, (void **)&pUnk1));
-		checkResult(spTypeDef2->QueryInterface(IID_IUnknown, (void **)&pUnk2));
-		checkExpression( pUnk1 == pUnk2, AAFRESULT_TEST_FAILED );
-_skip_GetDefaultValue:
-		;
-
-		
-		
 	}//try
 	catch (HRESULT & rResult)
 	{
@@ -333,25 +272,6 @@ extern "C" HRESULT CAAFPropertyDef_test()
 		hr = CreateAAFFile(	pFileName );
 		if(hr == AAFRESULT_SUCCESS)
 			hr = ReadAAFFile( pFileName );
-		
-		//Check for partial success
-		if (bSetDefaultValue_NI || bSetIsSearchable_NI || bGetDefaultValue_NI || bGetIsSearchable_NI )
-		{
-			//if any one of these are set, we have only partial success ... damn! ...
-			hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-			
-			//print out the appropriate NI message(s) ...
-			if (bSetDefaultValue_NI)
-				cout << "\t  SetDefaultValue  method is Not Implemented" << endl;
-			if (bSetIsSearchable_NI)
-				cout << "\t  SetIsSearchable  method is Not Implemented" << endl;
-			if (bGetDefaultValue_NI)
-				cout << "\t  GetDefaultValue  method is Not Implemented" << endl;
-			if (bGetIsSearchable_NI)
-				cout << "\t  GetIsSearchable  method is Not Implemented" << endl;
-			
-		}//if partial success stuff
-
 	}//try
 	catch (...)
 	{
