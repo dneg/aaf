@@ -31,7 +31,6 @@
 
 #include <assert.h>
 #include <string.h>
-#include <typeinfo.h>
 
 
 ImplAAFEventMobSlot::ImplAAFEventMobSlot ():
@@ -127,7 +126,8 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
         RAISE(AAFRESULT_OBJECT_SEMANTIC);
 
       // Get the runtime type info for validation.
-      const type_info& firstComponentType = typeid(*pComponent);
+      aafUID_t firstComponentType;
+      CHECK(pComponent->GetObjectClass(&firstComponentType));
 
       // The component MUST be an event.
       pEvent = dynamic_cast<ImplAAFEvent *>(pComponent);
@@ -156,8 +156,9 @@ ImplAAFEventMobSlot::SetSegment (/*[in]*/ ImplAAFSegment * pSegment)
 
         // Validate that this event is the "same" type of event as the
         // first component of the sequence.
-        const type_info& componentType = typeid(*pEvent);
-        if (componentType != firstComponentType)
+        aafUID_t  componentType;
+        CHECK(pComponent->GetObjectClass(&componentType));
+        if (0 != memcmp(&firstComponentType, &componentType, sizeof(firstComponentType)))
           RAISE(AAFRESULT_OBJECT_SEMANTIC);
 
         // The component MUST be an event.
