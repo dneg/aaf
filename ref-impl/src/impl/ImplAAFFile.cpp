@@ -107,6 +107,7 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 		  return hr;
 		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
+		dictionary = 0;
 
 		// Initialize the mob lookup tables.
 		checkResult(_head->LoadMobTables());
@@ -192,6 +193,7 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 		  return hr;
 		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
+		dictionary = 0;
 
 		// Initialize the mob lookup tables.
 		checkResult(_head->LoadMobTables());
@@ -289,6 +291,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		//JeffB!!! We must decide whether def-only files have a content storage
 		checkResult(_head->GetContentStorage(&pCStore));
 		pCStore->ReleaseReference(); // need to release this pointer!
+		pCStore = 0;
 
 		// Attempt to create the file.
 		_file = OMFile::openNewModify(pFileName, _factory, _byteOrder, _head);
@@ -304,6 +307,7 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		  return hr;
 		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
+		dictionary = 0;
 
 		_open = AAFTrue;
 		_openType = kOmCreate;
@@ -373,6 +377,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		//JeffB!!! We must decide whether def-only files have a content storage
 		checkResult(_head->GetContentStorage(&pCStore));
 		pCStore->ReleaseReference(); // need to release this pointer!
+		pCStore = 0;
 
 		// Attempt to create the file.
 		_file = OMFile::openNewTransient(_factory, _byteOrder, _head);
@@ -388,6 +393,7 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		  return hr;
 		dictionary->InitBuiltins();
 		dictionary->ReleaseReference();
+		dictionary = 0;
 
 		_open = AAFTrue;
 		_openType = kOmTransient;
