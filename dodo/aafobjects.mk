@@ -75,7 +75,6 @@ HUMAN_TYPED_IMPL="\
 	AAFObject \
 	AAFParameter \
 	AAFParameterDef \
-	AAFPluggableCode \
 	AAFProperty \
 	AAFPropertyDef \
 	AAFPropertyValue \
