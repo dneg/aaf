@@ -440,6 +440,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefFixedArray.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefIndirect.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefInt.cpp"
 # End Source File
 # Begin Source File
