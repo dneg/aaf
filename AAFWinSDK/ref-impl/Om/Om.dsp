@@ -90,6 +90,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMContainerProperty.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMDataStreamProperty.cpp"
 # End Source File
 # Begin Source File
@@ -111,6 +115,18 @@ SOURCE="..\..\..\ref-impl\src\OM\OMPropertySet.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMPropertyTable.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMRefProperty.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMRefSetProperty.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMRefVectorProperty.cpp"
 # End Source File
 # Begin Source File
 
@@ -218,6 +234,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMFixedSizePropertyT.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMObject.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMObjectDirectory.h"
 # End Source File
 # Begin Source File
@@ -303,6 +323,18 @@ SOURCE="..\..\..\ref-impl\src\OM\OMReferenceVectorIterT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\OM\OMReferenceVectorT.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMRefProperty.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMRefSetProperty.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMRefVectorProperty.h"
 # End Source File
 # Begin Source File
 
