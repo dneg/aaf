@@ -83,7 +83,7 @@ protected:
 private:
   // @access Private members.
 
-    // @cmember The next avaliable local key.
+    // @cmember The next available local key.
     //
   OMUInt32 _localKey;
 
