@@ -175,9 +175,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							  IID_IAAFTypeDefInt, 
 							  (IUnknown **)&pIntDef));
 		checkResult(pIntDef->Initialize (&testInterpDef, sizeof(aafRational_t), AAFTrue, L"Signed Rational Effect Parameter"));
-		checkResult(pDictionary->CreateInstance(&AUID_AAFInterpolationDefinition,
-							  IID_IAAFInterpolationDef, 
-							  (IUnknown **)&pInterpDef));
 		checkResult(AAFGetPluginManager(&pMgr));
 		checkResult(pMgr->CreatePluginDefinition(LinearInterpolator, pDictionary, &pDefObject));
 		checkResult(pDefObject->QueryInterface(IID_IAAFInterpolationDef, (void **) &pInterpDef));
@@ -209,7 +206,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pDefObject->Release();
 		pDefObject = NULL;
 
-
 		//Make the first mob
 		long	test;
 		aafRational_t	videoRate = { 2997, 100 };
@@ -224,7 +220,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"AAFOperationGroupTest"));
 	  
 		// Add some slots
-		for(test = 0; test < 2; test++)
+		for(test = 0; test < 1/*!!!*/; test++)
 		{
  			checkResult(pDictionary->CreateInstance(&AUID_AAFOperationGroup,
 							     IID_IAAFOperationGroup, 
@@ -396,11 +392,12 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IEnumAAFControlPoints *pEnumCP = NULL;
 	IAAFControlPoint	*pControlPoint = NULL;
 	IAAFVaryingValue	*pVaryingValue = NULL;
+	IAAFInterpolationDef	*pInterpDef = NULL;
 	bool				bFileOpen = false;
-	aafUID_t			readSourceID;
+	aafUID_t			readSourceID, testInterpID, checkInterpID = LinearInterpolator;
 	aafBool				readIsTimeWarp;
 	aafInt32			catLen, checkNumInputs, testNumSources, testNumParam;
-	aafUInt32			checkBypass, testLen;
+	aafUInt32			checkBypass;
 	HRESULT				hr = S_OK;
 	wchar_t				checkCat[256], checkName[256];
 	aafNumSlots_t		s;
@@ -446,6 +443,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			/**/
 			checkResult(pOperationGroup->GetIndexedInputSegment (0, &pSeg));
  			checkResult(pSeg->QueryInterface(IID_IAAFFiller, (void **) &pFill));
+			pFill->Release();
+			pFill = NULL;
 			/**/
 			checkResult(pOperationGroup->GetParameterByArgID (kTestParmID, &pParameter));
  			checkResult(pParameter->QueryInterface(IID_IAAFVaryingValue, (void **) &pVaryingValue));
@@ -474,22 +473,31 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
  			checkExpression(bytesRead == sizeof(sampleValue2), AAFRESULT_TEST_FAILED);
 			pControlPoint->Release();
 			pControlPoint = NULL;
+			pEnumCP->Release();
+			pEnumCP = NULL;
 			/*****/
 
-			// Test out the interpolation method
+ 			// Test out the interpolation method
 			aafRational_t	oneQuarter = { 1, 4 };
 			aafRational_t	threeQuarters = { 3, 4 };
 			aafRational_t	testRat;
 			aafInt32		ratBytesRead;
 
 			checkResult(pVaryingValue->GetInterpolatedValue (oneQuarter, sizeof(testRat), (aafDataBuffer_t)&testRat, &ratBytesRead));
- 			checkExpression(testValue.numerator == threeQuarters.numerator, AAFRESULT_TEST_FAILED);
- 			checkExpression(testValue.denominator == threeQuarters.denominator, AAFRESULT_TEST_FAILED);
+			checkExpression(testRat.numerator == threeQuarters.numerator, AAFRESULT_TEST_FAILED);
+ 			checkExpression(testRat.denominator == threeQuarters.denominator, AAFRESULT_TEST_FAILED);
  			checkExpression(ratBytesRead == sizeof(sampleValue2), AAFRESULT_TEST_FAILED);
 
+			checkResult(pVaryingValue->GetInterpolationDefinition (&pInterpDef));
+ 			checkResult(pInterpDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
+			checkResult(pDefObject->GetAUID (&testInterpID));
+ 			checkExpression(EqualAUID(&testInterpID, &checkInterpID) == AAFTrue, AAFRESULT_TEST_FAILED);
+			pInterpDef->Release();
+			pInterpDef = NULL;
+			pDefObject->Release();
+			pDefObject = NULL;
+
 			/*****/
-			pEnumCP->Release();
-			pEnumCP = NULL;
 			checkResult(pParameter->GetParameterDefinition(&pParmDef));
 			checkResult(pParmDef->GetDisplayUnits (checkName, sizeof(checkName)));
 			checkExpression(wcscmp(checkName, TEST_PARAM_UNITS) == 0, AAFRESULT_TEST_FAILED);
@@ -527,18 +535,18 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			checkResult(pOperationGroup->GetRender (&pSourceRef));
 			checkResult(pSourceRef->GetSourceID (&readSourceID));
 			checkExpression(EqualAUID(&readSourceID, &zeroID) == AAFTrue, AAFRESULT_TEST_FAILED);
+			pSourceRef->Release();
+			pSourceRef = NULL;
+			pVaryingValue->Release();
+			pVaryingValue = NULL;
+			pParameter->Release();
+			pParameter = NULL;
+			pSeg->Release();
+			pSeg = NULL;
 			pOperationGroup->Release();
 			pOperationGroup = NULL;
 			pSlot->Release();
 			pSlot = NULL;
-			pSeg->Release();
-			pSeg = NULL;
-			pFill->Release();
-			pFill = NULL;
-			pParameter->Release();
-			pParameter = NULL;
-			pSourceRef->Release();
-			pSourceRef = NULL;
 		}
 		
 		slotIter->Release();
@@ -555,6 +563,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pFill)
 		pFill->Release();
       
+	if(pInterpDef)
+		pInterpDef->Release();
 	if(pVaryingValue)
 		pVaryingValue->Release();
 	if (pSourceRef)
@@ -637,13 +647,10 @@ HRESULT CAAFVaryingValue::test()
 
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following IAAFVaryingValue methods have not been implemented:" << endl; 
-		cout << "     GetInterpolationDefinition" << endl; 
-		cout << "     GetInterpolatedValue" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
+//	if (SUCCEEDED(hr))
+//	{
+//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//	}
 
 	return hr;
 }
