@@ -22,7 +22,6 @@ AD_HEAD
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(AAFMobSlot)
 AD_FORWARD_DECLARATION(AAFFile)
-AD_FORWARD_DECLARATION(AAFMedia)
 AD_FORWARD_DECLARATION(EnumAAFMobSlots)
 AD_FORWARD_DECLARATION(EnumAAFMobComments)
 
@@ -118,7 +117,7 @@ This method returns false by default. This method must be overridden by
 
 AD_XMETHOD3(AppendNewSlot,
 [in], objPass, aafRational_t, editRate, Edit rate property value,
-[in\, ref], objIn, AAFSegment, segment, Segment to append as slot component,
+[in], objIn, AAFSegment, segment, Segment to append as slot component,
 [out], objOut, AAFMobSlot, newSlot, Newly created slot,
 This method creates a new mob slot with the given property
   // values\, and appends it to the input mob.  Since the Toolkit
@@ -127,7 +126,7 @@ This method creates a new mob slot with the given property
 
 AD_XMETHOD6(AppendNewTrack,
 [in], objPass, aafRational_t, editRate, Edit rate property value,
-[in\, ref], objIn, AAFSegment, segment, Segment to append as track component,
+[in], objIn, AAFSegment, segment, Segment to append as track component,
 [in], objPass, aafPosition_t, origin, Track Origin,
 [in], objPass, aafTrackID_t, trackID, The Track ID,
 [in], objPass, aafString_t *, trackName, Track Name \(optional\),
@@ -153,7 +152,7 @@ return the enumeration for all mob comments..)
 
 
 AD_XMETHOD3(OffsetToMobTimecode,
-[in\,ref], objIn, AAFSegment, tcTrackID, Current track,
+[in], objIn, AAFSegment, tcTrackID, Current track,
 [in\,ref], objPass, aafPosition_t *, offset, Offset into segment,
 [out], objPass, aafTimecode_t *, result, The resulting timecode,
 This method will all mob property information is a single call.)
@@ -206,33 +205,11 @@ Finds all Source Clips in the specified Mob that refer to the specified old Mob\
   // for Source Clips\\\, and changes the sourceID property on all Source Clips with
   // oldMobID to newMobID.)
 
-AD_XMETHOD6(CopyExternal,
-[in], objPass, aafDepend_t, resolveDependencies, Whether to copy dependent mobs,
-[in], objPass, aafIncMedia_t, includeMedia, Whether to include media data,
-[in\,ref], objPass, aafString_t *, destMobName, Destination Mob Name,
-[in\,ref], objIn, AAFFile, destFile, Destination File,
-[out], objOut, AAFMedia, destMedia, Destination Media Data,
-[out], objOut, AAFMob, destMob, Destination Mob,
-Copies the specified Mob and optionally all dependent Mobs to an external
-  // file\, creating a new MobID for the specified Mob but retaining the MobIDs for
-  // the dependent Mobs.
-  // @commThis function copies the specified Mob in the source file into a destination Mob
-  // in the destination file with the specified destMobName. If resolveDependencies is
-  // kFollowDepend\, the function also clones all Mobs referenced by the speci\-
-  // fied Source Mob. The function creates a new MobID for the specified Mob\, but
-  // clones all other dependent Mobs \(they retain the same MobID\).
-  // If includeMedia is kIncludeMedia\, the function also copies the media data
-  // associated with the specified Mob. The function returns the destination Mob
-  // \(and its destination media data object\, if requested\) and copies all private data.
-  // If the media data is not in the file\, the function does not attempt to find it in
-  // another file and copy it.
-  // Both AAF files must be open before you call this function and both must have
-  // the same AAF Version number.)
 
 AD_XMETHOD4(CloneExternal,
 [in], objPass, aafDepend_t, resolveDependencies, Whether to clone dependent mobs,
 [in], objPass, aafIncMedia_t, includeMedia, Whether to include media data,
-[in\,ref], objIn, AAFFile, destFile, Destination AAF File,
+[in], objIn, AAFFile, destFile, Destination AAF File,
 [out], objOut, AAFMob, destMob, Destination Mob,
 Clones the specified Source Mob\, and optionally all dependent Mobs\, to an
   // external file\, keeping the same MobID.
