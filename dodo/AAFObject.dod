@@ -6,21 +6,9 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
 /***********************************************\
 *	Stub only.   Implementation not yet added	*
 \***********************************************/
-
-
 AD_IDL(//
 // This interface is implemented for all AAF persistent classes.  In
 // addition to methods which all clients can use\, it provides methods
@@ -129,11 +117,11 @@ AD_XMETHOD1(GetObjectClass,
 
 AD_XMETHOD1(EnumProperties,
 			[out\, retval],
-			  objOut,
-			  EnumAAFProperties,
-			  ppEnum,
-			  Property Enumeration,
-              Places an enumerator for properties into the *ppEnum argument.
+			objOut,
+			EnumAAFProperties,
+			ppEnum,
+			Property Enumeration,
+            Places an enumerator for properties into the *ppEnum argument.
   // 
   // The returned enumerator is AddRef\(\)ed before it is returned.
   // 
