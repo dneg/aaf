@@ -2212,7 +2212,7 @@ void OMSSStoredObject::readFromStream(IStream* stream,
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  unsigned long bytesRead;
+  OMUInt32 bytesRead;
   HRESULT status = stream->Read(data, size, &bytesRead);
   checkStatus(status);
   ASSERT("IStream::Read() succeeded", SUCCEEDED(status));
@@ -2253,7 +2253,7 @@ void OMSSStoredObject::writeToStream(IStream* stream, void* data, size_t size)
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  unsigned long bytesWritten;
+  OMUInt32 bytesWritten;
   HRESULT status = stream->Write(data, size, &bytesWritten);
   checkStatus(status);
   ASSERT("IStream::Write() succeeded", SUCCEEDED(status));

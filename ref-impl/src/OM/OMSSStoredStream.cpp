@@ -52,7 +52,7 @@ void OMSSStoredStream::read(void* data, size_t size) const
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  unsigned long bytesRead;
+  OMUInt32 bytesRead;
   HRESULT result = _stream->Read(data, size, &bytesRead);
   checkStatus(result);
   ASSERT("Succeeded", SUCCEEDED(result));
@@ -81,7 +81,7 @@ void OMSSStoredStream::write(void* data, size_t size)
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  unsigned long bytesWritten;
+  OMUInt32 bytesWritten;
   HRESULT resultCode = _stream->Write(data, size, &bytesWritten);
   checkStatus(resultCode);
   ASSERT("Succeeded", SUCCEEDED(resultCode));

@@ -51,7 +51,7 @@ void OMXMLStoredStream::read(void* data, size_t size) const
   PRECONDITION("Valid data buffer", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  unsigned long bytesRead;
+  OMUInt32 bytesRead;
   read(reinterpret_cast<OMByte*>(data), size, bytesRead);
 
   ASSERT("Successful read", bytesRead == size);
@@ -79,7 +79,7 @@ void OMXMLStoredStream::write(void* data, size_t size)
   PRECONDITION("Valid data", data != 0);
   PRECONDITION("Valid size", size > 0);
 
-  unsigned long bytesWritten;
+  OMUInt32 bytesWritten;
   write(reinterpret_cast<OMByte*>(data), size, bytesWritten);
 
   ASSERT("Successful write", bytesWritten == size);
