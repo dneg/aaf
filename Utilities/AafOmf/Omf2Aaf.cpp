@@ -315,7 +315,7 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 		v.type = kAAFVersionDebug;
 		pIdent->Initialize(L"Company Name",
 						   L"OMF to AAF File Conversion",
-						   0,
+						   L"<Unspecified version>",
 						   ProductID);
 		pIdent->SetProductVersion(v);
 		rc = pHeader->AppendIdentification(pIdent);
