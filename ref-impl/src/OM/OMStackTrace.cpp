@@ -155,30 +155,6 @@ static void finalize(void)
   }
 }
 
-// Instead of requiring clients to call setImageName() consider
-// calling SymGetModuleInfo().
-//
-static char _imageName[FILENAME_MAX] = "";
-
-void setImageName(const char* imageName)
-{
-  TRACE("setImageName");
-
-  PRECONDITION("Valid image name", validString(imageName));
-
-  size_t size = strlen(imageName) + 1;
-  if (size >= FILENAME_MAX) {
-    size = FILENAME_MAX - 1;
-  }
-  strncpy(_imageName, imageName, size);
-  _imageName[size] = '\0';
-
-  char* suffix = strrchr(_imageName, '.');
-  if ((suffix == 0) || ((suffix != 0) && (strcmp(suffix, ".exe") != 0))) {
-    strcat(_imageName, ".exe");
-  }
-}
-
 void printStackTrace(OMOStream& s)
 {
   s << "Symbolic stack trace." << endl;
@@ -187,13 +163,9 @@ void printStackTrace(OMOStream& s)
 
     BOOL status;
 
-    status = _SymInitialize(GetCurrentProcess(), 0, FALSE);
+    status = _SymInitialize(GetCurrentProcess(), 0, TRUE);
     if (!status) {
       s << "SymInitialize() failed." << endl;
-    }
-    status = _SymLoadModule(GetCurrentProcess(), 0, _imageName, 0, 0, 0);
-    if (!status) {
-      s << "SymLoadModule() failed." << endl;
     }
 
     //DWORD options = SymGetOptions();
@@ -294,10 +266,6 @@ void printStackTrace(OMOStream& s)
 }
 
 #else
-
-void setImageName(const char* /* imageName */)
-{
-}
 
 void printStackTrace(OMOStream& /* s */)
 {

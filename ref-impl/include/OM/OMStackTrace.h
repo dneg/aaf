@@ -31,6 +31,4 @@ class OMOStream;
 
 void printStackTrace(OMOStream& s);
 
-void setImageName(const char* imageName);
-
 #endif
