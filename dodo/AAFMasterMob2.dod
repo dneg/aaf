@@ -686,6 +686,14 @@ AD_XMETHOD7(CreateStaticEssence,
 [out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
 
      Creates and initializes the objects required to represent static essence.)
+  // This function is broadly similar to CreateEssence except that the essence is 
+  // Created in a static slot in the MasterMob
+  //
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
+
 
 AD_XMETHOD9(CreateEventEssence,
 [in],objPass, aafSlotID_t,masterSlotID,,
@@ -699,6 +707,14 @@ AD_XMETHOD9(CreateEventEssence,
 [out],objOut, AAFEssenceAccess,access,Return an essence access on the essence.,
 
      Creates and initializes the objects required to represent stream of events.)
+   // This function is broadly similar to CreateEssence except that the essence is 
+  // Created in a event slot in the MasterMob
+  //
+  // 
+  // The essence handle from this call can be used with
+  // WriteDataSamples  and possibly WriteDataLines\, but NOT with
+  // WriteMultiSamples.
+  // 
 
 AD_XCLASS_END(Concrete, StoredObject)
 
