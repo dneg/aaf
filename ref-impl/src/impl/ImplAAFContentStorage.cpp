@@ -190,7 +190,7 @@ AAFRESULT STDMETHODCALLTYPE
 			  aMob = NULL;
 			}
  		} while(hr == AAFRESULT_SUCCESS);
-		if(hr == AAFRESULT_NO_MORE_MOBS)
+		if(hr == AAFRESULT_NO_MORE_OBJECTS)
 			hr = AAFRESULT_SUCCESS;
 		if (mobEnum)
 		  {
