@@ -38,11 +38,17 @@ ImplAAFComponent::~ImplAAFComponent ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFComponent::SetLength (aafLength_t *  length)
+    ImplAAFComponent::SetLength (aafLength_t *  pLength)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-	_length = *length;
-
+	if (pLength == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_length = *pLength;
+	}
 	return aafError;
 }
 
@@ -63,7 +69,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	*pLength = _length;
+	if (pLength == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		*pLength = _length;
+	}
 	return aafError;
 }
 
@@ -73,7 +86,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	_dataDef = *pDataDef;
+	if (pDataDef == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_dataDef = *pDataDef;
+	}
 	return aafError;
 }
 
@@ -83,7 +103,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	*pDataDef = _dataDef;
+	if (pDataDef == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		*pDataDef = _dataDef;
+	}
 
 	return aafError;
 }
@@ -107,20 +134,32 @@ AAFRESULT STDMETHODCALLTYPE
  *************************************************************************/
 AAFRESULT ImplAAFComponent::SetNewProps(
         aafLength_t length,			/* IN - Length property value */
-        aafUID_t *dataDef)			/* IN - DataDef property value */
+        aafUID_t *pDataDef)			/* IN - DataDef property value */
 {
 //	aafAssertValidFHdl(_file);
 //	aafAssert((datakind != NULL), _file, OM_ERR_INVALID_DATAKIND);
-	assert(dataDef != NULL);
+//	assert(dataDef != NULL);
 	
-	_dataDef = *dataDef;
-	_length	= length;
-
+	if (pDataDef == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		_dataDef = *pDataDef;
+		_length	= length;
+	}
+		
 	return(AAFRESULT_SUCCESS);
 }
 
-AAFRESULT ImplAAFComponent::AccumulateLength(aafLength_t *length)
+AAFRESULT ImplAAFComponent::AccumulateLength(aafLength_t *pLength)
 {
+	if (pLength == NULL)
+	{
+ 		return AAFRESULT_NULL_PARAM;
+	}
+
 	return(AAFRESULT_SUCCESS);
 }
 
