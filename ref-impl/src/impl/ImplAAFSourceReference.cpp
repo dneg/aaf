@@ -23,6 +23,7 @@
 #include "ImplAAFSourceReference.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -99,7 +100,6 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
-extern "C" const aafClassID_t CLSID_AAFSourceReference;
 
-OMDEFINE_STORABLE(ImplAAFSourceReference, CLSID_AAFSourceReference);
+OMDEFINE_STORABLE(ImplAAFSourceReference, AUID_AAFSourceReference);
 
