@@ -55,7 +55,7 @@ CAAFServer* g_pAAFServer = &g_AAFInProcServer;
 
 // Include the definitions for all of the interface IID's.
 #include "AAF_i.c"
-#include "AAFRoot_i.c"
+#include "AAFPrivate_i.c"
 
 
 #if defined(_MAC)
