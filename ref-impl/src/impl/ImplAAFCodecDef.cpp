@@ -32,14 +32,18 @@
 #include <string.h>
 #include "aafErr.h"
 #include "AafUtils.h"
+#include "ImplAAFDictionary.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFDataDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFCodecFlavours;
 
 ImplAAFCodecDef::ImplAAFCodecDef ()
-:  _dataDefs(		PID_CodecDefinition_DataDefinitions,			"DataDefinitions")
+:  _dataDefs(		PID_CodecDefinition_DataDefinitions,			"DataDefinitions"),
+   _fileDescClass(	PID_CodecDefinition_FileDescriptorClass,		"FileDescriptorClass")
+
 {
 	_persistentProperties.put(_dataDefs.address());
+	_persistentProperties.put(_fileDescClass.address());
 }
 
 
@@ -125,27 +129,100 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::AreThereFlavours (
-      aafBool *  /*pResult*/)
+      aafBool *pResult)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUID_t						uid;
+	ImplAAFPluginManager			*mgr = NULL;
+	IAAFPlugin						*pPlug = NULL;
+	IAAFEssenceCodec				*pCodec = NULL;
+	aafBool							found;
+	aafInt32						flavourCount;
+
+	if(pResult == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	XPROTECT()
+	{
+		CHECK(GetAUID(&uid));
+		mgr = ImplAAFPluginManager::GetPluginManager();
+		// Only looks at first codec matching
+		found = AAFFalse;
+		if(mgr->GetPluginInstance(uid, &pPlug) == AAFRESULT_SUCCESS)
+		{
+			if(pPlug->QueryInterface(IID_IAAFEssenceCodec, (void **)&pCodec) == AAFRESULT_SUCCESS)
+			{
+				found = AAFTrue;
+			}
+		}
+		if(!found)
+			RAISE(AAFRESULT_CODEC_INVALID);
+
+		CHECK(pCodec->GetFlavourCount(&flavourCount));
+		*pResult = (flavourCount >= 2 ? AAFTrue : AAFFalse);
+		pPlug->Release();
+		pPlug = NULL;
+		pCodec->Release();
+		pCodec = NULL;
+		mgr->ReleaseReference();
+		mgr = NULL;
+	}
+	XEXCEPT
+	{
+		if(pPlug != NULL)
+			pPlug->Release();
+		if(pCodec != NULL)
+			pCodec->Release();
+		if(mgr != NULL)
+			mgr->ReleaseReference();
+	}
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::GetFileDescriptorClass (
-      ImplAAFClassDef ** /*ppClass*/)
+      ImplAAFClassDef **ppClass)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUID_t			classID;
+	ImplAAFDictionary	*pDict = NULL;
+	AAFRESULT			status;
+
+	if (ppClass == NULL)
+	{
+		status =  AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		classID = _fileDescClass;
+		status = GetDictionary(&pDict);
+		if(status == AAFRESULT_SUCCESS)
+			status = pDict->LookupClass(&classID, ppClass);
+	}
+
+	return status;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::SetFileDescriptorClass (
-      ImplAAFClassDef * /*pClass*/)
+      ImplAAFClassDef *pClass)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUID_t	classID;
+	
+	if (pClass == NULL)
+	{
+		return AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		pClass->GetAUID(&classID);
+		_fileDescClass = classID;
+	}
+	return AAFRESULT_SUCCESS;
 }
 
 
