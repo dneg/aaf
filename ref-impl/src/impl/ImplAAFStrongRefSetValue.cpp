@@ -143,12 +143,12 @@ AAFRESULT ImplAAFStrongRefSetValue::ValidateNewObject(ImplAAFStorable *pNewObjec
   if (pNewObject->attached())
     return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
-  // Hand off to the OMContainerProperty
-  OMContainerProperty * pContainerProperty = containerProperty();
+  // Hand off to the OMReferenceContainer
+  OMReferenceContainer* pReferenceContainer = referenceContainer();
 
   // Object refernce containers should only contain a single reference
   // to an object.
-  if (pContainerProperty->containsObject(pNewObject))
+  if (pReferenceContainer->containsObject(pNewObject))
   {
     return AAFRESULT_TABLE_DUP_KEY; // Object is already in the set!
   }

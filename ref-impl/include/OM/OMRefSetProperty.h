@@ -30,12 +30,15 @@
 #define OMREFSETPROPERTY_H
 
 #include "OMContainerProperty.h"
+#include "OMObjectSet.h"
 
   // @class Abstract base class for persistent object reference set
   //        properties supported by the Object Manager.
   //   @base public | <c OMContainerProperty>
+  //   @base public | <c OMObjectSet>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMReferenceSetProperty : public OMContainerProperty {
+class OMReferenceSetProperty : public OMContainerProperty,
+                               public OMObjectSet {
 public:
   // @access Public members.
 
@@ -46,20 +49,6 @@ public:
 
     // @cmember Destructor.
   virtual ~OMReferenceSetProperty(void);
-
-    // @cmember Remove the <c OMObject> identified by <p identification>
-    //          from this <c OMReferenceSetProperty>.
-  virtual OMObject* remove(void* identification) = 0;
-
-    // @cmember Does this <c OMReferenceSetProperty> contain an
-    //          <c OMObject> identified by <p identification> ?
-  virtual bool contains(void* identification) const = 0;
-
-    // @cmember Find the <c OMObject> in this <c OMReferenceSetProperty>
-    //          identified by <p identification>.  If the object is found
-    //          it is returned in <p object> and the result is < e bool.true>.
-    //          If the object is not found the result is <e bool.false>.
-  virtual bool findObject(void* identification, OMObject*& object) const = 0;
 
 };
 

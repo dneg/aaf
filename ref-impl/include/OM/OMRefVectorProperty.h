@@ -30,12 +30,15 @@
 #define OMREFVECTORPROPERTY_H
 
 #include "OMContainerProperty.h"
+#include "OMObjectVector.h"
 
   // @class Abstract base class for persistent object reference vector
   //        properties supported by the Object Manager.
   //   @base public | <c OMContainerProperty>
+  //   @base public | <c OMObjectVector>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-class OMReferenceVectorProperty : public OMContainerProperty {
+class OMReferenceVectorProperty : public OMContainerProperty,
+                                  public OMObjectVector {
 public:
   // @access Public members.
 
@@ -46,35 +49,6 @@ public:
 
     // @cmember Destructor.
   virtual ~OMReferenceVectorProperty(void);
-
-    // @cmember Set the value of this <c OMReferenceVectorProperty>
-    //          at position <p index> to <p object>.
-  virtual OMObject* setObjectAt(const OMObject* object,
-                                const size_t index) = 0;
-
-    // @cmember The value of this <c OMReferenceVectorProperty>
-    //          at position <p index>.
-  virtual OMObject* getObjectAt(const size_t index) const = 0;
-
-    // @cmember Append the given <p OMObject> <p object> to
-    //          this <c OMReferenceVectorProperty>.
-  virtual void appendObject(const OMObject* object) = 0;
-
-    // @cmember Prepend the given <p OMObject> <p object> to
-    //          this <c OMReferenceVectorProperty>.
-  virtual void prependObject(const OMObject* object) = 0;
-
-    // @cmember Remove the object from this
-    //          <c OMReferenceVectorProperty> at position <p index>.
-    //          Existing objects in this <c OMReferenceVectorProperty>
-    //          at <p index> + 1 and higher are shifted down one index
-    //          position.
-  virtual OMObject* removeObjectAt(const size_t index) = 0;
-
-    // @cmember Insert <p object> into this <c OMReferenceVectorProperty>
-    //          at position <p index>. Existing objects at <p index> and
-    //          higher are shifted up one index position.
-  virtual void insertObjectAt(const OMObject* object, const size_t index) = 0;
 
 };
 
