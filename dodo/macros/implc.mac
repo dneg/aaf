@@ -400,7 +400,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Argument9: constructor description
 #c
 #startm AD_CONSTRUCTOR2 09
-    .this-module::.this-module (%02 %03,%06 %07)
+    Impl.this-module::.this-module (%02 %03,%06 %07)
 {}
 #endm
 
@@ -425,7 +425,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Argument13: constructor description
 #c
 #startm AD_CONSTRUCTOR3 13
-    .this-module::.this-module (%02 %03,
+    Impl.this-module::.this-module (%02 %03,
 								%06 %07,
 								%10 %11)
 {}
@@ -456,7 +456,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c Argument17: constructor description
 #c
 #startm AD_CONSTRUCTOR4 17
-    .this-module::.this-module (%02 %03,
+    Impl.this-module::.this-module (%02 %03,
 								%06 %07,
 								%10 %11,
 								%14 %15)
@@ -484,7 +484,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_GETOBJ_METHOD1 06
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (Impl%03 ** %04)
+    Impl.this-module::%01 (Impl%03 ** %04)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -511,7 +511,7 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_SETOBJ_METHOD1 06
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (Impl%03 * %04)
+    Impl.this-module::%01 (Impl%03 * %04)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
