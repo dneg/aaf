@@ -335,13 +335,6 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 										   _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
-		if (_file->byteOrder() != hostByteOrder()) {
-		  // Modify of foreign files not yet supported
-		  _file->close();
-		  _file = 0;
-		  return AAFRESULT_NOT_IN_CURRENT_VERSION;
-		}
-
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
