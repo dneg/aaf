@@ -953,7 +953,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if (index >= count)
 	  return AAFRESULT_BADINDEX;
 
-	return AAFRESULT_NOT_IMPLEMENTED;
+	_locators.removeAt(index);
+	return AAFRESULT_SUCCESS;
 }
 
 

@@ -161,9 +161,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSelector::RemoveAlternateSegment (ImplAAFSegment* pSegment)
 {
-	HRESULT				hr = AAFRESULT_NOT_IMPLEMENTED;
+	if (!_alternates.containsValue(pSegment))
+	  return AAFRESULT_SEGMENT_NOT_FOUND;
 
-	return hr;
+	_alternates.removeValue(pSegment);
+	return AAFRESULT_SUCCESS;
 }
 
 //***********************************************************
