@@ -168,6 +168,14 @@ public:
 
          // @parm [in, string] friendly name of this type definition
          wchar_t *  pTypeName);
+
+public:
+  // Overrides from ImplAAFTypeDef
+  virtual bool IsAggregatable () const;
+  virtual bool IsStreamable () const;
+  virtual bool IsFixedArrayable () const;
+  virtual bool IsVariableArrayable () const;
+  virtual bool IsStringable () const;
 };
 
 //

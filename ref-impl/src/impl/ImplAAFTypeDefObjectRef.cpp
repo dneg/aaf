@@ -161,3 +161,19 @@ void ImplAAFTypeDefObjectRef::internalize(OMByte* externalBytes,
   assert (internalBytesSize >= externalBytesSize);
   copy (externalBytes, internalBytes, externalBytesSize);
 }
+
+
+bool ImplAAFTypeDefObjectRef::IsAggregatable () const
+{ return false; }
+
+bool ImplAAFTypeDefObjectRef::IsStreamable () const
+{ return false; }
+
+bool ImplAAFTypeDefObjectRef::IsFixedArrayable () const
+{ return false; }
+
+bool ImplAAFTypeDefObjectRef::IsVariableArrayable () const
+{ return true; }
+
+bool ImplAAFTypeDefObjectRef::IsStringable () const
+{ return false; }
