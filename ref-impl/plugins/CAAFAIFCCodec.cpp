@@ -627,8 +627,8 @@ CAAFAIFCCodec::WriteBlocks (aafDeinterleave_t  inter,
 				
 				CHECK(_stream->Write(fileBytes, xfer->buffer, &bytesWritten));
 				
-				resultBlock->bytesXfered = xfer->numSamples * _bytesPerFrame;
-				resultBlock->samplesXfered += xfer->numSamples;
+				resultBlock->bytesXfered = bytesWritten;
+				resultBlock->samplesXfered += (bytesWritten / _bytesPerFrame);
 			}
 		}
 		else if(_numCh == 1)
@@ -645,8 +645,8 @@ CAAFAIFCCodec::WriteBlocks (aafDeinterleave_t  inter,
 				CHECK(_stream->Write(fileBytes, xfer->buffer, &bytesWritten));
 				
 				
-				result->bytesXfered = xfer->numSamples * _bytesPerFrame;
-				result->samplesXfered += xfer->numSamples;
+				result->bytesXfered = bytesWritten;
+				result->samplesXfered += (bytesWritten / _bytesPerFrame);
 			}
 		}
 		else
@@ -931,12 +931,12 @@ HRESULT STDMETHODCALLTYPE
 CAAFAIFCCodec::Seek (aafPosition_t  sampleFrame)
 {
 	aafInt64          nBytes;
-	aafInt64          temp, offset, one;
+	aafInt64          temp, offset, zero;
 	aafUInt32           bytesPerFrame;
 	
 	XPROTECT()
 	{
-		CvtInt32toInt64(1, &one);
+		CvtInt32toInt64(0, &zero);
 		temp = _sampleFrames;
 		CHECK(AddInt32toInt64(1, &temp));
 		if (Int64Greater(sampleFrame, temp))
@@ -944,10 +944,8 @@ CAAFAIFCCodec::Seek (aafPosition_t  sampleFrame)
 		
 		nBytes = sampleFrame;
 		
-		/* Make the result zero-based (& check for bad frame numbers as well). */
-		if(Int64Less(nBytes, one))
+		if(Int64Less(nBytes, zero))
 			RAISE(AAFRESULT_BADSAMPLEOFFSET);
-		CHECK(SubInt64fromInt64(one, &nBytes));
 		bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
 		CHECK(MultInt32byInt64(bytesPerFrame, nBytes, &nBytes));
 		offset = _dataStartOffset;
@@ -1142,6 +1140,7 @@ CAAFAIFCCodec::PutEssenceFormat (IAAFEssenceFormat * pFormat)
 			{
 				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INVALID_PARM_SIZE);
 				memcpy(&valueUInt32, buf, bytesRead);
+				XASSERT(valueUInt32 > 0, AAFRESULT_ZERO_SAMPLESIZE);
 				_bitsPerSample = (aafUInt16)valueUInt32;
 				_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
 			}
@@ -1155,6 +1154,7 @@ CAAFAIFCCodec::PutEssenceFormat (IAAFEssenceFormat * pFormat)
 			{
 				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INVALID_PARM_SIZE);
 				memcpy(&valueUInt32, buf, bytesRead);
+				XASSERT(valueUInt32 > 0, AAFRESULT_CODEC_CHANNELS);
 				_numCh = (aafUInt16)valueUInt32;
 				_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
 			}
