@@ -443,7 +443,7 @@ HRESULT STDMETHODCALLTYPE
 		                      const_cast<wchar_t *>(kDisplayName),
 		                      const_cast<wchar_t *>(kDescription)));
 
-	  	checkResult(dict->LookupClassDef(AUID_AAFWAVEDescriptor, &fileClass));
+	  	checkResult(dict->LookupClassDef(AUID_AAFCDCIDescriptor, &fileClass));
 		checkResult(codecDef->SetFileDescriptorClass (fileClass));
 		fileClass->Release ();
 		fileClass = 0;
