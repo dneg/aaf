@@ -45,6 +45,15 @@ class ImplAAFDefObject;
 #include "AAFPlugin.h"
 #include "aafTable.h"
 
+// Implemenent a visitor pattern for plugins with a given definition id.
+// Used with ForEachPluginWithDefinitionDo.
+typedef aafBool	(*AAFDOTOPLUGINWITHDEFINTIONPROC)(
+  aafUID_constref defID, 
+  REFCLSID clsid, 
+  void *refCon);
+
+
+
 class ImplAAFDictionary;
 
 class ImplAAFPluginManager : public ImplAAFRoot
@@ -79,6 +88,21 @@ public:
 	//Toolkit internal only
 static ImplAAFPluginManager *GetPluginManager(void);
 
+// Implemenent a visitor pattern for plugins with a given definition id.
+AAFRESULT ForEachPluginWithDefinitionDo(
+  aafUID_constref defID, 
+  AAFDOTOPLUGINWITHDEFINTIONPROC proc, 
+  void *refCon);
+
+bool FindPluginFromDefintion(
+  aafUID_constref	pluginID,
+  CLSID& clsid);
+
+bool FindPluginFromEssenceDesc(
+  aafUID_constref	essenceDesc,
+  CLSID& clsid);
+
+
 // Create an object contained within one of the loaded plugin files.
 AAFRESULT CreateInstance(
 			REFCLSID rclsid, 
@@ -86,6 +110,11 @@ AAFRESULT CreateInstance(
 			REFIID riid, 
 			void ** result);
 
+AAFRESULT CreateInstanceFromDefinition(
+			aafUID_constref		pluginID,
+			IUnknown* pUnkOuter, 
+			REFIID riid, 
+			void ** result);
 
 AAFRESULT GetPluginInstance(
 			aafUID_t		pluginID,
@@ -95,8 +124,30 @@ AAFRESULT MakeCodecFromEssenceDesc(
 			aafUID_t		essenceDesc,	// Stored class ID
 			IAAFEssenceCodec **codec);
 
+// Attempt to register all of the plugin files in the installation directory.
+AAFRESULT RegisterSharedPlugins(void);
+
+// Attempt to register all of the plugin files in the given directory.
+AAFRESULT RegisterPluginDirectory(const char *directoryName);
+AAFRESULT RegisterPluginDirectory(aafCharacter_constptr wdirectoryName);
+
+// Attempt to register all of the plugins in the given file.
+AAFRESULT RegisterPluginFile(const char *fileName);
+AAFRESULT RegisterPluginFile(aafCharacter_constptr wfileName);
+
+// Associate a factory object with a code class id.
+AAFRESULT RegisterPluginFactory(
+			REFCLSID rclsid,
+      IClassFactory *pFactory);
+
 AAFRESULT RegisterPlugin(
 			CLSID		plugin);
+
+// Attempt to unregister all plugins. This may fail if any plugins
+// are still loaded. This method should only be called after all
+// files have been closed, all client created plugins have been
+// released but before AAFUnload() has been called.
+AAFRESULT UnregisterAllPlugins(void);
 
 AAFRESULT Init(void);
 
@@ -110,6 +161,7 @@ AAFRESULT CreatePluginDefinition (aafUID_t  pluginDefID,
 
 private:
   aafTable_t	*_pluginFiles;
+  aafTable_t  *_pluginFactories;
 	aafTable_t	*_plugins;
 	aafTable_t	*_codecDesc;
 };
