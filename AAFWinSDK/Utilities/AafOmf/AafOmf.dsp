@@ -50,8 +50,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /machine:I386
-# ADD LINK32 aaf.lib aafiid.lib libbento.lib libjpeg.lib libomfi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /incremental:yes /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /nodefaultlib:"msvcirtd.lib" /libpath:"..\..\Release\Refimpl" /libpath:"..\..\..\OMF"
-# SUBTRACT LINK32 /pdb:none /nodefaultlib
+# ADD LINK32 aaf.lib aafiid.lib libbento.lib libjpeg.lib libomfi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib AAFConverterLib.lib /nologo /subsystem:console /incremental:yes /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /nodefaultlib:"msvcrtd.lib" /nodefaultlib:"msvcirtd.lib" /libpath:"..\..\Release\Refimpl" /libpath:"..\..\..\OMF" /libpath:"..\..\Release\Utilities"
+# SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "AafOmf - Win32 Debug"
 
@@ -75,8 +75,8 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 aafd.lib aafiidd.lib libbentod.lib libjpegd.lib libomfid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"msvcirt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /pdbtype:sept /libpath:"..\..\Debug\Refimpl" /libpath:"..\..\..\OMF"
-# SUBTRACT LINK32 /pdb:none /nodefaultlib
+# ADD LINK32 aafd.lib aafiidd.lib libbentod.lib libjpegd.lib libomfid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib AAFConverterLib.lib /nologo /subsystem:console /debug /machine:I386 /nodefaultlib:"libc.lib" /nodefaultlib:"libcmt.lib" /nodefaultlib:"msvcrt.lib" /nodefaultlib:"msvcirt.lib" /nodefaultlib:"libcd.lib" /nodefaultlib:"libcmtd.lib" /pdbtype:sept /libpath:"..\..\Debug\Refimpl" /libpath:"..\..\..\OMF" /libpath:"..\..\Debug\Utilities"
+# SUBTRACT LINK32 /pdb:none
 
 !ENDIF 
 
@@ -89,63 +89,7 @@ LINK32=link.exe
 # PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
 # Begin Source File
 
-SOURCE=..\..\..\Utilities\AafOmf\Aaf2Omf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\AAFDomainExtensions.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\AAFDomainUtils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\AAFException.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\AafOmf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\Assertion.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\EffectTranslate.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\ExceptionBase.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\Extensions.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\LoggerBase.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\Omf2Aaf.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\OMFDomainExtensionUtils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\OMFDomainUtils.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\OMFException.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\..\Utilities\AafOmf\StreamLogger.cpp
+SOURCE=..\..\..\Utilities\AafOmf\AafOmfMain.cpp
 # End Source File
 # End Group
 # Begin Group "Header Files"
