@@ -1026,7 +1026,7 @@ function formatAUIS(O00, O01, O02, O03, O04, O05, O06, O07,
 {
   return sprintf("{%s%s%s%s-%s%s-%s%s-%s%s-%s%s%s%s%s%s}",
              O11, O10, O09, O08,
-             O13, O12, O15, O14,
+             O12, O13, O14, O15,
              O00, O01, O02, O03,
              O04, O05, O06, O07);
 }
