@@ -37,6 +37,7 @@
 
 // Include the AAF interface declarations.
 #include "AAF.h"
+#include "AAFFileKinds.h"
 
 // Include the AAF Stored Object identifiers. These symbols are defined
 // in aaf.lib.
@@ -566,6 +567,114 @@ void usage(void)
   printf("  CreateSequence <Number of components>\n");
   printf("<Number of components> must be greater than zero.\n");
   printf("<file> defaults to <Number of components>.aaf\n");
+}
+
+STDAPI AAFMemoryFileOpenNewModify (
+  aafUInt32  modeFlags,
+  aafProductIdentification_t*  pIdent,
+  IAAFFile** ppFile)
+{
+  HRESULT hr;
+  IAAFRawStorage* rs = 0;
+
+  hr = AAFCreateRawStorageMemory(
+    kAAFFileAccess_modify,
+    &rs);
+  if (!SUCCEEDED(hr)) {
+    return hr;
+  }
+
+  hr = AAFCreateAAFFileOnRawStorage(
+    rs,
+    kAAFFileExistence_new,
+    kAAFFileAccess_write,
+    &aafFileKindAafSSBinary,
+    modeFlags,
+    pIdent,
+    ppFile);
+  if (!SUCCEEDED(hr)) {
+    (*ppFile)->Release();
+    return hr;
+  }
+
+  hr = (*ppFile)->Open();
+  if (!SUCCEEDED(hr)) {
+    (*ppFile)->Release();
+    rs->Release();
+    return hr;
+  }
+
+  rs->Release();
+  rs = 0;
+
+  return S_OK;
+}
+
+STDAPI AAFMemoryFileSaveToDisk(
+  aafCharacter_constptr  pFileName,
+  IAAFFile* pFile)
+{
+  IAAFRandomFile* pRandFile;
+  HRESULT hr = pFile->QueryInterface(IID_IAAFRandomFile, (void **)&pRandFile);
+  if (FAILED(hr)) {
+    return hr;
+  }
+  
+  IAAFGetFileBits* pGetBits;
+  hr = pRandFile->GetFileBits(&pGetBits);
+  if (FAILED(hr)) {
+    pRandFile->Release();
+    return hr;
+  }
+
+  aafUInt64 size = 0;
+  hr = pGetBits->GetSize(&size);
+  if (FAILED(hr)) {
+    pRandFile->Release();
+    pGetBits->Release();
+    return hr;
+  }
+
+  char cFileName[FILENAME_MAX];
+  size_t status = wcstombs(cFileName, pFileName, FILENAME_MAX);
+  if (status == (size_t)-1) {
+    pRandFile->Release();
+    pGetBits->Release();
+    return E_FAIL;
+  }
+
+  FILE *f = fopen(cFileName, "wb");
+  if (f == 0) {
+    pRandFile->Release();
+    pGetBits->Release();
+    return E_FAIL;
+  }
+
+  aafUInt64 position = 0;
+  aafUInt64 remaining = size;
+  while (remaining != 0) {
+    aafUInt32 readSize;
+    aafUInt8 buffer[4 * 1024];
+    if (remaining > sizeof(buffer)) {
+      readSize = sizeof(buffer);
+	} else {
+      readSize = (aafUInt32)remaining;
+    } 
+	hr = pGetBits->ReadAt(buffer, readSize, position);
+	if (FAILED(hr)) {
+      pRandFile->Release();
+      pGetBits->Release();
+      return hr;
+    }
+    fwrite(buffer, 1, readSize, f);
+    position = position + readSize;
+    remaining = remaining - readSize;
+  }
+  fclose(f);
+
+  pRandFile->Release();
+  pGetBits->Release();
+  return S_OK;
 }
 
 //  Main adapted to use command-line arguments with argument checking
