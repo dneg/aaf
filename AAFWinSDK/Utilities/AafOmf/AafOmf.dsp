@@ -97,6 +97,10 @@ SOURCE=..\..\..\Utilities\AafOmf\AafOmf.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\Utilities\AafOmf\EffectTranslate.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\..\Utilities\AafOmf\Omf2Aaf.cpp
 # End Source File
 # End Group
@@ -110,6 +114,10 @@ SOURCE=..\..\..\Utilities\AafOmf\Aaf2Omf.h
 # Begin Source File
 
 SOURCE=..\..\..\Utilities\AafOmf\AafOmf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\..\Utilities\AafOmf\EffectTranslate.h
 # End Source File
 # Begin Source File
 
