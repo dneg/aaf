@@ -50,7 +50,7 @@ static HRESULT CreateAAFSequence(IAAFSequence** ppSequence)
 						   (void **)&pSequence);		
  	if (SUCCEEDED(hr))
 	{
-		pSequence->SetInitialValue((aafUID_t*)&DDEF_Audio);
+		pSequence->Initialize((aafUID_t*)&DDEF_Audio);
 
 		//
 		//	Add some segments.  Need to test failure conditions
