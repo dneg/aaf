@@ -7,9 +7,9 @@ $LinuxBaseDir = "/home/aaftest";   # This is the local directory on the Linux se
 $IrixBaseDir  = "/mnt/aaftest";    # /home/aaftest on the Linux server accessed via NFS.
 $Win2KBaseDir = "g:";              # /home/aaftest on the Linux server accessed via Samba
 
-$LinuxAAFDir = "~jpt/aaf/V101_RC1/AAF/AAFi686LinuxSDK/g++";
-$IrixAAFDir  = "~jpt/AAF/V101_RC1/AAF/AAFMipsIrixSDK/MIPSpro";
-$Win2KAAFDir = "c:/cygwin/home/jpt/AAF/V101_RC1/AAF/AAFWinSDK";
+$LinuxAAFDir = "~jpt/aaf/V101_RC2/AAF/AAFi686LinuxSDK/g++";
+$IrixAAFDir  = "~jpt/AAF/V101_RC2/AAF/AAFMipsIrixSDK/MIPSpro";
+$Win2KAAFDir = "c:/cygwin/home/jpt/AAF/V101_RC2/AAF/AAFWinSDK";
 
 $SharedTestDirPath = "testfiles";
 
@@ -29,34 +29,55 @@ $SharedTestDirPath = "testfiles";
   # and Linux303 to independentally verify Linux builds that use
   # different versions of gcc.
 
-  Platforms => [ Win2K, Linux, Irix, ],
+#  Platforms => [ Win2K, Linux, Irix ],
+  Platforms => [ Linux ],
 
   # A list of COM library versions.  Again these are just symbolic
   # names.  Every platform in the Platforms array must have a version
   # of the com library in the Versions list.
 
-  Versions => [ V1, V101, ],
+  Versions => [ V101, V1 ],
 
   # A list of the test that should be executed.  They will be executed
   # in order.  Each entry in this list must have an identically named
   # entry in the CFG array (find them below).
 
-  Tests => [ TestLoad, TestOne, TestTwo ],
+  Tests => [ TestLoad,
+	     AddMobs,
+	     ModifyMobs,
+	     ModifyComments,
+	     CreateEssence,
+	     ModifyEssence,
+	   ],
 
   # A full path the COM library is required for each platform and
   # library version.  An CFG entry for each version in the Versions
   # list accomplishes this.  Each version entry maps the platform to a
   # full path to the library.
 
-  V1   => { Win2K => "c:/cygwin/home/jpt/AAF/V1/AAFWinRC1src/AAF/AAFWinSDK/Debug/Refimpl/AAFCOAPI.dll",
+  V1   => { Win2K => "c:/cygwin/home/jpt/AAF/V1/AAFWinRC1src/AAF/AAFWinSDK/bin/AAFCOAPI.dll",
 	    Linux => "~jpt/aaf/V1/AAF/AAFi686LinuxSDK/g++/bin/libcom-api.so",
 	    Irix  => "~jpt/AAF/V1/AAF/AAFMipsIrixSDK/MIPSpro/bin/libcom-api.so",
 	  },
 
   V101 => {  Win2K => "${Win2KAAFDir}/bin/AAFCOAPI.dll",
- 	     Linux => "${LinuxAAFDir}/bin/debug/libcom-api.so",
-	     Irix  => "${IrixAAFDir}/com-api/debug/libcom-api.so",
+ 	     Linux => "${LinuxAAFDir}/bin/libcom-api.so",
+	     Irix  => "${IrixAAFDir}/bin/libcom-api.so",
 	  },
+
+  PlugInLibPath => {
+
+      V1   => { Win2K => "c:/cygwin/home/jpt/AAF/V1/AAFWinRC1src/AAF/AAFWinSDK/bin/aafext/AAFPGAPI.DLL",
+		Linux => "~jpt/aaf/V1/AAF/AAFi686LinuxSDK/g++/bin/libaafpgapi.so",
+		Irix  => "~jpt/AAF/V1/AAF/AAFMipsIrixSDK/MIPSpro/bin/libaafpgapi.so",
+	    },
+
+      V101 => { Win2K => "${Win2KAAFDir}/bin/aafext/AAFPGAPI.DLL",
+		Linux => "${LinuxAAFDir}/bin/libaafpgapi.so",
+		Irix  => "${IrixAAFDir}/bin/libaafpgapi.so",
+	    },
+  },
+
   # Test are executed using the MultiGenTest program.
   # MultiGenTestPath maps versions and platform names to a full path
   # to the MultiGenTest executable.
@@ -115,7 +136,7 @@ $SharedTestDirPath = "testfiles";
   # approach might to let the tests fail, then check if the failure
   # was expected.  How could that be generically expressed?
   #
-  # Versions  - array of library versions that do support modify.
+  # Versions  - array of library versions that do not support modify.
   # ByteOrder - exclude modify tests if the byte ordering of the 
   #             creator and modifier do not match.
     
@@ -177,15 +198,119 @@ $SharedTestDirPath = "testfiles";
 
   TestLoad => [ "load" ],
 
-  TestOne => [ "create",
-	       "AddMasterMobs A B",
-	       "FindMasterMobsExclusive A B",
-	     ],
+  AddMobs =>
 
-  TestTwo => [ "modify",
-	       "AddMasterMobs C D",
-	       "FindMasterMobsExclusive A B C D",
-	       "TestOne"
-	     ],
+	[ "create",
+	  
+	  ["MasterMobAdd A",
+	   "MasterMobAdd B",
+	   "MasterMobAdd C",
+	   "MasterMobAdd D",
+	   "AppendComment A CategoryOne   CommentOne",
+	   "AppendComment A CategoryTwo   CommentTwo",
+	   "AppendComment A CategoryThree CommentThree",
+	  ],
+	  
+	  ["FindMasterMob A",
+	   "FindMasterMob B",
+	   "FindMasterMob C",
+	   "FindMasterMob D",
+	   "CountMasterMobs 4",
+	   "FindComment A CategoryOne   CommentOne",
+	   "FindComment A CategoryTwo   CommentTwo",
+	   "FindComment A CategoryThree CommentThree",
+	   "CountComments A 3",
+	  ],
+      ],
 
+  ModifyMobs =>
+
+	[ "modify",
+
+	  [ "MasterMobAdd E",
+	    "RenameMob A G",
+	    "MasterMobAdd F",
+	    "RenameMob D H",
+	    "RemoveMob B",
+	    "RemoveMob C",
+	  ],
+	  
+	  [ "FindMasterMob E",
+	    "FindMasterMob F",
+	    "FindMasterMob G",
+	    "FindMasterMob H",
+	    "CountMasterMobs 4",
+	  ],
+	  
+	  "AddMobs"
+       ],
+
+  ModifyComments =>
+
+       [  "modify",
+
+	  [ "AppendComment A CategoryOne   CommentOneChanged",
+	    "AppendComment A CategoryFour  CommentFour",
+	    "RemoveComment A CategoryTwo   CommentTwo",
+	    "RemoveComment A CategoryThree CommentThree",
+	    "AppendComment B CategoryOne   CommentOne",
+	  ],
+
+	  [ "FindComment A CategoryOne  CommentOneChanged",
+	    "FindComment A CategoryFour CommentFour",
+	    "CountComments A 2",
+	    "FindComment B CategoryOne  CommentOne",
+	    "CountComments B 1",
+	  ],
+
+	  "AddMobs",
+       ],
+
+  CreateEssence =>
+
+       [ "create",
+
+	 [
+	    "MasterMobAdd A",
+	    "EssenceCreate A 1 picture cdci uncompressed    3",
+	    "EssenceCreate A 2   sound wave uncompressed 3000",
+	    "MasterMobAdd B",
+	    "EssenceCreate B 1 picture cdci uncompressed    4",
+	    "EssenceCreate B 2   sound wave uncompressed 4000",
+	 ],
+
+	 [
+	    "SlotDataDef A 1 picture",
+	    "SlotDataDef A 2   sound",
+	    "SlotDataDef B 1 picture",
+	    "SlotDataDef B 2   sound",
+	    "CountSamples A 1 uncompressed    3",
+	    "CountSamples A 2 uncompressed 3000",
+	    "CountSamples B 1 uncompressed    4",
+	    "CountSamples B 2 uncompressed 4000",
+	 ],
+
+       ],
+
+  ModifyEssence =>
+
+	[ "modify",
+
+	  [
+	     "EssenceAppend A 1 uncompressed    3",
+	     "EssenceAppend A 2 uncompressed 3000",
+	     "EssenceAppend B 1 uncompressed    4",
+	     "EssenceAppend B 2 uncompressed 4000"
+	  ],
+	  
+	  [
+	    "CountSamples A 1 uncompressed 7", 
+	    "CountSamples A 2 uncompressed 7000", 
+	    "CountSamples B 1 uncompressed 8", 
+	    "CountSamples B 2 uncompressed 8000", 
+	  ],
+
+	  "CreateEssence"
+
+	],
 );
