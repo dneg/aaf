@@ -227,6 +227,9 @@ public:
     // @cmember The loading mode (eager or lazy) of this <c OMFile>.
   OMLoadMode loadMode(void) const;
 
+    // @cmember The access mode of this <c OMFile>.
+  OMAccessMode accessMode(void) const;
+
     // @cmember Is this file recognized by the Object Manager ?
   bool isOMFile(void) const;
 
