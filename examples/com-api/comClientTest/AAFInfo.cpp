@@ -143,7 +143,6 @@ static void ReadAAFFile(aafWChar * pFileName)
 
 
   hr = AAFFileOpenExistingRead (pFileName, 0, &pFile);
-  check(hr); // display error message
   if (SUCCEEDED(hr))
   {
     IAAFHeader * pHeader = NULL;
@@ -178,6 +177,10 @@ static void ReadAAFFile(aafWChar * pFileName)
 
     pFile->Release();
     pFile = NULL;
+  }
+  else
+  {
+    fprintf(stderr, "Error : Failed to open file (result = %0x).\n", hr);
   }
 }
 
