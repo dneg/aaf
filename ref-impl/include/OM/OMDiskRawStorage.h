@@ -49,12 +49,12 @@ public:
     // @cmember Create an <c OMDiskRawStorage> object by opening an existing
     //          file for read-only access, the file is named <p fileName>.
     //          The file must already exist.
-  static OMDiskRawStorage* openExisitingRead(const wchar_t* fileName);
+  static OMDiskRawStorage* openExistingRead(const wchar_t* fileName);
 
     // @cmember Create an <c OMDiskRawStorage> object by opening an existing
     //          file for modify access, the file is named <p fileName>.
     //          The file must already exist.
-  static OMDiskRawStorage* openExisitingModify(const wchar_t* fileName);
+  static OMDiskRawStorage* openExistingModify(const wchar_t* fileName);
 
     // @cmember Create an <c OMDiskRawStorage> object by creating a new
     //          file for modify access, the file is named <p fileName>.

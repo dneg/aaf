@@ -37,9 +37,9 @@
   //   @parm The file name.
   //   @rdesc The newly created <c OMDiskRawStorage> object.
 OMDiskRawStorage*
-OMDiskRawStorage::openExisitingRead(const wchar_t* fileName)
+OMDiskRawStorage::openExistingRead(const wchar_t* fileName)
 {
-  TRACE("OMDiskRawStorage::openExisitingRead");
+  TRACE("OMDiskRawStorage::openExistingRead");
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
@@ -53,9 +53,9 @@ OMDiskRawStorage::openExisitingRead(const wchar_t* fileName)
   //   @parm The file name.
   //   @rdesc The newly created <c OMDiskRawStorage> object.
 OMDiskRawStorage*
-OMDiskRawStorage::openExisitingModify(const wchar_t* fileName)
+OMDiskRawStorage::openExistingModify(const wchar_t* fileName)
 {
-  TRACE("OMDiskRawStorage::openExisitingModify");
+  TRACE("OMDiskRawStorage::openExistingModify");
 
   PRECONDITION("Valid file name", validWideString(fileName));
 
