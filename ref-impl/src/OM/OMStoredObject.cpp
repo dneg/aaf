@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMEXTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMStoredObject
 #include "OMStoredObject.h"
 #include "OMStoredPropertySetIndex.h"
 #include "OMProperty.h"

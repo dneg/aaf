@@ -45,6 +45,7 @@ class OMStoredVectorIndex;
 class OMStoredSetIndex;
 
   // @class In-memory representation of a persistent object.
+  //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 class OMStoredObject {
 public:
   // @access Static members.

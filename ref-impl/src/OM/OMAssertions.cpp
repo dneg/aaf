@@ -26,6 +26,8 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMAssertions
+
 #include "OMAssertions.h"
 
 class OMAssertionViolation {

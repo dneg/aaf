@@ -26,6 +26,7 @@
 ************************************************************************/
 
 // @doc OMINTERNAL
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMVectorIterator
 #include "OMAssertions.h"
 
   // @mfunc Create an <c OMVectorIterator> over the given
