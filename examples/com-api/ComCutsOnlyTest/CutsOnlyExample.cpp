@@ -665,13 +665,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 
 										pMasterMob->Release();
-
 										pMasterMob = NULL;
 									}
 
+									pReferencedMob->Release();
+									pReferencedMob = NULL;
 
 									pSourceClip->Release();
-
 									pSourceClip = NULL;
 								}
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
@@ -728,7 +728,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		printf("***Wrong number of composition mobs in the file (was %ld should be %ld)\n",
 			numCompMobs, 1L);
 	}
-
 
 
 cleanup:
