@@ -303,7 +303,7 @@ aafUInt32 .this-module::AcquireReference() const
 aafUInt32 .this-module::ReleaseReference()
 {
   long count = InterlockedDecrement(reinterpret_cast<long *>(&_refCount));
-#if defined(DELETE_LAST_REFERENCE)
+#if !defined(DONT_DELETE_LAST_REFERENCE)
   if (0 == count)
     delete this;
 #else
