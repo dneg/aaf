@@ -245,12 +245,130 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+template <class T1, class T2>
+aafBoolean_t  AreUnksSame(T1& cls1, T2& cls2)
+{
+	IUnknown	*pUnk1=NULL, *pUnk2=NULL;
+	
+	pUnk1 = static_cast<IUnknown *> (cls1->GetContainer());
+	assert (pUnk1);
+
+	pUnk2 = static_cast<IUnknown *> (cls2->GetContainer());
+	assert (pUnk2);
+	
+	if (pUnk1 == pUnk2)
+		return kAAFTrue;
+	else
+		return kAAFFalse;
+
+}
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefString::AppendElements (
-      ImplAAFPropertyValue * /*pInPropVal*/,
-      aafMemPtr_t  /*pElements*/)
+      ImplAAFPropertyValue * pInPropVal,
+      aafMemPtr_t  pElements)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (! pInPropVal)
+		return AAFRESULT_NULL_PARAM;
+	
+	if (! pElements)
+		return AAFRESULT_NULL_PARAM;
+	
+	if (! IsRegistered ())
+		return AAFRESULT_NOT_REGISTERED;
+	
+	AAFRESULT hr;
+	
+	ImplAAFTypeDefSP  pIncomingType;
+	hr = GetType (&pIncomingType);
+	
+	ImplAAFTypeDefSP  pBaseType;
+	hr = GetType (&pBaseType);
+	
+	//compare types ... make sure there're the same
+	if (!AreUnksSame(pIncomingType, pBaseType))
+		return AAFRESULT_ILLEGAL_VALUE;
+	
+	//do the size thing ...
+	
+	assert (pBaseType->IsFixedSize ());
+	pBaseType->AttemptBuiltinRegistration ();
+	assert (pBaseType->IsRegistered ());
+	// Size of individual elements
+	aafUInt32 elementSize = pBaseType->NativeSize ();
+	
+	// Get the current size of the property
+    aafUInt32 originalDataSize;
+	
+	ImplAAFPropValDataSP pvd;
+	pvd = dynamic_cast<ImplAAFPropValData *>(pInPropVal);
+	assert (pvd);
+	hr = pvd->GetBitsSize (&originalDataSize);
+	
+	//get the data
+	aafMemPtr_t pOriginalData = NULL;
+	hr = pvd->GetBits (&pOriginalData);
+	assert(hr == AAFRESULT_SUCCESS);
+		
+	/////
+	//Now, find out what additional size we need based on the new data coming in.
+	
+	//first, see how many elements we have
+	aafMemPtr_t pNewData = pElements;
+	
+	aafUInt32 newElemCount =0;
+	
+	//outer loop of the entire memory buffer passed in ...
+	while (pNewData)
+	{
+		aafUInt32 count_of_zeroes = 0;
+
+		//inner loop - chunking in size of elementSize
+		for (aafUInt32 i=0; i<elementSize; i++)
+			if (*pNewData == 0)
+				count_of_zeroes++;
+		
+		if (count_of_zeroes == elementSize)
+			//we have a null! ... done!
+			break;
+		
+		//otherwise, increment new element count, and move on
+		newElemCount++;
+		
+		//incr pNewData by elementSize
+		pNewData += elementSize;
+	}//while
+	
+	
+	//At this point, our newElemCount holds a count of new elements to be added 
+	//and the new size of bits is:
+	aafUInt32 newsize = (newElemCount+1/*don't forget EOS*/) * elementSize;
+	
+	//Add this "newsize" to the original originalDataSize to get the new Total buffer size
+	aafUInt32 TotalSize = originalDataSize + newsize;
+	
+	//Save the orginal buffer, before we re-allocate
+	aafMemPtr_t tmp_buffer = new aafUInt8[originalDataSize+1];
+	memcpy(tmp_buffer, pOriginalData, originalDataSize);
+	
+	//Allocate the grand total # of bits (orginal + the new stuff) ...
+	aafMemPtr_t pBits = 0;
+	hr = pvd->AllocateBits (TotalSize, &pBits);
+	if (AAFRESULT_FAILED (hr))
+		return hr;
+	assert (pBits);
+	
+	//copy over the first part
+	memcpy (pBits, tmp_buffer, originalDataSize);
+	pBits += originalDataSize;
+	
+	//copy over the second part
+	memcpy (pBits, pElements, newsize);
+	
+	//delete our tmp_buffer
+	delete [] tmp_buffer;
+	
+	return AAFRESULT_SUCCESS;
 }
 
 
