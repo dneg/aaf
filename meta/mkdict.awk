@@ -467,9 +467,66 @@ BEGIN {
   printf("//\n");
   printf("// AAF_CLASS_ALIAS(name, alias)\n");
   printf("//\n");
+  printf("//   Define a name used in the source code different from the name of the metadefinition.\n");
+  printf("//\n");
   printf("//     name      = class name\n");
   printf("//     alias     = another, usually shorter, name by which the\n");
   printf("//                 class is also known\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE_TABLE_BEGIN()\n");
+  printf("//\n");
+  printf("//   Begin a table of AAF definition instance definitions.\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE_TABLE_END()\n");
+  printf("//\n");
+  printf("//   End a table of AAF definition instance definitions.\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE_GROUP_SEPARATOR()\n");
+  printf("//\n");
+  printf("//   Separate one group of AAF definition instances from another.\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE_GROUP(name, target)\n");
+  printf("//\n");
+  printf("//   Begin a group of AAF definition instances.\n");
+  printf("//\n");
+  printf("//     name      = name of container for these instances\n");
+  printf("//     target    = class name of each instance\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE_GROUP_END(name, target)\n");
+  printf("//\n");
+  printf("//   End a group of AAF definition instances.\n");
+  printf("//\n");
+  printf("//     name      = name of container for these instances\n");
+  printf("//     target    = class name of each instance\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE_SEPARATOR()\n");
+  printf("//\n");
+  printf("//   Separate one AAF definition instance from another.\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE(class, name, id, desc)\n");
+  printf("//\n");
+  printf("//   Define an instance of an AAF definition.\n");
+  printf("//\n");
+  printf("//     class     = the class of the instance\n");
+  printf("//     name      = the name of the instance\n");
+  printf("//     id        = the auid used to identify the instance [*]\n");
+  printf("//     desc      = the text description (may be null)\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE_END(class, name, id)\n");
+  printf("//\n");
+  printf("//   Complete an instance of an AAF definition.\n");
+  printf("//\n");
+  printf("//     class     = the class of the instance\n");
+  printf("//     name      = the name of the instance\n");
+  printf("//     id        = the auid used to identify the instance [*]\n");
+  printf("//\n");
+  printf("// AAF_INSTANCE_PROPERTY(name, type, value)\n");
+  printf("//\n");
+  printf("//   Define a property of an instance of an AAF definition.\n");
+  printf("//\n");
+  printf("//     name      = the name of the property\n");
+  printf("//     id        = the type name of the property [*]\n");
+  printf("//     value     = the value of the property [* - maybe]\n");
   printf("//\n");
   printf("// AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8)\n");
   printf("//\n");
@@ -656,6 +713,42 @@ BEGIN {
   printf("#define AAF_CLASS_ALIAS(name, alias)\n");
   printf("#endif\n");
   printf("\n");
+  printf("#ifndef AAF_INSTANCE_TABLE_BEGIN\n");
+  printf("#define AAF_INSTANCE_TABLE_BEGIN()\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_INSTANCE_TABLE_END\n");
+  printf("#define AAF_INSTANCE_TABLE_END()\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_INSTANCE_GROUP_SEPARATOR\n");
+  printf("#define AAF_INSTANCE_GROUP_SEPARATOR()\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_INSTANCE_GROUP\n");
+  printf("#define AAF_INSTANCE_GROUP(name, target)\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_INSTANCE_GROUP_END\n");
+  printf("#define AAF_INSTANCE_GROUP_END(name, target)\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_INSTANCE_SEPARATOR\n");
+  printf("#define AAF_INSTANCE_SEPARATOR()\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_INSTANCE\n");
+  printf("#define AAF_INSTANCE(class, name, id, desc)\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_INSTANCE_END\n");
+  printf("#define AAF_INSTANCE_END(class, name, id)\n");
+  printf("#endif\n");
+  printf("\n");
+  printf("#ifndef AAF_INSTANCE_PROPERTY\n");
+  printf("#define AAF_INSTANCE_PROPERTY(name, type, value)\n");
+  printf("#endif\n");
+  printf("\n");
   printf("#ifndef AAF_LITERAL_AUID\n");
   printf("#define AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8) \\\n");
   printf("                        {l, w1, w2, {b1, b2, b3, b4, b5, b6, b7, b8}}\n");
@@ -670,6 +763,7 @@ BEGIN {
   #
   firstType = 1;
   firstAlias = 1;
+  firstInstance = -1; // set to 1 by Aliases
 }
 
 /^#fields/ {
@@ -1015,6 +1109,7 @@ BEGIN {
         printf("AAF_ALIAS_TABLE_BEGIN()\n");
         printf("\n");
         firstAlias = 0;
+        firstInstance = 1;
 
       } else {
         printf("AAF_ALIAS_SEPARATOR()\n");
@@ -1030,6 +1125,119 @@ BEGIN {
 
     next # not emitting any macros for Labels yet
 
+  # Instances Register
+  } else if( $C["r_reg"] == "Instances" ) {
+
+    if ($C["s_type_sym"] == "Instance" )
+    { 
+        # a set of instances of a [subclass of] DefinitionObject
+
+        # assert( $C["r_nest"] == "Stalk" )
+
+        if( firstInstance<0 )
+        {
+            # haven't had any aliases yet
+            printError("Instances in wrong context");
+	        errors++;
+            firstInstance = 0;
+        }
+        else if( firstInstance>0 )
+        {
+            # finish previous aliases
+            printf("\n");
+            printf("AAF_ALIAS_TABLE_END()\n");
+            printf("\n");
+            printf("// Instances\n");
+            printf("//\n");
+            printf("\n");
+            printf("AAF_INSTANCE_TABLE_BEGIN()\n");
+            printf("\n");
+            firstInstance = 0;
+            igsym = "";
+            isym = "";
+        }
+        else # firstInstance==0 
+        {
+            # finish previous instance
+            if( isym!="" )
+            {
+                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, isym, iid);
+            }
+
+            # finish previous instance definition group
+            if( igsym!="" )
+            {
+                printf("AAF_INSTANCE_GROUP_END(%s, %s)\n", igsym, igtarget);
+            }
+            else
+            {
+                printError("no instances encountered in previous Instance Group");
+	            errors++;
+            }
+            printf("AAF_INSTANCE_GROUP_SEPARATOR()\n");
+        }
+
+        igsym = $C["r_sym"];
+        if( igsym=="" ) nullError( "r_sym", "Instance" );
+
+        igtarget = $C["s_target_sym"];
+        if( igtarget=="" ) nullError( "s_target_sym", "Instance" );
+
+        printf("AAF_INSTANCE_GROUP(%s, %s)\n", igsym, igtarget);
+
+        isym = "";
+    }
+    else
+    {
+      # an instance of either a [subclass of] DefinitionObject or a property of the subclass
+
+       if( $C["r_nest"] == "Leaf" )
+       { 
+            # an instance of a [subclass of] DefinitionObject
+
+            # finish previous instance
+            if( isym!="" )
+            {
+                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, isym, iid);
+                printf("  AAF_INSTANCE_SEPARATOR()\n");
+            }
+
+            isym = $C["r_sym"];
+
+            iid = formatAUID($C["ul_1"], $C["ul_2"], $C["ul_3"], $C["ul_4"],
+                             $C["ul_5"], $C["ul_6"], $C["ul_7"], $C["ul_8"],
+                             $C["ul_9"], $C["ul_10"], $C["ul_11"], $C["ul_12"],
+                             $C["ul_13"], $C["ul_14"], $C["ul_15"], $C["ul_16"], "      ");
+
+            iclass = $C["s_type_sym"];
+            idesc = $C["r_detail"];
+
+            printf("  AAF_INSTANCE(%s, %s, %s, %s)\n", iclass, isym, iid, "\"" idesc "\"");
+
+            # basic properties of DefinitionObject
+            printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", "Name", "String", "\"" isym "\"");
+
+            if( idesc != "" ) printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", "Description", "String", "\"" idesc "\"");
+
+            printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", "Identification", "AUID", iid);
+
+	   }
+       else if( $C["r_nest"] == "Child" )
+       {
+            # a property of the subclass
+
+            ipsym = $C["r_sym"];
+            iptype = $C["s_type_sym"];
+            ipvalue = $C["r_value"];
+            printf("    AAF_INSTANCE_PROPERTY(%s, %s, %s)\n", ipsym, iptype, "\"" ipvalue "\"");
+       }
+       else
+       {
+            printError("Unknown child of Instances");
+	        errors++;
+       }
+	}
+
   # Unknown Register
   } else {
       printError("Unknown Register");
@@ -1039,9 +1247,32 @@ BEGIN {
 
 END {
   if (errors == 0 ){
-    printf("\n");
-    printf("AAF_ALIAS_TABLE_END()\n");
-    printf("\n");
+
+        # finish last instance definition group
+        if( firstInstance==0 )
+        {
+            # finish last instance
+            if( isym!="" )
+            {
+                printf("  AAF_INSTANCE_END(%s, %s, %s)\n", iclass, isym, iid);
+            }
+
+            # finish last instance definition group
+            if( igsym!="" && igtarget!="" )
+            {
+                printf("AAF_INSTANCE_GROUP_END(%s, %s)\n", igsym, igtarget);
+            }
+            else
+            {
+                printError("no instances encountered in previous Instance Group");
+	            errors++;
+            }
+        }
+
+        printf("\n");
+        printf("AAF_INSTANCE_TABLE_END()\n");
+        printf("\n");
+
     printf("// Undefine all macros\n");
     printf("//\n");
     printf("#undef AAF_TABLE_BEGIN\n");
@@ -1132,6 +1363,24 @@ END {
     printf("\n");
     printf("#undef AAF_CLASS_ALIAS\n");
     printf("\n");
+    printf("#undef AAF_INSTANCE_TABLE_BEGIN\n");
+    printf("\n");
+    printf("#undef AAF_INSTANCE_TABLE_END\n");
+    printf("\n");
+    printf("#undef AAF_INSTANCE_GROUP_SEPARATOR\n");
+    printf("\n");
+    printf("#undef AAF_INSTANCE_GROUP\n");
+    printf("\n");
+    printf("#undef AAF_INSTANCE_GROUP_END\n");
+    printf("\n");
+    printf("#undef AAF_INSTANCE_SEPARATOR\n");
+    printf("\n");
+    printf("#undef AAF_INSTANCE\n");
+    printf("\n");
+    printf("#undef AAF_INSTANCE_END\n");
+    printf("\n");
+    printf("#undef AAF_INSTANCE_PROPERTY\n");
+    printf("\n");
     printf("#undef AAF_LITERAL_AUID\n");
     printf("\n");
     printf("//\n");
@@ -1205,13 +1454,23 @@ function referenceTypeName( kind, qualif )
 
 function printError(message)
 {
-  printf("#error %s", message);
-  printf("Error : %s", message) | "cat 1>&2";
+  printf("#error %s\n", message);
+  printf("Error : %s\n", message) | "cat 1>&2";
 }
 
 function elementError(column, elementName)
 {
   printError(sprintf("Illegal entry \"%s\" in column \"%s\", for %s.\n", $column, column, elementName));
+}
+
+function elError(column, elementName)
+{
+  printError(sprintf("Illegal entry \"%s\" in column \"%s\", for %s.\n", $C[column], column, elementName));
+}
+
+function nullError(column, elementName)
+{
+  printError(sprintf("Illegal null value in column \"%s\", for %s.\n", column, elementName));
 }
 
 function classError(class, column)
