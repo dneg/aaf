@@ -49,6 +49,8 @@ typedef IAAFSmartPointer<IAAFPropertyDef>      IAAFPropertyDefSP;
 typedef IAAFSmartPointer<IAAFPropertyValue>    IAAFPropertyValueSP;
 typedef IAAFSmartPointer<IAAFTypeDef>          IAAFTypeDefSP;
 typedef IAAFSmartPointer<IAAFTypeDefObjectRef> IAAFTypeDefObjectRefSP;
+typedef IAAFSmartPointer<IAAFTypeDefStrongObjRef>
+    IAAFTypeDefStrongObjRefSP;
 typedef IAAFSmartPointer<IEnumAAFMobs>         IEnumAAFMobsSP;
 
 #include "CAAFBuiltinDefs.h"
@@ -216,9 +218,12 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkResult (pDictionary->LookupClassDef (AUID_AAFComponent, &cdComp));
 
 	  // init our new type def strong obj ref
-	  checkResult (tdor->Initialize (kTestTypeID_ObjRef,
-									 cdComp,
-									 L"StrongRefToComponent"));
+	  IAAFTypeDefStrongObjRefSP tdsor;
+	  checkResult (tdor->QueryInterface (IID_IAAFTypeDefStrongObjRef,
+										  (void **)&tdsor));
+	  checkResult (tdsor->Initialize (kTestTypeID_ObjRef,
+									  cdComp,
+									  L"StrongRefToComponent"));
 
 	  // Blast it into the dictionary.  To do so, we'll need to use
 	  // the TypeDef interface.
@@ -234,7 +239,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // get the existing class def describing comp mob
 	  IAAFClassDefSP cdCompMob;
-	  checkResult (pDictionary->LookupClassDef (AUID_AAFCompositionMob, &cdCompMob));
+	  checkResult (pDictionary->
+				   LookupClassDef (AUID_AAFCompositionMob, &cdCompMob));
 
 	  // append the new prop defs to it
 	  IAAFPropertyDefSP pd1; // remember this for later use
