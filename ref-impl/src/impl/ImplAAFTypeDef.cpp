@@ -68,6 +68,14 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+bool ImplAAFTypeDef::isFixedSize(void) const
+{
+  bool result = false;
+  if (IsFixedSize() == kAAFTrue) {
+    result = true;
+  }
+  return result;
+}
 
 void ImplAAFTypeDef::reorder(OMByte* /*bytes*/,
 							 size_t /*bytesSize*/) const
@@ -85,6 +93,10 @@ size_t ImplAAFTypeDef::externalSize(const OMByte* /*internalBytes*/,
   return 0; // Not reached!
 }
 
+size_t ImplAAFTypeDef::externalSize(void) const
+{
+  return PropValSize();
+}
 
 void ImplAAFTypeDef::externalize(const OMByte* /*internalBytes*/,
 								 size_t /*internalBytesSize*/,
@@ -105,6 +117,10 @@ size_t ImplAAFTypeDef::internalSize(const OMByte* /*externalBytes*/,
   return 0; // Not reached!
 }
 
+size_t ImplAAFTypeDef::internalSize(void) const
+{
+  return NativeSize();
+}
 
 void ImplAAFTypeDef::internalize(const OMByte* /*externalBytes*/,
 								 size_t /*externalBytesSize*/,

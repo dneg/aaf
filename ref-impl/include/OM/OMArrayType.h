@@ -26,6 +26,14 @@
 #ifndef OMARRAYTYPE_H
 #define OMARRAYTYPE_H
 
-// Nothing yet
+#include "OMType.h"
+
+// @author Tim Bingham | tjb | Avid Technology, Inc. | OMArrayType
+class OMArrayType : public OMType {
+public:
+
+  virtual OMType* elementType(void) const = 0;
+
+};
 
 #endif

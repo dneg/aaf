@@ -37,6 +37,14 @@ class OMType {
 public:
   // @access Public members.
 
+    // @cmember Are all instances of this type the same size ?
+    //          The <f externalSize()> and <f internalSize()> of
+    //          fixed size types may be determined independently
+    //          of a specific instance of the type. Note that a fixed
+    //          size type may have differing internal and external
+    //          sizes and, if so, must be externalized and internalized.
+  virtual bool isFixedSize(void) const = 0;
+
     // @cmember Reorder (swap) the given <p externalBytes> according to the
     //          data type described by this <c OMType>. The number of
     //          bytes is given by <p externalBytesSize>. Object Manager clients
@@ -56,6 +64,13 @@ public:
     //          functions to aid in such an implementation.
   virtual size_t externalSize(const OMByte* internalBytes,
                               size_t internalBytesSize) const = 0;
+
+    // @cmember The size, in bytes, of an entity of this <c OMType>
+    //          when persisted. Object Manager clients must provide
+    //          a suitable implementation of this virtual function
+    //          for the data type being described.
+    //          @precondition <f isFixedSize()>
+  virtual size_t externalSize(void) const = 0;
 
     // @cmember Convert the given <p internalBytes> from internal
     //          (in memory) representation to external (persisted)
@@ -90,6 +105,13 @@ public:
     //          functions to aid in such an implementation.
   virtual size_t internalSize(const OMByte* externalBytes,
                               size_t externalSize) const = 0;
+
+    // @cmember The size, in bytes, of an entity of this <c OMType>
+    //          when in memory. Object Manager clients must provide
+    //          a suitable implementation of this virtual function
+    //          for the data type being described.
+    //          @precondition <f isFixedSize()>
+  virtual size_t internalSize(void) const = 0;
 
     // @cmember Convert the given <p externalBytes> from external
     //          (persisted) representation to internal (in memory)

@@ -41,6 +41,11 @@ OMUniqueObjectIdentificationType::~OMUniqueObjectIdentificationType(void)
   TRACE("OMUniqueObjectIdentificationType::~OMUniqueObjectIdentificationType");
 }
 
+bool OMUniqueObjectIdentificationType::isFixedSize(void) const
+{
+  return true;
+}
+
 void OMUniqueObjectIdentificationType::reorder(
                                          OMByte* externalBytes,
                                          size_t ANAME(externalBytesSize)) const
@@ -56,6 +61,11 @@ void OMUniqueObjectIdentificationType::reorder(
   OMInteger16Type::instance()->reorder((OMByte*)&p->Data2, 2);
   OMInteger16Type::instance()->reorder((OMByte*)&p->Data3, 2);
   // no need to swap Data4
+}
+
+size_t OMUniqueObjectIdentificationType::externalSize(void) const
+{
+  return sizeof(OMUniqueObjectIdentification);
 }
 
 size_t OMUniqueObjectIdentificationType::externalSize(
@@ -91,6 +101,12 @@ size_t OMUniqueObjectIdentificationType::internalSize(
 
   ASSERT("Sizes match",
                     externalBytesSize == sizeof(OMUniqueObjectIdentification));
+  return sizeof(OMUniqueObjectIdentification);
+}
+
+size_t OMUniqueObjectIdentificationType::internalSize(void) const
+{
+  TRACE("OMUniqueObjectIdentificationType::internalSize");
   return sizeof(OMUniqueObjectIdentification);
 }
 
