@@ -289,6 +289,25 @@ void printStackTrace(OMOStream& s)
 
 }
 
+#elif defined(OM_OS_UNIX) && defined(__GLIBC__)
+
+#include <execinfo.h>
+#include <stdlib.h>
+
+void printStackTrace(OMOStream& s)
+{
+  void* addresses[64];
+
+  size_t depth = backtrace(addresses, sizeof(addresses)/sizeof(addresses[0]));
+
+  char** names = backtrace_symbols(addresses, depth);
+
+  for (size_t i = 0; i < depth; i++) {
+    s << names[i] << endl;
+  }
+  free(names);
+}
+
 #else
 
 void printStackTrace(OMOStream& s)
