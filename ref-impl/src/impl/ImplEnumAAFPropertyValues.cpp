@@ -40,11 +40,69 @@
 
 extern "C" const aafClassID_t CLSID_EnumAAFPropertyValues;
 
+#include "ImplAAFSmartPointer.h"
+#include "ImplAAFPropValData.h"
+
+extern "C" const aafClassID_t CLSID_AAFPropValData;
+
+AAFRESULT GetElementValueFromSet( ImplAAFPropertyValue* pVal,
+				  aafUInt32 current,
+				  ImplAAFTypeDefSet* pDefSet,
+				  ImplAAFPropertyValue** ppItemVal )
+{
+  assert( pVal );
+  assert( pDefSet );
+  assert( ppItemVal );
+
+  AAFRESULT hr;
+
+  // Get the type def of the set's contained elements;
+  ImplAAFSmartPointer<ImplAAFTypeDef> pElemTypeDef;
+  hr = pDefSet->GetElementType( &pElemTypeDef );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return hr;
+  }
+
+
+  // Get the element's size, and compute offset of "current" element
+  // in the propVal's buffer.
+  assert( pElemTypeDef->IsFixedSize() );
+  aafUInt32 elemSize = pElemTypeDef->PropValSize();
+  aafUInt32 byteOffset = current * elemSize;
+
+  // Create a PropValData and initialize it such that it points into pVal.
+  ImplAAFPropValData* pElemValData = (ImplAAFPropValData*)CreateImpl(CLSID_AAFPropValData);
+  if ( !pElemValData ) {
+    return AAFRESULT_NOMEMORY;
+  }
+
+  hr = pElemValData->Initialize( pElemTypeDef );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    pElemValData->ReleaseReference();
+    return hr;
+  }
+
+  aafMemPtr_t unused;
+  hr = pElemValData->AllocateFromPropVal(  dynamic_cast<ImplAAFPropValData*>( pVal ),
+					   byteOffset, elemSize, &unused );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    pElemValData->ReleaseReference();
+    return hr;
+  };
+
+  // Done.  AcquireReference and return pointer.
+  pElemValData->AcquireReference();
+  *ppItemVal = pElemValData;
+  return AAFRESULT_SUCCESS;
+}
+
 ImplEnumAAFPropertyValues::ImplEnumAAFPropertyValues ()
   : _count(0),
     _current(0),
     _pDef(0),
-    _pVal(0)
+    _pVal(0),
+    _pDefSet(0),
+   _initialized(false)
 {}
 
 ImplEnumAAFPropertyValues::~ImplEnumAAFPropertyValues ()
@@ -60,9 +118,11 @@ ImplEnumAAFPropertyValues::~ImplEnumAAFPropertyValues ()
   }
 }
 
-AAFRESULT STDMETHODCALLTYPE ImplEnumAAFPropertyValues::Initialize( ImplAAFTypeDefArray* pDef,
-								   ImplAAFPropertyValue* pVal )
+AAFRESULT ImplEnumAAFPropertyValues::Initialize( ImplAAFTypeDefArray* pDef,
+						 ImplAAFPropertyValue* pVal )
 {
+  assert( !_initialized );
+
   if ( !pDef ) {
     return AAFRESULT_NULL_PARAM;
   }
@@ -99,15 +159,47 @@ AAFRESULT STDMETHODCALLTYPE ImplEnumAAFPropertyValues::Initialize( ImplAAFTypeDe
   _pVal = pVal;
   _pVal->AcquireReference();
 
+  _initialized = true;
+
   return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT ImplEnumAAFPropertyValues::Initialize( ImplAAFTypeDefSet* pDefSet,
+						 ImplAAFPropertyValue* pVal )
+{
+  assert( !_initialized );
+
+  if ( !pDefSet ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if ( !pVal ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  AAFRESULT hr = pDefSet->GetCount( pVal, &_count );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return hr;
+  }
+
+  _current = 0;
+
+  _pDefSet = pDefSet;
+  _pDefSet->AcquireReference();
+
+  _pVal = pVal;
+  _pVal->AcquireReference();
+
+  _initialized = true;
+
+  return AAFRESULT_SUCCESS;
+}
 
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyValues::NextOne (
       ImplAAFPropertyValue ** ppPropertyValue )
 {
-  if ( !_pDef || !_pVal ) {
+  if ( !_initialized ) {
     return AAFRESULT_NOT_INITIALIZED;
   }
 
@@ -122,7 +214,14 @@ AAFRESULT STDMETHODCALLTYPE
   // _current should never exceed _count if the implementation is correct
   assert( _current < _count );
 
-  HRESULT hr = _pDef->GetElementValue( _pVal, _current, ppPropertyValue );
+  HRESULT hr;
+  if ( _pDefSet ) {
+    hr = GetElementValueFromSet( _pVal, _current, _pDefSet, ppPropertyValue ); 
+  }
+  else {
+    assert( _pDef );
+    hr = _pDef->GetElementValue( _pVal, _current, ppPropertyValue );
+  }
 
   if ( AAFRESULT_SUCCESS != hr ) {
     return hr;
@@ -141,7 +240,7 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyValue ** ppItems,
       aafUInt32 *  pFetched )
 {
-  if ( !_pDef || !_pVal ) {
+  if ( !_initialized ) {
     return AAFRESULT_NOT_INITIALIZED;
   }
 
@@ -175,7 +274,7 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyValues::Skip (
       aafUInt32  count )
 {
-  if ( !_pDef || !_pVal ) {
+  if ( !_initialized ) {
     return AAFRESULT_NOT_INITIALIZED;
   }
 
@@ -194,10 +293,10 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyValues::Reset ()
 {
-  if ( !_pDef || !_pVal ) {
+  if ( !_initialized ) {
     return AAFRESULT_NOT_INITIALIZED;
   }
-  
+
   _current = 0;
 
   return AAFRESULT_SUCCESS;
@@ -209,10 +308,22 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFPropertyValues::Clone (
       ImplEnumAAFPropertyValues ** ppEnum)
 {
+  if ( !_initialized ) {
+    return AAFRESULT_NOT_INITIALIZED;
+  }
+
   ImplEnumAAFPropertyValues* pEnum = 
     static_cast<ImplEnumAAFPropertyValues*>( ::CreateImpl(CLSID_EnumAAFPropertyValues) );
 
-  AAFRESULT hr = pEnum->Initialize( _pDef, _pVal );
+  AAFRESULT hr;
+  if ( _pDefSet ) {
+    hr = pEnum->Initialize( _pDefSet, _pVal );
+  }
+  else {
+    assert( _pDef );
+    hr = pEnum->Initialize( _pDef, _pVal );
+  }
+
   if ( AAFRESULT_SUCCESS != hr ) {
     return hr;
   }

@@ -38,6 +38,7 @@ class ImplAAFPropertyValue;
 
 #include "ImplAAFEnumerator.h"
 #include "ImplAAFTypeDefArray.h"
+#include "ImplAAFTypeDefSet.h"
 #include "ImplAAFPropertyValue.h"
 
 class ImplEnumAAFPropertyValues : public ImplAAFRoot
@@ -54,9 +55,12 @@ protected:
 
 public:
 
-  // Internal initialize method.
-  AAFRESULT STDMETHODCALLTYPE Initialize( ImplAAFTypeDefArray* pDef,
-					  ImplAAFPropertyValue* pVal );
+  // Internal initialize methods.
+  AAFRESULT Initialize( ImplAAFTypeDefArray* pDef,
+			ImplAAFPropertyValue* pVal );
+
+  AAFRESULT Initialize( ImplAAFTypeDefSet* pDefSet,
+			ImplAAFPropertyValue* pVal );
 
   //****************
   // NextOne()
@@ -115,7 +119,14 @@ public:
   static AAFRESULT test();
  
 private:
+
+  bool _initialized;
+
+  // Either _pDefSet, or _pDef, will be valid depending on how the
+  // object is initialized.
+  ImplAAFTypeDefSet* _pDefSet;
   ImplAAFTypeDefArray* _pDef;
+
   ImplAAFPropertyValue* _pVal;
   aafUInt32 _count;
   aafUInt32 _current;

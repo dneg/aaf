@@ -97,13 +97,51 @@
 #include "AAFPropertyIDs.h"
 #include "ImplAAFTypeDefObjectRef.h"
 #include "ImplAAFObjectCreation.h"
-
+#include "ImplAAFPropValData.h"
 
 #include <assert.h>
 #include <string.h>
 
 extern "C" const aafClassID_t CLSID_AAFStrongRefSetValue;
 extern "C" const aafClassID_t CLSID_AAFWeakRefSetValue;
+extern "C" const aafClassID_t CLSID_EnumAAFPropertyValues;
+
+
+AAFRESULT GetSetElementCount( ImplAAFPropertyValue* pVal,
+			      ImplAAFTypeDefSet* pDefSet,
+			      aafUInt32* pRetVal )
+{
+  assert( pVal );
+  assert( pDefSet );
+  assert( pRetVal );
+
+  AAFRESULT hr;
+
+  // Get the type def of the set's contained elements;
+  ImplAAFSmartPointer<ImplAAFTypeDef> pElemTypeDef;
+  hr = pDefSet->GetElementType( &pElemTypeDef );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return hr;
+  }
+
+  // Get the element's size.
+  assert( pElemTypeDef->IsFixedSize() );
+  aafUInt32 elemSize = pElemTypeDef->PropValSize();
+
+  // Get the set size.
+  ImplAAFPropValData* pSetValData = dynamic_cast<ImplAAFPropValData*>( pVal );
+  aafUInt32 propSize;
+  hr = pSetValData->GetBitsSize( &propSize );
+  if ( AAFRESULT_SUCCESS != hr ) {
+    return hr;
+  }
+
+  // count is size of set divided by size of single element.
+  *pRetVal = propSize/elemSize;
+
+  return AAFRESULT_SUCCESS;
+}
+
 
 ImplAAFTypeDefSet::ImplAAFTypeDefSet () :
 _ElementType  ( PID_TypeDefinitionSet_ElementType, 
@@ -443,7 +481,7 @@ ImplAAFTypeDefSet::GetCount (
   }
   else
   {
-    return AAFRESULT_ELEMENT_NOT_OBJECT;
+    return GetSetElementCount( pSetPropertyValue, this, pCount );
   }
 }
 
@@ -582,7 +620,21 @@ ImplAAFTypeDefSet::GetElements (
   }
   else
   {
-    return AAFRESULT_ELEMENT_NOT_OBJECT;
+    ImplEnumAAFPropertyValues* pEnumPropVals = (ImplEnumAAFPropertyValues*)CreateImpl(CLSID_EnumAAFPropertyValues);
+    if ( !pEnumPropVals ) {
+      return AAFRESULT_NOMEMORY;
+    }
+
+    AAFRESULT hr = pEnumPropVals->Initialize( this, pSetPropertyValue );
+    if ( AAFRESULT_SUCCESS != hr ) {
+      pEnumPropVals->ReleaseReference();
+      return hr;
+    }
+
+    pEnumPropVals->AcquireReference();
+    *ppEnum = pEnumPropVals;
+
+    return AAFRESULT_SUCCESS;
   }
 }
 
