@@ -130,7 +130,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTimecode \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
-	AAFWaveDescriptor \
+	AAFWAVEDescriptor \
 	EnumAAFComponents \
 	EnumAAFEssenceData \
 	EnumAAFLocators \
