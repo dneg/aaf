@@ -8,6 +8,22 @@ AAFLocator\
 #c
 #import ./AAFLocator.exp
 AD_HEAD
+AD_IDL(//
+// The IAAFNetworkLocator interface is implemented by objects which
+// provide information to help find a file containing essence data.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//)
 AD_CLASS_UUID(2c1097b1, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(2c1097b2, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
