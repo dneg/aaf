@@ -532,14 +532,14 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   IAAFFile * pFile = NULL;
   // printing file open time
 
-    clock_t start = clock();
-    clock_t finish;
-    double duration;
+  clock_t start = clock();
+  clock_t finish;
+  double duration;
 
   check(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
 
-    finish = clock();
-    duration = ((double) (finish - start) / CLOCKS_PER_SEC);
+  finish = clock();
+  duration = ((double) (finish - start) / CLOCKS_PER_SEC);
 
   pFile->Close();
   pFile->Release();
