@@ -298,6 +298,23 @@ bool ImplAAFMetaDictionary::containsType(aafUID_constref typeId)
 //
 //////////////////////////////
 
+
+//Creates a single uninitialized AAF meta definition associated 
+  // with a specified stored object id.
+AAFRESULT STDMETHODCALLTYPE 
+  ImplAAFMetaDictionary::CreateMetaInstance (
+    // Stored Object ID of the meta object to be created.
+    aafUID_constref /* classId */,
+
+    // Address of output variable that receives the 
+    // object pointer requested in auid
+    ImplAAFMetaDefinition ** /* ppMetaObject */)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+
+
   //****************
   // LookupClassDef()
   //

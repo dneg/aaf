@@ -547,6 +547,53 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 
+
+//Creates a single uninitialized AAF meta definition associated 
+  // with a specified stored object id.
+AAFRESULT STDMETHODCALLTYPE 
+  ImplAAFDictionary::CreateMetaInstance (
+    // Stored Object ID of the meta object to be created.
+    aafUID_constref classId,
+
+    // Address of output variable that receives the 
+    // object pointer requested in auid
+    ImplAAFMetaDefinition ** ppMetaObject)
+{
+  if (!ppMetaObject)
+    return AAFRESULT_NULL_PARAM;
+
+  *ppMetaObject = NULL;
+
+  // Temporary: The first version just calls the old CreateInstance method.
+  // This will be replaced when the "two-roots", data and meta-data, are 
+  // implemented. transdel:2000-APR-21.
+  ImplAAFObject * pObject = NULL;
+  AAFRESULT result = CreateInstance(classId, &pObject);
+  if (AAFRESULT_SUCCESS(result))
+  {
+    // Make sure that this object is in fact a meta definition.
+    *ppMetaObject = dynamic_cast<ImplAAFMetaDefinition*>(pObject);
+    if (NULL == *ppMetaObject)
+    {
+      // Cleanup on failure.
+      pObject->ReleaseReference();
+      pObject = NULL;
+      result = AAFRESULT_INVALID_PARAM;
+    }
+  }
+
+  return (result);
+
+#if 0  
+  // Ask the meta dictionary to create the meta definition
+  return (metaDictionary()->CreateMetaInstance(classId, ppMetaObject));
+#endif
+}
+
+
+
+
+
 AAFRESULT ImplAAFDictionary::dictLookupClassDef (
       const aafUID_t & classID,
       ImplAAFClassDef ** ppClassDef)
@@ -686,67 +733,6 @@ AAFRESULT STDMETHODCALLTYPE
 	
   return(AAFRESULT_SUCCESS);
 }
-
-#if USE_NEW_OBJECT_CREATION
-
-
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::CreateImplClassDef (
-      aafUID_constref classID,
-      ImplAAFClassDef * pParentClass,
-      aafCharacter_constptr pClassName,
-      ImplAAFClassDef ** ppClassDef)
-{
-  assert(pClassName && ppClassDef);
-  AAFRESULT result = AAFRESULT_SUCCESS;
-  *ppClassDef = NULL;
-
-  // Lookup the class definitions class definition! This had
-  // better not be recursive!
-  ImplAAFClassDef *pClassDefsClassDef = GetBuiltinDefs()->cdClassDef();
-  ImplAAFClassDef *pClassDef = NULL;
-
-  // Create an instance of a class definition and initialize it.
-  pClassDef = (ImplAAFClassDef *)pvtInstantiate(AUID_AAFClassDef);
-  if (NULL == pClassDef)
-    return AAFRESULT_NOMEMORY;
-
-  result = pClassDef->pvtInitialize(classID, pParentClass, pClassName);
-  if (AAFRESULT_FAILED(result))
-  {
-    // Delete the new object.
-    pClassDef->ReleaseReference();
-    pClassDef = NULL;
-  }
-  else
-  {
-    // Make sure properties are initialized (???)
-    pClassDefsClassDef->InitOMProperties (pClassDef);
-
-    // The class definition could be successfully initialized. NOTE: This
-    // object has already been reference counted.
-    *ppClassDef = pClassDef;
-  }
-
-  return result;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFDictionary::CreateClassDef (
-      aafUID_constref classID,
-      ImplAAFClassDef *pParentClass,
-      aafCharacter_constptr pClassName,
-      ImplAAFClassDef ** ppClassDef)
-{
-
- return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-#endif // #if USE_NEW_OBJECT_CREATION
 
 
 AAFRESULT STDMETHODCALLTYPE

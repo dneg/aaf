@@ -38,6 +38,7 @@
 
 #include "ImplAAFObject.h"
 
+class ImplAAFMetaDefinition;
 class ImplAAFClassDef;
 class ImplAAFTypeDef;
 
@@ -75,6 +76,23 @@ public:
 
   // Override callback from OMStorable
   //  virtual void onSave(void* clientContext) const;
+
+
+
+  //****************
+  // CreateMetaInstance()
+  //
+  // Creates a single uninitialized AAF meta definition associated 
+  // with a specified stored object id.
+  virtual AAFRESULT STDMETHODCALLTYPE 
+  CreateMetaInstance (
+    // Stored Object ID of the meta object to be created.
+    aafUID_constref classId,
+
+    // Address of output variable that receives the 
+    // object pointer requested in pAUID
+    ImplAAFMetaDefinition ** ppMetaObject);
+
 
   //
   // Add class property and type access methods ...
