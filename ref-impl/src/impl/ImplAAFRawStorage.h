@@ -112,7 +112,7 @@ public:
   // Initialize()
   //
   void Initialize (OMRawStorage * prs,
-				   aafFileAccess_e access);
+				   aafFileAccess_t access);
 
   //
   // Returns the underlying OMRawStorage
@@ -121,7 +121,7 @@ public:
 
 private:
   OMRawStorage *  _rep;
-  aafFileAccess_e _access;
+  aafFileAccess_t _access;
 
   bool pvtIsReadable () const;
   bool pvtIsWriteable () const;

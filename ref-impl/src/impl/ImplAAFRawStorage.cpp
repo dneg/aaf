@@ -161,7 +161,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 void ImplAAFRawStorage::Initialize
   (OMRawStorage * prs,
-   aafFileAccess_e access)
+   aafFileAccess_t access)
 {
   assert (! _rep);
   assert(prs);
