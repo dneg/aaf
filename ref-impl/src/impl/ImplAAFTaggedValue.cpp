@@ -44,40 +44,15 @@ ImplAAFTaggedValue::~ImplAAFTaggedValue ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTaggedValue::Initialize (wchar_t* pName, ImplAAFTypeDef* pTypeDef)
+    ImplAAFTaggedValue::Initialize (wchar_t* pName, aafUID_t*  pDataDef)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	ImplAAFHeader*			pHeader = NULL;
-	ImplAAFDictionary*		pDictionary = NULL;
-	ImplAAFTypeDef*			pTempTypeDef = NULL;
-	aafUID_t				typeDefUID;
 
-	if (pName == NULL || pTypeDef == NULL)
+	if (pName == NULL || pDataDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
-	XPROTECT()
-	{
-		// Get the Header and the dictionary objects for this file.
-		CHECK(pTypeDef->MyHeadObject(&pHeader));
-		CHECK(pHeader->GetDictionary(&pDictionary));
-		// make sure the given type is already registered in the file's dictionary
-		CHECK(pTypeDef->GetAUID(&typeDefUID));
-		CHECK(pDictionary->LookupType(&typeDefUID, &pTempTypeDef));
-		_type = typeDefUID;
-		pTypeDef->AcquireReference();
-		_name = pName;
-		pHeader->ReleaseReference();
-		pDictionary->ReleaseReference();
-	}
-	XEXCEPT
-	{
-		if(pHeader != NULL)
-			pHeader->ReleaseReference();
-		if(pDictionary)
-			pDictionary->ReleaseReference();
-	}
-	XEND;
-
+	_type = *pDataDef;
+	_name = pName;
 
 	return rc;
 }
