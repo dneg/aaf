@@ -41,9 +41,15 @@ AD_XMETHOD1(GetSegment,
 [out\,retval], objOut, AAFSegment, result, Segment property value,
 This method will get the segment for this mob slot.)
 
-AD_METHOD1(GetName,
-[in\\\,out], aafWChar *, name, Mob Slot Name,
-This method will copy the mob slot name into the given aafString.)
+AD_METHOD2(GetName,
+[in\\\,string], aafWChar *, name,buffer provided by client to hold the Mob Slot Name,
+[in], aafInt32, size, length of the buffer provided to hold the name,
+This method will copy the mob slot name into the given array for the given length.)
+
+AD_METHOD1(GetNameLength,
+[in], aafInt32 *, pSize, length of the buffer provided to hold the name,
+This method will return the length of the buffer required to hold the slot name
+//including the terminator.)
 
 AD_METHOD1(GetPhysicalNum,
 [out\\\,retval], aafUInt32 *, result, The physical slot number property value,
