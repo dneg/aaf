@@ -24,6 +24,7 @@ run:
 .SUFFIXES: .cpp .h .comc .comh .dod .exp .idl .implc .implh
 								   
 DODO_TARGETS = \
+	AAFTypes.all \
 	AAFAttribute.all \
 	AAFAttributeArray.all \
 	AAFComponent.all \
@@ -45,6 +46,7 @@ DODO_TARGETS = \
 	AAFObject.all \
 	AAFMob.all  \
 	AAFMasterMob.all \
+	AAFSourceMob.all \
 	AAFMobSlot.all \
 	AAFParameter.all \
 	AAFReferenceValue.all \
@@ -131,6 +133,14 @@ clean:
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/cpp-api/*.cpp $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/com-api/C*.{cpp,h} $(SH_SUFFIX)
 	$(SH_PREFIX) $(RM) -rf $(SRC_DIR)/impl/Impl*.{cpp,h} $(SH_SUFFIX)
+
+AAFTypes.all : AAFTypes.h
+AAFTypes.all : AAFTypes.exp AAFTypes.idl
+AAFTypes.all : AAFTypes.implh
+AAFTypes.exp : macros/exp.mac
+AAFTypes.h : AAFTypes.exp macros/h.mac
+AAFTypes.idl : AAFTypes.exp macros/idl.mac
+AAFTypes.implh : AAFTypes.exp macros/implh.mac
 
 AAFAttribute.all : AAFAttribute.cpp AAFAttribute.h
 AAFAttribute.all : AAFAttribute.comc AAFAttribute.comh
@@ -413,6 +423,19 @@ AAFMasterMob.comc : AAFMasterMob.exp macros/comc.mac
 AAFMasterMob.comh : AAFMasterMob.exp macros/comh.mac
 AAFMasterMob.implc : AAFMasterMob.exp macros/implc.mac
 AAFMasterMob.implh : AAFMasterMob.exp macros/implh.mac
+
+AAFSourceMob.all : AAFSourceMob.cpp AAFSourceMob.h
+AAFSourceMob.all : AAFSourceMob.comc AAFSourceMob.comh
+AAFSourceMob.all : AAFSourceMob.exp AAFSourceMob.idl
+AAFSourceMob.all : AAFSourceMob.implc AAFSourceMob.implh
+AAFSourceMob.exp : AAFUnitTest.exp AAFMob.exp macros/exp.mac
+AAFSourceMob.h : AAFSourceMob.exp macros/h.mac
+AAFSourceMob.cpp : AAFSourceMob.exp macros/cpp.mac
+AAFSourceMob.idl : AAFSourceMob.exp macros/idl.mac
+AAFSourceMob.comc : AAFSourceMob.exp macros/comc.mac
+AAFSourceMob.comh : AAFSourceMob.exp macros/comh.mac
+AAFSourceMob.implc : AAFSourceMob.exp macros/implc.mac
+AAFSourceMob.implh : AAFSourceMob.exp macros/implh.mac
 
 AAFMobSlot.all : AAFMobSlot.cpp AAFMobSlot.h
 AAFMobSlot.all : AAFMobSlot.comc AAFMobSlot.comh
