@@ -8,17 +8,15 @@
 //
 // File: CAAFModuleTest.cpp
 // 
-// Implementation for the AAFClassFactory class.
+// Implementation for the CAAFModuleTest class.
 //
 
-
-#ifndef __CAAFModuleTest_h__
 #include "CAAFModuleTest.h"
-#endif
 
 #include <iostream.h>
 #include <iomanip.h>
 #include <string.h>
+
 #include "AAFTypes.h"
 #include "AAFResult.h"
 
@@ -26,12 +24,10 @@
 // Use the x-macros in AAFObjectTable.h to declare the function
 // prototypes for all of the module tests.
 //
-#undef AAF_BEGIN_OBJECT_MAP
-#undef AAF_OBJECT_ENTRY
-#undef AAF_END_OBJECT_MAP
 #define AAF_OBJECT_ENTRY(xclass) extern "C" HRESULT C##xclass##_test();
 
 #include "AAFObjectTable.h"
+
 #undef AAF_BEGIN_OBJECT_MAP
 #undef AAF_OBJECT_ENTRY
 #undef AAF_END_OBJECT_MAP
@@ -61,25 +57,15 @@ typedef struct tagAAFObjectTestInfo
 #define AAF_END_OBJECT_MAP() { NULL, NULL } };
 
 
-
 // Include the table the associates all of the CLSID's with class names and test methods.
 #include "AAFObjectTable.h"
 
 
 
-// CLSID for AAFObject 
-// {B1A213AE-1A7D-11D2-BF78-00104BC9156D}
-EXTERN_C const CLSID CLSID_AAFModuleTest = { 0xB1A213AE, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
-
-
-// Default Interface for AAFObject 
-// {B1A213AD-1A7D-11D2-BF78-00104BC9156D}
-EXTERN_C const IID IID_IAAFModuleTest = { 0xB1A213AD, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 
 
 // Implementation
-CAAFModuleTest::CAAFModuleTest(IUnknown *pUnkOuter)
-	: CAAFUnknown(pUnkOuter)
+CAAFModuleTest::CAAFModuleTest()
 {
 }
 
@@ -87,35 +73,12 @@ CAAFModuleTest::~CAAFModuleTest()
 {
 }
 
-// Implement the class factory for AAFModuleTest objects.
-AAF_DEFINE_CONCRETE(AAFModuleTest)
 
 
-HRESULT CAAFModuleTest::InternalQueryInterface 
-(
-	REFIID riid,
-	void **ppvObj)
-{
-	HRESULT hr = S_OK;
-
-	if (NULL == ppvObj)
-		return E_INVALIDARG;
-
-    // We only support the IClassFactory interface 
-    if (riid == IID_IAAFModuleTest) 
-    { 
-        *ppvObj = (IAAFModuleTest *)this; 
-        ((IUnknown *)*ppvObj)->AddRef();
-		return S_OK;
-    }
-
-	// Always delegate back to base implementation.
-	return CAAFUnknown::InternalQueryInterface(riid, ppvObj);
-}
 
 #define MAX_TEST_COUNT 1000
 
-STDMETHODIMP CAAFModuleTest::Test
+HRESULT CAAFModuleTest::Test
 (
 	unsigned char *pClassName
 )
@@ -235,32 +198,3 @@ STDMETHODIMP CAAFModuleTest::Test
 
 	return hr;
 }
-
-HRESULT CAAFModuleTest::test()
-{
-	return S_OK;
-}
-
-//
-// Return private implementation pointer for delegation.
-// NOTE: This is NOT the pointer to the COM object's implementation
-// object!
-//
-HRESULT STDMETHODCALLTYPE
-    CAAFModuleTest::GetImplRep(void **ppRep)
-{
-#ifdef BOB_TEST
-    if (!ppRep)
-        return E_INVALIDARG;
-//	*ppRep = static_cast<void *>(GetRepObject());
-//	return S_OK;
-	*ppRep = static_cast<void *>(NULL);
-    return AAFRESULT_NOT_IMPLEMENTED;
-#else
-    return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
-
-
-
-
