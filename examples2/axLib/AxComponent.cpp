@@ -339,6 +339,14 @@ void AxOperationGroup::AppendInputSegment( IAAFSegmentSP spIaafSegment )
 	CHECK_HRESULT( _spIaafOperationGroup->AppendInputSegment( spIaafSegment ) );
 }
 
+IAAFOperationDefSP AxOperationGroup::GetOperationDef()
+{
+	IAAFOperationDefSP operationDef;
+
+	CHECK_HRESULT( _spIaafOperationGroup->GetOperationDefinition(&operationDef));
+
+	return operationDef;
+}
 
 //=---------------------------------------------------------------------=
 

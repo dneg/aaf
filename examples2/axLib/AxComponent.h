@@ -240,6 +240,8 @@ public:
 
 	void AppendInputSegment( IAAFSegmentSP );
 
+	IAAFOperationDefSP GetOperationDef();
+
 	operator IAAFOperationGroupSP ()
 	{ return _spIaafOperationGroup; }
 
