@@ -66,11 +66,12 @@ public:
   //****************
   // Initialize()
   //
-  virtual AAFRESULT STDMETHODCALLTYPE
+  AAFRESULT STDMETHODCALLTYPE
     Initialize
         // @parm [in] Pointer to an AUID reference
         (const aafUID_t & id,
-		 const aafCharacter *name);
+		 const aafCharacter *name,
+		 const aafCharacter *description = NULL);
 
 
   //****************
