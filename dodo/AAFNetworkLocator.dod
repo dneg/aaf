@@ -1,0 +1,22 @@
+#startm .this-module 0
+AAFNetworkLocator\
+#endm
+#c
+#startm .parent-module 0
+AAFLocator\
+#endm
+#c
+#import ./AAFLocator.exp
+AD_HEAD
+AD_CLASS_UUID(2c1097b1, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
+
+AD_DEFAULT_UUID(2c1097b2, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
+AD_CLASS_BEGIN
+AD_OVERRIDE(.method-GetPath)
+
+
+AD_OVERRIDE(.method-GetPathBufLen)
+
+
+AD_OVERRIDE(.method-SetPath)
+AD_CLASS_END
