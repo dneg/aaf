@@ -48,6 +48,9 @@
 const CLSID CLSID_AAFCDCICodec = 
 { 0xc995e9a9, 0x4156, 0x11d4, { 0xa3, 0x67, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
+// {EDB35391-6D30-11d3-A036-006094EB75CB}
+const aafUID_t AAF_CMPR_AUNC422 = { 0xedb35391, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+
 // This plugin currently only supports a single definition
 const aafUInt32 kSupportedDefinitions = 1;
 
@@ -239,6 +242,8 @@ const aafCharacter kAAFPropName_DIDResolutionID[] = { 'R','e','s','o','l','u','t
 const aafCharacter kAAFPropName_DIDFrameSampleSize[] = { 'F','r','a','m','e','S','a','m','p','l','e','S','i','z','e','\0' };
 
 
+// The method creates some descriptor properties to handle legacy CDCI 
+// variations.
 HRESULT STDMETHODCALLTYPE CAAFCDCICodec::CreateLegacyPropDefs( 
     IAAFDictionary	*p_dict )
 {
@@ -310,6 +315,7 @@ HRESULT STDMETHODCALLTYPE
 	{
 		//!!!Later, add in dataDefs supported & filedescriptor class
 
+		// Creates descriptor properties to handle legacy CDCI.
 		checkResult( CreateLegacyPropDefs( dict ) );
 
 		// Create the Codec Definition:
@@ -1389,7 +1395,15 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	checkResult(descriptorHelper.SetColorRange(_colorRange));
 	checkResult(descriptorHelper.SetPaddingBits(_paddingBits));
 
-	checkResult(descriptorHelper.SetMCProps( 0x97, _fileBytesPerSample ) );
+	// If working with legacy CDCI set some specific descriptor properties.
+	if( memcmp(&_compression,&AAF_CMPR_AUNC422,sizeof(_compression))==0  &&
+	    _fieldStartOffset == 0  &&  _fieldEndOffset == 4 )
+	{
+	    checkResult( descriptorHelper.SetResolutionID( 0x97 ) );
+	    checkResult( descriptorHelper.SetFrameSampleSize( 
+		_fileBytesPerSample ) );
+	}
+
 }
 
 
@@ -1538,6 +1552,8 @@ HRESULT STDMETHODCALLTYPE
 
 	return AAFRESULT_SUCCESS;
 }
+
+
 
 // Private data structure for handling essence format specifier data.
 const size_t kMaxEssenceFormatData = 64;
@@ -1809,6 +1825,13 @@ HRESULT STDMETHODCALLTYPE
 			// Validate the in-memory size.
 			checkExpression( param.size == sizeof(param.operand.expRational), AAFRESULT_INVALID_PARM_SIZE);
 			_sampleRate = param.operand.expRational;
+		}
+		else if (EqualAUID( &kAAFLegacyCDCI, &param.opcode ) )
+		{
+			memcpy( &_compression, &AAF_CMPR_AUNC422, 
+			    sizeof(_compression) );
+			_fieldStartOffset = 0;
+			_fieldEndOffset = 4;
 		}
 		// Below are parameters which are accessible for client to read 
 		// but not to modify. Some of them are constant for this codec
