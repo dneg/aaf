@@ -28,24 +28,24 @@ AD_FORWARD_DECLARATION(AAFParameterSlot)
 
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR3(
-	[in], AAFDataDefinition *, datadef, Data definition object,
-	[in], aafLength_t, length, Length property value,
-	[in], AAFEffectDefinition *, effectDef, Effect Definition object,
+AD_XCONSTRUCTOR3(
+	[in], objIn, AAFDataDefinition, datadef, Data definition object,
+	[in], objPass, aafLength_t, length, Length property value,
+	[in], objIn, AAFEffectDefinition, effectDef, Effect Definition object,
 	Creates a new empty effect object with the given property values.)
 	//@comm  This function takes an already created effect definition object as an argument.
 	//@comm  To add slots to the effect, call omfiEffectAddNewSlot.
 	//@comm  To add renderings, call omfiEffectSetFinalRender or omfiEffectSetWorkingRender.
 
-AD_METHOD1(GetEffectDefinition,
-		   [out], AAFEffectDefinition **, effectDef, Effect definition object,
+AD_XMETHOD1(GetEffectDefinition,
+			[out], objOut, AAFEffectDefinition, effectDef, Effect definition object,
 		   Returns the effect definition for this invocation.)
 	//@comm Replaces part of omfiEffectGetInfo
 
 
-AD_METHOD1(GetRender,
-		   [out], AAFSegment **, segment, Final rendering segment,
-		   Returns the segment that represents the optional rendering on an effect object.)
+AD_XMETHOD1(GetRender,
+			[out], objOut, AAFSegment, segment, Final rendering segment,
+			Returns the segment that represents the optional rendering on an effect object.)
 	//@comm If this property does not exist the error
 	// OM_ERR_PROP_NOT_PRESENT will be returned.
 	//@comm Working and final renderings are handled by using
@@ -79,23 +79,23 @@ AD_METHOD1(IsValidTranEffect,
 	[out], aafBool *, validTransition, TRUE if the effect is valid in a transition,
 	Verifies that the input effect object can be used in a transition.)
 
-AD_METHOD3(AddNewParameterSlot,
-	[in], aafArgIDType_t, argID, Argument ID for the slot,
-	[in], AAFParameter *, value, Parameter to place in effect slot,
-	[out], AAFParameterSlot **, parmSlot, Parameter slot object,
+AD_XMETHOD3(AddNewParameterSlot,
+	[in], objPass, aafArgIDType_t, argID, Argument ID for the slot,
+	[in], objIn, AAFParameter, value, Parameter to place in effect slot,
+	[out], objOut, AAFParameterSlot, parmSlot, Parameter slot object,
 	creates a new parameter slot object\, inserts the
 	// segment passed as the "value" argument to the new slot\, and
 	//adds the slot to the effect object.)
 	//@comm Replaces part of omfiEffectAddNewSlot
 
-AD_METHOD2(AddNewInputSegment,
-	[in], aafInt32, index, Index \(1-based\) of the input segment,
-	[in], AAFSegment *, value, Segment to place in effect,
+AD_XMETHOD2(AddNewInputSegment,
+	[in], objPass, aafInt32, index, Index \(1-based\) of the input segment,
+	[in], objIn, AAFSegment, value, Segment to place in effect,
 	Adds another input segment to an effect at the given index.)
 	//@comm Replaces part of omfiEffectAddNewSlot
 
-AD_METHOD1(SetRender,
-	[in], AAFSegment *, segment, A segment containing a representation of the rendering,
+AD_XMETHOD1(SetRender,
+	[in], objIn, AAFSegment, segment, A segment containing a representation of the rendering,
 	This function sets the final rendering for the given effect
 	//    to the input source clip.  Multiple renderings may exist if the
 	//    source clip refers to a master mob that contains a media group.)
@@ -106,15 +106,15 @@ AD_METHOD1(SetBypassOverride,
 	This function sets the optional bypass override property on the given effect object.)
 	//@comm Replaces omfiEffectSetBypassOverride
 
-AD_METHOD3(GetParameterSlotByArgID,
-		   [in], aafArgIDType_t, argID, Arg ID,
-		   [out], AAFParameterSlot **, parameterSlot, Parameter slot object,
-		   [out], AAFParameter **, parameter, Parameter object,
+AD_XMETHOD3(GetParameterSlotByArgID,
+		   [in], objPass, aafArgIDType_t, argID, Arg ID,
+		   [out], objOut, AAFParameterSlot, parameterSlot, Parameter slot object,
+		   [out], objOut, AAFParameter, parameter, Parameter object,
 		   Given an argID\, returns the corresponding parameter slot and parameter slot value.)
 
-AD_METHOD2(GetIndexedInputSegment,
-		   [in], aafInt32, index, 1-based index into the effet inputs,
-		   [out], AAFSegment **, inputSegment, Input segment,
+AD_XMETHOD2(GetIndexedInputSegment,
+		   [in], objPass, aafInt32, index, 1-based index into the effet inputs,
+		   [out], objOut, AAFSegment, inputSegment, Input segment,
 		   Given an index\, returns the corresponding input segment.)
 
 AD_OVERRIDE(.method-Test)

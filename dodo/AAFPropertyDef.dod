@@ -151,25 +151,29 @@ AD_METHOD1(SetDefaultValue,
 		   default data value,
 		   Sets the default data value of this property definition.)
 
-AD_METHOD1(AppendRefValue,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFReferenceValue\) *,
-		   pRefValue, 
-		   Ref value to be added,
-		   Add the reference value  to the property definition.)
+AD_XMETHOD1(AppendRefValue,
+			[in\,ref],
+			objIn,
+			AAFReferenceValue,
+			pRefValue, 
+			Ref value to be added,
+			Add the reference value  to the property definition.)
 
-AD_METHOD1(RemoveRefValue,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFReferenceValue\) *,
-		   pRefValue, 
-		   Ref value to be removed,
-		   Remove the reference value from the property definition.)
+AD_XMETHOD1(RemoveRefValue,
+			[in\,ref],
+			objIn,
+			AAFReferenceValue,
+			pRefValue, 
+			Ref value to be removed,
+			Remove the reference value from the property definition.)
 
-AD_METHOD1(GetRefValues,
-		   [out\,retval], AD_AAFTYPES\(EnumAAFReferenceValues\) **, 
-		   ppEnum, 
-		   Reference value Enumeration,
-		   Return an enumerator for the reference values.)
+AD_XMETHOD1(GetRefValues,
+			[out\,retval],
+			objOut,
+			EnumAAFReferenceValues,
+			ppEnum, 
+			Reference value Enumeration,
+			Return an enumerator for the reference values.)
 
 AD_OVERRIDE(.method-Test)
 
