@@ -855,6 +855,7 @@ void Usage( const char* argv0 )
 int main( int argc, char **argv )
 {
 	using namespace std;
+	int err = 0;
 	
 	try {
 
@@ -872,21 +873,26 @@ int main( int argc, char **argv )
 
 	catch ( const AxFGEx& ex ) {
 		wcout << endl << endl << L"Error: " << ex.what() << endl;
+		err = -1;
 	}
 	catch ( const AxEx& ex ) {
 		wcout << endl << endl << L"Error: " << ex.what() << endl;
+		err = -1;
 	}
 	catch ( const AxString& ex ) {
 		wcout << endl << endl << L"Error: " << ex << endl;
+		err = -1;
 	}
 	catch ( exception& ex ) {
 		cout << endl << endl << "Error: " << ex.what() << endl;
+		err = -1;
 	}
 	catch ( ... ) {
 		cout << endl << endl << "Error: caught unknown exception" << endl;
+		err = -1;
 	}
 		
-	return 0;
+	return err;
 }
 
 //=---------------------------------------------------------------------=
