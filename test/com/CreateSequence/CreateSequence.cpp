@@ -150,7 +150,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 	IAAFClassDef *              pCDSequence = 0;
 	IAAFClassDef *              pCDSourceMob = 0;
 	IAAFClassDef *              pCDTapeDescriptor = 0;
-	IAAFClassDef *              pCDFileDescriptor = 0;
+	IAAFClassDef *              pCDHTMLDescriptor = 0;
 	IAAFClassDef *              pCDNetworkLocator = 0;
 	IAAFClassDef *              pCDMasterMob = 0;
 	IAAFClassDef *              pCDSourceClip = 0;
@@ -201,8 +201,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 									  &pCDSourceMob));
 	check(pDictionary->LookupClassDef(AUID_AAFTapeDescriptor,
 									  &pCDTapeDescriptor));
-	check(pDictionary->LookupClassDef(AUID_AAFFileDescriptor,
-									  &pCDFileDescriptor));
+	check(pDictionary->LookupClassDef(AUID_AAFHTMLDescriptor,
+									  &pCDHTMLDescriptor));
 	check(pDictionary->LookupClassDef(AUID_AAFNetworkLocator,
 									  &pCDNetworkLocator));
 	check(pDictionary->LookupClassDef(AUID_AAFMasterMob,
@@ -288,7 +288,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, long int N)
 		check(pCDSourceMob->
 			  CreateInstance(IID_IAAFSourceMob, 
 							 (IUnknown **)&pFileMob));
-		check(pCDFileDescriptor->
+		check(pCDHTMLDescriptor->
 			  CreateInstance(IID_IAAFFileDescriptor, 
 							 (IUnknown **)&pFileDesc));
 		check(pFileDesc->QueryInterface (IID_IAAFEssenceDescriptor, (void **)&aDesc));
@@ -485,10 +485,10 @@ cleanup:
 		pCDTapeDescriptor = 0;
 	  }
 
-	if (pCDFileDescriptor)
+	if (pCDHTMLDescriptor)
 	  {
-		pCDFileDescriptor->Release();
-		pCDFileDescriptor = 0;
+		pCDHTMLDescriptor->Release();
+		pCDHTMLDescriptor = 0;
 	  }
 
 	if (pCDNetworkLocator)

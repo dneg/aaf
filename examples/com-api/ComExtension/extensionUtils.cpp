@@ -1138,7 +1138,8 @@ void CreateAndRegisterPersonnelResource (IAAFDictionary * pDict)
     // which we've just looked up), and a name for this class.
     check (pcd->Initialize (kClassID_PersonnelResource,
 						    pcd_Object,
-						    L"PersonnelResource"));
+						    L"PersonnelResource",
+							kAAFTrue));
 
     //
     // Now we add definitions for the properties that this class will
@@ -1486,7 +1487,8 @@ void CreateAndRegisterAdminMob (IAAFDictionary * pDict)
     // we've just looked up), and a name for this class.
     check (pcd->Initialize (kClassID_AdminMob,
 						    pcd_Mob,
-						    L"AdminMob"));
+						    L"AdminMob",
+							kAAFTrue));
 
     //
     // Now we add a definition for the property that this class will

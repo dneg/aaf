@@ -483,7 +483,8 @@ static void CreateAAFFile(aafWChar * pFileName)
     check(pMob->SetMobID(newMobID));
     check(pMob->SetName(names[test]));
 
-    check(defs.cdFileDescriptor()->
+	// Create a concrete subclass of FileDescriptor
+    check(defs.cdHTMLDescriptor()->
 		  CreateInstance(IID_IAAFFileDescriptor, 
 						 (IUnknown **)&fileDesc));
     check(fileDesc->SetSampleRate(audioRate));
