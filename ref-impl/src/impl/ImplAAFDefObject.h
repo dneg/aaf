@@ -65,6 +65,16 @@ public:
 		 const wchar_t *description);
 
   //****************
+  // Initialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    Initialize
+        // @parm [in] Pointer to an AUID reference
+        (const aafUID_t & id,
+		 const aafCharacter *name);
+
+
+  //****************
   // GetAUID()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
