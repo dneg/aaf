@@ -1,6 +1,8 @@
 #ifndef IMPLAAFOBJECTCREATION_H
 #define IMPLAAFOBJECTCREATION_H
 
+#include <wtypes.h>
+
 class ImplAAFRoot;
 
 // Creates and returns an Impl object based on the given class ID.
