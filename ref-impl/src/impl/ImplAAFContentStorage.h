@@ -18,7 +18,9 @@ class ImplAAFMob;
 
 class ImplEnumAAFMobs;
 
-class ImplEnumAAFMedia;
+class ImplAAFEssenceData;
+
+class ImplEnumAAFEssenceData;
 
 class ImplAAFDictionary;
 
@@ -111,31 +113,56 @@ public:
         (ImplAAFMob * pMob);  //@parm [in] Mob to remove from header
 
 
-
   //****************
-  // IsMediaDataPresent()
+  // IsEssenceDataPresent()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    IsMediaDataPresent
-        (aafUID_t *  pFileMobID,   //@parm [in,ref] A Unique File Mob ID
-		 aafFileFormat_t  fmt,   //@parm [in] The Media File Format
-         aafBool *  result);  //@parm [out,retval] True if the media is found
+    IsEssenceDataPresent
+        (// @parm [in] A Unique File Mob ID
+		 aafUID_t *  pFileMobID,
+
+		 // @parm [in] The Essence File Format
+		 aafFileFormat_t  fmt,
+
+		 // @parm [out,retval] True if the essence is found
+         aafBool *  pResult);
 
 
   //****************
-  // GetMedia()
+  // EnumAAFEssenceData()
   //
   virtual AAFRESULT STDMETHODCALLTYPE
-    GetMedia
-        (aafMediaCriteria_t *  pMediaCriteria,   //@parm [in,ref] Media Criteria for enumeration
-		 ImplEnumAAFMedia ** ppEnum);  //@parm [out,retval] Media Enumeration
+    EnumEssenceData
+	    (// @parm [in,ref] Essence Criteria for enumeration
+         aafMediaCriteria_t *  pMediaCriteria,
 
-public:
+		 // @parm [out,retval] Essence Enumeration
+		 ImplEnumAAFEssenceData ** ppEnum);
+
+
+  //****************
+  // AppendEssenceData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    AppendEssenceData
+		// @parm [in] Essence data object to append
+        (ImplAAFEssenceData * pEssenceData);
+
+
+  //****************
+  // RemoveEssenceData()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    RemoveEssenceData
+		// @parm [in] Essence data object to Remove
+        (ImplAAFEssenceData * pEssenceData);
+
+
+
 	// Interfaces visible inside the toolkit, but not exposed through the API
 	virtual AAFRESULT UnlinkMobID(aafUID_t mobID);
 
-	aafBool IsMediaDataPresent( 	aafUID_t				fileMobUid,	/* IN -- */
-									aafFileFormat_t	fmt);
+	aafBool IsEssenceDataPresent(aafUID_t fileMobUid, /* IN -- */ aafFileFormat_t fmt);
 	AAFRESULT AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
 						  AAFObject *dataObj) ;    /* IN - Input Mob */ 
 	AAFRESULT ChangeIndexedMobID (ImplAAFMob *pMob, aafUID_t *newID);
