@@ -1620,11 +1620,12 @@ void CAAFCDCICodec::UpdateDescriptor (CAAFCDCIDescriptorHelper& descriptorHelper
 	checkResult(descriptorHelper.SetVideoLineMap(_videoLineMapSize, _videoLineMap));
 	checkResult(descriptorHelper.SetImageAspectRatio(_imageAspectRatio));
 	checkResult(descriptorHelper.SetAlphaTransparency(_alphaTransparency));
-	checkResult(descriptorHelper.SetGamma(_gamma));
 	checkResult(descriptorHelper.SetImageAlignmentFactor(_imageAlignmentFactor));
 	checkResult(descriptorHelper.SetFieldDominance(_fieldDominance));
 	checkResult(descriptorHelper.SetFieldStartOffset(_fieldStartOffset));
 	checkResult(descriptorHelper.SetFieldEndOffset(_fieldEndOffset));
+	if (_gamma != NULL_UID)
+		checkResult(descriptorHelper.SetGamma(_gamma));
 
 	// CDCIDescriptor methods:
 	checkResult(descriptorHelper.SetComponentWidth(_componentWidth));
