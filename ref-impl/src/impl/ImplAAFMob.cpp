@@ -100,13 +100,15 @@ extern "C" const aafClassID_t CLSID_AAFTypeDefString;
 extern "C" const aafClassID_t CLSID_EnumAAFKLVData;
 
 ImplAAFMob::ImplAAFMob ()
-: _mobID(			PID_Mob_MobID,			L"MobID"),
-  _name(			PID_Mob_Name,			L"Name"),
-  _creationTime(    PID_Mob_CreationTime,	L"CreationTime"),
-  _lastModified(    PID_Mob_LastModified,	L"LastModified"),
-  _slots(			PID_Mob_Slots,			L"Slots"),
-  _userComments(	PID_Mob_UserComments,	L"UserComments"),
-  _KLVData(			PID_Mob_KLVData,		L"KLVData")
+: _mobID(	 PID_Mob_MobID,	        L"MobID"),
+  _name(	 PID_Mob_Name,	        L"Name"),
+  _creationTime( PID_Mob_CreationTime,  L"CreationTime"),
+  _lastModified( PID_Mob_LastModified,  L"LastModified"),
+  _slots(	 PID_Mob_Slots,	        L"Slots"),
+  _userComments( PID_Mob_UserComments,  L"UserComments"),
+  _KLVData(	 PID_Mob_KLVData,       L"KLVData"),
+  _attributes(   PID_Mob_Attributes,    L"Attributes" ),
+  _usageCode(    PID_Mob_UsageCode,     L"UsageCode" )
 {
 	_persistentProperties.put(_mobID.address());
 	_persistentProperties.put(_name.address());
@@ -115,6 +117,9 @@ ImplAAFMob::ImplAAFMob ()
 	_persistentProperties.put(_slots.address());
 	_persistentProperties.put(_userComments.address());
 	_persistentProperties.put(_KLVData.address());
+	_persistentProperties.put(_attributes.address());
+	_persistentProperties.put(_usageCode.address());
+
 	(void)aafMobIDNew(&_mobID);		// Move this out of constructor when we get 2-stage create
 	AAFGetDateTime(&_creationTime);
 	AAFGetDateTime(&_lastModified);
@@ -953,6 +958,154 @@ AAFRESULT STDMETHODCALLTYPE
   XEND;
 	
   return(AAFRESULT_SUCCESS);
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::AppendAttribute (aafCharacter_constptr  pName,
+				 aafCharacter_constptr  pValue )
+{
+  if ( pName  == NULL ||
+       pValue == NULL ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+
+  XPROTECT()
+  {
+    ImplAAFSmartPointer<ImplAAFDictionary> spDict;
+    CHECK( GetDictionary(&spDict) );
+
+    // Get a type def for the tagged value.  GetBuiltinDefs passes an
+    // unowned pointer.  Don't release it (hence, a bare pointer).
+    ImplAAFTypeDef* pTaggedValType = spDict->GetBuiltinDefs()->tdString();
+    assert( pTaggedValType );
+
+
+    // The TaggedValueDef returned by GetBuildinDefs is not reference
+    // counted - don't release it.
+    // pTaggedDef is the object we will return, so it is not put in a smart pointer
+    // either.
+    ImplAAFTaggedValue* pTaggedVal;
+    ImplAAFClassDef* pTaggedValDef = spDict->GetBuiltinDefs()->cdTaggedValue();
+    if ( !pTaggedValDef ) {
+      RAISE( E_FAIL );
+    }
+
+
+    // Create the tagged value.
+    CHECK( pTaggedValDef->CreateInstance( reinterpret_cast<ImplAAFObject**>(&pTaggedVal) ) );
+    assert( pTaggedVal );
+
+    // Init the tagged value.
+    CHECK( pTaggedVal->Initialize( pName,
+				   pTaggedValType,
+				   (wcslen(pValue)+1)*sizeof(aafCharacter),
+				   reinterpret_cast<aafDataBuffer_t>(const_cast<aafCharacter*>(pValue)) ) );
+
+    _attributes.appendValue( pTaggedVal );
+
+  }
+  XEXCEPT
+  {}
+  XEND;
+
+
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::CountAttributes (aafUInt32*  pNumAttributes )
+{
+  if ( NULL == pNumAttributes ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  *pNumAttributes = _attributes.count();
+
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::GetAttributes (ImplEnumAAFTaggedValues ** ppEnum)
+{
+  if ( NULL == ppEnum ) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  ImplEnumAAFTaggedValues* pEnum = 
+    reinterpret_cast<ImplEnumAAFTaggedValues*>( CreateImpl(CLSID_EnumAAFTaggedValues) );
+  if ( NULL == pEnum ) {
+    return E_FAIL;
+  }
+
+  XPROTECT()
+  {
+    OMStrongReferenceVectorIterator<ImplAAFTaggedValue>* iter =
+      new OMStrongReferenceVectorIterator<ImplAAFTaggedValue>(_attributes);
+    if ( NULL == iter ) {
+      RAISE( AAFRESULT_NOMEMORY );
+    }
+
+    CHECK(pEnum->Initialize( &CLSID_EnumAAFTaggedValues, this, iter ) );
+    *ppEnum = pEnum;
+
+  }
+  XEXCEPT
+  {
+    if ( pEnum ) {
+      pEnum->ReleaseReference();
+    }
+  }
+  XEND;
+
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::RemoveAttribute (ImplAAFTaggedValue * pAttribute )
+{
+  if (NULL == pAttribute) {
+    return AAFRESULT_NULL_PARAM;
+  }
+
+  if ( !pAttribute->attached () ) {
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
+  }
+
+  if ( !_attributes.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  size_t index;
+  if ( _attributes.findIndex (pAttribute, index) ) {
+    _attributes.removeAt(index);
+    pAttribute->ReleaseReference();
+  }
+  else {
+    return AAFRESULT_OBJECT_NOT_FOUND;
+  }
+
+  return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::SetUsageCode (aafUID_constref  usageCode )
+{
+  _usageCode = usageCode;
+
+  return(AAFRESULT_SUCCESS);
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFMob::GetUsageCode (aafUID_t*  /*pUsageCode*/)
+{
+  if ( !_usageCode.isPresent() ) {
+    return AAFRESULT_PROP_NOT_PRESENT;
+  }
+
+  return AAFRESULT_SUCCESS;
+
 }
 
 AAFRESULT STDMETHODCALLTYPE
