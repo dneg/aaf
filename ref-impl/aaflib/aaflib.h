@@ -324,53 +324,5 @@ protected:
   LPFNAAFCREATEAAFFILEONRAWSTORAGE _pfnCreateAAFFileOnRawStorage;
 };
 
-
-
-#ifdef __cplusplus
-extern "C"{
-#endif 
-
-
-
-
-//
-// Assertion code copied from OM...
-//
-
-#ifdef _DEBUG
-
-void reportAssertionFailure(char* kind,
-                            char* name,
-                            char* expressionString,
-                            char* routine,
-                            char* fileName,
-                            size_t lineNumber);
-
-
-#define ASSERT(name, expression) \
-  (expression) \
-    ? (void)0  \
-    : reportAssertionFailure("Assertion",    name, #expression, \
-                             currentRoutineName, __FILE__, __LINE__)
-
-#define TRACE(routine) char* currentRoutineName = routine;
-
-#else
-
-#define ASSERT(name, expression)
-
-#define TRACE(routine)
-
-#endif /* _DEBUG */
-
-
-
-#ifdef __cplusplus
-}
-#endif
-
-
-
-
 #endif /* __aaflib_h__ */
 

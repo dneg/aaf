@@ -30,6 +30,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 
 //
 // Define the platform specific default dll name.
@@ -42,54 +43,6 @@
 #define DEFAULT_AAFDLL_NAME "libcom-api.so"
 #else
 #error Unknown operating system
-#endif
-
-
-// Use conditional to control inclusion of stream code.
-#ifndef USE_IOSTREAM
-#define USE_IOSTREAM 0
-#endif
-
-
-// ASSERT code copied from OM...
-
-#ifdef _DEBUG
-
-#if USE_IOSTREAM
-
-#include <iostream.h>
-
-void reportAssertionFailure(char* kind,
-                            char* name,
-                            char* expressionString,
-                            char* routine,
-                            char* fileName,
-                            size_t lineNumber)
-{
-  cerr << kind << " \"" << name << "\" failed in routine \""
-       << routine  << "\"." << endl;
-  cerr << "The failure occurred at line " << lineNumber
-       << " in file \"" << fileName << "\"." << endl;
-  cerr << "The condition \"" << expressionString << "\" was violated." << endl;
-  throw AAFRESULT_ASSERTION_VIOLATION;
-}
-
-#else // #if USE_IOSTREAM
-
-void reportAssertionFailure(char*,
-                            char*,
-                            char*,
-                            char*,
-                            char*,
-                            size_t)
-{
-  throw AAFRESULT_ASSERTION_VIOLATION;
-}
-
-#endif // #else // #if USE_IOSTREAM
-
-
-
 #endif
 
 
@@ -185,7 +138,6 @@ STDAPI AAFUnload()
 // 
 static HRESULT LoadIfNecessary(AAFDLL **ppAAFDLL)
 {
-  TRACE("LoadIfNecessary");
   HRESULT hr = S_OK;
 
   // Get the dll wrapper
@@ -196,7 +148,7 @@ static HRESULT LoadIfNecessary(AAFDLL **ppAAFDLL)
     if (SUCCEEDED(hr))
     {
       pAAFDLL = AAFDLL::GetAAFDLL();
-      ASSERT("Valid AAFDLL wrapper", pAAFDLL);
+      assert(pAAFDLL != 0); // "Valid AAFDLL wrapper"
     }
   }
   
@@ -213,7 +165,6 @@ STDAPI AAFFileOpenExistingRead (
   aafUInt32  modeFlags,
   IAAFFile ** ppFile)
 {
-  TRACE("AAFFileOpenExistingRead");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -248,7 +199,6 @@ STDAPI AAFFileOpenExistingModify (
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
 {
-  TRACE("AAFFileOpenExistingModify");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -285,7 +235,6 @@ STDAPI AAFFileOpenNewModify (
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
 {
-  TRACE("AAFFileOpenNewModify");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -323,7 +272,6 @@ STDAPI AAFFileOpenNewModifyEx (
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
 {
-  TRACE("AAFFileOpenNewModifyEx");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -357,7 +305,6 @@ STDAPI AAFFileOpenTransient (
   aafProductIdentification_t *  pIdent,
   IAAFFile ** ppFile)
 {
-  TRACE("AAFFileOpenTransient");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -391,7 +338,6 @@ STDAPI AAFFileIsAAFFile (
     aafUID_t *  pAAFFileKind,
     aafBool *  pFileIsAAFFile)
 {
-  TRACE("AAFFileIsAAFFile");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -425,7 +371,6 @@ STDAPI AAFRawStorageIsAAFFile (
     aafUID_t *  pAAFFileKind,
     aafBool *  pRawStorageIsAAFFile)
 {
-  TRACE("AAFRawStorageIsAAFFile");
   HRESULT hr = S_OK;
   AAFDLL *pAAFDLL = NULL;
 
@@ -653,8 +598,7 @@ STDAPI AAFGetPluginManager (
 AAFDLL::AAFDLL() :
   _libHandle(NULL)
 {
-  TRACE("AAFDLL::AAFDLL");
-  ASSERT("There Can Be Only One!", NULL == _singleton);
+  assert(_singleton == 0);
   _singleton = this;
   
   // Initialize all funtions pointers
@@ -668,8 +612,7 @@ AAFDLL::AAFDLL() :
 // Destructor for the base class
 AAFDLL::~AAFDLL()
 {
-  TRACE("AAFDLL::~AAFDLL");
-  ASSERT("There Can Be Only One!", this == _singleton);
+  assert(this == _singleton);
 
   // Reset the entry point function pointers to NULL.
   ClearEntrypoints();
@@ -838,9 +781,7 @@ HRESULT AAFDLL::OpenExistingRead (
     aafUInt32  modeFlags,
     IAAFFile ** ppFile)
 {
-  TRACE("AAFDLL::OpenExistingRead");
-  ASSERT("Valid dll callback function", _pfnOpenExistingRead);
-  
+  assert(_pfnOpenExistingRead != 0); // "Valid dll callback function"
   return _pfnOpenExistingRead(pFileName, modeFlags, ppFile);  
 }
   
@@ -850,8 +791,7 @@ HRESULT AAFDLL::OpenExistingModify (
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)
 {
-  TRACE("AAFDLL::OpenExistingModify");
-  ASSERT("Valid dll callback function", _pfnOpenExistingModify);
+  assert(_pfnOpenExistingModify != 0); // "Valid dll callback function"
   return _pfnOpenExistingModify(pFileName, modeFlags, pIdent, ppFile);  
 }
 
@@ -861,8 +801,7 @@ HRESULT AAFDLL::OpenNewModify (
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)
 {
-  TRACE("AAFDLL::OpenNewModify");
-  ASSERT("Valid dll callback function", _pfnOpenNewModify);
+  assert(_pfnOpenNewModify != 0); // "Valid dll callback function"
   return _pfnOpenNewModify(pFileName, modeFlags, pIdent, ppFile);  
 }
 
@@ -873,8 +812,6 @@ HRESULT AAFDLL::OpenNewModifyEx (
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)
 {
-  TRACE("AAFDLL::OpenNewModifyEx");
-
   // This entry point is not present in some versions of the DLL
   if (NULL == _pfnOpenNewModifyEx)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
@@ -886,8 +823,7 @@ HRESULT AAFDLL::OpenTransient (
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)
 {
-  TRACE("AAFDLL::OpenTransient");
-  ASSERT("Valid dll callback function", _pfnOpenTransient);
+  assert(_pfnOpenTransient != 0); // "Valid dll callback function"
   return _pfnOpenTransient(pIdent, ppFile);  
 }
 
@@ -896,7 +832,6 @@ HRESULT AAFDLL::IsAAFFile (
     aafUID_t *  pAAFFileKind,
     aafBool *  pFileIsAAFFile)
 {
-  TRACE("AAFDLL::IsAAFFile");
   // This function was previously implemented here but has now
   // been moved to the DLL. There was previously a stub in the
   // DLL that returned AAFRESULT_NOT_IMPLEMENTED (this stub
@@ -921,8 +856,7 @@ HRESULT AAFDLL::IsAAFFile (
 HRESULT AAFDLL::GetPluginManager (
   IAAFPluginManager ** ppPluginManager)
 {
-  TRACE("AAFDLL::GetPluginManager");
-  ASSERT("Valid dll callback function", _pfnGetPluginManager);
+  assert(_pfnGetPluginManager != 0); // "Valid dll callback function"
   return _pfnGetPluginManager(ppPluginManager);  
 }
 
@@ -931,8 +865,6 @@ HRESULT AAFDLL::RawStorageIsAAFFile (
     aafUID_t *  pAAFFileKind,
     aafBool *  pRawStorageIsAAFFile)
 {
-  TRACE("AAFDLL::RawStorageIsAAFFile");
-
   // This entry point is not present in some versions of the DLL
   if (NULL == _pfnRawStorageIsAAFFile)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
@@ -944,8 +876,6 @@ HRESULT AAFDLL::CreateRawStorageMemory (
 	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage)
 {
-  TRACE("AAFDLL::CreateRawStorageMemory");
-//  ASSERT("Valid dll callback function", _pfnCreateRawStorageMemory);
   // This callback did not exist in DR4 or earlier toolkits.
   if (NULL == _pfnCreateRawStorageMemory)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
@@ -959,8 +889,6 @@ HRESULT AAFDLL::CreateRawStorageDisk (
 	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage)
 {
-  TRACE("AAFDLL::CreateRawStorageDisk");
-//  ASSERT("Valid dll callback function", _pfnCreateRawStorageDisk);
   // This callback did not exist in DR4 or earlier toolkits.
   if (NULL == _pfnCreateRawStorageDisk)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
@@ -976,8 +904,6 @@ HRESULT AAFDLL::CreateRawStorageCachedDisk (
     aafUInt32  pageSize,
 	IAAFRawStorage ** ppNewRawStorage)
 {
-  TRACE("AAFDLL::CreateRawStorageCachedDisk");
-//  ASSERT("Valid dll callback function", _pfnCreateRawStorageCachedDisk);
   // This callback did not exist in DR4 or earlier toolkits.
   if (NULL == _pfnCreateRawStorageCachedDisk)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
@@ -1000,8 +926,6 @@ HRESULT AAFDLL::CreateAAFFileOnRawStorage (
 	aafProductIdentification_constptr  pIdent,
 	IAAFFile ** ppNewFile)
 {
-  TRACE("AAFDLL::CreateAAFFileOnRawStorage");
-//  ASSERT("Valid dll callback function", _pfnCreateAAFFileOnRawStorage);
   // This callback did not exist in DR4 or earlier toolkits.
   if (NULL == _pfnCreateAAFFileOnRawStorage)
     return AAFRESULT_DLL_SYMBOL_NOT_FOUND;
