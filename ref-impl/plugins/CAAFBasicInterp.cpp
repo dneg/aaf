@@ -34,8 +34,6 @@
 #include "AAF.h"
 
 #include "aafErr.h"
-#include "AAFUtils.h"
-#include "aafCvt.h"
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFRational.h"
@@ -50,6 +48,12 @@ const CLSID CLSID_AAFBasicInterp = { 0x5B6C85A1, 0x0EDE, 0x11d3, { 0x80, 0xA9, 0
 
 const aafUID_t BASIC_INTERP_PLUGIN = { 0x5B6C85A2, 0x0EDE, 0x11d3, { 0x80, 0xA9, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
+
+static bool EqualAUID(const aafUID_t *id1, const aafUID_t * id2)
+{
+  assert (id1 && id2);
+  return (0 == memcmp(id1, id2, sizeof(aafUID_t)));
+}
 
 HRESULT STDMETHODCALLTYPE
     CAAFBasicInterp::CountDefinitions (aafUInt32 *pDefCount)
@@ -79,7 +83,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFBasicInterp::GetIndexedDefinitionObject (aafUInt32 index, IAAFDictionary *dict, IAAFDefObject **def)
+    CAAFBasicInterp::GetIndexedDefinitionObject (aafUInt32 /* index */, IAAFDictionary *dict, IAAFDefObject **def)
 {
 	IAAFInterpolationDef	*interpDef = NULL;
 	IAAFDefObject	*obj = NULL;
@@ -180,7 +184,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
-CAAFBasicInterp::CAAFBasicInterp (IUnknown * pControllingUnknown, aafBool doInit)
+CAAFBasicInterp::CAAFBasicInterp (IUnknown * pControllingUnknown)
   : CAAFUnknown (pControllingUnknown)
 {
 	_typeDef = NULL;
@@ -363,7 +367,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT CAAFBasicInterp::InterpolateMany(
 	/* [in] */ aafRational_t *  pStartInputValue,
     /* [in] */ aafRational_t *  pInputStep,
-    /* [in] */ aafUInt32  pGenerateCount,
+    /* [in] */ aafUInt32  /* pGenerateCount */,
     /* [out] */aafMemPtr_t pOutputValue,
     /* [out] */aafUInt32 *  pResultCount)
 {

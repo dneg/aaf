@@ -31,7 +31,6 @@
  ************************************************************************/
 
 
-#include "AAFUtils.h"
 #include "AAF.h"
 #include "AAFPlugin.h"
 #include "CAAFUnknown.h"
@@ -50,7 +49,7 @@ protected:
   //
   // Constructor/destructor
   //
-  CAAFBasicInterp (IUnknown * pControllingUnknown, aafBool doInit = kAAFTrue);
+  CAAFBasicInterp (IUnknown * pControllingUnknown);
   virtual ~CAAFBasicInterp ();
 
 public:
