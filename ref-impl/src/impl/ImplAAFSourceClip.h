@@ -47,6 +47,7 @@ const int PID_SOURCECLIP_FADEINPRESENT	= 6;
 const int PID_SOURCECLIP_FADEOUTLEN	= 7;
 const int PID_SOURCECLIP_FADEOUTTYPE	= 8;
 const int PID_SOURCECLIP_FADEOUTPRESENT	= 9;
+const int PID_SOURCECLIP_STARTTIME		= 10;
 
 
 class ImplAAFSourceClip : public ImplAAFSourceReference
@@ -144,26 +145,6 @@ public:
         (aafSourceRef_t  sourceRef);
 
 
-  // Override from AAFSourceReference
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetSourceID (/*[retval][out]*/ aafUID_t *  pSourceID);
-
-  // Override from AAFSourceReference
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetSourceID (/*[in]*/ aafUID_t   sourceID);
-
-  // Override from AAFSourceReference
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetSourceMobSlotID (/*[retval][out]*/ aafSlotID_t *  pMobSlotID);
-
-  // Override from AAFSourceReference
-  virtual AAFRESULT STDMETHODCALLTYPE
-    SetSourceMobSlotID (/*[in]*/ aafSlotID_t   mobSlotID);
-
-
-
-
-
 public:
 
   // Declare the module test method. The implementation of the will be be
@@ -177,6 +158,7 @@ private:
 	OMFixedSizeProperty<aafInt32> 		_fadeOutLen;
 	OMFixedSizeProperty<aafFadeType_t>	_fadeOutType;
 	OMFixedSizeProperty<aafBool>		_fadeOutPresent;
+	OMFixedSizeProperty<aafPosition_t>	_startTime;
 
 };
 
