@@ -139,7 +139,10 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   // Attach the object.
   object->attach(containingObject, name);
   object->setStore(&s);
+#if defined(OM_ENABLE_DEBUG)
+  // Keep track of each object (debugging only)
   f->objectDirectory()->insert(object->pathName(), object);
+#endif
   object->restoreContents();
   return object;
 }
