@@ -22,11 +22,13 @@ AAF_CMD_LINK = ld
 AAF_LINK_FLAGS =
 AAF_LINK_OUTPUT_FLAG = -o
 LFLAGS = -Olimit 1026
-CFLAGS = -Olimit 1026 -exceptions ${MAINWINCCPPFLAGS}
+CFLAGS = -Wall -Werror
 ARFLAGS = -r
 OBJFILE = -o $*.${OBJ}
 EXEFILE = -o unittest.${EXE}
 CP = cp
+MAKE_SUFFIX =
+
 UNICODE = 1
 SH_PREFIX = 
 SH_SUFFIX =

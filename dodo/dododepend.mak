@@ -18,22 +18,22 @@ include aafobjects.mk
 
 depend.mk : aafobjects.mk
 	@ echo Creating depend.tmp ...
-	@ $(SH_PREFIX) rm -f depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo # This file automatically generated make. > depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo # Special case AAFTypes since no object is to be built only headers... >> depend.tmp $(SH_SUFFIX)
+	@ rm -f depend.tmp
+	@ echo "#" This file automatically generated make. > depend.tmp
+	@ echo "#" Special case AAFTypes since no object is to be built only headers... >> depend.tmp
 	@ echo AAFTypes.all...
-	@ $(SH_PREFIX) echo AAFTypes.all : AAFTypes.h >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo AAFTypes.all : AAFTypes.idl >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo AAFTypes.all : AAFTypes.refh >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo AAFTypes.h : macros/h.mac macros/base.mac >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo AAFTypes.idl : macros/idl.mac macros/base.mac >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo AAFTypes.refh : macros/refh.mac macros/base.mac >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo # >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo # >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo #special case the utility classes since they will not be exposed by com >> depend.tmp $(SH_SUFFIX)
-	@ $(SH_PREFIX) for base in $(DODO_TARGET_NAMES) ; do \
+	@ echo AAFTypes.all : AAFTypes.h >> depend.tmp
+	@ echo AAFTypes.all : AAFTypes.idl >> depend.tmp
+	@ echo AAFTypes.all : AAFTypes.refh >> depend.tmp
+	@ echo AAFTypes.h : macros/h.mac macros/base.mac >> depend.tmp
+	@ echo AAFTypes.idl : macros/idl.mac macros/base.mac >> depend.tmp
+	@ echo AAFTypes.refh : macros/refh.mac macros/base.mac >> depend.tmp
+	@ echo "#" >> depend.tmp
+	@ echo "#" >> depend.tmp
+	@ echo "#" special case the utility classes since they will not be exposed by com >> depend.tmp
+	@ for base in $(DODO_TARGET_NAMES) ; do \
 		echo $$base.all... ; \
-		echo '' >> depend.tmp ; \
+		echo "" >> depend.tmp ; \
 		echo $$base.all : $$base.cpp $$base.h $$base.cppt >> depend.tmp ; \
 		echo $$base.all : $$base.comc $$base.comh $$base.comt >> depend.tmp ; \
 		echo $$base.all : $$base.implc $$base.implh >> depend.tmp ; \
@@ -50,7 +50,7 @@ depend.mk : aafobjects.mk
 		echo $$base.idl : macros/idl.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.refh : macros/refh.mac macros/base.mac >> depend.tmp ; \
 		echo $$base.exp : macros/exp.mac macros/base.mac >> depend.tmp ; \
-		for import in `grep '^#import' $$base.dod | sed -e 's,#import,,' | sed -e 's,.*/,,'` ; do \
+		for import in `grep '^\#import' $$base.dod | sed -e 's,\#import,,' | sed -e 's,.*/,,'` ; do \
 			echo $$base.cpp : $$import >> depend.tmp ; \
 			echo $$base.h : $$import >> depend.tmp ; \
 			echo $$base.cppt : $$import >> depend.tmp ; \
@@ -63,12 +63,19 @@ depend.mk : aafobjects.mk
 			echo $$base.refh : $$import >> depend.tmp ; \
 			echo $$base.exp : $$import >> depend.tmp ; \
 		done ; \
-	done $(SH_SUFFIX)
-	@ $(SH_PREFIX) echo \\n>> depend.tmp $(SH_SUFFIX)
-	$(SH_PREFIX) mv depend.tmp depend.mk $(SH_SUFFIX)
+	  done
+	@ echo "" >> depend.tmp
+	for file in $(HUMAN_TYPED_IMPL) ; do \
+		grep -v $$file\.impl depend.tmp > depend.tmp2 ; \
+		rm depend.tmp ; \
+		mv depend.tmp2 depend.tmp ; \
+      done
+	@ mv depend.tmp depend.mk
 	@ echo "Done with depend.mk."
 
 
 clean :
-	$(SH_PREFIX) $(RM) -rf depend.mk $(SH_SUFFIX)
-	$(SH_PREFIX) touch depend.mk $(SH_SUFFIX)
+	$(RM) -rf depend.mk
+	touch depend.mk
+
+
