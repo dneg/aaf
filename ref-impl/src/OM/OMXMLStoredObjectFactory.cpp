@@ -198,9 +198,9 @@ OMXMLStoredObjectFactory::isRecognized(OMRawStorage* /* rawStorage */)
   //        specified by <p accessMode> ?
   //   @parm The <c OMRawStorage>.
   //   @parm The <t OMAccessMode>.
-  //   @rdecs True if the file can be created, false otherwise.
+  //   @rdesc True if the file can be created, false otherwise.
 bool OMXMLStoredObjectFactory::compatibleRawStorage(
-                                         const OMRawStorage* /* rawStorage */,
+                                         const OMRawStorage* NNAME(rawStorage),
                                          const OMFile::OMAccessMode accessMode)
 {
   TRACE("OMXMLStoredObjectFactory::compatibleRawStorage");
@@ -217,7 +217,7 @@ bool OMXMLStoredObjectFactory::compatibleRawStorage(
   // @mfunc Can a file be created successfully as a named file and
   //        accessed successfully in the mode specified by <p accessMode> ?
   //   @parm The <t OMAccessMode>.
-  //   @rdecs True if the file can be created, false otherwise.
+  //   @rdesc True if the file can be created, false otherwise.
 bool OMXMLStoredObjectFactory::compatibleNamedFile(
                                    const OMFile::OMAccessMode /* accessMode */)
 {

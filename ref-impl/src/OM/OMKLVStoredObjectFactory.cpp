@@ -198,7 +198,7 @@ OMKLVStoredObjectFactory::isRecognized(OMRawStorage* /* rawStorage */)
   //        specified by <p accessMode> ?
   //   @parm The <c OMRawStorage>.
   //   @parm The <t OMAccessMode>.
-  //   @rdecs True if the file can be created, false otherwise.
+  //   @rdesc True if the file can be created, false otherwise.
 bool OMKLVStoredObjectFactory::compatibleRawStorage(
                                    const OMRawStorage* /* rawStorage */,
                                    const OMFile::OMAccessMode /* accessMode */)
@@ -212,7 +212,7 @@ bool OMKLVStoredObjectFactory::compatibleRawStorage(
   // @mfunc Can a file be created successfully as a named file and
   //        accessed successfully in the mode specified by <p accessMode> ?
   //   @parm The <t OMAccessMode>.
-  //   @rdecs True if the file can be created, false otherwise.
+  //   @rdesc True if the file can be created, false otherwise.
 bool OMKLVStoredObjectFactory::compatibleNamedFile(
                                    const OMFile::OMAccessMode /* accessMode */)
 {
