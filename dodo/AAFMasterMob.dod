@@ -22,7 +22,7 @@ AD_HEAD
 AD_FORWARD_DECLARATION(AAFSourceClip)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFComponent)
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFFindSourceInfo)
 
 AD_CLASS_UUID(b1a21373, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
@@ -31,7 +31,7 @@ AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 AD_CLASS_BEGIN
 
 AD_XMETHOD5(AddMasterTrack,
-[in], objIn, AAFDataDefinition, mediaKind, Data kind of new track. The mediaKind 
+[in], objIn, AAFDataDef, mediaKind, Data kind of new track. The mediaKind 
   // parameter requires a data kind valid for a media stream. Valid data kinds are:
   // Picture
   // Sound,

@@ -15,7 +15,7 @@ AD_HEAD
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 
 AD_CLASS_UUID(91920d61, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
@@ -25,7 +25,7 @@ AD_CLASS_BEGIN
 AD_XMETHOD5(AddPoint,
 			[in],objPass,aafRational_t, time, time for Control Point,
 			[in],objPass,aafEditHint_t, editHint, Edit hint,
-			[in],objIn,AAFDataDefinition, datadef, pointer to data definition object,
+			[in],objIn,AAFDataDef, datadef, pointer to data definition object,
 			[in],objPass,aafInt32, valueSize, Size of value data,
 			[in\, size_is\(valueSize\)],objPass, aafDataBuffer_t, pValue, Ponter to the value data,
 			This function adds a control point in time order into a varying
@@ -34,7 +34,7 @@ AD_XMETHOD5(AddPoint,
 AD_XMETHOD3(GetInfo,
 			[out], objPass, aafLength_t *, pLength, Length of varying value object,
 		    [out], objPass, aafInterpKind_t *, pInterpolation, Interpolation method,
-			[out\,retval],objOut,AAFDataDefinition, pDatadef, Data Definition  object,
+			[out\,retval],objOut,AAFDataDef, pDatadef, Data Definition  object,
 		   This function returns the required property values for the varying
 		   // value object.)
 

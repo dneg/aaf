@@ -17,7 +17,7 @@ AD_HEAD
 \******************************************/
 
 AD_INCLUDE(AAFTypes)
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 
 AD_CLASS_UUID(9c568a82, 2096, 11d2, bf, 98, 00, 60, 97, 11, 62, 1) 
 
@@ -45,7 +45,7 @@ AD_METHOD1(GetLength,
 AD_XMETHOD1(SetDataDefinition,
 			[in],
 			objIn,
-			AAFDataDefinition,
+			AAFDataDef,
 			datadef,
 			Data Definition of this object,
 			sets the datakind property values on the input component object.)
@@ -53,7 +53,7 @@ AD_XMETHOD1(SetDataDefinition,
 AD_XMETHOD1(GetDataKind,
 			[out\,retval],
 			objOut,
-			AAFDataDefinition *,
+			AAFDataDef *,
 			datadef,
 			Data Definition of this object,
 			returns datakind definition object)

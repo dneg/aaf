@@ -13,7 +13,7 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFMasterMob)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFSourceClip)
@@ -89,7 +89,7 @@ AD_XMETHOD6(Create,
 [in],objIn, AAFMasterMob,masterMob,on this master mob,
 [in],objPass, aafTrackID_t,masterTrackID,,
 [in],objIn, AAFSourceMob,fileMob,and this file mob,
-[in],objIn, AAFDataDefinition,mediaKind,create media of this type,
+[in],objIn, AAFDataDef,mediaKind,create media of this type,
 [in],objPass, aafRational_t,samplerate,with this sample rate,
 [in],objPass, aafCompressEnable_t,enable,optionally compressing it,
 Creates a single channel stream of media.)
@@ -304,7 +304,7 @@ AD_XMETHOD5(GetNumChannels,
 [in],objIn, AAFMasterMob,masterMob,In this master mob,
 [in],objPass, aafTrackID_t,trackID,On this track,
 [in],objPass, aafMediaCriteria_t*,mediaCrit,using this media criteria,
-[in],objIn, AAFDataDefinition,mediaKind,for this media type,
+[in],objIn, AAFDataDef,mediaKind,for this media type,
 [out],objPass, aafInt16*,numCh,How many channels?,
 Takes an opaque handle  a master mob reference  and a track ID so that it may be called before the media is opened.)
 	//@comm Returns the number of interleaved media channels of a given type in the media stream referenced by the given file mob
@@ -316,7 +316,7 @@ Takes an opaque handle  a master mob reference  and a track ID so that it may be
 
 /****/
 AD_XMETHOD2(GetLargestSampleSize,
-[in],objIn, AAFDataDefinition,mediaKind,and this media type,
+[in],objIn, AAFDataDef,mediaKind,and this media type,
 [out],objPass, aafInt32*,maxSize,the largest sample size,
 Returns the size in bytes of the largest sample for a given media type.)
 	//@comm For uncompressed data, or the output of the software codec,
@@ -327,7 +327,7 @@ Returns the size in bytes of the largest sample for a given media type.)
 
 /****/
 AD_XMETHOD3(GetSampleFrameSize,
-[in],objIn, AAFDataDefinition,mediaKind,and this media type,
+[in],objIn, AAFDataDef,mediaKind,and this media type,
 [in],objPass, aafPosition_t,frameNum,for this [1-based] sample frame number,
 [out],objPass, aafLength_t*,frameSize,How big is the sample frame?,
 Returns the size in bytes of the given sample for a given media type.)

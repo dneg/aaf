@@ -16,7 +16,7 @@ AD_HEAD
 *                                          *
 \******************************************/
 
-AD_FORWARD_DECLARATION(AAFDataDefinition)
+AD_FORWARD_DECLARATION(AAFDataDef)
 
 AD_CLASS_UUID(86192db2, 2a23, 11D2, BF, a3, 00, 60, 97, 11, 62, 12)
 
@@ -40,7 +40,7 @@ AD_METHOD1(GetEditHint,
 AD_XMETHOD1(GetDatakind,
 			[out\,retval],
 			objOut,
-			AAFDataDefinition,
+			AAFDataDef,
 			pDatadef,
 			Pointer to a Data Definition object,
 			Returns the Data Definition object of the control point.)
@@ -60,7 +60,7 @@ AD_METHOD1(SetEditHint,
 		   Sets the control point Edit hint value.)
 
 AD_XMETHOD1(SetDataDefinition,
-			[in], objIn, AAFDataDefinition, datadef,Control Point data definition,
+			[in], objIn, AAFDataDef, datadef,Control Point data definition,
 			Sets the control point datakind value.)
 
 AD_METHOD2(SetValue,
