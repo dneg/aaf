@@ -129,4 +129,16 @@ void trace(const char* routineName)
 
 #endif
 
+#if defined (OM_ENABLE_OBSOLETE)
+
+void obsolete(const char* routineName, const char* newRoutineName)
+{
+  cerr << "The routine \""
+       << routineName
+       << "\" is obsolete. Please use \""
+       << newRoutineName << "\" instead." << endl;
+}
+
+#endif
+
 #endif

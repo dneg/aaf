@@ -112,6 +112,30 @@ void trace(const char* routineName);
 
 #endif
 
+#if defined(OM_ENABLE_OBSOLETE)
+
+  // @func Output a message indicating that the <p routineName>
+  //       is obsolete and that <p newRoutineName> should be used instead
+  //   @parm The name of the obsolete routine.
+  //   @parm The name of the routine that should be called instead.
+void obsolete(const char* routineName, const char* newRoutineName);
+
+  // @func Print a message (when enabled with OM_ENABLE_DEBUG and
+  //       OM_ENABLE_OBSOLETE) indicating that the current routine
+  //       is obsolete and that <p newRoutineName> should be used instead.
+  //       OBSOLETE is provided to aid clients in migrating from one
+  //       Object Manager version to the next. Routines are made obsolete
+  //       before they are removed. 
+  //   @parm The name of the routine that should be called instead.
+#define OBSOLETE(newRoutineName) \
+  obsolete(currentRoutineName, newRoutineName);
+
+#else
+
+#define OBSOLETE(newRoutineName)
+
+#endif
+
   // @func Assert (when enabled with OM_ENABLE_DEBUG) that the
   //       precondition described by <p name> and <p expression> is
   //       true. An invocation of this macro must be preceeded by an
@@ -206,6 +230,8 @@ void trace(const char* routineName);
 #else
 
 #define TRACE(name)
+
+#define OBSOLETE(newRoutineName)
 
 #define PRECONDITION(name, expression)
 
