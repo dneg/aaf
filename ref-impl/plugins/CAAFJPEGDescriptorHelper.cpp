@@ -221,18 +221,18 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::SetIsInContainer (aafBool  isAAF)
+    CAAFJPEGDescriptorHelper::SetCodecDef (const aafUID_t & codecDef)
 {
 	checkAssertion(NULL != _filedes);
-	return _filedes->SetIsInContainer (isAAF);
+	return _filedes->SetCodecDef (codecDef);
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFJPEGDescriptorHelper::GetIsInContainer (aafBool *  pIsAAF)
+    CAAFJPEGDescriptorHelper::GetCodecDef (aafUID_t *  pCodecDef)
 {
 	checkAssertion(NULL != _filedes);
-	return _filedes->GetIsInContainer (pIsAAF);
+	return _filedes->GetCodecDef (pCodecDef);
 }
 
 
