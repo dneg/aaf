@@ -40,7 +40,9 @@ AAFPERSISTENTOBJECTS = \
 	AAFTypeDef \
 	AAFUnixLocator \
 	AAFVaryingValue \
-	AAFWindowsLocator
+	AAFWindowsLocator \
+	AAFDigitalImageDescriptor \
+	AAFCDCIDescriptor
 
 
 
@@ -100,6 +102,7 @@ HUMAN_TYPED_IMPL = \
 	AAFTimecode \
 	AAFTimelineMobSlot \
 	AAFTapeDescriptor \
+	AAFWAVEDescriptor \
 	EnumAAFComponents \
 	EnumAAFLocators \
 	EnumAAFMobSlots \
