@@ -14,22 +14,18 @@
 \******************************************/
 
 class ImplAAFMasterMob;
-
 class ImplAAFSourceMob;
-
 class ImplAAFSourceClip;
-
 class ImplAAFEssenceFormat;
-
 class ImplAAFEssenceStream;
 class ImplAAFEssenceSampleStream;
-
 class ImplAAFFileDescriptor;
-
+class ImplAAFFile;
 class ImplAAFLocator;
 class ImplAAFContainerDef;
 class ImplAAFPluginDescriptor;
 class ImplAAFHeader;
+class ImplAAFDictionary;
 
 #ifndef __ImplAAFRoot_h__
 #include "ImplAAFRoot.h"
@@ -675,24 +671,31 @@ public:
 
 public:
 	//Toolkit private functions
-	AAFRESULT MakeAAFContainerDef(ImplAAFContainerDef **result);
+	AAFRESULT MakeAAFContainerDef(ImplAAFHeader *head, ImplAAFContainerDef **result);
 	AAFRESULT CreateContainerDef (ImplAAFHeader *head);
 	AAFRESULT CreateCodecDef(ImplAAFHeader *head, aafUID_t codecDef);
+	AAFRESULT CreateEssenceFileFromLocator (ImplAAFHeader *srcHead, ImplAAFLocator *loc, ImplAAFFile **result);
+	AAFRESULT CreateFileMob (ImplAAFHeader *newHead, aafSlotID_t slotID, aafUID_t *newMobID,
+							aafUID_t mediaKind, aafRational_t editRate,aafRational_t sampleRate,
+							ImplAAFLocator *addLocator, ImplAAFSourceMob **result);
 
 private:
-	aafUID_t			_codecID;
-	aafUID_t			_variety;
-	ImplAAFLocator		*_destination;
-	aafUID_t			_fileFormat;
-	ImplAAFSourceMob	*_fileMob;
-	aafInt32			_numChannels;
-	aafSubChannel_t		*_channels;
-	ImplAAFMasterMob	*_masterMob;
-	ImplAAFFileDescriptor *_mdes;
-	IAAFEssenceCodec	*_codec;
-	IAAFEssenceStream	 *_stream;
-	aafOpenType_t		_openType;
-	IAAFPluginDescriptor *_codecDescriptor;
+	aafUID_t				_codecID;
+	aafUID_t				_variety;
+	ImplAAFLocator			*_destination;
+	aafUID_t				_fileFormat;
+	ImplAAFSourceMob		*_compFileMob;
+	aafInt32				_numChannels;
+	aafSubChannel_t			*_channels;
+	ImplAAFMasterMob		*_masterMob;
+	ImplAAFFileDescriptor	*_mdes;
+	IAAFEssenceCodec		*_codec;
+	IAAFEssenceStream		*_stream;
+	aafOpenType_t			_openType;
+	IAAFPluginDescriptor	*_codecDescriptor;
+	ImplAAFFile				*_dataFile;
+	ImplAAFSourceMob		*_dataFileMob;
+	ImplAAFDictionary		*_compDictionary;
 };
 
 #endif // ! __ImplAAFEssenceAccess_h__
