@@ -50,6 +50,7 @@ ImplEnumAAFParameterDefs::ImplEnumAAFParameterDefs ()
 	_current = 0;
 	_enumObj = NULL;
 	_enumProp = NULL;
+	_enumStrongProp = NULL;
 }
 
 
@@ -67,10 +68,21 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFParameterDefs::NextOne (
       ImplAAFParameterDef **ppParameterDef)
 {
-	aafUInt32			numElem = _enumProp->size() / sizeof(aafUID_t);
+	aafUInt32			numElem;
 	aafUID_t			value;
-	ImplAAFHeader		*head;
-	ImplAAFDictionary	*dict;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
+
+	if(_enumProp != NULL)
+		numElem = _enumProp->size() / sizeof(aafUID_t);
+	else if(_enumStrongProp != NULL)
+	{
+		size_t	siz;
+		
+		_enumStrongProp->getSize(siz);
+		numElem = siz;
+	}
+	//!!!Else assert
 
 	if(ppParameterDef == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -78,13 +90,32 @@ AAFRESULT STDMETHODCALLTYPE
 		return AAFRESULT_NO_MORE_OBJECTS;
 	XPROTECT()
 	{
-		_enumProp->getValueAt(&value, _current);
-		CHECK(_enumObj->MyHeadObject(&head));
-		CHECK(head->GetDictionary (&dict));
-		CHECK(dict->LookupPluggableDef(&value, (ImplAAFPluggableDef **)ppParameterDef));//!!!
+		if(_enumProp != NULL)
+		{
+			_enumProp->getValueAt(&value, _current);
+			CHECK(_enumObj->MyHeadObject(&head));
+			CHECK(head->GetDictionary (&dict));
+			CHECK(dict->LookupParameterDefinition(&value, ppParameterDef));
+			head->ReleaseReference();
+			head = NULL;
+			dict->ReleaseReference();
+			dict = NULL;
+		}
+		else if(_enumStrongProp != NULL)
+		{
+			_enumStrongProp->getValueAt(*ppParameterDef, _current);
+			(*ppParameterDef)->AcquireReference();
+		}
+		//!!!Else assert
 		_current++;
 	}
 	XEXCEPT
+	{
+		if(head != NULL)
+			head->ReleaseReference();
+		if(dict != NULL)
+			dict->ReleaseReference();
+	}
 	XEND;
 
 	return(AAFRESULT_SUCCESS); 
@@ -132,7 +163,18 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	AAFRESULT	hr;
 	aafUInt32	newCurrent;
-	aafUInt32	numElem = _enumProp->size() / sizeof(aafUID_t);
+	aafUInt32	numElem;
+
+	if(_enumProp != NULL)
+		numElem = _enumProp->size() / sizeof(aafUID_t);
+	else if(_enumStrongProp != NULL)
+	{
+		size_t	siz;
+		
+		_enumStrongProp->getSize(siz);
+		numElem = siz;
+	}
+	//!!!Else assert
 
 	newCurrent = _current + count;
 
@@ -169,7 +211,10 @@ AAFRESULT STDMETHODCALLTYPE
 	if (result == NULL)
 		return E_FAIL;
 
-	hr = result->SetEnumProperty(_enumObj, _enumProp);
+	if(_enumProp != NULL)
+		hr = result->SetEnumProperty(_enumObj, _enumProp);
+	else if(_enumStrongProp != NULL)
+		hr = result->SetEnumStrongProperty(_enumObj, _enumStrongProp);
 	if (SUCCEEDED(hr))
 	{
 		result->_current = _current;
@@ -194,12 +239,22 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pObj)
 		pObj->AcquireReference();
 	_enumProp = pProp;				// Don't refcount, same lifetime as the object.
+	_enumStrongProp = NULL;
 
 	return AAFRESULT_SUCCESS;
 }
 
+AAFRESULT STDMETHODCALLTYPE
+    ImplEnumAAFParameterDefs::SetEnumStrongProperty( ImplAAFObject *pObj, parmDefStrongRefArrayProp_t *pProp)
+{
+	if (_enumObj)
+		_enumObj->ReleaseReference();
+	_enumObj = pObj;
+	if (pObj)
+		pObj->AcquireReference();
+	/**/
+	_enumStrongProp = pProp;		// Don't refcount, same lifetime as the object.
+	_enumProp = NULL;
 
-
-
-
-
+	return AAFRESULT_SUCCESS;
+}

@@ -23,11 +23,13 @@ class ImplEnumAAFLocators;
 class ImplEnumAAFParameterDefs;
 
 class ImplEnumAAFEffectDefs;
+
  
 #ifndef __ImplAAFDefObject_h__
 #include "ImplAAFDefObject.h"
 #endif
 
+#include "ImplAAFParameterDef.h"
 #include "ImplEnumAAFEffectDefs.h"
 #include "ImplEnumAAFParameterDefs.h"
 

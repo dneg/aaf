@@ -4,29 +4,14 @@
 #define __ImplEnumAAFParameterDefs_h__
 
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
-
 /***********************************************\
-*	Stub only.   Implementation not yet added	*
+*												*
+* Advanced Authoring Format						*
+*												*
+* Copyright (c) 1998-1999 Avid Technology, Inc. *
+* Copyright (c) 1998-1999 Microsoft Corporation *
+*												*
 \***********************************************/
-
 
 class ImplAAFParameterDef;
 
@@ -41,6 +26,7 @@ class ImplAAFParameterDef;
 #endif
 
 typedef OMVariableSizeProperty<aafUID_t> parmDefWeakRefArrayProp_t;
+typedef OMStrongReferenceVectorProperty<ImplAAFParameterDef> parmDefStrongRefArrayProp_t;
 
 class ImplEnumAAFParameterDefs : public ImplAAFRoot
 {
@@ -108,15 +94,19 @@ public:
   // SDK Internal 
   virtual AAFRESULT STDMETHODCALLTYPE
     SetEnumProperty( ImplAAFObject *pObj, parmDefWeakRefArrayProp_t *pProp);
+  virtual AAFRESULT STDMETHODCALLTYPE
+    SetEnumStrongProperty( ImplAAFObject *pObj, parmDefStrongRefArrayProp_t *pProp);
+
 
 public:
   // Declare the module test method. The implementation of the will be be
   // in /test/ImplEnumAAFParameterDefsTest.cpp.
   static AAFRESULT test();
 private:
-	aafUInt32					_current;
-	ImplAAFObject				*_enumObj;
-	parmDefWeakRefArrayProp_t	*_enumProp;
+	aafUInt32						_current;
+	ImplAAFObject					*_enumObj;
+	parmDefWeakRefArrayProp_t		*_enumProp;
+	parmDefStrongRefArrayProp_t		*_enumStrongProp;
 };
 
 #endif // ! __ImplEnumAAFParameterDefs_h__

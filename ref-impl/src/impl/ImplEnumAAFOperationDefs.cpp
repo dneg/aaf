@@ -50,7 +50,7 @@ ImplEnumAAFEffectDefs::ImplEnumAAFEffectDefs ()
 	_current = 0;
 	_enumObj = NULL;
 	_enumProp = NULL;
-	_enumProp = NULL;
+	_enumStrongProp = NULL;
 }
 
 
@@ -61,7 +61,6 @@ ImplEnumAAFEffectDefs::~ImplEnumAAFEffectDefs ()
 		_enumObj->ReleaseReference();
 		_enumObj = NULL;
 	}
-	//!!!??Refcount prop?
 }
 
 
@@ -230,12 +229,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pObj)
 		pObj->AcquireReference();
 	/**/
-//	if (_enumProp)
-//		_enumProp->ReleaseReference();		Do we have to refcount these externally?!!!
-	_enumProp = pProp;
+	_enumProp = pProp;				// Don't refcount, same lifetime as the object.
 	_enumStrongProp = NULL;
-//	if (pProp)
-//		pProp->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
 }
@@ -250,12 +245,8 @@ AAFRESULT STDMETHODCALLTYPE
 	if (pObj)
 		pObj->AcquireReference();
 	/**/
-//	if (_enumProp)
-//		_enumProp->ReleaseReference();		Do we have to refcount these externally?!!!
-	_enumStrongProp = pProp;
+	_enumStrongProp = pProp;				// Don't refcount, same lifetime as the object.
 	_enumProp = NULL;
-//	if (pProp)
-//		pProp->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
 }
