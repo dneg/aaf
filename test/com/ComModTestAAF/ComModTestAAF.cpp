@@ -63,8 +63,8 @@
 #endif
 
 
-#ifndef __AAFTypes_h__
-#include "AAFTypes.h"
+#ifndef __AAF_h__
+#include "AAF.h"
 #endif
 
 
@@ -76,7 +76,7 @@
 
 #ifdef WIN32
 #include <winbase.h>
-#include <tchar.h>
+//#include <tchar.h>
 #endif
 
 typedef AAFRESULT (*AAFModuleTestProc)();
@@ -84,6 +84,35 @@ typedef AAFRESULT (*AAFModuleTestProc)();
 
 #define SUCCESS (0)
 #define FAILURE (-1)
+
+// routine copied from Tim Bingham's test program...
+static void formatError(DWORD errorCode)
+{
+  cerr << "RESULT = " << (long)errorCode << " (0x" << hex << errorCode << dec << ")" << endl;
+
+#ifdef WIN32
+  CHAR buffer[256];
+
+  int status = FormatMessageA(
+    FORMAT_MESSAGE_FROM_SYSTEM,
+    NULL,
+    errorCode,
+    LANG_SYSTEM_DEFAULT,
+    buffer, sizeof(buffer)/sizeof(buffer[0]),
+    NULL);
+
+  if (status != 0) {
+    int length = strlen(buffer);
+    if (length >= 1) {
+      buffer[length - 1] = '\0';
+    }
+    cerr << buffer << endl;
+  }
+#endif
+
+	cerr << endl;
+}
+
 
 
 // helper class
@@ -94,35 +123,32 @@ struct CComInitialize
 };
 
 
+// simple helper class to initialize and cleanup AAF library.
+struct CAAFInitialize
+{
+  CAAFInitialize(const char *dllname = NULL)
+  {
+	  cout << "Attempting to load the AAF dll...";
+	  cout.flush();
+    HRESULT hr = AAFLoad(dllname);
+    if (S_OK != hr)
+  	{
+      cerr << "FAILED! ";
+      formatError(hr);
+      throw hr;
+		}
+    cout << "DONE" << endl;
+  }
+
+  ~CAAFInitialize()
+  {
+    AAFUnload();
+  }
+};
 
 
 // forward declarations.
 
-#ifdef WIN32
-// routine copied from Tim Bingham's test program...
-void formatError(DWORD errorCode)
-{
-  TCHAR buffer[256];
-
-  int status = FormatMessage(
-    FORMAT_MESSAGE_FROM_SYSTEM,
-    NULL,
-    errorCode,
-    LANG_SYSTEM_DEFAULT,
-    buffer, sizeof(buffer)/sizeof(buffer[0]),
-    NULL);
-
-  if (status != 0) {
-    int length = _tcslen(buffer);
-    if (length >= 2) {
-      buffer[length - 2] = '\0';
-    }
-    cerr << buffer << endl;
-  } else {
-    cerr << hex << errorCode << dec << endl;
-  }
-}
-#endif
 
 
 
@@ -145,6 +171,10 @@ int main(int argc, char* argv[])
 	try
 	{
 		HRESULT hr = S_OK;
+
+		// Make sure the dll can be loaded and initialized.
+		CAAFInitialize aafInit;
+
 
 		/* console window for mac */
 
@@ -207,6 +237,10 @@ int main(int argc, char* argv[])
 
 
 		result = (int)hr;
+	}
+	catch (HRESULT& rhr)
+	{
+		result = rhr;
 	}
 	catch (...)
 	{
