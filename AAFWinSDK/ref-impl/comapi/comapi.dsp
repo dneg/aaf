@@ -424,6 +424,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDef.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefCharacter.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFTypeDefEnum.cpp"
 # End Source File
 # Begin Source File

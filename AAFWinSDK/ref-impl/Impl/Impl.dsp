@@ -430,6 +430,10 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefArray.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefCharacter.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTypeDefEnum.cpp"
 # End Source File
 # Begin Source File
