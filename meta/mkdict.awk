@@ -553,7 +553,7 @@ BEGIN {
   firstType = 1;
 }
 
-/Key/ {
+/SMPTE Label Key/ {
   next # Discard the key line
 }
 
