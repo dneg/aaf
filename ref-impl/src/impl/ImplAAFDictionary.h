@@ -13,39 +13,26 @@
 \************************************************/
 
 
-class ImplAAFBuiltins;
-
+class ImplAAFBuiltinClasses;
+class ImplAAFBuiltinTypes;
+class ImplAAFBuiltinProps;
 class ImplAAFClassDef;
-
-class ImplEnumAAFClassDefs;
-
-class ImplAAFTypeDef;
-
-class ImplEnumAAFTypeDefs;
-
-class ImplAAFDataDef;
-
-class ImplEnumAAFDataDefs;
-
-class ImplAAFOperationDef;
-
-class ImplEnumAAFOperationDefs;
-
-class ImplEnumAAFPluggableDefs;
-
 class ImplAAFCodecDef;
-
-class ImplEnumAAFCodecDefs;
-
-class ImplEnumAAFContainerDefs;
-
 class ImplAAFContainerDef;
-
-class ImplEnumAAFInterpolationDefs;
-
+class ImplAAFDataDef;
 class ImplAAFInterpolationDef;
+class ImplAAFOperationDef;
 class ImplAAFPluginDescriptor;
+class ImplAAFTypeDef;
+class ImplEnumAAFClassDefs;
+class ImplEnumAAFCodecDefs;
+class ImplEnumAAFContainerDefs;
+class ImplEnumAAFDataDefs;
+class ImplEnumAAFInterpolationDefs;
+class ImplEnumAAFOperationDefs;
+class ImplEnumAAFPluggableDefs;
 class ImplEnumAAFPluginDescriptors;
+class ImplEnumAAFTypeDefs;
 
 #ifndef __ImplAAFObject_h__
 #include "ImplAAFObject.h"
@@ -107,7 +94,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupClass
         (// @parm [in,ref] Class Unique ID
-         aafUID_t *  pClassID,
+         const aafUID_t *  pClassID,
 
          // @parm [out,retval] Class Definition
          ImplAAFClassDef ** ppClassDef);
@@ -145,7 +132,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupType
         (// @parm [in,ref] Type Unique ID
-         aafUID_t *  pTypeID,
+         const aafUID_t *  pTypeID,
 
          // @parm [out,retval] Type Definition Object
          ImplAAFTypeDef ** ppTypeDef);
@@ -333,12 +320,12 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFDictionary)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFDictionaryTest.cpp.
-  static AAFRESULT test();
-
 public:
-	// Internal to the SDK
+
+  //
+  // Internal to the SDK
+  //
+
   //****************
   // GetNumEssenceData()
   //
@@ -356,8 +343,11 @@ public:
   virtual AAFRESULT
     GetNthContainerDef (aafInt32 index, ImplAAFContainerDef **ppEnum);
 
-  AAFRESULT LookupPropDef (OMPropertyId opid,
-						   ImplAAFPropertyDef ** ppd);
+  AAFRESULT LookupComplexPropTypeByOMPid (OMPropertyId opid,
+										  ImplAAFTypeDef ** ppTypeDef) const;
+
+  AAFRESULT LookupPropDefByOMPid (OMPropertyId opid,
+								  ImplAAFPropertyDef ** ppd) const;
 
   // make sure built-in types are initialized.
   void InitBuiltins();
@@ -371,18 +361,79 @@ public:
   // non-ImplAAFObject classes such as an enumerator.
   ImplAAFObject *CreateImplObject(const aafUID_t& auid); 
 
-private:
-  ImplAAFBuiltins * _pBuiltins;
+  // Generates an OM PID corresponding to the given property def auid.
+  AAFRESULT GenerateOmPid (const aafUID_t & rAuid,
+						   OMPropertyId & rOutPid);
 
-    OMStrongReferenceVectorProperty<ImplAAFCodecDef>		_codecDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFContainerDef>	_containerDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFOperationDef>	_operationDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFParameterDef>	_parameterDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFTypeDef>			_typeDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFClassDef>		_classDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFInterpolationDef>	_interpolationDefinitions;
-    OMStrongReferenceVectorProperty<ImplAAFDataDef>			_dataDefinitions;
-	OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
+
+  // Like LookupClass(), except will only look at classes currently
+  // registered in this dictionary; will not attempt to look at
+  // builtins which may not have already been entered into the dict.
+  AAFRESULT dictLookupClass
+    (// @parm [in,ref] Class Unique ID
+	 const aafUID_t *  pClassID,
+
+	 // @parm [out,retval] Class Definition
+	 ImplAAFClassDef ** ppClassDef);
+
+
+  // Like LookupType(), except will only look at types currently
+  // registered in this dictionary; will not attempt to look at
+  // builtins which may not have already been entered into the dict.
+  AAFRESULT dictLookupType
+    (// @parm [in,ref] Type Unique ID
+	 const aafUID_t *  pTypeID,
+
+	 // @parm [out,retval] Type Definition Object
+	 ImplAAFTypeDef ** ppTypeDef);
+
+
+  static ImplAAFObject* pvtCreateBaseClassInstance(const aafUID_t* pAUID);
+
+
+  // Initializes the built-in types critical to building the dictionary.
+  void pvtInitCriticalBuiltins (void);
+
+
+private:
+
+  // Like the non-private LookupComplexPropTypeByOMPid(), except will
+  // only look at types currently registered in this dictionary; will
+  // not attempt to look at builtins which may have not already been
+  // entered into the dict.
+  AAFRESULT pvtLookupComplexPropTypeByOMPid (OMPropertyId opid,
+											 ImplAAFTypeDef ** ppTypeDef) const;
+
+
+  // Like the non-private LookupPropDefByOMPid(), except will only
+  // look at classes currently registered in this dictionary; will not
+  // attempt to look at builtins which may have not already been
+  // entered into the dict.
+  AAFRESULT pvtLookupPropDefByOMPid (OMPropertyId opid,
+									 ImplAAFPropertyDef ** ppd) const;
+
+
+  ImplAAFBuiltinClasses * _pBuiltinClasses;
+  ImplAAFBuiltinProps   * _pBuiltinProps;
+  ImplAAFBuiltinTypes   * _pBuiltinTypes;
+
+  // Flag to show if initialization of critical builtins has been
+  // started yet.
+  aafBool                 _initStarted;
+
+  // Flag to show if it's OK to initialize properties of newly created
+  // objects.
+  aafBool                 _OKToInitProps;
+
+  OMStrongReferenceVectorProperty<ImplAAFCodecDef>         _codecDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFContainerDef>     _containerDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFOperationDef>     _operationDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFParameterDef>     _parameterDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFTypeDef>          _typeDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFClassDef>         _classDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFInterpolationDef> _interpolationDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFDataDef>          _dataDefinitions;
+  OMStrongReferenceVectorProperty<ImplAAFPluginDescriptor> _pluginDefinitions;
 };
 
 #endif // ! __ImplAAFDictionary_h__
