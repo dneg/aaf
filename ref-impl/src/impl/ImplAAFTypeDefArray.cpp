@@ -121,7 +121,8 @@ AAFRESULT STDMETHODCALLTYPE
   AAFRESULT hr;
   hr = GetType (&ptd);
   if (AAFRESULT_FAILED (hr)) return hr;
-  aafUInt32 elementSize = ptd->PropValSize();
+  // aafUInt32 elementSize = ptd->PropValSize();
+  aafUInt32 elementSize = ptd->NativeSize();
 
   assert (pInPropVal);
   pvd = dynamic_cast<ImplAAFPropValData*> (pInPropVal);
