@@ -24,6 +24,8 @@
 #pragma warning( disable : 4786 )	// disable warning about debug info truncated
 #endif
 
+#include <string.h>
+#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #ifndef _WIN32
@@ -62,6 +64,8 @@ const aafUID_t kAAFPropID_DIDResolutionID			= { 0xce2aca4d, 0x51ab, 0x11d3, { 0x
 const aafUID_t kAAFPropID_DIDFirstFrameOffset		= { 0xce2aca4e, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDFrameSampleSize		= { 0xce2aca50, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
 const aafUID_t kAAFPropID_DIDImageSize				= { 0xce2aca4f, 0x51ab, 0x11d3, { 0xa0, 0x24, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
+
+static bool writeNetworkLocator = false;
 
 // Add a property definition to the dictionary, after first checking if it
 // needs to be added (used in CreateLegacyPropDefs() only)
@@ -295,6 +299,30 @@ static int getFirstTimecodeFromDVFile(const char *file)
 	return frames;
 }
 
+// Given a filepath to a DV file, return a WCHAR NetLoc string
+// Returned wchar_t* needs to be freed
+static wchar_t* getNetLocPath(const char *filepath, const char *audio_track)
+{
+	// RFC 1738 and RFC 1630 specify URIs and the file URL scheme
+	// TODO: So, we should insert the full path after file:///
+	// TODO: Should we have an option for MS drives? e.g. file:///C%3A/
+	char c_str[FILENAME_MAX] = "file:///";
+	strcat(c_str, filepath);
+
+	// Treat referenced audio slots as if they were once external WAV files
+	if (audio_track)
+	{
+		char *p = strrchr(c_str, '.');
+		strcpy(p, audio_track);		// typically "A1.wav" or "A2.wav"
+	}
+
+	// Now convert to wchar
+	size_t length = strlen(c_str);
+	wchar_t* path = new wchar_t[length + 1];
+	size_t status = mbstowcs(path, c_str, length + 1);
+	return path;
+}
+
 
 // TODO: These should be command-line arguments
 static bool create_tapemob = true;
@@ -433,7 +461,7 @@ static bool addMasterMobForDVFile(
 	cdci.SetColorRange(0xe1);
 	aafRational_t aspect = {4,3};
 	cdci.SetImageAspectRatio(aspect);
-	cdci.SetContainerFormat(dict.LookupContainerDef(ContainerAAF));
+	cdci.SetContainerFormat(dict.LookupContainerDef(writeNetworkLocator ? ContainerFile : ContainerAAF));
 	cdci.SetSampleRate(samplerate);
 	cdci.SetLength(cliplength);
 	cdci.SetCodecDef(dict.LookupCodecDef(kAAFCodecCDCI));
@@ -476,6 +504,17 @@ static bool addMasterMobForDVFile(
 	// Slots must have a segment before they are added to mobs.
 	// The source mob must have an essencedescriptor before it is added to the header.
 	smob.SetEssenceDescriptor(cdci);
+	if (writeNetworkLocator)
+	{
+		IAAFEssenceDescriptorSP mdes = smob.GetEssenceDescriptor();
+		DECLARE_AX( NetworkLocator, netLoc );
+		netLoc.Initialize();
+
+		wchar_t* path = getNetLocPath(filename.c_str(), NULL);
+		netLoc.SetPath(AxString(path));
+		mdes->AppendLocator( static_cast<IAAFLocatorSP>(netLoc) );
+		delete path;
+	}
 	tlslot.SetSegment(msrcclip);
 	srctlslot.SetSegment(srcclip);
 	mmob.AppendSlot(tlslot);
@@ -483,6 +522,9 @@ static bool addMasterMobForDVFile(
 	head.AddMob(mmob);
 	head.AddMob(smob);
 
+	FILE *fp;
+	if (!writeNetworkLocator)
+	{
 	IAAFEssenceDataSP essdata;
 	unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
 	if(!AxIsA(unk, essdata))
@@ -498,7 +540,7 @@ static bool addMasterMobForDVFile(
 	CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(essdata));
 
 	// Create the essence data and write to it.
-	FILE *fp = fopen(filename.c_str(), "rb");
+	fp = fopen(filename.c_str(), "rb");
 	if (!fp)
 	{
 		cerr << "Error Opening File " << filename << endl;
@@ -520,11 +562,14 @@ static bool addMasterMobForDVFile(
 		total_written += byteswritten;
 
 		if (feof(fp))
+		{
 			break;
+		}
 	} while (true);
+	fclose(fp);
 
 	cout << filename << ": " << total_written << " bytes written for CDCI Essence" << endl;
-
+	}
 
 	/////////////////////////////////////////////////////////////////
 	// Audio channel 1
@@ -570,10 +615,24 @@ static bool addMasterMobForDVFile(
 
 	// Create WaveDescriptor
 	DECLARE_AX( WAVEDescriptor, waveA1 );
-	waveA1.SetContainerFormat(dict.LookupContainerDef(ContainerAAF));
-	waveA1.SetSampleRate(samplerate);
+	waveA1.SetContainerFormat(dict.LookupContainerDef(writeNetworkLocator ? ContainerFile : ContainerAAF));
+	waveA1.SetCodecDef(dict.LookupCodecDef(kAAFCodecWAVE));
+
+	aafRational_t wav_samplerate = {48000, 1};		// 48kHz hard-coded in this version
+	waveA1.SetSampleRate(wav_samplerate);
 
 	smobA1.SetEssenceDescriptor(waveA1);
+	if (writeNetworkLocator)
+	{
+		IAAFEssenceDescriptorSP mdesA1 = smobA1.GetEssenceDescriptor();
+		DECLARE_AX( NetworkLocator, netLocA1 );
+		netLocA1.Initialize();
+
+		wchar_t* path = getNetLocPath(filename.c_str(), "A1.wav");
+		netLocA1.SetPath(AxString(path));
+		mdesA1->AppendLocator( static_cast<IAAFLocatorSP>(netLocA1) );
+		delete path;
+	}
 	tlslotA1.SetSegment(msrcclipA1);
 	srctlslotA1.SetSegment(srcclipA1);
 	smobA1.AppendSlot(srctlslotA1);
@@ -581,20 +640,6 @@ static bool addMasterMobForDVFile(
 	{
 		mmob.AppendSlot(tlslotA1);
 		head.AddMob(smobA1);
-	}
-
-	IAAFEssenceDataSP wavA1data;
-	if (add_audio)
-	{
-		unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
-		if(!AxIsA(unk, wavA1data))
-		{
-			throw AxEx(L"Bad wavA1data data object.");
-		}
-		CHECK_HRESULT(wavA1data->SetFileMob(static_cast<IAAFSourceMobSP>(smobA1)));
-	
-		// You must add the essence data to the file before you write to the essence data.
-		CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(wavA1data));
 	}
 
 	/////////////////////////////////////////////////////////////////
@@ -638,10 +683,22 @@ static bool addMasterMobForDVFile(
 
 	// Create WaveDescriptor
 	DECLARE_AX( WAVEDescriptor, waveA2 );
-	waveA2.SetContainerFormat(dict.LookupContainerDef(ContainerAAF));
-	waveA2.SetSampleRate(samplerate);
+	waveA2.SetContainerFormat(dict.LookupContainerDef(writeNetworkLocator ? ContainerFile : ContainerAAF));
+	waveA2.SetCodecDef(dict.LookupCodecDef(kAAFCodecWAVE));
+	waveA2.SetSampleRate(wav_samplerate);
 
 	smobA2.SetEssenceDescriptor(waveA2);
+	if (writeNetworkLocator)
+	{
+		IAAFEssenceDescriptorSP mdesA2 = smobA2.GetEssenceDescriptor();
+		DECLARE_AX( NetworkLocator, netLocA2 );
+		netLocA2.Initialize();
+
+		wchar_t* path = getNetLocPath(filename.c_str(), "A2.wav");
+		netLocA2.SetPath(AxString(path));
+		mdesA2->AppendLocator( static_cast<IAAFLocatorSP>(netLocA2) );
+		delete path;
+	}
 	tlslotA2.SetSegment(msrcclipA2);
 	srctlslotA2.SetSegment(srcclipA2);
 	smobA2.AppendSlot(srctlslotA2);
@@ -651,39 +708,24 @@ static bool addMasterMobForDVFile(
 		head.AddMob(smobA2);
 	}
 
-	IAAFEssenceDataSP wavA2data;
 	if (add_audio)
 	{
-		unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
-		if(!AxIsA(unk, wavA2data))
-		{
-			throw AxEx(L"Bad wavA2data data object.");
-		}
-		CHECK_HRESULT(wavA2data->SetFileMob(static_cast<IAAFSourceMobSP>(smobA2)));
-
-		// You must add the essence data to the file before you write to the essence data.
-		CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(wavA2data));
-	}
-
-
-	// Audio sample extraction from DV stream
-	// FIXME: Audio sample extraction only works for PAL at the moment.
-	if (add_audio)
-	{
-		short audio_buffers[2][DV_AUDIO_SAMPLES * sizeof(short)];
-
 		struct stat statbuf;
 		stat(filename.c_str(), &statbuf);
 
+		// (hard-coded to 48kHz)
 		// 48000 samples per second at 2 bytes per sample
 		// so 1920 samples per frame
 		// so 3840 bytes per frame.
 		int num_samples = (statbuf.st_size / DV_PAL_FRAME_SIZE) * 1920;
+		waveA1.SetLength(num_samples);
+		waveA2.SetLength(num_samples);
+
+		// These lengths are in editrate
+		// (lengths are always in units of the containing slot)
 		int length_in_er = num_samples / 1920;
-		waveA1.SetLength(length_in_er);		// length is in terms of editrate
 		srcclipA1.SetLength(length_in_er);
 		msrcclipA1.SetLength(length_in_er);
-		waveA2.SetLength(length_in_er);		// length is in terms of editrate
 		srcclipA2.SetLength(length_in_er);
 		msrcclipA2.SetLength(length_in_er);
 
@@ -693,63 +735,93 @@ static bool addMasterMobForDVFile(
 
 		waveA1.SetSummary(sizeof(WAVEHeader), WAVEHeader);
 		waveA2.SetSummary(sizeof(WAVEHeader), WAVEHeader);
-		aafUInt32 byteswritten = 0;
-		CHECK_HRESULT(wavA1data->Write(sizeof(WAVEHeader), WAVEHeader, &byteswritten));
-		CHECK_HRESULT(wavA2data->Write(sizeof(WAVEHeader), WAVEHeader, &byteswritten));
 
-		// Create the essence wav data and write to it for both A1 and A2
-		fp = fopen(filename.c_str(), "rb");
-		if (!fp)
+		if (!writeNetworkLocator)
 		{
-			cerr << "Error Opening File " << filename << endl;
-			return false;
-		}
-		int total_A1 = 0;
-		int total_A2 = 0;
-		for (int i = 0; i < statbuf.st_size; i += DV_PAL_FRAME_SIZE)
-		{
-			unsigned char buf[DV_PAL_FRAME_SIZE];
-			int r;
-			if ((r = fread(buf, 1, sizeof(buf), fp)) != sizeof(buf))
+			IAAFEssenceDataSP wavA1data;
+			IAAFEssenceDataSP wavA2data;
+			unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
+			if(!AxIsA(unk, wavA1data))
 			{
-				cout << filename << " short read of DV frame (expected " << sizeof(buf) << ") read " << r << endl;
-				break;
+				throw AxEx(L"Bad wavA1data data object.");
 			}
+			CHECK_HRESULT(wavA1data->SetFileMob(static_cast<IAAFSourceMobSP>(smobA1)));
 
-			// There are 12 DIF sequences, each storing audio data, in PAL 625/50
-			// Each DIF sequence is 12000 bytes long and has 9 DIF blocks containing
-			// audio data which are not arranged contiguously [SMPTE 314M-1999]
-			for (int dif_seq = 0; dif_seq < 12; dif_seq++)
+			// You must add the essence data to the file before you write to the essence data.
+			CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(wavA1data));
+			unk = dict.CreateInstance(AUID_AAFEssenceData, IID_IAAFEssenceData);
+			if(!AxIsA(unk, wavA2data))
 			{
-				// Audio data for one channel is scattered over 54 DIF blocks for
-				// the 625/50 system (6 DIF sequences * 9 DIF blocks)
-				for (int audio_dif = 0; audio_dif < 9; audio_dif++)
+				throw AxEx(L"Bad wavA2data data object.");
+			}
+			CHECK_HRESULT(wavA2data->SetFileMob(static_cast<IAAFSourceMobSP>(smobA2)));
+
+			// You must add the essence data to the file before you write to the essence data.
+			CHECK_HRESULT(static_cast<IAAFHeaderSP>(head)->AddEssenceData(wavA2data));
+			// Audio sample extraction from DV stream
+			// FIXME: Audio sample extraction only works for PAL at the moment.
+			short audio_buffers[2][DV_AUDIO_SAMPLES * sizeof(short)];
+
+			aafUInt32 byteswritten = 0;
+			for (int nchan = 0; nchan < 2; nchan++)
+			{
+				IAAFEssenceDataSP wavAdata;
+				if (nchan == 0)
+					wavAdata = wavA1data;
+				else
+					wavAdata = wavA2data;
+				CHECK_HRESULT(wavAdata->Write(sizeof(WAVEHeader), WAVEHeader, &byteswritten));
+
+				// Create the essence wav data and write to it for both A1 and A2
+				fp = fopen(filename.c_str(), "rb");
+				if (!fp)
 				{
-					// channel 0 is in first 6 DIF sequences, channel 1 in 2nd 6
-					int channel = (dif_seq < 6) ? 0 : 1;
-
-					// skip first 6 DIF blocks (header, subcode, VAUX sections)
-					// audio blocks occur every 16 DIF blocks after this point
-					// each DIF block is 80 bytes in size
-					int offset = (dif_seq * 150 + 6 + audio_dif * 16) * 80;
-					deshuffle_audio_block(buf + offset, dif_seq, audio_dif,
-											audio_buffers[channel] );
+					cerr << "Error Opening File " << filename << endl;
+					return false;
 				}
+				int total_A = 0;
+				for (int i = 0; i < statbuf.st_size; i += DV_PAL_FRAME_SIZE)
+				{
+					unsigned char buf[DV_PAL_FRAME_SIZE];
+					int r;
+					if ((r = fread(buf, 1, sizeof(buf), fp)) != sizeof(buf))
+					{
+						cout << filename << " short read of DV frame (expected " << sizeof(buf) << ") read " << r << endl;
+						break;
+					}
+
+					// There are 12 DIF sequences, each storing audio data, in PAL 625/50
+					// Each DIF sequence is 12000 bytes long and has 9 DIF blocks containing
+					// audio data which are not arranged contiguously [SMPTE 314M-1999]
+					for (int dif_seq = 0; dif_seq < 12; dif_seq++)
+					{
+						// Audio data for one channel is scattered over 54 DIF blocks for
+						// the 625/50 system (6 DIF sequences * 9 DIF blocks)
+						for (int audio_dif = 0; audio_dif < 9; audio_dif++)
+						{
+							// channel 0 is in first 6 DIF sequences, channel 1 in 2nd 6
+							int channel = (dif_seq < 6) ? 0 : 1;
+							if (channel != nchan)
+								continue;
+							// skip first 6 DIF blocks (header, subcode, VAUX sections)
+							// audio blocks occur every 16 DIF blocks after this point
+							// each DIF block is 80 bytes in size
+							int offset = (dif_seq * 150 + 6 + audio_dif * 16) * 80;
+							deshuffle_audio_block(buf + offset, dif_seq, audio_dif,
+													audio_buffers[channel] );
+						}
+					}
+					aafDataValue_t dataA = (unsigned char *)audio_buffers[nchan];
+
+					CHECK_HRESULT(wavAdata->Write(DV_AUDIO_SAMPLES*sizeof(short),
+										dataA, &byteswritten));
+					total_A += byteswritten;
+				}
+				fclose(fp);
+				cout << filename << ": " << total_A << " bytes written for A" << nchan + 1 << " WAVE Essence" << endl;
 			}
-			aafDataValue_t dataA1 = (unsigned char *)audio_buffers[0];
-			aafDataValue_t dataA2 = (unsigned char *)audio_buffers[1];
-
-			CHECK_HRESULT(wavA1data->Write(DV_AUDIO_SAMPLES*sizeof(short),
-									dataA1, &byteswritten));
-			total_A1 += byteswritten;
-			CHECK_HRESULT(wavA2data->Write(DV_AUDIO_SAMPLES*sizeof(short),
-									dataA2, &byteswritten));
-			total_A2 += byteswritten;
 		}
-		cout << filename << ": " << total_A1 << " bytes written for A1 WAVE Essence" << endl;
-		cout << filename << ": " << total_A2 << " bytes written for A2 WAVE Essence" << endl;
 	}
-
 	return true;
 }
 
@@ -1097,15 +1169,28 @@ int main(int argc, char* argv[])
 {
 	if (argc < 3)
 	{
-		cout << "Usage: " << argv[0] << " infile outfile [essencedir]" << endl;
+		cout << "Usage: " << argv[0] << " [-netloc] infile outfile [essencedir]" << endl;
 		return 1;
 	}
 
-	const char *edit_list = argv[1];
-	const char *output_aaf_file = argv[2];
+	int i = 1;		// argv index
+	if (!strcmp(argv[i], "-netloc"))
+	{
+		// writeNetworkLocator flag is used to alternate between embedded essence
+		// with ContainerAAF property and no embedded essence with ContainerFile property
+		writeNetworkLocator = true;
+		i++;
+	}
+	const char *edit_list = argv[i++];
+	const char *output_aaf_file = argv[i++];
 	const char *essence_src_dir = NULL;
-	if (argc == 4)
-		essence_src_dir = argv[3];
+	if (argc >= 4)
+	{
+		if (writeNetworkLocator)
+			essence_src_dir = argv[4];
+		else
+			essence_src_dir = argv[3];
+	}
 
 	FILE *edlfp = fopen(edit_list, "rb");
 	if (!edlfp)
@@ -1137,7 +1222,6 @@ int main(int argc, char* argv[])
 
 	cout << "*** Start ELI ***" << endl;
 	// read DV files and add to a map
-	int i;
 	for (i = 0; i < num_clips; i++)
 	{
 		fscanf(edlfp, "%[^\n]\n", str);
@@ -1146,9 +1230,16 @@ int main(int argc, char* argv[])
 		string filename(str);
 		if (essence_src_dir)
 		{
+			// Remove any path information for filename and
+			// replace with essence_src_dir path
 			string::size_type strpos = filename.find_last_of("\\/");
-			if (strpos != string::npos)
+			if (strpos != string::npos)		// If found a slash
 				filename = essence_src_dir + filename.substr(strpos);
+			else
+			{
+				string slash("/");
+				filename = essence_src_dir + slash + filename;
+			}
 		}
 
 		dvfile_by_idx.push_back(filename);
