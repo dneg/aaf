@@ -55,6 +55,13 @@ typedef IAAFSmartPointer<IAAFSegment>			IAAFSegmentSP;
 typedef IAAFSmartPointer<IAAFSequence>			IAAFSequenceSP;
 typedef IAAFSmartPointer<IAAFTimelineMobSlot>	IAAFTimelineMobSlotSP;
 typedef IAAFSmartPointer<IAAFTypeDefInt>		IAAFTypeDefIntSP;
+typedef IAAFSmartPointer<IEnumAAFProperties> IEnumAAFPropertiesSP;
+typedef IAAFSmartPointer<IAAFProperty> IAAFPropertySP;
+typedef IAAFSmartPointer<IAAFTypeDefObjectRef> IAAFTypeDefObjectRefSP;
+typedef IAAFSmartPointer<IAAFTypeDefSet> IAAFTypeDefSetSP;
+typedef IAAFSmartPointer<IEnumAAFPropertyValues> IEnumAAFPropertyValuesSP;
+typedef IAAFSmartPointer<IAAFTypeDefVariableArray> IAAFTypeDefVariableArraySP;
+typedef IAAFSmartPointer<IAAFTypeDefFixedArray> IAAFTypeDefFixedArraySP;
 
 // convenient error handlers.
 inline void checkResult(HRESULT r)
@@ -90,6 +97,12 @@ static const aafUID_t AUID_OptionalProperty =
 static const aafUID_t AUID_OptionalProperty2 = 
 { 0xecde5700, 0x58e8, 0x11d4, { 0x92, 0x2a, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d } };
 
+// {e209dd80-f369-11d4-9ba2-8fd4b4adfda7}
+static const aafUID_t AUID_OptionalProperty3 = 
+{ 0xe209dd80, 0xf369, 0x11d4, { 0x9b, 0xa2, 0x8f, 0xd4, 0xb4, 0xad, 0xfd, 0xa7 } };
+
+static const aafUInt32 kOptionalObjectPropertyValue = 42;
+
 // IDs of Mobs we will create
 static const aafMobID_t	kTestMobID =
 	{{0x07, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -100,6 +113,14 @@ static const aafMobID_t	kTestMobID =
 //	{{0x07, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
 //	0x13, 0x00, 0x00, 0x00,
 //	{0x4d540120, 0x5900, 0x11d4,0x92, 0x2a, 0x0, 0x50, 0x4, 0x9c, 0x3b, 0x9d}};
+enum traversalType_e
+{
+  traversalOnly,
+  traversalWrite,
+  traversalRead
+};
+
+static void TraverseObject(IAAFObject *, IAAFPropertyDef *, IAAFTypeDefInt *, traversalType_e); // throw HRESULT
 
 static HRESULT ObjectWriteTest ()
 {
@@ -141,7 +162,7 @@ static HRESULT ObjectWriteTest ()
 	  assert (pDict);
 	  
 	  aafProductVersion_t			testRev;
-	  checkResult(pHeader->GetRefImplVersion(&testRev));
+	  checkResult(GetAAFVersions(pHeader, &testRev, NULL));
 	  if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
 	  {
 		  
@@ -167,7 +188,20 @@ static HRESULT ObjectWriteTest ()
 			  defs.tdUInt16(),
 			  &pOptionalPropertyDef2));
 		  checkResult(pDict->RegisterClassDef(pClassDef));
-		  
+
+
+      if (ExtendingAAFObjectSupported(testRev))
+      {
+        // Add an optional property to the class definition for AAFObject.
+        checkResult(pDict->LookupClassDef(AUID_AAFObject,&pClassDef));
+        IAAFPropertyDefSP pOptionalPropertyDef3;
+        checkResult(pClassDef->RegisterOptionalPropertyDef(AUID_OptionalProperty3,
+          L"New property on AAFObject",
+          defs.tdUInt32(),
+          &pOptionalPropertyDef3));
+      }
+
+
 		  // Create an instance of AAFCompositionMob using the newly registered
 		  // class definition.
 		  checkResult(pDict->LookupClassDef(AUID_AAFCompositionMob,&pClassDef));
@@ -427,6 +461,18 @@ static HRESULT ObjectWriteTest ()
 		  aafUID_t readAuid2 = { 0 };
 		  checkResult (pReadIdent2->GetProductID(&readAuid2));
 		  checkExpression (2 == readAuid2.Data1, AAFRESULT_TEST_FAILED);
+		  
+		  if (ExtendingAAFObjectSupported(testRev))
+		  {
+        checkResult(pDict->LookupClassDef(AUID_AAFObject,&pClassDef));
+        IAAFPropertyDefSP pOptionalObjectPropertyDef;
+        checkResult(pClassDef->LookupPropertyDef(AUID_OptionalProperty3, &pOptionalObjectPropertyDef));
+        IAAFTypeDefIntSP pOptionalObjectPropertyTypeDef;
+        checkResult(defs.tdUInt32()->QueryInterface(IID_IAAFTypeDefInt, (void**)&pOptionalObjectPropertyTypeDef));
+        IAAFObjectSP pHeaderObject;
+        checkResult(pHeader->QueryInterface(IID_IAAFObject, (void**)&pHeaderObject));
+		    TraverseObject(pHeaderObject, pOptionalObjectPropertyDef, pOptionalObjectPropertyTypeDef, traversalWrite);
+		  }
 }
 hr = AAFRESULT_SUCCESS;
 	}
@@ -472,10 +518,13 @@ static HRESULT ObjectReadTest ()
 
       IAAFDictionarySP pDict;
 	  checkResult(pHeader->GetDictionary(&pDict));
+    CAAFBuiltinDefs defs (pDict);
+    
+	  aafProductVersion_t			testRev, fileRev;
+	  checkResult(GetAAFVersions(pHeader, &testRev, &fileRev));
 
-	  aafProductVersion_t			testRev;
-	  checkResult(pHeader->GetRefImplVersion(&testRev));
-	  if(testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3))
+	  if ((testRev.major >= 1 && (testRev.minor > 0 || testRev.patchLevel > 3)) &&
+	      (fileRev.major >= 1 && (fileRev.minor > 0 || fileRev.patchLevel > 3)))
 	  {
 	  IAAFIdentificationSP pReadIdent;
 	  checkResult (pHeader->GetLastIdentification(&pReadIdent));
@@ -540,6 +589,20 @@ static HRESULT ObjectReadTest ()
 	  checkResult(pTypeDefInt->GetInteger(pOptionalPropertyValue,
 		  (aafMemPtr_t)&storedValue,sizeof(aafUInt16)));
       checkExpression(storedValue==10);
+      
+		  
+		  if (ExtendingAAFObjectSupported(testRev) && ExtendingAAFObjectSupported(fileRev))
+		  {
+        checkResult(pDict->LookupClassDef(AUID_AAFObject,&pClassDef));
+        IAAFPropertyDefSP pOptionalObjectPropertyDef;
+        checkResult(pClassDef->LookupPropertyDef(AUID_OptionalProperty3, &pOptionalObjectPropertyDef));
+        IAAFTypeDefIntSP pOptionalObjectPropertyTypeDef;
+        checkResult(defs.tdUInt32()->QueryInterface(IID_IAAFTypeDefInt, (void**)&pOptionalObjectPropertyTypeDef));
+        IAAFObjectSP pHeaderObject;
+        checkResult(pHeader->QueryInterface(IID_IAAFObject, (void**)&pHeaderObject));
+		    TraverseObject(pHeaderObject, pOptionalObjectPropertyDef, pOptionalObjectPropertyTypeDef, traversalRead);
+		  }
+      
 	  }
 
 	  hr = AAFRESULT_SUCCESS;
@@ -561,6 +624,135 @@ static HRESULT ObjectReadTest ()
 
   return hr;
 }
+
+static void TraverseObjectValue(
+  IAAFPropertyValue * pPropertyValue, 
+  IAAFPropertyDef * pOptionalPropertyDef,
+  IAAFTypeDefInt * pTypeDefInt, 
+  traversalType_e traversalType) // throw HRESULT
+{
+  IAAFTypeDefSP pPropertyValueType;
+  checkResult(pPropertyValue->GetType(&pPropertyValueType));
+
+  IAAFTypeDefObjectRefSP pObjectRefType;
+  checkResult(pPropertyValueType->QueryInterface(IID_IAAFTypeDefObjectRef, (void **)&pObjectRefType));
+  
+  IAAFObjectSP pObject;
+  checkResult(pObjectRefType->GetObject(pPropertyValue, IID_IAAFObject, (IUnknown **)&pObject));
+  
+  TraverseObject(pObject, pOptionalPropertyDef, pTypeDefInt, traversalType);
+}
+
+// Routine to traverse the object tree by following strong references.
+void TraverseObject(
+  IAAFObject * pObject,
+  IAAFPropertyDef * pOptionalPropertyDef,
+  IAAFTypeDefInt * pTypeDefInt, 
+  traversalType_e traversalType) // throw HRESULT
+{
+  checkExpression(pObject && pOptionalPropertyDef && pTypeDefInt);
+
+  IAAFPropertyValueSP pOptionalPropertyValue;
+  if (traversalWrite == traversalType)
+  {
+    checkExpression(pOptionalPropertyDef && pTypeDefInt);
+    checkResult(pObject->CreateOptionalPropertyValue(pOptionalPropertyDef, &pOptionalPropertyValue));
+    checkResult(pTypeDefInt->SetInteger(pOptionalPropertyValue, (aafMemPtr_t)&kOptionalObjectPropertyValue, sizeof(kOptionalObjectPropertyValue)));
+    checkResult(pObject->SetPropertyValue(pOptionalPropertyDef, pOptionalPropertyValue));
+  }    
+  else if (traversalRead == traversalType)
+  {
+    checkExpression(pOptionalPropertyDef && pTypeDefInt);
+    checkResult(pObject->GetPropertyValue(pOptionalPropertyDef, &pOptionalPropertyValue));
+    aafUInt32 testValue = 0;
+    checkResult(pTypeDefInt->GetInteger(pOptionalPropertyValue, (aafMemPtr_t)&testValue, sizeof(testValue)));
+    checkExpression(kOptionalObjectPropertyValue == testValue, AAFRESULT_TEST_FAILED);
+  }
+  
+  //
+  // Now traverse the properties of this instance and recursively
+  // call TraverseObject for any strong reference objects...
+  //
+  IEnumAAFPropertiesSP pEnumProperties;
+  checkResult(pObject->GetProperties(&pEnumProperties));
+  IAAFPropertySP pProperty;
+  while (SUCCEEDED(pEnumProperties->NextOne(&pProperty)))
+  {
+    IAAFPropertyDefSP pPropertyDef;
+    checkResult(pProperty->GetDefinition(&pPropertyDef));
+    IAAFTypeDefSP pPropertyType;
+    checkResult(pPropertyDef->GetTypeDef(&pPropertyType));
+    eAAFTypeCategory_t category = kAAFTypeCatUnknown;
+    checkResult(pPropertyType->GetTypeCategory(&category));
+    
+    IAAFPropertyValueSP pObjectPropertyValue;
+    
+    if (kAAFTypeCatStrongObjRef == category)
+    {
+      checkResult(pProperty->GetValue(&pObjectPropertyValue));
+      TraverseObjectValue(pObjectPropertyValue, pOptionalPropertyDef, pTypeDefInt, traversalType); 
+    }
+    else if (kAAFTypeCatSet == category || kAAFTypeCatVariableArray == category || kAAFTypeCatFixedArray == category)
+    {
+      // Eventhough sets, fixed and variable arrays all have a GetElements method the 
+      // method is not on a common interface.
+      IAAFPropertyValueSP pCollectionPropertyValue;
+      IAAFTypeDefSP pElementType;
+      IEnumAAFPropertyValuesSP pEnumPropertyValues;
+      eAAFTypeCategory_t elementCategory = kAAFTypeCatUnknown;
+      
+      if (kAAFTypeCatSet == category)
+      {
+        IAAFTypeDefSetSP pTypeDefSet;
+        checkResult(pPropertyType->QueryInterface(IID_IAAFTypeDefSet, (void **)&pTypeDefSet));
+        checkResult(pTypeDefSet->GetElementType(&pElementType));
+        checkResult(pElementType->GetTypeCategory(&elementCategory));
+        if (kAAFTypeCatStrongObjRef == elementCategory)
+        {
+          checkResult(pProperty->GetValue(&pCollectionPropertyValue));
+          checkResult(pTypeDefSet->GetElements(pCollectionPropertyValue, &pEnumPropertyValues));
+        }
+      }
+      else if (kAAFTypeCatVariableArray == category)
+      {
+        IAAFTypeDefVariableArraySP pTypeDefVariableArray;
+        checkResult(pPropertyType->QueryInterface(IID_IAAFTypeDefVariableArray, (void **)&pTypeDefVariableArray));
+        checkResult(pTypeDefVariableArray->GetType(&pElementType));
+        checkResult(pElementType->GetTypeCategory(&elementCategory));
+        if (kAAFTypeCatStrongObjRef == elementCategory)
+        {
+          checkResult(pProperty->GetValue(&pCollectionPropertyValue));
+          checkResult(pTypeDefVariableArray->GetElements(pCollectionPropertyValue, &pEnumPropertyValues));
+        }
+      }
+      else if (kAAFTypeCatFixedArray == category)
+      {
+        IAAFTypeDefFixedArraySP pTypeDefFixedArray;
+        checkResult(pPropertyType->QueryInterface(IID_IAAFTypeDefFixedArray, (void **)&pTypeDefFixedArray));
+        checkResult(pTypeDefFixedArray->GetType(&pElementType));
+        checkResult(pElementType->GetTypeCategory(&elementCategory));
+        if (kAAFTypeCatStrongObjRef == elementCategory)
+        {
+          checkResult(pProperty->GetValue(&pCollectionPropertyValue));
+          checkResult(pTypeDefFixedArray->GetElements(pCollectionPropertyValue, &pEnumPropertyValues));
+        }
+      }
+      
+      if (kAAFTypeCatStrongObjRef == elementCategory)
+      {
+        checkExpression(NULL != (IEnumAAFPropertyValues *)pEnumPropertyValues, AAFRESULT_TEST_FAILED);
+        IAAFPropertyValueSP pElementPropertyValue;
+        while (SUCCEEDED(pEnumPropertyValues->NextOne(&pElementPropertyValue)))
+        {
+          TraverseObjectValue(pElementPropertyValue, pOptionalPropertyDef, pTypeDefInt, traversalType);
+        }
+      }
+      
+    } // collection type category
+    
+  } // next property
+  
+} // TraverseObject
 
 
 extern "C" HRESULT CAAFObject_test(testMode_t mode);
