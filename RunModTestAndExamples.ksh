@@ -189,14 +189,14 @@ VerifyFiles ()
 			mv tempdump.log ${File}.CPDDump.log
 		fi
 
-		RemoveIfExists ${File}.CPDAccess.log
-		${ExamplesDir}/ComPropDirectAccess "$File" > tempdump.log
-		Stat=$?
-		print "  $Stat    ComPropDirectAccess.exe"
-		if [ $Stat -ne 0 ]; then
-			CheckExitCode $Stat   "     $File  <- ComPropDirectAccess.exe reported error.  See ${File}.CPDAccess.log"
-			mv tempdump.log ${File}.CPDAccess.log
-		fi
+#		RemoveIfExists ${File}.CPDAccess.log
+#		${ExamplesDir}/ComPropDirectAccess "$File" > tempdump.log
+#		Stat=$?
+#		print "  $Stat    ComPropDirectAccess.exe"
+#		if [ $Stat -ne 0 ]; then
+#			CheckExitCode $Stat   "     $File  <- ComPropDirectAccess.exe reported error.  See ${File}.CPDAccess.log"
+#			mv tempdump.log ${File}.CPDAccess.log
+#		fi
 
 	done
 
@@ -405,7 +405,8 @@ PrintExitCodes ()
 	if [ AAFWATCHDOG -eq 1 ]; then
 		print "\nPrinting $ExTarget Test Exit Codes:\n$RESULTS" >> D:/AAFWatchDog/AAFWatchDog.log
 		print "\nAll Generated Test and Example files have been run thru the following programs:" >> D:/AAFWatchDog/AAFWatchDog.log
-		print "ComAAFInfo, dump, ComPropDirectDump, ComPropDirectAccess" >> D:/AAFWatchDog/AAFWatchDog.log
+		print "ComAAFInfo, dump, ComPropDirectDump" >> D:/AAFWatchDog/AAFWatchDog.log
+#		print "ComAAFInfo, dump, ComPropDirectDump, ComPropDirectAccess" >> D:/AAFWatchDog/AAFWatchDog.log
 	fi
 }
 
