@@ -178,5 +178,14 @@ OMUInt64 OMStreamProperty<Element>::elementCount(void) const
   return result;
 }
 
+template <typename Element>
+void OMStreamProperty<Element>::setElementCount(OMUInt64 newElementCount)
+{
+  TRACE("OMStreamProperty<Element>::elementCount");
+
+  OMUInt64 newSize = newElementCount * sizeof(Element);
+  
+  setSize(newSize);
+}
 
 #endif

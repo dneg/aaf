@@ -109,6 +109,9 @@ public:
     // The count of elements in the stream.
   OMUInt64 elementCount(void) const;
 
+    // Set the count of elements in the stream.
+  void setElementCount(OMUInt64 newElementCount);
+
 };
 
 #include "OMStreamPropertyT.h"
