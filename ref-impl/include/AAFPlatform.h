@@ -47,24 +47,13 @@
 /*
  *  Compiler:   Microsoft Visual C++
  *  Processor:  Intel x86
- *  OS:         Windows NT
+ *  OS:         MS Windows NT/2000/XP
  */
 #if   defined(_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
 #define CPU_INTEL
 #define OS_WINDOWS
 #define COMPILER_MSC
 #define PLATFORM_MSC_INTEL_WINDOWS
-    
-/*
- *  Compiler:   Metrowerks CodeWarrior
- *  Processor:  PowerPC
- *  OS:         Classic MacOS
- */
-#elif defined(__MWERKS__) && defined(__POWERPC__) && ! defined(PPC_DARWIN)
-#define CPU_POWERPC
-#define OS_MACOS
-#define COMPILER_MWERKS
-#define PLATFORM_MWERKS_POWERPC_MACOS
     
 /*
  *  Compiler:   GNU C++
@@ -141,7 +130,7 @@
 /*
  *  Compiler:   GNU C++
  *  Processor:  PowerPC
- *  OS:         MacOS 10
+ *  OS:         MacOS 10 (Darwin)
  */
 #elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__) && defined(__APPLE_CC__)
 #define CPU_POWERPC
@@ -190,45 +179,16 @@
 
 
 /*
- *  Classic MacOS
+ *  MS Windows
  */
-#if defined( PLATFORM_MWERKS_POWERPC_MACOS )
-typedef signed char		aafInt8;
+#if defined( PLATFORM_MSC_INTEL_WINDOWS )
+typedef signed char			aafInt8;
 typedef signed short int	aafInt16;
 typedef signed long int		aafInt32;
 
 typedef unsigned char		aafUInt8;
 typedef unsigned short int	aafUInt16;
 typedef unsigned long int	aafUInt32;
-
-#if (__MWERKS__ >= 0x1100)
-typedef signed long long int	aafInt64;
-typedef unsigned long long int	aafUInt64;
-#define AAF_INT64_NATIVE	1
-#endif
-
-#if !__option(wchar_type)
-typedef aafUInt16		aafWChar;
-typedef aafUInt16		aafCharacter;
-
-#else
-typedef wchar_t			aafWChar;
-typedef wchar_t			aafCharacter;
-
-#endif
-
-
-/*
- *  Windows
- */
-#elif defined( PLATFORM_MSC_INTEL_WINDOWS )
-typedef signed char			aafInt8;
-typedef signed short int	aafInt16;
-typedef signed int			aafInt32;
-
-typedef unsigned char		aafUInt8;
-typedef unsigned short int	aafUInt16;
-typedef unsigned int		aafUInt32;
 
 typedef __int64				aafInt64;
 typedef unsigned __int64	aafUInt64;
@@ -239,51 +199,30 @@ typedef wchar_t			aafCharacter;
 
 
 /*
- *  IRIX
- */
-#elif defined(PLATFORM_MIPSPRO_MIPS_IRIX) || defined(PLATFORM_GCC_MIPS_IRIX)
-typedef signed char			aafInt8;
-typedef signed short int	aafInt16;
-typedef signed int	 		aafInt32;
-
-typedef unsigned char		aafUInt8;
-typedef unsigned short int	aafUInt16;
-typedef unsigned int	 	aafUInt32;
-
-#if defined( __LONGLONG ) || defined( _LONGLONG )
-typedef signed long long int	aafInt64;
-typedef unsigned long long int	aafUInt64;
-#define AAF_INT64_NATIVE	1
-#endif
-
-typedef wchar_t			aafWChar;
-typedef wchar_t			aafCharacter;
-
-
-/*
- *  Linux, Darwin, Solaris, FreeBSD
+ *  Linux, Irix, Darwin, Solaris, FreeBSD
  */
 #elif defined(PLATFORM_GCC_INTEL_LINUX) || defined(PLATFORM_GCC_X86_64_LINUX) \
-           || defined(PLATFORM_GCC_POWERPC_DARWIN) || defined(PLATFORM_GCC_SPARC_SOLARIS) \
-           || defined(PLATFORM_MWERKS_POWERPC_DARWIN) || defined(PLATFORM_GCC_INTEL_FREEBSD)
-typedef signed char			aafInt8;
-typedef signed short int	aafInt16;
-typedef signed int			aafInt32;
+	|| defined(PLATFORM_MIPSPRO_MIPS_IRIX) || defined(PLATFORM_GCC_MIPS_IRIX) \
+	|| defined(PLATFORM_GCC_POWERPC_DARWIN) || defined(PLATFORM_MWERKS_POWERPC_DARWIN) \
+	|| defined(PLATFORM_GCC_SPARC_SOLARIS) || defined(PLATFORM_GCC_INTEL_FREEBSD)
 
-typedef unsigned char		aafUInt8;
-typedef unsigned short int	aafUInt16;
-typedef unsigned int		aafUInt32;
+// Use ISO C99 (also ANSI and POSIX) fixed size integers
+#include <inttypes.h>
+typedef int8_t			aafInt8;
+typedef int16_t			aafInt16;
+typedef int32_t			aafInt32;
+typedef int64_t			aafInt64;
 
-typedef signed long long int	aafInt64;
-typedef unsigned long long int	aafUInt64;
+typedef uint8_t			aafUInt8;
+typedef uint16_t		aafUInt16;
+typedef uint32_t		aafUInt32;
+typedef uint64_t		aafUInt64;
 #define AAF_INT64_NATIVE	1
 
 typedef wchar_t			aafWChar;
 typedef wchar_t			aafCharacter;
 
-
 #endif
-
 
 
 /*
@@ -322,4 +261,3 @@ typedef aafInt64_t              aafUInt64;
 
 
 #endif // #ifndef __AAFPlatform_h__
-
