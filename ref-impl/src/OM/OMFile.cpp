@@ -677,7 +677,7 @@ OMFile::OMFileEncoding OMFile::encoding(void) const
 
   // @mfunc The raw storage on which this <c OMFile> is stored.
   //   @rdesc The raw storage on which the raw bytes of
-  //          this < c OMFile> reside.
+  //          this <c OMFile> reside.
 OMRawStorage* OMFile::rawStorage(void) const
 {
   TRACE("OMFile::rawStorage");
