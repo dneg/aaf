@@ -53,7 +53,7 @@ AD_METHOD1(RemoveSegment,
 
 AD_METHOD1(GetSlots,
 		   [retval][out],
-		   AD_AAFTYPES\{EnumAAFSegments\} **,
+		   AD_AAFTYPES\(EnumAAFSegments\) **,
 		   ppEnum,
 		   Slots - segment list  enumeration,
 		   Returns an enumerator for aaf segment.)
