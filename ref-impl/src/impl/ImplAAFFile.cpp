@@ -176,6 +176,7 @@ AAFRESULT STDMETHODCALLTYPE
 ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 							   aafUInt32 modeFlags)
 {
+	OMFile::OMLoadMode	loadMode = OMFile::lazyLoad;	// The default behavior
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 	// Validate parameters and preconditions.
@@ -212,7 +213,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		_file = OMFile::openExistingRead(pFileName,
 										 _factory,
 										 0,
-										 OMFile::lazyLoad,
+										 loadMode,
 										 _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
@@ -297,6 +298,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 								 aafUInt32 modeFlags,
 								 aafProductIdentification_t * pIdent)
 {
+	OMFile::OMLoadMode	loadMode = OMFile::lazyLoad;	// The default behavior
 	AAFRESULT stat = AAFRESULT_SUCCESS;
 
 
@@ -337,7 +339,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		_file = OMFile::openExistingModify(pFileName,
 										   _factory,
 										   0,
-										   OMFile::lazyLoad,
+										   loadMode,
 										   _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
@@ -595,6 +597,8 @@ ImplAAFFile::CreateAAFFileOnRawStorage
    aafUInt32 modeFlags,
    aafProductIdentification_constptr pIdent)
 {
+ 	OMFile::OMLoadMode	loadMode = OMFile::lazyLoad;	// The default behavior
+
   if (! _initialized)
 	return AAFRESULT_NOT_INITIALIZED;
 
@@ -796,7 +800,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 			  _file = OMFile::openExistingModify (pOMStg,
 												  _factory,
 												  0,
-												  OMFile::lazyLoad,
+												  loadMode,
 												  _metafactory);
 			}
 		  else // read-only
@@ -805,7 +809,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 			  _file = OMFile::openExistingRead (pOMStg,
 												_factory,
 												0,
-												OMFile::lazyLoad,
+												loadMode,
 												_metafactory);
 			}
 		} // endif new/existing
