@@ -952,16 +952,20 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_NULL_PARAM;
   *ppEnum = 0;
 
-#if 0
-  ImplEnumAAFTypeDefs *theEnum = (ImplEnumAAFTypeDefs *)CreateImpl (CLSID_EnumAAFTypeDefs);
+  if (NULL == ppEnum)
+    return AAFRESULT_NULL_PARAM;
+  *ppEnum = 0;
+  
+  ImplEnumAAFTypeDefs *theEnum = (ImplEnumAAFTypeDefs *)CreateImpl (
+	  CLSID_EnumAAFTypeDefs);
   
   XPROTECT()
   {
-    OMSetIterator<OMUniqueObjectIdentification, ImplAAFMetaDictionary::OpaqueTypeDefinition>* iter = 
-      new OMSetIterator<OMUniqueObjectIdentification, ImplAAFMetaDictionary::OpaqueTypeDefinition>(_opaqueTypeDefinitions, OMBefore);
+    OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>* iter = 
+      new OMReferenceSetIterator<OMUniqueObjectIdentification, ImplAAFTypeDef>(_opaqueTypeDefinitions);
     if(iter == 0)
       RAISE(AAFRESULT_NOMEMORY);
-	CHECK(theEnum->Initialize(&CLSID_EnumAAFTypeDefs,this, iter));
+	CHECK(theEnum->Initialize(&CLSID_EnumAAFTypeDefs,this,iter));
     *ppEnum = theEnum;
   }
   XEXCEPT
@@ -974,8 +978,7 @@ AAFRESULT STDMETHODCALLTYPE
   }
   XEND;
   
-#endif
-  return (AAFRESULT_NOT_IMPLEMENTED);
+  return(AAFRESULT_SUCCESS);
 }
 
 //****************
@@ -1289,194 +1292,5 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
   }
 
   return (result);
-}
-
-
-//
-// Meta definition factory methods:
-//
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMetaDictionary::CreateClassDef (
-      aafUID_constref /*classID*/,
-      aafCharacter_constptr pClassName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFClassDef * pParentClass,
-      ImplAAFClassDef **ppNewClass)
-{
-  if (!pClassName || ! pParentClass || !ppNewClass) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefVariableArray (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDef *pElementType,
-      ImplAAFTypeDefVariableArray ** ppNewVariableArray)
-{
-  if (!pTypeName || !pElementType || !ppNewVariableArray) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefFixedArray (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDef *pElementType,
-      aafUInt32  /*nElements*/,
-      ImplAAFTypeDefFixedArray **pNewFixedArray)
-{
-  if (!pTypeName || !pElementType || !pNewFixedArray) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMetaDictionary::CreateTypeDefRecord (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDef ** ppMemberTypes,
-      aafCharacter_constptr * pMemberNames,
-      aafUInt32 /*numMembers*/,
-      ImplAAFTypeDefRecord ** ppNewRecord)
-{
-  if (!pTypeName || !ppMemberTypes || !pMemberNames || !ppNewRecord) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMetaDictionary::CreateTypeDefRename (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDef *pBaseType,
-      ImplAAFTypeDefRename ** ppNewRename)
-{
-  if (!pTypeName || !pBaseType || !ppNewRename) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefString (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDef *pElementType,
-      ImplAAFTypeDefString ** ppNewString)
-{
-  if (!pTypeName || !pElementType || !ppNewString) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefStrongObjRef (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFClassDef * pTargetObjType,
-      ImplAAFTypeDefStrongObjRef ** ppNewStrongObjRef)
-{
-  if (!pTypeName || !pTargetObjType || !ppNewStrongObjRef) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefWeakObjRef (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFClassDef * pTargetObjType,
-      aafUID_constptr * pTargetHint,
-      aafUInt32 /*targetHintCount*/,
-      ImplAAFTypeDefWeakObjRef ** ppNewWeakObjRef)
-{
-  if (!pTypeName || !pTargetObjType || !pTargetHint || !ppNewWeakObjRef) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefStrongObjRefVector (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDefStrongObjRef * pStrongObjRef,
-      ImplAAFTypeDefVariableArray ** ppNewStrongObjRefVector)
-{
-  if (!pTypeName || !pStrongObjRef || !ppNewStrongObjRefVector) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefWeakObjRefVector (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDefWeakObjRef * pWeakObjRef,
-      ImplAAFTypeDefVariableArray ** ppNewWeakObjRefVector)
-{
-  if (!pTypeName || !pWeakObjRef || !ppNewWeakObjRefVector) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefStrongObjRefSet (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDefStrongObjRef * pStrongObjRef,
-      ImplAAFTypeDefSet ** ppNewStrongObjRefSet)
-{
-  if (!pTypeName || !pStrongObjRef || !ppNewStrongObjRefSet) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-AAFRESULT STDMETHODCALLTYPE
-   ImplAAFMetaDictionary::CreateTypeDefWeakObjRefSet (
-      aafUID_constref /*typeID*/,
-      aafCharacter_constptr pTypeName,
-      aafCharacter_constptr /*pDescription*/,
-      ImplAAFTypeDefWeakObjRef * pWeakObjRef,
-      ImplAAFTypeDefSet ** ppNewWeakObjRefSet)
-{
-  if (!pTypeName || !pWeakObjRef || !ppNewWeakObjRefSet) 
-    return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
 }
 
