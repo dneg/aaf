@@ -74,7 +74,6 @@ OMMappedFileRawStorage::openNewModify(const wchar_t* /* fileName */)
 }
 
   // @mfunc Constructor.
-  //   @parm The file.
   //   @parm The access mode.
 OMMappedFileRawStorage::OMMappedFileRawStorage(
                                          /* TBS */
@@ -127,9 +126,9 @@ bool OMMappedFileRawStorage::isWritable(void) const
   //        to be less than <p byteCount>.
   //        Reading bytes that have never been written returns undefined
   //        data in <p bytes>.
-  //   @parm The buffer into which the bytes are to be read.
-  //   @parm The number of bytes to read.
-  //   @parm The number of bytes actually read.
+  //   @parm OMByte* | bytes | The buffer into which the bytes are to be read.
+  //   @parm OMUInt32 | byteCount | The number of bytes to read.
+  //   @parm OMUInt32& | bytesRead | The number of bytes actually read.
   //   @this const
 void OMMappedFileRawStorage::read(OMByte* /* bytes */,
                                   OMUInt32 /* byteCount */,
@@ -150,9 +149,10 @@ void OMMappedFileRawStorage::read(OMByte* /* bytes */,
   //        <c OMMappedFileRawStorage> to be extended, however such
   //        extension can fail, causing <p bytesWritten> to be less than
   //        <p byteCount>.
-  //   @parm The buffer from which the bytes are to be written.
-  //   @parm The number of bytes to write.
-  //   @parm The actual number of bytes written.
+  //   @parm const OMByte* | bytes | The buffer from which the bytes are
+  //         to be written.
+  //   @parm OMUInt32 | byteCount | The number of bytes to write.
+  //   @parm OMUInt32& | bytesWritten | The actual number of bytes written.
 void OMMappedFileRawStorage::write(const OMByte* /* bytes */,
                                    OMUInt32 /* byteCount */,
                                    OMUInt32& /* bytesWritten */)
