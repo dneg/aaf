@@ -8,15 +8,11 @@ AAFObject\
 #c
 #import ./AAFObject.exp
 AD_HEAD
-/************************************************\
-*												*
-* Advanced Authoring Format						*
-*												*
-* Copyright (c) 1998-1999 Avid Technology, Inc. *
-* Copyright (c) 1998-1999 Microsoft Corporation *
-*												*
-\************************************************/
-
+AD_IDL(//
+// This interface is used to access dictionary services in an AAF
+// file.
+AD_STD_COMMENT_IFC_HEADER
+AD_STD_COMMENT_IFC_STUB)
 AD_FORWARD_DECLARATION(AAFClassDef)
 AD_FORWARD_DECLARATION(EnumAAFClassDefs)
 AD_FORWARD_DECLARATION(AAFTypeDef)
@@ -26,44 +22,148 @@ AD_FORWARD_DECLARATION(EnumAAFDataDefs)
 AD_FORWARD_DECLARATION(AAFEffectDef)
 AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
 AD_FORWARD_DECLARATION(EnumAAFPluggableDefs)
-
-
-
 AD_CLASS_UUID(B1A21399, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A21398, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-
 AD_DICTIONARY_FACTORY(CreateInstance,
 Creates a single uninitialized AAF object of the class associated 
   // with a specified stored object id.)
 
-AD_XMETHOD2(LookupClass,
-[in\,ref], objPass, aafUID_t *, pClassID, Class Unique ID,
-[out\,retval], objOut, AAFClassDef, ppClassDef, Class Definition,
-Return the class definition with the given id.)
+AD_XMETHOD2(RegisterClass,
+			[in\, ref],
+			objPass,
+			aafUID_t *,
+			pClassAuid,
+			ID by which class is to be known,
 
-AD_XMETHOD1(RegisterClass,
-[in], objIn, AAFClassDef, pClassDef, Class Definition,
-Add the class definition object to the dictionary.)
+			[in],
+			objIn,
+			AAFClassDef,
+			pClassDef,
+			Class Definition,
+
+     Add the class definition object to the dictionary\, to be
+  // identified by the given auid.
+  // 
+  // Succeeds if:
+  // - The pClassAuid pointer is valid.
+  // - The pClassDef pointer is valid.
+  // - the ID is not already been registered.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassAuid or pClassDef\)
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - The given ID has already been registered.)
+
+
+AD_XMETHOD2(LookupClass,
+			[in\, ref],
+			objPass,
+			aafUID_t *,
+			pClassID,
+			Class Unique ID,
+
+			[out\,retval],
+			objOut,
+			AAFClassDef,
+			ppClassDef,
+			Class Definition,
+
+     Return the class definition with the given id.
+  // 
+  // Succeeds if:
+  // - The pClassID pointer is valid.
+  // - The ppClassDef pointer is valid.
+  // - the ID is a recognized id for a class definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassID or ppClassDef\)
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - The given ID is not recognized as a class definition ID.)
+
 
 AD_XMETHOD1(GetClassDefinitions,
-[out\,retval], objOut, EnumAAFClassDefs, ppEnum, Class Definition Enumeration,
-Return an enumerator for all class definitions.)
+			[out\,retval],
+			objOut,
+			EnumAAFClassDefs,
+			ppEnum,
+			Class Definition Enumeration,
+
+     Return an enumerator for all class definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
 
-AD_XMETHOD1(RegisterType,
-[in], objIn, AAFTypeDef, pTypeDef, Type Definition Object,
-Add the type definition object to the header's list of definitions.)
+AD_XMETHOD2(RegisterType,
+			[in\, ref],
+			objPass,
+			aafUID_t *,
+			pTypeAuid,
+			ID by which type is to be known,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			Type Definition Object,
+
+     Add the type definition object to the dictionary\, to be
+  // identified by the given auid.
+  // 
+  // Succeeds if:
+  // - The pTypeAuid pointer is valid.
+  // - The pTypeDef pointer is valid.
+  // - the ID is not already been registered.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassAuid or pClassDef\)
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - The given ID has already been registered.)
+
 
 AD_XMETHOD2(LookupType,
-[in\,ref], objPass, aafUID_t *, pTypeID, Type Unique ID,
-[out\,retval], objOut, AAFTypeDef, ppTypeDef, Type Definition Object,
-Return the type definition object with the given id.)
+			[in\,ref],
+			objPass,
+			aafUID_t *,
+			pTypeID,
+			Type Unique ID,
+
+			[out\,retval],
+			objOut,
+			AAFTypeDef,
+			ppTypeDef,
+			Type Definition Object,
+
+     Return the type definition object with the given id.
+  // 
+  // Succeeds if:
+  // - The pTypeID pointer is valid.
+  // - The ppTypeDef pointer is valid.
+  // - the ID is a recognized id for a type definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pTypeID or ppTypeDef\)
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - The given ID is not recognized as a type definition ID.)
+
 
 AD_XMETHOD1(GetTypeDefinitions,
-[out\,retval], objOut, EnumAAFTypeDefs, ppEnum, Type Def Enumeration,
-Return an enumerator for all type definitions.)
+			[out\,retval],
+			objOut,
+			EnumAAFTypeDefs,
+			ppEnum,
+			Type Def Enumeration,
+
+     Return an enumerator for all type definitions.
+  //
+  // Succeeds if:
+  // - The ppEnum pointer is valid.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
 
 AD_XMETHOD1(RegisterDataDefintion,
