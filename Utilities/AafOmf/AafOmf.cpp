@@ -177,6 +177,8 @@ HRESULT InitGlobalVars( void )
 	gpGlobals->bVerboseMode = AAFFalse;
 	gpGlobals->numIndents = 0;
 	gpGlobals->pProgramName = NULL;
+	gpGlobals->bDeleteOutput  = AAFTrue;
+	gpGlobals->bConvertAAFFile  = AAFFalse;
 
 	gpGlobals->nNumAAFMobs = 0;
 	gpGlobals->nNumAAFObjects = 0;
@@ -213,9 +215,11 @@ void Usage( void )
 	UTLstdprintf("%s [-v] [-s] [-p logfile] [-d deffile] [-t tocfile] <infile> [outfile]\n\n", gpGlobals->pProgramName);
 	UTLstdprintf("-v         = Verbose - give progress report (optional)\n" );
 	UTLstdprintf("-s         = Straight conversion. Do NOT discard unnecessary objects (optional)\n");
-	UTLstdprintf("-p logfile = Log file name(optional)\n");
-	UTLstdprintf("-d deffile = Definition file (optional)\n");
-	UTLstdprintf("-t tocfile = Dump OMFI Table of contents (optional)\n");
+	UTLstdprintf("-nr        = DO NOT replace Output file. If Output file is present, give an error (optional)!!\n");
+//	UTLstdprintf("-p logfile = Log file name(optional)\n");
+//	UTLstdprintf("-d deffile = Definition file (optional)\n");
+//	UTLstdprintf("-t tocfile = Dump OMFI Table of contents (optional)\n");
+	UTLstdprintf("-OMF       = Convert an AAF file to OMF 2.1 version\n");
 	UTLstdprintf("infile     = input file name (required)\n");
 	UTLstdprintf("outfile    = output file name (optional)\n");
 	UTLstdprintf("\n*******************\n\n");
@@ -297,7 +301,7 @@ HRESULT GetUserInput(int argc, char* argv[])
 			char	c = pNextArgument[0];
 			char*	pFileName;
 
-			if ((c == '-') && (strlen(pNextArgument) >= 2))
+			if ((c == '-') && (strlen(pNextArgument) == 2))
 			{
 				char flag = pNextArgument[1];
 				switch( flag )
@@ -348,6 +352,21 @@ HRESULT GetUserInput(int argc, char* argv[])
 						rc = AAFRESULT_BAD_FLAGS;
 						break;
 				}
+			}
+			else if ((c == '-') && (strlen(pNextArgument) > 2))
+			{
+				char* pArg = &pNextArgument[1];
+				
+				if (_stricmp(pArg, "nr") == 0)
+				{
+					gpGlobals->bDeleteOutput = AAFFalse;
+				}
+				else if ( _stricmp(pArg, "OMF") == 0 ) 
+				{
+					gpGlobals->bConvertAAFFile = AAFTrue;
+				}
+				else
+					rc = AAFRESULT_BAD_FLAGS;
 			}
 			else
 			{
@@ -457,25 +476,39 @@ int main(int argc, char *argv[])
 		Usage();
 		return UTLEcFromHr(hr);
 	}
-	hr = IsOMFFile(gpGlobals->sInFileName, &bIsOMFFile);
-	if (FAILED(hr))
+	if (gpGlobals->bConvertAAFFile)
 	{
-		Usage();
-		return UTLEcFromHr(hr);
-	}
-	if (bIsOMFFile)
-	{
-		// Convert OMF to AAF
-		OMFMain.ConvertFile();
+		// User indictaded input file must be an AAF 
+		// Convert AAF to OMF
+		hr = AAFMain.ConvertFile();
+
 	}
 	else
 	{
-		// Convert AAF to OMF
-		AAFMain.ConvertFile();
+		// User indictaed Input file must be an OMF file
+		hr = IsOMFFile(gpGlobals->sInFileName, &bIsOMFFile);
+		if (FAILED(hr))
+		{
+			UTLstdprintf("OMF Input file NOT Found !!\n");
+			Usage();
+		}
+		else
+		{
+			if (!bIsOMFFile)
+			{
+				UTLstdprintf("Input file is NOT a valid  OMF File !!\n");
+				Usage();
+			}
+			else
+			{
+				hr = OMFMain.ConvertFile();
+			}
+		}
 	}
 
 	// We are done, just
-	DisplaySummary();
+	if (SUCCEEDED(hr))
+		DisplaySummary();
 
 	// clean up memory
 	if(gpGlobals)
