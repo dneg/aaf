@@ -39,7 +39,6 @@
 #define AUID_AAFInterchangeObject AUID_AAFObject
 #define AUID_AAFJPEGImageData AUID_AAFJPEGData
 #define AUID_AAFMIDIFileData AUID_AAFMIDIData
-#define AUID_AAFMIDIFileDescriptor AUID_AAFMIDIDescriptor
 #define AUID_AAFParameterDefinition AUID_AAFParameterDef
 #define AUID_AAFPropertyDefinition AUID_AAFPropertyDef
 #define AUID_AAFTypeDefinition AUID_AAFTypeDef
