@@ -136,7 +136,7 @@ public:
   //   - the given path already points to a file-system file.
   STDMETHOD (Create)
     (/*[in,string]*/ const aafCharacter * pFilePath, // The local file-system path to a file
-     /*[in]*/ const aafUID_t * pMobID); // Optional mobID identifying the external media 
+     /*[in]*/ aafMobID_constptr pMobID); // Optional mobID identifying the external media 
 
   // Attempt to open an essence file stream for reading.
   // Returns one of the following:
@@ -149,7 +149,7 @@ public:
   //   - file is write-only, cannot be opened for reading.
   STDMETHOD (OpenRead)
     (/*[in,string]*/ const aafCharacter * pFilePath, // The local file-system path to a file
-     /*[in]*/ const aafUID_t * pMobID); // Optional mobID identifying the external media 
+     /*[in]*/ aafMobID_constptr pMobID); // Optional mobID identifying the external media 
 
   // Attempt to open an essence file stream for appending.
   // Returns one of the following:
@@ -162,7 +162,7 @@ public:
   //   - file is read-only, cannot be opened for writing.
   STDMETHOD (OpenAppend)
     (/*[in,string]*/ const aafCharacter * pFilePath, // The local file-system path to a file
-     /*[in]*/ const aafUID_t * pMobID); // Optional mobID identifying the external media 
+     /*[in]*/ aafMobID_constptr pMobID); // Optional mobID identifying the external media 
 
 
 
@@ -205,7 +205,7 @@ public :
   //   - succeeded.  (This is the only code indicating success.)
   STDMETHOD (Init)
     (/*[in,string]*/ const aafCharacter * pFilePath, // The local file-system path to a file
-     /*[in]*/ const aafUID_t * pMobID); // Optional mobID identifying the external media 
+     /*[in]*/ aafMobID_constptr pMobID); // Optional mobID identifying the external media 
 
   // Cleanup any internally allocated buffers.
   void CleanupBuffers(void);
@@ -254,7 +254,7 @@ public :
   wchar_t *_pwPath;
   //
   // Optional mobID identifying the external media
-  aafUID_t *_pMobID;
+  aafMobID_t *_pMobID;
   //
   // Ascii character path
   char *_pPath;
