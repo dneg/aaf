@@ -195,7 +195,20 @@ Return the effect definition object with the given id.
 
 AD_XMETHOD1(GetEffectDefinitions,
 [out\,retval], objOut, EnumAAFEffectDefs, ppEnum, Definition Enumeration,
-Return an enumerator for aff effect definitions.)
+Return an enumerator for all effect definitions.)
+
+AD_XMETHOD1(RegisterParameterDefinition,
+[in], objIn, AAFParameterDef, pParmDef, Parameter Definition Object,
+Add the effect definition object to the header's list of definitions.)
+
+AD_XMETHOD2(LookupParameterDefinition,
+[in\,ref], objPass, aafUID_t *, parameterID, Parameter Unique ID,
+[out\,retval], objOut, AAFParameterDef, ppParmDef, Effect definition object,
+Return the parameter definition object with the given id.)
+
+AD_XMETHOD1(GetParameterDefinitions,
+[out\,retval], objOut, EnumAAFParameterDefs, ppEnum, Definition Enumeration,
+Return an enumerator for aff parameter definitions.)
 
 AD_XMETHOD1(RegisterPluggableDefinition,
 [in], objIn, AAFPluggableDef, pPlugDef, Pluggable Definition Object,
