@@ -84,7 +84,7 @@ public:
 
 	static std::string wctomb( const AxString& s );
 
-	// Converts using base zero - see the strol man page.
+	// Converts using base zero - see the strtol man page.
 	// This means that s can be decimal, hex, or octal using
 	// the usual notations.  Throws an exception if conversion
 	// failed.
