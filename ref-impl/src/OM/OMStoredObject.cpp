@@ -244,8 +244,7 @@ OMStoredObject* OMStoredObject::openStoragePath(const char* storagePathName)
   // @mfunc Save the <c OMPropertySet> <p properties> in this
   //        <c OMStoredObject>.
   //   @parm The <c OMPropertySet> to save.
-  //   @parm Client context for callbacks.
-void OMStoredObject::save(const OMPropertySet& properties, void* clientContext)
+void OMStoredObject::save(const OMPropertySet& properties)
 {
   TRACE("OMStoredObject::save(OMPropertySet)");
   PRECONDITION("Already open", _open);
@@ -268,7 +267,7 @@ void OMStoredObject::save(const OMPropertySet& properties, void* clientContext)
     properties.iterate(context, p);
     ASSERT("Valid property", p != 0);
     if (!p->isOptional() || p->isPresent()) {
-      p->save(clientContext);
+      p->save();
     }
   }
 #if !defined(OM_DISABLE_VALIDATE)
