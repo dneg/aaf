@@ -13,9 +13,9 @@
 \******************************************/
 
 
-#ifndef __ImplAAFClassDef_h__
-#include "ImplAAFClassDef.h"
-#endif
+class ImplAAFPropertyValue;
+
+class ImplAAFClassDef;
 
 #ifndef __ImplAAFTypeDefObjectRef_h__
 #include "ImplAAFTypeDefObjectRef.h"
@@ -82,8 +82,7 @@ public:
   aafBool IsFixedSize (void);
   size_t PropValSize (void);
 
-  // OMStrongReferenceProperty<ImplAAFClassDef> _ReferencedType;
-  ImplAAFClassDef * _ReferencedType;
+  OMWeakReferenceProperty<ImplAAFClassDef> _referencedType;
 };
 
 
