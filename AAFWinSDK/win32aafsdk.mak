@@ -165,10 +165,13 @@ OMF_LIBS = $(AAFTOOLKIT)\Omf
 #
 !if "$(CFG)"=="FULL"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
+OMF_DLL_NAME = "omfToolkit.dll"
 !elseif "$(CFG)"=="Debug"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_DEBUG_REFIMPL)
+OMF_DLL_NAME = "omfToolkitd.dll"
 !elseif "$(CFG)"=="Release"
 TOOLKIT_TARGET_REFIMPL = $(TOOLKIT_RELEASE_REFIMPL)
+OMF_DLL_NAME = "omfToolkit.dll"
 !else
 !ERROR Unknown configuration!
 !endif
@@ -570,8 +573,8 @@ $(AAFSDK_BIN)\aafintp.dll : $(TOOLKIT_TARGET_REFIMPL)\aafintp.dll
 $(AAFSDK_BIN)\aafpgapi.dll : $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll
 	$(CP) $(CP_OPTS) $(TOOLKIT_TARGET_REFIMPL)\aafpgapi.dll $(AAFSDK_BIN)\
 
-$(AAFSDK_BIN)\omfToolkit.dll : $(OMF_LIBS)\omfToolkit.dll
-	$(CP) $(CP_OPTS) $(OMF_LIBS)\omfToolkit.dll $(AAFSDK_BIN)\
+$(AAFSDK_BIN)\omfToolkit.dll : $(OMF_LIBS)\$(OMF_DLL_NAME)
+	$(CP) $(CP_OPTS) $(OMF_LIBS)\$(OMF_DLL_NAME) $(AAFSDK_BIN)\
 	
 
 #
