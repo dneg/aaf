@@ -243,4 +243,4 @@ ImplAAFSession::BeginSession (
 
 extern "C" const aafClassID_t CLSID_AAFSession;
 
-OMDEFINE_STORABLE(AAFSession, CLSID_AAFSession);
+OMDEFINE_STORABLE(ImplAAFSession, CLSID_AAFSession);
