@@ -1,0 +1,71 @@
+#startm .this-module 0
+AAFSearchSource\
+#endm
+#c
+AD_HEAD
+AD_DEFAULT_UUID(332CBDD0, 5425, 11D2, AA, 7A, 10, 00, 3D, 00, 00, 00)
+AD_CLASS_BEGIN
+
+AD_XMETHOD7(SearchSource,
+			[in],
+			  objPass,
+			  aafTrackID_t,
+			  trackID,
+			  Track ID,
+			[in],
+			  objPass,
+			  aafPosition_t,
+			  offset,
+			  Offset,
+			[in],
+			  objPass,
+			  aafMobKind_t,
+			  mobKind,
+			  Mob Kind,
+			[in],
+			  objPass,
+			  aafMediaCriteria_t *,
+			  pMediaCrit,
+			  Media Criteria,
+			[in],
+			  objPass,
+			  aafEffectChoice_t *,
+			  pEffectChoice,
+			  Effect Choice,
+			[out],
+			  objOut,
+			  AAFComponent,
+			  ppThisCpnt,
+			  The found component,
+			[out],
+			  objOut,
+			  AAFFindSourceInfo,
+			  ppSourceInfo,
+			  Source Information,
+			This function returns the source information for a track in a
+  // Master Mob or Source Mob.  It follows the Source Clip references
+  // in the specified track until it encounters the kind of Mob
+  // specified in the mobKind parameter.  This function cannot be used
+  // on a Composition Mob and is not intended to be called
+  // iteratively; use the omfiMobOpenSearch\, omfiMobGetNextSource\,
+  // omfiMobGetThisSource\, and omfiMobCloseSearch functions for those
+  // purposes. 
+  //
+  // Succeeds if all of the following are true:
+  // - the ppThisCpnt pointer is valid.
+  // \(other conditions here\)
+  // 
+  // If this method fails nothing is written to *ppThisCpnt.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppCpnt is null.
+  //
+  // \(other codes here.\))
+AD_CLASS_END
