@@ -281,8 +281,8 @@ AAFRESULT STDMETHODCALLTYPE
 				cstore = NULL;
 			}
 
-//			head->ReleaseReference();
-//			head = NULL;
+			head->ReleaseReference();
+			head = NULL;
 		}
 		else if (hr == AAFRESULT_NOT_IN_FILE)
 		{
