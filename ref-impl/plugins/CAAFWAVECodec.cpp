@@ -31,24 +31,24 @@ const CLSID CLSID_AAFWaveCodec = { 0x8D7B04B1, 0x95E1, 0x11d2, { 0x80, 0x89, 0x0
 const IID IID_IAAFSourceMob = { 0xB1A2137C, 0x1A7D, 0x11D2, { 0xBF, 0x78, 0x00, 0x10, 0x4B, 0xC9, 0x15, 0x6D } };
 const IID IID_IAAFWAVEDescriptor = { 0x4c2e1692, 0x8ae6, 0x11d2, { 0x81, 0x3c, 0x00, 0x60, 0x97, 0x31, 0x01, 0x72 } };
 const IID IID_IAAFFileDescriptor = { 0xe58a8561, 0x2a3e, 0x11D2, { 0xbf, 0xa4, 0x00, 0x60, 0x97, 0x11, 0x62, 0x12 } };
+const IID IID_IAAFEssenceSampleStream = { 0x63E12802, 0xCCE5, 0x11D2, { 0x80, 0x98, 0x00, 0x60, 0x08, 0x14, 0x3E, 0x6F } };
 
-/*HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::Start ()
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::Start (void)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_SUCCESS;
 }
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::Finish ()
+    CAAFWaveCodec::Finish (void)
 {
-  return HRESULT_NOT_IMPLEMENTED;
+	return AAFRESULT_SUCCESS;
 }
-!!!*/
 
 static void SplitBuffers(void *original, aafInt32 srcSamples, aafInt16 sampleSize, aafInt16 numDest, interleaveBuf_t *destPtr);
 
 CAAFWaveCodec::CAAFWaveCodec (IUnknown * pControllingUnknown, aafBool doInit)
-  : CAAFDefaultCodec (pControllingUnknown, AAFFalse)
+  : CAAFUnknown (pControllingUnknown)
 {
 	_headerLoaded = AAFFalse;
 	_nativeByteOrder = GetNativeByteOrder();
@@ -642,7 +642,7 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::Close ()
+    CAAFWaveCodec::CompleteWrite ()
 {
 	aafInt64	byteLen, sampleLen;
 	aafErr_t	aafError;
@@ -692,7 +692,7 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::WriteRawData (aafUInt32 nSamples, aafDataBuffer_t  buffer,
-        aafInt32  buflen)
+        aafUInt32  buflen)
 {
 	_stream->Write (buffer, nSamples * _bytesPerFrame);
 	return HRESULT_SUCCESS;
@@ -1340,6 +1340,12 @@ HRESULT CAAFWaveCodec::InternalQueryInterface
     if (riid == IID_IAAFEssenceCodec) 
     { 
         *ppvObj = (IAAFEssenceCodec *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+    else if (riid == IID_IAAFEssenceSampleStream) 
+    { 
+        *ppvObj = (IAAFEssenceSampleStream *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
