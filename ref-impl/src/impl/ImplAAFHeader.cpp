@@ -316,11 +316,11 @@ AAFRESULT
 	{		
 		if(pIdent == (aafProductIdentification_t *)NULL)
 		{
-			fiction.companyName = (unsigned char *)"Unknown";
-			fiction.productName = (unsigned char *)"Unknown";
-			fiction.productVersionString = (unsigned char *)NULL;
+			fiction.companyName = L"Unknown";
+			fiction.productName = L"Unknown";
+			fiction.productVersionString = (aafWChar*)NULL;
 			fiction.productID = -1;
-			fiction.platform = (unsigned char *)NULL;
+			fiction.platform = (aafWChar*)NULL;
 			fiction.productVersion.major = 0;
 			fiction.productVersion.minor = 0;
 			fiction.productVersion.tertiary = 0;
@@ -332,20 +332,20 @@ AAFRESULT
 		
 	XASSERT(pIdent != NULL, OM_ERR_NEED_PRODUCT_IDENT);
     if (pIdent->productVersionString == 0) {
-      pIdent->productVersionString = (unsigned char *)"Unknown version";
+      pIdent->productVersionString = L"Unknown version";
     }
     if (pIdent->platform == 0) {
-      pIdent->platform = (unsigned char *)"Windows NT";
+      pIdent->platform = L"Windows NT";
     }
     identObj = new ImplAAFIdentification(
-      (const char *)pIdent->companyName,
-      (const char *)pIdent->productName,
+      pIdent->companyName,
+      pIdent->productName,
       &pIdent->productVersion,
-      (const char *)pIdent->productVersionString,
+      pIdent->productVersionString,
       // productID,
       _lastModified,
       &AAFToolkitVersion,
-      (const char *)pIdent->platform
+      pIdent->platform
       // generation
       );
 
