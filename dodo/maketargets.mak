@@ -331,24 +331,18 @@ SRC_DIR = ../ref-impl/src
 
 clean:
 	cd tool ; $(MAKE) clean
-	$(RM) -f *.cpp *.cppt *.h *.idl *.fidl *.exp
+	$(RM) -f *.idl *.fidl *.exp
 	$(RM) -f *.comc *.comcx *.comh *.comt *.refh *.frefh
 	$(RM) -f *.implc *.implh
 	$(RM) -f core
 	@for file in $(AAFOBJECTS) ; do \
-		echo $(RM) -f $(SRC_DIR)/cpp-api/$$file.cpp ; \
-		$(RM) -f $(SRC_DIR)/cpp-api/$$file.cpp ; \
 		echo $(RM) -f $(SRC_DIR)/com-api/C$$file.h ; \
 		$(RM) -f $(SRC_DIR)/com-api/C$$file.h ; \
 		echo $(RM) -f $(SRC_DIR)/com-api/C$$file.cpp ; \
 		$(RM) -f $(SRC_DIR)/com-api/C$$file.cpp ; \
-		echo $(RM) -f $(INCLUDE_DIR)/cpp-api/$$file.h ; \
-		$(RM) -f $(INCLUDE_DIR)/cpp-api/$$file.h ; \
 		echo $(RM) -f $(INCLUDE_DIR)/ref-api/$$file.h ; \
 		$(RM) -f $(INCLUDE_DIR)/ref-api/$$file.h ; \
 	done
-	$(RM) -f $(SRC_DIR)/cpp-api/test/AAF*Test.cpp
-	$(RM) -f $(SRC_DIR)/cpp-api/test/EnumAAF*Test.cpp
 #	$(RM) -f $(SRC_DIR)/com-api/test/CAAF*Test.cpp
 #	$(RM) -f $(SRC_DIR)/com-api/test/CEnumAAF*Test.cpp
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.h
@@ -375,3 +369,4 @@ clean:
 
 # This file contains the list of all dependents...
 include depend.mk
+
