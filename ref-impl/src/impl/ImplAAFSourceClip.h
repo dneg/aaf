@@ -55,7 +55,7 @@ public:
 
 	// Declare class storable
 
-	OMDECLARE_STORABLE(ImplAAFSourceClip);
+	OMDECLARE_STORABLE(ImplAAFSourceClip)
   //
   // Constructor/destructor
   //
