@@ -58,11 +58,11 @@ OMRawStorageLockBytes::Release(void)
 {
   TRACE("OMRawStorageLockBytes::Release");
 
-  _referenceCount--;
+  ULONG result = --_referenceCount;
   if (_referenceCount == 0) {
     delete this;
   }
-  return _referenceCount;
+  return result;
 }
 
   // @mfunc Constructor.
