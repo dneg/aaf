@@ -199,7 +199,9 @@ const CLSID CLSID_AAFHeader =
 //           MIDIFileData, TIFFData and WAVEData. Move FrameIndex property
 //           to EssenceData and rename to SampleIndex. Change type of
 //           DefinitionObject::PluginDescriptors from ObjRefArray to
-//           RefAUIDArray
+//           RefAUIDArray.
+//  0.12   : TIFFDescriptor now descended from FileDescriptor instead of
+//           DigitalImageDescriptor. Several other minor changes.
 //
 
 // The following may change at run time depending on the file format
@@ -211,7 +213,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const OMUInt32 HIGHVERSION = 11;
+const OMUInt32 HIGHVERSION = 12;
 
 // Output format requested
 //
