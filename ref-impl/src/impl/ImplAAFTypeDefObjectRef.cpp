@@ -73,11 +73,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::pvtInitialize (
-      const aafUID_t *  pID,
-      const aafUID_t * pRefdObjID,
-      wchar_t *  pTypeName)
+      const aafUID_t *  /*pID*/,
+      const aafUID_t * /*pRefdObjID*/,
+      wchar_t *  /*pTypeName*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // This is a virtual function should be implemented in a derived class.
+  return AAFRESULT_INTERNAL_ERROR;
 }
 
 
@@ -87,7 +88,8 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFObject * /*pObj*/,
       ImplAAFPropertyValue ** /*ppPropVal*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // This is a virtual function should be implemented in a derived class.
+  return AAFRESULT_INTERNAL_ERROR;
 }
 
 
@@ -96,7 +98,8 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefObjectRef::GetObjectType (
       ImplAAFClassDef ** /*ppObjType*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // This is a virtual function should be implemented in a derived class.
+  return AAFRESULT_INTERNAL_ERROR;
 }
 
 
@@ -106,7 +109,8 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyValue * /*pPropVal*/,
       ImplAAFObject ** /*ppObject*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // This is a virtual function should be implemented in a derived class.
+  return AAFRESULT_INTERNAL_ERROR;
 }
 
 
@@ -116,7 +120,8 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFPropertyValue * /*pPropVal*/,
       ImplAAFObject * /*ppObject*/)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  // This is a virtual function should be implemented in a derived class.
+  return AAFRESULT_INTERNAL_ERROR;
 }
 
 
