@@ -794,7 +794,10 @@ typedef enum _aafSearchTag_e
 	kAAFByClass = 4, 
 	kAAFByDataDef = 5,
 	kAAFByMediaCrit = 6,
-	kAAFByUsageCode = 7
+	kAAFByUsageCode = 7,
+	kAAFByMasterMobUsageCode = 8,
+	kAAFBySourceMobUsageCode = 9,
+	kAAFByCompositionMobUsageCode = 10
 } aafSearchTag_e;
 
 

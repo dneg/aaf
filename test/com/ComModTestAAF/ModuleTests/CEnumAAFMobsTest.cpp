@@ -138,7 +138,15 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  checkResult(pMob->SetMobID(TEST_File_MobID));
 	  checkResult(pMob->SetName(L"File Mob"));
-	
+
+	  // Check the Mob2 usage code implementations.
+	  // Need IAAFMob2 for to do that.
+	  {
+	    IAAFSmartPointer<IAAFMob2> pMobInterface2;
+	    checkResult( pMob->QueryInterface( IID_IAAFMob2, reinterpret_cast<void**>(&pMobInterface2) ) );
+	    checkResult( pMobInterface2->SetUsageCode( kAAFUsage_Template ) );
+	  }
+
 	  // Create a concrete subclass of FileDescriptor
  	  checkResult(defs.cdAIFCDescriptor()->
 				  CreateInstance(IID_IAAFEssenceDescriptor, 
@@ -166,6 +174,14 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  checkResult(pMob->SetMobID(TEST_Master_MobID));
 	  checkResult(pMob->SetName(L"Master Mob"));
+
+	  // Check the Mob2 usage code implementations.
+	  // Need IAAFMob2 for to do that.
+	  {
+	    IAAFSmartPointer<IAAFMob2> pMobInterface2;
+	    checkResult( pMob->QueryInterface( IID_IAAFMob2, reinterpret_cast<void**>(&pMobInterface2) ) );
+	    checkResult( pMobInterface2->SetUsageCode( kAAFUsage_Template ) );
+	  }
 
 	  checkResult(pHeader->AddMob(pMob));
 
@@ -222,6 +238,36 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	}
 
 	return hr;
+}
+
+
+
+static void CheckMobsByUsageCode( IAAFHeader* pHeader,
+				  aafSearchCrit_t& usageCrit,
+				  int expectedCount,
+				  bool checkIID,
+				  const IID& expectedIID )
+{
+  IAAFSmartPointer<IEnumAAFMobs> pEnumByUsage;
+  checkResult( pHeader->GetMobs( &usageCrit, &pEnumByUsage ) );
+
+  // Should get one back, and it should be a composition mob.
+  IAAFSmartPointer<IAAFMob> pNextMob;
+  HRESULT nextHr;
+  int count;
+  for( count = 0, nextHr = pEnumByUsage->NextOne( &pNextMob );
+       AAFRESULT_SUCCESS == nextHr;
+       count++, nextHr = pEnumByUsage->NextOne( &pNextMob ) ) {
+    if ( checkIID ) {
+      void* pUnused;
+      checkResult( pNextMob->QueryInterface( expectedIID, &pUnused ) );
+    }
+  }
+    
+  checkExpression( AAFRESULT_NO_MORE_OBJECTS == nextHr,
+		   AAFRESULT_TEST_FAILED );
+  
+  checkExpression( expectedCount == count, AAFRESULT_TEST_FAILED );
 }
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
@@ -608,38 +654,37 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
 	  // Test usageCode search criteria.
 	  {
+	    // Should find one TopLevel mob, and two Template mobs.
+
+	    // There should be one mob with usage code TopLevel, and it should be
+	    // a composition mob.
 	    aafSearchCrit_t usageCrit;
 	    usageCrit.searchTag = kAAFByUsageCode;
 	    usageCrit.tags.usageCode = kAAFUsage_TopLevel; 
+	    CheckMobsByUsageCode( pHeader, usageCrit, 1, true, IID_IAAFCompositionMob );
 
-	    IAAFSmartPointer<IEnumAAFMobs> pEnumByUsage;
-	    checkResult( pHeader->GetMobs( &usageCrit, &pEnumByUsage ) );
+	    // There should be one composition mob with usage code TopLevel.
+	    usageCrit.searchTag = kAAFByCompositionMobUsageCode;
+	    usageCrit.tags.usageCode = kAAFUsage_TopLevel; 
+	    CheckMobsByUsageCode( pHeader, usageCrit, 1, true, IID_IAAFCompositionMob );
 
-		// Should get one back, and it should be a composition mob.
-		IAAFSmartPointer<IAAFMob> pNextMob;
-		IAAFSmartPointer<IAAFMob> pLastFoundMob;
-		HRESULT nextHr;
-		int count;
-		for( count = 0, nextHr = pEnumByUsage->NextOne( &pNextMob );
-			 AAFRESULT_SUCCESS == nextHr;
-			 count++, nextHr = pEnumByUsage->NextOne( &pNextMob ) ){
-			pLastFoundMob = pNextMob;
-		}
+	    // There should be two mobs with usage code Template.  They are of difference
+	    // types, hence, don't check the type.
+	    usageCrit.searchTag = kAAFByUsageCode;
+	    usageCrit.tags.usageCode = kAAFUsage_Template; 
+	    CheckMobsByUsageCode( pHeader, usageCrit, 2, false, IID_IUnknown );
 
+	    // One of the Template mobs should be a SourceMob, the other should be MasterMob.
+	    usageCrit.searchTag = kAAFBySourceMobUsageCode;
+	    usageCrit.tags.usageCode = kAAFUsage_Template; 
+	    CheckMobsByUsageCode( pHeader, usageCrit, 1, true, IID_IAAFSourceMob );
 
-		checkExpression( AAFRESULT_NO_MORE_OBJECTS == nextHr,
-						 AAFRESULT_TEST_FAILED );
-	
-		checkExpression( 1 == count, AAFRESULT_TEST_FAILED );
-
-		IAAFSmartPointer<IAAFCompositionMob> pCompMob;
-		checkResult( pLastFoundMob->QueryInterface( IID_IAAFCompositionMob, (void**)&pCompMob ) );
-
+	    usageCrit.searchTag = kAAFByMasterMobUsageCode;
+	    usageCrit.tags.usageCode = kAAFUsage_Template; 
+	    CheckMobsByUsageCode( pHeader, usageCrit, 1, true, IID_IAAFMasterMob ); 
 	  }
 
-
-
-	}
+  }
   catch (HRESULT& rResult)
   {
     hr = rResult;

@@ -644,6 +644,9 @@ bool Is_aafSearchTag_t_Valid(aafSearchTag_t param)
     case kAAFByDataDef:
     case kAAFByMediaCrit:
     case kAAFByUsageCode:
+    case kAAFByMasterMobUsageCode:
+    case kAAFBySourceMobUsageCode:
+    case kAAFByCompositionMobUsageCode:
       return true;
     default:
       return false;
