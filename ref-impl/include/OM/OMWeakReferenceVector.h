@@ -27,7 +27,7 @@
 
 // @doc OMINTERNAL
 #ifndef OMWEAKREFERENCEVECTOR_H
-#define OMwEAKREFERENCEVECTOR_H
+#define OMWEAKREFERENCEVECTOR_H
 
 #include "OMRefVectorProperty.h"
 
