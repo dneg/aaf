@@ -33,6 +33,11 @@ void reportAssertionFailure(char* kind,
 #endif
 }
 
+void trace(const char* routine)
+{
+  cerr << "Enter \"" << routine << "\"." << endl;
+}
+
 bool validString(const char* string)
 {
   return ((string != 0) && (strlen(string) > 0));

@@ -10,8 +10,6 @@
 
 #if defined (OM_ENABLE_DEBUG)
 
-static char* currentRoutineName = "unknown";
-
 void reportAssertionFailure(char* kind,
                             char* name,
                             char* expressionString,
@@ -21,13 +19,16 @@ void reportAssertionFailure(char* kind,
 
 #if defined(OM_ENABLE_TRACE)
 
+void trace(const char* routine);
+
 #define TRACE(routine) \
   char* currentRoutineName = routine; \
-  cerr << "Enter \"" << currentRoutineName << "\"." << endl;
+  trace(currentRoutineName);
 
 #else
 
-#define TRACE(routine) char* currentRoutineName = routine;
+#define TRACE(routine) char* currentRoutineName; \
+                       currentRoutineName = routine;
 
 #endif
 
