@@ -136,6 +136,7 @@ HUMAN_TYPED_COMTEST = \
 	AAFSourceClip \
 	AAFEssenceDescriptor \
 	AAFFile \
+	AAFNetworkLocator \
 	AAFSourceMob \
 	AAFSourceReference \
 	AAFComponent \
@@ -166,7 +167,6 @@ AUTO_GEN_COMTEST = \
 	AAFMediaGroup \
 	AAFMediaTapeDescriptor \
 	AAFNestedScope \
-	AAFNetworkLocator \
 	AAFObjectAttribute \
 	AAFParameter \
 	AAFParameterSlot \
