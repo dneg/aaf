@@ -87,9 +87,15 @@ $(INCLUDE_DIR)/ref-api/AAF.h : $(FREFH_TARGETS)
 	    echo \#include \"AAFCOMPlatform.h\" ; \
 	    echo \#endif ; \
 	    echo "" ; \
+	    echo \#ifdef __cplusplus ; \
 	    for class in $(DODO_TARGET_NAMES) ; do \
 	    	echo interface I$$class\;; \
 	    done ; \
+	    echo \#else ; \
+	    for class in $(DODO_TARGET_NAMES) ; do \
+	    	echo typedef interface I$$class I$$class\;;  \
+	    done ; \
+	    echo \#endif ; \
 	    for class in $(DODO_TARGET_NAMES); do \
 	    	echo ""; \
 	    	echo "// I$$class"; \
