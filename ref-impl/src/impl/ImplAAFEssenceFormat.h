@@ -107,11 +107,6 @@ public:
          aafInt32*  bytesRead);
 
 
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEssenceFormatTest.cpp.
-  static AAFRESULT test();
-
 private:
 		oneParm_t	*_elements;
 		aafUInt32	_elemUsed;

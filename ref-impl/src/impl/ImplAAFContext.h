@@ -36,10 +36,6 @@ public:
 
 
 public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFContextTest.cpp.
-  static AAFRESULT test();
-
 
   void InitPluginManager (void);
   ImplAAFPluginManager *GetPluginManager (void);

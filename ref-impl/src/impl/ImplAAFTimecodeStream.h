@@ -213,9 +213,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFTimecodeStream)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTimecodeStreamTest.cpp.
-  static AAFRESULT test();
 private: 
   virtual AAFRESULT STDMETHODCALLTYPE
     Write(aafUInt32  bytes, aafDataBuffer_t  buffer, aafUInt32 *  bytesWritten);

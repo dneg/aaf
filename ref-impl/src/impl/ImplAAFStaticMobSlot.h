@@ -46,10 +46,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFStaticMobSlot)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFStaticMobSlotTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFStaticMobSlot_h__

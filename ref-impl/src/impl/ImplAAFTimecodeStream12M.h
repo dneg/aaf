@@ -80,10 +80,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTimecodeStream12M)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTimecodeStream12MTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFTimecodeStream12M_h__

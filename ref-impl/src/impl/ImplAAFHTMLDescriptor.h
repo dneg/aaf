@@ -46,10 +46,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFHTMLDescriptor)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFHTMLDescriptorTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFHTMLDescriptor_h__
