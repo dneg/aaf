@@ -121,17 +121,17 @@
  *
  * All functions can return the following error codes if the following
  * argument values are NULL:
- *		OM_ERR_NULL_FHDL -- aafHdl_t was NULL.
- *		OM_ERR_NULLOBJECT -- aafObject_t was NULL.
- *		OM_ERR_BADDATAADDRESS -- Data address was NULL.
- *		OM_ERR_NULL_SESSION -- No session was open.
- *		OM_ERR_SWAB -- Unable to byte swap the given data type.
+ *		AAFRESULT_NULL_FHDL -- aafHdl_t was NULL.
+ *		AAFRESULT_NULLOBJECT -- aafObject_t was NULL.
+ *		AAFRESULT_BADDATAADDRESS -- Data address was NULL.
+ *		AAFRESULT_NULL_SESSION -- No session was open.
+ *		AAFRESULT_SWAB -- Unable to byte swap the given data type.
  * 
  * Accessor functions can also return the error codes below:
- *		OM_ERR_BAD_PROP -- aafProperty_t code was out of range.
- *		OM_ERR_OBJECT_SEMANTIC -- Failed a semantic check on an input obj
- *		OM_ERR_DATA_IN_SEMANTIC -- Failed a semantic check on an input data
- *		OM_ERR_DATA_OUT_SEMANTIC -- Failed a semantic check on an output data
+ *		AAFRESULT_BAD_PROP -- aafProperty_t code was out of range.
+ *		AAFRESULT_OBJECT_SEMANTIC -- Failed a semantic check on an input obj
+ *		AAFRESULT_DATA_IN_SEMANTIC -- Failed a semantic check on an input data
+ *		AAFRESULT_DATA_OUT_SEMANTIC -- Failed a semantic check on an output data
  */
 
 //#include "masterhd.h"
@@ -153,6 +153,7 @@
 #include "AAFTypes.h"
 #include "AAFUtils.h"
 #include "aafCvt.h"
+#include "aafresult.h"
 
 /* Moved math.h down here to make NEXT's compiler happy */
 #include <math.h>
@@ -282,7 +283,7 @@ aafErr_t AAFConvertEditRate(
 		CvtInt32toInt64(0, destPosition);
 		if ((howRound != kRoundCeiling) && (howRound != kRoundFloor))
 		{
-			RAISE(OM_ERR_INVALID_ROUNDING);
+			RAISE(AAFRESULT_INVALID_ROUNDING);
 		}
 
 		if(FloatFromRational(srcRate) != FloatFromRational(destRate))
@@ -326,7 +327,7 @@ aafErr_t AAFConvertEditRate(
 	}
 	XEND;
 
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -566,7 +567,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 	aLabel.smpte.MobIDMinor = minor;
 
 	*mobID = aLabel.guid;
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 typedef struct
@@ -695,7 +696,7 @@ aafErr_t PvtOffsetToTimecode(
 		*frames = (aafInt16)(offset % frameRate);
 	 }
 
-  return(OM_ERR_NONE);
+  return(AAFRESULT_SUCCESS);
 }
 
 
@@ -744,7 +745,7 @@ aafErr_t PvtTimecodeToOffset(
 	
 	*result = val;
 
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 /************************
