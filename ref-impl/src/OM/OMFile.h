@@ -41,6 +41,12 @@ public:
 
   virtual OMFile* file(void) const;
 
+  // OMReferenceCountable interface
+  //
+  virtual size_t AcquireReference(void);
+  virtual size_t ReleaseReference(void);
+  virtual size_t ReferenceCount(void);
+
 private:
 
   OMStorable* _root;
