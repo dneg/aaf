@@ -73,7 +73,7 @@ test : install
 	cd test && $(MAKE)
 
 .PHONY : check
-check : ref-impl
+check : test
 	cd test/com/ComModTestAAF && $(MAKE) check
 
 #
