@@ -319,8 +319,7 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
       pProp = ps->get (defPid);
     }      
     else if(defPid != PID_InterchangeObject_ObjClass
-      && (defPid != PID_InterchangeObject_Generation)
-      && (defPid != PID_PropertyDefinition_DefaultValue))
+      && (defPid != PID_InterchangeObject_Generation))
     {
       assert (0);
 #if 0
@@ -338,8 +337,7 @@ void ImplAAFMetaDefinition::InitOMProperties (ImplAAFClassDef * pClassDef)
     }
     
   if(defPid != PID_InterchangeObject_ObjClass
-      && (defPid != PID_InterchangeObject_Generation)
-      && (defPid != PID_PropertyDefinition_DefaultValue))
+      && (defPid != PID_InterchangeObject_Generation))
   {
       ImplAAFPropertyDef * pPropDef =
         (ImplAAFPropertyDef*) propDefSP;
