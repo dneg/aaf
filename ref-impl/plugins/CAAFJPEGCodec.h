@@ -361,6 +361,10 @@ private:
 	HRESULT ReadSampleIndex();
 	HRESULT WriteSampleIndex();
 
+	// Helper utility to make sure the given descriptor information is synchronized
+	// with the current information in the codec. Called in CompleteWrite method.
+	void UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper);
+
 private:
 	AAFByteOrder		_nativeByteOrder;
 
