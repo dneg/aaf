@@ -19,14 +19,14 @@ AD_HEAD
 
 
 
-AD_FORWARD_DECLARATION(AAFClassDefinition)
-AD_FORWARD_DECLARATION(EnumAAFClassDefinitions)
-AD_FORWARD_DECLARATION(AAFTypeDefinition)
-AD_FORWARD_DECLARATION(EnumAAFTypeDefinitions)
-AD_FORWARD_DECLARATION(AAFDataDefinition)
-AD_FORWARD_DECLARATION(EnumAAFDataDefinitions)
-AD_FORWARD_DECLARATION(AAFEffectDefinition)
-AD_FORWARD_DECLARATION(EnumAAFEffectDefinitions)
+AD_FORWARD_DECLARATION(AAFClassDef)
+AD_FORWARD_DECLARATION(EnumAAFClassDefs)
+AD_FORWARD_DECLARATION(AAFTypeDef)
+AD_FORWARD_DECLARATION(EnumAAFTypeDefs)
+AD_FORWARD_DECLARATION(AAFDataDef)
+AD_FORWARD_DECLARATION(EnumAAFDataDefs)
+AD_FORWARD_DECLARATION(AAFEffectDef)
+AD_FORWARD_DECLARATION(EnumAAFEffectDefs)
 
 
 
@@ -37,61 +37,61 @@ AD_CLASS_BEGIN
 
 AD_XMETHOD2(LookupClass,
 [in\,ref], objPass, aafUID_t *, pClassID, Class Unique ID,
-[out\,retval], objOut, AAFClassDefinition, ppClassDefinition, Class Definition,
+[out\,retval], objOut, AAFClassDef, ppClassDef, Class Definition,
 Return the class definition with the given id.)
 
 AD_XMETHOD1(RegisterClass,
-[in], objIn, AAFClassDefinition, pClassDefinition, Class Definition,
+[in], objIn, AAFClassDef, pClassDef, Class Definition,
 Add the class definition object to the dictionary.)
 
 AD_XMETHOD1(GetClassDefinitions,
-[out\,retval], objOut, EnumAAFClassDefinitions, ppEnum, Class Definition Enumeration,
+[out\,retval], objOut, EnumAAFClassDefs, ppEnum, Class Definition Enumeration,
 Return an enumerator for all class definitions.)
 
 
 AD_XMETHOD1(RegisterType,
-[in], objIn, AAFTypeDefinition, pTypeDefinition, Type Definition Object,
+[in], objIn, AAFTypeDef, pTypeDef, Type Definition Object,
 Add the type definition object to the header's list of definitions.)
 
 AD_XMETHOD2(LookupType,
 [in\,ref], objPass, aafUID_t *, pTypeID, Type Unique ID,
-[out\,retval], objOut, AAFTypeDefinition, ppTypeDefinition, Type Definition Object,
+[out\,retval], objOut, AAFTypeDef, ppTypeDef, Type Definition Object,
 Return the type definition object with the given id.)
 
 AD_XMETHOD1(GetTypeDefinitions,
-[out\,retval], objOut, EnumAAFTypeDefinitions, ppEnum, Type Definition Enumeration,
+[out\,retval], objOut, EnumAAFTypeDefs, ppEnum, Type Def Enumeration,
 Return an enumerator for all type definitions.)
 
 
 AD_XMETHOD1(RegisterDataDefintion,
-[in], objIn, AAFDataDefinition, pDataDefinition, Data Definition Object,
+[in], objIn, AAFDataDef, pDataDef, Data Definition Object,
 Add the data definition object to the header's list of definitions.
   // @devnote based on omfiDatakindRegister.)
 
 AD_XMETHOD2(LookupDataDefintion,
 [in\,ref], objPass, aafUID_t *, pDataDefintionID, Datak Defintion Unique ID,
-[out\,retval], objOut, AAFDataDefinition, ppDataDefinition, Data Definition Object,
+[out\,retval], objOut, AAFDataDef, ppDataDef, Data Definition Object,
 Return the data definition object with the given id.
   // @devnote based on omfiDatakindLookup.)
 
 AD_XMETHOD1(GetDataDefinitions,
-[out\,retval], objOut, EnumAAFDataDefinitions, ppEnum, Definition Enumeration,
+[out\,retval], objOut, EnumAAFDataDefs, ppEnum, Definition Enumeration,
 Return an enumerator for aff data definitions.)
 
 
 AD_XMETHOD1(RegisterEffectDefinition,
-[in], objIn, AAFEffectDefinition, pEffectDefinition, Effect Definition Object,
+[in], objIn, AAFEffectDef, pEffectDef, Effect Definition Object,
 Add the effect definition object to the header's list of definitions.
   // @devnote based on omfiEffectDefRegister.)
 
 AD_XMETHOD2(LookupEffectDefinition,
 [in\,ref], objPass, aafUID_t *, effectID, Effect Unique ID,
-[out\,retval], objOut, AAFEffectDefinition, ppEffectDefinition, Effect definition object,
+[out\,retval], objOut, AAFEffectDef, ppEffectDef, Effect definition object,
 Return the effect definition object with the given id.
   // @devnote based on omfiEffectDefLookup.)
 
 AD_XMETHOD1(GetEffectDefinitions,
-[out\,retval], objOut, EnumAAFEffectDefinitions, ppEnum, Definition Enumeration,
+[out\,retval], objOut, EnumAAFEffectDefs, ppEnum, Definition Enumeration,
 Return an enumerator for aff effect definitions.)
 
 
