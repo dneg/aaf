@@ -34,6 +34,7 @@ AAFCOMINTERFACESONLY="\
 	AAFComponent2 \
 	AAFCompositionMob2 \
 	AAFDataDef2 \
+	AAFDataDef3 \
 	AAFDictionary2 \
 	AAFDigitalImageDescriptor2 \
 	AAFEndian \

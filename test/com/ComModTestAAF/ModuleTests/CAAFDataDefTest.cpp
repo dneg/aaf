@@ -43,7 +43,7 @@ using namespace std;
 #include "CAAFBuiltinDefs.h"
 
 #define kNumComponents	5
-#define kNumSlots	9 // adjust slot-specific behaviour in test if you change this
+#define kNumSlots	11 // adjust slot-specific behaviour in test if you change this
 
 static const	aafMobID_t	TEST_MobID = 
 {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
@@ -205,6 +205,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 				checkResult(pDictionary2->LookupLegacySoundDataDef(&pSeqDataDef));
 			else if (slot==8)
 				checkResult(pDictionary2->LookupLegacyTimecodeDataDef(&pSeqDataDef));
+			else if (slot==9)
+				checkResult(pDictionary2->LookupPictureWithMatteDataDef(&pSeqDataDef));
+			else if (slot==10)
+				checkResult(pDictionary2->LookupMatteDataDef(&pSeqDataDef));
 
 			checkResult(pSequence->Initialize( pSeqDataDef ));
 			checkResult(pSequence->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
@@ -230,11 +234,27 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							CreateInstance(IID_IAAFComponent, 
 										   (IUnknown **)&pComponent));
 				
+				// This is the structure on the first and sixth slot:
+				// 0 Picture        | PWM | LegPic | Pic | Pic | Pic |
+				// 6 LegacyPic      | PWM | Pic | LegPic | LegPic | LegPic |
+
 				// First component of picture slots gets a picture with matte component
 				// so we can test that picture with matte converts to picture on read
 				if((slot==0 || slot==6) && comp == 0)
 				{
 					checkResult(pComponent->SetDataDef(defs.ddkAAFPictureWithMatte()));
+				}
+				// Second component of picture slots gets a legacy picture component
+				// so we can test that legacy picture is accepted into a picture sequence
+				else if ((slot==0) && comp == 1)
+				{
+					checkResult(pComponent->SetDataDef(defs.ddPicture()));
+				}
+				// Second component of legacy picture slots gets a picture component
+				// so we can test that picture is accepted into a legacy picture sequence
+				else if ((slot==6) && comp == 1)
+				{
+					checkResult(pComponent->SetDataDef(defs.ddkAAFPicture()));
 				}
 				else // otherwise component datadef matches sequence datadef
 				{
@@ -314,6 +334,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFSegment*		pSegment = NULL;
 	IAAFDataDef*		pDataDef = NULL;
 	IAAFDataDef2*		pDataDef2 = NULL;
+	IAAFDataDef3*		pDataDef3 = NULL;
 	IAAFSequence*		pSequence = NULL;
 	IAAFDictionary*		pDictionary = NULL;
 	IEnumAAFComponents*	pCompIter = NULL;
@@ -371,6 +392,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					
 					checkResult(pComp->GetDataDef(&pDataDef));
 					checkResult(pDataDef->QueryInterface(IID_IAAFDataDef2, (void **) &pDataDef2));
+					checkResult(pDataDef->QueryInterface(IID_IAAFDataDef3, (void **) &pDataDef3));
+
+					// This is the structure on the first and sixth slot:
+					// 0 Picture        | PWM | LegPic | Pic | Pic | Pic |
+					// 6 LegacyPic      | PWM | Pic | LegPic | LegPic | LegPic |
 
 					checkResult(pDataDef->IsPictureKind(&testBool));
 					if ((slot==0 || slot==6) && comp!=0) // picture or legacy picture
@@ -380,6 +406,18 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 					checkResult(pDataDef->IsSoundKind(&testBool));
 					if (slot==1 || slot==7) // sound or legacy sound
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+					else
+						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+
+					checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
+					if (slot==9 || ((slot==0 || slot==6) && comp==0)) // picturewithmatte
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+					else
+						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+
+					checkResult(pDataDef->IsMatteKind(&testBool));
+					if (slot==10) // matte
 						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 					else
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
@@ -396,9 +434,17 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 					else
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 
+					checkResult(pDataDef3->IsAuxiliaryKind(&testBool));
+					if (slot==5) // auxiliary
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+					else
+						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 
-					checkResult(pDataDef->IsMatteKind(&testBool));
-					checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
+					checkResult(pDataDef3->IsDescriptiveKind(&testBool));
+					if (slot==4) // descriptive
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+					else
+						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 
 					if (slot==0 || slot==6)
 					{
@@ -412,37 +458,31 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 							checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 							checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
 							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-							checkResult(pDataDef->DoesDataDefConvertTo (defs.ddkAAFPicture(),
-																		&testBool));
-							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-							checkResult(pDataDef->DoesDataDefConvertTo (defs.ddPicture(),
-																		&testBool));
-							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 						}
-						else // Second component is Picture, converts _from_ picture with Matte
+						else
 						{
-							if (slot==0)
-								checkResult(pDataDef->IsDataDefOf(defs.ddkAAFPicture(), &testBool));
-							else
-								checkResult(pDataDef->IsDataDefOf(defs.ddPicture(), &testBool));
-							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
-							checkResult(pDataDef->IsPictureKind(&testBool));
-							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 							checkResult(pDataDef->IsPictureWithMatteKind(&testBool));
 							checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 							checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddkAAFPictureWithMatte(), &testBool));
 							checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 						}
 
+						checkResult(pDataDef->DoesDataDefConvertTo (defs.ddkAAFPicture(),
+																	&testBool));
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+						checkResult(pDataDef->DoesDataDefConvertTo (defs.ddPicture(),
+																	&testBool));
+						checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->DoesDataDefConvertTo (defs.ddkAAFSound(), &testBool));
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
 						checkResult(pDataDef->DoesDataDefConvertFrom (defs.ddkAAFSound(), &testBool));
 						checkExpression(testBool == kAAFFalse, AAFRESULT_TEST_FAILED);
-
 					}
 
 					pComp->Release();
 					pComp = NULL;
+					pDataDef3->Release();
+					pDataDef3 = NULL;
 					pDataDef2->Release();
 					pDataDef2 = NULL;
 					pDataDef->Release();

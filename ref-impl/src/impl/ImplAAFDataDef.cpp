@@ -170,6 +170,67 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDataDef::IsAuxiliaryKind (
+      aafBool *bIsAuxiliaryKind)
+{
+	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFAuxiliary(), bIsAuxiliaryKind));
+}
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDataDef::IsDescriptiveKind (
+      aafBool *bIsDescriptiveKind)
+{
+	return(IsDataDefOf(GetDict()->GetBuiltinDefs()->ddkAAFDescriptive(), bIsDescriptiveKind));
+}
+
+
+AAFRESULT ImplAAFDataDef::IsDataDefEquivalentOf (
+      ImplAAFDataDef * pDataDef,
+      aafBool *bIsDataDefEquivalentOf)
+{
+	if(bIsDataDefEquivalentOf == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	
+	if(pDataDef == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	
+	XPROTECT()
+	{
+		aafBool	result = kAAFFalse;
+		
+		CHECK(IsDataDefOf (pDataDef, &result));
+		if(result == kAAFFalse)
+		{
+			aafBool	thisIsPicture = kAAFFalse;
+			CHECK(IsPictureKind (&thisIsPicture));
+			aafBool	thisIsSound = kAAFFalse;
+			CHECK(IsSoundKind (&thisIsSound));
+			aafBool	thisIsTimecode = kAAFFalse;
+			CHECK(IsTimecodeKind (&thisIsTimecode));
+
+			aafBool	argIsPicture = kAAFFalse;
+			CHECK(pDataDef->IsPictureKind (&argIsPicture));
+			aafBool	argIsSound = kAAFFalse;
+			CHECK(pDataDef->IsSoundKind (&argIsSound));
+			aafBool	argIsTimecode = kAAFFalse;
+			CHECK(pDataDef->IsTimecodeKind (&argIsTimecode));
+
+			if((thisIsPicture == kAAFTrue) && (argIsPicture == kAAFTrue)
+					|| (thisIsSound == kAAFTrue) && (argIsSound == kAAFTrue)
+					|| (thisIsTimecode == kAAFTrue) && (argIsTimecode == kAAFTrue))
+				result = kAAFTrue;
+		}
+
+		*bIsDataDefEquivalentOf = result;
+	}
+	XEXCEPT
+	XEND;
+
+	return AAFRESULT_SUCCESS;
+}
+
+AAFRESULT STDMETHODCALLTYPE
     ImplAAFDataDef::DoesDataDefConvertTo (
       ImplAAFDataDef * pDataDef,
       aafBool *bDoesConvertTo)
@@ -182,18 +243,17 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		aafBool	result;
-		aafUID_t id;
-		CHECK (pDataDef->GetAUID (&id));
+		aafBool	result = kAAFFalse;
 		
-		CHECK(IsDataDefOf (pDataDef, &result));
+		CHECK(IsDataDefEquivalentOf (pDataDef, &result));
 		if(result == kAAFFalse)
 		{
-			aafBool	thisIsPWM;
-			CHECK(IsPictureWithMatteKind (&thisIsPWM));
-			aafBool	argIsPict;
-			CHECK(pDataDef->IsPictureKind (&argIsPict));
-			if((thisIsPWM == kAAFTrue) && (argIsPict == kAAFTrue))
+			aafBool	argIsPicture = kAAFFalse;
+			CHECK(pDataDef->IsPictureKind (&argIsPicture));
+			aafBool	thisIsPictureWithMatte = kAAFFalse;
+			CHECK(IsPictureWithMatteKind (&thisIsPictureWithMatte));
+
+			if((thisIsPictureWithMatte == kAAFTrue) && (argIsPicture == kAAFTrue))
 				result = kAAFTrue;
 		}
 		*bDoesConvertTo = result;
@@ -244,16 +304,16 @@ AAFRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		aafBool	result;
+		aafBool	result = kAAFFalse;
 		
-		CHECK(IsDataDefOf (pDataDef, &result));
+		CHECK(IsDataDefEquivalentOf (pDataDef, &result));
 		if(result == kAAFFalse)
 		{
-			aafBool	thisIsPict;
-			CHECK(IsPictureKind (&thisIsPict));
-			aafBool	argIsPWM;
-			CHECK(pDataDef->IsPictureWithMatteKind (&argIsPWM));
-			if((thisIsPict == kAAFTrue) && (argIsPWM == kAAFTrue))
+			aafBool	thisIsPicture;
+			CHECK(IsPictureKind (&thisIsPicture));
+			aafBool	argIsPictureWithMatte;
+			CHECK(pDataDef->IsPictureWithMatteKind (&argIsPictureWithMatte));
+			if((thisIsPicture == kAAFTrue) && (argIsPictureWithMatte == kAAFTrue))
 				result = kAAFTrue;
 		}
 		*bDoesConvertFrom = result;

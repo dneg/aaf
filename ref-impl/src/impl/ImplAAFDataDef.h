@@ -137,7 +137,35 @@ public:
         // @parm [retval,out] pointer to the return value
         (aafBool *  bIsEdgecodeKind);
 
+  //****************
+  // IsAuxiliaryKind()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsAuxiliaryKind
+        // @parm [retval,out] pointer to the return value
+        (aafBool *  bIsAuxiliaryKind);
+
+  //****************
+  // IsDescriptiveKind()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    IsDescriptiveKind
+        // @parm [retval,out] pointer to the return value
+        (aafBool *  bIsDescriptiveKind);
+
+
 private:
+
+  //****************
+  // IsDataDefEquivalentOf()
+  //
+  AAFRESULT IsDataDefEquivalentOf
+        (// @parm [in,ref] data def to compare against
+         ImplAAFDataDef * pDataDef,
+
+         // @parm [retval,out] pointer to result
+         aafBool *  bIsDataDefEquivalentOf);
+
   // *NOT* reference counted!
   ImplAAFDictionary * _pCachedDict;
 

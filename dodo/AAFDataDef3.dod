@@ -25,15 +25,15 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFDataDef2\
+AAFDataDef3\
 #endm
 #c
 #startm .parent-module 0
 AAFDefObject\
 #endm
 AD_HEAD
-AD_CLASS_UUID(78620cfc, 9b98, 4ff4, 93, 7b, c1, eb, fd, 81, a5, ae)
-AD_DEFAULT_UUID(588951c1, 2f10, 46da, a2, 0d, 6e, 8e, 7a, c6, 96, 3c)
+AD_CLASS_UUID(3e912bbb, c77d, 470e, 8b, e6, e7, 23, 3d, af, c4, 93)
+AD_DEFAULT_UUID(858109c4, cb51, 48ad, 90, 86, a3, fc, fe, 97, 39, fa)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD3(Initialize,
 		   [in\, ref],
@@ -165,5 +165,25 @@ AD_XMETHOD1(IsTimecodeKind,
 		   bIsTimecodeKind,
 		   pointer to the return value, 
 		   Sets return value to TRUE if DataDef is a timecode.)
+
+#c
+#c AAFDataDef3 methods
+#c
+
+AD_XMETHOD1(IsAuxiliaryKind,
+		   [retval\,out],
+		   objPass,
+		   aafBoolean_t *,
+		   bIsAuxiliaryKind,
+		   pointer to the return value, 
+		   Sets return value to TRUE if DataDef is auxiliary.)
+
+AD_XMETHOD1(IsDescriptiveKind,
+		   [retval\,out],
+		   objPass,
+		   aafBoolean_t *,
+		   bIsDescriptiveKind,
+		   pointer to the return value, 
+		   Sets return value to TRUE if DataDef is descriptive.)
 
 AD_XCLASS_END(Concrete, StoredObject)
