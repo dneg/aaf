@@ -95,6 +95,7 @@ AAFRESULT STDMETHODCALLTYPE
   if (! theEnum->_rep)
 	{
 	  theEnum->ReleaseReference();
+	  theEnum = 0;
 	  return AAFRESULT_NOMEMORY;
 	}
 

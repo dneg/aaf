@@ -105,20 +105,23 @@ ImplAAFHeader::~ImplAAFHeader ()
 		ImplAAFIdentification *pIdent = _identificationList.setValueAt(0, i);
 
 		if (pIdent) {
-			pIdent->ReleaseReference();
+		  pIdent->ReleaseReference();
+		  pIdent = 0;
 		}
 	}
 
 	// Release the content storage pointer.
 	ImplAAFContentStorage *contentStorage = _contentStorage.setValue(0);
 	if (contentStorage) {
-		contentStorage->ReleaseReference();
+	  contentStorage->ReleaseReference();
+	  contentStorage = 0;
 	}
 
 	// Release the dictionary pointer.
 	ImplAAFDictionary *dictionary = _dictionary.setValue(0);
 	if (dictionary) {
-		dictionary->ReleaseReference();
+	  dictionary->ReleaseReference();
+	  dictionary = 0;
 	}
 }
 
@@ -457,7 +460,8 @@ AAFRESULT STDMETHODCALLTYPE
 	XEXCEPT
 	{
 		if (theEnum)
-			theEnum->ReleaseReference();
+		  theEnum->ReleaseReference();
+		theEnum = 0;
 		return(XCODE());
 	}
 	XEND;
@@ -682,7 +686,9 @@ ImplAAFDictionary *ImplAAFHeader::GetDictionary()
   assert(AAFRESULT_SUCCESS == ImplAAFObject::GetDictionary(&pDictionary));
   assert(pDictionary);
   assert(pDictionary == result);
-  assert(0 != pDictionary->ReleaseReference());
+  aafUInt32 refCount = pDictionary->ReleaseReference();
+  pDictionary = 0;
+  assert(0 != refCount);
 
   return(result);
 }
