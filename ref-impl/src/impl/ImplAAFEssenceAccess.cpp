@@ -329,7 +329,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 			plug = NULL;
 			
 			CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
-			delete nameBuf;
+			delete [] nameBuf;
 			nameBuf = NULL;			
 			container->Release();
 			container = NULL;
@@ -406,7 +406,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		  implData->ReleaseReference();
 		implData = 0;
 		if(nameBuf != NULL)
-			delete nameBuf;
+			delete [] nameBuf;
 		if(edStream != NULL)
 			edStream->Release();
 		if(iAccess != NULL)
@@ -627,7 +627,7 @@ AAFRESULT STDMETHODCALLTYPE
 				plug = NULL;
 				
 				CHECK(container->CreateEssenceStream(nameBuf, &fileMobUID, &_stream));
-				delete nameBuf;
+				delete [] nameBuf;
 				nameBuf = NULL;			
 				container->Release();
 				container = NULL;
@@ -706,7 +706,7 @@ AAFRESULT STDMETHODCALLTYPE
 		  implData->ReleaseReference();
 		implData = 0;
 		if(nameBuf != NULL)
-			delete nameBuf;
+			delete [] nameBuf;
 		if(edStream != NULL)
 			edStream->Release();
 		if(iAccess != NULL)
@@ -800,7 +800,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
 		CHECK(plugins->MakeCodecFromEssenceDesc(essenceDescClass, &_codec));
-
+	
+		// Inialize the codec
+		CHECK(_codec->SetCompressionEnabled((kSDKCompressionEnable == compEnable) ? AAFTrue : AAFFalse));
 
 		iUnk = static_cast<IUnknown *> (this->GetContainer());
 		CHECK(iUnk->QueryInterface(IID_IAAFEssenceAccess, (void **)&iAccess));
@@ -938,7 +940,7 @@ AAFRESULT STDMETHODCALLTYPE
 					plug = NULL;
 				}
 
-				delete nameBuf;
+				delete [] nameBuf;
 				nameBuf = NULL;
 				pLoc->ReleaseReference();
 				pLoc = NULL;
@@ -1274,7 +1276,7 @@ AAFRESULT STDMETHODCALLTYPE
 					plug = NULL;
 				}
 
-				delete nameBuf;
+				delete [] nameBuf;
 				nameBuf = NULL;
 				pLoc->ReleaseReference();
 				pLoc = NULL;
