@@ -28,6 +28,7 @@
 #include "AAFResult.h"
 
 #include "CAAFBuiltinDefs.h"
+#include "AAFDefUIDs.h"
 #include "ModuleTest.h"
 
 using namespace std;
@@ -96,16 +97,16 @@ inline void checkExpression(bool expression, HRESULT r)
 
 // Required function prototype.
 extern "C" HRESULT CAAFPCMDescriptor_test(
-    testMode_t mode,
-    aafUID_t fileKind,
-//    testRawStorageType_t rawStorageType,
-    aafProductIdentification_t productID);
+    testMode_t mode);
+
+static HRESULT OpenAAFFile(
+    aafWChar*           pFileName,
+    aafMediaOpenMode_t  mode,
+    IAAFFile**          ppFile,
+    IAAFHeader**        ppHeader);
 
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName,
-    aafUID_constref fileKind,
-//    testRawStorageType_t rawStorageType,
-    aafProductIdentification_constref productID);
+    aafWChar * pFileName);
 
 static HRESULT ReadAAFFile(
     aafWChar * pFileName);
@@ -120,10 +121,7 @@ static HRESULT Test_IAAFPCMDescriptor( IAAFPCMDescriptor*, testMode_t );
 // The public entry for this module test,
 //
 HRESULT CAAFPCMDescriptor_test(
-    testMode_t mode,
-    aafUID_t fileKind,
-//    testRawStorageType_t rawStorageType,
-    aafProductIdentification_t productID )
+    testMode_t mode )
 {
     // None of the tests are implemented. Do not run them to
     // avoid unnecessary exceptions.
@@ -133,14 +131,13 @@ HRESULT CAAFPCMDescriptor_test(
 
     HRESULT  hr = AAFRESULT_NOT_IMPLEMENTED;
     const size_t fileNameBufLen = 128;
-    aafWChar pFileName[ fileNameBufLen ] = L"";
-    //GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
+    aafWChar* pFileName = L"AAFPCMDescriptorTest.aaf";
 
 
     try
     {
         if(mode == kAAFUnitTestReadWrite)
-            ; //hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
+            hr = CreateAAFFile(pFileName);
         else
             hr = AAFRESULT_SUCCESS;
         if(hr == AAFRESULT_SUCCESS)
@@ -157,12 +154,86 @@ HRESULT CAAFPCMDescriptor_test(
     return hr;
 }
 
-#if 0
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+
+
+static HRESULT OpenAAFFile(
+    aafWChar*           pFileName,
+    aafMediaOpenMode_t  mode,
+    IAAFFile**          ppFile,
+    IAAFHeader**        ppHeader)
+{
+    aafProductIdentification_t    ProductInfo;
+    HRESULT                        hr = AAFRESULT_SUCCESS;
+
+    aafProductVersion_t v;
+    v.major = 1;
+    v.minor = 0;
+    v.tertiary = 0;
+    v.patchLevel = 0;
+    v.type = kAAFVersionUnknown;
+    ProductInfo.companyName = L"AAF Developers Desk";
+    ProductInfo.productName = L"AAFSoundDescriptor Test";
+    ProductInfo.productVersion = &v;
+    ProductInfo.productVersionString = NULL;
+    ProductInfo.productID = UnitTestProductID;
+    ProductInfo.platform = NULL;
+
+    *ppFile = NULL;
+
+    switch (mode)
+    {
+        case kAAFMediaOpenReadOnly:
+            hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
+            break;
+
+        case kAAFMediaOpenAppend:
+            hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
+            break;
+
+        default:
+            hr = AAFRESULT_TEST_FAILED;
+            break;
+    }
+
+    if (FAILED(hr))
+    {
+        if (*ppFile)
+        {
+            (*ppFile)->Release();
+            *ppFile = NULL;
+        }
+        return hr;
+    }
+  
+    hr = (*ppFile)->GetHeader(ppHeader);
+    if (FAILED(hr))
+    {
+        (*ppFile)->Release();
+        *ppFile = NULL;
+        return hr;
+    }
+     
+    return hr;
+}
+
+
+
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName,
-    aafUID_constref fileKind,
-    testRawStorageType_t rawStorageType,
-    aafProductIdentification_constref productID)
+    aafWChar * pFileName)
 {
     IAAFFile*               pFile = 0;
     IAAFHeader*             pHeader = 0;
@@ -181,15 +252,10 @@ static HRESULT CreateAAFFile(
 
 
         // Create the test file
-        checkResult(CreateTestFile( pFileName,
-                                    fileKind,
-                                    rawStorageType,
-                                    productID,
-                                    &pFile ));
+        checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader));
 
 
         // Get the AAF Dictionary
-        checkResult(pFile->GetHeader(&pHeader));
         checkResult(pHeader->GetDictionary(&pDictionary));
         CAAFBuiltinDefs  defs (pDictionary);
 
@@ -278,7 +344,7 @@ static HRESULT CreateAAFFile(
     return hr;
 }
 
-#endif
+
 
 static HRESULT ReadAAFFile(
     aafWChar * pFileName )
@@ -1144,8 +1210,8 @@ static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeTimestamp(
             hr = pPCMDesc->GetPeakEnvelopeTimestamp( &peakEnvelopeTimestamp );
             checkExpression( hr == AAFRESULT_PROP_NOT_PRESENT,
                              AAFRESULT_TEST_FAILED );
-            //checkExpression( peakEnvelopeTimestamp == bogusPeakEnvelopeTimestamp,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( peakEnvelopeTimestamp == bogusPeakEnvelopeTimestamp,
+                             AAFRESULT_TEST_FAILED );
 
 
             // GetPeakEnvelopeTimestamp() should fail if function
@@ -1154,8 +1220,8 @@ static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeTimestamp(
             hr = pPCMDesc->GetPeakEnvelopeTimestamp( 0 );
             checkExpression( hr == AAFRESULT_NULL_PARAM,
                              AAFRESULT_TEST_FAILED );
-            //checkExpression( peakEnvelopeTimestamp == bogusPeakEnvelopeTimestamp,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( peakEnvelopeTimestamp == bogusPeakEnvelopeTimestamp,
+                             AAFRESULT_TEST_FAILED );
 
 
             // SetPeakEnvelopeTimestamp() should always succeed
@@ -1170,8 +1236,8 @@ static HRESULT Test_IAAFPCMDescriptor_PeakEnvelopeTimestamp(
             aafTimeStamp_t  peakEnvelopeTimestamp = bogusPeakEnvelopeTimestamp;
             hr = pPCMDesc->GetPeakEnvelopeTimestamp( &peakEnvelopeTimestamp );
             checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
-            //checkExpression( peakEnvelopeTimestamp == gTestData.peakEnvelopeTimestamp,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( peakEnvelopeTimestamp == gTestData.peakEnvelopeTimestamp,
+                             AAFRESULT_TEST_FAILED );
         }
 
 

@@ -57,11 +57,86 @@ inline void checkExpression(bool expression, HRESULT r)
 }
 
 
-#if 0
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+
+
+static HRESULT OpenAAFFile(
+    aafWChar*           pFileName,
+    aafMediaOpenMode_t  mode,
+    IAAFFile**          ppFile,
+    IAAFHeader**        ppHeader)
+{
+    aafProductIdentification_t    ProductInfo;
+    HRESULT                        hr = AAFRESULT_SUCCESS;
+
+    aafProductVersion_t v;
+    v.major = 1;
+    v.minor = 0;
+    v.tertiary = 0;
+    v.patchLevel = 0;
+    v.type = kAAFVersionUnknown;
+    ProductInfo.companyName = L"AAF Developers Desk";
+    ProductInfo.productName = L"AAFSoundDescriptor Test";
+    ProductInfo.productVersion = &v;
+    ProductInfo.productVersionString = NULL;
+    ProductInfo.productID = UnitTestProductID;
+    ProductInfo.platform = NULL;
+
+    *ppFile = NULL;
+
+    switch (mode)
+    {
+        case kAAFMediaOpenReadOnly:
+            hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
+            break;
+
+        case kAAFMediaOpenAppend:
+            hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
+            break;
+
+        default:
+            hr = AAFRESULT_TEST_FAILED;
+            break;
+    }
+
+    if (FAILED(hr))
+    {
+        if (*ppFile)
+        {
+            (*ppFile)->Release();
+            *ppFile = NULL;
+        }
+        return hr;
+    }
+  
+    hr = (*ppFile)->GetHeader(ppHeader);
+    if (FAILED(hr))
+    {
+        (*ppFile)->Release();
+        *ppFile = NULL;
+        return hr;
+    }
+     
+    return hr;
+}
+
+
+
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName,
-    aafUID_constref fileKind,
-    aafProductIdentification_constref productID)
+    aafWChar * pFileName )
 {
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
@@ -77,66 +152,63 @@ static HRESULT CreateAAFFile(
 	// Remove the previous test file if any.
 	RemoveTestFile(pFileName);
 
-	hr = CreateTestFile( pFileName, fileKind, rawStorageType, productID, &pFile );
+	hr = OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader);
 
 	if (AAFRESULT_SUCCESS == hr)
 	{
-		hr = pFile->GetHeader(&pHeader);
-		if (AAFRESULT_SUCCESS == hr)
+	  hr = pHeader->GetDictionary(&pDictionary);
+	  if (AAFRESULT_SUCCESS == hr)
 		{
-		  hr = pHeader->GetDictionary(&pDictionary);
-		  if (AAFRESULT_SUCCESS == hr)
-			{
-				// Create a source mob
+		// Create a source mob
 
-			  CAAFBuiltinDefs defs (pDictionary);
-				hr = defs.cdSourceMob()->
-				  CreateInstance(IID_IAAFSourceMob, 
-								 (IUnknown **)&pSourceMob);
+		  CAAFBuiltinDefs defs (pDictionary);
+			hr = defs.cdSourceMob()->
+			  CreateInstance(IID_IAAFSourceMob, 
+							 (IUnknown **)&pSourceMob);
+			if (AAFRESULT_SUCCESS == hr)
+			{
+				hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
 				if (AAFRESULT_SUCCESS == hr)
 				{
-					hr = pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob);
-					if (AAFRESULT_SUCCESS == hr)
+					pMob->SetMobID(TEST_MobID);
+					pMob->SetName(L"ImportDescriptorTest");
+					hr = defs.cdImportDescriptor()->
+					  CreateInstance(IID_IAAFImportDescriptor, 
+									 (IUnknown **)&pImportDesc);		
+ 					if (AAFRESULT_SUCCESS == hr)
 					{
-						pMob->SetMobID(TEST_MobID);
-						pMob->SetName(L"ImportDescriptorTest");
-						hr = defs.cdImportDescriptor()->
-						  CreateInstance(IID_IAAFImportDescriptor, 
-										 (IUnknown **)&pImportDesc);		
- 						if (AAFRESULT_SUCCESS == hr)
-						{
-							hr = pImportDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
-							if (AAFRESULT_SUCCESS == hr)
-							{
-								hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
-								pEssDesc->Release();
-								pEssDesc = NULL;
-							}
-							pImportDesc->Release();
-							pImportDesc = NULL;
-						}
-
-						// Add the MOB to the file
+						hr = pImportDesc->QueryInterface(IID_IAAFEssenceDescriptor, (void **)&pEssDesc);
 						if (AAFRESULT_SUCCESS == hr)
-							hr = pHeader->AddMob(pMob);
-
-						pMob->Release();
-						pMob = NULL;
+						{
+							hr = pSourceMob->SetEssenceDescriptor(pEssDesc);
+							pEssDesc->Release();
+							pEssDesc = NULL;
+						}
+						pImportDesc->Release();
+						pImportDesc = NULL;
 					}
-					pSourceMob->Release();
-					pSourceMob = NULL;
-        }
 
-				pDictionary->Release();
-				pDictionary = NULL;
+					// Add the MOB to the file
+					if (AAFRESULT_SUCCESS == hr)
+						hr = pHeader->AddMob(pMob);
+
+					pMob->Release();
+					pMob = NULL;
+				}
+				pSourceMob->Release();
+				pSourceMob = NULL;
 			}
-			pHeader->Release();
-			pHeader = NULL;
+
+			pDictionary->Release();
+			pDictionary = NULL;
 		}
+		pHeader->Release();
+		pHeader = NULL;
+
 		pFile->Save();
 		pFile->Close();
 
-    pFile->Release();
+		pFile->Release();
 		pFile = NULL;
 	}
 
@@ -144,7 +216,7 @@ static HRESULT CreateAAFFile(
 
 	return hr;
 }
-#endif
+
 static HRESULT ReadAAFFile(aafWChar * pFileName)
 {
 	IAAFFile *					pFile = NULL;
@@ -221,23 +293,18 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 }
 
 extern "C" HRESULT CAAFImportDescriptor_test(
-    testMode_t mode,
-    aafUID_t fileKind,
-    aafProductIdentification_t productID);
+    testMode_t mode);
 extern "C" HRESULT CAAFImportDescriptor_test(
-    testMode_t mode,
-    aafUID_t fileKind,
-    aafProductIdentification_t productID)
+    testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
 	const size_t fileNameBufLen = 128;
-	aafWChar pFileName[ fileNameBufLen ] = L"";
-	//GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
+	aafWChar* pFileName = L"AAFImportDescriptorTest.aaf";
 
 	try
 	{
 		if(mode == kAAFUnitTestReadWrite)
-			;//hr = CreateAAFFile(pFileName, fileKind, productID);
+			hr = CreateAAFFile(pFileName);
 		else
 			hr = AAFRESULT_SUCCESS;
 		if (hr == AAFRESULT_SUCCESS)

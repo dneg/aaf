@@ -27,6 +27,7 @@
 #include "AAFResult.h"
 
 #include "CAAFBuiltinDefs.h"
+#include "AAFDefUIDs.h"
 #include "ModuleTest.h"
 
 using namespace std;
@@ -86,17 +87,19 @@ inline void checkExpression(bool expression, HRESULT r)
 
 
 // Required function prototype.
-extern "C" HRESULT CAAFSoundDescriptor_test(
-    testMode_t mode,
-    aafUID_t fileKind,
-//    testRawStorageType_t rawStorageType,
-    aafProductIdentification_t productID);
+extern "C" HRESULT CAAFSoundDescriptor_test(testMode_t mode);
+
+static void RemoveTestFile(
+    const wchar_t* pFileName);
+
+static HRESULT OpenAAFFile(
+    aafWChar*           pFileName,
+    aafMediaOpenMode_t  mode,
+    IAAFFile**          ppFile,
+    IAAFHeader**        ppHeader);
 
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName,
-    aafUID_constref fileKind,
-//    testRawStorageType_t rawStorageType,
-    aafProductIdentification_constref productID);
+    aafWChar * pFileName);
 
 static HRESULT ReadAAFFile(
     aafWChar * pFileName);
@@ -141,21 +144,16 @@ bool operator !=( const aafUID_t uid1, const aafUID_t uid2 );
 // The public entry for this module test,
 //
 HRESULT CAAFSoundDescriptor_test(
-    testMode_t mode,
-    aafUID_t fileKind,
-//    testRawStorageType_t rawStorageType,
-    aafProductIdentification_t productID )
+    testMode_t mode )
 {
     HRESULT  hr = AAFRESULT_NOT_IMPLEMENTED;
-    const size_t fileNameBufLen = 128;
-    aafWChar pFileName[ fileNameBufLen ] = L"";
-//    GenerateTestFileName( productID.productName, fileKind, fileNameBufLen, pFileName );
+    aafWChar* pFileName = L"AAFSoundDescriptorTest.aaf";
 
 
     try
     {
         if(mode == kAAFUnitTestReadWrite)
-            ; //hr = CreateAAFFile(pFileName, fileKind, rawStorageType, productID);
+            hr = CreateAAFFile(pFileName);
         else
             hr = AAFRESULT_SUCCESS;
         if(hr == AAFRESULT_SUCCESS)
@@ -173,12 +171,86 @@ HRESULT CAAFSoundDescriptor_test(
 }
 
 
-#if 0
+
+// Cross-platform utility to delete a file.
+static void RemoveTestFile(const wchar_t* pFileName)
+{
+  const size_t kMaxFileName = 512;
+  char cFileName[kMaxFileName];
+
+  size_t status = wcstombs(cFileName, pFileName, kMaxFileName);
+  if (status != (size_t)-1)
+  { // delete the file.
+    remove(cFileName);
+  }
+}
+
+
+
+static HRESULT OpenAAFFile(
+    aafWChar*           pFileName,
+    aafMediaOpenMode_t  mode,
+    IAAFFile**          ppFile,
+    IAAFHeader**        ppHeader)
+{
+    aafProductIdentification_t    ProductInfo;
+    HRESULT                        hr = AAFRESULT_SUCCESS;
+
+    aafProductVersion_t v;
+    v.major = 1;
+    v.minor = 0;
+    v.tertiary = 0;
+    v.patchLevel = 0;
+    v.type = kAAFVersionUnknown;
+    ProductInfo.companyName = L"AAF Developers Desk";
+    ProductInfo.productName = L"AAFSoundDescriptor Test";
+    ProductInfo.productVersion = &v;
+    ProductInfo.productVersionString = NULL;
+    ProductInfo.productID = UnitTestProductID;
+    ProductInfo.platform = NULL;
+
+    *ppFile = NULL;
+
+    switch (mode)
+    {
+        case kAAFMediaOpenReadOnly:
+            hr = AAFFileOpenExistingRead(pFileName, 0, ppFile);
+            break;
+
+        case kAAFMediaOpenAppend:
+            hr = AAFFileOpenNewModify(pFileName, 0, &ProductInfo, ppFile);
+            break;
+
+        default:
+            hr = AAFRESULT_TEST_FAILED;
+            break;
+    }
+
+    if (FAILED(hr))
+    {
+        if (*ppFile)
+        {
+            (*ppFile)->Release();
+            *ppFile = NULL;
+        }
+        return hr;
+    }
+  
+    hr = (*ppFile)->GetHeader(ppHeader);
+    if (FAILED(hr))
+    {
+        (*ppFile)->Release();
+        *ppFile = NULL;
+        return hr;
+    }
+     
+    return hr;
+}
+
+
+
 static HRESULT CreateAAFFile(
-    aafWChar * pFileName,
-    aafUID_constref fileKind,
-    testRawStorageType_t rawStorageType,
-    aafProductIdentification_constref productID)
+    aafWChar * pFileName)
 {
     IAAFFile*               pFile = 0;
     IAAFHeader*             pHeader = 0;
@@ -198,15 +270,10 @@ static HRESULT CreateAAFFile(
 
 
         // Create the test file
-        checkResult(CreateTestFile( pFileName,
-                                    fileKind,
-                                    rawStorageType,
-                                    productID,
-                                    &pFile ));
+        checkResult(OpenAAFFile(pFileName, kAAFMediaOpenAppend, &pFile, &pHeader));
 
 
         // Get the AAF Dictionary
-        checkResult(pFile->GetHeader(&pHeader));
         checkResult(pHeader->GetDictionary(&pDictionary));
         CAAFBuiltinDefs  defs (pDictionary);
 
@@ -299,7 +366,7 @@ static HRESULT CreateAAFFile(
 
     return hr;
 }
-#endif
+
 
 
 static HRESULT ReadAAFFile(
@@ -388,12 +455,12 @@ static HRESULT Test_IAAFSoundDescriptor_Uninitialized( IAAFSoundDescriptor* pSou
         static const aafUID_t bogusCompressionID_2 =
             { 0x8629080b, 0xd506, 0x4692,
             { 0xab, 0xfa, 0x6d, 0x31, 0x77, 0x9f, 0x8a, 0x8c } };
-        //assert( bogusCompressionID_1 != bogusCompressionID_2 );
+        assert( bogusCompressionID_1 != bogusCompressionID_2 );
 
         aafUID_t  compressionID = bogusCompressionID_2;
         hr = pSoundDesc->GetCompression( &compressionID );
         checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        //checkExpression( compressionID==bogusCompressionID_2, AAFRESULT_TEST_FAILED );
+        checkExpression( compressionID==bogusCompressionID_2, AAFRESULT_TEST_FAILED );
 
 
 
@@ -415,11 +482,11 @@ static HRESULT Test_IAAFSoundDescriptor_Uninitialized( IAAFSoundDescriptor* pSou
         checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
 
         const aafRational_t  bogusRate_2 = { 4336, 65 };
-        //assert( bogusRate_1 != bogusRate_2 );
+        assert( bogusRate_1 != bogusRate_2 );
         aafRational_t  audioSamplingRate = bogusRate_2;
         hr = pSoundDesc->GetAudioSamplingRate( &audioSamplingRate );
         checkExpression( hr == AAFRESULT_NOT_INITIALIZED, AAFRESULT_TEST_FAILED );
-        //checkExpression( audioSamplingRate==bogusRate_2, AAFRESULT_TEST_FAILED );
+        checkExpression( audioSamplingRate==bogusRate_2, AAFRESULT_TEST_FAILED );
 
 
 
@@ -557,8 +624,8 @@ static HRESULT Test_IAAFSoundDescriptor_Compression(
             hr = pSoundDesc->GetCompression( &compressionID );
             checkExpression( hr == AAFRESULT_PROP_NOT_PRESENT,
                              AAFRESULT_TEST_FAILED );
-            //checkExpression( compressionID == bogusCompressionID,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( compressionID == bogusCompressionID,
+                             AAFRESULT_TEST_FAILED );
 
 
             // GetCompression() should fail if function arguments are invalid.
@@ -566,8 +633,8 @@ static HRESULT Test_IAAFSoundDescriptor_Compression(
             hr = pSoundDesc->GetCompression( 0 );
             checkExpression( hr == AAFRESULT_NULL_PARAM,
                              AAFRESULT_TEST_FAILED );
-            //checkExpression( compressionID == bogusCompressionID,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( compressionID == bogusCompressionID,
+                             AAFRESULT_TEST_FAILED );
 
 
             // SetCompression() should always succeed
@@ -582,8 +649,8 @@ static HRESULT Test_IAAFSoundDescriptor_Compression(
             aafUID_t  compressionID = bogusCompressionID;
             hr = pSoundDesc->GetCompression( &compressionID );
             checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
-            //checkExpression( compressionID == gTestData.compressionID,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( compressionID == gTestData.compressionID,
+                             AAFRESULT_TEST_FAILED );
         }
 
 
@@ -687,8 +754,8 @@ static HRESULT Test_IAAFSoundDescriptor_AudioSamplingRate(
             hr = pSoundDesc->GetAudioSamplingRate( &audioSamplingRate );
             checkExpression( hr == AAFRESULT_SUCCESS,
                              AAFRESULT_TEST_FAILED );
-            //checkExpression( audioSamplingRate != bogusAudioSamplingRate,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( audioSamplingRate != bogusAudioSamplingRate,
+                             AAFRESULT_TEST_FAILED );
 
 
             // GetAudioSamplingRate() should fail if function
@@ -697,8 +764,8 @@ static HRESULT Test_IAAFSoundDescriptor_AudioSamplingRate(
             hr = pSoundDesc->GetAudioSamplingRate( 0 );
             checkExpression( hr == AAFRESULT_NULL_PARAM,
                              AAFRESULT_TEST_FAILED );
-            //checkExpression( audioSamplingRate == bogusAudioSamplingRate,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( audioSamplingRate == bogusAudioSamplingRate,
+                             AAFRESULT_TEST_FAILED );
 
 
             // SetAudioSamplingRate() should always succeed
@@ -713,8 +780,8 @@ static HRESULT Test_IAAFSoundDescriptor_AudioSamplingRate(
             aafRational_t  audioSamplingRate = bogusAudioSamplingRate;
             hr = pSoundDesc->GetAudioSamplingRate( &audioSamplingRate );
             checkExpression( hr == AAFRESULT_SUCCESS, AAFRESULT_TEST_FAILED );
-            //checkExpression( audioSamplingRate == gTestData.samplingRate,
-            //                 AAFRESULT_TEST_FAILED );
+            checkExpression( audioSamplingRate == gTestData.samplingRate,
+                             AAFRESULT_TEST_FAILED );
         }
 
 
