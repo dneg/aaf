@@ -324,7 +324,7 @@ AAFRESULT STDMETHODCALLTYPE
 		aafUInt32 count_of_zeroes = 0;
 
 		//inner loop - chunking in size of elementSize
-		for (aafUInt32 i=0; i<elementSize; i++)
+		for (aafUInt32 i=0; i<elementSize; i++, pNewData++)
 			if (*pNewData == 0)
 				count_of_zeroes++;
 		
@@ -335,8 +335,6 @@ AAFRESULT STDMETHODCALLTYPE
 		//otherwise, increment new element count, and move on
 		newElemCount++;
 		
-		//incr pNewData by elementSize
-		pNewData += elementSize;
 	}//while
 	
 	
