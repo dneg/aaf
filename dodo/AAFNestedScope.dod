@@ -40,7 +40,7 @@ AD_FORWARD_DECLARATION(EnumAAFSegments)
 AD_CLASS_UUID(e44be452, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(e44be451, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_XMETHOD1(AppendSegment,
 			[in],
@@ -66,4 +66,4 @@ AD_XMETHOD1(GetSlots,
 			Slots - segment list  enumeration,
 			Returns an enumerator for aaf segment.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

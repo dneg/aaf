@@ -28,7 +28,7 @@ AD_FORWARD_DECLARATION(EnumAAFComponents)
 AD_CLASS_UUID(66e855f1, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(66e855f0, 2bc2, 11d2, bf, aa, 00, 60, 97, 11, 62, 12)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_XMETHOD1(Initialize,
 			[in],
 			objPass,
@@ -182,4 +182,4 @@ AD_XMETHOD1(EnumComponents,
 
 AD_OVERRIDE(.method-SegmentOffsetToTC)
 AD_OVERRIDE(.method-SegmentTCToOffset)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, StoredObject)

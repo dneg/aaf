@@ -28,7 +28,7 @@ AD_CLASS_UUID(D8000381, 498E, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
 
 AD_DEFAULT_UUID(d8000382, 498e, 11d2, 84, 1B, 00, 60, 08, 32, AC, B8)
 
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 
 AD_XMETHOD1(NextOne,
 			[out\,retval], objOut, AAFDataDef, ppDataDef, The Next DataDefinition,
@@ -67,4 +67,4 @@ AD_XMETHOD1(Clone,
   // at a later time.
   // @comm The caller must release this new enumerator separately from the first enumerator.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)

@@ -3,7 +3,7 @@ AAFEssenceFormat\
 #endm
 #c
 #startm .parent-module 0
-AAFObject\
+AAFRoot\
 #endm
 #c
 AD_HEAD
@@ -32,7 +32,7 @@ AD_IDL(//
 AD_CLASS_UUID(34C2DC81, 904C, 11d2, 80, 88, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(34C2DC82, 904C, 11d2, 80, 88, 00, 60, 08, 14, 3E, 6F)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 AD_METHOD3(AddFormatSpecifier,
 			[in],aafUID_t,essenceFormatCode,From aaddefuids.h,
 			[in],aafInt32,valueSize,Size of preallocated buffer,
@@ -54,4 +54,4 @@ AD_METHOD4(GetFormatSpecifier,
 			//@comm The actual number of bytes read is returned in
 			// bytesRead.  If the buffer is not big enough to return the entire
 			// value, an error is returned.
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)
