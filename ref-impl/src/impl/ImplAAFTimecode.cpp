@@ -158,7 +158,7 @@ AAFRESULT STDMETHODCALLTYPE
     }
   XEND;
 
-  return(OM_ERR_NONE);
+  return(AAFRESULT_SUCCESS);
 }
 
   // Override from AAFSegment
@@ -197,7 +197,7 @@ AAFRESULT STDMETHODCALLTYPE
 	   if (pTimecode->startFrame < startTC.startFrame) 
 	   {
 			  /* out of left bound */
-		    RAISE(OM_ERR_BADSAMPLEOFFSET);
+		    RAISE(AAFRESULT_BADSAMPLEOFFSET);
 	   }
 	   else
 	   {
@@ -206,7 +206,7 @@ AAFRESULT STDMETHODCALLTYPE
 		    if (pTimecode->startFrame > (startTC.startFrame + len))
 		    {
 					/* out of right bound */
-			     RAISE(OM_ERR_BADSAMPLEOFFSET);
+			     RAISE(AAFRESULT_BADSAMPLEOFFSET);
 		    }
 	   }
 	 }
@@ -215,7 +215,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
   XEND;
   
-  return(OM_ERR_NONE);
+  return(AAFRESULT_SUCCESS);
 
 }
 
@@ -227,7 +227,7 @@ aafErr_t ImplAAFTimecode::OffsetToTimecodeClip(aafPosition_t offset, ImplAAFTime
 		return(AAFRESULT_NULL_PARAM);
 	*result = this;
 	CvtInt32toInt64(0, tcStartPos);
-	return(OM_ERR_NONE);
+	return(AAFRESULT_SUCCESS);
 }
 
 
