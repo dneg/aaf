@@ -76,12 +76,9 @@
 
 //#include "masterhd.h"
 #include <string.h>
-#if defined(macintosh) || defined(_MAC)
-#include <wstring.h>
-#endif
 #include <ctype.h>
 #include <stdlib.h> 
-
+#include <wchar.h>
 
 //#include "omPublic.h"
 #include "AAFTypes.h"

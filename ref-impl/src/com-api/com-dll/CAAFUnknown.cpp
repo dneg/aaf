@@ -112,7 +112,7 @@ HRESULT CAAFUnknown::InternalQueryInterface
     *ppvObjOut = NULL;
 
     // We only support the IID_IUnknown interface 
-    if (riid == IID_IUnknown) 
+    if (IsEqualIID(riid, IID_IUnknown))
     { 
         *ppvObjOut = static_cast<IUnknown *>(GetPrivateUnknown()); 
         ((IUnknown *)*ppvObjOut)->AddRef();
