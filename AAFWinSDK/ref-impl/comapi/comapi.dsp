@@ -333,11 +333,11 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaGroupTest.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\CAAFMediaTapeDescriptor.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFTapeDescriptor.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFMediaTapeDescriptorTest.cpp"
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFTapeDescriptorTest.cpp"
 # End Source File
 # Begin Source File
 

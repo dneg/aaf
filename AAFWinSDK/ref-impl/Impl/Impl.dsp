@@ -212,7 +212,7 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMediaGroup.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFMediaTapeDescriptor.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplAAFTapeDescriptor.cpp"
 # End Source File
 # Begin Source File
 
