@@ -648,6 +648,15 @@ static void ReadAAFFile(aafWChar * pFileName,
   IAAFHeaderSP spHeader;
   check (spFile->GetHeader(&spHeader));
 
+  IAAFDictionarySP spDictionary;
+  check (spHeader->GetDictionary(&spDictionary));
+   
+  // This registration needs to be done, even though offsets were
+  // registered when file was written.  Note that if it is to be done
+  // at all, it has to be done before any attempt to read any object
+  // containing a property of this type is done.
+  check (registerRational16StructOffsets (spDictionary));
+
   IAAFMobSP spMob;
   check (spHeader->LookupMob (createdMobID, &spMob));
 
@@ -671,13 +680,6 @@ static void ReadAAFFile(aafWChar * pFileName,
   IAAFFillerSP spFiller;
   check (spSegment->QueryInterface(IID_IAAFFiller,
 								   (void**)&spFiller));
-
-  IAAFDictionarySP spDictionary;
-  check (spHeader->GetDictionary(&spDictionary));
-   
-  // This registration needs to be done, even though offsets were
-  // registered when file was written.
-  check (registerRational16StructOffsets (spDictionary));
 
   // We do the checking in this function.
   check (checkStinkyFiller (spDictionary, spFiller));
