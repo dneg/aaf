@@ -591,10 +591,7 @@ AAFRESULT
     if (ident.productVersionString == 0) {
       ident.productVersionString = L"Unknown version";
     }
-    if (ident.platform == 0) {
-      ident.platform = L"Windows NT";
-    }
-    
+
     // Get the dictionary so that we can use the factory
     // method to create the identification.
     ImplAAFDictionary *pDictionary = GetDictionary();
