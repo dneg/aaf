@@ -251,6 +251,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   if (pSourceMob)
     pSourceMob->Release();
 
+  if (pDictionary)
+    pDictionary->Release();
+
 	if (pHeader)
     pHeader->Release();
 
@@ -332,6 +335,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 
   if (pMob)
     pMob->Release();
+
+  if (pMobIter)
+    pMobIter->Release();
 
   if (pSourceMob)
     pSourceMob->Release();
