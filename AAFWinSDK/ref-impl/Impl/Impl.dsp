@@ -94,6 +94,10 @@ SOURCE="..\..\..\ref-impl\aaflib\aaflibwin32.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\impl\AAFObjectModel.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\impl\aafTable.cpp"
 # End Source File
 # Begin Source File
