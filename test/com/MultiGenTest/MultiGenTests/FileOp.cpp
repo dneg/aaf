@@ -42,18 +42,6 @@ class KindMap {
 public:
   KindMap()
   {
-#if AAF_MAJOR_VERSION == 1 && AAF_MINOR_VERSION == 0
-    
-    #define ADD_KIND( X, Y ) \
-    _kindMap[ string( #X ) ] = aafFileKindAaf##Y;
-
-    ADD_KIND( M512Binary, MSSBinary );
-    ADD_KIND( S512Binary, SSSBinary );
-    ADD_KIND( M4KBinary,  M4KBinary );
-    ADD_KIND( S4KBinary,  M4KBinary );
-
-#elif AAF_MAJOR_VERSION >= 1 && AAF_MINOR_VERSION > 0 
-
     #define ADD_KIND( X ) \
     _kindMap[ string( #X ) ] = kAAFFileKind_Aaf##X;
 
@@ -61,10 +49,6 @@ public:
     ADD_KIND( S512Binary );
     ADD_KIND( M4KBinary );
     ADD_KIND( S4KBinary );
-
-#else
-#error unsupported version
-#endif
   }
 
   ~KindMap()
@@ -104,30 +88,61 @@ public:
 };
 
 IAAFSmartPointer<IAAFFile> CreateFileOfKind( const std::string& fileName,
-					     aafFileExistence_e existance,
+					     aafFileExistence_e existence,
 					     aafFileAccess_e access,
 					     const aafUID_t& fileKind,
 					     const aafProductIdentification_t& prodId )
+#if 1
 {
   std::auto_ptr<wchar_t> wfileName( ToWideString( fileName.c_str() ) );
 
   IAAFSmartPointer<IAAFRawStorage> spRawStorage;
   CHECK_HRESULT( AAFCreateRawStorageDisk( wfileName.get(),
-					  existance,
+					  existence,
 					  access,
 					  &spRawStorage) );
   
   IAAFSmartPointer<IAAFFile> spFile;
   CHECK_HRESULT( AAFCreateAAFFileOnRawStorage( spRawStorage,
-					       existance,
+					       existence,
 					       access,
 					       &fileKind,
 					       0,
 					       &prodId,
 					       &spFile));
 
+  CHECK_HRESULT( spFile->Open() );
+
   return spFile;
 }
+#else
+{
+  std::auto_ptr<wchar_t> wfileName( ToWideString( fileName.c_str() ) );
+
+  IAAFSmartPointer<IAAFFile> spFile;
+
+  if ( kAAFFileExistence_existing == existence ) {
+    if ( kAAFFileAccess_read == access )
+    {
+      CHECK_HRESULT( AAFFileOpenExistingRead( wfileName.get(), 0, &spFile ) );      
+    }
+    else
+    {
+      assert( kAAFFileAccess_modify == access );
+      CHECK_HRESULT( AAFFileOpenExistingModify( wfileName.get(), 0,
+						const_cast<aafProductIdentification_t*>(&prodId),
+						&spFile ) );
+    }
+  }
+  else {
+    CHECK_HRESULT( AAFFileOpenNewModify( wfileName.get(), 0,
+					 const_cast<aafProductIdentification_t*>(&prodId),
+					 &spFile ) );
+  }
+
+  return spFile;
+}
+#endif
 
 void FileOp::RunTest( CmdState& state, int argc, char** argv )
 {
@@ -196,8 +211,6 @@ void FileOp::RunTest( CmdState& state, int argc, char** argv )
 			fileKind,
 			productInfo );
     
-    CHECK_HRESULT( spFile->Open() );
-
     state.SetFile( spFile );
   }
   else if ( which == "save" ) {
