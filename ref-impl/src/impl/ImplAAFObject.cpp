@@ -1,4 +1,3 @@
-
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
@@ -7,7 +6,6 @@
 * Copyright (c) 1998 Microsoft Corporation *
 *                                          *
 \******************************************/
-
 
 
 
@@ -26,34 +24,34 @@ ImplAAFObject::ImplAAFObject ()
 ImplAAFObject::~ImplAAFObject ()
 {}
 
-
-// AxD_XMETHOD1(itsFile,
-// 			[out],objOut,AAFFile,aFile, ,
-// 			Returns the AAFFile containing the object in persistent
-//   // store\, or NULL for transient objects.)
-
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::isForeignByteOrder (aafBool*  /*isForeign*/)
+    ImplAAFObject::SetGeneration (aafUID_t *  /*pGeneration*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-  //@comm This routine is optimized in the common case (objects byte order == file byte order).	
-  //@comm Replaces ompvtIsForeignByteOrder
+
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::Delete ()
+    ImplAAFObject::GetGeneration (aafUID_t *  /*pGeneration*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-  //@comm Replaces omfsObjectDelete
+
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::IsTypeOf (aafUID_t      /*aClass*/,
-                           aafBool*  /*Result*/)
+    ImplAAFObject::GetStoredByteOrder (aafByteOrder_t *  /*pOrder*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
- 
+
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFObject::GetNativeByteOrder (aafByteOrder_t *  /*pOrder*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
 
