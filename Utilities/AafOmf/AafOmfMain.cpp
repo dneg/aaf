@@ -37,11 +37,8 @@
 #ifdef macintosh
 	#include "DataInput.h"
 #endif 
-namespace OMF2
-{
 #include "omPublic.h"
 #include "omMedia.h"
-}
 
 #include "AAFException.h"
 #include "OMFException.h"
