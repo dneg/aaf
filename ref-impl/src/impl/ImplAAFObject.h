@@ -45,7 +45,7 @@ class ImplAAFDictionary;
 
 #include "AAFTypes.h"
 #include "OMStorable.h"
-#include "OMProperty.h"
+#include "OMFixedSizeProperty.h"
 #include "ImplAAFRoot.h"
 
 #ifndef __ImplAAFSmartPointer_h__

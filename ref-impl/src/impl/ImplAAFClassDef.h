@@ -46,6 +46,9 @@ class ImplAAFPropertyDef;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMWeakRefProperty.h"
+#include "OMStrongRefSetProperty.h"
+
 class ImplAAFClassDef : public ImplAAFMetaDefinition
 {
 public:

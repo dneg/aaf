@@ -37,6 +37,7 @@
 //#include "OMClassFactory.h"
 
 #include "ImplAAFObject.h"
+#include "OMStrongRefSetProperty.h"
 
 class ImplAAFMetaDefinition;
 class ImplAAFClassDef;

@@ -38,6 +38,8 @@
 #include "ImplAAFObject.h"
 #endif
 
+#include "OMWideStringProperty.h"
+
 class ImplAAFDictionary;
 
 
