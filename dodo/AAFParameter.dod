@@ -40,7 +40,7 @@ AD_METHOD1(GetLength,
 		   Gets the starting time and places it into the pStartTime
 		   // argument.  This function returns the length of a component.  It
 		   // supports both 1.x and 2.x component objects.  Length is not
-		   // stored as an implicit property on 1.x objects\, so this routine
+		   // stored as an implicit property on 1.x objects\\\, so this routine
 		   // recursively calculates the length.)
 	
 AD_XMETHOD1(SetDataDefinition,
