@@ -62,7 +62,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafInt32					numLocators;
 	HRESULT						hr = AAFRESULT_SUCCESS;
 	bool bFileOpen = false;
-//	aafUID_t					ddef = DDEF_Audio;
+//	aafUID_t					ddef = DDEF_Sound;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"AAFEssenceDescriptor Test";
