@@ -63,6 +63,10 @@ public:
 
 	IAAFEssenceFormatSP GetEmptyFileFormat();
 
+	IAAFEssenceFormatSP GetFileFormat( IAAFEssenceFormatSP spTemplate );
+
+	IAAFEssenceFormatSP GetFileFormatParameterList();
+
 	void PutFileFormat( IAAFEssenceFormatSP spIaafEssenceFormat );
 
 	aafLength_t CountSamples( IAAFDataDefSP spDataDef );
@@ -480,7 +484,14 @@ public:
 
 	void AddFormatSpecifier( const aafUID_t& essenceFormatCode,
 							 aafInt32 valueSize,
-							 aafDataBuffer_t value );
+							 aafDataBuffer_t pValue );
+
+	
+	void GetFormatSpecifier( const aafUID_t& essenceFormatCode,
+							 aafInt32 valueSize,
+							 aafDataBuffer_t pValue,
+							 aafInt32& bytesRead );
+
 
 	template <typename FormatType>
 	void AddFormatSpecifier( const aafUID_t& essenceFormatCode,
@@ -489,6 +500,21 @@ public:
 		AddFormatSpecifier( essenceFormatCode, sizeof(FormatType),
 							reinterpret_cast<aafDataBuffer_t>(
 								const_cast<FormatType*>(&value)) );
+	}
+
+	template <typename FormatType>
+	void GetFormatSpecifier( const aafUID_t& essenceFormatCode,
+							 FormatType& valueRet )
+	{
+		aafInt32 bytesRead = 0;
+
+		GetFormatSpecifier( essenceFormatCode, sizeof(FormatType),
+							reinterpret_cast<aafDataBuffer_t>(&valueRet),
+							bytesRead );
+
+		if ( sizeof(FormatType) != bytesRead ) {
+			throw AxEx( L"unexpected size returned by AxEssenceFormat::GetFormatSpecifier()" );
+		}
 	}
 
 	inline operator IAAFEssenceFormatSP ()

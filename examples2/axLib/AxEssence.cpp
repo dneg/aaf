@@ -48,6 +48,24 @@ IAAFEssenceFormatSP AxEssenceAccess::GetEmptyFileFormat()
 	return spIaafEssenceFormat;
 }
 
+IAAFEssenceFormatSP AxEssenceAccess::GetFileFormat( IAAFEssenceFormatSP spTemplate )
+{
+	IAAFEssenceFormatSP spIaafEssenceFormat;
+
+	CHECK_HRESULT( _spIaafEssenceAccess->GetFileFormat( spTemplate, &spIaafEssenceFormat ) );
+
+	return spIaafEssenceFormat;
+}
+
+IAAFEssenceFormatSP AxEssenceAccess::GetFileFormatParameterList()
+{
+	IAAFEssenceFormatSP spIaafEssenceFormat;
+
+	CHECK_HRESULT( _spIaafEssenceAccess->GetFileFormatParameterList( &spIaafEssenceFormat ) );
+
+	return spIaafEssenceFormat;
+}
+
 void AxEssenceAccess::PutFileFormat( IAAFEssenceFormatSP spIaafEssenceFormat )
 {
 	CHECK_HRESULT( _spIaafEssenceAccess->PutFileFormat( spIaafEssenceFormat ) );
@@ -876,6 +894,16 @@ void AxEssenceFormat::AddFormatSpecifier( const aafUID_t& essenceFormatCode,
 								 pValue ) );
 }
 
+void AxEssenceFormat::GetFormatSpecifier( const aafUID_t& essenceFormatCode,
+										  aafInt32 valueSize,
+										  aafDataBuffer_t pValue,
+										  aafInt32& bytesRead )
+{
+	CHECK_HRESULT( _spIaafEssenceFormat->GetFormatSpecifier( essenceFormatCode,
+					 valueSize,
+					 pValue,
+					 &bytesRead ) );
+}
 
 //=---------------------------------------------------------------------=
 
