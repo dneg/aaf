@@ -55,14 +55,14 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceReference::GetSourceMobSlotID (aafTrackID_t *  /*pMobSlotID*/)
+    ImplAAFSourceReference::GetSourceMobSlotID (aafSlotID_t *  /*pMobSlotID*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceReference::SetSourceMobSlotID (aafTrackID_t   /*mobSlotID*/)
+    ImplAAFSourceReference::SetSourceMobSlotID (aafSlotID_t   /*mobSlotID*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
