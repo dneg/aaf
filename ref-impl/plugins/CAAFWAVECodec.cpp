@@ -100,6 +100,7 @@ HRESULT STDMETHODCALLTYPE
 }
 
 //!!!Need a way to convert between CLSID and aafUID_t
+//!!!Change this to stored object IDs
 const aafUID_t LOCAL_AAFWAVEDescriptor = { 0x4c2e1691, 0x8ae6, 0x11d2, { 0x81, 0x3c, 0x00, 0x60, 0x97, 0x31, 0x01, 0x72 } };
 const aafUID_t LOCAL_AAFEssenceData = { 0x6a33f4e1, 0x8ed6, 0x11d2, { 0xbf, 0x9d, 0x00, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
 
@@ -186,6 +187,20 @@ HRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
+HRESULT STDMETHODCALLTYPE
+    CAAFWaveCodec::GetNumSamples (
+        aafUID_t  essenceKind,
+        aafLength_t *  pNumSamples)
+{
+	if(EqualAUID(&essenceKind, &DDEF_Audio))
+	{
+		*pNumSamples = _sampleFrames;
+	}
+	else
+		*pNumSamples = 0;
+	
+	return AAFRESULT_SUCCESS;
+}
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::SemanticCheck (IUnknown *fileMob,
@@ -307,7 +322,8 @@ HRESULT STDMETHODCALLTYPE
 
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::Open (IUnknown *unk,
-        aafMediaOpenMode_t  openMode,
+        aafSlotID_t	slotID,
+		aafMediaOpenMode_t  openMode,
         IAAFEssenceStream * stream)
 {
 	AAFRESULT		aafError;
@@ -339,7 +355,7 @@ HRESULT STDMETHODCALLTYPE
         aafmMultiXfer_t *  xferBlock)
 {
 	aafUInt32      	fileBytes;
-	aafInt32      	bytesPerSample, n, xfers, samp;
+	aafInt32      	n, xfers, samp;
 	aafUInt32		maxSamplesLeft;
 	aafmMultiXfer_t *xfer;
 	interleaveBuf_t	*interPtr;
@@ -356,6 +372,7 @@ HRESULT STDMETHODCALLTYPE
 		{
 			CHECK(CreateWAVEheader(header, STD_HDRSIZE_NODATA, _numCh));
 
+			_stream->Seek(0);
 			_sampleDataHeaderWritten = AAFTrue;
 			// The next four lines won't work for raw writes
 			_stream->Write(header, STD_HDRSIZE_NODATA);
@@ -364,7 +381,6 @@ HRESULT STDMETHODCALLTYPE
 			_stream->Write((aafUInt8 *)&zero, 4);		
 		}
 
-		bytesPerSample = ((_bitsPerSample + 7)/ 8);
 		for (n = 0; n < xferBlockCount; n++)
 		{
 			xferBlock[n].bytesXfered = 0;
@@ -377,14 +393,14 @@ HRESULT STDMETHODCALLTYPE
 			{
 				xfer = xferBlock + n;
 		
-				fileBytes = xfer->numSamples * bytesPerSample * _numCh;
+				fileBytes = xfer->numSamples * _bytesPerFrame;
 				if (fileBytes > xfer->buflen)
 					RAISE(AAFRESULT_SMALLBUF);
 				
 				CHECK(_stream->Write(xfer->buffer, fileBytes));
 				
-				xfer->bytesXfered = xfer->numSamples * bytesPerSample;
-				xfer->samplesXfered += xfer->numSamples / bytesPerSample;
+				xfer->bytesXfered = xfer->numSamples * _bytesPerFrame;
+				xfer->samplesXfered += xfer->numSamples / _bytesPerFrame;
 			}
 		}
 		else if(_numCh == 1)
@@ -393,19 +409,21 @@ HRESULT STDMETHODCALLTYPE
 			{
 				xfer = xferBlock + n;
 		
-				fileBytes = xfer->numSamples * bytesPerSample;
+				fileBytes = xfer->numSamples * _bytesPerFrame;
 				if (fileBytes > xfer->buflen)
 					RAISE(OM_ERR_SMALLBUF);
 				
 				CHECK(_stream->Write(xfer->buffer, fileBytes));
 		
 		
-				xfer->bytesXfered = xfer->numSamples * bytesPerSample;
-				xfer->samplesXfered += xfer->numSamples / bytesPerSample;
+				xfer->bytesXfered = xfer->numSamples * _bytesPerFrame;
+				xfer->samplesXfered += xfer->numSamples / _bytesPerFrame;
 			}
 		}
 		else
 		{
+			aafInt32	bytesPerSample;
+			
 			if(_interleaveBuf == NULL)
 				_interleaveBuf = new interleaveBuf_t[_numCh];
 			if(_interleaveBuf == NULL)
@@ -473,7 +491,7 @@ HRESULT STDMETHODCALLTYPE
         aafmMultiXfer_t *  xferBlock)
 {
 	aafUInt32       nbytes, fileBytes;
-	aafInt32        bytesPerSample, n, startBuflen, xferSamples, sub;
+	aafInt32        n, startBuflen, xferSamples, sub;
 	aafUInt32		maxSamplesLeft;
 	aafUInt8		*start;
 	aafmMultiXfer_t *xfer;
@@ -498,40 +516,40 @@ HRESULT STDMETHODCALLTYPE
 		
 		if(inter == leaveInterleaved)
 		{
-			bytesPerSample = ((_bitsPerSample + 7) / 8);
 			for (n = 0; n < xferBlockCount; n++)
 			{
 				xfer = xferBlock + n;
 				xfer->samplesXfered = 0;
 		
-				fileBytes = xfer->numSamples * bytesPerSample * _numCh;
+				fileBytes = xfer->numSamples * _bytesPerFrame;
 				if (fileBytes > xfer->buflen)
 					RAISE(AAFRESULT_SMALLBUF);
 		
 				CHECK(_stream->Read(fileBytes, xfer->buffer, &nbytes));
 				xfer->bytesXfered = nbytes;
-				xfer->samplesXfered = nbytes / (bytesPerSample * _numCh);
+				xfer->samplesXfered = nbytes / _bytesPerFrame;
 			}
 		}
 		else if(_numCh == 1)
 		{
-			bytesPerSample = ((_bitsPerSample + 7) / 8);
 			for (n = 0; n < xferBlockCount; n++)
 			{
 				xfer = xferBlock + n;
 				xfer->samplesXfered = 0;
 		
-				fileBytes = xfer->numSamples * bytesPerSample;
+				fileBytes = xfer->numSamples * _bytesPerFrame;
 				if (fileBytes > xfer->buflen)
 					RAISE(OM_ERR_SMALLBUF);
 		
 				CHECK(_stream->Read(fileBytes, xfer->buffer, &nbytes));
 				xfer->bytesXfered = nbytes;
-				xfer->samplesXfered = nbytes / bytesPerSample;
+				xfer->samplesXfered = nbytes / _bytesPerFrame;
 			}
 		}
 		else
 		{
+			aafInt32	bytesPerSample;
+
 			if(_interleaveBuf == NULL)
 				_interleaveBuf = new interleaveBuf_t[_numCh];
 			if(_interleaveBuf == NULL)
@@ -616,7 +634,7 @@ HRESULT STDMETHODCALLTYPE
 			{
 				xfer = xferBlock + xf;
 				xfer->bytesXfered = nbytes;
-				xfer->samplesXfered = nbytes / (bytesPerSample * _numCh);
+				xfer->samplesXfered = nbytes / _bytesPerFrame;	//!!!
 			}
 		}
 	}
@@ -693,17 +711,31 @@ HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::WriteFractionalSample (aafDataBuffer_t  buffer,
         aafInt32  buflen)
 {
-//!!!		if(!_sampleDataHeaderWritten)
-//		{
-//			_sampleDataHeaderWritten = AAFTrue;
-//			// The next four lines won't work for raw writes
-//			_stream->Write(header, STD_HDRSIZE_NODATA);
-//			_stream->Write((aafUInt8 *)"data", 4);
-//			_stream->GetPosition(&_dataSizeOffset);
-//			_stream->Write(0, 4);		
-//		}
-  return HRESULT_NOT_IMPLEMENTED;
+	unsigned char	header[STD_HDRSIZE_NODATA];
+	aafUInt32		zero = 0;
+
+	XPROTECT()
+	{
+		if(!_sampleDataHeaderWritten)
+		{
+			CHECK(CreateWAVEheader(header, STD_HDRSIZE_NODATA, _numCh));
+
+			_stream->Seek(0);
+			_sampleDataHeaderWritten = AAFTrue;
+			// The next four lines won't work for raw writes
+			_stream->Write(header, STD_HDRSIZE_NODATA);
+			_stream->Write((aafUInt8 *)"data", 4);
+			_stream->GetPosition(&_dataSizeOffset);
+			_stream->Write((aafUInt8 *)&zero, 4);		
+		}
+		CHECK(_stream->Write (buffer, buflen));
+	}
+	XEXCEPT
+	XEND
+
+	return HRESULT_SUCCESS;
 }
+
 
 
 
@@ -713,12 +745,19 @@ HRESULT STDMETHODCALLTYPE
         aafDataBuffer_t  buffer,
         aafUInt32 *  bytesRead)
 {
-//!!!		if(!_initialSeekPerformed)
-//		{
-//			CHECK(_stream->Seek(_dataStartOffset));	// Not compatible with raw read
-//			_initialSeekPerformed = AAFTrue;
-//		}
-  return HRESULT_NOT_IMPLEMENTED;
+	XPROTECT()
+	{
+		if(!_initialSeekPerformed)
+		{
+			CHECK(_stream->Seek(_dataStartOffset));	// Not compatible with raw read
+			_initialSeekPerformed = AAFTrue;
+		}
+		CHECK(_stream->Read (buflen, buffer, bytesRead));
+	}
+	XEXCEPT
+	XEND
+
+	return HRESULT_SUCCESS;
 }
 
 
@@ -728,8 +767,7 @@ HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::WriteRawData (aafUInt32 nSamples, aafDataBuffer_t  buffer,
         aafUInt32  buflen)
 {
-	_stream->Write (buffer, nSamples * _bytesPerFrame);
-	return HRESULT_SUCCESS;
+	return _stream->Write (buffer, nSamples * _bytesPerFrame);
 }
 
 
@@ -742,19 +780,21 @@ HRESULT STDMETHODCALLTYPE
         aafUInt32 *  bytesRead,
         aafUInt32 *  samplesRead)
 {
-	HRESULT	hr;
-	
-	//!!!Later Check that buflen > nSamples * SAMPLE_SIZE;
-	if(!_initialSeekPerformed)
+	XPROTECT()
 	{
-		hr = _stream->Seek(0L);
-		if(hr != S_OK)
-			return(hr);
-		_initialSeekPerformed = AAFTrue;
-	}
+		XASSERT(buflen > nSamples * _bytesPerFrame, OM_ERR_SMALLBUF);
+		if(!_initialSeekPerformed)
+		{
+			CHECK(_stream->Seek(0L));
+			_initialSeekPerformed = AAFTrue;
+		}
 
-	_stream->Read (nSamples * _bytesPerFrame, buffer, bytesRead);
-	*samplesRead = (*bytesRead)/_bytesPerFrame ;
+		CHECK(_stream->Read (nSamples * _bytesPerFrame, buffer, bytesRead));
+		*samplesRead = (*bytesRead)/_bytesPerFrame ;
+	}
+	XEXCEPT
+	XEND
+
 	return HRESULT_SUCCESS;
 }
 
@@ -834,9 +874,12 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFWaveCodec::PutEssenceFormat (IAAFEssenceFormat * pFormat)
 {
-/*!!!!	aafInt32		numSpecifiers, n, bytesRead;
+	aafInt32		numSpecifiers, n, bytesRead;
+	aafUInt32		valueUInt32;
+	aafRational_t	valueRat;
 	aafUID_t		opcode;
 	aafUInt8		buf[256];
+	aafUInt8		header[STD_HDRSIZE_NODATA];
 
 	XPROTECT()
 	{
@@ -846,143 +889,109 @@ HRESULT STDMETHODCALLTYPE
 		{
 			CHECK(pFormat->GetIndexedFormatSpecifier (n, &opcode, sizeof(buf), buf, &bytesRead));
 
-			if(EqualAUID(&kAAFSampleSize, &opcode))
-				_bitsPerSample = aparms->operand.sampleSize;
-			else if(EqualAUID(&kAAFSampleRate, &opcode))
-				_sampleRate = aparms->operand.sampleRate;
-			else if(EqualAUID(&kAAFSampleFormat, &opcode))
-				RAISE(OM_ERR_INVALID_OP_CODEC);
-			else if(EqualAUID(&kAAFNumChannels, &opcode))
-				_numCh = aparms->operand.numChannels;
-			else
-
-				RAISE(OM_ERR_INVALID_OP_CODEC);
+			if(EqualAUID(&kAAFAudioSampleBits, &opcode))
+			{
+				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INTERNAL_CORRUPTVINFO);
+				memcpy(&valueUInt32, buf, bytesRead);
+				_bitsPerSample = (aafUInt16)valueUInt32;
+				_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
 			}
+			else if(EqualAUID(&kAAFSampleRate, &opcode))
+			{
+				XASSERT(bytesRead == sizeof(aafRational_t), AAFRESULT_INTERNAL_CORRUPTVINFO);
+				memcpy(&valueRat, buf, bytesRead);
+				_sampleRate = valueRat;
+			}
+			else if(EqualAUID(&kAAFSampleFormat, &opcode))
+			{
+				RAISE(AAFRESULT_INVALID_OP_CODEC);
+			}
+			else if(EqualAUID(&kAAFNumChannels, &opcode))
+			{
+				XASSERT(bytesRead == sizeof(valueUInt32), AAFRESULT_INTERNAL_CORRUPTVINFO);
+				memcpy(&valueUInt32, buf, bytesRead);
+				_numCh = (aafUInt16)valueUInt32;
+				_bytesPerFrame = ((_bitsPerSample + 7) / 8) * _numCh;
+			}
+			else
+				RAISE(AAFRESULT_INVALID_OP_CODEC);
 		}
 		
-		if(main->fmt == kOmfiMedia)
-		{
-			CHECK(CreateWAVEheader(main,  media->stream, pdata, _numCh, FALSE));
-		}
+		CHECK(CreateWAVEheader(header, STD_HDRSIZE_NODATA, _numCh));
+		CHECK(_mdes->SetSummary (STD_HDRSIZE_NODATA, header));
 		
-		// This should also reset the stream position?
-		_stream->Seek(0);
-		CHECK(CreateWAVEheader(main,  media->stream, pdata, media->numChannels, TRUE));
+		// This will output the header on the next non-raw write
+		_sampleDataHeaderWritten = AAFFalse;
 	}
 	XEXCEPT
 	XEND
-*/	
+
 	return (AAFRESULT_SUCCESS);
-#if FULL_TOOLKIT
-	AAFRESULT	status = OM_ERR_NONE;
-	userDataWAVE_t 		*pdata;
-	aafInt16			numFmtOps, n;
-	omfAudioMemOp_t 	*aparms;
-
-	switch (parmblk->spc.mediaInfo.infoType)
-	{
-	case kAudioInfo:
-		status = codecPutAudioInfoWAVE(parmblk, media);
-		break;
-	case kSetAudioMemFormat:
-		pdata = (userDataWAVE_t *) media->userData;
-		numFmtOps = 0;
-		while((pdata->fmtOps[numFmtOps].opcode != kOmfAFmtEnd) && (numFmtOps <= MAX_FMT_OPS))
-			numFmtOps++;
-		
-		if(numFmtOps >= MAX_FMT_OPS)
-			status = OM_ERR_TOO_MANY_FMT_OPS;
-		else
-		{
-			aparms = ((omfAudioMemOp_t *)parmblk->spc.mediaInfo.buf);
-			for(n = 0 ; ; aparms++, n++)
-			{
-				pdata->fmtOps[n] =  *((omfAudioMemOp_t *)aparms);
-				if(aparms->opcode == kOmfAFmtEnd)
-					break;
-			}
-			status = setupStream(media->stream, media->soundKind, pdata);
-		}
-		break;
-	default:
-		status = ;
-		break;
-	}
-
-	return(status);
-#endif
 }
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFWaveCodec::GetEssenceFormat (IAAFEssenceFormat ** ppFormat)
+    CAAFWaveCodec::GetEssenceFormat (IAAFEssenceFormat *pFormat)
 {
-#if FULL_TOOLKIT
-	userDataWAVE_t *pdata;
-	omfAudioMemOp_t *aparms;
+	aafInt32		numSpecifiers, n, bytesRead;
+	aafUInt32		valueUInt32;
+	aafRational_t	valueRat;
+	aafUID_t		opcode;
+	aafUInt8		buf[256];
+	aafUInt8		header[STD_HDRSIZE_NODATA];
 
-	omfAssertMediaHdl(media);
-
-	pdata = (userDataWAVE_t *) media->userData;
-	aparms = *((omfAudioMemOp_t **)parmblk->spc.mediaInfo.buf);
-	for( ; aparms->opcode != kOmfAFmtEnd; aparms++)
-	  {
-		switch(aparms->opcode)
-		  {
-		  case kOmfSampleSize:
-			aparms->operand.sampleSize = _bitsPerSample;
-			break;
-		  case kOmfSampleRate:
-			aparms->operand.sampleRate = _sampleRate;
-			break;
-			
-		  case kOmfSampleFormat:
-			aparms->operand.format = kOmfSignedMagnitude;
-			break;
-	
-		  case kOmfNumChannels:
-			aparms->operand.numChannels = media->numChannels;
-			break;
-		  }
-	  }
-
-	return (OM_ERR_NONE);
-	AAFRESULT			status = OM_ERR_NONE;
-	omfType_t			dataType;
-	omfMaxSampleSize_t	*samplePtr;
-	userDataWAVE_t 		*pdata;
-
-	switch (parmblk->spc.mediaInfo.infoType)
+	XPROTECT()
 	{
-	case kMediaIsContiguous:
-		dataType = (parmblk->fileRev == kOmfRev2x ? OMDataValue : OMVarLenBytes);
-		status = OMIsPropertyContiguous(main, media->dataObj,OMWAVEData,
-										dataType, (aafBool *)parmblk->spc.mediaInfo.buf);
-		break;
-	case kAudioInfo:
-		status = codecGetAudioInfoWAVE(parmblk, media);
-		break;
+		CHECK(pFormat->NumFormatSpecifiers (&numSpecifiers));
 
-	case kMaxSampleSize:
-		samplePtr = (omfMaxSampleSize_t *) parmblk->spc.mediaInfo.buf;
-		if(samplePtr->mediaKind == media->soundKind)
+		for(n = 0; n < numSpecifiers; n++)
 		{
-			pdata = (userDataWAVE_t *)media->userData;
-			samplePtr->largestSampleSize = (_bitsPerSample + 7)/ 8;
+			CHECK(pFormat->GetIndexedFormatSpecifier (n, &opcode, sizeof(buf), buf, &bytesRead));
+
+			if(EqualAUID(&kAAFAudioSampleBits, &opcode))
+			{
+				valueUInt32 = _bitsPerSample;
+				memcpy(buf, &valueUInt32, sizeof(valueUInt32));
+				CHECK(pFormat->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(valueUInt32), buf));
+			}
+			else if(EqualAUID(&kAAFSampleRate, &opcode))
+			{
+				valueRat = _sampleRate;
+				memcpy(buf, &valueRat, sizeof(valueRat));
+				CHECK(pFormat->AddFormatSpecifier (kAAFSampleRate, sizeof(valueRat), buf));
+			}
+			else if(EqualAUID(&kAAFSampleFormat, &opcode))
+			{
+				valueUInt32 = kAAFSignedMagnitude;
+				memcpy(buf, &valueUInt32, sizeof(valueUInt32));
+				CHECK(pFormat->AddFormatSpecifier (kAAFSampleFormat, sizeof(valueUInt32), buf));
+			}
+			else if(EqualAUID(&kAAFNumChannels, &opcode))
+			{
+				valueUInt32 = _numCh;
+				memcpy(buf, &valueUInt32, sizeof(valueUInt32));
+				CHECK(pFormat->AddFormatSpecifier (kAAFNumChannels, sizeof(valueUInt32), buf));
+			}
+			else if(EqualAUID(&kAAFMaxSampleBytes, &opcode))
+			{
+				valueUInt32 = (_bitsPerSample + 7)/ 8;
+				memcpy(buf, &valueUInt32, sizeof(valueUInt32));
+				CHECK(pFormat->AddFormatSpecifier (kAAFMaxSampleBytes, sizeof(valueUInt32), buf));
+			}
+			else
+				RAISE(AAFRESULT_INVALID_OP_CODEC);
 		}
-		else
-			status = OM_ERR_CODEC_CHANNELS;
-		break;
-
-	default:
-		status = OM_ERR_INVALID_OP_CODEC;
-		break;
+		
+		CHECK(CreateWAVEheader(header, STD_HDRSIZE_NODATA, _numCh));
+		CHECK(_mdes->SetSummary (STD_HDRSIZE_NODATA, header));
+		
+		// This will output the header on the next non-raw write
+		_sampleDataHeaderWritten = AAFFalse;
 	}
+	XEXCEPT
+	XEND
 
-	return(status);
-#else
-	return HRESULT_NOT_IMPLEMENTED;
-#endif
+	return (AAFRESULT_SUCCESS);
 }
 
 /************************
@@ -999,7 +1008,7 @@ HRESULT STDMETHODCALLTYPE
  * Possible Errors:
  *		Standard errors (see top of file).
  */
-AAFRESULT CAAFWaveCodec::writeSwappedWAVEData(aafUInt8 **destBufHdl, aafInt32 maxsize, void *data)
+AAFRESULT CAAFWaveCodec::fillSwappedWAVEData(aafUInt8 **destBufHdl, aafInt32 maxsize, void *data)
 {
 	aafInt32        dataL;
 	aafInt16        dataS;
@@ -1022,7 +1031,7 @@ AAFRESULT CAAFWaveCodec::writeSwappedWAVEData(aafUInt8 **destBufHdl, aafInt32 ma
 	return (AAFRESULT_SUCCESS);
 }
 
-AAFRESULT CAAFWaveCodec::readSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
+AAFRESULT CAAFWaveCodec::scanSwappedWAVEData(aafUInt8 **srcBufHdl, aafInt32 maxsize, void *data)
 {
 	memcpy(data, *srcBufHdl, maxsize);
 	(*srcBufHdl) += maxsize;
@@ -1109,28 +1118,28 @@ AAFRESULT CAAFWaveCodec::CreateWAVEheader(aafUInt8		*buffer,
 		*ptr++ = ' ';
 
 		chunksize = 16;		/* WAVE format size is fixed */
-		CHECK(writeSwappedWAVEData(&ptr, 4L, (void *) &chunksize));
-		CHECK(writeSwappedWAVEData(&ptr, 2L, (void *) &pcm_format));
-		CHECK(writeSwappedWAVEData(&ptr, 2L, (void *) &numCh));
+		CHECK(fillSwappedWAVEData(&ptr, 4L, (void *) &chunksize));
+		CHECK(fillSwappedWAVEData(&ptr, 2L, (void *) &pcm_format));
+		CHECK(fillSwappedWAVEData(&ptr, 2L, (void *) &numCh));
 	
 		if (_sampleRate.denominator != 0)
 			samplesPerSec = (long) FloatFromRational(_sampleRate);
 		else
 			samplesPerSec = 0;
-		CHECK(writeSwappedWAVEData(&ptr, 4L, (void *) &samplesPerSec));
+		CHECK(fillSwappedWAVEData(&ptr, 4L, (void *) &samplesPerSec));
 	
 		bytesPerFrame = ((_bitsPerSample + 7) / 8) * numCh;
 		avgBytesPerSec = samplesPerSec * bytesPerFrame;
-		CHECK(writeSwappedWAVEData(&ptr, 4L, (void *) &avgBytesPerSec));
+		CHECK(fillSwappedWAVEData(&ptr, 4L, (void *) &avgBytesPerSec));
 	
-		CHECK(writeSwappedWAVEData(&ptr, 2L, (void *) &bytesPerFrame));
-		CHECK(writeSwappedWAVEData(&ptr, 2L, (void *) &_bitsPerSample));
+		CHECK(fillSwappedWAVEData(&ptr, 2L, (void *) &bytesPerFrame));
+		CHECK(fillSwappedWAVEData(&ptr, 2L, (void *) &_bitsPerSample));
 		// !!!Postcondition to make sure that offset within
 
 		/* patch FORM size here. */
 		len = ptr - buffer;
 		ptr = buffer+ 4;
-		CHECK(writeSwappedWAVEData(&ptr, 4L, &len));	// Patch in
+		CHECK(fillSwappedWAVEData(&ptr, 4L, &len));	// Patch in
 	}
 	XEXCEPT
 	XEND
@@ -1297,7 +1306,7 @@ AAFRESULT CAAFWaveCodec::ComputeWriteChunkSize(
 #endif
 		CHECK(_stream->Seek(sizeOff));
 		tmp = buf;
-		CHECK(writeSwappedWAVEData(&tmp, 4L, &size));
+		CHECK(fillSwappedWAVEData(&tmp, 4L, &size));
 		CHECK(_stream->Write(buf, 4L));
 	
 		CHECK(_stream->Seek(savePos));
