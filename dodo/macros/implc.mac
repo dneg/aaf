@@ -110,7 +110,7 @@ Impl%01\
 #c Argument: class name
 #c
 #startm AD_FORWARD_DECLARATION 01
-#ifndef _Impl%01_h_
+#ifndef __Impl%01_h__
 #include "Impl%01.h"
 #endif
 #endm
@@ -140,11 +140,11 @@ Impl%01\
 #c Arguments: none
 #c
 #startm AD_CLASS_BEGIN 00
-#ifndef _Impl.this-module_h_
+#ifndef __Impl.this-module_h__
 #include "Impl.this-module.h"
 #endif
 
-#ifndef _.this-module_h_
+#ifndef __.this-module_h__
 #include ".this-module.h"
 #endif
 
@@ -167,7 +167,7 @@ Impl.this-module::~Impl.this-module ()
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-#ifndef _Impl.this-module_h_
+#ifndef __Impl.this-module_h__
 #include "Impl.this-module.h"
 #endif
 
