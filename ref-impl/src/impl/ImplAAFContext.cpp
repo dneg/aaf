@@ -42,6 +42,8 @@
 #include <assert.h>
 #include "ImplAAFPluginManager.h"
 
+#include "OMObjectManager.h"
+
 extern "C" const aafClassID_t CLSID_AAFPluginManager;
 
 
@@ -105,6 +107,7 @@ ImplAAFContext::ImplAAFContext ()
   _singleton = this;
 
   _plugins = NULL;
+  initializeObjectManager();
 }
 
 ImplAAFContext::~ImplAAFContext ()
@@ -117,6 +120,7 @@ ImplAAFContext::~ImplAAFContext ()
   
   // Thare Can Be Only One!
   _singleton = 0;
+  finalizeObjectManager();
 }
 
 void ImplAAFContext::InitPluginManager (void)
