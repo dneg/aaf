@@ -25,7 +25,7 @@
 *
 ************************************************************************/
 
-// @doc OMEXTERNAL
+// @doc OMINTERNAL
 #ifndef OMSTOREDOBJECT_H
 #define OMSTOREDOBJECT_H
 
@@ -101,7 +101,6 @@ public:
     // @cmember Check that the <c OMPropertySet> <p propertySet> is
     //          consistent with the <c OMStoredPropertySetIndex>
     //          propertySetIndex.
-    //   @this const
   void validate(const OMPropertySet* propertySet,
                 const OMStoredPropertySetIndex* propertySetIndex) const;
 
@@ -198,7 +197,6 @@ public:
     // @cmember The current position for <f readFromStream()> and
     //          <f writeToStream()>, as an offset in bytes from the
     //          begining of the data stream.
-    // @this const
   OMUInt64 streamPosition(IStream* stream) const;
 
     // @cmember Set the current position for <f readFromStream()> and
