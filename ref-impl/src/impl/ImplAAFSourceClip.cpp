@@ -84,20 +84,7 @@ AAFRESULT STDMETHODCALLTYPE
   SetSourceMobSlotID( sourceRef.sourceSlotID );
   _startTime = sourceRef.startTime;
 
-  aafBool isSound;
-  AAFRESULT hr = pDataDef->IsSoundKind( &isSound );
-  if ( AAFRESULT_SUCCESS != hr ) {
-    return hr;
-  }
 
-  // Only set fade default values if the essence type is sound.
-  if ( isSound ) {
-       _fadeInLength		= 0;
-       _fadeInType		= kAAFFadeNone;
-       
-       _fadeOutLength		= 0;
-       _fadeOutType	        = kAAFFadeNone;
-  };
 
   return AAFRESULT_SUCCESS;
 }
