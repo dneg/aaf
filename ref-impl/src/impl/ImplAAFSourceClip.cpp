@@ -32,6 +32,7 @@
 #endif
 
 #include <assert.h>
+#include "aafCvt.h" 
 #include <AAFResult.h>
 
 
@@ -58,47 +59,193 @@ ImplAAFSourceClip::~ImplAAFSourceClip ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::InitializeSourceClip (ImplAAFDataDef * /*datadef  */,
-                           aafLength_t      /*length   */,
-                           aafSourceRef_t   /*sourceRef*/)
+    ImplAAFSourceClip::InitializeSourceClip(aafUID_t*		pDatadef,
+											aafLength_t*	pLength,
+											aafSourceRef_t	sourceRef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+	if (pDatadef == NULL ||
+		pLength == NULL)
+	{
+		aafError = AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+		SetDataDef( pDatadef );
+		SetLength( pLength );
+		SetSourceID( sourceRef.sourceID );
+		SetSourceMobSlotID( sourceRef.sourceSlotID );
+
+		_fadeInLen		= 0;
+		_fadeInType		= kFadeNone;
+		_fadeInPresent	= AAFFalse;
+	
+		_fadeOutLen		= 0;
+		_fadeOutType	= kFadeNone;
+		_fadeOutPresent = AAFFalse;
+}
+
+	return aafError;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-   ImplAAFSourceClip::GetFade (aafInt32 *       /*fadeInLen     */,
-                           aafFadeType_t *  /*fadeInType    */,
-                           aafBool *        /*fadeInPresent */,
-                           aafInt32 *       /*fadeOutLen    */,
-                           aafFadeType_t *  /*fadeOutType   */,
-                           aafBool *        /*fadeOutPresent*/)
+   ImplAAFSourceClip::GetFade (aafInt32		*fadeInLen,
+                           aafFadeType_t	*fadeInType,
+                           aafBool			*fadeInPresent,
+                           aafInt32			*fadeOutLen,
+                           aafFadeType_t	*fadeOutType,
+                           aafBool			*fadeOutPresent)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (fadeInLen == NULL ||
+		fadeInType == NULL ||
+		fadeInPresent == NULL ||
+		fadeOutLen == NULL ||
+		fadeOutType == NULL ||
+		fadeOutPresent == NULL )
+	{
+		aafError = 	AAFRESULT_NULL_PARAM;
+	}
+	else
+	{
+	
+		*fadeInLen		= _fadeInLen;
+		*fadeInType		= _fadeInType;
+		*fadeInPresent	= _fadeInPresent;
+
+		*fadeOutLen		= _fadeOutLen;
+		*fadeOutType	= _fadeOutType;
+		*fadeOutPresent	= _fadeOutPresent;
+	}
+
+	return aafError;
 }
 
 
+/*************************************************************************
+ * Function: ResolveRef()
+ *
+ * 		Given a source clip object, this function returns a pointer to
+ *      the mob that it references.  If this mob does not exist, the
+ *      error AAFRESULT_MOB_NOT_FOUND is returned.
+ *
+ * Argument Notes:
+ *
+ * ReturnValue:
+ *		Error code .
+ *
+ * Possible Errors:
+ *		Standard errors .
+ *************************************************************************/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::ResolveRef (ImplAAFMob ** /*mob*/)
+    ImplAAFSourceClip::ResolveRef (ImplAAFMob ** mob)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    aafSourceRef_t sourceRef;
+	ImplAAFObject * head = NULL;
+	ImplAAFMob * tmpMob = NULL;
+	aafInt32 index = 0;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	*mob = NULL;
+
+	XPROTECT()
+	  {
+		if (!mob)
+		  {
+			RAISE(AAFRESULT_NULL_PARAM);
+		  }
+
+		/* NOTE: This function should really be doing more checking,
+		 * i.e., does track exist in mob, does position (adjusted by
+		 * editrate) exist in track, etc.
+		 */
+
+		CHECK(GetRef(&sourceRef));
+
+#ifdef FULL_TOOLKIT
+		CHECK(_file->LookupMob(sourceRef.sourceID, mob));
+#endif
+	  } /* XPROTECT */
+
+	XEXCEPT
+	  {
+		return(XCODE());
+	  }
+	XEND;
+
+	return(aafError);
 }
 
 
+/*************************************************************************
+ * Function: GetRef()
+ *
+ * 		This function returns the 3 properties on a source Clip that
+ *      make of the "source reference" (sourceID, sourceTrackID, and
+ *      startTime).
+ *
+ * Argument Notes:
+ *
+ * ReturnValue:
+ *		Error code.
+ *
+ * Possible Errors:
+ *		Standard errors.
+ *************************************************************************/
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSourceClip::GetRef (aafSourceRef_t *  /*sourceRef*/)
+    ImplAAFSourceClip::GetRef (aafSourceRef_t*	pSourceRef)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	XPROTECT()
+	  {
+		if (pSourceRef)
+		  {
+#ifdef FULL_TOOLKIT
+			  *pSourceRef = _srcRef;
+#endif
+		  } /* if sourceRef */
+		else
+		  {
+			RAISE(AAFRESULT_NULL_PARAM);
+		  }
+	  } /* XPROTECT */
+
+	XEXCEPT
+	  {
+		return(XCODE());
+	  }
+	XEND;
+
+	return(aafError);
 }
 
 
  AAFRESULT STDMETHODCALLTYPE
-   ImplAAFSourceClip::SetFade (aafInt32       /*fadeInLen  */,
-                           aafFadeType_t  /*fadeInType */,
-                           aafInt32       /*fadeOutLen */,
-                           aafFadeType_t  /*fadeOutType*/)
+   ImplAAFSourceClip::SetFade (aafInt32		fadeInLen,
+                           aafFadeType_t	fadeInType,
+                           aafInt32			fadeOutLen,
+                           aafFadeType_t	fadeOutType)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+
+	if (fadeInLen > 0)
+	{
+		_fadeInLen	= fadeInLen;
+		_fadeInType	= fadeInType;
+		_fadeInPresent = AAFTrue;
+	}
+
+	if (fadeOutLen > 0)
+	{
+		_fadeOutLen		= fadeOutLen;
+		_fadeOutType	= fadeOutType;
+		_fadeOutPresent = AAFTrue;
+	}
+
+	return aafError;
 }
 
 
