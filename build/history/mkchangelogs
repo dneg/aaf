@@ -97,7 +97,12 @@ do
  ptag=${tagnames[i - 1]}
  tag=${tagnames[i]}
  file=Changes-${ptag}-${tag}
- echo "<li><a href=\"${file}.html\">${ptag} -> ${tag}</a>"
+ if [[ -s ${file}.clog ]]
+ then
+   echo "<li><a href=\"${file}.html\">${ptag} -> ${tag}</a>"
+ else
+   echo "<li>${ptag} -> ${tag} - no changes"
+ fi
  let i=$i-1
 done >> $index
 echo "</ul>" >> $index
