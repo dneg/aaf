@@ -37,10 +37,10 @@ endif
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
-# Remove OMSSStoredObject.o fomr CXXOBJS list sine MIPSpro introduces
+# Remove OMMSSStoredObject.o fomr CXXOBJS list sine MIPSpro introduces
 # unusal linking behavior when this unused source file is built.
 ifeq ($(COMPILER),MIPSpro)
-CXXOBJS:=$(filter-out %/OMSSStoredObject.o,$(CXXOBJS))
+CXXOBJS:=$(filter-out %/OMMSSStoredObject.o,$(CXXOBJS))
 endif
 
 INCLUDES = -I. \
@@ -53,9 +53,9 @@ INCLUDES = -I. \
 # E.g. "make LIBGSF_PATH=/usr/local"
 ifndef LIBGSF_PATH
 DEPS:=$(filter-out %/OMGSFStructuredStorage.d,$(DEPS))
-DEPS:=$(filter-out %/OMGSF_SSStoredObjectFactory.d,$(DEPS))
+DEPS:=$(filter-out %/OMGSFxMSSStoredObjectFactory.d,$(DEPS))
 CXXOBJS:=$(filter-out %/OMGSFStructuredStorage.o,$(CXXOBJS))
-CXXOBJS:=$(filter-out %/OMGSF_SSStoredObjectFactory.o,$(CXXOBJS))
+CXXOBJS:=$(filter-out %/OMGSFxMSSStoredObjectFactory.o,$(CXXOBJS))
 endif
 
 CFLAGS += -DOM_STACK_TRACE_ON_ASSERT
