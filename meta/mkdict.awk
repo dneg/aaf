@@ -118,7 +118,7 @@ BEGIN {
              $10, $2, $3, $4, $5, $6, $7, $8, $9, $1, parent);
     } else {
       # AAF_PROPERTY(name, dataid, datatag, type, container)
-      printf("AAF_PROPERTY(%s,\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s),\n  %x,\n  %s,\n  %s)\n", $10, $2, $3, $4, $5, $6, $7, $8, $9, $1, pid, $13, class);
+      printf("AAF_PROPERTY(%s,\n  AAF_LITERAL_AUID(0x%s%s%s%s,\n    0x%s%s, 0x%s%s,\n    0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x%s),\n  0x%x,\n  %s,\n  %s)\n", $10, $2, $3, $4, $5, $6, $7, $8, $9, $1, pid, $13, class);
       pid = pid + 1;
     }
   }
