@@ -72,7 +72,7 @@ AAFRESULT STDMETHODCALLTYPE
                            ImplAAFMobSlot **ppMobSlots,
                            aafUInt32 *pFetched)
 {
-	ImplAAFMobSlot*		pMobSlot;
+	ImplAAFMobSlot**	ppMobSlot;
 	aafUInt32			numSlots;
 	HRESULT				hr;
 
@@ -80,10 +80,10 @@ AAFRESULT STDMETHODCALLTYPE
 		return E_INVALIDARG;
 
 	// Point at the first component in the array.
-	pMobSlot = *ppMobSlots;
+	ppMobSlot = ppMobSlots;
 	for (numSlots = 0; numSlots < count; numSlots++)
 	{
-		hr = NextOne(&pMobSlot);
+		hr = NextOne(ppMobSlot);
 		if (FAILED(hr))
 			break;
 
@@ -91,7 +91,7 @@ AAFRESULT STDMETHODCALLTYPE
 		// will increment off the end of the array when
 		// numComps == count-1, but the for loop should
 		// prevent access to this location.
-		pMobSlot++;
+		ppMobSlot++;
 	}
 	
 	if (pFetched)
