@@ -43,8 +43,8 @@ AD_METHOD1(IsATrack,
 Tests whether a Mob Slot is a track \(contains a Track Descriptor\, which makes
   // it externally visible\).)
 
-AD_METHOD1(GetSegment,
-[out\,retval], AAFSegment **, result, Segment property value,
+AD_XMETHOD1(GetSegment,
+[out\,retval], objOut, AAFSegment, result, Segment property value,
 This method will get the segment for this mob slot.)
 
 AD_METHOD1(GetName,
@@ -73,8 +73,8 @@ Sets the physical output channel associated with the Track.
   // of 2.
   // The function returns an error if the Mob Slot passed in is not a track.)
 
-AD_METHOD1(GetDataKind,
-[out\,retval], AAFDataDefinition **, result, Data Definition object,
+AD_XMETHOD1(GetDataKind,
+[out\,retval], objOut, AAFDataDefinition, result, Data Definition object,
 This method will return Data Definition object associated with this Mob Slot.)
 
 

@@ -21,16 +21,16 @@ AD_FORWARD_DECLARATION(AAFTimecode)
 
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR2([in],AAFFile *    ,file    ,File Handle,
-				[in],AAFDataDefinition *,datadef,Data Definition object,
+AD_XCONSTRUCTOR2([in],objIn, AAFFile, file, File Handle,
+				 [in],objIn, AAFDataDefinition, datadef, Data Definition object,
   // This function creates a new sequence object with the given
   // property values.  The length of the sequence is initially set to
   // 0.  When components are appended to the sequence with the
   // omfiSequenceAppendCpnt\(\) call\, the length of the appended
   // component is added to the length of the sequence.)
 
-AD_METHOD1(AppendCpnt,
-		  [in],AAFComponent *,component,
+AD_XMETHOD1(AppendCpnt,
+			[in],objIn,AAFComponent,component,
 		  Component to append to the sequence,
   // This function appends the input component to the given sequence\,
   // enforcing bottom up creation of mobs.  The length of the sequence
@@ -64,17 +64,17 @@ AD_METHOD4(SegmentTCToOffset,
 		   [out],aafBool *         ,found   ,,
 		   )
 
-AD_METHOD4(FindSubSegment,
-		   [in],aafPosition_t  ,offset    ,,
-		   [out],aafPosition_t *,sequPosPtr,,
-		   [out],AAFSegment **  ,subseg    ,,
-		   [out],aafBool *      ,found     ,,
+AD_XMETHOD4(FindSubSegment,
+			[in],objPass,aafPosition_t  ,offset    ,,
+			[out],objPass,aafPosition_t *,sequPosPtr,,
+			[out],objOut,AAFSegment,subseg    ,,
+			[out],aafBool *      ,found     ,,
 		   )
 
-AD_METHOD3(OffsetToTimecodeClip,
-		   [in],aafPosition_t  ,offset    ,,
-		   [out],AAFTimecode ** ,result    ,,
-		   [out],aafPosition_t *,tcStartPos,,
+AD_XMETHOD3(OffsetToTimecodeClip,
+			[in],objPass,aafPosition_t  ,offset    ,,
+			[out],objOut,AAFTimecode,result    ,,
+			[out],objPass,aafPosition_t *,tcStartPos,,
 		   )
 
 AD_OVERRIDE(.method-Test)

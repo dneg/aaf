@@ -19,10 +19,10 @@ AD_HEAD
 \******************************************/
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR3([in],AAFFile *    ,file    ,File Handle,
-				[in],aafLength_t  ,length  ,Length Property Value,
-				[in],aafEdgecode_t,edgecode,Edgecode Value,
-				This function creates a new edgecode clip with the
+AD_XCONSTRUCTOR3([in],objIn,AAFFile,file    ,File Handle,
+				 [in],objPass,aafLength_t  ,length  ,Length Property Value,
+				 [in],objPass,aafEdgecode_t,edgecode,Edgecode Value,
+				 This function creates a new edgecode clip with the
   // given property values.  The edgecode value is represented with an
   // omfEdgecode_t struct consisting of startFrame\, filmKind\, and
   // codeFormat.)
@@ -30,10 +30,10 @@ AD_CONSTRUCTOR3([in],AAFFile *    ,file    ,File Handle,
 AD_METHOD1(GetEdgecode,
 		   [out],aafEdgecode_t *,edgecode,Edgecode,
 		   This set of functions returns the required property values
-  // for the object identified by XXX.  If a value is not requested\, a
+  // for the object identified by XXX.  If a value is not requested\\\, a
   // NULL should be passed into the parameter corresponding to that
   // property.  For example --
-  //            omfiMobSlotInfo\(file\, slotObj\, NULL\, &segment\);
+  //            omfiMobSlotInfo\\\(file\\\, slotObj\\\, NULL\\\, &segment\\\);
   // would not return the editRate property from a mob slot.
   // Additional functions are provided to return optional properties.)
 

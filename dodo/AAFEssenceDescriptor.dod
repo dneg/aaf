@@ -28,10 +28,10 @@ AD_METHOD1(GetNumLocators,
 		   Return the number of locators attached to this media descriptor.)
   //@comm The number of locators may be zero if the media is in the current file.
 
-AD_METHOD2(GetNthLocator,
-		   [in],aafInt32,index,A 1-based index,
-		   [out],AAFLocator*,result,Returns a reference to the object,
-		   Gets a particular locator from this media descriptor.)
+AD_XMETHOD2(GetNthLocator,
+			[in],objPass,aafInt32,index,A 1-based index,
+			[out],objOut,AAFLocator,result,Returns a reference to the object,
+			Gets a particular locator from this media descriptor.)
   //@comm The number of locators may be zero if the media is in the current file.
 
 AD_OVERRIDE(.method-Test)

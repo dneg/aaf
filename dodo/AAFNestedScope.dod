@@ -37,26 +37,29 @@ AD_CLASS_UUID(e44be452, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(e44be451, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_METHOD1(AppendSegment,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFSegment\) *,
-		   pSegment, 
-		   Pointer to segment to be added,
-		   Add the Segment to the Slots list.)
+AD_XMETHOD1(AppendSegment,
+			[in\,ref],
+			objIn,
+			AAFSegment,
+			pSegment, 
+			Pointer to segment to be added,
+			Add the Segment to the Slots list.)
 
-AD_METHOD1(RemoveSegment,
-		   [in\,ref],
-		   AD_AAFTYPES\(AAFSegment\) *,
-		   pSegment, 
-		   Pointer to segment to be added,
-		   Remove the Segment from the Slots list.)
+AD_XMETHOD1(RemoveSegment,
+			[in\,ref],
+			objIn,
+			AAFSegment,
+			pSegment, 
+			Pointer to segment to be added,
+			Remove the Segment from the Slots list.)
 
-AD_METHOD1(GetSlots,
-		   [retval][out],
-		   AD_AAFTYPES\(EnumAAFSegments\) **,
-		   ppEnum,
-		   Slots - segment list  enumeration,
-		   Returns an enumerator for aaf segment.)
+AD_XMETHOD1(GetSlots,
+			[retval][out],
+			objIn,
+			EnumAAFSegments,
+			ppEnum,
+			Slots - segment list  enumeration,
+			Returns an enumerator for aaf segment.)
 
 AD_OVERRIDE(.method-Test)
 
