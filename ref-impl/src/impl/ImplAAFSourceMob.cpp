@@ -443,12 +443,12 @@ AAFRESULT STDMETHODCALLTYPE
 			delete sequIter;
 			sequIter = NULL;
 			
-			/* Release Bento reference, so the useCount is decremented */
-			if (subSegment)
-			  {
-				 subSegment->ReleaseObject();	
-				 subSegment = NULL;
-			  }
+//!!!			/* Release reference, so the useCount is decremented */
+//			if (subSegment)
+//			  {
+//				 subSegment->ReleaseObject();	
+//				 subSegment = NULL;
+//			  }
 		}
 		if(sclp!= NULL)
 			sclp->ReleaseReference();
