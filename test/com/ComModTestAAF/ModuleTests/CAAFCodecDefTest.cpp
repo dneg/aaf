@@ -157,8 +157,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pPlugDef->AddEssenceKind (defs.ddMatte()));
 		checkResult(pDictionary->RegisterCodecDef(pPlugDef));
 		uid = kAAFClassID_WAVEDescriptor;
-//		checkResult(pDictionary->LookupClass(&uid, &classDef));
-//		checkResult(pPlugDef->SetFileDescriptorClass (classDef));
+		checkResult(pDictionary->LookupClassDef(uid, &classDef));
+		checkResult(pPlugDef->SetFileDescriptorClass (classDef));
 	}
 	catch (HRESULT& rResult)
 	{
