@@ -51,7 +51,7 @@ STDAPI DllCanUnloadNow(void)
 }
 
 // Return the number of components implemented by this library.
-
+extern void initialize();
 STDAPI AAFGetClassCount(void)
 {
 	return AxPlugin::GetClassCount();

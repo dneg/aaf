@@ -25,13 +25,22 @@
 #include "AxPluginUtil.h"
 #include "AxEx.h"
 
+#include <AAFCOMPlatform.h>
 #include <AAFCodecDefs.h>
 #include <AAFStoredObjectIDs.h>
 #include <AAFDataDefs.h>
-
 #include <AAFResult.h>
 
 #include <memory>
+
+#if defined(OS_MACOS)
+// FIXME - AAFPlugin_i.c is included to work around a Mac link problem.
+// IID_IAAFPlugin and IID_IAAFEssenceCodec are not defined unless I include
+// this here - in the file that references them.  The AAFPlugin_i.c files is
+// also included in 
+#define __IID_DEFINED__
+#include <AAFPlugin_i.c>
+#endif
 
 namespace {
 
@@ -91,6 +100,27 @@ const aafUID_t CAX_AAF_CODEC_MANUFACTURER_ID =
 
 
 } // End of anonymous name space.
+
+#if defined(OS_MACOS)
+
+// FIXME - See comments 
+
+NullEssenceCodecRegister *_instance = 0;
+void CAxNullEssenceCodecInit()
+{
+	if ( !_instance ) {
+		_instance = new NullEssenceCodecRegister;
+	}
+}
+
+void CAxNullEssenceCodecFini()
+{
+	if ( _instance ) {
+		delete _instance;
+	}
+}
+#endif
+
 
 //=---------------------------------------------------------------------=
 

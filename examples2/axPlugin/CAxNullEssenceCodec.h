@@ -56,7 +56,20 @@ public:
 	CAxNullEssenceCodec( IUnknown * pUnkOuter );
 	virtual ~CAxNullEssenceCodec();
 
-	CAXUNKNOWN_DECLARE_IUNKNOWN_METHODS
+	//CAXUNKNOWN_DECLARE_IUNKNOWN_METHODS
+	STDMETHOD(QueryInterface)(const IID& iid, void** ppv)    
+	{	                                                     
+		return GetOuterUnknown()->QueryInterface(iid,ppv) ;  
+	} ;	                                                     
+	STDMETHOD_(ULONG, AddRef)()	                             
+	{	                                                     
+		return GetOuterUnknown()->AddRef() ;                 
+	} ;	                                                     
+	STDMETHOD_(ULONG, Release)() 	                         
+	{	                                                     
+		return GetOuterUnknown()->Release() ;               
+	} ;
+
 	
 	// Override CAxUnknown::NondelegatingQueryInterface() in order to add
 	// support for the interfaces supported by this class.
