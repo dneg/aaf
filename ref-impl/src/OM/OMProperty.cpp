@@ -18,6 +18,7 @@ OMProperty::~OMProperty(void)
 {
 }
 
+  // @mfunc Close this <c OMProperty>.
 void OMProperty::close(void)
 {
   // nothing to do for most descendants of OMProperty
@@ -59,6 +60,13 @@ OMProperty* OMProperty::address(void)
   return this;
 }
 
+  // @mfunc Detach the <c OMStorable> object with the given
+  //        <p key> from this <c OMProperty>. This
+  //        <c OMProperty> must no longer attempt
+  //        to access the <c OMStorable> with the given <p key>.
+  //   @parm The <c OMStoredObject> to detach from this
+  //         <c OMProperty>.
+  //   @parm A key identifying the <c OMStorable>.
 void OMProperty::detach(const OMStorable* object, const size_t key)
 {
   TRACE("OMProperty::detach");
@@ -119,6 +127,8 @@ void OMSimpleProperty::set(const void* value, size_t valueSize)
   memcpy(_bits, value, _size);
 }
 
+  // @mfunc Save this <c OMSimpleProperty>.
+  //   @this const
 void OMSimpleProperty::save(void) const
 {
   ASSERT("Valid property set", _propertySet != 0);
