@@ -70,11 +70,11 @@ extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 ImplAAFOperationDef::ImplAAFOperationDef ()
 : _dataDef(	PID_OperationDefinition_DataDefinition,	L"DataDefinition", L"/Header/Dictionary/DataDefinitions", PID_DefinitionObject_Identification),
   _isTimeWarp(		PID_OperationDefinition_IsTimeWarp,			L"IsTimeWarp"),
-  _degradeTo(		PID_OperationDefinition_DegradeTo,			L"DegradeTo"),
+  _degradeTo(		PID_OperationDefinition_DegradeTo,			L"DegradeTo", L"/Header/Dictionary/OperationDefinitions", PID_DefinitionObject_Identification),
   _category(		PID_OperationDefinition_Category,			L"Category"),
   _numInputs(		PID_OperationDefinition_NumberInputs,		L"NumberInputs"),
   _bypass(			PID_OperationDefinition_Bypass,				L"Bypass"),
-  _paramDefined(	PID_OperationDefinition_ParametersDefined,	L"ParametersDefined")
+  _paramDefined(	PID_OperationDefinition_ParametersDefined,	L"ParametersDefined", L"/Header/Dictionary/ParameterDefinitions", PID_DefinitionObject_Identification)
 {
 	_persistentProperties.put(_dataDef.address());
 	_persistentProperties.put(_isTimeWarp.address());
@@ -181,34 +181,11 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::PrependDegradeToOperation (
       ImplAAFOperationDef  *pOperationDef)
 {
-	aafUID_t	*tmp = NULL, newUID;
-	aafInt32	oldCount;
-	aafInt32	newCount;
-
-	if(pOperationDef == NULL)
+	if (NULL == pOperationDef)
 		return AAFRESULT_NULL_PARAM;
-	
-	XPROTECT()
-	{
-		oldCount = _degradeTo.count();
-		newCount = oldCount + 1;
-		CHECK(pOperationDef->GetAUID(&newUID));
-		tmp = new aafUID_t[newCount];
-		if(tmp == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-		if(oldCount != 0)
-			_degradeTo.copyToBuffer(&tmp[1], oldCount * sizeof(aafUID_t));
-		tmp[0] = newUID;
-		_degradeTo.setValue(tmp, newCount * sizeof(aafUID_t));
-		delete [] tmp;
-	}
-	XEXCEPT
-	{
-		if(tmp != NULL)
-			delete [] tmp;
-	}
-	XEND;
 
+	_degradeTo.prependValue(pOperationDef);
+	pOperationDef->AcquireReference();
 	return AAFRESULT_SUCCESS;
 }
 
@@ -216,34 +193,11 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::AppendDegradeToOperation (
       ImplAAFOperationDef  *pOperationDef)
 {
-	aafUID_t	*tmp, newUID;
-	aafInt32	oldCount;
-	aafInt32	newCount;
-
-	if(pOperationDef == NULL)
+	if (NULL == pOperationDef)
 		return AAFRESULT_NULL_PARAM;
-	
-	XPROTECT()
-	{
-		oldCount = _degradeTo.count();
-		newCount = oldCount + 1;
-		CHECK(pOperationDef->GetAUID(&newUID));
-		tmp = new aafUID_t[newCount];
-		if(tmp == NULL)
-			RAISE(AAFRESULT_NOMEMORY);
-		if(oldCount != 0)
-			_degradeTo.copyToBuffer(tmp, oldCount * sizeof(aafUID_t));
-		tmp[newCount - 1] = newUID;
-		_degradeTo.setValue(tmp, newCount * sizeof(aafUID_t));
-		delete [] tmp;
-	}
-	XEXCEPT
-	{
-		if(tmp != NULL)
-			delete [] tmp;
-	}
-	XEND;
 
+	_degradeTo.appendValue(pOperationDef);
+	pOperationDef->AcquireReference();
 	return AAFRESULT_SUCCESS;
 }
 
@@ -252,16 +206,13 @@ AAFRESULT STDMETHODCALLTYPE
 	  aafUInt32 index,
       ImplAAFOperationDef  *pOperationDef)
 {
-  if (! pOperationDef) return AAFRESULT_NULL_PARAM;
+	if (! pOperationDef) return AAFRESULT_NULL_PARAM;
 
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountDegradeToOperations (&count);
-  if (AAFRESULT_FAILED (hr)) return hr;
-  if (index > count)
-	return AAFRESULT_BADINDEX;
+	if (index > _degradeTo.count()) // we can "insert" one after the end
+	  return AAFRESULT_BADINDEX;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_degradeTo.insertAt(pOperationDef, index);
+	return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -275,23 +226,40 @@ AAFRESULT STDMETHODCALLTYPE
 	if (index >= count)
 		return AAFRESULT_BADINDEX;
 	
-	return AAFRESULT_NOT_IMPLEMENTED;
-//!!!	_degradeTo.removeAt(index);
-//	return AAFRESULT_SUCCESS;
+	_degradeTo.removeAt(index);
+	return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::GetDegradeToOperations (
       ImplEnumAAFOperationDefs  **ppEnum)
 {
-	if(ppEnum == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
-	*ppEnum = (ImplEnumAAFOperationDefs *)CreateImpl(CLSID_EnumAAFOperationDefs);
-	if(*ppEnum == NULL)
-		return(AAFRESULT_NOMEMORY);
-	(*ppEnum)->SetEnumProperty(this, &_degradeTo);
-
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFOperationDefs *theEnum = (ImplEnumAAFOperationDefs *)CreateImpl (CLSID_EnumAAFOperationDefs);
+	
+	XPROTECT()
+	{
+		OMWeakReferenceVectorIterator</*OMUniqueObjectIdentification,*/ ImplAAFOperationDef>* iter = 
+			new OMWeakReferenceVectorIterator</*OMUniqueObjectIdentification,*/ ImplAAFOperationDef>(_degradeTo);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+		  {
+			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
+		return(XCODE());
+	}
+	XEND;
+	
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -378,108 +346,85 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::AddParameterDef (
       ImplAAFParameterDef *pAAFParameterDef)
 {
-	aafUID_t					*tmp, newUID, oldUID;
-	aafInt32					oldCount;
-	aafInt32					newCount;
-	ImplAAFParameterDef*		pParmDef = NULL;
-	ImplEnumAAFParameterDefs*	pEnum = NULL;
-	aafBool						parmDefFound = kAAFFalse;
-
-	tmp = NULL;
-
-	if(pAAFParameterDef == NULL)
+	if (NULL == pAAFParameterDef)
 		return AAFRESULT_NULL_PARAM;
+
+	_paramDefined.appendValue(pAAFParameterDef);
+	// trr - We are saving a copy of pointer in _paramDefined
+	// so we need to bump its reference count.
+	pAAFParameterDef->AcquireReference();
 	
-	XPROTECT()
-	{
-		CHECK(pAAFParameterDef->GetAUID(&newUID));
-		CHECK(GetParameterDefs(&pEnum));
-		pEnum->NextOne(&pParmDef);
-		while(pParmDef)
-		{
-			CHECK(pParmDef->GetAUID(&oldUID));
-			if ( memcmp(&newUID, &oldUID, sizeof(aafUID_t)) == 0)
-			{
-				parmDefFound = kAAFTrue;
-				break;
-			}
-			pParmDef->ReleaseReference();
-			pParmDef = NULL;
-			pEnum->NextOne(&pParmDef);
-		}
-		pEnum->ReleaseReference();
-		pEnum = NULL;
-		if (!parmDefFound)
-		{
-			if (!_paramDefined.isPresent())
-				oldCount = 0;			
-			else oldCount = _paramDefined.count();
-
-			newCount = oldCount + 1;
-			tmp = new aafUID_t[newCount];
-			if(tmp == NULL)
-				RAISE(AAFRESULT_NOMEMORY);
-			if(oldCount!= 0)
-				_paramDefined.copyToBuffer(tmp, oldCount * sizeof(aafUID_t));
-			tmp[newCount - 1] = newUID;
-			_paramDefined.setValue(tmp, newCount * sizeof(aafUID_t));
-			delete [] tmp;
-		}
-		else
-		{
-			pParmDef->ReleaseReference();
-			pParmDef = NULL;
-			RAISE(AAFRESULT_OBJECT_ALREADY_ATTACHED);
-		}
-	}
-	XEXCEPT
-	{
-		if (pParmDef)
-		  pParmDef->ReleaseReference();
-		pParmDef = 0;
-		if (pEnum)
-		  pEnum->ReleaseReference();
-		pEnum = 0;
-		if(tmp != NULL)
-			delete [] tmp;
-	}
-	XEND;
-
-	return AAFRESULT_SUCCESS;
+	return(AAFRESULT_SUCCESS);
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::GetParameterDefs (
       ImplEnumAAFParameterDefs **ppEnum)
 {
+	ImplEnumAAFParameterDefs	*theEnum;
 	if(ppEnum == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	*ppEnum = (ImplEnumAAFParameterDefs *)CreateImpl(CLSID_EnumAAFParameterDefs);
-	if(*ppEnum == NULL)
+	*ppEnum = NULL;
+	theEnum = (ImplEnumAAFParameterDefs *)CreateImpl(CLSID_EnumAAFParameterDefs);
+	if(theEnum == NULL)
 		return(AAFRESULT_NOMEMORY);
-	(*ppEnum)->SetEnumProperty(this, &_paramDefined);
+	XPROTECT()
+	{
+		OMWeakReferenceSetIterator</*OMUniqueObjectIdentification,*/ ImplAAFParameterDef>* iter = 
+			new OMWeakReferenceSetIterator</*OMUniqueObjectIdentification,*/ ImplAAFParameterDef>(_paramDefined);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+		  {
+			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
+		return(XCODE());
+	}
+	XEND;
 
 	return(AAFRESULT_SUCCESS);
 }
+
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::CountParameterDefs (
       aafUInt32 * pResult)
 {
-	if(pResult == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
-	return(AAFRESULT_NOT_IMPLEMENTED);
+  if (! pResult)
+	return AAFRESULT_NULL_PARAM;
+  *pResult = _paramDefined.count();
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::LookupParameterDef (
-	  const aafUID_t & /*parameterDefId*/,
+	  const aafUID_t & parameterDefId,
 	  ImplAAFParameterDef ** ppParameterDef)
 {
-	if(ppParameterDef == NULL)
-		return(AAFRESULT_NULL_PARAM);
+  if (!ppParameterDef) return AAFRESULT_NULL_PARAM;
 
-	return(AAFRESULT_NOT_IMPLEMENTED);
+	AAFRESULT result = AAFRESULT_SUCCESS;
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-29)
+	if (_paramDefined.find((*reinterpret_cast<const OMObjectIdentification *>(&parameterDefId)),
+                             *ppParameterDef))
+	{
+		assert(NULL != *ppParameterDef);
+		(*ppParameterDef)->AcquireReference();
+	}
+	else
+	{
+		// no recognized class guid in dictionary
+		result = AAFRESULT_NO_MORE_OBJECTS;
+	}
+
+	return (result);
 }
