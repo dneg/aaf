@@ -167,9 +167,7 @@ public:
 	// Interfaces visible inside the toolkit, but not exposed through the API
 	virtual AAFRESULT UnlinkMobID(aafUID_t mobID);
 
-	aafBool IsEssenceDataPresent(aafUID_t fileMobUid, /* IN -- */ aafFileFormat_t fmt);
-	AAFRESULT AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
-						  ImplAAFObject *dataObj) ;    /* IN - Input Mob */ 
+	AAFRESULT LookupEssence (aafUID_t *pFileMobID, ImplAAFEssenceData **ppEssence);
 	AAFRESULT ChangeIndexedMobID (ImplAAFMob *pMob, aafUID_t *newID);
 
 AAFRESULT
