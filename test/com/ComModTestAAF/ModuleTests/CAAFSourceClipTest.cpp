@@ -25,6 +25,21 @@ static aafFadeType_t fadeInType = kFadeLinearAmp;
 static aafFadeType_t fadeOutType = kFadeLinearPower;
 static aafSourceRef_t sourceRef; 
 
+
+// Handle macro for error handling...
+#ifdef CHECK
+#undef CHECK
+#endif
+#define CHECK(result)\
+do\
+{\
+	hr = result;\
+	if (AAFRESULT_SUCCESS != hr)\
+		throw hr;\
+} while (false)
+
+
+
 static HRESULT CreateAAFFile(aafWChar * pFileName)
 {
 	// IAAFSession*				pSession = NULL;
@@ -36,10 +51,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment*				seg = NULL;
 	IAAFSourceClip*				sclp = NULL;
 	aafRational_t				audioRate = { 44100, 1 };
-
+	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
 	aafUID_t					newMobID, referencedMobID;
-	HRESULT						hr;
+	HRESULT						hr = AAFRESULT_SUCCESS;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
 	ProductInfo.productName = L"Make AVR Example";
@@ -52,89 +67,97 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession);
-	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFile, 
-						   (void **)&pFile);
-	if (AAFRESULT_SUCCESS == hr)
+	try
 	{
+		/*
+		hr = CoCreateInstance(CLSID_AAFSession,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFSession, 
+								 (void **)&pSession);
+		*/
+		CHECK(CoCreateInstance(CLSID_AAFFile,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFFile, 
+								 (void **)&pFile));
 		// We assume the following functions have been tested and they do work
 		// The next 3 function calls create the AAF file
 		// hr = pSession->SetDefaultIdentification(&ProductInfo);
 		// hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
-		hr = pFile->Initialize();
-		hr = pFile->OpenNewModify(pFileName, 0, &ProductInfo);
-	  	hr = pFile->GetHeader(&pHeader);
+		CHECK(pFile->Initialize());
+		CHECK(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+		bFileOpen = true;
+
+		CHECK(pFile->GetHeader(&pHeader));
 
 		//Make the MOB to be referenced
-		hr = CoCreateInstance( CLSID_AAFMasterMob,
-							   NULL, 			  
-							   CLSCTX_INPROC_SERVER, 
-							   IID_IAAFMob, 
-							   (void **)&pReferencedMob);
-
-
-		CoCreateGuid((GUID *)&referencedMobID);
-		hr = pReferencedMob->SetMobID(&referencedMobID);
-		hr = pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob");
+		CHECK(CoCreateInstance( CLSID_AAFMasterMob,
+								 NULL, 			  
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFMob, 
+								 (void **)&pReferencedMob));
+		CHECK(CoCreateGuid((GUID *)&referencedMobID));
+		CHECK(pReferencedMob->SetMobID(&referencedMobID));
+		CHECK(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
 
 		// Create a Mob
-		hr = CoCreateInstance( CLSID_AAFCompositionMob,
-							   NULL, 			  
-							   CLSCTX_INPROC_SERVER, 
-							   IID_IAAFMob, 
-							   (void **)&pMob);
-
-
-		CoCreateGuid((GUID *)&newMobID);
-		hr = pMob->SetMobID(&newMobID);
-		hr = pMob->SetName(L"AAFSourceClipTest");
+		CHECK(CoCreateInstance( CLSID_AAFCompositionMob,
+								 NULL, 			  
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFMob, 
+								 (void **)&pMob));
+		CHECK(CoCreateGuid((GUID *)&newMobID));
+		CHECK(pMob->SetMobID(&newMobID));
+		CHECK(pMob->SetName(L"AAFSourceClipTest"));
 
 		// Create a SourceClip
-		hr = CoCreateInstance( CLSID_AAFSourceClip,
-							   NULL, 
-							   CLSCTX_INPROC_SERVER, 
-							   IID_IAAFSourceClip, 
-							   (void **)&sclp);		
- 		if (AAFRESULT_SUCCESS == hr)
-		{			
-			// Set the properties for the SourceClip
-			hr = sclp->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType);
-			if (AAFRESULT_SUCCESS == hr)
-			{
-				sourceRef.sourceID = referencedMobID;
-				sourceRef.sourceSlotID = 0;
-				sourceRef.startTime = 0;
-				hr = sclp->SetSourceReference(sourceRef);
-				if (AAFRESULT_SUCCESS == hr)
-				{
-					hr = sclp->QueryInterface (IID_IAAFSegment, (void **)&seg);
-					if (AAFRESULT_SUCCESS == hr)
-					{
-						hr = pMob->AppendNewSlot (seg, 1, slotName, &newSlot);
-					}
-				}
-			}
-		}
+		CHECK(CoCreateInstance( CLSID_AAFSourceClip,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFSourceClip, 
+								 (void **)&sclp));
+								 		
+		// Set the properties for the SourceClip
+		CHECK(sclp->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
+		sourceRef.sourceID = referencedMobID;
+		sourceRef.sourceSlotID = 0;
+		sourceRef.startTime = 0;
+		CHECK(sclp->SetSourceReference(sourceRef));
+
+		CHECK(sclp->QueryInterface (IID_IAAFSegment, (void **)&seg));
+		CHECK(pMob->AppendNewSlot (seg, 1, slotName, &newSlot));
+
+		CHECK(pHeader->AppendMob(pMob));
+		CHECK(pHeader->AppendMob(pReferencedMob));
+	}
+	catch (...)
+	{
 	}
 
-	if (AAFRESULT_SUCCESS == hr)
-		hr = pHeader->AppendMob(pMob);
-	if (AAFRESULT_SUCCESS == hr)
-		hr = pHeader->AppendMob(pReferencedMob);
-
 	// Cleanup and return
+	if (newSlot)
+		newSlot->Release();
+
+	if (seg)
+		seg->Release();
+
+	if (sclp)
+		sclp->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pReferencedMob)
+		pReferencedMob->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
 	if (pFile) 
 	{
-		pFile->Close();
+		if (bFileOpen)
+			pFile->Close();
 		pFile->Release();
 	}
 
@@ -145,21 +168,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pSession->Release();
 	}
 	*/
-
-	if (pHeader)
-		pHeader->Release();
-
-	if (pMob)
-		pMob->Release();
-
-	if (newSlot)
-		newSlot->Release();
-
-	if (seg)
-		seg->Release();
-
-	if (sclp)
-		sclp->Release();
 
 	return hr;
 }
@@ -176,7 +184,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	IAAFMobSlot*				pSlot = NULL;
 	IAAFSegment*				pSegment = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
-
+	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
 	aafSearchCrit_t				criteria;
 	aafNumSlots_t				numMobs, numSlots;
@@ -200,111 +208,119 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
-	  
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession);
-	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFile, 
-						   (void **)&pFile);
-	if (AAFRESULT_SUCCESS == hr)
-	{
+
+	try
+	{  
+		/*
+		hr = CoCreateInstance(CLSID_AAFSession,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFSession, 
+								 (void **)&pSession);
+		*/
+		CHECK(CoCreateInstance(CLSID_AAFFile,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFFile, 
+								 (void **)&pFile));
+
 		// We assume the following functions have been tested and they do work
 		// The next 3 function calls open the AAF file
 		// hr = pSession->SetDefaultIdentification(&ProductInfo);
 		// hr = pSession->OpenReadFile(pFileName, &pFile);
-		hr = pFile->Initialize();
-		hr = pFile->OpenExistingRead(pFileName, 0);
-	  	hr = pFile->GetHeader(&pHeader);
+		CHECK(pFile->Initialize());
+		CHECK(pFile->OpenExistingRead(pFileName, 0));
+		bFileOpen = true;
+
+		CHECK(pFile->GetHeader(&pHeader));
 
 		// Get the number of mobs in the file (should be one)
-		hr = pHeader->GetNumMobs(kAllMob, &numMobs);
-		if (2 == numMobs )
-		{
-			// Enumerate over all Composition Mobs
-			criteria.searchTag = kByMobKind;
-			criteria.tags.mobKind = kCompMob;
-			hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
-			while (pMobIter && pMobIter->NextOne(&pMob) !=AAFRESULT_NO_MORE_MOBS)
-			{
-				pMob->GetNumSlots(&numSlots);
-				if (1 == numSlots)
-				{
-					hr = pMob->EnumAAFAllMobSlots(&pSlotIter);
-					while (pSlotIter && pSlotIter->NextOne(&pSlot) != AAFRESULT_NO_MORE_OBJECTS)
-					{
-						hr = pSlot->GetSegment(&pSegment);
-						hr = pSegment->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip);
-		
-						hr = pSourceClip->GetFade( &rFadeInLen, &rFadeInType, &fadeInPresent, 
-											&rFadeOutLen, &rFadeOutType, &fadeOutPresent );
-						hr = pSourceClip->GetSourceReference( &rSourceRef); 
-						// verify that we read exactly the same thing as we wrote to the file !!
-						if (fadeInPresent)
-						{
-							if (rFadeInLen != fadeInLen ||
-								rFadeInType != fadeInType)
-							{
-								hr = AAFRESULT_TEST_FAILED;
-							}
-						}
-						else
-						{
-							hr = AAFRESULT_TEST_FAILED;
-						}
-						if (fadeOutPresent)
-						{
-							if (rFadeOutLen != fadeOutLen ||
-								rFadeOutType != fadeOutType)
-							{
-								hr = AAFRESULT_TEST_FAILED;
-							}
-						}
-						else
-						{
-							hr = AAFRESULT_TEST_FAILED;
-						}
-						if (memcmp(&(rSourceRef.sourceID), &(sourceRef.sourceID), sizeof(sourceRef.sourceID)) != 0) 
-						{
-							hr = AAFRESULT_TEST_FAILED;
-						}
-						if (rSourceRef.sourceSlotID != sourceRef.sourceSlotID ||
-							rSourceRef.startTime != sourceRef.startTime)
-						{
-							hr = AAFRESULT_TEST_FAILED;
-						}
+		CHECK(pHeader->GetNumMobs(kAllMob, &numMobs));
+		if (2 != numMobs )
+			CHECK(AAFRESULT_TEST_FAILED);
 
-						hr = pSourceClip->ResolveRef(&pReferencedMob);
-						if(hr == AAFRESULT_SUCCESS)
-						{
-							pReferencedMob->GetMobID(&rReferencedMobID);
-							if(!EqualAUID(&rReferencedMobID, &sourceRef.sourceID))
-								hr = AAFRESULT_TEST_FAILED;
-						}
-					}
-				}
-				else
-				{
-					hr = AAFRESULT_TEST_FAILED;
-				}
-			}
-		}
-		else
+		// Enumerate over all Composition Mobs
+		criteria.searchTag = kByMobKind;
+		criteria.tags.mobKind = kCompMob;
+		CHECK(pHeader->EnumAAFAllMobs(&criteria, &pMobIter));
+		while (AAFRESULT_SUCCESS == pMobIter->NextOne(&pMob))
 		{
-			hr = AAFRESULT_TEST_FAILED;
+			CHECK(pMob->GetNumSlots(&numSlots));
+			if (1 != numSlots)
+				CHECK(AAFRESULT_TEST_FAILED);
+
+			CHECK(pMob->EnumAAFAllMobSlots(&pSlotIter));
+			while (AAFRESULT_SUCCESS == pSlotIter->NextOne(&pSlot))
+			{
+				// The segment should be a source clip...
+				CHECK(pSlot->GetSegment(&pSegment));
+				CHECK(pSegment->QueryInterface(IID_IAAFSourceClip, (void **) &pSourceClip));
+
+				CHECK(pSourceClip->GetFade( &rFadeInLen, &rFadeInType, &fadeInPresent, 
+									&rFadeOutLen, &rFadeOutType, &fadeOutPresent ));
+				CHECK(pSourceClip->GetSourceReference( &rSourceRef)); 
+				// verify that we read exactly the same thing as we wrote to the file !!
+				if (!fadeInPresent)
+					CHECK(AAFRESULT_TEST_FAILED);
+				if (rFadeInLen != fadeInLen || rFadeInType != fadeInType)
+					CHECK(AAFRESULT_TEST_FAILED);
+				if (!fadeOutPresent)
+					CHECK(AAFRESULT_TEST_FAILED);
+				if (rFadeOutLen != fadeOutLen || rFadeOutType != fadeOutType)
+					CHECK(AAFRESULT_TEST_FAILED);
+				if (memcmp(&(rSourceRef.sourceID), &(sourceRef.sourceID), sizeof(sourceRef.sourceID)) != 0) 
+					CHECK(AAFRESULT_TEST_FAILED);
+				if (rSourceRef.sourceSlotID != sourceRef.sourceSlotID ||
+					rSourceRef.startTime != sourceRef.startTime)
+					CHECK(AAFRESULT_TEST_FAILED);
+
+				CHECK(pSourceClip->ResolveRef(&pReferencedMob));
+				CHECK(pReferencedMob->GetMobID(&rReferencedMobID));
+				if(!EqualAUID(&rReferencedMobID, &sourceRef.sourceID))
+					CHECK(AAFRESULT_TEST_FAILED);
+
+				pSlot->Release();
+				pSlot = NULL;
+			}
+
+			pMob->Release();
+			pMob = NULL;
 		}
+
+	}
+	catch (...)
+	{
 	}
 
 	// Cleanup and return
+	if (pReferencedMob)
+		pReferencedMob->Release();
+
+	if (pSourceClip)
+		pSourceClip->Release();
+
+	if (pSegment)
+		pSegment->Release();
+
+	if (pSlot)
+		pSlot->Release();
+
+	if (pSlotIter)
+		pSlotIter->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pMobIter)
+		pMobIter->Release();
+
+	if (pHeader)
+		pHeader->Release();
+
 	if (pFile) 
 	{
-		pFile->Close();
+		if (bFileOpen)
+			pFile->Close();
 		pFile->Release();
 	}
 
@@ -315,28 +331,6 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		pSession->Release();
 	}
 	*/
-
-	if (pHeader)
-		pHeader->Release();
-
-	if (pMob)
-		pMob->Release();
-
-	if (pSlot)
-		pSlot->Release();
-
-	if (pSegment)
-		pSegment->Release();
-
-	if (pSourceClip)
-		pSourceClip->Release();
-
-	if (pMobIter)
-		pMobIter->Release();
-
-	if (pSlotIter)
-		pSlotIter->Release();
-
 	return hr;
 }
  

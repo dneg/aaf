@@ -19,6 +19,17 @@
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 
+// Handle macro for error handling...
+#ifdef CHECK
+#undef CHECK
+#endif
+#define CHECK(result)\
+do\
+{\
+	hr = result;\
+	if (AAFRESULT_SUCCESS != hr)\
+		throw hr;\
+} while (false)
 
 
   //@comm The number of locators may be zero if the essence is in the current file.
@@ -42,11 +53,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
-	IAAFLocator	*				pLocator;
+	IAAFLocator	*				pLocator = NULL;
+	IAAFSourceMob	*pSourceMob = NULL;
+	IAAFMob			*pMob = NULL;
+	IAAFEssenceDescriptor *edesc = NULL;
+	aafRational_t	audioRate = { 44100, 1 };
 	aafProductIdentification_t	ProductInfo;
 	aafUID_t					newUID;
 	aafInt32					numLocators;
-	HRESULT						hr;
+	HRESULT						hr = AAFRESULT_SUCCESS;
+	bool bFileOpen = false;
 	aafUID_t					ddef = DDEF_Audio;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
@@ -60,115 +76,103 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession);
-	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFile, 
-						   (void **)&pFile);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-    hr = pFile->Initialize();
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	try 
+	{
+		/*
+		hr = CoCreateInstance(CLSID_AAFSession,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFSession, 
+								 (void **)&pSession);
 
-	/*
-	hr = pSession->SetDefaultIdentification(&ProductInfo);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	*/
+		hr = pSession->SetDefaultIdentification(&ProductInfo);
+		if (AAFRESULT_SUCCESS != hr)
+			return hr;
+		*/
+		CHECK(CoCreateInstance(CLSID_AAFFile,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFFile, 
+								 (void **)&pFile));
+		CHECK(pFile->Initialize());
 
-	// hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
-	hr = pFile->OpenNewModify(pFileName, 0, &ProductInfo);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+		// hr = pSession->CreateFile(pFileName, kAAFRev1, &pFile);
+		CHECK(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
+		bFileOpen = true;
   
-  	hr = pFile->GetHeader(&pHeader);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
- 	
-//Make the first mob
-	IAAFSourceMob	*pSourceMob;
-	IAAFMob			*pMob;
-	IAAFEssenceDescriptor *edesc;
+		CHECK(pFile->GetHeader(&pHeader));
+ 		
+		//Make the first mob
+		// Create a Mob
+		CHECK(CoCreateInstance(CLSID_AAFSourceMob,
+								NULL, 
+								CLSCTX_INPROC_SERVER, 
+								IID_IAAFSourceMob, 
+								(void **)&pSourceMob));
+		
+		// Initialize mob properties:
+		CHECK(pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
+		CHECK(CoCreateGuid((GUID *)&newUID));
+		CHECK(pMob->SetMobID(&newUID));
+		CHECK(pMob->SetName(L"EssenceDescriptorTest"));
+		
+		// Create the descriptor:
+		CHECK(CoCreateInstance(CLSID_AAFEssenceDescriptor,
+								NULL, 
+								CLSCTX_INPROC_SERVER, 
+								IID_IAAFEssenceDescriptor, 
+								(void **)&edesc));		
+ 		CHECK(pSourceMob->SetEssenceDescriptor (edesc));
 
-	aafRational_t	audioRate = { 44100, 1 };
+			// Verify that there are no locators
+		CHECK(edesc->GetNumLocators(&numLocators));
+		if (0 != numLocators)
+			CHECK(AAFRESULT_TEST_FAILED);
 
-	// Create a Mob
-	hr = CoCreateInstance(CLSID_AAFSourceMob,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
-							IID_IAAFSourceMob, 
-							(void **)&pSourceMob);
+  
+		// Make a locator, and attach it to the EssenceDescriptor
+		CHECK(CoCreateInstance(CLSID_AAFLocator,
+								NULL, 
+								CLSCTX_INPROC_SERVER, 
+								IID_IAAFLocator, 
+								(void **)&pLocator));		
 
+		CHECK(edesc->AppendLocator(pLocator));
 
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	hr = pSourceMob->QueryInterface (IID_IAAFMob, (void **)&pMob);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+		// Verify that there is now one locator
+		CHECK(edesc->GetNumLocators(&numLocators));
+		if (1 != numLocators)
+			CHECK(AAFRESULT_TEST_FAILED);
 
-	newUID.Data1 = 0;
-	hr = pMob->SetMobID(&newUID);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	hr = pMob->SetName(L"EssenceDescriptorTest");
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+		// Add the source mob into the tree
+		CHECK(pHeader->AppendMob(pMob));
+	}
+	catch (...)
+	{
+	}
+
+	// Cleanup object references
+	if (pLocator)
+		pLocator->Release();
+
+	if (edesc)
+		edesc->Release();
+
+	if (pMob)
+		pMob->Release();
+
+	if (pSourceMob)
+		pSourceMob->Release();
 	
-	hr = CoCreateInstance(CLSID_AAFEssenceDescriptor,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
-							IID_IAAFEssenceDescriptor, 
-							(void **)&edesc);		
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
- 	hr = pSourceMob->SetEssenceDescriptor (edesc);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-    // Verify that there are no locators
-	hr = edesc->GetNumLocators(&numLocators);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	if (0 != numLocators)
-		return AAFRESULT_TEST_FAILED;
-
-  
-	// Make a locator, and attach it to the EssenceDescriptor
-	hr = CoCreateInstance(CLSID_AAFLocator,
-							NULL, 
-							CLSCTX_INPROC_SERVER, 
-							IID_IAAFLocator, 
-							(void **)&pLocator);		
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-    hr = edesc->AppendLocator(pLocator);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-	// Verify that there is now one locator
-	hr = edesc->GetNumLocators(&numLocators);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	if (1 != numLocators)
-		return AAFRESULT_TEST_FAILED;
-
-	// Add the source mob into the tree
-	hr = pHeader->AppendMob(pMob);
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-
-	hr = pFile->Close();
- 	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	if (pHeader)
+		pHeader->Release();
+			
+	if (pFile)
+	{	// Close file, clean-up and return
+		if (bFileOpen)
+			pFile->Close();
+ 		pFile->Release();
+	}
 
 	/*
 	hr = pSession->EndSession();
@@ -176,11 +180,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		return hr;
 	*/
 
-	pMob->Release();
-	if (pFile) pFile->Release();
-	// if (pSession) pSession->Release();
-
-	return AAFRESULT_SUCCESS;
+	return hr;
 }
 
 static HRESULT ReadAAFFile(aafWChar * pFileName)
@@ -188,14 +188,17 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	// IAAFSession *				pSession = NULL;
 	IAAFFile *					pFile = NULL;
 	IAAFHeader *				pHeader = NULL;
-	IAAFEssenceDescriptor		*pEdesc;
-	IAAFSourceMob				*pSourceMob;
-	IEnumAAFLocators *			pEnum;
-	IAAFLocator	*				pLocator;
+	IEnumAAFMobs *mobIter = NULL;
+	IAAFMob			*aMob = NULL;
+	IAAFEssenceDescriptor		*pEdesc = NULL;
+	IAAFSourceMob				*pSourceMob = NULL;
+	IEnumAAFLocators *			pEnum = NULL;
+	IAAFLocator	*				pLocator = NULL;
 	aafInt32					numLocators;
 	aafProductIdentification_t	ProductInfo;
 	aafNumSlots_t	numMobs, n;
-	HRESULT						hr;
+	HRESULT						hr = AAFRESULT_SUCCESS;
+	bool bFileOpen = false;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
 	ProductInfo.productName = L"Make AVR Example. NOT!";
@@ -207,111 +210,130 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	ProductInfo.productVersionString = NULL;
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
-	  
-	/*
-	hr = CoCreateInstance(CLSID_AAFSession,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFSession, 
-						   (void **)&pSession);
-	*/
-	hr = CoCreateInstance(CLSID_AAFFile,
-						   NULL, 
-						   CLSCTX_INPROC_SERVER, 
-						   IID_IAAFFile, 
-						   (void **)&pFile);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-    hr = pFile->Initialize();
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
 
-	// hr = pSession->SetDefaultIdentification(&ProductInfo);
-	// if (AAFRESULT_SUCCESS != hr)
-	// 	return hr;
 
-	// hr = pSession->OpenReadFile(pFileName, &pFile);
-	hr = pFile->OpenExistingRead(pFileName, 0);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+	try
+	{	  
+		/*
+		hr = CoCreateInstance(CLSID_AAFSession,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFSession, 
+								 (void **)&pSession);
+		*/
+		// hr = pSession->SetDefaultIdentification(&ProductInfo);
+		// if (AAFRESULT_SUCCESS != hr)
+		// 	return hr;
+
+		CHECK(CoCreateInstance(CLSID_AAFFile,
+								 NULL, 
+								 CLSCTX_INPROC_SERVER, 
+								 IID_IAAFFile, 
+								 (void **)&pFile));
+		CHECK(pFile->Initialize());
+
+
+		// hr = pSession->OpenReadFile(pFileName, &pFile);
+		CHECK(pFile->OpenExistingRead(pFileName, 0));
+		bFileOpen = true;
   
-  	hr = pFile->GetHeader(&pHeader);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
+  	CHECK(pFile->GetHeader(&pHeader));
 
-	hr = pHeader->GetNumMobs(kAllMob, &numMobs);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	if (1 != numMobs )
-		return AAFRESULT_TEST_FAILED;
+		CHECK(pHeader->GetNumMobs(kAllMob, &numMobs));
+		if (1 != numMobs )
+			CHECK(AAFRESULT_TEST_FAILED);
 
-	IEnumAAFMobs *mobIter;
 
-//!!!	aafSearchCrit_t		criteria;
-//!!!	criteria.searchTag = kNoSearch;
+	//!!!	aafSearchCrit_t		criteria;
+	//!!!	criteria.searchTag = kNoSearch;
 
-    hr = pHeader->EnumAAFAllMobs (NULL, &mobIter);
-	if (AAFRESULT_SUCCESS != hr)
-		return hr;
-	for(n = 0; n < numMobs; n++)
+		CHECK(pHeader->EnumAAFAllMobs (NULL, &mobIter));
+		for(n = 0; n < numMobs; n++)
+		{
+			aafWChar		name[500];
+			aafUID_t		mobID;
+
+			CHECK(mobIter->NextOne (&aMob));
+			CHECK(aMob->GetName (name, sizeof(name)));
+			CHECK(aMob->GetMobID (&mobID));
+
+			CHECK(aMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob));
+			CHECK(pSourceMob->GetEssenceDescriptor (&pEdesc));
+
+			// Verify that there is now one locator
+			CHECK(pEdesc->GetNumLocators(&numLocators));
+			if (1 != numLocators)
+				CHECK(AAFRESULT_TEST_FAILED);
+		
+			CHECK(pEdesc->EnumAAFAllLocators(&pEnum));
+
+			// This should read the one real locator
+			CHECK(pEnum->NextOne(&pLocator));
+
+			// This should run off the end
+			pLocator->Release();
+			pLocator = NULL;
+
+			hr = pEnum->NextOne(&pLocator);
+			if (AAFRESULT_NO_MORE_OBJECTS != hr)
+				CHECK(AAFRESULT_TEST_FAILED);
+			else
+				hr = AAFRESULT_SUCCESS; // reset result
+			
+
+			pEnum->Release();
+			pEnum = NULL;
+
+			pEdesc->Release();
+			pEdesc = NULL;
+
+			pSourceMob->Release();
+			pSourceMob = NULL;
+
+			aMob->Release();
+			aMob = NULL;
+		}
+	}
+	catch (...)
 	{
-		IAAFMob			*aMob;
-		aafWChar		name[500];
-		aafUID_t		mobID;
+	}
 
-		hr = mobIter->NextOne (&aMob);
-		if (AAFRESULT_SUCCESS != hr)
-			return hr;
-		hr = aMob->GetName (name, sizeof(name));
-		if (AAFRESULT_SUCCESS != hr)
-			return hr;
-		hr = aMob->GetMobID (&mobID);
-		if (AAFRESULT_SUCCESS != hr)
-			return hr;
+	// Cleanup object references
+	if (pLocator)
+		pLocator->Release();
 
-		hr = aMob->QueryInterface (IID_IAAFSourceMob, (void **)&pSourceMob);
-		if (AAFRESULT_SUCCESS != hr)
-			return hr;
-		hr = pSourceMob->GetEssenceDescriptor (&pEdesc);
-		if (AAFRESULT_SUCCESS != hr)
-			return hr;
+	if (pEnum)
+		pEnum->Release();
 
-		// Verify that there is now one locator
-		hr = pEdesc->GetNumLocators(&numLocators);
-		if (AAFRESULT_SUCCESS != hr)
-			return hr;
-		if (1 != numLocators)
-			return AAFRESULT_TEST_FAILED;
+	if (pEdesc)
+		pEdesc->Release();
+
+	if (pSourceMob)
+		pSourceMob->Release();
 	
-		hr = pEdesc->EnumAAFAllLocators(&pEnum);
-		if (AAFRESULT_SUCCESS != hr)
-			return hr;
+	if (aMob)
+		aMob->Release();
 
-		// This should read the one real locator
-		hr = pEnum->NextOne(&pLocator);
-		if (AAFRESULT_SUCCESS != hr)
-			return hr;
+	if (mobIter)
+		mobIter->Release();
 
-		// This should run off the end
-		hr = pEnum->NextOne(&pLocator);
-		if (AAFRESULT_NO_MORE_OBJECTS != hr)
-			return hr;
-}
+	if (pHeader)
+		pHeader->Release();
+			
+	if (pFile)
+	{	// Close file, clean-up and return
+		if (bFileOpen)
+			pFile->Close();
+ 		pFile->Release();
+	}
 
-	//!!! Problem deleting, let it leak -- 	delete mobIter;
-	hr = pFile->Close();
-	if (AAFRESULT_SUCCESS != hr)
+	/*
+	hr = pSession->EndSession();
+ 	if (AAFRESULT_SUCCESS != hr)
 		return hr;
+	*/
 
-	// hr = pSession->EndSession();
-	// if (AAFRESULT_SUCCESS != hr)
-	// 	return hr;
-
-	if (pHeader) pHeader->Release();
-	if (pFile) pFile->Release();
-	// if (pSession) pSession->Release();
-
-	return 	AAFRESULT_SUCCESS;
+	return hr;
 }
  
 HRESULT CAAFEssenceDescriptor::test()
