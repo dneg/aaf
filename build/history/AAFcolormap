@@ -18,7 +18,7 @@
 
 color Pale-Green          CCFFCC
 color Pale-Red            FFCCCC
-color Pale-Blue           CCFFFF
+color Pale-Cyan           CCFFFF
 color Pale-Magenta        FFCCFF
 color Pale-Yellow         FFFFCC
 color Blue                CCCCFF
@@ -51,7 +51,7 @@ component Project-and-Makefiles Green
   AAF
 end
 
-component Documentation Pale-Blue
+component Documentation Pale-Cyan
   ref-impl/doc/
   LEGAL/
   doc/
