@@ -227,8 +227,7 @@ AXSP_TDEF_C( IUnknown )
 
 //=---------------------------------------------------------------------=
 
-// This is the type-safe version of AxQueryInterface.  The iid
-// parameter can be removed if desired.
+// This is the type-safe version of QueryInterface.
 
 template <class TypeSrc, class TypeDst>
 inline void AxQueryInterface( IAAFSmartPointer<TypeSrc> spSrc,
@@ -242,7 +241,7 @@ inline void AxQueryInterface( IAAFSmartPointer<TypeSrc> spSrc,
 
 // This version returns spDst.  The compiler can't deduce TypeDst,
 // therefore, this must be called with explicit template parameters.
-// e.g.: AxQueryInterface<IAAFHeader,IAAFObject>( spHeader, IID_IAAFObject )
+// e.g.: AxQueryInterface<IAAFHeader,IAAFObject>( spHeader )
 
 template <class TypeSrc, class TypeDst>
 inline IAAFSmartPointer< TypeDst >
