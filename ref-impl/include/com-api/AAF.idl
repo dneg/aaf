@@ -170,6 +170,7 @@ interface IAAFEssenceMultiAccess;
 interface IAAFTypeDefVariableArrayEx;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
+interface IAAFComponent2;
 
 
 // ************************
@@ -1183,6 +1184,7 @@ interface IAAFCodecDef : IUnknown
 //  - IAAFEvent
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -1250,6 +1252,8 @@ interface IAAFCommentMarker : IUnknown
 //
 // ************************
 //
+// IAAFComponent is DEPRECATED, please use IAAFComponent2.
+//
 // The component class represents an essence element.  A Component is
 // an abastract class with two subclasses: Segment and Transition.
 // The GetLength and SetLength only aplies to time-varying media and
@@ -1276,6 +1280,7 @@ interface IAAFCommentMarker : IUnknown
 
 //
 // Objects that implement IAAFComponent also implement the following interfaces:
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -1286,7 +1291,6 @@ interface IAAFCommentMarker : IUnknown
 ]
 interface IAAFComponent : IUnknown
 {
-
   //***********************************************************
   //
   // SetLength()
@@ -1508,6 +1512,7 @@ interface IAAFComponent : IUnknown
   HRESULT RemoveKLVData (
     // KLV data object to remove
     [in] IAAFKLVData * pData);
+
 
 }
 
@@ -5329,6 +5334,7 @@ interface IAAFDictionary : IUnknown
 // Objects that implement IAAFEdgecode also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -6850,6 +6856,7 @@ interface IAAFEssenceDescriptor : IUnknown
 // Objects that implement IAAFEvent also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -9576,6 +9583,7 @@ interface IAAFEssenceFormat : IUnknown
 // Objects that implement IAAFEssenceGroup also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -9845,6 +9853,7 @@ interface IAAFEssenceGroup : IUnknown
 // Objects that implement IAAFFiller also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -10071,6 +10080,7 @@ interface IAAFFindSourceInfo : IUnknown
 // Objects that implement IAAFOperationGroup also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -10669,6 +10679,7 @@ interface IAAFOperationGroup : IUnknown
 //  - IAAFEvent
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -14829,6 +14840,7 @@ interface IAAFMobSlot : IUnknown
 // Objects that implement IAAFNestedScope also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -17579,6 +17591,7 @@ interface IAAFPluginManager : IUnknown
 // Objects that implement IAAFPulldown also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -18216,6 +18229,7 @@ interface IAAFRGBADescriptor : IUnknown
 // Objects that implement IAAFScopeReference also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -18365,6 +18379,7 @@ interface IAAFScopeReference : IUnknown
 //
 // Objects that implement IAAFSegment also implement the following interfaces:
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -18475,6 +18490,7 @@ interface IAAFSegment : IUnknown
 // Objects that implement IAAFSelector also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -18704,6 +18720,7 @@ interface IAAFSelector : IUnknown
 // Objects that implement IAAFSequence also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -19610,6 +19627,7 @@ interface IAAFSoundDescriptor : IUnknown
 //  - IAAFSourceReference
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -20433,6 +20451,7 @@ interface IAAFSourceMob : IUnknown
 // Objects that implement IAAFSourceReference also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -21540,6 +21559,7 @@ interface IAAFTextLocator : IUnknown
 // Objects that implement IAAFTimecode also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -21842,6 +21862,7 @@ interface IAAFTimelineMobSlot : IUnknown
 //
 // Objects that implement IAAFTransition also implement the following interfaces:
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -22327,6 +22348,7 @@ interface IAAFTIFFDescriptor : IUnknown
 // Objects that implement IAAFTimecodeStream also implement the following interfaces:
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -22582,6 +22604,7 @@ interface IAAFTimecodeStream : IUnknown
 //  - IAAFTimecodeStream
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -35240,6 +35263,468 @@ interface IAAFMob2 : IUnknown
    //   AAFRESULT_SUCCESS
    //        - succeeded \(This is the only code indicating success.\)
    //
+
+}
+
+
+
+// ************************
+//
+// Interface IAAFComponent2
+//
+// ************************
+//
+// The component class represents an essence element.  A Component is
+// an abastract class with two subclasses: Segment and Transition.
+// The GetLength and SetLength only aplies to time-varying media and
+// it is an  optional property. Non time-varying objects DO NOT
+// support this property.
+//
+// In addition to the specific error results listed for each method,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize() called on it through
+//     this object's primary interface.  Note that IAAFComponent2 is a
+//     primary interface for an abstract class, so it is not
+//     appropriate for the Initialize() method to exist in this
+//     interface.  The Initialize() method is available through the
+//     concrete object's primary interface.
+//
+
+
+//
+// Objects that implement IAAFComponent2 also implement the following interfaces:
+//  - IAAFObject
+
+[
+    object,
+    uuid(c703e7f5-b97f-44fb-87da-a412e60ea6aa),
+    helpstring("IAAFComponent2 Interface"),
+    pointer_default(unique)
+]
+interface IAAFComponent2 : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // SetLength()
+  //
+  // Sets the length property value on this component object.
+  // 
+  // Succeeds if all of the following are true:
+  // - the optional length property is present for this object.
+  //
+  // This method deals with an optional property, which will only be
+  // present for time-varying media.
+  // 
+  // If this method fails the length property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_BAD_PROP
+  //   - the optional length property is not present for this object.
+  // 
+  HRESULT SetLength (
+    // The duration in edit units of this component
+    [in] aafLength_constref  length);
+
+
+  //***********************************************************
+  //
+  // GetLength()
+  //
+  // Gets the duration in edit units of this component.
+  //	
+  // Succeeds if all of the following are true:
+  // - the pLength pointer is valid.
+  // - the optional length property is present for this object.
+  //
+  // This method deals with an optional property, which will only be
+  // present for time-varying media.
+  // 
+  // If this method fails nothing will be written to *pLength.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLength arg is NULL.
+  //
+  // AAFRESULT_BAD_PROP
+  //   - the optional length property is not present for this object.
+  // 
+  HRESULT GetLength (
+    // Length of this component
+    [retval][out] aafLength_t *  pLength);
+	
+
+  //***********************************************************
+  //
+  // SetDataDef()
+  //
+  // sets the data definition property AUID on this component.
+  // 
+  // If this method fails the Data Definition property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef arg is NULL.
+  // 
+  HRESULT SetDataDef (
+    // DataDef of this object
+    [in] IAAFDataDef * pDataDef);
+
+
+  //***********************************************************
+  //
+  // GetDataDef()
+  //
+  // returns data definition object.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppDatadef pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppDatadef.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDatadef arg is NULL.
+  // 
+  HRESULT GetDataDef (
+    // DataDef of this object
+    [out, retval] IAAFDataDef ** ppDatadef);
+
+  //***********************************************************
+  //
+  // AppendKLVData()
+  //
+  // Appends a pre-existing KLV Data object to the specified
+  // component.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pKLV pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - the pData arg is NULL.
+  // 
+  HRESULT AppendKLVData (
+    // KLV object
+    [in] IAAFKLVData * pData);
+
+
+  //***********************************************************
+  //
+  // CountKLVData()
+  //
+  // return total number of KLV data objects attached to this component.
+  //
+  // Succeeds if all of the following are true:
+  // - the pNumData pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumComments.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumData arg is NULL.
+  // 
+  HRESULT CountKLVData (
+    // Number  of KLV data objects
+    [out] aafUInt32 *  pNumData);
+
+
+  //***********************************************************
+  //
+  // GetKLVData()
+  //
+  // return the enumeration for all KLV data objects on this component.  The returned
+  // enumerator is AddRef()ed before it is returned.  The enumerator
+  // is implemented as a EnumAAFKLVData.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  // 
+  HRESULT GetKLVData (
+    // KLV data objects
+    [out] IEnumAAFKLVData ** ppEnum);
+
+
+  //***********************************************************
+  //
+  // RemoveKLVData()
+  //
+  // // Removes the given KLV data object from this component.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pData pointer is valid.
+  // - the given KLV data object is present in the component.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pData is null.
+  //
+  // AAFRESULT_OBJECT_NOT_FOUND
+  //   - the given KLV data object is not in this component.
+  // 
+  HRESULT RemoveKLVData (
+    // KLV data object to remove
+    [in] IAAFKLVData * pData);
+
+
+  //***********************************************************
+  //
+  // AppendComment()
+  //
+  // Append and attribute name/value pair to the attribute list. 
+  // 
+  HRESULT AppendComment (
+    // The attribute name.
+    [in] aafCharacter_constptr  pName,
+
+    // The attribute value.
+    [in] aafCharacter_constptr  pValue);
+
+   // Creates a new tagged value, initializes it with the specified comment
+   // name/value pair, and appends it to the comment list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // CountComments()
+  //
+  // Return the number of comments contained by this component 
+  // 
+  HRESULT CountComments (
+    // Pointer to comment count.
+    [out] aafUInt32*  pNumComments);
+
+   // Returns the number of comments on this component.
+   //
+   // Succeeds if:
+   //   - pNumComments is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumComments is null
+  
+
+  //***********************************************************
+  //
+  // GetComments()
+  //
+  // Return a comment enumerator for this component. 
+  // 
+  HRESULT GetComments (
+    // Pointer to the new enumerator object created by this method.
+    [out] IEnumAAFTaggedValues ** ppEnum);
+
+   // Creates an enumerator for this component\'s comments.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+  //***********************************************************
+  //
+  // RemoveComment()
+  //
+  // Remove a comment (tagged value).
+  // 
+  HRESULT RemoveComment (
+    // Pointer to the tagged value comment.
+    [in] IAAFTaggedValue * pComment);
+
+   // Removes a component comment.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // AppendAttribute()
+  //
+  // Append and attribute name/value pair to the attribute list. 
+  // 
+  HRESULT AppendAttribute (
+    // The attribute name.
+    [in] aafCharacter_constptr  pName,
+
+    // The attribute value.
+    [in] aafCharacter_constptr  pValue);
+
+   // Creates a new tagged value, initializes it with the specified attribute
+   // name/value pair, and appends it to the attribute list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // CountAttributes()
+  //
+  // Return the number of attributes contained by this component 
+  // 
+  HRESULT CountAttributes (
+    // Pointer to attribute count.
+    [out] aafUInt32*  pNumAttributes);
+
+   // Returns the number of attributes on this component.
+   //
+   // Succeeds if:
+   //   - pNumAttributes is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumAttributes is null
+  
+
+  //***********************************************************
+  //
+  // GetAttributes()
+  //
+  // Return an attribute enumerator for this component. 
+  // 
+  HRESULT GetAttributes (
+    // Pointer to the new enumerator object created by this method.
+    [out] IEnumAAFTaggedValues ** ppEnum);
+
+   // Creates an enumerator for this component\'s attributes.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+  //***********************************************************
+  //
+  // RemoveAttribute()
+  //
+  // Remove an attribute (tagged value).
+  // 
+  HRESULT RemoveAttribute (
+    // Pointer to the tagged value attribute.
+    [in] IAAFTaggedValue * pAttribute);
+
+   // Removes a component attribute.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
 
 }
 

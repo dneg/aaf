@@ -103,6 +103,7 @@ interface IAAFRoot : IUnknown
 //  - IAAFSourceReference
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [
@@ -531,6 +532,7 @@ interface IAAFStrongRefValue : IUnknown
 //  - IAAFSourceReference
 //  - IAAFSegment
 //  - IAAFComponent
+//  - IAAFComponent2
 //  - IAAFObject
 
 [

@@ -38,7 +38,8 @@ AAFCOMINTERFACESONLY="\
 	AAFEssenceMultiAccess \
 	AAFTypeDefVariableArrayEx \
 	AAFMasterMobEx \
-	AAFMob2 "
+	AAFMob2 \
+	AAFComponent2 "
 
 
 # These are the impl files that are typed by humans.  Be sure to

@@ -249,6 +249,58 @@ AAFRESULT STDMETHODCALLTYPE
 	
   return(AAFRESULT_SUCCESS);
 }
+
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::AppendComment (aafCharacter_constptr  /*pName*/,
+                           aafCharacter_constptr  /*pValue*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::CountComments (aafUInt32*  /*pNumComments*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::GetComments (ImplEnumAAFTaggedValues ** /*ppEnum*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::RemoveComment (ImplAAFTaggedValue * /*pComment*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::AppendAttribute (aafCharacter_constptr  /*pName*/,
+                           aafCharacter_constptr  /*pValue*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::CountAttributes (aafUInt32*  /*pNumAttributes*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::GetAttributes (ImplEnumAAFTaggedValues ** /*ppEnum*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFComponent::RemoveAttribute (ImplAAFTaggedValue * /*pAttribute*/)
+{
+  return AAFRESULT_NOT_IMPLEMENTED;
+}
+
 /*************************************************************************
  * Private Function: SetNewProps()
  *

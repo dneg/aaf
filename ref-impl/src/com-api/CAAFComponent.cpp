@@ -73,7 +73,6 @@ CAAFComponent::~CAAFComponent ()
 {
 }
 
-
 HRESULT STDMETHODCALLTYPE
     CAAFComponent::SetLength (aafLength_constref  length)
 {
@@ -603,6 +602,256 @@ HRESULT STDMETHODCALLTYPE
 }
 
 
+
+HRESULT STDMETHODCALLTYPE
+    CAAFComponent::AppendComment (aafCharacter_constptr  pName,
+        aafCharacter_constptr  pValue)
+{
+  HRESULT hr;
+
+  ImplAAFComponent * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFComponent*> (pO);
+  assert (ptr);
+
+
+
+  hr = ptr->AppendComment (pName,
+    pValue);
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFComponent::CountComments (aafUInt32*  pNumComments)
+{
+  HRESULT hr;
+
+  ImplAAFComponent * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFComponent*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->CountComments (pNumComments);
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFComponent::GetComments (IEnumAAFTaggedValues ** ppEnum)
+{
+  HRESULT hr;
+
+  ImplAAFComponent * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFComponent*> (pO);
+  assert (ptr);
+
+  //
+  // set up for ppEnum
+  //
+  ImplEnumAAFTaggedValues * internalppEnum = NULL;
+  ImplEnumAAFTaggedValues ** pinternalppEnum = NULL;
+  if (ppEnum)
+    {
+      pinternalppEnum = &internalppEnum;
+    }
+
+  hr = ptr->GetComments (pinternalppEnum);
+  //
+  // cleanup for ppEnum
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppEnum)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppEnum->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IEnumAAFTaggedValues, (void **)ppEnum);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppEnum->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFComponent::RemoveComment (IAAFTaggedValue * pComment)
+{
+  HRESULT hr;
+
+  ImplAAFComponent * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFComponent*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pComment
+  //
+  ImplAAFTaggedValue * internalpComment = NULL;
+  if (pComment)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pComment->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpComment = static_cast<ImplAAFTaggedValue*>(arg);
+      assert (internalpComment);
+    }
+
+  hr = ptr->RemoveComment (internalpComment);
+  //
+  // no cleanup necessary for pComment
+  //
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFComponent::AppendAttribute (aafCharacter_constptr  pName,
+        aafCharacter_constptr  pValue)
+{
+  HRESULT hr;
+
+  ImplAAFComponent * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFComponent*> (pO);
+  assert (ptr);
+
+
+
+  hr = ptr->AppendAttribute (pName,
+    pValue);
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFComponent::CountAttributes (aafUInt32*  pNumAttributes)
+{
+  HRESULT hr;
+
+  ImplAAFComponent * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFComponent*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->CountAttributes (pNumAttributes);
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFComponent::GetAttributes (IEnumAAFTaggedValues ** ppEnum)
+{
+  HRESULT hr;
+
+  ImplAAFComponent * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFComponent*> (pO);
+  assert (ptr);
+
+  //
+  // set up for ppEnum
+  //
+  ImplEnumAAFTaggedValues * internalppEnum = NULL;
+  ImplEnumAAFTaggedValues ** pinternalppEnum = NULL;
+  if (ppEnum)
+    {
+      pinternalppEnum = &internalppEnum;
+    }
+
+  hr = ptr->GetAttributes (pinternalppEnum);
+  //
+  // cleanup for ppEnum
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppEnum)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppEnum->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IEnumAAFTaggedValues, (void **)ppEnum);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppEnum->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFComponent::RemoveAttribute (IAAFTaggedValue * pAttribute)
+{
+  HRESULT hr;
+
+  ImplAAFComponent * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFComponent*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pAttribute
+  //
+  ImplAAFTaggedValue * internalpAttribute = NULL;
+  if (pAttribute)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pAttribute->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpAttribute = static_cast<ImplAAFTaggedValue*>(arg);
+      assert (internalpAttribute);
+    }
+
+  hr = ptr->RemoveAttribute (internalpAttribute);
+  //
+  // no cleanup necessary for pAttribute
+  //
+
+  return hr;
+}
+
+
 //
 // 
 // 
@@ -615,6 +864,8 @@ HRESULT CAAFComponent::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
+    HRESULT hr = S_OK;
+
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
@@ -622,6 +873,13 @@ HRESULT CAAFComponent::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFComponent)) 
     { 
         *ppvObj = (IAAFComponent *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    if (EQUAL_UID(riid,IID_IAAFComponent2)) 
+    { 
+        *ppvObj = (IAAFComponent2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }

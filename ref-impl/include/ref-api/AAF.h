@@ -169,6 +169,7 @@ interface IAAFEssenceMultiAccess;
 interface IAAFTypeDefVariableArrayEx;
 interface IAAFMasterMobEx;
 interface IAAFMob2;
+interface IAAFComponent2;
 #else
 typedef interface IAAFAIFCDescriptor IAAFAIFCDescriptor;
 typedef interface IAAFClassDef IAAFClassDef;
@@ -299,6 +300,7 @@ typedef interface IAAFEssenceMultiAccess IAAFEssenceMultiAccess;
 typedef interface IAAFTypeDefVariableArrayEx IAAFTypeDefVariableArrayEx;
 typedef interface IAAFMasterMobEx IAAFMasterMobEx;
 typedef interface IAAFMob2 IAAFMob2;
+typedef interface IAAFComponent2 IAAFComponent2;
 #endif
 
 // IAAFAIFCDescriptor
@@ -1401,7 +1403,6 @@ DECLARE_INTERFACE_(IAAFComponent, IUnknown)
   STDMETHOD_(ULONG,Release) (THIS) PURE;
 
   /* *** IAAFComponent methods *** */
-
   //***********************************************************
   //
   // SetLength()
@@ -1623,6 +1624,16 @@ DECLARE_INTERFACE_(IAAFComponent, IUnknown)
   STDMETHOD(RemoveKLVData) (THIS_
     // KLV data object to remove
     /*[in]*/ IAAFKLVData * pData) PURE;
+
+
+
+
+
+
+
+
+
+
 
 
   END_INTERFACE
@@ -35356,6 +35367,467 @@ DECLARE_INTERFACE_(IAAFMob2, IUnknown)
   END_INTERFACE
 };
 #endif // __IAAFMob2_INTERFACE_DEFINED__
+
+
+
+// IAAFComponent2
+
+// ************************
+//
+// Interface IAAFComponent2
+//
+// ************************
+
+
+
+
+
+
+
+
+#ifndef __IAAFComponent2_INTERFACE_DEFINED__
+#define __IAAFComponent2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFComponent2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFComponent2
+
+DECLARE_INTERFACE_(IAAFComponent2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFComponent2 methods *** */
+
+
+
+
+  //***********************************************************
+  //
+  // SetLength()
+  //
+  // Sets the length property value on this component object.
+  // 
+  // Succeeds if all of the following are true:
+  // - the optional length property is present for this object.
+  //
+  // This method deals with an optional property, which will only be
+  // present for time-varying media.
+  // 
+  // If this method fails the length property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_BAD_PROP
+  //   - the optional length property is not present for this object.
+  //
+  STDMETHOD(SetLength) (THIS_
+    // The duration in edit units of this component
+    /*[in]*/ aafLength_constref  length) PURE;
+
+
+  //***********************************************************
+  //
+  // GetLength()
+  //
+  // Gets the duration in edit units of this component.
+  //	
+  // Succeeds if all of the following are true:
+  // - the pLength pointer is valid.
+  // - the optional length property is present for this object.
+  //
+  // This method deals with an optional property, which will only be
+  // present for time-varying media.
+  // 
+  // If this method fails nothing will be written to *pLength.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pLength arg is NULL.
+  //
+  // AAFRESULT_BAD_PROP
+  //   - the optional length property is not present for this object.
+  //
+  STDMETHOD(GetLength) (THIS_
+    // Length of this component
+    /*[retval][out]*/ aafLength_t *  pLength) PURE;
+	
+
+  //***********************************************************
+  //
+  // SetDataDef()
+  //
+  // sets the data definition property AUID on this component.
+  // 
+  // If this method fails the Data Definition property will not be
+  // changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pDataDef arg is NULL.
+  //
+  STDMETHOD(SetDataDef) (THIS_
+    // DataDef of this object
+    /*[in]*/ IAAFDataDef * pDataDef) PURE;
+
+
+  //***********************************************************
+  //
+  // GetDataDef()
+  //
+  // returns data definition object.
+  //
+  // Succeeds if all of the following are true:
+  // - the ppDatadef pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppDatadef.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppDatadef arg is NULL.
+  //
+  STDMETHOD(GetDataDef) (THIS_
+    // DataDef of this object
+    /*[out, retval]*/ IAAFDataDef ** ppDatadef) PURE;
+
+  //***********************************************************
+  //
+  // AppendKLVData()
+  //
+  // Appends a pre-existing KLV Data object to the specified
+  // component.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pKLV pointer is valid.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - the pData arg is NULL.
+  //
+  STDMETHOD(AppendKLVData) (THIS_
+    // KLV object
+    /*[in]*/ IAAFKLVData * pData) PURE;
+
+
+  //***********************************************************
+  //
+  // CountKLVData()
+  //
+  // return total number of KLV data objects attached to this component.
+  //
+  // Succeeds if all of the following are true:
+  // - the pNumData pointer is valid.
+  // 
+  // If this method fails nothing will be written to *pNumComments.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pNumData arg is NULL.
+  //
+  STDMETHOD(CountKLVData) (THIS_
+    // Number  of KLV data objects
+    /*[out]*/ aafUInt32 *  pNumData) PURE;
+
+
+  //***********************************************************
+  //
+  // GetKLVData()
+  //
+  // return the enumeration for all KLV data objects on this component.  The returned
+  // enumerator is AddRef()ed before it is returned.  The enumerator
+  // is implemented as a EnumAAFKLVData.
+  // 
+  // Succeeds if all of the following are true:
+  // - the ppEnum pointer is valid.
+  // 
+  // If this method fails nothing will be written to *ppEnum.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum is null.
+  //
+  STDMETHOD(GetKLVData) (THIS_
+    // KLV data objects
+    /*[out]*/ IEnumAAFKLVData ** ppEnum) PURE;
+
+
+  //***********************************************************
+  //
+  // RemoveKLVData()
+  //
+  // // Removes the given KLV data object from this component.
+  // 
+  // Succeeds if all of the following are true:
+  // - the pData pointer is valid.
+  // - the given KLV data object is present in the component.
+  // 
+  // If this method fails no state will be changed.
+  // 
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pData is null.
+  //
+  // AAFRESULT_OBJECT_NOT_FOUND
+  //   - the given KLV data object is not in this component.
+  //
+  STDMETHOD(RemoveKLVData) (THIS_
+    // KLV data object to remove
+    /*[in]*/ IAAFKLVData * pData) PURE;
+
+
+
+  //***********************************************************
+  //
+  // AppendComment()
+  //
+  // Append and attribute name/value pair to the attribute list. 
+  //
+  STDMETHOD(AppendComment) (THIS_
+    // The attribute name.
+    /*[in]*/ aafCharacter_constptr  pName,
+
+    // The attribute value.
+    /*[in]*/ aafCharacter_constptr  pValue) PURE;
+
+   // Creates a new tagged value, initializes it with the specified comment
+   // name/value pair, and appends it to the comment list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // CountComments()
+  //
+  // Return the number of comments contained by this component 
+  //
+  STDMETHOD(CountComments) (THIS_
+    // Pointer to comment count.
+    /*[out]*/ aafUInt32*  pNumComments) PURE;
+
+   // Returns the number of comments on this component.
+   //
+   // Succeeds if:
+   //   - pNumComments is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumComments is null
+  
+
+  //***********************************************************
+  //
+  // GetComments()
+  //
+  // Return a comment enumerator for this component. 
+  //
+  STDMETHOD(GetComments) (THIS_
+    // Pointer to the new enumerator object created by this method.
+    /*[out]*/ IEnumAAFTaggedValues ** ppEnum) PURE;
+
+   // Creates an enumerator for this component\'s comments.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+  //***********************************************************
+  //
+  // RemoveComment()
+  //
+  // Remove a comment (tagged value).
+  //
+  STDMETHOD(RemoveComment) (THIS_
+    // Pointer to the tagged value comment.
+    /*[in]*/ IAAFTaggedValue * pComment) PURE;
+
+   // Removes a component comment.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // AppendAttribute()
+  //
+  // Append and attribute name/value pair to the attribute list. 
+  //
+  STDMETHOD(AppendAttribute) (THIS_
+    // The attribute name.
+    /*[in]*/ aafCharacter_constptr  pName,
+
+    // The attribute value.
+    /*[in]*/ aafCharacter_constptr  pValue) PURE;
+
+   // Creates a new tagged value, initializes it with the specified attribute
+   // name/value pair, and appends it to the attribute list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+  //***********************************************************
+  //
+  // CountAttributes()
+  //
+  // Return the number of attributes contained by this component 
+  //
+  STDMETHOD(CountAttributes) (THIS_
+    // Pointer to attribute count.
+    /*[out]*/ aafUInt32*  pNumAttributes) PURE;
+
+   // Returns the number of attributes on this component.
+   //
+   // Succeeds if:
+   //   - pNumAttributes is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumAttributes is null
+  
+
+  //***********************************************************
+  //
+  // GetAttributes()
+  //
+  // Return an attribute enumerator for this component. 
+  //
+  STDMETHOD(GetAttributes) (THIS_
+    // Pointer to the new enumerator object created by this method.
+    /*[out]*/ IEnumAAFTaggedValues ** ppEnum) PURE;
+
+   // Creates an enumerator for this component\'s attributes.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+  //***********************************************************
+  //
+  // RemoveAttribute()
+  //
+  // Remove an attribute (tagged value).
+  //
+  STDMETHOD(RemoveAttribute) (THIS_
+    // Pointer to the tagged value attribute.
+    /*[in]*/ IAAFTaggedValue * pAttribute) PURE;
+
+   // Removes a component attribute.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+
+
+
+
+
+  END_INTERFACE
+};
+#endif // __IAAFComponent2_INTERFACE_DEFINED__
 
 
 
