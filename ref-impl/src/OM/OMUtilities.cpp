@@ -3,26 +3,25 @@
 #include "OMAssertions.h"
 
 #include <iostream.h>
-#include <assert.h>
 #include <string.h>
+#include <stdio.h>
 
-char* programName = 0;
+char programName[FILENAME_MAX] = "Object Manager";
 
 void setProgramName(const char* name)
 {
   PRECONDITION("Valid program name", validString(name));
 
   size_t size = strlen(name) + 1;
-  delete [] programName;
-  programName = new char[size];
+  if (size >= FILENAME_MAX) {
+    size = FILENAME_MAX - 1;
+  }
   strncpy(programName, name, size);
+  programName[size] = '\0';
 }
 
 const char* getProgramName(void)
 {
-  if (programName == 0) {
-    setProgramName("Unknown Program");
-  }
   return programName;
 }
 
