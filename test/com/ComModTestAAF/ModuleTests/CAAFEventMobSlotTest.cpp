@@ -93,8 +93,8 @@ private:
   bool _bWritableFile;
   IAAFHeader *_pHeader;
   IAAFDictionary *_pDictionary;
-  aafUID_t _eventMobID1;
-  aafUID_t _eventMobID2;
+  aafMobID_t _eventMobID1;
+  aafMobID_t _eventMobID2;
 
   // EventMobSlot static data
   static const aafRational_t _editRate;

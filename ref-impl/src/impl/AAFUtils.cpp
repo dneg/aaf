@@ -195,6 +195,11 @@ aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2)
 	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? AAFTrue : AAFFalse);
 }
 
+aafBool	EqualMobID(aafMobID_constref mobID1, aafMobID_constref mobID2)
+{
+	return(memcmp(&mobID1, &mobID1, sizeof(aafMobID_t)) == 0 ? AAFTrue : AAFFalse);
+}
+
 static aafInt32 powi(
 			aafInt32	base,
 			aafInt32	exponent);
@@ -499,12 +504,12 @@ struct SMPTELabel
 
 union label
 {
-	aafUID_t			guid;
+	aafMobID_t			mobID;
 	struct SMPTELabel	smpte;
 };
 
 AAFRESULT aafMobIDNew(
-        aafUID_t *mobID)     /* OUT - Newly created Mob ID */
+        aafMobID_t *mobID)     /* OUT - Newly created Mob ID */
 {
 	aafUInt32	major, minor;
 	static aafUInt32 last_part2 = 0;		// Get rid of this!!!
@@ -559,7 +564,7 @@ AAFRESULT aafMobIDNew(
 AAFRESULT aafMobIDFromMajorMinor(
         aafUInt32	major,
 		aafUInt32	minor,
-		aafUID_t *mobID)     /* OUT - Newly created Mob ID */
+		aafMobID_t *mobID)     /* OUT - Newly created Mob ID */
 {
 	union label		aLabel;
 	
@@ -574,7 +579,7 @@ AAFRESULT aafMobIDFromMajorMinor(
 	aLabel.smpte.MobIDMajor = major;
 	aLabel.smpte.MobIDMinor = minor;
 
-	*mobID = aLabel.guid;
+	*mobID = aLabel.mobID;
 	return(AAFRESULT_SUCCESS);
 }
 
