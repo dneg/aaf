@@ -46,6 +46,7 @@
 #include "OMUtilities.h"
 
 #include "OMMSStructuredStorage.h"
+#include "OMType.h"
 
 const OMVersion currentVersion = 32;
 
@@ -308,10 +309,46 @@ void OMStoredObject::save(const OMPropertySet& properties)
   // @mfunc Save the <c OMSimpleProperty> <p property> in this
   //        <c OMStoredObject>.
   //   @parm TBS
-void OMStoredObject::save(const OMSimpleProperty& /* property */)
+void OMStoredObject::save(const OMSimpleProperty& property)
 {
   TRACE("OMStoredObject::save");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyId propertyId = property.propertyId();
+  OMStoredForm storedForm = property.storedForm();
+  size_t size = property.bitsSize();
+  OMByte* bits = property.bits();
+  const OMType* propertyType = property.type();
+
+  if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
+
+    ASSERT("Valid property type", propertyType != 0);
+
+    // Allocate buffer for property value
+    size_t externalBytesSize = propertyType->externalSize(bits, size);
+    OMByte* buffer = new OMByte[externalBytesSize];
+    ASSERT("Valid heap pointer", buffer != 0);
+
+    // Externalize property value
+    propertyType->externalize(bits,
+                              size,
+                              buffer,
+                              externalBytesSize,
+                              byteOrder());
+
+    // Reorder property value
+    if (byteOrder() != hostByteOrder()) {
+      propertyType->reorder(buffer, externalBytesSize);
+    }
+
+    // Write property value
+    write(propertyId, storedForm, buffer, externalBytesSize);
+    delete [] buffer;
+
+  } else {
+    // tjb - temporary, no type information, do it the old way
+    //
+    write(propertyId, storedForm, bits, size);
+  }
 }
 
   // @mfunc Save the <c OMStrongReference> <p singleton> in this
@@ -465,11 +502,54 @@ void OMStoredObject::restore(OMPropertySet& properties)
   //        <c OMStoredObject>.
   //   @parm TBS
   //   @parm TBS
-void OMStoredObject::restore(OMSimpleProperty& /* property */,
-                             size_t /* externalSize */)
+void OMStoredObject::restore(OMSimpleProperty& property,
+                             size_t externalSize)
 {
   TRACE("OMStoredObject::restore");
-  ASSERT("Unimplemented code not reached", false);
+
+  OMPropertyId propertyId = property.propertyId();
+  OMStoredForm storedForm = property.storedForm();
+  OMByte* bits = 0;
+  const OMType* propertyType = property.type();
+
+  if (propertyType != 0) { // tjb - temporary, should be ASSERTION below
+
+    ASSERT("Valid property type", propertyType != 0);
+
+    // Allocate buffer for property value
+    OMByte* buffer = new OMByte[externalSize];
+    ASSERT("Valid heap pointer", buffer != 0);
+
+    // Read property value
+    read(propertyId, storedForm, buffer, externalSize);
+
+    // Reorder property value
+    if (byteOrder() != hostByteOrder()) {
+      propertyType->reorder(buffer, externalSize);
+    }
+
+    // Internalize property value
+    size_t requiredBytesSize = propertyType->internalSize(buffer,
+                                                          externalSize);
+    property.setSize(requiredBytesSize);
+    ASSERT("Property value buffer large enough",
+                                         property.size() >= requiredBytesSize);
+    bits = property.bits();
+    propertyType->internalize(buffer,
+                              externalSize,
+                              bits,
+                              requiredBytesSize,
+                              hostByteOrder());
+    delete [] buffer;
+  } else {
+    // tjb - temporary, no type information, do it the old way
+    //
+    property.setSize(externalSize);
+    ASSERT("Property value buffer large enough",
+                                              property.size() >= externalSize);
+    bits = property.bits();
+    read(propertyId, storedForm, bits, externalSize);
+  }
 }
 
   // @mfunc Restore the <c OMStrongReference> <p singleton> into this
