@@ -430,7 +430,7 @@ OMProperty* OMFile::findPropertyPath(const wchar_t* propertyPathName) const
   PRECONDITION("Valid root", _root != 0);
 
   wchar_t* path = saveWideString(propertyPathName);
-  
+
   wchar_t* element = path;
   element++; // skip first '/'
 
@@ -438,7 +438,7 @@ OMProperty* OMFile::findPropertyPath(const wchar_t* propertyPathName) const
   OMProperty* result = 0;
 
   wchar_t* end = findWideCharacter(element, L'/');
-  
+
   while (end != 0) {
     *end = 0;
     storable = storable->find(element);
