@@ -45,6 +45,7 @@
 #include "aafUtils.h"
 #include "AAFInterpolatorDefs.h"
 #include "AAFTypeDefUIDs.h"
+#include "AAFSmartPointer.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -162,7 +163,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment			*pFiller = NULL;
 	IAAFComponent		*pComponent = NULL;
 	IAAFSourceClip		 *pSourceClip = NULL;
-	IAAFControlPoint	 *pControlPoint = NULL;
+	IAAFSmartPointer<IAAFControlPoint>	pControlPoint1,pControlPoint2,
+		pControlPoint3;
 	IAAFSourceReference *pSourceRef = NULL;
 	IAAFInterpolationDef *pInterpDef = NULL;
 	IAAFPluginManager	*pMgr = NULL;
@@ -175,8 +177,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	aafRational_t		testLevel1 = kTestLevel1;
 	aafRational_t		testLevel2 = kTestLevel2;
 	aafUInt32			numPoints;
-/*	long				test;
-*/
 
 	try
 	{
@@ -253,33 +253,31 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			checkResult(defs.cdVaryingValue()->
 						CreateInstance(IID_IAAFVaryingValue, 
 									   (IUnknown **)&pVaryingValue));
-      checkResult(pVaryingValue->Initialize (pParamDef, pInterpDef));
+			checkResult(pVaryingValue->Initialize (pParamDef, pInterpDef));
 
 			checkResult(defs.cdControlPoint()->
 						CreateInstance(IID_IAAFControlPoint, 
-									   (IUnknown **)&pControlPoint));
-      checkResult(pControlPoint->Initialize (pVaryingValue, startTime, sizeof(testLevel1), (aafDataBuffer_t)&testLevel1));
-			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
-			pControlPoint->Release();
-			pControlPoint = NULL;
+									   (IUnknown **)&pControlPoint1));
+			checkResult(pControlPoint1->Initialize (pVaryingValue, startTime, 
+				sizeof(testLevel1), (aafDataBuffer_t)&testLevel1));
+			checkResult(pVaryingValue->AddControlPoint(pControlPoint1));
 			checkResult(defs.cdControlPoint()->
 						CreateInstance(IID_IAAFControlPoint, 
-									   (IUnknown **)&pControlPoint));
-      checkResult(pControlPoint->Initialize (pVaryingValue, endTime, sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
-			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
-			pControlPoint->Release();
-			pControlPoint = NULL;
+									   (IUnknown **)&pControlPoint2));
+			checkResult(pControlPoint2->Initialize (pVaryingValue, endTime, 
+				sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
+			checkResult(pVaryingValue->AddControlPoint(pControlPoint2));
 
 			// Add an extra control point, in order to test delete
 			checkResult(defs.cdControlPoint()->
 						CreateInstance(IID_IAAFControlPoint, 
-									   (IUnknown **)&pControlPoint));
-      checkResult(pControlPoint->Initialize (pVaryingValue, endTime, sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
-			checkResult(pVaryingValue->AddControlPoint(pControlPoint));
-			pControlPoint->Release();
-			pControlPoint = NULL;
+									   (IUnknown **)&pControlPoint3));
+			checkResult(pControlPoint3->Initialize (pVaryingValue, endTime, 
+				sizeof(testLevel2), (aafDataBuffer_t)&testLevel2));
+			checkResult(pVaryingValue->AddControlPoint(pControlPoint3));
 			checkResult(pVaryingValue->CountControlPoints (&numPoints));
  			checkExpression(3 == numPoints, AAFRESULT_TEST_FAILED);
+
 			checkResult(pVaryingValue->RemoveControlPointAt(2));
 			checkResult(pVaryingValue->CountControlPoints (&numPoints));
  			checkExpression(2 == numPoints, AAFRESULT_TEST_FAILED);
@@ -339,8 +337,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	// Cleanup and return
 	if(pSourceRef)
 		pSourceRef->Release();
-	if(pControlPoint)
-		pControlPoint->Release();
 	if(pSourceClip)
 		pSourceClip->Release();
 	if (pDefObject)
@@ -479,6 +475,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			aafUInt32		testLen, bytesRead;
 			aafRational_t	sampleValue1 = kTestLevel1, sampleValue2 = kTestLevel2, testValue;
 
+			/* Verify using enumerator */
 			checkResult(pVaryingValue->GetControlPoints(&pEnumCP));
 			checkResult(pEnumCP->NextOne(&pControlPoint));
 			checkResult(pControlPoint->GetValueBufLen (&testLen));
@@ -502,6 +499,27 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			pEnumCP->Release();
 			pEnumCP = NULL;
 			/*****/
+
+			/* Verify using GetControlPointAt() */
+			checkResult(pVaryingValue->GetControlPointAt(0,&pControlPoint));
+			checkResult(pControlPoint->GetValueBufLen (&testLen));
+ 			checkExpression(testLen == sizeof(sampleValue1), AAFRESULT_TEST_FAILED);
+			checkResult(pControlPoint->GetValue (sizeof(sampleValue1), (aafDataBuffer_t)&testValue, &bytesRead));
+ 			checkExpression(testValue.numerator == sampleValue1.numerator, AAFRESULT_TEST_FAILED);
+ 			checkExpression(testValue.denominator == sampleValue1.denominator, AAFRESULT_TEST_FAILED);
+ 			checkExpression(bytesRead == sizeof(sampleValue1), AAFRESULT_TEST_FAILED);
+			pControlPoint->Release();
+			pControlPoint = NULL;
+
+			checkResult(pVaryingValue->GetControlPointAt(1,&pControlPoint));
+			checkResult(pControlPoint->GetValueBufLen (&testLen));
+ 			checkExpression(testLen == sizeof(sampleValue2), AAFRESULT_TEST_FAILED);
+			checkResult(pControlPoint->GetValue (sizeof(sampleValue2), (aafDataBuffer_t)&testValue, &bytesRead));
+ 			checkExpression(testValue.numerator == sampleValue2.numerator, AAFRESULT_TEST_FAILED);
+ 			checkExpression(testValue.denominator == sampleValue2.denominator, AAFRESULT_TEST_FAILED);
+ 			checkExpression(bytesRead == sizeof(sampleValue2), AAFRESULT_TEST_FAILED);
+			pControlPoint->Release();
+			pControlPoint = NULL;
 
  			// Test out the interpolation method
 			aafRational_t	oneQuarter = { 1, 4 };
@@ -675,13 +693,6 @@ extern "C" HRESULT CAAFVaryingValue_test()
 			 << "Caught general C++ exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
 	}
-
-	// When all of the functionality of this class is tested, we can return success.
-	// When a method and its unit test have been implemented, remove it from the list.
-//	if (SUCCEEDED(hr))
-//	{
-//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-//	}
 
 	return hr;
 }
