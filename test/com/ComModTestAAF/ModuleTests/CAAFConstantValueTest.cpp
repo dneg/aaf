@@ -340,7 +340,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	aafUID_t			readSourceID;
 	aafBool				readIsTimeWarp;
 	aafInt32			catLen, checkNumInputs, testNumSources, testNumParam;
-	aafUInt32			checkBypass, testLen;
+	aafUInt32			checkBypass;
 	HRESULT				hr = S_OK;
 	wchar_t				checkCat[256], checkName[256];
 	aafNumSlots_t		s;
