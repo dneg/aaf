@@ -62,6 +62,22 @@ OMStrongReferenceVectorIterator<ReferencedObject>::
 {
 }
 
+  // @mfunc Create a copy of this <c OMStrongReferenceVectorIterator>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The new <c OMStrongReferenceVectorIterator>.
+  //   @this const
+template <typename ReferencedObject>
+OMReferenceContainerIterator<ReferencedObject>*
+            OMStrongReferenceVectorIterator<ReferencedObject>::copy(void) const
+{
+  TRACE("OMStrongReferenceVectorIterator<ReferencedObject>::copy");
+
+  OMStrongReferenceVectorIterator<ReferencedObject>*
+     result = new OMStrongReferenceVectorIterator<ReferencedObject>(_iterator);
+
+  return result;
+}
+
   // @mfunc Reset this <c OMStrongReferenceVectorIterator> to the given
   //        <p initialPosition>.
   //        If <p initialPosition> is specified as
@@ -233,4 +249,18 @@ template <typename ReferencedObject>
 size_t OMStrongReferenceVectorIterator<ReferencedObject>::index(void) const
 {
   return _iterator.index();
+}
+
+  // @mfunc Create an <c OMStrongReferenceVectorIterator> given
+  //        an underlying <c OMVectorIterator>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @parm The underlying <c OMVectorIterator>.
+template <typename ReferencedObject>
+OMStrongReferenceVectorIterator<ReferencedObject>::
+                                               OMStrongReferenceVectorIterator(
+  const OMVectorIterator<
+                     OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                                     ReferencedObject> >& iter)
+  : _iterator(iter) // probably bitwise
+{
 }

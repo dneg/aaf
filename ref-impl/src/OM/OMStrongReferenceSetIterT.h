@@ -60,6 +60,22 @@ OMStrongReferenceSetIterator<ReferencedObject>::~OMStrongReferenceSetIterator(
 {
 }
 
+  // @mfunc Create a copy of this <c OMStrongReferenceSetIterator>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @rdesc The new <c OMStrongReferenceSetIterator>.
+  //   @this const
+template <typename ReferencedObject>
+OMReferenceContainerIterator<ReferencedObject>*
+               OMStrongReferenceSetIterator<ReferencedObject>::copy(void) const
+{
+  TRACE("OMStrongReferenceSetIterator<ReferencedObject>::copy");
+
+  OMStrongReferenceSetIterator<ReferencedObject>*
+        result = new OMStrongReferenceSetIterator<ReferencedObject>(_iterator);
+
+  return result;
+}
+
   // @mfunc Reset this <c OMStrongReferenceSetIterator> to the given
   //        <p initialPosition>.
   //        If <p initialPosition> is specified as
@@ -238,4 +254,17 @@ OMStrongReferenceSetIterator<ReferencedObject>::identification(void) const
   TRACE("OMStrongReferenceSetIterator<ReferencedObject>::identification");
 
   return _iterator.key();
+}
+
+  // @mfunc Create an <c OMStrongReferenceSetIterator> given
+  //        an underlying <c OMSetIterator>.
+  //   @tcarg class | ReferencedObject | The type of the contained objects.
+  //   @parm The underlying <c OMSetIterator>.
+template <typename ReferencedObject>
+OMStrongReferenceSetIterator<ReferencedObject>::OMStrongReferenceSetIterator(
+     const OMSetIterator<OMUniqueObjectIdentification,
+	        OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                                                 ReferencedObject> >& iter)
+  : _iterator(iter) // probably bitwise
+{
 }

@@ -63,6 +63,9 @@ public:
     // @cmember Destroy this <c OMStrongReferenceSetIterator>.
   virtual ~OMStrongReferenceSetIterator(void);
 
+    // @cmember Create a copy of this <c OMStrongReferenceSetIterator>.
+  virtual OMReferenceContainerIterator<ReferencedObject>* copy(void) const;
+
     // @cmember Reset this <c OMStrongReferenceSetIterator> to the given
     //          <p initialPosition>.
     //          If <p initialPosition> is specified as
@@ -143,6 +146,15 @@ public:
     //          associated <c OMStrongReferenceSetProperty> at the position
     //          currently designated by this <c OMStrongReferenceSetIterator>.
    OMUniqueObjectIdentification identification(void) const;
+
+protected:
+
+    // @cmember Create an <c OMStrongReferenceSetIterator> given
+    //          an underlying <c OMSetIterator>.
+  OMStrongReferenceSetIterator(
+         const OMSetIterator<OMUniqueObjectIdentification,
+	            OMSetElement<OMStrongObjectReference<ReferencedObject>,
+                             ReferencedObject> >& iter);
 
 private:
 

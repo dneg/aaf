@@ -60,6 +60,9 @@ public:
                const OMStrongReferenceVectorProperty<ReferencedObject>& vector,
                OMIteratorPosition initialPosition = OMBefore);
 
+    // @cmember Create a copy of this <c OMStrongReferenceVectorIterator>.
+  virtual OMReferenceContainerIterator<ReferencedObject>* copy(void) const;
+
     // @cmember Destroy this <c OMStrongReferenceVectorIterator>.
   virtual ~OMStrongReferenceVectorIterator(void);
 
@@ -142,6 +145,15 @@ public:
     //          currently designated by this
     //          <c OMStrongReferenceVectorIterator>.
    virtual size_t index(void) const;
+
+protected:
+
+    // @cmember Create an <c OMStrongReferenceVectorIterator> given
+    //          an underlying <c OMVectorIterator>.
+  OMStrongReferenceVectorIterator(
+    const OMVectorIterator<
+                     OMVectorElement<OMStrongObjectReference<ReferencedObject>,
+                                     ReferencedObject> >& iter);
 
 private:
 
