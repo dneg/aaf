@@ -31,8 +31,8 @@ class ImplAAFScopeStack;
 
 #include "OMProperty.h"
 
-const int PID_IDENTIFICATION_DATADEF           = 0;
-const int PID_IDENTIFICATION_LENGTH            = 1;
+const int PID_COMPONENT_DATADEF           = 0;
+const int PID_COMPONENT_LENGTH            = 1;
 
 typedef 
 enum _implCompType_t
