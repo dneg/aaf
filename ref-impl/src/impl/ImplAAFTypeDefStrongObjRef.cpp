@@ -28,14 +28,14 @@
 
 
 ImplAAFTypeDefStrongObjRef::ImplAAFTypeDefStrongObjRef ()
-  : _ReferencedType (0)
-{}
+  : _referencedType (PID_TypeDefinitionStrongObjectReference_ReferencedType, "ReferencedType")
+{
+  _persistentProperties.put(_referencedType.address());
+}
 
 
 ImplAAFTypeDefStrongObjRef::~ImplAAFTypeDefStrongObjRef ()
-{
-  if (_ReferencedType) _ReferencedType->ReleaseReference ();
-}
+{}
 
 // Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
@@ -54,10 +54,14 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  assert (!_ReferencedType);
-  _ReferencedType = pObjType;
-  if (_ReferencedType)
-    _ReferencedType->AcquireReference ();
+  // BobT note: We don't have class defs yet, so don't require
+  // this...
+  // if (! pObjType) return AAFRESULT_NULL_PARAM;
+  if (pObjType)
+	{
+	  _referencedType = pObjType;
+	  pObjType->AcquireReference ();
+	}
 
   hr = SetAUID (pID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
@@ -126,9 +130,13 @@ AAFRESULT STDMETHODCALLTYPE
 {
   if (! ppObjType) return AAFRESULT_NULL_PARAM;
 
-  *ppObjType = _ReferencedType;
+  *ppObjType = _referencedType;
+  // BobT note: We don't have class defs yet, so don't require
+  // this...
+  // assert (*ppObjType);
   if (*ppObjType)
 	(*ppObjType)->AcquireReference ();
+
   return AAFRESULT_SUCCESS;
 }
 
