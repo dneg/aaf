@@ -308,6 +308,7 @@ AAFRESULT STDMETHODCALLTYPE
       const pvtPropertyIdentifier & propId,
       ImplAAFPropertyDef ** ppPropDef)
 {
+		///!!!JeffB: Leave this in original loop form until the OM  genericizes the lookup key
   if (! ppPropDef)
 	return AAFRESULT_NULL_PARAM;
 
