@@ -181,6 +181,7 @@ TARGET_H_FILES = \
 TARGET_IDL_FILES = \
 	$(AAFSDK_INCLUDE)\AAFTypes.idl \
 	$(AAFSDK_INCLUDE)\AAF.idl \
+	$(AAFSDK_INCLUDE)\AAFModuleTest.idl \
 	$(AAFSDK_INCLUDE)\AAFPlugin.idl \
 	$(AAFSDK_INCLUDE)\AAFPluginTypes.idl
 
@@ -191,6 +192,7 @@ TARGET_IDL_FILES = \
 TARGET_MIDL_FILES = \
 	$(AAFSDK_INCLUDE)\AAFTypes.h \
 	$(AAFSDK_INCLUDE)\AAF.h \
+	$(AAFSDK_INCLUDE)\AAFModuleTest.h \
 	$(AAFSDK_INCLUDE)\AAFPlugin.h \
 	$(AAFSDK_INCLUDE)\AAFPluginTypes.h \
 	$(AAFSDK_INCLUDE)\AAF_i.c \
@@ -328,12 +330,14 @@ TARGET_DIRS_TO_REMOVE = \
 #
 # Main dependency order for all targets
 #
-sdk_targets : $(TARGET_DIRS)
-sdk_targets : $(TARGET_H_FILES)
-sdk_targets : $(TARGET_IDL_FILES)
-sdk_targets : $(TARGET_MIDL_FILES)
-sdk_targets : $(TARGET_LIB_FILES)
-sdk_targets : $(TARGET_DLL_FILES)
+SDK_TARGETS = \
+	$(TARGET_DIRS) \
+	$(TARGET_H_FILES) \
+	$(TARGET_IDL_FILES)\
+	$(TARGET_MIDL_FILES)\
+	$(TARGET_LIB_FILES)\
+	$(TARGET_DLL_FILES) \
+	$(AAFSDK_REGISTERED)
 
 
 #
@@ -348,14 +352,14 @@ targets : unregisterdlls
 !elseif "$(LASTCFG)"!="$(CFG)" && "$(LASTCFG)"!=""
 targets : cleanfiles
 !endif
-targets : sdk_targets
+targets : $(SDK_TARGETS)
 targets : $(AAFSDK_CFG)
 
 
 #
 # Dependencies for config file.
 #
-$(AAFSDK_CFG) : sdk_targets $(AAFSDK_REGISTERED)
+$(AAFSDK_CFG) : $(SDK_TARGETS)
 	@echo # > $(AAFSDK_CFG)
 	@echo # generated configuration file...DO NOT EDIT >> $(AAFSDK_CFG)
 	@echo # >> $(AAFSDK_CFG)
@@ -409,6 +413,9 @@ $(AAFSDK_INCLUDE)\AAFTypes.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFTypes.idl
 $(AAFSDK_INCLUDE)\AAF.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAF.idl
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAF.idl "$(AAFSDK_INCLUDE)\"
 
+$(AAFSDK_INCLUDE)\AAFModuleTest.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.idl
+	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFModuleTest.idl "$(AAFSDK_INCLUDE)\"
+
 $(AAFSDK_INCLUDE)\AAFPluginTypes.idl : $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl
 	$(CP) $(CP_OPTS) $(TOOLKIT_INCLUDE_COMAPI)\AAFPluginTypes.idl "$(AAFSDK_INCLUDE)\"
 
@@ -424,6 +431,9 @@ $(AAFSDK_INCLUDE)\AAFTypes.h : $(TOOLKIT_COMIDL)\AAFTypes.h
 
 $(AAFSDK_INCLUDE)\AAF.h : $(TOOLKIT_COMIDL)\AAF.h
 	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF.h "$(AAFSDK_INCLUDE)\"
+
+$(AAFSDK_INCLUDE)\AAFModuleTest.h : $(TOOLKIT_COMIDL)\AAFModuleTest.h
+	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAFModuleTest.h "$(AAFSDK_INCLUDE)\"
 
 $(AAFSDK_INCLUDE)\AAF_i.c : $(TOOLKIT_COMIDL)\AAF_i.c
 	$(CP) $(CP_OPTS) $(TOOLKIT_COMIDL)\AAF_i.c "$(AAFSDK_INCLUDE)\"
@@ -520,8 +530,8 @@ cleanfiles : unregisterdlls
 cleandirs :
 	@for %%d in ( $(TARGET_DIRS_TO_REMOVE) ) do \
 	    @if exist %%d \
-		@echo rmdir %%d & \
-	        rmdir %%d
+		@echo rd %%d & \
+	        rd %%d
 
 #
 # Cleanup all target files and directories
