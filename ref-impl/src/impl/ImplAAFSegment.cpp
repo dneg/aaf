@@ -83,7 +83,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-AAFRESULT ImplAAFSegment::NumRepresentations (aafInt32 *pCount)
+AAFRESULT ImplAAFSegment::NumRepresentations (aafUInt32 *pCount)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 

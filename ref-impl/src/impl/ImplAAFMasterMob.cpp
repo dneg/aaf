@@ -432,7 +432,7 @@ AAFRESULT STDMETHODCALLTYPE
 //
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMasterMob::GetRepresentationSourceClip (aafSlotID_t			slotID,
-												   aafInt32				index,
+												   aafUInt32				index,
 												   ImplAAFSourceClip**	ppSourceClip)
 {
 	ImplAAFMobSlot	*pSlot = NULL;
@@ -662,8 +662,8 @@ AAFRESULT ImplAAFMasterMob::ReconcileMobLength(void)
 	ImplEnumAAFMobSlots	*slotIter = NULL, *fileSlotIter = NULL;
 	ImplAAFMobSlot		*fileSlot = NULL, *slot = NULL;
 	ImplAAFSegment		*fileSeg = NULL, *seg = NULL;
-	aafInt32			loop;
-	aafInt32			numSlots, fileNumSlots;
+	aafUInt32			loop;
+	aafNumSlots_t		numSlots, fileNumSlots;
 	aafPosition_t		endPos;
 
 	XPROTECT()
