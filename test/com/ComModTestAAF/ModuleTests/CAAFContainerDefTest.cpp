@@ -199,11 +199,11 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pContainerDef)
 		pContainerDef->Release();
 
-//!!!	if (pPlugDef)
-//		pPlugDef->Release();
+	if (pPlugDef)
+		pPlugDef->Release();
 
-//!!!	if (pPlug)
-//		pPlug->Release();
+	if (pPlug)
+		pPlug->Release();
 
   if (pDictionary)
 		pDictionary->Release();

@@ -400,7 +400,7 @@ void CommentMarkerTest::OpenEvent()
 	
 		checkResult(pEvent->QueryInterface(IID_IAAFCommentMarker, (void **)&pMarker));		
 		checkResult(pMarker->GetAnnotation(&pClip));
-		checkResult(pClip->QueryInterface(IID_IAAFSourceClip, (void **)&pClip));		
+//		checkResult(pClip->QueryInterface(IID_IAAFSourceClip, (void **)&pClip));		
 	}
 	catch (HRESULT& rHR)
 	{

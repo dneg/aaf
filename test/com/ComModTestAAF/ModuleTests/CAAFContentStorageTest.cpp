@@ -196,7 +196,7 @@ void ContentStorageTest::cleanupReferences()
 		_pEnumEssenceData->Release();
 		_pEnumEssenceData = NULL;
 	}
-	
+		
 	if (NULL != _pFileDescriptor)
 	{
 		_pFileDescriptor->Release();
@@ -311,7 +311,7 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	aafUInt32		readNumEssenceData;
 	aafInt32		readNumMobs;
 	IAAFMob			*testMob = NULL;
-	IEnumAAFMobs	*pEnum;
+	IEnumAAFMobs	*pEnum = NULL;
 	aafUID_t		uid, readID;
 	aafBool			testBool;
 
@@ -369,6 +369,8 @@ void ContentStorageTest::openFile(wchar_t *pFileName)
 	checkExpression(AAFFalse == testBool, AAFRESULT_TEST_FAILED);
 
 	/***/
+	pEnum->Release();
+	pEnum = NULL;
 	cleanupReferences();
 }
 

@@ -344,6 +344,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   if (pMob)
     pMob->Release();
 
+  if (pMobIter)
+    pMobIter->Release();
+
   if (pSourceMob)
     pSourceMob->Release();
 
