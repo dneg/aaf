@@ -130,9 +130,12 @@ AUTO_GEN_IMPL = \
 # its name here and remove it from AUTO_GEN_COMTEST (below).
 # Do not add the 'Test' suffix here.
 HUMAN_TYPED_COMTEST = \
+	AAFCompositionMob \
+	AAFMasterMob \
 	AAFMob \
 	AAFSourceClip \
-	AAFSourceMob
+	AAFSourceMob \
+	EnumAAFMobs
 
 # Build the list of all objects that have automatically-generated
 # COM Test classes.
@@ -142,7 +145,6 @@ AUTO_GEN_COMTEST = \
 	AAFAttribute \
 	AAFClassDef \
 	AAFDictionary \
-	AAFCompositionMob \
 	AAFConstValue \
 	AAFControlCodeDef \
 	AAFControlPoint \
@@ -156,7 +158,6 @@ AUTO_GEN_COMTEST = \
 	AAFIntegerAttribute \
 	AAFLocator \
 	AAFMacLocator \
-	AAFMasterMob \
 	AAFMediaFilmDescriptor \
 	AAFMediaGroup \
 	AAFMediaTapeDescriptor \
@@ -210,5 +211,4 @@ AUTO_GEN_COMTEST = \
 	AAFTimelineMobSlot \
 	AAFSourceReference \
 	AAFSession \
-	EnumAAFMobs \
 	EnumAAFMobSlots
