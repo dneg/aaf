@@ -155,9 +155,6 @@ HRESULT CAAFInProcServer::Init
   while (pObjectInfo[i].pCLSID)
     ++i;
   _objectCount = i;
-  printf("this = %p, &_objectCount = %p, _objectCount = %d\n",
-	this,&_objectCount,(int)_objectCount);
-
 
   // Allocate the key table to the object info table.
   _ppObjectInfoKey = new AAFComObjectInfo_t* [_objectCount];
