@@ -75,21 +75,57 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTimelineMobSlot::GetTrackID (aafTrackID_t *  /*result*/)
+    ImplAAFTimelineMobSlot::GetTrackID (aafTrackID_t *result)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+    AAFRESULT aafError = AAFRESULT_SUCCESS;
+	assert(result != NULL);
+
+	XPROTECT( )
+	  {
+		CHECK(GetTrackDesc(0, NULL, NULL, result));
+	  }
+	XEXCEPT
+	  {
+		return(XCODE());
+	  }
+	XEND;
+
+	return(aafError);
 }
 
 
   // Override from AAFMobSlot
-  AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTimelineMobSlot::IsATrack (/*[out,retval]*/ aafBool *  /*retval*/)
-  {
-    return AAFRESULT_NOT_IMPLEMENTED;
-  }
+/*************************************************************************
+ * Function: IsATrack()
+ *
+ * 		This is a boolean function that determines whether or not a mob slot
+ *      is a track (externally visible).  For 1.x, it will always return
+ *      TRUE since a mob slot is a TRACK object.  For 2.x, it will return
+ *      TRUE if the mob slot has a track descriptor (TRKD) object attached
+ *      to it.
+ *
+ * Argument Notes:
+ *      As with all boolean functions, the error status is returned as
+ *      the last argument.
+ *
+ * ReturnValue:
+ *		Boolean (as described above).
+ *
+ * Possible Errors:
+ *		Standard errors (see top of file).
+ *************************************************************************/
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTimelineMobSlot::IsATrack (/*[out,retval]*/ aafBool *retval)
+{
+	*retval = AAFFalse;
+	if (_trackID != NULL)
+		*retval = AAFTrue;	
+	
+    return AAFRESULT_SUCCESS;
+}
 
 /*************************************************************************
- * Private Function: MobSlotGetTrackDesc()
+ * Private Function: GetTrackDesc()
  *
  * 		This function returns the requested information (non-NULL
  *      parameters) identifying a track.  For 1.x, the information is
@@ -140,7 +176,7 @@ AAFRESULT  ImplAAFTimelineMobSlot::
 			 }
 			if (trackID)
 			{	
-				GetTrackID(trackID);
+				*trackID = _trackID;
 			}
 		} /* OmfRev2x */
 	} /* XPROTECT */
