@@ -333,7 +333,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (index >= count)
 	return AAFRESULT_BADINDEX;
 
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_components.removeAt(index);
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -363,7 +364,11 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::RemoveComponent (ImplAAFComponent* pComponent)
 {
-  return AAFRESULT_NOT_IN_CURRENT_VERSION;
+	if (!_components.containsValue(pComponent))
+	  return AAFRESULT_BADINDEX;
+
+	_components.removeValue(pComponent);
+	return AAFRESULT_SUCCESS;
 }
 
 //***********************************************************
