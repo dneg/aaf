@@ -50,6 +50,7 @@ MacroDef::eAppendStat MacroDef::AppendMacroExpansion
 			{
 			  // escape of '%' character: that's OK
 			  _definition.Append (c);
+			  _definition.Append (c);
 			  continue;
 			}
 
