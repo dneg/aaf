@@ -238,6 +238,7 @@ PLUGIN_OBJECTS="\
 	AAFEssenceStream \
 	AAFEssenceDataStream \
 	AAFEssenceCodec \
+	AAFEssenceCodec2 \
 	AAFMultiEssenceCodec \
 	AAFEssenceContainer \
 	AAFInterpolator "

@@ -249,7 +249,6 @@ ImplAAFEssenceAccess::CreateEx (ImplAAFMasterMob *    masterMob,
 	IAAFEssenceContainer	*container = NULL;
 	IAAFPlugin				*plug = NULL;
 	aafMobID_t			fileMobUID;
-	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
 	ImplAAFDictionary	*dataDict = NULL;
 	ImplAAFHeader		*compHead = NULL;
 	ImplAAFHeader		*dataHead = NULL;
@@ -507,7 +506,7 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFPlugin				*plug = NULL;
 	aafMobID_t				fileMobUID;
 	aafUID_t				essenceKind;
-	aafLength_t				oneLength = CvtInt32toLength(1, oneLength);
+	aafLength_t				oneLength = 1;
 	ImplAAFDictionary		*dataDict = NULL;
 	ImplAAFHeader			*compHead = NULL;
 	ImplAAFHeader			*dataHead = NULL;
@@ -648,9 +647,6 @@ AAFRESULT STDMETHODCALLTYPE
 				tmpTrack->ReleaseReference();
 				tmpTrack = NULL;
 			}
-//!!!			CvtInt32toPosition(0, destPtr->dataOffset);
-//!!!			CvtInt32toLength(0, destPtr->numSamples);
-//!!!			destPtr->sampleRate = initPtr->sampleRate;
 		}
 
 			//!!! As an optimization, use clone to move a copy of the definition objects into the media file.
@@ -835,7 +831,6 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFEssenceContainer	*container = NULL;
 	IAAFPlugin				*plug = NULL;
 	aafMobID_t			fileMobUID;
-	aafLength_t			oneLength = CvtInt32toLength(1, oneLength);
 	ImplAAFDictionary	*dataDict = NULL;
 	ImplAAFHeader		*compHead = NULL;
 	ImplAAFHeader		*dataHead = NULL;
@@ -1004,7 +999,7 @@ AAFRESULT STDMETHODCALLTYPE
 		else
 			_dataFileMob = NULL;
 		
-		CvtInt32toPosition(0, zeroPos);
+		zeroPos = 0;
 		ref.sourceID = fileMobUID;
 		ref.sourceSlotID = DEFAULT_FILE_SLOT;
 		ref.startTime = zeroPos;
@@ -1224,7 +1219,7 @@ ImplAAFEssenceAccess::MultiAppend (ImplAAFMasterMob *masterMob,
 	IAAFPlugin				*plug = NULL;
 	aafMobID_t				fileMobUID;
 	aafUID_t				essenceKind;
-	aafLength_t				oneLength = CvtInt32toLength(1, oneLength);
+	aafLength_t				oneLength = 1;
 	ImplAAFDictionary		*dataDict = NULL;
 	ImplAAFHeader			*compHead = NULL;
 	ImplAAFHeader			*dataHead = NULL;
@@ -1453,7 +1448,7 @@ ImplAAFEssenceAccess::MultiAppend (ImplAAFMasterMob *masterMob,
 				ImplAAFDataDefSP pEssenceKind;
 				CHECK(dataDict->LookupDataDef (essenceKind, &pEssenceKind));
 				
-				CvtInt32toPosition(0, zeroPos);
+				zeroPos = 0;
 				ref.sourceID = fileMobUID;
 				ref.sourceSlotID = initPtr->slotID;
 				ref.startTime = zeroPos;
@@ -1708,7 +1703,7 @@ AAFRESULT STDMETHODCALLTYPE
 		seg = NULL;
 
 		_openType = kAAFReadOnly;
-		CvtInt32toPosition(0, Pos);	
+		Pos = 0;	
 
 		// comparison performed in units of Master mob edit rate
 		//Ian/Oct 2004 If there is static essence we only go round this oloop once. A break at the bottom exits the loop
@@ -2120,7 +2115,7 @@ AAFRESULT STDMETHODCALLTYPE
 		seg = NULL;
 
 		_openType = kAAFReadOnly;
-		CvtInt32toPosition(0, Pos);	
+		Pos = 0;	
 
 		while (Pos < masterMobLength) 
 		{
@@ -2469,11 +2464,31 @@ AAFRESULT ImplAAFEssenceAccess::SetEssenceDestination(
 
 
 
- //Sets which flavour of the codec ID is to be used.)
+// Sets which flavour of the codec ID is to be used.
 AAFRESULT ImplAAFEssenceAccess::SetEssenceCodecFlavour(aafUID_t flavour)
 {
-	_flavour = flavour;
-	return AAFRESULT_SUCCESS;
+	IAAFEssenceCodec2	*codec2 = NULL;
+	HRESULT hr = _codec->QueryInterface(IID_IAAFEssenceCodec2, (void **)&codec2);
+
+	if (SUCCEEDED(hr))
+	{
+		HRESULT hr = codec2->SetFlavour(flavour);
+		if (SUCCEEDED(hr))
+			_flavour = flavour;
+
+		codec2->Release();
+		return hr;
+	}
+	else
+	{
+		// No IID_IAAFEssenceCodec2 interface, so treat as no-op.
+		if (flavour == kAAFNilCodecFlavour)
+			return AAFRESULT_SUCCESS;
+
+		// Client attempted to set a non-nil flavour on a codec which
+		// does not support the IAAFEssenceCodec2 interface.
+		return AAFRESULT_INVALID_OP_CODEC;
+	}
 }
 
 
@@ -2638,7 +2653,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		plugins = ImplAAFContext::GetInstance()->GetPluginManager();
-		CvtInt32toPosition(0, zeroPos);	
+		zeroPos = 0;	
 		CHECK(masterMob->SearchSource(slotID, zeroPos,kAAFFileMob,
 									   mediaCrit,
 									   NULL,
@@ -2824,20 +2839,11 @@ AAFRESULT STDMETHODCALLTYPE
 		ImplAAFDataDef * pMediaKind,
         aafLength_t *result)
 {
-//!!!	aafInt64		one;
-	
 	aafAssert(pMediaKind != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 	aafAssert(result != NULL, _mainFile, AAFRESULT_NULL_PARAM);
 
 	aafLength_t tempTotal = 0;
 	aafLength_t temp;
-//!!!	CvtInt32toInt64(1, &one);
-	
-//!!!   if(Int64Greater(_pvt->repeatCount, one))
-//	{
-//	  *result = _pvt->repeatCount;
-//	  return(AAFRESULT_SUCCESS);
-//	}
 
 	aafUID_t mediaKind;
 	AAFRESULT hr = pMediaKind->GetAUID(&mediaKind);
@@ -3019,13 +3025,8 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceAccess::Seek (aafPosition_t  frameNum)
 {
-//	aafPosition_t		one;
 	AAFRESULT		status = AAFRESULT_BADSAMPLEOFFSET;
 	size_t backup = _cur.index();
-	//	CvtInt32toInt64(1, &one);
-//!!!	if(Int64Greater(_pvt->repeatCount, one))
-//		status = _codec->Seek(one);
-//	else
 	
 	_cur.reset(OMBefore);
 	++_cur;

@@ -45,6 +45,7 @@ interface IAAFClassExtension;
 interface IAAFEssenceStream;
 interface IAAFEssenceDataStream;
 interface IAAFEssenceCodec;
+interface IAAFEssenceCodec2;
 interface IAAFMultiEssenceCodec;
 interface IAAFEssenceContainer;
 interface IAAFInterpolator;
@@ -54,6 +55,7 @@ typedef interface IAAFClassExtension IAAFClassExtension;
 typedef interface IAAFEssenceStream IAAFEssenceStream;
 typedef interface IAAFEssenceDataStream IAAFEssenceDataStream;
 typedef interface IAAFEssenceCodec IAAFEssenceCodec;
+typedef interface IAAFEssenceCodec2 IAAFEssenceCodec2;
 typedef interface IAAFMultiEssenceCodec IAAFMultiEssenceCodec;
 typedef interface IAAFEssenceContainer IAAFEssenceContainer;
 typedef interface IAAFInterpolator IAAFInterpolator;
@@ -644,7 +646,6 @@ DECLARE_INTERFACE_(IAAFEssenceCodec, IUnknown)
 
 
 
-
   //***********************************************************
   //
   // SetEssenceAccess()
@@ -788,8 +789,9 @@ DECLARE_INTERFACE_(IAAFEssenceCodec, IUnknown)
   // GetMaxCodecDisplayNameLength()
   //
   // This method should return the buffer size required to hold the
-  // largest display name (including flavour).  The client code does
-  // not expect this to be equal to any particular display name.
+  // largest display name (and optional flavour) including the
+  // terminating NUL character.  The client code does not expect this
+  // to be equal to any particular display name.
   //
   // This method should return only the following codes.  If more than
   // one of the listed errors is in effect, it should return the
@@ -1479,9 +1481,73 @@ DECLARE_INTERFACE_(IAAFEssenceCodec, IUnknown)
     // The returned length of the largest sample
     /*[out]*/ aafLength_t *  pLength) PURE;
 
+
+
+
+
   END_INTERFACE
 };
 #endif // __IAAFEssenceCodec_INTERFACE_DEFINED__
+
+
+// IAAFEssenceCodec2
+
+// ************************
+//
+// Interface IAAFEssenceCodec2
+//
+// ************************
+
+
+
+#ifndef __IAAFEssenceCodec2_INTERFACE_DEFINED__
+#define __IAAFEssenceCodec2_INTERFACE_DEFINED__
+
+EXTERN_C const IID IID_IAAFEssenceCodec2;
+
+#undef  INTERFACE
+#define INTERFACE   IAAFEssenceCodec2
+
+DECLARE_INTERFACE_(IAAFEssenceCodec2, IUnknown)
+{
+  BEGIN_INTERFACE
+
+  /* *** IUnknown methods *** */
+  STDMETHOD(QueryInterface) (THIS_ REFIID riid, void **ppvObj) PURE;
+  STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
+  STDMETHOD_(ULONG,Release) (THIS) PURE;
+
+  /* *** IAAFEssenceCodec2 methods *** */
+
+
+
+  //***********************************************************
+  //
+  // SetFlavour()
+  //
+  // Switches the codec into the specified flavour.  Flavour is
+  // codec dependent.  For example, the DV codec could use a
+  // flavour to switch into a legacy mode causing legacy properties
+  // to be added which are needed by legacy applications.
+  // 
+  // This method should return only the following codes.  If more than
+  // one of the listed errors is in effect, it should return the
+  // first one encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // HRESULT_NOT_IMPLEMENTED
+  //   - flavour not implemented by the codec
+  //
+  STDMETHOD(SetFlavour) (THIS_
+    // the codec flavour to use
+    /*[in, ref]*/ aafUID_constref  flavour) PURE;
+
+
+  END_INTERFACE
+};
+#endif // __IAAFEssenceCodec2_INTERFACE_DEFINED__
 
 
 

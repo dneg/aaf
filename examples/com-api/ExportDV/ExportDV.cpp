@@ -159,7 +159,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	IAAFMob*					pMob = NULL;
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
-	IAAFEssenceFormat*			pFormat = NULL;
 	aafMobID_t					masterMobID;
 	aafProductIdentification_t	ProductInfo;
 	aafRational_t				editRate = {25, 1};
@@ -168,6 +167,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	IAAFClassDef				*pCDMasterMob = NULL;
 	IAAFDataDef					*pPictureDef = NULL;
 	aafUInt32					samplesWritten, bytesWritten;
+	aafInt32					frameSize;
 
 	// Delete any previous test file before continuing...
 	char cFileName[FILENAME_MAX];
@@ -185,8 +185,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	ProductInfo.productID = NIL_UID;
 	ProductInfo.platform = NULL;		// Set by SDK when saving
 
+	// Large sectors for new files, small sectors for legacy files
+	const aafUID_t *fileKind = useLegacyDV ? &kAAFFileKind_Aaf512Binary : &kAAFFileKind_Aaf4KBinary;
+
 	// Create a new AAF file
-	check(AAFFileOpenNewModifyEx (pFileName, &kAAFFileKind_Aaf4KBinary, 0, &ProductInfo, &pFile));
+	check(AAFFileOpenNewModifyEx(pFileName, fileKind, 0, &ProductInfo, &pFile));
 	check(pFile->GetHeader(&pHeader));
 
 	// Get the AAF Dictionary from the file
@@ -238,6 +241,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 		sampleRate = ntsc_rate;
 	}
 
+
 	/* Create the Essence Data specifying the codec, container, edit rate and sample rate */
 	check(pMasterMob->CreateEssence(1,			// Slot ID within MasterMob
 						pPictureDef,			// MediaKind
@@ -249,69 +253,33 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 						ContainerAAF,			// Essence embedded in AAF file
 						&pEssenceAccess));		//
 
-	pEssenceAccess->SetEssenceCodecFlavour( kAAFNilCodecFlavour );
-
-	// Set Format specifiers that describe the essence data
-	aafInt32 YUV_pixel = kAAFColorSpaceYUV;
-	aafInt32 horiz_sub_sampling;
-	aafRect_t stored_rect;
-	aafRect_t pal_stored_rect = {0, 0, 720, 576/2};
-	aafRect_t ntsc_stored_rect = {0, 0, 720, 480/2};
-	aafInt32 frameSize;
-	aafUID_t compression = NIL_UID;
-
-	if (! useLegacyDV)
-	{
-		// compression is passed to the kAAFCompression format specifier
-		if (formatPAL)
-			memcpy (&compression, &kAAFCompression_IEC_DV_625_50, sizeof(compression));
-		else
-			memcpy (&compression, &kAAFCompression_IEC_DV_525_60, sizeof(compression));
-	}
-
+	// Set the codec flavour for desired video format
 	if (formatPAL)
 	{
-		horiz_sub_sampling = 2;		// PAL DV uses 4:2:0
-		frameSize = UNC_PAL_FRAME_SIZE;
-		memcpy (&stored_rect, &pal_stored_rect, sizeof(stored_rect));
-	}
-	else
-	{
-		horiz_sub_sampling = 4;		// NTSC DV uses 4:1:1
-		frameSize = UNC_NTSC_FRAME_SIZE;
-		memcpy (&stored_rect, &ntsc_stored_rect, sizeof(stored_rect));
-	}
-
-	if (! comp_enable)		// compressed DV frames are passed directly to codec
-	{
-		if (formatPAL)
-			frameSize = DV_PAL_FRAME_SIZE;
+		if (useLegacyDV)
+			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_LegacyDV_625_50 );
 		else
-			frameSize = DV_NTSC_FRAME_SIZE;
-	}
+			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_625_50 );
 
-	check(pEssenceAccess->GetEmptyFileFormat(&pFormat));
-	check(pFormat->AddFormatSpecifier(kAAFPixelFormat, 4, (unsigned char *) &YUV_pixel));
-	check(pFormat->AddFormatSpecifier(kAAFCDCIHorizSubsampling, 4 ,(unsigned char *) &horiz_sub_sampling));
-	check(pFormat->AddFormatSpecifier(kAAFStoredRect, 16, (unsigned char *) &stored_rect));
-	if (useLegacyDV)
+		frameSize = (comp_enable ? UNC_PAL_FRAME_SIZE : DV_PAL_FRAME_SIZE);
+	}
+	else	// format is NTSC
 	{
-		// kAAFLegacyDV performs many steps including
-		// - setting CompressionID to the same legacy value for all frame dimensions
-		// - extends CDCI descriptor with 6 legacy properties
-		// - forces FrameLayout to have the incorrect legacy value of MixedFields
-		check(pFormat->AddFormatSpecifier(kAAFLegacyDV, 2, (unsigned char *) &useLegacyDV));
-	}
-	else
-	{
-		check(pFormat->AddFormatSpecifier(kAAFCompression, 16, (unsigned char *) &compression));
+		if (useLegacyDV)
+			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_LegacyDV_525_60 );
+		else
+			pEssenceAccess->SetEssenceCodecFlavour( kAAFCodecFlavour_IEC_DV_525_60 );
+
+		frameSize = (comp_enable ? UNC_NTSC_FRAME_SIZE : DV_NTSC_FRAME_SIZE);
 	}
 
-	check(pEssenceAccess->PutFileFormat(pFormat));
+	// For fun, print the name of the selected codec flavour
+	aafWChar codec_name[128] = L"";
+	check(pEssenceAccess->GetCodecName(sizeof(codec_name), codec_name));
+	printf("  using codec flavour \"%ls\"\n", codec_name);
 
-	pFormat->Release();
 
-	/* Write the samples */
+	// Write the video samples
 	int total_samples = 0;
 	if (input_video == NULL)		// using generated uncompressed video?
 	{
@@ -364,9 +332,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName, bool comp_enable)
 	check(pEssenceAccess->CompleteWrite());
 
 	pEssenceAccess->Release();
-	pEssenceAccess = NULL;
-
-	/* Release COM interfaces */
 
 	pMob->Release();
 	pMasterMob->Release();

@@ -83,7 +83,3 @@ const aafUID_t kAAFPadBytesPerRow = { 0xc146bde0, 0x4c0d, 0x11d3, { 0xbf, 0xdc, 
 // data will be very lossy non-baseline JPEG image. The image quality does not improve
 // much past 95.
 const aafUID_t kAAFCompressionQuality = { 0xc146bde1, 0x4c0d, 0x11d3, { 0xbf, 0xdc, 0x0, 0x10, 0x4b, 0xc9, 0x15, 0x6d } };
-
-// kAAFLegacyDV is used as a boolean specifier to select whether the CDCI codec
-// should create properties needed by legacy applications
-const aafUID_t kAAFLegacyDV = { 0xa7f3060f, 0x27df, 0x4769, { 0xa2, 0x52, 0x12, 0xa7, 0xd9, 0x46, 0x3e, 0xa2 } };

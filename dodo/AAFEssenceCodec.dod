@@ -57,7 +57,7 @@ AD_IDL(//
 AD_CLASS_UUID(3631F7A1, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(3631F7A2, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
-AD_XCLASS_BEGIN(Abstract, Transient)
+AD_COM_EXT_CLASS_BEGIN(public IAAFEssenceCodec2)
 
 AD_IDL(//
 	//**************
@@ -205,8 +205,9 @@ AD_XMETHOD1(GetMaxCodecDisplayNameLength,
 			pBufSize,
 			length of the buffer required to hold the longest flavour Name,
      This method should return the buffer size required to hold the
-  // largest display name \(including flavour\).  The client code does
-  // not expect this to be equal to any particular display name.
+  // largest display name \(and optional flavour\) including the
+  // terminating NUL character.  The client code does not expect this
+  // to be equal to any particular display name.
   //
   // This method should return only the following codes.  If more than
   // one of the listed errors is in effect\, it should return the
@@ -925,4 +926,11 @@ AD_XMETHOD2(GetLargestSampleSize,
   //
   // AAFRESULT_NULL_PARAM
   //   - pLength is null.)
-AD_XCLASS_END(Abstract, Transient)
+
+#c
+#c AAFEssenceCodec2 methods
+#c
+
+AD_COM_METH(.method-SetFlavour)
+
+AD_COM_EXT_CLASS_END(AAFEssenceCodec2)

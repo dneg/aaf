@@ -1548,7 +1548,11 @@ static HRESULT CreateVideoAAFFile(
 			pLocator,		// In current file
 			testContainer,	// In AAF Format
 			&pEssenceAccess));
-		
+
+		// For legacy DV, the convenient way is to set a CDCI codec flavour
+		if (compression == kAAFCompression_LegacyDV)
+			checkResult(pEssenceAccess->SetEssenceCodecFlavour(kAAFCodecFlavour_LegacyDV_625_50));
+
 		// Get and display the current code name.
 		checkResult(pEssenceAccess->GetCodecName(sizeof(wNameBuffer), wNameBuffer));
 		convert(chNameBuffer, sizeof(chNameBuffer), wNameBuffer);
@@ -1618,23 +1622,17 @@ static HRESULT CreateVideoAAFFile(
 
 		if (codecID != kAAFCodecJPEG && compressEnable == kAAFCompressionDisable)
 		{
-			// Set format specifiers needed for uncompressed CDCI video
-			checkResult(pEssenceAccess->GetEmptyFileFormat (&pTransformFormat));
-			checkResult(pTransformFormat->AddFormatSpecifier (kAAFCDCIHorizSubsampling, sizeof(horizontalSubsample), (aafDataBuffer_t)&horizontalSubsample));
-			if (compression == kAAFCompression_LegacyDV)
+			// For Legacy DV a flavour was set.  For other formats use format specifiers.
+			if (compression != kAAFCompression_LegacyDV)
 			{
-				aafUInt32 useLegacyDV = 1;
-				aafInt32 YUV_pixel = kAAFColorSpaceYUV;
+				// Set format specifiers needed for uncompressed CDCI video
+				checkResult(pEssenceAccess->GetEmptyFileFormat (&pTransformFormat));
+				checkResult(pTransformFormat->AddFormatSpecifier (kAAFCDCIHorizSubsampling, sizeof(horizontalSubsample), (aafDataBuffer_t)&horizontalSubsample));
+				checkResult(pEssenceAccess->PutFileFormat(pTransformFormat));
 
-				checkResult(pTransformFormat->AddFormatSpecifier(kAAFPixelFormat, 4, (unsigned char *) &YUV_pixel));
-				checkResult(pTransformFormat->AddFormatSpecifier(kAAFStoredRect, 16, (unsigned char *) &rc));
-				checkResult(pTransformFormat->AddFormatSpecifier(kAAFLegacyDV, sizeof(useLegacyDV), (aafDataBuffer_t)&useLegacyDV));
-				
+				pTransformFormat->Release();
+				pTransformFormat = NULL;
 			}
-			checkResult(pEssenceAccess->PutFileFormat(pTransformFormat));
-
-			pTransformFormat->Release();
-			pTransformFormat = NULL;
 		}
 
 

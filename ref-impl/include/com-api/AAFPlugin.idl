@@ -50,6 +50,7 @@ interface IAAFClassExtension;
 interface IAAFEssenceStream;
 interface IAAFEssenceDataStream;
 interface IAAFEssenceCodec;
+interface IAAFEssenceCodec2;
 interface IAAFMultiEssenceCodec;
 interface IAAFEssenceContainer;
 interface IAAFInterpolator;
@@ -634,6 +635,7 @@ interface IAAFEssenceDataStream : IUnknown
 
 //
 // Objects that implement IAAFEssenceCodec also implement the following interfaces:
+//  - IAAFEssenceCodec2
 //  - IAAFPlugin
 
 [
@@ -644,7 +646,6 @@ interface IAAFEssenceDataStream : IUnknown
 ]
 interface IAAFEssenceCodec : IUnknown
 {
-
 
 //
 	//**************
@@ -795,8 +796,9 @@ interface IAAFEssenceCodec : IUnknown
   // GetMaxCodecDisplayNameLength()
   //
   // This method should return the buffer size required to hold the
-  // largest display name (including flavour).  The client code does
-  // not expect this to be equal to any particular display name.
+  // largest display name (and optional flavour) including the
+  // terminating NUL character.  The client code does not expect this
+  // to be equal to any particular display name.
   //
   // This method should return only the following codes.  If more than
   // one of the listed errors is in effect, it should return the
@@ -1499,6 +1501,59 @@ interface IAAFEssenceCodec : IUnknown
 
     // The returned length of the largest sample
     [out] aafLength_t *  pLength);
+
+
+}
+
+
+// ************************
+//
+// Interface IAAFEssenceCodec2
+//
+// ************************
+//
+// The AAFEssenceCodec2 interface adds SetFlavour() to the
+// interfaces of the now deprecated AAFEssenceCodec API.
+//
+
+
+//
+// Objects that implement IAAFEssenceCodec2 also implement the following interfaces:
+//  - IAAFPlugin
+
+[
+    object,
+    uuid(8888F7A2-9121-11d2-8088-006008143e6f),
+    helpstring("IAAFEssenceCodec2 Interface"),
+    pointer_default(unique)
+]
+interface IAAFEssenceCodec2 : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // SetFlavour()
+  //
+  // Switches the codec into the specified flavour.  Flavour is
+  // codec dependent.  For example, the DV codec could use a
+  // flavour to switch into a legacy mode causing legacy properties
+  // to be added which are needed by legacy applications.
+  // 
+  // This method should return only the following codes.  If more than
+  // one of the listed errors is in effect, it should return the
+  // first one encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // HRESULT_NOT_IMPLEMENTED
+  //   - flavour not implemented by the codec
+  // 
+  HRESULT SetFlavour (
+    // the codec flavour to use
+    [in, ref] aafUID_constref  flavour);
+
 }
 
 
