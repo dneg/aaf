@@ -445,6 +445,24 @@ void OMVector<Element>::removeFirst(void)
   removeAt(0);
 }
 
+  // @mfunc Remove all elements from this <c OMVector>.
+  //        from this <c OMVector>. Existing values in this
+  //        <c OMVector> are shifted down one index position.
+  //   @tcarg class | Element | The type of an <c OMVector> element.
+  //          This type must support operator = and operator ==.
+template <typename Element>
+void OMVector<Element>::clear(void)
+{
+  TRACE("OMVector<Element>::clear");
+
+  size_t elementCount = count();
+  for (size_t i = 0; i < elementCount; i++) {
+    removeLast();
+  }
+  POSTCONDITION("All elements removed", count() == 0);
+  POSTCONDITION("Empty", capacity() == 0);
+}
+
   // @mfunc The index of the element with value <p value>.
   //        In the case of duplicate values, lowest index is returned.
   //   @tcarg class | Element | The type of an <c OMVector> element.

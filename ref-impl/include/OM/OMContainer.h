@@ -45,6 +45,9 @@ public:
     //          of elements in the <c OMContainer>.
   virtual size_t count(void) const = 0;
 
+    // @cmember Remove all elements from this <c OMContainer>.
+  virtual void clear(void) = 0;
+
 };
 
 #endif

@@ -99,6 +99,9 @@ public:
     // @cmember Remove <p value> from this <c OMSet>.
   virtual void removeValue(const Element value);
 
+    // @cmember Remove all elements from this <c OMSet>.
+  virtual void clear(void);
+
 private:
   // @access Private members.
 

@@ -138,6 +138,9 @@ public:
     //          <c OMVector> are shifted down one index position.
   void removeFirst(void);
 
+    // @cmember Remove all elements from this <c OMVector>.
+  virtual void clear(void);
+
     // @cmember The index of the element with value <p value>.
     //          In the case of duplicate values, lowest index is returned.
   size_t indexOfValue(const Element value) const;

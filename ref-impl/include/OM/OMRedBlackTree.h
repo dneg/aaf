@@ -89,6 +89,9 @@ public:
     //          <c OMRedBlackTree>.
   bool remove(const Key k);
 
+    // @cmember Remove all items from this <c OMRedBlackTree>.
+  virtual void clear(void);
+
     // @cmember The number of items in this <c OMRedBlackTree>.
     //          <mf OMRedBlackTree::count> returns the actual number
     //          of items in the <c OMRedBlackTree>.
