@@ -438,6 +438,8 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::appendValue(
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::appendValue");
 
+  PRECONDITION("Valid object", object != 0);
+
   setValueAt(object, count());
 
 }
@@ -453,6 +455,8 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::prependValue(
                                                 const ReferencedObject* object)
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::prependValue");
+
+  PRECONDITION("Valid object", object != 0);
 
   insertAt(object, 0);
 }
@@ -470,6 +474,8 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::insert(
                                                 const ReferencedObject* object)
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::insert");
+
+  PRECONDITION("Valid object", object != 0);
 
   appendValue(object);
 }
@@ -713,6 +719,9 @@ bool OMWeakReferenceVectorProperty<ReferencedObject>::findIndex(
                            const ReferencedObject* object, size_t& index) const
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::findIndex");
+
+  PRECONDITION("Valid object", object != 0);
+
   bool result = false;
 
   VectorIterator iterator(_vector, OMBefore);
@@ -968,6 +977,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::setObjectAt(
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::setObjectAt");
 
   PRECONDITION("Valid index", index < count());
+  PRECONDITION("Valid object", object != 0);
 
   // TBS
   return 0;
@@ -1007,7 +1017,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::appendObject(
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::appendObject");
 
-  PRECONDITION("Valid object ", object != 0);
+  PRECONDITION("Valid object", object != 0);
 
   insertObjectAt(object, count());
 }
@@ -1025,7 +1035,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::prependObject(
 {
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::prependObject");
 
-  PRECONDITION("Valid object ", object != 0);
+  PRECONDITION("Valid object", object != 0);
 
   insertObjectAt(object, 0);
 }
@@ -1069,7 +1079,7 @@ OMWeakReferenceVectorProperty<ReferencedObject>::insertObjectAt(
   TRACE("OMWeakReferenceVectorProperty<ReferencedObject>::insertObjectAt");
 
   PRECONDITION("Valid index", index <= count());
-  PRECONDITION("Valid object ", object != 0);
+  PRECONDITION("Valid object", object != 0);
 
   // TBS
 }
