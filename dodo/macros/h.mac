@@ -200,9 +200,10 @@ public:\
 
 #ccccccccccccccccccccccccccc
 #c
-#c Starts a class definition
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
 #c
-#c Arguments: none
+#c Arguments: additional interface name
 #c
 #startm AD_COM_EXT_CLASS_BEGIN 01
 AD_CLASS_BEGIN\
@@ -840,6 +841,18 @@ public:
 
 #ccccccccccccccccccccccccccc
 #c
+#c Ends a class definition for classes which support more than the
+#c primary COM interface.
+#c
+#c Arguments: additional interface name
+#c
+#startm AD_COM_EXT_CLASS_END 01
+AD_CLASS_END\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Ends a class definition for AAFRoot
 #c
 #c Arguments: none
@@ -1066,6 +1079,39 @@ static AAFRESULT STDMETHODCALLTYPE
 #startm AD_STATIC_CREATE 00
 static AAFRESULT STDMETHODCALLTYPE
     CreateObject (.this-module ** result);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c The following macros assist in passing arguments to methods of the
+#c contained implementation class:
+#c
+#c The objIn macros are for use with pointers to objects that are
+#c passed into the method.  The Type argument is the base type, with
+#c no indirection specified.  For example, if you're passing in
+#c AObject*, AObject should be specified for the Type argument.#c
+#c
+#c The objOut macros are for use with pointers to pointers to objects
+#c that are passed out of the method.  The Type argument is the base
+#c type, with no indirection specified.  For example, if you're
+#c passing in AObject**, AObject should be specified for the Type
+#c argument.
+#c
+#c The objPass macros are for use with any kind of data which is
+#c passed exactly into or out of the method.
+#c
+
+
+#startm .objIn-adornment 00
+#endm
+
+
+#startm .objPass-adornment 00
+#endm
+
+
+#startm .objOut-adornment 00
 #endm
 
 
