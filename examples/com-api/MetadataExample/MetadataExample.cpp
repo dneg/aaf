@@ -635,7 +635,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 
   if (1 == numMobs )
     {
-      printf("Found %ld Master Mobs\n", numMobs);
+      printf("Found %d Master Mobs\n", numMobs);
       criteria.searchTag = kAAFByMobKind;
       criteria.tags.mobKind = kAAFMasterMob;
       check(pHeader->GetMobs(&criteria, &pMobIter));
@@ -697,7 +697,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 		  pFormat = NULL;
 		  if(sampleBits != bitsPerSample)
 		    {
-		      printf("***Wrong sample size read ( was %ld , should be %ld)\n",
+		      printf("***Wrong sample size read ( was %d , should be %d)\n",
 			     sampleBits, bitsPerSample);
 		    }
 
@@ -730,7 +730,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 		  // Now compare the data read from the AAF file to the actual WAV file
 		  if (dataLen != AAFBytesRead)
 		    {
-		      printf("***Wrong number of bytes read ( was %ld , should be %ld)\n",
+		      printf("***Wrong number of bytes read ( was %d , should be %d)\n",
 			     AAFBytesRead, WAVBytesRead);
 		    }
 		  if (memcmp( dataPtr, AAFDataBuf, dataLen) != 0)
@@ -745,8 +745,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	    }
 	  else
 	    {
-	      printf("***Wrong number of slots in the Master Mob (was %ld should be %ld)\n",
-		     numSlots, 2L);
+	      printf("***Wrong number of slots in the Master Mob (was %d should be %d)\n",
+		     numSlots, 2);
 	    }
 	  if (pMasterMob)
 	    {
@@ -768,8 +768,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
     }
   else
     {
-      printf("***Wrong number of Master mobs in the file (was %ld should be %ld)\n",
-	     numMobs, 1L);
+      printf("***Wrong number of Master mobs in the file (was %d should be %d)\n",
+	     numMobs, 1);
     }
   printf("--------\n");
 

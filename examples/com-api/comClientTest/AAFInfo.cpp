@@ -112,25 +112,6 @@ static void convert(char* cName, size_t length, const char* name)
   }
 }
 
-static void convert(wchar_t* wName, size_t length, const wchar_t* name)
-{
-  assert((name /* && *name */), "Valid input name");
-  assert(wName != 0, "Valid output buffer");
-  assert(length > 0, "Valid output buffer size");
-
-  size_t sourceLength = 0;
-  while (*name)
-    ++sourceLength;
-  if (sourceLength < length - 1) {
-    // Copy the string if there is enough room in the destinition buffer.
-    while (*wName++ = *name++)
-      ;
-  } else {
-    fprintf(stderr, "Error : Failed to copy '%s'.\n\n", name);
-    exit(1);  
-  }
-}
-
 static void printProductVersion(aafProductVersion_t* pProductVersion)
 {
   printf("%d.%d.%d-%d", pProductVersion->major,

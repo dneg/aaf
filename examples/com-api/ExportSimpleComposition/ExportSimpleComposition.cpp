@@ -59,11 +59,6 @@ static aafSourceRef_t sourceRef;
   if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
 
 
-static aafBool	EqualAUID(aafUID_t *uid1, aafUID_t *uid2)
-{
-	return(memcmp((char *)uid1, (char *)uid2, sizeof(aafUID_t)) == 0 ? kAAFTrue : kAAFFalse);
-}
-
 #define TEST_PATH	L"SomeFile.dat"
 
 static void     LogError(HRESULT errcode, int line, char *file)
@@ -460,7 +455,7 @@ static HRESULT ProcessAAFFile(aafWChar * pFileName, testType_t testType)
 	check(pHeader->CountMobs(kAAFMasterMob, &numMobs));
 	if (numMobs != 0)
 	{
-		printf("Found %ld Master Mobs\n", numMobs);
+		printf("Found %d Master Mobs\n", numMobs);
 		criteria.searchTag = kAAFByMobKind;
 		criteria.tags.mobKind = kAAFMasterMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));

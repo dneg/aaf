@@ -135,8 +135,6 @@ static void printIndent (int indent, ostream & os)
 	while (indent--) os << " ";
 }
 
-
-
 static void convert(aafCharacter* wcName, size_t length, const char* name)
 {
 	assert(name );
@@ -150,45 +148,6 @@ static void convert(aafCharacter* wcName, size_t length, const char* name)
 		cerr << "Error : Failed to convert'"
 			<< name
 			<< "' to a wide character string.\n\n";
-		exit(1);  
-	}
-}
-
-
-static void convert(char* cName, size_t length, const char* name)
-{
-	assert(name );
-	// assert(*name); can this handle 0-length
-	// if there is an error handling only terminating, for !*name and set *cName=0;
-	assert(cName != 0);
-	assert(length > 0);
-	
-	size_t sourceLength = strlen(name);
-	if (sourceLength < length - 1) {
-		strncpy(cName, name, length);
-	} else {
-		cerr << "Error : Failed to copy '" << name << "'.\n\n";
-		exit(1);  
-	}
-}
-
-static void convert(aafCharacter* wName, size_t length, const aafCharacter* name)
-{
-	assert(name );
-	// assert(*name); can this handle 0-length
-	// if there is an error handling only terminating, for !*name and set *wName=0;
-	assert(wName != 0);
-	assert(length > 0);
-	
-	size_t sourceLength = 0;
-	while (*name)
-		++sourceLength;
-	if (sourceLength < length - 1) {
-		// Copy the string if there is enough room in the destinition buffer.
-		while (0 != (*wName++ = *name++))
-			;
-	} else {
-		cerr << "Error : Failed to copy '" << name << "'.\n\n";
 		exit(1);  
 	}
 }
@@ -1739,7 +1698,6 @@ HRESULT dumpPropertyValue (IAAFPropertyValueSP pPVal,
 		// recursively)
 		IAAFTypeDefObjectRefSP pTDO;
 		aafCharacter *nameBuf=NULL;
-		aafUInt32 bufSize=0;
 
 		checkResult(pTD->QueryInterface(IID_IAAFTypeDefObjectRef,
 						(void**)&pTDO));

@@ -624,8 +624,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	check(pHeader->CountMobs(kAAFAllMob, &numMobs));
 	if (4 != numMobs )
 	{
-		printf("***Wrong number of mobs in the file (was %ld should be %ld)\n",
-			numMobs, 4L);
+		printf("***Wrong number of mobs in the file (was %d should be %d)\n",
+			numMobs, 4);
 	}
 
 	printf("--------\n");
@@ -633,7 +633,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	check(pHeader->CountMobs(kAAFTapeMob, &numTapeMobs));
 	if (1 == numTapeMobs )
 	{
-		printf("Found %ld Tape Mobs\n", numTapeMobs);
+		printf("Found %d Tape Mobs\n", numTapeMobs);
 		criteria.searchTag = kAAFByMobKind;
 		criteria.tags.mobKind = kAAFTapeMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
@@ -655,8 +655,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 	else
 	{
-		printf("***Wrong number of tape mobs in the file (was %ld should be %ld)\n",
-			numTapeMobs, 1L);
+		printf("***Wrong number of tape mobs in the file (was %d should be %d)\n",
+			numTapeMobs, 1);
 	}
 
 
@@ -665,7 +665,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	check(pHeader->CountMobs(kAAFFileMob, &numFileMobs));
 	if (1 == numFileMobs )
 	{
-		printf("Found %ld File Mobs\n", numFileMobs);
+		printf("Found %d File Mobs\n", numFileMobs);
 		criteria.searchTag = kAAFByMobKind;
 		criteria.tags.mobKind = kAAFFileMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
@@ -711,8 +711,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 	else
 	{
-		printf("***Wrong number of file mobs in the file (was %ld should be %ld)\n",
-			numFileMobs, 1L);
+		printf("***Wrong number of file mobs in the file (was %d should be %d)\n",
+			numFileMobs, 1);
 	}
 
 	printf("--------\n");
@@ -720,7 +720,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	check(pHeader->CountMobs(kAAFMasterMob, &numMasterMobs));
 	if (1 == numMasterMobs )
 	{
-		printf("Found %ld Master Mobs\n", numMasterMobs);
+		printf("Found %d Master Mobs\n", numMasterMobs);
 		criteria.searchTag = kAAFByMobKind;
 		criteria.tags.mobKind = kAAFMasterMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
@@ -743,8 +743,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 	else
 	{
-		printf("***Wrong number of master mobs in the file (was %ld should be %ld)\n",
-			numMasterMobs, 1L);
+		printf("***Wrong number of master mobs in the file (was %d should be %d)\n",
+			numMasterMobs, 1);
 	}
 
 	printf("--------\n");
@@ -752,7 +752,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	check(pHeader->CountMobs(kAAFCompMob, &numCompMobs));
 	if (1 == numCompMobs )
 	{
-		printf("Found %ld Composition Mobs\n", numCompMobs);
+		printf("Found %d Composition Mobs\n", numCompMobs);
 
 		// Enumerate over all Composition Mobs
 		criteria.searchTag = kAAFByMobKind;
@@ -809,7 +809,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 							aafUInt32	numComponents, item = 0;
 					
 							check(pSequence->CountComponents (&numComponents));
-							printf("    Found Sequence on slot with %ld components\n",
+							printf("    Found Sequence on slot with %d components\n",
 								numComponents);
 							printf("        It has length %" L64 "d\n", length);
 							check(pSequence->GetComponents (&pCompIter));
@@ -823,7 +823,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 									aafSourceRef_t		ref;
 
 									check(pSourceClip->GetSourceReference (&ref));
-									printf("        %ld) A length %" L64 "d source clip\n", item, length);
+									printf("        %d) A length %" L64 "d source clip\n", item, length);
 									check(pSourceClip->ResolveRef(&pReferencedMob));
 									check(pReferencedMob->GetMobID(&mobID));
 									check(pReferencedMob->GetName (bufW, sizeof(bufW)));
@@ -854,7 +854,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 								hr = pComponent->QueryInterface(IID_IAAFFiller, (void **) &pFiller);
 								if(AAFRESULT_SUCCESS == hr)
 								{
-									printf("        %ld) A length %" L64 "d filler\n", item, length);
+									printf("        %d) A length %" L64 "d filler\n", item, length);
 
 									pFiller->Release();
 									pFiller = NULL;
@@ -888,8 +888,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			}
 			else
 			{
-				printf("***Wrong number of slots in the composition mob (was %ld should be %ld)\n",
-					numSlots, 1L);
+				printf("***Wrong number of slots in the composition mob (was %d should be %d)\n",
+					numSlots, 1);
 			}
 
 			pMob->Release();
@@ -902,8 +902,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	}
 	else
 	{
-		printf("***Wrong number of composition mobs in the file (was %ld should be %ld)\n",
-			numCompMobs, 1L);
+		printf("***Wrong number of composition mobs in the file (was %d should be %d)\n",
+			numCompMobs, 1);
 	}
 
 

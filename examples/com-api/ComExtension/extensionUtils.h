@@ -160,11 +160,6 @@ typedef aafUID_t  ePosition;
 typedef aafUInt32 contractID_t;
 
 
-
-static void SetStringProperty (IAAFObject * pObj,
-						aafUID_constref propertyID,
-						aafCharacter_constptr strValue);
-
 bool classDefinitionIsA ( IAAFClassDef *pClassDefQuery,
 							   aafUID_constref targetAUID);
 

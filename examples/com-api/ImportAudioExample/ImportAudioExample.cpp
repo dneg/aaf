@@ -194,7 +194,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 	check(pHeader->CountMobs(kAAFMasterMob, &numMobs));
 	if (numMobs != 0)
 	{
-		printf("Found %ld Master Mobs\n", numMobs);
+		printf("Found %d Master Mobs\n", numMobs);
 		criteria.searchTag = kAAFByMobKind;
 		criteria.tags.mobKind = kAAFMasterMob;
 		check(pHeader->GetMobs(&criteria, &pMobIter));
@@ -263,7 +263,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName, testType_t testType)
 							(aafDataBuffer_t)&sampleBits, &bytesRead));
 		
 						// Output the size so we can see what's going on
-						printf("File has %ld Sample Bits.\n",sampleBits);
+						printf("File has %d Sample Bits.\n",sampleBits);
 		
 						pFormat->Release();
 						pFormat = NULL;

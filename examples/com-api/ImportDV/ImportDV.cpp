@@ -51,7 +51,7 @@ using namespace std;
 
 static void LogError(HRESULT errcode, int line, char *file)
 {
-	printf("Error '%0lx' returned at line %d in %s\n", errcode, line, file);
+	printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
 
 static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
@@ -87,7 +87,7 @@ static void MobIDtoString(aafMobID_constref uid, char *buf)
 {
     sprintf( buf, "%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x-" \
 		  "%02x-%02x-%02x-%02x-" \
-		  "%08lx%04x%04x" \
+		  "%08x%04x%04x" \
 		  "%02x%02x%02x%02x%02x%02x%02x%02x",
 
 	(int)uid.SMPTELabel[0], (int)uid.SMPTELabel[1], 
@@ -149,7 +149,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 	if (numMobs == 0)
 		return 0;
 
-	printf("Found %ld Master Mobs\n", numMobs);
+	printf("Found %d Master Mobs\n", numMobs);
 	criteria.searchTag = kAAFByMobKind;
 	criteria.tags.mobKind = kAAFMasterMob;
 	check(pHeader->GetMobs(&criteria, &pMobIter));
@@ -256,7 +256,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 						case kAAFMixedFields: frameLayoutStr = "MixedFields"; break;
 						default: break;
 					}
-					printf("\tSlotID %lu: SampleRate=%ld/%ld MaxSampleBytes=%lu StoredRect=%ldx%ld\n",
+					printf("\tSlotID %u: SampleRate=%d/%d MaxSampleBytes=%u StoredRect=%dx%d\n",
 								MobSlotID, sampleRate.numerator, sampleRate.denominator,
 								maxSampleSize, storedRect.xSize, storedRect.ySize);
 			
@@ -292,7 +292,7 @@ static HRESULT OpenAAFFile(aafWChar * pFileName, bool comp_enable)
 							}
 						} 
 					}
-					printf("\tTotal samples = %lu (written to %s)\n", total_samples, output_file);
+					printf("\tTotal samples = %u (written to %s)\n", total_samples, output_file);
 					
 					delete [] dataBuff;
 					dataBuff = NULL;

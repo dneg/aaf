@@ -70,7 +70,7 @@ aafUID_t kIEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0x06, 0x0e, 0x2b, 0x34
 
 static void LogError(HRESULT errcode, int line, char *file)
 {
-	printf("Error '%0lx' returned at line %d in %s\n", errcode, line, file);
+	printf("Error '%0x' returned at line %d in %s\n", errcode, line, file);
 }
 
 static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */

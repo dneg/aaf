@@ -83,19 +83,6 @@ static HRESULT moduleErrorTmp = S_OK; /* note usage in macro */
   if (!(b)) {fprintf(stderr, "\nASSERT: %s\n\n", msg); exit(1);}
 
 
-static void convert(wchar_t* wcName, size_t length, const char* name)
-{
-  assert((name && *name), "Valid input name");
-  assert(wcName != 0, "Valid output buffer");
-  assert(length > 0, "Valid output buffer size");
-  
-  size_t status = mbstowcs(wcName, name, length);
-  if (status == (size_t)-1) {
-    fprintf(stderr, "\nError : Failed to convert'%s' to a wide character string.\n\n", name);
-    exit(1);  
-  }
-}
-
 static void convert(char* cName, size_t length, const wchar_t* name)
 {
   assert((name && *name), "Valid input name");
@@ -120,25 +107,6 @@ static void convert(char* cName, size_t length, const char* name)
     strncpy(cName, name, length);
   } else {
     fprintf(stderr, "\nError : Failed to copy '%s'.\n\n", name);
-    exit(1);  
-  }
-}
-
-static void convert(wchar_t* wName, size_t length, const wchar_t* name)
-{
-  assert((name && *name), "Valid input name");
-  assert(wName != 0, "Valid output buffer");
-  assert(length > 0, "Valid output buffer size");
-
-  size_t sourceLength = 0;
-  while (*name)
-    ++sourceLength;
-  if (sourceLength < length - 1) {
-    // Copy the string if there is enough room in the destinition buffer.
-    while (*wName++ = *name++)
-      ;
-  } else {
-    fprintf(stderr, "\nError : Failed to copy string.\n\n");
     exit(1);  
   }
 }
@@ -264,7 +232,7 @@ static void ReadAAFFile(aafWChar * pFileName)
         check(hr); // display error message
         if (FAILED(hr))
           numMobs = 0;
-        printf("Number of Mobs = %ld\n", numMobs);
+        printf("Number of Mobs = %d\n", numMobs);
 
 
         IEnumAAFMobs      *mobIter = NULL;
@@ -312,13 +280,13 @@ static void ReadAAFFile(aafWChar * pFileName)
               else
                 strcpy(chMobID, "<mob id not available>");
             
-              printf("Mob %ld: (ID %s) is named '%s'\n", n, chMobID, chName);
+              printf("Mob %d: (ID %s) is named '%s'\n", n, chMobID, chName);
 
               hr = aMob->CountSlots (&numSlots);
               check(hr); // display error message
               if (FAILED(hr))
                 numSlots = 0;
-              printf("Found %ld slots\n", numSlots);
+              printf("Found %d slots\n", numSlots);
 
               hr = aMob->QueryInterface (IID_IAAFSourceMob, (void **)&smob);
               check(hr); // display error message
@@ -343,7 +311,7 @@ static void ReadAAFFile(aafWChar * pFileName)
                     check(hr); // display error message
                     if(SUCCEEDED(hr))
                     {
-                      printf("    It is a file source mob of sample rate %ld/%ld.\n",
+                      printf("    It is a file source mob of sample rate %d/%d.\n",
                              rate.numerator, rate.denominator);
                     }
                     // cleanup references...
@@ -394,7 +362,7 @@ static void ReadAAFFile(aafWChar * pFileName)
                       check(slot->GetName (slotName, sizeof(slotName)));
                       check(slot->GetSlotID(&trackID));
                       convert(chName, sizeof(chName), slotName);
-                      printf("    Slot %ld: (ID %ld), is named '%s'\n",
+                      printf("    Slot %d: (ID %d), is named '%s'\n",
                             s, trackID, chName);
     
                       // cleanup references

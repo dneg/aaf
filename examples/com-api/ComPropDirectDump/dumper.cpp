@@ -118,41 +118,6 @@ static void convert(aafCharacter* wcName, size_t length, const char* name)
 	}
 }
 
-
-static void convert(char* cName, size_t length, const char* name)
-{
-	assert((name && *name));
-	assert(cName != 0);
-	assert(length > 0);
-	
-	size_t sourceLength = strlen(name);
-	if (sourceLength < length - 1) {
-		strncpy(cName, name, length);
-	} else {
-		cerr << "Error : Failed to copy '" << name << "'.\n\n";
-		exit(1);  
-	}
-}
-
-static void convert(aafCharacter* wName, size_t length, const aafCharacter* name)
-{
-	assert((name && *name));
-	assert(wName != 0);
-	assert(length > 0);
-	
-	size_t sourceLength = 0;
-	while (*name)
-		++sourceLength;
-	if (sourceLength < length - 1) {
-		// Copy the string if there is enough room in the destinition buffer.
-		while (0 != (*wName++ = *name++))
-			;
-	} else {
-		cerr << "Error : Failed to copy '" << name << "'.\n\n";
-		exit(1);  
-	}
-}
-
 static void convert(char* cName, size_t length, const aafCharacter* name)
 {
 	assert((name && *name));
