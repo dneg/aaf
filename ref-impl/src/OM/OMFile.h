@@ -160,10 +160,8 @@ public:
     //          an existing external file.
     // @devnote Will superceed OMFile::OMFile (for existing files) above.
   OMFile(OMRawStorage* rawStorage,
-         const OMFileEncoding encoding,
          void* clientOnRestoreContext,
          const OMAccessMode mode,
-         OMStoredObject* store,
          const OMClassFactory* factory,
          OMDictionary* dictionary,
          const OMLoadMode loadMode);
@@ -172,14 +170,13 @@ public:
     //          a new external file.
     // @devnote Will superceed OMFile::OMFile (for new files) above.
   OMFile(OMRawStorage* rawStorage,
-         const OMFileEncoding encoding,
          void* clientOnRestoreContext,
          OMFileSignature signature,
          const OMAccessMode mode,
-         OMStoredObject* store,
          const OMClassFactory* factory,
          OMDictionary* dictionary,
-         OMRootStorable* root);
+         OMRootStorable* root,
+         const OMByteOrder byteOrder);
 
     // @cmember Destructor.
   ~OMFile(void);
@@ -307,6 +304,12 @@ private:
 
   static OMFileEncoding encodingOf(const OMFileSignature& signature);
 
+  void openRead(void);
+
+  void openModify(void);
+
+  void createModify(void);
+
   OMRootStorable* _root;
   OMStoredObject* _rootStore;
 
@@ -327,6 +330,8 @@ private:
 
   bool _isOpen;
   bool _isClosed;
+  bool _isNew;
+  OMByteOrder _byteOrder;
 
 };
 
