@@ -333,16 +333,6 @@ private:
          OMRootStorable* root,
          const OMByteOrder byteOrder);
 
-    // @cmember Read the signature from the given file.
-  static void readSignature(const wchar_t* fileName,
-                            OMFileSignature& signature);
-
-    // @cmember Read the signature from the given raw storage.
-  static void readSignature(OMRawStorage* rawStorage,
-                            OMFileSignature& signature);
-
-  static OMFileEncoding encodingOf(const OMFileSignature& signature);
-
   void openRead(void);
 
   void openModify(void);
