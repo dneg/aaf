@@ -103,6 +103,11 @@ public:
     //          which is <p size> bytes in size.
   virtual void getBits(OMByte* bits, size_t size) const;
 
+    // @cmember Set the raw bits of this <c OMDataStreamProperty>. The raw
+    //          bits are copied from the buffer at address <p bits> which
+    //          is <p size> bytes in size.
+  virtual void setBits(const OMByte* bits, size_t size);
+
 private:
 
   void open(void);

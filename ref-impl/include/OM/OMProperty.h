@@ -138,6 +138,11 @@ public:
     //          <p size> bytes in size.
   virtual void getBits(OMByte* bits, size_t size) const = 0;
 
+    // @cmember Set the raw bits of this <c OMProperty>. The raw
+    //          bits are copied from the buffer at address <p bits> which
+    //          is <p size> bytes in size.
+  virtual void setBits(const OMByte* bits, size_t size) = 0;
+
 protected:
   // @access Protected members.
 
@@ -222,6 +227,11 @@ public:
     //          raw bits are copied to the buffer at address <p bits>
     //          which is <p size> bytes in size.
   virtual void getBits(OMByte* bits, size_t size) const;
+
+    // @cmember Set the raw bits of this <c OMReferenceProperty>. The raw
+    //          bits are copied from the buffer at address <p bits> which
+    //          is <p size> bytes in size.
+  virtual void setBits(const OMByte* bits, size_t size);
 
 protected:
   // @access Protected members.
@@ -652,6 +662,12 @@ public:
     //          copied to the buffer at address <p bits> which is
     //          <p size> bytes in size.
   virtual void getBits(OMByte* bits, size_t size) const;
+
+    // @cmember Set the raw bits of this
+    //          <c OMStrongReferenceVectorProperty>. The raw bits are
+    //          copied from the buffer at address <p bits> which is
+    //          <p size> bytes in size.
+  virtual void setBits(const OMByte* bits, size_t size);
 
 protected:
   // @access Protected members.
