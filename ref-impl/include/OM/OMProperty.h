@@ -147,6 +147,13 @@ public:
     // @cmember The type of this <c OMProperty>.
   const OMType* type(void) const;
 
+  // Copying.
+
+  virtual void shallowCopyTo(OMProperty* destination) const = 0;
+
+  virtual void deepCopyTo(OMProperty* destination,
+                          void* clientContext) const = 0;
+
 protected:
   // @access Protected members.
 
@@ -242,6 +249,13 @@ public:
 
     // @cmember Set the size of this <c OMSimpleProperty> to <p newSize> bytes.
   void setSize(size_t newSize);
+
+  // Copying.
+
+  virtual void shallowCopyTo(OMProperty* destination) const;
+
+  virtual void deepCopyTo(OMProperty* destination,
+                          void* clientContext) const;
 
 protected:
   // @access Protected members.

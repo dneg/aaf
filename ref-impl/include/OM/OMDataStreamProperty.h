@@ -150,6 +150,13 @@ public:
 
   virtual void setStoredByteOrder(OMByteOrder byteOrder);
 
+  // Copying.
+
+  virtual void shallowCopyTo(OMProperty* destination) const;
+
+  virtual void deepCopyTo(OMProperty* destination,
+                          void* clientContext) const;
+
 protected:
 
   virtual const wchar_t* storedName(void) const;

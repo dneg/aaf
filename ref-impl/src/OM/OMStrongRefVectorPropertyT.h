@@ -974,4 +974,21 @@ OMStrongReferenceVectorProperty<ReferencedObject>::insert(
   _vector.setAt(element, index);
 }
 
+template <typename ReferencedObject>
+void OMStrongReferenceVectorProperty<ReferencedObject>::shallowCopyTo(
+                                           OMProperty* /* destination */) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::shallowCopyTo");
+  // Nothing to do - this is a shallow copy
+}
+
+template <typename ReferencedObject>
+void OMStrongReferenceVectorProperty<ReferencedObject>::deepCopyTo(
+                                                     OMProperty* destination,
+                                                     void* clientContext) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::deepCopyTo");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
 #endif

@@ -248,6 +248,13 @@ public:
   virtual void insert(const size_t index,
                       const OMStrongReferenceVectorElement& element);
 
+  // Copying.
+
+  virtual void shallowCopyTo(OMProperty* destination) const;
+
+  virtual void deepCopyTo(OMProperty* destination,
+                          void* clientContext) const;
+
 private:
 
   typedef OMStrongReferenceVectorElement VectorElement;

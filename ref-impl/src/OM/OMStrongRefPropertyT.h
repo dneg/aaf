@@ -423,4 +423,21 @@ OMStrongReferenceProperty<ReferencedObject>::reference(void) const
   return const_cast<OMStrongObjectReference&>(_reference);
 }
 
+template <typename ReferencedObject>
+void OMStrongReferenceProperty<ReferencedObject>::shallowCopyTo(
+                                           OMProperty* /* destination */) const
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::shallowCopyTo");
+  // Nothing to do - this is a shallow copy
+}
+
+template <typename ReferencedObject>
+void OMStrongReferenceProperty<ReferencedObject>::deepCopyTo(
+                                                     OMProperty* destination,
+                                                     void* clientContext) const
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::deepCopyTo");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
 #endif

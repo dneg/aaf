@@ -121,6 +121,13 @@ public:
 
   virtual OMStrongObjectReference& reference(void) const;
 
+  // Copying.
+
+  virtual void shallowCopyTo(OMProperty* destination) const;
+
+  virtual void deepCopyTo(OMProperty* destination,
+                          void* clientContext) const;
+
 private:
 
   OMStrongObjectReference _reference;

@@ -882,5 +882,26 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   object = p;
 }
 
+template <typename UniqueIdentification, typename ReferencedObject>
+void OMStrongReferenceSetProperty<UniqueIdentification,
+                                  ReferencedObject>::shallowCopyTo(
+                                            OMProperty* /* destination */)const
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
+                                     "ReferencedObject>::shallowCopyTo");
+  // Nothing to do - this is a shallow copy
+}
+
+template <typename UniqueIdentification, typename ReferencedObject>
+void OMStrongReferenceSetProperty<UniqueIdentification,
+                                  ReferencedObject>::deepCopyTo(
+                                                     OMProperty* destination,
+                                                     void* clientContext) const
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
+                                     "ReferencedObject>::deepCopyTo");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
 #endif
 
