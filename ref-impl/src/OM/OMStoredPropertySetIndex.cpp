@@ -110,6 +110,25 @@ void OMStoredPropertySetIndex::iterate(size_t& context,
   }
 }
 
+bool OMStoredPropertySetIndex::find(const OMPropertyId& propertyId,
+                                    OMUInt32& type,
+                                    OMUInt32& offset,
+                                    OMUInt32& length) const
+{
+  bool result;
+
+  OMStoredPropertySetIndex::IndexEntry* e = find(propertyId);
+  if (e != 0) {
+    type = e->_type;
+    offset = e->_offset;
+    length = e->_length;
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
 bool OMStoredPropertySetIndex::isValid(void) const
 {
   TRACE("OMStoredPropertySetIndex::isValid");

@@ -18,8 +18,6 @@ public:
               OMUInt32 offset,
               OMUInt32 length);
   
-  IndexEntry* find(OMPropertyId propertyId) const;
-
   size_t entries(void) const;
 
   void iterate(size_t& context,
@@ -28,11 +26,18 @@ public:
                OMUInt32& offset,
                OMUInt32& length) const;
 
+  bool find(const OMPropertyId& propertyId,
+            OMUInt32& type,
+            OMUInt32& offset,
+            OMUInt32& length) const;
+
   bool isValid(void) const;
 
 protected:
     
   OMStoredPropertySetIndex::IndexEntry* find(void) const;
+
+  OMStoredPropertySetIndex::IndexEntry* find(OMPropertyId propertyId) const;
     
 private:
     
