@@ -1571,7 +1571,6 @@ void ImplAAFFile::registerFactories(void)
 	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
 #endif // USE_LIBGSF
 
-#if ! defined( OS_IRIX )
 	OMFile::registerFactory(AAFS4KEncoding,
                           new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
@@ -1582,7 +1581,6 @@ void ImplAAFFile::registerFactories(void)
                                                        Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
-#endif // ! OS_IRIX
 
 #elif defined( OS_FREEBSD )
 // No SS implementations ported as yet
