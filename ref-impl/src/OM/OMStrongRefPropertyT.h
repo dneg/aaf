@@ -38,10 +38,12 @@ OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty(
 : OMReferenceProperty<ReferencedObject>(propertyId,
                                         SF_STRONG_OBJECT_REFERENCE,
                                         name),
-  _reference(this, name)
+  _reference()
 {
   TRACE(
      "OMStrongReferenceProperty<ReferencedObject>::OMStrongReferenceProperty");
+
+  _reference = OMStrongObjectReference<ReferencedObject>(this, name);
 }
 
 template <typename ReferencedObject>
