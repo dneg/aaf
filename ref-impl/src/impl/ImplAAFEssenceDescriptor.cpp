@@ -77,14 +77,12 @@ ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::CountLocators (aafUInt32 *pCount)
 {
-	size_t	siz;
 	if (! pCount)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
 
-	_locators.getSize(siz);
-	*pCount = siz;
+	*pCount = _locators.count();
 	return(AAFRESULT_SUCCESS);
 }
 
@@ -110,19 +108,10 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	if(pLocator == NULL)
 		return(AAFRESULT_NULL_PARAM);
+  if (pLocator->attached ())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
-	size_t			siz;
-	long			n;
-	ImplAAFLocator	*obj = NULL;
-
-	_locators.getSize(siz);
-	for(n = siz-1; n >= 0; n--)
-	{
-		_locators.getValueAt(obj, n);
-		_locators.setValueAt(NULL, n);
-		_locators.setValueAt(obj, n+1);
-	}
-	_locators.setValueAt(pLocator, 0);
+  _locators.prependValue(pLocator);
 	pLocator->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
@@ -136,17 +125,16 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::InsertLocatorAt (aafUInt32 index,
 											   ImplAAFLocator *pLocator)
 {
-  if (! pLocator) return AAFRESULT_NULL_PARAM;
+	if (NULL == pLocator)
+		return AAFRESULT_NULL_PARAM;
+  if (pLocator->attached ())
+    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+  if (index > _locators.count())
+    return AAFRESULT_BADINDEX;
 
-  aafUInt32 count;
-  AAFRESULT hr;
-  hr = CountLocators (&count);
-  if (AAFRESULT_FAILED (hr)) return hr;
-
-  if (index > count)
-	return AAFRESULT_BADINDEX;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	_locators.insertAt(pLocator, index);
+	pLocator->AcquireReference();
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -172,15 +160,17 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::RemoveLocatorAt (aafUInt32 index)
 {
-	aafUInt32 count;
-	AAFRESULT hr;
-	hr = CountLocators (&count);
-	if (AAFRESULT_FAILED (hr)) return hr;
+	if (index >= _locators.count())
+	  return AAFRESULT_BADINDEX;
 	
-	if (index >= count)
-		return AAFRESULT_BADINDEX;
-	
-	_locators.removeAt(index);
+	ImplAAFLocator *pLocator = _locators.removeAt(index);
+  if (pLocator)
+  {
+    // We have removed an element from a "stong reference container" so we must
+    // decrement the objects reference count. This will not delete the object
+    // since the caller must have alread acquired a reference. (transdel 2000-MAR-10)
+    pLocator->ReleaseReference ();
+  }
 	return AAFRESULT_SUCCESS;
 }
 
@@ -188,8 +178,17 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFEssenceDescriptor::RemoveLocator (ImplAAFLocator *pLocator)
 {
-	if (! pLocator) return AAFRESULT_NULL_PARAM;
-	_locators.removeValue(pLocator);
+	if (NULL == pLocator)
+		return AAFRESULT_NULL_PARAM;
+  if (!pLocator->attached ()) // locator could not possibly be in _locators container.
+    return AAFRESULT_OBJECT_NOT_ATTACHED;
+
+  size_t index;
+  if (_locators.findIndex (pLocator, index))
+	  return RemoveLocatorAt (index);
+  else
+    return AAFRESULT_OBJECT_NOT_FOUND;
+
 	return AAFRESULT_SUCCESS;
 }
 
@@ -232,14 +231,12 @@ AAFRESULT
 {
 	if(ppLocator == NULL)
 		return(AAFRESULT_NULL_PARAM);
-
-	ImplAAFLocator	*obj = NULL;
-	_locators.getValueAt(obj, index);
-	*ppLocator = obj;
-	if (obj)
-		obj->AcquireReference();
-	else
+  if ((aafUInt32)index >= _locators.count())
 		return AAFRESULT_NO_MORE_OBJECTS; // AAFRESULT_BADINDEX ???
+
+	_locators.getValueAt(*ppLocator, index);
+  assert(*ppLocator); // locator should never be NULL.
+	(*ppLocator)->AcquireReference();
 
 	return AAFRESULT_SUCCESS;
 }
