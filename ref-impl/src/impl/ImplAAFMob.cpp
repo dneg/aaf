@@ -81,6 +81,7 @@
 #include "ImplEnumAAFMobSlots.h"
 #include "ImplEnumAAFComponents.h"
 #include "ImplAAFCloneResolver.h"
+#include "ImplAAFTaggedValueUtil.h"
 
 #include <assert.h>
 #include <string.h>
@@ -965,128 +966,25 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::AppendAttribute (aafCharacter_constptr  pName,
 				 aafCharacter_constptr  pValue )
 {
-  if ( pName  == NULL ||
-       pValue == NULL ) {
-    return AAFRESULT_NULL_PARAM;
-  }
-
-
-  XPROTECT()
-  {
-    ImplAAFSmartPointer<ImplAAFDictionary> spDict;
-    CHECK( GetDictionary(&spDict) );
-
-    // Get a type def for the tagged value.  GetBuiltinDefs passes an
-    // unowned pointer.  Don't release it (hence, a bare pointer).
-    ImplAAFTypeDef* pTaggedValType = spDict->GetBuiltinDefs()->tdString();
-    assert( pTaggedValType );
-
-
-    // The TaggedValueDef returned by GetBuildinDefs is not reference
-    // counted - don't release it.
-    // pTaggedDef is the object we will return, so it is not put in a smart pointer
-    // either.
-    ImplAAFTaggedValue* pTaggedVal;
-    ImplAAFClassDef* pTaggedValDef = spDict->GetBuiltinDefs()->cdTaggedValue();
-    if ( !pTaggedValDef ) {
-      RAISE( E_FAIL );
-    }
-
-
-    // Create the tagged value.
-    CHECK( pTaggedValDef->CreateInstance( reinterpret_cast<ImplAAFObject**>(&pTaggedVal) ) );
-    assert( pTaggedVal );
-
-    // Init the tagged value.
-    CHECK( pTaggedVal->Initialize( pName,
-				   pTaggedValType,
-				   (wcslen(pValue)+1)*sizeof(aafCharacter),
-				   reinterpret_cast<aafDataBuffer_t>(const_cast<aafCharacter*>(pValue)) ) );
-
-    _attributes.appendValue( pTaggedVal );
-
-  }
-  XEXCEPT
-  {}
-  XEND;
-
-
-  return AAFRESULT_SUCCESS;
+  return ImplAAFTaggedValueUtil::AppendNameValuePair( this, _attributes, pName, pValue );
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::CountAttributes (aafUInt32*  pNumAttributes )
 {
-  if ( NULL == pNumAttributes ) {
-    return AAFRESULT_NULL_PARAM;
-  }
-
-  *pNumAttributes = _attributes.count();
-
-  return AAFRESULT_SUCCESS;
+  return ImplAAFTaggedValueUtil::CountEntries( _attributes, pNumAttributes );
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::GetAttributes (ImplEnumAAFTaggedValues ** ppEnum)
 {
-  if ( NULL == ppEnum ) {
-    return AAFRESULT_NULL_PARAM;
-  }
-
-  ImplEnumAAFTaggedValues* pEnum = 
-    reinterpret_cast<ImplEnumAAFTaggedValues*>( CreateImpl(CLSID_EnumAAFTaggedValues) );
-  if ( NULL == pEnum ) {
-    return E_FAIL;
-  }
-
-  XPROTECT()
-  {
-    OMStrongReferenceVectorIterator<ImplAAFTaggedValue>* iter =
-      new OMStrongReferenceVectorIterator<ImplAAFTaggedValue>(_attributes);
-    if ( NULL == iter ) {
-      RAISE( AAFRESULT_NOMEMORY );
-    }
-
-    CHECK(pEnum->Initialize( &CLSID_EnumAAFTaggedValues, this, iter ) );
-    *ppEnum = pEnum;
-
-  }
-  XEXCEPT
-  {
-    if ( pEnum ) {
-      pEnum->ReleaseReference();
-    }
-  }
-  XEND;
-
-  return AAFRESULT_SUCCESS;
+  return ImplAAFTaggedValueUtil::GetEnumerator( this, _attributes, ppEnum );
 }
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::RemoveAttribute (ImplAAFTaggedValue * pAttribute )
 {
-  if (NULL == pAttribute) {
-    return AAFRESULT_NULL_PARAM;
-  }
-
-  if ( !pAttribute->attached () ) {
-    return AAFRESULT_OBJECT_NOT_ATTACHED;
-  }
-
-  if ( !_attributes.isPresent() ) {
-    return AAFRESULT_PROP_NOT_PRESENT;
-  }
-
-  size_t index;
-  if ( _attributes.findIndex (pAttribute, index) ) {
-    _attributes.removeAt(index);
-    pAttribute->ReleaseReference();
-  }
-  else {
-    return AAFRESULT_OBJECT_NOT_FOUND;
-  }
-
-  return AAFRESULT_SUCCESS;
+  return ImplAAFTaggedValueUtil::RemoveEntry( _attributes, pAttribute );
 }
 
 AAFRESULT STDMETHODCALLTYPE
