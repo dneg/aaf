@@ -17,7 +17,7 @@
 //
 // ../smpte/DictP18.csv 
 //
-// This file was generated on Wed Jun 16 10:22:22 EDT 1999
+// This file was generated on Wed Jun 16 14:50:44 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -835,7 +835,7 @@ AAF_PROPERTY(PluginDescriptors,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
   0x1b04,
-  ObjRefArray,
+  RefAUIDArray,
   false,
   DefinitionObject)
 AAF_CLASS_END(DefinitionObject)
