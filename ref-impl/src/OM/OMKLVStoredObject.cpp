@@ -105,7 +105,7 @@ void OMKLVStoredObject::close(void)
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMKLVStoredObject::close(OMFile& file)
+void OMKLVStoredObject::close(OMFile& /* file */)
 {
   TRACE("OMKLVStoredObject::close");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
@@ -121,13 +121,13 @@ OMByteOrder OMKLVStoredObject::byteOrder(void) const
   return unspecified;
 }
 
-void OMKLVStoredObject::save(OMFile& file)
+void OMKLVStoredObject::save(OMFile& /* file */)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
 }
 
-void OMKLVStoredObject::save(OMStorable& object)
+void OMKLVStoredObject::save(OMStorable& /* object */)
 {
   TRACE("OMKLVStoredObject::save(OMFile)");
   ASSERT("Unimplemented code not reached", false); // tjb TBS
