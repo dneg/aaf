@@ -61,6 +61,11 @@ OMSimpleProperty::OMSimpleProperty(int pid, const char* name, size_t valueSize)
   POSTCONDITION("Valid bits", _bits != 0 );
 }
 
+OMSimpleProperty::~OMSimpleProperty(void)
+{
+  delete _bits;
+}
+
 size_t OMSimpleProperty::size(void) const
 {
   return _size;
@@ -97,10 +102,18 @@ OMCollectionProperty::OMCollectionProperty(int pid,
 {
 }
 
+OMCollectionProperty::~OMCollectionProperty(void)
+{
+}
+
 // class OMStringProperty
 
 OMStringProperty::OMStringProperty(int pid, const char* name)
 : OMCharacterStringProperty<char>(pid, name)
+{
+}
+
+OMStringProperty::~OMStringProperty(void)
 {
 }
 
@@ -114,6 +127,10 @@ OMStringProperty& OMStringProperty::operator = (const char* value)
 
 OMWideStringProperty::OMWideStringProperty(int pid, const char* name)
 : OMCharacterStringProperty<wchar_t>(pid, name)
+{
+}
+
+OMWideStringProperty::~OMWideStringProperty(void)
 {
 }
 
