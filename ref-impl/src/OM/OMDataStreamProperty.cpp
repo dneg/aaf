@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -33,13 +33,15 @@
 #include "OMStoredObject.h"
 #include "OMType.h"
 #include "OMUtilities.h"
+#include "OMDataStreamAccess.h"
 
 OMDataStreamProperty::OMDataStreamProperty(const OMPropertyId propertyId,
                                            const wchar_t* name)
 : OMDataStream(propertyId, name),
   _stream(0),
   _exists(false),
-  _byteOrder(unspecified)
+  _byteOrder(unspecified),
+  _streamAccess(0)
 {
 }
 
@@ -66,6 +68,18 @@ void OMDataStreamProperty::save(void) const
   OMDataStreamProperty* p = const_cast<OMDataStreamProperty*>(this);
   if (!_exists) {
     p->create();
+  }
+  if (hasStreamAccess()) {
+    // Set the current position to the end of the stream
+    //
+    OMUInt64 lastPosition = size();
+    OMUInt64 currentPosition = position();
+    if (currentPosition != lastPosition) {
+      setPosition(lastPosition);
+    }
+    // Allow clients to write to the stream
+    //
+    streamAccess()->save(const_cast<OMDataStreamProperty&>(*this));
   }
 }
 
@@ -192,7 +206,9 @@ void OMDataStreamProperty::close(void)
     delete _stream;
     _stream = 0;
   }
-
+  if (hasStreamAccess()) {
+    clearStreamAccess();
+  }
   _exists = false;
 
   POSTCONDITION("Stream closed", _stream == 0);
@@ -508,6 +524,45 @@ void OMDataStreamProperty::deepCopyTo(OMProperty* destination,
   // Restore current position of source
   setPosition(savedPosition);
   dest->setPosition(0);
+}
+
+void OMDataStreamProperty::setStreamAccess(OMDataStreamAccess* streamAccess)
+{
+  TRACE("OMDataStreamProperty::setStreamAccess");
+  PRECONDITION("No existing stream access", !hasStreamAccess());
+  _streamAccess = streamAccess;
+  POSTCONDITION("Has stream access", hasStreamAccess());
+}
+
+void OMDataStreamProperty::clearStreamAccess(void)
+{
+  TRACE("OMDataStreamProperty::clearStreamAccess");
+  PRECONDITION("Existing stream access", hasStreamAccess());
+  _streamAccess = 0;
+  POSTCONDITION("No stream access", !hasStreamAccess());
+}
+
+bool OMDataStreamProperty::hasStreamAccess(void) const
+{
+  TRACE("OMDataStreamProperty::hasStreamAccess");
+  bool result;
+  if (_streamAccess != 0) {
+    result = true;
+  } else {
+    result = false;
+  }
+  POSTCONDITION("Consistent result", IMPLIES(_streamAccess == 0, !result));
+  POSTCONDITION("Consistent result", IMPLIES(_streamAccess != 0,  result));
+  return result;
+}
+
+OMDataStreamAccess* OMDataStreamProperty::streamAccess(void) const
+{
+  TRACE("OMDataStreamProperty::streamAccess");
+  PRECONDITION("Has stream access", hasStreamAccess());
+  OMDataStreamAccess* result = _streamAccess;
+  POSTCONDITION("Valid result", result != 0);
+  return result;
 }
 
 const wchar_t* OMDataStreamProperty::storedName(void) const

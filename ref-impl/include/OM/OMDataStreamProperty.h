@@ -11,7 +11,7 @@
 // the License for the specific language governing rights and limitations
 // under the License.
 // 
-// The Original Code of this file is Copyright 1998-2001, Licensor of the
+// The Original Code of this file is Copyright 1998-2002, Licensor of the
 // AAF Association.
 // 
 // The Initial Developer of the Original Code of this file and the
@@ -29,6 +29,7 @@
 #include "OMDataStream.h"
 
 class OMStoredStream;
+class OMDataStreamAccess;
 
   // @class Persistent data stream properties supported by the Object
   //        Manager.
@@ -156,6 +157,16 @@ public:
   virtual void deepCopyTo(OMProperty* destination,
                           void* clientContext) const;
 
+  // Deferred access.
+
+  void setStreamAccess(OMDataStreamAccess* streamAccess);
+
+  void clearStreamAccess(void);
+
+  bool hasStreamAccess(void) const;
+
+  OMDataStreamAccess* streamAccess(void) const;
+
 protected:
 
   virtual const wchar_t* storedName(void) const;
@@ -176,6 +187,8 @@ private:
 
     // OMDataStreamProperty can't be copied - declare but don't define
   OMDataStreamProperty(const OMDataStreamProperty& rhs);
+
+  OMDataStreamAccess* _streamAccess;
 
 };
 
