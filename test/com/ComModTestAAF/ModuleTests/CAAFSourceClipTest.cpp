@@ -194,8 +194,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafProductIdentification_t	ProductInfo;
 	aafSearchCrit_t				criteria;
 	aafNumSlots_t				numMobs, numSlots;
-	aafInt32					rFadeInLen;
-	aafInt32					rFadeOutLen;
+	aafLength_t					rFadeInLen;
+	aafLength_t					rFadeOutLen;
 	aafFadeType_t				rFadeInType;
 	aafFadeType_t				rFadeOutType;
 	aafSourceRef_t				rSourceRef; 
