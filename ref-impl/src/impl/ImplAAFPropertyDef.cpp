@@ -38,7 +38,8 @@
 ImplAAFPropertyDef::ImplAAFPropertyDef ()
   : _Type(PID_PropertyDefinition_Type, "Type"),
     _IsOptional(PID_PropertyDefinition_IsOptional, "IsOptional"),
-    _pid(PID_PropertyDefinition_LocalIdentification, "LocalIdentification")
+    _pid(PID_PropertyDefinition_LocalIdentification, "LocalIdentification"),
+	_cachedType (0)  // BobT: don't reference count the cached type!
 {
   _persistentProperties.put (_Type.address());
   _persistentProperties.put (_IsOptional.address());
@@ -47,7 +48,9 @@ ImplAAFPropertyDef::ImplAAFPropertyDef ()
 
 
 ImplAAFPropertyDef::~ImplAAFPropertyDef ()
-{}
+{
+  // BobT: don't reference count the cached type!
+}
 
 
 AAFRESULT STDMETHODCALLTYPE
@@ -101,9 +104,15 @@ AAFRESULT STDMETHODCALLTYPE
 	  ImplAAFPropertyDef * pNonConstThis =
 		  (ImplAAFPropertyDef *) this;
 	  aafUID_t typeId = _Type;
-	  hr = pDict->LookupType (&typeId, &pNonConstThis->_cachedType);
+
+	  // Remember that _cachedType is *not* referenced counted!
+	  ImplAAFTypeDef * tmp = 0;
+	  hr = pDict->LookupType (&typeId, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
+	  assert (tmp);
+	  pNonConstThis->_cachedType = tmp;
+	  tmp->ReleaseReference ();
 	}
   assert (ppTypeDef);
   *ppTypeDef = _cachedType;
