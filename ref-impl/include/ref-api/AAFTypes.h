@@ -40,35 +40,7 @@
  * Basic types that don't depend on other types.
  */
 
-
-#if 0
-// MIDL only defintion for 64 bit integer
-
-#if ((!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
-
-typedef signed char		aafInt8;
-typedef signed short int	aafInt16;
-typedef signed long int		aafInt32;
-
-typedef unsigned char		aafUInt8;
-typedef unsigned short int	aafUInt16;
-typedef unsigned long int	aafUInt32;
-
-typedef hyper			aafInt64;
-typedef unsigned hyper		aafUInt64;
-#define AAF_INT64_NATIVE	1
-
-typedef wchar_t			aafWChar;
-typedef wchar_t			aafCharacter;
-
-#else
-#error Using an incompatible midl host compiler!
-#endif
-
-#else
 #include "AAFPlatform.h"
-
-#endif  // #if 0
 
 
 // Add compatibility with 32/64 conversion routines.
@@ -104,19 +76,9 @@ typedef enum _aafBoolean_e
 
 #ifndef MAX_NUM_RGBA_COMPS
 #define MAX_NUM_RGBA_COMPS 8 /* limit on the size of component arrays */
-#if 0
-typedef aafInt32 aafMAX_NUM_RGBA_COMPS;
-typedef enum _aafMAX_NUM_RGBA_COMPS_e
-{
-  MAX_NUM_RGBA_COMPS = 8				// Lower to 6 to match type object
-} aafMAX_NUM_RGBA_COMPS_e;
-#endif
 #endif
 
 
-#if 0
-typedef [string] aafCharacter * aafString_t;
-#endif
 typedef aafCharacter * aafString_t;
 
 /************************************************************
@@ -240,15 +202,6 @@ typedef enum _aafFileAccess_e
 
 
 typedef aafInt32 aafJPEGcomponent_t;
-#if 0
-typedef enum _aafJPEGcomponent_e
-{
-	kAAFJcLuminance = 0, 
-	kAAFJcChrominance = 1, 
-	kAAFJcLuminanceFP16 = 2, 
-	kAAFJcChrominanceFP16 = 3
-} aafJPEGcomponent_e;
-#endif
 
 typedef enum _aafJPEGcomponent_e
 {
@@ -560,7 +513,6 @@ typedef struct _aafProductVersion_t
 
 typedef struct _aafUID_t
 {
-//	aafUInt32           value[4]; // binary compatibility with GUID/CLSID and IID structures.
     aafUInt32 Data1;
     aafUInt16 Data2;
     aafUInt16 Data3;
@@ -739,9 +691,6 @@ typedef struct _aafDefaultFade_t
  * Multiple Media Representations Criteria types
  *
  *************************************************************/
-//typedef aafInt16(*aafCriteriaProc_t)(IAAFFile  * file,
-//                                     IAAFObject  * mdes, 
-//                                     aafCodecID_t codecID);
 
 typedef aafInt32 aafCriteriaType_t;
 typedef enum _aafCriteriaType_e
@@ -756,7 +705,6 @@ typedef enum _aafCriteriaType_e
 typedef struct _aafMediaCriteria_t
 {
 	aafCriteriaType_t		type;
-//	aafCriteriaProc_t		proc;	
 } aafMediaCriteria_t;
 
 /************************************************************
@@ -778,31 +726,6 @@ typedef enum _aafSearchTag_e
 } aafSearchTag_e;
 
 
-#if 0
-typedef struct _aafSearchCrit_t
-{
-
-    aafSearchTag_t     searchTag;
-    [switch_is(searchTag)] union
-    {
-        [case(kAAFByMobID)]
-			aafMobID_t mobID;		// shouldn't this be a pointer?
-        [case(kAAFByMobKind)]
-			aafMobKind_t mobKind;
-        [case(kAAFByName)]
-			aafString_t name;
-        [case(kAAFByClass)]
-			aafClassID_t objClass;	// shouldn't this be a pointer?
-        [case(kAAFByDataDef)]
-			aafUID_t datadef;	// shouldn't this be a pointer?
-        [case(kAAFByMediaCrit)]
-			aafCriteriaType_t mediaCrit;
-        [default] ;
-    } ;
-
-} aafSearchCrit_t;
-#endif
-//
 typedef struct _aafSearchCrit_t
 {
     aafSearchTag_t     searchTag;
@@ -909,36 +832,6 @@ typedef enum _eAAFByteOrder_e
 } eAAFByteOrder_e;
 
 
-#if 0
-typedef struct _aafSearchDictionaryCrit_t
-{
-
-    aafSearchDictionaryTag_t     searchTag;
-    [switch_is(searchTag)] union
-    {
-        [case(kAAFByClassID)]
-            aafUID_t    * classID;
-        [case(kAAFByParentClassID)]
-            aafUID_t    * parentClassID;
-        [case(kAAFByPropertyID)]
-            aafUID_t	* propertyID;
-        [case(kAAFByTypeID)]
-            aafUID_t	* typeID;
-        [case(kAAFByClassName)]
-            aafString_t   name;
-        [default] ;
-    } ;
-
-} aafSearchDictionaryCrit_t;
-
-
-//********
-//
-// Enum indicating general category of stored (property) data
-//
-//
-#endif
-//
 typedef struct _aafSearchDictionaryCrit_t
 {
 	aafSearchDictionaryTag_t     searchTag;
@@ -1004,63 +897,6 @@ typedef aafPulldownKind_t       aafPulldownKindType_t;
 #endif
 
 
-
-#if 0
-  #if defined(__midl)
-    /* MIDL 2.0 definitions */
-	typedef aafArgIDType_t *             aafArgIDType_constref;
-	typedef aafEdgecodeHeader_t *        aafEdgecodeHeader_constref;
-	typedef aafEdgecode_t *              aafEdgecode_constref;
-	typedef aafEngine_t *                aafEngine_constref;
-	typedef aafHardwarePlatform_t *      aafHardwarePlatform_constref;
-	typedef aafMediaCriteria_t *         aafMediaCriteria_constref;
-	typedef aafPluginAPI_t *             aafPluginAPI_constref;
-	typedef aafPosition_t *              aafPosition_constref;
-	typedef aafProductIdentification_t * aafProductIdentification_constref;
-	typedef aafProductVersion_t *        aafProductVersion_constref;
-	typedef aafRect_t *                  aafRect_constref;
-	typedef aafSourceRef_t *             aafSourceRef_constref;
-	typedef aafTimecode_t *              aafTimecode_constref;
-    typedef aafLength_t *                aafLength_constref;
-    typedef aafRational_t *              aafRational_constref;
-    typedef aafTimeStamp_t *             aafTimeStamp_constref;
-    typedef aafUID_t *                   aafUID_constref;
-    typedef aafMobID_t *                 aafMobID_constref;
-    typedef aafVersionType_t *           aafVersionType_constref;
-  #else
-    /* MIDL 1.1 definitions */
-	typedef aafArgIDType_t               aafArgIDType_constref;
-	typedef aafEdgecodeHeader_t          aafEdgecodeHeader_constref;
-	typedef aafEdgecode_t                aafEdgecode_constref;
-	typedef aafEngine_t                  aafEngine_constref;
-	typedef aafHardwarePlatform_t        aafHardwarePlatform_constref;
-	typedef aafMediaCriteria_t           aafMediaCriteria_constref;
-	typedef aafPluginAPI_t               aafPluginAPI_constref;
-	typedef aafPosition_t                aafPosition_constref;
-	typedef aafProductIdentification_t   aafProductIdentification_constref;
-	typedef aafProductVersion_t          aafProductVersion_constref;
-	typedef aafRect_t                    aafRect_constref;
-	typedef aafSourceRef_t               aafSourceRef_constref;
-	typedef aafTimecode_t                aafTimecode_constref;
-    typedef aafLength_t                  aafLength_constref;
-    typedef aafRational_t                aafRational_constref;
-    typedef aafTimeStamp_t               aafTimeStamp_constref;
-    typedef aafUID_t                     aafUID_constref;
-    typedef aafMobID_t                   aafMobID_constref;
-    typedef aafVersionType_t             aafVersionType_constref;
-  #endif
-
-  typedef unsigned char *                aafMemConstPtr_t;
-  typedef aafCharacter *                 aafCharacter_constptr;
-  typedef aafMediaCriteria_t *           aafMediaCriteria_constptr;
-  typedef aafOperationChoice_t *         aafOperationChoice_constptr;
-  typedef aafProductVersion_t *          aafProductVersion_constptr;
-  typedef aafProductIdentification_t *   aafProductIdentification_constptr;
-  typedef aafSearchCrit_t *              aafSearchCrit_constptr;
-  typedef aafUID_t *                     aafUID_constptr;
-  typedef aafMobID_t *                   aafMobID_constptr;
-
-#endif // 0
 
 #if defined(__cplusplus)
 #define aafArgIDType_constref        const aafArgIDType_t &
