@@ -228,22 +228,13 @@ OMStorable* ImplAAFMetaDictionary::create(const OMClassId& classId) const
   else
   {
     //
-    // Temporary: For compatibility use the "data" dictionary OMFactory to create 
-    // meta data objects.
-    //
-    // This needs to be replaced with code that only creates "meta" data objects:
-    // class definitions, property definitions and type definitions.
-    // transdel:2000-APR-11
-    //
-//    storable = dataDictionary()->create(classId);
-
-    //
     // Create the appropriate meta definition object for the given
     // classId.
     // transdel:2000-MAY-16
     //
     ImplAAFMetaDefinition *pMetaObject = NULL;
-    AAFRESULT result = (const_cast<ImplAAFMetaDictionary *>(this))->CreateMetaInstance((*reinterpret_cast<const aafUID_t *>(&classId)), &pMetaObject);
+    ImplAAFMetaDictionary *pNonConstThis = const_cast<ImplAAFMetaDictionary *>(this);
+    AAFRESULT result = pNonConstThis->CreateMetaInstance((*reinterpret_cast<const aafUID_t *>(&classId)), &pMetaObject);
     assert(AAFRESULT_SUCCEEDED(result));
     storable = pMetaObject;
   }
@@ -543,6 +534,8 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
     return hr;
 
+  if (! pClassDef->pvtIsConcrete ())
+	return AAFRESULT_ABSTRACT_CLASS;
 
   // Create the correct definition object.
   *ppMetaObject = pvtCreateMetaDefinition(classId);
