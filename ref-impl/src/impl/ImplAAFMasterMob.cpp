@@ -86,47 +86,40 @@ AAFRESULT STDMETHODCALLTYPE
 	aafLength_t	slotLength;
 	aafUID_t	sourceMobID;
 	HRESULT		hr;
+	ImplAAFMobSlot*	pMobSlot;
+	aafUID_t	DataDef;
+	ImplAAFSegment*	pSegment = NULL;
+	ImplAAFSourceClip*	pSrcClip = NULL;
+	aafSourceRef_t		ref;
+	aafPosition_t		zeroPos;
+	ImplAAFMobSlot	*pNewSlot = NULL;
 
 	if (!pDataDef || !pSourceMob || !pSlotName)
 		return AAFRESULT_NULL_PARAM;
 
-	// Get the slot length and mob id.  Verify that data kind
-	// of the slot is the same as pDataDef
-	hr = pSourceMob->GetMobID(&sourceMobID);
-	if (SUCCEEDED(hr))
+	XPROTECT()
 	{
-		ImplAAFMobSlot*	pMobSlot;
+		// Get the slot length and mob id.  Verify that data kind
+		// of the slot is the same as pDataDef
+		CHECK(pSourceMob->GetMobID(&sourceMobID));
 
-		hr = pSourceMob->FindSlotBySlotID(sourceSlotID, &pMobSlot);
-		if (SUCCEEDED(hr))
-		{
-			ImplAAFSegment*	pSegment;
+		CHECK(pSourceMob->FindSlotBySlotID(sourceSlotID, &pMobSlot));
 
-			hr = pMobSlot->GetSegment(&pSegment);
-			if (SUCCEEDED(hr))
-			{
-				aafUID_t	DataDef;
+		CHECK(pMobSlot->GetSegment(&pSegment));
 
-				pSegment->GetLength(&slotLength);
-				pSegment->GetDataDef(&DataDef);
-				pSegment->ReleaseReference();
-				pSegment = NULL;
+		pSegment->GetLength(&slotLength);
+		pSegment->GetDataDef(&DataDef);
+		pSegment->ReleaseReference();
+		pSegment = NULL;
 
-				// Make sure the slot contains the expected media type.
-				if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
-					hr = AAFRESULT_INVALID_DATAKIND;
-			}
-			pMobSlot->ReleaseReference();
-			pMobSlot = NULL;
-		}
-	}
+		// Make sure the slot contains the expected media type.
+		if (memcmp(&DataDef, pDataDef, sizeof(aafUID_t)) != 0)
+			RAISE(AAFRESULT_INVALID_DATAKIND);
+
+		pMobSlot->ReleaseReference();
+		pMobSlot = NULL;
 
 	// Add the master slot
-	if (SUCCEEDED(hr))
-	{
-		ImplAAFSourceClip*	pSrcClip = NULL;
-		aafSourceRef_t		ref;
-		aafPosition_t		zeroPos;
 
 		CvtInt32toPosition(0, zeroPos);
 		ref.sourceID = sourceMobID;
@@ -134,26 +127,29 @@ AAFRESULT STDMETHODCALLTYPE
 		ref.startTime = zeroPos;
 
 		pSrcClip = (ImplAAFSourceClip *)CreateImpl(CLSID_AAFSourceClip);
-		if (pSrcClip)
-		{
-			ImplAAFMobSlot	*pNewSlot = NULL;
+		if(pSrcClip == NULL)
+			RAISE(E_FAIL);
 
-			hr = pSrcClip->InitializeSourceClip(pDataDef, &slotLength, ref);
-			if (SUCCEEDED(hr))
-			{
-				hr = AppendNewSlot(pSrcClip, masterSlotID, pSlotName, &pNewSlot);
-				if (SUCCEEDED(hr))
-				{
-					pNewSlot->ReleaseReference();
-					pNewSlot = NULL;
-				}
-			}
+		CHECK(pSrcClip->InitializeSourceClip(pDataDef, &slotLength, ref));
+		CHECK(AppendNewSlot(pSrcClip, masterSlotID, pSlotName, &pNewSlot));
 
+		pNewSlot->ReleaseReference();
+		pNewSlot = NULL;
+
+		if(pSrcClip)
 			pSrcClip->ReleaseReference();
-			pSrcClip = NULL;
-		}
+		pSrcClip = NULL;
 	}
-
+	XEXCEPT
+	{
+		if(pSegment != NULL)
+			pSegment->ReleaseReference();
+		if(pNewSlot != NULL)
+			pNewSlot->ReleaseReference();
+		if(pSrcClip != NULL)
+			pSrcClip->ReleaseReference();
+	}
+	XEND;
 	return hr;
 }
 
@@ -209,7 +205,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(SearchSource (masterSlotID, 0, kTapeMob, NULL, NULL,
-									NULL, &info));
+									&info));
 		CHECK(info->GetMob(&mob));
 		CHECK(mob->GetName(pTapeName, bufSize));
 		info->ReleaseReference();
@@ -443,11 +439,10 @@ AAFRESULT STDMETHODCALLTYPE
 									aafMobKind_t			mobKind,
 									aafMediaCriteria_t*		pMediaCrit,
 									aafEffectChoice_t*		pEffectChoice,
-									ImplAAFComponent**		ppThisCpnt,
 									ImplAAFFindSourceInfo**	ppSourceInfo)
 {
 	return(InternalSearchSource(slotID, offset, mobKind, pMediaCrit, pEffectChoice,
-										   ppThisCpnt, ppSourceInfo));
+										   ppSourceInfo));
 }
 
 //***********************************************************
