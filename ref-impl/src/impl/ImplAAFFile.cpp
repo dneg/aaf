@@ -504,12 +504,13 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		pCStore = 0;
 
 		// Attempt to create the file.
+		const OMStoredObjectEncoding aafFileEncoding = AAFMSSEncoding;
 		_file = OMFile::openNewModify(pFileName,
 									  _factory,
 									  0,
 									  byteOrder,
 									  _head,
-									  AAFMSSEncoding,
+									  aafFileEncoding,
 									  _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
@@ -729,6 +730,8 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 		  pCStore = 0;
 
 		  // Attempt to create the file.
+		  const OMStoredObjectEncoding aafFileEncoding =
+			*reinterpret_cast<const OMStoredObjectEncoding*> (pFileKind);
 		  if (kAAFFileAccess_read == access)
 			{
 			  // Can't open an new file for read only.
@@ -739,7 +742,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 			  // NewModify
 			  if (! OMFile::compatibleRawStorage (pOMStg,
 												  OMFile::modifyMode,
-												  AAFMSSEncoding))
+												  aafFileEncoding))
 				return AAFRESULT_INVALID_PARAM;
 												  
 			  _file = OMFile::openNewModify (pOMStg,
@@ -747,7 +750,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 											 0,
 											 byteOrder,
 											 _head,
-											 AAFMSSEncoding,
+											 aafFileEncoding,
 											 _metafactory);
 			}
 		  else // write-only
@@ -755,7 +758,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 			  // NewWrite
 			  if (! OMFile::compatibleRawStorage (pOMStg,
 												  OMFile::writeOnlyMode,
-												  AAFMSSEncoding))
+												  aafFileEncoding))
 				return AAFRESULT_INVALID_PARAM;
 												  
 			  _file = OMFile::openNewWrite (pOMStg,
@@ -763,7 +766,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 											0,
 											byteOrder,
 											_head,
-											AAFMSSEncoding,
+											aafFileEncoding,
 											_metafactory);
 			}
 		}
