@@ -280,7 +280,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 			_file = 0;
 		}
 
-		if (NULL == _head)
+		if (NULL != _head)
 		{
 			_head->ReleaseReference();
 			_head = 0;
@@ -415,7 +415,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 			_file = 0;
 		}
 
-		if (NULL == _head)
+		if (NULL != _head)
 		{
 			_head->ReleaseReference();
 			_head = 0;
@@ -551,7 +551,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 			_file = 0;
 		}
 
-		if (NULL == _head)
+		if (NULL != _head)
 		{
 			_head->ReleaseReference();
 			_head = 0;
