@@ -238,6 +238,14 @@ typedef enum _aafAlphaTransparency_e
 	kAAFMaxValueTransparent = 1
 } aafAlphaTransparency_e;
 
+typedef aafInt32 aafFieldNumber_t;
+typedef enum _aafFieldNumber_e
+{
+	kAAFUnspecifiedField = 0,
+	kAAFFieldOne = 1,
+	kAAFFieldTwo = 2
+} aafFieldNumber_e;
+
 typedef aafInt32 aafPixelFormat_t;
 typedef enum _aafPixelFormat_e
 {
