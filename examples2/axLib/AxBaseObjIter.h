@@ -86,9 +86,7 @@ public:
 			ret = apObj;
 			return true;
 		}
-		else {
-		        return false;
-		}
+		return false;
 	}
 
 	virtual void Reset()
