@@ -92,3 +92,18 @@ size_t OMObjectDirectory::count(void) const
   return _current;
 }
 
+OMStorable* OMObjectDirectory::object(size_t index) const
+{
+  TRACE("OMObjectDirectory::object");
+  PRECONDITION("Valid index", index < count());
+
+  return _table[index]._object;
+}
+
+const wchar_t* OMObjectDirectory::name(size_t index) const
+{
+  TRACE("OMObjectDirectory::name");
+  PRECONDITION("Valid index", index < count());
+
+  return _table[index]._name;
+}

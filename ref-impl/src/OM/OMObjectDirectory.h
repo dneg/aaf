@@ -54,6 +54,14 @@ public:
   //
   size_t count(void) const;
 
+  // Object at index.
+  //
+  OMStorable* object(size_t index) const;
+
+  // Name of obect at index.
+  //
+  const wchar_t* name(size_t index) const;
+
 private:
 
   struct TableEntry {
