@@ -840,19 +840,26 @@ void OMStoredObject::save(const OMPropertyTable* table)
   OMPropertyCount count = table->count();
   writeToStream(stream, &count, sizeof(count));
  
-  // count of bytes
-  OMUInt32 byteCount = 0;
+  // count of characters
+  OMUInt32 characterCount = 0;
   for (size_t i = 0; i < count; i++) {
-    byteCount = byteCount + strlen(table->valueAt(i)) + 1;
+    OMUInt32 length = lengthOfWideString(table->valueAt(i));
+    characterCount = characterCount + length + 1;
   }
-  writeToStream(stream, &byteCount, sizeof(byteCount));
+  writeToStream(stream, &characterCount, sizeof(characterCount));
 
   // sequence of null terminated strings
   for (size_t j = 0; j < count; j++) {
-    const char* p = table->valueAt(j);
-    writeToStream(stream, (void*)p, strlen(p));
-    const OMByte null = 0;
+    const wchar_t* internalName = table->valueAt(j);
+    size_t characterCount = lengthOfWideString(internalName);
+    size_t byteCount = characterCount * sizeof(OMCharacter);
+    OMCharacter* externalName = new OMCharacter[characterCount];
+    ASSERT("Valid heap pointer", externalName != 0);
+    externalizeString(internalName, externalName, characterCount);
+    writeToStream(stream, (void*)externalName, byteCount);
+    const OMCharacter null = 0;
     writeToStream(stream, (void*)&null, sizeof(null));
+    delete [] externalName;
   }
 
   closeStream(stream);
@@ -1160,18 +1167,24 @@ void OMStoredObject::restore(OMPropertyTable*& table)
   ASSERT("Valid heap pointer", table != 0);
  
   if (count > 0) {
-    // count of bytes
-    OMUInt32 byteCount;
-    readUInt32FromStream(stream, byteCount, reorderBytes);
+    // count of characters
+    OMUInt32 totalCharacters;
+    readUInt32FromStream(stream, totalCharacters, reorderBytes);
 
     // sequence of null terminated strings
-    char* buffer = new char[byteCount];
+    OMCharacter* buffer = new OMCharacter[totalCharacters];
     ASSERT("Valid heap pointer", buffer != 0);
-    char* p = buffer;
-    readFromStream(stream, buffer, byteCount);
+    OMUInt32 totalBytes = totalCharacters * sizeof(OMCharacter);
+    readFromStream(stream, buffer, totalBytes);
+    OMCharacter* externalName = buffer;
     for (size_t i = 0; i < count; i++) {
-      table->insert(p);
-      p = p + strlen(p) + 1;
+      size_t characterCount = lengthOfOMString(externalName);
+      wchar_t* internalName = new wchar_t[characterCount + 1];
+      ASSERT("Valid heap pointer", internalName != 0);
+      internalizeString(externalName, internalName, characterCount + 1);
+      table->insert(internalName);
+      delete [] internalName;
+      externalName = externalName + characterCount + 1;
     }
     delete [] buffer;
   }
@@ -1365,6 +1378,38 @@ OMByteOrder OMStoredObject::byteOrder(void) const
   TRACE("OMStoredObject::byteOrder");
 
   return _byteOrder;
+}
+
+void OMStoredObject::reorderString(OMCharacter* string,
+                                   size_t characterCount)
+{
+  TRACE("OMStoredObject::reorderString");
+
+  for (size_t i = 0; i < characterCount; i++) {
+    reorderUInt16(string[i]);
+  }
+}
+
+void OMStoredObject::internalizeString(OMCharacter* externalString,
+                                       wchar_t* internalString,
+                                       size_t characterCount)
+{
+  TRACE("OMStoredObject::internalizeString");
+
+  for (size_t i = 0; i < characterCount; i++) {
+    internalString[i] = externalString[i];
+  }
+}
+
+void OMStoredObject::externalizeString(const wchar_t* internalString,
+                                       OMCharacter* externalString,
+                                       size_t characterCount)
+{
+  TRACE("OMStoredObject::externalizeString");
+
+  for (size_t i = 0; i < characterCount; i++) {
+    externalString[i] = internalString[i];
+  }
 }
 
 IStorage* OMStoredObject::createStorage(IStorage* storage,
