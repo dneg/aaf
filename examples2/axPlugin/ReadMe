@@ -1,41 +1,51 @@
 Title:	AxPlugin Readme - How to reuse the AxPlugin (null codec) code.
 
-Revision History:  18 Oct 2002, Jim Trainor, Initial Revision
+Revision History:
+
+18 Oct 2002, Jim Trainor, Initial Revision
+ 4 Apr 2004, Jim Trainor, CAxPlugin, CAxEssenceCodec, AxImplPlugin,
+and AxImplNullEssenceCodec details.  Some minor edits.
+
+
 
 This is a simple example AAF plugin implementation.  Please refer to
 the AxPlug.pdf file for an overview (in UML format) of the code.  The
-AxPlugin code satisfies the basic requirements of all AFF plugins:
-
-Another reference is the "AAF Plugins and Codecs" presentation given
-at the AAF Engineering Commitee Meeting in Atlanta on Oct 7'th, 2002.
+AxPlugin code satisfies the basic requirements of an AFF plugin:
 
 i) A simple means to register all the components implemented by the
 plugin.
 
 ii) A common class factory to create these components.
 
-iii) A shared IUnknown implementation that support COM object
+iii) A shared IUnknown implementation that supports COM object
 aggregation (note, the factory is also involved in aggregation
 support).
 
-iv) Implementation of the four static entry points that must exist in
+iv) Implementations of the four static entry points that must exist in
 all AAF plugins (see the AxPluginEntryPoints.cpp file).
+
+v) Implementations of the AAF Com interfaces.  Every plugin must
+implement IAAFPlugin, plus at least one of the other plugin
+interfaces.
+
+Another reference is the "AAF Plugins and Codecs" presentation given
+at the AAF Engineering Commitee Meeting in Atlanta on Oct 7'th, 2002.
 
 Support for COM aggregregation is provided using the techniques
 presented in the book: "Inside COM", Dale Rogerson, Microsoft Press.
 This book is the basis for the CAxUnknown implementation, and
 CAxClassFactory::CreateInstance() implementation.
 
-The four items noted above are implemented in a fairly transparent
+The five items noted above are implemented in a fairly transparent
 style that should be easy to understand and reuse.  In general, all
 that is required in order to reuse this code to copy all the files to
 a new location and add a new file(s) containing the implementation of
 your COM object.  Your COM object should be implemented using
 CAxNullEssenceCodec.{cpp,h} as a guide.
 
-If the idea of copying and modifying the code is offensive, the AxPlug
-build can be easily modified to create a static library than can be
-linked into a COM plugin implementation.
+If the idea of copying and modifying the code is offensive, the
+AxPlugin build can be easily modified to create a static library that
+can be linked into a COM plugin implementation.
 
 Here is a recipe to get started with a new plugin:
 
@@ -53,8 +63,12 @@ implements the IAAFEssenceCodec interface:
 	#include <AAFPlugin.h>
 
 	class CMyPlugin {
-	  : public IAAFEssenceCodec, <<= We choose to implement this plugin interface.
-	    public IAAFPlugin, 	     <<= All AAF plugins must implement this.
+	  : public IAAFPlugin, 	     <<= All AAF plugins must implement this.
+				         Note the CAxPlugin comments in section 4.1
+	    public IAAFEssenceCodec, <<= We choose to implement this additional interface.
+	                                 At least one plugin interface over and above
+					 IAAFPlugin is requied.
+				         Note the CAxEssenceCodec comments in section 4.2
 	    public CAxUnknown        <<= Inherit the CAxUnknown IUknnown implementation
 	{
 	public:
@@ -91,6 +105,32 @@ implements the IAAFEssenceCodec interface:
 		.... declare the IAAFEssenceCodecs methods
 
 	};
+
+
+4.1) A reusable implementation of IAAFPlugin exists.  This is the
+CAxPlugin class.  Refer to the UML.  CAxPlugin is a wrapper that
+forwards calls to an implementation class.  The implementation class
+is a template argument of CAxPlugin.  CAxPlugin takes care of checking
+for null pointer arguments, and catching exceptions (COM interfaces
+cannot throw exceptions), and returns HRESULT values.  The
+implementation class has a matching set of methods, but with void
+return types.  It does not need to be concerned about catching
+exceptions.  In fact it must throw an exception to "return" an
+HRESULT.  A generic reusable implementation class exists.  See
+AxImplPlugin.
+
+4.2) A reusable implementation of IAAFEssenceCodec exists.  This is
+the CAxEssenceCodec class.  CAxEssenceCodec is a wrapper that forwards
+calls to an implementation class. The implementation class is a
+template argument of CAxEssenceCodec.  The implementation class is
+where the bulk of the work is required in a new essence codec
+implementation.  CAxEssenceCodec takes care of checking for null
+pointer arguments (with the exception of the CompleteWrite() method,
+where a null pointer to an IAAFSourceMob is meaningful), catching all
+exceptions, and returning HRESULT values.  An example implementation
+is AxImplNullEssenceCode.  This implementation can be used as an
+alternative to the CDCICodec.  It supports the same set of format
+specifiers as the CDCIDescriptor.
 
 5) Add the CMyPlugin method definitions to CMyPlugin.cpp:
 	
@@ -170,15 +210,15 @@ public:
 
 RegisterMyPlugin nullEssenceCodecRegister;
 
+6.1) There are a number of other unique ID used by a codec implementation.
+Some additional notes may be found in: AxImplPlugin.h.
+
 }
 7) Link my CMyCodec.o in with the rest of the AxPlugin code to create
-a new library.  That's it.  There is no need to modify the CAxPlugin
+a new library.  That's it.  There is no need to modify the AxPlugin
 code, just link in your new code.
 
-8) Implement the IAAFPlugin and IAAFEssenceCodec (or what ever
-inteface you are implementing).  This is the hard part.
-
-9) If, for some reason, you need to add some platform specific code
+8) If, for some reason, you need to add some platform specific code
 (i.e. a DllMain implementation for a Windows dll), this can be done by
 adding code to the AxPluginWin.cpp file.  For Unix and MacOS platforms
 use the like named file.  Currently, there is no need for any platform
