@@ -71,8 +71,12 @@ $(LIBDIR)/libjpeg$(LIB) :  $(OBJDIR) $(LIBDIR) $(CXXOBJS)
 
 .PHONY : clean
 clean :
-	$(RMDIR) $(OBJDIR)/*$(OBJ)
-	$(RM) $(LIBDIR)/libjpeg$(LIB)
+	@$(RM) $(CXXOBJS)
+	@$(RM) $(LIBDIR)/libjpeg$(LIB)
+
+
+.PHONY : realclean
+realclean : clean
 
 
 include $(AAFBASE)/build/rules.mk
