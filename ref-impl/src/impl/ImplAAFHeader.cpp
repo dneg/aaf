@@ -496,7 +496,7 @@ AAFRESULT ImplAAFHeader::IsValidHeadObject(void)
 #endif
 }
 
-int ImplAAFHeader::classId(void) const
-{
-  return CLSID_AAFHEADER;
-}
+extern "C" const aafClassID_t CLSID_AAFHeader;
+
+OMDEFINE_STORABLE(AAFHeader, CLSID_AAFHeader);
+
