@@ -22,23 +22,12 @@ AD_IDL(//
 //
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
+//     this object's primary interface.  Note that IAAFLocator is a
+//     primary interface for an abstract class\, so it is not
+//     appropriate for the Initialize\(\) method to exist in this
+//     interface.  The Initialize\(\) method is available through the
+//     concrete object's primary interface.
 //)
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
 AD_CLASS_UUID(e58a8565, 2a3e, 11D2, bf, A4, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(d4f89061, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
@@ -59,6 +48,13 @@ AD_XMETHOD2(GetPath,
   // caller.  The size of the buffer is given by bufSize.  If the
   // property name has not yet been set\, a zero-length string will be
   // written \(that is\, only the trailing null character\).
+  // 
+  // Note: the form of the path string will be the same as was given
+  // to SetPath\(\).  It should be of the same form as required by
+  // StgOpenStorage\(\) for this platform.  Note also that each
+  // IAAFLocator-supporting object may also support a
+  // platform-specific interfaces which may have further restrictions
+  // on path specification.
   // 
   // Caller may call GetPathBufLen\(\) to determine the required
   // buffer size.
@@ -119,6 +115,12 @@ AD_XMETHOD1(SetPath,
 			Set the Path property to the value specified in pPathBuf.  A
   // copy is made of the data so the caller retains ownership of the
   // *pPathBuf buffer and is responsible for de-allocating it.
+  // 
+  // Note: the form of the path string should be of the same form as
+  // required by StgOpenStorage\(\) for this platform.  Note also that
+  // each IAAFLocator-supporting object may also support a
+  // platform-specific interfaces which may have further restrictions
+  // on path specification.
   // 
   // Succeeds if all of the following are true:
   // - the pPathBuf pointer is valid.
