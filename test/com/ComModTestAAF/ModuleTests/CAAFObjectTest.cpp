@@ -300,10 +300,10 @@ static HRESULT ObjectWriteTest ()
 static HRESULT ObjectReadTest ()
 {
   HRESULT hr = AAFRESULT_TEST_FAILED;
+	IAAFFile * pFile = NULL;
 
   try
 	{
-	  IAAFFileSP pFile;
 	  checkResult (AAFFileOpenExistingRead(testFileName,
 										   0,
 										   &pFile));
@@ -326,6 +326,15 @@ static HRESULT ObjectReadTest ()
 	{
 	  hr = rResult;
 	}
+
+  if (pFile)
+  {
+	  AAFRESULT temphr;
+	  temphr = pFile->Close();
+	  if (! SUCCEEDED (temphr)) return temphr;
+    pFile->Release();
+    pFile = NULL;
+  }
 
   return hr;
 }
