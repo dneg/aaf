@@ -83,7 +83,7 @@ private:
 	AAFCheck & operator= (AAFCheck &status ); // N/A
 	AAFCheck(AAFCheck &status); // N/A
 public:
-	operator= (AAFRESULT status );
+	AAFCheck& operator= (AAFRESULT status );
 	AAFCheck(AAFRESULT status = AAFRESULT_SUCCESS );
 };
 
@@ -96,9 +96,10 @@ inline AAFCheck::AAFCheck(AAFCheck &status)
 {
 }
 
-inline AAFCheck::operator= ( AAFRESULT status )
+inline AAFCheck& AAFCheck::operator= ( AAFRESULT status )
 { 
 	AAFException::Check( status ); 
+	return *this;
 }
 	
 inline AAFCheck::AAFCheck( AAFRESULT status )
@@ -107,3 +108,4 @@ inline AAFCheck::AAFCheck( AAFRESULT status )
 }
 
 #endif 
+
