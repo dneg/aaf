@@ -167,6 +167,8 @@ void convert_444yuv_to_411uyvy( aafUInt32* yuv,
 
 	assert( width % 4 == 0 );
 
+	// This is cheating.  I beleive the chrome samples
+	// should come from two lines, not one.
 	for( i = 0; i < width; i += 4 ) {
 
 		unsigned char y1;
@@ -185,10 +187,10 @@ void convert_444yuv_to_411uyvy( aafUInt32* yuv,
 		unsigned char u4;
 		unsigned char v4;
 
-		unpack32( y1, u1, v1, yuv[i] );
+		unpack32( y1, u1, v1, yuv[i+0] );
 		unpack32( y2, u2, v2, yuv[i+1] );
-		unpack32( y2, u2, v2, yuv[i+2] );
-		unpack32( y3, u3, v3, yuv[i+4] );
+		unpack32( y3, u3, v3, yuv[i+2] );
+		unpack32( y4, u4, v4, yuv[i+4] );
 
 		pack32( (u1+u2+u3+u4)/4, y1, (v1+v2+v3+v4)/4, y2 );
 	}

@@ -20,6 +20,13 @@
 
 //=---------------------------------------------------------------------=
 
+#if defined(OS_WINDOWS)
+#pragma warning(disable:4660)
+// "template-class specialization 'ParamMap<struct _aafUID_t,class _ContainerDefsTag>'
+// is already instantiated"  etc for the other instances.
+#endif
+
+
 
 #include "ParamMaps.h"
 
@@ -347,7 +354,7 @@ template class ParamMap< aafPixelFormat_t, aafPixelFormat_e >;
 
 //=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=
-
+#if 0
 // Recipe:
 // 1) Copy the template.
 // 2) Define _TemplateTag to something unique and appriate name.
@@ -365,5 +372,6 @@ ParamMap< int, _TemplateTag >::ParamMap()
 
 template class ParamMap< int, _TemplateTag >;
 
+#endif
 //=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=

@@ -183,7 +183,6 @@ AxString AxStringUtil::mbtowc( const char* cstr )
 std::string AxStringUtil::wctomb( const AxString& s )
 {
 	std::stringstream os;
-	char c;
 	const wchar_t* ws = s.c_str();
 	
 	int i;

@@ -100,6 +100,10 @@ SOURCE=.\FileGenOps\AudioEssenceSource.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\FileGenOps\CommentMarker.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FileGenOps\CompositionMob.cpp
 # End Source File
 # Begin Source File
