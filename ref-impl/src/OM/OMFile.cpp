@@ -57,7 +57,8 @@ OMFile::OMFile(const wchar_t* fileName,
                const OMLoadMode loadMode)
 : _root(0), _rootStoredObject(store),
   _objectDirectory(0), _referencedProperties(0), _mode(mode),
-  _loadMode(loadMode), _fileName(0)
+  _loadMode(loadMode), _fileName(0),
+  _clientOnSaveContext(0)
 {
   TRACE("OMFile::OMFile");
 
@@ -86,7 +87,8 @@ OMFile::OMFile(const wchar_t* fileName,
                OMStorable* root)
 : _root(root), _rootStoredObject(store),
   _objectDirectory(0), _referencedProperties(0), _mode(mode),
-  _loadMode(lazyLoad), _fileName(0), _signature(signature)
+  _loadMode(lazyLoad), _fileName(0), _signature(signature),
+  _clientOnSaveContext(0)
 {
   TRACE("OMFile::OMFile");
 
@@ -222,13 +224,14 @@ bool OMFile::validSignature(const OMFileSignature& signature)
   //        <c OMFile>. It is not possible to <mf OMFile::save>
   //        read-only or transient files.
   //   @parm Client context for callbacks.
-void OMFile::save(void* clientContext)
+void OMFile::save(void* clientOnSaveContext)
 {
   TRACE("OMFile::save");
 
   if (_mode == modifyMode) {
-    _root->onSave(clientContext);
-    _root->save(clientContext);
+    _clientOnSaveContext = clientOnSaveContext;
+    _root->onSave(_clientOnSaveContext);
+    _root->save();
     _rootStoredObject->save(referencedProperties());
   }
 }
@@ -438,6 +441,11 @@ bool OMFile::persistent(void) const
   // Transient files NYI so by definition a file is persistent.
   //
   return true;
+}
+
+void* OMFile::clientOnSaveContext(void)
+{
+  return _clientOnSaveContext;
 }
 
   // @mfunc Write the signature to the given file.
