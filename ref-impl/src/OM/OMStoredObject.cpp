@@ -4,7 +4,7 @@
 #include "OMProperty.h"
 #include "OMPropertySet.h"
 #include "OMStoredVectorIndex.h"
-#include "OMTypes.h"
+#include "OMDataTypes.h"
 
 #include "OMAssertions.h"
 #include "OMUtilities.h"
