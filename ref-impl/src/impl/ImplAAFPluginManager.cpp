@@ -20,7 +20,7 @@
 #include <assert.h>
 #include <string.h>
 
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 #include "AAFStoredObjectIDs.h"
 #include "aafErr.h"

@@ -23,7 +23,7 @@
   #include <wtypes.h>
 #else
   // Default to the reference implementation.
-  #include "REF.HXX"
+  #include "ref.hxx"
 #endif
 
 
