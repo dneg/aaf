@@ -3,6 +3,7 @@
 
 #include "OMStorable.h"
 #include "OMStoredObject.h"
+#include "OMTypes.h"
 
 class OMClassFactory;
 class OMObjectDirectory;
@@ -21,10 +22,10 @@ public:
 
   OMFile& operator << (const OMStorable& o);
 
-  static OMClassFactory* classFactory(void);
-  static OMObjectDirectory* objectDirectory(void);
+  OMClassFactory* classFactory(void);
+  OMObjectDirectory* objectDirectory(void);
   
-  virtual int classId(void) const;
+  virtual const OMClassId& classId(void) const;
 
   virtual OMFile* file(void) const;
 
@@ -36,8 +37,8 @@ private:
   const char* _name;
   OMStoredObject* _root;
   
-  static OMClassFactory* _classFactory;
-  static OMObjectDirectory* _objectDirectory;
+  OMClassFactory* _classFactory;
+  OMObjectDirectory* _objectDirectory;
 };
 
 #endif
