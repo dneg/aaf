@@ -28,6 +28,7 @@ AAFBASE ?= ../..
 # Common definitions
 include $(AAFBASE)/build/common.mk
 
+CFLAGS +=  -D_LARGEFILE_SOURCE -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 
 # Include directories
 INCLUDES = -I. \
