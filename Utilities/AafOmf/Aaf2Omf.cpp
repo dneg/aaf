@@ -126,19 +126,20 @@ void Aaf2Omf::ConvertFile ()
 void Aaf2Omf::ConvertMobIDtoUID(aafMobID_constptr pMobID, 
 							   OMF2::omfUID_t* pOMFMobID)
 {
-	struct SMPTELabel
+	struct SMPTELabel		// Change to match GUID to ensure correct byte swapping
 	{
 		aafUInt32	MobIDMajor;
-		aafUInt32	MobIDMinor;
+		aafUInt16	MobIDMinorLow;
+		aafUInt16	MobIDMinorHigh;
 		aafUInt8	oid;
 		aafUInt8	size;
 		aafUInt8	ulcode;
 		aafUInt8	SMPTE;
 		aafUInt8	Registry;
 		aafUInt8	unused;
-		aafUInt16	MobIDPrefix;
+		aafUInt8	MobIDPrefixLow;
+		aafUInt8	MobIDPrefixHigh;
 	};
-
 	union label
 	{
 		aafMobID_t			mobID;
@@ -148,9 +149,9 @@ void Aaf2Omf::ConvertMobIDtoUID(aafMobID_constptr pMobID,
 	union label aLabel;
 	memcpy((void *)&aLabel.mobID, pMobID, sizeof(aLabel.mobID));
 
-	pOMFMobID->prefix = aLabel.smpte.MobIDPrefix;
+	pOMFMobID->prefix = (aLabel.smpte.MobIDPrefixHigh << 8L) | aLabel.smpte.MobIDPrefixLow;
 	pOMFMobID->major = aLabel.smpte.MobIDMajor;
-	pOMFMobID->minor = aLabel.smpte.MobIDMinor;
+	pOMFMobID->minor = (aLabel.smpte.MobIDMinorHigh << 16L) | aLabel.smpte.MobIDMinorLow;
 }
 // ============================================================================
 // OpenInputFile
