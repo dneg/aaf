@@ -211,7 +211,12 @@ OMWeakReferenceVectorIterator<ReferencedObject>::value(void) const
 
   const VectorElement& element = _iterator.value();
 
-  ReferencedObject* result = element.getValue();
+  OMStorable* p = element.getValue();
+  ReferencedObject* result = 0;
+  if (p != 0) {
+    result = dynamic_cast<ReferencedObject*>(p);
+    ASSERT("Object is correct type", result != 0);
+  }
 
   POSTCONDITION("Valid result", result != 0);
   return result;
