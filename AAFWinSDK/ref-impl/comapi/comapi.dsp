@@ -153,6 +153,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFCodecDef.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFCodecDefTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFCommentMarker.cpp"
 # End Source File
 # Begin Source File
@@ -186,6 +190,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFConstValueTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFContainerDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFContainerDefTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -555,7 +563,15 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluggableCode.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPluggableCodeTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluggableDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPluggableDefTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -563,7 +579,15 @@ SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginDescriptor.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPluginDescriptorTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFPluginManager.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFPluginManagerTest.cpp"
 # End Source File
 # Begin Source File
 
@@ -944,6 +968,10 @@ SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFParameterDefsTest.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFPluginDescriptors.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFPluginDescTest.cpp"
 # End Source File
 # Begin Source File
 

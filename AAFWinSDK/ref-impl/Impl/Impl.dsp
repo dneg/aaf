@@ -539,7 +539,7 @@ SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFParameterDefs.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPluginDescriptors.cpp"
+SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFPluginDesc.cpp"
 # End Source File
 # Begin Source File
 
