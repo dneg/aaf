@@ -151,7 +151,14 @@ public:
   // in /test/ImplAAFSourceClipTest.cpp.
   static AAFRESULT test();
 
-  // Return this objects stored object class.
+	virtual AAFRESULT TraverseToClip(aafLength_t length,
+					ImplAAFSegment **sclp,
+					 ImplAAFPulldown **pulldownObj,
+					 aafInt32 *pulldownPhase,
+					 aafLength_t *sclpLen,
+					 aafBool *isMask);
+
+	// Return this objects stored object class.
   virtual AAFRESULT STDMETHODCALLTYPE
 	GetObjectClass(aafUID_t * pClass);
 
