@@ -646,6 +646,10 @@ SOURCE=..\..\..\..\test\com\ComModTestAAF\ComModTestAAF.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\..\..\test\com\ComModTestAAF\ModuleTest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\stdafx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
