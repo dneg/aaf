@@ -84,6 +84,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	bool bFileOpen = false;
 	IAAFHeader *				pHeader = NULL;
 	IAAFDictionary*  pDictionary = NULL;
+	IAAFContainerDef*  pContainer = NULL;
 	IAAFSourceMob	*pSourceMob = NULL;
 	IAAFMob			*pMob = NULL;
 	IAAFEssenceDescriptor *edesc = NULL;
@@ -147,7 +148,11 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								   (IUnknown **)&edesc));		
 		checkResult(edesc->QueryInterface(IID_IAAFFileDescriptor, (void **) &pFileDesc));
 		checkResult(pFileDesc->SetSampleRate (checkSampleRate));
-		checkResult(pFileDesc->SetContainerFormat (checkContainer));
+		checkResult(pDictionary->LookupContainerDef(checkContainer, &pContainer));
+		checkResult(pFileDesc->SetContainerFormat (pContainer));
+		pContainer->Release();
+		pContainer = NULL;
+
 		checkResult(pFileDesc->SetLength (checkLength));
 //		checkResult(pFileDesc->SetIsInContainer (kAAFTrue));
 		
@@ -198,6 +203,8 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	bool bFileOpen = false;
 	IAAFHeader *				pHeader = NULL;
 	IEnumAAFMobs *mobIter = NULL;
+	IAAFContainerDef*  pContainer = NULL;
+	IAAFDefObject	*  pDef = NULL;
 	IAAFEssenceDescriptor		*pEdesc = NULL;
 	IAAFSourceMob				*pSourceMob = NULL;
 	IAAFMob			*aMob = NULL;
@@ -272,7 +279,13 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 			checkResult(pFileDesc->GetSampleRate (&testSampleRate));
 			checkExpression(testSampleRate.numerator == checkSampleRate.numerator, AAFRESULT_TEST_FAILED);
 			checkExpression(testSampleRate.denominator == checkSampleRate.denominator, AAFRESULT_TEST_FAILED);
-			checkResult(pFileDesc->GetContainerFormat (&testContainer));
+			checkResult(pFileDesc->GetContainerFormat (&pContainer));
+			checkResult(pContainer->QueryInterface(IID_IAAFDefObject, (void **) &pDef));
+			checkResult(pDef->GetAUID(&testContainer));
+			pContainer->Release();
+			pContainer = NULL;
+			pDef->Release();
+			pDef = NULL;
 			checkExpression(memcmp(&testContainer, &checkContainer, sizeof(testContainer)) == 0, AAFRESULT_TEST_FAILED);
 			checkResult(pFileDesc->GetLength (&testLength));
 			checkExpression(checkLength == testLength, AAFRESULT_TEST_FAILED);

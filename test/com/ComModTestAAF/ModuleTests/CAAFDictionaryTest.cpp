@@ -38,6 +38,7 @@
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
 #include "AAFTypeDefUIDs.h"
+#include "AAFClassDefUIDs.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -432,7 +433,7 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
 				  /* SP for def to register */     IAAFParameterDefSP,
 				  /* reg method on pDict */        RegisterParameterDef);
 
-  RegisterOneDef (/* dictionary*/                  pDict,
+				  RegisterOneDef (/* dictionary*/                  pDict,
 				  /* def object's class */         defs.cdCodecDef(),
 				  /* IID of def to pass to Init */ IID_IAAFCodecDef,
 				  /* SP of def to use with Init */ IAAFCodecDefSP,
@@ -448,9 +449,12 @@ static HRESULT RegisterDefs (IAAFDictionary * pDict)
   // order to be saved correctly...
   {
 	IAAFCodecDefSP cd;
+	IAAFClassDefSP pClassDef;
 	checkResult (pDict->LookupCodecDef (kTestCodecDefID,
 										&cd));
 	checkResult (cd->AddEssenceKind (defs.ddMatte()));
+	checkResult(pDict->LookupClassDef(kAAFClassID_EssenceDescriptor, &pClassDef));
+	checkResult(cd->SetFileDescriptorClass (pClassDef));
   }  
 
   RegisterOneDef (/* dictionary*/                  pDict,
