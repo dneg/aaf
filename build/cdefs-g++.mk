@@ -53,17 +53,27 @@
 # Compiler command
 #------------------------------------------------------------------------------
 CC = g++
-CCVERSION = g++ -v 2>&1 | tail -1
+CCVERSION = $(shell g++ -dumpversion)
+
+#------------------------------------------------------------------------------
+# gcc 4.x always gives warnings about non-virtual destructor, e.g.
+#   warning: 'struct IUnknown' has virtual functions but non-virtual destructor
+# This warning cannot be fixed by providing an empty virtual destructor since
+# it will change the binary substitutability of the libcom-api.so library.
+# Since binary substitutability is a requirement of the SDK we will have to
+# live with this warning forever or supress it using
+#   -Wno-non-virtual-dtor
+#------------------------------------------------------------------------------
 
 #------------------------------------------------------------------------------
 # Debug info generation
 #------------------------------------------------------------------------------
-DBG_FLAGS = -g -Wall -Wundef -Werror
+DBG_FLAGS = -g -Wall -Wundef -Wno-non-virtual-dtor -Werror
 
 #------------------------------------------------------------------------------
 # Optimisation flags when building a Release
 #------------------------------------------------------------------------------
-REL_FLAGS = -O2 -Wall -Wundef -Werror
+REL_FLAGS = -O2 -Wall -Wundef -Wno-non-virtual-dtor -Werror
 
 #------------------------------------------------------------------------------
 # Compiler flags
