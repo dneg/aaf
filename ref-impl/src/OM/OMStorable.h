@@ -1,3 +1,4 @@
+// @doc OMINTERNAL
 #ifndef OMSTORABLE_H
 #define OMSTORABLE_H
 
@@ -8,70 +9,93 @@
 class OMStoredObject;
 class OMFile;
 
-// Abstract base class for all objects that may be stored by the
-// Object Manager.
+// @class Abstract base class for all objects that may be stored by
+//        the Object Manager.
 //
 class OMStorable {
-
 public:
+  // @access Public members.
 
+    // @cmember Constructor.
   OMStorable(void);
 
+    // @cmember Destructor.
   virtual ~OMStorable(void);
 
+    // @cmember The stored object identifier for the class of this
+    //          <c OMStorable>.
+    //   @this const
   virtual const OMClassId& classId(void) const = 0;
   
 // private:
-  
+
+    // @cmember Inform this <c OMStorable> that it is contained
+    //          (owned) by the <c OMStorable> <p containingObject>.
   void setContainingObject(const OMStorable* containingObject);
 
+    // @cmember Inform this <c OMStorable> that it is no longer contained.
   void clearContainingObject(void);
 
+    // @cmember Inform this <c OMStorable> that it is contained
+    //          within the <c OMProperty> <p containingProperty>.
   void setContainingProperty(const OMProperty* containingProperty,
                              const size_t key);
 
+    // @cmember Inform this <c OMStorable> that it is no longer
+    //          contained within any <c OMProperty>.
   void clearContainingProperty(void);
   
+    // @cmember Give this <c OMStorable> a name.
   void setName(const char* name);
 
-  // Save this object.
-  //
+    // @cmember Save this <c OMStorable>.
+    //   @this const
   void save(void) const;
 
+    // @cmember Close this <c OMStorable>.
   void close(void);
 
-  // Restore an object, of unknown sub-class, from `s'.
-  //
+    // @cmember Restore an <c OMStorable> (of unknown sub-class) from
+    // the stored representation <p s>.
   static OMStorable* restoreFrom(const OMStorable* container,
                                  const char* name,
                                  OMStoredObject& s);
   
+    // @cmember The <c OMFile> in which this <c OMStorable> has a
+    //          persistent representation.
   virtual OMFile* file(void) const;
 
   const char* pathName(void) const;
 
-  // The stored representation of this object.
-  //
+    // @cmember The stored representation of this <c OMStorable>.
+    //   @this const
   OMStoredObject* store(void) const;
 
+    // @cmember Inform this <c OMStorable> where it should store its
+    //          persistent representation.
   void setStore(OMStoredObject* store);
 
-  // Is this object attached to a file ?
-
+    // @cmember Is this <c OMStorable> attached to a file ?
   virtual bool attached(void);
 
 private:
+  // @access Private members.
 
-  // Restore the contents of an object, of known sub-class, from `s'.
-  //
+    // @cmember Restore the contents of an <c OMStorable> (of unknown
+    //          sub-class) from the stored representation <p s>.
   void restoreContentsFrom(OMStoredObject& s);
 
   char* makePathName(void);
 
+    // @cmember The name of this <c OMStorable>.
   const char* name(void) const;
 
 protected:
+  // @access Protected members.
 
+    // @cmember The <c OMStorable> that contains (owns) this
+    //          <c OMStorable>.
+    //   @this const
   OMStorable* containingObject(void) const;
 
   OMPropertySet _persistentProperties;

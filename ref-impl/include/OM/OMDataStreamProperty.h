@@ -28,6 +28,9 @@ public:
     //          <c OMDataStreamProperty> is <p size>.
   virtual void restoreFrom(OMStoredObject& s, size_t size);
 
+    // @cmember Close this  <c OMDataStreamProperty>.
+  virtual void close(void);
+
     // @cmember The size, in bytes, of the data in this
     //          <c OMDataStreamProperty>.
     //   @this const
@@ -67,7 +70,6 @@ private:
 
   void open(void);
   void create(void);
-  void close(void);
 
   IStream* _stream;
 

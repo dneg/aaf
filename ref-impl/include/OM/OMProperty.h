@@ -33,6 +33,7 @@ public:
     // @this const
   virtual void save(void) const = 0;
 
+    // @cmember Close this <c OMProperty>.
   virtual void close(void);
 
     // @cmember Restore this <c OMProperty> from the
@@ -55,6 +56,10 @@ public:
     // @cmember The address of this <c OMProperty> object.
   OMProperty* address(void);
 
+    // @cmember Detach the <c OMStorable> object with the given
+    //          <p key> from this <c OMProperty>. This <c OMProperty>
+    //          must no longer attempt to access the <c OMStorable> with
+    //          the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
 
 protected:
@@ -145,6 +150,7 @@ public:
     // @this const
   virtual void save(void) const;
 
+    // @cmember Close this <c OMProperty>.
   virtual void close(void);
 
     // @cmember Restore this <c OMStrongReferenceProperty> from the
@@ -152,6 +158,10 @@ public:
     //          <c OMStrongReferenceProperty> is <p size>.
   virtual void restoreFrom(OMStoredObject& s, size_t size);
 
+    // @cmember Detach the <c OMStorable> object with the given
+    //          <p key> from this <c OMStrongReferenceProperty>. This
+    //          <c OMStrongReferenceProperty> must no longer attempt
+    //          to access the <c OMStorable> with the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
 
 };
@@ -359,6 +369,7 @@ public:
     // @this const
   virtual void save(void) const;
 
+    // @cmember Close this <c OMProperty>.
   virtual void close(void);
 
     // @cmember Restore this <c OMStrongReferenceVectorProperty> from
@@ -389,6 +400,10 @@ public:
     //          this <c OMStrongReferenceVectorProperty>.
   void appendValue(const ReferencedObject*& value);
 
+    // @cmember Detach the <c OMStorable> object with the given
+    //          <p key> from this <c OMStrongReferenceVectorProperty>.
+    //          This <c OMStrongReferenceVectorProperty> must no longer
+    //          attempt to access the <c OMStorable> with the given <p key>.
   virtual void detach(const OMStorable* object, const size_t key);
 
 private:
@@ -441,7 +456,7 @@ public:
 
     // @cmember Utility function for computing the length, in
     //          characters, of the string of <p CharacterType>
-   //           characters <p characterString>.
+    //          characters <p characterString>.
   static size_t stringLength(const CharacterType* characterString);
 
 private:
