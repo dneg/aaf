@@ -4,7 +4,7 @@ AAFBASE ?= ../..
 
 include $(AAFBASE)/build/defs.mk
 
-INCLUDES = -I$(AAFBASE)ref-impl/bld_cfg
+INCLUDES = -I$(AAFBASE)/ref-impl/bld_cfg
 
 .PHONY : all
 all : dodo
