@@ -41,6 +41,7 @@ HUMAN_TYPED_IMPL="\
 	AAFControlPoint \
 	AAFDataDef \
 	AAFDefObject \
+	AAFPluginDef \
 	AAFDictionary \
 	AAFEdgecode \
 	AAFOperationDef \
@@ -79,7 +80,6 @@ HUMAN_TYPED_IMPL="\
 	AAFPropertyDef \
 	AAFPropertyValue \
 	AAFPropValData \
-	AAFPluginDescriptor \
 	AAFPluginManager \
 	AAFPulldown \
 	AAFRGBADescriptor \
@@ -140,11 +140,14 @@ HUMAN_TYPED_IMPL="\
 	EnumAAFParameters \
 	EnumAAFProperties \
 	EnumAAFPropertyDefs \
-	EnumAAFPluginDescriptors \
+	EnumAAFPluginDefs \
 	EnumAAFPluginLocators \
 	EnumAAFSegments \
 	EnumAAFTaggedValues \
 	EnumAAFTypeDefs "
+
+# Defered interfaces
+#	AAFIntraFrameMarker \
 
 # The list of standard dodo targets.
 # AAFTypes have to be handled separately since no object is to be created.
