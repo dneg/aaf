@@ -17,6 +17,7 @@
 #include <iostream.h>
 #include <assert.h>
 #include <stdio.h>
+#include "AAFDefUIDs.h"
 
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFTypeDefInt; // generated
@@ -415,7 +416,7 @@ static HRESULT TestTypeDefInt ()
 	  ProductInfo.productVersion.patchLevel = 0;
 	  ProductInfo.productVersion.type = kVersionUnknown;
 	  ProductInfo.productVersionString = NULL;
-	  ProductInfo.productID = -1;
+	  ProductInfo.productID = UnitTestProductID;
 	  ProductInfo.platform = NULL;
 
 	  RemoveTestFile (testFileName);

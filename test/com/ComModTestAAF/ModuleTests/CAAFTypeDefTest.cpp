@@ -39,6 +39,7 @@ static void RemoveTestFile(const wchar_t* pFileName)
   }
 }
 
+const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 static HRESULT TestTypeDef ()
 {
@@ -53,7 +54,7 @@ static HRESULT TestTypeDef ()
   ProductInfo.productVersion.patchLevel = 0;
   ProductInfo.productVersion.type = kVersionUnknown;
   ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = -1;
+  ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
 
   IAAFFile* pFile = NULL;

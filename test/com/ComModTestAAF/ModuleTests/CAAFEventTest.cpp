@@ -87,6 +87,7 @@ private:
   static const wchar_t* _eventComment;
 };
 
+const aafUID_t NIL_UID = { 0, 0, 0, { 0, 0, 0, 0, 0, 0, 0, 0 } };
 
 extern "C" HRESULT CAAFEvent_test()
 {
@@ -103,7 +104,7 @@ extern "C" HRESULT CAAFEvent_test()
   ProductInfo.productVersion.patchLevel = 0;
   ProductInfo.productVersion.type = kVersionUnknown;
   ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = -1;
+  ProductInfo.productID = NIL_UID;
   ProductInfo.platform = NULL;
 
   // Create an instance of our text clip test class and run the

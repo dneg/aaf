@@ -13,6 +13,7 @@
 
 #include "AAFResult.h"
 #include "AAFStoredObjectIDs.h"
+#include "AAFDefUIDs.h"
 
 #include <iostream.h>
 #include <assert.h>
@@ -69,7 +70,7 @@ static HRESULT TestPropertyValue ()
   ProductInfo.productVersion.patchLevel = 0;
   ProductInfo.productVersion.type = kVersionUnknown;
   ProductInfo.productVersionString = NULL;
-  ProductInfo.productID = -1;
+  ProductInfo.productID = UnitTestProductID;
   ProductInfo.platform = NULL;
 
   IAAFFile* pFile = NULL;
