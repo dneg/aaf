@@ -133,7 +133,7 @@ public:
     //          <p identification>.
   ReferencedObject* value(
                      const OMUniqueObjectIdentification& identification) const;
-  
+
     // @cmember Find the <p ReferencedObject> in this
     //          <c OMWeakReferenceSetProperty> identified by
     //          <p identification>.  If the object is found it is returned
