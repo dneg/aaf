@@ -779,17 +779,5 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFTypeDefs.cpp"
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFTypeDefsTest.cpp"
 # End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceAccess.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplAAFEssenceData.cpp"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\impl\ImplEnumAAFEssenceData.cpp"
-# End Source File
 # End Target
 # End Project
