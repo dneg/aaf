@@ -208,6 +208,7 @@ static ByteOrder hostByteOrder(void);
 static const char* byteOrder(ByteOrder bo);
 static void formatError(DWORD errorCode);
 static void fatalError(char* routineName, char* message);
+static void warning(char* routineName, char* message);
 static void printError(const char* prefix,
                        const char* fileName,
                        DWORD errorCode);
@@ -530,6 +531,13 @@ void fatalError(char* routineName, char* message)
   exit(FAILURE);
 }
 
+void warning(char* routineName, char* message)
+{
+  cerr << programName
+       << ": Warning in routine \"" << routineName << "\". "
+       << message << endl;
+}
+
 void printError(const char* prefix, const char* fileName, DWORD errorCode)
 {
   cerr << prefix << ": Error : \"" << fileName << "\" : ";
@@ -663,7 +671,7 @@ size_t sizeOfStream(IStream* stream, const char* streamName)
   }
   unsigned long int totalBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
-    cerr << "Warning : Large streams not handled." << endl;
+    warning("sizeOfStream", "Large streams not handled.");
     totalBytes = ULONG_MAX;
   }
   return totalBytes;
@@ -706,7 +714,7 @@ void printStat(STATSTG* statstg, char* tag)
   if ((statstg->type == STGTY_STREAM) || (statstg->type == STGTY_LOCKBYTES)) {
     unsigned long int byteCount = statstg->cbSize.LowPart;
     if (statstg->cbSize.HighPart != 0) {
-      cerr << "Warning : Large streams not handled." << endl;
+      warning("printStat", "Large streams not handled.");
       byteCount = ULONG_MAX;
     }
     
@@ -763,7 +771,7 @@ void dumpStream(IStream* stream, STATSTG* statstg, char* pathName)
 
   unsigned long int byteCount = statstg->cbSize.LowPart;
   if (statstg->cbSize.HighPart != 0) {
-    cerr << "Warning : Large streams not handled." << endl;
+    warning("dumpStream", "Large streams not handled.");
     byteCount = ULONG_MAX;
   }
   totalBytes = totalBytes + byteCount;
@@ -1352,7 +1360,7 @@ void dumpDataStream(IStream* stream,
   }
   unsigned long int totalBytes = statstg.cbSize.LowPart;
   if (statstg.cbSize.HighPart != 0) {
-    cerr << "Warning : Large streams not handled." << endl;
+    warning("dumpDataStream", "Large streams not handled.");
     totalBytes = ULONG_MAX;
   }
 
@@ -1552,7 +1560,7 @@ void dumpObject(IStorage* storage, char* pathName, int isRoot)
       // information as possible, this could be the bug that the
       // user is looking for.
       //
-      cerr << programName << ": Warning : Illegal AAF File." << endl;
+      warning("dumpObject", "Illegal AAF File.");
       cerr << "Byte ordering for index of \"" << pathName << "\" ("
            << byteOrder(_byteOrder)
            << ") does not match that of the file ("
