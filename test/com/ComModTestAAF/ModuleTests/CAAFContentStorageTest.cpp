@@ -327,7 +327,7 @@ void ContentStorageTest::createFile(wchar_t *pFileName)
 void ContentStorageTest::openFile(wchar_t *pFileName)
 {
 	aafUInt32		readNumEssenceData;
-	aafInt32		readNumMobs;
+	aafNumSlots_t	readNumMobs;
 	IAAFMob			*testMob = NULL;
 	IEnumAAFMobs	*pEnum = NULL;
 	aafUID_t		uid, readID;
