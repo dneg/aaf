@@ -268,20 +268,13 @@ size_t OMSimpleProperty::size(void) const
 
   // @mfunc Write this property to persistent store, performing
   //        any necessary externalization and byte reordering.
-  //   @parm The property id.
-  //   @parm The stored form to use for this property.
-  //   @parm The bytes of this property in internal (in memory) form.
-  //   @parm The actual size of the bytes of this property.
   //   @this const
-void OMSimpleProperty::write(OMPropertyId propertyId,
-                             int storedForm,
-                             OMByte* internalBytes,
-                             size_t internalBytesSize) const
+void OMSimpleProperty::write(void) const
 {
   TRACE("OMSimpleProperty::write");
 
-  PRECONDITION("Valid internal bytes", internalBytes != 0);
-  PRECONDITION("Valid internal bytes size", internalBytesSize > 0);
+  PRECONDITION("Valid internal bytes", _bits != 0);
+  PRECONDITION("Valid internal bytes size", _size > 0);
 
   ASSERT("Valid property set", _propertySet != 0);
   OMStorable* container = _propertySet->container();
@@ -304,14 +297,14 @@ void OMSimpleProperty::write(OMPropertyId propertyId,
     ASSERT("Valid property type", type != 0);
  
     // Allocate buffer for property value
-    size_t externalBytesSize = type->externalSize(internalBytes,
-                                                  internalBytesSize);
+    size_t externalBytesSize = type->externalSize(_bits,
+                                                  _size);
     OMByte* buffer = new OMByte[externalBytesSize];
     ASSERT("Valid heap pointer", buffer != 0);
 
     // Externalize property value
-    type->externalize(internalBytes,
-                      internalBytesSize,
+    type->externalize(_bits,
+                      _size,
                       buffer,
                       externalBytesSize,
                       store->byteOrder());
@@ -322,13 +315,13 @@ void OMSimpleProperty::write(OMPropertyId propertyId,
     }
 
     // Write property value
-    store->write(propertyId, storedForm, buffer, externalBytesSize);
+    store->write(_propertyId, _storedForm, buffer, externalBytesSize);
     delete [] buffer;
 
   } else {
     // tjb - temporary, no type information, do it the old way
     //
-    store->write(propertyId, storedForm, internalBytes, internalBytesSize);
+    store->write(_propertyId, _storedForm, _bits, _size);
   }
 }
 
@@ -438,7 +431,7 @@ void OMSimpleProperty::save(void* /* clientContext */) const
   PRECONDITION("Optional property is present",
                                            IMPLIES(isOptional(), isPresent()));
 
-  write(_propertyId, _storedForm, _bits, _size);
+  write();
 }
 
   // @mfunc Restore this <c OMSimpleProperty>, the external (persisted)
