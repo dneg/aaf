@@ -407,6 +407,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\com-dll\CAAFInProcServer.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\com-api\CAAFInterpolationDef.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CAAFInterpolationDefTest.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\com-api\CAAFIntraFrameMarker.cpp"
 # End Source File
 # Begin Source File
@@ -1000,6 +1008,14 @@ SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFIdentifications.cpp"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFIdentificationsTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\test\CEnumAAFInterpolateDefsTest.cpp"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\com-api\CEnumAAFInterpolationDefs.cpp"
 # End Source File
 # Begin Source File
 
