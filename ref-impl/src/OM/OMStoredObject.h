@@ -303,15 +303,30 @@ public:
                          wchar_t* mangledName,
                          size_t mangledNameSize);
 
+  // Name manipulation.
+
+    // @cmember Compute the name for a stream.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
   static wchar_t* streamName(const wchar_t* propertyName,
                              OMPropertyId pid);
 
+    // @cmember Compute the name for an object reference.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
   static wchar_t* referenceName(const wchar_t* propertyName,
                                 OMPropertyId pid);
 
+    // @cmember Compute the name for a collection.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
   static wchar_t* collectionName(const wchar_t* propertyName,
                                  OMPropertyId pid);
 
+    // @cmember Compute the name for an object reference
+    //          that is an element of a collection.
+    //   @devnote This member function doesn't make sense for all
+    //            derived instances of <c OMStoredObject>.
   static wchar_t* elementName(const wchar_t* propertyName,
                               OMPropertyId pid,
                               OMUInt32 localKey);
