@@ -863,11 +863,10 @@ static void formatError(DWORD errorCode)
     buffer, 256,
     NULL);
 
-  char message[256];
-
-  convert(message, 256, buffer);
-
   if (status != 0) {
+    char message[256];
+    convert(message, 256, buffer);
+
     int length = strlen(message);
     // zap cr/lf
     if (length >= 2) {
