@@ -7,6 +7,8 @@ AAFLocator\
 #endm
 #c
 #import ./AAFUnitTest.exp
+#import ./AAFLocator.exp
+AD_HEAD
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
