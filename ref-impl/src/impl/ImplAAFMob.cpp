@@ -108,12 +108,15 @@ ImplAAFMob::~ImplAAFMob ()
 		}
 	}
 
-	size = _userComments.getSize();
-	for (size_t j = 0; j < size; j++)
+	if(_userComments.isPresent())
 	{
-		ImplAAFTaggedValue* pTaggedValue = _userComments.setValueAt(0, j);
-		if (pTaggedValue)
-			pTaggedValue->ReleaseReference();
+		size = _userComments.getSize();
+		for (size_t j = 0; j < size; j++)
+		{
+			ImplAAFTaggedValue* pTaggedValue = _userComments.setValueAt(0, j);
+			if (pTaggedValue)
+				pTaggedValue->ReleaseReference();
+		}
 	}
 }
 
@@ -181,7 +184,11 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pName == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
-	stat = _name.copyToBuffer(pName, bufSize);
+	if(!_name.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	else
+		stat = _name.copyToBuffer(pName, bufSize);
+	
 	if (! stat)
 	{
 	  return AAFRESULT_SMALLBUF;	// Shouldn't the API have a length parm?
@@ -199,8 +206,14 @@ ImplAAFMob::GetNameBufLen
 {
 	if(pSize == NULL)
 		return(AAFRESULT_NULL_PARAM);
-	*pSize = _name.size();
-	return(AAFRESULT_SUCCESS); 
+	
+	if(!_name.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+	else
+	{
+		*pSize = _name.size();
+		return(AAFRESULT_SUCCESS); 
+	}
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -582,20 +595,25 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	size_t	numComments;
 
+	if(!_userComments.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+
 	if (pNumComments == NULL)
 		return AAFRESULT_NULL_PARAM;
-
+		
 	_userComments.getSize(numComments);
-
+		
 	*pNumComments = numComments;
-
+		
 	return(AAFRESULT_SUCCESS);
 }
-
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFMob::EnumAAFAllMobComments (ImplEnumAAFTaggedValues** ppEnum)
 {
+	if(!_userComments.isPresent())
+		return AAFRESULT_PROP_NOT_PRESENT;
+		
 	ImplEnumAAFTaggedValues*	theEnum = (ImplEnumAAFTaggedValues *)CreateImpl(CLSID_EnumAAFTaggedValues);
 
 	XPROTECT()
