@@ -175,8 +175,6 @@ AUTO_GEN_IMPL = \
 # NOT into AAF.idl.
 
 PLUGIN_OBJECTS = \
-	AAFRoot \
-	AAFEssenceFormat \
 	AAFPlugin \
 	AAFEssenceStream \
 	AAFEssenceSampleStream \
