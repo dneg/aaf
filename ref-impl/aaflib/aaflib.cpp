@@ -27,7 +27,7 @@
 // Declare all of the public functions.
 #include "AAF.h"
 #include "AAFResult.h"
-#include <assert.h>
+
 
 
 // 
@@ -42,6 +42,49 @@ STDAPI AAFUnload();
 }
 #endif
 
+
+
+// ASSERT code copied from OM...
+
+#ifdef _DEBUG
+
+#include <iostream.h>
+#include <stdlib.h>
+
+#define FAILURE -1
+
+static void reportAssertionFailure(char* kind,
+                            char* name,
+                            char* expressionString,
+                            char* routine,
+                            char* fileName,
+                            size_t lineNumber)
+{
+  cerr << kind << " \"" << name << "\" failed in routine \""
+       << routine  << "\"." << endl;
+  cerr << "The failure occurred at line " << lineNumber
+       << " in file \"" << fileName << "\"." << endl;
+  cerr << "The condition \"" << expressionString << "\" was violated." << endl;
+  abort();
+}
+
+
+#define ASSERT(name, expression) \
+  (expression) \
+    ? (void)0  \
+    : reportAssertionFailure("Assertion",    name, #expression, \
+                             currentRoutineName, __FILE__, __LINE__)
+
+
+#define TRACE(routine) char* currentRoutineName = routine;
+
+#else
+
+#define ASSERT(name, expression)
+
+#define TRACE(routine)
+
+#endif
 
 
 
@@ -266,6 +309,7 @@ STDAPI AAFUnload()
 // 
 static HRESULT LoadIfNecessary(AAFDLL **ppAAFDLL)
 {
+  TRACE("LoadIfNecessary");
   HRESULT hr = S_OK;
 
   // Get the dll wrapper
@@ -276,7 +320,7 @@ static HRESULT LoadIfNecessary(AAFDLL **ppAAFDLL)
     if (SUCCEEDED(hr))
     {
       pAAFDLL = AAFDLL::GetAAFDLL();
-      assert(pAAFDLL);
+      ASSERT("Valid AAFDLL wrapper", pAAFDLL);
     }
   }
   
@@ -416,8 +460,8 @@ STDAPI AAFGetPluginManager (
 // Constructor for the base class
 AAFDLL::AAFDLL()
 {
-  // There Can Be Only One!
-  assert(NULL == _singleton);
+  TRACE("AAFDLL::AAFDLL");
+  ASSERT("There Can Be Only One!", NULL == _singleton);
   _pfnOpenExistingRead = NULL;
   _pfnOpenExistingModify = NULL;
   _pfnOpenNewModify = NULL;
@@ -428,8 +472,8 @@ AAFDLL::AAFDLL()
 // Destructor for the base class
 AAFDLL::~AAFDLL()
 {
-  // There Can Be Only One!
-  assert(this == _singleton);
+  TRACE("AAFDLL::~AAFDLL");
+  ASSERT("There Can Be Only One!", this == _singleton);
 
   _singleton = NULL;
 }
@@ -444,7 +488,8 @@ HRESULT AAFDLL::OpenExistingRead (
     aafUInt32  modeFlags,
     IAAFFile ** ppFile)
 {
-  assert(_pfnOpenExistingRead);
+  TRACE("AAFDLL::OpenExistingRead");
+  ASSERT("Valid dll callback function", _pfnOpenExistingRead);
   return _pfnOpenExistingRead(pFileName, modeFlags, ppFile);  
 }
   
@@ -454,7 +499,8 @@ HRESULT AAFDLL::OpenExistingModify (
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)
 {
-  assert(_pfnOpenExistingModify);
+  TRACE("AAFDLL::OpenExistingModify");
+  ASSERT("Valid dll callback function", _pfnOpenExistingModify);
   return _pfnOpenExistingModify(pFileName, modeFlags, pIdent, ppFile);  
 }
 
@@ -464,7 +510,8 @@ HRESULT AAFDLL::OpenNewModify (
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)
 {
-  assert(_pfnOpenNewModify);
+  TRACE("AAFDLL::OpenNewModify");
+  ASSERT("Valid dll callback function", _pfnOpenNewModify);
   return _pfnOpenNewModify(pFileName, modeFlags, pIdent, ppFile);  
 }
 
@@ -472,14 +519,16 @@ HRESULT AAFDLL::OpenTransient (
     aafProductIdentification_t *  pIdent,
     IAAFFile ** ppFile)
 {
-  assert(_pfnOpenTransient);
+  TRACE("AAFDLL::OpenTransient");
+  ASSERT("Valid dll callback function", _pfnOpenTransient);
   return _pfnOpenTransient(pIdent, ppFile);  
 }
 
 HRESULT AAFDLL::GetPluginManager (
   IAAFPluginManager ** ppPluginManager)
 {
-  assert(_pfnGetPluginManager);
+  TRACE("AAFDLL::GetPluginManager");
+  ASSERT("Valid dll callback function", _pfnGetPluginManager);
   return _pfnGetPluginManager(ppPluginManager);  
 }
  
@@ -554,7 +603,8 @@ private:
 // dll wrapper object.
 AAFDLL * MakeAAFDLL()
 {
-  assert(NULL == AAFDLL::_singleton);
+  TRACE("MakeAAFDLL for Win32AAFDLL");
+  ASSERT("There Can Be Only One!", NULL == AAFDLL::_singleton);
   AAFDLL *pAAFDLL =  new Win32AAFDLL;
   AAFDLL::_singleton = pAAFDLL;
   return pAAFDLL;
@@ -650,7 +700,8 @@ private:
 // dll wrapper object.
 AAFDLL * MakeAAFDLL()
 {
-  assert(NULL == AAFDLL::_singleton);
+  TRACE("MakeAAFDLL for UnknownAAFDLL");
+  ASSERT("There Can Be Only One!", NULL == AAFDLL::_singleton);
   AAFDLL *pAAFDLL =  new UnknownAAFDLL;
   AAFDLL::_singleton = pAAFDLL;
   return pAAFDLL;
