@@ -33,7 +33,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ComModTestAAF"=".\Test\com\ComModTestAAF.dsp" - Package Owner=<4>
+Project: "ComClientTestAAF"=".\examples\com-api\ComClientTestAAF\ComClientTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -51,7 +51,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ComTestAAF"=".\examples\com-api\ComTestAAF\ComTestAAF.dsp" - Package Owner=<4>
+Project: "ComModTestAAF"=".\Test\com\ComModTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -84,7 +84,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "CppModTestAAF"=".\Test\cpp\CppModTestAAF.dsp" - Package Owner=<4>
+Project: "CppClientTestAAF"=".\examples\cpp-api\CppClientTestAAF\CppClientTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -99,7 +99,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "CppTestAAF"=".\examples\cpp-api\CppTestAAF\CppTestAAF.dsp" - Package Owner=<4>
+Project: "CppModTestAAF"=".\Test\cpp\CppModTestAAF.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -135,12 +135,6 @@ Package=<4>
     Project_Dep_Name OM
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name CppTestAAF
-    End Project Dependency
-    Begin Project Dependency
-    Project_Dep_Name ComTestAAF
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name AAFCPPTST
     End Project Dependency
     Begin Project Dependency
@@ -160,6 +154,12 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name dump
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ComClientTestAAF
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CppClientTestAAF
     End Project Dependency
 }}}
 
