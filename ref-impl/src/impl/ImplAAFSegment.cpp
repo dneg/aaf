@@ -69,7 +69,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSegment::SegmentTCToOffset (aafTimecode_t *pTimecode,
-                           aafRational_t */*pEditRate*/,
+                           aafRational_t * /*pEditRate*/,
                            aafFrameOffset_t *pOffset)
 {
 	AAFRESULT aafError = AAFRESULT_SUCCESS;
@@ -159,11 +159,11 @@ AAFRESULT ImplAAFSegment::FindSubSegment(aafPosition_t offset,
 }
 
 AAFRESULT ImplAAFSegment::TraverseToClip(aafLength_t /*length*/,
-										 ImplAAFSegment **/*sclp*/,
-										 ImplAAFPulldown **/*pulldownObj*/,
-										 aafInt32 */*pulldownPhase*/,
-										 aafLength_t */*sclpLen*/,
-										 aafBool */*isMask*/)
+										 ImplAAFSegment ** /*sclp*/,
+										 ImplAAFPulldown ** /*pulldownObj*/,
+										 aafInt32 * /*pulldownPhase*/,
+										 aafLength_t * /*sclpLen*/,
+										 aafBool * /*isMask*/)
 {
 	return(AAFRESULT_TRAVERSAL_NOT_POSS);
 }

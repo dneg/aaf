@@ -365,7 +365,7 @@ AAFRESULT STDMETHODCALLTYPE
 //*** Abstract operations which must be overridden by a subclass of AAFTimecodeStream
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTimecodeStream::GetUserDataLength (
-      aafInt32 */*length*/)
+      aafInt32 * /*length*/)
 {
   return AAFRESULT_ABSTRACT_CLASS;
 }
