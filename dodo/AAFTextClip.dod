@@ -31,10 +31,10 @@ AAFSourceReference\
 #c
 AD_HEAD
 
-AD_IDL(//
-// A TextClip is an abstract class of SourceReference. Implementations
-// of TextClip reference a Mob Slot containing text essence data.
-//)
+AD_IDL(///
+/// A TextClip is an abstract class of SourceReference. Implementations
+/// of TextClip reference a Mob Slot containing text essence data.
+///)
 
 AD_CLASS_UUID(e684d785, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 

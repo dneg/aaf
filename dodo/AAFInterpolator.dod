@@ -32,35 +32,35 @@ AAFPlugin\
 #c #import ./AAFObject.exp
 AD_HEAD
 
-AD_IDL(//
-// The AAFInterpolator interface describes the calls of a plugin
-// which handles interpolating between two IAAFControlPoints in an
-// IAAFVaryingValue.  There will be one InterpolatorDefinition for each
-// method of interpolation  \(ex: Step\, Linear\, Log\) supported\,
-// so that the SDK can call GetIndexedSupportedType\(\)
-// repeatedly in order to find out what types this interpolator suppports.
-//
-// The AAFPluginManager keeps a copy of each interpolator in a table\, along
-// with cached copies of pertinant metadata about the interpolator.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The AAFInterpolator interface describes the calls of a plugin
+/// which handles interpolating between two IAAFControlPoints in an
+/// IAAFVaryingValue.  There will be one InterpolatorDefinition for each
+/// method of interpolation  \(ex: Step\, Linear\, Log\) supported\,
+/// so that the SDK can call GetIndexedSupportedType\(\)
+/// repeatedly in order to find out what types this interpolator suppports.
+///
+/// The AAFPluginManager keeps a copy of each interpolator in a table\, along
+/// with cached copies of pertinant metadata about the interpolator.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_CLASS_UUID(75C6CDF1, 0D67, 11d3, 80, A9, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(75C6CDF2, 0D67, 11d3, 80, A9, 00, 60, 08, 14, 3e, 6f)
 AD_XCLASS_BEGIN(Abstract, Transient)
 
-AD_IDL(//
-	//**************
-	// Meta codec functions.  Called to plug a codec into the SDK\, but
-	// NOT for each instance of a codec.
-	//)
+AD_IDL(///
+	///**************
+	/// Meta codec functions.  Called to plug a codec into the SDK\, but
+	/// NOT for each instance of a codec.
+	///)
 
 AD_XMETHOD1(GetNumTypesSupported,
 		   [out],
@@ -69,22 +69,22 @@ AD_XMETHOD1(GetNumTypesSupported,
 		   pCount,
 		   Number of data types supported,
 			 Each interpolator plugin will support a given number of interpolator
-	// types for a given number of data types.  This call returns the number of
-	// data types supported\, so that the SDK can call GetIndexedSupportedType\(\)
-	// repeatedly in order to find out what types this interpolator suppports.
-	//
-	// An interpolator is expected to support all data types for each interpolation
-	// method which the interpolator supports.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\)
-	//
-	// AAFRESULT_NULL_PARAM
-	//   - pCount is null.)
+	/// types for a given number of data types.  This call returns the number of
+	/// data types supported\, so that the SDK can call GetIndexedSupportedType\(\)
+	/// repeatedly in order to find out what types this interpolator suppports.
+	///
+	/// An interpolator is expected to support all data types for each interpolation
+	/// method which the interpolator supports.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pCount is null.)
 
 
 AD_XMETHOD2(GetIndexedSupportedType,
@@ -99,27 +99,27 @@ AD_XMETHOD2(GetIndexedSupportedType,
 		   ppType,
 		   The returned type definition,
 			 Each interpolator plugin will support a given number of interpolator
-	// types for a given number of data types.  This call returns one of the data
-	// types supported using an index.  The index value should be between 0 and
-	// one less than the value returned by GetNumTypesSupported\(\).
-	// The number of flavours is returned by GetNumTypesSupported\(\)\, and cached
-	// by the AAFPluginManager.
-	//
-	// An interpolator is expected to support all data types for each interpolation
-	// method which the interpolator supports.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\)
-	//
-	// AAFRESULT_NULL_PARAM
-	//   - pVariant is null.
-	//
-	// AAFRESULT_OUT_OF_RANGE
-	//   - index must be \>\= 0 and \< the number of flavours returned in GetNumTypesSupported\(\). )
+	/// types for a given number of data types.  This call returns one of the data
+	/// types supported using an index.  The index value should be between 0 and
+	/// one less than the value returned by GetNumTypesSupported\(\).
+	/// The number of flavours is returned by GetNumTypesSupported\(\)\, and cached
+	/// by the AAFPluginManager.
+	///
+	/// An interpolator is expected to support all data types for each interpolation
+	/// method which the interpolator supports.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \(This is the only code indicating success.\)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pVariant is null.
+	///
+	/// AAFRESULT_OUT_OF_RANGE
+	///   - index must be \>\= 0 and \< the number of flavours returned in GetNumTypesSupported\(\). )
 
 AD_XMETHOD1(GetTypeDefinition,
 			[out],
@@ -128,25 +128,25 @@ AD_XMETHOD1(GetTypeDefinition,
 			ppTypeDef,
 			Returned data definition object,
 			Places the data definition object attached to this interpolator into the
-  // *ppTypeDef argument.  If none exists yet\, NULL is placed into the
-  // *ppTypeDef argument.
-  //
-  // The returned data definition object\, if it exists\, is
-  // AddRef\(\)ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppTypeDef pointer is valid.
-  // - A valid data definition exists.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.)
+  /// *ppTypeDef argument.  If none exists yet\, NULL is placed into the
+  /// *ppTypeDef argument.
+  ///
+  /// The returned data definition object\, if it exists\, is
+  /// AddRef\(\)ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppTypeDef pointer is valid.
+  /// - A valid data definition exists.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.)
 
 
 AD_XMETHOD1(SetTypeDefinition,
@@ -156,19 +156,19 @@ AD_XMETHOD1(SetTypeDefinition,
 			pTypeDef,
 			Data definition object,
 			Sets the data definition of this interpolator to be the given one.
-  //
-  // Succeeds if all of the following are true:
-  // - the pTypeDef pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTypeDef is null.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pTypeDef pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTypeDef is null.)
 
 
 AD_XMETHOD1(GetParameter,
@@ -178,25 +178,25 @@ AD_XMETHOD1(GetParameter,
 			ppParameter,
 			Returned data definition object,
 			Places the parameter object attached to this interpolator into the
-  // *ppParameter argument.  If none exists yet\, NULL is placed into the
-  // *ppParameter argument.
-  //
-  // The returned parameter object\, if it exists\, is
-  // AddRef\(\)ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppParameter pointer is valid.
-  // - A valid data definition exists.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppParameter is null.)
+  /// *ppParameter argument.  If none exists yet\, NULL is placed into the
+  /// *ppParameter argument.
+  ///
+  /// The returned parameter object\, if it exists\, is
+  /// AddRef\(\)ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppParameter pointer is valid.
+  /// - A valid data definition exists.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppParameter is null.)
 
 
 AD_XMETHOD1(SetParameter,
@@ -206,19 +206,19 @@ AD_XMETHOD1(SetParameter,
 			pParameter,
 			Parameter object,
 			Sets the parmeter of this interpolator to be the given one.
-  //
-  // Succeeds if all of the following are true:
-  // - the pParameter pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pParameter is null.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pParameter pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pParameter is null.)
 
 
 AD_XMETHOD4(InterpolateOne,
@@ -243,26 +243,26 @@ AD_XMETHOD4(InterpolateOne,
 			bytesRead,
 			The number of bytes actually transferred,
 			Interpolates between known control points on the value\, and
-	// creates a new AAFControlPoint which which can be imagined to exist
-	// at the given inputValue.
-  //
-  // Succeeds if all of the following are true:
-  // - the pInputValue pointer is valid.
-  // - the ppOutputValue pointer is valid.
-  // - The input value is between 0 \(effect start\)\, to 1 \(effect end\) inclusive.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_INPUT_RANGE
-  //   - The input value must be between 0 and 1\, inclusive.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pInputValue or ppOutputValue is null.)
+	/// creates a new AAFControlPoint which which can be imagined to exist
+	/// at the given inputValue.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pInputValue pointer is valid.
+  /// - the ppOutputValue pointer is valid.
+  /// - The input value is between 0 \(effect start\)\, to 1 \(effect end\) inclusive.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_INPUT_RANGE
+  ///   - The input value must be between 0 and 1\, inclusive.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pInputValue or ppOutputValue is null.)
 
 
 AD_X2METHOD5(InterpolateMany,
@@ -307,29 +307,29 @@ AD_X2METHOD5(InterpolateMany,
 			xxx,
 
 			Interpolates between known control points on the value\, and
-	// creates an array of new AAFControlPoint which which can be imagined to exist
-	// at the given inputValue.  While InterpolateOne\(\) generates a single point\,
-	// this function starts at a given offset and generates interpolations until either
-	// generateCount is reached\, or the next result would have an input value
-	// of greater than one. 
-  //
-  // Succeeds if all of the following are true:
-  // - the pInputValue pointer is valid.
-  // - the pInputStep pointer is valid.
-  // - the ppOutputValue pointer is valid.
-  // - the pResultCount pointer is valid.
-  // - The input value is between 0 \(effect start\)\, to 1 \(effect end\) inclusive.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_INPUT_RANGE
-  //   - The input value must be between 0 and 1\, inclusive.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pInputValue or ppOutputValue or pInputStep or pResultCount is null.)
+	/// creates an array of new AAFControlPoint which which can be imagined to exist
+	/// at the given inputValue.  While InterpolateOne\(\) generates a single point\,
+	/// this function starts at a given offset and generates interpolations until either
+	/// generateCount is reached\, or the next result would have an input value
+	/// of greater than one. 
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pInputValue pointer is valid.
+  /// - the pInputStep pointer is valid.
+  /// - the ppOutputValue pointer is valid.
+  /// - the pResultCount pointer is valid.
+  /// - The input value is between 0 \(effect start\)\, to 1 \(effect end\) inclusive.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_INPUT_RANGE
+  ///   - The input value must be between 0 and 1\, inclusive.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pInputValue or ppOutputValue or pInputStep or pResultCount is null.)
 AD_XCLASS_END(Abstract, Transient)

@@ -231,8 +231,8 @@ interface I.this-module
   //
   // %01()
   //
-  // %02
-  // 
+  /// %02
+  /// 
   HRESULT %01 ();\
 #endm
 
@@ -256,10 +256,11 @@ interface I.this-module
   //
   // %01()
   //
-  // %07
-  // 
+  /// %07
+  /// 
+  /// @param %05 %02 %06
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05);\
 #endm
 
@@ -284,13 +285,13 @@ interface I.this-module
   //
   // %01()
   //
-  // %12
-  // 
+  /// %12
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10);\
 #endm
 
@@ -316,16 +317,15 @@ interface I.this-module
   //
   // %01()
   //
-  // %17
-  // 
+  /// %17
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15);\
 #endm
 
@@ -352,19 +352,17 @@ interface I.this-module
   //
   // %01()
   //
-  // %22
-  // 
+  /// %22
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15,
-
-    // %21
     %17 .%18-adornment%19 .%18-indirection %20);\
 #endm
 
@@ -392,22 +390,19 @@ interface I.this-module
   //
   // %01()
   //
-  // %27
-  // 
+  /// %27
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15,
-
-    // %21
     %17 .%18-adornment%19 .%18-indirection %20,
-
-    // %26
     %22 .%23-adornment%24 .%23-indirection %25);\
 #endm
 
@@ -436,25 +431,21 @@ interface I.this-module
   //
   // %01()
   //
-  // %32
-  // 
+  /// %32
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  /// @param %30 %27 %31
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15,
-
-    // %21
     %17 .%18-adornment%19 .%18-indirection %20,
-
-    // %26
     %22 .%23-adornment%24 .%23-indirection %25,
-
-    // %31
     %27 .%28-adornment%29 .%28-indirection %30);\
 #endm
 
@@ -484,28 +475,23 @@ interface I.this-module
   //
   // %01()
   //
-  // %37
-  // 
+  /// %37
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  /// @param %30 %27 %31
+  /// @param %35 %32 %36
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15,
-
-    // %21
     %17 .%18-adornment%19 .%18-indirection %20,
-
-    // %26
     %22 .%23-adornment%24 .%23-indirection %25,
-
-    // %31
     %27 .%28-adornment%29 .%28-indirection %30,
-
-    // %36
     %32 .%33-adornment%34 .%33-indirection %35);\
 #endm
 
@@ -536,31 +522,25 @@ interface I.this-module
   //
   // %01()
   //
-  // %42
-  // 
+  /// %42
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  /// @param %30 %27 %31
+  /// @param %35 %32 %36
+  /// @param %40 %37 %41
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15,
-
-    // %21
     %17 .%18-adornment%19 .%18-indirection %20,
-
-    // %26
     %22 .%23-adornment%24 .%23-indirection %25,
-
-    // %31
     %27 .%28-adornment%29 .%28-indirection %30,
-
-    // %36
     %32 .%33-adornment%34 .%33-indirection %35,
-
-    // %41
     %37 .%38-adornment%39 .%38-indirection %40);\
 #endm
 
@@ -592,34 +572,27 @@ interface I.this-module
   //
   // %01()
   //
-  // %47
-  // 
+  /// %47
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  /// @param %30 %27 %31
+  /// @param %35 %32 %36
+  /// @param %40 %37 %41
+  /// @param %45 %42 %46
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15,
-
-    // %21
     %17 .%18-adornment%19 .%18-indirection %20,
-
-    // %26
     %22 .%23-adornment%24 .%23-indirection %25,
-
-    // %31
     %27 .%28-adornment%29 .%28-indirection %30,
-
-    // %36
     %32 .%33-adornment%34 .%33-indirection %35,
-
-    // %41
     %37 .%38-adornment%39 .%38-indirection %40,
-
-    // %46
     %42 .%43-adornment%44 .%43-indirection %45);\
 #endm
 
@@ -652,37 +625,29 @@ interface I.this-module
   //
   // %01()
   //
-  // %52
-  // 
+  /// %52
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  /// @param %30 %27 %31
+  /// @param %35 %32 %36
+  /// @param %40 %37 %41
+  /// @param %45 %42 %46
+  /// @param %50 %47 %51
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15,
-
-    // %21
     %17 .%18-adornment%19 .%18-indirection %20,
-
-    // %26
     %22 .%23-adornment%24 .%23-indirection %25,
-
-    // %31
     %27 .%28-adornment%29 .%28-indirection %30,
-
-    // %36
     %32 .%33-adornment%34 .%33-indirection %35,
-
-    // %41
     %37 .%38-adornment%39 .%38-indirection %40,
-
-    // %46
     %42 .%43-adornment%44 .%43-indirection %45,
-
-    // %51
     %47 .%48-adornment%49 .%48-indirection %50);\
 #endm
 
@@ -716,40 +681,31 @@ interface I.this-module
   //
   // %01()
   //
-  // %57
-  // 
+  /// %57
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  /// @param %30 %27 %31
+  /// @param %35 %32 %36
+  /// @param %40 %37 %41
+  /// @param %45 %42 %46
+  /// @param %50 %47 %51
+  /// @param %55 %52 %56
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15,
-
-    // %21
     %17 .%18-adornment%19 .%18-indirection %20,
-
-    // %26
     %22 .%23-adornment%24 .%23-indirection %25,
-
-    // %31
     %27 .%28-adornment%29 .%28-indirection %30,
-
-    // %36
     %32 .%33-adornment%34 .%33-indirection %35,
-
-    // %41
     %37 .%38-adornment%39 .%38-indirection %40,
-
-    // %46
     %42 .%43-adornment%44 .%43-indirection %45,
-
-    // %51
     %47 .%48-adornment%49 .%48-indirection %50,
-
-    // %56
     %52 .%53-adornment%54 .%53-indirection %55);\
 #endm
 
@@ -785,16 +741,15 @@ interface I.this-module
   //
   // %01()
   //
-  // %23
-  // 
+  /// %23
+  /// 
+  /// @param %05 %02 %06
+  /// @param %12 %09 %13
+  /// @param %19 %16 %20
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %13
     %09 .%10-adornment%11 .%10-indirection %12,
-
-    // %20
     %16 .%17-adornment%18 .%17-indirection %19);\
 #endm
 
@@ -820,16 +775,15 @@ interface I.this-module
   //
   // %01()
   //
-  // %17
-  // 
+  /// %17
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %11
     %07 .%08-adornment%09 .%08-indirection %10,
-
-    // %16
     %12 .%13-adornment%14 .%13-indirection %15);\
 #endm
 
@@ -866,19 +820,17 @@ interface I.this-module
   //
   // %01()
   //
-  // %30
-  // 
+  /// %30
+  /// 
+  /// @param %05 %02 %06
+  /// @param %12 %09 %13
+  /// @param %19 %16 %20
+  /// @param %26 %23 %27
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %13
     %09 .%10-adornment%11 .%10-indirection %12,
-
-    // %20
     %16 .%17-adornment%18 .%17-indirection %19,
-
-    // %27
     %23 .%24-adornment%25 .%24-indirection %26);\
 #endm
 
@@ -916,22 +868,19 @@ interface I.this-module
   //
   // %01()
   //
-  // %37
-  // 
+  /// %37
+  /// 
+  /// @param %05 %02 %06
+  /// @param %12 %09 %13
+  /// @param %19 %16 %20
+  /// @param %26 %23 %27
+  /// @param %33 %30 %34
+  ///
   HRESULT %01 (
-    // %06
     %02 .%03-adornment%04 .%03-indirection %05,
-
-    // %13
     %09 .%10-adornment%11 .%10-indirection %12,
-
-    // %20
     %16 .%17-adornment%18 .%17-indirection %19,
-
-    // %27
     %23 .%24-adornment%25 .%24-indirection %26,
-
-    // %34
     %30 .%31-adornment%32 .%31-indirection %33);\
 #endm
 
@@ -1062,19 +1011,17 @@ AD_CLASS_END\
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_END 00
-  //
-  // Return private implementation pointer for delegation.
-  // NOTE: This is NOT the pointer to the COM object's implementation
-  // object!
-  //
+  /// Return private implementation pointer for delegation.
+  /// NOTE: This is NOT the pointer to the COM object's implementation
+  /// object!
+  ///
   [local] HRESULT GetImplRep([out, retval] void **);
 
-  //
-  // Intialize class extensions. This method is called after the
-  // contained Impl object has been completely initialized. This
-  // allows the aggregated extension object access to all of the
-  // interfaces and property data of its controlling unknown.
-  //
+  /// Intialize class extensions. This method is called after the
+  /// contained Impl object has been completely initialized. This
+  /// allows the aggregated extension object access to all of the
+  /// interfaces and property data of its controlling unknown.
+  ///
   [local] HRESULT InitializeExtension(REFCLSID clsid);
 }\
 #endm
@@ -1189,7 +1136,8 @@ AD_CLASS_END\
 #c Argument6: method description
 #c
 #startm AD_GETOBJ_METHOD1 06
-  // %06
+  /// %06
+  ///
   HRESULT %01 (
     %02 %03 ** I%04);\
 #endm
@@ -1210,7 +1158,8 @@ AD_CLASS_END\
 #c Argument6: method description
 #c
 #startm AD_SETOBJ_METHOD1 06
-  // %06
+  /// %06
+  ///
   HRESULT %01 (
     %02 %03 * I%04);\
 #endm
@@ -1496,19 +1445,18 @@ AD_CLASS_END\
   //
   // %01()
   //
-  // %02 
-  // 
+  /// %02 
+  ///
+  /// @param[in] id Class identifier (id) of the stored object. This is the
+  ///               corresponding SMPTE identifier (as a GUID) for all
+  ///               predefined built-in classes.
+  /// @param[in] riid Reference to the identifier of the interface
+  /// @param[out] ppvObject Address of output variable that receives the
+  ///                       interface pointer requested in riid
+  ///
   HRESULT %01(
-    // Class identifier (id) of the stored object. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in classes.
     [in, ref] aafUID_constref id,
-
-    // Reference to the identifier of the interface
     [in, ref] REFIID riid,
-
-    // Address of output variable that receives the 
-    // interface pointer requested in riid
     [out, iid_is(riid)] IUnknown ** ppvObject);
 #endm
 
@@ -1522,19 +1470,18 @@ AD_CLASS_END\
   //
   // %01()
   //
-  // %02 
-  // 
+  /// %02 
+  /// 
+  /// @param[in] id Identifier (id) of a class or type definition. This is
+  ///               the corresponding SMPTE identifier (as a GUID) for all
+  ///               predefined built-in definitions.
+  /// @param[in] riid Reference to the identifier of the interface
+  /// @param[out] ppMetaDefinition Address of output variable that receives
+  ///                              the interface pointer requested in riid
+  ///
   HRESULT %01(
-    // Identifier (id) of a class or type definition. This is the
-    // corresponding SMPTE identifier (as a GUID) for all predefined
-    // built-in definitions.
     [in, ref] aafUID_constref id,
-
-    // Reference to the identifier of the interface
     [in, ref] REFIID riid,
-
-    // Address of output variable that receives the 
-    // interface pointer requested in riid
     [out, iid_is(riid)] IUnknown ** ppMetaDefinition);
 #endm
 
@@ -1548,14 +1495,14 @@ AD_CLASS_END\
   //
   // %01()
   //
-  // %02 
-  // 
+  /// %02 
+  /// 
+  /// @param[in] riid Reference to the identifier of the interface
+  /// @param[out] ppvObject Address of output variable that receives the
+  ///                       interface pointer requested in riid
+  ///
   HRESULT %01(
-    // Reference to the identifier of the interface
     [in, ref] REFIID riid,
-
-    // Address of output variable that receives the 
-    // interface pointer requested in riid
     [out, iid_is(riid)] IUnknown ** ppvObject);
 #endm
 
@@ -1568,25 +1515,25 @@ AD_CLASS_END\
 #c
 
 #startm AD_STD_COMMENT_IFC_HEADER 00
-//
-// In addition to the specific error results listed for each method,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.\
+///
+/// In addition to the specific error results listed for each method,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.\
 #endm
 
 #startm AD_STD_COMMENT_IFC_INIT 00
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize() called on it through
-//     this object's primary interface.  Note that IAAFObject is a
-//     primary interface for an abstract class, so it is not
-//     appropriate for the Initialize() method to exist in this
-//     interface.  The Initialize() method is available through the
-//     concrete object's primary interface.\
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize() called on it through
+///     this object's primary interface.  Note that IAAFObject is a
+///     primary interface for an abstract class, so it is not
+///     appropriate for the Initialize() method to exist in this
+///     interface.  The Initialize() method is available through the
+///     concrete object's primary interface.\
 #endm
 
 #startm AD_STD_COMMENT_IFC_STUB 00
@@ -1603,41 +1550,41 @@ AD_CLASS_END\
 
 
 #startm AD_STD_COMMENT_METH_ADDREF 01
-//
-  // *%01 is AddRef()ed before it is returned.\
+///
+  /// *%01 is AddRef()ed before it is returned.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_HEADER 00
-//
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)\
+///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)\
 #endm
 
 #startm AD_STD_COMMENT_METH_STUB 00
-//
-  // NOTE! Stub only.   Implementation not yet added.\
+///
+  /// NOTE! Stub only.   Implementation not yet added.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_ALREADY_INIT 00
-//
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - This object has already had Initialize() called on it.\
+///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - This object has already had Initialize() called on it.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_NO_INIT 00
-//
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.\
+///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.\
 #endm
 
 #startm AD_STD_COMMENT_METH_ERR_NULL_PARAM 01
-//
-  // AAFRESULT_NULL_PARAM
-  //   - %01 arg is NULL.\
+///
+  /// AAFRESULT_NULL_PARAM
+  ///   - %01 arg is NULL.\
 #endm
 
 
@@ -1663,14 +1610,12 @@ AD_CLASS_END\
 #c Argument2: function description
 #c
 #startm AD_FUNCTION0 02
-  //***********************************************************
+  ///***********************************************************
   //
   // %01()
   //
-  // %02
-  //
-  // STDAPI %01 ();
- 
+  /// %02
+  ///
 cpp_quote("STDAPI %01 ();")
 cpp_quote("")\
 #endm
@@ -1695,12 +1640,10 @@ cpp_quote("")\
   //
   // %01()
   //
-  // %07
-  // 
-  // STDAPI %01 (
-    // %06
-    // %02 .%03-adornment%04 .%03-indirection %05);
-
+  /// %07
+  ///
+  /// @param %05 %02 %06 
+  ///
 cpp_quote("STDAPI %01 (.%03-adornment%04 .%03-indirection %05);")
 cpp_quote("")\
 #endm
@@ -1726,15 +1669,11 @@ cpp_quote("")\
   //
   // %01()
   //
-  // %12
-  // 
-  // STDAPI %01 (
-    // %06
-    // %02 .%03-adornment%04 .%03-indirection %05,
-    //
-    // %11
-    // %07 .%08-adornment%09 .%08-indirection %10);
-
+  /// %12
+  ///
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// 
 cpp_quote("STDAPI %01 (")
 cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
 cpp_quote("          .%08-adornment%09 .%08-indirection %10);")
@@ -1763,18 +1702,12 @@ cpp_quote("")\
   //
   // %01()
   //
-  // %17
-  // 
-  // STDAPI %01 (
-    //  %06
-    //  %02 .%03-adornment%04 .%03-indirection %05,
-    //
-    //  %11
-    //  %07 .%08-adornment%09 .%08-indirection %10,
-    //
-    //  %16
-    //  %12 .%13-adornment%14 .%13-indirection %15);
-
+  /// %17
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// 
 cpp_quote("STDAPI %01 (")
 cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
 cpp_quote("          .%08-adornment%09 .%08-indirection %10,")
@@ -1805,21 +1738,13 @@ cpp_quote("")\
   //
   // %01()
   //
-  // %22
-  // 
-  // STDAPI %01 (
-    //  %06
-    //  %02 .%03-adornment%04 .%03-indirection %05,
-    //
-    //  %11
-    //  %07 .%08-adornment%09 .%08-indirection %10,
-    //
-    //  %16
-    //  %12 .%13-adornment%14 .%13-indirection %15,
-    //
-    //  %21
-    //  %17 .%18-adornment%19 .%18-indirection %20);
-
+  /// %22
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  ///
 cpp_quote("STDAPI %01 (")
 cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
 cpp_quote("          .%08-adornment%09 .%08-indirection %10,")
@@ -1852,24 +1777,14 @@ cpp_quote("")\
   //
   // %01()
   //
-  // %27
-  // 
-  // STDAPI %01 (
-    //  %06
-    //  %02 .%03-adornment%04 .%03-indirection %05,
-    //
-    //  %11
-    //  %07 .%08-adornment%09 .%08-indirection %10,
-    //
-    //  %16
-    //  %12 .%13-adornment%14 .%13-indirection %15,
-    //
-    //  %21
-    //  %17 .%18-adornment%19 .%18-indirection %20,
-    //
-    //  %26
-    //  %22 .%23-adornment%24 .%23-indirection %25);
-
+  /// %27
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  ///
 cpp_quote("STDAPI %01 (")
 cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
 cpp_quote("          .%08-adornment%09 .%08-indirection %10,")
@@ -1904,27 +1819,15 @@ cpp_quote("")\
   //
   // %01()
   //
-  // %32
-  // 
-  // STDAPI %01 (
-    //  %06
-    //  %02 .%03-adornment%04 .%03-indirection %05,
-    //
-    //  %11
-    //  %07 .%08-adornment%09 .%08-indirection %10,
-    //
-    //  %16
-    //  %12 .%13-adornment%14 .%13-indirection %15,
-    //
-    //  %21
-    //  %17 .%18-adornment%19 .%18-indirection %20,
-    //
-    //  %26
-    //  %22 .%23-adornment%24 .%23-indirection %25,
-    //
-    //  %31
-    //  %27 .%28-adornment%20 .%28-indirection %30);
-
+  /// %32
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  /// @param %30 %27 %31
+  ///
 cpp_quote("STDAPI %01 (")
 cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
 cpp_quote("          .%08-adornment%09 .%08-indirection %10,")
@@ -1961,30 +1864,16 @@ cpp_quote("")\
   //
   // %01()
   //
-  // %37
-  // 
-  // STDAPI %01 (
-    //  %06
-    //  %02 .%03-adornment%04 .%03-indirection %05,
-    //
-    //  %11
-    //  %07 .%08-adornment%09 .%08-indirection %10,
-    //
-    //  %16
-    //  %12 .%13-adornment%14 .%13-indirection %15,
-    //
-    //  %21
-    //  %17 .%18-adornment%19 .%18-indirection %20,
-    //
-    //  %26
-    //  %22 .%23-adornment%24 .%23-indirection %25,
-    //
-    //  %31
-    //  %27 .%28-adornment%20 .%28-indirection %30,
-    //
-    //  %36
-    //  %32 .%33-adornment%25 .%33-indirection %35);
-
+  /// %37
+  /// 
+  /// @param %05 %02 %06
+  /// @param %10 %07 %11
+  /// @param %15 %12 %16
+  /// @param %20 %17 %21
+  /// @param %25 %22 %26
+  /// @param %30 %27 %31
+  /// @param %35 %32 %36
+  ///
 cpp_quote("STDAPI %01 (")
 cpp_quote("          .%03-adornment%04 .%03-indirection %05,")
 cpp_quote("          .%08-adornment%09 .%08-indirection %10,")

@@ -31,28 +31,28 @@ AAFSegment\
 #c
 AD_HEAD
 
-AD_IDL(//
-// The IAAFEvent interface is implemented by objects which represent
-// a text comment\, a trigger\, or an area in the image that has an
-// associated interactive action.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that IAAFMobSlot is a
-//     primary interface for an abstract class\, so it is not
-//     appropriate for the Initialize\(\) method to exist in this
-//     interface.  The Initialize\(\) method is available through the
-//     concrete object's primary interface.
-// 
-//)
+AD_IDL(///
+/// The IAAFEvent interface is implemented by objects which represent
+/// a text comment\, a trigger\, or an area in the image that has an
+/// associated interactive action.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.  Note that IAAFMobSlot is a
+///     primary interface for an abstract class\, so it is not
+///     appropriate for the Initialize\(\) method to exist in this
+///     interface.  The Initialize\(\) method is available through the
+///     concrete object's primary interface.
+/// 
+///)
 
 AD_CLASS_UUID(e684d78f, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
@@ -65,22 +65,22 @@ AD_METHOD1(GetPosition,
 		pPosition,
 		Position property value,
 		This method will return the Position of this event.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pPosition pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPosition arg is NULL.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pPosition pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPosition arg is NULL.)
 
 AD_METHOD1(SetPosition,
 		[in],
@@ -88,16 +88,16 @@ AD_METHOD1(SetPosition,
 		Position,
 		Position property value,
 		This method will set the Position of this event.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\).
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.)
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\).
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Comment,

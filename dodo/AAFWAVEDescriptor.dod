@@ -31,41 +31,41 @@ AAFFileDescriptor\
 #c
 #c #import ./AAFFileDescriptor.exp
 AD_HEAD
-AD_IDL(//
-// The IAAFWaveDescriptor interface is implemented by objects which
-// describe audio content data formatted according to the RIFF
-// Waveform Audio File Format \(WAVE\).
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The IAAFWaveDescriptor interface is implemented by objects which
+/// describe audio content data formatted according to the RIFF
+/// Waveform Audio File Format \(WAVE\).
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_CLASS_UUID(4c2e1691, 8ae6, 11d2, 81, 3c, 00, 60, 97, 31, 01, 72)
 
 AD_DEFAULT_UUID(4c2e1692, 8ae6, 11d2, 81, 3c, 00, 60, 97, 31, 01, 72)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty
-  // IAAFWaveDescriptor-supporting object.  This method must be
-  // called after allocation\, and before any other method can be
-  // called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  /// IAAFWaveDescriptor-supporting object.  This method must be
+  /// called after allocation\, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
 
 
 AD_XMETHOD2(GetSummary,
@@ -80,24 +80,24 @@ AD_XMETHOD2(GetSummary,
 				pSummary,
 				Preallocated buffer to hold the WAVE file information,
 			Gets a copy of the WAVE file information without the media.
-  // 
-  // Succeeds if all of the following are true:
-  // - pSummary is a valid pointer.
-  // - The size of the buffer is large enough to hold the WAVE file
-  //   information.
-  // 
-  // If this method fails pSummary will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSummary arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - The buffer is too small to hold the WAVE file information.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pSummary is a valid pointer.
+  /// - The size of the buffer is large enough to hold the WAVE file
+  ///   information.
+  /// 
+  /// If this method fails pSummary will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSummary arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - The buffer is too small to hold the WAVE file information.)
 
 
 AD_XMETHOD1(GetSummaryBufferSize,
@@ -107,20 +107,20 @@ AD_XMETHOD1(GetSummaryBufferSize,
 			pSize,
 			required buffer size,
 			Returns the size of the buffer required for the GetSummary\(\)
-  // method.  The value is placed into the location specified by pSize.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSize pointer is valid.
-  //
-  // If this method fails nothing will be written to *pSize.
-  //
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSize arg is NULL.)
+  /// method.  The value is placed into the location specified by pSize.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSize pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pSize.
+  ///
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize arg is NULL.)
 
 
 AD_XMETHOD2(SetSummary,
@@ -135,20 +135,20 @@ AD_XMETHOD2(SetSummary,
 				pSummary,
 				buffer containing value,
 			Sets the WAVE file information.
-  // 
-  // Succeeds if all of the following are true:
-  // - pSummary is a valid pointer
-  // 
-  // If this method fails the summary property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSummary arg is NULL.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pSummary is a valid pointer
+  /// 
+  /// If this method fails the summary property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSummary arg is NULL.)
 
 
 AD_XCLASS_END(Concrete, StoredObject)

@@ -34,47 +34,47 @@ AD_HEAD
 
 AD_FORWARD_DECLARATION(AAFEssenceFormat)
 
-AD_IDL(//
-// The AAFMultiEssenceCodec interface describes the calls of a plugin
-// which handles encoding media in a particular file format\, with
-// optional compression.  These methods are used internally by the SDK\,
-// and are not exported through the client interface.
-//
-// The AAFPluginManager keeps a copy of each codec in a table\, along
-// with cached copies of pertinant metadata about the codec\, and
-// instantiates a copy of the codec for each media stream.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-//
-// AAFRESULT_NULL_PARAM
-//   - One of the passed in pointers is NULL.
-//
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The AAFMultiEssenceCodec interface describes the calls of a plugin
+/// which handles encoding media in a particular file format\, with
+/// optional compression.  These methods are used internally by the SDK\,
+/// and are not exported through the client interface.
+///
+/// The AAFPluginManager keeps a copy of each codec in a table\, along
+/// with cached copies of pertinant metadata about the codec\, and
+/// instantiates a copy of the codec for each media stream.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+///
+/// AAFRESULT_NULL_PARAM
+///   - One of the passed in pointers is NULL.
+///
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_CLASS_UUID(7F93992C, DDA3, 11d3, 80, 08, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(7F93992D, DDA3, 11d3, 80, 08, 00, 10, 4b, c9, 15, 6d)
 AD_XCLASS_BEGIN(Abstract, Transient)
 
-AD_IDL(//
-	//**************
-	// Meta codec functions.  Called to plug a codec into the SDK\, but
-	// NOT for each instance of a codec.
-	//)
+AD_IDL(///
+	///**************
+	/// Meta codec functions.  Called to plug a codec into the SDK\, but
+	/// NOT for each instance of a codec.
+	///)
 
 	
-AD_IDL(//
-	//**************
-	// General purpose codec functions\, always callable \(whether or
-	// not Open or Create have been called.\)  These are called by
-	// AAFEssenceAccess to before the stream is actually opened\, and
-	// therefore may not rely on data which is created during open or
-	// create.  This is why they take so many parameters.
-	//)
+AD_IDL(///
+	///**************
+	/// General purpose codec functions\, always callable \(whether or
+	/// not Open or Create have been called.\)  These are called by
+	/// AAFEssenceAccess to before the stream is actually opened\, and
+	/// therefore may not rely on data which is created during open or
+	/// create.  This is why they take so many parameters.
+	///)
 
 
 AD_XMETHOD6(MultiCreate,
@@ -109,24 +109,24 @@ AD_XMETHOD6(MultiCreate,
 			createParms,
 			Here are the create parameters,
      Initalize the stream to be of the correct format with no data and
-  // default metadata\, attach the correct type of EssenceDescriptor
-  // to the fileMob\, and file in the default metadata on the
-  // descriptor also.  Prepare the stream for writing the first sample
-  // of data.
-  // 
-  // This method should return only the following codes.  If more than
-  // one of the listed errors is in effect\, it should return the
-  // first one encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - fileMob\, stream or createParms is null.
-  //
-  // AAFRESULT_STREAM_FULL
-  //   - The essence can not be written because of a fault such as a
-  //     disk full error in the underlying operating system.)
+  /// default metadata\, attach the correct type of EssenceDescriptor
+  /// to the fileMob\, and file in the default metadata on the
+  /// descriptor also.  Prepare the stream for writing the first sample
+  /// of data.
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect\, it should return the
+  /// first one encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - fileMob\, stream or createParms is null.
+  ///
+  /// AAFRESULT_STREAM_FULL
+  ///   - The essence can not be written because of a fault such as a
+  ///     disk full error in the underlying operating system.)
 
 
 AD_XMETHOD4(MultiOpen,
@@ -151,25 +151,25 @@ AD_XMETHOD4(MultiOpen,
 			compEnable,
 			optionally decompressing,
      Read the metadata from the essence descriptor and\/or the
-  // formatted data\, and prepare the stream for reading the first
-  // sample of data.
-  // 
-  // This method should return only the following codes.  If more than
-  // one of the listed errors is in effect\, it should return the
-  // first one encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - fileMob or stream  is null.)
+  /// formatted data\, and prepare the stream for reading the first
+  /// sample of data.
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect\, it should return the
+  /// first one encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - fileMob or stream  is null.)
 	
 
-AD_IDL(//
-	//**************
-	// Essence access codec functions\, MultiOpen or MultiCreate must have been
-	// called.
-	//)
+AD_IDL(///
+	///**************
+	/// Essence access codec functions\, MultiOpen or MultiCreate must have been
+	/// called.
+	///)
 
 
 
@@ -196,33 +196,33 @@ AD_XMETHOD4(WriteBlocks,
 			pResultParm,
 			One or more blocks containing results,
      Write blocks from one or more buffers\, interleaving if needed.
-  // 
-  // This method should return only the following codes.  If more than
-  // one of the listed errors is in effect\, it should return the
-  // first one encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_ZERO_SAMPLESIZE
-  //	 - The sample size of the stream has not been set.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTransferParm or pResultParm is null.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - One of the supplied buffers is not large enough to hold the
-  //     given number of samples.
-  //
-  // AAFRESULT_CODEC_CHANNELS
-  //   - SPecified channel numbers are out of range
-  //
-  // AAFRESULT_XFER_DUPCH
-  //   - The SDK passed in the same channel number on two blocks
-  //
-  // AAFRESULT_MULTI_WRITELEN
-  //   - The length fields of the channels must specify an identical
-  //     length of clock time.)
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect\, it should return the
+  /// first one encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ZERO_SAMPLESIZE
+  ///	 - The sample size of the stream has not been set.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTransferParm or pResultParm is null.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - One of the supplied buffers is not large enough to hold the
+  ///     given number of samples.
+  ///
+  /// AAFRESULT_CODEC_CHANNELS
+  ///   - SPecified channel numbers are out of range
+  ///
+  /// AAFRESULT_XFER_DUPCH
+  ///   - The SDK passed in the same channel number on two blocks
+  ///
+  /// AAFRESULT_MULTI_WRITELEN
+  ///   - The length fields of the channels must specify an identical
+  ///     length of clock time.)
 
 AD_XMETHOD4(ReadBlocks,
 			[in],
@@ -246,29 +246,29 @@ AD_XMETHOD4(ReadBlocks,
 			pResultParm,
 			One or more blocks containing results,
      Read blocks into one or more buffers\, de-interleaving if needed.
-  // 
-  // This method should return only the following codes.  If more than
-  // one of the listed errors is in effect\, it should return the
-  // first one  encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTransferParm is null.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - The buffer is not large enough to hold the data
-  //
-  // AAFRESULT_CODEC_CHANNELS
-  //   - SPecified channel numbers are out of range
-  //
-  // AAFRESULT_XFER_DUPCH
-  //   - The SDK passed in the same channel number on two blocks
-  //
-  // AAFRESULT_END_OF_DATA
-  //   - Hit either the end-of-file on a raw essence file\, or the
-  //     end of the essence property.  The bytesRead fields inside of
-  //     pTransferParm correctly reflect the number of bytes and
-  //     complete samples on each track.)
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect\, it should return the
+  /// first one  encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTransferParm is null.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - The buffer is not large enough to hold the data
+  ///
+  /// AAFRESULT_CODEC_CHANNELS
+  ///   - SPecified channel numbers are out of range
+  ///
+  /// AAFRESULT_XFER_DUPCH
+  ///   - The SDK passed in the same channel number on two blocks
+  ///
+  /// AAFRESULT_END_OF_DATA
+  ///   - Hit either the end-of-file on a raw essence file\, or the
+  ///     end of the essence property.  The bytesRead fields inside of
+  ///     pTransferParm correctly reflect the number of bytes and
+  ///     complete samples on each track.)
 AD_XCLASS_END(Abstract, Transient)

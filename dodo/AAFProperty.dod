@@ -30,9 +30,9 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is used to access instances of properties contained
-// in AAF persistent objects.
+AD_IDL(///
+/// This interface is used to access instances of properties contained
+/// in AAF persistent objects.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFTypeDef)
@@ -49,19 +49,19 @@ AD_XMETHOD1(GetDefinition,
 			This property's definition,
 
             Returns the definition of this property.
-  //
-  // Succeeds if:
-  // - This object has already been Initialize\(\)d.
-  // - The ppPropDef pointer is valid.
-  // - The associated property definition can be found in the
-  //   dictionary.
+  ///
+  /// Succeeds if:
+  /// - This object has already been Initialize\(\)d.
+  /// - The ppPropDef pointer is valid.
+  /// - The associated property definition can be found in the
+  ///   dictionary.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppPropDef\)
-  //
-  // AAFRESULT_BAD_PROP
-  //   - The definition for this property could not be found in the
-  //     dictionary.)
+  ///
+  /// AAFRESULT_BAD_PROP
+  ///   - The definition for this property could not be found in the
+  ///     dictionary.)
 
 
 AD_XMETHOD1(GetValue,
@@ -72,14 +72,14 @@ AD_XMETHOD1(GetValue,
 		    The Property Value object associated with this property.,
 
 		    Returns the Property Value object associated with this property.
-  //
-  // Succeeds if:
-  // - This object has already been Initialize\(\)d.
-  // - The ppPval pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - This object has already been Initialize\(\)d.
+  /// - The ppPval pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppValue\)
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - The given property is optional and not present.)
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - The given property is optional and not present.)
 AD_XCLASS_END(Concrete, Transient)

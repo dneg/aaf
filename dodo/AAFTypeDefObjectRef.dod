@@ -31,9 +31,9 @@ AAFTypeDef\
 #c
 #import ./AAFTypeDef.exp
 AD_HEAD
-AD_IDL(//
-// This interface is used to define Object references \(either strong
-// or weak\) used in AAF persistent objects.
+AD_IDL(///
+/// This interface is used to define Object references \(either strong
+/// or weak\) used in AAF persistent objects.
 AD_STD_COMMENT_IFC_HEADER)
 
 AD_FORWARD_DECLARATION(AAFObject)
@@ -53,12 +53,12 @@ AD_XMETHOD1(GetObjectType\,
 			class def of objects permitted to be referenced\,
 
      Returns the class def representing objects to which this type def
-  // can refer.  The returned type def is the class definition of the
-  // least-derived type which is permissible to be represented.
-  //
-  // Succeeds if:
-  // - this object has been Initialize\\\(\\\)d.
-  // - The ppObjType pointer is valid.
+  /// can refer.  The returned type def is the class definition of the
+  /// least-derived type which is permissible to be represented.
+  ///
+  /// Succeeds if:
+  /// - this object has been Initialize\\\(\\\)d.
+  /// - The ppObjType pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\\(ppObjType\\\)\))
@@ -77,12 +77,12 @@ AD_XMETHOD2(CreateValue,
 			newly created property value,
 
      Creates a property value which contains an object reference.
-  // Initializes it to refer to the given object\, and returns the
-  // newly-created property value in ppPropVal.
-  //
-  // Succeeds if:
-  // - The pObj pointer is valid.
-  // - The ppPropVal pointer is valid.
+  /// Initializes it to refer to the given object\, and returns the
+  /// newly-created property value in ppPropVal.
+  ///
+  /// Succeeds if:
+  /// - The pObj pointer is valid.
+  /// - The ppPropVal pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pObj or ppPropVal\))
@@ -107,12 +107,12 @@ AD_GETOBJECT3(GetObject,
 			pointer to object value,
 
      Returns the object contained in the named property value.
-  // Requires that pPropVal be a strong object reference or a weak
-  // object reference.
-  //
-  // Succeeds if:
-  // - The pPropVal pointer is valid.
-  // - The ppObject pointer is valid.
+  /// Requires that pPropVal be a strong object reference or a weak
+  /// object reference.
+  ///
+  /// Succeeds if:
+  /// - The pPropVal pointer is valid.
+  /// - The ppObject pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or ppObject\))
@@ -132,12 +132,12 @@ AD_XMETHOD2(SetObject,
 			pointer to object value,
 
      Sets the named property value to refer to the named object.
-  // Requires that pPropVal be a strong object reference or a weak
-  // object reference.
-  //
-  // Succeeds if:
-  // - The pPropVal pointer is valid.
-  // - The ppObject pointer is valid.
+  /// Requires that pPropVal be a strong object reference or a weak
+  /// object reference.
+  ///
+  /// Succeeds if:
+  /// - The pPropVal pointer is valid.
+  /// - The ppObject pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or ppObject\))

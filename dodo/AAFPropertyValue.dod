@@ -30,11 +30,11 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is used to access the values of properties contained
-// in AAF persistent objects.  Values may be simple \(e.g. integer\)\,
-// structured \(e.g. aafTimecode_t\)\, other AAF persistent objects\,
-// media\, or arrays of other types.
+AD_IDL(///
+/// This interface is used to access the values of properties contained
+/// in AAF persistent objects.  Values may be simple \(e.g. integer\)\,
+/// structured \(e.g. aafTimecode_t\)\, other AAF persistent objects\,
+/// media\, or arrays of other types.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFTypeDef)
 AD_CLASS_UUID(83057d71, 9691, 11d2, aa, 7f, 80, e6, aa, 00, 00, 00)
@@ -49,14 +49,14 @@ AD_XMETHOD1(GetType,
 			The type definition associated with this property value,
 
      Returns the type definition associated with this property value.
-  // If this Property Value is not of a recognized type \(such as from
-  // a damaged or incorrectly construct file\) this method will return
-  // a raw access type which can be used to access the property data
-  // in a raw manner.
-  //
-  // Succeeds if:
-  // - The ppTypeDef pointer is valid.
-  // - The associated type definition can be found in the dictionary.
+  /// If this Property Value is not of a recognized type \(such as from
+  /// a damaged or incorrectly construct file\) this method will return
+  /// a raw access type which can be used to access the property data
+  /// in a raw manner.
+  ///
+  /// Succeeds if:
+  /// - The ppTypeDef pointer is valid.
+  /// - The associated type definition can be found in the dictionary.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
 
@@ -69,17 +69,17 @@ AD_XMETHOD1(IsDefinedType,
 			result,
 
      Returns false if this property value's type is not \(necessarily\)
-  // the one which was defined for it.  That may be the case if this
-  // property value was read from a damaged file where type
-  // information was not available; in that case GetType\(\) will return
-  // the raw access type for this value.
-  //
-  // If this property value's type is the one which was defined for
-  // it\, this method will return true and GetType\(\) will return that
-  // defined type for this value.
-  //
-  // Succeeds if:
-  // - The pIsDefined pointer is valid.
+  /// the one which was defined for it.  That may be the case if this
+  /// property value was read from a damaged file where type
+  /// information was not available; in that case GetType\(\) will return
+  /// the raw access type for this value.
+  ///
+  /// If this property value's type is the one which was defined for
+  /// it\, this method will return true and GetType\(\) will return that
+  /// defined type for this value.
+  ///
+  /// Succeeds if:
+  /// - The pIsDefined pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pIsDefined\))
 AD_XCLASS_END(Concrete, Transient)

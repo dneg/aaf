@@ -31,19 +31,19 @@ AAFEssenceDescriptor\
 #c
 #c #import ./AAFEssenceDescriptor.exp
 AD_HEAD
-AD_IDL(//
-// The IAAFFilmDescriptor interface is implemented by objects which
-// describe film essence.  A FilmDescriptor object shall be the
-// EssenceDescription of a  physical Source Mob.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The IAAFFilmDescriptor interface is implemented by objects which
+/// describe film essence.  A FilmDescriptor object shall be the
+/// EssenceDescription of a  physical Source Mob.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_INCLUDE(AAFTypes)
 AD_CLASS_UUID(e58a8564, 2a3e, 11D2, bf, a4, 00, 60, 97, 11, 62, 12)
 
@@ -60,160 +60,160 @@ AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(FilmModel,
 AD_METHOD1(GetFilmFormat,
 [out],aafFilmType_t*,pFilmFormat, pointer to the filmFormat,
 	 Gets the film format.
-  //
-  // Valid values include:
-  //  - kFt35MM
-  //  - kFt16MM
-  //  - kFt8MM
-  //  - kFt65MM
-  // 
-  // This method succeeds if all of the following are true:
-  // - the pFilmFormat pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFilmFormat arg is NULL.)
+  ///
+  /// Valid values include:
+  ///  - kFt35MM
+  ///  - kFt16MM
+  ///  - kFt8MM
+  ///  - kFt65MM
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - the pFilmFormat pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFilmFormat arg is NULL.)
 
 
 AD_METHOD1(GetFrameRate,
 [out],aafUInt32*,pRate,Frame Rate,
      Get the frame rate of the film.
-  // 
-  // This method succeeds if all of the following are true:
-  // - the pRate pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pRate parameter is NULL.)
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - the pRate pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pRate parameter is NULL.)
 
 
 AD_METHOD1(GetPerfPerFrame,
 [out],aafUInt8*,pPerfPerFrame,Perforations per frame,
      Get the number of perforations per frame.
-  // 
-  // This method succeeds if all of the following are true:
-  // - the pPerfPerFrame pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPerfPerFrame parameter is NULL.)
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - the pPerfPerFrame pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPerfPerFrame parameter is NULL.)
 
 
 AD_METHOD1(GetFilmAspectRatio,
 [out],aafRational_t*,pAspectRatio,Film Aspect Ratio,
      Get the image aspect ratio.
-  // 
-  // This method succeeds if all of the following are true:
-  // - the pAspectRatio pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pAspectRatio arg is NULL.)
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - the pAspectRatio pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pAspectRatio arg is NULL.)
 
 
 AD_XMETHOD1(SetFilmFormat,
 [in],enumIn,aafFilmType_t,filmFormat,Film Format,
      Sets the film format of the film.
-  // Valid values include:
-  //  - kFt35MM
-  //  - kFt16MM
-  //  - kFt8MM
-  //  - kFt65MM
-  // 
-  // This method succeeds if all of the following are true:
-  // - formFactor represents a valid format.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_BAD_TYPE
-  //	- filmFormat is invalid.)
+  /// Valid values include:
+  ///  - kFt35MM
+  ///  - kFt16MM
+  ///  - kFt8MM
+  ///  - kFt65MM
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - formFactor represents a valid format.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_BAD_TYPE
+  ///	- filmFormat is invalid.)
 
 
 AD_METHOD1(SetFrameRate,
 [in],aafUInt32,rate,Frame Rate,
 			Set the frame rate of the film.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.)
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 
 AD_METHOD1(SetPerfPerFrame,
 [in],aafUInt8,perfPerFrame,Perforations per frame,
 		Set the number of perforations per frame.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.)
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 
 AD_METHOD1(SetFilmAspectRatio,
 [in],aafRational_t,aspectRatio,Film Aspect Ratio,
 		Set the image aspect ratio.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.)
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.)
 AD_XCLASS_END(Concrete, StoredObject)

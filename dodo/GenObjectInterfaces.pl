@@ -217,23 +217,24 @@ sub printSupportedInterfaces {
   if (($name ne 'AAFRoot' && $name ne 'AAFMetaDictionary') ) {
     $obj = $objects{$name};
     if (defined($obj) && ($obj->parent ne 'AAFRoot' || defined($obj->ex))) {
-      print "//\n";	
-      print "// Objects that implement I", $obj->name, " also implement the following interfaces:\n";
+      print "///\n";	
+      print "/// Objects that implement I", $obj->name, " also implement the following interfaces:\n";
       
       if (defined($obj->ex)) {
-        print "//  - ", $obj->ex, "\n";
+        print "///  - ", $obj->ex, "\n";
       }
       
       while ($obj->parent ne 'AAFRoot') {
         $obj = $objects{$obj->parent};
-        print "//  - I", $obj->name, "\n";
+        print "///  - I", $obj->name, "\n";
 
         if (defined($obj->ex)) {
-          print "//  - ", $obj->ex, "\n";
+          print "///  - ", $obj->ex, "\n";
         }
       }
       
-      print "\n";
+      # JD XXX
+      #print "\n";
     }
   }
 }

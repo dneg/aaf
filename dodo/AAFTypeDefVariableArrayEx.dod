@@ -31,9 +31,9 @@ AAFTypeDef\
 #c
 #import ./AAFTypeDef.exp
 AD_HEAD
-AD_IDL(//
-// This interface is an extension to the previously definined TypeDefVariableArray
-// interface.  Hence the suffix "Ex" to the name. Additional methods are now included.
+AD_IDL(///
+/// This interface is an extension to the previously definined TypeDefVariableArray
+/// interface.  Hence the suffix "Ex" to the name. Additional methods are now included.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
@@ -58,12 +58,12 @@ AD_XMETHOD2(PrependElement,
 			value to be prepended to this array,
 
 			Prepends an element to the end of the array\, setting it to the
-  // value given in pMemberPropVal.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - pInPropVal pointer is valid.
-  // - pMemberPropVal pointer is valid.
+  /// value given in pMemberPropVal.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pInPropVal pointer is valid.
+  /// - pMemberPropVal pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or pMemberPropVal\))
 
@@ -85,19 +85,19 @@ AD_XMETHOD2(RemoveElement,
 
 
      Remove an element from the Array\, given an index.
-  // Index is zero-based\,
-  // and must be less than the value returned by GetCount\(\).
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
+  /// Index is zero-based\,
+  /// and must be less than the value returned by GetCount\(\).
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - the index exists in this array type def.
+  /// - The pInPropVal pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pInPropVal\)
-  //
-  // AAFRESULT_BADINDEX
-  //   - The given index is out of range for this array type def.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - The given index is out of range for this array type def.)
 
 
 
@@ -122,22 +122,22 @@ AD_XMETHOD3(InsertElement,
 			value to be inserted into this array,
 
      Inserts the value of the single\, indicated element of the fixed
-  // array contained in pInPropVal\, to the value contained in
-  // pMemberPropVal.  Index is zero-based\, and must be less than the
-  // value returned by GetCount\(\).  Property value must be of the
-  // same type as returned by GetType\(\).
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
-  // - The ppOutPropVal pointer is valid.
+  /// array contained in pInPropVal\, to the value contained in
+  /// pMemberPropVal.  Index is zero-based\, and must be less than the
+  /// value returned by GetCount\(\).  Property value must be of the
+  /// same type as returned by GetType\(\).
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - the index exists in this array type def.
+  /// - The pInPropVal pointer is valid.
+  /// - The ppOutPropVal pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or ppOutPropVal\)
-  //
-  // AAFRESULT_BADINDEX
-  //   - The given index is out of range for this array type def.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - The given index is out of range for this array type def.)
 
 
 

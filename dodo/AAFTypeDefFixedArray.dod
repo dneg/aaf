@@ -31,9 +31,9 @@ AAFTypeDef\
 #c
 #import ./AAFTypeDef.exp
 AD_HEAD
-AD_IDL(//
-// This interface is used to define fixed-sized Array types used in
-// AAF persistent objects.
+AD_IDL(///
+/// This interface is used to define fixed-sized Array types used in
+/// AAF persistent objects.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_FORWARD_DECLARATION(EnumAAFPropertyValues)
@@ -67,30 +67,30 @@ AD_XMETHOD4(Initialize,
 			friendly name of this type definition,
 
      Initializes this type def to contain elements of the given type\,
-  // and have the given fixed size.  Note that it is only possible to
-  // use certain types as the element type.  Those permissible types
-  // include:
-  // - AAFTypeDefInt
-  // - AAFTypeDefRecord
-  // - AAFTypeDefEnum
-  // - AAFTypeDefExtEnum
-  // - AAFTypeDefFixedArray
-  //
-  // This method must be called after allocation\, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  // - pID is a valid pointer.
-  // - pTypeDef is a valid pointer.
-  // - pTypeName is a valid pointer.
-  // - element type is permissible for use in a FixedArray.
+  /// and have the given fixed size.  Note that it is only possible to
+  /// use certain types as the element type.  Those permissible types
+  /// include:
+  /// - AAFTypeDefInt
+  /// - AAFTypeDefRecord
+  /// - AAFTypeDefEnum
+  /// - AAFTypeDefExtEnum
+  /// - AAFTypeDefFixedArray
+  ///
+  /// This method must be called after allocation\, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  /// - pID is a valid pointer.
+  /// - pTypeDef is a valid pointer.
+  /// - pTypeName is a valid pointer.
+  /// - element type is permissible for use in a FixedArray.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pTypeDef or pTypeName\)
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - an illegal element type was given.)
+  ///
+  /// AAFRESULT_BAD_TYPE
+  ///   - an illegal element type was given.)
 
 
 AD_XMETHOD1(GetType,
@@ -101,10 +101,10 @@ AD_XMETHOD1(GetType,
 			type of elements in this array,
 
      Returns the type of elements in this array.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - ppTypeDef is a valid pointer.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - ppTypeDef is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
@@ -118,10 +118,10 @@ AD_XMETHOD1(GetCount,
 			count of elements in this array,
 
      Returns number of elements in this array.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - pCount is a valid pointer.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pCount is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
@@ -134,7 +134,7 @@ AD_X2METHOD3(CreateValueFromValues,
 			 AAFPropertyValue,
 			 ppElementValues,
        array of property values for elements of array value which
-    // is to be created.,
+  /// is to be created.,
 			 numElements,
 			 xxx,
 
@@ -155,24 +155,24 @@ AD_X2METHOD3(CreateValueFromValues,
 			 xxx,
 
      Creates a property value which contains a fixed array type.  The
-  // array elements in the property value are initialized to contain
-  // the given values\, passed in the pElementValues array.
-  // numElements\, which indicates the size of the pElementValues
-  // array\, must match the value returned by GetCount\(\).  Returns
-  // the newly-created property value in ppPropVal.
-  //
-  // Succeeds if all of the following are true:
-  // - the pElementValues pointer is valid.
-  // - the ppPropVal pointer is valid.
-  // - numElements matches the number of elements in this array
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// array elements in the property value are initialized to contain
+  /// the given values\, passed in the pElementValues array.
+  /// numElements\, which indicates the size of the pElementValues
+  /// array\, must match the value returned by GetCount\(\).  Returns
+  /// the newly-created property value in ppPropVal.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pElementValues pointer is valid.
+  /// - the ppPropVal pointer is valid.
+  /// - numElements matches the number of elements in this array
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pElementValues or ppPropVal\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - numElements does not match GetCount\(\).)
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - numElements does not match GetCount\(\).)
 
 
 AD_XMETHOD3(CreateValueFromCArray,
@@ -195,29 +195,29 @@ AD_XMETHOD3(CreateValueFromCArray,
 			newly created property value,
 
      Creates a property value which contains a fixed array type.  The
-  // array elements in the property value are initialized from data in
-  // a C array which is pointed to by pInitData.  Requires that any
-  // structures declared within this array typedef have had their
-  // offsets registered with that type.  Returns the newly-created
-  // property value in ppPropVal.
-  //
-  // Succeeds if all of the following are true:
-  // - the pInitData pointer is valid.
-  // - the ppPropVal pointer is valid.
-  // - initDataSize indicates pInitData is the correct size.
-  // - compile-time struct has had its member offests registered.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// array elements in the property value are initialized from data in
+  /// a C array which is pointed to by pInitData.  Requires that any
+  /// structures declared within this array typedef have had their
+  /// offsets registered with that type.  Returns the newly-created
+  /// property value in ppPropVal.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pInitData pointer is valid.
+  /// - the ppPropVal pointer is valid.
+  /// - initDataSize indicates pInitData is the correct size.
+  /// - compile-time struct has had its member offests registered.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInitData or ppPropVal\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - initDataSize indicates pInitData is of the wrong size.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - any contained struct offsets have not yet been registered for
-  //    that typedef.)
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - initDataSize indicates pInitData is of the wrong size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - any contained struct offsets have not yet been registered for
+  ///    that typedef.)
 
 
 AD_XMETHOD3(GetElementValue,
@@ -240,21 +240,21 @@ AD_XMETHOD3(GetElementValue,
 			value that is read,
 
      Gets a single property value corresponding to the indexed array
-  // element.  Places a property value representing the array element
-  // identified by the index into ppOutPropval.  Index is zero-based\,
-  // and must be less than the value returned by GetCount\(\).
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
-  // - The ppOutPropVal pointer is valid.
+  /// element.  Places a property value representing the array element
+  /// identified by the index into ppOutPropval.  Index is zero-based\,
+  /// and must be less than the value returned by GetCount\(\).
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - the index exists in this array type def.
+  /// - The pInPropVal pointer is valid.
+  /// - The ppOutPropVal pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pInPropVal or ppOutPropVal\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - The given index is out of range for this array type def.)
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - The given index is out of range for this array type def.)
 
 
 AD_XMETHOD3(GetCArray,
@@ -277,27 +277,27 @@ AD_XMETHOD3(GetCArray,
 			size of pData buffer in bytes,
 
      Copies all the array data contained in the given property value\,
-  // interpreted as a fixed array of this type\, into the C array
-  // pointed to by pData.  Requires that any structures declared
-  // within this array typedef have had their offsets registered with
-  // that type.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPropVal pointer is valid.
-  // - the pData pointer is valid.
-  // - dataSize indicates pData is large enough to hold the data.
-  // - compile-time struct has had its member offests registered.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// interpreted as a fixed array of this type\, into the C array
+  /// pointed to by pData.  Requires that any structures declared
+  /// within this array typedef have had their offsets registered with
+  /// that type.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPropVal pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  /// - compile-time struct has had its member offests registered.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - dataSize indicates pData is too small.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.)
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - dataSize indicates pData is too small.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for this typedef.)
 
 
 AD_XMETHOD3(SetElementValue,
@@ -320,22 +320,22 @@ AD_XMETHOD3(SetElementValue,
 			value to be placed into this array,
 
      Sets the value of the single\, indicated element of the fixed
-  // array contained in pPropVal\, to the value contained in
-  // pMemberPropVal.  Index is zero-based\, and must be less than the
-  // value returned by GetCount\(\).  Property value must be of the
-  // same type as returned by GetType\(\).
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
-  // - The ppOutPropVal pointer is valid.
+  /// array contained in pPropVal\, to the value contained in
+  /// pMemberPropVal.  Index is zero-based\, and must be less than the
+  /// value returned by GetCount\(\).  Property value must be of the
+  /// same type as returned by GetType\(\).
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - the index exists in this array type def.
+  /// - The pInPropVal pointer is valid.
+  /// - The ppOutPropVal pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or ppOutPropVal\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - The given index is out of range for this array type def.)
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - The given index is out of range for this array type def.)
 
 
 AD_XMETHOD3(SetCArray,
@@ -358,28 +358,28 @@ AD_XMETHOD3(SetCArray,
 			size of pData buffer in bytes,
 
      Copies all the array data contained in the C array pointed to by
-  // pData into the given property value\, interpreting the data as a
-  // fixed array of this type.  Requires that any structures declared
-  // within this typedef have had their offsets registered with that
-  // type.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPropVal pointer is valid.
-  // - the pData pointer is valid.
-  // - dataSize indicates pData contains the correct amount of data.
-  // - any contained compile-time struct has had its member offests
-  //   registered.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// pData into the given property value\, interpreting the data as a
+  /// fixed array of this type.  Requires that any structures declared
+  /// within this typedef have had their offsets registered with that
+  /// type.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPropVal pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData contains the correct amount of data.
+  /// - any contained compile-time struct has had its member offests
+  ///   registered.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //  - dataSize indicates pData is not the correct size.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - offsets of any contained struct have not yet been registered.)
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///  - dataSize indicates pData is not the correct size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - offsets of any contained struct have not yet been registered.)
 
 
 AD_OVERRIDE(.method-GetTypeCategory)
@@ -398,12 +398,12 @@ AD_XMETHOD2(GetElements,
 			enumerator across property values,
 
      Returns an enumerator across elements in this set.
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - The PSetPropVal pointer is valid.
-  // - The ppEnum pointer is valid.
-  //
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - The PSetPropVal pointer is valid.
+  /// - The ppEnum pointer is valid.
+  ///
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either PSetPropVal or ppEnum\))

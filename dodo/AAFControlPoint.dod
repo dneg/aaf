@@ -30,21 +30,21 @@ AAFObject\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// The IAAFControlPoint interface is implemented by objects that store an individual point value
-// of a parameter whose value changes during the operation group.  IAAFControlPoints must be added to
-// an object which implements IAAFVaryingValue\, which is then added to the IAAFOperationGroup.
-//
-// For parameters which are constant in value during the operation group\, use IAAFConstantValue.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The IAAFControlPoint interface is implemented by objects that store an individual point value
+/// of a parameter whose value changes during the operation group.  IAAFControlPoints must be added to
+/// an object which implements IAAFVaryingValue\, which is then added to the IAAFOperationGroup.
+///
+/// For parameters which are constant in value during the operation group\, use IAAFConstantValue.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 
 
 AD_FORWARD_DECLARATION(AAFVaryingValue)
@@ -82,19 +82,19 @@ AD_XMETHOD4(Initialize,
 			buffer containing value,
 
      Initializes a new control point object to be 
-  //
-  // This method must be called after allocation\, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  // - pVaryingValue is a valid pointer.
-  // - time is a valid rational.
-  // - pValue is a valid pointer
+  ///
+  /// This method must be called after allocation\, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  /// - pVaryingValue is a valid pointer.
+  /// - time is a valid rational.
+  /// - pValue is a valid pointer
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pName or pValue\)
-  // )
+  /// )
 
 AD_METHOD1(GetTime,
 			[out\\\,retval],
@@ -102,28 +102,28 @@ AD_METHOD1(GetTime,
 			pTime,
 			Pointer to an aafRational_t,
 	Returns the position of the control point within an operation group\\\, expressed as a rational
-  // running from 0 to 1.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pTime pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pTime.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - This property does not exist in the file.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTime arg is NULL.)
+  /// running from 0 to 1.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pTime pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pTime.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - This property does not exist in the file.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTime arg is NULL.)
 
 AD_METHOD1(GetEditHint,
 			[out\\\,retval],
@@ -131,28 +131,28 @@ AD_METHOD1(GetEditHint,
 			pEditHint,
 			Pointer to an aafEditHint_t,
 			Returns the edit hint of the control point\\\, which describes how to alter the
-  // position if the AAFOperationGroup is made longer or shorter.
-  //
-  // Succeeds if all of the following are true:
-  // - the pEditHint pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pEditHint.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - This property does not exist in the file.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pEditHint arg is NULL.)
+  /// position if the AAFOperationGroup is made longer or shorter.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pEditHint pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pEditHint.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - This property does not exist in the file.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEditHint arg is NULL.)
 
 AD_XMETHOD1(GetValueBufLen,
 			[out],
@@ -162,81 +162,81 @@ AD_XMETHOD1(GetValueBufLen,
 			Pointer to an variable used to return the length,
 
 			Returns the length of buffer required for the GetValue\(\) method.
-  // The value is placed into the location specified by pLen.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.)
+  /// The value is placed into the location specified by pLen.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pLen.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLen arg is NULL.)
 
 AD_METHOD3(GetValue,
 			[in],aafUInt32,valueSize,Size of preallocated buffer,
 			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
 			[out],aafUInt32*,bytesRead,Number of actual bytes read,
 			Writes the value into the pValue buffer.  The buffer is allocated by the caller\\\,
-  // and the size of the buffer is given by valueSize.
-  // 
-  // Caller may call GetValueBufLen\\\(\\\) to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // - valueSize indicates the buffer is large enough to hold the name.
-  // 
-  // If this method fails nothing will be written to *pValue.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - valueSize indicates the buffer is too small to hold the value.)
+  /// and the size of the buffer is given by valueSize.
+  /// 
+  /// Caller may call GetValueBufLen\\\(\\\) to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// - valueSize indicates the buffer is large enough to hold the name.
+  /// 
+  /// If this method fails nothing will be written to *pValue.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - valueSize indicates the buffer is too small to hold the value.)
 
 AD_METHOD1(SetTime,
 		   [in], aafRational_t, pTime,Control Point time,
 			Sets the position of the control point within an operation group\\\, expressed as a rational
-  // running from 0 to 1.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.)
+  /// running from 0 to 1.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.)
 
 AD_XMETHOD1(SetEditHint,
 		   [in], enumIn, aafEditHint_t, editHint,Control Point Edit hint,
 		   Sets the control point Edit hint value\, which describes how to alter the
-  // position if the AAFOperationGroup is made longer or shorter.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.)
+  /// position if the AAFOperationGroup is made longer or shorter.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.)
 
 AD_XMETHOD1(GetTypeDefinition,
 			[out\,retval],
@@ -245,20 +245,20 @@ AD_XMETHOD1(GetTypeDefinition,
 			ppTypeDef,
 			Type Definition of the dataval inside of this object,
 			Places the type definition of the dataval inside this parameter into the
-  // *ppTypeDef argument.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.)
+  /// *ppTypeDef argument.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.)
 
 AD_XMETHOD2(SetValue,
 			[in], 
@@ -274,23 +274,23 @@ AD_XMETHOD2(SetValue,
 			buffer containing value,
 
 			The data value is set from a buffer of size valueSize and type.
-  //
-  // Succeeds if all of the following are true:
-  // - pTypeDef is valid and registered with the object's dictionary.
-  // - the pValue pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pTypeDef is valid and registered with the object's dictionary.
+  /// - the pValue pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.)
 
 AD_XCLASS_END(Concrete, StoredObject)
 

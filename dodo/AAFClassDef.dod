@@ -30,11 +30,11 @@ AAFMetaDefinition\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is used with an object representing an AAF class
-// definition.  The operations on a class definition include managing
-// the position of the class within the class heirarchy\, and
-// accessing property definitions associated with the class.
+AD_IDL(///
+/// This interface is used with an object representing an AAF class
+/// definition.  The operations on a class definition include managing
+/// the position of the class within the class heirarchy\, and
+/// accessing property definitions associated with the class.
 AD_STD_COMMENT_IFC_HEADER)
 
 AD_FORWARD_DECLARATION(AAFObject)
@@ -75,14 +75,14 @@ AD_XMETHOD4(Initialize,
 			can objects of this class be instantiated,
 
      Initializes this class definition object to inherit from the
-  // given parent class.  If isConcrete is set to AAFTrue\, objects of
-  // this class can be instantiated; otherwise\, it will be illegal to
-  // instantiate such objects.
-  // 
-  // Succeeds if:
-  // - The pID pointer is valid.
-  // - The pParentClass pointer is valid.
-  // - The pTypeName pointer is valid.
+  /// given parent class.  If isConcrete is set to AAFTrue\, objects of
+  /// this class can be instantiated; otherwise\, it will be illegal to
+  /// instantiate such objects.
+  /// 
+  /// Succeeds if:
+  /// - The pID pointer is valid.
+  /// - The pParentClass pointer is valid.
+  /// - The pTypeName pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pParentClass\\\, or pTypeName\))
 
@@ -94,10 +94,10 @@ AD_XMETHOD1(GetPropertyDefs,
 		    ppEnum,
 		    Property Definition enumeration,
      Returns an enumerator over all of the aaf property definitions
-  // attached to the current class.
-  // 
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
+  /// attached to the current class.
+  /// 
+  /// Succeeds if:
+  /// - The ppEnum pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
@@ -109,9 +109,9 @@ AD_XMETHOD1(CountPropertyDefs,
 			pCount,
 			number of properties contained in this class definition,
      Returns number of property definitions in this class.
-  // 
-  // Succeeds if:
-  // - The pCount pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pCount pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
@@ -154,36 +154,36 @@ AD_XMETHOD6(RegisterNewPropertyDef,
 			return pointer to newly created property def,
 
      Creates a new property definition and registers it in this class
-  // definition.  If ppPropDef is non-NULL\, will return the new
-  // property definition in ppPropDef.
-  // 
-  // Note that it is illegal to add mandatory properties to an
-  // existing \(registered\) class.  This method will allow adding
-  // either optional or mandatory properties to a class\, but they must
-  // be added to a class which has not yet been registered in the
-  // dictionary.  If this class has already been registered\, it is
-  // possible to add optional properties\, but not through this
-  // method.  Optional properties added to an existing \(registered\)
-  // class may be added through the RegisterOptionalPropertyDef\(\)
-  // method.
-  // 
-  // Succeeds if:
-  // - The pID pointer is valid.
-  // - The pName pointer is valid.
-  // - The pTypeDef pointer is valid.
-  // - This class has not already been registered in the dictionary.
-  // - The auid specified by pID has not already been registered.
+  /// definition.  If ppPropDef is non-NULL\, will return the new
+  /// property definition in ppPropDef.
+  /// 
+  /// Note that it is illegal to add mandatory properties to an
+  /// existing \(registered\) class.  This method will allow adding
+  /// either optional or mandatory properties to a class\, but they must
+  /// be added to a class which has not yet been registered in the
+  /// dictionary.  If this class has already been registered\, it is
+  /// possible to add optional properties\, but not through this
+  /// method.  Optional properties added to an existing \(registered\)
+  /// class may be added through the RegisterOptionalPropertyDef\(\)
+  /// method.
+  /// 
+  /// Succeeds if:
+  /// - The pID pointer is valid.
+  /// - The pName pointer is valid.
+  /// - The pTypeDef pointer is valid.
+  /// - This class has not already been registered in the dictionary.
+  /// - The auid specified by pID has not already been registered.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pName or pTypeDef\)
-  //
-  // AAFRESULT_OBJECT_ALREADY_ATTACHED
-  //   - This class has already been registered.
-  //
-  // AAFRESULT_ALREADY_UNIQUELY_INDENTIFED
-  //   - This class already has a unique indentifier property.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - The given ID has already been registered.)
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///   - This class has already been registered.
+  ///
+  /// AAFRESULT_ALREADY_UNIQUELY_INDENTIFED
+  ///   - This class already has a unique indentifier property.
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - The given ID has already been registered.)
 
 
 AD_XMETHOD4(RegisterOptionalPropertyDef,
@@ -212,27 +212,27 @@ AD_XMETHOD4(RegisterOptionalPropertyDef,
 			return pointer to newly created property def,
 
      Creates a new property definition and registers it in this class
-  // definition.  If ppPropDef is non-NULL\, will return the new
-  // property definition in ppPropDef.
-  //
-  // Note that it is illegal to add mandatory properties to an already
-  // existing \(registered\) class.  It is assumed that this property is
-  // being added to a class which is already registered.  If so\, it
-  // must be optional and this method will declare it so.  If it is
-  // wished to add a mandatory property\, that may be done through the
-  // RegisterNewPropertyDef\(\) method\, but that must be called on a class
-  // which is not yet registered.
-  // 
-  // Succeeds if:
-  // - The pID pointer is valid.
-  // - The pName pointer is valid.
-  // - The pTypeDef pointer is valid.
-  // - The auid specified by pID has not already been registered.
+  /// definition.  If ppPropDef is non-NULL\, will return the new
+  /// property definition in ppPropDef.
+  ///
+  /// Note that it is illegal to add mandatory properties to an already
+  /// existing \(registered\) class.  It is assumed that this property is
+  /// being added to a class which is already registered.  If so\, it
+  /// must be optional and this method will declare it so.  If it is
+  /// wished to add a mandatory property\, that may be done through the
+  /// RegisterNewPropertyDef\(\) method\, but that must be called on a class
+  /// which is not yet registered.
+  /// 
+  /// Succeeds if:
+  /// - The pID pointer is valid.
+  /// - The pName pointer is valid.
+  /// - The pTypeDef pointer is valid.
+  /// - The auid specified by pID has not already been registered.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pName or pTypeDef\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - The given ID has already been registered.)
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - The given ID has already been registered.)
 
 
 AD_XMETHOD2(LookupPropertyDef,
@@ -249,26 +249,26 @@ AD_XMETHOD2(LookupPropertyDef,
 			resulting property definition,
 
      Looks up the property definition corresponding to the named auid
-  // and returns a pointer to that property definition in ppPropDef.
-  // 
-  // Succeeds if:
-  // - The pPropID pointer is valid.
-  // - The ppPropDef pointer is valid.
-  // - the auid specified by pID has been registered as a property
-  //   definition for this class definition.
+  /// and returns a pointer to that property definition in ppPropDef.
+  /// 
+  /// Succeeds if:
+  /// - The pPropID pointer is valid.
+  /// - The ppPropDef pointer is valid.
+  /// - the auid specified by pID has been registered as a property
+  ///   definition for this class definition.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppPropDef\)
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - The given ID has not been registered as a property
-  //     definition.)
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - The given ID has not been registered as a property
+  ///     definition.)
 
 
 AD_STD_METHOD_STRING_GET_AND_SIZE(Name,
      Accesses a human-readable name for the class.  This name is not
-  // meant to be a way for programs to refer to the class\\\, as it is
-  // of undetermined length\\\, and is not checked to guarantee
-  // uniqueness.)
+  /// meant to be a way for programs to refer to the class\\\, as it is
+  /// of undetermined length\\\, and is not checked to guarantee
+  /// uniqueness.)
 
 
 AD_XMETHOD1(GetParent,
@@ -279,11 +279,11 @@ AD_XMETHOD1(GetParent,
 			parent class definition,
 
      Gets the Parent class for this object.  If there is no parent\,
-  // returns the result AAFRESULT_NO_PARENT.  The only class which has no parent will
-  // be AAFObject.
-  // 
-  // Succeeds if:
-  // - The ppClassDef pointer is valid.
+  /// returns the result AAFRESULT_NO_PARENT.  The only class which has no parent will
+  /// be AAFObject.
+  /// 
+  /// Succeeds if:
+  /// - The ppClassDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\))
 
@@ -296,10 +296,10 @@ AD_XMETHOD1(IsConcrete,
 			Can this class be instantiated,
 
      Returns true if this class can be instantiated; returns false
-  // otherwise. 
-  // 
-  // Succeeds if:
-  // - The ppClassDef pointer is valid.
+  /// otherwise. 
+  /// 
+  /// Succeeds if:
+  /// - The ppClassDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\))
 
@@ -312,10 +312,10 @@ AD_XMETHOD1(IsRoot,
 			Is this a root \(base\) class,
 
      Returns true if this class is the base of the inheritance
-  // hierarchy; returns false otherwise.
-  // 
-  // Succeeds if:
-  // - The ppClassDef pointer is valid.
+  /// hierarchy; returns false otherwise.
+  /// 
+  /// Succeeds if:
+  /// - The ppClassDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(isRoot\))
 
@@ -328,9 +328,9 @@ AD_XMETHOD1(IsUniquelyIdentified,
 			Is this a UniquelyIdentified class,
 
      Returns true if this class is uniquely identified.
-  // 
-  // Succeeds if:
-  // - The pIsUniquelyIdentified pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pIsUniquelyIdentified pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pIsUniquelyIdentified\))
 
@@ -343,32 +343,32 @@ AD_XMETHOD1(GetUniqueIdentifier,
 			The unique identifier,
 
      Returns the property definition corresponding to this class'
-  // unique identifier.
-  // 
-  // Succeeds if:
-  // - The ppUniqueIdentifier pointer is valid.
+  /// unique identifier.
+  /// 
+  /// Succeeds if:
+  /// - The ppUniqueIdentifier pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppUniqueIdentifier\)
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - If this class definition does not have a unique identifier
-  //     property definition.)
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - If this class definition does not have a unique identifier
+  ///     property definition.)
 
 
 AD_CLASSDEF_FACTORY(CreateInstance,
      Creates an object of this class\, and returns it by reference in
-  // the location specified by the ppObject argument.
-  // 
-  // Succeeds if:
-  // - The ppObject pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppObject arg is NULL.)
+  /// the location specified by the ppObject argument.
+  /// 
+  /// Succeeds if:
+  /// - The ppObject pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppObject arg is NULL.)
 AD_XCLASS_END(Concrete, StoredObject)

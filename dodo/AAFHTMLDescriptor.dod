@@ -31,11 +31,11 @@ AAFFileDescriptor\
 #c
 AD_HEAD
 
-AD_IDL(//
-// The IAAFHTMLDescriptor specifies that the file source mob 
-// describes an HTML essence data object\, which contains text
-// formatted according to the HTML standard.
-//)
+AD_IDL(///
+/// The IAAFHTMLDescriptor specifies that the file source mob 
+/// describes an HTML essence data object\, which contains text
+/// formatted according to the HTML standard.
+///)
 
 AD_CLASS_UUID(e684d76f, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 

@@ -31,9 +31,9 @@ AAFTypeDefObjectRef\
 #c
 #import ./AAFTypeDefObjectRef.exp
 AD_HEAD
-AD_IDL(//
-// This interface is used to implement Strong Object references.
-//
+AD_IDL(///
+/// This interface is used to implement Strong Object references.
+///
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_FORWARD_DECLARATION(AAFClassDef)
@@ -61,16 +61,16 @@ AD_XMETHOD3(Initialize,
 			friendly name of this type definition,
 
      Initializes this type def to be a reference to objects of
-  // the given type\, and assigns this object the given AUID.  pObjType
-  // points to the class definition of the least-derived class which
-  // is possible to be contained in property values of this type.
-  // 
-  // This method must be called after allocation\, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  // - pObjType is a valid pointer.
+  /// the given type\, and assigns this object the given AUID.  pObjType
+  /// points to the class definition of the least-derived class which
+  /// is possible to be contained in property values of this type.
+  /// 
+  /// This method must be called after allocation\, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  /// - pObjType is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pObjType or pTypeName\))

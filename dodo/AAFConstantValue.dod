@@ -30,20 +30,20 @@ AAFParameter\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// The IAAFConstantValue interface is implemented by objects that
-// specify a parameter whose value is constant for an entire operation
-// group.  Use IAAFVaryingValue and one or more IAAFControlPoints for
-// parameters which change in value during the operation group.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The IAAFConstantValue interface is implemented by objects that
+/// specify a parameter whose value is constant for an entire operation
+/// group.  Use IAAFVaryingValue and one or more IAAFControlPoints for
+/// parameters which change in value during the operation group.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 
 AD_FORWARD_DECLARATION(AAFParameterDef)
 AD_FORWARD_DECLARATION(AAFTypeDef)
@@ -73,18 +73,18 @@ AD_XMETHOD3(Initialize,
 			buffer containing value,
 
      Initializes a new constant value object to be identified with the
-  // given the given type\, and with the given human-legible name.
-  //
-  // This method must be called after allocation\, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  // - pParameterDef and pValue are a valid pointers.
+  /// given the given type\, and with the given human-legible name.
+  ///
+  /// This method must be called after allocation\, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  /// - pParameterDef and pValue are a valid pointers.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pParameterDef or pValue\)
-  // )
+  /// )
 
 
 AD_METHOD3(GetValue,
@@ -92,32 +92,32 @@ AD_METHOD3(GetValue,
 			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
 			[out],aafUInt32*,bytesRead,Number of actual bytes read,
      Writes the value into the pValue buffer.  The buffer is allocated
-  // by the caller\\\, and the size of the buffer is given by
-  // valueSize.
-  // 
-  // Caller may call GetValueBufLen\\\(\\\) to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // - valueSize indicates the buffer is large enough to hold the
-  //   name.
-  // 
-  // If this method fails nothing will be written to *pValue.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - valueSize indicates the buffer is too small to hold the
-  //     value.)
+  /// by the caller\\\, and the size of the buffer is given by
+  /// valueSize.
+  /// 
+  /// Caller may call GetValueBufLen\\\(\\\) to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// - valueSize indicates the buffer is large enough to hold the
+  ///   name.
+  /// 
+  /// If this method fails nothing will be written to *pValue.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - valueSize indicates the buffer is too small to hold the
+  ///     value.)
 
 
 AD_XMETHOD1(GetValueBufLen,
@@ -128,23 +128,23 @@ AD_XMETHOD1(GetValueBufLen,
 			Pointer to an variable used to return the length,
 
      Returns the length of buffer required for the GetValue\(\)
-  // method.  The value is placed into the location specified by
-  // pLen.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.)
+  /// method.  The value is placed into the location specified by
+  /// pLen.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pLen.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLen arg is NULL.)
 
 AD_XMETHOD1(GetTypeDefinition,
 			[out\,retval],
@@ -153,20 +153,20 @@ AD_XMETHOD1(GetTypeDefinition,
 			ppTypeDef,
 			Type Definition of the dataval inside of this object,
 			Places the type definition of the dataval inside this parameter into the
-  // *ppTypeDef argument.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.)
+  /// *ppTypeDef argument.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.)
 
 AD_XMETHOD2(SetValue,
 			[in], 
@@ -182,22 +182,22 @@ AD_XMETHOD2(SetValue,
 			buffer containing value,
 
 			The data value is set from a buffer of size valueSize and type.
-  //
-  // Succeeds if all of the following are true:
-  // - pTypeDef is valid and registered with the object's dictionary.
-  // - the pValue pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pTypeDef is valid and registered with the object's dictionary.
+  /// - the pValue pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.)
 
 AD_XCLASS_END(Concrete, StoredObject)

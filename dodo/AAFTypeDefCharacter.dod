@@ -31,9 +31,9 @@ AAFTypeDef\
 #c
 #import ./AAFTypeDef.exp
 AD_HEAD
-AD_IDL(//
-// This interface is used to define Integer types used in AAF persistent
-// objects.
+AD_IDL(///
+/// This interface is used to define Integer types used in AAF persistent
+/// objects.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 
@@ -56,16 +56,16 @@ AD_XMETHOD2(CreateValueFromCharacter,
 		character property value with the given character,
 
      Gets a property value corresponding to the character data. 
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - The pCharacterValue pointer is valid.
-  // - The ppActualPropertyValue pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - The pCharacterValue pointer is valid.
+  /// - The ppActualPropertyValue pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppCharacterValue is not a valid pointer.
-  //)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppCharacterValue is not a valid pointer.
+  ///)
 
 AD_XMETHOD2(GetCharacter,
 		[in],
@@ -81,16 +81,16 @@ AD_XMETHOD2(GetCharacter,
 		character that is read,
 
      Gets a character from the property value. 
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - The pCharacterValue pointer is valid.
-  // - The ppActualPropertyValue pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - The pCharacterValue pointer is valid.
+  /// - The ppActualPropertyValue pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - pCharacterValue is not a valid character property value.
-  //)
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - pCharacterValue is not a valid character property value.
+  ///)
 
 AD_XMETHOD2(SetCharacter,
 		[in],
@@ -106,15 +106,15 @@ AD_XMETHOD2(SetCharacter,
 		character that is written,
 
      Sets a character into the given property value. 
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - The pCharacterValue pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - The pCharacterValue pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - pCharacterValue is not a valid character property value.
-  //)
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - pCharacterValue is not a valid character property value.
+  ///)
 
 AD_OVERRIDE(.method-GetTypeCategory)
 

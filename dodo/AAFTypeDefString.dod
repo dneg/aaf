@@ -31,9 +31,9 @@ AAFTypeDef\
 #c
 #import ./AAFTypeDef.exp
 AD_HEAD
-AD_IDL(//
-// This interface is used to define variably-sized Array types whose
-// length is determined by a special terminator element value.
+AD_IDL(///
+/// This interface is used to define variably-sized Array types whose
+/// length is determined by a special terminator element value.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 AD_CLASS_UUID(307e9e67, dcb2, 11d2, 84, 29, 00, 60, 08, 32, ac, b8)
@@ -60,20 +60,20 @@ AD_XMETHOD3(Initialize,
 			friendly name of this type definition,
 
 			Initializes this type def to contain elements of the given type.
-  // Note that it is only possible to use certain types as the element
-  // type.  Those permissible types include:
-  //
-  // - AAFTypeDefInt
-  //
-  // This method must be called after allocation\, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  // - pID is a valid pointer.
-  // - pTypeDef is a valid pointer.
-  // - pTypeName is a valid pointer.
-  // - element type is permissible for use in a String.
+  /// Note that it is only possible to use certain types as the element
+  /// type.  Those permissible types include:
+  ///
+  /// - AAFTypeDefInt
+  ///
+  /// This method must be called after allocation\, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  /// - pID is a valid pointer.
+  /// - pTypeDef is a valid pointer.
+  /// - pTypeName is a valid pointer.
+  /// - element type is permissible for use in a String.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pTypeDef or pTypeName\))
@@ -87,10 +87,10 @@ AD_XMETHOD1(GetType,
 			type of elements in this array,
 
      Returns the type of elements in this string.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - ppTypeDef is a valid pointer.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - ppTypeDef is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppTypeDef\))
@@ -110,12 +110,12 @@ AD_XMETHOD2(GetCount,
 			count of elements in the specified string property value,
 
      Returns number of elements contained in the referenced property
-  // value.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - pPropVal is a valid pointer.
-  // - pCount is a valid pointer.
+  /// value.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pPropVal is a valid pointer.
+  /// - pCount is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pPropVal or pCount\))
@@ -141,18 +141,18 @@ AD_XMETHOD3(CreateValueFromCString,
 			newly created property value,
 
      Creates a property value which contains a string type.  The
-  // string in the property value are initialized from data in a C
-  // string which is pointed to by pInitData.  Returns the
-  // newly-created property value in ppPropVal.  The size of the
-  // newly-created string property value will be determined by the
-  // size of the initialization C array\, as communicated by
-  // initDataSize.
-  //
-  // Succeeds if all of the following are true:
-  // - the pInitData pointer is valid.
-  // - the ppPropVal pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// string in the property value are initialized from data in a C
+  /// string which is pointed to by pInitData.  Returns the
+  /// newly-created property value in ppPropVal.  The size of the
+  /// newly-created string property value will be determined by the
+  /// size of the initialization C array\, as communicated by
+  /// initDataSize.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pInitData pointer is valid.
+  /// - the ppPropVal pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInitData or ppPropVal\))
@@ -178,16 +178,16 @@ AD_XMETHOD3(SetCString,
 			size of pData buffer in bytes,
 
      Copies all the string data contained in the C array pointed to by
-  // pData into the given property value\, interpreting the data as a
-  // string of this type.  If dataSize indicates an array size
-  // different from the size currently in the indicated array property
-  // value\, that array property value will be resized.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPropVal pointer is valid.
-  // - the pData pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// pData into the given property value\, interpreting the data as a
+  /// string of this type.  If dataSize indicates an array size
+  /// different from the size currently in the indicated array property
+  /// value\, that array property value will be resized.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPropVal pointer is valid.
+  /// - the pData pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\))
@@ -200,7 +200,7 @@ AD_XMETHOD2(AppendElements,
 			AAFPropertyValue,
 			pInPropVal,
        property value corresponding to string to which elements are to
-    // be appended,
+  /// be appended,
 
 			[in],
 			objPass,
@@ -209,12 +209,12 @@ AD_XMETHOD2(AppendElements,
 			Null-terminated array of elements to be appended,
 
      Appends elements to the end of the array\, setting them to the
-  // values given in the pElements array.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - pInPropVal pointer is valid.
-  // - pElements pointer is valid.
+  /// values given in the pElements array.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - pInPropVal pointer is valid.
+  /// - pElements pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pInPropVal or pElements\))
 
@@ -239,20 +239,20 @@ AD_XMETHOD3(GetElements,
 			size of pBuffer\, in bytes,
 
      Gets the value of this property as a string and places it into
-  // pBuffer.  bufferSize indicates the size of the buffer\, in bytes.
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - The pInPropVal pointer is valid.
-  // - bufferSize indicates that pBuffer is large enough to hold the
-  //   data.
+  /// pBuffer.  bufferSize indicates the size of the buffer\, in bytes.
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - The pInPropVal pointer is valid.
+  /// - bufferSize indicates that pBuffer is large enough to hold the
+  ///   data.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pInPropVal\)
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufferSize indicates that pBuffer is too small to hold the
-  //     data.)
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - bufferSize indicates that pBuffer is too small to hold the
+  ///     data.)
 
 
 AD_OVERRIDE(.method-GetTypeCategory)

@@ -30,10 +30,10 @@ AAFDefObject\
 #endm
 #c
 AD_HEAD
-AD_IDL( //
-// This interface is used to describe the data type of a value stored
-// in an AAFTaggedValue object.
-//)
+AD_IDL( ///
+/// This interface is used to describe the data type of a value stored
+/// in an AAFTaggedValue object.
+///)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
 
@@ -68,15 +68,15 @@ AD_XMETHOD1(AddParentProperty,
 	    pParentProperty,
 	    Property definition to add.,
 
-  // Add a property definition to the tagged value definition.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pParentProperty is null.)
+  /// Add a property definition to the tagged value definition.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pParentProperty is null.)
 
 AD_XMETHOD1(GetParentProperties,
 	    [out],
@@ -85,16 +85,16 @@ AD_XMETHOD1(GetParentProperties,
 	    ppEnum,
 	    Property definition enumerator.,
 
-  // Writes an enumerator for the property definitions into *ppEnum.
-  // A reference is added to the new enumerator before it is returned.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  /// Writes an enumerator for the property definitions into *ppEnum.
+  /// A reference is added to the new enumerator before it is returned.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 AD_XMETHOD1(CountParentProperties,
 	    [out],
@@ -103,16 +103,16 @@ AD_XMETHOD1(CountParentProperties,
 	    pNumProperties,
 	    Number of property definitions.,
 
-  // Writes the total number of property definitions into *pNumProperties if\,
-  // and only if\, the method succeeds.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  /// Writes the total number of property definitions into *pNumProperties if\,
+  /// and only if\, the method succeeds.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 AD_XMETHOD1(RemoveParentProperty,
 	    [in],
@@ -121,17 +121,17 @@ AD_XMETHOD1(RemoveParentProperty,
 	    pParentProperty,
 	    Property to remove.,
 
-  // Removes the given property definition.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - The property definition is not in this tagged value definition.)
+  /// Removes the given property definition.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - The property definition is not in this tagged value definition.)
 
 AD_XCLASS_END(Concrete,StoredObject)

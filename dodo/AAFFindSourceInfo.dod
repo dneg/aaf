@@ -44,26 +44,26 @@ AD_XMETHOD1(GetMob,
 			ppMob,
 			The final media object referenced,
 
-  // This function returns the mob found by the function
-  // which generated this IAAFFindSourceInfo as a result.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppMob pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppMob.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULLOBJECT
-  //   - There is no valid mob referenced
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppMob arg is NULL.)
+  /// This function returns the mob found by the function
+  /// which generated this IAAFFindSourceInfo as a result.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppMob pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppMob.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULLOBJECT
+  ///   - There is no valid mob referenced
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppMob arg is NULL.)
 
 AD_XMETHOD1(GetSourceReference,
 			[out],
@@ -72,30 +72,30 @@ AD_XMETHOD1(GetSourceReference,
 			pSourceRef,
 			Source Reference,
 
-  // This function returns the source reference found by the function
-  // which generated this IAAFFindSourceInfo as a result.
-  //
-  // Note: the 3 properties that make up the "source
-  // reference" are sourceID\, sourceTrackID\, and startTime.
-  //
-  // Succeeds if all of the following are true:
-  // - This object has already been Initialize\(\)d.
-  // - the pSourceRef pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pSourceRef.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSourceRef arg is NULL.)
+  /// This function returns the source reference found by the function
+  /// which generated this IAAFFindSourceInfo as a result.
+  ///
+  /// Note: the 3 properties that make up the "source
+  /// reference" are sourceID\, sourceTrackID\, and startTime.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - This object has already been Initialize\(\)d.
+  /// - the pSourceRef pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pSourceRef.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceRef arg is NULL.)
 
 AD_METHOD1(GetLength,
 		   [retval][out],
@@ -103,29 +103,29 @@ AD_METHOD1(GetLength,
 		   pLength,
 		   Length of this component,
 		   Gets the  of this component.
-  // This function returns the duration in edit units of the result.
-  //	
-  // Succeeds if all of the following are true:
-  // - the pLength pointer is valid.
-  // - the optional length property is present for this object.
-  //
-  // This method deals with an optional property\\\, which will only be
-  // present for time-varying media.
-  // 
-  // If this method fails nothing will be written to *pLength.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLength arg is NULL.
-  //
-  // AAFRESULT_BAD_PROP
-  //   - the optional length property is not present for this object.)
+  /// This function returns the duration in edit units of the result.
+  ///	
+  /// Succeeds if all of the following are true:
+  /// - the pLength pointer is valid.
+  /// - the optional length property is present for this object.
+  ///
+  /// This method deals with an optional property\\\, which will only be
+  /// present for time-varying media.
+  /// 
+  /// If this method fails nothing will be written to *pLength.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLength arg is NULL.
+  ///
+  /// AAFRESULT_BAD_PROP
+  ///   - the optional length property is not present for this object.)
 
 AD_METHOD1(GetEditRate,
 		   [out\\\,retval], 
@@ -133,21 +133,21 @@ AD_METHOD1(GetEditRate,
 		   pEditRate, 
 		   Edit rate property value,
 		   This method will get the edit rate for this result.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pEditRate pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pEditRate arg is NULL.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pEditRate pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEditRate arg is NULL.)
 
 AD_XCLASS_END(Concrete, Transient)

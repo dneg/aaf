@@ -31,18 +31,18 @@ AAFObject\
 #c
 #c #import ./AAFObject.exp
 AD_HEAD
-AD_IDL(//
-// The IAAFKLVData interface is implemented by objects that
-// specify an User defined tag and value.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The IAAFKLVData interface is implemented by objects that
+/// specify an User defined tag and value.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_FORWARD_DECLARATION(AAFTypeDef)
 AD_CLASS_UUID(46114413, 0676, 11d4, A3, 56, 00, 90, 27, DF, CA, 6A)
 
@@ -68,26 +68,26 @@ AD_XMETHOD3(Initialize,
 			buffer containing value,
 
      Initializes a new KLVData object to be interpreted using the
-  // given given key.  The key must have been registered using dictionary\-\>RegisterKLVDataKey\(\)
-  // in order to use the byte swapping functionality of the type model.
-  //
-  // This method must be called after allocation\, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  // - pName is a valid pointer.
-  // - pTypeDef is a valid pointer and registered
-  // - pValue is a valid pointer
+  /// given given key.  The key must have been registered using dictionary\-\>RegisterKLVDataKey\(\)
+  /// in order to use the byte swapping functionality of the type model.
+  ///
+  /// This method must be called after allocation\, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  /// - pName is a valid pointer.
+  /// - pTypeDef is a valid pointer and registered
+  /// - pValue is a valid pointer
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef or pValue\)
-  //
-  // AAFRESULT_NOT_VALID_KEY
-  //   - The  given key must not resolve to a builtin type.  For most purposes\, use
-  //     IAAFTypeDefRename to rename an existing type.
-  //
-  // )
+  ///
+  /// AAFRESULT_NOT_VALID_KEY
+  ///   - The  given key must not resolve to a builtin type.  For most purposes\, use
+  ///     IAAFTypeDefRename to rename an existing type.
+  ///
+  /// )
 
 AD_XMETHOD1(GetKey,
             [out],
@@ -97,27 +97,27 @@ AD_XMETHOD1(GetKey,
             The key of this object,
 
 		   Returns the type definition for this invocation.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pKey pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pKey.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - This property does not exist in the file.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pKey arg is NULL.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pKey pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pKey.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - This property does not exist in the file.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pKey arg is NULL.)
 
 
 AD_METHOD3(GetValue,
@@ -138,30 +138,30 @@ AD_METHOD3(GetValue,
             Number of actual bytes read,
 
      Writes the value into the pValue buffer.  The buffer is allocated
-  // by the caller\\\, and the size of the buffer is given by
-  // valueSize.
-  // 
-  // Caller may call GetValueBufLen\\\(\\\) to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // - valueSize indicates the buffer is large enough to hold the name.
-  // 
-  // If this method fails nothing will be written to *pValue.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - valueSize indicates the buffer is too small to hold the value.)
+  /// by the caller\\\, and the size of the buffer is given by
+  /// valueSize.
+  /// 
+  /// Caller may call GetValueBufLen\\\(\\\) to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// - valueSize indicates the buffer is large enough to hold the name.
+  /// 
+  /// If this method fails nothing will be written to *pValue.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - valueSize indicates the buffer is too small to hold the value.)
 
 
 AD_XMETHOD1(GetValueBufLen,
@@ -172,22 +172,22 @@ AD_XMETHOD1(GetValueBufLen,
 			Pointer to an variable used to return the length,
 
 			Returns the length of buffer required for the GetValue\(\) method.
-  // The value is placed into the location specified by pLen.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.)
+  /// The value is placed into the location specified by pLen.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pLen.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLen arg is NULL.)
 
 AD_XMETHOD2(SetValue,
 			[in], 
@@ -203,21 +203,21 @@ AD_XMETHOD2(SetValue,
 			buffer containing value,
 
 			The data value is set from a buffer of size valueSize and type.
-  //
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue is null.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue is null.)
 
 AD_XCLASS_END(Concrete, StoredObject)

@@ -31,29 +31,29 @@ AAFRoot\
 #c
 AD_HEAD
 
-AD_IDL(//
-// The IAAFEssenceDataStream interface is an additional interface implemented by objects
-// which stream over AAF files\, and were therefore created by the AAFContainerDef for
-// AAF files.  This interface allows the setting of one additional parameter \(a pointer
-// to the AAFEssenceData object to stream over\) which was not general-purpose enough
-// to be in the IAAFEssenceStream interface.
-//
-// Objects which support this interface must be created by methods in IAAFContainerDef\, since
-// the container definition is what is used to differentiate between the different streams.
-// If the stream needs a reference to data other than a file pointer \(ex. the AAFContainer
-// makes a stream which needs a reference to a structureed storage stream\) will have another
-// interface to support the additional behaviour.  For an AAF container\, the additional interface
-// is IAAFEssenceDataStream.
-//
-// The following has been copied from the IAAFEssenceStream interface:
-//		The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
-//		essence codecs to read the low-level representation of the essence.  There are multiple
-//		classes implementing this interface\, each representing a different underlying container
-//		holding the essence data.  The idea of \"container\" is separate from any formatting such
-//		as WAVE or JPEG.  Examples of containers \(and therefore streams\)\, are essence embedded
-//		in AAF files\, and essence in a file all by itself \(ex. a WAVE file\).
-//
-//)
+AD_IDL(///
+/// The IAAFEssenceDataStream interface is an additional interface implemented by objects
+/// which stream over AAF files\, and were therefore created by the AAFContainerDef for
+/// AAF files.  This interface allows the setting of one additional parameter \(a pointer
+/// to the AAFEssenceData object to stream over\) which was not general-purpose enough
+/// to be in the IAAFEssenceStream interface.
+///
+/// Objects which support this interface must be created by methods in IAAFContainerDef\, since
+/// the container definition is what is used to differentiate between the different streams.
+/// If the stream needs a reference to data other than a file pointer \(ex. the AAFContainer
+/// makes a stream which needs a reference to a structureed storage stream\) will have another
+/// interface to support the additional behaviour.  For an AAF container\, the additional interface
+/// is IAAFEssenceDataStream.
+///
+/// The following has been copied from the IAAFEssenceStream interface:
+///		The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
+///		essence codecs to read the low-level representation of the essence.  There are multiple
+///		classes implementing this interface\, each representing a different underlying container
+///		holding the essence data.  The idea of \"container\" is separate from any formatting such
+///		as WAVE or JPEG.  Examples of containers \(and therefore streams\)\, are essence embedded
+///		in AAF files\, and essence in a file all by itself \(ex. a WAVE file\).
+///
+///)
 
 AD_CLASS_UUID(42A63FE1, 968A, 11d2, 80, 89, 00, 60, 08, 14, 3e, 6f)
 

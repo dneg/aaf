@@ -29,16 +29,16 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is implemented by the toolkit\, and is provided to
-// clients of IAAFFile to allow them to supply the raw bits of a file
-// before open.
-//
-// Note that this and the IAAFGetFileBits interfaces are different
-// than the IAAFRawStorage interfaces in that those are implemented by
-// clients to provide access to the desired media; these are provided
-// by the toolkit to provide read OR write \(but not both
-// simultaneously\) access to the raw bits.
+AD_IDL(///
+/// This interface is implemented by the toolkit\, and is provided to
+/// clients of IAAFFile to allow them to supply the raw bits of a file
+/// before open.
+///
+/// Note that this and the IAAFGetFileBits interfaces are different
+/// than the IAAFRawStorage interfaces in that those are implemented by
+/// clients to provide access to the desired media; these are provided
+/// by the toolkit to provide read OR write \(but not both
+/// simultaneously\) access to the raw bits.
 AD_STD_COMMENT_IFC_HEADER)
 AD_CLASS_UUID(6D950761, 8DB4, 11D4, B8, 0D, 00, 00, 86, 3F, 2C, 27)
 
@@ -64,23 +64,23 @@ AD_XMETHOD3(WriteAt,
 			The position in bytes at which to read,
 
      Writes bufsize bytes into this file at the given byte offset.
-  // Obtains the data from buf.  A value of zero for position
-  // indicates the beginning of the stream.
-  //
-  // Succeeds if sufficient space is available in the file to write
-  // the given number of bytes at the given position.  It's possible
-  // to guarantee that this method will succeed if SetSize\(\) is first
-  // called to reserve the required space.  If SetSize\(\) is not first
-  // called to reserve the space\, this method will attempt to request
-  // it\, but this attempt may fail.
-  //
-  // Succeeds if:
-  // - The buf argument is a valid pointer.
+  /// Obtains the data from buf.  A value of zero for position
+  /// indicates the beginning of the stream.
+  ///
+  /// Succeeds if sufficient space is available in the file to write
+  /// the given number of bytes at the given position.  It's possible
+  /// to guarantee that this method will succeed if SetSize\(\) is first
+  /// called to reserve the required space.  If SetSize\(\) is not first
+  /// called to reserve the space\, this method will attempt to request
+  /// it\, but this attempt may fail.
+  ///
+  /// Succeeds if:
+  /// - The buf argument is a valid pointer.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(buf\)
-  //
-  // AAFRESULT_DATA_SIZE
-  //   - The requested space is not available.)
+  ///
+  /// AAFRESULT_DATA_SIZE
+  ///   - The requested space is not available.)
 
 
 AD_XMETHOD1(SetSize,
@@ -91,11 +91,11 @@ AD_XMETHOD1(SetSize,
 			The requested file size,
 
      Attempts to reserve size bytes of storage.
-  //
-  // Succeeds if:
-  // - The requested space is available.
+  ///
+  /// Succeeds if:
+  /// - The requested space is available.
   AD_STD_COMMENT_METH_ERR_HEADER
-  //
-  // AAFRESULT_DATA_SIZE
-  //   - size bytes are not available.)
+  ///
+  /// AAFRESULT_DATA_SIZE
+  ///   - size bytes are not available.)
 AD_XCLASS_END(Concrete, Transient)

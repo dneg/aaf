@@ -30,14 +30,14 @@ AAFTextClip\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// An HTMLClip is a reference to HTML text essence.
-//
-// Typically an HTMLClip is in a StaticMobSlot and defines a section
-// of HTML text that is associated with the essence data in a parallel
-// TimelineMobSlot. The duration\, accessed through IAAFComponent\,
-// defines the extent of the association with the parallel Mob Slot.
-//)
+AD_IDL(///
+/// An HTMLClip is a reference to HTML text essence.
+///
+/// Typically an HTMLClip is in a StaticMobSlot and defines a section
+/// of HTML text that is associated with the essence data in a parallel
+/// TimelineMobSlot. The duration\, accessed through IAAFComponent\,
+/// defines the extent of the association with the parallel Mob Slot.
+///)
 AD_CLASS_UUID(e684d783, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
 AD_DEFAULT_UUID(e684d784, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)

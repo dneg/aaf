@@ -30,20 +30,20 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is used with an object representing an AAF class
-// definition.  The operations on a class definition include managing
-// the position of the class within the class heirarchy\, and
-// accessing property definitions associated with the class.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// This interface is used with an object representing an AAF class
+/// definition.  The operations on a class definition include managing
+/// the position of the class within the class heirarchy\, and
+/// accessing property definitions associated with the class.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_FORWARD_DECLARATION(EnumAAFLoadedPlugins)
 AD_FORWARD_DECLARATION(AAFDictionary)
 AD_CLASS_UUID(AD1BB85B, DBB2, 11d2, 80, 9C, 00, 60, 08, 14, 3E, 6F)
@@ -53,7 +53,7 @@ AD_XCLASS_BEGIN(Concrete, Transient)
 AD_METHOD0(RegisterSharedPlugins,
 
      Attempts to load and register all of the AAF plugin files found
-  // in shared installation directory.)
+  /// in shared installation directory.)
 
 
 AD_XMETHOD1(RegisterPluginDirectory,
@@ -64,7 +64,7 @@ AD_XMETHOD1(RegisterPluginDirectory,
 			Pointer to the name of directory to look for plugins.,
 
      Attempts to load and register all of the AAF plugin files found
-  // in the given directory.)
+  /// in the given directory.)
 
 
 AD_XMETHOD1(RegisterPluginFile,
@@ -75,7 +75,7 @@ AD_XMETHOD1(RegisterPluginFile,
 			Pointer to the name of plugin file to register.,
 
      Attempts to load and register all of the AAF plugins found
-  // in the given file.)
+  /// in the given file.)
 
 
 AD_XMETHOD2(EnumLoadedPlugins,
@@ -90,23 +90,23 @@ AD_XMETHOD2(EnumLoadedPlugins,
 			  ppEnum,
 			  Loaded Plugin Enumeration,
      Returns an enumerator which enumerates over all of the loaded
-  // pluigin choices through the *ppEnum argument.  The returned
-  // enumerator is AddRef\(\)ed before it is returned.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - if ppEnum is null.)
+  /// pluigin choices through the *ppEnum argument.  The returned
+  /// enumerator is AddRef\(\)ed before it is returned.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - if ppEnum is null.)
 
 
 AD_XMETHOD3(CreatePluginDefinition,
@@ -126,29 +126,29 @@ AD_XMETHOD3(CreatePluginDefinition,
 			ppPluginDef,
 			The interface of the returned definition,
      Given a plugin definition ID\, find a plugin and manufactures a
-  // plugin descriptor of the correct class for this plugin\, filling
-  // in the values\, and returning the definition through the
-  // *pPluginDesc argument.  The returned definition is AddRef\(\)ed
-  // before it is returned.  You must call QueryInterface on the
-  // result in order to find the correct interface\, and are
-  // responsible for adding the definition to the correct place in the
-  // dictionary\, as well as preventing duplicates. The resulting
-  // definiton has the plugin descriptor already attached.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pPluginDesc pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - if pPluginDesc is null.)
+  /// plugin descriptor of the correct class for this plugin\, filling
+  /// in the values\, and returning the definition through the
+  /// *pPluginDesc argument.  The returned definition is AddRef\(\)ed
+  /// before it is returned.  You must call QueryInterface on the
+  /// result in order to find the correct interface\, and are
+  /// responsible for adding the definition to the correct place in the
+  /// dictionary\, as well as preventing duplicates. The resulting
+  /// definiton has the plugin descriptor already attached.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pPluginDesc pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - if pPluginDesc is null.)
 
 
 AD_XMETHOD4(CreateInstance,
@@ -161,29 +161,29 @@ AD_XMETHOD4(CreateInstance,
 	[out\,iid_is\(riid\)], objPass, void **, ppPlugin,
 		The IID of the initialial interface for the new plugin instance,
      Create an object contained within one of the loaded plugin
-  // files.
-  // 
-  // Succeeds if all of the following are true:
-  // - the rclsid was found by the plugin manager
-  // - the interface corresponding to riid is supported by the plugin
-  // - if pUnkOuter is not NULL and given plugin supports aggregation
-  //   and riid must be a reference to IID_IUnknown.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // E_INVALIDARG
-  //   - if ppPlugin is null.
-  //   - pUnkOuter is not NULL and riid is not IID_IUnknown.
-  //
-  // AAFRESULT_EXTENSION_NOT_FOUND
-  //   - The given rclsid could not be found by the Plugin Manager.
-  //
-  // E_NOINTERFACE
-  //   - if initial interface given by riid is not supported by the
-  //     plugin.)
+  /// files.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the rclsid was found by the plugin manager
+  /// - the interface corresponding to riid is supported by the plugin
+  /// - if pUnkOuter is not NULL and given plugin supports aggregation
+  ///   and riid must be a reference to IID_IUnknown.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// E_INVALIDARG
+  ///   - if ppPlugin is null.
+  ///   - pUnkOuter is not NULL and riid is not IID_IUnknown.
+  ///
+  /// AAFRESULT_EXTENSION_NOT_FOUND
+  ///   - The given rclsid could not be found by the Plugin Manager.
+  ///
+  /// E_NOINTERFACE
+  ///   - if initial interface given by riid is not supported by the
+  ///     plugin.)
 AD_XCLASS_END(Concrete, Transient)

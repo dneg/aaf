@@ -31,9 +31,9 @@ AAFObject\
 #c
 #c #import ./AAFObject.exp
 AD_HEAD
-AD_IDL(//
-// This interface is used to access dictionary services in an AAF
-// file.
+AD_IDL(///
+/// This interface is used to access dictionary services in an AAF
+/// file.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFMetaDefinition)
 AD_FORWARD_DECLARATION(AAFClassDef)
@@ -63,11 +63,11 @@ AD_DEFAULT_UUID(952a5c85, dcec, 4c99, 8e, 40, 97, 8d, 88, a0, cd, c1)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_DICTIONARY_FACTORY(CreateInstance,
 Creates a single uninitialized AAF object of the class associated 
-  // with a specified stored object id.)
+  /// with a specified stored object id.)
 
 AD_DICTIONARY_METAFACTORY(CreateMetaInstance,
 Creates a single uninitialized AAF meta class or type associated 
-  // with a specified stored object id.)
+  /// with a specified stored object id.)
 
 
 #c
@@ -83,16 +83,16 @@ AD_XMETHOD1(RegisterClassDef,
 			Class Definition,
 
      Add the class definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pClassDef pointer is valid.
-  // - the ID contained in the class def is not already been
-  //   registered.
+  /// 
+  /// Succeeds if:
+  /// - The pClassDef pointer is valid.
+  /// - the ID contained in the class def is not already been
+  ///   registered.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The class def ID has already been registered.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The class def ID has already been registered.)
 
 
 AD_XMETHOD2(LookupClassDef,
@@ -110,16 +110,16 @@ AD_XMETHOD2(LookupClassDef,
 			Class Definition,
 
      Return the class definition with the given id.
-  // 
-  // Succeeds if:
-  // - The pClassID pointer is valid.
-  // - The ppClassDef pointer is valid.
-  // - the ID is a recognized id for a class definition.
+  /// 
+  /// Succeeds if:
+  /// - The pClassID pointer is valid.
+  /// - The ppClassDef pointer is valid.
+  /// - the ID is a recognized id for a class definition.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassID or ppClassDef\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a class definition ID.)
 
 
 AD_XMETHOD1(GetClassDefs,
@@ -131,9 +131,9 @@ AD_XMETHOD1(GetClassDefs,
 			Class Definition Enumeration,
 
      Return an enumerator for all class definitions.
-  //
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - The ppEnum pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
@@ -145,22 +145,22 @@ AD_XMETHOD1(CountClassDefs,
 			pResult,
 			Total number of class definition objects,
 			Writes the number of class definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 AD_XMETHOD1(CreateForwardClassReference,
 
@@ -171,14 +171,14 @@ AD_XMETHOD1(CreateForwardClassReference,
 			Class Unique ID,
 
      Return the class definition with the given id.
-  // 
-  // Succeeds if:
-  // - The classId does not represent an existing forward class reference
-  //   or a class definition that has already been successfully registered.
+  /// 
+  /// Succeeds if:
+  /// - The classId does not represent an existing forward class reference
+  ///   or a class definition that has already been successfully registered.
   AD_STD_COMMENT_METH_ERR_HEADER
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a class definition ID.)
 
 AD_XMETHOD2(HasForwardClassReference,
 
@@ -195,16 +195,16 @@ AD_XMETHOD2(HasForwardClassReference,
 			true if forward class reference; false if not a forward class reference,
 
      Return kAAFTrue if the given class identification is a forward reference.
-  // 
-  // Succeeds if:
-  // - The pClassID pointer is valid.
-  // - The ppClassDef pointer is valid.
-  // - the ID is a recognized id for a class definition.
+  /// 
+  /// Succeeds if:
+  /// - The pClassID pointer is valid.
+  /// - The ppClassDef pointer is valid.
+  /// - the ID is a recognized id for a class definition.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassID or ppClassDef\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a class definition ID.)
 
 AD_XMETHOD1(RegisterTypeDef,
 
@@ -215,15 +215,15 @@ AD_XMETHOD1(RegisterTypeDef,
 			Type Definition Object,
 
      Add the type definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the ID is not already been registered.
+  /// 
+  /// Succeeds if:
+  /// - The pTypeDef pointer is valid.
+  /// - the ID is not already been registered.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given type has already been registered.)
 
 
 AD_XMETHOD2(LookupTypeDef,
@@ -241,16 +241,16 @@ AD_XMETHOD2(LookupTypeDef,
 			Type Definition Object,
 
      Return the type definition object with the given id.
-  // 
-  // Succeeds if:
-  // - The pTypeID pointer is valid.
-  // - The ppTypeDef pointer is valid.
-  // - the ID is a recognized id for a type definition.
+  /// 
+  /// Succeeds if:
+  /// - The pTypeID pointer is valid.
+  /// - The ppTypeDef pointer is valid.
+  /// - the ID is a recognized id for a type definition.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pTypeID or ppTypeDef\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a type definition ID.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a type definition ID.)
 
 
 AD_XMETHOD1(GetTypeDefs,
@@ -262,9 +262,9 @@ AD_XMETHOD1(GetTypeDefs,
 			Type Def Enumeration,
 
      Return an enumerator for all type definitions.
-  //
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - The ppEnum pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
@@ -276,22 +276,22 @@ AD_XMETHOD1(CountTypeDefs,
 			pResult,
 			Total number of type definition objects,
 			Writes the number of type definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 
 AD_XMETHOD1(RegisterOpaqueTypeDef,
@@ -303,15 +303,15 @@ AD_XMETHOD1(RegisterOpaqueTypeDef,
 			Type Definition Object,
 
      Add the opaquetype definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the definition is not already been registered with RegisterTypeDef.
+  /// 
+  /// Succeeds if:
+  /// - The pTypeDef pointer is valid.
+  /// - the definition is not already been registered with RegisterTypeDef.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given type has already been registered.)
 
 
 AD_XMETHOD2(LookupOpaqueTypeDef,
@@ -329,16 +329,16 @@ AD_XMETHOD2(LookupOpaqueTypeDef,
 			Type Definition Object,
 
      Return the opaque type definition object with the given id.
-  // 
-  // Succeeds if:
-  // - The pTypeID pointer is valid.
-  // - The ppTypeDef pointer is valid.
-  // - the ID is a recognized id for an opaque type definition.
+  /// 
+  /// Succeeds if:
+  /// - The pTypeID pointer is valid.
+  /// - The ppTypeDef pointer is valid.
+  /// - the ID is a recognized id for an opaque type definition.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either typeId or ppTypeDef\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a type definition ID.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a type definition ID.)
 
 
 AD_XMETHOD1(GetOpaqueTypeDefs,
@@ -350,9 +350,9 @@ AD_XMETHOD1(GetOpaqueTypeDefs,
 			Type Def Enumeration,
 
      Return an enumerator for all registered opaque type definitions.
-  //
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - The ppEnum pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
@@ -364,22 +364,22 @@ AD_XMETHOD1(CountOpaqueTypeDefs,
 			pResult,
 			Total number of opaque type definition objects,
 			Writes the number of opaque type definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 AD_XMETHOD2(RegisterKLVDataKey,
 
@@ -396,16 +396,16 @@ AD_XMETHOD2(RegisterKLVDataKey,
 			Type Definition Object,
 
      Add the definition for the given KLV key to the runtime dictionary.
-  // The pTypeDef will often be kAAFTypeID_UInt8Array\,
-  // but may be something else.  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the definition is not already been registered with RegisterTypeDef.
+  /// The pTypeDef will often be kAAFTypeID_UInt8Array\,
+  /// but may be something else.  /// 
+  /// Succeeds if:
+  /// - The pTypeDef pointer is valid.
+  /// - the definition is not already been registered with RegisterTypeDef.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given type has already been registered.)
 
 AD_XMETHOD1(RegisterDataDef,
 
@@ -453,22 +453,22 @@ AD_XMETHOD1(CountDataDefs,
 			pResult,
 			Total number of data definition objects,
 			Writes the number of data definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 
 AD_XMETHOD1(RegisterOperationDef,
@@ -517,22 +517,22 @@ AD_XMETHOD1(CountOperationDefs,
 			pResult,
 			Total number of operation definition objects,
 			Writes the number of operation definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 
 AD_XMETHOD1(RegisterParameterDef,
@@ -581,22 +581,22 @@ AD_XMETHOD1(CountParameterDefs,
 			pResult,
 			Total number of parameter definition objects,
 			Writes the number of parameter definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 
 AD_XMETHOD1(RegisterCodecDef,
@@ -645,22 +645,22 @@ AD_XMETHOD1(CountCodecDefs,
 			pResult,
 			Total number of codec definition objects,
 			Writes the number of codec definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 
 AD_XMETHOD1(RegisterContainerDef,
@@ -709,22 +709,22 @@ AD_XMETHOD1(CountContainerDefs,
 			pResult,
 			Total number of container definition objects,
 			Writes the number of container definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 
 AD_XMETHOD1(RegisterInterpolationDef,
@@ -773,22 +773,22 @@ AD_XMETHOD1(CountInterpolationDefs,
 			pResult,
 			Total number of interpolation definition objects,
 			Writes the number of interpolation definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 
 AD_XMETHOD1(RegisterPluginDef,
@@ -837,22 +837,22 @@ AD_XMETHOD1(CountPluginDefs,
 			pResult,
 			Total number of plugin definition objects,
 			Writes the number of plugin definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 #c
 #c Dictionary2 methods
@@ -904,22 +904,22 @@ AD_XMETHOD1(CountKLVDataDefs,
 			pResult,
 			Total number of KLVData definition objects,
 			Writes the number of KLVData definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 
 AD_XMETHOD1(RegisterTaggedValueDef,
@@ -968,22 +968,22 @@ AD_XMETHOD1(CountTaggedValueDefs,
 			pResult,
 			Total number of tagged value definition objects,
 			Writes the number of tagged value definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.)
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.)
 
 AD_XMETHOD1(LookupAuxiliaryDataDef,
 
@@ -993,9 +993,9 @@ AD_XMETHOD1(LookupAuxiliaryDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the Auxiliary Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1007,9 +1007,9 @@ AD_XMETHOD1(LookupDescriptiveMetadataDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the Descriptive Metadata Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1022,9 +1022,9 @@ AD_XMETHOD1(LookupEdgecodeDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the Edgecode Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1037,9 +1037,9 @@ AD_XMETHOD1(LookupLegacyPictureDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the legacy Picture Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1052,9 +1052,9 @@ AD_XMETHOD1(LookupLegacySoundDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the legacy Sound Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1067,9 +1067,9 @@ AD_XMETHOD1(LookupLegacyTimecodeDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the legacy Timecode Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1082,9 +1082,9 @@ AD_XMETHOD1(LookupMatteDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the Matte Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1097,9 +1097,9 @@ AD_XMETHOD1(LookupPictureDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the Picture Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1112,9 +1112,9 @@ AD_XMETHOD1(LookupPictureWithMatteDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the PictureWithMatte Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1127,9 +1127,9 @@ AD_XMETHOD1(LookupSoundDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the Sound Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 
@@ -1142,9 +1142,9 @@ AD_XMETHOD1(LookupTimecodeDataDef,
 			ppDataDef,
 			Data Definition Object,
 			Return the Timecode Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppDataDef\))
 

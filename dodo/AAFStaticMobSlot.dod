@@ -31,11 +31,11 @@ AAFMobSlot\
 #c
 AD_HEAD
 
-AD_IDL(//
-// StaticMobSlot describes essence data that has no relationship to time\,
-// such as a static image; consequently\, a StaticMobSlot does not define an
-// edit rate.
-//)
+AD_IDL(///
+/// StaticMobSlot describes essence data that has no relationship to time\,
+/// such as a static image; consequently\, a StaticMobSlot does not define an
+/// edit rate.
+///)
 
 AD_CLASS_UUID(e684d763, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 

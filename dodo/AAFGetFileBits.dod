@@ -29,16 +29,16 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is implemented by the toolkit\, and is provided to
-// clients of IAAFFile to allow them to obtain the raw bits of a file
-// after close.
-//
-// Note that this and the IAAFSetFileBits interfaces are different
-// than the IAAFRawStorage interfaces in that those are implemented by
-// clients to provide access to the desired media; these are provided
-// by the toolkit to provide read OR write \(but not both
-// simultaneously\) access to the raw bits.
+AD_IDL(///
+/// This interface is implemented by the toolkit\, and is provided to
+/// clients of IAAFFile to allow them to obtain the raw bits of a file
+/// after close.
+///
+/// Note that this and the IAAFSetFileBits interfaces are different
+/// than the IAAFRawStorage interfaces in that those are implemented by
+/// clients to provide access to the desired media; these are provided
+/// by the toolkit to provide read OR write \(but not both
+/// simultaneously\) access to the raw bits.
 AD_STD_COMMENT_IFC_HEADER)
 AD_CLASS_UUID(3CC80281, 72A8, 11D4, B8, 0D, 00, 00, 86, 3F, 2C, 27)
 
@@ -64,22 +64,22 @@ AD_XMETHOD3(ReadAt,
 			The position in bytes at which to read,
 
      Attempts to read bufsize bytes from this stream at the given byte
-  // offset.  Places the data into buf.  Any attempt to read beyond
-  // the size of this file\, as reported by GetSize\(\)\, will be
-  // considered an error.
-  //
-  // A value of zero for position indicates the beginning of the
-  // stream.
-  //
-  // Succeeds if:
-  // - The pNumBytes pointer is valid.
-  // - position + buSize is not larger than the size of this file\, as
-  //   reported by GetSize\(\).
+  /// offset.  Places the data into buf.  Any attempt to read beyond
+  /// the size of this file\, as reported by GetSize\(\)\, will be
+  /// considered an error.
+  ///
+  /// A value of zero for position indicates the beginning of the
+  /// stream.
+  ///
+  /// Succeeds if:
+  /// - The pNumBytes pointer is valid.
+  /// - position + buSize is not larger than the size of this file\, as
+  ///   reported by GetSize\(\).
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(buf\)
-  //
-  // AAFRESULT_OFFSET_SIZE
-  //   - position + size is larger than the size of this file.)
+  ///
+  /// AAFRESULT_OFFSET_SIZE
+  ///   - position + size is larger than the size of this file.)
 
 
 AD_XMETHOD1(GetSize,
@@ -90,9 +90,9 @@ AD_XMETHOD1(GetSize,
 			The size of this file in bytes,
 
      Returns the size of this file\, in bytes\, in *pSize.
-  //
-  // Succeeds if:
-  // - The pSize pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - The pSize pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pSize\))
 AD_XCLASS_END(Concrete, Transient)

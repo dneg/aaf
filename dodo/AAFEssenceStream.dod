@@ -31,25 +31,25 @@ AAFRoot\
 #c
 AD_HEAD
 
-AD_IDL(//
-// The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
-// essence codecs to read the low-level representation of the essence.  There are multiple
-// classes implementing this interface\, each representing a different underlying container
-// holding the essence data.  The idea of \"container\" is separate from any formatting such
-// as WAVE or JPEG.  Examples of containers \(and therefore streams\)\, are essence embedded
-// in AAF files\, and essence in a file all by itself \(ex. a WAVE file\).
-//
-// Objects which support this interface must be created by methods in IAAFContainerDef\, since
-// the container definition is what is used to differentiate between the different streams.
-// If the stream needs a reference to data other than a file pointer \(ex. the AAFContainer
-// makes a stream which needs a reference to a structureed storage stream\) will have another
-// interface to support the additional behaviour.  For an AAF container\, the additional interface
-// is IAAFEssenceDataStream.
-//
-// NOTE: The SDK will init the representation of this object with the correct path
-// and open the underlying file before handing out an interface pointer.  Hence\,
-// there is no Open method on the stream.
-//)
+AD_IDL(///
+/// The IAAFEssenceStream interface is an internal interface used by AAFEssenceAccess and
+/// essence codecs to read the low-level representation of the essence.  There are multiple
+/// classes implementing this interface\, each representing a different underlying container
+/// holding the essence data.  The idea of \"container\" is separate from any formatting such
+/// as WAVE or JPEG.  Examples of containers \(and therefore streams\)\, are essence embedded
+/// in AAF files\, and essence in a file all by itself \(ex. a WAVE file\).
+///
+/// Objects which support this interface must be created by methods in IAAFContainerDef\, since
+/// the container definition is what is used to differentiate between the different streams.
+/// If the stream needs a reference to data other than a file pointer \(ex. the AAFContainer
+/// makes a stream which needs a reference to a structureed storage stream\) will have another
+/// interface to support the additional behaviour.  For an AAF container\, the additional interface
+/// is IAAFEssenceDataStream.
+///
+/// NOTE: The SDK will init the representation of this object with the correct path
+/// and open the underlying file before handing out an interface pointer.  Hence\,
+/// there is no Open method on the stream.
+///)
 AD_CLASS_UUID(83402901, 9146, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(83402902, 9146, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
@@ -66,20 +66,20 @@ AD_METHOD3(Write,
 			aafUInt32 *,
 			bytesWritten, the number of bytes actually written from the buffer,
 			Write some number of bytes to the stream exactly and with no formatting or compression.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\\\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \\\(This is the only code indicating success.\\\)
-	//
-	// AAFRESULT_NULL_PARAM
-	//   - pBuffer or pBytesRead is null.
-	//
-	// AAFRESULT_STREAM_FULL
-	//   - The essence can not be written because of a fault such as a disk full error in the
-	// underlying operating system.)
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pBuffer or pBytesRead is null.
+	///
+	/// AAFRESULT_STREAM_FULL
+	///   - The essence can not be written because of a fault such as a disk full error in the
+	/// underlying operating system.)
 
 
 AD_METHOD3(Read,
@@ -96,20 +96,20 @@ AD_METHOD3(Read,
 			pBytesRead,
 			Return bytes actually read,
 			Read some number of bytes from the stream exactly and with no formatting or compression.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\\\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \\\(This is the only code indicating success.\\\)
-	//
-	// AAFRESULT_NULL_PARAM
-	//   - pBuffer or pBytesRead is null.
-	//
-	// AAFRESULT_END_OF_ESSENCE
-	//   - Hit either the end-of-file on a raw essence file\\\, or the end of the essence property.
-	//	The pBytesRead parameter correctly reflects the number of bytes actually read.)
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pBuffer or pBytesRead is null.
+	///
+	/// AAFRESULT_END_OF_ESSENCE
+	///   - Hit either the end-of-file on a raw essence file\\\, or the end of the essence property.
+	///	The pBytesRead parameter correctly reflects the number of bytes actually read.)
 
 AD_METHOD1(Seek,
 			[in],
@@ -117,16 +117,16 @@ AD_METHOD1(Seek,
 			byteOffset,
 			The absolute byte offset into the stream.,
 			Seek to the absolute byte offset into the stream.)
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\\\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \\\(This is the only code indicating success.\\\)
-	//
-	// AAFRESULT_STREAM_BOUNDS
-	//   - The new position would be outside of the bounds of the stream.)
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\)
+	///
+	/// AAFRESULT_STREAM_BOUNDS
+	///   - The new position would be outside of the bounds of the stream.)
 
 AD_METHOD1(SeekRelative,
 			[in],
@@ -134,16 +134,16 @@ AD_METHOD1(SeekRelative,
 			byteOffset,
 			The relative byte offset into the stream.,
 			Seek forward or backward the given byte count.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\\\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \\\(This is the only code indicating success.\\\)
-	//
-	// AAFRESULT_STREAM_BOUNDS
-	//   - The new position would be outside of the bounds of the stream.)
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\)
+	///
+	/// AAFRESULT_STREAM_BOUNDS
+	///   - The new position would be outside of the bounds of the stream.)
 
 AD_METHOD1(GetPosition,
 			[out],
@@ -151,16 +151,16 @@ AD_METHOD1(GetPosition,
 			pPosition,
 			The position within the stream.,
 			Returns the position within the stream.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\\\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \\\(This is the only code indicating success.\\\)
-	//
-	// AAFRESULT_NULL_PARAM
-	//   - pPosition is null.)
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pPosition is null.)
 
 AD_METHOD1(GetLength,
 			[out],
@@ -168,37 +168,37 @@ AD_METHOD1(GetLength,
 			pLength,
 			The length of the stream.,
 			Returns the length of the stream.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\\\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \\\(This is the only code indicating success.\\\)
-	//
-	// AAFRESULT_NULL_PARAM
-	//   - pLength is null.)
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\)
+	///
+	/// AAFRESULT_NULL_PARAM
+	///   - pLength is null.)
 
-AD_IDL(//
-// NOTE: Methods which help support optional buffering or caching of the essence
-// data.  Caching is not required to be supported\, and may actually reduce performance.
-// on some platforms.  If your stream does not support caching\, then return AAFRESULT_SUCCESS
-// for these calls.
-//)
+AD_IDL(///
+/// NOTE: Methods which help support optional buffering or caching of the essence
+/// data.  Caching is not required to be supported\, and may actually reduce performance.
+/// on some platforms.  If your stream does not support caching\, then return AAFRESULT_SUCCESS
+/// for these calls.
+///)
 
 AD_METHOD0(FlushCache, Ensure that all bits are written.  The caller of this interface
-	// is required to call FlushCache before releasing the stream.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\\\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \\\(This is the only code indicating success.\\\)
-	// 
-	// AAFRESULT_STREAM_FULL
-	//   - The essence can not be written because of a fault such as a disk full error in the
-	// underlying operating system.)
+	/// is required to call FlushCache before releasing the stream.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\)
+	/// 
+	/// AAFRESULT_STREAM_FULL
+	///   - The essence can not be written because of a fault such as a disk full error in the
+	/// underlying operating system.)
 
 AD_METHOD1(SetCacheSize,
 			[in],
@@ -206,14 +206,14 @@ AD_METHOD1(SetCacheSize,
 			itsSize,
 			The size of the cache buffer.  Zero is a valid size\\\, and means to turn caching off,
 			Sets the size of the cache buffer used for further operations.
-			// Destroys the current contents of the cache.
-	// 
-	// This method should return only the following codes.  If more than one of
-	// the listed errors is in effect\\\, it should return the first one
-	// encountered in the order given below:
-	// 
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \\\(This is the only code indicating success.\\\) )
+			/// Destroys the current contents of the cache.
+	/// 
+	/// This method should return only the following codes.  If more than one of
+	/// the listed errors is in effect\\\, it should return the first one
+	/// encountered in the order given below:
+	/// 
+	/// AAFRESULT_SUCCESS
+	///   - succeeded.  \\\(This is the only code indicating success.\\\) )
 
 AD_XCLASS_END(Abstract, Transient)
 

@@ -34,27 +34,27 @@ AAFObject\
 #c
 #c #import ./AAFObject.exp
 AD_HEAD
-AD_IDL(//
-// The IAAFMob2 interface is implemented by objects that specify a
-// Metadata Object\, which can describe a composition\, essence\, or
-// physical media.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that IAAFMob2 is a
-//     primary interface for an abstract class\, so it is not
-//     appropriate for the Initialize\(\) method to exist in this
-//     interface.  The Initialize\(\) method is available through the
-//     concrete object's primary interface.
-//)
+AD_IDL(///
+/// The IAAFMob2 interface is implemented by objects that specify a
+/// Metadata Object\, which can describe a composition\, essence\, or
+/// physical media.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.  Note that IAAFMob2 is a
+///     primary interface for an abstract class\, so it is not
+///     appropriate for the Initialize\(\) method to exist in this
+///     interface.  The Initialize\(\) method is available through the
+///     concrete object's primary interface.
+///)
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(AAFMobSlot)
 AD_FORWARD_DECLARATION(AAFTimelineMobSlot)
@@ -103,21 +103,21 @@ AD_XMETHOD1(GetMobID,
 			The unique media object id,
 
 			This method returns the unique Mob ID associated with this mob.
-  //
-  // Succeeds if all of the following are true:
-  // - the pMobID pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pMobID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMobID arg is NULL.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pMobID pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pMobID.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMobID arg is NULL.)
 
 
 AD_XMETHOD1(SetMobID,
@@ -127,18 +127,18 @@ AD_XMETHOD1(SetMobID,
 			mobID,
 			New Mob ID,
 
-  // When a mob is initially created\, the Reference Implementation
-  // internally creates a mobID for the new mob.  This method should
-  // be used to change the mob's identity to an explicit mobID.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// When a mob is initially created\, the Reference Implementation
+  /// internally creates a mobID for the new mob.  This method should
+  /// be used to change the mob's identity to an explicit mobID.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(Name,
@@ -153,21 +153,21 @@ AD_XMETHOD1(CountSlots,
 			Number of slots,
 
 			This method returns the number of slots contained by this mob.
-  //
-  // Succeeds if all of the following are true:
-  // - the pNumSlots pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pNumSlots.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumSlots arg is NULL.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pNumSlots pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pNumSlots.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumSlots arg is NULL.)
 
 
 AD_XMETHOD1(AppendSlot,
@@ -178,21 +178,21 @@ AD_XMETHOD1(AppendSlot,
 			slot to append,
 
 			Appends the given mob slot to the mob.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSlot pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSlot is null.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSlot pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSlot is null.)
 
 
 AD_XMETHOD1(PrependSlot,
@@ -203,21 +203,21 @@ AD_XMETHOD1(PrependSlot,
 			slot to prepend,
 
 			Prepends the given mob slot to the mob.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSlot pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSlot is null.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSlot pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSlot is null.)
 
 
 AD_XMETHOD2(InsertSlotAt,
@@ -235,28 +235,28 @@ AD_XMETHOD2(InsertSlotAt,
 			slot to insert,
 
      Inserts the given slot into this mob at the given index.  All
-  // existing slots at the given and higher index will be moved up one
-  // index to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSlot pointer is valid.
-  // - index is less than or equal to the result obtained by
-  //   CountSlots\(\).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSlot is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than the result obtained from CountSlots\(\).)
+  /// existing slots at the given and higher index will be moved up one
+  /// index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSlot pointer is valid.
+  /// - index is less than or equal to the result obtained by
+  ///   CountSlots\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSlot is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the result obtained from CountSlots\(\).)
 
 
 AD_XMETHOD1(RemoveSlotAt,
@@ -268,24 +268,24 @@ AD_XMETHOD1(RemoveSlotAt,
 			index of slot to be removed,
 
      Removes the slot at the given index.  All existing slots at
-  // indices higher than the given index will be moved down one index
-  // to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - index is less than the result obtained by CountSlots\(\).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is not less than the result obtained from
-  //     CountSlots\(\).)
+  /// indices higher than the given index will be moved down one index
+  /// to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the result obtained by CountSlots\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is not less than the result obtained from
+  ///     CountSlots\(\).)
 
 
 AD_XMETHOD2(GetSlotAt,
@@ -303,26 +303,26 @@ AD_XMETHOD2(GetSlotAt,
 			the returned slot,
 
      Returns the indexed slot in *ppSlot.
-  // 
-  // Succeeds if all of the following are true:
-  // - ppSlot is a valid pointer.
-  // - index is less than the result obtained by CountSlots\(\).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppSlot is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is not less than the result obtained from
-  //     CountSlots\(\).)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - ppSlot is a valid pointer.
+  /// - index is less than the result obtained by CountSlots\(\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppSlot is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is not less than the result obtained from
+  ///     CountSlots\(\).)
 
 
 AD_XMETHOD1(GetSlots,
@@ -333,22 +333,22 @@ AD_XMETHOD1(GetSlots,
 			Mob Slot Enumeration,
 
 			return an enumeration for all mob slots.  The returned
-  // enumerator is AddRef\(\)ed before it is returned.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  /// enumerator is AddRef\(\)ed before it is returned.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 
 AD_XMETHOD1(GetModTime,
@@ -359,21 +359,21 @@ AD_XMETHOD1(GetModTime,
 			Modified Time,
 
 			This method will return the modification time for this mob.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLastModified pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pLastModified.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLastModified arg is NULL.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLastModified pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pLastModified.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLastModified arg is NULL.)
 
 
 AD_XMETHOD1(SetModTime,
@@ -384,20 +384,20 @@ AD_XMETHOD1(SetModTime,
 			New Modification Time,
 
 			This method sets the modification time on a mob.  The
-  // modification time is initially set to the time that the mob
-  // was created.  The Reference Implementation does not maintain the
-  // modification time every time that a mob has been updated.
-  // Therefore\, this method should be called explicitly to change the
-  // modification time.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// modification time is initially set to the time that the mob
+  /// was created.  The Reference Implementation does not maintain the
+  /// modification time every time that a mob has been updated.
+  /// Therefore\, this method should be called explicitly to change the
+  /// modification time.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetCreateTime,
@@ -408,21 +408,21 @@ AD_XMETHOD1(GetCreateTime,
 			Creation Time,
 
 			This method will return the creation time for this mob.
-  //
-  // Succeeds if all of the following are true:
-  // - the pCreationTime pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pCreationTime.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pCreationTime arg is NULL.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pCreationTime pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pCreationTime.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCreationTime arg is NULL.)
 
 
 AD_XMETHOD1(SetCreateTime,
@@ -433,19 +433,19 @@ AD_XMETHOD1(SetCreateTime,
 			New Creation Time,
 
 			This method sets the creation time on a mob.  The
-  // creation time is initially set to the time that the mob
-  // was created.
-  // Therefore\, this method should be called explicitly to change the
-  // creation time.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// creation time is initially set to the time that the mob
+  /// was created.
+  /// Therefore\, this method should be called explicitly to change the
+  /// creation time.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD2(AppendComment,
@@ -462,24 +462,24 @@ AD_XMETHOD2(AppendComment,
 			Comment value,
 
 			Creates a user-defined comment and appends it to the specified
-  // Mob.  A Mob comment is implemented as a AAFTaggedValue object of type 
-  // WCharString.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pCategory pointer is valid.
-  // - the pComment pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - either pCategory or pComment args is NULL.)
+  /// Mob.  A Mob comment is implemented as a AAFTaggedValue object of type 
+  /// WCharString.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCategory pointer is valid.
+  /// - the pComment pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pCategory or pComment args is NULL.)
 
 
 AD_XMETHOD1(CountComments,
@@ -490,21 +490,21 @@ AD_XMETHOD1(CountComments,
 			Number  of Mob Comments,
 
 			return total number of comments attached to this mob.
-  //
-  // Succeeds if all of the following are true:
-  // - the pNumComments pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pNumComments.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumComments arg is NULL.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pNumComments pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pNumComments.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumComments arg is NULL.)
 
 
 AD_XMETHOD1(GetComments,
@@ -515,24 +515,24 @@ AD_XMETHOD1(GetComments,
 			Mob Comments,
 
 			return the enumeration for all mob comments.  The returned
-  // enumerator is AddRef\(\)ed before it is returned.  Mob comments are 
-  // implemented as AAFTaggedValue of type WCharString.   The enumerator
-  // is implemented as a EnumAAAFTaggedValues.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  /// enumerator is AddRef\(\)ed before it is returned.  Mob comments are 
+  /// implemented as AAFTaggedValue of type WCharString.   The enumerator
+  /// is implemented as a EnumAAAFTaggedValues.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 
 AD_XMETHOD1(RemoveComment,
@@ -542,26 +542,26 @@ AD_XMETHOD1(RemoveComment,
 			pComment,
 			Comment to remove,
 
-  // Removes the given comment from this mob.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pComment pointer is valid.
-  // - the given comment is present in the mob.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pComment is null.
-  //
-  // AAFRESULT_OBJECT_NOT_FOUND
-  //   - the given comment is not in this mob.)
+  /// Removes the given comment from this mob.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pComment pointer is valid.
+  /// - the given comment is present in the mob.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pComment is null.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the given comment is not in this mob.)
 
 
 AD_XMETHOD6(AppendNewTimelineSlot,
@@ -602,26 +602,26 @@ AD_XMETHOD6(AppendNewTimelineSlot,
 			Newly created slot,
 
 			This method creates a new timeline mob slot with the given
-  // property values and appends it to the input mob.
-  // 
-  // The returned mob slot is AddRef\(\)ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
-  // - the pSlotName pointer is valid.
-  // - the ppNewSlot pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
+  /// property values and appends it to the input mob.
+  /// 
+  /// The returned mob slot is AddRef\(\)ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSegment pointer is valid.
+  /// - the pSlotName pointer is valid.
+  /// - the ppNewSlot pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
 
 
 AD_XMETHOD4(GetMobInfo,
@@ -650,30 +650,30 @@ AD_XMETHOD4(GetMobInfo,
 			size of the supplied buffer.,
 
 			This method will get all mob property information is a single call.
-  //
-  // Caller may call GetNameBufLen\(\) to determine the required pName
-  // buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pLastModified pointer is valid.
-  // - the pCreationTime pointer is valid.
-  // - the pName pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pLastModified\,
-  // *pCreationTime\, or *pName.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - any of pLastModified\, pCreationTime\, or pName arguments is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.)
+  ///
+  /// Caller may call GetNameBufLen\(\) to determine the required pName
+  /// buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pLastModified pointer is valid.
+  /// - the pCreationTime pointer is valid.
+  /// - the pName pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pLastModified\,
+  /// *pCreationTime\, or *pName.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - any of pLastModified\, pCreationTime\, or pName arguments is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - bufSize indicates the buffer is too small to hold the string.)
 
 
 AD_XMETHOD3(OffsetToMobTimecode,
@@ -696,30 +696,30 @@ AD_XMETHOD3(OffsetToMobTimecode,
 			The resulting timecode,
 
 	This method will determine the timecode at the given offset into
-  // the given timecode segment\, and will return it in *pResult.  If
-  // pTcSeg is NULL\, will search for the slot containing a timecode
-  // segment and will use that instead.
-  //
-  // Succeeds if all of the following are true:
-  // - the pTcSeg pointer is valid.
-  // - the pOffset pointer is valid.
-  // - the pResult pointer is valid.
-  // - Timecode track exists.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - either pOffset or pResult argument is NULL.
-  //
-  // AAFRESULT_TIMECODE_NOT_FOUND
-  //   - timecode track wasn't found.)
+  /// the given timecode segment\, and will return it in *pResult.  If
+  /// pTcSeg is NULL\, will search for the slot containing a timecode
+  /// segment and will use that instead.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pTcSeg pointer is valid.
+  /// - the pOffset pointer is valid.
+  /// - the pResult pointer is valid.
+  /// - Timecode track exists.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pOffset or pResult argument is NULL.
+  ///
+  /// AAFRESULT_TIMECODE_NOT_FOUND
+  ///   - timecode track wasn't found.)
 
 
 AD_XMETHOD2(LookupSlot,
@@ -736,24 +736,24 @@ AD_XMETHOD2(LookupSlot,
 			The requested slot,
 
 			The method will find the mob slot for the given slot id.
-  //
-  // The returned mob slot is AddRef\(\)ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppDestSlot pointer is valid.
-  // - the given slot ID is found.
-  // 
-  // If this method fails nothing will be written to *ppDestSlot.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppDestSlot arg is NULL.)
+  ///
+  /// The returned mob slot is AddRef\(\)ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppDestSlot pointer is valid.
+  /// - the given slot ID is found.
+  /// 
+  /// If this method fails nothing will be written to *ppDestSlot.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppDestSlot arg is NULL.)
 
 
 AD_XMETHOD2(ChangeRef,
@@ -770,21 +770,21 @@ AD_XMETHOD2(ChangeRef,
 			New Mob ID reference in source clip,
 
 			Finds all Source Clips in the specified Mob that refer to the
-  // specified old Mob\, and changes the references to point to the
-  // new Mob.
-  //
-  // This function traverses through the entire structure of the input
-  // Mob looking for Source Clips\, and changes the sourceID property
-  // on all Source Clips with oldMobID to newMobID.
-  //
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// specified old Mob\, and changes the references to point to the
+  /// new Mob.
+  ///
+  /// This function traverses through the entire structure of the input
+  /// Mob looking for Source Clips\, and changes the sourceID property
+  /// on all Source Clips with oldMobID to newMobID.
+  ///
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD4(CloneExternal,
@@ -813,39 +813,39 @@ AD_XMETHOD4(CloneExternal,
 			Destination Mob,
 
 	Clones the specified Source Mob\, and optionally all dependent
-  // Mobs\, to an external file\, keeping the same MobID.  A pointer
-  // to the newly created destination mob is returned in *ppDestMob.
-  // 
-  // This function clones the specified Source Mob in the source file
-  // into a destination Mob\, with the same MobID\, in the destination
-  // file.  If resolveDependencies is kFollowDepend\, the function
-  // also clones all Mobs referenced by the specified Source Mob.  If
-  // includeMedia is kIncludeMedia\, the function also copies the
-  // media data associated with the Source Mob\, returns the
-  // destination Mob\, and clones all private data.
-  //
-  // If the media data is not in the file\, the function does not
-  // attempt to find it in another file and clone it.  Both AAF files
-  // must be open before you call this function and both must have the
-  // same AAF Version number.
-  //
-  // The returned mob is AddRef\(\)ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the pDestFile pointer is valid.
-  // - the ppDestMob pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - either pDestFile or ppDestMob arguments is NULL.)
+  /// Mobs\, to an external file\, keeping the same MobID.  A pointer
+  /// to the newly created destination mob is returned in *ppDestMob.
+  /// 
+  /// This function clones the specified Source Mob in the source file
+  /// into a destination Mob\, with the same MobID\, in the destination
+  /// file.  If resolveDependencies is kFollowDepend\, the function
+  /// also clones all Mobs referenced by the specified Source Mob.  If
+  /// includeMedia is kIncludeMedia\, the function also copies the
+  /// media data associated with the Source Mob\, returns the
+  /// destination Mob\, and clones all private data.
+  ///
+  /// If the media data is not in the file\, the function does not
+  /// attempt to find it in another file and clone it.  Both AAF files
+  /// must be open before you call this function and both must have the
+  /// same AAF Version number.
+  ///
+  /// The returned mob is AddRef\(\)ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pDestFile pointer is valid.
+  /// - the ppDestMob pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pDestFile or ppDestMob arguments is NULL.)
 
 
 AD_XMETHOD2(Copy,
@@ -854,8 +854,8 @@ AD_XMETHOD2(Copy,
 			aafCharacter_constptr,
 			pDestMobName,
 			Optional Input. The name to be assigned to the new copy of the
-	// Mob.  The destMobName argument is optional. Specify a NULL
-	// value if no destination Mob name is desired.,
+	/// Mob.  The destMobName argument is optional. Specify a NULL
+	/// value if no destination Mob name is desired.,
 
 			[out],
 			objOut,
@@ -864,29 +864,29 @@ AD_XMETHOD2(Copy,
 			Destination Mob,
 
 			This function copies the specified Mob into a destination Mob in
-  // the same AAF file. The new Mob is returned through the destMob
-  // parameter. The function gives the destination Mob a new MobID and
-  // the name specified in the destMobName parameter. The function
-  // also copies all private data.
-  // 
-  // The returned mob is AddRef\(\)ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the pDestMobName pointer is valid.
-  // - the ppDestMob pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - either pDestMobName or pDestMob arguments is NULL.)
-  //
+  /// the same AAF file. The new Mob is returned through the destMob
+  /// parameter. The function gives the destination Mob a new MobID and
+  /// the name specified in the destMobName parameter. The function
+  /// also copies all private data.
+  /// 
+  /// The returned mob is AddRef\(\)ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pDestMobName pointer is valid.
+  /// - the ppDestMob pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pDestMobName or pDestMob arguments is NULL.)
+  ///
 
 AD_XMETHOD1(AppendKLVData,
 			[in],
@@ -896,22 +896,22 @@ AD_XMETHOD1(AppendKLVData,
 			KLV object,
 
 			Appends a pre-existing KLV Data object to the specified
-  // Mob.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pKLV pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - the pData arg is NULL.)
+  /// Mob.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pKLV pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - the pData arg is NULL.)
 
 
 AD_XMETHOD1(CountKLVData,
@@ -922,21 +922,21 @@ AD_XMETHOD1(CountKLVData,
 			Number  of KLV data objects,
 
 			return total number of KLV data objects attached to this mob.
-  //
-  // Succeeds if all of the following are true:
-  // - the pNumData pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pNumComments.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumData arg is NULL.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pNumData pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pNumComments.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumData arg is NULL.)
 
 
 AD_XMETHOD1(GetKLVData,
@@ -947,23 +947,23 @@ AD_XMETHOD1(GetKLVData,
 			KLV data objects,
 
 			return the enumeration for all KLV data objects on this mob.  The returned
-  // enumerator is AddRef\(\)ed before it is returned.  The enumerator
-  // is implemented as a EnumAAFKLVData.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  /// enumerator is AddRef\(\)ed before it is returned.  The enumerator
+  /// is implemented as a EnumAAFKLVData.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 
 AD_XMETHOD1(RemoveKLVData,
@@ -973,26 +973,26 @@ AD_XMETHOD1(RemoveKLVData,
 			pData,
 			KLV data object to remove,
 
-  // Removes the given KLV data object from this mob.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pData pointer is valid.
-  // - the given KLV data object is present in the mob.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pData is null.
-  //
-  // AAFRESULT_OBJECT_NOT_FOUND
-  //   - the given KLV data object is not in this mob.)
+  /// Removes the given KLV data object from this mob.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// - the given KLV data object is present in the mob.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pData is null.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the given KLV data object is not in this mob.)
 
 #c
 #c New AAFMob2 methods
@@ -1005,35 +1005,35 @@ AD_XMETHOD2( AppendAttribute,
              The attribute value.,
 	     Append and attribute name/value pair to the attribute list. )
 
-   // Creates a new tagged value, initializes it with the specified attribute
-   // name/value pair, and appends it to the attribute list.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pName or pValue is null.
+  /// Creates a new tagged value, initializes it with the specified attribute
+  /// name/value pair, and appends it to the attribute list.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pName or pValue is null.
 
 AD_XMETHOD1( CountAttributes,
 	     [out], objPass, aafUInt32*, pNumAttributes,
 	     Pointer to attribute count.,
 	     Return the number of attributes contained by this mob )
 
-   // Returns the number of attributes on this mob.
-   //
-   // Succeeds if:
-   //   - pNumAttributes is a valid pointer
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pNumAttributes is null
+  /// Returns the number of attributes on this mob.
+  ///
+  /// Succeeds if:
+  ///   - pNumAttributes is a valid pointer
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pNumAttributes is null
   
 
 AD_XMETHOD1( GetAttributes,
@@ -1041,18 +1041,18 @@ AD_XMETHOD1( GetAttributes,
 	     Pointer to the new enumerator object created by this method.,
 	     Return an attribute enumerator for this mob. )
 
-   // Creates an enumerator for this mobs attributes.  The new enumerator is
-   // AddRef'ed before it is returned.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pEnum was null
+  /// Creates an enumerator for this mobs attributes.  The new enumerator is
+  /// AddRef'ed before it is returned.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pEnum was null
 
 
 AD_XMETHOD1( RemoveAttribute,
@@ -1060,53 +1060,53 @@ AD_XMETHOD1( RemoveAttribute,
 	     Pointer to the tagged value attribute.,
 	     Remove an attribute \(tagged value\).)
 
-   // Removes a mob attribute.
-   //
-   // Succeeds if:
-   //   - pName and pValue are valid pointers.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pName or pValue is null.
+  /// Removes a mob attribute.
+  ///
+  /// Succeeds if:
+  ///   - pName and pValue are valid pointers.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pName or pValue is null.
 	
 AD_XMETHOD1( SetUsageCode,
 	     [in], objPass, aafUID_constref, usageCode,
 	     The usage code value.,
 	     Set this mob\'s usage code. )
 
-   // Set this mob\'s usage code. Usage codes are documented in the
-   // AAF Edit Protocol, and related specifications.
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_SUCCESS
-   //
+  /// Set this mob\'s usage code. Usage codes are documented in the
+  /// AAF Edit Protocol, and related specifications.
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_SUCCESS
+  ///
 
 AD_XMETHOD1( GetUsageCode,
 	     [out], objPass, aafUID_t*, pUsageCode,
 	     Pointer to usage code.,
 	     Get this mob\'s usage code. )
 
-   // Get this mob\'s usage code. Usage codes are documented in the
-   // AAF Edit Protocol, and related specifications.
-   //
-   // Succeeds if:
-   //   - pUsageCode is a valid pointer
-   //
-   // Return codes:
-   //
-   //   AAFRESULT_PROP_NOT_PRESENT
-   //        - no usage code is present on this mob
-   //
-   //   AAFRESULT_NULL_PARAM
-   //	     - pUsageCode is null
-   //	
-   //   AAFRESULT_SUCCESS
-   //        - succeeded \(This is the only code indicating success.\)
-   //
+  /// Get this mob\'s usage code. Usage codes are documented in the
+  /// AAF Edit Protocol, and related specifications.
+  ///
+  /// Succeeds if:
+  ///   - pUsageCode is a valid pointer
+  ///
+  /// Return codes:
+  ///
+  ///   AAFRESULT_PROP_NOT_PRESENT
+  ///        - no usage code is present on this mob
+  ///
+  ///   AAFRESULT_NULL_PARAM
+  ///	     - pUsageCode is null
+  ///	
+  ///   AAFRESULT_SUCCESS
+  ///        - succeeded \(This is the only code indicating success.\)
+  ///
 
 
 AD_XMETHOD4(AppendNewStaticSlot,
@@ -1136,26 +1136,26 @@ AD_XMETHOD4(AppendNewStaticSlot,
 			Newly created slot,
 
 			This method creates a new static mob slot with the given
-  // property values and appends it to the input mob.
-  // 
-  // The returned mob slot is AddRef\(\)ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
-  // - the pSlotName pointer is valid.
-  // - the ppNewSlot pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
+  /// property values and appends it to the input mob.
+  /// 
+  /// The returned mob slot is AddRef\(\)ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSegment pointer is valid.
+  /// - the pSlotName pointer is valid.
+  /// - the ppNewSlot pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
 
 
 AD_XMETHOD6(AppendNewEventSlot,
@@ -1196,26 +1196,26 @@ AD_XMETHOD6(AppendNewEventSlot,
 			Newly created slot,
 
 			This method creates a new event mob slot with the given
-  // property values and appends it to the input mob.
-  // 
-  // The returned mob slot is AddRef\(\)ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
-  // - the pSlotName pointer is valid.
-  // - the ppNewSlot pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
+  /// property values and appends it to the input mob.
+  /// 
+  /// The returned mob slot is AddRef\(\)ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSegment pointer is valid.
+  /// - the pSlotName pointer is valid.
+  /// - the ppNewSlot pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - any of pSegment\, pSlotName\, or ppNewSlot arguments is null.)
 	     
 
 AD_XCLASS_END(Abstract, StoredObject)

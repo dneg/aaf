@@ -31,18 +31,18 @@ AAFPhysicalDescriptor\
 #c
 AD_HEAD
 AD_INCLUDE(AAFTypes)
-AD_IDL(//
-// The IAAFAuxiliaryDescriptor interface is implemented by objects that
-// describe a file source which has no physical source.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The IAAFAuxiliaryDescriptor interface is implemented by objects that
+/// describe a file source which has no physical source.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 
 
 AD_CLASS_UUID(989d79d1, 9aca, 43f6, 8b, e1, 03, ad, 2a, d0, 75, d5)
@@ -53,16 +53,16 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\,
-  // IAAFAuxiliaryDescriptor object.  This method must be called
-  // after allocation\, and before any other method can be called.
-  //
-  // Return codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  /// IAAFAuxiliaryDescriptor object.  This method must be called
+  /// after allocation\, and before any other method can be called.
+  ///
+  /// Return codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
 
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(MimeType,
      The registered mime type of the data per RFC 2046 and RFC 2048.)

@@ -32,31 +32,31 @@ AAFObject\
 #c #import ./AAFObject.exp
 #import ./AAFComponent2.exp
 AD_HEAD
-AD_IDL(//
-// IAAFComponent is DEPRECATED\, please use IAAFComponent2.
-//
-// The component class represents an essence element.  A Component is
-// an abastract class with two subclasses: Segment and Transition.
-// The GetLength and SetLength only aplies to time-varying media and
-// it is an  optional property. Non time-varying objects DO NOT
-// support this property.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that IAAFComponent is a
-//     primary interface for an abstract class\, so it is not
-//     appropriate for the Initialize\(\) method to exist in this
-//     interface.  The Initialize\(\) method is available through the
-//     concrete object's primary interface.
-//)
+AD_IDL(///
+/// IAAFComponent is DEPRECATED\, please use IAAFComponent2.
+///
+/// The component class represents an essence element.  A Component is
+/// an abastract class with two subclasses: Segment and Transition.
+/// The GetLength and SetLength only aplies to time-varying media and
+/// it is an  optional property. Non time-varying objects DO NOT
+/// support this property.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.  Note that IAAFComponent is a
+///     primary interface for an abstract class\, so it is not
+///     appropriate for the Initialize\(\) method to exist in this
+///     interface.  The Initialize\(\) method is available through the
+///     concrete object's primary interface.
+///)
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFKLVData)
 AD_FORWARD_DECLARATION(EnumAAFKLVData)
@@ -71,25 +71,25 @@ AD_METHOD1(SetLength,
 		   length,
 		   The duration in edit units of this component,
 		   Sets the length property value on this component object.
-  // 
-  // Succeeds if all of the following are true:
-  // - the optional length property is present for this object.
-  //
-  // This method deals with an optional property\\\, which will only be
-  // present for time-varying media.
-  // 
-  // If this method fails the length property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_BAD_PROP
-  //   - the optional length property is not present for this object.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the optional length property is present for this object.
+  ///
+  /// This method deals with an optional property\\\, which will only be
+  /// present for time-varying media.
+  /// 
+  /// If this method fails the length property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_BAD_PROP
+  ///   - the optional length property is not present for this object.)
 
 
 AD_METHOD1(GetLength,
@@ -98,28 +98,28 @@ AD_METHOD1(GetLength,
 		   pLength,
 		   Length of this component,
 		   Gets the duration in edit units of this component.
-  //	
-  // Succeeds if all of the following are true:
-  // - the pLength pointer is valid.
-  // - the optional length property is present for this object.
-  //
-  // This method deals with an optional property\\\, which will only be
-  // present for time-varying media.
-  // 
-  // If this method fails nothing will be written to *pLength.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLength arg is NULL.
-  //
-  // AAFRESULT_BAD_PROP
-  //   - the optional length property is not present for this object.)
+  ///	
+  /// Succeeds if all of the following are true:
+  /// - the pLength pointer is valid.
+  /// - the optional length property is present for this object.
+  ///
+  /// This method deals with an optional property\\\, which will only be
+  /// present for time-varying media.
+  /// 
+  /// If this method fails nothing will be written to *pLength.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLength arg is NULL.
+  ///
+  /// AAFRESULT_BAD_PROP
+  ///   - the optional length property is not present for this object.)
 	
 
 AD_XMETHOD1(SetDataDef,
@@ -129,16 +129,16 @@ AD_XMETHOD1(SetDataDef,
 			pDataDef,
 			DataDef of this object,
 			sets the data definition property AUID on this component.
-  // 
-  // If this method fails the Data Definition property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
+  /// 
+  /// If this method fails the Data Definition property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pDataDef\))
 
 
@@ -149,21 +149,21 @@ AD_XMETHOD1(GetDataDef,
 			ppDatadef,
 			DataDef of this object,
 			returns data definition object.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppDatadef pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppDatadef.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppDatadef arg is NULL.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppDatadef pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppDatadef.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppDatadef arg is NULL.)
 
 AD_XMETHOD1(AppendKLVData,
 			[in],
@@ -173,22 +173,22 @@ AD_XMETHOD1(AppendKLVData,
 			KLV object,
 
 			Appends a pre-existing KLV Data object to the specified
-  // component.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pKLV pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - the pData arg is NULL.)
+  /// component.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pKLV pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - the pData arg is NULL.)
 
 
 AD_XMETHOD1(CountKLVData,
@@ -199,21 +199,21 @@ AD_XMETHOD1(CountKLVData,
 			Number  of KLV data objects,
 
 			return total number of KLV data objects attached to this component.
-  //
-  // Succeeds if all of the following are true:
-  // - the pNumData pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pNumComments.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumData arg is NULL.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pNumData pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pNumComments.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumData arg is NULL.)
 
 
 AD_XMETHOD1(GetKLVData,
@@ -224,23 +224,23 @@ AD_XMETHOD1(GetKLVData,
 			KLV data objects,
 
 			return the enumeration for all KLV data objects on this component.  The returned
-  // enumerator is AddRef\(\)ed before it is returned.  The enumerator
-  // is implemented as a EnumAAFKLVData.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  /// enumerator is AddRef\(\)ed before it is returned.  The enumerator
+  /// is implemented as a EnumAAFKLVData.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 
 AD_XMETHOD1(RemoveKLVData,
@@ -250,26 +250,26 @@ AD_XMETHOD1(RemoveKLVData,
 			pData,
 			KLV data object to remove,
 
-  // Removes the given KLV data object from this component.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pData pointer is valid.
-  // - the given KLV data object is present in the component.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pData is null.
-  //
-  // AAFRESULT_OBJECT_NOT_FOUND
-  //   - the given KLV data object is not in this component.)
+  /// Removes the given KLV data object from this component.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pData pointer is valid.
+  /// - the given KLV data object is present in the component.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pData is null.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - the given KLV data object is not in this component.)
 
 #c
 #c AAFComponent2 methods

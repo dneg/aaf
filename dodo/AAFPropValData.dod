@@ -30,9 +30,9 @@ AAFPropertyValue\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// Stub interface for an implementation class with no separate
-// published interface.)
+AD_IDL(///
+/// Stub interface for an implementation class with no separate
+/// published interface.)
 AD_CLASS_UUID(106bb6e1, f0c1, 11d2, 84, 2c, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(106bb6e2, f0c1, 11d2, 84, 2c, 00, 60, 08, 32, ac, b8)

@@ -31,19 +31,19 @@ AAFFileDescriptor\
 #c
 #c #import ./AAFFileDescriptor.exp
 AD_HEAD
-AD_IDL(//
-// The IAAFSoundDescriptor interface is implemented by objects
-// which describe the basic parameters of Sound used by all
-// compression or coding schemes.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The IAAFSoundDescriptor interface is implemented by objects
+/// which describe the basic parameters of Sound used by all
+/// compression or coding schemes.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_CLASS_UUID(DDC8931D, 1A32, 4362, BD, 78, 45, 0D, 0D, 97, 00, 47)
 
 AD_DEFAULT_UUID(DDC8931E, 1A32, 4362, BD, 78, 45, 0D, 0D, 97, 00, 47)
@@ -54,22 +54,22 @@ AD_XMETHOD1(SetCompression,
 				aafUID_constref,
 				compression,
 			Identifies kind of compression and format of
-	// compression information.,
+	/// compression information.,
 
-  // Sets the kind of compression and format of compression
-  // information of the sound essence data. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the Compression property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// Sets the kind of compression and format of compression
+  /// information of the sound essence data. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the Compression property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetCompression,
@@ -79,27 +79,27 @@ AD_XMETHOD1(GetCompression,
 				pCompression,
 			Compression of the sound essence data.,
 
-  // Gets the kind of compression and format of compression
-  // information of the sound essence data. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pCompression pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pCompression.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pCompression arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.)
+  /// Gets the kind of compression and format of compression
+  /// information of the sound essence data. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pCompression pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pCompression.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCompression arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
 
 
 AD_XMETHOD1(SetChannelCount,
@@ -108,21 +108,21 @@ AD_XMETHOD1(SetChannelCount,
 				aafUInt32,
 				channelCount,
 			The number of channels of sound represented
-	// by this descriptor.,
+	/// by this descriptor.,
 
-  // Sets the number of channels of sound represented by
-  // this descriptor. This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the Channels property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// Sets the number of channels of sound represented by
+  /// this descriptor. This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the Channels property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetChannelCount,
@@ -131,24 +131,24 @@ AD_XMETHOD1(GetChannelCount,
 				aafUInt32 *,
 				pChannelCount,
 			The number of channels of sound represented
-	// by this descriptor.,
+	/// by this descriptor.,
 
-  // Gets the number of channels of sound represented by
-  // this descriptor. This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pChannelCount pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pChannelCount.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pChannelCount arg is NULL.)
+  /// Gets the number of channels of sound represented by
+  /// this descriptor. This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pChannelCount pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pChannelCount.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChannelCount arg is NULL.)
 
 
 AD_XMETHOD1(SetAudioSamplingRate,
@@ -158,19 +158,19 @@ AD_XMETHOD1(SetAudioSamplingRate,
 				rate,
 			Sample rate of audio essence.,
 
-  // Sets the sample rate of audio represented by this descriptor.
-  // This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the AudioSamplingRate property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// Sets the sample rate of audio represented by this descriptor.
+  /// This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the AudioSamplingRate property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetAudioSamplingRate,
@@ -180,22 +180,22 @@ AD_XMETHOD1(GetAudioSamplingRate,
 				pRate,
 			Sample rate of audio essence.,
 
-  // Gets the sample rate of audio represented by this descriptor.
-  // This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pRate pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pRate.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pRate arg is NULL.)
+  /// Gets the sample rate of audio represented by this descriptor.
+  /// This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pRate pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pRate.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pRate arg is NULL.)
 
 
 AD_XMETHOD1(SetIsLocked,
@@ -205,20 +205,20 @@ AD_XMETHOD1(SetIsLocked,
 				locked,
 			Is number of samples per frame locked to video?,
 
-  // Sets the Locked flag which indicates whether the number of
-  // samples per frame is locked or unlocked. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the Locked property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// Sets the Locked flag which indicates whether the number of
+  /// samples per frame is locked or unlocked. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the Locked property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(IsLocked,
@@ -228,27 +228,27 @@ AD_XMETHOD1(IsLocked,
 				pLocked,
 			Is number of samples per frame locked to video?,
 
-  // Gets the Locked flag which indicates whether the number of
-  // samples per frame is locked or unlocked. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pLocked pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pLocked.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLocked arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.)
+  /// Gets the Locked flag which indicates whether the number of
+  /// samples per frame is locked or unlocked. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pLocked pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pLocked.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocked arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
 
 
 AD_XMETHOD1(SetElectroSpatialFormulation,
@@ -258,19 +258,19 @@ AD_XMETHOD1(SetElectroSpatialFormulation,
 				formulation,
 			Electro-spatial form of the signal.,
 
-  // Sets the electro-spatial form of the signal. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the ElectroSpatial property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// Sets the electro-spatial form of the signal. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the ElectroSpatial property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetElectroSpatialFormulation,
@@ -280,26 +280,26 @@ AD_XMETHOD1(GetElectroSpatialFormulation,
 				pFormulation,
 			Electro-spatial form of the signal.,
 
-  // Gets the electro-spatial form of the signal. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pFormulation pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pFormulation.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFormulation arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.)
+  /// Gets the electro-spatial form of the signal. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pFormulation pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pFormulation.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFormulation arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
 
 
 AD_XMETHOD1(SetAudioRefLevel,
@@ -309,18 +309,18 @@ AD_XMETHOD1(SetAudioRefLevel,
 				level,
 			Audio reference level.,
 
-  // Sets the audio reference level. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the AudioRefLevel property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// Sets the audio reference level. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the AudioRefLevel property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetAudioRefLevel,
@@ -330,25 +330,25 @@ AD_XMETHOD1(GetAudioRefLevel,
 				pLevel,
 			Audio reference level.,
 
-  // Gets the audio reference level. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pLevel pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pLevel.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLevel arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.)
+  /// Gets the audio reference level. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pLevel pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pLevel.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLevel arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
 
 
 AD_XMETHOD1(SetDialNorm,
@@ -358,18 +358,18 @@ AD_XMETHOD1(SetDialNorm,
 				dialNorm,
 			Dial norm.,
 
-  // Sets the dial norm. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the DialNorm property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// Sets the dial norm. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the DialNorm property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetDialNorm,
@@ -379,25 +379,25 @@ AD_XMETHOD1(GetDialNorm,
 				pDialNorm,
 			Dial norm.,
 
-  // Gets the dial norm. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pDialNorm pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pDialNorm.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDialNorm arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.)
+  /// Gets the dial norm. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pDialNorm pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pDialNorm.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDialNorm arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.)
 
 
 AD_XMETHOD1(SetQuantizationBits,
@@ -407,18 +407,18 @@ AD_XMETHOD1(SetQuantizationBits,
 				bitsCount,
 			Number of quantization bits.,
 
-  // Sets the number of quantization bits. This property is required.
-  //  
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the QuantizationBits property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// Sets the number of quantization bits. This property is required.
+  ///  
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the QuantizationBits property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetQuantizationBits,
@@ -428,19 +428,19 @@ AD_XMETHOD1(GetQuantizationBits,
 				pBitsCount,
 			Number of quantization bits.,
 
-  // Gets the number of quantization bits. This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pBitsCount pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pBitsCount.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBitsCount arg is NULL.)
+  /// Gets the number of quantization bits. This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pBitsCount pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pBitsCount.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBitsCount arg is NULL.)
 AD_XCLASS_END(Concrete, StoredObject)

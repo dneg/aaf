@@ -31,43 +31,43 @@ AAFLocator\
 #c
 #import ./AAFLocator.exp
 AD_HEAD
-AD_IDL(//
-// The IAAFNetworkLocator interface is implemented by objects which
-// provide information to help find a file containing essence data.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
-//)
+AD_IDL(///
+/// The IAAFNetworkLocator interface is implemented by objects which
+/// provide information to help find a file containing essence data.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.
+///)
 AD_CLASS_UUID(2c1097b1, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
 
 AD_DEFAULT_UUID(2c1097b2, 69d6, 11d2, 84, 1b, 00, 60, 08, 32, ac, b8)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\, empty
-  // IAAFNetworkLocator-supporting object.  This method must be called
-  // after allocation\, and before any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize\(\) has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  /// IAAFNetworkLocator-supporting object.  This method must be called
+  /// after allocation\, and before any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize\(\) has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
 
 
 AD_OVERRIDE(.method-GetPath)

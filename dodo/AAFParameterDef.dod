@@ -30,22 +30,22 @@ AAFDefObject\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// The IAAFParameterDef interface is implemented by objects that
-// specify a definition of an operation group parameter.  The
-// parameterDef object is separate from the operation definition to
-// allow some parameters\, for example level\, to be specified once
-// for multiple operation definitions. Parmeter definitions define the
-// possible values and display units of a single operation parameter.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The IAAFParameterDef interface is implemented by objects that
+/// specify a definition of an operation group parameter.  The
+/// parameterDef object is separate from the operation definition to
+/// allow some parameters\, for example level\, to be specified once
+/// for multiple operation definitions. Parmeter definitions define the
+/// possible values and display units of a single operation parameter.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_FORWARD_DECLARATION(AAFTypeDef)
 AD_CLASS_UUID(20045fa2, 1d87, 11d2, bf, 96, 00, 60, 97, 11, 62, 12) 
 
@@ -82,32 +82,32 @@ AD_XMETHOD1(GetTypeDefinition,
 		   ppTypeDef,
 		   Pointer to a type definition,
      Places the AAFTypeDef object attached to this IAAFParameterDef
-  // into the *ppTypeDef argument.  If none exists yet\, NULL is
-  // placed into the *ppTypeDef argument.
-  //
-  // The returned AAFTypeDef object\, if it exists\, is AddRef\(\)ed
-  // before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppTypeDef pointer is valid.
-  // - A valid AAFTypeDef exists.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.
-  //
-  // AAFRESULT_NO_ESSENCE_DESC
-  //   - There is no AAFTypeDef.  There has to be one of some
-  //     kind for this to be a valid operation definition.)
+  /// into the *ppTypeDef argument.  If none exists yet\, NULL is
+  /// placed into the *ppTypeDef argument.
+  ///
+  /// The returned AAFTypeDef object\, if it exists\, is AddRef\(\)ed
+  /// before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppTypeDef pointer is valid.
+  /// - A valid AAFTypeDef exists.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.
+  ///
+  /// AAFRESULT_NO_ESSENCE_DESC
+  ///   - There is no AAFTypeDef.  There has to be one of some
+  ///     kind for this to be a valid operation definition.)
 
 
 AD_STD_METHOD_STRING_MULTI_SET_GET_SIZE(DisplayUnits,

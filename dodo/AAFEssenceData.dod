@@ -32,29 +32,29 @@ AAFObject\
 #import ./AAFEssenceDataEx.exp
 AD_HEAD
 
-AD_IDL(//
-//
-// This interface is DEPRECATED\, please use IAAFEssenceDataEx.
-//
-// The IAAFEssenceData interface is used to modify AAFEssenceData
-// objects\, which contain the actual essence data \(ex. WAVE\) when
-// it is contained within an AAF file.  Normally the client
-// application would access the essence through the IAAFEssenceAccess
-// interface\, which handles the work of finding and \(de\)compressing
-// the data.  However\, in rare cases direct access to the data is
-// required\, so this interface is exposed.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-//
-// AAFRESULT_NULL_PARAM
-//   - One of the passed in pointers is NULL.
-//
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+///
+/// This interface is DEPRECATED\, please use IAAFEssenceDataEx.
+///
+/// The IAAFEssenceData interface is used to modify AAFEssenceData
+/// objects\, which contain the actual essence data \(ex. WAVE\) when
+/// it is contained within an AAF file.  Normally the client
+/// application would access the essence through the IAAFEssenceAccess
+/// interface\, which handles the work of finding and \(de\)compressing
+/// the data.  However\, in rare cases direct access to the data is
+/// required\, so this interface is exposed.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+///
+/// AAFRESULT_NULL_PARAM
+///   - One of the passed in pointers is NULL.
+///
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_CLASS_UUID(6a33f4e1, 8ed6, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
@@ -68,23 +68,23 @@ AAFSourceMob,
 pFileMob,
 reference to a file mob,
      Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the pFileMob pointer is valid and points to 
-  // a file mob \(contains a file descriptor\).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFileMob is null.)
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFileMob pointer is valid and points to 
+  /// a file mob \(contains a file descriptor\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileMob is null.)
 
 AD_METHOD3(Write,
 [in],aafUInt32, bytes, write this many bytes,
@@ -122,23 +122,23 @@ AAFSourceMob,
 pFileMob,
 reference to a file mob,
      Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the pFileMob pointer is valid and points to 
-  // a file mob \(contains a file descriptor\).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFileMob is null.)
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFileMob pointer is valid and points to 
+  /// a file mob \(contains a file descriptor\).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileMob is null.)
 
 
 AD_XMETHOD1(GetFileMob,
@@ -148,31 +148,31 @@ AAFSourceMob,
 ppFileMob,
 reference to a file mob,
      Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppFileMob pointer is valid and a weak
-  // reference to the associated file mob can be
-  // resolved.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppFileMob is null.)
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppFileMob pointer is valid and a weak
+  /// reference to the associated file mob can be
+  /// resolved.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppFileMob is null.)
 
 
 AD_METHOD1(GetFileMobID,
 [out], aafMobID_t *, pFileMobID, the file mob id associated with essence,
      Return the mob id used to find the file mob associated with this
-  // essence.  The file mob must exist in the same file as this
-  // essence data.)
+  /// essence.  The file mob must exist in the same file as this
+  /// essence data.)
 
 AD_COM_METH(.method-WriteSampleIndex)
 AD_COM_METH(.method-ReadSampleIndex)

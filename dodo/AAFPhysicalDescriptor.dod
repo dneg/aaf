@@ -32,18 +32,18 @@ AAFEssenceDescriptor\
 #c #import ./AAFEssenceDescriptor.exp
 AD_HEAD
 AD_INCLUDE(AAFTypes)
-AD_IDL(//
-// The AAFPhysicalDescriptor interface is implemented by objects which
-// describe physical sources.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The AAFPhysicalDescriptor interface is implemented by objects which
+/// describe physical sources.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_CLASS_UUID(f128cd24, dc67, 49d7, 8b, 4b, e1, 21, 1c, b6, 20, 95)
 
 AD_DEFAULT_UUID(e3a1234e, a544, 448e, 95, f0, ed, 49, 44, ed, af, c8)

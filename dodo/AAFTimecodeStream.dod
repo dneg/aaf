@@ -31,26 +31,26 @@ AAFSegment\
 #c
 #import ./AAFSegment.exp
 AD_HEAD
-AD_IDL(//
-// Objects which support IAAFTimecodeStream specify a stream of
-// timecode data.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that IAAFSearchSource is
-//     not a primary interface for a concrete class\, so it is not
-//     appropriate for the Initialize\(\) method to exist in this
-//     interface.  The Initialize\(\) method is available through the
-//     concrete object's primary interface.
-//)
+AD_IDL(///
+/// Objects which support IAAFTimecodeStream specify a stream of
+/// timecode data.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.  Note that IAAFSearchSource is
+///     not a primary interface for a concrete class\, so it is not
+///     appropriate for the Initialize\(\) method to exist in this
+///     interface.  The Initialize\(\) method is available through the
+///     concrete object's primary interface.
+///)
 AD_INCLUDE(AAFTypes)
 AD_CLASS_UUID(7B007BF1, 2D39, 11d2, 80, 43, 00, 60, 08, 14, 3E, 6F)
 
@@ -87,7 +87,7 @@ AD_XMETHOD2(SetPositionTimecode,
 			Timecode [startFrame  drop  fps],
 
      Set the timecode fields for a given frame.  The frame index must
-  // be within the length of the object.)
+  /// be within the length of the object.)
 
 
 AD_XMETHOD1(GetUserDataLength,
@@ -195,30 +195,30 @@ AD_METHOD3(GetSource,
 			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
 			[out],aafUInt32*,bytesRead,Number of actual bytes read,
 	 Writes the entire timecode data value into the pValue buffer.
-  // The buffer is allocated by the caller\\\, and the size of the
-  // buffer is given by valueSize.
-  // 
-  // Caller may call GetValueBufLen\\\(\\\) to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // - valueSize indicates the buffer is large enough to hold the name.
-  // 
-  // If this method fails nothing will be written to *pValue.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - valueSize indicates the buffer is too small to hold the value.)
+  /// The buffer is allocated by the caller\\\, and the size of the
+  /// buffer is given by valueSize.
+  /// 
+  /// Caller may call GetValueBufLen\\\(\\\) to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// - valueSize indicates the buffer is large enough to hold the name.
+  /// 
+  /// If this method fails nothing will be written to *pValue.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - valueSize indicates the buffer is too small to hold the value.)
 
 
 AD_XMETHOD1(GetSourceBufLen,
@@ -229,45 +229,45 @@ AD_XMETHOD1(GetSourceBufLen,
 			Pointer to an variable used to return the length,
 
      Returns the length of buffer required for the GetValue\(\)
-  // method.  The value is placed into the location specified by
-  // pLen.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.)
+  /// method.  The value is placed into the location specified by
+  /// pLen.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pLen.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLen arg is NULL.)
 
 
 AD_METHOD2(SetSource,
 			[in],aafUInt32,valueSize, Size of preallocated buffer,
 			[in\\\, size_is\\\(valueSize\\\)],aafDataBuffer_t,pValue, buffer containing value,
 			The data value is set from a buffer of size valueSize.
-  //
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\\\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \\\(This is the only code indicating success.\\\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\\\(\\\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue is null.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\\\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \\\(This is the only code indicating success.\\\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\\\(\\\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue is null.)
 
 
 AD_OVERRIDE(.method-SegmentOffsetToTC)

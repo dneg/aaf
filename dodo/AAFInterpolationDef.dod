@@ -30,19 +30,19 @@ AAFDefObject\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is used with an object representing a particular
-// kind of interpolator\, which may be implemented by one or more
-// AAFPluginDescriptors.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// This interface is used with an object representing a particular
+/// kind of interpolator\, which may be implemented by one or more
+/// AAFPluginDescriptors.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_FORWARD_DECLARATION(AAFClassDef)
 AD_CLASS_UUID(293600A2, 0D37, 11d3, 80, A9, 00, 60, 08, 14, 3E, 6F)
 

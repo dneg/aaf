@@ -31,19 +31,19 @@ AAFObject\
 #c
 AD_HEAD
 AD_INCLUDE(AAFTypes)
-AD_IDL(//
+AD_IDL(///
 
-// The IAAFDescriptiveFramework interface is implemented by objects
-// that represent descriptive metadata.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+/// The IAAFDescriptiveFramework interface is implemented by objects
+/// that represent descriptive metadata.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 
 AD_CLASS_UUID(778f56fc, 9e54, 4334, ab, ea, 97, 26, 39, c6, 84, 64)
 

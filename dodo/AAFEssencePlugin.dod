@@ -31,27 +31,27 @@ AAFRoot\
 #c #import ./AAFObject.exp
 #import ./AAFEndian.exp
 AD_HEAD
-AD_IDL(//
-// The AAFEssencePlugin interface describes the calls available
-// to all plugins \(ex. Codecs and Interpolators\).  This interface
-//  is used internally by the SDK\, and is not exported through the
-// client interface.
-//
-// The AAFPluginManager keeps a copy of each plugin in a table\, along
-// with cached copies of pertinant metadata about the plugin\, and
-// instantiates a copy of the plugin when required.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-//
-// AAFRESULT_NULL_PARAM
-//   - One of the passed in pointers is NULL.
-//
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// The AAFEssencePlugin interface describes the calls available
+/// to all plugins \(ex. Codecs and Interpolators\).  This interface
+///  is used internally by the SDK\, and is not exported through the
+/// client interface.
+///
+/// The AAFPluginManager keeps a copy of each plugin in a table\, along
+/// with cached copies of pertinant metadata about the plugin\, and
+/// instantiates a copy of the plugin when required.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+///
+/// AAFRESULT_NULL_PARAM
+///   - One of the passed in pointers is NULL.
+///
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 
 
 AD_CLASS_UUID(AF98DE41, 952D, 11D2, 80, 89, 00, 60, 08, 14, 3e, 6f)

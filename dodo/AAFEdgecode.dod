@@ -42,13 +42,13 @@ AD_METHOD2(Initialize,
 	[in],aafLength_t  ,length  ,Length Property Value,
 	[in],aafEdgecode_t,edgecode,Edgecode Value,
 	This function creates a new edgecode clip with the
-  // given property values.  The edgecode value is represented with an
-  // aafEdgecode_t struct consisting of startFrame\\\, filmKind\\\, and
-  // codeFormat.)
+  /// given property values.  The edgecode value is represented with an
+  /// aafEdgecode_t struct consisting of startFrame\\\, filmKind\\\, and
+  /// codeFormat.)
 
 AD_METHOD1(GetEdgecode,
 		   [out],aafEdgecode_t *,edgecode,Edgecode,
 		   This set of functions returns the required property values
-  // for the object identified by XXX.)
+  /// for the object identified by XXX.)
 
 AD_XCLASS_END(Concrete, StoredObject)

@@ -31,29 +31,29 @@ AAFCommentMarker\
 #c
 AD_HEAD
 
-AD_IDL(//
+AD_IDL(///
 
-// The IAAFDescriptiveMarker interface is implemented by objects which represent
-// a descriptive metadata associated with a point in time.   A DescriptiveMarker
-// may contain a DescriptiveFramework object that specifies the metadata.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that IAAFMobSlot is a
-//     primary interface for an abstract class\, so it is not
-//     appropriate for the Initialize\(\) method to exist in this
-//     interface.  The Initialize\(\) method is available through the
-//     concrete object's primary interface.
-// 
-//)
+/// The IAAFDescriptiveMarker interface is implemented by objects which represent
+/// a descriptive metadata associated with a point in time.   A DescriptiveMarker
+/// may contain a DescriptiveFramework object that specifies the metadata.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.  Note that IAAFMobSlot is a
+///     primary interface for an abstract class\, so it is not
+///     appropriate for the Initialize\(\) method to exist in this
+///     interface.  The Initialize\(\) method is available through the
+///     concrete object's primary interface.
+/// 
+///)
 
 AD_FORWARD_DECLARATION(AAFDescriptiveFramework)
 
@@ -65,16 +65,16 @@ AD_XCLASS_BEGIN(Concrete, StoredObject)
 
 AD_METHOD0(Initialize,
 		   Initializes a newly allocated\,
-  // IAAFDescriptiveFrame object.  This method must be called
-  // after allocation\, and before any other method can be called.
-  //
-  // Return codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize\(\) has already been called on this object.)
+  /// IAAFDescriptiveFrame object.  This method must be called
+  /// after allocation\, and before any other method can be called.
+  ///
+  /// Return codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize\(\) has already been called on this object.)
 
 
 AD_XMETHOD2(SetDescribedSlotIDs,
@@ -90,17 +90,17 @@ AD_XMETHOD2(SetDescribedSlotIDs,
 		Array of slot IDs,
 
 	Specifies the slot IDs in the Mob to which the DescriptiveFramework refers.
-//
-// 
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pMonoSourceSlotIDs is null 
-//
-// This interface is not currently implemented.)
+///
+/// 
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pMonoSourceSlotIDs is null 
+///
+/// This interface is not currently implemented.)
 
 
 AD_XMETHOD2(GetDescribedSlotIDs,
@@ -115,23 +115,23 @@ AD_XMETHOD2(GetDescribedSlotIDs,
 		pDescribedSlotIDs,
 		Array of channel IDs,
 
-// Get the described slot IDs that are referenced by this object.  Refer to
-// SetDescribedSlotIDs for a description of pDescribedSlotIDs.
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pDescribedSlotIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
-//
-// AAFRESULT_SMALLBUF
-//   - pDescribedSlotIDs is too small
-//
-// This interface is not currently implemented.)
+/// Get the described slot IDs that are referenced by this object.  Refer to
+/// SetDescribedSlotIDs for a description of pDescribedSlotIDs.
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pDescribedSlotIDs is null
+///
+/// AAFRESULT_PROP_NOT_PRESENT
+///   - the property is not present
+///
+/// AAFRESULT_SMALLBUF
+///   - pDescribedSlotIDs is too small
+///
+/// This interface is not currently implemented.)
 
 AD_XMETHOD1(GetDescribedSlotIDsSize,
 		[out],
@@ -140,15 +140,15 @@ AD_XMETHOD1(GetDescribedSlotIDsSize,
 		numberElements,
 		Number of elements in the pDescribedSlotIDs array,
 
-// Get the number of slot IDs stored by this DescriptiveMarker.
-//
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pDescribedSlotIDs is null )
+/// Get the number of slot IDs stored by this DescriptiveMarker.
+///
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pDescribedSlotIDs is null )
 
 AD_XMETHOD1(SetDescriptiveFramework,
 		[in],
@@ -157,15 +157,15 @@ AD_XMETHOD1(SetDescriptiveFramework,
 		pDescriptiveFramework,
 		DescriptorFramework object to set,
 
-// Sets the DescriptiveFramework that describes this DescriptiveMarker.
-//
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//	- succeeded
-//
-// AAFRESULT_NULL_PARAM
-//	- pDescriptorFramework is null)
+/// Sets the DescriptiveFramework that describes this DescriptiveMarker.
+///
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///	- succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///	- pDescriptorFramework is null)
 
 AD_XMETHOD1(GetDescriptiveFramework,
 		[out\,retval],
@@ -174,14 +174,14 @@ AD_XMETHOD1(GetDescriptiveFramework,
 		ppDescriptiveFramework,
 		DescriptorFramework object to return,
 
-// Gets the DescriptiveFramework that describes this DescriptiveMarker.
-//
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//	- succeeded
-//
-// AAFRESULT_NULL_PARAM
-//	- ppDescriptorFramework is null)
+/// Gets the DescriptiveFramework that describes this DescriptiveMarker.
+///
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///	- succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///	- ppDescriptorFramework is null)
 
 AD_XCLASS_END(Concrete, StoredObject)

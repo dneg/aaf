@@ -30,10 +30,10 @@ AAFPlugin\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// The AAFEssenceCodec2 interface adds SetFlavour\(\) to the
-// interfaces of the now deprecated AAFEssenceCodec API.
-//)
+AD_IDL(///
+/// The AAFEssenceCodec2 interface adds SetFlavour\(\) to the
+/// interfaces of the now deprecated AAFEssenceCodec API.
+///)
 AD_CLASS_UUID(8888F7A1, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
 
 AD_DEFAULT_UUID(8888F7A2, 9121, 11d2, 80, 88, 00, 60, 08, 14, 3e, 6f)
@@ -47,18 +47,18 @@ AD_XMETHOD1(SetFlavour,
 			flavour,
 			the codec flavour to use,
      Switches the codec into the specified flavour.  Flavour is
-  // codec dependent.  For example\, the DV codec could use a
-  // flavour to switch into a legacy mode causing legacy properties
-  // to be added which are needed by legacy applications.
-  // 
-  // This method should return only the following codes.  If more than
-  // one of the listed errors is in effect\, it should return the
-  // first one encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // HRESULT_NOT_IMPLEMENTED
-  //   - flavour not implemented by the codec)
+  /// codec dependent.  For example\, the DV codec could use a
+  /// flavour to switch into a legacy mode causing legacy properties
+  /// to be added which are needed by legacy applications.
+  /// 
+  /// This method should return only the following codes.  If more than
+  /// one of the listed errors is in effect\, it should return the
+  /// first one encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// HRESULT_NOT_IMPLEMENTED
+  ///   - flavour not implemented by the codec)
 
 AD_XCLASS_END(Abstract, Transient)

@@ -31,9 +31,9 @@ AAFTypeDef\
 #c
 #import ./AAFTypeDef.exp
 AD_HEAD
-AD_IDL(//
-// This interface is used to define Integer types used in AAF persistent
-// objects.
+AD_IDL(///
+/// This interface is used to define Integer types used in AAF persistent
+/// objects.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFPropertyValue)
 
@@ -57,22 +57,22 @@ AD_XMETHOD2(CreateValueFromActualValue,
 			newly created property value,
 
      Creates an indirect property value which contains the actual type.  
-  // Returns the newly-created property value in ppIndirectPropertyValue.
-  //
-  // Succeeds if all of the following are true:
-  // - the pActualValue pointer is valid.
-  // - the ppIndirectPropertyValue pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppIndirectPropertyValue.
+  /// Returns the newly-created property value in ppIndirectPropertyValue.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pActualValue pointer is valid.
+  /// - the ppIndirectPropertyValue pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppIndirectPropertyValue.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pActualValue or ppIndirectPropertyValue\)
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - initDataSize indicates pInitData is of the wrong size.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.)
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - initDataSize indicates pInitData is of the wrong size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for this typedef.)
 
 AD_XMETHOD4(CreateValueFromActualData,
 		[in],
@@ -100,27 +100,27 @@ AD_XMETHOD4(CreateValueFromActualData,
 		newly created property value,
 
      Creates an indirect property value which contains data of the 
-  // actual type.  Returns the newly-created property value in
-  // ppIndirectPropertyValue.
-  //
-  // Succeeds if all of the following are true:
-  // - the pActualType pointer is valid and registered
-  // - the pInitData pointer is valid.
-  // - the ppIndirectPropertyValue pointer is valid.
-  // - initDataSize indicates pInitData is the correct size for 
-  //   the actual type.
-  // - compile-time struct has had its member offests registered.
-  //
-  // If this method fails nothing will be written to *ppIndirectPropertyValue.
+  /// actual type.  Returns the newly-created property value in
+  /// ppIndirectPropertyValue.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pActualType pointer is valid and registered
+  /// - the pInitData pointer is valid.
+  /// - the ppIndirectPropertyValue pointer is valid.
+  /// - initDataSize indicates pInitData is the correct size for 
+  ///   the actual type.
+  /// - compile-time struct has had its member offests registered.
+  ///
+  /// If this method fails nothing will be written to *ppIndirectPropertyValue.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pActualType or InitData or ppIndirectPropertyValue\)
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - initDataSize indicates pInitData is of the wrong size.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.)
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - initDataSize indicates pInitData is of the wrong size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for this typedef.)
 
 
 AD_XMETHOD2(GetActualValue,
@@ -137,21 +137,21 @@ AD_XMETHOD2(GetActualValue,
 		value that is read,
 
      Gets a property value corresponding to the actual data. 
-  // 
-  // Succeeds if:
-  // - Initialize\(\) has already been called on this object.
-  // - The pIndirectPropertyValue pointer is valid.
-  // - The ppActualPropertyValue pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - Initialize\(\) has already been called on this object.
+  /// - The pIndirectPropertyValue pointer is valid.
+  /// - The ppActualPropertyValue pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pIndirectPropertyValue or ppActualPropertyValue\)
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - initDataSize indicates pInitData is of the wrong size.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.)
-  //)
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - initDataSize indicates pInitData is of the wrong size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for this typedef.)
+  ///)
 
 AD_XMETHOD2(GetActualSize,
 			[in],
@@ -166,26 +166,26 @@ AD_XMETHOD2(GetActualSize,
 			pActualSize,
 			actual data size,
 			Return the size of the actual data withing the indirect property value.
-  //
-  //
-  // Succeeds if all of the following are true:
-  // - the pIndirectPropertyValue pointer is valid.
-  // - the pActualSize pointer is valid.
-  //
-  // If this method fails nothing will be written to *pActualSize.
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pIndirectPropertyValue pointer is valid.
+  /// - the pActualSize pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pActualSize.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pIndirectPropertyValue or pActualSize\)
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - the type of pIndirectPropertyValue was not indirect. 
-  //
-  // AAFRESULT_TYPE_NOT_FOUND
-  //   - the actual type cannot be found in the dictionary.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for 
-  //    the actual typedef.)
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - the type of pIndirectPropertyValue was not indirect. 
+  ///
+  /// AAFRESULT_TYPE_NOT_FOUND
+  ///   - the actual type cannot be found in the dictionary.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for 
+  ///    the actual typedef.)
 AD_XMETHOD2(GetActualType,
 			[in],
 			objIn,
@@ -199,25 +199,25 @@ AD_XMETHOD2(GetActualType,
 			pActualType,
 			the type definition of the actual data,
 			Return the type definition of the  actual data within the indirect property value.
-  //
-  //
-  // Succeeds if all of the following are true:
-  // - the pIndirectPropertyValue pointer is valid.
-  // - the pActualType pointer is valid.
-  //
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pIndirectPropertyValue pointer is valid.
+  /// - the pActualType pointer is valid.
+  ///
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pIndirectPropertyValue or pActualType\)
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - the type of pIndirectPropertyValue was not indirect. 
-  //
-  // AAFRESULT_TYPE_NOT_FOUND
-  //   - the actual type cannot be found in the dictionary.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for 
-  //    the actual typedef.)
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - the type of pIndirectPropertyValue was not indirect. 
+  ///
+  /// AAFRESULT_TYPE_NOT_FOUND
+  ///   - the actual type cannot be found in the dictionary.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for 
+  ///    the actual typedef.)
 
 AD_XMETHOD3(GetActualData,
 			[in],
@@ -239,28 +239,28 @@ AD_XMETHOD3(GetActualData,
 			size of pData buffer in bytes,
 
      Copies all the actual data contained in the given indirect property value\,
-  // interpreted as the actual type for this indirect property value\, into the 
-  // buffer pointed to by pData.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPropVal pointer is valid.
-  // - the pData pointer is valid.
-  // - dataSize indicates pData is large enough to hold the data.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// interpreted as the actual type for this indirect property value\, into the 
+  /// buffer pointed to by pData.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPropVal pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(either pPropVal or pData\)
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - dataSize indicates pData is too small.
-  //
-  // AAFRESULT_TYPE_NOT_FOUND
-  //   - the actual type cannot be found in the dictionary.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for 
-  //    the actual typedef.)
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - dataSize indicates pData is too small.
+  ///
+  /// AAFRESULT_TYPE_NOT_FOUND
+  ///   - the actual type cannot be found in the dictionary.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for 
+  ///    the actual typedef.)
 
 AD_OVERRIDE(.method-GetTypeCategory)
 

@@ -29,10 +29,10 @@ AAFDefObject\
 AAFObject\
 #endm
 AD_HEAD
-AD_IDL(//
-// This interface is defines an item to be referenced in the AAF file.
-// It specifies the AUID unique identifier used to define types used
-// in AAF persistent objects.
+AD_IDL(///
+/// This interface is defines an item to be referenced in the AAF file.
+/// It specifies the AUID unique identifier used to define types used
+/// in AAF persistent objects.
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_INIT)
 AD_INCLUDE(AAFTypes)

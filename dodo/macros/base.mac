@@ -566,30 +566,30 @@ AD_XMETHOD2(Get%01,
 			size of *p%01 buffer in bytes,
 
      Gets %02
-  // 
-  // Writes the %01 property\\, with a trailing null
-  // character\\, into the p%01 buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the %01 property has not yet
-  // been set\\, a zero-length string will be written \\(that is\\,
-  // only the trailing null character\\). 
-  // 
-  // Caller may call Get%01BufLen\\(\\) to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *p%01.
-  // 
-  // Succeeds if:
-  // - The p%01 pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   %01.
+  /// 
+  /// Writes the %01 property\\, with a trailing null
+  /// character\\, into the p%01 buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the %01 property has not yet
+  /// been set\\, a zero-length string will be written \\(that is\\,
+  /// only the trailing null character\\). 
+  /// 
+  /// Caller may call Get%01BufLen\\(\\) to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *p%01.
+  /// 
+  /// Succeeds if:
+  /// - The p%01 pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   %01.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\(p%01\\)
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold %01.)
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold %01.)
 
 
 AD_XMETHOD1(Get%01BufLen,
@@ -600,9 +600,9 @@ AD_XMETHOD1(Get%01BufLen,
 			size of required buffer\\, in bytes,
 
      Returns size of buffer \\(in bytes\\) required for Get%01\\(\\).
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\(pBufSize\\))\
 #endm
@@ -617,20 +617,20 @@ AD_XMETHOD1(Set%01,
 			buffer from which %01 is to be read,
 
      Sets %02
-  //
-  // Set the %01 property to the value specified in
-  // p%01.  A copy is made of the data so the caller
-  // retains ownership of the *p%01 buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name\\, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the p%01 pointer is valid.
-  // 
-  // If this method fails the %01 property will not be
-  // changed.
-  // 
+  ///
+  /// Set the %01 property to the value specified in
+  /// p%01.  A copy is made of the data so the caller
+  /// retains ownership of the *p%01 buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name\\, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the p%01 pointer is valid.
+  /// 
+  /// If this method fails the %01 property will not be
+  /// changed.
+  /// 
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\(p%01\\))\
 #endm
@@ -679,19 +679,19 @@ AD_XMETHOD1(NextOne,
 			pp%02,
 			The Next %03,
      Enumerates to the next element in the enumerators list. The
-  // caller is responsible for properly releasing the returned pointer
-  // when it is no longer needed.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pp%02 pointer is valid.
-  // - there are %03 objects remaining to be returned.
-  // 
-  // If this method fails nothing is written to *pp%02.
+  /// caller is responsible for properly releasing the returned pointer
+  /// when it is no longer needed.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pp%02 pointer is valid.
+  /// - there are %03 objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *pp%02.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\(pp%02\\)
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - no %03 objects remaining to be returned.)
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - no %03 objects remaining to be returned.)
 
 
 AD_X2METHOD3(Next,
@@ -721,18 +721,18 @@ AD_X2METHOD3(Next,
 			 xxx,
 
      Enumerates the next count elements \\(AAF%01 pointers\\) in the
-  // enumerator's list\\, returning them in the given array along with
-  // the actual number of enumerated elements in pNumFetched. The caller
-  // is responsible for properly releasing the returned pointers.
-  // 
-  // Succeeds if all of the following are true:
-  // - The pp%02 pointer is valid.
-  // - The pNumFetched pointer is valid. If count is 1\\, pNumFetched
-  //   can be NULL.
-  // - There are %03 objects remaining to be returned.
-  // 
-  // If this method fails nothing is written to *pp%02 or
-  // pNumFetched.
+  /// enumerator's list\\, returning them in the given array along with
+  /// the actual number of enumerated elements in pNumFetched. The caller
+  /// is responsible for properly releasing the returned pointers.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - The pp%02 pointer is valid.
+  /// - The pNumFetched pointer is valid. If count is 1\\, pNumFetched
+  ///   can be NULL.
+  /// - There are %03 objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *pp%02 or
+  /// pNumFetched.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\(Either pp%02 or pNumFetched\\))
 
@@ -748,20 +748,20 @@ AD_XMETHOD1(Skip,
 			count,
 			Number of elements to skip,
      Instructs the enumerator to skip the next count elements in the
-  // enumeration so that the next call to Next will not return those
-  // elements.
-  // 
-  // Succeeds if all of the following are true:
-  // - count is less than or equal to the number of remaining objects.
+  /// enumeration so that the next call to Next will not return those
+  /// elements.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - count is less than or equal to the number of remaining objects.
   AD_STD_COMMENT_METH_ERR_HEADER
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - count exceeded number of remaining objects.)
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - count exceeded number of remaining objects.)
 
 
 AD_METHOD0(Reset,
      Instructs the enumerator to position itself at the beginning of
-  // the list of elements.
+  /// the list of elements.
   AD_STD_COMMENT_METH_ERR_HEADER)
 
 
@@ -772,15 +772,15 @@ AD_XMETHOD1(Clone,
 			ppEnum,
 			new enumeration,
      Creates another enumerator with the same state as the current
-  // enumerator to iterate over the same list. This method makes it
-  // possible to record a point in the enumeration sequence in order
-  // to return to that point at a later time.
-  //
-  // Note: The caller must release this new enumerator separately from
-  // the first enumerator.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
+  /// enumerator to iterate over the same list. This method makes it
+  /// possible to record a point in the enumeration sequence in order
+  /// to return to that point at a later time.
+  ///
+  /// Note: The caller must release this new enumerator separately from
+  /// the first enumerator.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\\(ppEnum\\))\
 #endm

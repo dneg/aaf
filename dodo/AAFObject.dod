@@ -29,11 +29,11 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is implemented for all AAF persistent classes.  In
-// addition to methods which all clients can use\, it provides methods
-// for direct property access which should not be used unless the
-// client programmer is aware of the liabilities.
+AD_IDL(///
+/// This interface is implemented for all AAF persistent classes.  In
+/// addition to methods which all clients can use\, it provides methods
+/// for direct property access which should not be used unless the
+/// client programmer is aware of the liabilities.
 AD_STD_COMMENT_IFC_HEADER
 AD_STD_COMMENT_IFC_INIT)
 
@@ -54,31 +54,31 @@ AD_XMETHOD1(GetGeneration,
 			AAFIdentification,
 			ppGeneration,
        AAFIdentification object corresponding to this object's
-    // Generation ID, 
+  /// Generation ID, 
 
      Gets the generation of this object\, which is represented by an
-  // AAFIdentification object.  This is used to detect when an object
-  // has been modified.
-  //
-  // This method will succeed if generation tracking is enabled for
-  // this object.  Call EnableGenerationTrackint\(\) and
-  // DisableGenerationTrackint\(\) to control generation tracking for
-  // this object.  Call IsGenerationTracked\(\) to determine if
-  // generation tracking is currently enabled for this object.
-  //
-  // Succeeds if all of the following are true:
-  // - the given pGeneration pointer is valid.
-  // - generation tracking is enabled for this object.
-  // - this object is attached to a file.
+  /// AAFIdentification object.  This is used to detect when an object
+  /// has been modified.
+  ///
+  /// This method will succeed if generation tracking is enabled for
+  /// this object.  Call EnableGenerationTrackint\(\) and
+  /// DisableGenerationTrackint\(\) to control generation tracking for
+  /// this object.  Call IsGenerationTracked\(\) to determine if
+  /// generation tracking is currently enabled for this object.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given pGeneration pointer is valid.
+  /// - generation tracking is enabled for this object.
+  /// - this object is attached to a file.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppGeneration\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - Generation tracking is not enabled for this object.
-  //
-  // AAFRESULT_OBJECT_NOT_ATTACHED
-  //   - This object is not attached to a file from which generation
-  //     information can be obtained..)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - Generation tracking is not enabled for this object.
+  ///
+  /// AAFRESULT_OBJECT_NOT_ATTACHED
+  ///   - This object is not attached to a file from which generation
+  ///     information can be obtained..)
 
 
 AD_XMETHOD1(GetGenerationAUID,
@@ -89,29 +89,29 @@ AD_XMETHOD1(GetGenerationAUID,
        AUID corresponding to this object's Generation ID, 
 
      Shortcut to get the AUID representing the Identification
-  // representing this object's generation.  \(Can also be obtained by
-  // calling this->GetGeneration\(&pIdent\)\, and using its result to
-  // call pIdent->GetAuid\(\)\).
-  //
-  // This method will succeed if generation tracking is enabled for
-  // this object.  Call EnableGenerationTrackint\(\) and
-  // DisableGenerationTrackint\(\) to control generation tracking for
-  // this object.  Call IsGenerationTracked\(\) to determine if
-  // generation tracking is currently enabled for this object.
-  //
-  // Succeeds if all of the following are true:
-  // - the given pResult pointer is valid.
-  // - generation tracking is enabled for this object.
-  // - this object is attached to a file.
+  /// representing this object's generation.  \(Can also be obtained by
+  /// calling this->GetGeneration\(&pIdent\)\, and using its result to
+  /// call pIdent->GetAuid\(\)\).
+  ///
+  /// This method will succeed if generation tracking is enabled for
+  /// this object.  Call EnableGenerationTrackint\(\) and
+  /// DisableGenerationTrackint\(\) to control generation tracking for
+  /// this object.  Call IsGenerationTracked\(\) to determine if
+  /// generation tracking is currently enabled for this object.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given pResult pointer is valid.
+  /// - generation tracking is enabled for this object.
+  /// - this object is attached to a file.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - Generation tracking is not enabled for this object.
-  //
-  // AAFRESULT_OBJECT_NOT_ATTACHED
-  //   - This object is not attached to a file from which generation
-  //     information can be obtained..)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - Generation tracking is not enabled for this object.
+  ///
+  /// AAFRESULT_OBJECT_NOT_ATTACHED
+  ///   - This object is not attached to a file from which generation
+  ///     information can be obtained..)
 
 
 AD_XMETHOD1(GetDefinition,
@@ -121,15 +121,15 @@ AD_XMETHOD1(GetDefinition,
 			ppClassDef,
 			class definition of which this object is an instance.,
             Returns the class definition which describes this object
-  // instance.
-  //
-  // Succeeds if all of the following are true:
-  // - the given ppClassDef pointer is valid.
-  //
-  // Note! Use care when dealing with the object class.  Among the
-  // pitfalls to be avoided is that tests for equality will not
-  // reflect inheritance.  This becomes important if an unknown
-  // non-builtin \(that is\, user defined\) object class ID is obtained.
+  /// instance.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given ppClassDef pointer is valid.
+  ///
+  /// Note! Use care when dealing with the object class.  Among the
+  /// pitfalls to be avoided is that tests for equality will not
+  /// reflect inheritance.  This becomes important if an unknown
+  /// non-builtin \(that is\, user defined\) object class ID is obtained.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppClassDef\))
 
@@ -141,20 +141,20 @@ AD_XMETHOD1(GetProperties,
 			ppEnum,
 			Property Enumeration,
             Returns an enumerator across all properties actually contained in
-  // this object.  Each property is represented by an IAAFProperty
-  // interface.
-  // 
+  /// this object.  Each property is represented by an IAAFProperty
+  /// interface.
+  /// 
   AD_STD_COMMENT_METH_ADDREF\(ppEnum\)
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done\, any semantic checking \(such
-  // as that which is performed in all other named property Get/Set
-  // methods\) is not done here.  Users must use this method at their
-  // own risk.
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done\, any semantic checking \(such
+  /// as that which is performed in all other named property Get/Set
+  /// methods\) is not done here.  Users must use this method at their
+  /// own risk.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppEnum\))
 
@@ -166,14 +166,14 @@ AD_XMETHOD1(CountProperties,
             pCount,
             count of properties present in this object,
             Returns the number of properties currently present in this
-  // object.  This is the same number as will be accessed through
-  // GetProperties\(\).
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done\, any semantic checking \(such
-  // as that which is performed in all other named property Get/Set
-  // methods\) is not done here.  Users must use this method at their
-  // own risk.
+  /// object.  This is the same number as will be accessed through
+  /// GetProperties\(\).
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done\, any semantic checking \(such
+  /// as that which is performed in all other named property Get/Set
+  /// methods\) is not done here.  Users must use this method at their
+  /// own risk.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pCount\))
 
@@ -192,21 +192,21 @@ AD_XMETHOD2(GetPropertyValue,
 			returned AAFPropertyValue,
 
      Returns the requested Property Value.  The desired property data
-  // is identified by the given property definition.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done\, any semantic checking \(such
-  // as that which is performed in all other named property Get/Set
-  // methods\) is not done here.  Users must use this method at their
-  // own risk.
+  /// is identified by the given property definition.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done\, any semantic checking \(such
+  /// as that which is performed in all other named property Get/Set
+  /// methods\) is not done here.  Users must use this method at their
+  /// own risk.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPropDef or ppPropVal\)
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - named property is optional\, but not present in this class.)
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - named property is optional\, but not present in this class.)
 
 
 AD_XMETHOD2(SetPropertyValue,
@@ -223,22 +223,22 @@ AD_XMETHOD2(SetPropertyValue,
 			value to set.,
 
      Sets the value of the given property to the given value.  If the
-  // selected property is optional but not yet present\, will make the
-  // property present before setting its value.
-  //
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done\, any semantic checking \(such
-  // as that which is performed in all other named property Get/Set
-  // methods\) is not done here.  Users must use this method at their
-  // own risk.
+  /// selected property is optional but not yet present\, will make the
+  /// property present before setting its value.
+  ///
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done\, any semantic checking \(such
+  /// as that which is performed in all other named property Get/Set
+  /// methods\) is not done here.  Users must use this method at their
+  /// own risk.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPropDef or ppPropVal\)
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - named property is optional\, but not present in this class.)
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - named property is optional\, but not present in this class.)
 
 
 AD_XMETHOD2(IsPropertyPresent,
@@ -255,18 +255,18 @@ AD_XMETHOD2(IsPropertyPresent,
 			true if present; false if not present,
 
      Sets *pResultReturns true in if named property is legal and is
-  // present; sets it to false if it is legal and is absent.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done\, any semantic checking \(such
-  // as that which is performed in all other named property Get/Set
-  // methods\) is not done here.  Users must use this method at their
-  // own risk.
+  /// present; sets it to false if it is legal and is absent.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done\, any semantic checking \(such
+  /// as that which is performed in all other named property Get/Set
+  /// methods\) is not done here.  Users must use this method at their
+  /// own risk.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\)
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.)
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.)
 
 
 AD_XMETHOD1(RemoveOptionalProperty,
@@ -277,18 +277,18 @@ AD_XMETHOD1(RemoveOptionalProperty,
 			property definition indentifying desired property,
 
      Removes the property if named property is legal and is
-  // optional and present.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done\, any semantic checking \(such
-  // as that which is performed in all other named property Get/Set
-  // methods\) is not done here.  Users must use this method at their
-  // own risk.
+  /// optional and present.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done\, any semantic checking \(such
+  /// as that which is performed in all other named property Get/Set
+  /// methods\) is not done here.  Users must use this method at their
+  /// own risk.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\)
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.)
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.)
 
 
 AD_XMETHOD2(CreateOptionalPropertyValue,
@@ -305,21 +305,21 @@ AD_XMETHOD2(CreateOptionalPropertyValue,
 			returned AAFPropertyValue,
 
      Returns the requested Property Value.  The desired property data
-  // is identified by the given optional property definition.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done\, any semantic checking \(such
-  // as that which is performed in all other named property Get/Set
-  // methods\) is not done here.  Users must use this method at their
-  // own risk.
+  /// is identified by the given optional property definition.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done\, any semantic checking \(such
+  /// as that which is performed in all other named property Get/Set
+  /// methods\) is not done here.  Users must use this method at their
+  /// own risk.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pPropDef or ppPropVal\)
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.
-  //
-  // AAFRESULT_PROP_ALREADY_PRESENT
-  //   - named property is optional\, but already present in this class.)
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.
+  ///
+  /// AAFRESULT_PROP_ALREADY_PRESENT
+  ///   - named property is optional\, but already present in this class.)
 
 
 AD_XMETHOD1(GetDictionary,
@@ -329,51 +329,51 @@ AD_XMETHOD1(GetDictionary,
 		ppDictionary,
 		A pointer to an Dictionary pointer,
             Returns the dictionary for this object instance.
-  //
-  // Succeeds if all of the following are true:
-  // - the given ppDictionary pointer is valid.
-  //
-  // Note! Use care when dealing with the object class.  Among the
-  // pitfalls to be avoided is that tests for equality will not
-  // reflect inheritance.  This becomes important if an unknown
-  // non-builtin \(that is\, user defined\) object class ID is obtained.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given ppDictionary pointer is valid.
+  ///
+  /// Note! Use care when dealing with the object class.  Among the
+  /// pitfalls to be avoided is that tests for equality will not
+  /// reflect inheritance.  This becomes important if an unknown
+  /// non-builtin \(that is\, user defined\) object class ID is obtained.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppClassDef\))
 
 
 AD_METHOD0(EnableGenerationTracking,
      Calling this method will cause generation tracking to be enabled
-  // for this object.  Generation information will then be available
-  // through the GetGeneration\(\) and GetGenerationAUID\(\) methods.
-  // 
-  // Calling the DisableGenerationTracking\(\) method will disable
-  // generation tracking for this object.
-  // 
-  // Generation tracking is disabled by default.
-  //
-  // This method always succeeds\, even if generation tracking is
-  // already enabled.
-  // 
-  // This method will return the following result:
-  //  - AAFRESULT_SUCCESS)
+  /// for this object.  Generation information will then be available
+  /// through the GetGeneration\(\) and GetGenerationAUID\(\) methods.
+  /// 
+  /// Calling the DisableGenerationTracking\(\) method will disable
+  /// generation tracking for this object.
+  /// 
+  /// Generation tracking is disabled by default.
+  ///
+  /// This method always succeeds\, even if generation tracking is
+  /// already enabled.
+  /// 
+  /// This method will return the following result:
+  ///  - AAFRESULT_SUCCESS)
 
 
 AD_METHOD0(DisableGenerationTracking,
      Calling this method will cause generation tracking to be disabled
-  // for this object.  Generation information will then not be
-  // available through the GetGeneration\(\) and GetGenerationAUID\(\)
-  // methods.
-  // 
-  // Calling the EnableGenerationTracking\(\) method will enable
-  // generation tracking for this object.
-  // 
-  // Generation tracking is disabled by default.
-  //
-  // This method always succeeds\, even if generation tracking is
-  // already disbled.
-  // 
-  // This method will return the following result:
-  //  - AAFRESULT_SUCCESS)
+  /// for this object.  Generation information will then not be
+  /// available through the GetGeneration\(\) and GetGenerationAUID\(\)
+  /// methods.
+  /// 
+  /// Calling the EnableGenerationTracking\(\) method will enable
+  /// generation tracking for this object.
+  /// 
+  /// Generation tracking is disabled by default.
+  ///
+  /// This method always succeeds\, even if generation tracking is
+  /// already disbled.
+  /// 
+  /// This method will return the following result:
+  ///  - AAFRESULT_SUCCESS)
 
 
 AD_XMETHOD1(IsGenerationTracked,
@@ -384,17 +384,17 @@ AD_XMETHOD1(IsGenerationTracked,
 			set to true if generations are tracked; false otherwise,
 
      This method will set *pResult to AAFTrue if generations are
-  // being tracked for this object.  A result of AAFTrue indicates
-  // that generation information will be available through the
-  // GetGeneration\(\) and GetGenerationAUID\(\) methods.
-  // 
-  // Calling the EnableGenerationTracking\(\) method will enable
-  // generation tracking for this object; calling the
-  // DisableGenerationTracking\(\) method will disable generation
-  // tracking for this object.
-  // 
-  // Generation tracking is disabled by default.
-  //
+  /// being tracked for this object.  A result of AAFTrue indicates
+  /// that generation information will be available through the
+  /// GetGeneration\(\) and GetGenerationAUID\(\) methods.
+  /// 
+  /// Calling the EnableGenerationTracking\(\) method will enable
+  /// generation tracking for this object; calling the
+  /// DisableGenerationTracking\(\) method will disable generation
+  /// tracking for this object.
+  /// 
+  /// Generation tracking is disabled by default.
+  ///
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pResult\))
 AD_XCLASS_END(Abstract, StoredObjectBase)

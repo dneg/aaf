@@ -31,28 +31,28 @@ AAFEvent\
 #c
 AD_HEAD
 
-AD_IDL(//
-// The IAAFGPITrigger interface is implemented by objects which represent
-// an trigger action that should be taken when its position in time is
-// reached.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that IAAFMobSlot is a
-//     primary interface for an abstract class\, so it is not
-//     appropriate for the Initialize\(\) method to exist in this
-//     interface.  The Initialize\(\) method is available through the
-//     concrete object's primary interface.
-// 
-//)
+AD_IDL(///
+/// The IAAFGPITrigger interface is implemented by objects which represent
+/// an trigger action that should be taken when its position in time is
+/// reached.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///
+/// AAFRESULT_NOT_INITIALIZED
+///   - This object has not yet had Initialize\(\) called on it through
+///     this object's primary interface.  Note that IAAFMobSlot is a
+///     primary interface for an abstract class\, so it is not
+///     appropriate for the Initialize\(\) method to exist in this
+///     interface.  The Initialize\(\) method is available through the
+///     concrete object's primary interface.
+/// 
+///)
 
 AD_CLASS_UUID(e684d78b, b935, 11d2, bf, 9d, 00, 10, 4b, c9, 15, 6d)
 
@@ -67,20 +67,20 @@ AD_XMETHOD1(GetActiveState,
 		pointer to the result, 
 
 		Sets *pActiveState to AAFTrue it the event is on otherwise
-  // sets it to AAFFalse.
-  //
-  // Succeeds if:
-  // - The pActiveState pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pActiveState pointer is NULL.)
+  /// sets it to AAFFalse.
+  ///
+  /// Succeeds if:
+  /// - The pActiveState pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - The pActiveState pointer is NULL.)
 
 
 AD_XMETHOD1(SetActiveState,
@@ -91,13 +91,13 @@ AD_XMETHOD1(SetActiveState,
 		the active state of the trigger, 
 
 		Set to AAFTrue to turn the trigger on or AAFFalse
-  // to turn the trigger off.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\))
+  /// to turn the trigger off.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\))
 
 AD_XCLASS_END(Concrete, StoredObject)

@@ -30,10 +30,10 @@ AAFDefObject\
 #endm
 #c
 AD_HEAD
-AD_IDL( //
-// This interface is used to describe the data type of a value stored
-// in an AAFKLVData object.
-//)
+AD_IDL( ///
+/// This interface is used to describe the data type of a value stored
+/// in an AAFKLVData object.
+///)
 AD_FORWARD_DECLARATION(AAFTypeDef)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
@@ -68,14 +68,14 @@ AD_XMETHOD1(AddParentProperty,
 	    pParentProperty,
 	    Property definition to add.,
 
-  // Add a property definition to the KLV data definition.
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pParentProperty is null.)
+  /// Add a property definition to the KLV data definition.
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pParentProperty is null.)
 
 AD_XMETHOD1(GetParentProperties,
 	    [out],
@@ -84,16 +84,16 @@ AD_XMETHOD1(GetParentProperties,
 	    ppEnum,
 	    Property definition enumerator.,
 
-  // Writes an enumerator for the property definitions into *ppEnum.
-  // A reference is added to the new enumerator before it is returned.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  /// Writes an enumerator for the property definitions into *ppEnum.
+  /// A reference is added to the new enumerator before it is returned.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 AD_XMETHOD1(CountParentProperties,
 	    [out],
@@ -102,16 +102,16 @@ AD_XMETHOD1(CountParentProperties,
 	    pNumProperties,
 	    Number of property definitions.,
 
-  // Writes the total number of property definitions into *pNumProperties if\,
-  // and only if\, the method succeeds.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.)
+  /// Writes the total number of property definitions into *pNumProperties if\,
+  /// and only if\, the method succeeds.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.)
 
 AD_XMETHOD1(RemoveParentProperty,
 	    [in],
@@ -120,18 +120,18 @@ AD_XMETHOD1(RemoveParentProperty,
 	    pParentProperty,
 	    Property to remove.,
 
-  // Removes the given property definition.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - The property definition is not in this tagged value definition.)
+  /// Removes the given property definition.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - The property definition is not in this tagged value definition.)
 
 AD_XMETHOD1(GetKLVDataType,
   	    [out],
@@ -140,20 +140,20 @@ AD_XMETHOD1(GetKLVDataType,
 	    ppTypeDef,
 	    Returned data definition object,
 
-  // Writes the data definition object attached to this KLV data
-  // definition into the *ppTypeDef argument if\, and only if\, the call succeeds.
-  // If none exists\, NULL is written to the *ppTypeDef argument.
-  //
-  // The returned data definition object\, if it exists\, is
-  // AddRef\(\)ed before it is returned.
-  //
-  // Return codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.)
+  /// Writes the data definition object attached to this KLV data
+  /// definition into the *ppTypeDef argument if\, and only if\, the call succeeds.
+  /// If none exists\, NULL is written to the *ppTypeDef argument.
+  ///
+  /// The returned data definition object\, if it exists\, is
+  /// AddRef\(\)ed before it is returned.
+  ///
+  /// Return codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.)
 
 
 AD_XMETHOD1(SetKLVDataType,
@@ -163,14 +163,14 @@ AD_XMETHOD1(SetKLVDataType,
 	    pTypeDef,
 	    Data definition object,
 
-  // Sets the date type of this KLV data definition to be the given one.
-  //
-  // Return codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTypeDef is null.)
+  /// Sets the date type of this KLV data definition to be the given one.
+  ///
+  /// Return codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTypeDef is null.)
 
 AD_XCLASS_END(Concrete,StoredObject)

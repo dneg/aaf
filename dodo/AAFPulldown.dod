@@ -31,19 +31,19 @@ AAFSegment\
 #c
 #import ./AAFSegment.exp
 AD_HEAD
-AD_IDL(//
-// This interface is used with an object which converts between film
-// frame rates and videotape frame rates by describing the mapping
-// between them.
-//
-// In addition to the specific error results listed for each method\,
-// all methods in this interface may also return one of the following
-// values:
-// 
-// AAFRESULT_NOMEMORY
-//   - insufficient system memory is available to perform the
-//     operation.
-//)
+AD_IDL(///
+/// This interface is used with an object which converts between film
+/// frame rates and videotape frame rates by describing the mapping
+/// between them.
+///
+/// In addition to the specific error results listed for each method\,
+/// all methods in this interface may also return one of the following
+/// values:
+/// 
+/// AAFRESULT_NOMEMORY
+///   - insufficient system memory is available to perform the
+///     operation.
+///)
 AD_CLASS_UUID(92B88032, 2B2B, 11d2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(92B88031, 2B2B, 11d2, BF, 7E, 00, 10, 4B, C9, 15, 6D)
@@ -55,28 +55,28 @@ AD_XMETHOD1(GetInputSegment,
 			ppInputSegment,
 			Returns the input Segment object,
      Places the input Segment object in this pulldown into the
-  // *ppInputSegment argument.  If none exists yet\, NULL is placed
-  // into the *ppInputSegment argument.
-  //
-  // The returned segment object\, if it exists\, is AddRef\(\)ed
-  // before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppInputSegment pointer is valid.
-  // - A valid segment exists.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppInputSegment is null.)
+  /// *ppInputSegment argument.  If none exists yet\, NULL is placed
+  /// into the *ppInputSegment argument.
+  ///
+  /// The returned segment object\, if it exists\, is AddRef\(\)ed
+  /// before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppInputSegment pointer is valid.
+  /// - A valid segment exists.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppInputSegment is null.)
 
 
 AD_XMETHOD1(SetInputSegment,
@@ -86,22 +86,22 @@ AD_XMETHOD1(SetInputSegment,
 			pInputSegment,
 			A Segment object,
 			Sets the input segment .
-  //
-  // Succeeds if all of the following are true:
-  // - the pInputSegment pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pInputSegment is null.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pInputSegment pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pInputSegment is null.)
 
 
 AD_XMETHOD1(GetPulldownKind,
@@ -111,25 +111,25 @@ AD_XMETHOD1(GetPulldownKind,
 			pPulldownKind,
 			Returns the pulldownKind property,
      Returns the pulldownKind property of this pulldown through the
-  // *pPulldownKind argument.  The pulldown kinds include
-  // kThreeTwoPD\, kPalPD\, kOneToOneNTSC\, kOneToOnePAL\, and
-  // kVideoTapNTSC.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPulldownKind pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPulldownKind is null.)
+  /// *pPulldownKind argument.  The pulldown kinds include
+  /// kThreeTwoPD\, kPalPD\, kOneToOneNTSC\, kOneToOnePAL\, and
+  /// kVideoTapNTSC.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPulldownKind pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPulldownKind is null.)
 
 
 AD_XMETHOD1(SetPulldownKind,
@@ -139,21 +139,21 @@ AD_XMETHOD1(SetPulldownKind,
 			pulldownKind,
 			A Segment object,
      Sets the pulldown kind field of this pulldown object.  The
-  // pulldown kinds include kThreeTwoPD\, kPalPD\, kOneToOneNTSC\,
-  // kOneToOnePAL\, and kVideoTapNTSC.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pInputSegment is null.)
+  /// pulldown kinds include kThreeTwoPD\, kPalPD\, kOneToOneNTSC\,
+  /// kOneToOnePAL\, and kVideoTapNTSC.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pInputSegment is null.)
 
 
 AD_XMETHOD1(GetPulldownDirection,
@@ -163,34 +163,34 @@ AD_XMETHOD1(GetPulldownDirection,
 			pPulldownDirection,
 			Returns the input Segment object,
      Returns the pulldownDirection field of this pulldown through the
-  // *pPulldownDirection argument.  The valid
-  // pulldown directions are:
-  //    kVideoToFilmSpeed -- The input segment is at videoSpeed\, and
-  //                         the pulldown object is on a mob slot at
-  //                         film edit rate.
-  //    kFilmToVideoSpeed -- The input segment is at film edit rate.
-  //
-  // The value kVideoToFilmSpeed is used when connecting 24fps file
-  // mobs to tape mobs. 
-  //
-  // The value kFilmToVideoSpeed is used when connecting tape mobs to
-  // film mobs.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPulldownDirection pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPulldownDirection is null.)
+  /// *pPulldownDirection argument.  The valid
+  /// pulldown directions are:
+  ///    kVideoToFilmSpeed -- The input segment is at videoSpeed\, and
+  ///                         the pulldown object is on a mob slot at
+  ///                         film edit rate.
+  ///    kFilmToVideoSpeed -- The input segment is at film edit rate.
+  ///
+  /// The value kVideoToFilmSpeed is used when connecting 24fps file
+  /// mobs to tape mobs. 
+  ///
+  /// The value kFilmToVideoSpeed is used when connecting tape mobs to
+  /// film mobs.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPulldownDirection pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPulldownDirection is null.)
 
 
 AD_XMETHOD1(SetPulldownDirection,
@@ -200,30 +200,30 @@ AD_XMETHOD1(SetPulldownDirection,
 			pulldownDirection,
 			A Segment object,
      Sets the pulldown direction field of this pulldown object.  The
-  // valid pulldown directions are:
-  //    kVideoToFilmSpeed -- The input segment is at videoSpeed\, and
-  //                         the pulldown object is on a mob slot at
-  //                         film edit rate.
-  //    kFilmToVideoSpeed -- The input segment is at film edit rate.
-  //
-  // The value kVideoToFilmSpeed is used when connecting 24fps file
-  // mobs to tape mobs.
-  //
-  // The value kFilmToVideoSpeed is used when connecting tape mobs to
-  // film mobs.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pInputSegment is null.)
+  /// valid pulldown directions are:
+  ///    kVideoToFilmSpeed -- The input segment is at videoSpeed\, and
+  ///                         the pulldown object is on a mob slot at
+  ///                         film edit rate.
+  ///    kFilmToVideoSpeed -- The input segment is at film edit rate.
+  ///
+  /// The value kVideoToFilmSpeed is used when connecting 24fps file
+  /// mobs to tape mobs.
+  ///
+  /// The value kFilmToVideoSpeed is used when connecting tape mobs to
+  /// film mobs.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pInputSegment is null.)
 
 
 AD_XMETHOD1(GetPhaseFrame,
@@ -233,26 +233,26 @@ AD_XMETHOD1(GetPhaseFrame,
 			pPhaseFrame,
 			Returns the input Segment object,
      Returns the phaseFrame field of this pulldown through the
-  // *pPhaseFrame argument.  The phase frame field specifies the phase
-  // within the repeating pattern used to map between the two edit
-  // rates. A value of zero specifies that the pulldown object starts
-  // at the begining of the pattern.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPhaseFrame pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPhaseFrame is null.)
+  /// *pPhaseFrame argument.  The phase frame field specifies the phase
+  /// within the repeating pattern used to map between the two edit
+  /// rates. A value of zero specifies that the pulldown object starts
+  /// at the begining of the pattern.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPhaseFrame pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPhaseFrame is null.)
 
 
 AD_XMETHOD1(SetPhaseFrame,
@@ -262,22 +262,22 @@ AD_XMETHOD1(SetPhaseFrame,
 			phaseFrame,
 			A Segment object,
      Sets the phase frame field of this pulldown object.  The phase
-  // frame field specifies the phase within the repeating pattern used
-  // to map between the two edit rates. A value of zero specifies that
-  // the pulldown object starts at the begining of the pattern.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect\, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  \(This is the only code indicating success.\)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize\(\) called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pInputSegment is null.)
+  /// frame field specifies the phase within the repeating pattern used
+  /// to map between the two edit rates. A value of zero specifies that
+  /// the pulldown object starts at the begining of the pattern.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect\, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  \(This is the only code indicating success.\)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize\(\) called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pInputSegment is null.)
 
 
 AD_OVERRIDE(.method-SegmentOffsetToTC)

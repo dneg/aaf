@@ -30,9 +30,9 @@ AAFRoot\
 #endm
 #c
 AD_HEAD
-AD_IDL(//
-// This interface is used to enumerate over the AAFProperties
-// contained in a collection.
+AD_IDL(///
+/// This interface is used to enumerate over the AAFProperties
+/// contained in a collection.
 AD_STD_COMMENT_IFC_HEADER)
 AD_FORWARD_DECLARATION(AAFProperty)
 AD_CLASS_UUID(BE316DB1, 7E73, 11D2, 84, 1D, 00, 60, 08, 32, AC, B8)
