@@ -263,6 +263,21 @@ void OMStrongReferenceProperty<ReferencedObject>::restore(size_t externalSize)
   setPresent();
 }
 
+  // @mfunc The number of objects contained within this
+  //        <c OMStrongReferenceProperty> if any.
+  //   @rdesc The number of objects.
+template <typename ReferencedObject>
+OMUInt64 OMStrongReferenceProperty<ReferencedObject>::objectCount(void) const
+{
+  TRACE("OMStrongReferenceProperty<ReferencedObject>::objectCount");
+  OMUInt64 result = 0;
+  OMStorable* p = _reference.getValue();
+  if (p != 0) {
+    result = p->objectCount();
+  }
+  return result;
+}
+
   // @mfunc  Is this <c OMStrongReferenceProperty> void ?
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of

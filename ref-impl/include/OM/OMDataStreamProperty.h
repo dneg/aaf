@@ -47,6 +47,10 @@ public:
     // @cmember Save this <c OMDataStreamProperty>.
   virtual void save(void) const;
 
+    // @cmember The number of objects contained within this
+    //          <c OMDataStreamProperty> if any.
+  virtual OMUInt64 objectCount(void) const;
+
     // @cmember Restore this <c OMDataStreamProperty>, the size of the
     //          <c OMDataStreamProperty> is <p externalSize>.
   virtual void restore(size_t externalSize);

@@ -115,6 +115,10 @@ public:
     // @cmember Remove this optional <c OMProperty>.
   virtual void removeProperty(void);
 
+    // @cmember The number of objects contained within this
+    //          <c OMProperty> if any.
+  virtual OMUInt64 objectCount(void) const = 0;
+
   // Direct property access interface
 
     // @cmember The size of the raw bits of this <c OMProperty>. The
@@ -222,6 +226,10 @@ public:
 
     // @cmember The size of this <c OMSimpleProperty>.
   size_t size(void) const;
+
+    // @cmember The number of objects contained within this
+    //          <c OMSimpleProperty> if any.
+  virtual OMUInt64 objectCount(void) const;
 
   // Direct property access interface
 

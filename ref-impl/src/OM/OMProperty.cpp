@@ -304,6 +304,16 @@ size_t OMSimpleProperty::size(void) const
   return _size;
 }
 
+  // @mfunc The number of objects contained within this
+  //        <c OMProperty> if any.
+  //   @rdesc The number of objects.
+OMUInt64 OMSimpleProperty::objectCount(void) const
+{
+  TRACE("OMSimpleProperty::objectCount");
+  // OMSimpleProperty doesn't contain objects.
+  return 0;
+}
+
   // @mfunc Set the size of this <c OMSimpleProperty> to <p newSize> bytes.
   //   @parm The new property size in bytes.
 void OMSimpleProperty::setSize(size_t newSize)

@@ -261,6 +261,17 @@ void OMWeakReferenceProperty<ReferencedObject>::close(void)
   // tjb
 }
 
+  // @mfunc The number of objects contained within this
+  //        <c OMWeakReferenceProperty> if any.
+  //   @rdesc The number of objects.
+template <typename ReferencedObject>
+OMUInt64 OMWeakReferenceProperty<ReferencedObject>::objectCount(void) const
+{
+  TRACE("OMWeakReferenceProperty<ReferencedObject>::objectCount");
+  // OMWeakReferenceProperty doesn't contain objects.
+  return 0;
+}
+
   // @mfunc Restore this <c OMWeakReferenceProperty>, the external
   //        (persisted) size of the <c OMWeakReferenceProperty> is
   //        <p externalSize>.

@@ -86,6 +86,10 @@ public:
     //          is <p externalSize>.
   virtual void restore(size_t externalSize);
 
+    // @cmember The number of objects contained within this
+    //          <c OMStrongReferenceProperty> if any.
+  virtual OMUInt64 objectCount(void) const;
+
   // Optional property interface
 
     // @cmember Is this <c OMStrongReferenceProperty> void ?

@@ -86,6 +86,10 @@ public:
     // @cmember close this <c OMWeakReferenceProperty>.
   virtual void close(void);
 
+    // @cmember The number of objects contained within this
+    //          <c OMWeakReferenceProperty> if any.
+  virtual OMUInt64 objectCount(void) const;
+
     // @cmember Restore this <c OMWeakReferenceProperty>, the external
     //          (persisted) size of the <c OMWeakReferenceProperty> is
     //          <p externalSize>.

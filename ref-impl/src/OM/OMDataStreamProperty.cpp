@@ -68,6 +68,16 @@ void OMDataStreamProperty::save(void) const
   }
 }
 
+  // @mfunc The number of objects contained within this
+  //        <c OMDataStreamProperty> if any.
+  //   @rdesc The number of objects.
+OMUInt64 OMDataStreamProperty::objectCount(void) const
+{
+  TRACE("OMDataStreamProperty::objectCount");
+  // OMDataStreamProperty doesn't contain objects.
+  return 0;
+}
+
   // @mfunc Restore this <c OMDataStreamProperty>, the size of the
   //        <c OMDataStreamProperty> is <p externalSize>.
   //   @parm The size of the <c OMDataStreamProperty>.

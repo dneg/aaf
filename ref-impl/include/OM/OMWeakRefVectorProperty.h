@@ -77,6 +77,10 @@ public:
     //          <c OMWeakReferenceVectorProperty> is <p externalSize>.
   virtual void restore(size_t externalSize);
 
+    // @cmember The number of objects contained within this
+    //          <c OMWeakReferenceVectorProperty> if any.
+  virtual OMUInt64 objectCount(void) const;
+
     // @cmember The number of <p ReferencedObject>s in this
     //          <c OMWeakReferenceVectorProperty>.
   size_t count(void) const;

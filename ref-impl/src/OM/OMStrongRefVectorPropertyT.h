@@ -115,6 +115,27 @@ void OMStrongReferenceVectorProperty<ReferencedObject>::restore(
   setPresent();
 }
 
+  // @mfunc The number of objects contained within this
+  //        <c OMStrongReferenceVectorProperty> if any.
+  //   @rdesc The number of objects.
+template <typename ReferencedObject>
+OMUInt64
+OMStrongReferenceVectorProperty<ReferencedObject>::objectCount(void) const
+{
+  TRACE("OMStrongReferenceVectorProperty<ReferencedObject>::objectCount");
+
+  OMUInt64 result = 0;
+  VectorIterator iterator(_vector, OMBefore);
+  while (++iterator) {
+    VectorElement& element = iterator.value();
+    OMStorable* object = element.pointer();
+    if (object != 0) {
+      result = result + object->objectCount();
+    }
+  }
+  return result;
+}
+
   // @mfunc The number of <p ReferencedObject>s in this
   //        <c OMStrongReferenceVectorProperty>.
   //   @this const

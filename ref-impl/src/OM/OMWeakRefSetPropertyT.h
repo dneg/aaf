@@ -161,6 +161,18 @@ void OMWeakReferenceSetProperty<ReferencedObject>::restore(
   setPresent();
 }
 
+  // @mfunc The number of objects contained within this
+  //        <c OMWeakReferenceSetProperty> if any.
+  //   @rdesc The number of objects.
+template <typename ReferencedObject>
+OMUInt64
+OMWeakReferenceSetProperty<ReferencedObject>::objectCount(void) const
+{
+  TRACE("OMWeakReferenceSetProperty<ReferencedObject>::objectCount");
+  // OMWeakReferenceProperty doesn't contain objects.
+  return 0;
+}
+
   // @mfunc The number of <p ReferencedObject>s in this
   //        <c OMWeakReferenceSetProperty>.
   //   @this const

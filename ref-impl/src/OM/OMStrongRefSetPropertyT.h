@@ -138,6 +138,29 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   setPresent();
 }
 
+  // @mfunc The number of objects contained within this
+  //        <c OMStrongReferenceSetProperty> if any.
+  //   @rdesc The number of objects.
+template <typename UniqueIdentification, typename ReferencedObject>
+OMUInt64
+OMStrongReferenceSetProperty<UniqueIdentification,
+                             ReferencedObject>::objectCount(void) const
+{
+  TRACE("OMStrongReferenceSetProperty<UniqueIdentification, "
+                                     "ReferencedObject>::objectCount");
+
+  OMUInt64 result = 0;
+  SetIterator iterator(_set, OMBefore);
+  while (++iterator) {
+    SetElement& element = iterator.value();
+    OMStorable* object = element.pointer();
+    if (object != 0) {
+      result = result + object->objectCount();
+    }
+  }
+  return result;
+}
+
   // @mfunc The number of <p ReferencedObject>s in this
   //        <c OMStrongReferenceSetProperty>.
   //   @this const
