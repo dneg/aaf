@@ -111,6 +111,7 @@ AAFRESULT STDMETHODCALLTYPE
 	for(n = siz-1; n >= 0; n--)
 	{
 		_locators.getValueAt(obj, n);
+		_locators.setValueAt(NULL, n);
 		_locators.setValueAt(obj, n+1);
 	}
 	_locators.setValueAt(pLocator, 0);
