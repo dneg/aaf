@@ -112,7 +112,7 @@ OMUInt64 OMDataStreamProperty::size(void) const
 
   OMUInt64 result;
   result = store()->streamSize(_stream);
- 
+
   return result;
 }
 
@@ -261,7 +261,7 @@ void OMDataStreamProperty::write(const OMByte* buffer,
   //        at address <p elements>. The actual number of elements read
   //        is returned in <p elementsRead>.
   //   @parm The element type
-  //   @parm The external element size 
+  //   @parm The external element size
   //   @parm The address of the buffer into which the elements should be read.
   //   @parm The number of elements to read.
   //   @parm The actual number of elements that were read.
@@ -323,7 +323,7 @@ void OMDataStreamProperty::readTypedElements(const OMType* elementType,
   //        at address <p elements>. The actual number of elements written
   //        is returned in <p elementsWritten>.
   //   @parm The element type
-  //   @parm The internal element size 
+  //   @parm The internal element size
   //   @parm The address of the buffer from which the elements should
   //         be written.
   //   @parm The number of elements to write.
@@ -355,7 +355,7 @@ void OMDataStreamProperty::writeTypedElements(const OMType* elementType,
   OMByte* buffer = new OMByte[externalBytesSize];
 
   for (size_t i = 0; i < elementCount; i++) {
- 
+
     // Externalize an element of the property value
     elementType->externalize(
                        const_cast<OMByte*>(&elements[i * internalElementSize]),
