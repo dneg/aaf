@@ -189,6 +189,8 @@ const CLSID CLSID_AAFHeader =
 //  0.7    : change AAFSourceMob::MediaDescription to
 //           AAFSourceMob::EssenceDescription.
 //  0.8    : remove AAFPluggableDef. Renumbered TID_* values.
+//  0.9    : Effect -> OperationGroup, EffectDefinition -> OperationDefinition,
+//           PlugInDescriptors -> PluginDescriptors.
 //
 //
 
@@ -201,7 +203,7 @@ char* _closeArrayKeySymbol = (char*)closeArrayKeySymbol;
 
 // Highest version of file/index format recognized by this dumper
 //
-const int HIGHVERSION = 8;
+const int HIGHVERSION = 9;
 
 // Output format requested
 //
