@@ -523,6 +523,9 @@ static void convertName(char* cName,
                         size_t length,
                         OMCHAR* wideName,
                         char** tag);
+static char* makePathName(const char* pathName,
+                          const char* componentName,
+                          bool isRoot);
 static void indent(int level);
 static void getClass(IStorage* storage, CLSID* clsid, const char* fileName);
 static void printClsid(const CLSID& clsid, ostream& stream);
@@ -1169,6 +1172,25 @@ void convertName(char* cName, size_t length, OMCHAR* wideName, char** tag)
   }
   // Insert check for non-printable characters here.
   strncpy(cName, pName, length);
+}
+
+char* makePathName(const char* pathName,
+                   const char* componentName,
+                   bool isRoot)
+{
+  const char* separator = "/";
+  size_t length = strlen(pathName) + strlen(componentName);
+  if (!isRoot) {
+    length = length + strlen(separator);
+  }
+  char* newPathName = new char[length + 1];
+  ASSERT("Successfully allocated new path name", newPathName != 0);
+  strcpy(newPathName, pathName);
+  if (!isRoot) {
+    strcat(newPathName, separator);
+  }
+  strcat(newPathName, componentName);
+  return newPathName;
 }
 
 void indent(int level)
