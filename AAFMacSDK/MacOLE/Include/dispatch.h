@@ -884,8 +884,14 @@ typedef ITypeLib2 *LPTYPELIB2;
 typedef unsigned long HREFTYPE;
 
 #if defined(_MAC)
-#pragma pack(push, 2)	// These structures require this packing, which was the
-			// compiler default in OLE 2.02, but not anymore.
+#if PRAGMA_STRUCT_ALIGN
+	#pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+	#pragma pack(push, 2) // These structures require this packing, which was the
+			// compiler default in OLE 2.02, but not anymore.	
+#elif PRAGMA_STRUCT_PACK
+	#pragma pack(2)
+#endif
 #endif
 
 typedef struct FARSTRUCT tagTYPEDESC {
@@ -957,7 +963,13 @@ typedef struct FARSTRUCT tagELEMDESC {
 } ELEMDESC, FAR* LPELEMDESC;
 
 #if defined(_MAC)
-#pragma pack(pop)		// restore default packing
+#if PRAGMA_STRUCT_ALIGN
+	#pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+	#pragma pack(pop)		// restore default packing
+#elif PRAGMA_STRUCT_PACK
+	#pragma pack()
+#endif
 #endif
 
 
@@ -1105,8 +1117,14 @@ typedef enum tagVARKIND {
 } VARKIND;
 
 #if defined(_MAC)
-#pragma pack(push, 2)	// This structure require this packing, which was the
-			// compiler default in OLE 2.02, but not anymore.
+#if PRAGMA_STRUCT_ALIGN
+	#pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+	#pragma pack(push, 2) // These structures require this packing, which was the
+			// compiler default in OLE 2.02, but not anymore.	
+#elif PRAGMA_STRUCT_PACK
+	#pragma pack(2)
+#endif
 #endif
 typedef struct FARSTRUCT tagVARDESC {
     MEMBERID memid;
@@ -1125,7 +1143,13 @@ typedef struct FARSTRUCT tagVARDESC {
 } VARDESC, FAR* LPVARDESC;
 
 #if defined(_MAC)
-#pragma pack(pop)		// restore default packing
+#if PRAGMA_STRUCT_ALIGN
+	#pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+	#pragma pack(pop)		// restore default packing
+#elif PRAGMA_STRUCT_PACK
+	#pragma pack()
+#endif
 #endif
 
 typedef enum tagTYPEFLAGS {
@@ -2163,8 +2187,14 @@ typedef ITypeChangeEvents *LPTYPECHANGEEVENTS;
 /*---------------------------------------------------------------------*/
 
 #if defined(_MAC)
-#pragma pack(push, 2)	// These structures require this packing, which was the
-			// compiler default in OLE 2.02, but not anymore.
+#if PRAGMA_STRUCT_ALIGN
+	#pragma options align=mac68k
+#elif PRAGMA_STRUCT_PACKPUSH
+	#pragma pack(push, 2) // These structures require this packing, which was the
+			// compiler default in OLE 2.02, but not anymore.	
+#elif PRAGMA_STRUCT_PACK
+	#pragma pack(2)
+#endif
 #endif
 
 typedef struct FARSTRUCT tagPARAMDATA {
@@ -2173,7 +2203,13 @@ typedef struct FARSTRUCT tagPARAMDATA {
 } PARAMDATA, FAR* LPPARAMDATA;
 
 #if defined(_MAC)
-#pragma pack(pop)		// restore default packing
+#if PRAGMA_STRUCT_ALIGN
+	#pragma options align=reset
+#elif PRAGMA_STRUCT_PACKPUSH
+	#pragma pack(pop)		// restore default packing
+#elif PRAGMA_STRUCT_PACK
+	#pragma pack()
+#endif
 #endif
 
 typedef struct FARSTRUCT tagMETHODDATA {
