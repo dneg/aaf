@@ -5,7 +5,7 @@
 
 
 /* File created by MIDL compiler version 5.01.0164 */
-/* at Sat May 08 19:12:08 2004
+/* at Mon May 24 23:08:19 2004
  */
 /* Compiler settings for AAF.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext

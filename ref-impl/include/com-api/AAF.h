@@ -2,7 +2,7 @@
 
 
 /* File created by MIDL compiler version 5.01.0164 */
-/* at Sat May 08 19:12:08 2004
+/* at Mon May 24 23:08:19 2004
  */
 /* Compiler settings for AAF.idl:
     Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
@@ -31989,6 +31989,11 @@ EXTERN_C const IID IID_IAAFTaggedValueDefinition;
     IAAFTaggedValueDefinition : public IUnknown
     {
     public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
+        
         virtual HRESULT STDMETHODCALLTYPE AddParentProperty( 
             /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
         
@@ -32019,6 +32024,12 @@ EXTERN_C const IID IID_IAAFTaggedValueDefinition;
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IAAFTaggedValueDefinition __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFTaggedValueDefinition __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParentProperty )( 
             IAAFTaggedValueDefinition __RPC_FAR * This,
@@ -32059,6 +32070,9 @@ EXTERN_C const IID IID_IAAFTaggedValueDefinition;
     (This)->lpVtbl -> Release(This)
 
 
+#define IAAFTaggedValueDefinition_Initialize(This,id,pName,pDescription)	\
+    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
+
 #define IAAFTaggedValueDefinition_AddParentProperty(This,pParentProperty)	\
     (This)->lpVtbl -> AddParentProperty(This,pParentProperty)
 
@@ -32076,6 +32090,20 @@ EXTERN_C const IID IID_IAAFTaggedValueDefinition;
 
 #endif 	/* C style interface */
 
+
+
+HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_Initialize_Proxy( 
+    IAAFTaggedValueDefinition __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [string][in] */ aafCharacter_constptr pName,
+    /* [string][in] */ aafCharacter_constptr pDescription);
+
+
+void __RPC_STUB IAAFTaggedValueDefinition_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
 
 
 HRESULT STDMETHODCALLTYPE IAAFTaggedValueDefinition_AddParentProperty_Proxy( 
@@ -32145,6 +32173,11 @@ EXTERN_C const IID IID_IAAFKLVDataDefinition;
     IAAFKLVDataDefinition : public IUnknown
     {
     public:
+        virtual HRESULT STDMETHODCALLTYPE Initialize( 
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription) = 0;
+        
         virtual HRESULT STDMETHODCALLTYPE AddParentProperty( 
             /* [in] */ IAAFPropertyDef __RPC_FAR *pParentProperty) = 0;
         
@@ -32181,6 +32214,12 @@ EXTERN_C const IID IID_IAAFKLVDataDefinition;
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *Release )( 
             IAAFKLVDataDefinition __RPC_FAR * This);
+        
+        HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Initialize )( 
+            IAAFKLVDataDefinition __RPC_FAR * This,
+            /* [ref][in] */ aafUID_constref id,
+            /* [string][in] */ aafCharacter_constptr pName,
+            /* [string][in] */ aafCharacter_constptr pDescription);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddParentProperty )( 
             IAAFKLVDataDefinition __RPC_FAR * This,
@@ -32229,6 +32268,9 @@ EXTERN_C const IID IID_IAAFKLVDataDefinition;
     (This)->lpVtbl -> Release(This)
 
 
+#define IAAFKLVDataDefinition_Initialize(This,id,pName,pDescription)	\
+    (This)->lpVtbl -> Initialize(This,id,pName,pDescription)
+
 #define IAAFKLVDataDefinition_AddParentProperty(This,pParentProperty)	\
     (This)->lpVtbl -> AddParentProperty(This,pParentProperty)
 
@@ -32252,6 +32294,20 @@ EXTERN_C const IID IID_IAAFKLVDataDefinition;
 
 #endif 	/* C style interface */
 
+
+
+HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_Initialize_Proxy( 
+    IAAFKLVDataDefinition __RPC_FAR * This,
+    /* [ref][in] */ aafUID_constref id,
+    /* [string][in] */ aafCharacter_constptr pName,
+    /* [string][in] */ aafCharacter_constptr pDescription);
+
+
+void __RPC_STUB IAAFKLVDataDefinition_Initialize_Stub(
+    IRpcStubBuffer *This,
+    IRpcChannelBuffer *_pRpcChannelBuffer,
+    PRPC_MESSAGE _pRpcMessage,
+    DWORD *_pdwStubPhase);
 
 
 HRESULT STDMETHODCALLTYPE IAAFKLVDataDefinition_AddParentProperty_Proxy( 
@@ -35832,7 +35888,7 @@ EXTERN_C const IID IID_IAAFDictionary2;
             /* [in] */ IAAFKLVDataDefinition __RPC_FAR *pDef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupKLVDataDef( 
-            /* [ref][in] */ aafUID_constref parameterId,
+            /* [ref][in] */ aafUID_constref defId,
             /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppDef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetKLVDataDefs( 
@@ -35845,7 +35901,7 @@ EXTERN_C const IID IID_IAAFDictionary2;
             /* [in] */ IAAFTaggedValueDefinition __RPC_FAR *pDef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LookupTaggedValueDef( 
-            /* [ref][in] */ aafUID_constref parameterId,
+            /* [ref][in] */ aafUID_constref defId,
             /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppDef) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTaggedValueDefs( 
@@ -36075,7 +36131,7 @@ EXTERN_C const IID IID_IAAFDictionary2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupKLVDataDef )( 
             IAAFDictionary2 __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref parameterId,
+            /* [ref][in] */ aafUID_constref defId,
             /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppDef);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetKLVDataDefs )( 
@@ -36092,7 +36148,7 @@ EXTERN_C const IID IID_IAAFDictionary2;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LookupTaggedValueDef )( 
             IAAFDictionary2 __RPC_FAR * This,
-            /* [ref][in] */ aafUID_constref parameterId,
+            /* [ref][in] */ aafUID_constref defId,
             /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppDef);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetTaggedValueDefs )( 
@@ -36264,8 +36320,8 @@ EXTERN_C const IID IID_IAAFDictionary2;
 #define IAAFDictionary2_RegisterKLVDataDef(This,pDef)	\
     (This)->lpVtbl -> RegisterKLVDataDef(This,pDef)
 
-#define IAAFDictionary2_LookupKLVDataDef(This,parameterId,ppDef)	\
-    (This)->lpVtbl -> LookupKLVDataDef(This,parameterId,ppDef)
+#define IAAFDictionary2_LookupKLVDataDef(This,defId,ppDef)	\
+    (This)->lpVtbl -> LookupKLVDataDef(This,defId,ppDef)
 
 #define IAAFDictionary2_GetKLVDataDefs(This,ppEnum)	\
     (This)->lpVtbl -> GetKLVDataDefs(This,ppEnum)
@@ -36276,8 +36332,8 @@ EXTERN_C const IID IID_IAAFDictionary2;
 #define IAAFDictionary2_RegisterTaggedValueDef(This,pDef)	\
     (This)->lpVtbl -> RegisterTaggedValueDef(This,pDef)
 
-#define IAAFDictionary2_LookupTaggedValueDef(This,parameterId,ppDef)	\
-    (This)->lpVtbl -> LookupTaggedValueDef(This,parameterId,ppDef)
+#define IAAFDictionary2_LookupTaggedValueDef(This,defId,ppDef)	\
+    (This)->lpVtbl -> LookupTaggedValueDef(This,defId,ppDef)
 
 #define IAAFDictionary2_GetTaggedValueDefs(This,ppEnum)	\
     (This)->lpVtbl -> GetTaggedValueDefs(This,ppEnum)
@@ -36862,7 +36918,7 @@ void __RPC_STUB IAAFDictionary2_RegisterKLVDataDef_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupKLVDataDef_Proxy( 
     IAAFDictionary2 __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref parameterId,
+    /* [ref][in] */ aafUID_constref defId,
     /* [retval][out] */ IAAFKLVDataDefinition __RPC_FAR *__RPC_FAR *ppDef);
 
 
@@ -36911,7 +36967,7 @@ void __RPC_STUB IAAFDictionary2_RegisterTaggedValueDef_Stub(
 
 HRESULT STDMETHODCALLTYPE IAAFDictionary2_LookupTaggedValueDef_Proxy( 
     IAAFDictionary2 __RPC_FAR * This,
-    /* [ref][in] */ aafUID_constref parameterId,
+    /* [ref][in] */ aafUID_constref defId,
     /* [retval][out] */ IAAFTaggedValueDefinition __RPC_FAR *__RPC_FAR *ppDef);
 
 
