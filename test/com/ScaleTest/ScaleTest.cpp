@@ -59,8 +59,7 @@ using namespace std;
 
 #ifdef AAF_TOOLKIT_V1_0
 // using v1.0.x toolkit
-const aafUID_t kAAFCompression_IEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 
-0x01, 0x01, 0x01 } };
+const aafUID_t kAAFCompression_IEC_DV_525_60 = { 0x04010202, 0x0201, 0x0100, { 0x06, 0x0e, 0x2b, 0x34, 0x04, 0x01, 0x01, 0x01 } };
 const aafUID_t *filekind_4K = &aafFileKindAaf4KBinary;
 #else
 // using v1.0.x toolkit
@@ -81,6 +80,7 @@ const aafInt32 DV_PAL_FRAME_SIZE = 144000;
 const aafInt32 DV_NTSC_FRAME_SIZE = 120000;
 
 bool verbose = true;
+bool deleteFiles = false;
 
 #define aaf_assert(b, msg) \
 	if (!(b)) {fprintf(stderr, "ASSERT: %s\n\n", msg); exit(1);}
@@ -223,7 +223,8 @@ static const   aafMobID_t  TEST_SourceMobID = {{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x
 static aafProductVersion_t TestVersion = { 1, 1, 0, 0, kAAFVersionUnknown };
 static aafProductIdentification_t TestProductID;
 
-static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
+static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, bool useRawStorage,
+									int frame_limit,
 									aafLength_t *p_totalbytes)
 {
 	TestProductID.companyName = L"AAF Association";
@@ -246,16 +247,33 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
 		IAAFFile		*pFile = NULL;
 		TestProductID.productVersionString = L"ScaleTest EssenceData";
 
-		// Large sectors for new files
-		int modeFlags = AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
+		// AAFFileOpenNewModifyEx() uses RawStorage internally while
+		// AAFFileOpenNewModify() does not.  Since libgsf doesn't yet
+		// support RawStorage, AAFFileOpenNewModifyEx() will fail with libgsf
+		if (useRawStorage)
+		{
+			printf("Creating %s using AAFFileOpenNewModifyEx()\n", cFileName);
 
-		// We don't use AAFFileOpenNewModifyEx here since that API uses
-		// RawStorage internally which is not supported for the GSF library.
-		check( AAFFileOpenNewModify(
+			check( AAFFileOpenNewModifyEx(
+						pFileName,
+						filekind_4K,
+						0,
+						&TestProductID,
+						&pFile) );
+		}
+		else
+		{
+			printf("Creating %s using AAFFileOpenNewModify()\n", cFileName);
+
+			// Large sectors for new files
+			int modeFlags = AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
+
+			check( AAFFileOpenNewModify(
 						pFileName,
 						modeFlags,
 						&TestProductID,
 						&pFile) );
+		}
 
 		// Get the header & dictionary
 		IAAFHeader		*pHeader = NULL;
@@ -282,11 +300,14 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
 
 		// Add an EssenceDescriptor to the SourceMob
 		IAAFEssenceDescriptor		*edesc = NULL;
+		IAAFFileDescriptor			*pFileDesc = NULL;
 		IAAFCDCIDescriptor			*pCDCIDesc = NULL;
 		IAAFDigitalImageDescriptor	*pDIDesc = NULL;
 		check(defs.cdCDCIDescriptor()->CreateInstance(IID_IAAFEssenceDescriptor, (IUnknown **)&edesc));
-		check(edesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pCDCIDesc));
+		check(edesc->QueryInterface(IID_IAAFFileDescriptor, (void **)&pFileDesc));
 		check(edesc->QueryInterface(IID_IAAFDigitalImageDescriptor, (void **)&pDIDesc));
+		check(edesc->QueryInterface(IID_IAAFCDCIDescriptor, (void **)&pCDCIDesc));
+		check(pFileDesc->SetLength(frame_limit));
 		check(pDIDesc->SetCompression(kAAFCompressionDef_IEC_DV_525_60));
 		check(pDIDesc->SetStoredView(576/2, 720));
 		check(pDIDesc->SetFrameLayout(kAAFSeparateFields));
@@ -352,11 +373,11 @@ static HRESULT CreateAAFFileEssenceData(aafWChar *pFileName, int frame_limit,
 static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, int frame_limit, aafLength_t bytes)
 {
 	HRESULT			hr = S_OK;
+	char cFileName[FILENAME_MAX];
 
 	try
 	{
 		// Delete any previous test file before continuing...
-		char cFileName[FILENAME_MAX];
 		convert(cFileName, sizeof(cFileName), pFileName);
 
 		// Open new file
@@ -386,14 +407,29 @@ static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, int frame_limit, aafL
 			aafLength_t		size = 0;
 			check(pEnumEssenceData->NextOne(&pEssenceData));
 			check(pEssenceData->GetSize(&size));
-			if (size != bytes)
+			aaf_assert(size == bytes, "GetSize() matches total written bytes");
+
+			printf("  EssenceData GetSize() correct    (%"AAFFMT64"d bytes)\n", size);
+
+			aafLength_t			totalRead = 0;
+			aafUInt8			buf[149993];	// use a nice prime number
+
+			while (true)
 			{
-				printf("  EssenceData size mismatch: %"AAFFMT64"d != %"AAFFMT64"d\n", size, bytes);
+				aafUInt32	bytesRead = 0;
+
+				hr = pEssenceData->Read(sizeof(buf), buf, &bytesRead);
+				totalRead += bytesRead;
+				if (AAFRESULT_FAILED(hr))
+				{
+					aaf_assert(hr == AAFRESULT_END_OF_DATA, "END_OF_DATA found as expected");
+					hr = S_OK;
+					break;
+				}
 			}
-			else
-			{
-				printf("  EssenceData size correct (%"AAFFMT64"d bytes)\n", size);
-			}
+			aaf_assert(totalRead == bytes, "total Read() matches total written bytes");
+
+			printf("  EssenceData total Read() correct (%"AAFFMT64"d bytes)\n", totalRead);
 			check(pEssenceData->Release());
 		}
 		check(pEnumEssenceData->Release());
@@ -407,11 +443,14 @@ static HRESULT ReadAAFFileEssenceData(aafWChar *pFileName, int frame_limit, aafL
 		cout << "*** ReadAAFFileEssenceData: caught error hr=0x" << hex << hr << dec << endl;
 	}
 
+	if (deleteFiles)
+		remove(cFileName);
+
 	return hr;
 }
 
 #ifndef AAF_TOOLKIT_V1_0
-static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
+static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool useRawStorage, bool comp_enable,
 								aafUID_t codec, aafUID_t container,
 								aafLength_t size_limit, aafLength_t *p_totalbytes)
 {
@@ -422,7 +461,6 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	IAAFMasterMob*				pMasterMob = NULL;
 	IAAFEssenceAccess*			pEssenceAccess = NULL;
 	aafMobID_t					masterMobID;
-	aafProductIdentification_t	ProductInfo;
 	aafRational_t				pictureEditRate = {25, 1}, pictureSampleRate = {25, 1};
 	aafRational_t				soundEditRate = {25, 1}, soundSampleRate = {48000, 1};
 	aafRational_t				editRate, sampleRate;
@@ -438,20 +476,43 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	remove(cFileName);
 
 	aafProductVersion_t ver = {1, 0, 0, 0, kAAFVersionBeta};
-	ProductInfo.companyName = L"none";
-	ProductInfo.productName = L"AAF SDK";
-	ProductInfo.productVersion = &ver;
-	ProductInfo.productVersionString = L"1.0.0.0 Beta";
-	ProductInfo.productID = NIL_UID;
-	ProductInfo.platform = NULL;		// Set by SDK when saving
+	TestProductID.companyName = L"none";
+	TestProductID.productName = L"AAF SDK";
+	TestProductID.productVersion = &ver;
+	TestProductID.productVersionString = L"1.0.0.0 Beta";
+	TestProductID.productID = NIL_UID;
+	TestProductID.platform = NULL;		// Set by SDK when saving
 
-	// Large sectors for new files
-	int modeFlags = AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
+	// AAFFileOpenNewModifyEx() uses RawStorage internally while
+	// AAFFileOpenNewModify() does not.  Since libgsf doesn't yet
+	// support RawStorage, AAFFileOpenNewModifyEx() will fail with libgsf
+	if (useRawStorage)
+	{
+		printf("Creating %s using CreateEssence(%s) via AAFFileOpenNewModifyEx()\n", cFileName,
+					(comp_enable ? "CompressionEnable" : "CompressionDisable"));
 
-	// Create a new AAF file
-	// We don't use AAFFileOpenNewModifyEx here since that API uses
-	// RawStorage internally which is not supported for the GSF library.
-	check(AAFFileOpenNewModify(pFileName, modeFlags, &ProductInfo, &pFile));
+		check( AAFFileOpenNewModifyEx(
+					pFileName,
+					filekind_4K,
+					0,
+					&TestProductID,
+					&pFile) );
+	}
+	else
+	{
+		printf("Creating %s using CreateEssence(%s) via AAFFileOpenNewModify()\n", cFileName,
+					(comp_enable ? "CompressionEnable" : "CompressionDisable"));
+
+		// Large sectors for new files
+		int modeFlags = AAF_FILE_MODE_USE_LARGE_SS_SECTORS;
+
+		check( AAFFileOpenNewModify(
+					pFileName,
+					modeFlags,
+					&TestProductID,
+					&pFile) );
+	}
+
 	check(pFile->GetHeader(&pHeader));
 
 	// Get the AAF Dictionary from the file
@@ -515,9 +576,6 @@ static HRESULT CreateAAFFileCodec(aafWChar * pFileName, bool comp_enable,
 	{
 		aaf_assert(0, "codec choice not implemented");
 	}
-
-	cout << "Creating file " << cFileName << " using WriteSamples with " <<
-		(comp_enable ? "CompressionEnable" : "CompressionDisable") << endl;
 
 	/* Create the Essence Data specifying the codec, container, edit rate and sample rate */
 	check(pMasterMob->CreateEssence(1,			// Slot ID within MasterMob
@@ -661,17 +719,15 @@ static HRESULT RegisterRequiredPlugins(void)
 
 void printUsage(const char *progname)
 {
-#ifndef AAF_TOOLKIT_V1_0
 	cout << "Usage : " << progname << " [-q] [-c] [-n frames]" << endl;
 	cout << endl;
-	cout << "\tWith no arguments creates TestDV.aaf containing 30 minutes of DV frames" << endl;
+	cout << "\tWith no arguments creates TestEssData.aaf containing ~10 minutes of DV frames" << endl;
 	cout << endl;
 	cout << "\t-n frames   number of DV frames to write" << endl;
-#else
 	cout << "\t-c          Test the codecs only (not EssenceData API)" << endl;
+	cout << "\t-d          Delete test files upon completion" << endl;
 	cout << "\t-compress   Test using uncompressed video passing through codec's compressor" << endl;
-#endif
-	cout << "\t-q          Quiet (no status messages)" << endl;
+	cout << "\t-q          Quiet (less verbose)" << endl;
 }
 
 extern int main(int argc, char *argv[])
@@ -681,6 +737,7 @@ extern int main(int argc, char *argv[])
 	bool			compressionEnable = false;		// use compressed frames by default
 	bool			testEssenceData = true;
 	bool			testCodecs = false;
+	bool			testRawStorage = true;
 
 	// 14897 DV frames + AAF overhead = 2147405824 (2GB - 77824)
 	// 14898 DV frames + AAF overhead = 2147553280 (2GB - 69632)
@@ -719,6 +776,11 @@ extern int main(int argc, char *argv[])
 				testCodecs = true;
 				i++;
 			}
+			else if (!strcmp(argv[i], "-d"))
+			{
+				deleteFiles = true;
+				i++;
+			}
 #ifndef AAF_TOOLKIT_V1_0
 			else if (!strcmp(argv[i], "-compress"))
 			{
@@ -740,9 +802,15 @@ extern int main(int argc, char *argv[])
 	{
 		aafWChar *		pwFileName	= L"TestEssData.aaf";
 		aafLength_t bytes = 0;
-		checkFatal(CreateAAFFileEssenceData(pwFileName, frame_limit, &bytes));
 
+		checkFatal(CreateAAFFileEssenceData(pwFileName, false, frame_limit, &bytes));
 		checkFatal(ReadAAFFileEssenceData(pwFileName, frame_limit, bytes));
+
+		if (testRawStorage)
+		{
+			checkFatal(CreateAAFFileEssenceData(pwFileName, true, frame_limit, &bytes));
+			checkFatal(ReadAAFFileEssenceData(pwFileName, frame_limit, bytes));
+		}
 	}
 
 #ifndef AAF_TOOLKIT_V1_0
@@ -763,15 +831,29 @@ extern int main(int argc, char *argv[])
 							*PCMName = L"TestPCM.aaf";
 		aafLength_t bytes = 0;
 
-		checkFatal(CreateAAFFileCodec(CDCIName, compressionEnable, kAAFCodecCDCI, ContainerAAF,
-									size_limit, &bytes));
+		checkFatal(CreateAAFFileCodec(CDCIName, false, compressionEnable,
+							kAAFCodecCDCI, ContainerAAF, size_limit, &bytes));
 		checkFatal(ReadAAFFileEssenceData(CDCIName, size_limit, bytes));
 
-		checkFatal(CreateAAFFileCodec(PCMName, compressionEnable, kAAFCodecPCM, ContainerAAF,
-									size_limit, &bytes));
+		if (testRawStorage)
+        {
+			checkFatal(CreateAAFFileCodec(CDCIName, true, compressionEnable,
+								kAAFCodecCDCI, ContainerAAF, size_limit, &bytes));
+			checkFatal(ReadAAFFileEssenceData(CDCIName, size_limit, bytes));
+		}
+
+		checkFatal(CreateAAFFileCodec(PCMName, false, compressionEnable,
+							kAAFCodecPCM, ContainerAAF, size_limit, &bytes));
 		checkFatal(ReadAAFFileEssenceData(PCMName, size_limit, bytes));
 
-		//checkFatal(ReadAAFFileCodec(pwFileName, size_limit));
+		if (testRawStorage)
+        {
+			checkFatal(CreateAAFFileCodec(PCMName, true, compressionEnable,
+								kAAFCodecPCM, ContainerAAF, size_limit, &bytes));
+			checkFatal(ReadAAFFileEssenceData(PCMName, size_limit, bytes));
+		}
+
+		// TODO: write a ReadAAFFileCodec() which uses the codec to read back samples
 	}
 #endif
 	return(0);
