@@ -54,25 +54,9 @@ private:
 class MultiGenTest {
  public:
 
-  MultiGenTest( const char* name,
-		const char *desc,
-		const char *usage,
-		const char *notes );
-
+  MultiGenTest();
   virtual ~MultiGenTest();
-
-  const char* GetName() const;
-  const char* GetDesc() const;
-  const char* GetUsage() const;
-  const char* GetNotes() const;
-
   virtual void RunTest( CmdState& state, int sub_argc, char** sub_argv ) = 0;
-
- private:
-  const char* _name;
-  const char* _desc;
-  const char* _usage;
-  const char* _notes;
 };
 
 //=---------------------------------------------------------------------=
@@ -84,7 +68,9 @@ class MultiGenTestFactory {
   MultiGenTestFactory( const char* name,
 		       const char* desc,
 		       const char* usage,
-		       const char* notes );
+		       const char* notes,
+		       int minArgC,
+		       int maxArgC );
 
   virtual ~MultiGenTestFactory();
 
@@ -92,6 +78,8 @@ class MultiGenTestFactory {
   const char* GetDesc() const;
   const char* GetUsage() const;
   const char* GetNotes() const;
+  const int   GetMinArgC() const;
+  const int   GetMaxArgC() const;
 
   // Caller takes ownership of the returned pointer.
   virtual MultiGenTest* Create() = 0;
@@ -101,26 +89,37 @@ class MultiGenTestFactory {
   const char* _desc;
   const char* _usage;
   const char* _notes;
+  int _minArgC;
+  int _maxArgC;
 };
 
-// Common implementation in the form of a macro.  This macro assumes a
-// class exists which has the same name as the test (i.e. TESTNAME).
-#define MULTIGEN_TEST_FACTORY( FCTRYNAME, TESTNAME, DESC, USAGE, NOTES ) \
-MULTIGEN_TEST_FACTORY_LONG( FCTRYNAME, TESTNAME, TESTNAME, DESC, USAGE, NOTES )
+#define STANDARD_TEST_DECLARATION( TYPE ) \
+class TYPE : public MultiGenTest \
+{         \
+public:                                 \
+  TYPE () : MultiGenTest() {}\
+  virtual void RunTest( CmdState& state, int argc, char** argv );\
+};
 
-#define MULTIGEN_TEST_FACTORY_LONG( FCTRYNAME, TESTNAME, TESTCLASS, DESC, USAGE, NOTES ) \
-class FCTRYNAME : public MultiGenTestFactory {                    \
-public:                                                           \
-  FCTRYNAME ()                                                    \
-    : MultiGenTestFactory( #TESTNAME, DESC, USAGE, NOTES )        \
-  {                                                               \
-    MultiGenTestRegistry::GetInstance().Register( this );         \
-  }                                                               \
-  virtual ~FCTRYNAME () {}                                        \
-  virtual MultiGenTest* Create()                                  \
-  {                                                               \
-    return new TESTCLASS( #TESTNAME, DESC, USAGE, NOTES );        \
-  }                                                               \
+template <class Type>
+class StandardFactory : public MultiGenTestFactory {
+ public:
+  StandardFactory( const char* name,
+		   const char* desc,
+		   const char* usage,
+		   const char* notes,
+		   int minArgsC =  1,
+		   int maxArgsC = -1
+		 )
+    : MultiGenTestFactory( name, desc, usage, notes, minArgsC, maxArgsC )
+    {}
+
+  virtual ~StandardFactory()
+    {}
+
+  virtual MultiGenTest* Create() {
+    return new Type();
+  }
 };
 
 //=---------------------------------------------------------------------=
@@ -158,10 +157,6 @@ class MultiGenTestRegistry {
 //=---------------------------------------------------------------------=
 
 // Misc. stuff.
-inline void checkResult( HRESULT hr )
-{
-  if ( AAFRESULT_FAILED(hr) ) throw hr;
-}
 
 // Usage errors will be common.  Best to have an exception so that
 // they can be clearly reported as such
@@ -173,7 +168,7 @@ public:
   UsageEx( const char* msg )
     : _msg(msg) {}
 
-  UsageEx( string& msg )
+  UsageEx( const string& msg )
     : _msg(msg) {}
 
   const string& GetMsg() const
@@ -183,7 +178,7 @@ private:
 };
 
 // HRESULT errors will be common.  Best to have an exception so that
-// they can be clearly reported as such
+// they can be clearly reported as such.
 class HResultEx {
 public:
   HResultEx( HRESULT hr, const char *file, int line )
@@ -198,6 +193,23 @@ private:
   const int _line;
 };
 
+// Test failures (other than HRESULT errors) should be reported using
+// TestFailureEx.  For example, if a search for a named mob does not
+// find the mob, throw this exception.
+class TestFailedEx {
+public:
+  TestFailedEx( const char* msg )
+    : _msg(msg) {}
+
+  TestFailedEx( const string& msg )
+    : _msg(msg) {}
+
+  const string& GetMsg() const
+    { return _msg; };
+private:
+  string _msg;
+};
+
 #define CHECK_HRESULT( expr )			       \
 {						       \
   HRESULT _hr = (expr);				       \
@@ -205,23 +217,5 @@ private:
      throw HResultEx( _hr, __FILE__, __LINE__ );       \
   }						       \
 }
-
-template <class T>
-inline IUnknown** ToIUnknown( T** p )
-{
-  return reinterpret_cast<IUnknown**>(p);
-}
-
-template <class T>
-inline void** ToVoid( T** p )
-{
-  return reinterpret_cast<void**>(p);
-}
-
-// Caller takes ownership of returned pointer.
-wchar_t* ToWideString( const char* str );
-
-// wide string compare
-bool wstrcmp( wchar_t* a, wchar_t* b );
 
 //=---------------------------------------------------------------------=

@@ -28,6 +28,7 @@
 #include <assert.h>
 
 #include <iostream>
+#include <sstream>
 #include <string>
 #include <vector>
 #include <memory>
@@ -119,12 +120,23 @@ bool MultiGenTestRegistry::IsKnown( const char* name )
 MultiGenTestFactory::MultiGenTestFactory( const char* name,
 					  const char* desc,
 					  const char* usage,
-					  const char* notes )
+					  const char* notes,
+					  int minArgC,
+					  int maxArgC )
   : _name( name ),
     _desc( desc ),
     _usage( usage ),
-    _notes( notes )
-{}
+    _notes( notes ),
+    _minArgC( minArgC ),
+    _maxArgC( maxArgC )
+{
+  // Quietly fix nonsense _minArgC value.
+  if ( _minArgC < 1 ) {
+    _minArgC = 1;
+  }
+
+  MultiGenTestRegistry::GetInstance().Register( this );
+}
 
 MultiGenTestFactory::~MultiGenTestFactory()
 {}
@@ -149,40 +161,23 @@ const char* MultiGenTestFactory::GetNotes() const
   return _notes;
 }
 
+const int  MultiGenTestFactory::GetMinArgC() const
+{
+  return _minArgC;
+}
+
+const int  MultiGenTestFactory::GetMaxArgC() const
+{
+  return _maxArgC;
+}
+
 //=---------------------------------------------------------------------=
 
-MultiGenTest::MultiGenTest( const char* name,
-			    const char* desc,
-			    const char* usage,
-			    const char* notes )
-  : _name( name ),
-    _desc( desc ),
-    _usage( usage ),
-    _notes( notes )
+MultiGenTest::MultiGenTest()
 {}
 
 MultiGenTest::~MultiGenTest()
 {}
-
-const char* MultiGenTest::GetName() const
-{
-  return _name;
-}
-
-const char* MultiGenTest::GetDesc() const
-{
-  return _desc;
-}
-
-const char* MultiGenTest::GetUsage() const
-{
-  return _usage;
-}
-
-const char* MultiGenTest::GetNotes() const
-{
-  return _notes;
-}
 
 //=---------------------------------------------------------------------=
 
@@ -259,10 +254,9 @@ private:
   char** _subArgV;
 };
 
-// Currently this is the only CmdFunc implementation.
-// If other are required, just derived from CmdFunc,
-// and add test for in on the command line as is done
-// for "-r" below.
+// Currently this is the only CmdFunc implementation.  If others are
+// required, just derive from CmdFunc, and add an option for it on the
+// command line as is done for "-r" below.
 
 class RunCmd : public CmdFunc {
 public:
@@ -270,31 +264,28 @@ public:
 
   virtual void operator()(CmdState& state)
   {
-      MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
-
-      if ( !registry.IsKnown( GetArgV()[0] ) ) {
-  	    string anError( string( "Can't run unkown test: " ) + string( GetArgV()[0] ) );
-		throw anError;
-      }
-
-      MultiGenTestFactory& factory = registry.GetFactory( GetArgV()[0] );
-
-      auto_ptr<MultiGenTest> test( factory.Create() );
-      test->RunTest( state, GetArgC(), GetArgV() );
+    MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
+    MultiGenTestFactory& factory = registry.GetFactory( GetArgV()[0] );
+    auto_ptr<MultiGenTest> test( factory.Create() );
+    test->RunTest( state, GetArgC(), GetArgV() );
   }
 };
 
 void ProcessCommandLineArgs( int argc, char** argv )
 {
-  // Run the the command line arguments plucking out the indices of
-  // those that are recognized as commands.  Save the index, and
+  // Run through the command line arguments plucking out the indices
+  // of those that are recognized as commands.  Save the index, and
   // create a command object to execute it.
   // 
-  // Next, for each option figure the start/end argument indices that
-  // the command object will pass through to the test implementation.
+  // For each option determine the start/end argument indices that the
+  // command object will pass through to the test implementation.
   //
-  // Finally, execute each command options.  Inter-command state is
-  // held in a state object passed as an argument to each command.
+  // For each command objects, verify that the test exists and the the
+  // number of command line options match the number expected by the
+  // command.
+  //
+  // Finally, execute each command.  Inter-command state is held in a
+  // state object passed as an argument to each command.
 
   vector<int> optionIndices;
   vector<CmdFunc*> optionCmdFuncs;
@@ -323,52 +314,50 @@ void ProcessCommandLineArgs( int argc, char** argv )
     }
   }
 
+  for(i = 0; i < optionCmdFuncs.size(); i++ ) {
+
+      CmdFunc* cmd = optionCmdFuncs[i];
+
+      MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
+
+      if ( !registry.IsKnown( cmd->GetArgV()[0] ) ) {
+  	    string anError( string( "Unkown test: " ) +
+			    string( cmd->GetArgV()[0] ) );
+		throw anError;
+      }
+
+      MultiGenTestFactory& factory = registry.GetFactory( cmd->GetArgV()[0] );
+
+      if ( cmd->GetArgC() < factory.GetMinArgC() ) {
+	stringstream anError;
+	anError << "Expected at least " << factory.GetMinArgC() <<
+	  " arguments for Test: " << cmd->GetArgV()[0];
+	throw anError.str();
+      }
+
+      if ( factory.GetMaxArgC() != -1 &&
+	   cmd->GetArgC() > factory.GetMaxArgC() ) {
+	stringstream anError;
+	anError << "Expected at most " << factory.GetMaxArgC() <<
+	  " arguments for Test: " << cmd->GetArgV()[0];
+	throw anError.str();
+      }
+  }
+
   CmdState* state = new CmdState;
   for(i = 0; i < optionCmdFuncs.size(); i++ ) {
-	cout << *optionCmdFuncs[i]->GetArgV() << "... ";
-	(*optionCmdFuncs[i])( *state );
-	cout << "done" << endl;
+
+    int j;
+    for(j = 0; j < optionCmdFuncs[i]->GetArgC(); j++ ){
+      cout << optionCmdFuncs[i]->GetArgV()[j] << " ";
+    }
+    cout << "... ";
+    cout.flush();
+    (*optionCmdFuncs[i])( *state );
+    cout << "done" << endl;
   }
 
   delete state;
-}
-
-//=---------------------------------------------------------------------=
-
-wchar_t* ToWideString( const char* str )
-{  
-  int len = strlen( str );
-  wchar_t *wstr = new wchar_t [ len + 1 ];
-
-  int i;
-  for( i = 0; i < len; i++ ) {
-    mbtowc( &wstr[i], &str[i], 1 );
-  }
-  wstr[i] = 0;
-
-  return wstr;
-}
-
-//=---------------------------------------------------------------------=
-
-// True if identical
-bool wstrcmp( wchar_t* a, wchar_t* b )
-{
-  if ( !(a && b) ) {
-    return false;
-  }
-
-  while( (*a && *b) && ( *a == *b ) ) {
-    a++;
-    b++;
-  }
-
-  if ( *a || *b ) {
-    return false;
-  }
-  else {
-    return true;
-  }
 }
 
 //=---------------------------------------------------------------------=
@@ -393,8 +382,16 @@ int main( int argc, char **argv )
     MultiGenTestRegistry& registry = MultiGenTestRegistry::GetInstance();
 
     ProcessCommandLineArgs( argc, argv );
- }
+  }
 
+  catch ( const UsageEx& ex_usage ) {
+    cout << "Usage Error: " << ex_usage.GetMsg() << endl;
+    hr = -1;
+  }
+  catch ( const TestFailedEx& ex_failed ) {
+    cout << "Test Failed: " << ex_failed.GetMsg() << endl;
+    hr = -1;
+  }
   catch ( const HResultEx& ex_hr ) {
     hr = ex_hr.GetHResult(); 
     cout << "Error: HRESULT value" << endl;
@@ -405,10 +402,6 @@ int main( int argc, char **argv )
   }
   catch ( const char* ex_str ) {
     cout << "Error: " << ex_str << endl;
-    hr = -1;
-  }
-  catch ( const UsageEx& ex_usage ) {
-    cout << "Usage Error: " << ex_usage.GetMsg() << endl;
     hr = -1;
   }
   catch (...) {

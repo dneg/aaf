@@ -1,5 +1,24 @@
 #! /usr/bin/perl
 
+#=---------------------------------------------------------------------=
+#
+# The contents of this file are subject to the AAF SDK Public
+# Source License Agreement (the "License"); You may not use this file
+# except in compliance with the License.  The License is available in
+# AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
+# Association or its successor.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
+# the License for the specific language governing rights and limitations
+# under the License.
+# 
+# The Original Code of this file is Copyright 1998-2001, Licensor of the
+# AAF Association.
+# 
+#=---------------------------------------------------------------------=
+
+
 #
 # In the following subroutines:
 #   $P - Platform name
@@ -15,7 +34,8 @@
 sub InitGlobalState {
     %GlobalState = ( TestPassedCount => 0,
                      TestFailedCount => 0,
-		     TestExcludedCount => 0 
+		     TestExcludedCount => 0,
+		     FailedTestList => [],
 		   );
 }
 
@@ -41,6 +61,18 @@ sub DumpList {
 	print "$item ";
     }
     print "\n";
+}
+
+######################################################################
+
+sub TestListToCommandArgs {
+    $cmd = "";
+    foreach $item ( @_ ) {
+	$cmd .= " -r ";
+	$cmd .= $item;
+    }
+
+    $cmd;
 }
 
 ######################################################################
@@ -96,6 +128,7 @@ sub LoadLibrary {
 
     @args = ( $CFG{MultiGenTestPath}{$V}{$P},
 	      "-r LoadLib $CFG{$V}{$P}",
+	      "-r RegPlugins $CFG{PlugInLibPath}{$V}{$P}",
 	      "-r UnloadLib",
             );
 
@@ -113,10 +146,13 @@ sub CreateFile {
     my( $P, $V, $T, $F ) = @_;
     my($status) = 0;
 
+
+
     my(@args) = ( $CFG{MultiGenTestPath}{$V}{$P},
 		  "-r LoadLib $CFG{$V}{$P}",
+		  "-r RegPlugins $CFG{PlugInLibPath}{$V}{$P}",
 		  "-r FileOp write $CFG{SharedTestDirPath}{$P}/${F}",
-		  "-r $CFG{$T}[1] ",
+		  TestListToCommandArgs( @{$CFG{$T}[1]} ),
 		  "-r FileOp save_and_close",
 		  "-r UnloadLib",
 		  );
@@ -137,8 +173,9 @@ sub ModifyFile {
 
     my(@args) = ( $CFG{MultiGenTestPath}{$V}{$P},
 		  "-r LoadLib $CFG{$V}{$P}",
+		  "-r RegPlugins $CFG{PlugInLibPath}{$V}{$P}",
 		  "-r FileOp modify $CFG{SharedTestDirPath}{$P}/${F}",
-		  "-r $CFG{$T}[1] ",
+		  TestListToCommandArgs( @{$CFG{$T}[1]} ),
 		  "-r FileOp save_and_close",
 		  "-r UnloadLib",
 		  );
@@ -160,8 +197,9 @@ sub VerifyFile {
 
     my(@args) = ( $CFG{MultiGenTestPath}{$V}{$P},
 		  "-r LoadLib $CFG{$V}{$P}",
+		  "-r RegPlugins $CFG{PlugInLibPath}{$V}{$P}",
 		  "-r FileOp read $CFG{SharedTestDirPath}{$P}/${F}",
-		  "-r $CFG{$T}[2] ",
+		  TestListToCommandArgs( @{$CFG{$T}[2]} ),
 		  "-r FileOp close",
 		  "-r UnloadLib",
 		  );
@@ -177,12 +215,25 @@ sub VerifyFile {
 # Exit if non-zero and ExistOnTestFailure CFG policy is true.
 
 sub TestStatus {
-    my( $status ) = @_;
+    my( $status, $what ) = @_;
 
     if ( oct( $status ) != 0 ) {
-	printf "Non-zero status\: 0x\%08x.\n", oct($status);
+
+	# FIXME - when status is 0xdeadbeaf I need to
+	# print it differently.  If not, an incorrect
+	# value is printed.  What's up with that?
+	if ( $status == 0xdeadbeef ) {
+	    printf "Non-zero status\: 0x%08x\n", $status;
+	}
+	else {
+	    printf "Non-zero status\: 0x%08x\n", oct($status);
+	}
+
 	print "TEST FAILED.\n";
 	$GlobalState{TestFailedCount} += 1;
+
+	push @{$GlobalState{FailedTestList}}, $what;
+
 	if ( $CFG{ExitOnTestFailure} eq "true" ) {
 	    FinalReport();
 	    exit(-1);
@@ -240,6 +291,15 @@ sub PrintConfigSummary {
 	    }
 	print "\n";
     }
+
+    print "PlugInLibPath:\n";
+    foreach $version ( @{$CFG{Versions}} ) {
+        print "\tVersion: $version\n";
+	foreach $platform ( @{$CFG{Platforms}} ) {
+	    print "\t\t$platform: $CFG{PlugInLibPath}{$version}{$platform}\n";
+        }
+    }
+    print "\n";
     
     print "MultiGenTestPath:\n";
     foreach $version ( @{$CFG{Versions}} ) {
@@ -263,17 +323,37 @@ sub PrintConfigSummary {
 
     foreach $test ( @{$CFG{Tests}} ) {
 	print "Test $test:\n";
-	print "\tOption               : $CFG{$test}[0]\n";
-	print "\tCreate/Modify Command: $CFG{$test}[1]\n";
-	print "\tVerify Command       : $CFG{$test}[2]\n";
-	print "\tUses result of       : $CFG{$test}[3]\n";
-	print "\n";
+	print "\tOption                : $CFG{$test}[0]\n";
+	
+	$prefix =  "\tCreate/Modify Commands: ";
+	@cmdlist = @{$CFG{$test}[1]};
+	foreach $cmd ( @cmdlist ) {
+	    print "${prefix}${cmd}\n";
+	    $prefix = "\t                        ";
+        }
+	if ( $#cmdlist == -1 ) {
+	    print "${prefix}\n";
+	}
+	
+	$prefix = "\tVerify Commands       : ";
+	@cmdlist = @{$CFG{$test}[2]};
+	foreach $cmd ( @cmdlist ) {
+	    print "${prefix}${cmd}\n";
+	    $prefix = "\t                        ";
+        }
+	if ( $#cmdlist == -1 ) {
+	    print "${prefix}\n";
+	}
+
+	print "\tUses result of        : $CFG{$test}[3]\n";
 	
 	if ( !( $CFG{$test}[0] eq "create" ||
 		$CFG{$test}[0] eq "modify" ||
 		$CFG{$test}[0] eq "load" ) ) {
 	    die "Test option must be \"create\", \"modify\", or \"load\" in test: $T\n";
 	}
+
+	print "\n";
     }
 
     print "\n\n";
@@ -301,25 +381,28 @@ sub ExecuteTests {
 	    foreach $Cv ( @{$CFG{Versions}} ) {
 
 		if ( $CFG{$T}[0] eq "load" ) {
-		    print "load $Cv on $Cp\n";
+		    $what =  "load $Cv on $Cp";
+		    print "${what}\n";
 		    $status = LoadLibrary( $Cp, $Cv, $T );
-		    TestStatus( $status );
+		    TestStatus( $status, $what );
 		    print "\n";
 		    next;
 		}
 		elsif ( $CFG{$T}[0] eq "create" ) {
 		    $filename = GenerateUniqueFilename( $Cp, $Cv, $T );
-		    print "create $filename by running $T on $Cp using $Cv\n";
+		    $what = "create $filename by running $T on $Cp using $Cv";
+		    print "${what}\n";
 		    $status = CreateFile( $Cp, $Cv, $T, $filename );
-		    TestStatus( $status );
+		    TestStatus( $status, $what );
 		    print "\n";
 
 		    # for all platforms and versions: verify result of the create operation
 		    foreach $Vp ( @{$CFG{Platforms}} ) {
 			foreach $Vv ( @{$CFG{Versions}} ) {
-			    print "verify $filename by running $T on $Vp using $Vv\n";
+			    $what = "verify $filename by running $T on $Vp using $Vv";
+			    print "${what}\n";
 			    $status = VerifyFile( $Vp, $Vv, $T, $filename );
-			    TestStatus( $status );
+			    TestStatus( $status, $what );
 			    print "\n";
 			} #Vv
 		    } #Vp
@@ -341,8 +424,9 @@ sub ExecuteTests {
 
 			    $modify_filename = GenerateUniqueFilename( $Mp, $Mv, $T );
 
-			    print "copy $filename to $modify_filename and ...\n";
-			    print "modify $modify_filename by running $T on $Mp using $Mv\n";
+			    $what = "copy $filename to $modify_filename and ...\n";
+			    $what .= "modify $modify_filename by running $T on $Mp using $Mv";
+			    print "${what}\n";
 
 			    # Exclusion Processing:
 
@@ -363,7 +447,7 @@ sub ExecuteTests {
 			      CopyFile( $filename, $modify_filename );
 
 			      $status = ModifyFile( $Mp, $Mv, $T, $modify_filename );
-			      TestStatus( $status );
+			      TestStatus( $status, $what );
 			      print "\n";
 			    }
 
@@ -371,15 +455,17 @@ sub ExecuteTests {
 			    foreach $Vp ( @{$CFG{Platforms}} ) {
 				foreach $Vv ( @{$CFG{Versions}} ) {
 
+				    $what = "verify $modify_filename by running $T on $Vp using $Vv";
+
 				    if ( $exclude == 1 ) {
-					print "verify $modify_filename by running $T on $Mp using $Mv\n";
+					print "${what}\n";
 					print "Excluded: create or modify test was excluded.\n\n";
 					$GlobalState{TestExcludedCount} += 1;
 				    }
 				    else {
-					print "verify $modify_filename by running $T on $Mp using $Mv\n";
-					$status = VerifyFile( $Mp, $Mv, $T, $modify_filename );
-					TestStatus( $status );
+					print "${what}\n";
+					$status = VerifyFile( $Vp, $Vv, $T, $modify_filename );
+					TestStatus( $status, $what );
 					print "\n";
 				    }
 
@@ -404,6 +490,11 @@ sub ExecuteTests {
 
 sub FinalReport {
 
+    print "\nFailed Tests:\n\n";
+    foreach $item ( @{$GlobalState{FailedTestList}} ) {
+	print "${item}\n";
+    }
+
     print "\nFinal Test Report:\n\n";
 
     printf "\t  Passed: %6d\n", $GlobalState{TestPassedCount};
@@ -422,7 +513,8 @@ sub main {
     if ( $#ARGV < 0 ) {
 	usage();
     }
-    do $ARGV[0];
+
+    do $ARGV[0] != undef() or  die "Failed to read: ${ARGV[0]}\n$!\n$@\n";
 
     InitGlobalState();
 
