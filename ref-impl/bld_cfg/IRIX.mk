@@ -22,12 +22,12 @@ AAF_CMD_LINK = ld
 AAF_LINK_FLAGS =
 AAF_LINK_OUTPUT_FLAG = -o
 LFLAGS = -Olimit 1026
-CFLAGS = -Olimit 1026
+CFLAGS = -Olimit 1026 -exceptions ${MAINWINCCPPFLAGS}
 ARFLAGS = -r
 OBJFILE = -o $*.${OBJ}
 EXEFILE = -o unittest.${EXE}
 CP = cp
-
+UNICODE = 1
 SH_PREFIX = 
 SH_SUFFIX =
 
@@ -39,3 +39,12 @@ SH_SUFFIX =
 # Clearcase dependency checking is used.
 #
 include $(BLD_CFG_DIR)/depend.mk
+
+
+#
+# MainWin make information
+#
+MIDL_CFLAGS = /ms_ext /c_ext /server none /client none
+#MIDL_IDL = AAFMedia.idl
+MAKE_VERBOSE = true
+include $(BLD_CFG_DIR)/mainwin.mk
