@@ -32,7 +32,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <iostream.h>
-#include <cstdlib>
+//#include <cstdlib>
 
 namespace OMF2
 {
@@ -58,8 +58,8 @@ namespace OMF2
 #include "EffectTranslate.h"
 #endif
 #include "Aaf2Omf.h"
-#include "aafCodecdefs.h"
-#include "aafclassdefuids.h"
+#include "AAFCodecDefs.h"
+#include "AAFClassDefUIDs.h"
 #include "AAFException.h"
 #include "OMFException.h"
 //#include "omcAvJPED.h"
