@@ -168,16 +168,17 @@ void OMMemoryRawStorage::read(OMByte* bytes,
   //   @parm The number of bytes to read.
   //   @parm The number of bytes actually read.
   //   @this const
-void OMMemoryRawStorage::readAt(OMUInt64 /* position */,
-                                OMByte* /* bytes */,
-                                OMUInt32 /* byteCount */,
-                                OMUInt32& /* bytesRead */) const
+void OMMemoryRawStorage::readAt(OMUInt64 position,
+                                OMByte* bytes,
+                                OMUInt32 byteCount,
+                                OMUInt32& bytesRead) const
 {
   TRACE("OMMemoryRawStorage::readAt");
   PRECONDITION("Readable", isReadable());
   PRECONDITION("Readable", isPositionable());
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  setPosition(position);
+  read(bytes, byteCount, bytesRead);
 }
 
   // @mfunc Is it possible to write to this <c OMMemoryRawStorage> ?
@@ -283,17 +284,18 @@ void OMMemoryRawStorage::write(const OMByte* bytes,
   //   @parm The buffer from which the bytes are to be written.
   //   @parm The number of bytes to write.
   //   @parm The actual number of bytes written.
-void OMMemoryRawStorage::writeAt(OMUInt64 /* position */,
-                                 const OMByte* /* bytes */,
-                                 OMUInt32 /* byteCount */,
-                                 OMUInt32& /* bytesWritten */)
+void OMMemoryRawStorage::writeAt(OMUInt64 position,
+                                 const OMByte* bytes,
+                                 OMUInt32 byteCount,
+                                 OMUInt32& bytesWritten)
 {
   TRACE("OMMemoryRawStorage::writeAt");
 
   PRECONDITION("Writable", isWritable());
   PRECONDITION("Readable", isPositionable());
 
-  ASSERT("Unimplemented code not reached", false); // tjb TBS
+  setPosition(position);
+  write(bytes, byteCount, bytesWritten);
 }
 
   // @mfunc May this <c OMMemoryRawStorage> be changed in size ?
@@ -408,6 +410,24 @@ bool OMMemoryRawStorage::isPositionable(void) const
   return true;
 }
 
+  // @mfunc Synchronize this <c OMMemoryRawStorage> with its external
+  //        representation.
+void OMMemoryRawStorage::synchronize(void)
+{
+  TRACE("OMMemoryRawStorage::synchronize");
+  // nothing to do
+}
+
+  // @mfunc Constructor.
+OMMemoryRawStorage::OMMemoryRawStorage(void)
+: _pageVector(),
+  _pageSize(4 * 1024),
+  _size(0),
+  _position(0)
+{
+  TRACE("OMMemoryRawStorage::OMMemoryRawStorage");
+}
+
   // @mfunc The current position for <f read()> and <f write()>, as an
   //        offset in bytes from the beginning of this
   //        <c OMMemoryRawStorage>.
@@ -428,34 +448,18 @@ OMUInt64 OMMemoryRawStorage::position(void) const
   //        <c OMMemoryRawStorage>.
   //        precondition - isPositionable()
   //   @parm The new position.
+  //   @this const
   //   @devnote fseek takes a long int for offset this may not be sufficient
   //            for 64-bit offsets.
-void OMMemoryRawStorage::setPosition(OMUInt64 newPosition)
+void OMMemoryRawStorage::setPosition(OMUInt64 newPosition) const
 {
   TRACE("OMMemoryRawStorage::setPosition");
 
   PRECONDITION("Positionable", isPositionable());
   PRECONDITION("Valid position", newPosition < _size);
 
-  _position = newPosition;
-}
-
-  // @mfunc Synchronize this <c OMMemoryRawStorage> with its external
-  //        representation.
-void OMMemoryRawStorage::synchronize(void)
-{
-  TRACE("OMMemoryRawStorage::synchronize");
-  // nothing to do
-}
-
-  // @mfunc Constructor.
-OMMemoryRawStorage::OMMemoryRawStorage(void)
-: _pageVector(),
-  _pageSize(4 * 1024),
-  _size(0),
-  _position(0)
-{
-  TRACE("OMMemoryRawStorage::OMMemoryRawStorage");
+  OMMemoryRawStorage* nonConstThis = const_cast<OMMemoryRawStorage*>(this);
+  nonConstThis->_position = newPosition;
 }
 
   // @mfunc Write a page or partial page.
