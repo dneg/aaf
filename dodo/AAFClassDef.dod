@@ -7,6 +7,20 @@ AAFDefObject\
 #endm
 #c
 AD_HEAD
+AD_IDL(//
+// This interface is used with an object representing an AAF class definition.
+// The operations on a class definition include managing the position of the
+// class within the class heirarchy\, and accessing property definitions associated
+// with the class.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//)
 
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
@@ -32,7 +46,14 @@ AD_XMETHOD1(GetName,
 			aafString_t *,
 			pstrName,
 			Pointer to name,
-			Gets the unique name that identifies this datakind object.)
+			Gets a human-readable name for the class.  This name is not
+	// meant to be a way for programs to refer to the class\, as it is
+	// of undetermined length\, and is not checked to guarantee uniqueness.
+	//
+	// Returns one of the following:
+	//
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(GetParentAUID,
@@ -42,7 +63,13 @@ AD_XMETHOD1(GetParentAUID,
 			pAuid,
 			Pointer to an AUID reference,
 			Gets the Parent class AUID for this object.  If there is no
-  // parent\, returns the NULL AUID.)
+	// parent\, returns the NULL AUID.  The only class which has no parent
+	// should be AAFObject.
+	//
+	// Returns one of the following:
+	//
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\))
 
 
 AD_XMETHOD1(SetParentAUID,
@@ -51,8 +78,17 @@ AD_XMETHOD1(SetParentAUID,
 			aafUID_t,
 			ParentAuid,
 			Parent class AUID,
-			Sets the Parent's AUID.)
-
+			Sets the class which is the parent of this class by specifying its AUID.  This
+	// method may be called only on initialization\, and not on existing class definitions.
+	//
+	// Returns one of the following:
+	//
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_PARENT_ALREADY_SET
+	//   - This method may not be called to restructure a class heirarchy which is already
+	//     in use.)
 
 AD_XMETHOD1(AppendPropertyDef,
 		    [in],
@@ -60,7 +96,16 @@ AD_XMETHOD1(AppendPropertyDef,
 		    AAFPropertyDef,
 		    pPropertyDef, 
 		    Property Definition to be added,
-		    Add the Property Definition to the class definition.)
+		    Add a new Property Definition to the class definition.  This call may only be
+	// used to add new properties\, and not to modify existing properties.)
+	//
+	// Returns one of the following:
+	//
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_PROPERTY_EXISTS
+	//   - Attempted to append a property which is already in the class.)
 
 
 AD_XMETHOD1(RemovePropertyDef,
@@ -69,7 +114,18 @@ AD_XMETHOD1(RemovePropertyDef,
 		    AAFPropertyDef,
 		    pPropertyDef, 
 		    Property Definition to be removed,
-		    Remove Property Definition from the class definition.)
+		    Remove a Property Definition from the class definition.  This method
+	// may not be used to remove properties which are part of the base AAF1.0
+	// specification.
+	//
+	// Returns one of the following:
+	//
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\)
+	//
+	// AAFRESULT_CANT_REMOVE_PROPERTY
+	//   - The given property is part of the base AAF1.0 specification\, and may
+	//     not be removed. )
 
 
 AD_XMETHOD1(GetPropertyDefs,
@@ -78,5 +134,12 @@ AD_XMETHOD1(GetPropertyDefs,
 		    EnumAAFPropertyDefs,
 		    ppEnum,
 		    Property Definition enumeration,
-		    Returns an enumerator for aaf property definitions.)
+		    Returns an enumerator over all of the aaf property definitions attached
+	// to the current class.
+	//
+	// Returns one of the following:
+	//
+	// AAFRESULT_SUCCESS
+	//   - succeeded.  \(This is the only code indicating success.\) )
+
 AD_CLASS_END
