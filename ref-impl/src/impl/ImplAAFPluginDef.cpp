@@ -1026,6 +1026,5 @@ AAFRESULT
 }
 
 
-OMDEFINE_STORABLE(ImplAAFPluginDescriptor, AUID_AAFPluginDescriptor);
 
 

@@ -143,6 +143,5 @@ AAFRESULT ImplAAFNestedScope::ChangeContainedReferences(aafUID_t *from, aafUID_t
 
 
 
-OMDEFINE_STORABLE(ImplAAFNestedScope, AUID_AAFNestedScope);
 
 

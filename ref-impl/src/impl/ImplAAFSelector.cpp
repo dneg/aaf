@@ -314,6 +314,5 @@ AAFRESULT
   return(AAFRESULT_SUCCESS);
 }
 
-OMDEFINE_STORABLE(ImplAAFSelector, AUID_AAFSelector);
 
 

@@ -200,6 +200,3 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMPropertyMBS
   assert (result);
   return result;
 }
-
-
-OMDEFINE_STORABLE(ImplAAFTypeDefWeakObjRef, AUID_AAFTypeDefWeakObjRef);

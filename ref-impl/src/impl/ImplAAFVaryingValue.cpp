@@ -319,8 +319,3 @@ ImplAAFVaryingValue::GetTypeDef(ImplAAFTypeDef **ppTypeDef)
 
 	return AAFRESULT_SUCCESS;
 }
-
-OMDEFINE_STORABLE(ImplAAFVaryingValue, AUID_AAFVaryingValue);
-
-
-

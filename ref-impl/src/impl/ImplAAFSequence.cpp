@@ -639,4 +639,3 @@ AAFRESULT
 	return hr;
 }
 
-OMDEFINE_STORABLE(ImplAAFSequence, AUID_AAFSequence);

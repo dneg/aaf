@@ -976,5 +976,4 @@ AAFRESULT ImplAAFSourceMob::ReconcileMobLength(void)
 }
 
 
-OMDEFINE_STORABLE(ImplAAFSourceMob, AUID_AAFSourceMob);
 

@@ -389,5 +389,4 @@ AAFRESULT ImplAAFEssenceGroup::GetCriteriaSourceClip(
 	return(AAFRESULT_SUCCESS);
 }
 
-OMDEFINE_STORABLE(ImplAAFEssenceGroup, AUID_AAFEssenceGroup);
 

@@ -220,4 +220,3 @@ AAFRESULT ImplAAFComponent::ChangeContainedReferences(aafUID_t *from, aafUID_t *
 	return AAFRESULT_SUCCESS;
 }
 
-OMDEFINE_STORABLE(ImplAAFComponent, AUID_AAFComponent);

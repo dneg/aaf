@@ -196,7 +196,6 @@ AAFRESULT STDMETHODCALLTYPE
 	return AAFRESULT_SUCCESS;
 }
 
-OMDEFINE_STORABLE(ImplAAFMobSlot, AUID_AAFMobSlot);
 
 
 AAFRESULT ImplAAFMobSlot::FindSegment(aafPosition_t offset,

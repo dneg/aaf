@@ -486,6 +486,5 @@ AAFRESULT ImplAAFPulldown::TraverseToClip(aafLength_t length,
   return(AAFRESULT_SUCCESS);
 }
 
-OMDEFINE_STORABLE(ImplAAFPulldown, AUID_AAFPulldown);
 
 
