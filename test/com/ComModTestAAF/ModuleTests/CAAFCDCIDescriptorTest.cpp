@@ -106,9 +106,9 @@ static HRESULT SetDigitalImageDescProps(IAAFCDCIDescriptor* pDesc)
 	pDIDesc->SetAlphaTransparency(kAlphaTransparencyTestVal);
 	pDIDesc->SetImageAlignmentFactor(kImageAlignmentFactorTestVal);
 
-	ratio.numerator = kGammaNumTestVal;
-	ratio.denominator = kGammaDenTestVal;
-	pDIDesc->SetGamma(ratio);
+//	ratio.numerator = kGammaNumTestVal;
+//	ratio.denominator = kGammaDenTestVal;
+//!!!	pDIDesc->SetGamma(ratio);
 
 	pDIDesc->Release();
 
