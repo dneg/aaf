@@ -84,6 +84,28 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
+
+// Override from AAFTypeDefObjectRef
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFTypeDefWeakObjRef::pvtInitialize (
+      const aafUID_t & id,
+      const ImplAAFClassDef * pClassDef,
+      const aafCharacter * pTypeName)
+{
+  if (! pTypeName) return AAFRESULT_NULL_PARAM;
+
+  AAFRESULT hr;
+
+  hr = ImplAAFMetaDefinition::Initialize(id, pTypeName, NULL);
+  if (AAFRESULT_FAILED (hr))
+    return hr;
+
+  _referencedType = pClassDef;
+
+  return AAFRESULT_SUCCESS;
+}
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefWeakObjRef::SetObject (ImplAAFPropertyValue * pPropVal,
 										   ImplAAFObject * pObject)
@@ -222,4 +244,26 @@ OMProperty * ImplAAFTypeDefWeakObjRef::pvtCreateOMProperty
   OMProperty * result = new OMSimpleProperty (pid, name, elemSize);
   assert (result);
   return result;
+}
+
+
+
+
+
+
+// override from OMStorable.
+const OMClassId& ImplAAFTypeDefWeakObjRef::classId(void) const
+{
+  return (*reinterpret_cast<const OMClassId *>(&AUID_AAFTypeDefWeakObjRef));
+}
+
+// Override callbacks from OMStorable
+void ImplAAFTypeDefWeakObjRef::onSave(void* clientContext) const
+{
+  ImplAAFTypeDefObjectRef::onSave(clientContext);
+}
+
+void ImplAAFTypeDefWeakObjRef::onRestore(void* clientContext) const
+{
+  ImplAAFTypeDefObjectRef::onRestore(clientContext);
 }

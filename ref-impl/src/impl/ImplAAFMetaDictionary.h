@@ -31,6 +31,7 @@
  ************************************************************************/
 
 #include "ImplAAFObject.h"
+#include "OMClassFactory.h"
 #include "OMStrongRefSetProperty.h"
 #include "OMReferenceSet.h"
 
@@ -53,10 +54,31 @@ class ImplAAFTypeDefSet;
 class ImplEnumAAFClassDefs;
 class ImplEnumAAFTypeDefs;
 
+#include "ImplAAFClassDef.h"
+#include "ImplAAFPropertyDef.h"
+#include "ImplAAFTypeDef.h"
+
+//
+// Indicates the "mode" for creating and initializing any of the axiomatic and
+// built-in class definitions.
+//
+typedef enum _aafObjectCreationMode_e
+{
+  // Objects need to be created and all properties fully initialized, including all
+  // object references.
+  kAAFCreatingNewObjects,
+
+  // Objects only need to be created, no properties need to be (or should be)
+  // initialized. Only runtime data such as known record offsets need to be
+  // initialized.
+  kAAFRestoringOldObjects
+
+} aafObjectCreationMode_e;
+
 
 class ImplAAFMetaDictionary :
-  public ImplAAFObject
-//  public OMClassFactory, 
+  public ImplAAFObject,
+  public OMClassFactory 
 //  public OMStorable
 {
 public:
@@ -76,15 +98,16 @@ public:
   // 
   // This method implements the OMClassFactory interface.
   //
-  //  OMStorable* create(const OMClassId& classId) const;
+  OMStorable* create(const OMClassId& classId) const;
 
   //
   // This method implements the required OMStorable interface method
   //
   //  virtual const OMClassId& classId(void) const;
 
-  // Override callback from OMStorable
+  // Override callbacks from OMStorable
   //  virtual void onSave(void* clientContext) const;
+  //  virtual void onRestore(void* clientContext) const;
 
 
 
@@ -360,18 +383,67 @@ public:
   void RemoveForwardClassReference(aafUID_constref classId);
 
   // Find the opaque type definition associated with the given type id.
-  ImplAAFTypeDef * findOpaqueTypeDefinition(aafUID_constref typeId); // NOT REFERENCE COUNTED!
+  ImplAAFTypeDef * findOpaqueTypeDefinition(aafUID_constref typeId) const; // NOT REFERENCE COUNTED!
+
+
+  // Add the given class definition to the set of axiomatic class definitions.
+  void addAxiomaticClassDefinition(ImplAAFClassDef *pClassDef);
+
+  // Add the given property definition to the set of axiomatic property definitions.
+  void addAxiomaticPropertyDefinition(ImplAAFPropertyDef *pPropertyDef);
+
+  // Add the given type definition to the set of axiomatic type definitions.
+  void addAxiomaticTypeDefinition(ImplAAFTypeDef *pTypeDef);
 
   // Find the aximatic class definition associated with the given class id.
-  ImplAAFClassDef * findAxiomaticClassDefinition(aafUID_constref classId); // NOT REFERENCE COUNTED!
+  ImplAAFClassDef * findAxiomaticClassDefinition(aafUID_constref classId) const; // NOT REFERENCE COUNTED!
 
   // Find the aximatic property definition associated with the given property id.
-  ImplAAFPropertyDef * findAxiomaticPropertyDefinition(aafUID_constref propertyId); // NOT REFERENCE COUNTED!
+  ImplAAFPropertyDef * findAxiomaticPropertyDefinition(aafUID_constref propertyId) const; // NOT REFERENCE COUNTED!
 
   // Find the aximatic type definition associated with the given type id.
-  ImplAAFTypeDef * findAxiomaticTypeDefinition(aafUID_constref typeId); // NOT REFERENCE COUNTED!
+  ImplAAFTypeDef * findAxiomaticTypeDefinition(aafUID_constref typeId) const; // NOT REFERENCE COUNTED!
+
+  // Factory function to create an unitialized meta defintion for the 
+  // given auid.
+  ImplAAFMetaDefinition * pvtCreateMetaDefinition(const aafUID_t & auid);
+
+  // Create and initialize all of the axiomatic definitions.
+  AAFRESULT InstantiateAxiomaticDefinitions(void);
+
+  // Create all of the axiomatic classes as uninitialized objects.
+  void CreateAxiomaticClasses(void); // throw AAFRESULT
+
+  // Create all of the axiomatic properties as uninitialized objects.
+  void CreateAxiomaticProperties(void); // throw AAFRESULT
+
+  // Create all of the axiomatic types as uninitialized objects.
+  void CreateAxiomaticTypes(void); // throw AAFRESULT
+
+  // Initialize all of the axiomatic classes with their parent and class
+  // definitions.
+  void InitializeAxiomaticClasses(void); // throw AAFRESULT
+
+  // Initialize all of the property definitions with their type definitions.
+  void InitializeAxiomaticProperties(void); // throw AAFRESULT
+
+  // Initialize all of the type definitions with there appropriate class and type
+  // definitions.
+  void InitializeAxiomaticTypes(void); // throw AAFRESULT
 
 
+  // Register all of the axiomatic properties with their corresponding
+  //  axiomatic class definitions.
+  void RegisterAxiomaticProperties(void); // throw AAFRESULT
+
+  // Initialize all of the OMProperties for each aximatic definition.
+  void InitializeAxiomaticOMProperties(void); // throw AAFRESULT
+
+  // Create all of the axiomatic definitions.
+  void CreateAxiomaticDefinitions(void); // throw AAFRESULT
+
+  // Initialize all of the axiomatic definitions.
+  void InitializeAxiomaticDefinitions(void); // throw AAFRESULT
 
 private:
 
@@ -408,7 +480,6 @@ private:
   };
 
   OMSet<OMUniqueObjectIdentification, ForwardClassReference> _forwardClassReferences;
-
 
 };
 

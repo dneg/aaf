@@ -231,7 +231,7 @@ public:
         (const aafUID_t & classID,
 
 		// Inheritance parent of this class
-		const ImplAAFClassDef * pParentClassId,
+		ImplAAFClassDef * pParentClass,
 
 		// Human-legible name
 		const aafCharacter * pClassName,
@@ -242,6 +242,9 @@ public:
 
   // Returns true if this class can be instantiated.
   aafBool pvtIsConcrete () const;
+
+  // Private method to set the "IsConcrete" property (used for bootstrap).
+  void pvtSetIsConcrete (aafBoolean_t isConcrete);
 
   // Private method to unconditionally register a property def (ignoring
   // whether or not property is optional or not, or if this class has
@@ -281,6 +284,14 @@ public:
   // Find the unique identifier property defintion for this class or any parent class
   // (RECURSIVE)
   ImplAAFPropertyDef * pvtGetUniqueIdentifier(void); // result is NOT reference counted.
+
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
 
 private:
 

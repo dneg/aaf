@@ -54,6 +54,13 @@
 #include <assert.h>
 
 
+// Enable/disable the use of the new AAFObjectModel initialized objects.
+#ifndef USE_AAFOBJECT_MODEL
+#define USE_AAFOBJECT_MODEL 0
+#endif
+
+
+
 /*static*/
 bool ImplAAFBuiltinClasses::sBuiltinsInited = ImplAAFBuiltinClasses::sInitBuiltins ();
 
@@ -523,6 +530,16 @@ void ImplAAFBuiltinClasses::instantiateProps ()
 
 	  while (propInfo)
 		{
+#if !defined(NDEBUG) && USE_AAFOBJECT_MODEL
+
+    // Check that all of the current manual table entries are in the automatically generated
+    // set.
+    ImplAAFPropertyDef *pAxiomaticProperty = _dictionary->findAxiomaticPropertyDefinition(propInfo->id);
+    assert (pAxiomaticProperty);
+
+    ImplAAFTypeDef *pAxiomaticType = _dictionary->findAxiomaticTypeDefinition(*propInfo->pTypeGuid);
+    assert (pAxiomaticType);
+#endif
 		  ImplAAFObject * obj =
 			_dictionary->pvtInstantiate (AUID_AAFPropertyDef);
 		  assert (obj);
@@ -591,6 +608,12 @@ void ImplAAFBuiltinClasses::instantiateClasses ()
   // foreach axiomatic class id, instantiate a class def object.
   for (classIdx = 0; classIdx < ksNumAxClasses; classIdx++)
 	{
+#if !defined(NDEBUG) && USE_AAFOBJECT_MODEL
+    // Check that all of the current manual table entries are in the automatically generated
+    // set.
+    ImplAAFClassDef *pAxiomaticClass = _dictionary->findAxiomaticClassDefinition(*sAxClassIDs[classIdx]);
+    assert (pAxiomaticClass);
+#endif
 	  // instantiate the class def object
 	  ImplAAFObject * tmp = _dictionary->pvtInstantiate (AUID_AAFClassDef);
 	  assert (tmp);

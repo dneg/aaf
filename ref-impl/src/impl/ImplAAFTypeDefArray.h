@@ -147,6 +147,10 @@ public:
          aafUInt32  dataSize);
 
 
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
+
 protected:
   virtual aafUInt32 pvtCount (ImplAAFPropertyValue * pInPropVal) const = 0;
   //

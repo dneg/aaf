@@ -44,6 +44,7 @@ class ImplEnumAAFPropertyValues;
 #include "ImplAAFTypeDef.h"
 #endif
 
+#include "OMWeakRefProperty.h"
 
 class ImplAAFTypeDefSet : public ImplAAFTypeDef
 {
@@ -150,6 +151,22 @@ public:
          ImplEnumAAFPropertyValues ** ppEnum);
 
 
+public:
+  //****************
+  // pvtInitialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    pvtInitialize
+        (// @parm [in] auid to be used to identify this type
+         const aafUID_t & id,
+
+         // @parm [in] type of each element to be contained in this set
+         ImplAAFTypeDef * pTypeDef,
+
+         // @parm [in] friendly name of this type definition
+         const aafCharacter *  pTypeName);
+
+
 
   //*************************************************************
   //
@@ -192,6 +209,21 @@ public:
   virtual bool IsFixedArrayable () const;
   virtual bool IsVariableArrayable () const;
   virtual bool IsStringable () const;
+
+
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
+
+private:
+  //
+  // Persistent properties
+  //
+  OMWeakReferenceProperty<ImplAAFTypeDef> _ElementType;
 };
 
 #endif // ! __ImplAAFTypeDefSet_h__

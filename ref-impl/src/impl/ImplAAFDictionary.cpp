@@ -25,7 +25,6 @@
  *
  ************************************************************************/
 
-
 #ifndef __ImplAAFDictionary_h__
 #include "ImplAAFDictionary.h"
 #endif
@@ -119,11 +118,6 @@
 #include "AAFClassDefUIDs.h"
 
 
-//#ifndef __AAFObjectModel_h__
-//#include "AAFObjectModel.h"
-//#endif
-
-
 #include <assert.h>
 #include <string.h>
 #include "aafErr.h"
@@ -138,6 +132,15 @@ extern "C" const aafClassID_t CLSID_EnumAAFInterpolationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFOperationDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFParameterDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFPluginDefs;
+
+
+
+// Enable/disable the use of the new AAFObjectModel initialized objects.
+#ifndef USE_AAFOBJECT_MODEL
+#define USE_AAFOBJECT_MODEL 0
+#endif
+
+
 
 ImplAAFDictionary::ImplAAFDictionary ()
 : _operationDefinitions(PID_Dictionary_OperationDefinitions, L"OperationDefinitions", PID_DefinitionObject_Identification), 
@@ -155,6 +158,7 @@ ImplAAFDictionary::ImplAAFDictionary ()
   _axiomaticTypes (0),
   _OKToAssurePropTypes (false),
   _defRegistrationAllowed (true),
+  _metaDefinitionsInitialized(false),
   _metaDictionary(0)
 {
   _persistentProperties.put (_operationDefinitions.address());
@@ -350,9 +354,6 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
     // by the OMClassFactory interface we just set the factory to "itself".
     //
     pDictionary->setClassFactory(pDictionary);
-
-  	pDictionary->_pBuiltinTypes   = new ImplAAFBuiltinTypes (pDictionary);
-	pDictionary->_pBuiltinClasses = new ImplAAFBuiltinClasses (pDictionary);
   }
   
   pDictionary->pvtSetSoid (AUID_AAFDictionary);
@@ -371,24 +372,11 @@ OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
   const aafUID_t * auid  = reinterpret_cast<const aafUID_t*>(&classId);
   ImplAAFDictionary * pNonConstThis = (ImplAAFDictionary*) this;
 
-#if USE_NEW_OBJECT_CREATION
-  
-  // Call the sample top-level dictionary method that is called
-  // by the API client to create objects.
-  ImplAAFObject *pObject = NULL;
-  hr = pNonConstThis->CreateInstance(*auid, &pObject);
-  assert (AAFRESULT_SUCCEEDED (hr));
-  return pObject;
-
-#else // #if USE_NEW_OBJECT_CREATION
-  
   ImplAAFClassDefSP pcd;
   hr = pNonConstThis->LookupClassDef(*auid, &pcd);
   assert (AAFRESULT_SUCCEEDED (hr));
   
   return CreateAndInit (pcd);
-
-#endif // #else // #if USE_NEW_OBJECT_CREATION
 }
 
 
@@ -527,15 +515,6 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
-#if USE_NEW_OBJECT_CREATION
-
-  // The class definition is the factory for the corresponding 
-  // "data" object. For example the class definition for MasterMob is the 
-  // factory for creating instances of MasterMobs. (TRR 2000-MAR-01)
-  return pClassDef->CreateInstance(ppvObject);
-
-#else // #if USE_NEW_OBJECT_CREATION
-
   if (! pClassDef->pvtIsConcrete ())
 	return AAFRESULT_ABSTRACT_CLASS;
 
@@ -545,8 +524,6 @@ AAFRESULT STDMETHODCALLTYPE
     return AAFRESULT_INVALID_CLASS_ID;
   else
     return AAFRESULT_SUCCESS;
-
-#endif // #else // #if USE_NEW_OBJECT_CREATION
 }
 
 
@@ -618,8 +595,16 @@ bool ImplAAFDictionary::PvtIsClassPresent (
 bool
 ImplAAFDictionary::IsAxiomaticClass (const aafUID_t &classID) const
 {
+#if USE_AAFOBJECT_MODEL
+  ImplAAFClassDef *pAxiomaticClass = findAxiomaticClassDefinition(classID); // return value NOT reference counted! 
+  if (ImplAAFClassDef)
+    return true;
+  else
+    return false;
+#else // #if USE_AAFOBJECT_MODEL
   assert (_pBuiltinClasses);
   return _pBuiltinClasses->IsAxiomaticClass (classID);
+#endif // #else // #if USE_AAFOBJECT_MODEL
 }
 
 
@@ -628,6 +613,21 @@ ImplAAFDictionary::pvtLookupAxiomaticClassDef (const aafUID_t &classID,
 										   ImplAAFClassDef **
 										   ppClassDef)
 {
+#if USE_AAFOBJECT_MODEL
+
+  *ppClassDef = findAxiomaticClassDefinition(classID); // return value NOT reference counted!
+  if (*ppClassDef)
+  {
+    (*ppClassDef)->AcquireReference(); // We will be returning this references!
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+
+#else // #if USE_AAFOBJECT_MODEL
+
   if (_pBuiltinClasses->IsAxiomaticClass (classID))
 	{
 	  // It's axiomatic.
@@ -637,6 +637,8 @@ ImplAAFDictionary::pvtLookupAxiomaticClassDef (const aafUID_t &classID,
 	  return true;
 	}
   return false;
+
+#endif // #else // #if USE_AAFOBJECT_MODEL
 }
 
 
@@ -647,11 +649,20 @@ AAFRESULT STDMETHODCALLTYPE
 {
   AAFRESULT					status;
 
+  //
+  // TEMPORARY:
+  // Initialize the built-in types and classes if necessary.
+  //
+  InitializeMetaDefinitions();
+
+
+
   if (! ppClassDef) return AAFRESULT_NULL_PARAM;
 
   if (pvtLookupAxiomaticClassDef (classID, ppClassDef))
   {
 	  assert (*ppClassDef);
+
 	  // Yes, this is an axiomatic class.  classDef should be filled
 	  // in.  Assure that it's in the dictionary, and return it.
 	  
@@ -701,6 +712,9 @@ AAFRESULT STDMETHODCALLTYPE
 	  AssurePropertyTypes (*ppClassDef);
 	  return AAFRESULT_SUCCESS;
   }
+
+
+
 
   // Not axiomatic.  Check to see if it's already in the dict.
   status = dictLookupClassDef (classID, ppClassDef);
@@ -895,6 +909,21 @@ ImplAAFDictionary::pvtLookupAxiomaticTypeDef (const aafUID_t &typeID,
 										   ImplAAFTypeDef **
 										   ppTypeDef)
 {
+#if USE_AAFOBJECT_MODEL
+
+  *ppTypeDef = findAxiomaticTypeDefinition(typeID); // return value NOT reference counted!
+  if (*ppTypeDef)
+  {
+    (*ppTypeDef)->AcquireReference (); // We will be returning this references!
+    return true;
+  }
+  else
+  {
+    return false;
+  }
+
+#else // #if USE_AAFOBJECT_MODEL
+
   static const aafUInt32 ksNumAxiomaticTypes
 	= sizeof (sAxiomaticTypeGuids) / sizeof (sAxiomaticTypeGuids[0]);
 
@@ -939,6 +968,9 @@ ImplAAFDictionary::pvtLookupAxiomaticTypeDef (const aafUID_t &typeID,
 		}
 	}
   return false;
+
+#endif // #else // #if USE_AAFOBJECT_MODEL
+
 }
 
 
@@ -949,6 +981,14 @@ AAFRESULT STDMETHODCALLTYPE
 {
   ImplAAFTypeDefSP			typeDef;
   AAFRESULT					status;
+
+
+  //
+  // TEMPORARY:
+  // Initialize the built-in types and classes if necessary.
+  //
+  InitializeMetaDefinitions();
+
 
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 
@@ -2137,6 +2177,35 @@ ImplAAFBuiltinDefs * ImplAAFDictionary::GetBuiltinDefs ()
   return _pBuiltinDefs;
 }
 
+// Initialize all of the axiomatic and required built-in definitions
+// have been initialized. This should be called after the file has been opened.
+void ImplAAFDictionary::InitializeMetaDefinitions(void)
+{
+  if (!_metaDefinitionsInitialized)
+  {
+      //
+      // TEMPORARY:
+      // Initialize the built-in types and classes if necessary.
+      //
+#if USE_AAFOBJECT_MODEL
+      // Experimental: Create and initialize all of the axiomatic definitions.
+      // This must be done before another other definitions or data objects
+      // can be created.
+      AAFRESULT result = InstantiateAxiomaticDefinitions();
+      assert(AAFRESULT_SUCCEEDED(result));
+#endif // #if USE_AAFOBJECT_MODEL
+
+    if (!_pBuiltinTypes)
+      _pBuiltinTypes   = new ImplAAFBuiltinTypes (this);
+    assert (_pBuiltinTypes);
+
+    if (!_pBuiltinClasses)
+      _pBuiltinClasses = new ImplAAFBuiltinClasses (this);
+    assert (_pBuiltinClasses);
+
+    _metaDefinitionsInitialized = true;
+  }
+}
 
 //
 // Meta definition factory methods:

@@ -41,6 +41,7 @@
 #include "OMWideStringProperty.h"
 
 class ImplAAFDictionary;
+class Definition; // the base class for all of the AAFObjectModel definitions.
 
 
 class ImplAAFMetaDefinition : public ImplAAFObject
@@ -130,6 +131,8 @@ public:
         (aafUInt32 *  descriptionLen);  //@parm [in,out] Definition description length
 
 public:
+  // Private SDK methods.
+
   // Associate the existing OMProperties with corresponding property definitions from
   // the given class definition. NOTE: This call is recursive, it calls itself again
   // for the parent class of the given class until current class is a "root" class.
@@ -138,7 +141,20 @@ public:
 
   virtual const OMUniqueObjectIdentification& identification(void) const;
 
+  // Private method to assign the unique identifier.
+  AAFRESULT SetIdentification(aafUID_constref identification);
+
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
+
+
 private:
+
   // friendly name of this definition
   OMWideStringProperty          _name;
 
