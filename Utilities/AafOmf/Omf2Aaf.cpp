@@ -1692,14 +1692,44 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 	}
 	else
 	{
-		char	classID[5];
+		char				classID[5];
+		OMF2::omfProperty_t idProp;
 
-		OMFError = OMF2::omfsReadClassID(OMFFileHdl, OMFSegment, OMF2::OMOOBJObjClass,classID);
-		gpGlobals->nNumUndefinedOMFObjects++;
-		classID[4] = '\0';
-		if (gpGlobals->bVerboseMode)
+		if (OMF2::kOmfRev2x == OMFFileRev)
+			idProp = OMF2::OMOOBJObjClass;
+		else
+			idProp = OMF2::OMObjID;
+
+		OMFError = OMF2::omfsReadClassID(OMFFileHdl, OMFSegment, idProp, classID);
+		// Some 1.x effects are detected here. They have each a class of their own !!!
+
+		if (strncmp(classID, "MASK", (size_t)4) == 0)
 		{
-			UTLerrprintf("%sERROR:*** UNKNOWN OBJECT : %s\n", gpGlobals->indentLeader, classID);
+//			OMFError = OMF2::omfeVideoFrameMaskGetInfo();
+		}
+		else if (strncmp(classID, "REPT", (size_t)4) == 0)
+		{
+		}
+		else if (strncmp(classID, "SPED", (size_t)4) == 0)
+		{
+		}
+		else if (strncmp(classID, "PVOL", (size_t)4) == 0)
+		{
+		}
+		else if (strncmp(classID, "TKFX", (size_t)4) == 0)
+		{
+		}
+		else if (strncmp(classID, "TNFX", (size_t)4) == 0)
+		{
+		}
+		else
+		{
+			gpGlobals->nNumUndefinedOMFObjects++;
+			classID[4] = '\0';
+			if (gpGlobals->bVerboseMode)
+			{
+				UTLerrprintf("%sERROR:*** UNKNOWN OBJECT : %s\n", gpGlobals->indentLeader, classID);
+			}
 		}
 	}
 
@@ -2938,6 +2968,12 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 		rc = ConvertOMFEffectDefinition(effectDef, NULL, &pEffectDef);
 		if (strcmp(effectID, "omfi:effect:VideoSpeedControl") == 0)
 		{
+			rc = GetParameterDefinition((aafUID_t *)&kAAFParameterDefSpeedRatio, NULL, 
+										L"Speed Ratio", 
+										L"Defines the ration of output length to input length. Range is -infinity to +infinity",
+										L" ",
+										&pParameterDef);
+			pEffectDef->AddParameterDefs(pParameterDef);
 			OMFError = OMF2::omfeVideoSpeedControlGetInfo(OMFFileHdl, effect, &effectLength, &inputSegmentA, &speedRatio, &phaseOffset);
 			if(OMF2::OM_ERR_NONE == OMFError)
 			{
@@ -3289,9 +3325,14 @@ HRESULT Omf2Aaf::ConvertOMFEffects(OMF2::omfEffObj_t	effect,
 	}
 	else
 	{
+		// Handle 1.x effects
+		char				classID[5];
+
+		OMFError = OMF2::omfsReadClassID(OMFFileHdl, effect, OMF2::OMObjID, classID);
+		classID[4] = '\0';
 		if (gpGlobals->bVerboseMode)
 		{
-			UTLstdprintf("%sGeneric 1.x OMF Effect\n ", gpGlobals->indentLeader);
+			UTLstdprintf("%sOMF 1.x Effect = %s\n ", gpGlobals->indentLeader, classID);
 		}
 	}
 
