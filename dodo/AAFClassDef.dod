@@ -8,10 +8,10 @@ AAFDefObject\
 #c
 AD_HEAD
 AD_IDL(//
-// This interface is used with an object representing an AAF class definition.
-// The operations on a class definition include managing the position of the
-// class within the class heirarchy\, and accessing property definitions associated
-// with the class.
+// This interface is used with an object representing an AAF class
+// definition.  The operations on a class definition include managing
+// the position of the class within the class heirarchy\, and
+// accessing property definitions associated with the class.
 //
 // In addition to the specific error results listed for each method\,
 // all methods in this interface may also return one of the following
@@ -20,131 +20,188 @@ AD_IDL(//
 // AAFRESULT_NOMEMORY
 //   - insufficient system memory is available to perform the
 //     operation.
-//)
+//
 
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/)
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefs)
 AD_FORWARD_DECLARATION(AAFPropertyDef)
 AD_FORWARD_DECLARATION(AAFDefObject)
-
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-* Copyright (c) 1998 Microsoft Corporation *
-*                                          *
-\******************************************/
-
- 
-/***********************************************\
-*	Stub only.   Implementation not yet added	*
-\***********************************************/
-
-
+AD_FORWARD_DECLARATION(AAFTypeDef)
 AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD1(GetName,
-			[out\, retval],
-			objPass,
-			aafString_t *,
-			pstrName,
-			Pointer to name,
-			Gets a human-readable name for the class.  This name is not
-	// meant to be a way for programs to refer to the class\, as it is
-	// of undetermined length\, and is not checked to guarantee uniqueness.
-	//
-	// Returns one of the following:
-	//
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\))
-
-
-AD_XMETHOD1(GetParentAUID,
-			[out\, retval],
-			objPass,
-			aafUID_t *,
-			pAuid,
-			Pointer to an AUID reference,
-			Gets the Parent class AUID for this object.  If there is no
-	// parent\, returns the NULL AUID.  The only class which has no parent
-	// should be AAFObject.
-	//
-	// Returns one of the following:
-	//
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\))
-
-
-AD_XMETHOD1(SetParentAUID,
-			[in],
-			objPass,
-			aafUID_t,
-			ParentAuid,
-			Parent class AUID,
-			Sets the class which is the parent of this class by specifying its AUID.  This
-	// method may be called only on initialization\, and not on existing class definitions.
-	//
-	// Returns one of the following:
-	//
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\)
-	//
-	// AAFRESULT_PARENT_ALREADY_SET
-	//   - This method may not be called to restructure a class heirarchy which is already
-	//     in use.)
-
-AD_XMETHOD1(AppendPropertyDef,
-		    [in],
-		    objIn,
-		    AAFPropertyDef,
-		    pPropertyDef, 
-		    Property Definition to be added,
-		    Add a new Property Definition to the class definition.  This call may only be
-	// used to add new properties\, and not to modify existing properties.)
-	//
-	// Returns one of the following:
-	//
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\)
-	//
-	// AAFRESULT_PROPERTY_EXISTS
-	//   - Attempted to append a property which is already in the class.)
-
-
-AD_XMETHOD1(RemovePropertyDef,
-		    [in],
-		    objIn,
-		    AAFPropertyDef,
-		    pPropertyDef, 
-		    Property Definition to be removed,
-		    Remove a Property Definition from the class definition.  This method
-	// may not be used to remove properties which are part of the base AAF1.0
-	// specification.
-	//
-	// Returns one of the following:
-	//
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\)
-	//
-	// AAFRESULT_CANT_REMOVE_PROPERTY
-	//   - The given property is part of the base AAF1.0 specification\, and may
-	//     not be removed. )
-
-
 AD_XMETHOD1(GetPropertyDefs,
-		   [out\, retval],
+			[out\, retval],
 		    objOut,
 		    EnumAAFPropertyDefs,
 		    ppEnum,
 		    Property Definition enumeration,
-		    Returns an enumerator over all of the aaf property definitions attached
-	// to the current class.
-	//
-	// Returns one of the following:
-	//
-	// AAFRESULT_SUCCESS
-	//   - succeeded.  \(This is the only code indicating success.\) )
+			Returns an enumerator over all of the aaf property
+  // definitions attached to the current class.
+  //
+  // Returns one of the following:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  // 	 - ppEnum was null.)
 
+
+AD_XMETHOD1(CountPropertyDefs,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pCount,
+			number of properties contained in this class definition,
+			Returns number of property definitions in this class.
+  //
+  // Returns one of the following:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  // 	 - ppEnum was null.)
+
+
+AD_XMETHOD5(AppendNewPropertyDef,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this property,
+
+			[in\, string],
+			objPass,
+			wchar_t *,
+			pName,
+			name of the new property,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			type of the new property,
+
+			[in],
+			objPass,
+			aafBool,
+			isOptional,
+			true if new property is to be optional,
+
+			[out],
+			objOut,
+			AAFPropertyDef,
+			ppPropDef,
+			return pointer to newly created property def,
+
+			Creates a new property definition and appends it to this class
+  // definition.  Returns the new property definition in ppPropDef.
+  //
+  // Returns one of the following:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - ppEnum was null.
+  //
+  // AAFRESULT_OPTIONAL
+  //   - If this is a builtin class\, the property must be optional.)
+
+
+AD_XMETHOD2(LookupPropertyDef,
+			[in],
+			objPass,
+			aafUID_t *,
+			pPropID,
+			auid reprepresenting property to look up,
+
+			[out],
+			objOut,
+			AAFPropertyDef,
+			ppPropDef,
+			resulting property definition,
+
+  // Looks up the property definition corresponding to the named auid
+  // and returns a pointer to that property definition in ppPropDef.
+  //
+  // Returns one of the following:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName was null.
+  //
+  // AAFRESULT_NOT_FOUND
+  //   - the given property definition is not present in this class
+  //     definition.)
+
+
+AD_XMETHOD2(GetName,
+			[out\, string\, size_is\(bufSize\)],
+			objPass,
+			wchar_t *,
+			pName,
+			buffer into which name is to be written,
+
+			[in],
+			objPass,
+			aafUInt32,
+			bufSize,
+			size of *pName buffer in bytes,
+
+			Gets a human-readable name for the class.  This name is not
+  // meant to be a way for programs to refer to the class\, as it is
+  // of undetermined length\, and is not checked to guarantee uniqueness.
+  //
+  // Returns one of the following:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_SMALLBUF
+  //   - bufSize indicates that *pBuf is too small to hold the name.
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName was null.)
+
+
+AD_XMETHOD1(GetNameBufLen,
+			[out],
+			objPass,
+			aafUInt32 *,
+			pBufSize,
+			size of required buffer\, in bytes,
+			Returns size of buffer \(in bytes\) required for GetName\(\).
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pBufSize was null.)
+
+
+AD_XMETHOD1(GetParent,
+			[out\, retval],
+			objOut,
+			AAFClassDef,
+			pClassDef,
+			parent class definition,
+			Gets the Parent class for this object.  If there is no
+  // parent\, returns the NULL AUID.  The only class which has no parent
+  // should be AAFObject.
+  //
+  // Returns one of the following:
+  //
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - pName was null.)
 AD_XCLASS_END(Concrete, StoredObject)
