@@ -31,6 +31,7 @@
 //
 
 #include "CAAFModuleTest.h"
+#include "ModuleTest.h"
 
 #include <iostream.h>
 #include <iomanip.h>
@@ -43,7 +44,7 @@
 // Use the x-macros in AAFObjectTable.h to declare the function
 // prototypes for all of the module tests.
 //
-#define AAF_OBJECT_ENTRY(xclass) extern "C" HRESULT C##xclass##_test();
+#define AAF_OBJECT_ENTRY(xclass) extern "C" HRESULT C##xclass##_test(testMode_t);
 
 #include "AAFObjectTable.h"
 
@@ -60,7 +61,7 @@
 // Define the object creation callback function that should be
 // implemented as a static method for every concrete AAF object.
 // 
-typedef HRESULT (*AAFModuleTestProc)(); 
+typedef HRESULT (*AAFModuleTestProc)(testMode_t mode); 
 
 
 struct AAFObjectTestInfo
@@ -70,7 +71,7 @@ struct AAFObjectTestInfo
 
   // Encapsulate the test proc so that we can trap exceptions
   // in one place.
-  HRESULT CallTestProc(void) const;
+  HRESULT CallTestProc(testMode_t mode) const;
 };
 
 
@@ -86,13 +87,13 @@ struct AAFObjectTestInfo
 
 // Encapsulate the test proc so that we can trap exceptions
 // in one place.
-HRESULT AAFObjectTestInfo::CallTestProc(void) const
+HRESULT AAFObjectTestInfo::CallTestProc(testMode_t mode) const
 {
   HRESULT result = S_OK;
   try
   {
     // Call the module test.
-    result = (*pfnTestProc)();
+    result = (*pfnTestProc)(mode);
   }
   catch (...)
   {
@@ -119,6 +120,7 @@ CAAFModuleTest::~CAAFModuleTest()
 
 HRESULT CAAFModuleTest::Test
 (
+	testMode_t	mode,
 	unsigned char *pClassName
 )
 {
@@ -142,11 +144,16 @@ HRESULT CAAFModuleTest::Test
 		{
 			if (0 == strcmp(reinterpret_cast<char *>(pClassName), AAFObjectMap[index].pClassName))
 			{
-				cout << "Testing " << AAFObjectMap[index].pClassName << " ...." << endl;
+				if(mode == kAAFUnitTestReadOnly)
+					cout << "Testing " << AAFObjectMap[index].pClassName << " (Read Only) ...." << endl;
+				else
+					cout << "Testing " << AAFObjectMap[index].pClassName << " ...." << endl;
 
-				hr = AAFObjectMap[index].CallTestProc();
+				hr = AAFObjectMap[index].CallTestProc(mode);
 
 				cout << "Module test for " << setiosflags(ios::left) << setw(38) << AAFObjectMap[index].pClassName;
+				if(mode == kAAFUnitTestReadOnly)
+					cout << " (Read Only) ";
 
 				if ( AAFRESULT_SUCCESS == hr )
 					cout << "SUCCEEDED.\n" << endl;
@@ -178,7 +185,7 @@ HRESULT CAAFModuleTest::Test
 		while (NULL != AAFObjectMap[testCount].pClassName && MAX_TEST_COUNT > testCount)
 		{
 			cout<< "  "<< AAFObjectMap[testCount].pClassName << endl;
-			testResults[testCount] = AAFObjectMap[testCount].CallTestProc();
+			testResults[testCount] = AAFObjectMap[testCount].CallTestProc(mode);
 
 			++testCount;
 			if ( MAX_TEST_COUNT <= testCount ) 
@@ -193,6 +200,8 @@ HRESULT CAAFModuleTest::Test
 			{
 				cout<< setiosflags(ios::left)<< setw(4)<< ++passCount;  
 				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				if(mode == kAAFUnitTestReadOnly)
+					cout << " (Read Only) ";
 				cout<< "SUCCEEDED." << endl;
 			}
 
@@ -201,6 +210,8 @@ HRESULT CAAFModuleTest::Test
 			{
 				cout<< setiosflags(ios::left)<< setw(4)<< ++passCount;  
 				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				if(mode == kAAFUnitTestReadOnly)
+					cout << " (Read Only) ";
 				cout << "SUCCEEDED.  One or more methods will be implemented in a future SDK." << endl;				
 			}
 
@@ -209,6 +220,8 @@ HRESULT CAAFModuleTest::Test
 			{
 				cout<< setiosflags(ios::left)<< setw(4)<< ++partialSuccessCount + passCount;  
 				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				if(mode == kAAFUnitTestReadOnly)
+					cout << " (Read Only) ";
 				cout<< "Partial Success." << endl;
 			}
 
@@ -220,6 +233,8 @@ HRESULT CAAFModuleTest::Test
 			{
 				cout<< setiosflags(ios::left)<< setw(4)<< ++failCount + partialSuccessCount + passCount;  
 				cout<< setw(30) << AAFObjectMap[index].pClassName;
+				if(mode == kAAFUnitTestReadOnly)
+					cout << " (Read Only) ";
 				cout<< "FAILED" << endl;
 			}
 

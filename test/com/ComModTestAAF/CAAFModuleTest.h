@@ -29,7 +29,7 @@
 #define __CAAFModuleTest_h__
 
 #include "AAFTypes.h"
-
+#include "ModuleTest.h"
 
 class CAAFModuleTest
 {
@@ -41,9 +41,10 @@ public:
   //
 	// Call  Module test functions.
 	//
-  HRESULT Test(unsigned char *pClassName = NULL);
+  HRESULT Test(testMode_t mode, unsigned char *pClassName = NULL);
 
 };
+
 
 
 #endif // __CAAFModuleTest_h__

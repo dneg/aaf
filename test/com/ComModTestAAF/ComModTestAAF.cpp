@@ -70,6 +70,7 @@
 
 
 #include "CAAFModuleTest.h"
+#include "ModuleTest.h"
 
 #ifdef WIN32
 #include <winbase.h>
@@ -189,7 +190,8 @@ public:
 int main(int argc, char* argv[])
 {
 	int result = SUCCESS;
-
+	int	startArg = 1;
+	testMode_t	testMode = kAAFUnitTestReadWrite;
 
 
 	// Initialize com library for this process.
@@ -224,6 +226,14 @@ int main(int argc, char* argv[])
 			return(0);
 		}
 
+		if ( argc > 1 &&
+			(0 == strncmp(argv[1],"-r",2) ||
+			 0 == strncmp(argv[1],"-r",2) )	)
+		{
+			testMode = kAAFUnitTestReadOnly;
+			startArg++;
+		}
+
 		/* Print Header */
 		cout<< "\n\n"<< endl;
 		cout<< "***************************\n";
@@ -237,16 +247,16 @@ int main(int argc, char* argv[])
 		time(&s_time);
 		cout<< ctime(&s_time)<< endl<< endl;
 
-		if (1 >= argc)
+		if (startArg >= argc)
 			// Call all Module tests...
-			hr = AAFModuleTest.Test(NULL);
+			hr = AAFModuleTest.Test(testMode, NULL);
 		else
 		{
 			// Call only the modules that are named in the command line.
 			int module;
 
-			for (module = 1; module < argc; module++)
-				hr = AAFModuleTest.Test(reinterpret_cast<unsigned char *>(argv[module]));
+			for (module = startArg; module < argc; module++)
+				hr = AAFModuleTest.Test(testMode, reinterpret_cast<unsigned char *>(argv[module]));
 		}
 
 		/* Get and Print finish time	*/
