@@ -66,6 +66,9 @@ public:
 
 private:
 
+  void initialize(OMStorable* clientRoot,
+                  OMDictionary* dictionary);
+
   OMStrongReferenceProperty<OMStorable> _clientRoot;
   OMStrongReferenceProperty<OMDictionary> _dictionary;
 
