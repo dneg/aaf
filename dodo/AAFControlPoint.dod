@@ -43,7 +43,7 @@ AD_METHOD1(GetEditHint,
 			Pointer to an aafEditHint_t,
 			Returns the edit hint of control point.)
 
-AD_XMETHOD1(GetDatakind,
+AD_XMETHOD1(GetDataDef,
 			[out\,retval],
 			objOut,
 			AAFDataDef,
@@ -65,9 +65,9 @@ AD_METHOD1(SetEditHint,
 		   [in], aafEditHint_t, editHint,Control Point Edit hint,
 		   Sets the control point Edit hint value.)
 
-AD_XMETHOD1(SetDataDefinition,
+AD_XMETHOD1(SetDataDef,
 			[in], objIn, AAFDataDef, datadef,Control Point data definition,
-			Sets the control point datakind value.)
+			Sets the control point Data Definition value.)
 
 AD_METHOD2(SetValue,
 		   [in],aafInt32, valueSize, value size,
