@@ -113,21 +113,19 @@ void ImplAAFTypeDefRecord::pvtInitInternalSizes (void) const
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::Initialize (
-      const aafUID_t * pID,
+      const aafUID_t & id,
       ImplAAFTypeDef ** ppMemberTypes,
       aafString_t * pMemberNames,
       aafUInt32 numMembers,
       wchar_t * pTypeName)
 {
-  if (!pID)
-	return AAFRESULT_NULL_PARAM;
   if (!pTypeName)
     return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  hr = SetAUID (pID);
+  hr = SetAUID (id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   _cachedCount = numMembers;
@@ -180,21 +178,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefRecord::pvtInitialize (
-      const aafUID_t * pID,
+      const aafUID_t & id,
       aafUID_t ** pMemberTypeIDs,
       aafString_t * pMemberNames,
       aafUInt32 numMembers,
       wchar_t * pTypeName)
 {
-  if (!pID)
-	return AAFRESULT_NULL_PARAM;
   if (!pTypeName)
     return AAFRESULT_NULL_PARAM;
 
   AAFRESULT hr;
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
-  hr = SetAUID (pID);
+  hr = SetAUID (id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   _cachedCount = numMembers;
@@ -275,7 +271,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = GetDictionary (&pDict);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (pDict);
-	  hr = pDict->LookupType(&memberUID, &pMemberType);
+	  hr = pDict->LookupType(memberUID, &pMemberType);
 	  assert (AAFRESULT_SUCCEEDED(hr));
 	  assert (pMemberType);
 	  _cachedMemberTypes[index] = pMemberType;

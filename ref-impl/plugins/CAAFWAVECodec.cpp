@@ -124,14 +124,13 @@ HRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		//!!!Later, add in dataDefs supported & filedescriptor class
-		CHECK(dict->CreateInstance(&AUID_AAFCodecDef,
+		CHECK(dict->CreateInstance(AUID_AAFCodecDef,
 							IID_IAAFCodecDef, 
 							(IUnknown **)&codecDef));
 		uid = CodecWave;
 		CHECK(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
-		CHECK(obj->Init(&uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
-		uid = DDEF_Sound;
-		CHECK(codecDef->AppendEssenceKind (&uid));
+		CHECK(obj->Initialize(uid, L"WAVE Codec", L"Handles RIFF WAVE data."));
+		CHECK(codecDef->AppendEssenceKind (DDEF_Sound));
 		*def = obj;
 		codecDef->Release();
 		codecDef = NULL;
@@ -162,21 +161,19 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
-	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
-	aafUID_t				plugID = JEFFS_WAVE_PLUGIN;
 	
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(&AUID_AAFPluginDescriptor,
+		CHECK(dict->CreateInstance(AUID_AAFPluginDescriptor,
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
 		*descPtr = desc;
 		desc->AddRef();
-		CHECK(desc->Init(&plugID, L"Example WAVE Codec", L"Handles RIFF WAVE data."));
+		CHECK(desc->Initialize(JEFFS_WAVE_PLUGIN, L"Example WAVE Codec", L"Handles RIFF WAVE data."));
 
-		CHECK(desc->SetCategoryClass(&category));
+		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
 		CHECK(desc->SetPluginVersionString(manufRev));
-		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (manufURL));
@@ -187,14 +184,14 @@ HRESULT STDMETHODCALLTYPE
 		pLoc->Release();
 		pLoc = NULL;
 
-		CHECK(desc->SetManufacturerID(&manufacturer));
+		CHECK(desc->SetManufacturerID(MANUF_JEFFS_PLUGINS));
 		CHECK(desc->SetPluginManufacturerName(manufName));
 		CHECK(desc->SetIsSoftwareOnly(AAFTrue));
 		CHECK(desc->SetIsAccelerated(AAFFalse));
 		CHECK(desc->SetSupportsAuthentication(AAFFalse));
 		
 		/**/
-		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (downloadURL));

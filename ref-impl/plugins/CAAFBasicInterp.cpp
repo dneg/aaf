@@ -99,12 +99,12 @@ HRESULT STDMETHODCALLTYPE
 	
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(&AUID_AAFInterpolationDefinition,
+		CHECK(dict->CreateInstance(AUID_AAFInterpolationDefinition,
 							IID_IAAFInterpolationDef, 
 							(IUnknown **)&interpDef));
 		uid = LinearInterpolator;
 		CHECK(interpDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
-		CHECK(obj->Init(&uid, L"Basic Plugins", L"Handles step and linear interpolation."));
+		CHECK(obj->Initialize(uid, L"Basic Plugins", L"Handles step and linear interpolation."));
 		*def = obj;
 		interpDef->Release();
 		interpDef = NULL;
@@ -133,20 +133,18 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
-	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_AVID_TECH;
-	aafUID_t				plugID = BASIC_INTERP_PLUGIN;
 	
 	XPROTECT()
 	{
-		CHECK(dict->CreateInstance(&AUID_AAFPluginDescriptor,
+		CHECK(dict->CreateInstance(AUID_AAFPluginDescriptor,
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
 		*descPtr = desc;
 		desc->AddRef();
-		CHECK(desc->Init(&plugID, L"Example interpolators", L"Handles step and linear interpolation."));
-		CHECK(desc->SetCategoryClass(&category));
+		CHECK(desc->Initialize(BASIC_INTERP_PLUGIN, L"Example interpolators", L"Handles step and linear interpolation."));
+		CHECK(desc->SetCategoryClass(AUID_AAFDefObject));
 		CHECK(desc->SetPluginVersionString(manufRev));
-		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (manufURL));
@@ -157,14 +155,14 @@ HRESULT STDMETHODCALLTYPE
 		pLoc->Release();
 		pLoc = NULL;
 
-		CHECK(desc->SetManufacturerID(&manufacturer));
+		CHECK(desc->SetManufacturerID(MANUF_AVID_TECH));
 		CHECK(desc->SetPluginManufacturerName(manufName));
 		CHECK(desc->SetIsSoftwareOnly(AAFTrue));
 		CHECK(desc->SetIsAccelerated(AAFFalse));
 		CHECK(desc->SetSupportsAuthentication(AAFFalse));
 		
 		/**/
-		CHECK(dict->CreateInstance(&AUID_AAFNetworkLocator,
+		CHECK(dict->CreateInstance(AUID_AAFNetworkLocator,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		CHECK(pLoc->SetPath (downloadURL));

@@ -88,8 +88,7 @@ AAFRESULT STDMETHODCALLTYPE
 		return hr;
 	  assert (pDict);
 
-	  aafUID_t id = _ElementType;
-	  hr = pDict->LookupType (&id, &pNonConstThis->_cachedBaseType);
+	  hr = pDict->LookupType (_ElementType, &pNonConstThis->_cachedBaseType);
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (_cachedBaseType);
@@ -105,10 +104,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFTypeDefFixedArray::Initialize (
-      const aafUID_t *  pID,
+      const aafUID_t & id,
       ImplAAFTypeDef * pTypeDef,
       aafUInt32  nElements,
-      wchar_t *  pTypeName)
+      const aafCharacter * pTypeName)
 {
   if (! pTypeDef)  return AAFRESULT_NULL_PARAM;
 
@@ -116,36 +115,33 @@ AAFRESULT STDMETHODCALLTYPE
   if (! pTypeDef->IsFixedArrayable())
 	return AAFRESULT_BAD_TYPE;
 
-  aafUID_t id;
-  AAFRESULT hr = pTypeDef->GetAUID(&id);
+  aafUID_t typeId;
+  AAFRESULT hr = pTypeDef->GetAUID(&typeId);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  return pvtInitialize (pID, &id, nElements, pTypeName);
+  return pvtInitialize (id, typeId, nElements, pTypeName);
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
    ImplAAFTypeDefFixedArray::pvtInitialize (
-      const aafUID_t *  pID,
-      const aafUID_t * pTypeId,
+      const aafUID_t & id,
+      const aafUID_t & typeId,
       aafUInt32  nElements,
-      wchar_t *  pTypeName)
+      const aafCharacter * pTypeName)
 {
   if (! pTypeName) return AAFRESULT_NULL_PARAM;
-  if (! pTypeId)   return AAFRESULT_NULL_PARAM;
-  if (! pID)       return AAFRESULT_NULL_PARAM;
 
   HRESULT hr;
 
   hr = SetName (pTypeName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  hr = SetAUID (pID);
+  hr = SetAUID (id);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  assert (pTypeId);
-  _ElementType = *pTypeId;
+  _ElementType = typeId;
   _ElementCount = nElements;
 
   return AAFRESULT_SUCCESS;

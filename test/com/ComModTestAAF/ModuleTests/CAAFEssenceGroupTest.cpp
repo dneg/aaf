@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -87,8 +87,6 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFSegment*				pSeg = NULL;
 	IAAFSourceClip*				pSourceClip = NULL;
 	IAAFComponent*				pComponent = NULL;
-	aafUID_t					dataDefSound = DDEF_Sound;
-	aafRational_t				audioRate = { 44100, 1 };
 	bool bFileOpen = false;
 	aafProductIdentification_t	ProductInfo;
 	aafUID_t					newMobID, referencedMobID;
@@ -122,49 +120,49 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pHeader->GetDictionary(&pDictionary));
  		
 		//Make the MOB to be referenced
-		checkResult(pDictionary->CreateInstance(&AUID_AAFMasterMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFMasterMob,
 								 IID_IAAFMob, 
 								 (IUnknown **)&pReferencedMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
-		checkResult(pReferencedMob->SetMobID(&referencedMobID));
+		checkResult(pReferencedMob->SetMobID(referencedMobID));
 		checkResult(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
 
 		// Create a Mob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 								 IID_IAAFMob, 
 								 (IUnknown **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 		checkResult(pMob->SetName(L"AAFSourceClipTest"));
 
 		// Create an EssenceGroup
-		checkResult(pDictionary->CreateInstance(&AUID_AAFEssenceGroup,
+		checkResult(pDictionary->CreateInstance(AUID_AAFEssenceGroup,
 								 IID_IAAFEssenceGroup, 
 								 (IUnknown **)&essenceGroup));
 		checkResult(essenceGroup->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (&dataDefSound));
-		checkResult(pComponent->SetLength (&segLen));
+		checkResult(pComponent->SetDataDef (DDEF_Sound));
+		checkResult(pComponent->SetLength (segLen));
 		pComponent->Release();
 		pComponent = NULL;
 		// Add a source clip still frame
-		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceClip,
+		checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
 								 IID_IAAFSourceClip, 
 								 (IUnknown **)&pSourceClip));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (&dataDefSound));
-		checkResult(pComponent->SetLength (&stillLength));
+		checkResult(pComponent->SetDataDef (DDEF_Sound));
+		checkResult(pComponent->SetLength (stillLength));
 		checkResult(essenceGroup->SetStillFrame(pSourceClip)); 
 		pComponent->Release();
 		pComponent = NULL;
 		pSourceClip->Release();
 		pSourceClip = NULL;
 		// Add a source clip alternate
-		checkResult(pDictionary->CreateInstance(&AUID_AAFSourceClip,
+		checkResult(pDictionary->CreateInstance(AUID_AAFSourceClip,
 								 IID_IAAFSourceClip, 
 								 (IUnknown **)&pSourceClip));
 		checkResult(pSourceClip->QueryInterface (IID_IAAFComponent, (void **)&pComponent));
-		checkResult(pComponent->SetDataDef (&dataDefSound));
-		checkResult(pComponent->SetLength (&segLen));
+		checkResult(pComponent->SetDataDef (DDEF_Sound));
+		checkResult(pComponent->SetLength (segLen));
 		checkResult(essenceGroup->AppendChoice(pSourceClip)); 
 		pComponent->Release();
 		pComponent = NULL;

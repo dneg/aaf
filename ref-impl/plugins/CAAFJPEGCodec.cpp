@@ -336,19 +336,18 @@ HRESULT STDMETHODCALLTYPE
 		//!!!Later, add in dataDefs supported & filedescriptor class
 
 		// Create the Codec Definition:
-		checkResult(dict->CreateInstance(&AUID_AAFCodecDef,
+		checkResult(dict->CreateInstance(AUID_AAFCodecDef,
 							IID_IAAFCodecDef, 
 							(IUnknown **)&codecDef));
 		
 		// Support "Picture" type of data definition.
-		uid = DDEF_Picture;
-		checkResult(codecDef->AppendEssenceKind (&uid));
+		checkResult(codecDef->AppendEssenceKind (DDEF_Picture));
 
 		
 		// Initialize the standard Definition properties.
 		checkResult(codecDef->QueryInterface(IID_IAAFDefObject, (void **)&obj));
 		uid = CodecJPEG;
-		checkResult(obj->Init(&uid, 
+		checkResult(obj->Initialize(uid, 
 		                      const_cast<wchar_t *>(kDisplayName),
 		                      const_cast<wchar_t *>(kDescription)));
 
@@ -390,8 +389,6 @@ HRESULT STDMETHODCALLTYPE
 	IAAFPluginDescriptor	*desc = NULL;
 	IAAFLocator				*pLoc = NULL;
  	IAAFNetworkLocator		*pNetLoc = NULL;
-	aafUID_t				category = AUID_AAFDefObject, manufacturer = MANUF_AVID_PLUGINS;
-	aafUID_t				plugID = AVID_JPEG_PLUGIN;
 	
 	if ((NULL == dict) || (NULL == descPtr))
 		return AAFRESULT_NULL_PARAM;
@@ -401,23 +398,23 @@ HRESULT STDMETHODCALLTYPE
 
 	try
 	{
-		checkResult(dict->CreateInstance(&AUID_AAFPluginDescriptor,
+		checkResult(dict->CreateInstance(AUID_AAFPluginDescriptor,
 			IID_IAAFPluginDescriptor, 
 			(IUnknown **)&desc));
 
-		checkResult(desc->Init(&plugID,
+		checkResult(desc->Initialize(AVID_JPEG_PLUGIN,
 		                       const_cast<wchar_t *>(kDisplayName),
 		                       const_cast<wchar_t *>(kDescription)));
-		checkResult(desc->SetCategoryClass(&category));
+		checkResult(desc->SetCategoryClass(AUID_AAFDefObject));
 		checkResult(desc->SetPluginVersionString(kManufRev));
-		checkResult(desc->SetManufacturerID(&manufacturer));
+		checkResult(desc->SetManufacturerID(MANUF_AVID_PLUGINS));
 		checkResult(desc->SetPluginManufacturerName(kManufName));
 		checkResult(desc->SetIsSoftwareOnly(AAFTrue));
 		checkResult(desc->SetIsAccelerated(AAFFalse));
 		checkResult(desc->SetSupportsAuthentication(AAFFalse));
 
 		// Create the network locator for the Manufacturer's web site: 
-		checkResult(dict->CreateInstance(&AUID_AAFNetworkLocator,
+		checkResult(dict->CreateInstance(AUID_AAFNetworkLocator,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		checkResult(pLoc->SetPath (kManufURL));
@@ -430,7 +427,7 @@ HRESULT STDMETHODCALLTYPE
 
 		
 		// Create a Network locator to point to our default download site.
-		checkResult(dict->CreateInstance(&AUID_AAFNetworkLocator,
+		checkResult(dict->CreateInstance(AUID_AAFNetworkLocator,
 			IID_IAAFLocator, 
 			(IUnknown **)&pLoc));
 		checkResult(pLoc->SetPath (kDownloadURL));
@@ -1404,9 +1401,9 @@ void CAAFJPEGCodec::UpdateDescriptor (CAAFJPEGDescriptorHelper& descriptorHelper
 {
 	checkResult(descriptorHelper.SetLength(_numberOfSamples));
 	//	checkResult(descriptorHelper.SetIsInContainer(_isInAAFContainer));
-	checkResult(descriptorHelper.SetSampleRate(&_sampleRate));
+	checkResult(descriptorHelper.SetSampleRate(_sampleRate));
 	//	checkResult(descriptorHelper.SetContainerFormat(_containerFormat));
-	checkResult(descriptorHelper.SetCompression(&_codecID));
+	checkResult(descriptorHelper.SetCompression(_codecID));
 	checkResult(descriptorHelper.SetStoredView(_storedHeight, _storedWidth));
 	checkResult(descriptorHelper.SetSampledView(_sampledHeight, _sampledWidth, _sampledXOffset, _sampledYOffset));
 	checkResult(descriptorHelper.SetDisplayView(_displayHeight, _displayWidth, _displayXOffset, _displayYOffset));
