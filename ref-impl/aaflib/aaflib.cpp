@@ -59,16 +59,19 @@
 #endif
 
 
+// Use conditional to control inclusion of stream code.
+#ifndef USE_IOSTREAM
+#define USE_IOSTREAM 0
+#endif
 
 
 // ASSERT code copied from OM...
-#include <iostream.h>
 
 #ifdef _DEBUG
 
-#include <stdlib.h>
+#if USE_IOSTREAM
 
-#define FAILURE -1
+#include <iostream.h>
 
 void reportAssertionFailure(char* kind,
                             char* name,
@@ -82,8 +85,23 @@ void reportAssertionFailure(char* kind,
   cerr << "The failure occurred at line " << lineNumber
        << " in file \"" << fileName << "\"." << endl;
   cerr << "The condition \"" << expressionString << "\" was violated." << endl;
-  abort();
+  throw AAFRESULT_ASSERTION_VIOLATION;
 }
+
+#else // #if USE_IOSTREAM
+
+void reportAssertionFailure(char*,
+                            char*,
+                            char*,
+                            char*,
+                            char*,
+                            size_t)
+{
+  throw AAFRESULT_ASSERTION_VIOLATION;
+}
+
+#endif // #else // #if USE_IOSTREAM
+
 
 
 #endif
@@ -263,13 +281,6 @@ STDAPI AAFFileOpenExistingRead (
     hr = pAAFDLL->OpenExistingRead(pFileName, modeFlags, ppFile);
 #endif // USE_RAW_STORAGE
   }
-  catch (const char* exStr)
-  {
-    // Return a reasonable exception code.
-    //
-    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
-    hr = AAFRESULT_ASSERTION_VIOLATION;
-  }
   catch (...)
   {
     // Return a reasonable exception code.
@@ -345,13 +356,6 @@ STDAPI AAFFileOpenExistingModify (
     hr = pAAFDLL->OpenExistingModify(pFileName, modeFlags, pIdent, ppFile);
 #endif // USE_RAW_STORAGE
   }
-  catch (const char* exStr)
-  {
-    // Return a reasonable exception code.
-    //
-    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
-    hr = AAFRESULT_ASSERTION_VIOLATION;
-  }
   catch (...)
   {
     // Return a reasonable exception code.
@@ -419,13 +423,6 @@ STDAPI AAFFileOpenNewModify (
     hr = pAAFDLL->OpenNewModify(pFileName, modeFlags, pIdent, ppFile);
 #endif // USE_RAW_STORAGE
   }
-  catch (const char* exStr)
-  {
-    // Return a reasonable exception code.
-    //
-    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
-    hr = AAFRESULT_ASSERTION_VIOLATION;
-  }
   catch (...)
   {
     // Return a reasonable exception code.
@@ -488,13 +485,6 @@ STDAPI AAFFileOpenTransient (
     hr = pAAFDLL->OpenTransient(pIdent, ppFile);
 #endif // USE_RAW_STORAGE
   }
-  catch (const char* exStr)
-  {
-    // Return a reasonable exception code.
-    //
-    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
-    hr = AAFRESULT_ASSERTION_VIOLATION;
-  }
   catch (...)
   {
     // Return a reasonable exception code.
@@ -541,7 +531,7 @@ static aafBool isRecognizedSignature(unsigned char* signature,
                                      size_t signatureSize,
                                      aafUID_t* fileKind);
 
-static size_t maxSignatureSize = signatureSize();
+static const size_t maxSignatureSize = 256; //signatureSize();
 
 // Just like fopen() except for wchar_t* file names.
 //
@@ -578,10 +568,11 @@ HRESULT readSignature(FILE* file,
   TRACE("readSignature");
   ASSERT("Valid file", file != 0);
   ASSERT("Valid signature buffer", signature != 0);
-  ASSERT("Valid signature buffer size", signatureSize != 0);
+  ASSERT("Valid signature buffer size", signatureSize != 0 
+                      && signatureSize <= maxSignatureSize);
 
   HRESULT hr = S_OK;
-  unsigned char* sig = new unsigned char[signatureSize];
+  unsigned char sig[maxSignatureSize];
   if (sig == 0) {
     hr = AAFRESULT_NOMEMORY;
   } else {
@@ -592,7 +583,6 @@ HRESULT readSignature(FILE* file,
       hr = AAFRESULT_NOT_AAF_FILE;  // Can't read signature
     }
   }
-  delete [] sig;
   return hr;
 }
 
@@ -649,6 +639,7 @@ STDAPI AAFFileIsAAFFile (
     aafUID_t *  pAAFFileKind,
     aafBool *  pFileIsAAFFile)
 {
+  TRACE("AAFFileIsAAFFile");
   if (pFileName == 0)
     return AAFRESULT_NULL_PARAM;
 
@@ -658,17 +649,20 @@ STDAPI AAFFileIsAAFFile (
   if (pFileIsAAFFile == 0)
     return AAFRESULT_NULL_PARAM;
 
+  ASSERT("Valid signature buffer size", signatureSize() <= maxSignatureSize);
+
+
   HRESULT hr = S_OK;
-  unsigned char* signature = new unsigned char[maxSignatureSize];
+  unsigned char signature[maxSignatureSize];
   if (signature == 0) {
     hr = AAFRESULT_NOMEMORY;
   } else {
     FILE* f = wfopen(pFileName, L"rb");
     if (f != 0) {
-      hr = readSignature(f, signature, maxSignatureSize);
+      hr = readSignature(f, signature, signatureSize());
       if (SUCCEEDED(hr)) {
         *pFileIsAAFFile = isRecognizedSignature(signature,
-                                                maxSignatureSize,
+                                                signatureSize(),
                                                 pAAFFileKind);
       } else {
         // The file exists but we can't read the signature
@@ -680,7 +674,6 @@ STDAPI AAFFileIsAAFFile (
       hr = AAFRESULT_FILE_NOT_FOUND; // Can't open file
     }
   }
-  delete [] signature;
   return hr;
 }
 
@@ -707,13 +700,6 @@ STDAPI AAFCreateRawStorageMemory (
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->CreateRawStorageMemory(access,
 										 ppNewRawStorage);
-  }
-  catch (const char* exStr)
-  {
-    // Return a reasonable exception code.
-    //
-    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
-    hr = AAFRESULT_ASSERTION_VIOLATION;
   }
   catch (...)
   {
@@ -753,13 +739,6 @@ STDAPI AAFCreateRawStorageDisk (
 	   existence,
 	   access,
 	   ppNewRawStorage);
-  }
-  catch (const char* exStr)
-  {
-    // Return a reasonable exception code.
-    //
-    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
-    hr = AAFRESULT_ASSERTION_VIOLATION;
   }
   catch (...)
   {
@@ -806,13 +785,6 @@ STDAPI AAFCreateAAFFileOnRawStorage (
 	   pIdent,
 	   ppNewFile);
   }
-  catch (const char* exStr)
-  {
-    // Return a reasonable exception code.
-    //
-    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
-    hr = AAFRESULT_ASSERTION_VIOLATION;
-  }
   catch (...)
   {
     // Return a reasonable exception code.
@@ -845,13 +817,6 @@ STDAPI AAFGetPluginManager (
   {
     // Attempt to call the dll's exported function...
     hr = pAAFDLL->GetPluginManager(ppPluginManager);
-  }
-  catch (const char* exStr)
-  {
-    // Return a reasonable exception code.
-    //
-    cerr << "Assertion: \"" << exStr << "\" failed!" << endl;
-    hr = AAFRESULT_ASSERTION_VIOLATION;
   }
   catch (...)
   {
