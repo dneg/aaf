@@ -38,6 +38,7 @@
 //
 class OMFile;
 class ImplAAFDictionary;
+class ImplAAFMetaDictionary;
 class ImplAAFFile;
 class ImplAAFHeader;
 class ImplAAFDataDef;
@@ -121,6 +122,7 @@ private:
   aafInt32			_cookie;
   OMFile			*_file;
   ImplAAFDictionary *_factory;
+  ImplAAFMetaDictionary *_metafactory;
   aafInt16			_byteOrder;
   openType_t			_openType;
   ImplAAFHeader *   _head;		// Needed by Head object

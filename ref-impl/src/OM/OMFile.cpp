@@ -1,6 +1,6 @@
 /***********************************************************************
 *
-*              Copyright (c) 1998-2000 Avid Technology, Inc.
+*              Copyright (c) 1998-1999 Avid Technology, Inc.
 *
 * Permission to use, copy and modify this software and accompanying
 * documentation, and to distribute and sublicense application software
@@ -209,8 +209,16 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid root", root != 0);
   PRECONDITION("Valid signature", validSignature(signature));
+  // PRECONDITION("Valid dictionary ", dictionary != 0);
 
   OMStoredObject* store = OMStoredObject::createModify(fileName, byteOrder);
+  OMStorable* rt = 0;
+  if (dictionary == 0) {
+    rt = root;
+  } else {
+    rt = new OMRootStorable(root, dictionary);
+    ASSERT("Valid heap pointer", rt != 0);
+  }
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
                                signature,
@@ -218,7 +226,7 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
                                store,
                                factory,
                                dictionary,
-                               root);
+                               rt);
   ASSERT("Valid heap pointer", newFile != 0);
   return newFile;
 }
@@ -287,7 +295,23 @@ OMStorable* OMFile::restore(void)
   TRACE("OMFile::restore");
 
   _rootStoredObject->restore(_referencedProperties);
-  _root = OMStorable::restoreFrom(this, "/", *rootStoredObject());
+  OMClassId id;
+  _rootStoredObject->restore(id);
+  if (id == OMRootStorable::_rootClassId) {
+    ASSERT("Valid dictionary", _dictionary != 0);
+    _root = new OMRootStorable();
+    _root->attach(this, "/");
+    _root->setStore(rootStoredObject());
+    _root->setClassFactory(_dictionary);
+
+    _root->restoreContents();
+
+    OMDictionary *metaDictionary = ((OMRootStorable *)_root)->dictionary();
+    ASSERT("Consistent dictionaries", metaDictionary == _dictionary);
+    _root->setClassFactory(classFactory());
+  } else {
+    _root = OMStorable::restoreFrom(this, "/", *rootStoredObject());
+  }
   return root();
 }
 
@@ -301,6 +325,10 @@ void OMFile::close(void)
     writeSignature(_fileName);
   }
   _root->detach();
+  if (_dictionary != 0) {
+    delete _root;
+    _root = 0;
+  }
 }
 
   // @mfunc Retrieve the root <c OMStorable> from this <c OMFile>.
@@ -309,7 +337,13 @@ OMStorable* OMFile::root(void)
 {
   TRACE("OMFile::root");
 
-  return _root;
+  OMStorable* result;
+  if (_dictionary != 0) {
+    result = ((OMRootStorable*)_root)->clientRoot();
+  } else {
+    result = _root;
+  }
+  return result;
 }
 
   // @mfunc Retrieve the root <c OMStoredObject> from this <c OMFile>.

@@ -33,6 +33,7 @@
 
 #include "ImplAAFDataDef.h"
 #include "ImplAAFDictionary.h"
+#include "ImplAAFMetaDictionary.h"
 #include "ImplAAFHeader.h"
 #include "ImplAAFIdentification.h"
 
@@ -93,6 +94,16 @@ ImplAAFFile::Initialize ()
   _factory = ImplAAFDictionary::CreateDictionary();
 	if (NULL == _factory)
 		return AAFRESULT_NOMEMORY;
+
+	// Create the class factory for meta classes.
+	_metafactory = ImplAAFMetaDictionary::CreateMetaDictionary();
+	if (NULL == _metafactory)
+		return AAFRESULT_NOMEMORY;
+
+	// The following is temporary code. (transdel:2000-APR-11)
+	_factory->setMetaDictionary(_metafactory);
+	_metafactory->setDataDictionary(_factory);
+
 	_initialized = kAAFTrue;
 
 	return AAFRESULT_SUCCESS;
@@ -129,7 +140,7 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 	try
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openExistingRead(pFileName, _factory, 0, OMFile::lazyLoad);
+		_file = OMFile::openExistingRead(pFileName, _factory, 0, OMFile::lazyLoad, _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
         // Check the file's signature.
@@ -239,7 +250,7 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 	try 
 	{
 		// Ask the OM to open the file.
-		_file = OMFile::openExistingModify(pFileName, _factory, 0, OMFile::lazyLoad);
+		_file = OMFile::openExistingModify(pFileName, _factory, 0, OMFile::lazyLoad, _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Get the byte order
@@ -400,7 +411,7 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 
 		// Attempt to create the file.
 		const OMFileSignature aafFileSignature  = *reinterpret_cast<const OMFileSignature *>(&aafFileSignatureGUID);
-		_file = OMFile::openNewModify(pFileName, _factory, 0, byteOrder, _head, aafFileSignature);
+		_file = OMFile::openNewModify(pFileName, _factory, 0, byteOrder, _head, aafFileSignature, _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
 		// Now that the file is open and the header has been
@@ -577,6 +588,7 @@ ImplAAFFile::ImplAAFFile () :
 		_cookie(0),
 		_file(0),
 		_factory(NULL),
+		_metafactory(NULL),
 		_byteOrder(0),
 		_openType(kOmUndefined),
 		_head(NULL),
@@ -597,6 +609,12 @@ ImplAAFFile::~ImplAAFFile ()
 	{
 		_factory->ReleaseReference();
 		_factory = NULL;
+	}
+
+	if (_metafactory)
+	{
+		_metafactory->ReleaseReference();
+		_metafactory = NULL;
 	}
 
 	// cleanup the OM File.
