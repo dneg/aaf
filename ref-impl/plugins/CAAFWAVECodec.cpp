@@ -1448,7 +1448,10 @@ AAFRESULT CAAFWaveCodec::ComputeWriteChunkSize(
 {
 	aafInt64          tmpOffset, savePos, result;
 	aafUInt32          size;
-	aafUInt8			*tmp, buf[4];
+	aafUInt8			*tmp;
+	// BobT: buf[] only *really* needs to be pointer-sized, but we're
+	// adding 1 here to keep BoundsChecker happy
+	aafUInt8			buf[sizeof(void*) + 1];
 #if DEBUG_READ
 	aafUInt8			debugBuf[64];
 	aafUInt32			bytesRead;

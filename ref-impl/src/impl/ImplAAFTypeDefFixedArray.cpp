@@ -73,9 +73,13 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = pDict->LookupType (&id, &ptd);
 	  if (AAFRESULT_FAILED(hr))
 		throw hr;
+	  assert (ptd);
 
 	  *ppTypeDef = ptd;
 	  (*ppTypeDef)->AcquireReference ();
+
+	  ptd->ReleaseReference ();
+	  ptd = 0;
 	}
   catch (AAFRESULT &rCaught)
 	{
