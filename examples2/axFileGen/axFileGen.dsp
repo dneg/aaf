@@ -128,10 +128,6 @@ SOURCE=.\FileGenOps\InstanceDump.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\FileGenOps\Integer.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\FileGenOps\Locator.cpp
 # End Source File
 # Begin Source File
