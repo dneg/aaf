@@ -112,7 +112,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT ImplAAFSourceReference::ChangeContainedReferences(aafMobID_constref from,
 															aafMobID_constref to)
 {
-	aafMobID_t			myID;
+	aafMobID_t			myID = _sourceID;
 
 	if(memcmp(&myID, &from, sizeof(aafMobID_t)) == 0)
 		SetSourceID(to);
