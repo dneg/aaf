@@ -654,7 +654,7 @@ extern "C" HRESULT CAAFTypeDefVariableArray_test()
 	catch (...)
 	{
 		cerr << "CAAFTypeDefVariableArray_test...Caught general C++"
-			" exception!" << endl; 
+			 << " exception!" << endl; 
 		hr = AAFRESULT_TEST_FAILED;
 	}
 	
