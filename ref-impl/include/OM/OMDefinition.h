@@ -25,6 +25,7 @@
 #define OMDEFINITION_H
 
 #include "OMDataTypes.h"
+#include <stddef.h>
 
 class OMType;
 
