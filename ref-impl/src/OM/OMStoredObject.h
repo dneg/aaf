@@ -74,6 +74,10 @@ public:
 
   // Saving and restoring properties
 
+  virtual void save(OMFile& file) = 0;
+
+  virtual void save(OMStorable& object) = 0;
+
     // @cmember Save the <c OMStoredObjectIdentification> <p id>
     //          in this <c OMStoredObject>.
   virtual void save(const OMStoredObjectIdentification& id) = 0;
