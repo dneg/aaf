@@ -482,16 +482,17 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
 	// Cleanup object references
-	edesc->CountLocators(&numLocators);
+	if ( edesc ) {
+	  edesc->CountLocators(&numLocators);
 
-	for (i=0; i<numLocators; ++i)
-	{
-		edesc->GetLocatorAt(i, &pLocator);
-		pLocator->Release();
+	  for (i=0; i<numLocators; ++i)
+	    {
+	      edesc->GetLocatorAt(i, &pLocator);
+	      pLocator->Release();
+	    }
+
+	  edesc->Release();
 	}
-
-	if (edesc)
-		edesc->Release();
 
 	if (pMob)
 		pMob->Release();
