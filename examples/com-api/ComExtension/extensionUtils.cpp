@@ -1293,7 +1293,7 @@ CreateAndRegisterPersonnelResourceReference
 
   IAAFTypeDef *ptd=NULL;
   IAAFClassDef *pcd=NULL;
-  IAAFTypeDefObjectRef *ptdr=NULL;
+  IAAFTypeDefStrongObjRef *ptdsr=NULL;
 
   CAAFBuiltinDefs defs (pDict);
 
@@ -1319,8 +1319,8 @@ CreateAndRegisterPersonnelResourceReference
     // PersonnelResource object.  We'll instantiate a
     // TypeDefinitionStrongObjectReference.
     check (defs.cdTypeDefStrongObjRef()->
-		   CreateInstance (IID_IAAFTypeDefObjectRef,
-						   (IUnknown**) &ptdr));
+		   CreateInstance (IID_IAAFTypeDefStrongObjRef,
+						   (IUnknown**) &ptdsr));
 
     // Initialize our new type def, identifying the given AUID by which
     // this type will be known
@@ -1328,18 +1328,18 @@ CreateAndRegisterPersonnelResourceReference
     // generated), the class definition describing the types of objects
     // to which we'll refer (the ClassDef descriging PersonnelResource
     // objects), and a name for this type.
-    check (ptdr->Initialize (kTypeID_PersonnelResourceStrongReference,
-						     pcd,
-						     L"PersonnelResourceStrongReference"));
+    check (ptdsr->Initialize (kTypeID_PersonnelResourceStrongReference,
+							  pcd,
+							  L"PersonnelResourceStrongReference"));
 
     // Register this type definition in the dictionary.  The
     // dictionary::RegisterTypeDef() method expects an IAAFTypeDef
     // pointer, so we'll QI for that first.
-    check (ptdr->QueryInterface (IID_IAAFTypeDef, (void **)&ptd));
+    check (ptdsr->QueryInterface (IID_IAAFTypeDef, (void **)&ptd));
     check (pDict->RegisterTypeDef (ptd));
 
-    ptdr->Release();
-    ptdr=NULL;
+    ptdsr->Release();
+    ptdsr=NULL;
     ptd->Release();
     ptd=NULL;
     pcd->Release();
@@ -1348,8 +1348,8 @@ CreateAndRegisterPersonnelResourceReference
   catch (...)
   {
     // cleanup after error...
-    if (ptdr)
-      ptdr->Release();
+    if (ptdsr)
+      ptdsr->Release();
     if (ptd)
       ptd->Release();
     if (pcd)
