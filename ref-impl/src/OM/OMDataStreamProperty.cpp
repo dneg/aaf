@@ -57,7 +57,6 @@ void OMDataStreamProperty::setSize(const OMUInt64 newSize)
 
   // @mfunc The current position for <f read()> and <f write()>, as an
   //        offset in bytes from the begining of the data stream.
-  //        The valid range for <p offset> is 0 .. <f size()>.
   //   @rdesc The current position for <f read()> and <f write()>, as an
   //          offset in bytes from the begining of the data stream.
   //   @this const
@@ -66,12 +65,12 @@ OMUInt64 OMDataStreamProperty::position(void) const
   // stub
   return 0;
 }
+
   // @mfunc Set the current position for <f read()> and <f write()>, as an
   //        offset in bytes from the begining of the data stream.
-  //        The valid range for <p offset> is 0 .. <f size()>.
   //   @parm The position to use for subsequent calls to read() and
   //         write() on this stream. The position is specified as an
-  //          offset in bytes from the begining of the data stream.
+  //         offset in bytes from the begining of the data stream.
   //   @this const
 void OMDataStreamProperty::setPosition(const OMUInt64 offset)
 {
