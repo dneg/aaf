@@ -52,9 +52,13 @@ static void printError(const char* prefix, const char* type);
 static void printName(const char* name);
 
 
-OMStoredObject::OMStoredObject(struct IStorage* s)
+OMStoredObject::OMStoredObject(IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
   _offset(0), _open(false), _mode(readOnlyMode)
+{
+}
+
+OMStoredObject::~OMStoredObject(void)
 {
 }
 
@@ -247,7 +251,7 @@ OMStoredObject* OMStoredObject::open(const char* fileName,
   convert(omFileName, 256, fileName);
 
   HRESULT result;
-  IStorage* storage;
+  IStorage* storage = 0;
 
   result = StgOpenStorage(
     omFileName,
@@ -273,7 +277,7 @@ OMStoredObject* OMStoredObject::create(const char* fileName)
   convert(omFileName, 256, fileName);
 
   HRESULT result;
-  IStorage* storage;
+  IStorage* storage = 0;
 
   result = StgCreateDocfile(
     omFileName,
@@ -327,9 +331,11 @@ void OMStoredObject::close(void)
   closeStream(_indexStream);
   closeStream(_propertiesStream);
   
-  HRESULT resultCode = _storage->Release();
-  _storage = 0;
-  ASSERT("Reference count is 0.", resultCode == 0);
+  delete _index;
+  _index = 0;
+
+  closeStorage(_storage);
+
   _open = false;
 }
 
@@ -425,6 +431,8 @@ void OMStoredObject::save(const OMStoredVectorIndex* index,
   // Close the stream.
   //
   closeStream(vectorIndexStream);
+
+  delete [] vectorIndexName;
 }
 
 OMStoredVectorIndex* OMStoredObject::restore(const char* vectorName)
@@ -460,6 +468,13 @@ OMStoredVectorIndex* OMStoredObject::restore(const char* vectorName)
     readFromStream(vectorIndexStream, &name, sizeof(name));
     vectorIndex->insert(i, name);
   }
+
+  // Close the stream.
+  //
+  closeStream(vectorIndexStream);
+
+  delete [] vectorIndexName;
+
   return vectorIndex;
 }
 
@@ -479,7 +494,7 @@ IStream* OMStoredObject::createStream(IStorage* storage,
   TRACE("OMStoredObject::createStream");
   PRECONDITION("Valid storage", storage != 0);
 
-  IStream* stream;
+  IStream* stream = 0;
   OMCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
 
@@ -502,7 +517,7 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
   PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid stream name", validString(streamName));
   
-  IStream* stream;
+  IStream* stream = 0;
   OMCHAR omStreamName[256];
   convert(omStreamName, 256, streamName);
   
@@ -537,7 +552,7 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
   PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid storage name", validString(storageName));
 
-  IStorage* newStorage;
+  IStorage* newStorage = 0;
   OMCHAR omStorageName[256];
   convert(omStorageName, 256, storageName);
 
@@ -571,7 +586,7 @@ IStorage* OMStoredObject::openStorage(IStorage* storage,
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
   }
 
-  IStorage* newStorage;
+  IStorage* newStorage = 0;
   OMCHAR omStorageName[256];
   convert(omStorageName, 256, storageName);
 
