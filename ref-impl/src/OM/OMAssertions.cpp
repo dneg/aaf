@@ -50,7 +50,26 @@ void reportAssertionViolation(char* assertionKind,
   omlog << "The violation occurred at line " << lineNumber
         << " in file \"" << fileName << "\"." << endl;
   omlog << "The condition \"" << expressionString << "\" was false." << endl;
+}
 
+void assertionViolation(char* assertionKind,
+                        char* assertionName,
+                        char* expressionString,
+                        char* routineName,
+                        char* fileName,
+                        OMUInt32 lineNumber)
+{
+  reportAssertionViolation(assertionKind,
+                           assertionName,
+                           expressionString,
+                           routineName,
+                           fileName,
+                           lineNumber);
+  handleAssertionViolation();
+}
+
+void handleAssertionViolation(void)
+{
 #if defined(OM_STACK_TRACE_ON_ASSERT)
   printStackTrace(omlog);
 #endif

@@ -55,7 +55,7 @@ public:
   //   @parm The name not to define.
 #define NNAME(name)
 
-#if defined (OM_DEBUG)
+#if defined(OM_DEBUG)
 
 #include "OMDataTypes.h"
 
@@ -83,6 +83,15 @@ void reportAssertionViolation(char* assertionKind,
                               char* routineName,
                               char* fileName,
                               OMUInt32 lineNumber);
+
+void assertionViolation(char* assertionKind,
+                        char* assertionName,
+                        char* expressionString,
+                        char* routineName,
+                        char* fileName,
+                        OMUInt32 lineNumber);
+
+void handleAssertionViolation(void);
 
   // @func Is the given string valid ? Use <f validString> in
   //       expressions passed to the assertion macros
@@ -174,8 +183,8 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define PRECONDITION(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionViolation("Precondition", name, #expression, \
-                               currentRoutineName, __FILE__, __LINE__)
+    : assertionViolation("Precondition", name, #expression, \
+                         currentRoutineName, __FILE__, __LINE__)
 
   // @func Assert (when enabled with OM_DEBUG) that the
   //       postcondition described by <p name> and <p expression> is
@@ -192,8 +201,8 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define POSTCONDITION(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionViolation("Postcondition", name, #expression, \
-                               currentRoutineName, __FILE__, __LINE__)
+    : assertionViolation("Postcondition", name, #expression, \
+                         currentRoutineName, __FILE__, __LINE__)
 
   // @func Assert (when enabled with OM_DEBUG) that the
   //       condition described by <p name> and <p expression> is
@@ -210,8 +219,8 @@ void obsolete(const char* routineName, const char* newRoutineName);
 #define ASSERT(name, expression) \
   (expression) \
     ? (void)0  \
-    : reportAssertionViolation("Assertion",    name, #expression, \
-                               currentRoutineName, __FILE__, __LINE__)
+    : assertionViolation("Assertion",    name, #expression, \
+                         currentRoutineName, __FILE__, __LINE__)
 
   // @func Assert (when enabled with OM_DEBUG) that the
   //       invariant for the class of the current object is true.
