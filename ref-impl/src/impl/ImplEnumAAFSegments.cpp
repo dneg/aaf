@@ -24,6 +24,9 @@
 #include "ImplAAFObjectCreation.h"
 
 #include <assert.h>
+#include "aafErr.h"
+#include "ImplAAFHeader.h"
+#include "ImplAAFDictionary.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFSegments;
 
@@ -31,14 +34,18 @@ extern "C" const aafClassID_t CLSID_EnumAAFSegments;
 ImplEnumAAFSegments::ImplEnumAAFSegments ()
 {
 	_current = 0;
-	_pSelector = NULL;
+	_enumObj = NULL;
+	_enumStrongProp = NULL;
 }
 
 
 ImplEnumAAFSegments::~ImplEnumAAFSegments ()
 {
-	if (_pSelector)
-		_pSelector->ReleaseReference();
+	if (_enumObj)
+	{
+		_enumObj->ReleaseReference();
+		_enumObj = NULL;
+	}
 }
 
 
@@ -72,24 +79,54 @@ ImplEnumAAFSegments::~ImplEnumAAFSegments ()
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFSegments::NextOne (ImplAAFSegment** ppSegment)
 {
-	AAFRESULT	result;
-	aafInt32	cur = _current, siz;
-		
-	assert(_pSelector);
+	aafUInt32			numElem;
+	ImplAAFHeader		*head = NULL;
+	ImplAAFDictionary	*dict = NULL;
 
-	if (ppSegment == NULL)
-		return AAFRESULT_NULL_PARAM;
-
-    _pSelector->GetNumAlternateSegments(&siz);
-	if(cur < siz)
+	if(_enumStrongProp != NULL)
 	{
-		result = _pSelector->GetNthSegment(cur, ppSegment);
-		_current = ++cur;
+		size_t	siz;
+		
+		_enumStrongProp->getSize(siz);
+		numElem = siz;
 	}
 	else
-		result = AAFRESULT_NO_MORE_OBJECTS;
+		return(AAFRESULT_INCONSISTANCY);
 
-	return result;
+	if(ppSegment == NULL)
+		return(AAFRESULT_NULL_PARAM);
+	if(_current >= numElem)
+		return AAFRESULT_NO_MORE_OBJECTS;
+	XPROTECT()
+	{
+		if(_enumStrongProp != NULL)
+		{
+			_enumStrongProp->getValueAt(*ppSegment, _current);
+			(*ppSegment)->AcquireReference();
+		}
+		else
+			RAISE(AAFRESULT_INCONSISTANCY);
+
+		_current++;
+		if (head) {
+			head->ReleaseReference();
+			head = NULL;
+		}
+		if (dict) {
+			dict->ReleaseReference();
+			dict = NULL;
+		}
+	}
+	XEXCEPT
+	{
+		if(head)
+			head->ReleaseReference();
+		if(dict)
+			dict->ReleaseReference();
+	}
+	XEND;
+
+	return(AAFRESULT_SUCCESS); 
 }
 
 
@@ -125,30 +162,30 @@ AAFRESULT STDMETHODCALLTYPE
 								ImplAAFSegment**	ppSegments,
 								aafUInt32*			pFetched)
 {
-	ImplAAFSegment**	ppSegment;
-	aafUInt32			numSegments;
+	ImplAAFSegment**	ppDef;
+	aafUInt32			numDefs;
 	HRESULT				hr;
 
-	if (pFetched == NULL && count != 1)
-		return AAFRESULT_NULL_PARAM;
+	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+		return E_INVALIDARG;
 
 	// Point at the first component in the array.
-	ppSegment = ppSegments;
-	for (numSegments = 0; numSegments < count; numSegments++)
+	ppDef = ppSegments;
+	for (numDefs = 0; numDefs < count; numDefs++)
 	{
-		hr = NextOne(ppSegment);
+		hr = NextOne(ppDef);
 		if (FAILED(hr))
 			break;
 
 		// Point at the next component in the array.  This
 		// will increment off the end of the array when
-		// numSegments == count-1, but the for loop should
+		// numComps == count-1, but the for loop should
 		// prevent access to this location.
-		ppSegment++;
+		ppDef++;
 	}
 	
 	if (pFetched)
-		*pFetched = numSegments;
+		*pFetched = numDefs;
 
 	return hr;
 }
@@ -179,19 +216,29 @@ AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFSegments::Skip (aafUInt32 count)
 {
 	AAFRESULT	hr;
-	aafInt32	newCurrent, size;
+	aafUInt32	newCurrent;
+	aafUInt32	numElem;
+	
+	if(_enumStrongProp != NULL)
+	{
+		size_t	siz;
+		
+		_enumStrongProp->getSize(siz);
+		numElem = siz;
+	}
+	else
+		return(AAFRESULT_INCONSISTANCY);
 
 	newCurrent = _current + count;
 
-    _pSelector->GetNumAlternateSegments(&size);
-	if(newCurrent < size)
+	if(newCurrent < numElem)
 	{
 		_current = newCurrent;
 		hr = AAFRESULT_SUCCESS;
 	}
 	else
 	{
-		hr = AAFRESULT_NO_MORE_OBJECTS;
+		hr = E_FAIL;
 	}
 
 	return hr;
@@ -248,53 +295,43 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplEnumAAFSegments::Clone (ImplEnumAAFSegments** ppEnum)
 {
-	ImplEnumAAFSegments*	theEnum;
-	HRESULT					hr;
+	ImplEnumAAFSegments	*result;
+	AAFRESULT				hr;
 
-	if (ppEnum == NULL)
-		return AAFRESULT_NULL_PARAM;
-	
-	theEnum = (ImplEnumAAFSegments *)CreateImpl(CLSID_EnumAAFSegments);
-	if (theEnum == NULL)
+	result = (ImplEnumAAFSegments *)CreateImpl(CLSID_EnumAAFSegments);
+	if (result == NULL)
 		return E_FAIL;
-		
-	hr = theEnum->SetEnumSelector(_pSelector);
+
+	if(_enumStrongProp != NULL)
+		hr = result->SetEnumStrongProperty(_enumObj, _enumStrongProp);
+	else
+		return(AAFRESULT_INCONSISTANCY);
+
 	if (SUCCEEDED(hr))
 	{
-		theEnum->Reset();
-		theEnum->Skip(_current);
-		*ppEnum = theEnum;
+		result->_current = _current;
+		*ppEnum = result;
 	}
 	else
 	{
-		theEnum->ReleaseReference();
+		result->ReleaseReference();
 		*ppEnum = NULL;
 	}
-
+	
 	return hr;
 }
 
-//***********************************************************
-//
-// SetEnumSelector()
-//
-// Internal method for use by the SDK.  Set the selector which
-// will be enumerated over.
-// 
-// AAFRESULT_SUCCESS
-//   - Successfuly set the selector.
-// 
-AAFRESULT
-    ImplEnumAAFSegments::SetEnumSelector(ImplAAFSelector * pSelector)
+AAFRESULT STDMETHODCALLTYPE
+    ImplEnumAAFSegments::SetEnumStrongProperty( ImplAAFObject *pObj, SegmentStrongRefArrayProp_t *pProp)
 {
-	if (_pSelector)
-		_pSelector->ReleaseReference();
-
-	_pSelector = pSelector;
-	_pSelector->AcquireReference();
+	if (_enumObj)
+		_enumObj->ReleaseReference();
+	_enumObj = pObj;
+	if (pObj)
+		pObj->AcquireReference();
+	/**/
+	_enumStrongProp = pProp;				// Don't refcount, same lifetime as the object.
 
 	return AAFRESULT_SUCCESS;
 }
-
-
 
