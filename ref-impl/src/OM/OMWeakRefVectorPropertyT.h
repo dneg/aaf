@@ -36,6 +36,8 @@
 #include "OMWeakReferenceVectorIter.h"
 #include "OMPropertyTable.h"
 #include "OMUtilities.h"
+#include "OMStoredObject.h"
+#include "OMFile.h"
 
   // @mfunc Constructor.
   //   @parm The property id.

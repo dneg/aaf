@@ -81,10 +81,6 @@ public:
     //          The value is a pointer to the referenced <c OMStorable>.
   virtual OMStorable* getValue(void) const = 0;
 
-    // @cmember Set the value of this <c OMObjectReference>.
-    //          The value is a pointer to the referenced <c OMStorable>.
-  virtual OMStorable* setValue(const OMStorable* value) = 0;
-
     // @cmember The value of this <c OMObjectReference> as a pointer.
     //          This function provides low-level access. If the object exits
     //          but has not yet been loaded then the value returned is 0.
@@ -150,7 +146,7 @@ public:
   virtual OMStorable* getValue(void) const;
 
     // @cmember Set the value of this <c OMStrongObjectReference>.
-    //          The value is a pointer to the <c ReferencedObject>.
+    //          The value is a pointer to the referenced <c OMstorable>.
   virtual OMStorable* setValue(const OMStorable* value);
 
 protected:
@@ -181,15 +177,11 @@ protected:
 
 };
 
-template <typename UniqueIdentification, typename ReferencedObject>
-class OMStrongReferenceSetProperty;
+class OMStrongReferenceSet;
 
   // @class Persistent weak references to persistent objects.
-  //   @tcarg class | ReferencedObject | The type of the referenced
-  //          object. This type must be a descendant of <c OMStorable>.
   //   @base public | <c OMObjectReference>
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
-template <typename ReferencedObject>
 class OMWeakObjectReference : public OMObjectReference {
 public:
   // @access Public members.
@@ -218,13 +210,12 @@ public:
     // @cmember Assignment.
     //          This operator provides value semantics for <c OMContainer>.
     //          This operator does not provide assignment of object references.
-  OMWeakObjectReference<ReferencedObject>& operator=
-                          (const OMWeakObjectReference<ReferencedObject>& rhs);
+  OMWeakObjectReference& operator= (const OMWeakObjectReference& rhs);
 
     // @cmember Equality.
     //          This operator provides value semantics for <c OMContainer>.
     //          This operator does not provide equality of object references.
-  bool operator== (const OMWeakObjectReference<ReferencedObject>& rhs) const;
+  bool operator== (const OMWeakObjectReference& rhs) const;
 
     // @cmember Save this <c OMWeakObjectReference>.
   virtual void save(void) const;
@@ -244,7 +235,9 @@ public:
 
     // @cmember Set the value of this <c OMWeakObjectReference>.
     //          The value is a pointer to the referenced <c OMStorable>.
-  virtual OMStorable* setValue(const OMStorable* value);
+  virtual OMStorable* setValue(
+                            const OMUniqueObjectIdentification& identification,
+                            const OMStorable* value);
 
   void setTargetTag(OMPropertyTag targetTag);
 
@@ -252,17 +245,13 @@ public:
 
 private:
 
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification,
-                               ReferencedObject>* set(void) const;
+  OMStrongReferenceSet* set(void) const;
 
   OMUniqueObjectIdentification _identification;
   OMPropertyTag _targetTag;
-  OMStrongReferenceSetProperty<OMUniqueObjectIdentification,
-                               ReferencedObject>* _targetSet;
+  OMStrongReferenceSet* _targetSet;
 
 };
-
-#include "OMObjectReferenceT.h"
 
 #endif
 

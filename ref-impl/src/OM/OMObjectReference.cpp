@@ -28,6 +28,13 @@
 // @doc OMINTERNAL
 #include "OMObjectReference.h"
 
+#include "OMAssertions.h"
+#include "OMFile.h"
+#include "OMPropertyTable.h"
+#include "OMStoredObject.h"
+#include "OMStrongReferenceSet.h"
+#include "OMUtilities.h"
+
 // class OMObjectReference
 // @author Tim Bingham | tjb | Avid Technology, Inc. | OMObjectReference
 
@@ -322,8 +329,8 @@ void OMStrongObjectReference::restore(void)
 }
 
   // @mfunc Get the value of this <c OMStrongObjectReference>.
-  //        The value is a pointer to the <c ReferencedObject>.
-  //   @rdesc  A pointer to the <p ReferencedObject>.
+  //        The value is a pointer to the referenced <c OMStorable>.
+  //   @rdesc  A pointer to the referenced <c OMStorable>.
   //   @this const
 OMStorable* OMStrongObjectReference::getValue(void) const
 {
@@ -344,8 +351,8 @@ OMStorable* OMStrongObjectReference::getValue(void) const
 
   // @mfunc Set the value of this <c OMStrongObjectReference>.
   //        The value is a pointer to the <c OMStorable>.
-  //   @parm A pointer to the new <p OMStorable>.
-  //   @rdesc A pointer to previous <p OMStorable>, if any.
+  //   @parm A pointer to the new <c OMStorable>.
+  //   @rdesc A pointer to previous <c OMStorable>, if any.
 OMStorable* OMStrongObjectReference::setValue(const OMStorable* value)
 {
   TRACE("OMStrongObjectReference::setValue");
@@ -440,4 +447,229 @@ void OMStrongObjectReference::load(void)
   _pointer->onRestore(file->clientOnSaveContext());
 
   POSTCONDITION("Property properly loaded", isLoaded());
+}
+
+// class OMWeakObjectReference
+
+  // @mfunc Constructor.
+OMWeakObjectReference::OMWeakObjectReference(void)
+: OMObjectReference(),
+  _identification(nullOMUniqueObjectIdentification),
+  _targetTag(nullOMPropertyTag),
+  _targetSet(0)
+{
+  TRACE("OMWeakObjectReference::OMWeakObjectReference");
+  POSTCONDITION("void", isVoid());
+}
+
+  // @mfunc Constructor.
+  //   @parm The <c OMProperty> that contains this <c OMWeakObjectReference>.
+OMWeakObjectReference::OMWeakObjectReference(OMProperty* property)
+: OMObjectReference(property),
+  _identification(nullOMUniqueObjectIdentification),
+  _targetTag(nullOMPropertyTag),
+  _targetSet(0)
+{
+  TRACE("OMWeakObjectReference::OMWeakObjectReference");
+}
+
+  // @mfunc Constructor.
+  //   @parm The <c OMProperty> that contains this <c OMWeakObjectReference>.
+  //   @parm The unique key of this <c OMWeakObjectReference>.
+  //   @parm A tag identifying the <c OMStrongReferenceSetProperty>
+  //         in which the target resides.
+OMWeakObjectReference::OMWeakObjectReference(
+                                   OMProperty* property,
+                                   OMUniqueObjectIdentification identification,
+                                   OMPropertyTag targetTag)
+: OMObjectReference(property),
+  _identification(identification),
+  _targetTag(targetTag),
+  _targetSet(0)
+{
+  TRACE("OMWeakObjectReference::OMWeakObjectReference");
+  POSTCONDITION("non-void", !isVoid());
+}
+
+  // @mfunc Copy constructor.
+  //   @parm The <c OMWeakObjectReference> to copy.
+OMWeakObjectReference::OMWeakObjectReference(const OMWeakObjectReference& rhs)
+: OMObjectReference(rhs),
+  _identification(rhs._identification),
+  _targetTag(rhs._targetTag),
+  _targetSet(0)
+{
+  TRACE("OMWeakObjectReference::OMWeakObjectReference");
+}
+
+  // @mfunc Destructor.
+OMWeakObjectReference::~OMWeakObjectReference(void)
+{
+}
+
+  // @mfunc Is this <c OMWeakObjectReference> void ?
+  //   @rdesc True if this <c OMWeakObjectReference> is void,
+  //          false otherwise. 
+  //   @this const
+bool OMWeakObjectReference::isVoid(void) const
+{
+  return (_identification == nullOMUniqueObjectIdentification) &&
+         OMObjectReference::isVoid();
+}
+
+  // @mfunc Assignment.
+  //        This operator provides value semantics for <c OMContainer>.
+  //        This operator does not provide assignment of object references.
+  //   @parm The <c OMWeakObjectReference> to be assigned.
+  //   @rdesc The <c OMWeakObjectReference> resulting from the assignment. 
+OMWeakObjectReference&
+OMWeakObjectReference::operator= (const OMWeakObjectReference& rhs)
+{
+  TRACE("OMWeakObjectReference::operator=");
+
+  if (*this == rhs) {
+    return *this; // early return !
+  }
+  OMObjectReference::operator=(rhs);
+  _identification = rhs._identification;
+  _targetTag = rhs._targetTag;
+  _targetSet = 0;
+  return *this;
+}
+
+  // @mfunc Equality.
+  //   @parm The <c OMWeakObjectReference> to be compared.
+  //   @rdesc True if the values are the same, false otherwise. 
+  //   @this const
+bool OMWeakObjectReference::operator== (const OMWeakObjectReference& rhs) const
+{
+  TRACE("OMWeakObjectReference::operator==");
+
+  return OMObjectReference::operator==(rhs) &&
+         (_identification == rhs._identification);
+}
+
+  // @mfunc Save this <c OMWeakObjectReference>.
+  //   @this const
+void OMWeakObjectReference::save(void) const
+{
+  TRACE("OMWeakObjectReference::save");
+  PRECONDITION("Valid identification",
+                          _identification != nullOMUniqueObjectIdentification);
+
+  // tjb nothing to do ?
+}
+
+  // @mfunc Close this <c OMWeakObjectReference>.
+void OMWeakObjectReference::close(void)
+{
+  TRACE("OMWeakObjectReference::close");
+
+}
+
+  // @mfunc Detach this <c OMWeakObjectReference>.
+void OMWeakObjectReference::detach(void)
+{
+  TRACE("OMWeakObjectReference::detach");
+}
+
+  // @mfunc Restore this <c OMWeakObjectReference>.
+void OMWeakObjectReference::restore(void)
+{
+  TRACE("OMWeakObjectReference::restore");
+
+  PRECONDITION("Reference not already set", _pointer == 0);
+  PRECONDITION("Valid identification",
+                          _identification != nullOMUniqueObjectIdentification);
+
+  // tjb nothing to do ?
+
+}
+
+  // @mfunc Get the value of this <c OMWeakObjectReference>.
+  //        The value is a pointer to the referenced <c OMStorable>.
+  //   @rdesc  A pointer to the referenced <c OMStorable>.
+  //   @this const
+OMStorable* OMWeakObjectReference::getValue(void) const
+{
+  TRACE("OMWeakObjectReference::getValue");
+
+  OMWeakObjectReference* nonConstThis =
+                                      const_cast<OMWeakObjectReference*>(this);
+
+  if ((_pointer == 0) &&
+      (_identification != nullOMUniqueObjectIdentification)) {
+    OMStorable* object = 0;
+    set()->find(&nonConstThis->_identification, object);
+    nonConstThis->_pointer = object;
+  }  
+  POSTCONDITION("Object found",
+                   IMPLIES(_identification != nullOMUniqueObjectIdentification,
+                           _pointer != 0));
+  return _pointer;
+}
+
+  // @mfunc Set the value of this <c OMWeakObjectReference>.
+  //        The value is a pointer to the <c OMStorable>.
+  //   @parm TBS
+  //   @parm A pointer to the new <c OMStorable>.
+  //   @rdesc A pointer to previous <c OMStorable>, if any.
+OMStorable* OMWeakObjectReference::setValue(
+                            const OMUniqueObjectIdentification& identification,
+                            const OMStorable* value)
+{
+  TRACE("OMWeakObjectReference::setValue");
+
+  PRECONDITION("Valid container property", _property != 0);
+
+  ASSERT("Valid identification",
+      IMPLIES(value != 0, identification != nullOMUniqueObjectIdentification));
+  ASSERT("Valid identification",
+      IMPLIES(value == 0, identification == nullOMUniqueObjectIdentification));
+
+  OMStorable* oldObject = _pointer;
+  _pointer = const_cast<OMStorable*>(value);
+ _identification = identification;
+
+ #if defined(OM_VALIDATE_WEAK_REFERENCES)
+  ASSERT("Consistent source and target",
+                     IMPLIES(_pointer != 0, set()->contains(_identification)));
+#endif
+
+  POSTCONDITION("Element properly set", _pointer == value);
+  return oldObject;
+}
+
+const OMUniqueObjectIdentification&
+OMWeakObjectReference::identification(void) const
+{
+  return _identification;
+}
+
+void OMWeakObjectReference::setTargetTag(OMPropertyTag targetTag)
+{
+  _targetTag = targetTag;
+}
+
+OMStrongReferenceSet* OMWeakObjectReference::set(void) const
+{
+  TRACE("OMWeakObjectReference::set");
+
+  if (_targetSet == 0) {
+    ASSERT("Valid containing property", _property != 0);
+    OMFile* file = _property->propertySet()->container()->file();
+    OMPropertyTable* table = file->referencedProperties();
+    ASSERT("Valid target tag", table->isValid(_targetTag));
+    const OMPropertyId* targetPath = table->valueAt(_targetTag);
+    ASSERT("Valid target path", validPropertyPath(targetPath));
+
+    OMProperty* property = file->findProperty(targetPath);
+
+    OMWeakObjectReference* nonConstThis =
+                                      const_cast<OMWeakObjectReference*>(this);
+    nonConstThis->_targetSet = dynamic_cast<OMStrongReferenceSet*>(property);
+  }
+
+  POSTCONDITION("Valid result", _targetSet != 0);
+  return _targetSet;
 }
