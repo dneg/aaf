@@ -376,13 +376,13 @@ extern "C" HRESULT CAAFPropertyDef_test()
 			
 			//print out the appropriate NI message(s) ...
 			if (bSetDefaultValue_NI)
-				cerr << "\t  SetDefaultValue  method is Not Implemented" << endl;
+				cout << "\t  SetDefaultValue  method is Not Implemented" << endl;
 			if (bSetIsSearchable_NI)
-				cerr << "\t  SetIsSearchable  method is Not Implemented" << endl;
+				cout << "\t  SetIsSearchable  method is Not Implemented" << endl;
 			if (bGetDefaultValue_NI)
-				cerr << "\t  GetDefaultValue  method is Not Implemented" << endl;
+				cout << "\t  GetDefaultValue  method is Not Implemented" << endl;
 			if (bGetIsSearchable_NI)
-				cerr << "\t  GetIsSearchable  method is Not Implemented" << endl;
+				cout << "\t  GetIsSearchable  method is Not Implemented" << endl;
 			
 		}//if partial success stuff
 
