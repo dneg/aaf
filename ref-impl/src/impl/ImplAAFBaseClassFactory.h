@@ -6,7 +6,6 @@
 #include "AAFTypes.h"
 
 // Forward declarations.
-class OMFile; // obsolete
 class ImplAAFObject;
 
 
@@ -16,10 +15,6 @@ public:
 	ImplAAFBaseClassFactory(void);
 	~ImplAAFBaseClassFactory(void);
 
-
-	// Factory method for making instances of the built-in base classes.
-  static ImplAAFObject*
-    CreateInstance(const aafUID_t*	pAUID);
   
   // Utility to find the code class id for the corresponding stored
   // object id.
