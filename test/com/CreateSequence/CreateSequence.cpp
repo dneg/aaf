@@ -619,6 +619,18 @@ int main(int argumentCount, char *argumentVector[])
 	}
 	//  and then carry on...
 
+	// Load the AAF library explicity to catch the common error
+	// that the AAF DLL is not in the user's path, otherwise this
+	// error looks like an error opening the file.
+	//
+	HRESULT hr = AAFLoad(0);
+	if (!AAFRESULT_SUCCEEDED(hr))
+	  {
+	    printf("Failed to load the AAF DLL.\n");
+            printf("Is the $PATH environment variable set correctly ?\n");
+	    exit(1);
+	  }
+
 #if USE_TIMER_LIB
 	UTLInitTimers(1000);
 #endif
