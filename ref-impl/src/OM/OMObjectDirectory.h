@@ -54,8 +54,6 @@ public:
   //
   size_t count(void) const;
 
-  void dump(void) const;
-
 private:
 
   struct TableEntry {

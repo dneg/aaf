@@ -32,9 +32,6 @@
 #include "OMAssertions.h"
 #include "OMUtilities.h"
 
-#include <string.h>
-#include <iostream.h>
-
 #define OM_OBJECT_DIRECTORY_CAPACITY  (5000)
 
 OMObjectDirectory::OMObjectDirectory(void)
@@ -95,11 +92,3 @@ size_t OMObjectDirectory::count(void) const
   return _current;
 }
 
-void OMObjectDirectory::dump(void) const
-{
-  for (size_t i = 0; i < _current; i++) {
-    cout << i << " [" << _table[i]._object << "] \"";
-    printWideString(_table[i]._name);
-    cout << "\"" << endl;
-  }
-}
