@@ -35,6 +35,7 @@
 #include <AAFContainerDefs.h>
 #include <AAFCodecDefs.h>
 #include <AAFDataDefs.h>
+#include <AAFOperationDefs.h>
 
 //=---------------------------------------------------------------------=
 
@@ -351,6 +352,101 @@ ParamMap< aafPixelFormat_t, aafPixelFormat_e >::ParamMap()
 }
 
 template class ParamMap< aafPixelFormat_t, aafPixelFormat_e >;
+
+//=---------------------------------------------------------------------=
+
+ParamMap< aafDropType_t, aafDropType_e >::ParamMap()
+{
+	_map[ L"kAAFTcNonDrop" ] = kAAFTcNonDrop;
+	_map[ L"TcNonDrop" ]     = kAAFTcNonDrop;
+	_map[ L"NonDrop" ]       = kAAFTcNonDrop;
+
+	_map[ L"kAAFTcDrop" ] = kAAFTcDrop;
+	_map[ L"TcDrop" ]     = kAAFTcDrop;
+	_map[ L"Drop" ]       = kAAFTcDrop;
+}
+
+template class ParamMap< aafDropType_t, aafDropType_e >;
+
+//=---------------------------------------------------------------------=
+
+ParamMap< aafBoolean_t, aafBoolean_e >::ParamMap()
+{
+	_map[ L"kAAFFalse" ] = kAAFFalse;
+	_map[ L"False" ]     = kAAFFalse;
+	_map[ L"False" ]     = kAAFFalse;
+	_map[ L"false" ]     = kAAFFalse;
+
+	_map[ L"kAAFTrue" ]  = kAAFTrue;
+	_map[ L"True" ]      = kAAFTrue;
+	_map[ L"TRUE" ]      = kAAFTrue;
+	_map[ L"true" ]      = kAAFTrue;
+}
+
+template class ParamMap< aafBoolean_t, aafBoolean_e >;
+
+//=---------------------------------------------------------------------=
+
+ParamMap< aafUID_t, _OperationDefTag >::ParamMap()
+{
+
+	_map[ L"kAAFEffectVideoDissolve" ]       = kAAFEffectVideoDissolve;
+	_map[ L"EffectVideoDissolve" ]           = kAAFEffectVideoDissolve;
+	_map[ L"VideoDissolve" ]                 = kAAFEffectVideoDissolve;
+
+	_map[ L"kAAFEffectMonoAudioDissolve" ]   = kAAFEffectMonoAudioDissolve;
+	_map[ L"EffectMonoAudioDissolve" ]       = kAAFEffectMonoAudioDissolve;
+	_map[ L"MonoAudioDissolve" ]             = kAAFEffectMonoAudioDissolve;
+
+	_map[ L"kAAFEffectStereoAudioDissolve" ] = kAAFEffectStereoAudioDissolve;
+	_map[ L"EffectStereoAudioDissolve" ]     = kAAFEffectStereoAudioDissolve;
+	_map[ L"StereoAudioDissolve" ]           = kAAFEffectStereoAudioDissolve;
+
+	_map[ L"kAAFEffectVideoFadeToBlack" ]    = kAAFEffectVideoFadeToBlack;
+	_map[ L"EffectVideoFadeToBlack" ]        = kAAFEffectVideoFadeToBlack;
+	_map[ L"StereoAudioDissolve" ]           = kAAFEffectStereoAudioDissolve;
+
+	_map[ L"kAAFEffectSMPTEVideoWipe" ]      = kAAFEffectSMPTEVideoWipe;
+	_map[ L"EffectSMPTEVideoWipe" ]          = kAAFEffectSMPTEVideoWipe;
+	_map[ L"SMPTEVideoWipe" ]                = kAAFEffectSMPTEVideoWipe;
+
+	_map[ L"kAAFEffectPictureWithMate" ]     = kAAFEffectPictureWithMate;
+	_map[ L"EffectPictureWithMate" ]         = kAAFEffectPictureWithMate;
+	_map[ L"PictureWithMate" ]               = kAAFEffectPictureWithMate;
+
+	_map[ L"kAAFEffectVideoSpeedControl" ]   = kAAFEffectVideoSpeedControl;
+	_map[ L"EffectVideoSpeedControl" ]       = kAAFEffectVideoSpeedControl;
+	_map[ L"VideoSpeedControl" ]             = kAAFEffectVideoSpeedControl;
+
+	_map[ L"kAAFEffectVideoRepeat" ]         = kAAFEffectVideoRepeat;
+	_map[ L"EffectVideoRepeat" ]             = kAAFEffectVideoRepeat;
+	_map[ L"VideoRepeat" ]                   = kAAFEffectVideoRepeat;
+
+	_map[ L"kAAFEffectVideoFrameToMask" ]    = kAAFEffectVideoFrameToMask;
+	_map[ L"EffectVideoFrameToMask" ]        = kAAFEffectVideoFrameToMask;
+	_map[ L"VideoFrameToMask" ]              = kAAFEffectVideoFrameToMask;
+
+	_map[ L"kAAFEffectMonoAudioPan" ]        = kAAFEffectMonoAudioPan;
+	_map[ L"EffectMonoAudioPan" ]            = kAAFEffectMonoAudioPan;
+	_map[ L"MonoAudioPan" ]                  = kAAFEffectMonoAudioPan;
+
+	_map[ L"kAAFEffectMonoAudioGain" ]       = kAAFEffectMonoAudioGain;
+	_map[ L"EffectMonoAudioGain" ]           = kAAFEffectMonoAudioGain;
+	_map[ L"MonoAudioGain" ]                 = kAAFEffectMonoAudioGain;
+
+	_map[ L"kAAFEffectStereoAudioGain" ]     = kAAFEffectStereoAudioGain;
+	_map[ L"EffectStereoAudioGain" ]         = kAAFEffectStereoAudioGain;
+	_map[ L"StereoAudioGain" ]               = kAAFEffectStereoAudioGain;
+
+	_map[ L"kAAFEffectMonoAudioMixdown" ]    = kAAFEffectMonoAudioMixdown;
+	_map[ L"EffectMonoAudioMixdown" ]        = kAAFEffectMonoAudioMixdown;
+	_map[ L"MonoAudioMixdown" ]              = kAAFEffectMonoAudioMixdown;
+
+	_map[ L"kAAFOperationUnknown" ]          = kAAFOperationUnknown;
+	_map[ L"OperationUnknown" ]              = kAAFOperationUnknown;
+}
+
+template class ParamMap< aafUID_t, _OperationDefTag >;
 
 //=---------------------------------------------------------------------=
 //=---------------------------------------------------------------------=

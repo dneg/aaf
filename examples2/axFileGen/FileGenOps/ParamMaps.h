@@ -63,17 +63,23 @@ private:
 
 //=---------------------------------------------------------------------=
 
+// Create unique type tags for untyped parameters that use uid's.
 class _ContainerDefsTag;
 class _CodecIDTag;
 class _DDefTag;
+class _OperationDefTag;
 
-typedef ParamMap< aafUID_t, _ContainerDefsTag >					ContainerDefParams;
-typedef ParamMap< aafCompressEnable_t, aafCompressEnable_e >	CompressionEnableParams;
-typedef ParamMap< aafUID_t, _CodecIDTag >						CodecIDParams;
-typedef ParamMap< aafTapeCaseType_t, aafTapeCaseType_e >		TapeCaseParams;
+typedef ParamMap< aafUID_t,             _OperationDefTag     >  OperationDefParams;
+typedef ParamMap< aafUID_t,             _ContainerDefsTag    >	ContainerDefParams;
+typedef ParamMap< aafUID_t,             _CodecIDTag          >	CodecIDParams;
+typedef ParamMap< aafUID_t,             _DDefTag             >	DDefParams;
+
+typedef ParamMap< aafCompressEnable_t,  aafCompressEnable_e  >	CompressionEnableParams;
+typedef ParamMap< aafTapeCaseType_t,    aafTapeCaseType_e    >	TapeCaseParams;
 typedef ParamMap< aafVideoSignalType_t, aafVideoSignalType_e >	SignalTypeParams;
-typedef ParamMap< aafTapeFormatType_t, aafTapeFormatType_e >	TapeFormatParams;
-typedef ParamMap< aafUID_t, _DDefTag >							DDefParams;
-typedef ParamMap< aafFrameLayout_t, aafFrameLayout_e >          FrameLayoutParams;
-typedef ParamMap< aafColorSpace_t, aafColorSpace_e >            ColorSpaceParams;
-typedef ParamMap< aafPixelFormat_t, aafPixelFormat_e >          PixelFormatParams;
+typedef ParamMap< aafTapeFormatType_t,  aafTapeFormatType_e  >	TapeFormatParams;
+typedef ParamMap< aafFrameLayout_t,     aafFrameLayout_e     >  FrameLayoutParams;
+typedef ParamMap< aafColorSpace_t,      aafColorSpace_e      >  ColorSpaceParams;
+typedef ParamMap< aafPixelFormat_t,     aafPixelFormat_e     >  PixelFormatParams;
+typedef ParamMap< aafDropType_t,        aafDropType_e        >  DropTypeParams;
+typedef ParamMap< aafBoolean_t,         aafBoolean_e         >  BooleanParams;
