@@ -168,6 +168,23 @@ static void formatGUID(char *cBuffer, size_t length, aafUID_t *pGUID)
   }
 }
 
+static void printDate(aafDateStruct_t *pDate)
+{
+  printf("%04d-%02d-%02d", pDate->year, pDate->month, pDate->day);
+}
+
+static void printTime(aafTimeStruct_t *pTime)
+{
+  printf("%02d:%02d:%02d.%02d", pTime->hour, pTime->minute, pTime->second, pTime->fraction);
+}
+
+static void printTimeStamp(aafTimeStamp_t *pTimeStamp)
+{
+  printDate(&pTimeStamp->date);
+  printf(" ");
+  printTime(&pTimeStamp->time);
+}
+
 static void printIdentification(IAAFIdentification* pIdent)
 {
   aafWChar wchName[500];
@@ -223,6 +240,12 @@ static void printIdentification(IAAFIdentification* pIdent)
   check(pIdent->GetProductID(&productID));
   formatGUID(chName, sizeof(chName), &productID);
   printf("ProductID            = %s\n", chName);
+
+  aafTimeStamp_t timeStamp;
+  check(pIdent->GetDate(&timeStamp));
+  printf("Date                 = ");
+  printTimeStamp(&timeStamp);
+  printf("\n");
 
   check(pIdent->GetPlatform(wchName, sizeof (wchName)));
   convert(chName, sizeof(chName), wchName);
