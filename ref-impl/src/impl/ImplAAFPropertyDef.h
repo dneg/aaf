@@ -141,6 +141,7 @@ public:
   // Overrides from OMPropertyDefinition
   //
   const OMType* type(void) const;
+  const OMUniqueObjectIdentification& uniqueIdentification(void) const;
   const wchar_t* name(void) const;
   OMPropertyId localIdentification(void) const;
   bool isOptional(void) const;

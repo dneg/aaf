@@ -243,6 +243,12 @@ const OMType* ImplAAFPropertyDef::type(void) const
   return ptd;
 }
 
+const OMUniqueObjectIdentification&
+ImplAAFPropertyDef::uniqueIdentification(void) const
+{
+  assert(false); // tjb for ak - stub
+  return nullOMUniqueObjectIdentification;
+}
 
 const wchar_t* ImplAAFPropertyDef::name(void) const
 {

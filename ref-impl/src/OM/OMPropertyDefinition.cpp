@@ -59,6 +59,16 @@ const OMType* OMBuiltinPropertyDefinition::type(void) const
   return _type;
 }
 
+  // @mfunc The unique identification of the <c OMProperty> defined by
+  //        this <c OMPropertyDefinition>.
+const OMUniqueObjectIdentification&
+OMBuiltinPropertyDefinition::uniqueIdentification(void) const
+{
+  TRACE("OMBuiltinPropertyDefinition::uniqueIdentification");
+  ASSERT("Unimplemented code not reached", false); // tjb -stub
+  return nullOMUniqueObjectIdentification;
+}
+
   // @mfunc The name of the <c OMProperty> defined by this
   //        <c OMBuiltinPropertyDefinition>.
 const wchar_t* OMBuiltinPropertyDefinition::name(void) const

@@ -200,7 +200,8 @@ ImplAAFMetaDictionary *ImplAAFMetaDictionary::CreateMetaDictionary(void)
 
 bool ImplAAFMetaDictionary::isRegistered(const OMClassId& /* classId */) const
 {
-  return false; // tjb - stub
+  assert(false);
+  return false; // tjb for ak - stub
 }
 
 //

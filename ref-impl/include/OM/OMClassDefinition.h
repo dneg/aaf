@@ -24,10 +24,20 @@
 #ifndef OMCLASSDEFINITION_H
 #define OMCLASSDEFINITION_H
 
+#include "OMDataTypes.h"
+
+class OMPropertyDefinition;
+
 class OMClassDefinition {
 public:
 
   virtual ~OMClassDefinition(void) {}
+
+    // @cmember The <c OMPropertyDefinition> for properties (members
+    //          of classes defined by this <c OMClassDefinition>) defined
+    //          by <p id>.
+  virtual const OMPropertyDefinition* propertyDefinition(
+                             const OMUniqueObjectIdentification& id) const = 0;
 
 };
 

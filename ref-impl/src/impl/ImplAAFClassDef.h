@@ -199,6 +199,8 @@ public:
     GetUniqueIdentifier
         (ImplAAFPropertyDef ** ppUniqueIdentifier);
 
+  const OMPropertyDefinition* propertyDefinition(
+                                 const OMUniqueObjectIdentification& id) const;
 
 public:
 

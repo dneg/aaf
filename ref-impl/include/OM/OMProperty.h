@@ -85,6 +85,9 @@ public:
     // @cmember The <c OMPropertyDefinition> defining this <c OMProperty>.
   const OMPropertyDefinition* definition(void) const;
 
+    // @cmember Is this an instance of a predefined <c OMProperty>.
+  bool isPredefined(void) const;
+
     // @cmember The name of this <c OMProperty>.
   const wchar_t* name(void) const;
 

@@ -603,6 +603,13 @@ AAFRESULT STDMETHODCALLTYPE
   }
 }
 
+const OMPropertyDefinition* ImplAAFClassDef::propertyDefinition(
+                            const OMUniqueObjectIdentification& /* id */) const
+{
+  assert(false); // tjb for ak - stub
+  return 0;
+}
+
 
 // Find the unique identifier property defintion for this class or any parent class
 // (RECURSIVE)

@@ -113,6 +113,24 @@ const OMPropertyDefinition* OMProperty::definition(void) const
   return result;
 }
 
+  // @mfunc Is this an instance of a predefined <c OMProperty>.
+  //   @rdesc True if this is an instance of a predefined property,
+  //          false otherwise.
+  //   @this const
+bool OMProperty::isPredefined(void) const
+{
+  TRACE("OMProperty::isPredefined");
+  PRECONDITION("Valid property id", _propertyId != 0);
+  bool result;
+
+  if (_propertyId < 0x8000) {
+    result = true;
+  } else {
+    result = false;
+  }
+  return result;
+}
+
   // @mfunc The name of this <c OMProperty>.
   //   @rdesc The property name.
   //   @this const
