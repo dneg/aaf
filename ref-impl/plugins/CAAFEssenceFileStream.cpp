@@ -436,7 +436,7 @@ HRESULT STDMETHODCALLTYPE
   { // What error code should we return?
     long err = errno;
 
-    return AAFRESULT_INTERNAL_ERROR;
+    return AAFRESULT_CONTAINERWRITE;
   }
 
   return AAFRESULT_SUCCESS;
@@ -480,7 +480,7 @@ HRESULT STDMETHODCALLTYPE
   { // What error code should we return?
     long err = errno;
 
-    return AAFRESULT_INTERNAL_ERROR;
+    return AAFRESULT_END_OF_DATA;
   }
   else if (feof(_pFile))
     return AAFRESULT_EOF; 
