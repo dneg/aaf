@@ -160,7 +160,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 	//@comm If this property does not exist the error
-	// OM_ERR_PROP_NOT_PRESENT will be returned.
+	// AAFRESULT_PROP_NOT_PRESENT will be returned.
 	//@comm Working and final renderings are handled by using
 	// a media group as the segment.
 	//@comm Replaces omfiEffectGetFinalRender and omfiEffectGetWorkingRender
@@ -180,7 +180,7 @@ AAFRESULT STDMETHODCALLTYPE
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 
-	//@comm If the property does not exist, the error OM_ERR_PROP_NOT_PRESENT will be returned.)
+	//@comm If the property does not exist, the error AAFRESULT_PROP_NOT_PRESENT will be returned.)
 	//@comm Replaces omfiEffectGetBypassOverride
 
 AAFRESULT STDMETHODCALLTYPE
