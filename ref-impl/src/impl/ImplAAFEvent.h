@@ -14,12 +14,6 @@
 \******************************************/
 
 
-
-
-
-
-
-
 #ifndef __ImplAAFSegment_h__
 #include "ImplAAFSegment.h"
 #endif
@@ -93,9 +87,9 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFEvent)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEventTest.cpp.
-  static AAFRESULT test();
+protected:
+  OMFixedSizeProperty<aafPosition_t> _position;
+  OMWideStringProperty _comment;
 };
 
 #endif // ! __ImplAAFEvent_h__
