@@ -22,7 +22,7 @@
 #include "AAFResult.h"
 
 #include <assert.h>
-#include "AAFPluginManager.h"
+#include "ImplAAFPluginManager.h"
 
 #if defined(__MWERKS__)
 #include <wstring.h>	// include wcslen declaration.
@@ -54,12 +54,12 @@ void ImplAAFSession::InitPluginManager (void)
 {
 	if(_plugins == NULL)
 	{
-		_plugins = new AAFPluginManager;
+		_plugins = new ImplAAFPluginManager;
 		_plugins->Init();
 	}
 }
 
-class AAFPluginManager *ImplAAFSession::GetPluginManager (void)
+class ImplAAFPluginManager *ImplAAFSession::GetPluginManager (void)
 {
 	return(_plugins);
 }
