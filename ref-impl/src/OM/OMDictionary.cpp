@@ -64,7 +64,7 @@ void OMDictionary::insert(const OMPropertyId propertyId,
                                 propertyId,
                                 const_cast<OMPropertyDefinition*>(definition));
 
-  POSTCONDITION("Definition not previously present", !status);
+  POSTCONDITION("Definition not previously present", status);
   POSTCONDITION("Definition present",
                                     _propertyDefinitions.contains(propertyId));
 }
