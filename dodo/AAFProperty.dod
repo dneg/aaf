@@ -55,5 +55,8 @@ AD_XMETHOD1(GetValue,
   // - The ppPval pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppValue\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(ppValue\)
+  //
+  // AAFRESULT_PROP_NOT_PRESENT
+  //   - The given property is optional and not present.)
 AD_XCLASS_END(Concrete, Transient)
