@@ -10,9 +10,16 @@
 # OMDOC  - The Object Manager autoduck directory
 # SRC    - The Object Manager sources
 #
-ADROOT="../bin"
-OMDOC=doc/OM
-SRC="src/OM/*.cpp src/OM/*.h include/OM/*.h"
+if [ "${LOCAL}" == "" ]
+then
+  ADROOT="../bin"
+  OMDOC=doc/OM
+  SRC="src/OM/*.cpp src/OM/*.h include/OM/*.h"
+else
+  ADROOT="c:/program files/autoduck"
+  OMDOC=docs
+  SRC="src/*.cpp src/*.h"
+fi
 #
 # The autoduck program
 #
