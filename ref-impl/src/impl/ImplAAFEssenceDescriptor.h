@@ -4,17 +4,7 @@
 #define __ImplAAFEssenceDescriptor_h__
 
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
-*                                          *
-* Copyright (c) 1998 Avid Technology, Inc. *
-*                                          *
-\******************************************/
 
-/******************************************\
-*                                          *
-* Advanced Authoring Format                *
 /***********************************************************************
  *
  *              Copyright (c) 1998-1999 Avid Technology, Inc.
@@ -42,10 +32,9 @@
  *
  ************************************************************************/
 
+class ImplAAFLocator;
 
-
-
-
+class ImplEnumAAFLocators;
 
 
 #ifndef __ImplAAFObject_h__
