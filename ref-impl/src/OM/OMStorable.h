@@ -77,6 +77,8 @@ public:
                                  const char* name,
                                  OMStoredObject& s);
 
+    // @cmember Restore the contents of an <c OMStorable> (of unknown
+    //          sub-class).
   virtual void restoreContents(void);
 
     // @cmember The <c OMFile> in which this <c OMStorable> has a
@@ -147,10 +149,6 @@ public:
 
 private:
   // @access Private members.
-
-    // @cmember Restore the contents of an <c OMStorable> (of unknown
-    //          sub-class) from the stored representation <p s>.
-  void restoreContentsFrom(OMStoredObject& s);
 
   char* makePathName(void);
 
