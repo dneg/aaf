@@ -21,8 +21,8 @@ void convert(wchar_t* wcName, size_t length, const char* name)
   
   ASSERT("Valid program name", validString(programName));
 
-  size_t status  = mbstowcs(wcName, name, length);
-  if (status == -1) {
+  size_t status = mbstowcs(wcName, name, length);
+  if (status == (size_t)-1) {
     cerr << programName
       << "Error : Failed to convert \""
       << name
@@ -36,8 +36,8 @@ void convert(char* cName, size_t length, wchar_t* name)
 {
   ASSERT("Valid program name", validString(programName));
 
-  size_t status  = wcstombs(cName, name, length);
-  if (status == -1) {
+  size_t status = wcstombs(cName, name, length);
+  if (status == (size_t)-1) {
     cerr << programName
       << ": Error : Conversion failed."
       << endl;
