@@ -20,6 +20,8 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
   _isPresent(false)
 {
   TRACE("OMProperty::OMProperty");
+
+  PRECONDITION("Valid name", validString(_name)); 
 }
 
 void OMProperty::initialize(const OMPropertyId propertyId,
