@@ -249,7 +249,7 @@ OMFile* OMFile::openNewTransient(const OMClassFactory* factory,
 
   // Not yet implemented.
   //
-  ASSERT("Not yet implemented", false);
+  ASSERT("Unimplemented code not reached", false);
   return 0;
 }
 
@@ -297,7 +297,7 @@ void OMFile::saveAs(const wchar_t* fileName) const
   TRACE("OMFile::saveAs");
   PRECONDITION("Valid file name", validWideString(fileName));
 
-  ASSERT("Not yet implemented", false);
+  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Discard all changes made to this <c OMFile> since the
@@ -306,7 +306,7 @@ void OMFile::revert(void)
 {
   TRACE("OMFile::revert");
 
-  ASSERT("Not yet implemented", false);
+  ASSERT("Unimplemented code not reached", false);
 }
 
   // @mfunc Restore the root <c OMStorable> object from this <c OMFile>.
