@@ -28,6 +28,7 @@
 #include "extensionUtils.h"
 #include "AAF.h"
 #include <assert.h>
+#include "AAFStoredObjectIDs.h"
 
 #if defined(_MAC) || defined(macintosh)
 #include <wstring.h>
@@ -35,7 +36,33 @@
 
 #include <iostream.h>
 
+bool classDefinitionIsA ( IAAFClassDef *pClassDefQuery,
+							   const aafUID_t targetAUID)
+{
+	IAAFDefObject *pDefObject;
+	check(pClassDefQuery->QueryInterface(IID_IAAFDefObject,(void **)&pDefObject));
+	aafUID_t testAUID;
+	check(pDefObject->GetAUID(&testAUID));
+	pDefObject->Release();
+	pDefObject=NULL;
+    if (!memcmp (&testAUID, &targetAUID, sizeof (aafUID_t)))
+	{
+		// AUIDs match
+		return true;
+	} else if (!memcmp(&testAUID, (aafUID_t *) &AUID_AAFInterchangeObject, sizeof(aafUID_t)))
+	{
+		return false;
+	}
 
+	// Get parent class
+	IAAFClassDef *pParentClass=NULL;
+	check(pClassDefQuery->GetParent(&pParentClass));
+	bool classMatch=false;
+	classMatch= classDefinitionIsA( pParentClass, targetAUID);
+	pParentClass->Release();
+	pParentClass=NULL;
+	return classMatch;
+}
 
 //
 // Temporarily (?) only used to print out the role enum.
