@@ -65,6 +65,7 @@
 
 
 extern "C" const aafClassID_t CLSID_AAFMetaDictionary;
+extern "C" const aafClassID_t CLSID_AAFPropertyDef;
 extern "C" const aafClassID_t CLSID_EnumAAFClassDefs;
 extern "C" const aafClassID_t CLSID_EnumAAFTypeDefs;
 
@@ -1363,8 +1364,66 @@ AAFRESULT ImplAAFMetaDictionary::InstantiateAxiomaticDefinitions(void)
   return result;
 }
 
+AAFRESULT ImplAAFMetaDictionary::MergeBuiltinClassDefs()
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
 
+  OMStrongReferenceSetIterator<OMUniqueObjectIdentification, 
+                               ImplAAFClassDef>
+  iter(_classDefinitions); 
 
+  const AAFObjectModel* pObjectModel = AAFObjectModel::singleton();
+  assert( pObjectModel );
+
+  // For each class def in file...
+  while (++iter) {   
+
+    // Get the class def's id and check if the same class def exists in
+    // the built in dictionary.
+    OMUniqueObjectIdentification id = iter.identification(); 
+    ImplAAFClassDef* pFileClassDef = iter.value(); 
+    const aafUID_t* uid = reinterpret_cast<aafUID_t*>(&id); 
+
+    const ClassDefinition* pBuiltInModelClassDef = pObjectModel->findClassDefinition( uid );
+
+    if ( pBuiltInModelClassDef && !pBuiltInModelClassDef->isNil() ) {
+      
+      // The class def exists in both the builtin and file
+      // dictionaries. Check that each property that exists in the
+      // builtin class def also exists in the files's version of that
+      // class def. If it doesn't, then add it to the file's class
+      // def.
+
+      unsigned int i;
+      for (i = 0; i < pBuiltInModelClassDef->propertyCount(); i++) {
+
+	const PropertyDefinition * pBuiltInModelPropDef = 0;
+	pBuiltInModelPropDef = pBuiltInModelClassDef->propertyDefinitionAt(i);
+
+	if ( ! pFileClassDef->PvtIsPropertyDefRegistered( *pBuiltInModelPropDef->id() ) ) {
+
+	  ImplAAFSmartPointer<ImplAAFPropertyDef> spTmp;
+	  AAFRESULT hr;
+	  hr = pFileClassDef->pvtRegisterPropertyDef( *pBuiltInModelPropDef->id(),
+						      pBuiltInModelPropDef->name(),
+						      *pBuiltInModelPropDef->typeId(),
+						      pBuiltInModelPropDef->required() ? kAAFFalse : kAAFTrue,
+						      pBuiltInModelPropDef->uid() ? kAAFTrue : kAAFFalse,
+						      &spTmp );
+	  
+	  assert( AAFRESULT_SUCCESS == hr );
+	  if ( AAFRESULT_SUCCESS != hr ) {
+	    result = hr;
+	    break;
+	  }
+	}
+
+      }
+    }
+  }
+
+  return result;
+}
 
 //
 // Methods that would be inherited or overriden from ImplAAFStrorable

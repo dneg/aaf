@@ -272,7 +272,12 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
 		assert(d);
-		d->InstantiateAxiomaticDefinitions();
+		checkResult( d->InstantiateAxiomaticDefinitions() );
+
+		// Make sure properties that exist in builtin class
+		// definitions but not the file's class definition,
+		// are merged to the file's class definition.
+		checkResult( d->MergeBuiltinClassDefs() );
 
 		// Get the byte order
 		OMByteOrder byteOrder = _file->byteOrder();
@@ -413,7 +418,12 @@ ImplAAFFile::OpenExistingModify (const aafCharacter * pFileName,
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
 		assert(d);
-		d->InstantiateAxiomaticDefinitions();
+		checkResult( d->InstantiateAxiomaticDefinitions() );
+
+		// Make sure properties that exist in builtin class
+		// definitions but not the file's class definition,
+		// are merged to the file's class definition.
+		checkResult( d->MergeBuiltinClassDefs() );
 
 		// Get the byte order
 		OMByteOrder byteOrder = _file->byteOrder();
@@ -619,7 +629,12 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
 		assert(d);
-		d->InstantiateAxiomaticDefinitions();
+		checkResult( d->InstantiateAxiomaticDefinitions() );
+
+		// Make sure properties that exist in builtin class
+		// definitions but not the file's class definition,
+		// are merged to the file's class definition.
+		checkResult( d->MergeBuiltinClassDefs() );
 
 		// Now that the file is open and the header has been
 		// restored, complete the initialization of the
@@ -988,6 +1003,14 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 												loadMode,
 												aafFileEncoding,
 												_metafactory);
+
+			  // Make sure properties that exist in builtin class
+			  // definitions but not the file's class definition,
+			  // are merged to the file's class definition.
+			  ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(_metafactory);
+			  assert(d);
+			  checkResult( d->MergeBuiltinClassDefs() );
+
 			}
 		} // endif new/existing
 	  else
@@ -1046,7 +1069,12 @@ ImplAAFFile::Open ()
 		// Make sure all definitions are present in the meta dictionary
 		ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(mf);
 		assert(d);
-		d->InstantiateAxiomaticDefinitions();
+		checkResult( d->InstantiateAxiomaticDefinitions() );
+
+		// Make sure properties that exist in builtin class
+		// definitions but not the file's class definition,
+		// are merged to the file's class definition.
+		checkResult( d->MergeBuiltinClassDefs() );
 
 		  // Get the byte order
 		  OMByteOrder byteOrder = _file->byteOrder();

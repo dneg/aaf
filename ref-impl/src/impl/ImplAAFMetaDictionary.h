@@ -329,6 +329,9 @@ public:
   // Create and initialize all of the axiomatic definitions.
   AAFRESULT InstantiateAxiomaticDefinitions(void);
 
+  // Sync the builtin dictionary and the file dictionary definitions.
+  AAFRESULT MergeBuiltinClassDefs();
+
   // Create all of the axiomatic classes as uninitialized objects.
   void CreateAxiomaticClasses(void); // throw AAFRESULT
 
