@@ -11,11 +11,13 @@ class OMFile : public OMStorable {
 public:
   OMFile(const char* name);
   ~OMFile(void);
-  void create(void);
-  void open(void);
+
+  static OMFile* open(const char* fileName);
+  static OMFile* create(const char* fileName);
+
   void close(void);
-  OMStoredObject& root(void);
-  OMStoredObject& openStoragePath(const char* storagePathName);
+
+  OMStoredObject* root(void);
 
   OMFile& operator << (const OMStorable& o);
 
@@ -28,11 +30,11 @@ public:
 
 private:
 
-  OMStoredObject& createFile(const char* fileName);
-  OMStoredObject& openFile(const char* fileName);
+  void create(void);
+  void open(void);
 
   const char* _name;
-  OMStoredObject _root;
+  OMStoredObject* _root;
   
   static OMClassFactory* _classFactory;
   static OMObjectDirectory* _objectDirectory;
