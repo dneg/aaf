@@ -1,5 +1,5 @@
 #include "ImplAAFObjectCreation.h"
-#include "AAFRoot.h"
+#include "AAF.h"
 #include "ImplAAFRoot.h"
 
 // Creates and returns an Impl object based on the given class ID.
