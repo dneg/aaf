@@ -32,8 +32,7 @@
 #include "AAF.h"
 
 
-// Include the defintions for the AAF Stored Object identifiers.
-#define INIT_AUID
+// Include the AAF Stored Object identifiers. These symbols are defined in aaf.lib.
 #include "AAFStoredObjectIDs.h"
 
 
@@ -169,17 +168,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	ProductInfo.productID = -1;
 	ProductInfo.platform = NULL;
 
-	// We assume the following functions have been tested and they do work
-	// The next 3 function calls create the AAF file
-/*	hr = pSession->SetDefaultIdentification(&ProductInfo);	*/
-	check(CoCreateInstance(CLSID_AAFFile,
-               NULL, 
-               CLSCTX_INPROC_SERVER, 
-               IID_IAAFFile, 
-               (void **)&pFile));
+  check(AAFFileOpenNewModify (pFileName, 0, &ProductInfo, &pFile));
 
-	check(pFile->Initialize());
-	check(pFile->OpenNewModify(pFileName, 0, &ProductInfo));
 	check(pFile->GetHeader(&pHeader));
 
   // Get the AAF Dictionary so that we can create valid AAF objects.
@@ -426,13 +416,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafLength_t					length;
 
 	  
-	check(CoCreateInstance(CLSID_AAFFile,
-               NULL, 
-               CLSCTX_INPROC_SERVER, 
-               IID_IAAFFile, 
-               (void **)&pFile));
-	check(pFile->Initialize());
-	check(pFile->OpenExistingRead(pFileName, 0));
+	check(AAFFileOpenExistingRead ( pFileName, 0, &pFile));
 	check(pFile->GetHeader(&pHeader));
 
   // Get the AAF Dictionary so that we can create valid AAF objects.
