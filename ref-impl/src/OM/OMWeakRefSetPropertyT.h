@@ -31,6 +31,7 @@
 
 #include "OMAssertions.h"
 #include "OMWeakReferenceSetIter.h"
+#include "OMPropertyTable.h"
 
   // @mfunc Constructor.
   //   @parm The property id.

@@ -32,6 +32,7 @@
 #include "OMAssertions.h"
 #include "OMStoredVectorIndex.h"
 #include "OMWeakReferenceVectorIter.h"
+#include "OMPropertyTable.h"
 
   // @mfunc Constructor.
   //   @parm The property id.
