@@ -32,6 +32,7 @@ include aafobjects.mk
 INCLUDE_DIR = ../ref-impl/include
 
 targets: $(DODO_TARGETS)
+targets: $(PLUGIN_TARGETS)
 targets: $(INCLUDE_DIR)/com-api/AAF.idl
 targets: $(PLUGIN_DIR)/AAFPlugin.idl
 targets: $(INCLUDE_DIR)/ref-api/AAF.h
@@ -103,6 +104,10 @@ $(PLUGIN_DIR)/AAFPlugin.idl : $(PLUGIN_FIDL_TARGETS)
 	    echo "" ; \
 	    echo \#ifndef DO_NO_IMPORTS ; \
 	    echo import \"AAFTypes.idl\"\; ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef DO_NO_IMPORTS ; \
+	    echo import \"AAFPluginTypes.idl\"\; ; \
 	    echo \#endif ; \
 	    echo "" ; \
 	    for class in $(PLUGIN_OBJECTS) ; do \
@@ -187,6 +192,10 @@ $(INCLUDE_DIR)/ref-api/AAFPlugin.h : $(PLUGIN_FREFH_TARGETS)
 	    echo "" ; \
 	    echo \#ifndef __AAFTypes_h__ ; \
 	    echo \#include \"AAFTypes.h\" ; \
+	    echo \#endif ; \
+	    echo "" ; \
+	    echo \#ifndef __AAFPluginTypes_h__ ; \
+	    echo \#include \"AAFPluginTypes.h\" ; \
 	    echo \#endif ; \
 	    echo "" ; \
 	    echo \#ifdef __cplusplus ; \
@@ -344,13 +353,16 @@ clean:
 #	$(RM) -f $(SRC_DIR)/com-api/test/CEnumAAF*Test.cpp
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.h
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.h
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAF.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFTypes.idl
+	$(RM) -f $(INCLUDE_DIR)/com-api/AAFPluginTypes.idl
 	$(RM) -f $(INCLUDE_DIR)/com-api/AAFModuleTest.idl
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAF.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFTypes.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFModuleTest.h
+	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPluginTypes.h
 	$(RM) -f $(INCLUDE_DIR)/ref-api/AAFPlugin.h
 	@for file in $(AUTO_GEN_IMPL) ; do \
 		echo $(RM) -f $(SRC_DIR)/impl/Impl$$file.cpp ; \
