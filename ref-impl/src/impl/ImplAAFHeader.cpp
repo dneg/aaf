@@ -73,11 +73,24 @@
 
 
 ImplAAFHeader::ImplAAFHeader ()
+#if OM_PRESENT
+: _byteOrder(         PID_HEADER_BYTEORDER,          "byteOrder"),
+  _lastModified(      PID_HEADER_LASTMODIFIED,       "lastModified"),
+  _identificationList(PID_HEADER_IDENTIFICATIONLIST, "identificationList")
+#endif
 {
-//!!!	_head = this;
+#if OM_PRESENT
+  _persistentProperties.put(_byteOrder.address());
+  _persistentProperties.put(_lastModified.address());
+  _persistentProperties.put(_identificationList.address());
+#endif
+
+  //!!!	_head = this;
 //	file->InternalSetHead(this);
+#if FULL_TOOLKIT
 	_mobs = (omTable_t *)NULL;
 	_dataObjs = (omTable_t *)NULL;
+#endif
 	_fileRev.major = 0;
 	_fileRev.minor = 0;
 	_toolkitRev.major = 0;
@@ -222,7 +235,7 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFHeader::AddIdentificationObject (aafProductIdentification_t *pIdent)
 {
-	AAFObject *					identObj;
+	AAFIdentification *			identObj;
 	aafProductIdentification_t	fiction;
 	aafBool						dummyIDNT = AAFFalse;
 	aafProductVersion_t			dummyVersion;
@@ -246,47 +259,29 @@ AAFRESULT STDMETHODCALLTYPE
 			dummyIDNT = AAFTrue;
 		}
 		
-#if FULL_TOOLKIT
+#if OM_PRESENT
 		XASSERT(pIdent != NULL, OM_ERR_NEED_PRODUCT_IDENT);
-		identObj = new AAFObject(_file, OMClassIDNT);
-		if(pIdent->companyName != NULL)
-		{
-			CHECK(identObj->WriteString(OMIDNTCompanyName, identPtr->companyName));
-		}
-		if(pIdent->productName != NULL)
-		{
-			CHECK(identObj->WriteString(OMIDNTProductName, identPtr->productName));
-		}
-		CHECK(identObj->WriteProductVersionType(OMIDNTProductVersion,
-										pIdent->productVersion));
-		if(identPtr->productVersionString != NULL)
-		{
-			CHECK(identObj->WriteString(OMIDNTProductVersionString,
-										identPtr->productVersionString));
-		}
-		CHECK(identObj->WriteInt32(OMIDNTProductID, identPtr->productID));
-		if(dummyIDNT)
-		{
-			CHECK(identObj->WriteTimeStamp(OMIDNTDate, _lastModified));
-			dummyVersion.major = 0;
-			dummyVersion.minor = 0;
-			dummyVersion.tertiary = 0;
-			dummyVersion.patchLevel = 0;
-			dummyVersion.type = kVersionUnknown;
-			CHECK(identObj->WriteProductVersionType(OMIDNTToolkitVersion,
-											dummyVersion));
-		}
-		else
-		{
-			CHECK(identObj->WriteTimeStamp(OMIDNTDate, _lastModified));
-			CHECK(identObj->WriteProductVersionType(OMIDNTToolkitVersion, AAFToolkitVersion));
-		}
-		
-		CHECK(identObj->WriteInt16(OMIDNTByteOrder, _byteOrder));
-		CHECK(identObj->WriteString(OMIDNTPlatform, 
-				(identPtr->platform != NULL ? identPtr->platform : "Unspecified")));
-				
-		CHECK(AppendObjRefArray(OMHEADIdentList, identObj));
+    if (identPtr->productVersionString == 0) {
+      identPtr->productVersionString = "Unknown version";
+    }
+    if (identPtr->platform == 0) {
+      identPtr->platform = "Windoze NT";
+    }
+    identObj = new AAFIdentification(
+      identPtr->companyName,
+      identPtr->productName,
+      &identPtr->productVersion,
+      identPtr->productVersionString,
+      // productID,
+      _lastModified,
+      &AAFToolkitVersion,
+      identPtr->platform
+      // generation
+      );
+
+    _identificationList.appendValue(identObj);
+ 
+    dummyVersion.major = 0;
 #endif
 	}
 	XEXCEPT
@@ -502,3 +497,10 @@ AAFRESULT ImplAAFHeader::IsValidHeadObject(void)
   return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
+
+#if OM_PRESENT
+int AAFHeader::classId(void) const
+{
+  return CLSID_AAFHEADER;
+}
+#endif
