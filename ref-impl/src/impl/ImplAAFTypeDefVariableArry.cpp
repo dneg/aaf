@@ -891,17 +891,12 @@ ImplAAFTypeDefVariableArray::InsertElement(
 	if (!pMemberPropVal)
 		return AAFRESULT_NULL_PARAM;
 	
-	
-  ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
-  if (NULL != pRefArray)
-  {
-    return pRefArray->InsertElementAt(pMemberPropVal, index);
-  }
-
+		
 	//CASE 1 -- if the Insert is at "0" postition - this implies a prepend, 
 	//			SO - delegate to PrependElement() routine
 	if (index == 0)
-		PrependElement(pInPropVal, pMemberPropVal);
+		return PrependElement(pInPropVal, pMemberPropVal);
+	
 	
 	
 	HRESULT hr = 0;
@@ -913,7 +908,7 @@ ImplAAFTypeDefVariableArray::InsertElement(
 	//CASE 2 -- if the Insert is at LAST position - this implies an Append,
 	//			SO - delegate to AppendElement() routine
 	if (index == count)
-		AppendElement(pInPropVal, pMemberPropVal);
+		return AppendElement(pInPropVal, pMemberPropVal);
 	
 	//CASE 3 -  invalid Index
 	if (index > count)
@@ -921,8 +916,15 @@ ImplAAFTypeDefVariableArray::InsertElement(
 	
 	//All other VALID Cases follow ..............
 	//   (index lying within (1) and (count-1) ) ...
-	
-	
+
+	//Tom's  RefArray stuff:
+	ImplAAFRefArrayValue* pRefArray = dynamic_cast<ImplAAFRefArrayValue*>(pInPropVal);
+	if (NULL != pRefArray)
+	{
+		return pRefArray->InsertElementAt(pMemberPropVal, index);
+	}
+
+	//regular insert stuff follows ....
 	ImplAAFPropValData* inPvd =
 		dynamic_cast<ImplAAFPropValData*> (pInPropVal);	
 	if (!inPvd)
