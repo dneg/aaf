@@ -161,7 +161,6 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   TRACE("OMStorable::restoreFrom");
   OMClassId cid;
   s.restore(cid);
-  OMFile* f = containingObject->file();
   const OMClassFactory* classFactory = containingObject->classFactory();
   OMStorable* object = classFactory->create(cid);
   ASSERT("Registered class id", object != 0);
@@ -174,6 +173,7 @@ OMStorable* OMStorable::restoreFrom(const OMStorable* containingObject,
   object->setStore(&s);
 #if defined(OM_TRACK_OBJECTS)
   // Keep track of each object (debugging only)
+  OMFile* f = containingObject->file();
   f->objectDirectory()->insert(object->pathName(), object);
 #endif
   object->restoreContents();
