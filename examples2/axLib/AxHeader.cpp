@@ -118,6 +118,15 @@ IEnumAAFMobsSP AxHeader::GetMobs(aafSearchCrit_t & searchCrit) const
 	return spMobs;
 }
 
+IAAFMobSP AxHeader::LookupMob(aafMobID_constref mobid) const
+{
+	IAAFMobSP spmob;
+
+	CHECK_HRESULT(_spIaafHeader->LookupMob(mobid, &spmob));
+
+	return spmob;
+}
+
 aafUInt32 AxHeader::CountIdentifications()
 {
 	aafUInt32 idcount;

@@ -186,6 +186,25 @@ void AxFiller::Initialize( IAAFDataDefSP spDataDef, aafLength_t length )
 
 //=---------------------------------------------------------------------=
 
+AxPulldown::AxPulldown( IAAFPulldownSP spIaafPulldown )
+:	AxSegment( AxQueryInterface<IAAFPulldown, IAAFSegment>( spIaafPulldown ) ),
+	_spIaafPulldown( spIaafPulldown )
+{}
+
+AxPulldown::~AxPulldown()
+{}
+
+IAAFSegmentSP AxPulldown::GetInputSegment()
+{
+	IAAFSegmentSP spIaafSegment;
+
+	CHECK_HRESULT(_spIaafPulldown->GetInputSegment(&spIaafSegment));
+
+	return spIaafSegment;
+}
+
+//=---------------------------------------------------------------------=
+
 AxSourceReference::AxSourceReference( IAAFSourceReferenceSP spIaafSourceReference )
 :	AxSegment( AxQueryInterface<IAAFSourceReference, IAAFSegment>( spIaafSourceReference ) ),
 	_spIaafSourceReference( spIaafSourceReference )

@@ -257,6 +257,8 @@ public:
 	AxFileDescriptor( IAAFFileDescriptorSP spIaafFileDescriptor );
 	~AxFileDescriptor();
 
+	aafRational_t GetSampleRate();
+
 private:
 	AxFileDescriptor();
 	AxFileDescriptor( const AxFileDescriptor& );
@@ -316,6 +318,8 @@ public:
 			             aafInt32& DisplayedXOffset, aafInt32& DisplayedYOffset );
 
 	aafFrameLayout_t GetFrameLayout();
+
+	aafRational_t GetImageAspectRatio();
 
 	// FIXME - surely we can do better than this
 	void GetVideoLineMap( aafUInt32  numberElements, aafInt32*  pVideoLineMap );

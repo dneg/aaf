@@ -332,6 +332,15 @@ AxFileDescriptor::AxFileDescriptor( IAAFFileDescriptorSP sp )
 AxFileDescriptor::~AxFileDescriptor()
 {}
 
+aafRational_t AxFileDescriptor::GetSampleRate()
+{
+	aafRational_t rate;
+
+	CHECK_HRESULT(_spIaafFileDescriptor->GetSampleRate(&rate));
+
+	return rate;
+}
+
 //=---------------------------------------------------------------------=
 
 AxWAVEDescriptor::AxWAVEDescriptor( IAAFWAVEDescriptorSP sp )
@@ -437,6 +446,14 @@ void AxDigitalImageDescriptor::GetDisplayView( aafUInt32& DisplayedHeight, aafUI
 								      &DisplayedXOffset, &DisplayedYOffset ) );
 }
 
+aafRational_t AxDigitalImageDescriptor::GetImageAspectRatio()
+{
+	aafRational_t aspect;
+
+	CHECK_HRESULT(_spIaafDigitalImageDescriptor->GetImageAspectRatio(&aspect));
+
+	return aspect;
+}
 
 aafFrameLayout_t AxDigitalImageDescriptor::GetFrameLayout()
 {

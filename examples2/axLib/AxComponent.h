@@ -157,6 +157,26 @@ private:
 
 //=---------------------------------------------------------------------=
 
+class AxPulldown : public AxSegment {
+
+public:
+	AxPulldown( IAAFPulldownSP _spIaafPulldown );
+	virtual ~AxPulldown();
+
+	IAAFSegmentSP GetInputSegment();
+	
+	operator IAAFPulldownSP () 
+	{ return _spIaafPulldown; }
+
+private:
+	AxPulldown();
+	AxPulldown( const AxPulldown& );
+	AxPulldown& operator=( const AxPulldown& );
+
+	IAAFPulldownSP _spIaafPulldown;
+};
+//=---------------------------------------------------------------------=
+
 class AxSourceReference : public AxSegment {
 
 public:
