@@ -47,11 +47,15 @@
 #    make AAFPLATFORM=Mac AAFSDK=../AAFMacSDK release-dist
 #    make AAFPLATFORM=Mac AAFSDK=../AAFMacSDK sdk-dist
 # 
-# As of November 13, 2002, the SDK only supports OS9.  The OS X
-# developers toolkit (available from Apple) includes GNU make, and
-# other GNU tools.  Bash must be compiled It was tested using Cygwin.
-# The CreateDistribution.bash script is quite simply, hence, sh should work in lieu of bash.
-# The script can be executed from OS X, even if the rest of the build is done with OS 9.
+# Pending some form of top-level-build resolution, the above commands
+# can be executed using "make mac"
+#
+# Note, as of V101 the SDK only supports OS9.  The OS X developers
+# toolkit (available from Apple) includes GNU make, and other GNU
+# tools.  Bash must be compiled It was tested using Cygwin.  The
+# CreateDistribution.bash script is quite simple, hence, sh should
+# work in lieu of bash.  The script can be executed from OS X, even if
+# the rest of the build is done with OS 9.
 
 AAFBASE ?= ..
 
@@ -96,6 +100,19 @@ release-dist : release-files
 .PHONY : sdk-dist
 sdk-dist : sdk-files
 	./CreateDistribution.bash sdk Dist/sdk-files Dist/aaf_sdk $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H)
+
+
+.PHONY : mac
+mac :
+	@echo ============== Creating release distribution ==============
+	mkdir -p ../AAFMacSDK/Dist
+	cp release-files.mac ../AAFMacSDK/Dist/release-files
+	./CreateDistribution.bash release Dist/release-files Dist/aaf_release ../AAFMacSDK Mac ../ref-impl/include/AAFSDKBuild.h
+	@echo ============== Creating sdk distribution ==============
+	mkdir -p ../AAFMacSDK/Dist
+	cp sdk-files.mac ../AAFMacSDK/Dist/sdk-files
+	./CreateDistribution.bash sdk Dist/sdk-files Dist/aaf_sdk ../AAFMacSDK Mac ../ref-impl/include/AAFSDKBuild.h
+
 
 .PHONY : clean
 clean : realclean
