@@ -44,6 +44,9 @@
 #c Argument: Base filename
 #c
 #startm AD_INCLUDE 01
+#ifndef DO_NO_IMPORTS
+import "%01.idl";
+#endif\
 #endm
 
 
@@ -54,7 +57,53 @@
 #c Arguments: none
 #c
 #startm AD_HEAD 00
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("// .this-module.h")
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("// (C) Copyright 1998 Avid Technology.")
+cpp_quote("// (C) Copyright 1998 Microsoft Corporation.")
+cpp_quote("//")
+cpp_quote("// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF")
+cpp_quote("// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO")
+cpp_quote("// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A")
+cpp_quote("// PARTICULAR PURPOSE.")
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("// .this-module Interface.")
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("//")
+
+#ifndef DO_NO_IMPORTS
+import "unknwn.idl";
+#endif\
 #endm
+
+#ccccccccccccccccccccccccccc
+#c
+#c Goes at the head of the file.
+#c
+#c Arguments: none
+#c
+#startm AD_TYPES_HEAD 00
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("// .this-module.h")
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("// (C) Copyright 1998 Avid Technology.")
+cpp_quote("// (C) Copyright 1998 Microsoft Corporation.")
+cpp_quote("//")
+cpp_quote("// THIS CODE AND INFORMATION IS PROVIDED 'AS IS' WITHOUT WARRANTY OF")
+cpp_quote("// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO")
+cpp_quote("// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A")
+cpp_quote("// PARTICULAR PURPOSE.")
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("// .this-module Interface.")
+cpp_quote("//=--------------------------------------------------------------------------=")
+cpp_quote("//")
+
+#ifndef DO_NO_IMPORTS
+import "wtypes.idl";
+#endif \
+#endm
+
 
 
 #ccccccccccccccccccccccccccc
@@ -65,7 +114,7 @@
 #c
 #startm AD_CLASS_BEGIN 00
 interface I.this-module : IUnknown
-{
+{\
 #endm
 
 
@@ -76,7 +125,7 @@ interface I.this-module : IUnknown
 #c Arguments: none
 #c
 #startm AD_ROOT_CLASS_BEGIN 00
-AD_CLASS_BEGIN
+AD_CLASS_BEGIN\
 #endm
 
 
@@ -101,17 +150,14 @@ AD_CLASS_BEGIN
 #c Example:
 #c AD_TYPES_BEGIN(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 #c
-#c TomR:980716: Added
-#c
 #startm AD_TYPES_BEGIN 11
 [
-	object,
 	uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
 	pointer_default(unique)
 ]
 
 interface I.this-module
-{
+{\
 #endm
 
 
@@ -125,7 +171,7 @@ interface I.this-module
 #c Arguments: none
 #c
 #startm AD_TYPES_END 00
-}
+}\
 #endm
 
 
@@ -489,10 +535,10 @@ interface I.this-module
 #c
 #c Argument: Base name
 #c
-#c TomR:980713: Added
-#c
 #startm AD_FORWARD_DECLARATION 01
-interface I%01;\
+#ifndef DO_NO_IMPORTS
+import "%01.idl";
+#endif\
 #endm
 
 
@@ -517,14 +563,14 @@ interface I%01;\
 #c Example:
 #c AD_DEFAULT_UUID(b1a21372, 1a7d, 11d2, bf, 78, 00, 10, 4b, c9, 15, 6d)
 #c
-#c TomR:980713: Added
 #c
 #startm AD_DEFAULT_UUID 11
 [
+	object,
 	uuid(%01-%02-%03-%04%05-%06%07%08%09%10%11),
 	helpstring("I.this-module Interface"),
 	pointer_default(unique)
-]\
+]
 #endm
 
 
@@ -553,6 +599,7 @@ interface I%01;\
 #c TomR:980713: Added
 #c
 #startm AD_CLASS_UUID 11
+cpp_quote("EXTERN_C const CLSID CLSID_.this-module;")
 #endm
 
 
@@ -568,7 +615,7 @@ interface I%01;\
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  HRESULT GetImplRep(void **);
+  HRESULT GetImplRep([out, string, retval] char **);
 }\
 #endm
 
@@ -585,7 +632,7 @@ interface I%01;\
   // NOTE: This is NOT the pointer to the COM object's implementation
   // object!
   //
-  HRESULT GetImplRep(void **);
+  HRESULT GetImplRep([out, string, retval] char **);
 }\
 #endm
 
