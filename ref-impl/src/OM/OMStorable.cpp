@@ -588,3 +588,8 @@ void OMStorable::onCopy(void*) const
 {
   // nothing to do in this default implementation
 }
+
+const OMStorable* OMStorable::container(void) const
+{
+  return _container;
+}

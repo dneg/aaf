@@ -207,6 +207,9 @@ protected:
   OMPropertySet _persistentProperties;
 
 private:
+
+  const OMStorable* container(void) const;
+
   const OMStorable* _container;
   wchar_t* _name;
 
