@@ -87,7 +87,7 @@ ImplAAFContentStorage::~ImplAAFContentStorage ()
 	OMStrongReferenceSetIterator<OMMaterialIdentification, ImplAAFEssenceData>essenceData(_essenceData);
 	while(++essenceData)
 	{
-		ImplAAFEssenceData *pData = essenceData.setValue(0);
+		ImplAAFEssenceData *pData = essenceData.clearValue();
 		if (pData)
 		{
 		  pData->ReleaseReference();
@@ -99,7 +99,7 @@ ImplAAFContentStorage::~ImplAAFContentStorage ()
 	OMStrongReferenceSetIterator<OMMaterialIdentification, ImplAAFMob>mobs(_mobs);
 	while(++mobs)
 	{
-		ImplAAFMob *pMob = mobs.setValue(0);
+		ImplAAFMob *pMob = mobs.clearValue();
 		if (pMob)
 		{
 		  pMob->ReleaseReference();
