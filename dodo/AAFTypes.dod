@@ -947,39 +947,98 @@ AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#if 0)
   #if defined(__midl)
     /* MIDL 2.0 definitions */
-    typedef aafUID_t * aafUID_constref;
-    typedef aafRational_t * aafRational_constref;
-    typedef aafLength_t * aafLength_constref;
-    typedef aafVersionType_t * aafVersionType_constref;
-    typedef aafTimeStamp_t * aafTimeStamp_constref;
+	typedef aafArgIDType_t *             aafArgIDType_constref;
+	typedef aafEdgecodeHeader_t *        aafEdgecodeHeader_constref;
+	typedef aafEdgecode_t *              aafEdgecode_constref;
+	typedef aafEngine_t *                aafEngine_constref;
+	typedef aafHardwarePlatform_t *      aafHardwarePlatform_constref;
+	typedef aafMediaCriteria_t *         aafMediaCriteria_constref;
+	typedef aafPluginAPI_t *             aafPluginAPI_constref;
+	typedef aafPosition_t *              aafPosition_constref;
+	typedef aafProductIdentification_t * aafProductIdentification_constref;
+	typedef aafProductVersion_t *        aafProductVersion_constref;
+	typedef aafRect_t *                  aafRect_constref;
+	typedef aafSourceRef_t *             aafSourceRef_constref;
+	typedef aafTimecode_t *              aafTimecode_constref;
+    typedef aafLength_t *                aafLength_constref;
+    typedef aafRational_t *              aafRational_constref;
+    typedef aafTimeStamp_t *             aafTimeStamp_constref;
+    typedef aafUID_t *                   aafUID_constref;
+    typedef aafVersionType_t *           aafVersionType_constref;
   #else
     /* MIDL 1.1 definitions */
-    typedef aafUID_t aafUID_constref;
-    typedef aafRational_t aafRational_constref;
-    typedef aafLength_t aafLength_constref;
-    typedef aafVersionType_t aafVersionType_constref;
-    typedef aafTimeStamp_t aafTimeStamp_constref;
+	typedef aafArgIDType_t               aafArgIDType_constref;
+	typedef aafEdgecodeHeader_t          aafEdgecodeHeader_constref;
+	typedef aafEdgecode_t                aafEdgecode_constref;
+	typedef aafEngine_t                  aafEngine_constref;
+	typedef aafHardwarePlatform_t        aafHardwarePlatform_constref;
+	typedef aafMediaCriteria_t           aafMediaCriteria_constref;
+	typedef aafPluginAPI_t               aafPluginAPI_constref;
+	typedef aafPosition_t                aafPosition_constref;
+	typedef aafProductIdentification_t   aafProductIdentification_constref;
+	typedef aafProductVersion_t          aafProductVersion_constref;
+	typedef aafRect_t                    aafRect_constref;
+	typedef aafSourceRef_t               aafSourceRef_constref;
+	typedef aafTimecode_t                aafTimecode_constref;
+    typedef aafLength_t                  aafLength_constref;
+    typedef aafRational_t                aafRational_constref;
+    typedef aafTimeStamp_t               aafTimeStamp_constref;
+    typedef aafUID_t                     aafUID_constref;
+    typedef aafVersionType_t             aafVersionType_constref;
   #endif
 
-  typedef aafUID_t * aafUID_constptr;
-  typedef aafCharacter * aafCharacter_constptr;
+  typedef aafCharacter *                 aafCharacter_constptr;
+  typedef aafMediaCriteria_t *           aafMediaCriteria_constptr;
+  typedef aafOperationChoice_t *         aafOperationChoice_constptr;
+  typedef aafSearchCrit_t *              aafSearchCrit_constptr;
+  typedef aafUID_t *                     aafUID_constptr;
+
 AD_CPP_QUOTE(#endif // 0)
 
 AD_CPP_QUOTE(#if defined\(__cplusplus\))
-AD_CPP_QUOTE(  #define aafUID_constref const aafUID_t &)
-AD_CPP_QUOTE(  #define aafRational_constref const aafRational_t &)
-AD_CPP_QUOTE(  #define aafLength_constref const aafLength_t &)
-AD_CPP_QUOTE(  #define aafVersionType_constref const aafVersionType_t &)
-AD_CPP_QUOTE(  #define aafTimeStamp_constref const aafTimeStamp_t &)
+AD_CPP_QUOTE(  #define aafArgIDType_constref        const aafArgIDType_t &)
+AD_CPP_QUOTE(  #define aafEdgecodeHeader_constref   const aafEdgecodeHeader_t &)
+AD_CPP_QUOTE(  #define aafEdgecode_constref         const aafEdgecode_t &)
+AD_CPP_QUOTE(  #define aafEngine_constref           const aafEngine_t &)
+AD_CPP_QUOTE(  #define aafHardwarePlatform_constref const aafHardwarePlatform_t &)
+AD_CPP_QUOTE(  #define aafLength_constref           const aafLength_t &)
+AD_CPP_QUOTE(  #define aafMediaCriteria_constref    const aafMediaCriteria_t &)
+AD_CPP_QUOTE(  #define aafPluginAPI_constref        const aafPluginAPI_t &)
+AD_CPP_QUOTE(  #define aafPosition_constref         const aafPosition_t &)
+AD_CPP_QUOTE(  #define aafProductIdentification_constref const aafProductIdentification_t &)
+AD_CPP_QUOTE(  #define aafProductVersion_constref   const aafProductVersion_t &)
+AD_CPP_QUOTE(  #define aafRational_constref         const aafRational_t &)
+AD_CPP_QUOTE(  #define aafRect_constref             const aafRect_t &)
+AD_CPP_QUOTE(  #define aafSourceRef_constref        const aafSourceRef_t &)
+AD_CPP_QUOTE(  #define aafTimeStamp_constref        const aafTimeStamp_t &)
+AD_CPP_QUOTE(  #define aafTimecode_constref         const aafTimecode_t &)
+AD_CPP_QUOTE(  #define aafUID_constref              const aafUID_t &)
+AD_CPP_QUOTE(  #define aafVersionType_constref      const aafVersionType_t &)
 AD_CPP_QUOTE(#else // !__cplusplus)
-AD_CPP_QUOTE(  #define aafUID_constref const aafUID_t * const)
-AD_CPP_QUOTE(  #define aafRational_constref const aafRational_t * const)
-AD_CPP_QUOTE(  #define aafLength_constref const aafLength_t * const)
-AD_CPP_QUOTE(  #define aafVersionType_constref const aafVersionType_t * const)
-AD_CPP_QUOTE(  #define aafTimeStamp_constref const aafTimeStamp_t * const)
+AD_CPP_QUOTE(  #define aafArgIDType_constref         const aafArgIDType_t * const)
+AD_CPP_QUOTE(  #define aafEdgecodeHeader_constref    const aafEdgecodeHeader_t * const)
+AD_CPP_QUOTE(  #define aafEdgecode_constref          const aafEdgecode_t * const)
+AD_CPP_QUOTE(  #define aafEngine_constref            const aafEngine_t * const)
+AD_CPP_QUOTE(  #define aafHardwarePlatform_constrfef const aafHardwarePlatform_t * const)
+AD_CPP_QUOTE(  #define aafLength_constref            const aafLength_t * const)
+AD_CPP_QUOTE(  #define aafMediaCriteria_constref     const aafMediaCriteria_t * const)
+AD_CPP_QUOTE(  #define aafPluginAPI_constref         const aafPluginAPI_t * const)
+AD_CPP_QUOTE(  #define aafPosition_constref          const aafPosition_t * const)
+AD_CPP_QUOTE(  #define aafProductIdentification_constref const aafProductIdentification_t * const)
+AD_CPP_QUOTE(  #define aafProductVersion_constref    const aafProductVersion_t * const)
+AD_CPP_QUOTE(  #define aafRational_constref          const aafRational_t * const)
+AD_CPP_QUOTE(  #define aafRect_constref              const aafRect_t * const)
+AD_CPP_QUOTE(  #define aafSourceRef_constref         const aafSourceRef_t * const)
+AD_CPP_QUOTE(  #define aafTimeStamp_constref         const aafTimeStamp_t * const)
+AD_CPP_QUOTE(  #define aafTimecode_constref          const aafTimecode_t * const)
+AD_CPP_QUOTE(  #define aafUID_constref               const aafUID_t * const)
+AD_CPP_QUOTE(  #define aafVersionType_constref       const aafVersionType_t * const)
 AD_CPP_QUOTE(#endif // !__cplusplus)
 
-AD_CPP_QUOTE(  #define aafUID_constptr const aafUID_t *)
-AD_CPP_QUOTE(  #define aafCharacter_constptr const aafCharacter *)
+AD_CPP_QUOTE(  #define aafCharacter_constptr         const aafCharacter *)
+AD_CPP_QUOTE(  #define aafMediaCriteria_constptr     const aafMediaCriteria_t *)
+AD_CPP_QUOTE(  #define aafOperationChoice_constptr   const aafOperationChoice_t *)
+AD_CPP_QUOTE(  #define aafSearchCrit_constptr        const aafSearchCrit_t *)
+AD_CPP_QUOTE(  #define aafUID_constptr               const aafUID_t *)
 
 AD_TYPES_END
