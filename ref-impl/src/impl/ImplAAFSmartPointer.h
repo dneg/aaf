@@ -9,6 +9,12 @@
 *                                               *
 \***********************************************/
 
+// Define smart pointer assertions before including the base header.
+#ifndef AAF_SMART_POINTER_ASSERT
+#define AAF_SMART_POINTER_ASSERT(condition) \
+  if (! (condition)) throw #condition
+#endif // ! AAF_SMART_POINTER_ASSERT
+
 #ifndef __AAFSmartPointerBase_h__
 #include "AAFSmartPointerBase.h"
 #endif
