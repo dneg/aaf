@@ -86,8 +86,6 @@ AAFRESULT aafMobIDFromMajorMinor(
  * Possible Errors:
  *		Standard errors (see top of file).
  *************************************************************************/
-//!!! These should be somewhere else (AAFUtils??)
-/* omfmTimecodeToOffset */
 aafErr_t PvtOffsetToTimecode(
 	aafFrameOffset_t offset, /* IN - Offset into a track */
 	aafInt16 frameRate,      /* IN - Frame rate */
