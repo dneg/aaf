@@ -58,16 +58,6 @@
 #include <wstring.h>
 #endif
 
-// BobT 11-Sept-1998: Changed '#if 0' to '#if FULL_TOOLKIT'.
-#if FULL_TOOLKIT
-#include <stdio.h>
-#include <string.h>
-#include "aafCvt.h"
-#include "aafTable.h"
-#include "AAFPrivate.h"
-#include "AAFUtils.h"
-#endif
-
 #include "ImplAAFObjectCreation.h"
 
 #define DEFAULT_NUM_MOBS				1000
@@ -95,10 +85,6 @@ ImplAAFHeader::ImplAAFHeader ()
 
   //!!!	_head = this;
 //	file->InternalSetHead(this);
-#if FULL_TOOLKIT
-	_mobs = (omTable_t *)NULL;
-	_dataObjs = (omTable_t *)NULL;
-#endif
 	_fileRev.major = 0;
 	_fileRev.minor = 0;
 	_toolkitRev.major = 0;
@@ -411,7 +397,6 @@ AAFRESULT
 	aafBool						dummyIDNT = AAFFalse;
 	aafProductVersion_t			dummyVersion;
 	
-//!!!	aafAssertValidFHdl(_file);
 	XPROTECT()
 	{		
 		if(pIdent == (aafProductIdentification_t *)NULL)
@@ -563,72 +548,6 @@ AAFRESULT ImplAAFHeader::LoadMobTables(void)
 {
 	ImplAAFContentStorage *cstore = GetContentStorage();
 	return(cstore->LoadMobTables());
-}
-
-/************************
- * Function: BuildMediaCache (INTERNAL)
- *
- * 		This function is a callback from the openFile and createFile
- *		group of functions.  This callback exists in order to allow the
- *		media layer to be independant, and yet have information of its
- *		own in the opaque file handle.
- *
- * Argument Notes:
- *		<none>.
- *
- * ReturnValue:
- *		Error code (see below).
- *
- * Possible Errors:
- *		Standard errors (see top of file).
- */
-AAFRESULT ImplAAFHeader::BuildMediaCache(void)
-{
-#if FULL_TOOLKIT
-	aafInt32						siz, n, dataObjTableSize;
-	AAFObject *				obj;
-	aafUID_t					uid;
-	
-	XPROTECT(_file)
-	{
-		{
-		   siz = GetObjRefArrayLength(OMHEADMediaData);
-			dataObjTableSize = (siz < DEFAULT_NUM_DATAOBJ ? 
-									  DEFAULT_NUM_DATAOBJ : siz);
-			CHECK(NewUIDTable(_file, dataObjTableSize, &(_dataObjs)));
-			for(n = 1; n <= siz; n++)
-			  {
-				 CHECK(ReadNthObjRefArray(OMHEADMediaData, 
-													  &obj, n));
-				 CHECK(obj->ReadUID(OMMDATMobID, &uid));
-				 CHECK(TableAddUID(_dataObjs, uid,obj,kOmTableDupAddDup));
-			  }
-		 }
-	}
-	XEXCEPT
-	XEND
-#endif
-	
-	return(OM_ERR_NONE);
-}
-
-AAFRESULT ImplAAFHeader::AppendDataObject(aafUID_t mobID,      /* IN - Mob ID */
-						  ImplAAFObject *dataObj)    /* IN - Input Mob */ 
-{
-#if FULL_TOOLKIT
-	XPROTECT(_file)
-	  {
-		CHECK(AppendObjRefArray(OMHEADMediaData, dataObj));
-		CHECK(TableAddUID(_dataObjs, mobID, dataObj, kOmTableDupError));
-	  } /* XPROTECT */
-	XEXCEPT
-	  {
-		return(XCODE());
-	  }
-	XEND;
-#endif
-	
-	return(OM_ERR_NONE);
 }
 
 AAFRESULT ImplAAFHeader::IsValidHeadObject(void)
