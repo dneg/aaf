@@ -197,8 +197,10 @@ ImplAAFEssenceAccess::~ImplAAFEssenceAccess ()
 			i.value().fileMob->ReleaseReference();
 		if (i.value().mdes)
 			i.value().mdes->ReleaseReference();
-		if (i.value().dataFile)
+		if (i.value().dataFile) {
+			i.value().dataFile->Close();
 			i.value().dataFile->ReleaseReference();
+		}
 		if (i.value().codec)
 			i.value().codec->Release();
 		if (i.value().multicodec) 
