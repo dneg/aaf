@@ -8,6 +8,7 @@
 // Generated from the TEXTINCLUDE 2 resource.
 //
 #include "afxres.h"
+#include "../../ref-impl/include/AAFSDKBuild.h"
 
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
@@ -28,8 +29,8 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,0,0,1
+ FILEVERSION AAF_MAJOR_VERSION,AAF_MINOR_VERSION,AAF_MAINT_RELEASE,AAF_BUILD_NUMBER
+ PRODUCTVERSION AAF_MAJOR_VERSION,AAF_MINOR_VERSION,AAF_MAINT_RELEASE,AAF_BUILD_NUMBER
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x9L
@@ -47,14 +48,14 @@ BEGIN
             VALUE "Comments", "www.aafassociation.org\0"
             VALUE "CompanyName", "AAF Association\0"
             VALUE "FileDescription", "Advanced Authoring Format API\0"
-            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "FileVersion", AAF_FILE_VERSION "\0"
             VALUE "InternalName", "AAFCOAPI\0"
-            VALUE "LegalCopyright", "Copyright © 1998-2001\0"
+            VALUE "LegalCopyright", AAF_COPYRIGHT_STRING "\0"
             VALUE "LegalTrademarks", "\0"
             VALUE "OriginalFilename", "AAFCOAPI.dll\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "AAF SDK 1.0 RC1\0"
-            VALUE "ProductVersion", "\0"
+            VALUE "ProductName", AAF_PRODUCT_NAME "\0"
+            VALUE "ProductVersion", AAF_SDK_VERSION "\0"
             VALUE "SpecialBuild", "\0"
         END
     END
