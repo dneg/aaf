@@ -20,16 +20,32 @@ AD_IDL(//
 // AAFRESULT_NOMEMORY
 //   - insufficient system memory is available to perform the
 //     operation.
-//
-// AAFRESULT_NOT_INITIALIZED
-//   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.
 //)
 
 AD_CLASS_UUID(4c2e1691, 8ae6, 11d2, 81, 3c, 00, 60, 97, 31, 01, 72)
 
 AD_DEFAULT_UUID(4c2e1692, 8ae6, 11d2, 81, 3c, 00, 60, 97, 31, 01, 72)
 AD_CLASS_BEGIN
+AD_METHOD0(Initialize,
+		   Initializes a newly allocated\, empty
+  // IAAFWaveDescriptor-supporting object.  This method must be
+  // called after allocation\, and before any other method can be
+  // called.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has not yet been called on this object.
+  //
+  // This method will return the following codes.  If more than one of
+  // the listed errors is in effect\, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  \(This is the only code indicating success.\)
+  //
+  // AAFRESULT_ALREADY_INITIALIZED
+  //   - Initialize\(\) has already been called on this object.)
+
+
 AD_XMETHOD2(GetSummary,
 			[in],
 				objPass,
