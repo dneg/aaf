@@ -57,7 +57,7 @@ AD_XMETHOD4(Initialize,
   //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_ALREADY_INIT
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\, pTypeDef\, pTermValue\, or pTypeName\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pTypeDef\\\, pTermValue\\\, or pTypeName\))
 
 
 AD_XMETHOD1(GetTermValue,
@@ -65,10 +65,15 @@ AD_XMETHOD1(GetTermValue,
 			objOut,
 			AAFPropertyValue,
 			ppTermValue,
-			terminator value
+			terminator value,
 
      Returns the value of the terminator element for this type of
   // string.
+  //
+  // Succeeds if:
+  // - Initialize\(\) has already been called on this object.
+  // - ppTermValue is a valid pointer.
+  //
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NO_INIT
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTermValue\))
