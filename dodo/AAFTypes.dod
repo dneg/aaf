@@ -581,7 +581,7 @@ typedef struct _aafRect_t
 
 typedef struct _aafmMultiXfer_t
 {
-	aafUID_t *			mediaKind;		/* IN -- */
+    aafUID_t *	        mediaKind;		/* IN -- */
 	aafInt16			subTrackNum;	/* IN - The physical output channel */
 	aafUInt32           numSamples;		/* IN -- */
 	aafUInt32          	buflen;			/* IN -- */
@@ -596,7 +596,7 @@ typedef struct _aafmMultiResult_t
 
 typedef struct _aafmMultiCreate_t
 {
-	aafUID_t *			mediaKind;		/* IN -- */
+	const aafUID_t *	mediaKind;		/* IN -- */
 	aafInt16			subTrackNum;	/* IN - The physical output channel */
 	aafInt32           	slotID;		/* IN -- */
 	aafRational_t		sampleRate;
@@ -934,7 +934,39 @@ AD_CPP_QUOTE(\  #endif)
 AD_CPP_QUOTE(#endif)
 
 
+
+AD_CPP_QUOTE(#if 0)
+  #if defined(__midl)
+    /* MIDL 2.0 definitions */
+    typedef aafUID_t * aafUID_constref;
+    typedef aafRational_t * aafRational_constref;
+    typedef aafLength_t * aafLength_constref;
+    typedef aafVersionType_t * aafVersionType_constref;
+  #else
+    /* MIDL 1.1 definitions */
+    typedef aafUID_t aafUID_constref;
+    typedef aafRational_t aafRational_constref;
+    typedef aafLength_t aafLength_constref;
+    typedef aafVersionType_t aafVersionType_constref;
+  #endif
+
+  typedef aafUID_t * aafUID_constptr;
+  typedef aafCharacter * aafCharacter_constptr;
+AD_CPP_QUOTE(#endif // 0)
+
+AD_CPP_QUOTE(#if defined\(__cplusplus\))
+AD_CPP_QUOTE(  #define aafUID_constref const aafUID_t &)
+AD_CPP_QUOTE(  #define aafRational_constref const aafRational_t &)
+AD_CPP_QUOTE(  #define aafLength_constref const aafLength_t &)
+AD_CPP_QUOTE(  #define aafVersionType_constref const aafVersionType_t &)
+AD_CPP_QUOTE(#else // !__cplusplus)
+AD_CPP_QUOTE(  #define aafUID_constref const aafUID_t * const)
+AD_CPP_QUOTE(  #define aafRational_constref const aafRational_t * const)
+AD_CPP_QUOTE(  #define aafLength_constref const aafLength_t * const)
+AD_CPP_QUOTE(  #define aafVersionType_constref const aafVersionType_t * const)
+AD_CPP_QUOTE(#endif // !__cplusplus)
+
+AD_CPP_QUOTE(  #define aafUID_constptr const aafUID_t *)
+AD_CPP_QUOTE(  #define aafCharacter_constptr const aafCharacter *)
+
 AD_TYPES_END
-
-
-
