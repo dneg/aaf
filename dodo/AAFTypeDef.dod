@@ -1,16 +1,16 @@
 #c/*************************************************\
-#c*													*
-#c* Advanced Authoring Format						*
-#c*													*
-#c* Copyright (c) 1998-1999 Avid Technology, Inc.	*
-#c*													*
+#c*                                                 *
+#c* Advanced Authoring Format                       *
+#c*                                                 *
+#c* Copyright (c) 1998-2000 Avid Technology, Inc.   *
+#c*                                                 *
 #c\*************************************************/
 #startm .this-module 0
 AAFTypeDef\
 #endm
 #c
 #startm .parent-module 0
-AAFDefObject\
+AAFMetaDefinition\
 #endm
 #c
 AD_HEAD
