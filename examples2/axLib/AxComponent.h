@@ -8,15 +8,15 @@
 // except in compliance with the License.  The License is available in
 // AAFSDKPSL.TXT, or you may obtain a copy of the License from the AAF
 // Association or its successor.
-// 
+//
 // Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.  See
 // the License for the specific language governing rights and limitations
 // under the License.
-// 
+//
 // The Original Code of this file is Copyright 1998-2001, Licensor of the
 // AAF Association.
-// 
+//
 //=---------------------------------------------------------------------=
 
 #include "AxTypes.h"
@@ -80,7 +80,7 @@ public:
 
 	aafPosition_t GetCutPoint();
 	void SetCutPoint( aafPosition_t cutPoint );
-	
+
 	operator IAAFTransitionSP ()
 	{ return _spIaafTransition; }
 
@@ -101,10 +101,12 @@ public:
 	virtual ~AxSequence();
 
 	void Initialize( IAAFDataDefSP spIaafDataDef );
-	
+
 	void AppendComponent( IAAFComponentSP );
 
 	IEnumAAFComponentsSP GetComponents();
+
+	IAAFComponentSP GetComponentAt( aafUInt32 index );
 
 	aafUInt32 CountComponents();
 
@@ -167,8 +169,8 @@ public:
 	aafPulldownKind_t GetPulldownKind();
 	aafPulldownDir_t GetPulldownDirection();
 	aafPhaseFrame_t GetPhaseFrame();
-	
-	operator IAAFPulldownSP () 
+
+	operator IAAFPulldownSP ()
 	{ return _spIaafPulldown; }
 
 private:
@@ -214,8 +216,8 @@ public:
 	aafSourceRef_t GetSourceReference();
 
 	IAAFMobSP ResolveRef();
-	
-	operator IAAFSourceClipSP () 
+
+	operator IAAFSourceClipSP ()
 	{ return _spIaafSourceClip; }
 
 private:
@@ -237,8 +239,8 @@ public:
 	void Initialize( IAAFDataDefSP, aafLength_t, IAAFOperationDefSP );
 
 	void AppendInputSegment( IAAFSegmentSP );
-	
-	operator IAAFOperationGroupSP () 
+
+	operator IAAFOperationGroupSP ()
 	{ return _spIaafOperationGroup; }
 
 private:
