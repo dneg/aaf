@@ -133,6 +133,7 @@ HUMAN_TYPED_COMTEST = \
 	AAFMasterMob \
 	AAFMob \
 	AAFSourceClip \
+	AAFEssenceDescriptor \
 	AAFFile \
 	AAFSourceMob \
 	AAFSourceReference \
@@ -204,7 +205,6 @@ AUTO_GEN_COMTEST = \
 	AAFHeader \
 	AAFIdentification \
 	AAFObject \
-	AAFEssenceDescriptor \
 	AAFFileDescriptor \
 	AAFSegment \
 	AAFMobSlot \
