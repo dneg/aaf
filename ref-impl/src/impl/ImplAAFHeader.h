@@ -276,7 +276,6 @@ public:
   // AAFRESULT CountIdentifications (aafInt32 * /*pCount*/);
 
   AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
-  AAFRESULT LoadMobTables(void);
   AAFRESULT SetModified(void);		// To NOW
 
   void SetByteOrder(const aafInt16 byteOrder);
