@@ -13,6 +13,8 @@ OMPropertySet::OMPropertySet(void)
   PRECONDITION("Valid Capacity", _capacity >= 0);
 
   _propertySet = new OMPropertySetElement[_capacity];
+  ASSERT("Valid heap pointer", _propertySet != 0);
+
   for (size_t i = 0; i < _capacity; i++) {
     _propertySet[i]._valid = false;
   }
@@ -223,7 +225,8 @@ void OMPropertySet::grow(const size_t additionalElements)
   // Allocate new property set element array
   //
   _propertySet = new OMPropertySetElement[_capacity];
-  
+  ASSERT("Valid heap pointer", _propertySet != 0);
+
   // Copy over all elements from the old array
   //
   for (size_t i = 0; i < oldCapacity; i++) {
