@@ -71,6 +71,7 @@ EXTERN_C const CLSID CLSID_AAFMob = { 0xB1A21375, 0x1A7D, 0x11d2, { 0xBF, 0x78, 
 
 
 
+
 CAAFMob::CAAFMob (IUnknown * pControllingUnknown, aafBool doInit)
   : CAAFObject (pControllingUnknown, kAAFFalse)
 {
@@ -2146,6 +2147,171 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
+
+
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::AppendAttribute (aafCharacter_constptr  pName,
+        aafCharacter_constptr  pValue)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+
+  hr = ptr->AppendAttribute (pName,
+    pValue);
+
+
+  return hr;
+}
+
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::CountAttributes (aafUInt32*  pNumAttributes)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->CountAttributes (pNumAttributes);
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::GetAttributes (IEnumAAFTaggedValues ** ppEnum)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+  //
+  // set up for ppEnum
+  //
+  ImplEnumAAFTaggedValues * internalppEnum = NULL;
+  ImplEnumAAFTaggedValues ** pinternalppEnum = NULL;
+  if (ppEnum)
+    {
+      pinternalppEnum = &internalppEnum;
+    }
+
+  hr = ptr->GetAttributes (pinternalppEnum);
+  //
+  // cleanup for ppEnum
+  //
+  if (SUCCEEDED(hr))
+    {
+      IUnknown *pUnknown;
+      HRESULT hStat;
+
+      if (internalppEnum)
+        {
+          pUnknown = static_cast<IUnknown *> (internalppEnum->GetContainer());
+          hStat = pUnknown->QueryInterface(IID_IEnumAAFTaggedValues, (void **)ppEnum);
+          assert (SUCCEEDED (hStat));
+          //pUnknown->Release();
+          internalppEnum->ReleaseReference(); // We are through with this pointer.
+        }
+    }
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::RemoveAttribute (IAAFTaggedValue * pAttribute)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+  //
+  // set up for pAttribute
+  //
+  ImplAAFTaggedValue * internalpAttribute = NULL;
+  if (pAttribute)
+    {
+      HRESULT hStat;
+      IAAFRoot * iObj;
+      ImplAAFRoot *arg;
+      hStat = pAttribute->QueryInterface (IID_IAAFRoot, (void **)&iObj);
+      assert (SUCCEEDED (hStat));
+      assert (iObj);
+      hStat = iObj->GetImplRep((void **)&arg);
+      assert (SUCCEEDED (hStat));
+      iObj->Release(); // we are through with this interface pointer.
+      internalpAttribute = static_cast<ImplAAFTaggedValue*>(arg);
+      assert (internalpAttribute);
+    }
+
+  hr = ptr->RemoveAttribute (internalpAttribute);
+  //
+  // no cleanup necessary for pAttribute
+  //
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::SetUsageCode (aafUID_constref  usageCode)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->SetUsageCode (usageCode);
+
+  return hr;
+}
+
+HRESULT STDMETHODCALLTYPE
+    CAAFMob::GetUsageCode (aafUID_t*  pUsageCode)
+{
+  HRESULT hr;
+
+  ImplAAFMob * ptr;
+  ImplAAFRoot * pO;
+  pO = GetRepObject ();
+  assert (pO);
+  ptr = static_cast<ImplAAFMob*> (pO);
+  assert (ptr);
+
+
+  hr = ptr->GetUsageCode (pUsageCode);
+
+  return hr;
+}
+
+
 //
 // 
 // 
@@ -2158,6 +2324,8 @@ HRESULT CAAFMob::InternalQueryInterface
     REFIID riid,
     void **ppvObj)
 {
+    HRESULT hr = S_OK;
+
     if (NULL == ppvObj)
         return E_INVALIDARG;
 
@@ -2165,6 +2333,13 @@ HRESULT CAAFMob::InternalQueryInterface
     if (EQUAL_UID(riid,IID_IAAFMob)) 
     { 
         *ppvObj = (IAAFMob *)this; 
+        ((IUnknown *)*ppvObj)->AddRef();
+        return S_OK;
+    }
+
+    if (EQUAL_UID(riid,IID_IAAFMob2)) 
+    { 
+        *ppvObj = (IAAFMob2 *)this; 
         ((IUnknown *)*ppvObj)->AddRef();
         return S_OK;
     }
@@ -2177,4 +2352,3 @@ HRESULT CAAFMob::InternalQueryInterface
 // Define the contrete object support implementation.
 // 
 AAF_DEFINE_FACTORY(AAFMob)
-

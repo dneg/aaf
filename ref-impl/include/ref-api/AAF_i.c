@@ -2,8 +2,6 @@
 //
 // This file was GENERATED for the AAF SDK
 //
-// $Id$ $Name$
-//
 // The contents of this file are subject to the AAF SDK Public
 // Source License Agreement (the "License"); You may not use this file
 // except in compliance with the License.  The License is available in
@@ -426,6 +424,9 @@ const IID IID_IAAFTypeDefVariableArrayEx = {0x7f73d4b3,0x6f9a,0x11d4,{0x8e,0x59,
 
 
 const IID IID_IAAFMasterMobEx = {0xb1a21370,0x1a7d,0x11d2,{0xbf,0x78,0x00,0x10,0x4b,0xc9,0x15,0x6d}};
+
+
+const IID IID_IAAFMob2 = {0xa94fdb8b,0x451f,0x4d62,{0xac,0x17,0x16,0x95,0x03,0x44,0x83,0x2e}};
 
 
 #ifdef __cplusplus

@@ -22,7 +22,7 @@
 #c
 #c *********************************************************************
 #startm .this-module 0
-AAFMob\
+AAFMob2\
 #endm
 #c
 #startm .parent-module 0
@@ -30,12 +30,9 @@ AAFObject\
 #endm
 #c
 #c #import ./AAFObject.exp
-#import ./AAFMob2.exp
 AD_HEAD
 AD_IDL(//
-// IAAFMob is DEPRECATED\,  Please use IAAFMob2.
-//
-// The IAAFMob interface is implemented by objects that specify a
+// The IAAFMob2 interface is implemented by objects that specify a
 // Metadata Object\, which can describe a composition\, essence\, or
 // physical media.
 //
@@ -49,7 +46,7 @@ AD_IDL(//
 //
 // AAFRESULT_NOT_INITIALIZED
 //   - This object has not yet had Initialize\(\) called on it through
-//     this object's primary interface.  Note that IAAFMob is a
+//     this object's primary interface.  Note that IAAFMob2 is a
 //     primary interface for an abstract class\, so it is not
 //     appropriate for the Initialize\(\) method to exist in this
 //     interface.  The Initialize\(\) method is available through the
@@ -64,11 +61,34 @@ AD_FORWARD_DECLARATION(EnumAAFTaggedValues)
 AD_FORWARD_DECLARATION(AAFKLVData)
 AD_FORWARD_DECLARATION(EnumAAFKLVData)
 
-AD_CLASS_UUID(B1A21375, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+AD_CLASS_UUID(f579d5b7, bc5f, 4541, 94, 58, 84, d4, e7, 80, 7d, 3e)
 
-AD_DEFAULT_UUID(B1A21374, 1A7D, 11d2, BF, 78, 00, 10, 4B, C9, 15, 6D)
+AD_DEFAULT_UUID(a94fdb8b, 451f, 4d62, ac, 17, 16, 95, 03, 44, 83, 2e)
+AD_XCLASS_BEGIN(Abstract, StoredObject)
 
-AD_COM_EXT_CLASS_BEGIN(public IAAFMob2)
+
+
+#c First, the origninal set of IAAFMob interface that are
+#c crepeated in this interface:
+#c
+#c GetMobID, SetMobId, CountSlots, AppendSlot,
+#c PrependSlot, InsertSlotAt, RemoveSlotAt, GetSlotAt,
+#c GetSlots, GetModTime, SetModTime GetCreateTime,
+#c SetCreateTime, AppendComment, CountComments, GetComment,
+#c RemoveComment, AppendNewTimelineSlot, GetMobInfo,
+#c OffsetToMobTimecode, LookupSlot, ChangeRef, CloneExternal,
+#c Copy, AppendKKLVData, CountKLVData, GetKLVData, RemoveKLVData,
+#c
+#c After those, come the new methods added to this interface:
+#c
+#c AppendAttribute, CountAttributes, GetAttribute,
+#c SetUsageCode, GetUsageCode,
+
+
+#c
+#c Original AAFMob methods repeated in AAFMob2
+#c
+
 
 AD_XMETHOD1(GetMobID,
 			[out],
@@ -969,17 +989,118 @@ AD_XMETHOD1(RemoveKLVData,
   // AAFRESULT_OBJECT_NOT_FOUND
   //   - the given KLV data object is not in this mob.)
 
-
+#c
+#c New AAFMob2 methods
 #c
 
-#c AAFMob2 methods
-#c
+AD_XMETHOD2( AppendAttribute,
+	     [in], objPass, aafCharacter_constptr, pName,
+ 	     The attribute name.,
+	     [in], objPass, aafCharacter_constptr, pValue,
+             The attribute value.,
+	     Append and attribute name/value pair to the attribute list. )
 
-AD_COM_METH(.method-AppendAttribute)
-AD_COM_METH(.method-CountAttributes)
-AD_COM_METH(.method-GetAttributes)
-AD_COM_METH(.method-RemoveAttribute)
-AD_COM_METH(.method-SetUsageCode)
-AD_COM_METH(.method-GetUsageCode)
+   // Creates a new tagged value, initializes it with the specified attribute
+   // name/value pair, and appends it to the attribute list.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
 
-AD_COM_EXT_CLASS_END(AAFMob2)
+AD_XMETHOD1( CountAttributes,
+	     [out], objPass, aafUInt32*, pNumAttributes,
+	     Pointer to attribute count.,
+	     Return the number of attributes contained by this mob )
+
+   // Returns the number of attributes on this mob.
+   //
+   // Succeeds if:
+   //   - pNumAttributes is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pNumAttributes is null
+  
+
+AD_XMETHOD1( GetAttributes,
+	     [out], objOut, EnumAAFTaggedValues, ppEnum,
+	     Pointer to the new enumerator object created by this method.,
+	     Return an attribute enumerator for this mob. )
+
+   // Creates an enumerator for this mobs attributes.  The new enumerator is
+   // AddRef'ed before it is returned.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pEnum was null
+
+
+AD_XMETHOD1( RemoveAttribute,
+	     [in], objIn, AAFTaggedValue, pAttribute,
+	     Pointer to the tagged value attribute.,
+	     Remove an attribute \(tagged value\).)
+
+   // Removes a mob attribute.
+   //
+   // Succeeds if:
+   //   - pName and pValue are valid pointers.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pName or pValue is null.
+	
+AD_XMETHOD1( SetUsageCode,
+	     [in], objPass, aafUID_constref, usageCode,
+	     The usage code value.,
+	     Set this mob\'s usage code. )
+
+   // Set this mob\'s usage code. Usage codes are documented in the
+   // AAF Edit Protocol, and related specifications.
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_SUCCESS
+   //
+
+AD_XMETHOD1( GetUsageCode,
+	     [out], objPass, aafUID_t*, pUsageCode,
+	     Pointer to usage code.,
+	     Get this mob\'s usage code. )
+
+   // Get this mob\'s usage code. Usage codes are documented in the
+   // AAF Edit Protocol, and related specifications.
+   //
+   // Succeeds if:
+   //   - pUsageCode is a valid pointer
+   //
+   // Return codes:
+   //
+   //   AAFRESULT_PROP_NOT_PRESENT
+   //        - no usage code is present on this mob
+   //
+   //   AAFRESULT_NULL_PARAM
+   //	     - pUsageCode is null
+   //	
+   //   AAFRESULT_SUCCESS
+   //        - succeeded \(This is the only code indicating success.\)
+   //
+
+AD_XCLASS_END(Abstract, StoredObject)

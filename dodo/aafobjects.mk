@@ -37,7 +37,8 @@ AAFCOMINTERFACESONLY="\
 	AAFSearchSource \
 	AAFEssenceMultiAccess \
 	AAFTypeDefVariableArrayEx \
-	AAFMasterMobEx "
+	AAFMasterMobEx \
+	AAFMob2 "
 
 
 # These are the impl files that are typed by humans.  Be sure to

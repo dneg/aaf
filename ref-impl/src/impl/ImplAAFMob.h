@@ -321,6 +321,93 @@ public:
     GetKLVData
         (ImplEnumAAFKLVData ** ppEnum);  //@parm [out,retval] KLVData
 
+  //***********************************************************
+  // METHOD NAME: AppendAttribute()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | AppendAttribute |
+  // Append and attribute name/value pair to the attribute list. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  AppendAttribute (
+    // @parm [in] aafCharacter_constptr | pName | The attribute name.
+    aafCharacter_constptr  pName,
+
+    // @parm [in] aafCharacter_constptr | pValue | The attribute value.
+    aafCharacter_constptr  pValue
+  );
+
+  //***********************************************************
+  // METHOD NAME: CountAttributes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | CountAttributes |
+  // Return the number of attributes contained by this mob 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  CountAttributes (
+    // @parm [out] aafUInt32* | pNumAttribues | Pointer to attribute count.
+    aafUInt32*  pNumAttributes
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetAttributes()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | GetAttributes |
+  // Return an attribute enumerator for this mob. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetAttributes (
+    // @parm [out] EnumAAFTaggedValues | ppEnum | Pointer to the new enumerator object created by this method.
+    ImplEnumAAFTaggedValues ** ppEnum
+  );
+
+  //***********************************************************
+  // METHOD NAME: RemoveAttribute()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | RemoveAttribute |
+  // Remove and attribute (tagged value).
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  RemoveAttribute (
+    // @parm [in] AAFTaggedValue | pAttribute | Pointer to the tagged value attribute.
+    ImplAAFTaggedValue * pAttribute
+  );
+
+  //***********************************************************
+  // METHOD NAME: SetUsageCode()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | SetUsageCode |
+  // Set this mob's usage code. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  SetUsageCode (
+    // @parm [in] aafUID_constref | usageCode | The usage code value.
+    aafUID_constref  usageCode
+  );
+
+  //***********************************************************
+  // METHOD NAME: GetUsageCode()
+  //
+  // DESCRIPTION:
+  // @mfunc AAFRESULT | AAFMobEx | GetUsageCode |
+  // Get this mob's usage code. 
+  // @end
+  // 
+  virtual AAFRESULT STDMETHODCALLTYPE
+  GetUsageCode (
+    // @parm [out] aafUID_t* | pUsageCode | Pointer to usage code.
+    aafUID_t*  pUsageCode
+  );
+
 
   //****************
   // OffsetToMobTimecode()
@@ -485,6 +572,9 @@ virtual AAFRESULT STDMETHODCALLTYPE
     OMStrongReferenceVectorProperty<ImplAAFMobSlot> _slots;
     OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _userComments;
     OMStrongReferenceVectorProperty<ImplAAFKLVData> _KLVData;
+
+    OMStrongReferenceVectorProperty<ImplAAFTaggedValue> _attributes;
+    OMFixedSizeProperty<aafUID_t> _usageCode;
 
     aafClassID_t _clsid;
 };
