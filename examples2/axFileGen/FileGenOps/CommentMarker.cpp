@@ -61,27 +61,29 @@ void CommentMarker::Execute( const std::vector<AxString>& argv )
 //=---------------------------------------------------------------------=
 
 AXFG_OP(
-  CommentMarkerSetPos,           
-  L"CommentMarkerSetPos",
-  L"Set the position of a comment marker",
-  L"CommentMarkerName position",
+  CommentMarkerSetRegion,           
+  L"CommentMarkerSetRegion",
+  L"Set the position and length of a comment marker",
+  L"CommentMarkerName position length",
   L"",
-  3,
-  3 ) 
+  4,
+  4 ) 
 
-CommentMarkerSetPos::~CommentMarkerSetPos()
+CommentMarkerSetRegion::~CommentMarkerSetRegion()
 {}
 
-void CommentMarkerSetPos::Execute( const std::vector<AxString>& argv )
+void CommentMarkerSetRegion::Execute( const std::vector<AxString>& argv )
 {
 	AxString commentMarkerName = argv[1];
 	AxString position          = argv[2];
+	AxString length            = argv[3];
 
 	IAAFCommentMarkerSP spCommentMarker;
 	GetInstance( commentMarkerName ).GetCOM( spCommentMarker );
 	AxCommentMarker axCommentMarker( spCommentMarker );
 
 	axCommentMarker.SetPosition( AxStringUtil::strtol( position ) );
+	axCommentMarker.SetLength( AxStringUtil::strtol( length ) );
 }
 
 
