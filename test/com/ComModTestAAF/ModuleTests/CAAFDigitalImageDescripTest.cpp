@@ -172,9 +172,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	CAAFBuiltinDefs defs (pDictionary);
 
     // Create a source mob
-    checkResult(pDictionary->CreateInstance(defs.cdSourceMob(),
-                IID_IAAFSourceMob, 
-                (IUnknown **)&pSourceMob));
+    checkResult(defs.cdSourceMob()->
+				CreateInstance(IID_IAAFSourceMob, 
+							   (IUnknown **)&pSourceMob));
     checkResult(pSourceMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
 
     checkResult(CoCreateGuid((GUID *)&newMobID));
@@ -183,9 +183,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
     // Create a digitial image descriptor.
-    checkResult(pDictionary->CreateInstance(defs.cdDigitalImageDescriptor(),
-                IID_IAAFDigitalImageDescriptor, 
-                (IUnknown **)&pDIDesc));		
+    checkResult(defs.cdDigitalImageDescriptor()->
+				CreateInstance(IID_IAAFDigitalImageDescriptor, 
+							   (IUnknown **)&pDIDesc));		
 
     aafRational_t	ratio;
     aafInt32		VideoLineMap[kVideoLineMapMaxElement] = {kVideoLineMap1TestVal,kVideoLineMap2TestVal};

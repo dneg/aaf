@@ -264,12 +264,12 @@ void CommentMarkerTest::CreateEvent()
 	{
 		// Create an event (note: this will be replaced by a concrete event in a
 		// later version after such an event is implemented.)
-		checkResult(_pDictionary->CreateInstance(defs.cdCommentMarker(),
-			IID_IAAFCommentMarker, 
-			(IUnknown **)&pMarker));
-		checkResult(_pDictionary->CreateInstance(defs.cdSourceClip(),
-			IID_IAAFSourceReference, 
-			(IUnknown **)&pClip));
+		checkResult(defs.cdCommentMarker()->
+					CreateInstance(IID_IAAFCommentMarker, 
+								   (IUnknown **)&pMarker));
+		checkResult(defs.cdSourceClip()->
+					CreateInstance(IID_IAAFSourceReference, 
+								   (IUnknown **)&pClip));
 
 		checkResult(pMarker->SetAnnotation(pClip));
 		pClip->Release();
@@ -284,9 +284,9 @@ void CommentMarkerTest::CreateEvent()
 		checkResult(pEvent->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
 		
 		// Create and initialize an EventMobSlot
-		checkResult(_pDictionary->CreateInstance(defs.cdEventMobSlot(),
-			IID_IAAFEventMobSlot, 
-			(IUnknown **)&pEventMobSlot));
+		checkResult(defs.cdEventMobSlot()->
+					CreateInstance(IID_IAAFEventMobSlot, 
+								   (IUnknown **)&pEventMobSlot));
 		checkResult(pEventMobSlot->SetEditRate(const_cast<aafRational_t *>(&_editRate)));
 		
 		// Get the mob slot interface so that we can add the event segment.
@@ -296,9 +296,9 @@ void CommentMarkerTest::CreateEvent()
 		checkResult(pMobSlot->SetSegment(pSegment));
 		
 		// Create the mob to hold the new event mob slot.
-		checkResult(_pDictionary->CreateInstance(defs.cdCompositionMob(),
-			IID_IAAFMob, 
-			(IUnknown **)&pMob));
+		checkResult(defs.cdCompositionMob()->
+					CreateInstance(IID_IAAFMob, 
+								   (IUnknown **)&pMob));
 		checkResult(pMob->SetName(L"CompositionMob::Name:Test mob to hold an event mob slot"));
 		
 		// Append event slot to the composition mob.

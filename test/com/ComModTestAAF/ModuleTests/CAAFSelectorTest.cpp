@@ -165,9 +165,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
  		
 		// Create a mob to be referenced by the source clip
-		checkResult(pDictionary->CreateInstance(defs.cdMasterMob(),
-								 IID_IAAFMob, 
-								 (IUnknown **)&pReferencedMob));
+		checkResult(defs.cdMasterMob()->
+					CreateInstance(IID_IAAFMob, 
+								   (IUnknown **)&pReferencedMob));
 		checkResult(CoCreateGuid((GUID *)&referencedMobID));
 		checkResult(pReferencedMob->SetMobID(referencedMobID));
 		checkResult(pReferencedMob->SetName(L"AAFSourceClipTest::ReferencedMob"));
@@ -176,9 +176,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pReferencedMob = NULL;
 
 		// Create a Composition Mob
-		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-											  IID_IAAFCompositionMob, 
-											  (IUnknown **)&pCompMob));
+		checkResult(defs.cdCompositionMob()->
+					CreateInstance(IID_IAAFCompositionMob, 
+								   (IUnknown **)&pCompMob));
 
 	    // get a IAAFMob interface
 		checkResult(pCompMob->QueryInterface(IID_IAAFMob, (void **)&pMob));
@@ -187,9 +187,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetName(L"AAFSelectorTest"));
 	  
 		// Create a Source clip 
- 		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
-						     IID_IAAFSourceClip, 
-						     (IUnknown **)&pSourceClip));		
+ 		checkResult(defs.cdSourceClip()->
+					CreateInstance(IID_IAAFSourceClip, 
+								   (IUnknown **)&pSourceClip));		
 
 		// Set the properties for the SourceClip
 		checkResult(pSourceClip->SetFade( fadeInLen, fadeInType, fadeOutLen, fadeOutType));
@@ -199,16 +199,16 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pSourceClip->SetSourceReference(sourceRef));
 
 		// create a filler 
-	    checkResult(pDictionary->CreateInstance(defs.cdFiller(),
-												IID_IAAFFiller, 
-												(IUnknown **)&pFiller));
+	    checkResult(defs.cdFiller()->
+					CreateInstance(IID_IAAFFiller, 
+								   (IUnknown **)&pFiller));
 		// Set its properties.
 	    checkResult(pFiller->Initialize(defs.ddPicture(), fillerLength));
 
 		// Now create a selector 
-	    checkResult(pDictionary->CreateInstance(defs.cdSelector(),
-												IID_IAAFSelector, 
-												(IUnknown **)&pSelector));
+	    checkResult(defs.cdSelector()->
+					CreateInstance(IID_IAAFSelector, 
+								   (IUnknown **)&pSelector));
 
 		// Get a segment interface from the source clip
 		checkResult(pSourceClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment));
