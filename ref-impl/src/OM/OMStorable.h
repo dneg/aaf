@@ -88,10 +88,6 @@ public:
     //          persistent representation.
   virtual OMFile* file(void) const;
 
-    // @cmember The path to this <c OMStorable> from the root of
-    //          the <c OMFile> in which this <c OMStorable> resides.
-  const wchar_t* pathName(void) const;
-
     // @cmember Find the <c OMStorable> named <p objectName> contained
     //          within this <c OMStorable>.
   OMStorable* find(const wchar_t* objectName) const;
@@ -202,11 +198,6 @@ public:
     //          copied after <mf OMStorable::onCopy> returns.
   virtual void onCopy(void* clientContext) const;
 
-private:
-  // @access Private members.
-
-  wchar_t* makePathName(void);
-
 protected:
   // @access Protected members.
 
@@ -218,7 +209,6 @@ protected:
 private:
   const OMStorable* _container;
   wchar_t* _name;
-  wchar_t* _pathName;
 
   OMStoredObject* _store;
   bool _exists; // true means an accessible persisted representation exists

@@ -40,7 +40,6 @@ OMStorable::OMStorable(void)
 : _persistentProperties(),
   _container(0),
   _name(0),
-  _pathName(0),
   _store(0),
   _exists(false),
   _classFactory(0),
@@ -62,8 +61,6 @@ OMStorable::~OMStorable(void)
 
   delete [] _name;
   _name = 0;
-  delete [] _pathName;
-  _pathName = 0;
 }
 
   // @mfunc Set the <c OMClassDefinition> defining this <c OMStorable>.
@@ -237,8 +234,6 @@ void OMStorable::detach(void)
 
   _container = 0;
 
-  delete [] _pathName;
-  _pathName = 0;
   delete [] _name;
   _name = 0;
   _exists = false;
@@ -264,8 +259,6 @@ void OMStorable::setName(const wchar_t* name)
   delete [] _name;
   _name = 0; // for BoundsChecker
   _name = saveWideString(name);
-  delete [] _pathName;
-  _pathName = 0;
 }
 
   // @mfunc The <c OMFile> in which this <c OMStorable> has a
@@ -278,22 +271,6 @@ OMFile* OMStorable::file(void) const
   TRACE("OMStorable::file");
   PRECONDITION("Valid containing object", _container != 0);
   return _container->file();
-}
-
-  // @mfunc The path to this <c OMStorable> from the root of
-  //        the <c OMFile> in which this <c OMStorable> resides.
-  //   @rdesc The path name of this <c OMStorable>.
-  //   @this const
-const wchar_t* OMStorable::pathName(void) const
-{
-  TRACE("OMStorable::pathName");
-
-  if (_pathName == 0) {
-    OMStorable* nonConstThis = const_cast<OMStorable*>(this);
-    nonConstThis->_pathName = nonConstThis->makePathName();
-  }
-  ASSERT("Valid path name", validWideString(_pathName));
-  return _pathName;
 }
 
   // @mfunc Find the <c OMStorable> named <p objectName> contained
@@ -610,49 +587,4 @@ void OMStorable::onRestore(void*) const
 void OMStorable::onCopy(void*) const
 {
   // nothing to do in this default implementation
-}
-
-const wchar_t* rootName = L"/";
-
-wchar_t* OMStorable::makePathName(void)
-{
-  TRACE("OMStorable::makePathName");
-
-  ASSERT("Object has a name", validWideString(name()));
-  ASSERT("Root object properly named",
-                  IMPLIES(isRoot(), compareWideString(name(), rootName) == 0));
-  ASSERT("Non-root object properly named",
-                  IMPLIES(compareWideString(name(), rootName) == 0, isRoot()));
-  ASSERT("Non-root object has valid container",
-                                          IMPLIES(!isRoot(), _container != 0));
-
-  wchar_t* result = 0;
-  if (isRoot()) {
-    // root
-    result = saveWideString(name());
-  } else {
-    const OMStorable* cont = _container;
-    size_t pathNameLength = lengthOfWideString(cont->pathName());
-    size_t nameLength = lengthOfWideString(name());
-    size_t characterCount = pathNameLength + nameLength;
-
-    if (cont->isRoot()) {
-      // child of root
-      result = new wchar_t[characterCount + 1];
-      ASSERT("Valid heap pointer", result != 0);
-      copyWideString(result, cont->pathName(), pathNameLength + 1);
-      concatenateWideString(result, name(), nameLength);
-    } else {
-      // general case
-      result = new wchar_t[characterCount + 1 + 1];
-      ASSERT("Valid heap pointer", result != 0);
-      copyWideString(result, cont->pathName(), pathNameLength + 1);
-      concatenateWideString(result, rootName, 1);
-      concatenateWideString(result, name(), nameLength);
-    }
-  }
-
-  POSTCONDITION("Valid result", validWideString(result));
-  return result;
-
 }
