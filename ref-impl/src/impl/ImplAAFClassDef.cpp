@@ -105,14 +105,14 @@ ImplAAFClassDef::~ImplAAFClassDef ()
   if (AAFRESULT_FAILED (hr))
 	throw hr;
 
-  aafUInt32 i;
-  for (i = 0; i < numProps; i++)
+	OMStrongReferenceSetIterator<ImplAAFPropertyDef>propertyDefinitions(_Properties);
+	while(++propertyDefinitions)
 	{
-	  ImplAAFPropertyDef *pd = _Properties.setValueAt(0, i);
-	  if (pd)
+		ImplAAFPropertyDef *pProperty = propertyDefinitions.setValue(0);
+		if (pProperty)
 		{
-		  pd->ReleaseReference();
-		  pd = 0;
+		  pProperty->ReleaseReference();
+		  pProperty = 0;
 		}
 	}
 }
@@ -180,7 +180,12 @@ AAFRESULT STDMETHODCALLTYPE
   	return AAFRESULT_NOMEMORY;
 
   AAFRESULT hr;
-  hr = theEnum->SetEnumStrongProperty(this, &_Properties);
+  OMStrongReferenceSetIterator<ImplAAFPropertyDef>* iter = 
+	new OMStrongReferenceSetIterator<ImplAAFPropertyDef>(_Properties);
+  if(iter == 0)
+	hr = AAFRESULT_NOMEMORY;
+  else
+	hr = theEnum->SetIterator(this, iter);
   if (AAFRESULT_FAILED (hr))
 	{
 		theEnum->ReleaseReference();

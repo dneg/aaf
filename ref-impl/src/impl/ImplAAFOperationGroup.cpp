@@ -66,6 +66,7 @@
 
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
+#include "ImplEnumAAFParameters.h"
 
 #include <assert.h>
 #include <string.h>
@@ -80,6 +81,7 @@
 extern "C" const aafClassID_t CLSID_AAFSourceReference;
 extern "C" const aafClassID_t CLSID_AAFParameter;
 extern "C" const aafClassID_t CLSID_AAFSegment;
+extern "C" const aafClassID_t CLSID_EnumAAFParameters;
 
 
 const aafUID_t kNullID = {0};
@@ -112,11 +114,10 @@ ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 		  pSeg = 0;
 		}
 	}
-	// Release all of the mob slot pointers.
-	size_t size2 = _parameters.getSize();
-	for (size_t j = 0; j < size2; j++)
+	OMStrongReferenceSetIterator<ImplAAFParameter>parameters(_parameters);
+	while(++parameters)
 	{
-		ImplAAFParameter *pParm = _parameters.setValueAt(0, j);
+		ImplAAFParameter *pParm = parameters.setValue(0);
 		if (pParm)
 		{
 		  pParm->ReleaseReference();
@@ -311,7 +312,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if(pNumParameters == NULL)
 		return AAFRESULT_NULL_PARAM;
-	_parameters.getSize(numSlots);
+	numSlots = _parameters.count();
 	
 	*pNumParameters = numSlots;
 
@@ -425,6 +426,28 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationGroup::LookupParameter (aafArgIDType_t  argID,
                            ImplAAFParameter ** ppParameter)
 {
+#if 1
+	if (!ppParameter) return AAFRESULT_NULL_PARAM;
+
+	AAFRESULT result = AAFRESULT_SUCCESS;
+  // NOTE: The following type cast is temporary. It should be removed as soon
+	// as the OM has a declarative sytax to include the type
+	// of the key used in the set. (trr:2000-FEB-29)
+	if (_parameters.find((*reinterpret_cast<const OMObjectIdentification *>(&argID)),
+                             *ppParameter))
+	{
+		assert(NULL != *ppParameter);
+		(*ppParameter)->AcquireReference();
+	}
+	else
+	{
+	// no recognized class guid in dictionary
+		result = AAFRESULT_NO_MORE_OBJECTS;
+	}
+
+	return (result);
+
+#else
 	ImplAAFParameter	*parm = NULL;
 	ImplAAFParameterDef	*parmDef = NULL;
 	aafInt32			numParm, n;
@@ -472,6 +495,7 @@ AAFRESULT STDMETHODCALLTYPE
 	XEND
 
 	return AAFRESULT_SUCCESS;
+#endif
 }
 
 
@@ -480,10 +504,33 @@ AAFRESULT STDMETHODCALLTYPE
         (// @parm [out] enumerator across parameters
          ImplEnumAAFParameters ** ppEnum)
 {
-  if (! ppEnum)
-	return AAFRESULT_NULL_PARAM;
-
-  return AAFRESULT_NOT_IMPLEMENTED;
+	if (NULL == ppEnum)
+		return AAFRESULT_NULL_PARAM;
+	*ppEnum = 0;
+	
+	ImplEnumAAFParameters *theEnum = (ImplEnumAAFParameters *)CreateImpl (CLSID_EnumAAFParameters);
+	
+	XPROTECT()
+	{
+		OMStrongReferenceSetIterator<ImplAAFParameter>* iter = 
+			new OMStrongReferenceSetIterator<ImplAAFParameter>(_parameters);
+		if(iter == 0)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(theEnum->SetIterator(this, iter));
+		*ppEnum = theEnum;
+	}
+	XEXCEPT
+	{
+		if (theEnum)
+		  {
+			theEnum->ReleaseReference();
+			theEnum = 0;
+		  }
+		return(XCODE());
+	}
+	XEND;
+	
+	return(AAFRESULT_SUCCESS);
 }
 
 
