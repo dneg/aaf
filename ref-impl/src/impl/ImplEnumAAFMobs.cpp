@@ -87,7 +87,7 @@ AAFRESULT STDMETHODCALLTYPE
 //				aafString_t *name;
 				case kByClass:
 //				aafClassID_t objClass;	// shouldn't this be a pointer?
-				case kByDatakind:
+				case kByDataDef:
 //				aafUID_t datadef;	// shouldn't this be a pointer?
 				case kByMediaCrit:
 //				aafCriteriaType_t mediaCrit;
@@ -166,7 +166,7 @@ AAFRESULT STDMETHODCALLTYPE
 //			aafString_t *name;
 		case kByClass:
 //			aafClassID_t objClass;	// shouldn't this be a pointer?
-		case kByDatakind:
+		case kByDataDef:
 //			aafUID_t datadef;	// shouldn't this be a pointer?
 		case kByMediaCrit:
 //		aafCriteriaType_t mediaCrit;
