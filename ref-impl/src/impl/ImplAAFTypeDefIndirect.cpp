@@ -25,6 +25,10 @@
 *
 ************************************************************************/
 
+#ifndef __AAFTypes_h__
+#include "AAFTypes.h"
+#endif
+
 #ifndef __ImplAAFTypeDefIndirect_h__
 #include "ImplAAFTypeDefIndirect.h"
 #endif
@@ -91,7 +95,7 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 
 static void formatError(DWORD errorCode)
 {
-#if defined(_WIN32) || defined(WIN32)
+#if defined( OS_WINDOWS )
   char message[256];
 
   int status = FormatMessageA(
@@ -112,9 +116,11 @@ static void formatError(DWORD errorCode)
   } else {
     cerr << "Error code = " << hex << errorCode << dec << endl;
   }
+
 #else
   cerr << "Error code = " << hex << errorCode << dec << endl;
-#endif
+
+#endif  // OS_WINDOWS
 }
 
 static void checkResult(AAFRESULT resultCode)
