@@ -28,7 +28,7 @@
 #include "OMAssertions.h"
 #include "OMExceptions.h"
 
-static void check(HRESULT status);
+static void checkStatus(HRESULT status);
 
 OMMSSStoredStream::OMMSSStoredStream(IStream* stream)
 : _stream(stream)
@@ -52,7 +52,7 @@ void OMMSSStoredStream::read(void* data, size_t size) const
 
   unsigned long bytesRead;
   HRESULT result = _stream->Read(data, size, &bytesRead);
-  check(result);
+  checkStatus(result);
   ASSERT("Succeeded", SUCCEEDED(result));
 
   ASSERT("Successful read", bytesRead == size);
@@ -68,7 +68,7 @@ void OMMSSStoredStream::read(OMByte* data,
   PRECONDITION("Valid size", bytes > 0);
 
   HRESULT result = _stream->Read(data, bytes, &bytesRead);
-  check(result);
+  checkStatus(result);
   ASSERT("Succeeded", SUCCEEDED(result));
 }
 
@@ -81,7 +81,7 @@ void OMMSSStoredStream::write(void* data, size_t size)
 
   unsigned long bytesWritten;
   HRESULT resultCode = _stream->Write(data, size, &bytesWritten);
-  check(resultCode);
+  checkStatus(resultCode);
   ASSERT("Succeeded", SUCCEEDED(resultCode));
 
   ASSERT("Successful write", bytesWritten == size);
@@ -97,7 +97,7 @@ void OMMSSStoredStream::write(const OMByte* data,
   PRECONDITION("Valid size", bytes > 0);
 
   HRESULT resultCode = _stream->Write(data, bytes, &bytesWritten);
-  check(resultCode);
+  checkStatus(resultCode);
   ASSERT("Succeeded", SUCCEEDED(resultCode));
 }
 
@@ -108,7 +108,7 @@ OMUInt64 OMMSSStoredStream::size(void) const
 
   STATSTG statstg;
   HRESULT status = _stream->Stat(&statstg, STATFLAG_NONAME);
-  check(status);
+  checkStatus(status);
   ASSERT("Succeeded", SUCCEEDED(status));
 
   OMUInt64 result = toOMUInt64(statstg.cbSize);
@@ -121,7 +121,7 @@ void OMMSSStoredStream::setSize(const OMUInt64 newSize)
 
   ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
   HRESULT status = _stream->SetSize(newStreamSize);
-  check(status);
+  checkStatus(status);
   ASSERT("Succeeded", SUCCEEDED(status));
 }
 
@@ -134,7 +134,7 @@ OMUInt64 OMMSSStoredStream::position(void) const
   LARGE_INTEGER zero = {0, 0};
   ULARGE_INTEGER position;
   HRESULT status = _stream->Seek(zero, STREAM_SEEK_CUR, &position);
-  check(status);
+  checkStatus(status);
   ASSERT("Succeeded", SUCCEEDED(status));
 
   result = toOMUInt64(position);
@@ -151,7 +151,7 @@ void OMMSSStoredStream::setPosition(const OMUInt64 offset)
   LARGE_INTEGER position;
   memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
   HRESULT status = _stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
-  check(status);
+  checkStatus(status);
   ASSERT("Succeeded", SUCCEEDED(status));
 }
 
@@ -169,9 +169,9 @@ void OMMSSStoredStream::close(void)
   _stream = 0;
 }
 
-static void check(HRESULT status)
+static void checkStatus(HRESULT status)
 {
-  TRACE("check");
+  TRACE("checkStatus");
 
   if (FAILED(status)) {
     throw OMException(status);

@@ -73,7 +73,7 @@ static void convert(wchar_t* wcName, size_t length, const wchar_t* name);
 static void convert(char* cName, size_t length, const wchar_t* name);
 #endif
 
-static void check(HRESULT status);
+static void checkStatus(HRESULT status);
 
 #if defined(OM_DEBUG)
 void OMMSSStoredObject::incrementOpenStreamCount(void)
@@ -2079,7 +2079,7 @@ void OMMSSStoredObject::readFromStream(IStream* stream,
 
   unsigned long bytesRead;
   HRESULT status = stream->Read(data, size, &bytesRead);
-  check(status);
+  checkStatus(status);
   ASSERT("IStream::Read() succeeded", SUCCEEDED(status));
   ASSERT("Successful read", bytesRead == size);
 }
@@ -2102,7 +2102,7 @@ void OMMSSStoredObject::readFromStream(IStream* stream,
   PRECONDITION("Valid size", bytes > 0);
 
   HRESULT status = stream->Read(data, bytes, &bytesRead);
-  check(status);
+  checkStatus(status);
   ASSERT("IStream::Read() succeeded", SUCCEEDED(status));
 }
 
@@ -2120,7 +2120,7 @@ void OMMSSStoredObject::writeToStream(IStream* stream, void* data, size_t size)
 
   unsigned long bytesWritten;
   HRESULT status = stream->Write(data, size, &bytesWritten);
-  check(status);
+  checkStatus(status);
   ASSERT("IStream::Write() succeeded", SUCCEEDED(status));
   ASSERT("Successful write", bytesWritten == size);
 }
@@ -2143,7 +2143,7 @@ void OMMSSStoredObject::writeToStream(IStream* stream,
   PRECONDITION("Valid size", bytes > 0);
 
   HRESULT status = stream->Write(data, bytes, &bytesWritten);
-  check(status);
+  checkStatus(status);
   ASSERT("IStream::Write() succeeded", SUCCEEDED(status));
 }
 
@@ -2458,7 +2458,7 @@ OMUInt64 OMMSSStoredObject::streamSize(IStream* stream) const
 
   STATSTG statstg;
   HRESULT status = stream->Stat(&statstg, STATFLAG_NONAME);
-  check(status);
+  checkStatus(status);
   ASSERT("IStream::Stat() succeeded", SUCCEEDED(status));
   OMUInt64 result = toOMUInt64(statstg.cbSize);
   return result;
@@ -2473,7 +2473,7 @@ void OMMSSStoredObject::streamSetSize(IStream* stream, const OMUInt64 newSize)
 
   ULARGE_INTEGER newStreamSize = fromOMUInt64(newSize);
   HRESULT status = stream->SetSize(newStreamSize);
-  check(status);
+  checkStatus(status);
   ASSERT("IStream::SetSize() succeeded", SUCCEEDED(status));
 }
 
@@ -2493,7 +2493,7 @@ OMUInt64 OMMSSStoredObject::streamPosition(IStream* stream) const
   LARGE_INTEGER zero = {0, 0};
   ULARGE_INTEGER position;
   HRESULT status = stream->Seek(zero, STREAM_SEEK_CUR, &position);
-  check(status);
+  checkStatus(status);
   ASSERT("IStream::Seek() succeeded", SUCCEEDED(status));
   result = toOMUInt64(position);
   return result;
@@ -2517,7 +2517,7 @@ void OMMSSStoredObject::streamSetPosition(IStream* stream,
   LARGE_INTEGER position;
   memcpy(&position, &newPosition, sizeof(LARGE_INTEGER));
   HRESULT status = stream->Seek(position, STREAM_SEEK_SET, &oldPosition);
-  check(status);
+  checkStatus(status);
   ASSERT("IStream::Seek() succeeded", SUCCEEDED(status));
 }
 
@@ -2722,7 +2722,7 @@ OMMSSStoredObject* OMMSSStoredObject::openFile(const wchar_t* fileName,
     0,
     0,
     &storage);
-  check(status);
+  checkStatus(status);
   ASSERT("StgOpenStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_DEBUG)
   incrementOpenStorageCount();
@@ -2749,7 +2749,7 @@ OMMSSStoredObject* OMMSSStoredObject::createFile(const wchar_t* fileName)
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_FAILIFTHERE,
     0,
     &storage);
-  check(status);
+  checkStatus(status);
   ASSERT("StgCreateDocfile() succeeded", SUCCEEDED(status));
 #if defined(OM_DEBUG)
   incrementOpenStorageCount();
@@ -2788,7 +2788,7 @@ OMMSSStoredObject* OMMSSStoredObject::openFile(OMRawStorage* rawStorage,
     0,
     0,
     &storage);
-  check(status);
+  checkStatus(status);
   ASSERT("StgOpenStorageOnILockBytes() succeeded", SUCCEEDED(status));
 #if defined(OM_DEBUG)
   incrementOpenStorageCount();
@@ -2816,7 +2816,7 @@ OMMSSStoredObject* OMMSSStoredObject::createFile(OMRawStorage* rawStorage)
     STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE,
     0,
     &storage);
-  check(status);
+  checkStatus(status);
   ASSERT("StgCreateDocfileOnILockBytes() succeeded", SUCCEEDED(status));
 #if defined(OM_DEBUG)
   incrementOpenStorageCount();
@@ -3002,7 +3002,7 @@ IStream* OMMSSStoredObject::createStream(IStorage* storage,
     0,
     0,
     &stream);
-  check(status);
+  checkStatus(status);
   ASSERT("IStorage::CreateStream() succeeded", SUCCEEDED(status));
 #if defined(OM_DEBUG)
   incrementOpenStreamCount();
@@ -3035,7 +3035,7 @@ IStream* OMMSSStoredObject::openStream(IStorage* storage,
     mode,
     0,
     &stream);
-  check(status);
+  checkStatus(status);
   ASSERT("IStorage::OpenStream() succeeded", SUCCEEDED(status));
 #if defined(OM_DEBUG)
   incrementOpenStreamCount();
@@ -3101,7 +3101,7 @@ IStorage* OMMSSStoredObject::createStorage(IStorage* storage,
     0,
     0,
     &newStorage);
-  check(status);
+  checkStatus(status);
   ASSERT("IStorage::CreateStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_DEBUG)
   incrementOpenStorageCount();
@@ -3138,7 +3138,7 @@ IStorage* OMMSSStoredObject::openStorage(IStorage* storage,
     0,
     0,
     &newStorage);
-  check(status);
+  checkStatus(status);
   ASSERT("IStorage::OpenStorage() succeeded", SUCCEEDED(status));
 #if defined(OM_DEBUG)
   incrementOpenStorageCount();
@@ -3172,7 +3172,7 @@ void OMMSSStoredObject::setClass(IStorage* storage, const OMClassId& cid)
   GUID g;
   memcpy(&g, &cid, sizeof(GUID));
   HRESULT status = storage->SetClass(g);
-  check(status);
+  checkStatus(status);
   ASSERT("IStorage::SetClass() succeeded", SUCCEEDED(status));
 }
 
@@ -3183,7 +3183,7 @@ void OMMSSStoredObject::getClass(IStorage* storage, OMClassId& cid)
 
   STATSTG statstg;
   HRESULT status = storage->Stat(&statstg, STATFLAG_NONAME);
-  check(status);
+  checkStatus(status);
   ASSERT("IStorage::Stat() succeeded", SUCCEEDED(status));
   memcpy(&cid, &statstg.clsid, sizeof(OMClassId));
 }
@@ -3279,9 +3279,9 @@ static void convert(char* cName, size_t length, const wchar_t* name)
 
 #endif
 
-static void check(HRESULT status)
+static void checkStatus(HRESULT status)
 {
-  TRACE("check");
+  TRACE("checkStatus");
 
   if (FAILED(status)) {
     throw OMException(status);
