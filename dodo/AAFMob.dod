@@ -23,6 +23,7 @@ AD_HEAD
 AD_FORWARD_DECLARATION(AAFSegment)
 AD_FORWARD_DECLARATION(AAFMobSlot)
 AD_FORWARD_DECLARATION(AAFFile)
+AD_FORWARD_DECLARATION(AAFMedia)
 AD_FORWARD_DECLARATION(EnumAAFMobSlots)
 AD_FORWARD_DECLARATION(EnumAAFMobComments)
 
@@ -71,10 +72,6 @@ AD_METHOD1(GetNumSlots,
 [out], aafNumSlots_t *, numSlots, Number of slots,
 This method returns the number of slots contained by this mob.)
 
-// trr: does this method belong in the public AAF interfaces or is it part of an older omf api?
-AD_METHOD1(GetNumComments,
-[out], aafString_t	*, numComments, Number of comments,
-Iterates through the specified Mob to retrieve the next user\-defined comment.)
 
 AD_METHOD3(SetNewProps,
 [in], aafBool, isMasterMob, Whether or not this is a Master Mob,
@@ -122,8 +119,8 @@ This method returns false by default. This method must be overridden by
 
 AD_METHOD3(AppendNewSlot,
 [in], aafRational_t, editRate, Edit rate property value,
-[in\, ref], AAFSegment *, segment, Segment to append as slot component,
-[out], AAFMobSlot **, newSlot, Newly created slot,
+[in\, ref], AD_AAFTYPES\(AAFSegment\) *, segment, Segment to append as slot component,
+[out], AD_AAFTYPES\(AAFMobSlot\) **, newSlot, Newly created slot,
 This method creates a new mob slot with the given property
   // values\, and appends it to the input mob.  Since the Toolkit
   // attempts to enforce bottom up creation of mobs\, the slot segment
@@ -131,11 +128,11 @@ This method creates a new mob slot with the given property
 
 AD_METHOD6(AppendNewTrack,
 [in], aafRational_t, editRate, Edit rate property value,
-[in\, ref], AAFSegment *, segment, Segment to append as track component,
+[in\, ref], AD_AAFTYPES\(AAFSegment\) *, segment, Segment to append as track component,
 [in], aafPosition_t, origin, Track Origin,
 [in], aafTrackID_t, trackID, The Track ID,
 [in], aafString_t *, trackName, Track Name \(optional\),
-[out], AAFMobSlot **, newTrack, Newly created track,
+[out], AD_AAFTYPES\(AAFMobSlot\) **, newTrack, Newly created track,
 This method creates a new mob slot with the given property values and appends it to the input mob.)
 
 AD_METHOD1(GetAllMobSlots,
@@ -157,14 +154,14 @@ return the enumeration for all mob comments..)
 
 
 AD_METHOD3(OffsetToMobTimecode,
-[in\,ref], AAFSegment*, tcTrackID, Current track,
+[in\,ref], AD_AAFTYPES\(AAFSegment\) *, tcTrackID, Current track,
 [in\,ref], aafPosition_t *, offset, Offset into segment,
 [out], aafTimecode_t *, result, The resulting timecode,
 This method will all mob property information is a single call.)
 
 AD_METHOD2(FindTrackByTrackID,
 [in], aafTrackID_t, trackID, The requested track id,
-[out], AAFMobSlot **, destTrack, The requested track,
+[out], AD_AAFTYPES\(AAFMobSlot\) **, destTrack, The requested track,
 The method will find the mob slot for the given track id.)
 
 // trr: Does this method only work for AAFSourceMobs? If so we should probably move
@@ -195,7 +192,7 @@ AD_METHOD2(Copy,
 [in], aafString_t *, destMobName, Optional Input. The name to be assigned to the new copy of the Mob.
   // The destMobName argument is optional. Specify a NULL value if no desti\-
   // nation Mob name is desired.,
-[out], AAFMob **, destMob, Destination Mob,
+[out], AD_AAFTYPES\(AAFMob\) **, destMob, Destination Mob,
   // This function copies the specified Mob into a destination Mob in the same
   // OMF file. The new Mob is returned through the destMob parameter. The func\-
   // tion gives the destination Mob a new MobID and the name specified in the
@@ -214,9 +211,9 @@ AD_METHOD6(CopyExternal,
 [in], aafDepend_t, resolveDependencies, Whether to copy dependent mobs,
 [in], aafIncMedia_t, includeMedia, Whether to include media data,
 [in\,ref], aafString_t *, destMobName, Destination Mob Name,
-[in\,ref], AAFFile *, destFile, Destination File,
-[out], AAFObject **, destMedia, Destination Media Data,
-[out], AAFMob **, destMob, Destination Mob,
+[in\,ref], AD_AAFTYPES\(AAFFile\) *, destFile, Destination File,
+[out], AD_AAFTYPES\(AAFMedia\) **, destMedia, Destination Media Data,
+[out], AD_AAFTYPES\(AAFMob\) **, destMob, Destination Mob,
 Copies the specified Mob and optionally all dependent Mobs to an external
   // file\, creating a new MobID for the specified Mob but retaining the MobIDs for
   // the dependent Mobs.
@@ -236,8 +233,8 @@ Copies the specified Mob and optionally all dependent Mobs to an external
 AD_METHOD4(CloneExternal,
 [in], aafDepend_t, resolveDependencies, Whether to clone dependent mobs,
 [in], aafIncMedia_t, includeMedia, Whether to include media data,
-[in\,ref], AAFFile *, destFile, Destination AAF File,
-[out], AAFMob **, destMob, Destination Mob,
+[in\,ref], AD_AAFTYPES\(AAFFile\) *, destFile, Destination AAF File,
+[out], AD_AAFTYPES\(AAFMob\) **, destMob, Destination Mob,
 Clones the specified Source Mob\, and optionally all dependent Mobs\, to an
   // external file\, keeping the same MobID.
   // @commThis function clones the specified Source Mob in the source file into a destina\-
