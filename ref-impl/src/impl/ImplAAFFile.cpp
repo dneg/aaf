@@ -77,12 +77,11 @@ static const aafProductIdentification_t kNullIdent = { 0 };
 //
 static const aafUInt32 sCurrentAAFObjectModelVersion = 0;
 
-static const OMStoredObjectEncoding AAFMSSEncoding =
-    *reinterpret_cast<const OMStoredObjectEncoding*>(&aafFileKindAafSSBinary);
-static const OMStoredObjectEncoding AAFXMLEncoding =
-    *reinterpret_cast<const OMStoredObjectEncoding*>(&aafFileKindAafXmlText);
-static const OMStoredObjectEncoding AAFKLVEncoding =
-    *reinterpret_cast<const OMStoredObjectEncoding*>(&aafFileKindAafKlvBinary);
+#define ENCODING(x) *reinterpret_cast<const OMStoredObjectEncoding*>(&x)
+
+#define AAFMSSEncoding ENCODING(aafFileKindAafSSBinary)
+#define AAFXMLEncoding ENCODING(aafFileKindAafXmlText)
+#define AAFKLVEncoding ENCODING(aafFileKindAafKlvBinary)
 
 static const aafUID_t kNullFileKind = { 0 };
 
