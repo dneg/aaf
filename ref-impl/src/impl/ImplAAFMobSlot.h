@@ -29,10 +29,7 @@
 // aafUInt32,
 // AAFDataDef
 
-const int PID_MOBSLOT_NAME				= 0;
-const int PID_MOBSLOT_TRACKID			= 1;
-const int PID_MOBSLOT_PHYSICAL_TRACK	= 2;
-const int PID_MOBSLOT_SEGMENT			= 3;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFSegment;
 

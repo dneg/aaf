@@ -23,7 +23,7 @@
 
 #include "OMProperty.h"
 
-const int PID_NETWORKLOCATOR_URLSTRING          = 0;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFNetworkLocator : public ImplAAFLocator
 {

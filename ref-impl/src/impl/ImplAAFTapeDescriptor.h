@@ -24,14 +24,7 @@
 
 #include "OMProperty.h"
 
-// Persistent Property IDs
-
-const int PID_TAPEDESCRIPTOR_FORMFACTOR		= 1;
-const int PID_TAPEDESCRIPTOR_VIDEOSIGNAL	= 2;
-const int PID_TAPEDESCRIPTOR_TAPEFORMAT		= 3;
-const int PID_TAPEDESCRIPTOR_LENGTH			= 4;
-const int PID_TAPEDESCRIPTOR_MANUFACTURER	= 5;
-const int PID_TAPEDESCRIPTOR_MODEL			= 6;
+#include "AAFPropertyIDs.h"
 
 
 class ImplAAFTapeDescriptor : public ImplAAFEssenceDescriptor

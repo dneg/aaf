@@ -14,7 +14,7 @@
 
 #include "ImplAAFFileDescriptor.h"
 
-const int PID_WAVEDESCRIPTOR_SUMMARY	= 30;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFWAVEDescriptor : public ImplAAFFileDescriptor
 {

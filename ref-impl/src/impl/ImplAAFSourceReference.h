@@ -34,10 +34,7 @@
 #include "ImplAAFObject.h"
 #include "OMProperty.h"
 
-// Persistent Property IDs
-
-const int PID_SOURCEREFERENCE_SOURCEID		= 2;
-const int PID_SOURCEREFERENCE_SOURCEMOBSLOTID	= 3;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFSourceReference : public ImplAAFSegment
 {

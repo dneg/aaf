@@ -34,7 +34,7 @@ class ImplAAFSegment;
 
 #include "OMProperty.h"
 
-const int PID_SOURCEMOB_EDESC	= 5;
+#include "AAFPropertyIDs.h"
 
 const int FULL_LENGTH = -1;
 

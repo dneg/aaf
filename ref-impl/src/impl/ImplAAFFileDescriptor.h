@@ -21,10 +21,7 @@
 
 #include "OMProperty.h"
 
-const int PID_FILE_DESC_SAMPLERATE      = 1;
-const int PID_FILE_DESC_LENGTH		    = 2;
-const int PID_FILE_DESC_INCONTAINER     = 3;
-const int PID_FILE_DESC_CONTAINERFMT    = 4;
+#include "AAFPropertyIDs.h"
 
 class ImplAAFFileDescriptor : public ImplAAFEssenceDescriptor
 {
