@@ -43,6 +43,10 @@
 
 #include <assert.h>
 #include <string.h>
+#include <iostream.h>
+#if defined(_MAC) || defined(macintosh)
+#include <wstring.h>
+#endif
 
 #include "AAFUtils.h"
 #include "AAFDefUIDs.h"
@@ -68,20 +72,71 @@ extern "C" const char * AAFGetLibraryDirectory();
 extern "C" const char * AAFGetLibraryPath();
 
 
-// Dispose proc for values in pluginFiles table.
-inline void	ImplAAFPluginFileDisposeProc(void *valuePtr)
+// Comment base class for all table entry wrapper classes.
+struct AAFPluginEntry
+{
+  virtual ~AAFPluginEntry() {};
+};
+
+
+// Simple wrapper class for plugin files so that 
+class AAFPluginFileEntry : public AAFPluginEntry
+{
+public:
+  AAFPluginFileEntry(ImplAAFPluginFile *pPluginFile);
+  virtual ~AAFPluginFileEntry();
+
+  // member access operators (non-const and const)
+  ImplAAFPluginFile * GetPluginFile();
+
+private:
+  ImplAAFPluginFile *_pPluginFile;
+
+  // Hide the default constructor and copy constructors to prevent
+  // invalid copy operations.
+  AAFPluginFileEntry();
+  AAFPluginFileEntry(const AAFPluginFileEntry&);
+  AAFPluginFileEntry& operator =(const AAFPluginFileEntry&);
+};
+
+// Simple wrapper class for plugin factory so that 
+class AAFPluginFactoryEntry : public AAFPluginEntry
+{
+public:
+  AAFPluginFactoryEntry(IClassFactory *pPluginFactory);
+  virtual ~AAFPluginFactoryEntry();
+
+  // member access operators (non-const and const)
+  IClassFactory *GetPluginFactory();
+
+private:
+  IClassFactory *_pPluginFactory;
+
+  // Hide the default constructor and copy constructors to prevent
+  // invalid copy operations.
+  AAFPluginFactoryEntry();
+  AAFPluginFactoryEntry(const AAFPluginFactoryEntry&);
+  AAFPluginFactoryEntry& operator =(const AAFPluginFactoryEntry&);
+};
+
+
+
+
+// Dispose proc for values which are AAFPluginEntry objects. 
+static void	AAFPluginEntryDisposeProc(void * valuePtr)
 {
   if (valuePtr)
 	{
-		ImplAAFPluginFile *pPluginFile = (ImplAAFPluginFile *)valuePtr;
-		pPluginFile->ReleaseReference();
-		pPluginFile = 0;
+		AAFPluginEntry *pPluginEntry = static_cast<AAFPluginEntry *>(valuePtr);
+		delete pPluginEntry;
 	}
 }
 
 
+
 ImplAAFPluginManager::ImplAAFPluginManager () :
   _pluginFiles(0),
+  _pluginFactories(0),
   _plugins(0),
 	_codecDesc(0)
 {}
@@ -89,6 +144,12 @@ ImplAAFPluginManager::ImplAAFPluginManager () :
 
 ImplAAFPluginManager::~ImplAAFPluginManager ()
 {
+  
+  // Make sure that we have unregistered all of the plugins.
+  //
+  UnregisterAllPlugins();
+
+
 	// Cleanup the non-persistent data...
   if (_plugins)
   {
@@ -101,22 +162,20 @@ ImplAAFPluginManager::~ImplAAFPluginManager ()
 	  _codecDesc = 0;
   }
 
+
+  if (_pluginFactories)
+  {
+    // Release all of the registered class factories. We need to do this
+    // before we attempt to unload and release the pluginFiles (aka dlls)
+    // that may contain the code for the class factories and 
+    TableDisposeAll(_pluginFactories);
+	  _pluginFactories = 0;
+  }
+
   if (_pluginFiles)
   {
-		// We need to cleanup the elements in the list manually.
-		aafBool found = AAFFalse;
-		aafTableIterate_t iter = {0};
-	  AAFRESULT status = ::TableFirstEntry(_pluginFiles, &iter, &found);
-		while((AAFRESULT_SUCCESS == status) && found)
-		{
-			::ImplAAFPluginFileDisposeProc(iter.valuePtr);
-			iter.valuePtr = NULL;
-
-			::TableNextEntry(&iter,&found);
-		}
-
-
-	  TableDispose(_pluginFiles);
+		// Release all of the plugin files.
+    TableDisposeAll(_pluginFiles);
 	  _pluginFiles = 0;
   }
 }
@@ -168,56 +227,17 @@ typedef struct _AAFTestLibraryProcData
 
 AAFRDLIRESULT testLibraryProc(const char* name, char isDirectory, void * userData)
 {
+  AAFRESULT rc = AAFRESULT_SUCCESS;
 	AAFTestLibraryProcData *pData = (AAFTestLibraryProcData *)userData;
 	assert(pData && pData->plugins && pData->pluginFiles && pData->currentLibraryPath);
 
-
-
+  //
+  // If the current name is not a directory and not equal to the 
+  // path this dll (the reference implementation dll) then
+  // attempt to register the file and any contained plugins.
+  //
 	if (!isDirectory && 0 != strcmp(pData->currentLibraryPath, name))
-	{
-		AAFRESULT rc = AAFRESULT_SUCCESS;
-		ImplAAFPluginFile *pPluginFile = NULL;
-
-		rc = ImplAAFPluginFile::CreatePluginFile(name, &pPluginFile);
-		if (AAFRESULT_SUCCESS == rc)
-		{
-			ULONG classIDs = 0, index = 0;
-			CLSID classID;
-
-			classIDs = pPluginFile->GetClassCount();
-			for (index = 0; index < classIDs; ++index)
-			{
-				rc = pPluginFile->GetClassObjectID(index, &classID);
-				if (AAFRESULT_FAILED(rc))
-					break;
-
-				// Save the classID -> plugin file association.
-				rc = TableAddValuePtr(
-						pData->pluginFiles,
-						&classID,
-						sizeof(CLSID),
-						pPluginFile,
-						kAafTableDupError);
-				if (AAFRESULT_FAILED(rc))
-					break;
-
-				// We are saving a reference to the plugin file so bump its reference count.
-				pPluginFile->AcquireReference();
-
-				// Now attempt to register this class id for the current plugin file.
-				// HACK: Problem CAAFEssenceDataStream is NOT a plugin!
-				if (!IsEqualCLSID(CLSID_AAFEssenceDataStream, classID))
-				{
-					rc = (pData->plugins)->RegisterPlugin(classID);
-					if (AAFRESULT_FAILED(rc))
-						break;
-				}
-			}
-
-			pPluginFile->ReleaseReference();
-			pPluginFile = NULL;
-		}
-	}
+		rc = (pData->plugins)->RegisterPluginFile(name);
 
 	// Ignore error results and continue processing plugins...
 	return 0;
@@ -229,24 +249,17 @@ AAFRESULT ImplAAFPluginManager::Init(void)
 	XPROTECT()
 	{
 		CHECK(NewUIDTable(NULL, 20, &_pluginFiles));
-		CHECK(NewUIDTable(NULL, 20, &_plugins));
-		CHECK(NewUIDTable(NULL, 20, &_codecDesc));
+    CHECK(SetTableDispose(_pluginFiles, AAFPluginEntryDisposeProc));
+		CHECK(NewUIDTable(NULL, 40, &_pluginFactories));
+    CHECK(SetTableDispose(_pluginFactories, AAFPluginEntryDisposeProc));
+		CHECK(NewUIDTable(NULL, 40, &_plugins));
+		CHECK(NewUIDTable(NULL, 40, &_codecDesc));
 		
 		//
-		// Find all AAF plugin files and register them with 
+		// Find all the installed AAF plugin files and register them with 
 		// the reference implementation.
 		//		
-		const char* libraryDirectory = AAFGetLibraryDirectory();
-		assert(NULL != libraryDirectory);
-
-		// Setup common data needed by testLibraryProc callback.
-		AAFTestLibraryProcData testLibraryData;
-		testLibraryData.plugins = this;
-		testLibraryData.pluginFiles = _pluginFiles;
-		testLibraryData.currentLibraryPath = AAFGetLibraryPath();
-		assert(NULL != testLibraryData.currentLibraryPath);
-
-		CHECK(AAFFindLibrary(libraryDirectory, testLibraryProc, &testLibraryData));
+		//CHECK(RegisterSharedPlugins());
 	}
 	XEXCEPT
 	{
@@ -264,54 +277,131 @@ ImplAAFPluginManager *ImplAAFPluginManager::GetPluginManager()
 }
 
 
-AAFRESULT ImplAAFPluginManager::CreateInstance(REFCLSID rclsid, IUnknown* pUnkOuter, REFIID riid, void ** result)
+AAFRESULT ImplAAFPluginManager::CreateInstance(
+  REFCLSID rclsid, 
+  IUnknown* pUnkOuter, 
+  REFIID riid, 
+  void ** result)
 {
 	AAFRESULT rc = AAFRESULT_SUCCESS;
-	ImplAAFPluginFile *pPluginFile = (ImplAAFPluginFile *)::TableLookupPtr(_pluginFiles, (void *)&rclsid);
+  AAFPluginFactoryEntry *pPluginFactoryEntry = NULL;
+	IClassFactory *pFactory = NULL;
 
-	if (NULL == pPluginFile)
-		rc = AAFRESULT_CODEC_INVALID;
-	else
+
+	// The reference implementation must be "self-contained". We do
+	// not want any user supplied classes to be created and used
+	// instead on one our built-in classes.
+
+  // Check to see if the class factory has already been registered or cached.
+  pPluginFactoryEntry = static_cast<AAFPluginFactoryEntry *>(::TableLookupPtr(_pluginFactories, (void *)&rclsid));
+	if (pPluginFactoryEntry)
+    pFactory = pPluginFactoryEntry->GetPluginFactory();
+
+	//
+  // Use the registered plugin class factory to create an instance of
+  // of a plugin with the given interface pointer.
+  // 
+	if (NULL != pFactory)
 	{
-		// The reference implementation must be "self-contained". We do
-		// not want any user supplied classes to be created and used
-		// instead on one our built-in classes.
-		//
-		// The simplest change is to just simulate a call to 
-		// CoCreateInstance:
-		//
-		// This code is invoked within the current module so we
-		// should just be able to call the DllGetClassObject entry point
-		// instead of calling CoCreateInstance and searching the 
-		// registry.
-		IClassFactory *pFactory = NULL;
-		rc = pPluginFile->GetClassObject(rclsid, IID_IClassFactory, (void **)&pFactory);
-		if (SUCCEEDED(rc))
-		{
-			rc = pFactory->CreateInstance(pUnkOuter, riid, (void **)result);
-			pFactory->Release();
-		}
-	}
+    rc = pFactory->CreateInstance(pUnkOuter, riid, (void **)result);
+
+    pFactory->Release();
+    pFactory = NULL; 
+  }
+  else
+  { // The requested plugin could not be found!
+    rc = AAFRESULT_CODEC_INVALID;
+  }
 
 	return rc;
 }
 
 
-AAFRESULT ImplAAFPluginManager::GetPluginInstance(
-			aafUID_t		pluginID,
-			IAAFPlugin		**result)
+// Implemenent a visitor pattern for plugins with a given definition id.
+AAFRESULT ImplAAFPluginManager::ForEachPluginWithDefinitionDo(
+  aafUID_constref defID, 
+  AAFDOTOPLUGINWITHDEFINTIONPROC proc, 
+  void *refCon)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  int count = 0;
+
+  if (NULL == proc)
+    return AAFRESULT_NULL_PARAM;
+
+  if (NULL != _plugins)
+  {
+    aafTableIterate_t iter;
+    aafBool found = AAFFalse;
+   
+
+    result = ::TableFirstEntryMatching(_plugins, &iter, (void *)&defID, &found);
+    while (AAFRESULT_SUCCESS == result && found)
+    {
+      assert(NULL != iter.valuePtr);
+      REFCLSID clsid = *static_cast<const CLSID *>(iter.valuePtr);
+      ++count;
+
+      // Call the provided function for each plugin that has the given
+      // definition id.
+      result = proc ( defID, clsid, refCon);
+      if (AAFRESULT_SUCCESS != result)
+        break;
+
+      result = ::TableNextEntry(&iter, &found);
+    }
+  }
+
+  // Return a more meaningful result code.
+  if (0 == count && AAFRESULT_SUCCESS == result)
+    result = AAFRESULT_EXTENSION_NOT_FOUND;
+
+  return result;
+}
+
+
+bool ImplAAFPluginManager::FindPluginFromDefintion(
+  aafUID_constref	pluginID,
+  CLSID& clsid)
+{
+	aafBool		found = AAFFalse;
+
+  if (NULL != _plugins)
+	  TableUIDLookupBlock(_plugins, pluginID, sizeof(CLSID), &clsid, &found);
+
+  return (AAFTrue == found);
+}
+
+
+bool ImplAAFPluginManager::FindPluginFromEssenceDesc(
+  aafUID_constref	essenceDesc,
+  CLSID& clsid)
+{
+	aafBool		found = AAFFalse;
+
+  if (NULL != _codecDesc)
+	  TableUIDLookupBlock(_codecDesc, essenceDesc, sizeof(CLSID), &clsid, &found);
+
+  return (AAFTrue == found);
+}
+
+
+
+AAFRESULT ImplAAFPluginManager::CreateInstanceFromDefinition(
+			aafUID_constref		pluginID,
+			IUnknown* pUnkOuter,
+			REFIID riid,
+			void	**result)
 {
 	CLSID		codecCLSID;
-	aafBool		found;
 
 	XPROTECT()
 	{
-		TableUIDLookupBlock(_plugins, pluginID, sizeof(CLSID), &codecCLSID, &found);
-		if(!found)
+		if(!FindPluginFromDefintion(pluginID, codecCLSID))
 			return(AAFRESULT_CODEC_INVALID);
 		CHECK(CreateInstance(codecCLSID,
-			NULL, 
-			IID_IAAFPlugin, 
+			pUnkOuter, 
+			riid, 
 			(void **)result));
 	}
 	XEXCEPT
@@ -321,17 +411,25 @@ AAFRESULT ImplAAFPluginManager::GetPluginInstance(
 }
 
 
+
+AAFRESULT ImplAAFPluginManager::GetPluginInstance(
+			aafUID_t		pluginID,
+			IAAFPlugin		**result)
+{
+	return(CreateInstanceFromDefinition(pluginID, NULL, IID_IAAFPlugin, (void **)result));
+}
+
+
 AAFRESULT ImplAAFPluginManager::MakeCodecFromEssenceDesc(
 			aafUID_t		essenceDescriptor,	// Stored classID
 			IAAFEssenceCodec **codec)
 {
 	CLSID		codecCLSID;
-	aafBool		found;
+
 
 	XPROTECT()
 	{
-		TableUIDLookupBlock(_codecDesc, essenceDescriptor, sizeof(CLSID), &codecCLSID, &found);
-		if(!found)
+		if(!FindPluginFromEssenceDesc(essenceDescriptor, codecCLSID))
 			return(AAFRESULT_CODEC_INVALID);
 		CHECK(CreateInstance(codecCLSID,
                NULL, 
@@ -344,25 +442,314 @@ AAFRESULT ImplAAFPluginManager::MakeCodecFromEssenceDesc(
 	return(AAFRESULT_SUCCESS);
 }
 
+
+
+// Attempt to register all of the plugin files in the installation directory.
+AAFRESULT ImplAAFPluginManager::RegisterSharedPlugins(void)
+{
+  // The current impelementation uses the directory that contains
+  // the loaded and running AAF dll as the "installation directory".
+  // This may change in a future version to some other directory.
+	const char* libraryDirectory = AAFGetLibraryDirectory();
+	assert(NULL != libraryDirectory);
+
+  return RegisterPluginDirectory(libraryDirectory);
+}
+
+
+// Attempt to register all of the plugin files in the given directory.
+AAFRESULT ImplAAFPluginManager::RegisterPluginDirectory(const char *directoryName)
+{
+  if (NULL == directoryName)
+    return AAFRESULT_NULL_PARAM;
+
+	// Setup common data needed by testLibraryProc callback.
+	AAFTestLibraryProcData testLibraryData;
+	testLibraryData.plugins = this;
+	testLibraryData.pluginFiles = _pluginFiles;
+	testLibraryData.currentLibraryPath = AAFGetLibraryPath();
+	assert(NULL != testLibraryData.currentLibraryPath);
+
+  return AAFFindLibrary(directoryName, testLibraryProc, &testLibraryData);
+}
+
+// Utility to create an ascii character string from a wide character string.
+static char * NewStringFromAAFString(aafCharacter_constptr wName)
+{
+  char * name = NULL;
+  int wNameLength = wcslen(wName);
+  int nameLegth = (wNameLength * MB_CUR_MAX) + 1;
+  name = new char[nameLegth];
+  if (NULL != name)
+  {
+    size_t status = wcstombs(name, wName, wNameLength + 1);
+    if (status == (size_t)-1)
+    {
+      delete [] name;
+      name = NULL;
+    }
+    assert (status != (size_t)-1);
+  }
+
+  return name;
+}
+
+AAFRESULT ImplAAFPluginManager::RegisterPluginDirectory(aafCharacter_constptr wdirectoryName)
+{
+  AAFRESULT rc = AAFRESULT_SUCCESS;
+
+  if (NULL == wdirectoryName)
+    return AAFRESULT_NULL_PARAM;
+
+  char *directoryName = NewStringFromAAFString(wdirectoryName);
+  if (directoryName)
+  {
+    rc = RegisterPluginDirectory(directoryName);
+    delete [] directoryName;
+  }
+  else
+  {
+    rc = AAFRESULT_NOMEMORY;
+  }
+
+  return rc;
+}
+
+
+
+// Attempt to register all of the plugins in the given file.
+AAFRESULT ImplAAFPluginManager::RegisterPluginFile(const char *fileName)
+{
+	AAFRESULT rc = AAFRESULT_SUCCESS;
+  AAFPluginFileEntry *pPluginFileEntry = NULL;
+	ImplAAFPluginFile *pPluginFile = NULL;
+  IClassFactory *pFactory = NULL;
+
+  if (NULL == fileName)
+    return AAFRESULT_NULL_PARAM;
+
+
+
+  //
+  // Attempt to create a plugin file object to the given 
+  // fileName. If this fails then given file was not a valid
+  // dll or did not support all of the required exported
+  // functions.
+  //
+	rc = ImplAAFPluginFile::CreatePluginFile(fileName, &pPluginFile);
+	if (AAFRESULT_SUCCESS == rc)
+	{
+		ULONG classIDs = 0, index = 0;
+		CLSID classID;
+
+    //
+    // For each classID in the plugin file attempt to register
+    // the corresponding class factory.
+    //
+		classIDs = pPluginFile->GetClassCount();
+		for (index = 0; index < classIDs; ++index)
+		{
+			rc = pPluginFile->GetClassObjectID(index, &classID);
+			if (AAFRESULT_FAILED(rc))
+				break;
+
+      // Abort if the plugin has already been registered.
+      //
+      if (TableIncludesKey(_pluginFiles, (void *)&classID))
+      {
+        rc = AAFRESULT_PLUGIN_ALREADY_REGISTERED;
+        break;
+      }
+
+      // Test to see if class has been registered but not with
+      // the current plugin files. This would be possible if
+      // RegisterPluginFactory() had been called directly.
+      // Code with a unique CLSID should not be registered from
+      // more than one source so return an error.
+      //
+      if (TableIncludesKey(_pluginFactories, (void *)&classID))
+      {
+        rc = AAFRESULT_PLUGIN_ALREADY_REGISTERED;
+        break;
+      }
+
+      // Create the wrapper for the plugin file.
+      //
+      pPluginFileEntry = new AAFPluginFileEntry(pPluginFile);
+			if (NULL == pPluginFileEntry)
+      {
+        rc = AAFRESULT_NOMEMORY;
+				break;
+      }
+
+      // Get the associated class factory by calling the DllGetClassObject
+      // method in the plugin's dll.
+      //
+		  rc = pPluginFile->GetClassObject(classID, IID_IClassFactory, (void **)&pFactory);
+			if (AAFRESULT_FAILED(rc))
+      { // *** Need to output some sort of warning! ***
+				break;
+      }
+
+      // Attempt to register the class factory. This may fail.
+      //
+      rc = RegisterPluginFactory(classID, pFactory);
+      if (AAFRESULT_FAILED(rc))
+      { // *** Need to output some sort of warning! ***
+				break;
+      }
+      pFactory->Release();
+      pFactory = NULL;
+
+			// Save the classID -> plugin file association.
+      //
+			rc = TableAddValuePtr(
+            _pluginFiles,
+            &classID,
+            sizeof(CLSID),
+            pPluginFileEntry,
+            kAafTableDupError);
+			if (AAFRESULT_FAILED(rc))
+      { // *** Need to output some sort of warning! ***
+        if (AAFRESULT_TABLE_DUP_KEY == rc)
+          rc = AAFRESULT_PLUGIN_ALREADY_REGISTERED;
+				break;
+      }
+      pPluginFileEntry = NULL; // don't need this value.
+
+    } // for (index = 0; index < classIDs; ++index)
+
+
+    //
+    // Cleanup
+    //
+    if (pFactory)
+      pFactory->Release();
+
+    if (pPluginFileEntry)
+      delete pPluginFileEntry;
+
+		pPluginFile->ReleaseReference();
+		pPluginFile = NULL;
+	}
+
+  return rc;
+}
+
+
+AAFRESULT ImplAAFPluginManager::RegisterPluginFile(aafCharacter_constptr wfileName)
+{
+  AAFRESULT rc = AAFRESULT_SUCCESS;
+
+  if (NULL == wfileName)
+    return AAFRESULT_NULL_PARAM;
+
+  char *fileName = NewStringFromAAFString(wfileName);
+  if (fileName)
+  {
+    rc = RegisterPluginFile(fileName);
+    delete [] fileName;
+  }
+  else
+  {
+    rc = AAFRESULT_NOMEMORY;
+  }
+
+  return rc;
+}
+
+
+// Associate a factory object with a code class id.
+AAFRESULT ImplAAFPluginManager::RegisterPluginFactory(
+			REFCLSID rclsid,
+      IClassFactory *pFactory)
+{
+  AAFRESULT rc = AAFRESULT_SUCCESS;
+  AAFPluginFactoryEntry *pPluginFactoryEntry = NULL;
+  bool factoryInTable = false;
+
+
+  XPROTECT()
+  {
+    // Create a new factory entry.
+    pPluginFactoryEntry = new AAFPluginFactoryEntry(pFactory);
+    if (NULL == pPluginFactoryEntry)
+      RAISE(AAFRESULT_NOMEMORY);
+
+    // Cache/register the factory.
+		rc = TableAddValuePtr(
+				_pluginFactories,
+				(void *)(&rclsid), // key
+				sizeof(CLSID), // keyLen
+				pPluginFactoryEntry, // value
+				kAafTableDupError);
+    if (AAFRESULT_TABLE_DUP_KEY == rc)
+      rc = AAFRESULT_PLUGIN_ALREADY_REGISTERED;
+    CHECK(rc);
+
+    // The entry will be cleaned up with the table.
+    factoryInTable = true;
+    pPluginFactoryEntry = NULL;
+
+    // Attempt to register this plugin.
+    CHECK(RegisterPlugin(rclsid));
+  }
+  XEXCEPT
+  {
+    // If we failed then we need to remove the factory from our table.
+    if (factoryInTable)
+      TableRemove(_pluginFactories, (void *)&rclsid);
+    if (pPluginFactoryEntry)
+      delete pPluginFactoryEntry;
+  }
+  XEND
+
+  return AAFRESULT_SUCCESS;
+}
+
+
+
 AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 {
 	IAAFPlugin	*plugin			= NULL;
 	IAAFEssenceCodec	*codec	= NULL;
 	aafUID_t	uid;
+	aafInt32 defIndex, defCount;
+
+
+  // Now attempt to register this class id for the current plugin file.
+  // HACK: Problem CAAFEssenceDataStream is NOT a plugin! This class
+  // should be INSIDE the reference implementation not in an external
+  // plugin!
+	if (IsEqualCLSID(CLSID_AAFEssenceDataStream, pluginClass))
+    return AAFRESULT_SUCCESS;
+
 
 	XPROTECT()
 	{
+    // Attempt to create the plugin using the registered plugin factory.
+    // This may fail.
 		CHECK(CreateInstance(pluginClass,
                NULL, 
                IID_IAAFPlugin, 
                (void **)&plugin));
-		CHECK(plugin->GetIndexedDefinitionID(/*!!!*/0, &uid));
-		CHECK(TableAddUIDBlock(
-				_plugins,
-				uid,
-				&pluginClass,
-				sizeof(CLSID),
-				kAafTableDupError));
+
+    //
+    // NOTE: This version supports a multiple plugins per definition (id).
+    //
+    CHECK(plugin->GetNumDefinitions (&defCount));
+    for(defIndex = 0; defIndex < defCount; ++defIndex)
+    {
+      CHECK(plugin->GetIndexedDefinitionID(defIndex, &uid));
+      CHECK(TableAddUIDBlock(
+            _plugins,
+            uid,
+            &pluginClass,
+            sizeof(CLSID),
+            kAafTableDupAddDup));
+    }
+
+
 		if(plugin->QueryInterface(IID_IAAFEssenceCodec, (void **)&codec) == AAFRESULT_SUCCESS)
 		{
 			CHECK(codec->GetEssenceDescriptorID(&uid));
@@ -392,6 +779,44 @@ AAFRESULT ImplAAFPluginManager::RegisterPlugin(CLSID pluginClass)
 	return AAFRESULT_SUCCESS;
 
 }
+
+
+// Attempt to unregister all plugins. This may fail if any plugins
+// are still loaded. This method should only be called after all
+// files have been closed, all client created plugins have been
+// released but before AAFUnload() has been called.
+AAFRESULT ImplAAFPluginManager::UnregisterAllPlugins(void)
+{
+  if (_plugins)
+  { // Clear out the items in the table that maps definitions to plugins.
+    //
+	  TableDisposeItems(_plugins);
+  }
+  if (_codecDesc)
+  { // Clear out the items in the table that maps codec descriptors to plugins.
+    //
+	  TableDisposeItems(_codecDesc);
+  }
+
+
+  if (_pluginFactories)
+  { // Release all of the registered class factories. We need to do this
+    // before we attempt to unload and release the pluginFiles (aka dlls)
+    // that may contain the code for the class factories and 
+    //
+    TableDisposeItems(_pluginFactories);
+  }
+
+  if (_pluginFiles)
+  { // Release all of the plugin files.
+    //
+    TableDisposeItems(_pluginFiles);
+  }
+
+	return AAFRESULT_SUCCESS;
+}
+
+
 
 // Internal to the toolkit functions
 AAFRESULT
@@ -482,3 +907,64 @@ AAFRESULT
 
 	return AAFRESULT_SUCCESS;
 }
+
+
+
+AAFPluginFileEntry::AAFPluginFileEntry(ImplAAFPluginFile *pPluginFile) :
+  _pPluginFile(pPluginFile)
+{
+  if (_pPluginFile)
+    _pPluginFile->AcquireReference();
+}
+
+AAFPluginFileEntry::~AAFPluginFileEntry()
+{
+  if (_pPluginFile)
+  {
+#ifdef NDEBUG // symbol for ansi assert
+    // If we are about to 
+    if (1 == _pPluginFile->ReferenceCount() && S_OK != _pPluginFile->CanUnloadNow())
+    {
+      cerr << "WARNING: Unloading a plugin dll when the CanUnloadNow()\n"
+              "callback has failed. This may not be an error if the dll\n"
+              "was loaded outside of the AAF Plugin Manager.\n";
+    }
+#endif
+    _pPluginFile->ReleaseReference();
+    _pPluginFile = NULL;
+  }
+}
+
+// member access operators (non-const and const)
+ImplAAFPluginFile * AAFPluginFileEntry::GetPluginFile()
+{
+  assert(_pPluginFile);
+  _pPluginFile->AcquireReference();
+  return _pPluginFile;
+}
+
+
+AAFPluginFactoryEntry::AAFPluginFactoryEntry(IClassFactory *pPluginFactory) :
+  _pPluginFactory(pPluginFactory)
+{
+  if (_pPluginFactory)
+    _pPluginFactory->AddRef();
+}
+
+AAFPluginFactoryEntry::~AAFPluginFactoryEntry()
+{
+  if (_pPluginFactory)
+  {
+    _pPluginFactory->Release();
+    _pPluginFactory = NULL;
+  }
+}
+
+// member access operators (non-const and const)
+IClassFactory *AAFPluginFactoryEntry::GetPluginFactory()
+{
+  assert(_pPluginFactory);
+  _pPluginFactory->AddRef();
+  return _pPluginFactory;
+}
+
