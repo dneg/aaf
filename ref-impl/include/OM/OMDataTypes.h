@@ -113,6 +113,17 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
+#elif defined(OM_COMPILER_MWERKS_PPC_MACOSX)
+typedef signed char            OMInt8;
+typedef short int              OMInt16;
+typedef long int               OMInt32;
+typedef long long int          OMInt64;
+
+typedef unsigned char          OMUInt8;
+typedef unsigned short int     OMUInt16;
+typedef unsigned long int      OMUInt32;
+typedef unsigned long long int OMUInt64;
+
 #elif defined(OM_COMPILER_GCC_SPARC_SUNOS)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;

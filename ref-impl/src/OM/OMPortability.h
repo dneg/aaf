@@ -53,6 +53,9 @@
 #elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__)
 #define OM_COMPILER_GCC_PPC_MACOSX
 #define OM_OS_MACOSX
+#elif defined(__MWERKS__) && defined(__ppc__) && defined(__APPLE__)
+#define OM_COMPILER_MWERKS_PPC_MACOSX
+#define OM_OS_MACOSX
 #elif defined(__GNUC__) && defined(__sparc__) && defined(__sun__)
 #define OM_COMPILER_GCC_SPARC_SUNOS
 #define OM_OS_UNIX
