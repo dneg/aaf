@@ -8,11 +8,14 @@
 #include <stddef.h>
 
 const int TID_DATA                           = 0;
-const int TID_STRONG_OBJECT_REFERENCE        = 1;
-const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 2;
-const int TID_WEAK_OBJECT_REFERENCE          = 3;
-const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 5;
-const int TID_DATA_STREAM                    = 4;
+const int TID_DATA_STREAM                    = 1;
+const int TID_STRONG_OBJECT_REFERENCE        = 2;
+const int TID_STRONG_OBJECT_REFERENCE_VECTOR = 3;
+const int TID_STRONG_OBJECT_REFERENCE_SET    = 4;
+const int TID_WEAK_OBJECT_REFERENCE          = 5;
+const int TID_WEAK_OBJECT_REFERENCE_VECTOR   = 6;
+const int TID_WEAK_OBJECT_REFERENCE_SET      = 7;
+
 
 class OMStoredObject;
 class OMStorable;
