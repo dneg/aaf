@@ -1002,16 +1002,10 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 												0,
 												loadMode,
 												aafFileEncoding,
+
 												_metafactory);
-
-			  // Make sure properties that exist in builtin class
-			  // definitions but not the file's class definition,
-			  // are merged to the file's class definition.
-			  ImplAAFMetaDictionary* d = dynamic_cast<ImplAAFMetaDictionary*>(_metafactory);
-			  assert(d);
-			  checkResult( d->MergeBuiltinClassDefs() );
-
 			}
+
 		} // endif new/existing
 	  else
 		{
