@@ -815,6 +815,8 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_AUID,
   & kAAFTypeID_Boolean,
   & kAAFTypeID_Character,
+  & kAAFTypeID_DateStruct,
+  & kAAFTypeID_TimeStruct,
   & kAAFTypeID_Int16,
   & kAAFTypeID_Int32,
   & kAAFTypeID_Int64,
