@@ -28,9 +28,6 @@
 #include "OMAssertions.h"
 #include "OMStoredObject.h"
 #include "OMStoredObjectFactory.h"
-#include "OMMSSStoredObject.h"
-#include "OMXMLStoredObject.h"
-#include "OMKLVStoredObject.h"
 #include "OMClassFactory.h"
 #include "OMPropertyTable.h"
 #include "OMUtilities.h"
@@ -78,20 +75,21 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
-  OMFileSignature signature;
-  bool result = OMMSSStoredObject::isRecognized(fileName, signature);
-  ASSERT("Recognized file", result);
-  OMStoredObject* store = OMMSSStoredObject::openRead(fileName);
+  OMStoredObjectEncoding encoding;
+  bool result = isRecognized(fileName, encoding);
+  ASSERT("Recognized file", result); // tjb - error
+  OMStoredObjectFactory* f = findFactory(encoding);
+  ASSERT("Recognized file encoding", f != 0);
+  OMStoredObject* store = f->openRead(fileName);
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
-                               signature,
+                               encoding,
                                readOnlyMode,
                                store,
                                factory,
                                dictionary,
                                loadMode);
   ASSERT("Valid heap pointer", newFile != 0);
-  POSTCONDITION("Object Manager file", newFile->isOMFile());
   POSTCONDITION("File is open", newFile->isOpen());
   return newFile;
 }
@@ -116,20 +114,21 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
-  OMFileSignature signature;
-  bool result = OMMSSStoredObject::isRecognized(fileName, signature);
-  ASSERT("Recognized file", result);
-  OMStoredObject* store = OMMSSStoredObject::openModify(fileName);
+  OMStoredObjectEncoding encoding;
+  bool result = isRecognized(fileName, encoding);
+  ASSERT("Recognized file", result); // tjb - error
+  OMStoredObjectFactory* f = findFactory(encoding);
+  ASSERT("Recognized file encoding", f != 0);
+  OMStoredObject* store = f->openModify(fileName);
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
-                               signature,
+                               encoding,
                                modifyMode,
                                store,
                                factory,
                                dictionary,
                                loadMode);
   ASSERT("Valid heap pointer", newFile != 0);
-  POSTCONDITION("Object Manager file", newFile->isOMFile());
   POSTCONDITION("File is open", newFile->isOpen());
   return newFile;
 }
@@ -142,15 +141,18 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   //        created file is given by <p clientRoot>.
   //   @parm The name of the file to create.
   //   @parm The factory to use for creating objects.
+  //   @parm TBS
   //   @parm The byte order to use for the newly created file.
   //   @parm The client root <c OMStorable> in the newly created file.
+  //   @parm TBS
+  //   @parm TBS
   //   @rdesc The newly created <c OMFile>.
 OMFile* OMFile::openNewModify(const wchar_t* fileName,
                               const OMClassFactory* factory,
                               void* clientOnRestoreContext,
                               const OMByteOrder byteOrder,
                               OMStorable* clientRoot,
-                              const OMFileSignature& signature,
+                              const OMStoredObjectEncoding& encoding,
                               OMDictionary* dictionary)
 {
   TRACE("OMFile::openNewModify");
@@ -160,16 +162,17 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid client root", clientRoot != 0);
-  PRECONDITION("Valid signature", validSignature(signature));
   PRECONDITION("Valid dictionary ", dictionary != 0);
 
-  OMStoredObject* store = OMMSSStoredObject::createModify(fileName, byteOrder);
+  OMStoredObjectFactory* f = findFactory(encoding);
+  ASSERT("Recognized file encoding", f != 0);
+  OMStoredObject* store = f->createModify(fileName, byteOrder);
   OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
   ASSERT("Valid heap pointer", root != 0);
 
   OMFile* newFile = new OMFile(fileName,
                                clientOnRestoreContext,
-                               signature,
+                               encoding,
                                modifyMode,
                                store,
                                factory,
@@ -180,44 +183,22 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   return newFile;
 }
 
-  // @mfunc Is the given <c OMRawStorage> compatible with the given file
-  //        access mode and signature ? Can a file of the encoding
-  //        specified by <p signature> be created successfully on
-  //        <p rawStorage> and then accessed successfully in the mode
-  //        specified by <p accessMode> ?
-  //   @parm The <c OMRawStorage> on which the file is to be created.
-  //   @parm TBS
-  //   @parm TBS
-  //   @rdesc TBS
-bool OMFile::compatibleRawStorage(const OMRawStorage* rawStorage,
-                                  const OMAccessMode accessMode,
-                                  const OMFileSignature& signature)
+  // @mfunc Can a file of the encoding specified by <p encoding> be
+  //        created successfully on an <c OMRawStorage> and
+  //        accessed successfully in the mode specified by <p accessMode> ?
+  //   @parm The <t OMAccessMode> 
+  //   @parm The <t OMStoredObjectEncoding>
+  //   @rdesc True if <p accessMode> and <p encoding> are compatible,
+  //          false otherwise.
+bool OMFile::compatibleRawStorage(const OMAccessMode accessMode,
+                                  const OMStoredObjectEncoding& encoding)
 {
   TRACE("OMFile::compatibleRawStorage");
-  PRECONDITION("Consistent raw storage access mode",
-                IMPLIES(accessMode == readOnlyMode, rawStorage->isReadable()));
-  PRECONDITION("Consistent raw storage access mode",
-               IMPLIES(accessMode == writeOnlyMode, rawStorage->isWritable()));
-  PRECONDITION("Consistent raw storage access mode",
-                  IMPLIES(accessMode == modifyMode, rawStorage->isReadable() &&
-                                                    rawStorage->isWritable()));
 
-  // Most combinations of raw storage access mode and file encoding
-  // (denoted by the signature) are valid.
-  //
-  bool result = true;
-
-  // Write only Microsoft Structured Storage files are allowed
-  // only on a read/write OMRawStorage.
-  //
-  OMFileEncoding encoding;
-  bool recognized = isRecognized(signature, encoding);
-  ASSERT("Recognized signature", recognized);
-  if ((encoding == MSSBinaryEncoding) &&
-      (accessMode == writeOnlyMode) &&
-      (!rawStorage->isReadable())) {
-    result = false;
-  }
+  bool result = false;
+  OMStoredObjectFactory* factory = findFactory(encoding);
+  ASSERT("Recognized file encoding", factory != 0);
+  result = factory->compatibleRawStorage(accessMode);
   return result;
 }
 
@@ -230,7 +211,6 @@ OMFile* OMFile::openExistingRead(OMRawStorage* rawStorage,
   TRACE("OMFile::openExistingRead");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Compatible raw storage access mode", rawStorage->isReadable());
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
@@ -253,8 +233,6 @@ OMFile* OMFile::openExistingModify(OMRawStorage* rawStorage,
   TRACE("OMFile::openExistingModify");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Compatible raw storage access mode",
-                         rawStorage->isReadable() && rawStorage->isWritable());
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid dictionary", dictionary != 0);
 
@@ -273,20 +251,17 @@ OMFile* OMFile::openNewWrite(OMRawStorage* rawStorage,
                              void* clientOnRestoreContext,
                              const OMByteOrder byteOrder,
                              OMStorable* clientRoot,
-                             const OMFileSignature& signature,
+                             const OMStoredObjectEncoding& encoding,
                              OMDictionary* dictionary)
 {
   TRACE("OMFile::openNewWrite");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Compatible raw storage access mode", rawStorage->isWritable());
-  PRECONDITION("Compatible raw storage",
-                   compatibleRawStorage(rawStorage, writeOnlyMode, signature));
+  PRECONDITION("Creatable", compatibleRawStorage(writeOnlyMode, encoding));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid client root", clientRoot != 0);
-  PRECONDITION("Valid signature", validSignature(signature));
   PRECONDITION("Valid dictionary ", dictionary != 0);
 
   OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
@@ -294,7 +269,7 @@ OMFile* OMFile::openNewWrite(OMRawStorage* rawStorage,
 
   OMFile* newFile = new OMFile(rawStorage,
                                clientOnRestoreContext,
-                               signature,
+                               encoding,
                                writeOnlyMode,
                                factory,
                                dictionary,
@@ -309,21 +284,17 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
                               void* clientOnRestoreContext,
                               const OMByteOrder byteOrder,
                               OMStorable* clientRoot,
-                              const OMFileSignature& signature,
+                              const OMStoredObjectEncoding& encoding,
                               OMDictionary* dictionary)
 {
   TRACE("OMFile::openNewModify");
 
   PRECONDITION("Valid raw storage", rawStorage != 0);
-  PRECONDITION("Compatible raw storage access mode",
-                         rawStorage->isReadable() && rawStorage->isWritable());
-  PRECONDITION("Compatible raw storage",
-                   compatibleRawStorage(rawStorage, modifyMode, signature));
+  PRECONDITION("Creatable", compatibleRawStorage(modifyMode, encoding));
   PRECONDITION("Valid class factory", factory != 0);
   PRECONDITION("Valid byte order",
                     ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid client root", clientRoot != 0);
-  PRECONDITION("Valid signature", validSignature(signature));
   PRECONDITION("Valid dictionary ", dictionary != 0);
 
   OMRootStorable* root = new OMRootStorable(clientRoot, dictionary);
@@ -331,7 +302,7 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
 
   OMFile* newFile = new OMFile(rawStorage,
                                clientOnRestoreContext,
-                               signature,
+                               encoding,
                                modifyMode,
                                factory,
                                dictionary,
@@ -341,26 +312,8 @@ OMFile* OMFile::openNewModify(OMRawStorage* rawStorage,
   return newFile;
 }
 
-   // @mfunc Is <p signature> a valid signature for an <c OMFile> ?
-   //   @parm The signature to check.
-   //   @rdesc True if <p signature> is a valid signature for an
-   //          <c OMFile>, false otherwise.
-bool OMFile::validSignature(const OMFileSignature& signature)
-{
-  TRACE("OMFile::validSignature");
-
-  bool result;
-
-  if (signature.Data3 == 0x4D4F) { // "OM"
-    result = true;
-  } else {
-    result = false;
-  }
-  return result;
-}
-
   // @mfunc Is the file named <p fileName> a recognized file ?
-  //        If so, the result is true, the encoding is returned
+  //        If so, the result is true, and the encoding is returned
   //        in <p encoding>.
   //   @parm The name of the file to check.
   //   @parm If recognized, the file encoding.
@@ -385,66 +338,28 @@ bool OMFile::isRecognized(const wchar_t* fileName,
 }
 
   // @mfunc Does <p rawStorage> contain a recognized file ?
-  //        If so, the result is true, and the signature is returned
-  //        in <p signature> and the encoding in <p encoding>.
+  //        If so, the result is true, and the encoding is returned
+  //        in <p encoding>.
   //   @parm The <c OMRawStorage> to check.
-  //   @parm If recognized, the file signature.
   //   @parm If recognized, the file encoding.
   //   @rdesc True if the <c OMRawStorage> contains a recognized
   //          file, false otherwise.
 bool OMFile::isRecognized(OMRawStorage* rawStorage,
-                          OMFileSignature& signature,
-                          OMFileEncoding& encoding)
+                          OMStoredObjectEncoding& encoding)
 {
   TRACE("OMFile::isRecognized");
   bool result = false;
 
-  if (OMMSSStoredObject::isRecognized(rawStorage, signature)) {
-    result = true;
-    encoding = MSSBinaryEncoding;
-  } else if (OMKLVStoredObject::isRecognized(rawStorage, signature)) {
-    result = true;
-    encoding = KLVBinaryEncoding;
-  } else if (OMXMLStoredObject::isRecognized(rawStorage, signature)) {
-    result = true;
-    encoding = XMLTextEncoding;
-  } else {
-    result = false;
-  }
-  POSTCONDITION("Valid encoding", IMPLIES(result,
-                                          (encoding == MSSBinaryEncoding) ||
-                                          (encoding == KLVBinaryEncoding) ||
-                                          (encoding == XMLTextEncoding)));
-  return result;
-}
+  OMSetIterator<OMStoredObjectEncoding,
+                OMStoredObjectFactory*> iterator(_factory, OMBefore);
 
-  // @mfunc Is <p signature> recognized ?
-  //        If so, the result is true, and the encoding is
-  //        returned in <p encoding>.
-  //   @parm If recognized, the encoding.
-  //   @rdesc True if the signature is recognized, false otherwise.
-bool OMFile::isRecognized(const OMFileSignature& signature,
-                          OMFileEncoding& encoding)
-{
-  TRACE("OMFile::isRecognized");
-  bool result = false;
-
-  if (OMMSSStoredObject::isRecognized(signature)) {
-    result = true;
-    encoding = MSSBinaryEncoding;
-  } else if (OMKLVStoredObject::isRecognized(signature)) {
-    result = true;
-    encoding = KLVBinaryEncoding;
-  } else if (OMXMLStoredObject::isRecognized(signature)) {
-    result = true;
-    encoding = XMLTextEncoding;
-  } else {
-    result = false;
+  while (++iterator) {
+    if (iterator.value()->isRecognized(rawStorage)) {
+      result = true;
+      encoding = iterator.key();
+      break;
+    }
   }
-  POSTCONDITION("Valid encoding", IMPLIES(result,
-                                          (encoding == MSSBinaryEncoding) ||
-                                          (encoding == KLVBinaryEncoding) ||
-                                          (encoding == XMLTextEncoding)));
   return result;
 }
 
@@ -593,7 +508,6 @@ void OMFile::open(void)
     }
     ASSERT("No root object", _root == 0);
     _root = restoreRoot();
-    ASSERT("Object Manager file", isOMFile());
   }
 
   _isOpen = true;
@@ -611,6 +525,21 @@ void OMFile::close(void)
   PRECONDITION("Valid root", _root != 0);
 
   _root->close();
+  _rootStore->close();
+
+  if (isWritable()) {
+    if (isValid()) {
+      OMStoredObjectFactory* factory = findFactory(_encoding);
+      ASSERT("Recognized file encoding", factory != 0);
+      OMRawStorage* store = rawStorage();
+      if (store != 0) {
+        factory->close(store);
+      } else {
+        const wchar_t* name = fileName();
+        factory->close(name);
+      }
+    }
+  }
 
   // TBS - tjb delete _rootStore; _rootStore = 0;
 
@@ -748,24 +677,6 @@ bool OMFile::isWritable(void) const
   return result;
 }
 
-  // @mfunc Is this file recognized by the Object Manager ?
-  //   @rdesc True if this file is recognized by the Object Manager,
-  //          false otherwise.
-  //   @this const
-bool OMFile::isOMFile(void) const
-{
-  TRACE("OMFile::isOMFile");
-
-  bool result;
-
-  if (validSignature(_signature)) {
-    result = true;
-  } else {
-    result = false;
-  }
-  return result;
-}
-
   // @mfunc The name of this <c OMFile>.
   //   @rdesc The name of this <c OMFile>.
 const wchar_t* OMFile::fileName(void) const
@@ -773,19 +684,10 @@ const wchar_t* OMFile::fileName(void) const
   return _fileName;
 }
 
-  // @mfunc The signature of this <c OMFile>.
-  //   @rdesc The signature of this <c OMFile>.
-OMFileSignature OMFile::signature(void) const
-{
-  return _signature;
-}
-
   // @mfunc The encoding of this <c OMFile>.
-  //   @rdesc The encoding of the <c OMFile>.
-OMFile::OMFileEncoding OMFile::encoding(void) const
+  //   @rdesc The encoding of this <c OMFile>.
+OMStoredObjectEncoding OMFile::encoding(void) const
 {
-  TRACE("OMFile::encoding");
-
   return _encoding;
 }
 
@@ -970,7 +872,7 @@ void* OMFile::clientOnRestoreContext(void)
   //   @parm The <e OMFile::OMLoadMode> for this <c OMFile>.
 OMFile::OMFile(const wchar_t* fileName,
                void* clientOnRestoreContext,
-               OMFileSignature signature,
+               OMStoredObjectEncoding encoding,
                const OMAccessMode mode,
                OMStoredObject* store,
                const OMClassFactory* factory,
@@ -983,10 +885,9 @@ OMFile::OMFile(const wchar_t* fileName,
   _mode(mode),
   _loadMode(loadMode),
   _fileName(0),
-  _signature(signature),
+  _encoding(encoding),
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
-  _encoding(MSSBinaryEncoding),
   _rawStorage(0),
   _isOpen(false),
   _isClosed(false),
@@ -1010,7 +911,7 @@ OMFile::OMFile(const wchar_t* fileName,
   // @mfunc Constructor. Create an <c OMFile> object representing
   //        a new named external file.
   //   @parm The name of this <c OMFile>.
-  //   @parm The signature of this <c OMFile>.
+  //   @parm The encoding of this <c OMFile>.
   //   @parm The access mode of this <c OMFile>.
   //   @parm The <c OMStoredObject> in which to store the root
   //         <c OMStorable> object.
@@ -1019,7 +920,7 @@ OMFile::OMFile(const wchar_t* fileName,
   //   @parm The root <c OMStorable> object to save in this file.
 OMFile::OMFile(const wchar_t* fileName,
                void* clientOnRestoreContext,
-               OMFileSignature signature,
+               OMStoredObjectEncoding encoding,
                const OMAccessMode mode,
                OMStoredObject* store,
                const OMClassFactory* factory,
@@ -1032,10 +933,9 @@ OMFile::OMFile(const wchar_t* fileName,
   _mode(mode),
   _loadMode(lazyLoad),
   _fileName(0),
-  _signature(signature),
+  _encoding(encoding),
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
-  _encoding(MSSBinaryEncoding),
   _rawStorage(0),
   _isOpen(false),
   _isClosed(false),
@@ -1072,10 +972,9 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   _mode(mode),
   _loadMode(loadMode),
   _fileName(0),
-  _signature(nullOMFileSignature),
+  _encoding(nullOMStoredObjectEncoding),
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
-  _encoding(MSSBinaryEncoding), // tjb
   _rawStorage(rawStorage),
   _isOpen(false),
   _isClosed(false),
@@ -1100,7 +999,7 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   //          a new external file on the given <c OMRawStorage>.
 OMFile::OMFile(OMRawStorage* rawStorage,
                void* clientOnRestoreContext,
-               OMFileSignature signature,
+               OMStoredObjectEncoding encoding,
                const OMAccessMode mode,
                const OMClassFactory* factory,
                OMDictionary* dictionary,
@@ -1113,10 +1012,9 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   _mode(mode),
   _loadMode(lazyLoad),
   _fileName(0),
-  _signature(signature),
+  _encoding(encoding),
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
-  _encoding(MSSBinaryEncoding), // tjb
   _rawStorage(rawStorage),
   _isOpen(false),
   _isClosed(false),
@@ -1143,22 +1041,12 @@ void OMFile::openRead(void)
 {
   TRACE("OMFile::openRead");
 
-  bool result = isRecognized(_rawStorage, _signature, _encoding);
+  bool result = isRecognized(_rawStorage, _encoding);
   ASSERT("Recognized file", result);
-  ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
-                           (_encoding == KLVBinaryEncoding) ||
-                           (_encoding == XMLTextEncoding));
-  switch (_encoding) {
-  case MSSBinaryEncoding:
-    _rootStore = OMMSSStoredObject::openRead(_rawStorage);
-    break;
-  case KLVBinaryEncoding:
-    _rootStore = OMKLVStoredObject::openRead(_rawStorage);
-    break;
-  case XMLTextEncoding:
-    _rootStore = OMXMLStoredObject::openRead(_rawStorage);
-    break;
-  }
+
+  OMStoredObjectFactory* factory = findFactory(_encoding);
+  ASSERT("Recognized file encoding", factory != 0);
+  _rootStore = factory->openRead(_rawStorage);
   POSTCONDITION("Valid store", _rootStore != 0);
 }
 
@@ -1166,22 +1054,12 @@ void OMFile::openModify(void)
 {
   TRACE("OMFile::openModify");
 
-  bool result = isRecognized(_rawStorage, _signature, _encoding);
+  bool result = isRecognized(_rawStorage, _encoding);
   ASSERT("Recognized file", result);
-  ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
-                           (_encoding == KLVBinaryEncoding) ||
-                           (_encoding == XMLTextEncoding));
-  switch (_encoding) {
-  case MSSBinaryEncoding:
-    _rootStore = OMMSSStoredObject::openModify(_rawStorage);
-    break;
-  case KLVBinaryEncoding:
-    _rootStore = OMKLVStoredObject::openModify(_rawStorage);
-    break;
-  case XMLTextEncoding:
-    _rootStore = OMXMLStoredObject::openModify(_rawStorage);
-    break;
-  }
+
+  OMStoredObjectFactory* factory = findFactory(_encoding);
+  ASSERT("Recognized file encoding", factory != 0);
+  _rootStore = factory->openModify(_rawStorage);
   ASSERT("Valid store", _rootStore != 0);
 }
 
@@ -1189,22 +1067,9 @@ void OMFile::createModify(void)
 {
   TRACE("OMFile::createModify");
 
-  bool result = isRecognized(_signature, _encoding);
-  ASSERT("Recognized file", result);
-  ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
-                           (_encoding == KLVBinaryEncoding) ||
-                           (_encoding == XMLTextEncoding));
-  switch (_encoding) {
-  case MSSBinaryEncoding:
-    _rootStore = OMMSSStoredObject::createModify(_rawStorage, _byteOrder);
-    break;
-  case KLVBinaryEncoding:
-    _rootStore = OMKLVStoredObject::createModify(_rawStorage, _byteOrder);
-    break;
-  case XMLTextEncoding:
-    _rootStore = OMXMLStoredObject::createModify(_rawStorage, _byteOrder);
-    break;
-  }
+  OMStoredObjectFactory* factory = findFactory(_encoding);
+  ASSERT("Recognized file encoding", factory != 0);
+  _rootStore = factory->createModify(_rawStorage, _byteOrder);
   ASSERT("Valid root", _root != 0);
   ASSERT("Valid store", _rootStore != 0);
   _root->setStore(_rootStore);
@@ -1214,22 +1079,9 @@ void OMFile::createWrite(void)
 {
   TRACE("OMFile::createWrite");
 
-  bool result = isRecognized(_signature, _encoding);
-  ASSERT("Recognized file", result);
-  ASSERT("Valid encoding", (_encoding == MSSBinaryEncoding) ||
-                           (_encoding == KLVBinaryEncoding) ||
-                           (_encoding == XMLTextEncoding));
-  switch (_encoding) {
-  case MSSBinaryEncoding:
-    _rootStore = OMMSSStoredObject::createWrite(_rawStorage, _byteOrder);
-    break;
-  case KLVBinaryEncoding:
-    _rootStore = OMKLVStoredObject::createWrite(_rawStorage, _byteOrder);
-    break;
-  case XMLTextEncoding:
-    _rootStore = OMXMLStoredObject::createWrite(_rawStorage, _byteOrder);
-    break;
-  }
+  OMStoredObjectFactory* factory = findFactory(_encoding);
+  ASSERT("Recognized file encoding", factory != 0);
+  _rootStore = factory->createWrite(_rawStorage, _byteOrder);
   ASSERT("Valid root", _root != 0);
   ASSERT("Valid store", _rootStore != 0);
   _root->setStore(_rootStore);

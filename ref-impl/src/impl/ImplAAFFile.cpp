@@ -216,13 +216,6 @@ ImplAAFFile::OpenExistingRead (const aafCharacter * pFileName,
 										 _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
-        // Check the file's signature.
-        OMFileSignature sig = _file->signature();
-		const OMFileSignature aafFileSignature =
-		  *reinterpret_cast<const OMFileSignature *>
-		  (&aafFileKindAafSSBinary);
-        checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
-
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();
@@ -511,15 +504,12 @@ ImplAAFFile::OpenNewModify (const aafCharacter * pFileName,
 		pCStore = 0;
 
 		// Attempt to create the file.
-		const OMFileSignature aafFileSignature =
-		  *reinterpret_cast<const OMFileSignature *>
-		  (&aafFileKindAafSSBinary);
 		_file = OMFile::openNewModify(pFileName,
 									  _factory,
 									  0,
 									  byteOrder,
 									  _head,
-									  aafFileSignature,
+									  AAFMSSEncoding,
 									  _metafactory);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
@@ -739,9 +729,6 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 		  pCStore = 0;
 
 		  // Attempt to create the file.
-		  const OMFileSignature aafFileSignature =
-			*reinterpret_cast<const OMFileSignature *> (pFileKind);
-
 		  if (kAAFFileAccess_read == access)
 			{
 			  // Can't open an new file for read only.
@@ -750,9 +737,8 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 		  if (kAAFFileAccess_modify == access)
 			{
 			  // NewModify
-			  if (! OMFile::compatibleRawStorage (pOMStg,
-												  OMFile::modifyMode,
-												  aafFileSignature))
+			  if (! OMFile::compatibleRawStorage (OMFile::modifyMode,
+												  AAFMSSEncoding))
 				return AAFRESULT_INVALID_PARAM;
 												  
 			  _file = OMFile::openNewModify (pOMStg,
@@ -760,15 +746,14 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 											 0,
 											 byteOrder,
 											 _head,
-											 aafFileSignature,
+											 AAFMSSEncoding,
 											 _metafactory);
 			}
 		  else // write-only
 			{
 			  // NewWrite
-			  if (! OMFile::compatibleRawStorage (pOMStg,
-												  OMFile::writeOnlyMode,
-												  aafFileSignature))
+			  if (! OMFile::compatibleRawStorage (OMFile::writeOnlyMode,
+												  AAFMSSEncoding))
 				return AAFRESULT_INVALID_PARAM;
 												  
 			  _file = OMFile::openNewWrite (pOMStg,
@@ -776,7 +761,7 @@ ImplAAFFile::CreateAAFFileOnRawStorage
 											0,
 											byteOrder,
 											_head,
-											aafFileSignature,
+											AAFMSSEncoding,
 											_metafactory);
 			}
 		}
@@ -858,13 +843,6 @@ ImplAAFFile::Open ()
 		}
 	  else if (kAAFFileExistence_existing == _existence) // existing
 		{
-		  // Check the file's signature.
-		  OMFileSignature sig = _file->signature();
-		  const OMFileSignature aafFileSignature  =
-			*reinterpret_cast<const OMFileSignature *>
-			(&aafFileKindAafSSBinary);
-		  checkExpression(sig == aafFileSignature, AAFRESULT_NOT_AAF_FILE);
-
 		// Restore the meta dictionary, it should be the same object
 		// as _metafactory
 		OMDictionary* mf = _file->dictionary();

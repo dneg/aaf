@@ -57,13 +57,6 @@ public:
     lazyLoad     // @@emem Objects are loaded on demand.
   };
 
-    // @cmember,menum Supported file encodings.
-  enum OMFileEncoding {
-    MSSBinaryEncoding,  // @@emem Microsoft Structured Storage (binary).
-    KLVBinaryEncoding,  // @@emem SMPTE KLV (binary).
-    XMLTextEncoding     // @@emem XML (text).
-  };
-
   // @access Static members.
 
     // @cmember Open an existing <c OMFile> for read-only access, the
@@ -97,17 +90,14 @@ public:
                                void* clientOnRestoreContext,
                                const OMByteOrder byteOrder,
                                OMStorable* clientRoot,
-                               const OMFileSignature& signature,
+                               const OMStoredObjectEncoding& encoding,
                                OMDictionary* dictionary = 0);
 
-    // @cmember Is the given <c OMRawStorage> compatible with the given file
-    //          access mode and signature ? Can a file of the encoding
-    //          specified by <p signature> be created successfully on
-    //          <p rawStorage> and then accessed successfully in the mode
-    //          specified by <p accessMode> ?
-  static bool compatibleRawStorage(const OMRawStorage* rawStorage,
-                                   const OMAccessMode accessMode,
-                                   const OMFileSignature& signature);
+    // @cmember Can a file of the encoding specified by <p encoding> be
+    //          created successfully on an <c OMRawStorage> and
+    //          accessed successfully in the mode specified by <p accessMode> ?
+  static bool compatibleRawStorage(const OMAccessMode accessMode,
+                                   const OMStoredObjectEncoding& encoding);
 
     // @cmember Open an existing <c OMFile> for read-only access.
     // @devnote Will superceed openExistingRead() above.
@@ -131,7 +121,7 @@ public:
                               void* clientOnRestoreContext,
                               const OMByteOrder byteOrder,
                               OMStorable* clientRoot,
-                              const OMFileSignature& signature,
+                              const OMStoredObjectEncoding& encoding,
                               OMDictionary* dictionary = 0);
 
     // @cmember Open a new <c OMFile> for modify access.
@@ -141,12 +131,8 @@ public:
                                void* clientOnRestoreContext,
                                const OMByteOrder byteOrder,
                                OMStorable* clientRoot,
-                               const OMFileSignature& signature,
+                               const OMStoredObjectEncoding& encoding,
                                OMDictionary* dictionary = 0);
-
-     // @cmember Is <p signature> a valid signature for an <c OMFile> ?
-  static bool validSignature(const OMFileSignature& signature);
-
 
      // @cmember Is the file named <p fileName> a recognized file ?
      //          If so, the result is true, and the encoding is returned
@@ -155,17 +141,10 @@ public:
                            OMStoredObjectEncoding& encoding);
 
      // @cmember Does <p rawStorage> contain a recognized file ?
-     //          If so, the result is true, and the signature is returned
-     //          in <p signature> and the encoding in <p encoding>.
+     //          If so, the result is true, and the encoding is returned
+     //          in <p encoding>.
   static bool isRecognized(OMRawStorage* rawStorage,
-                           OMFileSignature& signature,
-                           OMFileEncoding& encoding);
-
-     // @cmember Is <p signature> recognized ?
-     //          If so, the result is true, and the encoding is
-     //          returned in <p encoding>.
-  static bool isRecognized(const OMFileSignature& signature,
-                           OMFileEncoding& encoding);
+                           OMStoredObjectEncoding& encoding);
 
   static void registerFactory(const OMStoredObjectEncoding& encoding,
                               OMStoredObjectFactory* factory);
@@ -256,18 +235,12 @@ public:
     // @cmember Is it possible to write to this <c OMFile> ?
   bool isWritable(void) const;
 
-    // @cmember Is this file recognized by the Object Manager ?
-  bool isOMFile(void) const;
-
     // @cmember The name of this <c OMFile>.
     //   @devnote Soon to be obsolete.
   const wchar_t* fileName(void) const;
 
-    // @cmember The signature of this <c OMFile>.
-  OMFileSignature signature(void) const;
-
     // @cmember The encoding of this <c OMFile>.
-  OMFileEncoding encoding(void) const;
+  OMStoredObjectEncoding encoding(void) const;
 
     // @cmember The raw storage on which this <c OMFile> is stored.
   OMRawStorage* rawStorage(void) const;
@@ -304,7 +277,7 @@ private:
     //          an existing named external file.
   OMFile(const wchar_t* fileName,
          void* clientOnRestoreContext,
-         OMFileSignature signature,
+         OMStoredObjectEncoding encoding,
          const OMAccessMode mode,
          OMStoredObject* store,
          const OMClassFactory* factory,
@@ -315,7 +288,7 @@ private:
     //          a new named external file.
   OMFile(const wchar_t* fileName,
          void* clientOnRestoreContext,
-         OMFileSignature signature,
+         OMStoredObjectEncoding encoding,
          const OMAccessMode mode,
          OMStoredObject* store,
          const OMClassFactory* factory,
@@ -337,7 +310,7 @@ private:
     // @devnote Will superceed OMFile::OMFile (for new files) above.
   OMFile(OMRawStorage* rawStorage,
          void* clientOnRestoreContext,
-         OMFileSignature signature,
+         OMStoredObjectEncoding encoding,
          const OMAccessMode mode,
          const OMClassFactory* factory,
          OMDictionary* dictionary,
@@ -363,12 +336,11 @@ private:
   enum OMAccessMode _mode;
   enum OMLoadMode _loadMode;
   wchar_t* _fileName;
-  OMFileSignature _signature;
+  OMStoredObjectEncoding _encoding;
 
   void* _clientOnSaveContext;
   void* _clientOnRestoreContext;
 
-  enum OMFileEncoding _encoding;
   OMRawStorage* _rawStorage;
 
   bool _isOpen;

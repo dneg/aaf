@@ -421,26 +421,6 @@ void OMMSSStoredObject::close(void)
   }
 }
 
-void OMMSSStoredObject::close(OMFile& file)
-{
-  TRACE("OMMSSStoredObject::close");
-
-  close();
-
-  if (file.isWritable()) {
-    if (file.isValid()) {
-      OMFileSignature signature = file.signature();
-      OMRawStorage* store = file.rawStorage();
-      if (store != 0) {
-        writeSignature(store, signature);
-      } else {
-        const wchar_t* fileName = file.fileName();
-        writeSignature(fileName, signature);
-      }
-    }
-  }
-}
-
 OMByteOrder OMMSSStoredObject::byteOrder(void) const
 {
   TRACE("OMMSSStoredObject::byteOrder");

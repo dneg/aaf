@@ -71,8 +71,6 @@ void OMRootStorable::close(void)
 
   _clientRoot->close();
   _dictionary->close();
-
-  store()->close(*file());
 }
 
   // @mfunc Restore the contents of an <c OMRootStorable>.

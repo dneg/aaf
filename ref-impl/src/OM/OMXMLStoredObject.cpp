@@ -216,7 +216,7 @@ void OMXMLStoredObject::save(OMFile& file)
   _stream << beginl;
   _stream << "<?xml version=\"1.0\"?>" << endl;
   _stream << beginl;
-  _stream << "<?OM signature=\"" << file.signature() << "\"?>" << endl;
+  _stream << "<?OM signature=\"" << file.encoding() << "\"?>" << endl;
   _stream << beginl;
   _stream << "<!DOCTYPE object SYSTEM \"ObjectManager.dtd\">" << endl;
   _stream << beginl;
