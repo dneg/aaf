@@ -605,14 +605,9 @@ int main(int argumentCount, char* argumentVector[])
 	{
 		// Set the variables to do the specified case
 		static char* niceFileName = argumentVector[1];
-		
-		// It is a design issue whether argument must end with ".aaf" or not
-		// If one chooses that files are specified without extension, 
-		// then uncomment the following line, which adds the ".aaf" extension
-		//strcat (niceFileName,".aaf");
-		
-		aafWChar FileNameBuffer[80];
-		mbstowcs(FileNameBuffer,niceFileName,80);
+
+		aafWChar FileNameBuffer[FILENAME_MAX];
+		mbstowcs(FileNameBuffer,niceFileName,FILENAME_MAX);
 		pwFileName = FileNameBuffer;
 		pFileName = niceFileName;
 	}
