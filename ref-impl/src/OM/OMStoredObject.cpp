@@ -75,7 +75,6 @@ OMStoredPropertySetIndex* OMStoredObject::restore(void)
   size_t entries;
   readFromStream(_indexStream, &entries, sizeof(size_t));
   OMStoredPropertySetIndex* index = new OMStoredPropertySetIndex(entries);
-  ASSERT("Valid number of entries", entries >= 0);
   
   // Read entries.
   //
