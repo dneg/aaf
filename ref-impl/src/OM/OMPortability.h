@@ -29,24 +29,24 @@
 //   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
 
 // Figure out the compiler and define a symbol of the
-// form COMPILER_<compiler name>_<processor>_<operating system>
+// form OM_COMPILER_<compiler name>_<processor>_<operating system>
 //
 #if defined (_MSC_VER) && defined(_M_IX86) && defined(_WIN32)
-#define COMPILER_MSC_INTEL_WINDOWS
+#define OM_COMPILER_MSC_INTEL_WINDOWS
 #elif defined(__MWERKS__) && defined(__POWERPC__) && defined(macintosh)
-#define COMPILER_MWERKS_PPC_MACOS
+#define OM_COMPILER_MWERKS_PPC_MACOS
 #elif defined(__GNUC__) && defined(__mips__) && defined(__sgi__)
-#define COMPILER_GCC_MIPS_SGI
+#define OM_COMPILER_GCC_MIPS_SGI
 #elif defined(__GNUC__) && defined(__i386__) && defined(__linux__)
-#define COMPILER_GCC_INTEL_LINUX
+#define OM_COMPILER_GCC_INTEL_LINUX
 #elif defined(__GNUC__) && defined(__i386__) && defined(__FreeBSD__)
-#define COMPILER_GCC_INTEL_FREEBSD
+#define OM_COMPILER_GCC_INTEL_FREEBSD
 #elif defined(mips) && defined(sgi)
-#define COMPILER_SGICC_MIPS_SGI
+#define OM_COMPILER_SGICC_MIPS_SGI
 #elif defined(__GNUC__) && defined(__ppc__) && defined(__APPLE__)
-#define COMPILER_GCC_PPC_MACOSX
+#define OM_COMPILER_GCC_PPC_MACOSX
 #elif defined(__GNUC__) && defined(__sparc__) && defined(__sun__)
-#define COMPILER_GCC_SPARC_SUNOS
+#define OM_COMPILER_GCC_SPARC_SUNOS
 #else
 #error "Unknown compiler"
 #endif

@@ -36,7 +36,7 @@
 // This allows new platforms to be added without disturbing the code
 // for existing platforms.
 //
-#if defined(COMPILER_MSC_INTEL_WINDOWS)
+#if defined(OM_COMPILER_MSC_INTEL_WINDOWS)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -47,7 +47,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned _int64        OMUInt64;
 
-#elif defined(COMPILER_MWERKS_PPC_MACOS)
+#elif defined(OM_COMPILER_MWERKS_PPC_MACOS)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -58,7 +58,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
-#elif defined(COMPILER_GCC_MIPS_SGI)
+#elif defined(OM_COMPILER_GCC_MIPS_SGI)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -69,7 +69,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
-#elif defined(COMPILER_GCC_INTEL_LINUX)
+#elif defined(OM_COMPILER_GCC_INTEL_LINUX)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -80,7 +80,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
-#elif defined(COMPILER_GCC_INTEL_FREEBSD)
+#elif defined(OM_COMPILER_GCC_INTEL_FREEBSD)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -91,7 +91,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
-#elif defined(COMPILER_SGICC_MIPS_SGI)
+#elif defined(OM_COMPILER_SGICC_MIPS_SGI)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -102,7 +102,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
-#elif defined(COMPILER_GCC_PPC_MACOSX)
+#elif defined(OM_COMPILER_GCC_PPC_MACOSX)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
@@ -113,7 +113,7 @@ typedef unsigned short int     OMUInt16;
 typedef unsigned long int      OMUInt32;
 typedef unsigned long long int OMUInt64;
 
-#elif defined(COMPILER_GCC_SPARC_SUNOS)
+#elif defined(OM_COMPILER_GCC_SPARC_SUNOS)
 typedef signed char            OMInt8;
 typedef short int              OMInt16;
 typedef long int               OMInt32;
