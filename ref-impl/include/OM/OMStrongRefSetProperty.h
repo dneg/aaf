@@ -33,11 +33,8 @@
 #include "OMContainerElement.h"
 #include "OMContainerProperty.h"
 
-template <typename ReferencedObject>
+template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetIterator;
-
-template <typename Key, typename Element>
-class OMSetIterator;
 
   // @class Persistent sets of uniquely identified strongly referenced
   //        (contained) objects supported by the Object Manager.
@@ -45,9 +42,11 @@ class OMSetIterator;
   //        The objects are not ordered. Duplicates objects are not allowed.
   //   @tcarg class | ReferencedObject | The type of the referenced
   //          (contained) object. This type must be a descendant of
-  //          <c OMStorable> and of <c OMUnique>.
+  //          <c OMStorable>.
+  //   @tcarg class | UniqueIdentification | The type of the unique key
+  //          used to identify the referenced objects. 
   //   @base public | <c OMContainerProperty>
-template <typename ReferencedObject>
+template <typename UniqueIdentification, typename ReferencedObject>
 class OMStrongReferenceSetProperty :
                                  public OMContainerProperty<ReferencedObject> {
 public:
@@ -55,7 +54,8 @@ public:
 
     // @cmember Constructor.
   OMStrongReferenceSetProperty(const OMPropertyId propertyId,
-                               const char* name);
+                               const char* name,
+                               const OMPropertyId keyPropertyId);
 
     // @cmember Destructor.
   virtual ~OMStrongReferenceSetProperty(void);
@@ -96,12 +96,12 @@ public:
 
     // @cmember Remove the <p ReferencedObject> identified by
     //          <p identification> from this <c OMStrongReferenceSetProperty>.
-  ReferencedObject* remove(const OMUniqueObjectIdentification& identification);
+  ReferencedObject* remove(const UniqueIdentification& identification);
 
     // @cmember If it is present, remove the <p ReferencedObject> identified by
     //          <p identification> from this <c OMStrongReferenceSetProperty>
     //          and return true, otherwise return false.
-  bool ensureAbsent(const OMUniqueObjectIdentification& identification);
+  bool ensureAbsent(const UniqueIdentification& identification);
 
     // @cmember Remove <p object> from this
     //          <c OMStrongReferenceSetProperty>.
@@ -119,20 +119,20 @@ public:
     // @cmember Does this <c OMStrongReferenceSetProperty> contain a
     //          <p ReferencedObject> identified by <p identification>?
   virtual bool contains(
-                     const OMUniqueObjectIdentification& identification) const;
+                     const UniqueIdentification& identification) const;
 
     // @cmember The <p ReferencedObject> in this
     //          <c OMStrongReferenceSetProperty> identified by
     //          <p identification>.
   ReferencedObject* value(
-                     const OMUniqueObjectIdentification& identification) const;
+                     const UniqueIdentification& identification) const;
   
     // @cmember Find the <p ReferencedObject> in this
     //          <c OMStrongReferenceSetProperty> identified by
     //          <p identification>.  If the object is found it is returned
     //          in <p object> and the result is true. If the element is
     //          not found the result is false.
-  virtual bool find(const OMUniqueObjectIdentification& identification,
+  virtual bool find(const UniqueIdentification& identification,
                     ReferencedObject*& object) const;
 
   // Optional property interface
@@ -164,15 +164,16 @@ public:
 
 private:
 
-  typedef OMStrongReferenceSetElement<OMUniqueObjectIdentification,
+  typedef OMStrongReferenceSetElement<UniqueIdentification,
                                       ReferencedObject> SetElement;
 
-  typedef OMSetIterator<OMUniqueObjectIdentification, SetElement> SetIterator;
+  typedef OMSetIterator<UniqueIdentification, SetElement> SetIterator;
 
   // The set of references.
-  OMSet<OMUniqueObjectIdentification, SetElement> _set;
+  OMSet<UniqueIdentification, SetElement> _set;
 
-  friend class OMStrongReferenceSetIterator<ReferencedObject>;
+  friend class OMStrongReferenceSetIterator<UniqueIdentification,
+                                            ReferencedObject>;
 
     // @cmember The id of the property whose value is the unique
     //          identifier of objects in this set.
