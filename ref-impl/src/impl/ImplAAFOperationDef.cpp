@@ -314,6 +314,8 @@ AAFRESULT STDMETHODCALLTYPE
 	ImplEnumAAFParameterDefs*	pEnum = NULL;
 	aafBool						parmDefFound = AAFFalse;
 
+	tmp = NULL;
+
 	if(pAAFParameterDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 	
