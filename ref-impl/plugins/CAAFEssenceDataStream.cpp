@@ -59,9 +59,9 @@ HRESULT STDMETHODCALLTYPE
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceDataStream::Seek (aafUInt32  byteOffset)
+    CAAFEssenceDataStream::Seek (aafInt64  byteOffset)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return(_data->SetPosition(byteOffset));
 }
 
 
@@ -72,7 +72,7 @@ HRESULT STDMETHODCALLTYPE    CAAFEssenceDataStream::SeekRelative (aafInt32  byte
 
 
 HRESULT STDMETHODCALLTYPE
-    CAAFEssenceDataStream::IsPosValid (aafUInt32  byteOffset,
+    CAAFEssenceDataStream::IsPosValid (aafInt64  byteOffset,
         aafBool *  isValid)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
@@ -82,7 +82,7 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::GetPosition (aafInt64 *  position)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	return(_data->GetPosition (position));
 }
 
 
