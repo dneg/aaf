@@ -33,6 +33,9 @@
 
 #include "ImplAAFMob.h"
 #include "AAFResult.h"
+#include "ImplAAFObjectCreation.h"
+
+extern "C" const aafClassID_t CLSID_EnumAAFMobSlots;
 
 ImplEnumAAFMobSlots::ImplEnumAAFMobSlots ()
 {
@@ -65,18 +68,59 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFMobSlots::Next (aafUInt32  /*count*/,
-                           ImplAAFMobSlot ** /*ppMobSlots*/,
-                           aafUInt32 *  /*pFetched*/)
+    ImplEnumAAFMobSlots::Next (aafUInt32  count,
+                           ImplAAFMobSlot **ppMobSlots,
+                           aafUInt32 *pFetched)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplAAFMobSlot*		pMobSlot;
+	aafUInt32			numSlots;
+	HRESULT				hr;
+
+	if ((pFetched == NULL && count != 1) || (pFetched != NULL && count == 1))
+		return E_INVALIDARG;
+
+	// Point at the first component in the array.
+	pMobSlot = *ppMobSlots;
+	for (numSlots = 0; numSlots < count; numSlots++)
+	{
+		hr = NextOne(&pMobSlot);
+		if (FAILED(hr))
+			break;
+
+		// Point at the next component in the array.  This
+		// will increment off the end of the array when
+		// numComps == count-1, but the for loop should
+		// prevent access to this location.
+		pMobSlot++;
+	}
+	
+	if (pFetched)
+		*pFetched = numSlots;
+
+	return hr;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFMobSlots::Skip (aafUInt32  /*count*/)
+    ImplEnumAAFMobSlots::Skip (aafUInt32 count)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	AAFRESULT	hr;
+	aafInt32	newCurrent, siz;
+
+	newCurrent = _current + count;
+
+    _mob->GetNumSlots(&siz);
+	if(newCurrent < siz)
+	{
+		_current = newCurrent;
+		hr = AAFRESULT_SUCCESS;
+	}
+	else
+	{
+		hr = E_FAIL;
+	}
+
+	return hr;
 }
 
 
@@ -89,9 +133,29 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplEnumAAFMobSlots::Clone (ImplEnumAAFMobSlots ** /*ppEnum*/)
+    ImplEnumAAFMobSlots::Clone (ImplEnumAAFMobSlots **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	ImplEnumAAFMobSlots*	theEnum;
+	HRESULT					hr;
+	
+	theEnum = (ImplEnumAAFMobSlots *)CreateImpl(CLSID_EnumAAFMobSlots);
+	if (theEnum == NULL)
+		return E_FAIL;
+		
+	hr = theEnum->SetEnumMob(_mob);
+	if (SUCCEEDED(hr))
+	{
+		theEnum->Reset();
+		theEnum->Skip(_current);
+		*ppEnum = theEnum;
+	}
+	else
+	{
+		theEnum->ReleaseRef();
+		*ppEnum = NULL;
+	}
+
+	return hr;
 }
 
 
