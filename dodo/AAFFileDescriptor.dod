@@ -35,22 +35,22 @@ Gets the length of the media in samples [not edit units].)
 /****/
 AD_METHOD1(SetIsAAFMedia,
 [in],AAFBool_t,isOMFI,,
-Set to TRUE if this is AAF-wrapped media, FALSE if the media is in an external non-AAF file.)
+Set to TRUE if this is AAF-wrapped media FALSE if the media is in an external non-AAF file.)
 
 /****/
 AD_METHOD1(GetIsAAFMedia,
 [out],AAFBool_t*,isOMFI,,
-Returns TRUE if this is AAF-wrapped media, FALSE if the media is in an external non-AAF file.)
+Returns TRUE if this is AAF-wrapped media FALSE if the media is in an external non-AAF file.)
 
 /****/
 AD_METHOD1(SetSampleRate,
 [in],AAFRational_t,rate,,
-Sets sample rate of the media, as opposed to the edit rate.)
+Sets sample rate of the media as opposed to the edit rate.)
 
 /****/
 AD_METHOD1(GetSampleRate,
 [out],AAFRational_t*,rate,,
-Sets sample rate of the media, as opposed to the edit rate.)
+Sets sample rate of the media as opposed to the edit rate.)
 
 
   //
