@@ -24,8 +24,8 @@
 * LIABILITY.
 *
 ************************************************************************/
-#ifndef __AAFPersionnelExtension_h__
-#define __AAFPersionnelExtension_h__
+#ifndef __AAFPersonnelExtension_h__
+#define __AAFPersonnelExtension_h__
 
 #ifndef __AAFCOMPlatform_h__
 #include "AAFCOMPlatform.h"
@@ -176,5 +176,5 @@ EXTERN_C const CLSID CLSID_AAFPersonnelResource;
 EXTERN_C const CLSID CLSID_AAFAdminMob;
 
 
-#endif // #ifndef __AAFPersionnelExtension_h__
+#endif // #ifndef __AAFPersonnelExtension_h__
 
