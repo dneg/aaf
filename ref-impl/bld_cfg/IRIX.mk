@@ -41,10 +41,10 @@ SH_SUFFIX =
 include $(BLD_CFG_DIR)/depend.mk
 
 
-#
-# MainWin make information
-#
-MIDL_CFLAGS = /ms_ext /c_ext /server none /client none
-#MIDL_IDL = AAFMedia.idl
-MAKE_VERBOSE = true
-include $(BLD_CFG_DIR)/mainwin.mk
+# #
+# # MainWin make information
+# #
+# MIDL_CFLAGS = /ms_ext /c_ext /server none /client none
+# #MIDL_IDL = AAFMedia.idl
+# MAKE_VERBOSE = true
+# include $(BLD_CFG_DIR)/mainwin.mk
