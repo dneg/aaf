@@ -30,7 +30,7 @@ AAFSDKBUILD_H=ref-impl/include/AAFSDKBuild.h
 
 short_usage()
 {
-    echo "Usage `basename $0` [-basedir] [-bump] [-copylogs] [-release] [-update]"
+    echo "Usage `basename $0` [-basedir] [-copylogs] [-release] [-update]"
     echo "                [-noregtests] [-nocvsco] [-nocvslog] [-nobuild]"
     echo "                [-h|-help]"
 }
@@ -45,10 +45,6 @@ usage()
     echo "	Set the directory where the cvs checkout command will write the\n"
     echo "	AAF directory, or where it already exists. The default value is the"
     echo "	current working directory."
-    echo ""
-    echo "-bump"
-    echo "	Bump the build number (i.e. increment it). This is implemented using"
-    echo "	the BuildNumber script."
     echo ""
     echo "-copylogs"
     echo "      Copy the make logs to aaf.sourceforge.net.  Both the full and filtered"
@@ -125,7 +121,7 @@ do
 
 	case $1 in
 		-basedir    ) BASE_DIR=$2 ; shift ;;
-		-bump       ) BUMP_BUILD_TAG=1 ;;
+		-bump       ) echo "Build Number not longer supported (replaced by human-edited patchlevel"; exit 1 ;;
 		-copylogs   ) COPY_LOGS=1 ;;
 		-release    ) AAFTARGET=Release ;;
 		-update     ) CVS_UPDATE_ONLY=1 ;;
@@ -164,51 +160,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-# If we are bumping the build number, then checkout the head of the
-# source tree.  If we are not bumping the build number, then determine
-# the build number by first, checking out *only* AAFSDKBuild.h.
-
-if [ $BUMP_BUILD_TAG -eq 1 ] && [ $CVS_RUN_CO_COMMAND -eq 1 ]; then
-    BUILD_TAG_CO=HEAD
-else
-
-    mkdir -p $TMPCODIR
-    if [ $? -ne 0 ]; then
-	echo Failed to change to mkdir: ${TMPCODIR}
-	exit 1
-    fi
-
-    cd $TMPCODIR
-    if [ $? -ne 0 ]; then
-	echo Failed to change to directory: $TMPCODIR
-	exit 1
-    fi
-
-    # If a previous result is lingering, remove it.
-    # -f never fails, no need to check return code
-    rm -rf AAF
-
-    # co AAFSDKBuild.h
-    cvs -z3 co AAF/${AAFSDKBUILD_H}
-    RepeatUntil 0 100 cvs -z3 co AAF/${AAFSDKBUILD_H}
-    CVS_STATUS=$?
-    if [ $CVS_STATUS -ne 0 ]; then
-	echo cvs failed with exit status $CVS_STATUS
-	exit $CVS_STATUS
-    fi
-
-    AAF_BUILD_NUMBER_CO=`grep "define AAF_BUILD_NUMBER" AAF/${AAFSDKBUILD_H} | awk '{print $3}'`;
-    BUILD_TAG_CO=`printf "Build-%04d" $AAF_BUILD_NUMBER_CO`
-
-
-    # Move back the the base directory.
-    cd $BASE_DIR
-    if [ $? -ne 0 ]; then
-       echo Failed to change to base directory: $BASE_DIR
-       exit 1
-    fi
-
-fi
+BUILD_TAG_CO=HEAD
 
 # Check out or update the source tree.
 
@@ -247,36 +199,15 @@ if [ $? -ne 0 ]; then
 fi
 
 #
-# Optionally bump the build number, or simply call BuildNumber to
-# verify the consistency of the AAFSDKBuild.h file, and the build tag.
-#
-if [ $BUMP_BUILD_TAG -eq 1 ]; then
-    echo Bump the build number.
-    BuildNumber -basedir $BASE_DIR -bump
-    if [ $? -ne 0 ] ; then
-	echo Failed to bump the build number.
-	exit 1
-    fi
-else
-    # Run BuildNumber to check the build number consistency.
-    echo Verifying the build number is consistent.
-    BuildNumber -basedir $BASE_DIR
-    if [ $? -ne 0 ] ; then
-	echo Can not continue, the build number is not consistent.
-	echo Please repair ${AAFSDKBUILD_H}.
-	exit 1
-    fi
-fi
-
-#
 # Fetch the current version info.  Report when the build tag was
 # applied, and the current date.
 #
-AAF_BUILD_NUMBER=`grep "define AAF_BUILD_NUMBER" ${AAFSDKBUILD_H} | awk '{print $3}'`;
-BUILD_TAG=`printf "Build-%04d" $AAF_BUILD_NUMBER`
+AAF_PATCH_LEVEL=`grep "define AAF_PATCH_LEVEL" ${AAFSDKBUILD_H} | awk '{print $3}'`;
+BUILD_TAG=`printf "Build-%04d" $AAF_PATCH_LEVEL`
 
 CVS_LOG_OUTPUT_FILENAME=~/tmp/cvs.log.log
 
+# FIXME: Needs to use Major.Minor.Tertiary.PatchLevel or date for logging
 if [ $CVS_RUN_LOG_COMMAND -eq 1 ]; then
 
     echo cvs log -r${BUILD_TAG} ${AAFSDKBUILD_H}
