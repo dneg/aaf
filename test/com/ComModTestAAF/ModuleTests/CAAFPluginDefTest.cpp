@@ -285,7 +285,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
-#if 1	//!!!
 		checkResult(pDictionary->GetCodecDefinitions(&pEnumPluggable));
 		checkResult(pEnumPluggable->NextOne (&pCodecDef));
 		checkResult(pCodecDef->QueryInterface (IID_IAAFDefObject, (void **)&pDefObj));
@@ -339,14 +338,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkExpression (count == 2, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->EnumPluginLocators(&pEnumLoc));
 
-    pLoc->Release(); // this local variable was already has a reference that must be released!
-    pLoc = NULL;
+		pLoc->Release(); // this local variable was already has a reference that must be released!
+		pLoc = NULL;
 		checkResult(pEnumLoc->NextOne (&pLoc));
  		checkResult(pLoc->GetPath (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manuf1URL) == 0, AAFRESULT_TEST_FAILED);
 
-    pLoc->Release(); // this local variable was already has a reference that must be released!
-    pLoc = NULL;
+		pLoc->Release(); // this local variable was already has a reference that must be released!
+		pLoc = NULL;
 		checkResult(pEnumLoc->NextOne (&pLoc));
  		checkResult(pLoc->GetPath (testString, sizeof(testString)));
 		checkExpression (wcscmp(testString, manuf2URL) == 0, AAFRESULT_TEST_FAILED);
@@ -357,7 +356,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
  		checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
 		checkResult(pPlugin->SupportsAuthentication(&testBool));
 		checkExpression(testBool == AAFFalse, AAFRESULT_TEST_FAILED);
-#endif
 	}
 	catch (HRESULT& rResult)
 	{
@@ -433,24 +431,3 @@ HRESULT CAAFPluginDescriptor::test()
 
 	return hr;
 }
-
-#if 0
-  //****************
-  // GetPluggableCode()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    GetPluggableCode
-        // @parm [out] An interface pointer to the pluggable code object
-        (ImplAAFPluggableCode ** pCode);
-
-
-
-
-  //****************
-  // IsPluginLocal()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-    IsPluginLocal
-        // @parm [out] Returns AAFTrue if the plugin is local
-        (aafBool *  pIsLocal); 
-#endif
