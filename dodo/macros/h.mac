@@ -21,6 +21,23 @@
 
 #ccccccccccccccccccccccccccc
 #c
+#c Pass through argument if for idl otherwise omit it.
+#c 
+#c This macro is generally used to specify IDL options that would
+#c make since to emit to c++.
+#c To allow proper marshalling code generation of a struct: |
+#c typedef struct
+#c {
+#c     aafInt32 length;
+#c     AD_IDL([length_is(length)]) aafWchar *str;
+#c } aafString_t;
+#c
+#startm AD_IDL 01
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Includes another file.
 #c
 #c Argument: Base filename
@@ -30,6 +47,7 @@
 #include "%01.h"
 #endif
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -127,6 +145,15 @@ class %01;
 //@class    .this-module | Implementation class for .this-module
 #ifndef __.this-module_h__
 #define __.this-module_h__
+
+/******************************************\\
+*                                          *
+* Advanced Authoring Format                *
+*                                          *
+* Copyright (c) 1998 Avid Technology, Inc. *
+* Copyright (c) 1998 Microsoft Corporation *
+*                                          *
+\\******************************************/
 #endm
 
 
@@ -168,6 +195,17 @@ public:
   virtual ~.this-module ();
 
 public:\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Starts a class definition
+#c
+#c Arguments: none
+#c
+#startm AD_COM_EXT_CLASS_BEGIN 01
+AD_CLASS_BEGIN\
 #endm
 
 
@@ -841,6 +879,17 @@ private:
 
 #ccccccccccccccccccccccccccc
 #c
+#c Specifies a method in a separate COM interface.
+#c
+#c Argument: method declaration
+#c
+#startm AD_COM_METH 01
+%01-com-meth-h
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
 #c Inserts declaration for a constructor which takes one argument.
 #c Constructor name is assumed to be .this-module.
 #c
@@ -1017,4 +1066,14 @@ static AAFRESULT STDMETHODCALLTYPE
 #startm AD_STATIC_CREATE 00
 static AAFRESULT STDMETHODCALLTYPE
     CreateObject (.this-module ** result);
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c Hack to quote the .this-module macro and keep it out of export
+#c files.  Do not define this macro in exp.mac!!!
+#c
+#startm AD_EXPORT_THIS_MODULE 00
+.this-module\
 #endm
