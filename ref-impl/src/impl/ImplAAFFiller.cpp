@@ -41,7 +41,7 @@ ImplAAFFiller::~ImplAAFFiller ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFFiller::Create (aafUID_t*	pDataDef,
+    ImplAAFFiller::Initialize (aafUID_t*	pDataDef,
                            aafLength_t		length)
 {
 	if (pDataDef == NULL)
