@@ -24,6 +24,7 @@
 #include "AAFDataDefs.h"
 #include "aafUtils.h"
 #include "AAFDefUIDs.h"
+#include "AAFTypeDefUIDs.h"
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -58,6 +59,7 @@ inline void checkExpression(bool expression, HRESULT r)
 #define TEST_PARAM_NAME		L"A TestEffect parameter"
 #define TEST_PARAM_DESC		L"A longer description of the TestEffect parameter"
 #define TEST_PARAM_UNITS	L"Furlongs per Fortnight"
+static aafUID_t	checkTypeID = kAAFTypeID_UInt8;
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
@@ -114,6 +116,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFOperationDef*		pOperationDef = NULL;
 	IAAFParameterDef*	pParamDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
+	IAAFTypeDef*		pTypeDef = NULL;
 	bool				bFileOpen = false;
 	HRESULT				hr = S_OK;
 	aafUID_t			testDataDef = DDEF_Picture;
@@ -161,6 +164,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pOperationDef->AppendDegradeToOperations (pOperationDef));
 
 		checkResult(pParamDef->SetDisplayUnits(TEST_PARAM_UNITS));
+		checkResult(pDictionary->LookupType (&checkTypeID , &pTypeDef));
+		checkResult(pParamDef->SetTypeDef(pTypeDef));
+		pTypeDef->Release();
+		pTypeDef = NULL;
 		checkResult(pParamDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
 		checkResult(pDefObject->SetName (TEST_PARAM_NAME));
 		checkResult(pDefObject->SetDescription (TEST_PARAM_DESC));
@@ -182,6 +189,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	if (pParamDef)
 		pParamDef->Release();
+
+	if (pTypeDef)
+		pTypeDef->Release();
 
 	if (pDictionary)
 		pDictionary->Release();
@@ -212,6 +222,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFOperationDef		*pOperationDef = NULL;
 	IAAFParameterDef	*pParmDef = NULL;
 	IAAFDefObject*		pDefObject = NULL;
+	IAAFTypeDef*		pTypeDef = NULL;
 	bool				bFileOpen = false;
 	aafUID_t			readDataDef, checkDataDef = DDEF_Picture;
 	aafBool				readIsTimeWarp;
@@ -219,6 +230,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	aafUInt32			checkBypass, testLen;
 	HRESULT				hr = S_OK;
 	wchar_t				checkCat[256], checkName[256];
+	aafUID_t			testAUID;
 
 	try
 	{
@@ -255,6 +267,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pOperationDef->GetParameterDefinitions (&pParmDefEnum));
 		checkResult(pParmDefEnum->NextOne (&pParmDef));
 
+		checkResult(pParmDef->GetTypeDef(&pTypeDef));
+		checkResult(pTypeDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
+		checkResult(pDefObject->GetAUID(&testAUID));
+		checkExpression(memcmp(&testAUID, &checkTypeID, sizeof(testAUID)) == 0, AAFRESULT_TEST_FAILED);
+		pDefObject->Release();
+		pDefObject = NULL;
+		pTypeDef->Release();
+		pTypeDef = NULL;
 		checkResult(pParmDef->GetDisplayUnits (checkName, sizeof(checkName)));
 		checkExpression(wcscmp(checkName, TEST_PARAM_UNITS) == 0, AAFRESULT_TEST_FAILED);
 		checkResult(pParmDef->QueryInterface(IID_IAAFDefObject, (void **) &pDefObject));
@@ -293,6 +313,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	if (pDefObject)
 		pDefObject->Release();
 
+	if (pTypeDef)
+		pTypeDef->Release();
+
 	if (pParmDef)
 		pParmDef->Release();
 
@@ -325,13 +348,13 @@ extern "C" HRESULT CAAFParameterDef_test()
 
 	// When all of the functionality of this class is tested, we can return success.
 	// When a method and its unit test have been implemented, remove it from the list.
-	if (SUCCEEDED(hr))
-	{
-		cout << "The following IAAFParameterDef methods have not been implemented:" << endl; 
-		cout << "     SetTypeDef" << endl; 
-		cout << "     GetTypeDef" << endl; 
-		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
-	}
+//	if (SUCCEEDED(hr))
+//	{
+//		cout << "The following IAAFParameterDef methods have not been implemented:" << endl; 
+//		cout << "     SetTypeDef" << endl; 
+//		cout << "     GetTypeDef" << endl; 
+//		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
+//	}
 
 	return hr;
 }
