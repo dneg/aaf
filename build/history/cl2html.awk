@@ -87,7 +87,7 @@ function printKey() {
 
 function printHeader() {
   "date" | getline date
-  "echo $USER$USERNAME" | getline user
+  "echo $USER" | getline user
   "hostname" | getline computer
   printf("\
 <!-- -->\n\

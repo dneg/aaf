@@ -131,7 +131,7 @@ do
 done
 
 date=$(date)
-user=$(echo $USER$USERNAME)
+user=$(echo $USER)
 computer=$(hostname)
 
 index=Changes-index.html
