@@ -312,9 +312,9 @@ void HeaderTest::createFileMob(int itemNumber)
   CAAFBuiltinDefs defs (_pDictionary);
 
   // Create a Mob
-  check(_pDictionary->CreateInstance(defs.cdSourceMob(),
-             IID_IAAFSourceMob, 
-             (IUnknown **)&_pSourceMob));
+  check(defs.cdSourceMob()->
+		CreateInstance(IID_IAAFSourceMob, 
+					   (IUnknown **)&_pSourceMob));
 
   check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
   
@@ -322,9 +322,9 @@ void HeaderTest::createFileMob(int itemNumber)
 
   check(_pMob->SetName(wcBuffer));
   
-  check(_pDictionary->CreateInstance(defs.cdFileDescriptor(),
-              IID_IAAFEssenceDescriptor, 
-              (IUnknown **)&_pFileDescriptor));
+  check(defs.cdFileDescriptor()->
+		CreateInstance(IID_IAAFEssenceDescriptor, 
+					   (IUnknown **)&_pFileDescriptor));
 
   check(_pFileDescriptor->QueryInterface (IID_IAAFEssenceDescriptor,
                                           (void **)&_pEssenceDescriptor));
@@ -357,9 +357,9 @@ void HeaderTest::createEssenceData(IAAFSourceMob *pSourceMob)
   CAAFBuiltinDefs defs (_pDictionary);
 
   // Attempt to create an AAFEssenceData.
-  check(_pDictionary->CreateInstance(defs.cdEssenceData(),
-                         IID_IAAFEssenceData,
-                         (IUnknown **)&_pEssenceData));
+  check(defs.cdEssenceData()->
+		CreateInstance(IID_IAAFEssenceData,
+					   (IUnknown **)&_pEssenceData));
 
   check(_pEssenceData->SetFileMob(pSourceMob));
   check(_pHeader->AddEssenceData(_pEssenceData));

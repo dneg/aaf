@@ -171,10 +171,8 @@ AAFRESULT STDMETHODCALLTYPE
     memset(&sourceRef, 0, sizeof(sourceRef));
 		CvtInt32toPosition(0, sourceRef.startTime);
 		CHECK(GetDictionary(&pDictionary));
-		sub = (ImplAAFSourceClip *)pDictionary->CreateImplObject
-		  (pDictionary->GetBuiltinDefs()->cdSourceClip());
-		if(sub == NULL)
-			RAISE(E_FAIL);
+		CHECK(pDictionary->GetBuiltinDefs()->cdSourceClip()->
+			  CreateInstance ((ImplAAFObject**) &sub));
 		pDictionary->ReleaseReference();
 		pDictionary = NULL;
 		CHECK(sub->Initialize (pDataDef, length, sourceRef));
@@ -240,18 +238,15 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(GetDictionary(&pDictionary));
-		tccp = (ImplAAFTimecode *)pDictionary->CreateImplObject
-		  (pDictionary->GetBuiltinDefs()->cdTimecode());
-		if(NULL == tccp)
-			RAISE(E_FAIL);
+		CHECK(pDictionary->GetBuiltinDefs()->cdTimecode()->
+			  CreateInstance ((ImplAAFObject**) &tccp));
 
 		tccp->Initialize(length, &startTC);		 
- 		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot) == AAFRESULT_SUCCESS)
+ 		if (FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&mobSlot)
+			== AAFRESULT_SUCCESS)
 		{
-			aSequ = (ImplAAFSequence *)pDictionary->CreateImplObject
-			  (pDictionary->GetBuiltinDefs()->cdSequence());
-			if(aSequ == NULL)
-				RAISE(E_FAIL);
+			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
+				  CreateInstance((ImplAAFObject**) &aSequ));
 			CHECK(aSequ->Initialize(pDictionary->
 									GetBuiltinDefs()->
 									ddTimecode()));
@@ -261,10 +256,8 @@ AAFRESULT STDMETHODCALLTYPE
 		} /* FindTimecodeSlot */
 		else
 		{
-			aSequ = (ImplAAFSequence *)pDictionary->CreateImplObject
-			  (pDictionary->GetBuiltinDefs()->cdSequence());
-			if(aSequ == NULL)
-				RAISE(E_FAIL);
+			CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
+				  CreateInstance ((ImplAAFObject**) &aSequ));
 			CHECK(aSequ->Initialize(pDictionary->
 									GetBuiltinDefs()->
 									ddTimecode()));
@@ -347,25 +340,19 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(GetDictionary(&pDictionary));
-		filler1 = (ImplAAFFiller *)pDictionary->CreateImplObject
-		  (pDictionary->GetBuiltinDefs()->cdFiller());
-		if(filler1 == NULL)
-			RAISE(E_FAIL);
+		CHECK(pDictionary->GetBuiltinDefs()->cdFiller()->
+			  CreateInstance((ImplAAFObject**) &filler1));
 		CHECK(filler1->Initialize(pDictionary->
 								  GetBuiltinDefs()->
 								  ddEdgecode(), zeroLen));	
-		filler2 = (ImplAAFFiller *)pDictionary->CreateImplObject
-		  (pDictionary->GetBuiltinDefs()->cdFiller());
-		if(filler2 == NULL)
-			RAISE(E_FAIL);
+		CHECK(pDictionary->GetBuiltinDefs()->cdFiller()->
+			  CreateInstance ((ImplAAFObject**) &filler2));
 		CHECK(filler2->Initialize(pDictionary->
 								  GetBuiltinDefs()->
 								  ddEdgecode(), zeroLen));	
 
-		ecSequence = (ImplAAFSequence *)pDictionary->CreateImplObject
-		  (pDictionary->GetBuiltinDefs()->cdSequence());
-		if(ecSequence == NULL)
-			RAISE(E_FAIL);
+		CHECK(pDictionary->GetBuiltinDefs()->cdSequence()->
+			  CreateInstance ((ImplAAFObject**) &ecSequence));
 		CHECK(ecSequence->Initialize(pDictionary->
 									 GetBuiltinDefs()->
 									 ddEdgecode()));	
@@ -377,10 +364,8 @@ AAFRESULT STDMETHODCALLTYPE
 		edge.codeFormat = codeFormat;
 		strncpy((char *)&edge.header, (char *)&header, 8);
 		
-		edgecodeClip = (ImplAAFEdgecode *)pDictionary->CreateImplObject
-		  (pDictionary->GetBuiltinDefs()->cdEdgecode());
-		if(edgecodeClip == NULL)
-			RAISE(E_FAIL);
+		CHECK(pDictionary->GetBuiltinDefs()->cdEdgecode()->
+			  CreateInstance ((ImplAAFObject**) &edgecodeClip));
 		CHECK(edgecodeClip->Initialize(length, edge));	
 		
 		CHECK(ecSequence->AppendComponent(filler1));
@@ -468,21 +453,21 @@ AAFRESULT STDMETHODCALLTYPE
 		memset(&sourceRef, 0, sizeof(sourceRef));
 		CvtInt32toPosition(0, sourceRef.startTime);
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdSourceClip(),
-									(ImplAAFObject **)&sclp));
+		CHECK(pDict->GetBuiltinDefs()->cdSourceClip()->
+			  CreateInstance((ImplAAFObject **)&sclp));
 
 		if(FindSlotBySlotID(slotID, (ImplAAFMobSlot **)&slot) != AAFRESULT_SUCCESS)
 		{
-			CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdSequence(),
-										(ImplAAFObject **)&aSequ));
-			CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdFiller(),
-										(ImplAAFObject **)&filler1));
+			CHECK(pDict->GetBuiltinDefs()->cdSequence()->
+				  CreateInstance((ImplAAFObject **)&aSequ));
+			CHECK(pDict->GetBuiltinDefs()->cdFiller()->
+				  CreateInstance((ImplAAFObject **)&filler1));
 			if(aSequ == NULL || filler1 == NULL)
 				RAISE(E_FAIL);
 			CHECK(aSequ->AppendComponent(filler1));
 			CHECK(aSequ->AppendComponent(sclp));
-			CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdFiller(),
-										(ImplAAFObject **)&filler2));
+			CHECK(pDict->GetBuiltinDefs()->cdFiller()->
+				  CreateInstance((ImplAAFObject **)&filler2));
 			CHECK(aSequ->AppendComponent(filler2));
 
 			/* (SPR#343) Change to validate multiple ranges */
@@ -526,8 +511,8 @@ AAFRESULT STDMETHODCALLTYPE
 						AddInt64toInt64(firstFillLen, &sequLen);
 						CHECK(segSequ->SetLength(sequLen));
 
-						CHECK(pDict->CreateInstance(pDict->GetBuiltinDefs()->cdFiller(),
-													(ImplAAFObject **)&filler2));
+						CHECK(pDict->GetBuiltinDefs()->cdFiller()->
+							  CreateInstance((ImplAAFObject **)&filler2));
 //!!!						filler2 = CreateImpl(CLSID_AAFFiller(_file, mediaKind, endFillLen);	
 						CHECK(segSequ->AppendComponent(sclp));
 						CHECK(segSequ->AppendComponent(filler2));
@@ -721,8 +706,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 		CvtInt32toPosition(0, zeroPos);
 		{
-			CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdPulldown(),
-									   (ImplAAFObject **)&pdwn));
+			CHECK(dict->GetBuiltinDefs()->cdPulldown()->
+				  CreateInstance((ImplAAFObject **)&pdwn));
 			CHECK(pdwn->SetDataDef(pEssenceKind));
 			CHECK(pdwn->SetPulldownKind(pulldownKind));
 			CHECK(pdwn->SetPhaseFrame(phaseFrame));
@@ -766,8 +751,8 @@ AAFRESULT STDMETHODCALLTYPE
 				if(numSegments == 0)
 				{
 					CHECK(sequence->AppendComponent(pdwn));
-					CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdSourceClip(),
-											   (ImplAAFObject **)&sclp));
+					CHECK(dict->GetBuiltinDefs()->cdSourceClip()->
+						  CreateInstance((ImplAAFObject **)&sclp));
 					CHECK(sclp->Initialize(pEssenceKind, srcRefLength, ref));
 				}
 				for(n = 0; n < numSegments; n++)
@@ -796,8 +781,8 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 		else
 		{
-			CHECK(dict->CreateInstance(dict->GetBuiltinDefs()->cdSourceClip(),
-									   (ImplAAFObject **)&sclp));
+			CHECK(dict->GetBuiltinDefs()->cdSourceClip()->
+				  CreateInstance((ImplAAFObject **)&sclp));
 			CHECK(sclp->Initialize(pEssenceKind, srcRefLength, ref));
 			CHECK(AppendNewTimelineSlot(editrate, pdwn,
 								aMobSlot, NULL, zeroPos, &trkd) );

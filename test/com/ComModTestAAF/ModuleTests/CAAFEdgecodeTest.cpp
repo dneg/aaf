@@ -115,9 +115,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  CAAFBuiltinDefs defs (pDictionary);
 
 	  // Create a CompositionMob
-	  checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-							IID_IAAFCompositionMob, 
-							(IUnknown **)&pCompMob));
+	  checkResult(defs.cdCompositionMob()->
+				  CreateInstance(IID_IAAFCompositionMob, 
+								 (IUnknown **)&pCompMob));
 
 	  // Get a MOB interface
 	  checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
@@ -126,9 +126,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  checkResult(pCompMob->Initialize(L"COMPMOB01"));
 		
-	  checkResult(pDictionary->CreateInstance(defs.cdEdgecode(),
-								IID_IAAFEdgecode, 
-								(IUnknown **)&pEdgecode));		
+	  checkResult(defs.cdEdgecode()->
+				  CreateInstance(IID_IAAFEdgecode, 
+								 (IUnknown **)&pEdgecode));		
 
 	  startEC.startFrame = 108000;	// One hour
 	  startEC.filmKind = kFt35MM;

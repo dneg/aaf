@@ -147,13 +147,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
  		
 		// Create the effect and parameter definitions
-		checkResult(pDictionary->CreateInstance(defs.cdOperationDef(),
-							  IID_IAAFOperationDef, 
-							  (IUnknown **)&pOperationDef));
+		checkResult(defs.cdOperationDef()->
+					CreateInstance(IID_IAAFOperationDef, 
+								   (IUnknown **)&pOperationDef));
     
-		checkResult(pDictionary->CreateInstance(defs.cdParameterDef(),
-							  IID_IAAFParameterDef, 
-							  (IUnknown **)&pParamDef));
+		checkResult(defs.cdParameterDef()->
+					CreateInstance(IID_IAAFParameterDef, 
+								   (IUnknown **)&pParamDef));
 
 		checkResult(pDictionary->RegisterOperationDef(pOperationDef));
 		checkResult(pDictionary->RegisterParameterDef(pParamDef));
@@ -186,9 +186,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		// ------------------------------------------------------------
 		//
 		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-							IID_IAAFCompositionMob, 
-							(IUnknown **)&pCompMob));
+		checkResult(defs.cdCompositionMob()->
+					CreateInstance(IID_IAAFCompositionMob, 
+								   (IUnknown **)&pCompMob));
 
 		checkResult(pCompMob->Initialize(L"Transition Test"));
 		// Get a MOB interface
@@ -197,9 +197,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		checkResult(pMob->SetMobID(newMobID));
 
 		// Create a Sequence
-		checkResult(pDictionary->CreateInstance(defs.cdSequence(),
-												IID_IAAFSequence,
-												(IUnknown **) &pSequence));
+		checkResult(defs.cdSequence()->
+					CreateInstance(IID_IAAFSequence,
+								   (IUnknown **) &pSequence));
 
 		// Get a Segment interface
 		checkResult(pSequence->QueryInterface(IID_IAAFSegment, (void **)&pSegment));
@@ -221,9 +221,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 												&pNewSlot));
 
 		// Create a Filler
-		checkResult(pDictionary->CreateInstance(defs.cdFiller(),
-												IID_IAAFFiller,
-												(IUnknown **) &pFiller));
+		checkResult(defs.cdFiller()->
+					CreateInstance(IID_IAAFFiller,
+								   (IUnknown **) &pFiller));
 
 		// Get a component interface
 		checkResult(pFiller->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
@@ -239,34 +239,34 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pComponent = NULL;
 
 		
-	    checkResult(pDictionary->CreateInstance(defs.cdTransition(),
-												IID_IAAFTransition, 
-												(IUnknown **)&pTransition));
+	    checkResult(defs.cdTransition()->
+					CreateInstance(IID_IAAFTransition, 
+								   (IUnknown **)&pTransition));
 
 		// Create an empty EffectGroup object !!
-		checkResult(pDictionary->CreateInstance(defs.cdOperationGroup(),
-												IID_IAAFOperationGroup,
-												(IUnknown **)&pOperationGroup));
+		checkResult(defs.cdOperationGroup()->
+					CreateInstance(IID_IAAFOperationGroup,
+								   (IUnknown **)&pOperationGroup));
 
-		checkResult(pDictionary->CreateInstance(defs.cdParameter(),
-												IID_IAAFParameter, 
-												(IUnknown **)&pParm));
+		checkResult(defs.cdParameter()->
+					CreateInstance(IID_IAAFParameter, 
+								   (IUnknown **)&pParm));
 		checkResult(pParm->SetParameterDefinition (pParamDef));
  // !!!  ImplAAFParameter::SetTypeDefinition (ImplAAFTypeDef*  pTypeDef)
 		checkResult(pOperationGroup->Initialize(defs.ddPicture(), transitionLength, pOperationDef));
 		checkResult(pOperationGroup->AddParameter (pParm));
-		checkResult(pDictionary->CreateInstance(defs.cdFiller(),
-												IID_IAAFSegment,
-												(IUnknown **) &pEffectFiller));
+		checkResult(defs.cdFiller()->
+					CreateInstance(IID_IAAFSegment,
+								   (IUnknown **) &pEffectFiller));
 		checkResult(pOperationGroup->AppendInputSegment (pEffectFiller));
 		// release the filler
 		pEffectFiller->Release();
 		pEffectFiller  = NULL;
 
 		checkResult(pOperationGroup->SetBypassOverride (1));
-		checkResult(pDictionary->CreateInstance(defs.cdSourceClip(),
-						  IID_IAAFSourceClip, 
-						  (IUnknown **)&pSourceClip));
+		checkResult(defs.cdSourceClip()->
+					CreateInstance(IID_IAAFSourceClip, 
+								   (IUnknown **)&pSourceClip));
 		aafSourceRef_t	sourceRef;
 		sourceRef.sourceID = zeroMobID;
 		sourceRef.sourceSlotID = 0;
@@ -293,9 +293,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		pComponent = NULL;
 
 		// Create the second filler 
-		checkResult(pDictionary->CreateInstance(defs.cdFiller(),
-												IID_IAAFFiller,
-												(IUnknown **) &pFiller));
+		checkResult(defs.cdFiller()->
+					CreateInstance(IID_IAAFFiller,
+								   (IUnknown **) &pFiller));
 
 		checkResult(pFiller->QueryInterface(IID_IAAFComponent, (void **) &pComponent));
 		// Set values for the filler

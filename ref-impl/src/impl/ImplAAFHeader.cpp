@@ -10,7 +10,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -561,8 +561,8 @@ AAFRESULT
     ImplAAFDictionary *pDictionary = GetDictionary();
     if (NULL == pDictionary)
       CHECK(AAFRESULT_NOMEMORY);
-    CHECK(pDictionary->CreateInstance(pDictionary->GetBuiltinDefs()->cdIdentification(),
-									  (ImplAAFObject **)&identObj));
+    CHECK(pDictionary->GetBuiltinDefs()->cdIdentification()->
+		  CreateInstance((ImplAAFObject **)&identObj));
     if (NULL == identObj)
       CHECK(AAFRESULT_NOMEMORY);
     CHECK(identObj->SetCompanyName(pIdent->companyName));
@@ -698,8 +698,8 @@ ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
     ImplAAFDictionary *pDictionary = GetDictionary();
     if (NULL != pDictionary)
 	  {
-		pDictionary->CreateInstance (pDictionary->GetBuiltinDefs()->cdContentStorage(),
-									 (ImplAAFObject **)&result);
+		pDictionary->GetBuiltinDefs()->cdContentStorage()->
+		  CreateInstance ((ImplAAFObject **)&result);
 		_contentStorage = result;
 	  }
   }

@@ -108,9 +108,9 @@ static HRESULT ObjectTest ()
 	  assert (pDict);
 	  CAAFBuiltinDefs defs (pDict);
 
-	  checkResult (pDict->CreateInstance (defs.cdCompositionMob(),
-										  IID_IAAFCompositionMob,
-										  (IUnknown **) &pCMob));
+	  checkResult (defs.cdCompositionMob()->
+				   CreateInstance (IID_IAAFCompositionMob,
+								   (IUnknown **) &pCMob));
 	  assert (pCMob);
 	  checkResult (pCMob->Initialize (L"TestMob"));
 	  

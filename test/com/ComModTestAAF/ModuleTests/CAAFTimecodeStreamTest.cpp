@@ -119,9 +119,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		CAAFBuiltinDefs defs (pDictionary);
 		
 		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(defs.cdCompositionMob(),
-			IID_IAAFCompositionMob, 
-			(IUnknown **)&pCompMob));
+		checkResult(defs.cdCompositionMob()->
+					CreateInstance(IID_IAAFCompositionMob, 
+								   (IUnknown **)&pCompMob));
 		
 		// Get a MOB interface
 		checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
@@ -130,9 +130,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 		
 		checkResult(pCompMob->Initialize(L"COMPMOB01"));
 		
-		checkResult(pDictionary->CreateInstance(defs.cdTimecodeStream(),
-			IID_IAAFTimecodeStream, 
-			(IUnknown **)&pTimecodeStream));		
+		checkResult(defs.cdTimecodeStream()->
+					CreateInstance(IID_IAAFTimecodeStream, 
+								   (IUnknown **)&pTimecodeStream));		
 				
 		checkResult(pTimecodeStream->QueryInterface (IID_IAAFSegment, (void **)&pSeg));
 		aafRational_t editRate = { 0, 1};
