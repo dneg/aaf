@@ -138,6 +138,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMDiskRawStorage.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMDynamicLibrary.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMEnumeratedType.cpp"
 # End Source File
 # Begin Source File
@@ -350,6 +354,14 @@ SOURCE="..\..\..\ref-impl\src\OM\OMAssertions.h"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\include\OM\OMAVLTree.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMAVLTreeT.h"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\include\OM\OMBufferedIStream.h"
 # End Source File
 # Begin Source File
@@ -419,6 +431,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMDictionary.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMDiskRawStorage.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMDynamicLibrary.h"
 # End Source File
 # Begin Source File
 
