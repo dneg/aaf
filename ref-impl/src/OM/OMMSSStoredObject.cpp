@@ -259,6 +259,12 @@ void OMMSSStoredObject::close(void)
   }
 }
 
+void OMMSSStoredObject::close(OMFile& file)
+{
+  TRACE("OMMSSStoredObject::close");
+  ASSERT("Unimplemented code not reached", false); // tjb TBS
+}
+
 OMByteOrder OMMSSStoredObject::byteOrder(void) const
 {
   TRACE("OMMSSStoredObject::byteOrder");
