@@ -83,7 +83,6 @@ static const aafUInt32 sCurrentAAFObjectModelVersion = 0;
 #define AAFXMLEncoding ENCODING(aafFileKindAafXmlText)
 #define AAFKLVEncoding ENCODING(aafFileKindAafKlvBinary)
 
-static const aafUID_t kNullFileKind = { 0 };
 
 
 // local function for simplifying error handling.
