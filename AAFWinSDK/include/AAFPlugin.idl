@@ -828,7 +828,7 @@ interface IAAFEssenceCodec : IUnknown
   //   - pName is null.
   // 
   HRESULT GetCodecDisplayName (
-    // which flavour of the codec to use, or kNoCodecFlavour
+    // which flavour of the codec to use, or kAAFNilCodecFlavour
     [in, ref] aafUID_constref  flavour,
 
     // Human-readable name of the flavour
