@@ -60,7 +60,7 @@ AD_XMETHOD1(RegisterClassDef,
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\)
   //
-  // AAFRESULT_BAD_PARAM
+  // AAFRESULT_INVALID_PARAM
   //   - The class def ID has already been registered.)
 
 
@@ -87,7 +87,7 @@ AD_XMETHOD2(LookupClassDef,
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassID or ppClassDef\)
   //
-  // AAFRESULT_BAD_PARAM
+  // AAFRESULT_INVALID_PARAM
   //   - The given ID is not recognized as a class definition ID.)
 
 
@@ -131,6 +131,49 @@ AD_XMETHOD1(CountClassDefs,
   // AAFRESULT_NULL_PARAM
   //   - pResult is null.)
 
+AD_XMETHOD1(CreateForwardClassReference,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			classId,
+			Class Unique ID,
+
+     Return the class definition with the given id.
+  // 
+  // Succeeds if:
+  // - The classId does not represent an existing forward class reference
+  //   or a class definition that has already been successfully registered.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.)
+
+AD_XMETHOD2(HasForwardClassReference,
+
+			[in\, ref],
+			objPass,
+			aafUID_constref,
+			classId,
+			Class Unique ID,
+
+			[out\,retval],
+			objPass,
+			aafBoolean_t *,
+			pResult,
+			true if forward class reference; false if not a forward class reference,
+
+     Return kAAFTrue if the given class identification is a forward reference.
+  // 
+  // Succeeds if:
+  // - The pClassID pointer is valid.
+  // - The ppClassDef pointer is valid.
+  // - the ID is a recognized id for a class definition.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pClassID or ppClassDef\)
+  //
+  // AAFRESULT_INVALID_PARAM
+  //   - The given ID is not recognized as a class definition ID.)
 
 AD_XMETHOD1(RegisterTypeDef,
 
@@ -148,7 +191,7 @@ AD_XMETHOD1(RegisterTypeDef,
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pClassDef\)
   //
-  // AAFRESULT_BAD_PARAM
+  // AAFRESULT_INVALID_PARAM
   //   - The given type has already been registered.)
 
 
@@ -175,7 +218,7 @@ AD_XMETHOD2(LookupTypeDef,
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either pTypeID or ppTypeDef\)
   //
-  // AAFRESULT_BAD_PARAM
+  // AAFRESULT_INVALID_PARAM
   //   - The given ID is not recognized as a type definition ID.)
 
 
@@ -236,7 +279,7 @@ AD_XMETHOD1(RegisterOpaqueTypeDef,
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pTypeDef\)
   //
-  // AAFRESULT_BAD_PARAM
+  // AAFRESULT_INVALID_PARAM
   //   - The given type has already been registered.)
 
 
@@ -263,7 +306,7 @@ AD_XMETHOD2(LookupOpaqueTypeDef,
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(Either typeId or ppTypeDef\)
   //
-  // AAFRESULT_BAD_PARAM
+  // AAFRESULT_INVALID_PARAM
   //   - The given ID is not recognized as a type definition ID.)
 
 
