@@ -128,8 +128,6 @@ public:
 
 	STDMETHOD (SetResolutionID) ( aafInt32  resolutionID );
 	STDMETHOD (SetFrameSampleSize) ( aafInt32 frameSampleSize );
-	STDMETHOD (SetMCProps) ( aafInt32 resolutionID, 
-				 aafInt32 frameSampleSize );
 
 private:
 	IUnknown *_filemob_unk; // used for equality testing.

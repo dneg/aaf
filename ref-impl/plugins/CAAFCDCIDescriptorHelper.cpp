@@ -1301,24 +1301,3 @@ HRESULT STDMETHODCALLTYPE
 
 
 
-HRESULT STDMETHODCALLTYPE CAAFCDCIDescriptorHelper::SetMCProps( 
-    aafInt32	resolutionID,
-    aafInt32	frameSampleSize )
-{
-    HRESULT		hr = S_OK;
-
-
-    hr = SetResolutionID( resolutionID );
-
-    if( hr == S_OK )
-	hr = SetFrameSampleSize( frameSampleSize );
-
-    // {EDB35391-6D30-11d3-A036-006094EB75CB}
-    aafUID_t AAF_CMPR_AUNC422 = { 0xedb35391, 0x6d30, 0x11d3, { 0xa0, 0x36, 0x0, 0x60, 0x94, 0xeb, 0x75, 0xcb } };
-
-    if( hr == S_OK )
-	hr = SetCompression( AAF_CMPR_AUNC422 );
-
-    return hr;
-}
-
