@@ -870,7 +870,7 @@ AAFRESULT STDMETHODCALLTYPE
 			* datakind of the slot segment.
 			*/
 			CHECK(seg->GetDataDef(&datakind));
-			CHECK(dict->LookupDataDefintion(&datakind, &dataDef));
+			CHECK(dict->LookupDataDefinition(&datakind, &dataDef));
 			aafUID_t	uid = DDEF_Timecode;
 			aafBool		isTimecode;
 			CHECK(dataDef->IsDataDefOf(&uid, &isTimecode));
