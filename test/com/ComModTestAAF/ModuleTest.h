@@ -42,6 +42,13 @@ bool WeakReferenceSetsSupported(aafProductVersion_constref toolkitVersion);
 // Support for extending AAFObject was added after DR4
 bool ExtendingAAFObjectSupported(aafProductVersion_constref toolkitVersion);
 
+// Return true is greater than DR3
+bool DR4TestSupported(aafProductVersion_constref toolkitVersion);
+
+// Return true is greater than DR4 (a.k.a. RC1)
+bool RC1TestSupported(aafProductVersion_constref toolkitVersion);
+
+
 #ifdef __cplusplus
 }
 #endif
