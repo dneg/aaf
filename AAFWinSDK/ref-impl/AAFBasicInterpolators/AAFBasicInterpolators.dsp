@@ -107,7 +107,7 @@ SOURCE="..\..\..\ref-impl\plugins\AAFInterpCOM.cpp"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\plugins\AafPlugincom.def"
+SOURCE="..\..\..\ref-impl\plugins\AAFINTP.DEF"
 # End Source File
 # Begin Source File
 
