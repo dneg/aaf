@@ -126,6 +126,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMKLVStoredObject.cpp"
 # End Source File
 # Begin Source File
 
+SOURCE="..\..\..\ref-impl\src\OM\OMKLVStoredStream.cpp"
+# End Source File
+# Begin Source File
+
 SOURCE="..\..\..\ref-impl\src\OM\OMMappedFileRawStorage.cpp"
 # End Source File
 # Begin Source File
@@ -260,6 +264,10 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWideStringProperty.cpp"
 
 SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredObject.cpp"
 # End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\src\OM\OMXMLStoredStream.cpp"
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -347,6 +355,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMIntegerType.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMKLVStoredObject.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMKLVStoredStream.h"
 # End Source File
 # Begin Source File
 
@@ -707,6 +719,10 @@ SOURCE="..\..\..\ref-impl\include\OM\OMWideStringProperty.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMXMLStoredObject.h"
+# End Source File
+# Begin Source File
+
+SOURCE="..\..\..\ref-impl\include\OM\OMXMLStoredStream.h"
 # End Source File
 # End Group
 # End Target
