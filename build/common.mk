@@ -35,6 +35,33 @@ endif
 
 include $(AAFBASE)/build/pdefs-$(AAFPLATFORM).mk
 
+#--------------------------------------------------------------------------
+# Optional DV functionality requires libdv and can be turned on using e.g.
+# make LIBDV_PATH=/usr/lib
+#
+# libdv is used to provide DV functionality in the CDCI codec.
+#--------------------------------------------------------------------------
+ifdef LIBDV_PATH
+    ifneq "$(LIBDV_PATH)" "/usr/lib"
+        ADD_CFLAGS += -I$(LIBDV_PATH)/include
+        OPT_CODEC_LIBS += -L$(LIBDV_PATH)
+    endif
+    ADD_CFLAGS += -DUSE_LIBDV
+    OPT_CODEC_LIBS += -ldv
+endif
+
+#--------------------------------------------------------------------------
+# Optional libgsf support is enabled by the LIBGSF_PATH variable which must
+# contain the path to the installed libgsf includes and library e.g.
+# make LIBGSF_PATH=/usr/local
+#
+# libgsf itself requires glib (for gobject and glib calls) and zlib
+#--------------------------------------------------------------------------
+ifdef LIBGSF_PATH
+    PLATFORMLIBS += -L$(LIBGSF_PATH)/lib -lgsf-1 -lgobject-2.0 -lglib-2.0 -lz
+    ADD_CFLAGS += -I$(LIBGSF_PATH)/include -I$(LIBGSF_PATH)/include/glib-2.0 -I$(LIBGSF_PATH)/lib/glib-2.0/include -I$(LIBGSF_PATH)/include/libgsf-1 -DUSE_LIBGSF
+endif
+
 
 #----------------------------------------------------------
 # AAFBUILDDIR is the directory where all the binaries will 
@@ -75,7 +102,7 @@ endif
 
 # Update DBG_FLAGS depending on build target.
 ifeq ($(findstring Debug, $(AAFTARGET)), Debug)
-	# Add debug flags if -D_DEBUG is not already present
+    # Add debug flags if -D_DEBUG is not already present
     ifneq ($(findstring -D_DEBUG, $(DBG_FLAGS)), -D_DEBUG)
         DBG_FLAGS += -D_DEBUG -DOM_DEBUG -DOM_STACK_TRACE_ON_ASSERT
     endif
@@ -88,7 +115,7 @@ endif
 endif
 
 ifeq ($(AAFTARGET), Debug-static)
-	DBG_FLAGS += -DDISABLE_DYNAMIC_LOADING
+    DBG_FLAGS += -DDISABLE_DYNAMIC_LOADING
 endif
 
 #----------------------------------------------------------

@@ -1548,45 +1548,7 @@ void ImplAAFFile::registerFactories(void)
 // deleted
 #error No SS implementation available on platform
 
-#elif defined( OS_DARWIN )
-// DEFAULT is SchemaSoft 4K
-
-	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
-
-	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-S4K",
-                                                       L"AAF Schemasoft 4K"));
-
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
-
-	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
-
-#elif defined( OS_IRIX )
-// DEFAULT is SchemaSoft 4K
-
-	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
-
-	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-S4K",
-                                                       L"AAF Schemasoft 4K"));
-
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
-
-	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
-  						    						   Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
-
-#elif defined( OS_LINUX )
+#elif defined( OS_DARWIN ) || defined( OS_IRIX ) || defined( OS_LINUX ) || defined( OS_SOLARIS )
 
 #ifdef USE_LIBGSF
 	// If LIBGSF support is explicitly requested, GSF SS is the default
@@ -1604,13 +1566,12 @@ void ImplAAFFile::registerFactories(void)
                                                        L"AAF-G",
                                                        L"AAF GSF SS"));
 #else
-
-// DEFAULT is SchemaSoft 4K
+	// DEFAULT is SchemaSoft 4K
 	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
 	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
+#endif // USE_LIBGSF
 
-#endif
-
+#if ! defined( OS_IRIX )
 	OMFile::registerFactory(AAFS4KEncoding,
                           new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
                                                        Signature_SSBin_4K,
@@ -1621,33 +1582,13 @@ void ImplAAFFile::registerFactories(void)
                                                        Signature_SSBin_512,
                                                        L"AAF-S",
                                                        L"AAF Schemasoft SS"));
+#endif // ! OS_IRIX
 
 #elif defined( OS_FREEBSD )
 // No SS implementations ported as yet
 #error No SS implementation available on platform
 
-#elif defined( OS_SOLARIS )
-// DEFAULT is Schemasoft 4K
-
-	assert( equalUID( aafFileKindAaf4KBinary, aafFileKindAafS4KBinary));
-
-	OMFile::registerFactory(AAFS4KEncoding,
-                          new OMSS_SSStoredObjectFactory(AAFS4KEncoding,
-                                                       Signature_SSBin_4K,
-                                                       L"AAF-S4K",
-                                                       L"AAF Schemasoft 4K"));
-
-	assert( equalUID( aafFileKindAaf512Binary, aafFileKindAafS512Binary));
-
-	OMFile::registerFactory(AAFS512Encoding,
-                          new OMSS_SSStoredObjectFactory(AAFS512Encoding,
-                                                       Signature_SSBin_512,
-                                                       L"AAF-S",
-                                                       L"AAF Schemasoft SS"));
-
 #else
 #error Unknown platform
 #endif
-
-
 }

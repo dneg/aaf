@@ -91,47 +91,17 @@ const aafUID_t aafFileKindMxfKlvBinary = aafFileKindMxfKlvBinary_Value;
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
-#elif defined( OS_MACOS )
-// No SS implementation available since Microsoft 512 (via MacOLE) has been
-// deleted
-const aafUID_t aafFileKindAaf512Binary = aafFileKindPathalogical_Value;
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
-
-
-#elif defined( OS_DARWIN )
-// DEFAULT is Schemasoft (via libSSRW2C.a).
-const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
-
-
-#elif defined( OS_IRIX )
-
-// DEFAULT is Schemasoft (via libSSRW2C.a). 
-const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
-
-#elif defined( OS_LINUX )
+#elif defined( OS_DARWIN ) || defined( OS_IRIX ) || defined( OS_LINUX ) || defined( OS_SOLARIS ) || defined( OS_FREEBSD )
 
 #ifdef USE_LIBGSF
 // When LIBGSF is requested make it the default for 512 and 4k
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafG512Binary_Value;
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafG4KBinary_Value;
 #else
-// DEFAULT is Schemasoft (via libSSRW2C.a). 
+// Otherwise default is Schemasoft (via libSSRW2C.a)
 const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
 const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 #endif
-
-#elif defined( OS_FREEBSD )
-// No SS implementations ported as yet
-const aafUID_t aafFileKindAaf512Binary = aafFileKindPathalogical_Value;
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindPathalogical_Value;
-
-
-#elif defined( OS_SOLARIS )
-// DEFAULT is Schemasoft (via libSSRW2C.a)
-const aafUID_t aafFileKindAaf512Binary = aafFileKindAafS512Binary_Value;
-const aafUID_t aafFileKindAaf4KBinary = aafFileKindAafS4KBinary_Value;
 
 #else
 #error Unknown platform
@@ -158,4 +128,3 @@ const aafUID_t aafSignature_Aaf_SSBin_512 = aafSignature_Aaf_SSBin_512_Value;
 const aafUID_t aafSignature_Aaf_SSBin_4K = aafSignature_Aaf_SSBin_4K_Value;
 
 #endif // ! __AAFFileKinds_h__
-
