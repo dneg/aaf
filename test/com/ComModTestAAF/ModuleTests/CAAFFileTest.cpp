@@ -40,8 +40,6 @@
 
 #include "CAAFBuiltinDefs.h"
 
-static aafMobID_t		newMobID;
-
 
 // Cross-platform utility to delete a file.
 static void RemoveTestFile(const wchar_t* pFileName)
@@ -71,6 +69,11 @@ inline void checkExpression(bool expression, HRESULT r)
 
 #define MOB_NAME_TEST L"MOBTest"
 #define MOB_NAME_SIZE 16
+
+static const 	aafMobID_t	TEST_MobID =
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xfd3cc302, 0x03fe, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
 
 static HRESULT CreateAAFFile(aafWChar * pFileName)
@@ -121,8 +124,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 								 (IUnknown **)&pMob));
     
 	  // Initialize the Mob properties
-	  checkResult(CoCreateGuid((GUID *)&newMobID));
-	  checkResult(pMob->SetMobID(newMobID));
+	  checkResult(pMob->SetMobID(TEST_MobID));
 	  checkResult(pMob->SetName(MOB_NAME_TEST));
 
 	  // Add the source mob into the tree
@@ -208,7 +210,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		  checkResult(pMob->GetName (name, sizeof(name)));
 		  checkResult(pMob->GetMobID (&mobID));
 		  checkExpression(wcscmp( name, MOB_NAME_TEST) == 0, AAFRESULT_TEST_FAILED);
-		  checkExpression(memcmp(&mobID, &newMobID, sizeof(mobID)) == 0, AAFRESULT_TEST_FAILED);
+		  checkExpression(memcmp(&mobID, &TEST_MobID, sizeof(mobID)) == 0, AAFRESULT_TEST_FAILED);
 
 		  pMob->Release();
 		  pMob = NULL;

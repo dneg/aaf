@@ -41,6 +41,20 @@
 
 #include "CAAFBuiltinDefs.h"
 
+static const 	aafMobID_t	TEST_MobIDs[2] =
+{// begin mobid's ...
+	//first id
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0x79a699c8, 0x03fe, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}},
+
+	//second if
+{{0x06, 0x0c, 0x2b, 0x34, 0x02, 0x05, 0x11, 0x01, 0x01, 0x00, 0x10, 0x00},
+0x13, 0x00, 0x00, 0x00,
+{0xe7824a42, 0x040c, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}}
+
+}; // ...end mobid's
+
 
 // Utility class to implement the test.
 struct EssenceDataTest
@@ -51,7 +65,7 @@ struct EssenceDataTest
   void createFile(wchar_t *pFileName);
   void openFile(wchar_t *pFileName);
 
-  void createFileMob();
+  void createFileMob(unsigned int mobid_Index);
   void createEssenceData(IAAFSourceMob *pSourceMob);
   void openEssenceData();
 
@@ -311,8 +325,8 @@ void EssenceDataTest::createFile(wchar_t *pFileName)
   check(_pFile->GetHeader(&_pHeader));
   check(_pHeader->GetDictionary(&_pDictionary));
 
-  createFileMob();
-  createFileMob();
+  createFileMob(0); //use unique mobid's (without using cocreate guid()
+  createFileMob(1); //use unique mobid's (without using cocreate guid()
 
   check(_pFile->Save());
 
@@ -330,7 +344,7 @@ void EssenceDataTest::openFile(wchar_t *pFileName)
   cleanupReferences();
 }
 
-void EssenceDataTest::createFileMob()
+void EssenceDataTest::createFileMob(unsigned int mobid_Index)
 {
   assert(_pFile && _pHeader && _pDictionary);
   assert(NULL == _pSourceMob);
@@ -347,9 +361,7 @@ void EssenceDataTest::createFileMob()
 
   check(_pSourceMob->QueryInterface (IID_IAAFMob, (void **)&_pMob));
   
-  aafMobID_t newMobID = {0};
-  check(CoCreateGuid((GUID *)&newMobID));
-  check(_pMob->SetMobID(newMobID));
+  check(_pMob->SetMobID(TEST_MobIDs[mobid_Index]));
   check(_pMob->SetName(L"EssenceDataTest File Mob"));
   
   check(defs.cdFileDescriptor()->
