@@ -91,6 +91,8 @@ AD_CPP_QUOTE(// MIDL only defintion for 64 bit integer)
 #if (!defined(AAF_INT64_TYPE) && (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64)))
 #define AAF_INT64_TYPE hyper
 typedef AAF_INT64_TYPE aafInt64;
+#define AAF_UINT64_TYPE hyper
+typedef AAF_UINT64_TYPE aafUInt64;
 #else
 #error Using an incompatible midl host compiler!
 #endif
@@ -100,6 +102,7 @@ AD_CPP_QUOTE(#ifdef __MWERKS__)
 AD_CPP_QUOTE(#if \(__MWERKS__ >= 0x1100\))
 AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
 AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
+AD_CPP_QUOTE(#define AAF_UINT64_TYPE	unsigned long long)
 AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#endif)
 
@@ -108,6 +111,7 @@ AD_CPP_QUOTE(#ifdef sgi)
 AD_CPP_QUOTE(#if defined\(__LONGLONG\) || defined\(_LONGLONG\))
 AD_CPP_QUOTE(#define AAF_INT64_NATIVE	1)
 AD_CPP_QUOTE(#define AAF_INT64_TYPE		long long)
+AD_CPP_QUOTE(#define AAF_UINT64_TYPE	unsigned long long)
 AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#endif)
 
@@ -116,6 +120,7 @@ AD_CPP_QUOTE(#if defined\(_WIN32\) || defined\(WIN32\))
 AD_CPP_QUOTE(#if \(!defined\(_M_IX86\) || \(defined\(_INTEGRAL_MAX_BITS\) && _INTEGRAL_MAX_BITS >= 64\)\))
 AD_CPP_QUOTE(#define AAF_INT64_NATIVE 1)
 AD_CPP_QUOTE(#define AAF_INT64_TYPE   __int64)
+AD_CPP_QUOTE(#define AAF_UINT64_TYPE  unsigned __int64)
 AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(#endif)
 
@@ -130,9 +135,14 @@ AD_CPP_QUOTE(\	aafUInt16	words[4];)
 AD_CPP_QUOTE(} aafInt64_t;)
 AD_CPP_QUOTE(#define AAF_INT64_TYPE aafInt64_t)
 AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(#ifndef AAF_UINT64_TYPE)
+AD_CPP_QUOTE(#define AAF_UINT64_TYPE aafInt64_t)
+AD_CPP_QUOTE(#endif)
 
 AD_CPP_QUOTE(// Define the 64 bit integer type.)
 AD_CPP_QUOTE(typedef AAF_INT64_TYPE aafInt64;)
+AD_CPP_QUOTE(// Define the 64 bit unsigned integer type.)
+AD_CPP_QUOTE(typedef AAF_UINT64_TYPE aafUInt64;)
 
 AD_CPP_QUOTE(// Add compatibility with 32/64 conversion routines.)
 AD_CPP_QUOTE(#undef PORT_USE_NATIVE64)
