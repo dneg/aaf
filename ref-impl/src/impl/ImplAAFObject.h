@@ -166,42 +166,6 @@ public:
 		 aafBool * pResult);
 
 
-  //***********************************************************
-  // METHOD NAME: GetStoredByteOrder()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFEndian | GetStoredByteOrder |
-  // Returns the "Endian-ness" in which the current object was or will
-  // be stored.  If this is a transient object (i.e., one which has
-  // not been persisted) then it will return the native byte order of
-  // the platform on which this is running.
-  //
-  // @end
-  // 
-  virtual AAFRESULT STDMETHODCALLTYPE
-  GetStoredByteOrder (
-    // @parm [out] eAAFByteOrder_t * | pOrder | Pointer to place where byte order is to be put
-    eAAFByteOrder_t *  pOrder
-  );
-
-
-
-  //***********************************************************
-  // METHOD NAME: GetNativeByteOrder()
-  //
-  // DESCRIPTION:
-  // @mfunc AAFRESULT | AAFEndian | GetNativeByteOrder |
-  // Returns the native "Endian-ness" of the platform on which this is
-  // running.
-  //
-  // @end
-  // 
-  virtual AAFRESULT STDMETHODCALLTYPE
-  GetNativeByteOrder (
-    // @parm [out] eAAFByteOrder_t * | pOrder | Pointer to place where byte order is to be put
-    eAAFByteOrder_t *  pOrder
-  );
-
 
 public:
   // Interfaces ivisible inside the toolkit, but not exposed through the API

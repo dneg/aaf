@@ -837,20 +837,6 @@ AAFRESULT STDMETHODCALLTYPE
 }
 
 
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::GetStoredByteOrder (eAAFByteOrder_t *  /*pOrder*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
-
-
-AAFRESULT STDMETHODCALLTYPE
-    ImplAAFObject::GetNativeByteOrder (eAAFByteOrder_t *  /*pOrder*/)
-{
-  return AAFRESULT_NOT_IMPLEMENTED;
-}
-
 //************
 // Interfaces ivisible inside the toolkit, but not exposed through the API
 
