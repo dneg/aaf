@@ -13,6 +13,14 @@
 # $ cvs log > Everything.log
 # $ cat Everything.log | awk -f build/history/flatlog.awk  > Everything.flog
 #
+# The following prints the date and time of the most recent change
+# preceeding application of the Build-0505 tag.
+#
+# $ grep Build-0505 Everything.flog | \ 
+#   sort -r -k 3 -k 4 | \ 
+#   head -n 1 | \ 
+#   awk '{print $3 $4}'
+#
 # Functionality : Flattening the log includes -
 #
 #   - putting the information (revision, date, user etc.) about each
