@@ -118,11 +118,6 @@ public:
 			aafMediaCriteria_t *criteria,
 			ImplAAFSourceClip		**retSrcClip);
 
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFEssenceGroup)
-
 private:
 	OMStrongReferenceVectorProperty<ImplAAFSourceClip>	_choices;
 	OMStrongReferenceProperty<ImplAAFSourceClip>		_stillFrame;

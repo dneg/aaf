@@ -174,10 +174,6 @@ public:
         // @parm [out,retval] Parameter definition enumeration
         (ImplEnumAAFParameterDefs ** ppEnum);
 
-public:
-  // Declare this class to be storable.
-  //
-  OMDECLARE_STORABLE(ImplAAFOperationDef)
 private:
 	OMFixedSizeProperty<aafUID_t>					_dataDef;
 	OMFixedSizeProperty<aafBool>					_isTimeWarp;
