@@ -394,7 +394,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFMasterMob*		pMasterMob = NULL;
 	IEnumAAFMobSlots*	pSlotIter = NULL;
 	IAAFMobSlot*		pSlot;
-	aafWChar*			pTapeName = NULL;
 	aafNumSlots_t	numMobs;
 	aafSearchCrit_t	criteria;
 	IAAFSearchSource*  pSearchSource = NULL;
