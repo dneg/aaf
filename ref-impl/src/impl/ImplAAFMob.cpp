@@ -231,8 +231,8 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	AAFRESULT				hr = AAFRESULT_SUCCESS;
 	ImplAAFMob				*mobPtr = NULL;
-	ImplAAFHeader			*head;
-	ImplAAFContentStorage	*cstore;
+	ImplAAFHeader			*head = NULL;
+	ImplAAFContentStorage	*cstore = NULL;
 
 	if(newMobID == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -242,21 +242,29 @@ AAFRESULT STDMETHODCALLTYPE
 		hr = MyHeadObject(&head);
 		if(hr == AAFRESULT_SUCCESS)
 		{			
-			cstore = head->GetContentStorage();
-		
-			// Does a mob with the new ID already exist?  If so, return error
-			hr= cstore->LookupMob(newMobID, &mobPtr) ;
-			if(hr== AAFRESULT_SUCCESS)
+			hr = head->GetContentStorage(&cstore);
+			if (hr == AAFRESULT_SUCCESS)
 			{
-				RAISE(OM_ERR_DUPLICATE_MOBID);
-			}	
-			else if(hr== AAFRESULT_MOB_NOT_FOUND)
-			{
-				_mobID = *newMobID;
-				CHECK(cstore->ChangeIndexedMobID (this, newMobID));
+				// Does a mob with the new ID already exist?  If so, return error
+				hr= cstore->LookupMob(newMobID, &mobPtr) ;
+				if(hr== AAFRESULT_SUCCESS)
+				{
+					RAISE(OM_ERR_DUPLICATE_MOBID);
+				}	
+				else if(hr== AAFRESULT_MOB_NOT_FOUND)
+				{
+					_mobID = *newMobID;
+					CHECK(cstore->ChangeIndexedMobID (this, newMobID));
+				}
+				else
+					RAISE(hr);
+				
+				cstore->ReleaseReference();
+				cstore = NULL;
 			}
-			else
-				RAISE(hr);
+
+//			head->ReleaseReference();
+//			head = NULL;
 		}
 		else if (hr == AAFRESULT_NOT_IN_FILE)
 		{
@@ -267,6 +275,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 	} /* XPROTECT */
 	XEXCEPT
+	{
+		if (cstore)
+		{
+			cstore->ReleaseReference();
+			cstore = NULL;
+		}
+//		if (head)
+//		{
+//			head->ReleaseReference();
+//			head = NULL;
+//		}
+		
+	}
 	XEND;
 
 	return(AAFRESULT_SUCCESS);
