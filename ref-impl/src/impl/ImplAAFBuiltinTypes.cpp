@@ -204,6 +204,7 @@ ImplAAFBuiltinTypes::TypeDefAUID (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefRecord);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefRecord);
 
 	  _TD_AUID = static_cast<ImplAAFTypeDefRecord*>(pObj);
 	  assert (_TD_AUID);
@@ -257,6 +258,7 @@ ImplAAFBuiltinTypes::TypeDefUInt8 (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefInt);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefInt);
 
 	  _TD_UInt8 = static_cast<ImplAAFTypeDefInt*>(pObj);
 	  assert (_TD_UInt8);
@@ -291,6 +293,7 @@ ImplAAFBuiltinTypes::TypeDefUInt16 (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefInt);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefInt);
 
 	  _TD_UInt16 = static_cast<ImplAAFTypeDefInt*>(pObj);
 	  assert (_TD_UInt16);
@@ -325,6 +328,7 @@ ImplAAFBuiltinTypes::TypeDefInt16 (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefInt);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefInt);
 
 	  _TD_Int16 = static_cast<ImplAAFTypeDefInt*>(pObj);
 	  assert (_TD_Int16);
@@ -359,6 +363,7 @@ ImplAAFBuiltinTypes::TypeDefUInt32 (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefInt);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefInt);
 
 	  _TD_UInt32 = static_cast<ImplAAFTypeDefInt*>(pObj);
 	  assert (_TD_UInt32);
@@ -393,6 +398,7 @@ ImplAAFBuiltinTypes::TypeDefInt32 (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefInt);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefInt);
 
 	  _TD_Int32 = static_cast<ImplAAFTypeDefInt*>(pObj);
 	  assert (_TD_Int32);
@@ -427,6 +433,7 @@ ImplAAFBuiltinTypes::TypeDefInt64 (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefInt);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefInt);
 
 	  _TD_Int64 = static_cast<ImplAAFTypeDefInt*>(pObj);
 	  assert (_TD_Int64);
@@ -462,6 +469,7 @@ ImplAAFBuiltinTypes::TypeDefObjRef (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefStrongObjRef);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefStrongObjRef);
 
 	  _TD_ObjRef = static_cast<ImplAAFTypeDefStrongObjRef*>(pObj);
 	  assert (_TD_ObjRef);
@@ -498,6 +506,7 @@ ImplAAFBuiltinTypes::TypeDefObjRefArray (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefVariableArray);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefVariableArray);
 
 	  _TD_ObjRefArray = static_cast<ImplAAFTypeDefVariableArray*>(pObj);
 	  assert (_TD_ObjRefArray);
@@ -539,6 +548,7 @@ ImplAAFBuiltinTypes::TypeDefAUIDArray (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefVariableArray);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefVariableArray);
 
 	  _TD_AUIDArray = static_cast<ImplAAFTypeDefVariableArray*>(pObj);
 	  assert (_TD_AUIDArray);
@@ -579,6 +589,7 @@ ImplAAFBuiltinTypes::TypeDefUInt8Array (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefVariableArray);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefVariableArray);
 
 	  _TD_UInt8Array = static_cast<ImplAAFTypeDefVariableArray*>(pObj);
 	  assert (_TD_UInt8Array);
@@ -620,6 +631,7 @@ ImplAAFBuiltinTypes::TypeDefUInt8Array8 (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefFixedArray);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefFixedArray);
 
 	  _TD_UInt8Array8 = static_cast<ImplAAFTypeDefFixedArray*>(pObj);
 	  assert (_TD_UInt8Array8);
@@ -660,6 +672,7 @@ ImplAAFBuiltinTypes::TypeDefWCharString (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefString);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefString);
 
 	  _TD_WCharString = static_cast<ImplAAFTypeDefString*>(pObj);
 	  assert (_TD_WCharString);
@@ -701,6 +714,7 @@ ImplAAFBuiltinTypes::TypeDefFadeType (ImplAAFTypeDef ** ptd)
 		_dictionary->pvtCreateBaseClassInstance (&AUID_AAFTypeDefEnum);
 	  if (! pObj) return AAFRESULT_NOMEMORY;
 	  pObj->setClassFactory(_dictionary);
+	  pObj->pvtSetSoid (AUID_AAFTypeDefEnum);
 
 	  _TD_FadeType = static_cast<ImplAAFTypeDefEnum*>(pObj);
 	  assert (_TD_FadeType);
