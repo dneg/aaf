@@ -33,7 +33,7 @@
 
 
 class ImplAAFPropertyValue;
-
+class ImplAAFObject;
 class ImplAAFClassDef;
 
 

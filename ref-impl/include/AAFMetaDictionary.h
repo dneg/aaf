@@ -49,8 +49,8 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Tue May  9 12:23:43 EDT 2000
-// by user tbingham on system TBINGHAMPC.
+// This file was generated on Thu May 11 16:21:05 EDT 2000
+// by user transdel on system TRANSDEL.
 //
 // Key to macros.
 //
@@ -1754,26 +1754,8 @@ AAF_CLASS(Dictionary,
   AAF_LITERAL_AUID(0x06455000,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  MetaDictionary,
+  InterchangeObject,
   true)
-  AAF_PROPERTY(ClassDefinitions,
-    AAF_LITERAL_AUID(0x06455001,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x2601,
-    AAF_REFERENCE_TYPE(StrongReferenceSet, ClassDefinition),
-    false,
-    false,
-    Dictionary)
-  AAF_PROPERTY(TypeDefinitions,
-    AAF_LITERAL_AUID(0x06455002,
-      0x0000, 0x0000,
-      0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-    0x2602,
-    AAF_REFERENCE_TYPE(StrongReferenceSet, TypeDefinition),
-    false,
-    false,
-    Dictionary)
   AAF_PROPERTY(OperationDefinitions,
     AAF_LITERAL_AUID(0x06455003,
       0x0000, 0x0000,
@@ -3394,7 +3376,7 @@ AAF_CLASS(MetaDefinition,
   AAF_LITERAL_AUID(0x06600000,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  InterchangeObject,
+  Root,
   false)
   AAF_PROPERTY(Identification,
     AAF_LITERAL_AUID(0x06600100,
@@ -3432,7 +3414,7 @@ AAF_CLASS(MetaDictionary,
   AAF_LITERAL_AUID(0x06610000,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  InterchangeObject,
+  Root,
   true)
   AAF_PROPERTY(ClassDefinitions,
     AAF_LITERAL_AUID(0x06610100,
