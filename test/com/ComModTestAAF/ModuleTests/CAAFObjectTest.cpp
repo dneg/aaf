@@ -360,6 +360,9 @@ extern "C" HRESULT CAAFObject_test()
 		  return hr;
 		}
 
+		
+		if(hr == AAFRESULT_SUCCESS)
+			hr = AAFRESULT_NOT_IN_CURRENT_VERSION;
 	}
   catch (...)
 	{
