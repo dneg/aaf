@@ -15,9 +15,9 @@
 //
 // The following source files were used as input : 
 //
-// ../smpte/DictP18.csv 
+// ../smpte/DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Tue Jun 22 17:40:49 EDT 1999
+// This file was generated on Thu Jun 24 13:29:35 EDT 1999
 // by user tbingham on system TBINGHAMPC.
 //
 // Key to macros.
@@ -1743,7 +1743,7 @@ AAF_CLASS(TIFFDescriptor,
   AAF_LITERAL_AUID(0x06474145,
     0x0000, 0x0000,
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x01, 0x01, 0x04),
-  DigitalImageDescriptor)
+  FileDescriptor)
 AAF_PROPERTY(IsUniform,
   AAF_LITERAL_AUID(0x06474145,
     0x0100, 0x0000,
