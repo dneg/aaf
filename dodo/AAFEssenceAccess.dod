@@ -44,9 +44,9 @@ AD_IDL(//
 //
 // A number of errors can be returned from most method calls\,  These
 // are:
-//		AAFRESULT_NOMEMORY   -- The system ran out of memory processing
+//    AAFRESULT_NOMEMORY   -- The system ran out of memory processing
 //                              the method.
-//		AAFRESULT_NULL_PARAM -- A NULL parameter was passed in which
+//    AAFRESULT_NULL_PARAM -- A NULL parameter was passed in which
 //                              was required.)
 AD_FORWARD_DECLARATION(AAFSourceMob)
 AD_FORWARD_DECLARATION(AAFSourceClip)

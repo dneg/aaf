@@ -51,7 +51,7 @@ AD_XMETHOD6(Initialize,
 			AAFTypeDef,
 			pType,
 			Type of values in this enumeration.
-			// Has to be of type Int,
+    // Has to be of type Int,
 
 			[in\, size_is\(numElems\)],
 			objPass,

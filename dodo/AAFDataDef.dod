@@ -101,8 +101,8 @@ AD_XMETHOD2(DoesDataDefConvertTo,
 			pointer to result,
 
 		   Sets return value to TRUE if the DataDef of the given object
-		   // can be converted to the DataDef specified in the IN 
-		   // parameter with the DataDefName string.)
+   // can be converted to the DataDef specified in the IN 
+   // parameter with the DataDefName string.)
 		   
 
 AD_XMETHOD2(IsDataDefOf,

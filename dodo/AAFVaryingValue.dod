@@ -305,7 +305,7 @@ AD_METHOD4(GetInterpolatedValue,
 		   Size of preallocated buffer,
 
 		   [out\\\,
-		   size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],
+   size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],
 		   aafDataBuffer_t,
 		   pValue,
 		   Preallocated buffer to hold value,
