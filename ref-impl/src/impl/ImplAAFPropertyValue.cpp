@@ -86,9 +86,13 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPropertyValue::IsDefinedType (
-      aafBool *  /*pIsDefined*/)
+      aafBool * pIsDefined)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+  if (! pIsDefined)
+	return AAFRESULT_NULL_PARAM;
+  // Currently the type returned by GetType() is always the defined type.
+  *pIsDefined = AAFTrue;
+  return AAFRESULT_SUCCESS;
 }
 
 
