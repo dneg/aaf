@@ -262,7 +262,7 @@ size_t stringSize(OMUInt32 i)
   return result;
 }
 
-void toWideString(OMUInt32 i, wchar_t* result, size_t resultSize)
+void toWideString(OMUInt32 i, wchar_t* result, size_t ANAME(resultSize))
 {
   TRACE("toWideString");
 
