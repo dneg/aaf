@@ -117,6 +117,7 @@ function rowcolor(files) {
   for (x in map) {
     if (match(ff, "^" x)) {
       result = map[x];
+      break;
     }
   }
   return result;
