@@ -67,7 +67,7 @@ usage()
     echo ""
     echo "-nocvsco"
     echo "	Don't run a cvs checkout (or update) command.  This assumes an AAF"
-    echo "	source tree exists in the base directory."
+    echo "	source tree exists in the base directory. This overrides -update."
     echo ""
     echo "-nocvslog"
     echo "	Skip the cvs log command required used to determine the age of the"
@@ -150,9 +150,7 @@ fi
 CVSROOT=${CVSROOT:=:pserver:anonymous@cvs.aaf.sourceforge.net:/cvsroot/aaf}
 export CVSROOT
 
-# Fetch the source tree using cvs.  The default access method is
-# pserver.  Use ssh if option specified Update only, if option
-# specified.
+# Check out or update the source tree.
 
 CVS_CO_LOG_FILENAME=~/tmp/cvs.co.log
 CVS_UPDATE_LOG_FILENAME=~/tmp/cvs.update.log
@@ -163,7 +161,7 @@ if [ $CVS_RUN_CO_COMMAND -eq 1 ]; then
 		echo cvs update -d
 		echo cvs log file is: $CVS_UPDATE_LOG_FILENAME
 		cd AAF
-		cvs update > $CVS_UPDATE_LOG_FILENAME 2>&1
+		RepeatUntil 0 25 cvs update > $CVS_UPDATE_LOG_FILENAME 2>&1
 		CVS_STATUS=$?
 		cd ..
 	else
@@ -171,7 +169,7 @@ if [ $CVS_RUN_CO_COMMAND -eq 1 ]; then
 		echo cvs -z3 co AAF
 	        echo CVSROOT = $CVSROOT
 		echo cvs log file is: $CVS_CO_LOG_FILENAME
-		cvs -z3 co AAF > $CVS_CO_LOG_FILENAME 2>&1
+		RepeatUntil 0 25 cvs -z3 co AAF > $CVS_CO_LOG_FILENAME 2>&1
 		CVS_STATUS=$?
 
 	fi
@@ -216,7 +214,7 @@ if [ $CVS_RUN_LOG_COMMAND -eq 1 ]; then
 
     echo cvs log -r${BUILD_TAG} ${AAFSDKBUILD_H}
     echo cvs log files are: ${CVS_LOG_OUTPUT_FILENAME} and ${CVS_LOG_OUTPUT_FILENAME}.error
-    cvs log -r${BUILD_TAG} ${AAFSDKBUILD_H} > ${CVS_LOG_OUTPUT_FILENAME} 2>&1
+    RepeatUntil 0 25 cvs log -r${BUILD_TAG} ${AAFSDKBUILD_H} > ${CVS_LOG_OUTPUT_FILENAME} 2>&1
     CVS_STATUS=$?
     if [ $CVS_STATUS -ne 0 ]; then
         mv ${CVS_LOG_OUTPUT_FILENAME} ${CVS_LOG_OUTPUT_FILENAME}.error
@@ -260,7 +258,7 @@ if [ $BUILD_RUN_COMMAND -eq 1 ]; then
     ln -s $MAKE_LOG_FILENAME $MAKE_LOG_LINK
 
     cat /dev/null > $MAKE_INFO_HEADER
-    printf "Build tag:\t\t${BUILD_TAG}\n"              >> $MAKE_INFO_HEADER
+    printf "Last build tag:\t\t${BUILD_TAG}\n"              >> $MAKE_INFO_HEADER
     printf "${BUILD_TAG} date:\t${BUILD_TAG_DATE}\n"   >> $MAKE_INFO_HEADER
     printf "Host date:\t\t${CURRENT_DATE}\n"           >> $MAKE_INFO_HEADER
     printf "\n"                                        >> $MAKE_INFO_HEADER
@@ -274,6 +272,23 @@ if [ $BUILD_RUN_COMMAND -eq 1 ]; then
 
     printf "======================================================================\n\n" >> $MAKE_LOG_FILENAME
 
+    printf "Files that differ from ${BUILD_TAG}:\n\n" >> $MAKE_LOG_FILENAME
+    printf "M - files modified locally\n" >> $MAKE_LOG_FILENAME
+    printf "U - out of date files (modified in the cvs repository)\n" >> $MAKE_LOG_FILENAME
+    printf "Unknown local files are not shown.\n\n" >> $MAKE_LOG_FILENAME
+
+    echo Running: cvs -nq update -d -r ${BUILD_TAG} 
+    RepeatUntil 0 25 cvs -nq update -d -r ${BUILD_TAG} > ~/tmp/cvs.changed_files.log
+    CVS_STATUS=$?
+    if [ $CVS_STATUS -ne 0 ]; then
+	echo cvs failed with exit status $CVS_STATUS
+	exit $CVS_STATUS
+    fi
+    grep -v ^\? < ~/tmp/cvs.changed_files.log  >> $MAKE_LOG_FILENAME
+
+
+    printf "\n======================================================================\n\n" >> $MAKE_LOG_FILENAME
+
     (time make -k everything AAFTARGET=${AAFTARGET}) >> $MAKE_LOG_FILENAME 2>&1
 
 fi
@@ -283,8 +298,9 @@ fi
 #
 
 # Get the date stamped log file name from the link.  The link is used
-# in case the build command was not executed (i.e. we don't have the
-# date stamped file name).
+# in case the build command was not executed (i.e. The -nobuild option
+# This is useful when the FilterLog script must be tweaked and the
+# user which to avoid recompiling.
 
 FILTER_COMMAND=FilterLog_`sh build/aafplatform.sh`
 MAKE_LOG_FILENAME=`ls -l $MAKE_LOG_LINK | awk '{print $11}'`
@@ -314,34 +330,33 @@ if [ $RUN_REG_TESTS -eq 1 ]; then
 fi
 
 # Recover the regression log filename from the link in case the
-# regressions where not run.
+# regression tests were not executed.
 REGRESSION_LOG_FILENAME=`ls -l $REGRESSION_LOG_LINK | awk '{print $11}'`
-
 
 if [ $COPY_LOGS -eq 1 ]; then
     echo Copying the log files.
     echo ssh ${SF_SHELL_HOST} mkdir -p ${DST_DIR}
 
-    ssh ${SF_SHELL_HOST} mkdir -p ${DST_DIR}
+    RepeatWhile 255 5 ssh ${SF_SHELL_HOST} mkdir -p ${DST_DIR}
 
     echo scp ${MAKE_LOG_FILENAME} ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}
-    scp -q ${MAKE_LOG_FILENAME} ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}
+    RepeatUntil 0 5 scp -q ${MAKE_LOG_FILENAME} ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}
 
     echo scp ${MAKE_LOG_FILENAME}.filtered ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}.filtered
-    scp -q ${MAKE_LOG_FILENAME}.filtered ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}.filtered
+    RepeatUntil 0 5 scp -q ${MAKE_LOG_FILENAME}.filtered ${SF_SHELL_HOST}:${DST_DIR}/${MAKE_LOG_FILENAME}.filtered
 
     echo scp -q ${REGRESSION_LOG_FILENAME} ${SF_SHELL_HOST}:${DST_DIR}/${REGRESSION_LOG_FILENAME}
-    scp -q ${REGRESSION_LOG_FILENAME} ${SF_SHELL_HOST}:${DST_DIR}/${REGRESSION_LOG_FILENAME}
+    RepeatUntil 0 5 scp -q ${REGRESSION_LOG_FILENAME} ${SF_SHELL_HOST}:${DST_DIR}/${REGRESSION_LOG_FILENAME}
 
     # Add user friendly links. The links will always point to most recent log.
     echo Making links on the remote host.
-    ssh ${SF_SHELL_HOST} \(rm -f ${DST_DIR}/make.log.${AAFTARGET} \; \
+    RepeatWhile 255 5 ssh ${SF_SHELL_HOST} \(rm -f ${DST_DIR}/make.log.${AAFTARGET} \; \
                            ln -s ${DST_DIR}/${MAKE_LOG_FILENAME} ${DST_DIR}/make.log.${AAFTARGET}\)
 
-    ssh ${SF_SHELL_HOST} \(rm -f ${DST_DIR}/make.log.${AAFTARGET}.filtered \; \
+    RepeatWhile 255 5 ssh ${SF_SHELL_HOST} \(rm -f ${DST_DIR}/make.log.${AAFTARGET}.filtered \; \
                            ln -s ${DST_DIR}/${MAKE_LOG_FILENAME}.filtered ${DST_DIR}/make.log.${AAFTARGET}.filtered \)
 
-    ssh ${SF_SHELL_HOST} \(rm -f ${DST_DIR}/regression.log.${AAFTARGET} \; \
+    RepeatWhile 255 5 ssh ${SF_SHELL_HOST} \(rm -f ${DST_DIR}/regression.log.${AAFTARGET} \; \
                            ln -s ${DST_DIR}/${REGRESSION_LOG_FILENAME} ${DST_DIR}/regression.log.${AAFTARGET} \)
 
 fi
