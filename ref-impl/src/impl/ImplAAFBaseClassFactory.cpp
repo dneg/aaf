@@ -133,11 +133,9 @@ static void InitializeAUIDTable(void)
 }
 
 
-//!This file should be merged into other files over time
-
 ImplAAFBaseClassFactory::ImplAAFBaseClassFactory(void)
 {
-  // Initialize out lookup table for the built-in base class auids.
+  // Initialize our lookup table for the built-in base class auids.
   if (0 == g_AUIDTable[0])
     InitializeAUIDTable();
 }
@@ -148,7 +146,7 @@ ImplAAFBaseClassFactory::~ImplAAFBaseClassFactory(void)
 
 
 
-// Temporary function that looksup the code class id for the corresponding
+// Global function that looksup the built-in code class id for the corresponding
 // auid.
 const aafClassID_t* lookupClassID(const aafUID_t* pAUID)
 {
@@ -172,7 +170,11 @@ const aafClassID_t* lookupClassID(const aafUID_t* pAUID)
   return (pClassID);
 }
 
-static OMStorable* createObject(const aafUID_t* pAUID)
+
+//
+// Factory method for all built-in classes.
+//
+ImplAAFObject* ImplAAFBaseClassFactory::createObject(const aafUID_t* pAUID) const
 {
 
   // Lookup the code class id for the given stored object id.
@@ -181,15 +183,24 @@ static OMStorable* createObject(const aafUID_t* pAUID)
     return NULL;
   
   // Attempt to create the corresponding storable object.
-  OMStorable* result = dynamic_cast<OMStorable*>(CreateImpl(*id));
-  return result;
-}
+  ImplAAFRoot *impl = CreateImpl(*id);
+  if (NULL == impl)
+  { // This is a serious programming error. A stored object id was found in the file
+	// with a known base class id but no base object could be created.
+    assert(NULL != impl);
+    return NULL;
+  }
 
+  // Make sure that the object we created was actually one of our
+  // ImplAAFObject derived classes.
+  ImplAAFObject* object = dynamic_cast<ImplAAFObject*>(impl);
+  if (NULL == object)
+  { // Not a valid object. Release the pointer so we don't leak memory.
+    impl->ReleaseReference();
+    impl = 0;
+    assert(NULL != object);
+	return NULL;
+  }
 
-
-ImplAAFObject* ImplAAFBaseClassFactory::createObject(const aafUID_t* pAUID) const
-{
-  // Call the current private static function to create the built-in
-  // base class.
-  return (ImplAAFObject *)::createObject(pAUID);
+  return object;
 }
