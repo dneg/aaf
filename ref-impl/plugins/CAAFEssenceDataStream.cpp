@@ -70,8 +70,18 @@ HRESULT STDMETHODCALLTYPE
 HRESULT STDMETHODCALLTYPE
     CAAFEssenceDataStream::Seek (aafInt64  byteOffset)
 {
-  if (NULL == _data)
-    return AAFRESULT_NOT_INITIALIZED;
+	HRESULT		hr = S_OK;
+	aafBool		valid;
+
+	if (NULL == _data)
+		return AAFRESULT_NOT_INITIALIZED;
+
+  	hr = IsPosValid (byteOffset, &valid);
+	if(hr != S_OK)
+		return(hr);
+
+	if(!valid)
+		return(AAFRESULT_BADSAMPLEOFFSET);
 
 	return(_data->SetPosition(byteOffset));
 }
@@ -112,7 +122,7 @@ HRESULT STDMETHODCALLTYPE
   
   *isValid = AAFFalse;
 
-  if (0 < byteOffset)
+  if (0 <= byteOffset)
   {
     aafInt64 length = 0;
     HRESULT hr = GetLength(&length);
