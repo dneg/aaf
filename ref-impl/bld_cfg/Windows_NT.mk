@@ -43,4 +43,5 @@ SH_PREFIX =
 SH_SUFFIX = 
 SHELL = c:/mksnt/sh
 
-IDL = midl
+MIDL = midl
+MIDL_SYS_CFLAGS = /server none /client none
