@@ -71,6 +71,12 @@ static wchar_t *sDescription1 = L"Test Descriptor Description1";
 static wchar_t *sName2 = L"Test Descriptor Name2";
 static wchar_t *sDescription2 = L"Test Descriptor Description2";
 
+// {81831636-EDF4-11d3-A353-009027DFCA6A}
+static const aafUID_t InterpDef1 = 
+{ 0x81831636, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
+// {81831637-EDF4-11d3-A353-009027DFCA6A}
+static const aafUID_t InterpDef2 = 
+{ 0x81831637, 0xedf4, 0x11d3, { 0xa3, 0x53, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
@@ -152,8 +158,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pInterpolationDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pDef->SetName(sName1));
-	checkResult(pDef->SetDescription(sDescription1));
+	checkResult(pInterpolationDef->Initialize(InterpDef1, sName1, sDescription1));
 	checkResult(pDictionary->RegisterInterpolationDef(pInterpolationDef));
 	pDef->Release();
 	pDef = NULL;
@@ -166,8 +171,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	checkResult(pInterpolationDef->QueryInterface (IID_IAAFDefObject,
                                           (void **)&pDef));
 
-	checkResult(pDef->SetName(sName2));
-	checkResult(pDef->SetDescription(sDescription2));
+	checkResult(pInterpolationDef->Initialize(InterpDef2, sName2, sDescription2));
 
 	checkResult(pDictionary->RegisterInterpolationDef(pInterpolationDef));
   }
