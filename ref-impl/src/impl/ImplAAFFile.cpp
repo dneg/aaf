@@ -49,7 +49,6 @@ ImplAAFFile::Initialize ()
 	_dictionary = static_cast<ImplAAFDictionary *>(CreateImpl(CLSID_AAFDictionary));
 	if (NULL == _dictionary)
 		return AAFRESULT_NOMEMORY;
-
 	_initialized = AAFTrue;
 
 	return AAFRESULT_SUCCESS;
@@ -97,6 +96,17 @@ ImplAAFFile::OpenExistingRead (wchar_t * pFileName,
 		_head = dynamic_cast<ImplAAFHeader *>(head);
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
+		// Now that the file is open and the header has been
+		// restored, complete the initialization of the
+		// dictionary. We obtain the dictionary via the header
+		// to give the persistence mechanism a chance to work.
+		ImplAAFDictionary* dictionary = 0;
+		HRESULT hr = _head->GetDictionary(&dictionary);
+		if (hr != AAFRESULT_SUCCESS)
+		  return hr;
+		dictionary->InitBuiltins();
+		dictionary->ReleaseReference();
+
 		// Initialize the mob lookup tables.
 		checkResult(_head->LoadMobTables());
 		
@@ -171,6 +181,17 @@ ImplAAFFile::OpenExistingModify (wchar_t * pFileName,
 		_head = dynamic_cast<ImplAAFHeader *>(head);
 		checkExpression(NULL != _head, AAFRESULT_BADHEAD);
 		
+		// Now that the file is open and the header has been
+		// restored, complete the initialization of the
+		// dictionary. We obtain the dictionary via the header
+		// to give the persistence mechanism a chance to work.
+		ImplAAFDictionary* dictionary = 0;
+		HRESULT hr = _head->GetDictionary(&dictionary);
+		if (hr != AAFRESULT_SUCCESS)
+		  return hr;
+		dictionary->InitBuiltins();
+		dictionary->ReleaseReference();
+
 		// Initialize the mob lookup tables.
 		checkResult(_head->LoadMobTables());
 
@@ -267,6 +288,17 @@ ImplAAFFile::OpenNewModify (wchar_t * pFileName,
 		_file = OMFile::openNewModify(pFileName, _dictionary, _byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
 
+		// Now that the file is open and the header has been
+		// restored, complete the initialization of the
+		// dictionary. We obtain the dictionary via the header
+		// to give the persistence mechanism a chance to work.
+		ImplAAFDictionary* dictionary = 0;
+		HRESULT hr = _head->GetDictionary(&dictionary);
+		if (hr != AAFRESULT_SUCCESS)
+		  return hr;
+		dictionary->InitBuiltins();
+		dictionary->ReleaseReference();
+
 		_open = AAFTrue;
 		_openType = kOmCreate;
 		GetRevision(&_setrev);
@@ -336,6 +368,17 @@ ImplAAFFile::OpenTransient (aafProductIdentification_t * pIdent)
 		// Attempt to create the file.
 		_file = OMFile::openNewTransient(_dictionary, _byteOrder, _head);
 		checkExpression(NULL != _file, AAFRESULT_INTERNAL_ERROR);
+
+		// Now that the file is open and the header has been
+		// restored, complete the initialization of the
+		// dictionary. We obtain the dictionary via the header
+		// to give the persistence mechanism a chance to work.
+		ImplAAFDictionary* dictionary = 0;
+		HRESULT hr = _head->GetDictionary(&dictionary);
+		if (hr != AAFRESULT_SUCCESS)
+		  return hr;
+		dictionary->InitBuiltins();
+		dictionary->ReleaseReference();
 
 		_open = AAFTrue;
 		_openType = kOmTransient;
