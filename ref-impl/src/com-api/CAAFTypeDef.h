@@ -65,9 +65,9 @@ public:
   // GetTypeCategory()
   //
   // Returns the type category to which this type definition belongs.
-  // 
-  // Succeeds if:
-  // - The pTid argument is valid
+  /// 
+  /// Succeeds if:
+  /// - The pTid argument is valid
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -89,14 +89,14 @@ public:
   // RawAccessType()
   //
   // This method returns the type def through which values of this
-  // type may be accessed if the client wishes to access the value as
-  // as raw data.
+  /// type may be accessed if the client wishes to access the value as
+  /// as raw data.
     // NOTE! Stub only.   Implementation not yet added.
   //
 
-  // 
-  // Succeeds if:
-  // - The ppRawTYPEDEF argument is valid
+  /// 
+  /// Succeeds if:
+  /// - The ppRawTYPEDEF argument is valid
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

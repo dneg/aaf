@@ -73,19 +73,19 @@ public:
   // GetGeneration()
   //
   // Gets the generation of this object, which is represented by an
-  // AAFIdentification object.  This is used to detect when an object
-  // has been modified.
-  //
-  // This method will succeed if generation tracking is enabled for
-  // this object.  Call EnableGenerationTrackint() and
-  // DisableGenerationTrackint() to control generation tracking for
-  // this object.  Call IsGenerationTracked() to determine if
-  // generation tracking is currently enabled for this object.
-  //
-  // Succeeds if all of the following are true:
-  // - the given pGeneration pointer is valid.
-  // - generation tracking is enabled for this object.
-  // - this object is attached to a file.
+  /// AAFIdentification object.  This is used to detect when an object
+  /// has been modified.
+  ///
+  /// This method will succeed if generation tracking is enabled for
+  /// this object.  Call EnableGenerationTrackint() and
+  /// DisableGenerationTrackint() to control generation tracking for
+  /// this object.  Call IsGenerationTracked() to determine if
+  /// generation tracking is currently enabled for this object.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given pGeneration pointer is valid.
+  /// - generation tracking is enabled for this object.
+  /// - this object is attached to a file.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -96,17 +96,17 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - ppGeneration arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - Generation tracking is not enabled for this object.
-  //
-  // AAFRESULT_OBJECT_NOT_ATTACHED
-  //   - This object is not attached to a file from which generation
-  //     information can be obtained..
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - Generation tracking is not enabled for this object.
+  ///
+  /// AAFRESULT_OBJECT_NOT_ATTACHED
+  ///   - This object is not attached to a file from which generation
+  ///     information can be obtained..
   //
   STDMETHOD (GetGeneration) (
     // AAFIdentification object corresponding to this object's
-    // Generation ID 
+  /// Generation ID 
     /*[out]*/ IAAFIdentification ** ppGeneration);
 
 
@@ -115,20 +115,20 @@ public:
   // GetGenerationAUID()
   //
   // Shortcut to get the AUID representing the Identification
-  // representing this object's generation.  (Can also be obtained by
-  // calling this->GetGeneration(&pIdent), and using its result to
-  // call pIdent->GetAuid()).
-  //
-  // This method will succeed if generation tracking is enabled for
-  // this object.  Call EnableGenerationTrackint() and
-  // DisableGenerationTrackint() to control generation tracking for
-  // this object.  Call IsGenerationTracked() to determine if
-  // generation tracking is currently enabled for this object.
-  //
-  // Succeeds if all of the following are true:
-  // - the given pResult pointer is valid.
-  // - generation tracking is enabled for this object.
-  // - this object is attached to a file.
+  /// representing this object's generation.  (Can also be obtained by
+  /// calling this->GetGeneration(&pIdent), and using its result to
+  /// call pIdent->GetAuid()).
+  ///
+  /// This method will succeed if generation tracking is enabled for
+  /// this object.  Call EnableGenerationTrackint() and
+  /// DisableGenerationTrackint() to control generation tracking for
+  /// this object.  Call IsGenerationTracked() to determine if
+  /// generation tracking is currently enabled for this object.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given pResult pointer is valid.
+  /// - generation tracking is enabled for this object.
+  /// - this object is attached to a file.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -139,13 +139,13 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pResult arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - Generation tracking is not enabled for this object.
-  //
-  // AAFRESULT_OBJECT_NOT_ATTACHED
-  //   - This object is not attached to a file from which generation
-  //     information can be obtained..
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - Generation tracking is not enabled for this object.
+  ///
+  /// AAFRESULT_OBJECT_NOT_ATTACHED
+  ///   - This object is not attached to a file from which generation
+  ///     information can be obtained..
   //
   STDMETHOD (GetGenerationAUID) (
     // AUID corresponding to this object's Generation ID 
@@ -157,15 +157,15 @@ public:
   // GetDefinition()
   //
   // Returns the class definition which describes this object
-  // instance.
-  //
-  // Succeeds if all of the following are true:
-  // - the given ppClassDef pointer is valid.
-  //
-  // Note! Use care when dealing with the object class.  Among the
-  // pitfalls to be avoided is that tests for equality will not
-  // reflect inheritance.  This becomes important if an unknown
-  // non-builtin (that is, user defined) object class ID is obtained.
+  /// instance.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given ppClassDef pointer is valid.
+  ///
+  /// Note! Use care when dealing with the object class.  Among the
+  /// pitfalls to be avoided is that tests for equality will not
+  /// reflect inheritance.  This becomes important if an unknown
+  /// non-builtin (that is, user defined) object class ID is obtained.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -187,21 +187,21 @@ public:
   // GetProperties()
   //
   // Returns an enumerator across all properties actually contained in
-  // this object.  Each property is represented by an IAAFProperty
-  // interface.
-  // 
+  /// this object.  Each property is represented by an IAAFProperty
+  /// interface.
+  /// 
   //
   // *ppEnum is AddRef()ed before it is returned.
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done, any semantic checking (such
-  // as that which is performed in all other named property Get/Set
-  // methods) is not done here.  Users must use this method at their
-  // own risk.
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done, any semantic checking (such
+  /// as that which is performed in all other named property Get/Set
+  /// methods) is not done here.  Users must use this method at their
+  /// own risk.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -223,14 +223,14 @@ public:
   // CountProperties()
   //
   // Returns the number of properties currently present in this
-  // object.  This is the same number as will be accessed through
-  // GetProperties().
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done, any semantic checking (such
-  // as that which is performed in all other named property Get/Set
-  // methods) is not done here.  Users must use this method at their
-  // own risk.
+  /// object.  This is the same number as will be accessed through
+  /// GetProperties().
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done, any semantic checking (such
+  /// as that which is performed in all other named property Get/Set
+  /// methods) is not done here.  Users must use this method at their
+  /// own risk.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -252,13 +252,13 @@ public:
   // GetPropertyValue()
   //
   // Returns the requested Property Value.  The desired property data
-  // is identified by the given property definition.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done, any semantic checking (such
-  // as that which is performed in all other named property Get/Set
-  // methods) is not done here.  Users must use this method at their
-  // own risk.
+  /// is identified by the given property definition.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done, any semantic checking (such
+  /// as that which is performed in all other named property Get/Set
+  /// methods) is not done here.  Users must use this method at their
+  /// own risk.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -269,12 +269,12 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pPropDef or ppPropVal arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - named property is optional, but not present in this class.
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - named property is optional, but not present in this class.
   //
   STDMETHOD (GetPropertyValue) (
     // property definition indentifying desired property
@@ -289,14 +289,14 @@ public:
   // SetPropertyValue()
   //
   // Sets the value of the given property to the given value.  If the
-  // selected property is optional but not yet present, will make the
-  // property present before setting its value.
-  //
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done, any semantic checking (such
-  // as that which is performed in all other named property Get/Set
-  // methods) is not done here.  Users must use this method at their
-  // own risk.
+  /// selected property is optional but not yet present, will make the
+  /// property present before setting its value.
+  ///
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done, any semantic checking (such
+  /// as that which is performed in all other named property Get/Set
+  /// methods) is not done here.  Users must use this method at their
+  /// own risk.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -307,12 +307,12 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pPropDef or ppPropVal arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - named property is optional, but not present in this class.
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - named property is optional, but not present in this class.
   //
   STDMETHOD (SetPropertyValue) (
     // property definition indentifying desired property
@@ -327,13 +327,13 @@ public:
   // IsPropertyPresent()
   //
   // Sets *pResultReturns true in if named property is legal and is
-  // present; sets it to false if it is legal and is absent.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done, any semantic checking (such
-  // as that which is performed in all other named property Get/Set
-  // methods) is not done here.  Users must use this method at their
-  // own risk.
+  /// present; sets it to false if it is legal and is absent.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done, any semantic checking (such
+  /// as that which is performed in all other named property Get/Set
+  /// methods) is not done here.  Users must use this method at their
+  /// own risk.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -344,9 +344,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pResult arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.
   //
   STDMETHOD (IsPropertyPresent) (
     // property definition indentifying desired property
@@ -361,13 +361,13 @@ public:
   // RemoveOptionalProperty()
   //
   // Removes the property if named property is legal and is
-  // optional and present.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done, any semantic checking (such
-  // as that which is performed in all other named property Get/Set
-  // methods) is not done here.  Users must use this method at their
-  // own risk.
+  /// optional and present.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done, any semantic checking (such
+  /// as that which is performed in all other named property Get/Set
+  /// methods) is not done here.  Users must use this method at their
+  /// own risk.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -378,9 +378,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pResult arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.
   //
   STDMETHOD (RemoveOptionalProperty) (
     // property definition indentifying desired property 
@@ -392,13 +392,13 @@ public:
   // CreateOptionalPropertyValue()
   //
   // Returns the requested Property Value.  The desired property data
-  // is identified by the given optional property definition.
-  // 
-  // Note! This is a low-level method which allows direct access to
-  // properties.  If such access is done, any semantic checking (such
-  // as that which is performed in all other named property Get/Set
-  // methods) is not done here.  Users must use this method at their
-  // own risk.
+  /// is identified by the given optional property definition.
+  /// 
+  /// Note! This is a low-level method which allows direct access to
+  /// properties.  If such access is done, any semantic checking (such
+  /// as that which is performed in all other named property Get/Set
+  /// methods) is not done here.  Users must use this method at their
+  /// own risk.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -409,12 +409,12 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pPropDef or ppPropVal arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_PROPERTY
-  //   - named property illegal for this object's class.
-  //
-  // AAFRESULT_PROP_ALREADY_PRESENT
-  //   - named property is optional, but already present in this class.
+  ///
+  /// AAFRESULT_ILLEGAL_PROPERTY
+  ///   - named property illegal for this object's class.
+  ///
+  /// AAFRESULT_PROP_ALREADY_PRESENT
+  ///   - named property is optional, but already present in this class.
   //
   STDMETHOD (CreateOptionalPropertyValue) (
     // property definition indentifying desired property
@@ -429,14 +429,14 @@ public:
   // GetDictionary()
   //
   // Returns the dictionary for this object instance.
-  //
-  // Succeeds if all of the following are true:
-  // - the given ppDictionary pointer is valid.
-  //
-  // Note! Use care when dealing with the object class.  Among the
-  // pitfalls to be avoided is that tests for equality will not
-  // reflect inheritance.  This becomes important if an unknown
-  // non-builtin (that is, user defined) object class ID is obtained.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given ppDictionary pointer is valid.
+  ///
+  /// Note! Use care when dealing with the object class.  Among the
+  /// pitfalls to be avoided is that tests for equality will not
+  /// reflect inheritance.  This becomes important if an unknown
+  /// non-builtin (that is, user defined) object class ID is obtained.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -458,19 +458,19 @@ public:
   // EnableGenerationTracking()
   //
   // Calling this method will cause generation tracking to be enabled
-  // for this object.  Generation information will then be available
-  // through the GetGeneration() and GetGenerationAUID() methods.
-  // 
-  // Calling the DisableGenerationTracking() method will disable
-  // generation tracking for this object.
-  // 
-  // Generation tracking is disabled by default.
-  //
-  // This method always succeeds, even if generation tracking is
-  // already enabled.
-  // 
-  // This method will return the following result:
-  //  - AAFRESULT_SUCCESS
+  /// for this object.  Generation information will then be available
+  /// through the GetGeneration() and GetGenerationAUID() methods.
+  /// 
+  /// Calling the DisableGenerationTracking() method will disable
+  /// generation tracking for this object.
+  /// 
+  /// Generation tracking is disabled by default.
+  ///
+  /// This method always succeeds, even if generation tracking is
+  /// already enabled.
+  /// 
+  /// This method will return the following result:
+  ///  - AAFRESULT_SUCCESS
   //
   STDMETHOD (EnableGenerationTracking)
      ();
@@ -482,20 +482,20 @@ public:
   // DisableGenerationTracking()
   //
   // Calling this method will cause generation tracking to be disabled
-  // for this object.  Generation information will then not be
-  // available through the GetGeneration() and GetGenerationAUID()
-  // methods.
-  // 
-  // Calling the EnableGenerationTracking() method will enable
-  // generation tracking for this object.
-  // 
-  // Generation tracking is disabled by default.
-  //
-  // This method always succeeds, even if generation tracking is
-  // already disbled.
-  // 
-  // This method will return the following result:
-  //  - AAFRESULT_SUCCESS
+  /// for this object.  Generation information will then not be
+  /// available through the GetGeneration() and GetGenerationAUID()
+  /// methods.
+  /// 
+  /// Calling the EnableGenerationTracking() method will enable
+  /// generation tracking for this object.
+  /// 
+  /// Generation tracking is disabled by default.
+  ///
+  /// This method always succeeds, even if generation tracking is
+  /// already disbled.
+  /// 
+  /// This method will return the following result:
+  ///  - AAFRESULT_SUCCESS
   //
   STDMETHOD (DisableGenerationTracking)
      ();
@@ -507,17 +507,17 @@ public:
   // IsGenerationTracked()
   //
   // This method will set *pResult to AAFTrue if generations are
-  // being tracked for this object.  A result of AAFTrue indicates
-  // that generation information will be available through the
-  // GetGeneration() and GetGenerationAUID() methods.
-  // 
-  // Calling the EnableGenerationTracking() method will enable
-  // generation tracking for this object; calling the
-  // DisableGenerationTracking() method will disable generation
-  // tracking for this object.
-  // 
-  // Generation tracking is disabled by default.
-  //
+  /// being tracked for this object.  A result of AAFTrue indicates
+  /// that generation information will be available through the
+  /// GetGeneration() and GetGenerationAUID() methods.
+  /// 
+  /// Calling the EnableGenerationTracking() method will enable
+  /// generation tracking for this object; calling the
+  /// DisableGenerationTracking() method will disable generation
+  /// tracking for this object.
+  /// 
+  /// Generation tracking is disabled by default.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

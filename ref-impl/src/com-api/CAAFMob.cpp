@@ -1877,7 +1877,7 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
-  //
+  ///
 
 HRESULT STDMETHODCALLTYPE
     CAAFMob::AppendKLVData (IAAFKLVData * pData)

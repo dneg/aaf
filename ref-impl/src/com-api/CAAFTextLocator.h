@@ -66,21 +66,21 @@ public:
   // Initialize()
   //
   // Initializes a newly allocated, empty
-  // IAAFNetworkLocator-supporting object.  This method must be called
-  // after allocation, and before any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize() has already been called on this object.
+  /// IAAFNetworkLocator-supporting object.  This method must be called
+  /// after allocation, and before any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
   //
   STDMETHOD (Initialize)
      ();
@@ -92,20 +92,20 @@ public:
   // SetName()
   //
   // Sets the Name string property.
-  //
-  // Set the Name property to the value specified in
-  // pName.  A copy is made of the data so the caller
-  // retains ownership of the *pName buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pName pointer is valid.
-  // 
-  // If this method fails the Name property will not be
-  // changed.
-  // 
+  ///
+  /// Set the Name property to the value specified in
+  /// pName.  A copy is made of the data so the caller
+  /// retains ownership of the *pName buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pName pointer is valid.
+  /// 
+  /// If this method fails the Name property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -127,24 +127,24 @@ public:
   // GetName()
   //
   // Gets the Name string property.
-  // 
-  // Writes the Name property, with a trailing null
-  // character, into the pName buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the Name property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetNameBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pName.
-  // 
-  // Succeeds if:
-  // - The pName pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   Name.
+  /// 
+  /// Writes the Name property, with a trailing null
+  /// character, into the pName buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the Name property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetNameBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pName.
+  /// 
+  /// Succeeds if:
+  /// - The pName pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   Name.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -155,10 +155,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pName arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold Name.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold Name.
   //
   STDMETHOD (GetName) (
     // buffer into which Name is to be written
@@ -173,9 +173,9 @@ public:
   // GetNameBufLen()
   //
   // Returns size of buffer (in bytes) required for GetName().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

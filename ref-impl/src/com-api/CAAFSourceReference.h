@@ -65,21 +65,21 @@ public:
   // GetSourceID()
   //
   // Gets the SourceID and places it into the pSourceID argument.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSourceID pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pSourceID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSourceID arg is NULL.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSourceID pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pSourceID.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSourceID arg is NULL.
   //
   STDMETHOD (GetSourceID) (
     // Place to put source ID 
@@ -91,15 +91,15 @@ public:
   // SetSourceID()
   //
   // Sets the SourceID using the sourceID argument.
-  // 
-  // Always succeeds.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// Always succeeds.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetSourceID) (
     // Source ID to set 
@@ -111,21 +111,21 @@ public:
   // GetSourceMobSlotID()
   //
   // Gets the Mob Slot ID and places it into the pMobSlotID argument.
-  //
-  // Succeeds if all of the following are true:
-  // - the pMobSlotID pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pMobSlotID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMobSlotID arg is NULL.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pMobSlotID pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pMobSlotID.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMobSlotID arg is NULL.
   //
   STDMETHOD (GetSourceMobSlotID) (
     // Place to put source mob slot ID 
@@ -137,20 +137,20 @@ public:
   // SetSourceMobSlotID()
   //
   // Sets the mob slot ID using the mobSlotID argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - (preconditions here)
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // (other error codes here.)
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - (preconditions here)
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// (other error codes here.)
   //
   STDMETHOD (SetSourceMobSlotID) (
     // Source Mob ID to set 
@@ -163,18 +163,18 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | SetChannelIDs |
   // Specify the channels in a slot that are referenced. The first channel has
-// and ID of 1, the N'th channel has an ID of N.  The number of channel IDs
-// shall equal the number of channels being described the bht MobSlot containing
-// the SourceReference, e.g. 1 element for a mono audio slot, 6 elements for a 5.1
-// multi-channel audio slot.
-// 
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pChannelIDs is null 
+/// and ID of 1, the N'th channel has an ID of N.  The number of channel IDs
+/// shall equal the number of channels being described the bht MobSlot containing
+/// the SourceReference, e.g. 1 element for a mono audio slot, 6 elements for a 5.1
+/// multi-channel audio slot.
+/// 
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pChannelIDs is null 
   // @end
   // 
   STDMETHOD (SetChannelIDs)
@@ -191,21 +191,21 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | GetChannelIDs |
-  // // Get the channels in a slot that are referenced.  Refer to
-// SetChannelIDs for channel IDs description.
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pChannelIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
-//
-// AAFRESULT_SMALLBUF
-//   - pChannelIDs is too small
+  // /// Get the channels in a slot that are referenced.  Refer to
+/// SetChannelIDs for channel IDs description.
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pChannelIDs is null
+///
+/// AAFRESULT_PROP_NOT_PRESENT
+///   - the property is not present
+///
+/// AAFRESULT_SMALLBUF
+///   - pChannelIDs is too small
   // @end
   // 
   STDMETHOD (GetChannelIDs)
@@ -222,13 +222,13 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | GetChannelIDsSize |
-  // // Get the number of channel IDs stored by this SourceReference.
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pChannelIDs is null
+  // /// Get the number of channel IDs stored by this SourceReference.
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pChannelIDs is null
   // @end
   // 
   STDMETHOD (GetChannelIDsSize)
@@ -243,17 +243,17 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | SetMonoSourceSlotIDs |
   // For reference from a multi-channel MobSlot to multiple mono MobSlots.
-// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
-// object.
+/// pMonoSourceSlotIDs identifies the mono slots referenced by this SourceReference
+/// object.
 
-// 
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pMonoSourceSlotIDs is null 
+/// 
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pMonoSourceSlotIDs is null 
   // @end
   // 
   STDMETHOD (SetMonoSourceSlotIDs)
@@ -270,21 +270,21 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | GetMonoSourceSlotIDs |
-  // // Get the mono slot IDs that are referenced by this object.  Refer to
-// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
-// Return codes:
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pMonoSourceSlotIDs is null
-//
-// AAFRESULT_PROP_NOT_PRESENT
-//   - the property is not present
-//
-// AAFRESULT_SMALLBUF
-//   - pMonoSourceSlotIDs is too small
+  // /// Get the mono slot IDs that are referenced by this object.  Refer to
+/// SetMonoSourceSlotIDs for a description of pMonoSourceSlotIDs.
+/// Return codes:
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pMonoSourceSlotIDs is null
+///
+/// AAFRESULT_PROP_NOT_PRESENT
+///   - the property is not present
+///
+/// AAFRESULT_SMALLBUF
+///   - pMonoSourceSlotIDs is too small
   // @end
   // 
   STDMETHOD (GetMonoSourceSlotIDs)
@@ -301,13 +301,13 @@ public:
   //
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFSourceReference2 | GetMonoSourceSlotIDsSize |
-  // // Get the number of mono slot IDs stored by this SourceReference.
-//
-// AAFRESULT_SUCCESS
-//   - succeeded
-//
-// AAFRESULT_NULL_PARAM
-//   - pMonoSourceSlotIDs is null
+  // /// Get the number of mono slot IDs stored by this SourceReference.
+///
+/// AAFRESULT_SUCCESS
+///   - succeeded
+///
+/// AAFRESULT_NULL_PARAM
+///   - pMonoSourceSlotIDs is null
   // @end
   // 
   STDMETHOD (GetMonoSourceSlotIDsSize)

@@ -66,14 +66,14 @@ public:
   // NextOne()
   //
   // Enumerates to the next element in the enumerators list. The
-  // caller is responsible for properly releasing the returned pointer
-  // when it is no longer needed.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppProperties pointer is valid.
-  // - there are Property objects remaining to be returned.
-  // 
-  // If this method fails nothing is written to *ppProperties.
+  /// caller is responsible for properly releasing the returned pointer
+  /// when it is no longer needed.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppProperties pointer is valid.
+  /// - there are Property objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppProperties.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -84,9 +84,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - ppProperties arg is NULL.
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - no Property objects remaining to be returned.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - no Property objects remaining to be returned.
   //
   STDMETHOD (NextOne) (
     // The Next Property 
@@ -98,18 +98,18 @@ public:
   // Next()
   //
   // Enumerates the next count elements (AAFProperty pointers) in the
-  // enumerator's list, returning them in the given array along with
-  // the actual number of enumerated elements in pNumFetched. The caller
-  // is responsible for properly releasing the returned pointers.
-  // 
-  // Succeeds if all of the following are true:
-  // - The ppProperties pointer is valid.
-  // - The pNumFetched pointer is valid. If count is 1, pNumFetched
-  //   can be NULL.
-  // - There are Property objects remaining to be returned.
-  // 
-  // If this method fails nothing is written to *ppProperties or
-  // pNumFetched.
+  /// enumerator's list, returning them in the given array along with
+  /// the actual number of enumerated elements in pNumFetched. The caller
+  /// is responsible for properly releasing the returned pointers.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - The ppProperties pointer is valid.
+  /// - The pNumFetched pointer is valid. If count is 1, pNumFetched
+  ///   can be NULL.
+  /// - There are Property objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppProperties or
+  /// pNumFetched.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -137,11 +137,11 @@ public:
   // Skip()
   //
   // Instructs the enumerator to skip the next count elements in the
-  // enumeration so that the next call to Next will not return those
-  // elements.
-  // 
-  // Succeeds if all of the following are true:
-  // - count is less than or equal to the number of remaining objects.
+  /// enumeration so that the next call to Next will not return those
+  /// elements.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - count is less than or equal to the number of remaining objects.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -149,9 +149,9 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - count exceeded number of remaining objects.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - count exceeded number of remaining objects.
   //
   STDMETHOD (Skip) (
     // Number of elements to skip 
@@ -163,7 +163,7 @@ public:
   // Reset()
   //
   // Instructs the enumerator to position itself at the beginning of
-  // the list of elements.
+  /// the list of elements.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -182,15 +182,15 @@ public:
   // Clone()
   //
   // Creates another enumerator with the same state as the current
-  // enumerator to iterate over the same list. This method makes it
-  // possible to record a point in the enumeration sequence in order
-  // to return to that point at a later time.
-  //
-  // Note: The caller must release this new enumerator separately from
-  // the first enumerator.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
+  /// enumerator to iterate over the same list. This method makes it
+  /// possible to record a point in the enumeration sequence in order
+  /// to return to that point at a later time.
+  ///
+  /// Note: The caller must release this new enumerator separately from
+  /// the first enumerator.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

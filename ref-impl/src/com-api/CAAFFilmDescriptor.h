@@ -69,20 +69,20 @@ public:
   // SetFilmManufacturer()
   //
   // Sets the Film Manufacturer string property.
-  //
-  // Set the FilmManufacturer property to the value specified in
-  // pFilmManufacturer.  A copy is made of the data so the caller
-  // retains ownership of the *pFilmManufacturer buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pFilmManufacturer pointer is valid.
-  // 
-  // If this method fails the FilmManufacturer property will not be
-  // changed.
-  // 
+  ///
+  /// Set the FilmManufacturer property to the value specified in
+  /// pFilmManufacturer.  A copy is made of the data so the caller
+  /// retains ownership of the *pFilmManufacturer buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFilmManufacturer pointer is valid.
+  /// 
+  /// If this method fails the FilmManufacturer property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -104,24 +104,24 @@ public:
   // GetFilmManufacturer()
   //
   // Gets the Film Manufacturer string property.
-  // 
-  // Writes the FilmManufacturer property, with a trailing null
-  // character, into the pFilmManufacturer buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the FilmManufacturer property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetFilmManufacturerBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pFilmManufacturer.
-  // 
-  // Succeeds if:
-  // - The pFilmManufacturer pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   FilmManufacturer.
+  /// 
+  /// Writes the FilmManufacturer property, with a trailing null
+  /// character, into the pFilmManufacturer buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the FilmManufacturer property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetFilmManufacturerBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pFilmManufacturer.
+  /// 
+  /// Succeeds if:
+  /// - The pFilmManufacturer pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   FilmManufacturer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -132,10 +132,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pFilmManufacturer arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold FilmManufacturer.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold FilmManufacturer.
   //
   STDMETHOD (GetFilmManufacturer) (
     // buffer into which FilmManufacturer is to be written
@@ -150,9 +150,9 @@ public:
   // GetFilmManufacturerBufLen()
   //
   // Returns size of buffer (in bytes) required for GetFilmManufacturer().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -174,20 +174,20 @@ public:
   // SetFilmModel()
   //
   // Sets the Film Model string property.
-  //
-  // Set the FilmModel property to the value specified in
-  // pFilmModel.  A copy is made of the data so the caller
-  // retains ownership of the *pFilmModel buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pFilmModel pointer is valid.
-  // 
-  // If this method fails the FilmModel property will not be
-  // changed.
-  // 
+  ///
+  /// Set the FilmModel property to the value specified in
+  /// pFilmModel.  A copy is made of the data so the caller
+  /// retains ownership of the *pFilmModel buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pFilmModel pointer is valid.
+  /// 
+  /// If this method fails the FilmModel property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -209,24 +209,24 @@ public:
   // GetFilmModel()
   //
   // Gets the Film Model string property.
-  // 
-  // Writes the FilmModel property, with a trailing null
-  // character, into the pFilmModel buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the FilmModel property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetFilmModelBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pFilmModel.
-  // 
-  // Succeeds if:
-  // - The pFilmModel pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   FilmModel.
+  /// 
+  /// Writes the FilmModel property, with a trailing null
+  /// character, into the pFilmModel buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the FilmModel property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetFilmModelBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pFilmModel.
+  /// 
+  /// Succeeds if:
+  /// - The pFilmModel pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   FilmModel.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -237,10 +237,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pFilmModel arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold FilmModel.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold FilmModel.
   //
   STDMETHOD (GetFilmModel) (
     // buffer into which FilmModel is to be written
@@ -255,9 +255,9 @@ public:
   // GetFilmModelBufLen()
   //
   // Returns size of buffer (in bytes) required for GetFilmModel().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -279,28 +279,28 @@ public:
   // GetFilmFormat()
   //
   // Gets the film format.
-  //
-  // Valid values include:
-  //  - kFt35MM
-  //  - kFt16MM
-  //  - kFt8MM
-  //  - kFt65MM
-  // 
-  // This method succeeds if all of the following are true:
-  // - the pFilmFormat pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFilmFormat arg is NULL.
+  ///
+  /// Valid values include:
+  ///  - kFt35MM
+  ///  - kFt16MM
+  ///  - kFt8MM
+  ///  - kFt65MM
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - the pFilmFormat pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFilmFormat arg is NULL.
   //
   STDMETHOD (GetFilmFormat) (
     // pointer to the filmFormat 
@@ -312,22 +312,22 @@ public:
   // GetFrameRate()
   //
   // Get the frame rate of the film.
-  // 
-  // This method succeeds if all of the following are true:
-  // - the pRate pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pRate parameter is NULL.
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - the pRate pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pRate parameter is NULL.
   //
   STDMETHOD (GetFrameRate) (
     // Frame Rate 
@@ -339,22 +339,22 @@ public:
   // GetPerfPerFrame()
   //
   // Get the number of perforations per frame.
-  // 
-  // This method succeeds if all of the following are true:
-  // - the pPerfPerFrame pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPerfPerFrame parameter is NULL.
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - the pPerfPerFrame pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPerfPerFrame parameter is NULL.
   //
   STDMETHOD (GetPerfPerFrame) (
     // Perforations per frame 
@@ -366,22 +366,22 @@ public:
   // GetFilmAspectRatio()
   //
   // Get the image aspect ratio.
-  // 
-  // This method succeeds if all of the following are true:
-  // - the pAspectRatio pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pAspectRatio arg is NULL.
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - the pAspectRatio pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pAspectRatio arg is NULL.
   //
   STDMETHOD (GetFilmAspectRatio) (
     // Film Aspect Ratio 
@@ -393,27 +393,27 @@ public:
   // SetFilmFormat()
   //
   // Sets the film format of the film.
-  // Valid values include:
-  //  - kFt35MM
-  //  - kFt16MM
-  //  - kFt8MM
-  //  - kFt65MM
-  // 
-  // This method succeeds if all of the following are true:
-  // - formFactor represents a valid format.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_BAD_TYPE
-  //	- filmFormat is invalid.
+  /// Valid values include:
+  ///  - kFt35MM
+  ///  - kFt16MM
+  ///  - kFt8MM
+  ///  - kFt65MM
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - formFactor represents a valid format.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_BAD_TYPE
+  ///	- filmFormat is invalid.
   //
   STDMETHOD (SetFilmFormat) (
     // Film Format 
@@ -425,16 +425,16 @@ public:
   // SetFrameRate()
   //
   // Set the frame rate of the film.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetFrameRate) (
     // Frame Rate 
@@ -446,16 +446,16 @@ public:
   // SetPerfPerFrame()
   //
   // Set the number of perforations per frame.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetPerfPerFrame) (
     // Perforations per frame 
@@ -467,16 +467,16 @@ public:
   // SetFilmAspectRatio()
   //
   // Set the image aspect ratio.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetFilmAspectRatio) (
     // Film Aspect Ratio 

@@ -69,13 +69,13 @@ public:
   // CreateValueFromActualValue()
   //
   // Creates an indirect property value which contains the actual type.  
-  // Returns the newly-created property value in ppIndirectPropertyValue.
-  //
-  // Succeeds if all of the following are true:
-  // - the pActualValue pointer is valid.
-  // - the ppIndirectPropertyValue pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppIndirectPropertyValue.
+  /// Returns the newly-created property value in ppIndirectPropertyValue.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pActualValue pointer is valid.
+  /// - the ppIndirectPropertyValue pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppIndirectPropertyValue.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -89,12 +89,12 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pActualValue or ppIndirectPropertyValue arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - initDataSize indicates pInitData is of the wrong size.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - initDataSize indicates pInitData is of the wrong size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for this typedef.
   //
   STDMETHOD (CreateValueFromActualValue) (
     // pointer to actual value
@@ -108,18 +108,18 @@ public:
   // CreateValueFromActualData()
   //
   // Creates an indirect property value which contains data of the 
-  // actual type.  Returns the newly-created property value in
-  // ppIndirectPropertyValue.
-  //
-  // Succeeds if all of the following are true:
-  // - the pActualType pointer is valid and registered
-  // - the pInitData pointer is valid.
-  // - the ppIndirectPropertyValue pointer is valid.
-  // - initDataSize indicates pInitData is the correct size for 
-  //   the actual type.
-  // - compile-time struct has had its member offests registered.
-  //
-  // If this method fails nothing will be written to *ppIndirectPropertyValue.
+  /// actual type.  Returns the newly-created property value in
+  /// ppIndirectPropertyValue.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pActualType pointer is valid and registered
+  /// - the pInitData pointer is valid.
+  /// - the ppIndirectPropertyValue pointer is valid.
+  /// - initDataSize indicates pInitData is the correct size for 
+  ///   the actual type.
+  /// - compile-time struct has had its member offests registered.
+  ///
+  /// If this method fails nothing will be written to *ppIndirectPropertyValue.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -133,12 +133,12 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pActualType or InitData or ppIndirectPropertyValue arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - initDataSize indicates pInitData is of the wrong size.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - initDataSize indicates pInitData is of the wrong size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for this typedef.
   //
   STDMETHOD (CreateValueFromActualData) (
     // the actual type of the data
@@ -159,11 +159,11 @@ public:
   // GetActualValue()
   //
   // Gets a property value corresponding to the actual data. 
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - The pIndirectPropertyValue pointer is valid.
-  // - The ppActualPropertyValue pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - The pIndirectPropertyValue pointer is valid.
+  /// - The ppActualPropertyValue pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -177,12 +177,12 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pIndirectPropertyValue or ppActualPropertyValue arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - initDataSize indicates pInitData is of the wrong size.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - initDataSize indicates pInitData is of the wrong size.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for this typedef.
   //
   STDMETHOD (GetActualValue) (
     // indirect property value to read
@@ -190,20 +190,20 @@ public:
 
     // value that is read
     /*[out]*/ IAAFPropertyValue ** ppActualPropertyValue);
-  //)
+  ///)
 
   //***********************************************************
   //
   // GetActualSize()
   //
   // Return the size of the actual data withing the indirect property value.
-  //
-  //
-  // Succeeds if all of the following are true:
-  // - the pIndirectPropertyValue pointer is valid.
-  // - the pActualSize pointer is valid.
-  //
-  // If this method fails nothing will be written to *pActualSize.
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pIndirectPropertyValue pointer is valid.
+  /// - the pActualSize pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pActualSize.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -217,16 +217,16 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pIndirectPropertyValue or pActualSize arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - the type of pIndirectPropertyValue was not indirect. 
-  //
-  // AAFRESULT_TYPE_NOT_FOUND
-  //   - the actual type cannot be found in the dictionary.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for 
-  //    the actual typedef.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - the type of pIndirectPropertyValue was not indirect. 
+  ///
+  /// AAFRESULT_TYPE_NOT_FOUND
+  ///   - the actual type cannot be found in the dictionary.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for 
+  ///    the actual typedef.
   //
   STDMETHOD (GetActualSize) (
     // indirect property value to read
@@ -239,12 +239,12 @@ public:
   // GetActualType()
   //
   // Return the type definition of the  actual data within the indirect property value.
-  //
-  //
-  // Succeeds if all of the following are true:
-  // - the pIndirectPropertyValue pointer is valid.
-  // - the pActualType pointer is valid.
-  //
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pIndirectPropertyValue pointer is valid.
+  /// - the pActualType pointer is valid.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -258,16 +258,16 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pIndirectPropertyValue or pActualType arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - the type of pIndirectPropertyValue was not indirect. 
-  //
-  // AAFRESULT_TYPE_NOT_FOUND
-  //   - the actual type cannot be found in the dictionary.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for 
-  //    the actual typedef.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - the type of pIndirectPropertyValue was not indirect. 
+  ///
+  /// AAFRESULT_TYPE_NOT_FOUND
+  ///   - the actual type cannot be found in the dictionary.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for 
+  ///    the actual typedef.
   //
   STDMETHOD (GetActualType) (
     // indirect property value to read
@@ -281,15 +281,15 @@ public:
   // GetActualData()
   //
   // Copies all the actual data contained in the given indirect property value,
-  // interpreted as the actual type for this indirect property value, into the 
-  // buffer pointed to by pData.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPropVal pointer is valid.
-  // - the pData pointer is valid.
-  // - dataSize indicates pData is large enough to hold the data.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// interpreted as the actual type for this indirect property value, into the 
+  /// buffer pointed to by pData.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPropVal pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -303,16 +303,16 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pPropVal or pData arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - dataSize indicates pData is too small.
-  //
-  // AAFRESULT_TYPE_NOT_FOUND
-  //   - the actual type cannot be found in the dictionary.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for 
-  //    the actual typedef.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - dataSize indicates pData is too small.
+  ///
+  /// AAFRESULT_TYPE_NOT_FOUND
+  ///   - the actual type cannot be found in the dictionary.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for 
+  ///    the actual typedef.
   //
   STDMETHOD (GetActualData) (
     // indirect property value to read

@@ -68,12 +68,12 @@ public:
   // GetActualTypeID()
   //
   // Return the type id of the  actual data within the opaque property value.
-  //
-  //
-  // Succeeds if all of the following are true:
-  // - the pOpaquePropertyValue pointer is valid.
-  // - the pActualType pointer is valid.
-  //
+  ///
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pOpaquePropertyValue pointer is valid.
+  /// - the pActualType pointer is valid.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -87,10 +87,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pOpaquePropertyValue or pActualTypeID arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - the type of pOpaquePropertyValue was not opaque. 
-  //
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - the type of pOpaquePropertyValue was not opaque. 
+  ///
   //
   STDMETHOD (GetActualTypeID) (
     // indirect property value to read
@@ -104,34 +104,34 @@ public:
   // GetHandle()
   //
   // Used to read and save an unknown property without having to know its contents.
-  // This call fills in a handle to a block of data which can be saved in you application, and
-  // later written to another file using SetHandle().  Writes the data into the pHandle buffer. 
-  // The buffer is allocated by the caller, and the size of the buffer is given by
-  // handleSize.
-  // 
-  // Caller may call GetHandleBufLen() to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pHandle pointer is valid.
-  // - handleSize indicates the buffer is large enough to hold the
-  //   name.
-  // 
-  // If this method fails nothing will be written to *pHandle.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pHandle arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - handleSize indicates the buffer is too small to hold the
-  //     handle.
+  /// This call fills in a handle to a block of data which can be saved in you application, and
+  /// later written to another file using SetHandle().  Writes the data into the pHandle buffer. 
+  /// The buffer is allocated by the caller, and the size of the buffer is given by
+  /// handleSize.
+  /// 
+  /// Caller may call GetHandleBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pHandle pointer is valid.
+  /// - handleSize indicates the buffer is large enough to hold the
+  ///   name.
+  /// 
+  /// If this method fails nothing will be written to *pHandle.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pHandle arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - handleSize indicates the buffer is too small to hold the
+  ///     handle.
   //
   STDMETHOD (GetHandle) (
     // value to get data from.
@@ -152,23 +152,23 @@ public:
   // GetHandleBufLen()
   //
   // Returns the length of buffer required for the GetHandle()
-  // method.  The handle is placed into the location specified by
-  // pLen.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.
+  /// method.  The handle is placed into the location specified by
+  /// pLen.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pLen.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLen arg is NULL.
   //
   STDMETHOD (GetHandleBufLen) (
     // value to set.
@@ -182,23 +182,23 @@ public:
   // SetHandle()
   //
   // This call takes a block of unknown data created by a previous call to GetHandle()
-  // and saved in you application, and sets an opaque property value.
-  //
-  // Succeeds if all of the following are true:
-  // - the pHandle pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pHandle is null.
+  /// and saved in you application, and sets an opaque property value.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pHandle pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pHandle is null.
   //
   STDMETHOD (SetHandle) (
     // value to write data to.
@@ -215,17 +215,17 @@ public:
   // CreateValueFromHandle()
   //
   // This call takes a block of unknown data created by GetHandle()
-  // and saved in you application, and creates an opaque property value.
-  // Returns the newly-created property value in ppOpaquePropertyValue.
-  //
-  // Succeeds if all of the following are true:
-  // - the pInitData pointer is valid.
-  // - the ppOpaquePropertyValue pointer is valid.
-  // - initDataSize indicates pInitData is the correct size for 
-  //   the actual type.
-  // - compile-time struct has had its member offests registered.
-  //
-  // If this method fails nothing will be written to *ppOpaquePropertyValue.
+  /// and saved in you application, and creates an opaque property value.
+  /// Returns the newly-created property value in ppOpaquePropertyValue.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pInitData pointer is valid.
+  /// - the ppOpaquePropertyValue pointer is valid.
+  /// - initDataSize indicates pInitData is the correct size for 
+  ///   the actual type.
+  /// - compile-time struct has had its member offests registered.
+  ///
+  /// If this method fails nothing will be written to *ppOpaquePropertyValue.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -239,9 +239,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pInitData or ppOpaquePropertyValue arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - initDataSize indicates pInitData is of the wrong size.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - initDataSize indicates pInitData is of the wrong size.
   //
   STDMETHOD (CreateValueFromHandle) (
     // pointer to buffer containing handle to use

@@ -67,20 +67,20 @@ public:
   // SetStillFrame()
   //
   // This method sets the still frame property on a essence group to
-  // be the source clip passed as the stillFrame argument.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pStillFrame is null.
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// be the source clip passed as the stillFrame argument.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pStillFrame is null.
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetStillFrame) (
     // Still Frame source clip  
@@ -92,19 +92,19 @@ public:
   // GetStillFrame()
   //
   // Gets the still frame property on a essence group.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppStillFrame is null.
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppStillFrame is null.
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (GetStillFrame) (
     // Still Frame source clip  
@@ -116,21 +116,21 @@ public:
   // AppendChoice()
   //
   // Append another choice to this AAFEssenceGroup.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pChoice pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pChoice is null.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pChoice pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChoice is null.
   //
   STDMETHOD (AppendChoice) (
     // Source clip to add as a choice  
@@ -142,21 +142,21 @@ public:
   // PrependChoice()
   //
   // Prepend another choice to this AAFEssenceGroup.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pChoice pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pChoice is null.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pChoice pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChoice is null.
   //
   STDMETHOD (PrependChoice) (
     // Source clip to add as a choice 
@@ -168,29 +168,29 @@ public:
   // InsertChoiceAt()
   //
   // Insert another choice to this AAFEssenceGroup at the given
-  // index.  Choices already existing at the given and higher indices
-  // will be moved up by one index to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pChoice pointer is valid.
-  // - index is less than or equal to the value returned by
-  //   CountChoices().
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pChoice is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than the value returned by
-  //     CountChoices().
+  /// index.  Choices already existing at the given and higher indices
+  /// will be moved up by one index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pChoice pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountChoices().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChoice is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountChoices().
   //
   STDMETHOD (InsertChoiceAt) (
     // place to insert new choice
@@ -205,22 +205,22 @@ public:
   // CountChoices()
   //
   // Returns the number of choices attached to this AAFEssenceGroup.,
-  // excepting the still frame.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pCount pointer is valid.
-  // 
-  // If this method fails nothing is written to *pCount.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pCount is null.
+  /// excepting the still frame.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.
   //
   STDMETHOD (CountChoices) (
     // The number of representations contained within. 
@@ -232,24 +232,24 @@ public:
   // GetChoiceAt()
   //
   // Given an index, returns the corresponding source clip choice.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppChoice pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppChoice.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_MISSING_INDEX
-  //   - The given index value is not present.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppChoice arg is NULL.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppChoice pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppChoice.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_MISSING_INDEX
+  ///   - The given index value is not present.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppChoice arg is NULL.
   //
   STDMETHOD (GetChoiceAt) (
     // The 0-based index into the array
@@ -264,27 +264,27 @@ public:
   // RemoveChoiceAt()
   //
   // Removes the choice at the given index.  Items already existing at
-  // higher indices will be moved down by one index to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppChoice pointer is valid.
-  // - index is less than the value returned by CountChoices().
-  // 
-  // If this method fails no state will be changed.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppChoice arg is NULL.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than or equal to the value returned by
-  //     CountChoices().
+  /// higher indices will be moved down by one index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppChoice pointer is valid.
+  /// - index is less than the value returned by CountChoices().
+  /// 
+  /// If this method fails no state will be changed.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppChoice arg is NULL.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountChoices().
   //
   STDMETHOD (RemoveChoiceAt) (
     // The 0-based index into the array 

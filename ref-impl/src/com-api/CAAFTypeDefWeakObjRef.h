@@ -67,35 +67,35 @@ public:
   // Initialize()
   //
   // Initializes this type def to be a reference to objects of
-  // the given type, and assigns this object the given AUID.  pObjType
-  // points to the class definition of the least-derived class which
-  // is possible to be contained in property values of this type.
-  // 
-  // pTargetSet points to an array of Property Def AUIDs which
-  // indicate the location of the property containing the target of
-  // this weak reference.  The AUIDs indicate the containment path to
-  // the target property, starting at the root Header object.  For
-  // example, if the containment hierarchy is:
-  //
-  // Header->A->B->C
-  //
-  // then the first AUID corresponds to the Header's property which
-  // contains Object A; the second AUID corresponds to Object A's
-  // property which contains Object B; and the third AUID corresponds
-  // to Object B's property C which contans the target of this weak
-  // reference.  If any intermediate property is a vector or set,
-  // *all* objects in that vector or set are searched for the target.
-  // Note that the final AUID *must* correspond to a Set property.
-  // 
-  // The number of AUIDs in pTargetSet is noted by ids.
-  // 
-  // This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  // - pObjType is a valid pointer.
-  // - pTargetSet is a valid pointer.
+  /// the given type, and assigns this object the given AUID.  pObjType
+  /// points to the class definition of the least-derived class which
+  /// is possible to be contained in property values of this type.
+  /// 
+  /// pTargetSet points to an array of Property Def AUIDs which
+  /// indicate the location of the property containing the target of
+  /// this weak reference.  The AUIDs indicate the containment path to
+  /// the target property, starting at the root Header object.  For
+  /// example, if the containment hierarchy is:
+  ///
+  /// Header->A->B->C
+  ///
+  /// then the first AUID corresponds to the Header's property which
+  /// contains Object A; the second AUID corresponds to Object A's
+  /// property which contains Object B; and the third AUID corresponds
+  /// to Object B's property C which contans the target of this weak
+  /// reference.  If any intermediate property is a vector or set,
+  /// *all* objects in that vector or set are searched for the target.
+  /// Note that the final AUID *must* correspond to a Set property.
+  /// 
+  /// The number of AUIDs in pTargetSet is noted by ids.
+  /// 
+  /// This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  /// - pObjType is a valid pointer.
+  /// - pTargetSet is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -124,7 +124,7 @@ public:
     /*[in]*/ aafUInt32  ids,
 
     // List of property definition IDs indicating the property where
-    // the target is to be found.
+  /// the target is to be found.
     /*[in, size_is(ids)]*/ aafUID_constptr  pTargetSet);
 
 protected:

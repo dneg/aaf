@@ -65,12 +65,12 @@ public:
   // AddFormatSpecifier()
   //
   // Appends a format specifier to the AAFEssenceFormat.  If an
-  // essenceFormatCode has already been added, then this call
-  // replaces the value, otherwise the value is appended.
-  //
-  // The value data is passed in as a void * through the "value"
-  // argument.  The size of the value must be passed through the
-  // valueSize argument.
+  /// essenceFormatCode has already been added, then this call
+  /// replaces the value, otherwise the value is appended.
+  ///
+  /// The value data is passed in as a void * through the "value"
+  /// argument.  The size of the value must be passed through the
+  /// valueSize argument.
   //
   STDMETHOD (AddFormatSpecifier) (
     // From aaddefuids.h
@@ -88,11 +88,11 @@ public:
   // GetFormatSpecifier()
   //
   // The data value is returned in a preallocated buffer of size
-  // valueSize.
-  //
-  // The actual number of bytes read is returned in bytesRead.  If the
-  // buffer is not big enough to return the entire  value, an error
-  // is returned.
+  /// valueSize.
+  ///
+  /// The actual number of bytes read is returned in bytesRead.  If the
+  /// buffer is not big enough to return the entire  value, an error
+  /// is returned.
   //
   STDMETHOD (GetFormatSpecifier) (
     // From aaddefuids.h
@@ -113,7 +113,7 @@ public:
   // NumFormatSpecifiers()
   //
   // The data value is returned in a preallocated buffer of size
-  // valueSize.
+  /// valueSize.
   //
   STDMETHOD (NumFormatSpecifiers) (
     // The number of specifiers present. 
@@ -125,7 +125,7 @@ public:
   // GetIndexedFormatSpecifier()
   //
   // The data value is returned in a preallocated buffer of size
-  // valueSize.
+  /// valueSize.
   //
   STDMETHOD (GetIndexedFormatSpecifier) (
     // 0-based index

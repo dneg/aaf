@@ -83,7 +83,7 @@ public:
   // SetPositionTimecode()
   //
   // Set the timecode fields for a given frame.  The frame index must
-  // be within the length of the object.
+  /// be within the length of the object.
   //
   STDMETHOD (SetPositionTimecode) (
     // Zero-based offset to set the timecode at
@@ -198,30 +198,30 @@ public:
   // GetSource()
   //
   // Writes the entire timecode data value into the pValue buffer.
-  // The buffer is allocated by the caller, and the size of the
-  // buffer is given by valueSize.
-  // 
-  // Caller may call GetValueBufLen() to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // - valueSize indicates the buffer is large enough to hold the name.
-  // 
-  // If this method fails nothing will be written to *pValue.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - valueSize indicates the buffer is too small to hold the value.
+  /// The buffer is allocated by the caller, and the size of the
+  /// buffer is given by valueSize.
+  /// 
+  /// Caller may call GetValueBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// - valueSize indicates the buffer is large enough to hold the name.
+  /// 
+  /// If this method fails nothing will be written to *pValue.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - valueSize indicates the buffer is too small to hold the value.
   //
   STDMETHOD (GetSource) (
     // Size of preallocated buffer
@@ -239,23 +239,23 @@ public:
   // GetSourceBufLen()
   //
   // Returns the length of buffer required for the GetValue()
-  // method.  The value is placed into the location specified by
-  // pLen.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.
+  /// method.  The value is placed into the location specified by
+  /// pLen.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pLen.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLen arg is NULL.
   //
   STDMETHOD (GetSourceBufLen) (
     // Pointer to an variable used to return the length 
@@ -267,22 +267,22 @@ public:
   // SetSource()
   //
   // The data value is set from a buffer of size valueSize.
-  //
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue is null.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue is null.
   //
   STDMETHOD (SetSource) (
     // Size of preallocated buffer

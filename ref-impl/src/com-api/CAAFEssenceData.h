@@ -68,23 +68,23 @@ public:
   // Initialize()
   //
   // Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the pFileMob pointer is valid and points to 
-  // a file mob (contains a file descriptor).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFileMob is null.
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFileMob pointer is valid and points to 
+  /// a file mob (contains a file descriptor).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileMob is null.
   //
   STDMETHOD (Initialize) (
     // reference to a file mob 
@@ -162,23 +162,23 @@ public:
   // SetFileMob()
   //
   // Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the pFileMob pointer is valid and points to 
-  // a file mob (contains a file descriptor).
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFileMob is null.
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFileMob pointer is valid and points to 
+  /// a file mob (contains a file descriptor).
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFileMob is null.
   //
   STDMETHOD (SetFileMob) (
     // reference to a file mob 
@@ -190,24 +190,24 @@ public:
   // GetFileMob()
   //
   // Associates a weak reference to the given file mob with the
-  // essence data.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppFileMob pointer is valid and a weak
-  // reference to the associated file mob can be
-  // resolved.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppFileMob is null.
+  /// essence data.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppFileMob pointer is valid and a weak
+  /// reference to the associated file mob can be
+  /// resolved.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppFileMob is null.
   //
   STDMETHOD (GetFileMob) (
     // reference to a file mob 
@@ -219,8 +219,8 @@ public:
   // GetFileMobID()
   //
   // Return the mob id used to find the file mob associated with this
-  // essence.  The file mob must exist in the same file as this
-  // essence data.
+  /// essence.  The file mob must exist in the same file as this
+  /// essence data.
   //
   STDMETHOD (GetFileMobID) (
     // the file mob id associated with essence 

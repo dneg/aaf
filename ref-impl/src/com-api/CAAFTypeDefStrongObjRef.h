@@ -67,16 +67,16 @@ public:
   // Initialize()
   //
   // Initializes this type def to be a reference to objects of
-  // the given type, and assigns this object the given AUID.  pObjType
-  // points to the class definition of the least-derived class which
-  // is possible to be contained in property values of this type.
-  // 
-  // This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  // - pObjType is a valid pointer.
+  /// the given type, and assigns this object the given AUID.  pObjType
+  /// points to the class definition of the least-derived class which
+  /// is possible to be contained in property values of this type.
+  /// 
+  /// This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  /// - pObjType is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

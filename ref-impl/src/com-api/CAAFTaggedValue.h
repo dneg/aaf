@@ -66,16 +66,16 @@ public:
   // Initialize()
   //
   // Initializes a new tagged value object to be identified with the
-  // given the given type, and with the given human-legible name.
-  //
-  // This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  // - pName is a valid pointer.
-  // - pTypeDef is a valid pointer and registered
-  // - pValue is a valid pointer
+  /// given the given type, and with the given human-legible name.
+  ///
+  /// This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  /// - pName is a valid pointer.
+  /// - pTypeDef is a valid pointer and registered
+  /// - pValue is a valid pointer
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -89,7 +89,7 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pName or pTypeDef or pValue arg is NULL.
-  // 
+  /// 
   //
   STDMETHOD (Initialize) (
     // User defined name (tag) of this tagged value object
@@ -110,24 +110,24 @@ public:
   // GetName()
   //
   // Gets the Name string property.
-  // 
-  // Writes the Name property, with a trailing null
-  // character, into the pName buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the Name property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetNameBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pName.
-  // 
-  // Succeeds if:
-  // - The pName pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   Name.
+  /// 
+  /// Writes the Name property, with a trailing null
+  /// character, into the pName buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the Name property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetNameBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pName.
+  /// 
+  /// Succeeds if:
+  /// - The pName pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   Name.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -138,10 +138,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pName arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold Name.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold Name.
   //
   STDMETHOD (GetName) (
     // buffer into which Name is to be written
@@ -156,9 +156,9 @@ public:
   // GetNameBufLen()
   //
   // Returns size of buffer (in bytes) required for GetName().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -180,27 +180,27 @@ public:
   // GetTypeDefinition()
   //
   // Returns the type definition for this invocation.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppTypeDef pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppTypeDef.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - This property does not exist in the file.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef arg is NULL.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppTypeDef pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppTypeDef.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - This property does not exist in the file.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef arg is NULL.
   //
   STDMETHOD (GetTypeDefinition) (
     // Type definition object 
@@ -212,30 +212,30 @@ public:
   // GetValue()
   //
   // Writes the value into the pValue buffer.  The buffer is allocated
-  // by the caller, and the size of the buffer is given by
-  // valueSize.
-  // 
-  // Caller may call GetValueBufLen() to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // - valueSize indicates the buffer is large enough to hold the name.
-  // 
-  // If this method fails nothing will be written to *pValue.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - valueSize indicates the buffer is too small to hold the value.
+  /// by the caller, and the size of the buffer is given by
+  /// valueSize.
+  /// 
+  /// Caller may call GetValueBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// - valueSize indicates the buffer is large enough to hold the name.
+  /// 
+  /// If this method fails nothing will be written to *pValue.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - valueSize indicates the buffer is too small to hold the value.
   //
   STDMETHOD (GetValue) (
     // Size of preallocated buffer
@@ -253,22 +253,22 @@ public:
   // GetValueBufLen()
   //
   // Returns the length of buffer required for the GetValue() method.
-  // The value is placed into the location specified by pLen.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  //
-  // If this method fails nothing will be written to *pLen.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLen arg is NULL.
+  /// The value is placed into the location specified by pLen.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pLen.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLen arg is NULL.
   //
   STDMETHOD (GetValueBufLen) (
     // Pointer to an variable used to return the length 
@@ -279,23 +279,23 @@ public:
   // SetValue()
   //
   // The data value is set from a buffer of size valueSize and type.
-  //
-  // Succeeds if all of the following are true:
-  // - pTypeDef is valid and registered with the object's dictionary.
-  // - the pValue pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pTypeDef is valid and registered with the object's dictionary.
+  /// - the pValue pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.
   //
   STDMETHOD (SetValue) (
     // Size of preallocated buffer

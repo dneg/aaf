@@ -67,14 +67,14 @@ public:
   // Initialize()
   //
   // Initializes this type def to contain elements of the given type.
-  //
-  // This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  // - pTypeName is a valid pointer.
-  //
+  ///
+  /// This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  /// - pTypeName is a valid pointer.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -104,10 +104,10 @@ public:
   // GetElementType()
   //
   // Returns the type of elements in this set.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - ppTypeDef is a valid pointer.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - ppTypeDef is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -131,13 +131,13 @@ public:
   // AddElement()
   //
   // Adds an element to the set, setting it to the
-  // value given in pElementPropertyValue.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pSetPropertyValue pointer is valid.
-  // - pElementPropertyValue pointer is valid.
-  //
+  /// value given in pElementPropertyValue.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pSetPropertyValue pointer is valid.
+  /// - pElementPropertyValue pointer is valid.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -161,13 +161,13 @@ public:
   // RemoveElement()
   //
   // Removes an element from the set.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pSetPropertyValue pointer is valid.
-  // - pElementPropertyValue pointer is valid.
-  // - The given element was in the set.
-  //
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pSetPropertyValue pointer is valid.
+  /// - pElementPropertyValue pointer is valid.
+  /// - The given element was in the set.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -191,12 +191,12 @@ public:
   // ContainsElement()
   //
   // Tests if an element is in the set.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pSetPropertyValue pointer is valid.
-  // - pElementPropertyValue pointer is valid.
-  //
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pSetPropertyValue pointer is valid.
+  /// - pElementPropertyValue pointer is valid.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -225,12 +225,12 @@ public:
   // GetCount()
   //
   // Returns number of elements in the referenced property value.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pSetPropertyValue is a valid pointer.
-  // - pCount is a valid pointer.
-  //
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pSetPropertyValue is a valid pointer.
+  /// - pCount is a valid pointer.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -258,12 +258,12 @@ public:
   // CreateKey()
   //
   // Returns number of elements in the referenced property value.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pSetPropertyValue is a valid pointer.
-  // - pCount is a valid pointer.
-  //
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pSetPropertyValue is a valid pointer.
+  /// - pCount is a valid pointer.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -294,14 +294,14 @@ public:
   // LookupElement()
   //
   // Looks up the given key (created by CreateKey()) and returns the propertyValue
-  // of the entry, or an error if the entry is not present.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pSetPropertyValue is a valid pointer.
-  // - pCount is a valid pointer.
-  // - An entry with the correct key is present in the set.
-  //
+  /// of the entry, or an error if the entry is not present.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pSetPropertyValue is a valid pointer.
+  /// - pCount is a valid pointer.
+  /// - An entry with the correct key is present in the set.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -331,13 +331,13 @@ public:
   // ContainsKey()
   //
   // Looks up the given key (created by CreateKey()) and returns AAFTrue if the entry
-  // is present, or AAFFalse if the entry is not present.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pSetPropertyValue is a valid pointer.
-  // - pCount is a valid pointer.
-  //
+  /// is present, or AAFFalse if the entry is not present.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pSetPropertyValue is a valid pointer.
+  /// - pCount is a valid pointer.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -368,12 +368,12 @@ public:
   // GetElements()
   //
   // Returns an enumerator across elements in this set.
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - The pSetPropertyValue pointer is valid.
-  // - The ppEnum pointer is valid.
-  //
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - The pSetPropertyValue pointer is valid.
+  /// - The ppEnum pointer is valid.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

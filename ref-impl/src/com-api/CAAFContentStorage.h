@@ -68,26 +68,26 @@ public:
   // LookupMob()
   //
   // Looks up the Mob that matches the given mob id and puts it into
-  // the ppMob argument.  The returned mob interface is AddRef()ed
-  // before it is returned.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppMob pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppMob.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppMob is null
-  //
-  // AAFRESULT_MOB_NOT_FOUND
-  //   - the requested mob wasn't found.
+  /// the ppMob argument.  The returned mob interface is AddRef()ed
+  /// before it is returned.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppMob pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppMob.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppMob is null
+  ///
+  /// AAFRESULT_MOB_NOT_FOUND
+  ///   - the requested mob wasn't found.
   //
   STDMETHOD (LookupMob) (
     // The Mob ID
@@ -102,22 +102,22 @@ public:
   // CountMobs()
   //
   // Writes the number of matches for the given mob kind into the
-  // *pNumMobs argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pNumMobs pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pNumMobs.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumMobs is null.
+  /// *pNumMobs argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pNumMobs pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pNumMobs.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumMobs is null.
   //
   STDMETHOD (CountMobs) (
     // The mob kind to count
@@ -132,26 +132,26 @@ public:
   // GetMobs()
   //
   // Places an enumerator for mobs that apply to the criteria into the
-  // *ppEnum argument.  If pSearchCriteria is null, all mobs are
-  // returned.   The searchTag field of pSearchCriteria, and exactly
-  // ONE of the fields in the union (tags.mobID, tags.name, etc. )
-  // must be set.  Only one search criterion may be specified.  The
-  // returned enumerator is AddRef()ed before it is returned.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  /// *ppEnum argument.  If pSearchCriteria is null, all mobs are
+  /// returned.   The searchTag field of pSearchCriteria, and exactly
+  /// ONE of the fields in the union (tags.mobID, tags.name, etc. )
+  /// must be set.  Only one search criterion may be specified.  The
+  /// returned enumerator is AddRef()ed before it is returned.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (GetMobs) (
     // Search Criteria for enumeration
@@ -166,26 +166,26 @@ public:
   // AddMob()
   //
   // Appends the given mob to the header.  If the given mob is already
-  // contained this method will do nothing and will return success.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pMob pointer is valid.
-  // - the given mob is not already part of this collection.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMob is null.
-  //
-  // AAFRESULT_DUPLICATE_MOBID
-  //   - the given mob is already contained.
+  /// contained this method will do nothing and will return success.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pMob pointer is valid.
+  /// - the given mob is not already part of this collection.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMob is null.
+  ///
+  /// AAFRESULT_DUPLICATE_MOBID
+  ///   - the given mob is already contained.
   //
   STDMETHOD (AddMob) (
     // Mob to add 
@@ -196,26 +196,26 @@ public:
   //
   // RemoveMob()
   //
-  // // Removes the given mob from the header.
-  //
-  // Succeeds if all of the following are true:
-  // - the pMob pointer is valid.
-  // - the given mob is currently in the collection.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMob is null.
-  //
-  // AAFRESULT_MOB_NOT_FOUND
-  //   - the given mob is not already contained.
+  // /// Removes the given mob from the header.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pMob pointer is valid.
+  /// - the given mob is currently in the collection.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMob is null.
+  ///
+  /// AAFRESULT_MOB_NOT_FOUND
+  ///   - the given mob is not already contained.
   //
   STDMETHOD (RemoveMob) (
     // Mob to remove 
@@ -227,23 +227,23 @@ public:
   // CountEssenceData()
   //
   // Writes the total number of essence data into the *pNumEssenceData
-  // argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pNumEssenceData pointer is valid.
-  // 
-  // If this method fails nothing will be written to
-  // *pNumEssenceData.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumEssenceData is null.
+  /// argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pNumEssenceData pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pNumEssenceData.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumEssenceData is null.
   //
   STDMETHOD (CountEssenceData) (
     // Total number of essence data 
@@ -254,21 +254,21 @@ public:
   //
   // IsEssenceDataPresent()
   //
-  // // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  // /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (IsEssenceDataPresent) (
     // A Unique File Mob ID
@@ -286,24 +286,24 @@ public:
   // EnumEssenceData()
   //
   // Places an enumerator for essence that applies to the criteria
-  // into the *ppEnum argument.  The returned enumerator is
-  // AddRef()ed before it is returned.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pMediaCriteria pointer is valid.
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - either pMediaCriteria or ppEnum is null.
+  /// into the *ppEnum argument.  The returned enumerator is
+  /// AddRef()ed before it is returned.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pMediaCriteria pointer is valid.
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either pMediaCriteria or ppEnum is null.
   //
   STDMETHOD (EnumEssenceData) (
     // Essence Enumeration 
@@ -315,25 +315,25 @@ public:
   // AddEssenceData()
   //
   // Appends the given essence data object to the header.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pEssenceData pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_DUPLICATE_MOBID
-  //   - The given mob has already been added.  The validation is done by comparing
-  //     mobIDs, which should be unique.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pEssenceData is null.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pEssenceData pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_DUPLICATE_MOBID
+  ///   - The given mob has already been added.  The validation is done by comparing
+  ///     mobIDs, which should be unique.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEssenceData is null.
   //
   STDMETHOD (AddEssenceData) (
     // Essence data object to append 
@@ -343,26 +343,26 @@ public:
   //
   // RemoveEssenceData()
   //
-  // // Removes the given EssenceData from the header.
-  //
-  // Succeeds if all of the following are true:
-  // - the pEssenceData pointer is valid.
-  // - the given EssenceData is currently in the collection.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pEssenceData is null.
-  //
-  // AAFRESULT_ESSENCE_NOT_FOUND
-  //   - the given EssenceData is not already contained.
+  // /// Removes the given EssenceData from the header.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pEssenceData pointer is valid.
+  /// - the given EssenceData is currently in the collection.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEssenceData is null.
+  ///
+  /// AAFRESULT_ESSENCE_NOT_FOUND
+  ///   - the given EssenceData is not already contained.
   //
   STDMETHOD (RemoveEssenceData) (
     // EssenceData to remove 
@@ -373,26 +373,26 @@ public:
   // LookupEssenceData()
   //
   // Looks up the EssenceData that matches the given mob id and puts it into
-  // the ppEssenceData argument.  The returned EssenceData interface is AddRef()ed
-  // before it is returned.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEssenceData pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEssenceData.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEssenceData is null
-  //
-  // AAFRESULT_MOB_NOT_FOUND
-  //   - the requested EssenceData wasn't found.
+  /// the ppEssenceData argument.  The returned EssenceData interface is AddRef()ed
+  /// before it is returned.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEssenceData pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEssenceData.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEssenceData is null
+  ///
+  /// AAFRESULT_MOB_NOT_FOUND
+  ///   - the requested EssenceData wasn't found.
   //
   STDMETHOD (LookupEssenceData) (
     // The Mob ID

@@ -71,24 +71,24 @@ public:
   // AppendSegment()
   //
   // Append another input segment to the list of source segments.  The
-  // last segment added will be used as the output of the nested
-  // scope, and usually contains operations whose inputs are scope
-  // references.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSegment is null.
+  /// last segment added will be used as the output of the nested
+  /// scope, and usually contains operations whose inputs are scope
+  /// references.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSegment pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSegment is null.
   //
   STDMETHOD (AppendSegment) (
     // Pointer to segment to be added 
@@ -100,21 +100,21 @@ public:
   // PrependSegment()
   //
   // Prepend another input segment to the list of source segments.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSegment is null.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSegment pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSegment is null.
   //
   STDMETHOD (PrependSegment) (
     // Pointer to segment to be added 
@@ -126,29 +126,29 @@ public:
   // InsertSegmentAt()
   //
   // Insert an input segment to the list of source segments at the
-  // given index.  Segments already existing at the given and higher
-  // indices will be moved up one index to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
-  // - index is less than or equal to the value returned by
-  //   CountSegments().
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSegment is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than the value returned by
-  //     CountSegments().
+  /// given index.  Segments already existing at the given and higher
+  /// indices will be moved up one index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSegment pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountSegments().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSegment is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountSegments().
   //
   STDMETHOD (InsertSegmentAt) (
     // index where segment is to be inserted
@@ -163,28 +163,28 @@ public:
   // RemoveSegmentAt()
   //
   // Removes the indexed segment.  Segments already existing at
-  // indices greater than the given index will be moved down by one
-  // index to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSegment pointer is valid.
-  // - index is less than the value returned by CountSegments().
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSegment is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than or equal to the value returned by
-  //     CountSegments().
+  /// indices greater than the given index will be moved down by one
+  /// index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSegment pointer is valid.
+  /// - index is less than the value returned by CountSegments().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSegment is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSegments().
   //
   STDMETHOD (RemoveSegmentAt) (
     // index of segment to be removed 
@@ -196,21 +196,21 @@ public:
   // CountSegments()
   //
   // Returns the number of source segments currently contained.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails no value will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails no value will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountSegments) (
     // number of segments contained 
@@ -222,26 +222,26 @@ public:
   // GetSegmentAt()
   //
   // Retrieves the indexed segment.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // - index is less than the value returned by CountSegments().
-  // 
-  // If this method fails nothing will be written to *ppSegment.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than or equal to the value returned by
-  //     CountSegments().
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// - index is less than the value returned by CountSegments().
+  /// 
+  /// If this method fails nothing will be written to *ppSegment.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountSegments().
   //
   STDMETHOD (GetSegmentAt) (
     // index of segment to retrieve
@@ -256,22 +256,22 @@ public:
   // GetSegments()
   //
   // Return an enumerator for the ordered list of AAFSegments which
-  // make up the nested scope.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  /// make up the nested scope.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (GetSegments) (
     // Slots - segment list  enumeration 

@@ -66,8 +66,8 @@ public:
   // NextOne()
   //
   // Enumerates to the next element in the enumerators list. The
-  // caller is responsible for properly releasing the returned pointer
-  // when it is no longer needed.
+  /// caller is responsible for properly releasing the returned pointer
+  /// when it is no longer needed.
   //
   STDMETHOD (NextOne) (
     // The Next AAFLocator 
@@ -79,9 +79,9 @@ public:
   // Next()
   //
   // Enumerates the next count elements (AAFLocator pointers) in the
-  // enumerator's list, returning them in the given array along with
-  // the actual number of enumerated elements in pFetched. The caller
-  // is responsible for properly releasing the returned pointers.
+  /// enumerator's list, returning them in the given array along with
+  /// the actual number of enumerated elements in pFetched. The caller
+  /// is responsible for properly releasing the returned pointers.
   //
   STDMETHOD (Next) (
     // number of AAFLocators requested
@@ -99,8 +99,8 @@ public:
   // Skip()
   //
   // Instructs the enumerator to skip the next count elements in the
-  // enumeration so that the next call to EnumAAFPluginLocators::Next
-  // will not return  those elements.
+  /// enumeration so that the next call to EnumAAFPluginLocators::Next
+  /// will not return  those elements.
   //
   STDMETHOD (Skip) (
     // Number of elements to skip 
@@ -112,12 +112,12 @@ public:
   // Reset()
   //
   // Instructs the enumerator to position itself at the beginning of
-  // the list of elements.
-  //
-  // There is no guarantee that the same set of elements will be
-  // enumerated on each pass through the list, nor will the elements
-  // necessarily be enumerated inthe same order. The exact behavior
-  // depends on the collection being enumerated.
+  /// the list of elements.
+  ///
+  /// There is no guarantee that the same set of elements will be
+  /// enumerated on each pass through the list, nor will the elements
+  /// necessarily be enumerated inthe same order. The exact behavior
+  /// depends on the collection being enumerated.
   //
   STDMETHOD (Reset)
      ();
@@ -129,12 +129,12 @@ public:
   // Clone()
   //
   // Creates another AAFPluginLocators enumerator with the same state
-  // as the current enumerator to iterate over the same list. This
-  // method makes it possible to record a point in the enumeration
-  // sequence in order to return to that point at a later time.
-  //
-  // The caller must release this new enumerator separately from the
-  // first enumerator.
+  /// as the current enumerator to iterate over the same list. This
+  /// method makes it possible to record a point in the enumeration
+  /// sequence in order to return to that point at a later time.
+  ///
+  /// The caller must release this new enumerator separately from the
+  /// first enumerator.
   //
   STDMETHOD (Clone) (
     // new enumeration 

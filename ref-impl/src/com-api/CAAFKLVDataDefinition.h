@@ -85,14 +85,14 @@ public:
   //
   // AddParentProperty()
   //
-  // // Add a property definition to the KLV data definition.
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pParentProperty is null.
+  // /// Add a property definition to the KLV data definition.
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pParentProperty is null.
   //
   STDMETHOD (AddParentProperty) (
     // Property definition to add. 
@@ -102,16 +102,16 @@ public:
   //
   // GetParentProperties()
   //
-  // // Writes an enumerator for the property definitions into *ppEnum.
-  // A reference is added to the new enumerator before it is returned.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  // /// Writes an enumerator for the property definitions into *ppEnum.
+  /// A reference is added to the new enumerator before it is returned.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (GetParentProperties) (
     // Property definition enumerator. 
@@ -121,16 +121,16 @@ public:
   //
   // CountParentProperties()
   //
-  // // Writes the total number of property definitions into *pNumProperties if,
-  // and only if, the method succeeds.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  // /// Writes the total number of property definitions into *pNumProperties if,
+  /// and only if, the method succeeds.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (CountParentProperties) (
     // Number of property definitions. 
@@ -140,18 +140,18 @@ public:
   //
   // RemoveParentProperty()
   //
-  // // Removes the given property definition.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - The property definition is not in this tagged value definition.
+  // /// Removes the given property definition.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - The property definition is not in this tagged value definition.
   //
   STDMETHOD (RemoveParentProperty) (
     // Property to remove. 
@@ -161,20 +161,20 @@ public:
   //
   // GetKLVDataType()
   //
-  // // Writes the data definition object attached to this KLV data
-  // definition into the *ppTypeDef argument if, and only if, the call succeeds.
-  // If none exists, NULL is written to the *ppTypeDef argument.
-  //
-  // The returned data definition object, if it exists, is
-  // AddRef()ed before it is returned.
-  //
-  // Return codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.
+  // /// Writes the data definition object attached to this KLV data
+  /// definition into the *ppTypeDef argument if, and only if, the call succeeds.
+  /// If none exists, NULL is written to the *ppTypeDef argument.
+  ///
+  /// The returned data definition object, if it exists, is
+  /// AddRef()ed before it is returned.
+  ///
+  /// Return codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.
   //
   STDMETHOD (GetKLVDataType) (
     // Returned data definition object 
@@ -185,15 +185,15 @@ public:
   //
   // SetKLVDataType()
   //
-  // // Sets the date type of this KLV data definition to be the given one.
-  //
-  // Return codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTypeDef is null.
+  // /// Sets the date type of this KLV data definition to be the given one.
+  ///
+  /// Return codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTypeDef is null.
   //
   STDMETHOD (SetKLVDataType) (
     // Data definition object 

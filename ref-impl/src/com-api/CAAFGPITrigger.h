@@ -68,20 +68,20 @@ public:
   // GetActiveState()
   //
   // Sets *pActiveState to AAFTrue it the event is on otherwise
-  // sets it to AAFFalse.
-  //
-  // Succeeds if:
-  // - The pActiveState pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pActiveState pointer is NULL.
+  /// sets it to AAFFalse.
+  ///
+  /// Succeeds if:
+  /// - The pActiveState pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - The pActiveState pointer is NULL.
   //
   STDMETHOD (GetActiveState) (
     // pointer to the result 
@@ -93,14 +93,14 @@ public:
   // SetActiveState()
   //
   // Set to AAFTrue to turn the trigger on or AAFFalse
-  // to turn the trigger off.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// to turn the trigger off.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetActiveState) (
     // the active state of the trigger 

@@ -67,9 +67,9 @@ public:
   // Initialize()
   //
   // This function creates a new edgecode clip with the
-  // given property values.  The edgecode value is represented with an
-  // aafEdgecode_t struct consisting of startFrame, filmKind, and
-  // codeFormat.
+  /// given property values.  The edgecode value is represented with an
+  /// aafEdgecode_t struct consisting of startFrame, filmKind, and
+  /// codeFormat.
   //
   STDMETHOD (Initialize) (
     // Length Property Value
@@ -83,7 +83,7 @@ public:
   // GetEdgecode()
   //
   // This set of functions returns the required property values
-  // for the object identified by XXX.
+  /// for the object identified by XXX.
   //
   STDMETHOD (GetEdgecode) (
     // Edgecode 

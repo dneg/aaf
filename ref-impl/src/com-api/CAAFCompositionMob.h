@@ -65,23 +65,23 @@ public:
   // Initialize()
   //
   // Initializes this object with the given name.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has not yet been initialized.
-  // - the pName pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pName argument is NULL.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has not yet been initialized.
+  /// - the pName pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pName argument is NULL.
   //
   STDMETHOD (Initialize) (
     // Mob name [optional] 
@@ -93,26 +93,26 @@ public:
   // GetDefaultFade()
   //
   // Get the default fade for this composition.  If there is no
-  // default fade, this function returns with no error, but the VALID
-  // field of the structure is false.  This allows you to pass this
-  // struct to SourceClip::GetFade() in all cases.
-  //
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the pResult pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult argument is NULL.
+  /// default fade, this function returns with no error, but the VALID
+  /// field of the structure is false.  This allows you to pass this
+  /// struct to SourceClip::GetFade() in all cases.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the pResult pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult argument is NULL.
   //
   STDMETHOD (GetDefaultFade) (
     // a default fade struct 
@@ -124,25 +124,25 @@ public:
   // SetDefaultFade()
   //
   // Adds the default crossfade properties to the Mob.
-  //
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - invalid fadeType.
-  //
-  // AAFRESULT_BAD_LENGTH
-  //   - invalid fadeLength.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_BAD_TYPE
+  ///   - invalid fadeType.
+  ///
+  /// AAFRESULT_BAD_LENGTH
+  ///   - invalid fadeLength.
   //
   STDMETHOD (SetDefaultFade) (
     // Default fade length
@@ -162,9 +162,9 @@ public:
   // @mfunc AAFRESULT | AAFCompositionMob2 | SetRendering |
   // set the MobID of a rendering of this CompositionMob.
 
-  // This method will return the following codes:
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// This method will return the following codes:
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   // @end
   // 
   STDMETHOD (SetRendering)
@@ -180,20 +180,20 @@ public:
   // @mfunc AAFRESULT | AAFCompositionMob2 | GetRendering |
   // return the MobID of a rendering of this CompositionMob.
 
-  // Succeeds if all of the following are true:
-  // - the pMobID pointer is valid.
-  //
-  // If this method fails nothing will be written to *pMobID.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMobID arg is NULL.
+  /// Succeeds if all of the following are true:
+  /// - the pMobID pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pMobID.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMobID arg is NULL.
   // @end
   // 
   STDMETHOD (GetRendering)

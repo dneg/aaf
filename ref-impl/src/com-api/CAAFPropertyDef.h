@@ -68,16 +68,16 @@ public:
   // GetTypeDef()
   //
   // Returns a reference to this property's type definition.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (GetTypeDef) (
     // definition of type contained by this property 
@@ -89,24 +89,24 @@ public:
   // GetName()
   //
   // Gets the human-legible name.
-  // 
-  // Writes the Name property, with a trailing null
-  // character, into the pName buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the Name property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetNameBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pName.
-  // 
-  // Succeeds if:
-  // - The pName pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   Name.
+  /// 
+  /// Writes the Name property, with a trailing null
+  /// character, into the pName buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the Name property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetNameBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pName.
+  /// 
+  /// Succeeds if:
+  /// - The pName pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   Name.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -117,10 +117,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pName arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold Name.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold Name.
   //
   STDMETHOD (GetName) (
     // buffer into which Name is to be written
@@ -135,9 +135,9 @@ public:
   // GetNameBufLen()
   //
   // Returns size of buffer (in bytes) required for GetName().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -159,20 +159,20 @@ public:
   // GetIsOptional()
   //
   // Sets *pIsOptional to AAFTrue for properties that are optional.
-  // Sets it to AAFFalse for properties that are mandatory.
-  //
-  // Succeeds if:
-  // - The pIsOptional pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pIsOptional pointer is NULL.
+  /// Sets it to AAFFalse for properties that are mandatory.
+  ///
+  /// Succeeds if:
+  /// - The pIsOptional pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - The pIsOptional pointer is NULL.
   //
   STDMETHOD (GetIsOptional) (
     // pointer to the result 
@@ -183,20 +183,20 @@ public:
   // GetIsUniqueIdentifier()
   //
   // Sets *pIsUniqueIdentifier to AAFTrue for properties that are optional.
-  // Sets it to AAFFalse for properties that are mandatory.
-  //
-  // Succeeds if:
-  // - The pIsUniqueIdentifier pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - The pIsUniqueIdentifier pointer is NULL.
+  /// Sets it to AAFFalse for properties that are mandatory.
+  ///
+  /// Succeeds if:
+  /// - The pIsUniqueIdentifier pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - The pIsUniqueIdentifier pointer is NULL.
   //
   STDMETHOD (GetIsUniqueIdentifier) (
     // pointer to the result 
@@ -210,20 +210,20 @@ public:
   // SetDescription()
   //
   // Sets the description of the property definition.
-  //
-  // Set the Description property to the value specified in
-  // pDescription.  A copy is made of the data so the caller
-  // retains ownership of the *pDescription buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pDescription pointer is valid.
-  // 
-  // If this method fails the Description property will not be
-  // changed.
-  // 
+  ///
+  /// Set the Description property to the value specified in
+  /// pDescription.  A copy is made of the data so the caller
+  /// retains ownership of the *pDescription buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pDescription pointer is valid.
+  /// 
+  /// If this method fails the Description property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -245,24 +245,24 @@ public:
   // GetDescription()
   //
   // Gets the description of the property definition.
-  // 
-  // Writes the Description property, with a trailing null
-  // character, into the pDescription buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the Description property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetDescriptionBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pDescription.
-  // 
-  // Succeeds if:
-  // - The pDescription pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   Description.
+  /// 
+  /// Writes the Description property, with a trailing null
+  /// character, into the pDescription buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the Description property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetDescriptionBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pDescription.
+  /// 
+  /// Succeeds if:
+  /// - The pDescription pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   Description.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -273,10 +273,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pDescription arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold Description.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold Description.
   //
   STDMETHOD (GetDescription) (
     // buffer into which Description is to be written
@@ -291,9 +291,9 @@ public:
   // GetDescriptionBufLen()
   //
   // Returns size of buffer (in bytes) required for GetDescription().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

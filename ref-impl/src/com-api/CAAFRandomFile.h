@@ -67,14 +67,14 @@ public:
   // GetFileBits()
   //
   // Since the purpose of this method is to obtain file data after a
-  // file has been created, it will only succeed if this file has
-  // already been Open()ed and then Close()d, or if it was never
-  // opened with write access.
-  // 
-  // Succeeds if:
-  // - The ppGetFileBits argument is valid
-  // - This file has been opened for write or modify, and has been
-  //   subsequently closed.
+  /// file has been created, it will only succeed if this file has
+  /// already been Open()ed and then Close()d, or if it was never
+  /// opened with write access.
+  /// 
+  /// Succeeds if:
+  /// - The ppGetFileBits argument is valid
+  /// - This file has been opened for write or modify, and has been
+  ///   subsequently closed.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -85,15 +85,15 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - ppGetFileBits arg is NULL.
-  //
-  // AAFRESULT_BADOPEN
-  // - This file has never been opened
-  //
-  // AAFRESULT_NOT_WRITEABLE
-  // - This file has never been opened for write or modify
-  //
-  // AAFRESULT_BADCLOSE
-  // - This file has not been closed after being opened.
+  ///
+  /// AAFRESULT_BADOPEN
+  /// - This file has never been opened
+  ///
+  /// AAFRESULT_NOT_WRITEABLE
+  /// - This file has never been opened for write or modify
+  ///
+  /// AAFRESULT_BADCLOSE
+  /// - This file has not been closed after being opened.
   //
   STDMETHOD (GetFileBits) (
     // The interface to the GetFileBits object 
@@ -126,15 +126,15 @@ public:
   // SaveAsFile()
   //
   // Associates this file with the storage specified in pDestFile.
-  // Any objects contained in pDestFile will be lost.
-  // 
-  // Behaves in a manner similar to SaveCopyAs(), except that
-  // SaveAs() will change this object to be associated with the new
-  // file.
-  // 
-  // Special case: if f->SaveAs(f) is called, passing this as the
-  // save-to argument, the operation will save everything including
-  // things which have not changed.
+  /// Any objects contained in pDestFile will be lost.
+  /// 
+  /// Behaves in a manner similar to SaveCopyAs(), except that
+  /// SaveAs() will change this object to be associated with the new
+  /// file.
+  /// 
+  /// Special case: if f->SaveAs(f) is called, passing this as the
+  /// save-to argument, the operation will save everything including
+  /// things which have not changed.
     // NOTE! Stub only.   Implementation not yet added.
   //
 
@@ -148,7 +148,7 @@ public:
   //
   STDMETHOD (SaveAsFile) (
     // The destination file into which the contents of this file are to
-    // be written. 
+  /// be written. 
     /*[in]*/ IAAFFile * pDestFile);
 
 
@@ -157,12 +157,12 @@ public:
   // SetFileBits()
   //
   // Since the purpose of this method is to specify file data with
-  // which a file is to be created, it will only succeed if this file
-  // has not yet been Open()ed.
-  //
-  // Succeeds if:
-  // - The ppSetFileBits argument is valid
-  // - This file has not yet been opened.
+  /// which a file is to be created, it will only succeed if this file
+  /// has not yet been Open()ed.
+  ///
+  /// Succeeds if:
+  /// - The ppSetFileBits argument is valid
+  /// - This file has not yet been opened.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -173,12 +173,12 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - ppSetFileBits arg is NULL.
-  //
-  // AAFRESULT_BADOPEN
-  // - This file has has already been opened
-  //
-  // AAFRESULT_NOT_READABLE
-  // - This read or modify has not been specified for this file
+  ///
+  /// AAFRESULT_BADOPEN
+  /// - This file has has already been opened
+  ///
+  /// AAFRESULT_NOT_READABLE
+  /// - This read or modify has not been specified for this file
   //
   STDMETHOD (SetFileBits) (
     // The interface to the SetFileBits object 

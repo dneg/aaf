@@ -65,21 +65,21 @@ public:
   // Initialize()
   //
   // Initializes a newly allocated, IAAFPCMDescriptor-supporting
-  // object. This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize() has already been called on this object.
+  /// object. This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
   //
   STDMETHOD (Initialize)
      ();
@@ -91,21 +91,21 @@ public:
   // SetBlockAlign()
   //
   // Sets the number of bytes used to store one sample of all channels.
-  // This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the BlockAlign property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the BlockAlign property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetBlockAlign) (
     // The number of bytes used to store one sample of all channels. 
@@ -117,24 +117,24 @@ public:
   // GetBlockAlign()
   //
   // Gets the number of bytes used to store one sample of all channels.
-  // This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pBlockAlign pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pBlockAlign.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBlockAlign arg is NULL.
+  /// This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pBlockAlign pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pBlockAlign.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBlockAlign arg is NULL.
   //
   STDMETHOD (GetBlockAlign) (
     // The number of bytes used to store one sample of all channels. 
@@ -146,25 +146,25 @@ public:
   // SetSequenceOffset()
   //
   // Sets the frame number of the beginning of the essence data
-  // within a five-frame sequence. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the SequenceOffset property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// within a five-frame sequence. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the SequenceOffset property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetSequenceOffset) (
     // Zero-based ordinal frame number of the beginning of
-	// the essence data within a five-frame sequence. 
+	/// the essence data within a five-frame sequence. 
     /*[in]*/ aafUInt8  offset);
 
 
@@ -173,32 +173,32 @@ public:
   // GetSequenceOffset()
   //
   // Gets the frame number of the beginning of the essence data
-  // within a five-frame sequence. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pOffset pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pOffset.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pOffset arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// within a five-frame sequence. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pOffset pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pOffset.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pOffset arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetSequenceOffset) (
     // Zero-based ordinal frame number of the beginning of
-	// the essence data within a five-frame sequence. 
+	/// the essence data within a five-frame sequence. 
     /*[out]*/ aafUInt8 *  pOffset);
 
 
@@ -207,21 +207,21 @@ public:
   // SetAverageBPS()
   //
   // Sets the average bytes per second of the essence stream.
-  // This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the AverageBPS property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the AverageBPS property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetAverageBPS) (
     // Average bytes per second of the essence stream. 
@@ -233,24 +233,24 @@ public:
   // GetAverageBPS()
   //
   // Gets the average bytes per second of the essence stream.
-  // This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pBps pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pBps.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBps arg is NULL.
+  /// This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pBps pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pBps.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBps arg is NULL.
   //
   STDMETHOD (GetAverageBPS) (
     // Average bytes per second of the essence stream. 
@@ -262,20 +262,20 @@ public:
   // SetChannelAssignment()
   //
   // Sets the channel assignment scheme. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the ChannelAssignment property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the ChannelAssignment property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetChannelAssignment) (
     // The channel assignment to use. 
@@ -287,27 +287,27 @@ public:
   // GetChannelAssignment()
   //
   // Gets the channel assignment scheme. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pChannelAssignment pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pChannelAssignment.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pChannelAssignment arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pChannelAssignment pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pChannelAssignment.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChannelAssignment arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetChannelAssignment) (
     // The channel assignment in use. 
@@ -319,35 +319,35 @@ public:
   // AreAllPeakEnvelopePropertiesPresent()
   //
   // Places TRUE into *pArePresent if the following optional
-  // properties are set on the descriptor:
-  //   PeakEnvelopeVersion
-  //   PeakEnvelopeFormat
-  //   PointsPerPeakValue
-  //   PeakEnvelopeBlockSize
-  //   PeakChannels
-  //   PeakFrames
-  //   PeakOfPeaksPosition
-  //   PeakEnvelopeTimestamp
-  //   PeakEnvelopeData
-  //
-  // Succeeds if all of the following are true:
-  // - the pArePresent pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pIsPresent.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pArePresent arg is NULL.
+  /// properties are set on the descriptor:
+  ///   PeakEnvelopeVersion
+  ///   PeakEnvelopeFormat
+  ///   PointsPerPeakValue
+  ///   PeakEnvelopeBlockSize
+  ///   PeakChannels
+  ///   PeakFrames
+  ///   PeakOfPeaksPosition
+  ///   PeakEnvelopeTimestamp
+  ///   PeakEnvelopeData
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pArePresent pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pIsPresent.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pArePresent arg is NULL.
   //
   STDMETHOD (AreAllPeakEnvelopePropertiesPresent) (
     // The flag indicating presence of the optional properties
-	// that form peak envelope. 
+	/// that form peak envelope. 
     /*[out]*/ aafBoolean_t *  pArePresent);
 
 
@@ -356,19 +356,19 @@ public:
   // SetPeakEnvelopeVersion()
   //
   // Sets the version of the peak envelope data.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the version will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the version will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetPeakEnvelopeVersion) (
     // Version of the peak envelope data. 
@@ -380,28 +380,28 @@ public:
   // GetPeakEnvelopeVersion()
   //
   // Gets the version of the peak envelope data.
-  // This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pVersion pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pVersion.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pVersion arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pVersion pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pVersion.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pVersion arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetPeakEnvelopeVersion) (
     // Version of the peak envelope data. 
@@ -413,19 +413,19 @@ public:
   // SetPeakEnvelopeFormat()
   //
   // Sets the format of the peak point.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the format will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the format will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetPeakEnvelopeFormat) (
     // Format of the peak point. 
@@ -437,28 +437,28 @@ public:
   // GetPeakEnvelopeFormat()
   //
   // Gets the format of the peak point.
-  // This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pFormat pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pFormat.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFormat arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pFormat pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pFormat.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFormat arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetPeakEnvelopeFormat) (
     // Format of the peak point. 
@@ -470,20 +470,20 @@ public:
   // SetPointsPerPeakValue()
   //
   // Sets the number of peak points per peak value.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the PointsPerPeakValue property will
-  // not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the PointsPerPeakValue property will
+  /// not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetPointsPerPeakValue) (
     // The number of peak points per peak value. 
@@ -495,28 +495,28 @@ public:
   // GetPointsPerPeakValue()
   //
   // Gets the number of peak points per peak value.
-  // This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pPointCount pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pPointCount.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPointCount arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pPointCount pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pPointCount.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPointCount arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetPointsPerPeakValue) (
     // The number of peak points per peak value. 
@@ -528,20 +528,20 @@ public:
   // SetPeakEnvelopeBlockSize()
   //
   // Sets the number of audio samples used to generate each peak frame.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the PeakEnvelopeBlockSize property will
-  // not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the PeakEnvelopeBlockSize property will
+  /// not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetPeakEnvelopeBlockSize) (
     // The number of audio samples used to generate each peak frame. 
@@ -553,28 +553,28 @@ public:
   // GetPeakEnvelopeBlockSize()
   //
   // Gets the number of audio samples used to generate each peak frame.
-  // This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pBlockSize pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pBlockSize.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBlockSize arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pBlockSize pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pBlockSize.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBlockSize arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetPeakEnvelopeBlockSize) (
     // The number of audio samples used to generate each peak frame. 
@@ -586,19 +586,19 @@ public:
   // SetPeakChannelCount()
   //
   // Sets the number of peak channels.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the channel count will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the channel count will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetPeakChannelCount) (
     // The number of peak channels. 
@@ -610,28 +610,28 @@ public:
   // GetPeakChannelCount()
   //
   // Gets the number of peak channels.
-  // This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pChannelCount pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pChannelCount.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pChannelCount arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pChannelCount pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pChannelCount.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChannelCount arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetPeakChannelCount) (
     // The number of peak channels. 
@@ -643,19 +643,19 @@ public:
   // SetPeakFrameCount()
   //
   // Sets the number of peak frames.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the frame count will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the frame count will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetPeakFrameCount) (
     // The number of peak frames. 
@@ -667,28 +667,28 @@ public:
   // GetPeakFrameCount()
   //
   // Gets the number of peak frames.
-  // This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pFrameCount pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pFrameCount.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFrameCount arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pFrameCount pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pFrameCount.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFrameCount arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetPeakFrameCount) (
     // The number of peak frames. 
@@ -700,21 +700,21 @@ public:
   // SetPeakOfPeaksPosition()
   //
   // Sets the offset to the first audio sample whose absolute
-  // value is the maximum value of the entire audio file.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the PeakOfPeaksPosition property will
-  // not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// value is the maximum value of the entire audio file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the PeakOfPeaksPosition property will
+  /// not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetPeakOfPeaksPosition) (
     // The offset to peak of peaks 
@@ -726,29 +726,29 @@ public:
   // GetPeakOfPeaksPosition()
   //
   // Gets the offset to the first audio sample whose absolute
-  // value is the maximum value of the entire audio file.
-  // This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pPosition pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pPosition.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPosition arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// value is the maximum value of the entire audio file.
+  /// This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pPosition pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pPosition.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPosition arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetPeakOfPeaksPosition) (
     // The offset to peak of peaks. 
@@ -760,19 +760,19 @@ public:
   // SetPeakEnvelopeTimestamp()
   //
   // Sets the time stamp of the creation of the peak data.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the time stamp will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the time stamp will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
   //
   STDMETHOD (SetPeakEnvelopeTimestamp) (
     // The time stamp of the creation of the peak data. 
@@ -784,28 +784,28 @@ public:
   // GetPeakEnvelopeTimestamp()
   //
   // Gets the time stamp of the creation of the peak data.
-  // This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pTimeStamp pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pTimeStamp.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTimeStamp arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  /// This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pTimeStamp pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pTimeStamp.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTimeStamp arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetPeakEnvelopeTimestamp) (
     // The time stamp of the creation of the peak data. 
@@ -817,23 +817,23 @@ public:
   // SetPeakEnvelopeDataPosition()
   //
   // Sets the offset from the beginning of peak envelope data.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the object is persistent (attached to a file).
-  // 
-  // If this method fails the position will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_OBJECT_NOT_PERSISTENT
-  //   - the object is not persistent.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the object is persistent (attached to a file).
+  /// 
+  /// If this method fails the position will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
   //
   STDMETHOD (SetPeakEnvelopeDataPosition) (
     // Offset from the beginning of peak envelope data. 
@@ -845,30 +845,30 @@ public:
   // GetPeakEnvelopeDataPosition()
   //
   // Gets the offset from the beginning of peak envelope data.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pPosition pointer is valid.
-  // - the object is persistent (attached to a file).
-  // 
-  // If this method fails nothing will be written to *pPosition.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPosition arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the PeakEnvelopeData property is not present.
-  //
-  // AAFRESULT_OBJECT_NOT_PERSISTENT
-  //   - the object is not persistent.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pPosition pointer is valid.
+  /// - the object is persistent (attached to a file).
+  /// 
+  /// If this method fails nothing will be written to *pPosition.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPosition arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the PeakEnvelopeData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
   //
   STDMETHOD (GetPeakEnvelopeDataPosition) (
     // Offset from the beginning of peak envelope data. 
@@ -880,32 +880,32 @@ public:
   // GetPeakEnvelopeDataSize()
   //
   // Gets the size of peak envelope data.
-  // PeakEnvelopeData is optional property.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pSize pointer is valid.
-  // - the PeakEnvelopeData property is present.
-  // - the object is persistent (attached to a file).
-  // 
-  // If this method fails nothing will be written to *pSize.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSize arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the PeakEnvelopeData property is not present.
-  //
-  // AAFRESULT_OBJECT_NOT_PERSISTENT
-  //   - the object is not persistent.
+  /// PeakEnvelopeData is optional property.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pSize pointer is valid.
+  /// - the PeakEnvelopeData property is present.
+  /// - the object is persistent (attached to a file).
+  /// 
+  /// If this method fails nothing will be written to *pSize.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the PeakEnvelopeData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
   //
   STDMETHOD (GetPeakEnvelopeDataSize) (
     // The size of peak envelope data. 
@@ -917,39 +917,39 @@ public:
   // WritePeakEnvelopeData()
   //
   // Write the specified bytes to the peak envelope data stream.
-  // 
-  // Succeeds if all of the following are true:
-  // - the number of bytes to write is non-zero.
-  // - the buffer pointer is valid.
-  // - the pBytesWritten pointer is valid.
-  // - the object is initialized.
-  // - the object is persistent (attached to a file).
-  // 
-  // If this method fails the PeakEnvelopeData property will
-  // not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - bytes arg is larger than zero.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - buffer arg is NULL.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBytesWritten arg is NULL.
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  //
-  // AAFRESULT_OBJECT_NOT_PERSISTENT
-  //   - the object is not persistent.
-  //
-  // AAFRESULT_CONTAINERWRITE
-  //   - writing failed.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the number of bytes to write is non-zero.
+  /// - the buffer pointer is valid.
+  /// - the pBytesWritten pointer is valid.
+  /// - the object is initialized.
+  /// - the object is persistent (attached to a file).
+  /// 
+  /// If this method fails the PeakEnvelopeData property will
+  /// not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - bytes arg is larger than zero.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - buffer arg is NULL.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBytesWritten arg is NULL.
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
+  ///
+  /// AAFRESULT_CONTAINERWRITE
+  ///   - writing failed.
   //
   STDMETHOD (WritePeakEnvelopeData) (
     // Write this many bytes
@@ -967,42 +967,42 @@ public:
   // ReadPeakEnvelopeData()
   //
   // Read the specified number of bytes from the peak envelope data
-  // stream into buffer.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the number of bytes to read is non-zero.
-  // - the buffer pointer is valid.
-  // - the pBytesRead pointer is valid.
-  // - the PeakEnvelopeData property is present.
-  // - the object is persistent (attached to a file).
-  // - not yet reached the end of the data stream.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  // 
-  // AAFRESULT_END_OF_DATA
-  //   - trying to read beyond the end of the data stream.
-  // 
-  // AAFRESULT_NOT_INITIALIZED
-  //   - the object is not initialized.
-  // 
-  // AAFRESULT_INVALID_PARAM
-  //   - bytes arg is larger than zero.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - buffer arg is NULL.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBytesRead arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the PeakEnvelopeData property is not present.
-  //
-  // AAFRESULT_OBJECT_NOT_PERSISTENT
-  //   - the object is not persistent.
+  /// stream into buffer.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the number of bytes to read is non-zero.
+  /// - the buffer pointer is valid.
+  /// - the pBytesRead pointer is valid.
+  /// - the PeakEnvelopeData property is present.
+  /// - the object is persistent (attached to a file).
+  /// - not yet reached the end of the data stream.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// AAFRESULT_END_OF_DATA
+  ///   - trying to read beyond the end of the data stream.
+  /// 
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - the object is not initialized.
+  /// 
+  /// AAFRESULT_INVALID_PARAM
+  ///   - bytes arg is larger than zero.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - buffer arg is NULL.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBytesRead arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the PeakEnvelopeData property is not present.
+  ///
+  /// AAFRESULT_OBJECT_NOT_PERSISTENT
+  ///   - the object is not persistent.
   //
   STDMETHOD (ReadPeakEnvelopeData) (
     // Read this many bytes

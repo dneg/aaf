@@ -68,22 +68,22 @@ public:
   // GetPosition()
   //
   // This method will return the Position of this event.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pPosition pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPosition arg is NULL.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pPosition pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPosition arg is NULL.
   //
   STDMETHOD (GetPosition) (
     // Position property value 
@@ -94,16 +94,16 @@ public:
   // SetPosition()
   //
   // This method will set the Position of this event.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.).
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.).
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetPosition) (
     // Position property value 
@@ -115,20 +115,20 @@ public:
   // SetComment()
   //
   // Sets specifies the purpose of the event.
-  //
-  // Set the Comment property to the value specified in
-  // pComment.  A copy is made of the data so the caller
-  // retains ownership of the *pComment buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pComment pointer is valid.
-  // 
-  // If this method fails the Comment property will not be
-  // changed.
-  // 
+  ///
+  /// Set the Comment property to the value specified in
+  /// pComment.  A copy is made of the data so the caller
+  /// retains ownership of the *pComment buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pComment pointer is valid.
+  /// 
+  /// If this method fails the Comment property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -150,24 +150,24 @@ public:
   // GetComment()
   //
   // Gets specifies the purpose of the event.
-  // 
-  // Writes the Comment property, with a trailing null
-  // character, into the pComment buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the Comment property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetCommentBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pComment.
-  // 
-  // Succeeds if:
-  // - The pComment pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   Comment.
+  /// 
+  /// Writes the Comment property, with a trailing null
+  /// character, into the pComment buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the Comment property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetCommentBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pComment.
+  /// 
+  /// Succeeds if:
+  /// - The pComment pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   Comment.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -178,10 +178,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pComment arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold Comment.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold Comment.
   //
   STDMETHOD (GetComment) (
     // buffer into which Comment is to be written
@@ -196,9 +196,9 @@ public:
   // GetCommentBufLen()
   //
   // Returns size of buffer (in bytes) required for GetComment().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

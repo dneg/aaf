@@ -65,10 +65,10 @@ public:
   // IsReadable()
   //
   // Sets *pResult to true if this storage is readable; sets it to
-  // false otherwise.
-  //
-  // Succeeds if:
-  // - The pResult pointer is valid.
+  /// false otherwise.
+  ///
+  /// Succeeds if:
+  /// - The pResult pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -90,16 +90,16 @@ public:
   // Read()
   //
   // Attempts to read bufsize bytes from this stream.  Places the data
-  // into buf, and puts the actual number of bytes read into
-  // *pNumRead.  If the end of the stream is encountered before
-  // bufSize bytes can be read, the value written into *pNumRead may
-  // be smaller than bufSize.
-  //
-  // This call will advance the current position by *pNumRead bytes.
-  //
-  // Succeeds if:
-  // - The pNumBytes pointer is valid.
-  // - This stream is open for read or read/write.
+  /// into buf, and puts the actual number of bytes read into
+  /// *pNumRead.  If the end of the stream is encountered before
+  /// bufSize bytes can be read, the value written into *pNumRead may
+  /// be smaller than bufSize.
+  ///
+  /// This call will advance the current position by *pNumRead bytes.
+  ///
+  /// Succeeds if:
+  /// - The pNumBytes pointer is valid.
+  /// - This stream is open for read or read/write.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -110,9 +110,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - buf or pNumRead arg is NULL.
-  //
-  // AAFRESULT_NOT_READABLE
-  //   - This stream is not open for read or read/write.
+  ///
+  /// AAFRESULT_NOT_READABLE
+  ///   - This stream is not open for read or read/write.
   //
   STDMETHOD (Read) (
     // Buffer into which data is read
@@ -130,10 +130,10 @@ public:
   // IsWriteable()
   //
   // Sets *pResult to true if this storage is writeable; sets it to
-  // false otherwise.
-  //
-  // Succeeds if:
-  // - The pResult pointer is valid.
+  /// false otherwise.
+  ///
+  /// Succeeds if:
+  /// - The pResult pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -155,21 +155,21 @@ public:
   // Write()
   //
   // Writes bufsize bytes into this stream.  Obtains the data
-  // from buf.
-  //
-  // This call may fail if the stream has insufficient capacity to
-  // complete the request.  If this storage supports the
-  // IAAFRandomRawStorage interface, the client can call
-  // IAAFRandomRawStorage::SetSize() to attempt to reserve capacity
-  // in the stream; if the SetSize() call succeeds, subsequent
-  // Write() calls within that capacity are guaranteed to succeed.
-  //
-  // This call will advance the current position by bufSize bytes.
-  //
-  // Succeeds if:
-  // - This stream is open for write or read/write.
-  // - Sufficient capacity exists in this stream to perform the
-  //   write.
+  /// from buf.
+  ///
+  /// This call may fail if the stream has insufficient capacity to
+  /// complete the request.  If this storage supports the
+  /// IAAFRandomRawStorage interface, the client can call
+  /// IAAFRandomRawStorage::SetSize() to attempt to reserve capacity
+  /// in the stream; if the SetSize() call succeeds, subsequent
+  /// Write() calls within that capacity are guaranteed to succeed.
+  ///
+  /// This call will advance the current position by bufSize bytes.
+  ///
+  /// Succeeds if:
+  /// - This stream is open for write or read/write.
+  /// - Sufficient capacity exists in this stream to perform the
+  ///   write.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -177,12 +177,12 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_WRITEABLE
-  //   - This stream is not open for write or read/write.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - This stream has insufficient capacity to perform the write.
+  ///
+  /// AAFRESULT_NOT_WRITEABLE
+  ///   - This stream is not open for write or read/write.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - This stream has insufficient capacity to perform the write.
   //
   STDMETHOD (Write) (
     // Buffer from which data is written

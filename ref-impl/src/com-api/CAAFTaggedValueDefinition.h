@@ -85,15 +85,15 @@ public:
   //
   // AddParentProperty()
   //
-  // // Add a property definition to the tagged value definition.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pParentProperty is null.
+  // /// Add a property definition to the tagged value definition.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pParentProperty is null.
   //
   STDMETHOD (AddParentProperty) (
     // Property definition to add. 
@@ -103,16 +103,16 @@ public:
   //
   // GetParentProperties()
   //
-  // // Writes an enumerator for the property definitions into *ppEnum.
-  // A reference is added to the new enumerator before it is returned.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  // /// Writes an enumerator for the property definitions into *ppEnum.
+  /// A reference is added to the new enumerator before it is returned.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (GetParentProperties) (
     // Property definition enumerator. 
@@ -122,16 +122,16 @@ public:
   //
   // CountParentProperties()
   //
-  // // Writes the total number of property definitions into *pNumProperties if,
-  // and only if, the method succeeds.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  // /// Writes the total number of property definitions into *pNumProperties if,
+  /// and only if, the method succeeds.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (CountParentProperties) (
     // Number of property definitions. 
@@ -141,18 +141,18 @@ public:
   //
   // RemoveParentProperty()
   //
-  // // Removes the given property definition.
-  //
-  // Return codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - The property definition is not in this tagged value definition.
+  // /// Removes the given property definition.
+  ///
+  /// Return codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - The property definition is not in this tagged value definition.
   //
   STDMETHOD (RemoveParentProperty) (
     // Property to remove. 

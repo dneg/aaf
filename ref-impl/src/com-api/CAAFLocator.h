@@ -65,20 +65,20 @@ public:
   // SetPath()
   //
   // Sets the Path string property.
-  //
-  // Set the Path property to the value specified in
-  // pPath.  A copy is made of the data so the caller
-  // retains ownership of the *pPath buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pPath pointer is valid.
-  // 
-  // If this method fails the Path property will not be
-  // changed.
-  // 
+  ///
+  /// Set the Path property to the value specified in
+  /// pPath.  A copy is made of the data so the caller
+  /// retains ownership of the *pPath buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pPath pointer is valid.
+  /// 
+  /// If this method fails the Path property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -100,24 +100,24 @@ public:
   // GetPath()
   //
   // Gets the Path string property.
-  // 
-  // Writes the Path property, with a trailing null
-  // character, into the pPath buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the Path property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetPathBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pPath.
-  // 
-  // Succeeds if:
-  // - The pPath pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   Path.
+  /// 
+  /// Writes the Path property, with a trailing null
+  /// character, into the pPath buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the Path property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetPathBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pPath.
+  /// 
+  /// Succeeds if:
+  /// - The pPath pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   Path.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -128,10 +128,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pPath arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold Path.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold Path.
   //
   STDMETHOD (GetPath) (
     // buffer into which Path is to be written
@@ -146,9 +146,9 @@ public:
   // GetPathBufLen()
   //
   // Returns size of buffer (in bytes) required for GetPath().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

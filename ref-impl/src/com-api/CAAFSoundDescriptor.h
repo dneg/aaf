@@ -64,24 +64,24 @@ public:
   //
   // SetCompression()
   //
-  // // Sets the kind of compression and format of compression
-  // information of the sound essence data. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the Compression property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Sets the kind of compression and format of compression
+  /// information of the sound essence data. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the Compression property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetCompression) (
     // Identifies kind of compression and format of
-	// compression information. 
+	/// compression information. 
     /*[in]*/ aafUID_constref  compression);
 
 
@@ -89,27 +89,27 @@ public:
   //
   // GetCompression()
   //
-  // // Gets the kind of compression and format of compression
-  // information of the sound essence data. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pCompression pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pCompression.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pCompression arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  // /// Gets the kind of compression and format of compression
+  /// information of the sound essence data. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pCompression pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pCompression.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCompression arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetCompression) (
     // Compression of the sound essence data. 
@@ -120,23 +120,23 @@ public:
   //
   // SetChannelCount()
   //
-  // // Sets the number of channels of sound represented by
-  // this descriptor. This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the Channels property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Sets the number of channels of sound represented by
+  /// this descriptor. This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the Channels property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetChannelCount) (
     // The number of channels of sound represented
-	// by this descriptor. 
+	/// by this descriptor. 
     /*[in]*/ aafUInt32  channelCount);
 
 
@@ -144,26 +144,26 @@ public:
   //
   // GetChannelCount()
   //
-  // // Gets the number of channels of sound represented by
-  // this descriptor. This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pChannelCount pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pChannelCount.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pChannelCount arg is NULL.
+  // /// Gets the number of channels of sound represented by
+  /// this descriptor. This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pChannelCount pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pChannelCount.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pChannelCount arg is NULL.
   //
   STDMETHOD (GetChannelCount) (
     // The number of channels of sound represented
-	// by this descriptor. 
+	/// by this descriptor. 
     /*[out]*/ aafUInt32 *  pChannelCount);
 
 
@@ -171,19 +171,19 @@ public:
   //
   // SetAudioSamplingRate()
   //
-  // // Sets the sample rate of audio represented by this descriptor.
-  // This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the AudioSamplingRate property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Sets the sample rate of audio represented by this descriptor.
+  /// This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the AudioSamplingRate property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetAudioSamplingRate) (
     // Sample rate of audio essence. 
@@ -194,22 +194,22 @@ public:
   //
   // GetAudioSamplingRate()
   //
-  // // Gets the sample rate of audio represented by this descriptor.
-  // This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pRate pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pRate.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pRate arg is NULL.
+  // /// Gets the sample rate of audio represented by this descriptor.
+  /// This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pRate pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pRate.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pRate arg is NULL.
   //
   STDMETHOD (GetAudioSamplingRate) (
     // Sample rate of audio essence. 
@@ -220,20 +220,20 @@ public:
   //
   // SetIsLocked()
   //
-  // // Sets the Locked flag which indicates whether the number of
-  // samples per frame is locked or unlocked. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the Locked property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Sets the Locked flag which indicates whether the number of
+  /// samples per frame is locked or unlocked. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the Locked property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetIsLocked) (
     // Is number of samples per frame locked to video? 
@@ -244,27 +244,27 @@ public:
   //
   // IsLocked()
   //
-  // // Gets the Locked flag which indicates whether the number of
-  // samples per frame is locked or unlocked. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pLocked pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pLocked.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLocked arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  // /// Gets the Locked flag which indicates whether the number of
+  /// samples per frame is locked or unlocked. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pLocked pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pLocked.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocked arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (IsLocked) (
     // Is number of samples per frame locked to video? 
@@ -275,19 +275,19 @@ public:
   //
   // SetElectroSpatialFormulation()
   //
-  // // Sets the electro-spatial form of the signal. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the ElectroSpatial property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Sets the electro-spatial form of the signal. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the ElectroSpatial property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetElectroSpatialFormulation) (
     // Electro-spatial form of the signal. 
@@ -298,26 +298,26 @@ public:
   //
   // GetElectroSpatialFormulation()
   //
-  // // Gets the electro-spatial form of the signal. This property is
-  // optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pFormulation pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pFormulation.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFormulation arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  // /// Gets the electro-spatial form of the signal. This property is
+  /// optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pFormulation pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pFormulation.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFormulation arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetElectroSpatialFormulation) (
     // Electro-spatial form of the signal. 
@@ -328,18 +328,18 @@ public:
   //
   // SetAudioRefLevel()
   //
-  // // Sets the audio reference level. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the AudioRefLevel property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Sets the audio reference level. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the AudioRefLevel property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetAudioRefLevel) (
     // Audio reference level. 
@@ -350,25 +350,25 @@ public:
   //
   // GetAudioRefLevel()
   //
-  // // Gets the audio reference level. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pLevel pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pLevel.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLevel arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  // /// Gets the audio reference level. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pLevel pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pLevel.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLevel arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetAudioRefLevel) (
     // Audio reference level. 
@@ -379,18 +379,18 @@ public:
   //
   // SetDialNorm()
   //
-  // // Sets the dial norm. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the DialNorm property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Sets the dial norm. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the DialNorm property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetDialNorm) (
     // Dial norm. 
@@ -401,25 +401,25 @@ public:
   //
   // GetDialNorm()
   //
-  // // Gets the dial norm. This property is optional.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pDialNorm pointer is valid.
-  // - the property is present.
-  // 
-  // If this method fails nothing will be written to *pDialNorm.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDialNorm arg is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  // /// Gets the dial norm. This property is optional.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pDialNorm pointer is valid.
+  /// - the property is present.
+  /// 
+  /// If this method fails nothing will be written to *pDialNorm.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDialNorm arg is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   //
   STDMETHOD (GetDialNorm) (
     // Dial norm. 
@@ -430,18 +430,18 @@ public:
   //
   // SetQuantizationBits()
   //
-  // // Sets the number of quantization bits. This property is required.
-  //  
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // 
-  // If this method fails the QuantizationBits property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Sets the number of quantization bits. This property is required.
+  ///  
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// 
+  /// If this method fails the QuantizationBits property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetQuantizationBits) (
     // Number of quantization bits. 
@@ -452,21 +452,21 @@ public:
   //
   // GetQuantizationBits()
   //
-  // // Gets the number of quantization bits. This property is required.
-  // 
-  // Succeeds if all of the following are true:
-  // - the object is initialized.
-  // - the pBitsCount pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pBitsCount.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBitsCount arg is NULL.
+  // /// Gets the number of quantization bits. This property is required.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the object is initialized.
+  /// - the pBitsCount pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pBitsCount.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBitsCount arg is NULL.
   //
   STDMETHOD (GetQuantizationBits) (
     // Number of quantization bits. 

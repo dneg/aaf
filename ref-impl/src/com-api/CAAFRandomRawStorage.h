@@ -65,16 +65,16 @@ public:
   // ReadAt()
   //
   // Attempts to read bufsize bytes from this storage.  Places the
-  // data into buf, and puts the actual number of bytes read into
-  // *pNumRead.  If the end of the storage is encountered before
-  // bufSize bytes can be read, the value written into *pNumRead may
-  // be smaller than bufSize.
-  //
-  // This call will advance the current position by *pNumRead bytes.
-  //
-  // Succeeds if:
-  // - The pNumRead pointer is valid.
-  // - This storage is open for read or read/write.
+  /// data into buf, and puts the actual number of bytes read into
+  /// *pNumRead.  If the end of the storage is encountered before
+  /// bufSize bytes can be read, the value written into *pNumRead may
+  /// be smaller than bufSize.
+  ///
+  /// This call will advance the current position by *pNumRead bytes.
+  ///
+  /// Succeeds if:
+  /// - The pNumRead pointer is valid.
+  /// - This storage is open for read or read/write.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -85,9 +85,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - buf or pNumRead arg is NULL.
-  //
-  // AAFRESULT_NOT_READABLE
-  //   - This storage is not open for read or read/write.
+  ///
+  /// AAFRESULT_NOT_READABLE
+  ///   - This storage is not open for read or read/write.
   //
   STDMETHOD (ReadAt) (
     // position in this storage from which data is read
@@ -108,21 +108,21 @@ public:
   // WriteAt()
   //
   // Writes bufsize bytes into this storage.  Obtains the data
-  // from buf.
-  //
-  // This call may fail if the capacity of this storage cannot be
-  // extended sufficiently to complete the request.  The client can
-  // call SetSize() to attempt to reserve capacity for the storage;
-  // if the SetSize() call succeeds, subsequent Write() calls
-  // within requested that capacty are guaranteed to succeed.
-  //
-  // This call will advance the current position by bufSize bytes.
-  //
-  // Succeeds if:
-  // - The pNumWritten pointer is valid.
-  // - This storage is open for write or read/write.
-  // - Sufficient capacity exists in this storage to perform the
-  //   write.
+  /// from buf.
+  ///
+  /// This call may fail if the capacity of this storage cannot be
+  /// extended sufficiently to complete the request.  The client can
+  /// call SetSize() to attempt to reserve capacity for the storage;
+  /// if the SetSize() call succeeds, subsequent Write() calls
+  /// within requested that capacty are guaranteed to succeed.
+  ///
+  /// This call will advance the current position by bufSize bytes.
+  ///
+  /// Succeeds if:
+  /// - The pNumWritten pointer is valid.
+  /// - This storage is open for write or read/write.
+  /// - Sufficient capacity exists in this storage to perform the
+  ///   write.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -133,13 +133,13 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pNumWritten arg is NULL.
-  //
-  // AAFRESULT_NOT_WRITEABLE
-  //   - This storage is not open for write or read/write.
-  //
-  // AAFRESULT_OFFSET_SIZE
-  //   - It is not possible to extend the allocated size of this
-  //     storage.
+  ///
+  /// AAFRESULT_NOT_WRITEABLE
+  ///   - This storage is not open for write or read/write.
+  ///
+  /// AAFRESULT_OFFSET_SIZE
+  ///   - It is not possible to extend the allocated size of this
+  ///     storage.
   //
   STDMETHOD (WriteAt) (
     // position in this storage into which data is written
@@ -160,10 +160,10 @@ public:
   // GetSize()
   //
   // Returns the highest byte position in this storage which has been
-  // written so far.
-  //
-  // Succeeds if:
-  // - The pSize pointer is valid.
+  /// written so far.
+  ///
+  /// Succeeds if:
+  /// - The pSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -185,10 +185,10 @@ public:
   // IsExtendable()
   //
   // Sets *pResult to true if the memory allocated to this storage can
-  // be dynamically extened; sets it to false otherwise.
-  //
-  // Succeeds if:
-  // - The pResult pointer is valid.
+  /// be dynamically extened; sets it to false otherwise.
+  ///
+  /// Succeeds if:
+  /// - The pResult pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -210,9 +210,9 @@ public:
   // GetExtent()
   //
   // Returns the number of bytes currently allocated storage.
-  //
-  // Succeeds if:
-  // - The pSize pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - The pSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -234,11 +234,11 @@ public:
   // SetExtent()
   //
   // Requests the given capacity for this storage.  If successful,
-  // subsequent calls to WriteAt() and IAAFRawStorage::Write()
-  // within that capacity are guaranteed to succeed.
-  //
-  // Succeeds if:
-  // - It is permissible to set the extent of this storage.
+  /// subsequent calls to WriteAt() and IAAFRawStorage::Write()
+  /// within that capacity are guaranteed to succeed.
+  ///
+  /// Succeeds if:
+  /// - It is permissible to set the extent of this storage.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -246,9 +246,9 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_OFFSET_SIZE
-  //   - This storage has insufficient capacity to perform the write.
+  ///
+  /// AAFRESULT_OFFSET_SIZE
+  ///   - This storage has insufficient capacity to perform the write.
   //
   STDMETHOD (SetExtent) (
     // Number of bytes capacity requested for this storage 

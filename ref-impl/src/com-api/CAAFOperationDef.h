@@ -88,37 +88,37 @@ public:
   // GetDataDef()
   //
   // Places the DataDefinition object attached to this
-  // IAAFOperationDef into the *ppDataDef argument.  The data
-  // definition will match one of the AUIDs in the file
-  // AAFDataDefs.h, (which includes kAAFDataDef_Picture, and
-  // kAAFDataDef_Sound), and indicates what type of data the operation will
-  // be performed upon.  For example, a video dissolve will have the
-  // data def kAAFDataDef_Picture.  If a data definition is used which is not
-  // from AAFDataDefs.h, then the client is responsible for making
-  // sure that a data definition object with that ID exists in the
-  // dictionary.  The SDK will take care of creating the standard data
-  // definitions.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppDataDefID pointer is valid.
-  // - A valid DataDefinition exists.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppDataDef is null.
-  //
-  // AAFRESULT_INVALID_DATA_DEF
-  //   - There is no IAAFDataDefinition.  There has to be one of some
-  //     kind for this to be a valid operation definition.
+  /// IAAFOperationDef into the *ppDataDef argument.  The data
+  /// definition will match one of the AUIDs in the file
+  /// AAFDataDefs.h, (which includes kAAFDataDef_Picture, and
+  /// kAAFDataDef_Sound), and indicates what type of data the operation will
+  /// be performed upon.  For example, a video dissolve will have the
+  /// data def kAAFDataDef_Picture.  If a data definition is used which is not
+  /// from AAFDataDefs.h, then the client is responsible for making
+  /// sure that a data definition object with that ID exists in the
+  /// dictionary.  The SDK will take care of creating the standard data
+  /// definitions.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppDataDefID pointer is valid.
+  /// - A valid DataDefinition exists.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppDataDef is null.
+  ///
+  /// AAFRESULT_INVALID_DATA_DEF
+  ///   - There is no IAAFDataDefinition.  There has to be one of some
+  ///     kind for this to be a valid operation definition.
   //
   STDMETHOD (GetDataDef) (
     // Returned DataDefinition object 
@@ -130,29 +130,29 @@ public:
   // SetDataDef()
   //
   // Sets the IAAFDataDefinition of this IAAFOperationDef to be the
-  // given one.  The
-  // data definition will match one of the AUIDs in the file
-  // AAFDataDefs.h, (which includes kAAFDataDef_Picture, and
-  // kAAFDataDef_Sound), and indicates what type of data the operation will
-  // be performed upon.  For example, a video dissolve will have the
-  // data def kAAFDataDef_Picture.  If a data definition is used which is not
-  // from AAFDataDefs.h, then the client is responsible for making
-  // sure that a data definition object with that ID exists in the
-  // dictionary.  The SDK will take care of creating the standard data
-  // definitions.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDataDef is null.
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// given one.  The
+  /// data definition will match one of the AUIDs in the file
+  /// AAFDataDefs.h, (which includes kAAFDataDef_Picture, and
+  /// kAAFDataDef_Sound), and indicates what type of data the operation will
+  /// be performed upon.  For example, a video dissolve will have the
+  /// data def kAAFDataDef_Picture.  If a data definition is used which is not
+  /// from AAFDataDefs.h, then the client is responsible for making
+  /// sure that a data definition object with that ID exists in the
+  /// dictionary.  The SDK will take care of creating the standard data
+  /// definitions.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDataDef is null.
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetDataDef) (
     // Essence Descriptor object 
@@ -164,23 +164,23 @@ public:
   // IsTimeWarp()
   //
   // Returns the value of isTimeWarp.  IsTimeWarp is true if the
-  // length of an IAAFOperationGroup is different from the lengths of
-  // the input segments.  For example, a slow motion effect.
-  //
-  // Succeeds if all of the following are true:
-  // - the bIsTimeWarp pointer is valid.
-  // 
-  // If this method fails nothing will be written to *bIsTimeWarp.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - bIsTimeWarp arg is NULL.
+  /// length of an IAAFOperationGroup is different from the lengths of
+  /// the input segments.  For example, a slow motion effect.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the bIsTimeWarp pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *bIsTimeWarp.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - bIsTimeWarp arg is NULL.
   //
   STDMETHOD (IsTimeWarp) (
     // pointer to the return value 
@@ -192,15 +192,15 @@ public:
   // SetIsTimeWarp()
   //
   // Sets the IsTimeWarp boolean.  IsTimeWarp is true if the length of
-  // an IAAFOperationGroup is different from the lengths of the input
-  // segments.  For example, a slow motion effect.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// an IAAFOperationGroup is different from the lengths of the input
+  /// segments.  For example, a slow motion effect.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetIsTimeWarp) (
     // is timewarp value 
@@ -212,24 +212,24 @@ public:
   // PrependDegradeToOperation()
   //
   // Prepend another operation definition to the DegradeTo list of
-  // definitions.  Use this function to add an operation definition to
-  // be scanned first when searching for the a replacement (a more
-  // desirable alternate operation).
-  // 
-  // Succeeds if all of the following are true:
-  // - the pOperationDef pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pOperationDef is null.
+  /// definitions.  Use this function to add an operation definition to
+  /// be scanned first when searching for the a replacement (a more
+  /// desirable alternate operation).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pOperationDef pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pOperationDef is null.
   //
   STDMETHOD (PrependDegradeToOperation) (
     // Degrade To Operation Definition Object 
@@ -241,24 +241,24 @@ public:
   // AppendDegradeToOperation()
   //
   // Append another operation definition to the DegradeTo list of
-  // definitions.  Use this function to add an operation definition to
-  // be scanned last when searching for the a replacement (a less
-  // desirable alternate operation).
-  // 
-  // Succeeds if all of the following are true:
-  // - the pOperationDef pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pOperationDef is null.
+  /// definitions.  Use this function to add an operation definition to
+  /// be scanned last when searching for the a replacement (a less
+  /// desirable alternate operation).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pOperationDef pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pOperationDef is null.
   //
   STDMETHOD (AppendDegradeToOperation) (
     // Degrade To operation Definition Object 
@@ -270,30 +270,30 @@ public:
   // InsertDegradeToOperationAt()
   //
   // Insert an operation definition into the DegradeTo list of
-  // definitions at the given index.  Operation definitions already
-  // existing at the given and higher indices will be moved up to the
-  // next higher index to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pOperationDef pointer is valid.
-  // - index is less than or equal to the value returned by
-  //   CountDegradeToOperations().
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pOperationDef is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than the value returned by
-  //     CountDegradeToOperations().
+  /// definitions at the given index.  Operation definitions already
+  /// existing at the given and higher indices will be moved up to the
+  /// next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pOperationDef pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountDegradeToOperations().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pOperationDef is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountDegradeToOperations().
   //
   STDMETHOD (InsertDegradeToOperationAt) (
     // index where operation def is to be inserted
@@ -308,26 +308,26 @@ public:
   // RemoveDegradeToOperationAt()
   //
   // Removes the indexed operation definition from the DegradeTo list
-  // of definitions.  Operation definitions already existing at
-  // indices higher than the given index will be moved down to the
-  // next lower index to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - index is less than the value returned by
-  //   CountDegradeToOperations().
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater or equal to than the value returned by
-  //     CountDegradeToOperations().
+  /// of definitions.  Operation definitions already existing at
+  /// indices higher than the given index will be moved down to the
+  /// next lower index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by
+  ///   CountDegradeToOperations().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater or equal to than the value returned by
+  ///     CountDegradeToOperations().
   //
   STDMETHOD (RemoveDegradeToOperationAt) (
     // index where operation def is to be inserted 
@@ -339,22 +339,22 @@ public:
   // GetDegradeToOperations()
   //
   // Return an enumerator for aaf operation definitions, ordered from
-  // the most desirable to the least desirable alternative.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  /// the most desirable to the least desirable alternative.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (GetDegradeToOperations) (
     // Operation Definition Enumeration 
@@ -366,22 +366,22 @@ public:
   // CountDegradeToOperations()
   //
   // Retrieves the number of Degrade To operations currently present
-  // and places that number in *pResult.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// and places that number in *pResult.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountDegradeToOperations) (
     // resulting count of Degrade To operations 
@@ -393,21 +393,21 @@ public:
   // GetCategory()
   //
   // This method returns an AUID indicating the category of the given operation.
-  //
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pValue.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pValue arg is NULL.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pValue.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pValue arg is NULL.
   //
   STDMETHOD (GetCategory) (
     // The enumeration describing the current category 
@@ -419,15 +419,15 @@ public:
   // SetCategory()
   //
   // This method sets an AUID indicating the category of the given operation.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetCategory) (
     // The enumeration describing the current categor 
@@ -439,24 +439,24 @@ public:
   // GetNumberInputs()
   //
   // Gets the Number of input media segments.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pNumberInputs pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pNumberInputs.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumberInputs arg is NULL.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pNumberInputs pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pNumberInputs.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumberInputs arg is NULL.
   //
   STDMETHOD (GetNumberInputs) (
     // Pointer to Number of Inputs 
@@ -468,16 +468,16 @@ public:
   // SetNumberInputs()
   //
   // Sets the Number of input media segments.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetNumberInputs) (
     // Number of Inputs 
@@ -489,29 +489,29 @@ public:
   // GetBypass()
   //
   // Gets the Bypass media segment index, which is a value from 0
-  // to one less than that returned by GetNumberInputs().  This
-  // value allows the client application to pick one of the inputs
-  // (foreground, background, etc.) to stand in for the
-  // effect if it is not available, and none of the degrade to
-  // effects are available.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pBypass pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pBypass.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pBypass arg is NULL.
+  /// to one less than that returned by GetNumberInputs().  This
+  /// value allows the client application to pick one of the inputs
+  /// (foreground, background, etc.) to stand in for the
+  /// effect if it is not available, and none of the degrade to
+  /// effects are available.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pBypass pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pBypass.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pBypass arg is NULL.
   //
   STDMETHOD (GetBypass) (
     // Pointer to a Bypass media segment index  
@@ -523,21 +523,21 @@ public:
   // SetBypass()
   //
   // Sets the media segment index, which is a value from 0 to one
-  // less than that returned by GetNumberInputs().  This value
-  // allows the client application to pick one of the inputs
-  // (foreground, background, etc.) to stand in for the
-  // effect if it is not available, and none of the degrade to
-  // effects are available.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// less than that returned by GetNumberInputs().  This value
+  /// allows the client application to pick one of the inputs
+  /// (foreground, background, etc.) to stand in for the
+  /// effect if it is not available, and none of the degrade to
+  /// effects are available.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetBypass) (
     // Bypass media segment index 
@@ -549,27 +549,27 @@ public:
   // AddParameterDef()
   //
   // Add the Parameter Definition object to the unordered list of
-  // parameter definitions. 
-  // 
-  // Succeeds if all of the following are true:
-  // - the pAAFParameterDef pointer is valid. 
-  // - the given Parameter Definition does not exists in this Operation
-  //   Definition already
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pAAFParameterDef is null.
-  //
-  // AAFRESULT_OBJECT_ALREADY_ATTACHED
-  //	- pAAFParameterDef is already in this OperationDef
+  /// parameter definitions. 
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pAAFParameterDef pointer is valid. 
+  /// - the given Parameter Definition does not exists in this Operation
+  ///   Definition already
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pAAFParameterDef is null.
+  ///
+  /// AAFRESULT_OBJECT_ALREADY_ATTACHED
+  ///	- pAAFParameterDef is already in this OperationDef
   //
   STDMETHOD (AddParameterDef) (
     // Parameter definition Object 
@@ -581,22 +581,22 @@ public:
   // GetParameterDefs()
   //
   // Return an enumerator for the unordered list of AAF Parameter
-  // definitions.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  /// definitions.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (GetParameterDefs) (
     // Parameter definition enumeration 
@@ -608,21 +608,21 @@ public:
   // CountParameterDefs()
   //
   // This method returns the number of parameter defs.
-  //
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult arg is NULL.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult arg is NULL.
   //
   STDMETHOD (CountParameterDefs) (
     // Number of parameter defs 
@@ -634,26 +634,26 @@ public:
   // LookupParameterDef()
   //
   // This method looks up the parameter def corresponding to the given
-  // ID.
-  //
-  // Succeeds if all of the following are true:
-  // - the given ID corresponds to a known parameter def
-  // - the ppParameterDef pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppParameterDef.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pParameterDef arg is NULL.
-  //
-  // AAFRESULT_OBJECT_NOT_FOUND
-  //   - given ID does not correspond to a known parameter def.
+  /// ID.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the given ID corresponds to a known parameter def
+  /// - the ppParameterDef pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppParameterDef.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pParameterDef arg is NULL.
+  ///
+  /// AAFRESULT_OBJECT_NOT_FOUND
+  ///   - given ID does not correspond to a known parameter def.
   //
   STDMETHOD (LookupParameterDef) (
     // ID of parameter def to look up

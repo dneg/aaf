@@ -374,7 +374,7 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
-  //)
+  ///)
 
 HRESULT STDMETHODCALLTYPE
     CAAFTypeDefIndirect::GetActualSize (IAAFPropertyValue * pIndirectPropertyValue,

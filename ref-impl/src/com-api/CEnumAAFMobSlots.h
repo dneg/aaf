@@ -66,27 +66,27 @@ public:
   // NextOne()
   //
   // Enumerates to the next element in the enumerators list. The
-  // caller is responsible for properly releasing the returned pointer
-  // when it is no longer needed.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppMobSlot pointer is valid.
-  // - there are Mob Slot objects remaining to be returned.
-  // 
-  // If this method fails nothing is written to *ppMobSlot.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppMobSlot is null.
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - Hit the end of the list of slots being enumerated over.
+  /// caller is responsible for properly releasing the returned pointer
+  /// when it is no longer needed.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppMobSlot pointer is valid.
+  /// - there are Mob Slot objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppMobSlot.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppMobSlot is null.
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - Hit the end of the list of slots being enumerated over.
   //
   STDMETHOD (NextOne) (
     // The Next MobSlot 
@@ -98,30 +98,30 @@ public:
   // Next()
   //
   // Enumerates the next count elements (AAFMobSlot pointers) in 
-  // the enumerator's list, returning them in the given array along
-  // with the actual number of enumerated elements in pNumFetched. The
-  // caller is responsible for properly releasing the returned pointers.
-  // 
-  // Succeeds if all of the following are true:
-  // - the ppMobSlots pointer is valid.
-  // - the pNumFetched pointer is valid.
-  // - there are Mob Slot objects remaining to be returned.
-  // 
-  // If this method fails nothing is written to *ppMobSlots or
-  // pNumFetched.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - either ppMob or pNumFetched is null.
-  //
-  // E_INVALIDARG
-  //   - Hit the end of the list of slots being enumerated over.
+  /// the enumerator's list, returning them in the given array along
+  /// with the actual number of enumerated elements in pNumFetched. The
+  /// caller is responsible for properly releasing the returned pointers.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the ppMobSlots pointer is valid.
+  /// - the pNumFetched pointer is valid.
+  /// - there are Mob Slot objects remaining to be returned.
+  /// 
+  /// If this method fails nothing is written to *ppMobSlots or
+  /// pNumFetched.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - either ppMob or pNumFetched is null.
+  ///
+  /// E_INVALIDARG
+  ///   - Hit the end of the list of slots being enumerated over.
   //
   STDMETHOD (Next) (
     // number of mob slots requested
@@ -139,21 +139,21 @@ public:
   // Skip()
   //
   // Instructs the enumerator to skip the next count elements in the
-  // enumeration so that the next call to EnumAAFMobSlots::Next will
-  // not return those elements.
-  // 
-  // Succeeds if all of the following are true:
-  // - count is less than or equal to the number of remaining objects.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NO_MORE_OBJECTS
-  //   - count exceeded number of remaining objects.
+  /// enumeration so that the next call to EnumAAFMobSlots::Next will
+  /// not return those elements.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - count is less than or equal to the number of remaining objects.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NO_MORE_OBJECTS
+  ///   - count exceeded number of remaining objects.
   //
   STDMETHOD (Skip) (
     // Number of elements to skip 
@@ -165,14 +165,14 @@ public:
   // Reset()
   //
   // Instructs the enumerator to position itself at the beginning of
-  // the list of elements.
-  // 
-  // Always succeeds.
-  // 
-  // This method will return the following code:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// the list of elements.
+  /// 
+  /// Always succeeds.
+  /// 
+  /// This method will return the following code:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (Reset)
      ();
@@ -184,22 +184,22 @@ public:
   // Clone()
   //
   // Creates another mob slot enumerator with the same state as the
-  // current enumerator to iterate over the same list. This method
-  // makes it possible to record a point in the enumeration sequence
-  // in order to return to that point at a later time.
-  // 
-  // Note: The caller must release this new enumerator separately from
-  // the first enumerator.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
+  /// current enumerator to iterate over the same list. This method
+  /// makes it possible to record a point in the enumeration sequence
+  /// in order to return to that point at a later time.
+  /// 
+  /// Note: The caller must release this new enumerator separately from
+  /// the first enumerator.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
   //
   STDMETHOD (Clone) (
     // new enumeration 

@@ -70,16 +70,16 @@ public:
   // SetIsUniform()
   //
   // Set to TRUE if essence data has the same number of rows per strip
-  // throughout.
-  //
-  // Always succeeds.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// throughout.
+  ///
+  /// Always succeeds.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetIsUniform) (
     // Sets the IsUniform flag value 
@@ -91,22 +91,22 @@ public:
   // GetIsUniform()
   //
   // Places TRUE into *pIsUniform if the data has the same number of
-  // rows per strip throughout.
-  //
-  // Succeeds if all of the following are true:
-  // - the pIsUniform pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pIsUniform.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pIsUniform arg is NULL.
+  /// rows per strip throughout.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pIsUniform pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pIsUniform.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pIsUniform arg is NULL.
   //
   STDMETHOD (GetIsUniform) (
     // Gets the IsUniform flag value 
@@ -118,15 +118,15 @@ public:
   // SetIsContiguous()
   //
   // Set to TRUE if essence data is stored in contiguous bytes.
-  // 
-  // Always succeeds.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// Always succeeds.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetIsContiguous) (
     // is data stores in contiguous bytes 
@@ -138,22 +138,22 @@ public:
   // GetIsContiguous()
   //
   // Places TRUE into *pIsContiguous if essence data is stored in
-  // contiguous bytes.
-  //
-  // Succeeds if all of the following are true:
-  // - the pIsContiguous pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pIsContiguous.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pIsContiguous arg is NULL.
+  /// contiguous bytes.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pIsContiguous pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pIsContiguous.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pIsContiguous arg is NULL.
   //
   STDMETHOD (GetIsContiguous) (
     // is this data stored in contiguous bytes 
@@ -165,19 +165,19 @@ public:
   // SetLeadingLines()
   //
   // Sets the number of leading lines in the TIFF image file.
-  // 
-  // This method succeeds if all of the following are true:
-  // - LeadingLines is  equal or greater than 0(zero).
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - LeadingLines is  equal or greater than 0(zero).
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetLeadingLines) (
     // Number of leading lines to be thrown away Optional 
@@ -189,24 +189,24 @@ public:
   // GetLeadingLines()
   //
   // Gets the leading lines of the TIFF image.
-  //
-  // This method succeeds if all of the following are true:
-  // - the pLeadingLines pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pLeadingLines.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLeadingLines arg is NULL.
+  ///
+  /// This method succeeds if all of the following are true:
+  /// - the pLeadingLines pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pLeadingLines.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLeadingLines arg is NULL.
   //
   STDMETHOD (GetLeadingLines) (
     // Address to store the number of leading lines 
@@ -218,19 +218,19 @@ public:
   // SetTrailingLines()
   //
   // Sets the number of trailing lines in the TIFF image file
-  // 
-  // This method succeeds if all of the following are true:
-  // - TrailingLines is  equal or greater than 0(zero).
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// 
+  /// This method succeeds if all of the following are true:
+  /// - TrailingLines is  equal or greater than 0(zero).
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetTrailingLines) (
     // Number of trailing lines to be thrown away Optional. 
@@ -242,24 +242,24 @@ public:
   // GetTrailingLines()
   //
   // Gets the trailing lines of the TIFF image.
-  //
-  // This method succeeds if all of the following are true:
-  // - the pTrailingLines pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pTrailingLines.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pTrailingLines arg is NULL.
+  ///
+  /// This method succeeds if all of the following are true:
+  /// - the pTrailingLines pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pTrailingLines.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pTrailingLines arg is NULL.
   //
   STDMETHOD (GetTrailingLines) (
     // Address to store the number of trailing lines. 
@@ -271,15 +271,15 @@ public:
   // SetJPEGTableID()
   //
   // Sets the JPEG table code for  the TIFF image file
-  // 
-  // This method always succeeds .
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// This method always succeeds .
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetJPEGTableID) (
     // Registered JPEG table code or JT_NULL. 
@@ -291,24 +291,24 @@ public:
   // GetJPEGTableID()
   //
   // Gets the JPEG table code of the TIFF image.
-  //
-  // This method succeeds if all of the following are true:
-  // - the pJPEGTableID pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pJPEGTableID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pJPEGTableID arg is NULL.
+  ///
+  /// This method succeeds if all of the following are true:
+  /// - the pJPEGTableID pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pJPEGTableID.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pJPEGTableID arg is NULL.
   //
   STDMETHOD (GetJPEGTableID) (
     // Address to store the nJPEG table code 
@@ -320,24 +320,24 @@ public:
   // GetSummary()
   //
   // Gets a copy of the TIFF IFD file information without the media.
-  // 
-  // Succeeds if all of the following are true:
-  // - pSummary is a valid pointer.
-  // - The size of the buffer is large enough to hold the TIFF IFD
-  //   file information. 
-  // 
-  // If this method fails pSummary will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSummary arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - The buffer is too small to hold the WAVE file information.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pSummary is a valid pointer.
+  /// - The size of the buffer is large enough to hold the TIFF IFD
+  ///   file information. 
+  /// 
+  /// If this method fails pSummary will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSummary arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - The buffer is too small to hold the WAVE file information.
   //
   STDMETHOD (GetSummary) (
     // Size of preallocated buffer
@@ -352,20 +352,20 @@ public:
   // GetSummaryBufferSize()
   //
   // Returns the size of the buffer required for the GetSummary()
-  // method.  The value is placed into the location specified by pSize.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSize pointer is valid.
-  //
-  // If this method fails nothing will be written to *pSize.
-  //
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSize arg is NULL.
+  /// method.  The value is placed into the location specified by pSize.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSize pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pSize.
+  ///
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize arg is NULL.
   //
   STDMETHOD (GetSummaryBufferSize) (
     // required buffer size 
@@ -377,20 +377,20 @@ public:
   // SetSummary()
   //
   // Sets the TIFF IFD file information.
-  // 
-  // Succeeds if all of the following are true:
-  // - pSummary is a valid pointer
-  // 
-  // If this method fails the summary property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSummary arg is NULL.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pSummary is a valid pointer
+  /// 
+  /// If this method fails the summary property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSummary arg is NULL.
   //
   STDMETHOD (SetSummary) (
     // Size of preallocated buffer

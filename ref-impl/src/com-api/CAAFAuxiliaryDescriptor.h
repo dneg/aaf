@@ -73,16 +73,16 @@ public:
   // Initialize()
   //
   // Initializes a newly allocated,
-  // IAAFAuxiliaryDescriptor object.  This method must be called
-  // after allocation, and before any other method can be called.
-  //
-  // Return codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize() has already been called on this object.
+  /// IAAFAuxiliaryDescriptor object.  This method must be called
+  /// after allocation, and before any other method can be called.
+  ///
+  /// Return codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
   //
   STDMETHOD (Initialize)
      ();
@@ -93,20 +93,20 @@ public:
   // SetMimeType()
   //
   // Sets The registered mime type of the data per RFC 2046 and RFC 2048.
-  //
-  // Set the MimeType property to the value specified in
-  // pMimeType.  A copy is made of the data so the caller
-  // retains ownership of the *pMimeType buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pMimeType pointer is valid.
-  // 
-  // If this method fails the MimeType property will not be
-  // changed.
-  // 
+  ///
+  /// Set the MimeType property to the value specified in
+  /// pMimeType.  A copy is made of the data so the caller
+  /// retains ownership of the *pMimeType buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pMimeType pointer is valid.
+  /// 
+  /// If this method fails the MimeType property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -128,24 +128,24 @@ public:
   // GetMimeType()
   //
   // Gets The registered mime type of the data per RFC 2046 and RFC 2048.
-  // 
-  // Writes the MimeType property, with a trailing null
-  // character, into the pMimeType buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the MimeType property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetMimeTypeBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pMimeType.
-  // 
-  // Succeeds if:
-  // - The pMimeType pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   MimeType.
+  /// 
+  /// Writes the MimeType property, with a trailing null
+  /// character, into the pMimeType buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the MimeType property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetMimeTypeBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pMimeType.
+  /// 
+  /// Succeeds if:
+  /// - The pMimeType pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   MimeType.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -156,10 +156,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pMimeType arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold MimeType.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold MimeType.
   //
   STDMETHOD (GetMimeType) (
     // buffer into which MimeType is to be written
@@ -174,9 +174,9 @@ public:
   // GetMimeTypeBufLen()
   //
   // Returns size of buffer (in bytes) required for GetMimeType().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -197,20 +197,20 @@ public:
   // SetCharSet()
   //
   // Sets The registered character set per RFC 2048.
-  //
-  // Set the CharSet property to the value specified in
-  // pCharSet.  A copy is made of the data so the caller
-  // retains ownership of the *pCharSet buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pCharSet pointer is valid.
-  // 
-  // If this method fails the CharSet property will not be
-  // changed.
-  // 
+  ///
+  /// Set the CharSet property to the value specified in
+  /// pCharSet.  A copy is made of the data so the caller
+  /// retains ownership of the *pCharSet buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCharSet pointer is valid.
+  /// 
+  /// If this method fails the CharSet property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -232,24 +232,24 @@ public:
   // GetCharSet()
   //
   // Gets The registered character set per RFC 2048.
-  // 
-  // Writes the CharSet property, with a trailing null
-  // character, into the pCharSet buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the CharSet property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetCharSetBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pCharSet.
-  // 
-  // Succeeds if:
-  // - The pCharSet pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   CharSet.
+  /// 
+  /// Writes the CharSet property, with a trailing null
+  /// character, into the pCharSet buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the CharSet property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetCharSetBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pCharSet.
+  /// 
+  /// Succeeds if:
+  /// - The pCharSet pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   CharSet.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -260,10 +260,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pCharSet arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold CharSet.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold CharSet.
   //
   STDMETHOD (GetCharSet) (
     // buffer into which CharSet is to be written
@@ -278,9 +278,9 @@ public:
   // GetCharSetBufLen()
   //
   // Returns size of buffer (in bytes) required for GetCharSet().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

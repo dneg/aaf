@@ -84,28 +84,28 @@ public:
   // GetCategoryClass()
   //
   // Obtains the Category Class, which is identifies the stored
-  // classID of the subclass of AAFPluggableDefinition which
-  // references this plugin descriptor.  This ID is written into the
-  // caller-allocated aafUID_t specified by the pCategoryClass
-  // argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pCategoryClass pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pCategoryClass.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pCategoryClass arg is NULL.
+  /// classID of the subclass of AAFPluggableDefinition which
+  /// references this plugin descriptor.  This ID is written into the
+  /// caller-allocated aafUID_t specified by the pCategoryClass
+  /// argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCategoryClass pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pCategoryClass.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCategoryClass arg is NULL.
   //
   STDMETHOD (GetCategoryClass) (
     // The CategoryClass 
@@ -117,21 +117,21 @@ public:
   // SetCategoryClass()
   //
   // Sets the Category Class, which is identifies the stored classID
-  // of the subclass of AAFPluggableDefinition which references this
-  // plugin descriptor.
-  // 
-  // If this method fails the Category Class property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// of the subclass of AAFPluggableDefinition which references this
+  /// plugin descriptor.
+  /// 
+  /// If this method fails the Category Class property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetCategoryClass) (
     // The Category Class 
@@ -143,25 +143,25 @@ public:
   // GetPluginVersion()
   //
   // Gets the Plugin Version property associated with this plugin
-  // descriptor and places it into *pVersion. 
-  //
-  // Succeeds if all of the following are true:
-  // - the pVersion pointer is valid.
-  // 
-  // If this method fails, nothing will be written to *pVersion.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pVersion arg is NULL.
+  /// descriptor and places it into *pVersion. 
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pVersion pointer is valid.
+  /// 
+  /// If this method fails, nothing will be written to *pVersion.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pVersion arg is NULL.
   //
   STDMETHOD (GetPluginVersion) (
     // The Plugin Version 
@@ -173,22 +173,22 @@ public:
   // SetPluginVersion()
   //
   // Sets the plugin version property of this plugin descriptor.
-  //
-  // Succeeds if all of the following are true:
-  // - pVersion pointer is valid.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pVersion arg is NULL.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pVersion pointer is valid.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pVersion arg is NULL.
   //
   STDMETHOD (SetPluginVersion) (
     // The plugin Version 
@@ -200,20 +200,20 @@ public:
   // SetPluginVersionString()
   //
   // Sets the Plugin Version String property.
-  //
-  // Set the PluginVersionString property to the value specified in
-  // pPluginVersionString.  A copy is made of the data so the caller
-  // retains ownership of the *pPluginVersionString buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pPluginVersionString pointer is valid.
-  // 
-  // If this method fails the PluginVersionString property will not be
-  // changed.
-  // 
+  ///
+  /// Set the PluginVersionString property to the value specified in
+  /// pPluginVersionString.  A copy is made of the data so the caller
+  /// retains ownership of the *pPluginVersionString buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pPluginVersionString pointer is valid.
+  /// 
+  /// If this method fails the PluginVersionString property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -235,24 +235,24 @@ public:
   // GetPluginVersionString()
   //
   // Gets the Plugin Version String property.
-  // 
-  // Writes the PluginVersionString property, with a trailing null
-  // character, into the pPluginVersionString buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the PluginVersionString property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetPluginVersionStringBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pPluginVersionString.
-  // 
-  // Succeeds if:
-  // - The pPluginVersionString pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   PluginVersionString.
+  /// 
+  /// Writes the PluginVersionString property, with a trailing null
+  /// character, into the pPluginVersionString buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the PluginVersionString property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetPluginVersionStringBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pPluginVersionString.
+  /// 
+  /// Succeeds if:
+  /// - The pPluginVersionString pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   PluginVersionString.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -263,10 +263,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pPluginVersionString arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold PluginVersionString.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold PluginVersionString.
   //
   STDMETHOD (GetPluginVersionString) (
     // buffer into which PluginVersionString is to be written
@@ -281,9 +281,9 @@ public:
   // GetPluginVersionStringBufLen()
   //
   // Returns size of buffer (in bytes) required for GetPluginVersionString().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -305,20 +305,20 @@ public:
   // SetPluginManufacturerName()
   //
   // Sets the Plugin Manufacturer Name string property.
-  //
-  // Set the PluginManufacturerName property to the value specified in
-  // pPluginManufacturerName.  A copy is made of the data so the caller
-  // retains ownership of the *pPluginManufacturerName buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pPluginManufacturerName pointer is valid.
-  // 
-  // If this method fails the PluginManufacturerName property will not be
-  // changed.
-  // 
+  ///
+  /// Set the PluginManufacturerName property to the value specified in
+  /// pPluginManufacturerName.  A copy is made of the data so the caller
+  /// retains ownership of the *pPluginManufacturerName buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pPluginManufacturerName pointer is valid.
+  /// 
+  /// If this method fails the PluginManufacturerName property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -340,24 +340,24 @@ public:
   // GetPluginManufacturerName()
   //
   // Gets the Plugin Manufacturer Name string property.
-  // 
-  // Writes the PluginManufacturerName property, with a trailing null
-  // character, into the pPluginManufacturerName buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the PluginManufacturerName property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetPluginManufacturerNameBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pPluginManufacturerName.
-  // 
-  // Succeeds if:
-  // - The pPluginManufacturerName pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   PluginManufacturerName.
+  /// 
+  /// Writes the PluginManufacturerName property, with a trailing null
+  /// character, into the pPluginManufacturerName buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the PluginManufacturerName property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetPluginManufacturerNameBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pPluginManufacturerName.
+  /// 
+  /// Succeeds if:
+  /// - The pPluginManufacturerName pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   PluginManufacturerName.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -368,10 +368,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pPluginManufacturerName arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold PluginManufacturerName.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold PluginManufacturerName.
   //
   STDMETHOD (GetPluginManufacturerName) (
     // buffer into which PluginManufacturerName is to be written
@@ -386,9 +386,9 @@ public:
   // GetPluginManufacturerNameBufLen()
   //
   // Returns size of buffer (in bytes) required for GetPluginManufacturerName().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -410,25 +410,25 @@ public:
   // GetManufacturerInfo()
   //
   // This method will get an AAFNetworkLocator pointing to
-  // ManufacturerInfo for this plugin and place an interface for the
-  // locator into the **ppResult argument.  If a ManufacturerInfo
-  // locator exists, the result will be AddRef()ed. If not, the
-  // result will be NULL.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppResult arg is NULL.
+  /// ManufacturerInfo for this plugin and place an interface for the
+  /// locator into the **ppResult argument.  If a ManufacturerInfo
+  /// locator exists, the result will be AddRef()ed. If not, the
+  /// result will be NULL.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppResult arg is NULL.
   //
   STDMETHOD (GetManufacturerInfo) (
     // ManufacturerInfo property value 
@@ -440,17 +440,17 @@ public:
   // SetManufacturerInfo()
   //
   // This method will set a locator pointing to the location of
-  // ManufacturerInfo for this plugin.  If a ManufacturerInfo
-  // already exists for this mob slot, it will be discarded.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// ManufacturerInfo for this plugin.  If a ManufacturerInfo
+  /// already exists for this mob slot, it will be discarded.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetManufacturerInfo) (
     // ManufacturerInfo property value 
@@ -462,27 +462,27 @@ public:
   // GetManufacturerID()
   //
   // Obtains the manufacturer ID, which is identifies the manfacturer
-  // of this plugin.  This ID is written into the caller-allocated
-  // aafUID_t specified by the pManufacturerID argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pManufacturerID pointer is valid.
-  // 
-  // If this method fails nothing will be written to
-  // *pManufacturerID.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pManufacturerID arg is NULL.
+  /// of this plugin.  This ID is written into the caller-allocated
+  /// aafUID_t specified by the pManufacturerID argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pManufacturerID pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pManufacturerID.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pManufacturerID arg is NULL.
   //
   STDMETHOD (GetManufacturerID) (
     // The ManufacturerID 
@@ -494,20 +494,20 @@ public:
   // SetManufacturerID()
   //
   // Sets the manufacturer ID, which is identifies the manufacturer
-  // of this plugin.
-  // 
-  // If this method fails the ManufacturerID property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// of this plugin.
+  /// 
+  /// If this method fails the ManufacturerID property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetManufacturerID) (
     // The Category Class 
@@ -519,30 +519,30 @@ public:
   // GetHardwarePlatform()
   //
   // Obtains the hardware platform ID, which identifies the hardware
-  // platform which is required to use this plugin.  This ID is
-  // written into the caller-allocated variable specified by the
-  // pHardwarePlatform argument. The type aafHardwarePlatform_t is an
-  // extensible enumerated type, and the value given must be either
-  // standard or in the type dictionary.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pHardwarePlatform pointer is valid.
-  // 
-  // If this method fails nothing will be written to
-  // *pHardwarePlatform.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pHardwarePlatform arg is NULL.
+  /// platform which is required to use this plugin.  This ID is
+  /// written into the caller-allocated variable specified by the
+  /// pHardwarePlatform argument. The type aafHardwarePlatform_t is an
+  /// extensible enumerated type, and the value given must be either
+  /// standard or in the type dictionary.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pHardwarePlatform pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pHardwarePlatform.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pHardwarePlatform arg is NULL.
   //
   STDMETHOD (GetHardwarePlatform) (
     // The HardwarePlatform 
@@ -554,22 +554,22 @@ public:
   // SetHardwarePlatform()
   //
   // Sets the hardware platform ID, which identifies the hardware
-  // platform which is required to use this plugin.  The type
-  // aafHardwarePlatform_t is an extensible enumerated type, and the
-  // value given must be either standard or in the type dictionary.
-  // 
-  // If this method fails the HardwarePlatform property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// platform which is required to use this plugin.  The type
+  /// aafHardwarePlatform_t is an extensible enumerated type, and the
+  /// value given must be either standard or in the type dictionary.
+  /// 
+  /// If this method fails the HardwarePlatform property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetHardwarePlatform) (
     // The Category Class 
@@ -581,29 +581,29 @@ public:
   // GetPlatformVersionRange()
   //
   // Gets the minimum and maximum platform Version properties
-  // associated with this plugin descriptor and places it into
-  // *pMinVersion, and *pMaxVersion.  These are the minimum and
-  // maximum versions of the platform for which this plugin will
-  // function.
-  //
-  // Succeeds if all of the following are true:
-  // - both pMinVersion and pMaxVersion pointers are valid.
-  // 
-  // If this method fails, nothing will be written to *pMinVersion or
-  // *pMaxVersion.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.
+  /// associated with this plugin descriptor and places it into
+  /// *pMinVersion, and *pMaxVersion.  These are the minimum and
+  /// maximum versions of the platform for which this plugin will
+  /// function.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - both pMinVersion and pMaxVersion pointers are valid.
+  /// 
+  /// If this method fails, nothing will be written to *pMinVersion or
+  /// *pMaxVersion.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMinVersion or pMaxVersion arg is NULL.
   //
   STDMETHOD (GetPlatformVersionRange) (
     // The Minimum Platform Version
@@ -618,18 +618,18 @@ public:
   // SetPlatformMinimumVersion()
   //
   // Sets the maximum platform Version property of this plugin
-  // descriptor.  This is the minimum version of the platform for
-  // which this plugin will function.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// descriptor.  This is the minimum version of the platform for
+  /// which this plugin will function.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetPlatformMinimumVersion) (
     // The Minimum Platform Version 
@@ -641,18 +641,18 @@ public:
   // SetPlatformMaximumVersion()
   //
   // Sets the maximum platform Version properties associated with this
-  // plugin descriptor.  This is the maximum version of the platform
-  // for which this plugin will function.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// plugin descriptor.  This is the maximum version of the platform
+  /// for which this plugin will function.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetPlatformMaximumVersion) (
     // The Maximum Platform Version 
@@ -664,30 +664,30 @@ public:
   // GetEngine()
   //
   // Obtains the software engine ID, which identifies the software
-  // subsystem used for essence management and playback used by the
-  // plugin.  This ID is written into the caller-allocated variable
-  // specified by the pHardwarePlatform argument.  The type
-  // aafEngine_t is an extensible, enumerated type, and the value
-  // given must be either standard or in the type dictionary.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pHardwarePlatform pointer is valid.
-  // 
-  // If this method fails nothing will be written to
-  // *pHardwarePlatform.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pEngine arg is NULL.
+  /// subsystem used for essence management and playback used by the
+  /// plugin.  This ID is written into the caller-allocated variable
+  /// specified by the pHardwarePlatform argument.  The type
+  /// aafEngine_t is an extensible, enumerated type, and the value
+  /// given must be either standard or in the type dictionary.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pHardwarePlatform pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pHardwarePlatform.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pEngine arg is NULL.
   //
   STDMETHOD (GetEngine) (
     // The software engine 
@@ -699,23 +699,23 @@ public:
   // SetEngine()
   //
   // Sets the software engine ID, which identifies the software
-  // subsystem used for essence management and playback used by the
-  // plugin.  The type aafEngine_t is an extensible enumerated type,
-  // and the value given must be either standard or in the type
-  // dictionary.
-  // 
-  // If this method fails the engine property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// subsystem used for essence management and playback used by the
+  /// plugin.  The type aafEngine_t is an extensible enumerated type,
+  /// and the value given must be either standard or in the type
+  /// dictionary.
+  /// 
+  /// If this method fails the engine property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetEngine) (
     // The software engine 
@@ -727,29 +727,29 @@ public:
   // GetEngineVersionRange()
   //
   // Gets the minimum and maximum engine Version properties of the
-  // engine which is associated with this plugin and places it into
-  // *pMinVersion, and *pMaxVersion.  These are the minimum and
-  // maximum versions of the engine for which this plugin will
-  // function.
-  //
-  // Succeeds if all of the following are true:
-  // - both pMinVersion and pMaxVersion pointers are valid.
-  // 
-  // If this method fails, nothing will be written to *pMinVersion or
-  // *pMaxVersion.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.
+  /// engine which is associated with this plugin and places it into
+  /// *pMinVersion, and *pMaxVersion.  These are the minimum and
+  /// maximum versions of the engine for which this plugin will
+  /// function.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - both pMinVersion and pMaxVersion pointers are valid.
+  /// 
+  /// If this method fails, nothing will be written to *pMinVersion or
+  /// *pMaxVersion.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMinVersion or pMaxVersion arg is NULL.
   //
   STDMETHOD (GetEngineVersionRange) (
     // The Minimum Engine Version
@@ -764,19 +764,19 @@ public:
   // SetEngineMinimumVersion()
   //
   // Sets the minimum engine Version property to the minimum useful
-  // version of the engine which is associated with this plugin.  This
-  // is the minimum version of the engine for which this plugin will
-  // function.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// version of the engine which is associated with this plugin.  This
+  /// is the minimum version of the engine for which this plugin will
+  /// function.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetEngineMinimumVersion) (
     // The Minimum Engine Version 
@@ -788,19 +788,19 @@ public:
   // SetEngineMaximumVersion()
   //
   // Sets the minimum engine Version property to the maximum useful
-  // version of the engine which is associated with this plugin.  This
-  // is the maximum version of the engine for which this plugin will
-  // function.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// version of the engine which is associated with this plugin.  This
+  /// is the maximum version of the engine for which this plugin will
+  /// function.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetEngineMaximumVersion) (
     // The Minimum Engine Version 
@@ -812,29 +812,29 @@ public:
   // GetPluginAPI()
   //
   // Obtains the manufacturer ID Class, which identifies the plugin
-  // interface supported by the plugin.  This ID is written into the
-  // caller-allocated variable specified by the pPluginAPI argument.
-  // The type aafPluginAPI_t is an extensible enumerated type, and
-  // the value given must be either standard or in the type
-  // dictionary.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pPluginAPI pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pPluginAPI.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPluginAPI arg is NULL.
+  /// interface supported by the plugin.  This ID is written into the
+  /// caller-allocated variable specified by the pPluginAPI argument.
+  /// The type aafPluginAPI_t is an extensible enumerated type, and
+  /// the value given must be either standard or in the type
+  /// dictionary.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pPluginAPI pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pPluginAPI.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPluginAPI arg is NULL.
   //
   STDMETHOD (GetPluginAPI) (
     // The PluginAPI 
@@ -846,23 +846,23 @@ public:
   // SetPluginAPI()
   //
   // Obtains the manufacturer ID, which identifies the plugin
-  // interface supported by the plugin.
-  // 
-  // The type aafPluginAPI_t is an extensible enumerated type, and
-  // the value given must be either standard or in the type dictionary.
-  // 
-  // If this method fails the PluginAPI property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// interface supported by the plugin.
+  /// 
+  /// The type aafPluginAPI_t is an extensible enumerated type, and
+  /// the value given must be either standard or in the type dictionary.
+  /// 
+  /// If this method fails the PluginAPI property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetPluginAPI) (
     // The Category Class 
@@ -874,29 +874,29 @@ public:
   // GetPluginAPIVersionRange()
   //
   // Gets the minimum and maximum plugin API Version properties of the
-  // plugin API which is associated with this plugin descriptor and
-  // places it into *pMinVersion, and *pMaxVersion.  These are the
-  // minimum and maximum versions of the PluginAPI for which this
-  // plugin will function.
-  //
-  // Succeeds if all of the following are true:
-  // - both pMinVersion and pMaxVersion pointers are valid.
-  // 
-  // If this method fails, nothing will be written to *pMinVersion or
-  // *pMaxVersion.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pMinVersion or pMaxVersion arg is NULL.
+  /// plugin API which is associated with this plugin descriptor and
+  /// places it into *pMinVersion, and *pMaxVersion.  These are the
+  /// minimum and maximum versions of the PluginAPI for which this
+  /// plugin will function.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - both pMinVersion and pMaxVersion pointers are valid.
+  /// 
+  /// If this method fails, nothing will be written to *pMinVersion or
+  /// *pMaxVersion.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pMinVersion or pMaxVersion arg is NULL.
   //
   STDMETHOD (GetPluginAPIVersionRange) (
     // The Minimum Plugin API Version
@@ -911,18 +911,18 @@ public:
   // SetPluginAPIMinimumVersion()
   //
   // Sets the minimum plugin API Version property to the minimum
-  // useful version of the plugin API which is associated with this
-  // plugin.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// useful version of the plugin API which is associated with this
+  /// plugin.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetPluginAPIMinimumVersion) (
     // The Minimum Plugin API Version 
@@ -934,17 +934,17 @@ public:
   // SetPluginAPIMaximumVersion()
   //
   // Sets the maximum engine Version property to the maximum useful
-  // version of the plugin API which is associated with this plugin.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// version of the plugin API which is associated with this plugin.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetPluginAPIMaximumVersion) (
     // The Maximum Plugin API Version 
@@ -956,28 +956,28 @@ public:
   // IsSoftwareOnly()
   //
   // Tells whether the given plugin is capable of running in a
-  // software-only environment.  A value of AAFTrue indicates that no
-  // additional hardware is required.  If the result is AAFTrue, then
-  // this plugin may also support hardware acceleration, as long as
-  // it also contains a software method of processing the data.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pIsSoftwareOnly pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pIsSoftwareOnly.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pIsSoftwareOnly arg is NULL.
+  /// software-only environment.  A value of AAFTrue indicates that no
+  /// additional hardware is required.  If the result is AAFTrue, then
+  /// this plugin may also support hardware acceleration, as long as
+  /// it also contains a software method of processing the data.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pIsSoftwareOnly pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pIsSoftwareOnly.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pIsSoftwareOnly arg is NULL.
   //
   STDMETHOD (IsSoftwareOnly) (
     // The IsSoftwareOnly 
@@ -989,21 +989,21 @@ public:
   // SetIsSoftwareOnly()
   //
   // Sets whether the given plugin is capable of running in a
-  // software-only environment, and returns AAFFalse if any hardware
-  // is required.  If isSoftwareOnly is AAFTrue, then this plugin may
-  // also support hardware acceleration, as long as it also contains
-  // a software method of processing the data.  If this method fails
-  // the isSoftwareOnly property will not be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// software-only environment, and returns AAFFalse if any hardware
+  /// is required.  If isSoftwareOnly is AAFTrue, then this plugin may
+  /// also support hardware acceleration, as long as it also contains
+  /// a software method of processing the data.  If this method fails
+  /// the isSoftwareOnly property will not be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetIsSoftwareOnly) (
     // The isSoftwareOnly flag 
@@ -1015,26 +1015,26 @@ public:
   // IsAccelerated()
   //
   // Tells whether the given plugin is capable of running with a
-  // hardware accelerator.  If the result is AAFTrue, then this
-  // plugin may also support software decompression.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pIsAccelerated pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pIsAccelerated.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pIsAccelerated arg is NULL.
+  /// hardware accelerator.  If the result is AAFTrue, then this
+  /// plugin may also support software decompression.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pIsAccelerated pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pIsAccelerated.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pIsAccelerated arg is NULL.
   //
   STDMETHOD (IsAccelerated) (
     // The IsAccelerated 
@@ -1046,21 +1046,21 @@ public:
   // SetIsAccelerated()
   //
   // Tells whether the given plugin is capable of running with a
-  // hardware accelerator.  If the result is AAFTrue, then this
-  // plugin may also support software decompression.
-  //
-  // If this method fails the IsAccelerated property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// hardware accelerator.  If the result is AAFTrue, then this
+  /// plugin may also support software decompression.
+  ///
+  /// If this method fails the IsAccelerated property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetIsAccelerated) (
     // The isAccelerated flag 
@@ -1072,27 +1072,27 @@ public:
   // SupportsAuthentication()
   //
   // Tells whether the given plugin is capable of supporting
-  // authentication.  The methods for authenticating a plugin are
-  // still <tbd>.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pSupportsAuthentication pointer is valid.
-  // 
-  // If this method fails nothing will be written to
-  // *pSupportsAuthentication.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSupportsAuthentication arg is NULL.
+  /// authentication.  The methods for authenticating a plugin are
+  /// still <tbd>.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pSupportsAuthentication pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pSupportsAuthentication.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSupportsAuthentication arg is NULL.
   //
   STDMETHOD (SupportsAuthentication) (
     // The SupportsAuthentication 
@@ -1104,18 +1104,18 @@ public:
   // SetSupportsAuthentication()
   //
   // Tells whether the given plugin is capable of supporting
-  // authentication.  The methods for authenticating a plugin are
-  // still <tbd>.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
+  /// authentication.  The methods for authenticating a plugin are
+  /// still <tbd>.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
   //
   STDMETHOD (SetSupportsAuthentication) (
     // The SupportsAuthentication flag 
@@ -1128,23 +1128,23 @@ public:
   // CountLocators()
   //
   // Return the number of locators attached to this plugin descriptor.
-  // The number of locators may be zero if the plugin is in the
-  // current file.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pCount pointer is valid.
-  // 
-  // If this method fails nothing is written to *pCount.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pCount is null.
+  /// The number of locators may be zero if the plugin is in the
+  /// current file.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pCount pointer is valid.
+  /// 
+  /// If this method fails nothing is written to *pCount.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCount is null.
   //
   STDMETHOD (CountLocators) (
     // Returns the number of locators 
@@ -1156,23 +1156,23 @@ public:
   // AppendLocator()
   //
   // Append another locator to this plugin descriptor.  Use this
-  // function to add a locator to be scanned last when searching for
-  // the plugin (a secondary location for the plugin).
-  // 
-  // Succeeds if all of the following are true:
-  // - the pLocator pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLocator is null.
+  /// function to add a locator to be scanned last when searching for
+  /// the plugin (a secondary location for the plugin).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pLocator pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocator is null.
   //
   STDMETHOD (AppendLocator) (
     // Locator to append 
@@ -1184,23 +1184,23 @@ public:
   // PrependLocator()
   //
   // Append another locator to this plugin descriptor.  Use this
-  // function to add a locator to be scanned first when searching for
-  // the plugin (a new primary location for the plugin).
-  // 
-  // Succeeds if all of the following are true:
-  // - the pLocator pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLocator is null.
+  /// function to add a locator to be scanned first when searching for
+  /// the plugin (a new primary location for the plugin).
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pLocator pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocator is null.
   //
   STDMETHOD (PrependLocator) (
     // Locator to append 
@@ -1212,29 +1212,29 @@ public:
   // InsertLocatorAt()
   //
   // Insert another locator to this plugin descriptor at the given
-  // index.  Locators already existing at the named and higher indices
-  // will be moved up to the next higher index to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - index is less than or equal to the value returned by
-  //   CountLocators().
-  // - the pLocator pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLocator is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than the value returned by
-  //     CountLocators().
+  /// index.  Locators already existing at the named and higher indices
+  /// will be moved up to the next higher index to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than or equal to the value returned by
+  ///   CountLocators().
+  /// - the pLocator pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLocator is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountLocators().
   //
   STDMETHOD (InsertLocatorAt) (
     // index to insert locator
@@ -1249,27 +1249,27 @@ public:
   // GetLocatorAt()
   //
   // Gets the locator which exists in this plugin descriptor at the
-  // given index.
-  // 
-  // Succeeds if all of the following are true:
-  // - index is less than the value returned by CountLocators().
-  // - the ppLocator pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppLocator is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than or equal to the value returned by
-  //     CountLocators().
+  /// given index.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountLocators().
+  /// - the ppLocator pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppLocator is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountLocators().
   //
   STDMETHOD (GetLocatorAt) (
     // index to insert locator
@@ -1284,29 +1284,29 @@ public:
   // RemoveLocatorAt()
   //
   // Removes the locator which exists in this plugin descriptor at the
-  // given index.  Locators already existing at indices higher than
-  // the named index will be moved down to the next higher index to
-  // accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - index is less than the value returned by CountLocators().
-  // - the ppLocator pointer is valid.
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppLocator is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than or equal to the value returned by
-  //     CountLocators().
+  /// given index.  Locators already existing at indices higher than
+  /// the named index will be moved down to the next higher index to
+  /// accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - index is less than the value returned by CountLocators().
+  /// - the ppLocator pointer is valid.
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppLocator is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountLocators().
   //
   STDMETHOD (RemoveLocatorAt) (
     // index to insert locator 
@@ -1319,32 +1319,32 @@ public:
   // GetLocators()
   //
   // Places an IEnumAAFPluginLocators enumerator for the plugin
-  // locators contained in the AAFPluginDescriptor into the *ppEnum
-  // argument.
-  // 
-  // The returned enumerator is AddRef()ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
-  //
-  // E_FAIL
-  //   - Failed to create the enumerator.
+  /// locators contained in the AAFPluginDescriptor into the *ppEnum
+  /// argument.
+  /// 
+  /// The returned enumerator is AddRef()ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// E_FAIL
+  ///   - Failed to create the enumerator.
   //
   STDMETHOD (GetLocators) (
     // Plugin Locator Enumeration 

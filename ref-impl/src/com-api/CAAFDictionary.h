@@ -87,7 +87,7 @@ public:
 
 
   // Creates a single uninitialized AAF object of the class associated 
-  // with a specified stored object id. 
+  /// with a specified stored object id. 
   STDMETHOD (CreateInstance)
    (// Class identifier (AUID) of the stored object. This is the
     // corresponding SMPTE identifier (as a GUID) for all predefined
@@ -103,7 +103,7 @@ public:
 
 
   // Creates a single uninitialized AAF meta class or type associated 
-  // with a specified stored object id. 
+  /// with a specified stored object id. 
   STDMETHOD (CreateMetaInstance)
    (// Identifier (id) of a class or type definition. This is the
     // corresponding SMPTE identifier (as a GUID) for all predefined
@@ -124,11 +124,11 @@ public:
   // RegisterClassDef()
   //
   // Add the class definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pClassDef pointer is valid.
-  // - the ID contained in the class def is not already been
-  //   registered.
+  /// 
+  /// Succeeds if:
+  /// - The pClassDef pointer is valid.
+  /// - the ID contained in the class def is not already been
+  ///   registered.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -139,9 +139,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pClassDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The class def ID has already been registered.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The class def ID has already been registered.
   //
   STDMETHOD (RegisterClassDef) (
     // Class Definition 
@@ -153,11 +153,11 @@ public:
   // LookupClassDef()
   //
   // Return the class definition with the given id.
-  // 
-  // Succeeds if:
-  // - The pClassID pointer is valid.
-  // - The ppClassDef pointer is valid.
-  // - the ID is a recognized id for a class definition.
+  /// 
+  /// Succeeds if:
+  /// - The pClassID pointer is valid.
+  /// - The ppClassDef pointer is valid.
+  /// - the ID is a recognized id for a class definition.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -168,9 +168,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - Either pClassID or ppClassDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a class definition ID.
   //
   STDMETHOD (LookupClassDef) (
     // Class Unique ID
@@ -185,9 +185,9 @@ public:
   // GetClassDefs()
   //
   // Return an enumerator for all class definitions.
-  //
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - The ppEnum pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -209,22 +209,22 @@ public:
   // CountClassDefs()
   //
   // Writes the number of class definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountClassDefs) (
     // Total number of class definition objects 
@@ -235,10 +235,10 @@ public:
   // CreateForwardClassReference()
   //
   // Return the class definition with the given id.
-  // 
-  // Succeeds if:
-  // - The classId does not represent an existing forward class reference
-  //   or a class definition that has already been successfully registered.
+  /// 
+  /// Succeeds if:
+  /// - The classId does not represent an existing forward class reference
+  ///   or a class definition that has already been successfully registered.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -246,9 +246,9 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a class definition ID.
   //
   STDMETHOD (CreateForwardClassReference) (
     // Class Unique ID 
@@ -259,11 +259,11 @@ public:
   // HasForwardClassReference()
   //
   // Return kAAFTrue if the given class identification is a forward reference.
-  // 
-  // Succeeds if:
-  // - The pClassID pointer is valid.
-  // - The ppClassDef pointer is valid.
-  // - the ID is a recognized id for a class definition.
+  /// 
+  /// Succeeds if:
+  /// - The pClassID pointer is valid.
+  /// - The ppClassDef pointer is valid.
+  /// - the ID is a recognized id for a class definition.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -274,9 +274,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - Either pClassID or ppClassDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a class definition ID.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a class definition ID.
   //
   STDMETHOD (HasForwardClassReference) (
     // Class Unique ID
@@ -290,10 +290,10 @@ public:
   // RegisterTypeDef()
   //
   // Add the type definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the ID is not already been registered.
+  /// 
+  /// Succeeds if:
+  /// - The pTypeDef pointer is valid.
+  /// - the ID is not already been registered.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -304,9 +304,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pClassDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given type has already been registered.
   //
   STDMETHOD (RegisterTypeDef) (
     // Type Definition Object 
@@ -318,11 +318,11 @@ public:
   // LookupTypeDef()
   //
   // Return the type definition object with the given id.
-  // 
-  // Succeeds if:
-  // - The pTypeID pointer is valid.
-  // - The ppTypeDef pointer is valid.
-  // - the ID is a recognized id for a type definition.
+  /// 
+  /// Succeeds if:
+  /// - The pTypeID pointer is valid.
+  /// - The ppTypeDef pointer is valid.
+  /// - the ID is a recognized id for a type definition.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -333,9 +333,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - Either pTypeID or ppTypeDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a type definition ID.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a type definition ID.
   //
   STDMETHOD (LookupTypeDef) (
     // Type Unique ID
@@ -350,9 +350,9 @@ public:
   // GetTypeDefs()
   //
   // Return an enumerator for all type definitions.
-  //
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - The ppEnum pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -374,22 +374,22 @@ public:
   // CountTypeDefs()
   //
   // Writes the number of type definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountTypeDefs) (
     // Total number of type definition objects 
@@ -401,10 +401,10 @@ public:
   // RegisterOpaqueTypeDef()
   //
   // Add the opaquetype definition object to the dictionary.
-  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the definition is not already been registered with RegisterTypeDef.
+  /// 
+  /// Succeeds if:
+  /// - The pTypeDef pointer is valid.
+  /// - the definition is not already been registered with RegisterTypeDef.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -415,9 +415,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pTypeDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given type has already been registered.
   //
   STDMETHOD (RegisterOpaqueTypeDef) (
     // Type Definition Object 
@@ -429,11 +429,11 @@ public:
   // LookupOpaqueTypeDef()
   //
   // Return the opaque type definition object with the given id.
-  // 
-  // Succeeds if:
-  // - The pTypeID pointer is valid.
-  // - The ppTypeDef pointer is valid.
-  // - the ID is a recognized id for an opaque type definition.
+  /// 
+  /// Succeeds if:
+  /// - The pTypeID pointer is valid.
+  /// - The ppTypeDef pointer is valid.
+  /// - the ID is a recognized id for an opaque type definition.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -444,9 +444,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - Either typeId or ppTypeDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given ID is not recognized as a type definition ID.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given ID is not recognized as a type definition ID.
   //
   STDMETHOD (LookupOpaqueTypeDef) (
     // Type Unique ID
@@ -461,9 +461,9 @@ public:
   // GetOpaqueTypeDefs()
   //
   // Return an enumerator for all registered opaque type definitions.
-  //
-  // Succeeds if:
-  // - The ppEnum pointer is valid.
+  ///
+  /// Succeeds if:
+  /// - The ppEnum pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -485,22 +485,22 @@ public:
   // CountOpaqueTypeDefs()
   //
   // Writes the number of opaque type definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountOpaqueTypeDefs) (
     // Total number of opaque type definition objects 
@@ -511,11 +511,11 @@ public:
   // RegisterKLVDataKey()
   //
   // Add the definition for the given KLV key to the runtime dictionary.
-  // The pTypeDef will often be kAAFTypeID_UInt8Array,
-  // but may be something else.  // 
-  // Succeeds if:
-  // - The pTypeDef pointer is valid.
-  // - the definition is not already been registered with RegisterTypeDef.
+  /// The pTypeDef will often be kAAFTypeID_UInt8Array,
+  /// but may be something else.  /// 
+  /// Succeeds if:
+  /// - The pTypeDef pointer is valid.
+  /// - the definition is not already been registered with RegisterTypeDef.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -526,9 +526,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pTypeDef arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - The given type has already been registered.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - The given type has already been registered.
   //
   STDMETHOD (RegisterKLVDataKey) (
     // Key to define
@@ -578,22 +578,22 @@ public:
   // CountDataDefs()
   //
   // Writes the number of data definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountDataDefs) (
     // Total number of data definition objects 
@@ -641,22 +641,22 @@ public:
   // CountOperationDefs()
   //
   // Writes the number of operation definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountOperationDefs) (
     // Total number of operation definition objects 
@@ -704,22 +704,22 @@ public:
   // CountParameterDefs()
   //
   // Writes the number of parameter definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountParameterDefs) (
     // Total number of parameter definition objects 
@@ -767,22 +767,22 @@ public:
   // CountCodecDefs()
   //
   // Writes the number of codec definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountCodecDefs) (
     // Total number of codec definition objects 
@@ -830,22 +830,22 @@ public:
   // CountContainerDefs()
   //
   // Writes the number of container definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountContainerDefs) (
     // Total number of container definition objects 
@@ -893,22 +893,22 @@ public:
   // CountInterpolationDefs()
   //
   // Writes the number of interpolation definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountInterpolationDefs) (
     // Total number of interpolation definition objects 
@@ -956,22 +956,22 @@ public:
   // CountPluginDefs()
   //
   // Writes the number of plugin definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountPluginDefs) (
     // Total number of plugin definition objects 
@@ -1029,22 +1029,22 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | CountKLVDataDefs |
   // Writes the number of KLVData definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   // @end
   // 
   STDMETHOD (CountKLVDataDefs)
@@ -1104,22 +1104,22 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | CountTaggedValueDefs |
   // Writes the number of tagged value definition objects into the
-  // *pResult argument.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pResult.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// *pResult argument.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pResult.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   // @end
   // 
   STDMETHOD (CountTaggedValueDefs)
@@ -1135,9 +1135,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupAuxiliaryDataDef |
   // Return the Auxiliary Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1162,9 +1162,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupDescriptiveMetadataDataDef |
   // Return the Descriptive Metadata Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1189,9 +1189,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupEdgecodeDataDef |
   // Return the Edgecode Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1216,9 +1216,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupLegacyPictureDataDef |
   // Return the legacy Picture Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1243,9 +1243,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupLegacySoundDataDef |
   // Return the legacy Sound Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1270,9 +1270,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupLegacyTimecodeDataDef |
   // Return the legacy Timecode Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1297,9 +1297,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupMatteDataDef |
   // Return the Matte Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1324,9 +1324,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupPictureDataDef |
   // Return the Picture Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1351,9 +1351,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupPictureWithMatteDataDef |
   // Return the PictureWithMatte Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1378,9 +1378,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupSoundDataDef |
   // Return the Sound Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -1405,9 +1405,9 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFDictionary2 | LookupTimecodeDataDef |
   // Return the Timecode Data Definition Object.
-  // 
-  // Succeeds if:
-  // - The ppDataDef pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The ppDataDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

@@ -66,25 +66,25 @@ public:
   // Initialize()
   //
   // Initializes this type def to be identified by the given guid, to
-  // be implemented as the given data type, and to contain the given
-  // elements (names and values).  The given data type must be an
-  // integral type.  It is considered an error if multiple elements
-  // have the same name or the same value.  The values and names are
-  // given in parallel arrays, each of which has numElements
-  // elements.
-  //
-  // This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  // - pID is a valid pointer.
-  // - pType is a valid pointer.
-  // - pElementValues is a valid pointer.
-  // - pElementNames is a valid pointer.
-  // - pTypeName is a valid pointer.
-  // - base type is integral type.
-  // - no duplicate names or values are found.
+  /// be implemented as the given data type, and to contain the given
+  /// elements (names and values).  The given data type must be an
+  /// integral type.  It is considered an error if multiple elements
+  /// have the same name or the same value.  The values and names are
+  /// given in parallel arrays, each of which has numElements
+  /// elements.
+  ///
+  /// This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  /// - pID is a valid pointer.
+  /// - pType is a valid pointer.
+  /// - pElementValues is a valid pointer.
+  /// - pElementNames is a valid pointer.
+  /// - pTypeName is a valid pointer.
+  /// - base type is integral type.
+  /// - no duplicate names or values are found.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -98,27 +98,27 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - any pointer argument arg is NULL.
-  //
-  // AAFRESULT_DUPLICATE
-  //   - duplicate name or value is found.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - base type is not integral type.
+  ///
+  /// AAFRESULT_DUPLICATE
+  ///   - duplicate name or value is found.
+  ///
+  /// AAFRESULT_BAD_TYPE
+  ///   - base type is not integral type.
   //
   STDMETHOD (Initialize) (
     // auid to be used to identify this type
     /*[in, ref]*/ aafUID_constref  id,
 
     // Type of values in this enumeration.
-    // Has to be of type Int
+  /// Has to be of type Int
     /*[in]*/ IAAFTypeDef * pType,
 
     // array of element values to be represented in this enumerated
-    // type
+  /// type
     /*[in, size_is(numElems)]*/ aafInt64 *  pElementValues,
 
     // array of element names to be represented in this enumerated
-    // type
+  /// type
     /*[in, size_is(numElems)]*/ aafString_t *  pElementNames,
 
     // number of members in pElementValues and pElementNames arrays
@@ -133,17 +133,17 @@ public:
   // CreateValueFromName()
   //
   // Creates a property value which contains an Enum type.  A
-  // lookup on the Name is done to find a match in the list of 
-  // legal enumerations for this type. If the Name specified is not
-  // found to exist then an INVALID_PARAM error code is returned.
-  // If it succeeds then a newly-created property value in ppPropVal
-  // is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the Name pointer is valid.
-  // - the ppPropVal pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// lookup on the Name is done to find a match in the list of 
+  /// legal enumerations for this type. If the Name specified is not
+  /// found to exist then an INVALID_PARAM error code is returned.
+  /// If it succeeds then a newly-created property value in ppPropVal
+  /// is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the Name pointer is valid.
+  /// - the ppPropVal pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -157,9 +157,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - ppPropVal arg is NULL.
-  //
-  // AAFRESULT_INVALID_PARAM
-  //   - the Name specified is not in the list of legal Enumerations.
+  ///
+  /// AAFRESULT_INVALID_PARAM
+  ///   - the Name specified is not in the list of legal Enumerations.
   //
   STDMETHOD (CreateValueFromName) (
     // the Name of a valid Enum symbol
@@ -175,11 +175,11 @@ public:
   // GetElementType()
   //
   // Returns the type definition of the values which are found in this
-  // enumeration.
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - The ppTypeDef pointer is valid.
+  /// enumeration.
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - The ppTypeDef pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -203,12 +203,12 @@ public:
   // GetElementValue()
   //
   // Gets the indexed element in this enumerated type.  The
-  // value is written into the client-allocated *pOutValue.  Index
-  // must be less than the value returned by CountElements().
-  //
-  // Succeeds if:
-  // - pOutValue is a valid pointer.
-  // - index is less than CountElements().
+  /// value is written into the client-allocated *pOutValue.  Index
+  /// must be less than the value returned by CountElements().
+  ///
+  /// Succeeds if:
+  /// - pOutValue is a valid pointer.
+  /// - index is less than CountElements().
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -222,9 +222,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pOutValue arg is NULL.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is not less than CountElements().
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is not less than CountElements().
   //
   STDMETHOD (GetElementValue) (
     // index of element to retrieve
@@ -238,16 +238,16 @@ public:
   // GetElementName()
   //
   // Gets the indexed element in this enumerated type.  The
-  // Name is written into the client-allocated *pOutValue. The
-  // bufSize argument should be large enough to hold the pOutValue.
-  // Index must be less than the value returned by CountElements().
-  //
-  // Caller may call GetElementNameBufLen() to determine the
-  // required buffer size.
-  //  
-  // Succeeds if:
-  // - pOutValue is a valid pointer.
-  // - index is less than CountElements().
+  /// Name is written into the client-allocated *pOutValue. The
+  /// bufSize argument should be large enough to hold the pOutValue.
+  /// Index must be less than the value returned by CountElements().
+  ///
+  /// Caller may call GetElementNameBufLen() to determine the
+  /// required buffer size.
+  ///  
+  /// Succeeds if:
+  /// - pOutValue is a valid pointer.
+  /// - index is less than CountElements().
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -261,13 +261,13 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pOutValue arg is NULL.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is not less than CountElements().
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.
-  //
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is not less than CountElements().
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - bufSize indicates the buffer is too small to hold the string.
+  ///
   //
   STDMETHOD (GetElementName) (
     // index of element to retrieve
@@ -286,15 +286,15 @@ public:
   // GetElementNameBufLen()
   //
   // Returns the length of buffer required for the GetElementName()
-  // method, in bytes.  The value is placed into the location
-  // specified by pLen. The value will include space required for the
-  // trailing null character.
-  //
-  // Succeeds if the following is true:
-  // - the pLen pointer is valid.
-  // - index is less than CountElements().
-  //
-  // If this method fails nothing will be written to *pLen.
+  /// method, in bytes.  The value is placed into the location
+  /// specified by pLen. The value will include space required for the
+  /// trailing null character.
+  ///
+  /// Succeeds if the following is true:
+  /// - the pLen pointer is valid.
+  /// - index is less than CountElements().
+  ///
+  /// If this method fails nothing will be written to *pLen.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -305,10 +305,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is not less than CountElements().
-  //
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is not less than CountElements().
+  ///
   //
   STDMETHOD (GetElementNameBufLen) (
     // index of element to retrieve
@@ -325,10 +325,10 @@ public:
   // CountElements()
   //
   // Returns number of enumeration elements contained.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pCount is a valid pointer.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pCount is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -354,22 +354,22 @@ public:
   // GetNameFromValue()
   //
   // Writes the human-legible tag associated with the given value in
-  // this enumerated type.  The name is written, with a trailing null
-  // character, into the pName buffer.  The buffer is allocated by
-  // the caller.  The size of the buffer is given by bufSize.
-  // 
-  // Caller may call GetNameBufLenFromValue() to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // - the pName pointer is valid.
-  // - bufSize indicates the buffer is large enough to hold the name.
-  // - the integer value is associated with an element of this
-  //   enumerated type.
-  // 
-  // If this method fails nothing will be written to
-  // *pName.
+  /// this enumerated type.  The name is written, with a trailing null
+  /// character, into the pName buffer.  The buffer is allocated by
+  /// the caller.  The size of the buffer is given by bufSize.
+  /// 
+  /// Caller may call GetNameBufLenFromValue() to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// - the pName pointer is valid.
+  /// - bufSize indicates the buffer is large enough to hold the name.
+  /// - the integer value is associated with an element of this
+  ///   enumerated type.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pName.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -380,13 +380,13 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pValue or pName arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - the given value is not associated with an element of
-  //     this type.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - bufSize indicates the buffer is too small to hold the string.
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - the given value is not associated with an element of
+  ///     this type.
   //
   STDMETHOD (GetNameFromValue) (
     // value of element to get
@@ -404,17 +404,17 @@ public:
   // GetNameBufLenFromValue()
   //
   // Returns the length of buffer required for the GetNameFromValue()
-  // method, in bytes.  The value is placed into the location
-  // specified by pLen. The value will include space required for the
-  // trailing null character.
-  //
-  // Succeeds if all of the following are true:
-  // - the pValue pointer is valid.
-  // - the pLen pointer is valid.
-  // - the value is associated with an element of this enumerated
-  //   type.
-  //
-  // If this method fails nothing will be written to *pLen.
+  /// method, in bytes.  The value is placed into the location
+  /// specified by pLen. The value will include space required for the
+  /// trailing null character.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pValue pointer is valid.
+  /// - the pLen pointer is valid.
+  /// - the value is associated with an element of this enumerated
+  ///   type.
+  ///
+  /// If this method fails nothing will be written to *pLen.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -425,10 +425,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pValue or pLen arg is NULL.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - the given value is not associated with an element of this
-  //     type.
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - the given value is not associated with an element of this
+  ///     type.
   //
   STDMETHOD (GetNameBufLenFromValue) (
     // value of element to get
@@ -443,21 +443,21 @@ public:
   // GetNameFromInteger()
   //
   // Writes the human-legible tag associated with the given value in
-  // this enumerated type.  The name is written, with a trailing null
-  // character, into the pName buffer.  The buffer is allocated by
-  // the caller.  The size of the buffer is given by bufSize.
-  // 
-  // Caller may call GetNameBufLenFromInteger() to determine the
-  // required buffer size.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pName pointer is valid.
-  // - bufSize indicates the buffer is large enough to hold the name.
-  // - the integer value is associated with an element of this
-  //   enumerated type.
-  // 
-  // If this method fails nothing will be written to
-  // *pName.
+  /// this enumerated type.  The name is written, with a trailing null
+  /// character, into the pName buffer.  The buffer is allocated by
+  /// the caller.  The size of the buffer is given by bufSize.
+  /// 
+  /// Caller may call GetNameBufLenFromInteger() to determine the
+  /// required buffer size.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pName pointer is valid.
+  /// - bufSize indicates the buffer is large enough to hold the name.
+  /// - the integer value is associated with an element of this
+  ///   enumerated type.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pName.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -468,13 +468,13 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pName arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - bufSize indicates the buffer is too small to hold the string.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - the given value is not associated with an element of
-  //     this type.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - bufSize indicates the buffer is too small to hold the string.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - the given value is not associated with an element of
+  ///     this type.
   //
   STDMETHOD (GetNameFromInteger) (
     // value of element to get
@@ -492,16 +492,16 @@ public:
   // GetNameBufLenFromInteger()
   //
   // Returns the length of buffer required for the GetNameFromInteger()
-  // method, in bytes.  The value is placed into the location
-  // specified by pLen. The value will include space required for the
-  // trailing null character.
-  //
-  // Succeeds if all of the following are true:
-  // - the pLen pointer is valid.
-  // - the value is associated with an element of this enumerated
-  //   type.
-  //
-  // If this method fails nothing will be written to *pLen.
+  /// method, in bytes.  The value is placed into the location
+  /// specified by pLen. The value will include space required for the
+  /// trailing null character.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLen pointer is valid.
+  /// - the value is associated with an element of this enumerated
+  ///   type.
+  ///
+  /// If this method fails nothing will be written to *pLen.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -512,10 +512,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - the given value is not associated with an element of this
-  //     type.
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - the given value is not associated with an element of this
+  ///     type.
   //
   STDMETHOD (GetNameBufLenFromInteger) (
     // value of element to get
@@ -530,11 +530,11 @@ public:
   // GetIntegerValue()
   //
   // Gets the value from the given property value and writes it as an
-  // integer into *pValueOut.
-  //
-  // Succeeds if:
-  // - The pPropValIn pointer is valid.
-  // - The pValueOut pointer is valid.
+  /// integer into *pValueOut.
+  ///
+  /// Succeeds if:
+  /// - The pPropValIn pointer is valid.
+  /// - The pValueOut pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -562,10 +562,10 @@ public:
   // SetIntegerValue()
   //
   // Sets the given property to the value given in pValueIn.
-  //
-  // Succeeds if:
-  // - The pPropValToSet pointer is valid.
-  // - valueIn is a correct value for this enumerated type.
+  ///
+  /// Succeeds if:
+  /// - The pPropValToSet pointer is valid.
+  /// - valueIn is a correct value for this enumerated type.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -579,10 +579,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pPropValToSet arg is NULL.
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - valueIn is not a correct value for this enumerated type.
-  //   - pPropValIn's type doesn't match GetElementType()
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - valueIn is not a correct value for this enumerated type.
+  ///   - pPropValIn's type doesn't match GetElementType()
   //
   STDMETHOD (SetIntegerValue) (
     // property value to set
@@ -597,14 +597,14 @@ public:
   // RegisterSize()
   //
   // Allows client to register to the reference implementation a
-  // runtime C enum to represent objects of this TypeDef.  The size of
-  // the enum to be represented should be passed as the enumSize
-  // argument.  This allows the reference implementation to write
-  // property values into compile-time-defined C enums intelligible
-  // by the local machine and compiler.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
+  /// runtime C enum to represent objects of this TypeDef.  The size of
+  /// the enum to be represented should be passed as the enumSize
+  /// argument.  This allows the reference implementation to write
+  /// property values into compile-time-defined C enums intelligible
+  /// by the local machine and compiler.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

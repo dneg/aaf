@@ -67,24 +67,24 @@ public:
   // Initialize()
   //
   // Initializes this type def to contain elements of the given type.
-  // Note that it is only possible to use certain types as the element
-  // type.  Those permissible types include:
-  // - AAFTypeDefInt
-  // - AAFTypeDefRecord
-  // - AAFTypeDefEnum
-  // - AAFTypeDefExtEnum
-  // - AAFTypeDefFixedArray
-  // - AAFTypeDefObjectRef
-  //
-  // This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  // - pID is a valid pointer.
-  // - pTypeDef is a valid pointer.
-  // - pTypeName is a valid pointer.
-  // - element type is permissible for use in a VariableArray.
+  /// Note that it is only possible to use certain types as the element
+  /// type.  Those permissible types include:
+  /// - AAFTypeDefInt
+  /// - AAFTypeDefRecord
+  /// - AAFTypeDefEnum
+  /// - AAFTypeDefExtEnum
+  /// - AAFTypeDefFixedArray
+  /// - AAFTypeDefObjectRef
+  ///
+  /// This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  /// - pID is a valid pointer.
+  /// - pTypeDef is a valid pointer.
+  /// - pTypeName is a valid pointer.
+  /// - element type is permissible for use in a VariableArray.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -98,9 +98,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pTypeDef or pTypeName arg is NULL.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - an illegal element type was given.
+  ///
+  /// AAFRESULT_BAD_TYPE
+  ///   - an illegal element type was given.
   //
   STDMETHOD (Initialize) (
     // auid to be used to identify this type
@@ -118,10 +118,10 @@ public:
   // GetType()
   //
   // Returns the type of elements in this array.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - ppTypeDef is a valid pointer.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - ppTypeDef is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -146,12 +146,12 @@ public:
   // GetCount()
   //
   // Returns number of array elements in the referenced property
-  // value.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pPropVal is a valid pointer.
-  // - pCount is a valid pointer.
+  /// value.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pPropVal is a valid pointer.
+  /// - pCount is a valid pointer.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -179,12 +179,12 @@ public:
   // AppendElement()
   //
   // Appends an element to the end of the array, setting it to the
-  // value given in pMemberPropVal.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pInPropVal pointer is valid.
-  // - pMemberPropVal pointer is valid.
+  /// value given in pMemberPropVal.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pInPropVal pointer is valid.
+  /// - pMemberPropVal pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -209,13 +209,13 @@ public:
   // CreateEmptyValue()
   //
   // Creates an empty property value which contains a variable array
-  // type that initially is empty (that is, contains no elements
-  // yet).
-  //
-  // Succeeds if all of the following are true:
-  // - the ppPropVal pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// type that initially is empty (that is, contains no elements
+  /// yet).
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppPropVal pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -240,17 +240,17 @@ public:
   // CreateValueFromValues()
   //
   // Creates a property value which contains a variable array type.
-  // The array elements in the property value are initialized to
-  // contain the given values, passed in the pElementValues array.
-  // numElements, which indicates the size of the pElementValues
-  // array, determines the size of the array in the new array
-  // property value.
-  //
-  // Succeeds if all of the following are true:
-  // - the pElementValues pointer is valid.
-  // - the ppPropVal pointer is valid.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// The array elements in the property value are initialized to
+  /// contain the given values, passed in the pElementValues array.
+  /// numElements, which indicates the size of the pElementValues
+  /// array, determines the size of the array in the new array
+  /// property value.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pElementValues pointer is valid.
+  /// - the ppPropVal pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -267,7 +267,7 @@ public:
   //
   STDMETHOD (CreateValueFromValues) (
     // array of property values for elements of array value which
-    // is to be created.
+  /// is to be created.
     /*[in, size_is(numElements)]*/ IAAFPropertyValue ** pElementValues,
 
     // size of pElementValues array.
@@ -282,20 +282,20 @@ public:
   // CreateValueFromCArray()
   //
   // Creates a property value which contains a fixed array type.  The
-  // array elements in the property value are initialized from data in
-  // a C array which is pointed to by pInitData.  Requires that any
-  // structures declared within this array typedef have had their
-  // offsets registered with that type.  Returns the newly-created
-  // property value in ppPropVal.  The size of the newly-created array
-  // property value will be determined by the number of elements in
-  // the initialization C array, as communicated by initDataSize.
-  //
-  // Succeeds if all of the following are true:
-  // - the pInitData pointer is valid.
-  // - the ppPropVal pointer is valid.
-  // - compile-time struct has had its member offests registered.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// array elements in the property value are initialized from data in
+  /// a C array which is pointed to by pInitData.  Requires that any
+  /// structures declared within this array typedef have had their
+  /// offsets registered with that type.  Returns the newly-created
+  /// property value in ppPropVal.  The size of the newly-created array
+  /// property value will be determined by the number of elements in
+  /// the initialization C array, as communicated by initDataSize.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pInitData pointer is valid.
+  /// - the ppPropVal pointer is valid.
+  /// - compile-time struct has had its member offests registered.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -309,10 +309,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pInitData or ppPropVal arg is NULL.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - any contained struct offsets have not yet been registered for
-  //    that typedef.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - any contained struct offsets have not yet been registered for
+  ///    that typedef.
   //
   STDMETHOD (CreateValueFromCArray) (
     // pointer to compile-time C array containing data to use
@@ -330,15 +330,15 @@ public:
   // GetElementValue()
   //
   // Gets a single property value corresponding to the indexed array
-  // element.  Places a property value representing the array element
-  // identified by the index into ppOutPropval.  Index is zero-based,
-  // and must be less than the value returned by GetCount().
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
-  // - The ppOutPropVal pointer is valid.
+  /// element.  Places a property value representing the array element
+  /// identified by the index into ppOutPropval.  Index is zero-based,
+  /// and must be less than the value returned by GetCount().
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - the index exists in this array type def.
+  /// - The pInPropVal pointer is valid.
+  /// - The ppOutPropVal pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -352,9 +352,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - Either pInPropVal or ppOutPropVal arg is NULL.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - The given index is out of range for this array type def.
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - The given index is out of range for this array type def.
   //
   STDMETHOD (GetElementValue) (
     // property value to read
@@ -372,18 +372,18 @@ public:
   // GetCArray()
   //
   // Copies all the array data contained in the given property value,
-  // interpreted as a fixed array of this type, into the C array
-  // pointed to by pData.  Requires that any structures declared
-  // within this array typedef have had their offsets registered with
-  // that type.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPropVal pointer is valid.
-  // - the pData pointer is valid.
-  // - dataSize indicates pData is large enough to hold the data.
-  // - compile-time struct has had its member offests registered.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// interpreted as a fixed array of this type, into the C array
+  /// pointed to by pData.  Requires that any structures declared
+  /// within this array typedef have had their offsets registered with
+  /// that type.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPropVal pointer is valid.
+  /// - the pData pointer is valid.
+  /// - dataSize indicates pData is large enough to hold the data.
+  /// - compile-time struct has had its member offests registered.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -397,12 +397,12 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pPropVal or pData arg is NULL.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - dataSize indicates pData is too small.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - struct offsets have not yet been registered for this typedef.
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - dataSize indicates pData is too small.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - struct offsets have not yet been registered for this typedef.
   //
   STDMETHOD (GetCArray) (
     // property value to read
@@ -420,16 +420,16 @@ public:
   // SetElementValue()
   //
   // Sets the value of the single, indicated element of the fixed
-  // array contained in pPropVal, to the value contained in
-  // pMemberPropVal.  Index is zero-based, and must be less than the
-  // value returned by GetCount().  Property value must be of the
-  // same type as returned by GetType().
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
-  // - The ppOutPropVal pointer is valid.
+  /// array contained in pPropVal, to the value contained in
+  /// pMemberPropVal.  Index is zero-based, and must be less than the
+  /// value returned by GetCount().  Property value must be of the
+  /// same type as returned by GetType().
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - the index exists in this array type def.
+  /// - The pInPropVal pointer is valid.
+  /// - The ppOutPropVal pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -443,9 +443,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pInPropVal or ppOutPropVal arg is NULL.
-  //
-  // AAFRESULT_BAD_PARAM
-  //   - The given index is out of range for this array type def.
+  ///
+  /// AAFRESULT_BAD_PARAM
+  ///   - The given index is out of range for this array type def.
   //
   STDMETHOD (SetElementValue) (
     // property value to write
@@ -463,20 +463,20 @@ public:
   // SetCArray()
   //
   // Copies all the array data contained in the C array pointed to by
-  // pData into the given property value, interpreting the data as a
-  // fixed array of this type.  Requires that any structures declared
-  // within this typedef have had their offsets registered with that
-  // type.  If dataSize indicates an array size different from the
-  // size currently in the indicated array property value, that array
-  // property value will be resized.
-  //
-  // Succeeds if all of the following are true:
-  // - the pPropVal pointer is valid.
-  // - the pData pointer is valid.
-  // - any contained compile-time struct has had its member offests
-  //   registered.
-  //
-  // If this method fails nothing will be written to *ppPropVal.
+  /// pData into the given property value, interpreting the data as a
+  /// fixed array of this type.  Requires that any structures declared
+  /// within this typedef have had their offsets registered with that
+  /// type.  If dataSize indicates an array size different from the
+  /// size currently in the indicated array property value, that array
+  /// property value will be resized.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pPropVal pointer is valid.
+  /// - the pData pointer is valid.
+  /// - any contained compile-time struct has had its member offests
+  ///   registered.
+  ///
+  /// If this method fails nothing will be written to *ppPropVal.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -490,9 +490,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pPropVal or pData arg is NULL.
-  //
-  // AAFRESULT_NOT_REGISTERED
-  //  - offsets of any contained struct have not yet been registered.
+  ///
+  /// AAFRESULT_NOT_REGISTERED
+  ///  - offsets of any contained struct have not yet been registered.
   //
   STDMETHOD (SetCArray) (
     // property value to write
@@ -512,12 +512,12 @@ public:
   // GetElements()
   //
   // Returns an enumerator across elements in this set.
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - The PSetPropVal pointer is valid.
-  // - The ppEnum pointer is valid.
-  //
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - The PSetPropVal pointer is valid.
+  /// - The ppEnum pointer is valid.
+  ///
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -545,12 +545,12 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFTypeDefVariableArrayEx | PrependElement |
   // Prepends an element to the end of the array, setting it to the
-  // value given in pMemberPropVal.
-  //
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - pInPropVal pointer is valid.
-  // - pMemberPropVal pointer is valid.
+  /// value given in pMemberPropVal.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - pInPropVal pointer is valid.
+  /// - pMemberPropVal pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -578,13 +578,13 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFTypeDefVariableArrayEx | RemoveElement |
   // Remove an element from the Array, given an index.
-  // Index is zero-based,
-  // and must be less than the value returned by GetCount().
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
+  /// Index is zero-based,
+  /// and must be less than the value returned by GetCount().
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - the index exists in this array type def.
+  /// - The pInPropVal pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -598,9 +598,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pInPropVal arg is NULL.
-  //
-  // AAFRESULT_BADINDEX
-  //   - The given index is out of range for this array type def.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - The given index is out of range for this array type def.
   // @end
   // 
   STDMETHOD (RemoveElement)
@@ -618,16 +618,16 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFTypeDefVariableArrayEx | InsertElement |
   // Inserts the value of the single, indicated element of the fixed
-  // array contained in pInPropVal, to the value contained in
-  // pMemberPropVal.  Index is zero-based, and must be less than the
-  // value returned by GetCount().  Property value must be of the
-  // same type as returned by GetType().
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - the index exists in this array type def.
-  // - The pInPropVal pointer is valid.
-  // - The ppOutPropVal pointer is valid.
+  /// array contained in pInPropVal, to the value contained in
+  /// pMemberPropVal.  Index is zero-based, and must be less than the
+  /// value returned by GetCount().  Property value must be of the
+  /// same type as returned by GetType().
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - the index exists in this array type def.
+  /// - The pInPropVal pointer is valid.
+  /// - The ppOutPropVal pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -641,9 +641,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pInPropVal or ppOutPropVal arg is NULL.
-  //
-  // AAFRESULT_BADINDEX
-  //   - The given index is out of range for this array type def.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - The given index is out of range for this array type def.
   // @end
   // 
   STDMETHOD (InsertElement)

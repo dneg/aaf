@@ -333,9 +333,9 @@ HRESULT STDMETHODCALLTYPE
   return hr;
 }
 
-  // @comm There is no guarantee that the same set of elements will be enumerated on 
-  // each pass through the list\, nor will the elements necessarily be enumerated in 
-  // the same order. The exact behavior depends on the collection being enumerated.)
+  /// @comm There is no guarantee that the same set of elements will be enumerated on 
+  /// each pass through the list\, nor will the elements necessarily be enumerated in 
+  /// the same order. The exact behavior depends on the collection being enumerated.)
 
 HRESULT STDMETHODCALLTYPE
     CEnumAAFParameterDefs::Clone (IEnumAAFParameterDefs ** ppEnum)

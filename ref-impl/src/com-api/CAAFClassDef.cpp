@@ -1015,20 +1015,20 @@ HRESULT STDMETHODCALLTYPE
 
 //
 // Creates an object of this class, and returns it by reference in
-  // the location specified by the ppObject argument.
-  // 
-  // Succeeds if:
-  // - The ppObject pointer is valid.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppObject arg is NULL.
+  /// the location specified by the ppObject argument.
+  /// 
+  /// Succeeds if:
+  /// - The ppObject pointer is valid.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppObject arg is NULL.
 HRESULT CAAFClassDef::CreateInstance
    (// Reference to the identifier of the interface
     /*[in, ref]*/ REFIID riid,

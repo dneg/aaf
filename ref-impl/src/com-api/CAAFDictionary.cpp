@@ -126,7 +126,7 @@ CAAFDictionary::~CAAFDictionary ()
 
 //
 // Creates a single uninitialized AAF object of the class associated 
-  // with a specified stored object id.
+  /// with a specified stored object id.
 HRESULT CAAFDictionary::CreateInstance
    (// Class identifier (AUID) of the stored object. This is the
     // corresponding SMPTE identifier (as a GUID) for all predefined
@@ -192,7 +192,7 @@ HRESULT CAAFDictionary::CreateInstance
 
 //
 // Creates a single uninitialized AAF meta class or type associated 
-  // with a specified stored object id.
+  /// with a specified stored object id.
 HRESULT CAAFDictionary::CreateMetaInstance
    (// Identifier (id) of a class or type definition. This is the
     // corresponding SMPTE identifier (as a GUID) for all predefined

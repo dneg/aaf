@@ -71,25 +71,25 @@ public:
   // SetPixelLayout()
   //
   // Sets the layout and structure of the components in a single pixel.
-  // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
-  // from the set:
-  //   	- kAAFCompNone
-  // 	- kAAFCompAlpha
-  // 	- kAAFCompBlue
-  // 	- kAAFCompFill
-  // 	- kAAFCompGreen
-  // 	- kAAFCompPalette
-  // 	- kAAFCompRed
-  //
-  // The 'Size' field of the struct is the component size in bits.
-  // 
-  // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
-  // If this method fails the PixelLayout property will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  /// from the set:
+  ///   	- kAAFCompNone
+  /// 	- kAAFCompAlpha
+  /// 	- kAAFCompBlue
+  /// 	- kAAFCompFill
+  /// 	- kAAFCompGreen
+  /// 	- kAAFCompPalette
+  /// 	- kAAFCompRed
+  ///
+  /// The 'Size' field of the struct is the component size in bits.
+  /// 
+  /// If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
+  /// If this method fails the PixelLayout property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetPixelLayout) (
     // The number of elements in each array
@@ -103,25 +103,25 @@ public:
   // CountPixelLayoutElements()
   //
   // This function returns the number of components in a pixel.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails no state is changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountPixelLayoutElements) (
     // Number of components 
@@ -132,33 +132,33 @@ public:
   // GetPixelLayout()
   //
   // Gets the layout and structure of the components in a single pixel.
-  // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
-  // from the set:
-  //   	- kAAFCompNone
-  // 	- kAAFCompAlpha
-  // 	- kAAFCompBlue
-  // 	- kAAFCompFill
-  // 	- kAAFCompGreen
-  // 	- kAAFCompPalette
-  // 	- kAAFCompRed
-  //
-  // The 'Size' field of the struct is the component size in bits.
-  // 
-  // If you Get more entries than were set, the extra entries will be padded with kAAFCompNone and a size of zero.
-  //
-  // If this method fails, PixelLayoutArray will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumberElements or PixelLayoutArray or PixelStructureArray is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - numberElements indicates that the array is too small to hold
-  //     the data.
+  /// The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  /// from the set:
+  ///   	- kAAFCompNone
+  /// 	- kAAFCompAlpha
+  /// 	- kAAFCompBlue
+  /// 	- kAAFCompFill
+  /// 	- kAAFCompGreen
+  /// 	- kAAFCompPalette
+  /// 	- kAAFCompRed
+  ///
+  /// The 'Size' field of the struct is the component size in bits.
+  /// 
+  /// If you Get more entries than were set, the extra entries will be padded with kAAFCompNone and a size of zero.
+  ///
+  /// If this method fails, PixelLayoutArray will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumberElements or PixelLayoutArray or PixelStructureArray is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - numberElements indicates that the array is too small to hold
+  ///     the data.
   //
   STDMETHOD (GetPixelLayout) (
     // The number of elements in the array
@@ -172,21 +172,21 @@ public:
   // SetPalette()
   //
   // Sets the palette property.  The palette must be in the form specified
-  // by the palette layout and palette structure parameters.
-  // 
-  // Succeeds if all of the following are true:
-  // - pPalette is a valid pointer
-  // 
-  // If this method fails, the palette property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pPalette is NULL.
+  /// by the palette layout and palette structure parameters.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pPalette is a valid pointer
+  /// 
+  /// If this method fails, the palette property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pPalette is NULL.
   //
   STDMETHOD (SetPalette) (
     // The number of bytes in the array
@@ -201,29 +201,29 @@ public:
   // GetPalette()
   //
   // Sets the palette property.  The palette must be in the form specified
-  // by the palette layout and palette structure parameters.
-  // The values are written to the array specified by pPalette,
-  // which is of size numberElements.  The required size may be found
-  // by calling GetPaletteSize().
-  // 
-  // Succeeds if all of the following are true:
-  // - pPalette is a valid pointer.
-  // - numberElements indicates the array is large enough to hold the
-  //   data.
-  // 
-  // If this method fails, pPalette will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumberElements is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - numberElements indicates that the array is too small to hold
-  //     the data.
+  /// by the palette layout and palette structure parameters.
+  /// The values are written to the array specified by pPalette,
+  /// which is of size numberElements.  The required size may be found
+  /// by calling GetPaletteSize().
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pPalette is a valid pointer.
+  /// - numberElements indicates the array is large enough to hold the
+  ///   data.
+  /// 
+  /// If this method fails, pPalette will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumberElements is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - numberElements indicates that the array is too small to hold
+  ///     the data.
   //
   STDMETHOD (GetPalette) (
     // The number of bytes in the array
@@ -238,19 +238,19 @@ public:
   // GetPaletteSize()
   //
   // Get the number of bytes in the VideoLineMap property array.
-  // 
-  // Succeeds if all of the following are true:
-  // - pNumberBytes is a valid pointer
-  // 
-  // If this method fails, *pNumberBytes will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumberBytes is NULL.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pNumberBytes is a valid pointer
+  /// 
+  /// If this method fails, *pNumberBytes will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumberBytes is NULL.
   //
   STDMETHOD (GetPaletteSize) (
     // The number of bytes in the array 
@@ -261,25 +261,25 @@ public:
   // CountPaletteLayoutElements()
   //
   // This function returns the number of components in a pixel.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails no state is changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountPaletteLayoutElements) (
     // Number of components 
@@ -290,25 +290,25 @@ public:
   // SetPaletteLayout()
   //
   // Sets the layout and structure of the components in a single pixel.
-  // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
-  // from the set:
-  //   	- kAAFCompNone
-  // 	- kAAFCompAlpha
-  // 	- kAAFCompBlue
-  // 	- kAAFCompFill
-  // 	- kAAFCompGreen
-  // 	- kAAFCompPalette
-  // 	- kAAFCompRed
-  //
-  // The 'Size' field of the struct is the component size in bits.
-  // 
-  // If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
-  // If this method fails the PaletteLayout property will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  /// from the set:
+  ///   	- kAAFCompNone
+  /// 	- kAAFCompAlpha
+  /// 	- kAAFCompBlue
+  /// 	- kAAFCompFill
+  /// 	- kAAFCompGreen
+  /// 	- kAAFCompPalette
+  /// 	- kAAFCompRed
+  ///
+  /// The 'Size' field of the struct is the component size in bits.
+  /// 
+  /// If you set less than 8 entries, the remaining entries will be padded with kAAFCompNone and a size of zero.
+  /// If this method fails the PaletteLayout property will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetPaletteLayout) (
     // The number of elements in the array
@@ -321,33 +321,33 @@ public:
   //
   // GetPaletteLayout()
   //
-  // // The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
-  // from the set:
-  //   	- kAAFCompNone
-  // 	- kAAFCompAlpha
-  // 	- kAAFCompBlue
-  // 	- kAAFCompFill
-  // 	- kAAFCompGreen
-  // 	- kAAFCompPalette
-  // 	- kAAFCompRed
-  //
-  // The 'Size' field of the struct is the component size in bits.
-  // 
-  // If you Get more entries than were set, the extra entries will be padded with kAAFCompNone and a size of zero.
-  //
-  // If this method fails, PaletteLayoutArray will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pNumberElements or PaletteLayoutArray is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - numberElements indicates that the array is too small to hold
-  //     the data.
+  // /// The layout array is an Array of 8 aafRGBAComponent_t.  The 'Code' field of the struct is
+  /// from the set:
+  ///   	- kAAFCompNone
+  /// 	- kAAFCompAlpha
+  /// 	- kAAFCompBlue
+  /// 	- kAAFCompFill
+  /// 	- kAAFCompGreen
+  /// 	- kAAFCompPalette
+  /// 	- kAAFCompRed
+  ///
+  /// The 'Size' field of the struct is the component size in bits.
+  /// 
+  /// If you Get more entries than were set, the extra entries will be padded with kAAFCompNone and a size of zero.
+  ///
+  /// If this method fails, PaletteLayoutArray will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pNumberElements or PaletteLayoutArray is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - numberElements indicates that the array is too small to hold
+  ///     the data.
   //
   STDMETHOD (GetPaletteLayout) (
     // The number of elements in each array
@@ -362,16 +362,16 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetComponentMaxRef |
   // Sets the ComponentMaxRef property.
-  //
-  // Succeeds if all of the following are true:
-  // 
-  // If this method fails, the ComponentMaxRef property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// 
+  /// If this method fails, the ComponentMaxRef property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   // @end
   // 
   STDMETHOD (SetComponentMaxRef)
@@ -386,23 +386,23 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetComponentMaxRef |
   // Gets the ComponentMaxRef property.
-  //
-  // Succeeds if all of the following are true:
-  // - pComponentMaxRef is a valid pointer
-  // - the property is present.
-  //
-  // If this method fails, pComponentMaxRef will not be changed.
-  //
-  // This method will return the following codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pComponentMaxRef is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pComponentMaxRef is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pComponentMaxRef will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pComponentMaxRef is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   // @end
   // 
   STDMETHOD (GetComponentMaxRef)
@@ -417,16 +417,16 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetComponentMinRef |
   // Sets the ComponentMinRef property.
-  //
-  // Succeeds if all of the following are true:
-  // 
-  // If this method fails, the ComponentMinRef property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// 
+  /// If this method fails, the ComponentMinRef property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   // @end
   // 
   STDMETHOD (SetComponentMinRef)
@@ -441,23 +441,23 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetComponentMinRef |
   // Gets the ComponentMinRef property.
-  //
-  // Succeeds if all of the following are true:
-  // - pComponentMinRef is a valid pointer
-  // - the property is present.
-  //
-  // If this method fails, pComponentMinRef will not be changed.
-  //
-  // This method will return the following codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pComponentMinRef is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pComponentMinRef is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pComponentMinRef will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pComponentMinRef is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   // @end
   // 
   STDMETHOD (GetComponentMinRef)
@@ -472,16 +472,16 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetAlphaMaxRef |
   // Sets the AlphaMaxRef property.
-  //
-  // Succeeds if all of the following are true:
-  // 
-  // If this method fails, the AlphaMaxRef property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// 
+  /// If this method fails, the AlphaMaxRef property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   // @end
   // 
   STDMETHOD (SetAlphaMaxRef)
@@ -496,23 +496,23 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetAlphaMaxRef |
   // Gets the AlphaMaxRef property.
-  //
-  // Succeeds if all of the following are true:
-  // - pAlphaMaxRef is a valid pointer
-  // - the property is present.
-  //
-  // If this method fails, pAlphaMaxRef will not be changed.
-  //
-  // This method will return the following codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pAlphaMaxRef is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pAlphaMaxRef is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pAlphaMaxRef will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pAlphaMaxRef is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   // @end
   // 
   STDMETHOD (GetAlphaMaxRef)
@@ -527,16 +527,16 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetAlphaMinRef |
   // Sets the AlphaMinRef property.
-  //
-  // Succeeds if all of the following are true:
-  // 
-  // If this method fails, the AlphaMinRef property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// Succeeds if all of the following are true:
+  /// 
+  /// If this method fails, the AlphaMinRef property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   // @end
   // 
   STDMETHOD (SetAlphaMinRef)
@@ -551,23 +551,23 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetAlphaMinRef |
   // Gets the AlphaMinRef property.
-  //
-  // Succeeds if all of the following are true:
-  // - pAlphaMinRef is a valid pointer
-  // - the property is present.
-  //
-  // If this method fails, pAlphaMinRef will not be changed.
-  //
-  // This method will return the following codes:
-  //
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pAlphaMinRef is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pAlphaMinRef is a valid pointer
+  /// - the property is present.
+  ///
+  /// If this method fails, pAlphaMinRef will not be changed.
+  ///
+  /// This method will return the following codes:
+  ///
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pAlphaMinRef is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   // @end
   // 
   STDMETHOD (GetAlphaMinRef)
@@ -582,20 +582,20 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | SetScanningDirection |
   // Sets the ScanningDirection property.  This property is optional.
-  //
-  // Succeeds if all of the following are true:
-  // - scanningDirection is a value value.
-  // 
-  // If this method fails, the ScanningDirection property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
-  //   - scanningDirection is not a valid value.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - scanningDirection is a value value.
+  /// 
+  /// If this method fails, the ScanningDirection property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_AAFRESULT_INVALID_ENUM_VALUE
+  ///   - scanningDirection is not a valid value.
   // @end
   // 
   STDMETHOD (SetScanningDirection)
@@ -610,23 +610,23 @@ public:
   // DESCRIPTION:
   // @mfunc AAFRESULT | AAFRGBADescriptor2 | GetScanningDirection |
   // Gets the ScanningDirection property.  This property is optional.
-  //
-  // Succeeds if all of the following are true:
-  // - pScanningDirection is a valid pointer
-  // - the property is present.
-  // 
-  // If this method fails, pScanningDirection not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pScanningDirection is NULL.
-  //
-  // AAFRESULT_PROP_NOT_PRESENT
-  //   - the property is not present.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - pScanningDirection is a valid pointer
+  /// - the property is present.
+  /// 
+  /// If this method fails, pScanningDirection not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pScanningDirection is NULL.
+  ///
+  /// AAFRESULT_PROP_NOT_PRESENT
+  ///   - the property is not present.
   // @end
   // 
   STDMETHOD (GetScanningDirection)

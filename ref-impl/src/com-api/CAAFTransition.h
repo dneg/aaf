@@ -82,7 +82,7 @@ public:
     /*[in]*/ aafLength_t  length,
 
     // The point at which a cut would be inserted if the transition
-	// were removed
+	/// were removed
     /*[in]*/ aafPosition_t  cutPoint,
 
     // A reference to an operation group object
@@ -94,7 +94,7 @@ public:
   // GetCutPoint()
   //
   // Gets the point at which a cut would be inserted if the transition
-  // were removed.
+  /// were removed.
   //
   STDMETHOD (GetCutPoint) (
     // Cut Point 
@@ -117,7 +117,7 @@ public:
   // SetCutPoint()
   //
   // Sets the point at which a cut would be inserted if the transition
-  // were removed.
+  /// were removed.
   //
   STDMETHOD (SetCutPoint) (
     // Cut Point 

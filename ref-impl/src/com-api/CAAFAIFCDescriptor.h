@@ -67,22 +67,22 @@ public:
   // Initialize()
   //
   // Initializes a newly allocated, empty
-  // IAAFAIFCDescriptor-supporting object.  This method must be
-  // called after allocation, and before any other method can be
-  // called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  //
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize() has already been called on this object.
+  /// IAAFAIFCDescriptor-supporting object.  This method must be
+  /// called after allocation, and before any other method can be
+  /// called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  ///
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
   //
   STDMETHOD (Initialize)
      ();
@@ -94,24 +94,24 @@ public:
   // GetSummary()
   //
   // Gets a copy of the AIFC file information without the media.
-  // 
-  // Succeeds if all of the following are true:
-  // - pSummary is a valid pointer.
-  // - The size of the buffer is large enough to hold the AIFC file information.
-  // 
-  // If this method fails pSummary will not be changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSummary arg is NULL.
-  //
-  // AAFRESULT_SMALLBUF
-  //   - The buffer is too small to hold the AIFC file information.
-  //
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pSummary is a valid pointer.
+  /// - The size of the buffer is large enough to hold the AIFC file information.
+  /// 
+  /// If this method fails pSummary will not be changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSummary arg is NULL.
+  ///
+  /// AAFRESULT_SMALLBUF
+  ///   - The buffer is too small to hold the AIFC file information.
+  ///
   //
   STDMETHOD (GetSummary) (
     // Size of preallocated buffer
@@ -125,21 +125,21 @@ public:
   // GetSummaryBufferSize()
   //
   // Returns the size of the buffer required for the GetSummary()
-  // method.  The value is placed into the location specified by pSize.
-  //
-  // Succeeds if all of the following are true:
-  // - the pSize pointer is valid.
-  //
-  // If this method fails nothing will be written to *pSize.
-  //
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSize arg is NULL.
-  //
+  /// method.  The value is placed into the location specified by pSize.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pSize pointer is valid.
+  ///
+  /// If this method fails nothing will be written to *pSize.
+  ///
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSize arg is NULL.
+  ///
   //
   STDMETHOD (GetSummaryBufferSize) (
     // required buffer size 
@@ -150,21 +150,21 @@ public:
   // SetSummary()
   //
   // Sets the AIFC file information.
-  // 
-  // Succeeds if all of the following are true:
-  // - pSummary is a valid pointer
-  // 
-  // If this method fails the summary property will not be
-  // changed.
-  // 
-  // This method will return the following codes:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pSummary arg is NULL.
-  //
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - pSummary is a valid pointer
+  /// 
+  /// If this method fails the summary property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pSummary arg is NULL.
+  ///
   //
   STDMETHOD (SetSummary) (
     // Size of preallocated buffer

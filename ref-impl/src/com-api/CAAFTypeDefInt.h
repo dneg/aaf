@@ -66,18 +66,18 @@ public:
   // Initialize()
   //
   // Initializes this type def to be identified by the given guid, to
-  // have the given size in bytes, and to be signed or unsigned.
-  //
-  // The implementation of this method may only allow certain values
-  // for intSize.  It *will* allow at least 1, 2, 4, and 8-byte
-  // integers; some implementations may allow more than that.
-  //
-  // This method must be called after allocation, and before
-  // any other method can be called.
-  //
-  // Succeeds if:
-  // - Initialize() has not yet been called on this object.
-  // - intSize is a valid value.
+  /// have the given size in bytes, and to be signed or unsigned.
+  ///
+  /// The implementation of this method may only allow certain values
+  /// for intSize.  It *will* allow at least 1, 2, 4, and 8-byte
+  /// integers; some implementations may allow more than that.
+  ///
+  /// This method must be called after allocation, and before
+  /// any other method can be called.
+  ///
+  /// Succeeds if:
+  /// - Initialize() has not yet been called on this object.
+  /// - intSize is a valid value.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -88,9 +88,9 @@ public:
   //
   // AAFRESULT_ALREADY_INITIALIZED
   //   - This object has already had Initialize() called on it.
-  //
-  // AAFRESULT_BAD_SIZE
-  //  - intSize is not a valid value.
+  ///
+  /// AAFRESULT_BAD_SIZE
+  ///  - intSize is not a valid value.
   //
   STDMETHOD (Initialize) (
     // auid to be used to identify this type
@@ -111,22 +111,22 @@ public:
   // CreateValue()
   //
   // Creates a property value which contains an integer.  Initializes
-  // it to contain the given integer value.  The initialization value
-  // is passed through pVal; the size of the initialzation value is
-  // given in valSize.
-  //
-  // valSize may be smaller than GetSize() for this typedef; if so,
-  // the value is lsb-justified and sign-extended (for signed) or
-  // zero-filled (for unsigned).
-  //
-  // The implementation of this method may only allow certain values
-  // for valSize.  It *will* allow at least 1, 2, 4, and 8-byte
-  // integers; some implementations may allow more than that.
-  //
-  // Succeeds if:
-  // - The pVal pointer is valid.
-  // - The ppPropVal pointer is valid.
-  // - valSize is no larger than GetSize() for this typedef.
+  /// it to contain the given integer value.  The initialization value
+  /// is passed through pVal; the size of the initialzation value is
+  /// given in valSize.
+  ///
+  /// valSize may be smaller than GetSize() for this typedef; if so,
+  /// the value is lsb-justified and sign-extended (for signed) or
+  /// zero-filled (for unsigned).
+  ///
+  /// The implementation of this method may only allow certain values
+  /// for valSize.  It *will* allow at least 1, 2, 4, and 8-byte
+  /// integers; some implementations may allow more than that.
+  ///
+  /// Succeeds if:
+  /// - The pVal pointer is valid.
+  /// - The ppPropVal pointer is valid.
+  /// - valSize is no larger than GetSize() for this typedef.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -140,10 +140,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pVal or ppPropVal arg is NULL.
-  //
-  // AAFRESULT_BAD_SIZE
-  //   - valSize is larger than GetSize() for this typedef, or
-  //     valSize is not a supported value.
+  ///
+  /// AAFRESULT_BAD_SIZE
+  ///   - valSize is larger than GetSize() for this typedef, or
+  ///     valSize is not a supported value.
   //
   STDMETHOD (CreateValue) (
     // pointer to integer initialization value
@@ -161,23 +161,23 @@ public:
   // GetInteger()
   //
   // Returns the integer value of this property.  The value
-  // to set is passed through pVal.  The size of the pVal buffer is
-  // given in valSize.  valSize may be larger than GetSize(); if so,
-  // the value is lsb-justified and sign-extended (for signed) or
-  // zero-filled (for unsigned).
-  //
-  // valSize may be smaller than GetSize() for this typedef; if so,
-  // the value is lsb-justified and sign-extended (for signed) or
-  // zero-filled (for unsigned).
-  //
-  // The implementation of this method may only allow certain values
-  // for valSize.  It *will* allow at least 1, 2, 4, and 8-byte
-  // integers; some implementations may allow more than that.
-  //
-  // Succeeds if:
-  // - The pPropVal pointer is valid.
-  // - The pVal pointer is valid.
-  // - valSize indicates that pVal is large enough to hold the value.
+  /// to set is passed through pVal.  The size of the pVal buffer is
+  /// given in valSize.  valSize may be larger than GetSize(); if so,
+  /// the value is lsb-justified and sign-extended (for signed) or
+  /// zero-filled (for unsigned).
+  ///
+  /// valSize may be smaller than GetSize() for this typedef; if so,
+  /// the value is lsb-justified and sign-extended (for signed) or
+  /// zero-filled (for unsigned).
+  ///
+  /// The implementation of this method may only allow certain values
+  /// for valSize.  It *will* allow at least 1, 2, 4, and 8-byte
+  /// integers; some implementations may allow more than that.
+  ///
+  /// Succeeds if:
+  /// - The pPropVal pointer is valid.
+  /// - The pVal pointer is valid.
+  /// - valSize indicates that pVal is large enough to hold the value.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -191,15 +191,15 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pPropVal or pVal arg is NULL.
-  //
-  // AAFRESULT_BAD_SIZE
-  //   - valSize is smaller than GetSize() for this typedef, or
-  //     valSize is not a supported value.
-  //
-  // AAFRESULT_BAD_TYPE
-  //   - The type associated with pPropVal cannot be read as an
-  //     integral type, or the int size of pPropVal is larger than the
-  //     int size of this type.
+  ///
+  /// AAFRESULT_BAD_SIZE
+  ///   - valSize is smaller than GetSize() for this typedef, or
+  ///     valSize is not a supported value.
+  ///
+  /// AAFRESULT_BAD_TYPE
+  ///   - The type associated with pPropVal cannot be read as an
+  ///     integral type, or the int size of pPropVal is larger than the
+  ///     int size of this type.
   //
   STDMETHOD (GetInteger) (
     // property value from which value is to be read
@@ -217,15 +217,15 @@ public:
   // SetInteger()
   //
   // Sets this property value to the given integer value.  The value
-  // to set is passed in pVal, and the size of the value in pVal is
-  // given in valSize.  valSize may be smaller than GetSize(); if so,
-  // the value is lsb-justified and sign-extended (for signed) or
-  // zero-filled (for unsigned).
-  //
-  // Succeeds if:
-  // - The pPropVal pointer is valid.
-  // - The pVal pointer is valid.
-  // - valSize indicates that pVal is large enough to hold the value.
+  /// to set is passed in pVal, and the size of the value in pVal is
+  /// given in valSize.  valSize may be smaller than GetSize(); if so,
+  /// the value is lsb-justified and sign-extended (for signed) or
+  /// zero-filled (for unsigned).
+  ///
+  /// Succeeds if:
+  /// - The pPropVal pointer is valid.
+  /// - The pVal pointer is valid.
+  /// - valSize indicates that pVal is large enough to hold the value.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -239,9 +239,9 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - either pPropVal or pVal arg is NULL.
-  //
-  // AAFRESULT_BAD_SIZE
-  //   - valSize is larger than GetSize() for this typedef.
+  ///
+  /// AAFRESULT_BAD_SIZE
+  ///   - valSize is larger than GetSize() for this typedef.
   //
   STDMETHOD (SetInteger) (
     // property value from which value is to be read
@@ -259,10 +259,10 @@ public:
   // GetSize()
   //
   // Returns the size of the integral value defined by this type
-  // definition. 
-  //
-  // Succeeds if:
-  // - The pSize pointer is valid.
+  /// definition. 
+  ///
+  /// Succeeds if:
+  /// - The pSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -287,10 +287,10 @@ public:
   // IsSigned()
   //
   // Puts true in *pSigned if property values defined with this type
-  // def are signed; puts false there for unsigned property values.
-  //
-  // Succeeds if:
-  // - The pSigned pointer is valid.
+  /// def are signed; puts false there for unsigned property values.
+  ///
+  /// Succeeds if:
+  /// - The pSigned pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -307,7 +307,7 @@ public:
   //
   STDMETHOD (IsSigned) (
     // set to true if this integer type is signed; set to false for
-    // unsigned 
+  /// unsigned 
     /*[out]*/ aafBoolean_t *  pSigned);
 
 

@@ -66,14 +66,14 @@ public:
   // GetType()
   //
   // Returns the type definition associated with this property value.
-  // If this Property Value is not of a recognized type (such as from
-  // a damaged or incorrectly construct file) this method will return
-  // a raw access type which can be used to access the property data
-  // in a raw manner.
-  //
-  // Succeeds if:
-  // - The ppTypeDef pointer is valid.
-  // - The associated type definition can be found in the dictionary.
+  /// If this Property Value is not of a recognized type (such as from
+  /// a damaged or incorrectly construct file) this method will return
+  /// a raw access type which can be used to access the property data
+  /// in a raw manner.
+  ///
+  /// Succeeds if:
+  /// - The ppTypeDef pointer is valid.
+  /// - The associated type definition can be found in the dictionary.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -95,17 +95,17 @@ public:
   // IsDefinedType()
   //
   // Returns false if this property value's type is not (necessarily)
-  // the one which was defined for it.  That may be the case if this
-  // property value was read from a damaged file where type
-  // information was not available; in that case GetType() will return
-  // the raw access type for this value.
-  //
-  // If this property value's type is the one which was defined for
-  // it, this method will return true and GetType() will return that
-  // defined type for this value.
-  //
-  // Succeeds if:
-  // - The pIsDefined pointer is valid.
+  /// the one which was defined for it.  That may be the case if this
+  /// property value was read from a damaged file where type
+  /// information was not available; in that case GetType() will return
+  /// the raw access type for this value.
+  ///
+  /// If this property value's type is the one which was defined for
+  /// it, this method will return true and GetType() will return that
+  /// defined type for this value.
+  ///
+  /// Succeeds if:
+  /// - The pIsDefined pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

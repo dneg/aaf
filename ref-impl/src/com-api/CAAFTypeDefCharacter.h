@@ -68,11 +68,11 @@ public:
   // CreateValueFromCharacter()
   //
   // Gets a property value corresponding to the character data. 
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - The pCharacterValue pointer is valid.
-  // - The ppActualPropertyValue pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - The pCharacterValue pointer is valid.
+  /// - The ppActualPropertyValue pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -80,10 +80,10 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppCharacterValue is not a valid pointer.
-  //
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppCharacterValue is not a valid pointer.
+  ///
   //
   STDMETHOD (CreateValueFromCharacter) (
     // character data to write the the new value
@@ -97,11 +97,11 @@ public:
   // GetCharacter()
   //
   // Gets a character from the property value. 
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - The pCharacterValue pointer is valid.
-  // - The ppActualPropertyValue pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - The pCharacterValue pointer is valid.
+  /// - The ppActualPropertyValue pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -109,10 +109,10 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - pCharacterValue is not a valid character property value.
-  //
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - pCharacterValue is not a valid character property value.
+  ///
   //
   STDMETHOD (GetCharacter) (
     // character property value to read
@@ -126,10 +126,10 @@ public:
   // SetCharacter()
   //
   // Sets a character into the given property value. 
-  // 
-  // Succeeds if:
-  // - Initialize() has already been called on this object.
-  // - The pCharacterValue pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - Initialize() has already been called on this object.
+  /// - The pCharacterValue pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -137,10 +137,10 @@ public:
   // 
   // AAFRESULT_SUCCESS
   //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_ILLEGAL_VALUE
-  //   - pCharacterValue is not a valid character property value.
-  //
+  ///
+  /// AAFRESULT_ILLEGAL_VALUE
+  ///   - pCharacterValue is not a valid character property value.
+  ///
   //
   STDMETHOD (SetCharacter) (
     // character property value to modify

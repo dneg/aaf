@@ -70,30 +70,30 @@ public:
   // Initialize()
   //
   // This function sets the properties on a newly created sequence
-  // object with the given property values. The length of the sequence
-  // is initially set to 0.  When components are appended to the
-  // sequence with the AppendComponent() call, the length of the
-  // appended component is added to the length of the sequence.  The
-  // given DataDef specifies the kind of data which all components to
-  // be contained in this sequence must share.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has not yet been initialized.
-  // 
-  // If this method fails no state is changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pDataDef is null.
-  //
-  // AAFRESULT_ALREADY_INITIALIZED
-  //   - Initialize() has already been called on this object.
+  /// object with the given property values. The length of the sequence
+  /// is initially set to 0.  When components are appended to the
+  /// sequence with the AppendComponent() call, the length of the
+  /// appended component is added to the length of the sequence.  The
+  /// given DataDef specifies the kind of data which all components to
+  /// be contained in this sequence must share.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has not yet been initialized.
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pDataDef is null.
+  ///
+  /// AAFRESULT_ALREADY_INITIALIZED
+  ///   - Initialize() has already been called on this object.
   //
   STDMETHOD (Initialize) (
     // DataDef of this object 
@@ -105,53 +105,53 @@ public:
   // AppendComponent()
   //
   // This function appends the input component to the given sequence,
-  // enforcing bottom up creation of mobs.  The length of the sequence
-  // is incremented by the size of the component, unless the
-  // component is a transition.  If the component is a transition, it
-  // verifies that it is not the first object in a transition, and
-  // that it is not neighboring another transition.  It also verifies
-  // that there is enough source material on either side of the
-  // transition.  The function also verifies that the datadefs are
-  // compatible.
-  //
-  // This method will AddRef() the component if it succeeds.
-  //
-  // If the component is successfully appended to the sequence, the
-  // reference count of the component is incremented.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the pComponent pointer is valid.
-  // 
-  // If this method fails no state is changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pComponent is null.
-  //
-  // AAFRESULT_INVALID_DATADEF
-  //   - The data kind of the component is not compatible with the 
-  //     data def of the sequence.
-  //
-  // AAFRESULT_LEADING_TRAN
-  //   - Attempted to append a transition as the first component of
-  //     a sequence.  A sequence can not start with a transition. 
-  //
-  // AAFRESULT_ADJACENT_TRAN
-  //   - Attempted to append a transition next to a transition.  A
-  //     sequence can not contain back to back transitions.
-  //
-  // AAFRESULT_INSUFF_TRAN_MATERIAL
-  //   - There is not enough source material to add this component.
+  /// enforcing bottom up creation of mobs.  The length of the sequence
+  /// is incremented by the size of the component, unless the
+  /// component is a transition.  If the component is a transition, it
+  /// verifies that it is not the first object in a transition, and
+  /// that it is not neighboring another transition.  It also verifies
+  /// that there is enough source material on either side of the
+  /// transition.  The function also verifies that the datadefs are
+  /// compatible.
+  ///
+  /// This method will AddRef() the component if it succeeds.
+  ///
+  /// If the component is successfully appended to the sequence, the
+  /// reference count of the component is incremented.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the pComponent pointer is valid.
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pComponent is null.
+  ///
+  /// AAFRESULT_INVALID_DATADEF
+  ///   - The data kind of the component is not compatible with the 
+  ///     data def of the sequence.
+  ///
+  /// AAFRESULT_LEADING_TRAN
+  ///   - Attempted to append a transition as the first component of
+  ///     a sequence.  A sequence can not start with a transition. 
+  ///
+  /// AAFRESULT_ADJACENT_TRAN
+  ///   - Attempted to append a transition next to a transition.  A
+  ///     sequence can not contain back to back transitions.
+  ///
+  /// AAFRESULT_INSUFF_TRAN_MATERIAL
+  ///   - There is not enough source material to add this component.
   //
   STDMETHOD (AppendComponent) (
     // Component to append to the sequence 
@@ -163,53 +163,53 @@ public:
   // PrependComponent()
   //
   // This function prepends the input component to the given
-  // sequence, enforcing bottom up creation of mobs.  The length of
-  // the sequence is incremented by the size of the component, unless
-  // the component is a transition.  If the component is a
-  // transition, it verifies that it is not the first object in a
-  // transition, and that it is not neighboring another transition.
-  // It also verifies that there is enough source material on either
-  // side of the transition.  The function also verifies that the
-  // datadefs are compatible.
-  //
-  // This method will AddRef() the component if it succeeds.
-  //
-  // If the component is successfully appended to the sequence, the
-  // reference count of the component is incremented.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the pComponent pointer is valid.
-  // 
-  // If this method fails no state is changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pComponent is null.
-  //
-  // AAFRESULT_INVALID_DATADEF
-  //   - The data kind of the component is not compatible with the 
-  //     data def of the sequence.
-  //
-  // AAFRESULT_LEADING_TRAN
-  //   - Attempted to append a transition as the first component of
-  //     a sequence.  A sequence can not start with a transition. 
-  //
-  // AAFRESULT_ADJACENT_TRAN
-  //   - Attempted to append a transition next to a transition.  A
-  //     sequence can not contain back to back transitions.
-  //
-  // AAFRESULT_INSUFF_TRAN_MATERIAL
-  //   - There is not enough source material to add this component.
+  /// sequence, enforcing bottom up creation of mobs.  The length of
+  /// the sequence is incremented by the size of the component, unless
+  /// the component is a transition.  If the component is a
+  /// transition, it verifies that it is not the first object in a
+  /// transition, and that it is not neighboring another transition.
+  /// It also verifies that there is enough source material on either
+  /// side of the transition.  The function also verifies that the
+  /// datadefs are compatible.
+  ///
+  /// This method will AddRef() the component if it succeeds.
+  ///
+  /// If the component is successfully appended to the sequence, the
+  /// reference count of the component is incremented.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the pComponent pointer is valid.
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pComponent is null.
+  ///
+  /// AAFRESULT_INVALID_DATADEF
+  ///   - The data kind of the component is not compatible with the 
+  ///     data def of the sequence.
+  ///
+  /// AAFRESULT_LEADING_TRAN
+  ///   - Attempted to append a transition as the first component of
+  ///     a sequence.  A sequence can not start with a transition. 
+  ///
+  /// AAFRESULT_ADJACENT_TRAN
+  ///   - Attempted to append a transition next to a transition.  A
+  ///     sequence can not contain back to back transitions.
+  ///
+  /// AAFRESULT_INSUFF_TRAN_MATERIAL
+  ///   - There is not enough source material to add this component.
   //
   STDMETHOD (PrependComponent) (
     // Component to prepend to the sequence 
@@ -221,59 +221,59 @@ public:
   // InsertComponentAt()
   //
   // This function inserts the input component into the given sequence
-  // at the given index, enforcing bottom up creation of mobs.  The
-  // length of the sequence is incremented by the size of the
-  // component, unless the component is a transition.  If the
-  // component is a transition, it verifies that it is not the first
-  // object in a transition, and that it is not neighboring another
-  // transition.  It also verifies that there is enough source
-  // material on either side of the transition.  The function also
-  // verifies that the datadefs are compatible.
-  //
-  // This method will AddRef() the component if it succeeds.
-  //
-  // If the component is successfully appended to the sequence, the
-  // reference count of the component is incremented.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the pComponent pointer is valid.
-  // - index is less than or equal to the value returned by
-  //   CountComponents().
-  // 
-  // If this method fails no state is changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pComponent is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than the value returned by
-  //     CountComponents().
-  //
-  // AAFRESULT_INVALID_DATADEF
-  //   - The data kind of the component is not compatible with the 
-  //     data def of the sequence.
-  //
-  // AAFRESULT_LEADING_TRAN
-  //   - Attempted to append a transition as the first component of
-  //     a sequence.  A sequence can not start with a transition. 
-  //
-  // AAFRESULT_ADJACENT_TRAN
-  //   - Attempted to append a transition next to a transition.  A
-  //     sequence can not contain back to back transitions.
-  //
-  // AAFRESULT_INSUFF_TRAN_MATERIAL
-  //   - There is not enough source material to add this component.
+  /// at the given index, enforcing bottom up creation of mobs.  The
+  /// length of the sequence is incremented by the size of the
+  /// component, unless the component is a transition.  If the
+  /// component is a transition, it verifies that it is not the first
+  /// object in a transition, and that it is not neighboring another
+  /// transition.  It also verifies that there is enough source
+  /// material on either side of the transition.  The function also
+  /// verifies that the datadefs are compatible.
+  ///
+  /// This method will AddRef() the component if it succeeds.
+  ///
+  /// If the component is successfully appended to the sequence, the
+  /// reference count of the component is incremented.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the pComponent pointer is valid.
+  /// - index is less than or equal to the value returned by
+  ///   CountComponents().
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pComponent is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than the value returned by
+  ///     CountComponents().
+  ///
+  /// AAFRESULT_INVALID_DATADEF
+  ///   - The data kind of the component is not compatible with the 
+  ///     data def of the sequence.
+  ///
+  /// AAFRESULT_LEADING_TRAN
+  ///   - Attempted to append a transition as the first component of
+  ///     a sequence.  A sequence can not start with a transition. 
+  ///
+  /// AAFRESULT_ADJACENT_TRAN
+  ///   - Attempted to append a transition next to a transition.  A
+  ///     sequence can not contain back to back transitions.
+  ///
+  /// AAFRESULT_INSUFF_TRAN_MATERIAL
+  ///   - There is not enough source material to add this component.
   //
   STDMETHOD (InsertComponentAt) (
     // index to insert component
@@ -288,32 +288,32 @@ public:
   // GetComponentAt()
   //
   // This function retrieves the input component at the given index in
-  // the given sequence.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the ppComponent pointer is valid.
-  // - index is less than the value returned by
-  //   CountComponents().
-  // 
-  // If this method fails nothing will be written to *ppComponent.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pComponent is null.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than or equal to the value returned by
-  //     CountComponents().
+  /// the given sequence.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the ppComponent pointer is valid.
+  /// - index is less than the value returned by
+  ///   CountComponents().
+  /// 
+  /// If this method fails nothing will be written to *ppComponent.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pComponent is null.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountComponents().
   //
   STDMETHOD (GetComponentAt) (
     // index of component to retrieve
@@ -328,30 +328,30 @@ public:
   // RemoveComponentAt()
   //
   // This function removes the input component at the given index in
-  // the given sequence.  Components already existing at indices
-  // higher than the given index will be moved to the next lower index
-  // to accommodate.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - index is less than the value returned by
-  //   CountComponents().
-  // 
-  // If this method fails no state will be changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_BADINDEX
-  //   - index is greater than or equal to the value returned by
-  //     CountComponents().
+  /// the given sequence.  Components already existing at indices
+  /// higher than the given index will be moved to the next lower index
+  /// to accommodate.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - index is less than the value returned by
+  ///   CountComponents().
+  /// 
+  /// If this method fails no state will be changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_BADINDEX
+  ///   - index is greater than or equal to the value returned by
+  ///     CountComponents().
   //
   STDMETHOD (RemoveComponentAt) (
     // index of component to remove 
@@ -363,25 +363,25 @@ public:
   // CountComponents()
   //
   // This function returns the number of components in the sequence.
-  // 
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the pResult pointer is valid.
-  // 
-  // If this method fails no state is changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pResult is null.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the pResult pointer is valid.
+  /// 
+  /// If this method fails no state is changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pResult is null.
   //
   STDMETHOD (CountComponents) (
     // Number of components 
@@ -393,31 +393,31 @@ public:
   // GetComponents()
   //
   // Places an IEnumAAFComponents enumerator for the components
-  // contained in the sequence into the *ppEnum argument.
-  // 
-  // The returned enumerator is AddRef()ed before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - this object has already been initialized.
-  // - the ppEnum pointer is valid.
-  // 
-  // If this method fails nothing will be written to *ppEnum.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - Initialize() has already been called on this object.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppEnum is null.
-  //
-  // E_FAIL
-  //   - Failed to create the enumerator.
+  /// contained in the sequence into the *ppEnum argument.
+  /// 
+  /// The returned enumerator is AddRef()ed before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - this object has already been initialized.
+  /// - the ppEnum pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *ppEnum.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - Initialize() has already been called on this object.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppEnum is null.
+  ///
+  /// E_FAIL
+  ///   - Failed to create the enumerator.
   //
   STDMETHOD (GetComponents) (
     // Component Enumeration 

@@ -86,32 +86,32 @@ public:
   // GetTypeDefinition()
   //
   // Places the AAFTypeDef object attached to this IAAFParameterDef
-  // into the *ppTypeDef argument.  If none exists yet, NULL is
-  // placed into the *ppTypeDef argument.
-  //
-  // The returned AAFTypeDef object, if it exists, is AddRef()ed
-  // before it is returned.
-  //
-  // Succeeds if all of the following are true:
-  // - the ppTypeDef pointer is valid.
-  // - A valid AAFTypeDef exists.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NOT_INITIALIZED
-  //   - This object has not yet had Initialize() called on it.
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - ppTypeDef is null.
-  //
-  // AAFRESULT_NO_ESSENCE_DESC
-  //   - There is no AAFTypeDef.  There has to be one of some
-  //     kind for this to be a valid operation definition.
+  /// into the *ppTypeDef argument.  If none exists yet, NULL is
+  /// placed into the *ppTypeDef argument.
+  ///
+  /// The returned AAFTypeDef object, if it exists, is AddRef()ed
+  /// before it is returned.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the ppTypeDef pointer is valid.
+  /// - A valid AAFTypeDef exists.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NOT_INITIALIZED
+  ///   - This object has not yet had Initialize() called on it.
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - ppTypeDef is null.
+  ///
+  /// AAFRESULT_NO_ESSENCE_DESC
+  ///   - There is no AAFTypeDef.  There has to be one of some
+  ///     kind for this to be a valid operation definition.
   //
   STDMETHOD (GetTypeDefinition) (
     // Pointer to a type definition 
@@ -123,20 +123,20 @@ public:
   // SetDisplayUnits()
   //
   // Sets the Display Units string property.
-  //
-  // Set the DisplayUnits property to the value specified in
-  // pDisplayUnits.  A copy is made of the data so the caller
-  // retains ownership of the *pDisplayUnits buffer and is
-  // responsible for de-allocating it.  There is no pre-set limit to
-  // the length of the name, other than available system memory or
-  // disk space.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pDisplayUnits pointer is valid.
-  // 
-  // If this method fails the DisplayUnits property will not be
-  // changed.
-  // 
+  ///
+  /// Set the DisplayUnits property to the value specified in
+  /// pDisplayUnits.  A copy is made of the data so the caller
+  /// retains ownership of the *pDisplayUnits buffer and is
+  /// responsible for de-allocating it.  There is no pre-set limit to
+  /// the length of the name, other than available system memory or
+  /// disk space.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pDisplayUnits pointer is valid.
+  /// 
+  /// If this method fails the DisplayUnits property will not be
+  /// changed.
+  /// 
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -158,24 +158,24 @@ public:
   // GetDisplayUnits()
   //
   // Gets the Display Units string property.
-  // 
-  // Writes the DisplayUnits property, with a trailing null
-  // character, into the pDisplayUnits buffer.  The
-  // buffer is allocated by the caller.  The size of the buffer is
-  // given by bufSize.  If the DisplayUnits property has not yet
-  // been set, a zero-length string will be written (that is,
-  // only the trailing null character). 
-  // 
-  // Caller may call GetDisplayUnitsBufLen() to determine the
-  // required buffer size.
-  // 
-  // If this method fails nothing will be written to
-  // *pDisplayUnits.
-  // 
-  // Succeeds if:
-  // - The pDisplayUnits pointer is valid.
-  // - bufSize indicates that the buffer is large enough to hold
-  //   DisplayUnits.
+  /// 
+  /// Writes the DisplayUnits property, with a trailing null
+  /// character, into the pDisplayUnits buffer.  The
+  /// buffer is allocated by the caller.  The size of the buffer is
+  /// given by bufSize.  If the DisplayUnits property has not yet
+  /// been set, a zero-length string will be written (that is,
+  /// only the trailing null character). 
+  /// 
+  /// Caller may call GetDisplayUnitsBufLen() to determine the
+  /// required buffer size.
+  /// 
+  /// If this method fails nothing will be written to
+  /// *pDisplayUnits.
+  /// 
+  /// Succeeds if:
+  /// - The pDisplayUnits pointer is valid.
+  /// - bufSize indicates that the buffer is large enough to hold
+  ///   DisplayUnits.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one
@@ -186,10 +186,10 @@ public:
   //
   // AAFRESULT_NULL_PARAM
   //   - pDisplayUnits arg is NULL.
-  //
-  // AAFRESULT_SMALL_BUF
-  //   - bufSize indicates that the allocated buffer is not large
-  //     enough to hold DisplayUnits.
+  ///
+  /// AAFRESULT_SMALL_BUF
+  ///   - bufSize indicates that the allocated buffer is not large
+  ///     enough to hold DisplayUnits.
   //
   STDMETHOD (GetDisplayUnits) (
     // buffer into which DisplayUnits is to be written
@@ -204,9 +204,9 @@ public:
   // GetDisplayUnitsBufLen()
   //
   // Returns size of buffer (in bytes) required for GetDisplayUnits().
-  // 
-  // Succeeds if:
-  // - The pBufSize pointer is valid.
+  /// 
+  /// Succeeds if:
+  /// - The pBufSize pointer is valid.
   //
   // This method will return the following codes.  If more than one of
   // the listed errors is in effect, it will return the first one

@@ -65,25 +65,25 @@ public:
   // SegmentOffsetToTC()
   //
   // Converts the given Segment offset to timecode.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pOffset pointer is valid.
-  // - the pTimeCode pointer is valid.
-  // 
-  // If this method fails the value of pTimecode is left unchanged.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - any arg is NULL.
-  //
-  // AAFRESULT_TIMECODE_NOT_FOUND
-  //   - the given offset is not available in this segment.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pOffset pointer is valid.
+  /// - the pTimeCode pointer is valid.
+  /// 
+  /// If this method fails the value of pTimecode is left unchanged.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - any arg is NULL.
+  ///
+  /// AAFRESULT_TIMECODE_NOT_FOUND
+  ///   - the given offset is not available in this segment.
   //
   STDMETHOD (SegmentOffsetToTC) (
     // Pointer to a Segment Offset to be convert to Timecode
@@ -98,26 +98,26 @@ public:
   // SegmentTCToOffset()
   //
   // Converts the given Timecode to an Offset.
-  // 
-  // Succeeds if all of the following are true:
-  // - the pTimeCode pointer is valid.
-  // - the pEditRate pointer is valid
-  // - the pFrameOffset pointer is valid.
-  // 
-  // If this method fails the value of pOffset is left unchanged.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - any arg is NULL.
-  //
-  // AAFRESULT_TIMECODE_NOT_FOUND
-  //   - the given timecode is not available in this segment.
+  /// 
+  /// Succeeds if all of the following are true:
+  /// - the pTimeCode pointer is valid.
+  /// - the pEditRate pointer is valid
+  /// - the pFrameOffset pointer is valid.
+  /// 
+  /// If this method fails the value of pOffset is left unchanged.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - any arg is NULL.
+  ///
+  /// AAFRESULT_TIMECODE_NOT_FOUND
+  ///   - the given timecode is not available in this segment.
   //
   STDMETHOD (SegmentTCToOffset) (
     // Pointer to a timecode to be converted to Offset

@@ -133,8 +133,8 @@ public:
   // DoesDataDefConvertTo()
   //
   // Sets return value to TRUE if the DataDef of the given object
-   // can be converted to the DataDef specified in the IN 
-   // parameter with the DataDefName string.
+  /// can be converted to the DataDef specified in the IN 
+  /// parameter with the DataDefName string.
   //
   STDMETHOD (DoesDataDefConvertTo) (
     // data def to compare against
@@ -149,8 +149,8 @@ public:
   // IsDataDefOf()
   //
   // Sets the value to TRUE if the DataDef of the given object
-  // matches the DataDef specified in the IN parameter with the
-  // DataDefName string.
+  /// matches the DataDef specified in the IN parameter with the
+  /// DataDefName string.
   //
   STDMETHOD (IsDataDefOf) (
     // data def to compare against
@@ -165,8 +165,8 @@ public:
   // DoesDataDefConvertFrom()
   //
   // Sets return value to TRUE if the DataDef of the given object
-  // can be converted from the DataDef specified in the IN 
-  // parameter specified with the DataDefName string.
+  /// can be converted from the DataDef specified in the IN 
+  /// parameter specified with the DataDefName string.
   //
   STDMETHOD (DoesDataDefConvertFrom) (
     // data def to compare against

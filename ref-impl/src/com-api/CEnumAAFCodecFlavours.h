@@ -65,10 +65,10 @@ public:
   // NextOne()
   //
   // Enumerates to the next element in the enumerators list. The
-  // caller is responsible for passing in a pointer to an aafUID_t,
-  // and retains control over the pointer.
-  //
-  // This is a just simplified version of the Next method. 
+  /// caller is responsible for passing in a pointer to an aafUID_t,
+  /// and retains control over the pointer.
+  ///
+  /// This is a just simplified version of the Next method. 
   //
   STDMETHOD (NextOne) (
     // The Next flavour code 
@@ -80,10 +80,10 @@ public:
   // Next()
   //
   // Enumerates the next count elements (codec flavour IDs) in
-  // the enumerator's list, returning them in the given array along
-  // with the actual number of enumerated elements in pFetched. The
-  // caller is responsible for passing in a pointer to an array of
-  // aafUID_t, and retains control over the pointer.
+  /// the enumerator's list, returning them in the given array along
+  /// with the actual number of enumerated elements in pFetched. The
+  /// caller is responsible for passing in a pointer to an array of
+  /// aafUID_t, and retains control over the pointer.
   //
   STDMETHOD (Next) (
     // number of AAFPluggableDefs requested
@@ -101,8 +101,8 @@ public:
   // Skip()
   //
   // Instructs the enumerator to skip the next count elements in the
-  // enumeration so that the next call to EnumAAFCodecFlavours::Next
-  // will not return those elements.
+  /// enumeration so that the next call to EnumAAFCodecFlavours::Next
+  /// will not return those elements.
   //
   STDMETHOD (Skip) (
     // Number of elements to skip 
@@ -114,12 +114,12 @@ public:
   // Reset()
   //
   // Instructs the enumerator to position itself at the beginning of
-  // the list of elements.
-  //
-  // There is no guarantee that the same set of elements will be
-  // enumerated on each pass through the list, nor will the elements
-  // necessarily be enumerated in the same order. The exact behavior
-  // depends on the collection being enumerated.
+  /// the list of elements.
+  ///
+  /// There is no guarantee that the same set of elements will be
+  /// enumerated on each pass through the list, nor will the elements
+  /// necessarily be enumerated in the same order. The exact behavior
+  /// depends on the collection being enumerated.
   //
   STDMETHOD (Reset)
      ();
@@ -131,13 +131,13 @@ public:
   // Clone()
   //
   // Creates another EnumAAFCodecFlavours enumerator with the same
-  // state as the current enumerator to iterate over the same
-  // list.  This method makes it possible to record a point in the
-  // enumeration sequence in order to return to that point at a later
-  // time.
-  // 
-  // The caller must release this new enumerator separately from the
-  // first enumerator.
+  /// state as the current enumerator to iterate over the same
+  /// list.  This method makes it possible to record a point in the
+  /// enumeration sequence in order to return to that point at a later
+  /// time.
+  /// 
+  /// The caller must release this new enumerator separately from the
+  /// first enumerator.
   //
   STDMETHOD (Clone) (
     // new enumeration 

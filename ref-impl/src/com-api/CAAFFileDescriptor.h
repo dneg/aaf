@@ -64,17 +64,17 @@ public:
   //
   // SetLength()
   //
-  // // 
-  // Sets the length of the essence in samples [not edit units].
-  // 
-  // Always succeeds.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// 
+  /// Sets the length of the essence in samples [not edit units].
+  /// 
+  /// Always succeeds.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetLength) (
     // length of the essence in samples 
@@ -85,22 +85,22 @@ public:
   //
   // GetLength()
   //
-  // // Gets the length of the essence in samples [not edit units].
-  //
-  // Succeeds if all of the following are true:
-  // - the pLength pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pLength.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pLength arg is NULL.
+  // /// Gets the length of the essence in samples [not edit units].
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pLength pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pLength.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pLength arg is NULL.
   //
   STDMETHOD (GetLength) (
     // returns length of the essence in samples 
@@ -111,16 +111,16 @@ public:
   //
   // SetCodecDef()
   //
-  // // Set to the exact codec which was used as a hint.
-  // 
-  // Always succeeds.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  // /// Set to the exact codec which was used as a hint.
+  /// 
+  /// Always succeeds.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetCodecDef) (
     // Which codec was used 
@@ -131,22 +131,22 @@ public:
   //
   // GetCodecDef()
   //
-  // // Get to the exact codec which was used as a hint.
-  //
-  // Succeeds if all of the following are true:
-  // - the pCodecDef pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pCodecDef.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pCodecDef arg is NULL.
+  // /// Get to the exact codec which was used as a hint.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pCodecDef pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pCodecDef.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pCodecDef arg is NULL.
   //
   STDMETHOD (GetCodecDef) (
     // Which codec was used 
@@ -158,16 +158,16 @@ public:
   // SetSampleRate()
   //
   // Sets sample rate of the essence as opposed to the edit rate.
-  // 
-  // If this method fails the sample rate property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// 
+  /// If this method fails the sample rate property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetSampleRate) (
     // sample rate of the essence 
@@ -179,22 +179,22 @@ public:
   // GetSampleRate()
   //
   // Gets sample rate of the essence as opposed to the edit rate. and
-  // writes it into the *pRate argument.
-  //
-  // Succeeds if all of the following are true:
-  // - the pRate pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pRate.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pRate arg is NULL.
+  /// writes it into the *pRate argument.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pRate pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pRate.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pRate arg is NULL.
   //
   STDMETHOD (GetSampleRate) (
     // sample rate of the essence 
@@ -206,17 +206,17 @@ public:
   // SetContainerFormat()
   //
   // Identifies the file format.  The container format is an optional
-  // property.
-  // 
-  // If this method fails the container format property will not be
-  // changed.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
+  /// property.
+  /// 
+  /// If this method fails the container format property will not be
+  /// changed.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
   //
   STDMETHOD (SetContainerFormat) (
     // file format 
@@ -227,22 +227,22 @@ public:
   //
   // GetContainerFormat()
   //
-  // // Optional. Identifies the file format.
-  //
-  // Succeeds if all of the following are true:
-  // - the pFormat pointer is valid.
-  // 
-  // If this method fails nothing will be written to *pFormat.
-  // 
-  // This method will return the following codes.  If more than one of
-  // the listed errors is in effect, it will return the first one
-  // encountered in the order given below:
-  // 
-  // AAFRESULT_SUCCESS
-  //   - succeeded.  (This is the only code indicating success.)
-  //
-  // AAFRESULT_NULL_PARAM
-  //   - pFormat arg is NULL.
+  // /// Optional. Identifies the file format.
+  ///
+  /// Succeeds if all of the following are true:
+  /// - the pFormat pointer is valid.
+  /// 
+  /// If this method fails nothing will be written to *pFormat.
+  /// 
+  /// This method will return the following codes.  If more than one of
+  /// the listed errors is in effect, it will return the first one
+  /// encountered in the order given below:
+  /// 
+  /// AAFRESULT_SUCCESS
+  ///   - succeeded.  (This is the only code indicating success.)
+  ///
+  /// AAFRESULT_NULL_PARAM
+  ///   - pFormat arg is NULL.
   //
   STDMETHOD (GetContainerFormat) (
     // Identifies the file format 
