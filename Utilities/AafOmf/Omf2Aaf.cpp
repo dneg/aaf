@@ -221,8 +221,6 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 	aafBool					bAddExtraIdent = AAFFalse;
 	aafProductIdentification_t	ProductInfo;
 
-	CAAFBuiltinDefs defs (pDictionary);
-
 	std::auto_ptr<wchar_t> pwFile( new wchar_t[strlen(pFileName)+1] );
 	aafWChar*	pwFileName = pwFile.get();
 	mbstowcs(pwFileName, pFileName, strlen(pFileName)+1);
@@ -300,6 +298,8 @@ void Omf2Aaf::AAFFileOpen( char* pFileName)
 	gpGlobals->bAAFFileOpen = AAFTrue;
 	rc = pFile->GetHeader(&pHeader);
 	rc = pHeader->GetDictionary(&pDictionary);
+	CAAFBuiltinDefs defs (pDictionary);
+
 	if (bAddExtraIdent)
 	{
 		// Create a new Identification
