@@ -82,7 +82,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 			CoCreateGuid((GUID *)&newMobID);
 			hr = pMob->SetMobID(&newMobID);
 
-			hr = pCompMob->SetInitialValues(L"COMPMOB01", AAFFalse);
+			hr = pCompMob->SetInitialValues( L"COMPMOB01" );
 			if (AAFRESULT_SUCCESS == hr)
 			{
 				hr = pCompMob->SetDefaultFade(fadeInLen, fadeInType, fadeInEditUnit);
