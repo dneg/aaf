@@ -59,32 +59,6 @@ OMProperty::OMProperty(const OMPropertyId propertyId,
 }
 
   // @mfunc Temporary pseudo-constructor for clients which provide
-  //         a type definition.
-  //   @parm const OMPropertyId | propertyId | The property id.
-  //   @parm const char* | name | The name of this <c OMProperty>.
-  //   @parm OMType* | type | The type of this <c OMProperty>.
-  //   @parm const bool | isOptional | True if this is an optional property,
-  //         false otherwise.
-void OMProperty::initialize(const OMPropertyId ANAME(propertyId),
-                            const char* ANAME(name),
-                            OMType* type,
-                            const bool isOptional)
-{
-  TRACE("OMProperty::initialize");
-
-  PRECONDITION("Valid property name", validString(name));
-  // PRECONDITION("Valid type", type != 0);
-
-  // Temporary consistency checks
-  ASSERT("Consistent property id", propertyId == OMProperty::propertyId());
-  ASSERT("Consistent property name", strcmp(name, OMProperty::name()) == 0);
-  ASSERT("Not initialized by property definition", _definition == 0);
-
-  _type = type;
-  _isOptional = isOptional;
-}
-
-  // @mfunc Temporary pseudo-constructor for clients which provide
   //        a property definition.
   //   @parm The definition of this <c OMProperty>.
 void OMProperty::initialize(const OMPropertyDefinition* definition)
