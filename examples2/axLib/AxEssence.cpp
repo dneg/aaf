@@ -232,6 +232,15 @@ AxFileDescriptor::AxFileDescriptor( IAAFFileDescriptorSP sp )
 AxFileDescriptor::~AxFileDescriptor()
 {}
 
+aafLength_t AxFileDescriptor::GetLength()
+{
+	aafLength_t length;
+
+	CHECK_HRESULT( _spIaafFileDescriptor->GetLength(&length) );
+
+	return length;
+}
+
 aafRational_t AxFileDescriptor::GetSampleRate()
 {
 	aafRational_t rate;
