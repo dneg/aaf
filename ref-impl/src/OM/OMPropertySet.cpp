@@ -77,6 +77,26 @@ OMProperty* OMPropertySet::get(const OMPropertyId propertyId) const
   return result;
 }
 
+  // @mfunc Get the <c OMProperty> named <p propertyName>.
+  //   @parm Property name.
+  //   @rdesc The <c OMProperty> with name <p propertyName>.
+  //   @this const
+OMProperty* OMPropertySet::get(const char* propertyName) const
+{
+  TRACE("OMPropertySet::get");
+
+  PRECONDITION("Valid property name", validString(propertyName));
+  PRECONDITION("Property is present", isPresent(propertyName));
+
+  OMPropertySetElement* element = find(propertyName);
+  ASSERT("Element found", element != 0);
+  ASSERT("Valid element", element->_valid);
+  OMProperty* result = element->_property;
+
+  POSTCONDITION("Valid result", result != 0);
+  return result;
+}
+
   // @mfunc Insert the <c OMProperty> <p property> into
   //        this <c OMPropertySet>.
   //   @parm <c OMProperty> to insert.
@@ -152,6 +172,24 @@ bool OMPropertySet::isPresent(const OMPropertyId propertyId) const
   TRACE("OMPropertySet::isPresent");
 
   OMPropertySetElement* element = find(propertyId);
+  if (element != 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+  // @mfunc Is an <c OMProperty> with name <p propertyName>
+  //        present in this <c OMPropertySet> ?
+  //  @rdesc <e bool.true> if an <c OMProperty> with name
+  //         <p propertyName> is present <e bool.false> otherwise.
+  //  @parm Property name.
+  //  @this const
+bool OMPropertySet::isPresent(const char* propertyName) const
+{
+  TRACE("OMPropertySet::isPresent");
+
+  OMPropertySetElement* element = find(propertyName);
   if (element != 0) {
     return true;
   } else {
@@ -242,6 +280,24 @@ OMPropertySet::OMPropertySetElement* OMPropertySet::find(
   for (size_t i = 0; i < _capacity; i++) {
     if (_propertySet[i]._valid) {
       if (equal(_propertySet[i]._propertyId, propertyId)) {
+        result = &_propertySet[i];
+        break;
+      }
+    }
+  }
+  return result;
+}
+
+OMPropertySet::OMPropertySetElement* OMPropertySet::find(
+                                                const char* propertyName) const
+{
+  TRACE("OMPropertySet::find");
+
+  OMPropertySetElement* result = 0;
+
+  for (size_t i = 0; i < _capacity; i++) {
+    if (_propertySet[i]._valid) {
+      if (strcmp(_propertySet[i]._property->name(), propertyName) == 0) {
         result = &_propertySet[i];
         break;
       }
