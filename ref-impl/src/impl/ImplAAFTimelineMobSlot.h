@@ -89,11 +89,6 @@ virtual AAFRESULT FindSegment(aafPosition_t offset,
 										  ImplAAFMobSlot *srcSlot,
 										aafPosition_t *convertPos);
 
-public:
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTimelineMobSlotTest.cpp.
-	static AAFRESULT test();
-
 protected:
 	OMFixedSizeProperty<aafRational_t>	_editRate;
 	OMFixedSizeProperty<aafPosition_t>	_origin; 

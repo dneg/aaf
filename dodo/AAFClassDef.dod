@@ -22,20 +22,35 @@ AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-AD_XMETHOD1(Initialize,
+AD_XMETHOD3(Initialize,
+
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this type,
+
 			[in],
 		    objIn,
 		    AAFClassDef,
 		    pParentClass,
 		    existing class from which this one inherits,
 
+			[in\, string],
+			objPass,
+			aafCharacter *,
+			pClassName,
+			friendly name of this type definition,
+
      Initializes this class definition object to inherit from the
   // given parent class.
   // 
   // Succeeds if:
+  // - The pID pointer is valid.
   // - The pParentClass pointer is valid.
+  // - The pTypeName pointer is valid.
   AD_STD_COMMENT_METH_ERR_HEADER
-  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pParentClass\))
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pParentClass\\\, or pTypeName\))
 
 
 AD_XMETHOD1(GetPropertyDefs,
@@ -102,11 +117,74 @@ AD_XMETHOD5(AppendNewPropertyDef,
   // definition.  If ppPropDef is non-NULL\, will return the new
   // property definition in ppPropDef.
   // 
+  // Note that it is illegal to add mandatory properties to an
+  // existing \(registered\) class.  This method will allow adding
+  // either optional or mandatory properties to a class\, but they must
+  // be added to a class which has not yet been registered in the
+  // dictionary.  If this class has already been registered\, it is
+  // possible to add optional properties\, but not through this
+  // method.  Optional properties added to an existing \(registered\)
+  // class may be added through the AppendOpionalPropertyDef\(\)
+  // method.
+  // 
   // Succeeds if:
   // - The pID pointer is valid.
   // - The pName pointer is valid.
   // - The pTypeDef pointer is valid.
-  // - the auid specified by pID has not already been registered.
+  // - This class has not already been registered in the dictionary.
+  // - The auid specified by pID has not already been registered.
+  AD_STD_COMMENT_METH_ERR_HEADER
+  AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pName\\\, or pTypeDef\)
+  //
+  // AAFRESULT_OBJECT_ALREADY_ATTACHED
+  //   - This class has already been registered.
+  //
+  // AAFRESULT_BAD_PARAM
+  //   - The given ID has already been registered.)
+
+
+AD_XMETHOD4(AppendOptionalPropertyDef,
+			[in],
+			objPass,
+			aafUID_t *,
+			pID,
+			auid to be used to identify this property,
+
+			[in\, string],
+			objPass,
+			aafCharacter *,
+			pName,
+			name of the new property,
+
+			[in],
+			objIn,
+			AAFTypeDef,
+			pTypeDef,
+			type of the new property,
+
+			[out],
+			objOut,
+			AAFPropertyDef,
+			ppPropDef,
+			return pointer to newly created property def,
+
+     Creates a new property definition and appends it to this class
+  // definition.  If ppPropDef is non-NULL\, will return the new
+  // property definition in ppPropDef.
+  //
+  // Note that it is illegal to add mandatory properties to an already
+  // existing \(registered\) class.  It is assumed that this property is
+  // being added to a class which is already registered.  If so\, it
+  // must be optional and this method will declare it so.  If it is
+  // wished to add a mandatory property\, that may be done through the
+  // AppendNewPropertyDef\(\) method\, but that must be called on a class
+  // which is not yet registered.
+  // 
+  // Succeeds if:
+  // - The pID pointer is valid.
+  // - The pName pointer is valid.
+  // - The pTypeDef pointer is valid.
+  // - The auid specified by pID has not already been registered.
   AD_STD_COMMENT_METH_ERR_HEADER
   AD_STD_COMMENT_METH_ERR_NULL_PARAM\(pID\\\, pName\\\, or pTypeDef\)
   //

@@ -64,7 +64,9 @@ ImplAAFDefObject::~ImplAAFDefObject ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::Init (
-      aafUID_t *pAuid, aafWChar *pName, aafWChar *pDesc)
+      const aafUID_t *pAuid,
+	  const aafWChar *pName,
+	  const aafWChar *pDesc)
 {
 	if (pAuid == NULL || pName == NULL || pDesc == NULL)
 	{
@@ -80,7 +82,7 @@ AAFRESULT STDMETHODCALLTYPE
 }
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::SetName (
-      wchar_t *  pName)
+      const wchar_t *  pName)
 {
   if (! pName)
 	{
@@ -176,7 +178,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::GetAUID (
-      aafUID_t *pAuid)
+      aafUID_t *pAuid) const
 {
   if (pAuid == NULL)
 	{
@@ -193,7 +195,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDefObject::SetAUID (
-      aafUID_t *pAuid)
+      const aafUID_t *pAuid)
 {
   if (pAuid == NULL)
 	{

@@ -122,9 +122,6 @@ public:
   //
   OMDECLARE_STORABLE(ImplAAFEssenceGroup)
 
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFEssenceGroupTest.cpp.
-  static AAFRESULT test();
 private:
 	OMStrongReferenceVectorProperty<ImplAAFSourceClip>	_choices;
 	OMStrongReferenceProperty<ImplAAFSourceClip>		_stillFrame;
