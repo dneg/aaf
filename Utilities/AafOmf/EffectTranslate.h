@@ -57,3 +57,4 @@ typedef struct
 extern effectXlate_t	stdXlateTable[];
 extern long				numStdEntries;
 #endif
+
