@@ -138,7 +138,7 @@ void dumpBaseObjects( AxDictionary& axDict,
 				 dynamic_cast<AxObject*>( next.second.release() ) );
 
 			wcout << level.get() << L"\tObject\t" << level <<
-				*obj->GetClassName() << endl;
+				obj->GetClassName() << endl;
 		}
 
 		else if ( dynamic_cast<AxProperty*>( next.second.get() ) ) {
@@ -154,8 +154,8 @@ void dumpBaseObjects( AxDictionary& axDict,
 			}
 
 			if ( propertyDump.first ) {
-				auto_ptr< AxString > name = prop->GetName();
-				wcout << level.get()<< L"\tProp\t" << level << *name;
+				AxString name = prop->GetName();
+				wcout << level.get()<< L"\tProp\t" << level << name;
 				wcout << endl;
 			}
 
