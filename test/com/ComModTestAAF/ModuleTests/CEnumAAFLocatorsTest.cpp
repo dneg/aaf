@@ -32,6 +32,10 @@
 
 #include <iostream.h>
 
+// Temporarily necessary global declarations.
+extern "C" const CLSID CLSID_EnumAAFLocators;
+
+
 HRESULT CEnumAAFLocators::test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
