@@ -25,6 +25,8 @@
 #include "ImplAAFOperationDef.h"
 #include "AAFResult.h"
 
+//=---------------------------------------------------------------------=
+
 ImplAAFCloneResolver::ImplAAFCloneResolver( ImplAAFFile* pDstFile )
 {
   _AAFCLONE_CHECK_HRESULT( pDstFile->GetDictionary( &_pDstDict ) );
@@ -36,6 +38,18 @@ ImplAAFCloneResolver::ImplAAFCloneResolver( ImplAAFDictionary* pDstDict )
 
 ImplAAFCloneResolver::~ImplAAFCloneResolver()
 {}
+
+void ImplAAFCloneResolver::AddSourceReference( const aafMobID_t mobID )
+{
+  if ( !_sourceIDList.containsValue( mobID ) ) {
+    _sourceIDList.insert( mobID );
+  }
+}
+
+const OMVector<aafMobID_t>& ImplAAFCloneResolver::GetSourceReferences() const
+{
+  return _sourceIDList;
+}
 
 //=---------------------------------------------------------------------=
 
@@ -63,3 +77,10 @@ _DEFINE( CodecDef );
 _DEFINE( ContainerDef );
 _DEFINE( InterpolationDef );
 _DEFINE( PluginDef );
+
+//=---------------------------------------------------------------------=
+
+bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs )
+{
+   return (memcmp( &rhs, &lhs, sizeof(aafMobID_t) ) == 0) ? true : false;
+}

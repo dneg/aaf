@@ -88,8 +88,14 @@ HRESULT ImplAAFCloneResolverRegisterDef( ImplAAFDictionary* pDict, Type* ppDef )
 
 //=---------------------------------------------------------------------=
 
+// Required for OMVector
+bool operator==( const aafMobID_t& lhs, const aafMobID_t& rhs );
+
+//=---------------------------------------------------------------------=
+
 class ImplAAFCloneResolver {
  public:
+
   ImplAAFCloneResolver( ImplAAFFile* pDstFile );
   ImplAAFCloneResolver( ImplAAFDictionary* pDstDict );
   ~ImplAAFCloneResolver();
@@ -127,6 +133,12 @@ class ImplAAFCloneResolver {
 	}
   }
 
+  // Add a mobID to the list, and get the list.
+  // AddSourceReference ignores mobID's that are already in the source
+  // reference list.
+  void AddSourceReference( const aafMobID_t mobID );
+  const OMVector<aafMobID_t>& GetSourceReferences() const;
+
 private:
 
   // prohibited
@@ -146,7 +158,7 @@ private:
 
     if ( AAFRESULT_NO_MORE_OBJECTS == hr ) {
     
-	  OMStorable* pDstStorable = pSrcDef->shallowCopy( _pDstDict );
+      OMStorable* pDstStorable = pSrcDef->shallowCopy( _pDstDict );
       ImplAAFCloneResolver context( _pDstDict );
       pSrcDef->deepCopyTo( pDstStorable, &context );
 
@@ -166,6 +178,7 @@ private:
 
   }
 
+  OMVector<aafMobID_t> _sourceIDList;
   ImplAAFDictionary* _pDstDict;
 };
 
