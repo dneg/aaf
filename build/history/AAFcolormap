@@ -20,7 +20,7 @@ color Pale-Green          CCFFCC
 color Pale-Red            FFCCCC
 color Pale-Blue           CCFFFF
 color Pale-Magenta        FFCCFF
-color Yellow              FFFFCC
+color Pale-Yellow         FFFFCC
 color Blue                CCCCFF
 color Magenta             FF00FF
 color Green               00FF00
@@ -64,7 +64,7 @@ component Tests-and-Examples Pale-Magenta
   examples2/
 end
 
-component Utilities Yellow
+component Utilities Pale-Yellow
   DevUtils/
   Utilities/
   OMF/
