@@ -61,8 +61,8 @@ ImplAAFEssenceDescriptor::ImplAAFEssenceDescriptor ()
 ImplAAFEssenceDescriptor::~ImplAAFEssenceDescriptor ()
 {
 	// Release all of the locator pointers.
-	size_t size = _locators.getSize();
-	for (size_t i = 0; i < size; i++)
+	size_t count = _locators.count();
+	for (size_t i = 0; i < count; i++)
 	{
 		ImplAAFLocator *pLocator = _locators.clearValueAt(i);
 		if (pLocator)
