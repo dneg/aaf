@@ -396,15 +396,15 @@ int main( int argc, char **argv )
  }
 
   catch ( const HResultEx& ex_hr ) {
-    hr = ex_hr.GetHResult();
-    cout << "hr = 0x" << hex << hr << endl;
+    hr = ex_hr.GetHResult(); 
+    cout << "Error: HRESULT value" << endl;
   }
   catch ( const string& ex_string ) {
-    cout << ex_string << endl;
+    cout << "Error: " << ex_string << endl;
     hr = -1;
   }
   catch ( const char* ex_str ) {
-    cout << ex_str << endl;
+    cout << "Error: " << ex_str << endl;
     hr = -1;
   }
   catch ( const UsageEx& ex_usage ) {
@@ -412,10 +412,11 @@ int main( int argc, char **argv )
     hr = -1;
   }
   catch (...) {
-	cout << "caught an unknown exception" << endl;
+	cout << "Error: caught an unknown exception" << endl;
     hr = -1;
   }
 
+  cout << "status 0x" << hex << hr << endl;
 
   return hr;
 }
