@@ -610,50 +610,10 @@ static HRESULT CreateStaticEssenceAAFFile(
 			&pEssenceAccess));// Compress disabled
 
 		
-/*
-		checkResult(pEssenceAccess->GetFileFormatParameterList (&format));
-		checkResult(format->NumFormatSpecifiers (&numSpecifiers));
-		for(n = 0; n < numSpecifiers; n++)
-		{
-			checkResult(format->GetIndexedFormatSpecifier (n, &essenceFormatCode, 0, NULL, NULL));
-		}
-		format->Release();
-		format = NULL;
-		
-		// Tell the AAFEssenceAccess what the format is.
-		checkResult(pEssenceAccess->GetEmptyFileFormat (&pFormat));
-		checkResult(pFormat->NumFormatSpecifiers (&numSpecifiers));
-		
-		aafInt32	sampleSize = bitsPerSample;
-		checkResult(pFormat->AddFormatSpecifier (kAAFAudioSampleBits, sizeof(sampleSize), (aafUInt8 *)&sampleSize));
-		checkResult(pEssenceAccess->PutFileFormat (pFormat));
-		*/
+			/// There is no test writing of Static Essence Access
+			/// Although this does not use any different code than other tests to write essence
+		    /// However we do need a static essence codec in the SDK.
 
-		// At the time this test was written, SetTransformParameters() returned
-		// AAFRESULT_NOT_IN_CURRENT_VERSION, and therefore did not need to be 
-		// tested.  We simply store the HRESULT from SetTransformParameters(), and
-		// check at the end of CAAFEssenceAccess_test(testMode_t mode) if the function still
-		// returns that code.
-	//	if(bCallSetTransformParameters==kAAFTrue)
-	//		hrSetTransformParameters=pEssenceAccess->SetTransformParameters(
-	//			pFormat);
-
-		// NIL flavour is the only one available for kAAFCodecWAVE
-	//	checkResult(pEssenceAccess->SetEssenceCodecFlavour(kAAFNilCodecFlavour));
-
-		// write out the data
-/*
-			checkResult(pEssenceAccess->WriteSamples(	dataLen,	//!!! hardcoded bytes/sample ==1// Number of Samples
-						      sizeof(dataBuff),// buffer size
-				          dataPtr,	// THE data
-									&samplesWritten,
-									&bytesWritten));
-
-*/
-
-	
-		// Finish writing the destination
-//		checkResult(pEssenceAccess->CompleteWrite());
 	}
 	catch (HRESULT& rhr)
 	{
@@ -2090,18 +2050,7 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 
 	cout << endl << endl;
 
-	//	if (SUCCEEDED(hr))
-	//{
-		cout << "    Static Essence " << endl;
- 		/**/
-		if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
-		{
-			cout << "        Write Static Essence" << endl;
-			hr = CreateStaticEssenceAAFFile(L"StaticEssenceAccess.aaf", NULL, testStandardCalls, kAAFCodecWAVE,kAAFTrue);
-		}
-	//}
 
-	
   cout << "    Internal Essence (WAVE)" << endl;
   
 	/**/
@@ -2269,56 +2218,67 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 		cout << "        WriteMultiSamples (compression disabled, RGB)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMulti.aaf",NULL, kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
 				kAAFCodecJPEG, testMultiCalls);
-    if (AAFRESULT_INVALID_OP_CODEC == hr)
-    {
-      cout << "          Codec does not support interleaved data." << endl;
-      hr = AAFRESULT_SUCCESS;
-    }
-    else
-    {
-	    if (SUCCEEDED(hr))
-	    {
-		    cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testMultiCalls);
-	    }
-	    if (SUCCEEDED(hr))
-	    {
-		    cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
-				kAAFCodecJPEG, testMultiCalls);
-	    }
-    }
-
-
-  }
+		if (AAFRESULT_INVALID_OP_CODEC == hr)
+		{
+		cout << "          Codec does not support interleaved data." << endl;
+		hr = AAFRESULT_SUCCESS;
+		}
+		else
+		{
+			if (SUCCEEDED(hr))
+			{
+				cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
+				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1,  
+					kAAFCodecJPEG, testMultiCalls);
+			}
+			if (SUCCEEDED(hr))
+			{
+				cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
+				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMulti.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1,  
+					kAAFCodecJPEG, testMultiCalls);
+			}
+		}
+	}
 
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
 		cout << "        WriteMultiSamples (compression enabled, RGB)" << endl;
 		hr = CreateVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf",NULL, kAAFCompressionEnable, kAAFColorSpaceRGB,1, 
 				kAAFCodecJPEG, testMultiCalls);
-    if (AAFRESULT_INVALID_OP_CODEC == hr)
-    {
-      cout << "          Codec does not support interleaved data." << endl;
-      hr = AAFRESULT_SUCCESS;
-    }
-    else
-    {
-	    if (SUCCEEDED(hr))
-	    {
-		    cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
-		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
-				kAAFCodecJPEG, testMultiCalls);
-	    }
-	    if (SUCCEEDED(hr))
-	    {
-		    cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
-		    hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
-				kAAFCodecJPEG, testMultiCalls);
-	    }
-    }
+		if (AAFRESULT_INVALID_OP_CODEC == hr)
+		{
+		cout << "          Codec does not support interleaved data." << endl;
+		hr = AAFRESULT_SUCCESS;
+		}
+		else
+		{
+			if (SUCCEEDED(hr))
+			{
+				cout << "        ReadMultiSamples (compression disabled, RGB)" << endl;
+				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionDisable, kAAFColorSpaceRGB, 1, 
+					kAAFCodecJPEG, testMultiCalls);
+			}
+			if (SUCCEEDED(hr))
+			{
+				cout << "        ReadMultiSamples (compression enabled, RGB)" << endl;
+				hr = ReadVideoAAFFile(L"EssenceAccessJPEGMultiComp.aaf", kAAFCompressionEnable, kAAFColorSpaceRGB, 1, 
+					kAAFCodecJPEG, testMultiCalls);
+			}
+		}
 	}
+
+
+	if (SUCCEEDED(hr))
+	{
+		cout << "    Create Static Essence Slot" << endl;
+ 		/**/
+		if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
+		{
+			cout << "        Write Static Essence" << endl;
+			hr = CreateStaticEssenceAAFFile(L"StaticEssenceAccess.aaf", NULL, testStandardCalls, kAAFCodecWAVE,kAAFTrue);
+		}
+	}
+
 
 
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
