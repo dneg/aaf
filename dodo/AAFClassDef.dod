@@ -12,6 +12,7 @@ AD_HEAD
 AD_INCLUDE(AAFTypes)
 
 AD_FORWARD_DECLARATION(EnumAAFPropertyDefinitions)
+AD_FORWARD_DECLARATION(AAFPropertyDefinition)
 AD_FORWARD_DECLARATION(AAFDefinitionObject)
 
 /******************************************\
@@ -29,7 +30,7 @@ AD_CLASS_UUID(dfbd6526, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(dfbd6525, 1d81, 11d2, bf, 96, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR2([in],aafAuid_t,Auid,auid for this definition object,
+AD_CONSTRUCTOR2([in],aafUID_t,Auid,auid for this definition object,
 				[in],aafString_t, Name, Unique name of this Data definition,
 				Constructs and sets the AUID ad Name of this ClassDefinition object.)
 
@@ -42,14 +43,14 @@ AD_METHOD1(GetName,
 
 AD_METHOD1(GetParentAUID,
 		   [out\\\,retval],
-		   aafAuid_t *,
+		   aafUID_t *,
 		   pAuid,
 		   Pointer to an AUID reference,
 		   Gets the Parent class AUID for this object.)
 
 AD_METHOD1(SetParentAUID,
 		   [in],
-		   aafAuid_t,
+		   aafUID_t,
 		   ParentAuid,
 		   Parent class AUID,
 		   Sets the Parent's AUID.)
@@ -57,7 +58,7 @@ AD_METHOD1(SetParentAUID,
 AD_XMETHOD1(AppendPropertyDef,
 		    [in\,ref],
 		    objIn,
-		    AAFPropertyDefintion,
+		    AAFPropertyDefinition,
 		    pPropertyDef, 
 		    Property Definition to be added,
 		    Add the Property Definition to the class definition.)
