@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -38,14 +38,11 @@
 #include "ImplAAFTypeDefWeakObjRef.h"
 #endif
 
-#ifndef __ImplAAFHeader_h_
-#include "ImplAAFHeader.h"
-#endif
-
 #ifndef __AAFTypeDefUIDs_h__
 #include "AAFTypeDefUIDs.h"
 #endif
 
+#include "ImplAAFDictionary.h"
 #include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
@@ -121,15 +118,10 @@ AAFRESULT STDMETHODCALLTYPE
 
   if (! _cachedObjType)
 	{
-	  ImplAAFHeaderSP pHead;
 	  ImplAAFDictionarySP pDict;
 
 	  AAFRESULT hr;
-	  hr = MyHeadObject(&pHead);
-	  if (AAFRESULT_FAILED(hr))
-		return hr;
-	  assert (pHead);
-	  hr = (pHead->GetDictionary(&pDict));
+	  hr = (GetDictionary(&pDict));
 	  if (AAFRESULT_FAILED(hr))
 		return hr;
 	  assert (pDict);

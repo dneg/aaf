@@ -9,7 +9,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -40,7 +40,6 @@
 #endif
 
 #include "ImplAAFControlPoint.h"
-#include "ImplAAFHeader.h"
 #include "ImplAAFDictionary.h"
 #include "ImplAAFPluginManager.h"
 #include "AAFPlugin.h"
@@ -183,7 +182,6 @@ AAFRESULT STDMETHODCALLTYPE
       ImplAAFInterpolationDef *pDef)
 {
 	aafUID_t			newUID;
-	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 
 	if(pDef == NULL)
@@ -192,24 +190,18 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		CHECK(pDef->GetAUID(&newUID));
-		CHECK(pDef->MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+		CHECK(GetDictionary(&dict));
 // This is a weak reference, not yet counted
 //		if(dict->LookupParameterDef(&newUID, &def) == AAFRESULT_SUCCESS)
 //			def->ReleaseReference();
 
 		_interpolation = newUID;
 //		pDef->AcquireReference();
-		head->ReleaseReference();
-		head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;
@@ -223,7 +215,6 @@ AAFRESULT STDMETHODCALLTYPE
     ImplAAFVaryingValue::GetInterpolationDefinition (
       ImplAAFInterpolationDef **ppDef)
 {
-	ImplAAFHeader		*head = NULL;
 	ImplAAFDictionary	*dict = NULL;
 	aafUID_t			interpID;
 
@@ -232,21 +223,15 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		CHECK(MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
 		interpID = _interpolation;
+		CHECK(GetDictionary(&dict));
 		CHECK(dict->LookupInterpolationDef(interpID, ppDef));
 //		(*ppDef)->AcquireReference();
-		head->ReleaseReference();
-		head = NULL;
 		dict->ReleaseReference();
 		dict = NULL;
 	}
 	XEXCEPT
 	{
-		if(head)
-		  head->ReleaseReference();
-		head = 0;
 		if(dict)
 		  dict->ReleaseReference();
 		dict = 0;

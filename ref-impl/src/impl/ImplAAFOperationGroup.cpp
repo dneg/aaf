@@ -66,7 +66,6 @@
 
 #include "ImplAAFObjectCreation.h"
 #include "ImplAAFDictionary.h"
-#include "ImplAAFHeader.h"
 
 #include <assert.h>
 #include <string.h>
@@ -139,7 +138,6 @@ AAFRESULT STDMETHODCALLTYPE
                              ImplAAFOperationDef* pOperationDef)
 {
 	HRESULT					rc = AAFRESULT_SUCCESS;
-	ImplAAFHeader*			pHeader = NULL;
 	ImplAAFDictionary*		pDictionary = NULL;
 //	ImplAAFOperationDef*		pOldOperationDef = NULL;
 	aafUID_t				OperationDefAUID;
@@ -153,11 +151,8 @@ AAFRESULT STDMETHODCALLTYPE
 
 	XPROTECT()
 	{
-		// Get the Header and the dictionary objects for this file.
-		CHECK(pOperationDef->MyHeadObject(&pHeader));
-		CHECK(pHeader->GetDictionary(&pDictionary));
-		pHeader->ReleaseReference();
-		pHeader = NULL;
+		// Get the dictionary objects for this file.
+		CHECK(GetDictionary(&pDictionary));
 
 		CHECK(SetNewProps(length, pDataDef));
 		CHECK(pOperationDef->GetAUID(&uid));
@@ -175,9 +170,6 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 	XEXCEPT
 	{
-		if(pHeader != NULL)
-		  pHeader->ReleaseReference();
-		pHeader = 0;
 		if(pDictionary)
 		  pDictionary->ReleaseReference();
 		pDictionary = 0;
@@ -196,7 +188,6 @@ AAFRESULT STDMETHODCALLTYPE
 {
 	aafUID_t			defUID;
 	ImplAAFDictionary	*dict = NULL;
-	ImplAAFHeader		*head = NULL;
 
 	if(OperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
@@ -204,22 +195,16 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT()
 	{
 		defUID = _operationDefinition;
-		CHECK(MyHeadObject(&head));
-		CHECK(head->GetDictionary(&dict));
+		CHECK(GetDictionary(&dict));
 		CHECK(dict->LookupOperationDef(defUID, OperationDef));
 		dict->ReleaseReference();
 		dict = 0;
-		head->ReleaseReference();
-		head = 0;
 	}
 	XEXCEPT
 	{
 		if(dict != NULL)
 		  dict->ReleaseReference();
 		dict = 0;
-		if(head != NULL)
-		  head->ReleaseReference();
-		head = 0;
 	}
 	XEND;
 
