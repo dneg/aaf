@@ -243,6 +243,13 @@ public:
   OMStrongReferenceSetElement(OMProperty* property,
                               const wchar_t* name,
                               OMUInt32 localKey,
+                              void* identification,
+                              size_t identificationSize);
+
+    // @cmember Constructor.
+  OMStrongReferenceSetElement(OMProperty* property,
+                              const wchar_t* name,
+                              OMUInt32 localKey,
                               OMUInt32 referenceCount,
                               void* identification,
                               size_t identificationSize);
@@ -269,11 +276,6 @@ public:
 
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
   void* identification(void) const;
-
-  // Special value for the reference count indicating that this
-  // <c OMStrongReferenceSetElement> is not reference counted.
-  //
-  enum {sticky = 0xffffffff};
 
     // @cmember The count of weak references to this
     //          <c OMStrongReferenceSetElement>.
@@ -303,6 +305,11 @@ public:
 
 private:
   // @access Private members.
+
+  // Special value for the reference count indicating that this
+  // <c OMStrongReferenceSetElement> is not reference counted.
+  //
+  enum {sticky = 0xffffffff};
 
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
     //          The element's unique key is in memory even when the

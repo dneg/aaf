@@ -203,7 +203,6 @@ OMStrongReferenceSetProperty<UniqueIdentification,
   SetElement newElement(this,
                         name,
                         localKey,
-                        OMStrongReferenceSetElement::sticky,
                         &key,
                         sizeof(key));
   newElement.setValue(&key, object);

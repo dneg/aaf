@@ -158,6 +158,32 @@ OMStrongReferenceSetElement::OMStrongReferenceSetElement(
                                                      OMProperty* property,
                                                      const wchar_t* name,
                                                      OMUInt32 localKey,
+                                                     void* identification,
+                                                     size_t identificationSize)
+: OMStrongReferenceVectorElement(property, name, localKey),
+  _identification(0),
+  _identificationSize(identificationSize),
+  _referenceCount(sticky)
+{
+  TRACE("OMStrongReferenceSetElement::OMStrongReferenceSetElement");
+
+  _identification = new OMByte[identificationSize];
+  ASSERT("Valid heap pointer", _identification != 0);
+  memcpy(_identification, identification, _identificationSize);
+}
+
+  // @mfunc Constructor.
+  //   @parm The <c OMProperty> (a set property) that contains this
+  //         <c OMStrongReferenceSetElement>.
+  //   @parm The name of this <c OMStrongReferenceSetElement>.
+  //   @parm The local key of this <c OMStrongReferenceSetElement> within
+  //         it's set.
+  //   @parm The unique key of this <c OMStrongReferenceSetElement>.
+  //   @parm TBS
+OMStrongReferenceSetElement::OMStrongReferenceSetElement(
+                                                     OMProperty* property,
+                                                     const wchar_t* name,
+                                                     OMUInt32 localKey,
                                                      OMUInt32 referenceCount,
                                                      void* identification,
                                                      size_t identificationSize)
