@@ -38,6 +38,7 @@ using namespace std;
 #include "ModuleTest.h"
 #include "AAFDefUIDs.h"
 #include "AAFFileMode.h"
+#include "AAFFileKinds.h"
 
 #include "CAAFBuiltinDefs.h"
 
@@ -163,7 +164,7 @@ static const 	aafMobID_t	TEST_MobID =
 {0xfd3cc302, 0x03fe, 0x11d4, 0x8e, 0x3d, 0x00, 0x90, 0x27, 0xdf, 0xca, 0x7c}};
 
 
-static HRESULT CreateAAFFile(aafWChar * pFileName)
+static HRESULT CreateAAFFile(aafWChar * pFileName, bool useEx )
 {
 	IAAFFile *					pFile = NULL;
 	bool bFileOpen = false;
@@ -196,7 +197,13 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	  checkModeFlags ();
 
 	  // Create the file.
-	  checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+	  if ( useEx ) {
+	    checkResult(AAFFileOpenNewModify(pFileName, 0, &ProductInfo, &pFile));
+	  }
+	  else {
+	    aafUID_t fileKind = aafFileKindAafSSBinary;
+	    checkResult(AAFFileOpenNewModifyEx(pFileName, &fileKind, 0, &ProductInfo, &pFile));
+	  }
 	  bFileOpen = true;
   
 	  // We can't really do anthing in AAF without the header.
@@ -339,16 +346,25 @@ extern "C" HRESULT CAAFFile_test(testMode_t mode);
 extern "C" HRESULT CAAFFile_test(testMode_t mode)
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
+	HRESULT hrex = AAFRESULT_NOT_IMPLEMENTED;
  	aafWChar * pFileName = L"AAFFileTest.aaf";
+ 	aafWChar * pFileNameEx = L"AAFFileTestEx.aaf";
 
 	try
 	{
-		if(mode == kAAFUnitTestReadWrite)
-			hr = CreateAAFFile(pFileName);
-		else
-			hr = AAFRESULT_SUCCESS;
-		if(hr == AAFRESULT_SUCCESS)
-			hr = ReadAAFFile( pFileName );
+  	        if(mode == kAAFUnitTestReadWrite) {
+			hr = CreateAAFFile(pFileName, false );
+			hrex = CreateAAFFile(pFileNameEx, true );
+	        }
+		else {
+			hr   = AAFRESULT_SUCCESS;
+			hrex = AAFRESULT_SUCCESS;
+		}
+
+		if(hr == AAFRESULT_SUCCESS) {
+			hr   = ReadAAFFile( pFileName );
+			hrex = ReadAAFFile( pFileNameEx );
+		}
 	}
 	catch (...)
 	{
@@ -357,7 +373,7 @@ extern "C" HRESULT CAAFFile_test(testMode_t mode)
 	  hr = AAFRESULT_TEST_FAILED;
 	}
 
-	if (SUCCEEDED(hr))
+	if (SUCCEEDED(hr) && SUCCEEDED(hrex) )
 	{
 		// Open() and SaveCopyAs() method were not in the current version
 		// of the toolkit at the time this module test was written.
