@@ -49,7 +49,7 @@ all : $(AAFSDKBINDIR)/ComModAAF$(EXE)
 # $(AAFSDKBINDIR)/ComModAAF$(EXE) : $(CXXOBJS) ModuleTests
 $(AAFSDKBINDIR)/ComModAAF$(EXE) : $(CXXOBJS) $(CXXOBJS2)
 	$(LD) $(CXXOBJS) $(CXXOBJS2) \
-	-L$(AAFSDKLIBDIR) -laaflib -laafiid -o $@
+	-L$(AAFSDKLIBDIR) -laaflib -laafiid $(LIBCIO) -o $@
 
 
 #.PHONY : ModuleTests
