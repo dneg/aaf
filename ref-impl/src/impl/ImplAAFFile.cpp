@@ -21,8 +21,10 @@
 #include "AAFDataDefinition.h"
 #include "AAFSession.h"
 #include "ImplAAFSession.h"
+#include "ImplAAFHeader.h"
 #include "AAFUtils.h"
 #include "aafErr.h"
+//#include "aafDefs.h"
 
 #include <assert.h>
 
@@ -44,7 +46,7 @@ void ImplAAFFile::InitContainer (void * pContainer)
 }
 
 
-class IAAFObject;
+struct  IAAFObject;
 
 void * ImplAAFFile::GetContainer ()
 {
@@ -65,7 +67,6 @@ void * ImplAAFFile::GetContainer ()
 	
 #if FULL_TOOLKIT
 	AAFFile *tstFile;
-	aafAssertValidFHdl(this);
   clearBentoErrors();
   aafAssert((_topMedia == NULL) || (_closeMediaProc != NULL), 
 				  this, OM_ERR_MEDIA_CANNOT_CLOSE);
@@ -213,7 +214,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 								   openType_t type)
 {
 	OMLRefCon        	myRefCon = NULL;
-	AAFHeader *     	head;
+	ImplAAFHeader		*head;
 	aafErr_t      		status, finalStatus = OM_ERR_NONE;
 	aafInt32			errnum;
 
@@ -279,14 +280,16 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 #endif
 		}
 		
-#if FULL_TOOLKIT
 		/* This is a little bit of a catch-22, since we're setting
 		 * the rev "before" we can verify that the HEAD object is a head
 		 * object.   But, we need head object to get the rev! */
-		head = new AAFHeader(this, (OMLObject)_container->cmFindObject(1));
-		head->Load(this);
+		head = new ImplAAFHeader();
+//!!!		this, (OMLObject)_container->cmFindObject(1));
+//!!!		head->Load(this);
+		_head = head;
 		/* We now use datakinds in the whole API, not just 2.x
 		 */
+#if FULL_TOOLKIT
 		_head->DatakindLookup(NODATAKIND, &_nilKind, &status);
 		CHECK(status);
 		_head->DatakindLookup(PICTUREKIND, &_pictureKind, &status);
@@ -307,9 +310,7 @@ AAFRESULT ImplAAFFile::InternOpenFile(aafDataBuffer_t stream,
 		/* Reset to previous state before returning with error */
 		if (session && this)
 		{
-#if FULL_TOOLKIT
 			delete head;
-#endif
 
 #ifdef AAF_ERROR_TRACE
 		  if(_stackTrace != NULL)
@@ -361,7 +362,7 @@ AAFRESULT ImplAAFFile::Create(
 			aafFileRev_t		rev)
 {
 	OMLRefCon        myRefCon;
-	AAFHeader *     head;
+	ImplAAFHeader *     head;
 	aafErr_t		status;
 
 	XPROTECT((ImplAAFFile*)NULL)
@@ -399,11 +400,11 @@ AAFRESULT ImplAAFFile::Create(
 		if(_container == NULL)
 			RAISE(OM_ERR_BADOPEN);
 	
-#if FULL_TOOLKIT
-		head = new AAFHeader(this, (OMLObject)_container->cmFindObject(1));
+		head = new ImplAAFHeader();		//!!!this, (OMLObject)_container->cmFindObject(1));
 		_head = head;
 		if (head == NULL)
 		  RAISE(OM_ERR_BADHEAD);
+#if FULL_TOOLKIT
 		aafCheckBentoRaiseError(this, OM_ERR_BADHEAD);
 	
 		_head = head;
@@ -498,20 +499,18 @@ AAFRESULT ImplAAFFile::OpenModify(
 	{
 		CHECK(InternOpenFile(stream, session,
 				 (OMLContainerUseMode) kOMLReuseFreeSpace, kOmModify));
-#if FULL_TOOLKIT
 		CHECK(_head->SetToolkitRevisionCurrent());
 		
 		/* NOTE: If modifying an existing file WITHOUT an IDNT object, add a
 		 * dummy IDNT object to indicate that this program was not the creator.
 		 */
-		CHECK(_head->GetNumIdent(&numIdent));
+		CHECK(_head->GetNumIdentifications(&numIdent));
 		if(numIdent == 0)
 		{
-			_head->AddIDENTObject(NULL);
+			_head->AddIdentificationObject((aafProductIdentification_t *)NULL);
 		}
 		/* Now, always add the information from THIS application */
-		_head->AddIDENTObject(session->GetDefaultIdent());
-#endif
+		_head->AddIdentificationObject(session->GetDefaultIdent());
 	}
 	XEXCEPT
 	  {
