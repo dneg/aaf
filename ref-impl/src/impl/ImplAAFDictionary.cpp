@@ -922,6 +922,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (NULL == pDataDef)
 	return AAFRESULT_NULL_PARAM;
 	
+  if (pDataDef->attached())
+	return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
   // Get the AUID of the new type to register.
   aafUID_t newAUID;
   HRESULT hr = pDataDef->GetAUID(&newAUID);
@@ -1038,6 +1041,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (NULL == pOperationDef)
 		return AAFRESULT_NULL_PARAM;
+
+	if (pOperationDef->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	_operationDefinitions.appendValue(pOperationDef);
 	// trr - We are saving a copy of pointer in _pluginDefinitions
@@ -1220,6 +1226,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (NULL == pPlugDef)
 		return AAFRESULT_NULL_PARAM;
 
+	if (pPlugDef->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	_codecDefinitions.appendValue(pPlugDef);
 	// trr - We are saving a copy of pointer in _pluginDefinitions
 	// so we need to bump its reference count.
@@ -1322,6 +1331,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (NULL == pPlugDef)
 		return AAFRESULT_NULL_PARAM;
+
+	if (pPlugDef->attached())
+		return AAFRESULT_OBJECT_NOT_FOUND;
 
 	_containerDefinitions.appendValue(pPlugDef);
 	// trr - We are saving a copy of pointer in _pluginDefinitions
@@ -1569,6 +1581,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if (NULL == pInterpolationDef)
 		return AAFRESULT_NULL_PARAM;
 
+	if (pInterpolationDef->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	_interpolationDefinitions.appendValue(pInterpolationDef);
 	// trr - We are saving a copy of pointer in _pluginDefinitions
 	// so we need to bump its reference count.
@@ -1657,6 +1672,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 	if (NULL == pDesc)
 		return AAFRESULT_NULL_PARAM;
+
+	if (pDesc->attached())
+		return AAFRESULT_OBJECT_ALREADY_ATTACHED;
 
 	_pluginDefinitions.appendValue(pDesc);
 	// trr - We are saving a copy of pointer in _pluginDefinitions
