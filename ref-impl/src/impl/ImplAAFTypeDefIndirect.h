@@ -40,6 +40,7 @@
 
 // Forward declarations:
 class ImplAAFPropertyValue;
+class ImplAAFDictioanry;
 
 
 
@@ -173,6 +174,19 @@ public:
                            OMByteOrder byteOrder) const;
 
 
+  //****************
+  // Initialize() 
+  //   Called when we initialize as one of the "builtin" types.
+  //
+  AAFRESULT
+    Initialize
+        (// @parm [in, ref] auid to be used to identify this type
+         aafUID_constref  id,
+
+         // @parm [in, ref, string] friendly name of this type definition
+         aafCharacter_constptr  pTypeName);
+
+
 
   //****************
   // pvtInitialize() 
@@ -181,10 +195,16 @@ public:
   AAFRESULT
     pvtInitialize
         (// @parm [in, ref] auid to be used to identify this type
-         aafUID_constref  id,
+       aafUID_constref  id,
 
-         // @parm [in, ref, string] friendly name of this type definition
-         aafCharacter_constptr  pTypeName);
+       // @parm [in, ref, string] friendly name of this type definition
+       aafCharacter_constptr  pTypeName,
+       
+       // @parm [in] the type definition for kAAFTypeID_AUID.
+       ImplAAFTypeDef *pTypeDefAUID,
+
+       // @parm [in] the dictionary for this instance
+       ImplAAFDictionary *pDictionary);
 
 
   //
@@ -239,6 +259,14 @@ public:
   virtual bool IsFixedArrayable () const;
   virtual bool IsVariableArrayable () const;
   virtual bool IsStringable () const;
+
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
 
 protected:
   // Utility (possibly temporary) that returns true if the given 

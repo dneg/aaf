@@ -114,17 +114,44 @@ public:
 public:
 
   //****************
-  // pvtInitialize() 
+  // Initialize() 
   //   Called when we initialize as one of the "builtin" types.
   //
   AAFRESULT
-    pvtInitialize
+    Initialize
         (// @parm [in, ref] auid to be used to identify this type
          aafUID_constref  id,
 
          // @parm [in, ref, string] friendly name of this type definition
          aafCharacter_constptr  pTypeName);
 
+
+  //****************
+  // pvtInitialize() 
+  //   Called when we initialize as one of the "builtin" types.
+  //
+  AAFRESULT
+    pvtInitialize
+        (// @parm [in, ref] auid to be used to identify this type
+       aafUID_constref  id,
+
+       // @parm [in, ref, string] friendly name of this type definition
+       aafCharacter_constptr  pTypeName,
+       
+       // @parm [in] the type definition for kAAFTypeID_AUID.
+       ImplAAFTypeDef *pTypeDefAUID,
+
+       // @parm [in] the dictionary for this instance
+       ImplAAFDictionary *pDictionary);
+
+
+
+  // override from OMStorable.
+  virtual const OMClassId& classId(void) const;
+
+  // Override callbacks from OMStorable
+  virtual void onSave(void* clientContext) const;
+  virtual void onRestore(void* clientContext) const;
 
 protected:
   // Find the actual type definition from the dictionary.
