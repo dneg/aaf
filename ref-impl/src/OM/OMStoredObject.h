@@ -152,7 +152,7 @@ public:
     // @cmember Restore a collection (vector/set) of weak references.
   void restore(OMPropertyId propertyId,
                OMStoredForm storedForm,
-               char*& collectionName,
+               const char* collectionName,
                size_t nameSize,
                const OMUniqueObjectIdentification*& index,
                size_t &count,
