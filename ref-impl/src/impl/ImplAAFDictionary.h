@@ -524,6 +524,10 @@ public:
   // meta data: classes, properties and types). This method
   // can only be called once.
   void setMetaDictionary(ImplAAFMetaDictionary *metaDictionary);
+AAFRESULT PvtIsPropertyDefDuplicate(
+							aafUID_t propertyDefID,
+							ImplAAFClassDef *correctClass,
+							bool	*isDuplicate);
 
 
   //****************
