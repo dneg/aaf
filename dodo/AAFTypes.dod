@@ -835,6 +835,13 @@ typedef struct _aafSearchDictionaryCrit_t
     } ;
 
 } aafSearchDictionaryCrit_t;
+
+
+//********
+//
+// Enum indicating general category of stored (property) data
+//
+//
 AD_CPP_QUOTE(#endif)
 AD_CPP_QUOTE(//)
 AD_CPP_QUOTE(typedef struct _aafSearchDictionaryCrit_t)
@@ -849,6 +856,35 @@ AD_CPP_QUOTE(\		aafUID_t	* typeID;)
 AD_CPP_QUOTE(\		aafString_t * name;)
 AD_CPP_QUOTE(\	} tags;)
 AD_CPP_QUOTE(} aafSearchDictionaryCrit_t;)
+
+
+
+AD_CPP_QUOTE(#if 0)
+typedef enum _eAAFTypeCategory_t
+{
+  kAAFTypeCategoryInt          = 0, // any signed integral type
+  kAAFTypeCategoryUInt         = 1, // any unsigned integral type
+  kAAFTypeCategoryArray        = 2, // an array of non-object types
+  kAAFTypeCategoryStruct       = 3, // a structure containing any type
+  kAAFTypeCategoryObject       = 4, // an object (which has behavior)
+  kAAFTypeCategoryObjectVector = 5, // an ordered collection of
+									 // objects
+  kAAFTypeCategoryMedia        = 6   // potentially huge amount of data
+} eAAFTypeCategory_t;
+
+AD_CPP_QUOTE(#endif)
+AD_CPP_QUOTE(//)
+AD_CPP_QUOTE(typedef enum _eAAFTypeCategory_t)
+AD_CPP_QUOTE({)
+AD_CPP_QUOTE(  kAAFTypeCategoryInt          = 0\,	// any signed integral type)
+AD_CPP_QUOTE(  kAAFTypeCategoryUInt         = 1\,	// any unsigned integral type)
+AD_CPP_QUOTE(  kAAFTypeCategoryArray        = 2\, // an array of non-object types)
+AD_CPP_QUOTE(  kAAFTypeCategoryStruct       = 3\, // a structure containing any type)
+AD_CPP_QUOTE(  kAAFTypeCategoryObject       = 4\, // an object \(which has behavior\))
+AD_CPP_QUOTE(  kAAFTypeCategoryObjectVector = 5\, // an ordered collection of)
+AD_CPP_QUOTE(									// objects)
+AD_CPP_QUOTE(  kAAFTypeCategoryMedia        = 6  // potentially huge amount of data)
+AD_CPP_QUOTE(} eAAFTypeCategory_t;)
 
 
 
