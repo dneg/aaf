@@ -33,6 +33,9 @@
 // Include the AAF interface declarations.
 #include "AAF.h"
 
+#if defined(macintosh) || defined(_MAC)
+#include <console.h> /* Mac command line window */
+#endif
 
 static void     FatalErrorCode(HRESULT errcode, int line, char *file)
 {
@@ -215,6 +218,12 @@ struct CAAFInitialize
 
 int main(int argumentCount, char* argumentVector[])
 {
+  /* console window for mac */
+
+  #if defined(macintosh) || defined(_MAC)
+  argumentCount = ccommand(&argumentVector);
+  #endif
+
   if (argumentCount != 2) {
     fprintf(stderr, "Error : wrong number of arguments\n");
     return(1);
