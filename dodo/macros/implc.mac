@@ -17,6 +17,9 @@
 #ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 
+#import macros/base.mac
+
+
 #ccccccccccccccccccccccccccc
 #c
 #c Includes another file.
@@ -170,7 +173,7 @@ Impl.this-module::~Impl.this-module ()
 {}
 
 
-void Impl.this-module::InitComParent (IAAFObject * pComParent)
+void Impl.this-module::InitComParent (I.this-module * pComParent)
 {
   assert (! _pComParent);
   _pComParent = pComParent;
@@ -179,7 +182,7 @@ void Impl.this-module::InitComParent (IAAFObject * pComParent)
 }
 
 
-void Impl.this-module::InitCppParent (AAFObject * pCppParent)
+void Impl.this-module::InitCppParent (.this-module * pCppParent)
 {
   assert (! _pCppParent);
   _pCppParent = pCppParent;
@@ -209,16 +212,19 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes one argument.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD1 06
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c
+#c Macro Arg 07: method description
+#c
+#startm AD_XMETHOD1 07
 AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/)
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -229,21 +235,21 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes two arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD2 10
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c
+#c Macro Arg 12: method description
+#c
+#startm AD_XMETHOD2 12
 AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/)
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -254,26 +260,22 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes three arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD3 14
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11, /*%12*/)
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c
+#c Macro Arg 17: method description
+#c
+#startm AD_XMETHOD3 17
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -284,31 +286,24 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes four arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD4 18
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11 /*%12*/,
-                           %15 /*%16*/)
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c
+#c Macro Arg 22: method description
+#c
+#startm AD_XMETHOD4 22
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/,
+                           %19 .%18-indirection /*%20*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -319,36 +314,26 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes five arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD5 22
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11 /*%12*/,
-                           %15 /*%16*/,
-                           %19 /*%20*/)
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c
+#c Macro Arg 27: method description
+#c
+#startm AD_XMETHOD5 27
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/,
+                           %19 .%18-indirection /*%20*/,
+                           %24 .%23-indirection /*%25*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -359,92 +344,62 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes six arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD6 26
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11 /*%12*/,
-                           %15 /*%16*/,
-                           %19 /*%20*/,
-                           %23 /*%24*/)
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c
+#c Macro Arg 32: method description
+#c
+#startm AD_XMETHOD6 32
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/,
+                           %19 .%18-indirection /*%20*/,
+                           %24 .%23-indirection /*%25*/,
+                           %29 .%28-indirection /*%30*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes seven arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: method description
+#c Macro Arg 01: method name
 #c
-#c TomR:980713: Added
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
 #c
-#startm AD_METHOD7 30
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11 /*%12*/,
-                           %15 /*%16*/,
-                           %19 /*%20*/,
-                           %23 /*%24*/,
-                           %27 /*%28*/)
+#c Macro Arg 37: method description
+#c
+#startm AD_XMETHOD7 37
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/,
+                           %19 .%18-indirection /*%20*/,
+                           %24 .%23-indirection /*%25*/,
+                           %29 .%28-indirection /*%30*/,
+                           %34 .%33-indirection /*%35*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -455,53 +410,32 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes eight arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: method description
+#c Macro Arg 01: method name
 #c
-#c TomR:980713: Added
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
 #c
-#startm AD_METHOD8 34
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11 /*%12*/,
-                           %15 /*%16*/,
-                           %19 /*%20*/,
-                           %23 /*%24*/,
-                           %27 /*%28*/,
-                           %31 /*%32*/)
+#c Macro Arg 42: method description
+#c
+#startm AD_XMETHOD8 42
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/,
+                           %19 .%18-indirection /*%20*/,
+                           %24 .%23-indirection /*%25*/,
+                           %29 .%28-indirection /*%30*/,
+                           %34 .%33-indirection /*%35*/,
+                           %39 .%38-indirection /*%40*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
@@ -512,193 +446,121 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes nine arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD9 38
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11 /*%12*/,
-                           %15 /*%16*/,
-                           %19 /*%20*/,
-                           %23 /*%24*/,
-                           %27 /*%28*/,
-                           %31 /*%32*/,
-                           %35 /*%36*/)
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c
+#c Macro Arg 47: method description
+#c
+#startm AD_XMETHOD9 47
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/,
+                           %19 .%18-indirection /*%20*/,
+                           %24 .%23-indirection /*%25*/,
+                           %29 .%28-indirection /*%30*/,
+                           %34 .%33-indirection /*%35*/,
+                           %39 .%38-indirection /*%40*/,
+                           %44 .%43-indirection /*%45*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes ten arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: argument modifiers (e.g. [in])
-#c Argument39: argument type
-#c Argument40: argument name
-#c Argument41: argument comment
-#c Argument42: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD_10 42
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11 /*%12*/,
-                           %15 /*%16*/,
-                           %19 /*%20*/,
-                           %23 /*%24*/,
-                           %27 /*%28*/,
-                           %31 /*%32*/,
-                           %35 /*%36*/,
-                           %39 /*%40*/)
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c metharg 10   47           48          49      50      51
+#c
+#c Macro Arg 52: method description
+#c
+#startm AD_XMETHOD_10 52
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/,
+                           %19 .%18-indirection /*%20*/,
+                           %24 .%23-indirection /*%25*/,
+                           %29 .%28-indirection /*%30*/,
+                           %34 .%33-indirection /*%35*/,
+                           %39 .%38-indirection /*%40*/,
+                           %44 .%43-indirection /*%45*/,
+                           %49 .%48-indirection /*%50*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes eleven arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: argument modifiers (e.g. [in])
-#c Argument39: argument type
-#c Argument40: argument name
-#c Argument41: argument comment
-#c Argument42: argument modifiers (e.g. [in])
-#c Argument43: argument type
-#c Argument44: argument name
-#c Argument45: argument comment
-#c Argument46: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD_11 46
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::%01 (%03 /*%04*/,
-                           %07 /*%08*/,
-                           %11 /*%12*/,
-                           %15 /*%16*/,
-                           %19 /*%20*/,
-                           %23 /*%24*/,
-                           %27 /*%28*/,
-                           %31 /*%32*/,
-                           %35 /*%36*/,
-                           %39 /*%40*/,
-                           %43 /*%44*/)
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c metharg 10   47           48          49      50      51
+#c metharg 11   52           53          54      55      56
+#c
+#c Macro Arg 57: method description
+#c
+#startm AD_XMETHOD_11 57
+    Impl.this-module::%01 (%04 .%03-indirection /*%05*/,
+                           %09 .%08-indirection /*%10*/,
+                           %14 .%13-indirection /*%15*/,
+                           %19 .%18-indirection /*%20*/,
+                           %24 .%23-indirection /*%25*/,
+                           %29 .%28-indirection /*%30*/,
+                           %34 .%33-indirection /*%35*/,
+                           %39 .%38-indirection /*%40*/,
+                           %44 .%43-indirection /*%45*/,
+                           %49 .%48-indirection /*%50*/,
+                           %54 .%53-indirection /*%55*/)
 {
   return AAFRESULT_NOT_IMPLEMENTED;
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -718,7 +580,9 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #startm AD_ROOT_CLASS_END 00
 
-IAAFObject * Impl.this-module::GetCOMParent ()
+class IAAFObject;
+
+I.this-module * Impl.this-module::GetCOMParent ()
 {
   assert (_pComParent);
   assert (! _pCppParent);
@@ -726,7 +590,7 @@ IAAFObject * Impl.this-module::GetCOMParent ()
 }
 
 
-AAFObject * Impl.this-module::GetCppParent ()
+.this-module * Impl.this-module::GetCppParent ()
 {
   assert (! _pComParent);
   assert (_pCppParent);
@@ -748,17 +612,18 @@ AAFObject * Impl.this-module::GetCppParent ()
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a constructor which takes one argument.
-#c Constructor name is assumed to be Impl.this-module.
+#c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument modifiers (e.g. [in])
-#c Argument2: argument type
-#c Argument3: argument name
-#c Argument4: argument comment
-#c Argument5: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
 #c
-#startm AD_CONSTRUCTOR1 05
-AAFRESULT STDMETHODCALLTYPE
-    Impl.this-module::.this-module (%02 %03)
+#c Macro Arg 06: method description
+#c
+#startm AD_XCONSTRUCTOR1 06
+Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/)
 {}
 #endm
 
@@ -768,18 +633,18 @@ AAFRESULT STDMETHODCALLTYPE
 #c Inserts declaration for a constructor which takes two arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
 #c
-#startm AD_CONSTRUCTOR2 09
-    Impl.this-module::.this-module (%02 %03,%06 %07)
+#c Macro Arg 11: method description
+#c
+#startm AD_XCONSTRUCTOR2 11
+Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/,
+	%08 .%07-indirection /*%09*/)
 {}
 #endm
 
@@ -789,24 +654,20 @@ AAFRESULT STDMETHODCALLTYPE
 #c Inserts declaration for a constructor which takes three arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument1 modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument2 modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: argument3 modifiers (e.g. [in])
-#c Argument10: argument3 type
-#c Argument11: argument3 name
-#c Argument12: argument3 comment
-#c Argument13: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c metharg 3    11           12          13      14      15
 #c
-#startm AD_CONSTRUCTOR3 13
-    Impl.this-module::.this-module (%02 %03,
-                                %06 %07,
-                                %10 %11)
+#c Macro Arg 16: method description
+#c
+#startm AD_XCONSTRUCTOR3 16
+Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/,
+	%08 .%07-indirection /*%09*/,
+	%13 .%12-indirection /*%14*/)
 {}
 #endm
 
@@ -816,29 +677,22 @@ AAFRESULT STDMETHODCALLTYPE
 #c Inserts declaration for a constructor which takes four arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument1 modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument2 modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: argument3 modifiers (e.g. [in])
-#c Argument10: argument3 type
-#c Argument11: argument3 name
-#c Argument12: argument3 comment
-#c Argument13: argument4 modifiers (e.g. [in])
-#c Argument14: argument4 type
-#c Argument15: argument4 name
-#c Argument16: argument4 comment
-#c Argument17: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c metharg 3    11           12          13      14      15
+#c metharg 4    16           17          18      19      20
 #c
-#startm AD_CONSTRUCTOR4 17
-    Impl.this-module::.this-module (%02 %03,
-                                %06 %07,
-                                %10 %11,
-                                %14 %15)
+#c Macro Arg 21: method description
+#c
+#startm AD_XCONSTRUCTOR4 21
+Impl.this-module::Impl.this-module (%03 .%02-indirection /*%04*/,
+	%08 .%07-indirection /*%09*/,
+	%13 .%12-indirection /*%14*/,
+	%18 .%17-indirection /*%19*/)
 {}
 #endm
 

@@ -17,6 +17,9 @@
 #ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
 
+#import macros/base.mac
+
+
 #ccccccccccccccccccccccccccc
 #c
 #c Includes another file.
@@ -28,6 +31,8 @@
 #c
 #startm AD_INCLUDE 01
 #endm
+
+
 #ccccccccccccccccccccccccccc
 #c
 #c Types definitions should only be used by idl and c++ & impl headers
@@ -42,6 +47,7 @@
 #startm AD_TYPES_BEGIN 11
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Ends a types definition
@@ -52,6 +58,7 @@
 #c
 #startm AD_TYPES_END 00
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -69,6 +76,7 @@
 #startm AD_DECLARE_FORWARD_AAFTYPES 01
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Argument1: text to be quoted.
@@ -77,6 +85,7 @@
 #c
 #startm AD_CPP_QUOTE 01
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -91,6 +100,7 @@
 #endif
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Class UUID.
@@ -100,6 +110,7 @@
 #startm AD_CLASS_UUID 11
 #endm
 
+
 #ccccccccccccccccccccccccccc
 #c
 #c Default UUID.
@@ -108,6 +119,7 @@
 #c
 #startm AD_DEFAULT_UUID 11
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
@@ -146,7 +158,7 @@
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
-      newRep->InitCppParent (this);
+      newRep->InitParent (this);
 #endif
     }
 }
@@ -191,7 +203,7 @@
       newRep = new Impl.this-module;
       assert (newRep);
       InitRep (newRep);
-      newRep->InitCppParent (this);
+      newRep->InitParent (this);
 #endif
     }
 }
@@ -212,8 +224,9 @@ void .this-module::InitRep (Impl.this-module * newRep)
 {
 #ifdef BOB_TEST
   assert (newRep);
+  assert (_rep);
   _rep = newRep;
-  newRep->InitCppParent (this);
+  newRep->InitParent (this);
 #endif
 }
 
@@ -260,27 +273,36 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes one argument.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD1 06
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c
+#c Macro Arg 07: method description
+#c
+#startm AD_XMETHOD1 07
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04)
+    .this-module::%01 (%04 .%03-indirection %05)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04);
+
+.%03-setup(%04, %05)
+  stat = ptr->%01 (.%03-internalname(%05));
+.%03-cleanup(%04, %05)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -290,31 +312,41 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes two arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD2 10
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c
+#c Macro Arg 12: method description
+#c
+#startm AD_XMETHOD2 12
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -324,35 +356,46 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes three arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD3 14
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c
+#c Macro Arg 17: method description
+#c
+#startm AD_XMETHOD3 17
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10,
+		%14 .%13-indirection %15)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -362,39 +405,51 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes four arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD4 18
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c
+#c Macro Arg 22: method description
+#c
+#startm AD_XMETHOD4 22
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10,
+		%14 .%13-indirection %15,
+		%19 .%18-indirection %20)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12,%16);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+.%18-setup(%19, %20)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15),
+	.%18-internalname(%20));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+.%18-cleanup(%19, %20)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -404,43 +459,56 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes five arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD5 22
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c
+#c Macro Arg 27: method description
+#c
+#startm AD_XMETHOD5 27
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10,
+		%14 .%13-indirection %15,
+		%19 .%18-indirection %20,
+		%24 .%23-indirection %25)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12,%16,%20);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+.%18-setup(%19, %20)
+.%23-setup(%24, %25)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15),
+	.%18-internalname(%20),
+	.%23-internalname(%25));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+.%18-cleanup(%19, %20)
+.%23-cleanup(%24, %25)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -450,218 +518,283 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes six arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD6 26
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c
+#c Macro Arg 32: method description
+#c
+#startm AD_XMETHOD6 32
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10,
+		%14 .%13-indirection %15,
+		%19 .%18-indirection %20,
+		%24 .%23-indirection %25,
+		%29 .%28-indirection %30)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12,%16,%20,%24);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+.%18-setup(%19, %20)
+.%23-setup(%24, %25)
+.%28-setup(%29, %30)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15),
+	.%18-internalname(%20),
+	.%23-internalname(%25),
+	.%28-internalname(%30));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+.%18-cleanup(%19, %20)
+.%23-cleanup(%24, %25)
+.%28-cleanup(%29, %30)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes seven arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD7 30
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c
+#c Macro Arg 37: method description
+#c
+#startm AD_XMETHOD7 37
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24, %27 %28)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10,
+		%14 .%13-indirection %15,
+		%19 .%18-indirection %20,
+		%24 .%23-indirection %25,
+		%29 .%28-indirection %30,
+		%34 .%33-indirection %35)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12,%16,%20,%24,%28);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+.%18-setup(%19, %20)
+.%23-setup(%24, %25)
+.%28-setup(%29, %30)
+.%33-setup(%34, %35)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15),
+	.%18-internalname(%20),
+	.%23-internalname(%25),
+	.%28-internalname(%30),
+	.%33-internalname(%35));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+.%18-cleanup(%19, %20)
+.%23-cleanup(%24, %25)
+.%28-cleanup(%29, %30)
+.%33-cleanup(%34, %35)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes eight arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD8 34
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c
+#c Macro Arg 42: method description
+#c
+#startm AD_XMETHOD8 42
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24, %27 %28,%31 %32)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10,
+		%14 .%13-indirection %15,
+		%19 .%18-indirection %20,
+		%24 .%23-indirection %25,
+		%29 .%28-indirection %30,
+		%34 .%33-indirection %35,
+		%39 .%38-indirection %40)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12,%16,%20,%24,%28,%32);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+.%18-setup(%19, %20)
+.%23-setup(%24, %25)
+.%28-setup(%29, %30)
+.%33-setup(%34, %35)
+.%38-setup(%39, %40)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15),
+	.%18-internalname(%20),
+	.%23-internalname(%25),
+	.%28-internalname(%30),
+	.%33-internalname(%35),
+	.%38-internalname(%40));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+.%18-cleanup(%19, %20)
+.%23-cleanup(%24, %25)
+.%28-cleanup(%29, %30)
+.%33-cleanup(%34, %35)
+.%38-cleanup(%39, %40)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
+
 
 #ccccccccccccccccccccccccccc
 #c
 #c Inserts declaration for a method which takes nine arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD9 38
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c
+#c Macro Arg 47: method description
+#c
+#startm AD_XMETHOD9 47
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24, %27 %28,%31 %32,%35 %36)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10,
+		%14 .%13-indirection %15,
+		%19 .%18-indirection %20,
+		%24 .%23-indirection %25,
+		%29 .%28-indirection %30,
+		%34 .%33-indirection %35,
+		%39 .%38-indirection %40,
+		%44 .%43-indirection %45)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12,%16,%20,%24,%28,%32,%36);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+.%18-setup(%19, %20)
+.%23-setup(%24, %25)
+.%28-setup(%29, %30)
+.%33-setup(%34, %35)
+.%38-setup(%39, %40)
+.%43-setup(%44, %45)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15),
+	.%18-internalname(%20),
+	.%23-internalname(%25),
+	.%28-internalname(%30),
+	.%33-internalname(%35),
+	.%38-internalname(%40),
+	.%43-internalname(%45));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+.%18-cleanup(%19, %20)
+.%23-cleanup(%24, %25)
+.%28-cleanup(%29, %30)
+.%33-cleanup(%34, %35)
+.%38-cleanup(%39, %40)
+.%43-cleanup(%44, %45)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -671,63 +804,81 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes ten arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: argument modifiers (e.g. [in])
-#c Argument39: argument type
-#c Argument40: argument name
-#c Argument41: argument comment
-#c Argument42: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD_10 42
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c metharg 10   47           48          49      50      51
+#c
+#c Macro Arg 52: method description
+#c
+#startm AD_XMETHOD_10 52
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24, %27 %28,%31 %32,%35 %36,%39 %40)
+    .this-module::%01 (%04 .%03-indirection %05,
+		%09 .%08-indirection %10,
+		%14 .%13-indirection %15,
+		%19 .%18-indirection %20,
+		%24 .%23-indirection %25,
+		%29 .%28-indirection %30,
+		%34 .%33-indirection %35,
+		%39 .%38-indirection %40,
+		%44 .%43-indirection %45,
+		%49 .%48-indirection %50)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12,%16,%20,%24,%28,%32,%36,%40);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+.%18-setup(%19, %20)
+.%23-setup(%24, %25)
+.%28-setup(%29, %30)
+.%33-setup(%34, %35)
+.%38-setup(%39, %40)
+.%43-setup(%44, %45)
+.%48-setup(%49, %50)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15),
+	.%18-internalname(%20),
+	.%23-internalname(%25),
+	.%28-internalname(%30),
+	.%33-internalname(%35),
+	.%38-internalname(%40),
+	.%43-internalname(%45),
+	.%48-internalname(%50));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+.%18-cleanup(%19, %20)
+.%23-cleanup(%24, %25)
+.%28-cleanup(%29, %30)
+.%33-cleanup(%34, %35)
+.%38-cleanup(%39, %40)
+.%43-cleanup(%44, %45)
+.%48-cleanup(%49, %50)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -737,67 +888,86 @@ AAFRESULT STDMETHODCALLTYPE
 #c
 #c Inserts declaration for a method which takes eleven arguments.
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: argument modifiers (e.g. [in])
-#c Argument7: argument type
-#c Argument8: argument name
-#c Argument9: argument comment
-#c Argument10: argument modifiers (e.g. [in])
-#c Argument11: argument type
-#c Argument12: argument name
-#c Argument13: argument comment
-#c Argument14: argument modifiers (e.g. [in])
-#c Argument15: argument type
-#c Argument16: argument name
-#c Argument17: argument comment
-#c Argument18: argument modifiers (e.g. [in])
-#c Argument19: argument type
-#c Argument20: argument name
-#c Argument21: argument comment
-#c Argument22: argument modifiers (e.g. [in])
-#c Argument23: argument type
-#c Argument24: argument name
-#c Argument25: argument comment
-#c Argument26: argument modifiers (e.g. [in])
-#c Argument27: argument type
-#c Argument28: argument name
-#c Argument29: argument comment
-#c Argument30: argument modifiers (e.g. [in])
-#c Argument31: argument type
-#c Argument32: argument name
-#c Argument33: argument comment
-#c Argument34: argument modifiers (e.g. [in])
-#c Argument35: argument type
-#c Argument36: argument name
-#c Argument37: argument comment
-#c Argument38: argument modifiers (e.g. [in])
-#c Argument39: argument type
-#c Argument40: argument name
-#c Argument41: argument comment
-#c Argument42: argument modifiers (e.g. [in])
-#c Argument43: argument type
-#c Argument44: argument name
-#c Argument45: argument comment
-#c Argument46: method description
+#c Macro Arg 01: method name
 #c
-#startm AD_METHOD_11 46
+#c Macro arguments 02+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    02           03          04      05      06
+#c metharg 2    07           08          09      10      11
+#c metharg 3    12           13          14      15      16
+#c metharg 4    17           18          19      20      21
+#c metharg 5    22           23          24      25      26
+#c metharg 6    27           28          29      30      31
+#c metharg 7    32           33          34      35      36
+#c metharg 8    37           38          39      40      41
+#c metharg 9    42           43          44      45      46
+#c metharg 10   47           48          49      50      51
+#c metharg 11   52           53          54      55      56
+#c
+#c Macro Arg 57: method description
+#c
+#startm AD_XMETHOD_11 57
 AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 %04, %07 %08, %11 %12, %15 %16, %19 %20, %23 %24, %27 %28,%31 %32,%35 %36,%39 %40,%43 %44)
+    .this-module::%01 (%04 .%03-indirection %05,
+	    %09 .%08-indirection %10,
+        %14 .%13-indirection %15,
+        %19 .%18-indirection %20,
+        %24 .%23-indirection %25,
+        %29 .%28-indirection %30,
+        %34 .%33-indirection %35,
+        %39 .%38-indirection %40,
+        %44 .%43-indirection %45,
+        %49 .%48-indirection %50,
+        %54 .%53-indirection %55)
 {
 #ifdef BOB_TEST
+  AAFRESULT stat;
+
   Impl.this-module * ptr;
   ImplAAFObject * pO;
   pO = GetRepObject ();
   assert (pO);
   ptr = static_cast<Impl.this-module*> (pO);
   assert (ptr);
-  return ptr->%01 (%04,%08,%12,%16,%20,%24,%28,%32,%36,%40,%44);
+
+.%03-setup(%04, %05)
+.%08-setup(%09, %10)
+.%13-setup(%14, %15)
+.%18-setup(%19, %20)
+.%23-setup(%24, %25)
+.%28-setup(%29, %30)
+.%33-setup(%34, %35)
+.%38-setup(%39, %40)
+.%43-setup(%44, %45)
+.%48-setup(%49, %50)
+.%53-setup(%54, %55)
+  stat = ptr->%01 (.%03-internalname(%05),
+	.%08-internalname(%10),
+	.%13-internalname(%15),
+	.%18-internalname(%20),
+	.%23-internalname(%25),
+	.%28-internalname(%30),
+	.%33-internalname(%35),
+	.%38-internalname(%40),
+	.%43-internalname(%45),
+	.%48-internalname(%50),
+	.%53-internalname(%55));
+.%03-cleanup(%04, %05)
+.%08-cleanup(%09, %10)
+.%13-cleanup(%14, %15)
+.%18-cleanup(%19, %20)
+.%23-cleanup(%24, %25)
+.%28-cleanup(%29, %30)
+.%33-cleanup(%34, %35)
+.%38-cleanup(%39, %40)
+.%43-cleanup(%44, %45)
+.%48-cleanup(%49, %50)
+.%53-cleanup(%54, %55)
+  return stat;
 #else
-    return AAFRESULT_NOT_IMPLEMENTED;
+  return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -838,20 +1008,26 @@ AAFRESULT STDMETHODCALLTYPE
 #c Inserts declaration for a constructor which takes one argument.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument modifiers (e.g. [in])
-#c Argument2: argument type
-#c Argument3: argument name
-#c Argument4: argument comment
-#c Argument5: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
 #c
-#startm AD_CONSTRUCTOR1 05
-.this-module::.this-module (%02 %03)
+#c Macro Arg 06: method description
+#c
+#startm AD_XCONSTRUCTOR1 06
+.this-module::.this-module (%03 .%02-indirection %04)
 {
 #ifdef BOB_TEST
+.%02-setup(%03, %04)
   Impl.this-module * newRep;
-  newRep = new Impl.this-module (%03);
+  newRep = new Impl.this-module (%04);
   assert (newRep);
   InitRep (newRep);
+.%02-cleanup(%03, %04)
+#else
+  // return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -862,24 +1038,32 @@ AAFRESULT STDMETHODCALLTYPE
 #c Inserts declaration for a constructor which takes two arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument1 modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument2 modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
 #c
-#startm AD_CONSTRUCTOR2 09
-.this-module::.this-module (%02 %03,%06 %07)
+#c Macro Arg 11: method description
+#c
+#startm AD_XCONSTRUCTOR2 11
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::.this-module (%03 .%02-indirection %04,
+								%08 .%07-indirection %09)
 {
 #ifdef BOB_TEST
+.%02-setup(%03, %04)
+.%07-setup(%08, %09)
   Impl.this-module * newRep;
-  newRep = new Impl.this-module (%03, %07);
+  newRep = new Impl.this-module (%04,
+								 %09);
   assert (newRep);
   InitRep (newRep);
+.%02-cleanup(%03, %04)
+.%07-cleanup(%08, %09)
+#else
+  // return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -890,30 +1074,37 @@ AAFRESULT STDMETHODCALLTYPE
 #c Inserts declaration for a constructor which takes three arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument1 modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument2 modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: argument3 modifiers (e.g. [in])
-#c Argument10: argument3 type
-#c Argument11: argument3 name
-#c Argument12: argument3 comment
-#c Argument13: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c metharg 3    11           12          13      14      15
 #c
-#startm AD_CONSTRUCTOR3 13
-.this-module::.this-module (%02 %03,
-                            %06 %07,
-                            %10 %11)
+#c Macro Arg 16: method description
+#c
+#startm AD_XCONSTRUCTOR3 16
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::.this-module (%03 .%02-indirection %04,
+								%08 .%07-indirection %09,
+								%13 .%12-indirection %14)
 {
 #ifdef BOB_TEST
+.%02-setup(%03, %04)
+.%07-setup(%08, %09)
+.%12-setup(%13, %14)
   Impl.this-module * newRep;
-  newRep = new Impl.this-module (%03, %07, %11);
+  newRep = new Impl.this-module (%04,
+								 %09,
+								 %14);
   assert (newRep);
   InitRep (newRep);
+.%02-cleanup(%03, %04)
+.%07-cleanup(%08, %09)
+.%12-cleanup(%13, %14)
+#else
+  // return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -924,35 +1115,42 @@ AAFRESULT STDMETHODCALLTYPE
 #c Inserts declaration for a constructor which takes four arguments.
 #c Constructor name is assumed to be .this-module.
 #c
-#c Argument1: argument1 modifiers (e.g. [in])
-#c Argument2: argument1 type
-#c Argument3: argument1 name
-#c Argument4: argument1 comment
-#c Argument5: argument2 modifiers (e.g. [in])
-#c Argument6: argument2 type
-#c Argument7: argument2 name
-#c Argument8: argument2 comment
-#c Argument9: argument3 modifiers (e.g. [in])
-#c Argument10: argument3 type
-#c Argument11: argument3 name
-#c Argument12: argument3 comment
-#c Argument13: argument4 modifiers (e.g. [in])
-#c Argument14: argument4 type
-#c Argument15: argument4 name
-#c Argument16: argument4 comment
-#c Argument17: constructor description
+#c Macro arguments 01+:
+#c 
+#c meth arg #   arg modfrs   obj style   type    name    arg cmnt
+#c ----------   ----------   ---------   ----    ----    --------
+#c metharg 1    01           02          03      04      05
+#c metharg 2    06           07          08      09      10
+#c metharg 3    11           12          13      14      15
+#c metharg 4    16           17          18      19      20
 #c
-#startm AD_CONSTRUCTOR4 17
-.this-module::.this-module (%02 %03,
-                            %06 %07,
-                            %10 %11,
-                            %14 %15)
+#c Macro Arg 21: method description
+#c
+#startm AD_XCONSTRUCTOR4 21
+AAFRESULT STDMETHODCALLTYPE
+    .this-module::.this-module (%03 .%02-indirection %04,
+								%08 .%07-indirection %09,
+								%13 .%12-indirection %14,
+								%18 .%17-indirection %19)
 {
 #ifdef BOB_TEST
+.%02-setup(%03, %04)
+.%07-setup(%08, %09)
+.%12-setup(%13, %14)
+.%17-setup(%18, %19)
   Impl.this-module * newRep;
-  newRep = new Impl.this-module (%03, %07, %11, %15);
+  newRep = new Impl.this-module (%04,
+								 %09,
+								 %14,
+								 %19);
   assert (newRep);
   InitRep (newRep);
+.%02-cleanup(%03, %04)
+.%07-cleanup(%08, %09)
+.%12-cleanup(%13, %14)
+.%17-cleanup(%18, %19)
+#else
+  // return AAFRESULT_NOT_IMPLEMENTED;
 #endif
 }
 #endm
@@ -960,92 +1158,141 @@ AAFRESULT STDMETHODCALLTYPE
 
 #ccccccccccccccccccccccccccc
 #c
-#c Inserts declaration for a method which takes one argument, which is
-#c a pointer to an AAF object which is to be returned to the caller.
-#c This is different from the normal METHOD macro because the
-#c _rep will probably have the object in a different form.
+#c The following macros assist in passing arguments to methods of the
+#c contained implementation class:
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
+#c The objIn macros are for use with pointers to objects that are
+#c passed into the method.  The Type argument is the base type, with
+#c no indirection specified.  For example, if you're passing in
+#c AObject*, AObject should be specified for the Type argument.#c
 #c
-#c NOTE!!! This macro takes as type, the object itself, not the
-#c pointer to it.  The indirection will be added by the macro
-#c expansion.
+#c The objOut macros are for use with pointers to pointers to objects
+#c that are passed out of the method.  The Type argument is the base
+#c type, with no indirection specified.  For example, if you're
+#c passing in AObject**, AObject should be specified for the Type
+#c argument.
 #c
-#startm AD_GETOBJ_METHOD1 06
-AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 ** %04)
-{
-#ifdef BOB_TEST
-  ImplAAFObject * pThisO;
-  Impl%03 * repObj;
-  %03  * retObj;
-  AAFRESULT stat;
+#c The objPass macros are for use with any kind of data which is
+#c passed exactly into or out of the method.
+#c
 
-  pThisO = GetRepObject ();
-  assert (pThisO);
 
-  stat = pThisO->%01 (&repObj);
-  if (FAILED (stat))
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objIn-setup(T, externArg, internArg)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objIn-setup 02
+  Impl%01 * internal%02 = NULL;
+  if (%02)
     {
-      return stat;
+	  internal%02 = static_cast<Impl%01*>(%02->GetImpl());
+	  assert (internal%02);
     }
-  assert (repObj);
-  retObj = repObj->GetCppParent();
-  assert (retObj);
-  assert (%04);
-  *%04 = retObj;
-#else
-    return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
 #endm
 
 
 #ccccccccccccccccccccccccccc
 #c
-#c Inserts declaration for a method which takes one argument, which is
-#c a pointer to an AAF object which is to be passed in from the caller.
-#c This is different from the normal METHOD macro because the
-#c _rep will probably have the object in a different form.
+#c #define .objPass-setup(T, externArg, internArg)		/* nothing */
 #c
-#c NOTE!!! This macro takes as type, the object itself, not the
-#c pointer to it.  The indirection will be added by the macro
-#c expansion.
+#c arg1 = unadorned type
+#c arg2 = external arg name
 #c
-#c Argument1: method name
-#c Argument2: argument modifiers (e.g. [in])
-#c Argument3: argument type
-#c Argument4: argument name
-#c Argument5: argument comment
-#c Argument6: method description
-#c
-#startm AD_SETOBJ_METHOD1 06
-AAFRESULT STDMETHODCALLTYPE
-    .this-module::%01 (%03 * %04)
-{
-#ifdef BOB_TEST
-  ImplAAFObject* pArgO;
-  ImplAAFObject* pThisO;
-  Impl%03 * repObj;
-  AAFRESULT stat;
+#startm .objPass-setup 02
+#endm
 
-  pThisO = GetRepObject ();
-  assert (pThisO);
 
-  assert (%04);
-  pArgO = %04->GetRepObject ();
-  assert (pArgO);
-  repObj = static_cast<Impl%03*> (pArgO);
-  assert (repObj);
-  stat = pThisO->%01 (repObj);
-  return stat;
-#else
-    return AAFRESULT_NOT_IMPLEMENTED;
-#endif
-}
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOut-setup(T, externArg, internArg)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objOut-setup 02
+  Impl%01 * internal%02;
+  Impl%01 ** pinternal%02 = NULL;
+  if (%02)
+    {
+	  pinternal%02 = &internal%02;
+    }
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objIn-internalname(externArg, internArg)	(internArg)
+#c
+#c arg1 = external arg name
+#c
+#startm .objIn-internalname 01
+internal%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objPass-internalname(externArg, internArg)	(internArg)
+#c
+#c arg1 = external arg name
+#c
+#startm .objPass-internalname 01
+%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOut-internalname(externArg, internArg)	(internArg)
+#c
+#c arg1 = external arg name
+#c
+#startm .objOut-internalname 01
+pinternal%01\
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objIn-cleanup(T, externArg, internArg)		/* nothing */
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objIn-cleanup 02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objPass-cleanup(T, externArg, internArg)	/* nothing */
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objPass-cleanup 02
+#endm
+
+
+#ccccccccccccccccccccccccccc
+#c
+#c #define .objOut-cleanup(T, externArg, internArg)
+#c
+#c arg1 = unadorned type
+#c arg2 = external arg name
+#c
+#startm .objOut-cleanup 02
+  if (internal%02)
+    {
+	  assert (%02);
+	  *%02 = static_cast<%01*>(internal%02->GetContainer());
+	  assert (*%02);
+	}
+  else
+    {
+	  *%02 = NULL;
+	}
 #endm
