@@ -89,17 +89,17 @@ AD_XMETHOD2(GetIdentification,
 Return the Identification that matches the given generation.)
 
 AD_XMETHOD2(GetIdentificationList,
-[in\,ref], objPass, aafIndentificationCrit_t *, pCriteria, Identification Criteria for enumeration,
+[in\,ref], objPass, aafIdentificationCritType_t *, pCriteria, Identification Criteria for enumeration,
 [out\,retval], objOut, EnumAAFIdentifications, ppEnum, Indentification Enumeration,
 Return an enumerator for all Identification the meet the given criteria.)
 
 
 AD_METHOD1(GetToolkitVersion,
-[out\\\,retval], aafToolkitVersion_t *, pToolkitVersion, The Toolkit Version,
+[out\\\,retval], aafProductVersion_t *, pToolkitVersion, The Toolkit Version,
 Return the Toolkit Version property. This is a read-only property.)
 
 AD_METHOD1(GetFileRevision,
-[out\\\,retval], aafFileRev_t *, pRevision, The Toolkit Version,
+[out\\\,retval], aafVersionType_t *, pRevision, The Toolkit Version,
 Return the Toolkit Version property. This is a read-only property.)
 	
 AD_METHOD1(GetByteOrder,

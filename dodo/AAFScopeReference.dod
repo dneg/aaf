@@ -1,5 +1,5 @@
 #startm .this-module 0
-AAFNestedScope\
+AAFScopeReference\
 #endm
 #c
 #startm .parent-module 0
@@ -32,20 +32,20 @@ AD_CLASS_UUID(e44be454, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 AD_DEFAULT_UUID(e44be453, 2099, 11d2, bf, 98, 00, 60, 97, 11, 62, 12)
 AD_CLASS_BEGIN
 
-AD_CONSTRUCTOR2([in],aafUint32,RelativeScope, Number of nested scopes to pass to find the Nested Scope slot,
-				[in],aafUint32, RelativeSlot, Number of slots that preced the slot containing the Scope Reference,
+AD_CONSTRUCTOR2([in],aafUInt32,RelativeScope, Number of nested scopes to pass to find the Nested Scope slot,
+				[in],aafUInt32, RelativeSlot, Number of slots that preced the slot containing the Scope Reference,
 				Constructs a Scope Reference object.)
 
 AD_METHOD1(GetRelativeScope,
 		   [retval][out],
-		   aafUint32 *,
+		   aafUInt32 *,
 		   pnRelativeScope,
 		   Pointer to a Relative Scope,
 		   Gets the number of nested scopes to pass to find the Nested Scope slot.)
 
 AD_METHOD1(GetRelativeSlot,
 		   [retval][out],
-		   aafUint32 *,
+		   aafUInt32 *,
 		   pnRelativeSlot,
 		   Pointer to a Relative Slot,
 		   Gets the number of f slots that preced the slot containing the Scope Reference.)
