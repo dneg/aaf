@@ -7,7 +7,8 @@ AAFSegment\
 #endm
 #c
 #import ./AAFUnitTest.exp
-#c #import ./AAFSegment.dod
+#import ./AAFSegment.dod
+AD_HEAD
 /******************************************\
 *                                          *
 * Advanced Authoring Format                *
