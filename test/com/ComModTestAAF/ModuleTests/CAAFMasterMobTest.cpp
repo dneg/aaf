@@ -359,7 +359,7 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 extern "C" HRESULT CAAFMasterMob_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"MasterMOBTest.aaf";
+	aafWChar * pFileName = L"AAFMasterMobTest.aaf";
 
 	try
 	{

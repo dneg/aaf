@@ -325,7 +325,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFTextLocator_test()
 {
   HRESULT	hr = AAFRESULT_NOT_IMPLEMENTED;
-  aafWChar*	pFileName = L"TextLocatorTest.aaf";
+  aafWChar*	pFileName = L"AAFTextLocatorTest.aaf";
 
   try
 	{

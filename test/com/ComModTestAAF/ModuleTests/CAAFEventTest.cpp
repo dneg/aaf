@@ -93,7 +93,7 @@ extern "C" HRESULT CAAFEvent_test()
 {
   HRESULT hr = S_OK;
   aafProductIdentification_t	ProductInfo = {0};
-  aafWChar * pFileName = L"EventTest.aaf";
+  aafWChar * pFileName = L"AAFEventTest.aaf";
 
   // Initialize the product info for this module test
   ProductInfo.companyName = L"AAF Developers Desk";

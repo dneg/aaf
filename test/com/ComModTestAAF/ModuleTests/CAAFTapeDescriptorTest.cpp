@@ -305,7 +305,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFTapeDescriptor_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-	aafWChar * pFileName = L"TapeDescTest.aaf";
+	aafWChar * pFileName = L"AAFTapeDescriptorTest.aaf";
 
 	try
 	{

@@ -145,7 +145,7 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 							  aafCompressEnable_t  enable)
 {
 	IUnknown				*dataObj = NULL;
-	IUnknown				*iFileMob = NULL;
+	IAAFSourceMob			*iFileMob = NULL;
 	IAAFEssenceAccess		*iAccess = NULL;
 	IUnknown				*iUnk = NULL;
 	IAAFEssenceDataStream	*edStream = NULL;
@@ -316,7 +316,10 @@ ImplAAFEssenceAccess::Create (	  ImplAAFMasterMob *masterMob,
 		createBlock.slotID = DEFAULT_FILE_SLOT;
 		createBlock.sampleRate = sampleRate;
 		
-		iFileMob = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
+		iUnk = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
+		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+		iUnk->Release();
+		iUnk= NULL;
 		CHECK(_codec->Create(iFileMob, _variety, _stream, 1, &createBlock));
 		(void)(_codec->SetCompressionEnabled(enable == kSDKCompressionEnable ? AAFTrue : AAFFalse));
 
@@ -406,7 +409,7 @@ AAFRESULT STDMETHODCALLTYPE
                            aafCompressEnable_t  Enable)
 {
 	IUnknown				*dataObj = NULL;
-	IUnknown				*iFileMob = NULL;
+	IAAFSourceMob			*iFileMob = NULL;
 	IAAFEssenceAccess		*iAccess = NULL;
 	IUnknown				*iUnk = NULL;
 	IAAFEssenceDataStream	*edStream = NULL;
@@ -597,7 +600,10 @@ AAFRESULT STDMETHODCALLTYPE
 				CHECK(dataHead->SetModified());	// To NOW
 			}
 						
-			iFileMob = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
+			iUnk = static_cast<IUnknown *> (_compFileMob->GetContainer());	// Codec knowns about compFilemob only
+			CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+			iUnk->Release();
+			iUnk= NULL;
 			CHECK(_codec->Create(iFileMob, _variety, _stream, arrayElemCount, mediaArray));
 			(void)(_codec->SetCompressionEnabled(Enable == kSDKCompressionEnable ? AAFTrue : AAFFalse));
 			
@@ -687,7 +693,7 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFEssenceContainer	*container = NULL;
 	IAAFPlugin				*plug = NULL;
 	IUnknown				*iUnk = NULL;
-	IUnknown				*iFileMob = NULL;
+	IAAFSourceMob			*iFileMob = NULL;
 	IAAFEssenceAccess		*iAccess = NULL;
 	ImplAAFDictionary		*dict = NULL;
 	ImplAAFContainerDef		*containerDef = NULL;
@@ -898,7 +904,10 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 
 
-		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
+		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+		iUnk->Release();
+		iUnk= NULL;
 		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, _stream, &numCh));
 		if (numCh == 0)
 		  RAISE(AAFRESULT_INVALID_DATADEF);
@@ -914,7 +923,10 @@ AAFRESULT STDMETHODCALLTYPE
 			_channels[n].trackID = slotID+n;
 		}
 
-		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
+		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+		iUnk->Release();
+		iUnk= NULL;
 		CHECK(_codec->Open(iFileMob, slotID, openMode, _stream));
 		
 		_masterMob = masterMob;
@@ -1003,7 +1015,7 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFEssenceContainer	*container = NULL;
 	IAAFPlugin				*plug = NULL;
 	IUnknown				*iUnk = NULL;
-	IUnknown				*iFileMob = NULL;
+	IAAFSourceMob			*iFileMob = NULL;
 	IAAFEssenceAccess		*iAccess = NULL;
 	ImplAAFDictionary		*dict = NULL;
 	ImplAAFContainerDef		*containerDef = NULL;
@@ -1214,7 +1226,10 @@ AAFRESULT STDMETHODCALLTYPE
 		}
 
 
-		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
+		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+		iUnk->Release();
+		iUnk= NULL;
 		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, _stream, &numCh));
 		if (numCh == 0)
 		  RAISE(AAFRESULT_INVALID_DATADEF);
@@ -1230,7 +1245,10 @@ AAFRESULT STDMETHODCALLTYPE
 			_channels[n].trackID = slotID+n;
 		}
 
-		iFileMob = static_cast<IUnknown *> (fileMob->GetContainer());
+		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
+		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+		iUnk->Release();
+		iUnk= NULL;
 		CHECK(_codec->Open(iFileMob, slotID, openMode, _stream));
 		
 		_masterMob = masterMob;
@@ -1569,6 +1587,7 @@ AAFRESULT STDMETHODCALLTYPE
 	IAAFEssenceStream		*stream;
 	ImplAAFDictionary		*dict = NULL;
 	IUnknown				*iUnk = NULL;
+	IAAFSourceMob			*iFileMob = NULL;
 	ImplAAFPluginManager *plugins = NULL;
 
 	aafAssert(numCh != NULL, _mainFile, AAFRESULT_NULL_PARAM);
@@ -1585,14 +1604,19 @@ AAFRESULT STDMETHODCALLTYPE
 				NULL, 
 				IID_IAAFEssenceStream, 
 				(void **)&stream));
-		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());
-		CHECK(_codec->GetNumChannels(iUnk, mediaKind, stream, numCh));
+		iUnk = static_cast<IUnknown *> (fileMob->GetContainer());	// Codec knowns about compFilemob only
+		CHECK(iUnk->QueryInterface(IID_IAAFSourceMob, (void **)&iFileMob));
+		iUnk->Release();
+		iUnk= NULL;
+		CHECK(_codec->GetNumChannels(iFileMob, mediaKind, stream, numCh));
 		dict->ReleaseReference();
 		dict = NULL;
 		stream->Release();
 		stream = NULL;
 		plugins->ReleaseReference();
 		plugins = NULL;
+		iFileMob->Release();
+		iFileMob = NULL;
 	}
 	XEXCEPT
 	{

@@ -77,7 +77,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	HRESULT				hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFTaggedValues Test";
+	ProductInfo.productName = L"AAFTaggedValue Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -231,7 +231,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	aafSearchCrit_t	criteria;
 
 	ProductInfo.companyName = L"AAF Developers Desk";
-	ProductInfo.productName = L"AAFMob Test";
+	ProductInfo.productName = L"AAFTaggedValue Test";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -340,7 +340,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFTaggedValue_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
- 	aafWChar * pFileName = L"TaggedValuesTest.aaf";
+ 	aafWChar * pFileName = L"AAFTaggedValueTest.aaf";
 
 	try
 	{

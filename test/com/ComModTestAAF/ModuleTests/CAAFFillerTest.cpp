@@ -69,7 +69,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 
   ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"Make AVR Example";
+  ProductInfo.productName = L"AAFFiller Test";
   ProductInfo.productVersion.major = 1;
   ProductInfo.productVersion.minor = 0;
   ProductInfo.productVersion.tertiary = 0;
@@ -187,7 +187,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
   HRESULT            hr = AAFRESULT_SUCCESS;
 
   ProductInfo.companyName = L"AAF Developers Desk";
-  ProductInfo.productName = L"Make AVR Example";
+  ProductInfo.productName = L"AAFFiller Test";
   ProductInfo.productVersion.major = 1;
   ProductInfo.productVersion.minor = 0;
   ProductInfo.productVersion.tertiary = 0;
@@ -298,7 +298,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFFiller_test()
 {
   HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-  aafWChar * pFileName = L"FillerTest.aaf";
+  aafWChar * pFileName = L"AAFFillerTest.aaf";
 
   try
   {

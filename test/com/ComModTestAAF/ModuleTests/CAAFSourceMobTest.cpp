@@ -172,7 +172,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 	HRESULT						hr = S_OK;
 
 	ProductInfo.companyName = L"AAF Developers Desk. NOT!";
-	ProductInfo.productName = L"Make AVR Example. NOT!";
+	ProductInfo.productName = L"AAFSourceMob Test. NOT!";
 	ProductInfo.productVersion.major = 1;
 	ProductInfo.productVersion.minor = 0;
 	ProductInfo.productVersion.tertiary = 0;
@@ -279,7 +279,7 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 extern "C" HRESULT CAAFSourceMob_test()
 {
 	HRESULT hr = AAFRESULT_NOT_IMPLEMENTED;
-  aafWChar * pFileName = L"SourceMOBTest.aaf";
+  aafWChar * pFileName = L"AAFSourceMobTest.aaf";
 
   try
 	{
