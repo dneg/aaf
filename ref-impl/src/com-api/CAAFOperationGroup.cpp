@@ -30,6 +30,7 @@
 #include "CAAFEnumValidation.h"
 
 #include "OMAssertions.h"
+#include "OMExceptions.h"
 
 #include <assert.h>
 #include <string.h>
@@ -144,6 +145,18 @@ HRESULT STDMETHODCALLTYPE
         length,
         internaloperationDef);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -198,6 +211,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->GetOperationDefinition
        (pinternalppOperationDef);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -273,6 +298,18 @@ HRESULT STDMETHODCALLTYPE
       hr = ptr->SetOperationDefinition
        (internalpOperationDef);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -323,6 +360,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->GetRender
        (pinternalppSourceRef);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -381,6 +430,18 @@ HRESULT STDMETHODCALLTYPE
       hr = ptr->IsATimeWarp
        (pIsTimeWarp);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -420,6 +481,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->GetBypassOverride
        (pBypassOverride);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -461,6 +534,18 @@ HRESULT STDMETHODCALLTYPE
       hr = ptr->CountSourceSegments
        (pResult);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -501,6 +586,18 @@ HRESULT STDMETHODCALLTYPE
       hr = ptr->IsValidTranOperation
        (pValidTransition);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -540,6 +637,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->CountParameters
        (pResult);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -598,6 +707,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->AddParameter
        (internalpParameter);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -660,6 +781,18 @@ HRESULT STDMETHODCALLTYPE
       hr = ptr->AppendInputSegment
        (internalpSegment);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -720,6 +853,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->PrependInputSegment
        (internalpSegment);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -784,6 +929,18 @@ HRESULT STDMETHODCALLTYPE
        (index,
         internalpSegment);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -845,6 +1002,18 @@ HRESULT STDMETHODCALLTYPE
       hr = ptr->SetRender
        (internalppSourceRef);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -887,6 +1056,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->SetBypassOverride
        (bypassOverride);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -936,6 +1117,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->GetParameters
        (pinternalppEnum);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
@@ -1005,6 +1198,18 @@ HRESULT STDMETHODCALLTYPE
        (argID,
         pinternalppParameter);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -1073,6 +1278,18 @@ HRESULT STDMETHODCALLTYPE
        (index,
         pinternalppInputSegment);
     }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
+    }
   catch (OMAssertionViolation &)
     {
       // Control reaches here if there is a programming error in the
@@ -1129,6 +1346,18 @@ HRESULT STDMETHODCALLTYPE
     {
       hr = ptr->RemoveInputSegmentAt
        (index);
+    }
+  catch (OMException& e)
+    {
+      // OMExceptions should be handled by the impl code. However, if an
+      // unhandled OMException occurs, control reaches here. We must not
+      // allow the unhandled exception to reach the client code, so we
+      // turn it into a failure status code.
+      //
+      // If the OMException contains an HRESULT, it is returned to the
+      // client, if not, AAFRESULT_UNEXPECTED_EXCEPTION is returned.
+      //
+      hr = OMExceptionToResult(e, AAFRESULT_UNEXPECTED_EXCEPTION);
     }
   catch (OMAssertionViolation &)
     {
