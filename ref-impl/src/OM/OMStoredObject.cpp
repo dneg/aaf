@@ -507,24 +507,26 @@ void OMStoredObject::read(OMPropertyId propertyId,
   PRECONDITION("Valid size", size > 0);
 
   // Consistency check - look up propertyId in _index and check that
-  // the property type is the expected (passed in) type.  and that the
+  // the property type is the expected (passed in) type, and that the
   // property length is the expected (passed in as size) length.
-  // 
   //
-  // NYI
-  // int actualType;
-  // size_t actualOffset;
-  // size_t actualLength;
-  // _index->find(propertyId, actualType, actualOffset, actualLength);
-  //
-  // ASSERT("Matching property types", type == actualType);
-  // ASSERT("Matching property sizes", size == actualLength);
+  OMUInt32 actualType;
+  OMUInt32 actualOffset;
+  OMUInt32 actualLength;
+  bool found = _index->find(propertyId,
+                            actualType,
+                            actualOffset,
+                            actualLength);
+
+  ASSERT("Recognized property", found);
+  ASSERT("Matching property types", (OMUInt32)type == actualType);
+  ASSERT("Matching property sizes", size == actualLength);
 
   // Since random access is not yet supported, check that the stream
   // is synchronized with the index.
   //
-  // ASSERT("Sequential access",
-  //        actualOffset == streamPosition(_propertiesStream));
+  ASSERT("Sequential access",
+         actualOffset == streamPosition(_propertiesStream));
 
   // Read property value.
   //
