@@ -1211,7 +1211,9 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::shallowCopyTo(
   VectorIterator iterator(_vector, OMBefore);
   while (++iterator) {
     VectorElement& element = iterator.value();
-    dest->_vector.insert(element);
+    VectorElement destElement(
+                            dest, element.identification(), nullOMPropertyTag);
+    dest->_vector.insert(destElement);
   }
 
   dest->_targetTag = nullOMPropertyTag;
@@ -1232,6 +1234,13 @@ void OMWeakReferenceVectorProperty<ReferencedObject>::deepCopyTo(
   typedef OMWeakReferenceVectorProperty<ReferencedObject> Property;
   Property* wp = dynamic_cast<Property*>(destination);
   ASSERT("Correct property type", wp != 0);
+
+  // Update the target tags on elements
+  VectorIterator destIterator(wp->_vector, OMBefore);
+  while (++destIterator) {
+    VectorElement& element = destIterator.value();
+    element.reference().setTargetTag(wp->targetTag());
+  }
 
   OMStrongReferenceSet* dest = wp->targetSet();
   ASSERT("Destination is correct type", dest != 0);
