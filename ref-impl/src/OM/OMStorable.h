@@ -5,13 +5,15 @@
 
 #include "OMPropertySet.h"
 
+#include "OMReferenceCountable.h"
+
 class OMStoredObject;
 class OMFile;
 
 // Abstract base class for all objects that may be stored by the
 // Object Manager.
 //
-class OMStorable {
+class OMStorable : public OMReferenceCountable {
 
 public:
 
