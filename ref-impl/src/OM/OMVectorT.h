@@ -31,6 +31,9 @@
 
 #include "OMAssertions.h"
 
+  // @mfunc Constructor.
+  //   @tcarg class | Element | The type of an <c OMVector> element.
+  //          This type must support operator = and operator ==.
 template <typename Element>
 OMVector<Element>::OMVector()
 : _vector(0), _capacity(0), _count(0)
@@ -38,6 +41,9 @@ OMVector<Element>::OMVector()
   TRACE("OMVector<Element>::OMVector");
 }
 
+  // @mfunc Destructor.
+  //   @tcarg class | Element | The type of an <c OMVector> element.
+  //          This type must support operator = and operator ==.
 template <typename Element>
 OMVector<Element>::~OMVector(void)
 {
@@ -226,6 +232,8 @@ void OMVector<Element>::shrink(size_t capacity)
 template <typename Element>
 bool OMVector<Element>::full(void) const
 {
+  TRACE("OMVector<Element>::full");
+
   bool result;
   if (count() == capacity()) {
     result = true;
@@ -243,6 +251,8 @@ bool OMVector<Element>::full(void) const
 template <typename Element>
 bool OMVector<Element>::empty(void) const
 {
+  TRACE("OMVector<Element>::empty");
+
   bool result;
   if (count() == 0) {
     result = true;
@@ -329,6 +339,7 @@ void OMVector<Element>::insertAt(const Element value, const size_t index)
 {
   TRACE("OMVector<Element>::insertAt");
   PRECONDITION("Valid index", (index >= 0) && (index <= _count));
+  SAVE(_count, size_t);
 
   // Make space for at least one more element
   //
@@ -344,6 +355,7 @@ void OMVector<Element>::insertAt(const Element value, const size_t index)
   _count = _count + 1;
 
   POSTCONDITION("Element properly inserted", _vector[index] == value);
+  POSTCONDITION("One more element", _count == OLD(_count) + 1);
 }
 
   // @mfunc Append the given <p Element> <p value> to
@@ -387,6 +399,8 @@ template <typename Element>
 void OMVector<Element>::removeAt(const size_t index)
 {
   TRACE("OMVector<Element>::removeAt");
+  PRECONDITION("Valid index", (index >= 0) && (index <  _count));
+  SAVE(_count, size_t);
 
   // Shuffle down existing elements
   //
@@ -399,6 +413,8 @@ void OMVector<Element>::removeAt(const size_t index)
   // Trim execss capacity
   //
   shrink(_count);
+
+  POSTCONDITION("One less element", _count == OLD(_count) - 1);
 }
 
   // @mfunc Remove the last (index == count() - 1) element
