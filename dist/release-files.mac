@@ -1,0 +1,25 @@
+# The dynamically loaded shared libraries required by an application.
+
+# Yes folks, every single file name has a space.
+
+# AAF Libraries
+./bin/AAFCOAPI.DLL?(PPC)
+./bin/aafext/AAFINTP.DLL?(PPC)
+./bin/aafext/AAFPGAPI.DLL?(PPC)
+
+# Additional Microsoft libraries (including Structured Storage).
+./MacOLE/InstallOLEExtensions
+./MacOLE/OLE?2.24?License?Agreement
+./MacOLE/OLE?2.24?SDK?Read?Me
+./MacOLE/OLE?2.24?Redistributable?Files
+./MacOLE/Extensions/Retail/Microsoft?Component?Library
+./MacOLE/Extensions/Retail/Microsoft?Debug?Library
+./MacOLE/Extensions/Retail/Microsoft?OLE?Automation
+./MacOLE/Extensions/Retail/Microsoft?OLE?Library
+./MacOLE/Extensions/Retail/Microsoft?Structured?Storage
+
+# Code Warriors V8 libraries
+./bin/MSL_All_Carbon.Shlb
+./bin/MSL_All_PPC.Shlb
+
+

@@ -19,6 +19,8 @@
 # This make file is normally called from the top level makefile
 # (../GNUmakefile) using the "dist" target.
 
+# Windows Notes:
+#
 # The top level make target does not currently work under Win2K.
 # Instead, run the following from this directory:
 #
@@ -26,6 +28,34 @@
 #    make AAFPLATFORM=Win AAFSDK=../AAFWinSDK sdk-dist
 #
 # It was tested using Cygwin.
+
+# Mac Notes:
+#
+# The top level make target does not currently work under Max (OS 9, OS X).
+# Instead, run the following from this directory:
+#
+#   mkdir -p ../AAFMacSDK/Dist
+#   cp release-files.mac ../AAFMacSDK/Dist/release-files
+#  ./CreateDistribution.bash release Dist/release-files Dist/aaf_release ../AAFMacSDK Mac ../ref-impl/include/AAFSDKBuild.h
+#
+#   mkdir -p ../AAFMacSDK/Dist
+#   cp sdk-files.mac ../AAFMacSDK/Dist/sdk-files
+#  ./CreateDistribution.bash sdk Dist/sdk-files Dist/aaf_sdk ../AAFMacSDK Mac ../ref-impl/include/AAFSDKBuild.h
+# 
+#   The folowing should work, when/if a pdefs-Mac.mk file appears in the build directory.
+#
+#    make AAFPLATFORM=Mac AAFSDK=../AAFMacSDK release-dist
+#    make AAFPLATFORM=Mac AAFSDK=../AAFMacSDK sdk-dist
+# 
+# Pending some form of top-level-build resolution, the above commands
+# can be executed using "make mac"
+#
+# Note, as of V101 the SDK only supports OS9.  The OS X developers
+# toolkit (available from Apple) includes GNU make, and other GNU
+# tools.  Bash must be compiled It was tested using Cygwin.  The
+# CreateDistribution.bash script is quite simple, hence, sh should
+# work in lieu of bash.  The script can be executed from OS X, even if
+# the rest of the build is done with OS 9.
 
 AAFBASE ?= ..
 
@@ -38,8 +68,13 @@ ifeq ($(AAFPLATFORM),Win)
 RELEASE_FILES_SRC = ./release-files.win
 SDK_FILES_SRC = ./sdk-files.win
 else
+ifeq ($(AAFPLATFORM),Mac)
+RELEASE_FILES_SRC = ./release-files.Mac
+SDK_FILES_SRC = ./sdk-files.mac
+else
 RELEASE_FILES_SRC = ./release-files.unix
 SDK_FILES_SRC = ./sdk-files.unix
+endif
 endif
 
 DST_DIR = $(AAFSDK)/Dist
@@ -65,6 +100,19 @@ release-dist : release-files
 .PHONY : sdk-dist
 sdk-dist : sdk-files
 	./CreateDistribution.bash sdk Dist/sdk-files Dist/aaf_sdk $(AAFSDK) $(AAFPLATFORM) $(AAFSDKBUILD_H)
+
+
+.PHONY : mac
+mac :
+	@echo ============== Creating release distribution ==============
+	mkdir -p ../AAFMacSDK/Dist
+	cp release-files.mac ../AAFMacSDK/Dist/release-files
+	./CreateDistribution.bash release Dist/release-files Dist/aaf_release ../AAFMacSDK Mac ../ref-impl/include/AAFSDKBuild.h
+	@echo ============== Creating sdk distribution ==============
+	mkdir -p ../AAFMacSDK/Dist
+	cp sdk-files.mac ../AAFMacSDK/Dist/sdk-files
+	./CreateDistribution.bash sdk Dist/sdk-files Dist/aaf_sdk ../AAFMacSDK Mac ../ref-impl/include/AAFSDKBuild.h
+
 
 .PHONY : clean
 clean : realclean
