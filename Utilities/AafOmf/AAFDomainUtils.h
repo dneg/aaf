@@ -61,7 +61,7 @@ public:
 	HRESULT SetObjRefPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, const aafUID_t* pPropTypeID, aafUID_t* pPropID, IAAFObject* pValue);
 	HRESULT GetObjRefPropFromObject(IAAFObject* pObj, aafUID_t* pClassID, const aafUID_t* pPropTypeID, aafUID_t* pPropID, IAAFObject** ppObject);
 
-	void AAFDomainUtils::SetDictionary(IAAFDictionary *dict);
+	void SetDictionary(IAAFDictionary *dict);
 protected:
 	IAAFDictionary	*_dict;
 
