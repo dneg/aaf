@@ -37,6 +37,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
@@ -46,8 +47,6 @@
 #include "AAFInterpolatorDefs.h"
 #include "AAFTypeDefUIDs.h"
 #include "AAFSmartPointer.h"
-
-#include "AAFWideString.h"
 
 #include "CAAFBuiltinDefs.h"
 

@@ -47,12 +47,13 @@
 #include <stdio.h>
 #include <assert.h>
 #include <string.h>
+#include <wchar.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFResult.h"
 #include "AAFDefUIDs.h"
 #include "AAFContainerDefs.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 
 #include "CAAFBuiltinDefs.h"
 
