@@ -115,19 +115,25 @@ static HRESULT CreateOneTypeDef (IAAFDictionary *  pDict,
   assert (name);
   assert (ppTD);
 
-  HRESULT hr = E_FAIL;
+  HRESULT hr = S_OK;
   IAAFTypeDefInt * pTD = NULL;
 
-  CAAFBuiltinDefs defs (pDict);
+  hr = pDict->CreateMetaInstance (AUID_AAFTypeDefInt,
+                                  IID_IAAFTypeDefInt,
+                                  (IUnknown **) &pTD);
+  if (FAILED(hr))
+    return (hr);
 
-  checkResult (defs.cdTypeDefInt()->
-			   CreateInstance (IID_IAAFTypeDefInt,
-							   (IUnknown **) &pTD));
   assert (pTD);
-  checkResult (pTD->Initialize (id, intSize, isSigned, name));
+  hr = pTD->Initialize (id, intSize, isSigned, name);
+  if (FAILED(hr))
+  {
+    pTD->Release();
+    return (hr);
+  }
 
   *ppTD = pTD;
-  return AAFRESULT_SUCCESS;
+  return hr;
 } 
 
 

@@ -208,9 +208,9 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	  // create
 	  IAAFTypeDefObjectRefSP tdor;
-	  checkResult (defs.cdTypeDefStrongObjRef()->
-				   CreateInstance(IID_IAAFTypeDefObjectRef,
-								  (IUnknown**)&tdor));
+	  checkResult (pDictionary->CreateMetaInstance(AUID_AAFTypeDefStrongObjRef,
+                                                       IID_IAAFTypeDefObjectRef,
+                                                       (IUnknown**)&tdor));
 
 	  // get class def for the referenced type.  In this case,
 	  // AAFComponent.
