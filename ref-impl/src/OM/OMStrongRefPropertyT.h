@@ -87,6 +87,8 @@ ReferencedObject* OMStrongReferenceProperty<ReferencedObject>::setValue(
 {
   TRACE("OMStrongReferenceProperty<ReferencedObject>::setValue");
 
+  // tjb - PRECONDITION("Valid object", object != 0);
+
   ReferencedObject* result = _reference.setValue(object);
   setPresent();
   return result;
