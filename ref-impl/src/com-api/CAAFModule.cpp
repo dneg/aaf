@@ -671,6 +671,7 @@ STDAPI
 }
 
 
+
 STDAPI
     AAFCreateRawStorageCachedDisk (aafCharacter_constptr  pFilename,
         aafFileExistence_t  existence,

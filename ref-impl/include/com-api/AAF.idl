@@ -33088,6 +33088,7 @@ cpp_quote("          aafFileAccess_t  access,")
 cpp_quote("          IAAFRawStorage ** ppNewRawStorage);")
 cpp_quote("")
 
+
   //***********************************************************
   //
   // AAFCreateRawStorageCachedDisk()
