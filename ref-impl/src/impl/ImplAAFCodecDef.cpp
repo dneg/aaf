@@ -27,13 +27,14 @@
 #endif
 
 #include "ImplAAFDataDef.h"
-
+#include "ImplAAFPluginManager.h"
 #include <assert.h>
 #include <string.h>
 #include "aafErr.h"
 #include "AafUtils.h"
 
 extern "C" const aafClassID_t CLSID_EnumAAFDataDefs;
+extern "C" const aafClassID_t CLSID_EnumAAFCodecFlavours;
 
 ImplAAFCodecDef::ImplAAFCodecDef ()
 :  _dataDefs(		PID_CodecDefinition_DataDefinitions,			"DataDefinitions")
@@ -151,9 +152,56 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::EnumCodecFlavours (
-      ImplEnumAAFCodecFlavours ** /*ppEnum*/)
+      ImplEnumAAFCodecFlavours **ppEnum)
 {
-  return AAFRESULT_NOT_IMPLEMENTED;
+	aafUID_t						uid;
+	ImplAAFPluginManager			*mgr = NULL;
+	IAAFPlugin						*pPlug = NULL;
+	IAAFEssenceCodec				*pCodec = NULL;
+	aafBool							found;
+
+	if(ppEnum == NULL)
+		return(AAFRESULT_NULL_PARAM);
+
+	XPROTECT()
+	{
+		*ppEnum = (ImplEnumAAFCodecFlavours *)CreateImpl(CLSID_EnumAAFCodecFlavours);
+		if(*ppEnum == NULL)
+			RAISE(AAFRESULT_NOMEMORY);
+		CHECK(GetAUID(&uid));
+		mgr = ImplAAFPluginManager::GetPluginManager();
+		// Only looks at first codec matching
+		found = AAFFalse;
+		if(mgr->GetPluginInstance(uid, &pPlug) == AAFRESULT_SUCCESS)
+		{
+			if(pPlug->QueryInterface(IID_IAAFEssenceCodec, (void **)&pCodec) == AAFRESULT_SUCCESS)
+			{
+				found = AAFTrue;
+			}
+		}
+		if(!found)
+			RAISE(AAFRESULT_CODEC_INVALID);
+
+		(*ppEnum)->SetEnumCodec(pCodec);
+		pPlug->Release();
+		pPlug = NULL;
+		pCodec->Release();
+		pCodec = NULL;
+		mgr->ReleaseReference();
+		mgr = NULL;
+	}
+	XEXCEPT
+	{
+		if(pPlug != NULL)
+			pPlug->Release();
+		if(pCodec != NULL)
+			pCodec->Release();
+		if(mgr != NULL)
+			mgr->ReleaseReference();
+	}
+	XEND;
+
+	return(AAFRESULT_SUCCESS);
 }
 
   

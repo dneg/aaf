@@ -327,26 +327,15 @@ AAFRESULT STDMETHODCALLTYPE
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFSequence::EnumComponents (ImplEnumAAFComponents ** ppEnum)
 {
-	ImplEnumAAFComponents*	theEnum;
-	HRESULT					hr;
-	
-	theEnum = (ImplEnumAAFComponents *)CreateImpl(CLSID_EnumAAFComponents);
-	if (theEnum == NULL)
-		return E_FAIL;
-		
-	hr = theEnum->SetEnumSequence(this);
-	if (SUCCEEDED(hr))
-	{
-		theEnum->Reset();
-		*ppEnum = theEnum;
-	}
-	else
-	{
-		theEnum->ReleaseReference();
-		*ppEnum = NULL;
-	}
+	if(ppEnum == NULL)
+		return(AAFRESULT_NULL_PARAM);
 
-	return hr;
+	*ppEnum = (ImplEnumAAFComponents *)CreateImpl(CLSID_EnumAAFComponents);
+	if(*ppEnum == NULL)
+		return(AAFRESULT_NOMEMORY);
+	(*ppEnum)->SetEnumStrongProperty(this, &_components);
+
+	return(AAFRESULT_SUCCESS);
 }
 
 
