@@ -32,6 +32,16 @@
 
 #include <stddef.h>
 
+// @module OMAssertions | Functions and macros to implement run-time
+//         monitoring of assertions.
+//
+// References ...
+//
+// [1] "Object Oriented Software Construction", Bertrand Meyer,
+// 1997 Prentice Hall PTR, ISBN 0-13-629155-4
+//
+//   @mauthor Tim Bingham | tjb | Avid Technology, Inc.
+
   // @class OMAssertionViolation | Object Manager assertion
   //        violation. An instance of this opaque class is thrown
   //        when an assertion violation occurs.
