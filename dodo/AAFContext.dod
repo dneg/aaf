@@ -10,7 +10,7 @@ AD_FORWARD_DECLARATION(AAFFile)
 AD_CLASS_UUID(F0C10891, 3073, 11d2, 80, 4A, 00, 60, 08, 14, 3E, 6F)
 
 AD_DEFAULT_UUID(F0C10892, 3073, 11d2, 80, 4A, 00, 60, 08, 14, 3E, 6F)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 AD_BEGIN_SESSION
 AD_METHOD0(EndSession,
 			End the session freeing up memory.)
@@ -190,4 +190,4 @@ AD_XMETHOD1(GetIdentification,
   // AAFRESULT_NULL_PARAM
   //   - the pIdent arg is NULL.
   //)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)

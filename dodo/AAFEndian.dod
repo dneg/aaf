@@ -30,7 +30,7 @@ AD_IDL(//
 //     concrete object's primary interface.
 //)
 AD_DEFAULT_UUID(6BACC0C1, 6091, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, Transient)
 AD_XMETHOD1(GetStoredByteOrder,
 			[out],
 			objPass,
@@ -81,4 +81,4 @@ AD_XMETHOD1(GetNativeByteOrder,
   //
   // AAFRESULT_NULL_PARAM
   //   - pOrder is null.)
-AD_CLASS_END
+AD_XCLASS_END(Abstract, Transient)

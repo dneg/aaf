@@ -21,7 +21,7 @@ AD_IDL(//
 //)
 
 AD_DEFAULT_UUID(CABC27B1, 57D5, 11D2, 84, 1B, 00, 60, 08, 32, AC, B8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Abstract, Transient)
 AD_XMETHOD1(GetMobKind,
 			[out],
 			objPass,
@@ -44,4 +44,4 @@ AD_XMETHOD1(GetMobKind,
   //
   // AAFRESULT_NULL_PARAM
   //   - pMobKind is null.)
-AD_CLASS_END
+AD_XCLASS_END(Abstract, Transient)

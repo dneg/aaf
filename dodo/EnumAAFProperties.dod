@@ -26,7 +26,7 @@ AD_FORWARD_DECLARATION(AAFProperty)
 AD_CLASS_UUID(BE316DB1, 7E73, 11D2, 84, 1D, 00, 60, 08, 32, AC, B8)
 
 AD_DEFAULT_UUID(BE316DB2, 7E73, 11D2, 84, 1D, 00, 60, 08, 32, AC, B8)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 AD_XMETHOD1(NextOne,
 			[out\,retval],
 			objOut,
@@ -158,4 +158,4 @@ AD_XMETHOD1(Clone,
   //
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)

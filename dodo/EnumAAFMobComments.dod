@@ -24,7 +24,7 @@ AD_HEAD
 AD_CLASS_UUID(B1A213A7, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
 
 AD_DEFAULT_UUID(B1A213A6, 1A7D, 11D2, BF, 78, 00, 10, 4B, C9, 15, 6D)
-AD_CLASS_BEGIN
+AD_XCLASS_BEGIN(Concrete, Transient)
 
 AD_METHOD1(NextOne,
 			[out\\\,retval], aafMobComment_t *, pMobComment, The Next MobComment,
@@ -67,4 +67,4 @@ AD_XMETHOD1(Clone,
   // at a later time.
   // @comm The caller must release this new enumerator separately from the first enumerator.)
 
-AD_CLASS_END
+AD_XCLASS_END(Concrete, Transient)
