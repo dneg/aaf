@@ -27,6 +27,7 @@
 #define _AAF_UTIL_API_ 1
 
 #include <stdio.h>
+#include <string.h>  // For use of memcmp() below.
 
 #include "aafErr.h"
 #include "AAFTypes.h"
@@ -65,6 +66,58 @@ aafUInt32 aafGetTickCount();
 
 // Initializes a new auid
 AAFRESULT aafAUIDNew(aafUID_t * auid);
+
+// aafUID_t comparison operators.
+
+inline bool operator == (const aafUID_t& lhs,
+                         const aafUID_t& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(aafUID_t)) == 0;
+}
+
+inline bool operator != (const aafUID_t& lhs,
+                         const aafUID_t& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(aafUID_t)) != 0;
+}
+
+inline bool operator < (const aafUID_t& lhs,
+                        const aafUID_t& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(aafUID_t)) < 0;
+}
+
+inline bool operator > (const aafUID_t& lhs,
+                        const aafUID_t& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(aafUID_t)) > 0;
+}
+
+// aafMobID_t comparison operators.
+
+inline bool operator == (const aafMobID_t& lhs,
+                         const aafMobID_t& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(aafMobID_t)) == 0;
+}
+
+inline bool operator != (const aafMobID_t& lhs,
+                         const aafMobID_t& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(aafMobID_t)) != 0;
+}
+
+inline bool operator < (const aafMobID_t& lhs,
+                        const aafMobID_t& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(aafMobID_t)) < 0;
+}
+
+inline bool operator > (const aafMobID_t& lhs,
+                        const aafMobID_t& rhs)
+{
+  return memcmp(&lhs, &rhs, sizeof(aafMobID_t)) > 0;
+}
 
 /************************************************************************
  *
