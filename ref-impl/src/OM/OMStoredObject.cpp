@@ -89,7 +89,7 @@ static void printName(const wchar_t* name);
 
 OMStoredObject::OMStoredObject(IStorage* s)
 : _storage(s), _index(0), _indexStream(0), _propertiesStream(0),
-  _offset(0), _open(false), _mode(readOnlyMode),
+  _offset(0), _open(false), _mode(OMFile::readOnlyMode),
   _byteOrder(hostByteOrder()), _reorderBytes(false)
 {
   TRACE("OMStoredObject::OMStoredObject");
@@ -111,8 +111,8 @@ OMStoredObject* OMStoredObject::openRead(const wchar_t* fileName)
   PRECONDITION("Valid file name", validWideString(fileName));
 
   OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
-                                                         readOnlyMode);
-  newStoredObject->open(readOnlyMode);
+                                                         OMFile::readOnlyMode);
+  newStoredObject->open(OMFile::readOnlyMode);
 
   return newStoredObject;
 }
@@ -128,8 +128,8 @@ OMStoredObject* OMStoredObject::openModify(const wchar_t* fileName)
   PRECONDITION("Valid file name", validWideString(fileName));
 
   OMStoredObject* newStoredObject = OMStoredObject::open(fileName,
-                                                         modifyMode);
-  newStoredObject->open(modifyMode);
+                                                         OMFile::modifyMode);
+  newStoredObject->open(OMFile::modifyMode);
 
   return newStoredObject;
 }
@@ -350,16 +350,17 @@ void OMStoredObject::restore(OMPropertySet& properties)
 }
 
 OMStoredObject* OMStoredObject::open(const wchar_t* fileName,
-                                     const OMAccessMode mode)
+                                     const OMFile::OMAccessMode mode)
 {
   TRACE("OMStoredObject::open");
   PRECONDITION("Valid file name", validWideString(fileName));
-  PRECONDITION("Valid mode", (mode == modifyMode) || (mode == readOnlyMode));
+  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
+                             (mode == OMFile::readOnlyMode));
 
   DWORD openMode;
-  if (mode == modifyMode) {
+  if (mode == OMFile::modifyMode) {
     openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == readOnlyMode) {
+  } else if (mode == OMFile::readOnlyMode) {
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
   }
 
@@ -423,7 +424,7 @@ void OMStoredObject::create(const OMByteOrder byteOrder)
   PRECONDITION("Not already open", !_open);
 
   _byteOrder = byteOrder;
-  _mode = modifyMode;
+  _mode = OMFile::modifyMode;
   _index = new OMStoredPropertySetIndex(50);
   ASSERT("Valid heap pointer", _index != 0);
   _indexStream = createStream(_storage, propertyIndexStreamName);
@@ -431,11 +432,12 @@ void OMStoredObject::create(const OMByteOrder byteOrder)
   _open = true;
 }
 
-void OMStoredObject::open(const OMAccessMode mode)
+void OMStoredObject::open(const OMFile::OMAccessMode mode)
 {
   TRACE("OMStoredObject::open");
   PRECONDITION("Not already open", !_open);
-  PRECONDITION("Valid mode", (mode == modifyMode) || (mode == readOnlyMode));
+  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
+                             (mode == OMFile::readOnlyMode));
 
   _mode = mode;
   _indexStream = openStream(_storage, propertyIndexStreamName);
@@ -799,9 +801,9 @@ IStream* OMStoredObject::createStream(IStorage* storage,
   PRECONDITION("Valid stream name", validString(streamName));
 
   DWORD mode;
-  if (_mode == modifyMode) {
+  if (_mode == OMFile::modifyMode) {
     mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
-  } else if (_mode == readOnlyMode) {
+  } else if (_mode == OMFile::readOnlyMode) {
     mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
   }
 
@@ -829,9 +831,9 @@ IStream* OMStoredObject::openStream(IStorage* storage, const char* streamName)
   PRECONDITION("Valid stream name", validString(streamName));
   
   DWORD mode;
-  if (_mode == modifyMode) {
+  if (_mode == OMFile::modifyMode) {
     mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (_mode == readOnlyMode) {
+  } else if (_mode == OMFile::readOnlyMode) {
     mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
   }
 
@@ -880,9 +882,9 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
   PRECONDITION("Valid storage name", validString(storageName));
 
   DWORD mode;
-  if (_mode == modifyMode) {
+  if (_mode == OMFile::modifyMode) {
     mode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
-  } else if (_mode == readOnlyMode) {
+  } else if (_mode == OMFile::readOnlyMode) {
     mode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE | STGM_CREATE;
   }
 
@@ -905,17 +907,18 @@ IStorage* OMStoredObject::createStorage(IStorage* storage,
 
 IStorage* OMStoredObject::openStorage(IStorage* storage,
                                       const char* storageName,
-                                      const OMAccessMode mode)
+                                      const OMFile::OMAccessMode mode)
 {
   TRACE("openStorage");
   PRECONDITION("Valid storage", storage != 0);
   PRECONDITION("Valid storage name", validString(storageName));
-  PRECONDITION("Valid mode", (mode == modifyMode) || (mode == readOnlyMode));
+  PRECONDITION("Valid mode", (mode == OMFile::modifyMode) ||
+                             (mode == OMFile::readOnlyMode));
 
   DWORD openMode;
-  if (mode == modifyMode) {
+  if (mode == OMFile::modifyMode) {
     openMode = STGM_DIRECT | STGM_READWRITE | STGM_SHARE_EXCLUSIVE;
-  } else if (mode == readOnlyMode) {
+  } else if (mode == OMFile::readOnlyMode) {
     openMode = STGM_DIRECT | STGM_READ      | STGM_SHARE_EXCLUSIVE;
   }
 
