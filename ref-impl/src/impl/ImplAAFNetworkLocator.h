@@ -62,6 +62,10 @@ public:
   // in /test/ImplAAFNetworkLocatorTest.cpp.
   static AAFRESULT test();
 
+  // Return this objects stored object class.
+  virtual AAFRESULT STDMETHODCALLTYPE
+	GetObjectClass(aafUID_t * pClass);
+
 private:
   OMWideStringProperty                             _path;
 };
