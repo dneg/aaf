@@ -47,7 +47,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         aafUID_t *  pID,
+         const aafUID_t *  pID,
 
          // @parm [in] type of each element to be contained in this set
          ImplAAFTypeDef * pTypeDef,
@@ -172,10 +172,6 @@ public:
   // Declare this class to be storable.
   //
   OMDECLARE_STORABLE(ImplAAFTypeDefSet)
-
-  // Declare the module test method. The implementation of the will be be
-  // in /test/ImplAAFTypeDefSetTest.cpp.
-  static AAFRESULT test();
 };
 
 #endif // ! __ImplAAFTypeDefSet_h__
