@@ -302,9 +302,9 @@ static HRESULT ReadAAFFile(aafWChar * pFileName)
 		checkExpression(leadingLines == 10, AAFRESULT_TEST_FAILED);
 		checkExpression(trailingLines == 20, AAFRESULT_TEST_FAILED);
 #if defined(_WIN32) || defined(WIN32)
-		checkExpression(memcmp(summary, "II*", 3) == 0, AAFRESULT_TEST_FAILED);
+		checkExpression(memcmp(summary, "II", 2) == 0, AAFRESULT_TEST_FAILED);
 #else
-		checkExpression(memcmp(summary, "MM*", 3) == 0, AAFRESULT_TEST_FAILED);
+		checkExpression(memcmp(summary, "MM", 2) == 0, AAFRESULT_TEST_FAILED);
 #endif
 
     // NOTE: The elements in the summary structure need to be byte swapped
