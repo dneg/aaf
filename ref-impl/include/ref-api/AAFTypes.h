@@ -790,7 +790,8 @@ typedef enum _aafSearchTag_e
 	kAAFByName = 3, 
 	kAAFByClass = 4, 
 	kAAFByDataDef = 5,
-	kAAFByMediaCrit = 6
+	kAAFByMediaCrit = 6,
+	kAAFByUsageCode = 7
 } aafSearchTag_e;
 
 
@@ -830,6 +831,7 @@ typedef struct _aafSearchCrit_t
         aafClassID_t      objClass;	// shouldn't this be a pointer?
         aafUID_t		 datadef;	// shouldn't this be a pointer?
         aafCriteriaType_t mediaCrit;
+        aafUID_t          usageCode;
     } tags;
 } aafSearchCrit_t;
 
