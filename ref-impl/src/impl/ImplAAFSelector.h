@@ -82,6 +82,19 @@ public:
         (ImplEnumAAFSegments ** ppEnum);
 
   AAFRESULT GetNthSegment(aafUInt32 index, ImplAAFSegment** ppSegment);
+public:
+	//SDK-private calls
+	virtual AAFRESULT GetMinimumBounds(aafPosition_t rootPos, aafLength_t rootLen,
+										ImplAAFMob *mob, ImplAAFMobSlot *track,
+										aafMediaCriteria_t *mediaCrit,
+										aafPosition_t currentObjPos,
+										aafOperationChoice_t *effectChoice,
+										ImplAAFComponent	*prevObject,
+										ImplAAFComponent *nextObject,
+										ImplAAFScopeStack *scopeStack,
+										aafPosition_t *diffPos, aafLength_t *minLength,
+										ImplAAFOperationGroup **groupObject, aafInt32	*nestDepth,
+										ImplAAFComponent **found, aafBool *foundTransition);
 
 
 public:
