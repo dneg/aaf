@@ -17,12 +17,17 @@
 
 #include <iostream.h>
 #include "AAFResult.h"
-
-static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
-static GUID		NewMobID;	// NOTE: this should really be aafUID_t, but problems w/ IsEqualGUID()
+#include "AAFDefUIDs.h"
 
 #define	MobName			L"MasterMOBTest"
-#define	NumMobSlots		5
+#define	NumMobSlots		3
+
+static aafWChar *		slotNames[NumMobSlots] = { L"VIDEO SLOT", L"AUDIO SLOT1", L"AUDIO SLOT2"};
+static const aafUID_t *	slotDDefs[NumMobSlots] = {&DDEF_Video, &DDEF_Audio, &DDEF_Audio};
+static aafRational_t	slotRates[NumMobSlots] = { {297,1}, {44100, 1}, {44100, 1}};
+
+static GUID		NewMobID;	// NOTE: this should really be aafUID_t, but problems w/ IsEqualGUID()
+
 
 static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   aafMediaOpenMode_t	mode,
@@ -49,7 +54,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 						   CLSCTX_INPROC_SERVER, 
 						   IID_IAAFSession, 
 						   (void **)ppSession);
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 		return hr;
 
 	hr = (*ppSession)->SetDefaultIdentification(&ProductInfo);
@@ -71,7 +76,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 		break;
 	}
 
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 	{
 		(*ppSession)->Release();
 		*ppSession = NULL;
@@ -79,7 +84,7 @@ static HRESULT OpenAAFFile(aafWChar*			pFileName,
 	}
   
   	hr = (*ppFile)->GetHeader(ppHeader);
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 	{
 		(*ppSession)->Release();
 		*ppSession = NULL;
@@ -103,7 +108,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
 	// Create the AAF file
 	hr = OpenAAFFile(pFileName, kMediaOpenAppend, &pSession, &pFile, &pHeader);
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 		return hr;
 
 	// Create a Master Mob
@@ -112,57 +117,68 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 							CLSCTX_INPROC_SERVER, 
 							IID_IAAFMob, 
 							(void **)&pMob);
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 		goto Cleanup;
 
 	CoCreateGuid((GUID *)&NewMobID);
 	hr = pMob->SetMobID((aafUID_t *)&NewMobID);
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 		goto Cleanup;
 
 	hr = pMob->SetName(MobName);
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 		goto Cleanup;
 	
-	// Add some slots
-	for (test = 0; test < NumMobSlots; test++)
-	{
-		IAAFMobSlot*	pNewSlot = NULL;
-		IAAFSegment*	pSegment = NULL;
-		IAAFSourceClip* pSrcClip = NULL;
-
-		hr = CoCreateInstance(CLSID_AAFSourceClip,
-							   NULL, 
-							   CLSCTX_INPROC_SERVER, 
-							   IID_IAAFSourceClip, 
-							   (void **)&pSrcClip);		
-		if (SUCCEEDED(hr))
-		{
-			hr = pSrcClip->QueryInterface (IID_IAAFSegment, (void **)&pSegment);
-			if (SUCCEEDED(hr))
-			{
-				hr = pMob->AppendNewSlot (pSegment, test+1, slotNames[test], &pNewSlot);
-				if (SUCCEEDED(hr))
-				{
-					pNewSlot->Release();
-				}
-				pSegment->Release();
-			}
-			pSrcClip->Release();
-		}
-
-		if (!SUCCEEDED(hr))
-			goto Cleanup;
-	}
-
-	// TODO: Test Master MOB specific methods here
 	hr = pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob);
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 	{
 		hr = AAFRESULT_TEST_FAILED;
 		goto Cleanup;
 	}
-	pMasterMob->Release();
+
+	// Add some slots
+	for (test = 0; test < NumMobSlots; test++)
+	{
+		IAAFSourceMob* pSrcMob;
+
+		hr = CoCreateInstance(CLSID_AAFSourceMob,
+							   NULL, 
+							   CLSCTX_INPROC_SERVER, 
+							   IID_IAAFSourceMob, 
+							   (void **)&pSrcMob);		
+		if (SUCCEEDED(hr))
+		{
+			hr = pSrcMob->AddNilReference (1, 0, (aafUID_t *)slotDDefs[test], slotRates[test]);
+			if (SUCCEEDED(hr))
+			{
+				aafUID_t				TempUID;
+				IAAFMob*				pTempMob;
+				IAAFEssenceDescriptor*	pDesc;
+
+ 				hr = CoCreateInstance(CLSID_AAFEssenceDescriptor,
+										NULL, 
+										CLSCTX_INPROC_SERVER, 
+										IID_IAAFEssenceDescriptor, 
+										(void **)&pDesc);		
+ 				hr = pSrcMob->SetEssenceDescription(pDesc);
+				pDesc->Release();
+
+				// Append source MOB to header
+				pSrcMob->QueryInterface(IID_IAAFMob, (void **) &pTempMob);
+				CoCreateGuid((GUID *)&TempUID);
+				hr = pTempMob->SetMobID(&TempUID);
+				hr = pTempMob->SetName(L"source mob");
+				pHeader->AppendMob(pTempMob);
+				pTempMob->Release();
+
+				hr = pMasterMob->AddMasterSlot((aafUID_t *)slotDDefs[test], test+1, 1, slotNames[test], pSrcMob);
+			}
+			pSrcMob->Release();
+		}
+
+		if (FAILED(hr))
+			goto Cleanup;
+	}
 
 	// Add the master mob to the file and cleanup
 	hr = pHeader->AppendMob(pMob);
@@ -171,6 +187,7 @@ Cleanup:
 	pFile->Close();
 	pSession->EndSession();
 
+	if (pMasterMob) pMasterMob->Release();
 	if (pMob) pMob->Release();
 	if (pHeader) pHeader->Release();
 	if (pFile) pFile->Release();
@@ -192,18 +209,19 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 
 	// Open the AAF file
 	hr = OpenAAFFile(pFileName, kMediaOpenReadOnly, &pSession, &pFile, &pHeader);
-	if (!SUCCEEDED(hr))
+	if (FAILED(hr))
 		return hr;
 
-	pHeader->GetNumMobs(kAllMob, &numMobs);
+	pHeader->GetNumMobs(kMasterMob, &numMobs);
 	if (1 != numMobs )
 	{
 		hr = AAFRESULT_TEST_FAILED;
 		goto Cleanup;
 	}
 
-	// Enumerate over all MOBs
-	criteria.searchTag = kNoSearch;
+	// Enumerate over Master MOBs
+	criteria.searchTag = kByMobKind;
+	criteria.tags.mobKind = kMasterMob;
     hr = pHeader->EnumAAFAllMobs(&criteria, &pMobIter);
 	while (pMobIter && pMobIter->NextOne(&pMob) != AAFRESULT_NO_MORE_MOBS)
 	{
@@ -213,6 +231,14 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		aafWChar			name[500];
 		aafNumSlots_t		numSlots = 0;
 		GUID				mobID;
+
+		// TODO: Test Master MOB specific methods here
+		hr = pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob);
+		if (FAILED(hr))
+		{
+			hr = AAFRESULT_TEST_FAILED;
+			goto Cleanup;
+		}
 
 		pMob->GetName(name, sizeof(name));
 		if (wcscmp(name, MobName) != 0) 
@@ -226,15 +252,6 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		if (NumMobSlots != numSlots)
 			hr = AAFRESULT_TEST_FAILED;
 
-		// TODO: Test Master MOB specific methods here
-		hr = pMob->QueryInterface(IID_IAAFMasterMob, (void **) &pMasterMob);
-		if (!SUCCEEDED(hr))
-		{
-			hr = AAFRESULT_TEST_FAILED;
-			goto Cleanup;
-		}
-		pMasterMob->Release();
-
 		if (SUCCEEDED(hr))
 		{
 			unsigned long	s = 0;
@@ -245,6 +262,9 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 			{
 				aafWChar			slotName[500];
 				aafSlotID_t			slotID;
+				aafNumSlots_t		numReps;
+				aafWChar*			pTapeName = NULL;
+				aafInt32			bufSize = 0;
 
 				pSlot->GetName(slotName, sizeof(slotName));
 				if (wcscmp(slotName, slotNames[s]) != 0) 
@@ -254,19 +274,35 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 				if (slotID != s+1)
 					hr = AAFRESULT_TEST_FAILED;
 
+				pMasterMob->GetTapeNameBufLen(&bufSize);
+				if (bufSize)
+				{
+					pTapeName = new aafWChar [bufSize];
+					if (pTapeName)
+					{
+						pMasterMob->GetTapeName(slotID, pTapeName, bufSize);
+						delete [] pTapeName;
+					}
+				}
+
+				pMasterMob->GetNumRepresentations(slotID, &numReps);
+				if (numReps != 1)
+					hr = AAFRESULT_TEST_FAILED;
+
 				pSlot->Release();
 				s++;
 
-				if (!SUCCEEDED(hr))
+				if (FAILED(hr))
 					break;
 			}
 
 			if (pSlotIter) pSlotIter->Release();
 		}
 
+		if (pMasterMob) pMasterMob->Release();
 		if (pMob) pMob->Release();
 
-		if (!SUCCEEDED(hr))
+		if (FAILED(hr))
 			break;
 	}
 
@@ -291,9 +327,9 @@ HRESULT CAAFMasterMob::test()
 
 	try
 	{
-		hr = CreateAAFFile(	pFileName );
-		if(hr == AAFRESULT_SUCCESS)
-			hr = ReadAAFFile( pFileName );
+		hr = CreateAAFFile(pFileName);
+		if (SUCCEEDED(hr))
+			hr = ReadAAFFile(pFileName);
 	}
 	catch (...)
 	{
@@ -301,7 +337,7 @@ HRESULT CAAFMasterMob::test()
 	}
 
 	// When all of the functionality of this class is tested, we can return success
-	if(hr == AAFRESULT_SUCCESS)
+	if (SUCCEEDED(hr))
 		hr = AAFRESULT_TEST_PARTIAL_SUCCESS;
 
 	return hr;
