@@ -183,7 +183,7 @@
 #include "AAFSelector.h"
 #include "AAFSourceClip.h"
 #include "AAFMediaFileDescriptor.h"
-#include "AAFMediaTapeDescriptor.h"
+#include "AAFTapeDescriptor.h"
 #include "AAFMediaFilmDescriptor.h"
 #include "AAFEffectSlot.h"
 #include "AAFFiller.h"
