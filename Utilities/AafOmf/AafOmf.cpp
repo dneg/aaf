@@ -42,6 +42,7 @@ namespace OMF2
 }
 
 #include "AAFException.h"
+#include "AutoRelease.h"
 
 // OMF Includes
 
@@ -598,31 +599,19 @@ void RegisterCodecProperties(AafOmfGlobals *globals, OMF2::omfSessionHdl_t OMFSe
 //
 static HRESULT AddPropertyToClass(IAAFDictionary *dict, const aafUID_t* pClassID, const aafUID_t* pPropTypeID, const aafUID_t* pPropID, aafCharacter*  pName)
 {
-	IAAFClassDef*	pCD;
-	HRESULT			hr;
+	AAFCheck			hr;
 
 	// Get the class definition.
+	IAAFClassDef*	pCD;
 	hr = dict->LookupClass(*pClassID, &pCD);
-	if (SUCCEEDED(hr))
-	{
-		IAAFTypeDef*	pTypeDef;
-
-		hr = dict->LookupType(*pPropTypeID, &pTypeDef);
-		if (SUCCEEDED(hr))
-		{
-			IAAFPropertyDef*	pPropDef;
-
-			hr = pCD->AppendOptionalPropertyDef(*pPropID, pName, pTypeDef, &pPropDef);
-			if (SUCCEEDED(hr))
-			{
-				pPropDef->Release();
-			}
-			pTypeDef->Release();
-		}
-		pCD->Release();
-	}
-	
-	return hr;
+	AutoRelease<IAAFClassDef> r1(pCD);
+	IAAFTypeDef*	pTypeDef;
+	hr = dict->LookupType(*pPropTypeID, &pTypeDef);
+	AutoRelease< IAAFTypeDef > r2( pTypeDef );
+	IAAFPropertyDef*	pPropDef;
+	hr = pCD->AppendOptionalPropertyDef(*pPropID, pName, pTypeDef, &pPropDef);
+	AutoRelease< IAAFPropertyDef > r3( pPropDef );	
+	return AAFRESULT_SUCCESS;
 }
 
 
@@ -664,54 +653,36 @@ void RegisterAAFMCPrivate(IAAFDictionary * dict)
 HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID,
 							   aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
 {
-	IAAFPropertyValue*	pPV = NULL;
-	IAAFTypeDef*		pTD;
-	HRESULT				hr;
+	AAFCheck			hr;
 
 	// Create a property value from the supplied value (pValue)
+	IAAFTypeDef*		pTD;
 	hr = dict->LookupType(*pIntTypeID, &pTD);
-	if (SUCCEEDED(hr))
-	{
-		IAAFTypeDefInt*	pTDInt;
+	AutoRelease<IAAFTypeDef> r1( pTD );
 
-		hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
-		if (SUCCEEDED(hr))
-		{
-			// Now create a property value object with that value.
-			hr = pTDInt->CreateValue(pValue, ValueSize, &pPV);
-			pTDInt->Release();
-		}
-		pTD->Release();
-	}
+	IAAFTypeDefInt*	pTDInt;
+	hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
+	AutoRelease<IAAFTypeDefInt> r2( pTDInt );
+
+	// Now create a property value object with that value.
+	IAAFPropertyValue*	pPV;
+	hr = pTDInt->CreateValue(pValue, ValueSize, &pPV);
+	AutoRelease<IAAFPropertyValue> r3( pPV );
 
 	// Add the property to the target object.
-	if (SUCCEEDED(hr))
-	{
-		if (SUCCEEDED(hr))
-		{
-			IAAFClassDef*	pCD;
+	// Get the class def for the object
+	IAAFClassDef*	pCD;
+	hr = dict->LookupClass(*pClassID, &pCD);
+	AutoRelease<IAAFClassDef> r4( pCD );
 
-			// Get the class def for the object
-			hr = dict->LookupClass(*pClassID, &pCD);
-			if (SUCCEEDED(hr))
-			{
-				IAAFPropertyDef*	pPD;
+	IAAFPropertyDef*	pPD;
+	hr = pCD->LookupPropertyDef(*pPropID, &pPD);
+	AutoRelease<IAAFPropertyDef> r5( pPD );
 
-				hr = pCD->LookupPropertyDef(*pPropID, &pPD);
-				if (SUCCEEDED(hr))
-				{
-					// Set the propeter value on the target object
-					hr = pObj->SetPropertyValue(pPD, pPV);
-					pPD->Release();
-				}
-				pCD->Release();
-			}
-		}
-	}
+	// Set the propeter value on the target object
+	hr = pObj->SetPropertyValue(pPD, pPV);
 
-	if (pPV) pPV->Release();
-
-	return hr;
+	return AAFRESULT_SUCCESS;
 }
 
 //***********************************************************
@@ -728,54 +699,43 @@ HRESULT SetIntegerPropOnObject(IAAFObject* pObj, aafUID_t* pClassID, aafUID_t* p
 //
 HRESULT GetIntegerPropFromObject(IAAFObject* pObj, const aafUID_t* pClassID, aafUID_t* pPropID, const aafUID_t* pIntTypeID, aafMemPtr_t pValue, aafUInt32 ValueSize, IAAFDictionary *dict)
 {
-	IAAFPropertyValue*	pPV = NULL;
-	IAAFClassDef*		pCD;
-	HRESULT				hr;
+	AAFCheck				hr;
 
 	// Get the property value for the target property
+	IAAFClassDef*		pCD;
 	hr = dict->LookupClass(*pClassID, &pCD);
-	if (SUCCEEDED(hr))
+	AutoRelease<IAAFClassDef> r1(pCD);
+
+	IAAFPropertyDef*	pPD;
+	hr = pCD->LookupPropertyDef(*pPropID, &pPD);
+	AutoRelease<IAAFPropertyDef> r2( pPD );
+
+	aafBool	present = AAFFalse;
+	pObj->IsPropertyPresent(pPD, &present);
+	IAAFPropertyValue*	pPV = NULL;
+	AutoRelease<IAAFPropertyValue> r3;
+
+	if (present == AAFTrue)
 	{
-		IAAFPropertyDef*	pPD;
-
-		hr = pCD->LookupPropertyDef(*pPropID, &pPD);
-		if (SUCCEEDED(hr))
-		{
-			aafBool	present = AAFFalse;
-
-			pObj->IsPropertyPresent(pPD, &present);
-			if (present == AAFTrue)
-				hr = pObj->GetPropertyValue(pPD, &pPV);
-			else
-				hr = AAFRESULT_PROP_NOT_PRESENT;
-
-			pPD->Release();
-		}
-		pCD->Release();
+		hr = pObj->GetPropertyValue(pPD, &pPV);
+		r3 = pPV;
+	}
+	else
+	{
+		hr = AAFRESULT_PROP_NOT_PRESENT;
 	}
 
-	if (SUCCEEDED(hr))
-	{
-		IAAFTypeDef* pTD;
+	// Get the type def from the dict with which to interpret this
+	// property value.
+	IAAFTypeDef* pTD;
+	hr = dict->LookupType(*pIntTypeID, &pTD);
+	AutoRelease< IAAFTypeDef > r4 (pTD);
 
-		// Get the type def from the dict with which to interpret this
-		// property value.
-		hr = dict->LookupType(*pIntTypeID, &pTD);
-		if (SUCCEEDED(hr))
-		{
-			IAAFTypeDefInt* pTDInt;
-			
-			hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
-			if (SUCCEEDED(hr))
-			{
-				pTDInt->GetInteger(pPV, pValue, ValueSize);
-				pTDInt->Release();
-			}
-			pTD->Release();
-		}
-	}
+	IAAFTypeDefInt* pTDInt;
+	hr = pTD->QueryInterface(IID_IAAFTypeDefInt, (void**)&pTDInt);
+	AutoRelease< IAAFTypeDefInt > r5( pTDInt );
 
-	if (pPV) pPV->Release();
+	pTDInt->GetInteger(pPV, pValue, ValueSize);
 
-	return hr;
+	return AAFRESULT_SUCCESS;
 }
