@@ -109,7 +109,7 @@ public:
 		  _size( size )
 	{}
 
-	AxBuffer( const AxBuffer<T>& other )
+	AxBuffer( AxBuffer<T>& other )
 		: _ptr( other._ptr ),
 		  _size( other._size )
 	{}
