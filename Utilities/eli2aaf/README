@@ -1,4 +1,5 @@
            README for eli2aaf
+           ==================
 
 eli2aaf is a command line utility to create an AAF file corresponding to the
 edit decisions in a lavtools (mjpegtools) ELI file for DV media.
@@ -8,8 +9,8 @@ composition in Kino, then save the edit decisions in ELI format using
 "Save As ELI" from Kino's File menu.  Running eli2aaf on the saved ELI file
 will then create an AAF file with a composition corresponding to the edit
 decisions made in Kino.  The AAF file will contain embedded essence for the
-video and audio tracks of the DV files.
-
+video and audio tracks of the DV files and can be imported into commercial
+non-linear editing applications that support AAF.
 
 Requirements
 ============
@@ -23,12 +24,14 @@ Building
   or 
     cd Utilities/eli2aaf && make
 
-The executable eli2aaf will be written to <platform>/g++/bin/debug/eli2aaf
+The executable, eli2aaf, will be written to <platform>/g++/bin/debug/eli2aaf
 
 Usage
 =====
-  eli2aaf infile outfile [essencedir]
+  eli2aaf [-netloc] infile outfile [essencedir]
 
+    -netloc     flag which cause essence not to be embedded, and a
+                NetworkLocator object added instead
     infile      ELI format file
     outfile     AAF file to be written
     essencedir  Optional directory where raw DV files are stored.  If specified
@@ -54,6 +57,11 @@ Limitations
  * No attempt is made to recover from bad or missing video/audio data
 
  * Raw DV files only are supported
+
+ * A limitation (bug) of the Microsoft Structured Storage implementation is
+   that it enters an infinite loop when reading/writing AAF files > 80MB.
+   Instead use libgsf (contact the author for more information) or OLE32.DLL
+   under MS Windows.
 
 References
 ==========
