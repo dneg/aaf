@@ -64,7 +64,6 @@
 
 #include <assert.h>
 #include <string.h>
-#include <iostream.h>
 
 
 
@@ -87,47 +86,6 @@ extern "C" const aafClassID_t CLSID_AAFPropValData;
 //
 // Therefore the minimum valid size is 18 bytes.
 //
-
-static void formatError(DWORD errorCode)
-{
-#if defined( OS_WINDOWS )
-  char message[256];
-
-  int status = FormatMessageA(
-    FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-    NULL,
-    errorCode,
-    LANG_SYSTEM_DEFAULT,
-    message, 256,
-    NULL);
-
-  if (status != 0) {
-    int length = strlen(message);
-    // zap cr/lf
-    if (length >= 2) {
-      message[length - 2] = '\0';
-    }
-    cerr << "Error text = \"" << message << "\"" << endl;
-  } else {
-    cerr << "Error code = " << hex << errorCode << dec << endl;
-  }
-
-#else
-  cerr << "Error code = " << hex << errorCode << dec << endl;
-
-#endif  // OS_WINDOWS
-}
-
-static void checkResult(AAFRESULT resultCode)
-{
-  TRACE("checkFile");
-
-  if (AAFRESULT_FAILED(resultCode)) {
-    formatError(resultCode);
-  }
-  ASSERT("Succeeded", AAFRESULT_SUCCEEDED(resultCode)); // trr - error
-}
-
 
 
 //
