@@ -43,6 +43,8 @@
 #c TomR:980716: Added
 #c
 #startm AD_TYPES_BEGIN 11
+#ifndef _.this-module_h_
+#define _.this-module_h_
 #endm
 
 
