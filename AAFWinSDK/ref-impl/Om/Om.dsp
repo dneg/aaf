@@ -238,10 +238,6 @@ SOURCE="..\..\..\ref-impl\include\OM\OMProperty.h"
 # End Source File
 # Begin Source File
 
-SOURCE="..\..\..\ref-impl\src\OM\OMPropertyBase.h"
-# End Source File
-# Begin Source File
-
 SOURCE="..\..\..\ref-impl\include\OM\OMPropertyDefinition.h"
 # End Source File
 # Begin Source File
@@ -471,10 +467,6 @@ SOURCE="..\..\..\ref-impl\src\OM\OMWeakRefVectorPropertyT.h"
 # Begin Source File
 
 SOURCE="..\..\..\ref-impl\include\OM\OMWideStringProperty.h"
-# End Source File
-# Begin Source File
-
-SOURCE="..\..\..\ref-impl\src\OM\OMWideStringPropertyT.h"
 # End Source File
 # End Group
 # End Target
