@@ -49,7 +49,8 @@ using namespace std;
 // Temporarily necessary global declarations.
 extern "C" const CLSID CLSID_AAFControlPoint; // generated
 
-static aafMobID_t	zeroMobID = { 0 };
+static aafMobID_t	zeroMobID = {{0,0,0,0,0,0,0,0,0,0,0,0},0,0,0,0,
+					{0,0,0,{0,0,0,0,0,0,0,0}}};
 static aafWChar *slotNames[5] = { L"SLOT1", L"SLOT2", L"SLOT3", L"SLOT4", L"SLOT5" };
 
 // Cross-platform utility to delete a file.
