@@ -25,6 +25,8 @@ class AAFObject;
 #include "OMStorable.h"
 #include "ImplAAFRoot.h"
 
+#include <assert.h>
+
 class ImplAAFObject : public OMStorable, public ImplAAFRoot
 {
 public:
@@ -68,7 +70,15 @@ public:
 		 aafBool*  Result);  //@parm [out] 
 
   // tjb - this is temporary and should be removed
-  int classId(void) const { return 0; }
+  const OMClassId& classId(void) const
+  {
+    // This function must be overidden by subclasses. It is pure
+    // virtual on OMStorable. It is defined here since it is not yet
+    // overridden in the automatically generated Impl classes.
+    //
+    assert(!"This code should not be reached.");
+    return nullOMClassId;
+  }
  
 public:
   // Declare the module test method. The implementation of the will be be
