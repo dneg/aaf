@@ -580,8 +580,13 @@ void reportBadIndex(char* pathName,
                     OMUInt32 expectedSize,
                     OMUInt32 actualSize);
 static void reportBadIndexEntry(OMUInt32 i,
-                                const IndexEntry* entry);
-static bool isValid(const IndexEntry* index, const OMUInt32 entries);
+                                const IndexEntry* entry,
+                                const CLSID& clsid,
+                                const char* path);
+static bool isValid(const IndexEntry* index,
+                    const OMUInt32 entries,
+                    const CLSID& clsid,
+                    const char* path);
 static size_t valueStreamSize(const IndexEntry* index, const OMUInt32 entries);
 static char* typeName(OMUInt32 type);
 static void openStorage(IStorage* parentStorage,
@@ -1782,9 +1787,14 @@ void reportBadIndex(char* pathName,
 }
 
 void reportBadIndexEntry(OMUInt32 i,
-                         const IndexEntry* entry)
+                         const IndexEntry* entry,
+                         const CLSID& clsid,
+                         const char* path)
 {
   cerr << "Property set index entry is invalid." << endl;
+  cerr << path << endl;
+  printClsid(clsid, cerr);
+  cerr << endl;
   cerr << setw(12) << "property";
   cerr << setw(12) << "pid (hex)";
   cerr << setw(12) << "form (hex)";
@@ -1803,7 +1813,10 @@ void reportBadIndexEntry(OMUInt32 i,
   cerr << endl;
 }
 
-bool isValid(const IndexEntry* index, const OMUInt32 entries)
+bool isValid(const IndexEntry* index,
+             const OMUInt32 entries,
+             const CLSID& clsid,
+             const char* path)
 {
   bool result = true;
 
@@ -1817,7 +1830,7 @@ bool isValid(const IndexEntry* index, const OMUInt32 entries)
     currentLength = index[i]._length;
     // Check length
     if (currentLength == 0) {
-      reportBadIndexEntry(i, &index[i]);
+      reportBadIndexEntry(i, &index[i], clsid, path);
       error("isValid", "Property set index entry has zero length.");
     }
     if (i == 0) {
@@ -1827,12 +1840,12 @@ bool isValid(const IndexEntry* index, const OMUInt32 entries)
     } else {
       // Subsequent entries
       if (currentOffset < previousOffset) {
-        reportBadIndexEntry(i, &index[i]);
+        reportBadIndexEntry(i, &index[i], clsid, path);
         warning("isValid", "Property set index entries out of order.");
         result = false;
         break;
       } else if (position > currentOffset) {
-        reportBadIndexEntry(i, &index[i]);
+        reportBadIndexEntry(i, &index[i], clsid, path);
         warning("isValid", "Property set index entries overlap.");
         result = false;
         break; 
@@ -3372,7 +3385,7 @@ void dumpObject(IStorage* storage,
   IndexEntry* index = readIndex(stream, _entryCount, swapNeeded, version);
   printIndex(index, _entryCount);
 
-  if (!isValid(index, _entryCount)) {
+  if (!isValid(index, _entryCount, clsid, pathName)) {
     fatalError("dumpObject", "Invalid property set index.");
   }
 
