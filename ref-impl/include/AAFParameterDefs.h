@@ -93,3 +93,10 @@ const aafUID_t kAAFParameterDefSMPTEReplicationV = { 0x9c894ba9, 0x2277, 0x11d3,
 // Parameter Definition Type : Boolean
 // {9C894BAA-2277-11d3-8A4C-0050040EF7D2}
 const aafUID_t kAAFParameterDefSMPTECheckerboard = { 0x9c894baa, 0x2277, 0x11d3, { 0x8a, 0x4c, 0x0, 0x50, 0x4, 0xe, 0xf7, 0xd2 } };
+
+// Parameter Definition : SMPTE Checkerboard
+// Parameter Definition Type : UINT 32
+// {5F1C2560-2415-11d3-8A4F-0050040EF7D2}
+const aafUID_t kAAFParameterDefPhaseOffset = { 0x5f1c2560, 0x2415, 0x11d3, { 0x8a, 0x4f, 0x0, 0x50, 0x4, 0xe, 0xf7, 0xd2 } };
+
+
