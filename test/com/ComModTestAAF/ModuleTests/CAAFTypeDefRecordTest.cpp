@@ -620,7 +620,7 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  checkResult (pObj->GetPropertyValue (pPdPosC, &pPVc));
 
 	  // Try to read the first one with GetStruct.
-	  rational8pair_t valA = { 0 };
+	  rational8pair_t valA = { {0,0},{0,0} };
 	  checkResult (ptdr8p->GetStruct (pPVa,
 									  (aafMemPtr_t) &valA,
 									  sizeof (valA)));
@@ -700,7 +700,7 @@ static HRESULT ReadRecord (const aafWChar * pFileName)
 	  checkExpression (8 == val, AAFRESULT_TEST_FAILED);
 
 	  // Read the last two with GetStruct just to get it over with. ;)
-	  rational8pair_t valC = { 0 };
+	  rational8pair_t valC = { {0,0},{0,0} };
 	  temphr = ptdr8p->GetStruct (pPVc,
 								  (aafMemPtr_t) &valC,
 								  sizeof (valC)-1);

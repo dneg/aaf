@@ -458,10 +458,10 @@ static HRESULT TestTypeDefInt (testMode_t mode)
 	  const aafUInt32 sizeTable[4] = {1, 2, 4, 8};
 	  IAAFTypeDefInt *typeDefTable[4][2] =
 	  {
-		ptdu8, ptds8,
-		ptdu16, ptds16,
-		ptdu32, ptds32,
-		ptdu64, ptds64
+		{ptdu8, ptds8},
+		{ptdu16, ptds16},
+		{ptdu32, ptds32},
+		{ptdu64, ptds64}
 	  };
 
 	  aafUInt32  setSize;
