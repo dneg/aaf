@@ -264,6 +264,19 @@ void TextStream::SetCurSourceInfo (const SourceInfo & si)
 }
 
 
+const char * TextStream::GetCString () const
+{
+  if (_pData && *_pData)
+	{
+	  return _pData;
+	}
+  else
+	{
+	  return 0;
+	}
+}
+
+
 void TextStream::dump (FILE* fp) const
 {
   TextStream tmp = *this;

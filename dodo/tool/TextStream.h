@@ -128,6 +128,14 @@ struct TextStream
   //********
 
 
+  const char * GetCString () const;
+  //
+  // Returns a pointer to a null-terminated const string representing
+  // this streams contents.  Returns NULL if empty.
+  //
+  //********
+
+
   void dump (FILE* fp) const;
   //
   // Dumps contents of this thing to given file.
