@@ -461,7 +461,7 @@ AAFRESULT STDMETHODCALLTYPE
 						break;
 					}
 					else
-						RAISE(OM_ERR_NOT_IMPLEMENTED);
+						RAISE(AAFRESULT_NOT_IMPLEMENTED);
 				}
 			} /* for */
 			delete sequIter;
@@ -563,9 +563,9 @@ AAFRESULT STDMETHODCALLTYPE
 	XPROTECT(_file)
 	{
 		CvtInt32toInt64(0, &zero);
-		XASSERT(sourceRefObj != NULL, OM_ERR_NULLOBJECT);
+		XASSERT(sourceRefObj != NULL, AAFRESULT_NULLOBJECT);
 		XASSERT(direction == kAAFFilmToTapeSpeed || direction == kAAFTapeToFilmSpeed,
-				OM_ERR_PULLDOWN_DIRECTION);
+				AAFRESULT_PULLDOWN_DIRECTION);
 
 		CvtInt32toPosition(0, zeroPos);
 		CHECK(sourceRefObj->ReadUID(OMMOBJMobID, &ref.sourceID));
@@ -642,7 +642,7 @@ AAFRESULT STDMETHODCALLTYPE
 				sclp = (AAFSourceClip *)seg;		//!!CASTING
 			}
 			
-			XASSERT(sclp->IsTypeOf("SCLP", &status), OM_ERR_NOT_SOURCE_CLIP);
+			XASSERT(sclp->IsTypeOf("SCLP", &status), AAFRESULT_NOT_SOURCE_CLIP);
 			CHECK(sclp->SetRef(ref));
 			CHECK(sclp->WriteLength(subProp, srcRefLength));
 		}
@@ -756,8 +756,8 @@ AAFRESULT ImplAAFSourceMob::FindTimecodeClip(
 	} /* XPROTECT */
 	XEXCEPT
 	{
-		if(XCODE() == OM_ERR_NO_MORE_OBJECTS)
-			RERAISE(OM_ERR_NO_TIMECODE);
+		if(XCODE() == AAFRESULT_NO_MORE_OBJECTS)
+			RERAISE(AAFRESULT_NO_TIMECODE);
 		*result = NULL;
 	}
 	XEND;
