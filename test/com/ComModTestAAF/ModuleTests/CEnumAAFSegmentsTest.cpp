@@ -33,6 +33,7 @@
 #include "AAFDataDefs.h"
 #include <iostream.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "AAFStoredObjectIDs.h"
 #include "AAFDefUIDs.h"
