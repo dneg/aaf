@@ -290,6 +290,8 @@ AAFRESULT AddIdentificationObject (aafProductIdentification_t * /*pIdent*/);
 AAFRESULT LoadMobTables(void);
 AAFRESULT SetModified(void);		// To NOW
 
+  void SetByteOrder(const aafInt16 byteOrder);
+
 private:
 	// These are private accessor methods.
 	ImplAAFContentStorage *GetContentStorage(void);
