@@ -22,6 +22,7 @@
 #include "ImplAAFTimelineMobSlot.h"
 #endif
 
+#include "AAFStoredObjectIDs.h"
 #include "AAFPropertyIDs.h"
 
 #include <assert.h>
@@ -182,19 +183,6 @@ AAFRESULT ImplAAFTimelineMobSlot::ConvertToMyRate(aafPosition_t srcPos,
 	return AAFRESULT_SUCCESS;
 }
 
-extern "C" const aafClassID_t CLSID_AAFTimelineMobSlot;
 
-OMDEFINE_STORABLE(ImplAAFTimelineMobSlot, CLSID_AAFTimelineMobSlot);
-
-// Cheat!  We're using this object's CLSID instead of object class...
-AAFRESULT STDMETHODCALLTYPE
-ImplAAFTimelineMobSlot::GetObjectClass(aafUID_t * pClass)
-{
-  if (! pClass)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  memcpy (pClass, &CLSID_AAFTimelineMobSlot, sizeof (aafClassID_t));
-  return AAFRESULT_SUCCESS;
-}
+OMDEFINE_STORABLE(ImplAAFTimelineMobSlot, AUID_AAFTimelineMobSlot);
 
