@@ -26,6 +26,10 @@
 #include "OMUtilities.h"
 #include "OMClassFactory.h"
 
+#include "OMMSSStoredObjectFactory.h"
+#include "OMXMLStoredObjectFactory.h"
+#include "OMKLVStoredObjectFactory.h"
+
 #include "ImplAAFDataDef.h"
 #include "ImplAAFDictionary.h"
 #include "ImplAAFMetaDictionary.h"
@@ -73,6 +77,12 @@ static const aafProductIdentification_t kNullIdent = { 0 };
 //
 static const aafUInt32 sCurrentAAFObjectModelVersion = 0;
 
+static const OMStoredObjectEncoding AAFMSSEncoding =
+    *reinterpret_cast<const OMStoredObjectEncoding*>(&aafFileKindAafSSBinary);
+static const OMStoredObjectEncoding AAFXMLEncoding =
+    *reinterpret_cast<const OMStoredObjectEncoding*>(&aafFileKindAafXmlText);
+static const OMStoredObjectEncoding AAFKLVEncoding =
+    *reinterpret_cast<const OMStoredObjectEncoding*>(&aafFileKindAafKlvBinary);
 
 static const aafUID_t kNullFileKind = { 0 };
 
@@ -1178,12 +1188,20 @@ OMFile * ImplAAFFile::omFile (void)
 
 void ImplAAFFile::registerFactories(void)
 {
-  // Nothing yet
+  OMFile::registerFactory(AAFMSSEncoding,
+                          new OMMSSStoredObjectFactory(AAFMSSEncoding,
+                                                       L"AAF MSS"));
+  OMFile::registerFactory(AAFXMLEncoding,
+                          new OMXMLStoredObjectFactory(AAFXMLEncoding,
+                                                       L"AAF XML"));
+  OMFile::registerFactory(AAFKLVEncoding,
+                          new OMKLVStoredObjectFactory(AAFKLVEncoding,
+                                                       L"AAF KLV"));
 }
 
 void ImplAAFFile::removeFactories(void)
 {
-  // Nothing yet
+  OMFile::removeAllFactories();
 }
 
 
