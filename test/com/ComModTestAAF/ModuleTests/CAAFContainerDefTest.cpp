@@ -62,6 +62,11 @@ inline void checkResult(HRESULT r)
   if (FAILED(r))
     throw r;
 }
+
+// {4E84045D-0F29-11d4-A359-009027DFCA6A}
+static const aafUID_t testUID = 
+{ 0x4e84045d, 0xf29, 0x11d4, { 0xa3, 0x59, 0x0, 0x90, 0x27, 0xdf, 0xca, 0x6a } };
+
 inline void checkExpression(bool expression, HRESULT r)
 {
   if (!expression)
@@ -124,7 +129,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 	IAAFDictionary*  pDictionary = NULL;
 	IAAFContainerDef*	pContainerDef = NULL;
 	bool bFileOpen = false;
-	aafUID_t		uid = ContainerFile;
+	aafUID_t		uid = testUID;
 	HRESULT			hr = S_OK;
 /*	long			test;
 */
@@ -189,9 +194,10 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	IAAFDictionary*  pDictionary = NULL;
 	IEnumAAFContainerDefs *pPlug = NULL;
 	IAAFContainerDef		*pPlugDef = NULL;
-	IAAFContainerDef		*pContainerDef = NULL;
+	IAAFDefObject		*pDef = NULL;
 	bool bFileOpen = false;
 	aafBool			testBool;
+	aafUID_t		readUID;
 	HRESULT			hr = S_OK;
 
 	try
@@ -203,10 +209,17 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 		checkResult(pHeader->GetDictionary(&pDictionary));
 	
 		checkResult(pDictionary->GetContainerDefs(&pPlug));
-		checkResult(pPlug->NextOne (&pPlugDef));
-		checkResult(pPlugDef->QueryInterface (IID_IAAFContainerDef, (void **)&pContainerDef));
-		checkResult(pContainerDef->EssenceIsIdentified (&testBool));
-		checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+		while(pPlug->NextOne (&pPlugDef) == AAFRESULT_SUCCESS)
+		{
+			checkResult(pPlugDef->QueryInterface (IID_IAAFDefObject, (void **)&pDef));
+			checkResult(pDef->GetAUID(&readUID));
+			if(memcmp(&readUID, &testUID, sizeof(aafUID_t)) == 0)
+			{
+				checkResult(pPlugDef->EssenceIsIdentified (&testBool));
+				checkExpression(testBool == kAAFTrue, AAFRESULT_TEST_FAILED);
+				break;
+			}
+		}
 	}
 	catch (HRESULT& rResult)
 	{
@@ -214,8 +227,8 @@ static HRESULT ReadAAFFile(aafWChar* pFileName)
 	}
 
 	// Cleanup and return
-	if (pContainerDef)
-		pContainerDef->Release();
+	if (pDef)
+		pDef->Release();
 
 	if (pPlugDef)
 		pPlugDef->Release();

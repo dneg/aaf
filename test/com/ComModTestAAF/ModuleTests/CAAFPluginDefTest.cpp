@@ -47,6 +47,7 @@ static wchar_t *manuf2URL = L"www.avid.com";
 #include "AAFResult.h"
 #include "AAFDataDefs.h"
 #include "AAFDefUIDs.h"
+#include "AAFClassDefUIDs.h"
 #include "aafUtils.h"
 
 #include "CAAFBuiltinDefs.h"
@@ -158,6 +159,7 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
   IAAFDefObject*	pPlugDef = NULL;
   IAAFCodecDef*		pCodecDef = NULL;
   IAAFPluginDef *pDesc = NULL;
+  IAAFClassDef *pClassDef = NULL;
   IAAFNetworkLocator *pNetLoc = NULL, *pNetLoc2 = NULL, *pNetLoc3 = NULL;
   IAAFLocator		*pLoc = NULL, *pLoc2 = NULL, *pLoc3 = NULL;
   aafUID_t			category = AUID_AAFDefObject, manufacturer = MANUF_JEFFS_PLUGINS;
@@ -236,6 +238,8 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
                                           (void **)&pCodecDef));
     checkResult(pCodecDef->Initialize (CODEC_DEF_ID, L"Test", L"Really, just a test."));
 	checkResult(pCodecDef->AddEssenceKind (defs.ddMatte()));
+	checkResult(pDictionary->LookupClassDef(kAAFClassID_EssenceDescriptor, &pClassDef));
+	checkResult(pCodecDef->SetFileDescriptorClass (pClassDef));
 	checkResult(pDictionary->RegisterCodecDef(pCodecDef));
 	/**/
 	checkResult(defs.cdNetworkLocator()->
@@ -275,6 +279,10 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
 
   if (pPlugDef)
     pPlugDef->Release();
+
+  if (pClassDef)
+    pClassDef->Release();
+
 
   if (pNetLoc)
     pNetLoc->Release();
