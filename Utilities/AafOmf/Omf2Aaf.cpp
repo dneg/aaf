@@ -215,9 +215,9 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 	aafWChar*				pwFileName = NULL;
 	aafInt32				nOMFIdentifications;
 	aafWChar*				pwCompanyName = NULL;
-	aafWChar*				pwProductName;
+	aafWChar*				pwProductName = NULL;
     aafWChar*				pwProductVersionString = NULL;
-    aafWChar*				pwPlatform;
+    aafWChar*				pwPlatform = NULL;
 	aafBool					bAddExtraIdent = AAFFalse;
 	OMF2::omfProductVersion_t OMFVersion;
 
@@ -315,6 +315,8 @@ HRESULT Omf2Aaf::AAFFileOpen( char* pFileName)
 				pIdent->SetProductName(ProductInfo.productName);
 				pIdent->SetProductVersion(&ProductInfo.productVersion);
 				rc = pHeader->AppendIdentification(pIdent);
+				pIdent->Release();
+				pIdent = NULL;
 			}
 		}
 	}
@@ -774,6 +776,38 @@ HRESULT Omf2Aaf::ConvertOMFMediaDataObject( OMF2::omfObject_t obj )
 	pSourceMob->Release();
 	return rc;
 }
+
+// ============================================================================
+// ConvertUniqueNameToAUID
+//
+//			This function converts an OMF uinique name or id into an AAF datadef. 
+//			
+// Returns: AAFRESULT_SUCCESS if datakind is converted succesfully
+//
+// ============================================================================
+HRESULT Omf2Aaf::ConvertUniqueNameToAUID(OMF2::omfUniqueName_t datakindName,
+										 aafUID_t* pDatadef)
+{
+	HRESULT					rc = AAFRESULT_SUCCESS;
+
+	if (strncmp("omfi:effect:VideoDissolve", datakindName, strlen("omfi:effect:VideoDissolve"))== 0)
+		*pDatadef = kAAFEffectVideoDissolve;
+	else if (strncmp("omfi:effect:MonoAudioDissolve", datakindName, strlen("omfi:effect:MonoAudioDissolve")) == 0)
+		*pDatadef = kAAFEffectMonoAudioDissolve;
+	else if(strncmp("omfi:effect:StereoAudioDissolve", datakindName, strlen("omfi:effect:StereoAudioDissolve")) == 0)
+		*pDatadef = kAAFEffectStereoAudioDissolve;
+	else if(strncmp("omfi:effect:VideoFadeToBlack", datakindName, strlen("omfi:effect:VideoFadeToBlack")) == 0)
+		*pDatadef = kAAFEffectVideoFadeToBlack;
+	else if(strncmp("omfi:effect:SMPTEVideoWipe", datakindName, strlen("omfi:effect:SMPTEVideoWipe")) == 0)
+		*pDatadef = kAAFEffectSMPTEVideoWipe;
+	else
+	{
+		UTLstdprintf("Unknown name :%s Found in sequence\n", datakindName);
+		*pDatadef = kAAFEffectUnknown;
+	}
+
+	return rc;
+}
 // ============================================================================
 // ConvertOMFDatakind
 //
@@ -790,14 +824,16 @@ HRESULT Omf2Aaf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind,
 	OMF2::omfUniqueName_t	datakindName;
 	
 	rc = OMF2::omfiDatakindGetName(OMFFileHdl, datakind, 64, datakindName);
-	if (strncmp("omfi:data:Picture", datakindName, 17)== 0)
+	if (strncmp("omfi:data:Picture", datakindName, strlen("omfi:data:Picture"))== 0)
 		*pDatadef = DDEF_Video;
-	else if (strncmp("omfi:data:Sound", datakindName, 15) == 0)
+	else if (strncmp("omfi:data:Sound", datakindName, strlen("omfi:data:Sound")) == 0)
 		*pDatadef = DDEF_Audio;
-	else if(strncmp("omfi:data:Timecode", datakindName, 18) == 0)
+	else if(strncmp("omfi:data:Timecode", datakindName, strlen("omfi:data:Timecode")) == 0)
 		*pDatadef = DDEF_Timecode;
-	else if(strncmp("omfi:data:Edgecode", datakindName, 18) == 0)
+	else if(strncmp("omfi:data:Edgecode", datakindName, strlen("omfi:data:Edgecode")) == 0)
 		*pDatadef = DDEF_Edgecode;
+	else if(strncmp("omfi:data:PictureWithMatte", datakindName, strlen("omfi:data:PictureWithMatte")) == 0)
+		*pDatadef = kAAFEffectPictureWithMate;
 
 	else
 	{
@@ -808,6 +844,7 @@ HRESULT Omf2Aaf::ConvertOMFDatakind( OMF2::omfDDefObj_t datakind,
 
 	return rc;
 }
+
 // ============================================================================
 // ConvertOMFMOBObject
 //
@@ -1063,6 +1100,7 @@ HRESULT Omf2Aaf::TraverseOMFMob( OMF2::omfObject_t obj, IAAFMob* pMob )
 							pMobSlot = NULL;
 						}
 						UTLMemoryFree(pwTrackName);
+						pwTrackName = NULL;
 						DecIndentLevel();
 					}
 					if (pSegment)
@@ -1201,6 +1239,9 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 	IAAFTransition*			pTransition = NULL;
 	IAAFSelector*			pSelector = NULL;
 	IAAFGroup*				pEffect = NULL;
+	IAAFEffectDef*			pEffectDef = NULL;
+	IAAFParameterDef*		pParameterDef = NULL;
+	IAAFDefObject*			pDefObject = NULL;
 	aafEdgecode_t			edgecode;
 	aafTimecode_t			timecode;
 	aafUID_t				datadef ;
@@ -1259,6 +1300,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 
 		pTimecode->Initialize((aafLength_t)OMFLength, &timecode);
 		pTimecode->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
+		pTimecode->Release();
 	}
 	else if (OMF2::omfiIsAnEdgecodeClip(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
@@ -1286,8 +1328,10 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 
 		pEdgecode->Create((aafLength_t)OMFLength, edgecode);
 		pEdgecode->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
+		pEdgecode->Release();
 		pTempComp = *ppComponent;
 		pTempComp->SetDataDef(&datadef);
+//		pTempComp->Release();
 	}
 	else if (OMF2::omfiIsAFiller(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
@@ -1304,6 +1348,8 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 											  (IUnknown **) &pFiller);
 			rc = pFiller->Initialize( &datadef, (aafLength_t)OMFLength);
 			rc = pFiller->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
+			pFiller->Release();
+			pFiller = NULL;
 		}
 	}
 	else if (OMF2::omfiIsAnEffect(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
@@ -1315,12 +1361,47 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 	}
 	else if (OMF2::omfiIsATransition(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
+		OMF2::omfDDefObj_t		effectDatakind;
+		OMF2::omfLength_t		effectLength;
+		OMF2::omfDDefObj_t		effectDef;
+		OMF2::omfArgIDType_t	bypassOverride;
+		OMF2::omfBool			isTimeWarp;
+		OMF2::omfInt32			nameSize = 64, idSize = 64, descSize = 120;
+		OMF2::omfUniqueName_t	effectID;
+
+		char					effectName[64], descBuffer[120];
+	    aafWChar*				pwCategory = NULL;
+	    aafWChar*				pwDesc = NULL;
+	    aafWChar*				pwName = NULL;
+		aafUID_t				effectDefAUID ;
+		aafUID_t				effectAUID ;
+
+
 		rc = OMF2::omfiTransitionGetInfo(OMFFileHdl, 
 										 OMFSegment,
 										 &OMFDatakind, 
 										 &OMFLength, 
 										 &OMFCutPoint,
 										 &OMFEffect);
+
+		rc = OMF2::omfiEffectGetInfo(OMFFileHdl, 
+									 OMFEffect, 
+									 &effectDatakind,
+									 &effectLength,
+									 &effectDef);
+
+		rc = OMF2::omfiEffectDefGetInfo(OMFFileHdl,
+										effectDef,
+										idSize, effectID,
+										nameSize, effectName,
+										descSize, descBuffer,
+										&bypassOverride,
+										&isTimeWarp);
+
+		UTLStrAToStrW(effectName, &pwCategory);
+		UTLStrAToStrW(descBuffer, &pwDesc);
+		UTLStrAToStrW(effectName, &pwName);
+		ConvertUniqueNameToAUID(effectID, &effectDefAUID);
 		rc = ConvertOMFDatakind( OMFDatakind, &datadef);
 		if (SUCCEEDED(rc))
 		{
@@ -1336,9 +1417,50 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 											  IID_IAAFGroup,
 											  (IUnknown **) &pEffect);
 
+			// Look in the dictionary to find if the effect Definition exists
+			// if it exists use it.
+			rc = pDictionary->LookupEffectDefinition(&effectDefAUID, &pEffectDef);
+			if (AAFRESULT_SUCCESS != rc)
+			{
+				// else create a new effect definition and fill the Object
+				// definition values.
+				rc = pDictionary->CreateInstance(&AUID_AAFEffectDef,
+												  IID_IAAFEffectDef,
+												  (IUnknown **) &pEffectDef);
+				rc = pDictionary->CreateInstance(&AUID_AAFParameterDef,
+												  IID_IAAFParameterDef,
+												  (IUnknown **) &pParameterDef);
+
+				rc = pEffectDef->QueryInterface(IID_IAAFDefObject, (void **)&pDefObject);
+				pDefObject->Init(&effectDefAUID, pwName, pwDesc);
+				pDefObject->Release();
+				rc = pDictionary->RegisterEffectDefinition(pEffectDef);
+			}
 			rc = pTransition->Create(&datadef, (aafLength_t)OMFLength, (aafPosition_t)OMFCutPoint, pEffect);
 			rc = pTransition->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
+			rc = ConvertOMFDatakind( effectDatakind, &effectAUID);
+			pEffect->Initialize(&effectAUID, (aafLength_t)OMFLength, pEffectDef);
+			pEffectDef->SetDataDefinitionID(&effectDefAUID); 
+			pEffectDef->SetIsTimeWarp((aafBool)isTimeWarp);
+			pEffectDef->SetCategory(pwCategory);
+			pEffectDef->SetBypass((aafUInt32 )bypassOverride);
+			if (memcmp((const void *)&effectDefAUID, (const void*)&kAAFEffectVideoDissolve, sizeof(aafUID_t)) == 0)
+				pEffectDef->SetNumberInputs((aafInt32)2);
+			else
+				pEffectDef->SetNumberInputs((aafInt32)0);
+			pEffectDef->AddParameterDefs(pParameterDef);
+			pParameterDef->Release();
+			pParameterDef = NULL;
+			pEffectDef->Release();
+			pEffectDef = NULL;
+			pEffect->Release();
+			pEffect = NULL;
+			pTransition->Release();
+			pTransition = NULL;
 		}
+		UTLMemoryFree(pwName);
+		UTLMemoryFree(pwDesc);
+		UTLMemoryFree(pwCategory);
 	}
 	else if (OMF2::omfiIsAConstValue(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
 	{
@@ -1377,6 +1499,7 @@ HRESULT Omf2Aaf::ProcessOMFComponent(OMF2::omfObject_t OMFSegment, IAAFComponent
 		rc = ConvertOMFSelector(OMFSegment, pSelector);
 		rc = pSelector->QueryInterface(IID_IAAFComponent, (void **)ppComponent);
 		pSelector->Release();
+		pSelector = NULL;
 		DecIndentLevel();
 	}
 	else if (OMF2::omfiIsAMediaGroup(OMFFileHdl, OMFSegment, (OMF2::omfErr_t *)&rc) )
@@ -1650,6 +1773,10 @@ HRESULT Omf2Aaf::ConvertOMFLocator(OMF2::omfObject_t obj,
 			{
 				rc = pLocator->SetPath(pwLocatorPath);
 				rc = pEssenceDesc->AppendLocator(pLocator);
+				pNetworkLocator->Release();
+				pNetworkLocator = NULL;
+				pLocator->Release();
+				pLocator = NULL;
 				if (gpGlobals->bVerboseMode)
 					UTLstdprintf("%sAdded a Network locator to the Essence Descriptor\n", gpGlobals->indentLeader);
 			}
@@ -2133,6 +2260,7 @@ HRESULT Omf2Aaf::ConvertOMFSourceMob(OMF2::omfObject_t obj,
 						pAifcDesc->Release();
 						pAifcDesc = NULL;
 					}
+					UTLMemoryFree(pSummary);
 				}
 			}
 			else if ( OMF2::omfsIsTypeOf(OMFFileHdl, mediaDescriptor, OMClassCDCI, (OMF2::omfErr_t *)&rc) )
