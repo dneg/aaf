@@ -160,15 +160,7 @@ public:
   //
   virtual AAFRESULT STDMETHODCALLTYPE
     GetCategory (
-        aafCharacter		*pCategory,
-		aafUInt32	bufSize);
-
-  //****************
-  // GetCategoryBufLen()
-  //
-  virtual AAFRESULT STDMETHODCALLTYPE
-	GetCategoryBufLen (
-			aafUInt32 *		pLen);
+        aafUID_t		*pCategory);
 
 			//****************
   // SetCategory()
@@ -176,7 +168,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     SetCategory
         // @parm [in] category
-        (const aafCharacter *category);
+        (const aafUID_t category);
 
   //****************
   // GetNumberInputs()
@@ -248,7 +240,7 @@ private:
 	OMWeakReferenceProperty<ImplAAFDataDef>			_dataDef;
 	OMFixedSizeProperty<aafBool>					_isTimeWarp;
 	OperationDefWeakRefArrayProp_t						_degradeTo;
-	OMWideStringProperty                            _category;
+	OMFixedSizeProperty<aafUID_t>                   _category;
 	OMFixedSizeProperty<aafInt32>					_numInputs;
 	OMFixedSizeProperty<aafUInt32>					_bypass;
 	parmDefWeakRefArrayProp_t						_paramDefined;
