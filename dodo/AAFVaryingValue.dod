@@ -15,9 +15,10 @@ AAFParameter\
 #c
 AD_HEAD
 AD_IDL(//
-// The IAAFVaryingValue interface is implemented by objects that specify a parameter
-// whose value changes during the operation group.  The actual values are stored in one or
-// more IAAFControlPoints.  For parameters which are constant in value during the operation group\,
+// The IAAFVaryingValue interface is implemented by objects that
+// specify a parameter whose value changes during the operation group.
+// The actual values are stored in one or more IAAFControlPoints.  For
+// parameters which are constant in value during the operation group\,
 // use IAAFConstantValue.
 //
 // In addition to the specific error results listed for each method\,
@@ -28,23 +29,25 @@ AD_IDL(//
 //   - insufficient system memory is available to perform the
 //     operation.
 //)
-
-
 AD_FORWARD_DECLARATION(AAFDataDef)
 AD_FORWARD_DECLARATION(AAFControlPoint)
 AD_FORWARD_DECLARATION(EnumAAFControlPoints)
 AD_FORWARD_DECLARATION(AAFInterpolationDef)
-
 AD_CLASS_UUID(91920d61, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 
 AD_DEFAULT_UUID(91920d60, 2a2e, 11D2, bf, A3, 00, 60, 97, 11, 62, 12)
 AD_XCLASS_BEGIN(Concrete, StoredObject)
-
 AD_XMETHOD1(AppendPoint,
-			[in],objIn,AAFControlPoint, pPoint, pointer to IAAFControlPoint object,
-			Appends a control point to the end a IAAFVaryingValue object\, which implies
-	// that it occurs at a later time than existing point.  The point
-  // will be sorted by time order\, not the order in which the points were added.
+			[in],
+			objIn,
+			AAFControlPoint,
+			pPoint,
+			pointer to IAAFControlPoint object,
+
+     Appends a control point to the end a IAAFVaryingValue object\,
+  // which implies that it occurs at a later time than existing point.
+  // The point will be sorted by time order\, not the order in which
+  // the points were added.
   // 
   // Succeeds if all of the following are true:
   // - the pPoint pointer is valid.
@@ -68,8 +71,9 @@ AD_XMETHOD1(GetControlPoints,
 			EnumAAFControlPoints,
 			ppEnum, 
 			Parameter definition enumeration,
-			Return an enumerator for the list of IAAFControlPoints.  The list
-  // will be returned in time order\, not the order in which the points were added.
+     Return an enumerator for the list of IAAFControlPoints.  The list
+  // will be returned in time order\, not the order in which the
+  // points were added.
   // 
   // Succeeds if all of the following are true:
   // - the ppEnum pointer is valid.
@@ -86,15 +90,16 @@ AD_XMETHOD1(GetControlPoints,
   // AAFRESULT_NULL_PARAM
   //   - ppEnum is null.)
 
+
 AD_XMETHOD1(GetInterpolationDefinition,
 			[out],
 			objOut,
 			AAFInterpolationDef,
 			ppInterpolation,
 			Returned InterpolationDefinition object,
-			Places the InterpolationDefinition object attached to this VaryingValue into the
-  // *ppInterpolation argument.  If none exists yet\, NULL is placed into the
-  // *ppInterpolation argument.
+     Places the InterpolationDefinition object attached to this
+  // VaryingValue into the *ppInterpolation argument.  If none exists
+  // yet\, NULL is placed into the *ppInterpolation argument.
   //
   // The returned InterpolationDefinition object\, if it exists\, is
   // AddRef\(\)ed before it is returned.
@@ -123,7 +128,8 @@ AD_XMETHOD1(SetInterpolationDefinition,
 			AAFInterpolationDef,
 			pInterpolation,
 			InterpolationDefinition object,
-			Sets the InterpolationDefinition of this VaryingValue to be the given one.
+     Sets the InterpolationDefinition of this VaryingValue to be the
+  // given one. 
   //
   // Succeeds if all of the following are true:
   // - the pEssence pointer is valid.
@@ -141,6 +147,7 @@ AD_XMETHOD1(SetInterpolationDefinition,
   // AAFRESULT_NULL_PARAM
   //   - pInterpolation is null.)
 
+
 AD_XMETHOD1(GetValueBufLen,
 			[out],
 			objPass,
@@ -148,8 +155,9 @@ AD_XMETHOD1(GetValueBufLen,
 			pLen,
 			Mob Name,
 
-			Returns the length of buffer required for the GetInterpolatedValue\(\) method.
-  // The value is placed into the location specified by pLen.
+     Returns the length of buffer required for the
+  // GetInterpolatedValue\(\) method.  The value is placed into the
+  // location specified by pLen.
   //
   // Succeeds if all of the following are true:
   // - the pLen pointer is valid.
@@ -166,14 +174,32 @@ AD_XMETHOD1(GetValueBufLen,
   // AAFRESULT_NULL_PARAM
   //   - pLen arg is NULL.)
 
+
 AD_METHOD4(GetInterpolatedValue,
-		    [in],aafRational_t, inputValue, Position along the operation group,
-			[in],aafInt32,valueSize,Size of preallocated buffer,
-			[out\\\, size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],aafDataBuffer_t,pValue,Preallocated buffer to hold value,
-			[out],aafInt32*,bytesRead,Number of actual bytes read,
-			Writes the interpolated value of the IAAFVaryingValue at a given position
-  // into the pValue buffer.  The buffer is allocated by the caller\\\,
-  // and the size of the buffer is given by valueSize.
+		   [in],
+		   aafRational_t,
+		   inputValue,
+		   Position along the operation group,
+
+		   [in],
+		   aafInt32,
+		   valueSize,
+		   Size of preallocated buffer,
+
+		   [out\\\,
+		   size_is\\\(valueSize\\\)\\\,length_is\\\(*bytesRead\\\)],
+		   aafDataBuffer_t,
+		   pValue,
+		   Preallocated buffer to hold value,
+
+		   [out],
+		   aafInt32 *,
+		   bytesRead,
+		   Number of actual bytes read,
+
+     Writes the interpolated value of the IAAFVaryingValue at a given
+  // position into the pValue buffer.  The buffer is allocated by the
+  // caller\\\, and the size of the buffer is given by valueSize.
   // 
   // Caller may call GetValueBufLen\\\(\\\) to determine the
   // required buffer size.
@@ -196,6 +222,4 @@ AD_METHOD4(GetInterpolatedValue,
   //
   // AAFRESULT_SMALLBUF
   //   - valueSize indicates the buffer is too small to hold the value.)
-
 AD_XCLASS_END(Concrete, StoredObject)
-
