@@ -134,7 +134,7 @@ ImplAAFOperationGroup::~ImplAAFOperationGroup ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFOperationGroup::Initialize(aafUID_t*		pDatadef,
+    ImplAAFOperationGroup::Initialize(const aafUID_t & datadef,
 							 aafLength_t    length,
                              ImplAAFOperationDef* pOperationDef)
 {
@@ -145,7 +145,7 @@ AAFRESULT STDMETHODCALLTYPE
 	aafUID_t				OperationDefAUID;
 	aafUID_t	uid;
 
-	if (pDatadef == NULL || pOperationDef == NULL)
+	if (pOperationDef == NULL)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
@@ -156,7 +156,7 @@ AAFRESULT STDMETHODCALLTYPE
 		pHeader->ReleaseReference();
 		pHeader = NULL;
 
-		CHECK(SetNewProps(length, pDatadef));
+		CHECK(SetNewProps(length, datadef));
 		CHECK(pOperationDef->GetAUID(&uid));
 		_operationDefinition = uid;
 		// Lookup the OperationGroup definition's AUID
@@ -203,7 +203,7 @@ AAFRESULT STDMETHODCALLTYPE
 		defUID = _operationDefinition;
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
-		CHECK(dict->LookupOperationDefinition(&defUID, OperationDef));
+		CHECK(dict->LookupOperationDefinition(defUID, OperationDef));
 		dict->ReleaseReference();
 		dict = 0;
 		head->ReleaseReference();

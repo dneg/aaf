@@ -86,19 +86,19 @@ ImplAAFTransition::~ImplAAFTransition ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-	ImplAAFTransition::Create (aafUID_t*				pDatadef,
+	ImplAAFTransition::Create (const aafUID_t &			datadef,
 							   aafLength_t				length,
 							   aafPosition_t			cutPoint,
 							   ImplAAFOperationGroup*	pOperationGroup)
 {
 	HRESULT		rc = AAFRESULT_SUCCESS;
 
-	if (pDatadef == NULL || pOperationGroup == NULL)
+	if (pOperationGroup == NULL)
 		return AAFRESULT_NULL_PARAM;
 
 	XPROTECT()
 	{
-		CHECK(SetNewProps(length, pDatadef));
+		CHECK(SetNewProps(length, datadef));
 		_cutPoint = cutPoint;
 		if (_operationGroup)
 		  _operationGroup->ReleaseReference();

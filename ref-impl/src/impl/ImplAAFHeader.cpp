@@ -146,19 +146,19 @@ ImplAAFHeader::~ImplAAFHeader ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::LookupMob (aafUID_t *pMobID,
+    ImplAAFHeader::LookupMob (const aafUID_t & mobID,
                            ImplAAFMob **ppMob)
 {
     ImplAAFContentStorage *cstore = NULL;
 
-    if ((! pMobID) || (! ppMob))
+    if (! ppMob)
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
 	XPROTECT()
 	{
 		cstore = GetContentStorage();		// Does not AddRef
-		CHECK(cstore->LookupMob(pMobID, ppMob));
+		CHECK(cstore->LookupMob(mobID, ppMob));
 	}
 	XEXCEPT
 	XEND
@@ -278,19 +278,19 @@ AAFRESULT STDMETHODCALLTYPE
 // based on omfmIsMediaDataPresent
 //
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::IsEssenceDataPresent (aafUID_t *pFileMobID,
+    ImplAAFHeader::IsEssenceDataPresent (const aafUID_t & fileMobID,
                            aafFileFormat_t fmt,
                            aafBool *pResult)
 {
     ImplAAFContentStorage *cstore = NULL;
-    if ((! pFileMobID) || (! pResult))
+    if ((! pResult))
 	  {
 		return AAFRESULT_NULL_PARAM;
 	  }
 	XPROTECT()
 	{
 		cstore = GetContentStorage();		// Does not AddRef
-		CHECK(cstore->IsEssenceDataPresent(pFileMobID, fmt, pResult));
+		CHECK(cstore->IsEssenceDataPresent(fileMobID, fmt, pResult));
 	}
 	XEXCEPT
 	XEND
@@ -435,10 +435,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFHeader::GetIdentificationByGen (aafUID_t * pGeneration,
+    ImplAAFHeader::GetIdentificationByGen (const aafUID_t & generation,
                            ImplAAFIdentification ** ppIdentification)
 {
-  if ((! pGeneration) || (! ppIdentification))
+  if ((! ppIdentification))
 	{
 	  return AAFRESULT_NULL_PARAM;
 	}
@@ -540,13 +540,13 @@ AAFRESULT
     ImplAAFDictionary *pDictionary = GetDictionary();
     if (NULL == pDictionary)
       CHECK(AAFRESULT_NOMEMORY);
-    CHECK(pDictionary->CreateInstance(&AUID_AAFIdentification, (ImplAAFObject **)&identObj));
+    CHECK(pDictionary->CreateInstance(AUID_AAFIdentification, (ImplAAFObject **)&identObj));
     if (NULL == identObj)
       CHECK(AAFRESULT_NOMEMORY);
     CHECK(identObj->SetCompanyName(pIdent->companyName));
     CHECK(identObj->SetProductName(pIdent->productName));
     CHECK(identObj->SetProductVersionString(pIdent->productVersionString));
-	CHECK(identObj->SetProductID(&pIdent->productID));
+	CHECK(identObj->SetProductID(pIdent->productID));
 
     _identificationList.appendValue(identObj);
  
@@ -676,7 +676,7 @@ ImplAAFContentStorage *ImplAAFHeader::GetContentStorage()
     ImplAAFDictionary *pDictionary = GetDictionary();
     if (NULL != pDictionary)
 	  {
-		pDictionary->CreateInstance (&AUID_AAFContentStorage,
+		pDictionary->CreateInstance (AUID_AAFContentStorage,
 									 (ImplAAFObject **)&result);
 		_contentStorage = result;
 	  }

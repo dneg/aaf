@@ -65,13 +65,13 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         (// @parm [in] auid to be used to identify this type
-         const aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in] type of each element to be contained in this set
          ImplAAFTypeDef * pTypeDef,
 
          // @parm [in] friendly name of this type definition
-         aafCharacter *  pTypeName);
+         const aafCharacter *  pTypeName);
 
 
   //****************

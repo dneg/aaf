@@ -129,24 +129,28 @@ ImplAAFPluginDescriptor::~ImplAAFPluginDescriptor ()
 }
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFPluginDescriptor::Init (
-      aafUID_t *pAuid, aafWChar *pName, aafWChar *pDesc)
+    ImplAAFPluginDescriptor::Initialize (
+      const aafUID_t & id,
+	  const aafCharacter * pName,
+	  const aafCharacter * pDesc)
 {
-	if (pAuid == NULL || pName == NULL || pDesc == NULL)
+	if (pName == NULL || pDesc == NULL)
 	{
 		return AAFRESULT_NULL_PARAM;
 	}
 	else
 	{
-		_identification = *pAuid;
+		_identification = id;
 		_name = pName;
 		_description = pDesc;
 	}
 	return AAFRESULT_SUCCESS;
 }
+
+
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetName (
-      wchar_t *  pName)
+      const aafCharacter *  pName)
 {
 	if (! pName)
 	{
@@ -194,7 +198,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetDescription (
-      wchar_t * pDescription)
+      const aafCharacter * pDescription)
 {
 	if (! pDescription)
 	{
@@ -268,16 +272,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetAUID (
-      aafUID_t *pAuid)
+      const aafUID_t & id)
 {
-  if (pAuid == NULL)
-	{
-	  return AAFRESULT_NULL_PARAM;
-	}
-  else
-	{
-	  _identification = *pAuid;
-	}
+  _identification = id;
+
   return AAFRESULT_SUCCESS;
 }
 
@@ -301,17 +299,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetCategoryClass (
-      aafUID_t *pCategoryClass)
+      const aafUID_t & categoryClass)
 {
-	if (pCategoryClass == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_categoryClass = *pCategoryClass;
-	}
-	return AAFRESULT_SUCCESS;
+  _categoryClass = categoryClass;
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE
@@ -386,7 +377,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPluginVersionString (
-      wchar_t * pVersionString)
+      const aafCharacter * pVersionString)
 {
 	if(pVersionString == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -438,7 +429,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPluginManufacturerName (
-      wchar_t * pManufacturerName)
+      const aafCharacter * pManufacturerName)
 {
 	if(pManufacturerName == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -517,16 +508,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetManufacturerID (
-      aafUID_t *pManufacturerID)
+      const aafUID_t & manufacturerID)
 {
-	if (pManufacturerID == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_pluginManufacturerID = *pManufacturerID;
-	}
+	_pluginManufacturerID = manufacturerID;
 	return AAFRESULT_SUCCESS;
 }
 
@@ -587,33 +571,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPlatformMinimumVersion (
-      aafVersionType_t *pMinVersion)
+      const aafVersionType_t & minVersion)
 {
-	if (pMinVersion == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_minPlatformVersion = *pMinVersion;
-	}
-	return AAFRESULT_SUCCESS;
+  _minPlatformVersion = minVersion;
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPlatformMaximumVersion (
-      aafVersionType_t *pMaxVersion)
+      const aafVersionType_t & maxVersion)
 {
-	if (pMaxVersion == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_maxPlatformVersion = *pMaxVersion;
-	}
-	return AAFRESULT_SUCCESS;
+  _maxPlatformVersion = maxVersion;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -675,34 +645,20 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetEngineMinimumVersion (
-      aafVersionType_t *pMinVersion)
+      const aafVersionType_t & minVersion)
 {
-	if (pMinVersion == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_minEngineVersion = *pMinVersion;
-	}
-	return AAFRESULT_SUCCESS;
+  _minEngineVersion = minVersion;
+  return AAFRESULT_SUCCESS;
 }
 
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetEngineMaximumVersion (
-      aafVersionType_t *pMaxVersion)
+      const aafVersionType_t & maxVersion)
 {
-	if (pMaxVersion == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_maxEngineVersion = *pMaxVersion;
-	}
-	return AAFRESULT_SUCCESS;
+  _maxEngineVersion = maxVersion;
+  return AAFRESULT_SUCCESS;
 }
 
 
@@ -765,33 +721,19 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPluginAPIMinimumVersion (
-      aafVersionType_t *pMinVersion)
+      const aafVersionType_t & minVersion)
 {
-	if (pMinVersion == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_minPluginAPIVersion = *pMinVersion;
-	}
-	return AAFRESULT_SUCCESS;
+  _minPluginAPIVersion = minVersion;
+  return AAFRESULT_SUCCESS;
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFPluginDescriptor::SetPluginAPIMaximumVersion (
-      aafVersionType_t *pMaxVersion)
+      const aafVersionType_t & maxVersion)
 {
-	if (pMaxVersion == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_maxPluginAPIVersion = *pMaxVersion;
-	}
-	return AAFRESULT_SUCCESS;
+  _maxPluginAPIVersion = maxVersion;
+  return AAFRESULT_SUCCESS;
 }
 
 AAFRESULT STDMETHODCALLTYPE

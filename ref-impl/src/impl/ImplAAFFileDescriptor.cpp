@@ -101,11 +101,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFFileDescriptor::SetSampleRate (aafRational_t *pRate)
+    ImplAAFFileDescriptor::SetSampleRate (const aafRational_t & rate)
 {
-	if(pRate == NULL)
-		return(AAFRESULT_NULL_PARAM);
-	_sampleRate = *pRate;
+	_sampleRate = rate;
 	return AAFRESULT_SUCCESS;
 }
 
@@ -121,12 +119,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFFileDescriptor::SetContainerFormat (aafUID_t *pFormat)
+    ImplAAFFileDescriptor::SetContainerFormat (const aafUID_t & format)
 {
-	if(pFormat == NULL)
-		return(AAFRESULT_NULL_PARAM);
-
-	_containerFmt = *pFormat;
+	_containerFmt = format;
 	return AAFRESULT_SUCCESS;
 }
 

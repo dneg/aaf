@@ -90,9 +90,9 @@ ImplAAFSequence::~ImplAAFSequence ()
 //   - pDatadef is null.
 // 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFSequence::Initialize (aafUID_t * pDatadef)
+    ImplAAFSequence::Initialize (const aafUID_t & datadef)
 {
-	return (SetDataDef(pDatadef));
+	return (SetDataDef(datadef));
 }
 
 //***********************************************************
@@ -172,10 +172,10 @@ AAFRESULT STDMETHODCALLTYPE
 		pComponent->GetDataDef(&cpntDataDef);
 		
 		CHECK(GetDictionary(&pDict));
-		CHECK(pDict->LookupDataDefinition(&cpntDataDef, &pDef));
+		CHECK(pDict->LookupDataDefinition(cpntDataDef, &pDef));
 		pDict->ReleaseReference();
 		pDict = NULL;
-		CHECK(pDef->DoesDataDefConvertTo(&sequDataDef, &willConvert));
+		CHECK(pDef->DoesDataDefConvertTo(sequDataDef, &willConvert));
 		pDef->ReleaseReference();
 		pDef = NULL;
 		
@@ -248,7 +248,7 @@ AAFRESULT STDMETHODCALLTYPE
 				}
 				
 				SubInt64fromInt64(cpntLen, &sequLen);
-				CHECK(SetLength(&sequLen));
+				CHECK(SetLength(sequLen));
 			}
 			else // Not a transition
 			{
@@ -263,7 +263,7 @@ AAFRESULT STDMETHODCALLTYPE
 				
 				// Add length of component to sequence, if not transition
 				AddInt64toInt64(cpntLen, &sequLen);
-				CHECK(SetLength(&sequLen));
+				CHECK(SetLength(sequLen));
 			}
 		}
 		// Else handle case #2
@@ -611,7 +611,8 @@ AAFRESULT
 	return hr;
 }
 
-AAFRESULT ImplAAFSequence::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+AAFRESULT ImplAAFSequence::ChangeContainedReferences(const aafUID_t & from,
+													 const aafUID_t & to)
 {
 	aafInt32			n, count;
 	ImplAAFComponent	*comp = NULL;

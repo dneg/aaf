@@ -100,7 +100,7 @@ public:
     // Class identifier (AUID) of the stored object. This is the
     // corresponding SMPTE identifier (as a GUID) for all predefined
     // built-in classes.
-    aafUID_t * pAUID,
+    const aafUID_t & id,
 
     // Address of output variable that receives the 
     // object pointer requested in pAUID
@@ -113,7 +113,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupClass
         (// @parm [in,ref] Class Unique ID
-         const aafUID_t *  pClassID,
+         const aafUID_t & classId,
 
          // @parm [out,retval] Class Definition
          ImplAAFClassDef ** ppClassDef);
@@ -151,7 +151,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupType
         (// @parm [in,ref] Type Unique ID
-         const aafUID_t *  pTypeID,
+         const aafUID_t & typeID,
 
          // @parm [out,retval] Type Definition Object
          ImplAAFTypeDef ** ppTypeDef);
@@ -179,7 +179,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupDataDefinition
         (// @parm [in,ref] Datak Definition Unique ID
-         aafUID_t *  pDataDefinitionID,
+         const aafUID_t & dataDefinitionId,
 
          // @parm [out,retval] Data Definition Object
          ImplAAFDataDef ** ppDataDef);
@@ -207,7 +207,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupOperationDefinition
         (// @parm [in,ref] Effect Unique ID
-         aafUID_t *  effectID,
+         const aafUID_t & effectId,
 
          // @parm [out,retval] Effect definition object
          ImplAAFOperationDef ** ppOperationDef);
@@ -234,7 +234,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupParameterDefinition
         (// @parm [in,ref] Parameter Unique ID
-         aafUID_t *  ParameterID,
+         const aafUID_t & parameterId,
 
          // @parm [out,retval] Parameter definition object
          ImplAAFParameterDef ** ppParameterDef);
@@ -263,7 +263,12 @@ public:
       // @parm [out,retval] Definition Enumeration
       (ImplEnumAAFCodecDefs ** ppEnum);
 
-   	AAFRESULT LookupCodecDefinition(aafUID_t *containerID, ImplAAFCodecDef **result);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+    LookupCodecDefinition
+      (const aafUID_t & containerId,
+	   ImplAAFCodecDef **result);
+
 
 	//****************
   // RegisterContainerDefinition()
@@ -281,7 +286,12 @@ public:
         // @parm [out,retval] Definition Enumeration
        (ImplEnumAAFContainerDefs ** ppEnum);
 
-    AAFRESULT LookupContainerDefinition(aafUID_t *containerID, ImplAAFContainerDef **result);
+
+  virtual AAFRESULT STDMETHODCALLTYPE
+     LookupContainerDefinition
+       (const aafUID_t & containerID,
+		ImplAAFContainerDef **result);
+
 
   //****************
   // RegisterInterpolationDefinition()
@@ -297,7 +307,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupInterpolationDefinition
         (// @parm [in,ref] Interpolation Unique ID
-         aafUID_t *  InterpolationID,
+         const aafUID_t & interpolationID,
 
          // @parm [out,retval] Interpolation definition object
          ImplAAFInterpolationDef ** ppInterpolationDef);
@@ -323,7 +333,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupPluginDescriptor
         (// @parm [in,ref] Interpolation Unique ID
-         aafUID_t *  InterpolationID,
+         const aafUID_t & interpolationID,
 
          ImplAAFPluginDescriptor ** ppPluginDesc);
 
@@ -367,7 +377,7 @@ public:
   // This method was created to make it simpler to replace calls to "Deprecated"
   // call to CreateImpl which should only be used for instanciating transient
   // non-ImplAAFObject classes such as an enumerator.
-  ImplAAFObject *CreateImplObject(const aafUID_t& auid); 
+  ImplAAFObject *CreateImplObject(const aafUID_t & auid); 
 
   // Generates an OM PID corresponding to the given property def auid.
   AAFRESULT GenerateOmPid (const aafUID_t & rAuid,
@@ -379,7 +389,7 @@ public:
   // builtins which may not have already been entered into the dict.
   AAFRESULT dictLookupClass
     (// @parm [in,ref] Class Unique ID
-	 const aafUID_t *  pClassID,
+	 const aafUID_t & classID,
 
 	 // @parm [out,retval] Class Definition
 	 ImplAAFClassDef ** ppClassDef);
@@ -390,17 +400,17 @@ public:
   // builtins which may not have already been entered into the dict.
   AAFRESULT dictLookupType
     (// @parm [in,ref] Type Unique ID
-	 const aafUID_t *  pTypeID,
+	 const aafUID_t & typeID,
 
 	 // @parm [out,retval] Type Definition Object
 	 ImplAAFTypeDef ** ppTypeDef);
 
 
-  static ImplAAFObject* pvtCreateBaseClassInstance(const aafUID_t* pAUID);
+  static ImplAAFObject* pvtCreateBaseClassInstance(const aafUID_t & id);
 
   // Similar to create(), but takes an AUID as argument and doesn't
   // init properties.
-  ImplAAFObject* pvtInstantiate(const aafUID_t * pAUID) const;
+  ImplAAFObject* pvtInstantiate(const aafUID_t & id) const;
 
   // Attempt to register the sizes of this type def if it is a
   // built-in type.  Currently implemented for Enum and Record
@@ -419,14 +429,14 @@ public:
   // value of flag.  Default is enabled.
   bool SetEnableDefRegistration (bool isEnabled);
 
-  bool IsAxiomaticClass (const aafUID_t &classID) const;
+  bool IsAxiomaticClass (const aafUID_t & classID) const;
 
 private:
 
-  bool pvtLookupAxiomaticType (const aafUID_t &typeID,
+  bool pvtLookupAxiomaticType (const aafUID_t & typeID,
 							   ImplAAFTypeDef ** ppTypeDef);
 
-  bool pvtLookupAxiomaticClass (const aafUID_t &classID,
+  bool pvtLookupAxiomaticClass (const aafUID_t & classID,
 								ImplAAFClassDef ** ppClassDef);
 
   ImplAAFBuiltinClasses * _pBuiltinClasses;

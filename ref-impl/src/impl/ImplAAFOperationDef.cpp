@@ -111,11 +111,9 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFOperationDef::SetDataDefinitionID (
-      aafUID_t  *pDataDefID)
+      const aafUID_t & dataDefID)
 {
-	if(pDataDefID == NULL)
-		return(AAFRESULT_NULL_PARAM);
-	_dataDef = *pDataDefID;
+	_dataDef = dataDefID;
 	
 	return AAFRESULT_SUCCESS;
 }

@@ -274,11 +274,11 @@ ImplAAFDictionary::~ImplAAFDictionary ()
 // Factory function for all built-in classes.
 //
 /*static*/ ImplAAFObject *
-ImplAAFDictionary::pvtCreateBaseClassInstance(const aafUID_t* pAUID) 
+ImplAAFDictionary::pvtCreateBaseClassInstance(const aafUID_t & auid) 
 {
 
   // Lookup the code class id for the given stored object id.
-  const aafClassID_t* id = ImplAAFBaseClassFactory::LookupClassID(pAUID);
+  const aafClassID_t* id = ImplAAFBaseClassFactory::LookupClassID(auid);
   if (NULL == id)
     return NULL;
   
@@ -313,7 +313,7 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
   ImplAAFDictionary * pDictionary = NULL;
   
   
-  pDictionary = static_cast<ImplAAFDictionary *>(pvtCreateBaseClassInstance(&AUID_AAFDictionary));
+  pDictionary = static_cast<ImplAAFDictionary *>(pvtCreateBaseClassInstance(AUID_AAFDictionary));
   assert(NULL != pDictionary);
   if (NULL != pDictionary)
   {
@@ -337,20 +337,20 @@ ImplAAFDictionary *ImplAAFDictionary::CreateDictionary(void)
 //
 OMStorable* ImplAAFDictionary::create(const OMClassId& classId) const
 {
-  const aafUID_t* pAUID  = reinterpret_cast<const aafUID_t*>(&classId);
+  const aafUID_t & auid  = reinterpret_cast<const aafUID_t&>(classId);
   ImplAAFObject * pNewObject = 0;
-  pNewObject = pvtInstantiate (pAUID);
+  pNewObject = pvtInstantiate (auid);
   if (pNewObject)
 	pNewObject->InitOMProperties ();
   return pNewObject;
 }
 
-ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t * pAUID) const
+ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t & auid) const
 {
   ImplAAFObject *result = 0;
 
   // Is this a request to create the dictionary?
-  if (memcmp(pAUID, &AUID_AAFDictionary, sizeof(aafUID_t)) == 0)
+  if (memcmp(&auid, &AUID_AAFDictionary, sizeof(aafUID_t)) == 0)
 	{ // The result is just this instance.
 	  result = const_cast<ImplAAFDictionary*>(this);
 	  // Bump the reference count.
@@ -369,11 +369,10 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t * pAUID) const
 
 	  // First see if this is a built-in class.
 	  //
-	  result = pvtCreateBaseClassInstance(pAUID);
+	  result = pvtCreateBaseClassInstance(auid);
 	  while (result == 0)
 		{
-		  assert (pAUID);
-		  aafUID_t parentAUID = *pAUID;
+		  aafUID_t parentAUID = auid;
 		  
 		  // Not a built-in class; find the nearest built-in parent.
 		  // That is, iterate up the inheritance hierarchy until we
@@ -381,7 +380,7 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t * pAUID) const
 		  //
 		  ImplAAFClassDefSP pcd;
 		  AAFRESULT hr;
-		  hr = ((ImplAAFDictionary*)this)->LookupClass (&parentAUID, &pcd);
+		  hr = ((ImplAAFDictionary*)this)->LookupClass (parentAUID, &pcd);
 		  if (AAFRESULT_FAILED (hr))
 			{
 			  // AUID does not correspond to any class in the
@@ -401,7 +400,7 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t * pAUID) const
 			  // pvtCreateBaseClassInstance() call.
 			  assert (0);
 			}
-		  result = pvtCreateBaseClassInstance(&parentAUID);
+		  result = pvtCreateBaseClassInstance(parentAUID);
 		}
 	}
 
@@ -418,8 +417,7 @@ ImplAAFObject* ImplAAFDictionary::pvtInstantiate(const aafUID_t * pAUID) const
 		  // requested ID, not the instantiated one.  (These will be
 		  // different if the requested ID is a client-supplied
 		  // extension class.)
-		  assert (pAUID);
-		  result->pvtSetSoid (*pAUID);
+		  result->pvtSetSoid (auid);
 		}
 	}
 
@@ -434,20 +432,20 @@ AAFRESULT STDMETHODCALLTYPE
     // Class identifier (AUID) of the stored object. This is the
     // corresponding SMPTE identifier (as a GUID) for all predefined
     // built-in classes.
-    aafUID_t * pAUID,
+    const aafUID_t & auid,
 
     // Address of output variable that receives the 
-    // object pointer requested in pAUID
+    // object pointer requested in auid
     ImplAAFObject ** ppvObject)
 {
-  if (NULL == pAUID || NULL == ppvObject)
+  if (NULL == ppvObject)
     return AAFRESULT_NULL_PARAM;
   
   // Initialize the out parameter.
   *ppvObject = NULL;
 
-  const OMClassId* classId  = reinterpret_cast<const OMClassId*>(pAUID);
-  *ppvObject = static_cast<ImplAAFObject *>(create(*classId));
+  const OMClassId& classId  = reinterpret_cast<const OMClassId&>(auid);
+  *ppvObject = static_cast<ImplAAFObject *>(create(classId));
 
   if (NULL == *ppvObject)
     return AAFRESULT_INVALID_CLASS_ID;
@@ -465,7 +463,7 @@ ImplAAFObject *ImplAAFDictionary::CreateImplObject(const aafUID_t& auid)
   ImplAAFObject *pObject = NULL;
   AAFRESULT result = AAFRESULT_SUCCESS;
   
-  result = CreateInstance(const_cast<aafUID_t *>(&auid), &pObject);
+  result = CreateInstance(const_cast<aafUID_t &>(auid), &pObject);
   assert(AAFRESULT_SUCCEEDED(result));
   return pObject;
 }
@@ -473,10 +471,9 @@ ImplAAFObject *ImplAAFDictionary::CreateImplObject(const aafUID_t& auid)
 
 
 AAFRESULT ImplAAFDictionary::dictLookupClass (
-      const aafUID_t * pClassID,
+      const aafUID_t & classID,
       ImplAAFClassDef ** ppClassDef)
 {
-  if (!pClassID) return AAFRESULT_NULL_PARAM;
   if (!ppClassDef) return AAFRESULT_NULL_PARAM;
 
   ImplEnumAAFClassDefs		*classEnum = NULL;
@@ -496,7 +493,7 @@ AAFRESULT ImplAAFDictionary::dictLookupClass (
 	  while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 		  CHECK(classDef->GetAUID (&testAUID));
-		  if(EqualAUID(pClassID, &testAUID))
+		  if(EqualAUID(&classID, &testAUID))
 			{
 			  defFound = AAFTrue;
 			  *ppClassDef = classDef;
@@ -567,16 +564,15 @@ ImplAAFDictionary::pvtLookupAxiomaticClass (const aafUID_t &classID,
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupClass (
-      const aafUID_t * pClassID,
+      const aafUID_t & classID,
       ImplAAFClassDef ** ppClassDef)
 {
   ImplAAFClassDefSP			classDef;
   AAFRESULT					status;
 
-  if (! pClassID) return AAFRESULT_NULL_PARAM;
   if (! ppClassDef) return AAFRESULT_NULL_PARAM;
 
-  if (pvtLookupAxiomaticClass (*pClassID, &classDef))
+  if (pvtLookupAxiomaticClass (classID, &classDef))
 	{
 	  // Yes, this is an axiomatic class.  classDef should be filled
 	  // in.  Assure that it's in the dictionary, and return it.
@@ -597,7 +593,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // Not axiomatic.  Check to see if it's already in the dict.
-  status = dictLookupClass (pClassID, ppClassDef);
+  status = dictLookupClass (classID, ppClassDef);
   if (AAFRESULT_SUCCEEDED (status))
 	{
 	  // Yup, already here. Pass on the good news.
@@ -614,7 +610,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // If we're here, it was not found in dict.  Try it in builtins.
-  status = _pBuiltinClasses->NewBuiltinClassDef (*pClassID, &classDef);
+  status = _pBuiltinClasses->NewBuiltinClassDef (classID, &classDef);
   if (AAFRESULT_FAILED (status))
 	{
 	  // no recognized class guid
@@ -653,7 +649,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Is this class already registered ?
   ImplAAFClassDef * pExistingClassDef = NULL;
-  hr = dictLookupClass(&newAUID, &pExistingClassDef);
+  hr = dictLookupClass(newAUID, &pExistingClassDef);
 
   if (hr != AAFRESULT_SUCCESS)
 	{
@@ -720,7 +716,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Is this type already registered ?
   ImplAAFTypeDef * pExistingTypeDef = NULL;
-  hr = dictLookupType(&newAUID, &pExistingTypeDef);
+  hr = dictLookupType(newAUID, &pExistingTypeDef);
 
   if (hr != AAFRESULT_SUCCESS) {
     // This type is not yet registered, add it to the dictionary.
@@ -748,7 +744,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 
 AAFRESULT ImplAAFDictionary::dictLookupType (
-      const aafUID_t *  pTypeID,
+      const aafUID_t & typeID,
       ImplAAFTypeDef ** ppTypeDef)
 {
   ImplEnumAAFTypeDefs		*typeEnum = NULL;
@@ -768,7 +764,7 @@ AAFRESULT ImplAAFDictionary::dictLookupType (
 	  while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 		  CHECK(typeDef->GetAUID (&testAUID));
-		  if(EqualAUID(pTypeID, &testAUID))
+		  if(EqualAUID(&typeID, &testAUID))
 			{
 			  defFound = AAFTrue;
 			  *ppTypeDef = typeDef;
@@ -924,16 +920,15 @@ ImplAAFDictionary::pvtLookupAxiomaticType (const aafUID_t &typeID,
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupType (
-      const aafUID_t *  pTypeID,
+      const aafUID_t & typeID,
       ImplAAFTypeDef ** ppTypeDef)
 {
   ImplAAFTypeDefSP			typeDef;
   AAFRESULT					status;
 
-  if (! pTypeID) return AAFRESULT_NULL_PARAM;
   if (! ppTypeDef) return AAFRESULT_NULL_PARAM;
 
-  if (pvtLookupAxiomaticType (*pTypeID, &typeDef))
+  if (pvtLookupAxiomaticType (typeID, &typeDef))
 	{
 	  // Yes, this is an axiomatic type.  typeDef should be filled
 	  // in.  Assure that it's in the dictionary, and return it.
@@ -952,7 +947,7 @@ AAFRESULT STDMETHODCALLTYPE
 	}
 
   // Not axiomatic.  Check to see if it's already in the dict.
-  status = dictLookupType (pTypeID, ppTypeDef);
+  status = dictLookupType (typeID, ppTypeDef);
   if (AAFRESULT_SUCCEEDED (status))
 	{
 	  // Yup, already here. Pass on the good news.
@@ -969,7 +964,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // If we're here, it was not found in dict.  Try it in builtins.
   assert (0 == (ImplAAFTypeDef*) typeDef);
-  status = _pBuiltinTypes->NewBuiltinTypeDef (*pTypeID, &typeDef);
+  status = _pBuiltinTypes->NewBuiltinTypeDef (typeID, &typeDef);
   if (AAFRESULT_FAILED (status))
 	{
 	  // no recognized type guid
@@ -1037,7 +1032,7 @@ AAFRESULT STDMETHODCALLTYPE
 
   // Is this type already registered ?
   ImplAAFDataDef * pExistingDataDef = NULL;
-  hr = LookupDataDefinition(&newAUID, &pExistingDataDef);
+  hr = LookupDataDefinition(newAUID, &pExistingDataDef);
 
   if (hr != AAFRESULT_SUCCESS) {
     // This type is not yet registered, add it to the dictionary.
@@ -1066,7 +1061,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupDataDefinition (
-      aafUID_t *pDataDefinitionID,
+      const aafUID_t & dataDefinitionID,
       ImplAAFDataDef **ppDataDef)
 {
 	ImplEnumAAFDataDefs		*dataEnum = NULL;
@@ -1083,7 +1078,7 @@ AAFRESULT STDMETHODCALLTYPE
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(dataDef->GetAUID (&testAUID));
-			if(EqualAUID(pDataDefinitionID, &testAUID))
+			if(EqualAUID(&dataDefinitionID, &testAUID))
 			{
 				defFound = AAFTrue;
 				*ppDataDef = dataDef;
@@ -1174,7 +1169,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupOperationDefinition (
-      aafUID_t *effectID,
+      const aafUID_t & effectID,
       ImplAAFOperationDef **ppOperationDef)
 {
 	ImplEnumAAFOperationDefs	*effectEnum = NULL;
@@ -1191,7 +1186,7 @@ AAFRESULT STDMETHODCALLTYPE
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(effectDef->GetAUID (&testAUID));
-			if(EqualAUID(effectID, &testAUID))
+			if(EqualAUID(&effectID, &testAUID))
 			{
 				defFound = AAFTrue;
 				*ppOperationDef = effectDef;
@@ -1280,7 +1275,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupParameterDefinition (
-      aafUID_t *pParameterID,
+      const aafUID_t & parameterID,
       ImplAAFParameterDef **ppParameterDef)
 {
 	ImplEnumAAFParameterDefs		*parameterEnum = NULL;
@@ -1297,7 +1292,7 @@ AAFRESULT STDMETHODCALLTYPE
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(parameterDef->GetAUID (&testAUID));
-			if(EqualAUID(pParameterID, &testAUID))
+			if(EqualAUID(&parameterID, &testAUID))
 			{
 				defFound = AAFTrue;
 				*ppParameterDef = parameterDef;
@@ -1418,7 +1413,9 @@ AAFRESULT
   return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFDictionary::LookupCodecDefinition(aafUID_t *defID, ImplAAFCodecDef **result)
+AAFRESULT ImplAAFDictionary::LookupCodecDefinition
+  (const aafUID_t & defID,
+   ImplAAFCodecDef **result)
 {
 	ImplAAFCodecDef				*codec = NULL;
 	aafBool						defFound;
@@ -1434,7 +1431,7 @@ AAFRESULT ImplAAFDictionary::LookupCodecDefinition(aafUID_t *defID, ImplAAFCodec
 		{
 			CHECK(GetNthCodecDef (n, &codec));
 			CHECK(codec->GetAUID (&testAUID));
-			if(EqualAUID(defID, &testAUID))
+			if(EqualAUID(&defID, &testAUID))
 			{
 				defFound = AAFTrue;
 				*result = codec;
@@ -1513,7 +1510,10 @@ AAFRESULT STDMETHODCALLTYPE
 	return(AAFRESULT_SUCCESS);
 }
 
-AAFRESULT ImplAAFDictionary::LookupContainerDefinition(aafUID_t *defID, ImplAAFContainerDef **result)
+AAFRESULT STDMETHODCALLTYPE
+    ImplAAFDictionary::LookupContainerDefinition
+	  (const aafUID_t & defID,
+	   ImplAAFContainerDef **result)
 {
 	ImplAAFContainerDef			*container = NULL;
 	aafBool						defFound;
@@ -1529,7 +1529,7 @@ AAFRESULT ImplAAFDictionary::LookupContainerDefinition(aafUID_t *defID, ImplAAFC
 		{
 			CHECK(GetNthContainerDef (n, &container));
 			CHECK(container->GetAUID (&testAUID));
-			if(EqualAUID(defID, &testAUID))
+			if(EqualAUID(&defID, &testAUID))
 			{
 				defFound = AAFTrue;
 				*result = container;
@@ -1628,81 +1628,74 @@ void ImplAAFDictionary::InitBuiltins()
 {
   ImplAAFDataDef	*dataDef = NULL;
   AAFRESULT		hr;
-  aafUID_t		uid;
 
-  uid = DDEF_Picture;
-  hr = LookupDataDefinition (&uid, &dataDef);
+  hr = LookupDataDefinition (DDEF_Picture, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (&AUID_AAFDataDef,
+	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
-	  hr = dataDef->Init (&uid, L"Picture", L"Picture data");
+	  hr = dataDef->Initialize (DDEF_Picture, L"Picture", L"Picture data");
 	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  uid = DDEF_Sound;
-  hr = LookupDataDefinition (&uid, &dataDef);
+  hr = LookupDataDefinition (DDEF_Sound, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (&AUID_AAFDataDef,
+	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
-	  hr = dataDef->Init (&uid, L"Sound", L"Sound data");
+	  hr = dataDef->Initialize (DDEF_Sound, L"Sound", L"Sound data");
 	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  uid = DDEF_Timecode;
-  hr = LookupDataDefinition (&uid, &dataDef);
+  hr = LookupDataDefinition (DDEF_Timecode, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (&AUID_AAFDataDef,
+	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
-	  hr = dataDef->Init (&uid, L"Timecode", L"Timecode data");
+	  hr = dataDef->Initialize (DDEF_Timecode, L"Timecode", L"Timecode data");
 	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  uid = DDEF_Edgecode;
-  hr = LookupDataDefinition (&uid, &dataDef);
+  hr = LookupDataDefinition (DDEF_Edgecode, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (&AUID_AAFDataDef,
+	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
-	  hr = dataDef->Init (&uid, L"Edgecode", L"Edgecode data");
+	  hr = dataDef->Initialize (DDEF_Edgecode, L"Edgecode", L"Edgecode data");
 	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
   
-  uid = DDEF_Matte;
-  hr = LookupDataDefinition (&uid, &dataDef);
+  hr = LookupDataDefinition (DDEF_Matte, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (&AUID_AAFDataDef,
+	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
-	  hr = dataDef->Init (&uid, L"Matte", L"Matte data");
+	  hr = dataDef->Initialize (DDEF_Matte, L"Matte", L"Matte data");
 	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
   dataDef = NULL;
 
-  uid = DDEF_PictureWithMatte;
-  hr = LookupDataDefinition (&uid, &dataDef);
+  hr = LookupDataDefinition (DDEF_PictureWithMatte, &dataDef);
   if (AAFRESULT_FAILED (hr))
 	{
 	  // not already in dictionary
-	  hr = CreateInstance (&AUID_AAFDataDef,
+	  hr = CreateInstance (AUID_AAFDataDef,
 						   (ImplAAFObject **)&dataDef);
-	  hr = dataDef->Init (&uid, L"PictureWithMatte", L"PictureWithMatte data");
+	  hr = dataDef->Initialize (DDEF_PictureWithMatte, L"PictureWithMatte", L"PictureWithMatte data");
 	  hr = RegisterDataDefinition (dataDef);
 	}
   dataDef->ReleaseReference();
@@ -1755,7 +1748,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupInterpolationDefinition (
-      aafUID_t *pInterpolationID,
+      const aafUID_t & interpolationID,
       ImplAAFInterpolationDef **ppInterpolationDef)
 {
 	ImplEnumAAFInterpolationDefs		*InterpolationEnum = NULL;
@@ -1772,7 +1765,7 @@ AAFRESULT STDMETHODCALLTYPE
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(InterpolationDef->GetAUID (&testAUID));
-			if(EqualAUID(pInterpolationID, &testAUID))
+			if(EqualAUID(&interpolationID, &testAUID))
 			{
 				defFound = AAFTrue;
 				*ppInterpolationDef = InterpolationDef;
@@ -1861,7 +1854,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFDictionary::LookupPluginDescriptor (		//!!! Bring this out through the IDL
-      aafUID_t *pInterpolationID,
+      const aafUID_t & interpolationID,
       ImplAAFPluginDescriptor **ppPluginDesc)
 {
 	ImplEnumAAFPluginDescriptors		*pEnum = NULL;
@@ -1878,7 +1871,7 @@ AAFRESULT STDMETHODCALLTYPE
 		while(status == AAFRESULT_SUCCESS && !defFound)
 		{
 			CHECK(pDesc->GetAUID (&testAUID));
-			if(EqualAUID(pInterpolationID, &testAUID))
+			if(EqualAUID(&interpolationID, &testAUID))
 			{
 				defFound = AAFTrue;
 				*ppPluginDesc = pDesc;

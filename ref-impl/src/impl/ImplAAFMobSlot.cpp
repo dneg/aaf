@@ -149,7 +149,7 @@ ImplAAFMobSlot::GetNameBufLen
 }
   
  AAFRESULT STDMETHODCALLTYPE
-    ImplAAFMobSlot::SetName (aafWChar *pName)
+    ImplAAFMobSlot::SetName (const aafCharacter *pName)
 {
 	if(pName == NULL)
 		return(AAFRESULT_NULL_PARAM);
@@ -281,7 +281,8 @@ AAFRESULT ImplAAFMobSlot::ConvertToMyRate(aafPosition_t tmpPos,
 	return AAFRESULT_SUCCESS;
 }
 
-AAFRESULT ImplAAFMobSlot::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+AAFRESULT ImplAAFMobSlot::ChangeContainedReferences(const aafUID_t & from,
+													const aafUID_t & to)
 {
 	ImplAAFSegment	*seg;
 	

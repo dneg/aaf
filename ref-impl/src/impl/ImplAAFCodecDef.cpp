@@ -72,7 +72,7 @@ ImplAAFCodecDef::~ImplAAFCodecDef ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::IsEssenceKindSupported (
-      aafUID_t *pEssenceKind,
+      const aafUID_t & essenceKind,
       aafBool* pIsSupported)
 {
 	ImplEnumAAFDataDefs	*dataEnum = NULL;
@@ -85,7 +85,7 @@ AAFRESULT STDMETHODCALLTYPE
 		while((dataEnum->NextOne(&aVal) == AAFRESULT_SUCCESS)
 		   && (result == AAFFalse))
 		{
-			CHECK(aVal->IsDataDefOf(pEssenceKind, &result));
+			CHECK(aVal->IsDataDefOf(essenceKind, &result));
 			aVal->ReleaseReference();
 			aVal = NULL;
 		}
@@ -115,21 +115,18 @@ AAFRESULT STDMETHODCALLTYPE
  
  AAFRESULT STDMETHODCALLTYPE
     ImplAAFCodecDef::AppendEssenceKind (
-      aafUID_t *pEssenceKind)
+      const aafUID_t & essenceKind)
 {
 	aafUID_t	*tmp, newUID;
 	aafInt32	oldBufSize;
 	aafInt32	newBufSize;
 
-	if(pEssenceKind == NULL)
-		return AAFRESULT_NULL_PARAM;
-	
 	XPROTECT()
 	{
 		oldBufSize = _dataDefs.size();
 		newBufSize = oldBufSize + sizeof(aafUID_t);
 		tmp = new aafUID_t[newBufSize];
-		newUID = *pEssenceKind;
+		newUID = essenceKind;
 		if(tmp == NULL)
 			RAISE(AAFRESULT_NOMEMORY);
 		if(oldBufSize != 0)
@@ -226,7 +223,7 @@ AAFRESULT STDMETHODCALLTYPE
 		classID = _fileDescClass;
 		status = GetDictionary(&pDict);
 		if(status == AAFRESULT_SUCCESS)
-			status = pDict->LookupClass(&classID, ppClass);
+			status = pDict->LookupClass(classID, ppClass);
 	}
 
 	return status;

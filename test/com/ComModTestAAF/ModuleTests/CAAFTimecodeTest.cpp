@@ -11,7 +11,7 @@
  * notice appear in all copies of the software and related documentation,
  * and (ii) the name Avid Technology, Inc. may not be used in any
  * advertising or publicity relating to the software without the specific,
- *  prior written permission of Avid Technology, Inc.
+ * prior written permission of Avid Technology, Inc.
  *
  * THE SOFTWARE IS PROVIDED AS-IS AND WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
@@ -113,18 +113,18 @@ static HRESULT CreateAAFFile(aafWChar * pFileName)
     checkResult(pHeader->GetDictionary(&pDictionary));
  		
 		// Create a CompositionMob
-		checkResult(pDictionary->CreateInstance(&AUID_AAFCompositionMob,
+		checkResult(pDictionary->CreateInstance(AUID_AAFCompositionMob,
 							IID_IAAFCompositionMob, 
 							(IUnknown **)&pCompMob));
 
     // Get a MOB interface
 		checkResult(pCompMob->QueryInterface (IID_IAAFMob, (void **)&pMob));
 		checkResult(CoCreateGuid((GUID *)&newMobID));
-		checkResult(pMob->SetMobID(&newMobID));
+		checkResult(pMob->SetMobID(newMobID));
 
 		checkResult(pCompMob->Initialize(L"COMPMOB01"));
 		
-    checkResult(pDictionary->CreateInstance(&AUID_AAFTimecode,
+    checkResult(pDictionary->CreateInstance(AUID_AAFTimecode,
 								IID_IAAFTimecode, 
 								(IUnknown **)&pTimecode));		
 

@@ -60,20 +60,13 @@ ImplAAFComponent::~ImplAAFComponent ()
 
 
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFComponent::SetLength (aafLength_t *  pLength)
+    ImplAAFComponent::SetLength (const aafLength_t & length)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
-	if (pLength == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
+	if ( length < 0 )
+	  aafError = AAFRESULT_BAD_LENGTH;
 	else
-	{
-		if ( *pLength < 0 )
-			aafError = AAFRESULT_BAD_LENGTH;
-		else
-			_length = *pLength;
-	}
+	  _length = length;
 	return aafError;
 }
 
@@ -108,18 +101,12 @@ AAFRESULT STDMETHODCALLTYPE
 
 	
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFComponent::SetDataDef (aafUID_t*  pDataDef)
+    ImplAAFComponent::SetDataDef (const aafUID_t & dataDef)
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 
-	if (pDataDef == NULL)
-	{
-		return AAFRESULT_NULL_PARAM;
-	}
-	else
-	{
-		_dataDef = *pDataDef;
-	}
+	_dataDef = dataDef;
+
 	return aafError;
 }
 
@@ -160,22 +147,15 @@ AAFRESULT STDMETHODCALLTYPE
  *************************************************************************/
 AAFRESULT ImplAAFComponent::SetNewProps(
         aafLength_t length,			/* IN - Length property value */
-        aafUID_t *pDataDef)			/* IN - DataDef property value */
+        const aafUID_t & dataDef)			/* IN - DataDef property value */
 {
     AAFRESULT aafError = AAFRESULT_SUCCESS;
 	
-	if (pDataDef == NULL)
-	{
-		return aafError = AAFRESULT_NULL_PARAM;
-	}
+	_dataDef = dataDef;
+	if ( length < 0 )
+	  aafError = AAFRESULT_BAD_LENGTH;
 	else
-	{
-		_dataDef = *pDataDef;
-		if ( length < 0 )
-			aafError = AAFRESULT_BAD_LENGTH;
-		else
-			_length	= length;
-	}
+	  _length	= length;
 		
 	return aafError;
 }
@@ -234,7 +214,8 @@ AAFRESULT ImplAAFComponent::GetMinimumBounds(aafPosition_t rootPos, aafLength_t 
 }
 
 
-AAFRESULT ImplAAFComponent::ChangeContainedReferences(aafUID_t *from, aafUID_t *to)
+AAFRESULT ImplAAFComponent::ChangeContainedReferences(const aafUID_t & from,
+													  const aafUID_t & to)
 {
 	return AAFRESULT_SUCCESS;
 }

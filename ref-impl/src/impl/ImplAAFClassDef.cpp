@@ -119,11 +119,10 @@ ImplAAFClassDef::~ImplAAFClassDef ()
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::Initialize (
-      const aafUID_t * pID,
+      const aafUID_t & classID,
       ImplAAFClassDef * pParentClass,
       const wchar_t *  pClassName)
 {
-  if (!pID) return AAFRESULT_NULL_PARAM;
   if (!pClassName) return AAFRESULT_NULL_PARAM;
 
   HRESULT hr;
@@ -139,17 +138,16 @@ AAFRESULT STDMETHODCALLTYPE
 	  parentId = NULL_UID;
 	}
 
-  return pvtInitialize (pID, &parentId, pClassName);
+  return pvtInitialize (classID, &parentId, pClassName);
 }
 
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::pvtInitialize (
-      const aafUID_t * pID,
+      const aafUID_t & classID,
       const aafUID_t * pParentClassId,
       const wchar_t *  pClassName)
 {
-  if (!pID) return AAFRESULT_NULL_PARAM;
   if (!pClassName) return AAFRESULT_NULL_PARAM;
   if (! pParentClassId) return AAFRESULT_NULL_PARAM;
 
@@ -158,7 +156,7 @@ AAFRESULT STDMETHODCALLTYPE
   hr = SetName (pClassName);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
-  hr = SetAUID (pID);
+  hr = SetAUID (classID);
   if (! AAFRESULT_SUCCEEDED (hr)) return hr;
 
   _ParentClass = *pParentClassId;
@@ -213,7 +211,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::AppendNewPropertyDef (
-      aafUID_t *            pID,
+      const aafUID_t &      id,
       wchar_t *             pName,
       ImplAAFTypeDef *      pTypeDef,
       aafBool               isOptional,
@@ -238,7 +236,7 @@ AAFRESULT STDMETHODCALLTYPE
 	  hr = GetAUID (&thisClassID);
 	  assert (AAFRESULT_SUCCEEDED (hr));
 
-	  hr = pDict->dictLookupClass (&thisClassID, &pClassDef);
+	  hr = pDict->dictLookupClass (thisClassID, &pClassDef);
 	  if (AAFRESULT_SUCCEEDED (hr))
 		{
 		  // pClassDef is unused; we only want to know the result of
@@ -254,9 +252,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
-  return pvtAppendPropertyDef (pID,
+  return pvtAppendPropertyDef (id,
 							   pName,
-							   &typeId,
+							   typeId,
 							   isOptional,
 							   ppPropDef);
 }
@@ -264,7 +262,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::AppendOptionalPropertyDef (
-      aafUID_t *            pID,
+      const aafUID_t &      id,
       wchar_t *             pName,
       ImplAAFTypeDef *      pTypeDef,
       ImplAAFPropertyDef ** ppPropDef)
@@ -291,9 +289,9 @@ AAFRESULT STDMETHODCALLTYPE
   if (AAFRESULT_FAILED (hr))
 	return hr;
 
-  return pvtAppendPropertyDef (pID,
+  return pvtAppendPropertyDef (id,
 							   pName,
-							   &typeId,
+							   typeId,
 							   AAFTrue,
 							   ppPropDef);
 }
@@ -353,13 +351,10 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::LookupPropertyDef (
-      aafUID_t * pPropID,
+      const aafUID_t & propID,
       ImplAAFPropertyDef ** ppPropDef) const
 {
-  if (! pPropID)
-	return AAFRESULT_NULL_PARAM;
-
-  const pvtPropertyIdentifierAUID generalPropId = *pPropID;
+  const pvtPropertyIdentifierAUID generalPropId = propID;
 
   // cast away bitwise const-ness; maintaining conceptual const-ness
   return ((ImplAAFClassDef*)this)->generalLookupPropertyDef
@@ -416,7 +411,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 	  ImplAAFClassDefSP tmp;
 	  assert (! _cachedParentClass);
-	  hr = pDict->LookupClass (&parentClass, &tmp);
+	  hr = pDict->LookupClass (parentClass, &tmp);
 	  if (AAFRESULT_FAILED (hr))
 		return hr;
 	  // If _cachedParentClass was set during process of looking this
@@ -437,24 +432,21 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFClassDef::pvtAppendPropertyDef (
-      aafUID_t *            pID,
+      const aafUID_t &      id,
       wchar_t *             pName,
-      const aafUID_t *      pTypeId,
+      const aafUID_t &      typeId,
       aafBool               isOptional,
       ImplAAFPropertyDef ** ppPropDef)
 {
-  if (! pID) return AAFRESULT_NULL_PARAM;
   if (! pName) return AAFRESULT_NULL_PARAM;
-  if (! pTypeId) return AAFRESULT_NULL_PARAM;
 
   ImplAAFDictionarySP pDict;
   ImplAAFPropertyDefSP pd;
 
   check_result (GetDictionary (&pDict));
   assert (pDict);
-  assert (pID);
   OMPropertyId omPid;
-  check_result (pDict->GenerateOmPid (*pID, omPid));
+  check_result (pDict->GenerateOmPid (id, omPid));
 
   ImplAAFPropertyDef * tmp =
 	(ImplAAFPropertyDef *)pDict->CreateImplObject (AUID_AAFPropertyDef);
@@ -466,10 +458,10 @@ AAFRESULT STDMETHODCALLTYPE
   tmp->ReleaseReference ();
   tmp = 0;
 
-  check_result (pd->Initialize (pID,
+  check_result (pd->Initialize (id,
 								omPid,
 								pName,
-								pTypeId,
+								typeId,
 								isOptional));
 
   ImplAAFPropertyDef * pdTemp = pd;

@@ -109,16 +109,16 @@ static HRESULT ClassDefTest ()
   if (FAILED (hr)) return hr;
   assert (pDict);
   IAAFTypeDefSP ptd;
-  hr = pDict->LookupType ((aafUID_t*)&kAAFTypeID_UInt8, &ptd);
+  hr = pDict->LookupType (kAAFTypeID_UInt8, &ptd);
   if (FAILED (hr))	return hr;
 
   // Try to extend a typeDefInt.  Should fail.
   IAAFClassDefSP badClass1;
-  hr = pDict->LookupClass (&AUID_AAFTypeDefInt, &badClass1);
+  hr = pDict->LookupClass (AUID_AAFTypeDefInt, &badClass1);
   if (FAILED (hr))	return hr;
 
   IAAFPropertyDefSP propDef1;
-  hr = badClass1->AppendOptionalPropertyDef ((aafUID_t*)&ourPid1,
+  hr = badClass1->AppendOptionalPropertyDef (ourPid1,
 											L"First prop",
 											ptd,
 											&propDef1);
@@ -127,11 +127,11 @@ static HRESULT ClassDefTest ()
 
   // Try to extend an AAFObject.  Should fail, for now at least.
   IAAFClassDefSP badClass2;
-  hr = pDict->LookupClass (&AUID_AAFObject, &badClass2);
+  hr = pDict->LookupClass (AUID_AAFObject, &badClass2);
   if (FAILED (hr))	return hr;
 
   IAAFPropertyDefSP propDef2;
-  hr = badClass2->AppendOptionalPropertyDef ((aafUID_t*)&ourPid2,
+  hr = badClass2->AppendOptionalPropertyDef (ourPid2,
 											 L"Second prop",
 											 ptd,
 											 &propDef2);
@@ -140,11 +140,11 @@ static HRESULT ClassDefTest ()
 
   // Try to extend an AAFSequence.  Should succeed.
   IAAFClassDefSP goodClass;
-  hr = pDict->LookupClass (&AUID_AAFSequence, &goodClass);
+  hr = pDict->LookupClass (AUID_AAFSequence, &goodClass);
   if (FAILED (hr))	return hr;
 
   IAAFPropertyDefSP propDef3;
-  hr = goodClass->AppendOptionalPropertyDef ((aafUID_t*)&ourPid3,
+  hr = goodClass->AppendOptionalPropertyDef (ourPid3,
 											 L"Third prop",
 											 ptd,
 											 &propDef3);

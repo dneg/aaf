@@ -63,7 +63,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     Initialize
         // @parm [in] auid to be used to identify this type
-        (const aafUID_t * pID,
+        (const aafUID_t & classID,
 
 		// Inheritance parent of this class
 		ImplAAFClassDef * pParentClass,
@@ -96,7 +96,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendNewPropertyDef
         (// @parm [in] auid to be used to identify this property
-         aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in, string] name of the new property
          wchar_t *  pName,
@@ -117,7 +117,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     AppendOptionalPropertyDef
         (// @parm [in] auid to be used to identify this property
-         aafUID_t *  pID,
+         const aafUID_t & id,
 
          // @parm [in, string] name of the new property
          wchar_t *  pName,
@@ -135,7 +135,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     LookupPropertyDef
         (// @parm [in] auid reprepresenting property to look up
-         aafUID_t *  pPropID,
+         const aafUID_t & propID,
 
          // @parm [out] resulting property definition
          ImplAAFPropertyDef ** ppPropDef) const;
@@ -165,7 +165,7 @@ public:
   virtual AAFRESULT STDMETHODCALLTYPE
     pvtInitialize
         // @parm [in] auid to be used to identify this type
-        (const aafUID_t * pID,
+        (const aafUID_t & classID,
 
 		// Inheritance parent of this class
 		const aafUID_t * pParentClassId,
@@ -179,9 +179,9 @@ public:
   // already been registered).
   AAFRESULT STDMETHODCALLTYPE
     pvtAppendPropertyDef
-        (aafUID_t *  pID,
+        (const aafUID_t & id,
          wchar_t *  pName,
-         const aafUID_t * pTypeId,
+         const aafUID_t & typeId,
          aafBool  isOptional,
          ImplAAFPropertyDef ** ppPropDef);
 

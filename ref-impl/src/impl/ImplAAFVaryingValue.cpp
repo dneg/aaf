@@ -187,7 +187,7 @@ AAFRESULT STDMETHODCALLTYPE
 		CHECK(MyHeadObject(&head));
 		CHECK(head->GetDictionary(&dict));
 		interpID = _interpolation;
-		CHECK(dict->LookupInterpolationDefinition(&interpID, ppDef));
+		CHECK(dict->LookupInterpolationDefinition(interpID, ppDef));
 //		(*ppDef)->AcquireReference();
 		head->ReleaseReference();
 		head = NULL;
