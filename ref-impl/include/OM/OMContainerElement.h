@@ -34,7 +34,7 @@
 
 class OMProperty;
 
-  // @class Pointer elements of Object Manager vectors.
+  // @class Pointer elements of non-persistent Object Manager vectors.
   //   @tcarg class | ReferencedObject | The type of the referenced object.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
@@ -78,7 +78,7 @@ private:
 
 };
 
-  // @class Pointer elements of Object Manager sets.
+  // @class Pointer elements of non-persistent Object Manager sets.
   //   @tcarg class | ReferencedObject | The type of the referenced object.
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename UniqueIdentification, typename ReferencedObject>
