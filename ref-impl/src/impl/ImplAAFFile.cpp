@@ -378,7 +378,7 @@ AAFRESULT ImplAAFFile::Create(
 		if(_container == NULL)
 			RAISE(OM_ERR_BADOPEN);
 	
-		head = new ImplAAFHeader();		//!!!this, (OMLObject)_container->cmFindObject(1));
+		head = dynamic_cast<ImplAAFHeader*>(CreateImpl(CLSID_AAFHeader));
 		_head = head;
 		if (head == NULL)
 		  RAISE(OM_ERR_BADHEAD);
