@@ -36,8 +36,7 @@ endif
 include $(AAFBASE)/build/common.mk
 
 INCLUDES = -I. \
-	   -I$(AAFSDKINCLUDEDIR) \
-	   -I$(AAFBASE)/ss-impl/ref/h
+	   -I$(AAFSDKINCLUDEDIR)
 
 .PHONY : all
 all : axLib
