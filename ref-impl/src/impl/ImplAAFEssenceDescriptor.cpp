@@ -94,6 +94,9 @@ AAFRESULT STDMETHODCALLTYPE
 	if(pLocator == NULL)
 		return(AAFRESULT_NULL_PARAM);
 
+	if(pLocator->attached())
+		return(AAFRESULT_OBJECT_ALREADY_ATTACHED);
+
 	_locators.appendValue(pLocator);
 	pLocator->AcquireReference();
 

@@ -627,6 +627,9 @@ AAFRESULT
 		return AAFRESULT_NULL_PARAM;
 	}
 
+	if (pIdent->attached())
+	    return AAFRESULT_OBJECT_ALREADY_ATTACHED;
+
 	_identificationList.appendValue(pIdent);
 	pIdent->AcquireReference();
 
@@ -689,6 +692,12 @@ void ImplAAFHeader::SetByteOrder(const aafInt16 byteOrder)
 
 void ImplAAFHeader::SetDictionary(ImplAAFDictionary *pDictionary)
 {
+  if( !pDictionary )
+	return; // AAFRESULT_NULL_PARAM
+
+  if( pDictionary->attached() )
+	return; // AAFRESULT_OBJECT_ALREADY_ATTACHED
+
   _dictionary = pDictionary;
   if (pDictionary)
     pDictionary->AcquireReference();
