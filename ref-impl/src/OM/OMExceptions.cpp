@@ -23,4 +23,58 @@
 // @doc OMEXTERNAL
 #include "OMExceptions.h"
 
-// Nothing yet
+OMException::OMException(void)
+: _name("Unknown")
+{
+}
+
+OMException::OMException(const char* name)
+: _name(name)
+{
+}
+
+const char* OMException::name(void) const
+{
+  return _name;
+}
+
+OMException::~OMException(void)
+{
+}
+
+OMWindowsException::OMWindowsException(OMWindowsResult result)
+: _result(result)
+{
+}
+
+OMWindowsException::OMWindowsException(
+  const char* name,
+  OMWindowsResult result)
+: OMException(name),
+  _result(result)
+{
+}
+
+OMWindowsException::~OMWindowsException(void)
+{
+}
+
+OMWindowsResult OMWindowsException::result(void)
+{
+  return _result;
+}
+
+OMWindowsResult OMExceptionToResult(
+  OMException& exception,
+  OMWindowsResult fallback)
+{
+  OMWindowsResult result;
+
+  OMWindowsException* e = dynamic_cast<OMWindowsException*>(&exception);
+  if (e != 0) {
+    result = e->result();
+  } else {
+    result = fallback;
+  }
+  return result;
+}
