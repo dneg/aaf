@@ -30,6 +30,7 @@ class CAxEssenceCodec : public IAAFEssenceCodec
 public:
 
 	CAxEssenceCodec( std::auto_ptr<T> impl )
+		: _impl( impl )
 	{}
 
 	virtual ~CAxEssenceCodec()

@@ -118,7 +118,7 @@ public:
 		                      const AxString& name,
 							  const AxString& desc )
 		: _codecDefID( codecDefID ),
-		  _descriptorAUID( _descriptorAUID ),
+		  _descriptorAUID( descriptorAUID ),
 	      _dataDefID( dataDefID ),
 	      _name( name ),
 	      _desc( desc )

@@ -32,6 +32,7 @@ class CAxPlugin : public IAAFPlugin
 public:
 
 	CAxPlugin( std::auto_ptr<T> impl )
+		: _impl( impl )
 	{}
 
 	virtual ~CAxPlugin()

@@ -25,6 +25,10 @@
 
 #include <map>
 
+#if _DEBUG
+#include <iostream>
+#endif
+
 //
 // Miscellaneous items.
 //
@@ -63,11 +67,18 @@ public:
 // implementation that, generally, has identical method
 // name and arguments but does not return an error code.
 
+#if _DEBUG
+#define AX_PLUGIN_LOG_WHAT( EX )  std::wcout << L"Codec error: " << (EX).what() << std::endl; 
+#else
+#define AX_PLUGIN_LOG_WHAT( EX )
+#endif
+
 #define AX_PLUGIN_TRY( OBJ, NAME, ARGS )		\
 	try {										\
 		(OBJ)->NAME ARGS ;						\
 	}											\
 	catch( const AxExHResult& ex ) {			\
+		AX_PLUGIN_LOG_WHAT( ex )                \
 		return ex.getHResult();					\
 	}											\
 	catch( ... ) {								\
