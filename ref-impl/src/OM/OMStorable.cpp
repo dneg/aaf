@@ -118,7 +118,6 @@ void OMStorable::save(void) const
     ASSERT("Valid store", _store != 0);
     _store->close();
     delete _store;
-    OMStorable* nonConstThis = const_cast<OMStorable*>(this);
     nonConstThis->_store = 0;
   }
 }
@@ -206,8 +205,7 @@ void OMStorable::restoreContents(void)
     ASSERT("Valid store", _store != 0);
     _store->close();
     delete _store;
-    OMStorable* nonConstThis = const_cast<OMStorable*>(this);
-    nonConstThis->_store = 0;
+    _store = 0;
   }
 }
 
