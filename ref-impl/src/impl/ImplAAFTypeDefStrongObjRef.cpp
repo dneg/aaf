@@ -101,10 +101,17 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
     ImplAAFTypeDefStrongObjRef::SetObject (ImplAAFPropertyValue * pPropVal,
-										   ImplAAFObject * pObject)
+										   ImplAAFRoot * pObj)
 {
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
-  if (! pObject) return AAFRESULT_NULL_PARAM;
+  if (! pObj) return AAFRESULT_NULL_PARAM;
+
+  // Clients can only make strong references to data objects (not type or class definitions!)
+  // transdel:2000-JUN-29
+  ImplAAFObject *pObject = dynamic_cast<ImplAAFObject*>(pObj);
+  if (NULL == pObject)
+    return AAFRESULT_INVALID_PARAM;
+  
 
   OMStorable ** ppStorable = NULL;
   aafUInt32 bitsSize = 0;
@@ -137,7 +144,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 AAFRESULT STDMETHODCALLTYPE
 ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
-									   ImplAAFObject ** ppObject)
+									   ImplAAFRoot ** ppObject)
 {
   if (! pPropVal) return AAFRESULT_NULL_PARAM;
   if (! ppObject) return AAFRESULT_NULL_PARAM;
@@ -151,13 +158,13 @@ ImplAAFTypeDefStrongObjRef::GetObject (ImplAAFPropertyValue * pPropVal,
 
   hr = pvd->GetBitsSize (&bitsSize);
   if (AAFRESULT_FAILED(hr)) return hr;
-  assert (bitsSize >= sizeof (ImplAAFObject*));
+  assert (bitsSize >= sizeof (ImplAAFRoot*));
   hr = pvd->GetBits ((aafMemPtr_t*) &ppStorable);
   if (AAFRESULT_FAILED(hr)) return hr;
   assert (*ppStorable);
   assert (ppObject);
-  ImplAAFObject * pObj;
-  pObj = dynamic_cast<ImplAAFObject*>(*ppStorable);
+  ImplAAFRoot * pObj;
+  pObj = dynamic_cast<ImplAAFRoot*>(*ppStorable);
   assert (pObj);
   *ppObject = pObj;
   (*ppObject)->AcquireReference ();
@@ -185,7 +192,7 @@ AAFRESULT STDMETHODCALLTYPE
 
 // Override from AAFTypeDefObjectRef
 AAFRESULT STDMETHODCALLTYPE
-    ImplAAFTypeDefStrongObjRef::CreateValue (/*[in]*/ ImplAAFObject * pObj,
+    ImplAAFTypeDefStrongObjRef::CreateValue (/*[in]*/ ImplAAFRoot * pObj,
       /*[out]*/ ImplAAFPropertyValue ** ppPropVal)
 {
   if (! pObj)
@@ -239,7 +246,7 @@ aafBool ImplAAFTypeDefStrongObjRef::IsFixedSize (void) const
 
 size_t ImplAAFTypeDefStrongObjRef::PropValSize (void) const
 {
-  return sizeof (ImplAAFObject*);
+  return sizeof (ImplAAFRoot*);
 }
 
 
@@ -251,7 +258,7 @@ aafBool ImplAAFTypeDefStrongObjRef::IsRegistered (void) const
 
 size_t ImplAAFTypeDefStrongObjRef::NativeSize (void) const
 {
-  return sizeof (ImplAAFObject*);
+  return sizeof (ImplAAFRoot*);
 }
 
 
@@ -260,6 +267,10 @@ OMProperty * ImplAAFTypeDefStrongObjRef::pvtCreateOMProperty
    const wchar_t * name) const
 {
   assert (name);
+  
+  // Clients can only make strong references to data objects (not type or class definitions!)
+  // However, clients should be able to create optional weak references to type and class
+  // definitions. transdel:2000-JUN-29
   OMProperty * result =
 	new OMStrongReferenceProperty<ImplAAFObject> (pid, name);
   assert (result);
