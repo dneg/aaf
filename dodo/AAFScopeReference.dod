@@ -18,6 +18,12 @@ AD_INCLUDE(AAFTypes)
 *                                          *
 \******************************************/
 
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+
 /*************************************************************************
  * 
  * @class AAFScopeReference | AAFScopeReference refers to a section in the 
