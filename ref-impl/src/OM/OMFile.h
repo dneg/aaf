@@ -75,18 +75,6 @@ public:
                                     const OMClassFactory* factory,
                                     const OMLoadMode loadMode);
 
-    // @cmember Open a new <c OMFile> for write-only access, the
-    //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
-    //          <p factory> to create the objects. The file must not already
-    //          exist. The byte ordering on the newly created file is given
-    //          by <p byteOrder>. The root <c OMStorable> in the newly
-    //          created file is given by <p root>.
-  static OMFile* openNewWrite(const wchar_t* fileName,
-                              const OMClassFactory* factory,
-                              const OMByteOrder byteOrder,
-                              OMStorable* root,
-                              const OMFileSignature& signature);
-
     // @cmember Open a new <c OMFile> for modify access, the
     //          <c OMFile> is named <p fileName>, use the <c OMClassFactory>
     //          <p factory> to create the objects. The file must not already
@@ -98,16 +86,6 @@ public:
                                const OMByteOrder byteOrder,
                                OMStorable* root,
                                const OMFileSignature& signature);
-
-    // @cmember Open a new transient <c OMFile> for modify access, the
-    //          <c OMFile> is not named, use the <c OMClassFactory>
-    //          <p factory> to create the objects.
-    //          The byte ordering on the newly created file is given
-    //          by <p byteOrder>. The root <c OMStorable> in the newly
-    //          created file is given by <p root>.
-  static OMFile* openNewTransient(const OMClassFactory* factory,
-                                  const OMByteOrder byteOrder,
-                                  OMStorable* root);
 
      // @cmember Is <p signature> a valid signature for an <c OMFile> ?
   static bool validSignature(const OMFileSignature& signature);
