@@ -33,6 +33,8 @@
 #include "ImplAAFContentStorage.h"
 #endif
 
+#include "AAFPropertyIDs.h"
+
 #include "ImplAAFObjectCreation.h"
 
 #define DEFAULT_NUM_MOBS				1000

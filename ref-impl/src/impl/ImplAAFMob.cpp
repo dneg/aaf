@@ -31,7 +31,7 @@
 #endif
 
 
-
+#include "AAFPropertyIDs.h"
 
 
 
