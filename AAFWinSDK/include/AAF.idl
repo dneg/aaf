@@ -162,6 +162,7 @@ interface IAAFEndian;
 interface IAAFSearchSource;
 interface IAAFEssenceMultiAccess;
 interface IAAFTypeDefVariableArrayEx;
+interface IAAFMasterMobEx;
 
 
 // ************************
@@ -12451,7 +12452,6 @@ interface IAAFLocator : IUnknown
 
 //
 // Objects that implement IAAFMasterMob also implement the following interfaces:
-//  - IAAFSearchSource
 //  - IAAFMob
 //  - IAAFObject
 
@@ -32294,11 +32294,11 @@ interface IAAFEssenceMultiAccess : IUnknown
     // The multiXfer_t structure has the following fields, which
     // specify one channel of data:
     //
-    //     - essenceDef  [IN] -- The essence type definition
-    //     - physical    [IN] -- The physical input-output channel
-    //     - numSamples  [IN] -- The number of samples to transfer
-    //     - buflen      [IN] -- The size of the buffer
-    //     - buffer      [IN] -- The buffer for this
+    //   essenceDef  [IN] -- The essence type definition
+    //   physical    [IN] -- The physical input-output channel
+    //   numSamples  [IN] -- The number of samples to transfer
+    //   buflen      [IN] -- The size of the buffer
+    //   buffer      [IN] -- The buffer for this
     [in, size_is(elemCount)] aafmMultiXfer_t *  xferArray,
 
     // Results go into this array.
@@ -32306,8 +32306,8 @@ interface IAAFEssenceMultiAccess : IUnknown
     // The aafmMultiResult_t structure has the following fields,
     // which return result for one channel of data: 
     //
-    //     - bytesXfered   [OUT] -- The total number of bytes transferred
-    //     - samplesXfered [OUT] -- The total number of samples transferred
+    //   bytesXfered   [OUT] -- The total number of bytes transferred
+    //   samplesXfered [OUT] -- The total number of samples transferred
     [out, size_is(elemCount)] aafmMultiResult_t *  resultArray);
 }
 
@@ -32459,6 +32459,139 @@ interface IAAFTypeDefVariableArrayEx : IUnknown
 
 }
 
+
+
+
+// ************************
+//
+// Interface IAAFMasterMobEx
+//
+// ************************
+//
+// The IAAFMasterMobEx interface extends IAAFMasterMob.  It supports
+// extended essence.  Extended essence is represented by a Sequence of
+// SourceClip objects.  Each SourceClip refers to a SourceMob which
+// describes one chunk of essence.
+//
+// Individual chunks of embedded essence are currently limited to 2GB
+// in size.  A Sequence of SourceClips provides the means to overcome
+// this limit.  There is no limit to the number of SourceClip objects
+// in the sequence or the sum total size of all essence in a file,
+// other than those imposed by the underlying persistent object
+// store. It is expected that this will be significantly larger than
+// 2GB of essence data.
+//
+//
+// Essence can be extended at any time, for any reason.  Typically, it
+// will be extended because a CODEC returned an error indicating a
+// 2GB limit was reached.  To overcome this limit, simply extend the
+// essence.
+//
+// IAAFEssenceAccess::ReadSamples knows how to read embedded
+// essence.  This interface is created by IAAFMasterMob::OpenEssence
+//
+// This interface returns the same errors as IAAFMasterMob::CreateEssence,
+// and IAAFMasterMob::CreateMultiEssence.
+// 
+//
+// In addition to the specific error results listed for each method,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+
+
+//
+// Objects that implement IAAFMasterMobEx also implement the following interfaces:
+//  - IAAFMob
+//  - IAAFObject
+
+[
+    object,
+    uuid(b1a21370-1a7d-11d2-bf78-00104bc9156d ),
+    helpstring("IAAFMasterMobEx Interface"),
+    pointer_default(unique)
+]
+interface IAAFMasterMobEx : IUnknown
+{
+
+
+  //***********************************************************
+  //
+  // ExtendEssence()
+  //
+  // Extends a single stream of essence that was originally created using
+   // IAAFMasterMob::CreateEssence.  Extended essence is represented by
+   // a Sequence of SourceClip objects.  The first call to ExtendEssence will cause the
+   // TimelineMobSlot's SourceClip object to be replaced by a
+   // Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  // 
+  HRESULT ExtendEssence (
+    // 
+    [in] aafSlotID_t  masterSlotID,
+
+    // create essence of this type
+    [in] IAAFDataDef * pMediaKind,
+
+    // using this codec
+    [in, ref] aafUID_constref  codecID,
+
+    // with this edit rate
+    [in] aafRational_t  editRate,
+
+    // with this sample rate
+    [in] aafRational_t  samplerate,
+
+    // optionally compressing it
+    [in] aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    [in] IAAFLocator * destination,
+
+    // with this format
+    [in, ref] aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    [out] IAAFEssenceAccess ** access);
+
+
+  //***********************************************************
+  //
+  // ExtendMultiEssence()
+  //
+  // Extends a multi-channel interleaved stream of essence that was
+   // originally created using IAAFMasterMob::CreateMultiEssence.
+   // Extended essence is represented by a Sequence of SourceClip objects.
+   // The first call to ExtendEssence will cause the TimelineMobSlot's SourceClip
+   // object to be replaced by a Sequence.  The initial SourceClip becomes the first
+   // component of the new Sequence.
+  // 
+  HRESULT ExtendMultiEssence (
+    // using this codec
+    [in, ref] aafUID_constref  codecID,
+
+    // this many channels
+    [in] aafUInt16  arrayElemCount,
+
+    // using these definitions
+    [in,ref,size_is(arrayElemCount)] aafmMultiCreate_t *  mediaArray,
+
+    // optionally compressing it
+    [in] aafCompressEnable_t  Enable,
+
+    // Optionally create the file HERE.
+    [in] IAAFLocator * destination,
+
+    // with this format
+    [in, ref] aafUID_constref  fileFormat,
+
+    // Return an essence access on the essence.
+    [out] IAAFEssenceMultiAccess**  access);
+
+}
 
 
 
