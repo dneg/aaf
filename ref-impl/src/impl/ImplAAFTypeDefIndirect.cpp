@@ -508,6 +508,7 @@ bool ImplAAFTypeDefIndirect::supportedActualType (ImplAAFTypeDef *pActualType, a
     }
 
     case kAAFTypeCatInt:
+    case kAAFTypeCatEnum:
     case kAAFTypeCatRecord:
       return true;
 
@@ -516,7 +517,7 @@ bool ImplAAFTypeDefIndirect::supportedActualType (ImplAAFTypeDef *pActualType, a
       if (0 == level)
         return true;
       else
-        return false;
+        return false; // strings cannot be embedded in another type.
     }
 
     default:
