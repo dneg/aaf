@@ -570,7 +570,9 @@ public:
   HRESULT STDMETHODCALLTYPE
     Synchronize ()
   { if (! _file) return AAFRESULT_NOT_INITIALIZED;
-    fflush(_file);
+	aafBoolean_t writeable = kAAFFalse;
+	IsWriteable (&writeable);
+    if (writeable) fflush(_file);
     return AAFRESULT_SUCCESS; }
 
   // IAAFRandomRawStorage overrides
