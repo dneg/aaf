@@ -565,7 +565,7 @@ STDAPI AAFFileIsAAFFile (
 // AAFCreateRawStorageMemory()
 //
 STDAPI AAFCreateRawStorageMemory (
-  aafFileAccess_e  access,
+  aafFileAccess_t  access,
   IAAFRawStorage ** ppNewRawStorage)
 {
   HRESULT hr = S_OK;
@@ -607,8 +607,8 @@ STDAPI AAFCreateRawStorageMemory (
 //
 STDAPI AAFCreateRawStorageDisk (
   aafCharacter_constptr  filename,
-  aafFileExistence_e  existence,
-  aafFileAccess_e  access,
+  aafFileExistence_t  existence,
+  aafFileAccess_t  access,
   IAAFRawStorage ** ppNewRawStorage)
 {
   HRESULT hr = S_OK;
@@ -951,7 +951,7 @@ HRESULT AAFDLL::GetPluginManager (
 }
 
 HRESULT AAFDLL::CreateRawStorageMemory (
-	aafFileAccess_e  access,
+	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage)
 {
   TRACE("AAFDLL::CreateRawStorageMemory");
@@ -961,8 +961,8 @@ HRESULT AAFDLL::CreateRawStorageMemory (
 
 HRESULT AAFDLL::CreateRawStorageDisk (
     aafCharacter_constptr  filename,
-    aafFileExistence_e  existence,
-	aafFileAccess_e  access,
+    aafFileExistence_t  existence,
+	aafFileAccess_t  access,
 	IAAFRawStorage ** ppNewRawStorage)
 {
   TRACE("AAFDLL::CreateRawStorageDisk");
