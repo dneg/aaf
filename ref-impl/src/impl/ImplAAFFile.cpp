@@ -11,7 +11,7 @@
 #include "ImplAAFFile.h"
 
 #include "OMFile.h"
-#include "Container.h"  // will be "ImplAAFBaseClassFactory.h"
+#include "ImplAAFBaseClassFactory.h"
 
 #include "ImplAAFSession.h"
 #include "ImplAAFHeader.h"
