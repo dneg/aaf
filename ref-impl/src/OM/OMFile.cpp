@@ -1234,7 +1234,7 @@ void OMFile::openRead(void)
 
 	OMStoredObjectFactory* factory = 0;
 	// if client said DontCare, get from isRecognized(_rawStorage, _encoding)
-	if( nullOMStoredObjectEncoding != _encoding )
+	if( nullOMStoredObjectEncoding == _encoding )
 	{
 		bool result = isRecognized(_rawStorage, _encoding);
 		ASSERT("Recognized file", result);
@@ -1260,7 +1260,7 @@ void OMFile::openModify(void)
 
 	OMStoredObjectFactory* factory = 0;
 	// if client said DontCare, get from isRecognized(_rawStorage, _encoding)
-	if( nullOMStoredObjectEncoding != _encoding )
+	if( nullOMStoredObjectEncoding == _encoding )
 	{
 		bool result = isRecognized(_rawStorage, _encoding);
 		ASSERT("Recognized file", result);
