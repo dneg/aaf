@@ -1,0 +1,65 @@
+#
+# Script: rm
+# proxy for unix rm command.
+#
+
+#
+# This variable will contain a list of the files to delete.
+set filesToDelete ""
+
+#
+# This variable will be set to "Yes" if the "-p" option is used.
+set printProgress "No"
+
+
+# 
+# This variable is set to "Yes" if the "-f" option is used in the
+# parameter list.
+set silentDelete "No"
+
+
+#
+# Check the parameter list for options. If a parameter is not an option
+# then it assumed to be a file path.
+#
+for param in {parameters}
+	if "{param}" =~ /-[A-Za-z]+/
+		if "{param}" == "-f"
+			set silentDelete "Yes"
+		else if "{param}" == "-i"
+			set silentDelete "No"
+		else if "{param}" == "-v"
+			set printProgress "Yes"
+		else
+			echo '# Parameter "'{param}'" is an unknown or unsupported option for the '{0}' command.'
+			exit
+		end
+	else
+		set filesToDelete "{filesToDelete} '{param}'"
+	end
+end
+
+if "{printProgress}" == "Yes" 
+	echo '# Calling "'{0}' '{parameters}'"'
+end
+
+
+for theFile in {filesToDelete}
+	if "{printProgress}" == "Yes" 
+		echo -n '# Attempting to delete "'{theFile}'"'
+	end
+	
+	if "{silentDelete}" == "Yes"
+		if "`exists "{theFile}"`"
+			SetFile -a l "{theFile}"
+			Delete -i -ay "{theFile}"
+			if "{printProgress}" == "Yes"
+				echo '" done.'
+			end
+		else if "{printProgress}" == "Yes"
+			echo '" does not exist.'
+		end
+	else
+		Delete -ay "{theFile}"
+	end
+end
