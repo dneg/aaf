@@ -54,6 +54,10 @@ AAFByteOrder GetNativeByteOrder(void);
 aafBool	EqualAUID(const aafUID_t *uid1, const aafUID_t *uid2);
 
 AAFRESULT aafMobIDNew(aafUID_t *mobID);
+AAFRESULT aafMobIDFromMajorMinor(
+        aafUInt32	major,
+		aafUInt32	minor,
+		aafUID_t *mobID);     /* OUT - Newly created Mob ID */
 
 /************************************************************************
  *
