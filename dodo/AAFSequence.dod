@@ -21,8 +21,7 @@ AD_FORWARD_DECLARATION(AAFTimecode)
 
 AD_CLASS_BEGIN
 
-AD_XCONSTRUCTOR2([in],objIn, AAFFile, file, File Handle,
-				 [in],objIn, AAFDataDefinition, datadef, Data Definition object,
+AD_XCONSTRUCTOR1([in],objIn, AAFDataDefinition, datadef, Data Definition object,
   // This function creates a new sequence object with the given
   // property values.  The length of the sequence is initially set to
   // 0.  When components are appended to the sequence with the
