@@ -33038,6 +33038,36 @@ DECLARE_INTERFACE_(IAAFMasterMobEx, IUnknown)
     // Returns AAFTrue if the given file is an AAF file, returns AAFFalse otherwise.
     /*[out,retval]*/ aafBool *  pFileIsAAFFile);
 
+  //***********************************************************
+  //
+  // AAFRawStorageIsAAFFile()
+  //
+  // Does the storage contain an AAF file ?
+  //
+  // Note that the function result is returned via the pRawStorageIsAAFFile argument.
+  // If this function succeeds it returns AAFRESULT_SUCCESS even if the storage
+  // is not an AAF file.
+  //
+  // This function will return the following codes.  If more than one of
+  // the listed errors is in effect, it will return the first one
+  // encountered in the order given below:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.  (This is the only code indicating success.)
+  //
+  // AAFRESULT_NULL_PARAM
+  //   - at least one of the pointer arguments is NULL.
+  // 
+  STDAPI AAFRawStorageIsAAFFile (
+    // storage containing the purported file
+    /*[in]*/ IAAFRawStorage *  pRawStorage,
+
+    // Pointer to an AUID indicating the file kind
+    /*[out]*/ aafUID_t *  pAAFFileKind,
+
+    // Returns AAFTrue if the given storage contains an AAF file, returns AAFFalse otherwise.
+    /*[out,retval]*/ aafBool *  pRawStorageIsAAFFile);
+
 
   //***********************************************************
   //
