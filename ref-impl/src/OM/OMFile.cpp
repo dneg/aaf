@@ -103,12 +103,14 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
   //   @rdesc The newly created <c OMFile>.
 OMFile* OMFile::openNewWrite(const wchar_t* fileName,
                             const OMClassFactory* factory,
-                            const OMByteOrder /*byteOrder*/,
+                            const OMByteOrder byteOrder,
                             OMStorable* root)
 {
   TRACE("OMFile::openNewWrite");
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid class factory", factory != 0);
+  PRECONDITION("Valid byte order",
+                    ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid root", root != 0);
 
   // Not yet implemented.
@@ -135,6 +137,8 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   TRACE("OMFile::openNewModify");
   PRECONDITION("Valid file name", validWideString(fileName));
   PRECONDITION("Valid class factory", factory != 0);
+  PRECONDITION("Valid byte order",
+                    ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid root", root != 0);
 
   OMStoredObject* store = OMStoredObject::createModify(fileName, byteOrder);
@@ -154,11 +158,13 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
   //   @parm The root <c OMStorable> in the newly created file.
   //   @rdesc The newly created <c OMFile>.
 OMFile* OMFile::openNewTransient(const OMClassFactory* factory,
-                                 const OMByteOrder /*byteOrder*/,
+                                 const OMByteOrder byteOrder,
                                  OMStorable* root)
 {
   TRACE("OMFile::openNewTransient");
   PRECONDITION("Valid class factory", factory != 0);
+  PRECONDITION("Valid byte order",
+                    ((byteOrder == littleEndian) || (byteOrder == bigEndian)));
   PRECONDITION("Valid root", root != 0);
 
   // Not yet implemented.
