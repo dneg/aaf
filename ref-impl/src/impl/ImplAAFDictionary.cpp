@@ -1062,7 +1062,8 @@ const aafUID_t * ImplAAFDictionary::sAxiomaticTypeGuids[] =
   & kAAFTypeID_RGBAComponent,
   & kAAFTypeID_MobID,
   & kAAFTypeID_DataValue,
- 
+  & kAAFTypeID_CategoryType,
+
   & kAAFTypeID_ClassDefinitionStrongReference,
   & kAAFTypeID_ClassDefinitionStrongReferenceSet,
   & kAAFTypeID_ClassDefinitionWeakReference,
