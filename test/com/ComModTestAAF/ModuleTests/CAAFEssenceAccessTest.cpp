@@ -2386,7 +2386,7 @@ HRESULT CAAFEssenceAccess_test(testMode_t mode)
 	if(hr == AAFRESULT_SUCCESS && mode == kAAFUnitTestReadWrite)
 	{
         cout << "        WriteSamples (Legacy DDEF_Sound)" << endl;
-		hr = CreateAudioAAFFile(L"EssenceAccessAIFCLegacy.aaf", NULL, testStandardCalls, kAAFCODEC_AIFC, kAAFDataDef_Sound);
+		hr = CreateAudioAAFFile(L"EssenceAccessAIFCLegacy.aaf", NULL, testStandardCalls, kAAFCODEC_AIFC, DDEF_Sound);
 	}
 	
 	if(hr == AAFRESULT_SUCCESS)
