@@ -31,7 +31,7 @@
 #include "AAFResult.h"
 #include "aafErr.h"
 #include "aafCvt.h"
-#include "aafUtils.h"
+#include "AAFUtils.h"
 #include "AAFDefUIDs.h"
 
 ImplAAFTimecode::ImplAAFTimecode ():

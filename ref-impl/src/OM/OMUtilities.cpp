@@ -1,5 +1,7 @@
 #include <iostream.h>
+#include <assert.h>
 
+#include "AAFTypes.h"
 #include "OMUtilities.h"
 
 #include "OMAssertions.h"
@@ -32,3 +34,29 @@ ByteOrder hostByteOrder(void)
   return result;
 }
 
+
+void OMUwc2sb (char * pbString,
+			   const aafWChar * pwString)
+{
+  assert (pwString);
+  assert (pbString);
+  while (*pwString)
+	{
+	  // first make sure this char will fit
+	  assert (0 == (*pwString & ~0xFF));
+	  *pbString++ = (char) *pwString++;
+	}
+  *pbString = (char) *pwString;
+}
+
+void OMUsb2wc (aafWChar * pwString,
+			   const char * pbString)
+{
+  assert (pwString);
+  assert (pbString);
+  while (*pbString)
+	{
+	  *pwString++ = (char) *pbString++;
+	}
+  *pwString = (char) *pbString;
+}
