@@ -67,6 +67,7 @@
 #define CLSID_AAFParameterDefinition CLSID_AAFParameterDef
 #define CLSID_AAFPropertyDefinition CLSID_AAFPropertyDef
 #define CLSID_AAFTypeDefinition CLSID_AAFTypeDef
+#define CLSID_AAFTypeDefinitionCharacter CLSID_AAFTypeDefCharacter
 #define CLSID_AAFTypeDefinitionEnumeration CLSID_AAFTypeDefEnum
 #define CLSID_AAFTypeDefinitionExtendibleEnumeration CLSID_AAFTypeDefExtEnum
 #define CLSID_AAFTypeDefinitionFixedArray CLSID_AAFTypeDefFixedArray
