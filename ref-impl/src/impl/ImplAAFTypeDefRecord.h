@@ -337,6 +337,7 @@ public:
   size_t PropValSize (void) const;
   aafBool IsRegistered (void) const;
   size_t NativeSize (void) const;
+  void AttemptBuiltinRegistration (void);
 
   virtual OMProperty * 
     pvtCreateOMPropertyMBS (OMPropertyId pid,
