@@ -84,6 +84,7 @@ public:
 	void SetCutPoint( aafPosition_t cutPoint );
 
 	IAAFOperationGroupSP GetOperationGroup();
+	void SetOperationGroup( IAAFOperationGroupSP );
 
 	operator IAAFTransitionSP ()
 	{ return _spIaafTransition; }
@@ -107,10 +108,13 @@ public:
 	void Initialize( IAAFDataDefSP spIaafDataDef );
 
 	void AppendComponent( IAAFComponentSP );
+	void PrependComponent( IAAFComponentSP );
 
 	IEnumAAFComponentsSP GetComponents();
 
 	IAAFComponentSP GetComponentAt( aafUInt32 index );
+	void InsertComponentAt( aafUInt32, IAAFComponentSP );
+	void RemoveComponentAt( aafUInt32 );
 
 	aafUInt32 CountComponents();
 
@@ -173,6 +177,11 @@ public:
 	aafPulldownKind_t GetPulldownKind();
 	aafPulldownDir_t GetPulldownDirection();
 	aafPhaseFrame_t GetPhaseFrame();
+
+	void SetInputSegment( IAAFSegmentSP );
+	void SetPulldownKind( aafPulldownKind_t );
+	void SetPulldownDirection( aafPulldownDir_t );
+	void SetPhaseFrame( aafPhaseFrame_t );
 
 	operator IAAFPulldownSP ()
 	{ return _spIaafPulldown; }
@@ -243,12 +252,29 @@ public:
 	void Initialize( IAAFDataDefSP, aafLength_t, IAAFOperationDefSP );
 
 	void AppendInputSegment( IAAFSegmentSP );
-	void AddParameter( IAAFParameterSP );
+	void PrependInputSegment( IAAFSegmentSP );
+	void InsertInputSegmentAt( aafUInt32, IAAFSegmentSP );
+	IAAFSegmentSP GetInputSegmentAt( aafUInt32 );
+	void RemoveInputSegmentAt( aafUInt32 );
+	aafUInt32 CountSourceSegments();
 
 	IAAFOperationDefSP GetOperationDef();
-	aafUInt32 CountSourceSegments();
-	IAAFSegmentSP GetInputSegmentAt(aafUInt32);
+	void SetOperationDef( IAAFOperationDefSP );
 
+	IAAFSourceReferenceSP GetRender();
+	void SetRender( IAAFSourceReferenceSP );
+
+	aafBoolean_t IsATimeWarp();
+	aafBoolean_t IsValidTranOperation();
+
+	aafUInt32 GetBypassOverride();
+	void SetBypassOverride( aafUInt32 );
+
+	aafUInt32 CountParameters();
+	void AddParameter( IAAFParameterSP );
+	IEnumAAFParametersSP GetParameters();
+	IAAFParameterSP LookupParameter( aafArgIDType_constref );
+	
 	operator IAAFOperationGroupSP ()
 	{ return _spIaafOperationGroup; }
 
@@ -258,6 +284,78 @@ private:
 	AxOperationGroup& operator=( const AxOperationGroup& );
 
 	IAAFOperationGroupSP _spIaafOperationGroup;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxNestedScope : public AxSegment {
+
+public:
+	AxNestedScope( IAAFNestedScopeSP spIaafNestedScope );
+	virtual ~AxNestedScope();
+
+	void AppendSegment( IAAFSegmentSP );
+	void PrependSegment( IAAFSegmentSP );
+	void InsertSegmentAt( aafUInt32, IAAFSegmentSP );
+	void RemoveSegmentAt( aafUInt32 );
+	aafUInt32 CountSegments();
+	IAAFSegmentSP GetSegmentAt( aafUInt32 );
+	IEnumAAFSegmentsSP GetSegments();
+
+	operator IAAFNestedScopeSP ()
+	{ return _spIaafNestedScope; }
+
+private:
+	AxNestedScope();
+	AxNestedScope( const AxNestedScope& );
+	AxNestedScope& operator=( const AxNestedScope& );
+
+	IAAFNestedScopeSP _spIaafNestedScope;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxScopeReference : public AxSegment {
+
+public:
+	AxScopeReference( IAAFScopeReferenceSP spIaafScopeReference );
+	virtual ~AxScopeReference();
+
+	void Initialize( IAAFDataDefSP, aafUInt32, aafUInt32 );
+	aafUInt32 GetRelativeScope();
+	aafUInt32 GetRelativeSlot();
+
+	operator IAAFScopeReferenceSP ()
+	{ return _spIaafScopeReference; }
+
+private:
+	AxScopeReference();
+	AxScopeReference( const AxScopeReference& );
+	AxScopeReference& operator=( const AxScopeReference& );
+
+	IAAFScopeReferenceSP _spIaafScopeReference;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxEdgecode : public AxSegment {
+
+public:
+	AxEdgecode( IAAFEdgecodeSP spIaafEdgecode );
+	virtual ~AxEdgecode();
+
+	void Initialize( aafLength_t, aafEdgecode_t );
+	aafEdgecode_t GetEdgecode();
+
+	operator IAAFEdgecodeSP ()
+	{ return _spIaafEdgecode; }
+
+private:
+	AxEdgecode();
+	AxEdgecode( const AxEdgecode& );
+	AxEdgecode& operator=( const AxEdgecode& );
+
+	IAAFEdgecodeSP _spIaafEdgecode;
 };
 
 //=---------------------------------------------------------------------=
@@ -300,6 +398,25 @@ private:
 	AxCommentMarker& operator=( const AxCommentMarker& );
 
 	IAAFCommentMarkerSP _spIaafCommentMarker;
+};
+
+//=---------------------------------------------------------------------=
+
+class AxGPITrigger : public AxEvent {
+
+public:
+	AxGPITrigger( IAAFGPITriggerSP spIaafGPITrigger );
+	virtual ~AxGPITrigger();
+
+	aafBoolean_t GetActiveState();
+	void SetActiveState( aafBoolean_t );
+
+private:
+	AxGPITrigger();
+	AxGPITrigger( const AxGPITrigger& );
+	AxGPITrigger& operator=( const AxGPITrigger& );
+
+	IAAFGPITriggerSP _spIaafGPITrigger;
 };
 
 //=---------------------------------------------------------------------=

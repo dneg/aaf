@@ -107,6 +107,11 @@ IAAFOperationGroupSP AxTransition::GetOperationGroup()
   return spOpGroup;
 }
 
+void AxTransition::SetOperationGroup( IAAFOperationGroupSP spOpGroup )
+{
+  CHECK_HRESULT( _spIaafTransition->SetOperationGroup( spOpGroup ) );
+}
+
 //=---------------------------------------------------------------------=
 
 AxSequence::AxSequence( IAAFSequenceSP spIaafSequence )
@@ -127,6 +132,10 @@ void AxSequence::AppendComponent( IAAFComponentSP spIaafComponent )
 	CHECK_HRESULT( _spIaafSequence->AppendComponent( spIaafComponent ) );
 }
 
+void AxSequence::PrependComponent( IAAFComponentSP spIaafComponent )
+{
+	CHECK_HRESULT( _spIaafSequence->PrependComponent( spIaafComponent ) );
+}
 
 IEnumAAFComponentsSP AxSequence::GetComponents()
 {
@@ -144,6 +153,17 @@ IAAFComponentSP AxSequence::GetComponentAt( aafUInt32 index )
 	CHECK_HRESULT( _spIaafSequence->GetComponentAt( index, &spIaafComponent ) );
 
 	return spIaafComponent;
+}
+
+void AxSequence::InsertComponentAt( aafUInt32 index,
+				    IAAFComponentSP spIaafComponent )
+{
+	CHECK_HRESULT( _spIaafSequence->InsertComponentAt( index, spIaafComponent ) );
+}
+
+void AxSequence::RemoveComponentAt( aafUInt32 index )
+{
+	CHECK_HRESULT( _spIaafSequence->RemoveComponentAt( index ) );
 }
 
 aafUInt32 AxSequence::CountComponents()
@@ -243,6 +263,22 @@ aafPhaseFrame_t AxPulldown::GetPhaseFrame()
 	CHECK_HRESULT(_spIaafPulldown->GetPhaseFrame(&pdphase));
 
 	return pdphase;
+}
+void AxPulldown::SetInputSegment( IAAFSegmentSP spIaafSegment )
+{
+	CHECK_HRESULT(_spIaafPulldown->SetInputSegment(spIaafSegment));
+}
+void AxPulldown::SetPulldownKind( aafPulldownKind_t pdkind )
+{
+	CHECK_HRESULT(_spIaafPulldown->SetPulldownKind(pdkind));
+}
+void AxPulldown::SetPulldownDirection( aafPulldownDir_t pddir )
+{
+	CHECK_HRESULT(_spIaafPulldown->SetPulldownDirection(pddir));
+}
+void AxPulldown::SetPhaseFrame( aafPhaseFrame_t pdphase)
+{
+	CHECK_HRESULT(_spIaafPulldown->SetPhaseFrame(pdphase));
 }
 
 //=---------------------------------------------------------------------=
@@ -350,7 +386,24 @@ void AxOperationGroup::AppendInputSegment( IAAFSegmentSP spIaafSegment )
 
 void AxOperationGroup::AddParameter( IAAFParameterSP spIaafParameter )
 {
-	CHECK_HRESULT( _spIaafOperationGroup->AddParameter( spIaafParameter ) );
+    	CHECK_HRESULT( _spIaafOperationGroup->AddParameter( spIaafParameter ) );
+}
+
+void AxOperationGroup::PrependInputSegment( IAAFSegmentSP spIaafSegment )
+{
+	CHECK_HRESULT( _spIaafOperationGroup->PrependInputSegment( spIaafSegment ) );
+}
+
+void AxOperationGroup::InsertInputSegmentAt( aafUInt32 index,
+					     IAAFSegmentSP spIaafSegment )
+{
+	CHECK_HRESULT( _spIaafOperationGroup->InsertInputSegmentAt( index,
+								    spIaafSegment ) );
+}
+
+void AxOperationGroup::RemoveInputSegmentAt( aafUInt32 index )
+{
+	CHECK_HRESULT( _spIaafOperationGroup->RemoveInputSegmentAt( index ));
 }
 
 IAAFOperationDefSP AxOperationGroup::GetOperationDef()
@@ -379,6 +432,208 @@ IAAFSegmentSP AxOperationGroup::GetInputSegmentAt(aafUInt32 segIndex)
 								&inputSeg));
 
 	return inputSeg;
+}
+
+IAAFSourceReferenceSP AxOperationGroup::GetRender()
+{
+	IAAFSourceReferenceSP sourceRef;
+
+	CHECK_HRESULT( _spIaafOperationGroup->GetRender(&sourceRef));
+
+	return sourceRef;
+}
+
+void AxOperationGroup::SetRender( IAAFSourceReferenceSP spIaafSourceReference )
+{
+	CHECK_HRESULT( _spIaafOperationGroup->SetRender(spIaafSourceReference));
+}
+
+aafBoolean_t AxOperationGroup::IsATimeWarp()
+{
+	aafBoolean_t isATW;
+
+	CHECK_HRESULT( _spIaafOperationGroup->IsATimeWarp(&isATW));
+
+	return isATW;
+}
+
+aafBoolean_t AxOperationGroup::IsValidTranOperation()
+{
+	aafBoolean_t validTranOp;
+
+	CHECK_HRESULT( _spIaafOperationGroup->IsValidTranOperation(&validTranOp));
+	
+	return validTranOp;
+}
+
+aafUInt32 AxOperationGroup::GetBypassOverride()
+{
+	aafUInt32 bypassOR;
+
+	CHECK_HRESULT( _spIaafOperationGroup->GetBypassOverride(&bypassOR));
+
+	return bypassOR;
+}
+
+void AxOperationGroup::SetBypassOverride( aafUInt32 bypassOR )
+{
+	CHECK_HRESULT( _spIaafOperationGroup->SetBypassOverride(bypassOR));
+}
+
+aafUInt32 AxOperationGroup::CountParameters()
+{
+	aafUInt32 numParams;
+
+	CHECK_HRESULT( _spIaafOperationGroup->CountParameters(&numParams));
+
+	return numParams;
+}
+
+void AxOperationGroup::AddParameter( IAAFParameterSP spIaafParameter )
+{
+  CHECK_HRESULT( _spIaafOperationGroup->AddParameter(spIaafParameter));
+}
+
+IEnumAAFParametersSP AxOperationGroup::GetParameters()
+{
+	IEnumAAFParametersSP spIaafParameters;
+
+	CHECK_HRESULT( _spIaafOperationGroup->GetParameters(&spIaafParameters));
+	return spIaafParameters;
+}
+
+IAAFParameterSP AxOperationGroup::LookupParameter( aafArgIDType_constref argID )
+{
+	IAAFParameterSP spIaafParameter;
+
+	CHECK_HRESULT( _spIaafOperationGroup->LookupParameter(argID, &spIaafParameter));
+
+	return spIaafParameter;
+}
+
+void AxOperationGroup::SetOperationDef( IAAFOperationDefSP spIaafOperationDef )
+{
+  CHECK_HRESULT( _spIaafOperationGroup->SetOperationDefinition(spIaafOperationDef));
+}
+
+//=---------------------------------------------------------------------=
+
+AxNestedScope::AxNestedScope( IAAFNestedScopeSP spIaafNestedScope )
+:	AxSegment( AxQueryInterface<IAAFNestedScope, IAAFSegment>(spIaafNestedScope) ),
+	_spIaafNestedScope( spIaafNestedScope )
+{}
+
+AxNestedScope::~AxNestedScope()
+{}
+
+void AxNestedScope::AppendSegment( IAAFSegmentSP spIaafSegment )
+{
+	CHECK_HRESULT( _spIaafNestedScope->AppendSegment( spIaafSegment ) );
+}
+
+void AxNestedScope::PrependSegment( IAAFSegmentSP spIaafSegment )
+{
+	CHECK_HRESULT( _spIaafNestedScope->PrependSegment( spIaafSegment ) );
+}
+
+void AxNestedScope::InsertSegmentAt( aafUInt32 index, IAAFSegmentSP spIaafSegment )
+{
+	CHECK_HRESULT( _spIaafNestedScope->InsertSegmentAt( index, spIaafSegment ) );
+}
+
+void AxNestedScope::RemoveSegmentAt( aafUInt32 index )
+{
+	CHECK_HRESULT( _spIaafNestedScope->RemoveSegmentAt( index ) );
+}
+
+aafUInt32 AxNestedScope::CountSegments()
+{
+	aafUInt32 numSegments;
+
+	CHECK_HRESULT( _spIaafNestedScope->CountSegments(&numSegments));
+
+	return numSegments;
+}
+
+IAAFSegmentSP AxNestedScope::GetSegmentAt( aafUInt32 index )
+{
+	IAAFSegmentSP segment;
+
+	CHECK_HRESULT( _spIaafNestedScope->GetSegmentAt( index, &segment ) );
+
+	return segment;
+}
+
+IEnumAAFSegmentsSP AxNestedScope::GetSegments()
+{
+	IEnumAAFSegmentsSP segEnum;
+
+	CHECK_HRESULT( _spIaafNestedScope->GetSegments( &segEnum ) );
+
+	return segEnum;
+}
+
+//=---------------------------------------------------------------------=
+
+AxScopeReference::AxScopeReference( IAAFScopeReferenceSP spIaafScopeReference )
+:	AxSegment( AxQueryInterface<IAAFScopeReference, IAAFSegment>(spIaafScopeReference) ),
+	_spIaafScopeReference( spIaafScopeReference )
+{}
+
+AxScopeReference::~AxScopeReference()
+{}
+
+void AxScopeReference::Initialize( IAAFDataDefSP spIaafDataDef,
+				   aafUInt32 relScope,
+				   aafUInt32 relSlot )
+{
+  CHECK_HRESULT( _spIaafScopeReference->Initialize( spIaafDataDef,
+						    relScope,
+						    relSlot ) );
+}
+
+aafUInt32 AxScopeReference::GetRelativeScope()
+{
+	aafUInt32 relScope;
+
+	CHECK_HRESULT( _spIaafScopeReference->GetRelativeScope( &relScope ) );
+
+	return relScope;
+}
+
+aafUInt32 AxScopeReference::GetRelativeSlot()
+{
+	aafUInt32 relSlot;
+
+	CHECK_HRESULT( _spIaafScopeReference->GetRelativeSlot( &relSlot ) );
+
+	return relSlot;
+}
+
+//=---------------------------------------------------------------------=
+
+AxEdgecode::AxEdgecode( IAAFEdgecodeSP spIaafEdgecode )
+:	AxSegment( AxQueryInterface<IAAFEdgecode, IAAFSegment>(spIaafEdgecode
+) ),
+	_spIaafEdgecode( spIaafEdgecode )
+{}
+
+AxEdgecode::~AxEdgecode()
+{}
+
+void AxEdgecode::Initialize( aafLength_t length,
+			     aafEdgecode_t edgecode )
+{
+	CHECK_HRESULT( _spIaafEdgecode->Initialize( length, edgecode ) );
+}
+
+aafEdgecode_t AxEdgecode::GetEdgecode()
+{
+	aafEdgecode_t edgecode;
+
+	CHECK_HRESULT( _spIaafEdgecode->GetEdgecode( &edgecode ) );
+
+	return edgecode;
 }
 
 //=---------------------------------------------------------------------=
@@ -442,6 +697,30 @@ IAAFSourceReferenceSP AxCommentMarker::GetAnnotation()
 void AxCommentMarker::SetAnnotation( IAAFSourceReferenceSP spIaafSourceReference )
 {
 	CHECK_HRESULT( _spIaafCommentMarker->SetAnnotation( spIaafSourceReference ) );
+}
+
+//=---------------------------------------------------------------------=
+
+AxGPITrigger::AxGPITrigger( IAAFGPITriggerSP spIaafGPITrigger )
+:	AxEvent( AxQueryInterface<IAAFGPITrigger, IAAFEvent>(spIaafGPITrigger) ),
+	_spIaafGPITrigger( spIaafGPITrigger )
+{}
+
+AxGPITrigger::~AxGPITrigger()
+{}
+
+aafBoolean_t AxGPITrigger::GetActiveState()
+{
+	aafBoolean_t activeState;
+
+	CHECK_HRESULT( _spIaafGPITrigger->GetActiveState( &activeState ) );
+
+	return activeState;
+}
+
+void AxGPITrigger::SetActiveState( aafBoolean_t activeState )
+{
+	CHECK_HRESULT( _spIaafGPITrigger->SetActiveState( activeState ) );
 }
 
 //=---------------------------------------------------------------------=
