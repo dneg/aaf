@@ -55,13 +55,14 @@ private:
 
   char* makePathName(void);
 
-  OMStorable* containingObject(void) const;
-
   const char* name(void) const;
 
 protected:
 
+  OMStorable* containingObject(void) const;
   OMPropertySet _persistentProperties;
+
+private:
   const OMStorable* _containingObject;
   char* _name;
   char* _pathName;
