@@ -75,7 +75,9 @@ OMFile::OMFile(const wchar_t* fileName,
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
   _encoding(MSSBinaryEncoding),
-  _rawStorage(0)
+  _rawStorage(0),
+  _isOpen(false),
+  _isClosed(false)
 {
   TRACE("OMFile::OMFile");
 
@@ -117,7 +119,9 @@ OMFile::OMFile(const wchar_t* fileName,
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
   _encoding(MSSBinaryEncoding),
-  _rawStorage(0)
+  _rawStorage(0),
+  _isOpen(false),
+  _isClosed(false)
 {
   TRACE("OMFile::OMFile");
 
@@ -152,7 +156,9 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
   _encoding(encoding),
-  _rawStorage(rawStorage)
+  _rawStorage(rawStorage),
+  _isOpen(false),
+  _isClosed(false)
 {
   TRACE("OMFile::OMFile");
 
@@ -190,7 +196,9 @@ OMFile::OMFile(OMRawStorage* rawStorage,
   _clientOnSaveContext(0),
   _clientOnRestoreContext(clientOnRestoreContext),
   _encoding(encoding),
-  _rawStorage(rawStorage)
+  _rawStorage(rawStorage),
+  _isOpen(false),
+  _isClosed(false)
 {
   TRACE("OMFile::OMFile");
 
@@ -251,7 +259,9 @@ OMFile* OMFile::openExistingRead(const wchar_t* fileName,
                                dictionary,
                                loadMode);
   ASSERT("Valid heap pointer", newFile != 0);
+  newFile->open();
   POSTCONDITION("Object Manager file", newFile->isOMFile());
+  POSTCONDITION("File is open", newFile->isOpen());
   return newFile;
 }
 
@@ -284,7 +294,9 @@ OMFile* OMFile::openExistingModify(const wchar_t* fileName,
                                dictionary,
                                loadMode);
   ASSERT("Valid heap pointer", newFile != 0);
+  newFile->open();
   POSTCONDITION("Object Manager file", newFile->isOMFile());
+  POSTCONDITION("File is open", newFile->isOpen());
   return newFile;
 }
 
@@ -330,6 +342,8 @@ OMFile* OMFile::openNewModify(const wchar_t* fileName,
                                dictionary,
                                root);
   ASSERT("Valid heap pointer", newFile != 0);
+  newFile->open();
+  POSTCONDITION("File is open", newFile->isOpen());
   return newFile;
 }
 
@@ -497,9 +511,11 @@ bool OMFile::validSignature(const OMFileSignature& signature)
   //        <c OMFile>. It is not possible to save
   //        read-only or transient files.
   //   @parm Client context for callbacks.
+  //   @precondition <f isOpen()>
 void OMFile::saveFile(void* clientOnSaveContext)
 {
   TRACE("OMFile::saveFile");
+  PRECONDITION("File is open", isOpen());
 
   _clientOnSaveContext = clientOnSaveContext;
 
@@ -535,9 +551,11 @@ void OMFile::revert(void)
 
   // @mfunc Restore the client root <c OMStorable> object from this <c OMFile>.
   //   @rdesc The newly restored root <c OMStorable>.
+    //   @precondition <f isOpen()>
 OMStorable* OMFile::restore(void)
 {
   TRACE("OMFile::restore");
+  PRECONDITION("File is open", isOpen());
 
   _rootStore->restore(_referencedProperties);
 
@@ -559,10 +577,27 @@ OMStorable* OMFile::restore(void)
   return _root->clientRoot();
 }
 
+  // @mfunc Open this <c OMFile>.
+  //   @precondition <f !isOpen()>
+  //   @precondition <f !isClosed()>
+  //   @postcondition <f isOpen()>
+void OMFile::open(void)
+{
+  TRACE("OMFile::open");
+  PRECONDITION("Not already open", !isOpen());
+  PRECONDITION("Never been opened", !isClosed());
+  _isOpen = true;
+  POSTCONDITION("Open", isOpen());
+}
+
   // @mfunc Close this <c OMFile>, any unsaved changes are discarded.
+  //   @precondition <f isOpen()>
+  //   @postcondition <f !isOpen()>
+  //   @postcondition <f isClosed()>
 void OMFile::close(void)
 {
   TRACE("OMFile::close");
+  PRECONDITION("Open", isOpen());
 
   _root->close();
 
@@ -571,7 +606,27 @@ void OMFile::close(void)
   _root->detach();
   delete _root;
   _root = 0;
+  _isOpen = false;
+  _isClosed = true;
+  POSTCONDITION("Closed", isClosed());
+  POSTCONDITION("Closed", !isOpen());
+}
 
+  // @mfunc Is this <c OMFile> open ?
+bool OMFile::isOpen(void) const
+{
+  TRACE("OMFile::isOpen");
+  return _isOpen;
+}
+
+  // @mfunc Is this <c OMFile> closed ? Note that <f isClosed()> is not the
+  //        same as !<f isOpen()> since before open() is called,
+  //        <f isClosed()> is false. That is, <f isClosed()> means
+  //        "was once open and is now closed".
+bool OMFile::isClosed(void) const
+{
+  TRACE("OMFile::isClosed");
+  return _isClosed;
 }
 
   // @mfunc Retrieve the client root <c OMStorable> from this <c OMFile>.
