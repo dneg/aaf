@@ -28,8 +28,8 @@
 #include "ImplAAFObjectCreation.h"
 #include "AAF.h"
 #include "AAFRoot.h"
-#include "ImplAAFRoot.h"
-#include "ImplAAFContentStorage.h"
+#include "ImplAAFObject.h"
+#include "ImplAAFPluginManager.h"
 
 #include <string.h>
 #include <assert.h>
@@ -94,6 +94,46 @@ void DeleteImpl (ImplAAFRoot *& pObj)
 {
   ReleaseImplReference(pObj);
   pObj = NULL;
+}
+
+// Initializes the given Impl object's container by calling
+// the container's initialization method.
+
+AAFRESULT InitializePluginFromDefinitionProc(
+  aafUID_constref defID, 
+  REFCLSID clsid, 
+  IAAFRoot * pRoot)
+{
+   assert(NULL != pRoot);
+   return pRoot->InitializeExtension(clsid);
+}
+
+AAFRESULT InitializeImplExtension(ImplAAFRoot * pObj, aafUID_constref defID)
+{
+  AAFRESULT result = AAFRESULT_SUCCESS;
+  IAAFRoot * pRoot = static_cast<IAAFRoot *>(pObj->GetContainer());
+  assert(pRoot);
+
+  // If the plugin manager has an associated code clsid then attempt
+  // to initialize the extension object.
+	// NOTE: Need an iterator interface for plugins...
+	//
+  ImplAAFPluginManager *pPluginMgr = ImplAAFPluginManager::GetPluginManager();
+  if (NULL != pPluginMgr)
+  {
+    result = pPluginMgr->ForEachPluginWithDefinitionDo(
+      defID, 
+      (AAFDOTOPLUGINWITHDEFINTIONPROC)InitializePluginFromDefinitionProc, 
+      pRoot);
+
+    pPluginMgr->ReleaseReference();
+  }
+  else
+  { // GetPluginManager failed!
+    result = AAFRESULT_INVALID_OBJ;
+  }
+  
+  return result;
 }
 
 
