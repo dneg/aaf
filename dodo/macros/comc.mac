@@ -244,6 +244,11 @@ Impl.this-module * C.this-module::GetRepObject ()
     }
   catch (OMAssertionViolation &)
     {
+      // Control reaches here if there is a programming error in the
+      // impl code that was detected by an assertion violation.
+      // We must not allow the assertion to reach the client code so
+      // here we turn it into a failure status code.
+      //
       hr = AAFRESULT_ASSERTION_VIOLATION;
     }
 #endm
@@ -2318,6 +2323,16 @@ HRESULT C.this-module::%01
 #c Begining of the module definitions
 #c
 #startm AD_MODULE_BEGIN 02
+#include "Impl.this-module.h"
+#include "AAFResult.h"
+
+class OMAssertionViolation;
+
+#include <assert.h>
+
+#if defined(_MAC)
+#pragma export on
+#endif // #if defined(_MAC)
 #endm
 
 
@@ -2325,6 +2340,9 @@ HRESULT C.this-module::%01
 #c End of the module definitions
 #c
 #startm AD_MODULE_END 00
+#if defined(_MAC)
+#pragma export off
+#endif // #if defined(_MAC)
 #endm
 
 
@@ -2354,6 +2372,20 @@ HRESULT C.this-module::%01
 #c Macro Arg 07: function description
 #c
 #startm AD_XFUNCTION1 07
+HRESULT STDMETHODCALLTYPE
+    %01 (.%03-adornment%04 .%03-indirection %05)
+{
+  HRESULT hr;
+
+.%03-setup(%04, %05, foo)\
+
+AD_CATCH_ASSERTION_BEGIN\
+  hr = Impl%01
+       (.%03-internalname(%05));
+AD_CATCH_ASSERTION_END
+.%03-cleanup(%04, %05, foo)\
+  return hr;
+}
 #endm
 
 
@@ -2373,6 +2405,24 @@ HRESULT C.this-module::%01
 #c Macro Arg 12: function description
 #c
 #startm AD_XFUNCTION2 12
+HRESULT STDMETHODCALLTYPE
+    %01 (.%03-adornment%04 .%03-indirection %05,
+        .%08-adornment%09 .%08-indirection %10)
+{
+  HRESULT hr;
+
+.%03-setup(%04, %05, foo)\
+.%08-setup(%09, %10, foo)\
+
+AD_CATCH_ASSERTION_BEGIN\
+  hr = Impl%01
+       (.%03-internalname(%05),
+        .%08-internalname(%10));
+AD_CATCH_ASSERTION_END
+.%03-cleanup(%04, %05, foo)\
+.%08-cleanup(%09, %10, foo)\
+  return hr;
+}
 #endm
 
 
@@ -2393,6 +2443,28 @@ HRESULT C.this-module::%01
 #c Macro Arg 17: function description
 #c
 #startm AD_XFUNCTION3 17
+HRESULT STDMETHODCALLTYPE
+    %01 (.%03-adornment%04 .%03-indirection %05,
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15)
+{
+  HRESULT hr;
+
+.%03-setup(%04, %05, foo)\
+.%08-setup(%09, %10, foo)\
+.%13-setup(%14, %15, foo)\
+
+AD_CATCH_ASSERTION_BEGIN\
+  hr = Impl%01
+       (.%03-internalname(%05),
+        .%08-internalname(%10),
+        .%13-internalname(%15));
+AD_CATCH_ASSERTION_END
+.%03-cleanup(%04, %05, foo)\
+.%08-cleanup(%09, %10, foo)\
+.%13-cleanup(%14, %15, foo)\
+  return hr;
+}
 #endm
 
 
@@ -2414,6 +2486,32 @@ HRESULT C.this-module::%01
 #c Macro Arg 22: function description
 #c
 #startm AD_XFUNCTION4 22
+HRESULT STDMETHODCALLTYPE
+    %01 (.%03-adornment%04 .%03-indirection %05,
+        .%08-adornment%09 .%08-indirection %10,
+        .%13-adornment%14 .%13-indirection %15,
+        .%18-adornment%19 .%18-indirection %20)
+{
+  HRESULT hr;
+
+.%03-setup(%04, %05, foo)\
+.%08-setup(%09, %10, foo)\
+.%13-setup(%14, %15, foo)\
+.%18-setup(%19, %20, foo)\
+
+AD_CATCH_ASSERTION_BEGIN\
+  hr = Impl%01
+       (.%03-internalname(%05),
+        .%08-internalname(%10),
+        .%13-internalname(%15),
+        .%18-internalname(%20));
+AD_CATCH_ASSERTION_END
+.%03-cleanup(%04, %05, foo)\
+.%08-cleanup(%09, %10, foo)\
+.%13-cleanup(%14, %15, foo)\
+.%18-cleanup(%19, %20, foo)\
+  return hr;
+}
 #endm
 
 
