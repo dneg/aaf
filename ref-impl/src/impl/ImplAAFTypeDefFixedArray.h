@@ -149,6 +149,13 @@ public:
     pvtCreateOMPropertyMBS (OMPropertyId pid,
 							const char * name) const;
 
+public:
+  // Overrides from ImplAAFTypeDef
+  virtual bool IsAggregatable () const;
+  virtual bool IsStreamable () const;
+  virtual bool IsFixedArrayable () const;
+  virtual bool IsVariableArrayable () const;
+  virtual bool IsStringable () const;
 
 private:
   ImplAAFTypeDefSP BaseType (void) const;
