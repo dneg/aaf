@@ -44,7 +44,7 @@
 //
 // DictP18-277-1847BMaster.csv 
 //
-// This file was generated on Fri May 17 15:22:36 EDT 2002
+// This file was generated on Fri May 17 16:55:52 EDT 2002
 // by user tjb on system tjb.avid.com.
 //
 // Key to macros.
@@ -344,6 +344,12 @@
 //
 //   Separate one AAF type definition from another.
 //
+// AAF_CLASS_ALIAS(name, alias)
+//
+//     name      = class name
+//     alias     = another, usually shorter, name by which the
+//                 class is also known
+//
 // AAF_LITERAL_AUID(l, w1, w2,  b1, b2, b3, b4, b5, b6, b7, b8)
 //
 //   Define an AUID.
@@ -511,6 +517,10 @@
 
 #ifndef AAF_TYPE_SEPARATOR
 #define AAF_TYPE_SEPARATOR()
+#endif
+
+#ifndef AAF_CLASS_ALIAS
+#define AAF_CLASS_ALIAS(name, alias)
 #endif
 
 #ifndef AAF_LITERAL_AUID
@@ -6119,6 +6129,36 @@ AAF_TYPE_DEFINITION_WEAK_REFERENCE_VECTOR(
     0x06, 0x0E, 0x2B, 0x34, 0x01, 0x04, 0x01, 0x01),
   AAF_TYPE(DataDefinition))
 
+// Aliases
+//
+AAF_CLASS_ALIAS(CodecDefinition, CodecDef)
+AAF_CLASS_ALIAS(DataDefinition, DataDef)
+AAF_CLASS_ALIAS(DefinitionObject, DefObject)
+AAF_CLASS_ALIAS(EdgeCode, Edgecode)
+AAF_CLASS_ALIAS(OperationDefinition, OperationDef)
+AAF_CLASS_ALIAS(InterchangeObject, Object)
+AAF_CLASS_ALIAS(ParameterDefinition, ParameterDef)
+AAF_CLASS_ALIAS(InterpolationDefinition, InterpolationDef)
+AAF_CLASS_ALIAS(PropertyDefinition, PropertyDef)
+AAF_CLASS_ALIAS(TypeDefinition, TypeDef)
+AAF_CLASS_ALIAS(TypeDefinitionCharacter, TypeDefCharacter)
+AAF_CLASS_ALIAS(TypeDefinitionEnumeration, TypeDefEnum)
+AAF_CLASS_ALIAS(TypeDefinitionExtendibleEnumeration, TypeDefExtEnum)
+AAF_CLASS_ALIAS(TypeDefinitionFixedArray, TypeDefFixedArray)
+AAF_CLASS_ALIAS(TypeDefinitionInteger, TypeDefInt)
+AAF_CLASS_ALIAS(TypeDefinitionRecord, TypeDefRecord)
+AAF_CLASS_ALIAS(TypeDefinitionRename, TypeDefRename)
+AAF_CLASS_ALIAS(TypeDefinitionSet, TypeDefSet)
+AAF_CLASS_ALIAS(TypeDefinitionStream, TypeDefStream)
+AAF_CLASS_ALIAS(TypeDefinitionString, TypeDefString)
+AAF_CLASS_ALIAS(TypeDefinitionIndirect, TypeDefIndirect)
+AAF_CLASS_ALIAS(TypeDefinitionOpaque, TypeDefOpaque)
+AAF_CLASS_ALIAS(TypeDefinitionStrongObjectReference, TypeDefStrongObjRef)
+AAF_CLASS_ALIAS(TypeDefinitionVariableArray, TypeDefVariableArray)
+AAF_CLASS_ALIAS(TypeDefinitionWeakObjectReference, TypeDefWeakObjRef)
+AAF_CLASS_ALIAS(ContainerDefinition, ContainerDef)
+AAF_CLASS_ALIAS(PluginDefinition, PluginDef)
+
 AAF_TYPE_TABLE_END()
 
 // Undefine all macros
@@ -6202,6 +6242,8 @@ AAF_TYPE_TABLE_END()
 #undef AAF_TYPE_DEFINITION_STREAM
 
 #undef AAF_TYPE_SEPARATOR
+
+#undef AAF_CLASS_ALIAS
 
 #undef AAF_LITERAL_AUID
 
