@@ -1,0 +1,407 @@
+#startm .this-module 0
+AAFCDCIDescriptor\
+#endm
+#c
+#startm .parent-module 0
+AAFDigitalImageDescriptor\
+#endm
+#c
+#import ./AAFDigitalImageDescriptor.exp
+AD_HEAD
+AD_IDL(//
+// The IAAFCDCIDescriptor interface is implemented by objects which
+// describe video essence formatted with one luminance component and 
+// two color-difference components.
+//
+// In addition to the specific error results listed for each method\,
+// all methods in this interface may also return one of the following
+// values:
+// 
+// AAFRESULT_NOMEMORY
+//   - insufficient system memory is available to perform the
+//     operation.
+//
+// AAFRESULT_NOT_INITIALIZED
+//   - This object has not yet had Initialize\(\) called on it through
+//     this object's primary interface.
+//)
+
+/***********************************************\
+*	Stub only.   Implementation not yet added	*
+\***********************************************/
+
+AD_CLASS_UUID(44861702, 8AEA, 11d2, 81, 3C, 00, 60,97, 31, 01, 72)
+
+AD_DEFAULT_UUID(44861703, 8AEA, 11d2, 81, 3C, 00, 60, 97, 31, 01, 72)
+AD_CLASS_BEGIN
+AD_XMETHOD1(SetComponentWidth,
+			[in],
+				objPass,
+				aafInt32,
+				ComponentWidth,
+				Number of bits.,
+			Sets the ComponentWidth property.  Specifies the number of bits
+  // used to store each component.  Can have a value of 8\, 10\, or 16.  Each
+  // component in a sample is packed contiguously; the sample is filled with
+  // the number of bits specified by the optional PaddingBits property.  If 
+  // the PaddingBits property is omitted\, samples are packed contiguously.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the ComponentWidth property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(SetHorizontalSubsampling,
+			[in],
+				objPass,
+				aafUInt32,
+				HorizontalSubsampling,
+				Integer value.,
+			Sets the HorizontalSubsampling property.  Specifies the ratio of
+  // luminance sampling to chrominance sampling in the horizontal direction.
+  // For 4:2:2 video\, the value is 2\, which means that there are twice as
+  // many luminance values as there are color-difference values.  The other
+  // legal value is 1.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the HorizontalSubsampling property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(SetColorSitingType,
+			[in],
+				objPass,
+				aafColorSiting_t,
+				ColorSitingType,
+				Color siting value.,
+			Sets the ColorSitingType property.  Specifies how to compute subsampled
+  // chrominance values.
+  //
+  // Valid values are:
+  //
+  //     kCoSiting  - To calculate subsampled pixels\, take the preceding's pixels
+  //                  color value\, discard the other color values and cosite the
+  //                  color with the first luminance value.
+  //
+  //     kAveraging - To calculate subsampled pixels\, take the average of the two
+  //                  adjacent pixels' color values and site the color in the center
+  //                  of the luminance pixels.
+  //
+  //     kThreeTap  - To calculate subsampled pixels\, take 25 percent of the the previous
+  //                  pixel's color value\, 50 percent of the first value and 25 percent
+  //                  of the second value.  For the first value in a row\, use 75 percent
+  //                  of that value since there is no previous value.  The kThreeTap value
+  //                  is only meaningful when the HorizontalSubsampling propert has a value
+  //                  of 2.
+  //
+  // This property is optional.  The default value is kCoSiting.
+  //
+  // Succeeds if all of the following are true:
+  // - ColorSitingType is valid
+  //
+  // If this method fails\, the ColorSitingType property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(SetBlackReferenceLevel,
+			[in],
+				objPass,
+				aafUInt32,
+				BlackReferenceLevel,
+				Integer value.,
+			Sets the BlackReferenceLevel property.  Specifies the digital luminance
+  // component component value associated with black.
+  //
+  // For CCIR-601/2\, the value is 16.  For YUV\, the value is 0.  The same value is
+  // used in CDCI and RGBA when standard colorspace conversion is used.
+  //
+  // This property is optional.  The default value is 0.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the BlackReferenceLevel property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(SetWhiteReferenceLevel,
+			[in],
+				objPass,
+				aafUInt32,
+				WhiteReferenceLevel,
+				Integer value.,
+			Sets the WhiteReferenceLevel property.  Specifies the digital luminance
+  // component component value associated with white.
+  //
+  // For CCIR-601/2 8-bit video\, the value is 235.  For YUV 8-bit video\, the value
+  // is 255.
+  //
+  // This property is optional.  The default value is the maximum unsigned interger value
+  // for component size.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the WhiteReferenceLevel property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(SetColorRange,
+			[in],
+				objPass,
+				aafUInt32,
+				ColorRange,
+				Integer value.,
+			Sets the ColorRange property.  Specifies the range of allowable digital
+  // chrominance component values.  Chrominance values are signed and the range is
+  // centered on 0.  This value is used for both chrominance components.
+  //
+  // For CCIR-601/2\, the value is 225.  For YUV\, the value is 255.
+  //
+  // This property is optional.  The default value is the maximum unsigned interger value
+  // for component size.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the ColorRange property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(SetPaddingBits,
+			[in],
+				objPass,
+				aafInt16,
+				PaddingBits,
+				Number of bits.,
+			Sets the PaddingBits property.  Specifies the number of bits padded to each pixel.
+  //
+  // This property is optional.  The default value is 0.
+  //
+  // Succeeds if all of the following are true:
+  // 
+  // If this method fails\, the PaddingBits property will not be
+  // changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(GetComponentWidth,
+			[out],
+				objPass,
+				aafInt32 *,
+				pComponentWidth,
+				Address to store the number of bits.,
+			Gets the ComponentWidth property.  Specifies the number of bits
+  // used to store each component.  Can have a value of 8\, 10\, or 16.  Each
+  // component in a sample is packed contiguously; the sample is filled with
+  // the number of bits specified by the optional PaddingBits property.  If 
+  // the PaddingBits property is omitted\, samples are packed contiguously.
+  //
+  // Succeeds if all of the following are true:
+  // - pComponentWidth is a valid pointer.
+  // 
+  // If this method fails\, pComponentWidth will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(GetHorizontalSubsampling,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pHorizontalSubsampling,
+				Address to store the integer value.,
+			Gets the HorizontalSubsampling property.  Specifies the ratio of
+  // luminance sampling to chrominance sampling in the horizontal direction.
+  // For 4:2:2 video\, the value is 2\, which means that there are twice as
+  // many luminance values as there are color-difference values.  The other
+  // legal value is 1.
+  //
+  // Succeeds if all of the following are true:
+  // - pHorizontalSubsampling is a valid pointer.
+  // 
+  // If this method fails\, pHorizontalSubsampling will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(GetColorSitingType,
+			[out],
+				objPass,
+				aafColorSiting_t *,
+				pColorSitingType,
+				Address to store the color siting value.,
+			Gets the ColorSitingType property.  Specifies how to compute subsampled
+  // chrominance values.
+  //
+  // Valid values are:
+  //
+  //     kCoSiting  - To calculate subsampled pixels\, take the preceding's pixels
+  //                  color value\, discard the other color values and cosite the
+  //                  color with the first luminance value.
+  //
+  //     kAveraging - To calculate subsampled pixels\, take the average of the two
+  //                  adjacent pixels' color values and site the color in the center
+  //                  of the luminance pixels.
+  //
+  //     kThreeTap  - To calculate subsampled pixels\, take 25 percent of the the previous
+  //                  pixel's color value\, 50 percent of the first value and 25 percent
+  //                  of the second value.  For the first value in a row\, use 75 percent
+  //                  of that value since there is no previous value.  The kThreeTap value
+  //                  is only meaningful when the HorizontalSubsampling propert has a value
+  //                  of 2.
+  //
+  // Succeeds if all of the following are true:
+  // - pColorSitingType is a valid pointer.
+  //
+  // If this method fails\, pColorSitingType will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(GetBlackReferenceLevel,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pBlackReferenceLevel,
+				Address to store the integer value.,
+			Gets the BlackReferenceLevel property.  Specifies the digital luminance
+  // component component value associated with black.
+  //
+  // For CCIR-601/2\, the value is 16.  For YUV\, the value is 0.  The same value is
+  // used in CDCI and RGBA when standard colorspace conversion is used.
+  //
+  // Succeeds if all of the following are true:
+  // - pBlackReferenceLevel is a valid pointer.
+  // 
+  // If this method fails\, pBlackReferenceLevel will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(GetWhiteReferenceLevel,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pWhiteReferenceLevel,
+				Address to store the integer value.,
+			Gets the WhiteReferenceLevel property.  Specifies the digital luminance
+  // component component value associated with white.
+  //
+  // For CCIR-601/2 8-bit video\, the value is 235.  For YUV 8-bit video\, the value
+  // is 255.
+  //
+  // Succeeds if all of the following are true:
+  // - pWhiteReferenceLevel is a valid pointer.
+  // 
+  // If this method fails\, pWhiteReferenceLevel will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(GetColorRange,
+			[out],
+				objPass,
+				aafUInt32 *,
+				pColorRange,
+				Address to store the integer value.,
+			Gets the ColorRange property.  Specifies the range of allowable digital
+  // chrominance component values.  Chrominance values are signed and the range is
+  // centered on 0.  This value is used for both chrominance components.
+  //
+  // For CCIR-601/2\, the value is 225.  For YUV\, the value is 255.
+  //
+  // Succeeds if all of the following are true:
+  // - pColorRange is a valid pointer.
+  // 
+  // If this method fails\, pColorRange will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_XMETHOD1(GetPaddingBits,
+			[out],
+				objPass,
+				aafInt16 *,
+				pPaddingBits,
+				Address to store the number of bits.,
+			Gets the PaddingBits property.  Specifies the number of bits padded to each pixel.
+  //
+  //
+  // Succeeds if all of the following are true:
+  // - pPaddingBits is a valid pointer.
+  // 
+  // If this method fails\, pPaddingBits will not be changed.
+  // 
+  // This method will return the following codes:
+  // 
+  // AAFRESULT_SUCCESS
+  //   - succeeded.
+  //
+  //)
+
+AD_CLASS_END
