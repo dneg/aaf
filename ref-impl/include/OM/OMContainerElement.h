@@ -174,9 +174,6 @@ public:
     // @cmember Get the value of this <c OMContainerElement>.
   ReferencedObject* getValue(void) const;
 
-    // @cmember Set the value of this <c OMContainerElement>.
-  ReferencedObject* setValue(const ReferencedObject* value);
-
     // @cmember The value of this <c OMContainerElement> as a pointer.
     //          This function provides low-level access. If the object exits
     //          but has not yet been loaded then the value returned is 0.
@@ -228,6 +225,9 @@ public:
     //          This operator does not provide equality of object references.
   bool operator== (
             const OMStrongReferenceVectorElement<ReferencedObject>& rhs) const;
+
+    // @cmember Set the value of this <c OMStrongReferenceVectorElement>.
+  ReferencedObject* setValue(const ReferencedObject* value);
 
     // @cmember The local key of this <c OMStrongReferenceVectorElement>.
   OMUInt32 localKey(void) const;
@@ -287,6 +287,9 @@ public:
            const OMStrongReferenceSetElement<UniqueIdentification,
                                              ReferencedObject>& rhs) const;
 
+    // @cmember Set the value of this <c OMStrongReferenceSetElement>.
+  ReferencedObject* setValue(const ReferencedObject* value);
+
     // @cmember The unique key of this <c OMStrongReferenceSetElement>.
   UniqueIdentification identification(void) const;
 
@@ -316,8 +319,7 @@ private:
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMWeakReferenceVectorElement : public
-                   OMContainerElement<OMWeakObjectReference<ReferencedObject>,
-                                                            ReferencedObject> {
+                  OMContainerElement<OMWeakObjectReference, ReferencedObject> {
 public:
   // @access Public members.
 
@@ -348,6 +350,9 @@ public:
   bool operator== (
               const OMWeakReferenceVectorElement<ReferencedObject>& rhs) const;
 
+    // @cmember Set the value of this <c OMWeakReferenceVectorElement>.
+  ReferencedObject* setValue(const ReferencedObject* value);
+
     // @cmember The unique key of this <c OMWeakReferenceVectorElement>.
   OMUniqueObjectIdentification identification(void) const;
 
@@ -360,8 +365,7 @@ public:
   //   @cauthor Tim Bingham | tjb | Avid Technology, Inc.
 template <typename ReferencedObject>
 class OMWeakReferenceSetElement : public
-                   OMContainerElement<OMWeakObjectReference<ReferencedObject>,
-                                                            ReferencedObject> {
+                  OMContainerElement<OMWeakObjectReference, ReferencedObject> {
 public:
   // @access Public members.
 
@@ -391,6 +395,9 @@ public:
     //          This operator does not provide equality of object references.
   bool operator== (
                  const OMWeakReferenceSetElement<ReferencedObject>& rhs) const;
+
+    // @cmember Set the value of this <c OMWeakReferenceSetElement>.
+  ReferencedObject* setValue(const ReferencedObject* value);
 
     // @cmember The unique key of this <c OMWeakReferenceSetElement>.
   OMUniqueObjectIdentification identification(void) const;
