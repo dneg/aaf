@@ -272,6 +272,29 @@ public:
                            OMByteOrder byteOrder) const;
 
 
+  //****************
+  // pvtInitialize()
+  //
+  virtual AAFRESULT STDMETHODCALLTYPE
+    pvtInitialize
+        (// @parm [in] auid to be used to identify this type
+         const aafUID_t *  pID,
+
+         // @parm [in, size_is(numMembers)] array of member types to
+		 // be represented in this record type
+         aafUID_t ** pMemberTypeIDs,
+
+         // @parm [in, size_is(numMembers)] array of member names to
+		 // be represented in this enumerated  type
+         aafString_t *  pMemberNames,
+
+         // @parm [in] number of members in pMemberInfo array
+         aafUInt32  numMembers,
+
+         // @parm [in] friendly name of this type definition
+         wchar_t *  pTypeName);
+
+
 private:
 
   void pvtInitInternalSizes (void) const;
@@ -298,7 +321,7 @@ private:
   // registered, will be determined from PropValSize()s.
   aafUInt32 * _internalSizes;
 
-  ImplAAFTypeDefSP * _cachedMemberTypes;
+  ImplAAFTypeDef **  _cachedMemberTypes;
 
   aafUInt32          _cachedCount;
 
